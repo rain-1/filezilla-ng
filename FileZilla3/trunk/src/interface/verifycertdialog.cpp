@@ -204,7 +204,7 @@ void CVerifyCertDialog::ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSi
 void CVerifyCertDialog::ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& tokens, wxString prefix, const wxString& name, wxSizer* pSizer, bool decode /*=false*/)
 {
 	prefix += _T("=");
-	const int len = prefix.Length();
+	int len = prefix.Length();
 	
 	wxString value;
 
@@ -236,6 +236,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& t
 		{
 			value.RemoveLast();
 			append = true;
+			len = 0;
 		}
 
 		std::list<wxString>::iterator remove = iter++;
