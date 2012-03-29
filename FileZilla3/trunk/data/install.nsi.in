@@ -27,7 +27,7 @@
 
   ;Default installation folder
   InstallDir "$PROGRAMFILES\FileZilla FTP Client"
-  
+
   ;Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\FileZilla Client" ""
 
@@ -57,7 +57,7 @@
 
   VIProductVersion                   "${VERSION_FULL}"
   VIAddVersionKey "CompanyName"      "${PUBLISHER}"
-  VIAddVersionKey "ProductName"      "FileZilla" 
+  VIAddVersionKey "ProductName"      "FileZilla"
   VIAddVersionKey "ProductVersion"   "${VERSION}"
   VIAddVersionKey "FileDescription"  "FileZilla FTP Client"
   VIAddVersionKey "FileVersion"      "${VERSION}"
@@ -125,7 +125,7 @@
   !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\FileZilla Client"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Startmenu"
   !define MUI_STARTMENUPAGE_DEFAULTFOLDER "FileZilla FTP Client"
-  
+
   !define MUI_PAGE_CUSTOMFUNCTION_PRE PageStartmenuPre
   !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
 
@@ -137,7 +137,7 @@
   !define MUI_FINISHPAGE_RUN_FUNCTION CustomFinishRun
   !define MUI_FINISHPAGE_RUN_TEXT "&Start FileZilla now"
   !insertmacro MUI_PAGE_FINISH
-  
+
   !define MUI_PAGE_CUSTOMFUNCTION_PRE un.ConfirmPagePre
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
@@ -238,7 +238,7 @@ Function ReadPreviousVersion
       return
     ${EndIf}
   ${EndIf}
-  
+
   ReadRegStr $PREVIOUS_INSTALLDIR HKCU "Software\FileZilla Client" ""
 
   Call CheckPrevInstallDirExists
@@ -252,7 +252,7 @@ Function ReadPreviousVersion
       return
     ${EndIf}
   ${EndIf}
- 
+
 FunctionEnd
 
 Function LoadPreviousSettings
@@ -304,7 +304,7 @@ Function .onInit
     Abort
 installonoldwindows:
   ${EndUnless}
-  
+
   UAC_unicode::RunElevated
   StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
   StrCmp 0 $0 0 UAC_Err ; Error?
@@ -352,7 +352,7 @@ UAC_Success:
       ${EndIf}
     ${EndIf}
   ${EndIf}
-        
+
   ${If} $PREVIOUS_VERSION == ""
 
     StrCpy $PERFORM_UPDATE 0
@@ -624,7 +624,7 @@ Function PageAllUsers
 
   nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 0 100% 30 "Please select whether you wish to make this software available to all users or just yourself."
   Pop $R0
-  
+
   ${If} $IS_ADMIN == 1
     StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_VCENTER}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}|${WS_GROUP}|${WS_TABSTOP}
   ${Else}
@@ -632,16 +632,16 @@ Function PageAllUsers
   ${EndIf}
   nsDialogs::CreateItem /NOUNLOAD BUTTON $R2 0 10 55 100% 30 "&Anyone who uses this computer (all users)"
   Pop $ALL_USERS_BUTTON
-  
+
   StrCpy $R2 ${BS_AUTORADIOBUTTON}|${BS_TOP}|${BS_MULTILINE}|${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS}
-  
+
   ${If} $USERNAME != ""
     nsDialogs::CreateItem /NOUNLOAD BUTTON $R2 0 10 85 100% 50 "&Only for me ($USERNAME)"
   ${Else}
     nsDialogs::CreateItem /NOUNLOAD BUTTON $R2 0 10 85 100% 50 "&Only for me"
   ${EndIf}
   Pop $R0
-  
+
   ${If} $PREVIOUS_VERSION != ""
     ${If} $ALL_USERS_DEFAULT == 1
       nsDialogs::CreateItem /NOUNLOAD STATIC ${WS_VISIBLE}|${WS_CHILD}|${WS_CLIPSIBLINGS} 0 0 -30 100% 30 "FileZilla has been previously installed for all users."
@@ -658,7 +658,7 @@ Function PageAllUsers
   ${Else}
     SendMessage $R0 ${BM_SETCHECK} 1 0
   ${EndIf}
-  
+
   nsDialogs::Show
 
 FunctionEnd
@@ -724,7 +724,7 @@ Function CheckFileZillaRunning
   ${EndIf}
 
   ${While} $R1 == 1
- 
+
     ${If} $R0 == 0
 
       ${ExitWhile}
@@ -752,7 +752,7 @@ Function CheckFileZillaRunning
     Push "filezilla.exe"
     Call IsProcessRunning
     Pop $R1
-    
+
   ${EndWhile}
 
  CheckFileZillaRunning_ignore:
@@ -792,7 +792,7 @@ FunctionEnd
 
 ;--------------------------------
 ;Languages
- 
+
   !insertmacro MUI_LANGUAGE "English"
 
 ;--------------------------------
@@ -803,7 +803,7 @@ Section "FileZilla Client" SecMain
   SectionIn 1 RO
 
   SetOutPath "$INSTDIR"
-  
+
   File "..\src\interface\${LT_EXEDIR}FileZilla.exe"
   File "..\src\putty\${LT_EXEDIR}fzsftp.exe"
   File "..\src\putty\${LT_EXEDIR}fzputtygen.exe"
@@ -824,7 +824,7 @@ Section "FileZilla Client" SecMain
 
   SetOutPath "$INSTDIR\resources\32x32"
   File "${top_srcdir}/src\interface\resources\32x32\*.png"
-  
+
   SetOutPath "$INSTDIR\resources\48x48"
   File "${top_srcdir}/src\interface\resources\48x48\*.png"
 
@@ -855,13 +855,13 @@ Section "FileZilla Client" SecMain
   File "${top_srcdir}\docs\fzdefaults.xml.example"
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-    
+
   ;Create shortcuts
   SetOutPath "$INSTDIR"
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\FileZilla.lnk" "$INSTDIR\filezilla.exe"
-  
+
   ${If} ${AtLeastWin7}
     ; Setting AppID
     push "FileZilla.Client.AppID"
@@ -1048,7 +1048,7 @@ Function un.ReadPreviousVersion
   ${EndIf}
 
   ReadRegStr $R1 HKCU "Software\FileZilla Client" ""
-  
+
   ${If} $R1 != ""
     ;Detect version
     ReadRegStr $R2 HKCU "Software\FileZilla Client" "Version"
@@ -1087,30 +1087,30 @@ Function un.onInit
     MessageBox MB_ICONSTOP "FileZilla has been installed for all users.$\nPlease restart the uninstaller with Administrator privileges to remove it." /SD IDOK
     Abort
   ${EndIf}
-  
+
 FunctionEnd
 
 Function un.RemoveStartmenu
 
   !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
-  
+
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\FileZilla.lnk"
-  
+
   ${un.GetParameters} $R0
 
   ${un.GetOptions} $R0 "/keepstartmenudir" $R1
   ${If} ${Errors}
- 
+
     ;Delete empty start menu parent diretories
     StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
- 
+
     startMenuDeleteLoop:
       RMDir $MUI_TEMP
       GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
-    
+
       IfErrors startMenuDeleteLoopDone
-  
+
       StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
     startMenuDeleteLoopDone:
 
@@ -1119,7 +1119,7 @@ Function un.RemoveStartmenu
 FunctionEnd
 
 Function un.ConfirmPagePre
-  
+
   ${un.GetParameters} $R0
 
   ${un.GetOptions} $R0 "/frominstall" $R1
@@ -1130,7 +1130,7 @@ Function un.ConfirmPagePre
 FunctionEnd
 
 Function un.FinishPagePre
-  
+
   ${un.GetParameters} $R0
 
   ${un.GetOptions} $R0 "/frominstall" $R1
@@ -1156,7 +1156,7 @@ FunctionEnd
 !endif
 
 !macro UNINSTALLICONSET SET
-  
+
   Delete "$INSTDIR\resources\${SET}\theme.xml"
   Delete "$INSTDIR\resources\${SET}\16x16\*.png"
   Delete "$INSTDIR\resources\${SET}\20x20\*.png"
