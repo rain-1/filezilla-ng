@@ -63,6 +63,7 @@ public:
 	bool ConnectToSite(CSiteManagerItemData_Site* const pData);
 
 protected:
+	bool CloseDialogsAndQuit(wxCloseEvent &event);
 	bool CreateMenus();
 	bool CreateQuickconnectBar();
 	bool CreateToolBar();

@@ -1118,6 +1118,63 @@ BOOL CALLBACK FzEnumThreadWndProc(HWND hwnd, LPARAM lParam)
 }
 #endif //__WXMSW__
 
+
+bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
+{
+	// We need to close all other top level windows on the stack before closing the main frame.
+	// In other words, all open dialogs need to be closed.
+	static int prev_size = 0;
+
+	int size = wxTopLevelWindows.size();
+	static wxTopLevelWindow* pLast = 0;
+	wxWindowList::reverse_iterator iter = wxTopLevelWindows.rbegin();
+	wxTopLevelWindow* pTop = (wxTopLevelWindow*)(*iter);
+	while (pTop != this && (size != prev_size || pLast != pTop))
+	{
+		wxDialog* pDialog = wxDynamicCast(pTop, wxDialog);
+		if (pDialog)
+			pDialog->EndModal(wxID_CANCEL);
+		else
+		{
+			wxWindow* pParent = pTop->GetParent();
+			if (m_pQueuePane && pParent == m_pQueuePane)
+			{
+				// It's the AUI frame manager hint window. Ignore it
+				iter++;
+				pTop = (wxTopLevelWindow*)(*iter);
+				continue;
+			}
+			wxString title = pTop->GetTitle();
+			pTop->Destroy();
+		}
+
+		prev_size = size;
+		pLast = pTop;
+
+		m_closeEvent = event.GetEventType();
+		m_closeEventTimer.Start(1, true);
+
+		return false;
+	}
+
+#ifdef __WXMSW__
+	// wxMessageBox does not use wxTopLevelWindow, close it too
+	bool dialog = false;
+	EnumThreadWindows(GetCurrentThreadId(), FzEnumThreadWndProc, (LPARAM)&dialog);
+	if (dialog)
+	{
+		m_closeEvent = event.GetEventType();
+		m_closeEventTimer.Start(1, true);
+
+		return false;
+	}
+#endif //__WXMSW__
+
+	// At this point all other top level windows should be closed.
+	return true;
+}
+
+
 void CMainFrame::OnClose(wxCloseEvent &event)
 {
 	if (!m_bQuit)
@@ -1177,60 +1234,6 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 			quit_confirmation_displayed = false;
 		}
 
-		if (!event.CanVeto())
-		{
-			// We need to close all other top level windows on the stack before closing the main frame.
-			// In other words, all open dialogs need to be closed.
-			static int prev_size = 0;
-
-			int size = wxTopLevelWindows.size();
-			static wxTopLevelWindow* pLast = 0;
-			wxWindowList::reverse_iterator iter = wxTopLevelWindows.rbegin();
-			wxTopLevelWindow* pTop = (wxTopLevelWindow*)(*iter);
-			while (pTop != this && (size != prev_size || pLast != pTop))
-			{
-				wxDialog* pDialog = wxDynamicCast(pTop, wxDialog);
-				if (pDialog)
-					pDialog->EndModal(wxID_CANCEL);
-				else
-				{
-					wxWindow* pParent = pTop->GetParent();
-					if (m_pQueuePane && pParent == m_pQueuePane)
-					{
-						// It's the AUI frame manager hint window. Ignore it
-						iter++;
-						pTop = (wxTopLevelWindow*)(*iter);
-						continue;
-					}
-					wxString title = pTop->GetTitle();
-					pTop->Destroy();
-				}
-
-				prev_size = size;
-				pLast = pTop;
-
-				m_closeEvent = event.GetEventType();
-				m_closeEventTimer.Start(1, true);
-
-				return;
-			}
-
-#ifdef __WXMSW__
-			// wxMessageBox does not use wxTopLevelWindow, close it too
-			bool dialog = false;
-			EnumThreadWindows(GetCurrentThreadId(), FzEnumThreadWndProc, (LPARAM)&dialog);
-			if (dialog)
-			{
-				m_closeEvent = event.GetEventType();
-				m_closeEventTimer.Start(1, true);
-
-				return;
-			}
-#endif //__WXMSW__
-
-			// At this point all other top level windows should be closed.
-		}
-
 		if (m_pWindowStateManager)
 		{
 			m_pWindowStateManager->Remember(OPTION_MAINWINDOW_POSITION);
@@ -1248,6 +1251,8 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	}
 
 	Show(false);
+	if (!CloseDialogsAndQuit(event))
+		return;
 
 	// Getting deleted by wxWidgets
 	for (int i = 0; i < 2; i++)
@@ -2398,7 +2403,7 @@ void CMainFrame::ShowDropdownMenu(wxMenu* pMenu, wxToolBar* pToolBar, wxCommandE
 	{
 #ifdef __WXMSW__
 		RECT r;
-        if (::SendMessage((HWND)pToolBar->GetHandle(), TB_GETITEMRECT, pToolBar->GetToolPos(event.GetId()), (LPARAM)&r))
+		if (::SendMessage((HWND)pToolBar->GetHandle(), TB_GETITEMRECT, pToolBar->GetToolPos(event.GetId()), (LPARAM)&r))
 			pToolBar->PopupMenu(pMenu, r.left, r.bottom);
 		else
 #endif
@@ -2460,7 +2465,7 @@ void CMainFrame::ProcessCommandLine()
 
 		if (pData)
 		{
-            if (ConnectToSite(pData))
+			if (ConnectToSite(pData))
 			{
 				SetBookmarksFromPath(site);
 				if (m_pMenuBar)
