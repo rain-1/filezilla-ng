@@ -75,3 +75,6 @@ hicolorapps32dir = $(datadir)/icons/hicolor/32x32/apps
 hicolorapps32_DATA = 32x32/filezilla.png
 hicolorapps48dir = $(datadir)/icons/hicolor/48x48/apps
 hicolorapps48_DATA = 48x48/filezilla.png
+
+scalabledir = $(datadir)/icons/hicolor/scalable/apps
+scalable_DATA = filezilla.svg
