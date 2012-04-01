@@ -139,7 +139,7 @@ private:
 	wxListCtrlEx& m_listCtrl;
 };
 
-class CListCtrlDropTarget : public wxDropTarget, public wxEvtHandler
+class CListCtrlDropTarget : public wxEvtHandler, public wxDropTarget
 {
 public:
 	CListCtrlDropTarget(wxListCtrlEx* pListCtrl);
