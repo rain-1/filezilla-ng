@@ -8,7 +8,6 @@
 #include "filter.h"
 #include "inputdialog.h"
 #include <algorithm>
-#include <wx/dnd.h>
 #include "dndobjects.h"
 #include "Options.h"
 #ifdef __WXMSW__
@@ -27,11 +26,13 @@
 #define new DEBUG_NEW
 #endif
 
-class CLocalListViewDropTarget : public wxDropTarget
+
+class CLocalListViewDropTarget : public CListCtrlDropTarget
 {
 public:
 	CLocalListViewDropTarget(CLocalListView* pLocalListView)
-		: m_pLocalListView(pLocalListView), m_pFileDataObject(new wxFileDataObject()),
+        : CListCtrlDropTarget(pLocalListView)
+        , m_pLocalListView(pLocalListView), m_pFileDataObject(new wxFileDataObject()),
 		m_pRemoteDataObject(new CRemoteDataObject())
 	{
 		m_pDataObject = new wxDataObjectComposite;
@@ -119,6 +120,7 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
+        CListCtrlDropTarget::OnDrop(x, y);
 		ClearDropHighlight();
 
 		if (m_pLocalListView->m_fileData.empty())
@@ -127,7 +129,12 @@ public:
 		return true;
 	}
 
-	wxString DisplayDropHighlight(wxPoint point)
+    virtual void DisplayDropHighlight(wxPoint point)
+    {
+        DoDisplayDropHighlight(point);
+    }
+
+    virtual wxString DoDisplayDropHighlight(wxPoint point)
 	{
 		wxString subDir;
 
@@ -174,6 +181,8 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
+        CListCtrlDropTarget::OnDragOver(x, y, def);
+
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -188,7 +197,7 @@ public:
 			return wxDragNone;
 		}
 
-		const wxString& subdir = DisplayDropHighlight(wxPoint(x, y));
+        const wxString& subdir = DoDisplayDropHighlight(wxPoint(x, y));
 
 		CLocalPath dir = m_pLocalListView->m_pState->GetLocalDir();
 		if (subdir == _T(""))
@@ -214,11 +223,13 @@ public:
 
 	virtual void OnLeave()
 	{
+        CListCtrlDropTarget::OnLeave();
 		ClearDropHighlight();
 	}
 
-	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
+    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
+        CListCtrlDropTarget::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 

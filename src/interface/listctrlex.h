@@ -2,6 +2,7 @@
 #define __LISTCTRLEX_H__
 
 #include "systemimagelist.h"
+#include <wx/dnd.h>
 
 class wxListCtrlEx : public wxListCtrl, public CSystemImageList
 {
@@ -136,6 +137,37 @@ public:
 	virtual ~CLabelEditBlocker();
 private:
 	wxListCtrlEx& m_listCtrl;
+};
+
+class CListCtrlDropTarget : public wxDropTarget, public wxEvtHandler
+{
+public:
+	CListCtrlDropTarget(wxListCtrlEx* pListCtrl);
+
+	virtual bool OnDrop(wxCoord x, wxCoord y);
+
+	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
+
+	virtual void OnLeave();
+
+	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def);
+
+	virtual void DisplayDropHighlight(wxPoint) = 0;
+
+protected:
+	bool IsScroll(wxPoint p) const;
+	bool IsTopScroll(wxPoint p) const;
+	bool IsBottomScroll(wxPoint p) const;
+
+	void OnTimer(wxTimerEvent& /*event*/);
+
+protected:
+	wxListCtrlEx *m_pListCtrl;
+
+	wxTimer m_timer;
+	int m_count;
+
+	DECLARE_EVENT_TABLE();
 };
 
 #endif //__LISTCTRLEX_H__

@@ -28,11 +28,12 @@
 #define new DEBUG_NEW
 #endif
 
-class CRemoteListViewDropTarget : public wxDropTarget
+class CRemoteListViewDropTarget : public CListCtrlDropTarget
 {
 public:
 	CRemoteListViewDropTarget(CRemoteListView* pRemoteListView)
-		: m_pRemoteListView(pRemoteListView),
+		: CListCtrlDropTarget(pRemoteListView)
+		, m_pRemoteListView(pRemoteListView),
 		  m_pFileDataObject(new wxFileDataObject()),
 		  m_pRemoteDataObject(new CRemoteDataObject()),
 		  m_pDataObject(new wxDataObjectComposite())
@@ -175,6 +176,7 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
+		CListCtrlDropTarget::OnDrop(x, y);
 		ClearDropHighlight();
 
 		if (!m_pRemoteListView->m_pDirectoryListing)
@@ -183,7 +185,12 @@ public:
 		return true;
 	}
 
-	int DisplayDropHighlight(wxPoint point)
+	virtual void DisplayDropHighlight(wxPoint point)
+	{
+		DoDisplayDropHighlight(point);
+	}
+
+	int DoDisplayDropHighlight(wxPoint point)
 	{
 		int flags;
 		int hit = m_pRemoteListView->HitTest(point, flags, 0);
@@ -228,6 +235,8 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		CListCtrlDropTarget::OnDragOver(x, y, def);
+
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -245,7 +254,7 @@ public:
 		const CServer* const pServer = m_pRemoteListView->m_pState->GetServer();
 		wxASSERT(pServer);
 
-		int hit = DisplayDropHighlight(wxPoint(x, y));
+		int hit = DoDisplayDropHighlight(wxPoint(x, y));
 		const CDragDropManager* pDragDropManager = CDragDropManager::Get();
 
 		if (hit == -1 && pDragDropManager &&
@@ -258,11 +267,13 @@ public:
 
 	virtual void OnLeave()
 	{
+		CListCtrlDropTarget::OnLeave();
 		ClearDropHighlight();
 	}
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		CListCtrlDropTarget::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 

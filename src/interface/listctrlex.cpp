@@ -1160,3 +1160,143 @@ bool wxListCtrlEx::HasSelection() const
 	return GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1;
 #endif
 }
+
+
+
+CListCtrlDropTarget::CListCtrlDropTarget(wxListCtrlEx* pListCtrl)
+	: m_pListCtrl(pListCtrl)
+	, m_count()
+{
+	m_timer.SetOwner(this);
+}
+
+
+bool CListCtrlDropTarget::OnDrop(wxCoord x, wxCoord y)
+{
+	m_timer.Stop();
+	return true;
+}
+
+
+wxDragResult CListCtrlDropTarget::OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
+{
+	if (!m_timer.IsRunning() && IsScroll(wxPoint(x, y)))
+	{
+		m_timer.Start(100, true);
+		m_count = 0;
+	}
+	return def;
+}
+
+
+
+void CListCtrlDropTarget::OnLeave()
+{
+	m_timer.Stop();
+}
+
+
+wxDragResult CListCtrlDropTarget::OnEnter(wxCoord x, wxCoord y, wxDragResult def)
+{
+	if (!m_timer.IsRunning() && IsScroll(wxPoint(x, y)))
+	{
+		m_timer.Start(100, true);
+		m_count = 0;
+	}
+	return def;
+}
+
+
+bool CListCtrlDropTarget::IsScroll(wxPoint p) const
+{
+	return IsTopScroll(p) || IsBottomScroll(p);
+}
+
+
+bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
+{
+	wxRect itemRect;
+	if (!m_pListCtrl->GetItemRect(0, itemRect))
+		return false;
+
+	if (p.y < 0 || p.y >= itemRect.GetHeight())
+		return false;
+
+#ifdef __WXMSW__
+	wxRect windowRect = m_pListCtrl->GetClientRect();
+#else
+	wxRect windowRect = m_pListCtrl->GetMainWindow()->GetClientRect();
+#endif
+	if (p.x < 0 || p.x > windowRect.GetWidth())
+		return false;
+
+	int top = m_pListCtrl->GetTopItem();
+	if( top <= 0 ) {
+		return false;
+	}
+
+	return true;
+}
+
+
+bool CListCtrlDropTarget::IsBottomScroll(wxPoint p) const
+{
+	wxRect itemRect;
+	if (!m_pListCtrl->GetItemRect(0, itemRect))
+		return false;
+
+#ifdef __WXMSW__
+	wxRect windowRect = m_pListCtrl->GetClientRect();
+#else
+	wxRect windowRect = m_pListCtrl->GetMainWindow()->GetClientRect();
+#endif
+	if (p.y > windowRect.GetBottom() || p.y < windowRect.GetBottom() - itemRect.GetHeight())
+		return false;
+
+	if (p.x < 0 || p.x > windowRect.GetWidth())
+		return false;
+
+	int bottom = m_pListCtrl->GetTopItem() + m_pListCtrl->GetCountPerPage();
+	if (bottom >= m_pListCtrl->GetItemCount())
+		return false;
+
+	return true;
+}
+
+
+void CListCtrlDropTarget::OnTimer(wxTimerEvent& /*event*/)
+{
+	wxPoint p = wxGetMousePosition();
+#ifdef __WXMSW__
+	wxWindow* ctrl = m_pListCtrl->GetMainWindow();
+#else
+	wxWindow* ctrl = m_pListCtrl;
+#endif
+	p = ctrl->ScreenToClient(p);
+
+	if (IsTopScroll(p))
+	{
+		int top = m_pListCtrl->GetTopItem();
+		m_pListCtrl->EnsureVisible(top - 1);
+	}
+	else if(IsBottomScroll(p))
+	{
+		int top = m_pListCtrl->GetTopItem();
+		m_pListCtrl->EnsureVisible(top + m_pListCtrl->GetCountPerPage());
+	}
+	else
+	{
+		m_timer.Stop();
+		return;
+	}
+
+	DisplayDropHighlight(p);
+
+	if (m_count < 90)
+		++m_count;
+	m_timer.Start(100 - m_count, true);
+}
+
+BEGIN_EVENT_TABLE(CListCtrlDropTarget, wxEvtHandler)
+EVT_TIMER(wxID_ANY, CListCtrlDropTarget::OnTimer)
+END_EVENT_TABLE()
