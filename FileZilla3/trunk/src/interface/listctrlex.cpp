@@ -1216,10 +1216,10 @@ bool CListCtrlDropTarget::IsScroll(wxPoint p) const
 bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
 {
 	wxRect itemRect;
-	if (!m_pListCtrl->GetItemRect(0, itemRect))
+	if (!m_pListCtrl->GetItemRect(m_pListCtrl->GetTopItem(), itemRect))
 		return false;
 
-	if (p.y < 0 || p.y >= itemRect.GetHeight())
+	if (p.y < 0 || p.y >= itemRect.GetBottom())
 		return false;
 
 #ifdef __WXMSW__
