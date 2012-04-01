@@ -1268,9 +1268,9 @@ void CListCtrlDropTarget::OnTimer(wxTimerEvent& /*event*/)
 {
 	wxPoint p = wxGetMousePosition();
 #ifdef __WXMSW__
-	wxWindow* ctrl = m_pListCtrl->GetMainWindow();
-#else
 	wxWindow* ctrl = m_pListCtrl;
+#else
+	wxWindow* ctrl = m_pListCtrl->GetMainWindow();
 #endif
 	p = ctrl->ScreenToClient(p);
 
