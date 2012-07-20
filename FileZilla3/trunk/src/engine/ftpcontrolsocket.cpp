@@ -4365,7 +4365,34 @@ int CFtpControlSocket::Connect(const CServer &server)
 		(pData->ftp_proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_FTP_PROXY_TYPE)) && !server.GetBypassProxy())
 	{
 		pData->host = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST);
-		int pos = pData->host.Find(':');
+
+		int pos = -1;
+		if (pData->host[0] == '[')
+		{
+			// Probably IPv6 address
+			pos = pData->host.Find(']');
+			if (pos == -1)
+			{
+				LogMessage(::Error, _("Proxy host starts with '[' but no closing bracket found."));
+				DoClose(FZ_REPLY_CRITICALERROR);
+				return FZ_REPLY_ERROR;
+			}
+			if (pData->host[pos + 1])
+			{
+				if (pData->host[pos + 1] != ':')
+				{
+					LogMessage(::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
+					DoClose(FZ_REPLY_CRITICALERROR);
+					return FZ_REPLY_ERROR;
+				}
+				++pos;
+			}
+			else
+				pos = -1;
+		}
+		else
+			pos = pData->host.Find(':');
+	
 		if (pos != -1)
 		{
 			unsigned long port = 0;
