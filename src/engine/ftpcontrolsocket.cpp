@@ -1571,6 +1571,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 	}
 	else
 	{
+		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _("Wrong opState: %d"), pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1615,6 +1616,8 @@ int CFtpControlSocket::ListSend()
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
+
+		pData->opState = list_waitcwd;
 
 		return ListSubcommandResult(FZ_REPLY_OK);
 	}
