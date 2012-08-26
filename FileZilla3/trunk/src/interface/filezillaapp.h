@@ -32,6 +32,15 @@ public:
 
 	const CCommandLine* GetCommandLine() const { return m_pCommandLine; }
 
+#if 0 // Disabled for now due to some wx controls expecting wxYield to process all events.
+#if wxMAJOR_VERSION == 2 && wxMINOR_VERSION == 8
+	#define USE_CHUNKED_PROCESS_PENDING_EVENTS 1
+#endif
+#endif
+#if USE_CHUNKED_PROCESS_PENDING_EVENTS
+	virtual void ProcessPendingEvents();
+#endif
+
 protected:
 	bool InitDefaultsDir();
 	bool LoadResourceFiles();
