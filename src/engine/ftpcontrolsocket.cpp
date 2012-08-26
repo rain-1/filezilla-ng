@@ -1398,7 +1398,14 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 		delete m_pTransferSocket;
 		m_pTransferSocket = new CTransferSocket(m_pEngine, this, ::list);
-		pData->m_pDirectoryListingParser = new CDirectoryListingParser(this, *m_pCurrentServer);
+
+		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
+		listingEncoding::type encoding = listingEncoding::unknown;
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) == yes)
+			encoding = listingEncoding::normal;
+
+		pData->m_pDirectoryListingParser = new CDirectoryListingParser(this, *m_pCurrentServer, encoding);
+
 		pData->m_pDirectoryListingParser->SetTimezoneOffset(GetTimezoneOffset());
 		m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
 

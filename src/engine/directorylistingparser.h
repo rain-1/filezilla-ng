@@ -35,10 +35,22 @@
 class CLine;
 class CToken;
 class CControlSocket;
+
+namespace listingEncoding
+{
+	enum type
+	{
+		unknown,
+		normal,
+		ebcdic
+	};
+}
+
+
 class CDirectoryListingParser
 {
 public:
-	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server);
+	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding = listingEncoding::unknown);
 	~CDirectoryListingParser();
 
 	CDirectoryListing Parse(const CServerPath &path);
@@ -92,6 +104,9 @@ protected:
 
 	bool GetMonthFromName(const wxString& name, int &month);
 
+	void DeduceEncoding();
+	void ConvertEncoding(char *pData, int len);
+
 	CControlSocket* m_pControlSocket;
 
 	static std::map<wxString, int> m_MonthNamesMap;
@@ -105,6 +120,7 @@ protected:
 
 	std::list<t_list> m_DataList;
 	std::list<CDirentry> m_entryList;
+	wxLongLong m_totalData;
 
 	CLine *m_prevLine;
 
@@ -116,6 +132,8 @@ protected:
 	bool m_maybeMultilineVms;
 
 	wxTimeSpan m_timezoneOffset;
+
+	listingEncoding::type m_listingEncoding;
 };
 
 #endif
