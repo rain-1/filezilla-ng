@@ -447,8 +447,10 @@ protected:
 	wxChar* m_pLine;
 };
 
-CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server)
+CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding)
 	: m_pControlSocket(pControlSocket), m_server(server)
+	, m_totalData()
+	, m_listingEncoding(encoding)
 {
 	m_currentOffset = 0;
 	m_prevLine = 0;
@@ -688,6 +690,8 @@ CDirectoryListingParser::~CDirectoryListingParser()
 
 bool CDirectoryListingParser::ParseData(bool partial)
 {
+	DeduceEncoding();
+
 	bool error = false;
 	CLine *pLine = GetLine(partial, error);
 	while (pLine)
@@ -2025,11 +2029,17 @@ bool CDirectoryListingParser::ParseOther(CLine *pLine, CDirentry &entry)
 
 bool CDirectoryListingParser::AddData(char *pData, int len)
 {
+	ConvertEncoding( pData, len );
+
 	t_list item;
 	item.p = pData;
 	item.len = len;
 
 	m_DataList.push_back(item);
+	m_totalData += len;
+
+	if (m_totalData < 512)
+		return true;
 
 	return ParseData(true);
 }
@@ -3010,4 +3020,97 @@ bool CDirectoryListingParser::GetMonthFromName(const wxString& name, int &month)
 	month = iter->second;
 	
 	return true;
+}
+
+char ebcdic_table[256] = {
+	' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 0
+	' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '\n', // 1
+	' ',  ' ',  ' ',  ' ',  ' ',  '\n', ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 2
+	' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 3
+	' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '.',  '<',  '(',  '+',  '|',  // 4
+	'&',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '!',  '$',  '*',  ')',  ';',  ' ',  // 5
+	'-',  '/',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '|',  ',',  '%',  '_',  '>',  '?',  // 6
+	' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '`',  ':',  '#',  '@',  '\'', '=',  '"',  // 7
+	' ',  'a',  'b',  'c',  'd',  'e',  'f',  'g',  'h',  'i',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 8
+	' ',  'j',  'k',  'l',  'm',  'n',  'o',  'p',  'q',  'r',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // 9
+	' ',  '~',  's',  't',  'u',  'v',  'w',  'x',  'y',  'z',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // a
+	'^',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  '[',  ']',  ' ',  ' ',  ' ',  ' ',  // b
+	'{',  'A',  'B',  'C',  'D',  'E',  'F',  'G',  'H',  'I',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // c
+	'}',  'J',  'K',  'L',  'M',  'N',  'O',  'P',  'Q',  'R',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // d
+	'\\', ' ',  'S',  'T',  'U',  'V',  'W',  'X',  'Y',  'Z',  ' ',  ' ',  ' ',  ' ',  ' ',  ' ',  // e
+	'0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',  '8',  '9',  ' ',  ' ',  ' ',  ' ',  ' ',  ' '   // f
+};
+
+void CDirectoryListingParser::ConvertEncoding(char *pData, int len)
+{
+	if (m_listingEncoding != listingEncoding::ebcdic)
+		return;
+
+	for (int i = 0; i < len; ++i)
+	{
+		pData[i] = ebcdic_table[static_cast<unsigned char>(pData[i])];
+	}
+}
+
+void CDirectoryListingParser::DeduceEncoding()
+{
+	if (m_listingEncoding != listingEncoding::unknown)
+		return;
+
+	int count[256];
+
+	memset(&count, 0, sizeof(int)*256);
+
+	int count_us = 0;
+	int count_space = 0;
+	for (std::list<t_list>::const_iterator it = m_DataList.begin(); it != m_DataList.end(); ++it)
+	{
+		for (int i = 0; i < it->len; ++i)
+			++count[static_cast<unsigned char>(it->p[i])];
+	}
+
+	int count_normal = 0;
+	int count_ebcdic = 0;
+	for (int i = '0'; i <= '9'; ++i ) {
+		count_normal += count[i];
+	}
+	for (int i = 'a'; i <= 'Z'; ++i ) {
+		count_normal += count[i];
+	}
+	for (int i = 'A'; i <= 'Z'; ++i ) {
+		count_normal += count[i];
+	}
+	
+	for (int i = 0x81; i <= 0x89; ++i ) {
+		count_ebcdic += count[i];
+	}
+	for (int i = 0x91; i <= 0x99; ++i ) {
+		count_ebcdic += count[i];
+	}
+	for (int i = 0xa2; i <= 0xa9; ++i ) {
+		count_ebcdic += count[i];
+	}
+	for (int i = 0xc1; i <= 0x89; ++i ) {
+		count_ebcdic += count[i];
+	}
+	for (int i = 0xd1; i <= 0x99; ++i ) {
+		count_ebcdic += count[i];
+	}
+	for (int i = 0xe2; i <= 0xa9; ++i ) {
+		count_ebcdic += count[i];
+	}
+	for (int i = 0xf0; i <= 0xf9; ++i ) {
+		count_ebcdic += count[i];
+	}
+		
+
+	if ((count[0x1f] || count[0x25]) && !count[0x0a] && count['@'] && count['@'] > count[' '] && count_ebcdic > count_normal)
+	{
+		m_pControlSocket->LogMessage(::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
+		m_listingEncoding = listingEncoding::ebcdic;
+		for (std::list<t_list>::iterator it = m_DataList.begin(); it != m_DataList.end(); ++it)
+			ConvertEncoding(it->p, it->len);
+	}
+	else
+		m_listingEncoding = listingEncoding::normal;
 }
