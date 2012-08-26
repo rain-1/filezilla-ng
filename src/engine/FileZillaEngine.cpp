@@ -108,7 +108,7 @@ CNotification* CFileZillaEngine::GetNextNotification()
 		if (m_NotificationList.empty())
 			return 0;
 
-		m_NotificationList.push_back(0);
+		m_NotificationList.push_back(static_cast<CNotification*>(0));
 	}
 	else if (m_NotificationList.empty())
 		return 0;
