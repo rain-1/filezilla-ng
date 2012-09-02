@@ -1,9 +1,10 @@
-#ifndef UNICODE
+#ifndef UNICODE	
 #define UNICODE
 #endif
 #ifndef _UNICODE
 #define _UNICODE
 #endif
+
 
 //---------------------------------------------------------------------------
 #ifdef _MSC_VER
@@ -15,7 +16,9 @@
 #else
 	#define STDEXPORTAPI extern "C" __declspec(dllexport) HRESULT STDAPICALLTYPE
 
-	// Currently, the MinGW w32api has no unicode version of ICopyHook. As such,
+	#include <config.h>
+#if !HAVE_ICOPYHOOKW
+	// Some versions of the MinGW w32api have no unicode version of ICopyHook. As such,
 	// declare ICopyHookW manually.
 
 	// Use some #define magic to prevent LPCOPYHOOK being declared
@@ -33,6 +36,7 @@
 	};
 	#undef INTERFACE
 	typedef ICopyHookW *LPCOPYHOOK;
+#endif // !HAVE_ICOPYHOOKW
 
 #endif
 
