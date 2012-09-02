@@ -71,6 +71,7 @@ if SFTP_MINGW
   fzsftp_SOURCES += pproxy.c
   fzsftp_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS -DNO_GSSAPI
   fzsftp_LDADD += windows/libfzsftp_win.a windows/libfzputtycommon_win.a $(RESOURCEFILE)
+  fzsftp_LDADD += -lws2_32
 
   fzputtygen_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS -DNO_GSSAPI
   fzputtygen_LDADD = windows/libfzputtycommon_win.a libfzputtycommon.a $(RESOURCEFILE)
