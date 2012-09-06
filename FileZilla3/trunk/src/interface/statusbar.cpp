@@ -242,7 +242,7 @@ void CWidgetsStatusBar::PositionChildren(int field)
 		offset += 5 + GetGripperWidth();
 	}
 
-	for (std::map<int, struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); iter++)
+	for (std::map<int, struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); ++iter)
 	{
 		if (iter->second.field != field)
 			continue;

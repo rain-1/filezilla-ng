@@ -97,7 +97,7 @@ void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_state
 
 	std::list<t_handler> &handlers = m_handlers[notification];
 	std::list<t_handler>::const_iterator iter;
-	for (iter = handlers.begin(); iter != handlers.end(); iter++)
+	for (iter = handlers.begin(); iter != handlers.end(); ++iter)
 	{
 		if (iter->pHandler == pHandler)
 			return;
@@ -120,7 +120,7 @@ void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_sta
 		for (int i = 0; i < STATECHANGE_MAX; i++)
 		{
 			std::list<t_handler> &handlers = m_handlers[i];
-			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 			{
 				if (iter->pHandler == pHandler)
 				{
@@ -133,7 +133,7 @@ void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_sta
 	else
 	{
 		std::list<t_handler> &handlers = m_handlers[notification];
-		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 		{
 			if (iter->pHandler == pHandler)
 			{
@@ -155,7 +155,7 @@ void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
 	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 	{
 		if (blocked && iter->blockable)
 			continue;
@@ -184,7 +184,7 @@ void CContextManager::NotifyAllHandlers(enum t_statechange_notifications notific
 void CContextManager::NotifyGlobalHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
 {
 	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 		iter->pHandler->OnStateChange(0, notification, data, data2);
 }
 
@@ -228,7 +228,7 @@ CState::~CState()
 	// Unregister all handlers
 	for (int i = 0; i < STATECHANGE_MAX; i++)
 	{
-		for (std::list<t_handler>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); iter++)
+		for (std::list<t_handler>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); ++iter)
 		{
 			iter->pHandler->m_pState = 0;
 		}
@@ -585,7 +585,7 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_no
 
 	std::list<t_handler> &handlers = m_handlers[notification];
 	std::list<t_handler>::const_iterator iter;
-	for (iter = handlers.begin(); iter != handlers.end(); iter++)
+	for (iter = handlers.begin(); iter != handlers.end(); ++iter)
 	{
 		if (iter->pHandler == pHandler)
 			return;
@@ -607,7 +607,7 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 		for (int i = 0; i < STATECHANGE_MAX; i++)
 		{
 			std::list<t_handler> &handlers = m_handlers[i];
-			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 			{
 				if (iter->pHandler == pHandler)
 				{
@@ -620,7 +620,7 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	else
 	{
 		std::list<t_handler> &handlers = m_handlers[notification];
-		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 		{
 			if (iter->pHandler == pHandler)
 			{
@@ -663,7 +663,7 @@ void CState::NotifyHandlers(enum t_statechange_notifications notification, const
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
 	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); iter++)
+	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
 	{
 		if (m_blocked[notification] && iter->blockable)
 			continue;
@@ -684,7 +684,7 @@ CStateEventHandler::~CStateEventHandler()
 	CContextManager::Get()->UnregisterHandler(this, STATECHANGE_NONE);
 
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
 		(*iter)->UnregisterHandler(this, STATECHANGE_NONE);
 }
 
@@ -870,7 +870,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	bool hasDirs = false;
 	bool hasFiles = false;
 	const std::list<CRemoteDataObject::t_fileInfo>& files = pRemoteDataObject->GetFiles();
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 	{
 		if (iter->dir)
 			hasDirs = true;
@@ -890,7 +890,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	if (!hasDirs)
 		return true;
 
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 	{
 		if (!iter->dir)
 			continue;
@@ -1122,7 +1122,7 @@ CLocalPath CState::GetSynchronizedDirectory(CServerPath remote_path)
 		return CLocalPath();
 
 	CLocalPath local_path = m_sync_browse.local_root;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
 		local_path.AddSegment(*iter);
 
 	return local_path;
@@ -1142,7 +1142,7 @@ CServerPath CState::GetSynchronizedDirectory(CLocalPath local_path)
 		return CServerPath();
 
 	CServerPath remote_path = m_sync_browse.remote_root;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
 		remote_path.AddSegment(*iter);
 
 	return remote_path;

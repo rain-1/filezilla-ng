@@ -444,7 +444,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 	// For each path, check for the resources
 	wxPathList::const_iterator node;
-	for (node = pathList.begin(); node != pathList.end(); node++)
+	for (node = pathList.begin(); node != pathList.end(); ++node)
 	{
 		wxString cur = *node;
 		if (FileExists(cur + fileToFind))
@@ -455,7 +455,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 			return cur + _T("/filezilla");
 	}
 
-	for (node = pathList.begin(); node != pathList.end(); node++)
+	for (node = pathList.begin(); node != pathList.end(); ++node)
 	{
 		wxString cur = *node;
 		if (FileExists(cur + _T("/..") + fileToFind))
@@ -464,7 +464,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 			return cur + _T("/../share/filezilla");
 	}
 
-	for (node = pathList.begin(); node != pathList.end(); node++)
+	for (node = pathList.begin(); node != pathList.end(); ++node)
 	{
 		wxString cur = *node;
 		if (FileExists(cur + _T("/../../") + fileToFind))

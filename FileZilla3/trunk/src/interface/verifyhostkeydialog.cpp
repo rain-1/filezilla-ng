@@ -53,7 +53,7 @@ bool CVerifyHostkeyDialog::IsTrusted(CHostKeyNotification* pNotification)
 {
 	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort());
 
-	for (std::list<struct t_keyData>::const_iterator iter = m_sessionTrustedKeys.begin(); iter != m_sessionTrustedKeys.end(); iter++)
+	for (std::list<struct t_keyData>::const_iterator iter = m_sessionTrustedKeys.begin(); iter != m_sessionTrustedKeys.end(); ++iter)
 	{
 		if (iter->host == host && iter->fingerprint == pNotification->GetFingerprint())
 			return true;

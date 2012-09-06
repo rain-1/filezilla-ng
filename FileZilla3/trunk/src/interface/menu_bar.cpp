@@ -23,9 +23,9 @@ CMenuBar::CMenuBar()
 
 CMenuBar::~CMenuBar()
 {
-	for (std::map<wxMenu*, std::map<int, wxMenuItem*> >::iterator menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); menu_iter++)
+	for (std::map<wxMenu*, std::map<int, wxMenuItem*> >::iterator menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); ++menu_iter)
 	{
-		for (std::map<int, wxMenuItem*>::iterator iter = menu_iter->second.begin(); iter != menu_iter->second.end(); iter++)
+		for (std::map<int, wxMenuItem*>::iterator iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter)
 			delete iter->second;
 	}
 
@@ -145,13 +145,13 @@ void CMenuBar::UpdateBookmarkMenu()
 		return;
 
 	// Delete old bookmarks
-	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_global.begin(); iter != m_bookmark_menu_id_map_global.end(); iter++)
+	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_global.begin(); iter != m_bookmark_menu_id_map_global.end(); ++iter)
 	{
 		pMenu->Delete(iter->first);
 	}
 	m_bookmark_menu_id_map_global.clear();
 
-	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_site.begin(); iter != m_bookmark_menu_id_map_site.end(); iter++)
+	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_site.begin(); iter != m_bookmark_menu_id_map_site.end(); ++iter)
 	{
 		pMenu->Delete(iter->first);
 	}
@@ -173,7 +173,7 @@ void CMenuBar::UpdateBookmarkMenu()
 	{
 		pMenu->AppendSeparator();
 
-		for (std::list<wxString>::const_iterator iter = global_bookmarks.begin(); iter != global_bookmarks.end(); iter++)
+		for (std::list<wxString>::const_iterator iter = global_bookmarks.begin(); iter != global_bookmarks.end(); ++iter)
 		{
 			int id;
 			if (ids == m_bookmark_menu_ids.end())
@@ -184,7 +184,7 @@ void CMenuBar::UpdateBookmarkMenu()
 			else
 			{
 				id = *ids;
-				ids++;
+				++ids;
 			}
 			wxString name(*iter);
 			name.Replace(_T("&"), _T("&&"));
@@ -205,7 +205,7 @@ void CMenuBar::UpdateBookmarkMenu()
 
 	pMenu->AppendSeparator();
 
-	for (std::list<wxString>::const_iterator iter = controls->site_bookmarks->bookmarks.begin(); iter != controls->site_bookmarks->bookmarks.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = controls->site_bookmarks->bookmarks.begin(); iter != controls->site_bookmarks->bookmarks.end(); ++iter)
 	{
 		int id;
 		if (ids == m_bookmark_menu_ids.end())
@@ -216,7 +216,7 @@ void CMenuBar::UpdateBookmarkMenu()
 		else
 		{
 			id = *ids;
-			ids++;
+			++ids;
 		}
 		wxString name(*iter);
 		name.Replace(_T("&"), _T("&&"));
@@ -486,11 +486,11 @@ void CMenuBar::UpdateMenubarState()
 
 bool CMenuBar::ShowItem(int id)
 {
-	for (std::map<wxMenu*, std::map<int, wxMenuItem*> >::iterator menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); menu_iter++)
+	for (std::map<wxMenu*, std::map<int, wxMenuItem*> >::iterator menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); ++menu_iter)
 	{
 		int offset = 0;
 
-		for (std::map<int, wxMenuItem*>::iterator iter = menu_iter->second.begin(); iter != menu_iter->second.end(); iter++)
+		for (std::map<int, wxMenuItem*>::iterator iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter)
 		{
 			if (iter->second->GetId() != id)
 			{
@@ -525,7 +525,7 @@ bool CMenuBar::HideItem(int id)
 
 	std::map<wxMenu*, std::map<int, wxMenuItem*> >::iterator menu_iter = m_hidden_items.insert(std::make_pair(pMenu, std::map<int, wxMenuItem*>())).first;
 
-	for (std::map<int, wxMenuItem*>::iterator iter = menu_iter->second.begin(); iter != menu_iter->second.end(); iter++)
+	for (std::map<int, wxMenuItem*>::iterator iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter)
 	{
 		if (iter->first > (int)pos)
 			break;

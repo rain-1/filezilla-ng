@@ -162,7 +162,7 @@ bool CSettingsDialog::LoadPages()
 	// Keep track of maximum page size
 	size = wxSize();
 
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
 	{
 		if (!iter->page->CreatePage(m_pOptions, this, parentPanel, size))
 			return false;
@@ -188,7 +188,7 @@ bool CSettingsDialog::LoadPages()
 
 	// Keep track of maximum page size
 	size = wxSize(0, 0);
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
 		size.IncTo(iter->page->GetSizer()->GetMinSize());
 
 #ifdef __WXGTK__
@@ -197,7 +197,7 @@ bool CSettingsDialog::LoadPages()
 	parentPanel->SetInitialSize(size);
 
 	// Adjust pages sizes according to maximum size
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
 	{
 		iter->page->GetSizer()->SetMinSize(size);
 		iter->page->GetSizer()->Fit(iter->page);
@@ -212,7 +212,7 @@ bool CSettingsDialog::LoadPages()
 	Show();
 #endif
 
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
 		iter->page->Hide();
 
 	// Select first page
@@ -228,7 +228,7 @@ bool CSettingsDialog::LoadPages()
 
 bool CSettingsDialog::LoadSettings()
 {
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); iter++)
+	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
 	{
 		if (!iter->page->LoadPage())
 			return false;

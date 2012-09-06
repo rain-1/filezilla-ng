@@ -76,7 +76,7 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString remote_file, enum ServerTyp
 	if (remote_file == _T(""))
 		return false;
 
-	for (std::list<wxString>::const_iterator iter = m_ascii_extensions.begin(); iter != m_ascii_extensions.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = m_ascii_extensions.begin(); iter != m_ascii_extensions.end(); ++iter)
 		if (!remote_file.CmpNoCase(*iter))
 			return true;
 

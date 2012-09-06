@@ -1547,7 +1547,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	int firstSelected = -1;
 
 	int i = -1;
-	for (std::list<wxString>::const_iterator iter = selectedNames.begin(); iter != selectedNames.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = selectedNames.begin(); iter != selectedNames.end(); ++iter)
 	{
 		while (++i < (int)m_indexMapping.size())
 		{
@@ -1774,7 +1774,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	// Find correct position in index mapping
 	std::vector<unsigned int>::iterator start = m_indexMapping.begin();
 	if (m_hasParent)
-		start++;
+		++start;
 	CFileListCtrl<CLocalFileData>::CSortComparisonObject compare = GetSortComparisonObject();
 	std::vector<unsigned int>::iterator insertPos = std::lower_bound(start, m_indexMapping.end(), index, compare);
 	compare.Destroy();
@@ -2022,7 +2022,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 			return;
 	}
 
-	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); data++)
+	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); ++data)
 	{
 		wxFileName fn(m_dir, data->name);
 
@@ -2142,7 +2142,7 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 			return;
 	}
 
-	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); data++)
+	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); ++data)
 	{
 		if (data->dir)
 		{
@@ -2215,7 +2215,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 	if (m_dir != _T("\\"))
 		return;
 
-	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); iter++)
+	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter)
 	{
 		wxString drive = iter->volume;
 

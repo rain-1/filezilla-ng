@@ -742,7 +742,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		if (!postLoginCommands.empty())
 		{
 			TiXmlElement* pElement = node->LinkEndChild(new TiXmlElement("PostLoginCommands"))->ToElement();
-			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); iter++)
+			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter)
 				AddTextElement(pElement, "Command", *iter);
 		}
 	}

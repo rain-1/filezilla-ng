@@ -67,7 +67,7 @@ void CClearPrivateDataDialog::Show()
 
 		const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
 
-		for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+		for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
 		{
 			CState* pState = *iter;
 			if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
@@ -122,7 +122,7 @@ void CClearPrivateDataDialog::OnTimer(wxTimerEvent& event)
 {
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
 
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
 	{
 		CState* pState = *iter;
 
@@ -158,7 +158,7 @@ bool CClearPrivateDataDialog::ClearReconnect()
 	COptions::Get()->SetOption(OPTION_LASTSERVERPATH, _T(""));
 
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
 	{
 		CState* pState = *iter;
 

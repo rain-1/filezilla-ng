@@ -103,7 +103,7 @@ public:
 			}
 
 			const std::list<CRemoteDataObject::t_fileInfo>& files = m_pRemoteDataObject->GetFiles();
-			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 			{
 				const CRemoteDataObject::t_fileInfo& info = *iter;
 				if (info.dir)
@@ -118,7 +118,7 @@ public:
 				}
 			}
 
-			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 			{
 				const CRemoteDataObject::t_fileInfo& info = *iter;
 				m_pRemoteTreeView->m_pState->m_pCommandQueue->ProcessCommand(
@@ -374,7 +374,7 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 	const wxTreeItemId root = GetRootItem();
 	wxTreeItemId parent = root;
 
-	for (std::list<wxString>::const_iterator iter = pieces.begin(); iter != pieces.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = pieces.begin(); iter != pieces.end(); ++iter)
 	{
 		if (iter != pieces.begin())
 			path.AddSegment(*iter);
@@ -411,7 +411,7 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 			SortChildren(parent);
 
 			std::list<wxString>::const_iterator nextIter = iter;
-			nextIter++;
+			++nextIter;
 			if (nextIter != pieces.end())
 				DisplayItem(child, listing);
 		}
@@ -617,7 +617,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 				SetItemImages(child, true);
 
 			child = GetPrevSibling(child);
-			iter++;
+			++iter;
 		}
 		else if (cmp > 0)
 		{
@@ -652,7 +652,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 					SetItemImages(child, true);
 			}
 
-			iter++;
+			++iter;
 			inserted = true;
 		}
 	}
@@ -687,7 +687,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 			SetItemImages(child, true);
 		}
 
-		iter++;
+		++iter;
 		inserted = true;
 	}
 
@@ -789,7 +789,7 @@ CServerPath CRemoteTreeView::GetPathFromItem(const wxTreeItemId& item) const
 		if (pData)
 		{
 			CServerPath path = pData->m_path;
-			for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); iter++)
+			for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
 			{
 				if (!path.AddSegment(*iter))
 					return CServerPath();
@@ -1250,7 +1250,7 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		}
 		currentPath = parent;
 		currentPath.AddSegment(newName);
-		for (std::list<wxString>::const_iterator iter = subdirs.begin(); iter != subdirs.end(); iter++)
+		for (std::list<wxString>::const_iterator iter = subdirs.begin(); iter != subdirs.end(); ++iter)
 			currentPath.AddSegment(*iter);
 		m_pState->ChangeRemoteDir(currentPath);
 	}

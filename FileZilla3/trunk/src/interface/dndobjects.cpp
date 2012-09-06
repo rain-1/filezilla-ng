@@ -237,7 +237,7 @@ void CRemoteDataObject::Finalize()
 	AddTextElement(pElement, "Path", m_path.GetSafePath());
 
 	TiXmlElement* pFiles = pElement->LinkEndChild(new TiXmlElement("Files"))->ToElement();
-	for (std::list<t_fileInfo>::const_iterator iter = m_fileList.begin(); iter != m_fileList.end(); iter++)
+	for (std::list<t_fileInfo>::const_iterator iter = m_fileList.begin(); iter != m_fileList.end(); ++iter)
 	{
 		TiXmlElement* pFile = pFiles->LinkEndChild(new TiXmlElement("File"))->ToElement();
 		AddTextElement(pFile, "Name", iter->name);

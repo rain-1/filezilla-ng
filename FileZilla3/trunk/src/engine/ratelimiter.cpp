@@ -139,12 +139,11 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::OnTimer(wxTimerEvent& event)
 {
-	std::list<CRateLimiterObject*> objectsToUnwait;
 	for (int i = 0; i < 2; ++i)
 	{
 		m_tokenDebt[i] = 0;
 
-		if (!m_objectList.size())
+		if (m_objectList.empty())
 			continue;
 
 		wxLongLong limit = GetLimit((enum rate_direction)i);

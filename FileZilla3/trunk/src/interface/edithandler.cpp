@@ -246,7 +246,7 @@ int CEditHandler::GetFileCount(enum CEditHandler::fileType type, enum CEditHandl
 	{
 		if (type != remote)
 		{
-			for (std::list<t_fileData>::const_iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); iter++)
+			for (std::list<t_fileData>::const_iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
 			{
 				if (iter->state != state)
 					continue;
@@ -257,7 +257,7 @@ int CEditHandler::GetFileCount(enum CEditHandler::fileType type, enum CEditHandl
 		}
 		if (type != local)
 		{
-			for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
+			for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 			{
 				if (iter->state != state)
 					continue;
@@ -355,7 +355,7 @@ bool CEditHandler::RemoveAll(bool force)
 {
 	std::list<t_fileData> keep;
 
-	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
+	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 	{
 		if (!force && (iter->state == download || iter->state == upload || iter->state == upload_and_remove))
 		{
@@ -376,7 +376,7 @@ bool CEditHandler::RemoveAll(bool force)
 	m_fileDataList[remote].swap(keep);
 	keep.clear();
 
-	for (std::list<t_fileData>::iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); iter++)
+	for (std::list<t_fileData>::iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
 	{
 		if (force)
 			continue;
@@ -401,7 +401,7 @@ bool CEditHandler::RemoveAll(enum fileState state, const CServer* pServer /*=0*/
 
 	std::list<t_fileData> keep;
 
-	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
+	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 	{
 		if (iter->state != state)
 		{
@@ -433,7 +433,7 @@ bool CEditHandler::RemoveAll(enum fileState state, const CServer* pServer /*=0*/
 std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxString& fileName)
 {
 	std::list<t_fileData>::iterator iter;
-	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); iter++)
+	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
 	{
 		if (iter->file == fileName)
 			break;
@@ -445,7 +445,7 @@ std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxStri
 std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const wxString& fileName) const
 {
 	std::list<t_fileData>::const_iterator iter;
-	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); iter++)
+	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
 	{
 		if (iter->file == fileName)
 			break;
@@ -457,7 +457,7 @@ std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const 
 std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxString& fileName, const CServerPath& remotePath, const CServer& server)
 {
 	std::list<t_fileData>::iterator iter;
-	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
+	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 	{
 		if (iter->name != fileName)
 			continue;
@@ -477,7 +477,7 @@ std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxStri
 std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const
 {
 	std::list<t_fileData>::const_iterator iter;
-	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
+	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 	{
 		if (iter->name != fileName)
 			continue;
@@ -629,7 +629,7 @@ void CEditHandler::CheckForModifications(bool emitEvent)
 	for (int i = 0; i < 2; i++)
 	{
 checkmodifications_loopbegin:
-		for (std::list<t_fileData>::iterator iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); iter++)
+		for (std::list<t_fileData>::iterator iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); ++iter)
 		{
 			if (iter->state != edit)
 				continue;
@@ -1158,7 +1158,7 @@ wxString CEditHandler::TruncateFilename(const wxString path, const wxString& nam
 
 bool CEditHandler::FilenameExists(const wxString& file)
 {
-	for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); iter++)
+	for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 	{
 #ifdef __WXMSW__
 		if (!iter->file.CmpNoCase(file))
@@ -1376,7 +1376,7 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent& event)
 		files.push_front(item);
 	}
 
-	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 	{
 		const int i = *iter;
 
@@ -1429,7 +1429,7 @@ void CEditHandlerStatusDialog::OnUpload(wxCommandEvent& event)
 		files.push_front(item);
 	}
 
-	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 	{
 		const int i = *iter;
 
@@ -1479,7 +1479,7 @@ void CEditHandlerStatusDialog::OnEdit(wxCommandEvent& event)
 		files.push_front(item);
 	}
 
-	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 	{
 		const int i = *iter;
 

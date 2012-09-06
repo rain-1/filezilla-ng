@@ -24,7 +24,7 @@ CCommandQueue::CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, 
 
 CCommandQueue::~CCommandQueue()
 {
-	for (std::list<CCommand *>::iterator iter = m_CommandList.begin(); iter != m_CommandList.end(); iter++)
+	for (std::list<CCommand *>::iterator iter = m_CommandList.begin(); iter != m_CommandList.end(); ++iter)
 		delete *iter;
 }
 
@@ -150,7 +150,7 @@ bool CCommandQueue::Cancel()
 	std::list<CCommand *>::iterator iter = m_CommandList.begin();
 	CCommand *pCommand = *(iter++);
 
-	for (; iter != m_CommandList.end(); iter++)
+	for (; iter != m_CommandList.end(); ++iter)
 		delete *iter;
 
 	m_CommandList.clear();

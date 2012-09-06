@@ -668,7 +668,7 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 		if (!postLoginCommands.empty())
 		{
 			wxString commands;
-			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); iter++)
+			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter)
 			{
 				if (!commands.empty())
 					commands += _T("\n");

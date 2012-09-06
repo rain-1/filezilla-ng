@@ -18,7 +18,7 @@ CToolBar::CToolBar()
 
 CToolBar::~CToolBar()
 {
-	for (std::map<int, wxToolBarToolBase*>::iterator iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); iter++)
+	for (std::map<int, wxToolBarToolBase*>::iterator iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); ++iter)
 		delete iter->second;
 }
 
@@ -206,7 +206,7 @@ bool CToolBar::ShowTool(int id)
 	int offset = 0;
 
 	std::map<int, wxToolBarToolBase*>::iterator iter;
-	for (iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); iter++)
+	for (iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); ++iter)
 	{
 		if (iter->second->GetId() != id)
 		{
@@ -234,7 +234,7 @@ bool CToolBar::HideTool(int id)
 	if (!tool)
 		return false;
 
-	for (std::map<int, wxToolBarToolBase*>::iterator iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); iter++)
+	for (std::map<int, wxToolBarToolBase*>::iterator iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); ++iter)
 	{
 		if (iter->first > pos)
 			break;

@@ -155,7 +155,7 @@ CReentrantInterProcessMutexLocker::CReentrantInterProcessMutexLocker(enum t_ipcM
 	m_type = mutexType;
 
 	std::list<t_data>::iterator iter;
-	for (iter = m_mutexes.begin(); iter != m_mutexes.end(); iter++)
+	for (iter = m_mutexes.begin(); iter != m_mutexes.end(); ++iter)
 	{
 		if (iter->pMutex->GetType() == mutexType)
 			break;
@@ -177,7 +177,7 @@ CReentrantInterProcessMutexLocker::CReentrantInterProcessMutexLocker(enum t_ipcM
 CReentrantInterProcessMutexLocker::~CReentrantInterProcessMutexLocker()
 {
 	std::list<t_data>::iterator iter;
-	for (iter = m_mutexes.begin(); iter != m_mutexes.end(); iter++)
+	for (iter = m_mutexes.begin(); iter != m_mutexes.end(); ++iter)
 	{
 		if (iter->pMutex->GetType() == m_type)
 			break;

@@ -58,7 +58,7 @@ void CFilterEditDialog::OnCancel(wxCommandEvent& event)
 bool CFilterEditDialog::Create(wxWindow* parent, const std::vector<CFilter>& filters, const std::vector<CFilterSet>& filterSets)
 {
 	bool has_foreign_type = false;
-	for (std::vector<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); iter++)
+	for (std::vector<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
 	{
 		const CFilter& filter = *iter;
 		if (!filter.HasConditionOfType(filter_foreign))
@@ -84,7 +84,7 @@ bool CFilterEditDialog::Create(wxWindow* parent, const std::vector<CFilter>& fil
 
 	m_filters = filters;
 	m_filterSets = filterSets;
-	for (std::vector<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); iter++)
+	for (std::vector<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
 		m_pFilterListCtrl->Append(iter->name);
 
 	m_pWindowStateManager = new CWindowStateManager(this);
@@ -153,7 +153,7 @@ void CFilterEditDialog::OnNew(wxCommandEvent& event)
 
 	m_filters.push_back(filter);
 
-	for (std::vector<CFilterSet>::iterator iter = m_filterSets.begin(); iter != m_filterSets.end(); iter++)
+	for (std::vector<CFilterSet>::iterator iter = m_filterSets.begin(); iter != m_filterSets.end(); ++iter)
 	{
 		CFilterSet& set = *iter;
 		set.local.push_back(false);
@@ -177,7 +177,7 @@ void CFilterEditDialog::OnDelete(wxCommandEvent& event)
 	m_filters.erase(m_filters.begin() + item);
 
 	// Remote filter from all filter sets
-	for (std::vector<CFilterSet>::iterator iter = m_filterSets.begin(); iter != m_filterSets.end(); iter++)
+	for (std::vector<CFilterSet>::iterator iter = m_filterSets.begin(); iter != m_filterSets.end(); ++iter)
 	{
 		CFilterSet& set = *iter;
 		set.local.erase(set.local.begin() + item);
@@ -259,7 +259,7 @@ void CFilterEditDialog::OnCopy(wxCommandEvent& event)
 
 	m_filters.push_back(filter);
 
-	for (std::vector<CFilterSet>::iterator iter = m_filterSets.begin(); iter != m_filterSets.end(); iter++)
+	for (std::vector<CFilterSet>::iterator iter = m_filterSets.begin(); iter != m_filterSets.end(); ++iter)
 	{
 		CFilterSet& set = *iter;
 		set.local.push_back(false);

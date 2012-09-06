@@ -118,7 +118,7 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 	std::sort(m_locale.begin(), m_locale.end(), compareLangAsc);
 
 	std::vector<struct _locale_info>::const_iterator iter;
-	for (iter = m_locale.begin(); iter != m_locale.end(); iter++)
+	for (iter = m_locale.begin(); iter != m_locale.end(); ++iter)
 	{
 		n = pListBox->Append(iter->name + _T(" (") + iter->code + _T(")"));
 		if (iter->code == currentLanguage)
