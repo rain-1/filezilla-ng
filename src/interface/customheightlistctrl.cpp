@@ -34,7 +34,7 @@ void wxCustomHeightListCtrl::SetLineCount(int count)
 	{
 		std::set<int> selectedLines = m_selectedLines;
 		m_selectedLines.clear();
-		for (std::set<int>::const_iterator iter = selectedLines.begin(); iter != selectedLines.end(); iter++)
+		for (std::set<int>::const_iterator iter = selectedLines.begin(); iter != selectedLines.end(); ++iter)
 			if (*iter < count)
 				m_selectedLines.insert(*iter);
 	}
@@ -89,7 +89,7 @@ void wxCustomHeightListCtrl::OnDraw(wxDC& dc)
 	dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT)));
 	dc.SetPen(*wxTRANSPARENT_PEN);
 
-	for (std::set<int>::const_iterator iter = m_selectedLines.begin(); iter != m_selectedLines.end(); iter++)
+	for (std::set<int>::const_iterator iter = m_selectedLines.begin(); iter != m_selectedLines.end(); ++iter)
 	{
 		if (*iter == m_focusedLine)
 			dc.SetPen(wxPen(wxColour(0, 0, 0), 1, wxDOT));

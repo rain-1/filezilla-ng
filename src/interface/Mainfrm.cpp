@@ -674,7 +674,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 
 		COptions::Get()->SetOption(OPTION_VIEW_HIDDEN_FILES, showHidden ? 1 : 0);
 		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 		{
 			CState* pState = *iter;
 			CServerPath path = pState->GetRemotePath();
@@ -942,7 +942,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	CState* pState = 0;
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 	{
 		if ((*iter)->m_pEngine != pEngine)
 			continue;
@@ -1140,7 +1140,7 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 			if (m_pQueuePane && pParent == m_pQueuePane)
 			{
 				// It's the AUI frame manager hint window. Ignore it
-				iter++;
+				++iter;
 				pTop = (wxTopLevelWindow*)(*iter);
 				continue;
 			}
@@ -1282,7 +1282,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 
 	bool res = true;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 	{
 		CState* pState = *iter;
 		if (!pState->m_pCommandQueue)
@@ -1306,7 +1306,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, controls->site_bookmarks->path);
 	}
 
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 	{
 		CState *pState = *iter;
 		pState->DestroyEngine();
@@ -2099,7 +2099,7 @@ void CMainFrame::OnNavigationKeyEvent(wxNavigationKeyEvent& event)
 	windowOrder.push_back(m_pQueuePane);
 
 	std::list<wxWindow*>::iterator iter;
-	for (iter = windowOrder.begin(); iter != windowOrder.end(); iter++)
+	for (iter = windowOrder.begin(); iter != windowOrder.end(); ++iter)
 	{
 		if (*iter == event.GetEventObject())
 			break;
@@ -2155,7 +2155,7 @@ void CMainFrame::OnChar(wxKeyEvent& event)
 	else
 	{
 		wxWindow *parent = focused->GetParent();
-		for (iter = windowOrder.begin(); iter != windowOrder.end(); iter++)
+		for (iter = windowOrder.begin(); iter != windowOrder.end(); ++iter)
 		{
 			if (*iter == focused || *iter == parent)
 			{
@@ -2182,7 +2182,7 @@ void CMainFrame::FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<w
 		skipFirst = false;
 		if (forward)
 		{
-			iter++;
+			++iter;
 			if (iter == windowOrder.end())
 				iter = windowOrder.begin();
 		}
@@ -2190,7 +2190,7 @@ void CMainFrame::FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<w
 		{
 			if (iter == windowOrder.begin())
 				iter = windowOrder.end();
-			iter--;
+			--iter;
 		}
 
 		if (iter == start)

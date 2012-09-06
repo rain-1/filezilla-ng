@@ -823,7 +823,7 @@ void CLocalTreeView::Refresh()
 					dirsToCheck.push_front(subdir);
 				}
 				child = GetPrevSibling(child);
-				iter++;
+				++iter;
 			}
 			else if (cmp > 0)
 			{
@@ -847,7 +847,7 @@ void CLocalTreeView::Refresh()
 					);
 
 				CheckSubdirStatus(newItem, fullname);
-				iter++;
+				++iter;
 				inserted = true;
 			}
 		}
@@ -873,7 +873,7 @@ void CLocalTreeView::Refresh()
 				);
 
 			CheckSubdirStatus(newItem, fullname);
-			iter++;
+			++iter;
 			inserted = true;
 		}
 		if (inserted)
@@ -1091,7 +1091,7 @@ void CLocalTreeView::OnVolumesEnumerated(wxCommandEvent& event)
 		m_pVolumeEnumeratorThread = 0;
 	}
 
-	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); iter++)
+	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter)
 	{
 		wxString drive = iter->volume;
 

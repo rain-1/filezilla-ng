@@ -58,7 +58,7 @@ void CPowerManagement::OnStateChange(CState* pState, enum t_statechange_notifica
 	}
 
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); iter++)
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
 	{
 		if (!(*iter)->IsRemoteIdle())
 		{

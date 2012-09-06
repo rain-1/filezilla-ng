@@ -9,7 +9,7 @@ COptionChangeEventHandler::COptionChangeEventHandler()
 
 COptionChangeEventHandler::~COptionChangeEventHandler()
 {
-	for (std::set<int>::const_iterator iter = m_handled_options.begin(); iter != m_handled_options.end(); iter++)
+	for (std::set<int>::const_iterator iter = m_handled_options.begin(); iter != m_handled_options.end(); ++iter)
 		m_handlers[*iter].erase(this);
 }
 
@@ -35,7 +35,7 @@ void COptionChangeEventHandler::UnregisterAll()
 {
 	for (std::size_t i = 0; i < m_handlers.size(); i++)
 	{
-		for (std::set<COptionChangeEventHandler*>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); iter++)
+		for (std::set<COptionChangeEventHandler*>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); ++iter)
 		{
 			(*iter)->m_handled_options.clear();
 		}
@@ -48,7 +48,7 @@ void COptionChangeEventHandler::DoNotify(int option)
 	if (option < 0 || static_cast<std::size_t>(option) >= m_handlers.size())
 		return;
 
-	for (std::set<COptionChangeEventHandler*>::iterator iter = m_handlers[option].begin(); iter != m_handlers[option].end(); iter++)
+	for (std::set<COptionChangeEventHandler*>::iterator iter = m_handlers[option].begin(); iter != m_handlers[option].end(); ++iter)
 	{
 		(*iter)->OnOptionChanged(option);
 	}

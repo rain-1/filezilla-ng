@@ -26,14 +26,14 @@ public:
 
 	virtual ~CIconPreview()
 	{
-		for (std::list<wxBitmap*>::iterator iter = m_icons.begin(); iter != m_icons.end(); iter++)
+		for (std::list<wxBitmap*>::iterator iter = m_icons.begin(); iter != m_icons.end(); ++iter)
 			delete *iter;
 	}
 
 	void LoadIcons(const wxString& theme, const wxSize& iconSize)
 	{
 		m_iconSize = iconSize;
-		for (std::list<wxBitmap*>::iterator iter = m_icons.begin(); iter != m_icons.end(); iter++)
+		for (std::list<wxBitmap*>::iterator iter = m_icons.begin(); iter != m_icons.end(); ++iter)
 			delete *iter;
 
 		m_icons = CThemeProvider::GetAllImages(theme, m_iconSize);
@@ -108,7 +108,7 @@ protected:
 		int x = BORDER;
 		int y = BORDER;
 
-		for (std::list<wxBitmap*>::iterator iter = m_icons.begin(); iter != m_icons.end(); iter++)
+		for (std::list<wxBitmap*>::iterator iter = m_icons.begin(); iter != m_icons.end(); ++iter)
 		{
 			wxBitmap* bitmap = *iter;
 			dc.DrawBitmap(*bitmap, x, y, true);
@@ -193,7 +193,7 @@ bool COptionsPageThemes::DisplayTheme(const wxString& theme)
 	pPreview->DeleteAllPages();
 
 	std::list<wxString> sizes = CThemeProvider::GetThemeSizes(theme);
-	for (std::list<wxString>::const_iterator iter = sizes.begin(); iter != sizes.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = sizes.begin(); iter != sizes.end(); ++iter)
 	{
 		const wxString& size = *iter;
 
@@ -262,7 +262,7 @@ bool COptionsPageThemes::OnDisplayedFirstTime()
 
 	wxString theme = m_pOptions->GetOption(OPTION_THEME);
 	wxString firstName;
-	for (std::list<wxString>::const_iterator iter = themes.begin(); iter != themes.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = themes.begin(); iter != themes.end(); ++iter)
 	{
 		wxString name, author, mail;
 		if (!CThemeProvider::GetThemeData(*iter, name, author, mail))

@@ -7,9 +7,9 @@
 
 CVerifyCertDialog::~CVerifyCertDialog()
 {
-	for (std::list<t_certData>::iterator iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); iter++)
+	for (std::list<t_certData>::iterator iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); ++iter)
 		delete [] iter->data;
-	for (std::list<t_certData>::iterator iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); iter++)
+	for (std::list<t_certData>::iterator iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); ++iter)
 		delete [] iter->data;
 }
 
@@ -193,7 +193,7 @@ void CVerifyCertDialog::ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSi
 	if (!tokenlist.empty())
 	{
 		wxString value = tokenlist.front();
-		for (std::list<wxString>::const_iterator iter = ++tokenlist.begin(); iter != tokenlist.end(); iter++)
+		for (std::list<wxString>::const_iterator iter = ++tokenlist.begin(); iter != tokenlist.end(); ++iter)
 			value += _T(",") + *iter;
 
 		pSizer->Add(new wxStaticText(pDlg, wxID_ANY, _("Other:")));
@@ -217,7 +217,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& t
 		{
 			if (iter->Left(len) != prefix)
 			{
-				iter++;
+				++iter;
 				continue;
 			}
 
@@ -268,7 +268,7 @@ bool CVerifyCertDialog::IsTrusted(CCertificateNotification* pNotification)
 
 bool CVerifyCertDialog::IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly)
 {
-	for (std::list<t_certData>::const_iterator iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); iter++)
+	for (std::list<t_certData>::const_iterator iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); ++iter)
 	{
 		if (host != iter->host)
 			continue;
@@ -286,7 +286,7 @@ bool CVerifyCertDialog::IsTrusted(const wxString& host, int port, const unsigned
 	if (permanentOnly)
 		return false;
 
-	for (std::list<t_certData>::const_iterator iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); iter++)
+	for (std::list<t_certData>::const_iterator iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); ++iter)
 	{
 		if (host != iter->host)
 			continue;

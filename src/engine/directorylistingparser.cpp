@@ -3061,8 +3061,6 @@ void CDirectoryListingParser::DeduceEncoding()
 
 	memset(&count, 0, sizeof(int)*256);
 
-	int count_us = 0;
-	int count_space = 0;
 	for (std::list<t_list>::const_iterator it = m_DataList.begin(); it != m_DataList.end(); ++it)
 	{
 		for (int i = 0; i < it->len; ++i)

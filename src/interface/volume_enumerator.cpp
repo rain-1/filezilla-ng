@@ -29,7 +29,7 @@ CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
 	m_stop = true;
 	Wait();
 
-	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); iter++)
+	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); ++iter)
 	{
 		delete [] iter->pVolume;
 		delete [] iter->pVolumeName;
@@ -191,7 +191,7 @@ std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> CVolumeDescriptionEn
 
 	m_crit_section.Enter();
 	
-	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); iter++)
+	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); ++iter)
 	{
 		t_VolumeInfo info;
 		info.volume = iter->pVolume;

@@ -143,7 +143,7 @@ public:
 		}
 
 		const std::list<CRemoteDataObject::t_fileInfo>& files = m_pRemoteDataObject->GetFiles();
-		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 		{
 			const CRemoteDataObject::t_fileInfo& info = *iter;
 			if (info.dir)
@@ -158,7 +158,7 @@ public:
 			}
 		}
 
-		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); iter++)
+		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 		{
 			const CRemoteDataObject::t_fileInfo& info = *iter;
 			m_pRemoteListView->m_pState->m_pCommandQueue->ProcessCommand(
@@ -485,7 +485,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 		// Find correct position in index mapping
 		std::vector<unsigned int>::iterator start = m_indexMapping.begin();
 		if (m_hasParent)
-			start++;
+			++start;
 		CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = GetSortComparisonObject();
 		std::vector<unsigned int>::iterator insertPos = std::lower_bound(start, m_indexMapping.end(), i, compare);
 		compare.Destroy();
@@ -493,7 +493,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 		const int item = insertPos - m_indexMapping.begin();
 		m_indexMapping.insert(insertPos, i);
 
-		for (std::list<unsigned int>::iterator iter = added.begin(); iter != added.end(); iter++)
+		for (std::list<unsigned int>::iterator iter = added.begin(); iter != added.end(); ++iter)
 		{
 			unsigned int &pos = *iter;
 			if (pos >= (unsigned int)item)
@@ -645,7 +645,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(const CSharedPointer<const 
 	}
 
 	// Erase file data
-	for (std::list<unsigned int>::reverse_iterator iter = removedItems.rbegin(); iter != removedItems.rend(); iter++)
+	for (std::list<unsigned int>::reverse_iterator iter = removedItems.rbegin(); iter != removedItems.rend(); ++iter)
 	{
 		m_fileData.erase(m_fileData.begin() + *iter);
 	}
@@ -653,7 +653,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(const CSharedPointer<const 
 	// Erase indexes
 	wxASSERT(!toRemove);
 	wxASSERT(removedIndexes.size() == removed);
-	for (std::list<int>::iterator iter = removedIndexes.begin(); iter != removedIndexes.end(); iter++)
+	for (std::list<int>::iterator iter = removedIndexes.begin(); iter != removedIndexes.end(); ++iter)
 	{
 		m_indexMapping.erase(m_indexMapping.begin() + *iter);
 	}
@@ -2246,7 +2246,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 	// Reselect previous items if neccessary.
 	// Sorting direction did not change. We just have to scan through items once
 	unsigned int i = 0;
-	for (std::list<wxString>::const_iterator iter = selectedNames.begin(); iter != selectedNames.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = selectedNames.begin(); iter != selectedNames.end(); ++iter)
 	{
 		while (++i < m_indexMapping.size())
 		{
@@ -2640,7 +2640,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 			return;
 	}
 
-	for (std::list<CDirentry>::const_iterator iter = selected_item_list.begin(); iter != selected_item_list.end(); iter++)
+	for (std::list<CDirentry>::const_iterator iter = selected_item_list.begin(); iter != selected_item_list.end(); ++iter)
 	{
 		const CDirentry& entry = *iter;
 
@@ -3086,7 +3086,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 	else
 	{
 		wxString urls;
-		for (std::list<CDirentry>::const_iterator iter = selected_item_list.begin(); iter != selected_item_list.end(); iter++)
+		for (std::list<CDirentry>::const_iterator iter = selected_item_list.begin(); iter != selected_item_list.end(); ++iter)
 		{
 			urls += server;
 			urls += path.FormatFilename(iter->name, false);

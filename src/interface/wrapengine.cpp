@@ -513,7 +513,7 @@ void CWrapEngine::UnwrapRecursive_Wrapped(const std::list<int> &wrapped, std::ve
 	unsigned int i = 0;
 	for (std::list<int>::const_iterator iter = wrapped.begin();
 		iter != wrapped.end();
-		iter++)
+		++iter)
 	{
 		UnwrapRecursive(windows[i], windows[i]->GetSizer());
 		windows[i]->GetSizer()->Layout();
@@ -538,7 +538,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 	int maxWidth = GetWidthFromCache(name);
 	if (maxWidth)
 	{
-		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
+		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
 		{
 			wxSizer* pSizer = (*iter)->GetSizer();
 			if (!pSizer)
@@ -561,7 +561,9 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 			wxASSERT(!(res & wrap_failed));
 			pSizer->Layout();
 			pSizer->Fit(*iter);
+#ifdef __WXDEBUG__
 			wxSize size = pSizer->GetMinSize();
+#endif
 			wxASSERT(size.x <= maxWidth);
 		}
 		return true;
@@ -571,7 +573,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 	wxSize size = minRequestedSize;
 
-	for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
+	for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
 	{
 		wxSizer* pSizer = (*iter)->GetSizer();
 		if (!pSizer)
@@ -611,7 +613,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		std::list<int> didwrap;
 
 		wxSize size = minRequestedSize;
-		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); iter++)
+		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
 		{
 			wxSizer* pSizer = (*iter)->GetSizer();
 #ifdef __WXMAC__
@@ -713,7 +715,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 #else
 			const int offset = 0;
 #endif
-	for (std::vector<wxWindow*>::iterator iter = all_windows.begin(); iter != all_windows.end(); iter++)
+	for (std::vector<wxWindow*>::iterator iter = all_windows.begin(); iter != all_windows.end(); ++iter)
 	{
 		wxSizer *pSizer = (*iter)->GetSizer();
 

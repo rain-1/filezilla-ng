@@ -40,7 +40,7 @@ const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex 
 		else
 		{
 			std::list<CServer>::const_iterator iter;
-			for (iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); iter++)
+			for (iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); ++iter)
 			{
 				if (*iter == server)
 					break;
@@ -68,7 +68,7 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 	GetMostRecentServers(false);
 
 	bool relocated = false;
-	for (std::list<CServer>::iterator iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); iter++)
+	for (std::list<CServer>::iterator iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); ++iter)
 	{
 		if (iter->EqualsNoPass(server))
 		{
@@ -97,7 +97,7 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 		pElement = pDocument->LinkEndChild(new TiXmlElement("RecentServers"))->ToElement();
 
 	pElement->Clear();
-	for (std::list<CServer>::const_iterator iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); iter++)
+	for (std::list<CServer>::const_iterator iter = m_mostRecentServers.begin(); iter != m_mostRecentServers.end(); ++iter)
 	{
 		TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
 		SetServer(pServer, *iter);

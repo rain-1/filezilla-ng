@@ -3811,7 +3811,7 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 	if (!number.ToULong(&port))
 		 return false;
 
-	if (port <= 0 || port > 65535)
+	if (port == 0 || port > 65535)
 	   return false;
 
 	pData->port = port;

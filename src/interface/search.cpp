@@ -878,7 +878,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 						continue;
 					}
 				}
-				iter++;
+				++iter;
 			}
 			if (!replaced)
 				selected_dirs.push_back(path);
@@ -889,11 +889,11 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 
 	// Now in a second phase filter out all files that are also in a directory
 	std::list<int> selected_files_new;
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); iter++)
+	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
 	{
 		CServerPath path = m_results->m_fileData[*iter].path;
 		std::list<CServerPath>::const_iterator path_iter;
-		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); path_iter++)
+		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter)
 		{
 			if (*path_iter == path || path_iter->IsParentOf(path, false))
 				break;
@@ -951,7 +951,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 	bool start = XRCCTRL(dlg, "ID_QUEUE_START", wxRadioButton)->GetValue();
 	bool flatten = XRCCTRL(dlg, "ID_PATHS_FLATTEN", wxRadioButton)->GetValue();
 
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); iter++)
+	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
 	{
 		const CDirentry& entry = m_results->m_fileData[*iter].entry;
 
@@ -966,7 +966,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 				segments.push_front(remote_path.GetLastSegment());
 				remote_path = remote_path.GetParent();
 			}
-			for (std::list<wxString>::const_iterator segment_iter = segments.begin(); segment_iter != segments.end(); segment_iter++)
+			for (std::list<wxString>::const_iterator segment_iter = segments.begin(); segment_iter != segments.end(); ++segment_iter)
 				target_path.AddSegment(*segment_iter);
 		}
 
@@ -987,7 +987,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 	else
 		mode = start ? CRecursiveOperation::recursive_download : CRecursiveOperation::recursive_addtoqueue;
 
-	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); iter++)
+	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); ++iter)
 	{
 		CLocalPath target_path = path;
 		if (!flatten && iter->HasParent())
@@ -1033,7 +1033,7 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 	if (wxMessageBox(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
 		return;
 
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); iter++)
+	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
 	{
 		const CDirentry& entry = m_results->m_fileData[*iter].entry;
 		std::list<wxString> files_to_delete;
@@ -1041,7 +1041,7 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[*iter].path, files_to_delete));
 	}
 
-	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); iter++)
+	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); ++iter)
 	{
 		CServerPath path = *iter;
 		if (!path.HasParent())

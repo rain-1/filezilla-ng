@@ -71,7 +71,7 @@ wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& /*cl
 
 	wxLogNull logNull;
 
-	for (std::list<wxString>::const_iterator iter = dirs.begin(); iter != dirs.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = dirs.begin(); iter != dirs.end(); ++iter)
 	{
 		wxString fileName = *iter + name + _T(".png");
 //#ifdef __WXMSW__

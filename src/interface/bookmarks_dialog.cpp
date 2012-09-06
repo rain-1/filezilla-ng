@@ -101,7 +101,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 				return;
 			}
 		}
-		for (std::list<wxString>::const_iterator iter = bookmarks.begin(); iter != bookmarks.end(); iter++)
+		for (std::list<wxString>::const_iterator iter = bookmarks.begin(); iter != bookmarks.end(); ++iter)
 		{
 			if (*iter == name)
 			{
@@ -218,7 +218,7 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 	if (!CSiteManager::GetBookmarks(m_site_path, bookmarks))
 		return;
 
-	for (std::list<wxString>::const_iterator iter = bookmarks.begin(); iter != bookmarks.end(); iter++)
+	for (std::list<wxString>::const_iterator iter = bookmarks.begin(); iter != bookmarks.end(); ++iter)
 	{
 		wxString path = *iter;
 		path.Replace(_T("\\"), _T("\\\\"));

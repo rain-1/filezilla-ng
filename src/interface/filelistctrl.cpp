@@ -343,7 +343,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 		m_sortColumn = column;
 		std::vector<unsigned int>::iterator start = m_indexMapping.begin();
 		if (m_hasParent)
-			start++;
+			++start;
 		std::reverse(start, m_indexMapping.end());
 
 		if (updateSelections)
@@ -368,7 +368,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 
 	std::vector<unsigned int>::iterator start = m_indexMapping.begin();
 	if (m_hasParent)
-		start++;
+		++start;
 	CSortComparisonObject object = GetSortComparisonObject();
 	std::sort(start, m_indexMapping.end(), object);
 	object.Destroy();

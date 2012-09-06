@@ -118,13 +118,13 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 
 		if (!challenge)
 		{
-			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%d HTTP/1.1\r\nHost: %s:%d\r\nUser-Agent: FileZilla\r\n\r\n",
+			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nUser-Agent: FileZilla\r\n\r\n",
 				(const char*)host_raw, port,
 				(const char*)host_raw, port);
 		}
 		else
 		{
-			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%d HTTP/1.1\r\nHost: %s:%d\r\nProxy-Authorization: Basic %s\r\nUser-Agent: FileZilla\r\n\r\n",
+			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nProxy-Authorization: Basic %s\r\nUser-Agent: FileZilla\r\n\r\n",
 				(const char*)host_raw, port,
 				(const char*)host_raw, port,
 				(const char*)challenge);

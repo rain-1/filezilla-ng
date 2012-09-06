@@ -227,7 +227,7 @@ void CPowerManagementInhibitorImpl::OnAsyncReply(wxDBusConnectionEvent& event)
 		m_state = busy;
 		msg->GetUInt(m_cookie);
 		if (m_debug)
-			printf("wxD-Bus: CPowerManagementInhibitor: Request successful, cookie is %d\n", m_cookie);
+			printf("wxD-Bus: CPowerManagementInhibitor: Request successful, cookie is %u\n", m_cookie);
 		if (m_intended_state == idle)
 			RequestIdle();
 		return;

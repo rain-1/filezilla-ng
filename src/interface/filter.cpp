@@ -57,7 +57,7 @@ CFilter::CFilter()
 
 bool CFilter::HasConditionOfType(enum t_filterType type) const
 {
-	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); iter++)
+	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
 	{
 		if (iter->type == type)
 			return true;
@@ -149,7 +149,7 @@ void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
 	AddTextElement(pElement, "MatchCase", filter.matchCase ? _T("1") : _T("0"));
 
 	TiXmlElement* pConditions = pElement->LinkEndChild(new TiXmlElement("Conditions"))->ToElement();
-	for (std::vector<CFilterCondition>::const_iterator conditionIter = filter.filters.begin(); conditionIter != filter.filters.end(); conditionIter++)
+	for (std::vector<CFilterCondition>::const_iterator conditionIter = filter.filters.begin(); conditionIter != filter.filters.end(); ++conditionIter)
 	{
 		const CFilterCondition& condition = *conditionIter;
 
@@ -222,7 +222,7 @@ void CFilterDialog::SaveFilters()
 
 	pFilters = pDocument->LinkEndChild(new TiXmlElement("Filters"))->ToElement();
 
-	for (std::vector<CFilter>::const_iterator iter = m_globalFilters.begin(); iter != m_globalFilters.end(); iter++)
+	for (std::vector<CFilter>::const_iterator iter = m_globalFilters.begin(); iter != m_globalFilters.end(); ++iter)
 	{
 		const CFilter& filter = *iter;
 
@@ -241,7 +241,7 @@ void CFilterDialog::SaveFilters()
 	pSets = pDocument->LinkEndChild(new TiXmlElement("Sets"))->ToElement();
 	SetTextAttribute(pSets, "Current", wxString::Format(_T("%d"), m_currentFilterSet));
 
-	for (std::vector<CFilterSet>::const_iterator iter = m_globalFilterSets.begin(); iter != m_globalFilterSets.end(); iter++)
+	for (std::vector<CFilterSet>::const_iterator iter = m_globalFilterSets.begin(); iter != m_globalFilterSets.end(); ++iter)
 	{
 		const CFilterSet& set = *iter;
 		TiXmlElement* pSet = pSets->LinkEndChild(new TiXmlElement("Set"))->ToElement();
@@ -636,7 +636,7 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 
 bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const
 {
-	for (std::list<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); iter++)
+	for (std::list<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
 	{
 		if (FilenameFilteredByFilter(*iter, name, path, dir, size, attributes, date))
 			return true;
@@ -734,7 +734,7 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 	else if (!dir && !filter.filterFiles)
 		return false;
 
-	for (std::vector<CFilterCondition>::const_iterator iter = filter.filters.begin(); iter != filter.filters.end(); iter++)
+	for (std::vector<CFilterCondition>::const_iterator iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
 	{
 		bool match = false;
 		const CFilterCondition& condition = *iter;
@@ -903,7 +903,7 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 
 bool CFilterManager::CompileRegexes(CFilter& filter)
 {
-	for (std::vector<CFilterCondition>::iterator iter = filter.filters.begin(); iter != filter.filters.end(); iter++)
+	for (std::vector<CFilterCondition>::iterator iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
 	{
 		CFilterCondition& condition = *iter;
 		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4)

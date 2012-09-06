@@ -436,7 +436,7 @@ bool CStatusView::Show(bool show /*=true*/)
 			m_lineLengths.clear();
 		}
 
-		for (std::list<t_line>::const_iterator iter = m_hiddenLines.begin(); iter != m_hiddenLines.end(); iter++)
+		for (std::list<t_line>::const_iterator iter = m_hiddenLines.begin(); iter != m_hiddenLines.end(); ++iter)
 		{
 			AddToLog(iter->messagetype, iter->message, iter->time);
 		}

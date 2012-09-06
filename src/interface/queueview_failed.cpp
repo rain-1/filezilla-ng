@@ -64,7 +64,7 @@ void CQueueViewFailed::OnRemoveAll(wxCommandEvent& event)
 	if (pEditHandler)
 		pEditHandler->RemoveAll(CEditHandler::upload_and_remove_failed);
 
-	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); iter++)
+	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 		delete *iter;
 	m_serverList.clear();
 
@@ -232,7 +232,7 @@ bool CQueueViewFailed::RequeueServerItem(CServerItem* pServerItem)
 	delete pServerItem;
 
 	std::vector<CServerItem*>::iterator iter;
-	for (iter = m_serverList.begin(); iter != m_serverList.end(); iter++)
+	for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
 		if (*iter == pServerItem)
 			break;
