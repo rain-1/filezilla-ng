@@ -4051,7 +4051,7 @@ int CFtpControlSocket::TransferParseResponse()
 	switch (pData->opState)
 	{
 	case rawtransfer_type:
-		if (code != 2 && code != 2)
+		if (code != 2 && code != 3)
 			error = true;
 		else
 		{
