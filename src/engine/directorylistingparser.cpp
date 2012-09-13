@@ -448,8 +448,9 @@ protected:
 };
 
 CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding)
-	: m_pControlSocket(pControlSocket), m_server(server)
+	: m_pControlSocket(pControlSocket)
 	, m_totalData()
+	, m_server(server)
 	, m_listingEncoding(encoding)
 {
 	m_currentOffset = 0;
