@@ -302,7 +302,7 @@ int GetRandomNumber(int low, int high)
 		bool zero = false;
 		while (r)
 		{
-			if (!r & 1)
+			if (!(r & 1))
 				zero = true;
 			r >>= 1;
 			random_bits++;
