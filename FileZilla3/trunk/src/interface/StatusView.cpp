@@ -94,7 +94,6 @@ END_EVENT_TABLE()
 CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 	: wxWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER)
 {
-	m_pTextCtrl = 0;
 	m_pTextCtrl = new CFastTextCtrl(this);
 
 #ifdef __WXMAC__

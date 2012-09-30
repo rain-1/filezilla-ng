@@ -21,7 +21,7 @@ wxString CExternalIPResolver::m_ip;
 bool CExternalIPResolver::m_checked = false;
 
 CExternalIPResolver::CExternalIPResolver(wxEvtHandler* handler, int id /*=wxID_ANY*/)
-	: m_handler(handler), m_id(id)
+	: m_port(80), m_handler(handler), m_id(id)
 {
 	m_pSocket = 0;
 	m_done = false;
