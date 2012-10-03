@@ -89,7 +89,19 @@ bool CTlsSocket::Init()
 		return false;
 	}
 
-	res = gnutls_init(&m_session, GNUTLS_CLIENT);
+	if (!InitSession())
+		return false;
+	
+	m_shutdown_requested = false;
+
+	// At this point, we can start shaking hands.
+
+	return true;
+}
+
+bool CTlsSocket::InitSession()
+{
+	int res = gnutls_init(&m_session, GNUTLS_CLIENT);
 	if (res)
 	{
 		LogError(res);
@@ -117,20 +129,12 @@ bool CTlsSocket::Init()
 	gnutls_transport_set_lowat(m_session, 0);
 #endif
 
-	m_shutdown_requested = false;
-
-	// At this point, we can start shaking hands.
-
 	return true;
 }
 
 void CTlsSocket::Uninit()
 {
-	if (m_session)
-	{
-		gnutls_deinit(m_session);
-		m_session = 0;
-	}
+	UninitSession();
 
 	if (m_certCredentials)
 	{
@@ -155,6 +159,17 @@ void CTlsSocket::Uninit()
 
 	m_require_root_trust = false;
 }
+
+
+void CTlsSocket::UninitSession()
+{
+	if (m_session)
+	{
+		gnutls_deinit(m_session);
+		m_session = 0;
+	}
+}
+
 
 void CTlsSocket::LogError(int code)
 {
@@ -400,8 +415,8 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 	int res = gnutls_session_get_data(pPrimarySocket->m_session, 0, &session_data_size);
 	if (res)
 	{
-		m_pOwner->LogMessage(Debug_Info, _T("gnutls_session_get_data on primary socket failed: %d"), res);
-		return false;
+		m_pOwner->LogMessage(Debug_Warning, _T("gnutls_session_get_data on primary socket failed: %d"), res);
+		return true;
 	}
 
 	// Get session data
@@ -410,20 +425,23 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 	if (res)
 	{
 		delete [] session_data;
-		m_pOwner->LogMessage(Debug_Info, _T("gnutls_session_get_data on primary socket failed: %d"), res);
-		return false;
+		m_pOwner->LogMessage(Debug_Warning, _T("gnutls_session_get_data on primary socket failed: %d"), res);
+		return true;
 	}
 
 	// Set session data
-	res = gnutls_session_set_data(m_session, session_data, session_data_size);
+	res = gnutls_session_set_data(m_session, session_data, session_data_size );
 	delete [] session_data;
 	if (res)
 	{
-		m_pOwner->LogMessage(Debug_Info, _T("gnutls_session_set_data failed: %d"), res);
-		return false;
+		m_pOwner->LogMessage(Debug_Info, _T("gnutls_session_set_data failed: %d. Going to reinitialize session."), res);
+		UninitSession();
+		if( !InitSession() ) {
+			return false;
+		}
 	}
-
-	m_pOwner->LogMessage(Debug_Info, _T("Trying to resume existing TLS session."));
+	else
+		m_pOwner->LogMessage(Debug_Info, _T("Trying to resume existing TLS session."));
 
 	return true;
 }
@@ -453,7 +471,10 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/, bool try_resu
 		}
 
 		if (try_resume)
-			CopySessionData(pPrimarySocket);
+		{
+			if (!CopySessionData(pPrimarySocket))
+				return FZ_REPLY_ERROR;
+		}
 	}
 
 	return ContinueHandshake();
