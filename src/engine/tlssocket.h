@@ -47,6 +47,8 @@ public:
 	bool AddTrustedRootCertificate(const wxString& cert);
 protected:
 
+	bool InitSession();
+	void UninitSession();
 	bool CopySessionData(const CTlsSocket* pPrimarySocket);
 
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);
