@@ -29,7 +29,7 @@ DEALINGS IN THE SOFTWARE.
 wxDBusMessage::wxDBusMessage(DBusMessage * message)
 {
 	m_message = message;
-	m_get_iter_initialized = false;	
+	m_get_iter_initialized = false;
 	m_add_iter_initialized = false;
 }
 
@@ -94,7 +94,7 @@ bool wxDBusMessage::MoveToNextArg()
 	}
 	return (bool) dbus_message_iter_next(&m_iter);
 }
-	
+
 int wxDBusMessage::GetAgrType()
 {
 	if (!m_get_iter_initialized)
@@ -136,7 +136,7 @@ int wxDBusMessage::GetArrayElementType()
 {
 	return dbus_message_iter_get_element_type(&m_iter);
 }
-	
+
 /*
 int wxDBusMessage::GetArrayLength()
 {
@@ -197,7 +197,7 @@ bool wxDBusMessage::AddDict(const char **value, int n_elements)
 {
 	init_add_iter();
 	DBusMessageIter sub;
-	dbus_message_iter_open_container(&m_iter, DBUS_TYPE_ARRAY, 
+	dbus_message_iter_open_container(&m_iter, DBUS_TYPE_ARRAY,
 		DBUS_DICT_ENTRY_BEGIN_CHAR_AS_STRING DBUS_TYPE_STRING_AS_STRING DBUS_TYPE_VARIANT_AS_STRING DBUS_DICT_ENTRY_END_CHAR_AS_STRING,
 		&sub);
 	for (int i = 0; i < n_elements; i += 2)
@@ -271,7 +271,7 @@ bool wxDBusMethodCall::CallAsync(wxDBusConnection * connection, int timeout)
 	return connection->SendWithReply(GetMessage(), timeout);
 }
 
-wxDBusSignal::wxDBusSignal(const char *path, const char *interface, const char *name) : 
+wxDBusSignal::wxDBusSignal(const char *path, const char *interface, const char *name) :
 	wxDBusMessage(dbus_message_new_signal(path, interface, name))
 {
 }

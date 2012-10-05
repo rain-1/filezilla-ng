@@ -24,7 +24,7 @@ public:
 
 	// We override these for two reasons:
 	// - wxWidgets does not provide a function to get the field widths back
-	// - fixup for last field. Under MSW it has a gripper if window is not 
+	// - fixup for last field. Under MSW it has a gripper if window is not
 	//   maximized, under GTK2 it always has a gripper. These grippers overlap
 	//   last field.
 	virtual void SetFieldsCount(int number = 1, const int* widths = NULL);
@@ -65,7 +65,7 @@ public:
 	// Positioned in the field given in the constructor,
 	// right aligned and in reverse order.
 	void AddChild(int field, int idx, wxWindow* pChild);
-	
+
 	void RemoveChild(int idx);
 
 	virtual void SetFieldWidth(int field, int width);

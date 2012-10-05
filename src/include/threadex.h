@@ -34,7 +34,7 @@ SOFTWARE.
 // Implementation is fully transparent: All the user has to do is to replace
 // wxThread with wxThreadEx.
 
-// TODO: Implement missing functions as provided by wxThread should they ever 
+// TODO: Implement missing functions as provided by wxThread should they ever
 //       be needed
 
 #include <wx/thread.h>

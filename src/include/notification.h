@@ -17,19 +17,19 @@
 // or you will lose important notifications or your memory will fill with
 // pending notifications.
 
-// A special class of notifications are the asynchronous requests. These 
-// requests have to be answered. Once proessed, call 
+// A special class of notifications are the asynchronous requests. These
+// requests have to be answered. Once proessed, call
 // CFileZillaEngine::SetAsyncRequestReply to continue the current operation.
 
 #include "local_path.h"
 
 extern const wxEventType fzEVT_NOTIFICATION;
 #define EVT_FZ_NOTIFICATION(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        fzEVT_NOTIFICATION, id, -1, \
-        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxEventFunction, &fn ), \
-        (wxObject *) NULL \
-    ),
+	DECLARE_EVENT_TABLE_ENTRY(      \
+		fzEVT_NOTIFICATION, id, -1, \
+		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxEventFunction, &fn ), \
+		(wxObject *) NULL           \
+	),
 
 class wxFzEvent : public wxEvent
 {
@@ -90,7 +90,7 @@ public:
 	COperationNotification();
 	virtual ~COperationNotification();
 	virtual enum NotificationId GetID() const;
-	
+
 	int nReplyCode;
 	enum Command commandId;
 };
@@ -167,10 +167,10 @@ public:
 
 	// Set overwriteAction to the desired action
 	enum OverwriteAction overwriteAction;
-	
+
 	// Set to new filename if overwriteAction is rename. Might trigger further
 	// file exists notifications if new target file exists as well.
-	wxString newName; 
+	wxString newName;
 };
 
 class CInteractiveLoginNotification : public CAsyncRequestNotification
@@ -229,8 +229,8 @@ public:
 	virtual ~CTransferStatusNotification();
 	virtual enum  NotificationId GetID() const;
 
-    const CTransferStatus *GetStatus() const;
-	
+	const CTransferStatus *GetStatus() const;
+
 protected:
 	CTransferStatus *m_pStatus;
 };
@@ -240,27 +240,27 @@ protected:
 class CHostKeyNotification : public CAsyncRequestNotification
 {
 public:
-    CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed = false);
-    virtual ~CHostKeyNotification();
-    virtual enum RequestId GetRequestID() const;
+	CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed = false);
+	virtual ~CHostKeyNotification();
+	virtual enum RequestId GetRequestID() const;
 
-    wxString GetHost() const;
-    int GetPort() const;
-    wxString GetFingerprint() const;
+	wxString GetHost() const;
+	int GetPort() const;
+	wxString GetFingerprint() const;
 
 	// Set to true if you trust the server
 	bool m_trust;
 
-	// If m_truest is true, set this to true to always trust this server 
+	// If m_truest is true, set this to true to always trust this server
 	// in future.
 	bool m_alwaysTrust;
 
 protected:
 
-    const wxString m_host;
-    const int m_port;
-    const wxString m_fingerprint;
-    const bool m_changed;
+	const wxString m_host;
+	const int m_port;
+	const wxString m_fingerprint;
+	const bool m_changed;
 };
 
 class CDataNotification : public CNotification

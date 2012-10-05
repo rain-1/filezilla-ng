@@ -297,7 +297,7 @@ void CHttpControlSocket::OnConnect()
 	wxASSERT(GetCurrentCommandId() == cmd_connect);
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
-	
+
 	if (pData->tls)
 	{
 		if (!m_pTlsSocket)
@@ -522,7 +522,7 @@ int CHttpControlSocket::DoInternalConnect()
 
 	if (res && res != EINPROGRESS)
 		return ResetOperation(FZ_REPLY_ERROR);
-	
+
 	return FZ_REPLY_WOULDBLOCK;
 }
 
@@ -805,7 +805,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			if (res != FZ_REPLY_WOULDBLOCK)
 				return res;
 
-            pData->m_chunkData.size -= dataLen;
+			pData->m_chunkData.size -= dataLen;
 			p += dataLen;
 			len -= dataLen;
 
@@ -954,7 +954,7 @@ void CHttpControlSocket::OnClose(int error)
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
-	
+
 	if (DoReceive() == FZ_REPLY_REDIRECTED)
 		return; // Socket got closed already
 

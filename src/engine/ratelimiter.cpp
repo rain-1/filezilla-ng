@@ -28,7 +28,7 @@ CRateLimiter* CRateLimiter::Create(COptionsBase* pOptions)
 		m_pTheRateLimiter = new CRateLimiter(pOptions);
 	else
 		++m_pTheRateLimiter->m_usageCount;
-	
+
 	return m_pTheRateLimiter;
 }
 
@@ -163,7 +163,7 @@ void CRateLimiter::OnTimer(wxTimerEvent& event)
 
 		// Get amount of tokens for each object
 		wxLongLong tokensPerObject = tokens / m_objectList.size();
-		
+
 		if (tokensPerObject == 0)
 			tokensPerObject = 1;
 		tokens = 0;
@@ -236,7 +236,7 @@ void CRateLimiter::WakeupWaitingObjects()
 			m_wakeupList[i].pop_front();
 			if (!pObject->m_waiting[i])
 				continue;
-			
+
 			wxASSERT(pObject->m_bytesAvailable != 0);
 			pObject->m_waiting[i] = false;
 

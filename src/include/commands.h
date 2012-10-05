@@ -36,7 +36,7 @@ enum Command
 #define FZ_REPLY_SYNTAXERROR	(0x0010 | FZ_REPLY_ERROR)
 #define FZ_REPLY_NOTCONNECTED	(0x0020 | FZ_REPLY_ERROR)
 #define FZ_REPLY_DISCONNECTED	(0x0040)
-#define FZ_REPLY_INTERNALERROR	(0x0080 | FZ_REPLY_ERROR) // If you get this reply, the error description will be 
+#define FZ_REPLY_INTERNALERROR	(0x0080 | FZ_REPLY_ERROR) // If you get this reply, the error description will be
 														  // given by the last Debug_Warning log message. This
 														  // should not happen unless there is a bug in FileZilla 3.
 #define FZ_REPLY_BUSY			(0x0100 | FZ_REPLY_ERROR)
@@ -94,7 +94,7 @@ DECLARE_COMMAND(CListCommand, cmd_list)
 	// Without a given directory, the current directory will be listed.
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
-	
+
 	// Set LIST_FLAG_REFRESH to get a directory listing even if a cache
 	// lookup can be made after finding out true remote directory.
 	//
@@ -110,7 +110,7 @@ DECLARE_COMMAND(CListCommand, cmd_list)
 	// directories.
 	CListCommand(int flags = 0);
 	CListCommand(CServerPath path, wxString subDir = _T(""), int flags = 0);
-	
+
 	CServerPath GetPath() const;
 	wxString GetSubDir() const;
 
@@ -160,7 +160,7 @@ protected:
 
 DECLARE_COMMAND(CDeleteCommand, cmd_delete)
 	CDeleteCommand(const CServerPath& path, const std::list<wxString>& files);
-	
+
 	CServerPath GetPath() const { return m_path; }
 	const std::list<wxString>& GetFiles() const { return m_files; }
 
@@ -171,8 +171,8 @@ protected:
 };
 
 DECLARE_COMMAND(CRemoveDirCommand, cmd_removedir)
-    // Directories can either be given as absolute path or as
-    // pair of an absolute path and the very last path segments.
+	// Directories can either be given as absolute path or as
+	// pair of an absolute path and the very last path segments.
 	CRemoveDirCommand(const CServerPath& path, const wxString& subdDir);
 
 	CServerPath GetPath() const { return m_path; }
@@ -213,7 +213,7 @@ protected:
 DECLARE_COMMAND(CChmodCommand, cmd_chmod)
 	// The permission string should be given in a format understandable by the server.
 	// Most likely it's the defaut octal representation used by the unix chmod command,
-    // i.e. chmod 755 foo.bar
+	// i.e. chmod 755 foo.bar
 	CChmodCommand(const CServerPath& path, const wxString& file, const wxString& permission);
 
 	CServerPath GetPath() const { return m_path; }

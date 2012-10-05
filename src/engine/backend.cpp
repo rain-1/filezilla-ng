@@ -39,7 +39,7 @@ int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 		len = max.GetLo();
 
 	int written = m_pSocket->Write(buffer, len, error);
-	
+
 	if (written > 0 && max != -1)
 		UpdateUsage(CRateLimiter::outbound, written);
 
@@ -78,6 +78,6 @@ void CSocketBackend::OnRateAvailable(enum CRateLimiter::rate_direction direction
 		evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::write);
 	else
 		evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::read);
-	
+
 	CSocketEventDispatcher::Get().SendEvent(evt);
 }

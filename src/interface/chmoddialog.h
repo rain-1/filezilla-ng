@@ -9,7 +9,7 @@ public:
 	CChmodDialog() {}
 	virtual ~CChmodDialog() { }
 
-	bool Create(wxWindow* parent, int fileCount, int dirCount, 
+	bool Create(wxWindow* parent, int fileCount, int dirCount,
 				const wxString& name, const char permissions[9]);
 
 	wxString GetPermissions(const char* previousPermissions, bool dir);

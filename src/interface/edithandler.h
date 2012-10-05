@@ -71,7 +71,7 @@ public:
 	wxString CanOpen(enum fileType type, const wxString& fileName, bool &dangerous, bool& program_exists);
 	bool StartEditing(const wxString& file);
 	bool StartEditing(const wxString& file, const CServerPath& remotePath, const CServer& server);
-	
+
 	struct t_fileData
 	{
 		wxString name; // The name of the file
@@ -119,7 +119,7 @@ protected:
 
 	wxTimer m_timer;
 	wxTimer m_busyTimer;
-	
+
 	void RemoveTemporaryFiles(const wxString& temp);
 
 	wxString GetTemporaryFile(wxString name);

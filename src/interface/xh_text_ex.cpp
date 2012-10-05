@@ -12,12 +12,12 @@ wxObject *wxTextCtrlXmlHandlerEx::DoCreateResource()
 	XRC_MAKE_INSTANCE(text, wxTextCtrlEx);
 
 	text->Create(m_parentAsWindow,
-	             GetID(),
-	             GetText(wxT("value")),
-	             GetPosition(), GetSize(),
-	             GetStyle(),
-	             wxDefaultValidator,
-	             GetName());
+				 GetID(),
+				 GetText(wxT("value")),
+				 GetPosition(), GetSize(),
+				 GetStyle(),
+				 wxDefaultValidator,
+				 GetName());
 
 	SetupWindow(text);
 

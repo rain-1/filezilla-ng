@@ -60,7 +60,7 @@ public:
 	bool AddObjectPath(const char* value);
 	bool AddDict(const char** value, int n_elements); // Call with null to add empty dictionary. n_elements needs to be divisible by 2
 	bool Send(wxDBusConnection * connection, unsigned int * serial);
-	
+
 private:
 	DBusMessage * m_message;
 	DBusMessageIter m_iter;

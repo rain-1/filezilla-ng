@@ -55,7 +55,7 @@ public:
 	bool Init();
 	inline void SetExit() { m_exit = true; }
 	inline int GetID() { return m_ID; }
-	
+
 	void Wakeup();
 
 	inline void EnterCriticalSection() { m_critical_section.Enter(); }
@@ -71,7 +71,7 @@ private:
 	int m_wakeup_pipe[2];
 	wxCriticalSection m_critical_section;
 	bool m_thread_holds_lock;
-	
+
 	int m_ID;
 	DBusConnection * m_connection;
 	wxDBusConnection * m_parent;
@@ -119,7 +119,7 @@ bool DBusThread::Init()
 		return false;
 
 	fcntl(m_wakeup_pipe[0], F_SETFL, O_NONBLOCK);
-	
+
 	m_parent_id = pthread_self();
 
 	dbus_connection_set_watch_functions(m_connection, add_watch, remove_watch, toggle_watch, (void *)this, NULL);
@@ -143,12 +143,12 @@ wxThread::ExitCode DBusThread::Entry()
 
 		EnterCriticalSection();
 
-		while (dbus_connection_get_dispatch_status(m_connection) == DBUS_DISPATCH_DATA_REMAINS) 
+		while (dbus_connection_get_dispatch_status(m_connection) == DBUS_DISPATCH_DATA_REMAINS)
 			dbus_connection_dispatch(m_connection);
 
 		// Prepare list of file descriptors to pull
 		struct pollfd *fd_array = new struct pollfd[bus_watches.size() + 1];
-		
+
 		fd_array[0].fd = m_wakeup_pipe[0];
 		fd_array[0].events = POLLIN;
 
@@ -167,7 +167,7 @@ wxThread::ExitCode DBusThread::Entry()
 					fd_array[nfds].events |= POLLIN;
 				if (flags & DBUS_WATCH_WRITABLE)
 					fd_array[nfds].events |= POLLOUT;
-				++nfds;				
+				++nfds;
 			}
 		}
 		LeaveCriticalSection();
@@ -386,7 +386,7 @@ void wxDBusConnection::ReturnMessage(DBusMessage * message)
 {
 	dbus_connection_return_message(m_connection, message);
 }
-	
+
 DBusMessage * wxDBusConnection::PopMessage()
 {
 	return dbus_connection_pop_message(m_connection);
@@ -463,13 +463,13 @@ DBusError &wxDBusError::GetError()
 {
 	return m_error;
 }
-	
+
 void wxDBusError::Reset()
 {
 	dbus_error_free(&m_error);
 	dbus_error_init(&m_error);
 }
-	
+
 const char * wxDBusError::GetName()
 {
 	return m_error.name;
@@ -479,7 +479,7 @@ const char * wxDBusError::GetMessage()
 {
 	return m_error.message;
 }
-	
+
 bool wxDBusError::IsSet()
 {
 	return (bool) dbus_error_is_set(&m_error);

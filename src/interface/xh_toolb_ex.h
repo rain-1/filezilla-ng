@@ -10,15 +10,15 @@ class wxToolBar;
 class wxToolBarXmlHandlerEx : public wxXmlResourceHandler
 {
 public:
-    wxToolBarXmlHandlerEx();
-    virtual wxObject *DoCreateResource();
-    virtual bool CanHandle(wxXmlNode *node);
+	wxToolBarXmlHandlerEx();
+	virtual wxObject *DoCreateResource();
+	virtual bool CanHandle(wxXmlNode *node);
 
 	static void SetIconSize(const wxSize& size) { m_iconSize = size; }
 
 private:
-    bool m_isInside;
-    wxToolBar *m_toolbar;
+	bool m_isInside;
+	wxToolBar *m_toolbar;
 
 	static wxSize m_iconSize;
 };

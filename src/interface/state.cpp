@@ -217,7 +217,7 @@ CState::CState(CMainFrame* pMainFrame)
 CState::~CState()
 {
 	delete m_pServer;
-	
+
 	delete m_pCertificate;
 	delete m_pSftpEncryptionInfo;
 
@@ -269,7 +269,7 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 	if (!m_sync_browse.local_root.empty())
 	{
 		wxASSERT(m_pServer);
-		
+
 		if (p != m_sync_browse.local_root && !p.IsSubdirOf(m_sync_browse.local_root))
 		{
 			wxString msg = wxString::Format(_("The local directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the local directory?"),
@@ -306,7 +306,7 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 			return true;
 		}
 	}
-	
+
 	m_localDir = p;
 
 	COptions::Get()->SetOption(OPTION_LASTLOCALDIR, m_localDir.GetPath());
@@ -347,7 +347,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 		m_last_path = pDirectoryListing->path;
 
 	if (m_pDirectoryListing && m_pDirectoryListing->path == pDirectoryListing->path &&
-        pDirectoryListing->m_failed)
+		pDirectoryListing->m_failed)
 	{
 		// We still got an old listing, no need to display the new one
 		delete pDirectoryListing;
@@ -543,7 +543,7 @@ bool CState::Disconnect()
 
 	if (!IsRemoteConnected())
 		return true;
-	
+
 	if (!IsRemoteIdle())
 		return false;
 
@@ -1152,7 +1152,7 @@ bool CState::RefreshRemote()
 {
 	if (!m_pCommandQueue)
 		return false;
-	
+
 	if (!IsRemoteConnected() || !IsRemoteIdle())
 		return false;
 

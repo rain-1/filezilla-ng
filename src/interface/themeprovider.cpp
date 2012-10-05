@@ -76,7 +76,7 @@ wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& /*cl
 		wxString fileName = *iter + name + _T(".png");
 //#ifdef __WXMSW__
 		// MSW toolbar only greys out disabled buttons in a visually
-		// pleasing way if the bitmap has an alpha channel. 
+		// pleasing way if the bitmap has an alpha channel.
 		wxImage img(fileName, wxBITMAP_TYPE_PNG);
 		if (!img.Ok())
 			continue;
@@ -278,7 +278,7 @@ wxString CThemeProvider::GetThemePath()
 	if (wxFile::Exists(themePath + _T("theme.xml")))
 		return themePath;
 
-    themePath = resourceDir + _T("opencrystal/");
+	themePath = resourceDir + _T("opencrystal/");
 	if (wxFile::Exists(themePath + _T("theme.xml")))
 		return themePath;
 

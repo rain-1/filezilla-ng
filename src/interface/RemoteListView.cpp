@@ -599,7 +599,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(const CSharedPointer<const 
 
 		// Get old selection
 		bool isSelected = GetItemState(i, wxLIST_STATE_SELECTED) != 0;
-		
+
 		// Update statusbar info
 		if (removed && m_pFilelistStatusBar)
 		{
@@ -695,7 +695,7 @@ bool CRemoteListView::UpdateDirectoryListing(const CSharedPointer<const CDirecto
 		wxASSERT(pDirectoryListing->GetCount() == m_pDirectoryListing->GetCount());
 		if (pDirectoryListing->GetCount() != m_pDirectoryListing->GetCount())
 			return false;
-		
+
 		m_pDirectoryListing = pDirectoryListing;
 
 		// We don't have to do anything
@@ -767,7 +767,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 	if (m_pFilelistStatusBar)
 	{
 		m_pFilelistStatusBar->UnselectAll();
-		m_pFilelistStatusBar->SetConnected(pDirectoryListing); 
+		m_pFilelistStatusBar->SetConnected(pDirectoryListing);
 	}
 
 	m_pDirectoryListing = pDirectoryListing;
@@ -2265,7 +2265,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 					firstSelected = i;
 				if (m_pFilelistStatusBar)
 					m_pFilelistStatusBar->SelectDirectory();
-                SetSelection(i, true);
+				SetSelection(i, true);
 				break;
 			}
 			else if (*iter == (_T("-") + entry.name))
@@ -2581,7 +2581,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 	}
 
 	long item = -1;
-	
+
 	std::list<CDirentry> selected_item_list;
 	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
 	{

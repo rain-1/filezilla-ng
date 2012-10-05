@@ -23,7 +23,7 @@ class CRemoteDataObject : public wxDataObjectSimple
 public:
 	CRemoteDataObject(const CServer& server, const CServerPath& path);
 	CRemoteDataObject();
-	
+
 	virtual size_t GetDataSize() const;
 	virtual bool GetDataHere(void *buf ) const;
 
@@ -76,7 +76,7 @@ public:
 	bool IsLoaded() const { return m_shellExtension != 0; }
 
 	wxString InitDrag();
-	
+
 	wxString GetTarget();
 
 	wxString GetDragDirectory() const { return m_dragDirectory; }

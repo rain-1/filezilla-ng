@@ -103,7 +103,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 		wxString time = wxString::Format(
 			wxPLURAL("%d second", "%d seconds", elapsed),
 			elapsed);
-		
+
 		wxLongLong transferred = m_pTransferStatus->currentOffset - m_pTransferStatus->startOffset;
 		wxString size = CSizeFormatBase::Format(m_pEngine->GetOptions(), transferred, true);
 
@@ -515,7 +515,7 @@ int CControlSocket::CheckOverwriteFile()
 
 CFileTransferOpData::CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path) :
 	COpData(cmd_transfer),
- 	localFile(local_file), remoteFile(remote_file), remotePath(remote_path),
+	localFile(local_file), remoteFile(remote_file), remotePath(remote_path),
 	download(is_download),
 	localFileSize(-1), remoteFileSize(-1),
 	tryAbsolutePath(false), resume(false), transferInitiated(false)
@@ -757,7 +757,7 @@ bool CControlSocket::TryLockCache(enum locking_reason reason, const CServerPath&
 		wxASSERT(own->reason == reason);
 	}
 
-	// Needs to be set in any case so that ResetOperation 
+	// Needs to be set in any case so that ResetOperation
 	// unlocks or cancels the lock wait
 	m_pCurOpData->holdsLock = true;
 
@@ -1031,17 +1031,17 @@ void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
 	case CSocketEvent::hostaddress:
 		{
 			const wxString& address = event.GetData();
-			LogMessage(Status, _("Connecting to %s..."), address.c_str()); 
+			LogMessage(Status, _("Connecting to %s..."), address.c_str());
 		}
 		break;
 	case CSocketEvent::connection_next:
 		if (event.GetError())
-			LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str()); 
+			LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
 		break;
 	case CSocketEvent::connection:
 		if (event.GetError())
 		{
-			LogMessage(Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()).c_str()); 
+			LogMessage(Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()).c_str());
 			OnClose(event.GetError());
 		}
 		else

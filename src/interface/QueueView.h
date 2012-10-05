@@ -223,7 +223,7 @@ protected:
 	void RemoveQueuedFolderItem(CFolderScanItem* pFolder);
 
 	CFolderProcessingThread *m_pFolderProcessingThread;
-	
+
 	/*
 	 * Don't update status line positions if m_waitStatusLineUpdate is true.
 	 * This assures we are updating the status line positions only once,

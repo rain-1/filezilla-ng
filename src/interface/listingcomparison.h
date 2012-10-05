@@ -25,7 +25,7 @@ public:
 	virtual void FinishComparison() = 0;
 	virtual void ScrollTopItem(int item) = 0;
 	virtual void OnExitComparisonMode() = 0;
-	
+
 	void RefreshComparison();
 	void ExitComparisonMode();
 

@@ -27,7 +27,7 @@ public:
 protected:
 	CPowerManagement(CMainFrame* pMainFrame);
 	virtual ~CPowerManagement();
-	
+
 	static CPowerManagement* m_pPowerManagement;
 
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
@@ -36,7 +36,7 @@ protected:
 	void DoSetIdle();
 
 	bool m_busy;
-	
+
 	CMainFrame* m_pMainFrame;
 
 #ifdef WITH_LIBDBUS

@@ -212,7 +212,7 @@ public:
 
 	std::unordered_map<wxString, wxLongLong_t, wxStringHash, fast_equal> localPaths_;
 	std::unordered_map<wxString, wxLongLong_t, wxStringHash> remotePaths_; // No need for fast_equal as GetSafePath returns unshared string anyhow
-	
+
 	std::map<wxLongLong_t, CLocalPath> reverseLocalPaths_;
 	std::map<wxLongLong_t, CServerPath> reverseRemotePaths_;
 };
@@ -334,7 +334,7 @@ wxLongLong_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 	do {
 		res = sqlite3_step(insertLocalPathQuery_);
 	} while (res == SQLITE_BUSY);
-	
+
 	sqlite3_reset(insertLocalPathQuery_);
 
 	if (res == SQLITE_DONE)
@@ -361,7 +361,7 @@ wxLongLong_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
 	do {
 		res = sqlite3_step(insertRemotePathQuery_);
 	} while (res == SQLITE_BUSY);
-	
+
 	sqlite3_reset(insertRemotePathQuery_);
 
 	if (res == SQLITE_DONE)
@@ -586,9 +586,9 @@ bool CQueueStorage::Impl::BindNull(sqlite3_stmt* statement, int index)
 bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 {
 	bool kiosk_mode = COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0;
-	
+
 	const CServer& server = item.GetServer();
-	
+
 	Bind(insertServerQuery_, server_table_column_names::host, server.GetHost());
 	Bind(insertServerQuery_, server_table_column_names::port, static_cast<int>(server.GetPort()));
 	Bind(insertServerQuery_, server_table_column_names::protocol, static_cast<int>(server.GetProtocol()));
@@ -598,7 +598,7 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 	if (server.GetLogonType() != ANONYMOUS)
 	{
 		Bind(insertServerQuery_, server_table_column_names::user, server.GetUser());
-		
+
 		if (server.GetLogonType() == NORMAL || server.GetLogonType() == ACCOUNT)
 		{
 			if (kiosk_mode)
@@ -692,7 +692,7 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 	do {
 		res = sqlite3_step(insertServerQuery_);
 	} while (res == SQLITE_BUSY);
-	
+
 	sqlite3_reset(insertServerQuery_);
 
 	bool ret = res == SQLITE_DONE;
@@ -947,7 +947,7 @@ wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 		if (!server.SetPostLoginCommands(postLoginCommands))
 			return INVALID_DATA;
 	}
-	
+
 
 	server.SetBypassProxy(GetColumnInt(selectServersQuery_, server_table_column_names::bypass_proxy) == 1 );
 	server.SetName( GetColumnText(selectServersQuery_, server_table_column_names::name) );
@@ -1011,7 +1011,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 			fileItem->m_defaultFileExistsAction = (CFileExistsNotification::OverwriteAction)overwrite_action;
 	}
 
-	return GetColumnInt64(selectFilesQuery_, file_table_column_names::id); 
+	return GetColumnInt64(selectFilesQuery_, file_table_column_names::id);
 }
 
 CQueueStorage::CQueueStorage()
@@ -1050,7 +1050,7 @@ bool CQueueStorage::SaveQueue(std::vector<CServerItem*> const& queue)
 	bool ret = true;
 	if (sqlite3_exec(d_->db_, "BEGIN TRANSACTION", 0, 0, 0) == SQLITE_OK)
 	{
-		for (std::vector<CServerItem*>::const_iterator it = queue.begin(); it != queue.end(); ++it)	
+		for (std::vector<CServerItem*>::const_iterator it = queue.begin(); it != queue.end(); ++it)
 			ret &= d_->SaveServer(**it);
 
 		// Even on previous failure, we want to at least try to commit the data we have so far
@@ -1085,7 +1085,7 @@ wxLongLong_t CQueueStorage::GetServer(CServer& server, bool fromBeginning)
 				res = sqlite3_step(d_->selectServersQuery_);
 			}
 			while (res == SQLITE_BUSY);
-			
+
 			if (res == SQLITE_ROW)
 			{
 				ret = d_->ParseServerFromRow(server);
@@ -1135,7 +1135,7 @@ wxLongLong_t CQueueStorage::GetFile(CFileItem** pItem, wxLongLong_t server)
 				res = sqlite3_step(d_->selectFilesQuery_);
 			}
 			while (res == SQLITE_BUSY);
-			
+
 			if (res == SQLITE_ROW)
 			{
 				ret = d_->ParseFileFromRow(pItem);

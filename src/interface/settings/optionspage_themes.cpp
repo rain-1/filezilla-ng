@@ -201,7 +201,7 @@ bool COptionsPageThemes::DisplayTheme(const wxString& theme)
 		if (pos <= 0 || pos >= (int)size.Len() - 1)
 			continue;
 
-        long width = 0;
+		long width = 0;
 		long height = 0;
 		if (!size.Left(pos).ToLong(&width) ||
 			!size.Mid(pos + 1).ToLong(&height) ||

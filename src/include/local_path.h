@@ -24,7 +24,7 @@ public:
 
 	bool empty() const;
 	void clear();
-	
+
 	// On failure the path is undefined
 	bool ChangePath(const wxString& path);
 

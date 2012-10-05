@@ -22,7 +22,7 @@ DEALINGS IN THE SOFTWARE.
 
 ****************************************************************************/
 
-#ifndef WX_DBUSCONNECTION 
+#ifndef WX_DBUSCONNECTION
 #define WX_DBUSCONNECTION
 
 #include "wx/wx.h"
@@ -48,14 +48,14 @@ private:
 class wxDBusConnectionEvent : public wxNotifyEvent
 {
 public:
-    wxDBusConnectionEvent(wxEventType commandType = wxEVT_NULL,
-      int id = 0, DBusMessage * message = NULL): wxNotifyEvent(commandType, id)
+	wxDBusConnectionEvent(wxEventType commandType = wxEVT_NULL,
+	  int id = 0, DBusMessage * message = NULL): wxNotifyEvent(commandType, id)
 		{m_message = message; };
 
 	wxDBusConnectionEvent(const wxDBusConnectionEvent &event): wxNotifyEvent(event)
 		{m_message = event.m_message;};
 
-    virtual wxEvent *Clone() const
+	virtual wxEvent *Clone() const
 		{return new wxDBusConnectionEvent(*this);};
 
 	DBusMessage * GetMessage()
@@ -67,17 +67,17 @@ private:
 };
 
 typedef void (wxEvtHandler::*wxDBusConnectionEventFunction)
-                                        (wxDBusConnectionEvent&);
+										(wxDBusConnectionEvent&);
 /*
-  There are three events declared for the wxDBusConnection object. 
+  There are three events declared for the wxDBusConnection object.
   wxEVT_DBUS_SIGNAL informs the application about any signal that appearrs on the bus.
-  wxEVT_DBUS_NOTIFICATION informs the application about any messages that it 
+  wxEVT_DBUS_NOTIFICATION informs the application about any messages that it
   is has registered to recieve by calling RegisterObjectPath.
   These messages may be either signals or method calls.
   Note that all the messages that raise wxEVT_DBUS_NOTIFICATION also
   raise wxEVT_DBUS_SIGNAL.
   Your app may be uninterested in processing wxEVT_DBUS_SIGNAL, but it is
-  a good practice to process it anyway. Each time the event is called a copy of a D-Bus 
+  a good practice to process it anyway. Each time the event is called a copy of a D-Bus
   message is allocated for it.
   This copy should be freed in the event's handler. There are two ways to do it.
   the two following handlers do nothing else but release a copy of D-BUS message:
@@ -92,7 +92,7 @@ void MainFrame::OnSignal(wxDBusConnectionEvent& event)
 
 void MainFrame::OnSignal(wxDBusConnectionEvent& event)
 {
-	dbus_message_unref(event.GetMessage()); // here we call a low level D-Bus function to release the message. 
+	dbus_message_unref(event.GetMessage()); // here we call a low level D-Bus function to release the message.
 }
 
   The wxEVT_DBUS_ASYNC_RESPONSE event is raised when a response to an asynchronous

@@ -33,7 +33,7 @@ struct t_fallbacks fallbacks[] = {
 	{ "en", "en_US" },
 	{ "en_US", "en_GB" },
 	{ "en_GB", "C" },
-	
+
 	// Base names
 	{ "ar", "ar_EG" },
 	{ "ca", "ca_ES" },

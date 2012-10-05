@@ -9,7 +9,7 @@ class CFilterControls
 {
 public:
 	CFilterControls();
-	
+
 	void Reset();
 
 	wxChoice* pType;

@@ -19,7 +19,7 @@ bool COptionsPageFileExists::LoadPage()
 	SetChoice(XRCID("ID_UPLOAD_ACTION"), ulAction, failure);
 
 	SetCheck(XRCID("ID_ASCIIRESUME"), m_pOptions->GetOptionVal(OPTION_ASCIIRESUME) ? true : false, failure);
-	
+
 	return !failure;
 }
 

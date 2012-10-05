@@ -49,7 +49,7 @@ bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximi
 {
 	if (wxGetKeyState(WXK_SHIFT) && wxGetKeyState(WXK_ALT) && wxGetKeyState(WXK_CONTROL))
 		return false;
-	
+
 	// Fields:
 	// - maximized (1 or 0)
 	// - x position

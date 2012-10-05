@@ -131,7 +131,7 @@ protected:
 	void OnSftpEvent(wxCommandEvent& event);
 
 	// Set to true in destructor of CSftpControlSocket
-	// If sftp process dies (or gets killed), OnTerminate will be called. 
+	// If sftp process dies (or gets killed), OnTerminate will be called.
 	// To avoid a race condition, abort OnTerminate if m_inDestructor is set
 	bool m_inDestructor;
 	bool m_termindatedInDestructor;

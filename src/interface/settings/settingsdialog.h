@@ -21,7 +21,7 @@ protected:
 	bool LoadPages();
 
 	COptions* m_pOptions;
-	
+
 	COptionsPage* m_activePanel;
 
 	struct t_page

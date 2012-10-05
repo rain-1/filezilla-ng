@@ -4,7 +4,7 @@
 #include "dialogex.h"
 
 class CFileExistsDlg: public wxDialogEx
-{	
+{
 	DECLARE_EVENT_TABLE()
 
 public:
@@ -16,7 +16,7 @@ public:
 
 	/// Creates the controls and sizers
 	void CreateControls();
-	
+
 	enum CFileExistsNotification::OverwriteAction GetAction() const;
 	bool Always(bool &directionOnly, bool &queueOnly) const;
 
@@ -24,7 +24,7 @@ protected:
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
 	void OnCheck(wxCommandEvent& event);
-	
+
 	void LoadIcon(int id, const wxString &file);
 	wxString GetPathEllipsis(wxString path, wxWindow *window);
 

@@ -31,7 +31,7 @@ public:
 		CRemoteListView* pRemoteListView;
 		CViewHeader* pLocalViewHeader;
 		CViewHeader* pRemoteViewHeader;
-	
+
 		CSplitterWindowEx* pViewSplitter; // Contains local and remote splitters
 		CSplitterWindowEx* pLocalSplitter;
 		CSplitterWindowEx* pRemoteSplitter;
@@ -58,7 +58,7 @@ public:
 
 	struct _context_controls* GetCurrentControls();
 	struct _context_controls* GetControlsFromState(CState* pState);
-	
+
 	int GetCurrentTab() const;
 	int GetTabCount() const;
 	struct _context_controls* GetControlsFromTabIndex(int i);
@@ -67,7 +67,7 @@ public:
 	void AdvanceTab(bool forward);
 
 protected:
-	
+
 	void CreateContextControls(CState* pState);
 
 	std::vector<struct _context_controls> m_context_controls;

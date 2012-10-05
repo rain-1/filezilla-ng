@@ -31,7 +31,7 @@ CQuickconnectBar::~CQuickconnectBar()
 bool CQuickconnectBar::Create(CMainFrame* pParent)
 {
 	m_pMainFrame = pParent;
-    if (!wxXmlResource::Get()->LoadPanel(this, pParent, _T("ID_QUICKCONNECTBAR")))
+	if (!wxXmlResource::Get()->LoadPanel(this, pParent, _T("ID_QUICKCONNECTBAR")))
 	{
 		wxLogError(_("Cannot load Quickconnect bar from resource file"));
 		return false;
@@ -73,7 +73,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	wxString user = m_pUser->GetValue();
 	wxString pass = m_pPass->GetValue();
 	wxString port = m_pPort->GetValue();
-	
+
 	CServer server;
 
 	wxString error;
@@ -106,7 +106,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 		}
 		break;
 	}
-	
+
 	m_pHost->SetValue(host);
 	if (server.GetPort() != server.GetDefaultPort(server.GetProtocol()))
 		m_pPort->SetValue(wxString::Format(_T("%d"), server.GetPort()));

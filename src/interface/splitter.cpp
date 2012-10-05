@@ -96,7 +96,7 @@ void CSplitterWindowEx::OnSize(wxSizeEvent& event)
 					newPosition = size - m_minimumPaneSize - GetSashSize();
 			}
 		}
-		
+
 		if ( newPosition >= size - 5 )
 			newPosition = wxMax(10, size - 40);
 

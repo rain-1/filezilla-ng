@@ -3,19 +3,19 @@
 #ifdef __WXMSW__
 #include "shlobj.h"
 
-  // Once again lots of the shell stuff is missing in MinGW's headers
-  #ifndef IDO_SHGIOI_LINK
-    #define IDO_SHGIOI_LINK 0x0FFFFFFE
-  #endif
-  #ifndef SHGetIconOverlayIndex
-    extern "C" int WINAPI SHGetIconOverlayIndexW(LPCWSTR pszIconPath, int iIconIndex);
-    extern "C" int WINAPI SHGetIconOverlayIndexA(LPCSTR pszIconPath, int iIconIndex);
-    #if wxUSE_UNICODE
-      #define SHGetIconOverlayIndex SHGetIconOverlayIndexW
-    #else
-      #define SHGetIconOverlayIndex SHGetIconOverlayIndexA
-    #endif
-  #endif
+	// Once again lots of the shell stuff is missing in MinGW's headers
+	#ifndef IDO_SHGIOI_LINK
+		#define IDO_SHGIOI_LINK 0x0FFFFFFE
+	#endif
+	#ifndef SHGetIconOverlayIndex
+		extern "C" int WINAPI SHGetIconOverlayIndexW(LPCWSTR pszIconPath, int iIconIndex);
+		extern "C" int WINAPI SHGetIconOverlayIndexA(LPCSTR pszIconPath, int iIconIndex);
+		#if wxUSE_UNICODE
+			#define SHGetIconOverlayIndex SHGetIconOverlayIndexW
+		#else
+			#define SHGetIconOverlayIndex SHGetIconOverlayIndexA
+		#endif
+	#endif
 #endif
 #ifndef __WXMSW__
 #include "themeprovider.h"
@@ -74,10 +74,10 @@ static void OverlaySymlink(wxBitmap& bmp)
 
 	int sx = bmp.GetWidth();
 	if (symlink.GetWidth() < sx)
-		sx = symlink.GetWidth();		
+		sx = symlink.GetWidth();
 	int sy = bmp.GetHeight();
 	if (symlink.GetHeight() < sy)
-		sy = symlink.GetHeight();		
+		sy = symlink.GetHeight();
 
 	// Do some rudimentary alpha copying
 	wxAlphaPixelData::Iterator t(target);
@@ -226,7 +226,7 @@ int CSystemImageList::GetIconIndex(enum filetype type, const wxString& fileName 
 		m_iconCache[ext] = icon;
 		return icon;
 	}
-	
+
 	wxIconLocation loc;
 	if (pType->GetIcon(&loc) && loc.IsOk())
 	{

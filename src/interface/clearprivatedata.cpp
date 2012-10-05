@@ -60,7 +60,7 @@ void CClearPrivateDataDialog::Show()
 	}
 
 	pCheck = XRCCTRL(*this, "ID_CLEARRECONNECT", wxCheckBox);
-	
+
 	if (pCheck->GetValue())
 	{
 		bool asked = false;

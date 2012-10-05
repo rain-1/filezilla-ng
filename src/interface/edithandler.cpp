@@ -740,7 +740,7 @@ int CEditHandler::DisplayChangeNotification(CEditHandler::fileType type, std::li
 		int pos = file.Find(wxFileName::GetPathSeparator(), true);
 		wxASSERT(pos != -1);
 		file = file.Mid(pos + 1);
-	
+
 		if (file == iter->name)
 		{
 			XRCCTRL(dlg, "ID_DESC_OPENEDAS", wxStaticText)->Hide();
@@ -1071,7 +1071,7 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 			program_exists = false;
 			return prog;
 		}
-		
+
 		program_exists = true;
 		return command + _T(" \"") + fn.GetFullPath() + _T("\"");
 	}
@@ -1152,7 +1152,7 @@ wxString CEditHandler::TruncateFilename(const wxString path, const wxString& nam
 			return name.Left(max - pathlen - extlen) + name.Mid(pos);
 		}
 	}
-	
+
 	return name;
 }
 
@@ -1382,7 +1382,7 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent& event)
 
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(i, type);
-		
+
 		if (type == CEditHandler::local)
 		{
 			pEditHandler->Remove(pData->file);
@@ -1467,7 +1467,7 @@ void CEditHandlerStatusDialog::OnEdit(wxCommandEvent& event)
 	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
 	{
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
-		
+
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 
@@ -1559,7 +1559,7 @@ bool CNewAssociationDialog::Show(const wxString &file)
 	if (!pos)
 		m_ext = _T(".");
 	else if (pos != -1)
-		m_ext = file.Mid(pos + 1);	
+		m_ext = file.Mid(pos + 1);
 	else
 		m_ext.clear();
 

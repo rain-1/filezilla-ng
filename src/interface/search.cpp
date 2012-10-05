@@ -625,7 +625,7 @@ void CSearchDialog::ProcessDirectoryListing()
 	// Do not process same directory multiple times
 	if (!m_visited.insert(listing->path).second)
 		return;
-	
+
 	int old_count = m_results->m_fileData.size();
 	int added = 0;
 
@@ -902,7 +902,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 			selected_files_new.push_back(*iter);
 	}
 	selected_files.swap(selected_files_new);
-	
+
 	// At this point selected_dirs contains uncomparable
 	// paths and selected_files contains only files not
 	// covered by any of those directories.
@@ -1087,7 +1087,7 @@ void CSearchDialog::LoadConditions()
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
 	CXmlFile file;
-	
+
 	TiXmlElement* pDocument = file.Load(_T("search"));
 	if (!pDocument)
 	{
@@ -1108,7 +1108,7 @@ void CSearchDialog::SaveConditions()
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
 	CXmlFile file;
-	
+
 	TiXmlElement* pDocument = file.Load(_T("search"));
 	if (!pDocument)
 	{

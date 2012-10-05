@@ -38,7 +38,7 @@ void CPathCache::Store(const CServer& server, const CServerPath& target, const C
 	tServerCache &serverCache = *pServerCache;
 
 	CSourcePath sourcePath;
-	
+
 	sourcePath.source = source;
 	sourcePath.subdir = subdir;
 
@@ -91,7 +91,7 @@ void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, 
 		return;
 
 	CSourcePath sourcePath;
-	
+
 	sourcePath.source = path;
 	sourcePath.subdir = subdir;
 
@@ -102,7 +102,7 @@ void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, 
 		target = serverIter->second;
 		iter->second->erase(serverIter);
 	}
-	
+
 	if (target.IsEmpty() && subdir != _T(""))
 	{
 		target = path;

@@ -83,8 +83,8 @@ void CLogging::LogMessage(MessageType nMessageType, const wxChar *msgFormat, ...
 	}
 
 	va_list ap;
-    
-    va_start(ap, msgFormat);
+
+	va_start(ap, msgFormat);
 	wxString text = wxString::FormatV(msgFormat, ap);
 	va_end(ap);
 
@@ -171,7 +171,7 @@ void CLogging::LogMessage(wxString SourceFile, int nSourceLine, void *pInstance,
 		SourceFile = SourceFile.Mid(pos+1);
 
 	va_list ap;
-    
+
 	va_start(ap, msgFormat);
 	wxString text = wxString::FormatV(msgFormat, ap);
 	va_end(ap);
@@ -281,7 +281,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size)
 				{
 					CloseHandle(hFile);
-					
+
 					// MoveFileEx can fail if trying to access a deleted file for which another process still has
 					// a handle. Move it far away first.
 					// Todo: Handle the case in which logdir and tmpdir are on different volumes.

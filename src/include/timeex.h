@@ -1,7 +1,7 @@
 #ifndef __TIMEEX_H__
 #define __TIMEEX_H__
 
-/* If called multiple times in a row, wxDateTime::Now may return the same 
+/* If called multiple times in a row, wxDateTime::Now may return the same
  * time. This causes problems with the cache logic. This class implements
  * an extended time class in wich Now() never returns the same value.
  */
@@ -20,9 +20,9 @@ public:
 
 	bool IsValid() const { return m_time.IsValid(); }
 
-	bool operator < (const CTimeEx& op) const; 
+	bool operator < (const CTimeEx& op) const;
 	bool operator <= (const CTimeEx& op) const;
-	bool operator > (const CTimeEx& op) const; 
+	bool operator > (const CTimeEx& op) const;
 	bool operator >= (const CTimeEx& op) const;
 	bool operator == (const CTimeEx& op) const;
 

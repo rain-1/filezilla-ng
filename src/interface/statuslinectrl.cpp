@@ -45,7 +45,7 @@ CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const 
 	m_pParent = pParent;
 	m_pStatus = 0;
 	m_lastOffset = -1;
-	
+
 	m_gcLastTimeStamp = wxDateTime::Now();
 	m_gcLastOffset = -1;
 	m_gcLastSpeed = -1;
@@ -151,7 +151,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 		if (COptions::Get()->GetOptionVal(OPTION_SPEED_DISPLAY))
 			rate = GetCurrentSpeed();
 		else
-		    rate = GetSpeed(elapsed_seconds);
+			rate = GetSpeed(elapsed_seconds);
 
 		if (m_pStatus->totalSize > 0 && elapsed_seconds && rate > 0)
 		{
@@ -215,7 +215,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 		m_mdc->SetPen(GetBackgroundColour());
 		m_mdc->SetBrush(GetBackgroundColour());
 		m_mdc->SetTextForeground(GetForegroundColour());
-	
+
 		// Get character height so that we can center the text vertically.
 		wxCoord h = (rect.GetHeight() - m_textHeight) / 2;
 
@@ -378,7 +378,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 		prefix = _T("> ");
 		permill = 1000;
 	}
-	
+
 	wxString text = wxString::Format(_T("%s%d.%d%%"), prefix.c_str(), permill / 10, permill % 10);
 
 	wxCoord w, h;
@@ -422,21 +422,21 @@ wxFileOffset CStatusLineCtrl::GetCurrentSpeed()
 {
 	if (!m_pStatus)
 		return -1;
-	
+
 	const wxTimeSpan timeDiff( wxDateTime::UNow().Subtract(m_gcLastTimeStamp) );
-	
+
 	if (timeDiff.GetMilliseconds().GetLo() <= 2000)
 		return m_gcLastSpeed;
 
 	m_gcLastTimeStamp = wxDateTime::UNow();
 
 	if (m_gcLastOffset == -1)
-	    m_gcLastOffset = m_pStatus->startOffset;
-	
+		m_gcLastOffset = m_pStatus->startOffset;
+
 	const wxFileOffset fileOffsetDiff = m_pStatus->currentOffset - m_gcLastOffset;
 	m_gcLastOffset = m_pStatus->currentOffset;
 	m_gcLastSpeed = fileOffsetDiff * 1000 / timeDiff.GetMilliseconds().GetLo();
-	
+
 	return m_gcLastSpeed;
 }
 

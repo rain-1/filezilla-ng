@@ -23,7 +23,7 @@ public:
 
 	static const wxChar path_separator;
 
-	// If called with a symlink, GetFileType stats the link, not 
+	// If called with a symlink, GetFileType stats the link, not
 	// the target.
 	static enum local_fileType GetFileType(const wxString& path);
 
@@ -41,7 +41,7 @@ public:
 	bool GetNextFile(wxString& name);
 	bool GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, wxDateTime* modificationTime, int* mode);
 	void EndFindFiles();
-	
+
 protected:
 #ifdef __WXMSW__
 	static bool ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft);

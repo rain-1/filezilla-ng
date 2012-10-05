@@ -43,7 +43,7 @@ public:
 	void SetQueue(CQueueView* pQueue);
 
 	bool ChangeOperationMode(enum OperationMode mode);
-	
+
 protected:
 	// Processes the directory listing in case of a recursive operation
 	void ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing);

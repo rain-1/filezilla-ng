@@ -375,8 +375,8 @@ wxString GetDependencyVersion(enum _dependency dependency)
 		const char* v = gnutls_check_version(0);
 		if (!v || !*v)
 			return _T("unknown");
-	
-		return wxString(v, wxConvLibc);	
+
+		return wxString(v, wxConvLibc);
 	}
 
 	return _T("No such dependency");

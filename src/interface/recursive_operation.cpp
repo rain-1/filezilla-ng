@@ -242,7 +242,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	std::list<wxString> filesToDelete;
 
 	const wxString path = pDirectoryListing->path.GetPath();
-	
+
 	bool added = false;
 
 	for (int i = pDirectoryListing->GetCount() - 1; i >= 0; --i)
@@ -266,7 +266,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 				dirToVisit.subdir = entry.name;
 				dirToVisit.localDir = dir.localDir;
 				dirToVisit.start_dir = dir.start_dir;
-				
+
 				if (m_operationMode == recursive_download || m_operationMode == recursive_addtoqueue)
 					dirToVisit.localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(entry.name));
 				if (entry.is_link())

@@ -31,8 +31,8 @@ class CLocalListViewDropTarget : public CListCtrlDropTarget
 {
 public:
 	CLocalListViewDropTarget(CLocalListView* pLocalListView)
-        : CListCtrlDropTarget(pLocalListView)
-        , m_pLocalListView(pLocalListView), m_pFileDataObject(new wxFileDataObject()),
+		: CListCtrlDropTarget(pLocalListView)
+		, m_pLocalListView(pLocalListView), m_pFileDataObject(new wxFileDataObject()),
 		m_pRemoteDataObject(new CRemoteDataObject())
 	{
 		m_pDataObject = new wxDataObjectComposite;
@@ -120,7 +120,7 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
-        CListCtrlDropTarget::OnDrop(x, y);
+		CListCtrlDropTarget::OnDrop(x, y);
 		ClearDropHighlight();
 
 		if (m_pLocalListView->m_fileData.empty())
@@ -129,12 +129,12 @@ public:
 		return true;
 	}
 
-    virtual void DisplayDropHighlight(wxPoint point)
-    {
-        DoDisplayDropHighlight(point);
-    }
+	virtual void DisplayDropHighlight(wxPoint point)
+	{
+		DoDisplayDropHighlight(point);
+	}
 
-    virtual wxString DoDisplayDropHighlight(wxPoint point)
+	virtual wxString DoDisplayDropHighlight(wxPoint point)
 	{
 		wxString subDir;
 
@@ -181,7 +181,7 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
-        CListCtrlDropTarget::OnDragOver(x, y, def);
+		CListCtrlDropTarget::OnDragOver(x, y, def);
 
 		if (def == wxDragError ||
 			def == wxDragNone ||
@@ -197,7 +197,7 @@ public:
 			return wxDragNone;
 		}
 
-        const wxString& subdir = DoDisplayDropHighlight(wxPoint(x, y));
+		const wxString& subdir = DoDisplayDropHighlight(wxPoint(x, y));
 
 		CLocalPath dir = m_pLocalListView->m_pState->GetLocalDir();
 		if (subdir == _T(""))
@@ -223,13 +223,13 @@ public:
 
 	virtual void OnLeave()
 	{
-        CListCtrlDropTarget::OnLeave();
+		CListCtrlDropTarget::OnLeave();
 		ClearDropHighlight();
 	}
 
-    virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
+	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
-        CListCtrlDropTarget::OnEnter(x, y, def);
+		CListCtrlDropTarget::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 
@@ -2230,7 +2230,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 			continue;
 
 		m_fileData[index].label = drive + _T(" (") + iter->volumeName + _T(")");
-		
+
 		RefreshItem(item);
 	}
 }

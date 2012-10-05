@@ -120,7 +120,7 @@ wxString CShellExtensionInterface::GetTarget()
 		target = wxString((wchar_t*)(data + 2), wxConvFile);
 #endif
 	}
-	
+
 	ReleaseMutex(m_hMutex);
 
 	UnmapViewOfFile(data);
@@ -174,7 +174,7 @@ CShellExtensionInterface* CShellExtensionInterface::CreateInitialized()
 		delete ext;
 		return 0;
 	}
-	
+
 	if (ext->InitDrag() == _T(""))
 	{
 		delete ext;
@@ -267,7 +267,7 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 	TiXmlElement* pServer = pElement->FirstChildElement("Server");
 	if (!pServer || !::GetServer(pServer, m_server))
 		return false;
-	
+
 	wxString path = GetTextElement(pElement, "Path");
 	if (path == _T("") || !m_path.SetSafePath(path))
 		return false;

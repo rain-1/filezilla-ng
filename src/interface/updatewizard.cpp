@@ -183,7 +183,7 @@ bool CUpdateWizard::Load()
 
 
 	GetPageAreaSizer()->Add(m_pages[0]);
-	
+
 	std::vector<wxWindow*> windows;
 	for (unsigned int i = 0; i < m_pages.size(); i++)
 		windows.push_back(m_pages[i]);
@@ -280,7 +280,7 @@ CLocalPath CUpdateWizard::GetDownloadDir() const
 #ifdef __WXMSW__
 	// Old Vista has a profile directory for downloaded files,
 	// need to get it using SHGetKnownFolderPath which we need to
-	// load dynamically to preserve forward compatibility with the 
+	// load dynamically to preserve forward compatibility with the
 	// upgrade to Windows XP.
 	wxDynamicLibrary lib(_T("shell32.dll"));
 	if (lib.IsLoaded() && lib.HasSymbol(_T("SHGetKnownFolderPath")))
@@ -311,7 +311,7 @@ bool CUpdateWizard::SetLocalFile()
 	CLocalPath downloadDir(COptions::Get()->GetOption(OPTION_UPDATECHECK_DOWNLOADDIR));
 	if (downloadDir.empty() || !downloadDir.Exists())
 		downloadDir = defaultDownloadDir;
-	
+
 	const int flags = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
 
 	const wxString& ext = filename.Right(4);
@@ -387,7 +387,7 @@ void CUpdateWizard::OnPageChanging(wxWizardEvent& event)
 			return;
 		}
 	}
-	
+
 	m_skipPageChanging = false;
 }
 
@@ -453,9 +453,9 @@ void CUpdateWizard::FailedTransfer()
 		XRCCTRL(*this, "ID_FAILURE", wxStaticText)->SetLabel(_("Failed to check for newer version of FileZilla."));
 	else
 		XRCCTRL(*this, "ID_FAILURE", wxStaticText)->SetLabel(_("Failed to download the latest version of FileZilla."));
-	
+
 	((wxWizardPageSimple*)GetCurrentPage())->SetNext(m_pages[3]);
-	m_pages[3]->SetPrev((wxWizardPageSimple*)GetCurrentPage());	
+	m_pages[3]->SetPrev((wxWizardPageSimple*)GetCurrentPage());
 
 	m_skipPageChanging = true;
 	ShowPage(m_pages[3]);
@@ -519,7 +519,7 @@ void CUpdateWizard::OnEngineEvent(wxEvent& event)
 					else if (m_currentPage == 2)
 					{
 						wxStaticText *pText = XRCCTRL(*this, "ID_DOWNLOADPROGRESSTEXT", wxStaticText);
-						
+
 						wxString text = pLogMsg->msg;
 						text.Replace(_T("&"), _T("&&"));
 						WrapText(pText, text, m_pages[2]->GetClientSize().x);
@@ -721,7 +721,7 @@ void CUpdateWizard::ParseData()
 			m_news.Trim(false);
 			break;
 		}
-		
+
 		// Extract type of update
 		pos = line.Find(' ');
 		if (pos < 1)
@@ -871,7 +871,7 @@ void CUpdateWizard::SetTransferStatus(const CTransferStatus* pStatus)
 		return;
 	}
 
-	
+
 	wxTimeSpan elapsed = wxDateTime::Now().Subtract(pStatus->started);
 	int elapsedSeconds = elapsed.GetSeconds().GetLo(); // Assume GetHi is always 0
 
@@ -880,7 +880,7 @@ void CUpdateWizard::SetTransferStatus(const CTransferStatus* pStatus)
 	{
 		wxFileOffset rate = (pStatus->currentOffset - pStatus->startOffset) / elapsedSeconds;
 
-        if (rate > (1000*1000))
+		if (rate > (1000*1000))
 			text.Printf(_("%s bytes (%d.%d MB/s)"), wxLongLong(pStatus->currentOffset).ToString().c_str(), (int)(rate / 1000 / 1000), (int)((rate / 1000 / 100) % 10));
 		else if (rate > 1000)
 			text.Printf(_("%s bytes (%d.%d KB/s)"), wxLongLong(pStatus->currentOffset).ToString().c_str(), (int)(rate / 1000), (int)((rate / 100) % 10));
@@ -907,7 +907,7 @@ void CUpdateWizard::SetTransferStatus(const CTransferStatus* pStatus)
 	m_pages[2]->GetSizer()->Layout();
 
 	if (pStatus->totalSize > 0)
-	{	
+	{
 		int percent = (pStatus->currentOffset * 100) / pStatus->totalSize;
 		if (percent > 100)
 			percent = 100;
@@ -961,7 +961,7 @@ bool CUpdateWizard::CanAutoCheckForUpdateNow()
 	if (lastCheckStr == _T(""))
 		return true;
 
-	wxDateTime lastCheck;	
+	wxDateTime lastCheck;
 	lastCheck.ParseDateTime(lastCheckStr);
 	if (!lastCheck.IsValid())
 		return true;
@@ -971,7 +971,7 @@ bool CUpdateWizard::CanAutoCheckForUpdateNow()
 	if (span.GetSeconds() < 0)
 		// Last check in future
 		return true;
-	
+
 	int days;
 	if (CBuildInfo::GetBuildType() == _T("official") && CBuildInfo::IsUnstable())
 		days = 3600 * 24;
@@ -1245,9 +1245,9 @@ void CUpdateWizard::FailedChecksum()
 	XRCCTRL(*this, "ID_MISMATCH2", wxStaticText)->Show();
 	XRCCTRL(*this, "ID_MISMATCH3", wxStaticText)->Show();
 	XRCCTRL(*this, "ID_MISMATCH4", wxStaticText)->Show();
-	
+
 	((wxWizardPageSimple*)GetCurrentPage())->SetNext(m_pages[3]);
-	m_pages[3]->SetPrev((wxWizardPageSimple*)GetCurrentPage());	
+	m_pages[3]->SetPrev((wxWizardPageSimple*)GetCurrentPage());
 
 	m_skipPageChanging = true;
 	ShowPage(m_pages[3]);

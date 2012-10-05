@@ -29,7 +29,7 @@ protected:
 	void OnRename(wxCommandEvent& event);
 	void OnCopy(wxCommandEvent& event);
 	void OnFilterSelect(wxCommandEvent& event);
-		
+
 	void ShowFilter(const CFilter& filter);
 	void SaveFilter(CFilter& filter);
 

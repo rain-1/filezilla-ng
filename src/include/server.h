@@ -71,7 +71,7 @@ public:
 	CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int, wxString user, wxString pass = _T(""), wxString account = _T(""));
 
 	void SetType(enum ServerType type);
-	
+
 	enum ServerProtocol GetProtocol() const;
 	enum ServerType GetType() const;
 	wxString GetHost() const;
@@ -84,12 +84,12 @@ public:
 	enum PasvMode GetPasvMode() const;
 	int MaximumMultipleConnections() const;
 	bool GetBypassProxy() const;
-	
+
 	// Return true if URL could be parsed correctly, false otherwise.
 	// If parsing fails, pError is filled with the reason and the CServer instance may be left an undefined state.
 	bool ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path);
 	bool ParseUrl(wxString host, const wxString& port, wxString user, wxString pass, wxString &error, CServerPath &path);
-	
+
 	void SetProtocol(enum ServerProtocol serverProtocol);
 	bool SetHost(wxString Host, unsigned int port);
 
@@ -103,7 +103,7 @@ public:
 	bool operator!=(const CServer &op) const;
 	bool EqualsNoPass(const CServer &op) const;
 
-	bool SetTimezoneOffset(int minutes);	
+	bool SetTimezoneOffset(int minutes);
 	void SetPasvMode(enum PasvMode pasvMode);
 	void MaximumMultipleConnections(int maximum);
 

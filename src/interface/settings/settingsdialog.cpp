@@ -143,7 +143,7 @@ bool CSettingsDialog::LoadPages()
 	treeCtrl->SetQuickBestSize(false);
 	treeCtrl->InvalidateBestSize();
 	treeCtrl->SetInitialSize();
-	
+
 	// Compensate for scrollbar
 	wxSize size = treeCtrl->GetBestSize();
 	int scrollWidth = wxSystemSettings::GetMetric(wxSYS_VSCROLL_X, treeCtrl);

@@ -42,7 +42,7 @@ public:
 	wxString GetMacName();
 
 	bool ResumedSession() const;
-	
+
 	// PEM formatted
 	bool AddTrustedRootCertificate(const wxString& cert);
 protected:
@@ -55,7 +55,7 @@ protected:
 
 	int ContinueHandshake();
 	void ContinueShutdown();
-	
+
 	int VerifyCertificate();
 
 	enum TlsState m_tlsState;
@@ -69,7 +69,7 @@ protected:
 
 	void LogError(int code);
 	void PrintAlert();
-	
+
 	// Failure logs the error, uninits the session and sends a close event
 	void Failure(int code, int socket_error);
 

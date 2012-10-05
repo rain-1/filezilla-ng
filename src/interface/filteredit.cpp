@@ -76,7 +76,7 @@ bool CFilterEditDialog::Create(wxWindow* parent, const std::vector<CFilter>& fil
 		conditions |= filter_foreign;
 	if (!CreateListControl(conditions))
 		return false;
-	
+
 	m_pFilterListCtrl = XRCCTRL(*this, "ID_FILTERS", wxListBox);
 	if (!m_pFilterListCtrl)
 		return false;

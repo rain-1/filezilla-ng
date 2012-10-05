@@ -32,7 +32,7 @@ class CSystemImageList
 {
 public:
 	CSystemImageList(int size = -1);
-	
+
 	bool CreateSystemImageList(int size);
 	virtual ~CSystemImageList();
 

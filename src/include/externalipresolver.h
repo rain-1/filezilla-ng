@@ -14,11 +14,11 @@ typedef void (wxEvtHandler::*fzExternalIPResolveEventFunction)(fzExternalIPResol
 
 extern const wxEventType fzEVT_EXTERNALIPRESOLVE;
 #define EVT_FZ_EXTERNALIPRESOLVE(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        fzEVT_EXTERNALIPRESOLVE, id, -1, \
-        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzExternalIPResolveEventFunction, &fn ), \
-        (wxObject *) NULL \
-    ),
+	DECLARE_EVENT_TABLE_ENTRY(           \
+		fzEVT_EXTERNALIPRESOLVE, id, -1, \
+		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzExternalIPResolveEventFunction, &fn ), \
+		(wxObject *) NULL                \
+	),
 
 class CExternalIPResolver : public CSocketEventHandler
 {

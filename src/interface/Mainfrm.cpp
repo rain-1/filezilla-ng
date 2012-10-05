@@ -336,7 +336,7 @@ CMainFrame::CMainFrame()
 	m_pContextControl->CreateTab();
 
 	m_pContextControl->GetCurrentControls();
-	
+
 	switch (message_log_position)
 	{
 	case 1:
@@ -508,7 +508,7 @@ bool CMainFrame::CreateMenus()
 		delete m_pMenuBar;
 	}
 	m_pMenuBar = CMenuBar::Load(this);
-	
+
 	if (!m_pMenuBar)
 		return false;
 
@@ -854,7 +854,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
 			if (m_pMenuBar)
 				m_pMenuBar->UpdateBookmarkMenu();
-		}	
+		}
 	}
 	else if (event.GetId() == XRCID("ID_MENU_HELP_WELCOME"))
 	{
@@ -946,7 +946,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 	{
 		if ((*iter)->m_pEngine != pEngine)
 			continue;
-		
+
 		pState = *iter;
 		break;
 	}
@@ -1242,7 +1242,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		}
 
 		RememberSplitterPositions();
-		
+
 #ifdef __WXMAC__
 		if (m_pToolBar)
 			COptions::Get()->SetOption(OPTION_TOOLBAR_HIDDEN, m_pToolBar->IsShown() ? 0 : 1);
@@ -1586,7 +1586,7 @@ void CMainFrame::OnToggleLogView(wxCommandEvent& event)
 			shown = true;
 		}
 	}
-	
+
 	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) != 2)
 		COptions::Get()->SetOption(OPTION_SHOW_MESSAGELOG, shown);
 }
@@ -1637,7 +1637,7 @@ void CMainFrame::ShowLocalTree()
 			continue;
 
 		controls->pLocalTreeViewPanel->SetHeader(controls->pLocalListViewPanel->DetachHeader());
-		
+
 		if (layout == 3 && swap)
 			controls->pLocalSplitter->SplitVertically(controls->pLocalListViewPanel, controls->pLocalTreeViewPanel);
 		else if (layout)
@@ -1801,12 +1801,12 @@ void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagel
 
 	if (messagelog_position == -1)
 		messagelog_position = COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION);
-	
+
 	// First handle changes in message log position as it can make size of the other panes change
 	{
 		bool shown = m_pStatusView->IsShown();
 		wxWindow* parent = m_pStatusView->GetParent();
-	
+
 		bool changed;
 		if (parent == m_pTopSplitter && messagelog_position != 0)
 		{
@@ -2208,7 +2208,7 @@ void CMainFrame::RememberSplitterPositions()
 	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 	if (!controls)
 		return;
-	
+
 	wxString posString;
 
 	// top_pos
@@ -2554,7 +2554,7 @@ WXLRESULT CMainFrame::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 		// create another instance of the module and call its Exit() member.
 		// After that, the next call to a wxDisplay will create a new factory and
 		// get the new display layout from Windows.
-		// 
+		//
 		// Note: Both the factory pattern as well as the dynamic object system
 		//       are perfect example of bad design.
 		//

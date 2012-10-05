@@ -258,7 +258,7 @@ void CFilterDialog::SaveFilters()
 	}
 
 	xml.Save();
-	
+
 	m_filters_disabled = false;
 }
 
@@ -723,7 +723,7 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 		}
 		break;
 	}
-	
+
 	return match;
 }
 
@@ -987,7 +987,7 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		condition.matchCase = filter.matchCase;
 		if (condition.strValue == _T(""))
 			continue;
-		
+
 		// TODO: 64bit filesize
 		if (condition.type == filter_size)
 		{
@@ -1005,7 +1005,7 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		else if (condition.type == filter_date)
 		{
 			if (!condition.date.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !condition.date.IsValid())
-				continue;			
+				continue;
 		}
 
 		filter.filters.push_back(condition);

@@ -25,9 +25,9 @@ public:
 	void SetFileName(const wxString& name);
 	void SetFileName(const wxFileName& fileName);
 	const wxFileName& GetFileName() const { return m_fileName; }
-	
+
 	bool HasFileName() const { return m_fileName.IsOk(); }
-	
+
 	// Sets error description on failure
 	TiXmlElement* Load(const wxString& name, bool create = true);
 	TiXmlElement* Load(const wxFileName& fileName = wxFileName(), bool create = true);
@@ -37,7 +37,7 @@ public:
 	void GetRawDataHere(char* p); // p has to big enough to hold at least GetRawDataLength() bytes
 
 	bool ParseData(char* data); // data has to be 0-terminated
-	
+
 	void Close();
 
 	TiXmlElement* GetElement();
@@ -45,7 +45,7 @@ public:
 
 	bool Modified();
 
-    bool Save(wxString* error = 0);
+	bool Save(wxString* error = 0);
 
 protected:
 	wxDateTime m_modificationTime;

@@ -36,7 +36,7 @@ enum capabilityNames
 	// can return different times than the UTC based times using the MLST or
 	// MDTM commands.
 	// Note that the user can invoke an additional timezone offset on top of
-	// this for server not supporting auto-detection or to compensate 
+	// this for server not supporting auto-detection or to compensate
 	// unsynchronized clocks.
 	timezone_offset
 };

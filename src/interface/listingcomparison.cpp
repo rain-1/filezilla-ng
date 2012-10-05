@@ -169,7 +169,7 @@ bool CComparisonManager::CompareListings()
 						localFlag = CComparableListing::normal;
 						remoteFlag = CComparableListing::newer;
 					}
-					else 
+					else
 					{
 						localFlag = CComparableListing::newer;
 						remoteFlag = CComparableListing::normal;

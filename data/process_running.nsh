@@ -99,7 +99,7 @@ Function GetFilenameFromProcessId
     Push ''
 
     return
-    
+
   ${EndIf}
 
   System::Call "kernel32::CloseHandle(i R0)"
@@ -130,7 +130,7 @@ Function IsProcessRunning
   IntOp $R4 0 - $R4
 
   Call EnumProcesses
-  
+
   Pop $R1
   Pop $R2
 
@@ -179,4 +179,3 @@ Function IsProcessRunning
 FunctionEnd
 
 !endif ;EXECUTABLE_RUNNING_INCLUDED
-

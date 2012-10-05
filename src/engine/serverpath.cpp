@@ -18,16 +18,16 @@ struct CServerTypeTraits
 };
 
 static const CServerTypeTraits traits[SERVERTYPE_MAX] = {
-	{ _T("/"),  true,  0,    0,    false, 0, 0,   true,  false }, // Failsafe
-	{ _T("/"),  true,  0,    0,    false, 0, 0,   true,  false },
-	{ _T("."),  false, '[',  ']',  false, 0, '^', false, false },
-	{ _T("\\/"), false, 0,    0,    false, 0, 0,   true,  false },
-	{ _T("."),  false, '\'', '\'', true,  1, 0,   false, false },
-	{ _T("/"),  true,  0,    0,    false, 0, 0,   true,  false },
-	{ _T("/"),  true,  0,    0,    false, 0, 0,   true,  false }, // Same as Unix
-	{ _T("."),  false, 0,    0,    false, 0, 0,   false, false },
-	{ _T("\\"), true,  0,    0,    false, 0, 0,   true,  false },
-	{ _T("/"),  true,  0,    0,    false, 0, 0,   true,  true  } // Cygwin is like Unix but has optional prefix of form "//server"
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Failsafe
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false },
+	{ _T("."),   false,  '[',  ']',    false, 0, '^', false, false },
+	{ _T("\\/"), false,    0,    0,    false, 0, 0,   true,  false },
+	{ _T("."),   false, '\'', '\'',     true, 1, 0,   false, false },
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false },
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Same as Unix
+	{ _T("."),   false,    0,    0,    false, 0, 0,   false, false },
+	{ _T("\\"),  true,     0,    0,    false, 0, 0,   true,  false },
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  } // Cygwin is like Unix but has optional prefix of form "//server"
 };
 
 CServerPathData::CServerPathData()
@@ -380,7 +380,7 @@ bool CServerPath::SetSafePath(const wxString& path, bool coalesce)
 
 		p += prefix_len + 1;
 	}
-	
+
 	while (len > (p - begin))
 	{
 		int segment_len = 0;
@@ -926,7 +926,7 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 	parent.m_type = m_type;
 
 	CServerPathData& parentData = parent.m_data.Get();
-	
+
 	tConstSegmentIter last = m_data->m_segments.end();
 	tConstSegmentIter last2 = path.m_data->m_segments.end();
 	if (traits[m_type].prefixmode == 1)

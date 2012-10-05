@@ -9,16 +9,16 @@
 
 enum engineOptions
 {
-	OPTION_USEPASV,			// Use passive mode unless overridden by 
+	OPTION_USEPASV,			// Use passive mode unless overridden by
 							// server settings
 	OPTION_LIMITPORTS,
 	OPTION_LIMITPORTS_LOW,
 	OPTION_LIMITPORTS_HIGH,
 	OPTION_EXTERNALIPMODE,		/* External IP Address mode for use in active mode
 								   Values: 0: ask operating system
-								           1: use provided IP
+										   1: use provided IP
 										   2: use provided resolver
-							    */
+								*/
 	OPTION_EXTERNALIP,
 	OPTION_EXTERNALIPRESOLVER,
 	OPTION_LASTRESOLVEDIP,

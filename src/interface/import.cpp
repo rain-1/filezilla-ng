@@ -12,8 +12,8 @@ CImportDialog::CImportDialog(wxWindow* parent, CQueueView* pQueueView)
 
 void CImportDialog::Show()
 {
-	wxFileDialog dlg(m_parent, _("Select file to import settings from"), _T(""), 
-					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"), 
+	wxFileDialog dlg(m_parent, _("Select file to import settings from"), _T(""),
+					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	dlg.CenterOnParent();
 
@@ -80,7 +80,7 @@ void CImportDialog::Show()
 				COptions::Get()->Import(fz3Root->FirstChildElement("Settings"));
 				wxMessageBox(_("The settings have been imported. You have to restart FileZilla for all settings to have effect."), _("Import successful"), wxOK, this);
 			}
-			
+
 			wxMessageBox(_("The selected categories have been imported."), _("Import successful"), wxOK, this);
 
 			delete xmlDocument;
@@ -94,7 +94,7 @@ void CImportDialog::Show()
 		{
 			int res = wxMessageBox(_("The file you have selected contains site manager data from a previous version of FileZilla.\nDue to differences in the storage format, only host, port, username and password will be imported.\nContinue with the import?"),
 				_("Import data from older version"), wxICON_QUESTION | wxYES_NO);
-			
+
 			if (res == wxYES)
 				ImportLegacySites(fz2Root->FirstChildElement("Sites"));
 
@@ -169,7 +169,7 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement
 		{
 			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
 		}
-		
+
 		ImportLegacySites(pImportFolder, pFolder);
 	}
 
@@ -340,7 +340,7 @@ bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExi
 		{
 			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
 		}
-		
+
 		ImportSites(pImportFolder, pFolder);
 	}
 

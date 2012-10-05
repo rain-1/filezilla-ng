@@ -19,7 +19,7 @@ protected:
 
 	void ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSizer);
 	void ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& tokens, wxString prefix, const wxString& name, wxSizer* pSizer, bool decode = false);
-	
+
 	wxString DecodeValue(const wxString& value);
 
 	wxString ConvertHexToString(const unsigned char* data, unsigned int len);

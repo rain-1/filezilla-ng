@@ -37,8 +37,8 @@ void CExportDialog::Show()
 	else
 		str = _("Select file for exported data");
 
-	wxFileDialog dlg(m_parent, str, _T(""), 
-					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"), 
+	wxFileDialog dlg(m_parent, str, _T(""),
+					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	if (dlg.ShowModal() != wxID_OK)

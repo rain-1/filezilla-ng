@@ -22,11 +22,11 @@ extern const wxEventType fzEVT_ENGINE_NOTIFICATION;
 typedef void (wxEvtHandler::*fzEngineEventFunction)(wxFzEngineEvent&);
 
 #define EVT_FZ_ENGINE_NOTIFICATION(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        fzEVT_ENGINE_NOTIFICATION, id, -1, \
-        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzEngineEventFunction, &fn ), \
-        (wxObject *) NULL \
-    ),
+	DECLARE_EVENT_TABLE_ENTRY(             \
+		fzEVT_ENGINE_NOTIFICATION, id, -1, \
+		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzEngineEventFunction, &fn ), \
+		(wxObject *) NULL                  \
+	),
 
 std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
@@ -171,7 +171,7 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 {
 	m_pLogging->LogMessage(Debug_Debug, _T("CFileZillaEnginePrivate::ResetOperation(%d)"), nErrorCode);
-					
+
 	if (nErrorCode & FZ_REPLY_DISCONNECTED)
 		m_lastListDir.Clear();
 
@@ -185,8 +185,8 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 
 		if (m_pCurrentCommand->GetId() == cmd_connect)
 		{
-			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) && 
-				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))				
+			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) &&
+				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))
 			{
 				const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
 
@@ -280,7 +280,7 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 		if (protocol != UNKNOWN && protocol != command.GetServer().GetProtocol())
 			m_pLogging->LogMessage(Status, _("Selected port usually in use by a different protocol."));
 	}
-	
+
 	return ContinueConnect();
 }
 
@@ -311,7 +311,7 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &command)
 
 		delete m_pControlSocket;
 		m_pControlSocket = 0;
-		
+
 		delete m_pCurrentCommand;
 		m_pCurrentCommand = 0;
 
@@ -500,7 +500,7 @@ int CFileZillaEnginePrivate::Chmod(const CChmodCommand& command)
 void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed)
 {
 	wxASSERT(m_pControlSocket);
-	
+
 	const CServer* const pOwnServer = m_pControlSocket->GetCurrentServer();
 	wxASSERT(pOwnServer);
 
@@ -517,11 +517,11 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 	}
 
 	CDirectoryCache cache;
-	
+
 	CTimeEx changeTime;
 	if (!cache.GetChangeTime(changeTime, *pOwnServer, path))
 		return;
-	
+
 	CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, !onList);
 	AddNotification(pNotification);
 	m_lastListTime = changeTime;
@@ -546,7 +546,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 
 		if (pEngine->m_lastListTime.GetTime().IsValid() && changeTime <= pEngine->m_lastListTime)
 			continue;
-		
+
 		pEngine->m_lastListTime = changeTime;
 		CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, true);
 		pEngine->AddNotification(pNotification);

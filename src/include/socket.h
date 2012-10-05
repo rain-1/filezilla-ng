@@ -59,7 +59,7 @@ private:
 	~CSocketEventDispatcher();
 
 	virtual bool ProcessEvent(wxEvent& event);
-	
+
 	std::list<CSocketEvent*> m_pending_events;
 
 	wxCriticalSection m_sync;
@@ -116,8 +116,8 @@ public:
 		unspec, // AF_UNSPEC
 		ipv4,   // AF_INET
 		ipv6    // AF_INET6
-	};		
-		
+	};
+
 	// Connects to the given host, given as name, IPv4 or IPv6 address.
 	// Returns 0 on success, else an error code. Note: EINPROGRESS is
 	// not really an error. On success, you should still wait for the

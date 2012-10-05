@@ -101,7 +101,7 @@ void CLed::Ping()
 
 	if (m_timer.IsRunning())
 		return;
-	
+
 	Set();
 	m_timer.Start(100);
 }

@@ -40,7 +40,7 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 
 	menubar->m_pMainFrame = pMainFrame;
 
-	
+
 #if FZ_MANUALUPDATECHECK
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK))
 #endif
@@ -529,10 +529,10 @@ bool CMenuBar::HideItem(int id)
 	{
 		if (iter->first > (int)pos)
 			break;
-		
+
 		pos++;
 	}
-	
+
 	menu_iter->second[(int)pos] = pItem;
 
 	return true;

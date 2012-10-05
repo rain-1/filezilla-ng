@@ -582,7 +582,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 		if (localPath.empty() && remotePath.IsEmpty())
 			continue;
 
-		bookmarks.push_back(name);		
+		bookmarks.push_back(name);
 	}
 
 	return true;
@@ -658,7 +658,7 @@ wxString CSiteManager::AddServer(CServer server)
 		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
 		return _T("");
 	}
-	
+
 	name.Replace(_T("\\"), _T("\\\\"));
 	name.Replace(_T("/"), _T("\\/"));
 

@@ -356,7 +356,7 @@ void CNetConfWizard::OnReceive()
 		}
 		if (m_recvBuffer[i] != '\r')
 			continue;
-		
+
 		if (m_recvBuffer[i + 1] != '\n')
 		{
 			m_testResult = servererror;
@@ -524,7 +524,7 @@ void CNetConfWizard::ParseResponse(const char* line)
 		}
 		break;
 	}
-	
+
 	m_state++;
 
 	SendNextCommand();
@@ -862,7 +862,7 @@ void CNetConfWizard::OnFinish(wxWizardEvent& event)
 	long tmp;
 	XRCCTRL(*this, "ID_ACTIVE_PORTMIN", wxTextCtrl)->GetValue().ToLong(&tmp); m_pOptions->SetOption(OPTION_LIMITPORTS_LOW, tmp);
 	XRCCTRL(*this, "ID_ACTIVE_PORTMAX", wxTextCtrl)->GetValue().ToLong(&tmp); m_pOptions->SetOption(OPTION_LIMITPORTS_HIGH, tmp);
-	
+
 	m_pOptions->SetOption(OPTION_EXTERNALIP, XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl)->GetValue());
 	m_pOptions->SetOption(OPTION_EXTERNALIPRESOLVER, XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl)->GetValue());
 	m_pOptions->SetOption(OPTION_NOEXTERNALONLOCAL, XRCCTRL(*this, "ID_NOEXTERNALONLOCAL", wxCheckBox)->GetValue());
@@ -883,7 +883,7 @@ int CNetConfWizard::CreateListenSocket()
 		long high;
 		XRCCTRL(*this, "ID_ACTIVE_PORTMIN", wxTextCtrl)->GetValue().ToLong(&low);
 		XRCCTRL(*this, "ID_ACTIVE_PORTMAX", wxTextCtrl)->GetValue().ToLong(&high);
-		
+
 		int mid = GetRandomNumber(low, high);
 		wxASSERT(mid >= low && mid <= high);
 
@@ -1032,7 +1032,7 @@ void CNetConfWizard::OnDataReceive()
 		CloseSocket();
 		return;
 	}
-	
+
 	delete m_pDataSocket;
 	m_pDataSocket = 0;
 
