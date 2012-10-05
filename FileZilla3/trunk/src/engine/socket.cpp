@@ -53,7 +53,7 @@ union sockaddr_u
 // Apparently it is too hard for the richest company in the
 // world to add this simple function with a service pack...
 
-extern "C" 
+extern "C"
 {
 	typedef int (WINAPI *t_getaddrinfo)(const char *nodename, const char *servname,
 						const struct addrinfo *hints, struct addrinfo **res);
@@ -445,7 +445,7 @@ public:
 	{
 		if (!already_locked)
 			m_sync.Lock();
-			
+
 		if (!m_started || m_finished)
 		{
 			if (!already_locked)
@@ -503,7 +503,7 @@ protected:
 
 			return 0;
 		}
-		
+
 #if defined(SO_NOSIGPIPE) && !defined(MSG_NOSIGNAL)
 		// We do not want SIGPIPE if writing to socket.
 		const int value = 1;
@@ -859,7 +859,7 @@ protected:
 			int res = select(max, &readfds, &writefds, 0, 0);
 
 			m_sync.Lock();
-			
+
 			if (res > 0 && FD_ISSET(m_pipe[0], &readfds))
 			{
 				char buffer[100];
@@ -1793,7 +1793,7 @@ int CSocket::GetLocalPort(int& error)
 
 int CSocket::GetRemotePort(int& error)
 {
-	sockaddr_u addr;		
+	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
 	error = getpeername(m_fd, &addr.sockaddr, &addr_len);
 	if (error)
@@ -1832,7 +1832,7 @@ CSocket* CSocket::Accept(int &error)
 #endif
 		return 0;
 	}
-	
+
 #if defined(SO_NOSIGPIPE) && !defined(MSG_NOSIGNAL)
 	// We do not want SIGPIPE if writing to socket.
 	const int value = 1;

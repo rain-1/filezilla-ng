@@ -238,10 +238,10 @@ bool CToolBar::HideTool(int id)
 	{
 		if (iter->first > pos)
 			break;
-		
+
 		pos++;
 	}
-	
+
 	m_hidden_tools[pos] = tool;
 
 	return true;

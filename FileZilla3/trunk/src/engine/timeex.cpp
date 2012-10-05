@@ -35,7 +35,7 @@ bool CTimeEx::operator < (const CTimeEx& op) const
 		return true;
 	if (m_time > op.m_time)
 		return false;
-	
+
 	return m_offset < op.m_offset;
 }
 
@@ -45,7 +45,7 @@ bool CTimeEx::operator <= (const CTimeEx& op) const
 		return true;
 	if (m_time > op.m_time)
 		return false;
-	
+
 	return m_offset <= op.m_offset;
 }
 
@@ -55,7 +55,7 @@ bool CTimeEx::operator > (const CTimeEx& op) const
 		return true;
 	if (m_time < op.m_time)
 		return false;
-	
+
 	return m_offset > op.m_offset;
 }
 
@@ -65,7 +65,7 @@ bool CTimeEx::operator >= (const CTimeEx& op) const
 		return true;
 	if (m_time < op.m_time)
 		return false;
-	
+
 	return m_offset >= op.m_offset;
 }
 
@@ -73,6 +73,6 @@ bool CTimeEx::operator == (const CTimeEx& op) const
 {
 	if (m_time != op.m_time)
 		return false;
-	
+
 	return m_offset == op.m_offset;
 }

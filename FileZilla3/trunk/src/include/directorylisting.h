@@ -104,7 +104,7 @@ public:
 	// 3rd bit indicates a file got changed.
 	// 4th bit is set if an update cannot be applied to
 	// one of the other categories.
-	// 
+	//
 	// These bits should help the user interface to choose an appropriate sorting
 	// algorithm for modified listings
 	int m_hasUnsureEntries;

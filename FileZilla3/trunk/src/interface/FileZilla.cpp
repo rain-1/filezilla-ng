@@ -147,7 +147,7 @@ bool CheckForWin2003FirewallBug()
 	return true;
 }
 
-extern "C" 
+extern "C"
 {
 	typedef HRESULT (WINAPI *t_SetCurrentProcessExplicitAppUserModelID)(PCWSTR AppID);
 }

@@ -360,7 +360,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	{
 		wxCoord w, h;
 		dc.GetTextExtent(m_pNotebook_Site->GetPageText(i), &w, &h);
-		
+
 		width += w;
 #ifdef __WXMAC__
 		width += 20; // Guessed
@@ -368,7 +368,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 		width += 10;
 #endif
 	}
-	
+
 	wxSize page_min_size = m_pNotebook_Site->GetPage(0)->GetSizer()->GetMinSize();
 	if (page_min_size.x < width)
 	{
@@ -857,7 +857,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 
 		// Save local dir
 		AddTextElement(pNode, "LocalDir", data->m_localDir);
-		
+
 		// Save remote dir
 		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
 
@@ -884,13 +884,13 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 
 		// Save local dir
 		AddTextElement(pNode, "LocalDir", data->m_localDir);
-		
+
 		// Save remote dir
 		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
 
 		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
 	}
-	
+
 	delete [] utf8;
 	return true;
 }
@@ -942,7 +942,7 @@ bool CSiteManagerDialog::Verify()
 		if (host == _T(""))
 		{
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this); 
+			wxMessageBox(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -1071,7 +1071,7 @@ bool CSiteManagerDialog::Verify()
 		CSiteManagerItemData_Site* pServer = reinterpret_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
 		if (!pServer)
 			return false;
-		
+
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue();
 		if (remotePathRaw != _T(""))
 		{
@@ -1342,7 +1342,7 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	}
 	server.m_server.SetHost(host, port);
 
-	
+
 	const enum ServerProtocol protocol = GetProtocol();
 	if (protocol != UNKNOWN)
 		server.m_server.SetProtocol(protocol);
@@ -1704,7 +1704,7 @@ void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent& event)
 	wxChoice* pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 	wxStaticText* pEncryptionDesc = XRCCTRL(*this, "ID_ENCRYPTION_DESC", wxStaticText);
-	
+
 	pEncryption->Show(pProtocol->GetSelection() != 1);
 	pEncryptionDesc->Show(pProtocol->GetSelection() != 1);
 }
@@ -1911,7 +1911,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 	if (IsPredefinedItem(source) && !copy)
 		return false;
 
-    wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 
 	CSiteManagerItemData *pTargetData = (CSiteManagerItemData *)pTree->GetItemData(target);
 	CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(source);
@@ -2166,8 +2166,8 @@ void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
 
 void CSiteManagerDialog::OnExportSelected(wxCommandEvent& event)
 {
-	wxFileDialog dlg(this, _("Select file for exported sites"), _T(""), 
-					_T("sites.xml"), _T("XML files (*.xml)|*.xml"), 
+	wxFileDialog dlg(this, _("Select file for exported sites"), _T(""),
+					_T("sites.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	if (dlg.ShowModal() != wxID_OK)
@@ -2206,8 +2206,8 @@ void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent& event)
 	wxDirDialog dlg(this, _("Choose the local directory"), XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->GetValue(), wxDD_NEW_DIR_BUTTON);
 	if (dlg.ShowModal() != wxID_OK)
 		return;
-	
-    XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetValue(dlg.GetPath());
+
+	XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetValue(dlg.GetPath());
 }
 
 void CSiteManagerDialog::OnNewBookmark(wxCommandEvent& event)

@@ -22,7 +22,7 @@ public:
 	void EnablePrefixSearch(bool enable) { m_prefixSearch_enabled = enable; }
 
 	// Reducing item count does not reset the focused item
- 	// if using the generic list control. Work around it.
+	// if using the generic list control. Work around it.
 	void SaveSetItemCount(long count);
 
 	void ShowColumnEditor();
@@ -32,10 +32,10 @@ public:
 	// Moves column. Target position includes both hidden
 	// as well as shown columns
 	void MoveColumn(unsigned int col, unsigned int before);
-	
+
 	// Do not call after calling LoadColumnSettings
 	void AddColumn(const wxString& name, int align, int initialWidth, bool fixed = false);
-	
+
 	// LoadColumnSettings needs to be called exactly once after adding
 	// all columns
 	void LoadColumnSettings(int widthsOptionId, int visibilityOptionId, int sortOptionId);

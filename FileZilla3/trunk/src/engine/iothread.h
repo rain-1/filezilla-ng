@@ -18,11 +18,11 @@ typedef void (wxEvtHandler::*CIOThreadEventFunction)(CIOThreadEvent&);
 
 extern const wxEventType fzEVT_IOTHREAD;
 #define EVT_IOTHREAD(id, fn) \
-    DECLARE_EVENT_TABLE_ENTRY( \
-        fzEVT_IOTHREAD, id, -1, \
-        (wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( CIOThreadEventFunction, &fn ), \
-        (wxObject *) NULL \
-    ),
+	DECLARE_EVENT_TABLE_ENTRY(  \
+		fzEVT_IOTHREAD, id, -1, \
+		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( CIOThreadEventFunction, &fn ), \
+		(wxObject *) NULL       \
+	),
 
 enum IORet
 {

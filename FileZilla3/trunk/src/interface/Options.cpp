@@ -171,7 +171,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Filteredit window size", string, _T(""), normal },
 	{ "Enable invalid char filter", number, _T("1"), normal },
 	{ "Invalid char replace", string, _T("_"), normal },
-	{ "Already connected choice", number, _T("0"), normal },	
+	{ "Already connected choice", number, _T("0"), normal },
 	{ "Edit status dialog size", string, _T(""), normal },
 	{ "Display current speed", number, _T("0"), normal },
 	{ "Toolbar hidden", number, _T("0"), normal },
@@ -357,7 +357,7 @@ void COptions::CreateSettingsXmlElement()
 			wxString s(wxString::Format(_T("%d"), m_optionsCache[i].numValue));
 			SetXmlValue(i, s);
 		}
-		
+
 	}
 
 	m_pXmlFile->Save();
@@ -556,7 +556,7 @@ void COptions::SetServer(wxString path, const CServer& server)
 
 	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 		return;
-	
+
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
 	m_pXmlFile->Save();
 }
@@ -736,7 +736,7 @@ void COptions::LoadGlobalDefaultOptions(const std::map<std::string, int>& nameOp
 	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir == _T(""))
 		return;
-	
+
 	wxFileName name(defaultsDir, _T("fzdefaults.xml"));
 	CXmlFile file(name);
 	if (!file.Load())

@@ -71,7 +71,7 @@ struct fast_equal
 };
 
 
-// Can't use wxHashMap as it doesn't like forward declarations. That 
+// Can't use wxHashMap as it doesn't like forward declarations. That
 // contraption is actually implemented as a series of ugly macros and
 // not using beautiful templates.
 
@@ -148,7 +148,7 @@ void BenchmarkStringCoalescer()
 	{
 		s.push_back(it->first);
 	}
-	
+
 	wxDateTime start = wxDateTime::UNow();
 	for (int i = 0; i < 100; ++i)
 	{

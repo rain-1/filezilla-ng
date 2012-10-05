@@ -74,7 +74,7 @@ protected:
 	{
 		if (event.GetKeyCode() == WXK_TAB)
 			return;
-			
+
 #ifdef __WXMAC__
 		if (event.GetKeyCode() == 'v' && event.GetModifiers() == wxMOD_CMD)
 		{

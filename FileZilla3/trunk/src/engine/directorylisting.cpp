@@ -86,13 +86,13 @@ bool CDirentry::operator==(const CDirentry &op) const
 
 	if (flags != op.flags)
 		return false;
-	
+
 	if (flags & flag_timestamp_date)
 	{
 		if (time != op.time)
 			return false;
 	}
-	
+
 	return true;
 }
 
@@ -116,7 +116,7 @@ void CDirectoryListing::SetCount(unsigned int count)
 	}
 
 	m_entries.Get().resize(count);
-	
+
 	m_entryCount = count;
 }
 
@@ -141,11 +141,11 @@ void CDirectoryListing::Assign(const std::list<CDirentry> &entries)
 	std::vector<CRefcountObject<CDirentry> >& own_entries = m_entries.Get();
 	own_entries.clear();
 	own_entries.reserve(m_entryCount);
-	
+
 	m_hasDirs = false;
 	m_has_perms = false;
 	m_has_usergroup = false;
-	
+
 	for (std::list<CDirentry>::const_iterator iter = entries.begin(); iter != entries.end(); ++iter)
 	{
 		if (iter->is_dir())

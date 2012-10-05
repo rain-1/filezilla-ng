@@ -35,7 +35,7 @@ protected:
 	virtual int Disconnect();
 
 	virtual int ResetOperation(int nErrorCode);
-	
+
 	virtual void ResetHttpData(CHttpOpData* pData);
 
 	int ParseHeader(CHttpOpData* pData);

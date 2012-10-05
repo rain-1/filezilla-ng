@@ -161,10 +161,10 @@ public:
 	// ---
 	// The following two functions control the timeout behaviour:
 	// ---
-    
+
 	// Call this if data could be sent or retrieved
 	void SetAlive();
-	
+
 	// Set to true if waiting for data
 	void SetWait(bool waiting);
 
@@ -187,7 +187,7 @@ protected:
 
 	// Called by ResetOperation if there's a queued operation
 	virtual int ParseSubcommandResult(int prevResult);
-	
+
 	wxString ConvertDomainName(wxString domain);
 
 	int CheckOverwriteFile();
@@ -202,10 +202,10 @@ protected:
 	CServer *m_pCurrentServer;
 
 	CServerPath m_CurrentPath;
-	
+
 	CTransferStatus *m_pTransferStatus;
 	int m_transferStatusSendState;
-	
+
 	wxCSConv *m_pCSConv;
 	bool m_useUTF8;
 
@@ -295,7 +295,7 @@ protected:
 	virtual void OnReceive();
 	virtual void OnSend();
 	virtual void OnClose(int error);
-	
+
 	virtual bool Send(const char *buffer, int len);
 
 	CSocket* m_pSocket;

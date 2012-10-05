@@ -62,7 +62,7 @@ protected:
 	wxString m_last_bytes_and_rate;
 	int m_last_bar_split;
 	int m_last_permill;
-	
+
 	DECLARE_EVENT_TABLE()
 	void OnPaint(wxPaintEvent& event);
 	void OnTimer(wxTimerEvent& event);

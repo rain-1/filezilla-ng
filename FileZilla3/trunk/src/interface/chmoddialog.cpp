@@ -43,7 +43,7 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 		else
 			title = _("Please select the new attributes for the selected files and directories.");
 	}
-	
+
 	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_CHMODDIALOG")))
 		return false;
 
@@ -94,7 +94,7 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 	{
 		int id = wxXmlResource::GetXRCID(IDs[i]);
 		m_checkBoxes[i] = wxDynamicCast(FindWindow(id), wxCheckBox);
-		
+
 		if (!m_checkBoxes[i])
 			return false;
 
@@ -164,7 +164,7 @@ void CChmodDialog::OnCheckboxClick(wxCommandEvent& event)
 			break;
 		}
 	}
-	
+
 	wxString numericValue;
 	for (int i = 0; i < 3; i++)
 	{
@@ -192,12 +192,12 @@ void CChmodDialog::OnNumericChanged(wxCommandEvent& event)
 		return;
 
 	lastChangedNumeric = true;
-	
+
 	wxTextCtrl *pTextCtrl = XRCCTRL(*this, "ID_NUMERIC", wxTextCtrl);
 	wxString numeric = pTextCtrl->GetValue();
 	if (numeric.Length() < 3)
 		return;
-	
+
 	numeric = numeric.Right(3);
 	for (int i = 0; i < 3; i++)
 	{

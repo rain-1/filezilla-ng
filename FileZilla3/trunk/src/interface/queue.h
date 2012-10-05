@@ -163,7 +163,7 @@ public:
 	const wxLongLong& GetSize() const { return m_size; }
 	void SetSize(wxLongLong size) { m_size = size; }
 	inline bool Download() const { return flags & flag_download; }
-	
+
 	inline bool queued() const { return (flags & flag_queued) != 0; }
 	inline void set_queued(bool q)
 	{
@@ -186,7 +186,7 @@ public:
 
 	bool IsActive() const { return (flags & flag_active) != 0; }
 	virtual void SetActive(bool active);
-	
+
 	virtual void SaveItem(TiXmlElement* pElement) const;
 
 	virtual bool TryRemoveAll(); // Removes a inactive childrens, queues active children for removal.
@@ -241,7 +241,7 @@ class CFolderItem : public CFileItem
 public:
 	CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath);
 	CFolderItem(CServerItem* parent, bool queued, const CServerPath& remotePath, const wxString& remoteFile);
-	
+
 	virtual enum QueueItemType GetType() const { return QueueItemType_Folder; }
 
 	virtual void SaveItem(TiXmlElement* pElement) const;

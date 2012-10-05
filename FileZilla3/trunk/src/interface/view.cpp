@@ -47,7 +47,7 @@ void CView::OnSize(wxSizeEvent& event)
 	}
 	if (!m_pWnd)
 		return;
-    
+
 	m_pWnd->SetSize(rect);
 }
 

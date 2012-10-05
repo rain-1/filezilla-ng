@@ -187,7 +187,7 @@ void CVerifyCertDialog::ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSi
 	ParseDN_by_prefix(pDlg, tokenlist, _T("EMAIL"), _("E-Mail:"), pSizer);
 	ParseDN_by_prefix(pDlg, tokenlist, _T("serialNumber"), _("Serial number:"), pSizer);
 	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.3"), _("Jurisdiction country:"), pSizer, true);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.2"), _("Jurisdiction state or province:"), pSizer, true);	
+	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.2"), _("Jurisdiction state or province:"), pSizer, true);
 	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.1"), _("Jurisdiction locality:"), pSizer, true);
 
 	if (!tokenlist.empty())
@@ -205,7 +205,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& t
 {
 	prefix += _T("=");
 	int len = prefix.Length();
-	
+
 	wxString value;
 
 	bool append = false;
@@ -394,7 +394,7 @@ void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
 		wxString value = GetTextElement(pCert, "Data");
 
 		TiXmlElement* pRemove = 0;
-		
+
 		t_certData data;
 		if (value == _T("") || !(data.data = ConvertStringToHex(value, data.len)))
 			pRemove = pCert;
@@ -419,7 +419,7 @@ void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
 			m_trustedCerts.push_back(data);
 		else
 			delete [] data.data;
-		
+
 		pCert = pCert->NextSiblingElement("Certificate");
 
 		if (pRemove)

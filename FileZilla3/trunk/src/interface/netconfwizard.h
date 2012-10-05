@@ -38,7 +38,7 @@ protected:
 	void OnRestart(wxCommandEvent& event);
 	void OnFinish(wxWizardEvent& event);
 	void OnTimer(wxTimerEvent& event);
-	
+
 	void OnReceive();
 	void ParseResponse(const char* line);
 	void OnClose();
@@ -54,7 +54,7 @@ protected:
 	void SendNextCommand();
 
 	wxString GetExternalIPAddress();
-	
+
 	int CreateListenSocket();
 	int CreateListenSocket(unsigned int port);
 

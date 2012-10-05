@@ -22,7 +22,7 @@ public:
 		unknown,
 		HTTP,
 		SOCKS5,
-		
+
 		proxytype_count
 	};
 

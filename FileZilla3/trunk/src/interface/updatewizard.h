@@ -71,7 +71,7 @@ protected:
 	wxString m_update_log;
 
 	wxTimer m_statusTimer;
-	
+
 	// If there's already another dialog shown, wait
 	// with displaying update dialog until the other
 	// dialog gets closed. Check once every second.

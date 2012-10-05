@@ -470,7 +470,7 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay /*=_T(""
 		dc.DrawBitmap(unknownIcon, 0, 0, true);
 	}
 
-    dc.SelectObject(wxNullBitmap);
+	dc.SelectObject(wxNullBitmap);
 	return bmp;
 }
 
@@ -750,7 +750,7 @@ void CRemoteTreeView::SetItemImages(wxTreeItemId item, bool unknown)
 void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 {
 	if (event.GetItem() != m_ExpandAfterList)
-        m_ExpandAfterList = wxTreeItemId();
+		m_ExpandAfterList = wxTreeItemId();
 	if (m_busy)
 		return;
 
@@ -1126,7 +1126,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
 	const bool hasParent = path.HasParent();
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
-	
+
 	CServerPath startDir;
 	if (hasParent)
 	{
@@ -1375,7 +1375,7 @@ void CRemoteTreeView::ApplyFilters()
 		dir.path = path;
 		parents.push_back(dir);
 	}
-	
+
 	CFilterManager filter;
 	while (!parents.empty())
 	{
@@ -1404,7 +1404,7 @@ void CRemoteTreeView::ApplyFilters()
 						continue;
 					}
 				}
-				
+
 				struct _parents dir;
 				dir.item = child;
 				dir.path = path;

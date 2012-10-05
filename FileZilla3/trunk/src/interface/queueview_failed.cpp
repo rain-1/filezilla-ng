@@ -314,7 +314,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 
 	if (pQueueView->IsActive())
 		pQueueView->AdvanceQueue(false);
-	
+
 	DisplayNumberQueuedFiles();
 	SaveSetItemCount(m_itemCount);
 	RefreshListOnly();
@@ -339,7 +339,7 @@ void CQueueViewFailed::OnRequeueAll(wxCommandEvent& event)
 
 	if (pQueueView->IsActive())
 		pQueueView->AdvanceQueue(false);
-	
+
 	DisplayNumberQueuedFiles();
 	SaveSetItemCount(m_itemCount);
 	RefreshListOnly();

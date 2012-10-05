@@ -133,7 +133,7 @@ public:
 			if (!pState)
 				return wxDragNone;
 			if (!pState->GetLocalDir().IsWriteable())
-				return wxDragNone;			
+				return wxDragNone;
 		}
 
 		def = wxDragCopy;
@@ -398,7 +398,7 @@ protected:
 			}
 
 			t_dirPair* pair2 = new t_dirPair;
-	
+
 			{
 				pair2->localPath = pair->localPath.c_str();
 				pair2->remotePath = pair->remotePath.GetSafePath().c_str();
@@ -736,7 +736,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 
 			if (pEngineData->active)
 			{
-				if (pStatus && pStatus->madeProgress && !pStatus->list && 
+				if (pStatus && pStatus->madeProgress && !pStatus->list &&
 					pEngineData->pItem->GetType() == QueueItemType_File)
 				{
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
@@ -1870,7 +1870,7 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent& event)
 int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const enum CFileExistsNotification::OverwriteAction defaultFileExistsAction)
 {
 	wxASSERT(pServerItem);
-	
+
 	CFolderScanItem* pFolderScanItem = m_pFolderProcessingThread->GetFolderScanItem();
 
 	int added = 0;
@@ -2040,7 +2040,7 @@ void CQueueView::LoadQueue()
 		if (!m_queue_storage.Vacuum())
 			error = true;
 	}
-	
+
 	m_insertionStart = -1;
 	m_insertionCount = 0;
 	CommitChanges();
@@ -2080,7 +2080,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 
 				int dataType = GetTextElementInt(pFile, "DataType", -1);
 				if (dataType == -1)
-					dataType = GetTextElementInt(pFile, "TransferMode", 1); 
+					dataType = GetTextElementInt(pFile, "TransferMode", 1);
 				bool binary = dataType != 0;
 				int overwrite_action = GetTextElementInt(pFile, "OverwriteAction", CFileExistsNotification::unknown);
 
@@ -3420,7 +3420,7 @@ void CQueueView::RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString&
 	t_EngineData* const pEngineData = *iter;
 	if (!pEngineData->pItem)
 		return;
-	
+
 	if (pEngineData->pItem->GetType() != QueueItemType_File)
 		return;
 
@@ -3511,7 +3511,7 @@ void CQueueView::ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine)
 #ifdef __WXMSW__
 
 #ifndef WM_DWMCOMPOSITIONCHANGED
-#define WM_DWMCOMPOSITIONCHANGED        0x031E
+#define WM_DWMCOMPOSITIONCHANGED		0x031E
 #endif // WM_DWMCOMPOSITIONCHANGED
 
 WXLRESULT CQueueView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
@@ -3524,7 +3524,7 @@ WXLRESULT CQueueView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 	}
 	else if (nMsg == WM_LBUTTONDOWN)
 	{
-		// If clicking a partially selected item, Windows starts an internal timer with the double-click interval (as seen in the 
+		// If clicking a partially selected item, Windows starts an internal timer with the double-click interval (as seen in the
 		// disassembly). After the timer expires, the given item is selected. But there's a huge bug in Windows: We don't get
 		// notified about this change in scroll position in any way (verified using Spy++), so on left button down, start our
 		// own timer with a slightly higher interval.

@@ -39,7 +39,7 @@ bool COptionsPageConnectionSFTP::LoadPage()
 	pKeys->InsertColumn(0, _("Filename"), wxLIST_FORMAT_LEFT, 150);
 	pKeys->InsertColumn(1, _("Comment"), wxLIST_FORMAT_LEFT, 100);
 	pKeys->InsertColumn(2, _("Data"), wxLIST_FORMAT_LEFT, 350);
-	
+
 	// Generic wxListCtrl has gross minsize
 	wxSize size = pKeys->GetMinSize();
 	size.x = 1;

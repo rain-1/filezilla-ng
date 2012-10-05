@@ -86,7 +86,7 @@ CSessionManagerImpl::CSessionManagerImpl()
 		m_state = register_client;
 
 		char pid[sizeof(unsigned long) * 8 + 10];
-		sprintf(pid, "FileZilla %lu", wxGetProcessId()); 
+		sprintf(pid, "FileZilla %lu", wxGetProcessId());
 		call.AddString(pid);
 		call.AddString(pid); // What's this "startup identifier"?
 
@@ -154,7 +154,7 @@ void CSessionManagerImpl::OnSignal(wxDBusConnectionEvent& event)
 			printf("wxD-Bus: Signal from %s, member %s\n", msg->GetPath(), msg->GetMember());
 		return;
 	}
-	
+
 	if (m_client_object_path && !strcmp(path, m_client_object_path))
 	{
 		const char* member = msg->GetMember();
@@ -298,7 +298,7 @@ bool CSessionManagerImpl::SendEvent(bool query, bool* veto /*=0*/)
 
 	if (!pTop->ProcessEvent(evt))
 		return false;
-	
+
 	if (veto)
 		*veto = evt.GetVeto();
 

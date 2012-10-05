@@ -47,7 +47,7 @@ static wxString base64encode(const wxString& str)
 	static const char *base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 	wxString buf;
-	
+
 	const wxWX2MBbuf utf8 = str.mb_str(wxConvUTF8);
 	const char* from = utf8;
 
@@ -169,11 +169,11 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 	case CSocketEvent::hostaddress:
 		{
 			const wxString& address = event.GetData();
-			m_pOwner->LogMessage(Status, _("Connecting to %s..."), address.c_str()); 
+			m_pOwner->LogMessage(Status, _("Connecting to %s..."), address.c_str());
 		}
 	case CSocketEvent::connection_next:
 		if (event.GetError())
-			m_pOwner->LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str()); 
+			m_pOwner->LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
 		break;
 	case CSocketEvent::connection:
 		if (event.GetError())
@@ -301,7 +301,7 @@ void CProxySocket::OnReceive()
 
 			if (!end)
 				continue;
-			
+
 			end = strchr(m_pRecvBuffer, '\r');
 			wxASSERT(end);
 			*end = 0;
@@ -358,7 +358,7 @@ void CProxySocket::OnReceive()
 				continue;
 
 			m_recvBufferPos = 0;
-			
+
 			// All data got read, parse it
 			switch (m_handshakeState)
 			{
@@ -574,7 +574,7 @@ void CProxySocket::OnReceive()
 
 					m_pSendBuffer[addrlen + 4] = (m_port >> 8) & 0xFF; // Port in network order
 					m_pSendBuffer[addrlen + 5] = m_port & 0xFF;
-					
+
 					m_sendBufferLen = 6 + addrlen;
 					m_recvBufferLen = 2;
 				}

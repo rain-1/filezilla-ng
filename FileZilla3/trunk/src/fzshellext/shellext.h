@@ -11,11 +11,11 @@
 #define DRAG_EXT_DUMMY_DIR_PREFIX_LEN 4
 
 // {DB70412E-EEC9-479c-BBA9-BE36BFDDA41B}
-DEFINE_GUID(CLSID_ShellExtension, 
+DEFINE_GUID(CLSID_ShellExtension,
 0xdb70412e, 0xeec9, 0x479c, 0xbb, 0xa9, 0xbe, 0x36, 0xbf, 0xdd, 0xa4, 0x1b);
 
 // Internal structure of the file mapping
-// (Note: direct mappings to some struct cannot be used since structs are 
+// (Note: direct mappings to some struct cannot be used since structs are
 //  usually aligned differently depending on used compiler)
 //
 // Version number: 1 byte

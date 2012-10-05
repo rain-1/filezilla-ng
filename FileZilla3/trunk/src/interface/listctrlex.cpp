@@ -9,10 +9,10 @@
 #include "commctrl.h"
 
 #ifndef HDF_SORTUP
-#define HDF_SORTUP              0x0400
+#define HDF_SORTUP			  0x0400
 #endif
 #ifndef HDF_SORTDOWN
-#define HDF_SORTDOWN            0x0200
+#define HDF_SORTDOWN			0x0200
 #endif
 #else
 #include "themeprovider.h"
@@ -303,7 +303,7 @@ void wxListCtrlEx::OnKeyDown(wxKeyEvent& event)
 		event.Skip();
 		return;
 	}
-	
+
 	key = buffer[0];
 
 	if (key < 32)
@@ -1112,7 +1112,7 @@ bool wxListCtrlEx::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 	NMHDR *nmhdr = (NMHDR *)lParam;
 	HWND hwndHdr = ListView_GetHeader((HWND)GetHandle());
 
-    if (nmhdr->hwndFrom != hwndHdr)
+	if (nmhdr->hwndFrom != hwndHdr)
 		return wxListCtrl::MSWOnNotify(idCtrl, lParam, result);
 
 	HD_NOTIFY *nmHDR = (HD_NOTIFY *)nmhdr;
@@ -1143,7 +1143,7 @@ bool wxListCtrlEx::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 				return false;
 			}
 		}
-		else 
+		else
 			return false;
 	}
 

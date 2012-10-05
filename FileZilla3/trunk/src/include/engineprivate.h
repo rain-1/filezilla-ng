@@ -16,7 +16,7 @@ class CRateLimiter;
 class CFileZillaEnginePrivate : public wxEvtHandler
 {
 public:
-	int ResetOperation(int nErrorCode);	
+	int ResetOperation(int nErrorCode);
 	void SetActive(int direction);
 
 	// Add new pending notification
@@ -41,7 +41,7 @@ public:
 	// engine's CControlSocket instance still has that directory as
 	// current working directory (m_CurrentPath)
 	// Since this would cause problems, this function interate over all engines
-	// connected ot the same server and invalidates the current working 
+	// connected ot the same server and invalidates the current working
 	// directories if they match or if it is a subdirectory of the changed
 	// directory.
 	void InvalidateCurrentWorkingDirs(const CServerPath& path);
@@ -78,7 +78,7 @@ protected:
 
 	// Indicicates if data has been received/sent and whether to send any notifications
 	static int m_activeStatus[2];
-	
+
 	// Remember last path used in a dirlisting.
 	CServerPath m_lastListDir;
 	CTimeEx m_lastListTime;

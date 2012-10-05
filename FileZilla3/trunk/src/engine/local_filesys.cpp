@@ -355,8 +355,8 @@ bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
 		m_found = false;
 		return false;
 	}
-	
-	m_found = true;	
+
+	m_found = true;
 	return true;
 #else
 	if (path != _T("/") && path.Last() == '/')
@@ -428,7 +428,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 		m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 		return true;
 	} while ((m_found = FindNextFile(m_hFind, &m_find_data) != 0));
-	
+
 	return false;
 #else
 	if (!m_dir)
@@ -517,7 +517,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 		m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 		return true;
 	} while ((m_found = FindNextFile(m_hFind, &m_find_data) != 0));
-	
+
 	return false;
 #else
 	if (!m_dir)
@@ -571,10 +571,10 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 				*mode = 0;
 		}
 		if (m_dirs_only && type != dir)
-			continue;	
+			continue;
 
 		is_dir = type == dir;
-		
+
 		name = wxString(entry->d_name, *wxConvFileName);
 
 		return true;

@@ -480,7 +480,7 @@ void CExternalIPResolver::OnChunkedData()
 			if (!m_pRecvBuffer)
 				return;
 
-            m_chunkData.size -= dataLen;
+			m_chunkData.size -= dataLen;
 			p += dataLen;
 			len -= dataLen;
 

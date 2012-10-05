@@ -47,8 +47,8 @@ void CFileExistsDlg::CreateControls()
 	wxString localFile = m_pNotification->localFile;
 
 	wxString remoteFile = m_pNotification->remotePath.FormatFilename(m_pNotification->remoteFile);
-    localFile = GetPathEllipsis(localFile, FindWindow(XRCID("ID_FILE1_NAME")));
-    remoteFile = GetPathEllipsis(remoteFile, FindWindow(XRCID("ID_FILE2_NAME")));
+	localFile = GetPathEllipsis(localFile, FindWindow(XRCID("ID_FILE1_NAME")));
+	remoteFile = GetPathEllipsis(remoteFile, FindWindow(XRCID("ID_FILE2_NAME")));
 
 	localFile.Replace(_T("&"), _T("&&"));
 	remoteFile.Replace(_T("&"), _T("&&"));
@@ -301,7 +301,7 @@ bool CFileExistsDlg::Always(bool &directionOnly, bool &queueOnly) const
 wxString CFileExistsDlg::GetPathEllipsis(wxString path, wxWindow *window)
 {
 	int string_width; // width of the path string in pixels
-	int y;            // dummy variable
+	int y;			// dummy variable
 	window->GetTextExtent(path, &string_width, &y);
 
 	wxDisplay display(wxDisplay::GetFromWindow(window));

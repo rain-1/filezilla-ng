@@ -21,7 +21,7 @@ CConditionalDialog::CConditionalDialog(wxWindow* parent, enum DialogType type, e
 	pMainSizer->Add(pSizer, 0, wxALL, 5);
 	m_pTextSizer = new wxFlexGridSizer(1, 5, 6);
 	pSizer->Add(m_pTextSizer, 0, wxTOP, 5);
-	
+
 	wxCheckBox *pCheckBox = new wxCheckBox(this, wxID_HIGHEST + 1, _("&Don't show this dialog again."));
 	pCheckBox->SetValue(checked);
 	pSizer->Add(pCheckBox, 0, wxTOP | wxBOTTOM, 5);
@@ -42,13 +42,13 @@ CConditionalDialog::CConditionalDialog(wxWindow* parent, enum DialogType type, e
 
 		wxSizer* pGrid = new wxGridSizer(2, 5, 5);
 		pVertSizer->Add(pGrid, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTER_HORIZONTAL, 5);
-		
+
 		wxButton* pYes = new wxButton(this, wxID_YES);
 		pYes->SetDefault();
 		pGrid->Add(pYes, 0, wxGROW);
 
 		pGrid->Add(new wxButton(this, wxID_NO), 0, wxGROW);
-		
+
 		SetEscapeId(wxID_NO);
 	}
 

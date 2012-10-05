@@ -53,7 +53,7 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 	if (Lookup(cit, sit, listing.path, true, unused))
 	{
 		cit->modificationTime = CTimeEx::Now();
-		
+
 		m_totalFileCount -= cit->listing.GetCount();
 		cit->listing = listing;
 
@@ -161,7 +161,7 @@ bool CDirectoryCache::LookupFile(CDirentry &entry, const CServer &server, const 
 		matchedCase = false;
 		return true;
 	}
-			
+
 	return false;
 }
 
@@ -351,7 +351,7 @@ void CDirectoryCache::InvalidateServer(const CServer& server)
 			{
 				m_leastRecentlyUsedList.erase(*lruIt);
 				delete lruIt;
-			}	
+			}
 
 			m_totalFileCount -= cit->listing.GetCount();
 		}
@@ -515,7 +515,7 @@ void CDirectoryCache::UpdateLru(tServerIter const& sit, tCacheIter const& cit)
 	{
 		m_leastRecentlyUsedList.erase(*lruIt);
 		*lruIt = m_leastRecentlyUsedList.insert(m_leastRecentlyUsedList.end(), std::make_pair(sit, cit));
-	}		
+	}
 	else
 		cit->lruIt = (void*)new tLruList::iterator(m_leastRecentlyUsedList.insert(m_leastRecentlyUsedList.end(), std::make_pair(sit, cit)));
 }

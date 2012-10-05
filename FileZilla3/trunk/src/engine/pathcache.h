@@ -38,7 +38,7 @@ protected:
 			return source < op.source;
 		}
 	};
-	
+
 	typedef std::map<CSourcePath, CServerPath> tServerCache;
 	typedef tServerCache::iterator tServerCacheIterator;
 	typedef tServerCache::const_iterator tServerCacheConstIterator;

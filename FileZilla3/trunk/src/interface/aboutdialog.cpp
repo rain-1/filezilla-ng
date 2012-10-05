@@ -132,7 +132,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 		pSystemVersionDesc->Hide();
 		pSystemVersion->Hide();
 	}
-   
+
 	wxStaticText* pSystemPlatform = XRCCTRL(*this, "ID_SYSTEM_PLATFORM", wxStaticText);
 	if (!pSystemPlatform)
 		return false;
@@ -167,22 +167,22 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	wxString text = _T("FileZilla Client\n");
 	text += _T("----------------\n\n");
 
-	text += _T("Version:          ") + CBuildInfo::GetVersion();
+	text += _T("Version:		  ") + CBuildInfo::GetVersion();
 	if (CBuildInfo::GetBuildType() == _T("nightly"))
 		text += _T("-nightly");
 	text += '\n';
 
 	text += _T("\nBuild information:\n");
-	
+
 	wxString host = CBuildInfo::GetHostname();
 	if (!host.empty())
 		text += _T("  Compiled for:   ") + host + _T("\n");
 
 	wxString build = CBuildInfo::GetBuildSystem();
 	if (!build.empty())
-		text += _T("  Compiled on:    ") + build + _T("\n");
+		text += _T("  Compiled on:	") + build + _T("\n");
 
-	text += _T("  Build date:     ") + CBuildInfo::GetBuildDateString() + _T("\n");
+	text += _T("  Build date:	 ") + CBuildInfo::GetBuildDateString() + _T("\n");
 
 	text += _T("  Compiled with:  ") + CBuildInfo::GetCompiler() + _T("\n");
 
@@ -190,24 +190,24 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	if (!compilerFlags.empty())
 		text += _T("  Compiler flags: ") + compilerFlags + _T("\n");
 
-	text += _T("\nLinked against:\n  wxWidgets:      ") + wxString(wxVERSION_NUM_DOT_STRING_T) + _T("\n");
-	text += _T("  GnuTLS:         ") + GetDependencyVersion(dependency_gnutls) + _T("\n");
+	text += _T("\nLinked against:\n  wxWidgets:	  ") + wxString(wxVERSION_NUM_DOT_STRING_T) + _T("\n");
+	text += _T("  GnuTLS:		 ") + GetDependencyVersion(dependency_gnutls) + _T("\n");
 
 
 	text += _T("\nOperating system:\n");
 	wxString os = wxGetOsDescription();
 	if (!os.empty())
-		text += _T("  Name:           ") + os + _T("\n");
-	
+		text += _T("  Name:		   ") + os + _T("\n");
+
 	int major, minor;
 	if (wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN)
-		text += wxString::Format(_T("  Version:        %d.%d\n"), major, minor);
+		text += wxString::Format(_T("  Version:		%d.%d\n"), major, minor);
 
 #if defined(__WXMSW__)
 	if (::wxIsPlatform64Bit())
-		text += _T("  Platform:       64 bit system\n");
+		text += _T("  Platform:	   64 bit system\n");
 	else
-		text += _T("  Platform:       32 bit system\n");
+		text += _T("  Platform:	   32 bit system\n");
 #endif
 
 #ifdef __WXMSW__

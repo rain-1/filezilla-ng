@@ -595,7 +595,7 @@ void CTransferSocket::SetActive()
 	m_bActive = true;
 	if (!m_pSocket)
 		return;
-	
+
 	if (m_pSocket->GetState() == CSocket::connected || m_pSocket->GetState() == CSocket::closing)
 		TriggerPostponedEvents();
 }
@@ -618,7 +618,7 @@ void CTransferSocket::TransferEnd(enum TransferEndReason reason)
 	{
 		if (m_pBackend == m_pTlsSocket)
 			m_pBackend = 0;
-        delete m_pTlsSocket;
+		delete m_pTlsSocket;
 		m_pTlsSocket = 0;
 	}
 
@@ -739,7 +739,7 @@ bool CTransferSocket::CheckGetNextReadBuffer()
 			if (m_pTlsSocket)
 			{
 				m_shutdown = true;
-				
+
 				int error = m_pTlsSocket->Shutdown();
 				if (error != 0)
 				{

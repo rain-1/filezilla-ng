@@ -78,13 +78,13 @@ int CFileZillaEngine::Command(const CCommand &command)
 		ResetOperation(res);
 
 	m_bIsInCommand = false;
-	
+
 	if (command.GetId() != cmd_disconnect)
 		res |= m_nControlSocketError;
 	else if (res & FZ_REPLY_DISCONNECTED)
 		res = FZ_REPLY_OK;
 	m_nControlSocketError = 0;
-	
+
 	return res;
 }
 
@@ -114,7 +114,7 @@ CNotification* CFileZillaEngine::GetNextNotification()
 		return 0;
 	CNotification* pNotification = m_NotificationList.front();
 	m_NotificationList.pop_front();
-		
+
 	return pNotification;
 }
 

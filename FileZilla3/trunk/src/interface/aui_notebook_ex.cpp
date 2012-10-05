@@ -248,13 +248,13 @@ public:
 
 
 	virtual void DrawTab(wxDC& dc,
-                         wxWindow* wnd,
-                         const wxAuiNotebookPage& pane,
-                         const wxRect& in_rect,
-                         int close_button_state,
-                         wxRect* out_tab_rect,
-                         wxRect* out_button_rect,
-                         int* x_extent)
+						 wxWindow* wnd,
+						 const wxAuiNotebookPage& pane,
+						 const wxRect& in_rect,
+						 int close_button_state,
+						 wxRect* out_tab_rect,
+						 wxRect* out_button_rect,
+						 int* x_extent)
 	{
 #ifndef __WXMAC__
 		m_base_colour = wxSystemSettings::GetColour(TABCOLOUR);
@@ -383,7 +383,7 @@ void wxAuiNotebookEx::OnPageChanged(wxAuiNotebookEvent& event)
 	size_t page = (size_t)GetSelection();
 	if (page >= m_highlighted.size())
 		return;
-	
+
 	m_highlighted[page] = false;
 }
 

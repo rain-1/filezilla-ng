@@ -509,7 +509,7 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 		return FZ_REPLY_OK;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown op state: %d"), pData->opState);
-        DoClose(FZ_REPLY_INTERNALERROR);
+		DoClose(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
@@ -580,7 +580,7 @@ int CSftpControlSocket::ConnectSend()
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown op state: %d"), pData->opState);
-        DoClose(FZ_REPLY_INTERNALERROR);
+		DoClose(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
@@ -1883,7 +1883,7 @@ int CSftpControlSocket::FileTransferSend()
 		}
 
 		wxString quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
-		// Y2K38		
+		// Y2K38
 		time_t ticks = pData->fileTime.GetTicks(); // Already in UTC
 		wxString seconds = wxString::Format(_T("%d"), (int)ticks);
 		if (!Send(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),

@@ -582,9 +582,9 @@ bool CServer::SetUser(const wxString& user, const wxString& pass /*=_T("")*/)
 	}
 	else
 		m_pass = pass;
-	
+
 	m_user = user;
-	
+
 	return true;
 }
 

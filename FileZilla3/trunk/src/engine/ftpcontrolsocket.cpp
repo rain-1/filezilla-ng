@@ -745,7 +745,7 @@ int CFtpControlSocket::LogonParseResponse()
 		{
 			if (pData->opState == LOGON_AUTH_SSL)
 			{
-				if (m_pCurrentServer->GetProtocol() == FTP) 
+				if (m_pCurrentServer->GetProtocol() == FTP)
 				{
 					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
 					LogMessage(Status, _("Insecure server, it does not support FTP over TLS."));
@@ -1005,7 +1005,7 @@ int CFtpControlSocket::LogonParseResponse()
 					int delim = facts.Find(';');
 					if (delim == -1)
 						break;
-						
+
 					if (!delim)
 					{
 						facts = facts.Mid(1);
@@ -3875,7 +3875,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 		// Always use server address
 		pData->host = peerIP;
 	}
-		
+
 
 	return true;
 }
@@ -4402,7 +4402,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		}
 		else
 			pos = pData->host.Find(':');
-	
+
 		if (pos != -1)
 		{
 			unsigned long port = 0;

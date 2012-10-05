@@ -31,7 +31,7 @@ public:
 	{
 		DoSetSelection(from, to, false);
 
-		m_updatesCount = -2;        // suppress any update event
+		m_updatesCount = -2;		// suppress any update event
 
 		::SendMessage((HWND)GetHandle(), EM_REPLACESEL, 0, (LPARAM)_T(""));
 	}
@@ -109,7 +109,7 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 	InitDefAttr();
 
 	m_shown = IsShown();
-	
+
 #ifdef __WXMAC__
 	m_insertionPoint = 0;
 #endif
@@ -171,7 +171,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 #endif
 		m_pTextCtrl->Remove(0, oldLength + 1);
 		m_lineLengths.pop_front();
-		
+
 #ifdef __WXMAC__
 		m_pTextCtrl->SetInsertionPoint(m_insertionPoint);
 #endif
@@ -391,7 +391,7 @@ void CStatusView::OnClear(wxCommandEvent& event)
 		m_pTextCtrl->Clear();
 	m_nLineCount = 0;
 	m_lineLengths.clear();
-	
+
 #ifdef __WXMAC__
 	m_insertionPoint = 0;
 #endif

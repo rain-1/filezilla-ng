@@ -282,10 +282,10 @@ int CQueueItem::GetItemIndex() const
 }
 
 const wxString& CQueueItem::GetIndent() const
-{ 
+{
 	wxASSERT(m_indent < 5);
-	static const wxString indents[5] = 
-	{ 
+	static const wxString indents[5] =
+	{
 		_T(""),
 		_T("  "),
 		_T("    "),

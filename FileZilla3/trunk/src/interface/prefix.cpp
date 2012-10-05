@@ -3,7 +3,7 @@
  * Written by: Mike Hearn <mike@theoretic.com>
  *             Hongli Lai <h.lai@chello.nl>
  * http://autopackage.org/
- * 
+ *
  * This source code is public domain. You can relicense this code
  * under whatever license you want.
  *

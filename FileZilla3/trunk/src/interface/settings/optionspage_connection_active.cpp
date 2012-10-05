@@ -17,7 +17,7 @@ bool COptionsPageConnectionActive::LoadPage()
 	SetCheckFromOption(XRCID("ID_LIMITPORTS"), OPTION_LIMITPORTS, failure);
 	SetTextFromOption(XRCID("ID_LOWESTPORT"), OPTION_LIMITPORTS_LOW, failure);
 	SetTextFromOption(XRCID("ID_HIGHESTPORT"), OPTION_LIMITPORTS_HIGH, failure);
-	
+
 	SetRCheck(XRCID("ID_ACTIVEMODE1"), m_pOptions->GetOptionVal(OPTION_EXTERNALIPMODE) == 0, failure);
 	SetRCheck(XRCID("ID_ACTIVEMODE2"), m_pOptions->GetOptionVal(OPTION_EXTERNALIPMODE) == 1, failure);
 	SetRCheck(XRCID("ID_ACTIVEMODE3"), m_pOptions->GetOptionVal(OPTION_EXTERNALIPMODE) == 2, failure);
@@ -35,10 +35,10 @@ bool COptionsPageConnectionActive::LoadPage()
 bool COptionsPageConnectionActive::SavePage()
 {
 	SetOptionFromCheck(XRCID("ID_LIMITPORTS"), OPTION_LIMITPORTS);
-	
+
 	SetIntOptionFromText(XRCID("ID_LOWESTPORT"), OPTION_LIMITPORTS_LOW);
 	SetIntOptionFromText(XRCID("ID_HIGHESTPORT"), OPTION_LIMITPORTS_HIGH);
-	
+
 	int mode;
 	if (GetRCheck(XRCID("ID_ACTIVEMODE1")))
 		mode = 0;
@@ -88,7 +88,7 @@ bool COptionsPageConnectionActive::Validate()
 		if (!IsIpAddress(pActiveIP->GetValue()))
 			return DisplayError(pActiveIP, _("You have to enter a valid IP address."));
 	}
-	
+
 	return true;
 }
 
@@ -105,7 +105,7 @@ void COptionsPageConnectionActive::SetCtrlState()
 	FindWindow(XRCID("ID_ACTIVEIP"))->Enable(mode == 1);
 	FindWindow(XRCID("ID_ACTIVERESOLVER"))->Enable(mode == 2);
 
-	FindWindow(XRCID("ID_NOEXTERNALONLOCAL"))->Enable(mode != 0);	
+	FindWindow(XRCID("ID_NOEXTERNALONLOCAL"))->Enable(mode != 0);
 }
 
 void COptionsPageConnectionActive::OnRadioOrCheckEvent(wxCommandEvent& event)

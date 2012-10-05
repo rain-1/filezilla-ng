@@ -352,7 +352,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	}
 
 	int old_data_type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
-	
+
 	// Set data type for the file to add
 	if (XRCCTRL(*this, "ID_TYPE_ASCII", wxRadioButton)->GetValue())
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 1);

@@ -1,7 +1,7 @@
 #ifndef __IPCMUTEX_H__
 #define __IPCMUTEX_H__
 
-/* 
+/*
  * Unfortunately wxWidgets does not provide interprocess mutexes, so I've to
  * use platform specific code here.
  * CInterProcessMutex represents an interprocess mutex. The mutex will be
@@ -13,7 +13,7 @@
 enum t_ipcMutexType
 {
 	// Important: Never ever change a value.
-	// If adding a new mutex type, give it the value of MUTEX_LASTFREE and 
+	// If adding a new mutex type, give it the value of MUTEX_LASTFREE and
 	// increase MUTEX_LASTFREE by one.
 	// Otherwise this will cause interesting effects between different
 	// versions of FileZilla
@@ -27,7 +27,7 @@ enum t_ipcMutexType
 	MUTEX_TRUSTEDCERTS = 8,
 	MUTEX_GLOBALBOOKMARKS = 9,
 	MUTEX_SEARCHCONDITIONS = 10,
-	
+
 	MUTEX_LASTFREE = 11
 };
 

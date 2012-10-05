@@ -40,7 +40,7 @@ public:
 	void InvalidateServer(const CServer& server);
 	void RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath& target);
 	void Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo);
-	
+
 protected:
 
 	class CCacheEntry
@@ -68,7 +68,7 @@ protected:
 
 	tServerIter CreateServerEntry(const CServer& server);
 	tServerIter GetServerEntry(const CServer& server);
-	
+
 	typedef std::list<CCacheEntry>::iterator tCacheIter;
 	typedef std::list<CCacheEntry>::const_iterator tCacheConstIter;
 
@@ -81,7 +81,7 @@ protected:
 	void UpdateLru(tServerIter const& sit, tCacheIter const& cit);
 
 	void Prune();
-	
+
 	typedef std::pair<tServerIter, tCacheIter> tFullEntryPosition;
 	typedef std::list<tFullEntryPosition> tLruList;
 	static tLruList m_leastRecentlyUsedList;

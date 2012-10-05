@@ -27,7 +27,7 @@ public:
 
 protected:
 	static wxString GetThemePath();
-	
+
 	wxBitmap CreateBitmap(const wxArtID& id, const wxArtClient& /*client*/, const wxSize& size);
 
 	std::list<wxString> GetSearchDirs(const wxSize& size);

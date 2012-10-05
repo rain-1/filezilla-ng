@@ -7,9 +7,9 @@ class wxTreeCtrlEx : public wxTreeCtrl
 
 public:
 	wxTreeCtrlEx(wxWindow *parent, wxWindowID id = wxID_ANY,
-               const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize,
-               long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT);
+			   const wxPoint& pos = wxDefaultPosition,
+			   const wxSize& size = wxDefaultSize,
+			   long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT);
 	void SafeSelectItem(const wxTreeItemId& item);
 
 protected:

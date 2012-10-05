@@ -26,7 +26,7 @@ public:
 	void SetChoice(int id, int selection, bool& failure);
 	bool SetText(int id, const wxString& text, bool& failure);
 
-	// The GetXXX functions do never return an error since the controls were 
+	// The GetXXX functions do never return an error since the controls were
 	// checked to exist while loading the dialog.
 	bool GetCheck(int id) const;
 	bool GetRCheck(int id) const;

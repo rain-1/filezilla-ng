@@ -15,7 +15,7 @@ END_EVENT_TABLE()
 bool COptionsPageFiletype::LoadPage()
 {
 	bool failure = false;
-	
+
 	SetCheckFromOption(XRCID("ID_ASCIIWITHOUT"), OPTION_ASCIINOEXT, failure);
 	SetCheckFromOption(XRCID("ID_ASCIIDOTFILE"), OPTION_ASCIIDOTFILE, failure);
 
@@ -25,7 +25,7 @@ bool COptionsPageFiletype::LoadPage()
 	if (!FindWindow(XRCID("ID_EXTENSION")) || !FindWindow(XRCID("ID_ADD")) ||
 		!FindWindow(XRCID("ID_REMOVE")) || !FindWindow(XRCID("ID_EXTENSIONS")) ||
 		!FindWindow(XRCID("ID_TYPE_AUTO")) || !FindWindow(XRCID("ID_TYPE_ASCII")) ||
-		!FindWindow(XRCID("ID_TYPE_BINARY"))) 
+		!FindWindow(XRCID("ID_TYPE_BINARY")))
 		return false;
 
 	int mode = m_pOptions->GetOptionVal(OPTION_ASCIIBINARY);
@@ -39,7 +39,7 @@ bool COptionsPageFiletype::LoadPage()
 	wxListCtrl* pListCtrl = XRCCTRL(*this, "ID_EXTENSIONS", wxListCtrl);
 	pListCtrl->ClearAll();
 	pListCtrl->InsertColumn(0, _T(""));
-	
+
 	wxString extensions = m_pOptions->GetOption(OPTION_ASCIIFILES);
 	wxString ext;
 	int pos = extensions.Find(_T("|"));
@@ -49,7 +49,7 @@ bool COptionsPageFiletype::LoadPage()
 		{
 			if (ext != _T(""))
 			{
-				ext.Replace(_T("\\\\"), _T("\\")); 
+				ext.Replace(_T("\\\\"), _T("\\"));
 				pListCtrl->InsertItem(pListCtrl->GetItemCount(), ext);
 				ext = _T("");
 			}
@@ -57,7 +57,7 @@ bool COptionsPageFiletype::LoadPage()
 		else if (extensions.c_str()[pos - 1] != '\\')
 		{
 			ext += extensions.Left(pos);
-			ext.Replace(_T("\\\\"), _T("\\")); 
+			ext.Replace(_T("\\\\"), _T("\\"));
 			pListCtrl->InsertItem(pListCtrl->GetItemCount(), ext);
 			ext = _T("");
 		}
@@ -69,9 +69,9 @@ bool COptionsPageFiletype::LoadPage()
 		pos = extensions.Find(_T("|"));
 	}
 	ext += extensions;
-	ext.Replace(_T("\\\\"), _T("\\")); 
+	ext.Replace(_T("\\\\"), _T("\\"));
 	pListCtrl->InsertItem(pListCtrl->GetItemCount(), ext);
-	
+
 	SetCtrlState();
 
 	return true;

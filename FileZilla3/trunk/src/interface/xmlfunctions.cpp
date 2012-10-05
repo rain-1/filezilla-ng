@@ -250,7 +250,7 @@ void AddTextElementRaw(TiXmlElement* node, const char* value)
 		break;
 	}
 
-    node->LinkEndChild(new TiXmlText(value));
+	node->LinkEndChild(new TiXmlText(value));
 }
 
 wxString GetTextElement_Trimmed(TiXmlElement* node, const char* name)
@@ -388,7 +388,7 @@ bool GetTextElementBool(TiXmlElement* node, const char* name, bool defValue /*=f
 	const char* str = textNode->Value();
 	if (!str)
 		return defValue;
-	
+
 	switch (str[0])
 	{
 	case '0':
@@ -469,7 +469,7 @@ TiXmlElement* GetXmlFile(wxFileName file, bool create /*=true*/, wxString* error
 		// File does not exist
 		if (!create)
 			return 0;
-		
+
 		// create new XML document
 		TiXmlDocument* pXmlDocument = new TiXmlDocument();
 		pXmlDocument->SetCondenseWhiteSpace(false);
@@ -497,7 +497,7 @@ bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/
 	TiXmlDocument* pDocument = node->GetDocument();
 
 	bool exists = false;
-	
+
 	bool isLink = false;
 	int flags = 0;
 	if (CLocalFileSystem::GetFileInfo( fullPath, isLink, 0, 0, &flags ) == CLocalFileSystem::file)
@@ -677,7 +677,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		return;
 
 	bool kiosk_mode = COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0;
-	
+
 	node->Clear();
 
 	AddTextElement(node, "Host", server.GetHost());
@@ -761,7 +761,7 @@ void SetTextAttribute(TiXmlElement* node, const char* name, const wxString& valu
 	if (!utf8)
 		return;
 
-    node->SetAttribute(name, utf8);
+	node->SetAttribute(name, utf8);
 	delete [] utf8;
 }
 

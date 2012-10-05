@@ -52,13 +52,13 @@ void CContextControl::CreateTab()
 	Freeze();
 
 	CState* pState = 0;
-	
+
 	// See if we can reuse an existing context
 	for (size_t i = 0; i < m_context_controls.size(); i++)
 	{
 		if (m_context_controls[i].tab_index != -1)
 			continue;
-		
+
 		if (m_context_controls[i].pState->IsRemoteConnected() ||
 			!m_context_controls[i].pState->IsRemoteIdle())
 			continue;
@@ -275,7 +275,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	{
 		context_controls.tab_index = 0;
 		context_controls.site_bookmarks = new CContextControl::_context_controls::_site_bookmarks;
-		
+
 		context_controls.site_bookmarks->path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
 		CSiteManager::GetBookmarks(context_controls.site_bookmarks->path,
 			context_controls.site_bookmarks->bookmarks);

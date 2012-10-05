@@ -22,9 +22,9 @@ bool COptionsPageEditAssociations::SavePage()
 	COptions* pOptions = COptions::Get();
 
 	SetOptionFromText(XRCID("ID_ASSOCIATIONS"), OPTION_EDIT_CUSTOMASSOCIATIONS);
-	
+
 	pOptions->SetOption(OPTION_EDIT_INHERITASSOCIATIONS, GetCheck(XRCID("ID_INHERIT")) ? 1 : 0);
-		
+
 	return true;
 }
 
@@ -55,7 +55,7 @@ bool COptionsPageEditAssociations::Validate()
 		wxString args;
 		if (!UnquoteCommand(command, args))
 			return DisplayError(_T("ID_ASSOCIATIONS"), _("Improperly quoted association."));
-		
+
 		if (command == _T(""))
 			return DisplayError(_T("ID_ASSOCIATIONS"), _("Empty command."));
 
@@ -65,7 +65,7 @@ bool COptionsPageEditAssociations::Validate()
 			error += '\n';
 			error += command;
 			return DisplayError(_T("ID_ASSOCIATIONS"), error);
-		}		
+		}
 	}
 
 	return true;

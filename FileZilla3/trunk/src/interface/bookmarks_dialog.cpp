@@ -38,7 +38,7 @@ int CNewBookmarkDialog::ShowModal(const wxString &local_path, const CServerPath 
 	XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl)->ChangeValue(local_path);
 	if (!remote_path.IsEmpty())
 		XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->ChangeValue(remote_path.GetPath());
-	
+
 	if (!m_server)
 		XRCCTRL(*this, "ID_TYPE_SITE", wxRadioButton)->Enable(false);
 
@@ -368,7 +368,7 @@ void CBookmarksDialog::OnBrowse(wxCommandEvent& event)
 	wxTreeItemId item = m_pTree->GetSelection();
 	if (!item)
 		return;
-	
+
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
 	if (!data)
 		return;
@@ -403,7 +403,7 @@ bool CBookmarksDialog::Verify()
 	wxTreeItemId item = m_pTree->GetSelection();
 	if (!item)
 		return true;
-	
+
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
 	if (!data)
 		return true;
@@ -462,7 +462,7 @@ void CBookmarksDialog::UpdateBookmark()
 	wxTreeItemId item = m_pTree->GetSelection();
 	if (!item)
 		return;
-	
+
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
 	if (!data)
 		return;
@@ -499,7 +499,7 @@ void CBookmarksDialog::DisplayBookmark()
 		XRCCTRL(*this, "ID_NOTEBOOK", wxNotebook)->Enable(false);
 		return;
 	}
-	
+
 	CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(item);
 	if (!data)
 	{
@@ -777,7 +777,7 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 	for (TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
 	{
 		wxString remote_dir_raw;
-	
+
 		if (name != GetTextElement(pBookmark, "Name"))
 			continue;
 
@@ -830,7 +830,7 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 		wxString remote_dir_raw;
 
 		wxString old_name = GetTextElement(pBookmark, "Name");
-	
+
 		if (!name.CmpNoCase(old_name))
 		{
 			wxMessageBox(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);

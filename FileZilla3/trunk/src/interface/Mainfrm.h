@@ -55,7 +55,7 @@ public:
 	void ProcessCommandLine();
 
 	void PostInitialize();
-	
+
 	bool ConnectToServer(const CServer& server, const CServerPath& path = CServerPath());
 
 	CContextControl* GetContextControl() { return m_pContextControl; }

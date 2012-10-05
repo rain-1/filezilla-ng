@@ -49,7 +49,7 @@ bool COptionsPageEdit::SavePage()
 
 	if (GetRCheck(XRCID("ID_DEFAULT_CUSTOM")))
 		pOptions->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + GetText(XRCID("ID_EDITOR")));
-	else 
+	else
 		pOptions->SetOption(OPTION_EDIT_DEFAULTEDITOR, GetRCheck(XRCID("ID_DEFAULT_TEXT")) ? _T("1") : _T("0"));
 
 	if (GetRCheck(XRCID("ID_USEDEFAULT")))
@@ -58,7 +58,7 @@ bool COptionsPageEdit::SavePage()
 		pOptions->SetOption(OPTION_EDIT_ALWAYSDEFAULT, 0);
 
 	SetOptionFromCheck(XRCID("ID_EDIT_TRACK_LOCAL"), OPTION_EDIT_TRACK_LOCAL);
-		
+
 	return true;
 }
 

@@ -16,16 +16,16 @@ public:
 	// The COptionsBase instance has to be the same for every instance of CFileZillaEngine
 	int Init(wxEvtHandler *pEventHandler, COptionsBase *pOptions);
 
-	// TODO: Init function with a function pointer for a callback function for 
+	// TODO: Init function with a function pointer for a callback function for
 	// notifications. Not all users of the engine use wxWidgets.
 
-    // Execute the given command. See commands.h for a list of the available 
+	// Execute the given command. See commands.h for a list of the available
 	// commands and reply codes.
 	int Command(const CCommand &command);
 
 	bool IsBusy() const;
 	bool IsConnected() const;
-	
+
 	// IsActive returns true only if data has been transferred in the
 	// given direction since the last time IsActive was called with
 	// the same argument.
@@ -50,7 +50,7 @@ public:
 	// See notifiction.h for details.
 	bool IsPendingAsyncRequestReply(const CAsyncRequestNotification *pNotification);
 	bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
-	
+
 	// Get a progress update about the current transfer. changed will be set
 	// to true if the data has been updated compared to the last time
 	// GetTransferStatus was called.

@@ -162,7 +162,7 @@ void wxCustomHeightListCtrl::OnMouseEvent(wxMouseEvent& event)
 				changed = true;
 			}
 
-			m_focusedLine = line;				
+			m_focusedLine = line;
 
 		}
 		Refresh();

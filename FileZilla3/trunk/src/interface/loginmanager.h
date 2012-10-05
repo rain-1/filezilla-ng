@@ -12,7 +12,7 @@ public:
 	static CLoginManager& Get() { return m_theLoginManager; }
 
 	bool GetPassword(CServer& server, bool silent, wxString name = _T(""), wxString challenge = _T(""));
-	
+
 	void CachedPasswordFailed(const CServer& server);
 
 protected:

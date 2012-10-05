@@ -603,7 +603,7 @@ CFilter CFilterConditionsDialog::GetFilter()
 
 		filter.filters.push_back(condition);
 	}
-	
+
 	switch (XRCCTRL(*this, "ID_MATCHTYPE", wxChoice)->GetSelection())
 	{
 	case 1:

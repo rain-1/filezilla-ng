@@ -24,7 +24,7 @@ const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex 
 		return m_mostRecentServers;
 
 	m_mostRecentServers.clear();
-    
+
 	bool modified = false;
 	TiXmlElement* pServer = pElement->FirstChildElement("Server");
 	while (pServer)
@@ -91,7 +91,7 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 	TiXmlElement* pDocument = m_XmlFile.GetElement();
 	if (!pDocument)
 		return;
-	
+
 	TiXmlElement* pElement = pDocument->FirstChildElement("RecentServers");
 	if (!pElement)
 		pElement = pDocument->LinkEndChild(new TiXmlElement("RecentServers"))->ToElement();

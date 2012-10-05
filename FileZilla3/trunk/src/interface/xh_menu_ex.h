@@ -8,10 +8,10 @@
 
 class wxMenuBarXmlHandlerEx : public wxMenuBarXmlHandler
 {
-    DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandlerEx)
+	DECLARE_DYNAMIC_CLASS(wxMenuBarXmlHandlerEx)
 
 public:
-    virtual wxObject *DoCreateResource();
+	virtual wxObject *DoCreateResource();
 };
 
 #endif // _WX_XH_MENU_EX_H_
