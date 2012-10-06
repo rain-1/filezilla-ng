@@ -25,11 +25,18 @@ int GetRandomNumber(int low, int high);
 // and locale-independently
 void MakeLowerAscii(wxString& str);
 
-enum _dependency
-{
-	dependency_gnutls
-};
+// Strongly typed enum would be nice, but we need to support older compilers still.
+namespace dependency {
+enum type {
+	wxwidgets,
+	gnutls,
+	sqlite,
 
-wxString GetDependencyVersion(enum _dependency dependency);
+	count
+};
+}
+
+wxString GetDependencyName( dependency::type d );
+wxString GetDependencyVersion( dependency::type d );
 
 #endif //__MISC_H__

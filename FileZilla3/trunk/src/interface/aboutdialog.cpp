@@ -90,11 +90,15 @@ bool CAboutDialog::Create(wxWindow* parent)
 
 	wxStaticText* pVer_wx = XRCCTRL(*this, "ID_VER_WX", wxStaticText);
 	if (pVer_wx)
-		pVer_wx->SetLabel(wxVERSION_NUM_DOT_STRING_T);
+		pVer_wx->SetLabel(GetDependencyVersion(dependency::wxwidgets));
 
 	wxStaticText* pVer_gnutls = XRCCTRL(*this, "ID_VER_GNUTLS", wxStaticText);
 	if (pVer_gnutls)
-		pVer_gnutls->SetLabel(GetDependencyVersion(dependency_gnutls));
+		pVer_gnutls->SetLabel(GetDependencyVersion(dependency::gnutls));
+
+	wxStaticText* pVer_sqlite = XRCCTRL(*this, "ID_VER_SQLITE", wxStaticText);
+	if (pVer_sqlite)
+		pVer_sqlite->SetLabel(GetDependencyVersion(dependency::sqlite));
 
 	wxStaticText* pSystemName = XRCCTRL(*this, "ID_SYSTEM_NAME", wxStaticText);
 	if (!pSystemName)
@@ -190,9 +194,13 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	if (!compilerFlags.empty())
 		text += _T("  Compiler flags: ") + compilerFlags + _T("\n");
 
-	text += _T("\nLinked against:\n  wxWidgets:	  ") + wxString(wxVERSION_NUM_DOT_STRING_T) + _T("\n");
-	text += _T("  GnuTLS:		 ") + GetDependencyVersion(dependency_gnutls) + _T("\n");
-
+	text += _T("\nLinked against:\n");
+	for (int i = 0; i < dependency::count; ++i)
+	{
+		text += wxString::Format(_T("  % -16s %s\n"),
+			(GetDependencyName(dependency::type(i)) + _T(":")).c_str(),
+			GetDependencyVersion(dependency::type(i)));
+	}
 
 	text += _T("\nOperating system:\n");
 	wxString os = wxGetOsDescription();

@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include <gnutls/gnutls.h>
+#include <sqlite3.h>
 
 bool VerifySetDate(wxDateTime& date, int year, wxDateTime::Month month, int day, int hour /*=0*/, int minute /*=0*/, int second /*=0*/)
 {
@@ -368,16 +369,42 @@ void MakeLowerAscii(wxString& str)
 	}
 }
 
-wxString GetDependencyVersion(enum _dependency dependency)
+wxString GetDependencyVersion(dependency::type d)
 {
-	if (dependency == dependency_gnutls)
+	switch (d)
 	{
-		const char* v = gnutls_check_version(0);
-		if (!v || !*v)
-			return _T("unknown");
+	case dependency::wxwidgets:
+		return wxVERSION_NUM_DOT_STRING_T;
+	case dependency::gnutls:
+		{
+			const char* v = gnutls_check_version(0);
+			if (!v || !*v)
+				return _T("unknown");
 
-		return wxString(v, wxConvLibc);
+			return wxString(v, wxConvLibc);
+		}
+	case dependency::sqlite:
+		return wxString::FromUTF8(sqlite3_libversion());
+	default:
+		return _T("");
 	}
 
-	return _T("No such dependency");
+	return _T("");
+}
+
+wxString GetDependencyName(dependency::type d)
+{
+	switch (d)
+	{
+	case dependency::wxwidgets:
+		return _T("wxWidgets");
+	case dependency::gnutls:
+		return _T("GnuTLS");
+	case dependency::sqlite:
+		return _T("SQLite");
+	default:
+		return _T("");
+	}
+
+	return _T("");
 }

@@ -1853,6 +1853,14 @@
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_VER_GNUTLS"/>
               </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_VER_SQLITE_DESC">
+                  <label>SQLite:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_VER_SQLITE"/>
+              </object>
               <vgap>3</vgap>
               <hgap>5</hgap>
             </object>
