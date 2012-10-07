@@ -1,4 +1,4 @@
-SUBDIRS = 16x16 32x32 cyril blukis lone minimal opencrystal
+SUBDIRS = 16x16 32x32 cyril blukis lone minimal opencrystal tango
 
 CLEANFILES = filezilla.o
 
@@ -64,6 +64,7 @@ mac-copy-resources: $(dist_resources_DATA)
 	$(MAKE) -C blukis mac-copy-resources
 	$(MAKE) -C lone mac-copy-resources
 	$(MAKE) -C opencrystal mac-copy-resources
+	$(MAKE) -C tango mac-copy-resources
 endif
 
 pixmapsdir = $(datadir)/pixmaps
