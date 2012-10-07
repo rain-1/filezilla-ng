@@ -10,7 +10,7 @@ dist_resources_DATA = theme.xml
 dist_resources16_DATA = 16x16/ascii.png \
 		16x16/auto.png \
 		16x16/binary.png \
-		16x16/bookmarks.png \
+		16x16/bookmark.png \
 		16x16/cancel.png \
 		16x16/compare.png \
 		16x16/disconnect.png \
@@ -47,7 +47,7 @@ dist_resources24_DATA = 24x24/server.png
 dist_resources32_DATA = 32x32/ascii.png \
 		32x32/auto.png \
 		32x32/binary.png \
-		32x32/bookmarks.png \
+		32x32/bookmark.png \
 		32x32/cancel.png \
 		32x32/compare.png \
 		32x32/disconnect.png \
@@ -79,7 +79,7 @@ dist_resources32_DATA = 32x32/ascii.png \
 dist_resources48_DATA = 48x48/ascii.png \
 		48x48/auto.png \
 		48x48/binary.png \
-		48x48/bookmarks.png \
+		48x48/bookmark.png \
 		48x48/cancel.png \
 		48x48/compare.png \
 		48x48/disconnect.png \
