@@ -578,6 +578,7 @@ src/interface/resources/blukis/Makefile
 src/interface/resources/lone/Makefile
 src/interface/resources/minimal/Makefile
 src/interface/resources/opencrystal/Makefile
+src/interface/resources/tango/Makefile
 src/putty/Makefile src/putty/unix/Makefile src/putty/windows/Makefile
 tests/Makefile src/interface/resources/version.rc
 src/interface/resources/MacInfo.plist
