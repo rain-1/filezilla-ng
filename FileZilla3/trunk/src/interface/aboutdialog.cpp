@@ -199,7 +199,7 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	{
 		text += wxString::Format(_T("  % -16s %s\n"),
 			(GetDependencyName(dependency::type(i)) + _T(":")).c_str(),
-			GetDependencyVersion(dependency::type(i)));
+			GetDependencyVersion(dependency::type(i)).c_str());
 	}
 
 	text += _T("\nOperating system:\n");
