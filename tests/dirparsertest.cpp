@@ -68,7 +68,7 @@ static int calcYear(int month, int day)
 void CDirectoryListingParserTest::InitEntries()
 {
 	// Unix-style listings
-        // -------------------
+	// -------------------
 
 	// We start with a perfect example of a unix style directory listing without anomalies.
 	m_entries.push_back((t_entry){
@@ -296,7 +296,7 @@ void CDirectoryListingParserTest::InitEntries()
 	utc = wxDateTime(13, wxDateTime::Feb, 1996, 23, 58, 27);
 	utc.MakeFromTimezone(wxDateTime::UTC);
 	m_entries.push_back((t_entry){
-        	"+i8388621.50690,m824255907,/,\t15-eplf dir",
+			"+i8388621.50690,m824255907,/,\t15-eplf dir",
 			{
 				_T("15-eplf dir"),
 				-1,
@@ -508,6 +508,20 @@ void CDirectoryListingParserTest::InitEntries()
 				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
 				_T(""),
 				wxDateTime(26, wxDateTime::Jul, calcYear(7, 26), 20, 10)
+			},
+			DEFAULT
+		});
+
+	m_entries.push_back((t_entry){
+			"dr-xr-xr-x   2 root     other      2235 szept 26 20:10 28b-datetest-hungarian dir",
+			{
+				_T("28b-datetest-hungarian dir"),
+				2235,
+				_T("dr-xr-xr-x"),
+				_T("root other"),
+				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				_T(""),
+				wxDateTime(26, wxDateTime::Sep, calcYear(7, 26), 20, 10)
 			},
 			DEFAULT
 		});
@@ -1056,11 +1070,11 @@ void CDirectoryListingParserTest::InitEntries()
 	});
 
 	// MVS Dataset members
-	// 
+	//
 	// As common with IBM misdesign, multiple styles exist.
-	
+
 	// Speciality: Some members have no attributes at all.
-	// Requires servertype to be MVS or it won't be parsed, as 
+	// Requires servertype to be MVS or it won't be parsed, as
 	// it would conflict with lots of other servers.
 	m_entries.push_back((t_entry){
 			"65-MVS-PDS-MEMBER",
@@ -1137,7 +1151,7 @@ void CDirectoryListingParserTest::InitEntries()
 
 	// z/VM, another IBM abomination. Description by Alexandre Charbey
 	// Requires type set to ZVM or it cannot be parsed.
-	// 
+	//
 	// 70-ZVMFILE
 	//   is a filename
 	// TRACE
@@ -1257,7 +1271,7 @@ void CDirectoryListingParserTest::InitEntries()
 				utc
 			},
 			DEFAULT
-		});	
+		});
 
 		m_entries.push_back((t_entry){
 			"type=OS.unix=slink:/foo; 76 MLSD symlink",
@@ -1271,7 +1285,7 @@ void CDirectoryListingParserTest::InitEntries()
 				wxDateTime()
 			},
 			DEFAULT
-		});	
+		});
 
 		// Old ietf draft for MLST earlier than mlst-07 has no trailing semicolon after facts
 		m_entries.push_back((t_entry){

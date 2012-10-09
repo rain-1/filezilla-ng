@@ -631,6 +631,9 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		m_MonthNamesMap[_T("lap")] = 11;
 		m_MonthNamesMap[_T("grd")] = 12;
 
+		// Hungarian
+		m_MonthNamesMap[_T("szept")] = 9;
+
 		//There are more languages and thus month
 		//names, but as long as nobody reports a
 		//problem, I won't add them, there are way

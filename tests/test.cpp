@@ -5,7 +5,7 @@
 #include <cppunit/ui/text/TestRunner.h>
 #include <locale.h>
 #include <wx/init.h>
-	
+
 int main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, "");
