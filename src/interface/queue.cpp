@@ -298,8 +298,10 @@ const wxString& CQueueItem::GetIndent() const
 CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 					 const wxString& sourceFile, const wxString& targetFile,
 					 const CLocalPath& localPath, const CServerPath& remotePath, wxLongLong size)
-	: m_sourceFile(sourceFile), m_targetFile(targetFile)
-	, m_localPath(localPath), m_remotePath(remotePath)
+	: m_sourceFile(sourceFile)
+	, m_targetFile(targetFile)
+	, m_localPath(localPath)
+	, m_remotePath(remotePath)
 	, m_size(size)
 {
 	m_parent = parent;
@@ -431,9 +433,9 @@ void CFolderItem::SetActive(const bool active)
 }
 
 CServerItem::CServerItem(const CServer& server)
+	: m_activeCount(0)
+	, m_server(server)
 {
-	m_server = server;
-	m_activeCount = 0;
 }
 
 CServerItem::~CServerItem()

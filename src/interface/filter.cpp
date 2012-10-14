@@ -72,13 +72,12 @@ bool CFilter::IsLocalFilter() const
 }
 
 CFilterDialog::CFilterDialog()
+	: m_shiftClick()
+	, m_pMainFrame()
+	, m_filters(m_globalFilters)
+	, m_filterSets(m_globalFilterSets)
+	, m_currentFilterSet(m_globalCurrentFilterSet)
 {
-	m_pMainFrame = 0;
-	m_shiftClick = false;
-
-	m_filters = m_globalFilters;
-	m_filterSets = m_globalFilterSets;
-	m_currentFilterSet = m_globalCurrentFilterSet;
 }
 
 bool CFilterDialog::Create(CMainFrame* parent)
