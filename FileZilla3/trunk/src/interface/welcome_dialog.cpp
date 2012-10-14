@@ -32,6 +32,9 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			return true;
 		}
 		COptions::Get()->SetOption(OPTION_GREETINGVERSION, ownVersion);
+
+		if (greetingVersion.IsEmpty() && !COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE))
+			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 1);
 	}
 
 	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_WELCOME")))

@@ -6,6 +6,7 @@
 #include "Options.h"
 #include "loginmanager.h"
 #include "Mainfrm.h"
+#include "asksavepassworddialog.h"
 
 BEGIN_EVENT_TABLE(CQuickconnectBar, wxPanel)
 EVT_BUTTON(XRCID("ID_QUICKCONNECT_OK"), CQuickconnectBar::OnQuickconnect)
@@ -128,6 +129,9 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 
 	if (event.GetId() == 1)
 		server.SetBypassProxy(true);
+
+	if (!CAskSavePasswordDialog::Run(this))
+		return;
 
 	if (!m_pMainFrame->ConnectToServer(server, path))
 		return;

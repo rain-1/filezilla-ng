@@ -4941,4 +4941,62 @@
     </object>
     <title>Speed Limits</title>
   </object>
+<object class="wxDialog" name="ID_ASK_SAVE_PASSWORD">
+  <object class="wxBoxSizer">
+    <object class="sizeritem">
+      <object class="wxFlexGridSizer">
+        <cols>1</cols>
+        <vgap>5</vgap>
+        <object class="sizeritem">
+          <object class="wxStaticText">
+            <label>Would you like FileZilla to remember this password?</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <object class="wxStaticText">
+            <label>FileZilla can remember passwords so that you can later reconnect without having to reenter your password after restarting FileZilla.</label>
+          </object>
+        </object>
+        <object class="spacer"/>
+        <object class="sizeritem">
+          <object class="wxRadioButton" name="ID_REMEMBER_YES">
+            <label>&amp;Remember this and all future passwords</label>
+            <style>wxRB_GROUP</style>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <object class="wxRadioButton" name="ID_REMEMBER_NO">
+            <label>&amp;Do not remember passwords</label>
+          </object>
+        </object>
+        <object class="sizeritem">
+          <object class="wxStaticLine"/>
+          <flag>wxGROW</flag>
+        </object>
+        <object class="sizeritem">
+          <object class="wxFlexGridSizer">
+            <object class="sizeritem">
+              <object class="wxButton" name="wxID_OK">
+                <label>OK</label>
+                <default>1</default>
+              </object>
+            </object>
+            <object class="sizeritem">
+              <object class="wxButton" name="wxID_CANCEL">
+                <label>&amp;Cancel</label>
+              </object>
+            </object>
+            <cols>2</cols>
+            <hgap>5</hgap>
+          </object>
+          <flag>wxALIGN_RIGHT</flag>
+        </object>
+      </object>
+      <flag>wxALL</flag>
+      <border>5</border>
+    </object>
+    <orient>wxVERTICAL</orient>
+  </object>
+  <title>Remember password?</title>
+</object>
 </resource>

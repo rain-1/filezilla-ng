@@ -12,6 +12,7 @@ bin_PROGRAMS = filezilla
 
 # the application source, library search path, and link libraries
 filezilla_SOURCES = aboutdialog.cpp \
+		asksavepassworddialog.cpp \
 		asyncrequestqueue.cpp \
 		aui_notebook_ex.cpp \
 		auto_ascii_files.cpp \
@@ -122,6 +123,7 @@ filezilla_SOURCES += prefix.cpp
 endif
 
 noinst_HEADERS = aboutdialog.h \
+		 asksavepassworddialog.h \
 		 asyncrequestqueue.h \
 		 aui_notebook_ex.h \
 		 auto_ascii_files.h \
