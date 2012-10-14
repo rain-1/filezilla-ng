@@ -124,8 +124,13 @@ protected:
 
 DECLARE_COMMAND(CFileTransferCommand, cmd_transfer)
 
-	struct t_transferSettings
+	class t_transferSettings
 	{
+	public:
+		t_transferSettings()
+			: binary(true)
+		{}
+
 		bool binary;
 	};
 
