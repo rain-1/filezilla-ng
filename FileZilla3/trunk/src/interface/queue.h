@@ -117,8 +117,6 @@ public:
 
 	void SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction);
 
-	int m_activeCount;
-
 	virtual bool TryRemoveAll();
 
 	void DetachChildren();
@@ -126,6 +124,8 @@ public:
 	virtual void SetPriority(enum QueuePriority priority);
 
 	void SetChildPriority(CFileItem* pItem, enum QueuePriority oldPriority, enum QueuePriority newPriority);
+
+	int m_activeCount;
 
 protected:
 	void AddFileItemToList(CFileItem* pItem);

@@ -189,16 +189,19 @@ CShellExtensionInterface* CShellExtensionInterface::CreateInitialized()
 #endif //__WXMSW__
 
 CRemoteDataObject::CRemoteDataObject(const CServer& server, const CServerPath& path)
-	: wxDataObjectSimple(wxDataFormat(_T("FileZilla3RemoteDataObject"))),
-	  m_server(server), m_path(path), m_processId(wxGetProcessId())
+	: wxDataObjectSimple(wxDataFormat(_T("FileZilla3RemoteDataObject")))
+	, m_server(server)
+	, m_path(path)
+	, m_didSendData()
+	, m_processId(wxGetProcessId())
 {
-	m_didSendData = false;
 }
 
 CRemoteDataObject::CRemoteDataObject()
 	: wxDataObjectSimple(wxDataFormat(_T("FileZilla3RemoteDataObject")))
+	, m_didSendData()
+	, m_processId(wxGetProcessId())
 {
-	m_didSendData = false;
 }
 
 size_t CRemoteDataObject::GetDataSize() const

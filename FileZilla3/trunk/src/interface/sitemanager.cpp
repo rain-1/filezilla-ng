@@ -713,9 +713,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file;
-	TiXmlElement* pDocument = 0;
-
-	pDocument = file.Load(_T("sitemanager"));
+	TiXmlElement* pDocument = file.Load(_T("sitemanager"));
 
 	if (!pDocument)
 	{
@@ -800,9 +798,7 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file;
-	TiXmlElement* pDocument = 0;
-
-	pDocument = file.Load(_T("sitemanager"));
+	TiXmlElement* pDocument = file.Load(_T("sitemanager"));
 
 	if (!pDocument)
 	{

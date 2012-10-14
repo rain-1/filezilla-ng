@@ -171,7 +171,7 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	wxString text = _T("FileZilla Client\n");
 	text += _T("----------------\n\n");
 
-	text += _T("Version:		  ") + CBuildInfo::GetVersion();
+	text += _T("Version:          ") + CBuildInfo::GetVersion();
 	if (CBuildInfo::GetBuildType() == _T("nightly"))
 		text += _T("-nightly");
 	text += '\n';
@@ -184,9 +184,9 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 
 	wxString build = CBuildInfo::GetBuildSystem();
 	if (!build.empty())
-		text += _T("  Compiled on:	") + build + _T("\n");
+		text += _T("  Compiled on:    ") + build + _T("\n");
 
-	text += _T("  Build date:	 ") + CBuildInfo::GetBuildDateString() + _T("\n");
+	text += _T("  Build date:     ") + CBuildInfo::GetBuildDateString() + _T("\n");
 
 	text += _T("  Compiled with:  ") + CBuildInfo::GetCompiler() + _T("\n");
 
@@ -197,7 +197,7 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	text += _T("\nLinked against:\n");
 	for (int i = 0; i < dependency::count; ++i)
 	{
-		text += wxString::Format(_T("  % -16s %s\n"),
+		text += wxString::Format(_T("  % -15s %s\n"),
 			(GetDependencyName(dependency::type(i)) + _T(":")).c_str(),
 			GetDependencyVersion(dependency::type(i)).c_str());
 	}
@@ -205,17 +205,17 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	text += _T("\nOperating system:\n");
 	wxString os = wxGetOsDescription();
 	if (!os.empty())
-		text += _T("  Name:		   ") + os + _T("\n");
+		text += _T("  Name:           ") + os + _T("\n");
 
 	int major, minor;
 	if (wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN)
-		text += wxString::Format(_T("  Version:		%d.%d\n"), major, minor);
+		text += wxString::Format(_T("  Version:        %d.%d\n"), major, minor);
 
 #if defined(__WXMSW__)
 	if (::wxIsPlatform64Bit())
-		text += _T("  Platform:	   64 bit system\n");
+		text += _T("  Platform:       64 bit system\n");
 	else
-		text += _T("  Platform:	   32 bit system\n");
+		text += _T("  Platform:       32 bit system\n");
 #endif
 
 #ifdef __WXMSW__
