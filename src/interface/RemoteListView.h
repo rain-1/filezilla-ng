@@ -115,6 +115,7 @@ protected:
 	void OnMenuEnter(wxCommandEvent& event);
 	void OnMenuGeturl(wxCommandEvent& event);
 	void OnMenuRefresh(wxCommandEvent& event);
+	void OnMenuNewfile(wxCommandEvent& event);
 };
 
 #endif
