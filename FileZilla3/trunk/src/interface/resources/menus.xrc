@@ -299,6 +299,10 @@
       <label>&amp;Create directory</label>
       <help>Create a new subdirectory in the current directory</help>
     </object>
+    <object class="wxMenuItem" name="ID_NEW_FILE">
+      <label>Crea&amp;te new file</label>
+      <help>Create a new, empty file in the current directory</help>
+    </object>
     <object class="wxMenuItem" name="ID_CONTEXT_REFRESH">
       <label>Re&amp;fresh</label>
     </object>

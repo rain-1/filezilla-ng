@@ -338,6 +338,7 @@ BEGIN_EVENT_TABLE(CRemoteListView, CFileListCtrl<CGenericFileData>)
 	EVT_MENU(XRCID("ID_DOWNLOAD"), CRemoteListView::OnMenuDownload)
 	EVT_MENU(XRCID("ID_ADDTOQUEUE"), CRemoteListView::OnMenuDownload)
 	EVT_MENU(XRCID("ID_MKDIR"), CRemoteListView::OnMenuMkdir)
+	EVT_MENU(XRCID("ID_NEW_FILE"), CRemoteListView::OnMenuNewfile)
 	EVT_MENU(XRCID("ID_DELETE"), CRemoteListView::OnMenuDelete)
 	EVT_MENU(XRCID("ID_RENAME"), CRemoteListView::OnMenuRename)
 	EVT_MENU(XRCID("ID_CHMOD"), CRemoteListView::OnMenuChmod)
@@ -1415,6 +1416,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_EDIT"), false);
 		pMenu->Enable(XRCID("ID_GETURL"), false);
 		pMenu->Enable(XRCID("ID_CONTEXT_REFRESH"), false);
+		pMenu->Enable(XRCID("ID_NEW_FILE"), false);
 	}
 	else if ((GetItemCount() && GetItemState(0, wxLIST_STATE_SELECTED)))
 	{
@@ -3147,4 +3149,75 @@ void CRemoteListView::OnNavigationEvent(bool forward)
 
 		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
 	}
+}
+
+void CRemoteListView::OnMenuNewfile(wxCommandEvent& event)
+{
+	if (!m_pState->IsRemoteIdle())
+	{
+		wxBell();
+		return;
+	}
+
+	CInputDialog dlg;
+	if (!dlg.Create(this, _("Create empty file"), _("Please enter the name of the file which should be created:")))
+		return;
+	
+	if (dlg.ShowModal() != wxID_OK)
+		return;
+	
+	if (dlg.GetValue() == _T(""))
+	{
+		wxBell();
+		return;
+	}
+	
+	wxString newFileName = dlg.GetValue();
+	
+	// Copied from elsewhere in the source, checks for characters that Windows deems invalid
+	if ((newFileName.Find('/')  != -1) ||
+		(newFileName.Find('\\') != -1) ||
+		(newFileName.Find(':')  != -1) ||
+		(newFileName.Find('*')  != -1) ||
+		(newFileName.Find('?')  != -1) ||
+		(newFileName.Find('"')  != -1) ||
+		(newFileName.Find('<')  != -1) ||
+		(newFileName.Find('>')  != -1) ||
+		(newFileName.Find('|')  != -1))
+	{
+		wxMessageBox(_("Filename may not contain any of the following characters: / \\ : * ? \" < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
+		return;
+	}
+
+	// Check if target file already exists
+	for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); i++)
+	{
+		if (newFileName == (*m_pDirectoryListing)[i].name)
+		{
+			wxMessageBox(_("Target filename already exists!"));
+			return;
+		}
+	}
+	
+	CEditHandler* edithandler = CEditHandler::Get(); // Used to get the temporary folder
+	
+	wxString emptyfile_name = _T("empty_file_yq744zm");
+	wxString emptyfile = edithandler->GetLocalDirectory() + emptyfile_name;
+	
+	// Create the empty temporary file
+	{
+		wxFile file;
+		wxLogNull log;
+		file.Create(emptyfile);
+	}
+	
+	const CServer* pServer = m_pState->GetServer();
+	if (!pServer)
+	{
+		wxBell();
+		return;
+	}
+	
+	CFileTransferCommand *cmd = new CFileTransferCommand(emptyfile, m_pDirectoryListing->path, newFileName, false, CFileTransferCommand::t_transferSettings());
+	m_pState->m_pCommandQueue->ProcessCommand(cmd);
 }
