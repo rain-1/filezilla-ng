@@ -413,7 +413,7 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 
 	// Get buffer size
 	int res = gnutls_session_get_data(pPrimarySocket->m_session, 0, &session_data_size);
-	if (res)
+	if (res && res != GNUTLS_E_SHORT_MEMORY_BUFFER )
 	{
 		m_pOwner->LogMessage(Debug_Warning, _T("gnutls_session_get_data on primary socket failed: %d"), res);
 		return true;
@@ -465,6 +465,7 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/, bool try_resu
 		const gnutls_datum_t* const cert_list = gnutls_certificate_get_peers(pPrimarySocket->m_session, &cert_list_size);
 		if (cert_list && cert_list_size)
 		{
+			delete [] m_implicitTrustedCert.data;
 			m_implicitTrustedCert.data = new unsigned char[cert_list[0].size];
 			memcpy(m_implicitTrustedCert.data, cert_list[0].data, cert_list[0].size);
 			m_implicitTrustedCert.size = cert_list[0].size;
