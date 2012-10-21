@@ -10,6 +10,20 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.6.0-beta1 (2012-10-21)
+
++ Auto-scroll file lists if dragging an item near the top or bottom
++ Add option to create empty files to the remote file list context menu
++ Support legacy servers sending directory listings in EBCDIC
++ Added Tango icon set
++ First-time users now get prompted whether they want to save passwords when first using the quickconnect bar
++ Greatly improve TLS performance by updating to GnuTLS 3.1.x with Nettle backend
+- FTP proxies now work with IPv6 addresses as proxy address
+- Handle expired TLS sessions when trying to reuse a session
+- TLS session reusing no longer fails with newer GnuTLS versions due to changed semantics of gnutls_session_get_data
+- Directory listings now longer sporadically fail if two connections try to list the same directory in parallel
+- Partially Work around a Ubuntu-specific problem with modal dialogs not being modal resulting in crashes
+
 3.5.3 (2012-01-08)
 
 + Ctrl+Shift+O can be used to toggle between modification time and filesize based directory comparison
