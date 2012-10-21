@@ -1578,7 +1578,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 	}
 	else
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _("Wrong opState: %d"), pData->opState);
+		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Wrong opState: %d"), pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
