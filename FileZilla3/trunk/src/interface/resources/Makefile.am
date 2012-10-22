@@ -78,4 +78,4 @@ hicolorapps48dir = $(datadir)/icons/hicolor/48x48/apps
 hicolorapps48_DATA = 48x48/filezilla.png
 
 scalabledir = $(datadir)/icons/hicolor/scalable/apps
-scalable_DATA = filezilla.svg
+dist_scalable_DATA = filezilla.svg
