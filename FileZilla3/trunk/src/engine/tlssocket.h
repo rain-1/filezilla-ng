@@ -45,6 +45,9 @@ public:
 
 	// PEM formatted
 	bool AddTrustedRootCertificate(const wxString& cert);
+
+	static wxString ListTlsCiphers(wxString priority);
+
 protected:
 
 	bool InitSession();
