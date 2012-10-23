@@ -39,4 +39,6 @@ enum type {
 wxString GetDependencyName( dependency::type d );
 wxString GetDependencyVersion( dependency::type d );
 
+wxString ListTlsCiphers(const wxString& priority);
+
 #endif //__MISC_H__

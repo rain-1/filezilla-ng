@@ -623,6 +623,14 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		int *x = 0;
 		*x = 0;
 	}
+	else if (event.GetId() == XRCID("ID_CIPHERS"))
+	{
+		CInputDialog dlg;
+		dlg.Create(this, _T("Ciphers"), _T("Priority string:"));
+		dlg.AllowEmpty(true);
+		if (dlg.ShowModal() == wxID_OK)
+			wxMessageBox(ListTlsCiphers(dlg.GetValue()), _T("Ciphers"));
+	}
 	else if (event.GetId() == XRCID("ID_CLEARCACHE_LAYOUT"))
 	{
 		CWrapEngine::ClearCache();
