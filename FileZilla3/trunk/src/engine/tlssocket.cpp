@@ -6,6 +6,8 @@
 #include <gnutls/x509.h>
 #include <errno.h>
 
+char const ciphers[] = "NORMAL:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+
 //#define TLSDEBUG 1
 #if TLSDEBUG
 // This is quite ugly
@@ -109,7 +111,13 @@ bool CTlsSocket::InitSession()
 		return false;
 	}
 
-	res = gnutls_priority_set_direct(m_session, "NORMAL:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP", 0);
+	// Even though the name gnutls_db_set_cache_expiration
+	// implies expiration of some cache, it also governs
+	// the actual session lifetime, independend whether the
+	// session is cached or not.
+	gnutls_db_set_cache_expiration(m_session, 100000000);
+
+	res = gnutls_priority_set_direct(m_session, ciphers, 0);
 	if (res)
 	{
 		LogError(res);
@@ -1120,3 +1128,48 @@ bool CTlsSocket::AddTrustedRootCertificate(const wxString& cert)
 
 	return gnutls_certificate_set_x509_trust_mem(m_certCredentials, &datum, GNUTLS_X509_FMT_PEM) > 0;
 }
+
+wxString CTlsSocket::ListTlsCiphers(wxString priority)
+{
+	if (priority.IsEmpty())
+		priority = wxString::FromUTF8(ciphers);
+
+	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());
+
+    gnutls_priority_t pcache;
+    const char *err = 0;
+	int ret = gnutls_priority_init(&pcache, priority.mb_str(), &err);
+	if (ret < 0)
+	{
+		list += wxString::Format(_T("gnutls_priority_init failed with code %d: %s"), ret, wxString::FromUTF8(err ? err : "").c_str());
+		return list;
+	}
+	else
+	{
+		for (size_t i = 0; ; i++)
+		{
+			unsigned int idx;
+			ret = gnutls_priority_get_cipher_suite_index(pcache, i, &idx);
+			if (ret == GNUTLS_E_REQUESTED_DATA_NOT_AVAILABLE)
+				break;
+			if (ret == GNUTLS_E_UNKNOWN_CIPHER_SUITE)
+				continue;
+            
+			gnutls_protocol_t version;
+			unsigned char id[2];
+			const char* name = gnutls_cipher_suite_info(idx, id, NULL, NULL, NULL, &version);
+
+			if (name != 0)
+			{
+				list += wxString::Format(
+					_T("%-50s    0x%02x, 0x%02x    %s\n"),
+					wxString::FromUTF8(name).c_str(),
+					(unsigned char)id[0],
+					(unsigned char)id[1],
+					wxString::FromUTF8(gnutls_protocol_get_name(version)).c_str());
+			}
+		}
+	}
+
+	return list;
+}	
