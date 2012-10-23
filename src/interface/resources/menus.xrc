@@ -427,6 +427,11 @@
       <label>&amp;Crash</label>
       <help>Crashes FileZilla instantly. Only used to debug the exception handler</help>
     </object>
+    <object class="separator"/>
+    <object class="wxMenuItem" name="ID_CIPHERS">
+      <label>&amp;TLS Ciphers</label>
+      <help>Shows available TLS ciphers</help>
+    </object>
   </object>
   <object class="wxMenu" name="ID_MENU_QUEUE_FAILED">
     <object class="wxMenuItem" name="ID_REMOVEALL">

@@ -2,6 +2,8 @@
 #include <gnutls/gnutls.h>
 #include <sqlite3.h>
 
+#include "tlssocket.h"
+
 bool VerifySetDate(wxDateTime& date, int year, wxDateTime::Month month, int day, int hour /*=0*/, int minute /*=0*/, int second /*=0*/)
 {
 	if (year < 1900 || year > 3000)
@@ -407,4 +409,9 @@ wxString GetDependencyName(dependency::type d)
 	}
 
 	return _T("");
+}
+
+wxString ListTlsCiphers(const wxString& priority)
+{
+	return CTlsSocket::ListTlsCiphers(priority);
 }
