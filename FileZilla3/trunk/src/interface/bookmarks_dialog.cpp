@@ -556,7 +556,7 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent& event)
 
 	wxString newName = _("New bookmark");
 	int index = 2;
-	while (true)
+	for (;;)
 	{
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;
@@ -627,7 +627,7 @@ void CBookmarksDialog::OnCopy(wxCommandEvent& event)
 	const wxString name = m_pTree->GetItemText(item);
 	wxString newName = wxString::Format(_("Copy of %s"), name.c_str());
 	int index = 2;
-	while (true)
+	for (;;)
 	{
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;

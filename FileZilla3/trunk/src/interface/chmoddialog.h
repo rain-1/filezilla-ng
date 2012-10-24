@@ -7,7 +7,7 @@ class CChmodDialog : public wxDialogEx
 {
 public:
 	CChmodDialog() {}
-	virtual ~CChmodDialog() { }
+	virtual ~CChmodDialog() {}
 
 	bool Create(wxWindow* parent, int fileCount, int dirCount,
 				const wxString& name, const char permissions[9]);

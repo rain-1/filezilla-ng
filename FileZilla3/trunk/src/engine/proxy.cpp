@@ -225,7 +225,7 @@ void CProxySocket::OnReceive()
 	switch (m_handshakeState)
 	{
 	case http_wait:
-		while (true)
+		for (;;)
 		{
 			int error;
 			int do_read = m_recvBufferLen - m_recvBufferPos - 1;
@@ -606,7 +606,7 @@ void CProxySocket::OnSend()
 	if (m_proxyState != handshake || !m_pSendBuffer)
 		return;
 
-	while (true)
+	for (;;)
 	{
 		int error;
 		int written = m_pSocket->Write(m_pSendBuffer, m_sendBufferLen, error);

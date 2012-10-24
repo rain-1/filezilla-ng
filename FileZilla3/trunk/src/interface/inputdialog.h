@@ -7,7 +7,7 @@ class CInputDialog : public wxDialogEx
 {
 public:
 	CInputDialog() {}
-	virtual ~CInputDialog() { }
+	virtual ~CInputDialog() {}
 
 	bool Create(wxWindow* parent, const wxString& title, wxString text);
 

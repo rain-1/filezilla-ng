@@ -7,7 +7,7 @@ class CNewBookmarkDialog : public wxDialogEx
 {
 public:
 	CNewBookmarkDialog(wxWindow* parent, wxString& site_path, const CServer* server);
-	virtual ~CNewBookmarkDialog() { }
+	virtual ~CNewBookmarkDialog() {}
 
 	virtual int ShowModal(const wxString &local_path, const CServerPath &remote_path);
 
@@ -25,7 +25,7 @@ class CBookmarksDialog : public wxDialogEx
 {
 public:
 	CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server);
-	virtual ~CBookmarksDialog() { }
+	virtual ~CBookmarksDialog() {}
 
 	virtual int ShowModal(const wxString &local_path, const CServerPath &remote_path);
 

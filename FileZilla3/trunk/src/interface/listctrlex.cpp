@@ -626,11 +626,11 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 			info.order++;
 	}
 
-	int icon = -1;
-
 	t_columnInfo& info = m_columnInfo[col];
+
 	if (info.shown)
 	{
+		int icon = -1;
 		// Remove old column
 		for (unsigned int i = 0; i < (unsigned int)GetColumnCount(); i++)
 		{

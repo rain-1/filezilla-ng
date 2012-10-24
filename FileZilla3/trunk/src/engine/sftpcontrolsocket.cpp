@@ -328,7 +328,7 @@ public:
 		m_deleteFailed = false;
 	}
 
-	virtual ~CSftpDeleteOpData() { }
+	virtual ~CSftpDeleteOpData() {}
 
 	CServerPath path;
 	std::list<wxString> files;
@@ -2329,7 +2329,7 @@ public:
 	{
 	}
 
-	virtual ~CSftpRemoveDirOpData() { }
+	virtual ~CSftpRemoveDirOpData() {}
 
 	CServerPath path;
 	wxString subDir;
@@ -2411,7 +2411,7 @@ public:
 		m_useAbsolute = false;
 	}
 
-	virtual ~CSftpChmodOpData() { }
+	virtual ~CSftpChmodOpData() {}
 
 	CChmodCommand m_cmd;
 	bool m_useAbsolute;
@@ -2533,7 +2533,7 @@ public:
 		m_useAbsolute = false;
 	}
 
-	virtual ~CSftpRenameOpData() { }
+	virtual ~CSftpRenameOpData() {}
 
 	CRenameCommand m_cmd;
 	bool m_useAbsolute;

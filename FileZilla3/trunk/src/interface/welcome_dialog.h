@@ -7,7 +7,7 @@ class CWelcomeDialog : public wxDialogEx
 {
 public:
 	CWelcomeDialog() {}
-	virtual ~CWelcomeDialog() { }
+	virtual ~CWelcomeDialog() {}
 
 	bool Run(wxWindow* parent, bool force = false, bool delay = false);
 

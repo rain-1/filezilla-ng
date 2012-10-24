@@ -31,7 +31,6 @@ enum type {
 	wxwidgets,
 	gnutls,
 	sqlite,
-
 	count
 };
 }

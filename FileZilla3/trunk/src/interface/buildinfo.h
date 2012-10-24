@@ -4,7 +4,7 @@
 class CBuildInfo
 {
 protected:
-	CBuildInfo() { }
+	CBuildInfo() {}
 
 public:
 

@@ -111,7 +111,7 @@ class CFilterDialog : public wxDialogEx, public CFilterManager
 {
 public:
 	CFilterDialog();
-	virtual ~CFilterDialog() { }
+	virtual ~CFilterDialog() {}
 
 	bool Create(CMainFrame* parent);
 

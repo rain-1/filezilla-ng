@@ -622,7 +622,7 @@ wxString CSiteManager::AddServer(CServer server)
 	wxString name = _("New site");
 	int i = 1;
 
-	while (true)
+	for (;;)
 	{
 		std::list<wxString>::const_iterator iter;
 		for (iter = names.begin(); iter != names.end(); ++iter)

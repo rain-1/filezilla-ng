@@ -15,7 +15,7 @@ public:
 
 protected:
 	CClearPrivateDataDialog(CMainFrame* pMainFrame);
-	~CClearPrivateDataDialog() { }
+	~CClearPrivateDataDialog() {}
 
 	bool ClearReconnect();
 

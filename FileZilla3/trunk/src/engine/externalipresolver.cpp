@@ -257,7 +257,7 @@ void CExternalIPResolver::OnHeader()
 	// We do just the neccessary parsing and silently ignore most header fields
 	// Redirects are supported though if the server sends the Location field.
 
-	while (true)
+	for (;;)
 	{
 		// Find line ending
 		unsigned int i = 0;
@@ -469,7 +469,7 @@ void CExternalIPResolver::OnChunkedData()
 	char* p = m_pRecvBuffer;
 	unsigned int len = m_recvBufferPos;
 
-	while (true)
+	for (;;)
 	{
 		if (m_chunkData.size != 0)
 		{

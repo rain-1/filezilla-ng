@@ -35,9 +35,9 @@ CServerPathData::CServerPathData()
 }
 
 CServerPathData::CServerPathData(const CServerPathData& v)
+	: m_segments(v.m_segments)
 {
 	m_prefix = v.m_prefix;
-	m_segments = v.m_segments;
 }
 
 bool CServerPathData::operator==(const CServerPathData& cmp) const

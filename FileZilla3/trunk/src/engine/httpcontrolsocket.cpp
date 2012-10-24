@@ -580,7 +580,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 	// We do just the neccessary parsing and silently ignore most header fields
 	// Redirects are supported though if the server sends the Location field.
 
-	while (true)
+	for (;;)
 	{
 		// Find line ending
 		unsigned int i = 0;
@@ -793,7 +793,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 	char* p = m_pRecvBuffer;
 	unsigned int len = m_recvBufferPos;
 
-	while (true)
+	for (;;)
 	{
 		if (pData->m_chunkData.size != 0)
 		{

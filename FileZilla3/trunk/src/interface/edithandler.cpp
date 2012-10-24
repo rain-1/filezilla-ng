@@ -965,7 +965,7 @@ wxString CEditHandler::GetSystemOpenCommand(wxString file, bool &program_exists)
 	if (ext == _T(""))
 		return _T("");
 
-	while (true)
+	for (;;)
 	{
 		wxFileType* pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
 		if (!pType)

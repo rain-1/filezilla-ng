@@ -55,16 +55,16 @@ enum pagenames
 };
 
 // Helper macro to add pages in the most simplistic way
-#define ADD_PAGE(name, classname, parent) \
-	wxASSERT(parent < (int)m_pages.size()); \
-	page.page = new classname; \
-	if (parent == page_none) \
-		page.id = treeCtrl->AppendItem(root, name); \
-	else \
-	{ \
-		page.id = treeCtrl->AppendItem(m_pages[(unsigned int)parent].id, name); \
-		treeCtrl->Expand(m_pages[(unsigned int)parent].id); \
-	} \
+#define ADD_PAGE(name, classname, parent)										\
+	wxASSERT(parent < (int)m_pages.size());										\
+	page.page = new classname;													\
+	if (parent == page_none)													\
+		page.id = treeCtrl->AppendItem(root, name);								\
+	else																		\
+	{																			\
+		page.id = treeCtrl->AppendItem(m_pages[(unsigned int)parent].id, name);	\
+		treeCtrl->Expand(m_pages[(unsigned int)parent].id);						\
+	}																			\
 	m_pages.push_back(page);
 
 BEGIN_EVENT_TABLE(CSettingsDialog, wxDialogEx)

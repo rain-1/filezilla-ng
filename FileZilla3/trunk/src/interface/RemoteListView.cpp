@@ -1205,7 +1205,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 	bool back = false;
 
 	int item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1508,7 +1508,7 @@ void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 	}
 
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1554,7 +1554,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	bool added = false;
 	bool startRecursive = false;
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1669,7 +1669,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 	bool selected_link = false;
 
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1735,7 +1735,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 
 	bool startRecursive = false;
 	item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1946,7 +1946,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent& event)
 	char permissions[9] = {0};
 
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2021,7 +2021,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent& event)
 	wxASSERT(pRecursiveOperation);
 
 	item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2405,7 +2405,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent& event)
 
 	long item = -1;
 	int count = 0;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2452,7 +2452,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent& event)
 
 	// Add files to remote data object
 	item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2524,7 +2524,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent& event)
 			bool idle = m_pState->m_pCommandQueue->Idle();
 
 			long item = -1;
-			while (true)
+			for (;;)
 			{
 				item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 				if (item == -1)

@@ -120,12 +120,12 @@ bool ProgramExists(const wxString& editor)
 
 bool COptionsPageEdit::Validate()
 {
-	bool failure = false;
-
 	const bool custom = GetRCheck(XRCID("ID_DEFAULT_CUSTOM"));
 	wxString editor;
 	if (custom)
 	{
+		bool failure = false;
+
 		editor = GetText(XRCID("ID_EDITOR"));
 		editor.Trim(true);
 		editor.Trim(false);

@@ -494,7 +494,7 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 	bool back = false;
 
 	int item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -802,7 +802,7 @@ public:
 	{
 	}
 
-	virtual ~CLocalListViewSort() { }
+	virtual ~CLocalListViewSort() {}
 
 	virtual bool operator()(int a, int b) const = 0;
 
@@ -1128,7 +1128,7 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 {
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1150,7 +1150,7 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 	bool queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
 
 	item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1493,7 +1493,7 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 #endif
 	{
 		int item = -1;
-		while (true)
+		for (;;)
 		{
 			item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 			if (item == -1)
@@ -1604,7 +1604,7 @@ void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notificati
 void CLocalListView::OnBeginDrag(wxListEvent& event)
 {
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1621,7 +1621,7 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 	pDragDropManager->localParent = m_dir;
 
 	item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1704,7 +1704,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 #endif
 			{
 				int item = -1;
-				while (true)
+				for (;;)
 				{
 					item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 					if (item == -1)

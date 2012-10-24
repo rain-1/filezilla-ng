@@ -278,11 +278,10 @@ void CStatusView::InitDefAttr()
 		timestampWidth = width;
 	}
 
-	int maxWidth = 0;
 	wxCoord width = 0;
 	wxCoord height = 0;
 	dc.GetTextExtent(_("Error:"), &width, &height);
-	maxWidth = width;
+	int maxWidth = width;
 	dc.GetTextExtent(_("Command:"), &width, &height);
 	if (width > maxWidth)
 		maxWidth = width;
