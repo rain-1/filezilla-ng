@@ -91,7 +91,7 @@ void CQueueViewFailed::OnRemoveSelected(wxCommandEvent& event)
 
 	std::list<CQueueItem*> selectedItems;
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -261,7 +261,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 	std::list<CQueueItem*> selectedItems;
 	long item = -1;
 	long skipTo = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)

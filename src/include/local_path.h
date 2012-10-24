@@ -9,7 +9,7 @@
 class CLocalPath
 {
 public:
-	CLocalPath() { }
+	CLocalPath() {}
 	CLocalPath(const CLocalPath &path);
 
 	// Creates path. If the path is not syntactically

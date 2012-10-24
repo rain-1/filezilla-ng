@@ -1738,7 +1738,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 	const wxString name = pTree->GetItemText(item);
 	wxString newName = wxString::Format(_("Copy of %s"), name.c_str());
 	int index = 2;
-	while (true)
+	for (;;)
 	{
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;
@@ -2056,7 +2056,7 @@ wxString CSiteManagerDialog::FindFirstFreeName(const wxTreeItemId &parent, const
 
 	wxString newName = name;
 	int index = 2;
-	while (true)
+	for (;;)
 	{
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;

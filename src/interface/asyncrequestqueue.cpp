@@ -256,7 +256,7 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 				wxTextEntryDialog dlg(m_pMainFrame, msg, _("Rename file"), defaultName);
 
 				// Repeat until user cancels or enters a new name
-				while (1)
+				for (;;)
 				{
 					int res = dlg.ShowModal();
 					if (res == wxID_OK)

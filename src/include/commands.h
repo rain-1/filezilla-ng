@@ -64,8 +64,8 @@ enum Command
 class CCommand
 {
 public:
-	CCommand() { }
-	virtual ~CCommand() { }
+	CCommand() {}
+	virtual ~CCommand() {}
 	virtual enum Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
 };

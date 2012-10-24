@@ -85,7 +85,6 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	// SHFileOperation accepts a list of null-terminated strings. Go through all
 	// paths to get the required buffer length
 
-	;
 	int len = 1; // String list terminated by empty string
 
 	for (std::list<wxString>::const_iterator const_iter = dirsToVisit.begin(); const_iter != dirsToVisit.end(); ++const_iter)

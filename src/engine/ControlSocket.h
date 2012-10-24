@@ -137,7 +137,7 @@ public:
 	// from the engine.
 	enum Command GetCurrentCommandId() const;
 
-	virtual void TransferEnd() { }
+	virtual void TransferEnd() {}
 
 	void SendAsyncRequest(CAsyncRequestNotification* pNotification);
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) = 0;

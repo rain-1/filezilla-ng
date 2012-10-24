@@ -51,7 +51,7 @@ public:
 	CQueueItem* GetTopLevelItem();
 	const CQueueItem* GetTopLevelItem() const;
 	int GetItemIndex() const; // Return the visible item index relative to the topmost parent item.
-	virtual void SaveItem(TiXmlElement* pElement) const { }
+	virtual void SaveItem(TiXmlElement* pElement) const {}
 
 	virtual enum QueueItemType GetType() const = 0;
 
@@ -253,7 +253,7 @@ class CFolderScanItem : public CQueueItem
 {
 public:
 	CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath);
-	virtual ~CFolderScanItem() { }
+	virtual ~CFolderScanItem() {}
 
 	virtual enum QueueItemType GetType() const { return QueueItemType_FolderScan; }
 	CLocalPath GetLocalPath() const { return m_localPath; }

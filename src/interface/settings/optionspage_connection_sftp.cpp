@@ -158,7 +158,7 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 
 	wxString input;
 
-	while (true)
+	for (;;)
 	{
 		int pos = input.Find('\n');
 		if (pos == wxNOT_FOUND)

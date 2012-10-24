@@ -1077,7 +1077,7 @@ wxLongLong_t CQueueStorage::GetServer(CServer& server, bool fromBeginning)
 			sqlite3_reset(d_->selectServersQuery_);
 		}
 
-		while (true)
+		for (;;)
 		{
 			int res;
 			do
@@ -1127,7 +1127,7 @@ wxLongLong_t CQueueStorage::GetFile(CFileItem** pItem, wxLongLong_t server)
 			sqlite3_bind_int64(d_->selectFilesQuery_, 1, server);
 		}
 
-		while (true)
+		for (;;)
 		{
 			int res;
 			do

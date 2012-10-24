@@ -759,7 +759,7 @@ protected:
 	{
 		m_waiting |= wait;
 
-		while (true)
+		for (;;)
 		{
 #ifdef __WXMSW__
 			int wait_events = FD_CLOSE;
@@ -981,7 +981,7 @@ protected:
 	virtual ExitCode Entry()
 	{
 		m_sync.Lock();
-		while (true)
+		for (;;)
 		{
 			if (!IdleLoop())
 			{

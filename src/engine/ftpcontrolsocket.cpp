@@ -167,7 +167,7 @@ public:
 	{
 	}
 
-	virtual ~CFtpDeleteOpData() { }
+	virtual ~CFtpDeleteOpData() {}
 
 	CServerPath path;
 	std::list<wxString> files;
@@ -213,7 +213,7 @@ void CFtpControlSocket::OnReceive()
 {
 	LogMessage(Debug_Verbose, _T("CFtpControlSocket::OnReceive()"));
 
-	while (true)
+	for (;;)
 	{
 		int error;
 		int read = m_pBackend->Read(m_receiveBuffer + m_bufferLen, RECVBUFFERSIZE - m_bufferLen, error);
@@ -924,7 +924,7 @@ int CFtpControlSocket::LogonParseResponse()
 			return SendNextCommand();
 	}
 
-	while (true)
+	for (;;)
 	{
 		++pData->opState;
 
@@ -3172,7 +3172,7 @@ public:
 	{
 	}
 
-	virtual ~CFtpRemoveDirOpData() { }
+	virtual ~CFtpRemoveDirOpData() {}
 
 	CServerPath path;
 	CServerPath fullPath;
@@ -3516,7 +3516,7 @@ public:
 		m_useAbsolute = false;
 	}
 
-	virtual ~CFtpRenameOpData() { }
+	virtual ~CFtpRenameOpData() {}
 
 	CRenameCommand m_cmd;
 	bool m_useAbsolute;
@@ -3669,7 +3669,7 @@ public:
 		m_useAbsolute = false;
 	}
 
-	virtual ~CFtpChmodOpData() { }
+	virtual ~CFtpChmodOpData() {}
 
 	CChmodCommand m_cmd;
 	bool m_useAbsolute;

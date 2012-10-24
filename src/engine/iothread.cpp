@@ -142,7 +142,7 @@ wxThreadEx::ExitCode CIOThread::Entry()
 		}
 		m_mutex.Unlock();
 
-		while (true)
+		for (;;)
 		{
 			m_mutex.Lock();
 			while (m_curThreadBuf == m_curAppBuf)

@@ -94,7 +94,7 @@ public:
 
 protected:
 	CEditHandler();
-	virtual ~CEditHandler() { }
+	virtual ~CEditHandler() {}
 
 	static CEditHandler* m_pEditHandler;
 

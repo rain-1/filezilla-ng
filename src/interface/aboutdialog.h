@@ -7,7 +7,7 @@ class CAboutDialog : public wxDialogEx
 {
 public:
 	CAboutDialog() {}
-	virtual ~CAboutDialog() { }
+	virtual ~CAboutDialog() {}
 
 	bool Create(wxWindow* parent);
 

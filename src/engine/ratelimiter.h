@@ -54,7 +54,7 @@ class CRateLimiterObject
 
 public:
 	CRateLimiterObject();
-	virtual ~CRateLimiterObject() { }
+	virtual ~CRateLimiterObject() {}
 	wxLongLong GetAvailableBytes(enum CRateLimiter::rate_direction direction) const { return m_bytesAvailable[direction]; }
 
 	bool IsWaiting(enum CRateLimiter::rate_direction direction) const;
@@ -63,7 +63,7 @@ protected:
 	void UpdateUsage(enum CRateLimiter::rate_direction direction, int usedBytes);
 	void Wait(enum CRateLimiter::rate_direction direction);
 
-	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction) { }
+	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction) {}
 
 private:
 	bool m_waiting[2];

@@ -1391,7 +1391,7 @@ bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount
 
 void CQueueView::SendNextCommand(t_EngineData& engineData)
 {
-	while (true)
+	for (;;)
 	{
 		if (engineData.state == t_EngineData::waitprimary)
 		{
@@ -2389,7 +2389,7 @@ void CQueueView::OnRemoveSelected(wxCommandEvent& event)
 
 	std::list<CQueueItem*> selectedItems;
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2574,7 +2574,7 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &event)
 	bool upload_unknown = false;
 
 	long item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -2635,7 +2635,7 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &event)
 		return;
 
 	item = -1;
-	while (true)
+	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)

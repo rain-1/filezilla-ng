@@ -20,4 +20,3 @@ private:
 };
 
 #endif //__DESKTOP_NOTIFICATION_H__
-

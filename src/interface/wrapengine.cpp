@@ -608,7 +608,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 	printf("Initial min and max: %d %d\n", min, max);
 #endif
 
-	while (true)
+	for (;;)
 	{
 		std::list<int> didwrap;
 
