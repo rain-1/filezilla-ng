@@ -1136,6 +1136,7 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 
 	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());
 
+#if GNUTLS_VERSION_NUMBER >= 0x0300009
     gnutls_priority_t pcache;
     const char *err = 0;
 	int ret = gnutls_priority_init(&pcache, priority.mb_str(), &err);
@@ -1170,6 +1171,9 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 			}
 		}
 	}
+#else
+	list += _T("Unknown\n");
+#endif
 
 	return list;
 }	
