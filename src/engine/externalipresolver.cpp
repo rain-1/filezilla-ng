@@ -21,15 +21,16 @@ wxString CExternalIPResolver::m_ip;
 bool CExternalIPResolver::m_checked = false;
 
 CExternalIPResolver::CExternalIPResolver(wxEvtHandler* handler, int id /*=wxID_ANY*/)
-	: m_port(80), m_handler(handler), m_id(id)
+	: m_port(80)
+	, m_handler(handler)
+	, m_id(id)
+	, m_done(false)
+	, m_pSocket(0)
+	, m_pSendBuffer(0)
+	, m_sendBufferPos(0)
+	, m_pRecvBuffer(0)
+	, m_recvBufferPos(0)
 {
-	m_pSocket = 0;
-	m_done = false;
-	m_pSendBuffer = 0;
-	m_sendBufferPos = 0;
-	m_pRecvBuffer = 0;
-	m_recvBufferPos = 0;
-
 	ResetHttpData(true);
 }
 

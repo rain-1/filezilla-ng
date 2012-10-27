@@ -8,13 +8,12 @@
 #include "themeprovider.h"
 
 CQueueItem::CQueueItem()
+	: m_parent(0)
+	, m_visibleOffspring(0)
+	, m_indent(0)
+	, m_maxCachedIndex(-1)
+	, m_removed_at_front(0)
 {
-	m_visibleOffspring = 0;
-	m_parent = 0;
-	m_maxCachedIndex = -1;
-
-	m_removed_at_front = 0;
-	m_indent = 0;
 }
 
 CQueueItem::~CQueueItem()
@@ -298,16 +297,15 @@ const wxString& CQueueItem::GetIndent() const
 CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 					 const wxString& sourceFile, const wxString& targetFile,
 					 const CLocalPath& localPath, const CServerPath& remotePath, wxLongLong size)
-	: m_sourceFile(sourceFile)
+	: flags(0)
+	, m_priority(priority_normal)
+	, m_sourceFile(sourceFile)
 	, m_targetFile(targetFile)
 	, m_localPath(localPath)
 	, m_remotePath(remotePath)
 	, m_size(size)
 {
 	m_parent = parent;
-	m_priority = priority_normal;
-
-	flags = 0;
 	if (download)
 		flags |= flag_download;
 	if (queued)
@@ -742,19 +740,17 @@ void CServerItem::SetChildPriority(CFileItem* pItem, enum QueuePriority oldPrior
 }
 
 CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath)
+	: m_remove(false)
+	, m_active(false)
+	, m_count(0)
+	, m_defaultFileExistsAction(CFileExistsNotification::unknown)
+	, m_dir_is_empty(false)
+	, m_queued(queued)
+	, m_localPath(localPath)
+	, m_remotePath(remotePath)
+	, m_download(download)
 {
 	m_parent = parent;
-
-	m_download = download;
-	m_localPath = localPath;
-	m_remotePath = remotePath;
-	m_queued = queued;
-	m_remove = false;
-	m_active = false;
-	m_count = 0;
-	m_dir_is_empty = false;
-
-	m_defaultFileExistsAction = CFileExistsNotification::unknown;
 }
 
 bool CFolderScanItem::TryRemoveAll()
@@ -780,8 +776,9 @@ EVT_KEY_DOWN(CQueueViewBase::OnKeyDown)
 END_EVENT_TABLE()
 
 CQueueViewBase::CQueueViewBase(CQueue* parent, int index, const wxString& title)
-	: wxListCtrlEx(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxCLIP_CHILDREN | wxLC_REPORT | wxLC_VIRTUAL | wxSUNKEN_BORDER | wxTAB_TRAVERSAL),
-	  m_pageIndex(index), m_title(title)
+	: wxListCtrlEx(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxCLIP_CHILDREN | wxLC_REPORT | wxLC_VIRTUAL | wxSUNKEN_BORDER | wxTAB_TRAVERSAL)
+	, m_pageIndex(index)
+	, m_title(title)
 {
 	m_pQueue = parent;
 	m_insertionStart = -1;
