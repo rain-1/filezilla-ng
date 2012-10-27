@@ -83,9 +83,8 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	delete m_pSocket;
 	m_pSocket = 0;
 	delete m_pSocketServer;
-	m_pSocketServer = 0;
-
 	m_pSocketServer = CreateSocketServer();
+
 	if (!m_pSocketServer)
 	{
 		m_pControlSocket->LogMessage(::Debug_Warning, _T("CreateSocketServer failed"));
@@ -539,7 +538,6 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 {
 	// Void all previous attempts to createt a socket
 	delete m_pSocket;
-	m_pSocket = 0;
 	delete m_pSocketServer;
 	m_pSocketServer = 0;
 

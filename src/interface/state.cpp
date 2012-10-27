@@ -1174,10 +1174,9 @@ bool CState::GetSecurityInfo(CSftpEncryptionNotification *& pInfo)
 void CState::SetSecurityInfo(CCertificateNotification const& info)
 {
 	delete m_pCertificate;
-	m_pCertificate = 0;
+	m_pCertificate = new CCertificateNotification(info);
 	delete m_pSftpEncryptionInfo;
 	m_pSftpEncryptionInfo = 0;
-	m_pCertificate = new CCertificateNotification(info);
 }
 
 void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
@@ -1185,6 +1184,5 @@ void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
 	delete m_pCertificate;
 	m_pCertificate = 0;
 	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = 0;
 	m_pSftpEncryptionInfo = new CSftpEncryptionNotification(info);
 }

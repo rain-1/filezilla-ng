@@ -15,8 +15,10 @@ EVT_LISTBOX(XRCID("ID_FILTERS"), CFilterEditDialog::OnFilterSelect)
 END_EVENT_TABLE();
 
 CFilterEditDialog::CFilterEditDialog()
+	: m_pFilterListCtrl(0)
+	, m_currentSelection(-1)
+	, m_pWindowStateManager(0)
 {
-	m_pWindowStateManager = 0;
 }
 
 CFilterEditDialog::~CFilterEditDialog()
