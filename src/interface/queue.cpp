@@ -7,8 +7,8 @@
 #include "timeformatting.h"
 #include "themeprovider.h"
 
-CQueueItem::CQueueItem()
-	: m_parent(0)
+CQueueItem::CQueueItem(CQueueItem* parent)
+	: m_parent(parent)
 	, m_visibleOffspring(0)
 	, m_indent(0)
 	, m_maxCachedIndex(-1)
@@ -297,7 +297,13 @@ const wxString& CQueueItem::GetIndent() const
 CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 					 const wxString& sourceFile, const wxString& targetFile,
 					 const CLocalPath& localPath, const CServerPath& remotePath, wxLongLong size)
-	: flags(0)
+	: CQueueItem(parent)
+	, m_errorCount(0)
+	, m_edit(CEditHandler::none)
+	, m_pEngineData(0)
+	, m_defaultFileExistsAction(CFileExistsNotification::unknown)
+	, m_onetime_action(CFileExistsNotification::unknown)
+	, flags(0)
 	, m_priority(priority_normal)
 	, m_sourceFile(sourceFile)
 	, m_targetFile(targetFile)
@@ -305,16 +311,10 @@ CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 	, m_remotePath(remotePath)
 	, m_size(size)
 {
-	m_parent = parent;
 	if (download)
 		flags |= flag_download;
 	if (queued)
 		flags |= flag_queued;
-	m_errorCount = 0;
-	m_pEngineData = 0;
-	m_defaultFileExistsAction = CFileExistsNotification::unknown;
-	m_edit = CEditHandler::none;
-	m_onetime_action = CFileExistsNotification::unknown;
 }
 
 CFileItem::~CFileItem()
@@ -740,7 +740,8 @@ void CServerItem::SetChildPriority(CFileItem* pItem, enum QueuePriority oldPrior
 }
 
 CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath)
-	: m_remove(false)
+	: CQueueItem(parent)
+	, m_remove(false)
 	, m_active(false)
 	, m_count(0)
 	, m_defaultFileExistsAction(CFileExistsNotification::unknown)
@@ -750,7 +751,6 @@ CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download
 	, m_remotePath(remotePath)
 	, m_download(download)
 {
-	m_parent = parent;
 }
 
 bool CFolderScanItem::TryRemoveAll()

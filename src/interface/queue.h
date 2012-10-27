@@ -64,7 +64,7 @@ public:
 	int GetRemovedAtFront() const { return m_removed_at_front; }
 
 protected:
-	CQueueItem();
+	CQueueItem(CQueueItem* parent = 0);
 
 	CQueueItem* m_parent;
 
