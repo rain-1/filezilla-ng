@@ -449,15 +449,14 @@ protected:
 
 CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding)
 	: m_pControlSocket(pControlSocket)
+	, m_currentOffset(0)
 	, m_totalData()
+	, m_prevLine(0)
 	, m_server(server)
+	, m_fileListOnly(true)
+	, m_maybeMultilineVms(false)
 	, m_listingEncoding(encoding)
 {
-	m_currentOffset = 0;
-	m_prevLine = 0;
-	m_fileListOnly = true;
-	m_maybeMultilineVms = false;
-
 	if (m_MonthNamesMap.empty())
 	{
 		//Fill the month names map

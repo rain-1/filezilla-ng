@@ -36,8 +36,8 @@ CServerPathData::CServerPathData()
 
 CServerPathData::CServerPathData(const CServerPathData& v)
 	: m_segments(v.m_segments)
+	, m_prefix(v.m_prefix)
 {
-	m_prefix = v.m_prefix;
 }
 
 bool CServerPathData::operator==(const CServerPathData& cmp) const
@@ -52,17 +52,16 @@ bool CServerPathData::operator==(const CServerPathData& cmp) const
 }
 
 CServerPath::CServerPath()
+	: m_bEmpty(true)
+	, m_type(DEFAULT)
 {
-	m_type = DEFAULT;
-	m_bEmpty = true;
 }
 
 CServerPath::CServerPath(const CServerPath &path, wxString subdir)
-	: m_data(path.m_data)
+	: m_bEmpty(path.m_bEmpty)
+	, m_type(path.m_type)
+	, m_data(path.m_data)
 {
-	m_type = path.m_type;
-	m_bEmpty = path.m_bEmpty;
-
 	if (subdir == _T(""))
 		return;
 
@@ -71,16 +70,15 @@ CServerPath::CServerPath(const CServerPath &path, wxString subdir)
 }
 
 CServerPath::CServerPath(const CServerPath &path)
-	: m_data(path.m_data)
+	: m_bEmpty(path.m_bEmpty)
+	, m_type(path.m_type)
+	, m_data(path.m_data)
 {
-	m_type = path.m_type;
-	m_bEmpty = path.m_bEmpty;
 }
 
 CServerPath::CServerPath(wxString path, ServerType type /*=DEFAULT*/)
+	: m_type(m_type)
 {
-	m_type = type;
-
 	SetPath(path);
 }
 
