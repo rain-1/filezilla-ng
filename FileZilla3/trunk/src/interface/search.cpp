@@ -514,11 +514,12 @@ END_EVENT_TABLE()
 
 CSearchDialog::CSearchDialog(wxWindow* parent, CState* pState, CQueueView* pQueue)
 	: CStateEventHandler(pState)
+	, m_parent(parent)
+	, m_results(0)
+	, m_pQueue(pQueue)
+	, m_pWindowStateManager(0)
+	, m_searching(false)
 {
-	m_pQueue = pQueue;
-	m_parent = parent;
-	m_pWindowStateManager = 0;
-	m_searching = false;
 }
 
 CSearchDialog::~CSearchDialog()
