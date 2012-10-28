@@ -1237,7 +1237,7 @@ int CEditHandlerStatusDialog::ShowModal()
 	{
 		const std::list<CEditHandler::t_fileData>& files = pEditHandler->GetFiles(CEditHandler::remote);
 		unsigned int i = 0;
-		for (std::list<CEditHandler::t_fileData>::const_iterator iter = files.begin(); iter != files.end(); iter++, i++)
+		for (std::list<CEditHandler::t_fileData>::const_iterator iter = files.begin(); iter != files.end(); ++iter, ++i)
 		{
 			pListCtrl->InsertItem(i, iter->name);
 			pListCtrl->SetItem(i, COLUMN_TYPE, _("Remote"));
@@ -1274,7 +1274,7 @@ int CEditHandlerStatusDialog::ShowModal()
 	{
 		const std::list<CEditHandler::t_fileData>& files = pEditHandler->GetFiles(CEditHandler::local);
 		unsigned int i = 0;
-		for (std::list<CEditHandler::t_fileData>::const_iterator iter = files.begin(); iter != files.end(); iter++, i++)
+		for (std::list<CEditHandler::t_fileData>::const_iterator iter = files.begin(); iter != files.end(); ++iter, ++i)
 		{
 			pListCtrl->InsertItem(i, iter->file);
 			pListCtrl->SetItem(i, COLUMN_TYPE, _("Local"));
