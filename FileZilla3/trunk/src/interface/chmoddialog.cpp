@@ -8,6 +8,19 @@ EVT_TEXT(XRCID("ID_NUMERIC"), CChmodDialog::OnNumericChanged)
 EVT_CHECKBOX(XRCID("ID_RECURSE"), CChmodDialog::OnRecurseChanged)
 END_EVENT_TABLE();
 
+CChmodDialog::CChmodDialog()
+	: m_noUserTextChange()
+	, lastChangedNumeric()
+	, m_recursive()
+	, m_applyType()
+{
+	for (int i = 0; i < 9; ++i)
+	{
+		m_checkBoxes[i] = 0;
+		m_permissions[i] = 0;
+	}
+}
+
 bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 						  const wxString& name, const char permissions[9])
 {

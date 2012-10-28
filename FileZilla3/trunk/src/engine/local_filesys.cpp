@@ -15,16 +15,17 @@ const wxChar CLocalFileSystem::path_separator = '/';
 #endif
 
 CLocalFileSystem::CLocalFileSystem()
-{
-	m_dirs_only = false;
+	: m_dirs_only()
 #ifdef __WXMSW__
-	m_found = false;
-	m_hFind = INVALID_HANDLE_VALUE;
+	, m_hFind(INVALID_HANDLE_VALUE)
+	, m_found()
 #else
-	m_raw_path = 0;
-	m_file_part = 0;
-	m_dir = 0;
+	, m_raw_path()
+	, m_file_part();
+	, m_buffer_length()
+	, m_dir()
 #endif
+{
 }
 
 CLocalFileSystem::~CLocalFileSystem()

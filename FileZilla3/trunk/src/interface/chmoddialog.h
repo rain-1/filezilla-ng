@@ -6,7 +6,7 @@
 class CChmodDialog : public wxDialogEx
 {
 public:
-	CChmodDialog() {}
+	CChmodDialog();
 	virtual ~CChmodDialog() {}
 
 	bool Create(wxWindow* parent, int fileCount, int dirCount,
@@ -33,11 +33,11 @@ protected:
 	void OnCancel(wxCommandEvent& event);
 	void OnRecurseChanged(wxCommandEvent& event);
 
-	wxCheckBox* m_checkBoxes[9];
-	char m_permissions[9];
-
 	void OnCheckboxClick(wxCommandEvent& event);
 	void OnNumericChanged(wxCommandEvent& event);
+
+	wxCheckBox* m_checkBoxes[9];
+	char m_permissions[9];
 
 	bool m_noUserTextChange;
 	wxString oldNumeric;
