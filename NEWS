@@ -21,8 +21,8 @@ Legend:
 - FTP proxies now work with IPv6 addresses as proxy address
 - Handle expired TLS sessions when trying to reuse a session
 - TLS session reusing no longer fails with newer GnuTLS versions due to changed semantics of gnutls_session_get_data
-- Directory listings now longer sporadically fail if two connections try to list the same directory in parallel
-- Partially Work around a Ubuntu-specific problem with modal dialogs not being modal resulting in crashes
+- Directory listings no longer sporadically fail if two connections try to list the same directory in parallel
+- Partially work around a Ubuntu-specific problem with modal dialogs not being modal resulting in crashes
 
 3.5.3 (2012-01-08)
 
