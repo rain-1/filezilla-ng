@@ -6,7 +6,7 @@
 class CInputDialog : public wxDialogEx
 {
 public:
-	CInputDialog() {}
+	CInputDialog();
 	virtual ~CInputDialog() {}
 
 	bool Create(wxWindow* parent, const wxString& title, wxString text);
@@ -20,13 +20,12 @@ public:
 	bool SelectText(int start, int end);
 
 protected:
-	bool m_allowEmpty;
-
 	DECLARE_EVENT_TABLE();
 	void OnValueChanged(wxCommandEvent& event);
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
 
+	bool m_allowEmpty;
 	wxTextCtrl* m_pTextCtrl;
 };
 

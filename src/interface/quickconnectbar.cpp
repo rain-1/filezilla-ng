@@ -157,7 +157,7 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent& event)
 		unsigned int i = 0;
 		for (std::list<CServer>::const_iterator iter = m_recentServers.begin();
 			iter != m_recentServers.end();
-			iter++, i++)
+			++iter, ++i)
 		{
 			wxString name(iter->FormatServer());
 			name.Replace(_T("&"), _T("&&"));

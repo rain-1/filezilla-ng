@@ -92,7 +92,7 @@ CQueueItem* CQueueItem::GetChild(unsigned int item, bool recursive /*=true*/)
 		child = m_lookupCache[m_maxCachedIndex].child + 1;
 	}
 
-	for (; iter != m_children.end(); iter++, child++)
+	for (; iter != m_children.end(); ++iter, ++child)
 	{
 		if (!item)
 			return *iter;

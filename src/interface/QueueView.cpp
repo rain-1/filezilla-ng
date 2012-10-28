@@ -400,6 +400,7 @@ protected:
 			t_dirPair* pair2 = new t_dirPair;
 
 			{
+				// wx' refcounted wxString isn't thread-safe. Force a deep copy.
 				pair2->localPath = pair->localPath.c_str();
 				pair2->remotePath = pair->remotePath.GetSafePath().c_str();
 			}
@@ -415,6 +416,7 @@ protected:
 			{
 				if (is_link)
 					continue;
+				// wx' refcounted wxString isn't thread-safe. Force a deep copy.
 				entry->name = name.c_str();
 				entry->dir = is_dir;
 

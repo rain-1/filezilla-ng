@@ -8,6 +8,12 @@ EVT_BUTTON(XRCID("wxID_OK"), CInputDialog::OnOK)
 EVT_BUTTON(XRCID("wxID_CANCEL"), CInputDialog::OnCancel)
 END_EVENT_TABLE();
 
+CInputDialog::CInputDialog()
+	: m_allowEmpty()
+	, m_pTextCtrl()
+{
+}
+
 bool CInputDialog::Create(wxWindow* parent, const wxString& title, wxString text)
 {
 	m_allowEmpty = false;

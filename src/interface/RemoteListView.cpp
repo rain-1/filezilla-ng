@@ -584,7 +584,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(const CSharedPointer<const 
 
 		// j is the offset the index has to be adjusted
 		int j = 0;
-		for (std::list<unsigned int>::const_iterator iter = removedItems.begin(); iter != removedItems.end(); iter++, j++)
+		for (std::list<unsigned int>::const_iterator iter = removedItems.begin(); iter != removedItems.end(); ++iter, ++j)
 		{
 			if (*iter > index)
 				break;

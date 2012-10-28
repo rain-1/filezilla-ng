@@ -27,7 +27,12 @@ public:
 class t_newEntry : public CFolderProcessingEntry
 {
 public:
-	t_newEntry() : CFolderProcessingEntry(CFolderProcessingEntry::file) {}
+	t_newEntry() 
+		: CFolderProcessingEntry(CFolderProcessingEntry::file)
+		, attributes()
+		, dir()
+	{}
+
 	wxString name;
 	wxLongLong size;
 	wxDateTime time;
