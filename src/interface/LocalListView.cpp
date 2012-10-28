@@ -1689,7 +1689,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 
 	// Look if file data already exists
 	unsigned int i = 0;
-	for (std::vector<CLocalFileData>::iterator iter = m_fileData.begin(); iter != m_fileData.end(); iter++, i++)
+	for (std::vector<CLocalFileData>::iterator iter = m_fileData.begin(); iter != m_fileData.end(); ++iter, ++i)
 	{
 		const CLocalFileData& oldData = *iter;
 		if (oldData.name != file)

@@ -172,8 +172,7 @@ wxThread::ExitCode DBusThread::Entry()
 		}
 		LeaveCriticalSection();
 
-		int res;
-		if ((res = poll(fd_array, nfds, -1)) > 0) {
+		if (poll(fd_array, nfds, -1) > 0) {
 
 			EnterCriticalSection();
 			m_thread_holds_lock = true;
