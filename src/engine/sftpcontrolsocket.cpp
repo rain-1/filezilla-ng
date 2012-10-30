@@ -303,7 +303,7 @@ protected:
 		}
 loopexit:
 
-		return (ExitCode)Close();
+		return reinterpret_cast<ExitCode>(Close());
 	};
 
 	int Close()

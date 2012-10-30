@@ -210,6 +210,7 @@ class CGtkEventCallbackProxyBase
 {
 public:
 	virtual void OnNavigationEvent(bool forward) = 0;
+	virtual ~CGtkEventCallbackProxyBase() {}
 };
 
 template <class CFileData> class CGtkEventCallbackProxy : public CGtkEventCallbackProxyBase

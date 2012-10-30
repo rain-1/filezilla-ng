@@ -21,7 +21,7 @@ CLocalFileSystem::CLocalFileSystem()
 	, m_found()
 #else
 	, m_raw_path()
-	, m_file_part();
+	, m_file_part()
 	, m_buffer_length()
 	, m_dir()
 #endif
