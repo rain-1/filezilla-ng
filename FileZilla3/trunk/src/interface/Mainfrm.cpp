@@ -2000,7 +2000,7 @@ void CMainFrame::OnSitemanagerDropdown(wxCommandEvent& event)
 	ShowDropdownMenu(pMenu, m_pToolBar, event);
 }
 
-bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData)
+bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newTab)
 {
 	wxASSERT(pData);
 
@@ -2010,6 +2010,9 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData)
 		if (!CLoginManager::Get().GetPassword(pData->m_server, false, pData->m_server.GetName()))
 			return false;
 	}
+
+	if (newTab)
+		m_pContextControl->CreateTab();
 
 	if (!ConnectToServer(pData->m_server, pData->m_remoteDir))
 		return false;
