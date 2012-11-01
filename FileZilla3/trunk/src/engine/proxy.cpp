@@ -109,7 +109,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 		}
 		else
 		{
-			challenge = 0;
+			challenge = (size_t)0;
 			challenge_len = 0;
 		}
 
