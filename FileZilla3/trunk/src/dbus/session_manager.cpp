@@ -296,7 +296,7 @@ bool CSessionManagerImpl::SendEvent(bool query, bool* veto /*=0*/)
 	wxCloseEvent evt(query ? wxEVT_QUERY_END_SESSION : wxEVT_END_SESSION);
 	evt.SetCanVeto(veto && *veto);
 
-	if (!pTop->ProcessEvent(evt))
+	if (!pTop->GetEventHandler()->ProcessEvent(evt))
 		return false;
 
 	if (veto)
