@@ -1021,14 +1021,14 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 
 	wxString question;
 	if (selected_dirs.empty())
-		question.Printf(wxPLURAL("Really delete %d file?", "Really delete %d files?", selected_files.size()), selected_files.size());
+		question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", selected_files.size()), selected_files.size());
 	else if (selected_files.empty())
-		question.Printf(wxPLURAL("Really delete %d directory with its contents?", "Really delete %d directories with their contents?", selected_dirs.size()), selected_dirs.size());
+		question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", selected_dirs.size()), selected_dirs.size());
 	else
 	{
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", selected_files.size()), selected_files.size());
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", selected_dirs.size()), selected_dirs.size());
-		question.Printf(_("Really delete %s and %s?"), files.c_str(), dirs.c_str());
+		question.Printf(_("Really delete %s and %s from the server?"), files.c_str(), dirs.c_str());
 	}
 
 	if (wxMessageBox(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)

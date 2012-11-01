@@ -1700,14 +1700,14 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 
 	wxString question;
 	if (!count_dirs)
-		question.Printf(wxPLURAL("Really delete %d file?", "Really delete %d files?", count_files), count_files);
+		question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", count_files), count_files);
 	else if (!count_files)
-		question.Printf(wxPLURAL("Really delete %d directory with its contents?", "Really delete %d directories with their contents?", count_dirs), count_dirs);
+		question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", count_dirs), count_dirs);
 	else
 	{
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", count_files), count_files);
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", count_dirs), count_dirs);
-		question.Printf(_("Really delete %s and %s?"), files.c_str(), dirs.c_str());
+		question.Printf(_("Really delete %s and %s from the server?"), files.c_str(), dirs.c_str());
 	}
 
 	if (wxMessageBox(question, _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
