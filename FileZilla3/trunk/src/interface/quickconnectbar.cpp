@@ -130,7 +130,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	if (event.GetId() == 1)
 		server.SetBypassProxy(true);
 
-	if (!CAskSavePasswordDialog::Run(this))
+	if (server.GetLogonType() != ANONYMOUS && !CAskSavePasswordDialog::Run(this))
 		return;
 
 	if (!m_pMainFrame->ConnectToServer(server, path))
