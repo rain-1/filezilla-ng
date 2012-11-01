@@ -99,6 +99,9 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent& event)
 		delete m_mdc;
 		m_data = wxBitmap(rect.GetWidth(), rect.GetHeight());
 		m_mdc = new wxMemoryDC(m_data);
+		// Use same layout direction as the DC which bitmap is drawn on. 
+		// This avoids problem with mirrored characters on RTL locales. 
+		m_mdc->SetLayoutDirection(dc.GetLayoutDirection()); 
 		refresh = 31;
 	}
 
