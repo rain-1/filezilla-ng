@@ -6,7 +6,7 @@
 #include <gnutls/x509.h>
 #include <errno.h>
 
-char const ciphers[] = "NORMAL:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+char const ciphers[] = "SECURE256:+SECURE128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
 
 //#define TLSDEBUG 1
 #if TLSDEBUG
@@ -1136,7 +1136,7 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 
 	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());
 
-#if GNUTLS_VERSION_NUMBER >= 0x0300009
+#if GNUTLS_VERSION_NUMBER >= 0x030009
     gnutls_priority_t pcache;
     const char *err = 0;
 	int ret = gnutls_priority_init(&pcache, priority.mb_str(), &err);
