@@ -4946,21 +4946,21 @@
     <object class="sizeritem">
       <object class="wxFlexGridSizer">
         <cols>1</cols>
-        <vgap>5</vgap>
+        <vgap>7</vgap>
         <object class="sizeritem">
           <object class="wxStaticText">
-            <label>Would you like FileZilla to remember this password?</label>
+            <label>Would you like FileZilla to remember passwords?</label>
           </object>
         </object>
         <object class="sizeritem">
           <object class="wxStaticText">
-            <label>FileZilla can remember passwords so that you can later reconnect without having to reenter your password after restarting FileZilla.</label>
+            <label>When allowing FileZilla to remember passwords, you can reconnnect without having to re-enter a password after restarting FileZilla.</label>
           </object>
         </object>
         <object class="spacer"/>
         <object class="sizeritem">
           <object class="wxRadioButton" name="ID_REMEMBER_YES">
-            <label>&amp;Remember this and all future passwords</label>
+            <label>&amp;Remember passwords</label>
             <style>wxRB_GROUP</style>
           </object>
         </object>
@@ -4993,10 +4993,10 @@
         </object>
       </object>
       <flag>wxALL</flag>
-      <border>5</border>
+      <border>7</border>
     </object>
     <orient>wxVERTICAL</orient>
   </object>
-  <title>Remember password?</title>
+  <title>Remember passwords?</title>
 </object>
 </resource>
