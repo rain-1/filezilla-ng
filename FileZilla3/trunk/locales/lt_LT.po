@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt_LT_updated\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-21 20:19+0200\n"
-"PO-Revision-Date: 2012-03-22 13:23+0200\n"
+"POT-Creation-Date: 2012-11-02 11:10+0100\n"
+"PO-Revision-Date: 2012-10-27 11:37+0300\n"
 "Last-Translator: Algimantas Margevičius <margevicius.algimantas@gmail.com>\n"
 "Language-Team: Lietuvių <>\n"
 "MIME-Version: 1.0\n"
@@ -21,18 +21,19 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
 "100<10 || n%100>=20) ? 1 : 2)\n"
+"X-Generator: Gtranslator 2.91.5\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
-#: ../../locales/../src/interface/statuslinectrl.cpp:225
+#: ../../locales/../src/interface/statuslinectrl.cpp:228
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S praėjo"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:69
-#: ../../locales/../src/interface/statuslinectrl.cpp:233
+#: ../../locales/../src/interface/statuslinectrl.cpp:236
 msgid "%H:%M:%S left"
 msgstr "%H:%M:%S liko"
 
-#: resources.h:788
+#: resources.h:790
 #, no-c-format
 msgid ""
 "%a - Account (Lines containing this will be omitted if not using Account "
@@ -52,8 +53,8 @@ msgstr[1] "%d aplankai"
 msgstr[2] "%d aplankų"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1709
-#: ../../locales/../src/interface/search.cpp:776
-#: ../../locales/../src/interface/search.cpp:1029
+#: ../../locales/../src/interface/search.cpp:777
+#: ../../locales/../src/interface/search.cpp:1030
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -64,8 +65,8 @@ msgstr[2] "%d aplankų su savo turiniu"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:62
 #: ../../locales/../src/interface/filelist_statusbar.cpp:85
 #: ../../locales/../src/interface/RemoteListView.cpp:1708
-#: ../../locales/../src/interface/search.cpp:775
-#: ../../locales/../src/interface/search.cpp:1028
+#: ../../locales/../src/interface/search.cpp:776
+#: ../../locales/../src/interface/search.cpp:1029
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -89,7 +90,7 @@ msgstr[0] "%d failas. Bendras dydis: Bent %s"
 msgstr[1] "%d failai. Bendras dydis: Bent %s"
 msgstr[2] "%d failų. Bendras dydis: Bent %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2937
+#: ../../locales/../src/interface/QueueView.cpp:2939
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d failai pridėti į eilę"
@@ -102,31 +103,31 @@ msgstr[0] "%d sekundė"
 msgstr[1] "%d sekundės"
 msgstr[2] "%d sekundžių"
 
-#: resources.h:785
+#: resources.h:787
 msgid "%h - Host"
 msgstr "%h - Serveris"
 
-#: resources.h:787
+#: resources.h:789
 #, no-c-format
 msgid "%p - Password"
 msgstr "%p - Slaptažodis"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:181
+#: ../../locales/../src/interface/statuslinectrl.cpp:184
 #, c-format
 msgid "%s (%d B/s)"
 msgstr "%s (%d B/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:179
+#: ../../locales/../src/interface/statuslinectrl.cpp:182
 #, c-format
 msgid "%s (%d.%d KB/s)"
 msgstr "%s (%d.%d KB/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:177
+#: ../../locales/../src/interface/statuslinectrl.cpp:180
 #, c-format
 msgid "%s (%d.%d MB/s)"
 msgstr "%s (%d.%d MB/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:184
+#: ../../locales/../src/interface/statuslinectrl.cpp:187
 #, c-format
 msgid "%s (? B/s)"
 msgstr "%s (? B/s)"
@@ -141,7 +142,7 @@ msgstr "%s - Sertifikatas nebegalioja!"
 msgid "%s - Not yet valid!"
 msgstr "%s - Dar negalioja!"
 
-#: resources.h:789
+#: resources.h:791
 #, no-c-format
 msgid "%s - Proxy user"
 msgstr "%s - Tarpinio serverio naudotojas"
@@ -220,12 +221,12 @@ msgstr ""
 msgid "%s with %d bits"
 msgstr "%s su %d bitais"
 
-#: resources.h:786
+#: resources.h:788
 #, no-c-format
 msgid "%u - Username"
 msgstr "%u - Naudotojo vardas"
 
-#: resources.h:790
+#: resources.h:792
 #, no-c-format
 msgid "%w - Proxy password"
 msgstr "%w - Tarpinio serverio slaptažodis"
@@ -238,7 +239,7 @@ msgstr "&Apie..."
 msgid "&Account:"
 msgstr "Pask&yra:"
 
-#: resources.h:101 resources.h:690 resources.h:754
+#: resources.h:101 resources.h:692 resources.h:756
 msgid "&Active"
 msgstr "&Aktyvi veiksena"
 
@@ -250,11 +251,11 @@ msgstr "&Pridėti žymelę..."
 msgid "&Add files to queue"
 msgstr "&Pridėti failus į eilę"
 
-#: resources.h:798
+#: resources.h:800
 msgid "&Add keyfile..."
 msgstr "&Pridėti raktinį failą..."
 
-#: resources.h:640 resources.h:659
+#: resources.h:642 resources.h:661
 msgid "&Add to queue"
 msgstr "&Pridėti į eilę"
 
@@ -270,7 +271,7 @@ msgstr "&Ateityje visada pasitikėti sertifikatu."
 msgid "&Always trust this host, add this key to the cache"
 msgstr "&Visada pasitikėti šiuo serveriu, pridėti šį raktą į podėlį"
 
-#: resources.h:950
+#: resources.h:952
 msgid "&Always use default editor"
 msgstr "Visada n&audoti numatytąjį redaktorių"
 
@@ -282,11 +283,11 @@ msgstr "&Nesusietiems failams, visada naudoti pasirinkimą"
 msgid "&Always use this action"
 msgstr "Visada n&audoti šį veiksmą"
 
-#: resources.h:766
+#: resources.h:768
 msgid "&Ask your operating system for the external IP address"
 msgstr "&Paprašyti operacinės sistemos, kad suteiktų išorinį IP adresą"
 
-#: resources.h:536 resources.h:670 resources.h:835
+#: resources.h:536 resources.h:672 resources.h:837
 msgid "&Auto"
 msgstr "&Auto"
 
@@ -294,11 +295,11 @@ msgstr "&Auto"
 msgid "&Autodetect"
 msgstr "Nustatyti &automatiškai"
 
-#: resources.h:538 resources.h:672 resources.h:837
+#: resources.h:538 resources.h:674 resources.h:839
 msgid "&Binary"
 msgstr "&Dvejetainis"
 
-#: resources.h:910
+#: resources.h:912
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
 msgstr ""
 "&Dvejetainiai priešdėliai naudojant SI simbolius. (pvz. 1 KB = 1024 baitų)"
@@ -308,17 +309,17 @@ msgid "&Bookmarks"
 msgstr "Ž&ymelės"
 
 #: resources.h:92 resources.h:367 resources.h:404 resources.h:410
-#: resources.h:427 resources.h:445 resources.h:947 resources.h:969
+#: resources.h:427 resources.h:445 resources.h:949 resources.h:971
 msgid "&Browse..."
 msgstr "&Naršyti..."
 
-#: resources.h:825
+#: resources.h:827
 #, no-c-format
 msgid "&Burst tolerance:"
 msgstr "&Pliūpsnių tolerancija:"
 
 #: resources.h:128 resources.h:131 resources.h:198 resources.h:489
-#: resources.h:496 resources.h:738
+#: resources.h:496 resources.h:740
 msgid "&Cancel"
 msgstr "&Atšaukti"
 
@@ -334,7 +335,7 @@ msgstr "&Išvalyti privačius duomenis..."
 msgid "&Close FileZilla"
 msgstr "&Užverti FileZilla"
 
-#: resources.h:680
+#: resources.h:682
 msgid "&Configure speed limits..."
 msgstr "&Konfigūruoti greičio ribas..."
 
@@ -362,11 +363,11 @@ msgstr "&Kopijuoti į iškarpinę"
 msgid "&Crash"
 msgstr "&Lūžti"
 
-#: resources.h:575 resources.h:589 resources.h:642 resources.h:663
+#: resources.h:575 resources.h:589 resources.h:644 resources.h:665
 msgid "&Create directory"
 msgstr "&Sukurti aplanką"
 
-#: resources.h:675
+#: resources.h:677
 msgid "&Create new tab"
 msgstr "&Sukurti naują kortelę"
 
@@ -374,11 +375,11 @@ msgstr "&Sukurti naują kortelę"
 msgid "&Debug"
 msgstr "&Derinimas"
 
-#: resources.h:977
+#: resources.h:979
 msgid "&Debug information in message log:"
 msgstr "&Derinimo informacija pranešimų žurnale:"
 
-#: resources.h:943
+#: resources.h:945
 msgid "&Default editor:"
 msgstr "&Numatytasis redaktorius:"
 
@@ -386,12 +387,12 @@ msgstr "&Numatytasis redaktorius:"
 msgid "&Default file exists action..."
 msgstr "&Numatytasis failo egzistavimo veiksmas..."
 
-#: resources.h:748
+#: resources.h:750
 msgid "&Delay between failed login attempts:"
 msgstr "&Delsimas tarp nepavykusių prisijungimų:"
 
 #: resources.h:76 resources.h:203 resources.h:217 resources.h:417
-#: resources.h:578 resources.h:665
+#: resources.h:578 resources.h:667
 msgid "&Delete"
 msgstr "&Pašalinti"
 
@@ -415,32 +416,31 @@ msgstr "&Atsijungti"
 msgid "&Disconnect from server"
 msgstr "&Atsijungti nuo serverio"
 
-#: resources.h:886
+#: resources.h:888
 msgid "&Display momentary transfer speed instead of average speed"
 msgstr "&Rodyti trumpalaikį perdavimo greitį, užuot rodžius vidutinį greitį"
 
-#: resources.h:908
+#: resources.h:910
 msgid "&Display size in bytes"
 msgstr "&Rodyti dydį baitais"
 
 #: resources.h:494
-#, fuzzy
 msgid "&Do not remember passwords"
-msgstr "&Nesaugoti slaptažodžių"
+msgstr "&Neprisiminti slaptažodžių"
 
 #: ../../locales/../src/interface/conditionaldialog.cpp:25
 msgid "&Don't show this dialog again."
 msgstr "&Daugiau nerodyti šio lango."
 
-#: resources.h:771
+#: resources.h:773
 msgid "&Don't use external IP address on local connections."
 msgstr "&Nenaudoti išorinio IP adreso vietiniams prisijungimams."
 
-#: resources.h:930
+#: resources.h:932
 msgid "&Double-click action on files:"
 msgstr "&Dvigubo paspaudimo veiksmas failams:"
 
-#: resources.h:582 resources.h:638
+#: resources.h:582 resources.h:640
 msgid "&Download"
 msgstr "&Atsisiųsti"
 
@@ -448,11 +448,11 @@ msgstr "&Atsisiųsti"
 msgid "&Download to:"
 msgstr "&Atsiųsti į:"
 
-#: resources.h:673
+#: resources.h:675
 msgid "&Download..."
 msgstr "&Atsisiųsti..."
 
-#: resources.h:258 resources.h:847
+#: resources.h:258 resources.h:849
 msgid "&Downloads:"
 msgstr "&Atsiuntimai:"
 
@@ -464,15 +464,15 @@ msgstr "&Keisti"
 msgid "&Edit filter rules..."
 msgstr "&Keisti filtrų taisykles..."
 
-#: resources.h:520 resources.h:540 resources.h:653 resources.h:679
+#: resources.h:520 resources.h:540 resources.h:655 resources.h:681
 msgid "&Enable"
 msgstr "&Leisti"
 
-#: resources.h:958
+#: resources.h:960
 msgid "&Enable automatic update check"
 msgstr "&Leisti automatiškai tikrinti ar yra atnaujimų"
 
-#: resources.h:482 resources.h:820
+#: resources.h:482 resources.h:822
 msgid "&Enable speed limits"
 msgstr "&Įjungti greičio ribas"
 
@@ -496,11 +496,11 @@ msgstr "&Vykdyti"
 msgid "&Export Site Manager entries"
 msgstr "&Eksportuoti serverių įrašus"
 
-#: resources.h:506 resources.h:669
+#: resources.h:506 resources.h:671
 msgid "&Export..."
 msgstr "&Eksportuoti..."
 
-#: resources.h:776
+#: resources.h:778
 msgid "&Fall back to active mode"
 msgstr "&Sugrįžti į aktyvią veikseną"
 
@@ -508,7 +508,7 @@ msgstr "&Sugrįžti į aktyvią veikseną"
 msgid "&File"
 msgstr "&Failas"
 
-#: resources.h:650
+#: resources.h:652
 msgid "&File Attributes..."
 msgstr "&Failo atributai..."
 
@@ -552,7 +552,7 @@ msgstr ""
 msgid "&Follow symlink, delete target directory contents"
 msgstr "&Sekti simbolinę nuorodą, ištrinti paskirties vietos aplanko turinį"
 
-#: resources.h:769
+#: resources.h:771
 msgid "&Get external IP address from the following URL:"
 msgstr "&Gauti išorinį IP adresą iš šio URL:"
 
@@ -564,7 +564,7 @@ msgstr "&Pagalba..."
 msgid "&Global bookmark"
 msgstr "&Bendroji žymelė"
 
-#: resources.h:805
+#: resources.h:807
 msgid "&HTTP/1.1 using CONNECT method"
 msgstr "&HTTP/1.1 naudojant CONNECT metodą"
 
@@ -572,7 +572,7 @@ msgstr "&HTTP/1.1 naudojant CONNECT metodą"
 msgid "&Help"
 msgstr "&Žinynas"
 
-#: resources.h:523 resources.h:656
+#: resources.h:523 resources.h:658
 msgid "&Hide identical files"
 msgstr "&Slėpti identiškus failus"
 
@@ -580,19 +580,19 @@ msgstr "&Slėpti identiškus failus"
 msgid "&Highest"
 msgstr "&Didžiausias"
 
-#: resources.h:764
+#: resources.h:766
 msgid "&Highest available port:"
 msgstr "&Aukščiausias galimas prievadas:"
 
-#: resources.h:79 resources.h:379 resources.h:728
+#: resources.h:79 resources.h:379 resources.h:730
 msgid "&Host:"
 msgstr "&Serveris:"
 
-#: resources.h:909
+#: resources.h:911
 msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
 msgstr "&IEC dvejetainiai priešdėliai (pvz. 1 KiB = 1024 baitų)"
 
-#: resources.h:897
+#: resources.h:899
 msgid "&ISO 8601 (example: 2007-09-15)"
 msgstr "&ISO 8601 (pavyzdys: 2007-09-15)"
 
@@ -600,7 +600,7 @@ msgstr "&ISO 8601 (pavyzdys: 2007-09-15)"
 msgid "&Import..."
 msgstr "&Importuoti..."
 
-#: resources.h:952
+#: resources.h:954
 msgid "&Inherit system's filetype associations"
 msgstr "&Paveldėti sistemos failų tipų susiejimus"
 
@@ -609,11 +609,11 @@ msgid "&Keep remote path structure relative to search root"
 msgstr ""
 "&Išlaikyti nuotolinio kelio struktūrą atitinkamą paieškos šakniniam aplankui"
 
-#: resources.h:870
+#: resources.h:872
 msgid "&Layout of file and directory panes:"
 msgstr "&Failų ir aplankų išdėstymo polangiai:"
 
-#: resources.h:761
+#: resources.h:763
 msgid "&Limit local ports used by FileZilla"
 msgstr "&Riboti vietinių FileZilla prievadų skaičių"
 
@@ -629,7 +629,7 @@ msgstr "&Vietinių aplankų medis"
 msgid "&Local directory:"
 msgstr "&Vietinis aplankas:"
 
-#: resources.h:967
+#: resources.h:969
 msgid "&Log to file"
 msgstr "&Registruoti į failą"
 
@@ -657,7 +657,7 @@ msgstr "&Rankinis siuntimas..."
 msgid "&Maximum number of connections:"
 msgstr "&Maksimalus prisijungimų skaičius:"
 
-#: resources.h:746
+#: resources.h:748
 msgid "&Maximum number of retries:"
 msgstr "&Maksimalus bandymų skaičius:"
 
@@ -665,7 +665,7 @@ msgstr "&Maksimalus bandymų skaičius:"
 msgid "&Message log"
 msgstr "&Pranešimų žurnalas"
 
-#: resources.h:883
+#: resources.h:885
 msgid "&Minimize to tray"
 msgstr "&Sumažinti į dėklą"
 
@@ -697,7 +697,7 @@ msgstr "&Kitas >"
 msgid "&No"
 msgstr "&Ne"
 
-#: resources.h:779 resources.h:804
+#: resources.h:781 resources.h:806
 msgid "&None"
 msgstr "&Nėra"
 
@@ -705,7 +705,7 @@ msgstr "&Nėra"
 msgid "&Normal"
 msgstr "&Normalus"
 
-#: resources.h:959
+#: resources.h:961
 msgid "&Number of days between update checks:"
 msgstr "&Dienų skaičius tarp naujų versijų ieškojimo:"
 
@@ -717,11 +717,11 @@ msgstr "&Skaitinė reikšmė:"
 msgid "&OK"
 msgstr "&Gerai"
 
-#: resources.h:782
+#: resources.h:784
 msgid "&OPEN"
 msgstr "&ATVERTI"
 
-#: resources.h:571 resources.h:661
+#: resources.h:571 resources.h:663
 msgid "&Open"
 msgstr "&Atverti"
 
@@ -741,11 +741,11 @@ msgstr "&Slaptažodis:"
 msgid "&Play sound"
 msgstr "&Groti garsą"
 
-#: resources.h:80 resources.h:380 resources.h:732
+#: resources.h:80 resources.h:380 resources.h:734
 msgid "&Port:"
 msgstr "&Prievadas:"
 
-#: resources.h:876
+#: resources.h:878
 msgid "&Position of the message log:"
 msgstr "P&ranešimų žurnalo vieta:"
 
@@ -757,7 +757,7 @@ msgstr "&Išlaikyti failo laiko įspaudus"
 msgid "&Queue"
 msgstr "&Eilė"
 
-#: resources.h:734
+#: resources.h:736
 msgid "&Quickconnect"
 msgstr "&Greitas prisijungimas"
 
@@ -773,7 +773,7 @@ msgstr "&Skaityti"
 msgid "&Reconnect"
 msgstr "Prisijungti iš &naujo"
 
-#: resources.h:517 resources.h:678
+#: resources.h:517 resources.h:680
 msgid "&Refresh"
 msgstr "&Atnaujinti"
 
@@ -782,8 +782,9 @@ msgid "&Remember password for this session"
 msgstr "&Atsiminti slaptažodį tik šiai sesijai"
 
 #: resources.h:493
-msgid "&Remember this and all future passwords"
-msgstr ""
+#, fuzzy
+msgid "&Remember passwords"
+msgstr "Prisiminti slaptažodį?"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -793,11 +794,11 @@ msgstr "&Nutolęs aplankas:"
 msgid "&Remote path:"
 msgstr "&Nutolęs kelias:"
 
-#: resources.h:841
+#: resources.h:843
 msgid "&Remove"
 msgstr "&Pašalinti"
 
-#: resources.h:799
+#: resources.h:801
 msgid "&Remove key"
 msgstr "&Pašalinti raktą"
 
@@ -806,7 +807,7 @@ msgid "&Remove selected"
 msgstr "&Pašalinti pažymėtus"
 
 #: resources.h:75 resources.h:218 resources.h:416 resources.h:580
-#: resources.h:596 resources.h:646 resources.h:667
+#: resources.h:596 resources.h:648 resources.h:669
 msgid "&Rename"
 msgstr "Perva&dinti"
 
@@ -818,7 +819,7 @@ msgstr "&Pervardinti..."
 msgid "&Reopen local file"
 msgstr "&Atverti vietinį failą"
 
-#: resources.h:832
+#: resources.h:834
 msgid "&Replace invalid characters with:"
 msgstr "&Pakeisti netinkamus simbolius į:"
 
@@ -826,11 +827,11 @@ msgstr "&Pakeisti netinkamus simbolius į:"
 msgid "&Report a bug..."
 msgstr "Pranešti apie &klaidą..."
 
-#: resources.h:630
+#: resources.h:632
 msgid "&Reset and requeue all"
 msgstr "&Atstatyti ir visus perkelti į eilę"
 
-#: resources.h:727
+#: resources.h:729
 msgid "&Restart Wizard"
 msgstr "&Perkrauti konfigūravimo vedlį"
 
@@ -842,19 +843,19 @@ msgstr "&Tęsti"
 msgid "&Run command..."
 msgstr "&Paleisti komandą..."
 
-#: resources.h:741
+#: resources.h:743
 msgid "&Run configuration wizard now..."
 msgstr "&Paleisti konfigūravimo vedlį..."
 
-#: resources.h:961
+#: resources.h:963
 msgid "&Run update check now..."
 msgstr "&Paleisti atnaujinimų tikrinimą dabar..."
 
-#: resources.h:781
+#: resources.h:783
 msgid "&SITE"
 msgstr "&SERVERIS"
 
-#: resources.h:806
+#: resources.h:808
 msgid "&SOCKS 5"
 msgstr "&SOCKS 5"
 
@@ -874,7 +875,7 @@ msgstr "&Ieškoti nutolusių failų..."
 msgid "&Select Entry:"
 msgstr "&Pasirinkite elementą:"
 
-#: resources.h:941
+#: resources.h:943
 msgid "&Select language:"
 msgstr "&Pasirinkite kalbą:"
 
@@ -894,7 +895,7 @@ msgstr "&Nustatymai"
 msgid "&Settings..."
 msgstr "&Nustatymai..."
 
-#: resources.h:976
+#: resources.h:978
 msgid "&Show debug menu"
 msgstr "&Rodyti derinimo meniu"
 
@@ -902,7 +903,7 @@ msgstr "&Rodyti derinimo meniu"
 msgid "&Show message"
 msgstr "&Rodyti pranešimą"
 
-#: resources.h:966
+#: resources.h:968
 msgid "&Show timestamps in message log"
 msgstr "&Pranešimų žurnale rodyti žinutės laiko įspaudus"
 
@@ -926,15 +927,20 @@ msgstr "&Greičio ribos"
 msgid "&Start transfer immediately"
 msgstr "&Pradėti persiuntimą nedelsiant"
 
-#: resources.h:875
+#: resources.h:877
 msgid "&Swap local and remote panes"
 msgstr "&Sukeisti vietinius ir nuotolinius polangius"
+
+#: resources.h:629
+#, fuzzy
+msgid "&TLS Ciphers"
+msgstr "Šifras:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:228
 msgid "&Test"
 msgstr "&Testas"
 
-#: resources.h:889
+#: resources.h:891
 msgid "&Theme:"
 msgstr "&Tema:"
 
@@ -950,7 +956,7 @@ msgstr "P&erdavimo būdas:"
 msgid "&Transfer queue"
 msgstr "Perdavimų &eilė"
 
-#: resources.h:844
+#: resources.h:846
 msgid "&Treat dotfiles as ASCII files"
 msgstr "&Failus su tašku priekyje laikyti ASCII failais"
 
@@ -962,11 +968,11 @@ msgstr "&Atredaguoti"
 msgid "&Update cached key for this host"
 msgstr "&Atnaujinti patalpintą šio serverio raktą"
 
-#: resources.h:565 resources.h:657
+#: resources.h:565 resources.h:659
 msgid "&Upload"
 msgstr "&Išsiųsti"
 
-#: resources.h:268 resources.h:856
+#: resources.h:268 resources.h:858
 msgid "&Uploads:"
 msgstr "&Išsiuntimai:"
 
@@ -978,19 +984,19 @@ msgstr "&Naudoti pasirinktinę programą"
 msgid "&Use synchronized browsing"
 msgstr "&Naudoti sinchronizuotą naršymą"
 
-#: resources.h:945
+#: resources.h:947
 msgid "&Use system's default editor for text files"
 msgstr "&Tekstiniams failams naudoti sistemos numatytąjį redaktorių."
 
-#: resources.h:767
+#: resources.h:769
 msgid "&Use the following IP address:"
 msgstr "&Naudoti šį IP adresą:"
 
-#: resources.h:775
+#: resources.h:777
 msgid "&Use the server's external IP address instead"
 msgstr "&Vietoj to naudoti serverio išorinį IP adresą"
 
-#: resources.h:912
+#: resources.h:914
 msgid "&Use thousands separator"
 msgstr "&Naudoti tūkstančių skirtuką"
 
@@ -998,7 +1004,7 @@ msgstr "&Naudoti tūkstančių skirtuką"
 msgid "&User:"
 msgstr "&Naudotojas:"
 
-#: resources.h:730
+#: resources.h:732
 msgid "&Username:"
 msgstr "&Naudotojo vardas:"
 
@@ -1015,7 +1021,7 @@ msgstr "Ro&dymas"
 msgid "&View/Edit"
 msgstr "&Rodyti/Taisyti"
 
-#: resources.h:951
+#: resources.h:953
 msgid "&Watch locally edited files and prompt to upload modifications"
 msgstr "&Peržiūrėti redaguotus failus ir paraginti išsiųsti keitimus"
 
@@ -1064,39 +1070,39 @@ msgstr[0] "(%d prafiltruotas objektas)"
 msgstr[1] "(%d prafiltruoti objektai)"
 msgstr[2] "(%d prafiltruotų objektų)"
 
-#: resources.h:816 resources.h:818
+#: resources.h:818 resources.h:820
 msgid "(0 for no limit)"
 msgstr "(0 be ribos)"
 
-#: resources.h:747
+#: resources.h:749
 msgid "(0-99)"
 msgstr "(0-99)"
 
-#: resources.h:749
+#: resources.h:751
 msgid "(0-999 seconds)"
 msgstr "(0-999 sekundės)"
 
-#: resources.h:814
+#: resources.h:816
 msgid "(1-10)"
 msgstr "(1-10)"
 
-#: resources.h:743
+#: resources.h:745
 msgid "(5-9999, 0 to disable)"
 msgstr "(5-9999, 0 neleisti)"
 
-#: resources.h:960
+#: resources.h:962
 msgid "(At least 7 days)"
 msgstr "(Bent 7 dienos)"
 
-#: resources.h:905
+#: resources.h:907
 msgid "(example: %H:%M)"
 msgstr "(pavyzdys: %H:%M)"
 
-#: resources.h:899
+#: resources.h:901
 msgid "(example: %Y-%m-%d)"
 msgstr "(pavyzdys: %Y-%m-%d)"
 
-#: resources.h:484 resources.h:486 resources.h:822 resources.h:824
+#: resources.h:484 resources.h:486 resources.h:824 resources.h:826
 #, c-format
 msgid "(in %s/s)"
 msgstr "(%s/s)"
@@ -1109,7 +1115,7 @@ msgstr ", %H:%M:%S liko"
 msgid ", --:--:-- left"
 msgstr ", --:--:-- liko"
 
-#: resources.h:715
+#: resources.h:717
 msgid "-"
 msgstr "-"
 
@@ -1125,7 +1131,7 @@ msgstr "- Atspindyje failas pažeistas"
 msgid "- Malware on your system"
 msgstr "- Jūsų sistemoje kenkėjiška įranga"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:236
+#: ../../locales/../src/interface/statuslinectrl.cpp:239
 msgid "--:--:-- left"
 msgstr "--:--:-- liko"
 
@@ -1145,19 +1151,19 @@ msgstr "-s ir -c negali būti naudojami tuo pačiu metu."
 msgid "-s cannot be used together with an FTP URL."
 msgstr "-s negali būti naudojamas kartu su FTP URL."
 
-#: resources.h:978
+#: resources.h:980
 msgid "0 - None"
 msgstr "0 - Nėra"
 
-#: resources.h:979
+#: resources.h:981
 msgid "1 - Warning"
 msgstr "1 - Įspėjimas"
 
-#: resources.h:980
+#: resources.h:982
 msgid "2 - Info"
 msgstr "2 - Informacija"
 
-#: resources.h:981
+#: resources.h:983
 msgid "3 - Verbose"
 msgstr "3 - Išsamesnė"
 
@@ -1165,7 +1171,7 @@ msgstr "3 - Išsamesnė"
 msgid "32 bit system"
 msgstr "32 bitų sistema"
 
-#: resources.h:982
+#: resources.h:984
 msgid "4 - Debug"
 msgstr "4 - Derinimas"
 
@@ -1195,7 +1201,7 @@ msgstr "Reikia nustatyti numatytąjį redaktorių."
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Aplankas negali būti nutemptas į vieną iš savo poaplankių."
 
-#: resources.h:687
+#: resources.h:689
 msgid ""
 "A few servers don't allow passive mode or are misconfigured. In such cases "
 "you would have to use active mode. In active mode, FileZilla opens a port "
@@ -1247,7 +1253,7 @@ msgstr ""
 msgid "A newer version of FileZilla is available:"
 msgstr "Prieinama naujesnė FileZilla versija:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:669
+#: ../../locales/../src/interface/Mainfrm.cpp:677
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1256,7 +1262,7 @@ msgstr ""
 "serveriai slepia failus nuo naudotojo. Šį punktą naudokite norėdami "
 "priversti serverį rodyti visus failus."
 
-#: resources.h:759
+#: resources.h:761
 msgid ""
 "A proper server does not require this. Contact the server administrator if "
 "you need this."
@@ -1272,15 +1278,15 @@ msgstr ""
 "Nuotolinė operacija yra vykdoma ir įgalintas sinchronizuotasis naršymas.\n"
 "Ar uždrausti sinchronizuotąjį naršymą ir pratęsti vietinio aplanko keitimą?"
 
-#: resources.h:537 resources.h:671 resources.h:836
+#: resources.h:537 resources.h:673 resources.h:838
 msgid "A&SCII"
 msgstr "A&SCII"
 
-#: resources.h:840
+#: resources.h:842
 msgid "A&dd"
 msgstr "P&ridėti"
 
-#: resources.h:867
+#: resources.h:869
 msgid "A&llow resume of ASCII files"
 msgstr "&Leisti atnaujinti ASCII failus"
 
@@ -1296,7 +1302,7 @@ msgstr "&Pritaikyti tik išsiuntimams"
 msgid "A&pply to all files and directories"
 msgstr "&Pritaikyti visiems failams ir aplankams"
 
-#: resources.h:637
+#: resources.h:639
 msgid "A&utomatically remove successful transfers"
 msgstr "&Automatiškai pašalinti sėkmingus siuntimus"
 
@@ -1312,7 +1318,7 @@ msgstr "Nutraukti ankstesnį ryšį ir užmegzti naują dabartinėje kortelėje"
 msgid "About FileZilla"
 msgstr "Apie FileZilla"
 
-#: resources.h:877
+#: resources.h:879
 msgid "Above the file lists"
 msgstr "Virš failų sąrašo"
 
@@ -1374,7 +1380,7 @@ msgstr ""
 "adresą, tačiau jūsų maršrutizatorius ar ugniasienė klaidingai pakeitė "
 "išsiuntimo adresą."
 
-#: resources.h:772
+#: resources.h:774
 msgid "Active mode IP"
 msgstr "Aktyvios veiksenos IP"
 
@@ -1382,7 +1388,7 @@ msgstr "Aktyvios veiksenos IP"
 msgid "Add files to &queue only"
 msgstr "Pridėti failus tik į &eilę"
 
-#: resources.h:641 resources.h:660
+#: resources.h:643 resources.h:662
 msgid "Add selected directory to the transfer queue"
 msgstr "Pridėti pasirinktą aplanką į siuntimų eilę"
 
@@ -1390,7 +1396,7 @@ msgstr "Pridėti pasirinktą aplanką į siuntimų eilę"
 msgid "Add selected files and folders to the transfer queue"
 msgstr "Pažymėtus failus ir aplankus pridėti į siuntimų eilę"
 
-#: resources.h:932 resources.h:938
+#: resources.h:934 resources.h:940
 msgid "Add to queue"
 msgstr "Pridėti į eilę"
 
@@ -1410,15 +1416,15 @@ msgstr "Sudėtingesnės parinktys:"
 msgid "Algorithm:"
 msgstr "Algoritmas:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3139
+#: ../../locales/../src/interface/QueueView.cpp:3141
 msgid "All files have been successfully transferred"
 msgstr "Visi failai buvo sėkmingai perduoti"
 
-#: resources.h:716
+#: resources.h:718
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Visi prievadai turi būti tarp 1024 ir 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:3135
+#: ../../locales/../src/interface/QueueView.cpp:3137
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1426,11 +1432,11 @@ msgstr[0] "Visi perdavimai buvo užbaigti. %d failas nebuvo perduotas."
 msgstr[1] "Visi perdavimai buvo užbaigti. %d failai nebuvo perduoti."
 msgstr[2] "Visi perdavimai buvo užbaigti. %d failų nebuvo perduota."
 
-#: resources.h:755
+#: resources.h:757
 msgid "Allow &fall back to other transfer mode on failure"
 msgstr "Įvykus klaidai leisti &sugrįžti į kitą siuntimo būdą"
 
-#: resources.h:691
+#: resources.h:693
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "Įvykus klaidai leisti sugrįžti į kitą siuntimo būdą"
 
@@ -1438,7 +1444,7 @@ msgstr "Įvykus klaidai leisti sugrįžti į kitą siuntimo būdą"
 msgid "Already connected"
 msgstr "Jau prisijungta"
 
-#: resources.h:800
+#: resources.h:802
 msgid ""
 "Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
 "FileZilla does recognize Pageant."
@@ -1446,7 +1452,7 @@ msgstr ""
 "FileZilla neapažįsta Pageant, bet raktų tvarkymui galite naudoti Pageant "
 "įrankį iš PuTTY."
 
-#: resources.h:801
+#: resources.h:803
 msgid ""
 "Alternatively you can use your system's SSH agent. To do so, make sure the "
 "SSH_AUTH_SOCK environment variable is set."
@@ -1461,7 +1467,7 @@ msgid ""
 msgstr ""
 "Aplankykite http://filezilla-project.org ir atsisiųskite naujausią versiją."
 
-#: ../../locales/../src/interface/QueueView.cpp:2051
+#: ../../locales/../src/interface/QueueView.cpp:2053
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1470,7 +1476,7 @@ msgstr ""
 "Įkraunant perdavimų eilę iš „%s“ įvyko klaida.\n"
 "Kai kurių eilės elementų atstatyti nepavyko."
 
-#: ../../locales/../src/interface/QueueView.cpp:1950
+#: ../../locales/../src/interface/QueueView.cpp:1952
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1544,11 +1550,11 @@ msgstr "Pritaikyti &tik failams"
 msgid "Archive"
 msgstr "Archyvas"
 
-#: resources.h:879
+#: resources.h:881
 msgid "As tab in the transfer queue pane"
 msgstr "Kaip kortelė persiuntimų eilės langelyje"
 
-#: resources.h:260 resources.h:270 resources.h:848 resources.h:857
+#: resources.h:260 resources.h:270 resources.h:850 resources.h:859
 msgid "Ask for action"
 msgstr "Klausti ką daryti"
 
@@ -1558,11 +1564,11 @@ msgstr "Klausti ką daryti"
 msgid "Ask for password"
 msgstr "Klausti slaptažodžio"
 
-#: resources.h:712
+#: resources.h:714
 msgid "Ask operating system for a port."
 msgstr "Paprašyti operacinės sistemos, kad suteiktų prievadą."
 
-#: resources.h:702
+#: resources.h:704
 msgid "Ask your operating system for the external IP address"
 msgstr "Paprašyti operacinės sistemos, kad suteiktų išorinį IP adresą"
 
@@ -1578,7 +1584,7 @@ msgstr "Susieta programa nerasta:"
 msgid "At least one filter condition is incomplete"
 msgstr "Bent vienas sąlygos filtras yra neužbaigtas"
 
-#: resources.h:721
+#: resources.h:723
 msgid "At this point, all required information has been gathered."
 msgstr "Šioje vietoje, visa konfigūracija buvo surinkta."
 
@@ -1590,7 +1596,7 @@ msgstr "Atributas"
 msgid "Authentication failed."
 msgstr "Tapatybės patvirtinti nepavyko."
 
-#: resources.h:890
+#: resources.h:892
 msgid "Author:"
 msgstr "Autorius:"
 
@@ -1598,15 +1604,15 @@ msgstr "Autorius:"
 msgid "Auto"
 msgstr "Auto"
 
-#: resources.h:838
+#: resources.h:840
 msgid "Automatic file type classification"
 msgstr "Automatinis failų tipų klasifikavimas"
 
-#: resources.h:957
+#: resources.h:959
 msgid "Automatic update check"
 msgstr "Automatinis atnaujinimų tikrinimas"
 
-#: resources.h:894
+#: resources.h:896
 msgid "Available sizes"
 msgstr "Prieinami dydžiai"
 
@@ -1623,7 +1629,7 @@ msgstr "A&peiti tarpinį serverį"
 msgid "Basic usage instructions"
 msgstr "Pagrindinės naudojimo instrukcijos"
 
-#: resources.h:881
+#: resources.h:883
 msgid "Behaviour"
 msgstr "Elgsena"
 
@@ -1636,7 +1642,7 @@ msgstr "Redaguojama"
 msgid "Benchmark string coalescer"
 msgstr "Lyginamoji „coalescer“ eilutė"
 
-#: ../../locales/../src/engine/tlssocket.cpp:903
+#: ../../locales/../src/engine/tlssocket.cpp:911
 msgid "Beware! Certificate has been revoked"
 msgstr "Saugokitės! Liudijimas buvo panaikintas"
 
@@ -1644,7 +1650,7 @@ msgstr "Saugokitės! Liudijimas buvo panaikintas"
 msgid "Binary"
 msgstr "Dvejetainis"
 
-#: resources.h:874
+#: resources.h:876
 msgid "Blackboard"
 msgstr "Lenta"
 
@@ -1674,7 +1680,7 @@ msgstr "Sukūrimo informacija"
 msgid "Business category:"
 msgstr "Verslo kategorija:"
 
-#: resources.h:762
+#: resources.h:764
 msgid ""
 "By default uses any available local port to establish transfers in active "
 "mode. If you want to limit FileZilla to use only a small range of ports, "
@@ -1696,15 +1702,15 @@ msgstr "T&ikrinti ar yra FileZilla naktinių versijų"
 msgid "C&lear all"
 msgstr "&Išvalyti viską"
 
-#: resources.h:598 resources.h:648
+#: resources.h:598 resources.h:650
 msgid "C&opy URL(s) to clipboard"
 msgstr "K&opijuoti URL į iškarpinę"
 
-#: resources.h:898
+#: resources.h:900
 msgid "C&ustom"
 msgstr "&Pasirinktas"
 
-#: resources.h:953
+#: resources.h:955
 msgid "C&ustom filetype associations:"
 msgstr "&Pasirinktas failų tipų susiejimas:"
 
@@ -1713,17 +1719,17 @@ msgstr "&Pasirinktas failų tipų susiejimas:"
 msgid "Calculating timezone offset of server..."
 msgstr "Skaičiuojamas serverio laiko juostos poslinkis..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:733
+#: ../../locales/../src/engine/transfersocket.cpp:731
 msgid "Can't read from file"
 msgstr "Neįmanoma perskaityti failo"
 
-#: ../../locales/../src/engine/transfersocket.cpp:712
-#: ../../locales/../src/engine/transfersocket.cpp:786
+#: ../../locales/../src/engine/transfersocket.cpp:710
+#: ../../locales/../src/engine/transfersocket.cpp:784
 msgid "Can't write data to file."
 msgstr "Neįmanoma įrašyti duomenų į failą."
 
-#: ../../locales/../src/engine/transfersocket.cpp:710
-#: ../../locales/../src/engine/transfersocket.cpp:784
+#: ../../locales/../src/engine/transfersocket.cpp:708
+#: ../../locales/../src/engine/transfersocket.cpp:782
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Neįmanoma įrašyti duomenų į failą: %s"
@@ -1736,11 +1742,11 @@ msgstr "Neįmanoma įrašyti duomenų į failą: %s"
 msgid "Cancel"
 msgstr "Atšaukti"
 
-#: resources.h:1000
+#: resources.h:1002
 msgid "Cancel current operation"
 msgstr "Atšaukti dabartinę operaciją"
 
-#: resources.h:1001
+#: resources.h:1003
 msgid "Cancels the current operation"
 msgstr "Atšaukia dabartinę operaciją"
 
@@ -1773,7 +1779,7 @@ msgstr ""
 msgid "Cannot compare directories, not connected to a server."
 msgstr "Neįmanoma palyginti aplankų, neprisijungta prie serverio."
 
-#: ../../locales/../src/interface/filteredit.cpp:141
+#: ../../locales/../src/interface/filteredit.cpp:143
 msgid "Cannot create new filter"
 msgstr "Neįmanoma sukurti naujo filtro"
 
@@ -1813,7 +1819,7 @@ msgstr "Neįmanoma įkrauti failo, netinkamas XML failas."
 msgid "Cannot load keyfile"
 msgstr "Neįmanoma įkrauti raktinio failo"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1066
+#: ../../locales/../src/interface/Mainfrm.cpp:1074
 msgid "Cannot load toolbar from resource file"
 msgstr "Iš resursų failo įkrauti įrankinės nepavyko"
 
@@ -1878,11 +1884,11 @@ msgstr "Iššūkis:"
 msgid "Change file attributes"
 msgstr "Keisti failo atributus"
 
-#: resources.h:601 resources.h:651
+#: resources.h:601 resources.h:653
 msgid "Change the file permissions."
 msgstr "Keisti failo prieigos teises."
 
-#: resources.h:974
+#: resources.h:976
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr ""
 "Pakeistos žurnalo failo nuostatos reikalauja įkelti FileZilla iš naujo."
@@ -1895,7 +1901,7 @@ msgstr "Simbolių koduotės problema"
 msgid "Charset"
 msgstr "Koduotė"
 
-#: resources.h:962
+#: resources.h:964
 msgid "Check for &beta versions and release candidates"
 msgstr "Tikrinti ar yra &beta versijų ir leidimo kandidatų"
 
@@ -1911,7 +1917,7 @@ msgstr "Tikrinti ar yra naujesnių FileZilla versijų"
 msgid "Check for updates"
 msgstr "Tikrinti ar yra atnaujinimų"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1783
+#: ../../locales/../src/interface/Mainfrm.cpp:1791
 msgid "Check for updates failed"
 msgstr "Atnaujinimų patikrinimas nepavyko"
 
@@ -1945,11 +1951,11 @@ msgstr "Duomenų fragmentas užbaigtas neteisingai"
 msgid "Cipher:"
 msgstr "Šifras:"
 
-#: resources.h:504 resources.h:676
+#: resources.h:504 resources.h:678
 msgid "Cl&ose tab"
 msgstr "Už&verti kortelę"
 
-#: resources.h:871
+#: resources.h:873
 msgid "Classic"
 msgstr "Klasikinis"
 
@@ -2009,12 +2015,12 @@ msgstr "Iš kliento į serverį MAC:"
 msgid "Client to server cipher:"
 msgstr "Kliento serveriui šifras:"
 
-#: resources.h:677
+#: resources.h:679
 msgid "Close &all other tabs"
 msgstr "Užverti &visas kitas korteles"
 
-#: resources.h:510 ../../locales/../src/interface/Mainfrm.cpp:1195
-#: ../../locales/../src/interface/Mainfrm.cpp:1218
+#: resources.h:510 ../../locales/../src/interface/Mainfrm.cpp:1203
+#: ../../locales/../src/interface/Mainfrm.cpp:1226
 msgid "Close FileZilla"
 msgstr "Užverti FileZilla"
 
@@ -2038,7 +2044,7 @@ msgstr "Stulpelio savybės"
 msgid "Column setup"
 msgstr "Stulpelio nustatymai"
 
-#: resources.h:948
+#: resources.h:950
 msgid "Command and its arguments should be properly quoted."
 msgstr "Komanda ir jos argumentai turėtų būti tarp kabučių."
 
@@ -2057,8 +2063,8 @@ msgid "Command not supported by this protocol"
 msgstr "Komanda nepalaikoma šio protokolo"
 
 #: ../../locales/../src/engine/logging.cpp:214
-#: ../../locales/../src/interface/StatusView.cpp:286
-#: ../../locales/../src/interface/StatusView.cpp:336
+#: ../../locales/../src/interface/StatusView.cpp:285
+#: ../../locales/../src/interface/StatusView.cpp:335
 #: ../../locales/../src/interface/updatewizard.cpp:541
 msgid "Command:"
 msgstr "Komanda:"
@@ -2076,15 +2082,15 @@ msgstr "Bendras pavadinimas:"
 msgid "Communication tainted by router or firewall"
 msgstr "Susisiekimas sugadintas maršrutizatoriaus arba ugniasienės"
 
-#: resources.h:522 resources.h:655
+#: resources.h:522 resources.h:657
 msgid "Compare &modification time"
 msgstr "Palyginti &keitimų laiką"
 
-#: resources.h:521 resources.h:654
+#: resources.h:521 resources.h:656
 msgid "Compare file&size"
 msgstr "Palyginti failo &dydį"
 
-#: resources.h:928
+#: resources.h:930
 msgid "Comparison &threshold (in minutes):"
 msgstr "Palyginimų &slenkstis (minutėmis):"
 
@@ -2112,7 +2118,7 @@ msgstr "Kompiliatoriaus parametrai:"
 msgid "Compressed"
 msgstr "Suglaudintas"
 
-#: resources.h:812
+#: resources.h:814
 msgid "Concurrent transfers"
 msgstr "Lygiagretūs siuntimai"
 
@@ -2120,15 +2126,15 @@ msgstr "Lygiagretūs siuntimai"
 msgid "Conditions are c&ase sensitive"
 msgstr "Sąlygos jautrios raidžių &registrui"
 
-#: resources.h:720
+#: resources.h:722
 msgid "Configuration test"
 msgstr "Konfigūracijos testas"
 
-#: resources.h:694
+#: resources.h:696
 msgid "Configure passive mode"
 msgstr "Konfigūruoti pasyvią veikseną"
 
-#: resources.h:710
+#: resources.h:712
 msgid "Configure port range"
 msgstr "Konfigūruoti prievadų sritį"
 
@@ -2136,7 +2142,7 @@ msgstr "Konfigūruoti prievadų sritį"
 msgid "Configuring FileZilla and your network"
 msgstr "Konfigūruojama FileZilla ir tinklas"
 
-#: ../../locales/../src/interface/search.cpp:1033
+#: ../../locales/../src/interface/search.cpp:1034
 msgid "Confirm deletion"
 msgstr "Patvirtinti šalinimą"
 
@@ -2165,12 +2171,12 @@ msgstr "Prisijungti prie nurodyto Serverių tvarkyklės įrašo"
 msgid "Connected"
 msgstr "Prisijungta"
 
-#: ../../locales/../src/interface/QueueView.cpp:1454
+#: ../../locales/../src/interface/QueueView.cpp:1456
 msgid "Connecting"
 msgstr "Jungiamasi"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:207
-#: ../../locales/../src/interface/statuslinectrl.cpp:275
+#: ../../locales/../src/interface/statuslinectrl.cpp:278
 #, c-format
 msgid "Connecting to %s"
 msgstr "Jungiamasi prie %s"
@@ -2196,7 +2202,7 @@ msgstr "Jungiamasi prie serverio"
 msgid "Connection"
 msgstr "Prisijungimas"
 
-#: ../../locales/../src/interface/QueueView.cpp:1070
+#: ../../locales/../src/interface/QueueView.cpp:1072
 msgid "Connection attempt failed"
 msgstr "Prisijungti nepavyko"
 
@@ -2258,7 +2264,7 @@ msgstr "Prisijungimo laikas baigėsi"
 msgid "Connection timed out."
 msgstr "Prisijungimo laikas baigėsi."
 
-#: ../../locales/../src/interface/search.cpp:676
+#: ../../locales/../src/interface/search.cpp:677
 msgid "Connection to server lost."
 msgstr "Ryšys su serveriu nutrūko."
 
@@ -2294,11 +2300,11 @@ msgstr "Kopijuoti (%d) iš %s"
 msgid "Copy of %s"
 msgstr "%s Kopija"
 
-#: resources.h:599 resources.h:649
+#: resources.h:599 resources.h:651
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Kopijuoti pasirinktų elementų URL adresus į iškarpinę."
 
-#: ../../locales/../src/engine/transfersocket.cpp:207
+#: ../../locales/../src/engine/transfersocket.cpp:206
 #, c-format
 msgid "Could not accept connection: %s"
 msgstr "Negaliu priimti prisijungimo: %s"
@@ -2366,14 +2372,14 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "Nepavyko sugeneruoti pasirinktinės prisijungimo sekos."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1033
+#: ../../locales/../src/engine/tlssocket.cpp:1041
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
 msgstr ""
 "Nepavyko gauti liudijimo išdavėjo vardo, gnutls_x509_get_issuer_dn nepavyko"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1008
+#: ../../locales/../src/engine/tlssocket.cpp:1016
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2393,12 +2399,12 @@ msgstr "Nepavyko gauti atsakymo iš fzputtygen."
 msgid "Could not get temporary directory to download file into."
 msgstr "Nepavyko gauti laikino aplanko į kurį būtų atsiunčiami failai."
 
-#: ../../locales/../src/engine/tlssocket.cpp:961
+#: ../../locales/../src/engine/tlssocket.cpp:969
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Nepavyko importuoti tokių pat liudijimų, gnutls_x509_crt_import nepavyko"
 
-#: ../../locales/../src/engine/tlssocket.cpp:954
+#: ../../locales/../src/engine/tlssocket.cpp:962
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2507,8 +2513,8 @@ msgstr "Nepavyko interpretuoti IO srauto"
 msgid "Could not start proxy handshake: %s"
 msgstr "Nepavyko paleisti tarpinio serverio pasveikinimo: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1121
-#: ../../locales/../src/interface/QueueView.cpp:1126
+#: ../../locales/../src/interface/QueueView.cpp:1123
+#: ../../locales/../src/interface/QueueView.cpp:1128
 msgid "Could not start transfer"
 msgstr "Nepavyko pradėti siuntimo"
 
@@ -2532,7 +2538,7 @@ msgstr "Nepavyko įrašyti „%s“, žymelė nebuvo pridėta: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Nepavyko įrašyti į „%s“, visuotinės žymelės negali būti išsaugotos: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1985
+#: ../../locales/../src/interface/QueueView.cpp:1987
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2558,7 +2564,7 @@ msgstr "Nepavyko įrašyti „%s“: %s"
 msgid "Could not write keyfile: %s"
 msgstr "Nepavyko įrašyti į raktinį failą: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1115
+#: ../../locales/../src/interface/QueueView.cpp:1117
 msgid "Could not write to local file"
 msgstr "Nepavyko įrašyti į vietinį failą"
 
@@ -2583,18 +2589,16 @@ msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
 msgstr "FileZilla iškart nulūžta. Naudojama tik klaidų paieškai"
 
 #: resources.h:591
-#, fuzzy
 msgid "Crea&te new file"
-msgstr "Neįmanoma sukurti naujo filtro"
+msgstr "&Sukurti naujoą failą"
 
-#: resources.h:576 resources.h:590 resources.h:643 resources.h:664
+#: resources.h:576 resources.h:590 resources.h:645 resources.h:666
 msgid "Create a new subdirectory in the current directory"
 msgstr "Sukurti aplanką šiame aplanke"
 
 #: resources.h:592
-#, fuzzy
 msgid "Create a new, empty file in the current directory"
-msgstr "Sukurti aplanką šiame aplanke"
+msgstr "Šiame aplanke sukurti naują tuščią failą"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1194
 #: ../../locales/../src/interface/LocalTreeView.cpp:1182
@@ -2604,11 +2608,10 @@ msgid "Create directory"
 msgstr "Sukurti aplanką"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:3163
-#, fuzzy
 msgid "Create empty file"
-msgstr "Neįmanoma redaguoti failo"
+msgstr "Sukurti tuščią failą"
 
-#: ../../locales/../src/interface/QueueView.cpp:1527
+#: ../../locales/../src/interface/QueueView.cpp:1529
 msgid "Creating directory"
 msgstr "Kuriamas aplankas"
 
@@ -2653,7 +2656,7 @@ msgstr "Dabartinis siuntimų tipas yra nustatytas į automatinį aptikimą."
 msgid "Current transfer type is set to binary."
 msgstr "Dabartinis prisijungimo tipas nustatytas dvejetainiui."
 
-#: resources.h:783 resources.h:904
+#: resources.h:785 resources.h:906
 msgid "Cus&tom"
 msgstr "&Pasirinktinis"
 
@@ -2669,7 +2672,7 @@ msgstr "Naudotojo paruoštas serveris"
 msgid "D&ata type"
 msgstr "D&uomenų tipas"
 
-#: resources.h:911
+#: resources.h:913
 msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
 msgstr ""
 "D&ešimtainiai priešdėliai naudojant SI simbolius (pvz. 1 KB = 1000 baitų)"
@@ -2678,7 +2681,7 @@ msgstr ""
 msgid "D&efault"
 msgstr "N&umatytas"
 
-#: resources.h:594 resources.h:644 resources.h:674
+#: resources.h:594 resources.h:646 resources.h:676
 msgid "D&elete"
 msgstr "&Ištrinti"
 
@@ -2686,11 +2689,11 @@ msgstr "&Ištrinti"
 msgid "D&isable all"
 msgstr "&Išjungti viską"
 
-#: resources.h:882
+#: resources.h:884
 msgid "D&o not save passwords"
 msgstr "&Nesaugoti slaptažodžių"
 
-#: resources.h:935
+#: resources.h:937
 msgid "D&ouble-click action on directories:"
 msgstr "D&vigubo paspaudimo veiksmas aplankams:"
 
@@ -2716,7 +2719,7 @@ msgstr "Duomenų jungtis uždaryta per anksti."
 msgid "Date"
 msgstr "Data"
 
-#: resources.h:895
+#: resources.h:897
 msgid "Date formatting"
 msgstr "Datos formatavimas"
 
@@ -2735,7 +2738,7 @@ msgstr "Data/laikas nežinomas"
 msgid "Debug"
 msgstr "Derinimas"
 
-#: resources.h:975
+#: resources.h:977
 msgid "Debugging settings"
 msgstr "Derinimo nustatymai"
 
@@ -2751,7 +2754,7 @@ msgstr "Numatytasis (Automatinis aptikimas)"
 msgid "Default editor not properly quoted."
 msgstr "Neteisingos numatyto redaktoriaus kabutės."
 
-#: resources.h:256 resources.h:278 resources.h:865
+#: resources.h:256 resources.h:278 resources.h:867
 msgid "Default file exists action"
 msgstr "Numatytasis failo egzistavimo veiksmas"
 
@@ -2771,15 +2774,15 @@ msgstr ""
 msgid "Default system language"
 msgstr "Numatytoji sistemos kalba"
 
-#: resources.h:688
+#: resources.h:690
 msgid "Default transfer mode:"
 msgstr "Numatytasis siuntimo būdas:"
 
-#: resources.h:834
+#: resources.h:836
 msgid "Default transfer type:"
 msgstr "Numatytas perdavimo tipas:"
 
-#: resources.h:707 resources.h:770
+#: resources.h:709 resources.h:772
 msgid "Default: http://ip.filezilla-project.org/ip.php"
 msgstr "Numatyta: http://ip.filezilla-project.org/ip.php"
 
@@ -2809,7 +2812,7 @@ msgstr[2] ""
 msgid "Delete Site Manager entry"
 msgstr "Ištrinti serverių tvarkyklės įrašą"
 
-#: resources.h:645 resources.h:666
+#: resources.h:647 resources.h:668
 msgid "Delete selected directory"
 msgstr "Ištrinti pasirinktą aplanką"
 
@@ -2817,11 +2820,11 @@ msgstr "Ištrinti pasirinktą aplanką"
 msgid "Delete selected files and directories"
 msgstr "Ištrinti pažymėtus failus ir aplankus"
 
-#: ../../locales/../src/interface/search.cpp:1017
+#: ../../locales/../src/interface/search.cpp:1018
 msgid "Deleting directories"
 msgstr "Šalinami aplankai"
 
-#: ../../locales/../src/interface/search.cpp:1017
+#: ../../locales/../src/interface/search.cpp:1018
 msgid "Deleting multiple unrelated directories is not yet supported"
 msgstr "Kelių nesusijusių aplankų naikinimas dar nėra palaikomas"
 
@@ -2845,17 +2848,17 @@ msgstr "Naujo rakto detalės:"
 msgid "Dire&ctories"
 msgstr "&Aplankai"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Direction"
 msgstr "Kryptis"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:523
+#: ../../locales/../src/interface/filelistctrl.cpp:524
 msgid "Directory"
 msgstr "Aplankas"
 
-#: resources.h:652 resources.h:926 resources.h:1009
-#: ../../locales/../src/interface/filelistctrl.cpp:445
-#: ../../locales/../src/interface/Mainfrm.cpp:2343
+#: resources.h:654 resources.h:928 resources.h:1011
+#: ../../locales/../src/interface/filelistctrl.cpp:446
+#: ../../locales/../src/interface/Mainfrm.cpp:2354
 msgid "Directory comparison"
 msgstr "Aplankų palyginimas"
 
@@ -2897,14 +2900,14 @@ msgid ""
 msgstr ""
 "Ar uždrausti sinchronizuotąjį naršymą ir pratęsti nuotolinio aplanko keitimą?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:671
+#: ../../locales/../src/interface/Mainfrm.cpp:679
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
 msgstr ""
 "Išjunkite šią parinktį jeigu negalėsite matyti teisingo aplankų turinio."
 
-#: resources.h:1002
+#: resources.h:1004
 msgid "Disconnect from server"
 msgstr "Atsijungti nuo serverio"
 
@@ -2914,8 +2917,8 @@ msgstr "Atsijungti nuo serverio"
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:227
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:936
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:938
-#: ../../locales/../src/interface/QueueView.cpp:1068
-#: ../../locales/../src/interface/QueueView.cpp:1112
+#: ../../locales/../src/interface/QueueView.cpp:1070
+#: ../../locales/../src/interface/QueueView.cpp:1114
 msgid "Disconnected from server"
 msgstr "Atsijungta nuo serverio"
 
@@ -2925,12 +2928,12 @@ msgstr "Atsijungta nuo serverio"
 msgid "Disconnected from server: %s"
 msgstr "Atsijungta nuo serverio: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1429
-#: ../../locales/../src/interface/statuslinectrl.cpp:269
+#: ../../locales/../src/interface/QueueView.cpp:1431
+#: ../../locales/../src/interface/statuslinectrl.cpp:272
 msgid "Disconnecting from previous server"
 msgstr "Atsijungti nuo ankstesnio serverio"
 
-#: resources.h:1003
+#: resources.h:1005
 msgid "Disconnects from the currently visible server"
 msgstr "Atsijungia nuo šiuo metu matomo serverio"
 
@@ -2938,7 +2941,7 @@ msgstr "Atsijungia nuo šiuo metu matomo serverio"
 msgid "Display about dialog"
 msgstr "Rodyti „apie“ dialogą"
 
-#: resources.h:944
+#: resources.h:946
 msgid "Do &not use default editor"
 msgstr "&Nenaudoti numatytojo redaktoriaus"
 
@@ -2955,8 +2958,8 @@ msgstr ""
 "Ar tikrai norite patikrinti ar yra beta versija?\n"
 "Naudokite stabilią versija, nebent norite išbandyti naujas galimybes."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1198
-#: ../../locales/../src/interface/Mainfrm.cpp:1222
+#: ../../locales/../src/interface/Mainfrm.cpp:1206
+#: ../../locales/../src/interface/Mainfrm.cpp:1230
 msgid "Do you really want to close FileZilla?"
 msgstr "Ar tikrai norite uždaryti FileZilla?"
 
@@ -2987,17 +2990,17 @@ msgstr "Ar tikrai norite išsiųsti „%s“ serveriui?"
 msgid "Documentation"
 msgstr "Dokumentacija"
 
-#: resources.h:709
+#: resources.h:711
 msgid "Don't use external IP address on &local connections."
 msgstr "&Vietiniams prisijungimams nenaudoti išorinio IP adreso."
 
-#: resources.h:845
+#: resources.h:847
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
 msgstr ""
 "„Failai su tašku priekyje“ yra failai kurių pavadinimas prasideda tašku, "
 "pvz. .htaccess"
 
-#: resources.h:929
+#: resources.h:931
 msgid "Double-click action"
 msgstr "Dvigubo paspaudimo veiksmas"
 
@@ -3005,7 +3008,7 @@ msgstr "Dvigubo paspaudimo veiksmas"
 msgid "Download"
 msgstr "Atsisiųsti"
 
-#: resources.h:483 resources.h:821
+#: resources.h:483 resources.h:823
 msgid "Download &limit:"
 msgstr "Atsisiuntimų &riba:"
 
@@ -3018,12 +3021,12 @@ msgstr "Atsisiuntimo riba:%s/s"
 msgid "Download limit: none"
 msgstr "Atsisiuntimo riba: nėra"
 
-#: resources.h:442 ../../locales/../src/interface/search.cpp:817
-#: ../../locales/../src/interface/search.cpp:823
+#: resources.h:442 ../../locales/../src/interface/search.cpp:818
+#: ../../locales/../src/interface/search.cpp:824
 msgid "Download search results"
 msgstr "Atsisiųsti paieškos rezultatus"
 
-#: resources.h:639
+#: resources.h:641
 msgid "Download selected directory"
 msgstr "Atsisiųsti pasirinktą aplanką"
 
@@ -3041,11 +3044,11 @@ msgstr "Atsiunčiama"
 msgid "Downloading %s"
 msgstr "Atsiunčiama %s"
 
-#: ../../locales/../src/interface/search.cpp:926
+#: ../../locales/../src/interface/search.cpp:927
 msgid "Downloading multiple unrelated directories is not yet supported"
 msgstr "Kelių nesusijusių aplankų atsisiuntimas dar nėra palaikomas"
 
-#: ../../locales/../src/interface/search.cpp:926
+#: ../../locales/../src/interface/search.cpp:927
 msgid "Downloading search results"
 msgstr "Atsisiunčiami paieškos rezultatai"
 
@@ -3108,11 +3111,11 @@ msgstr ""
 msgid "Editing failed"
 msgstr "Redagavimas nepavyko"
 
-#: resources.h:892
+#: resources.h:894
 msgid "Email:"
 msgstr "El. paštas:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2297
+#: ../../locales/../src/interface/QueueView.cpp:2299
 msgid "Empty command"
 msgstr "Tuščia komanda"
 
@@ -3132,13 +3135,13 @@ msgstr "Tuščias aplankas."
 msgid "Empty file extension."
 msgstr "Tuščias failo plėtinys."
 
-#: ../../locales/../src/interface/filteredit.cpp:206
-#: ../../locales/../src/interface/filteredit.cpp:248
+#: ../../locales/../src/interface/filteredit.cpp:208
+#: ../../locales/../src/interface/filteredit.cpp:250
 msgid "Empty filter names are not allowed."
 msgstr "Tušti filtrų pavadinimai neleistini."
 
-#: ../../locales/../src/interface/filteredit.cpp:206
-#: ../../locales/../src/interface/filteredit.cpp:248
+#: ../../locales/../src/interface/filteredit.cpp:208
+#: ../../locales/../src/interface/filteredit.cpp:250
 msgid "Empty name"
 msgstr "Tuščias pavadinimas"
 
@@ -3150,7 +3153,7 @@ msgstr "Tuščia eilutė kabutėse."
 msgid "En&able all"
 msgstr "Įjun&gti viską"
 
-#: resources.h:830
+#: resources.h:832
 msgid "Enable invalid character &filtering"
 msgstr "Įgalinti netinkamo simbolio &filtravimą"
 
@@ -3166,7 +3169,7 @@ msgstr "Šifravimas"
 msgid "Encryption details"
 msgstr "Šifravimo informacija"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:447
+#: ../../locales/../src/interface/filelistctrl.cpp:448
 msgid "End comparison and change sorting order?"
 msgstr "Baigti palyginimą ir pakeisti rūšiavimo tvarką?"
 
@@ -3179,7 +3182,7 @@ msgstr "Įveskite &pasirinktinę komandą..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Įveskite 0 neribotam greičiui."
 
-#: ../../locales/../src/interface/QueueView.cpp:2286
+#: ../../locales/../src/interface/QueueView.cpp:2288
 msgid "Enter command"
 msgstr "Įveskite komandą"
 
@@ -3187,13 +3190,13 @@ msgstr "Įveskite komandą"
 msgid "Enter custom command"
 msgstr "Įveskite pasirinktinę komandą"
 
-#: resources.h:936
+#: resources.h:938
 msgid "Enter directory"
 msgstr "Įveskite aplanką"
 
-#: ../../locales/../src/interface/filteredit.cpp:134
-#: ../../locales/../src/interface/filteredit.cpp:194
-#: ../../locales/../src/interface/filteredit.cpp:241
+#: ../../locales/../src/interface/filteredit.cpp:136
+#: ../../locales/../src/interface/filteredit.cpp:196
+#: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Enter filter name"
 msgstr "Įveskite filtro pavadinimą"
 
@@ -3213,7 +3216,7 @@ msgstr "Įveskite slaptažodį"
 msgid "Enter selected directory"
 msgstr "Įveskite pasirinktą aplanką"
 
-#: resources.h:729
+#: resources.h:731
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3238,7 +3241,7 @@ msgstr ""
 "Įveskite failo „%s“ slaptažodį.\n"
 "Prašau įsidėmėti, kad konvertuotas failas nebus apsaugotas slaptažodžiu."
 
-#: resources.h:733
+#: resources.h:735
 msgid ""
 "Enter the port on which the server listens.\n"
 "The default for FTP is 21, the default for SFTP is 22."
@@ -3260,7 +3263,7 @@ msgstr "Klaida eksportuojant nustatymus"
 msgid "Error importing"
 msgstr "Importavimo klaida"
 
-#: ../../locales/../src/interface/QueueView.cpp:2052
+#: ../../locales/../src/interface/QueueView.cpp:2054
 msgid "Error loading queue"
 msgstr "Klaida įkraunant eilę"
 
@@ -3274,9 +3277,9 @@ msgstr "Klaida įkraunant eilę"
 #: ../../locales/../src/interface/import.cpp:120
 #: ../../locales/../src/interface/import.cpp:311
 #: ../../locales/../src/interface/Options.cpp:216
-#: ../../locales/../src/interface/QueueView.cpp:1965
-#: ../../locales/../src/interface/search.cpp:1094
-#: ../../locales/../src/interface/search.cpp:1115
+#: ../../locales/../src/interface/QueueView.cpp:1967
+#: ../../locales/../src/interface/search.cpp:1095
+#: ../../locales/../src/interface/search.cpp:1116
 #: ../../locales/../src/interface/sitemanager.cpp:250
 #: ../../locales/../src/interface/sitemanager.cpp:448
 #: ../../locales/../src/interface/sitemanager.cpp:544
@@ -3289,7 +3292,7 @@ msgstr "Klaida įkraunant eilę"
 msgid "Error loading xml file"
 msgstr "Klaida įkraunant xml failą"
 
-#: ../../locales/../src/interface/QueueView.cpp:1951
+#: ../../locales/../src/interface/QueueView.cpp:1953
 msgid "Error saving queue"
 msgstr "Klaida saugant eilę"
 
@@ -3300,7 +3303,7 @@ msgstr "Klaida paleidžiant programą"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:331
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:859
-#: ../../locales/../src/interface/QueueView.cpp:1986
+#: ../../locales/../src/interface/QueueView.cpp:1988
 #: ../../locales/../src/interface/sitemanager.cpp:658
 #: ../../locales/../src/interface/sitemanager.cpp:783
 #: ../../locales/../src/interface/sitemanager.cpp:843
@@ -3319,8 +3322,8 @@ msgid "Error, local file exists but cannot be removed"
 msgstr "Klaida, vietinis failas yra, tačiau negalima jo pašalinti"
 
 #: ../../locales/../src/engine/logging.cpp:213
-#: ../../locales/../src/interface/StatusView.cpp:284
-#: ../../locales/../src/interface/StatusView.cpp:332
+#: ../../locales/../src/interface/StatusView.cpp:283
+#: ../../locales/../src/interface/StatusView.cpp:331
 #: ../../locales/../src/interface/updatewizard.cpp:535
 msgid "Error:"
 msgstr "Klaida:"
@@ -3329,11 +3332,11 @@ msgstr "Klaida:"
 msgid "Establish connection in a new tab"
 msgstr "Užmegzti ryšį naujoje kortelėje"
 
-#: resources.h:955
+#: resources.h:957
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
 msgstr "Pavyzdžiui: png „c:\\program files\\viewer\\viewer.exe“ -open"
 
-#: resources.h:914
+#: resources.h:916
 msgid "Examples"
 msgstr "Pavyzdžiai"
 
@@ -3345,13 +3348,13 @@ msgstr "&Vykdyti"
 msgid "Executable"
 msgstr "Vykdomasis"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1783
+#: ../../locales/../src/interface/Mainfrm.cpp:1791
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Vykdomoji programa neturi versijos informacijos, neįmanoma patikrinti ar yra "
 "atnaujinimų."
 
-#: resources.h:872
+#: resources.h:874
 msgid "Explorer"
 msgstr "Naršyklė"
 
@@ -3392,11 +3395,11 @@ msgstr "FTP - Nesaugus failų perdavimo protokolas"
 msgid "FTP Engine not initialized, can't connect"
 msgstr "FTP varikliukas neinicijuotas, negalima prisijungti"
 
-#: resources.h:757
+#: resources.h:759
 msgid "FTP Keep-alive"
 msgstr "FTP Palaikyti-gyvą"
 
-#: resources.h:777
+#: resources.h:779
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:120
 msgid "FTP Proxy"
 msgstr "FTP tarpinis serveris"
@@ -3405,7 +3408,7 @@ msgstr "FTP tarpinis serveris"
 msgid "FTP URL"
 msgstr "FTP URL"
 
-#: resources.h:685
+#: resources.h:687
 msgid ""
 "FTP uses secondary connections for data transfers. These additional "
 "connections can be established in two ways."
@@ -3595,7 +3598,7 @@ msgstr "Nepavyko nustatyti kalbos į %s, naudojama numatytoji sistemos kalba."
 msgid "Failed to validate settings"
 msgstr "Nepavyko patvirtini nuostatų"
 
-#: ../../locales/../src/engine/tlssocket.cpp:896
+#: ../../locales/../src/engine/tlssocket.cpp:904
 msgid "Failed to verify peer certificate"
 msgstr "Nepavyko patikrinti siuntėjo liudijimo"
 
@@ -3612,7 +3615,7 @@ msgstr "Klaida rašant xml failą"
 msgid "Failed transfers"
 msgstr "Nepavykę siuntimai"
 
-#: resources.h:700
+#: resources.h:702
 msgid "Fall back to active mode"
 msgstr "Sugrįžti į aktyvią veikseną"
 
@@ -3624,9 +3627,9 @@ msgstr "Fa&ilas:"
 msgid "Fil&es"
 msgstr "Fa&ilai"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:500
-#: ../../locales/../src/interface/filelistctrl.cpp:518
-#: ../../locales/../src/interface/filelistctrl.cpp:527
+#: ../../locales/../src/interface/filelistctrl.cpp:501
+#: ../../locales/../src/interface/filelistctrl.cpp:519
+#: ../../locales/../src/interface/filelistctrl.cpp:528
 msgid "File"
 msgstr "Failas"
 
@@ -3665,7 +3668,7 @@ msgstr "Failų sąrašai"
 msgid "File not found"
 msgstr "Failas nerastas"
 
-#: resources.h:1013
+#: resources.h:1015
 msgid "File search"
 msgstr "Failo paieška"
 
@@ -3700,7 +3703,7 @@ msgstr "Failas perduotas sėkmingai"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Failo perdavimas pavyko, perduotas %s į %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1197
+#: ../../locales/../src/interface/Mainfrm.cpp:1205
 msgid "File transfers still in progress."
 msgstr "Failų siuntimas vis dar vyksta."
 
@@ -3718,19 +3721,13 @@ msgstr "Failas bus perduotas naudojant dvejetainį duomenų tipą."
 msgid "FileZilla Error"
 msgstr "FileZilla klaida"
 
-#: resources.h:722
+#: resources.h:724
 msgid ""
 "FileZilla can now test your configuration to ensure everything is configured "
 "properly."
 msgstr ""
 "FileZilla gali patikrinti jūsų konfigūraciją, kad įsitikintų jog viskas "
 "sukonfigūruota teisingai."
-
-#: resources.h:492
-msgid ""
-"FileZilla can remember passwords so that you can later reconnect without "
-"having to reenter your password after restarting FileZilla."
-msgstr ""
 
 #: resources.h:478
 msgid "FileZilla is already connected to a server."
@@ -3745,7 +3742,7 @@ msgstr ""
 "FileZilla paleista „kiosk“ veiksenoje.\n"
 "„Normali“ ir „Paskyra“ prisijungimo tipai nepalaikomi šioje veiksenoje."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1532
+#: ../../locales/../src/interface/Mainfrm.cpp:1540
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla turi būti perkrauta, kad kalbos pakeitimas įsigaliotų."
 
@@ -3778,7 +3775,6 @@ msgid "Filename invalid"
 msgstr "Netinkamas failo pavadinimas"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:3188
-#, fuzzy
 msgid ""
 "Filename may not contain any of the following characters: / \\ : * ? \" < > |"
 msgstr ""
@@ -3788,7 +3784,7 @@ msgstr ""
 msgid "Filename unchanged"
 msgstr "Failo pavadinimas nepakeistas"
 
-#: resources.h:308 resources.h:968
+#: resources.h:308 resources.h:970
 msgid "Filename:"
 msgstr "Failo pavadinimas:"
 
@@ -3824,7 +3820,7 @@ msgstr "Failo dydžio formatas"
 msgid "Filetype"
 msgstr "Failo tipas"
 
-#: resources.h:956
+#: resources.h:958
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:133
 msgid "Filetype associations"
 msgstr "Failų tipų susiejimai"
@@ -3833,14 +3829,14 @@ msgstr "Failų tipų susiejimai"
 msgid "Filter applies to:"
 msgstr "Filtras taikomas:"
 
-#: resources.h:829
+#: resources.h:831
 msgid "Filter invalid characters in filenames"
 msgstr "Netinkami simboliai filtro pavadinime"
 
-#: ../../locales/../src/interface/filteredit.cpp:147
-#: ../../locales/../src/interface/filteredit.cpp:215
-#: ../../locales/../src/interface/filteredit.cpp:254
-#: ../../locales/../src/interface/filteredit.cpp:356
+#: ../../locales/../src/interface/filteredit.cpp:149
+#: ../../locales/../src/interface/filteredit.cpp:217
+#: ../../locales/../src/interface/filteredit.cpp:256
+#: ../../locales/../src/interface/filteredit.cpp:358
 msgid "Filter name already exists"
 msgstr "Toks failas jau yra"
 
@@ -3861,13 +3857,13 @@ msgstr "Išfiltruoti įrašus kurie neatitinka jokio iš šių"
 msgid "Filter set already exists"
 msgstr "Filtras tokiu pavadinimu jau yra"
 
-#: resources.h:1006
+#: resources.h:1008
 msgid "Filter the directory listings"
 msgstr "Filtruoti aplankų sąrašus"
 
-#: ../../locales/../src/interface/filteredit.cpp:338
-#: ../../locales/../src/interface/filteredit.cpp:347
-#: ../../locales/../src/interface/filteredit.cpp:356
+#: ../../locales/../src/interface/filteredit.cpp:340
+#: ../../locales/../src/interface/filteredit.cpp:349
+#: ../../locales/../src/interface/filteredit.cpp:358
 msgid "Filter validation failed"
 msgstr "Filtro patikrinimas nepavyko"
 
@@ -3887,14 +3883,14 @@ msgstr "Antspaudas:"
 msgid "Firewall and router configuration wizard"
 msgstr "Ugniasienės ir maršrutizatoriaus konfigūravimo vedlys"
 
-#: resources.h:740
+#: resources.h:742
 msgid ""
 "For more detailed information about what these options do, please run the "
 "network configuration wizard."
 msgstr ""
 "Išsamesnei pasirinkčių informacijai, paleiskite tinklo konfigūracijos vedlį."
 
-#: resources.h:717
+#: resources.h:719
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "Normaliam darbui reikia nustatyti bent 10-ties prievadų sritį."
 
@@ -3914,15 +3910,15 @@ msgstr "Priverstinai &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "Priversti rodyti &paslėptus failus"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:666
+#: ../../locales/../src/interface/Mainfrm.cpp:674
 msgid "Force showing hidden files"
 msgstr "Priversti rodyti paslėptus failus"
 
-#: resources.h:784
+#: resources.h:786
 msgid "Format specifications:"
 msgstr "Formato nustatymai:"
 
-#: resources.h:954
+#: resources.h:956
 msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr ""
 "Formatas: Plėtinys, po to seka tinkama komanda ir argumentai - tarp kabučių."
@@ -3939,12 +3935,12 @@ msgstr "Pagrindinis"
 msgid "General SOCKS server failure"
 msgstr "General SOCKS serverio klaida"
 
-#: resources.h:802
+#: resources.h:804
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:122
 msgid "Generic proxy"
 msgstr "Bazinis tarpinis serveris"
 
-#: resources.h:706
+#: resources.h:708
 msgid "Get external IP address from the following URL:"
 msgstr "Gauti išorinį IP iš šio URL:"
 
@@ -3985,13 +3981,13 @@ msgstr "Maiša:"
 msgid "Hidden"
 msgstr "Paslėpta"
 
-#: resources.h:827 ../../locales/../src/interface/queue.cpp:924
-#: ../../locales/../src/interface/queue.cpp:1011
+#: resources.h:829 ../../locales/../src/interface/queue.cpp:921
+#: ../../locales/../src/interface/queue.cpp:1008
 msgid "High"
 msgstr "Aukštas"
 
-#: ../../locales/../src/interface/queue.cpp:926
-#: ../../locales/../src/interface/queue.cpp:1013
+#: ../../locales/../src/interface/queue.cpp:923
+#: ../../locales/../src/interface/queue.cpp:1010
 msgid "Highest"
 msgstr "Aukščiausias"
 
@@ -4035,11 +4031,11 @@ msgstr "Serveris:"
 msgid "Hours,"
 msgstr "Valandos"
 
-#: resources.h:903
+#: resources.h:905
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (pavyzdys: 15:47)"
 
-#: resources.h:744
+#: resources.h:746
 msgid ""
 "If no data is sent or received during an operation for longer than the "
 "specified time, the connection will be closed and FileZilla will try to "
@@ -4049,13 +4045,13 @@ msgstr ""
 "numatytą laiką, ryšys bus nutrauktas ir FileZilla bandys prisijungti iš "
 "naujo."
 
-#: resources.h:984
+#: resources.h:986
 msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
 msgstr ""
 "Pranešdami apie programos defektus, prašome pridėti žurnalą sukurtą esant "
 "įjungtam detaliam žurnalo pildymui."
 
-#: resources.h:697
+#: resources.h:699
 msgid ""
 "If the automatic test at the end of this wizard succeeds, but you cannot "
 "transfer files to a particular server, the server might be misconfigured and "
@@ -4067,7 +4063,7 @@ msgstr ""
 "nesuderintas ir jums reikėtų išbandyti aktyvią veikseną. Serverių "
 "tvarkyklėje galima nustatyti veikseną kiekvienam serveriui atskirai."
 
-#: resources.h:692
+#: resources.h:694
 msgid ""
 "If the fallback option is enabled, you will be able to connect to "
 "misconfigured servers which reject the selected transfer mode."
@@ -4097,7 +4093,7 @@ msgid ""
 msgstr ""
 "Jei problema išlieka, tai tam maršrutizatorius ir/ar užkarda pertraukia ryšį."
 
-#: resources.h:973
+#: resources.h:975
 msgid ""
 "If the size of the logfile reaches the limit, it gets renamed by adding \".1"
 "\" to the end of the filename (possibly overwriting older logfiles) and a "
@@ -4129,7 +4125,7 @@ msgstr ""
 "Jei ši problema išliks, prašau susisiekti su savo maršrutizatoriaus "
 "gamintoju."
 
-#: resources.h:279 resources.h:866
+#: resources.h:279 resources.h:868
 msgid ""
 "If using 'overwrite if newer', your system time has to be synchronized with "
 "the server. If the time differs (e.g. different timezone), specify a "
@@ -4139,7 +4135,7 @@ msgstr ""
 "suderintas su serveriu. Jei laikas skirsis (pvz. skirtinga laiko zona), "
 "nurodykite laiko juostos poslinkį serverių tvarkyklėje."
 
-#: resources.h:927
+#: resources.h:929
 msgid ""
 "If using timestamp based comparison, consider two files equal if their "
 "timestamp difference does not exceed this threshold."
@@ -4147,11 +4143,11 @@ msgstr ""
 "Jei naudojatės laiko įspaudais paremtu palyginimu, laikykite du failus "
 "lygiais, jei jų laiko įspaudų skirtumas neviršija šio slenksčio."
 
-#: resources.h:942
+#: resources.h:944
 msgid "If you change the language, you should restart FileZilla."
 msgstr "Pakeitę kalbą, turėtumėte FileZilla paleisti iš naujo."
 
-#: resources.h:723
+#: resources.h:725
 msgid ""
 "If you click on test, FileZilla will connect to probe.filezilla-project.org "
 "and will perform some simple tests."
@@ -4159,23 +4155,23 @@ msgstr ""
 "Jei paspausite testas, tuomet FileZilla prisijungs prie serverio probe."
 "filezilla-project.org ir atliks keletą paprastų testų."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1221
+#: ../../locales/../src/interface/Mainfrm.cpp:1229
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Jeigu užversite FileZilla, pakeitimai bus prarasti."
 
-#: resources.h:842
+#: resources.h:844
 msgid ""
 "If you enter the wrong filetypes, those files may get corrupted when "
 "transferred."
 msgstr ""
 "Jei failų tipus nurodysite neteisingai, siunčiant jie gali būti sugadinti."
 
-#: resources.h:724
+#: resources.h:726
 msgid "If you get any errors, your configuration is not correct."
 msgstr ""
 "Jei pamatysite pranešimų apie klaidas, tuomet jūsų konfigūracija neteisinga."
 
-#: resources.h:756
+#: resources.h:758
 msgid ""
 "If you have problems to retrieve directory listings or to transfer files, "
 "try to change the default transfer mode."
@@ -4194,7 +4190,7 @@ msgstr ""
 "pabandykite perjungti pasyvią veikseną ir susisiekite su serverio "
 "administratoriumi dėl pagalbos."
 
-#: resources.h:683
+#: resources.h:685
 msgid ""
 "If you successfully complete the wizard and the final test succeeds, any "
 "firewalls and routers you have should be configured properly."
@@ -4202,7 +4198,7 @@ msgstr ""
 "Jei sėkmingai užbaigėte vedlį ir paskutinis testas buvo sėkmingas, visos "
 "jūsų naudojamos ugniasienės ar maršrutizatoriai buvo paruošti naudoti."
 
-#: resources.h:719
+#: resources.h:721
 msgid ""
 "If you use a firewall, make sure FileZilla is allowed to accept connection "
 "on all given ports."
@@ -4210,7 +4206,7 @@ msgstr ""
 "Jei naudojate ugniasienę, tuomet įsitikinkite, kad programai FileZilla "
 "leidžiama priimti prisijungimus prie nurodytų prievadų."
 
-#: resources.h:718
+#: resources.h:720
 msgid ""
 "If you use a router, make sure all these ports are forwarded to the machine "
 "you're running FileZilla on."
@@ -4244,7 +4240,7 @@ msgstr "Importavimas sėkmingas"
 msgid "Improperly quoted association."
 msgstr "Neteisingai panaudotos kabutės susiejime."
 
-#: resources.h:711
+#: resources.h:713
 msgid ""
 "In active mode, FileZilla has to listen on a port for data transfers. You "
 "have to specify which ports FileZilla will use."
@@ -4252,7 +4248,7 @@ msgstr ""
 "Esant aktyviai veiksenai, FileZilla duomenų perdavimui turi laukti užklausų "
 "tam tikrais prievadais. Reikia nurodyti, kokius prievadus naudos FileZilla."
 
-#: resources.h:713
+#: resources.h:715
 msgid ""
 "In case you have a router, you will have to forward all available ports, as "
 "FileZilla has no influence on the ports your system chooses."
@@ -4268,7 +4264,7 @@ msgstr ""
 "Tuo atveju jei jūs teikiate pirmenybę automatiniams atnaujinimams, jūs "
 "galite įgalinti automatinių atnaujinimų patikrą nustatymų lange."
 
-#: resources.h:701 resources.h:765
+#: resources.h:703 resources.h:767
 msgid ""
 "In order to use active mode, FileZilla needs to know your external IP "
 "address."
@@ -4276,7 +4272,7 @@ msgstr ""
 "Norint naudoti aktyvią veikseną, programai reikia žinoti jūsų išorinį IP "
 "adresą."
 
-#: resources.h:686
+#: resources.h:688
 msgid ""
 "In passive mode, which is recommended for most users, FileZilla asks the "
 "server for a port and connects to the given port. Not much configuration has "
@@ -4286,7 +4282,7 @@ msgstr ""
 "serverio prievado ir prie jo prisijungs. Šiuo atveju daug konfigūracijos "
 "nereikia."
 
-#: ../../locales/../src/engine/tlssocket.cpp:910
+#: ../../locales/../src/engine/tlssocket.cpp:918
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4294,7 +4290,7 @@ msgstr ""
 "Neužbaigta grandinė, viršutinis liudijimas nėra savarankiškai "
 "prisijungiantis liudijimų įstaigos liudijimas"
 
-#: ../../locales/../src/interface/QueueView.cpp:1064
+#: ../../locales/../src/interface/QueueView.cpp:1066
 msgid "Incorrect password"
 msgstr "Neteisingas slaptažodis"
 
@@ -4317,8 +4313,8 @@ msgid "Interface"
 msgstr "Sąsaja"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:219
-#: ../../locales/../src/interface/QueueView.cpp:1021
-#: ../../locales/../src/interface/QueueView.cpp:1597
+#: ../../locales/../src/interface/QueueView.cpp:1023
+#: ../../locales/../src/interface/QueueView.cpp:1599
 msgid "Interrupted by user"
 msgstr "Pertraukė naudotojas"
 
@@ -4392,14 +4388,13 @@ msgstr ""
 "ftpes:// FTP per SSL (explicit)."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4394
-#, fuzzy
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
 "Netinkamas serveris, po uždarančio skliausto gali būti tik dvitaškis ir "
 "prievadas."
 
-#: ../../locales/../src/interface/search.cpp:698
+#: ../../locales/../src/interface/search.cpp:699
 msgid "Invalid regular expression in search conditions."
 msgstr "Paieškos sąlygose yra netinkam reguliarioji išraiška."
 
@@ -4407,7 +4402,7 @@ msgstr "Paieškos sąlygose yra netinkam reguliarioji išraiška."
 msgid "Invalid response code"
 msgstr "Netinkamas atsakymo kodas"
 
-#: ../../locales/../src/interface/search.cpp:692
+#: ../../locales/../src/interface/search.cpp:693
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Netinkamos paieškos sąlygos: %s"
@@ -4446,11 +4441,11 @@ msgstr "Jurisdikcijos vietovė:"
 msgid "Jurisdiction state or province:"
 msgstr "Jurisdikcijos valstija arba provincija:"
 
-#: resources.h:924
+#: resources.h:926
 msgid "Keep directories on top"
 msgstr "Laikyti aplankus viršuje"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:670
+#: ../../locales/../src/interface/Mainfrm.cpp:678
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4469,12 +4464,12 @@ msgstr "Rakto apsikeitimas"
 msgid "L&owest"
 msgstr "Že&miausias"
 
-#: resources.h:940
+#: resources.h:942
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:131
 msgid "Language"
 msgstr "Kalba"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1532
+#: ../../locales/../src/interface/Mainfrm.cpp:1540
 msgid "Language changed"
 msgstr "Kalba pakeista"
 
@@ -4484,27 +4479,27 @@ msgstr "Kalba pakeista"
 msgid "Last modified"
 msgstr "Paskutinį kartą redaguotas"
 
-#: resources.h:869
+#: resources.h:871
 msgid "Layout"
 msgstr "Išdėstymas"
 
-#: resources.h:815
+#: resources.h:817
 msgid "Limit for concurrent &downloads:"
 msgstr "Riboti vienu metu vykstančius &atsisiuntimus:"
 
-#: resources.h:817
+#: resources.h:819
 msgid "Limit for concurrent &uploads:"
 msgstr "Riboti vienu metu vykstančius &išsiuntimus:"
 
-#: resources.h:760
+#: resources.h:762
 msgid "Limit local ports"
 msgstr "Riboti vietinių prievadų naudojimą"
 
-#: resources.h:970
+#: resources.h:972
 msgid "Limit size of logfile"
 msgstr "Apriboti žurnalo failo dydį"
 
-#: resources.h:971
+#: resources.h:973
 msgid "Limit:"
 msgstr "Riba:"
 
@@ -4521,12 +4516,12 @@ msgid "Listen socket closed"
 msgstr "Klausanti jungtis uždaryta"
 
 #: ../../locales/../src/engine/logging.cpp:220
-#: ../../locales/../src/interface/StatusView.cpp:295
-#: ../../locales/../src/interface/StatusView.cpp:360
+#: ../../locales/../src/interface/StatusView.cpp:294
+#: ../../locales/../src/interface/StatusView.cpp:359
 msgid "Listing:"
 msgstr "Sąrašas:"
 
-#: resources.h:763
+#: resources.h:765
 msgid "Lo&west available port:"
 msgstr "Že&miausias galimas prievadas:"
 
@@ -4571,7 +4566,7 @@ msgstr "Žurnalo failas"
 msgid "Log of update check:"
 msgstr "Išjungti naujinimų tikrinimą:"
 
-#: resources.h:965
+#: resources.h:967
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:140
 msgid "Logging"
 msgstr "Registruojama žurnalui"
@@ -4614,13 +4609,13 @@ msgstr ""
 "Prisijungimo tipas gali būti naudojamas tik kartu su FTP URL. Argumentas "
 "turi būti vienas iš dviejų „%s“ arba „%s“"
 
-#: ../../locales/../src/interface/queue.cpp:919
-#: ../../locales/../src/interface/queue.cpp:1006
+#: ../../locales/../src/interface/queue.cpp:916
+#: ../../locales/../src/interface/queue.cpp:1003
 msgid "Low"
 msgstr "Žemas"
 
-#: ../../locales/../src/interface/queue.cpp:917
-#: ../../locales/../src/interface/queue.cpp:1004
+#: ../../locales/../src/interface/queue.cpp:914
+#: ../../locales/../src/interface/queue.cpp:1001
 msgid "Lowest"
 msgstr "Žemiausias"
 
@@ -4678,20 +4673,20 @@ msgstr "Atitinka bet kuris sekantis"
 msgid "Match none of the following"
 msgstr "Neatitinka nei vienas sekantis"
 
-#: resources.h:813
+#: resources.h:815
 msgid "Maximum simultaneous &transfers:"
 msgstr "Maksimalus lygiagrečių &siuntimų skaičius:"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:378
-#: ../../locales/../src/interface/Mainfrm.cpp:1860
+#: ../../locales/../src/interface/Mainfrm.cpp:1868
 msgid "Message log"
 msgstr "Pranešimų žurnalas"
 
-#: resources.h:880
+#: resources.h:882
 msgid "Message log position"
 msgstr "Pranešimų žurnalo vieta"
 
-#: resources.h:972
+#: resources.h:974
 msgid "MiB"
 msgstr "MiB"
 
@@ -4744,11 +4739,11 @@ msgstr "Pavadinimas iš adresyno jau egzistuoja."
 msgid "Name:"
 msgstr "Pavadinimas:"
 
-#: ../../locales/../src/interface/filteredit.cpp:347
+#: ../../locales/../src/interface/filteredit.cpp:349
 msgid "Need to enter filter name"
 msgstr "Reikia įvesti failo pavadinimą"
 
-#: ../../locales/../src/interface/search.cpp:682
+#: ../../locales/../src/interface/search.cpp:683
 msgid "Need to enter valid remote path"
 msgstr "Reikia įvesti galiojantį nuotolinį kelią"
 
@@ -4801,7 +4796,7 @@ msgstr "Naujas aplankas"
 msgid "New features and improvements in %s"
 msgstr "Naujos funkcijos ir patobulinimai yra čia %s"
 
-#: ../../locales/../src/interface/filteredit.cpp:129
+#: ../../locales/../src/interface/filteredit.cpp:131
 msgid "New filter"
 msgstr "Naujas filtras"
 
@@ -4815,7 +4810,7 @@ msgstr "Naujas aplankas"
 msgid "New site"
 msgstr "Naujas serveris"
 
-#: resources.h:878
+#: resources.h:880
 msgid "Next to the transfer queue"
 msgstr "Šalia perdavimo eilės"
 
@@ -4827,7 +4822,7 @@ msgstr "Ne"
 msgid "No category to export selected"
 msgstr "Nepasirinkta kategorija eksportuoti"
 
-#: ../../locales/../src/interface/QueueView.cpp:2297
+#: ../../locales/../src/interface/QueueView.cpp:2299
 msgid "No command given, aborting."
 msgstr "Nenurodyta komanda, nutraukiama."
 
@@ -4839,7 +4834,7 @@ msgstr "Nenustatytas išorinis IP adresas, bandau numatytąjį."
 msgid "No files are currently being edited."
 msgstr "Šiuo metu nėra redaguojamų failų."
 
-#: ../../locales/../src/interface/filteredit.cpp:141
+#: ../../locales/../src/interface/filteredit.cpp:143
 msgid "No filter name given"
 msgstr "Nenurodytas filtro pavadinimas"
 
@@ -4853,7 +4848,7 @@ msgstr "Nenurodytas serveris, prašau nurodyti serverį."
 msgid "No images available"
 msgstr "Nėra paveikslėlių"
 
-#: ../../locales/../src/interface/QueueView.cpp:3168
+#: ../../locales/../src/interface/QueueView.cpp:3170
 msgid "No more files in the queue!"
 msgstr "Eilėje nebėra failų!"
 
@@ -4871,7 +4866,7 @@ msgstr "Jokia programa nesusieta su šiuo failo tipu"
 msgid "No program has been associated to edit files with the extension '%s'."
 msgstr "Jokia programa, skirta redagavimui, nebuvo susieta su plėtiniu „%s“."
 
-#: ../../locales/../src/interface/search.cpp:540
+#: ../../locales/../src/interface/search.cpp:541
 msgid "No search results"
 msgstr "Rezultatų nėra"
 
@@ -4889,7 +4884,7 @@ msgstr "Nepalaikomas SOKS5 autorizacijos metodas"
 msgid "No username given."
 msgstr "Nepateiktas naudotojo vardas."
 
-#: resources.h:934 resources.h:939
+#: resources.h:936 resources.h:941
 #: ../../locales/../src/interface/verifycertdialog.cpp:54
 msgid "None"
 msgstr "Niekas"
@@ -4898,13 +4893,13 @@ msgstr "Niekas"
 msgid "None selected yet"
 msgstr "Dar niekas nepažymėta"
 
-#: resources.h:826 ../../locales/../src/engine/server.cpp:852
+#: resources.h:828 ../../locales/../src/engine/server.cpp:852
 #: ../../locales/../src/engine/server.cpp:871
 #: ../../locales/../src/interface/manual_transfer.cpp:160
 #: ../../locales/../src/interface/manual_transfer.cpp:185
 #: ../../locales/../src/interface/manual_transfer.cpp:560
-#: ../../locales/../src/interface/queue.cpp:922
-#: ../../locales/../src/interface/queue.cpp:1009
+#: ../../locales/../src/interface/queue.cpp:919
+#: ../../locales/../src/interface/queue.cpp:1006
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1288
 msgid "Normal"
 msgstr "Normalus"
@@ -4933,21 +4928,21 @@ msgstr "Neprisijungta prie jokio serverio."
 msgid "Not connected."
 msgstr "Neprisijungta."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:668
+#: ../../locales/../src/interface/Mainfrm.cpp:676
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "Ši savybė veikia tik naudojant FTP protokolą."
 
-#: resources.h:794
+#: resources.h:796
 msgid "Note: This only works with plain, unencrypted FTP connections."
 msgstr "Pastaba: Tai veikia tik su neužšifruotais FTP prisijungimais."
 
-#: resources.h:811
+#: resources.h:813
 msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr ""
 "Pastaba: Bazinio tarpinio serverio naudojimas priverstinai įjungia pasyvius "
 "FTP prisijungimus."
 
-#: resources.h:913
+#: resources.h:915
 msgid "Number of decimal places:"
 msgstr "Dešimtainių pozicijų skaičius:"
 
@@ -4965,11 +4960,11 @@ msgstr "&Atverti failą"
 #: resources.h:296 resources.h:304 resources.h:327 resources.h:335
 #: resources.h:354 resources.h:360 resources.h:393 resources.h:407
 #: resources.h:429 resources.h:452 resources.h:461 resources.h:475
-#: resources.h:488 resources.h:495 resources.h:737
+#: resources.h:488 resources.h:495 resources.h:739
 msgid "OK"
 msgstr "Gerai"
 
-#: resources.h:693
+#: resources.h:695
 msgid ""
 "On the following pages, the selected transfer mode will be configured, as "
 "well as the fallback mode if enabled."
@@ -4981,7 +4976,7 @@ msgstr ""
 msgid "Once"
 msgstr "Kartą"
 
-#: resources.h:964
+#: resources.h:966
 msgid ""
 "Only the versions of FileZilla and the operating system you are using will "
 "be submitted to the server."
@@ -4989,11 +4984,11 @@ msgstr ""
 "Serveriui bus nusiųsta informacija tik apie naudojamą operacinę sistemą ir "
 "apie naudojamą FileZilla versiją."
 
-#: resources.h:662
+#: resources.h:664
 msgid "Open directory in system's file manager"
 msgstr "Aplanką atverti sistemos failų tvarkyklėje"
 
-#: resources.h:986 resources.h:987
+#: resources.h:988 resources.h:989
 msgid "Open the Site Manager"
 msgstr "Atverti serverių tvarkyklę"
 
@@ -5025,7 +5020,7 @@ msgstr "Atveria naują kortelę"
 msgid "Opens the Site Manager"
 msgstr "Atveria serverių tvarkyklę"
 
-#: resources.h:1007
+#: resources.h:1009
 msgid ""
 "Opens the directory listing filter dialog. Right-click to toggle filters."
 msgstr ""
@@ -5048,7 +5043,7 @@ msgstr "Organizacija:"
 msgid "Other:"
 msgstr "Kitas:"
 
-#: resources.h:739
+#: resources.h:741
 msgid "Overview"
 msgstr "Peržiūra"
 
@@ -5056,19 +5051,19 @@ msgstr "Peržiūra"
 msgid "Overwrite &if source newer"
 msgstr "Perrašyti je&i šaltinis naujesnis"
 
-#: resources.h:261 resources.h:271 resources.h:849 resources.h:858
+#: resources.h:261 resources.h:271 resources.h:851 resources.h:860
 msgid "Overwrite file"
 msgstr "Pakeisti failą"
 
-#: resources.h:263 resources.h:273 resources.h:851 resources.h:860
+#: resources.h:263 resources.h:273 resources.h:853 resources.h:862
 msgid "Overwrite file if size differs"
 msgstr "Pakeisti failą, jei skiriasi dydis"
 
-#: resources.h:264 resources.h:274 resources.h:852 resources.h:861
+#: resources.h:264 resources.h:274 resources.h:854 resources.h:863
 msgid "Overwrite file if size differs or source file is newer"
 msgstr "Pakeisti failą, jei skiriasi dydis arba pradinis failas yra naujesnis"
 
-#: resources.h:262 resources.h:272 resources.h:850 resources.h:859
+#: resources.h:262 resources.h:272 resources.h:852 resources.h:861
 msgid "Overwrite file if source file newer"
 msgstr "Pakeisti failą, jei pradinis failas naujesnis"
 
@@ -5089,13 +5084,13 @@ msgstr "Savininko prieigos teisės"
 msgid "Owner/Group"
 msgstr "Savininkas/Grupė"
 
-#: resources.h:884
+#: resources.h:886
 msgid ""
 "P&revent system from entering idle sleep during transfers and other "
 "operations"
 msgstr "&Neleisti sistemai užmigti, vykdant perdavimus ir kitas operacijas"
 
-#: resources.h:791 resources.h:807
+#: resources.h:793 resources.h:809
 #, no-c-format
 msgid "P&roxy host:"
 msgstr "&Tarpinio serverio adresas:"
@@ -5104,7 +5099,7 @@ msgstr "&Tarpinio serverio adresas:"
 msgid "PORT command tainted by router or firewall."
 msgstr "Komandą PORT sugadino maršrutizatorius arba ugniasienė."
 
-#: resources.h:753
+#: resources.h:755
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&syvus (rekomenduojamas)"
 
@@ -5112,19 +5107,19 @@ msgstr "Pa&syvus (rekomenduojamas)"
 msgid "Package"
 msgstr "Paketas"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2494
+#: ../../locales/../src/interface/Mainfrm.cpp:2505
 msgid "Parameter not a valid URL"
 msgstr "Parametras yra netinkamas URL"
 
-#: resources.h:85 resources.h:384 resources.h:731
+#: resources.h:85 resources.h:384 resources.h:733
 msgid "Pass&word:"
 msgstr "Slap&tažodis:"
 
-#: resources.h:689
+#: resources.h:691
 msgid "Passive (recommended)"
 msgstr "Pasyvi veiksena (rekomenduojama)"
 
-#: resources.h:773
+#: resources.h:775
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:119
 msgid "Passive mode"
 msgstr "Pasyvi veiksena"
@@ -5199,7 +5194,7 @@ msgstr ""
 "apsilankykite http://filezilla-project.org ir atsisiųskite programos "
 "FileZilla programos pradinį kodą."
 
-#: resources.h:695
+#: resources.h:697
 msgid ""
 "Please configure any firewalls and routers so that FileZilla can establish "
 "outgoing connection to arbitrary ports."
@@ -5240,11 +5235,11 @@ msgstr "Įveskite datą iš formos YYYY-MM-DD, tokią kaip pavyzdys 2010-07-18."
 msgid "Please enter a download speed limit greater or equal to 0 %s/s."
 msgstr "Įveskite atsisiuntimo greičio ribą didesnę arba lygią 0 %s/s."
 
-#: ../../locales/../src/interface/filteredit.cpp:134
+#: ../../locales/../src/interface/filteredit.cpp:136
 msgid "Please enter a name for the new filter."
 msgstr "Įveskite naujo filtro pavadinimą."
 
-#: ../../locales/../src/interface/filteredit.cpp:241
+#: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Please enter a new name for the copied filter."
 msgstr "Įveskite naują nukopijuoto filtro pavadinimą."
 
@@ -5253,7 +5248,7 @@ msgstr "Įveskite naują nukopijuoto filtro pavadinimą."
 msgid "Please enter a new name for the filter set \"%s\""
 msgstr "Įveskite naują pavadinimą nustatytam filtrui „%s“"
 
-#: ../../locales/../src/interface/filteredit.cpp:194
+#: ../../locales/../src/interface/filteredit.cpp:196
 msgid "Please enter a new name for the filter."
 msgstr "Įveskite naują filtro pavadinimą."
 
@@ -5278,7 +5273,7 @@ msgstr "Įveskite lygiagrečių persiuntimų skaičių. Skaičius tarp 1 ir 10."
 msgid "Please enter a password for this server:"
 msgstr "Įveskite šio serverio slaptažodį:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2286
+#: ../../locales/../src/interface/QueueView.cpp:2288
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5338,9 +5333,8 @@ msgid "Please enter the name of the directory which should be created:"
 msgstr "Nurodykite kuriamo aplanko pavadinimą:"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:3163
-#, fuzzy
 msgid "Please enter the name of the file which should be created:"
-msgstr "Nurodykite kuriamo aplanko pavadinimą:"
+msgstr "Nurodykite kuriamo failo pavadinimą:"
 
 #: resources.h:119
 msgid "Please enter username and password for this server:"
@@ -5361,7 +5355,7 @@ msgstr ""
 "turite dinaminį adresą arba nežinote savo išorinio adreso, tuomet naudokitės "
 "išoriniu adresų nustatytuoju."
 
-#: resources.h:682
+#: resources.h:684
 msgid ""
 "Please follow the instructions carefully, as wrong configuration will "
 "prevent successful FTP connections."
@@ -5394,7 +5388,7 @@ msgstr ""
 "suderintas rankiniu būdu, nenaudokite maršrutizatoriaus naudojant "
 "„Demilitarizuotą zoną“ (DMZ mode) arba „game mode“."
 
-#: resources.h:696
+#: resources.h:698
 msgid ""
 "Please note that FileZilla has no influence on the port the server chooses. "
 "So the server might choose a port which your firewall thinks is only used by "
@@ -5406,7 +5400,7 @@ msgstr ""
 "ugniasienė manys kad jis yra naudojamas tik interneto šiukšlių ir kenkėjiškų "
 "programų. Tai gali sukelti saugumo aliarmą, kurį galite saugiai atmesti."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:718
+#: ../../locales/../src/interface/Mainfrm.cpp:726
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5414,7 +5408,7 @@ msgstr ""
 "Įkeliant failus FTP, FTPS ir FTPES išsaugoti failų laiko žymes galima tik "
 "tuo atveju jei serveris palaiko komandą MFMT."
 
-#: resources.h:750
+#: resources.h:752
 msgid ""
 "Please note that some servers might ban you if you try to reconnect too "
 "often or in too short intervals."
@@ -5423,7 +5417,7 @@ msgstr ""
 "kas labai mažus intervalus, tuomet kai kurie serveriai gali jus įtraukti į "
 "juodus sąrašus ir nebeleisti prisijungti niekada."
 
-#: resources.h:900 resources.h:906
+#: resources.h:902 resources.h:908
 #, no-c-format
 msgid ""
 "Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
@@ -5458,30 +5452,30 @@ msgstr "Pasirinkite veiksmą:"
 msgid "Please select the categories you would like to import."
 msgstr "Nurodykite kurias kategorijas norite importuoti."
 
-#: resources.h:684
+#: resources.h:686
 msgid "Please select the default transfer mode you would like to use."
 msgstr "Pasirinkite numatytąjį perdavimo režimą."
 
-#: ../../locales/../src/interface/chmoddialog.cpp:38
+#: ../../locales/../src/interface/chmoddialog.cpp:51
 #, c-format
 msgid "Please select the new attributes for the directory \"%s\"."
 msgstr "Aplankui „%s“ parinkite naujus atributus."
 
-#: ../../locales/../src/interface/chmoddialog.cpp:27
+#: ../../locales/../src/interface/chmoddialog.cpp:40
 #, c-format
 msgid "Please select the new attributes for the file \"%s\"."
 msgstr "Failui „%s“ parinkite naujus atributus."
 
-#: ../../locales/../src/interface/chmoddialog.cpp:41
+#: ../../locales/../src/interface/chmoddialog.cpp:54
 msgid "Please select the new attributes for the selected directories."
 msgstr "Pažymėtiems aplankams parinkite naujus atributus."
 
-#: ../../locales/../src/interface/chmoddialog.cpp:44
+#: ../../locales/../src/interface/chmoddialog.cpp:57
 msgid ""
 "Please select the new attributes for the selected files and directories."
 msgstr "Pažymėtiems failams ir aplankams parinkite naujus atributus."
 
-#: ../../locales/../src/interface/chmoddialog.cpp:30
+#: ../../locales/../src/interface/chmoddialog.cpp:43
 msgid "Please select the new attributes for the selected files."
 msgstr "Pažymėtiems failams parinkite naujus atributus."
 
@@ -5525,7 +5519,7 @@ msgstr "Pašto kodas:"
 msgid "Predefined Sites"
 msgstr "Iš anksto nustatyti tinklapiai"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:717
+#: ../../locales/../src/interface/Mainfrm.cpp:725
 msgid "Preserving file timestamps"
 msgstr "Saugomos failų laiko žymės"
 
@@ -5533,7 +5527,7 @@ msgstr "Saugomos failų laiko žymės"
 msgid "Preview:"
 msgstr "Peržiūra:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:936
+#: ../../locales/../src/engine/tlssocket.cpp:944
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Pirminio prisijungimo ir duomenų prisijungimo sertifikatai nesutampa."
 
@@ -5541,19 +5535,19 @@ msgstr "Pirminio prisijungimo ir duomenų prisijungimo sertifikatai nesutampa."
 msgid "Print version information to stdout and exit"
 msgstr "Parodyti versijos informaciją ir išeiti"
 
-#: resources.h:923
+#: resources.h:925
 msgid "Prioritize directories (default)"
 msgstr "Aplankų prioritetai (numatyti)"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Priority"
 msgstr "Prioritetas"
 
-#: resources.h:963
+#: resources.h:965
 msgid "Privacy policy:"
 msgstr "Privatumo politika:"
 
-#: resources.h:797
+#: resources.h:799
 msgid "Private &keys:"
 msgstr "Privatūs &raktai:"
 
@@ -5561,7 +5555,7 @@ msgstr "Privatūs &raktai:"
 msgid "Pro&tocol:"
 msgstr "Pro&tokolas:"
 
-#: resources.h:793 resources.h:810
+#: resources.h:795 resources.h:812
 msgid "Pro&xy password:"
 msgstr "&Tarpinio serverio slaptažodis:"
 
@@ -5569,11 +5563,11 @@ msgstr "&Tarpinio serverio slaptažodis:"
 msgid "Process &Queue"
 msgstr "Vykdyti &eilę"
 
-#: resources.h:808
+#: resources.h:810
 msgid "Proxy &port:"
 msgstr "Tarpinio serverio &prievadas:"
 
-#: resources.h:792 resources.h:809
+#: resources.h:794 resources.h:811
 msgid "Proxy &user:"
 msgstr "Tarpinio serverio &naudotojas:"
 
@@ -5581,16 +5575,15 @@ msgstr "Tarpinio serverio &naudotojas:"
 msgid "Proxy authentication failed"
 msgstr "Tarpinio serverio tapatybės patvirtinimas nepavyko"
 
-#: ../../locales/../src/engine/transfersocket.cpp:132
-#: ../../locales/../src/engine/transfersocket.cpp:146
+#: ../../locales/../src/engine/transfersocket.cpp:131
+#: ../../locales/../src/engine/transfersocket.cpp:145
 #, c-format
 msgid "Proxy handshake failed: %s"
 msgstr "Pasisveikinimas su tarpiniu serveriu nepavyko: %s"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4386
-#, fuzzy
 msgid "Proxy host starts with '[' but no closing bracket found."
-msgstr "Rastas serveris prasideda „[“, bet nėra uždarančio skliausto."
+msgstr "Serveris prasideda „[“, bet nėra uždarančio skliausto."
 
 #: ../../locales/../src/engine/proxy.cpp:309
 #, c-format
@@ -5613,7 +5606,7 @@ msgstr ""
 "Tarpinis serveris nustatytas, bet nurodytas netinkamas serveris arba "
 "prievadas"
 
-#: resources.h:795
+#: resources.h:797
 msgid "Public Key Authentication"
 msgstr "Viešojo rakto tapatybės patikrinimas"
 
@@ -5625,7 +5618,7 @@ msgstr "Viešojo rakto algoritmas:"
 msgid "Public permissions"
 msgstr "Viešos prieigos teisės"
 
-#: ../../locales/../src/interface/QueueView.cpp:3224
+#: ../../locales/../src/interface/QueueView.cpp:3226
 msgid "Queue has been fully processed"
 msgstr "Eilė pilnai įvykdyta"
 
@@ -5644,7 +5637,7 @@ msgstr "Eilė: %s%s"
 msgid "Queue: empty"
 msgstr "Eilė: tuščia"
 
-#: ../../locales/../src/interface/QueueView.cpp:453
+#: ../../locales/../src/interface/QueueView.cpp:455
 msgid "Queued files"
 msgstr "Failai eilėje"
 
@@ -5660,7 +5653,7 @@ msgstr "&Perkrauti sistemą"
 msgid "R&emote directory tree"
 msgstr "&Nutolęs aplankų medis"
 
-#: resources.h:632 resources.h:636
+#: resources.h:634 resources.h:638
 msgid "R&eset and requeue selected files"
 msgstr "&Atstatyti pažymėtų failų būseną ir perkelti į eilę"
 
@@ -5696,44 +5689,50 @@ msgstr "&Skaityti"
 msgid "Read-only"
 msgstr "Tik skaityti"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1095
+#: ../../locales/../src/interface/Mainfrm.cpp:1103
 msgid "Really cancel current operation?"
 msgstr "Tikrai atšaukti dabartinę operaciją?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
-#: ../../locales/../src/interface/search.cpp:1025
-#, c-format
-msgid "Really delete %d directory with its contents?"
-msgid_plural "Really delete %d directories with their contents?"
+#: ../../locales/../src/interface/search.cpp:1026
+#, fuzzy, c-format
+msgid "Really delete %d directory with its contents from the server?"
+msgid_plural ""
+"Really delete %d directories with their contents from the server?"
 msgstr[0] "Ar tikrai pašalinti %d aplanką su jo turiniu?"
 msgstr[1] "Ar tikrai pašalinti %d aplankus su jų turiniu?"
 msgstr[2] "Ar tikrai pašalinti %d aplankų su jų turiniu?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
-#: ../../locales/../src/interface/search.cpp:1023
-#, c-format
-msgid "Really delete %d file?"
-msgid_plural "Really delete %d files?"
+#: ../../locales/../src/interface/search.cpp:1024
+#, fuzzy, c-format
+msgid "Really delete %d file from the server?"
+msgid_plural "Really delete %d files from the server?"
 msgstr[0] "Ar tikrai pašalinti %d failą?"
 msgstr[1] "Ar tikrai pašalinti %d failus?"
 msgstr[2] "Ar tikrai pašalinti %d failų?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
-#: ../../locales/../src/interface/search.cpp:1030
-#, c-format
-msgid "Really delete %s and %s?"
+#: ../../locales/../src/interface/search.cpp:1031
+#, fuzzy, c-format
+msgid "Really delete %s and %s from the server?"
 msgstr "Ar tikrai pašalinti %s ir %s?"
 
-#: ../../locales/../src/engine/local_filesys.cpp:136
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-msgid "Really delete all selected files and/or directories?"
+#, fuzzy
+msgid "Really delete all selected files and/or directories from the server?"
 msgstr "Ar tikrai pašalinti visus pažymėtus failus ir/ar aplankus?"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/engine/local_filesys.cpp:136
+#, fuzzy
+msgid "Really delete all selected files and/or directories from your computer?"
+msgstr "Ar tikrai pašalinti visus pažymėtus failus ir/ar aplankus?"
+
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
 msgstr "Priežastis"
 
-#: ../../locales/../src/interface/QueueView.cpp:3231
+#: ../../locales/../src/interface/QueueView.cpp:3233
 msgid "Reboot now"
 msgstr "Perkrauti sistemą dabar"
 
@@ -5741,12 +5740,12 @@ msgstr "Perkrauti sistemą dabar"
 msgid "Rec&urse into subdirectories"
 msgstr "Taikyti &rekursiškai(ir poaplankiams)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:3111
+#: ../../locales/../src/engine/directorylistingparser.cpp:3110
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
-msgstr ""
+msgstr "Gautas aplanko failų sąrašas kuris atrodo užkoduotas EBDIC."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2124
-#: ../../locales/../src/engine/directorylistingparser.cpp:2139
+#: ../../locales/../src/engine/directorylistingparser.cpp:2123
+#: ../../locales/../src/engine/directorylistingparser.cpp:2138
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Gauta eilutė didesnė nei 10000 simbolių, nutraukiama."
 
@@ -5765,11 +5764,11 @@ msgstr ""
 "informacijos.\n"
 "Jei tęsite, jūsų prisijungimas bus nutrauktas."
 
-#: resources.h:751
+#: resources.h:753
 msgid "Reconnection settings"
 msgstr "Prisijungimo iš naujo nustatymai"
 
-#: resources.h:1004 resources.h:1005
+#: resources.h:1006 resources.h:1007
 msgid "Reconnects to the last used server"
 msgstr "Prisijungs prie paskutinio naudoto serverio"
 
@@ -5777,31 +5776,31 @@ msgstr "Prisijungs prie paskutinio naudoto serverio"
 msgid "Redirection to invalid address"
 msgstr "Peradresavimas į netinkamą adresą"
 
-#: resources.h:996 resources.h:997
+#: resources.h:998 resources.h:999
 msgid "Refresh the file and folder lists"
 msgstr "Atnaujinti failų ir aplankų sąrašą"
 
 #: resources.h:497
 #, fuzzy
-msgid "Remember password?"
-msgstr "Įveskite slaptažodį"
+msgid "Remember passwords?"
+msgstr "Prisiminti slaptažodį?"
 
 #: ../../locales/../src/interface/edithandler.cpp:1243
 msgid "Remote"
 msgstr "Nutolęs"
 
-#: ../../locales/../src/engine/tlssocket.cpp:859
+#: ../../locales/../src/engine/tlssocket.cpp:867
 msgid "Remote certificate not trusted."
 msgstr "Nutolusiu sertifikatu nėra pasitikima."
 
-#: resources.h:368 ../../locales/../src/interface/queue.cpp:1225
+#: resources.h:368 ../../locales/../src/interface/queue.cpp:1222
 msgid "Remote file"
 msgstr "Nutolęs failas"
 
-#: resources.h:441 ../../locales/../src/interface/search.cpp:676
-#: ../../locales/../src/interface/search.cpp:682
-#: ../../locales/../src/interface/search.cpp:692
-#: ../../locales/../src/interface/search.cpp:698
+#: resources.h:441 ../../locales/../src/interface/search.cpp:677
+#: ../../locales/../src/interface/search.cpp:683
+#: ../../locales/../src/interface/search.cpp:693
+#: ../../locales/../src/interface/search.cpp:699
 msgid "Remote file search"
 msgstr "Nuotolinio failo paieška"
 
@@ -5857,20 +5856,20 @@ msgstr "Nutolęs kelias:"
 msgid "Remote site:"
 msgstr "Nutolęs serveris:"
 
-#: resources.h:629 resources.h:633
+#: resources.h:631 resources.h:635
 msgid "Remove &all"
 msgstr "Pašalinti &viską"
 
-#: resources.h:631 resources.h:635
+#: resources.h:633 resources.h:637
 msgid "Remove &selected"
 msgstr "&Pašalinti pažymėtus"
 
-#: resources.h:266 resources.h:276 resources.h:854 resources.h:863
+#: resources.h:266 resources.h:276 resources.h:856 resources.h:865
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:256
 msgid "Rename file"
 msgstr "Pervadinti failą"
 
-#: resources.h:647 resources.h:668
+#: resources.h:649 resources.h:670
 msgid "Rename selected directory"
 msgstr "Pervadinti pažymėtą aplanką"
 
@@ -5896,7 +5895,7 @@ msgstr "Reikalauti išskirtinai FTP per TLS"
 msgid "Require implicit FTP over TLS"
 msgstr "Reikalauti FTP per TLS(jei įmanoma)"
 
-#: resources.h:634
+#: resources.h:636
 msgid "Reset and requeue &all"
 msgstr "&Atstatyti pažymėtų failų būseną ir perkelti į eilę"
 
@@ -5912,8 +5911,8 @@ msgstr "Nustatomas serverio pavadinimas"
 
 #: ../../locales/../src/engine/logging.cpp:215
 #: ../../locales/../src/interface/netconfwizard.cpp:395
-#: ../../locales/../src/interface/StatusView.cpp:289
-#: ../../locales/../src/interface/StatusView.cpp:343
+#: ../../locales/../src/interface/StatusView.cpp:288
+#: ../../locales/../src/interface/StatusView.cpp:342
 #: ../../locales/../src/interface/updatewizard.cpp:544
 msgid "Response:"
 msgstr "Atsakymas:"
@@ -5922,11 +5921,11 @@ msgstr "Atsakymas:"
 msgid "Results:"
 msgstr "Rezultatai:"
 
-#: resources.h:265 resources.h:275 resources.h:853 resources.h:862
+#: resources.h:265 resources.h:275 resources.h:855 resources.h:864
 msgid "Resume file transfer"
 msgstr "Tęsti failo perdavimą"
 
-#: resources.h:868
+#: resources.h:870
 msgid ""
 "Resuming ASCII files can cause problems if server uses a different line "
 "ending format than the client."
@@ -5945,7 +5944,7 @@ msgstr "Gaunamas aplankų sąrašas..."
 msgid "Retrieving external IP address from %s"
 msgstr "Gaunamas išorinis IP adresas iš %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:917
+#: ../../locales/../src/engine/tlssocket.cpp:925
 msgid "Root certificate is not trusted"
 msgstr "Šakninis liudijimas nepatikimas"
 
@@ -5953,7 +5952,7 @@ msgstr "Šakninis liudijimas nepatikimas"
 msgid "S&how files currently being edited..."
 msgstr "&Rodyti failus, kurie šiuo metu redaguojami..."
 
-#: resources.h:885
+#: resources.h:887
 msgid "S&how the Site Manager on startup"
 msgstr "&Paleidžiant rodyti serverių tvarkyklę"
 
@@ -5974,19 +5973,18 @@ msgid "SFTP"
 msgstr "SFTP"
 
 #: resources.h:167
-#, fuzzy
 msgid "SQLite:"
-msgstr "Riba:"
+msgstr "SQLite:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:846
 msgid "Save settings?"
 msgstr "Išsaugoti nustatymus?"
 
-#: ../../locales/../src/interface/QueueView.cpp:1831
+#: ../../locales/../src/interface/QueueView.cpp:1833
 msgid "Scanning for files to add to queue"
 msgstr "Ieškomi failai, kurie bus pridėti į eilę"
 
-#: ../../locales/../src/interface/QueueView.cpp:1833
+#: ../../locales/../src/interface/QueueView.cpp:1835
 msgid "Scanning for files to upload"
 msgstr "Ieškomi failai išsiuntimui"
 
@@ -5998,7 +5996,7 @@ msgstr "Paieškos &sąlygos:"
 msgid "Search &directory:"
 msgstr "Paieškos &aplankas:"
 
-#: resources.h:1012
+#: resources.h:1014
 msgid "Search for files recursively."
 msgstr "Ieškoti failų rekursyviai."
 
@@ -6020,15 +6018,15 @@ msgstr ""
 msgid "Sele&ct server"
 msgstr "Pasirin&kite serverį"
 
-#: resources.h:736
+#: resources.h:738
 msgid "Select &page:"
 msgstr "Pasirinkite &puslapį:"
 
-#: resources.h:888
+#: resources.h:890
 msgid "Select Theme"
 msgstr "Pasirinkite temą"
 
-#: resources.h:846
+#: resources.h:848
 msgid ""
 "Select default action to perform if target file of a transfer already exists."
 msgstr ""
@@ -6098,7 +6096,7 @@ msgstr "Nurodykite failo pavadinimą konvertuojamam raktui"
 msgid "Select how these files should be opened."
 msgstr "Pasirinkite, kaip šie failai bus atveriami."
 
-#: ../../locales/../src/interface/search.cpp:805
+#: ../../locales/../src/interface/search.cpp:806
 msgid "Select target download directory"
 msgstr "Pasirinkite paskirties atsisiuntimo aplanką"
 
@@ -6114,7 +6112,7 @@ msgstr "Pasirinkite eksportuojamas kategorijas:"
 msgid "Select the private data you would like to delete."
 msgstr "Pasirinkite privačius duomenis, kuriuos norite pašalinti."
 
-#: ../../locales/../src/interface/search.cpp:772
+#: ../../locales/../src/interface/search.cpp:773
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6130,7 +6128,7 @@ msgstr[0] "Pažymėtas %d aplankas."
 msgstr[1] "Pažymėti %d aplankai."
 msgstr[2] "Pažymėta %d aplankų."
 
-#: ../../locales/../src/interface/search.cpp:770
+#: ../../locales/../src/interface/search.cpp:771
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6154,7 +6152,7 @@ msgstr[0] "Parinktas %d failas. Bendras dydis: bent %s"
 msgstr[1] "Pasirinkti %d failai. Bendras dydis: bent %s"
 msgstr[2] "Pasirinkta %d failų. Bendras dydis: bent %s"
 
-#: ../../locales/../src/interface/search.cpp:777
+#: ../../locales/../src/interface/search.cpp:778
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Pasirinktas %s ir %s perdavimui."
@@ -6208,7 +6206,7 @@ msgstr ""
 msgid "Selected port usually in use by a different protocol."
 msgstr "Nurodytas prievadas paprastai naudojamas kitam protokolui."
 
-#: resources.h:758
+#: resources.h:760
 msgid "Send FTP &keep-alive commands"
 msgstr "Siųsti FTP &palikti-gyvą komandas"
 
@@ -6229,7 +6227,7 @@ msgstr "Serijos numeris:"
 msgid "Server &Type:"
 msgstr "Serverio &tipas:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:743
+#: ../../locales/../src/engine/tlssocket.cpp:751
 msgid "Server did not properly shut down TLS connection"
 msgstr "Serveris tinkamai neužbaigė TLS susijungimo"
 
@@ -6322,7 +6320,7 @@ msgstr "Šifras iš serverio į klientą:"
 msgid "Server&type:"
 msgstr "Serverio &tipas:"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Server/Local file"
 msgstr "Serveris/Vietinis failas"
 
@@ -6344,15 +6342,15 @@ msgstr "Nustatyti &prioritetą"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "„%s“ prieigos teises nustatyti į „%s“"
 
-#: ../../locales/../src/engine/transfersocket.cpp:860
+#: ../../locales/../src/engine/transfersocket.cpp:858
 msgid "SetSocketBufferSize called without socket"
 msgstr "SetSocketBufferSize iškviestas be lizdo"
 
-#: resources.h:735
+#: resources.h:737
 msgid "Settings"
 msgstr "Nuostatos"
 
-#: resources.h:985
+#: resources.h:987
 msgid "Show &raw directory listing"
 msgstr "Rodyti &nepakeistą aplankų sąrašą"
 
@@ -6360,15 +6358,20 @@ msgstr "Rodyti &nepakeistą aplankų sąrašą"
 msgid "Show &welcome dialog..."
 msgstr "Rodyti &pasisveikinimo langą..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2346
+#: ../../locales/../src/interface/Mainfrm.cpp:2357
 msgid "Show both directory trees and continue comparing?"
 msgstr "Rodyti abu aplankų medžius ir tęsti palyginimą?"
+
+#: resources.h:630
+#, fuzzy
+msgid "Shows available TLS ciphers"
+msgstr "Že&miausias galimas prievadas:"
 
 #: ../../locales/../src/interface/cmdline.cpp:6
 msgid "Shows this help dialog"
 msgstr "Rodyti šį pagalbos dialogą"
 
-#: ../../locales/../src/interface/QueueView.cpp:3233
+#: ../../locales/../src/interface/QueueView.cpp:3235
 msgid "Shutdown now"
 msgstr "Išjungti dabar"
 
@@ -6434,11 +6437,11 @@ msgstr ""
 "tvarkyklę“.\n"
 "Ar pridėti dabartinį ryšį prie serverių tvarkyklės?"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Size"
 msgstr "Dydis"
 
-#: resources.h:907
+#: resources.h:909
 msgid "Size formatting"
 msgstr "Dydžio formatas"
 
@@ -6447,7 +6450,7 @@ msgstr "Dydžio formatas"
 msgid "Size unknown"
 msgstr "Dydis nežinomas"
 
-#: resources.h:267 resources.h:277 resources.h:855 resources.h:864
+#: resources.h:267 resources.h:277 resources.h:857 resources.h:866
 msgid "Skip file"
 msgstr "Praleisti failą"
 
@@ -6467,11 +6470,11 @@ msgstr "Praleidžiamas failo %s gavimas"
 msgid "Skipping upload of %s"
 msgstr "Praleidžiamas failo %s siuntimas"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1220
+#: ../../locales/../src/interface/Mainfrm.cpp:1228
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Kai kurie failai vis dar redaguojami arba juos reikia įkelti."
 
-#: resources.h:698 resources.h:774
+#: resources.h:700 resources.h:776
 msgid ""
 "Some misconfigured remote servers which are behind a router, may reply with "
 "their local IP address."
@@ -6479,19 +6482,19 @@ msgstr ""
 "Netinkamai sukonfigūruoti serveriai, esantys už maršrutizatoriaus, gali "
 "nurodyti savo vietinio tinklo IP adresą."
 
-#: resources.h:925
+#: resources.h:927
 msgid "Sort directories inline"
 msgstr "Rikiuoti aplankus iš eilės"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:446
+#: ../../locales/../src/interface/filelistctrl.cpp:447
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "Lyginant aplankus, rūšiavimo tvarka negali būti keičiama."
 
-#: resources.h:921
+#: resources.h:923
 msgid "Sorting"
 msgstr "Rikiavimas"
 
-#: resources.h:922
+#: resources.h:924
 msgid "Sorting &mode:"
 msgstr "Rikiavimo &būdas:"
 
@@ -6516,7 +6519,7 @@ msgstr "Šaltinio failas:"
 msgid "Speed Limits"
 msgstr "Greičio apribojimai"
 
-#: resources.h:819
+#: resources.h:821
 msgid "Speed limits"
 msgstr "Greičio apribojimai"
 
@@ -6553,13 +6556,13 @@ msgid "State or province:"
 msgstr "Valstija arba provincija:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1235
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Status"
 msgstr "Būsena"
 
 #: ../../locales/../src/engine/logging.cpp:212
-#: ../../locales/../src/interface/StatusView.cpp:298
-#: ../../locales/../src/interface/StatusView.cpp:367
+#: ../../locales/../src/interface/StatusView.cpp:297
+#: ../../locales/../src/interface/StatusView.cpp:366
 #: ../../locales/../src/interface/updatewizard.cpp:538
 msgid "Status:"
 msgstr "Būsena:"
@@ -6580,7 +6583,7 @@ msgstr "Sertifikato antraštė"
 msgid "Successful transfers"
 msgstr "Sėkmingi siuntimai"
 
-#: resources.h:726
+#: resources.h:728
 msgid "Summary of test results:"
 msgstr "Testo rezultatų suvestinė:"
 
@@ -6592,7 +6595,7 @@ msgstr ""
 "Simbolinės nuorodos į failus nėra paveiktos šiuo pasirinkimu, tokios "
 "simbolinės nuorodos visuomet ištrinamos."
 
-#: resources.h:1011 ../../locales/../src/interface/state.cpp:249
+#: resources.h:1013 ../../locales/../src/interface/state.cpp:249
 #: ../../locales/../src/interface/state.cpp:278
 #: ../../locales/../src/interface/state.cpp:285
 #: ../../locales/../src/interface/state.cpp:297
@@ -6621,7 +6624,7 @@ msgstr "Sintaksės klaida"
 #: ../../locales/../src/interface/cmdline.cpp:80
 #: ../../locales/../src/interface/cmdline.cpp:89
 #: ../../locales/../src/interface/cmdline.cpp:95
-#: ../../locales/../src/interface/Mainfrm.cpp:2496
+#: ../../locales/../src/interface/Mainfrm.cpp:2507
 msgid "Syntax error in command line"
 msgstr "Komandų eilutės sintaksės klaida"
 
@@ -6658,15 +6661,14 @@ msgid "Target file:"
 msgstr "Paskirties failas:"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:3197
-#, fuzzy
 msgid "Target filename already exists!"
-msgstr "Paskirties failas jau yra"
+msgstr "Paskirties failas jau yra!"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1921
 msgid "Target filename already exists, really continue?"
 msgstr "Paskirties failas jau yra, tikrai norite tęsti?"
 
-#: resources.h:725
+#: resources.h:727
 msgid "Test results"
 msgstr "Testo rezultatai"
 
@@ -6730,9 +6732,9 @@ msgstr "Numatytojo tekstinių failų redaktoriaus rasti nepavyko."
 msgid "The default editor for text files is '%s'."
 msgstr "Numatytasis tekstinių failų redaktoriaus yra „%s“."
 
-#: ../../locales/../src/interface/filteredit.cpp:147
-#: ../../locales/../src/interface/filteredit.cpp:215
-#: ../../locales/../src/interface/filteredit.cpp:254
+#: ../../locales/../src/interface/filteredit.cpp:149
+#: ../../locales/../src/interface/filteredit.cpp:217
+#: ../../locales/../src/interface/filteredit.cpp:256
 msgid "The entered filter name already exists, please choose a different name."
 msgstr "Filtras tokiu vardu jau yra, pasirinkite kitokį vardą."
 
@@ -6876,7 +6878,7 @@ msgstr "Nemokamas atviro kodo FTP sprendimas"
 msgid "The global bookmarks could not be saved."
 msgstr "Visuotinės žymelės negali būti išsaugotos."
 
-#: resources.h:983
+#: resources.h:985
 msgid ""
 "The higher the debug level, the more information will be displayed in the "
 "message log. Displaying debug information has a negative impact on "
@@ -6923,7 +6925,7 @@ msgstr ""
 "Naujausia versija buvo atsiųsta. Prašome įdiegti ją taip, kaip įdiegėte šią "
 "versiją."
 
-#: ../../locales/../src/interface/QueueView.cpp:1964
+#: ../../locales/../src/interface/QueueView.cpp:1966
 msgid "The queue will not be saved."
 msgstr "Eilė nebus išsaugota."
 
@@ -7011,11 +7013,11 @@ msgid ""
 msgstr ""
 "Nustatymai importuoti. Kad jie įsigalėtų reikia paleisti FileZilla iš naujo."
 
-#: ../../locales/../src/interface/QueueView.cpp:3222
+#: ../../locales/../src/interface/QueueView.cpp:3224
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Sistema netrukus bus perkrauta, nebent, spragtelėsite Atsisakyti."
 
-#: ../../locales/../src/interface/QueueView.cpp:3220
+#: ../../locales/../src/interface/QueueView.cpp:3222
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Sistema netrukus bus sustabdyta, nebent, spragtelėsite Atsisakyti."
 
@@ -7051,7 +7053,7 @@ msgstr ""
 "Tai reiškia, kad dalis maršrutizatoriaus ir/arba ugniasienės vis dar kišasi "
 "į FileZilla."
 
-#: resources.h:703
+#: resources.h:705
 msgid ""
 "This only works if you are not behind a router, else your system would just "
 "return your internal address."
@@ -7059,7 +7061,7 @@ msgstr ""
 "Tai veiks tik jei jūs esate ne už maršrutizatoriaus, priešingu atveju "
 "sistemą grąžins tik jūsų vidinį adresą."
 
-#: resources.h:681
+#: resources.h:683
 msgid ""
 "This wizard will help you to properly configure any routers and firewalls "
 "you have and tests your configuration."
@@ -7067,20 +7069,20 @@ msgstr ""
 "Šis vedlys padės teisingai sukonfigūruoti bet kokius jūsų naudojamus "
 "maršrutizatorius ar ugniasienes ir konfigūraciją išbandys."
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Time"
 msgstr "Laikas"
 
-#: resources.h:901
+#: resources.h:903
 msgid "Time formatting"
 msgstr "Laiko formatas"
 
-#: resources.h:742
+#: resources.h:744
 msgid "Time&out in seconds:"
 msgstr "Laiko &riba sekundėmis:"
 
-#: resources.h:745 ../../locales/../src/interface/QueueView.cpp:1066
-#: ../../locales/../src/interface/QueueView.cpp:1110
+#: resources.h:747 ../../locales/../src/interface/QueueView.cpp:1068
+#: ../../locales/../src/interface/QueueView.cpp:1112
 msgid "Timeout"
 msgstr "Laukimo laikas"
 
@@ -7098,16 +7100,16 @@ msgstr ""
 msgid "Title:"
 msgstr "Antraštė:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2344
+#: ../../locales/../src/interface/Mainfrm.cpp:2355
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "Palyginti aplankus, abu failų sąrašai turi būti išlyginti."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2345
+#: ../../locales/../src/interface/Mainfrm.cpp:2356
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Norint tai atlikti, aplankų medžiai turi būti abu rodomi arba abu paslėpti."
 
-#: resources.h:796
+#: resources.h:798
 msgid ""
 "To support public key authentication, FileZilla needs to know the private "
 "keys to use."
@@ -7115,7 +7117,7 @@ msgstr ""
 "Norint naudoti viešo rakto autentikaciją, FileZilla turi žinoti kuriuos "
 "privačius raktus naudoti."
 
-#: resources.h:1008
+#: resources.h:1010
 msgid ""
 "Toggle directory comparison. Right-click to change comparison mode.\n"
 "\n"
@@ -7132,7 +7134,7 @@ msgstr ""
 "Žalia: Failas yra naujesnis už nepaženklintą failą kitoje pusėje\n"
 "Raudona: Skiriasi failo dydžiai"
 
-#: resources.h:1010
+#: resources.h:1012
 msgid ""
 "Toggle synchronized browsing.\n"
 "If enabled, navigating the local directory hierarchy will also change the "
@@ -7142,23 +7144,23 @@ msgstr ""
 "Jei įjungtas, žvalgymasis vietinio aplanko hierarchijoje taip pat pakeis "
 "aplanką serveryje atitinkamai ir atvirkščiai."
 
-#: resources.h:998 resources.h:999
+#: resources.h:1000 resources.h:1001
 msgid "Toggles processing of the transfer queue"
 msgstr "Perjungia siuntimų eilės vykdymą"
 
-#: resources.h:990 resources.h:991
+#: resources.h:992 resources.h:993
 msgid "Toggles the display of the local directory tree"
 msgstr "Perjungia vietinio aplankų medžio rodymą"
 
-#: resources.h:988 resources.h:989
+#: resources.h:990 resources.h:991
 msgid "Toggles the display of the message log"
 msgstr "Perjungia pranešimų žurnalo rodymą"
 
-#: resources.h:992 resources.h:993
+#: resources.h:994 resources.h:995
 msgid "Toggles the display of the remote directory tree"
 msgstr "Perjungia nutolusio aplankų medžio rodymą"
 
-#: resources.h:994 resources.h:995
+#: resources.h:996 resources.h:997
 msgid "Toggles the display of the transfer queue"
 msgstr "Perjungia siuntimų sąrašo rodymą"
 
@@ -7171,12 +7173,12 @@ msgid "Too many redirects"
 msgstr "Per daug peradresavimų"
 
 #: ../../locales/../src/engine/logging.cpp:216
-#: ../../locales/../src/interface/StatusView.cpp:292
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:291
+#: ../../locales/../src/interface/StatusView.cpp:352
 msgid "Trace:"
 msgstr "Pėdsakas:"
 
-#: resources.h:931 resources.h:937
+#: resources.h:933 resources.h:939
 msgid "Transfer"
 msgstr "Perdavimas"
 
@@ -7188,11 +7190,11 @@ msgstr "Siuntimo &kryptis"
 msgid "Transfer &type"
 msgstr "Siuntimo &būdas"
 
-#: resources.h:752
+#: resources.h:754
 msgid "Transfer Mode"
 msgstr "Siuntimo būdas"
 
-#: resources.h:887
+#: resources.h:889
 msgid "Transfer Queue"
 msgstr "Perdavimo eilė"
 
@@ -7200,8 +7202,8 @@ msgstr "Perdavimo eilė"
 msgid "Transfer Settings"
 msgstr "Perdavimo nuostatos"
 
-#: ../../locales/../src/engine/transfersocket.cpp:498
-#: ../../locales/../src/engine/transfersocket.cpp:522
+#: ../../locales/../src/engine/transfersocket.cpp:497
+#: ../../locales/../src/engine/transfersocket.cpp:521
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "Siuntimo prisijungimas nutrauktas: %s"
@@ -7210,8 +7212,8 @@ msgstr "Siuntimo prisijungimas nutrauktas: %s"
 msgid "Transferred data got tainted."
 msgstr "Persiųsti duomenys buvo sugadinti."
 
-#: ../../locales/../src/interface/QueueView.cpp:1491
-#: ../../locales/../src/interface/statuslinectrl.cpp:278
+#: ../../locales/../src/interface/QueueView.cpp:1493
+#: ../../locales/../src/interface/statuslinectrl.cpp:281
 msgid "Transferring"
 msgstr "Siunčiama"
 
@@ -7219,16 +7221,16 @@ msgstr "Siunčiama"
 msgid "Transfers"
 msgstr "Siuntimai"
 
-#: ../../locales/../src/interface/QueueView.cpp:3136
-#: ../../locales/../src/interface/QueueView.cpp:3139
+#: ../../locales/../src/interface/QueueView.cpp:3138
+#: ../../locales/../src/interface/QueueView.cpp:3141
 msgid "Transfers finished"
 msgstr "Perdavimai užbaigti"
 
-#: resources.h:843
+#: resources.h:845
 msgid "Treat files &without extension as ASCII file"
 msgstr "Failus &be plėtinio interpretuoti kaip ASCII failus"
 
-#: resources.h:839
+#: resources.h:841
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Šiuos &failų tipus laikyti ASCII failais:"
 
@@ -7256,11 +7258,11 @@ msgstr "Pasitikėti serveriu ir tęsti prisijungimą?"
 msgid "Type"
 msgstr "Tipas"
 
-#: resources.h:778
+#: resources.h:780
 msgid "Type of FTP Proxy:"
 msgstr "FTP tarpinio serverio tipas:"
 
-#: resources.h:803
+#: resources.h:805
 msgid "Type of generic proxy:"
 msgstr "Bendro tarpinio serverio tipas:"
 
@@ -7268,20 +7270,20 @@ msgstr "Bendro tarpinio serverio tipas:"
 msgid "U&pload"
 msgstr "&Išsiųsti"
 
-#: resources.h:485 resources.h:823
+#: resources.h:485 resources.h:825
 #, no-c-format
 msgid "U&pload limit:"
 msgstr "I&šsiuntimo greičio riba:"
 
-#: resources.h:949
+#: resources.h:951
 msgid "U&se filetype associations if available"
 msgstr "Jei įmanoma, naudoti failų tipų &susiejimus"
 
-#: resources.h:902
+#: resources.h:904
 msgid "U&se system defaults"
 msgstr "Naudoti &sistemos numatytuosius"
 
-#: resources.h:780
+#: resources.h:782
 msgid "USER@&HOST"
 msgstr "NAUDOTOJAS@&SERVERIS"
 
@@ -7357,7 +7359,7 @@ msgstr ""
 "Kol problema nebus sutvarkyta, aktyvi FTP veiksena neveiks, todėl naudokite "
 "pasyvią veikseną."
 
-#: ../../locales/../src/engine/tlssocket.cpp:888
+#: ../../locales/../src/engine/tlssocket.cpp:896
 msgid "Unsupported certificate type"
 msgstr "Nepalaikomas tapatybės liudijimo tipas"
 
@@ -7396,7 +7398,7 @@ msgstr "Išsiuntimo riba: %s/s"
 msgid "Upload limit: none"
 msgstr "Išsiuntimo riba: nėra"
 
-#: resources.h:658
+#: resources.h:660
 msgid "Upload selected directory"
 msgstr "Įkelti pažymėtą aplanką"
 
@@ -7432,7 +7434,7 @@ msgstr "Įkeliama ir atšaukiamas redagavimas"
 msgid "Use &custom charset"
 msgstr "Naudoti &pasirinktąją koduotę"
 
-#: resources.h:946
+#: resources.h:948
 msgid "Use &custom editor:"
 msgstr "Naudoti &pasirinktąjį redaktorių:"
 
@@ -7464,30 +7466,30 @@ msgstr "Naudoti serverį, prie kurio šiuo metu prisijungta"
 msgid "Use server from site manager"
 msgstr "Naudoti serverį iš serverių tvarkyklės"
 
-#: resources.h:896
+#: resources.h:898
 msgid "Use system &defaults"
 msgstr "Naudoti &numatytas sistemos reikšmes"
 
-#: resources.h:704
+#: resources.h:706
 msgid "Use the following IP address:"
 msgstr "Naudoti kitą IP adresą:"
 
-#: resources.h:714
+#: resources.h:716
 msgid "Use the following port range:"
 msgstr "Naudoti šią prievadų sritį:"
 
-#: resources.h:699
+#: resources.h:701
 msgid "Use the server's external IP address instead"
 msgstr "Naudoti serverio išorinį IP"
 
-#: resources.h:705 resources.h:768
+#: resources.h:707 resources.h:770
 msgid ""
 "Use this if you're behind a router and have a static external IP address."
 msgstr ""
 "Naudokite šį nustatymą, jei jūs esate už maršrutizatoriaus ir turite statinį "
 "išorinį IP adresą."
 
-#: resources.h:708
+#: resources.h:710
 msgid ""
 "Use this option if you have a dynamic IP address. FileZilla will contact the "
 "above server once each session as soon as you use active mode for the first "
@@ -7536,7 +7538,7 @@ msgstr "Galioja iki:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Išsamūs wxWidgets pranešimai"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1078
+#: ../../locales/../src/engine/tlssocket.cpp:1086
 msgid "Verifying certificate..."
 msgstr "Tikrinamas sertifikatas..."
 
@@ -7544,7 +7546,7 @@ msgstr "Tikrinamas sertifikatas..."
 msgid "Version:"
 msgstr "Versija:"
 
-#: resources.h:828
+#: resources.h:830
 msgid "Very high"
 msgstr "Labai aukštas"
 
@@ -7552,7 +7554,7 @@ msgstr "Labai aukštas"
 msgid "View hidden option set, but unsupported by server"
 msgstr "Rodyti paslėptus nustatymus, kurie nesuderinami su serveriu"
 
-#: resources.h:933
+#: resources.h:935
 msgid "View/Edit"
 msgstr "Peržiūrėti/Keisti"
 
@@ -7564,19 +7566,19 @@ msgstr "Rodomi stulpeliai"
 msgid "W&rite"
 msgstr "&Rašyti"
 
-#: ../../locales/../src/interface/QueueView.cpp:1790
+#: ../../locales/../src/interface/QueueView.cpp:1792
 msgid "Waiting"
 msgstr "Laukiama"
 
-#: ../../locales/../src/interface/QueueView.cpp:1398
+#: ../../locales/../src/interface/QueueView.cpp:1400
 msgid "Waiting for browsing connection"
 msgstr "Laukiama naršymui skirto prisijungimo"
 
-#: ../../locales/../src/interface/QueueView.cpp:1441
+#: ../../locales/../src/interface/QueueView.cpp:1443
 msgid "Waiting for password"
 msgstr "Laukiama slaptažodžio"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:272
+#: ../../locales/../src/interface/statuslinectrl.cpp:275
 msgid "Waiting for transfer to be cancelled"
 msgstr "Laukiama kol siuntimas bus atšauktas"
 
@@ -7649,7 +7651,16 @@ msgstr "Kas naujo"
 msgid "What's new:"
 msgstr "Kas naujo:"
 
-#: resources.h:831
+#: resources.h:492
+#, fuzzy
+msgid ""
+"When allowing FileZilla to remember passwords, you can reconnnect without "
+"having to re-enter a password after restarting FileZilla."
+msgstr ""
+"FileZilla gali prisiminti slaptažodžius ir jums kitą kart jungiantis "
+"nebereiks jo iš naujo vesti."
+
+#: resources.h:833
 msgid ""
 "When enabled, characters that are not supported by the local operating "
 "system in filenames are replaced if downloading such a file."
@@ -7657,13 +7668,14 @@ msgstr ""
 "Kuomet įgalinta, simboliai kurie nėra palaikomi vietinės operacinės "
 "sistemos, failo varduose yra pakeičiami, jei atsiunčiamas toks failas."
 
-#: resources.h:873
+#: resources.h:875
 msgid "Widescreen"
 msgstr "Plačiaekranis"
 
 #: resources.h:491
-msgid "Would you like FileZilla to remember this password?"
-msgstr ""
+#, fuzzy
+msgid "Would you like FileZilla to remember passwords?"
+msgstr "Ar norite jog FileZilla prisimintų šį slaptažodį?"
 
 #: resources.h:144
 msgid "Wr&ite"
@@ -7747,7 +7759,7 @@ msgstr ""
 msgid "You have to enter a hostname."
 msgstr "Reikia įvesti serverio pavadinimą."
 
-#: ../../locales/../src/interface/search.cpp:817
+#: ../../locales/../src/interface/search.cpp:818
 msgid "You have to enter a local directory."
 msgstr "Jūs turite įvesti vietinį aplanką."
 
@@ -7756,7 +7768,7 @@ msgstr "Jūs turite įvesti vietinį aplanką."
 msgid "You have to enter a valid IP address."
 msgstr "Įveskite tinkamą IP adresą."
 
-#: ../../locales/../src/interface/search.cpp:823
+#: ../../locales/../src/interface/search.cpp:824
 msgid "You have to enter a writable local directory."
 msgstr "Turite įvesti vietinį aplanką į kurį galima rašyti."
 
@@ -7881,10 +7893,10 @@ msgstr "baigiasi"
 msgid "equals"
 msgstr "lygus"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:497
-#: ../../locales/../src/interface/filelistctrl.cpp:515
-#: ../../locales/../src/interface/filelistctrl.cpp:540
-#: ../../locales/../src/interface/filelistctrl.cpp:556
+#: ../../locales/../src/interface/filelistctrl.cpp:498
+#: ../../locales/../src/interface/filelistctrl.cpp:516
+#: ../../locales/../src/interface/filelistctrl.cpp:541
+#: ../../locales/../src/interface/filelistctrl.cpp:557
 msgid "file"
 msgstr "failas"
 
@@ -7907,7 +7919,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "Paleisti fzsftp nepavyko"
 
-#: ../../locales/../src/engine/tlssocket.cpp:926
+#: ../../locales/../src/engine/tlssocket.cpp:934
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers negrąžino liudijimų"
 
@@ -7978,3 +7990,6 @@ msgstr "rašyti visiems"
 #: resources.h:165
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "&Remember this and all future passwords"
+#~ msgstr "&Prisiminti šį ir visus būsimus slaptažodžius"
