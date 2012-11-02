@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.6.0-rc1 (2012-11-02)
+
+- Do not show "Remember passwords?" dialog if connecting anonymously
+- Make wording in "Remember passwords?" dialog consistent.
+- Increase default TLS session lifetime
+- When asking for confirmation to delete files, state whether it's local or on the server
+- Fix right-to-left rendering of progress line in the transfer queue
+
 3.6.0-beta1 (2012-10-21)
 
 + Auto-scroll file lists if dragging an item near the top or bottom
