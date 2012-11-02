@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-23 23:35+0200\n"
-"PO-Revision-Date: 2012-10-22 05:01+0300\n"
+"POT-Creation-Date: 2012-11-02 11:10+0100\n"
+"PO-Revision-Date: 2012-10-27 00:17+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -22,12 +22,12 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
-#: ../../locales/../src/interface/statuslinectrl.cpp:225
+#: ../../locales/../src/interface/statuslinectrl.cpp:228
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S المنقضي"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:69
-#: ../../locales/../src/interface/statuslinectrl.cpp:233
+#: ../../locales/../src/interface/statuslinectrl.cpp:236
 msgid "%H:%M:%S left"
 msgstr "المتبقي %H:%M:%S"
 
@@ -52,8 +52,8 @@ msgstr[4] "%d مجلد"
 msgstr[5] "%d مجلد"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1709
-#: ../../locales/../src/interface/search.cpp:776
-#: ../../locales/../src/interface/search.cpp:1029
+#: ../../locales/../src/interface/search.cpp:777
+#: ../../locales/../src/interface/search.cpp:1030
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -67,8 +67,8 @@ msgstr[5] "%d مجلد مع محتوياتها"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:62
 #: ../../locales/../src/interface/filelist_statusbar.cpp:85
 #: ../../locales/../src/interface/RemoteListView.cpp:1708
-#: ../../locales/../src/interface/search.cpp:775
-#: ../../locales/../src/interface/search.cpp:1028
+#: ../../locales/../src/interface/search.cpp:776
+#: ../../locales/../src/interface/search.cpp:1029
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -101,7 +101,7 @@ msgstr[3] "%d ملفات . الحجم الكلي : على الأقل %s"
 msgstr[4] "%d ملف . الحجم الكلي : على الأقل %s"
 msgstr[5] "%d ملف . الحجم الكلي : على الأقل %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2937
+#: ../../locales/../src/interface/QueueView.cpp:2939
 #, c-format
 msgid "%d files added to queue"
 msgstr "تمت إضافة %d ملف إلى قائمة الإنتظار"
@@ -126,22 +126,22 @@ msgstr "%h - المضيف"
 msgid "%p - Password"
 msgstr "%p - كلمة المرور"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:181
+#: ../../locales/../src/interface/statuslinectrl.cpp:184
 #, c-format
 msgid "%s (%d B/s)"
 msgstr "(%s ـ (%d ب/ث"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:179
+#: ../../locales/../src/interface/statuslinectrl.cpp:182
 #, c-format
 msgid "%s (%d.%d KB/s)"
 msgstr "(%s ـ (%d.%d كب/ث"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:177
+#: ../../locales/../src/interface/statuslinectrl.cpp:180
 #, c-format
 msgid "%s (%d.%d MB/s)"
 msgstr "(%s ـ (%d.%d مب/ث"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:184
+#: ../../locales/../src/interface/statuslinectrl.cpp:187
 #, c-format
 msgid "%s (? B/s)"
 msgstr "(%s (؟ ب/ث"
@@ -795,8 +795,9 @@ msgid "&Remember password for this session"
 msgstr "&تذكر كلمة المرور لهذه الجلسة"
 
 #: resources.h:493
-msgid "&Remember this and all future passwords"
-msgstr "&تذكر هذخ و جميع كلمات المرور مستقبلا"
+#, fuzzy
+msgid "&Remember passwords"
+msgstr "حفظ كلمة المرور ؟"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -944,9 +945,8 @@ msgid "&Swap local and remote panes"
 msgstr "الت&بديل بين اللوائح المحلية و البعيدة"
 
 #: resources.h:629
-#, fuzzy
 msgid "&TLS Ciphers"
-msgstr "الشفرة :"
+msgstr "&تشفير TLS"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:228
 msgid "&Test"
@@ -1146,7 +1146,7 @@ msgstr "- الملف تالف على المرآة"
 msgid "- Malware on your system"
 msgstr "- برنامج ضار على نظامك"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:236
+#: ../../locales/../src/interface/statuslinectrl.cpp:239
 msgid "--:--:-- left"
 msgstr "--:--:--المتبقي"
 
@@ -1421,7 +1421,7 @@ msgstr "خيارات متقدمة:"
 msgid "Algorithm:"
 msgstr "الخوارزمية:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3139
+#: ../../locales/../src/interface/QueueView.cpp:3141
 msgid "All files have been successfully transferred"
 msgstr "تم إرسال كافة الملفات بنجاح"
 
@@ -1429,7 +1429,7 @@ msgstr "تم إرسال كافة الملفات بنجاح"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "كل المنافذ في المجال الذى تم إدخاله يجب ان تكون بين 1024 و 65535"
 
-#: ../../locales/../src/interface/QueueView.cpp:3135
+#: ../../locales/../src/interface/QueueView.cpp:3137
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1474,7 +1474,7 @@ msgid ""
 "recent version."
 msgstr "بدلا من ذلك ، قم بزيارة http://filezilla-project.org لتحميل آخر نسخة"
 
-#: ../../locales/../src/interface/QueueView.cpp:2051
+#: ../../locales/../src/interface/QueueView.cpp:2053
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1483,7 +1483,7 @@ msgstr ""
 "حدث خطأ أثناء تحميل قائمة إنتظار النقل من \"%s\"\n"
 "بعض العناصر الموجودة في قائمة الانتظار ربما لم يتم استعادتها"
 
-#: ../../locales/../src/interface/QueueView.cpp:1950
+#: ../../locales/../src/interface/QueueView.cpp:1952
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1723,17 +1723,17 @@ msgstr "إ&شراكات مخصصة لأنواع الملفات :"
 msgid "Calculating timezone offset of server..."
 msgstr "تعداد فارق التوقيت للخادم..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:733
+#: ../../locales/../src/engine/transfersocket.cpp:731
 msgid "Can't read from file"
 msgstr "تعذرت القراءة من الملف"
 
-#: ../../locales/../src/engine/transfersocket.cpp:712
-#: ../../locales/../src/engine/transfersocket.cpp:786
+#: ../../locales/../src/engine/transfersocket.cpp:710
+#: ../../locales/../src/engine/transfersocket.cpp:784
 msgid "Can't write data to file."
 msgstr "تعذرت كتابة البيانات إلى الملف"
 
-#: ../../locales/../src/engine/transfersocket.cpp:710
-#: ../../locales/../src/engine/transfersocket.cpp:784
+#: ../../locales/../src/engine/transfersocket.cpp:708
+#: ../../locales/../src/engine/transfersocket.cpp:782
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "تعذرت كتابة البيانات إلى الملف : %s"
@@ -1783,7 +1783,7 @@ msgstr ""
 msgid "Cannot compare directories, not connected to a server."
 msgstr "لا يمكن مقارنة الأدلة ، غير متصل بأي خادم"
 
-#: ../../locales/../src/interface/filteredit.cpp:141
+#: ../../locales/../src/interface/filteredit.cpp:143
 msgid "Cannot create new filter"
 msgstr "تعذر إنشاء مرشح جديد"
 
@@ -2064,8 +2064,8 @@ msgid "Command not supported by this protocol"
 msgstr "الأمر غير مدعوم من قبل هذا البروتوكول"
 
 #: ../../locales/../src/engine/logging.cpp:214
-#: ../../locales/../src/interface/StatusView.cpp:286
-#: ../../locales/../src/interface/StatusView.cpp:336
+#: ../../locales/../src/interface/StatusView.cpp:285
+#: ../../locales/../src/interface/StatusView.cpp:335
 #: ../../locales/../src/interface/updatewizard.cpp:541
 msgid "Command:"
 msgstr "الأمر:"
@@ -2143,7 +2143,7 @@ msgstr "تكوين نطاق المنفذ"
 msgid "Configuring FileZilla and your network"
 msgstr "تكوين FileZilla و شبكتك"
 
-#: ../../locales/../src/interface/search.cpp:1033
+#: ../../locales/../src/interface/search.cpp:1034
 msgid "Confirm deletion"
 msgstr "تأكيد الحذف"
 
@@ -2172,12 +2172,12 @@ msgstr "إتصال بموقع مدير موقع معين"
 msgid "Connected"
 msgstr "متصل"
 
-#: ../../locales/../src/interface/QueueView.cpp:1454
+#: ../../locales/../src/interface/QueueView.cpp:1456
 msgid "Connecting"
 msgstr "اتصال"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:207
-#: ../../locales/../src/interface/statuslinectrl.cpp:275
+#: ../../locales/../src/interface/statuslinectrl.cpp:278
 #, c-format
 msgid "Connecting to %s"
 msgstr "إتصال إلى %s"
@@ -2203,7 +2203,7 @@ msgstr "إتصال بالخادم"
 msgid "Connection"
 msgstr "الإتصال"
 
-#: ../../locales/../src/interface/QueueView.cpp:1070
+#: ../../locales/../src/interface/QueueView.cpp:1072
 msgid "Connection attempt failed"
 msgstr "محاولة الاتصال فشلت"
 
@@ -2265,7 +2265,7 @@ msgstr "إنقضاء مهملة الإتصال"
 msgid "Connection timed out."
 msgstr "إنقضاء مهملة الإتصال"
 
-#: ../../locales/../src/interface/search.cpp:676
+#: ../../locales/../src/interface/search.cpp:677
 msgid "Connection to server lost."
 msgstr "فقد الإتصال بالخادم"
 
@@ -2305,7 +2305,7 @@ msgstr "نسخة من %s"
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "نسخ الرابط للمواد المحددة إلى الحافظة"
 
-#: ../../locales/../src/engine/transfersocket.cpp:207
+#: ../../locales/../src/engine/transfersocket.cpp:206
 #, c-format
 msgid "Could not accept connection: %s"
 msgstr "تعذر قبول الإتصال : %s"
@@ -2510,8 +2510,8 @@ msgstr "لا يمكن تفقيس مؤشر ترابط إدخال/إخراج"
 msgid "Could not start proxy handshake: %s"
 msgstr "تعذر بدء ربط الملقم الوكيل : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1121
-#: ../../locales/../src/interface/QueueView.cpp:1126
+#: ../../locales/../src/interface/QueueView.cpp:1123
+#: ../../locales/../src/interface/QueueView.cpp:1128
 msgid "Could not start transfer"
 msgstr "تعذر بدء الإرسال"
 
@@ -2533,7 +2533,7 @@ msgstr "لا يمكن كتابة \"%s\" , تعذر إضافة العنوان ا�
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "لا يمكن كتابة \"%s\" , تعذر حفظ العناوين المفضلة الشاملة : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1985
+#: ../../locales/../src/interface/QueueView.cpp:1987
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2559,7 +2559,7 @@ msgstr "تعذرت كتابة \"%s\" : %s"
 msgid "Could not write keyfile: %s"
 msgstr "تعذرت كتابة ملف المفتاح : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1115
+#: ../../locales/../src/interface/QueueView.cpp:1117
 msgid "Could not write to local file"
 msgstr "تعذرت الكتابة إلى الملف المحلي"
 
@@ -2606,7 +2606,7 @@ msgstr "إنشاء دليل"
 msgid "Create empty file"
 msgstr "إنشاء ملف فارغ"
 
-#: ../../locales/../src/interface/QueueView.cpp:1527
+#: ../../locales/../src/interface/QueueView.cpp:1529
 msgid "Creating directory"
 msgstr "إنشاء دليل"
 
@@ -2811,11 +2811,11 @@ msgstr "حذف الدليل المحدد"
 msgid "Delete selected files and directories"
 msgstr "حذف الملفات المحددة و الأدلة"
 
-#: ../../locales/../src/interface/search.cpp:1017
+#: ../../locales/../src/interface/search.cpp:1018
 msgid "Deleting directories"
 msgstr "حذف الأدلة"
 
-#: ../../locales/../src/interface/search.cpp:1017
+#: ../../locales/../src/interface/search.cpp:1018
 msgid "Deleting multiple unrelated directories is not yet supported"
 msgstr "لم يتم بعد دعم الحذف للأدلة المتعددة الغير مرتبطة"
 
@@ -2839,17 +2839,17 @@ msgstr "التفاصيل للمفتاح الجديد:"
 msgid "Dire&ctories"
 msgstr "الا&دلة"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Direction"
 msgstr "الإتجاه"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:523
+#: ../../locales/../src/interface/filelistctrl.cpp:524
 msgid "Directory"
 msgstr "الدليل"
 
 #: resources.h:654 resources.h:928 resources.h:1011
-#: ../../locales/../src/interface/filelistctrl.cpp:445
-#: ../../locales/../src/interface/Mainfrm.cpp:2351
+#: ../../locales/../src/interface/filelistctrl.cpp:446
+#: ../../locales/../src/interface/Mainfrm.cpp:2354
 msgid "Directory comparison"
 msgstr "مقارنة الأدلة"
 
@@ -2906,8 +2906,8 @@ msgstr "قطع الاتصال من الخادم"
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:227
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:936
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:938
-#: ../../locales/../src/interface/QueueView.cpp:1068
-#: ../../locales/../src/interface/QueueView.cpp:1112
+#: ../../locales/../src/interface/QueueView.cpp:1070
+#: ../../locales/../src/interface/QueueView.cpp:1114
 msgid "Disconnected from server"
 msgstr "قطع الاتصال من الخادم"
 
@@ -2917,8 +2917,8 @@ msgstr "قطع الاتصال من الخادم"
 msgid "Disconnected from server: %s"
 msgstr "قطع الاتصال من الخادم : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1429
-#: ../../locales/../src/interface/statuslinectrl.cpp:269
+#: ../../locales/../src/interface/QueueView.cpp:1431
+#: ../../locales/../src/interface/statuslinectrl.cpp:272
 msgid "Disconnecting from previous server"
 msgstr "قطع الاتصال من الخادم السابق"
 
@@ -3008,8 +3008,8 @@ msgstr "حدود التحميل: %s/ث"
 msgid "Download limit: none"
 msgstr "حدود التحميل : بدون"
 
-#: resources.h:442 ../../locales/../src/interface/search.cpp:817
-#: ../../locales/../src/interface/search.cpp:823
+#: resources.h:442 ../../locales/../src/interface/search.cpp:818
+#: ../../locales/../src/interface/search.cpp:824
 msgid "Download search results"
 msgstr "تحميل نتائج البحث"
 
@@ -3031,11 +3031,11 @@ msgstr "تحميل"
 msgid "Downloading %s"
 msgstr "تحميل %s"
 
-#: ../../locales/../src/interface/search.cpp:926
+#: ../../locales/../src/interface/search.cpp:927
 msgid "Downloading multiple unrelated directories is not yet supported"
 msgstr "لم يتم بعد دعم التحميل للأدلة المتعددة الغير مرتبطة"
 
-#: ../../locales/../src/interface/search.cpp:926
+#: ../../locales/../src/interface/search.cpp:927
 msgid "Downloading search results"
 msgstr "تحميل نتائج البحث"
 
@@ -3099,7 +3099,7 @@ msgstr "فشل التحرير"
 msgid "Email:"
 msgstr "البريد :"
 
-#: ../../locales/../src/interface/QueueView.cpp:2297
+#: ../../locales/../src/interface/QueueView.cpp:2299
 msgid "Empty command"
 msgstr "أمر فارغ"
 
@@ -3119,13 +3119,13 @@ msgstr "دليل فارغ"
 msgid "Empty file extension."
 msgstr "إمتداد ملف فارغ"
 
-#: ../../locales/../src/interface/filteredit.cpp:206
-#: ../../locales/../src/interface/filteredit.cpp:248
+#: ../../locales/../src/interface/filteredit.cpp:208
+#: ../../locales/../src/interface/filteredit.cpp:250
 msgid "Empty filter names are not allowed."
 msgstr "أسماء المرشحات الفارغة غير مسموح بإستخدامها"
 
-#: ../../locales/../src/interface/filteredit.cpp:206
-#: ../../locales/../src/interface/filteredit.cpp:248
+#: ../../locales/../src/interface/filteredit.cpp:208
+#: ../../locales/../src/interface/filteredit.cpp:250
 msgid "Empty name"
 msgstr "إسم فارغ"
 
@@ -3153,7 +3153,7 @@ msgstr "التشفير"
 msgid "Encryption details"
 msgstr "تفاصيل التشفير"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:447
+#: ../../locales/../src/interface/filelistctrl.cpp:448
 msgid "End comparison and change sorting order?"
 msgstr "إنهاء المقارنة و تغيير نظام الترتيب ؟"
 
@@ -3166,7 +3166,7 @@ msgstr "إدخال أمر &مخصص..."
 msgid "Enter 0 for unlimited speed."
 msgstr "أدخل 0 للسرعة الغير المحدودة"
 
-#: ../../locales/../src/interface/QueueView.cpp:2286
+#: ../../locales/../src/interface/QueueView.cpp:2288
 msgid "Enter command"
 msgstr "إدخال أمر"
 
@@ -3178,9 +3178,9 @@ msgstr "إدخال أمر مخصص"
 msgid "Enter directory"
 msgstr "إدخال دليل"
 
-#: ../../locales/../src/interface/filteredit.cpp:134
-#: ../../locales/../src/interface/filteredit.cpp:194
-#: ../../locales/../src/interface/filteredit.cpp:241
+#: ../../locales/../src/interface/filteredit.cpp:136
+#: ../../locales/../src/interface/filteredit.cpp:196
+#: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Enter filter name"
 msgstr "إدخال إسم المرشح"
 
@@ -3246,7 +3246,7 @@ msgstr "خطأ في تصدير الإعدادات"
 msgid "Error importing"
 msgstr "خطأ بالإستيراد"
 
-#: ../../locales/../src/interface/QueueView.cpp:2052
+#: ../../locales/../src/interface/QueueView.cpp:2054
 msgid "Error loading queue"
 msgstr "خطأ في تحميل قائمة الإنتظار"
 
@@ -3260,9 +3260,9 @@ msgstr "خطأ في تحميل قائمة الإنتظار"
 #: ../../locales/../src/interface/import.cpp:120
 #: ../../locales/../src/interface/import.cpp:311
 #: ../../locales/../src/interface/Options.cpp:216
-#: ../../locales/../src/interface/QueueView.cpp:1965
-#: ../../locales/../src/interface/search.cpp:1094
-#: ../../locales/../src/interface/search.cpp:1115
+#: ../../locales/../src/interface/QueueView.cpp:1967
+#: ../../locales/../src/interface/search.cpp:1095
+#: ../../locales/../src/interface/search.cpp:1116
 #: ../../locales/../src/interface/sitemanager.cpp:250
 #: ../../locales/../src/interface/sitemanager.cpp:448
 #: ../../locales/../src/interface/sitemanager.cpp:544
@@ -3275,7 +3275,7 @@ msgstr "خطأ في تحميل قائمة الإنتظار"
 msgid "Error loading xml file"
 msgstr "خطأ في تحميل ملف xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1951
+#: ../../locales/../src/interface/QueueView.cpp:1953
 msgid "Error saving queue"
 msgstr "خطأ في حفظ قائمة الإنتظار"
 
@@ -3286,7 +3286,7 @@ msgstr "خطأ في تشغيل البرنامج"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:331
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:859
-#: ../../locales/../src/interface/QueueView.cpp:1986
+#: ../../locales/../src/interface/QueueView.cpp:1988
 #: ../../locales/../src/interface/sitemanager.cpp:658
 #: ../../locales/../src/interface/sitemanager.cpp:783
 #: ../../locales/../src/interface/sitemanager.cpp:843
@@ -3305,8 +3305,8 @@ msgid "Error, local file exists but cannot be removed"
 msgstr "خطأ ، الملف المحلي موجود لكن لا يمكن إزالته"
 
 #: ../../locales/../src/engine/logging.cpp:213
-#: ../../locales/../src/interface/StatusView.cpp:284
-#: ../../locales/../src/interface/StatusView.cpp:332
+#: ../../locales/../src/interface/StatusView.cpp:283
+#: ../../locales/../src/interface/StatusView.cpp:331
 #: ../../locales/../src/interface/updatewizard.cpp:535
 msgid "Error:"
 msgstr "الخطأ:"
@@ -3605,9 +3605,9 @@ msgstr "ال&ملف:"
 msgid "Fil&es"
 msgstr "م&لفات"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:500
-#: ../../locales/../src/interface/filelistctrl.cpp:518
-#: ../../locales/../src/interface/filelistctrl.cpp:527
+#: ../../locales/../src/interface/filelistctrl.cpp:501
+#: ../../locales/../src/interface/filelistctrl.cpp:519
+#: ../../locales/../src/interface/filelistctrl.cpp:528
 msgid "File"
 msgstr "ملف"
 
@@ -3705,14 +3705,6 @@ msgid ""
 "properly."
 msgstr ""
 "يمكن الآن لـ FileZilla أن يفحص تكوينك للتأكد من أن كل شيء تم تكوينه بشكل صحيح"
-
-#: resources.h:492
-msgid ""
-"FileZilla can remember passwords so that you can later reconnect without "
-"having to reenter your password after restarting FileZilla."
-msgstr ""
-"هذا يفيدك كثيرا بحيث فيما بعد تستطيع إعادة الاتصال بدون الحاجة إلى إعادة "
-"إدخال كلمة المرور الخاصة بك حتى بعد إعادة تشغيل البرنامج نفسه"
 
 #: resources.h:478
 msgid "FileZilla is already connected to a server."
@@ -3817,10 +3809,10 @@ msgstr "المرشح يطبق على:"
 msgid "Filter invalid characters in filenames"
 msgstr "فرز الرموز الغير صالحة في أسماء الملفات"
 
-#: ../../locales/../src/interface/filteredit.cpp:147
-#: ../../locales/../src/interface/filteredit.cpp:215
-#: ../../locales/../src/interface/filteredit.cpp:254
-#: ../../locales/../src/interface/filteredit.cpp:356
+#: ../../locales/../src/interface/filteredit.cpp:149
+#: ../../locales/../src/interface/filteredit.cpp:217
+#: ../../locales/../src/interface/filteredit.cpp:256
+#: ../../locales/../src/interface/filteredit.cpp:358
 msgid "Filter name already exists"
 msgstr "أسم المرشح موجود مسبقا"
 
@@ -3845,9 +3837,9 @@ msgstr "مجموعة المرشح موجودة مسبقا"
 msgid "Filter the directory listings"
 msgstr "فرز قوائم الدليل"
 
-#: ../../locales/../src/interface/filteredit.cpp:338
-#: ../../locales/../src/interface/filteredit.cpp:347
-#: ../../locales/../src/interface/filteredit.cpp:356
+#: ../../locales/../src/interface/filteredit.cpp:340
+#: ../../locales/../src/interface/filteredit.cpp:349
+#: ../../locales/../src/interface/filteredit.cpp:358
 msgid "Filter validation failed"
 msgstr "فشل التحقق من المرشح"
 
@@ -3965,13 +3957,13 @@ msgstr "التجزئة :"
 msgid "Hidden"
 msgstr "مخفي"
 
-#: resources.h:829 ../../locales/../src/interface/queue.cpp:924
-#: ../../locales/../src/interface/queue.cpp:1011
+#: resources.h:829 ../../locales/../src/interface/queue.cpp:921
+#: ../../locales/../src/interface/queue.cpp:1008
 msgid "High"
 msgstr "عالى"
 
-#: ../../locales/../src/interface/queue.cpp:926
-#: ../../locales/../src/interface/queue.cpp:1013
+#: ../../locales/../src/interface/queue.cpp:923
+#: ../../locales/../src/interface/queue.cpp:1010
 msgid "Highest"
 msgstr "أعلى"
 
@@ -4259,7 +4251,7 @@ msgid ""
 "certificate"
 msgstr "السلسلة ناقصة ، الشهادة العليا ليست شهادة موقّعة ذاتيا"
 
-#: ../../locales/../src/interface/QueueView.cpp:1064
+#: ../../locales/../src/interface/QueueView.cpp:1066
 msgid "Incorrect password"
 msgstr "كلمة مرور غير صحيحة"
 
@@ -4282,8 +4274,8 @@ msgid "Interface"
 msgstr "الواجهة"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:219
-#: ../../locales/../src/interface/QueueView.cpp:1021
-#: ../../locales/../src/interface/QueueView.cpp:1597
+#: ../../locales/../src/interface/QueueView.cpp:1023
+#: ../../locales/../src/interface/QueueView.cpp:1599
 msgid "Interrupted by user"
 msgstr "إنهاء من قبل المستخدم"
 
@@ -4360,7 +4352,7 @@ msgid ""
 msgstr ""
 "خادم الإستضافة غير صالح، بعد إغلاق القوس فقط النقطة و المنفذ قد يلي كلاحقة"
 
-#: ../../locales/../src/interface/search.cpp:698
+#: ../../locales/../src/interface/search.cpp:699
 msgid "Invalid regular expression in search conditions."
 msgstr "تعبير إصطلاحي غير صالح في شروط البحث"
 
@@ -4368,7 +4360,7 @@ msgstr "تعبير إصطلاحي غير صالح في شروط البحث"
 msgid "Invalid response code"
 msgstr "رمز إستجابة غير صالح"
 
-#: ../../locales/../src/interface/search.cpp:692
+#: ../../locales/../src/interface/search.cpp:693
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "شروط بحث غير صالحة : %s"
@@ -4481,8 +4473,8 @@ msgid "Listen socket closed"
 msgstr "مقبس الإستماع مغلق"
 
 #: ../../locales/../src/engine/logging.cpp:220
-#: ../../locales/../src/interface/StatusView.cpp:295
-#: ../../locales/../src/interface/StatusView.cpp:360
+#: ../../locales/../src/interface/StatusView.cpp:294
+#: ../../locales/../src/interface/StatusView.cpp:359
 msgid "Listing:"
 msgstr "القائمة:"
 
@@ -4569,13 +4561,13 @@ msgstr ""
 "نوع الدخول ، يمكن فقط أن يستخدم مع رابط FTP . يجب أن يكون التعامل إما '%s' "
 "أو '%s'"
 
-#: ../../locales/../src/interface/queue.cpp:919
-#: ../../locales/../src/interface/queue.cpp:1006
+#: ../../locales/../src/interface/queue.cpp:916
+#: ../../locales/../src/interface/queue.cpp:1003
 msgid "Low"
 msgstr "منخفض"
 
-#: ../../locales/../src/interface/queue.cpp:917
-#: ../../locales/../src/interface/queue.cpp:1004
+#: ../../locales/../src/interface/queue.cpp:914
+#: ../../locales/../src/interface/queue.cpp:1001
 msgid "Lowest"
 msgstr "الأقل"
 
@@ -4697,11 +4689,11 @@ msgstr "الإسم للعنوان المفضل موجود مسبقا"
 msgid "Name:"
 msgstr "الاسم:"
 
-#: ../../locales/../src/interface/filteredit.cpp:347
+#: ../../locales/../src/interface/filteredit.cpp:349
 msgid "Need to enter filter name"
 msgstr "يجب ادخال اسم مرشح"
 
-#: ../../locales/../src/interface/search.cpp:682
+#: ../../locales/../src/interface/search.cpp:683
 msgid "Need to enter valid remote path"
 msgstr "مطلوب إدخال مسار بعيد صالح"
 
@@ -4754,7 +4746,7 @@ msgstr "دليل جديد"
 msgid "New features and improvements in %s"
 msgstr "الميزات الجديدة و التحسينات في %s"
 
-#: ../../locales/../src/interface/filteredit.cpp:129
+#: ../../locales/../src/interface/filteredit.cpp:131
 msgid "New filter"
 msgstr "مرشح جديد"
 
@@ -4780,7 +4772,7 @@ msgstr "لا"
 msgid "No category to export selected"
 msgstr "لم يتم تحديد فئة للتصدير"
 
-#: ../../locales/../src/interface/QueueView.cpp:2297
+#: ../../locales/../src/interface/QueueView.cpp:2299
 msgid "No command given, aborting."
 msgstr "لم يتم وضع أمر , مقاطعة"
 
@@ -4792,7 +4784,7 @@ msgstr "لم يتم تحديد IP خارجى ، محاولة الافتراضى"
 msgid "No files are currently being edited."
 msgstr "لا يوجد ملفات حاليا يتم تحريرها"
 
-#: ../../locales/../src/interface/filteredit.cpp:141
+#: ../../locales/../src/interface/filteredit.cpp:143
 msgid "No filter name given"
 msgstr "لم يتم وضع إسم المرشح"
 
@@ -4806,7 +4798,7 @@ msgstr "لم يتم ادخال مضيف ، من فضلك ادخل عنوان م�
 msgid "No images available"
 msgstr "لا توجد صور متاحة"
 
-#: ../../locales/../src/interface/QueueView.cpp:3168
+#: ../../locales/../src/interface/QueueView.cpp:3170
 msgid "No more files in the queue!"
 msgstr "لا يوجد المزيد من الملفات في قائمة الإنتظار"
 
@@ -4824,7 +4816,7 @@ msgstr "لا يوجد برنامج مشروك مع نوع الملف"
 msgid "No program has been associated to edit files with the extension '%s'."
 msgstr "لا يوجد برنامج مشروك من أجل تحرير الملفات ذات الإمتداد '%s'"
 
-#: ../../locales/../src/interface/search.cpp:540
+#: ../../locales/../src/interface/search.cpp:541
 msgid "No search results"
 msgstr "لا يوجد نتائج بحث"
 
@@ -4856,8 +4848,8 @@ msgstr "الغير محددة بعد"
 #: ../../locales/../src/interface/manual_transfer.cpp:160
 #: ../../locales/../src/interface/manual_transfer.cpp:185
 #: ../../locales/../src/interface/manual_transfer.cpp:560
-#: ../../locales/../src/interface/queue.cpp:922
-#: ../../locales/../src/interface/queue.cpp:1009
+#: ../../locales/../src/interface/queue.cpp:919
+#: ../../locales/../src/interface/queue.cpp:1006
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1288
 msgid "Normal"
 msgstr "عادى"
@@ -5059,7 +5051,7 @@ msgstr "&سلبي (مستحسن)"
 msgid "Package"
 msgstr "حزمة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2502
+#: ../../locales/../src/interface/Mainfrm.cpp:2505
 msgid "Parameter not a valid URL"
 msgstr "المعيار ليس رابط صالح"
 
@@ -5181,11 +5173,11 @@ msgstr "الرجاء إدخال تاريخ بالتنسيق سنة-شهر-يوم
 msgid "Please enter a download speed limit greater or equal to 0 %s/s."
 msgstr "أدخل من فضلك حدود سرعة التحميل تساوي أو أكبر من 0 %s/ث"
 
-#: ../../locales/../src/interface/filteredit.cpp:134
+#: ../../locales/../src/interface/filteredit.cpp:136
 msgid "Please enter a name for the new filter."
 msgstr "من فضلك أدخل أسم للمرشح الجديد"
 
-#: ../../locales/../src/interface/filteredit.cpp:241
+#: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Please enter a new name for the copied filter."
 msgstr "من فضلك أدخل أسم جديد للمرشح المنسوخ"
 
@@ -5194,7 +5186,7 @@ msgstr "من فضلك أدخل أسم جديد للمرشح المنسوخ"
 msgid "Please enter a new name for the filter set \"%s\""
 msgstr "الرجاء إدخال إسم جديد لمجموعة المرشح \"%s\""
 
-#: ../../locales/../src/interface/filteredit.cpp:194
+#: ../../locales/../src/interface/filteredit.cpp:196
 msgid "Please enter a new name for the filter."
 msgstr "من فضلك أدخل إسم جديد للمرشح"
 
@@ -5219,7 +5211,7 @@ msgstr "من فضلك أدخل رقم بين 0 و 10 لعدد عمليات ال�
 msgid "Please enter a password for this server:"
 msgstr "من فضلك ادخل كلمة مرور لهذا الخادم"
 
-#: ../../locales/../src/interface/QueueView.cpp:2286
+#: ../../locales/../src/interface/QueueView.cpp:2288
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5396,26 +5388,26 @@ msgstr "الرجاء تحديد الفئات المراد إستيرادها"
 msgid "Please select the default transfer mode you would like to use."
 msgstr "من فضلك قم باختيار نمط الإرسال الافتراضي المراد إستخدامه"
 
-#: ../../locales/../src/interface/chmoddialog.cpp:38
+#: ../../locales/../src/interface/chmoddialog.cpp:51
 #, c-format
 msgid "Please select the new attributes for the directory \"%s\"."
 msgstr "الرجاء تحديد الخواص الجديدة للدليل \"%s\""
 
-#: ../../locales/../src/interface/chmoddialog.cpp:27
+#: ../../locales/../src/interface/chmoddialog.cpp:40
 #, c-format
 msgid "Please select the new attributes for the file \"%s\"."
 msgstr "الرجاء تحديد الخواص الجديدة للملف \"%s\""
 
-#: ../../locales/../src/interface/chmoddialog.cpp:41
+#: ../../locales/../src/interface/chmoddialog.cpp:54
 msgid "Please select the new attributes for the selected directories."
 msgstr "الرجاء تحديد الخواص الجديدة للأدلة المحددة"
 
-#: ../../locales/../src/interface/chmoddialog.cpp:44
+#: ../../locales/../src/interface/chmoddialog.cpp:57
 msgid ""
 "Please select the new attributes for the selected files and directories."
 msgstr "الرجاء تحديد الخواص الجديدة للملفات المحددة و الأدلة"
 
-#: ../../locales/../src/interface/chmoddialog.cpp:30
+#: ../../locales/../src/interface/chmoddialog.cpp:43
 msgid "Please select the new attributes for the selected files."
 msgstr "الرجاء تحديد الخواص الجديدة للملفات المحددة"
 
@@ -5477,7 +5469,7 @@ msgstr "طباعة معلومات النسخة إلى الناتج المعيا�
 msgid "Prioritize directories (default)"
 msgstr "وضع الأولوية للمجلدات (الإفتراضي)"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Priority"
 msgstr "الأولوية"
 
@@ -5513,8 +5505,8 @@ msgstr "&مستخدم الملقم:"
 msgid "Proxy authentication failed"
 msgstr "فشلت مصادقة الملقم"
 
-#: ../../locales/../src/engine/transfersocket.cpp:132
-#: ../../locales/../src/engine/transfersocket.cpp:146
+#: ../../locales/../src/engine/transfersocket.cpp:131
+#: ../../locales/../src/engine/transfersocket.cpp:145
 #, c-format
 msgid "Proxy handshake failed: %s"
 msgstr "فشلت مصافحة الملقم : %s"
@@ -5553,7 +5545,7 @@ msgstr "خوارزمية المفتاح العام:"
 msgid "Public permissions"
 msgstr "أذونات عمومية"
 
-#: ../../locales/../src/interface/QueueView.cpp:3224
+#: ../../locales/../src/interface/QueueView.cpp:3226
 msgid "Queue has been fully processed"
 msgstr "تم معالجة قائمة الإنتظار بالكامل"
 
@@ -5572,7 +5564,7 @@ msgstr "قائمة الإنتظار : %s%s"
 msgid "Queue: empty"
 msgstr "قائمة الانتظار : فارغة"
 
-#: ../../locales/../src/interface/QueueView.cpp:453
+#: ../../locales/../src/interface/QueueView.cpp:455
 msgid "Queued files"
 msgstr "ملفات في الإنتظار"
 
@@ -5629,10 +5621,11 @@ msgid "Really cancel current operation?"
 msgstr "إلغاء العملية الحالية فعلا ؟"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
-#: ../../locales/../src/interface/search.cpp:1025
-#, c-format
-msgid "Really delete %d directory with its contents?"
-msgid_plural "Really delete %d directories with their contents?"
+#: ../../locales/../src/interface/search.cpp:1026
+#, fuzzy, c-format
+msgid "Really delete %d directory with its contents from the server?"
+msgid_plural ""
+"Really delete %d directories with their contents from the server?"
 msgstr[0] "هل تريد فعلا حذف %d مجلد مع محتوياته ؟"
 msgstr[1] "هل تريد فعلا حذف %d مجلد مع محتوياته ؟"
 msgstr[2] "هل تريد فعلا حذف %d مجلد مع محتوياتهما ؟"
@@ -5641,10 +5634,10 @@ msgstr[4] "هل تريد فعلا حذف %d مجلد مع محتوياتها ؟"
 msgstr[5] "هل تريد فعلا حذف %d مجلد مع محتوياتها ؟"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
-#: ../../locales/../src/interface/search.cpp:1023
-#, c-format
-msgid "Really delete %d file?"
-msgid_plural "Really delete %d files?"
+#: ../../locales/../src/interface/search.cpp:1024
+#, fuzzy, c-format
+msgid "Really delete %d file from the server?"
+msgid_plural "Really delete %d files from the server?"
 msgstr[0] "هل تريد فعلا حذف %d ملف ؟"
 msgstr[1] "هل تريد فعلا حذف %d ملف ؟"
 msgstr[2] "هل تريد فعلا حذف %d ملف ؟"
@@ -5653,21 +5646,26 @@ msgstr[4] "هل تريد فعلا حذف %d ملف ؟"
 msgstr[5] "هل تريد فعلا حذف %d ملف ؟"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
-#: ../../locales/../src/interface/search.cpp:1030
-#, c-format
-msgid "Really delete %s and %s?"
+#: ../../locales/../src/interface/search.cpp:1031
+#, fuzzy, c-format
+msgid "Really delete %s and %s from the server?"
 msgstr "هل تحذف فعلا %s و %s ؟"
 
-#: ../../locales/../src/engine/local_filesys.cpp:136
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-msgid "Really delete all selected files and/or directories?"
+#, fuzzy
+msgid "Really delete all selected files and/or directories from the server?"
 msgstr "هل تريد فهلا حذف كافة الملفات المحددة و/أو الأدلة ؟"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/engine/local_filesys.cpp:136
+#, fuzzy
+msgid "Really delete all selected files and/or directories from your computer?"
+msgstr "هل تريد فهلا حذف كافة الملفات المحددة و/أو الأدلة ؟"
+
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
 msgstr "السبب"
 
-#: ../../locales/../src/interface/QueueView.cpp:3231
+#: ../../locales/../src/interface/QueueView.cpp:3233
 msgid "Reboot now"
 msgstr "إعادة تشغيل الكمبيوتر الآن"
 
@@ -5675,13 +5673,13 @@ msgstr "إعادة تشغيل الكمبيوتر الآن"
 msgid "Rec&urse into subdirectories"
 msgstr "التكرار &ضمن الأدلة الفرعية"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:3111
+#: ../../locales/../src/engine/directorylistingparser.cpp:3110
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr ""
 "تلقي دليل قائمة أدلة أرشفة المواقع الأجنبية و التي تكون مشفرة بطريقة EBCDIC"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2124
-#: ../../locales/../src/engine/directorylistingparser.cpp:2139
+#: ../../locales/../src/engine/directorylistingparser.cpp:2123
+#: ../../locales/../src/engine/directorylistingparser.cpp:2138
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "تلقى خط تتجاوز 10000 حرف ، مقاطعة"
 
@@ -5716,7 +5714,8 @@ msgid "Refresh the file and folder lists"
 msgstr "تحديث قوائم الملفات و المجلدات"
 
 #: resources.h:497
-msgid "Remember password?"
+#, fuzzy
+msgid "Remember passwords?"
 msgstr "حفظ كلمة المرور ؟"
 
 #: ../../locales/../src/interface/edithandler.cpp:1243
@@ -5727,14 +5726,14 @@ msgstr "بعيد"
 msgid "Remote certificate not trusted."
 msgstr "الشهادة البعيدة غير موثوق بها"
 
-#: resources.h:368 ../../locales/../src/interface/queue.cpp:1225
+#: resources.h:368 ../../locales/../src/interface/queue.cpp:1222
 msgid "Remote file"
 msgstr "الملف البعيد"
 
-#: resources.h:441 ../../locales/../src/interface/search.cpp:676
-#: ../../locales/../src/interface/search.cpp:682
-#: ../../locales/../src/interface/search.cpp:692
-#: ../../locales/../src/interface/search.cpp:698
+#: resources.h:441 ../../locales/../src/interface/search.cpp:677
+#: ../../locales/../src/interface/search.cpp:683
+#: ../../locales/../src/interface/search.cpp:693
+#: ../../locales/../src/interface/search.cpp:699
 msgid "Remote file search"
 msgstr "البحث عن بعد عن ملف"
 
@@ -5841,8 +5840,8 @@ msgstr "تحليل إسم المضيف"
 
 #: ../../locales/../src/engine/logging.cpp:215
 #: ../../locales/../src/interface/netconfwizard.cpp:395
-#: ../../locales/../src/interface/StatusView.cpp:289
-#: ../../locales/../src/interface/StatusView.cpp:343
+#: ../../locales/../src/interface/StatusView.cpp:288
+#: ../../locales/../src/interface/StatusView.cpp:342
 #: ../../locales/../src/interface/updatewizard.cpp:544
 msgid "Response:"
 msgstr "الإستجابة:"
@@ -5910,11 +5909,11 @@ msgstr "SQLite:"
 msgid "Save settings?"
 msgstr "حفظ الإعدادات ؟"
 
-#: ../../locales/../src/interface/QueueView.cpp:1831
+#: ../../locales/../src/interface/QueueView.cpp:1833
 msgid "Scanning for files to add to queue"
 msgstr "البحث عن الملفات لاضافتها إلى قائمة الإنتظار"
 
-#: ../../locales/../src/interface/QueueView.cpp:1833
+#: ../../locales/../src/interface/QueueView.cpp:1835
 msgid "Scanning for files to upload"
 msgstr "البحث عن ملفات لرفعها"
 
@@ -6027,7 +6026,7 @@ msgstr "تحديد الإسم للملف المفتاح المحول"
 msgid "Select how these files should be opened."
 msgstr "تحديد كيفية فتح هذه الملفات"
 
-#: ../../locales/../src/interface/search.cpp:805
+#: ../../locales/../src/interface/search.cpp:806
 msgid "Select target download directory"
 msgstr "تحديد الدليل الهدف للتحميل"
 
@@ -6043,7 +6042,7 @@ msgstr "تحديد الفئات للتصدير :"
 msgid "Select the private data you would like to delete."
 msgstr "تحديد البيانات الخاصة المراد حذفها"
 
-#: ../../locales/../src/interface/search.cpp:772
+#: ../../locales/../src/interface/search.cpp:773
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6065,7 +6064,7 @@ msgstr[3] "المحدد %d أدلة"
 msgstr[4] "المحدد %d أدلة"
 msgstr[5] "المحدد %d دليل"
 
-#: ../../locales/../src/interface/search.cpp:770
+#: ../../locales/../src/interface/search.cpp:771
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6098,7 +6097,7 @@ msgstr[3] "المحددة %d ملفات . الحجم الكلي : على الأ�
 msgstr[4] "المحددة %d ملف . الحجم الكلي : على الأقل %s"
 msgstr[5] "المحددة %d ملف . الحجم الكلي : على الأقل %s"
 
-#: ../../locales/../src/interface/search.cpp:777
+#: ../../locales/../src/interface/search.cpp:778
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "المحدد %s و %s للإرسال"
@@ -6258,7 +6257,7 @@ msgstr "الخادم إلى شفرة العميل :"
 msgid "Server&type:"
 msgstr "نوع &الخادم:"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Server/Local file"
 msgstr "الخادم/الملف المحلى"
 
@@ -6280,7 +6279,7 @@ msgstr "&وضع الاولوية"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "وضع الأذونات لـ '%s' إلى '%s'"
 
-#: ../../locales/../src/engine/transfersocket.cpp:860
+#: ../../locales/../src/engine/transfersocket.cpp:858
 msgid "SetSocketBufferSize called without socket"
 msgstr "تم إستدعاء SetSocketBufferSize بدون مقبس"
 
@@ -6296,20 +6295,19 @@ msgstr "إظهار &قائمة الدليل الخام"
 msgid "Show &welcome dialog..."
 msgstr "إظهار لائحة &مرحبا بك..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2354
+#: ../../locales/../src/interface/Mainfrm.cpp:2357
 msgid "Show both directory trees and continue comparing?"
 msgstr "إظهار تفرع الدليل و متابعة المقارنة ؟"
 
 #: resources.h:630
-#, fuzzy
 msgid "Shows available TLS ciphers"
-msgstr "المنفذ المتوفر ال&أدنى :"
+msgstr "لعرض تشفير TLS المتوفر"
 
 #: ../../locales/../src/interface/cmdline.cpp:6
 msgid "Shows this help dialog"
 msgstr "لإظهار لائحة التعليمات هذه"
 
-#: ../../locales/../src/interface/QueueView.cpp:3233
+#: ../../locales/../src/interface/QueueView.cpp:3235
 msgid "Shutdown now"
 msgstr "إغلاق الكمبيوتر الآن"
 
@@ -6374,7 +6372,7 @@ msgstr ""
 "تتطلب عناوين المفضلة للموقع المعين خادم من أجل حفظها في مدير الموقع\n"
 "إضافة الإتصال الحالي إلى مدير الموقع ؟"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Size"
 msgstr "الحجم"
 
@@ -6423,7 +6421,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "ترتيب الأدلة بشكل مصطف"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:446
+#: ../../locales/../src/interface/filelistctrl.cpp:447
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "طريقة الترتيب لا يمكن تغييرها عند مقارنة الأدلة"
 
@@ -6493,13 +6491,13 @@ msgid "State or province:"
 msgstr "الولاية أو المحافظة :"
 
 #: ../../locales/../src/interface/edithandler.cpp:1235
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Status"
 msgstr "الحالة"
 
 #: ../../locales/../src/engine/logging.cpp:212
-#: ../../locales/../src/interface/StatusView.cpp:298
-#: ../../locales/../src/interface/StatusView.cpp:367
+#: ../../locales/../src/interface/StatusView.cpp:297
+#: ../../locales/../src/interface/StatusView.cpp:366
 #: ../../locales/../src/interface/updatewizard.cpp:538
 msgid "Status:"
 msgstr "الحالة:"
@@ -6561,7 +6559,7 @@ msgstr "خطأ فى بناء الجملة"
 #: ../../locales/../src/interface/cmdline.cpp:80
 #: ../../locales/../src/interface/cmdline.cpp:89
 #: ../../locales/../src/interface/cmdline.cpp:95
-#: ../../locales/../src/interface/Mainfrm.cpp:2504
+#: ../../locales/../src/interface/Mainfrm.cpp:2507
 msgid "Syntax error in command line"
 msgstr "خطأ فى بناء الجملة في سطر الأمر"
 
@@ -6667,9 +6665,9 @@ msgstr "تعذر العثور على المحرر الإفتراضي للملف�
 msgid "The default editor for text files is '%s'."
 msgstr "المحرر الإفتراضي للملفات النصية هو '%s'"
 
-#: ../../locales/../src/interface/filteredit.cpp:147
-#: ../../locales/../src/interface/filteredit.cpp:215
-#: ../../locales/../src/interface/filteredit.cpp:254
+#: ../../locales/../src/interface/filteredit.cpp:149
+#: ../../locales/../src/interface/filteredit.cpp:217
+#: ../../locales/../src/interface/filteredit.cpp:256
 msgid "The entered filter name already exists, please choose a different name."
 msgstr "إسم المرشح المدخل موجود مسبقا, الرجاء إختيار إسم مختلف"
 
@@ -6855,7 +6853,7 @@ msgid ""
 msgstr ""
 "تم تحميل آخر نسخة . الرجاء تثبيتها مثلما فعلت في التثبيت السابق لهذه النسخة"
 
-#: ../../locales/../src/interface/QueueView.cpp:1964
+#: ../../locales/../src/interface/QueueView.cpp:1966
 msgid "The queue will not be saved."
 msgstr "لن يتم حفظ قائمة الإنتظار"
 
@@ -6941,11 +6939,11 @@ msgid ""
 "settings to have effect."
 msgstr "تم إستيراد الإعدادات . يجب إعادة تشغيل FileZilla لتفعيل جميع الإعدادات"
 
-#: ../../locales/../src/interface/QueueView.cpp:3222
+#: ../../locales/../src/interface/QueueView.cpp:3224
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "سيتم إعادة تشغيل النظام قريبا مالم تنقر على زر إلغاء الأمر"
 
-#: ../../locales/../src/interface/QueueView.cpp:3220
+#: ../../locales/../src/interface/QueueView.cpp:3222
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "سيتم إغلاق النظام قريبا مالم تنقر على زر إلغاء الأمر"
 
@@ -6996,7 +6994,7 @@ msgstr ""
 "هذا المعالج سيساعدك على تكوين إى جدران حماية او أجهزة توجيه لديك و من ثم "
 "لفحص تكوينك لها"
 
-#: ../../locales/../src/interface/queue.cpp:1225
+#: ../../locales/../src/interface/queue.cpp:1222
 msgid "Time"
 msgstr "الوقت"
 
@@ -7008,8 +7006,8 @@ msgstr "تنسيق الوقت"
 msgid "Time&out in seconds:"
 msgstr "إ&نقضاء الوقت بالثواني:"
 
-#: resources.h:747 ../../locales/../src/interface/QueueView.cpp:1066
-#: ../../locales/../src/interface/QueueView.cpp:1110
+#: resources.h:747 ../../locales/../src/interface/QueueView.cpp:1068
+#: ../../locales/../src/interface/QueueView.cpp:1112
 msgid "Timeout"
 msgstr "إنقضاء الوقت"
 
@@ -7027,11 +7025,11 @@ msgstr ""
 msgid "Title:"
 msgstr "العنوان:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2352
+#: ../../locales/../src/interface/Mainfrm.cpp:2355
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "لمقارنة الأدلة ، يجب محاذاة كلتا قائمتي الملف"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2353
+#: ../../locales/../src/interface/Mainfrm.cpp:2356
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "لعمل هذا، يجب إظهار أو إخفاء كلا التفرعين للدليل معا"
 
@@ -7097,8 +7095,8 @@ msgid "Too many redirects"
 msgstr "عمليات إعادة توجيه كثيرة جدا"
 
 #: ../../locales/../src/engine/logging.cpp:216
-#: ../../locales/../src/interface/StatusView.cpp:292
-#: ../../locales/../src/interface/StatusView.cpp:353
+#: ../../locales/../src/interface/StatusView.cpp:291
+#: ../../locales/../src/interface/StatusView.cpp:352
 msgid "Trace:"
 msgstr "الأثر:"
 
@@ -7126,8 +7124,8 @@ msgstr "قائمة إنتظار الإرسال"
 msgid "Transfer Settings"
 msgstr "إعدادات الإرسال"
 
-#: ../../locales/../src/engine/transfersocket.cpp:498
-#: ../../locales/../src/engine/transfersocket.cpp:522
+#: ../../locales/../src/engine/transfersocket.cpp:497
+#: ../../locales/../src/engine/transfersocket.cpp:521
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "تم إنهاء إتصال الإرسال : %s"
@@ -7136,8 +7134,8 @@ msgstr "تم إنهاء إتصال الإرسال : %s"
 msgid "Transferred data got tainted."
 msgstr "تلف البيانات المنقولة"
 
-#: ../../locales/../src/interface/QueueView.cpp:1491
-#: ../../locales/../src/interface/statuslinectrl.cpp:278
+#: ../../locales/../src/interface/QueueView.cpp:1493
+#: ../../locales/../src/interface/statuslinectrl.cpp:281
 msgid "Transferring"
 msgstr "إرسال"
 
@@ -7145,8 +7143,8 @@ msgstr "إرسال"
 msgid "Transfers"
 msgstr "عمليات الإرسال"
 
-#: ../../locales/../src/interface/QueueView.cpp:3136
-#: ../../locales/../src/interface/QueueView.cpp:3139
+#: ../../locales/../src/interface/QueueView.cpp:3138
+#: ../../locales/../src/interface/QueueView.cpp:3141
 msgid "Transfers finished"
 msgstr "إنتهاء عمليات الإرسال"
 
@@ -7485,19 +7483,19 @@ msgstr "الأعمدة المرئية"
 msgid "W&rite"
 msgstr "ك&تابة"
 
-#: ../../locales/../src/interface/QueueView.cpp:1790
+#: ../../locales/../src/interface/QueueView.cpp:1792
 msgid "Waiting"
 msgstr "إنتظار"
 
-#: ../../locales/../src/interface/QueueView.cpp:1398
+#: ../../locales/../src/interface/QueueView.cpp:1400
 msgid "Waiting for browsing connection"
 msgstr "إنتظار الإتصال من أجل التصفح"
 
-#: ../../locales/../src/interface/QueueView.cpp:1441
+#: ../../locales/../src/interface/QueueView.cpp:1443
 msgid "Waiting for password"
 msgstr "إنتظار كلمة المرور"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:272
+#: ../../locales/../src/interface/statuslinectrl.cpp:275
 msgid "Waiting for transfer to be cancelled"
 msgstr "إنتظار إلغاء الإرسال"
 
@@ -7568,6 +7566,15 @@ msgstr "ما هو الجديد"
 msgid "What's new:"
 msgstr "ما هو الجديد :"
 
+#: resources.h:492
+#, fuzzy
+msgid ""
+"When allowing FileZilla to remember passwords, you can reconnnect without "
+"having to re-enter a password after restarting FileZilla."
+msgstr ""
+"هذا يفيدك كثيرا بحيث فيما بعد تستطيع إعادة الاتصال بدون الحاجة إلى إعادة "
+"إدخال كلمة المرور الخاصة بك حتى بعد إعادة تشغيل البرنامج نفسه"
+
 #: resources.h:833
 msgid ""
 "When enabled, characters that are not supported by the local operating "
@@ -7581,7 +7588,8 @@ msgid "Widescreen"
 msgstr "شاشة عريضة"
 
 #: resources.h:491
-msgid "Would you like FileZilla to remember this password?"
+#, fuzzy
+msgid "Would you like FileZilla to remember passwords?"
 msgstr "هل تريد أن يتذكر FileZilla كلمة المرور هذه ؟"
 
 #: resources.h:144
@@ -7660,7 +7668,7 @@ msgstr ""
 msgid "You have to enter a hostname."
 msgstr "يجب أن تدخل أسم مضيف"
 
-#: ../../locales/../src/interface/search.cpp:817
+#: ../../locales/../src/interface/search.cpp:818
 msgid "You have to enter a local directory."
 msgstr "يجب إدخال دليل محلي"
 
@@ -7669,7 +7677,7 @@ msgstr "يجب إدخال دليل محلي"
 msgid "You have to enter a valid IP address."
 msgstr "يجب أن تدخل عنوان IP صالح"
 
-#: ../../locales/../src/interface/search.cpp:823
+#: ../../locales/../src/interface/search.cpp:824
 msgid "You have to enter a writable local directory."
 msgstr "يجب إدخال دليل محلي قابل للكتابة"
 
@@ -7791,10 +7799,10 @@ msgstr "ينتهى بـ"
 msgid "equals"
 msgstr "يساوى"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:497
-#: ../../locales/../src/interface/filelistctrl.cpp:515
-#: ../../locales/../src/interface/filelistctrl.cpp:540
-#: ../../locales/../src/interface/filelistctrl.cpp:556
+#: ../../locales/../src/interface/filelistctrl.cpp:498
+#: ../../locales/../src/interface/filelistctrl.cpp:516
+#: ../../locales/../src/interface/filelistctrl.cpp:541
+#: ../../locales/../src/interface/filelistctrl.cpp:557
 msgid "file"
 msgstr "ملف"
 
@@ -7888,6 +7896,9 @@ msgstr "ملف قابل للكتابة للعام"
 #: resources.h:165
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "&Remember this and all future passwords"
+#~ msgstr "&تذكر هذخ و جميع كلمات المرور مستقبلا"
 
 #~ msgid "Wrong opState: %d"
 #~ msgstr "opState خطا: %d"
