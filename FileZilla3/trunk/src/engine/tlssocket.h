@@ -1,7 +1,6 @@
 #ifndef __TLSSOCKET_H__
 #define __TLSSOCKET_H__
 
-#define ssize_t long
 #include <gnutls/gnutls.h>
 #include "backend.h"
 #include "socket.h"
