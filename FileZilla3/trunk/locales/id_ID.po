@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-25 22:44+0700\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-03 19:14+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -758,9 +758,8 @@ msgid "&Remember password for this session"
 msgstr "&Ingat Kata kunci untuk sesi ini"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "Ingat kata kunci?"
+msgstr "&Ingat kata kunci?"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -2242,7 +2241,7 @@ msgstr "Koneksi ditolak"
 msgid "Connection timed out"
 msgstr "Koneksi time out"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "Koneksi time out."
 
@@ -2694,8 +2693,8 @@ msgstr "Jenis berkas berbahaya"
 msgid "Data"
 msgstr "Data"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "Soket data tertutup terlalu cepat"
 
@@ -3429,7 +3428,7 @@ msgstr "Gagal menyalin atau memindahkan situs"
 msgid "Failed to create backup copy of xml file"
 msgstr "Gagal membuat salinan backup dari berkas xml"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr "Gagal membuat soket, membatalkan"
 
@@ -3450,12 +3449,12 @@ msgstr "Gagal untuk mendapatkan path 'Dokumenku'"
 msgid "Failed to get desktop path"
 msgstr "Gagal mengambil path desktop"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr ""
 "Gagal untuk mendapatkan alamat peer dari kontrol koneksi, koneksi terputus."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr ""
 "Gagal untuk mendapatkan alamat peer dari koneksi data, koneksi terputus."
@@ -3504,7 +3503,7 @@ msgstr "Tidak dapat memproses path."
 msgid "Failed to parse trusted root cert."
 msgstr "Gagal untuk memprsing sertifikat root yang dipercaya"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "Gagal menerima data"
 
@@ -5664,34 +5663,35 @@ msgstr "Yakin batalkan operasi yang sedang berjalan?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "Yakin menghapus %d direktori dengan isinya?"
+msgstr[0] "Yakin menghapus %d direktori dengan isinya dari server?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "Yakin menghapus %d berkas?"
+msgstr[0] "Yakin menghapus %d berkas? dari server?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "Yakin menghapus %s dan %s?"
+msgstr "Yakin menghapus %s dan %s dari server?"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "Yakin menghapus semua berkas dan/atau direktori yang dipilih?"
+msgstr ""
+"Yakin menghapus semua berkas dan/atau direktori yang dipilih dari server?"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "Yakin menghapus semua berkas dan/atau direktori yang dipilih?"
+msgstr ""
+"Yakin menghapus semua berkas dan/atau direktori yang dipilih dari komputer "
+"Anda?"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5715,9 +5715,9 @@ msgstr ""
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Menerima baris melebihi 10000 karakter, dibatalkan."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Data yang diterima ditolak"
 
@@ -5746,7 +5746,6 @@ msgid "Refresh the file and folder lists"
 msgstr "Perbarui daftar berkas dan direktori"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
 msgstr "Ingat kata kunci?"
 
@@ -5937,7 +5936,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "Simpan pengaturan?"
 
@@ -6980,7 +6979,7 @@ msgstr ""
 "Berkas target telah ada.\n"
 "Harap pilih sebuah aksi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "Pengujian tidak sukses. Apakah Anda hendak menyimpan perubahan?"
 
@@ -7569,7 +7568,7 @@ msgstr ""
 "Gateway,\n"
 " FileZilla akan mengalami timeout pada transfer besar."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Peringatan, mengabaikan koneksi data dari IP yang salah."
 
@@ -7605,13 +7604,12 @@ msgid "What's new:"
 msgstr "Apa yang baru:"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"FileZilla mampu mengingat kata sandi sehingga Anda bisa terhubung kembali "
-"tanpa harus memasukkan kembali kata kunci setelah menjalankan ulang "
+"Ketika mengijinkan FileZilla untuk mengingat kata sandi, Anda bisa terhubung "
+"kembali tanpa harus memasukkan kembali kata kunci setelah menjalankan ulang "
 "FileZilla."
 
 #: resources.h:833
@@ -7627,7 +7625,6 @@ msgid "Widescreen"
 msgstr "Layar lebar"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "Apakah Anda menghendaki FileZilla untuk mengingat kata sandi ini?"
 
@@ -7647,6 +7644,12 @@ msgstr "Akhir baris salah"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "Ya"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""

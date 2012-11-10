@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-28 23:52+0100\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-10 03:22+0100\n"
 "Last-Translator: Peter Körner <18427@gmx.net>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgid ""
 "%a - Account (Lines containing this will be omitted if not using Account "
 "logontype)"
 msgstr ""
-"%a - Konto (Zeilen die dies beinhalten werden ausgelassen, falls kein "
+"%a - Konto (Zeilen, die dies beinhalten, werden ausgelassen, falls kein "
 "Kontozugangstyp benutzt wird)"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:63
@@ -200,7 +200,7 @@ msgstr ""
 "funktionieren.\n"
 "\n"
 "Mögliche Lösungen:\n"
-"- Stellen Sie sicher dass %s sich in einem Verzeichnis befindet das in der "
+"- Stellen Sie sicher, dass %s sich in einem Verzeichnis befindet, das in der "
 "PATH-Umgebungsvariable enthalten ist.\n"
 "- Geben Sie den vollständigen Pfad zu %s in der FZ_FZSFTP-Umgebungsvariable "
 "an."
@@ -394,7 +394,7 @@ msgstr "&Verzeichnisvergleich"
 
 #: resources.h:326
 msgid "&Discard local file then download and edit file anew"
-msgstr "Lokale &Datei verwerfen, dann Datei neu herunterladen und editieren"
+msgstr "Lokale &Datei verwerfen, dann Datei neu herunterladen und bearbeiten"
 
 #: resources.h:547
 msgid "&Disconnect"
@@ -416,7 +416,7 @@ msgstr "&Größe in Bytes anzeigen"
 
 #: resources.h:494
 msgid "&Do not remember passwords"
-msgstr "&Passwörter nicht speichern"
+msgstr "Passwörter &nicht speichern"
 
 #: ../../locales/../src/interface/conditionaldialog.cpp:25
 msgid "&Don't show this dialog again."
@@ -528,7 +528,7 @@ msgstr "&Beenden"
 
 #: resources.h:318
 msgid "&Finish editing and delete local file"
-msgstr "Bearbeitung &beenden und lokale Datei löschen"
+msgstr "Bearbeiten &beenden und lokale Datei löschen"
 
 #: resources.h:448
 msgid ""
@@ -774,9 +774,8 @@ msgid "&Remember password for this session"
 msgstr "Passwo&rt für diese Sitzung merken"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "Passwort speichern?"
+msgstr "Passwörter &speichern"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -953,7 +952,7 @@ msgstr "'dotfiles' als ASCII-Dateie&n behandeln"
 
 #: resources.h:331
 msgid "&Unedit"
-msgstr "&Bearbeiten rückgängig machen"
+msgstr "&Bearbeiten beenden"
 
 #: resources.h:196
 msgid "&Update cached key for this host"
@@ -1051,7 +1050,7 @@ msgid ""
 "command without the leading 'quote'."
 msgstr ""
 "'quote' ist normalerweise ein lokales Kommando, das Befehlszeilen-Clients "
-"verwenden, um die Argumente die auf 'quote' folgen unverarbeitet an den "
+"verwenden, um die Argumente, die auf 'quote' folgen, unverarbeitet an den "
 "Server zu senden. Wollen Sie nicht vielmehr den Befehl ohne 'quote' senden?"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:96
@@ -1528,7 +1527,7 @@ msgid ""
 "Any changes made in the Site Manager will not be saved unless you repair the "
 "file."
 msgstr ""
-"Im Servermanager durchgeführte Änderungen werden nicht gespeichert bis Sie "
+"Im Servermanager durchgeführte Änderungen werden nicht gespeichert, bis Sie "
 "die Datei reparieren."
 
 #: ../../locales/../src/interface/filter.cpp:209
@@ -2015,11 +2014,11 @@ msgstr "String Coalescer leeren"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:571
 msgid "Click on Finish to save your configuration."
-msgstr "Klicken Sie auf Beenden um Ihre Konfiguration zu speichern."
+msgstr "Klicken Sie auf Beenden, um Ihre Konfiguration zu speichern."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1096
 msgid "Click on next to download the new version."
-msgstr "Klicken Sie auf weiter um die neue Version herunterzuladen."
+msgstr "Klicken Sie auf Weiter, um die neue Version herunterzuladen."
 
 #: resources.h:348
 msgid "Client to server MAC:"
@@ -2277,7 +2276,7 @@ msgstr "Verbindung verweigert"
 msgid "Connection timed out"
 msgstr "Zeitüberschreitung der Verbindung"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "Zeitüberschreitung der Verbindung."
 
@@ -2744,8 +2743,8 @@ msgstr "Gefährlicher Dateityp"
 msgid "Data"
 msgstr "Daten"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "Datensocket wurde zu früh geschlossen."
 
@@ -3242,7 +3241,7 @@ msgstr "Verzeichnis betreten"
 #: ../../locales/../src/interface/filteredit.cpp:196
 #: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Enter filter name"
-msgstr "Bitte einen Filternamen angegeben"
+msgstr "Bitte einen Filternamen angeben"
 
 #: ../../locales/../src/interface/filter.cpp:343
 msgid "Enter name for filterset"
@@ -3497,7 +3496,7 @@ msgstr "Kopieren oder Verschieben der Servereinträge fehlgeschlagen"
 msgid "Failed to create backup copy of xml file"
 msgstr "Sicherheitskopie der xml-Datei konnte nicht erstellt werden"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr ""
 "Fehler beim Erstellen eines Sockets für die Datenübertragungen, Aktion "
@@ -3521,13 +3520,13 @@ msgstr "Pfad für 'Eigene Dateien' konnte nicht gefunden werden"
 msgid "Failed to get desktop path"
 msgstr "Desktop-Pfad konnte nicht gefunden werden"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr ""
 "Server-IP-Adresse für die Kontrollverbindung konnte nicht ermittelt werden, "
 "Verbindung getrennt."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr ""
 "Server-IP-Adresse für die Datenverbindung konnte nicht ermittelt werden, "
@@ -3579,7 +3578,7 @@ msgstr "Zurückgegebener Pfad konnte nicht geparst werden."
 msgid "Failed to parse trusted root cert."
 msgstr "Parsen des vertrauenswürdigen Stammzertifikats fehlgeschlagen."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "Daten konnten nicht empfangen werden"
 
@@ -3789,7 +3788,7 @@ msgid ""
 "FileZilla can now test your configuration to ensure everything is configured "
 "properly."
 msgstr ""
-"FileZilla kann nun Ihre Konfiguration testen um sicherzustellen, dass alles "
+"FileZilla kann nun Ihre Konfiguration testen, um sicherzustellen, dass alles "
 "ordnungsgemäß eingestellt ist."
 
 #: resources.h:478
@@ -3866,7 +3865,7 @@ msgstr ""
 
 #: resources.h:336
 msgid "Files currently being edited"
-msgstr "Zur Bearbeitung geöffnete Dateien"
+msgstr "Momentan bearbeitete Dateien"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:132
 #: ../../locales/../src/interface/LocalListView.cpp:277
@@ -3959,8 +3958,8 @@ msgstr ""
 #: resources.h:719
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr ""
-"Um eine zuverlässige Verbindung bzw. Datenübertragung zu garantieren sollten "
-"Sie einen Bereich von mindestens 10 Ports angeben."
+"Um eine zuverlässige Verbindung bzw. Datenübertragung zu garantieren, "
+"sollten Sie einen Bereich von mindestens 10 Ports angeben."
 
 #: ../../locales/../src/interface/Options.cpp:215
 msgid ""
@@ -4070,7 +4069,7 @@ msgstr ""
 msgid ""
 "Hold the shift key to toggle the filter state on both sides simultaneously."
 msgstr ""
-"Halten Sie die Umschalttaste gedrückt um den Filterstatus auf beiden Seiten "
+"Halten Sie die Umschalttaste gedrückt, um den Filterstatus auf beiden Seiten "
 "gleichzeitig zu ändern."
 
 #: resources.h:157
@@ -4175,9 +4174,9 @@ msgid ""
 "\" to the end of the filename (possibly overwriting older logfiles) and a "
 "new file gets created."
 msgstr ""
-"Falls die Größe der Logdatei das Limit erreicht, wird sie umbenannt indem "
+"Falls die Größe der Logdatei das Limit erreicht, wird sie umbenannt, indem "
 "\".1\" an den Dateinamen angehängt wird (hierbei werden gegebenenfalls "
-"ältere Logdateien überschrieben) und eine neue Datei wird erzeugt."
+"ältere Logdateien überschrieben), und eine neue Datei wird erzeugt."
 
 #: resources.h:456
 msgid ""
@@ -4193,7 +4192,7 @@ msgid ""
 "manufacturer for a solution."
 msgstr ""
 "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Hersteller "
-"Ihres Routers oder Ihrer Firewall um eine Lösung zu erfragen."
+"Ihres Routers oder Ihrer Firewall, um eine Lösung zu erfragen."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:582
 msgid "If this problem stays, please contact your router manufacturer."
@@ -4209,8 +4208,8 @@ msgid ""
 msgstr ""
 "Wenn Sie 'Überschreiben wenn aktueller' verwenden, muss Ihre Systemzeit mit "
 "der des Servers synchronisiert werden. Wenn sich (z.B. durch "
-"unterschiedliche Zeitzonen) die Zeiten unterscheiden, stellen Sie Ihre "
-"Zeitzone im Servermanager ein."
+"unterschiedliche Zeitzonen) die Zeiten unterscheiden, stellen Sie die "
+"Abweichung im Servermanager ein."
 
 #: resources.h:929
 msgid ""
@@ -4218,7 +4217,7 @@ msgid ""
 "timestamp difference does not exceed this threshold."
 msgstr ""
 "Falls ein Verzeichnisvergleich anhand des Änderungszeitpunkts durchgeführt "
-"wird, werden zwei Dateien als gleich angesehen falls ihre "
+"wird, werden zwei Dateien als gleich angesehen, falls ihre "
 "Änderungszeitpunkte nicht weiter als der eingestellten Schwellwert "
 "auseinander liegen."
 
@@ -4267,7 +4266,7 @@ msgstr ""
 "Wenn Sie wiederholt Probleme mit einem bestimmten Server haben, könnte der "
 "Server selbst oder der dortige Router oder die Firewall falsch konfiguriert "
 "sein. Versuchen Sie in diesem Fall zum passiven Modus zu wechseln und wenden "
-"Sie sich an den Serveradministrator um Hilfe zu erhalten."
+"Sie sich an den Serveradministrator, um Hilfe zu erhalten."
 
 #: resources.h:685
 msgid ""
@@ -4415,7 +4414,7 @@ msgid ""
 "site manager to force UTF-8."
 msgstr ""
 "Ungültige Zeichenfolge empfangen, UTF-8 wird deaktiviert. Wählen Sie UTF-8 "
-"im Servermanager um UTF-8 zu erzwingen."
+"im Servermanager, um UTF-8 zu erzwingen."
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:896
 msgid "Invalid chunk size"
@@ -4533,9 +4532,9 @@ msgid ""
 "incorrect listings if this option is enabled. Although FileZilla performs "
 "some tests to check if the server supports this feature, the test may fail."
 msgstr ""
-"Beachten Sie, dass nicht alle Server dieses Feature unterstützten und "
+"Beachten Sie, dass nicht alle Server dieses Feature unterstützen und "
 "möglicherweise falsche Auflistungen liefern, falls diese Option aktiviert "
-"ist. Obwohl FileZilla einige Tests durchführt um herauszufinden ob der "
+"ist. Obwohl FileZilla einige Tests durchführt, um herauszufinden, ob der "
 "Server das Feature unterstützt, könnten diese fehlschlagen."
 
 #: resources.h:338
@@ -5068,8 +5067,8 @@ msgid ""
 "Only the versions of FileZilla and the operating system you are using will "
 "be submitted to the server."
 msgstr ""
-"Nur die Version von FileZilla und des Betriebssystems, welches Sie "
-"verwenden, wird an den Server übermittelt."
+"Nur die FileZilla-Version und die Version des verwendeten Betriebssystems "
+"werden an den Server übermittelt."
 
 #: resources.h:664
 msgid "Open directory in system's file manager"
@@ -5282,7 +5281,7 @@ msgid ""
 "Please check the package manager of your system for an updated package or "
 "visit http://filezilla-project.org to download the source code of FileZilla."
 msgstr ""
-"Bitte überprüfen Sie im Paketmanager Ihres Systems ob ein aktualisiertes "
+"Bitte überprüfen Sie im Paketmanager Ihres Systems, ob ein aktualisiertes "
 "Paket vorhanden ist, oder laden Sie sich den FileZilla-Quellcode unter "
 "http://filezilla-project.org herunter."
 
@@ -5390,7 +5389,7 @@ msgstr ""
 msgid ""
 "Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."
 msgstr ""
-"Bitte geben Sie ein Timeout zwischen 5 und 9999 Sekunden an, oder 0 um "
+"Bitte geben Sie ein Timeout zwischen 5 und 9999 Sekunden an, oder 0, um "
 "Timeouts zu deaktivieren."
 
 #: ../../locales/../src/interface/filter.cpp:343
@@ -5506,7 +5505,7 @@ msgid ""
 "discard."
 msgstr ""
 "Bitte beachten Sie, dass FileZilla nicht beeinflussen kann, welchen Port der "
-"Server auswählt. Der Server könnte beispielsweise einen Port auswählen von "
+"Server auswählt. Der Server könnte beispielsweise einen Port auswählen, von "
 "dem Ihre Firewall denkt, dass er von Trojanern oder anderer bösartiger "
 "Software benutzt wird. Sollte dies einen Fehlalarm auslösen, können Sie "
 "diesen ohne weiteres ignorieren."
@@ -5817,38 +5816,38 @@ msgstr "Aktuelle Operation wirklich abbrechen?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "Wirklich %d Verzeichnis und dessen Inhalt löschen?"
-msgstr[1] "Wirklich %d Verzeichnisse und deren Inhalt löschen?"
+msgstr[0] "Wirklich %d Verzeichnis und dessen Inhalt vom Server löschen?"
+msgstr[1] "Wirklich %d Verzeichnisse und deren Inhalt vom Server löschen?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "Wirklich %d Datei löschen?"
-msgstr[1] "Wirklich %d Dateien löschen?"
+msgstr[0] "Wirklich %d Datei vom Server löschen?"
+msgstr[1] "Wirklich %d Dateien vom Server löschen?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "Wirklich %s und %s löschen?"
+msgstr "Wirklich %s und %s vom Server löschen?"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
-"Wollen Sie wirklich alle ausgewählten Dateien und/oder Verzeichnisse löschen?"
+"Möchten Sie wirklich alle ausgewählten Dateien und/oder Verzeichnisse vom "
+"Server löschen?"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr ""
-"Wollen Sie wirklich alle ausgewählten Dateien und/oder Verzeichnisse löschen?"
+"Möchten Sie wirklich alle ausgewählten Dateien und/oder Verzeichnisse von "
+"Ihrem Rechner löschen?"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5871,9 +5870,9 @@ msgstr "Verzeichnisinhalt empfangen, der EBCDIC-codiert zu sein scheint."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Zeile mit einer Länge größer als 10000 Zeichen empfangen, Abbruch."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Empfangene Daten fehlerhaft"
 
@@ -5882,8 +5881,8 @@ msgid ""
 "Reconnect information cannot be cleared while connected to a server.\n"
 "If you continue, your connection will be disconnected."
 msgstr ""
-"Die Wiederverbindungsinformationen können nicht gelöscht werden solange eine "
-"Verbindung zu einem Server besteht.\n"
+"Die Wiederverbindungsinformationen können nicht gelöscht werden, solange "
+"eine Verbindung zu einem Server besteht.\n"
 "Falls Sie fortsetzen, wird Ihre Verbindung unterbrochen."
 
 #: resources.h:753
@@ -5903,9 +5902,8 @@ msgid "Refresh the file and folder lists"
 msgstr "Datei- und Verzeichnislisten aktualisieren"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
-msgstr "Passwort speichern?"
+msgstr "Passwörter speichern?"
 
 #: ../../locales/../src/interface/edithandler.cpp:1243
 msgid "Remote"
@@ -6099,7 +6097,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "Einstellungen speichern?"
 
@@ -6204,7 +6202,7 @@ msgstr "Wählen Sie die Datei für die exportierten Server"
 #: ../../locales/../src/interface/import.cpp:15
 msgid "Select file to import settings from"
 msgstr ""
-"Wählen Sie die Datei von welcher die Einstellungen importiert werden sollen."
+"Wählen Sie die Datei, von der die Einstellungen importiert werden sollen."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:250
 msgid "Select file to upload"
@@ -6233,7 +6231,7 @@ msgstr "Wählen Sie die zu exportierenden Kategorien:"
 
 #: resources.h:283
 msgid "Select the private data you would like to delete."
-msgstr "Wählen Sie die Einträge welche gelöscht werden sollen:"
+msgstr "Wählen Sie die Einträge, die gelöscht werden sollen:"
 
 #: ../../locales/../src/interface/search.cpp:773
 #, c-format
@@ -7058,7 +7056,7 @@ msgid ""
 "The most recent version has been downloaded. Click on Finish to close "
 "FileZilla and to start the installation."
 msgstr ""
-"Die aktuellste Version wurde heruntergeladen. Klicken Sie auf Beenden um "
+"Die aktuellste Version wurde heruntergeladen. Klicken Sie auf Beenden, um "
 "FileZilla zu schließen und die Installation zu starten."
 
 #: ../../locales/../src/interface/updatewizard.cpp:609
@@ -7133,8 +7131,8 @@ msgid ""
 "The server's certificate is unknown. Please carefully examine the "
 "certificate to make sure the server can be trusted."
 msgstr ""
-"Das Zertifikat des Servers ist unbekannt. Bitte überprüfen Sie es sorgfältig "
-"um sicherzustellen dass Sie dem Server vertrauen können."
+"Das Zertifikat des Servers ist unbekannt. Bitte überprüfen Sie es "
+"sorgfältig, um sicherzustellen, dass Sie dem Server vertrauen können."
 
 #: resources.h:188
 msgid ""
@@ -7166,13 +7164,13 @@ msgstr ""
 #: ../../locales/../src/interface/QueueView.cpp:3224
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
-"Das System wird in Kürze neu gestartet sofern Sie nicht auf Abbrechen "
+"Das System wird in Kürze neu gestartet, sofern Sie nicht auf Abbrechen "
 "klicken."
 
 #: ../../locales/../src/interface/QueueView.cpp:3222
 msgid "The system will soon shut down unless you click Cancel."
 msgstr ""
-"Das System wird in Kürze heruntergefahren sofern Sie nicht auf Abbrechen "
+"Das System wird in Kürze heruntergefahren, sofern Sie nicht auf Abbrechen "
 "klicken."
 
 #: resources.h:48
@@ -7183,7 +7181,7 @@ msgstr ""
 "Die Zieldatei existiert bereits.\n"
 "Bitte wählen Sie eine Aktion aus."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr ""
 "Der Test war nicht erfolgreich. Wollen Sie diese Einstellungen trotzdem "
@@ -7529,7 +7527,7 @@ msgstr "Diese Art der Adressumleitung wird nicht unterstützt"
 
 #: resources.h:333
 msgid "Up&load and unedit"
-msgstr "H&ochladen und Bearbeiten rückgängig machen"
+msgstr "H&ochladen und Bearbeiten beenden"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:137
 msgid "Update Check"
@@ -7588,7 +7586,7 @@ msgstr "Hochladen und anstehendes Entfernen"
 #: ../../locales/../src/interface/edithandler.cpp:1287
 #: ../../locales/../src/interface/edithandler.cpp:1453
 msgid "Uploading and unediting"
-msgstr "Hochladen und Bearbeiten rückgängig machen"
+msgstr "Hochladen und Bearbeiten beenden"
 
 #: resources.h:110
 msgid "Use &custom charset"
@@ -7778,7 +7776,7 @@ msgstr ""
 "Gateway-Dienst deaktiviert wird,\n"
 "bricht FileZilla bei großen Übertragungen ab."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Warnung, eine Datenverbindung von einer falschen IP wird ignoriert."
 
@@ -7815,14 +7813,13 @@ msgid "What's new:"
 msgstr "Neuerungen:"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"FileZilla kann Passwörter speichern, sodass Sie auch nach einem FileZilla-"
-"Neustart die Verbindung wiederherstellen können, ohne das Passwort neu "
-"einzugeben."
+"Wenn Sie FileZilla das Speichern von Passwörtern erlauben, können Sie "
+"Verbindungen auch nach dem Neustarten von FileZilla ohne erneute "
+"Passworteingabe wiederherstellen."
 
 #: resources.h:833
 msgid ""
@@ -7837,9 +7834,8 @@ msgid "Widescreen"
 msgstr "Breitbild"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
-msgstr "Soll FileZilla dieses Passwort speichern?"
+msgstr "Soll FileZilla Passwörter speichern?"
 
 #: resources.h:144
 msgid "Wr&ite"
@@ -7857,6 +7853,12 @@ msgstr "Falsche Zeilenenden"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "Ja"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""
@@ -7885,7 +7887,7 @@ msgstr ""
 #: ../../locales/../src/interface/import.cpp:28
 msgid "You cannot import settings from FileZilla's own settings directory."
 msgstr ""
-"Sie können keine Einstellungen aus dem Verzeichnis importieren in welchem "
+"Sie können keine Einstellungen aus dem Verzeichnis importieren, in dem "
 "FileZilla die eigenen Einstellungen speichert."
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:137
@@ -7912,8 +7914,8 @@ msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
 msgstr ""
-"Sie haben mehr als 10 Dateien zum Editieren ausgewählt; möchten Sie wirklich "
-"fortfahren?"
+"Sie haben mehr als 10 Dateien zum Bearbeiten ausgewählt; möchten Sie "
+"wirklich fortfahren?"
 
 #: ../../locales/../src/interface/LocalListView.cpp:2139
 msgid ""
@@ -8162,6 +8164,3 @@ msgstr "'world writeable'"
 #: resources.h:165
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "&Remember this and all future passwords"
-#~ msgstr "&Dieses und alle zukünftigen Passwörter speichern"

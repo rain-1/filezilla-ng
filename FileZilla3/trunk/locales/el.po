@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla Client 3.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-24 15:30+0200\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-03 18:01+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -17,6 +17,7 @@ msgstr ""
 "Language: el_GR\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
 #: ../../locales/../src/interface/statuslinectrl.cpp:228
@@ -772,9 +773,8 @@ msgid "&Remember password for this session"
 msgstr "&Απομνημόνευση κωδικού πρόσβασης γι' αυτήν τη συνεδρία"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "Απομνημόνευση κωδικού πρόσβασης;"
+msgstr "&Απομνημόνευση κωδικών πρόσβασης"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -2270,7 +2270,7 @@ msgstr "Η σύνδεση απορρίφθηκε"
 msgid "Connection timed out"
 msgstr "Η σύνδεση διακόπηκε"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "Τέλος χρονικού ορίου σύνδεσης."
 
@@ -2733,8 +2733,8 @@ msgstr "Επικίνδυνος τύπος αρχείου"
 msgid "Data"
 msgstr "Δεδομένα"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "Το socket δεδομένων έκλεισε πολύ σύντομα."
 
@@ -3483,7 +3483,7 @@ msgstr "Αποτυχία αντιγραφής ή μετακίνησης τοπο
 msgid "Failed to create backup copy of xml file"
 msgstr "Απέτυχε η δημιουργία αντιγράφου ασφαλείας για το αρχείου xml"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr "Αποτυχία δημιουργίας listen socket, ακύρωση"
 
@@ -3505,11 +3505,11 @@ msgstr "Αποτυχία πρόσβασης στην διαδρομή 'Τα Εγ
 msgid "Failed to get desktop path"
 msgstr "Αποτυχία πρόσβασης στην διαδρομή της επιφάνειας εργασίας"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr "Αποτυχία λήψης ομότιμης διεύθυνσης, η σύνδεση έκλεισε."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr ""
 "Αποτυχία λήψης ομότιμης διεύθυνσης από τα δεδομένα σύνδεσης, η σύνδεση "
@@ -3559,7 +3559,7 @@ msgstr "Αποτυχία ανάλυσης τις επιστρεφόμενης δ
 msgid "Failed to parse trusted root cert."
 msgstr "Αποτυχία ανάλυσης του εμπιστευτικού πιστοποιητικού βάσης."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "Αποτυχία λήψης δεδομένων"
 
@@ -5799,36 +5799,38 @@ msgstr "Ακύρωση τρέχουσας λειτουργίας;"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
 msgstr[0] "Να διαγραφεί ο φάκελος %d, καθώς και τα περιεχόμενα του;"
-msgstr[1] "Να διαγραφούν οι φάκελοι %d, καθώς και τα περιεχόμενα τους;"
+msgstr[1] ""
+"Να διαγραφούν οι φάκελοι %d, καθώς και τα περιεχόμενα τους από το διακομιστή;"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "Να διαγραφεί το αρχείο %d;"
-msgstr[1] "Να διαγραφούν τα αρχεία %d;"
+msgstr[0] "Να διαγραφεί το αρχείο %d από το διακομιστή;"
+msgstr[1] "Να διαγραφούν τα αρχεία %d από το διακομιστή;"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "Να διαγραφεί το %s και το %s;"
+msgstr "Να διαγραφεί το %s και το %s από το διακομιστή;"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "Διαγραφή όλων το επιλεγμένων αρχείων και/ή φακέλων;"
+msgstr ""
+"Να διαγραφούν όλα τα επιλεγμένα αρχεία και/ή οι φάκελοι από το διακομιστή;"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "Διαγραφή όλων το επιλεγμένων αρχείων και/ή φακέλων;"
+msgstr ""
+"Να διαγραφούν όλα τα επιλεγμένα αρχεία και/ή οι φάκελοι από τον υπολογιστή "
+"σας;"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5853,9 +5855,9 @@ msgstr ""
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Λήφθηκε μια γραμμή με πάνω από 10000 χαρακτήρες, ματαίωση."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Λαμβάνονται ανεπιθύμητα δεδομένα"
 
@@ -5885,9 +5887,8 @@ msgid "Refresh the file and folder lists"
 msgstr "Ανανέωση των λιστών αρχείων και φακέλων"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
-msgstr "Απομνημόνευση κωδικού πρόσβασης;"
+msgstr "Απομνημόνευση κωδικών πρόσβασης;"
 
 #: ../../locales/../src/interface/edithandler.cpp:1243
 msgid "Remote"
@@ -6081,7 +6082,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "Αποθήκευση ρυθμίσεων;"
 
@@ -7146,7 +7147,7 @@ msgstr ""
 "Το αρχείο προορισμού υπάρχει ήδη.\n"
 "Παρακαλώ, επιλέξτε μία ενέργεια."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr ""
 "Η δοκιμή απέτυχε. Είστε σίγουροι ότι θέλετε να αποθηκεύσετε τις ρυθμίσεις;"
@@ -7748,7 +7749,7 @@ msgstr ""
 "com/kb/931130\n"
 "Το FileZilla θα τερματίζει σε μεγάλες μεταφορές."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr ""
 "Προειδοποίηση, αγνόηση δεδομένων σύνδεσης λόγω εσφαλμένης διεύθυνσης IP."
@@ -7785,13 +7786,12 @@ msgid "What's new:"
 msgstr "Ενημερώσεις:"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"FileZilla μπορεί να θυμάται τους κωδικούς πρόσβασης, έτσι ώστε να μπορείτε "
-"να συνδεθείτε ξανά αργότερα χωρίς να χρειάζεται να εισαγάγετε ξανά τον "
+"Επιτρέποντας στο FileZilla να απομνημονεύσει τους κωδικούς πρόσβασης, "
+"μπορείτε να συνδεθείτε ξανά χωρίς να χρειάζεται να εισαγάγετε ξανά τον "
 "κωδικό πρόσβασής σας μετά την επανεκκίνηση του προγράμματος."
 
 #: resources.h:833
@@ -7808,7 +7808,6 @@ msgid "Widescreen"
 msgstr "Ευρεία οθόνη"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "Επιθυμείτε το FileZilla να απομνημονεύσει τον κωδικό πρόσβασης;"
 
@@ -7828,6 +7827,12 @@ msgstr "Εσφαλμένοι τερματισμοί γραμμών"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "Ναι"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""

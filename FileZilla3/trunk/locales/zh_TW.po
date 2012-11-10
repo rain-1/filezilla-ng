@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-25 00:58+0800\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-03 14:47+0800\n"
 "Last-Translator: Kene Lin <kenelin@gmail.com>\n"
 "Language-Team: milo <milo.tw@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -751,9 +751,8 @@ msgid "&Remember password for this session"
 msgstr "記住這次連線的密碼(&R)"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "記憶密碼?"
+msgstr "記憶密碼(&R)"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -2199,7 +2198,7 @@ msgstr "連線被拒"
 msgid "Connection timed out"
 msgstr "連線逾時"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "連線逾時."
 
@@ -2638,8 +2637,8 @@ msgstr "可能會造成危險的檔案型態"
 msgid "Data"
 msgstr "資料"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "Data Socket 過早關閉."
 
@@ -3355,7 +3354,7 @@ msgstr "無法複製或移動站台"
 msgid "Failed to create backup copy of xml file"
 msgstr "無法建立 XML 檔案副本"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr "無法建立 Listen Socket, 正在中止."
 
@@ -3376,11 +3375,11 @@ msgstr "無法取得 '我的文件' 路徑"
 msgid "Failed to get desktop path"
 msgstr "無法取得桌面路徑"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr "無法取得 peer address 的控制連線, 連線關閉."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "無法取得 peer address 的資料連線, 連線關閉."
 
@@ -3428,7 +3427,7 @@ msgstr "無法解析回傳路徑."
 msgid "Failed to parse trusted root cert."
 msgstr "無法解析信任的根憑證."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "無法收到資料"
 
@@ -5486,34 +5485,32 @@ msgstr "真的要取消當前的操作?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "真的要刪除 %d 個目錄與其內容嗎?"
+msgstr[0] "真的要從伺服器刪除 %d 個目錄與其內容嗎?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "真的要刪除 %d 個檔案嗎?"
+msgstr[0] "真的要從伺服器刪除 %d 個檔案嗎?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "真的要刪除 %s 與 %s 嗎?"
+msgstr "真的要從伺服器刪除 %s 與 %s 嗎?"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "真的要刪除所有選擇的檔案/目錄?"
+msgstr "真的要從伺服器刪除所有選擇的檔案/目錄?"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "真的要刪除所有選擇的檔案/目錄?"
+msgstr "真的要從您的電腦刪除所有選擇的檔案/目錄?"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5536,9 +5533,9 @@ msgstr "已取得目錄清單, 該清單似乎是以 EBCDIC 編碼而成."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "單行接收超過 10000 字元, 正在中止."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "收到的資料遭受影響."
 
@@ -5567,7 +5564,6 @@ msgid "Refresh the file and folder lists"
 msgstr "重新整理檔案與資料夾列表"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
 msgstr "記憶密碼?"
 
@@ -5756,7 +5752,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "儲存設定?"
 
@@ -6755,7 +6751,7 @@ msgstr ""
 "目標檔案已存在.\n"
 "請選擇動作."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "測試未成功. 您真的要儲存設定嗎?"
 
@@ -7312,7 +7308,7 @@ msgstr ""
 "除非您停用 Windows 防火牆或是應用程式層閘道服務,\n"
 "否則 FileZilla 在大型傳輸時將會逾時."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "警告, 忽略來自錯誤 IP Address 的資料連線."
 
@@ -7347,12 +7343,12 @@ msgid "What's new:"
 msgstr "最新消息:"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"FileZilla 能記憶密碼, 讓您往後啟動 FileZilla 再次連線的時候無須重新輸入密碼."
+"允許 FileZilla 記憶密碼後, 您就無須在往後啟動 FileZilla 再次連線時重新輸入密"
+"碼."
 
 #: resources.h:833
 msgid ""
@@ -7365,9 +7361,8 @@ msgid "Widescreen"
 msgstr "寬螢幕"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
-msgstr "您想讓 FileZilla 記憶此密碼嗎?"
+msgstr "您想讓 FileZilla 記憶密碼嗎?"
 
 #: resources.h:144
 msgid "Wr&ite"
@@ -7385,6 +7380,12 @@ msgstr "錯誤的換行格式"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "是"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""

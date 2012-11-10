@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-29 14:23+0100\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-03 10:00+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: it\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.5.3\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
 #: ../../locales/../src/interface/statuslinectrl.cpp:228
@@ -770,9 +770,8 @@ msgid "&Remember password for this session"
 msgstr "&Ricorda la password per questa sessione"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "Memorizzare la password?"
+msgstr "Memo&rizza la password"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -2261,7 +2260,7 @@ msgstr "Connessione rifiutata"
 msgid "Connection timed out"
 msgstr "Tempo scaduto per la connessione"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "Tempo scaduto per la connessione."
 
@@ -2725,8 +2724,8 @@ msgstr "File pericoloso"
 msgid "Data"
 msgstr "data"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "Data socket chiuso troppo presto."
 
@@ -3470,7 +3469,7 @@ msgstr "Impossibile copiare o spostare siti"
 msgid "Failed to create backup copy of xml file"
 msgstr "Non è stato possibile creare una copia di backup del file xml"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr ""
 "Non è stato possibile creare il socket di ascolto, connessione terminata"
@@ -3494,13 +3493,13 @@ msgstr "Non è possibile recuperare il percorso \"Documenti\""
 msgid "Failed to get desktop path"
 msgstr "Non è stato possibile recuperare il percorso del desktop"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr ""
 "Non è stato possibile recuperare l'indirizzo esterno del controllo "
 "connessione, connessione terminata."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr ""
 "Non è stato possibile recuperare l'indirizzo esterno della connessione dati, "
@@ -3550,7 +3549,7 @@ msgstr "Impossibile analizzare il percorso ritornato."
 msgid "Failed to parse trusted root cert."
 msgstr "Impossibile analizzare certificato principale autorizzato."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "Non è stato possibile ricevere i dati"
 
@@ -5753,36 +5752,34 @@ msgstr "Si è sicuri di voler annullare l'operazione attiva?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "Sicuri di voler cancellare %d cartella e il suo contenuto?"
-msgstr[1] "Sicuri di voler cancellare %d cartelle e il loro contenuto?"
+msgstr[0] "Eliminare %d cartelle e il loro contenuto nel server?"
+msgstr[1] "Eliminare %d cartelle e il loro contenuto nel server?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "Sicuri di voler cancellare %d file?"
-msgstr[1] "Sicuri di voler cancellare %d file?"
+msgstr[0] "Eliminare %d file nel server?"
+msgstr[1] "Eliminare %d file nel server?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "Sicuri di voler cancellare %s e %s?"
+msgstr "Eliminare %s e %s nel server?"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "Si è sicuri di voler eliminare tutti i file e/o cartelle selezionati?"
+msgstr "Eliminare tutti i file e/o cartelle selezionati nel server?"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "Si è sicuri di voler eliminare tutti i file e/o cartelle selezionati?"
+msgstr "Eliminare tutti i file e/o cartelle selezionati nel computer?"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5805,9 +5802,9 @@ msgstr "Ricevuto un elenco di cartella che appare codificato in EBCDIC."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Ricevuta una linea eccedente i 10000 caratteri, interruzione."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Ricevuti dati corrotti"
 
@@ -5837,7 +5834,6 @@ msgid "Refresh the file and folder lists"
 msgstr "Aggiorna l'elenco file e cartelle"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
 msgstr "Memorizzare la password?"
 
@@ -6031,7 +6027,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "Salvare le impostazioni?"
 
@@ -7087,7 +7083,7 @@ msgstr ""
 "Il file destinazione esiste già.\n"
 "Scegliere un'azione."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "Il test ha avuto esito negativo. Salvare comunque le impostazioni?"
 
@@ -7683,7 +7679,7 @@ msgstr ""
 "Gateway,\n"
 "FileZilla andrà in timeout nei trasferimenti di grandi dimensioni."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Avvertimento, connessione dati da IP sbagliato ignorata."
 
@@ -7719,12 +7715,11 @@ msgid "What's new:"
 msgstr "Novità:"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"Filezilla può memorizzare le password in modo da potersi riconenttere senza "
+"Filezilla può memorizzare le password in modo da potersi riconenttersi senza "
 "dove reinserire la password dopo aver riavviato Filezilla."
 
 #: resources.h:833
@@ -7741,7 +7736,6 @@ msgid "Widescreen"
 msgstr "Widescreen"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "Filezilla deve memorizzare la password?"
 
@@ -7761,6 +7755,12 @@ msgstr "Terminazioni di riga non corrette"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "Sì"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""
