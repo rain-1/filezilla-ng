@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-31 20:31+0100\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-05 20:22+0100\n"
 "Last-Translator: Magnus Nilsson <magnus.nilsson@telia.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -769,9 +769,8 @@ msgid "&Remember password for this session"
 msgstr "&Kom ihåg lösenordet för denna session"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "Komma ihåg lösenordet?"
+msgstr "&Komma ihåg lösenord"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -2249,7 +2248,7 @@ msgstr "Anslutningen nekades"
 msgid "Connection timed out"
 msgstr "Tidsgränsen för anslutningen överstegs"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "Tidsgränsen för anslutningen överstegs."
 
@@ -2708,8 +2707,8 @@ msgstr "Farlig filtyp"
 msgid "Data"
 msgstr "Data"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "Datauttaget stängdes för tidigt."
 
@@ -3447,7 +3446,7 @@ msgstr "Misslyckades med att kopiera eller flytta platserna"
 msgid "Failed to create backup copy of xml file"
 msgstr "Misslyckades med att skapa en säkerhetskopia av XML-filen"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr "Misslyckades med att skapa ett lyssningsuttag, avbryter"
 
@@ -3469,13 +3468,13 @@ msgstr "Misslyckades med att erhålla sökvägen till \"Mina dokument\""
 msgid "Failed to get desktop path"
 msgstr "Misslyckades med att erhålla sökvägen till Skrivbordet"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr ""
 "Misslyckades med att läsa av andra partens adress för kontrollanslutningen, "
 "anslutningen stängd."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr ""
 "Misslyckades med att läsa av andra partens adress för dataanslutningen, "
@@ -3525,7 +3524,7 @@ msgstr "Misslyckades med att tolka returnerad sökväg."
 msgid "Failed to parse trusted root cert."
 msgstr "Misslyckades med att tolka det tillförlitliga rotcertifikatet."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "Misslyckades med att ta emot data"
 
@@ -5697,36 +5696,40 @@ msgstr "Vill du verkligen avbryta aktuell åtgärd?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "Vill du verkligen ta bort %d katalog och dess innehåll?"
-msgstr[1] "Vill du verkligen ta bort %d kataloger och deras innehåll?"
+msgstr[0] ""
+"Vill du verkligen ta bort %d katalog och dess innehåll från servern?"
+msgstr[1] ""
+"Vill du verkligen ta bort %d kataloger och deras innehåll från servern?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "Vill du verkligen ta bort %d fil?"
-msgstr[1] "Vill du verkligen ta bort %d filer?"
+msgstr[0] "Vill du verkligen ta bort %d fil från servern?"
+msgstr[1] "Vill du verkligen ta bort %d filer från servern?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "Vill du verkligen ta bort %s och %s?"
+msgstr "Vill du verkligen ta bort %s och %s från servern?"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "Vill du verkligen ta bort alla markerade filer och/eller kataloger?"
+msgstr ""
+"Vill du verkligen ta bort alla markerade filer och/eller kataloger från "
+"servern?"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "Vill du verkligen ta bort alla markerade filer och/eller kataloger?"
+msgstr ""
+"Vill du verkligen ta bort alla markerade filer och/eller kataloger från din "
+"dator?"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5749,9 +5752,9 @@ msgstr "Mottog en kataloglistning som verkar vara kodad i EBCDIC."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Mottog en rad som överskred 10000 tecken, avbryter."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Mottagen data är påverkad"
 
@@ -5780,9 +5783,8 @@ msgid "Refresh the file and folder lists"
 msgstr "Uppdatera fil- och kataloglistor"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
-msgstr "Komma ihåg lösenordet?"
+msgstr "Komma ihåg lösenord?"
 
 #: ../../locales/../src/interface/edithandler.cpp:1243
 msgid "Remote"
@@ -5973,7 +5975,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "Spara inställningarna?"
 
@@ -7020,7 +7022,7 @@ msgstr ""
 "Målfilen finns redan.\n"
 "Välj en åtgärd."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "Testet misslyckades. Vill du verkligen spara inställningarna?"
 
@@ -7607,7 +7609,7 @@ msgstr ""
 "kommer FileZilla att få problem med överstigna tidsgränser vid stora "
 "överföringar."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Varning, ignorerar dataanslutning från felaktig IP-adress."
 
@@ -7643,12 +7645,11 @@ msgid "What's new:"
 msgstr "Vad är nytt:"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"FileZilla kan komma ihåg lösenord så att du senare kan återansluta utan att "
+"När FileZilla tillåts att komma ihåg lösenord, kan du återansluta utan att "
 "behöva ange lösenord på nytt efter omstart av FileZilla."
 
 #: resources.h:833
@@ -7664,9 +7665,8 @@ msgid "Widescreen"
 msgstr "Bredbild"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
-msgstr "Vill du att FileZilla skall komma ihåg det här lösenordet?"
+msgstr "Vill du att FileZilla skall komma ihåg lösenord?"
 
 #: resources.h:144
 msgid "Wr&ite"
@@ -7684,6 +7684,12 @@ msgstr "Felaktiga radslut"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "Ja"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""

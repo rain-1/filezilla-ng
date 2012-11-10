@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-02 11:10+0100\n"
-"PO-Revision-Date: 2012-10-27 00:17+0300\n"
+"POT-Creation-Date: 2012-11-10 19:27+0100\n"
+"PO-Revision-Date: 2012-11-03 00:06+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -795,9 +795,8 @@ msgid "&Remember password for this session"
 msgstr "&تذكر كلمة المرور لهذه الجلسة"
 
 #: resources.h:493
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "حفظ كلمة المرور ؟"
+msgstr "تذكر &كلمات المرور"
 
 #: resources.h:405 resources.h:411
 msgid "&Remote directory:"
@@ -2261,7 +2260,7 @@ msgstr "تم رفض الإتصال"
 msgid "Connection timed out"
 msgstr "إنقضاء مهملة الإتصال"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1070
+#: ../../locales/../src/interface/netconfwizard.cpp:1076
 msgid "Connection timed out."
 msgstr "إنقضاء مهملة الإتصال"
 
@@ -2703,8 +2702,8 @@ msgstr "نوع ملف خطير"
 msgid "Data"
 msgstr "بيانات"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:985
-#: ../../locales/../src/interface/netconfwizard.cpp:1051
+#: ../../locales/../src/interface/netconfwizard.cpp:991
+#: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
 msgstr "تم إغلاق مقبس البيانات مبكرا جدا"
 
@@ -3434,7 +3433,7 @@ msgstr "فشل نسخ أو تقل المواقع"
 msgid "Failed to create backup copy of xml file"
 msgstr "فشل في إنشاء نسخة احتياطية من ملف xml"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:791
+#: ../../locales/../src/interface/netconfwizard.cpp:797
 msgid "Failed to create listen socket, aborting"
 msgstr "فشل في إنشاء مقبس الإستماع . إنهاء"
 
@@ -3455,11 +3454,11 @@ msgstr "فشل الحصول على مسار 'المستندات'"
 msgid "Failed to get desktop path"
 msgstr "فشل الحصول على مسار سطح المكتب"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:950
+#: ../../locales/../src/interface/netconfwizard.cpp:956
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr "فشل الحصول على عنوان النظير لإتصال التحكم ، تم إغلاق الإتصال"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:964
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "فشل الحصول على عنوان النظير لإتصال البيانات ، تم إغلاق الإتصال"
 
@@ -3507,7 +3506,7 @@ msgstr "تعذر تحليل المسار المرتد"
 msgid "Failed to parse trusted root cert."
 msgstr "فشل في تحليل شهادة الجذر الموثوقة"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1014
+#: ../../locales/../src/interface/netconfwizard.cpp:1020
 msgid "Failed to receive data"
 msgstr "فشل في إستقبال البيانات"
 
@@ -5622,44 +5621,42 @@ msgstr "إلغاء العملية الحالية فعلا ؟"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1705
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "هل تريد فعلا حذف %d مجلد مع محتوياته ؟"
-msgstr[1] "هل تريد فعلا حذف %d مجلد مع محتوياته ؟"
-msgstr[2] "هل تريد فعلا حذف %d مجلد مع محتوياتهما ؟"
-msgstr[3] "هل تريد فعلا حذف %d مجلدات مع محتوياتها ؟"
-msgstr[4] "هل تريد فعلا حذف %d مجلد مع محتوياتها ؟"
-msgstr[5] "هل تريد فعلا حذف %d مجلد مع محتوياتها ؟"
+msgstr[0] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياته ؟"
+msgstr[1] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياته ؟"
+msgstr[2] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياتهما ؟"
+msgstr[3] "هل تريد فعلا حذف %d مجلدات من الخادم مع محتوياتها ؟"
+msgstr[4] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياتها ؟"
+msgstr[5] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياتها ؟"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1703
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "هل تريد فعلا حذف %d ملف ؟"
-msgstr[1] "هل تريد فعلا حذف %d ملف ؟"
-msgstr[2] "هل تريد فعلا حذف %d ملف ؟"
-msgstr[3] "هل تريد فعلا حذف %d ملفات ؟"
-msgstr[4] "هل تريد فعلا حذف %d ملف ؟"
-msgstr[5] "هل تريد فعلا حذف %d ملف ؟"
+msgstr[0] "هل تريد فعلا حذف %d ملف من الخادم؟"
+msgstr[1] "هل تريد فعلا حذف %d ملف من الخادم؟"
+msgstr[2] "هل تريد فعلا حذف %d من الملفات من الخادم؟"
+msgstr[3] "هل تريد فعلا حذف %d ملفات من الخادم؟"
+msgstr[4] "هل تريد فعلا حذف %d ملف من الخادم؟"
+msgstr[5] "هل تريد فعلا حذف %d ملف من الخادم؟"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1710
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "هل تحذف فعلا %s و %s ؟"
+msgstr "هل تريد حذف فعلا %s و %s من الخادم؟"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "هل تريد فهلا حذف كافة الملفات المحددة و/أو الأدلة ؟"
+msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الخادم؟"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "هل تريد فهلا حذف كافة الملفات المحددة و/أو الأدلة ؟"
+msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الكمبيوتر؟"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5683,9 +5680,9 @@ msgstr ""
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "تلقى خط تتجاوز 10000 حرف ، مقاطعة"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:998
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1031
+#: ../../locales/../src/interface/netconfwizard.cpp:1004
+#: ../../locales/../src/interface/netconfwizard.cpp:1013
+#: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "تلف البيانات المستقبلة"
 
@@ -5714,9 +5711,8 @@ msgid "Refresh the file and folder lists"
 msgstr "تحديث قوائم الملفات و المجلدات"
 
 #: resources.h:497
-#, fuzzy
 msgid "Remember passwords?"
-msgstr "حفظ كلمة المرور ؟"
+msgstr "تذكر كلمات المرور ؟"
 
 #: ../../locales/../src/interface/edithandler.cpp:1243
 msgid "Remote"
@@ -5905,7 +5901,7 @@ msgstr "SFTP"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "Save settings?"
 msgstr "حفظ الإعدادات ؟"
 
@@ -6955,7 +6951,7 @@ msgstr ""
 "الملف الهدف موجود مسبقا\n"
 "الرجاء إختيار أي إجراء"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:852
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "الفحص لم ينجح ، هل تريد فعلا حفظ الإعدادات ؟"
 
@@ -7532,7 +7528,7 @@ msgstr ""
 "مالم تقوم بتعطيل جدار حماية Windows أو خدمة عبّارة طبقة التطبيق\n"
 "ستظهر لوحة إنتهاء المهلة عند عمل FileZilla مع عمليات الإرسال الكبيرة"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:966
+#: ../../locales/../src/interface/netconfwizard.cpp:972
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "تحذير ، تجاهل إتصال البيانات من IP خاطئ"
 
@@ -7567,13 +7563,13 @@ msgid "What's new:"
 msgstr "ما هو الجديد :"
 
 #: resources.h:492
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"هذا يفيدك كثيرا بحيث فيما بعد تستطيع إعادة الاتصال بدون الحاجة إلى إعادة "
-"إدخال كلمة المرور الخاصة بك حتى بعد إعادة تشغيل البرنامج نفسه"
+"عندما تسمح لـ FileZilla بتذكر كلمات المرور, بحيث يمكنك لاحقا من إعادة "
+"الاتصال من دون الحاجة إلى إعادة إدخال كلمة المرور الخاصة بك عند إعادة تشغيل "
+"FileZilla"
 
 #: resources.h:833
 msgid ""
@@ -7588,7 +7584,6 @@ msgid "Widescreen"
 msgstr "شاشة عريضة"
 
 #: resources.h:491
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "هل تريد أن يتذكر FileZilla كلمة المرور هذه ؟"
 
@@ -7608,6 +7603,12 @@ msgstr "نهايات سطور خطأ"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
 msgid "Yes"
 msgstr "نعم"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:771
+msgid ""
+"You appear to be using an IPv6-only host. This wizard does not support this "
+"environment."
+msgstr ""
 
 #: resources.h:253
 msgid ""
