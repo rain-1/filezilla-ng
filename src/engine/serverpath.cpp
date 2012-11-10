@@ -77,7 +77,7 @@ CServerPath::CServerPath(const CServerPath &path)
 }
 
 CServerPath::CServerPath(wxString path, ServerType type /*=DEFAULT*/)
-	: m_type(m_type)
+	: m_type(type)
 {
 	SetPath(path);
 }
