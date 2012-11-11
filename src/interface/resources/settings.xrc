@@ -976,7 +976,7 @@
                   <object class="sizeritem">
                     <object class="wxTextCtrl" name="ID_REPLACE"/>
                     <flag>wxALIGN_CENTER_VERTICAL</flag>
-                    <minsize>15,-1</minsize>
+                    <minsize>25,-1</minsize>
                   </object>
                 </object>
               </object>
