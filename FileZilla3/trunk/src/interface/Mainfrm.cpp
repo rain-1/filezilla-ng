@@ -1135,34 +1135,39 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 
 	int size = wxTopLevelWindows.size();
 	static wxTopLevelWindow* pLast = 0;
-	wxWindowList::reverse_iterator iter = wxTopLevelWindows.rbegin();
-	wxTopLevelWindow* pTop = (wxTopLevelWindow*)(*iter);
-	while (pTop != this && (size != prev_size || pLast != pTop))
+	if (wxTopLevelWindows.size())
 	{
-		wxDialog* pDialog = wxDynamicCast(pTop, wxDialog);
-		if (pDialog)
-			pDialog->EndModal(wxID_CANCEL);
-		else
+		wxWindowList::reverse_iterator iter = wxTopLevelWindows.rbegin();
+		wxTopLevelWindow* pTop = (wxTopLevelWindow*)(*iter);
+		while (pTop != this && (size != prev_size || pLast != pTop))
 		{
-			wxWindow* pParent = pTop->GetParent();
-			if (m_pQueuePane && pParent == m_pQueuePane)
+			wxDialog* pDialog = wxDynamicCast(pTop, wxDialog);
+			if (pDialog)
+				pDialog->EndModal(wxID_CANCEL);
+			else
 			{
-				// It's the AUI frame manager hint window. Ignore it
-				++iter;
-				pTop = (wxTopLevelWindow*)(*iter);
-				continue;
+				wxWindow* pParent = pTop->GetParent();
+				if (m_pQueuePane && pParent == m_pQueuePane)
+				{
+					// It's the AUI frame manager hint window. Ignore it
+					++iter;
+					if (iter == wxTopLevelWindows.rend())
+						break;
+					pTop = (wxTopLevelWindow*)(*iter);
+					continue;
+				}
+				wxString title = pTop->GetTitle();
+				pTop->Destroy();
 			}
-			wxString title = pTop->GetTitle();
-			pTop->Destroy();
+
+			prev_size = size;
+			pLast = pTop;
+
+			m_closeEvent = event.GetEventType();
+			m_closeEventTimer.Start(1, true);
+
+			return false;
 		}
-
-		prev_size = size;
-		pLast = pTop;
-
-		m_closeEvent = event.GetEventType();
-		m_closeEventTimer.Start(1, true);
-
-		return false;
 	}
 
 #ifdef __WXMSW__
