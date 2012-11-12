@@ -278,6 +278,9 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 	GtkWidget* widget = GetMainWindow()->GetConnectWidget();
 	g_signal_connect(widget, "button_release_event", G_CALLBACK(gtk_button_release_event), m_gtkEventCallbackProxy.Value());
 #endif
+
+	m_genericTypes[genericTypes::file] = _("File");
+	m_genericTypes[genericTypes::directory] = _("Directory");
 }
 
 template<class CFileData> CFileListCtrl<CFileData>::~CFileListCtrl()
@@ -472,7 +475,7 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 
 	wxString type;
 	int flags = SHGFI_TYPENAME;
-	if (path == _T(""))
+	if (path.IsEmpty())
 		flags |= SHGFI_USEFILEATTRIBUTES;
 	else if (path == _T("\\"))
 		name += _T("\\");
@@ -487,45 +490,45 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 		sizeof(shFinfo),
 		flags))
 	{
-		type = shFinfo.szTypeName;
-		if (type == _T(""))
+		if (!*shFinfo.szTypeName)
 		{
-			type = ext;
-			type.MakeUpper();
-			if (!type.IsEmpty())
+			if (!ext.IsEmpty())
 			{
+				type = ext;
+				type.MakeUpper();
 				type += _T("-");
 				type += _("file");
 			}
 			else
-				type = _("File");
+				type = m_genericTypes[genericTypes::file];
 		}
 		else
 		{
-			if (!dir && ext != _T(""))
+			type = shFinfo.szTypeName;
+			if (!dir && !ext.IsEmpty())
 				m_fileTypeMap[ext.MakeLower()] = type;
 		}
 	}
 	else
 	{
-		type = ext;
-		type.MakeUpper();
-		if (!type.IsEmpty())
+		if (!ext.IsEmpty())
 		{
+			type = ext;
+			type.MakeUpper();
 			type += _T("-");
 			type += _("file");
 		}
 		else
-			type = _("File");
+			type = m_genericTypes[genericTypes::file];
 	}
 	return type;
 #else
 	if (dir)
-		return _("Directory");
+		return m_genericTypes[genericTypes::directory];
 
 	int pos = name.Find('.', true);
 	if (pos < 1 || !name[pos + 1]) // Starts or ends with dot
-		return _("File");
+		return m_genericTypes[genericTypes::file];
 	wxString ext = name.Mid(pos + 1);
 	wxString lower_ext = ext.Lower();
 
