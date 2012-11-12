@@ -38,6 +38,13 @@ public:
 	virtual ~CListViewSort() {} // Without this empty destructor GCC complains
 };
 
+namespace genericTypes {
+	enum type {
+		file,
+		directory
+	};
+}
+
 template<class CFileData> class CFileListCtrl : public wxListCtrlEx, public CComparableListing
 {
 public:
@@ -147,6 +154,8 @@ private:
 #ifdef __WXGTK__
 	CSharedPointer<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
 #endif
+
+	wxString m_genericTypes[2];
 
 	DECLARE_EVENT_TABLE()
 	void OnColumnClicked(wxListEvent &event);
