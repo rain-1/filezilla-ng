@@ -1,16 +1,13 @@
 dnl Checks C++0x support, in particular we look for unordered_map
 
-AC_DEFUN([CHECK_CXX0X], [
+dnl Internal function, don't call CHECK_CXX_VER_SPECIFIC directly
+AC_DEFUN([CHECK_CXX_VER_SPECIFIC], [
 
-  AC_LANG_PUSH(C++)
-
-  cxx_has_cxx0x=""
-  if test "X$GCC" = "Xyes"; then
-
-    AC_MSG_CHECKING([whether compiler supports -std=gnu++0x])
+  AC_MSG_CHECKING([whether compiler supports -std=$1])
+  if test "X${cxx_has_cxx0x}" = "X"; then
 
     old_cxxflags="$CXXFLAGS"
-    CXXFLAGS="$CXXFLAGS -std=gnu++0x"
+    CXXFLAGS="$CXXFLAGS -std=$1"
 
     AC_COMPILE_IFELSE([
       AC_LANG_PROGRAM([[
@@ -19,31 +16,28 @@ AC_DEFUN([CHECK_CXX0X], [
       ]])
     ], [
       AC_MSG_RESULT([yes])
-      cxx_has_cxx0x="-std=gnu++0x"
+      cxx_has_cxx0x="-std=$1"
     ], [
       AC_MSG_RESULT([no])
       CXXFLAGS="$old_cxxflags"
-
-      AC_MSG_CHECKING([whether compiler supports -std=C++0x])
-
-      old_cxxflags="$CXXFLAGS"
-      CXXFLAGS="$CXXFLAGS -std=c++0x"
-
-      AC_COMPILE_IFELSE([
-        AC_LANG_PROGRAM([[
-        ]], [[
-          return 0;
-        ]])
-      ], [
-        AC_MSG_RESULT([yes])
-        cxx_has_cxx0x="-std=c++0x"
-      ], [
-        AC_MSG_RESULT([no])
-        CXXFLAGS="$old_cxxflags"
-      ])
-
     ])
+  else
+    AC_MSG_RESULT([skipped])
+  fi
+])
 
+
+AC_DEFUN([CHECK_CXX0X], [
+
+  AC_LANG_PUSH(C++)
+
+  cxx_has_cxx0x=""
+  if test "X$GCC" = "Xyes"; then
+
+    CHECK_CXX_VER_SPECIFIC([gnu++11])
+    CHECK_CXX_VER_SPECIFIC([c++11])
+    CHECK_CXX_VER_SPECIFIC([gnu++0x])
+    CHECK_CXX_VER_SPECIFIC([c++11])
   fi
 
   AC_MSG_CHECKING([for whether we can include <unordered_map>])
