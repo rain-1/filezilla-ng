@@ -127,7 +127,7 @@ void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, 
 
 void CPathCache::Clear()
 {
-	for (tCacheIterator iter = m_cache.begin(); iter != m_cache.end(); iter++)
+	for (tCacheIterator iter = m_cache.begin(); iter != m_cache.end(); ++iter)
 		delete iter->second;
 
 	m_cache.clear();
