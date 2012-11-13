@@ -1129,6 +1129,17 @@ BOOL CALLBACK FzEnumThreadWndProc(HWND hwnd, LPARAM lParam)
 
 bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 {
+#ifndef __WXMAC__
+	if (m_taskBarIcon)
+	{
+		delete m_taskBarIcon;
+		m_taskBarIcon = 0;
+		m_closeEvent = event.GetEventType();
+		m_closeEventTimer.Start(1, true);
+		return false;
+	}
+#endif
+
 	// We need to close all other top level windows on the stack before closing the main frame.
 	// In other words, all open dialogs need to be closed.
 	static int prev_size = 0;
