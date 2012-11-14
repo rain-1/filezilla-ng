@@ -2,10 +2,11 @@
 
 #if FZ_MANUALUPDATECHECK
 
-#include "updatewizard.h"
-#include "filezillaapp.h"
-#include "Options.h"
 #include "buildinfo.h"
+#include "filezillaapp.h"
+#include "sizeformatting.h"
+#include "updatewizard.h"
+#include "Options.h"
 #include <wx/stdpaths.h>
 #include "Mainfrm.h"
 #ifdef __WXMSW__
@@ -880,12 +881,15 @@ void CUpdateWizard::SetTransferStatus(const CTransferStatus* pStatus)
 	{
 		wxFileOffset rate = (pStatus->currentOffset - pStatus->startOffset) / elapsedSeconds;
 
-		if (rate > (1000*1000))
-			text.Printf(_("%s bytes (%d.%d MB/s)"), wxLongLong(pStatus->currentOffset).ToString().c_str(), (int)(rate / 1000 / 1000), (int)((rate / 1000 / 100) % 10));
-		else if (rate > 1000)
-			text.Printf(_("%s bytes (%d.%d KB/s)"), wxLongLong(pStatus->currentOffset).ToString().c_str(), (int)(rate / 1000), (int)((rate / 100) % 10));
-		else
-			text.Printf(_("%s bytes (%d B/s)"), wxLongLong(pStatus->currentOffset).ToString().c_str(), (int)rate);
+		CSizeFormat::_format format = static_cast<CSizeFormat::_format>(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
+		if (format == CSizeFormat::bytes)
+			format = CSizeFormat::iec;
+		const wxString ratestr = CSizeFormat::Format(rate, true,
+													 format,
+													 COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
+													 COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
+
+		text.Printf(_("%s bytes (%s/s)"), wxLongLong(pStatus->currentOffset).ToString().c_str(), ratestr.c_str());
 
 		if (pStatus->totalSize > 0 && rate > 0)
 		{
