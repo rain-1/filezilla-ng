@@ -464,10 +464,21 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListE
 	RefreshListOnly(false);
 }
 
+static wxString GetExt(const wxString& file)
+{
+	wxString ret;
+
+	int pos = file.Find('.', true);
+	if (pos > 0 && file[pos + 1] != 0) // Does neither starts nor end with dot
+		ret = file.Mid(pos + 1);
+
+	return ret;
+}
+
 template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString name, bool dir, const wxString& path /*=_T("")*/)
 {
 #ifdef __WXMSW__
-	wxString ext = wxFileName(name).GetExt();
+	wxString ext = GetExt(name);
 	ext.MakeLower();
 	std::map<wxString, wxString>::iterator typeIter = m_fileTypeMap.find(ext);
 	if (typeIter != m_fileTypeMap.end())
