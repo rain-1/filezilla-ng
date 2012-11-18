@@ -910,7 +910,10 @@ int CFtpControlSocket::LogonParseResponse()
 
 		const enum CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
 		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
+		{
+			LogMessage(Status, _("Server does not support non-ASCII characters."));
 			m_useUTF8 = false;
+		}
 	}
 	else if (pData->opState == LOGON_PROT)
 	{
@@ -967,6 +970,12 @@ int CFtpControlSocket::LogonParseResponse()
 			enum capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), feat_command);
 			if (cap == unknown)
 				break;
+			const enum CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
+			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
+			{
+				LogMessage(Status, _("Server does not support non-ASCII characters."));
+				m_useUTF8 = false;
+			}
 		}
 		else if (pData->opState == LOGON_CLNT)
 		{
