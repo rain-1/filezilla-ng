@@ -66,8 +66,15 @@ bool COptionsPageProxy::Validate()
 		return true;
 
 	wxTextCtrl* pTextCtrl = XRCCTRL(*this, "ID_PROXY_HOST", wxTextCtrl);
-	if (pTextCtrl->GetValue() == _T(""))
+	wxString host = pTextCtrl->GetValue();
+	host.Trim(false);
+	host.Trim(true);
+	if (host == _T(""))
 		return DisplayError(_T("ID_PROXY_HOST"), _("You need to enter a proxy host."));
+	else
+	{
+		pTextCtrl->ChangeValue(host);
+	}
 
 	pTextCtrl = XRCCTRL(*this, "ID_PROXY_PORT", wxTextCtrl);
 	unsigned long port;
