@@ -69,7 +69,7 @@ protected:
 
 	gnutls_certificate_credentials_t m_certCredentials;
 
-	void LogError(int code);
+	void LogError(int code, const wxString& function);
 	void PrintAlert();
 
 	// Failure logs the error, uninits the session and sends a close event

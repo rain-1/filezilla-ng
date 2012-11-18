@@ -6,7 +6,12 @@
 #include <gnutls/x509.h>
 #include <errno.h>
 
-char const ciphers[] = "SECURE256:+SECURE128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+#if GNUTLS_VERSION_NUMBER >= 0x030100
+char const ciphers[] = "SECURE256:+SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+#else
+// Versions before 3.1.0 cannot combine level keywords
+char const ciphers[] = "SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+#endif
 
 //#define TLSDEBUG 1
 #if TLSDEBUG
@@ -73,7 +78,7 @@ bool CTlsSocket::Init()
 	int res = gnutls_global_init();
 	if (res)
 	{
-		LogError(res);
+		LogError(res, _T("gnutls_global_init"));
 		Uninit();
 		return false;
 	}
@@ -86,7 +91,7 @@ bool CTlsSocket::Init()
 	res = gnutls_certificate_allocate_credentials(&m_certCredentials);
 	if (res < 0)
 	{
-		LogError(res);
+		LogError(res, _T("gnutls_certificate_allocate_credentials"));
 		Uninit();
 		return false;
 	}
@@ -106,7 +111,7 @@ bool CTlsSocket::InitSession()
 	int res = gnutls_init(&m_session, GNUTLS_CLIENT);
 	if (res)
 	{
-		LogError(res);
+		LogError(res, _T("gnutls_init"));
 		Uninit();
 		return false;
 	}
@@ -120,7 +125,7 @@ bool CTlsSocket::InitSession()
 	res = gnutls_priority_set_direct(m_session, ciphers, 0);
 	if (res)
 	{
-		LogError(res);
+		LogError(res, _T("gnutls_priority_set_direct"));
 		Uninit();
 		return false;
 	}
@@ -179,7 +184,7 @@ void CTlsSocket::UninitSession()
 }
 
 
-void CTlsSocket::LogError(int code)
+void CTlsSocket::LogError(int code, const wxString& function)
 {
 	if (code == GNUTLS_E_WARNING_ALERT_RECEIVED || code == GNUTLS_E_FATAL_ALERT_RECEIVED)
 		PrintAlert();
@@ -193,10 +198,18 @@ void CTlsSocket::LogError(int code)
 #else
 		wxString str(error);
 #endif
-		m_pOwner->LogMessage(::Error, _T("GnuTLS error %d: %s"), code, str.c_str());
+		if (function.IsEmpty())
+			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d: %s"), code, str.c_str());
+		else
+			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d in %s: %s"), code, function.c_str(), str.c_str());
 	}
 	else
-		m_pOwner->LogMessage(::Error, _T("GnuTLS error %d"), code);
+	{
+		if (function.IsEmpty())
+			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d"), code);
+		else
+			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d in %s"), code, function.c_str());
+	}
 }
 
 void CTlsSocket::PrintAlert()
@@ -746,7 +759,7 @@ void CTlsSocket::Failure(int code, int socket_error)
 	m_pOwner->LogMessage(::Debug_Debug, _T("CTlsSocket::Failure(%d, %d)"), code, socket_error);
 	if (code)
 	{
-		LogError(code);
+		LogError(code, _T(""));
 		if (code == GNUTLS_E_UNEXPECTED_PACKET_LENGTH && m_socket_eof)
 			m_pOwner->LogMessage(Status, _("Server did not properly shut down TLS connection"));
 	}
@@ -1006,11 +1019,11 @@ int CTlsSocket::VerifyCertificate()
 				subject = wxString(dn, wxConvUTF8);
 			}
 			else
-				LogError(res);
+				LogError(res, _T("gnutls_x509_crt_get_dn"));
 			delete [] dn;
 		}
 		else
-			LogError(res);
+			LogError(res, _T("gnutls_x509_crt_get_dn"));
 		if (subject == _T(""))
 		{
 			m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
@@ -1031,11 +1044,11 @@ int CTlsSocket::VerifyCertificate()
 				issuer = wxString(dn, wxConvUTF8);
 			}
 			else
-				LogError(res);
+				LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
 			delete [] dn;
 		}
 		else
-			LogError(res);
+			LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
 		if (issuer == _T(""))
 		{
 			m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
