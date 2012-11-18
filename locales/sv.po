@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-10 19:27+0100\n"
-"PO-Revision-Date: 2012-11-05 20:22+0100\n"
+"POT-Creation-Date: 2012-11-18 11:42+0100\n"
+"PO-Revision-Date: 2012-11-10 22:57+0100\n"
 "Last-Translator: Magnus Nilsson <magnus.nilsson@telia.com>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -19,12 +19,12 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
-#: ../../locales/../src/interface/statuslinectrl.cpp:228
+#: ../../locales/../src/interface/statuslinectrl.cpp:230
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S förflutet"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:69
-#: ../../locales/../src/interface/statuslinectrl.cpp:236
+#: ../../locales/../src/interface/statuslinectrl.cpp:238
 msgid "%H:%M:%S left"
 msgstr "%H:%M:%S kvar"
 
@@ -101,22 +101,12 @@ msgstr "%h - Värd"
 msgid "%p - Password"
 msgstr "%p - Lösenord"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:184
-#, c-format
-msgid "%s (%d B/s)"
+#: ../../locales/../src/interface/statuslinectrl.cpp:186
+#, fuzzy, c-format
+msgid "%s (%s/s)"
 msgstr "%s (%d B/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:182
-#, c-format
-msgid "%s (%d.%d KB/s)"
-msgstr "%s (%d,%d kB/s)"
-
-#: ../../locales/../src/interface/statuslinectrl.cpp:180
-#, c-format
-msgid "%s (%d.%d MB/s)"
-msgstr "%s (%d,%d MB/s)"
-
-#: ../../locales/../src/interface/statuslinectrl.cpp:187
+#: ../../locales/../src/interface/statuslinectrl.cpp:189
 #, c-format
 msgid "%s (? B/s)"
 msgstr "%s (? B/s)"
@@ -153,25 +143,15 @@ msgid_plural "%s bytes"
 msgstr[0] "%s byte"
 msgstr[1] "%s byte"
 
-#: ../../locales/../src/interface/updatewizard.cpp:904
+#: ../../locales/../src/interface/updatewizard.cpp:908
 #, c-format
 msgid "%s bytes"
 msgstr "%s byte"
 
-#: ../../locales/../src/interface/updatewizard.cpp:888
-#, c-format
-msgid "%s bytes (%d B/s)"
+#: ../../locales/../src/interface/updatewizard.cpp:892
+#, fuzzy, c-format
+msgid "%s bytes (%s/s)"
 msgstr "%s byte (%d B/s)"
-
-#: ../../locales/../src/interface/updatewizard.cpp:886
-#, c-format
-msgid "%s bytes (%d.%d KB/s)"
-msgstr "%s byte (%d.%d kB/s)"
-
-#: ../../locales/../src/interface/updatewizard.cpp:884
-#, c-format
-msgid "%s bytes (%d.%d MB/s)"
-msgstr "%s byte (%d.%d MB/s)"
 
 #: ../../locales/../src/interface/FileZilla.cpp:701
 #, c-format
@@ -520,7 +500,7 @@ msgstr "&Filteruppsättningar:"
 msgid "&Filters:"
 msgstr "&Filter:"
 
-#: ../../locales/../src/interface/updatewizard.cpp:29
+#: ../../locales/../src/interface/updatewizard.cpp:30
 msgid "&Finish"
 msgstr "&Slutför"
 
@@ -672,11 +652,11 @@ msgstr "&Ny"
 msgid "&New Site"
 msgstr "&Ny plats"
 
-#: ../../locales/../src/interface/updatewizard.cpp:1043
+#: ../../locales/../src/interface/updatewizard.cpp:1047
 msgid "&New version available!"
 msgstr "&Ny version finns tillgänglig!"
 
-#: ../../locales/../src/interface/updatewizard.cpp:27
+#: ../../locales/../src/interface/updatewizard.cpp:28
 msgid "&Next >"
 msgstr "&Nästa >"
 
@@ -993,7 +973,7 @@ msgstr "&Användare:"
 msgid "&Username:"
 msgstr "&Användarnamn:"
 
-#: ../../locales/../src/interface/updatewizard.cpp:1039
+#: ../../locales/../src/interface/updatewizard.cpp:1043
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -1092,11 +1072,11 @@ msgstr "(exempel: %Y-%m-%d)"
 msgid "(in %s/s)"
 msgstr "(i %s/s)"
 
-#: ../../locales/../src/interface/updatewizard.cpp:896
+#: ../../locales/../src/interface/updatewizard.cpp:900
 msgid ", %H:%M:%S left"
 msgstr ", %H:%M:%S kvar"
 
-#: ../../locales/../src/interface/updatewizard.cpp:900
+#: ../../locales/../src/interface/updatewizard.cpp:904
 msgid ", --:--:-- left"
 msgstr ", --:--:-- kvar"
 
@@ -1116,7 +1096,7 @@ msgstr "- Skadad fil på speglingsservern"
 msgid "- Malware on your system"
 msgstr "- Sabotageprogram i ditt system"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:239
+#: ../../locales/../src/interface/statuslinectrl.cpp:241
 msgid "--:--:-- left"
 msgstr "--:--:-- kvar"
 
@@ -1164,7 +1144,7 @@ msgstr "4 - Felsökning"
 msgid "64 bit system"
 msgstr "64-bitars system"
 
-#: ../../locales/../src/interface/updatewizard.cpp:28
+#: ../../locales/../src/interface/updatewizard.cpp:29
 msgid "< &Back"
 msgstr "< &Tillbaka"
 
@@ -1202,13 +1182,13 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "En tidigare öppnad fil har ändrats."
 
-#: ../../locales/../src/interface/LocalListView.cpp:2069
+#: ../../locales/../src/interface/LocalListView.cpp:2071
 #, c-format
 msgid ""
 "A file with that name is already being edited. Do you want to reopen '%s'?"
 msgstr "En fil med det namnet redigeras redan. Vill du öppna \"%s\" på nytt?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2065
+#: ../../locales/../src/interface/LocalListView.cpp:2067
 #: ../../locales/../src/interface/RemoteListView.cpp:2687
 msgid "A file with that name is already being transferred."
 msgstr "En fil med det namnet håller redan på att överföras."
@@ -1446,7 +1426,7 @@ msgstr ""
 "Alternativt kan du använda ditt systems SSH-agent. För att göra det, se till "
 "att miljövariabeln SSH_AUTH_SOCK är inställd."
 
-#: ../../locales/../src/interface/updatewizard.cpp:1097
+#: ../../locales/../src/interface/updatewizard.cpp:1101
 msgid ""
 "Alternatively, visit http://filezilla-project.org to download the most "
 "recent version."
@@ -1531,7 +1511,7 @@ msgid "Apply to &files only"
 msgstr "Verkställ endast på &filer"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:102
-#: ../../locales/../src/interface/updatewizard.cpp:322
+#: ../../locales/../src/interface/updatewizard.cpp:323
 msgid "Archive"
 msgstr "Arkiv"
 
@@ -1577,7 +1557,7 @@ msgstr "Nu har all nödvändig information samlats in."
 msgid "Attribute"
 msgstr "Attribut"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:673
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:674
 msgid "Authentication failed."
 msgstr "Autentiseringen misslyckades"
 
@@ -1627,7 +1607,7 @@ msgstr "Redigeras"
 msgid "Benchmark string coalescer"
 msgstr "Prestandatesta textsträngshanteraren"
 
-#: ../../locales/../src/engine/tlssocket.cpp:911
+#: ../../locales/../src/engine/tlssocket.cpp:924
 msgid "Beware! Certificate has been revoked"
 msgstr "Se upp! Certifikatet har återkallats"
 
@@ -1699,8 +1679,8 @@ msgstr "A&npassad"
 msgid "C&ustom filetype associations:"
 msgstr "An&passade filtypsassociationer:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1633
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1270
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1642
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1271
 msgid "Calculating timezone offset of server..."
 msgstr "Beräknar serverns tidzonsskillnad..."
 
@@ -1770,18 +1750,18 @@ msgstr "Kan inte jämföra katalogerna, inte ansluten till en server."
 msgid "Cannot create new filter"
 msgstr "Kan inte skapa nytt filter"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2047
-#: ../../locales/../src/interface/LocalListView.cpp:2178
+#: ../../locales/../src/interface/LocalListView.cpp:2049
+#: ../../locales/../src/interface/LocalListView.cpp:2180
 #: ../../locales/../src/interface/RemoteListView.cpp:2621
 #: ../../locales/../src/interface/RemoteListView.cpp:2667
 msgid "Cannot edit file"
 msgstr "Kan inte redigera filen"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1963
+#: ../../locales/../src/interface/LocalListView.cpp:1965
 msgid "Cannot edit file, not connected to any server."
 msgstr "Kan inte redigera filen, inte ansluten till någon server."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1974
+#: ../../locales/../src/interface/LocalListView.cpp:1976
 msgid "Cannot edit file, remote path unknown."
 msgstr "Kan inte redigera filen, okänd fjärrsökväg."
 
@@ -1838,7 +1818,7 @@ msgstr "Kan inte ställa in filassociationen"
 msgid "Cannot show dialog"
 msgstr "Kan inte visa dialogrutan"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2065
+#: ../../locales/../src/interface/LocalListView.cpp:2067
 #: ../../locales/../src/interface/RemoteListView.cpp:2687
 msgid "Cannot view/edit selected file"
 msgstr "Kan inte visa/redigera markerad fil"
@@ -1899,11 +1879,11 @@ msgstr "Sök efter &uppdateringar..."
 msgid "Check for newer versions of FileZilla"
 msgstr "Sök efter nyare versioner av FileZilla"
 
-#: ../../locales/../src/interface/updatewizard.cpp:163
+#: ../../locales/../src/interface/updatewizard.cpp:164
 msgid "Check for updates"
 msgstr "Sök efter uppdateringar"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1791
+#: ../../locales/../src/interface/Mainfrm.cpp:1807
 msgid "Check for updates failed"
 msgstr "Sökningen efter uppdateringar misslyckades."
 
@@ -1915,7 +1895,7 @@ msgstr "Söker efter den korrekta externa IP-adressen"
 msgid "Checking for updates"
 msgstr "Söker efter uppdateringar"
 
-#: ../../locales/../src/interface/updatewizard.cpp:1241
+#: ../../locales/../src/interface/updatewizard.cpp:1245
 msgid "Checksum mismatch of downloaded file."
 msgstr "Kontrollsumman stämmer inte för den hämtade filen."
 
@@ -1989,7 +1969,7 @@ msgstr "Töm textsträngshanteraren"
 msgid "Click on Finish to save your configuration."
 msgstr "Klicka på Slutför för att spara din konfiguration."
 
-#: ../../locales/../src/interface/updatewizard.cpp:1096
+#: ../../locales/../src/interface/updatewizard.cpp:1100
 msgid "Click on next to download the new version."
 msgstr "Klicka på Nästa för att hämta den nya versionen."
 
@@ -2005,8 +1985,8 @@ msgstr "Chiffer, klient till server:"
 msgid "Close &all other tabs"
 msgstr "Stäng &alla andra flikar"
 
-#: resources.h:510 ../../locales/../src/interface/Mainfrm.cpp:1203
-#: ../../locales/../src/interface/Mainfrm.cpp:1226
+#: resources.h:510 ../../locales/../src/interface/Mainfrm.cpp:1219
+#: ../../locales/../src/interface/Mainfrm.cpp:1242
 msgid "Close FileZilla"
 msgstr "Stäng FileZilla"
 
@@ -2052,7 +2032,7 @@ msgstr "Kommandot stöds inte av det här protokollet"
 #: ../../locales/../src/engine/logging.cpp:214
 #: ../../locales/../src/interface/StatusView.cpp:285
 #: ../../locales/../src/interface/StatusView.cpp:335
-#: ../../locales/../src/interface/updatewizard.cpp:541
+#: ../../locales/../src/interface/updatewizard.cpp:542
 msgid "Command:"
 msgstr "Kommando:"
 
@@ -2134,8 +2114,8 @@ msgid "Confirm deletion"
 msgstr "Bekräfta borttagning"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#: ../../locales/../src/interface/LocalListView.cpp:2018
-#: ../../locales/../src/interface/LocalListView.cpp:2138
+#: ../../locales/../src/interface/LocalListView.cpp:2020
+#: ../../locales/../src/interface/LocalListView.cpp:2140
 #: ../../locales/../src/interface/RemoteListView.cpp:1713
 #: ../../locales/../src/interface/RemoteListView.cpp:2638
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
@@ -2154,7 +2134,7 @@ msgstr "Anslut men kringgå proxyinställningar"
 msgid "Connect to specified Site Manager site"
 msgstr "Anslut till angiven plats i Platshanteraren"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:933
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:936
 msgid "Connected"
 msgstr "Ansluten"
 
@@ -2163,12 +2143,12 @@ msgid "Connecting"
 msgstr "Ansluter"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:207
-#: ../../locales/../src/interface/statuslinectrl.cpp:278
+#: ../../locales/../src/interface/statuslinectrl.cpp:280
 #, c-format
 msgid "Connecting to %s"
 msgstr "Ansluter till %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1163
+#: ../../locales/../src/engine/ControlSocket.cpp:1166
 #, c-format
 msgid "Connecting to %s through proxy"
 msgstr "Ansluter till %s genom proxy"
@@ -2180,8 +2160,8 @@ msgstr "Ansluter till %s genom proxy"
 msgid "Connecting to %s..."
 msgstr "Ansluter till %s..."
 
-#: ../../locales/../src/interface/updatewizard.cpp:424
-#: ../../locales/../src/interface/updatewizard.cpp:998
+#: ../../locales/../src/interface/updatewizard.cpp:425
+#: ../../locales/../src/interface/updatewizard.cpp:1002
 msgid "Connecting to server"
 msgstr "Ansluter till servern"
 
@@ -2306,12 +2286,12 @@ msgstr "Kunde inte lägga till anslutningen i Platshanteraren"
 msgid "Could not connect to server"
 msgstr "Kunde inte ansluta till servern"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1205
+#: ../../locales/../src/engine/ControlSocket.cpp:1208
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Kunde inte ansluta till servern: %s"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:823
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:824
 msgid "Could not convert command to server encoding"
 msgstr "Kunde inte konvertera kommandot till serverns kodning"
 
@@ -2340,7 +2320,7 @@ msgstr ""
 "Antingen är skaltillägget inte installerat korrekt eller så släppte du inte "
 "filen i ett Utforskar-fönster."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4267
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4276
 msgid "Could not establish connection to server"
 msgstr "Kunde inte etablera en anslutning till servern"
 
@@ -2360,7 +2340,7 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "Kunde inte skapa anpassad inloggningssekvens."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1041
+#: ../../locales/../src/engine/tlssocket.cpp:1054
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2368,7 +2348,7 @@ msgstr ""
 "Fick inget unikt namn för certifikatsutfärdaren, gnutls_x509_get_issuer_dn "
 "misslyckades"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1016
+#: ../../locales/../src/engine/tlssocket.cpp:1029
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2389,13 +2369,13 @@ msgstr "Fick inget svar ifrån fzputtygen."
 msgid "Could not get temporary directory to download file into."
 msgstr "Kunde inte komma åt den temporära katalogen för filhämtning."
 
-#: ../../locales/../src/engine/tlssocket.cpp:969
+#: ../../locales/../src/engine/tlssocket.cpp:982
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Kunde inte importera andra partens certifikat, gnutls_x509_crt_import "
 "misslyckades"
 
-#: ../../locales/../src/engine/tlssocket.cpp:962
+#: ../../locales/../src/engine/tlssocket.cpp:975
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2486,12 +2466,12 @@ msgstr "Kunde inte läsa från uttaget: %s"
 msgid "Could not read server item."
 msgstr "Kunde inte läsa serverobjektet."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2705
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2714
 #, c-format
 msgid "Could not seek to offset %s within file"
 msgstr "Kunde inte söka till position %s i filen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2638
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2647
 msgid "Could not seek to the end of the file"
 msgstr "Kunde inte söka till slutet av filen"
 
@@ -2499,11 +2479,11 @@ msgstr "Kunde inte söka till slutet av filen"
 msgid "Could not send command to fzputtygen."
 msgstr "Kunde inte skicka kommandot till fzputtygen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2736
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2745
 msgid "Could not spawn IO thread"
 msgstr "Kunde inte starta I/O-tråd"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1178
+#: ../../locales/../src/engine/ControlSocket.cpp:1181
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Kunde inte starta handskakningen med proxyn: %s"
@@ -2599,7 +2579,7 @@ msgstr "Skapa en ny underkatalog i den aktuella katalogen"
 msgid "Create a new, empty file in the current directory"
 msgstr "Skapa en ny, tom fil i den aktuella katalogen"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1194
+#: ../../locales/../src/interface/LocalListView.cpp:1196
 #: ../../locales/../src/interface/LocalTreeView.cpp:1182
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1274
@@ -2614,8 +2594,8 @@ msgstr "Skapa tom fil"
 msgid "Creating directory"
 msgstr "Skapar katalog"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3310
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2047
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3319
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2048
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "Skapar katalogen \"%s\"..."
@@ -2698,7 +2678,7 @@ msgstr "Åtgärd vid d&ubbelklick på kataloger:"
 msgid "DOS-like with virtual paths"
 msgstr "Som DOS med virtuella sökvägar"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2052
+#: ../../locales/../src/interface/LocalListView.cpp:2054
 #: ../../locales/../src/interface/RemoteListView.cpp:2672
 msgid "Dangerous filetype"
 msgstr "Farlig filtyp"
@@ -2849,13 +2829,13 @@ msgstr "Katalo&ger"
 msgid "Direction"
 msgstr "Riktning"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:524
+#: ../../locales/../src/interface/filelistctrl.cpp:283
 msgid "Directory"
 msgstr "Katalog"
 
 #: resources.h:654 resources.h:928 resources.h:1011
-#: ../../locales/../src/interface/filelistctrl.cpp:446
-#: ../../locales/../src/interface/Mainfrm.cpp:2354
+#: ../../locales/../src/interface/filelistctrl.cpp:449
+#: ../../locales/../src/interface/Mainfrm.cpp:2370
 msgid "Directory comparison"
 msgstr "Katalogjämförelse"
 
@@ -2925,7 +2905,7 @@ msgid "Disconnected from server: %s"
 msgstr "Frånkopplad från servern: %s"
 
 #: ../../locales/../src/interface/QueueView.cpp:1431
-#: ../../locales/../src/interface/statuslinectrl.cpp:272
+#: ../../locales/../src/interface/statuslinectrl.cpp:274
 msgid "Disconnecting from previous server"
 msgstr "Kopplar från föregående server"
 
@@ -2946,7 +2926,7 @@ msgid "Do &nothing"
 msgstr "Gör &ingenting"
 
 #: ../../locales/../src/interface/settings/optionspage_updatecheck.cpp:61
-#: ../../locales/../src/interface/updatewizard.cpp:251
+#: ../../locales/../src/interface/updatewizard.cpp:252
 msgid ""
 "Do you really want to check for beta versions?\n"
 "Unless you want to test new features, keep using stable versions."
@@ -2955,8 +2935,8 @@ msgstr ""
 "Såvida du inte vill testa nya funktioner rekommenderas det att du använder "
 "de stabila versionerna."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1206
-#: ../../locales/../src/interface/Mainfrm.cpp:1230
+#: ../../locales/../src/interface/Mainfrm.cpp:1222
+#: ../../locales/../src/interface/Mainfrm.cpp:1246
 msgid "Do you really want to close FileZilla?"
 msgstr "Vill du verkligen stänga FileZilla?"
 
@@ -3034,7 +3014,7 @@ msgid "Downloading"
 msgstr "Hämtar"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:358
-#: ../../locales/../src/interface/updatewizard.cpp:415
+#: ../../locales/../src/interface/updatewizard.cpp:416
 #, c-format
 msgid "Downloading %s"
 msgstr "Hämtar %s"
@@ -3102,8 +3082,8 @@ msgstr ""
 "Redigera filen med den konfigurerade redigeraren och skicka ändringarna till "
 "servern."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1963
-#: ../../locales/../src/interface/LocalListView.cpp:1974
+#: ../../locales/../src/interface/LocalListView.cpp:1965
+#: ../../locales/../src/interface/LocalListView.cpp:1976
 msgid "Editing failed"
 msgstr "Redigeringen misslyckades"
 
@@ -3165,7 +3145,7 @@ msgstr "Kryptering"
 msgid "Encryption details"
 msgstr "Krypteringsinformation"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:448
+#: ../../locales/../src/interface/filelistctrl.cpp:451
 msgid "End comparison and change sorting order?"
 msgstr "Avsluta jämförelsen och ändra sorteringsordning?"
 
@@ -3308,18 +3288,18 @@ msgstr "Fel vid start av programmet"
 msgid "Error writing xml file"
 msgstr "Fel vid skrivning av XML-fil"
 
-#: ../../locales/../src/interface/updatewizard.cpp:335
+#: ../../locales/../src/interface/updatewizard.cpp:336
 msgid "Error, file name cannot be parsed."
 msgstr "Fel, filnamnet kan inte tolkas."
 
-#: ../../locales/../src/interface/updatewizard.cpp:351
+#: ../../locales/../src/interface/updatewizard.cpp:352
 msgid "Error, local file exists but cannot be removed"
 msgstr "Fel, den lokala filen finns men kan inte tas bort"
 
 #: ../../locales/../src/engine/logging.cpp:213
 #: ../../locales/../src/interface/StatusView.cpp:283
 #: ../../locales/../src/interface/StatusView.cpp:331
-#: ../../locales/../src/interface/updatewizard.cpp:535
+#: ../../locales/../src/interface/updatewizard.cpp:536
 msgid "Error:"
 msgstr "Fel:"
 
@@ -3339,11 +3319,11 @@ msgstr "Exempel"
 msgid "Exe&cute"
 msgstr "&Kör"
 
-#: ../../locales/../src/interface/updatewizard.cpp:320
+#: ../../locales/../src/interface/updatewizard.cpp:321
 msgid "Executable"
 msgstr "Körbar fil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1791
+#: ../../locales/../src/interface/Mainfrm.cpp:1807
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Den körbara filen innehåller ingen versionsinformation, kan därför inte söka "
@@ -3421,7 +3401,7 @@ msgstr "FTPS - FTP över implicit TLS/SSL"
 
 #: ../../locales/../src/interface/LocalListView.cpp:545
 #: ../../locales/../src/interface/LocalListView.cpp:625
-#: ../../locales/../src/interface/LocalListView.cpp:2259
+#: ../../locales/../src/interface/LocalListView.cpp:2261
 #: ../../locales/../src/interface/LocalTreeView.cpp:906
 #: ../../locales/../src/interface/viewheader.cpp:535
 msgid "Failed to change directory"
@@ -3434,7 +3414,7 @@ msgstr "Misslyckades med att byta katalog"
 msgid "Failed to change language"
 msgstr "Misslyckades med att byta språk"
 
-#: ../../locales/../src/interface/updatewizard.cpp:453
+#: ../../locales/../src/interface/updatewizard.cpp:454
 msgid "Failed to check for newer version of FileZilla."
 msgstr "Misslyckades med att söka efter en nyare version av FileZilla."
 
@@ -3450,13 +3430,13 @@ msgstr "Misslyckades med att skapa en säkerhetskopia av XML-filen"
 msgid "Failed to create listen socket, aborting"
 msgstr "Misslyckades med att skapa ett lyssningsuttag, avbryter"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4243
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4247
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4252
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4256
 msgid "Failed to create listening socket for active mode transfer"
 msgstr ""
 "Misslyckades med att skapa ett lyssningsuttag för överföring i aktivt läge"
 
-#: ../../locales/../src/interface/updatewizard.cpp:455
+#: ../../locales/../src/interface/updatewizard.cpp:456
 msgid "Failed to download the latest version of FileZilla."
 msgstr "Misslyckades med att hämta den senaste versionen av FileZilla."
 
@@ -3499,17 +3479,17 @@ msgstr "Misslyckades med att läsa in paneler, ogiltiga resursfiler?"
 msgid "Failed to load private key: %s"
 msgstr "Misslyckades med att läsa in den privata nyckeln: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2627
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2636
 #, c-format
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "Misslyckades med att öppna \"%s\" för skrivning"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2689
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2698
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "Misslyckades med att öppna \"%s\" för läsning"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2668
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2677
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:391
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:448
 #, c-format
@@ -3536,11 +3516,11 @@ msgstr "Misslyckades med att hämta kataloglistning"
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "Misslyckades med att hämta extern ip-adress, avbryter"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3941
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3950
 msgid "Failed to retrieve external ip address, using local address"
 msgstr "Misslyckades med att hämta extern ip-adress, använder lokal adress"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3963
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3972
 msgid "Failed to retrieve local ip address."
 msgstr "Misslyckades med att läsa av lokal ip-adress."
 
@@ -3604,7 +3584,7 @@ msgstr ""
 msgid "Failed to validate settings"
 msgstr "Misslyckades med att validera inställningarna"
 
-#: ../../locales/../src/engine/tlssocket.cpp:904
+#: ../../locales/../src/engine/tlssocket.cpp:917
 msgid "Failed to verify peer certificate"
 msgstr "Misslyckades med att verifiera andra partens certifikat"
 
@@ -3633,9 +3613,7 @@ msgstr "Fi&l:"
 msgid "Fil&es"
 msgstr "Fil&er"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:501
-#: ../../locales/../src/interface/filelistctrl.cpp:519
-#: ../../locales/../src/interface/filelistctrl.cpp:528
+#: ../../locales/../src/interface/filelistctrl.cpp:282
 msgid "File"
 msgstr "Fil"
 
@@ -3709,7 +3687,7 @@ msgstr "Filöverföringen lyckades"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Filöverföringen lyckades, överförde %s på %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1205
+#: ../../locales/../src/interface/Mainfrm.cpp:1221
 msgid "File transfers still in progress."
 msgstr "Filöverföringar pågår fortfarande."
 
@@ -3749,7 +3727,7 @@ msgstr ""
 "Inloggningstyperna \"Normal\" och \"Konto\" är inte tillgängliga i detta "
 "läge."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1540
+#: ../../locales/../src/interface/Mainfrm.cpp:1556
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla måste startas om för att bytet av språk skall träda i kraft."
 
@@ -3770,8 +3748,8 @@ msgstr "Filnamn"
 msgid "Filename &filters..."
 msgstr "Filnamns&filter..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3107
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2310
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3116
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2311
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "Filnamnet kan inte skapas för katalogen %s och filnamnet %s"
@@ -3794,11 +3772,11 @@ msgstr "Filnamnet är oförändrat"
 msgid "Filename:"
 msgstr "Filnamn:"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1373
+#: ../../locales/../src/interface/LocalListView.cpp:1375
 msgid "Filenames may not contain any of the following characters: / * ? < > |"
 msgstr "Filnamn får inte innehålla något av följande tecken: / * ? < > |"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1348
+#: ../../locales/../src/interface/LocalListView.cpp:1350
 msgid ""
 "Filenames may not contain any of the following characters: / \\ : * ? \" < > "
 "|"
@@ -4165,7 +4143,7 @@ msgstr ""
 "Om du klickar på Testa, kommer FileZilla att ansluta till probe.filezilla-"
 "project.org och genomföra några enkla tester."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1229
+#: ../../locales/../src/interface/Mainfrm.cpp:1245
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Om du stänger FileZilla kommer du att förlora dina ändringar."
 
@@ -4290,7 +4268,7 @@ msgstr ""
 "FileZilla att fråga servern efter en port och ansluta till den angivna "
 "porten. För detta behöver inte så mycket konfigureras."
 
-#: ../../locales/../src/engine/tlssocket.cpp:918
+#: ../../locales/../src/engine/tlssocket.cpp:931
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4358,8 +4336,8 @@ msgstr "Ogiltigt data togs emot"
 msgid "Invalid date"
 msgstr "Ogiltigt datum"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1348
-#: ../../locales/../src/interface/LocalListView.cpp:1373
+#: ../../locales/../src/interface/LocalListView.cpp:1350
+#: ../../locales/../src/interface/LocalListView.cpp:1375
 #: ../../locales/../src/interface/RemoteListView.cpp:3188
 msgid "Invalid filename"
 msgstr "Ogiltigt filnamn"
@@ -4394,7 +4372,7 @@ msgstr ""
 "ftps:// för FTP över SSL (implicit) och\n"
 "ftpes:// för FTP över SSL (explicit)."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4394
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4403
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4476,7 +4454,7 @@ msgstr "&Lägst"
 msgid "Language"
 msgstr "Språk"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1540
+#: ../../locales/../src/interface/Mainfrm.cpp:1556
 msgid "Language changed"
 msgstr "Språket har ändrats"
 
@@ -4684,7 +4662,7 @@ msgid "Maximum simultaneous &transfers:"
 msgstr "Maximalt antal samtidiga ö&verföringar:"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:378
-#: ../../locales/../src/interface/Mainfrm.cpp:1868
+#: ../../locales/../src/interface/Mainfrm.cpp:1884
 msgid "Message log"
 msgstr "Meddelandelogg"
 
@@ -4820,7 +4798,7 @@ msgstr "Ny plats"
 msgid "Next to the transfer queue"
 msgstr "Bredvid överföringskön"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:877
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:878
 msgid "No"
 msgstr "Nej"
 
@@ -4832,7 +4810,7 @@ msgstr "Ingen kategori att exportera"
 msgid "No command given, aborting."
 msgstr "Inget kommando gavs, avbryter."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3908
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3917
 msgid "No external IP address set, trying default."
 msgstr "Ingen extern IP-adress inställd, provar standard."
 
@@ -4978,7 +4956,7 @@ msgstr ""
 "På följande sidor kommer det valda överföringsläget att konfigureras, såväl "
 "som läget att falla tillbaka på om det är aktiverat."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:887
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:888
 msgid "Once"
 msgstr "En gång"
 
@@ -5010,10 +4988,10 @@ msgstr "Öppna Inställningsdialogen för FileZilla"
 msgid "Opened as:"
 msgstr "Öppnad som:"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2040
-#: ../../locales/../src/interface/LocalListView.cpp:2085
-#: ../../locales/../src/interface/LocalListView.cpp:2172
-#: ../../locales/../src/interface/LocalListView.cpp:2185
+#: ../../locales/../src/interface/LocalListView.cpp:2042
+#: ../../locales/../src/interface/LocalListView.cpp:2087
+#: ../../locales/../src/interface/LocalListView.cpp:2174
+#: ../../locales/../src/interface/LocalListView.cpp:2187
 #: ../../locales/../src/interface/RemoteListView.cpp:2660
 msgid "Opening failed"
 msgstr "Öppnandet misslyckades"
@@ -5111,11 +5089,11 @@ msgstr "PORT-kommandot påverkat av en router eller brandvägg."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssivt läge (rekommenderas)"
 
-#: ../../locales/../src/interface/updatewizard.cpp:324
+#: ../../locales/../src/interface/updatewizard.cpp:325
 msgid "Package"
 msgstr "Paket"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2505
+#: ../../locales/../src/interface/Mainfrm.cpp:2521
 msgid "Parameter not a valid URL"
 msgstr "Parametern är ingen giltig URL"
 
@@ -5147,8 +5125,8 @@ msgstr "Lösenord krävs"
 msgid "Path"
 msgstr "Sökväg"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3195
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2355
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3204
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2356
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Sökvägen kan inte skapas för katalogen %s och underkatalogen %s"
@@ -5193,7 +5171,7 @@ msgstr ""
 "Kontrollera på http://filezilla-project.org/probe.php att servern kör och "
 "kontrollera noga dina inställningar igen."
 
-#: ../../locales/../src/interface/updatewizard.cpp:1076
+#: ../../locales/../src/interface/updatewizard.cpp:1080
 msgid ""
 "Please check the package manager of your system for an updated package or "
 "visit http://filezilla-project.org to download the source code of FileZilla."
@@ -5330,7 +5308,7 @@ msgstr ""
 "Ange ett rått FTP-kommando.\n"
 "Användandet av råa FTP-kommandon kommer att tömma katalogcachen."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1194
+#: ../../locales/../src/interface/LocalListView.cpp:1196
 #: ../../locales/../src/interface/LocalTreeView.cpp:1182
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1274
@@ -5503,8 +5481,8 @@ msgid ""
 "FileZilla."
 msgstr "Besök http://filezilla-project.org för mer information om FileZilla."
 
-#: ../../locales/../src/interface/updatewizard.cpp:1074
-#: ../../locales/../src/interface/updatewizard.cpp:1090
+#: ../../locales/../src/interface/updatewizard.cpp:1078
+#: ../../locales/../src/interface/updatewizard.cpp:1094
 msgid ""
 "Please visit http://filezilla-project.org to download the most recent "
 "version."
@@ -5529,7 +5507,7 @@ msgstr "Bevarar tidsstämplar för filer"
 msgid "Preview:"
 msgstr "Förhandsgranska:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:944
+#: ../../locales/../src/engine/tlssocket.cpp:957
 msgid "Primary connection and data connection certificates don't match."
 msgstr ""
 "Certifikateten för primär anslutning och dataanslutning stämmer inte överens."
@@ -5584,7 +5562,7 @@ msgstr "Proxyns autentisering misslyckades"
 msgid "Proxy handshake failed: %s"
 msgstr "Proxyhandskakningen misslyckades: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4386
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4395
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr ""
 "Proxyvärden börjar med \"[\" men ingen avslutande hakparentes hittades."
@@ -5603,7 +5581,7 @@ msgstr "Proxyns begäran misslyckades: %s"
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr "Proxyns begäran misslyckades: Okänd adresstyp i svaret från CONNECT"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4419
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4428
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Proxyn är inställd men proxyns värd eller port är ogiltig"
 
@@ -5790,7 +5768,7 @@ msgstr "Komma ihåg lösenord?"
 msgid "Remote"
 msgstr "Fjärran"
 
-#: ../../locales/../src/engine/tlssocket.cpp:867
+#: ../../locales/../src/engine/tlssocket.cpp:880
 msgid "Remote certificate not trusted."
 msgstr "Fjärrcertifikatet inte pålitligt."
 
@@ -5876,8 +5854,8 @@ msgstr "Byt namn på markerad katalog"
 msgid "Rename selected files and directories"
 msgstr "Byt namn på markerade filer och kataloger"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3541
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2557
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3550
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2558
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "Byter namn på \"%s\" till \"%s\""
@@ -5898,13 +5876,13 @@ msgstr "Kräv implicit FTP över TLS"
 msgid "Reset and requeue &all"
 msgstr "&Återställ och lägg alla filer i kö på nytt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1198
+#: ../../locales/../src/engine/ControlSocket.cpp:1201
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:497
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Slår upp adressen för %s"
 
-#: ../../locales/../src/interface/updatewizard.cpp:1159
+#: ../../locales/../src/interface/updatewizard.cpp:1163
 msgid "Resolving hostname"
 msgstr "Slår upp värdnamnet"
 
@@ -5912,7 +5890,7 @@ msgstr "Slår upp värdnamnet"
 #: ../../locales/../src/interface/netconfwizard.cpp:395
 #: ../../locales/../src/interface/StatusView.cpp:288
 #: ../../locales/../src/interface/StatusView.cpp:342
-#: ../../locales/../src/interface/updatewizard.cpp:544
+#: ../../locales/../src/interface/updatewizard.cpp:545
 msgid "Response:"
 msgstr "Svar:"
 
@@ -5932,18 +5910,18 @@ msgstr ""
 "Återupptagning av ASCII-filer kan skapa problem om servern använder ett "
 "annat radslutsformat än klienten."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1292
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:955
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1301
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:956
 msgid "Retrieving directory listing..."
 msgstr "Hämtar kataloglistning..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3926
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3935
 #: ../../locales/../src/interface/netconfwizard.cpp:707
 #, c-format
 msgid "Retrieving external IP address from %s"
 msgstr "Hämtar extern IP-adress från %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:925
+#: ../../locales/../src/engine/tlssocket.cpp:938
 msgid "Root certificate is not trusted"
 msgstr "Rotcertifikatet är inte pålitligt"
 
@@ -6051,7 +6029,7 @@ msgstr ""
 "Välj standardåtgärd om filen redan finns (gäller bara för de för närvarande "
 "markerade filerna i kön)."
 
-#: ../../locales/../src/interface/updatewizard.cpp:328
+#: ../../locales/../src/interface/updatewizard.cpp:329
 msgid "Select download location for package"
 msgstr "Välj hämtningsplats för paket"
 
@@ -6165,7 +6143,7 @@ msgstr "%s och %s är markerade. Total storlek: Minst %s"
 msgid "Selected editor does not exist."
 msgstr "Vald redigerare existerar inte."
 
-#: resources.h:321 ../../locales/../src/interface/LocalListView.cpp:2069
+#: resources.h:321 ../../locales/../src/interface/LocalListView.cpp:2071
 msgid "Selected file already being edited"
 msgstr "Vald fil redigeras redan"
 
@@ -6206,7 +6184,7 @@ msgstr "Skicka &keep-alive kommandon för FTP"
 msgid "Send custom command to the server otherwise not available"
 msgstr "Skicka anpassat kommando till servern annars inte tillgänglig"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4501
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4510
 msgid "Sending keep-alive command"
 msgstr "Skickar keep-alive kommando"
 
@@ -6219,16 +6197,22 @@ msgstr "Serienummer:"
 msgid "Server &Type:"
 msgstr "Server&typ:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:751
+#: ../../locales/../src/engine/tlssocket.cpp:764
 msgid "Server did not properly shut down TLS connection"
 msgstr "Servern stängde inte ner TLS-anslutningen korrekt"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4325
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:914
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:976
+#, fuzzy
+msgid "Server does not support non-ASCII characters."
+msgstr "Servern saknar stöd för att återuppta filer > 2 GB"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4334
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr "Servern saknar stöd för att återuppta filer > %d GB"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4321
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4330
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -6237,15 +6221,15 @@ msgstr ""
 "Servern saknar stöd för att återuppta filer > %d GB. Avsluta överföringen "
 "eftersom filerna är lika stora."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2556
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2565
 msgid "Server does not support resume of files > 2GB."
 msgstr "Servern saknar stöd för att återuppta filer > 2 GB"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2551
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2560
 msgid "Server does not support resume of files > 4GB."
 msgstr "Servern saknar stöd för att återuppta filer > 4 GB"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4336
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4345
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -6265,7 +6249,7 @@ msgstr ""
 msgid "Server returned empty path."
 msgstr "Servern returnerade en tom sökväg."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:675
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:676
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
@@ -6273,13 +6257,13 @@ msgstr ""
 "Servern skickade en extra inloggningsuppmaning. Du måste använda den "
 "interaktiva inloggningstypen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3868
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3877
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr ""
 "Servern skickade ett passivt svar med en adress som inte är routningsbar. "
 "Passivt läge misslyckades."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3862
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3871
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
@@ -6327,8 +6311,8 @@ msgstr "Sessionsinformation"
 msgid "Set &Priority"
 msgstr "Ställ in &prioritet"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3693
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2435
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3702
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2436
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Ställ in rättigheter för \"%s\" till \"%s\""
@@ -6349,7 +6333,7 @@ msgstr "Visa &rå kataloglistning"
 msgid "Show &welcome dialog..."
 msgstr "Visa &välkomstdialogruta..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2357
+#: ../../locales/../src/interface/Mainfrm.cpp:2373
 msgid "Show both directory trees and continue comparing?"
 msgstr "Visa båda katalogträden och fortsätta med jämförelsen?"
 
@@ -6443,23 +6427,23 @@ msgstr "Storleken är okänd"
 msgid "Skip file"
 msgstr "Hoppa över filen"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1270
-#: ../../locales/../src/engine/ControlSocket.cpp:1289
-#: ../../locales/../src/engine/ControlSocket.cpp:1314
-#: ../../locales/../src/engine/ControlSocket.cpp:1380
+#: ../../locales/../src/engine/ControlSocket.cpp:1273
+#: ../../locales/../src/engine/ControlSocket.cpp:1292
+#: ../../locales/../src/engine/ControlSocket.cpp:1317
+#: ../../locales/../src/engine/ControlSocket.cpp:1383
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Hoppar över hämtningen av %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1274
-#: ../../locales/../src/engine/ControlSocket.cpp:1293
-#: ../../locales/../src/engine/ControlSocket.cpp:1318
-#: ../../locales/../src/engine/ControlSocket.cpp:1384
+#: ../../locales/../src/engine/ControlSocket.cpp:1277
+#: ../../locales/../src/engine/ControlSocket.cpp:1296
+#: ../../locales/../src/engine/ControlSocket.cpp:1321
+#: ../../locales/../src/engine/ControlSocket.cpp:1387
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Hoppar över sändningen av %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1228
+#: ../../locales/../src/interface/Mainfrm.cpp:1244
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Några filer redigeras fortfarande eller behöver skickas."
 
@@ -6475,7 +6459,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Sortera kataloger som filer"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:447
+#: ../../locales/../src/interface/filelistctrl.cpp:450
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "Sorteringsordningen kan inte ändras när kataloger jämförs."
 
@@ -6528,14 +6512,14 @@ msgstr "Starta överföringen &genast"
 msgid "Start with opened Site Manager"
 msgstr "Starta med Platshanteraren öppen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2235
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1633
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2244
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1634
 #, c-format
 msgid "Starting download of %s"
 msgstr "Påbörjar hämtning av %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2239
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1637
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2248
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1638
 #, c-format
 msgid "Starting upload of %s"
 msgstr "Påbörjar sändning av %s"
@@ -6552,7 +6536,7 @@ msgstr "Status"
 #: ../../locales/../src/engine/logging.cpp:212
 #: ../../locales/../src/interface/StatusView.cpp:297
 #: ../../locales/../src/interface/StatusView.cpp:366
-#: ../../locales/../src/interface/updatewizard.cpp:538
+#: ../../locales/../src/interface/updatewizard.cpp:539
 msgid "Status:"
 msgstr "Status:"
 
@@ -6613,7 +6597,7 @@ msgstr "Syntaxfel"
 #: ../../locales/../src/interface/cmdline.cpp:80
 #: ../../locales/../src/interface/cmdline.cpp:89
 #: ../../locales/../src/interface/cmdline.cpp:95
-#: ../../locales/../src/interface/Mainfrm.cpp:2507
+#: ../../locales/../src/interface/Mainfrm.cpp:2523
 msgid "Syntax error in command line"
 msgstr "Syntaxfel i kommandoraden"
 
@@ -6661,7 +6645,7 @@ msgstr "Målfilnamnet finns redan, vill du verkligen fortsätta?"
 msgid "Test results"
 msgstr "Testresultat"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4342
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4351
 msgid "Testing resume capabilities of server"
 msgstr "Testar om servern klarar av att återuppta överföringar"
 
@@ -6740,8 +6724,8 @@ msgstr ""
 "Filen %s finns redan.\n"
 "Ange ett nytt namn:"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2046
-#: ../../locales/../src/interface/LocalListView.cpp:2177
+#: ../../locales/../src/interface/LocalListView.cpp:2048
+#: ../../locales/../src/interface/LocalListView.cpp:2179
 #: ../../locales/../src/interface/RemoteListView.cpp:2666
 #, c-format
 msgid ""
@@ -6765,8 +6749,8 @@ msgstr ""
 msgid "The file '%s' could not be loaded."
 msgstr "Filen \"%s\" kunde inte läsas in."
 
-#: ../../locales/../src/interface/LocalListView.cpp:2040
-#: ../../locales/../src/interface/LocalListView.cpp:2172
+#: ../../locales/../src/interface/LocalListView.cpp:2042
+#: ../../locales/../src/interface/LocalListView.cpp:2174
 #: ../../locales/../src/interface/RemoteListView.cpp:2660
 #, c-format
 msgid ""
@@ -6776,8 +6760,8 @@ msgstr ""
 "Filen \"%s\" kunde inte öppnas:\n"
 "I ditt system är inget program associerat med den här filtypen."
 
-#: ../../locales/../src/interface/LocalListView.cpp:2085
-#: ../../locales/../src/interface/LocalListView.cpp:2185
+#: ../../locales/../src/interface/LocalListView.cpp:2087
+#: ../../locales/../src/interface/LocalListView.cpp:2187
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -6898,7 +6882,7 @@ msgstr ""
 "Den lägsta tillgängliga porten måste vara mindre än eller lika med den "
 "högsta tillgängliga porten."
 
-#: ../../locales/../src/interface/updatewizard.cpp:607
+#: ../../locales/../src/interface/updatewizard.cpp:608
 msgid ""
 "The most recent version has been downloaded. Click on Finish to close "
 "FileZilla and to start the installation."
@@ -6906,7 +6890,7 @@ msgstr ""
 "Den senaste versionen har hämtats. Klicka på Slutför för att stänga "
 "FileZilla och starta installationen."
 
-#: ../../locales/../src/interface/updatewizard.cpp:609
+#: ../../locales/../src/interface/updatewizard.cpp:610
 msgid ""
 "The most recent version has been downloaded. Please install it the same way "
 "you installed this version."
@@ -6946,7 +6930,7 @@ msgid ""
 msgstr ""
 "Den markerade filen är fortfarande öppen i något annat program, stäng filen."
 
-#: ../../locales/../src/interface/LocalListView.cpp:2052
+#: ../../locales/../src/interface/LocalListView.cpp:2054
 #: ../../locales/../src/interface/RemoteListView.cpp:2672
 msgid ""
 "The selected file would be executed directly.\n"
@@ -7079,8 +7063,8 @@ msgstr "Tids&gräns i sekunder:"
 msgid "Timeout"
 msgstr "Tidsgräns"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1694
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1079
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1703
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1080
 #, c-format
 msgid ""
 "Timezone offsets: Server: %d seconds. Local: %d seconds. Difference: %d "
@@ -7093,11 +7077,11 @@ msgstr ""
 msgid "Title:"
 msgstr "Titel:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2355
+#: ../../locales/../src/interface/Mainfrm.cpp:2371
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "För att jämföra katalogerna måste båda fillistorna vara lika."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2356
+#: ../../locales/../src/interface/Mainfrm.cpp:2372
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "För att göra detta måste båda katalogträden vara synliga eller dolda."
 
@@ -7205,7 +7189,7 @@ msgid "Transferred data got tainted."
 msgstr "Överförd data blev påverkad."
 
 #: ../../locales/../src/interface/QueueView.cpp:1493
-#: ../../locales/../src/interface/statuslinectrl.cpp:281
+#: ../../locales/../src/interface/statuslinectrl.cpp:283
 msgid "Transferring"
 msgstr "Överför"
 
@@ -7226,11 +7210,11 @@ msgstr "Behandla filer &utan filändelse som ASCII-filer"
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Behandla &följande filtyper som ASCII-filer:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:873
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:874
 msgid "Trust changed Hostkey:"
 msgstr "Lita på ändrad värdnyckel:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:871
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:872
 msgid "Trust new Hostkey:"
 msgstr "Lita på ny värdnyckel:"
 
@@ -7349,7 +7333,7 @@ msgstr ""
 "Såvida inte detta problem korrigeras kommer inte aktivt läge att fungera och "
 "passivt läge måste användas."
 
-#: ../../locales/../src/engine/tlssocket.cpp:896
+#: ../../locales/../src/engine/tlssocket.cpp:909
 msgid "Unsupported certificate type"
 msgstr "Certifikatstypen stöds inte"
 
@@ -7366,8 +7350,8 @@ msgid "Update Check"
 msgstr "Uppdateringskontroll"
 
 #: ../../locales/../src/interface/settings/optionspage_updatecheck.cpp:61
-#: ../../locales/../src/interface/updatewizard.cpp:251
-#: ../../locales/../src/interface/updatewizard.cpp:264
+#: ../../locales/../src/interface/updatewizard.cpp:252
+#: ../../locales/../src/interface/updatewizard.cpp:265
 msgid "Update wizard"
 msgstr "Uppdateringsguide"
 
@@ -7499,7 +7483,7 @@ msgstr "Användare:"
 msgid "Username cannot be a series of spaces"
 msgstr "Användarnamnet får inte bestå av en följd av blanksteg"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4424
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4433
 #, c-format
 msgid "Using proxy %s"
 msgstr "Använder proxy %s"
@@ -7529,7 +7513,7 @@ msgstr "Giltigt till:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Utförliga loggmeddelanden från vxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1086
+#: ../../locales/../src/engine/tlssocket.cpp:1099
 msgid "Verifying certificate..."
 msgstr "Validerar certifikatet..."
 
@@ -7541,7 +7525,7 @@ msgstr "Version:"
 msgid "Very high"
 msgstr "Mycket hög"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1427
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1436
 msgid "View hidden option set, but unsupported by server"
 msgstr ""
 "Alternativet för att visa dolda objekt är inställt men stöds inte av servern"
@@ -7570,7 +7554,7 @@ msgstr "Väntar på anslutning för att bläddra"
 msgid "Waiting for password"
 msgstr "Väntar på lösenord"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:275
+#: ../../locales/../src/interface/statuslinectrl.cpp:277
 msgid "Waiting for transfer to be cancelled"
 msgstr "Väntar på att överföringen skall avbrytas"
 
@@ -7613,7 +7597,7 @@ msgstr ""
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Varning, ignorerar dataanslutning från felaktig IP-adress."
 
-#: ../../locales/../src/interface/updatewizard.cpp:264
+#: ../../locales/../src/interface/updatewizard.cpp:265
 msgid ""
 "Warning, use nightly builds at your own risk.\n"
 "No support is given for nightly builds.\n"
@@ -7681,7 +7665,7 @@ msgstr "Felaktig extern IP-adress"
 msgid "Wrong line endings"
 msgstr "Felaktiga radslut"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:885
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:886
 msgid "Yes"
 msgstr "Ja"
 
@@ -7690,6 +7674,8 @@ msgid ""
 "You appear to be using an IPv6-only host. This wizard does not support this "
 "environment."
 msgstr ""
+"Du verkar använda en värd som bara stödjer IPv6. Den här guiden har inte "
+"stöd för den här miljön."
 
 #: resources.h:253
 msgid ""
@@ -7737,7 +7723,7 @@ msgstr "Du angav inte ett nytt namn för filen. Skriv över filen istället?"
 msgid "You have selected at least one symbolic link."
 msgstr "Du har markerat minst en symbolisk länk."
 
-#: ../../locales/../src/interface/LocalListView.cpp:2019
+#: ../../locales/../src/interface/LocalListView.cpp:2021
 #: ../../locales/../src/interface/RemoteListView.cpp:2639
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -7745,7 +7731,7 @@ msgid ""
 msgstr ""
 "Du har markerat fler än 10 filer för redigering, vill du verkligen fortsätta?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2139
+#: ../../locales/../src/interface/LocalListView.cpp:2141
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -7802,11 +7788,11 @@ msgid "You need to enter a properly quoted command."
 msgstr "Du måste ange ett kommando korrekt med citationstecken."
 
 #: ../../locales/../src/interface/settings/optionspage_ftpproxy.cpp:82
-#: ../../locales/../src/interface/settings/optionspage_proxy.cpp:70
+#: ../../locales/../src/interface/settings/optionspage_proxy.cpp:73
 msgid "You need to enter a proxy host."
 msgstr "Du måste ange en värd för proxyn."
 
-#: ../../locales/../src/interface/settings/optionspage_proxy.cpp:75
+#: ../../locales/../src/interface/settings/optionspage_proxy.cpp:82
 msgid "You need to enter a proxy port in the range from 1 to 65535"
 msgstr "Du måste ange en port för proxyn inom intervallet 1 till 65535"
 
@@ -7892,10 +7878,10 @@ msgstr "slutar med"
 msgid "equals"
 msgstr "är lika med"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:498
-#: ../../locales/../src/interface/filelistctrl.cpp:516
-#: ../../locales/../src/interface/filelistctrl.cpp:541
-#: ../../locales/../src/interface/filelistctrl.cpp:557
+#: ../../locales/../src/interface/filelistctrl.cpp:511
+#: ../../locales/../src/interface/filelistctrl.cpp:530
+#: ../../locales/../src/interface/filelistctrl.cpp:555
+#: ../../locales/../src/interface/filelistctrl.cpp:571
 msgid "file"
 msgstr "fil"
 
@@ -7914,11 +7900,11 @@ msgstr ""
 "Försäkra dig om att den här körbara filen finns i samma katalog som den "
 "körbara filen som startar FileZilla."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1558
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1559
 msgid "fzsftp could not be started"
 msgstr "fzsftp kunde inte startas"
 
-#: ../../locales/../src/engine/tlssocket.cpp:934
+#: ../../locales/../src/engine/tlssocket.cpp:947
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers returnerade inga certifikat"
 
@@ -7989,6 +7975,18 @@ msgstr "skrivbar för alla"
 #: resources.h:165
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "%s (%d.%d KB/s)"
+#~ msgstr "%s (%d,%d kB/s)"
+
+#~ msgid "%s (%d.%d MB/s)"
+#~ msgstr "%s (%d,%d MB/s)"
+
+#~ msgid "%s bytes (%d.%d KB/s)"
+#~ msgstr "%s byte (%d.%d kB/s)"
+
+#~ msgid "%s bytes (%d.%d MB/s)"
+#~ msgstr "%s byte (%d.%d MB/s)"
 
 #~ msgid "&Remember this and all future passwords"
 #~ msgstr "&Kom ihåg detta och alla framtida lösenord"
