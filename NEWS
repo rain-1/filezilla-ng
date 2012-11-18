@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.6.0.1 (2012-11-18)
+
+- Fix problems with TLS cipher selection, including a bugfix for GnuTLS
+- Fix a crash on shutdown
+- Add log message for servers not using UTF-8
+- Small performance and memory optimizations getting file types
+- Improve formatting of transfer speeds
+
 3.6.0 (2012-11-10)
 
 - Fix a crash introduced since 3.5.3
