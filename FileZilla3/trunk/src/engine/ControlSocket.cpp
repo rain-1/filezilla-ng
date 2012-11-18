@@ -1141,7 +1141,10 @@ int CRealControlSocket::Connect(const CServer &server)
 	SetWait(true);
 
 	if (server.GetEncodingType() == ENCODING_CUSTOM)
+	{
+		LogMessage(Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding().c_str());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
+	}
 
 	delete m_pCurrentServer;
 	m_pCurrentServer = new CServer(server);

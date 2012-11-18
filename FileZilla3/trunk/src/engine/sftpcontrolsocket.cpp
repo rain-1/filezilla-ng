@@ -399,6 +399,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	delete m_pCSConv;
 	if (server.GetEncodingType() == ENCODING_CUSTOM)
 	{
+		LogMessage(Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding().c_str());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 		m_useUTF8 = false;
 	}
