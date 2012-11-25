@@ -84,6 +84,12 @@ public:
 	virtual ~CSocketEventSource();
 };
 
+class CCallback
+{
+public:
+	virtual void cb() {}
+};
+
 class CSocketThread;
 class CSocket : public CSocketEventSource
 {
@@ -172,6 +178,8 @@ public:
 	// accepted sockets
 	void SetBufferSizes(int size_read, int size_write);
 
+	void SetSynchronousReadCallback(CCallback* cb);
+
 protected:
 	static int DoSetFlags(int fd, int flags, int flags_mask);
 	static int DoSetBufferSizes(int fd, int size_read, int size_write);
@@ -194,6 +202,8 @@ protected:
 	int m_flags;
 
 	int m_buffer_sizes[2];
+
+	CCallback* m_synchronous_read_cb;
 };
 
 #ifdef __WXMSW__
