@@ -29,6 +29,7 @@ libengine_a_SOURCES = \
 		pathcache.cpp \
 		proxy.cpp \
 		ratelimiter.cpp \
+		rtt.cpp \
 		server.cpp serverpath.cpp\
 		servercapabilities.cpp \
 		sftpcontrolsocket.cpp \
@@ -51,6 +52,7 @@ noinst_HEADERS = backend.h \
 		pathcache.h \
 		proxy.h \
 		ratelimiter.h \
+		rtt.h \
 		servercapabilities.h \
 		sftpcontrolsocket.h \
 		tlssocket.h \
