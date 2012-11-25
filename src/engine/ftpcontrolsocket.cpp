@@ -285,8 +285,6 @@ void CFtpControlSocket::OnReceive()
 void CFtpControlSocket::ParseLine(wxString line)
 {
 	m_rtt.Stop();
-	LogMessage(Status, _T("Latency: %d ms"), m_rtt.GetLatency());
-
 	LogMessageRaw(Response, line);
 	SetAlive();
 
@@ -3042,8 +3040,7 @@ int CFtpControlSocket::RawCommandSend()
 
 	CRawCommandOpData *pData = static_cast<CRawCommandOpData *>(m_pCurOpData);
 
-	m_rtt.Reset();
-	if (!Send(pData->m_command))//xxx , false, false))
+	if (!Send(pData->m_command, false, false))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
