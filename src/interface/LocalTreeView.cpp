@@ -748,6 +748,7 @@ void CLocalTreeView::Refresh()
 		t_dir dir = dirsToCheck.front();
 		dirsToCheck.pop_front();
 
+		// Step 1: Check if directory exists
 		CLocalFileSystem local_filesystem;
 		if (!local_filesystem.BeginFindFiles(dir.dir, true))
 		{
@@ -767,8 +768,8 @@ void CLocalTreeView::Refresh()
 			continue;
 		}
 
+		// Step 2: Enumerate subdirectories on disk and sort them
 		std::list<wxString> dirs;
-
 
 		wxString file;
 		const wxLongLong size(-1);
@@ -793,17 +794,26 @@ void CLocalTreeView::Refresh()
 
 		bool inserted = false;
 
+		// Step 3: Merge list of subdirectories with subtree.
 		wxTreeItemId child = GetLastChild(dir.item);
 		std::list<wxString>::reverse_iterator iter = dirs.rbegin();
-		while (child && iter != dirs.rend())
+		while (child || iter != dirs.rend())
 		{
+			int cmp;
+			if (child && iter != dirs.rend())
 #ifdef __WXMSW__
-			int cmp = GetItemText(child).CmpNoCase(*iter);
+				cmp = GetItemText(child).CmpNoCase(*iter);
 #else
-			int cmp = GetItemText(child).Cmp(*iter);
+				cmp = GetItemText(child).Cmp(*iter);
 #endif
+			else if (child)
+				cmp = 1;
+			else
+				cmp = -1;
+
 			if (!cmp)
 			{
+				// Found item with same name. Mark it for further processing
 				if (!IsExpanded(child))
 				{
 					wxString path = dir.dir + *iter + separator;
@@ -827,6 +837,9 @@ void CLocalTreeView::Refresh()
 			}
 			else if (cmp > 0)
 			{
+				// Subdirectory currently in tree no longer exists.
+				// Delete child from tree, unless current selection
+				// is in the subtree.
 				wxTreeItemId sel = GetSelection();
 				while (sel && sel != child)
 					sel = GetItemParent(sel);
@@ -837,6 +850,7 @@ void CLocalTreeView::Refresh()
 			}
 			else if (cmp < 0)
 			{
+				// New subdirectory, add treeitem
 				wxString fullname = dir.dir + *iter + separator;
 				wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname),
 #ifdef __WXMSW__
@@ -850,31 +864,6 @@ void CLocalTreeView::Refresh()
 				++iter;
 				inserted = true;
 			}
-		}
-		while (child)
-		{
-			wxTreeItemId sel = GetSelection();
-			while (sel && sel != child)
-				sel = GetItemParent(sel);
-			wxTreeItemId prev = GetPrevSibling(child);
-			if (!sel)
-				Delete(child);
-			child = prev;
-		}
-		while (iter != dirs.rend())
-		{
-			wxString fullname = dir.dir + *iter + separator;
-			wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname),
-#ifdef __WXMSW__
-					-1
-#else
-					GetIconIndex(opened_dir, fullname)
-#endif
-				);
-
-			CheckSubdirStatus(newItem, fullname);
-			++iter;
-			inserted = true;
 		}
 		if (inserted)
 			SortChildren(dir.item);
