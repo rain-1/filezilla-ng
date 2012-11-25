@@ -612,7 +612,7 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 	}
 	else
 	{
-		Failure(res, 0);
+		Failure(res, 0, _T("gnutls_record_recv"));
 		error = ECONNABORTED;
 	}
 
@@ -676,7 +676,7 @@ int CTlsSocket::Write(const void *buffer, unsigned int len, int& error)
 	}
 	else
 	{
-		Failure(res, 0);
+		Failure(res, 0, _T("gnutls_record_send"));
 		error = ECONNABORTED;
 		return -1;
 	}
@@ -754,12 +754,12 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 	}
 }
 
-void CTlsSocket::Failure(int code, int socket_error)
+void CTlsSocket::Failure(int code, int socket_error, const wxString& function)
 {
 	m_pOwner->LogMessage(::Debug_Debug, _T("CTlsSocket::Failure(%d, %d)"), code, socket_error);
 	if (code)
 	{
-		LogError(code, _T(""));
+		LogError(code, function);
 		if (code == GNUTLS_E_UNEXPECTED_PACKET_LENGTH && m_socket_eof)
 			m_pOwner->LogMessage(Status, _("Server did not properly shut down TLS connection"));
 	}
