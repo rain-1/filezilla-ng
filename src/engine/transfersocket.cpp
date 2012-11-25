@@ -405,7 +405,10 @@ void CTransferSocket::OnReceive()
 void CTransferSocket::OnSend()
 {
 	if (!m_pBackend)
+	{
+		m_pControlSocket->LogMessage(::Debug_Verbose, _T("OnSend called without backend. Ignoring event."));
 		return;
+	}
 
 	if (!m_bActive)
 	{
