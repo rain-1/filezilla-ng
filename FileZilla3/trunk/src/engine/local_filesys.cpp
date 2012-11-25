@@ -481,18 +481,18 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 		return false;
 	do
 	{
-		name = m_find_data.cFileName;
-		if (name == _T(""))
+		if (!m_find_data.cFileName[0])
 		{
 			m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 			return true;
 		}
-		if (name == _T(".") || name == _T(".."))
-			continue;
-
 		if (m_dirs_only && !(m_find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			continue;
 
+		if (m_find_data.cFileName[0] == '.' && (!m_find_data.cFileName[1] || (m_find_data.cFileName[1] == '.' && !m_find_data.cFileName[2])))
+			continue;
+		name = m_find_data.cFileName;
+		
 		isLink = false;
 
 		if (modificationTime)
