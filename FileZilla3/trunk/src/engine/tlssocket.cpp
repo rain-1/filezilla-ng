@@ -19,7 +19,7 @@ char const ciphers[] = "SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTY
 CControlSocket* pLoggingControlSocket;
 void log_func(int level, const char* msg)
 {
-	if (!msg)
+	if (!msg || !pLoggingControlSocket)
 		return;
 	wxString s(msg, wxConvLocal);
 	s.Trim();
@@ -84,9 +84,12 @@ bool CTlsSocket::Init()
 	}
 
 #if TLSDEBUG
-	pLoggingControlSocket = m_pOwner;
-	gnutls_global_set_log_function(log_func);
-	gnutls_global_set_log_level(99);
+	if (!pLoggingControlSocket)
+	{
+		pLoggingControlSocket = m_pOwner;
+		gnutls_global_set_log_function(log_func);
+		gnutls_global_set_log_level(99);
+	}
 #endif
 	res = gnutls_certificate_allocate_credentials(&m_certCredentials);
 	if (res < 0)
@@ -171,6 +174,11 @@ void CTlsSocket::Uninit()
 	m_implicitTrustedCert.data = 0;
 
 	m_require_root_trust = false;
+
+#if TLSDEBUG
+	if (pLoggingControlSocket == m_pOwner)
+		pLoggingControlSocket = 0;
+#endif
 }
 
 
@@ -648,6 +656,10 @@ int CTlsSocket::Write(const void *buffer, unsigned int len, int& error)
 	buffer = (char*)buffer + m_writeSkip;
 
 	int res = gnutls_record_send(m_session, buffer, len);
+
+	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
+		res = gnutls_record_send(m_session, buffer, len);
+
 	if (res >= 0)
 	{
 		error = 0;
@@ -1189,4 +1201,4 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 #endif
 
 	return list;
-}	
+}
