@@ -1,10 +1,10 @@
 # Kari Saariniemi, 2011.
 msgid ""
 msgstr ""
-"Project-Id-Version: FileZilla Client 3.5.3\n"
+"Project-Id-Version: FileZilla Client 3.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-18 11:42+0100\n"
-"PO-Revision-Date: 2012-11-17 14:24+0200\n"
+"POT-Creation-Date: 2012-11-29 22:48+0100\n"
+"PO-Revision-Date: 2012-11-21 20:54+0200\n"
 "Last-Translator: Kari Saariniemi <kari.saariniemi@pp.inet.fi>\n"
 "Language-Team: Kari Saariniemi <kari.saariniemi@pp.inet.fi>\n"
 "MIME-Version: 1.0\n"
@@ -1602,7 +1602,7 @@ msgstr "Muokattavana"
 msgid "Benchmark string coalescer"
 msgstr "Testaa merkkijonon yhteenliittyminen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:924
+#: ../../locales/../src/engine/tlssocket.cpp:949
 msgid "Beware! Certificate has been revoked"
 msgstr "Varoitus! Sertifikaatti mitätöity"
 
@@ -1674,22 +1674,22 @@ msgstr "M&uokattu"
 msgid "C&ustom filetype associations:"
 msgstr "&Muokatut tiedostosidokset:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1642
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1654
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1271
 msgid "Calculating timezone offset of server..."
 msgstr "Lasketaan palvelimen aikavyöhykkeen siirtymää..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:731
+#: ../../locales/../src/engine/transfersocket.cpp:734
 msgid "Can't read from file"
 msgstr "Tiedostosta ei voi lukea"
 
-#: ../../locales/../src/engine/transfersocket.cpp:710
-#: ../../locales/../src/engine/transfersocket.cpp:784
+#: ../../locales/../src/engine/transfersocket.cpp:713
+#: ../../locales/../src/engine/transfersocket.cpp:787
 msgid "Can't write data to file."
 msgstr "Dataa ei voi kirjoittaa tiedostoon."
 
-#: ../../locales/../src/engine/transfersocket.cpp:708
-#: ../../locales/../src/engine/transfersocket.cpp:782
+#: ../../locales/../src/engine/transfersocket.cpp:711
+#: ../../locales/../src/engine/transfersocket.cpp:785
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Ei voi kirjoittaa tiedostoon: %s"
@@ -1759,7 +1759,7 @@ msgstr "Tiedostoa ei voi muokata, ei yhdistetty mihinkään palvelimeen."
 msgid "Cannot edit file, remote path unknown."
 msgstr "Tiedostoa ei voi muokata, palvelimen polku tuntematon."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:335
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:342
 msgid ""
 "Cannot establish FTP connection to an SFTP server. Please select proper "
 "protocol."
@@ -2128,7 +2128,7 @@ msgstr "Yhdistä ohittaen palvelimen asetukset"
 msgid "Connect to specified Site Manager site"
 msgstr "Yhdistä määritettyyn Sivustonhallinnan sivustoon"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:936
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:943
 msgid "Connected"
 msgstr "Yhdistetty"
 
@@ -2189,11 +2189,11 @@ msgid "Connection closed"
 msgstr "Yhteys suljettu"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1132
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:235
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:241
 msgid "Connection closed by server"
 msgstr "Palvelin sulki yhteyden"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:386
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:393
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:305
 msgid "Connection established, initializing TLS..."
 msgstr "Yhteys muodostettu, alustetaan TLS..."
@@ -2202,7 +2202,7 @@ msgstr "Yhteys muodostettu, alustetaan TLS..."
 msgid "Connection established, sending HTTP request"
 msgstr "Yhteys muodostettu, lähetetään HTTP-pyyntö"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:415
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:422
 msgid "Connection established, waiting for welcome message..."
 msgstr "Yhteys muodostettu, odotetaan tervetulosanomaa..."
 
@@ -2314,7 +2314,7 @@ msgstr ""
 "Joko valikon laajennusta ei ole asennettu oikein tai et pudottanut "
 "tiedostoja Resurssienhallinnan ikkunaan."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4276
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4291
 msgid "Could not establish connection to server"
 msgstr "Palvelimeen ei saatu yhteyttä"
 
@@ -2329,11 +2329,11 @@ msgstr ""
 "Voit asettaa FileZillan datahakemiston käyttäen '--datadir <custompath>' "
 "komentorivin valintaa tai asettamalla FZ_DATADIR -ympäristömuuttujan."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:696
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:703
 msgid "Could not generate custom login sequence."
 msgstr "Muokattua kirjautumisaluetta ei voitu luoda."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1054
+#: ../../locales/../src/engine/tlssocket.cpp:1079
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2341,7 +2341,7 @@ msgstr ""
 "Ei saatu kuvaavaa nimeä sertifikaatin julkaisijalta, "
 "gnutls_x509_get_issuer_dn epäonnistui"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1029
+#: ../../locales/../src/engine/tlssocket.cpp:1054
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2362,12 +2362,12 @@ msgstr "fzputtygen:iltä ei saatu vastausta."
 msgid "Could not get temporary directory to download file into."
 msgstr "Latauksien väliaikaishakemistoa ei löytynyt."
 
-#: ../../locales/../src/engine/tlssocket.cpp:982
+#: ../../locales/../src/engine/tlssocket.cpp:1007
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Ei voitu tuoda 'peer'-sertifikaattia, gnutls_x509_crt_import epäonnistui"
 
-#: ../../locales/../src/engine/tlssocket.cpp:975
+#: ../../locales/../src/engine/tlssocket.cpp:1000
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2450,7 +2450,7 @@ msgstr "Palvelimen polkua ei voitu jäsentää."
 msgid "Could not parse server address:"
 msgstr "Ei voitu jäsentää palvelimen osoitetta:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:225
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:231
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "Ei voitu lukea socket-rajapinnasta: %s"
@@ -2459,12 +2459,12 @@ msgstr "Ei voitu lukea socket-rajapinnasta: %s"
 msgid "Could not read server item."
 msgstr "Palvelinosiota ei voitu lukea."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2714
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2726
 #, c-format
 msgid "Could not seek to offset %s within file"
 msgstr "Ei voitu etsiä tämän tiedoston siirtymäkohtaan %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2647
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2659
 msgid "Could not seek to the end of the file"
 msgstr "Ei voitu etsiä tiedoston loppuun"
 
@@ -2472,7 +2472,7 @@ msgstr "Ei voitu etsiä tiedoston loppuun"
 msgid "Could not send command to fzputtygen."
 msgstr "Komennon lähettäminen fzputtygen:ille epäonnistui."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2745
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2757
 msgid "Could not spawn IO thread"
 msgstr "IO-solmua ei voitu muodostaa"
 
@@ -2571,7 +2571,7 @@ msgid "Create a new, empty file in the current directory"
 msgstr "Luo uusi, tyhjä tiedosto nykyiseen hakemistoon"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1196
-#: ../../locales/../src/interface/LocalTreeView.cpp:1182
+#: ../../locales/../src/interface/LocalTreeView.cpp:1179
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1274
 msgid "Create directory"
@@ -2585,7 +2585,7 @@ msgstr "Luo tyhjä tiedosto"
 msgid "Creating directory"
 msgstr "Luodaan hakemisto"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3319
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3331
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2048
 #, c-format
 msgid "Creating directory '%s'..."
@@ -2801,7 +2801,7 @@ msgstr "Usean kuulumattoman hakemiston poistaminen ei ole vielä tuettu"
 msgid "Deleting symbolic link"
 msgstr "Poistetaan symbolinen linkki"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1048
+#: ../../locales/../src/interface/LocalTreeView.cpp:1045
 msgid "Desktop"
 msgstr "Työpöytä"
 
@@ -2881,7 +2881,7 @@ msgstr "Katkaise yhteys palvelimeen"
 #: ../../locales/../src/engine/ControlSocket.cpp:82
 #: ../../locales/../src/engine/ControlSocket.cpp:1000
 #: ../../locales/../src/engine/ControlSocket.cpp:1099
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:227
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:233
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:936
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:938
 #: ../../locales/../src/interface/QueueView.cpp:1070
@@ -3018,7 +3018,7 @@ msgid "Downloading search results"
 msgstr "Ladataan hakutulokset"
 
 #: ../../locales/../src/interface/LocalListView.cpp:104
-#: ../../locales/../src/interface/LocalTreeView.cpp:104
+#: ../../locales/../src/interface/LocalTreeView.cpp:105
 #: ../../locales/../src/interface/QueueView.cpp:83
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:88
@@ -3030,7 +3030,7 @@ msgstr ""
 "instanssien välillä."
 
 #: ../../locales/../src/interface/LocalListView.cpp:110
-#: ../../locales/../src/interface/LocalTreeView.cpp:110
+#: ../../locales/../src/interface/LocalTreeView.cpp:111
 #: ../../locales/../src/interface/QueueView.cpp:96
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:94
@@ -3391,7 +3391,7 @@ msgstr "FTPS - FTP yli implicit TLS/SSL"
 #: ../../locales/../src/interface/LocalListView.cpp:545
 #: ../../locales/../src/interface/LocalListView.cpp:625
 #: ../../locales/../src/interface/LocalListView.cpp:2261
-#: ../../locales/../src/interface/LocalTreeView.cpp:906
+#: ../../locales/../src/interface/LocalTreeView.cpp:900
 #: ../../locales/../src/interface/viewheader.cpp:535
 msgid "Failed to change directory"
 msgstr "Hakemiston vaihtaminen ei onnistunut"
@@ -3419,8 +3419,8 @@ msgstr "XML-tiedoston varmuuskopion luonti epäonnistui"
 msgid "Failed to create listen socket, aborting"
 msgstr "Kuuntelun socket-rajapinnan luonti epäonnistui, keskeytetään"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4252
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4256
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4266
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4270
 msgid "Failed to create listening socket for active mode transfer"
 msgstr "Kuuntelun socket-rajapinnan luonti epäonnistui aktiivitilan siirrolle"
 
@@ -3428,11 +3428,11 @@ msgstr "Kuuntelun socket-rajapinnan luonti epäonnistui aktiivitilan siirrolle"
 msgid "Failed to download the latest version of FileZilla."
 msgstr "FileZillan viimeisimmän version lataus epäonnistui."
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:660
+#: ../../locales/../src/interface/LocalTreeView.cpp:662
 msgid "Failed to get 'My Documents' path"
 msgstr "'Omat tiedostot' -polkua ei löytynyt"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:646
+#: ../../locales/../src/interface/LocalTreeView.cpp:648
 msgid "Failed to get desktop path"
 msgstr "Työpöydän polkua ei löytynyt"
 
@@ -3448,8 +3448,8 @@ msgstr "Datayhteyden 'peer'-osoitteen haku epäonnistui, yhteys suljettu."
 msgid "Failed to initialize FTP engine"
 msgstr "FTP-koneiston alustus epäonnistui"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:395
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:775
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:402
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:782
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
 msgid "Failed to initialize TLS."
 msgstr "TLS:n alustus epäonnistui."
@@ -3463,17 +3463,17 @@ msgstr "Paneelien lataminen epäonnistui, epäkelvot resurssitiedostot?"
 msgid "Failed to load private key: %s"
 msgstr "Salatun avaimen lataaminen epäonnistui: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2636
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2648
 #, c-format
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "Ei voitu avata tiedostoa \"%s\" lisäämistä/kirjoittamista varten"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2698
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2710
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "Ei voitu avata kohdetta \"%s\" lukemista varten"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2677
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2689
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:391
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:448
 #, c-format
@@ -3500,12 +3500,12 @@ msgstr "Hakemistolistauksen haku epäonnistui"
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "Ulkoisen IP-osoitteen haku epäonnistui, keskeytetään"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3950
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3962
 msgid "Failed to retrieve external ip address, using local address"
 msgstr ""
 "Ulkoisen IP-osoitteen haku epäonnistui, käytetään paikallista osoitetta"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3972
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3984
 msgid "Failed to retrieve local ip address."
 msgstr "Paikallisen IP-osoitteen haku epäonnistui."
 
@@ -3567,7 +3567,7 @@ msgstr ""
 msgid "Failed to validate settings"
 msgstr "Asetuksien varmennus epäonnistui"
 
-#: ../../locales/../src/engine/tlssocket.cpp:917
+#: ../../locales/../src/engine/tlssocket.cpp:942
 msgid "Failed to verify peer certificate"
 msgstr "'Peer'-sertifikaatin todennus epäonnistui"
 
@@ -3731,7 +3731,7 @@ msgstr "Nimi"
 msgid "Filename &filters..."
 msgstr "Tiedostonimen &suodattimet..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3116
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3128
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2311
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
@@ -4250,7 +4250,7 @@ msgstr ""
 "palvelimelta porttia ja yhdistää annettuun porttiin. Tätä ei tarvitse "
 "paljonkaan määrittää."
 
-#: ../../locales/../src/engine/tlssocket.cpp:931
+#: ../../locales/../src/engine/tlssocket.cpp:956
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4262,11 +4262,11 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Salasana ei kelpaa"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:765
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:772
 msgid "Initializing TLS..."
 msgstr "Alustetaan TLS..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:751
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:758
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Turvaton palvelin, ei tue FTP yli TLS."
 
@@ -4355,7 +4355,7 @@ msgstr ""
 "ftps:// FTP yli SSL (implisiittinen) ja\n"
 "ftpes:// FTP yli SSL (eksplisiittinen)."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4403
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4418
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4542,7 +4542,7 @@ msgstr "Päivitystarkistuksen loki:"
 msgid "Logging"
 msgstr "Kirjautuminen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:818
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:825
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Cannot fall back to local charset since using proxy."
@@ -4551,7 +4551,7 @@ msgstr ""
 "8:aa. Ei voi palata paikalliseen merkistöön, koska käytetään "
 "välityspalvelinta."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:825
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:832
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Trying local charset."
@@ -4559,7 +4559,7 @@ msgstr ""
 "Kirjautumistiedot eivät sisällä ASCII-merkkejä, palvelin ei ehkä ymmärrä UTF-"
 "8:aa. Kokeillaan paikallista merkistöä."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:854
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:861
 msgid "Login sequence fully executed yet not logged in. Aborting."
 msgstr "Kirjautuminen suoritettiin, mutta ei vielä kirjauduttu. Keskeytetään."
 
@@ -4673,11 +4673,11 @@ msgstr "Siirrä &alaspäin"
 msgid "Move &up"
 msgstr "Siirrä &ylöspäin"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1067
+#: ../../locales/../src/interface/LocalTreeView.cpp:1064
 msgid "My Computer"
 msgstr "Oma tietokone"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1057
+#: ../../locales/../src/interface/LocalTreeView.cpp:1054
 msgid "My Documents"
 msgstr "Omat tiedostot"
 
@@ -4756,7 +4756,7 @@ msgstr "Uusi kirjan&merkki"
 msgid "New bookmark"
 msgstr "Uusi kirjanmerkki"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1185
+#: ../../locales/../src/interface/LocalTreeView.cpp:1182
 #: ../../locales/../src/interface/RemoteListView.cpp:1631
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1288
 msgid "New directory"
@@ -4797,7 +4797,7 @@ msgstr "Luokkaa ei ole valittu vientiin."
 msgid "No command given, aborting."
 msgstr "Komentoa ei annettu, keskeytetään."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3917
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3929
 msgid "No external IP address set, trying default."
 msgstr "Ulkoista IP-osoitetta ei asetettu, kokeillaan oletusta."
 
@@ -5115,7 +5115,7 @@ msgstr "Tarvitaan salasana"
 msgid "Path"
 msgstr "Polku"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3204
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3216
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2356
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
@@ -5301,7 +5301,7 @@ msgstr ""
 "Käytettäessä FTP-komentoja, välimuistin hakemisto tyhjennetään."
 
 #: ../../locales/../src/interface/LocalListView.cpp:1196
-#: ../../locales/../src/interface/LocalTreeView.cpp:1182
+#: ../../locales/../src/interface/LocalTreeView.cpp:1179
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1274
 msgid "Please enter the name of the directory which should be created:"
@@ -5498,7 +5498,7 @@ msgstr "Sisällytetään aikaleimoja"
 msgid "Preview:"
 msgstr "Esikatselu:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:957
+#: ../../locales/../src/engine/tlssocket.cpp:982
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Ensisijaisen yhteyden ja datayhteyden sertifikaatit eivät täsmää."
 
@@ -5552,7 +5552,7 @@ msgstr "Välityspalvelimen todennus epäonnistui"
 msgid "Proxy handshake failed: %s"
 msgstr "Välityspalvelimen kättely epäonnistui: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4395
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4410
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "Isäntä alkaa '['-merkillä, mutta lopettavaa sulkumerkkiä ei löydy."
 
@@ -5572,7 +5572,7 @@ msgstr ""
 "Välityspalvelimen pyyntö epäonnistui: Tuntematon osoitteen tyyppi CONNECT-"
 "vastauksessa"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4428
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4443
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Välityspalvelin asetettu, mutta isäntä tai portti epäkelpo"
 
@@ -5754,7 +5754,7 @@ msgstr "&Muistetaanko salasanat?"
 msgid "Remote"
 msgstr "Palvelin"
 
-#: ../../locales/../src/engine/tlssocket.cpp:880
+#: ../../locales/../src/engine/tlssocket.cpp:905
 msgid "Remote certificate not trusted."
 msgstr "Palvelimen sertifikaatti ei ole luotettava."
 
@@ -5841,7 +5841,7 @@ msgstr "Nimeä valittu hakemisto uudelleen"
 msgid "Rename selected files and directories"
 msgstr "Nimeä uudelleen tiedostot ja hakemistot"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3550
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3562
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2558
 #, c-format
 msgid "Renaming '%s' to '%s'"
@@ -5897,18 +5897,18 @@ msgstr ""
 "Palautettaessa ASCII-tiedostoja ne voivat aiheuttaa ongelmia, jos palvelin "
 "käyttää erilaista rivinlopetuksen muotoa kuin asiakas."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1301
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1313
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:956
 msgid "Retrieving directory listing..."
 msgstr "Haetaan hakemistolistausta..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3935
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3947
 #: ../../locales/../src/interface/netconfwizard.cpp:707
 #, c-format
 msgid "Retrieving external IP address from %s"
 msgstr "Haetaan ulkoista IP-osoitetta kohteesta %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:938
+#: ../../locales/../src/engine/tlssocket.cpp:963
 msgid "Root certificate is not trusted"
 msgstr "Juurisertifikaatti ei ole luotettava"
 
@@ -6171,7 +6171,7 @@ msgstr "Lähetä FTP:n &Keep-Alive komentoja"
 msgid "Send custom command to the server otherwise not available"
 msgstr "Lähetä oma komento palvelimelle, joka ei ole muuten saatavissa"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4510
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4525
 msgid "Sending keep-alive command"
 msgstr "Lähetetään Keep-Alive komento"
 
@@ -6184,22 +6184,22 @@ msgstr "Sarjanumero:"
 msgid "Server &Type:"
 msgstr "Palvelime&n tyyppi:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:764
+#: ../../locales/../src/engine/tlssocket.cpp:785
 msgid "Server did not properly shut down TLS connection"
 msgstr "Palvelin ei lopettanut kunnolla TLS-yhteyttä"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:914
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:976
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:921
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:984
 #, fuzzy
 msgid "Server does not support non-ASCII characters."
 msgstr "Palvelin ei tue tiedostoja, jotka ovat > 2GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4334
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4349
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr "Palvelin ei tue tiedostoja, jotka ovat > %d GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4330
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4345
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -6208,15 +6208,15 @@ msgstr ""
 "Palvelin ei tue tiedostojen palautusta, jotka ovat > %d Gt. Lopeta siirto "
 "siihen asti, kunnes tiedostokoot täsmäävät."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2565
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2577
 msgid "Server does not support resume of files > 2GB."
 msgstr "Palvelin ei tue tiedostoja, jotka ovat > 2GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2560
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2572
 msgid "Server does not support resume of files > 4GB."
 msgstr "Palvelin ei tue tiedostoja, jotka ovat > 4GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4345
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4360
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -6225,7 +6225,7 @@ msgstr ""
 "Palvelin ei ehkä tue tiedostojen palautusta, jotka ovat > %d Gt. Lopeta "
 "siirto siihen asti, kunnes tiedostokoot täsmäävät."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:856
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:863
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
@@ -6243,13 +6243,13 @@ msgstr ""
 "Palvelin lähetti kirjautumisen lisäkyselyn. Sinun pitää käyttää "
 "interaktiivista kirjautumistapaa."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3877
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3889
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr ""
 "Palvelin lähetti passiivisen vastauksen osoitteesta, jota ei voi reitittää. "
 "Passiivitila epäonnistui."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3871
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3883
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
@@ -6297,13 +6297,13 @@ msgstr "Yhteyskerran tiedot"
 msgid "Set &Priority"
 msgstr "Aseta &prioriteetti"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3702
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3714
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2436
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Aseta oikeudet '%s':sta '%s':een"
 
-#: ../../locales/../src/engine/transfersocket.cpp:858
+#: ../../locales/../src/engine/transfersocket.cpp:861
 msgid "SetSocketBufferSize called without socket"
 msgstr "SetSocketBufferSize-kutsu ilman socket-rajapintaa"
 
@@ -6501,13 +6501,13 @@ msgstr "Aloita siirto &heti"
 msgid "Start with opened Site Manager"
 msgstr "Avaa Sivustonhallinta avattuna"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2244
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2256
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1634
 #, c-format
 msgid "Starting download of %s"
 msgstr "Aloitetaan %s:n lataus palvelimelta"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2248
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2260
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1638
 #, c-format
 msgid "Starting upload of %s"
@@ -6602,11 +6602,11 @@ msgstr "T&yökalurivi"
 msgid "TLS/SSL connection established, sending HTTP request"
 msgstr "TLS/SSL-yhteys muodostettu, lähetetään HTTP-pyyntö"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:407
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:414
 msgid "TLS/SSL connection established, waiting for welcome message..."
 msgstr "TLS/SSL -yhteys muodostettu, odotetaan tervetulosanomaa..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:411
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:418
 msgid "TLS/SSL connection established."
 msgstr "TLS/SSL -yhteys muodostettu."
 
@@ -6634,7 +6634,7 @@ msgstr "Kohdetiedosto on jo olemassa, jatketaanko?"
 msgid "Test results"
 msgstr "Testitulokset"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4351
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4366
 msgid "Testing resume capabilities of server"
 msgstr "Testataan palvelimen kykyjä jatkaa"
 
@@ -7046,7 +7046,7 @@ msgstr "&Aikakatkaisu sekunneissa:"
 msgid "Timeout"
 msgstr "Aikakatkaisu"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1703
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1715
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1080
 #, c-format
 msgid ""
@@ -7164,8 +7164,8 @@ msgstr "Siirtojono"
 msgid "Transfer Settings"
 msgstr "Siirtoasetukset"
 
-#: ../../locales/../src/engine/transfersocket.cpp:497
-#: ../../locales/../src/engine/transfersocket.cpp:521
+#: ../../locales/../src/engine/transfersocket.cpp:500
+#: ../../locales/../src/engine/transfersocket.cpp:524
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "Siirtoyhteys keskeytetty: %s"
@@ -7263,7 +7263,7 @@ msgstr "Yksikkö:"
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:702
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:709
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr ""
 "Tuntematon FTP-välityspalvelimen tyyppi, ei voi luoda kirjautumisaluetta."
@@ -7321,7 +7321,7 @@ msgstr ""
 "Siihen asti kunnes tämä ongelma korjataan, aktiivitilan FTP ei toimi ja "
 "passiivitilaa täytyy käyttää."
 
-#: ../../locales/../src/engine/tlssocket.cpp:909
+#: ../../locales/../src/engine/tlssocket.cpp:934
 msgid "Unsupported certificate type"
 msgstr "Sertifikaatin tyyppi ei tuettu"
 
@@ -7472,7 +7472,7 @@ msgstr "Käyttäjä:"
 msgid "Username cannot be a series of spaces"
 msgstr "Käyttäjänimi ei voi olla sarja välilyöntejä"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4433
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4448
 #, c-format
 msgid "Using proxy %s"
 msgstr "Käytetään välityspalvelinta %s"
@@ -7500,7 +7500,7 @@ msgstr "Voimassa loppuen:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Monisanaisia lokisanomia vxWidgets'istä"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1099
+#: ../../locales/../src/engine/tlssocket.cpp:1124
 msgid "Verifying certificate..."
 msgstr "Varmennetaan sertifikaattia..."
 
@@ -7512,7 +7512,7 @@ msgstr "Versio:"
 msgid "Very high"
 msgstr "Erittäin suuri"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1436
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1448
 msgid "View hidden option set, but unsupported by server"
 msgstr "Näyttää piilotetut valinnat, joita palvelin ei tue"
 
@@ -7883,7 +7883,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "fzsftp ei käynnistynyt"
 
-#: ../../locales/../src/engine/tlssocket.cpp:947
+#: ../../locales/../src/engine/tlssocket.cpp:972
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers ei palauttanut sertifikaatteja"
 
