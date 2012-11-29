@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-18 11:42+0100\n"
-"PO-Revision-Date: 2012-11-17 06:59+0300\n"
+"POT-Creation-Date: 2012-11-29 22:48+0100\n"
+"PO-Revision-Date: 2012-11-19 04:57+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1625,7 +1625,7 @@ msgstr "يتم التحرير"
 msgid "Benchmark string coalescer"
 msgstr "وضع علامة على زوائد العبارة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:924
+#: ../../locales/../src/engine/tlssocket.cpp:949
 msgid "Beware! Certificate has been revoked"
 msgstr "أنتبه! تم إبطال الشهادة"
 
@@ -1697,22 +1697,22 @@ msgstr "&مخصص"
 msgid "C&ustom filetype associations:"
 msgstr "إ&شراكات مخصصة لأنواع الملفات :"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1642
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1654
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1271
 msgid "Calculating timezone offset of server..."
 msgstr "تعداد فارق التوقيت للخادم..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:731
+#: ../../locales/../src/engine/transfersocket.cpp:734
 msgid "Can't read from file"
 msgstr "تعذرت القراءة من الملف"
 
-#: ../../locales/../src/engine/transfersocket.cpp:710
-#: ../../locales/../src/engine/transfersocket.cpp:784
+#: ../../locales/../src/engine/transfersocket.cpp:713
+#: ../../locales/../src/engine/transfersocket.cpp:787
 msgid "Can't write data to file."
 msgstr "تعذرت كتابة البيانات إلى الملف"
 
-#: ../../locales/../src/engine/transfersocket.cpp:708
-#: ../../locales/../src/engine/transfersocket.cpp:782
+#: ../../locales/../src/engine/transfersocket.cpp:711
+#: ../../locales/../src/engine/transfersocket.cpp:785
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "تعذرت كتابة البيانات إلى الملف : %s"
@@ -1781,7 +1781,7 @@ msgstr "تعذر تحرير الملف , غير متصل بأي خادم"
 msgid "Cannot edit file, remote path unknown."
 msgstr "لا يمكن تحرير الملف ، المسار البعيد غير معروف"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:335
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:342
 msgid ""
 "Cannot establish FTP connection to an SFTP server. Please select proper "
 "protocol."
@@ -2147,7 +2147,7 @@ msgstr "إعدادات تجاوز إتصال ملقم الوكيل"
 msgid "Connect to specified Site Manager site"
 msgstr "إتصال بموقع مدير موقع معين"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:936
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:943
 msgid "Connected"
 msgstr "متصل"
 
@@ -2207,11 +2207,11 @@ msgid "Connection closed"
 msgstr "تم إغلاق الإتصال"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1132
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:235
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:241
 msgid "Connection closed by server"
 msgstr "تم إغلاق الإتصال من قبل الخادم"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:386
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:393
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:305
 msgid "Connection established, initializing TLS..."
 msgstr "تم تأسيس الإتصال ، جاري تهيئة TLS..."
@@ -2220,7 +2220,7 @@ msgstr "تم تأسيس الإتصال ، جاري تهيئة TLS..."
 msgid "Connection established, sending HTTP request"
 msgstr "تم تأسيس الإتصال ، جاري إرسال طلب HTTP"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:415
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:422
 msgid "Connection established, waiting for welcome message..."
 msgstr "تم تأسيس الإتصال ، في انتظار رسالة الترحيب..."
 
@@ -2331,7 +2331,7 @@ msgstr ""
 "تعذر تعيين الهدف من عملية السحب و الإفلات\n"
 "ربما لم تثبت إمتداد القشرة بطريقة صحيحة أو لم تفلت الملفات في نافذة المستكشف"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4276
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4291
 msgid "Could not establish connection to server"
 msgstr "تعذر تأسيس الإتصال مع الخادم"
 
@@ -2346,11 +2346,11 @@ msgstr ""
 "يمكنك وضع دليل البيانات لـ FileZilla باستعمال خيار سطر الأمر '--datadir "
 "<custompath>' أو بوضع متغير بيئة FZ_DATADIR"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:696
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:703
 msgid "Could not generate custom login sequence."
 msgstr "تعذر توليد سلسلة تسجيل الدخول المخصصة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1054
+#: ../../locales/../src/engine/tlssocket.cpp:1079
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2358,7 +2358,7 @@ msgstr ""
 "لا يمكن الحصول على الإسم الفارق من ناشر الشهادة , فشل "
 "gnutls_x509_get_issuer_dn"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1029
+#: ../../locales/../src/engine/tlssocket.cpp:1054
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2378,11 +2378,11 @@ msgstr "تعذر الحصول على الرد من fzputtygen"
 msgid "Could not get temporary directory to download file into."
 msgstr "تعذر الحصول على الدليل المؤقت لتحميل معلومات الملف"
 
-#: ../../locales/../src/engine/tlssocket.cpp:982
+#: ../../locales/../src/engine/tlssocket.cpp:1007
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "لا يمكن إستيراد شهادات النظير , فشل gnutls_x509_crt_import"
 
-#: ../../locales/../src/engine/tlssocket.cpp:975
+#: ../../locales/../src/engine/tlssocket.cpp:1000
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2458,7 +2458,7 @@ msgstr "تعذر تحليل المسار البعيد"
 msgid "Could not parse server address:"
 msgstr "تعذر تحليل عنوان الخادم:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:225
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:231
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "تعذرت قراءة من المقبس : %s"
@@ -2467,12 +2467,12 @@ msgstr "تعذرت قراءة من المقبس : %s"
 msgid "Could not read server item."
 msgstr "تعذرت قراءة مادة الخادم"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2714
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2726
 #, c-format
 msgid "Could not seek to offset %s within file"
 msgstr "لا يمكن تقصي فارق %s ضمن الملف"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2647
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2659
 msgid "Could not seek to the end of the file"
 msgstr "لا يمكن تقصي النهاية للملف"
 
@@ -2480,7 +2480,7 @@ msgstr "لا يمكن تقصي النهاية للملف"
 msgid "Could not send command to fzputtygen."
 msgstr "تعذر إرسال الأمر إلى fzputtygen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2745
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2757
 msgid "Could not spawn IO thread"
 msgstr "لا يمكن تفقيس مؤشر ترابط إدخال/إخراج"
 
@@ -2575,7 +2575,7 @@ msgid "Create a new, empty file in the current directory"
 msgstr "إنشاء ملف فارغ و جديد في الدليل الحالي"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1196
-#: ../../locales/../src/interface/LocalTreeView.cpp:1182
+#: ../../locales/../src/interface/LocalTreeView.cpp:1179
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1274
 msgid "Create directory"
@@ -2589,7 +2589,7 @@ msgstr "إنشاء ملف فارغ"
 msgid "Creating directory"
 msgstr "إنشاء دليل"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3319
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3331
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2048
 #, c-format
 msgid "Creating directory '%s'..."
@@ -2802,7 +2802,7 @@ msgstr "لم يتم بعد دعم الحذف للأدلة المتعددة ال�
 msgid "Deleting symbolic link"
 msgstr "حذف الرابط الترميزي"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1048
+#: ../../locales/../src/interface/LocalTreeView.cpp:1045
 msgid "Desktop"
 msgstr "سطح المكتب"
 
@@ -2882,7 +2882,7 @@ msgstr "قطع الاتصال من الخادم"
 #: ../../locales/../src/engine/ControlSocket.cpp:82
 #: ../../locales/../src/engine/ControlSocket.cpp:1000
 #: ../../locales/../src/engine/ControlSocket.cpp:1099
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:227
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:233
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:936
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:938
 #: ../../locales/../src/interface/QueueView.cpp:1070
@@ -3019,7 +3019,7 @@ msgid "Downloading search results"
 msgstr "تحميل نتائج البحث"
 
 #: ../../locales/../src/interface/LocalListView.cpp:104
-#: ../../locales/../src/interface/LocalTreeView.cpp:104
+#: ../../locales/../src/interface/LocalTreeView.cpp:105
 #: ../../locales/../src/interface/QueueView.cpp:83
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:88
@@ -3029,7 +3029,7 @@ msgid ""
 msgstr "السحب و الإفلات بين حالات وجود مختلفة من FileZilla لا ينطبق بعد"
 
 #: ../../locales/../src/interface/LocalListView.cpp:110
-#: ../../locales/../src/interface/LocalTreeView.cpp:110
+#: ../../locales/../src/interface/LocalTreeView.cpp:111
 #: ../../locales/../src/interface/QueueView.cpp:96
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:94
@@ -3389,7 +3389,7 @@ msgstr "FTPS - FTP over implicit TLS/SSL"
 #: ../../locales/../src/interface/LocalListView.cpp:545
 #: ../../locales/../src/interface/LocalListView.cpp:625
 #: ../../locales/../src/interface/LocalListView.cpp:2261
-#: ../../locales/../src/interface/LocalTreeView.cpp:906
+#: ../../locales/../src/interface/LocalTreeView.cpp:900
 #: ../../locales/../src/interface/viewheader.cpp:535
 msgid "Failed to change directory"
 msgstr "فشل في تغيير الدليل"
@@ -3417,8 +3417,8 @@ msgstr "فشل في إنشاء نسخة احتياطية من ملف xml"
 msgid "Failed to create listen socket, aborting"
 msgstr "فشل في إنشاء مقبس الإستماع . إنهاء"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4252
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4256
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4266
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4270
 msgid "Failed to create listening socket for active mode transfer"
 msgstr "فشل في إنشاء مقبس الإستماع لنمط الإرسال النشط"
 
@@ -3426,11 +3426,11 @@ msgstr "فشل في إنشاء مقبس الإستماع لنمط الإرسال
 msgid "Failed to download the latest version of FileZilla."
 msgstr "فشل في تحميل آخر نسخة من FileZilla"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:660
+#: ../../locales/../src/interface/LocalTreeView.cpp:662
 msgid "Failed to get 'My Documents' path"
 msgstr "فشل الحصول على مسار 'المستندات'"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:646
+#: ../../locales/../src/interface/LocalTreeView.cpp:648
 msgid "Failed to get desktop path"
 msgstr "فشل الحصول على مسار سطح المكتب"
 
@@ -3446,8 +3446,8 @@ msgstr "فشل الحصول على عنوان النظير لإتصال البي
 msgid "Failed to initialize FTP engine"
 msgstr "فشل في بدأ محرك FTP"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:395
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:775
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:402
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:782
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
 msgid "Failed to initialize TLS."
 msgstr "فشل في تهيئة TLS"
@@ -3461,17 +3461,17 @@ msgstr "فشل في تحميل اللوائح ، ملفات موارد غير ص
 msgid "Failed to load private key: %s"
 msgstr "فشل في تحميل المفتاح الخصوصي : %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2636
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2648
 #, c-format
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "فشل في فتح \"%s\" للتذييل/للكتابة"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2698
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2710
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "فشل في فتح \"%s\" للقراءة"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2677
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2689
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:391
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:448
 #, c-format
@@ -3498,11 +3498,11 @@ msgstr "فشل في إستخلاص قائمة الدليل"
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "فشل في لإسترداد عنوان IP الخارجي ، إنهاء"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3950
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3962
 msgid "Failed to retrieve external ip address, using local address"
 msgstr "فشل في لإسترداد عنوان IP الخارجي ، إستخدام العنوان المحلي"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3972
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3984
 msgid "Failed to retrieve local ip address."
 msgstr "فشل في لإسترداد عنوان IP المحلي"
 
@@ -3555,7 +3555,7 @@ msgstr "فشل في وضع اللغة على %s ، إستعمال لغة الن�
 msgid "Failed to validate settings"
 msgstr "فشل في التحقق من الإعدادات"
 
-#: ../../locales/../src/engine/tlssocket.cpp:917
+#: ../../locales/../src/engine/tlssocket.cpp:942
 msgid "Failed to verify peer certificate"
 msgstr "فشل في التحقق من شهادة النظير"
 
@@ -3717,7 +3717,7 @@ msgstr "إسم الملف"
 msgid "Filename &filters..."
 msgstr "&مرشحات إسم الملف..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3116
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3128
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2311
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
@@ -4222,7 +4222,7 @@ msgstr ""
 "فى النمط السلبي الذى ينصح به لمعظم المستخدمين . البرنامج يسأل الخادم من أجل "
 "منفذ و يتصل بالمنفذ المعطى له , حيث لا يوجد الكثير من الضبط يجب عمله هنا"
 
-#: ../../locales/../src/engine/tlssocket.cpp:931
+#: ../../locales/../src/engine/tlssocket.cpp:956
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4232,11 +4232,11 @@ msgstr "السلسلة ناقصة ، الشهادة العليا ليست شها
 msgid "Incorrect password"
 msgstr "كلمة مرور غير صحيحة"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:765
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:772
 msgid "Initializing TLS..."
 msgstr "جاري تهيئة TLS..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:751
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:758
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "خادم غير آمن ، لا يدعم FTP عبر TLS"
 
@@ -4323,7 +4323,7 @@ msgstr ""
 "ftps:// لـ FTP فوق SSL (ضمني)\n"
 "ftpes:// لـ FTP فوق SSL (واضح)"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4403
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4418
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4505,7 +4505,7 @@ msgstr "سجل التدقيق عن التحديث:"
 msgid "Logging"
 msgstr "السجل"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:818
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:825
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Cannot fall back to local charset since using proxy."
@@ -4513,7 +4513,7 @@ msgstr ""
 "بيانات تسجيل الدخول تحتوى على رموز ليست-ASCII و الخادم قد يكون لا يوافق UTF-"
 "8 . لا يمكن التراجع إلى مجموعة الرموز المحلية و الملقم الوكيل هو المستخدم"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:825
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:832
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Trying local charset."
@@ -4521,7 +4521,7 @@ msgstr ""
 "بيانات تسجيل الدخول تحتوى على رموز ليست-ASCII و الخادم قد يكون لا يوافق UTF-"
 "8 . تجربة مجموعة الرموز المحلية"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:854
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:861
 msgid "Login sequence fully executed yet not logged in. Aborting."
 msgstr "تم التنفيذ بالكامل لسلسلة تسجيل الدخول و مع ذلك لم يتم الدخول . إنهاء"
 
@@ -4629,11 +4629,11 @@ msgstr "تحريك ل&تحت"
 msgid "Move &up"
 msgstr "تحريك ل&فوق"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1067
+#: ../../locales/../src/interface/LocalTreeView.cpp:1064
 msgid "My Computer"
 msgstr "جهاز الكمبيوتر"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1057
+#: ../../locales/../src/interface/LocalTreeView.cpp:1054
 msgid "My Documents"
 msgstr "المستندات"
 
@@ -4712,7 +4712,7 @@ msgstr "&عنوان مفضل جديد"
 msgid "New bookmark"
 msgstr "علامة جديدة"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1185
+#: ../../locales/../src/interface/LocalTreeView.cpp:1182
 #: ../../locales/../src/interface/RemoteListView.cpp:1631
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1288
 msgid "New directory"
@@ -4753,7 +4753,7 @@ msgstr "لم يتم تحديد فئة للتصدير"
 msgid "No command given, aborting."
 msgstr "لم يتم وضع أمر , مقاطعة"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3917
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3929
 msgid "No external IP address set, trying default."
 msgstr "لم يتم تحديد IP خارجى ، محاولة الافتراضى"
 
@@ -5060,7 +5060,7 @@ msgstr "مطلوب كلمة مرور"
 msgid "Path"
 msgstr "مسار"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3204
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3216
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2356
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
@@ -5241,7 +5241,7 @@ msgstr ""
 "إستخدام أوامر ftp سوف يمسح مخزون الدليل المؤقت"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1196
-#: ../../locales/../src/interface/LocalTreeView.cpp:1182
+#: ../../locales/../src/interface/LocalTreeView.cpp:1179
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1274
 msgid "Please enter the name of the directory which should be created:"
@@ -5434,7 +5434,7 @@ msgstr "إبقاء طوابع وقت الملف"
 msgid "Preview:"
 msgstr "معاينة:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:957
+#: ../../locales/../src/engine/tlssocket.cpp:982
 msgid "Primary connection and data connection certificates don't match."
 msgstr "شهادة الإتصال الرئيسية و شهادة إتصال البيانات غير متطابقتين"
 
@@ -5488,7 +5488,7 @@ msgstr "فشلت مصادقة الملقم"
 msgid "Proxy handshake failed: %s"
 msgstr "فشلت مصافحة الملقم : %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4395
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4410
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "ملقم الإستضافة بدأ بـ '[' لكن لا يوجد قوس الإغلاق"
 
@@ -5506,7 +5506,7 @@ msgstr "فشل طلب الملقم : %s"
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr "فشل طلب الملقم الوكيل : نوع العنوان غير معروف في الرد CONNECT"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4428
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4443
 msgid "Proxy set but proxy host or port invalid"
 msgstr "تم وضع الملقم الوكيل لكن مضيف الوكيل أو المنفذ غير صالح"
 
@@ -5630,11 +5630,11 @@ msgstr "هل تريد حذف فعلا %s و %s من الخادم؟"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1123
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "هل تريد فهلا حذف كافة الملفات و/أو  المجلدات المحددة من الخادم؟"
+msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الخادم؟"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "هل تريد فهلا حذف كافة الملفات و/أو  المجلدات المحددة من الكمبيوتر؟"
+msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الكمبيوتر؟"
 
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Reason"
@@ -5696,7 +5696,7 @@ msgstr "تذكر كلمات المرور ؟"
 msgid "Remote"
 msgstr "بعيد"
 
-#: ../../locales/../src/engine/tlssocket.cpp:880
+#: ../../locales/../src/engine/tlssocket.cpp:905
 msgid "Remote certificate not trusted."
 msgstr "الشهادة البعيدة غير موثوق بها"
 
@@ -5780,7 +5780,7 @@ msgstr "تسمية الدليل المحدد"
 msgid "Rename selected files and directories"
 msgstr "تسمية الملفات المحددة و الأدلة"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3550
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3562
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2558
 #, c-format
 msgid "Renaming '%s' to '%s'"
@@ -5836,18 +5836,18 @@ msgstr ""
 "إستئناف ملفات ASCII قد يسبب مشاكل إذا كان الخادم يستخدم تنسيق مختلف لنهاية "
 "السطر تختلف عن التي مع التابع"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1301
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1313
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:956
 msgid "Retrieving directory listing..."
 msgstr "إسترجاع قائمة الدليل..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3935
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3947
 #: ../../locales/../src/interface/netconfwizard.cpp:707
 #, c-format
 msgid "Retrieving external IP address from %s"
 msgstr "إسترجاع عنوان IP الخارجي من %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:938
+#: ../../locales/../src/engine/tlssocket.cpp:963
 msgid "Root certificate is not trusted"
 msgstr "شهادة الجذر غير موثوق بها"
 
@@ -6132,7 +6132,7 @@ msgstr "إرسال &أوامر البقاء نشطا لـ FTP"
 msgid "Send custom command to the server otherwise not available"
 msgstr "إرسال أمر مخصص إلى الخادم ، غير ذلك فانه غير متاح"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4510
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4525
 msgid "Sending keep-alive command"
 msgstr "إرسال &أوامر البقاء نشطا"
 
@@ -6145,22 +6145,21 @@ msgstr "رقم التسلسل:"
 msgid "Server &Type:"
 msgstr "نوع ال&خادم:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:764
+#: ../../locales/../src/engine/tlssocket.cpp:785
 msgid "Server did not properly shut down TLS connection"
 msgstr "الخادم ربما لم يغلق إتصال TLS بشكل صحيح"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:914
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:976
-#, fuzzy
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:921
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:984
 msgid "Server does not support non-ASCII characters."
-msgstr "الخادم لا يدعم الإستئناف للملفات > 2 غب"
+msgstr "الخادم لا يدعم حروفا غير حروف ASCII"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4334
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4349
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr "الخادم لا يدعم الإستئناف للملفات > %d غب"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4330
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4345
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -6168,15 +6167,15 @@ msgid ""
 msgstr ""
 "الخادم لا يدعم إستئناف الملفات > %d غب . نهاية الإرسال بما أن الحجم كبير"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2565
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2577
 msgid "Server does not support resume of files > 2GB."
 msgstr "الخادم لا يدعم الإستئناف للملفات > 2 غب"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2560
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2572
 msgid "Server does not support resume of files > 4GB."
 msgstr "الخادم لا يدعم الإستئناف للملفات > 4 غب"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4345
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4360
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -6184,7 +6183,7 @@ msgid ""
 msgstr ""
 "الخادم قد لا يدعم إستئناف الملفات > %d غب . نهاية الإرسال بما أن الحجم كبير"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:856
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:863
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
@@ -6201,11 +6200,11 @@ msgid ""
 msgstr ""
 "أرسل الخادم مطالبة بتسجيل دخول إضافي . تحتاج لإستعمال نوع تسجيل دخول تفاعلي"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3877
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3889
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr "الخادم أرسل رد سلبي مع عنوان غير قابل للتوجيه . فشل النمط السلبي"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3871
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3883
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
@@ -6253,13 +6252,13 @@ msgstr "تفاصيل الجلسة"
 msgid "Set &Priority"
 msgstr "&وضع الاولوية"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3702
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3714
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2436
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "وضع الأذونات لـ '%s' إلى '%s'"
 
-#: ../../locales/../src/engine/transfersocket.cpp:858
+#: ../../locales/../src/engine/transfersocket.cpp:861
 msgid "SetSocketBufferSize called without socket"
 msgstr "تم إستدعاء SetSocketBufferSize بدون مقبس"
 
@@ -6454,13 +6453,13 @@ msgstr "بدء الإرسال &فورا"
 msgid "Start with opened Site Manager"
 msgstr "البدء مع مدير مواقع مفتوح"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2244
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2256
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1634
 #, c-format
 msgid "Starting download of %s"
 msgstr "بدء التحميل لـ %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2248
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2260
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1638
 #, c-format
 msgid "Starting upload of %s"
@@ -6555,11 +6554,11 @@ msgstr "شريط &أدوات"
 msgid "TLS/SSL connection established, sending HTTP request"
 msgstr "تم تأسيس إتصال TLS/SSL ، إرسال طلب HTTP"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:407
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:414
 msgid "TLS/SSL connection established, waiting for welcome message..."
 msgstr "تم تأسيس إتصال TLS/SSL , إنتظار رسالة الترحيب..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:411
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:418
 msgid "TLS/SSL connection established."
 msgstr "تم تأسيس إتصال TLS/SSL"
 
@@ -6587,7 +6586,7 @@ msgstr "الملف الهدف موجود مسبقا ، هل تريد الإست�
 msgid "Test results"
 msgstr "نتائج الفحص"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4351
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4366
 msgid "Testing resume capabilities of server"
 msgstr "فحص قدرات الإستئناف للخادم"
 
@@ -6991,7 +6990,7 @@ msgstr "إ&نقضاء الوقت بالثواني:"
 msgid "Timeout"
 msgstr "إنقضاء الوقت"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1703
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1715
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1080
 #, c-format
 msgid ""
@@ -7104,8 +7103,8 @@ msgstr "قائمة إنتظار الإرسال"
 msgid "Transfer Settings"
 msgstr "إعدادات الإرسال"
 
-#: ../../locales/../src/engine/transfersocket.cpp:497
-#: ../../locales/../src/engine/transfersocket.cpp:521
+#: ../../locales/../src/engine/transfersocket.cpp:500
+#: ../../locales/../src/engine/transfersocket.cpp:524
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "تم إنهاء إتصال الإرسال : %s"
@@ -7203,7 +7202,7 @@ msgstr "وحدة:"
 msgid "Unknown"
 msgstr "غير معروف"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:702
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:709
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr "نوع ملقم وكيل FTP غير معروف ، لا يمكن توليد سلسلة تسجيل الدخول"
 
@@ -7259,7 +7258,7 @@ msgstr ""
 "مالم يتم إصلاح هذه المشكلة , لن يعمل نمط FTP النشط و بالتالي سوف يستخدم "
 "النمط السلبي"
 
-#: ../../locales/../src/engine/tlssocket.cpp:909
+#: ../../locales/../src/engine/tlssocket.cpp:934
 msgid "Unsupported certificate type"
 msgstr "نوع شهادة غير مدعومة"
 
@@ -7407,7 +7406,7 @@ msgstr "المستخدم:"
 msgid "Username cannot be a series of spaces"
 msgstr "إسم المستخدم لا يمكن أن يكون سلسلة من المسافات"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4433
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4448
 #, c-format
 msgid "Using proxy %s"
 msgstr "إستخدام الملقم %s"
@@ -7435,7 +7434,7 @@ msgstr "صالح إلى:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "رسائل سجل مطولة من wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1099
+#: ../../locales/../src/engine/tlssocket.cpp:1124
 msgid "Verifying certificate..."
 msgstr "جاري فحص الشهادة..."
 
@@ -7447,7 +7446,7 @@ msgstr "النسخة :"
 msgid "Very high"
 msgstr "مرتفعة جدا"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1436
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1448
 msgid "View hidden option set, but unsupported by server"
 msgstr "عرض مجموعة الخيارات المخفية ، لكنها غير معتمدة من قبل الخادم"
 
@@ -7810,7 +7809,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "fzsftp غير قادر على تشغيل"
 
-#: ../../locales/../src/engine/tlssocket.cpp:947
+#: ../../locales/../src/engine/tlssocket.cpp:972
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers لم يرجع بشهادات"
 
