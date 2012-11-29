@@ -465,9 +465,8 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 	{
 		m_pOwner->LogMessage(Debug_Info, _T("gnutls_session_set_data failed: %d. Going to reinitialize session."), res);
 		UninitSession();
-		if( !InitSession() ) {
+		if (!InitSession())
 			return false;
-		}
 	}
 	else
 		m_pOwner->LogMessage(Debug_Info, _T("Trying to resume existing TLS session."));
@@ -517,10 +516,10 @@ int CTlsSocket::ContinueHandshake()
 	wxASSERT(m_tlsState == handshake);
 
 	int res = gnutls_handshake(m_session);
-	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED) {
-		if( gnutls_record_get_direction(m_session) != 1 || !m_canWriteToSocket ) {
+	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED)
+	{
+		if ( gnutls_record_get_direction(m_session) != 1 || !m_canWriteToSocket )
 			break;
-		}
 
 		res = gnutls_handshake(m_session);
 	}
