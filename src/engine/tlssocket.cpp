@@ -517,6 +517,13 @@ int CTlsSocket::ContinueHandshake()
 	wxASSERT(m_tlsState == handshake);
 
 	int res = gnutls_handshake(m_session);
+	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED) {
+		if( gnutls_record_get_direction(m_session) != 1 || !m_canWriteToSocket ) {
+			break;
+		}
+
+		res = gnutls_handshake(m_session);
+	}
 	if (!res)
 	{
 		m_pOwner->LogMessage(Debug_Info, _T("TLS Handshake successful"));
@@ -658,7 +665,7 @@ int CTlsSocket::Write(const void *buffer, unsigned int len, int& error)
 	int res = gnutls_record_send(m_session, buffer, len);
 
 	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
-		res = gnutls_record_send(m_session, buffer, len);
+		res = gnutls_record_send(m_session, 0, 0);
 
 	if (res >= 0)
 	{
@@ -718,7 +725,10 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 {
 	if (m_lastWriteFailed)
 	{
-		int res = gnutls_record_send(m_session, 0, 0);
+		int res = GNUTLS_E_AGAIN;
+		while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
+			res = gnutls_record_send(m_session, 0, 0);
+
 		if (res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN)
 			return;
 
@@ -830,6 +840,8 @@ int CTlsSocket::Shutdown()
 	m_tlsState = closing;
 
 	int res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
+	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
+		res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
 	if (!res)
 	{
 		m_tlsState = closed;
@@ -848,6 +860,8 @@ void CTlsSocket::ContinueShutdown()
 	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::ContinueShutdown()"));
 
 	int res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
+	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
+		res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
 	if (!res)
 	{
 		m_tlsState = closed;
