@@ -88,7 +88,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		if (m_protocol == UNKNOWN)
 		{
 			// TODO: http:// once WebDAV is officially supported
-			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over SSL (implicit) and\nftpes:// for FTP over SSL (explicit).");
+			error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
 			return false;
 		}
 	}
