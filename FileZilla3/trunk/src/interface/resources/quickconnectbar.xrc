@@ -42,7 +42,7 @@
               <style>wxTE_PROCESS_ENTER</style>
               <tooltip>Enter the address of the server.
 To specify the server protocol, prepend the host with the protocol identifier. If no protocol is specified, the default protocol (ftp://) will be used.
-You can also enter complete URLs in the form protocol://user:pass@host:port here, the values in the other fields will be overwritten then.</tooltip>
+You can also enter complete URLs in the form protocol://user:pass@host:port here, the values in the other fields will be overwritten then.\n\nSupported protocols are:\n- ftp:// for normal FTP\n- sftp:// for SSH file transfer protocol\n- ftps:// for FTP over TLS (implicit)\n- ftpes:// for FTP over TLS (explicit)</tooltip>
             </object>
           </object>
           <object class="sizeritem">
