@@ -7,7 +7,8 @@
     <object class="tool" name="ID_TOOLBAR_SITEMANAGER">
       <bitmap stock_id="ART_SITEMANAGER"></bitmap>
       <longhelp>Open the Site Manager</longhelp>
-      <tooltip>Open the Site Manager</tooltip>
+      <tooltip platform="win">Open the Site Manager.</tooltip>
+      <tooltip platform="mac|unix">Open the Site Manager. Right-click for a list of sites.</tooltip>
     </object>
     <object class="separator"/>
     <object class="tool" name="ID_TOOLBAR_LOGVIEW">
