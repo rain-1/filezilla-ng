@@ -109,6 +109,7 @@ protected:
 	void OnSize(wxSizeEvent& event);
 	void OnMenuHandler(wxCommandEvent& event);
 	void OnEngineEvent(wxEvent& event);
+	void OnUpdateLedTooltip(wxCommandEvent& event);
 	void OnDisconnect(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
 	void OnClose(wxCloseEvent& event);

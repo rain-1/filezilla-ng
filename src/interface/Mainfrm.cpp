@@ -73,6 +73,7 @@ BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 	EVT_SIZE(CMainFrame::OnSize)
 	EVT_MENU(wxID_ANY, CMainFrame::OnMenuHandler)
 	EVT_FZ_NOTIFICATION(wxID_ANY, CMainFrame::OnEngineEvent)
+	EVT_COMMAND(wxID_ANY, fzEVT_UPDATE_LED_TOOLTIP, CMainFrame::OnUpdateLedTooltip)
 	EVT_TOOL(XRCID("ID_TOOLBAR_DISCONNECT"), CMainFrame::OnDisconnect)
 	EVT_MENU(XRCID("ID_MENU_SERVER_DISCONNECT"), CMainFrame::OnDisconnect)
 	EVT_TOOL(XRCID("ID_TOOLBAR_CANCEL"), CMainFrame::OnCancel)
@@ -1048,6 +1049,29 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 
 		pNotification = pState->m_pEngine->GetNextNotification();
 	}
+}
+
+void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
+{
+	wxString tooltipText;
+
+	wxFileOffset downloadSpeed = m_pQueueView->GetCurrentDownloadSpeed();
+	wxFileOffset uploadSpeed = m_pQueueView->GetCurrentUploadSpeed();
+
+	CSizeFormat::_format format = static_cast<CSizeFormat::_format>(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
+	if (format == CSizeFormat::bytes)
+		format = CSizeFormat::iec;
+
+	const wxString downloadSpeedStr = CSizeFormat::Format(downloadSpeed, true, format,
+	                                                      COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
+	                                                      COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
+	const wxString uploadSpeedStr = CSizeFormat::Format(uploadSpeed, true, format,
+	                                                    COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
+	                                                    COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
+	tooltipText.Printf(_("Download speed: %s/s\nUpload speed: %s/s"), downloadSpeedStr.c_str(), uploadSpeedStr.c_str());
+
+	m_pActivityLed[0]->SetToolTip(tooltipText);
+	m_pActivityLed[1]->SetToolTip(tooltipText);
 }
 
 bool CMainFrame::CreateToolBar()

@@ -3490,6 +3490,39 @@ wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
 	return result;
 }
 
+wxFileOffset CQueueView::GetCurrentDownloadSpeed()
+{
+	wxFileOffset speed = GetCurrentSpeed(true, false);
+	return speed;
+}
+
+wxFileOffset CQueueView::GetCurrentUploadSpeed()
+{
+	wxFileOffset speed = GetCurrentSpeed(false, true);
+	return speed;
+}
+
+wxFileOffset CQueueView::GetCurrentSpeed(bool countDownload, bool countUpload)
+{
+	wxFileOffset totalSpeed = 0;
+
+	for (std::list<CStatusLineCtrl*>::iterator iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
+	{
+		CStatusLineCtrl *pCtrl = *iter;
+		const CFileItem *pItem = pCtrl->GetItem();
+		bool isDownload = pItem->Download();
+
+		if ((isDownload && countDownload) || (!isDownload && countUpload))
+		{
+			wxFileOffset speed = pCtrl->GetCurrentSpeed();
+			if (speed != -1)
+				totalSpeed += speed;
+		}
+	}
+
+	return totalSpeed;
+}
+
 void CQueueView::ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine)
 {
 	wxASSERT(pEngine);
