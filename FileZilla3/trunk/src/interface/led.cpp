@@ -6,9 +6,12 @@
 #define new DEBUG_NEW
 #endif
 
+DEFINE_EVENT_TYPE(fzEVT_UPDATE_LED_TOOLTIP)
+
 BEGIN_EVENT_TABLE(CLed, wxWindow)
 	EVT_PAINT(CLed::OnPaint)
 	EVT_TIMER(wxID_ANY, CLed::OnTimer)
+	EVT_ENTER_WINDOW(CLed::OnEnterWindow)
 #ifdef __WXMSW__
 	EVT_ERASE_BACKGROUND(CLed::OnEraseBackground)
 #endif
@@ -90,8 +93,13 @@ void CLed::OnTimer(wxTimerEvent& event)
 		Unset();
 		m_timer.Stop();
 	}
+}
 
-	return;
+void CLed::OnEnterWindow(wxMouseEvent& event)
+{
+	wxCommandEvent requestUpdateEvent(fzEVT_UPDATE_LED_TOOLTIP, GetId());
+	requestUpdateEvent.SetEventObject(this);
+	GetEventHandler()->ProcessEvent(requestUpdateEvent);
 }
 
 void CLed::Ping()

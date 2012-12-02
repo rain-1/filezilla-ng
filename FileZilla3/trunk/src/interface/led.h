@@ -1,7 +1,10 @@
 #ifndef __LED_H__
 #define __LED_H__
 
-class CFileZillaEngine;
+#include "wx/event.h"
+
+DECLARE_EVENT_TYPE(fzEVT_UPDATE_LED_TOOLTIP, -1)
+
 class CLed : public wxWindow
 {
 public:
@@ -25,6 +28,7 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnPaint(wxPaintEvent& event);
 	void OnTimer(wxTimerEvent& event);
+	void OnEnterWindow(wxMouseEvent& event);
 #ifdef __WXMSW__
 	void OnEraseBackground(wxEraseEvent& event);
 #endif

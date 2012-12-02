@@ -143,6 +143,14 @@ public:
 
 	static wxString ReplaceInvalidCharacters(const wxString& filename);
 
+	// Get the current download speed as the sum of all active downloads.
+	// Unit is byte/s.
+	wxFileOffset GetCurrentDownloadSpeed();
+
+	// Get the current upload speed as the sum of all active uploads.
+	// Unit is byte/s.
+	wxFileOffset GetCurrentUploadSpeed();
+
 protected:
 
 #ifdef __WXMSW__
@@ -281,6 +289,10 @@ protected:
 #endif
 
 	CQueueStorage m_queue_storage;
+
+	// Get the current transfer speed.
+	// Unit is byte/s.
+	wxFileOffset GetCurrentSpeed(bool countDownload, bool countUpload);
 
 	DECLARE_EVENT_TABLE();
 	void OnEngineEvent(wxEvent &event);
