@@ -8,12 +8,12 @@ std::list<CVerifyHostkeyDialog::t_keyData> CVerifyHostkeyDialog::m_sessionTruste
 
 void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNotification* pNotification)
 {
-	wxDialogEx* pDlg = new wxDialogEx;
+	wxDialogEx dlg;
 	bool loaded;
 	if (pNotification->GetRequestID() == reqId_hostkey)
-		loaded = pDlg->Load(parent, _T("ID_HOSTKEY"));
+		loaded = dlg.Load(parent, _T("ID_HOSTKEY"));
 	else
-		loaded = pDlg->Load(parent, _T("ID_HOSTKEYCHANGED"));
+		loaded = dlg.Load(parent, _T("ID_HOSTKEYCHANGED"));
 	if (!loaded)
 	{
 		pNotification->m_trust = false;
@@ -22,21 +22,21 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 		return;
 	}
 
-	pDlg->WrapText(pDlg, XRCID("ID_DESC"), 400);
+	dlg.WrapText(&dlg, XRCID("ID_DESC"), 400);
 
 	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort());
-	pDlg->SetLabel(XRCID("ID_HOST"), host);
-	pDlg->SetLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
+	dlg.SetLabel(XRCID("ID_HOST"), host);
+	dlg.SetLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
 
-	pDlg->GetSizer()->Fit(pDlg);
-	pDlg->GetSizer()->SetSizeHints(pDlg);
+	dlg.GetSizer()->Fit(&dlg);
+	dlg.GetSizer()->SetSizeHints(&dlg);
 
-	int res = pDlg->ShowModal();
+	int res = dlg.ShowModal();
 
 	if (res == wxID_OK)
 	{
 		pNotification->m_trust = true;
-		pNotification->m_alwaysTrust = XRCCTRL(*pDlg, "ID_ALWAYS", wxCheckBox)->GetValue();
+		pNotification->m_alwaysTrust = XRCCTRL(dlg, "ID_ALWAYS", wxCheckBox)->GetValue();
 
 		struct t_keyData data;
 		data.host = host;
