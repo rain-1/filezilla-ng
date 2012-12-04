@@ -771,7 +771,7 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
     xfer = xfer_upload_init(fh, offset);
     err = eof = 0;
     while ((!err && !eof) || !xfer_done(xfer)) {
-	char buffer[4096];
+        char buffer[4096*4];
 	int len, ret;
 
 	while (xfer_upload_ready(xfer) && !err && !eof) {
@@ -2930,7 +2930,7 @@ int from_backend(void *frontend, int is_stderr, const char *data, int datalen)
 
     if (len > 0) {
 	if (pendsize < pendlen + len) {
-	    pendsize = pendlen + len + 4096;
+	    pendsize = pendlen + len + 4096*4;
 	    pending = sresize(pending, pendsize, unsigned char);
 	}
 	memcpy(pending + pendlen, p, len);

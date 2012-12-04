@@ -55,8 +55,9 @@ static struct sftp_packet *sftp_pkt_init(int pkt_type)
     pkt = snew(struct sftp_packet);
     pkt->data = NULL;
     pkt->savedpos = -1;
-    pkt->length = 0;
     pkt->maxlen = 0;
+    pkt->length = 4;
+    sftp_pkt_ensure(pkt, 4);
     sftp_pkt_addbyte(pkt, (unsigned char) pkt_type);
     return pkt;
 }
@@ -266,9 +267,8 @@ static void sftp_pkt_free(struct sftp_packet *pkt)
 int sftp_send(struct sftp_packet *pkt)
 {
     int ret;
-    char x[4];
-    PUT_32BIT(x, pkt->length);
-    ret = (sftp_senddata(x, 4) && sftp_senddata(pkt->data, pkt->length));
+    PUT_32BIT(pkt->data, pkt->length-4);
+    ret = sftp_senddata(pkt->data, pkt->length);
     sftp_pkt_free(pkt);
     return ret;
 }
