@@ -962,8 +962,17 @@ bool CSiteManagerDialog::Verify()
 			(logon_type == ACCOUNT || logon_type == NORMAL))
 		{
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
-			wxMessageBox(_("FileZilla is running in kiosk mode.\n'Normal' and 'Account' logontypes are not available in this mode."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
-			return false;
+			wxString msg;
+			if (COptions::Get()->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE))
+				msg = _("Saving of password has been disabled by your system administrator.");
+			else
+				msg = _("Saving of passwords has been disabled by you.");
+			msg += _T("\n");
+			msg += _("'Normal' and 'Account' logontypes are not available. Your entry has been changed to 'Ask ask for password'.");
+			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
+			XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
+			logon_type = ASK;
+			wxMessageBox(msg, _("Site Manager - Cannot remember password"), wxICON_INFORMATION, this);
 		}
 
 		// Set selected type

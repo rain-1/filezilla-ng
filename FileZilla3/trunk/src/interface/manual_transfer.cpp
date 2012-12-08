@@ -450,8 +450,17 @@ bool CManualTransfer::VerifyServer()
 		(logon_type == ACCOUNT || logon_type == NORMAL))
 	{
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
-		wxMessageBox(_("FileZilla is running in kiosk mode.\n'Normal' and 'Account' logontypes are not available in this mode."));
-		return false;
+		wxString msg;
+		if (COptions::Get()->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE))
+			msg = _("Saving of password has been disabled by your system administrator.");
+		else
+			msg = _("Saving of passwords has been disabled by you.");
+		msg += _T("\n");
+		msg += _("'Normal' and 'Account' logontypes are not available, using 'Ask ask for password' instead.");
+		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
+		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
+		logon_type = ASK;
+		wxMessageBox(msg, _("Cannot remember password"), wxICON_INFORMATION, this);
 	}
 
 	CServer server;
