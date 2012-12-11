@@ -307,6 +307,12 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 		}
 	}
 
+	if (p == m_localDir.GetParent())
+		m_previouslyVisitedLocalSubdir = m_localDir.GetLastSegment();
+	else
+		m_previouslyVisitedLocalSubdir = _T("");
+	
+
 	m_localDir = p;
 
 	COptions::Get()->SetOption(OPTION_LASTLOCALDIR, m_localDir.GetPath());
@@ -329,10 +335,17 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 			m_pDirectoryListing = 0;
 			NotifyHandlers(STATECHANGE_REMOTE_DIR);
 		}
+		m_previouslyVisitedRemoteSubdir = _T("");
 		return true;
 	}
 
 	wxASSERT(pDirectoryListing->m_firstListTime.IsValid());
+	
+	if (pDirectoryListing && m_pDirectoryListing &&
+		pDirectoryListing->path == m_pDirectoryListing->path.GetParent())
+		m_previouslyVisitedRemoteSubdir = m_pDirectoryListing->path.GetLastSegment();
+	else
+		m_previouslyVisitedRemoteSubdir = _T("");
 
 	if (modified)
 	{

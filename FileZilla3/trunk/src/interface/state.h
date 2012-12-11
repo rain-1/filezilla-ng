@@ -163,6 +163,12 @@ public:
 	bool GetSecurityInfo(CSftpEncryptionNotification *& pInfo);
 	void SetSecurityInfo(CCertificateNotification const& info);
 	void SetSecurityInfo(CSftpEncryptionNotification const& info);
+
+	// If the previously selected directory was a direct child of the current directory, this
+	// returns the relative name of the subdirectory.
+	wxString GetPreviouslyVisitedLocalSubdir() const { return m_previouslyVisitedLocalSubdir; }
+	wxString GetPreviouslyVisitedRemoteSubdir() const { return m_previouslyVisitedRemoteSubdir; }
+
 protected:
 	void SetServer(const CServer* server);
 
@@ -203,6 +209,9 @@ protected:
 
 	CCertificateNotification* m_pCertificate;
 	CSftpEncryptionNotification* m_pSftpEncryptionInfo;
+	
+	wxString m_previouslyVisitedLocalSubdir;
+	wxString m_previouslyVisitedRemoteSubdir;
 };
 
 class CStateEventHandler

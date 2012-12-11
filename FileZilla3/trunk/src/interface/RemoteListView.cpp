@@ -758,6 +758,8 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 			ExitComparisonMode();
 
 		ClearSelection();
+
+		prevFocused = m_pState->GetPreviouslyVisitedRemoteSubdir();
 	}
 	else
 	{
@@ -2231,6 +2233,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 			if ((*m_pDirectoryListing)[index].name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+				EnsureVisible(i);
 				return;
 			}
 		}
@@ -2259,6 +2262,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 			if (entry.name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+				EnsureVisible(i);
 				focused = _T("");
 			}
 			if (entry.is_dir() && *iter == (_T("d") + entry.name))

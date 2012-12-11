@@ -318,7 +318,9 @@ bool CLocalListView::DisplayDir(wxString dirname)
 			ExitComparisonMode();
 
 		ClearSelection();
-		focused = _T("..");
+		focused = m_pState->GetPreviouslyVisitedLocalSubdir();
+		if (focused.IsEmpty())
+			focused = _T("..");
 
 		if (GetItemCount())
 			EnsureVisible(0);
@@ -1538,6 +1540,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 			if (data.name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+				EnsureVisible(i);
 				return;
 			}
 		}
@@ -1555,6 +1558,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 			if (data.name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+				EnsureVisible(i);
 				focused = _T("");
 			}
 			if (data.dir && *iter == (_T("d") + data.name))
