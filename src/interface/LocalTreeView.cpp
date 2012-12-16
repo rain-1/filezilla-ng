@@ -231,6 +231,7 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, 
 	CStateEventHandler(pState),
 	m_pQueueView(pQueueView)
 {
+	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::CLocalTreeView"));
 #ifdef __WXMAC__
 	SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 #endif

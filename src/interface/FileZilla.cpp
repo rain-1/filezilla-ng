@@ -75,6 +75,8 @@ CFileZillaApp::CFileZillaApp()
 	m_pWrapEngine = 0;
 	m_pLocale = 0;
 	m_pCommandLine = 0;
+	m_profilingActive = true;
+	AddStartupProfileRecord(_T("CFileZillaApp::CFileZillaApp()"));
 }
 
 CFileZillaApp::~CFileZillaApp()
@@ -174,6 +176,8 @@ static void SetAppId()
 
 bool CFileZillaApp::OnInit()
 {
+	AddStartupProfileRecord(_T("CFileZillaApp::OnInit()"));
+
 	srand( (unsigned)time( NULL ) );
 
 #if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
@@ -330,6 +334,8 @@ FileZilla will timeout on big transfers.\
 	frame->ProcessCommandLine();
 	frame->PostInitialize();
 
+	ShowStartupProfile();
+
 	return true;
 }
 
@@ -477,6 +483,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 bool CFileZillaApp::LoadResourceFiles()
 {
+	AddStartupProfileRecord(_T("CFileZillaApp::LoadResourceFiles"));
 	m_resourceDir = GetDataDir(_T("/resources/menus.xrc"));
 
 	wxImage::AddHandler(new wxPNGHandler());
@@ -538,6 +545,7 @@ bool CFileZillaApp::LoadResourceFiles()
 
 bool CFileZillaApp::InitDefaultsDir()
 {
+	AddStartupProfileRecord(_T("InitDefaultsDir"));
 #ifdef __WXGTK__
 	wxFileName fn = wxFileName(wxGetHomeDir(), _T("fzdefaults.xml"));
 	fn.AppendDir(_T(".filezilla"));
@@ -554,6 +562,7 @@ bool CFileZillaApp::InitDefaultsDir()
 
 bool CFileZillaApp::LoadLocales()
 {
+	AddStartupProfileRecord(_T("CFileZillaApp::LoadLocales"));
 #ifndef __WXMAC__
 	m_localesDir = GetDataDir(_T("/../locale/*/filezilla.mo"));
 	if (m_localesDir == _T(""))
@@ -688,6 +697,7 @@ CWrapEngine* CFileZillaApp::GetWrapEngine()
 
 void CFileZillaApp::CheckExistsFzsftp()
 {
+	AddStartupProfileRecord(_T("CFileZillaApp::CheckExistsFzstp"));
 	// Get the correct path to the fzsftp executable
 
 #ifdef __WXMAC__
@@ -820,6 +830,7 @@ extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM lParam)
 
 int CFileZillaApp::ProcessCommandLine()
 {
+	AddStartupProfileRecord(_T("CFileZillaApp::ProcessCommandLine"));
 	m_pCommandLine = new CCommandLine(argc, argv);
 	int res = m_pCommandLine->Parse() ? 1 : -1;
 
@@ -890,3 +901,33 @@ void CFileZillaApp::ProcessPendingEvents()
 	wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 #endif
+
+void CFileZillaApp::AddStartupProfileRecord(const wxString& msg)
+{
+	if (!m_profilingActive)
+		return;
+
+	m_startupProfile.push_back(std::make_pair(wxDateTime::UNow(), msg));
+}
+
+void CFileZillaApp::ShowStartupProfile()
+{
+	m_profilingActive = false;
+
+	std::list<std::pair<wxDateTime, wxString> > profile;
+	profile.swap(m_startupProfile);
+
+	if (m_pCommandLine && !m_pCommandLine->HasSwitch(CCommandLine::debug_startup))
+		return;
+
+	wxString msg = _T("Profile:\n");
+	for (std::list<std::pair<wxDateTime, wxString> >::const_iterator it = profile.begin(); it != profile.end(); ++it)
+	{
+		msg += it->first.Format(_T("%Y-%m-%d %H:%M:%S %l"));
+		msg += _T(" ");
+		msg += it->second;
+		msg += _T("\n");
+	}
+
+	wxMessageBox(msg);
+}

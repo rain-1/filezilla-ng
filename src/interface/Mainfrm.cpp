@@ -209,6 +209,7 @@ protected:
 CMainFrame::CMainFrame()
 	: m_comparisonToggleAcceleratorId(wxNewId())
 {
+	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CMainFrame"));
 	wxRect screen_size = CWindowStateManager::GetScreenDimensions();
 
 	wxSize initial_size;
@@ -503,6 +504,7 @@ void CMainFrame::OnSize(wxSizeEvent &event)
 
 bool CMainFrame::CreateMenus()
 {
+	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateMenus"));
 	if (m_pMenuBar)
 	{
 		SetMenuBar(0);
@@ -524,6 +526,7 @@ bool CMainFrame::CreateMenus()
 
 bool CMainFrame::CreateQuickconnectBar()
 {
+	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateQuickconnectBar"));
 	delete m_pQuickconnectBar;
 
 	m_pQuickconnectBar = new CQuickconnectBar();
@@ -1076,6 +1079,7 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
 
 bool CMainFrame::CreateToolBar()
 {
+	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateToolBar"));
 	if (m_pToolBar)
 	{
 #ifdef __WXMAC__

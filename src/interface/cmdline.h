@@ -10,7 +10,8 @@ public:
 	{
 		sitemanager,
 		close,
-		version
+		version,
+		debug_startup
 	};
 
 	enum t_option

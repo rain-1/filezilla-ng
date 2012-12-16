@@ -5,6 +5,8 @@
 #include <wx/debugrpt.h>
 #endif
 
+#include <list>
+
 class CWrapEngine;
 class CCommandLine;
 class CFileZillaApp : public wxApp
@@ -41,6 +43,9 @@ public:
 	virtual void ProcessPendingEvents();
 #endif
 
+	void ShowStartupProfile();
+	void AddStartupProfileRecord(const wxString& msg);
+
 protected:
 	bool InitDefaultsDir();
 	bool LoadResourceFiles();
@@ -69,6 +74,9 @@ protected:
 	CWrapEngine* m_pWrapEngine;
 
 	CCommandLine* m_pCommandLine;
+
+	bool m_profilingActive;
+	std::list<std::pair<wxDateTime, wxString> > m_startupProfile;
 };
 
 DECLARE_APP(CFileZillaApp)

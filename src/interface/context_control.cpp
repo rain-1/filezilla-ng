@@ -2,6 +2,7 @@
 #include "commandqueue.h"
 #include "context_control.h"
 #include "filelist_statusbar.h"
+#include "filezillaapp.h"
 #include "LocalListView.h"
 #include "LocalTreeView.h"
 #include "Mainfrm.h"
@@ -49,6 +50,7 @@ void CContextControl::Create(wxWindow *parent)
 
 void CContextControl::CreateTab()
 {
+	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateTab"));
 	Freeze();
 
 	CState* pState = 0;
@@ -105,6 +107,7 @@ void CContextControl::CreateTab()
 
 void CContextControl::CreateContextControls(CState* pState)
 {
+	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateContextControls"));
 	wxWindow* parent = this;
 
 #ifdef __WXGTK__
@@ -116,7 +119,7 @@ void CContextControl::CreateContextControls(CState* pState)
 
 	if (!m_context_controls.empty())
 	{
-		if (!m_tabs )
+		if (!m_tabs)
 		{
 			m_tabs = new wxAuiNotebookEx();
 
