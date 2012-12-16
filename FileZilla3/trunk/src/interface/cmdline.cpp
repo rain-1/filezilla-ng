@@ -15,6 +15,7 @@ CCommandLine::CCommandLine(int argc, wxChar** argv)
 #endif
 	m_parser.AddSwitch(_T(""), _T("verbose"), _("Verbose log messages from wxWidgets"));
 	m_parser.AddSwitch(_T("v"), _T("version"), _("Print version information to stdout and exit"));
+	m_parser.AddSwitch(_T(""), _T("debug-startup"), _("Print diagnostic information related to startup of FileZilla"));
 	wxString str = _T("<");
 	str += _("FTP URL");
 	str += _T(">");
@@ -35,6 +36,8 @@ bool CCommandLine::HasSwitch(enum CCommandLine::t_switches s) const
 #endif
 	else if (s == version)
 		return m_parser.Found(_T("v"));
+	else if (s == debug_startup)
+		return m_parser.Found(_T("debug-startup"));
 
 	return false;
 }
