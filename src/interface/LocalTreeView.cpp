@@ -387,6 +387,7 @@ wxTreeItemId CLocalTreeView::GetSubdir(wxTreeItemId parent, const wxString& subD
 
 bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 {
+	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives"));
 	long drivesToHide = 0;
 	// Adhere to the NODRIVES group policy
 	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
@@ -439,12 +440,15 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 		if (drive.Right(1) == _T("\\"))
 			drive = drive.RemoveLast();
 
+		wxGetApp().AddStartupProfileRecord(wxString::Format(_T("CLocalTreeView::DisplayDrives adding drive %s"), drive.c_str()));
 		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(dir, pDrive));
 		AppendItem(item, _T(""));
 		SortChildren(parent);
 
 		pDrive += wxStrlen(pDrive) + 1;
 	}
+
+	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives adding drives done"));
 
 	delete [] drives;
 
