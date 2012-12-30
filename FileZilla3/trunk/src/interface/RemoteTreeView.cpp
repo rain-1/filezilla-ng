@@ -247,12 +247,12 @@ CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState* pState
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_MODIFIED);
 	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
 
+	CreateImageList();
+
 	m_busy = false;
 	m_pQueue = pQueue;
 	AddRoot(_T(""));
 	m_ExpandAfterList = wxTreeItemId();
-
-	CreateImageList();
 
 	SetDropTarget(new CRemoteTreeViewDropTarget(this));
 
