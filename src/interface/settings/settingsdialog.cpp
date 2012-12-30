@@ -134,7 +134,7 @@ bool CSettingsDialog::LoadPages()
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK))
 	{
-		ADD_PAGE(_("Update Check"), COptionsPageUpdateCheck, page_none);
+		ADD_PAGE(_("Updates"), COptionsPageUpdateCheck, page_none);
 	}
 #endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 	ADD_PAGE(_("Logging"), COptionsPageLogging, page_none);

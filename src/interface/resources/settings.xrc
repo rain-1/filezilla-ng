@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
   <object class="wxDialog" name="ID_SETTINGS">
     <title>Settings</title>
@@ -1320,7 +1319,7 @@
                   <label>S&amp;how the Site Manager on startup</label>
                 </object>
                 <flag>wxALL|wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL</flag>
-                </object>
+              </object>
               <cols>1</cols>
               <vgap>5</vgap>
             </object>
@@ -1963,74 +1962,72 @@
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
-          <label>Automatic update check</label>
-          <orient>wxVERTICAL</orient>
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
               <object class="sizeritem">
-                <object class="wxCheckBox" name="ID_UPDATECHECK">
-                  <label>&amp;Enable automatic update check</label>
+                <object class="wxStaticText">
+                  <label>Check for FileZilla &amp;updates automatically:</label>
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxBoxSizer">
-                  <orient>wxHORIZONTAL</orient>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>&amp;Number of days between update checks:</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxTextCtrl" name="ID_DAYS">
-                      <size>30,-1</size>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL|wxLEFT|wxRIGHT</flag>
-                    <border>5</border>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxStaticText">
-                      <label>(At least 7 days)</label>
-                    </object>
-                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
-                  </object>
+                <object class="wxChoice" name="ID_UPDATECHECK">
+                  <content>
+                    <item>Never</item>
+                    <item>Once a week</item>
+                    <item>Every two weeks</item>
+                    <item>Every month</item>
+                  </content>
+                  <selection>1</selection>
+                </object>
+              </object>              
+              <object class="spacer">
+                <size>0,10</size>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>&amp;When checking for updates, check for:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxChoice" name="ID_UPDATETYPE">
+                  <content>
+                    <item>Stable versions only</item>
+                    <item>Stable and beta versions</item>
+<!--                    <item>Stable, beta and nightly versions</item>-->
+                  </content>
+                  <selection>0</selection>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>Advice: Unless you want to test new features, please keep using stable versions only. Beta versions and nightly builds are development versions meant for testing purposes. Nightly versions of FileZilla may not work as expected and might even damage your system. Use beta versions and nightly builds at your own risk.</label>
                 </object>
               </object>
               <object class="spacer">
                 <size>0,10</size>
               </object>
               <object class="sizeritem">
+                <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
                 <object class="wxButton" name="ID_RUNUPDATECHECK">
                   <label>&amp;Run update check now...</label>
                 </object>
               </object>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>Privacy policy: Only your version of FileZilla, your used operating system and your CPU architecture will be submitted to the server.</label>
+                </object>
+              </object>
               <cols>1</cols>
               <vgap>3</vgap>
-              <object class="spacer">
-                <size>0,10</size>
-              </object>
-              <object class="sizeritem">
-                <object class="wxCheckBox" name="ID_CHECKBETA">
-                  <label>Check for &amp;beta versions and release candidates</label>
-                </object>
-              </object>
-              <object class="spacer">
-                <size>0,10</size>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Privacy policy:</label>
-                </object>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Only the versions of FileZilla and the operating system you are using will be submitted to the server.</label>
-                </object>
-              </object>
+              <growablecols>0</growablecols>
+              <growablerows>6</growablerows>
             </object>
-            <flag>wxALL</flag>
+            <flag>wxALL|wxGROW</flag>
+            <option>1</option>
             <border>5</border>
           </object>
+          <label>FileZilla updates</label>
+          <orient>wxVERTICAL</orient>
         </object>
         <option>1</option>
         <flag>wxGROW</flag>
