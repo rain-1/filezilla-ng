@@ -71,7 +71,7 @@ wxListCtrlEx::~wxListCtrlEx()
 }
 
 #ifndef __WXMSW__
-wxScrolledWindow* wxListCtrlEx::GetMainWindow()
+wxScrolledWindow* wxListCtrlEx::GetMainWindow() const
 {
 #ifdef __WXMAC__
 	return (wxScrolledWindow*)m_genericImpl->m_mainWin;
