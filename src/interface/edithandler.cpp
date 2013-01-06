@@ -813,7 +813,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 		return false;
 	}
 
-	m_pQueue->QueueFile(false, false, file, iter->name, localPath, iter->remotePath, iter->server, wxLongLong(size.GetHi(), size.GetLo()), type);
+	m_pQueue->QueueFile(false, false, file, iter->name, localPath, iter->remotePath, iter->server, wxLongLong(size.GetHi(), size.GetLo()), type, priority_high);
 	m_pQueue->QueueFile_Finish(true);
 
 	return true;
