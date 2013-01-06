@@ -326,8 +326,11 @@ void CFileItem::SetPriority(enum QueuePriority priority)
 	if (priority == m_priority)
 		return;
 
-	CServerItem* parent = (CServerItem*)m_parent;
-	parent->SetChildPriority(this, m_priority, priority);
+	if (m_parent)
+	{
+		CServerItem* parent = reinterpret_cast<CServerItem*>(m_parent);
+		parent->SetChildPriority(this, m_priority, priority);
+	}
 	m_priority = priority;
 }
 

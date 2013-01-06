@@ -531,7 +531,8 @@ CQueueView::~CQueueView()
 bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 						   const wxString& sourceFile, const wxString& targetFile,
 						   const CLocalPath& localPath, const CServerPath& remotePath,
-						   const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit /*=CEditHandler::none*/)
+						   const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit,
+						   QueuePriority priority)
 {
 	CServerItem* pServerItem = CreateServerItem(server);
 
@@ -560,6 +561,7 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 			fileItem->m_onetime_action = CFileExistsNotification::overwrite;
 	}
 
+	fileItem->SetPriorityRaw(priority);
 	InsertItem(pServerItem, fileItem);
 
 	return true;
