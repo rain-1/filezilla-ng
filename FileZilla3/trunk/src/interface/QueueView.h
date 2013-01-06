@@ -103,7 +103,8 @@ public:
 	bool QueueFile(const bool queueOnly, const bool download,
 		const wxString& localFile, const wxString& remoteFile,
 		const CLocalPath& localPath, const CServerPath& remotePath,
-		const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit = CEditHandler::none);
+		const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit = CEditHandler::none,
+		QueuePriority priority = priority_normal);
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
 	bool QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject);
