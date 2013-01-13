@@ -150,7 +150,9 @@ public:
 			{
 				CServerPath dir = m_pRemoteDataObject->GetServerPath();
 				dir.AddSegment(info.name);
-				if (dir == target || dir.IsParentOf(target, false))
+				if (dir == target)
+					return wxDragNone;
+				else if (dir.IsParentOf(target, false))
 				{
 					wxMessageBox(_("A directory cannot be dragged into one of its subdirectories."));
 					return wxDragNone;

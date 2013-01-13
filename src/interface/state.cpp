@@ -784,6 +784,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	delete [] to;
 	delete [] from;
 #else
+	wxString error;
 	for (unsigned int i = 0; i < files.Count(); i++)
 	{
 		const wxString& file(files[i]);
@@ -797,24 +798,38 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 			CLocalPath sourcePath(file, &name);
 			if (name.empty())
 				continue;
+			wxString target = path.GetPath() + name;
+			if (file == target)
+				continue;
+
 			if (copy)
-				wxCopyFile(file, path.GetPath() + name);
+				wxCopyFile(file, target);
 			else
-				wxRenameFile(file, path.GetPath() + name);
+				wxRenameFile(file, target);
 		}
 		else if (type == CLocalFileSystem::dir)
 		{
+			CLocalPath sourcePath(file);
+			if (sourcePath == path || sourcePath.GetParent() == path)
+				continue;
+			if (sourcePath.IsParentOf(path))
+			{
+				error = _("A directory cannot be dragged into one of its subdirectories.");
+				continue;
+			}
+
 			if (copy)
-				RecursiveCopy(CLocalPath(file), path);
+				RecursiveCopy(sourcePath, path);
 			else
 			{
-				CLocalPath sourcePath(file);
 				if (!sourcePath.HasParent())
 					continue;
 				wxRenameFile(file, path.GetPath() + sourcePath.GetLastSegment());
 			}
 		}
 	}
+	if (!error.IsEmpty())
+		wxMessageBox(error, _("Could not complete operation"));
 #endif
 
 	RefreshLocal();
