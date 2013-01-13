@@ -35,6 +35,7 @@ CFilterControls::CFilterControls()
 	pCondition = 0;
 	pValue = 0;
 	pSet = 0;
+	pLabel = 0;
 	pRemove = 0;
 }
 
@@ -44,12 +45,14 @@ void CFilterControls::Reset()
 	delete pCondition;
 	delete pValue;
 	delete pSet;
+	delete pLabel;
 	delete pRemove;
 
 	pType = 0;
 	pCondition = 0;
 	pValue = 0;
 	pSet = 0;
+	pLabel = 0;
 	pRemove = 0;
 }
 
@@ -170,14 +173,18 @@ void CFilterConditionsDialog::CalcMinListWidth()
 
 	wxChoice *pStringCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, stringConditionTypes);
 	wxChoice *pSizeCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, sizeConditionTypes);
+	wxStaticText *pSizeLabel = new wxStaticText(m_pListCtrl, wxID_ANY, _("bytes"));
 	wxChoice *pDateCondition = new wxChoice(m_pListCtrl, wxID_ANY, wxDefaultPosition, wxDefaultSize, dateConditionTypes);
 
-	int w = wxMax(pStringCondition->GetBestSize().GetWidth(), pSizeCondition->GetBestSize().GetWidth());
+	int w = wxMax(pStringCondition->GetBestSize().GetWidth(), pSizeCondition->GetBestSize().GetWidth() + 5 + pSizeLabel->GetBestSize().GetWidth());
 	w = wxMax(w, pDateCondition->GetBestSize().GetWidth());
 	requiredWidth += w;
 
+	m_size_label_size = pSizeLabel->GetBestSize();
+
 	pStringCondition->Destroy();
 	pSizeCondition->Destroy();
+	pSizeLabel->Destroy();
 	pDateCondition->Destroy();
 
 	requiredWidth += m_pListCtrl->GetWindowBorderSize().x;
@@ -281,6 +288,12 @@ void CFilterConditionsDialog::OnRemove(const std::set<int> &selected)
 				pos = controls.pSet->GetPosition();
 				pos.y -= delta_y;
 				controls.pSet->SetPosition(pos);
+			}
+			if (controls.pLabel)
+			{
+				pos = controls.pLabel->GetPosition();
+				pos.y -= delta_y;
+				controls.pLabel->SetPosition(pos);
 			}
 
 			pos = controls.pRemove->GetPosition();
@@ -416,11 +429,32 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 		controls.pRemove->SetPosition(wxPoint(client_size.GetWidth() - 5 - m_button_size.x, posy));
 
 	posx = 15 + typeRect.GetWidth() + conditionsRect.GetWidth();
-	const int maxwidth = client_size.GetWidth() - posx - 10 - m_button_size.x;
+	int maxwidth = client_size.GetWidth() - posx - 10 - m_button_size.x;
 	if (condition.type == filter_name || condition.type == filter_size || condition.type == filter_path || condition.type == filter_date)
 	{
 		delete controls.pSet;
 		controls.pSet = 0;
+
+		if (condition.type == filter_size)
+		{
+			// Label needs to be aligned
+			int size_posy = posy;
+			if (conditionsRect.GetHeight() > m_size_label_size.GetHeight())
+				size_posy += (conditionsRect.GetHeight() - m_size_label_size.GetHeight()) / 2;
+			maxwidth -= m_size_label_size.GetWidth() + 5;
+			if (!controls.pLabel)
+				controls.pLabel = new wxStaticText(m_pListCtrl, wxID_ANY, _("bytes"), wxPoint(posx + maxwidth + 5, size_posy), m_size_label_size);
+			else
+			{
+				controls.pLabel->SetPosition(wxPoint(posx + maxwidth + 5, size_posy));
+				controls.pLabel->SetSize(m_size_label_size);
+			}
+		}
+		else
+		{
+			delete controls.pLabel;
+			controls.pLabel = 0;
+		}
 
 		pos = wxPoint(posx, posy);
 		wxSize size(maxwidth, -1);
@@ -497,6 +531,13 @@ void CFilterConditionsDialog::UpdateConditionsClientSize()
 		wxPoint pos = controls.pRemove->GetPosition();
 		pos.x += deltaX;
 		controls.pRemove->SetPosition(pos);
+
+		if (controls.pLabel)
+		{
+			wxPoint pos = controls.pLabel->GetPosition();
+			pos.x += deltaX;
+			controls.pLabel->SetPosition(pos);
+		}
 	}
 
 	// Move add button
