@@ -8,7 +8,7 @@
 #include "local_filesys.h"
 
 // Defined in optionspage_edit.cpp
-bool UnquoteCommand(wxString& command, wxString& arguments);
+bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde = false);
 bool ProgramExists(const wxString& editor);
 
 class CChangedFileDialog : public wxDialogEx
@@ -985,6 +985,8 @@ wxString CEditHandler::GetSystemOpenCommand(wxString file, bool &program_exists)
 		program_exists = false;
 
 		wxString editor;
+		bool is_dde = false;
+#ifdef __WXMSW__
 		if (cmd.Left(7) == _T("WX_DDE#"))
 		{
 			// See wxWidget's wxExecute in src/msw/utilsexc.cpp
@@ -994,12 +996,16 @@ wxString CEditHandler::GetSystemOpenCommand(wxString file, bool &program_exists)
 			if (pos < 1)
 				return cmd;
 			editor = editor.Left(pos);
+			is_dde = true;
 		}
 		else
+#endif
+		{
 			editor = cmd;
+		}
 
 		wxString args;
-		if (!UnquoteCommand(editor, args) || editor.empty())
+		if (!UnquoteCommand(editor, args, is_dde) || editor.empty())
 			return cmd;
 
 		if (!PathExpand(editor))

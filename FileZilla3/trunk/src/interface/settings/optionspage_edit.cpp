@@ -62,7 +62,7 @@ bool COptionsPageEdit::SavePage()
 	return true;
 }
 
-bool UnquoteCommand(wxString& command, wxString& arguments)
+bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde = false)
 {
 	arguments = _T("");
 
@@ -89,6 +89,12 @@ bool UnquoteCommand(wxString& command, wxString& arguments)
 				inQuotes = false;
 		}
 		else if (command[i] == ' ' && !inQuotes)
+		{
+			arguments = command.Mid(i + 1);
+			arguments.Trim(false);
+			break;
+		}
+		else if (is_dde && !inQuotes && (command[i] == ',' || command[i] == '#'))
 		{
 			arguments = command.Mid(i + 1);
 			arguments.Trim(false);

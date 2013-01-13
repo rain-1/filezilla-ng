@@ -29,7 +29,7 @@ bool COptionsPageEditAssociations::SavePage()
 }
 
 // optionspage_edit.cpp
-extern bool UnquoteCommand(wxString& command, wxString& arguments);
+extern bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde = false);
 extern bool ProgramExists(const wxString& editor);
 
 bool COptionsPageEditAssociations::Validate()
