@@ -2743,7 +2743,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 		CLocalPath localPath(file, &localFile);
 
 		m_pQueue->QueueFile(false, true, entry.name, (localFile != entry.name) ? localFile : wxString(),
-			localPath, path, server, entry.size, CEditHandler::remote);
+			localPath, path, server, entry.size, CEditHandler::remote, priority_high);
 		m_pQueue->QueueFile_Finish(true);
 	}
 }
