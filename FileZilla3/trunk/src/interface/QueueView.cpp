@@ -1960,7 +1960,7 @@ void CQueueView::LoadQueueFromXML()
 {
 	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("queue.xml"));
 	CXmlFile xml(file);
-	TiXmlElement* pDocument = xml.Load(wxFileName(), false);
+	TiXmlElement* pDocument = xml.Load(wxFileName());
 	if (!pDocument)
 	{
 		if (!xml.GetError().empty())

@@ -210,7 +210,7 @@ COptions::COptions()
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
 	m_pXmlFile = new CXmlFile(_T("filezilla"));
-	if (!m_pXmlFile->Load())
+	if (!m_pXmlFile->Load(wxFileName()))
 	{
 		wxString msg = m_pXmlFile->GetError() + _T("\n\n") + _("For this session the default settings will be used. Any changes to the settings will not be saved.");
 		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
@@ -358,10 +358,7 @@ void COptions::CreateSettingsXmlElement()
 			wxString s(wxString::Format(_T("%d"), m_optionsCache[i].numValue));
 			SetXmlValue(i, s);
 		}
-
 	}
-
-	m_pXmlFile->Save();
 }
 
 void COptions::SetXmlValue(unsigned int nID, wxString value)
