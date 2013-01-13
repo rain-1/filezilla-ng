@@ -16,6 +16,7 @@ public:
 	wxChoice* pCondition;
 	wxTextCtrl* pValue;
 	wxChoice* pSet;
+	wxStaticText* pLabel;
 	wxButton* pRemove;
 };
 
@@ -61,6 +62,7 @@ private:
 
 	wxButton* m_pAdd;
 	wxSize m_button_size;
+	wxSize m_size_label_size;
 
 	void OnMore();
 	void OnRemove(int item);
