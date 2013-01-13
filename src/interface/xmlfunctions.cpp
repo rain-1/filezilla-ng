@@ -38,13 +38,13 @@ CXmlFile::~CXmlFile()
 	delete m_pDocument;
 }
 
-TiXmlElement* CXmlFile::Load(const wxString& name, bool create)
+TiXmlElement* CXmlFile::Load(const wxString& name)
 {
 	wxFileName fileName(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), name + _T(".xml"));
-	return Load(fileName, create);
+	return Load(fileName);
 }
 
-TiXmlElement* CXmlFile::Load(const wxFileName& fileName, bool create)
+TiXmlElement* CXmlFile::Load(const wxFileName& fileName)
 {
 	if (fileName.IsOk())
 		SetFileName(fileName);
@@ -55,7 +55,7 @@ TiXmlElement* CXmlFile::Load(const wxFileName& fileName, bool create)
 	m_pDocument = 0;
 
 	wxString error;
-	TiXmlElement* pElement = GetXmlFile(m_fileName, create, &error);
+	TiXmlElement* pElement = GetXmlFile(m_fileName, &error);
 	if (!pElement)
 	{
 		if (!error.empty())
@@ -433,7 +433,7 @@ bool LoadXmlDocument(TiXmlDocument* pXmlDocument, const wxString& file, wxString
 
 // Opens the specified XML file if it exists or creates a new one otherwise.
 // Returns 0 on error.
-TiXmlElement* GetXmlFile(wxFileName file, bool create /*=true*/, wxString* error /*=0*/)
+TiXmlElement* GetXmlFile(wxFileName file, wxString* error /*=0*/)
 {
 	if (wxFileExists(file.GetFullPath()) && file.GetSize() > 0)
 	{
@@ -466,22 +466,12 @@ TiXmlElement* GetXmlFile(wxFileName file, bool create /*=true*/, wxString* error
 	}
 	else
 	{
-		// File does not exist
-		if (!create)
-			return 0;
-
-		// create new XML document
+		// File does not exist, return empty XML document.
 		TiXmlDocument* pXmlDocument = new TiXmlDocument();
 		pXmlDocument->SetCondenseWhiteSpace(false);
 		pXmlDocument->LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", "yes"));
 
 		pXmlDocument->LinkEndChild(new TiXmlElement("FileZilla3"));
-
-		if (!SaveXmlFile(file, pXmlDocument, 0))
-		{
-			delete pXmlDocument;
-			return 0;
-		}
 
 		return pXmlDocument->FirstChildElement("FileZilla3");
 	}
