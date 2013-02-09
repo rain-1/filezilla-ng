@@ -261,6 +261,9 @@ public:
 #endif
 		if (!pane.active)
 		{
+			if (m_base_colour.Red() + m_base_colour.Green() + m_base_colour.Blue() >= 384)
+				m_base_colour = wxColour( m_base_colour.Red() * 0.95, m_base_colour.Green() * 0.95, m_base_colour.Blue() * 0.95 );
+
 			dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 			if (m_pNotebook->Highlighted(m_pNotebook->GetPageIndex(pane.window)))
 			{
@@ -280,6 +283,8 @@ public:
 
 		CFilterDC filter_dc(dc, pane.active ? 1 : 0, (m_tab_ctrl_height % 2) != 0, m_bottom);
 		wxAuiDefaultTabArt::DrawTab(*((wxDC*)&filter_dc), wnd, pane, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+
+		m_base_colour = wxSystemSettings::GetColour(TABCOLOUR);
 	}
 
 	virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect)
