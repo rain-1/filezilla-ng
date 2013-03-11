@@ -308,7 +308,17 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 	}
 
 	if (p == m_localDir.GetParent())
-		m_previouslyVisitedLocalSubdir = m_localDir.GetLastSegment();
+	{
+#ifdef __WXMSW__
+		if (p.GetPath() == _T("\\"))
+		{
+			m_previouslyVisitedLocalSubdir = m_localDir.GetPath();
+			m_previouslyVisitedLocalSubdir.RemoveLast();
+		}
+		else
+#endif
+			m_previouslyVisitedLocalSubdir = m_localDir.GetLastSegment();
+	}
 	else
 		m_previouslyVisitedLocalSubdir = _T("");
 	
