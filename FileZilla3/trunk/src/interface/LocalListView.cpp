@@ -1088,16 +1088,13 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 		const CLocalFileData* const data = GetData(index);
 		if (!data || (!index && m_hasParent))
 		{
-			pMenu->Enable(XRCID("ID_UPLOAD"), false);
-			pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
-			pMenu->Enable(XRCID("ID_DELETE"), false);
-			pMenu->Enable(XRCID("ID_RENAME"), false);
 			pMenu->Enable(XRCID("ID_OPEN"), false);
+			pMenu->Enable(XRCID("ID_RENAME"), false);
 			pMenu->Enable(XRCID("ID_EDIT"), false);
 		}
-		if (data->flags == fill)
+		if (data && data->flags == fill || (!index && m_hasParent))
 			fillCount++;
-		if (data->dir)
+		if (data && data->dir)
 			selectedDir = true;
 		index = GetNextItem(index, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	}
@@ -1130,17 +1127,6 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 
 void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 {
-	long item = -1;
-	for (;;)
-	{
-		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (item == -1)
-			break;
-
-		if (!item && m_hasParent)
-			return;
-	}
-
 	const CServer* pServer = m_pState->GetServer();
 	if (!pServer)
 	{
@@ -1152,10 +1138,12 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 
 	bool queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
 
-	item = -1;
+	long item = -1;
 	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+		if (!item && m_hasParent)
+			continue;
 		if (item == -1)
 			break;
 

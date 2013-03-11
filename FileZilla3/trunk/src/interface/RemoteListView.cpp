@@ -1422,16 +1422,6 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_CONTEXT_REFRESH"), false);
 		pMenu->Enable(XRCID("ID_NEW_FILE"), false);
 	}
-	else if ((GetItemCount() && GetItemState(0, wxLIST_STATE_SELECTED)))
-	{
-		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
-		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
-		pMenu->Enable(XRCID("ID_DELETE"), false);
-		pMenu->Enable(XRCID("ID_RENAME"), false);
-		pMenu->Enable(XRCID("ID_CHMOD"), false);
-		pMenu->Enable(XRCID("ID_EDIT"), false);
-		pMenu->Enable(XRCID("ID_GETURL"), false);
-	}
 	else if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
 	{
 		pMenu->Delete(XRCID("ID_ENTER"));
@@ -1445,12 +1435,27 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 	}
 	else
 	{
+		if ((GetItemCount() && GetItemState(0, wxLIST_STATE_SELECTED)))
+		{
+			pMenu->Enable(XRCID("ID_RENAME"), false);
+			pMenu->Enable(XRCID("ID_CHMOD"), false);
+			pMenu->Enable(XRCID("ID_EDIT"), false);
+			pMenu->Enable(XRCID("ID_GETURL"), false);
+		}
+
 		int count = 0;
 		int fillCount = 0;
 		bool selectedDir = false;
 		int item = -1;
 		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
 		{
+			if (!item)
+			{
+				++count;
+				++fillCount;
+				continue;
+			}
+
 			int index = GetItemIndex(item);
 			if (index == -1)
 				continue;
@@ -1519,10 +1524,7 @@ void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 			break;
 
 		if (!item)
-		{
-			wxBell();
-			return;
-		}
+			continue;
 
 		int index = GetItemIndex(item);
 		if (index == -1)
@@ -1563,6 +1565,8 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
+		if (!item)
+			continue;
 
 		int index = GetItemIndex(item);
 		if (index == -1)
@@ -1676,10 +1680,12 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+		if (!item)
+			continue;
 		if (item == -1)
 			break;
 
-		if (!item || !IsItemValid(item))
+		if (!IsItemValid(item))
 		{
 			wxBell();
 			return;
@@ -1742,6 +1748,8 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 	for (;;)
 	{
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+		if (!item)
+			continue;
 		if (item == -1)
 			break;
 
