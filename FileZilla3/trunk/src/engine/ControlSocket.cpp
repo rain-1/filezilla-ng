@@ -405,7 +405,10 @@ bool CControlSocket::ParsePwdReply(wxString reply, bool unquoted /*=false*/, con
 				reply = _T("");
 		}
 		else
+		{
 			reply = reply.Mid(pos1 + 1, pos2 - pos1 - 1);
+			reply.Replace(_T("\"\""), _T("\""));
+		}
 	}
 
 	m_CurrentPath.SetType(m_pCurrentServer->GetType());
