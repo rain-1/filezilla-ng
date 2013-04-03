@@ -330,6 +330,8 @@ class CCertificateNotification : public CAsyncRequestNotification
 {
 public:
 	CCertificateNotification(const wxString& host, unsigned int port,
+		const wxString& protocol,
+		const wxString& keyExchange,
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
 		const std::vector<CCertificate> &certificates);
@@ -346,10 +348,15 @@ public:
 
 	const std::vector<CCertificate> GetCertificates() const { return m_certificates; }
 
+	const wxString& GetProtocol() const { return m_protocol; }
+	const wxString& GetKeyExchange() const { return m_keyExchange; }
+
 protected:
 	wxString m_host;
 	unsigned int m_port;
 
+	wxString m_protocol;
+	wxString m_keyExchange;
 	wxString m_sessionCipher;
 	wxString m_sessionMac;
 

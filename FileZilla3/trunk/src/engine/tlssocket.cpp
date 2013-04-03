@@ -530,10 +530,12 @@ int CTlsSocket::ContinueHandshake()
 		if (ResumedSession())
 			m_pOwner->LogMessage(Debug_Info, _T("TLS Session resumed"));
 
-		const wxString& cipherName = GetCipherName();
-		const wxString& macName = GetMacName();
+		const wxString protocol = GetProtocolName();
+		const wxString keyExchange = GetKeyExchange();
+		const wxString cipherName = GetCipherName();
+		const wxString macName = GetMacName();
 
-		m_pOwner->LogMessage(Debug_Info, _T("Cipher: %s, MAC: %s"), cipherName.c_str(), macName.c_str());
+		m_pOwner->LogMessage(Debug_Info, _T("Protocol: %s, Key exchange: %s, Cipher: %s, MAC: %s"), protocol.c_str(), keyExchange.c_str(), cipherName.c_str(), macName.c_str());
 
 		res = VerifyCertificate();
 		if (res != FZ_REPLY_OK)
@@ -1115,6 +1117,8 @@ int CTlsSocket::VerifyCertificate()
 	CCertificateNotification *pNotification = new CCertificateNotification(
 		m_pOwner->GetCurrentServer()->GetHost(),
 		m_pOwner->GetCurrentServer()->GetPort(),
+		GetProtocolName(),
+		GetKeyExchange(),
 		GetCipherName(),
 		GetMacName(),
 		certificates);
@@ -1130,13 +1134,35 @@ void CTlsSocket::OnRateAvailable(enum CRateLimiter::rate_direction direction)
 {
 }
 
+wxString CTlsSocket::GetProtocolName()
+{
+	wxString protocol = _("unknown");
+
+	const char* s = gnutls_protocol_get_name( gnutls_protocol_get_version( m_session ) );
+	if (s && *s)
+		protocol = wxString(s, wxConvUTF8);
+
+	return protocol;
+}
+
+wxString CTlsSocket::GetKeyExchange()
+{
+	wxString keyExchange = _("unknown");
+
+	const char* s = gnutls_kx_get_name( gnutls_kx_get( m_session ) );
+	if (s && *s)
+		keyExchange = wxString(s, wxConvUTF8);
+
+	return keyExchange;
+}
+
 wxString CTlsSocket::GetCipherName()
 {
 	const char* cipher = gnutls_cipher_get_name(gnutls_cipher_get(m_session));
 	if (cipher && *cipher)
 		return wxString(cipher, wxConvUTF8);
 	else
-		return _T("unknown");
+		return _("unknown");
 }
 
 wxString CTlsSocket::GetMacName()
