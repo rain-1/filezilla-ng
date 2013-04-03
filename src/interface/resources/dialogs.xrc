@@ -186,6 +186,26 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
+                          <label>Protocol:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_PROTOCOL">
+                          <label>&lt;protocol&gt;</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
+                          <label>Key exchange:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_KEYEXCHANGE">
+                          <label>&lt;key exchange&gt;</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
                           <label>Cipher:</label>
                         </object>
                       </object>
@@ -435,6 +455,26 @@
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_HOST">
                           <label>&lt;Host:port&gt;</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
+                          <label>Protocol:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_PROTOCOL">
+                          <label>&lt;protocol&gt;</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
+                          <label>Key exchange:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_KEYEXCHANGE">
+                          <label>&lt;key exchange&gt;</label>
                         </object>
                       </object>
                       <object class="sizeritem">

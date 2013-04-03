@@ -119,6 +119,8 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 
 	bool warning = DisplayCert(m_pDlg, m_certificates[0]);
 
+	m_pDlg->SetLabel(XRCID("ID_PROTOCOL"), pNotification->GetProtocol());
+	m_pDlg->SetLabel(XRCID("ID_KEYEXCHANGE"), pNotification->GetKeyExchange());
 	m_pDlg->SetLabel(XRCID("ID_CIPHER"), pNotification->GetSessionCipher());
 	m_pDlg->SetLabel(XRCID("ID_MAC"), pNotification->GetSessionMac());
 

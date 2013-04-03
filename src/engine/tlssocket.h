@@ -37,6 +37,8 @@ public:
 
 	enum TlsState GetState() const { return m_tlsState; }
 
+	wxString GetProtocolName();
+	wxString GetKeyExchange();
 	wxString GetCipherName();
 	wxString GetMacName();
 

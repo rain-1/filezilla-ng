@@ -292,9 +292,13 @@ CCertificate& CCertificate::operator=(const CCertificate &op)
 }
 
 CCertificateNotification::CCertificateNotification(const wxString& host, unsigned int port,
+		const wxString& protocol,
+		const wxString& keyExchange,
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
 		const std::vector<CCertificate> &certificates)
+	: m_protocol( protocol )
+	, m_keyExchange( keyExchange )
 {
 	m_host = host;
 	m_port = port;
