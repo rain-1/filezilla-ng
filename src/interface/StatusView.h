@@ -2,7 +2,7 @@
 #define __STATUSVIEW_H__
 
 class CFastTextCtrl;
-class CStatusView :	public wxWindow
+class CStatusView : public wxWindow
 {
 public:
 	CStatusView(wxWindow* parent, wxWindowID id);

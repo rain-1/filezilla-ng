@@ -139,7 +139,7 @@ DBusThread::~DBusThread()
 
 wxThread::ExitCode DBusThread::Entry()
 {
-	while (!m_exit)	{
+	while (!m_exit) {
 
 		EnterCriticalSection();
 

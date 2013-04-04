@@ -224,7 +224,7 @@ void LogVersion(HINSTANCE HInstance)
 
 	VS_FIXEDFILEINFO* VersionInfo;
 	unsigned int VersionInfoSize;
-	if (!VerQueryValueA(Info, "\\", reinterpret_cast<void**>(&VersionInfo),	&VersionInfoSize))
+	if (!VerQueryValueA(Info, "\\", reinterpret_cast<void**>(&VersionInfo), &VersionInfoSize))
 	{
 		delete [] Info;
 		Debug("LogVersion return: no fixed version info");

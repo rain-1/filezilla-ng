@@ -101,7 +101,7 @@ bool CTlsSocket::Init()
 
 	if (!InitSession())
 		return false;
-	
+
 	m_shutdown_requested = false;
 
 	// At this point, we can start shaking hands.
@@ -1201,8 +1201,8 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());
 
 #if GNUTLS_VERSION_NUMBER >= 0x030009
-    gnutls_priority_t pcache;
-    const char *err = 0;
+	gnutls_priority_t pcache;
+	const char *err = 0;
 	int ret = gnutls_priority_init(&pcache, priority.mb_str(), &err);
 	if (ret < 0)
 	{
@@ -1219,7 +1219,7 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 				break;
 			if (ret == GNUTLS_E_UNKNOWN_CIPHER_SUITE)
 				continue;
-            
+
 			gnutls_protocol_t version;
 			unsigned char id[2];
 			const char* name = gnutls_cipher_suite_info(idx, id, NULL, NULL, NULL, &version);

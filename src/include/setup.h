@@ -16,7 +16,7 @@
 
 #ifdef __WXMSW__
   // IE 6 or higher
-  #ifndef _WIN32_IE 
+  #ifndef _WIN32_IE
     #define _WIN32_IE 0x0600
   #elif _WIN32_IE <= 0x0600
     #undef _WIN32_IE
@@ -24,7 +24,7 @@
   #endif
 
   // Win XP or higher
-  #ifndef _WIN32_WINNT 
+  #ifndef _WIN32_WINNT
     #define _WIN32_WINNT 0x0501
   #elif _WIN32_WINNT <= 0x0501
     #undef _WIN32_WINNT
@@ -32,7 +32,7 @@
   #endif
 
   // Win XP or higher
-  #ifndef WINVER 
+  #ifndef WINVER
     #define WINVER 0x0501
   #elif WINVER <= 0x0501
     #undef WINVER

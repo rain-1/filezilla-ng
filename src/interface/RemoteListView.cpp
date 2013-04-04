@@ -3176,18 +3176,18 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent& event)
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create empty file"), _("Please enter the name of the file which should be created:")))
 		return;
-	
+
 	if (dlg.ShowModal() != wxID_OK)
 		return;
-	
+
 	if (dlg.GetValue() == _T(""))
 	{
 		wxBell();
 		return;
 	}
-	
+
 	wxString newFileName = dlg.GetValue();
-	
+
 	// Copied from elsewhere in the source, checks for characters that Windows deems invalid
 	if ((newFileName.Find('/')  != -1) ||
 		(newFileName.Find('\\') != -1) ||
@@ -3212,26 +3212,26 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent& event)
 			return;
 		}
 	}
-	
+
 	CEditHandler* edithandler = CEditHandler::Get(); // Used to get the temporary folder
-	
+
 	wxString emptyfile_name = _T("empty_file_yq744zm");
 	wxString emptyfile = edithandler->GetLocalDirectory() + emptyfile_name;
-	
+
 	// Create the empty temporary file
 	{
 		wxFile file;
 		wxLogNull log;
 		file.Create(emptyfile);
 	}
-	
+
 	const CServer* pServer = m_pState->GetServer();
 	if (!pServer)
 	{
 		wxBell();
 		return;
 	}
-	
+
 	CFileTransferCommand *cmd = new CFileTransferCommand(emptyfile, m_pDirectoryListing->path, newFileName, false, CFileTransferCommand::t_transferSettings());
 	m_pState->m_pCommandQueue->ProcessCommand(cmd);
 }

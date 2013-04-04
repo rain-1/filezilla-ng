@@ -27,7 +27,7 @@ public:
 class t_newEntry : public CFolderProcessingEntry
 {
 public:
-	t_newEntry() 
+	t_newEntry()
 		: CFolderProcessingEntry(CFolderProcessingEntry::file)
 		, attributes()
 		, dir()

@@ -1066,11 +1066,11 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
 		format = CSizeFormat::iec;
 
 	const wxString downloadSpeedStr = CSizeFormat::Format(downloadSpeed, true, format,
-	                                                      COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
-	                                                      COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
+														  COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
+														  COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
 	const wxString uploadSpeedStr = CSizeFormat::Format(uploadSpeed, true, format,
-	                                                    COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
-	                                                    COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
+														COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
+														COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
 	tooltipText.Printf(_("Download speed: %s/s\nUpload speed: %s/s"), downloadSpeedStr.c_str(), uploadSpeedStr.c_str());
 
 	m_pActivityLed[0]->SetToolTip(tooltipText);
@@ -2611,7 +2611,7 @@ WXLRESULT CMainFrame::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 		// get the new display layout from Windows.
 		//
 		// Note: Both the factory pattern as well as the dynamic object system
-		//       are perfect example of bad design.
+		//	   are perfect example of bad design.
 		//
 		wxModule* pDisplayModule = (wxModule*)wxCreateDynamicObject(_T("wxDisplayModule"));
 		if (pDisplayModule)

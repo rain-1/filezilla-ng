@@ -40,7 +40,7 @@ bool CLatencyMeasurement::Stop()
 
 	m_summed_latency += diff.GetMilliseconds();
 	++m_measurements;
-	
+
 	return true;
 }
 

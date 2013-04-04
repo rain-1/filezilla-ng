@@ -209,7 +209,7 @@ protected:
 
 	CCertificateNotification* m_pCertificate;
 	CSftpEncryptionNotification* m_pSftpEncryptionInfo;
-	
+
 	wxString m_previouslyVisitedLocalSubdir;
 	wxString m_previouslyVisitedRemoteSubdir;
 };
