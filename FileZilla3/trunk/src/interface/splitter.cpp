@@ -236,7 +236,7 @@ bool CSplitterWindowEx::SplitHorizontally(wxWindow* window1, wxWindow* window2, 
 	}
 
 	// Needs to be set to avoid resizing oddity:
-	// Maximize window -> Unsplit -> Restore ->	Split -> Resize window
+	// Maximize window -> Unsplit -> Restore -> Split -> Resize window
 	m_lastSize = wxSize(w, h);
 
 	return wxSplitterWindow::SplitHorizontally(window1, window2, sashPosition);
@@ -265,7 +265,7 @@ bool CSplitterWindowEx::SplitVertically(wxWindow* window1, wxWindow* window2, in
 	}
 
 	// Needs to be set to avoid resizing oddity:
-	// Maximize window -> Unsplit -> Restore ->	Split -> Resize window
+	// Maximize window -> Unsplit -> Restore -> Split -> Resize window
 	m_lastSize = wxSize(w, h);
 
 	return wxSplitterWindow::SplitVertically(window1, window2, sashPosition);

@@ -27,7 +27,7 @@ static const CServerTypeTraits traits[SERVERTYPE_MAX] = {
 	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Same as Unix
 	{ _T("."),   false,    0,    0,    false, 0, 0,   false, false },
 	{ _T("\\"),  true,     0,    0,    false, 0, 0,   true,  false },
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  } // Cygwin is like Unix but has optional prefix of form "//server"
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  }  // Cygwin is like Unix but has optional prefix of form "//server"
 };
 
 CServerPathData::CServerPathData()

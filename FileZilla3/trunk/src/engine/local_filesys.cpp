@@ -492,7 +492,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 		if (m_find_data.cFileName[0] == '.' && (!m_find_data.cFileName[1] || (m_find_data.cFileName[1] == '.' && !m_find_data.cFileName[2])))
 			continue;
 		name = m_find_data.cFileName;
-		
+
 		isLink = false;
 
 		if (modificationTime)

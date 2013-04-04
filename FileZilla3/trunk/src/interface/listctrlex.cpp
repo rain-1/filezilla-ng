@@ -9,7 +9,7 @@
 #include "commctrl.h"
 
 #ifndef HDF_SORTUP
-#define HDF_SORTUP			  0x0400
+#define HDF_SORTUP				0x0400
 #endif
 #ifndef HDF_SORTDOWN
 #define HDF_SORTDOWN			0x0200
@@ -1237,7 +1237,7 @@ bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
 	wxRect itemRect;
 	if (!m_pListCtrl->GetItemRect(m_pListCtrl->GetTopItem(), itemRect))
 		return false;
-	
+
 	wxRect windowRect = m_pListCtrl->GetListRect();
 
 	if (itemRect.GetHeight() > windowRect.GetHeight() / 4 ) {

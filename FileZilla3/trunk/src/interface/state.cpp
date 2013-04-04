@@ -321,7 +321,7 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 	}
 	else
 		m_previouslyVisitedLocalSubdir = _T("");
-	
+
 
 	m_localDir = p;
 
@@ -350,7 +350,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 	}
 
 	wxASSERT(pDirectoryListing->m_firstListTime.IsValid());
-	
+
 	if (pDirectoryListing && m_pDirectoryListing &&
 		pDirectoryListing->path == m_pDirectoryListing->path.GetParent())
 		m_previouslyVisitedRemoteSubdir = m_pDirectoryListing->path.GetLastSegment();

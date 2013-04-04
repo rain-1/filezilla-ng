@@ -2145,7 +2145,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		char *res = new char[reslen + 1];
 		res[reslen] = 0;
 
-		int	respos = 0;
+		int respos = 0;
 
 		// Copy line data
 		std::list<t_list>::iterator i = m_DataList.begin();

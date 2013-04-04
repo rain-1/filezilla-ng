@@ -117,7 +117,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		xh_text_ex.cpp \
 		xh_toolb_ex.cpp \
 		xmlfunctions.cpp
- 
+
 if USE_BINRELOC
 filezilla_SOURCES += prefix.cpp
 endif
@@ -279,7 +279,7 @@ dist_noinst_DATA = interface.vcproj
 if MACAPPBUNDLE
 noinst_DATA = $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT)
 endif
- 
+
 $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT): filezilla
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/MacOS
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/SharedSupport/resources
