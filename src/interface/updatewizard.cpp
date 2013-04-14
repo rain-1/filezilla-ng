@@ -81,6 +81,11 @@ PqQuF7sJR6POArUVYkRD/2LIWsB7\n\
 class CUpdateWizardOptions : public COptionsBase
 {
 public:
+	CUpdateWizardOptions()
+		: m_use_internal_rootcert(true)
+	{
+	}
+
 	virtual int GetOptionVal(unsigned int nID)
 	{
 		return COptions::Get()->GetOptionVal(nID);
@@ -88,7 +93,7 @@ public:
 
 	virtual wxString GetOption(unsigned int nID)
 	{
-		if (nID == OPTION_INTERNAL_ROOTCERT)
+		if (nID == OPTION_INTERNAL_ROOTCERT && m_use_internal_rootcert)
 			return s_update_cert;
 
 		return COptions::Get()->GetOption(nID);
@@ -103,6 +108,8 @@ public:
 	{
 		return COptions::Get()->SetOption(nID, value);
 	}
+
+	bool m_use_internal_rootcert;
 };
 
 CUpdateWizard::CUpdateWizard(wxWindow* pParent)
@@ -418,6 +425,9 @@ void CUpdateWizard::OnPageChanged(wxWizardEvent& event)
 	pText->SetLabel(text);
 
 	m_inTransfer = false;
+
+	if (m_update_options)
+		m_update_options->m_use_internal_rootcert = false;
 
 	int res = m_pEngine->Command(CConnectCommand(CServer(m_urlProtocol, DEFAULT, m_urlServer, (m_urlProtocol == HTTPS) ? 443 : 80)));
 	if (res == FZ_REPLY_OK)
@@ -994,6 +1004,7 @@ void CUpdateWizard::StartUpdateCheck()
 	if (COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 0)
 		m_urlFile += _T("&beta=1");
 
+	m_update_options->m_use_internal_rootcert = true;
 	int res = m_pEngine->Command(CConnectCommand(CServer(m_urlProtocol, DEFAULT, m_urlServer, (m_urlProtocol == HTTPS) ? 443 : 80)));
 	if (res == FZ_REPLY_OK)
 	{
@@ -1086,7 +1097,13 @@ void CUpdateWizard::PrepareUpdateAvailablePage(const wxString &newVersion, wxStr
 	}
 	else
 	{
-		if (!newUrl.Left(7).CmpNoCase(_T("http://")))
+		m_urlProtocol = HTTP;
+		if (!newUrl.Left(8).CmpNoCase(_T("https://")))
+		{
+			newUrl = newUrl.Mid(8);
+			m_urlProtocol = HTTPS;
+		}
+		else if (!newUrl.Left(7).CmpNoCase(_T("http://")))
 			newUrl = newUrl.Mid(7);
 		int pos = newUrl.Find('/');
 		if (pos == -1)
@@ -1101,7 +1118,6 @@ void CUpdateWizard::PrepareUpdateAvailablePage(const wxString &newVersion, wxStr
 			XRCCTRL(*this, "ID_UPDATEDESC2", wxStaticText)->SetLabel(_("Alternatively, visit http://filezilla-project.org to download the most recent version."));
 			XRCCTRL(*this, "ID_UPDATEDESC2", wxStaticText)->Show();
 
-			m_urlProtocol = HTTP;
 			m_urlServer = newUrl.Left(pos);
 			m_urlFile = newUrl.Mid(pos);
 			m_update_checksum = newChecksum;

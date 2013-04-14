@@ -6,7 +6,7 @@
 #include <wx/wizard.h>
 #include "wrapengine.h"
 
-class COptionsBase;
+class CUpdateWizardOptions;
 class CUpdateWizard : public wxWizard, protected CWrapEngine
 {
 public:
@@ -94,7 +94,7 @@ protected:
 	bool m_menuUpdated;
 	bool m_start_check;
 
-	COptionsBase* m_update_options;
+	CUpdateWizardOptions* m_update_options;
 
 	bool m_successfully_downloaded;
 };
