@@ -231,11 +231,15 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 	unsigned int lineLength = 0;
 
 	bool url = false;
+	bool containsURL = false;
 	for (int i = 0; i <= strLen; i++)
 	{
 		if ((text[i] == ':' && text[i + 1] == '/' && text[i + 2] == '/') || // absolute
 			(text[i] == '/' && (!i || text[i - 1] == ' '))) // relative
+		{
 			url = true;
+			containsURL = true;
+		}
 		if (text[i] != ' ' && text[i] != 0)
 		{
 			// If url, wrap on slashes and ampersands, but not first slash of something://
@@ -328,7 +332,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 
 #ifdef __WXDEBUG__
 		wxString unwrapped = UnwrapText(text);
-		wxASSERT(original == unwrapped);
+		wxASSERT(original == unwrapped || containsURL);
 #endif
 
 	return true;
@@ -776,6 +780,17 @@ wxString CWrapEngine::UnwrapText(const wxString& text)
 #endif
 	{
 		unwrapped = text;
+
+		// Special handling for unwrapping of URLs
+		int pos;
+		while ( (pos = unwrapped.Find(_T("&&\n"))) > 0 )
+		{
+			if (unwrapped[pos - 1] == ' ')
+				unwrapped = unwrapped.Left(pos + 2) + _T(" ") + unwrapped.Mid(pos + 3);
+			else
+				unwrapped = unwrapped.Left(pos + 2) + unwrapped.Mid(pos + 3);				
+		}
+
 		unwrapped.Replace(_T("\n"), _T(" "));
 		unwrapped.Replace(_T("\r"), _T(""));
 	}
