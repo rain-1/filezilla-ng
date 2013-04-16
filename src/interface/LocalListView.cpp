@@ -2086,7 +2086,7 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 	long item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	if (item == -1)
 	{
-		wxLaunchDefaultBrowser(CState::GetAsURL(m_dir));
+		CState::OpenInFileManager(m_dir);
 		return;
 	}
 
@@ -2146,7 +2146,7 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 				continue;
 			}
 
-			wxLaunchDefaultBrowser(CState::GetAsURL(path.GetPath()));
+			CState::OpenInFileManager(path.GetPath());
 			continue;
 		}
 

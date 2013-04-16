@@ -1613,9 +1613,5 @@ void CLocalTreeView::OnMenuOpen(wxCommandEvent& event)
 	if (path == _T(""))
 		return;
 
-	wxString url = CState::GetAsURL(path);
-	if (url == _T(""))
-		return;
-
-	wxLaunchDefaultBrowser(url);
+	CState::OpenInFileManager(path);
 }
