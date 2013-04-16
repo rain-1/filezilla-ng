@@ -970,7 +970,10 @@ wxString CState::GetAsURL(const wxString& dir)
 {
 	// Cheap URL encode
 	wxString encoded;
-	const wxWX2MBbuf utf8 = dir.mb_str();
+	const wxWX2MBbuf utf8 = dir.mb_str(wxConvUTF8);
+
+	if (!utf8)
+		return wxEmptyString;
 
 	const char* p = utf8;
 	while (*p)
@@ -1020,8 +1023,31 @@ wxString CState::GetAsURL(const wxString& dir)
 	else
 		encoded = _T("/") + encoded;
 #endif
-
 	return _T("file://") + encoded;
+}
+
+bool CState::OpenInFileManager(const wxString& dir)
+{
+	bool ret = false;
+#ifdef __WXMSW__
+	// Unfortunately under Windows, UTF-8 encoded file:// URLs don't work, so use native paths.
+	// Unfortunatelier, we cannot use this for UNC paths, have to use file:// here
+	// Unfortunateliest, we again have a problem with UTF-8 characters which we cannot fix...
+	if (dir.Left(2) != _T("\\\\") && dir != _T("/"))
+		ret = wxLaunchDefaultBrowser(dir);
+	else
+#endif
+	{
+		wxString url = GetAsURL(dir);
+		if (!url.IsEmpty())
+			ret = wxLaunchDefaultBrowser(url);
+	}
+
+
+	if (!ret)
+		wxBell();
+
+	return ret;
 }
 
 void CState::ListingFailed(int error)
