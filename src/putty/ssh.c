@@ -1000,7 +1000,7 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
     Keyfile_list *list = ssh->cfg.keyfile_list;
     Loaded_keyfile_list* loaded_list = NULL;
     int num_loaded = 0;
-	int type;
+    int type;
 
     for (; list; list = list->next) {
 	Loaded_keyfile_list* loaded = snew(Loaded_keyfile_list);
@@ -1033,9 +1033,14 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
 	    }
 	}
 	else if (type == SSH_KEYTYPE_SSH2) {
-	    loaded->ssh2key = ssh2_load_userkey(&list->file, 0, 0);
+	    const char* error = NULL;
+	    loaded->ssh2key = ssh2_load_userkey(&list->file, 0, &error);
 	    if (loaded->ssh2key == SSH2_WRONG_PASSPHRASE || !loaded->ssh2key)
 	    {
+		if (!error) {
+		    error = "unknown";
+		}
+		logeventf(ssh, "Failed to load key '%s': %s", &list->file, error);
 		sfree(loaded);
 		continue;
 	    }
