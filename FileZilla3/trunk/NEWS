@@ -10,6 +10,30 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.7.0-rc1 (3013-04-29)
+
++ Show total transfer speed as tooltip over the transfer indicators
++ List supported protocols in tooltip of host field in quickconnect bar
++ Use TLS instead of the deprecated term SSL
++ Reworded text when saving of passwords is disabled, do not refer to kiosk mode
++ Improved usability of Update page in settings dialog
++ Improve SFTP performance
++ When navigating to the parent directory, highlight the former child
++ When editing files, use high priority for the transfers
++ Add label to size conditions in filter conditions dialog indicating that the unit is bytes
++ Ignore drag&drop operations where source and target are identical and clarify the wording in some drop error cases
++ Trim whitespace from the entered port numbers
++ Slightly darker color of inactive tabs
++ Ignore .. item in the file list context menus if multiple items are selected
++ Display TLS version and key exchange algorithm in certificate and encryption details dialog for FTP over TLS connections.
+- Fix handling of remote paths containing double-quotes
+- Fix crash when opening local directories in Explorer if the name contained characters not representable in the locale's narrow-width character set.
+- Fix a memory leak in the host key verification dialog for SFTP
+- Fix drag-scrolling in file lists with very low height
+- Don't attempt writing XML files upon loading them
+- Improve handling of legacy DDE file associations
+- Fix handling of HTTPS in the auto updater in case a mirror redirects to HTTPS
+
 3.6.0.2 (2012-11-29)
 
 - Fix problems with stalling FTP over TLS uploads
@@ -71,7 +95,6 @@ Legend:
 - Queue items with the lowest priority setting are now being restored again
 - Drag & Drop did not work with all saved sites if saving of passwords had been disabled
 
-
 3.5.1 (2011-08-28)
 
 - Add support for another rate variant of MVS style directory listings
@@ -124,7 +147,6 @@ Legend:
 - Compatibility with MVS listing containing PO-E type entries
 - Fix Resizing issues with manual transfers dialog
 - MSW: Remote file editing did not correctly handle files that were still open
-
 
 3.4.0-beta1 (2011-01-09)
 
