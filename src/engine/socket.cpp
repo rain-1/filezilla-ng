@@ -1348,6 +1348,7 @@ static struct Error_table error_table[] =
 	ERRORDECL(WSAEPROTOTYPE, "Protocol not supported on given socket type")
 	ERRORDECL(WSAESOCKTNOSUPPORT, "Socket type not supported for address family")
 	ERRORDECL(WSAEADDRNOTAVAIL, "Cannot assign requested address")
+	ERRORDECL(ERROR_NETNAME_DELETED, "The specified network name is no longer available")
 #endif
 	{ 0, 0, 0 }
 };
