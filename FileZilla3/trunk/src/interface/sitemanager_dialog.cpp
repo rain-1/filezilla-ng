@@ -968,7 +968,7 @@ bool CSiteManagerDialog::Verify()
 			else
 				msg = _("Saving of passwords has been disabled by you.");
 			msg += _T("\n");
-			msg += _("'Normal' and 'Account' logontypes are not available. Your entry has been changed to 'Ask ask for password'.");
+			msg += _("'Normal' and 'Account' logontypes are not available. Your entry has been changed to 'Ask for password'.");
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
 			XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
 			logon_type = ASK;

@@ -2000,7 +2000,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
-                  <label>Advice: Unless you want to test new features, please keep using stable versions only. Beta versions and nightly builds are development versions meant for testing purposes. Nightly versions of FileZilla may not work as expected and might even damage your system. Use beta versions and nightly builds at your own risk.</label>
+                  <label>Advice: Unless you want to test new features, please keep using stable versions only. Beta versions and nightly builds are development versions meant for testing purposes. Nightly builds of FileZilla may not work as expected and might even damage your system. Use beta versions and nightly builds at your own risk.</label>
                 </object>
               </object>
               <object class="spacer">
