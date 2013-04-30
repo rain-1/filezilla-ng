@@ -27,7 +27,7 @@ Legend:
 + Ignore .. item in the file list context menus if multiple items are selected
 + Display TLS version and key exchange algorithm in certificate and encryption details dialog for FTP over TLS connections.
 - Fix handling of remote paths containing double-quotes
-- Fix crash when opening local directories in Explorer if the name contained characters not representable in the locale's narrow-width character set.
+- Fix crash when opening local directories in Explorer if the name contains characters not representable in the locale's narrow-width character set.
 - Fix a memory leak in the host key verification dialog for SFTP
 - Fix drag-scrolling in file lists with very low height
 - Don't attempt writing XML files upon loading them
