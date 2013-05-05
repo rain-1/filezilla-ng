@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-15 08:17+0200\n"
-"PO-Revision-Date: 2013-04-06 15:53+0100\n"
+"POT-Creation-Date: 2013-04-30 22:56+0200\n"
+"PO-Revision-Date: 2013-05-02 14:33+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -1013,7 +1013,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/manual_transfer.cpp:459
 msgid ""
-"'Normal' and 'Account' logontypes are not available, using 'Ask ask for "
+"'Normal' and 'Account' logontypes are not available, using 'Ask for "
 "password' instead."
 msgstr ""
 "I tipi di accesso 'Normale' e 'Account' non sono disponibili. Usa invece "
@@ -1022,7 +1022,7 @@ msgstr ""
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:971
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
-"changed to 'Ask ask for password'."
+"changed to 'Ask for password'."
 msgstr ""
 "I tipi di accesso 'Normale' e 'Account' non sono disponibili. L'elemento è "
 "stato modificato in 'Richiedi password'."
@@ -1388,15 +1388,15 @@ msgstr "Opzioni avanzate:"
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
-"meant for testing purposes. Nightly versions of FileZilla may not work as "
+"meant for testing purposes. Nightly builds of FileZilla may not work as "
 "expected and might even damage your system. Use beta versions and nightly "
 "builds at your own risk."
 msgstr ""
 "Avviso: a meno che tu vuoi testare nuove funzionalità, usa solo le versioni "
 "stabili. Le versioni beta e i rilasci notturni sono versioni di sviluppo per "
 "scopo di test. I rilasci notturni di Filezilla potrebbero non funzionare "
-"come ti aspetti e anche danneggiare il tuo sistema. Usa le versioni beta e i "
-"rialsci notturni a tuo rischio."
+"come ti aspetti e anche danneggiare il tuo sistema. Puoi usare le versioni "
+"beta e i rilasci notturni a tuo rischio."
 
 #: resources.h:347
 msgid "Algorithm:"
@@ -1498,7 +1498,7 @@ msgstr ""
 msgid "Anonymous"
 msgstr "Anonimo"
 
-#: ../../locales/../src/interface/state.cpp:1069
+#: ../../locales/../src/interface/state.cpp:1095
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
@@ -2390,7 +2390,7 @@ msgstr ""
 "Impossibile distinguere nome del certificato oggetto, gnutls_x509_get_dn "
 "fallito"
 
-#: ../../locales/../src/interface/state.cpp:1053
+#: ../../locales/../src/interface/state.cpp:1079
 msgid "Could not get full remote path."
 msgstr "Impossibile analizzare il percorso remoto."
 
@@ -2436,7 +2436,7 @@ msgstr "Impossibile caricare il file chiave"
 msgid "Could not load private key"
 msgstr "Impossibile caricare chiave privata"
 
-#: ../../locales/../src/interface/state.cpp:1079
+#: ../../locales/../src/interface/state.cpp:1105
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory '%"
@@ -2911,7 +2911,7 @@ msgstr "Contenuto cartella letto con successo"
 msgid "Disa&ble all"
 msgstr "Disa&bilita tutto"
 
-#: ../../locales/../src/interface/state.cpp:1087
+#: ../../locales/../src/interface/state.cpp:1113
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
@@ -6723,11 +6723,11 @@ msgstr ""
 #: ../../locales/../src/interface/state.cpp:396
 #: ../../locales/../src/interface/state.cpp:406
 #: ../../locales/../src/interface/state.cpp:415
-#: ../../locales/../src/interface/state.cpp:1054
-#: ../../locales/../src/interface/state.cpp:1063
-#: ../../locales/../src/interface/state.cpp:1070
-#: ../../locales/../src/interface/state.cpp:1081
-#: ../../locales/../src/interface/state.cpp:1088
+#: ../../locales/../src/interface/state.cpp:1080
+#: ../../locales/../src/interface/state.cpp:1089
+#: ../../locales/../src/interface/state.cpp:1096
+#: ../../locales/../src/interface/state.cpp:1107
+#: ../../locales/../src/interface/state.cpp:1114
 msgid "Synchronized browsing"
 msgstr "Navigazione sincronizzata"
 
@@ -7053,7 +7053,7 @@ msgstr ""
 msgid "The queue will not be saved."
 msgstr "La coda non verrà salvata."
 
-#: ../../locales/../src/interface/state.cpp:1060
+#: ../../locales/../src/interface/state.cpp:1086
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"

@@ -6,18 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Հայերեն թարգմանություն\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-28 22:31+0200\n"
-"PO-Revision-Date: 2012-12-02 18:07+0400\n"
-"Last-Translator: Hrant Ohanyan <hrantohanyan@mail.am>\n"
+"POT-Creation-Date: 2013-04-30 22:56+0200\n"
+"PO-Revision-Date: 2013-05-01 11:19+0400\n"
+"Last-Translator: Hrant Ohanyan <h.ohanyan@haysoft.org>\n"
 "Language-Team: Hrant Ohanyan <hrantohanyan@mail.am>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hy\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Virtaal 0.5.2\n"
-"X-Poedit-Language: Armenian\n"
-"X-Poedit-Country: ARMENIA\n"
+"X-Generator: Poedit 1.5.5\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
 #: ../../locales/../src/interface/statuslinectrl.cpp:230
@@ -450,7 +448,7 @@ msgstr "&Պատահական հրաման..."
 
 #: resources.h:145
 msgid "&Execute"
-msgstr "&Կատարել"
+msgstr "&Գործարկել"
 
 #: resources.h:301
 msgid "&Export Site Manager entries"
@@ -923,7 +921,7 @@ msgstr "&Թարմացնել գրանցատեղի բանալին այս հոսթ�
 
 #: resources.h:573 resources.h:667
 msgid "&Upload"
-msgstr "&Փոխանցել"
+msgstr "&Վերբեռնել"
 
 #: resources.h:276 resources.h:866
 msgid "&Uploads:"
@@ -976,12 +974,11 @@ msgstr "&Դիտել/Խմբագրել"
 
 #: resources.h:961
 msgid "&Watch locally edited files and prompt to upload modifications"
-msgstr "&Հետևել ֆայլերի խմբագրմանը և հուշել փոփոխությունների փոխանցման մասին"
+msgstr "&Հետևել ֆայլերի խմբագրմանը և հուշել փոփոխությունների վերբեռման մասին"
 
 #: resources.h:972
-#, fuzzy
 msgid "&When checking for updates, check for:"
-msgstr "Ստուգվում է թարմացումների առկայությունը"
+msgstr "&Թարմացումները ստուգելիս ստուգել՝"
 
 #: resources.h:144
 msgid "&Write"
@@ -1010,19 +1007,20 @@ msgid "'Account' logontype not supported by selected protocol"
 msgstr "'Գործածող' եղանակով մուտք չի աջակցվում։"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:459
-#, fuzzy
 msgid ""
-"'Normal' and 'Account' logontypes are not available, using 'Ask ask for "
+"'Normal' and 'Account' logontypes are not available, using 'Ask for "
 "password' instead."
 msgstr ""
-"FileZilla-ն աշխատում է 'kiosk' եղանակով։\n"
-"Այս եղանակում 'Նորմալ' և 'Գործածող' ֆունկցիաները հասանելի չեն։"
+"'Նորմալ' և 'Գործածողը' եղանակները հասանելի չեն: Փոխարենը օգտագործեք 'Հարցնել "
+"գաղտնաբառը':"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:971
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
-"changed to 'Ask ask for password'."
+"changed to 'Ask for password'."
 msgstr ""
+"'Նորմալ' և 'Գործածողը' եղանակները հասանելի չեն: Փոխվել է 'Հարցնել "
+"գաղտնաբառով':"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:598
 msgid ""
@@ -1257,7 +1255,7 @@ msgstr "Կ&իրառել միայն բեռնումներին"
 
 #: ../../locales/../src/interface/fileexistsdlg.cpp:160
 msgid "A&pply only to uploads"
-msgstr "Կ&իրառել միայն փոխանցումներին"
+msgstr "Կ&իրառել միայն վերբեռնումներին"
 
 #: resources.h:157
 msgid "A&pply to all files and directories"
@@ -1377,10 +1375,14 @@ msgstr "Լրացուցիչ կարգավորումներ."
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
-"meant for testing purposes. Nightly versions of FileZilla may not work as "
+"meant for testing purposes. Nightly builds of FileZilla may not work as "
 "expected and might even damage your system. Use beta versions and nightly "
 "builds at your own risk."
 msgstr ""
+"Խորհուրդ. Եթե չեք ցանկանում փորձել ծրագրի նոր հնարավորությունները՝ "
+"օգտագործեք կայուն տարբերակը: Beta տարբերակները և nightly build-երը "
+"նախատեսված են փորձարկման համար: FileZilla-ի nightly build-երը հնարավոր է "
+"նորմալ չաշխատեն և անգամ վնասեն ձեր համակարգը: Այնպես որ զգույշ եղեք:"
 
 #: resources.h:347
 msgid "Algorithm:"
@@ -1735,12 +1737,12 @@ msgid ""
 "Cannot compare directories, different filters for local and remote "
 "directories are enabled"
 msgstr ""
-"Հնարավորչ չէ համեմատել թղթապանակները, նշված են տարբեր ֆիլտրեր համակարգչային "
-"և հեռադիր թղթապանակների համար։"
+"Հնարավոր չէ համեմատել թղթապանակները, նշված են տարբեր ֆիլտրեր համակարգչային և "
+"հեռադիր թղթապանակների համար։"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2805
 msgid "Cannot compare directories, not connected to a server."
-msgstr "Հնարավորչ չէ համեմատել թղթապանակները, չկա կապ սպասարկիչի հետ։"
+msgstr "Հնարավոր չէ համեմատել թղթապանակները, չկա կապ սպասարկիչի հետ։"
 
 #: ../../locales/../src/interface/filteredit.cpp:143
 msgid "Cannot create new filter"
@@ -1785,9 +1787,8 @@ msgid "Cannot load toolbar from resource file"
 msgstr "Հնարավոր չէ բացել գործիքաշերտը ռեսուրսների ֆայլից"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:463
-#, fuzzy
 msgid "Cannot remember password"
-msgstr "&Չհիշել գաղտնաբառերը"
+msgstr "Հնարավոր չէ հիշել գաղտնաբառը"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:713
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1190
@@ -1872,9 +1873,8 @@ msgid "Check for &updates..."
 msgstr "Ստուգել &թարմացումները..."
 
 #: resources.h:967
-#, fuzzy
 msgid "Check for FileZilla &updates automatically:"
-msgstr "Հնարավոր չեղավ ստուգել թարմացումները"
+msgstr "Ինքնավար ստուգել FileZilla-ի &թարմացումները."
 
 #: resources.h:567
 msgid "Check for newer versions of FileZilla"
@@ -2278,9 +2278,8 @@ msgid "Could not add connection to Site Manager"
 msgstr "Հնարավոր չէ ավելացնել Կայքերի Կառավարիչում"
 
 #: ../../locales/../src/interface/state.cpp:842
-#, fuzzy
 msgid "Could not complete operation"
-msgstr "Հնարավոր չէ պատճենել տվյալները"
+msgstr "Հնարավոր չէ ավարտել գործողությունը"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:188
 msgid "Could not connect to server"
@@ -2661,7 +2660,7 @@ msgstr "Գ&ործողություն մկնիկի կրկնակի սեղմամբ."
 
 #: resources.h:227 resources.h:426
 msgid "D&uplicate"
-msgstr ""
+msgstr "Կ&րկնօրինակել"
 
 #: ../../locales/../src/engine/server.cpp:34
 msgid "DOS-like with virtual paths"
@@ -2810,7 +2809,7 @@ msgstr "Թղթա&պանակներ"
 
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Direction"
-msgstr "Դեպի"
+msgstr "Դեպի՝"
 
 #: ../../locales/../src/interface/filelistctrl.cpp:283
 msgid "Directory"
@@ -2995,6 +2994,8 @@ msgid ""
 "Download speed: %s/s\n"
 "Upload speed: %s/s"
 msgstr ""
+"Բեռնելու արագ-ը. %s/վ\n"
+"Վերբեռնելու արագ-ը. %s/վ"
 
 #: ../../locales/../src/interface/edithandler.cpp:1253
 msgid "Downloading"
@@ -3034,7 +3035,7 @@ msgstr "Drag&drop-ը տարբեր սպասարկիչների միջև անհաս
 
 #: resources.h:85
 msgid "Dupl&icate"
-msgstr ""
+msgstr "Կ&րկնօրինակել"
 
 #: resources.h:213
 msgid "E&nable all"
@@ -3067,7 +3068,7 @@ msgstr "Խմբագրել ֆիլտրերը"
 #: resources.h:582
 msgid ""
 "Edit the file with the configured editor and upload changes to the server."
-msgstr "Խմբագրել ընտրված ֆայլը և փոխանցել սպասարկիչի վրա։"
+msgstr "Խմբագրել ընտրված ֆայլը և վերբեռնել սպասարկիչ։"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1956
 #: ../../locales/../src/interface/LocalListView.cpp:1967
@@ -3180,7 +3181,6 @@ msgid "Enter selected directory"
 msgstr "Բացել թղթապանակը"
 
 #: resources.h:739
-#, fuzzy
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3195,9 +3195,17 @@ msgid ""
 "- ftps:// for FTP over TLS (implicit)\n"
 "- ftpes:// for FTP over TLS (explicit)"
 msgstr ""
-"Նշեք սպասարկիչի հասցեն։\n"
-"Նշեք FTP արձանագրությունը (ftp://)։\n"
-"Կարող եք գրել նաև URL-ն՝ protocol://user:pass@host:port։"
+"Նշեք սպասարկիչի հասցեն:\n"
+"Որոշելու համար սպասարկիչի արձանագրությունը՝ հոսթը ավելացրեք արձանագրության "
+"որոշիչով: Եթե արձանագրությունը նշված չէ՝ կօգտագործվի ծրագրայինը (ftp://):\n"
+"Այստեղ կարող եք նաև նշել ամբողջական URL-ներ՝ protocol://user:pass@host:port, "
+"մյուս դաշտերի նշանակումները հետո կվերագրվեն:\n"
+"\n"
+"Աջակցվում են հետևյալները՝\n"
+"- ftp:// նորմալ FTP-ի համար\n"
+"- sftp:// SSH ֆայլի փոխանցման արձանագրությունը\n"
+"- ftps:// FTP over TLS (implicit)\n"
+"- ftpes:// FTP over TLS (explicit)"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
 #, c-format
@@ -3301,11 +3309,11 @@ msgstr "Կապ հաստատել նոր պատուհանում"
 
 #: resources.h:971
 msgid "Every month"
-msgstr ""
+msgstr "Ամեն ամիս"
 
 #: resources.h:970
 msgid "Every two weeks"
-msgstr ""
+msgstr "Ամեն երկու շաբաթ"
 
 #: resources.h:965
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
@@ -3317,11 +3325,11 @@ msgstr "Օրինակներ"
 
 #: resources.h:153
 msgid "Exe&cute"
-msgstr "Կատարել"
+msgstr "Գործա&րկել"
 
 #: ../../locales/../src/interface/updatewizard.cpp:328
 msgid "Executable"
-msgstr "Կատարելի"
+msgstr "Գործարկելի"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1835
 msgid "Executable contains no version info, cannot check for updates."
@@ -3435,7 +3443,7 @@ msgstr "Հնարավոր չէ ստեղծել դարպասի լսիչ՝ փոխա�
 
 #: ../../locales/../src/interface/updatewizard.cpp:466
 msgid "Failed to download the latest version of FileZilla."
-msgstr "Հնարավոր չէ բեռնել FileZilla-ի նոր տարբերակը!"
+msgstr "Հնարավոր չէ բեռնել FileZilla-ի նոր տարբերակը"
 
 #: ../../locales/../src/interface/LocalTreeView.cpp:665
 msgid "Failed to get 'My Documents' path"
@@ -3706,9 +3714,8 @@ msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "Վերամեկնարկեք FileZilla-ն՝ լեզուն փոխելու համար։"
 
 #: resources.h:978
-#, fuzzy
 msgid "FileZilla updates"
-msgstr "FileZilla-ի սխալ"
+msgstr "FileZilla-ի թարմացումները"
 
 #: resources.h:533
 msgid "Filelist status &bars"
@@ -4026,7 +4033,7 @@ msgid ""
 "misconfigured servers which reject the selected transfer mode."
 msgstr ""
 "Եթե կարգավորումը ընտրված է, ապա Դուք կկարողանաք միանալ չկարգավորված "
-"սպասակիչների, որոնք մերժում են փոխանցման ընտրված եղանակը։"
+"սպասարկիչների, որոնք մերժում են փոխանցման ընտրված եղանակը։"
 
 #: resources.h:197
 msgid ""
@@ -4317,7 +4324,6 @@ msgstr "Դարպասի սխալ թիվ։ Պետք է լինի 1-ից 65535"
 
 #: ../../locales/../src/engine/server.cpp:93
 #: ../../locales/../src/interface/quickconnectbar.cpp:125
-#, fuzzy
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP,\n"
@@ -4325,11 +4331,11 @@ msgid ""
 "ftps:// for FTP over TLS (implicit) and\n"
 "ftpes:// for FTP over TLS (explicit)."
 msgstr ""
-"Արձանագրությունը սխալ է։ Աջակցվում են.\n"
+"Արձանագրությունը սխալ է։ Աջակցվում են՝\n"
 "ftp:// նորմալ FTP-ի համար,\n"
 "sftp:// SSH փոխանցումների համար,\n"
-"ftps:// FTP-ի ու SSL-ի համար (ակնհայտ)\n"
-"ftpes:// FTP-ի ու SSL-ի համար (ոչ ակնհայտ)։"
+"ftps:// for FTP over TLS (implicit) և\n"
+"ftpes:// for FTP over TLS (explicit):"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4418
 msgid ""
@@ -4399,9 +4405,8 @@ msgid "Key exchange"
 msgstr "Բանալիների փոխարինում"
 
 #: resources.h:20 resources.h:48
-#, fuzzy
 msgid "Key exchange:"
-msgstr "Բանալիների փոխարինում"
+msgstr "Բանալիների փոխանակում."
 
 #: resources.h:619
 msgid "L&owest"
@@ -4432,7 +4437,7 @@ msgstr "Սահմանափակել միաժամանակյա բեռնումների
 
 #: resources.h:827
 msgid "Limit for concurrent &uploads:"
-msgstr "Սահմանափակել միաժամանակյա փոխանցումների &քանակը."
+msgstr "Սահմանափակել միաժամանակյա &վերբեռնումները."
 
 #: resources.h:770
 msgid "Limit local ports"
@@ -4692,9 +4697,8 @@ msgid "Network unreachable"
 msgstr "Ցանցը հասանելի չէ"
 
 #: resources.h:968
-#, fuzzy
 msgid "Never"
-msgstr "&Սպասարկիչը"
+msgstr "Երբեք"
 
 #: resources.h:81
 msgid "New &Folder"
@@ -4918,7 +4922,7 @@ msgstr "Մեկ անգամ"
 
 #: resources.h:969
 msgid "Once a week"
-msgstr ""
+msgstr "Շաբաթը մեկ անգամ"
 
 #: resources.h:672
 msgid "Open directory in system's file manager"
@@ -4929,14 +4933,12 @@ msgid "Open the Site Manager"
 msgstr "Բացել Կայքերի Կառավարիչը"
 
 #: resources.h:1001
-#, fuzzy
 msgid "Open the Site Manager."
-msgstr "Բացել Կայքերի Կառավարիչը"
+msgstr "Բացել Կայքերի Կառավարիչը:"
 
 #: resources.h:1002
-#, fuzzy
 msgid "Open the Site Manager. Right-click for a list of sites."
-msgstr "Բացում է թղթապանակների ցանկի ֆիլտրի պատուհանը։"
+msgstr "Բացել Կայքերի կառավարիչը: Աջ սեղմում կայքերի ցանկում:"
 
 #: resources.h:580
 msgid "Open the file."
@@ -5057,7 +5059,7 @@ msgstr "Ընդունելի URL հասցե չէ"
 
 #: resources.h:93 resources.h:392 resources.h:741
 msgid "Pass&word:"
-msgstr "Գաղտնա&բառը.."
+msgstr "Գաղտնա&բառը."
 
 #: resources.h:699
 msgid "Passive (recommended)"
@@ -5200,7 +5202,7 @@ msgstr "Նշեք սպասարկիչից միաժամանակյա բեռնում�
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:105
 msgid ""
 "Please enter a number between 0 and 10 for the number of concurrent uploads."
-msgstr "Նշեք սպասարկիչ միաժամանակյա փոխանցումների քանակը (0-10)։"
+msgstr "Նշեք սպասարկիչ միաժամանակյա վերբեռնումների քանակը (0-10)։"
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:97
 msgid ""
@@ -5247,7 +5249,7 @@ msgstr "Նշեք այն URL-ն, որից պետք է վերցվի Ձեր արտ�
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 #, c-format
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
-msgstr "Նշեք բեռնման արագության սահմանափակում (0-ից բարձր կամ հավասար %s/վայր։"
+msgstr "Նշեք վերբեռնման արագության սահմանափակում բարձր կամ հավասար 0 %s/վ։"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:580
 msgid ""
@@ -5331,7 +5333,7 @@ msgid ""
 "servers only works if they support the MFMT command."
 msgstr ""
 "Հաշվի առեք այն, որ ֆայլի ստեղծման ժամանակը FTP, FTPS և FTPES սպասարկիչներ "
-"փոխանցելիս կպահպանվի, եթե դրանք աջակցում են MFMT հրամանը։"
+"վերբեռնելիս կպահպանվի, եթե դրանք աջակցում են MFMT հրամանը։"
 
 #: resources.h:760
 msgid ""
@@ -5449,7 +5451,7 @@ msgstr "Հիմնական միացման և տվյալների ալիքի սեր�
 
 #: ../../locales/../src/interface/cmdline.cpp:18
 msgid "Print diagnostic information related to startup of FileZilla"
-msgstr ""
+msgstr "Տպել FileZilla-ը բացելուն վերաբերող տեղեկությունը"
 
 #: ../../locales/../src/interface/cmdline.cpp:17
 msgid "Print version information to stdout and exit"
@@ -5464,13 +5466,12 @@ msgid "Priority"
 msgstr "Առաջնայնությունը"
 
 #: resources.h:977
-#, fuzzy
 msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
 msgstr ""
-"Կուղարկվի տեղեկություն միայն FileZilla-ի և օպերացիոն համակարգի տարբերակի "
-"մասին։"
+"Անվտանգության քաղաքականություն. Կուղարկվի տեղեկություն միայն FileZilla-ի, "
+"CPU-ի և օպերացիոն համակարգի տարբերակի մասին։"
 
 #: resources.h:807
 msgid "Private &keys:"
@@ -5482,16 +5483,15 @@ msgstr "Արձա&նագրությունը"
 
 #: resources.h:803 resources.h:820
 msgid "Pro&xy password:"
-msgstr "&Դարպասի գաղտնաբառը."
+msgstr "&Միջնորդի գաղտնաբառը."
 
 #: resources.h:541 resources.h:610
 msgid "Process &Queue"
 msgstr "Կատարել &առաջադրանքը"
 
 #: resources.h:18 resources.h:46
-#, fuzzy
 msgid "Protocol:"
-msgstr "Արձա&նագրությունը"
+msgstr "Արձանագրությունը."
 
 #: resources.h:818
 msgid "Proxy &port:"
@@ -5868,7 +5868,7 @@ msgstr "Սերտիֆիկատը սխալ է"
 
 #: resources.h:516
 msgid "S&how files currently being edited..."
-msgstr "Ց&ույց տալ խմբագրվող ֆայլերը..."
+msgstr "Ց&ուցադրել խմբագրվող ֆայլերը..."
 
 #: resources.h:895
 msgid "S&how the Site Manager on startup"
@@ -5901,12 +5901,12 @@ msgstr "Պահպանե՞լ կարգավորումները։"
 #: ../../locales/../src/interface/manual_transfer.cpp:455
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:967
 msgid "Saving of password has been disabled by your system administrator."
-msgstr ""
+msgstr "Գաղտնաբառի պահպանումը ցուցադրվել է համակարգի ադմինին:"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:457
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:969
 msgid "Saving of passwords has been disabled by you."
-msgstr ""
+msgstr "Գաղտնաբառերի պահպանումը ցուցադրվել է ձեր կողմից:"
 
 #: ../../locales/../src/interface/QueueView.cpp:1835
 msgid "Scanning for files to add to queue"
@@ -5914,7 +5914,7 @@ msgstr "Փնտրվում են ֆայլեր, որոնք կավելացվեն հե
 
 #: ../../locales/../src/interface/QueueView.cpp:1837
 msgid "Scanning for files to upload"
-msgstr "Փնտրվում են ֆայլեր, որոնք փոխանցվելու են"
+msgstr "Փնտրվում են ֆայլեր, որոնք վերբեռնվելու են"
 
 #: resources.h:442
 msgid "Search &conditions:"
@@ -6011,7 +6011,7 @@ msgstr "Ընտրեք ֆայլ, որից ներմուծվելու են կարգա
 
 #: ../../locales/../src/interface/manual_transfer.cpp:250
 msgid "Select file to upload"
-msgstr "Ընտրեք ֆայլ՝ փոխանցելու համար"
+msgstr "Ընտրեք ֆայլ՝ վերբեռնելու համար"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:304
 msgid "Select filename for converted keyfile"
@@ -6303,9 +6303,8 @@ msgid "Site Manager"
 msgstr "Կայքերի Կառավարիչ"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:975
-#, fuzzy
 msgid "Site Manager - Cannot remember password"
-msgstr "&Չհիշել գաղտնաբառերը"
+msgstr "Կայքերի Կառավարիչ՝ հնարավոր չէ հիշել գաղտնաբառը"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:945
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:956
@@ -6391,11 +6390,11 @@ msgstr "Բաց է թողնվում %s-ի բեռնումը"
 #: ../../locales/../src/engine/ControlSocket.cpp:1390
 #, c-format
 msgid "Skipping upload of %s"
-msgstr "Բաց է թողնվում %s-ի փոխանցումը"
+msgstr "Բաց է թողնվում %s-ի վերբեռնումը"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1272
 msgid "Some files are still being edited or need to be uploaded."
-msgstr "Որոշ ֆայլեր խմբագրվում են կամ պահանջում են փոխանցել սպասարկիչի վրա։"
+msgstr "Որոշ ֆայլեր խմբագրվում են կամ պահանջում են վերբեռնում սպասարկիչ։"
 
 #: resources.h:708 resources.h:784
 msgid ""
@@ -6456,11 +6455,11 @@ msgstr "Արագության սահմանափակումներ չկան, սեղմ
 
 #: resources.h:974
 msgid "Stable and beta versions"
-msgstr ""
+msgstr "Կայուն և փորձարկվող տարբերակներ"
 
 #: resources.h:973
 msgid "Stable versions only"
-msgstr ""
+msgstr "Միայն կայուն տարբերակները"
 
 #: resources.h:400
 msgid "Start transfer &immediately"
@@ -6480,7 +6479,7 @@ msgstr "Սկսվում է %s-ի բեռնումը"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1638
 #, c-format
 msgid "Starting upload of %s"
-msgstr "Սկսվում է %s-ի փոխանցումը"
+msgstr "Սկսվում է %s-ի վերբեռնումը"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:184
 msgid "State or province:"
@@ -6590,9 +6589,8 @@ msgid "Target file:"
 msgstr "Ֆայլը սպասարկիչի վրա."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:3211
-#, fuzzy
 msgid "Target filename already exists!"
-msgstr "Ֆայլը գոյություն ունի"
+msgstr "Այս անունով ֆայլ կա։"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1933
 msgid "Target filename already exists, really continue?"
@@ -6663,11 +6661,8 @@ msgstr "Տեքստային ֆայլերի հաստատված ծրագիր '%s'։
 #: ../../locales/../src/interface/filteredit.cpp:149
 #: ../../locales/../src/interface/filteredit.cpp:217
 #: ../../locales/../src/interface/filteredit.cpp:256
-#, fuzzy
 msgid "The entered filter name already exists, please choose a different name."
-msgstr ""
-"Ֆայլւժը արդեն գոյություն ունի։.\n"
-"Ինչ անել։"
+msgstr "Նշված ֆիլտրի անունը արդեն առկա է: Ընտրեք այլ անուն:"
 
 #: ../../locales/../src/interface/settings/optionspage_filetype.cpp:160
 #, c-format
@@ -6800,7 +6795,7 @@ msgstr "Խմբագրվում են հետևյալ ֆայլերը."
 
 #: resources.h:472
 msgid "The free open source FTP solution"
-msgstr "Անվճար Open Source FTP ծրագիր"
+msgstr "Ազատ, բաց կոդով FTP ծրագիր"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:298
 msgid "The global bookmarks could not be saved."
@@ -7185,12 +7180,12 @@ msgstr "Բազային միջնորդի տեսակը."
 
 #: resources.h:340
 msgid "U&pload"
-msgstr "Փ&ոխանցել"
+msgstr "Վ&երբեռնել"
 
 #: resources.h:493 resources.h:833
 #, no-c-format
 msgid "U&pload limit:"
-msgstr "Փ&ոխանցման սահմանափակում."
+msgstr "Վ&երբեռման սահմանափակում."
 
 #: resources.h:959
 msgid "U&se filetype associations if available"
@@ -7282,7 +7277,7 @@ msgstr "Վերաուղղորդումը չի աջակցվում"
 
 #: resources.h:341
 msgid "Up&load and unedit"
-msgstr "Փոխ&անցել առանց փոփոխությունների"
+msgstr "Վե&րբեռնել առանց փոփոխությունների"
 
 #: ../../locales/../src/interface/updatewizard.cpp:259
 #: ../../locales/../src/interface/updatewizard.cpp:272
@@ -7290,13 +7285,12 @@ msgid "Update wizard"
 msgstr "Թարմացումների Օգնական"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:137
-#, fuzzy
 msgid "Updates"
-msgstr "Ստուգել թարմացումները"
+msgstr "Թարմացումներ"
 
 #: resources.h:372
 msgid "Upload"
-msgstr "Փոխանցել"
+msgstr "Վերբեռնել"
 
 #: ../../locales/../src/interface/edithandler.cpp:1262
 msgid "Upload failed"
@@ -7305,7 +7299,7 @@ msgstr "Անհաջող էր"
 #: ../../locales/../src/interface/statusbar.cpp:609
 #, c-format
 msgid "Upload limit: %s/s"
-msgstr "Փոխանցման սահմանափակում. %s/s"
+msgstr "Վերբեռման սահմանափակում. %s/s"
 
 #: ../../locales/../src/interface/statusbar.cpp:611
 msgid "Upload limit: none"
@@ -7313,35 +7307,35 @@ msgstr "Սահմանափակումներ չկան"
 
 #: resources.h:668
 msgid "Upload selected directory"
-msgstr "Փոխանցել ընտրված թղթապանակը"
+msgstr "Վերբեռնել ընտրված թղթապանակը"
 
 #: resources.h:574
 msgid "Upload selected files and directories"
-msgstr "Փոխանցել ընտրված ֆայլերը և թղթապանակները"
+msgstr "Վերբեռնել ընտրված ֆայլերը և թղթապանակները"
 
 #: resources.h:325
 msgid "Upload this file back to the server?"
-msgstr "Հետ փոխանցե՞լ այս ֆայլը դեպի սպասարկիչ։"
+msgstr "Ֆայլը ետ վերբեռնե՞լ սպասարկիչ:"
 
 #: resources.h:324
 msgid "Upload this file to the server?"
-msgstr "Փոխանցե՞լ ֆայլը սպասարկիչ։"
+msgstr "Վերբեռնե՞լ ֆայլը սպասարկիչ։"
 
 #: ../../locales/../src/interface/edithandler.cpp:1256
 #: ../../locales/../src/interface/edithandler.cpp:1290
 #: ../../locales/../src/interface/edithandler.cpp:1455
 msgid "Uploading"
-msgstr "Փոխանցվում է"
+msgstr "Վերբեռնում է"
 
 #: ../../locales/../src/interface/edithandler.cpp:1259
 #: ../../locales/../src/interface/edithandler.cpp:1457
 msgid "Uploading and pending removal"
-msgstr "Փոխանցվում է և սպասում է ջնջման"
+msgstr "Վերբեռնվում է և սպասում է ջնջման"
 
 #: ../../locales/../src/interface/edithandler.cpp:1293
 #: ../../locales/../src/interface/edithandler.cpp:1459
 msgid "Uploading and unediting"
-msgstr "Փոխանցում առանց փոփոխությունների"
+msgstr "Վերբեռնում առանց փոփոխությունների"
 
 #: resources.h:118
 msgid "Use &custom charset"
@@ -7373,7 +7367,7 @@ msgstr "Օգտագործել հիմնական FTP"
 
 #: resources.h:380
 msgid "Use server currently connected to"
-msgstr "Օգտագործել սպասակիչ, որին միացված են"
+msgstr "Օգտագործել սպասարկիչ, որը միացած է"
 
 #: resources.h:381
 msgid "Use server from site manager"
@@ -7780,9 +7774,8 @@ msgstr "սկսվում է՝"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:176
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:446
-#, fuzzy
 msgid "bytes"
-msgstr "%s բայթ"
+msgstr "բայթ"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:90
 msgid "contains"
