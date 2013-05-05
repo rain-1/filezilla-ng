@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Filezilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-28 22:31+0200\n"
-"PO-Revision-Date: 2012-10-23 14:17+0200\n"
+"POT-Creation-Date: 2013-04-30 22:56+0200\n"
+"PO-Revision-Date: 2013-05-05 16:32+0200\n"
 "Last-Translator: Alexandru Bogdan Munteanu <muntealb@gmail.com>\n"
 "Language-Team: MunteAlb, Laurențiu Anisie <muntealb@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -104,9 +104,9 @@ msgid "%p - Password"
 msgstr "%p - Parolă"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:186
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s/s)"
-msgstr "%s (%d B/s)"
+msgstr "%s (%s/s)"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:189
 #, c-format
@@ -152,9 +152,9 @@ msgid "%s bytes"
 msgstr "%s baiți"
 
 #: ../../locales/../src/interface/updatewizard.cpp:902
-#, fuzzy, c-format
+#, c-format
 msgid "%s bytes (%s/s)"
-msgstr "%s baiți (%d B/s)"
+msgstr "%s baiți (%s/s)"
 
 #: ../../locales/../src/interface/FileZilla.cpp:711
 #, c-format
@@ -320,7 +320,7 @@ msgstr "&Conectează"
 
 #: resources.h:509
 msgid "&Copy current connection to Site Manager..."
-msgstr "&Copiază Conexiunea Curentă în Administratorul de Situri..."
+msgstr "&Copiază Conexiunea Curentă în Administratorul Siturilor..."
 
 #: resources.h:181 resources.h:630
 msgid "&Copy to clipboard"
@@ -457,7 +457,7 @@ msgstr "&Execută"
 
 #: resources.h:301
 msgid "&Export Site Manager entries"
-msgstr "&Exportă intrările din Administratorul de Situri"
+msgstr "&Exportă intrările din Administratorul Siturilor"
 
 #: resources.h:514 resources.h:679
 msgid "&Export..."
@@ -740,9 +740,8 @@ msgid "&Remember password for this session"
 msgstr "&Memorează parola pentru această sesiune"
 
 #: resources.h:501
-#, fuzzy
 msgid "&Remember passwords"
-msgstr "Memorez Parola?"
+msgstr "Memo&rează parolele"
 
 #: resources.h:413 resources.h:419
 msgid "&Remote directory:"
@@ -867,7 +866,7 @@ msgstr "Arată marcajele de &timp în jurnalul mesajelor [log]"
 
 #: resources.h:507
 msgid "&Site Manager..."
-msgstr "Ad&ministrator de Situri..."
+msgstr "Ad&ministratorul Siturilor..."
 
 #: resources.h:407
 msgid "&Site-specific bookmark"
@@ -890,9 +889,8 @@ msgid "&Swap local and remote panes"
 msgstr "&Schimbă între ele panourile local și distant"
 
 #: resources.h:637
-#, fuzzy
 msgid "&TLS Ciphers"
-msgstr "Cifru:"
+msgstr "Cifruri &TLS"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:228
 msgid "&Test"
@@ -985,9 +983,8 @@ msgstr ""
 "&Monitorizează filele editate local și îndeamnă să fie încărcate modificările"
 
 #: resources.h:972
-#, fuzzy
 msgid "&When checking for updates, check for:"
-msgstr "Caut actualizări"
+msgstr "La &verificarea existenței actualizărilor, caută:"
 
 #: resources.h:144
 msgid "&Write"
@@ -1016,20 +1013,20 @@ msgid "'Account' logontype not supported by selected protocol"
 msgstr "Tipul de logare 'Cont' nu este suportat de protocolul selectat"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:459
-#, fuzzy
 msgid ""
-"'Normal' and 'Account' logontypes are not available, using 'Ask ask for "
+"'Normal' and 'Account' logontypes are not available, using 'Ask for "
 "password' instead."
 msgstr ""
-"FileZilla rulează în mod chioșc.\n"
-"Tipurile de autentificare 'Normală' și 'Cont' nu sînt disponibile în acest "
-"mod."
+"Tipurile de logare (autentificare) 'Normală' și 'Cont' nu sînt disponibile, "
+"deci va fi folosit tipul 'Cere parola'."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:971
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
-"changed to 'Ask ask for password'."
+"changed to 'Ask for password'."
 msgstr ""
+"Tipurile de logare (autentificare) 'Normală' și 'Cont' nu sînt disponibile. "
+"Intrarea a fost schimbată în tipul 'Cere parola'."
 
 #: ../../locales/../src/interface/Mainfrm.cpp:598
 msgid ""
@@ -1390,10 +1387,16 @@ msgstr "Opțiuni Avansate:"
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
-"meant for testing purposes. Nightly versions of FileZilla may not work as "
+"meant for testing purposes. Nightly builds of FileZilla may not work as "
 "expected and might even damage your system. Use beta versions and nightly "
 "builds at your own risk."
 msgstr ""
+"Sfat: Dacă nu vrei să testezi funcțiile nou introduse, folosește doar "
+"versiunile stabile ale softului. Versiunile beta și compilările nocturne "
+"sînt versiuni de dezvoltare create în scop de testare. Compilările nocturne "
+"de FileZilla ar putea să nu funcționeze corespunzător și ar putea chiar să "
+"producă daune sistemului. Folosește versiunile beta și compilările nocturne "
+"doar pe riscul tău."
 
 #: resources.h:347
 msgid "Algorithm:"
@@ -1497,14 +1500,14 @@ msgstr "O altă operație distantă e deja în curs, nu pot schimba dosarul acum
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:785
 msgid "Any changes made in the Site Manager could not be saved."
 msgstr ""
-"Modificările făcute în Administratorul de Situri nu vor putea fi salvate."
+"Modificările făcute în Administratorul Siturilor nu vor putea fi salvate."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:730
 msgid ""
 "Any changes made in the Site Manager will not be saved unless you repair the "
 "file."
 msgstr ""
-"Modificările făcute în Administratorul de Situri nu vor fi salvate pînă nu "
+"Modificările făcute în Administratorul Siturilor nu vor fi salvate pînă nu "
 "va fi reparată fila."
 
 #: ../../locales/../src/interface/filter.cpp:209
@@ -1548,7 +1551,7 @@ msgstr "Întreabă utilizatorul ce acțiune dorește"
 #: ../../locales/../src/engine/server.cpp:875
 #: ../../locales/../src/interface/manual_transfer.cpp:188
 msgid "Ask for password"
-msgstr "Cu parolă"
+msgstr "Cere parola"
 
 #: resources.h:722
 msgid "Ask operating system for a port."
@@ -1739,7 +1742,7 @@ msgstr "Nu pot accesa '%s', nu e inserat nici un mediu sau unitatea nu e gata."
 
 #: ../../locales/../src/interface/Mainfrm.cpp:568
 msgid "Cannot add server to Site Manager"
-msgstr "Nu pot adăuga serverul la Administratorul de Situri"
+msgstr "Nu pot adăuga serverul la Administratorul Siturilor"
 
 #: ../../locales/../src/interface/context_control.cpp:348
 msgid ""
@@ -1806,9 +1809,8 @@ msgid "Cannot load toolbar from resource file"
 msgstr "Nu pot încărca bara de unelte din fila cu resurse"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:463
-#, fuzzy
 msgid "Cannot remember password"
-msgstr "Nu memora par&olele"
+msgstr "Nu pot memora parola"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:713
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1190
@@ -1892,9 +1894,8 @@ msgid "Check for &updates..."
 msgstr "&Caută Actualizări..."
 
 #: resources.h:967
-#, fuzzy
 msgid "Check for FileZilla &updates automatically:"
-msgstr "Căutarea de actualizări a eșuat"
+msgstr "Caută automat act&ualizări pentru FileZilla:"
 
 #: resources.h:567
 msgid "Check for newer versions of FileZilla"
@@ -1948,7 +1949,7 @@ msgstr "Clasic"
 
 #: resources.h:295
 msgid "Clear &Site Manager entries"
-msgstr "Curăță Intrările din Ad&ministratorul de Situri"
+msgstr "Curăță Intrările din Ad&ministratorul Siturilor"
 
 #: resources.h:632
 msgid "Clear &layout cache"
@@ -2152,7 +2153,7 @@ msgstr "Conectează șuntînd setările pentru proxy"
 
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
-msgstr "Conectează la situl specificat în Administratorul de Situri"
+msgstr "Conectează la situl specificat în Administratorul Siturilor"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:943
 msgid "Connected"
@@ -2257,7 +2258,9 @@ msgstr "Conectarea la server a fost pierdută."
 
 #: ../../locales/../src/engine/proxy.cpp:188
 msgid "Connection with proxy established, performing handshake..."
-msgstr "Conexiune stabilită cu proxyul, realizez strîngerea de mînă..."
+msgstr ""
+"Conexiune stabilită cu serverul proxy (interpus), realizez strîngerea de "
+"mînă..."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:561
 msgid "Connection with server got closed prematurely."
@@ -2295,12 +2298,11 @@ msgstr "Nu pot accepta conexiunea: %s"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:99
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:551
 msgid "Could not add connection to Site Manager"
-msgstr "Nu pot adăuga conexiunea curentă la Administratorul de Situri"
+msgstr "Nu pot adăuga conexiunea curentă la Administratorul Siturilor"
 
 #: ../../locales/../src/interface/state.cpp:842
-#, fuzzy
 msgid "Could not complete operation"
-msgstr "Nu pot copia datele"
+msgstr "Nu am putut termina operația"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:188
 msgid "Could not connect to server"
@@ -2411,7 +2413,7 @@ msgid ""
 "Any changes made in the Site Manager will not be saved."
 msgstr ""
 "Nu pot încărca \"%s\". Asigură-te că fila este validă și poate fi accesată.\n"
-"Orice modificare făcută în Administratorul de Situri nu va fi salvată."
+"Orice modificare făcută în Administratorul Siturilor nu va fi salvată."
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:223
 msgid "Could not load keyfile"
@@ -2516,7 +2518,7 @@ msgid ""
 "Could not write \"%s\", any changes to the Site Manager could not be saved: %"
 "s"
 msgstr ""
-"Nu pot scrie \"%s\". Orice modificare în Administratorul de Situri nu poate "
+"Nu pot scrie \"%s\". Orice modificare în Administratorul Siturilor nu poate "
 "fi salvată: %s"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:858
@@ -2691,7 +2693,7 @@ msgstr "Acțiune la dublu-clic pe d&osar:"
 
 #: resources.h:227 resources.h:426
 msgid "D&uplicate"
-msgstr ""
+msgstr "D&uplichează"
 
 #: ../../locales/../src/engine/server.cpp:34
 msgid "DOS-like with virtual paths"
@@ -2809,7 +2811,7 @@ msgstr[2] ""
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1223
 msgid "Delete Site Manager entry"
-msgstr "Șterge Intrarea din Administratorul de Situri"
+msgstr "Șterge Intrarea din Administratorul Siturilor"
 
 #: resources.h:655 resources.h:676
 msgid "Delete selected directory"
@@ -2966,12 +2968,12 @@ msgstr "Sigur vrei să închizi FileZilla?"
 msgid ""
 "Do you really want to delete all Site Manager entries and the transfer queue?"
 msgstr ""
-"Sigur vrei să ștergi toate intrările din Administratorul de Situri și coada "
-"de transfer?"
+"Sigur vrei să ștergi toate intrările din Administratorul Siturilor și din "
+"coada de transfer?"
 
 #: ../../locales/../src/interface/clearprivatedata.cpp:46
 msgid "Do you really want to delete all Site Manager entries?"
-msgstr "Sigur vrei să ștergi toate intrările din Administratorul de Situri?"
+msgstr "Sigur vrei să ștergi toate intrările din Administratorul Siturilor?"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1225
 msgid "Do you really want to delete selected entry?"
@@ -3040,6 +3042,8 @@ msgid ""
 "Download speed: %s/s\n"
 "Upload speed: %s/s"
 msgstr ""
+"Viteza de descărcare: %s/s\n"
+"Viteza de încărcare: %s/s"
 
 #: ../../locales/../src/interface/edithandler.cpp:1253
 msgid "Downloading"
@@ -3083,7 +3087,7 @@ msgstr ""
 
 #: resources.h:85
 msgid "Dupl&icate"
-msgstr ""
+msgstr "Dupl&ichează"
 
 #: resources.h:213
 msgid "E&nable all"
@@ -3230,7 +3234,6 @@ msgid "Enter selected directory"
 msgstr "Deschide Dosarul Selectat"
 
 #: resources.h:739
-#, fuzzy
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3246,11 +3249,18 @@ msgid ""
 "- ftpes:// for FTP over TLS (explicit)"
 msgstr ""
 "Introdu adresa serverului.\n"
-"Pentru a specifica protocolul serverului, prefixează gazda cu protocolul de "
-"identificare. Dacă acesta nu e specificat, va fi utilizat cel implicit "
-"(ftp://).\n"
-"Poți de asemenea să introduci adrese complete în forma protocol://utiliz:"
-"parolă@server:port, valorile din celelalte cîmpuri fiind apoi suprascrise."
+"Pentru a specifica protocolul serverului, prefixează adresa serverului cu "
+"protocolul de identificare. Dacă acesta nu e specificat, va fi utilizat cel "
+"implicit (ftp://).\n"
+"Poți de asemenea să introduci aici adrese complete în forma protocol://"
+"utilizator:parolă@server:port, valorile din celelalte cîmpuri fiind apoi "
+"suprascrise.\n"
+"\n"
+"Protocoalele suportate sînt:\n"
+"ftp:// pt. FTP normal,\n"
+"sftp:// pt. protocolul de transfer SSH,\n"
+"ftps:// pt. FTP prin TLS (implicit)\n"
+"ftpes:// pt. FTP prin TLS (explicit)."
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
 #, c-format
@@ -3354,11 +3364,11 @@ msgstr "Realizează conectarea într-un tab nou"
 
 #: resources.h:971
 msgid "Every month"
-msgstr ""
+msgstr "Lunar"
 
 #: resources.h:970
 msgid "Every two weeks"
-msgstr ""
+msgstr "La două săptămîni"
 
 #: resources.h:965
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
@@ -3770,9 +3780,8 @@ msgstr ""
 "FileZilla trebuie repornită pentru ca schimbarea limbii să devină efectivă."
 
 #: resources.h:978
-#, fuzzy
 msgid "FileZilla updates"
-msgstr "Eroare FileZilla"
+msgstr "Actualizări FileZilla"
 
 #: resources.h:533
 msgid "Filelist status &bars"
@@ -3853,7 +3862,7 @@ msgstr "Tip"
 #: resources.h:966
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:133
 msgid "Filetype associations"
-msgstr "Asocieri ale tipurilor de file"
+msgstr "Asocierile tipurilor de file"
 
 #: resources.h:234
 msgid "Filter applies to:"
@@ -4097,8 +4106,8 @@ msgstr ""
 "Dacă testul automat de la sfîrșitul acestui vrăjitor reușește, dar nu poți "
 "totuși să transferi file către un anumit server, e posibil ca acesta să fie "
 "configurat greșit și deci va trebui să utilizezi modul activ de transfer. "
-"Poți seta acest mod pentru fiecare server în parte în Administratorul de "
-"Situri."
+"Poți seta acest mod pentru fiecare server în parte în Administratorul "
+"Siturilor."
 
 #: resources.h:702
 msgid ""
@@ -4370,7 +4379,7 @@ msgid ""
 "site manager to force UTF-8."
 msgstr ""
 "A fost recepționată o secvență de caractere nevalide, care a dezactivat UTF-"
-"8. Selectează opțiunea UTF-8 în Administratorul de Situri pentru a forța UTF-"
+"8. Selectează opțiunea UTF-8 în Administratorul Siturilor pentru a forța UTF-"
 "8."
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:896
@@ -4412,7 +4421,6 @@ msgstr "Port nevalid. El trebuie să aibă o valoare cuprinsă între 1 și 6553
 
 #: ../../locales/../src/engine/server.cpp:93
 #: ../../locales/../src/interface/quickconnectbar.cpp:125
-#, fuzzy
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP,\n"
@@ -4422,9 +4430,9 @@ msgid ""
 msgstr ""
 "Protocolul specificat este nevalid. Protocoalele valide sînt:\n"
 "ftp:// pt. FTP normal,\n"
-"sftp:// pt. protocolul de tranfer SSH,\n"
-"ftps:// pt. FTP prin SSL (implicit) și\n"
-"ftpes:// pt. FTP prin SSL (explicit)."
+"sftp:// pt. protocolul de transfer SSH,\n"
+"ftps:// pt. FTP prin TLS (implicit) și\n"
+"ftpes:// pt. FTP prin TLS (explicit)."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4418
 msgid ""
@@ -4499,9 +4507,8 @@ msgid "Key exchange"
 msgstr "Schimb de chei"
 
 #: resources.h:20 resources.h:48
-#, fuzzy
 msgid "Key exchange:"
-msgstr "Schimb de chei"
+msgstr "Schimb de chei:"
 
 #: resources.h:619
 msgid "L&owest"
@@ -4799,9 +4806,8 @@ msgid "Network unreachable"
 msgstr "Rețea inaccesibilă"
 
 #: resources.h:968
-#, fuzzy
 msgid "Never"
-msgstr "&Server"
+msgstr "Niciodată"
 
 #: resources.h:81
 msgid "New &Folder"
@@ -5026,7 +5032,7 @@ msgstr "O dată"
 
 #: resources.h:969
 msgid "Once a week"
-msgstr ""
+msgstr "Săptămînal"
 
 #: resources.h:672
 msgid "Open directory in system's file manager"
@@ -5034,19 +5040,17 @@ msgstr "Deschide dosarul în administratorul de file al sistemului"
 
 #: resources.h:1000
 msgid "Open the Site Manager"
-msgstr "Deschide Administratorul de Situri"
+msgstr "Deschide Administratorul Siturilor"
 
 #: resources.h:1001
-#, fuzzy
 msgid "Open the Site Manager."
-msgstr "Deschide Administratorul de Situri"
+msgstr "Deschide Administratorul Siturilor"
 
 #: resources.h:1002
-#, fuzzy
 msgid "Open the Site Manager. Right-click for a list of sites."
 msgstr ""
-"Deschide dialogul de filtrare a listării dosarului. Clic-dreapta pentru a "
-"comuta filtrele."
+"Deschide Administratorul Siturilor. Clichează-dreapta pentru a vedea lista "
+"siturilor."
 
 #: resources.h:580
 msgid "Open the file."
@@ -5074,7 +5078,7 @@ msgstr "Deschide ca Tab Nou"
 
 #: resources.h:508
 msgid "Opens the Site Manager"
-msgstr "Deschide Administratorul de Situri"
+msgstr "Deschide Administratorul Siturilor"
 
 #: resources.h:1022
 msgid ""
@@ -5585,7 +5589,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/cmdline.cpp:18
 msgid "Print diagnostic information related to startup of FileZilla"
-msgstr ""
+msgstr "Tipărește informații de diagnosticare legate de pornirea FileZilla"
 
 #: ../../locales/../src/interface/cmdline.cpp:17
 msgid "Print version information to stdout and exit"
@@ -5600,13 +5604,13 @@ msgid "Priority"
 msgstr "Prioritate"
 
 #: resources.h:977
-#, fuzzy
 msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
 msgstr ""
-"Vor fi trimise serverului doar versiunea de FileZilla și sistemul de operare "
-"pe care îl utilizezi."
+"Politică de confidențialitate: Vor fi trimise serverului doar versiunea de "
+"FileZilla, sistemul de operare folosit și arhitectura procesorului "
+"calculatorului."
 
 #: resources.h:807
 msgid "Private &keys:"
@@ -5625,9 +5629,8 @@ msgid "Process &Queue"
 msgstr "Procesează Coa&da de Transfer"
 
 #: resources.h:18 resources.h:46
-#, fuzzy
 msgid "Protocol:"
-msgstr "Pro&tocol:"
+msgstr "Protocol:"
 
 #: resources.h:818
 msgid "Proxy &port:"
@@ -5762,38 +5765,37 @@ msgstr "Sigur vrei să anulezi operația curentă?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1715
 #: ../../locales/../src/interface/search.cpp:1026
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
-msgstr[0] "Sigur ștergi %d dosar cu tot conținutul său?"
-msgstr[1] "Sigur ștergi cele %d dosare cu tot conținutul lor?"
-msgstr[2] "Sigur ștergi cele %d de dosare cu tot conținutul lor?"
+msgstr[0] "Sigur ștergi %d dosar cu tot conținutul său de pe server?"
+msgstr[1] "Sigur ștergi cele %d dosare cu tot conținutul lor de pe server?"
+msgstr[2] "Sigur ștergi cele %d de dosare cu tot conținutul lor de pe server?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1713
 #: ../../locales/../src/interface/search.cpp:1024
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
-msgstr[0] "Sigur ștergi %d filă?"
-msgstr[1] "Sigur ștergi cele %d file?"
-msgstr[2] "Sigur ștergi cele %d de file?"
+msgstr[0] "Sigur ștergi %d filă de pe server?"
+msgstr[1] "Sigur ștergi cele %d file de pe server?"
+msgstr[2] "Sigur ștergi cele %d de file de pe server?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1720
 #: ../../locales/../src/interface/search.cpp:1031
-#, fuzzy, c-format
+#, c-format
 msgid "Really delete %s and %s from the server?"
-msgstr "Sigur ștergi %s și %s?"
+msgstr "Sigur ștergi %s și %s de pe server?"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1125
-#, fuzzy
 msgid "Really delete all selected files and/or directories from the server?"
-msgstr "Sigur vrei să ștergi filele și/sau dosarele selectate?"
+msgstr "Sigur vrei să ștergi de pe server filele și/sau dosarele selectate?"
 
 #: ../../locales/../src/engine/local_filesys.cpp:136
-#, fuzzy
 msgid "Really delete all selected files and/or directories from your computer?"
-msgstr "Sigur vrei să ștergi filele și/sau dosarele selectate?"
+msgstr ""
+"Sigur vrei să ștergi de pe calculatorul tău filele și/sau dosarele selectate?"
 
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Reason"
@@ -5849,9 +5851,8 @@ msgid "Refresh the file and folder lists"
 msgstr "Împrospătează listele de file și dosare"
 
 #: resources.h:505
-#, fuzzy
 msgid "Remember passwords?"
-msgstr "Memorez Parola?"
+msgstr "Memorez parolele?"
 
 #: ../../locales/../src/interface/edithandler.cpp:1249
 msgid "Remote"
@@ -6019,7 +6020,7 @@ msgstr "Arată File&le Editate Curent..."
 
 #: resources.h:895
 msgid "S&how the Site Manager on startup"
-msgstr "Arată Ad&ministratorul de Situri la pornire"
+msgstr "Arată Ad&ministratorul Siturilor la pornire"
 
 #: resources.h:627
 msgid "S&hutdown system"
@@ -6048,12 +6049,12 @@ msgstr "Salvez setările?"
 #: ../../locales/../src/interface/manual_transfer.cpp:455
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:967
 msgid "Saving of password has been disabled by your system administrator."
-msgstr ""
+msgstr "Salvarea parolelor a fost dezactivată de administratorul de sistem."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:457
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:969
 msgid "Saving of passwords has been disabled by you."
-msgstr ""
+msgstr "Salvarea parolelor a fost dezactivată de tine."
 
 #: ../../locales/../src/interface/QueueView.cpp:1835
 msgid "Scanning for files to add to queue"
@@ -6307,9 +6308,8 @@ msgstr "Serverul nu a închis corespunzător conexiunea TLS"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:921
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:984
-#, fuzzy
 msgid "Server does not support non-ASCII characters."
-msgstr "Serverul nu suportă reluarea filelor > 2GB."
+msgstr "Serverul nu suportă caracterele non-ASCII."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4349
 #, c-format
@@ -6348,7 +6348,7 @@ msgid ""
 "Manager"
 msgstr ""
 "Serverul ar putea necesita autentificare. Încearcă să specifici un cont "
-"folosind Administratorul de Situri"
+"folosind Administratorul Siturilor"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:420
 msgid "Server returned empty path."
@@ -6443,9 +6443,8 @@ msgid "Show both directory trees and continue comparing?"
 msgstr "Afișez amîndoi arborii de dosare și continui compararea?"
 
 #: resources.h:638
-#, fuzzy
 msgid "Shows available TLS ciphers"
-msgstr "Port&ul minim disponibil:"
+msgstr "Arată cifrurile TLS disponibile"
 
 #: ../../locales/../src/interface/cmdline.cpp:6
 msgid "Shows this help dialog"
@@ -6457,16 +6456,15 @@ msgstr "Închide Calculatorul Acum"
 
 #: resources.h:308
 msgid "Site &Manager entries"
-msgstr "Intrări în Ad&ministratorul de Situri"
+msgstr "Intrări în Ad&ministratorul Siturilor"
 
 #: resources.h:78
 msgid "Site Manager"
-msgstr "Administrator de Situri"
+msgstr "Administratorul Siturilor"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:975
-#, fuzzy
 msgid "Site Manager - Cannot remember password"
-msgstr "Nu memora par&olele"
+msgstr "Administratorul Siturilor - Nu pot memora parola"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:945
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:956
@@ -6481,11 +6479,11 @@ msgstr "Nu memora par&olele"
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1107
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1116
 msgid "Site Manager - Invalid data"
-msgstr "Administratorul de Situri - Date nevalide"
+msgstr "Administratorul Siturilor - Date nevalide"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:316
 msgid "Site Manager already open"
-msgstr "Administratorul de Situri este deja deschis"
+msgstr "Administratorul Siturilor este deja deschis"
 
 #: ../../locales/../src/interface/sitemanager.cpp:439
 #: ../../locales/../src/interface/sitemanager.cpp:456
@@ -6518,8 +6516,8 @@ msgid ""
 "Add current connection to the site manager?"
 msgstr ""
 "Semnele de carte specifice pentru sit necesită ca serverul să fie stocat în "
-"Administratorul de Situri.\n"
-"Adaug conexiunea curentă la managerul de situri?"
+"Administratorul Siturilor.\n"
+"Adaug conexiunea curentă la administratorul de situri?"
 
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Size"
@@ -6617,11 +6615,11 @@ msgstr "Limitele de viteză sînt activate, clichează pentru a modifica."
 
 #: resources.h:974
 msgid "Stable and beta versions"
-msgstr ""
+msgstr "Versiunile stabile și cele beta"
 
 #: resources.h:973
 msgid "Stable versions only"
-msgstr ""
+msgstr "Doar versiunile stabile"
 
 #: resources.h:400
 msgid "Start transfer &immediately"
@@ -6629,7 +6627,7 @@ msgstr "Pornește &imediat transferul"
 
 #: ../../locales/../src/interface/cmdline.cpp:7
 msgid "Start with opened Site Manager"
-msgstr "Pornește cu Administratorul de Situri deschis"
+msgstr "Pornește cu Administratorul Siturilor deschis"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2256
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1634
@@ -6774,7 +6772,7 @@ msgid ""
 "Do you want to continue? Any changes made in the Site Manager won't be saved "
 "then."
 msgstr ""
-"Administratorul de Situri e deschis într-o altă instanță de FileZilla.\n"
+"Administratorul Siturilor e deschis într-o altă instanță de FileZilla.\n"
 "Vrei să continui? Orice modificare efectuată în Administrator nu va fi "
 "salvată."
 
@@ -6783,7 +6781,7 @@ msgid ""
 "The Site Manager is opened in another instance of FileZilla 3.\n"
 "Please close it or the data cannot be deleted."
 msgstr ""
-"Administratorul de Situri este deschis într-o altă instanță de FileZilla.\n"
+"Administratorul Siturilor este deschis într-o altă instanță de FileZilla.\n"
 "Închide-o sau datele nu vor putea fi șterse."
 
 #: ../../locales/../src/interface/xmlfunctions.cpp:426
@@ -6933,7 +6931,7 @@ msgid ""
 "password will be imported.\n"
 "Continue with the import?"
 msgstr ""
-"Fila selectată conține date ale managerului de situri dintr-o versiune "
+"Fila selectată conține date ale Administratorului Siturilor dintr-o versiune "
 "anterioară de FileZilla.\n"
 "Din cauza diferențelor în formatul de stocare, numai serverul, portul, "
 "utilizatorul și parola vor fi importate.\n"
@@ -7363,11 +7361,11 @@ msgstr "Tip"
 
 #: resources.h:788
 msgid "Type of FTP Proxy:"
-msgstr "Tip de proxy FTP:"
+msgstr "Tip de server proxy (interpus) FTP:"
 
 #: resources.h:813
 msgid "Type of generic proxy:"
-msgstr "Tip de proxy generic:"
+msgstr "Tip de server proxy (interpus) generic:"
 
 #: resources.h:340
 msgid "U&pload"
@@ -7479,9 +7477,8 @@ msgid "Update wizard"
 msgstr "Vrăjitor de Actualizare"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:137
-#, fuzzy
 msgid "Updates"
-msgstr "Control al Actualizărilor"
+msgstr "Actualizare"
 
 #: resources.h:372
 msgid "Upload"
@@ -7568,7 +7565,7 @@ msgstr "Folosește serverul conectat curent"
 
 #: resources.h:381
 msgid "Use server from site manager"
-msgstr "Folosește un server din administratorul de situri"
+msgstr "Folosește un server din Administratorul Siturilor"
 
 #: resources.h:906
 msgid "Use system &defaults"
@@ -7759,13 +7756,12 @@ msgid "What's new:"
 msgstr "Ce este nou:"
 
 #: resources.h:500
-#, fuzzy
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
 msgstr ""
-"FileZilla poate memora parolele, pentru ca tu să te poți reconecta ulterior "
-"fără să reintroduci parola după repornirea FileZilla."
+"Dacă permiți ca FileZilla să memoreze parolele, după repornirea softului te "
+"vei putea conecta la servere fără să mai reintroduci parola."
 
 #: resources.h:841
 msgid ""
@@ -7780,9 +7776,8 @@ msgid "Widescreen"
 msgstr "Ecran Lat"
 
 #: resources.h:499
-#, fuzzy
 msgid "Would you like FileZilla to remember passwords?"
-msgstr "Vrei ca FileZilla să memoreze această parolă?"
+msgstr "Vrei ca FileZilla să memoreze parolele?"
 
 #: resources.h:152
 msgid "Wr&ite"
@@ -7806,6 +7801,8 @@ msgid ""
 "You appear to be using an IPv6-only host. This wizard does not support this "
 "environment."
 msgstr ""
+"Se pare că utilizezi un server gazdă exclusiv IPv6. Acest vrăjitor nu "
+"suportă mediul respectiv."
 
 #: resources.h:261
 msgid ""
@@ -8116,6 +8113,18 @@ msgstr "oricine scrie"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
+#~ msgid "%s (%d.%d KB/s)"
+#~ msgstr "%s (%d.%d KB/s)"
+
+#~ msgid "%s (%d.%d MB/s)"
+#~ msgstr "%s (%d.%d MB/s)"
+
+#~ msgid "%s bytes (%d.%d KB/s)"
+#~ msgstr "%s baiți (%d.%d KB/s)"
+
+#~ msgid "%s bytes (%d.%d MB/s)"
+#~ msgstr "%s baiți (%d.%d MB/s)"
+
 #~ msgid "&Copy"
 #~ msgstr "&Copiază"
 
@@ -8124,6 +8133,9 @@ msgstr "wxWidgets:"
 
 #~ msgid "&Number of days between update checks:"
 #~ msgstr "&Numărul de zile între verificările actualizărilor:"
+
+#~ msgid "&Remember this and all future passwords"
+#~ msgstr "Memo&rează parola asta și toate cele viitoare"
 
 #~ msgid "(At least 7 days)"
 #~ msgstr "(cel puțin 7 zile)"
@@ -8142,21 +8154,6 @@ msgstr "wxWidgets:"
 
 #~ msgid "Privacy policy:"
 #~ msgstr "Politica de Confidențialitate:"
-
-#~ msgid "%s (%d.%d KB/s)"
-#~ msgstr "%s (%d.%d KB/s)"
-
-#~ msgid "%s (%d.%d MB/s)"
-#~ msgstr "%s (%d.%d MB/s)"
-
-#~ msgid "%s bytes (%d.%d KB/s)"
-#~ msgstr "%s baiți (%d.%d KB/s)"
-
-#~ msgid "%s bytes (%d.%d MB/s)"
-#~ msgstr "%s baiți (%d.%d MB/s)"
-
-#~ msgid "&Remember this and all future passwords"
-#~ msgstr "Memo&rează parola asta și toate cele viitoare"
 
 #~ msgid "Duplicate filter name"
 #~ msgstr "Nume de filtru duplicat"
@@ -8306,7 +8303,7 @@ msgstr "wxWidgets:"
 #~ msgstr "Inițial"
 
 #~ msgid "Error %d writing to socket"
-#~ msgstr "Eroarea %d apărută la scrierea în socket"
+#~ msgstr "Eroarea %d  apărută la scrierea în socket"
 
 #~ msgid "Folder"
 #~ msgstr "Folder"

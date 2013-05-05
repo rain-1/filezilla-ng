@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-04-30 22:56+0200\n"
-"PO-Revision-Date: 2013-04-30 15:34+0200\n"
+"PO-Revision-Date: 2013-05-02 00:47+0200\n"
 "Last-Translator: Peter Körner <18427@gmx.net>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1399,7 +1399,6 @@ msgid "Advanced options:"
 msgstr "Erweiterte Optionen:"
 
 #: resources.h:975
-#, fuzzy
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
