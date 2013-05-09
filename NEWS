@@ -10,7 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
-3.7.0-rc1 (3013-04-29)
+3.7.0 (2013-05-09)
+
+- Fix typo
+
+3.7.0-rc1 (2013-04-29)
 
 + Show total transfer speed as tooltip over the transfer indicators
 + List supported protocols in tooltip of host field in quickconnect bar
