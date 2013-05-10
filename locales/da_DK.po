@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-04-28 22:31+0200\n"
-"PO-Revision-Date: 2013-03-15 10:46+0100\n"
+"POT-Creation-Date: 2013-05-10 20:47+0200\n"
+"PO-Revision-Date: 2013-05-03 13:34+0100\n"
 "Last-Translator: Niels Fanøe <niels.f@noee.dk>\n"
 "Language-Team: Team Fanøe <niels.f@noee.dk>\n"
 "MIME-Version: 1.0\n"
@@ -1003,16 +1003,16 @@ msgstr "Logontypen 'Konto' understøttes ikke af den valgte protokol"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:459
 msgid ""
-"'Normal' and 'Account' logontypes are not available, using 'Ask ask for "
+"'Normal' and 'Account' logontypes are not available, using 'Ask for "
 "password' instead."
 msgstr ""
-"Login-typerne 'Normal' og 'Konto' er ikke tilgængelige - bruger 'Bed om "
+"Login-typerne 'Normal' og 'Konto' er ikke tilgængelige. Bruger 'Bed om "
 "adgangskode' i stedet."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:971
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
-"changed to 'Ask ask for password'."
+"changed to 'Ask for password'."
 msgstr ""
 "Login-typerne 'Normal' og 'Konto' er ikke tilgængelige. Din indtastning er "
 "ændret til 'Bed om adgangskode'."
@@ -1378,7 +1378,7 @@ msgstr "Avancerede indstillinger:"
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
-"meant for testing purposes. Nightly versions of FileZilla may not work as "
+"meant for testing purposes. Nightly builds of FileZilla may not work as "
 "expected and might even damage your system. Use beta versions and nightly "
 "builds at your own risk."
 msgstr ""
@@ -1611,7 +1611,7 @@ msgstr "Under redigering"
 msgid "Benchmark string coalescer"
 msgstr "Udmålingsstreng-samler"
 
-#: ../../locales/../src/engine/tlssocket.cpp:951
+#: ../../locales/../src/engine/tlssocket.cpp:960
 msgid "Beware! Certificate has been revoked"
 msgstr "Pas på! Certifikat er tilbagekaldt"
 
@@ -2343,7 +2343,7 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "Kunne ikke generere en brugerdefineret login-sekvens."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1081
+#: ../../locales/../src/engine/tlssocket.cpp:1090
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2351,7 +2351,7 @@ msgstr ""
 "Kunne ikke få DN (Distinguished Name) på certifikat-udstederen - "
 "gnutls_x509_get_issuer_dn fejlede"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1056
+#: ../../locales/../src/engine/tlssocket.cpp:1065
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2372,12 +2372,12 @@ msgstr "Kunne ikke få svar fra fzputtygen."
 msgid "Could not get temporary directory to download file into."
 msgstr "Kunne ikke etablere midlertidig mappe at downloade filen til."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1009
+#: ../../locales/../src/engine/tlssocket.cpp:1018
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Kunne ikke importere peer-certifikater - gnutls_x509_crt_import fejlede"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1002
+#: ../../locales/../src/engine/tlssocket.cpp:1011
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -3605,7 +3605,7 @@ msgstr "Kunne ikke sætte sproget til %s - anvender standardsystemsproget."
 msgid "Failed to validate settings"
 msgstr "Kunne ikke validere indstillinger"
 
-#: ../../locales/../src/engine/tlssocket.cpp:944
+#: ../../locales/../src/engine/tlssocket.cpp:953
 msgid "Failed to verify peer certificate"
 msgstr "Kunne ikke verificere peer-certifikat"
 
@@ -4284,7 +4284,7 @@ msgstr ""
 "serveren om en port, og opretter forbindelse til den givne port. Dette "
 "kræver ikke meget konfiguration."
 
-#: ../../locales/../src/engine/tlssocket.cpp:958
+#: ../../locales/../src/engine/tlssocket.cpp:967
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4459,9 +4459,8 @@ msgid "Key exchange"
 msgstr "Nøgleudveksling"
 
 #: resources.h:20 resources.h:48
-#, fuzzy
 msgid "Key exchange:"
-msgstr "Nøgleudveksling"
+msgstr "Nøgleudveksling:"
 
 #: resources.h:619
 msgid "L&owest"
@@ -5517,7 +5516,7 @@ msgstr "Bevarer fil-tidsstempler"
 msgid "Preview:"
 msgstr "Visning:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:984
+#: ../../locales/../src/engine/tlssocket.cpp:993
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Primær forbindelse og data-forbindelse certifikater er ikke ens."
 
@@ -5563,9 +5562,8 @@ msgid "Process &Queue"
 msgstr "Udfør &kø"
 
 #: resources.h:18 resources.h:46
-#, fuzzy
 msgid "Protocol:"
-msgstr "Pro&tokol:"
+msgstr "Protokol:"
 
 #: resources.h:818
 msgid "Proxy &port:"
@@ -5789,7 +5787,7 @@ msgstr "Husk adgangskoder?"
 msgid "Remote"
 msgstr "Fjern"
 
-#: ../../locales/../src/engine/tlssocket.cpp:907
+#: ../../locales/../src/engine/tlssocket.cpp:916
 msgid "Remote certificate not trusted."
 msgstr "Fjern-certifikat ikke sikkert."
 
@@ -5942,7 +5940,7 @@ msgstr "Henter mappeliste..."
 msgid "Retrieving external IP address from %s"
 msgstr "Henter ekstern IP-adresse fra %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:965
+#: ../../locales/../src/engine/tlssocket.cpp:974
 msgid "Root certificate is not trusted"
 msgstr "Rodcertifikat er ikke sikkert"
 
@@ -6229,7 +6227,7 @@ msgstr "Serienummer:"
 msgid "Server &Type:"
 msgstr "Servert&ype:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:787
+#: ../../locales/../src/engine/tlssocket.cpp:794
 msgid "Server did not properly shut down TLS connection"
 msgstr "Serveren lukkede ikke TLS-forbindelsen korrekt ned"
 
@@ -7370,7 +7368,7 @@ msgstr ""
 "Medmindre dette problem løses, vil FTP i aktiv tilstand ikke fungere, og du "
 "skal anvende passiv tilstand."
 
-#: ../../locales/../src/engine/tlssocket.cpp:936
+#: ../../locales/../src/engine/tlssocket.cpp:945
 msgid "Unsupported certificate type"
 msgstr "Certifikat-type ikke understøttet"
 
@@ -7547,7 +7545,7 @@ msgstr "Gyldig til:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Log-meddelelser med mange ord fra wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1128
+#: ../../locales/../src/engine/tlssocket.cpp:1137
 msgid "Verifying certificate..."
 msgstr "Godkender certifikat..."
 
@@ -7944,7 +7942,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "fzsftp kunne ikke startes"
 
-#: ../../locales/../src/engine/tlssocket.cpp:974
+#: ../../locales/../src/engine/tlssocket.cpp:983
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers returnerede ingen certifikater"
 
@@ -7996,9 +7994,9 @@ msgstr "læsbar af ejer"
 msgid "owner writeable"
 msgstr "skrivbar af ejer"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1139
-#: ../../locales/../src/engine/tlssocket.cpp:1150
-#: ../../locales/../src/engine/tlssocket.cpp:1165
+#: ../../locales/../src/engine/tlssocket.cpp:1148
+#: ../../locales/../src/engine/tlssocket.cpp:1159
+#: ../../locales/../src/engine/tlssocket.cpp:1174
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:29
 msgid "unknown"
 msgstr "ukendt"
