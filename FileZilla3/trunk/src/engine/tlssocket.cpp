@@ -783,8 +783,17 @@ void CTlsSocket::Failure(int code, int socket_error, const wxString& function)
 	if (code)
 	{
 		LogError(code, function);
-		if (code == GNUTLS_E_UNEXPECTED_PACKET_LENGTH && m_socket_eof)
-			m_pOwner->LogMessage(Status, _("Server did not properly shut down TLS connection"));
+		if (m_socket_eof)
+		{
+			if (code == GNUTLS_E_UNEXPECTED_PACKET_LENGTH
+#ifdef GNUTLS_E_PREMATURE_TERMINATION
+				|| code == GNUTLS_E_PREMATURE_TERMINATION
+#endif
+				)
+			{
+				m_pOwner->LogMessage(Status, _("Server did not properly shut down TLS connection"));
+			}
+		}
 	}
 	Uninit();
 
