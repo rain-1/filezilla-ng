@@ -60,8 +60,28 @@ class CStatusLineCtrl;
 class CFileItem;
 struct t_EngineData
 {
+	t_EngineData()
+		: pEngine()
+		, active()
+		, transient()
+		, state(t_EngineData::none)
+		, pItem()
+		, pStatusLineCtrl()
+		, m_idleDisconnectTimer()
+	{
+	}
+
+	~t_EngineData()
+	{
+		wxASSERT(!active);
+		if (!transient)
+			delete pEngine;
+		delete m_idleDisconnectTimer;
+	}
+
 	CFileZillaEngine* pEngine;
 	bool active;
+	bool transient;
 
 	enum EngineDataState
 	{
@@ -138,7 +158,7 @@ public:
 
 	void WriteToFile(TiXmlElement* pElement) const;
 
-	void ProcessNotification(CNotification* pNotification);
+	void ProcessNotification(CFileZillaEngine* pEngine, CNotification* pNotification);
 
 	void RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString& newName, bool local);
 
@@ -222,7 +242,8 @@ protected:
 
 	bool IsOtherEngineConnected(t_EngineData* pEngineData);
 
-	t_EngineData* GetIdleEngine(const CServer* pServer = 0);
+	t_EngineData* GetIdleEngine(const CServer* pServer = 0, bool allowTransient = false);
+	t_EngineData* GetEngineData(const CFileZillaEngine* pEngine);
 
 	std::vector<t_EngineData*> m_engineData;
 	std::list<CStatusLineCtrl*> m_statusLineList;

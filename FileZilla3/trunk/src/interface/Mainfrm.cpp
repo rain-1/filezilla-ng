@@ -1012,7 +1012,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 			{
 				CAsyncRequestNotification* pAsyncRequest = reinterpret_cast<CAsyncRequestNotification *>(pNotification);
 				if (pAsyncRequest->GetRequestID() == reqId_fileexists)
-					m_pQueueView->ProcessNotification(pNotification);
+					m_pQueueView->ProcessNotification(pEngine, pNotification);
 				else
 				{
 					if (pAsyncRequest->GetRequestID() == reqId_certificate)
@@ -1029,7 +1029,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 			}
 			break;
 		case nId_transferstatus:
-			m_pQueueView->ProcessNotification(pNotification);
+			m_pQueueView->ProcessNotification(pEngine, pNotification);
 			break;
 		case nId_sftp_encryption:
 			{

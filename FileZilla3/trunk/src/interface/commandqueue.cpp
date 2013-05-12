@@ -192,7 +192,7 @@ void CCommandQueue::Finish(COperationNotification *pNotification)
 
 	if (m_exclusiveEngineLock)
 	{
-		m_pMainFrame->GetQueue()->ProcessNotification(pNotification);
+		m_pMainFrame->GetQueue()->ProcessNotification(m_pEngine, pNotification);
 		return;
 	}
 
