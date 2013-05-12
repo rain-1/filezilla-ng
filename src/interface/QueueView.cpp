@@ -482,16 +482,6 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	extraCols.push_back(colTransferStatus);
 	CreateColumns(extraCols);
 
-	//Initialize the engine data
-	t_EngineData *pData = new t_EngineData;
-	pData->active = false;
-	pData->pItem = 0;
-	pData->pStatusLineCtrl = 0;
-	pData->state = t_EngineData::none;
-	pData->pEngine = 0; // TODO: Primary transfer engine data
-	pData->m_idleDisconnectTimer = 0;
-	m_engineData.push_back(pData);
-
 	SettingsChanged();
 
 	SetDropTarget(new CQueueViewDropTarget(this));
@@ -627,16 +617,9 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 
 void CQueueView::OnEngineEvent(wxEvent &event)
 {
-	std::vector<t_EngineData*>::iterator iter;
-	for (iter = m_engineData.begin(); iter != m_engineData.end(); ++iter)
-	{
-		if ((wxObject *)(*iter)->pEngine == event.GetEventObject())
-			break;
-	}
-	if (iter == m_engineData.end())
+	t_EngineData* const pEngineData = GetEngineData(reinterpret_cast<CFileZillaEngine*>(event.GetEventObject()));
+	if (!pEngineData)
 		return;
-
-	t_EngineData* const pEngineData = *iter;
 
 	CNotification *pNotification = pEngineData->pEngine->GetNextNotification();
 	while (pNotification)
@@ -650,16 +633,10 @@ void CQueueView::OnEngineEvent(wxEvent &event)
 	}
 }
 
-void CQueueView::ProcessNotification(CNotification* pNotification)
+void CQueueView::ProcessNotification(CFileZillaEngine* pEngine, CNotification* pNotification)
 {
-	if (m_engineData.empty())
-	{
-		delete pNotification;
-		return;
-	}
-
-	t_EngineData* pEngineData = m_engineData[0];
-	if (!pEngineData->active)
+	t_EngineData* pEngineData = GetEngineData(pEngine);
+	if (!pEngineData || !pEngineData->active || !pEngineData->transient)
 	{
 		delete pNotification;
 		return;
@@ -775,12 +752,11 @@ bool CQueueView::CanStartTransfer(const CServerItem& server_item, struct t_Engin
 
 	int active_count = server_item.m_activeCount;
 
-	bool browsing_on_same = false;
+	CState* browsingStateOnSameServer = 0;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	CState* pState = 0;
 	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 	{
-		pState = *iter;
+		CState* pState = *iter;
 		const CServer* pBrowsingServer = pState->GetServer();
 		if (!pBrowsingServer)
 			continue;
@@ -788,7 +764,7 @@ bool CQueueView::CanStartTransfer(const CServerItem& server_item, struct t_Engin
 		if (*pBrowsingServer == server)
 		{
 			active_count++;
-			browsing_on_same = true;
+			browsingStateOnSameServer = pState;
 			break;
 		}
 	}
@@ -798,30 +774,33 @@ bool CQueueView::CanStartTransfer(const CServerItem& server_item, struct t_Engin
 
 	// Max count has been reached
 
-	// If we got an idle engine connected to this very server, start the
-	// transfer anyhow. Let's not get this connection go to waste.
-	pEngineData = GetIdleEngine(&server);
-	if (pEngineData->pEngine->IsConnected() && pEngineData->lastServer == server)
-		return true;
+	pEngineData = GetIdleEngine(&server, true);
+	if (pEngineData)
+	{
+		// If we got an idle engine connected to this very server, start the
+		// transfer anyhow. Let's not get this connection go to waste.
+		if (pEngineData->lastServer == server && pEngineData->pEngine->IsConnected())
+			return true;
+	}
 
-	if (!browsing_on_same || active_count > 1)
+	if (!browsingStateOnSameServer || active_count > 1)
 		return false;
 
 	// At this point the following holds:
 	// max_count is limited to 1, only connection to server is held by the browsing connection
-	pEngineData = m_engineData[0];
 
-	if (pEngineData->active)
-		return false;
-
-	if (pEngineData->pEngine != pState->m_pEngine)
+	pEngineData = GetEngineData(browsingStateOnSameServer->m_pEngine);
+	if (pEngineData)
 	{
-		if (pEngineData->pEngine)
-			ReleaseExclusiveEngineLock(pEngineData->pEngine);
-		pEngineData->state = t_EngineData::waitprimary;
-		pEngineData->pEngine = pState->m_pEngine;
+		wxASSERT(pEngineData->transient);
+		return pEngineData->transient && !pEngineData->active;
 	}
 
+	pEngineData = new t_EngineData;
+	pEngineData->transient = true;
+	pEngineData->state = t_EngineData::waitprimary;
+	pEngineData->pEngine = browsingStateOnSameServer->m_pEngine;
+	m_engineData.push_back(pEngineData);
 	return true;
 }
 
@@ -1080,7 +1059,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 					return;
 			}
 
-			if (pEngineData != m_engineData[0])
+			if (!pEngineData->transient)
 				SwitchEngine(&pEngineData);
 		}
 		break;
@@ -1131,7 +1110,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 			if (!IncreaseErrorCount(*pEngineData))
 				return;
 
-			if (replyCode & FZ_REPLY_DISCONNECTED && pEngineData == m_engineData[0])
+			if (replyCode & FZ_REPLY_DISCONNECTED && pEngineData->transient)
 			{
 				ResetEngine(*pEngineData, retry);
 				return;
@@ -1154,7 +1133,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 			if (!IncreaseErrorCount(*pEngineData))
 				return;
 
-			if (pEngineData == m_engineData[0])
+			if (pEngineData->transient)
 			{
 				ResetEngine(*pEngineData, retry);
 				return;
@@ -1503,7 +1482,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 
 			if (res == FZ_REPLY_NOTCONNECTED)
 			{
-				if (&engineData == m_engineData[0])
+				if (engineData.transient)
 				{
 					ResetEngine(engineData, retry);
 					return;
@@ -1539,7 +1518,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 
 			if (res == FZ_REPLY_NOTCONNECTED)
 			{
-				if (&engineData == m_engineData[0])
+				if (engineData.transient)
 				{
 					ResetEngine(engineData, retry);
 					return;
@@ -1588,8 +1567,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 		UpdateStatusLinePositions();
 
 		// Send active engines the cancel command
-		unsigned int engineIndex;
-		for (engineIndex = 0; engineIndex < m_engineData.size(); engineIndex++)
+		for (unsigned int engineIndex = 0; engineIndex < m_engineData.size(); engineIndex++)
 		{
 			t_EngineData* const pEngineData = m_engineData[engineIndex];
 			if (!pEngineData->active)
@@ -1680,10 +1658,19 @@ bool CQueueView::Quit()
 
 void CQueueView::CheckQueueState()
 {
-	if (!m_engineData.empty() && !m_engineData[0]->active && m_engineData[0]->pEngine)
+	for (unsigned int i = 0; i < m_engineData.size(); )
 	{
-		ReleaseExclusiveEngineLock(m_engineData[0]->pEngine);
-		m_engineData[0]->pEngine = 0;
+		t_EngineData* data = m_engineData[i];
+		if (!data->active && data->transient)
+		{
+			if (data->pEngine)
+				ReleaseExclusiveEngineLock(data->pEngine);
+			delete data;
+			m_engineData.erase(m_engineData.begin() + i);
+		}
+		else {
+			++i;
+		}
 	}
 
 	if (m_activeCount)
@@ -2180,19 +2167,17 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 void CQueueView::SettingsChanged()
 {
 	// Create missing engines if needed
-	const int engineCount = m_engineData.size();
+	int engineCount = 0;
+	for (std::vector<t_EngineData*>::const_iterator it = m_engineData.begin(); it != m_engineData.end(); ++it)
+		if (!(*it)->transient)
+			++engineCount;
+
 	const int newEngineCount = COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS);
-	if (newEngineCount >= engineCount)
+	if (newEngineCount > engineCount)
 	{
-		for (int i = 0; i < (newEngineCount - engineCount + 1); i++)
+		for (int i = 0; i < (newEngineCount - engineCount); i++)
 		{
 			t_EngineData *pData = new t_EngineData;
-			pData->active = false;
-			pData->pItem = 0;
-			pData->pStatusLineCtrl = 0;
-			pData->state = t_EngineData::none;
-			pData->m_idleDisconnectTimer = 0;
-
 			pData->pEngine = new CFileZillaEngine();
 			pData->pEngine->Init(this, COptions::Get());
 
@@ -2688,14 +2673,18 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &event)
 	}
 }
 
-t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer /*=0*/)
+t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransient)
 {
+	wxASSERT(!allowTransient || pServer);
+
 	t_EngineData* pFirstIdle = 0;
 
-	// We start with 1, since 0 is the primary connection
-	for (unsigned int i = 1; i < m_engineData.size(); i++)
+	for (unsigned int i = 0; i < m_engineData.size(); i++)
 	{
 		if (m_engineData[i]->active)
+			continue;
+		
+		if (m_engineData[i]->transient && !allowTransient)
 			continue;
 
 		if (!pServer)
@@ -2710,6 +2699,17 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer /*=0*/)
 
 	return pFirstIdle;
 }
+
+
+t_EngineData* CQueueView::GetEngineData(const CFileZillaEngine* pEngine)
+{
+	for (unsigned int i = 0; i < m_engineData.size(); ++i)
+		if (m_engineData[i]->pEngine == pEngine)
+			return m_engineData[i];
+
+	return 0;
+}
+
 
 void CQueueView::TryRefreshListings()
 {
@@ -2731,7 +2731,7 @@ void CQueueView::TryRefreshListings()
 
 		// See if there's an engine that is already listing
 		unsigned int i;
-		for (i = 1; i < m_engineData.size(); i++)
+		for (i = 0; i < m_engineData.size(); i++)
 		{
 			if (!m_engineData[i]->active || m_engineData[i]->state != t_EngineData::list)
 				continue;
@@ -2782,19 +2782,12 @@ void CQueueView::OnAskPassword(wxCommandEvent& event)
 	{
 		const CFileZillaEngine* const pEngine = m_waitingForPassword.front();
 
-		std::vector<t_EngineData*>::iterator iter;
-		for (iter = m_engineData.begin(); iter != m_engineData.end(); ++iter)
-		{
-			if ((*iter)->pEngine == pEngine)
-				break;
-		}
-		if (iter == m_engineData.end())
+		t_EngineData* pEngineData = GetEngineData(pEngine);
+		if (!pEngineData)
 		{
 			m_waitingForPassword.pop_front();
 			continue;
 		}
-
-		t_EngineData* pEngineData = *iter;
 
 		if (pEngineData->state != t_EngineData::askpassword)
 		{
@@ -2859,9 +2852,9 @@ void CQueueView::AdvanceQueue(bool refresh /*=true*/)
 	}
 
 	// Set timer for connected, idle engines
-	for (unsigned int i = 1; i < m_engineData.size(); i++)
+	for (unsigned int i = 0; i < m_engineData.size(); i++)
 	{
-		if (m_engineData[i]->active)
+		if (m_engineData[i]->active || m_engineData[i]->transient)
 			continue;
 
 		if (m_engineData[i]->m_idleDisconnectTimer)
@@ -2943,7 +2936,7 @@ void CQueueView::OnTimer(wxTimerEvent& event)
 		return;
 	}
 
-	for (unsigned int i = 1; i < m_engineData.size(); i++)
+	for (unsigned int i = 0; i < m_engineData.size(); i++)
 	{
 		t_EngineData* pData = m_engineData[i];
 		if (pData->m_idleDisconnectTimer && !pData->m_idleDisconnectTimer->IsRunning())
@@ -2961,17 +2954,11 @@ void CQueueView::OnTimer(wxTimerEvent& event)
 
 void CQueueView::DeleteEngines()
 {
-	for (unsigned int engineIndex = 1; engineIndex < m_engineData.size(); engineIndex++)
+	for (unsigned int engineIndex = 0; engineIndex < m_engineData.size(); engineIndex++)
 	{
 		t_EngineData* const data = m_engineData[engineIndex];
-		wxASSERT(!data->active);
-		delete data->pEngine;
-		data->pEngine = 0;
-		delete data->m_idleDisconnectTimer;
-		data->m_idleDisconnectTimer = 0;
+		delete data;
 	}
-	for (unsigned int engineIndex = 0; engineIndex < m_engineData.size(); engineIndex++)
-		delete m_engineData[engineIndex];
 	m_engineData.clear();
 }
 
@@ -3035,8 +3022,6 @@ void CQueueView::OnSetPriority(wxCommandEvent& event)
 
 void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 {
-	t_EngineData* pEngineData = m_engineData[0];
-
 	CFileZillaEngine* pEngine = 0;
 	CState* pState;
 	CCommandQueue* pCommandQueue;
@@ -3052,25 +3037,20 @@ void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 		if (!pEngine)
 			continue;
 
-		if (pEngine != pEngineData->pEngine)
-		{
-			pCommandQueue->ReleaseEngine();
-			pEngine = 0;
-			continue;
-		}
-
 		break;
 	}
 
 	if (!pEngine)
 		return;
 
-	if (!pEngineData->active)
+	t_EngineData* pEngineData = GetEngineData(pEngine);
+	wxASSERT(!pEngineData || pEngineData->transient);
+	if (!pEngineData || !pEngineData->transient || !pEngineData->active)
 	{
 		pCommandQueue->ReleaseEngine();
 		return;
 	}
-
+	
 	wxASSERT(pEngineData->state == t_EngineData::waitprimary);
 	if (pEngineData->state != t_EngineData::waitprimary)
 		return;
@@ -3296,14 +3276,13 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 	t_EngineData* pEngineData = *ppEngineData;
 
 	std::vector<t_EngineData*>::iterator iter = m_engineData.begin();
-	++iter;
 	for (; iter != m_engineData.end(); ++iter)
 	{
 		t_EngineData* pNewEngineData = *iter;
 		if (pNewEngineData == pEngineData)
 			continue;
 
-		if (pNewEngineData->active)
+		if (pNewEngineData->active || pNewEngineData->transient)
 			continue;
 
 		if (pNewEngineData->lastServer != pEngineData->lastServer)
@@ -3412,17 +3391,8 @@ void CQueueView::OnSize(wxSizeEvent& event)
 
 void CQueueView::RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString& newName, bool local)
 {
-	std::vector<t_EngineData*>::iterator iter;
-	for (iter = m_engineData.begin(); iter != m_engineData.end(); ++iter)
-	{
-		if ((*iter)->pEngine == pEngine)
-			break;
-	}
-	if (iter == m_engineData.end())
-		return;
-
-	t_EngineData* const pEngineData = *iter;
-	if (!pEngineData->pItem)
+	t_EngineData* const pEngineData = GetEngineData(pEngine);
+	if (!pEngineData || !pEngineData->pItem)
 		return;
 
 	if (pEngineData->pItem->GetType() != QueueItemType_File)
