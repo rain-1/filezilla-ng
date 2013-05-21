@@ -22,7 +22,6 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			return true;
 		}
 
-		greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
 		if (greetingVersion != _T("") &&
 			CBuildInfo::ConvertToVersionNumber(ownVersion) <= CBuildInfo::ConvertToVersionNumber(greetingVersion))
 		{
