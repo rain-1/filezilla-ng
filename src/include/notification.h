@@ -285,6 +285,7 @@ public:
 		wxDateTime activationTime, wxDateTime expirationTime,
 		const wxString& serial,
 		const wxString& pkalgoname, unsigned int bits,
+		const wxString& signalgoname,
 		const wxString& fingerprint_md5,
 		const wxString& fingerprint_sha1,
 		const wxString& subject,
@@ -299,6 +300,8 @@ public:
 	const wxString& GetSerial() const { return m_serial; }
 	const wxString& GetPkAlgoName() const { return m_pkalgoname; }
 	unsigned int GetPkAlgoBits() const { return m_pkalgobits; }
+
+	const wxString& GetSignatureAlgorithm() const { return m_signalgoname; }
 
 	const wxString& GetFingerPrintMD5() const { return m_fingerprint_md5; }
 	const wxString& GetFingerPrintSHA1() const { return m_fingerprint_sha1; }
@@ -318,6 +321,8 @@ private:
 	wxString m_serial;
 	wxString m_pkalgoname;
 	unsigned int m_pkalgobits;
+
+	wxString m_signalgoname;
 
 	wxString m_fingerprint_md5;
 	wxString m_fingerprint_sha1;

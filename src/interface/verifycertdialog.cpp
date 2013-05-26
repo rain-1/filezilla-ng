@@ -54,6 +54,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 		pDlg->SetLabel(XRCID("ID_SERIAL"), _("None"));
 
 	pDlg->SetLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName().c_str(), cert.GetPkAlgoBits()));
+	pDlg->SetLabel(XRCID("ID_SIGNALGO"), cert.GetSignatureAlgorithm());
 
 	pDlg->SetLabel(XRCID("ID_FINGERPRINT_MD5"), cert.GetFingerPrintMD5());
 	pDlg->SetLabel(XRCID("ID_FINGERPRINT_SHA1"), cert.GetFingerPrintSHA1());
