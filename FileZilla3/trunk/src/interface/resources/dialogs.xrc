@@ -86,6 +86,16 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
+                          <label>Signature algorithm:</label>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText" name="ID_SIGNALGO">
+                          <label/>
+                        </object>
+                      </object>
+                      <object class="sizeritem">
+                        <object class="wxStaticText">
                           <label>Fingerprint (MD5):</label>
                         </object>
                       </object>

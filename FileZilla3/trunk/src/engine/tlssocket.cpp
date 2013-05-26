@@ -7,10 +7,10 @@
 #include <errno.h>
 
 #if GNUTLS_VERSION_NUMBER >= 0x030100
-char const ciphers[] = "SECURE256:+SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+char const ciphers[] = "SECURE256:+SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
 #else
 // Versions before 3.1.0 cannot combine level keywords
-char const ciphers[] = "SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
+char const ciphers[] = "SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
 #endif
 
 //#define TLSDEBUG 1
@@ -1031,13 +1031,24 @@ int CTlsSocket::VerifyCertificate()
 
 		wxString serial = bin2hex(buffer, size);
 
-		unsigned int bits;
-		int algo = gnutls_x509_crt_get_pk_algorithm(cert, &bits);
+		unsigned int pkBits;
+		int pkAlgo = gnutls_x509_crt_get_pk_algorithm(cert, &pkBits);
+		wxString pkAlgoName;
+		if (pkAlgo >= 0)
+		{
+			const char* pAlgo = gnutls_pk_algorithm_get_name((gnutls_pk_algorithm_t)pkAlgo);
+			if (pAlgo)
+				pkAlgoName = wxString(pAlgo, wxConvUTF8);
+		}
 
-		wxString algoName;
-		const char* pAlgo = gnutls_pk_algorithm_get_name((gnutls_pk_algorithm_t)algo);
-		if (pAlgo)
-			algoName = wxString(pAlgo, wxConvUTF8);
+		int signAlgo = gnutls_x509_crt_get_signature_algorithm(cert);
+		wxString signAlgoName;
+		if (signAlgo >= 0)
+		{
+			const char* pAlgo = gnutls_sign_algorithm_get_name((gnutls_sign_algorithm_t)signAlgo);
+			if (pAlgo)
+				signAlgoName = wxString(pAlgo, wxConvUTF8);
+		}
 
 		//int version = gnutls_x509_crt_get_version(cert);
 
@@ -1114,7 +1125,8 @@ int CTlsSocket::VerifyCertificate()
 			cert_list->data, cert_list->size,
 			activationTime, expirationTime,
 			serial,
-			algoName, bits,
+			pkAlgoName, pkBits,
+			signAlgoName,
 			fingerprint_md5,
 			fingerprint_sha1,
 			subject,
