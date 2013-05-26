@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.7.0.2 (2013-05-26)
+
+- Fix freeze if trying to transfer files with multiple servers each with a connection limit of 1
+- Adjust accepted X.509 signature algorithms in TLS 1.2 mode
+
 3.7.0.1 (2013-05-10)
 
 - Fixed a bug in bundled GnuTLS affecting FileZilla 3.7.0
