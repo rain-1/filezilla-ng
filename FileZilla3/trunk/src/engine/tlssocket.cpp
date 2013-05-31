@@ -1028,6 +1028,9 @@ int CTlsSocket::VerifyCertificate()
 		unsigned char buffer[40];
 		size_t size = sizeof(buffer);
 		int res = gnutls_x509_crt_get_serial(cert, buffer, &size);
+		if( res != 0 ) {
+			size = 0;
+		}
 
 		wxString serial = bin2hex(buffer, size);
 
