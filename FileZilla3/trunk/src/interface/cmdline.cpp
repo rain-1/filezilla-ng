@@ -6,6 +6,7 @@ CCommandLine::CCommandLine(int argc, wxChar** argv)
 	m_parser.AddSwitch(_T("h"), _T("help"), _("Shows this help dialog"), wxCMD_LINE_OPTION_HELP);
 	m_parser.AddSwitch(_T("s"), _T("site-manager"), _("Start with opened Site Manager"));
 	m_parser.AddOption(_T("c"), _T("site"), _("Connect to specified Site Manager site"));
+	m_parser.AddOption(_T("a"), _T("local"), _("Starts the local site in the given path"));
 
 	wxString desc = wxString::Format(_("Logontype, can only be used together with FTP URL. Argument has to be either '%s' or '%s'"), _T("ask"), _T("interactive"));
 	m_parser.AddOption(_T("l"), _T("logontype"), desc);
@@ -55,6 +56,10 @@ wxString CCommandLine::GetOption(enum CCommandLine::t_option option) const
 		if (m_parser.Found(_T("l"), &value))
 			return value;
 		break;
+	case local:
+		if (m_parser.Found(_T("a"), &value))
+			return value;
+		break;		
 	}
 
 	return _T("");
