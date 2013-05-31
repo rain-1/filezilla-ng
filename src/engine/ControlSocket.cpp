@@ -1444,3 +1444,45 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 	n->dir = last_successful;
 	m_pEngine->AddNotification(n);
 }
+
+int CControlSocket::List(CServerPath, wxString, int)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::FileTransfer(const wxString, const CServerPath &,
+					const wxString &, bool,
+					const CFileTransferCommand::t_transferSettings&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::RawCommand(const wxString&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::Delete(const CServerPath&, const std::list<wxString>&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::RemoveDir(const CServerPath&, const wxString&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::Mkdir(const CServerPath&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::Rename(const CRenameCommand&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
+
+int CControlSocket::Chmod(const CChmodCommand&)
+{
+	return FZ_REPLY_NOTSUPPORTED;
+}
