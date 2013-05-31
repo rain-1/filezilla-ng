@@ -2505,6 +2505,25 @@ void CMainFrame::ProcessCommandLine()
 	if (!pCommandLine)
 		return;
 
+	wxString local;
+	if ((local = pCommandLine->GetOption(CCommandLine::local)) != _T(""))
+	{
+		
+		if (!wxDir::Exists(local))
+		{
+			wxString str = _("Path not found:");
+			str += _T("\n") + local;
+			wxMessageBox(str, _("Syntax error in command line"));
+			return;
+		}
+		
+		CState *pState = CContextManager::Get()->GetCurrentContext();
+		if (!pState)
+			return;
+			
+		pState->SetLocalDir(local);
+	}	
+	
 	wxString site;
 	if (pCommandLine->HasSwitch(CCommandLine::sitemanager))
 	{

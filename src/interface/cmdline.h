@@ -17,7 +17,8 @@ public:
 	enum t_option
 	{
 		logontype,
-		site
+		site,
+		local
 	};
 
 	CCommandLine(int argc, wxChar** argv);

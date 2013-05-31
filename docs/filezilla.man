@@ -9,6 +9,8 @@ FileZilla \- FTP client
 .B filezilla \-h|\-s|\-v
 .br
 .B filezilla \-c <site>
+.br
+.B filezilla \-a <path>
 .SH DESCRIPTION
 FileZilla is a powerful client for plain FTP, FTP over SSL/TLS (FTPS) and the SSH File Transfer Protocol (SFTP).
 .SH OPTIONS
@@ -23,6 +25,12 @@ Example: filezilla \-c 0/foo/bar/sl\\/ash connects to the user site sl/ash in th
 May not be used together with
 .B \-s
 nor with URL parameter.
+
+.TP
+.B \-a <path>, \-\-local <path>
+Sets the local site to the given path.
+.IP
+Example: filezilla \-a "/foo bar/"
 
 .TP
 .B \-h, \-\-help
