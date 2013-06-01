@@ -280,6 +280,8 @@ protected:
 class CCertificate
 {
 public:
+	CCertificate();
+
 	CCertificate(
 		const unsigned char* rawData, unsigned int len,
 		wxDateTime activationTime, wxDateTime expirationTime,

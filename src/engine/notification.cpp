@@ -184,6 +184,13 @@ char* CDataNotification::Detach(int& len)
 	return pData;
 }
 
+CCertificate::CCertificate()
+	: m_rawData()
+	, m_len()
+	, m_pkalgobits()
+{
+}
+
 CCertificate::CCertificate(
 		const unsigned char* rawData, unsigned int len,
 		wxDateTime activationTime, wxDateTime expirationTime,

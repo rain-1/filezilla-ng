@@ -930,6 +930,140 @@ static wxString bin2hex(const unsigned char* in, size_t size)
 	return str;
 }
 
+
+bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
+{
+	const gnutls_datum_t* datum = reinterpret_cast<const gnutls_datum_t*>(in);
+	
+	gnutls_x509_crt_t cert;
+	if (gnutls_x509_crt_init(&cert))
+	{
+		m_pOwner->LogMessage(::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
+		return false;
+	}
+
+	if (gnutls_x509_crt_import(cert, datum, GNUTLS_X509_FMT_DER))
+	{
+		m_pOwner->LogMessage(::Error, _("Could not import peer certificates, gnutls_x509_crt_import failed"));
+		gnutls_x509_crt_deinit(cert);
+		return false;
+	}
+
+	wxDateTime expirationTime = gnutls_x509_crt_get_expiration_time(cert);
+	wxDateTime activationTime = gnutls_x509_crt_get_activation_time(cert);
+
+	// Get the serial number of the certificate
+	unsigned char buffer[40];
+	size_t size = sizeof(buffer);
+	int res = gnutls_x509_crt_get_serial(cert, buffer, &size);
+	if( res != 0 ) {
+		size = 0;
+	}
+
+	wxString serial = bin2hex(buffer, size);
+
+	unsigned int pkBits;
+	int pkAlgo = gnutls_x509_crt_get_pk_algorithm(cert, &pkBits);
+	wxString pkAlgoName;
+	if (pkAlgo >= 0)
+	{
+		const char* pAlgo = gnutls_pk_algorithm_get_name((gnutls_pk_algorithm_t)pkAlgo);
+		if (pAlgo)
+			pkAlgoName = wxString(pAlgo, wxConvUTF8);
+	}
+
+	int signAlgo = gnutls_x509_crt_get_signature_algorithm(cert);
+	wxString signAlgoName;
+	if (signAlgo >= 0)
+	{
+		const char* pAlgo = gnutls_sign_algorithm_get_name((gnutls_sign_algorithm_t)signAlgo);
+		if (pAlgo)
+			signAlgoName = wxString(pAlgo, wxConvUTF8);
+	}
+
+	wxString subject, issuer;
+
+	size = 0;
+	res = gnutls_x509_crt_get_dn(cert, 0, &size);
+	if (size)
+	{
+		char* dn = new char[size + 1];
+		dn[size] = 0;
+		if (!(res = gnutls_x509_crt_get_dn(cert, dn, &size)))
+		{
+			dn[size] = 0;
+			subject = wxString(dn, wxConvUTF8);
+		}
+		else
+			LogError(res, _T("gnutls_x509_crt_get_dn"));
+		delete [] dn;
+	}
+	else
+		LogError(res, _T("gnutls_x509_crt_get_dn"));
+	if (subject == _T(""))
+	{
+		m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
+		gnutls_x509_crt_deinit(cert);
+		return false;
+	}
+
+	size = 0;
+	res = gnutls_x509_crt_get_issuer_dn(cert, 0, &size);
+	if (size)
+	{
+		char* dn = new char[++size + 1];
+		dn[size] = 0;
+		if (!(res = gnutls_x509_crt_get_issuer_dn(cert, dn, &size)))
+		{
+			dn[size] = 0;
+			issuer = wxString(dn, wxConvUTF8);
+		}
+		else
+			LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
+		delete [] dn;
+	}
+	else
+		LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
+	if (issuer == _T(""))
+	{
+		m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
+		gnutls_x509_crt_deinit(cert);
+		return false;
+	}
+
+	wxString fingerprint_md5;
+	wxString fingerprint_sha1;
+
+	unsigned char digest[100];
+	size = sizeof(digest) - 1;
+	if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_MD5, digest, &size))
+	{
+		digest[size] = 0;
+		fingerprint_md5 = bin2hex(digest, size);
+	}
+	size = sizeof(digest) - 1;
+	if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_SHA1, digest, &size))
+	{
+		digest[size] = 0;
+		fingerprint_sha1 = bin2hex(digest, size);
+	}
+
+	gnutls_x509_crt_deinit(cert);
+
+	out = CCertificate(
+		datum->data, datum->size,
+		activationTime, expirationTime,
+		serial,
+		pkAlgoName, pkBits,
+		signAlgoName,
+		fingerprint_md5,
+		fingerprint_sha1,
+		subject,
+		issuer);
+
+	return true;
+}
+
 int CTlsSocket::VerifyCertificate()
 {
 	if (m_tlsState != handshake)
@@ -1005,137 +1139,16 @@ int CTlsSocket::VerifyCertificate()
 	std::vector<CCertificate> certificates;
 	for (unsigned int i = 0; i < cert_list_size; i++)
 	{
-		gnutls_x509_crt_t cert;
-		if (gnutls_x509_crt_init(&cert))
-		{
-			m_pOwner->LogMessage(::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
-			Failure(0, ECONNABORTED);
-			return FZ_REPLY_ERROR;
-		}
-
-		if (gnutls_x509_crt_import(cert, cert_list, GNUTLS_X509_FMT_DER))
-		{
-			m_pOwner->LogMessage(::Error, _("Could not import peer certificates, gnutls_x509_crt_import failed"));
-			Failure(0, ECONNABORTED);
-			gnutls_x509_crt_deinit(cert);
-			return FZ_REPLY_ERROR;
-		}
-
-		wxDateTime expirationTime = gnutls_x509_crt_get_expiration_time(cert);
-		wxDateTime activationTime = gnutls_x509_crt_get_activation_time(cert);
-
-		// Get the serial number of the certificate
-		unsigned char buffer[40];
-		size_t size = sizeof(buffer);
-		int res = gnutls_x509_crt_get_serial(cert, buffer, &size);
-		if( res != 0 ) {
-			size = 0;
-		}
-
-		wxString serial = bin2hex(buffer, size);
-
-		unsigned int pkBits;
-		int pkAlgo = gnutls_x509_crt_get_pk_algorithm(cert, &pkBits);
-		wxString pkAlgoName;
-		if (pkAlgo >= 0)
-		{
-			const char* pAlgo = gnutls_pk_algorithm_get_name((gnutls_pk_algorithm_t)pkAlgo);
-			if (pAlgo)
-				pkAlgoName = wxString(pAlgo, wxConvUTF8);
-		}
-
-		int signAlgo = gnutls_x509_crt_get_signature_algorithm(cert);
-		wxString signAlgoName;
-		if (signAlgo >= 0)
-		{
-			const char* pAlgo = gnutls_sign_algorithm_get_name((gnutls_sign_algorithm_t)signAlgo);
-			if (pAlgo)
-				signAlgoName = wxString(pAlgo, wxConvUTF8);
-		}
-
-		//int version = gnutls_x509_crt_get_version(cert);
-
-		wxString subject, issuer;
-
-		size = 0;
-		res = gnutls_x509_crt_get_dn(cert, 0, &size);
-		if (size)
-		{
-			char* dn = new char[size + 1];
-			dn[size] = 0;
-			if (!(res = gnutls_x509_crt_get_dn(cert, dn, &size)))
-			{
-				dn[size] = 0;
-				subject = wxString(dn, wxConvUTF8);
-			}
-			else
-				LogError(res, _T("gnutls_x509_crt_get_dn"));
-			delete [] dn;
-		}
+		CCertificate cert;
+		if (ExtractCert(cert_list, cert))
+			certificates.push_back(cert);
 		else
-			LogError(res, _T("gnutls_x509_crt_get_dn"));
-		if (subject == _T(""))
 		{
-			m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
 			Failure(0, ECONNABORTED);
-			gnutls_x509_crt_deinit(cert);
 			return FZ_REPLY_ERROR;
 		}
 
-		size = 0;
-		res = gnutls_x509_crt_get_issuer_dn(cert, 0, &size);
-		if (size)
-		{
-			char* dn = new char[++size + 1];
-			dn[size] = 0;
-			if (!(res = gnutls_x509_crt_get_issuer_dn(cert, dn, &size)))
-			{
-				dn[size] = 0;
-				issuer = wxString(dn, wxConvUTF8);
-			}
-			else
-				LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
-			delete [] dn;
-		}
-		else
-			LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
-		if (issuer == _T(""))
-		{
-			m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
-			Failure(0, ECONNABORTED);
-			gnutls_x509_crt_deinit(cert);
-			return FZ_REPLY_ERROR;
-		}
-
-		wxString fingerprint_md5;
-		wxString fingerprint_sha1;
-
-		unsigned char digest[100];
-		size = sizeof(digest) - 1;
-		if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_MD5, digest, &size))
-		{
-			digest[size] = 0;
-			fingerprint_md5 = bin2hex(digest, size);
-		}
-		size = sizeof(digest) - 1;
-		if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_SHA1, digest, &size))
-		{
-			digest[size] = 0;
-			fingerprint_sha1 = bin2hex(digest, size);
-		}
-
-		certificates.push_back(CCertificate(
-			cert_list->data, cert_list->size,
-			activationTime, expirationTime,
-			serial,
-			pkAlgoName, pkBits,
-			signAlgoName,
-			fingerprint_md5,
-			fingerprint_sha1,
-			subject,
-			issuer));
-
-		cert_list++;
+		++cert_list;
 	}
 
 	CCertificateNotification *pNotification = new CCertificateNotification(
