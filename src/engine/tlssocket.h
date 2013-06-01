@@ -88,6 +88,8 @@ protected:
 	void OnRead();
 	void OnSend();
 
+	bool ExtractCert(const void* in, CCertificate& out);
+
 	bool m_canReadFromSocket;
 	bool m_canWriteToSocket;
 	bool m_canCheckCloseSocket;
