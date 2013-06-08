@@ -51,7 +51,7 @@ protected:
 
 	int* m_columnWidths;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 };
 
@@ -81,7 +81,7 @@ protected:
 
 	void PositionChildren(int field);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 };
 
@@ -117,7 +117,7 @@ protected:
 	wxStaticBitmap* m_pEncryptionIndicator;
 	wxStaticBitmap* m_pSpeedLimitsIndicator;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSpeedLimitsEnable(wxCommandEvent& event);
 	void OnSpeedLimitsConfigure(wxCommandEvent& event);
 };

@@ -14,7 +14,7 @@ protected:
 
 	bool m_autoClear;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnMenuAutoClear(wxCommandEvent& event);
 };

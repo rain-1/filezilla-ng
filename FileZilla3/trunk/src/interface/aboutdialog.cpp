@@ -11,7 +11,7 @@
 BEGIN_EVENT_TABLE(CAboutDialog, wxDialogEx)
 EVT_BUTTON(XRCID("wxID_OK"), CAboutDialog::OnOK)
 EVT_BUTTON(XRCID("ID_COPY"), CAboutDialog::OnCopy)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 bool CAboutDialog::Create(wxWindow* parent)
 {

@@ -6,7 +6,7 @@ EVT_TEXT(XRCID("ID_STRING"), CInputDialog::OnValueChanged)
 EVT_TEXT(XRCID("ID_STRING_PW"), CInputDialog::OnValueChanged)
 EVT_BUTTON(XRCID("wxID_OK"), CInputDialog::OnOK)
 EVT_BUTTON(XRCID("wxID_CANCEL"), CInputDialog::OnCancel)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CInputDialog::CInputDialog()
 	: m_allowEmpty()

@@ -53,7 +53,7 @@ protected:
 	}
 #endif //__WXMSW__
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnKeyDown(wxKeyEvent& event)
 	{
 		if (event.GetKeyCode() != WXK_TAB)

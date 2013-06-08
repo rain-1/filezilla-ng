@@ -5,7 +5,7 @@
 
 #ifdef __WXMAC__
 
-IMPLEMENT_DYNAMIC_CLASS(wxTextCtrlXmlHandlerEx, wxTextCtrlXmlHandler);
+IMPLEMENT_DYNAMIC_CLASS(wxTextCtrlXmlHandlerEx, wxTextCtrlXmlHandler)
 
 wxObject *wxTextCtrlXmlHandlerEx::DoCreateResource()
 {

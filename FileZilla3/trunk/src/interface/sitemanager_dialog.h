@@ -11,7 +11,7 @@ class CSiteManagerDialog: public wxDialogEx
 {
 	friend class CSiteManagerDropTarget;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 
 public:
 	struct _connected_site

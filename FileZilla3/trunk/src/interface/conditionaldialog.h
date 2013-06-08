@@ -34,7 +34,7 @@ protected:
 
 	wxSizer* m_pTextSizer;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnButton(wxCommandEvent& event);
 };
 

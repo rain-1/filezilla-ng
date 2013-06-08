@@ -12,7 +12,7 @@ EVT_BUTTON(XRCID("ID_DELETE"), CFilterEditDialog::OnDelete)
 EVT_BUTTON(XRCID("ID_RENAME"), CFilterEditDialog::OnRename)
 EVT_BUTTON(XRCID("ID_COPY"), CFilterEditDialog::OnCopy)
 EVT_LISTBOX(XRCID("ID_FILTERS"), CFilterEditDialog::OnFilterSelect)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CFilterEditDialog::CFilterEditDialog()
 	: m_pFilterListCtrl(0)

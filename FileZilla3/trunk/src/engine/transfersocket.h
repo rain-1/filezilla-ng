@@ -60,7 +60,7 @@ protected:
 
 	void SetSocketBufferSizes(CSocket* pSocket);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 
 	CSocket *m_pSocket;
 

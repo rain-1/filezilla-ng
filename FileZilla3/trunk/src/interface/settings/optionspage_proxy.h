@@ -13,7 +13,7 @@ protected:
 
 	void SetCtrlState();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnProxyTypeChanged(wxCommandEvent& event);
 };
 

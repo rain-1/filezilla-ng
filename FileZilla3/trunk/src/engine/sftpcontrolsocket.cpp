@@ -50,7 +50,7 @@ DEFINE_EVENT_TYPE(fzEVT_SFTP)
 BEGIN_EVENT_TABLE(CSftpControlSocket, CControlSocket)
 EVT_COMMAND(wxID_ANY, fzEVT_SFTP, CSftpControlSocket::OnSftpEvent)
 EVT_END_PROCESS(wxID_ANY, CSftpControlSocket::OnTerminate)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 class CSftpInputThread : public wxThreadEx
 {

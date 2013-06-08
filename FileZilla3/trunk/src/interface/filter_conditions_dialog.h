@@ -70,7 +70,7 @@ private:
 
 	void OnListSize(wxSizeEvent& event);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnButton(wxCommandEvent& event);
 	void OnFilterTypeChange(wxCommandEvent& event);
 	void OnConditionSelectionChange(wxCommandEvent& event);

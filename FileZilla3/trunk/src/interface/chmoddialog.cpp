@@ -6,7 +6,7 @@ EVT_BUTTON(XRCID("wxID_OK"), CChmodDialog::OnOK)
 EVT_BUTTON(XRCID("wxID_CANCEL"), CChmodDialog::OnCancel)
 EVT_TEXT(XRCID("ID_NUMERIC"), CChmodDialog::OnNumericChanged)
 EVT_CHECKBOX(XRCID("ID_RECURSE"), CChmodDialog::OnRecurseChanged)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CChmodDialog::CChmodDialog()
 	: m_noUserTextChange()

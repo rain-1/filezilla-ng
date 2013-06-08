@@ -12,7 +12,7 @@ public:
 	void Run(wxWindow* parent);
 
 protected:
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnToggleEnable(wxCommandEvent& event);
 	void OnOK(wxCommandEvent& event);
 };

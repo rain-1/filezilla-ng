@@ -19,7 +19,7 @@ public:
 
 protected:
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	virtual void OnChar(wxKeyEvent& event);
 
 	static int m_shown_dialogs;

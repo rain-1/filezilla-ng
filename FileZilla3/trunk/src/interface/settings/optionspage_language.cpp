@@ -7,7 +7,7 @@
 #include <algorithm>
 
 BEGIN_EVENT_TABLE(COptionsPageLanguage, COptionsPage)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 bool COptionsPageLanguage::LoadPage()
 {

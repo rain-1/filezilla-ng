@@ -30,7 +30,7 @@ protected:
 
 	std::vector<wxWizardPageSimple*> m_pages;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnPageChanging(wxWizardEvent& event);
 	void OnPageChanged(wxWizardEvent& event);
 	void OnSocketEvent(wxSocketEvent& event);

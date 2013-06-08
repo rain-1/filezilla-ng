@@ -10,7 +10,7 @@ public:
 private:
 	CAskSavePasswordDialog(wxWindow* parent);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnRadioButtonChanged(wxCommandEvent& event);
 };
 

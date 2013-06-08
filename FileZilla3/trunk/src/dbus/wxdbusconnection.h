@@ -61,7 +61,7 @@ public:
 	DBusMessage * GetMessage()
 		{ return m_message; };
 
-DECLARE_DYNAMIC_CLASS(wxDBusConnectionEvent);
+DECLARE_DYNAMIC_CLASS(wxDBusConnectionEvent)
 private:
 	DBusMessage * m_message;
 };

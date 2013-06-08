@@ -12,7 +12,7 @@ public:
 protected:
 	virtual void SetCtrlState();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnRadioOrCheckEvent(wxCommandEvent& event);
 };
 

@@ -159,7 +159,7 @@ protected:
 
 	wxTimer m_save_timer;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
 };
 

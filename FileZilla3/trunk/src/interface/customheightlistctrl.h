@@ -24,7 +24,7 @@ public:
 protected:
 	virtual void OnDraw(wxDC& dc);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnMouseEvent(wxMouseEvent& event);
 
 	int m_lineHeight;

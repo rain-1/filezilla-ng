@@ -30,9 +30,9 @@ protected:
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionChanged(int option);
 
-	DECLARE_DYNAMIC_CLASS(CMenuBar);
+	DECLARE_DYNAMIC_CLASS(CMenuBar)
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnMenuEvent(wxCommandEvent& event);
 
 	std::map<wxMenu*, std::map<int, wxMenuItem*> > m_hidden_items;

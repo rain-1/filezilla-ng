@@ -273,7 +273,7 @@ public:
 	};
 
 protected:
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 
 	// Make sure it is truly transparent, i.e. also works with
 	// themed status bars.

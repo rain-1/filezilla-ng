@@ -78,7 +78,7 @@ protected:
 	CMainFrame* m_pMainFrame;
 
 protected:
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnTabRefresh(wxCommandEvent& event);
 	void OnTabChanged(wxAuiNotebookEvent& event);
 	void OnTabClosing(wxAuiNotebookEvent& event);

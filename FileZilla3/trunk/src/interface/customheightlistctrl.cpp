@@ -3,7 +3,7 @@
 
 BEGIN_EVENT_TABLE(wxCustomHeightListCtrl, wxScrolledWindow)
 EVT_MOUSE_EVENTS(wxCustomHeightListCtrl::OnMouseEvent)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 wxCustomHeightListCtrl::wxCustomHeightListCtrl(wxWindow* parent, wxWindowID id /*=-1*/, const wxPoint& pos /*=wxDefaultPosition*/, const wxSize& size /*=wxDefaultSize*/, long style /*=wxHSCROLL|wxVSCROLL*/, const wxString& name /*=_T("scrolledWindow")*/)
 	: wxScrolledWindow(parent, id, pos, size, style, name)

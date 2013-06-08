@@ -11,7 +11,7 @@
 
 BEGIN_EVENT_TABLE(CTransferSocket, wxEvtHandler)
 	EVT_IOTHREAD(wxID_ANY, CTransferSocket::OnIOThreadEvent)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, enum TransferMode transferMode)
 {

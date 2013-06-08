@@ -35,7 +35,7 @@ protected:
 	};
 	std::list<struct _notification> m_notifications;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSignal(wxDBusConnectionEvent& event);
 	void OnAsyncReply(wxDBusConnectionEvent& event);
 };

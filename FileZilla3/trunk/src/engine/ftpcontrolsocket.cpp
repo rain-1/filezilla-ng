@@ -38,7 +38,7 @@
 BEGIN_EVENT_TABLE(CFtpControlSocket, CRealControlSocket)
 EVT_FZ_EXTERNALIPRESOLVE(wxID_ANY, CFtpControlSocket::OnExternalIPAddress)
 EVT_TIMER(wxID_ANY, CFtpControlSocket::OnIdleTimer)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CRawTransferOpData::CRawTransferOpData()
 	: COpData(cmd_rawtransfer)
