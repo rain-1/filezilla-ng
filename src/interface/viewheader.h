@@ -28,7 +28,7 @@ protected:
 	wxStaticText* m_pLabel;
 	bool m_alreadyInPaint;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 
 	void OnPaint(wxPaintEvent& event);
@@ -55,7 +55,7 @@ protected:
 
 	wxString m_oldValue;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnTextChanged(wxCommandEvent& event);
 	void OnTextEnter(wxCommandEvent& event);
 	void OnSelectionChanged(wxCommandEvent& event);
@@ -77,7 +77,7 @@ protected:
 	CServer m_lastServer;
 	CServerPath m_path;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnTextChanged(wxCommandEvent& event);
 	void OnTextEnter(wxCommandEvent& event);
 	void OnSelectionChanged(wxCommandEvent& event);

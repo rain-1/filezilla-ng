@@ -13,7 +13,7 @@ public:
 
 protected:
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnOK(wxCommandEvent& event);
 	void OnCopy(wxCommandEvent& event);
 };

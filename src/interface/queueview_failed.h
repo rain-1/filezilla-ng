@@ -12,7 +12,7 @@ protected:
 	bool RequeueFileItem(CFileItem* pItem, CServerItem* pServerItem);
 	bool RequeueServerItem(CServerItem* pServerItem);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnRemoveAll(wxCommandEvent& event);
 	void OnRemoveSelected(wxCommandEvent& event);

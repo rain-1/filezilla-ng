@@ -12,7 +12,7 @@ public:
 protected:
 	void SetCtrlState();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnRemove(wxCommandEvent& event);
 	void OnAdd(wxCommandEvent& event);
 	void OnSelChanged(wxListEvent& event);

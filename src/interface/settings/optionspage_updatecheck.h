@@ -13,7 +13,7 @@ public:
 protected:
 	void OnRunUpdateCheck(wxCommandEvent& event);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 };
 
 #endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK

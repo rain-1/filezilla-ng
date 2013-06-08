@@ -176,7 +176,7 @@ protected:
 	wxWindow* m_pParent;
 	wxString m_ext;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnRadioButton(wxCommandEvent& event);
 	void OnOK(wxCommandEvent& event);
 	void OnBrowseEditor(wxCommandEvent& event);

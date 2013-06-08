@@ -1,7 +1,7 @@
 #include <filezilla.h>
 #include "treectrlex.h"
 
-IMPLEMENT_CLASS(wxTreeCtrlEx, wxTreeCtrl);
+IMPLEMENT_CLASS(wxTreeCtrlEx, wxTreeCtrl)
 
 wxTreeCtrlEx::wxTreeCtrlEx(wxWindow *parent, wxWindowID id /*=wxID_ANY*/,
 			   const wxPoint& pos /*=wxDefaultPosition*/,

@@ -269,7 +269,7 @@ protected:
 
 	bool m_invalidateCurrentPath;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
 	void OnObtainLock(wxCommandEvent& event);
 };

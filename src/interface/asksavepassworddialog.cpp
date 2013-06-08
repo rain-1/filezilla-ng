@@ -6,7 +6,7 @@
 BEGIN_EVENT_TABLE(CAskSavePasswordDialog, wxDialogEx)
 EVT_RADIOBUTTON(XRCID("ID_REMEMBER_YES"), CAskSavePasswordDialog::OnRadioButtonChanged)
 EVT_RADIOBUTTON(XRCID("ID_REMEMBER_NO"), CAskSavePasswordDialog::OnRadioButtonChanged)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CAskSavePasswordDialog::CAskSavePasswordDialog(wxWindow*)
 {

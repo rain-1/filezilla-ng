@@ -20,7 +20,7 @@ public:
 	bool SelectText(int start, int end);
 
 protected:
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnValueChanged(wxCommandEvent& event);
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);

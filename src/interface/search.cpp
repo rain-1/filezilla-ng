@@ -789,7 +789,7 @@ public:
 
 protected:
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnBrowse(wxCommandEvent& event);
 	void OnOK(wxCommandEvent& event);
 };

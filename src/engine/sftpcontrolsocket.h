@@ -126,7 +126,7 @@ protected:
 	CSftpInputThread* m_pInputThread;
 	int m_pid;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnTerminate(wxProcessEvent& event);
 	void OnSftpEvent(wxCommandEvent& event);
 

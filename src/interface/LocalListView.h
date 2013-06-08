@@ -88,7 +88,7 @@ protected:
 	int m_dropTarget;
 
 	// Event handlers
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnItemActivated(wxListEvent& event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnMenuUpload(wxCommandEvent& event);

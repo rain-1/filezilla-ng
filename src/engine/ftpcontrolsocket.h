@@ -151,7 +151,7 @@ protected:
 
 	CLatencyMeasurement m_rtt;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnExternalIPAddress(fzExternalIPResolveEvent& event);
 	void OnIdleTimer(wxTimerEvent& event);
 };

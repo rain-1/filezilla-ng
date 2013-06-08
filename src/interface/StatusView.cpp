@@ -44,7 +44,7 @@ public:
 	}
 #endif
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 
 	void OnText(wxCommandEvent& event)
 	{

@@ -39,7 +39,7 @@ protected:
 	};
 	std::list<t_queueEntry> m_requestList;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnProcessQueue(wxCommandEvent &event);
 	void OnTimer(wxTimerEvent& event);
 

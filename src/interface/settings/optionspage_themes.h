@@ -15,7 +15,7 @@ protected:
 
 	virtual bool OnDisplayedFirstTime();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnThemeChange(wxCommandEvent& event);
 };
 

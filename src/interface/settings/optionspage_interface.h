@@ -9,7 +9,7 @@ public:
 	virtual bool SavePage();
 	virtual bool Validate();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnLayoutChange(wxCommandEvent& event);
 };
 

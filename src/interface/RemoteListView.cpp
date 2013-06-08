@@ -326,7 +326,7 @@ protected:
 
 	wxSize m_textSize;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 };
 
 BEGIN_EVENT_TABLE(CInfoText, wxWindow)

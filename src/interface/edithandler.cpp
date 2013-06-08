@@ -13,7 +13,7 @@ bool ProgramExists(const wxString& editor);
 
 class CChangedFileDialog : public wxDialogEx
 {
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnYes(wxCommandEvent& event);
 	void OnNo(wxCommandEvent& event);
 };

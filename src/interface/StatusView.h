@@ -25,7 +25,7 @@ protected:
 
 	void OnSize(wxSizeEvent &event);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnClear(wxCommandEvent& event);
 	void OnCopy(wxCommandEvent& event);

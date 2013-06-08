@@ -14,7 +14,7 @@ public:
 	struct _locale_info { wxString name; wxString code; };
 
 protected:
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 
 	std::vector<_locale_info> m_locale;
 };

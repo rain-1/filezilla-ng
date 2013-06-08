@@ -316,7 +316,7 @@ protected:
 	// Unit is byte/s.
 	wxFileOffset GetCurrentSpeed(bool countDownload, bool countUpload);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnEngineEvent(wxEvent &event);
 	void OnFolderThreadComplete(wxCommandEvent& event);
 	void OnFolderThreadFiles(wxCommandEvent& event);

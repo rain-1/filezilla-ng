@@ -49,7 +49,7 @@ wxEvent *wxFzEngineEvent::Clone() const
 BEGIN_EVENT_TABLE(CFileZillaEnginePrivate, wxEvtHandler)
 	EVT_FZ_ENGINE_NOTIFICATION(wxID_ANY, CFileZillaEnginePrivate::OnEngineEvent)
 	EVT_TIMER(wxID_ANY, CFileZillaEnginePrivate::OnTimer)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CFileZillaEnginePrivate::CFileZillaEnginePrivate()
 	: m_retryTimer(this)

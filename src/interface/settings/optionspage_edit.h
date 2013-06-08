@@ -13,7 +13,7 @@ protected:
 
 	void SetCtrlState();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnBrowseEditor(wxCommandEvent& event);
 	void OnRadioButton(wxCommandEvent& event);
 };

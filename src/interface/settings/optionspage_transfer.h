@@ -10,7 +10,7 @@ public:
 	virtual bool Validate();
 
 protected:
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnToggleSpeedLimitEnable(wxCommandEvent& event);
 };
 

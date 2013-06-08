@@ -88,7 +88,7 @@ private:
 	void HandlePrefixSearch(wxChar character);
 	int FindItemWithPrefix(const wxString& searchPrefix, int start);
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnPostScrollEvent(wxCommandEvent& event);
 	void OnScrollEvent(wxScrollWinEvent& event);
 	void OnMouseWheel(wxMouseEvent& event);
@@ -170,7 +170,7 @@ protected:
 	wxTimer m_timer;
 	int m_count;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 };
 
 #endif //__LISTCTRLEX_H__

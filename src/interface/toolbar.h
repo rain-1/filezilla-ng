@@ -31,7 +31,7 @@ protected:
 
 	std::map<int, wxToolBarToolBase*> m_hidden_tools;
 
-	DECLARE_DYNAMIC_CLASS(CToolBar);
+	DECLARE_DYNAMIC_CLASS(CToolBar)
 };
 
 #endif //__TOOLBAR_H__

@@ -3,7 +3,7 @@
 
 class wxTreeCtrlEx : public wxTreeCtrl
 {
-	DECLARE_CLASS(wxTreeCtrlEx);
+	DECLARE_CLASS(wxTreeCtrlEx)
 
 public:
 	wxTreeCtrlEx(wxWindow *parent, wxWindowID id = wxID_ANY,

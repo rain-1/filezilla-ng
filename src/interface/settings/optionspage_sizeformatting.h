@@ -16,7 +16,7 @@ public:
 
 	CSizeFormat::_format GetFormat() const;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnRadio(wxCommandEvent& event);
 	void OnCheck(wxCommandEvent& event);
 	void OnSpin(wxSpinEvent& event);

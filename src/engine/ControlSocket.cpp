@@ -30,7 +30,7 @@ std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 BEGIN_EVENT_TABLE(CControlSocket, wxEvtHandler)
 	EVT_TIMER(wxID_ANY, CControlSocket::OnTimer)
 	EVT_COMMAND(wxID_ANY, fzOBTAINLOCK, CControlSocket::OnObtainLock)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 COpData::COpData(enum Command op_Id)
 	: opId(op_Id)

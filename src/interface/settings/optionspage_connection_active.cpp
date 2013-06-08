@@ -9,7 +9,7 @@ EVT_CHECKBOX(XRCID("ID_LIMITPORTS"), COptionsPageConnectionActive::OnRadioOrChec
 EVT_RADIOBUTTON(XRCID("ID_ACTIVEMODE1"), COptionsPageConnectionActive::OnRadioOrCheckEvent)
 EVT_RADIOBUTTON(XRCID("ID_ACTIVEMODE2"), COptionsPageConnectionActive::OnRadioOrCheckEvent)
 EVT_RADIOBUTTON(XRCID("ID_ACTIVEMODE3"), COptionsPageConnectionActive::OnRadioOrCheckEvent)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 bool COptionsPageConnectionActive::LoadPage()
 {

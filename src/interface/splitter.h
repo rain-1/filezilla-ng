@@ -31,9 +31,9 @@ protected:
 
 	int CalcSoftLimit(int newSashPosition);
 
-	DECLARE_CLASS(CSplitterWindowEx);
+	DECLARE_CLASS(CSplitterWindowEx)
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 
 	double m_relative_sash_position;

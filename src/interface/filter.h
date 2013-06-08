@@ -125,7 +125,7 @@ protected:
 
 	void SetCtrlState();
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
 	void OnApply(wxCommandEvent& event);

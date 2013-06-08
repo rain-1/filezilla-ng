@@ -14,7 +14,7 @@ EVT_BUTTON(XRCID("ID_QUICKCONNECT_DROPDOWN"), CQuickconnectBar::OnQuickconnectDr
 EVT_MENU(wxID_ANY, CQuickconnectBar::OnMenu)
 EVT_TEXT_ENTER(wxID_ANY, CQuickconnectBar::OnQuickconnect)
 EVT_NAVIGATION_KEY(CQuickconnectBar::OnKeyboardNavigation)
-END_EVENT_TABLE();
+END_EVENT_TABLE()
 
 CQuickconnectBar::CQuickconnectBar()
 	: m_pHost()

@@ -16,7 +16,7 @@ protected:
 	// Only valid while menu is being displayed
 	std::list<CServer> m_recentServers;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnQuickconnect(wxCommandEvent& event);
 	void OnQuickconnectDropdown(wxCommandEvent& event);
 	void OnMenu(wxCommandEvent& event);

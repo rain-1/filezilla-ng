@@ -380,7 +380,7 @@ protected:
 
 	std::vector<ColumnId> m_columns;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnEraseBackground(wxEraseEvent& event);
 	void OnNavigationKey(wxNavigationKeyEvent& event);
 	void OnChar(wxKeyEvent& event);

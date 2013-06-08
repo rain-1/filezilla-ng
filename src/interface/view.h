@@ -19,7 +19,7 @@ protected:
 	CViewHeader* m_pHeader;
 	wxStatusBar* m_pStatusBar;
 
-	DECLARE_EVENT_TABLE();
+	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 };
 
