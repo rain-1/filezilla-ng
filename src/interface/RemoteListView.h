@@ -36,7 +36,7 @@ protected:
 	// Select a list of items based in their names.
 	// Sort order may not change between call to RememberSelectedItems and
 	// ReselectItems
-	void ReselectItems(std::list<wxString>& selectedNames, wxString focused);
+	void ReselectItems(std::list<wxString>& selectedNames, wxString focused, bool ensureVisible = false);
 
 
 	// Declared const due to design error in wxWidgets.

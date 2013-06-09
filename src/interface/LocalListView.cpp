@@ -311,6 +311,7 @@ bool CLocalListView::DisplayDir(wxString dirname)
 
 	wxString focused;
 	std::list<wxString> selectedNames;
+	bool ensureVisible = false;
 	if (m_dir != dirname)
 	{
 		ResetSearchPrefix();
@@ -320,6 +321,7 @@ bool CLocalListView::DisplayDir(wxString dirname)
 
 		ClearSelection();
 		focused = m_pState->GetPreviouslyVisitedLocalSubdir();
+		ensureVisible = !focused.IsEmpty();
 		if (focused.IsEmpty())
 			focused = _T("..");
 
@@ -457,7 +459,7 @@ regular_dir:
 		RefreshComparison();
 	}
 
-	ReselectItems(selectedNames, focused);
+	ReselectItems(selectedNames, focused, ensureVisible);
 
 	RefreshListOnly();
 
@@ -1514,7 +1516,7 @@ std::list<wxString> CLocalListView::RememberSelectedItems(wxString& focused)
 	return selectedNames;
 }
 
-void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxString focused)
+void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxString focused, bool ensureVisible)
 {
 	// Reselect previous items if neccessary.
 	// Sorting direction did not change. We just have to scan through items once
@@ -1529,7 +1531,8 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 			if (data.name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-				EnsureVisible(i);
+				if (ensureVisible)
+					EnsureVisible(i);
 				return;
 			}
 		}
@@ -1547,7 +1550,8 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 			if (data.name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-				EnsureVisible(i);
+				if (ensureVisible)
+					EnsureVisible(i);
 				focused = _T("");
 			}
 			if (data.dir && *iter == (_T("d") + data.name))

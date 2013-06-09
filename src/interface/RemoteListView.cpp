@@ -752,6 +752,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 
 	wxString prevFocused;
 	std::list<wxString> selectedNames;
+	bool ensureVisible = false;
 	if (reset)
 	{
 		ResetSearchPrefix();
@@ -762,6 +763,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 		ClearSelection();
 
 		prevFocused = m_pState->GetPreviouslyVisitedRemoteSubdir();
+		ensureVisible = !prevFocused.IsEmpty();
 	}
 	else
 	{
@@ -884,11 +886,11 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 	{
 		m_originalIndexMapping.clear();
 		RefreshComparison();
-		ReselectItems(selectedNames, prevFocused);
+		ReselectItems(selectedNames, prevFocused, ensureVisible);
 	}
 	else
 	{
-		ReselectItems(selectedNames, prevFocused);
+		ReselectItems(selectedNames, prevFocused, ensureVisible);
 		RefreshListOnly(eraseBackground);
 	}
 }
@@ -2218,7 +2220,7 @@ std::list<wxString> CRemoteListView::RememberSelectedItems(wxString& focused)
 	return selectedNames;
 }
 
-void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString focused)
+void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString focused, bool ensureVisible)
 {
 	if (!GetItemCount())
 		return;
@@ -2243,7 +2245,8 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 			if ((*m_pDirectoryListing)[index].name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-				EnsureVisible(i);
+				if (ensureVisible)
+					EnsureVisible(i);
 				return;
 			}
 		}
@@ -2272,7 +2275,8 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 			if (entry.name == focused)
 			{
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-				EnsureVisible(i);
+				if (ensureVisible)
+					EnsureVisible(i);
 				focused = _T("");
 			}
 			if (entry.is_dir() && *iter == (_T("d") + entry.name))

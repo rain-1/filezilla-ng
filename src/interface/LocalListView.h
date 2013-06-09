@@ -51,7 +51,7 @@ protected:
 	// Select a list of items based in their names.
 	// Sort order may not change between call to RememberSelectedItems and
 	// ReselectItems
-	void ReselectItems(const std::list<wxString>& selectedNames, wxString focused);
+	void ReselectItems(const std::list<wxString>& selectedNames, wxString focused, bool ensureVisible = false);
 
 #ifdef __WXMSW__
 	void DisplayDrives();
