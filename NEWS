@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.7.1-rc1 (2013-06-10)
+
++ Add command-line option to specify initial local directory
+- Fix crash on OS X if connecting using FTP over TLS
+- Prevent file lists from jumping when they are not supposed to
+
 3.7.0.2 (2013-05-26)
 
 - Fix freeze if trying to transfer files with multiple servers each with a connection limit of 1
