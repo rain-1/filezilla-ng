@@ -141,6 +141,8 @@ static int ConvertMSWErrorCode(int error)
 		return EFAULT;
 	case WSAEACCES:
 		return EACCES;
+	case WSAETIMEDOUT:
+		return ETIMEDOUT;
 	default:
 		return error;
 	}
