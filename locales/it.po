@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-10 20:28+0200\n"
-"PO-Revision-Date: 2013-06-03 14:59+0100\n"
+"PO-Revision-Date: 2013-06-11 13:29+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -6856,9 +6856,9 @@ msgid "The custom login sequence cannot be empty."
 msgstr "La sequenza personale di login non può essere vuota."
 
 #: ../../locales/../src/engine/transfersocket.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "The data connection could not be established: %s"
-msgstr "Connessione TLS/SSL stabilita."
+msgstr "La connessione dati non può essere stabilita. %s"
 
 #: resources.h:434 ../../locales/../src/interface/edithandler.cpp:1690
 #, no-c-format

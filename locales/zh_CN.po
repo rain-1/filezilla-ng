@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-10 20:28+0200\n"
-"PO-Revision-Date: 2013-05-28 17:59+0800\n"
+"PO-Revision-Date: 2013-06-16 16:27+0800\n"
 "Last-Translator: Wylmer Wang <wantinghard@gmail.com>\n"
 "Language-Team: Chinese (simplified) <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -5010,9 +5010,8 @@ msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "无法为目录 %s 和子目录 %s 构造路径"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:2512
-#, fuzzy
 msgid "Path not found:"
-msgstr "文件未找到"
+msgstr "路径未找到："
 
 #: resources.h:411
 msgid "Paths"
@@ -6376,7 +6375,7 @@ msgstr "开始上传 %s"
 
 #: ../../locales/../src/interface/cmdline.cpp:9
 msgid "Starts the local site in the given path"
-msgstr ""
+msgstr "启动给定路径下的本地站点"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:185
 msgid "State or province:"
@@ -6547,9 +6546,9 @@ msgid "The custom login sequence cannot be empty."
 msgstr "自定义登录过程不能为空。"
 
 #: ../../locales/../src/engine/transfersocket.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "The data connection could not be established: %s"
-msgstr "TLS/SSL 连接已建立。"
+msgstr "无法建立数据连接：%s"
 
 #: resources.h:434 ../../locales/../src/interface/edithandler.cpp:1690
 #, no-c-format
