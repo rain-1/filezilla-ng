@@ -5,18 +5,18 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: filezilla-3.7.0.2\n"
+"Project-Id-Version: filezilla-3.7.1-rc1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-06-10 20:28+0200\n"
-"PO-Revision-Date: 2013-06-02 08:01+0700\n"
+"PO-Revision-Date: 2013-06-17 08:12+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: vi_VN\n"
-"Team-Website: <http://translationproject.org/team/vi.html>\n"
 "Plural-Forms: nplurals=2; plural=1;\n"
+"Team-Website: <http://translationproject.org/team/vi.html>\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Generator: Poedit 1.5.5\n"
 
@@ -687,7 +687,7 @@ msgstr "&Mở"
 
 #: resources.h:67
 msgid "&Overwrite"
-msgstr "&Ghi đè lên"
+msgstr "&Ghi đè"
 
 #: resources.h:111
 msgid "&Passive"
@@ -1045,7 +1045,7 @@ msgstr ""
 #, c-format
 msgid "(%d object filtered)"
 msgid_plural "(%d objects filtered)"
-msgstr[0] "(đối tượng %d đã được lọc)"
+msgstr[0] "(lọc ra %d đối tượng)"
 msgstr[1] "(các đối tượng %d đã được lọc)"
 
 #: resources.h:827 resources.h:829
@@ -1066,7 +1066,7 @@ msgstr "(1-10)"
 
 #: resources.h:754
 msgid "(5-9999, 0 to disable)"
-msgstr "(5-9999, 0 để tắt)"
+msgstr "(5-9999, 0 là tắt)"
 
 #: resources.h:916
 msgid "(example: %H:%M)"
@@ -1143,7 +1143,7 @@ msgstr "3 - Chi tiết"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:152
 msgid "32 bit system"
-msgstr "Hệ điều hành 32 bit"
+msgstr "Hệ thống 32 bit"
 
 #: resources.h:997
 msgid "4 - Debug"
@@ -1151,7 +1151,7 @@ msgstr "4 – Gỡ lỗi"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:150
 msgid "64 bit system"
-msgstr "Hệ điều hành 64 bit"
+msgstr "Hệ thống 64 bit"
 
 #: ../../locales/../src/interface/updatewizard.cpp:29
 msgid "< &Back"
@@ -1321,7 +1321,7 @@ msgstr "Hành động thực thi:"
 
 #: resources.h:66
 msgid "Action:"
-msgstr "Hành động:"
+msgstr "Thao tác:"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:118
 msgid "Active mode"
@@ -1545,7 +1545,7 @@ msgstr "Như một tab trong bảng điều khiển của hàng đợi truyền"
 
 #: resources.h:269 resources.h:279 resources.h:859 resources.h:868
 msgid "Ask for action"
-msgstr "Hỏi hành động"
+msgstr "Hỏi thao tác"
 
 #: ../../locales/../src/engine/server.cpp:856
 #: ../../locales/../src/engine/server.cpp:875
@@ -1659,7 +1659,7 @@ msgstr "Ngày biên dịch:"
 
 #: resources.h:168
 msgid "Build information"
-msgstr "Thông tin xây dựng"
+msgstr "Thông tin biên dịch"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:181
 msgid "Business category:"
@@ -6773,9 +6773,9 @@ msgid "The custom login sequence cannot be empty."
 msgstr "Chuỗi đăng nhập không thể rỗng."
 
 #: ../../locales/../src/engine/transfersocket.cpp:172
-#, fuzzy, c-format
+#, c-format
 msgid "The data connection could not be established: %s"
-msgstr "Kết nối TLS/SSL được thiết lập."
+msgstr "Không thể thiết lập kết nối dữ liệu: %s"
 
 #: resources.h:434 ../../locales/../src/interface/edithandler.cpp:1690
 #, no-c-format
