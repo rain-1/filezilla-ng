@@ -337,8 +337,6 @@ CMainFrame::CMainFrame()
 
 	m_pContextControl->CreateTab();
 
-	m_pContextControl->GetCurrentControls();
-
 	switch (message_log_position)
 	{
 	case 1:
