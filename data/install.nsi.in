@@ -89,6 +89,7 @@
   Var IS_ADMIN
   Var USERNAME
   Var PERFORM_UPDATE
+  Var SKIPLICENSE
   Var GetInstalledSize.total
 
 ;--------------------------------
@@ -297,6 +298,20 @@ Function ReadUpdateCommandline
 
 FunctionEnd
 
+Function ReadSkipLicense
+
+  ${GetParameters} $R0
+
+  ${GetOptions} $R0 "/skiplicense" $R1
+
+  ${If} ${Errors}
+    StrCpy $SKIPLICENSE 0
+  ${Else}
+    StrCpy $SKIPLICENSE 1
+  ${EndIf}
+
+FunctionEnd
+
 Function .onInit
 
   ${Unless} ${AtLeastWin2000}
@@ -317,6 +332,8 @@ UAC_Success:
 
   ; /update argument
   Call ReadUpdateCommandline
+
+  Call ReadSkipLicense
 
   Call GetUserInfo
 
@@ -465,8 +482,9 @@ Function PageLicensePre
 
   ${If} $PERFORM_UPDATE == 1
     Abort
+  ${Elseif} $SKIPLICENSE == 1
+    Abort
   ${EndIf}
-
 FunctionEnd
 
 Function PageReinstall
@@ -537,6 +555,12 @@ Function PageReinstall
   ${Else}
     SendMessage $R0 ${BM_SETCHECK} 1 0
   ${EndIf}
+
+  ${If} $SKIPLICENSE == 1
+    EnableWindow $mui.Button.Back 0
+  ${Else}
+    EnableWindow $mui.Button.Back 1
+  ${Endif}
 
   nsDialogs::Show
 
@@ -658,6 +682,19 @@ Function PageAllUsers
   ${Else}
     SendMessage $R0 ${BM_SETCHECK} 1 0
   ${EndIf}
+
+  ${If} $PREVIOUS_VERSION == ""
+  ${OrIf} $PERFORM_UPDATE == 1}
+    ${IF} $SKIPLICENSE == 1
+      EnableWindow $mui.Button.Back 0
+    ${ENDIF}
+  ${EndIf}
+
+  ${If} $PERFORM_UPDATE == 1
+    StrCpy $REINSTALL_UNINSTALL 1
+    Abort
+  ${EndIf}
+
 
   nsDialogs::Show
 
