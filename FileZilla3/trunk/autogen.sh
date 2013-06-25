@@ -21,7 +21,7 @@ done
 
 echo '--- FileZilla 3 autogen script ---'
 echo ''
-printf '\033[1mHINT:\033[0m If this script fails, please download a recent source tarball from \033[1mhttp://filezilla-project.org/nightly.php\033[0m\n\n'
+printf '\033[1mHINT:\033[0m If this script fails, please download a recent source tarball from \033[1mhttps://filezilla-project.org/nightly.php\033[0m\n\n'
 
 failedAclocal()
 {
@@ -82,7 +82,7 @@ printerror_notfound()
     printf "\033[1;31mfound $WRONGVERSION, not ok!\033[0m\n"
     echo "You must have $PACKAGENAME $VERSION or greater to generate the configure script."
     printf "If \033[1m$PACKAGENAME\033[0m is a symlink, make sure it points to the correct version.\n"
-    printf "Please update your installation or get a recent source tarball from \033[1mhttp://filezilla-project.org/nightly.php\033[0m\n"
+    printf "Please update your installation or get a recent source tarball from \033[1mhttps://filezilla-project.org/nightly.php\033[0m\n"
   fi
 }
 
@@ -235,7 +235,7 @@ if test ! -f configure || test ! -f config/ltmain.sh || test ! -f Makefile.in; t
   printf "\nError: Unable to generate all required files!\033[0m\n\n"
   echo "Please make sure you have autoconf 2.5, automake 1.7, libtool 1.5,"
   echo "autoheader and aclocal installed."
-  printf "If you don't have access to these tools, please get a recent source tarball from \033[1mhttp://filezilla-project.org/nightly.php\033[0m instead.\n"
+  printf "If you don't have access to these tools, please get a recent source tarball from \033[1mhttps://filezilla-project.org/nightly.php\033[0m instead.\n"
 
   exit 1
 fi

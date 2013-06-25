@@ -738,7 +738,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 	else if (event.GetId() == XRCID("ID_MENU_HELP_GETTINGHELP") ||
 			 event.GetId() == XRCID("ID_MENU_HELP_BUGREPORT"))
 	{
-		wxString url(_T("http://filezilla-project.org/support.php?type=client&mode="));
+		wxString url(_T("https://filezilla-project.org/support.php?type=client&mode="));
 		if (event.GetId() == XRCID("ID_MENU_HELP_GETTINGHELP"))
 			url += _T("help");
 		else
