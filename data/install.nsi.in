@@ -12,8 +12,8 @@
   !define VERSION_MAJOR @PACKAGE_VERSION_MAJOR@
   !define VERSION_MINOR @PACKAGE_VERSION_MINOR@
   !define VERSION_FULL  @PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@.@PACKAGE_VERSION_NANO@
-  !define PUBLISHER    "FileZilla Project"
-  !define WEBSITE_URL  "http://filezilla-project.org/"
+  !define PUBLISHER    "Tim Kosse"
+  !define WEBSITE_URL  "https://filezilla-project.org/"
   !addplugindir @srcdir@
 
 ;--------------------------------
