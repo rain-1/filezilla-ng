@@ -8,7 +8,7 @@ is part of FileZilla. It is used to convert private keys from OpenSSH or ssh.com
 .B fzputtygen
 is based on the puttygen component of PuTTY.
 .SH SUPPORT
-Please visit http://filezilla\-project.org/ for further information. Report bugs only if you are using the latest version available from the FileZilla website.
+Please visit https://filezilla\-project.org/ for further information. Report bugs only if you are using the latest version available from the FileZilla website.
 .SH COPYRIGHT
 Copyright (C) 2004\-2013  Tim Kosse
 .br
