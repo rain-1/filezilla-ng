@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.7.3 (2013-08-07)
+
+! Merge further fixes from PuTTY to address CVE-2013-4206, CVE-2013-4207, CVE-2013-4208
+
 3.7.2 (2013-08-06)
 
 ! Apply a fix for a security vulnerability in PuTTY as used in FileZilla to handle SFTP. See CVE-2013-4852 for reference.
