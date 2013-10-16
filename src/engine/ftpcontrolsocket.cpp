@@ -2660,7 +2660,7 @@ int CFtpControlSocket::FileTransferSend()
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
-					pData->localFileSize = pFile->Length();
+					pData->localFileSize = startOffset;
 
 					// Check resume capabilities
 					if (pData->opState == filetransfer_resumetest)
@@ -2718,6 +2718,32 @@ int CFtpControlSocket::FileTransferSend()
 					if (pData->remoteFileSize > 0)
 					{
 						startOffset = pData->remoteFileSize;
+
+						if (pData->localFileSize == -1)
+							pData->localFileSize = pFile->Length();
+
+						if (startOffset == pData->localFileSize && pData->binary)
+						{
+							LogMessage(Debug_Info, _T("No need to resume, remote file size matches local file size."));
+							delete pFile;
+
+							if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
+							{
+								wxFileName fn(pData->localFile);
+								if (fn.FileExists())
+								{
+									pData->fileTime = fn.GetModificationTime();
+									if (pData->fileTime.IsValid())
+									{
+										pData->opState = filetransfer_mfmt;
+										return SendNextCommand();
+									}
+								}
+							}
+							ResetOperation(FZ_REPLY_OK);
+							return FZ_REPLY_OK;
+						}
 
 						// Assume native 64 bit type exists
 						if (pFile->Seek(startOffset, wxFromStart) == wxInvalidOffset)
