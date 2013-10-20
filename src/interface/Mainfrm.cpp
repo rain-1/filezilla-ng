@@ -921,8 +921,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		}
 
-		wxString path;
-		CSiteManagerItemData_Site* pData = CSiteManager::GetSiteById(event.GetId(), path);
+		CSiteManagerItemData_Site* pData = CSiteManager::GetSiteById(event.GetId());
 
 		if (!pData)
 		{
@@ -930,15 +929,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		}
 
-		if (!ConnectToSite(pData))
-		{
-			delete pData;
-			return;
-		}
-
-		SetBookmarksFromPath(path);
-		if (m_pMenuBar)
-			m_pMenuBar->UpdateBookmarkMenu();
+		ConnectToSite(pData);
 
 		delete pData;
 	}
@@ -1394,7 +1385,7 @@ void CMainFrame::OnReconnect(wxCommandEvent &event)
 	}
 
 	CServerPath path = pState->GetLastServerPath();
-	ConnectToServer(server, path);
+	ConnectToServer(server, path, true);
 }
 
 void CMainFrame::OnRefresh(wxCommandEvent &event)
@@ -1493,12 +1484,7 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 		if (!dlg.GetServer(data))
 			return;
 
-		if (ConnectToSite(&data))
-		{
-			// Get new bookmarks
-			wxString path = dlg.GetSitePath();
-			SetBookmarksFromPath(path);
-		}
+		ConnectToSite(&data);
 	}
 
 	if (m_pMenuBar)
@@ -2072,6 +2058,10 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 		}
 	}
 
+	SetBookmarksFromPath(pData->m_path);
+	if (m_pMenuBar)
+		m_pMenuBar->UpdateBookmarkMenu();
+		
 	return true;
 }
 
@@ -2537,12 +2527,7 @@ void CMainFrame::ProcessCommandLine()
 
 		if (pData)
 		{
-			if (ConnectToSite(pData))
-			{
-				SetBookmarksFromPath(site);
-				if (m_pMenuBar)
-					m_pMenuBar->UpdateBookmarkMenu();
-			}
+			ConnectToSite(pData);
 			delete pData;
 		}
 	}
@@ -2801,7 +2786,7 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 	}
 }
 
-bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path /*=CServerPath()*/)
+bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path /*=CServerPath()*/, bool isReconnect /*=true*/)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -2830,6 +2815,10 @@ bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path 
 				COptions::Get()->SetOption(OPTION_ALREADYCONNECTED_CHOICE, 1);
 		}
 	}
+
+	CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromState(pState);
+	if (!isReconnect && controls)
+		controls->site_bookmarks.clear();
 
 	return pState->Connect(server, path);
 }

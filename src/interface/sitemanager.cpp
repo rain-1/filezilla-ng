@@ -6,7 +6,7 @@
 #include "Options.h"
 #include "xmlfunctions.h"
 
-std::map<int, struct CSiteManager::_menu_data> CSiteManager::m_idMap;
+std::map<int, CSiteManagerItemData_Site*> CSiteManager::m_idMap;
 
 bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler)
 {
@@ -109,7 +109,7 @@ CSiteManagerItemData_Site* CSiteManager::ReadServerElement(TiXmlElement *pElemen
 class CSiteManagerXmlHandler_Menu : public CSiteManagerXmlHandler
 {
 public:
-	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, struct CSiteManager::_menu_data> *idMap, bool predefined)
+	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, CSiteManagerItemData_Site*> *idMap, bool predefined)
 		: m_pMenu(pMenu), m_idMap(idMap)
 	{
 		m_added_site = false;
@@ -165,14 +165,12 @@ public:
 		newName.Replace(_T("&"), _T("&&"));
 		wxMenuItem* pItem = m_pMenu->Insert(i, wxID_ANY, newName);
 
-		struct CSiteManager::_menu_data menu_data;
-		menu_data.data = data;
-		menu_data.path = data->m_server.GetName();
-		menu_data.path.Replace(_T("\\"), _T("\\\\"));
-		menu_data.path.Replace(_T("/"), _T("\\/"));
-		menu_data.path = path + _T("/") + menu_data.path;
+		data->m_path = data->m_server.GetName();
+		data->m_path.Replace(_T("\\"), _T("\\\\"));
+		data->m_path.Replace(_T("/"), _T("\\/"));
+		data->m_path = path + _T("/") + data->m_path;
 
-		(*m_idMap)[pItem->GetId()] = menu_data;
+		(*m_idMap)[pItem->GetId()] = data;
 
 		m_added_site = true;
 
@@ -222,7 +220,7 @@ public:
 protected:
 	wxMenu* m_pMenu;
 
-	std::map<int, struct CSiteManager::_menu_data> *m_idMap;
+	std::map<int, CSiteManagerItemData_Site*> *m_idMap;
 
 	std::list<wxMenu*> m_parents;
 	std::list<wxString> m_childNames;
@@ -303,13 +301,13 @@ wxMenu* CSiteManager::GetSitesMenu()
 
 void CSiteManager::ClearIdMap()
 {
-	for (std::map<int, struct _menu_data>::iterator iter = m_idMap.begin(); iter != m_idMap.end(); ++iter)
-		delete iter->second.data;
+	for (std::map<int, CSiteManagerItemData_Site*>::iterator iter = m_idMap.begin(); iter != m_idMap.end(); ++iter)
+		delete iter->second;
 
 	m_idMap.clear();
 }
 
-wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, struct _menu_data> &idMap)
+wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData_Site*> &idMap)
 {
 	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir == _T(""))
@@ -344,16 +342,15 @@ wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, struct _menu_data> &
 	return pMenu;
 }
 
-CSiteManagerItemData_Site* CSiteManager::GetSiteById(int id, wxString& path)
+CSiteManagerItemData_Site* CSiteManager::GetSiteById(int id)
 {
-	std::map<int, struct _menu_data>::iterator iter = m_idMap.find(id);
+	std::map<int, CSiteManagerItemData_Site*>::iterator iter = m_idMap.find(id);
 
 	CSiteManagerItemData_Site *pData;
 	if (iter != m_idMap.end())
 	{
-		pData = iter->second.data;
-		iter->second.data = 0;
-		path = iter->second.path;
+		pData = iter->second;
+		iter->second = 0;
 	}
 	else
 		pData = 0;
@@ -510,6 +507,8 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 		data->m_localDir = localPath;
 		data->m_remoteDir = remotePath;
 	}
+
+	data->m_path = sitePath;
 
 	return data;
 }

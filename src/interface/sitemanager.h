@@ -28,6 +28,8 @@ public:
 	enum type m_type;
 
 	bool m_sync;
+
+	wxString m_path;
 };
 
 class CSiteManagerItemData_Site : public CSiteManagerItemData
@@ -70,7 +72,7 @@ class CSiteManager
 	friend class CSiteManagerDialog;
 public:
 	// This function also clears the Id map
-	static CSiteManagerItemData_Site* GetSiteById(int id, wxString &path);
+	static CSiteManagerItemData_Site* GetSiteById(int id);
 	static CSiteManagerItemData_Site* GetSiteByPath(wxString sitePath);
 
 	static bool GetBookmarks(wxString sitePath, std::list<wxString> &bookmarks);
@@ -84,22 +86,16 @@ public:
 
 	static bool UnescapeSitePath(wxString path, std::list<wxString>& result);
 
-	// Initialized by GetSitesMenu
-	struct _menu_data
-	{
-		wxString path;
-		CSiteManagerItemData_Site* data;
-	};
 protected:
 	static bool Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler);
 	static CSiteManagerItemData_Site* ReadServerElement(TiXmlElement *pElement);
 
 	static TiXmlElement* GetElementByPath(TiXmlElement* pNode, std::list<wxString> &segments);
 
-	static std::map<int, struct _menu_data> m_idMap;
+	static std::map<int, CSiteManagerItemData_Site*> m_idMap;
 
 	// The map maps event id's to sites
-	static wxMenu* GetSitesMenu_Predefined(std::map<int, struct _menu_data> &idMap);
+	static wxMenu* GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData_Site*> &idMap);
 };
 
 #endif //__SITEMANAGER_H__
