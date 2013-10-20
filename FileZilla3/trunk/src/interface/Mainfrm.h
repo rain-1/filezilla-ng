@@ -56,7 +56,7 @@ public:
 
 	void PostInitialize();
 
-	bool ConnectToServer(const CServer& server, const CServerPath& path = CServerPath());
+	bool ConnectToServer(const CServer& server, const CServerPath& path = CServerPath(), bool isReconnect = false);
 
 	CContextControl* GetContextControl() { return m_pContextControl; }
 
