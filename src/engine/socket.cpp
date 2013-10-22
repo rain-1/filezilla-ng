@@ -400,7 +400,7 @@ public:
 
 		// Connect method of CSocket ensures port is in range
 		m_pPort = new char[6];
-		sprintf(m_pPort, "%d", m_pSocket->m_port);
+		sprintf(m_pPort, "%u", m_pSocket->m_port);
 		m_pPort[5] = 0;
 
 		Start();

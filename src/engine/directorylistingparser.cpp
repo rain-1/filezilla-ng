@@ -354,7 +354,7 @@ public:
 					CToken *pToken = new CToken(m_pLine + start, m_parsePos - start);
 					m_Tokens.push_back(pToken);
 
-					while ((m_pLine[m_parsePos] == ' ' || m_pLine[m_parsePos] == '\t') && m_parsePos < m_len)
+					while (m_parsePos < m_len && (m_pLine[m_parsePos] == ' ' || m_pLine[m_parsePos] == '\t'))
 						++m_parsePos;
 
 					if (m_Tokens.size() > n)
