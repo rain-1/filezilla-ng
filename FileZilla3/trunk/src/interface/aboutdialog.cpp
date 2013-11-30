@@ -214,8 +214,17 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 		text += _T("  Name:           ") + os + _T("\n");
 
 	int major, minor;
-	if (wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN)
-		text += wxString::Format(_T("  Version:        %d.%d\n"), major, minor);
+	if (GetRealOsVersion(major, minor))
+	{
+		wxString version = wxString::Format(_T("%d.%d"), major, minor);
+		int fakeMajor, fakeMinor;
+		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor))
+		{
+			version += _T(" ");
+			version += wxString::Format(_("(app-compat is set to %d.%d)"), fakeMajor, fakeMinor);
+		}
+		text += wxString::Format(_T("  Version:        %s\n"), version.c_str());
+	}
 
 #if defined(__WXMSW__)
 	if (::wxIsPlatform64Bit())
