@@ -315,26 +315,27 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 #endif
 
 #ifdef __WXMSW__
+
+// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch. 
+static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600);
+
 bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft)
 {
 	if (!ft.dwHighDateTime && !ft.dwLowDateTime)
 		return false;
 
-	FILETIME ftLocal;
-	if (!::FileTimeToLocalFileTime(&ft, &ftLocal))
-		return false;
+	// See http://trac.wxwidgets.org/changeset/74423 and http://trac.wxwidgets.org/ticket/13098
+	// Directly converting to time_t
 
-	SYSTEMTIME st;
-	if (!::FileTimeToSystemTime(&ftLocal, &st))
+	wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+	t /= 10000000; // Convert hundreds of nanoseconds to seconds. 
+	t -= EPOCH_OFFSET_IN_MSEC;
+	if (t < 0) {
 		return false;
+	}
 
-	wxDateTime tmp;
-	if (!tmp.Set(st.wDay, wxDateTime::Month(st.wMonth - 1), st.wYear,
-		st.wHour, st.wMinute, st.wSecond, st.wMilliseconds).IsValid())
-		return false;
-	time = tmp;
-
-	return true;
+	time.Set(t.GetValue());
+	return time.IsValid();
 }
 #endif
 
