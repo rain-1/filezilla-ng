@@ -159,8 +159,9 @@ public:
 	void CreateTables();
 	wxString CreateColumnDefs(_column* columns, size_t count);
 
-	void PrepareStatements();
+	bool PrepareStatements();
 
+	sqlite3_stmt* PrepareStatement(const wxString& query);
 	sqlite3_stmt* PrepareInsertStatement(const wxString& name, const _column*, unsigned int count);
 
 	bool SaveServer(const CServerItem& item);
@@ -466,21 +467,39 @@ sqlite3_stmt* CQueueStorage::Impl::PrepareInsertStatement(const wxString& name, 
 
 	query += _T(")");
 
+	return PrepareStatement(query);
+}
+
+
+sqlite3_stmt* CQueueStorage::Impl::PrepareStatement(const wxString& query)
+{
 	sqlite3_stmt* ret = 0;
-	if (sqlite3_prepare_v2(db_, query.ToUTF8(), -1, &ret, 0) != SQLITE_OK)
+
+	int res;
+	do
+	{
+		res = sqlite3_prepare_v2(db_, query.ToUTF8(), -1, &ret, 0);
+	} while (res == SQLITE_BUSY);
+
+	if (res != SQLITE_OK)
 		ret = 0;
 
 	return ret;
 }
 
-void CQueueStorage::Impl::PrepareStatements()
+
+bool CQueueStorage::Impl::PrepareStatements()
 {
+	if (!db_)
+		return false;
+
 	insertServerQuery_ = PrepareInsertStatement(_T("servers"), server_table_columns, sizeof(server_table_columns) / sizeof(_column));
 	insertFileQuery_ = PrepareInsertStatement(_T("files"), file_table_columns, sizeof(file_table_columns) / sizeof(_column));
 	insertLocalPathQuery_ = PrepareInsertStatement(_T("local_paths"), path_table_columns, sizeof(path_table_columns) / sizeof(_column));
 	insertRemotePathQuery_ = PrepareInsertStatement(_T("remote_paths"), path_table_columns, sizeof(path_table_columns) / sizeof(_column));
+	if (!insertServerQuery_ || !insertFileQuery_ || !insertLocalPathQuery_ || !insertRemotePathQuery_)
+		return false;
 
-	if (db_)
 	{
 		wxString query = _T("SELECT ");
 		for (unsigned int i = 0; i < (sizeof(server_table_columns) / sizeof(_column)); ++i)
@@ -492,11 +511,10 @@ void CQueueStorage::Impl::PrepareStatements()
 
 		query += _T(" FROM servers ORDER BY id ASC");
 
-		if (sqlite3_prepare_v2(db_, query.ToUTF8(), -1, &selectServersQuery_, 0) != SQLITE_OK)
-			selectServersQuery_ = 0;
+		if (!(selectServersQuery_ = PrepareStatement(query)))
+			return false;
 	}
 
-	if (db_)
 	{
 		wxString query = _T("SELECT ");
 		for (unsigned int i = 0; i < (sizeof(file_table_columns) / sizeof(_column)); ++i)
@@ -508,23 +526,22 @@ void CQueueStorage::Impl::PrepareStatements()
 
 		query += _T(" FROM files WHERE server=:server ORDER BY id ASC");
 
-		if (sqlite3_prepare_v2(db_, query.ToUTF8(), -1, &selectFilesQuery_, 0) != SQLITE_OK)
-			selectFilesQuery_ = 0;
+		if (!(selectFilesQuery_ = PrepareStatement(query)))
+			return false;
 	}
 
-	if (db_)
 	{
 		wxString query = _T("SELECT id, path FROM local_paths");
-		if (sqlite3_prepare_v2(db_, query.ToUTF8(), -1, &selectLocalPathQuery_, 0) != SQLITE_OK)
-			selectLocalPathQuery_ = 0;
+		if (!(selectLocalPathQuery_ = PrepareStatement(query)))
+			return false;
 	}
 
-	if (db_)
 	{
 		wxString query = _T("SELECT id, path FROM remote_paths");
-		if (sqlite3_prepare_v2(db_, query.ToUTF8(), -1, &selectRemotePathQuery_, 0) != SQLITE_OK)
-			selectRemotePathQuery_ = 0;
+		if (!(selectRemotePathQuery_ = PrepareStatement(query)))
+			return false;
 	}
+	return true;
 }
 
 
