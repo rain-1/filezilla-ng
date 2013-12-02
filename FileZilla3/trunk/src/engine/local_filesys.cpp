@@ -334,7 +334,7 @@ bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILET
 		return false;
 	}
 
-	time.Set(t.GetValue());
+	time.Set(static_cast<time_t>(t.GetValue()));
 	return time.IsValid();
 }
 #endif
