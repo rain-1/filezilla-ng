@@ -436,7 +436,7 @@ bool IsAtLeast(int major, int minor = 0)
 bool GetRealOsVersion(int& major, int& minor)
 {
 #ifndef __WXMSW__
-	return wxGetOsVersion(major, minor) != wxOS_UNKNOWN;
+	return wxGetOsVersion(&major, &minor) != wxOS_UNKNOWN;
 #else
 	major = 4;
 	minor = 0;
