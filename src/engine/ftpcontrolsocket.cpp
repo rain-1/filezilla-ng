@@ -2533,15 +2533,12 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
-				wxFileName fn(pData->localFile);
-				if (fn.FileExists())
+				wxDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
+				if (mtime.IsValid())
 				{
-					pData->fileTime = fn.GetModificationTime();
-					if (pData->fileTime.IsValid())
-					{
-						pData->opState = filetransfer_mfmt;
-						return SendNextCommand();
-					}
+					pData->fileTime = mtime;
+					pData->opState = filetransfer_mfmt;
+					return SendNextCommand();
 				}
 			}
 			else if (pData->download && pData->fileTime.IsValid())
@@ -2730,15 +2727,12 @@ int CFtpControlSocket::FileTransferSend()
 							if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
-								wxFileName fn(pData->localFile);
-								if (fn.FileExists())
+								wxDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
+								if (mtime.IsValid())
 								{
-									pData->fileTime = fn.GetModificationTime();
-									if (pData->fileTime.IsValid())
-									{
-										pData->opState = filetransfer_mfmt;
-										return SendNextCommand();
-									}
+									pData->fileTime = mtime;
+									pData->opState = filetransfer_mfmt;
+									return SendNextCommand();
 								}
 							}
 							ResetOperation(FZ_REPLY_OK);

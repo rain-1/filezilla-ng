@@ -602,3 +602,14 @@ void CLocalFileSystem::AllocPathBuffer(const char* file)
 	}
 }
 #endif
+
+wxDateTime CLocalFileSystem::GetModificationTime( const wxString& path)
+{
+	wxDateTime mtime;
+
+	bool tmp;
+	if (GetFileInfo(path, tmp, 0, &mtime, 0) == unknown)
+		mtime = wxDateTime();
+
+	return mtime;
+}

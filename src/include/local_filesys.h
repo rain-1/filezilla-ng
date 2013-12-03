@@ -42,6 +42,7 @@ public:
 	bool GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, wxDateTime* modificationTime, int* mode);
 	void EndFindFiles();
 
+	static wxDateTime GetModificationTime(const wxString& path);
 protected:
 #ifdef __WXMSW__
 	static bool ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft);

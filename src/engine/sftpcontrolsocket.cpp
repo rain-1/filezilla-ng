@@ -1928,7 +1928,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 				}
 				else
 				{
-					pData->fileTime = fn.GetModificationTime();
+					pData->fileTime = CLocalFileSystem::GetModificationTime(pData->localFile);
 					if (pData->fileTime.IsValid())
 					{
 						pData->opState = filetransfer_chmtime;
