@@ -2543,15 +2543,10 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else if (pData->download && pData->fileTime.IsValid())
 			{
-				wxFileName fn(pData->localFile);
-				if (fn.FileExists())
-				{
-					// Need to close file first
-					delete pData->pIOThread;
-					pData->pIOThread = 0;
-
-					fn.SetTimes(&pData->fileTime, &pData->fileTime, 0);
-				}
+				delete pData->pIOThread;
+				pData->pIOThread = 0;
+				if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
+					LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Could not set modification time"));
 			}
 		}
 		ResetOperation(prevResult);

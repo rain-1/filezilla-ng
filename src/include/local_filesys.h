@@ -43,9 +43,11 @@ public:
 	void EndFindFiles();
 
 	static wxDateTime GetModificationTime(const wxString& path);
+	static bool SetModificationTime(const wxString& path, const wxDateTime& t);
 protected:
 #ifdef __WXMSW__
 	static bool ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft);
+	static bool ConvertWxDateTimeToFileTime(FILETIME &ft, const wxDateTime& time);
 #endif
 
 #ifndef __WXMSW__
