@@ -1918,22 +1918,21 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 
 		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 		{
-			wxFileName fn(pData->localFile);
-			if (fn.FileExists())
+			if (pData->download)
 			{
-				if (pData->download)
+				if (pData->fileTime.IsValid())
 				{
-					if (pData->fileTime.IsValid())
-						fn.SetTimes(&pData->fileTime, &pData->fileTime, 0);
+					if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
+						LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Could not set modification time"));
 				}
-				else
+			}
+			else
+			{
+				pData->fileTime = CLocalFileSystem::GetModificationTime(pData->localFile);
+				if (pData->fileTime.IsValid())
 				{
-					pData->fileTime = CLocalFileSystem::GetModificationTime(pData->localFile);
-					if (pData->fileTime.IsValid())
-					{
-						pData->opState = filetransfer_chmtime;
-						return SendNextCommand();
-					}
+					pData->opState = filetransfer_chmtime;
+					return SendNextCommand();
 				}
 			}
 		}

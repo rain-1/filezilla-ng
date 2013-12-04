@@ -337,6 +337,22 @@ bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILET
 	time.Set(static_cast<time_t>(t.GetValue()));
 	return time.IsValid();
 }
+
+bool CLocalFileSystem::ConvertWxDateTimeToFileTime(FILETIME &ft, const wxDateTime& time)
+{
+	if (!time.IsValid())
+		return false;
+
+	wxLongLong t = time.GetTicks();
+
+	t += EPOCH_OFFSET_IN_MSEC;
+	t *= 10000000;
+
+	ft.dwHighDateTime = t.GetHi();
+	ft.dwLowDateTime = t.GetLo();
+
+	return true;
+}
 #endif
 
 bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
@@ -612,4 +628,27 @@ wxDateTime CLocalFileSystem::GetModificationTime( const wxString& path)
 		mtime = wxDateTime();
 
 	return mtime;
+}
+
+bool CLocalFileSystem::SetModificationTime(const wxString& path, const wxDateTime& t)
+{
+	if (!t.IsValid())
+		return false;
+
+#ifdef __WXMSW__
+	FILETIME ft;
+	if (!ConvertWxDateTimeToFileTime(ft, t))
+		return false;
+
+	HANDLE h = CreateFile(path, GENERIC_WRITE, FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
+	if (h == INVALID_HANDLE_VALUE)
+		return false;
+
+	bool ret = SetFileTime(h, 0, &ft, &ft) == TRUE;
+	CloseHandle(h);
+	return ret;
+#else
+	wxFileName fn(path);
+	return fn.SetTimes( &t, &t, 0 );
+#endif
 }
