@@ -226,7 +226,10 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 	}
 
 	if (modificationTime)
-		ConvertFileTimeToWxDateTime(*modificationTime, attributes.ftLastWriteTime);
+	{
+		if (!ConvertFileTimeToWxDateTime(*modificationTime, attributes.ftLastWriteTime))
+			ConvertFileTimeToWxDateTime(*modificationTime, attributes.ftCreationTime);
+	}
 
 	if (mode)
 		*mode = (int)attributes.dwFileAttributes;
