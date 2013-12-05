@@ -486,15 +486,7 @@ int CControlSocket::CheckOverwriteFile()
 	else
 		pNotification->canResume = false;
 
-	wxStructStat buf;
-	int result;
-	result = wxStat(pData->localFile, &buf);
-	if (!result)
-	{
-		pNotification->localTime = wxDateTime(buf.st_mtime);
-		if (!pNotification->localTime.IsValid())
-			pNotification->localTime = wxDateTime(buf.st_ctime);
-	}
+	pNotification->localTime = CLocalFileSystem::GetModificationTime(pData->localFile);
 
 	if (pData->fileTime.IsValid())
 		pNotification->remoteTime = pData->fileTime;
