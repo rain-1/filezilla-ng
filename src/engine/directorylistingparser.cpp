@@ -2695,6 +2695,12 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 				if (value[13] == ':' && value[14] != 0)
 					entry.target = value.Mid(14);
 			}
+			else if (!value.Left(15).CmpNoCase(_T("OS.unix=symlink")))
+			{
+				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
+				if (value[15] == ':' && value[16] != 0)
+					entry.target = value.Mid(16);
+			}
 			else if (!value.CmpNoCase(_T("cdir")) ||
 					 !value.CmpNoCase(_T("pdir")))
 				return 2;
