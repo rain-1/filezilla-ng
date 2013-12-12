@@ -1287,6 +1287,20 @@ void CDirectoryListingParserTest::InitEntries()
 			DEFAULT
 		});
 
+		m_entries.push_back((t_entry){
+			"type=OS.UNIX=symlink; 76b MLSD symlink",
+			{
+				_T("76b MLSD symlink"),
+				-1,
+				_T(""),
+				_T(""),
+				CDirentry::flag_dir | CDirentry::flag_link,
+				_T(""),
+				wxDateTime()
+			},
+			DEFAULT
+		});
+
 		// Old ietf draft for MLST earlier than mlst-07 has no trailing semicolon after facts
 		m_entries.push_back((t_entry){
 			"type=file 77 MLSD file no trailing semicolon after facts < mlst-07",
