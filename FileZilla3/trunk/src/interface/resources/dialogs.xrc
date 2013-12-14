@@ -1482,7 +1482,7 @@
       </object>
       <object class="sizeritem">
         <object class="wxCheckBox" name="ID_REMEMBER">
-          <label>&amp;Remember password for this session</label>
+          <label>&amp;Remember password until FileZilla is closed</label>
           <checked>1</checked>
         </object>
         <flag>wxALL</flag>
