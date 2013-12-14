@@ -1414,7 +1414,11 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			if (engineData.pEngine->Command(CDisconnectCommand()) == FZ_REPLY_WOULDBLOCK)
 				return;
 
-			engineData.state = t_EngineData::connect;
+			if (engineData.lastServer.GetLogonType() == ASK && !CLoginManager::Get().GetPassword(engineData.lastServer, true))
+				engineData.state = t_EngineData::askpassword;
+			else
+				engineData.state = t_EngineData::connect;
+
 			if (engineData.active && engineData.pStatusLineCtrl)
 				engineData.pStatusLineCtrl->SetTransferStatus(0);
 		}
