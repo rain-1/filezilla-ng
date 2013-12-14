@@ -2687,23 +2687,27 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 		wxString value = facts.Mid(pos + 1, delim - pos - 1);
 		if (factname == _T("type"))
 		{
-			if (!value.CmpNoCase(_T("dir")))
+			int pos = value.Find(':');
+			wxString valuePrefix;
+			if (pos == -1)
+				valuePrefix = value;
+			else
+				valuePrefix = value.Left(pos);
+			MakeLowerAscii(valuePrefix);
+
+			if (valuePrefix == _T("dir") && pos == -1)
 				entry.flags |= CDirentry::flag_dir;
-			else if (!value.Left(13).CmpNoCase(_T("OS.unix=slink")))
+			else if (valuePrefix == _T("os.unix=slink") || valuePrefix == _T("os.unix=symlink"))
 			{
 				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
-				if (value[13] == ':' && value[14] != 0)
-					entry.target = value.Mid(14);
+				if (pos != -1)
+					entry.target = value.Mid(pos);
 			}
-			else if (!value.Left(15).CmpNoCase(_T("OS.unix=symlink")))
+			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && pos == -1)
 			{
-				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
-				if (value[15] == ':' && value[16] != 0)
-					entry.target = value.Mid(16);
-			}
-			else if (!value.CmpNoCase(_T("cdir")) ||
-					 !value.CmpNoCase(_T("pdir")))
+				// Current and parent directory, don't parse it
 				return 2;
+			}
 		}
 		else if (factname == _T("size"))
 		{
