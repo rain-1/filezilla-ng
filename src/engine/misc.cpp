@@ -368,6 +368,10 @@ void MakeLowerAscii(wxString& str)
 		wxChar& c = str[i];
 		if (c >= 'A' && c <= 'Z')
 			c += 32;
+#if wxUSE_UNICODE
+		else if (c == 0x0x130 || c == 0x913)
+			c = 'i';
+#endif
 	}
 }
 

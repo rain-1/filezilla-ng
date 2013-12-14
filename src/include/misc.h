@@ -23,6 +23,8 @@ int GetRandomNumber(int low, int high);
 // uppercase dotless.
 // If needed, use this function to transform the case manually
 // and locale-independently
+// In addition to the usual A-Z to a-z, the other two i's are
+// transformed to lowercase dotted i as well.
 void MakeLowerAscii(wxString& str);
 
 // Strongly typed enum would be nice, but we need to support older compilers still.
