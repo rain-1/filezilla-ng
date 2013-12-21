@@ -173,49 +173,8 @@ wxString ConvLocal(const char *value)
 	return wxString(wxConvUTF8.cMB2WC(value), *wxConvCurrent);
 }
 
-void AddTextElement(TiXmlElement* node, const char* name, const wxString& value)
+void RemoveTextElement(TiXmlElement* node)
 {
-	wxASSERT(node);
-
-	char* utf8 = ConvUTF8(value);
-	if (!utf8)
-		return;
-
-	TiXmlElement *element = new TiXmlElement(name);
-
-	element->LinkEndChild(new TiXmlText(utf8));
-	delete [] utf8;
-
-	node->LinkEndChild(element);
-}
-
-void AddTextElement(TiXmlElement* node, const char* name, int value)
-{
-	char buffer[sizeof(int) * 8]; // Always big enough
-	sprintf(buffer, "%d", value);
-	AddTextElementRaw(node, name, buffer);
-}
-
-void AddTextElementRaw(TiXmlElement* node, const char* name, const char* value)
-{
-	wxASSERT(node);
-	wxASSERT(value && *value);
-
-	TiXmlElement *element = new TiXmlElement(name);
-
-	element->LinkEndChild(new TiXmlText(value));
-
-	node->LinkEndChild(element);
-}
-
-void AddTextElement(TiXmlElement* node, const wxString& value)
-{
-	wxASSERT(node);
-
-	char* utf8 = ConvUTF8(value);
-	if (!utf8)
-		return;
-
 	for (TiXmlNode* pChild = node->FirstChild(); pChild; pChild = pChild->NextSibling())
 	{
 		if (!pChild->ToText())
@@ -224,8 +183,60 @@ void AddTextElement(TiXmlElement* node, const wxString& value)
 		node->RemoveChild(pChild);
 		break;
 	}
+}
 
-	node->LinkEndChild(new TiXmlText(utf8));
+void AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite)
+{
+	wxASSERT(node);
+
+	char* utf8 = ConvUTF8(value);
+	if (!utf8)
+		return;
+
+	AddTextElementRaw(node, name, utf8, overwrite);
+	delete [] utf8;
+}
+
+void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwrite)
+{
+	char buffer[sizeof(int) * 8]; // Always big enough
+	sprintf(buffer, "%d", value);
+	AddTextElementRaw(node, name, buffer, overwrite);
+}
+
+void AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite)
+{
+	wxASSERT(node);
+	wxASSERT(value);
+
+	TiXmlElement *element = 0;
+	if (overwrite)
+	{
+		element = node->FirstChildElement(name);
+		if (element)
+			RemoveTextElement(element);
+	}
+
+	if (!element)
+	{
+		element = new TiXmlElement(name);
+		node->LinkEndChild(element);
+	}
+
+	if (*value)
+		element->LinkEndChild(new TiXmlText(value));
+}
+
+void AddTextElement(TiXmlElement* node, const wxString& value)
+{
+	wxASSERT(node);
+	wxASSERT(value);
+
+	char* utf8 = ConvUTF8(value);
+	if (!utf8)
+		return;
+
+	AddTextElementRaw(node, utf8);
 	delete [] utf8;
 }
 
@@ -239,18 +250,12 @@ void AddTextElement(TiXmlElement* node, int value)
 void AddTextElementRaw(TiXmlElement* node, const char* value)
 {
 	wxASSERT(node);
-	wxASSERT(value && *value);
+	wxASSERT(value);
 
-	for (TiXmlNode* pChild = node->FirstChild(); pChild; pChild = pChild->NextSibling())
-	{
-		if (!pChild->ToText())
-			continue;
+	RemoveTextElement(node);
 
-		node->RemoveChild(pChild);
-		break;
-	}
-
-	node->LinkEndChild(new TiXmlText(value));
+	if (*value)
+		node->LinkEndChild(new TiXmlText(value));
 }
 
 wxString GetTextElement_Trimmed(TiXmlElement* node, const char* name)
