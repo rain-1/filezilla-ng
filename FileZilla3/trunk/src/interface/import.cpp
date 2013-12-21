@@ -327,9 +327,9 @@ bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExi
 {
 	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder"))
 	{
-		wxString name = GetTextElement(pImportFolder);
-		name.Trim(true);
-		name.Trim(false);
+		wxString name = GetTextElement_Trimmed(pImportFolder, "Name");
+		if (name == _T(""))
+			name = GetTextElement_Trimmed(pImportFolder);
 		if (name == _T(""))
 			continue;
 
@@ -346,9 +346,9 @@ bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExi
 
 	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Server"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Server"))
 	{
-		wxString name = GetTextElement(pImportSite);
-		name.Trim(true);
-		name.Trim(false);
+		wxString name = GetTextElement_Trimmed(pImportSite, "Name");
+		if (name == _T(""))
+			name = GetTextElement_Trimmed(pImportSite);
 		if (name == _T(""))
 			continue;
 
@@ -361,6 +361,7 @@ bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExi
 		}
 
 		TiXmlElement* pServer = pExistingSites->InsertEndChild(*pImportSite)->ToElement();
+		AddTextElement(pServer, "Name", newName, true);
 		AddTextElement(pServer, newName);
 	}
 
