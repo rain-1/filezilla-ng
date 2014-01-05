@@ -255,11 +255,7 @@ wxChar* fast_sprint_number(wxChar* s, size_t n)
 	return s;
 }
 
-#ifdef wxUSE_UNICODE
 #define tstrcpy wcscpy
-#else
-#define tstrcpy strcpy
-#endif
 
 wxString CServerPath::GetSafePath() const
 {

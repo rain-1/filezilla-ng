@@ -114,11 +114,7 @@ wxString CShellExtensionInterface::GetTarget()
 	if (reply == 2)
 	{
 		data[DRAG_EXT_MAPPING_LENGTH - 1] = 0;
-#if wxUSE_UNICODE
 		target = (wchar_t*)(data + 2);
-#else
-		target = wxString((wchar_t*)(data + 2), wxConvFile);
-#endif
 	}
 
 	ReleaseMutex(m_hMutex);

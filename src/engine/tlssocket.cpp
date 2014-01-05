@@ -201,11 +201,7 @@ void CTlsSocket::LogError(int code, const wxString& function)
 
 	if (error)
 	{
-#if wxUSE_UNICODE
 		wxString str(error, wxConvLocal);
-#else
-		wxString str(error);
-#endif
 		if (function.IsEmpty())
 			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d: %s"), code, str.c_str());
 		else
@@ -226,11 +222,7 @@ void CTlsSocket::PrintAlert()
 	const char* alert = gnutls_alert_get_name(last_alert);
 	if (alert)
 	{
-#if wxUSE_UNICODE
 		wxString str(alert, wxConvLocal);
-#else
-		wxString str(alert);
-#endif
 		m_pOwner->LogMessage(::Debug_Warning, _T("GnuTLS alert %d: %s"), last_alert, str.c_str());
 	}
 	else

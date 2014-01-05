@@ -96,11 +96,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 	{
 		m_handshakeState = http_wait;
 
-#if wxUSE_UNICODE
 		wxWX2MBbuf challenge;
-#else
-		const wxWX2MBbuf challenge;
-#endif
 		int challenge_len;
 		if (user != _T(""))
 		{
