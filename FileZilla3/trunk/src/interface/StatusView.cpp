@@ -31,9 +31,22 @@ public:
 	{
 		DoSetSelection(from, to, false);
 
-		m_updatesCount = -2;		// suppress any update event
-
+		m_updatesCount = -2; // suppress any update event
 		::SendMessage((HWND)GetHandle(), EM_REPLACESEL, 0, (LPARAM)_T(""));
+	}
+
+	void AppendText(const wxString& text, int lineCount, const CHARFORMAT2& cf)
+	{
+		HWND hwnd = (HWND)GetHWND();
+
+		CHARRANGE range;
+		range.cpMin = GetLastPosition();
+		range.cpMax = range.cpMin;
+		::SendMessage(hwnd, EM_EXSETSEL, 0, (LPARAM)&range);
+		::SendMessage(hwnd, EM_SETCHARFORMAT, SCF_SELECTION, (LPARAM)&cf);
+		m_updatesCount = -2; // suppress any update event
+		::SendMessage(hwnd, EM_REPLACESEL, 0, (LPARAM)text.c_str());
+		::SendMessage(hwnd, EM_LINESCROLL, (WPARAM)0, (LPARAM)lineCount);
 	}
 #endif
 
@@ -154,7 +167,11 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	prefix.Alloc(25 + messageLength);
 
 	if (m_nLineCount)
+#ifdef __WXMSW__
+		prefix = _T("\r\n");
+#else __WXMSW__
 		prefix = _T("\n");
+#endif
 
 #ifndef __WXGTK__
 	wxWindowUpdateLocker *pLock = 0;
@@ -205,13 +222,12 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 		m_insertionPoint = m_pTextCtrl->GetInsertionPoint();
 	}
 	m_pTextCtrl->SetStyle(m_insertionPoint, m_insertionPoint, m_attributeCache[messagetype].attr);
-#else
+#elif __WXGTK__
 	m_pTextCtrl->SetDefaultColor(m_attributeCache[messagetype].attr.GetTextColour());
 #endif
 
 	prefix += m_attributeCache[messagetype].prefix;
 
-#if wxUSE_UNICODE
 	if (m_rtl)
 	{
 		// Unicode control characters that control reading direction
@@ -232,7 +248,6 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 			lineLength += 2;
 		}
 	}
-#endif
 
 	m_lineLengths.push_back(lineLength);
 
@@ -251,9 +266,9 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 		m_insertionPoint += 1;
 	delete pLock;
 #elif !defined(__WXMAC__)
-	m_pTextCtrl->AppendText(prefix);
+	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[messagetype].cf);
 	delete pLock;
-#endif //__WXGTK__
+#endif
 }
 
 void CStatusView::InitDefAttr()
@@ -316,6 +331,9 @@ void CStatusView::InitDefAttr()
 	defAttr.SetTabs(array);
 	defAttr.SetLeftIndent(0, maxWidth);
 	m_pTextCtrl->SetDefaultStyle(defAttr);
+#ifdef __WXMSW__
+	m_pTextCtrl->SetStyle(0, 0, defAttr);
+#endif
 
 	const wxColour background = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
 	const bool is_dark = background.Red() + background.Green() + background.Blue() < 384;
@@ -369,6 +387,12 @@ void CStatusView::InitDefAttr()
 		}
 		m_attributeCache[i].prefix += _T("\t");
 		m_attributeCache[i].len = m_attributeCache[i].prefix.Length();
+
+#ifdef __WXMSW__
+		m_pTextCtrl->SetStyle(0, 0, m_attributeCache[i].attr);
+		m_attributeCache[i].cf.cbSize = sizeof(CHARFORMAT2);
+		::SendMessage((HWND)m_pTextCtrl->GetHWND(), EM_GETCHARFORMAT, SCF_SELECTION, (LPARAM)&m_attributeCache[i].cf);
+#endif
 	}
 
 	m_rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;

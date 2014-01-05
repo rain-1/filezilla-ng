@@ -1,6 +1,10 @@
 #ifndef __STATUSVIEW_H__
 #define __STATUSVIEW_H__
 
+#ifdef __WXMSW__
+#include "richedit.h"
+#endif
+
 class CFastTextCtrl;
 class CStatusView : public wxWindow
 {
@@ -37,6 +41,9 @@ protected:
 		wxString prefix;
 		int len;
 		wxTextAttr attr;
+#ifdef __WXMSW__
+		CHARFORMAT2 cf;
+#endif
 	} m_attributeCache[MessageTypeCount];
 
 	bool m_rtl;
