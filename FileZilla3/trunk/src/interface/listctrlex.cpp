@@ -285,7 +285,7 @@ void wxListCtrlEx::OnKeyDown(wxKeyEvent& event)
 		return;
 	}
 
-#if defined(__WXMSW__) && wxUSE_UNICODE
+#if defined(__WXMSW__)
 
 	if (code >= 300 && code != WXK_NUMPAD_DECIMAL)
 	{
@@ -321,16 +321,14 @@ void wxListCtrlEx::OnKeyDown(wxKeyEvent& event)
 #else
 	if (code > 32 && code < 300 && !event.HasModifiers())
 	{
-#if wxUSE_UNICODE
 		int unicodeKey = event.GetUnicodeKey();
 		if (unicodeKey)
 			code = unicodeKey;
-#endif
 		HandlePrefixSearch(code);
 	}
 	else
 		event.Skip();
-#endif //defined(__WXMSW__) && wxUSE_UNICODE
+#endif //defined(__WXMSW__)
 }
 
 // Declared const due to design error in wxWidgets.

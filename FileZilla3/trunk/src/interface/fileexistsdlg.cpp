@@ -314,11 +314,7 @@ wxString CFileExistsDlg::GetPathEllipsis(wxString path, wxWindow *window)
 		return path;
 
 	wxString fill = _T(" ");
-#if wxUSE_UNICODE
 	fill += 0x2026; //unicode ellipsis character
-#else
-	fill += _T("...");
-#endif
 	fill += _T(" ");
 
 	int fillWidth;

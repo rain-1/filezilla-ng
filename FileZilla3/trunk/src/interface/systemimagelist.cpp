@@ -10,11 +10,7 @@
 	#ifndef SHGetIconOverlayIndex
 		extern "C" int WINAPI SHGetIconOverlayIndexW(LPCWSTR pszIconPath, int iIconIndex);
 		extern "C" int WINAPI SHGetIconOverlayIndexA(LPCSTR pszIconPath, int iIconIndex);
-		#if wxUSE_UNICODE
-			#define SHGetIconOverlayIndex SHGetIconOverlayIndexW
-		#else
-			#define SHGetIconOverlayIndex SHGetIconOverlayIndexA
-		#endif
+		#define SHGetIconOverlayIndex SHGetIconOverlayIndexW
 	#endif
 #endif
 #ifndef __WXMSW__

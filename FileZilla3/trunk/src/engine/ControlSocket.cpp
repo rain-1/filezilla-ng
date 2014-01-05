@@ -568,21 +568,7 @@ wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv)
 
 	wchar_t* unicode = new wchar_t[len + 1];
 	conv.MB2WC(unicode, buffer, len + 1);
-#if wxUSE_UNICODE
 	return unicode;
-#else
-	len = wxConvCurrent->WC2MB(0, unicode, 0);
-	if (!len)
-	{
-		delete [] unicode;
-		return 0;
-	}
-
-	wxChar* output = new wxChar[len + 1];
-	wxConvCurrent->WC2MB(output, unicode, len + 1);
-	delete [] unicode;
-	return output;
-#endif
 }
 
 wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer)
@@ -609,13 +595,7 @@ wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer)
 	}
 
 	// Fallback: Conversion using current locale
-#if wxUSE_UNICODE
 	wxChar* res = ConvToLocalBuffer(buffer, *wxConvCurrent);
-#else
-	// No conversion needed, just copy
-	wxChar* res = new wxChar[strlen(buffer) + 1];
-	strcpy(res, buffer);
-#endif
 
 	return res;
 }
@@ -624,30 +604,14 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 {
 	if (m_useUTF8 || force_utf8)
 	{
-#if wxUSE_UNICODE
 		wxCharBuffer buffer = wxConvUTF8.cWX2MB(str);
-#else
-		wxWCharBuffer unicode = wxConvCurrent->cMB2WC(str);
-		wxCharBuffer buffer;
-		if (unicode)
-			 buffer = wxConvUTF8.cWC2MB(unicode);
-#endif
-
 		if (buffer || force_utf8)
 			return buffer;
 	}
 
 	if (m_pCSConv)
 	{
-#if wxUSE_UNICODE
 		wxCharBuffer buffer = m_pCSConv->cWX2MB(str);
-#else
-		wxWCharBuffer unicode = wxConvCurrent->cMB2WC(str);
-		wxCharBuffer buffer;
-		if (unicode)
-			 buffer = m_pCSConv->cWC2MB(unicode);
-#endif
-
 		if (buffer)
 			return buffer;
 	}

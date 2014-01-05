@@ -12,12 +12,10 @@
 bool CWrapEngine::m_use_cache = true;
 
 #define WRAPDEBUG 0
-#if wxUSE_UNICODE
 // Chinese equivalents to ".", "," and ":"
 static const wxChar noWrapChars_Chinese[] = { '.', ',', ':', 0x3002, 0xFF0C, 0xFF1A, 0};
 // Remark: Chinese (Taiwan) uses ascii punctuation marks though, but those
 // don't have to be added, as only characters >= 128 will be wrapped.
-#endif
 
 bool CWrapEngine::CanWrapBefore(const wxChar& c)
 {
@@ -744,7 +742,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 wxString CWrapEngine::UnwrapText(const wxString& text)
 {
 	wxString unwrapped;
-#if wxUSE_UNICODE
 	int lang = wxGetApp().GetCurrentLanguage();
 	if (lang == wxLANGUAGE_CHINESE || lang == wxLANGUAGE_CHINESE_SIMPLIFIED ||
 		lang == wxLANGUAGE_CHINESE_TRADITIONAL || lang == wxLANGUAGE_CHINESE_HONGKONG ||
@@ -777,7 +774,6 @@ wxString CWrapEngine::UnwrapText(const wxString& text)
 		}
 	}
 	else
-#endif
 	{
 		unwrapped = text;
 
@@ -1169,7 +1165,6 @@ void CWrapEngine::ClearCache()
 
 void CWrapEngine::CheckLanguage()
 {
-#if wxUSE_UNICODE
 	// Just don't bother with wrapping on anything other than UCS-2
 	// FIXME: Use charset conversion routines to convert into UCS-2 and back into
 	//        local charset if not using unicode.
@@ -1184,7 +1179,6 @@ void CWrapEngine::CheckLanguage()
 		m_noWrapChars = noWrapChars_Chinese;
 	}
 	else
-#endif
 	{
 		m_wrapOnEveryChar = false;
 		m_noWrapChars = 0;

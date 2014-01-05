@@ -210,11 +210,7 @@ const wxString& CSizeFormatBase::GetThousandsSeparator()
 		char* chr = nl_langinfo(THOUSEP);
 		if (chr && *chr)
 		{
-#if wxUSE_UNICODE
 			sep = wxString(chr, wxConvLibc);
-#else
-			sep = chr;
-#endif
 		}
 #endif
 	}
@@ -246,11 +242,7 @@ const wxString& CSizeFormatBase::GetRadixSeparator()
 			sep = _T(".");
 		else
 		{
-#if wxUSE_UNICODE
 			sep = wxString(chr, wxConvLibc);
-#else
-			sep = chr;
-#endif
 		}
 #endif
 	}
