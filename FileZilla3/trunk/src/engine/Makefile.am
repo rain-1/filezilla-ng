@@ -58,7 +58,7 @@ noinst_HEADERS = backend.h \
 		tlssocket.h \
 		transfersocket.h
 
-dist_noinst_DATA = engine.vcproj
+dist_noinst_DATA = engine.vcxproj
 
 CLEANFILES = filezilla.h.gch
 

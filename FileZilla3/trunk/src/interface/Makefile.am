@@ -274,7 +274,7 @@ else
 filezilla_DEPENDENCIES += $(TINYXML_LIBS)
 endif
 
-dist_noinst_DATA = interface.vcproj
+dist_noinst_DATA = interface.vcxproj
 
 if MACAPPBUNDLE
 noinst_DATA = $(top_builddir)/FileZilla.app/Contents/MacOS/filezilla$(EXEEXT)
