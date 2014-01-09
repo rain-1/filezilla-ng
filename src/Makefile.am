@@ -15,4 +15,4 @@ SUBDIRS = include engine $(MAYBE_TINYXML) $(MAYBE_DBUS) interface putty $(MAYBE_
 
 
 
-dist_noinst_DATA = FileZilla.sln
+dist_noinst_DATA = FileZilla.sln Dependencies.props.example
