@@ -1794,7 +1794,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_COPYRIGHT">
-                  <label>&lt;Copyright 2004-2013&gt;</label>
+                  <label>&lt;Copyright 2004-2014&gt;</label>
                 </object>
                 <flag>wxTOP|wxBOTTOM</flag>
                 <border>5</border>
