@@ -10,6 +10,19 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.7.4-rc1 (2014-02-01)
+
++ Added Corsican and Kabyle translations
++ SFTP now supports the hmac-sha2-256 algorithm
+- MSW: Show local timestamps for old files using the correct daylight saving time (DST) offset.
+- Fix loading of transfer queue if starting FileZilla while another instance is in the process of shutting down
+- Fix interaction between site-specific bookmarks and multiple tabs
+- Don't resume uploads when there's zero octets left to transfer
+- Improve symbolic link detection when using MLSD
+- If processing a queue with files queued on multiple servers and not storing passwords, the password was not always asked prior to switching servers
+- Use the correct name element when importing sites
+- MSW: Show actual Windows version in about dialog regardless of app-compat settings
+
 3.7.3 (2013-08-07)
 
 ! Merge further fixes from PuTTY to address CVE-2013-4206, CVE-2013-4207, CVE-2013-4208
