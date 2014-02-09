@@ -565,6 +565,10 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		m_MonthNamesMap[_T("sie")] = 8;
 		m_MonthNamesMap[_T("wrz")] = 9;
 		m_MonthNamesMap[_T("pa\x9f")] = 10;
+		m_MonthNamesMap[_T("pa\xbc")] = 10; // ISO-8859-2 
+		m_MonthNamesMap[_T("paz")] = 10; // ASCII 
+		m_MonthNamesMap[_T("pa\xc5\xba")] = 10; // UTF-8 
+		m_MonthNamesMap[_T("pa\x017a")] = 10; // some servers send this
 		m_MonthNamesMap[_T("lis")] = 11;
 		m_MonthNamesMap[_T("gru")] = 12;
 
