@@ -1448,6 +1448,8 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 	else
 		data = *(CSiteManagerItemData_Site *)pData;
 
+	data.m_path = GetSitePath(item);
+
 	return true;
 }
 
