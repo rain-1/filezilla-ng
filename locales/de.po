@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-09 20:02+0100\n"
-"PO-Revision-Date: 2014-02-08 15:01+0100\n"
+"PO-Revision-Date: 2014-02-09 21:09+0100\n"
 "Last-Translator: Peter Körner <18427@gmx.net>\n"
 "Language-Team: German\n"
 "MIME-Version: 1.0\n"
@@ -1854,6 +1854,8 @@ msgstr "Kann Datei nicht umbenennen"
 #: ../../locales/../src/engine/proxy.cpp:147
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr ""
+"Kann Hostnamen nicht zu IPv4-Adresse für die Verwendung mit SOCKS4-Proxy "
+"auflösen."
 
 #: ../../locales/../src/interface/filter.cpp:350
 #: ../../locales/../src/interface/filter.cpp:419
@@ -4147,7 +4149,7 @@ msgstr "ISO 8&601 (Beispiel: 15:47)"
 
 #: ../../locales/../src/engine/proxy.cpp:140
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
-msgstr ""
+msgstr "IPv6-Adressen werden mit SOCKS4-Proxy nicht unterstützt"
 
 #: resources.h:756
 msgid ""
@@ -6079,14 +6081,18 @@ msgstr "Fehler und Verbesserungswünsche mitteilen"
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
+"Anfrage fehlgeschlagen - auf Client läuft kein identd (oder er ist vom "
+"Server aus nicht erreichbar)"
 
 #: ../../locales/../src/engine/proxy.cpp:409
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
+"Anfrage fehlgeschlagen - identd des Client konnte die Nutzer-ID-Zeichenkette "
+"nicht bestätigen"
 
 #: ../../locales/../src/engine/proxy.cpp:403
 msgid "Request rejected or failed"
-msgstr ""
+msgstr "Anfrage zurückgewiesen oder fehlgeschlagen"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:514
 msgid "Require explicit FTP over TLS"
@@ -6174,14 +6180,13 @@ msgid "SFTP"
 msgstr "SFTP"
 
 #: resources.h:818
-#, fuzzy
 msgid "SOC&KS 4"
-msgstr "S&OCKS 5"
+msgstr "SO&CKS 4"
 
 #: ../../locales/../src/engine/proxy.cpp:153
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
-msgstr ""
+msgstr "SOCKS4-Proxy wird Verbindung herstellen mit: %s"
 
 #: resources.h:177
 msgid "SQLite:"
