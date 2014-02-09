@@ -521,7 +521,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T("root other"),
 				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
 				_T(""),
-				wxDateTime(26, wxDateTime::Sep, calcYear(7, 26), 20, 10)
+				wxDateTime(26, wxDateTime::Sep, calcYear(9, 26), 20, 10)
 			},
 			DEFAULT
 		});
