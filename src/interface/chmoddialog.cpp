@@ -375,6 +375,8 @@ bool CChmodDialog::ConvertPermissions(wxString rwx, char* permissions)
 		bool set = rwx[i + 1] == permchars[i % 3];
 		permissions[i] = set ? 2 : 1;
 	}
+	if (rwx[3] == 's')
+		permissions[2] = 2;
 	if (rwx[6] == 's')
 		permissions[5] = 2;
 	if (rwx[9] == 't')
