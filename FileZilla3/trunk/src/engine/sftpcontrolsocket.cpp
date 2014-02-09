@@ -549,6 +549,9 @@ int CSftpControlSocket::ConnectSend()
 			case CProxySocket::SOCKS5:
 				type = 2;
 				break;
+			case CProxySocket::SOCKS4:
+				type = 3;
+				break;
 			default:
 				LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unsupported proxy type"));
 				DoClose(FZ_REPLY_INTERNALERROR);

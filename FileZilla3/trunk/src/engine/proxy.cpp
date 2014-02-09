@@ -2,6 +2,7 @@
 #include "proxy.h"
 #include <errno.h>
 #include "ControlSocket.h"
+#include <wx/sckaddr.h>
 
 enum handshake_state
 {
@@ -11,7 +12,9 @@ enum handshake_state
 	socks5_auth,
 	socks5_request,
 	socks5_request_addrtype,
-	socks5_request_address
+	socks5_request_address,
+
+	socks4_handshake
 };
 
 CProxySocket::CProxySocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
@@ -81,7 +84,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 
 	const wxWX2MBbuf host_raw = host.mb_str(wxConvUTF8);
 
-	if (type != HTTP && type != SOCKS5)
+	if (type != HTTP && type != SOCKS5 && type != SOCKS4)
 		return EPROTONOSUPPORT;
 
 	m_user = user;
@@ -129,6 +132,49 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 		m_pRecvBuffer = new char[4096];
 		m_recvBufferLen = 4096;
 		m_recvBufferPos = 0;
+	}
+	else if (type == SOCKS4)
+	{
+		wxString ip = m_host;
+		if (GetIPV6LongForm(m_host).empty()) {
+			m_pOwner->LogMessage(Error, _("IPv6 addresses are not supported with SOCKS4 proxy"));
+			return EINVAL;
+		}
+
+		if (!IsIpAddress(m_host)) {			
+			wxIPV4address address;
+			if (!address.Hostname(host)) {
+				m_pOwner->LogMessage(Error, _("Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."));
+				return EINVAL;
+			}
+			ip = address.IPAddress();
+		}
+
+		m_pOwner->LogMessage(Status, _("SOCKS4 proxy will connect to: %s"), ip.c_str());		
+		
+		m_pSendBuffer = new char[9];
+		m_pSendBuffer[0] = 4; // Protocol version
+		m_pSendBuffer[1] = 1; // Stream mode
+		m_pSendBuffer[2] = (m_port >> 8) & 0xFF; // Port in network order
+		m_pSendBuffer[3] = m_port & 0xFF;
+		unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
+		int i = 0;
+		memset(buf, 0, 4);
+		for (const wxChar* p = ip.c_str(); *p && i < 4; p++) {
+			const wxChar& c = *p;
+			if (c == '.') {
+				i++;
+				continue;
+			}
+			buf[i] *= 10;
+			buf[i] += c - '0';
+		}
+		m_pSendBuffer[8] = 0;
+		m_sendBufferLen = 9;		
+		m_pRecvBuffer = new char[8];
+		m_recvBufferLen = 8;
+		m_recvBufferPos = 0;
+		m_handshakeState = socks4_handshake;
 	}
 	else
 	{
@@ -317,6 +363,66 @@ void CProxySocket::OnReceive()
 			CSocketEventDispatcher::Get().SendEvent(evt);
 			return;
 		}
+	case socks4_handshake:
+		while (m_recvBufferLen && m_can_read && m_proxyState == handshake)
+		{
+			int read_error;
+			int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, m_recvBufferLen, read_error);
+			if (read == -1)
+			{
+				if (read_error != EAGAIN)
+				{
+					m_proxyState = noconn;
+					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, read_error);
+					CSocketEventDispatcher::Get().SendEvent(evt);
+				}
+				else
+					m_can_read = false;
+				return;
+			}
+			
+			if (!read)
+			{
+				m_proxyState = noconn;
+				CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
+				CSocketEventDispatcher::Get().SendEvent(evt);
+				return;
+			}
+			m_recvBufferPos += read;
+			m_recvBufferLen -= read;
+
+			if (m_recvBufferLen)
+				continue;
+
+			m_recvBufferPos = 0;
+			
+			if (m_pRecvBuffer[1] != 0x5A) {
+				wxString error;
+				switch (m_pRecvBuffer[1]) {
+					case 0x5B:
+						error = _("Request rejected or failed");
+						break;
+					case 0x5C:
+						error = _("Request failed - client is not running identd (or not reachable from server)");
+						break;
+					case 0x5D:
+						error = _("Request failed - client's identd could not confirm the user ID string");
+						break;				
+					default:
+						error.Printf(_("Unassigned error code %d"), (int)(unsigned char) m_pRecvBuffer[1]);
+						break;
+				}
+				m_pOwner->LogMessage(Error, _("Proxy request failed: %s"), error.c_str());
+				m_proxyState = noconn;
+				CSocketEventDispatcher::Get()
+					.SendEvent(new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED));
+				return;
+			}
+			m_proxyState = conn;
+			CSocketEventDispatcher::Get()
+				.SendEvent(new CSocketEvent(m_pEvtHandler, this, CSocketEvent::connection, 0));
+		}
+		return;
 	case socks5_method:
 	case socks5_auth:
 	case socks5_request:
@@ -542,7 +648,7 @@ void CProxySocket::OnReceive()
 							unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
 							int i = 0;
 							memset(buf, 0, 4);
-							for (const wxChar* p = m_host.c_str(); *p; p++)
+							for (const wxChar* p = m_host.c_str(); *p && i < 4; p++)
 							{
 								const wxChar& c = *p;
 								if (c == '.')
