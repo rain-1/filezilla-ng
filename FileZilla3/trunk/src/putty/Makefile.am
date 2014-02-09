@@ -81,7 +81,7 @@ if MACAPPBUNDLE
 noinst_DATA = $(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp$(EXEEXT)
 endif
  
-$(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp$(EXEEXT): fzsftp
+$(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp$(EXEEXT): fzsftp fzputtygen
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/MacOS
 	cp -f fzsftp $(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp
 	cp -f fzputtygen $(top_builddir)/FileZilla.app/Contents/MacOS/fzputtygen
