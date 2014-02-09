@@ -8,6 +8,7 @@
 BEGIN_EVENT_TABLE(COptionsPageProxy, COptionsPageProxy::COptionsPage)
 EVT_RADIOBUTTON(XRCID("ID_PROXYTYPE_NONE"), COptionsPageProxy::OnProxyTypeChanged)
 EVT_RADIOBUTTON(XRCID("ID_PROXYTYPE_HTTP"), COptionsPageProxy::OnProxyTypeChanged)
+EVT_RADIOBUTTON(XRCID("ID_PROXYTYPE_SOCKS4"), COptionsPageProxy::OnProxyTypeChanged)
 EVT_RADIOBUTTON(XRCID("ID_PROXYTYPE_SOCKS5"), COptionsPageProxy::OnProxyTypeChanged)
 END_EVENT_TABLE()
 
@@ -33,6 +34,9 @@ bool COptionsPageProxy::LoadPage()
 	case 2:
 		SetRCheck(XRCID("ID_PROXYTYPE_SOCKS5"), true, failure);
 		break;
+	case 3:
+		SetRCheck(XRCID("ID_PROXYTYPE_SOCKS4"), true, failure);
+		break;
 	}
 
 	if (!failure)
@@ -53,6 +57,8 @@ bool COptionsPageProxy::SavePage()
 		type = 1;
 	else if (GetRCheck(XRCID("ID_PROXYTYPE_SOCKS5")))
 		type = 2;
+	else if (GetRCheck(XRCID("ID_PROXYTYPE_SOCKS4")))
+		type = 3;
 	else
 		type = 0;
 	m_pOptions->SetOption(OPTION_PROXY_TYPE, type);
@@ -87,11 +93,12 @@ bool COptionsPageProxy::Validate()
 void COptionsPageProxy::SetCtrlState()
 {
 	bool enabled = XRCCTRL(*this, "ID_PROXYTYPE_NONE", wxRadioButton)->GetValue() == 0;
+	bool enabled_auth = XRCCTRL(*this, "ID_PROXYTYPE_SOCKS4", wxRadioButton)->GetValue() == 0;
 
 	XRCCTRL(*this, "ID_PROXY_HOST", wxTextCtrl)->Enable(enabled);
 	XRCCTRL(*this, "ID_PROXY_PORT", wxTextCtrl)->Enable(enabled);
-	XRCCTRL(*this, "ID_PROXY_USER", wxTextCtrl)->Enable(enabled);
-	XRCCTRL(*this, "ID_PROXY_PASS", wxTextCtrl)->Enable(enabled);
+	XRCCTRL(*this, "ID_PROXY_USER", wxTextCtrl)->Enable(enabled && enabled_auth);
+	XRCCTRL(*this, "ID_PROXY_PASS", wxTextCtrl)->Enable(enabled && enabled_auth);
 }
 
 void COptionsPageProxy::OnProxyTypeChanged(wxCommandEvent& event)

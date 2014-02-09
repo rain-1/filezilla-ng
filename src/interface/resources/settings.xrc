@@ -706,6 +706,11 @@
                 </object>
               </object>
               <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_PROXYTYPE_SOCKS4">
+                  <label>SOC&amp;KS 4</label>
+                </object>
+              </object>
+              <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_PROXYTYPE_SOCKS5">
                   <label>&amp;SOCKS 5</label>
                 </object>
