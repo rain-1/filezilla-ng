@@ -596,14 +596,12 @@ bool CEditHandler::StartEditing(enum CEditHandler::fileType type, t_fileData& da
 	wxASSERT(type != none);
 	wxASSERT(data.state == edit);
 
-	wxFileName fn(data.file);
-
-	if (!fn.FileExists())
+	bool is_link;
+	if (CLocalFileSystem::GetFileInfo(data.file, is_link, 0, &data.modificationTime, 0) != CLocalFileSystem::file)
 		return false;
-	data.modificationTime = fn.GetModificationTime();
 
 	bool program_exists = false;
-	wxString cmd = GetOpenCommand(fn.GetFullPath(), program_exists);
+	wxString cmd = GetOpenCommand(data.file, program_exists);
 	if (cmd.empty() || !program_exists)
 		return false;
 
@@ -636,20 +634,13 @@ checkmodifications_loopbegin:
 			if (iter->state != edit)
 				continue;
 
-			wxFileName fn(iter->file);
-			if (!fn.FileExists())
-			{
+			wxDateTime mtime;
+			bool is_link;
+			if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file) {
 				m_fileDataList[i].erase(iter);
 
 				// Evil goto. Imo the next C++ standard needs a comefrom keyword.
 				goto checkmodifications_loopbegin;
-			}
-
-			wxDateTime mtime;
-
-			{
-				wxLogNull log; // If GetModificationTime fails wx spams error messages
-				mtime = fn.GetModificationTime();
 			}
 
 			if (!mtime.IsValid())
@@ -691,7 +682,7 @@ checkmodifications_loopbegin:
 			{
 				if (i == remote)
 				{
-					if (!fn.FileExists() || wxRemoveFile(fn.GetFullPath()))
+					if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file || wxRemoveFile(iter->file))
 					{
 						m_fileDataList[i].erase(iter);
 						goto checkmodifications_loopbegin;
@@ -704,7 +695,7 @@ checkmodifications_loopbegin:
 					goto checkmodifications_loopbegin;
 				}
 			}
-			else if (!fn.FileExists())
+			else if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file)
 			{
 				m_fileDataList[i].erase(iter);
 				goto checkmodifications_loopbegin;
