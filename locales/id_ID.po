@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-09 20:02+0100\n"
-"PO-Revision-Date: 2014-02-02 23:38+0700\n"
+"POT-Creation-Date: 2014-02-10 22:48+0100\n"
+"PO-Revision-Date: 2014-02-10 06:21+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -1614,8 +1614,8 @@ msgstr "Instruksi penggunaan dasar"
 msgid "Behaviour"
 msgstr "Perilaku"
 
-#: ../../locales/../src/interface/edithandler.cpp:1268
-#: ../../locales/../src/interface/edithandler.cpp:1296
+#: ../../locales/../src/interface/edithandler.cpp:1259
+#: ../../locales/../src/interface/edithandler.cpp:1287
 msgid "Being edited"
 msgstr "Sedang diedit"
 
@@ -1823,6 +1823,8 @@ msgstr "Tidak dapat mengganti nama berkas"
 #: ../../locales/../src/engine/proxy.cpp:147
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr ""
+"Tidak dapat me-resolve nama host ke alamat IPv4 untuk digunakan dengan "
+"SOCKS4 proxy."
 
 #: ../../locales/../src/interface/filter.cpp:350
 #: ../../locales/../src/interface/filter.cpp:419
@@ -1833,13 +1835,13 @@ msgstr "Tidak dapat menyimpat kumpulan filter"
 msgid "Cannot select filter"
 msgstr "Tidak dapat memilih filter"
 
-#: ../../locales/../src/interface/edithandler.cpp:1646
-#: ../../locales/../src/interface/edithandler.cpp:1651
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1637
+#: ../../locales/../src/interface/edithandler.cpp:1642
+#: ../../locales/../src/interface/edithandler.cpp:1681
 msgid "Cannot set file association"
 msgstr "Tidak dapat menentukan asosiasi berkas"
 
-#: ../../locales/../src/interface/edithandler.cpp:1227
+#: ../../locales/../src/interface/edithandler.cpp:1218
 msgid "Cannot show dialog"
 msgstr "Tidak bisa menampilkan dialog"
 
@@ -3037,7 +3039,7 @@ msgstr ""
 "Kecepatan download: %s/s\n"
 "Kecepatan upload: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1253
+#: ../../locales/../src/interface/edithandler.cpp:1244
 msgid "Downloading"
 msgstr "Mendownload"
 
@@ -3680,7 +3682,7 @@ msgstr "Berkas sudah berubah"
 msgid "File lists"
 msgstr "Daftar berkas"
 
-#: ../../locales/../src/interface/edithandler.cpp:1730
+#: ../../locales/../src/interface/edithandler.cpp:1721
 #: ../../locales/../src/interface/FileZilla.cpp:712
 #: ../../locales/../src/interface/FileZilla.cpp:806
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:188
@@ -3765,7 +3767,7 @@ msgstr "Update FileZilla"
 msgid "Filelist status &bars"
 msgstr "&Status bar daftar berkas"
 
-#: ../../locales/../src/interface/edithandler.cpp:1238
+#: ../../locales/../src/interface/edithandler.cpp:1229
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:277
 #: ../../locales/../src/interface/RemoteListView.cpp:372
@@ -4053,7 +4055,7 @@ msgstr "I&SO 8601 (contoh: 15:47)"
 
 #: ../../locales/../src/engine/proxy.cpp:140
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
-msgstr ""
+msgstr "Alamat IPv6 tidak didukung oleh SOCKS4 proxy"
 
 #: resources.h:756
 msgid ""
@@ -4550,8 +4552,8 @@ msgstr "Daftar:"
 msgid "Lo&west available port:"
 msgstr "Port ter&endah yang tersedia:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1286
-#: ../../locales/../src/interface/edithandler.cpp:1540
+#: ../../locales/../src/interface/edithandler.cpp:1277
+#: ../../locales/../src/interface/edithandler.cpp:1531
 msgid "Local"
 msgstr "Lokal:"
 
@@ -4854,7 +4856,7 @@ msgid "No external IP address set, trying default."
 msgstr ""
 "Tidak ada alamat IP eksternal yang ditentukan, mencoba menggunakan default."
 
-#: ../../locales/../src/interface/edithandler.cpp:1227
+#: ../../locales/../src/interface/edithandler.cpp:1218
 msgid "No files are currently being edited."
 msgstr "Tidak ada berkas yang sedang diedit."
 
@@ -5180,10 +5182,10 @@ msgstr "Path tidak ditemukan:"
 msgid "Paths"
 msgstr "Path"
 
-#: ../../locales/../src/interface/edithandler.cpp:1265
-#: ../../locales/../src/interface/edithandler.cpp:1408
-#: ../../locales/../src/interface/edithandler.cpp:1507
-#: ../../locales/../src/interface/edithandler.cpp:1520
+#: ../../locales/../src/interface/edithandler.cpp:1256
+#: ../../locales/../src/interface/edithandler.cpp:1399
+#: ../../locales/../src/interface/edithandler.cpp:1498
+#: ../../locales/../src/interface/edithandler.cpp:1511
 msgid "Pending removal"
 msgstr "Penghapusan tertunda"
 
@@ -5818,7 +5820,7 @@ msgstr "Perbarui daftar berkas dan direktori"
 msgid "Remember passwords?"
 msgstr "Ingat kata kunci?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1249
+#: ../../locales/../src/interface/edithandler.cpp:1240
 msgid "Remote"
 msgstr "Remote"
 
@@ -5841,7 +5843,7 @@ msgstr "Pencarian berkas remote"
 msgid "Remote filters:"
 msgstr "Filter remote:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1240
+#: ../../locales/../src/interface/edithandler.cpp:1231
 msgid "Remote path"
 msgstr "Path Remote"
 
@@ -5920,14 +5922,17 @@ msgstr "Melaporkan kesalahan dan permintaan fitur"
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
+"Permintaan gagal - klien tidak menjalankan identd (atau tidak dapat "
+"dihubungi dari server)"
 
 #: ../../locales/../src/engine/proxy.cpp:409
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
+"Permintaan gagal - identd milik klien tidak dapat mengkonfirmasi string ID"
 
 #: ../../locales/../src/engine/proxy.cpp:403
 msgid "Request rejected or failed"
-msgstr ""
+msgstr "Permintaan ditolak atau gagal"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:514
 msgid "Require explicit FTP over TLS"
@@ -6015,14 +6020,13 @@ msgid "SFTP"
 msgstr "SFTP"
 
 #: resources.h:818
-#, fuzzy
 msgid "SOC&KS 4"
-msgstr "&SOCKS 5"
+msgstr "&SOCKS 4"
 
 #: ../../locales/../src/engine/proxy.cpp:153
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
-msgstr ""
+msgstr "SOCKS4 proxy akan tersambung ke: %s"
 
 #: resources.h:177
 msgid "SQLite:"
@@ -6093,7 +6097,7 @@ msgid ""
 "Select default action to perform if target file of a transfer already exists."
 msgstr "Pilih aksi default yang akan dilakukan jika berkas tujuan sudah ada."
 
-#: ../../locales/../src/interface/edithandler.cpp:1710
+#: ../../locales/../src/interface/edithandler.cpp:1701
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:168
 msgid "Select default editor"
 msgstr "Pilih editor default"
@@ -6217,8 +6221,8 @@ msgstr "Terpilih %s dan %s. Ukuran total: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Terpilih %s dan %s. Ukuran total: Paling tidak %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
-#: ../../locales/../src/interface/edithandler.cpp:1730
+#: ../../locales/../src/interface/edithandler.cpp:1642
+#: ../../locales/../src/interface/edithandler.cpp:1721
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:188
 msgid "Selected editor does not exist."
 msgstr "Editor yang dipilih tidak ada."
@@ -6629,7 +6633,7 @@ msgstr "Menjalankan situs lokal pada path yang diberikan"
 msgid "State or province:"
 msgstr "Kota atau provinsi:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1241
+#: ../../locales/../src/interface/edithandler.cpp:1232
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Status"
 msgstr "Status"
@@ -6801,7 +6805,7 @@ msgstr "Urutan login kustom tidak boleh kosong."
 msgid "The data connection could not be established: %s"
 msgstr "Koneksi data tidak dapat terbentuk: %s"
 
-#: resources.h:435 ../../locales/../src/interface/edithandler.cpp:1690
+#: resources.h:435 ../../locales/../src/interface/edithandler.cpp:1681
 #, no-c-format
 msgid "The default editor for text files could not be found."
 msgstr "Editor default untuk berkas teks tidak ditemukan."
@@ -7337,7 +7341,7 @@ msgstr "Percayai sertifikat ini dan lanjutkan dengan menghubungkan diri?"
 msgid "Trust this host and carry on connecting?"
 msgstr "Percayai mesin ini dan lanjutkan dengan koneksi?"
 
-#: resources.h:407 ../../locales/../src/interface/edithandler.cpp:1239
+#: resources.h:407 ../../locales/../src/interface/edithandler.cpp:1230
 msgid "Type"
 msgstr "Jenis"
 
@@ -7380,8 +7384,8 @@ msgstr "Kode kesalahan yang belum ditentukan %d"
 msgid "Unit:"
 msgstr "Unit:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1271
-#: ../../locales/../src/interface/edithandler.cpp:1299
+#: ../../locales/../src/interface/edithandler.cpp:1262
+#: ../../locales/../src/interface/edithandler.cpp:1290
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
@@ -7468,7 +7472,7 @@ msgstr "Update"
 msgid "Upload"
 msgstr "Upload"
 
-#: ../../locales/../src/interface/edithandler.cpp:1262
+#: ../../locales/../src/interface/edithandler.cpp:1253
 msgid "Upload failed"
 msgstr "Upload gagal"
 
@@ -7497,19 +7501,19 @@ msgstr "Upload berkas ini kembali ke server?"
 msgid "Upload this file to the server?"
 msgstr "Upload berkas ini kembali ke server?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1256
-#: ../../locales/../src/interface/edithandler.cpp:1290
-#: ../../locales/../src/interface/edithandler.cpp:1455
+#: ../../locales/../src/interface/edithandler.cpp:1247
+#: ../../locales/../src/interface/edithandler.cpp:1281
+#: ../../locales/../src/interface/edithandler.cpp:1446
 msgid "Uploading"
 msgstr "Mengupload"
 
-#: ../../locales/../src/interface/edithandler.cpp:1259
-#: ../../locales/../src/interface/edithandler.cpp:1457
+#: ../../locales/../src/interface/edithandler.cpp:1250
+#: ../../locales/../src/interface/edithandler.cpp:1448
 msgid "Uploading and pending removal"
 msgstr "Mengupload dan penghapusan tertunda"
 
-#: ../../locales/../src/interface/edithandler.cpp:1293
-#: ../../locales/../src/interface/edithandler.cpp:1459
+#: ../../locales/../src/interface/edithandler.cpp:1284
+#: ../../locales/../src/interface/edithandler.cpp:1450
 msgid "Uploading and unediting"
 msgstr "Mengupload dan batalkan pengeditan"
 
@@ -7893,7 +7897,7 @@ msgstr "Anda harus memasukan sebuah nama untuk penanda."
 msgid "You need to enter a name for the log file."
 msgstr "Anda harus memasukan sebuah nama untuk berkas log."
 
-#: ../../locales/../src/interface/edithandler.cpp:1646
+#: ../../locales/../src/interface/edithandler.cpp:1637
 msgid "You need to enter a properly quoted command."
 msgstr "Anda harus memasukkan perintah yang dikutip dengan benar."
 

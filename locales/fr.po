@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-09 20:02+0100\n"
+"POT-Creation-Date: 2014-02-10 22:48+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.3\n"
+"X-Generator: Poedit 1.6.4\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
 #: ../../locales/../src/interface/statuslinectrl.cpp:230
@@ -1647,8 +1647,8 @@ msgstr "Instructions pour une première utilisation"
 msgid "Behaviour"
 msgstr "Comportement"
 
-#: ../../locales/../src/interface/edithandler.cpp:1268
-#: ../../locales/../src/interface/edithandler.cpp:1296
+#: ../../locales/../src/interface/edithandler.cpp:1259
+#: ../../locales/../src/interface/edithandler.cpp:1287
 msgid "Being edited"
 msgstr "En cours d'édition"
 
@@ -1859,6 +1859,8 @@ msgstr "Impossible de renommer le fichier"
 #: ../../locales/../src/engine/proxy.cpp:147
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr ""
+"Impossible de résoudre le nom d'hôte avec une adresse IPv4 pour une "
+"utilisation avec un proxy SOCKS 4."
 
 #: ../../locales/../src/interface/filter.cpp:350
 #: ../../locales/../src/interface/filter.cpp:419
@@ -1869,13 +1871,13 @@ msgstr "Impossible de sauvegarder le jeu de filtres"
 msgid "Cannot select filter"
 msgstr "Impossible de sélectionner le filtre"
 
-#: ../../locales/../src/interface/edithandler.cpp:1646
-#: ../../locales/../src/interface/edithandler.cpp:1651
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1637
+#: ../../locales/../src/interface/edithandler.cpp:1642
+#: ../../locales/../src/interface/edithandler.cpp:1681
 msgid "Cannot set file association"
 msgstr "Impossible de définir l'association de fichier"
 
-#: ../../locales/../src/interface/edithandler.cpp:1227
+#: ../../locales/../src/interface/edithandler.cpp:1218
 msgid "Cannot show dialog"
 msgstr "Impossible d'afficher le dialogue"
 
@@ -3101,7 +3103,7 @@ msgstr ""
 "Vitesse de téléchargement : %s/s\n"
 "Vitesse d'envoi : %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1253
+#: ../../locales/../src/interface/edithandler.cpp:1244
 msgid "Downloading"
 msgstr "En cours de téléchargement"
 
@@ -3762,7 +3764,7 @@ msgstr "Le fichier a été modifié"
 msgid "File lists"
 msgstr "Listes des fichiers"
 
-#: ../../locales/../src/interface/edithandler.cpp:1730
+#: ../../locales/../src/interface/edithandler.cpp:1721
 #: ../../locales/../src/interface/FileZilla.cpp:712
 #: ../../locales/../src/interface/FileZilla.cpp:806
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:188
@@ -3849,7 +3851,7 @@ msgstr "Mises à jour de FileZilla"
 msgid "Filelist status &bars"
 msgstr "Barre d'état des ar&borescences"
 
-#: ../../locales/../src/interface/edithandler.cpp:1238
+#: ../../locales/../src/interface/edithandler.cpp:1229
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:277
 #: ../../locales/../src/interface/RemoteListView.cpp:372
@@ -4146,7 +4148,7 @@ msgstr "I&SO 8601 (exemple : 15:47)"
 
 #: ../../locales/../src/engine/proxy.cpp:140
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
-msgstr ""
+msgstr "Les adresses IPv6 ne sont pas supportées avec un proxy SOCKS 4"
 
 #: resources.h:756
 msgid ""
@@ -4651,8 +4653,8 @@ msgstr "Contenu :"
 msgid "Lo&west available port:"
 msgstr "P&ort le plus bas disponible :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1286
-#: ../../locales/../src/interface/edithandler.cpp:1540
+#: ../../locales/../src/interface/edithandler.cpp:1277
+#: ../../locales/../src/interface/edithandler.cpp:1531
 msgid "Local"
 msgstr "Local"
 
@@ -4964,7 +4966,7 @@ msgid "No external IP address set, trying default."
 msgstr ""
 "Aucune adresse IP externe spécifiée, utilisation des paramètres par défaut."
 
-#: ../../locales/../src/interface/edithandler.cpp:1227
+#: ../../locales/../src/interface/edithandler.cpp:1218
 msgid "No files are currently being edited."
 msgstr "Aucun fichier en cours d'édition."
 
@@ -5304,10 +5306,10 @@ msgstr "Chemin introuvable :"
 msgid "Paths"
 msgstr "Chemins"
 
-#: ../../locales/../src/interface/edithandler.cpp:1265
-#: ../../locales/../src/interface/edithandler.cpp:1408
-#: ../../locales/../src/interface/edithandler.cpp:1507
-#: ../../locales/../src/interface/edithandler.cpp:1520
+#: ../../locales/../src/interface/edithandler.cpp:1256
+#: ../../locales/../src/interface/edithandler.cpp:1399
+#: ../../locales/../src/interface/edithandler.cpp:1498
+#: ../../locales/../src/interface/edithandler.cpp:1511
 msgid "Pending removal"
 msgstr "En attente de retrait"
 
@@ -5965,7 +5967,7 @@ msgstr "Actualiser la liste des dossiers et des fichiers"
 msgid "Remember passwords?"
 msgstr "Se souvenir des mots de passe?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1249
+#: ../../locales/../src/interface/edithandler.cpp:1240
 msgid "Remote"
 msgstr "Distant"
 
@@ -5988,7 +5990,7 @@ msgstr "Recherche de fichiers distants"
 msgid "Remote filters:"
 msgstr "Filtres distants :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1240
+#: ../../locales/../src/interface/edithandler.cpp:1231
 msgid "Remote path"
 msgstr "Chemin distant"
 
@@ -6070,14 +6072,18 @@ msgstr "Rapporter des bogues et demander des améliorations"
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
+"Échec de la requête - Le client n'exécute pas de protocole d'identification "
+"(ou n'est pas accessible à partir du serveur)"
 
 #: ../../locales/../src/engine/proxy.cpp:409
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
+"Échec de la requête - Les protocoles d'identification n'ont pas pu confirmer "
+"la chaîne de l'ID utilisateur"
 
 #: ../../locales/../src/engine/proxy.cpp:403
 msgid "Request rejected or failed"
-msgstr ""
+msgstr "Échec ou rejet de la requête"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:514
 msgid "Require explicit FTP over TLS"
@@ -6165,14 +6171,13 @@ msgid "SFTP"
 msgstr "SFTP"
 
 #: resources.h:818
-#, fuzzy
 msgid "SOC&KS 4"
-msgstr "&SOCKS 5"
+msgstr "SOC&KS 4"
 
 #: ../../locales/../src/engine/proxy.cpp:153
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
-msgstr ""
+msgstr "Le proxy SOCKS 4 se connecte à : %s"
 
 #: resources.h:177
 msgid "SQLite:"
@@ -6245,7 +6250,7 @@ msgstr ""
 "Sélectionnez une action par défaut à effectuer si le fichier cible d'un "
 "transfert existe déjà."
 
-#: ../../locales/../src/interface/edithandler.cpp:1710
+#: ../../locales/../src/interface/edithandler.cpp:1701
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:168
 msgid "Select default editor"
 msgstr "Sélection de l'éditeur par défaut"
@@ -6374,8 +6379,8 @@ msgstr "Sélection de %s et %s. Taille totale : %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Sélection de %s et %s. Taille totale : Au moins %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
-#: ../../locales/../src/interface/edithandler.cpp:1730
+#: ../../locales/../src/interface/edithandler.cpp:1642
+#: ../../locales/../src/interface/edithandler.cpp:1721
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:188
 msgid "Selected editor does not exist."
 msgstr "L'éditeur sélectionné n'existe pas."
@@ -6799,7 +6804,7 @@ msgstr "Démarre le site local dans le chemin déterminé"
 msgid "State or province:"
 msgstr "État ou province :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1241
+#: ../../locales/../src/interface/edithandler.cpp:1232
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Status"
 msgstr "Statut"
@@ -6971,7 +6976,7 @@ msgstr "La séquence d'identification personnalisée ne peut pas être vide."
 msgid "The data connection could not be established: %s"
 msgstr "La connexion des données ne peut pas être établie : %s"
 
-#: resources.h:435 ../../locales/../src/interface/edithandler.cpp:1690
+#: resources.h:435 ../../locales/../src/interface/edithandler.cpp:1681
 #, no-c-format
 msgid "The default editor for text files could not be found."
 msgstr "L'éditeur par défaut pour les fichiers texte est introuvable."
@@ -7517,7 +7522,7 @@ msgstr "Approuver ce certificat et l'associer à la connexion ?"
 msgid "Trust this host and carry on connecting?"
 msgstr "Approuver ce serveur et l'associer à la connexion ?"
 
-#: resources.h:407 ../../locales/../src/interface/edithandler.cpp:1239
+#: resources.h:407 ../../locales/../src/interface/edithandler.cpp:1230
 msgid "Type"
 msgstr "Type"
 
@@ -7560,8 +7565,8 @@ msgstr "Code d'erreur non affecté %d"
 msgid "Unit:"
 msgstr "Unité :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1271
-#: ../../locales/../src/interface/edithandler.cpp:1299
+#: ../../locales/../src/interface/edithandler.cpp:1262
+#: ../../locales/../src/interface/edithandler.cpp:1290
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -7650,7 +7655,7 @@ msgstr "Mises à jour"
 msgid "Upload"
 msgstr "Envoyer"
 
-#: ../../locales/../src/interface/edithandler.cpp:1262
+#: ../../locales/../src/interface/edithandler.cpp:1253
 msgid "Upload failed"
 msgstr "Échec de l'envoi"
 
@@ -7679,19 +7684,19 @@ msgstr "Envoyer à nouveau ce fichier vers le serveur ?"
 msgid "Upload this file to the server?"
 msgstr "Envoyer ce fichier vers le serveur ?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1256
-#: ../../locales/../src/interface/edithandler.cpp:1290
-#: ../../locales/../src/interface/edithandler.cpp:1455
+#: ../../locales/../src/interface/edithandler.cpp:1247
+#: ../../locales/../src/interface/edithandler.cpp:1281
+#: ../../locales/../src/interface/edithandler.cpp:1446
 msgid "Uploading"
 msgstr "Envoi en cours"
 
-#: ../../locales/../src/interface/edithandler.cpp:1259
-#: ../../locales/../src/interface/edithandler.cpp:1457
+#: ../../locales/../src/interface/edithandler.cpp:1250
+#: ../../locales/../src/interface/edithandler.cpp:1448
 msgid "Uploading and pending removal"
 msgstr "Envoi et attente de retrait"
 
-#: ../../locales/../src/interface/edithandler.cpp:1293
-#: ../../locales/../src/interface/edithandler.cpp:1459
+#: ../../locales/../src/interface/edithandler.cpp:1284
+#: ../../locales/../src/interface/edithandler.cpp:1450
 msgid "Uploading and unediting"
 msgstr "Envoi et fin de l'édition"
 
@@ -8084,7 +8089,7 @@ msgstr "Vous devez saisir un nom pour le favori."
 msgid "You need to enter a name for the log file."
 msgstr "Vous devez saisir un nom pour le fichier journal."
 
-#: ../../locales/../src/interface/edithandler.cpp:1646
+#: ../../locales/../src/interface/edithandler.cpp:1637
 msgid "You need to enter a properly quoted command."
 msgstr "Vous devez saisir une commande correcte et placée entre guillemets."
 
