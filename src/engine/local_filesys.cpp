@@ -318,7 +318,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 #ifdef __WXMSW__
 
 // This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch. 
-static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600);
+static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
 
 bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft)
 {
@@ -329,13 +329,15 @@ bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILET
 	// Directly converting to time_t
 
 	wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
-	t /= 10000000; // Convert hundreds of nanoseconds to seconds. 
+	t /= 10000; // Convert hundreds of nanoseconds to milliseconds. 
 	t -= EPOCH_OFFSET_IN_MSEC;
 	if (t < 0) {
 		return false;
 	}
 
-	time.Set(static_cast<time_t>(t.GetValue()));
+	// Interestingly wxDateTime has this constructor which
+	// even more interestingly isn't even marked explicit.
+	time = wxDateTime(t);
 	return time.IsValid();
 }
 
@@ -344,10 +346,10 @@ bool CLocalFileSystem::ConvertWxDateTimeToFileTime(FILETIME &ft, const wxDateTim
 	if (!time.IsValid())
 		return false;
 
-	wxLongLong t = time.GetTicks();
+	wxLongLong t = time.GetValue();
 
 	t += EPOCH_OFFSET_IN_MSEC;
-	t *= 10000000;
+	t *= 10000;
 
 	ft.dwHighDateTime = t.GetHi();
 	ft.dwLowDateTime = t.GetLo();
