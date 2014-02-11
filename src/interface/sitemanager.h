@@ -85,12 +85,14 @@ public:
 	static void ClearIdMap();
 
 	static bool UnescapeSitePath(wxString path, std::list<wxString>& result);
+	static wxString EscapeSegment( wxString segment );
 
 protected:
 	static bool Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler);
 	static CSiteManagerItemData_Site* ReadServerElement(TiXmlElement *pElement);
 
-	static TiXmlElement* GetElementByPath(TiXmlElement* pNode, std::list<wxString> &segments);
+	static TiXmlElement* GetElementByPath(TiXmlElement* pNode, std::list<wxString> const& segments);
+	static wxString BuildPath(wxChar root, std::list<wxString> const& segments);
 
 	static std::map<int, CSiteManagerItemData_Site*> m_idMap;
 
