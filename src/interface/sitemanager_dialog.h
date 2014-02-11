@@ -29,7 +29,7 @@ public:
 	bool Create(wxWindow* parent, std::vector<_connected_site> *connected_sites, const CServer* pServer = 0);
 
 	bool GetServer(CSiteManagerItemData_Site& data);
-	wxString GetSitePath();
+	wxString GetSitePath(bool stripBookmark = true);
 
 protected:
 	// Creates the controls and sizers
@@ -59,7 +59,7 @@ protected:
 
 	void RememberLastSelected();
 
-	wxString GetSitePath(wxTreeItemId item);
+	wxString GetSitePath(wxTreeItemId item, bool stripBookmark = true);
 
 	void MarkConnectedSites();
 	void MarkConnectedSite(int connected_site);
