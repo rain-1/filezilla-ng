@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.7.4.1 (2014-02-11)
+
+- Fix detection of modified files
+- Additional fixes for site-specific bookmark handling
+
 3.7.4 (2014-02-09)
 
 + Added SOCKS4 support
