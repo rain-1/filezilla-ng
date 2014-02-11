@@ -2135,32 +2135,7 @@ void CSiteManagerDialog::AddNewBookmark(wxTreeItemId parent)
 
 void CSiteManagerDialog::RememberLastSelected()
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
-		return;
-
-	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
-		return;
-
-	wxString path;
-	while (item != pTree->GetRootItem() && item != m_ownSites && item != m_predefinedSites)
-	{
-		wxString name = pTree->GetItemText(item);
-		name.Replace(_T("\\"), _T("\\\\"));
-		name.Replace(_T("/"), _T("\\/"));
-
-		path = name + _T("/") + path;
-
-		item = pTree->GetItemParent(item);
-	}
-
-	if (item == m_predefinedSites)
-		path = _T("1") + path;
-	else
-		path = _T("0") + path;
-
-	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, path);
+	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, GetSitePath(false));
 }
 
 void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
@@ -2243,7 +2218,7 @@ void CSiteManagerDialog::OnNewBookmark(wxCommandEvent& event)
 	AddNewBookmark(item);
 }
 
-wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item)
+wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item, bool stripBookmark)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -2253,31 +2228,25 @@ wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item)
 	if (!pData)
 		return _T("");
 
-	if (pData->m_type == CSiteManagerItemData::BOOKMARK)
+	if (stripBookmark && pData->m_type == CSiteManagerItemData::BOOKMARK)
 		item = pTree->GetItemParent(item);
 
 	wxString path;
 	while (item)
 	{
 		if (item == m_predefinedSites)
-			return _T("1/") + path;
+			return _T("1") + path;
 		else if (item == m_ownSites)
-			return _T("0/") + path;
-		wxString segment = pTree->GetItemText(item);
-		segment.Replace(_T("\\"), _T("\\\\"));
-		segment.Replace(_T("/"), _T("\\/"));
-		if (path != _T(""))
-			path = segment + _T("/") + path;
-		else
-			path = segment;
+			return _T("0") + path;
+		path = _T("/") + CSiteManager::EscapeSegment(pTree->GetItemText(item)) + path;
 
 		item = pTree->GetItemParent(item);
 	}
 
-	return _T("0/") + path;
+	return _T("0") + path;
 }
 
-wxString CSiteManagerDialog::GetSitePath()
+wxString CSiteManagerDialog::GetSitePath(bool stripBookmark)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -2287,7 +2256,7 @@ wxString CSiteManagerDialog::GetSitePath()
 	if (!item.IsOk())
 		return _T("");
 
-	return GetSitePath(item);
+	return GetSitePath(item, stripBookmark);
 }
 
 void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
