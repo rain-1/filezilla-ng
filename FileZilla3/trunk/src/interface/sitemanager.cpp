@@ -147,11 +147,7 @@ public:
 		m_parents.push_back(m_pMenu);
 		m_childNames.push_back(name);
 		m_paths.push_back(path);
-
-		wxString str(name);
-		str.Replace(_T("\\"), _T("\\\\"));
-		str.Replace(_T("/"), _T("\\/"));
-		path += _T("/") + str;
+		path += _T("/") + CSiteManager::EscapeSegment(name);
 
 		m_pMenu = new wxMenu;
 
@@ -165,10 +161,7 @@ public:
 		newName.Replace(_T("&"), _T("&&"));
 		wxMenuItem* pItem = m_pMenu->Insert(i, wxID_ANY, newName);
 
-		data->m_path = data->m_server.GetName();
-		data->m_path.Replace(_T("\\"), _T("\\\\"));
-		data->m_path.Replace(_T("/"), _T("\\/"));
-		data->m_path = path + _T("/") + data->m_path;
+		data->m_path = path + _T("/") + CSiteManager::EscapeSegment(data->m_server.GetName());
 
 		(*m_idMap)[pItem->GetId()] = data;
 
@@ -408,6 +401,22 @@ bool CSiteManager::UnescapeSitePath(wxString path, std::list<wxString>& result)
 	return !result.empty();
 }
 
+wxString CSiteManager::EscapeSegment(wxString segment)
+{
+	segment.Replace(_T("\\"), _T("\\\\"));
+	segment.Replace(_T("/"), _T("\\/"));
+	return segment;
+}
+
+wxString CSiteManager::BuildPath(wxChar root, std::list<wxString> const& segments)
+{
+	wxString ret = root;
+	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it)
+		ret += _T("/") + EscapeSegment(*it);
+
+	return ret;
+}
+
 CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 {
 	wxChar c = sitePath[0];
@@ -455,7 +464,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	}
 
 	std::list<wxString> segments;
-	if (!UnescapeSitePath(sitePath, segments))
+	if (!UnescapeSitePath(sitePath, segments) || segments.empty())
 	{
 		wxMessageBox(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
@@ -473,6 +482,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	{
 		pBookmark = pChild;
 		pChild = pChild->Parent()->ToElement();
+		segments.pop_back();
 	}
 	else
 		pBookmark = 0;
@@ -508,7 +518,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 		data->m_remoteDir = remotePath;
 	}
 
-	data->m_path = sitePath;
+	data->m_path = BuildPath( c, segments );
 
 	return data;
 }
@@ -557,6 +567,14 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 	}
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
+
+	TiXmlElement* pBookmark = 0;
+	if (pChild && !strcmp(pChild->Value(), "Bookmark"))
+	{
+		pBookmark = pChild;
+		pChild = pChild->Parent()->ToElement();
+	}
+
 	if (!pChild || strcmp(pChild->Value(), "Server"))
 		return 0;
 
@@ -658,19 +676,15 @@ wxString CSiteManager::AddServer(CServer server)
 		return _T("");
 	}
 
-	name.Replace(_T("\\"), _T("\\\\"));
-	name.Replace(_T("/"), _T("\\/"));
-
-	return _T("0/") + name;
+	return _T("0/") + EscapeSegment(name);
 }
 
-TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxString> &segments)
+TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxString> const& segments)
 {
-	while (!segments.empty())
+	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it)
 	{
-		const wxString segment = segments.front();
-		segments.pop_front();
-
+		const wxString & segment = *it;
+		
 		TiXmlElement* pChild;
 		for (pChild = pNode->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement())
 		{
