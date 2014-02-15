@@ -102,16 +102,10 @@ CNotification* CFileZillaEngine::GetNextNotification()
 {
 	wxCriticalSectionLocker lock(m_lock);
 
-	if (!m_maySendNotificationEvent)
-	{
+	if (m_NotificationList.empty()) {
 		m_maySendNotificationEvent = true;
-		if (m_NotificationList.empty())
-			return 0;
-
-		m_NotificationList.push_back(static_cast<CNotification*>(0));
-	}
-	else if (m_NotificationList.empty())
 		return 0;
+	}
 	CNotification* pNotification = m_NotificationList.front();
 	m_NotificationList.pop_front();
 
