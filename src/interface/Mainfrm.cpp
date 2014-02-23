@@ -989,7 +989,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 						pListing = new CDirectoryListing;
 						pListing->path = pListingNotification->GetPath();
 						pListing->m_failed = true;
-						pListing->m_firstListTime = CTimeEx::Now();
+						pListing->m_firstListTime = CMonotonicTime::Now();
 					}
 
 					pState->SetRemoteDir(pListing, pListingNotification->Modified());

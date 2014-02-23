@@ -114,7 +114,7 @@ public:
 	bool m_has_perms;
 	bool m_has_usergroup;
 
-	CTimeEx m_firstListTime;
+	CMonotonicTime m_firstListTime;
 
 	void Assign(const std::list<CDirentry> &entries);
 
