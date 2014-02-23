@@ -1716,12 +1716,8 @@ int CFtpControlSocket::ListParseResponse()
 
 			wxTimeSpan span(0, 0, offset);
 			const int count = pData->directoryListing.GetCount();
-			for (int i = 0; i < count; ++i)
-			{
+			for (int i = 0; i < count; ++i) {
 				CDirentry& entry = pData->directoryListing[i];
-				if (!entry.has_time())
-					continue;
-
 				entry.time += span;
 			}
 
@@ -1760,10 +1756,8 @@ int CFtpControlSocket::ListCheckTimezoneDetection(CDirectoryListing& listing)
 		else
 		{
 			const int count = listing.GetCount();
-			for (int i = 0; i < count; ++i)
-			{
-				if (!listing[i].is_dir() && listing[i].has_time())
-				{
+			for (int i = 0; i < count; ++i) {
+				if (!listing[i].is_dir() && listing[i].has_time()) {
 					pData->opState = list_mdtm;
 					pData->directoryListing = listing;
 					pData->mdtm_index = i;
