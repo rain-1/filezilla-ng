@@ -474,7 +474,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 			data.icon = -2;
 		m_fileData.push_back(data);
 
-		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time : 0))
+		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
 			continue;
 
 		if (m_pFilelistStatusBar)
@@ -815,7 +815,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 				data.icon = -2;
 			m_fileData.push_back(data);
 
-			if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time : 0))
+			if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
 			{
 				hidden++;
 				continue;
@@ -2127,7 +2127,7 @@ void CRemoteListView::ApplyCurrentFilter()
 	for (unsigned int i = 0; i < count; i++)
 	{
 		const CDirentry& entry = (*m_pDirectoryListing)[i];
-		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time : 0))
+		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
 		{
 			hidden++;
 			continue;
@@ -2864,7 +2864,7 @@ bool CRemoteListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, w
 	size = entry.size;
 	if (entry.has_date())
 	{
-		date = entry.time;
+		date = entry.time.Degenerate(); //fixme
 		hasTime = entry.has_time();
 	}
 	else
@@ -2966,10 +2966,10 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		if (!entry.has_date())
 			return _T("");
 
-		if (entry.has_time())
-			return CTimeFormat::FormatDateTime(entry.time);
+		if (entry.has_time()) //fixme
+			return CTimeFormat::FormatDateTime(entry.time.Degenerate());
 		else
-			return CTimeFormat::FormatDate(entry.time);
+			return CTimeFormat::FormatDate(entry.time.Degenerate());
 	}
 	else if (column == 4)
 		return (*m_pDirectoryListing)[index].permissions;

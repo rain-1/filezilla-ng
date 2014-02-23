@@ -58,14 +58,16 @@ CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
 
 wxString CDirentry::dump() const
 {
-	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nhasTimestamp=%d\nunsure=%d\n"),
+	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n"),
 				name.c_str(), size.ToString().c_str(), permissions.c_str(), ownerGroup.c_str(), flags & flag_dir, flags & flag_link,
-				target.c_str(), flags & flag_timestamp_mask, flags & flag_unsure);
+				target.c_str(), flags & flag_unsure);
 
-	if (flags & flag_timestamp_date)
-		str += _T("date=") + time.FormatISODate() + _T("\n");
-	if (flags & flag_timestamp_time)
-		str += _T("time=") + time.FormatISOTime() + _T("\n");
+	if( has_date() ) {
+		str += _T("date=") + time.Degenerate().FormatISODate() + _T("\n");
+	}
+	if( has_time() ) {
+		str += _T("time=") + time.Degenerate().FormatISOTime() + _T("\n");
+	}
 	str += wxString::Format(_T("unsure=%d\n"), flags & flag_unsure);
 	return str;
 }
@@ -87,8 +89,7 @@ bool CDirentry::operator==(const CDirentry &op) const
 	if (flags != op.flags)
 		return false;
 
-	if (flags & flag_timestamp_date)
-	{
+	if( has_date() ) {
 		if (time != op.time)
 			return false;
 	}

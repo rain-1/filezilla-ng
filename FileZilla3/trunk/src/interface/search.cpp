@@ -472,10 +472,10 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		if (!entry.has_date())
 			return _T("");
 
-		if (entry.has_time())
-			return CTimeFormat::FormatDateTime(entry.time);
+		if (entry.has_time()) //fixme
+			return CTimeFormat::FormatDateTime(entry.time.Degenerate());
 		else
-			return CTimeFormat::FormatDate(entry.time);
+			return CTimeFormat::FormatDate(entry.time.Degenerate());
 	}
 	else if (column == 5)
 		return entry.permissions;
@@ -637,7 +637,7 @@ void CSearchDialog::ProcessDirectoryListing()
 	{
 		const CDirentry& entry = (*listing)[i];
 
-		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.has_date() ? &entry.time : 0))
+		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
 			continue;
 
 		CSearchFileData data;

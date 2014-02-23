@@ -1062,8 +1062,8 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 				{
 					date.MakeTimezone(wxDateTime::GMT0);
 					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
-					wxDateTime listTime = pData->directoryListing[pData->mtime_index].time;
-					listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
+					wxDateTime listTime = pData->directoryListing[pData->mtime_index].time.Degenerate();
+					listTime += wxTimeSpan(0, -m_pCurrentServer->GetTimezoneOffset(), 0);
 
 					int serveroffset = (date - listTime).GetSeconds().GetLo();
 					if (!pData->directoryListing[pData->mtime_index].has_seconds())
@@ -1712,7 +1712,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 						if (entry.has_date())
-							pData->fileTime = entry.time;
+							pData->fileTime = entry.time.Degenerate(); //fixme
 
 						if (pData->download && !entry.has_time() &&
 							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
@@ -1774,7 +1774,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 					if (!entry.has_date())
-						pData->fileTime = entry.time;
+						pData->fileTime = entry.time.Degenerate(); //fixme
 
 					if (pData->download && !entry.has_time() &&
 						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))

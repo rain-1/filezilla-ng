@@ -508,7 +508,7 @@ bool CRemoteTreeView::HasSubdirs(const CDirectoryListing& listing, const CFilter
 		if (!listing[i].is_dir())
 			continue;
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time : 0))
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time.Degenerate() : 0)) //fixme
 			continue;
 
 		return true;
@@ -529,7 +529,7 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 		if (!listing[i].is_dir())
 			continue;
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time : 0))
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time.Degenerate() : 0)) //fixme
 			continue;
 
 		const wxString& name = listing[i].name;
@@ -588,7 +588,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		if (!listing[i].is_dir())
 			continue;
 
-		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time : 0))
+		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time.Degenerate() : 0)) //fixme
 			dirs.push_back(listing[i].name);
 	}
 

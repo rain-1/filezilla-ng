@@ -1,6 +1,8 @@
 #ifndef __DIRECTORYLISTING_H__
 #define __DIRECTORYLISTING_H__
 
+#include "timeex.h"
+
 #include <map>
 
 class CDirentry
@@ -16,10 +18,6 @@ public:
 		flag_dir = 1,
 		flag_link = 2,
 		flag_unsure = 4, // May be set on cached items if any changes were made to the file
-
-		flag_timestamp_date = 0x10,
-		flag_timestamp_time = 0x20,
-		flag_timestamp_seconds = 0x40,
 
 		flag_timestamp_mask = 0x70
 	};
@@ -41,21 +39,20 @@ public:
 
 	inline bool has_date() const
 	{
-		return (flags & flag_timestamp_date) != 0;
+		return time.IsValid();;
 	}
 	inline bool has_time() const
 	{
-		return (flags & flag_timestamp_time) != 0;
+		return time.IsValid() && time.GetAccuracy() >= CDateTime::hours;
 	}
 	inline bool has_seconds() const
 	{
-		return (flags & flag_timestamp_seconds) != 0;
+		return time.IsValid() && time.GetAccuracy() >= CDateTime::seconds;
 	}
-
 
 	wxString target; // Set to linktarget it link is true
 
-	wxDateTime time;
+	CDateTime time;
 
 	wxString dump() const;
 	bool operator==(const CDirentry &op) const;
