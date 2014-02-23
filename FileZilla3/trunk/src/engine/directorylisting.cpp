@@ -68,7 +68,6 @@ wxString CDirentry::dump() const
 	if( has_time() ) {
 		str += _T("time=") + time.Degenerate().FormatISOTime() + _T("\n");
 	}
-	str += wxString::Format(_T("unsure=%d\n"), flags & flag_unsure);
 	return str;
 }
 

@@ -17,9 +17,7 @@ public:
 	{
 		flag_dir = 1,
 		flag_link = 2,
-		flag_unsure = 4, // May be set on cached items if any changes were made to the file
-
-		flag_timestamp_mask = 0x70
+		flag_unsure = 4 // May be set on cached items if any changes were made to the file
 	};
 	int flags;
 

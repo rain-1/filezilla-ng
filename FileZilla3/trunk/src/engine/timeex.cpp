@@ -28,7 +28,7 @@ CDateTime::CDateTime( int year, int month, int day, int hour, int minute, int se
 }
 
 CDateTime::CDateTime( wxDateTime const& t, Accuracy a )
-: t_(t), a_(a)
+: a_(a), t_(t)
 {
 	wxASSERT(IsClamped());
 }
