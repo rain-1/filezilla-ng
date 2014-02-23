@@ -12,6 +12,21 @@ CDateTime::CDateTime( CDateTime const& op )
 {
 }
 
+CDateTime& CDateTime::operator=( CDateTime const& op )
+{
+	a_ = op.a_;
+	t_ = op.t_;
+	return *this;
+}
+
+CDateTime::CDateTime( int year, int month, int day, int hour, int minute, int second, int millisecond )
+	: a_()
+{
+	if( !Set( year, month, day, hour, minute, second, millisecond ) ) {
+		t_ = wxDateTime();
+	}
+}
+
 CDateTime::CDateTime( wxDateTime const& t, Accuracy a )
 : t_(t), a_(a)
 {
