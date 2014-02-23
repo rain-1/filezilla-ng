@@ -491,12 +491,9 @@ int CControlSocket::CheckOverwriteFile()
 	if (pData->fileTime.IsValid())
 		pNotification->remoteTime = pData->fileTime;
 
-	if (found)
-	{
-		if (!pData->fileTime.IsValid())
-		{
-			if (entry.has_date())
-			{
+	if (found) {
+		if (!pData->fileTime.IsValid()) {
+			if (entry.has_date()) {
 				pNotification->remoteTime = entry.time;
 				pData->fileTime = entry.time;
 			}

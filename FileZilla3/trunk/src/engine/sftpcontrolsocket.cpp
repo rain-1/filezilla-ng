@@ -1084,12 +1084,8 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 
 					wxTimeSpan span(0, 0, offset);
 					const int count = pData->directoryListing.GetCount();
-					for (int i = 0; i < count; ++i)
-					{
+					for (int i = 0; i < count; ++i) {
 						CDirentry& entry = pData->directoryListing[i];
-						if (!entry.has_time())
-							continue;
-
 						entry.time += span;
 					}
 
