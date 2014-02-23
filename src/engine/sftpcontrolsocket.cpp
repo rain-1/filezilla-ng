@@ -1712,7 +1712,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 						if (entry.has_date())
-							pData->fileTime = entry.time.Degenerate(); //fixme
+							pData->fileTime = entry.time;
 
 						if (pData->download && !entry.has_time() &&
 							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
@@ -1774,7 +1774,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 					if (!entry.has_date())
-						pData->fileTime = entry.time.Degenerate(); //fixme
+						pData->fileTime = entry.time;
 
 					if (pData->download && !entry.has_time() &&
 						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
@@ -1888,7 +1888,7 @@ int CSftpControlSocket::FileTransferSend()
 
 		wxString quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 		// Y2K38
-		time_t ticks = pData->fileTime.GetTicks(); // Already in UTC
+		time_t ticks = pData->fileTime.Degenerate().GetTicks(); // Already in UTC
 		wxString seconds = wxString::Format(_T("%d"), (int)ticks);
 		if (!Send(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),
 			_T("chmtime ") + seconds + _T(" ") + quotedFilename))
@@ -1959,7 +1959,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 			}
 			if (parsed)
 			{
-				wxDateTime fileTime = wxDateTime(seconds);
+				CDateTime fileTime = CDateTime(wxDateTime(seconds), CDateTime::seconds);
 				if (fileTime.IsValid())
 					pData->fileTime = fileTime;
 			}

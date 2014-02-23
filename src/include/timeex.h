@@ -37,6 +37,8 @@ public:
 	wxTimeSpan operator-( CDateTime const& op ) const;
 
 	int Compare( CDateTime const& op ) const;
+	bool IsEarlierThan( CDateTime const& op ) const { return Compare(op) < 0; };
+	bool IsLaterThan( CDateTime const& op ) const { return Compare(op) > 0; };
 
 	CDateTime& operator+=( wxTimeSpan const& op );
 	CDateTime operator+( wxTimeSpan const& op ) const { CDateTime t(*this); t += op; return t; }

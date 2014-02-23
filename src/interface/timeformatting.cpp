@@ -55,6 +55,20 @@ Impl& GetImpl()
 }
 }
 
+wxString CTimeFormat::Format(CDateTime const& time)
+{
+	wxString ret;
+	if( time.IsValid() ) {
+		if( time.GetAccuracy() > CDateTime::days ) {
+			ret = FormatDateTime(time.Degenerate());
+		}
+		else {
+			ret = FormatDate(time.Degenerate());
+		}
+	}
+	return ret;
+}
+
 wxString CTimeFormat::FormatDateTime(const wxDateTime &time)
 {
 	Impl& impl = GetImpl();

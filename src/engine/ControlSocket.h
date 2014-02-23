@@ -43,7 +43,7 @@ public:
 	CServerPath remotePath;
 	const bool download;
 
-	wxDateTime fileTime;
+	CDateTime fileTime;
 	wxFileOffset localFileSize;
 	wxFileOffset remoteFileSize;
 

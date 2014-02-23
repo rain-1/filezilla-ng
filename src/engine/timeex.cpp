@@ -40,6 +40,10 @@ CDateTime CDateTime::Now()
 
 bool CDateTime::operator<( CDateTime const& op ) const
 {
+	if( t_.IsValid() != op.t_.IsValid() ) {
+		return !t_.IsValid();
+	}
+
 	if( t_ < op.t_ ) {
 		return true;
 	}

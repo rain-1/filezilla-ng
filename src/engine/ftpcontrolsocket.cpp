@@ -2357,11 +2357,13 @@ int CFtpControlSocket::FileTransferParseResponse()
 		{
 			wxDateTime date;
 			const wxChar *res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M%S"));
-			if (!res || !date.IsValid())
+			CDateTime::Accuracy a = CDateTime::seconds;
+			if (!res || !date.IsValid()) {
 				res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M"));
-			if (res && date.IsValid())
-			{
-				pData->fileTime = date.FromTimezone(wxDateTime::GMT0);
+				a = CDateTime::minutes;
+			}
+			if (res && date.IsValid()) {
+				pData->fileTime = CDateTime( date.FromTimezone(wxDateTime::UTC), a );
 				pData->fileTime += wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 			}
 		}
@@ -2436,7 +2438,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 						if (entry.has_date())
-							pData->fileTime = entry.time.Degenerate(); //fixme
+							pData->fileTime = entry.time;
 
 						if (pData->download &&
 							!entry.has_time() &&
@@ -2501,7 +2503,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 					if (entry.has_date())
-						pData->fileTime = entry.time.Degenerate(); //fixme
+						pData->fileTime = entry.time;
 
 					if (pData->download &&
 						!entry.has_time() &&
@@ -2533,9 +2535,8 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
-				wxDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
-				if (mtime.IsValid())
-				{
+				CDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
+				if (mtime.IsValid()) {
 					pData->fileTime = mtime;
 					pData->opState = filetransfer_mfmt;
 					return SendNextCommand();
@@ -2722,9 +2723,8 @@ int CFtpControlSocket::FileTransferSend()
 							if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
-								wxDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
-								if (mtime.IsValid())
-								{
+								CDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
+								if (mtime.IsValid()) {
 									pData->fileTime = mtime;
 									pData->opState = filetransfer_mfmt;
 									return SendNextCommand();
@@ -2799,7 +2799,7 @@ int CFtpControlSocket::FileTransferSend()
 	case filetransfer_mfmt:
 		{
 			cmd = _T("MFMT ");
-			cmd += pData->fileTime.ToTimezone(wxDateTime::GMT0).Format(_T("%Y%m%d%H%M%S "));
+			cmd += pData->fileTime.Degenerate().ToTimezone(wxDateTime::UTC).Format(_T("%Y%m%d%H%M%S "));
 			cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 			break;
@@ -2911,7 +2911,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				{
 					pData->remoteFile = pFileExistsNotification->newName;
 					pData->remoteFileSize = -1;
-					pData->fileTime = wxDateTime();
+					pData->fileTime = CDateTime();
 
 					CDirectoryCache cache;
 
@@ -2933,7 +2933,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 						{
 							pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 							if (entry.has_date())
-								pData->fileTime = entry.time.Degenerate(); //fixme
+								pData->fileTime = entry.time;
 
 							if (pData->download &&
 								!entry.has_time() &&

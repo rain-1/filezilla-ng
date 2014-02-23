@@ -22,6 +22,7 @@
 // CFileZillaEngine::SetAsyncRequestReply to continue the current operation.
 
 #include "local_path.h"
+#include "timeex.h"
 
 extern const wxEventType fzEVT_NOTIFICATION;
 #define EVT_FZ_NOTIFICATION(id, fn) \
@@ -138,12 +139,12 @@ public:
 
 	wxString localFile;
 	wxLongLong localSize;
-	wxDateTime localTime;
+	CDateTime localTime;
 
 	wxString remoteFile;
 	CServerPath remotePath;
 	wxLongLong remoteSize;
-	wxDateTime remoteTime;
+	CDateTime remoteTime;
 
 	bool ascii;
 

@@ -29,7 +29,7 @@ public:
 
 	// Follows symlinks and stats the target, sets isLink to true if path was
 	// a link.
-	static enum local_fileType GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, wxDateTime* modificationTime, int* mode);
+	static enum local_fileType GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int* mode);
 
 	// If parent window is given, display confirmation dialog
 	// Returns false iff there's an encoding error, e.g. program
@@ -39,19 +39,19 @@ public:
 
 	bool BeginFindFiles(wxString path, bool dirs_only);
 	bool GetNextFile(wxString& name);
-	bool GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, wxDateTime* modificationTime, int* mode);
+	bool GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, CDateTime* modificationTime, int* mode);
 	void EndFindFiles();
 
-	static wxDateTime GetModificationTime(const wxString& path);
-	static bool SetModificationTime(const wxString& path, const wxDateTime& t);
+	static CDateTime GetModificationTime(const wxString& path);
+	static bool SetModificationTime(const wxString& path, const CDateTime& t);
 protected:
 #ifdef __WXMSW__
-	static bool ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft);
-	static bool ConvertWxDateTimeToFileTime(FILETIME &ft, const wxDateTime& time);
+	static bool ConvertFileTimeToCDateTime(CDateTime& time, const FILETIME &ft);
+	static bool ConvertCDateTimeToFileTime(FILETIME &ft, const CDateTime& time);
 #endif
 
 #ifndef __WXMSW__
-	static enum local_fileType GetFileInfo(const char* path, bool &isLink, wxLongLong* size, wxDateTime* modificationTime, int* mode);
+	static enum local_fileType GetFileInfo(const char* path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int* mode);
 	void AllocPathBuffer(const char* file);  // Ensures m_raw_path is large enough to hold path and filename
 #endif
 

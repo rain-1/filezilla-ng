@@ -20,7 +20,7 @@ public:
 
 	virtual bool CanStartComparison(wxString* pError) = 0;
 	virtual void StartComparison() = 0;
-	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, wxDateTime& date, bool &hasTime) = 0;
+	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date) = 0;
 	virtual void CompareAddFile(t_fileEntryFlags flags) = 0;
 	virtual void FinishComparison() = 0;
 	virtual void ScrollTopItem(int item) = 0;

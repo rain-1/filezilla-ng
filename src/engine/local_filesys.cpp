@@ -200,7 +200,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 #endif
 }
 
-enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, wxDateTime* modificationTime, int *mode)
+enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int *mode)
 {
 #ifdef __WXMSW__
 	if (path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator())
@@ -221,14 +221,14 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 		if (mode)
 			*mode = 0;
 		if (modificationTime)
-			*modificationTime = wxDateTime();
+			*modificationTime = CDateTime();
 		return unknown;
 	}
 
 	if (modificationTime)
 	{
-		if (!ConvertFileTimeToWxDateTime(*modificationTime, attributes.ftLastWriteTime))
-			ConvertFileTimeToWxDateTime(*modificationTime, attributes.ftCreationTime);
+		if (!ConvertFileTimeToCDateTime(*modificationTime, attributes.ftLastWriteTime))
+			ConvertFileTimeToCDateTime(*modificationTime, attributes.ftCreationTime);
 	}
 
 	if (mode)
@@ -259,7 +259,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 }
 
 #ifndef __WXMSW__
-enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, wxLongLong* size, wxDateTime* modificationTime, int *mode)
+enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int *mode)
 {
 	struct stat buf;
 	int result = lstat(path, &buf);
@@ -271,7 +271,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 		if (mode)
 			*mode = -1;
 		if (modificationTime)
-			*modificationTime = wxDateTime();
+			*modificationTime = CDateTime();
 		return unknown;
 	}
 
@@ -287,7 +287,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 			if (mode)
 				*mode = -1;
 			if (modificationTime)
-				*modificationTime = wxDateTime();
+				*modificationTime = CDateTime();
 			return unknown;
 		}
 	}
@@ -320,7 +320,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 // This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch. 
 static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
 
-bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILETIME &ft)
+bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIME &ft)
 {
 	if (!ft.dwHighDateTime && !ft.dwLowDateTime)
 		return false;
@@ -337,16 +337,16 @@ bool CLocalFileSystem::ConvertFileTimeToWxDateTime(wxDateTime& time, const FILET
 
 	// Interestingly wxDateTime has this constructor which
 	// even more interestingly isn't even marked explicit.
-	time = wxDateTime(t);
+	time = CDateTime(wxDateTime(t), CDateTime::milliseconds);
 	return time.IsValid();
 }
 
-bool CLocalFileSystem::ConvertWxDateTimeToFileTime(FILETIME &ft, const wxDateTime& time)
+bool CLocalFileSystem::ConvertCDateTimeToFileTime(FILETIME &ft, const CDateTime& time)
 {
 	if (!time.IsValid())
 		return false;
 
-	wxLongLong t = time.GetValue();
+	wxLongLong t = time.Degenerate().GetValue();
 
 	t += EPOCH_OFFSET_IN_MSEC;
 	t *= 10000;
@@ -494,7 +494,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 #endif
 }
 
-bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, wxDateTime* modificationTime, int* mode)
+bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, CDateTime* modificationTime, int* mode)
 {
 #ifdef __WXMSW__
 	if (!m_found)
@@ -516,7 +516,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 		isLink = false;
 
 		if (modificationTime)
-			ConvertFileTimeToWxDateTime(*modificationTime, m_find_data.ftLastWriteTime);
+			ConvertFileTimeToCDateTime(*modificationTime, m_find_data.ftLastWriteTime);
 
 		if (mode)
 			*mode = (int)m_find_data.dwFileAttributes;
@@ -622,25 +622,25 @@ void CLocalFileSystem::AllocPathBuffer(const char* file)
 }
 #endif
 
-wxDateTime CLocalFileSystem::GetModificationTime( const wxString& path)
+CDateTime CLocalFileSystem::GetModificationTime( const wxString& path)
 {
-	wxDateTime mtime;
+	CDateTime mtime;
 
 	bool tmp;
 	if (GetFileInfo(path, tmp, 0, &mtime, 0) == unknown)
-		mtime = wxDateTime();
+		mtime = CDateTime();
 
 	return mtime;
 }
 
-bool CLocalFileSystem::SetModificationTime(const wxString& path, const wxDateTime& t)
+bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime& t)
 {
 	if (!t.IsValid())
 		return false;
 
 #ifdef __WXMSW__
 	FILETIME ft;
-	if (!ConvertWxDateTimeToFileTime(ft, t))
+	if (!ConvertCDateTimeToFileTime(ft, t))
 		return false;
 
 	HANDLE h = CreateFile(path, GENERIC_WRITE, FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);

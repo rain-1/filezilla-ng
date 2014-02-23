@@ -47,7 +47,7 @@ protected:
 private:
 	virtual bool CanStartComparison(wxString* pError) { return false; }
 	virtual void StartComparison() {}
-	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, wxDateTime& date, bool &hasTime) { return false; }
+	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date) { return false; }
 	virtual void CompareAddFile(CComparableListing::t_fileEntryFlags flags) {}
 	virtual void FinishComparison() {}
 	virtual void ScrollTopItem(int item) {}
@@ -153,24 +153,14 @@ public:
 
 	inline int CmpTime(const CDirentry &data1, const CDirentry &data2) const
 	{
-		if (!data1.has_date())
-		{
-			if (data2.has_date())
-				return -1;
-			else
-				return 0;
+		if( data1.time < data2.time ) {
+			return -1;
 		}
-		else
-		{
-			if (!data2.has_date())
-				return 1;
-
-			if (data1.time < data2.time)
-				return -1;
-			else if (data1.time > data2.time)
-				return 1;
-			else
-				return 0;
+		else if( data1.time > data2.time ) {
+			return 1;
+		}
+		else {
+			return 0;
 		}
 	}
 
@@ -468,15 +458,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return data.fileType;
 	}
 	else if (column == 4)
-	{
-		if (!entry.has_date())
-			return _T("");
-
-		if (entry.has_time()) //fixme
-			return CTimeFormat::FormatDateTime(entry.time.Degenerate());
-		else
-			return CTimeFormat::FormatDate(entry.time.Degenerate());
-	}
+		return CTimeFormat::Format(entry.time);
 	else if (column == 5)
 		return entry.permissions;
 	else if (column == 6)
@@ -637,7 +619,7 @@ void CSearchDialog::ProcessDirectoryListing()
 	{
 		const CDirentry& entry = (*listing)[i];
 
-		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
+		if (m_search_filter.filters.size() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.time))
 			continue;
 
 		CSearchFileData data;

@@ -604,7 +604,7 @@ bool CFilterManager::HasSameLocalAndRemoteFilters() const
 	return true;
 }
 
-bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes,const wxDateTime* date) const
+bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const
 {
 	if (m_filters_disabled)
 		return false;
@@ -633,7 +633,7 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 	return false;
 }
 
-bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const
+bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const
 {
 	for (std::list<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
 	{
@@ -726,7 +726,7 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	return match;
 }
 
-bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, const wxDateTime* date)
+bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, CDateTime const& date)
 {
 	if (dir && !filter.filterDirs)
 		return false;
@@ -853,27 +853,23 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 #endif //__WXMSW__
 			break;
 		case filter_date:
-			if (!date)
-				break;
-
-			switch (condition.condition)
-			{
-			case 0:
-				// Before
-				match = date->GetDateOnly() < condition.date;
-				break;
-			case 1:
-				// Equals
-				match = date->GetDateOnly() == condition.date;
-				break;
-			case 2:
-				// Not equals
-				match = date->GetDateOnly() != condition.date;
-				break;
-			case 3:
-				// After
-				match = date->GetDateOnly() > condition.date;
-				break;
+			if (date.IsValid()) {
+				int cmp = date.Compare( condition.date );
+				switch (condition.condition)
+				{
+				case 0: // Before
+					match = cmp < 0;
+					break;
+				case 1: // Equals
+					match = cmp == 0;
+					break;
+				case 2: // Not equals
+					match = cmp != 0;
+					break;
+				case 3: // After
+					match = cmp > 0;
+					break;
+				}
 			}
 			break;
 		default:
@@ -1003,8 +999,10 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		}
 		else if (condition.type == filter_date)
 		{
-			if (!condition.date.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !condition.date.IsValid())
+			wxDateTime t;
+			if (!t.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !t.IsValid())
 				continue;
+			condition.date = CDateTime(t, CDateTime::days);
 		}
 
 		filter.filters.push_back(condition);

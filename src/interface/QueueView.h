@@ -35,7 +35,7 @@ public:
 
 	wxString name;
 	wxLongLong size;
-	wxDateTime time;
+	CDateTime time;
 	int attributes;
 	bool dir;
 };

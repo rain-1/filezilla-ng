@@ -356,7 +356,6 @@ bool CLocalListView::DisplayDir(wxString dirname)
 		data.label = _T("..");
 #endif
 		data.size = -1;
-		data.hasTime = 0;
 		m_fileData.push_back(data);
 		m_indexMapping.push_back(0);
 	}
@@ -411,10 +410,9 @@ regular_dir:
 #ifdef __WXMSW__
 			data.label = data.name;
 #endif
-			data.hasTime = data.lastModified.IsValid();
 
 			m_fileData.push_back(data);
-			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes, data.lastModified))
 			{
 				if (data.dir)
 					totalDirCount++;
@@ -693,7 +691,6 @@ void CLocalListView::DisplayDrives()
 		data.dir = true;
 		data.icon = -2;
 		data.size = -1;
-		data.hasTime = false;
 
 		m_fileData.push_back(data);
 		m_indexMapping.push_back(count);
@@ -758,7 +755,6 @@ void CLocalListView::DisplayShares(wxString computer)
 			data.dir = true;
 			data.icon = -2;
 			data.size = -1;
-			data.hasTime = false;
 
 			m_fileData.push_back(data);
 			m_indexMapping.push_back(j++);
@@ -896,24 +892,14 @@ public:
 
 	inline int CmpTime(const CLocalFileData &data1, const CLocalFileData &data2) const
 	{
-		if (!data1.hasTime)
-		{
-			if (data2.hasTime)
-				return -1;
-			else
-				return 0;
+		if( data1.lastModified < data2.lastModified ) {
+			return -1;
 		}
-		else
-		{
-			if (!data2.hasTime)
-				return 1;
-
-			if (data1.lastModified < data2.lastModified)
-				return -1;
-			else if (data1.lastModified > data2.lastModified)
-				return 1;
-			else
-				return 0;
+		else if( data1.lastModified > data2.lastModified ) {
+			return 1;
+		}
+		else {
+			return 0;
 		}
 	}
 
@@ -1438,8 +1424,7 @@ void CLocalListView::ApplyCurrentFilter()
 		const CLocalFileData& data = m_fileData[i];
 		if (data.flags == fill)
 			continue;
-		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
-		{
+		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.lastModified)) {
 			hidden++;
 			continue;
 		}
@@ -1676,10 +1661,9 @@ void CLocalListView::RefreshFile(const wxString& file)
 	data.label = file;
 #endif
 	data.dir = type == CLocalFileSystem::dir;
-	data.hasTime = data.lastModified.IsValid();
 
 	CFilterManager filter;
-	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.hasTime ? &data.lastModified : 0))
+	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.lastModified))
 		return;
 
 	CancelLabelEdit();
@@ -1857,14 +1841,13 @@ void CLocalListView::StartComparison()
 		CLocalFileData data;
 		data.dir = false;
 		data.icon = -1;
-		data.hasTime = false;
 		data.size = -1;
 		data.flags = fill;
 		m_fileData.push_back(data);
 	}
 }
 
-bool CLocalListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, wxDateTime& date, bool &hasTime)
+bool CLocalListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, CDateTime& date)
 {
 	if (++m_comparisonIndex >= (int)m_originalIndexMapping.size())
 		return false;
@@ -1879,7 +1862,6 @@ bool CLocalListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, wx
 	dir = data.dir;
 	size = data.size;
 	date = data.lastModified;
-	hasTime = true;
 
 	return true;
 }
@@ -1938,12 +1920,8 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 
 		return data->fileType;
 	}
-	else if (column == 3)
-	{
-		if (!data->hasTime)
-			return _T("");
-
-		return CTimeFormat::FormatDateTime(data->lastModified);
+	else if (column == 3) {
+		return CTimeFormat::Format(data->lastModified);
 	}
 	return _T("");
 }

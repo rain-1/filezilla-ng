@@ -21,7 +21,7 @@ public:
 
 	virtual bool CanStartComparison(wxString* pError);
 	virtual void StartComparison();
-	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, wxDateTime& date, bool& hasTime);
+	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date);
 	virtual void FinishComparison();
 	virtual void OnExitComparisonMode();
 

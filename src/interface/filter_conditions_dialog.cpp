@@ -631,9 +631,13 @@ CFilter CFilterConditionsDialog::GetFilter()
 		case filter_date:
 			if (controls.pValue->GetValue() == _T(""))
 				continue;
-			condition.strValue = controls.pValue->GetValue();
-			if (!condition.date.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !condition.date.IsValid())
-				continue;
+			else {
+				condition.strValue = controls.pValue->GetValue();
+				wxDateTime t;
+				if (!t.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !t.IsValid())
+					continue;
+				condition.date = CDateTime(t, CDateTime::days);
+			}
 			break;
 		default:
 			wxFAIL_MSG(_T("Unhandled condition"));
