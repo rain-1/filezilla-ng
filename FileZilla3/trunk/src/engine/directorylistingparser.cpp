@@ -738,7 +738,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 {
 	CDirectoryListing listing;
 	listing.path = path;
-	listing.m_firstListTime = CTimeEx::Now();
+	listing.m_firstListTime = CMonotonicTime::Now();
 
 	if (!ParseData(false))
 	{

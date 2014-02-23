@@ -233,7 +233,7 @@ protected:
 	void TryRefreshListings();
 	CServer m_last_refresh_server;
 	CServerPath m_last_refresh_path;
-	CTimeEx m_last_refresh_listing_time;
+	CMonotonicTime m_last_refresh_listing_time;
 
 	// Called from Process Reply.
 	// After a disconnect, check if there's another idle engine that

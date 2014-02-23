@@ -370,7 +370,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 						if (!avoid)
 						{
 							m_lastListDir = pListing->path;
-							m_lastListTime = wxDateTime::Now();
+							m_lastListTime = CDateTime::Now();
 							CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(pListing->path);
 							AddNotification(pNotification);
 						}
@@ -510,7 +510,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 	{
 		CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, false, true);
 		AddNotification(pNotification);
-		m_lastListTime = CTimeEx::Now();
+		m_lastListTime = CMonotonicTime::Now();
 
 		// On failed messages, we don't notify other engines
 		return;
@@ -518,7 +518,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 
 	CDirectoryCache cache;
 
-	CTimeEx changeTime;
+	CMonotonicTime changeTime;
 	if (!cache.GetChangeTime(changeTime, *pOwnServer, path))
 		return;
 

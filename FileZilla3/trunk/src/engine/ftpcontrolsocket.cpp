@@ -1296,7 +1296,7 @@ public:
 	// Listing index for list_mdtm
 	int mdtm_index;
 
-	CTimeEx m_time_before_locking;
+	CMonotonicTime m_time_before_locking;
 };
 
 enum listStates
@@ -1412,7 +1412,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			if (!TryLockCache(lock_list, m_CurrentPath))
 			{
 				pData->opState = list_waitlock;
-				pData->m_time_before_locking = CTimeEx::Now();
+				pData->m_time_before_locking = CMonotonicTime::Now();
 				return FZ_REPLY_WOULDBLOCK;
 			}
 		}
@@ -1514,7 +1514,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			{
 				CDirectoryListing listing;
 				listing.path = m_CurrentPath;
-				listing.m_firstListTime = CTimeEx::Now();
+				listing.m_firstListTime = CMonotonicTime::Now();
 
 				if (pData->viewHiddenCheck)
 				{

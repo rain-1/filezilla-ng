@@ -81,7 +81,7 @@ protected:
 
 	// Remember last path used in a dirlisting.
 	CServerPath m_lastListDir;
-	CTimeEx m_lastListTime;
+	CMonotonicTime m_lastListTime;
 
 	CControlSocket *m_pControlSocket;
 

@@ -52,7 +52,7 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 	bool unused;
 	if (Lookup(cit, sit, listing.path, true, unused))
 	{
-		cit->modificationTime = CTimeEx::Now();
+		cit->modificationTime = CMonotonicTime::Now();
 
 		m_totalFileCount -= cit->listing.GetCount();
 		cit->listing = listing;
@@ -62,7 +62,7 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 
 	// Create new entry and store listing in cache
 	CCacheEntry entry;
-	entry.modificationTime = CTimeEx::Now();
+	entry.modificationTime = CMonotonicTime::Now();
 	entry.listing = listing;
 
 	sit->cacheList.push_front(entry);
@@ -103,7 +103,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 			return false;
 
 		cacheIter = iter;
-		is_outdated = (wxDateTime::Now() - entry.listing.m_firstListTime.GetTime()).GetSeconds() > CACHE_TIMEOUT;
+		is_outdated = (CDateTime::Now() - entry.listing.m_firstListTime.GetTime()).GetSeconds() > CACHE_TIMEOUT;
 		return true;
 	}
 
@@ -205,7 +205,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 			}
 		}
 		entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_unknown;
-		entry.modificationTime = CTimeEx::Now();
+		entry.modificationTime = CMonotonicTime::Now();
 	}
 
 	return true;
@@ -281,7 +281,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 		}
 		else
 			entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_unknown;
-		entry.modificationTime = CTimeEx::Now();
+		entry.modificationTime = CMonotonicTime::Now();
 
 		updated = true;
 	}
@@ -331,7 +331,7 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 			}
 			iter->listing.m_hasUnsureEntries |= CDirectoryListing::unsure_invalid;
 		}
-		iter->modificationTime = CTimeEx::Now();
+		iter->modificationTime = CMonotonicTime::Now();
 	}
 
 	return true;
@@ -361,7 +361,7 @@ void CDirectoryCache::InvalidateServer(const CServer& server)
 	}
 }
 
-bool CDirectoryCache::GetChangeTime(CTimeEx& time, const CServer &server, const CServerPath &path)
+bool CDirectoryCache::GetChangeTime(CMonotonicTime& time, const CServer &server, const CServerPath &path)
 {
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
