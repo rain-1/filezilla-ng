@@ -5155,7 +5155,7 @@ msgid ""
 "You can also optionally specify program arguments."
 msgstr ""
 "لطفا مسير فايل اجرايي را جهت اجرا وارد کنيد.\n"
-"مثال : C:\\Programs\file.exe براي ويندوز و /home/file براي يونيکس\n"
+"مثال : C:\\Programs\\file.exe براي ويندوز و /home/file براي يونيکس\n"
 "You can also optionally specify program arguments."
 
 #: ../../locales/../src/interface/settings/optionspage_connection.cpp:46
