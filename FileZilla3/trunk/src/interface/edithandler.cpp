@@ -634,7 +634,7 @@ checkmodifications_loopbegin:
 			if (iter->state != edit)
 				continue;
 
-			wxDateTime mtime;
+			CDateTime mtime;
 			bool is_link;
 			if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file) {
 				m_fileDataList[i].erase(iter);
@@ -646,7 +646,7 @@ checkmodifications_loopbegin:
 			if (!mtime.IsValid())
 				continue;
 
-			if (iter->modificationTime.IsValid() && iter->modificationTime == mtime)
+			if (iter->modificationTime.IsValid() && !iter->modificationTime.Compare(mtime))
 				continue;
 
 			// File has changed, ask user what to do
@@ -780,7 +780,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 	iter->state = unedit ? upload_and_remove : upload;
 
 	wxLongLong size;
-	wxDateTime mtime;
+	CDateTime mtime;
 
 	bool is_link;
 	if (CLocalFileSystem::GetFileInfo(iter->file, is_link, &size, &mtime, 0) != CLocalFileSystem::file)
@@ -790,7 +790,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 	}
 
 	if (!mtime.IsValid())
-		mtime = wxDateTime::Now();
+		mtime = CDateTime::Now();
 
 	iter->modificationTime = mtime;
 

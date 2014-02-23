@@ -474,7 +474,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 			data.icon = -2;
 		m_fileData.push_back(data);
 
-		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
+		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
 			continue;
 
 		if (m_pFilelistStatusBar)
@@ -815,7 +815,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 				data.icon = -2;
 			m_fileData.push_back(data);
 
-			if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
+			if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
 			{
 				hidden++;
 				continue;
@@ -991,24 +991,14 @@ public:
 
 	inline int CmpTime(const CDirentry &data1, const CDirentry &data2) const
 	{
-		if (!data1.has_date())
-		{
-			if (data2.has_date())
-				return -1;
-			else
-				return 0;
+		if( data1.time < data2.time ) {
+			return -1;
 		}
-		else
-		{
-			if (!data2.has_date())
-				return 1;
-
-			if (data1.time < data2.time)
-				return -1;
-			else if (data1.time > data2.time)
-				return 1;
-			else
-				return 0;
+		else if( data1.time > data2.time ) {
+			return 1;
+		}
+		else {
+			return 0;
 		}
 	}
 
@@ -2127,7 +2117,7 @@ void CRemoteListView::ApplyCurrentFilter()
 	for (unsigned int i = 0; i < count; i++)
 	{
 		const CDirentry& entry = (*m_pDirectoryListing)[i];
-		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.has_date() ? &entry.time.Degenerate() : 0)) //fixme
+		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
 		{
 			hidden++;
 			continue;
@@ -2840,7 +2830,7 @@ void CRemoteListView::StartComparison()
 	}
 }
 
-bool CRemoteListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, wxDateTime& date, bool &hasTime)
+bool CRemoteListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, CDateTime& date)
 {
 	if (++m_comparisonIndex >= (int)m_originalIndexMapping.size())
 		return false;
@@ -2862,16 +2852,7 @@ bool CRemoteListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, w
 	name = entry.name;
 	dir = entry.is_dir();
 	size = entry.size;
-	if (entry.has_date())
-	{
-		date = entry.time.Degenerate(); //fixme
-		hasTime = entry.has_time();
-	}
-	else
-	{
-		date = wxDateTime();
-		hasTime = false;
-	}
+	date = entry.time;
 
 	return true;
 }
@@ -2963,13 +2944,7 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 	else if (column == 3)
 	{
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		if (!entry.has_date())
-			return _T("");
-
-		if (entry.has_time()) //fixme
-			return CTimeFormat::FormatDateTime(entry.time.Degenerate());
-		else
-			return CTimeFormat::FormatDate(entry.time.Degenerate());
+		return CTimeFormat::Format(entry.time);
 	}
 	else if (column == 4)
 		return (*m_pDirectoryListing)[index].permissions;

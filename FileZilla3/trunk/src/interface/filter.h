@@ -32,7 +32,7 @@ public:
 
 	wxString strValue; // All other types
 	wxLongLong value; // If type is size
-	wxDateTime date; // If type is date
+	CDateTime date; // If type is date
 	bool matchCase;
 	CSharedPointer<const wxRegEx> pRegEx;
 };
@@ -77,9 +77,9 @@ public:
 	CFilterManager();
 
 	// Note: Under non-windows, attributes are permissions
-	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const;
-	bool FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, const wxDateTime* date) const;
-	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, const wxDateTime* date);
+	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const;
+	bool FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const;
+	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, CDateTime const& date);
 	static bool HasActiveFilters(bool ignore_disabled = false);
 
 	bool HasSameLocalAndRemoteFilters() const;

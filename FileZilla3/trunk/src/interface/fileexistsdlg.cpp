@@ -2,6 +2,7 @@
 #include "fileexistsdlg.h"
 #include "Options.h"
 #include "sizeformatting.h"
+#include "timeformatting.h"
 #include "themeprovider.h"
 
 #include <wx/display.h>
@@ -55,17 +56,21 @@ void CFileExistsDlg::CreateControls()
 
 	const bool thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
 
-	wxString localSize;
+	wxString localSize = _("Size unknown");
 	if (m_pNotification->localSize != -1)
 		localSize = CSizeFormat::Format(m_pNotification->localSize, true, CSizeFormat::bytes, thousands_separator, 0);
-	else
-		localSize = _("Size unknown");
-
-	wxString remoteSize;
+	
+	wxString remoteSize = _("Size unknown");
 	if (m_pNotification->remoteSize != -1)
 		remoteSize = CSizeFormat::Format(m_pNotification->remoteSize, true, CSizeFormat::bytes, thousands_separator, 0);
-	else
-		remoteSize = _("Size unknown");
+
+	wxString localTime = _("Date/time unknown");
+	if (m_pNotification->localTime.IsValid())
+		localTime = CTimeFormat::Format(m_pNotification->localTime);
+
+	wxString remoteTime = _("Date/time unknown");
+	if (m_pNotification->remoteTime.IsValid())
+		remoteTime = CTimeFormat::Format(m_pNotification->remoteTime);
 
 	if (m_pNotification->download)
 	{
@@ -81,12 +86,7 @@ void CFileExistsDlg::CreateControls()
 
 		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_TIME")));
 		if (pStatText)
-		{
-			if (m_pNotification->localTime.IsValid())
-				pStatText->SetLabel(m_pNotification->localTime.Format());
-			else
-				pStatText->SetLabel(_("Date/time unknown"));
-		}
+			pStatText->SetLabel(localTime);
 
 		LoadIcon(XRCID("ID_FILE1_ICON"), m_pNotification->localFile);
 
@@ -100,12 +100,7 @@ void CFileExistsDlg::CreateControls()
 
 		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_TIME")));
 		if (pStatText)
-		{
-			if (m_pNotification->remoteTime.IsValid())
-				pStatText->SetLabel(m_pNotification->remoteTime.Format());
-			else
-				pStatText->SetLabel(_("Date/time unknown"));
-		}
+			pStatText->SetLabel(remoteTime);
 
 		LoadIcon(XRCID("ID_FILE2_ICON"), m_pNotification->remoteFile);
 
@@ -126,13 +121,8 @@ void CFileExistsDlg::CreateControls()
 			pStatText->SetLabel(remoteSize);
 
 		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_TIME")));
-		if (pStatText)
-		{
-			if (m_pNotification->remoteTime.IsValid())
-				pStatText->SetLabel(m_pNotification->remoteTime.Format());
-			else
-				pStatText->SetLabel(_("Date/time unknown"));
-		}
+		if( pStatText )
+			pStatText->SetLabel(remoteTime);
 
 		LoadIcon(XRCID("ID_FILE1_ICON"), m_pNotification->remoteFile);
 
@@ -145,13 +135,8 @@ void CFileExistsDlg::CreateControls()
 			pStatText->SetLabel(localSize);
 
 		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_TIME")));
-		if (pStatText)
-		{
-			if (m_pNotification->localTime.IsValid())
-				pStatText->SetLabel(m_pNotification->localTime.Format());
-			else
-				pStatText->SetLabel(_("Date/time unknown"));
-		}
+		if( pStatText )
+			pStatText->SetLabel(localTime);
 
 		LoadIcon(XRCID("ID_FILE2_ICON"), m_pNotification->localFile);
 

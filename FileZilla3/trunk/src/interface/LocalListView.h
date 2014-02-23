@@ -19,8 +19,7 @@ public:
 #endif
 	bool dir;
 	wxLongLong size;
-	bool hasTime;
-	wxDateTime lastModified;
+	CDateTime lastModified;
 	int attributes;
 };
 
@@ -61,7 +60,7 @@ protected:
 public:
 	virtual bool CanStartComparison(wxString* pError);
 	virtual void StartComparison();
-	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, wxDateTime& date, bool &hasTime);
+	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date);
 	virtual void FinishComparison();
 
 	virtual bool ItemIsDir(int index) const;

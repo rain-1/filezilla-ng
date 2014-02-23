@@ -508,7 +508,7 @@ bool CRemoteTreeView::HasSubdirs(const CDirectoryListing& listing, const CFilter
 		if (!listing[i].is_dir())
 			continue;
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time.Degenerate() : 0)) //fixme
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
 			continue;
 
 		return true;
@@ -529,7 +529,7 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 		if (!listing[i].is_dir())
 			continue;
 
-		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time.Degenerate() : 0)) //fixme
+		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
 			continue;
 
 		const wxString& name = listing[i].name;
@@ -588,7 +588,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		if (!listing[i].is_dir())
 			continue;
 
-		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].has_date() ? &listing[i].time.Degenerate() : 0)) //fixme
+		if (!filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
 			dirs.push_back(listing[i].name);
 	}
 
@@ -1395,7 +1395,7 @@ void CRemoteTreeView::ApplyFilters()
 				if (path.IsEmpty())
 					continue;
 
-				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, 0))
+				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, CDateTime()))
 				{
 					wxTreeItemId sel = GetSelection();
 					while (sel && sel != child)

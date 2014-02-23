@@ -1892,17 +1892,14 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 		else
 		{
 			const t_newEntry* entry = (const t_newEntry*)*iter;
-
-			if (filters.FilenameFiltered(entry->name, pFolderScanItem->m_current_local_path.GetPath(), entry->dir, entry->size, true, entry->attributes, &entry->time))
-			{
+			if (filters.FilenameFiltered(entry->name, pFolderScanItem->m_current_local_path.GetPath(), entry->dir, entry->size, true, entry->attributes, entry->time)) {
 				delete entry;
 				continue;
 			}
 
 			pFolderScanItem->m_dir_is_empty = false;
 
-			if (entry->dir)
-			{
+			if (entry->dir) {
 				m_pFolderProcessingThread->ProcessDirectory(pFolderScanItem->m_current_local_path, pFolderScanItem->m_current_remote_path, entry->name);
 				delete entry;
 				continue;

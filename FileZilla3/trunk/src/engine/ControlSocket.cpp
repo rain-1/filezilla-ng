@@ -497,8 +497,8 @@ int CControlSocket::CheckOverwriteFile()
 		{
 			if (entry.has_date())
 			{
-				pNotification->remoteTime = entry.time.Degenerate(); //fixme
-				pData->fileTime = entry.time.Degenerate(); //fixme
+				pNotification->remoteTime = entry.time;
+				pData->fileTime = entry.time;
 			}
 		}
 	}
@@ -1321,14 +1321,14 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 				wxLongLong size = entry.size;
 				pData->remoteFileSize = size.GetLo() + ((wxFileOffset)size.GetHi() << 32);
 				if (entry.has_date())
-					pData->fileTime = entry.time.Degenerate(); //fixme
+					pData->fileTime = entry.time;
 
 				if (CheckOverwriteFile() != FZ_REPLY_OK)
 					break;
 			}
 			else
 			{
-				pData->fileTime = wxDateTime();
+				pData->fileTime = CDateTime();
 				pData->remoteFileSize = -1;
 			}
 
