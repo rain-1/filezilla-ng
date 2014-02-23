@@ -15,8 +15,11 @@ public:
 	};
 
 	CDateTime();
-	CDateTime( CDateTime const& op );
+	CDateTime( int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1 );
 	CDateTime( wxDateTime const& t, Accuracy a );
+
+	CDateTime( CDateTime const& op );
+	CDateTime& operator=( CDateTime const& op );
 
 	wxDateTime Degenerate() const { return t_; }
 
