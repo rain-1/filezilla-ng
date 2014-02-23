@@ -1080,7 +1080,7 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 			pMenu->Enable(XRCID("ID_RENAME"), false);
 			pMenu->Enable(XRCID("ID_EDIT"), false);
 		}
-		if (data && data->flags == fill || (!index && m_hasParent))
+		if ((data && data->flags == fill) || (!index && m_hasParent))
 			fillCount++;
 		if (data && data->dir)
 			selectedDir = true;
