@@ -983,7 +983,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine *pLine, CDirentry &entry, bool e
 
 		if (expect_date)
 		{
-			entry.flags &= ~CDirentry::flag_timestamp_mask;
+			entry.time = CDateTime();
 			if (!ParseUnixDateTime(pLine, index, entry))
 				continue;
 		}
@@ -1024,7 +1024,6 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 {
 	bool mayHaveTime = true;
 	bool bHasYearAndTime = false;
-	bool hasTime = false;
 
 	CToken token;
 
@@ -1182,8 +1181,6 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 		if (minute < 0 || minute > 59)
 			return false;
 
-		hasTime = true;
-
 		// Some servers use times only for files newer than 6 months
 		if( year <= 0 ) {
 			wxASSERT( month != -1 && day != -1 );
@@ -1237,8 +1234,6 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 					return false;
 				if (minute < 0 || minute > 59)
 					return false;
-
-				hasTime = true;
 			}
 			else
 				--index;

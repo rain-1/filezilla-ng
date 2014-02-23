@@ -296,7 +296,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 		isLink = false;
 
 	if (modificationTime)
-		modificationTime->Set(buf.st_mtime);
+		*modificationTime = CDateTime(wxDateTime(buf.st_mtime), CDateTime::seconds);
 
 	if (mode)
 		*mode = buf.st_mode & 0x777;
@@ -586,7 +586,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 			if (size)
 				*size = -1;
 			if (modificationTime)
-				*modificationTime = wxDateTime();
+				*modificationTime = CDateTime();
 			if (mode)
 				*mode = 0;
 		}
@@ -652,6 +652,7 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 	return ret;
 #else
 	wxFileName fn(path);
-	return fn.SetTimes( &t, &t, 0 );
+	wxDateTime d = t.Degenerate();
+	return fn.SetTimes( &d, &d, 0 );
 #endif
 }

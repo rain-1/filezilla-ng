@@ -169,7 +169,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	if (m_nLineCount)
 #ifdef __WXMSW__
 		prefix = _T("\r\n");
-#else __WXMSW__
+#else
 		prefix = _T("\n");
 #endif
 

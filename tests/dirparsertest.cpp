@@ -78,9 +78,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("dr-xr-xr-x"),
 				_T("root other"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(8, wxDateTime::Apr, 1994)
+				CDateTime(1994, 4, 8)
 			},
 			DEFAULT
 		});
@@ -93,9 +93,9 @@ void CDirectoryListingParserTest::InitEntries()
 				531,
 				_T("-rw-r--r--"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(29, wxDateTime::Mar, calcYear(3, 29), 3, 26)
+				CDateTime(calcYear(3, 29), 3, 29, 3, 26)
 			},
 			DEFAULT
 		});
@@ -108,9 +108,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("dr-xr-xr-x"),
 				_T("root"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(8, wxDateTime::Apr, 1994)
+				CDateTime(1994, 4, 8)
 			},
 			DEFAULT
 		});
@@ -123,9 +123,9 @@ void CDirectoryListingParserTest::InitEntries()
 				7,
 				_T("lrwxrwxrwx"),
 				_T("root other"),
-				CDirentry::flag_dir | CDirentry::flag_link | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir | CDirentry::flag_link,
 				_T("usr/bin"),
-				wxDateTime(25, wxDateTime::Jan, calcYear(1, 25), 0, 17)
+				CDateTime(calcYear(1, 25), 1, 25, 0, 17)
 			},
 			DEFAULT
 		});
@@ -140,9 +140,9 @@ void CDirectoryListingParserTest::InitEntries()
 				531,
 				_T("-rw-r--r--"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(26, wxDateTime::Sep, 2000)
+				CDateTime(2000, 9, 26)
 			},
 			DEFAULT
 		});
@@ -154,9 +154,9 @@ void CDirectoryListingParserTest::InitEntries()
 				531,
 				_T("-rw-r--r--"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(26, wxDateTime::Sep, calcYear(9, 26), 13, 45)
+				CDateTime(calcYear(9, 26), 9, 26, 13, 45)
 			},
 			DEFAULT
 		});
@@ -168,9 +168,9 @@ void CDirectoryListingParserTest::InitEntries()
 				531,
 				_T("-rw-r--r--"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(7, wxDateTime::Jun, 2005, 21, 22)
+				CDateTime(2005, 6, 7, 21, 22)
 			},
 			DEFAULT
 		});
@@ -184,9 +184,9 @@ void CDirectoryListingParserTest::InitEntries()
 				335 * 1024 / 10,
 				_T("-rw-r--r--"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(5, wxDateTime::Oct, calcYear(10, 5), 21, 22)
+				CDateTime(calcYear(10, 5), 10, 5, 21, 22)
 			},
 			DEFAULT
 		});
@@ -201,9 +201,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("d [R----F--]"),
 				_T("supervisor"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(16, wxDateTime::Jan, calcYear(1, 16), 18, 53)
+				CDateTime(calcYear(1, 16), 1, 16, 18, 53)
 			},
 			DEFAULT
 		});
@@ -215,9 +215,9 @@ void CDirectoryListingParserTest::InitEntries()
 				214059,
 				_T("- [R----F--]"),
 				_T("rhesus"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(20, wxDateTime::Oct, calcYear(10, 20), 15, 27)
+				CDateTime(calcYear(10, 20), 10, 20, 15, 27)
 			},
 			DEFAULT
 		});
@@ -236,9 +236,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1392298,
 				_T("-------r--"),
 				_T("1391972"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(22, wxDateTime::Nov, 1995)
+				CDateTime(1995, 11, 22)
 			},
 			DEFAULT
 		});
@@ -250,9 +250,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2,
 				_T("drwxrwxr-x"),
 				_T("folder"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(10, wxDateTime::May, 1996)
+				CDateTime(1996, 5, 10)
 			},
 			DEFAULT
 		});
@@ -265,9 +265,9 @@ void CDirectoryListingParserTest::InitEntries()
 				531,
 				_T("-rw-r--r--"),
 				_T("group domain user"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(29, wxDateTime::Jan, calcYear(1, 29), 3, 26)
+				CDateTime(calcYear(1, 29), 1, 29, 3, 26)
 			},
 			DEFAULT
 		});
@@ -286,9 +286,9 @@ void CDirectoryListingParserTest::InitEntries()
 				280,
 				_T("755"),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				utc
+				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
 		});
@@ -302,9 +302,9 @@ void CDirectoryListingParserTest::InitEntries()
 				-1,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				CDirentry::flag_dir | 0,
 				_T(""),
-				utc
+				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
 		});
@@ -319,9 +319,9 @@ void CDirectoryListingParserTest::InitEntries()
 				-1,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(27, wxDateTime::Apr, 2000, 12, 9)
+				CDateTime(2000, 4, 27, 12, 9)
 			},
 			DEFAULT
 		});
@@ -334,9 +334,9 @@ void CDirectoryListingParserTest::InitEntries()
 				589,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(6, wxDateTime::Apr, 2000, 15, 47)
+				CDateTime(2000, 4, 6, 15, 47)
 			},
 			DEFAULT
 		});
@@ -348,9 +348,9 @@ void CDirectoryListingParserTest::InitEntries()
 				-1,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(2, wxDateTime::Sep, 2002, 18, 48)
+				CDateTime(2002, 9, 2, 18, 48)
 			},
 			DEFAULT
 		});
@@ -362,9 +362,9 @@ void CDirectoryListingParserTest::InitEntries()
 				9730,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(2, wxDateTime::Sep, 2002, 19, 6)
+				CDateTime(2002, 9, 2, 19, 6)
 			},
 			DEFAULT
 		});
@@ -379,9 +379,9 @@ void CDirectoryListingParserTest::InitEntries()
 				12345,
 				_T("0100644"),
 				_T("500 101"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				utc
+				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
 		});
@@ -396,9 +396,9 @@ void CDirectoryListingParserTest::InitEntries()
 				206876,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(4, wxDateTime::Apr, 2000, 21, 6)
+				CDateTime(2000, 4, 4, 21, 6)
 			},
 			DEFAULT
 		});
@@ -410,9 +410,9 @@ void CDirectoryListingParserTest::InitEntries()
 				0,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(12, wxDateTime::Dec, 2002, 2, 13)
+				CDateTime(2002, 12, 12, 2, 13)
 			},
 			DEFAULT
 		});
@@ -426,9 +426,9 @@ void CDirectoryListingParserTest::InitEntries()
 				9,
 				_T("-rwxr-xr-x"),
 				_T("user group"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(8, wxDateTime::Oct, 2002, 9, 47)
+				CDateTime(2002, 10, 8, 9, 47)
 			},
 			DEFAULT
 		});
@@ -444,9 +444,9 @@ void CDirectoryListingParserTest::InitEntries()
 				36611,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(23, wxDateTime::Apr, 2003, 10, 57)
+				CDateTime(2003, 4, 23, 10, 57)
 			},
 			DEFAULT
 		});
@@ -458,9 +458,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1123,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(14, wxDateTime::Jul, 1999, 12, 37)
+				CDateTime(1999, 7, 14, 12, 37)
 			},
 			DEFAULT
 		});
@@ -473,9 +473,9 @@ void CDirectoryListingParserTest::InitEntries()
 				0,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(11, wxDateTime::Feb, 2003, 16, 15)
+				CDateTime(2003, 2, 11, 16, 15)
 			},
 			DEFAULT
 		});
@@ -488,9 +488,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1123,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(5, wxDateTime::Oct, 2000, 23, 38)
+				CDateTime(2000, 10, 5, 23, 38)
 			},
 			DEFAULT
 		});
@@ -505,9 +505,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2235,
 				_T("dr-xr-xr-x"),
 				_T("root other"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(26, wxDateTime::Jul, calcYear(7, 26), 20, 10)
+				CDateTime(calcYear(7, 26), 7, 26, 20, 10)
 			},
 			DEFAULT
 		});
@@ -519,9 +519,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2235,
 				_T("dr-xr-xr-x"),
 				_T("root other"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(26, wxDateTime::Sep, calcYear(9, 26), 20, 10)
+				CDateTime(calcYear(9, 26), 9, 26, 20, 10)
 			},
 			DEFAULT
 		});
@@ -533,9 +533,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2235,
 				_T("-r-xr-xr-x"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(2, wxDateTime::Oct, 2003)
+				CDateTime(2003, 10, 2)
 			},
 			DEFAULT
 		});
@@ -547,9 +547,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2235,
 				_T("-r-xr-xr-x"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(12, wxDateTime::Oct, 1999, 17, 12)
+				CDateTime(1999, 10, 12, 17, 12)
 			},
 			DEFAULT
 		});
@@ -561,9 +561,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2235,
 				_T("-r-xr-xr-x"),
 				_T("root other"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(24, wxDateTime::Apr, 2003, 17, 12)
+				CDateTime(2003, 4, 24, 17, 12)
 			},
 			DEFAULT
 		});
@@ -578,9 +578,9 @@ void CDirectoryListingParserTest::InitEntries()
 				8473,
 				_T("-rw-r--r--"),
 				_T("root sys"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(18, wxDateTime::Apr, 2003)
+				CDateTime(2003, 4, 18)
 			},
 			DEFAULT
 		});
@@ -594,9 +594,9 @@ void CDirectoryListingParserTest::InitEntries()
 				0,
 				_T("-rwxrwxrwx"),
 				_T("root staff"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(20, wxDateTime::Mar, 2003)
+				CDateTime(2003, 3, 20)
 			},
 			DEFAULT
 		});
@@ -608,9 +608,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2096,
 				_T("-r--r--r--"),
 				_T("root root"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(17, wxDateTime::Aug, calcYear(8, 17), 8, 52)
+				CDateTime(calcYear(8, 17), 8, 17, 8, 52)
 			},
 			DEFAULT
 		});
@@ -622,9 +622,9 @@ void CDirectoryListingParserTest::InitEntries()
 				96,
 				_T("-r-xr-xr-x"),
 				_T("root root"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(15, wxDateTime::Jul, 2004)
+				CDateTime(2004, 7, 15)
 			},
 			DEFAULT
 		});
@@ -639,9 +639,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("RWE,RWE,RE,RE"),
 				_T("root,root"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(19, wxDateTime::Nov, 2001, 21, 41)
+				CDateTime(2001, 11, 19, 21, 41)
 			},
 			DEFAULT
 		});
@@ -654,9 +654,9 @@ void CDirectoryListingParserTest::InitEntries()
 				79360,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(2, wxDateTime::Jul, 2003, 10, 30, 13)
+				CDateTime(2003, 7, 2, 10, 30, 13)
 			},
 			DEFAULT
 		});
@@ -669,9 +669,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1024,
 				_T("RWED,RWED,RE,"),
 				_T("IV2_XXX"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(7, wxDateTime::Jan, 2000)
+				CDateTime(2000, 1, 7)
 			},
 			DEFAULT
 		});
@@ -684,9 +684,9 @@ void CDirectoryListingParserTest::InitEntries()
 				3072,
 				_T("RWED,RWED,RE,"),
 				_T("PRONAS"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(15, wxDateTime::Jul, 2002)
+				CDateTime(2002, 7, 15)
 			},
 			DEFAULT
 		});
@@ -698,9 +698,9 @@ void CDirectoryListingParserTest::InitEntries()
 				87436288,
 				_T("RWED,RWED,RE,"),
 				_T("FTP_CLIENT,SCOT"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(24, wxDateTime::Apr, 2003, 8, 16, 15)
+				CDateTime(2003, 4, 24, 8, 16, 15)
 			},
 			DEFAULT
 		});
@@ -712,9 +712,9 @@ void CDirectoryListingParserTest::InitEntries()
 				5120,
 				_T("RWED,RWED,RE,"),
 				_T("FTP_CLIENT,SCOT"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(2, wxDateTime::Jul, 2003, 10, 30, 8)
+				CDateTime(2003, 7, 2, 10, 30, 8)
 			},
 			DEFAULT
 		});
@@ -727,9 +727,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("RWE,RWE,RE,"),
 				_T("SUMMARY"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(2, wxDateTime::Aug, 2006, 13, 5)
+				CDateTime(2006, 8, 2, 13, 5)
 			},
 			DEFAULT
 		});
@@ -741,9 +741,9 @@ void CDirectoryListingParserTest::InitEntries()
 				3229696,
 				_T("RWED,RWED,R,"),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(17, wxDateTime::Jun, 1994, 17, 25, 37)
+				CDateTime(1994, 6, 17, 17, 25, 37)
 			},
 			DEFAULT
 		});
@@ -759,9 +759,9 @@ void CDirectoryListingParserTest::InitEntries()
 				77824,
 				_T(""),
 				_T("QSYS"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				CDirentry::flag_dir | 0,
 				_T(""),
-				wxDateTime(23, wxDateTime::Feb, 2000, 15, 9, 55)
+				CDateTime(2000, 2, 23, 15, 9, 55)
 			},
 			DEFAULT
 		});
@@ -773,9 +773,9 @@ void CDirectoryListingParserTest::InitEntries()
 				77824,
 				_T(""),
 				_T("QSYS"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(23, wxDateTime::Feb, 2000, 15, 9, 55)
+				CDateTime(2000, 2, 23, 15, 9, 55)
 			},
 			DEFAULT
 		});
@@ -788,9 +788,9 @@ void CDirectoryListingParserTest::InitEntries()
 				123456,
 				_T("-r-xr-xr-x"),
 				_T("longowner longgroup"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(12, wxDateTime::Feb, calcYear(2, 12), 17, 20)
+				CDateTime(calcYear(2, 12), 2, 12, 17, 20)
 			},
 			DEFAULT
 		});
@@ -803,9 +803,9 @@ void CDirectoryListingParserTest::InitEntries()
 				4512,
 				_T("-r-xr-xr-x"),
 				_T("owner group"),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(1, wxDateTime::Jun, 1999)
+				CDateTime(1999, 6, 1)
 			},
 			DEFAULT
 		});
@@ -818,9 +818,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1014196,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(3, wxDateTime::Jun, 2004, 10, 20, 3)
+				CDateTime(2004, 6, 3, 10, 20, 3)
 			},
 			DEFAULT
 		});
@@ -833,9 +833,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2048,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				CDirentry::flag_dir | 0,
 				_T(""),
-				wxDateTime(28, wxDateTime::Feb, 1998, 5, 23, 30)
+				CDateTime(1998, 2, 28, 5, 23, 30)
 			},
 			DEFAULT
 		});
@@ -848,9 +848,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1294495,
 				_T("-C--E-----FTP"),
 				_T("B BCC3I1 7670"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(13, wxDateTime::Jan, calcYear(1, 13), 7, 42)
+				CDateTime(calcYear(1, 13), 1, 13, 7, 42)
 			},
 			DEFAULT
 		});
@@ -864,9 +864,9 @@ void CDirectoryListingParserTest::InitEntries()
 				85920,
 				_T("d-ewrewr"),
 				_T("20.20"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(29, wxDateTime::Mar, 2007)
+				CDateTime(2007, 3, 29)
 			},
 			DEFAULT
 		});
@@ -879,9 +879,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("drwxr-xr-x"),
 				_T("user group"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(1, wxDateTime::Oct, 2004)
+				CDateTime(2004, 10, 1)
 			},
 			DEFAULT
 		});
@@ -893,9 +893,9 @@ void CDirectoryListingParserTest::InitEntries()
 				12,
 				_T("-r--r--r--"),
 				_T(""),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(11, wxDateTime::Nov, 2005)
+				CDateTime(2005, 11, 11)
 			},
 			DEFAULT
 		});
@@ -908,9 +908,9 @@ void CDirectoryListingParserTest::InitEntries()
 				512,
 				_T("drwxr-xr-x"),
 				_T("root sys"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(6, wxDateTime::Jan, 2005)
+				CDateTime(2005, 1, 6)
 			},
 			DEFAULT
 		});
@@ -923,9 +923,9 @@ void CDirectoryListingParserTest::InitEntries()
 				36864,
 				_T(""),
 				_T("QPGMR"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(18, wxDateTime::Sep, 2006, 14, 21, 26)
+				CDateTime(2006, 9, 18, 14, 21, 26)
 			},
 			DEFAULT
 		});
@@ -938,9 +938,9 @@ void CDirectoryListingParserTest::InitEntries()
 				2048,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(23, wxDateTime::Sep, 2005, 14, 57, 7)
+				CDateTime(2005, 9, 23, 14, 57, 7)
 			},
 			DEFAULT
 		});
@@ -953,9 +953,9 @@ void CDirectoryListingParserTest::InitEntries()
 				528,
 				_T("\"oooo\""),
 				_T("255, 0"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(6, wxDateTime::Apr, 2007, 14, 21, 18)
+				CDateTime(2007, 4, 6, 14, 21, 18)
 			},
 			HPNONSTOP
 		});
@@ -968,9 +968,9 @@ void CDirectoryListingParserTest::InitEntries()
 				528,
 				_T("\"oooo\""),
 				_T("255,255"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(6, wxDateTime::Apr, 2007, 14, 21, 18)
+				CDateTime(2007, 4, 6, 14, 21, 18)
 			},
 			HPNONSTOP
 		});
@@ -983,9 +983,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1024,
 				_T("drwxr-xr-x"),
 				_T("user sys"),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(30, wxDateTime::Jan, calcYear(1, 30), 12, 40)
+				CDateTime(calcYear(1, 30), 1, 30, 12, 40)
 			},
 			DEFAULT
 		});
@@ -1006,9 +1006,9 @@ void CDirectoryListingParserTest::InitEntries()
 				100,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(21, wxDateTime::May, 2003)
+				CDateTime(2003, 5, 21)
 		},
 		DEFAULT
 	});
@@ -1020,9 +1020,9 @@ void CDirectoryListingParserTest::InitEntries()
 				-1,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(04, wxDateTime::Mar, 2004)
+				CDateTime(2004, 3, 04)
 		},
 		DEFAULT
 	});
@@ -1036,7 +1036,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 		},
 		DEFAULT
 	});
@@ -1048,9 +1048,9 @@ void CDirectoryListingParserTest::InitEntries()
 				-1,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(6, wxDateTime::Jun, 2005)
+				CDateTime(2005, 6, 6)
 		},
 		DEFAULT
 	});
@@ -1064,7 +1064,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 		},
 		DEFAULT
 	});
@@ -1085,7 +1085,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 		},
 		MVS
 	});
@@ -1098,9 +1098,9 @@ void CDirectoryListingParserTest::InitEntries()
 				128,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time,
+				0,
 				_T(""),
-				wxDateTime(22, wxDateTime::Jun, 2004, 16, 32)
+				CDateTime(2004, 6, 22, 16, 32)
 		},
 		MVS
 	});
@@ -1115,7 +1115,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 		},
 		MVS
 	});
@@ -1129,7 +1129,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			MVS
 		});
@@ -1144,7 +1144,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			MVS
 		});
@@ -1174,9 +1174,9 @@ void CDirectoryListingParserTest::InitEntries()
 				6955,
 				_T(""),
 				_T("060191"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				wxDateTime(4, wxDateTime::Oct, 2005, 15, 28, 42)
+				CDateTime(2005, 10, 4, 15, 28, 42)
 			},
 			ZVM
 		});
@@ -1190,7 +1190,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T("slopri devlab"),
 				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1204,9 +1204,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1234,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				utc
+				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
 		});
@@ -1224,7 +1224,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			MVS
 		});
@@ -1238,7 +1238,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1252,7 +1252,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1266,9 +1266,9 @@ void CDirectoryListingParserTest::InitEntries()
 				65718921,
 				_T("00"),
 				_T("1179 1179"),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				utc
+				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
 		});
@@ -1282,7 +1282,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				CDirentry::flag_dir | CDirentry::flag_link,
 				_T("/foo"),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1296,7 +1296,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				CDirentry::flag_dir | CDirentry::flag_link,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1311,7 +1311,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				0,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1325,7 +1325,7 @@ void CDirectoryListingParserTest::InitEntries()
 				_T(""),
 				CDirentry::flag_dir | CDirentry::flag_link,
 				_T(""),
-				wxDateTime()
+				CDateTime()
 			},
 			DEFAULT
 		});
@@ -1339,9 +1339,9 @@ void CDirectoryListingParserTest::InitEntries()
 				1365694195,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds,
+				0,
 				_T(""),
-				utc
+				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
 		});
@@ -1355,9 +1355,9 @@ void CDirectoryListingParserTest::InitEntries()
 				100,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(21, wxDateTime::May, 2003)
+				CDateTime(2003, 5, 21)
 		},
 		DEFAULT
 	});
@@ -1372,9 +1372,9 @@ void CDirectoryListingParserTest::InitEntries()
 				100,
 				_T(""),
 				_T(""),
-				CDirentry::flag_timestamp_date,
+				0,
 				_T(""),
-				wxDateTime(25, wxDateTime::Aug, 2011)
+				CDateTime(2011, 8, 25)
 		},
 		DEFAULT
 	});
@@ -1389,9 +1389,9 @@ void CDirectoryListingParserTest::InitEntries()
 				-1,
 				_T(""),
 				_T(""),
-				CDirentry::flag_dir | CDirentry::flag_timestamp_date,
+				CDirentry::flag_dir,
 				_T(""),
-				wxDateTime(21, wxDateTime::May, 2003)
+				CDateTime(2003, 5, 21)
 		},
 		DEFAULT
 	});

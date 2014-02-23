@@ -568,12 +568,8 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
 
-	TiXmlElement* pBookmark = 0;
 	if (pChild && !strcmp(pChild->Value(), "Bookmark"))
-	{
-		pBookmark = pChild;
 		pChild = pChild->Parent()->ToElement();
-	}
 
 	if (!pChild || strcmp(pChild->Value(), "Server"))
 		return 0;
