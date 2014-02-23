@@ -6,6 +6,12 @@ CDateTime::CDateTime()
 {
 }
 
+CDateTime::CDateTime( CDateTime const& op )
+: a_(op.a_)
+, t_(op.t_)
+{
+}
+
 CDateTime::CDateTime( wxDateTime const& t, Accuracy a )
 : t_(t), a_(a)
 {
@@ -62,26 +68,33 @@ int CDateTime::Compare( CDateTime const& op ) const
 {
 	if( a_ == op.a_ ) {
 		// First fast path: Same accuracy
+		int ret = 0;
 		if( t_ < op.t_ ) {
-			return -1;
+			ret = -1;
 		}
 		else if( t_ > op.t_ ) {
-			return 1;
+			ret = 1;
 		}
-		else {
-			return 0;
-		}
+		wxASSERT( CompareSlow(op) == ret );
+		return ret;
 	}
 
 	// Second fast path: Lots of difference, at least 2 days
 	wxLongLong diff = t_.GetValue() - op.t_.GetValue();
 	if( diff > 60 * 60 * 24 * 1000 * 2 ) {
+		wxASSERT( CompareSlow(op) == 1 );
 		return 1;
 	}
 	else if( diff < -60 * 60 * 24 * 1000 * 2 ) {
+		wxASSERT( CompareSlow(op) == -1 );
 		return -1;
 	}
 
+	return CompareSlow( op );
+}
+
+int CDateTime::CompareSlow( CDateTime const& op ) const
+{
 	wxDateTime::Tm t1 = t_.GetTm();
 	wxDateTime::Tm t2 = op.t_.GetTm();
 	if( t1.year < t2.year ) {
@@ -135,12 +148,131 @@ int CDateTime::Compare( CDateTime const& op ) const
 		return 1;
 	}
 
-	wxASSERT( a < milliseconds );
+	if( a < milliseconds ) {
+		return 0;
+	}
+	if( t1.msec < t2.msec ) {
+		return -1;
+	}
+	else if( t1.msec > t2.msec ) {
+		return 1;
+	}
+
 	return 0;
 }
 
+CDateTime& CDateTime::operator+=( wxTimeSpan const& op )
+{
+	if( IsValid() ) {
+		if( a_ < hours ) {
+			t_ += wxTimeSpan::Days(op.GetDays());
+		}
+		else if( a_ < minutes ) {
+			t_ += wxTimeSpan::Hours(op.GetHours());
+		}
+		else if( a_ < seconds ) {
+			t_ += wxTimeSpan::Minutes(op.GetMinutes());
+		}
+		else if( a_ < milliseconds ) {
+			t_ += wxTimeSpan::Seconds(op.GetSeconds());
+		}
+		else {
+			t_ += op;
+		}
+	}
+	return *this;
+}
 
+bool CDateTime::Set( int year, int month, int day, int hour, int minute, int second, int millisecond )
+{
+	if (year < 1900 || year > 3000)
+		return false;
+	
+	if (month < 1 || month > 12)
+		return false;
 
+	int maxDays = wxDateTime::GetNumberOfDays(static_cast<wxDateTime::Month>(month - 1), year);
+	if (day < 1 || day > maxDays)
+		return false;
+
+	if( hour == -1 ) {
+		a_ = days;
+		wxASSERT(minute == -1);
+		wxASSERT(second == -1);
+		wxASSERT(millisecond == -1);
+		hour = minute = second = millisecond = 0;
+	}
+	else if( minute == -1 ) {
+		a_ = hours;
+		wxASSERT(second == -1);
+		wxASSERT(millisecond == -1);
+		minute = second = millisecond = 0;
+	}
+	else if( second == -1 ) {
+		a_ = minutes;
+		wxASSERT(millisecond == -1);
+		second = millisecond = 0;
+	}
+	else if( millisecond == -1 ) {
+		a_ = seconds;
+		millisecond = 0;
+	}
+	else {
+		a_ = milliseconds;
+	}
+
+	if( hour < 0 || hour >= 24 ) {
+		return false;
+	}
+	if( minute < 0 || minute >= 60 ) {
+		return false;
+	}
+	if( second < 0 || second >= 60 ) {
+		return false;
+	}
+	if( millisecond < 0 || millisecond >= 1000 ) {
+		return false;
+	}
+
+	t_.Set( day, static_cast<wxDateTime::Month>(month - 1), year, hour, minute, second, millisecond );
+	return t_.IsValid();
+}
+
+bool CDateTime::ImbueTime( int hour, int minute, int second, int millisecond )
+{
+	if( !IsValid() || a_ > days ) {
+		return false;
+	}
+
+	if( second == -1 ) {
+		a_ = minutes;
+		wxASSERT(millisecond == -1);
+		second = millisecond = 0;
+	}
+	else if( millisecond == -1 ) {
+		a_ = seconds;
+		millisecond = 0;
+	}
+	else {
+		a_ = milliseconds;
+	}
+
+	if( hour < 0 || hour >= 24 ) {
+		return false;
+	}
+	if( minute < 0 || minute >= 60 ) {
+		return false;
+	}
+	if( second < 0 || second >= 60 ) {
+		return false;
+	}
+	if( millisecond < 0 || millisecond >= 1000 ) {
+		return false;
+	}
+
+	t_ += wxTimeSpan(hour, minute, second, millisecond);
+	return true;
+}
 
 
 

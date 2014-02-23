@@ -15,11 +15,14 @@ public:
 	};
 
 	CDateTime();
+	CDateTime( CDateTime const& op );
 	CDateTime( wxDateTime const& t, Accuracy a );
 
-	wxDateTime Degenerate();
+	wxDateTime Degenerate() const { return t_; }
 
 	bool IsValid() const { return t_.IsValid(); }
+
+	Accuracy GetAccuracy() const { return a_; }
 
 	static CDateTime Now();
 
@@ -32,7 +35,16 @@ public:
 
 	int Compare( CDateTime const& op ) const;
 
+	CDateTime& operator+=( wxTimeSpan const& op );
+	CDateTime operator+( wxTimeSpan const& op ) const { CDateTime t(*this); t += op; return t; }
+
+	// Beware: month and day are 1-indexed!
+	bool Set( int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1 );
+	bool ImbueTime( int hour, int minute, int second = -1, int millisecond = -1 );
+
 private:
+	int CompareSlow( CDateTime const& op ) const;
+
 	bool IsClamped();
 
 	Accuracy a_;

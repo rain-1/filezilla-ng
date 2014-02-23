@@ -885,15 +885,7 @@ done:
 			entry.name = entry.name.Left(pos);
 	}
 
-	{
-		int offset = m_server.GetTimezoneOffset();
-		if (offset && entry.has_time())
-		{
-			// Apply timezone offset
-			wxTimeSpan span(0, offset, 0, 0);
-			entry.time.Add(span);
-		}
-	}
+	entry.time += wxTimeSpan( 0, m_server.GetTimezoneOffset(), 0, 0);
 
 	m_entryList.push_back(entry);
 
@@ -1019,8 +1011,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine *pLine, CDirentry &entry, bool e
 			}
 		}
 
-		if (entry.has_time())
-			entry.time.Add(m_timezoneOffset);
+		entry.time += m_timezoneOffset;
 
 		return true;
 	}
@@ -1042,11 +1033,11 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 	if (!pLine->GetToken(++index, token))
 		return false;
 
-	int year = 0;
-	int month = 0;
-	int day = 0;
-	long hour = 0;
-	long minute = 0;
+	int year = -1;
+	int month = -1;
+	int day = -1;
+	long hour = -1;
+	long minute = -1;
 
 	// Some servers use the following date formats:
 	// 26-05 2002, 2002-10-14, 01-jun-99 or 2004.07.15
@@ -1078,9 +1069,10 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 			if (token[pos] == '.')
 				return true;
 
-			year = entry.time.GetYear();
-			month = entry.time.GetMonth() - wxDateTime::Jan + 1;
-			day = entry.time.GetDay();
+			wxDateTime::Tm t = entry.time.Degenerate().GetTm();
+			year = t.year;
+			month = t.mon + 1;
+			day = t.mday;
 		}
 	}
 	else if (token.IsNumeric())
@@ -1117,8 +1109,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 			dateMonth = token;
 	}
 
-	if (!day)
-	{
+	if( day < 1 ) {
 		// Get day field
 		if (!pLine->GetToken(++index, token))
 			return false;
@@ -1148,8 +1139,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 		day = dateDay;
 	}
 
-	if (!month)
-	{
+	if( month < 1 ) {
 		wxString strMonth = dateMonth.GetString();
 		if (dateMonth.IsLeftNumeric() && (unsigned int)strMonth[strMonth.Length() - 1] > 127)
 		{
@@ -1195,8 +1185,8 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 		hasTime = true;
 
 		// Some servers use times only for files newer than 6 months
-		if (!year)
-		{
+		if( year <= 0 ) {
+			wxASSERT( month != -1 && day != -1 );
 			year = wxDateTime::Now().GetYear();
 			int currentDayOfYear = wxDateTime::Now().GetDay() + 31 * (wxDateTime::Now().GetMonth() - wxDateTime::Jan);
 			int fileDayOfYear = (month - 1) * 31 + day;
@@ -1211,7 +1201,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 				year -= 1;
 		}
 	}
-	else if (!year)
+	else if (year <= 0)
 	{
 		// token is a year
 		if (!token.IsNumeric() && !token.IsLeftNumeric())
@@ -1257,13 +1247,9 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 	else
 		--index;
 
-	entry.time = wxDateTime();
-	if (!VerifySetDate(entry.time, year, (wxDateTime::Month)(wxDateTime::Jan + month - 1), day, hour, minute))
+	if( !entry.time.Set( year, month, day, hour, minute ) ) {
 		return false;
-
-	entry.flags |= CDirentry::flag_timestamp_date;
-	if (hasTime)
-		entry.flags |= CDirentry::flag_timestamp_time;
+	}
 
 	return true;
 }
@@ -1420,10 +1406,9 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	if (!gotMonth || !gotDay || !gotYear)
 		return false;
 
-	entry.time = wxDateTime();
-	if (!VerifySetDate(entry.time, year, (wxDateTime::Month)(wxDateTime::Jan + month - 1), day))
+	if( !entry.time.Set( year, month, day ) ) {
 		return false;
-	entry.flags |= CDirentry::flag_timestamp_date;
+	}
 
 	return true;
 }
@@ -1488,9 +1473,7 @@ bool CDirectoryListingParser::ParseAsDos(CLine *pLine, CDirentry &entry)
 	entry.target = _T("");
 	entry.ownerGroup = _T("");
 	entry.permissions = _T("");
-
-	if (entry.has_time())
-		entry.time.Add(m_timezoneOffset);
+	entry.time += m_timezoneOffset;
 
 	return true;
 }
@@ -1523,17 +1506,12 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 	if (minute < 0 || minute > 59)
 		return false;
 
-	wxLongLong seconds;
-	bool hasSeconds = false;
-	if (pos2 == -1)
-		seconds = 0;
-	else
-	{
+	wxLongLong seconds = -1;
+	if (pos2 != -1) {
 		// Parse seconds
 		seconds = token.GetNumber(pos2 + 1, -1);
-		if (seconds < 0 || seconds > 59)
+		if (seconds < 0 || seconds > 60)
 			return false;
-		hasSeconds = true;
 	}
 
 	// Convert to 24h format
@@ -1549,14 +1527,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 				hour = 0;
 	}
 
-	wxTimeSpan span(hour.GetLo(), minute.GetLo(), seconds.GetLo());
-	entry.time.Add(span);
-
-	entry.flags |= CDirentry::flag_timestamp_time;
-	if (hasSeconds)
-		entry.flags |= CDirentry::flag_timestamp_seconds;
-
-	return true;
+	return entry.time.ImbueTime( hour.GetLo(), minute.GetLo(), seconds.GetLo() );
 }
 
 bool CDirectoryListingParser::ParseAsEplf(CLine *pLine, CDirentry &entry)
@@ -1606,9 +1577,7 @@ bool CDirectoryListingParser::ParseAsEplf(CLine *pLine, CDirentry &entry)
 			wxLongLong number = token.GetNumber(fact + 1, len - 1);
 			if (number < 0)
 				return false;
-			entry.time = wxDateTime((time_t)number.GetValue());
-
-			entry.flags |= CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds;
+			entry.time = CDateTime(wxDateTime((time_t)number.GetValue()), CDateTime::seconds);
 		}
 		else if (type == 'u' && len > 2 && token[fact + 1] == 'p')
 			entry.permissions = token.GetString().Mid(fact + 2, len - 2);
@@ -1795,8 +1764,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 		}
 	}
 
-	if (entry.has_time())
-		entry.time.Add(m_timezoneOffset);
+	entry.time += m_timezoneOffset;
 
 	return true;
 }
@@ -1848,8 +1816,7 @@ bool CDirectoryListingParser::ParseAsIbm(CLine *pLine, CDirentry &entry)
 		entry.flags |= CDirentry::flag_dir;
 	}
 
-	if (entry.has_time())
-		entry.time.Add(m_timezoneOffset);
+	entry.time += m_timezoneOffset;
 
 	return true;
 }
@@ -1904,9 +1871,7 @@ bool CDirectoryListingParser::ParseOther(CLine *pLine, CDirentry &entry)
 		wxLongLong number = token.GetNumber();
 		if (number < 0)
 			return false;
-		entry.time = wxDateTime((time_t)number.GetValue());
-
-		entry.flags |= CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds;
+		entry.time = CDateTime(wxDateTime((time_t)number.GetValue()), CDateTime::seconds);
 
 		// Get filename
 		if (!pLine->GetToken(++index, token, true))
@@ -1996,11 +1961,9 @@ bool CDirectoryListingParser::ParseOther(CLine *pLine, CDirentry &entry)
 			else if (year < 1000)
 				year += 1900;
 
-			entry.time = wxDateTime();
-			if (!VerifySetDate(entry.time, year.GetLo(), (wxDateTime::Month)(month - 1), day.GetLo()))
+			if( !entry.time.Set( year.GetLo(), month, day.GetLo() ) ) {
 				return false;
-
-			entry.flags |= CDirentry::flag_timestamp_date;
+			}
 
 			// Get time
 			if (!pLine->GetToken(++index, token))
@@ -2024,9 +1987,7 @@ bool CDirectoryListingParser::ParseOther(CLine *pLine, CDirentry &entry)
 		entry.target = _T("");
 		entry.ownerGroup = _T("");
 		entry.permissions = _T("");
-
-		if (entry.has_time())
-			entry.time.Add(m_timezoneOffset);
+		entry.time += m_timezoneOffset;
 	}
 
 	return true;
@@ -2260,9 +2221,7 @@ bool CDirectoryListingParser::ParseAsWfFtp(CLine *pLine, CDirentry &entry)
 
 	entry.ownerGroup = _T("");
 	entry.permissions = _T("");
-
-	if (entry.has_time())
-		entry.time.Add(m_timezoneOffset);
+	entry.time += m_timezoneOffset;
 
 	return true;
 }
@@ -2426,9 +2385,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS(CLine *pLine, CDirentry &entry)
 
 	entry.ownerGroup = _T("");
 	entry.permissions = _T("");
-
-	if (entry.has_time())
-		entry.time.Add(m_timezoneOffset);
+	entry.time += m_timezoneOffset;
 
 	return true;
 }
@@ -2732,16 +2689,14 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 			if (!time)
 				return 0;
 
-			if (*time)
-			{
+			if (*time) {
 				if (!dateTime.ParseFormat(time, _T("%H%M%S"), dateTime))
 					return 0;
-				entry.flags |= CDirentry::flag_timestamp_date | CDirentry::flag_timestamp_time | CDirentry::flag_timestamp_seconds;
+				entry.time = CDateTime(dateTime.FromTimezone(wxDateTime::UTC), CDateTime::seconds);
 			}
-			else
-				entry.flags |= CDirentry::flag_timestamp_date;
-
-			entry.time = dateTime.FromTimezone(wxDateTime::GMT0);
+			else {
+				entry.time = CDateTime(dateTime.FromTimezone(wxDateTime::UTC), CDateTime::days);
+			}
 		}
 		else if (factname == _T("perm"))
 		{
@@ -2949,9 +2904,7 @@ bool CDirectoryListingParser::ParseAsZVM(CLine* pLine, CDirentry &entry)
 
 	entry.permissions = _T("");
 	entry.target = _T("");
-
-	if (entry.has_time())
-		entry.time.Add(m_timezoneOffset);
+	entry.time += m_timezoneOffset;
 
 	return true;
 }

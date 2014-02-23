@@ -1694,7 +1694,7 @@ int CFtpControlSocket::ListParseResponse()
 		if (res && date.IsValid())
 		{
 			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
-			wxDateTime listTime = pData->directoryListing[pData->mdtm_index].time;
+			wxDateTime listTime = pData->directoryListing[pData->mdtm_index].time.Degenerate();
 			listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 
 			int serveroffset = (date - listTime).GetSeconds().GetLo();
@@ -2436,7 +2436,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 					{
 						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 						if (entry.has_date())
-							pData->fileTime = entry.time;
+							pData->fileTime = entry.time.Degenerate(); //fixme
 
 						if (pData->download &&
 							!entry.has_time() &&
@@ -2501,7 +2501,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				{
 					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 					if (entry.has_date())
-						pData->fileTime = entry.time;
+						pData->fileTime = entry.time.Degenerate(); //fixme
 
 					if (pData->download &&
 						!entry.has_time() &&
@@ -2933,7 +2933,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 						{
 							pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
 							if (entry.has_date())
-								pData->fileTime = entry.time;
+								pData->fileTime = entry.time.Degenerate(); //fixme
 
 							if (pData->download &&
 								!entry.has_time() &&
