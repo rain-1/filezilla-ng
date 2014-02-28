@@ -46,6 +46,8 @@ protected:
 	bool InitBackend();
 	bool InitTls(const CTlsSocket* pPrimaryTlsSocket);
 
+	void ResetSocket();
+
 	virtual void OnSocketEvent(CSocketEvent &event);
 	virtual void OnConnect();
 	virtual void OnAccept(int error);

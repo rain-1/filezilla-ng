@@ -56,7 +56,6 @@ private:
 	wxDateTime t_;
 };
 
-
 /* If called multiple times in a row, wxDateTime::Now may return the same
  * time. This causes problems with the cache logic. This class implements
  * an extended time class in wich Now() never returns the same value.

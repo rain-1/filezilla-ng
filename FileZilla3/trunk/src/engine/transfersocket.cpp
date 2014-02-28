@@ -52,15 +52,7 @@ CTransferSocket::~CTransferSocket()
 {
 	if (m_transferEndReason == none)
 		m_transferEndReason = successful;
-	delete m_pProxyBackend;
-	if (m_pTlsSocket)
-		delete m_pTlsSocket;
-	else
-		delete m_pBackend;
-	delete m_pSocketServer;
-	m_pSocketServer = 0;
-	delete m_pSocket;
-	m_pSocket = 0;
+	ResetSocket();
 
 	if (m_pControlSocket)
 	{
@@ -77,12 +69,25 @@ CTransferSocket::~CTransferSocket()
 	}
 }
 
+void CTransferSocket::ResetSocket()
+{
+	delete m_pProxyBackend;
+	delete m_pTlsSocket;
+	if( m_pBackend != m_pTlsSocket)
+		delete m_pBackend;
+	delete m_pSocketServer;
+	delete m_pSocket;
+	m_pProxyBackend = 0;
+	m_pTlsSocket = 0;
+	m_pBackend = 0;
+	m_pSocketServer = 0;
+	m_pSocket = 0;
+
+}
+
 wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 {
-	// Void all previous attempts to createt a socket
-	delete m_pSocket;
-	m_pSocket = 0;
-	delete m_pSocketServer;
+	ResetSocket();
 	m_pSocketServer = CreateSocketServer();
 
 	if (!m_pSocketServer)
@@ -95,8 +100,7 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	int port = m_pSocketServer->GetLocalPort(error);
 	if (port == -1)
 	{
-		delete m_pSocketServer;
-		m_pSocketServer = 0;
+		ResetSocket();
 
 		m_pControlSocket->LogMessage(::Debug_Warning, _T("GetLocalPort failed: %s"), CSocket::GetErrorDescription(error).c_str());
 		return _T("");
@@ -548,10 +552,7 @@ void CTransferSocket::OnClose(int error)
 
 bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 {
-	// Void all previous attempts to createt a socket
-	delete m_pSocket;
-	delete m_pSocketServer;
-	m_pSocketServer = 0;
+	ResetSocket();
 
 	m_pSocket = new CSocket(this);
 
@@ -565,15 +566,17 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 		if (res != EINPROGRESS)
 		{
-			delete m_pProxyBackend;
-			m_pProxyBackend = 0;
-			delete m_pSocket;
-			m_pSocket = 0;
+			ResetSocket();
 			return false;
 		}
 		int error;
 		host = m_pControlSocket->m_pSocket->GetPeerIP();
 		port = m_pControlSocket->m_pSocket->GetRemotePort(error);
+		if( host.empty() || port < 1 ) {
+			m_pControlSocket->LogMessage(::Debug_Warning, _T("Could not get peer address of control connection."));
+			ResetSocket();
+			return false;
+		}
 	}
 
 	SetSocketBufferSizes(m_pSocket);
@@ -581,10 +584,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 	int res = m_pSocket->Connect(host, port);
 	if (res && res != EINPROGRESS)
 	{
-		delete m_pProxyBackend;
-		m_pProxyBackend = 0;
-		delete m_pSocket;
-		m_pSocket = 0;
+		ResetSocket();
 		return false;
 	}
 
@@ -618,25 +618,7 @@ void CTransferSocket::TransferEnd(enum TransferEndReason reason)
 		return;
 	m_transferEndReason = reason;
 
-	delete m_pSocketServer;
-	m_pSocketServer = 0;
-
-	delete m_pProxyBackend;
-	m_pProxyBackend = 0;
-
-	if (m_pTlsSocket)
-	{
-		if (m_pBackend == m_pTlsSocket)
-			m_pBackend = 0;
-		delete m_pTlsSocket;
-		m_pTlsSocket = 0;
-	}
-
-	delete m_pBackend;
-	m_pBackend = 0;
-
-	delete m_pSocket;
-	m_pSocket = 0;
+	ResetSocket();
 
 	m_pEngine->SendEvent(engineTransferEnd);
 }
