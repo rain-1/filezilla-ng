@@ -31,6 +31,9 @@ public:
 	// a link.
 	static enum local_fileType GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int* mode);
 
+	// Shortcut, returns -1 on error.
+	static wxLongLong GetSize(const wxString& path);
+
 	// If parent window is given, display confirmation dialog
 	// Returns false iff there's an encoding error, e.g. program
 	// started without UTF-8 locale.
