@@ -3,6 +3,7 @@
 
 class CHttpOpData;
 class CTlsSocket;
+class CHttpFileTransferOpData;
 class CHttpControlSocket : public CRealControlSocket
 {
 public:
@@ -38,6 +39,8 @@ protected:
 
 	virtual void ResetHttpData(CHttpOpData* pData);
 
+	int OpenFile( CHttpFileTransferOpData* pData);
+
 	int ParseHeader(CHttpOpData* pData);
 	int OnChunkedData(CHttpOpData* pData);
 
@@ -50,6 +53,8 @@ protected:
 	CHttpOpData* m_pHttpOpData;
 
 	CTlsSocket* m_pTlsSocket;
+
+	wxString m_current_url;
 };
 
 #endif //__HTTPCONTROLSOCKET_H__

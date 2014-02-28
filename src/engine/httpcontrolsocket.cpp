@@ -2,6 +2,7 @@
 
 #include "ControlSocket.h"
 #include "httpcontrolsocket.h"
+#include "local_filesys.h"
 #include "tlssocket.h"
 
 #include <wx/file.h>
@@ -175,14 +176,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 			}
 
 			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification);
-			switch (pFileExistsNotification->overwriteAction)
-			{
-			case CFileExistsNotification::resume:
-				ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
-				break;
-			default:
-				return SetFileExistsAction(pFileExistsNotification);
-			}
+			return SetFileExistsAction(pFileExistsNotification);
 		}
 		break;
 	case reqId_certificate:
@@ -375,6 +369,8 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	if (localFile != _T(""))
 	{
+		pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile).GetValue();
+
 		pData->opState = filetransfer_waitfileexists;
 		int res = CheckOverwriteFile();
 		if (res != FZ_REPLY_OK)
@@ -382,16 +378,9 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 		pData->opState = filetransfer_transfer;
 
-		pData->pFile = new wxFile();
-
-		CreateLocalDir(pData->localFile);
-
-		if (!pData->pFile->Open(pData->localFile, wxFile::write))
-		{
-			LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
-			ResetOperation(FZ_REPLY_ERROR);
-			return FZ_REPLY_ERROR;
-		}
+		res = OpenFile(pData);
+		if( res != FZ_REPLY_OK )
+			return res;
 	}
 	else
 		pData->opState = filetransfer_transfer;
@@ -439,18 +428,12 @@ int CHttpControlSocket::FileTransferSend()
 	if (pData->opState == filetransfer_waitfileexists)
 	{
 		pData->opState = filetransfer_transfer;
-		pData->pFile = new wxFile();
 
-		CreateLocalDir(pData->localFile);
+		int res = OpenFile(pData);
+		if( res != FZ_REPLY_OK)
+			return res;
 
-		if (!pData->pFile->Open(pData->localFile, wxFile::write))
-		{
-			LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
-			ResetOperation(FZ_REPLY_ERROR);
-			return FZ_REPLY_ERROR;
-		}
-
-		int res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
+		res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
 		if (res != FZ_REPLY_OK)
 			return res;
 	}
@@ -471,10 +454,15 @@ int CHttpControlSocket::FileTransferSend()
 		hostWithPort = pData->m_newHostWithPort;
 	}
 
+	m_current_url = location;
 	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.c_str());
 	LogMessageRaw(Command, action);
 
-	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n"), action.c_str(), hostWithPort.c_str(), wxString(PACKAGE_STRING, wxConvLocal).c_str());
+	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n"), action.c_str(), hostWithPort.c_str(), wxString(PACKAGE_STRING, wxConvLocal).c_str());
+	if( pData->resume ) {
+		command += wxString::Format(_T("Range: bytes=%") wxFileOffsetFmtSpec _T("d-\r\n"), pData->localFileSize);
+	}
+	command += _T("\r\n");
 
 	const wxWX2MBbuf str = command.mb_str();
 	if (!Send(str, strlen(str)))
@@ -637,6 +625,21 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 
 			pData->m_responseCode = (m_pRecvBuffer[9] - '0') * 100 + (m_pRecvBuffer[10] - '0') * 10 + m_pRecvBuffer[11] - '0';
 
+			if( pData->m_responseCode == 416 && !m_current_url.empty()) {
+				CHttpFileTransferOpData* pTransfer = reinterpret_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
+				if( pTransfer->resume ) {
+					// Sad, the server does not like our attempt to resume.
+					// Get full file instead.
+					pTransfer->resume = false;
+					int res = OpenFile(pTransfer);
+					if( res != FZ_REPLY_OK ) {
+						return res;
+					}
+					pData->m_newLocation = m_current_url;
+					pData->m_responseCode = 300;
+				}
+			}
+
 			if (pData->m_responseCode >= 400)
 			{
 				// Failed request
@@ -725,6 +728,17 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					if (res == FZ_REPLY_WOULDBLOCK)
 						res |= FZ_REPLY_REDIRECTED;
 					return res;
+				}
+
+				if( pData->m_pOpData && pData->m_pOpData->opId == cmd_transfer) {
+					CHttpFileTransferOpData* pTransfer = reinterpret_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
+					if( pTransfer->resume && pData->m_responseCode != 206 ) {
+						pTransfer->resume = false;
+						int res = OpenFile(pTransfer);
+						if( res != FZ_REPLY_OK ) {
+							return res;
+						}
+					}
 				}
 
 				pData->m_gotHeader = true;
@@ -939,6 +953,7 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 		}
 		ResetSocket();
 		m_pHttpOpData = 0;
+		m_current_url.clear();
 	}
 
 	return CControlSocket::ResetOperation(nErrorCode);
@@ -1060,5 +1075,25 @@ int CHttpControlSocket::ParseSubcommandResult(int prevResult)
 int CHttpControlSocket::Disconnect()
 {
 	DoClose();
+	return FZ_REPLY_OK;
+}
+
+int CHttpControlSocket::OpenFile( CHttpFileTransferOpData* pData)
+{
+	delete pData->pFile;
+	pData->pFile = new wxFile();
+	CreateLocalDir(pData->localFile);
+
+	if (!pData->pFile->Open(pData->localFile, pData->resume ? wxFile::write_append : wxFile::write))
+	{
+		LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
+		ResetOperation(FZ_REPLY_ERROR);
+		return FZ_REPLY_ERROR;
+	}
+	wxFileOffset end = pData->pFile->SeekEnd();
+	if( !end ) {
+		pData->resume = false;
+	}
+	pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile).GetValue();
 	return FZ_REPLY_OK;
 }
