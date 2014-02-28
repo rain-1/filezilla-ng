@@ -656,3 +656,15 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 	return fn.SetTimes( &d, &d, 0 );
 #endif
 }
+
+wxLongLong CLocalFileSystem::GetSize(const wxString& path)
+{
+	wxLongLong ret = -1;
+	bool tmp;
+	local_fileType t = GetFileInfo(path, tmp, &ret, 0, 0);
+	if( t != file ) {
+		ret = -1;
+	}
+
+	return ret;
+}
