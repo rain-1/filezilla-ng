@@ -173,8 +173,10 @@ Function UpdateShellVarContext
 
   ${If} $ALL_USERS == 1
     SetShellVarContext all
+    LogText "Installing for all users"
   ${Else}
     SetShellVarContext current
+    LogText "Installing for current user"
   ${EndIf}
 
 FunctionEnd
@@ -374,12 +376,16 @@ UAC_Success:
   ${If} $PREVIOUS_VERSION == ""
 
     StrCpy $PERFORM_UPDATE 0
+    LogText "No previous version of FileZilla was found"
 
   ${Else}
 
     Push "${VERSION}"
     Push $PREVIOUS_VERSION
     Call FZVersionCompare
+
+    LogText "Found previous version: $PREVIOUS_VERSION"
+    LogText "Installing $PREVIOUS_VERSION_STATE version $VERSION".
 
   ${EndIf}
 
@@ -582,6 +588,7 @@ Function RunUninstaller
 
   ${If} $PREVIOUS_VERSION_STATE == "same"
   ${AndIf} $REINSTALL_UNINSTALL == "1"
+  ${AndIf} $PERFORM_UPDATE != "1"
     ExecWait '$R1 _?=$INSTDIR'
   ${Else}
     ExecWait '$R1 /frominstall /keepstartmenudir _?=$INSTDIR'
