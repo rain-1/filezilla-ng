@@ -173,10 +173,10 @@ Function UpdateShellVarContext
 
   ${If} $ALL_USERS == 1
     SetShellVarContext all
-    LogText "Installing for all users"
+    DetailPrint "Installing for all users"
   ${Else}
     SetShellVarContext current
-    LogText "Installing for current user"
+    DetailPrint "Installing for current user"
   ${EndIf}
 
 FunctionEnd
@@ -376,7 +376,7 @@ UAC_Success:
   ${If} $PREVIOUS_VERSION == ""
 
     StrCpy $PERFORM_UPDATE 0
-    LogText "No previous version of FileZilla was found"
+    DetailPrint "No previous version of FileZilla was found"
 
   ${Else}
 
@@ -384,8 +384,8 @@ UAC_Success:
     Push $PREVIOUS_VERSION
     Call FZVersionCompare
 
-    LogText "Found previous version: $PREVIOUS_VERSION"
-    LogText "Installing $PREVIOUS_VERSION_STATE version $VERSION".
+    DetailPrint "Found previous version: $PREVIOUS_VERSION"
+    DetailPrint "Installing $PREVIOUS_VERSION_STATE version $VERSION".
 
   ${EndIf}
 
