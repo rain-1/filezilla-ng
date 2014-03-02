@@ -380,10 +380,6 @@ UAC_Success:
     Push $PREVIOUS_VERSION
     Call FZVersionCompare
 
-    ${If} $PREVIOUS_VERSION_STATE != "newer"
-      StrCpy $PERFORM_UPDATE 0
-    ${EndIf}
-
   ${EndIf}
 
   StrCpy $ALL_USERS_DEFAULT $ALL_USERS
