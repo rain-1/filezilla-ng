@@ -22,7 +22,7 @@
 #include "filter.h"
 #include "netconfwizard.h"
 #include "quickconnectbar.h"
-#include "updatewizard.h"
+#include "updater.h"
 #include "defaultfileexistsdlg.h"
 #include "loginmanager.h"
 #include "conditionaldialog.h"
@@ -69,6 +69,12 @@ DEFINE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED);
 
 static int tab_hotkey_ids[10];
 
+static int GetAvailableUpdateMenuId()
+{
+	static int updateAvailableMenuId = wxNewId();
+	return updateAvailableMenuId;
+}
+
 BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 	EVT_SIZE(CMainFrame::OnSize)
 	EVT_MENU(wxID_ANY, CMainFrame::OnMenuHandler)
@@ -103,6 +109,7 @@ BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 	EVT_TOOL_RCLICKED(XRCID("ID_TOOLBAR_FILTER"), CMainFrame::OnFilterRightclicked)
 #if FZ_MANUALUPDATECHECK
 	EVT_MENU(XRCID("ID_CHECKFORUPDATES"), CMainFrame::OnCheckForUpdates)
+	EVT_MENU(GetAvailableUpdateMenuId(), CMainFrame::OnCheckForUpdates)
 #endif //FZ_MANUALUPDATECHECK
 	EVT_TOOL_RCLICKED(XRCID("ID_TOOLBAR_SITEMANAGER"), CMainFrame::OnSitemanagerDropdown)
 #ifdef EVT_TOOL_DROPDOWN
@@ -254,9 +261,9 @@ CMainFrame::CMainFrame()
 	m_bInitDone = false;
 	m_bQuit = false;
 	m_closeEvent = 0;
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	m_pUpdateWizard = 0;
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#if FZ_MANUALUPDATECHECK
+	m_pUpdater = 0;
+#endif
 	m_pQueuePane = 0;
 	m_pStatusView = 0;
 
@@ -285,9 +292,8 @@ CMainFrame::CMainFrame()
 		m_pActivityLed[1] = 0;
 	}
 
-	m_transferStatusTimer.SetOwner(this);
 	m_closeEventTimer.SetOwner(this);
-
+	
 	if (CFilterManager::HasActiveFilters(true))
 	{
 		if (COptions::Get()->GetOptionVal(OPTION_FILTERTOGGLESTATE))
@@ -314,12 +320,12 @@ CMainFrame::CMainFrame()
 	m_pTopSplitter = new CSplitterWindowEx(this, -1, wxDefaultPosition, clientSize, style);
 	m_pTopSplitter->SetMinimumPaneSize(50);
 
-	m_pBottomSplitter = new CSplitterWindowEx(m_pTopSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER  | wxSP_LIVE_UPDATE);
+	m_pBottomSplitter = new CSplitterWindowEx(m_pTopSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER | wxSP_LIVE_UPDATE);
 	m_pBottomSplitter->SetMinimumPaneSize(10, 60);
 	m_pBottomSplitter->SetSashGravity(1.0);
 
 	const int message_log_position = COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION);
-	m_pQueueLogSplitter = new CSplitterWindowEx(m_pBottomSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER  | wxSP_LIVE_UPDATE);
+	m_pQueueLogSplitter = new CSplitterWindowEx(m_pBottomSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER | wxSP_LIVE_UPDATE);
 	m_pQueueLogSplitter->SetMinimumPaneSize(50, 250);
 	m_pQueueLogSplitter->SetSashGravity(0.5);
 	m_pQueuePane = new CQueue(m_pQueueLogSplitter, this, m_pAsyncRequestQueue);
@@ -444,9 +450,9 @@ CMainFrame::~CMainFrame()
 
 	CContextManager::Get()->DestroyAllStates();
 	delete m_pAsyncRequestQueue;
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	delete m_pUpdateWizard;
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#if FZ_MANUALUPDATECHECK
+	delete m_pUpdater;
+#endif
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
 	if (pEditHandler)
@@ -514,10 +520,6 @@ bool CMainFrame::CreateMenus()
 		return false;
 
 	SetMenuBar(m_pMenuBar);
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	if (m_pUpdateWizard)
-		m_pUpdateWizard->DisplayUpdateAvailability(false);
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 
 	return true;
 }
@@ -1306,8 +1308,6 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	delete m_pStateEventHandler;
 	m_pStateEventHandler = 0;
 
-	m_transferStatusTimer.Stop();
-
 	if (!m_pQueueView->Quit())
 	{
 		event.Veto();
@@ -1813,7 +1813,14 @@ void CMainFrame::OnFilter(wxCommandEvent& event)
 #if FZ_MANUALUPDATECHECK
 void CMainFrame::OnCheckForUpdates(wxCommandEvent& event)
 {
-	wxString version(PACKAGE_VERSION, wxConvLocal);
+#ifdef __WXMSW__
+	if( m_pUpdater && !m_pUpdater->DownloadedFile().empty() ) {
+		wxExecute(_T("\"") + m_pUpdater->DownloadedFile() +  _T("\" /update"));
+		Close();
+	}
+#endif
+
+	/*wxString version(PACKAGE_VERSION, wxConvLocal);
 	if (version[0] < '0' || version[0] > '9')
 	{
 		wxMessageBox(_("Executable contains no version info, cannot check for updates."), _("Check for updates failed"), wxICON_ERROR, this);
@@ -1824,9 +1831,35 @@ void CMainFrame::OnCheckForUpdates(wxCommandEvent& event)
 	if (!dlg.Load())
 		return;
 
-	dlg.Run();
+	dlg.Run();*/
 }
-#endif //FZ_MANUALUPDATECHECK
+
+void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
+{
+	if( !m_pMenuBar ) {
+		return;
+	}
+
+	if( s != newversion && s != newversion_ready ) {
+		return;
+	}
+	if( v.version_.empty() ) {
+		return;
+	}
+
+	const wxString& name = wxString::Format(_("&Version %s"), v.version_);
+
+	wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId());
+	if( !pItem ) {
+		wxMenu* pMenu = new wxMenu();
+		pMenu->Append(GetAvailableUpdateMenuId(), name);
+		m_pMenuBar->Append(pMenu, _("&New version available!"));
+	}
+	else {
+		pItem->SetItemLabel(name);
+	}
+}
+#endif
 
 void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagelog_position /*=-1*/)
 {
@@ -2067,7 +2100,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 
 void CMainFrame::CheckChangedSettings()
 {
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#if 0 //fixmeFZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
 	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
 	{
 		if (!m_pUpdateWizard)
@@ -2723,16 +2756,12 @@ void CMainFrame::OnSearch(wxCommandEvent& event)
 
 void CMainFrame::PostInitialize()
 {
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#if FZ_MANUALUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
-	{
-		m_pUpdateWizard = new CUpdateWizard(this);
-		m_pUpdateWizard->InitAutoUpdateCheck();
+	if( !m_pUpdater ) {
+		m_pUpdater = new CUpdater(*this);
 	}
-	else
-		m_pUpdateWizard = 0;
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#endif
 
 	if (COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) != 0)
 	{

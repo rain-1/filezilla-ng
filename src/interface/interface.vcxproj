@@ -247,7 +247,7 @@
     <ClCompile Include="timeformatting.cpp" />
     <ClCompile Include="toolbar.cpp" />
     <ClCompile Include="treectrlex.cpp" />
-    <ClCompile Include="updatewizard.cpp" />
+    <ClCompile Include="updater.cpp" />
     <ClCompile Include="verifycertdialog.cpp" />
     <ClCompile Include="verifyhostkeydialog.cpp" />
     <ClCompile Include="view.cpp" />
@@ -357,7 +357,7 @@
     <ClInclude Include="timeformatting.h" />
     <ClInclude Include="toolbar.h" />
     <ClInclude Include="treectrlex.h" />
-    <ClInclude Include="updatewizard.h" />
+    <ClInclude Include="updater.h" />
     <ClInclude Include="verifycertdialog.h" />
     <ClInclude Include="verifyhostkeydialog.h" />
     <ClInclude Include="view.h" />
