@@ -104,7 +104,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		timeformatting.cpp \
 		toolbar.cpp \
 		treectrlex.cpp \
-		updatewizard.cpp \
+		updater.cpp \
 		verifycertdialog.cpp \
 		verifyhostkeydialog.cpp \
 		view.cpp \
@@ -217,7 +217,7 @@ noinst_HEADERS = aboutdialog.h \
 		 timeformatting.h \
 		 toolbar.h \
 		 treectrlex.h \
-		 updatewizard.h \
+		 updater.h \
 		 verifycertdialog.h \
 		 verifyhostkeydialog.h \
 		 view.h \

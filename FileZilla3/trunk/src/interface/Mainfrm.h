@@ -5,27 +5,33 @@
 #include <wx/taskbar.h>
 #endif
 
-class CStatusView;
-class CQueueView;
-class CState;
 class CAsyncRequestQueue;
-class CLed;
-class CThemeProvider;
-class CQuickconnectBar;
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-class CUpdateWizard;
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-class CSiteManagerItemData_Site;
-class CQueue;
-class CWindowStateManager;
-class CStatusBar;
-class CMainFrameStateEventHandler;
-class CSplitterWindowEx;
 class CContextControl;
-class CToolBar;
+class CLed;
+class CMainFrameStateEventHandler;
 class CMenuBar;
+class CQueue;
+class CQueueView;
+class CQuickconnectBar;
+class CSiteManagerItemData_Site;
+class CSplitterWindowEx;
+class CStatusBar;
+class CStatusView;
+class CState;
+class CThemeProvider;
+class CToolBar;
+class CWindowStateManager;
+
+
+#if FZ_MANUALUPDATECHECK
+#include "updater.h"
+#endif
+class CWindowStateManager;
 
 class CMainFrame : public wxFrame
+#if FZ_MANUALUPDATECHECK
+	, protected CUpdateHandler
+#endif
 {
 	friend class CMainFrameStateEventHandler;
 public:
@@ -87,11 +93,11 @@ protected:
 	CStatusView* m_pStatusView;
 	CQueueView* m_pQueueView;
 	CLed* m_pActivityLed[2];
-	wxTimer m_transferStatusTimer;
 	CThemeProvider* m_pThemeProvider;
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	CUpdateWizard* m_pUpdateWizard;
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#if FZ_MANUALUPDATECHECK
+	CUpdater* m_pUpdater;
+	virtual void UpdaterStateChanged( UpdaterState s, build const& v );
+#endif
 
 	void ShowLocalTree();
 	void ShowRemoteTree();

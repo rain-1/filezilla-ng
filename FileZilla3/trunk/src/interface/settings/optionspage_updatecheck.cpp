@@ -6,7 +6,6 @@
 #include "settingsdialog.h"
 #include "optionspage.h"
 #include "optionspage_updatecheck.h"
-#include "../updatewizard.h"
 
 BEGIN_EVENT_TABLE(COptionsPageUpdateCheck, COptionsPage)
 EVT_BUTTON(XRCID("ID_RUNUPDATECHECK"), COptionsPageUpdateCheck::OnRunUpdateCheck)
@@ -64,11 +63,11 @@ bool COptionsPageUpdateCheck::SavePage()
 
 void COptionsPageUpdateCheck::OnRunUpdateCheck(wxCommandEvent &event)
 {
-	CUpdateWizard dlg(this);
+	/*CUpdateWizard dlg(this);
 	if (!dlg.Load())
 		return;
 
-	dlg.Run();
+	dlg.Run();*/
 }
 
 #endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
