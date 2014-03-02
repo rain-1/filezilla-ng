@@ -385,7 +385,7 @@ UAC_Success:
     Call FZVersionCompare
 
     DetailPrint "Found previous version: $PREVIOUS_VERSION"
-    DetailPrint "Installing $PREVIOUS_VERSION_STATE version $VERSION".
+    DetailPrint "Installing $PREVIOUS_VERSION_STATE version $VERSION"
 
   ${EndIf}
 
