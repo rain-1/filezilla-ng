@@ -2088,25 +2088,6 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 
 void CMainFrame::CheckChangedSettings()
 {
-#if 0 //fixmeFZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK))
-	{
-		if (!m_pUpdateWizard)
-		{
-			m_pUpdateWizard = new CUpdateWizard(this);
-			m_pUpdateWizard->InitAutoUpdateCheck();
-		}
-	}
-	else
-	{
-		if (m_pUpdateWizard)
-		{
-			delete m_pUpdateWizard;
-			m_pUpdateWizard = 0;
-		}
-	}
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-
 	UpdateLayout();
 
 	m_pAsyncRequestQueue->RecheckDefaults();
