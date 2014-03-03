@@ -121,7 +121,10 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 {
 	AddHandler(parent);
 	engine_->Init(this, update_options_);
+}
 
+void CUpdater::Init()
+{
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
 	
 	UpdaterState s = ProcessFinishedData();
@@ -237,10 +240,6 @@ bool CUpdater::Run()
 
 int CUpdater::Download(wxString const& url, wxString const& local_file)
 {
-	if( state_ != checking && state_ != newversion_downloading && state_ != checking ) {
-		return FZ_REPLY_INTERNALERROR;
-	}
-
 	engine_->Command(CDisconnectCommand());
 	int res = SendConnectCommand(url);
 	if( res == FZ_REPLY_OK ) {
@@ -252,10 +251,6 @@ int CUpdater::Download(wxString const& url, wxString const& local_file)
 
 int CUpdater::SendConnectCommand(wxString const& url)
 {
-	if( state_ != checking && state_ != newversion_downloading && state_ != checking ) {
-		return FZ_REPLY_INTERNALERROR;
-	}
-
 	CServer s;
 	CServerPath path;
 	wxString error;
@@ -268,10 +263,6 @@ int CUpdater::SendConnectCommand(wxString const& url)
 
 int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_file)
 {
-	if( state_ != checking && state_ != newversion_downloading && state_ != checking ) {
-		return FZ_REPLY_INTERNALERROR;
-	}
-
 	CFileTransferCommand::t_transferSettings transferSettings;
 
 	CServer s;
@@ -732,8 +723,10 @@ void CUpdater::SetState( UpdaterState s )
 	if( s != state_ ) {
 		state_ = s;
 		build b = version_information_.available_;
-		for( std::vector<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
-			(*it)->UpdaterStateChanged( s, b );
+		for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+			if( *it ) {
+				(*it)->UpdaterStateChanged( s, b );
+			}
 		}
 	}
 }
@@ -749,15 +742,26 @@ wxString CUpdater::DownloadedFile() const
 
 void CUpdater::AddHandler( CUpdateHandler& handler )
 {
-	RemoveHandler(handler);
+
+	for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+		if( *it == &handler ) {
+			return;
+		}
+	}
+	for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+		if( !*it ) {
+			*it = &handler;
+			return;
+		}
+	}
 	handlers_.push_back(&handler);
 }
 
 void CUpdater::RemoveHandler( CUpdateHandler& handler )
 {
-	for( std::vector<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+	for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
 		if( *it == &handler ) {
-			handlers_.erase(it);
+			*it = 0;
 			return;
 		}
 	}

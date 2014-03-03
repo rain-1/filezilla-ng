@@ -22,15 +22,24 @@ enum type {
 };
 }
 
+static int refcount = 0;
+
 CUpdateDialog::CUpdateDialog(wxWindow* parent, CUpdater& updater)
 	: parent_(parent)
 	, updater_(updater)
 {
 	timer_.SetOwner(this);
+	++refcount;
 }
 
 CUpdateDialog::~CUpdateDialog()
 {
+	--refcount;
+}
+
+bool CUpdateDialog::IsRunning()
+{
+	return refcount != 0;
 }
 
 int CUpdateDialog::ShowModal()

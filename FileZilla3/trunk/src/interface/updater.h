@@ -51,6 +51,9 @@ public:
 	CUpdater( CUpdateHandler& parent );
 	virtual ~CUpdater();
 
+	// 2-Stage initialization
+	void Init();
+
 	void AddHandler( CUpdateHandler& handler );
 	void RemoveHandler( CUpdateHandler& handler );
 
@@ -107,7 +110,7 @@ protected:
 
 	version_information version_information_;
 
-	std::vector<CUpdateHandler*> handlers_;
+	std::list<CUpdateHandler*> handlers_;
 
 	wxString log_;
 
