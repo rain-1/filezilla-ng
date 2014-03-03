@@ -866,11 +866,9 @@ Section "FileZilla Client" SecMain
 
   SetOutPath "$INSTDIR\resources\32x32"
   File "${top_srcdir}/src\interface\resources\32x32\*.png"
-  File "${top_srcdir}/src\interface\resources\32x32\*.gif"
 
   SetOutPath "$INSTDIR\resources\48x48"
   File "${top_srcdir}/src\interface\resources\48x48\*.png"
-  File "${top_srcdir}/src\interface\resources\48x48\*.gif"
 
   ;Create uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
