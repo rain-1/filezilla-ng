@@ -1847,7 +1847,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		return;
 	}
 
-	wxString const name = wxString::Format(_("&Version %s"), v.version_);
+	wxString const name = wxString::Format(_("&Version %s"), v.version_.c_str());
 
 	wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId());
 	if( !pItem ) {
