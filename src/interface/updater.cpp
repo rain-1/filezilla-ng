@@ -127,7 +127,9 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 		SetState(newversion);
 	}
 
-	Run();
+	if( state_ == failed || state_ == idle ) {
+		Run();
+	}
 }
 
 CUpdater::~CUpdater()
@@ -688,6 +690,26 @@ void CUpdater::RemoveHandler( CUpdateHandler& handler )
 			return;
 		}
 	}
+}
+
+wxULongLong CUpdater::BytesDownloaded() const
+{
+	wxLongLong ret;
+	if( state_ == newversion_ready ) {
+		if( !local_file_.empty() ) {
+			ret = CLocalFileSystem::GetSize(local_file_);
+		}
+	}
+	else if( state_ == newversion_downloading ) {
+		wxString const temp = GetTempFile();
+		if( !temp.empty() ) {
+			ret = CLocalFileSystem::GetSize(temp);
+		}
+	}
+	if( ret < 0 ) {
+		ret = 0;
+	}
+	return static_cast<unsigned long long>(ret.GetValue());
 }
 
 #endif

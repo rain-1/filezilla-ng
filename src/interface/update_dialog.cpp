@@ -6,6 +6,7 @@
 
 BEGIN_EVENT_TABLE(CUpdateDialog, wxDialogEx)
 EVT_BUTTON(XRCID("ID_INSTALL"), CUpdateDialog::OnInstall)
+EVT_TIMER(wxID_ANY, CUpdateDialog::OnTimer)
 END_EVENT_TABLE()
 
 namespace pagenames {
@@ -21,6 +22,7 @@ CUpdateDialog::CUpdateDialog(wxWindow* parent, CUpdater& updater)
 	: parent_(parent)
 	, updater_(updater)
 {
+	timer_.SetOwner(this);
 }
 
 CUpdateDialog::~CUpdateDialog()
@@ -128,6 +130,7 @@ void CUpdateDialog::LoadPanel(wxString const& name)
 
 void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 {
+	timer_.Stop();
 	for (std::vector<wxPanel*>::iterator iter = panels_.begin(); iter != panels_.end(); ++iter) {
 		(*iter)->Hide();
 	}
@@ -152,6 +155,10 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		XRCCTRL(*this, "ID_DOWNLOAD_LABEL", wxStaticText)->Show(downloading);
 		XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->Show(downloading);
 		XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->Show(downloading);
+		if( downloading ) {
+			timer_.Start(500);
+			OnTimer(wxTimerEvent());
+		}
 
 		bool ready = s == newversion_ready;
 		XRCCTRL(*this, "ID_DOWNLOADED", wxStaticText)->Show(ready);
@@ -159,7 +166,6 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 
 		panels_[pagenames::newversion]->Show();
 		panels_[pagenames::newversion]->Layout();
-
 	}
 }
 
@@ -173,4 +179,17 @@ void CUpdateDialog::OnInstall(wxCommandEvent& ev)
 	wxExecute(_T("\"") + f +  _T("\" /update"));
 	parent_->Close();
 #endif
+}
+
+void CUpdateDialog::OnTimer(wxTimerEvent& ev)
+{
+	wxULongLong size = updater_.AvailableBuild().size_;
+	wxULongLong downloaded = updater_.BytesDownloaded();
+
+	unsigned int percent = 0;
+	if( size > 0 ) {
+		percent = ((downloaded * 100) / size).GetLo();
+	}
+
+	XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->SetLabel(wxString::Format(_T("(%u%% downloaded)"), percent));
 }
