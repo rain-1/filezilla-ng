@@ -927,7 +927,7 @@ SectionEnd
   SetOutPath "$INSTDIR\resources\${SET}"
   File "${top_srcdir}/src\interface\resources\${SET}\theme.xml"
   File /r "${top_srcdir}/src\interface\resources\${SET}\*.png"
-  File /r "${top_srcdir}/src\interface\resources\${SET}\*.gif"
+  File /nonfatal /r "${top_srcdir}/src\interface\resources\${SET}\*.gif"
 !macroend
 
 ${MementoSection} "Icon sets" SecIconSets
