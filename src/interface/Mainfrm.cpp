@@ -1412,6 +1412,11 @@ void CMainFrame::OnTimer(wxTimerEvent& event)
 		evt.SetCanVeto(false);
 		AddPendingEvent(evt);
 	}
+#if FZ_MANUALUPDATECHECK
+	else if( event.GetId() == update_dialog_timer_.GetId() ) {
+		TriggerUpdateDialog();
+	}
+#endif
 }
 
 void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
@@ -1818,8 +1823,10 @@ void CMainFrame::OnCheckForUpdates(wxCommandEvent& event)
 		return;
 	}
 
+	update_dialog_timer_.Stop();
 	CUpdateDialog dlg( this, *m_pUpdater );
 	dlg.ShowModal();
+	update_dialog_timer_.Stop();
 }
 
 void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
@@ -1842,10 +1849,43 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		wxMenu* pMenu = new wxMenu();
 		pMenu->Append(GetAvailableUpdateMenuId(), name);
 		m_pMenuBar->Append(pMenu, _("&New version available!"));
+
+		if( !update_dialog_timer_.IsRunning() ) {
+			TriggerUpdateDialog();
+		}
 	}
 	else {
 		pItem->SetItemLabel(name);
 	}
+}
+
+void CMainFrame::TriggerUpdateDialog()
+{
+	if( CUpdateDialog::IsRunning() ) {
+		return;
+	}
+
+	if (wxDialogEx::ShownDialogs()) {
+		update_dialog_timer_.Start( 1000, true );
+		return;
+	}
+#ifdef __WXMSW__
+	// Don't check for changes if mouse is captured,
+	// e.g. if user is dragging a file
+	if (GetCapture()) {
+		update_dialog_timer_.Start( 1000, true );
+		return;
+	}
+
+	// All open menus need to be closed or app will become unresponsive.
+	::EndMenu();
+#endif
+
+	CUpdateDialog dlg(this, *m_pUpdater);
+	dlg.ShowModal();
+
+	// In case the timer was started while the dialog was up.
+	update_dialog_timer_.Stop();
 }
 #endif
 
@@ -2728,7 +2768,9 @@ void CMainFrame::PostInitialize()
 #if FZ_MANUALUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
 	if( !m_pUpdater ) {
+		update_dialog_timer_.SetOwner(this);
 		m_pUpdater = new CUpdater(*this);
+		m_pUpdater->Init();
 	}
 #endif
 

@@ -17,6 +17,8 @@ public:
 
 	virtual int ShowModal();
 
+	static bool IsRunning();
+
 protected:
 	virtual void UpdaterStateChanged( UpdaterState s, build const& v );
 

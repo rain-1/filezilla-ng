@@ -97,6 +97,8 @@ protected:
 #if FZ_MANUALUPDATECHECK
 	CUpdater* m_pUpdater;
 	virtual void UpdaterStateChanged( UpdaterState s, build const& v );
+	void TriggerUpdateDialog();
+	wxTimer update_dialog_timer_;
 #endif
 
 	void ShowLocalTree();
