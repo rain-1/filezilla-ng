@@ -4,9 +4,13 @@
 #include "update_dialog.h"
 #include "themeprovider.h"
 
+#include <wx/hyperlink.h>
+
 BEGIN_EVENT_TABLE(CUpdateDialog, wxDialogEx)
 EVT_BUTTON(XRCID("ID_INSTALL"), CUpdateDialog::OnInstall)
 EVT_TIMER(wxID_ANY, CUpdateDialog::OnTimer)
+EVT_HYPERLINK(XRCID("ID_SHOW_DETAILS"), CUpdateDialog::ShowDetails)
+EVT_HYPERLINK(XRCID("ID_RETRY"), CUpdateDialog::Retry)
 END_EVENT_TABLE()
 
 namespace pagenames {
@@ -56,6 +60,8 @@ int CUpdateDialog::ShowModal()
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->Play();
 	
 	Wrap();
+
+	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Hide();
 
 	UpdaterState s = updater_.GetState();
 	UpdaterStateChanged( s, updater_.AvailableBuild() );
@@ -138,6 +144,7 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		panels_[pagenames::latest]->Show();
 	}
 	else if( s == failed ) {
+		XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->ChangeValue(updater_.GetLog());
 		panels_[pagenames::failed]->Show();
 	}
 	else if( s == checking ) {
@@ -193,4 +200,19 @@ void CUpdateDialog::OnTimer(wxTimerEvent& ev)
 	}
 
 	XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->SetLabel(wxString::Format(_T("(%u%% downloaded)"), percent));
+}
+
+void CUpdateDialog::ShowDetails(wxHyperlinkEvent& ev)
+{
+	XRCCTRL(*this, "ID_SHOW_DETAILS", wxHyperlinkCtrl)->Hide();
+	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Show();
+
+	panels_[pagenames::failed]->Layout();
+}
+
+void CUpdateDialog::Retry(wxHyperlinkEvent& ev)
+{
+	if( updater_.GetState() == failed ) {
+		updater_.Run();
+	}
 }

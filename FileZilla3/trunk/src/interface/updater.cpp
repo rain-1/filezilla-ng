@@ -121,11 +121,8 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 	engine_->Init(this, update_options_);
 
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
-	ParseData();
-
-	if( !version_information_.empty() ) {
-		SetState(newversion);
-	}
+	
+	ProcessFinishedData();
 
 	if( state_ == failed || state_ == idle ) {
 		Run();
@@ -170,6 +167,9 @@ bool CUpdater::Run()
 	}
 
 	local_file_.clear();
+	wxDateTime t = wxDateTime::Now();
+	log_ = wxString::Format(_("Started update check on %s\n"), t.Format().c_str());
+
 	SetState(checking);
 
 	update_options_->m_use_internal_rootcert = true;
@@ -277,11 +277,59 @@ void CUpdater::ProcessNotification(CNotification* notification)
 	case nId_operation:
 		ProcessOperation(notification);
 		break;
+	case nId_logmsg:
+		{
+			CLogmsgNotification* msg = reinterpret_cast<CLogmsgNotification *>(notification);
+			log_ += msg->msg + _T("\n");
+		}
 	default:
 		break;
 	}
 }
 
+UpdaterState CUpdater::ProcessFinishedData()
+{
+	UpdaterState s = failed;
+
+	ParseData();
+
+	if( version_information_.available_.version_.empty() ) {
+		s = idle;
+	}
+	else if( !version_information_.available_.url_.empty() ) {
+
+		wxString const temp = GetTempFile();
+		wxString const local_file = GetLocalFile(version_information_.available_, true);
+		if( !local_file.empty() && CLocalFileSystem::GetFileType(local_file) != CLocalFileSystem::unknown) {
+			local_file_ = local_file;
+			log_ += wxString::Format(_("Local file is %s\n"), local_file.c_str());
+			s = newversion_ready;
+		}
+		else {
+			// We got a checksum over a secure channel already.
+			update_options_->m_use_internal_rootcert = false;
+
+			if( temp.empty() || local_file.empty() ) {
+				s = newversion;
+			}
+			else {
+				s = newversion_downloading;
+				wxLongLong size = CLocalFileSystem::GetSize(temp);
+				if( size >= 0 && static_cast<unsigned long long>(size.GetValue()) >= version_information_.available_.size_ ) {
+					s = ProcessFinishedDownload();
+				}
+				else if( Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
+					s = newversion;
+				}
+			}
+		}
+	}
+	else {
+		s = newversion;
+	}
+
+	return s;
+}
 void CUpdater::ProcessOperation(CNotification* notification)
 {
 	if( state_ != checking && state_ != newversion_downloading ) {
@@ -297,41 +345,7 @@ void CUpdater::ProcessOperation(CNotification* notification)
 		}
 	}
 	else if( state_ == checking ) {
-		ParseData();
-
-		if( version_information_.available_.version_.empty() ) {
-			s = idle;
-		}
-		else if( !version_information_.available_.url_.empty() ) {
-
-			wxString const temp = GetTempFile();
-			wxString const local_file = GetLocalFile(version_information_.available_, true);
-			if( !local_file.empty() && CLocalFileSystem::GetFileType(local_file) != CLocalFileSystem::unknown) {
-				local_file_ = local_file;
-				s = newversion_ready;
-			}
-			else {
-				// We got a checksum over a secure channel already.
-				update_options_->m_use_internal_rootcert = false;
-
-				if( temp.empty() || local_file.empty() ) {
-					s = newversion;
-				}
-				else {
-					s = newversion_downloading;
-					wxLongLong size = CLocalFileSystem::GetSize(temp);
-					if( size >= 0 && static_cast<unsigned long long>(size.GetValue()) >= version_information_.available_.size_ ) {
-						s = ProcessFinishedDownload();
-					}
-					else if( Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
-						s = newversion;
-					}
-				}
-			}
-		}
-		else {
-			s = newversion;
-		}
+		s = ProcessFinishedData();
 	}
 	else {
 		s = ProcessFinishedDownload();
@@ -361,15 +375,17 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 		if (local_file.empty() || !wxRenameFile( temp, local_file, false ) ) {
 			s = newversion;
 			wxRemoveFile( temp );
+			log_ += wxString::Format(_("Could not create local file %s\n"), local_file.c_str());
 		}
 		else {
 			local_file_ = local_file;
+			log_ += wxString::Format(_("Local file is %s\n"), local_file.c_str());
 		}
 	}
 	return s;
 }
 
-wxString CUpdater::GetLocalFile( build const& b, bool allow_existing ) const
+wxString CUpdater::GetLocalFile( build const& b, bool allow_existing )
 {
 	wxString const fn = GetFilename( b.url_ );
 	wxString const dl = GetDownloadDir().GetPath();
@@ -538,7 +554,7 @@ void CUpdater::OnTimer(wxTimerEvent& ev)
 {
 }
 
-bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum ) const
+bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum )
 {
 	if( file.empty() || checksum.empty() ) {
 		return false;
@@ -588,9 +604,11 @@ bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString 
 	}
 
 	if (checksum.CmpNoCase(digest)) {
+		log_ += wxString::Format(_("Checksum mismatch on file %s\n"), file.c_str());
 		return false;
 	}
 
+	log_ += wxString::Format(_("Checksum match on file %s\n"), file.c_str());
 	return true;
 }
 

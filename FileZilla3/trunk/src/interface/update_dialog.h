@@ -7,6 +7,8 @@
 class wxPanel;
 class wxWindow;
 
+class wxHyperlinkEvent;
+
 class CUpdateDialog : public wxDialogEx, protected CUpdateHandler
 {
 public:
@@ -31,6 +33,8 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnInstall(wxCommandEvent& ev);
 	void OnTimer(wxTimerEvent& ev);
+	void ShowDetails(wxHyperlinkEvent& ev);
+	void Retry(wxHyperlinkEvent& ev);
 };
 
 #endif
