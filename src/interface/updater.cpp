@@ -153,11 +153,13 @@ CUpdater* CUpdater::GetInstance()
 
 void CUpdater::RunIfNeeded()
 {
+#if FZ_AUTOUPDATECHECK
 	if( state_ == failed || state_ == idle ) {
-		if( COptions::Get()->GetOptionVal(OPTION_UPDATECHECK) != 0 && LongTimeSinceLastCheck() ) {
+		if( !COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK) != 0 && LongTimeSinceLastCheck() ) {
 			Run();
 		}
 	}
+#endif
 }
 
 bool CUpdater::LongTimeSinceLastCheck() const
