@@ -4,6 +4,10 @@
 #include "Options.h"
 #include "xmlfunctions.h"
 
+#include <wx/animate.h>
+
+static CThemeProvider* instance = 0;
+
 CThemeProvider::CThemeProvider()
 {
 	wxArtProvider::Push(this);
@@ -11,6 +15,21 @@ CThemeProvider::CThemeProvider()
 	m_themePath = GetThemePath();
 
 	RegisterOption(OPTION_THEME);
+
+	if( !instance )
+		instance = this;
+}
+
+CThemeProvider::~CThemeProvider()
+{
+	if( instance == this ) {
+		instance = 0;
+	}	
+}
+
+CThemeProvider* CThemeProvider::Get()
+{
+	return instance;
 }
 
 static wxString SubdirFromSize(const int size)
@@ -94,6 +113,37 @@ wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& /*cl
 	}
 
 	return wxNullBitmap;
+}
+
+wxAnimation CThemeProvider::CreateAnimation(const wxArtID& id, const wxSize& size)
+{
+	if (id.Left(4) != _T("ART_"))
+		return wxAnimation();
+	wxASSERT(size.GetWidth() == size.GetHeight());
+
+	std::list<wxString> dirs = GetSearchDirs(size);
+
+	wxString name = id.Mid(4);
+
+	// The ART_* IDs are always given in uppercase ASCII,
+	// all filenames used by FileZilla for the resources
+	// are lowercase ASCII. Locale-independent transformation
+	// needed e.g. if using Turkish locale.
+	MakeLowerAscii(name);
+
+	wxLogNull logNull;
+
+	for (std::list<wxString>::const_iterator iter = dirs.begin(); iter != dirs.end(); ++iter)
+	{
+		wxString fileName = *iter + name + _T(".gif");
+
+		wxAnimation a(fileName);
+		if( a.IsOk() ) {
+			return a;
+		}
+	}
+
+	return wxAnimation();
 }
 
 std::list<wxString> CThemeProvider::GetThemes()

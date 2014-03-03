@@ -23,6 +23,7 @@
 #include "netconfwizard.h"
 #include "quickconnectbar.h"
 #include "updater.h"
+#include "update_dialog.h"
 #include "defaultfileexistsdlg.h"
 #include "loginmanager.h"
 #include "conditionaldialog.h"
@@ -1813,25 +1814,12 @@ void CMainFrame::OnFilter(wxCommandEvent& event)
 #if FZ_MANUALUPDATECHECK
 void CMainFrame::OnCheckForUpdates(wxCommandEvent& event)
 {
-#ifdef __WXMSW__
-	if( m_pUpdater && !m_pUpdater->DownloadedFile().empty() ) {
-		wxExecute(_T("\"") + m_pUpdater->DownloadedFile() +  _T("\" /update"));
-		Close();
-	}
-#endif
-
-	/*wxString version(PACKAGE_VERSION, wxConvLocal);
-	if (version[0] < '0' || version[0] > '9')
-	{
-		wxMessageBox(_("Executable contains no version info, cannot check for updates."), _("Check for updates failed"), wxICON_ERROR, this);
+	if( !m_pUpdater ) {
 		return;
 	}
 
-	CUpdateWizard dlg(this);
-	if (!dlg.Load())
-		return;
-
-	dlg.Run();*/
+	CUpdateDialog dlg( this, *m_pUpdater );
+	dlg.ShowModal();
 }
 
 void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )

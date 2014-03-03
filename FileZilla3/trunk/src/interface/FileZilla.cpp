@@ -14,6 +14,7 @@
 #include "cmdline.h"
 #include "welcome_dialog.h"
 
+#include <wx/xrc/xh_animatctrl.h>
 #include <wx/xrc/xh_bmpbt.h>
 #include <wx/xrc/xh_bttn.h>
 #include <wx/xrc/xh_chckb.h>
@@ -531,6 +532,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->AddHandler(new wxStaticLineXmlHandler);
 	pResource->AddHandler(new wxScrolledWindowXmlHandler);
 	pResource->AddHandler(new wxHyperlinkCtrlXmlHandler);
+	pResource->AddHandler(new wxAnimationCtrlXmlHandler);
 
 	wxString resourceDir = m_resourceDir;
 #if wxUSE_FILESYSTEM

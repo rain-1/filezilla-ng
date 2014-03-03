@@ -22,6 +22,7 @@ dist_resources_DATA = ascii.png \
 		speedlimits.png \
 		symlink.png \
 		synchronize.png \
+		throbber.gif \
 		unknown.png upload.png uploadadd.png
 
 if MACAPPBUNDLE
