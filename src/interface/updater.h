@@ -51,10 +51,14 @@ public:
 	CUpdater( CUpdateHandler& parent );
 	virtual ~CUpdater();
 
+	void AddHandler( CUpdateHandler& handler );
+	void RemoveHandler( CUpdateHandler& handler );
+
 	bool Run();
 
 	UpdaterState GetState() const { return state_; }
 	build AvailableBuild() const { return version_information_.available_; }
+	wxString GetChangelog() const { return version_information_.changelog; }
 
 	wxString DownloadedFile() const;
 protected:
@@ -92,7 +96,7 @@ protected:
 
 	version_information version_information_;
 
-	CUpdateHandler& parent_;
+	std::vector<CUpdateHandler*> handlers_;
 };
 
 #endif //FZ_MANUALUPDATECHECK

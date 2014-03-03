@@ -116,8 +116,8 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 	: state_(idle)
 	, engine_(new CFileZillaEngine)
 	, update_options_(new CUpdaterOptions())
-	, parent_(parent)
 {
+	AddHandler(parent);
 	engine_->Init(this, update_options_);
 
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
@@ -176,13 +176,14 @@ bool CUpdater::Run()
 	if (res != FZ_REPLY_WOULDBLOCK) {
 		SetState(failed);
 	}
+	raw_version_information_.clear();
 
 	return state_ == checking;
 }
 
 int CUpdater::Download(wxString const& url, wxString const& local_file)
 {
-	if( state_ != checking && state_ != newversion_downloading ) {
+	if( state_ != checking && state_ != newversion_downloading && state_ != checking ) {
 		return FZ_REPLY_INTERNALERROR;
 	}
 
@@ -197,7 +198,7 @@ int CUpdater::Download(wxString const& url, wxString const& local_file)
 
 int CUpdater::SendConnectCommand(wxString const& url)
 {
-	if( state_ != checking && state_ != newversion_downloading ) {
+	if( state_ != checking && state_ != newversion_downloading && state_ != checking ) {
 		return FZ_REPLY_INTERNALERROR;
 	}
 
@@ -213,7 +214,7 @@ int CUpdater::SendConnectCommand(wxString const& url)
 
 int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_file)
 {
-	if( state_ != checking && state_ != newversion_downloading ) {
+	if( state_ != checking && state_ != newversion_downloading && state_ != checking ) {
 		return FZ_REPLY_INTERNALERROR;
 	}
 
@@ -315,7 +316,7 @@ void CUpdater::ProcessOperation(CNotification* notification)
 					s = newversion;
 				}
 				else {
-					state_ = s = newversion_downloading;
+					s = newversion_downloading;
 					wxLongLong size = CLocalFileSystem::GetSize(temp);
 					if( size >= 0 && static_cast<unsigned long long>(size.GetValue()) >= version_information_.available_.size_ ) {
 						s = ProcessFinishedDownload();
@@ -657,7 +658,10 @@ void CUpdater::SetState( UpdaterState s )
 {
 	if( s != state_ ) {
 		state_ = s;
-		parent_.UpdaterStateChanged( state_, version_information_.available_ );
+		build b = version_information_.available_;
+		for( std::vector<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+			(*it)->UpdaterStateChanged( s, b );
+		}
 	}
 }
 
@@ -668,6 +672,22 @@ wxString CUpdater::DownloadedFile() const
 		ret = local_file_;
 	}
 	return ret;
+}
+
+void CUpdater::AddHandler( CUpdateHandler& handler )
+{
+	RemoveHandler(handler);
+	handlers_.push_back(&handler);
+}
+
+void CUpdater::RemoveHandler( CUpdateHandler& handler )
+{
+	for( std::vector<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+		if( *it == &handler ) {
+			handlers_.erase(it);
+			return;
+		}
+	}
 }
 
 #endif
