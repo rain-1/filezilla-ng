@@ -112,6 +112,8 @@ public:
 	bool m_use_internal_rootcert;
 };
 
+static CUpdater* instance = 0;
+
 CUpdater::CUpdater(CUpdateHandler& parent)
 	: state_(idle)
 	, engine_(new CFileZillaEngine)
@@ -122,17 +124,63 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
 	
-	ProcessFinishedData();
+	UpdaterState s = ProcessFinishedData();
+	SetState(s);
 
-	if( state_ == failed || state_ == idle ) {
-		Run();
+	RunIfNeeded();
+
+	update_timer_.SetOwner(this);
+	update_timer_.Start(1000 * 3600);
+
+	if( !instance ) {
+		instance = this;
 	}
 }
 
 CUpdater::~CUpdater()
 {
+	if( instance == this ) {
+		instance  =0;
+	}
 	delete engine_;
 	delete update_options_;
+}
+
+CUpdater* CUpdater::GetInstance()
+{
+	return instance;
+}
+
+void CUpdater::RunIfNeeded()
+{
+	if( state_ == failed || state_ == idle ) {
+		if( COptions::Get()->GetOptionVal(OPTION_UPDATECHECK) != 0 && LongTimeSinceLastCheck() ) {
+			Run();
+		}
+	}
+}
+
+bool CUpdater::LongTimeSinceLastCheck() const
+{
+	wxString const lastCheckStr = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTDATE);
+	if (lastCheckStr == _T(""))
+		return true;
+
+	wxDateTime lastCheck;
+	lastCheck.ParseDateTime(lastCheckStr);
+	if (!lastCheck.IsValid())
+		return true;
+
+	wxTimeSpan const span = wxDateTime::Now() - lastCheck;
+
+	if (span.GetSeconds() < 0)
+		// Last check in future
+		return true;
+
+	int days = 1;
+	if (!CBuildInfo::IsUnstable())
+		days = COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_INTERVAL);
+	return span.GetDays() >= days;
 }
 
 wxString CUpdater::GetUrl()
@@ -166,8 +214,10 @@ bool CUpdater::Run()
 		return false;
 	}
 
+	wxDateTime const t = wxDateTime::Now();
+	COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTDATE, t.Format(_T("%Y-%m-%d %H:%M:%S")));
+
 	local_file_.clear();
-	wxDateTime t = wxDateTime::Now();
 	log_ = wxString::Format(_("Started update check on %s\n"), t.Format().c_str());
 
 	SetState(checking);
@@ -552,6 +602,7 @@ void CUpdater::ParseData()
 
 void CUpdater::OnTimer(wxTimerEvent& ev)
 {
+	RunIfNeeded();
 }
 
 bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum )

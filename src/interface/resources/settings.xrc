@@ -1978,9 +1978,8 @@
                 <object class="wxChoice" name="ID_UPDATECHECK">
                   <content>
                     <item>Never</item>
+                    <item>Once a day</item>
                     <item>Once a week</item>
-                    <item>Every two weeks</item>
-                    <item>Every month</item>
                   </content>
                   <selection>1</selection>
                 </object>
@@ -1998,7 +1997,7 @@
                   <content>
                     <item>Stable versions only</item>
                     <item>Stable and beta versions</item>
-<!--                    <item>Stable, beta and nightly versions</item>-->
+                    <item>Stable, beta and nightly versions</item>
                   </content>
                   <selection>0</selection>
                 </object>
