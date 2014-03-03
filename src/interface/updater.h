@@ -63,6 +63,9 @@ public:
 	wxString DownloadedFile() const;
 
 	wxULongLong BytesDownloaded() const;
+
+	wxString GetLog() const { return log_; }
+
 protected:
 	int Download(wxString const& url, wxString const& local_file = _T(""));
 
@@ -75,13 +78,14 @@ protected:
 	void ProcessData(CNotification* notification);
 	void ParseData();
 	UpdaterState ProcessFinishedDownload();
+	UpdaterState ProcessFinishedData();
 
-	bool VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum ) const;
+	bool VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum );
 
 	wxString GetTempFile() const;
 	CLocalPath GetDownloadDir() const;
 	wxString GetFilename( wxString const& url) const;
-	wxString GetLocalFile( build const& b, bool allow_existing ) const;
+	wxString GetLocalFile( build const& b, bool allow_existing );
 
 	void SetState( UpdaterState s );
 
@@ -99,6 +103,8 @@ protected:
 	version_information version_information_;
 
 	std::vector<CUpdateHandler*> handlers_;
+
+	wxString log_;
 };
 
 #endif //FZ_MANUALUPDATECHECK

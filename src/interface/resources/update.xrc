@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<resource>
+<resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
   <object class="wxDialog" name="ID_UPDATE_DIALOG">
     <title>Check for Updates</title>
     <object class="wxBoxSizer">
@@ -157,43 +157,44 @@
     <object class="wxFlexGridSizer">
       <object class="sizeritem">
         <object class="wxStaticText">
-          <label>Information about the latest version of FileZilla could not be retrieved.</label>
+          <label>Information about the latest version of FileZilla could not be retrieved. Please try again later.</label>
         </object>
+      </object>
+      <object class="sizeritem">
+        <object class="wxHyperlinkCtrl" name="ID_RETRY">
+          <label>Try again</label>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <object class="wxTextCtrl" name="ID_DETAILS">
+          <style>wxTE_AUTO_SCROLL|wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL|wxTE_DONTWRAP</style>
+        </object>
+        <option>1</option>
+        <flag>wxGROW</flag>
+        <minsize>-1,200</minsize>
       </object>
       <object class="sizeritem">
         <object class="wxHyperlinkCtrl" name="ID_SHOW_DETAILS">
           <label>Show details</label>
         </object>
+        <flag>wxALIGN_RIGHT|wxTOP|wxBOTTOM</flag>
+        <border>10</border>
       </object>
       <object class="sizeritem">
-        <object class="wxTextCtrl" name="ID_DETAILS">
-          <style>wxTE_AUTO_SCROLL|wxTE_MULTILINE</style>
+        <object class="wxStaticText" name="ID_WEBSITE_TEXT">
+          <label>You can download the latest version from the FileZilla website:</label>
         </object>
-        <option>1</option>
-        <flag>wxGROW</flag>
-        <minsize>-1,200</minsize>
+      </object>
+      <object class="sizeritem">
+        <object class="wxHyperlinkCtrl" name="ID_WEBSITE_LINK">
+          <url>https://filezilla-project.org/</url>
+        </object>
       </object>
       <cols>1</cols>
       <vgap>5</vgap>
       <hgap>5</hgap>
       <growablecols>0</growablecols>
       <growablerows>2</growablerows>
-      <object class="sizeritem">
-        <object class="wxFlexGridSizer">
-          <object class="sizeritem">
-            <object class="wxStaticText" name="ID_WEBSITE_TEXT">
-              <label>You can also download the latest versions from the FileZilla website:</label>
-            </object>
-          </object>
-          <object class="sizeritem">
-            <object class="wxHyperlinkCtrl" name="ID_WEBSITE_LINK">
-              <url>https://filezilla-project.org/</url>
-            </object>
-          </object>
-          <cols>2</cols>
-          <hgap>5</hgap>
-        </object>
-      </object>
     </object>
   </object>
   <object class="wxPanel" name="ID_LATEST_PANEL">
