@@ -61,6 +61,8 @@ public:
 	wxString GetChangelog() const { return version_information_.changelog; }
 
 	wxString DownloadedFile() const;
+
+	wxULongLong BytesDownloaded() const;
 protected:
 	int Download(wxString const& url, wxString const& local_file = _T(""));
 
