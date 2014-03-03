@@ -1165,9 +1165,6 @@ void CWrapEngine::ClearCache()
 
 void CWrapEngine::CheckLanguage()
 {
-	// Just don't bother with wrapping on anything other than UCS-2
-	// FIXME: Use charset conversion routines to convert into UCS-2 and back into
-	//        local charset if not using unicode.
 	int lang = wxGetApp().GetCurrentLanguage();
 	if (lang == wxLANGUAGE_CHINESE || lang == wxLANGUAGE_CHINESE_SIMPLIFIED ||
 		lang == wxLANGUAGE_CHINESE_TRADITIONAL || lang == wxLANGUAGE_CHINESE_HONGKONG ||
