@@ -157,7 +157,8 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->Show(downloading);
 		if( downloading ) {
 			timer_.Start(500);
-			OnTimer(wxTimerEvent());
+			wxTimerEvent ev;
+			OnTimer(ev);
 		}
 
 		bool ready = s == newversion_ready;
