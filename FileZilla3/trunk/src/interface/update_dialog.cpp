@@ -185,7 +185,11 @@ void CUpdateDialog::OnInstall(wxCommandEvent& ev)
 	}
 #ifdef __WXMSW__
 	wxExecute(_T("\"") + f +  _T("\" /update"));
-	parent_->Close();
+	wxWindow* p = parent_;
+	while( p->GetParent() ) {
+		p = p->GetParent();
+	}
+	p->Close();
 #endif
 }
 

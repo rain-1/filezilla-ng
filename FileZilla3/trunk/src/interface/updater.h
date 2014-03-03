@@ -66,8 +66,13 @@ public:
 
 	wxString GetLog() const { return log_; }
 
+	bool LongTimeSinceLastCheck() const;
+
+	static CUpdater* GetInstance();
 protected:
 	int Download(wxString const& url, wxString const& local_file = _T(""));
+
+	void RunIfNeeded();
 
 	int SendConnectCommand(wxString const& url);
 	int SendTransferCommand(wxString const& url, wxString const& local_file);
@@ -105,6 +110,8 @@ protected:
 	std::vector<CUpdateHandler*> handlers_;
 
 	wxString log_;
+
+	wxTimer update_timer_;
 };
 
 #endif //FZ_MANUALUPDATECHECK

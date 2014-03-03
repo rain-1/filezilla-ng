@@ -427,7 +427,7 @@ int COptions::Validate(unsigned int nID, int value)
 	switch (nID)
 	{
 	case OPTION_UPDATECHECK_INTERVAL:
-		if (value < 7 || value > 9999)
+		if (value < 1 || value > 7)
 			value = 7;
 		break;
 	case OPTION_LOGGING_DEBUGLEVEL:

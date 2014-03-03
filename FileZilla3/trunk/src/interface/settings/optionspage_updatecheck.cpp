@@ -6,6 +6,8 @@
 #include "settingsdialog.h"
 #include "optionspage.h"
 #include "optionspage_updatecheck.h"
+#include "updater.h"
+#include "update_dialog.h"
 
 BEGIN_EVENT_TABLE(COptionsPageUpdateCheck, COptionsPage)
 EVT_BUTTON(XRCID("ID_RUNUPDATECHECK"), COptionsPageUpdateCheck::OnRunUpdateCheck)
@@ -20,18 +22,32 @@ bool COptionsPageUpdateCheck::LoadPage()
 	else
 	{
 		int days = m_pOptions->GetOptionVal(OPTION_UPDATECHECK_INTERVAL);
-		if (days <= 7)
+		if (days < 7)
 			sel = 1;
-		else if (days <= 14)
-			sel = 2;
 		else
-			sel = 3;
+			sel = 2;
 	}
 	SetChoice(XRCID("ID_UPDATECHECK"), sel, failure);
 
-	SetChoice(XRCID("ID_UPDATETYPE"), (m_pOptions->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 0) ? 1 : 0, failure);
+	int type = m_pOptions->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA);
+	if( type < 0 || type > 2 ) {
+		type = 1;
+	}
+	SetChoice(XRCID("ID_UPDATETYPE"), type, failure);
 
 	return !failure;
+}
+
+bool COptionsPageUpdateCheck::Validate()
+{
+	int type = GetChoice(XRCID("ID_UPDATETYPE"));
+	if( type == 2 && m_pOptions->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 2 ) {
+		if (wxMessageBox(_("Warning, use nightly builds at your own risk.\nNo support is given for nightly builds.\nNightly builds may not work as expected and might even damage your system.\n\nDo you really want to check for nightly builds?"), _("Updates"), wxICON_EXCLAMATION | wxYES_NO, this) != wxYES) {
+			bool tmp;
+			SetChoice(XRCID("ID_UPDATETYPE"), m_pOptions->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA), tmp);
+		}
+	}
+	return true;
 }
 
 bool COptionsPageUpdateCheck::SavePage()
@@ -42,32 +58,33 @@ bool COptionsPageUpdateCheck::SavePage()
 	switch (sel)
 	{
 	case 1:
-		days = 7;
+		days = 1;
 		break;
 	case 2:
-		days = 14;
-		break;
-	case 3:
-		days = 30;
+		days = 7;
 		break;
 	default:
+		days = 0;
 		break;
 	}
 	m_pOptions->SetOption(OPTION_UPDATECHECK_INTERVAL, days);
 
 	int type = GetChoice(XRCID("ID_UPDATETYPE"));
-	m_pOptions->SetOption(OPTION_UPDATECHECK_CHECKBETA, (type > 0) ? 1 : 0);
+	if( type < 0 || type > 2 ) {
+		type = 1;
+	}
+	m_pOptions->SetOption(OPTION_UPDATECHECK_CHECKBETA, type);
 
 	return true;
 }
 
 void COptionsPageUpdateCheck::OnRunUpdateCheck(wxCommandEvent &event)
 {
-	/*CUpdateWizard dlg(this);
-	if (!dlg.Load())
-		return;
-
-	dlg.Run();*/
+	CUpdater* updater = CUpdater::GetInstance();
+	if( updater ) {
+		CUpdateDialog dlg( this, *updater );
+		dlg.ShowModal();
+	}
 }
 
-#endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
+#endif

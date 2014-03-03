@@ -9,6 +9,7 @@ public:
 	virtual wxString GetResourceName() { return _T("ID_SETTINGS_UPDATECHECK"); }
 	virtual bool LoadPage();
 	virtual bool SavePage();
+	virtual bool Validate();
 
 protected:
 	void OnRunUpdateCheck(wxCommandEvent& event);
