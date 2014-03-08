@@ -1412,11 +1412,9 @@ void CMainFrame::OnTimer(wxTimerEvent& event)
 		evt.SetCanVeto(false);
 		AddPendingEvent(evt);
 	}
-#if FZ_MANUALUPDATECHECK
 	else if( event.GetId() == update_dialog_timer_.GetId() ) {
 		TriggerUpdateDialog();
 	}
-#endif
 }
 
 void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
@@ -1828,9 +1826,11 @@ void CMainFrame::OnCheckForUpdates(wxCommandEvent& event)
 	dlg.ShowModal();
 	update_dialog_timer_.Stop();
 }
+#endif
 
 void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 {
+#if FZ_AUTOUPDATECHECK
 	if( !m_pMenuBar ) {
 		return;
 	}
@@ -1857,6 +1857,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 	else {
 		pItem->SetItemLabel(name);
 	}
+#endif
 }
 
 void CMainFrame::TriggerUpdateDialog()
@@ -1887,7 +1888,6 @@ void CMainFrame::TriggerUpdateDialog()
 	// In case the timer was started while the dialog was up.
 	update_dialog_timer_.Stop();
 }
-#endif
 
 void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagelog_position /*=-1*/)
 {
