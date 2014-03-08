@@ -36,7 +36,7 @@ void CQueueViewSuccessful::OnContextMenu(wxContextMenuEvent& event)
 	delete pMenu;
 }
 
-void CQueueViewSuccessful::OnMenuAutoClear(wxCommandEvent& event)
+void CQueueViewSuccessful::OnMenuAutoClear(wxCommandEvent&)
 {
 	m_autoClear = !m_autoClear;
 	COptions::Get()->SetOption(OPTION_QUEUE_SUCCESSFUL_AUTOCLEAR, m_autoClear ? true : false);

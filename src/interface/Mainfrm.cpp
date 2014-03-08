@@ -64,8 +64,8 @@
 #endif
 
 #ifdef __WXGTK__
-DECLARE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED, -1);
-DEFINE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED);
+DECLARE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED, -1)
+DEFINE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED)
 #endif
 
 static int tab_hotkey_ids[10];
@@ -2791,7 +2791,7 @@ void CMainFrame::OnMenuNewTab(wxCommandEvent& event)
 		m_pContextControl->CreateTab();
 }
 
-void CMainFrame::OnMenuCloseTab(wxCommandEvent& event)
+void CMainFrame::OnMenuCloseTab(wxCommandEvent&)
 {
 	if (!m_pContextControl)
 		return;

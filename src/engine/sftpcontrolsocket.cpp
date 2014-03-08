@@ -594,7 +594,7 @@ int CSftpControlSocket::ConnectSend()
 		return FZ_REPLY_ERROR;
 }
 
-void CSftpControlSocket::OnSftpEvent(wxCommandEvent& event)
+void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 {
 	if (!m_pCurrentServer)
 		return;
@@ -2082,7 +2082,7 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 	return SendNextCommand();
 }
 
-int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString& reply)
+int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 {
 	LogMessage(Debug_Verbose, _T("CSftpControlSocket::MkdirParseResonse"));
 
@@ -2242,7 +2242,7 @@ int CSftpControlSocket::Delete(const CServerPath& path, const std::list<wxString
 	return SendNextCommand();
 }
 
-int CSftpControlSocket::DeleteParseResponse(bool successful, const wxString& reply)
+int CSftpControlSocket::DeleteParseResponse(bool successful, const wxString&)
 {
 	LogMessage(Debug_Verbose, _T("CSftpControlSocket::DeleteParseResponse"));
 
@@ -2369,7 +2369,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CSftpControlSocket::RemoveDirParseResponse(bool successful, const wxString& reply)
+int CSftpControlSocket::RemoveDirParseResponse(bool successful, const wxString&)
 {
 	LogMessage(Debug_Verbose, _T("CSftpControlSocket::RemoveDirParseResponse"));
 
@@ -2444,7 +2444,7 @@ int CSftpControlSocket::Chmod(const CChmodCommand& command)
 	return SendNextCommand();
 }
 
-int CSftpControlSocket::ChmodParseResponse(bool successful, const wxString& reply)
+int CSftpControlSocket::ChmodParseResponse(bool successful, const wxString&)
 {
 	CSftpChmodOpData *pData = static_cast<CSftpChmodOpData*>(m_pCurOpData);
 	if (!pData)
@@ -2566,7 +2566,7 @@ int CSftpControlSocket::Rename(const CRenameCommand& command)
 	return SendNextCommand();
 }
 
-int CSftpControlSocket::RenameParseResponse(bool successful, const wxString& reply)
+int CSftpControlSocket::RenameParseResponse(bool successful, const wxString&)
 {
 	CSftpRenameOpData *pData = static_cast<CSftpRenameOpData*>(m_pCurOpData);
 	if (!pData)

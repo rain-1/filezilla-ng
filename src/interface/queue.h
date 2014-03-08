@@ -51,7 +51,7 @@ public:
 	CQueueItem* GetTopLevelItem();
 	const CQueueItem* GetTopLevelItem() const;
 	int GetItemIndex() const; // Return the visible item index relative to the topmost parent item.
-	virtual void SaveItem(TiXmlElement* pElement) const {}
+	virtual void SaveItem(TiXmlElement*) const {}
 
 	virtual enum QueueItemType GetType() const = 0;
 

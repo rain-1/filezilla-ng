@@ -77,7 +77,7 @@ public:
 
 	void ClearSelection();
 
-	virtual void OnNavigationEvent(bool forward) {}
+	virtual void OnNavigationEvent(bool) {}
 
 protected:
 	CQueueView *m_pQueue;

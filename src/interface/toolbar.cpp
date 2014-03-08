@@ -87,7 +87,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	return toolbar;
 }
 
-void CToolBar::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CToolBar::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	switch (notification)
 	{

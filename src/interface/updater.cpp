@@ -279,7 +279,7 @@ int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_fil
 	return res;
 }
 
-void CUpdater::OnEngineEvent(wxEvent& ev)
+void CUpdater::OnEngineEvent(wxEvent&)
 {
 	if (!engine_)
 		return;
@@ -591,7 +591,7 @@ void CUpdater::ParseData()
 	COptions::Get()->SetOption( OPTION_UPDATECHECK_NEWVERSION, raw_version_information_ );
 }
 
-void CUpdater::OnTimer(wxTimerEvent& ev)
+void CUpdater::OnTimer(wxTimerEvent&)
 {
 	RunIfNeeded();
 }
@@ -617,7 +617,7 @@ bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString 
 			return false;
 		}
 		char buffer[65536];
-		size_t read;
+		ssize_t read;
 		while ((read = f.Read(buffer, sizeof(buffer))) > 0) {
 			SHA512_Bytes(&state, buffer, read);
 		}

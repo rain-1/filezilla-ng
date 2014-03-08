@@ -749,7 +749,7 @@ bool CTransferSocket::CheckGetNextReadBuffer()
 	return true;
 }
 
-void CTransferSocket::OnIOThreadEvent(CIOThreadEvent& event)
+void CTransferSocket::OnIOThreadEvent(CIOThreadEvent&)
 {
 	if (!m_bActive || m_transferEndReason != none)
 		return;

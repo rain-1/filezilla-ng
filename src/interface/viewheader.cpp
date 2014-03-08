@@ -122,7 +122,7 @@ CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 #endif //__WXMSW__
 }
 
-void CViewHeader::OnSize(wxSizeEvent& event)
+void CViewHeader::OnSize(wxSizeEvent&)
 {
 	const wxRect client_rect = GetClientRect();
 
@@ -256,7 +256,7 @@ void CViewHeader::OnComboMouseEvent(wxMouseEvent& event)
 
 #endif //__WXMSW__
 
-void CViewHeader::OnPaint(wxPaintEvent& event)
+void CViewHeader::OnPaint(wxPaintEvent&)
 {
 	wxRect rect = GetClientRect();
 	wxPaintDC dc(this);
@@ -362,7 +362,7 @@ CLocalViewHeader::CLocalViewHeader(wxWindow* pParent, CState* pState)
 	pState->RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 }
 
-void CLocalViewHeader::OnTextChanged(wxCommandEvent& event)
+void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 {
 	// This function handles auto-completion
 
@@ -479,7 +479,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent& event)
 }
 
 #ifdef __WXGTK__
-void CLocalViewHeader::OnSelectTextEvent(wxCommandEvent& event)
+void CLocalViewHeader::OnSelectTextEvent(wxCommandEvent&)
 {
 	if (m_autoCompletionText == _T(""))
 		return;
@@ -520,7 +520,7 @@ void CLocalViewHeader::OnSelectionChanged(wxCommandEvent& event)
 	m_pState->SetLocalDir(dir);
 }
 
-void CLocalViewHeader::OnTextEnter(wxCommandEvent& event)
+void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 {
 #ifdef __WXGTK__
 	m_autoCompletionText = _T("");
@@ -539,7 +539,7 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent& event)
 	}
 }
 
-void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications, const wxString&, const void*)
 {
 	wxASSERT(notification == STATECHANGE_LOCAL_DIR);
 
@@ -563,9 +563,10 @@ CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState* pState)
 	m_pComboBox->Disable();
 }
 
-void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	wxASSERT(notification == STATECHANGE_REMOTE_DIR);
+	(void)notification;
 
 	m_path = pState->GetRemotePath();
 	if (m_path.IsEmpty())
@@ -587,7 +588,7 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 	}
 }
 
-void CRemoteViewHeader::OnTextEnter(wxCommandEvent& event)
+void CRemoteViewHeader::OnTextEnter(wxCommandEvent&)
 {
 	CServerPath path = m_path;
 	wxString value = m_pComboBox->GetValue();

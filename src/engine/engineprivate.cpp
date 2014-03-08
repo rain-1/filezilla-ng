@@ -32,7 +32,7 @@ std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
-DEFINE_EVENT_TYPE(fzEVT_ENGINE_NOTIFICATION);
+DEFINE_EVENT_TYPE(fzEVT_ENGINE_NOTIFICATION)
 
 wxFzEngineEvent::wxFzEngineEvent(int id, enum EngineNotificationType eventType, int data /*=0*/) : wxEvent(id, fzEVT_ENGINE_NOTIFICATION)
 {
@@ -300,7 +300,7 @@ int CFileZillaEnginePrivate::Disconnect(const CDisconnectCommand &command)
 	return res;
 }
 
-int CFileZillaEnginePrivate::Cancel(const CCancelCommand &command)
+int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 {
 	if (!IsBusy())
 		return FZ_REPLY_OK;
@@ -600,7 +600,7 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 	return 0;
 }
 
-void CFileZillaEnginePrivate::OnTimer(wxTimerEvent& event)
+void CFileZillaEnginePrivate::OnTimer(wxTimerEvent&)
 {
 	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != cmd_connect)
 	{

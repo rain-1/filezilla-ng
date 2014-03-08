@@ -42,7 +42,7 @@ bool CAskSavePasswordDialog::Run(wxWindow* parent)
 	return ret;
 }
 
-void CAskSavePasswordDialog::OnRadioButtonChanged(wxCommandEvent& event)
+void CAskSavePasswordDialog::OnRadioButtonChanged(wxCommandEvent&)
 {
 	wxRadioButton* yes = XRCCTRL(*this, "ID_REMEMBER_NO", wxRadioButton);
 	wxRadioButton* no = XRCCTRL(*this, "ID_REMEMBER_YES", wxRadioButton);

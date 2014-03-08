@@ -1935,7 +1935,7 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 	return true;
 }
 
-void CRemoteListView::OnMenuChmod(wxCommandEvent& event)
+void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle())
 	{
@@ -3144,7 +3144,7 @@ void CRemoteListView::OnNavigationEvent(bool forward)
 	}
 }
 
-void CRemoteListView::OnMenuNewfile(wxCommandEvent& event)
+void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 	{

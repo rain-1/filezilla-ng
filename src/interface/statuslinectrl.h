@@ -43,6 +43,11 @@ protected:
 	// since at the very start the speed is hardly accurate (e.g. due to TCP slow start)
 	struct _past_data
 	{
+		_past_data()
+			: elapsed()
+			, offset()
+		{}
+
 		int elapsed;
 		wxFileOffset offset;
 	} m_past_data[10];

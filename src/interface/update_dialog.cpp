@@ -194,7 +194,7 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 	}
 }
 
-void CUpdateDialog::OnInstall(wxCommandEvent& ev)
+void CUpdateDialog::OnInstall(wxCommandEvent&)
 {
 	wxString f = updater_.DownloadedFile();
 	if( f.empty() ) {
@@ -220,7 +220,7 @@ void CUpdateDialog::OnInstall(wxCommandEvent& ev)
 #endif
 }
 
-void CUpdateDialog::OnTimer(wxTimerEvent& ev)
+void CUpdateDialog::OnTimer(wxTimerEvent&)
 {
 	wxULongLong size = updater_.AvailableBuild().size_;
 	wxULongLong downloaded = updater_.BytesDownloaded();
@@ -233,7 +233,7 @@ void CUpdateDialog::OnTimer(wxTimerEvent& ev)
 	XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->SetLabel(wxString::Format(_T("(%u%% downloaded)"), percent));
 }
 
-void CUpdateDialog::ShowDetails(wxHyperlinkEvent& ev)
+void CUpdateDialog::ShowDetails(wxHyperlinkEvent&)
 {
 	XRCCTRL(*this, "ID_SHOW_DETAILS", wxHyperlinkCtrl)->Hide();
 	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Show();
@@ -241,7 +241,7 @@ void CUpdateDialog::ShowDetails(wxHyperlinkEvent& ev)
 	panels_[pagenames::failed]->Layout();
 }
 
-void CUpdateDialog::Retry(wxHyperlinkEvent& ev)
+void CUpdateDialog::Retry(wxHyperlinkEvent&)
 {
 	if( updater_.GetState() == failed ) {
 		updater_.Run();

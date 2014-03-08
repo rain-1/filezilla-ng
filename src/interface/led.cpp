@@ -49,7 +49,7 @@ CLed::~CLed()
 	m_timer.Stop();
 }
 
-void CLed::OnPaint(wxPaintEvent& event)
+void CLed::OnPaint(wxPaintEvent&)
 {
 	wxPaintDC dc(this);
 
@@ -95,7 +95,7 @@ void CLed::OnTimer(wxTimerEvent& event)
 	}
 }
 
-void CLed::OnEnterWindow(wxMouseEvent& event)
+void CLed::OnEnterWindow(wxMouseEvent&)
 {
 	wxCommandEvent requestUpdateEvent(fzEVT_UPDATE_LED_TOOLTIP, GetId());
 	requestUpdateEvent.SetEventObject(this);
