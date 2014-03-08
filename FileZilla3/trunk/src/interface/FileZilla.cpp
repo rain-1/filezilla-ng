@@ -66,9 +66,9 @@
 #endif
 
 #ifndef __WXGTK__
-IMPLEMENT_APP(CFileZillaApp);
+IMPLEMENT_APP(CFileZillaApp)
 #else
-IMPLEMENT_APP_NO_MAIN(CFileZillaApp);
+IMPLEMENT_APP_NO_MAIN(CFileZillaApp)
 #endif //__WXGTK__
 
 CFileZillaApp::CFileZillaApp()
@@ -653,32 +653,9 @@ wxString CFileZillaApp::GetCurrentLanguageCode() const
 }
 
 #if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
-
 void CFileZillaApp::OnFatalException()
 {
-	//GenerateReport(wxDebugReport::Context_Exception);
 }
-
-void CFileZillaApp::GenerateReport(wxDebugReport::Context ctx)
-{
-	/*
-	wxDebugReport report;
-
-	// add all standard files: currently this means just a minidump and an
-	// XML file with system info and stack trace
-	report.AddAll(ctx);
-
-	// calling Show() is not mandatory, but is more polite
-	if ( wxDebugReportPreviewStd().Show(report) )
-	{
-		if ( report.Process() )
-		{
-			// report successfully uploaded
-		}
-	}*/
-	//else: user cancelled the report
-}
-
 #endif
 
 void CFileZillaApp::DisplayEncodingWarning()

@@ -740,19 +740,19 @@ void CProxySocket::OnSend()
 	}
 }
 
-int CProxySocket::Read(void *buffer, unsigned int size, int& error)
+int CProxySocket::Read(void *, unsigned int, int& error)
 {
 	error = EAGAIN;
 	return -1;
 }
 
-int CProxySocket::Peek(void *buffer, unsigned int size, int& error)
+int CProxySocket::Peek(void *, unsigned int, int& error)
 {
 	error = EAGAIN;
 	return -1;
 }
 
-int CProxySocket::Write(const void *buffer, unsigned int size, int& error)
+int CProxySocket::Write(const void *, unsigned int, int& error)
 {
 	error = EAGAIN;
 	return -1;

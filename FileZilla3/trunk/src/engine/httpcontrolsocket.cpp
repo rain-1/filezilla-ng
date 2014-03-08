@@ -345,7 +345,7 @@ enum filetransferStates
 
 int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath &remotePath,
 							  const wxString &remoteFile, bool download,
-							  const CFileTransferCommand::t_transferSettings& transferSettings)
+							  const CFileTransferCommand::t_transferSettings&)
 {
 	LogMessage(Debug_Verbose, _T("CHttpControlSocket::FileTransfer()"));
 

@@ -77,7 +77,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	return true;
 }
 
-void CWelcomeDialog::OnTimer(wxTimerEvent& event)
+void CWelcomeDialog::OnTimer(wxTimerEvent&)
 {
 	ShowModal();
 	Destroy();

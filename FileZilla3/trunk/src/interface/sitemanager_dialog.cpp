@@ -536,7 +536,7 @@ void CSiteManagerDialog::OnCancel(wxCommandEvent& event)
 	EndModal(wxID_CANCEL);
 }
 
-void CSiteManagerDialog::OnConnect(wxCommandEvent& event)
+void CSiteManagerDialog::OnConnect(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)

@@ -620,7 +620,7 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 	return buffer;
 }
 
-void CControlSocket::OnTimer(wxTimerEvent& event)
+void CControlSocket::OnTimer(wxTimerEvent&)
 {
 	int timeout = m_pEngine->GetOptions()->GetOptionVal(OPTION_TIMEOUT);
 	if (!timeout)
@@ -665,7 +665,7 @@ int CControlSocket::SendNextCommand()
 	return FZ_REPLY_ERROR;
 }
 
-int CControlSocket::ParseSubcommandResult(int prevResult)
+int CControlSocket::ParseSubcommandResult(int)
 {
 	ResetOperation(FZ_REPLY_INTERNALERROR);
 	return FZ_REPLY_ERROR;
@@ -848,7 +848,7 @@ enum CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 	return own->reason;
 }
 
-void CControlSocket::OnObtainLock(wxCommandEvent& event)
+void CControlSocket::OnObtainLock(wxCommandEvent&)
 {
 	if (ObtainLockFromEvent() == lock_unknown)
 		return;

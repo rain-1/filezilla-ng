@@ -85,7 +85,7 @@ void wxListCtrlEx::OnPostScroll()
 {
 }
 
-void wxListCtrlEx::OnPostScrollEvent(wxCommandEvent& event)
+void wxListCtrlEx::OnPostScrollEvent(wxCommandEvent&)
 {
 	OnPostScroll();
 }
@@ -1188,7 +1188,7 @@ CListCtrlDropTarget::CListCtrlDropTarget(wxListCtrlEx* pListCtrl)
 }
 
 
-bool CListCtrlDropTarget::OnDrop(wxCoord x, wxCoord y)
+bool CListCtrlDropTarget::OnDrop(wxCoord, wxCoord)
 {
 	m_timer.Stop();
 	return true;

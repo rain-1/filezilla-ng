@@ -118,7 +118,7 @@ void CFilterEditDialog::SaveFilter(CFilter& filter)
 	}
 }
 
-void CFilterEditDialog::OnNew(wxCommandEvent& event)
+void CFilterEditDialog::OnNew(wxCommandEvent&)
 {
 	if (m_currentSelection != -1)
 	{

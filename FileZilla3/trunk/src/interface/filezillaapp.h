@@ -60,7 +60,6 @@ protected:
 
 #if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
 	virtual void OnFatalException();
-	void GenerateReport(wxDebugReport::Context ctx);
 #endif
 
 	wxString GetDataDir(wxString fileToFind) const;

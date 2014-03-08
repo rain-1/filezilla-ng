@@ -29,7 +29,6 @@
 #ifndef NO_LIBDL
 #include <dlfcn.h>		       /* Dynamic library loading */
 #endif /*  NO_LIBDL */
-//#include "charset.h"
 
 struct Filename {
     char path[FILENAME_MAX];

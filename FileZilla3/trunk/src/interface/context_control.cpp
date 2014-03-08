@@ -16,8 +16,8 @@
 #include "view.h"
 #include "viewheader.h"
 
-DECLARE_EVENT_TYPE(fzEVT_TAB_CLOSING_DEFERRED, -1);
-DEFINE_EVENT_TYPE(fzEVT_TAB_CLOSING_DEFERRED);
+DECLARE_EVENT_TYPE(fzEVT_TAB_CLOSING_DEFERRED, -1)
+DEFINE_EVENT_TYPE(fzEVT_TAB_CLOSING_DEFERRED)
 
 BEGIN_EVENT_TABLE(CContextControl, wxSplitterWindow)
 EVT_MENU(XRCID("ID_TABCONTEXT_REFRESH"), CContextControl::OnTabRefresh)
@@ -485,7 +485,7 @@ void CContextControl::OnTabClosing_Deferred(wxCommandEvent& event)
 }
 
 
-void CContextControl::OnTabChanged(wxAuiNotebookEvent& event)
+void CContextControl::OnTabChanged(wxAuiNotebookEvent&)
 {
 	int i = m_tabs->GetSelection();
 	if (i < 0 || i >= (int)m_context_controls.size())

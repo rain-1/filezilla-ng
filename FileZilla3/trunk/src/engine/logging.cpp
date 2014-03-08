@@ -135,7 +135,7 @@ void CLogging::LogMessageRaw(MessageType nMessageType, const wxChar *msg) const
 	m_pEngine->AddNotification(notification);
 }
 
-void CLogging::LogMessage(wxString SourceFile, int nSourceLine, void *pInstance, MessageType nMessageType, const wxChar *msgFormat, ...) const
+void CLogging::LogMessage(wxString SourceFile, int nSourceLine, void *, MessageType nMessageType, const wxChar *msgFormat, ...) const
 {
 	InitLogFile();
 

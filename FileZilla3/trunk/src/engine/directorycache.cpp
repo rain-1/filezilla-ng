@@ -378,7 +378,7 @@ bool CDirectoryCache::GetChangeTime(CMonotonicTime& time, const CServer &server,
 	return false;
 }
 
-void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath& target)
+void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath&)
 {
 	// TODO: This is not 100% foolproof and may not work properly
 	// Perhaps just throw away the complete cache?

@@ -24,4 +24,4 @@ typedef struct
 void fz_timer_init(_fztimer *timer);
 int fz_timer_check(_fztimer *timer);
 
-#endif //__FZSFTP_H__
+#endif

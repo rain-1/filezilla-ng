@@ -242,7 +242,7 @@ static gboolean gtk_button_release_event(GtkWidget*, void *gdk_event, CGtkEventC
 }
 #endif
 
-template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CState* pState, CQueueView* pQueue, bool border /*=false*/)
+template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CState*, CQueueView* pQueue, bool border /*=false*/)
 : wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxLC_EDIT_LABELS | (border ? wxBORDER_SUNKEN : wxNO_BORDER)),
 	CComparableListing(this)
 {
@@ -536,6 +536,8 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	}
 	return type;
 #else
+	(void)path;
+
 	if (dir)
 		return m_genericTypes[genericTypes::directory];
 
@@ -704,7 +706,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRestoreSelect
 	}
 }
 
-template<class CFileData> void CFileListCtrl<CFileData>::OnColumnRightClicked(wxListEvent& event)
+template<class CFileData> void CFileListCtrl<CFileData>::OnColumnRightClicked(wxListEvent&)
 {
 	ShowColumnEditor();
 }
@@ -922,7 +924,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnLeftDown(wxMouseEvent
 	AddPendingEvent(evt);
 }
 
-template<class CFileData> void CFileListCtrl<CFileData>::OnProcessMouseEvent(wxCommandEvent& event)
+template<class CFileData> void CFileListCtrl<CFileData>::OnProcessMouseEvent(wxCommandEvent&)
 {
 	if (m_pending_focus_processing)
 		return;

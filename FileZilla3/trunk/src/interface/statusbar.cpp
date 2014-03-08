@@ -125,7 +125,7 @@ int wxStatusBarEx::GetFieldIndex(int field)
 	return field;
 }
 
-void wxStatusBarEx::OnSize(wxSizeEvent& event)
+void wxStatusBarEx::OnSize(wxSizeEvent&)
 {
 #ifdef __WXMSW__
 	const int count = GetFieldsCount();
@@ -309,11 +309,11 @@ protected:
 	CStatusBar* m_pStatusBar;
 
 	DECLARE_EVENT_TABLE()
-	void OnLeftMouseUp(wxMouseEvent& event)
+	void OnLeftMouseUp(wxMouseEvent&)
 	{
 		m_pStatusBar->OnHandleLeftClick(this);
 	}
-	void OnRightMouseUp(wxMouseEvent& event)
+	void OnRightMouseUp(wxMouseEvent&)
 	{
 		m_pStatusBar->OnHandleRightClick(this);
 	}
@@ -648,7 +648,7 @@ void CStatusBar::OnOptionChanged(int option)
 	}
 }
 
-void CStatusBar::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CStatusBar::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_SERVER || notification == STATECHANGE_CHANGEDCONTEXT)
 	{
@@ -657,7 +657,7 @@ void CStatusBar::OnStateChange(CState* pState, enum t_statechange_notifications 
 	}
 }
 
-void CStatusBar::OnSpeedLimitsEnable(wxCommandEvent& event)
+void CStatusBar::OnSpeedLimitsEnable(wxCommandEvent&)
 {
 	int downloadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
 	int uploadlimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
@@ -676,7 +676,7 @@ void CStatusBar::OnSpeedLimitsEnable(wxCommandEvent& event)
 		COptions::Get()->SetOption(OPTION_SPEEDLIMIT_ENABLE, 0);
 }
 
-void CStatusBar::OnSpeedLimitsConfigure(wxCommandEvent& event)
+void CStatusBar::OnSpeedLimitsConfigure(wxCommandEvent&)
 {
 	CSpeedLimitsDialog dlg;
 	dlg.Run(m_pParent);
