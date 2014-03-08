@@ -91,7 +91,6 @@ protected:
 	bool VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum );
 
 	wxString GetTempFile() const;
-	CLocalPath GetDownloadDir() const;
 	wxString GetFilename( wxString const& url) const;
 	wxString GetLocalFile( build const& b, bool allow_existing );
 
