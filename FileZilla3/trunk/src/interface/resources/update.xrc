@@ -112,6 +112,16 @@
       <hgap>5</hgap>
       <growablecols>0</growablecols>
       <growablerows>4</growablerows>
+      <object class="sizeritem">
+        <object class="wxStaticText" name="ID_NEWVERSION_WEBSITE_TEXT">
+          <label>You can download the latest version from the FileZilla website:</label>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <object class="wxHyperlinkCtrl" name="ID_NEWVERSION_WEBSITE_LINK">
+          <url>https://filezilla-project.org/</url>
+        </object>
+      </object>
     </object>
   </object>
   <object class="wxPanel" name="ID_CHECKING_PANEL">
