@@ -526,8 +526,7 @@ void CUpdater::ParseData()
 		wxString type = tokens.GetNextToken();
 		wxString versionOrDate = tokens.GetNextToken();
 
-		if (type == _T("nightly"))
-		{
+		if (type == _T("nightly")) {
 			wxDateTime nightlyDate;
 			if (!nightlyDate.ParseDate(versionOrDate))
 				continue;
@@ -536,8 +535,7 @@ void CUpdater::ParseData()
 			if (!buildDate.IsValid() || !nightlyDate.IsValid() || nightlyDate <= buildDate)
 				continue;
 		}
-		else
-		{
+		else {
 			wxLongLong v = CBuildInfo::ConvertToVersionNumber(versionOrDate);
 			if (v <= ownVersionNumber)
 				continue;

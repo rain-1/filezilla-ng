@@ -33,7 +33,7 @@
         </object>
         <option>1</option>
         <flag>wxALL|wxGROW</flag>
-        <border>5</border>
+        <border>7</border>
       </object>
     </object>
   </object>
