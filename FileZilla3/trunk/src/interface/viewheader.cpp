@@ -539,9 +539,10 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	}
 }
 
-void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications, const wxString&, const void*)
+void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	wxASSERT(notification == STATECHANGE_LOCAL_DIR);
+	(void)notification;
 
 #ifdef __WXGTK__
 	m_autoCompletionText = _T("");
