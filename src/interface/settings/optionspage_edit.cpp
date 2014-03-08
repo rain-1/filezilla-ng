@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "../Options.h"
+#include "file_utils.h"
 #include "settingsdialog.h"
 #include "optionspage.h"
 #include "optionspage_edit.h"
@@ -60,68 +61,6 @@ bool COptionsPageEdit::SavePage()
 	SetOptionFromCheck(XRCID("ID_EDIT_TRACK_LOCAL"), OPTION_EDIT_TRACK_LOCAL);
 
 	return true;
-}
-
-bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde = false)
-{
-	arguments = _T("");
-
-	if (command == _T(""))
-		return true;
-
-	wxChar inQuotes = 0;
-	wxString file;
-	for (unsigned int i = 0; i < command.Len(); i++)
-	{
-		const wxChar& c = command[i];
-		if (c == '"' || c == '\'')
-		{
-			if (!inQuotes)
-				inQuotes = c;
-			else if (c != inQuotes)
-				file += c;
-			else if (command[i + 1] == c)
-			{
-				file += c;
-				i++;
-			}
-			else
-				inQuotes = false;
-		}
-		else if (command[i] == ' ' && !inQuotes)
-		{
-			arguments = command.Mid(i + 1);
-			arguments.Trim(false);
-			break;
-		}
-		else if (is_dde && !inQuotes && (command[i] == ',' || command[i] == '#'))
-		{
-			arguments = command.Mid(i + 1);
-			arguments.Trim(false);
-			break;
-		}
-		else
-			file += command[i];
-	}
-	if (inQuotes)
-		return false;
-
-	command = file;
-
-	return true;
-}
-
-bool ProgramExists(const wxString& editor)
-{
-	if (wxFileName::FileExists(editor))
-		return true;
-
-#ifdef __WXMAC__
-	if (editor.Right(4) == _T(".app") && wxFileName::DirExists(editor))
-		return true;
-#endif
-
-	return false;
 }
 
 bool COptionsPageEdit::Validate()

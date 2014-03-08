@@ -2,14 +2,11 @@
 #include "edithandler.h"
 #include "dialogex.h"
 #include "filezillaapp.h"
+#include "file_utils.h"
 #include "queue.h"
 #include "Options.h"
 #include "window_state_manager.h"
 #include "local_filesys.h"
-
-// Defined in optionspage_edit.cpp
-bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde = false);
-bool ProgramExists(const wxString& editor);
 
 class CChangedFileDialog : public wxDialogEx
 {
@@ -911,120 +908,6 @@ wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists
 	return command + _T(" \"") + file + _T("\"");
 }
 
-
-static bool PathExpand(wxString& cmd)
-{
-#ifndef __WXMSW__
-	if (cmd[0] == '/')
-		return true;
-#else
-	if (cmd[0] == '\\')
-		// UNC or root of current working dir, whatever that is
-		return true;
-	if (cmd.Len() > 2 && cmd[1] == ':')
-		// Absolute path
-		return true;
-#endif
-
-	// Need to search for program in $PATH
-	wxString path;
-	if (!wxGetEnv(_T("PATH"), &path))
-		return false;
-
-	wxString full_cmd;
-	bool found = wxFindFileInPath(&full_cmd, path, cmd);
-#ifdef __WXMSW__
-	if (!found && cmd.Right(4).Lower() != _T(".exe"))
-	{
-		cmd += _T(".exe");
-		found = wxFindFileInPath(&full_cmd, path, cmd);
-	}
-#endif
-
-	if (!found)
-		return false;
-
-	cmd = full_cmd;
-	return true;
-}
-
-wxString CEditHandler::GetSystemOpenCommand(wxString file, bool &program_exists)
-{
-	wxFileName fn(file);
-
-	const wxString& ext = fn.GetExt();
-	if (ext == _T(""))
-		return _T("");
-
-	for (;;)
-	{
-		wxFileType* pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
-		if (!pType)
-			return _T("");
-
-		wxString cmd;
-		if (!pType->GetOpenCommand(&cmd, wxFileType::MessageParameters(file)))
-		{
-			delete pType;
-			return _T("");
-		}
-		delete pType;
-
-		if (cmd.empty())
-			return wxEmptyString;
-
-		program_exists = false;
-
-		wxString editor;
-		bool is_dde = false;
-#ifdef __WXMSW__
-		if (cmd.Left(7) == _T("WX_DDE#"))
-		{
-			// See wxWidget's wxExecute in src/msw/utilsexc.cpp
-			// WX_DDE#<command>#DDE_SERVER#DDE_TOPIC#DDE_COMMAND
-			editor = cmd.Mid(7);
-			int pos = editor.Find('#');
-			if (pos < 1)
-				return cmd;
-			editor = editor.Left(pos);
-			is_dde = true;
-		}
-		else
-#endif
-		{
-			editor = cmd;
-		}
-
-		wxString args;
-		if (!UnquoteCommand(editor, args, is_dde) || editor.empty())
-			return cmd;
-
-		if (!PathExpand(editor))
-			return cmd;
-
-		if (ProgramExists(editor))
-			program_exists = true;
-
-#ifdef __WXGTK__
-		int pos = args.Find(file);
-		if (pos != -1 && file.Find(' ') != -1 && file[0] != '\'' && file[0] != '"')
-		{
-			// Might need to quote filename, wxWidgets doesn't do it
-			if ((!pos || (args[pos - 1] != '\'' && args[pos - 1] != '"')) &&
-				args[pos + file.Length()] != '\'' && args[pos + file.Length()] != '"')
-			{
-				// Filename in command arguments isn't quoted. Repeat with quoted filename
-				file = _T("\"") + file + _T("\"");
-				continue;
-			}
-		}
-#endif
-		return cmd;
-	}
-
-	return wxEmptyString;
-}
-
 wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_exists)
 {
 	wxFileName fn(file);
@@ -1566,7 +1449,7 @@ bool CNewAssociationDialog::Show(const wxString &file)
 	pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), m_ext.c_str()));
 
 	bool program_exists = false;
-	wxString cmd = CEditHandler::Get()->GetSystemOpenCommand(_T("foo.txt"), program_exists);
+	wxString cmd = GetSystemOpenCommand(_T("foo.txt"), program_exists);
 	if (!program_exists)
 		cmd.clear();
 	if (!cmd.empty())
@@ -1663,7 +1546,7 @@ void CNewAssociationDialog::OnOK(wxCommandEvent& event)
 		else
 		{
 			bool program_exists = false;
-			wxString cmd = CEditHandler::Get()->GetSystemOpenCommand(_T("foo.txt"), program_exists);
+			wxString cmd = GetSystemOpenCommand(_T("foo.txt"), program_exists);
 			if (!program_exists)
 				cmd.clear();
 			if (!cmd.empty())

@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "buildinfo.h"
 #include "filezillaapp.h"
+#include "file_utils.h"
 #include "update_dialog.h"
 #include "themeprovider.h"
 
@@ -203,6 +204,16 @@ void CUpdateDialog::OnInstall(wxCommandEvent& ev)
 		p = p->GetParent();
 	}
 	p->Close();
+#else
+	bool program_exists = false;
+	wxString cmd = GetSystemOpenCommand(f, program_exists);
+	if( program_exists && cmd ) {
+		if (wxExecute(cmd))
+			return;
+	}
+
+	wxFileName fn(f);
+	OpenInFileManager(fn.GetPath());
 #endif
 }
 
