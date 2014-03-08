@@ -3,6 +3,7 @@
 #include "queue.h"
 #include "filezillaapp.h"
 #include "filter.h"
+#include "file_utils.h"
 #include <wx/dnd.h>
 #include "dndobjects.h"
 #include "inputdialog.h"
@@ -1288,9 +1289,6 @@ void CLocalTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 	}
 }
 
-// Defined in LocalListView.cpp
-extern bool Rename(wxWindow* pWnd, wxString dir, wxString from, wxString to);
-
 void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 {
 	if (event.IsEditCancelled())
@@ -1342,8 +1340,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	if (oldName == newName)
 		return;
 
-	if (!Rename(this, parent, oldName, newName))
-	{
+	if (!RenameFile(this, parent, oldName, newName)) {
 		event.Veto();
 		return;
 	}
@@ -1613,5 +1610,5 @@ void CLocalTreeView::OnMenuOpen(wxCommandEvent& event)
 	if (path == _T(""))
 		return;
 
-	CState::OpenInFileManager(path);
+	OpenInFileManager(path);
 }

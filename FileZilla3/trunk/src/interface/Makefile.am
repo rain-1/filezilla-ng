@@ -38,6 +38,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		filter.cpp \
 		filter_conditions_dialog.cpp \
 		filteredit.cpp \
+		file_utils.cpp \
 		import.cpp \
 		inputdialog.cpp \
 		ipcmutex.cpp \
@@ -151,6 +152,7 @@ noinst_HEADERS = aboutdialog.h \
 		 filter.h \
 		 filter_conditions_dialog.h \
 		 filteredit.h \
+		 file_utils.h \
 		 import.h \
 		 inputdialog.h \
 		 ipcmutex.h \

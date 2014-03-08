@@ -464,6 +464,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListE
 	RefreshListOnly(false);
 }
 
+#ifdef __WXMSW__
 static wxString GetExt(const wxString& file)
 {
 	wxString ret;
@@ -474,6 +475,7 @@ static wxString GetExt(const wxString& file)
 
 	return ret;
 }
+#endif
 
 template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString name, bool dir, const wxString& path /*=_T("")*/)
 {

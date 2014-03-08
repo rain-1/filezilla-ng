@@ -179,6 +179,7 @@
     <ClCompile Include="FileZilla.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="file_utils.cpp" />
     <ClCompile Include="filter.cpp" />
     <ClCompile Include="filter_conditions_dialog.cpp" />
     <ClCompile Include="filteredit.cpp" />
@@ -287,6 +288,7 @@
     <ClInclude Include="filelist_statusbar.h" />
     <ClInclude Include="filelistctrl.h" />
     <ClInclude Include="filezillaapp.h" />
+    <ClInclude Include="file_utils.h" />
     <ClInclude Include="filter.h" />
     <ClInclude Include="filter_conditions_dialog.h" />
     <ClInclude Include="filteredit.h" />

@@ -101,12 +101,6 @@ public:
 	CLocalPath GetLocalDir() const;
 	bool SetLocalDir(const wxString& dir, wxString *error = 0);
 
-	// Opens specified directory in local file manager, e.g. Explorer on Windows
-	static bool OpenInFileManager(const wxString& dir);
-	
-	// Returns a file:// URL
-	static wxString GetAsURL(const wxString& dir);
-
 	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
 	bool Disconnect();
 
