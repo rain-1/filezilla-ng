@@ -1,6 +1,7 @@
 #ifndef FILEZILLA_UPDATE_DIALOG_HEADER
 #define FILEZILLA_UPDATE_DIALOG_HEADER
 
+#if FZ_MANUALUPDATECHECK
 #include "dialogex.h"
 #include "updater.h"
 
@@ -39,4 +40,5 @@ protected:
 	void Retry(wxHyperlinkEvent& ev);
 };
 
+#endif
 #endif

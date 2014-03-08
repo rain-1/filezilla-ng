@@ -1,4 +1,7 @@
 #include <filezilla.h>
+
+#if FZ_MANUALUPDATECHECK
+
 #include "buildinfo.h"
 #include "filezillaapp.h"
 #include "file_utils.h"
@@ -244,3 +247,5 @@ void CUpdateDialog::Retry(wxHyperlinkEvent& ev)
 		updater_.Run();
 	}
 }
+
+#endif
