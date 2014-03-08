@@ -77,7 +77,7 @@ int CUpdateDialog::ShowModal()
 
 	updater_.AddHandler(*this);
 
-	if( s == idle || s == failed ) {
+	if( s == idle || s == failed || updater_.LongTimeSinceLastCheck() || (s == newversion && !updater_.AvailableBuild().url_.empty()) ) {
 		updater_.Run();
 	}
 	int ret = wxDialogEx::ShowModal();
@@ -180,6 +180,10 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		bool ready = s == newversion_ready;
 		XRCCTRL(*this, "ID_DOWNLOADED", wxStaticText)->Show(ready);
 		XRCCTRL(*this, "ID_INSTALL", wxButton)->Show(ready);
+
+		bool manual = s == newversion;
+		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_TEXT", wxStaticText)->Show(manual);
+		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_LINK", wxHyperlinkCtrl)->Show(manual);
 
 		panels_[pagenames::newversion]->Show();
 		panels_[pagenames::newversion]->Layout();
