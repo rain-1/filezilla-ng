@@ -674,9 +674,9 @@ wxString CUpdater::GetFilename( wxString const& url) const
 	if( pos != -1 ) {
 		ret = url.Mid(pos + 1);
 	}
-	pos = url.find_first_of(_T("?#"));
+	pos = ret.find_first_of(_T("?#"));
 	if( pos != -1 ) {
-		ret = url.Left(pos);
+		ret = ret.Left(pos);
 	}
 #ifdef __WXMSW__
 	ret.Replace(_T(":"), _T("_"));
