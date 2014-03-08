@@ -86,7 +86,7 @@ protected:
 	void ProcessData(CNotification* notification);
 	void ParseData();
 	UpdaterState ProcessFinishedDownload();
-	UpdaterState ProcessFinishedData();
+	UpdaterState ProcessFinishedData(bool can_download);
 
 	bool VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum );
 

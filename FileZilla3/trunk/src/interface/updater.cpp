@@ -127,7 +127,8 @@ void CUpdater::Init()
 {
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
 	
-	UpdaterState s = ProcessFinishedData();
+	UpdaterState s = ProcessFinishedData(FZ_AUTOUPDATECHECK);
+
 	SetState(s);
 
 	RunIfNeeded();
@@ -330,7 +331,7 @@ void CUpdater::ProcessNotification(CNotification* notification)
 	}
 }
 
-UpdaterState CUpdater::ProcessFinishedData()
+UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 {
 	UpdaterState s = failed;
 
@@ -361,7 +362,7 @@ UpdaterState CUpdater::ProcessFinishedData()
 				if( size >= 0 && static_cast<unsigned long long>(size.GetValue()) >= version_information_.available_.size_ ) {
 					s = ProcessFinishedDownload();
 				}
-				else if( Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
+				else if( !can_download || Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
 					s = newversion;
 				}
 			}
@@ -388,7 +389,7 @@ void CUpdater::ProcessOperation(CNotification* notification)
 		}
 	}
 	else if( state_ == checking ) {
-		s = ProcessFinishedData();
+		s = ProcessFinishedData(true);
 	}
 	else {
 		s = ProcessFinishedDownload();
