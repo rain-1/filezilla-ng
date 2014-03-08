@@ -15,4 +15,6 @@ bool OpenInFileManager(const wxString& dir);
 
 bool RenameFile(wxWindow* pWnd, wxString dir, wxString from, wxString to);
 
+CLocalPath GetDownloadDir();
+
 #endif
