@@ -17,7 +17,7 @@ SUBDIRS = . $(MAYBE_SRCDIR) $(MAYBE_LOCALES) $(MAYBE_DATADIR) $(MAYBE_TESTS)
 
 dist_noinst_SCRIPTS = autogen.sh
 
-dist_noinst_DATA = filezilla.kdevelop GPL.html
+dist_noinst_DATA = GPL.html
 
 dist_noinst_DATA += docs/iconspecs.htm
 
