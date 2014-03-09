@@ -27,6 +27,8 @@ public:
 protected:
 	CMainFrame* m_pMainFrame;
 
+	void UpdateSpeedLimitMenuItem();
+
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionChanged(int option);
 
