@@ -105,6 +105,8 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 		break;
 	}
 
+	menubar->UpdateSpeedLimitMenuItem();
+
 	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2)
 		menubar->HideItem(XRCID("ID_VIEW_MESSAGELOG"));
 
@@ -428,21 +430,24 @@ void CMenuBar::OnOptionChanged(int option)
 	case OPTION_SPEEDLIMIT_ENABLE:
 	case OPTION_SPEEDLIMIT_INBOUND:
 	case OPTION_SPEEDLIMIT_OUTBOUND:
-		{
-			bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0;
-
-			int downloadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
-			int uploadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
-
-			if (!downloadLimit && !uploadLimit)
-				enable = false;
-
-			Check(XRCID("ID_MENU_TRANSFER_SPEEDLIMITS_ENABLE"), enable);
-		}
+		UpdateSpeedLimitMenuItem();
 		break;
 	default:
 		break;
 	}
+}
+
+void CMenuBar::UpdateSpeedLimitMenuItem()
+{
+	bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0;
+
+	int downloadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
+	int uploadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
+
+	if (!downloadLimit && !uploadLimit)
+		enable = false;
+
+	Check(XRCID("ID_MENU_TRANSFER_SPEEDLIMITS_ENABLE"), enable);
 }
 
 void CMenuBar::UpdateMenubarState()
