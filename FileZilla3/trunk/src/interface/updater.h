@@ -72,6 +72,9 @@ public:
 	bool LongTimeSinceLastCheck() const;
 
 	static CUpdater* GetInstance();
+
+	bool UpdatableBuild() const;
+
 protected:
 	int Download(wxString const& url, wxString const& local_file = _T(""));
 

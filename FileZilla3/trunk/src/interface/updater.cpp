@@ -57,7 +57,6 @@ PqQuF7sJR6POArUVYkRD/2LIWsB7\n\
 -----END CERTIFICATE-----\n\
 ");
 
-
 void version_information::update_available()
 {
 	if( !nightly_.url_.empty() && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) == 2 ) {
@@ -323,6 +322,7 @@ void CUpdater::ProcessNotification(CNotification* notification)
 			CLogmsgNotification* msg = reinterpret_cast<CLogmsgNotification *>(notification);
 			log_ += msg->msg + _T("\n");
 		}
+		break;
 	default:
 		break;
 	}
@@ -542,7 +542,7 @@ void CUpdater::ParseData()
 		}
 
 		build* b = 0;
-		if( type == _T("nightly") ) {
+		if( type == _T("nightly") && UpdatableBuild() ) {
 			b = &version_information_.nightly_;
 		}
 		else if( type == _T("release") ) {
@@ -552,7 +552,7 @@ void CUpdater::ParseData()
 			b = &version_information_.beta_;
 		}
 		
-		if( b ) {
+		if( b && UpdatableBuild() ) {
 			b->version_ = versionOrDate;
 
 			if( tokens.CountTokens() == 4 ) {
@@ -752,6 +752,11 @@ wxULongLong CUpdater::BytesDownloaded() const
 		ret = 0;
 	}
 	return static_cast<unsigned long long>(ret.GetValue());
+}
+
+bool CUpdater::UpdatableBuild() const
+{return true;
+	return CBuildInfo::GetBuildType() == _T("nightly") || CBuildInfo::GetBuildType() == _T("official");
 }
 
 #endif
