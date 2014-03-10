@@ -959,10 +959,37 @@ protected:
 		}
 		if (m_triggered & WAIT_CLOSE)
 		{
-			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::close, m_triggered_errors[4]);
-			CSocketEventDispatcher::Get().SendEvent(evt);
+			SendCloseEvent();
 			m_triggered &= ~WAIT_CLOSE;
 		}
+	}
+
+	void SendCloseEvent()
+	{
+		if( !m_pSocket ) {
+			return;
+		}
+
+		CSocketEvent *evt = 0;
+#ifdef __WXMSW__
+		// MSDN says this:
+		//   FD_CLOSE being posted after all data is read from a socket.
+		//   An application should check for remaining data upon receipt
+		//   of FD_CLOSE to avoid any possibility of losing data.
+		// First half is actually plain wrong.
+		char buf;
+		if( !m_triggered_errors[4] && recv( m_pSocket->m_fd, &buf, 1, MSG_PEEK ) > 0) {
+			if( !(m_waiting & WAIT_READ) ) {
+				return;
+			}
+			evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::read, 0);
+		}
+		else
+#endif
+		{
+			evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::close, m_triggered_errors[4]);
+		}
+		CSocketEventDispatcher::Get().SendEvent(evt);			
 	}
 
 	// Call only while locked
@@ -1229,12 +1256,10 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 			CSocketEventDispatcher::Get().UpdatePending(m_pEvtHandler, this, pEvtHandler, this);
 	}
 #ifdef __WXMSW__
-	if (pEvtHandler && !m_pEvtHandler && m_state == closing && m_pSocketThread)
-	{
+	if (pEvtHandler && !m_pEvtHandler && m_state == closing && m_pSocketThread) {
 		// After getting FD_CLOSE, no further events are recorded, so send
 		// it out to new handler manually
-		CSocketEvent *evt = new CSocketEvent(pEvtHandler, this, CSocketEvent::close, m_pSocketThread->m_triggered_errors[4]);
-		CSocketEventDispatcher::Get().SendEvent(evt);
+		m_pSocketThread->SendCloseEvent();
 	}
 #else
 	wxASSERT(!pEvtHandler || m_state != closing);
@@ -1468,13 +1493,10 @@ int CSocket::Read(void* buffer, unsigned int size, int& error)
 #else
 		error = errno;
 #endif
-		if (error == EAGAIN)
-		{
-			if (m_pSocketThread)
-			{
+		if (error == EAGAIN) {
+			if (m_pSocketThread) {
 				m_pSocketThread->m_sync.Lock();
-				if (!(m_pSocketThread->m_waiting & WAIT_READ))
-				{
+				if (!(m_pSocketThread->m_waiting & WAIT_READ)) {
 					m_pSocketThread->m_waiting |= WAIT_READ;
 					m_pSocketThread->WakeupThread(true);
 				}

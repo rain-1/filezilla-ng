@@ -970,9 +970,6 @@ void CHttpControlSocket::OnClose(int error)
 		return;
 	}
 
-	if (DoReceive() == FZ_REPLY_REDIRECTED)
-		return; // Socket got closed already
-
 	// HTTP socket isn't connected outside operations
 	if (!m_pCurOpData)
 		return;
