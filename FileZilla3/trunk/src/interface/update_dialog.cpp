@@ -15,6 +15,7 @@ EVT_BUTTON(XRCID("ID_INSTALL"), CUpdateDialog::OnInstall)
 EVT_TIMER(wxID_ANY, CUpdateDialog::OnTimer)
 EVT_HYPERLINK(XRCID("ID_SHOW_DETAILS"), CUpdateDialog::ShowDetails)
 EVT_HYPERLINK(XRCID("ID_RETRY"), CUpdateDialog::Retry)
+EVT_HYPERLINK(XRCID("ID_DOWNLOAD_RETRY"), CUpdateDialog::Retry)
 END_EVENT_TABLE()
 
 namespace pagenames {
@@ -186,7 +187,12 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		XRCCTRL(*this, "ID_INSTALL", wxButton)->Show(ready);
 
 		bool manual = s == newversion;
-		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_TEXT", wxStaticText)->Show(manual);
+		bool dlfail = s == newversion && !v.url_.empty();
+		XRCCTRL(*this, "ID_DOWNLOAD_FAIL", wxStaticText)->Show(dlfail);
+		XRCCTRL(*this, "ID_DOWNLOAD_RETRY", wxHyperlinkCtrl)->Show(dlfail);
+
+		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_TEXT", wxStaticText)->Show(manual && !dlfail);
+		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_TEXT_DLFAIL", wxStaticText)->Show(manual && dlfail);
 		XRCCTRL(*this, "ID_NEWVERSION_WEBSITE_LINK", wxHyperlinkCtrl)->Show(manual);
 
 		panels_[pagenames::newversion]->Show();
@@ -243,7 +249,8 @@ void CUpdateDialog::ShowDetails(wxHyperlinkEvent&)
 
 void CUpdateDialog::Retry(wxHyperlinkEvent&)
 {
-	if( updater_.GetState() == failed ) {
+	UpdaterState s = updater_.GetState();
+	if( s == failed || (s == newversion && !updater_.AvailableBuild().url_.empty()) ) {
 		updater_.Run();
 	}
 }
