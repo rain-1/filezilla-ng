@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.0-beta1 (2014-03-10)
+
+! Updated GnuTLS to latest version to address vulnerabilities in GnuTLS' certificate validation
++ Redesigned update dialog
+- Fix initial state of the 'Enable' item in speed limit menu
+- Date/Time handling routines now carry precision information, this avoids comparisons of timestamps with different accuracy, e.g. 2014-02-01 and 2014-02-01 10:00 now compare as being identical when using the "Overwrite if newer" file exists action
+- MSW: Make handling of FD_CLOSE socket events more robust
+
 3.7.4.1 (2014-02-11)
 
 - Fix detection of modified files
