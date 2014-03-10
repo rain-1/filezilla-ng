@@ -1854,7 +1854,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		m_pMenuBar->Append(pMenu, _("&New version available!"));
 
 		if( !update_dialog_timer_.IsRunning() ) {
-			TriggerUpdateDialog();
+			update_dialog_timer_.Start(1, true);
 		}
 	}
 	else {
