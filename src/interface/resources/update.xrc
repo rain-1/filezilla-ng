@@ -107,6 +107,23 @@
         <flag>wxTOP|wxBOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
         <border>10</border>
       </object>
+      <object class="sizeritem">
+        <object class="wxStaticText" name="ID_DOWNLOAD_FAIL">
+          <label>The new version could not be downloaded, please retry later.</label>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <object class="wxHyperlinkCtrl" name="ID_DOWNLOAD_RETRY">
+          <label>Try again</label>
+        </object>
+        <flag>wxBOTTOM</flag>
+        <border>10</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticText" name="ID_NEWVERSION_WEBSITE_TEXT_DLFAIL">
+          <label>Alternatively, you can also download the latest version from the FileZilla website:</label>
+        </object>
+      </object>
       <cols>1</cols>
       <vgap>5</vgap>
       <hgap>5</hgap>
