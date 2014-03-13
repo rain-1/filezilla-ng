@@ -684,7 +684,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					}
 
 					long port = CServer::GetDefaultPort(protocol);
-					if( pData->m_newLocation.HasPort() && !pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535 ) {
+					if( pData->m_newLocation.HasPort() && (!pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535) ) {
 						LogMessage(::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
