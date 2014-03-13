@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 22:52+0100\n"
-"PO-Revision-Date: 2014-02-12 06:57+0300\n"
+"POT-Creation-Date: 2014-03-13 21:34+0100\n"
+"PO-Revision-Date: 2014-03-11 23:48+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -311,9 +311,8 @@ msgid "&Clear private data..."
 msgstr "&مسح بيانات الخصوصية..."
 
 #: resources.h:1009
-#, fuzzy
 msgid "&Close"
-msgstr "إ&غلاق التبويب"
+msgstr "&إغلاق"
 
 #: resources.h:599
 msgid "&Close FileZilla"
@@ -576,9 +575,8 @@ msgid "&Inherit system's filetype associations"
 msgstr "إ&شراكات متوارثة لأنواع ملفات النظام"
 
 #: resources.h:1016
-#, fuzzy
 msgid "&Install new version"
-msgstr "الإصدارات المستقرة و إصدارات بيتا"
+msgstr "تثبيت &الإصدار الجديد"
 
 #: resources.h:433
 msgid "&Keep remote path structure relative to search root"
@@ -745,9 +743,8 @@ msgid "&Refresh"
 msgstr "ت&حديث"
 
 #: resources.h:136
-#, fuzzy
 msgid "&Remember password until FileZilla is closed"
-msgstr "_تذكر كلمة السر حتى الخروج"
+msgstr "تذكر &كلمة المرور إلى أن يتم إغلاق FileZilla"
 
 #: resources.h:479
 msgid "&Remember passwords"
@@ -1213,9 +1210,8 @@ msgstr ""
 "لن يتم عرض تحذير في هذه الجلسة"
 
 #: resources.h:1010
-#, fuzzy
 msgid "A new version of FileZilla is available:"
-msgstr "يتوفر نسخة جديدة من FileZilla :"
+msgstr "يتوفر نسخة جديدة من FileZilla:"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:684
 msgid ""
@@ -1433,11 +1429,10 @@ msgstr ""
 "بيئة SSH_AUTH_SOCK موضوع"
 
 #: resources.h:1019
-#, fuzzy
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
-msgstr "فشل في تحميل آخر نسخة من FileZilla"
+msgstr "بدلاً من ذلك، يمكنك أيضا تحميل الإصدار الأحدث من موقع FileZilla:"
 
 #: ../../locales/../src/interface/QueueView.cpp:2048
 #, c-format
@@ -1606,7 +1601,7 @@ msgstr "يتم التحرير"
 msgid "Benchmark string coalescer"
 msgstr "وضع علامة على زوائد العبارة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1086
+#: ../../locales/../src/engine/tlssocket.cpp:1088
 msgid "Beware! Certificate has been revoked"
 msgstr "أنتبه! تم إبطال الشهادة"
 
@@ -1875,9 +1870,8 @@ msgid "Check for FileZilla &updates automatically:"
 msgstr "البحث من &تحديثات FileZilla تلقائيا:"
 
 #: resources.h:1008
-#, fuzzy
 msgid "Check for Updates"
-msgstr "التدقيق بحثا عن تحديثات"
+msgstr "التحقق من التحديثات"
 
 #: resources.h:545
 msgid "Check for newer versions of FileZilla"
@@ -1892,19 +1886,18 @@ msgid "Checking for correct external IP address"
 msgstr "جارى التحقق من عنوان رقم الانترنت الخارجى الصحيح"
 
 #: resources.h:1021
-#, fuzzy
 msgid "Checking for updates..."
-msgstr "التدقيق بحثا عن تحديثات"
+msgstr "يتم التحقق من التحديثات..."
 
-#: ../../locales/../src/interface/updater.cpp:651
-#, fuzzy, c-format
+#: ../../locales/../src/interface/updater.cpp:660
+#, c-format
 msgid "Checksum match on file %s\n"
-msgstr "عدم مطابقة رقم التدقيق النهائي للملف المحمل"
+msgstr "تطابق المجموع الاختباري على ملف %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:647
-#, fuzzy, c-format
+#: ../../locales/../src/interface/updater.cpp:656
+#, c-format
 msgid "Checksum mismatch on file %s\n"
-msgstr "عدم مطابقة رقم التدقيق النهائي للملف المحمل"
+msgstr "عدم تطابق المجموع الاختباري على ملف %s\n"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1470
 msgid "Choose the default local directory"
@@ -1916,7 +1909,7 @@ msgstr "قم باختيار الفولدر المحلى الافتراضى"
 msgid "Choose the local directory"
 msgstr "تحديد الدليل المحلي"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:868
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:840
 msgid "Chunk data improperly terminated"
 msgstr "تم إنهاء قطعة البيانات بشكل غير صحيح"
 
@@ -2195,11 +2188,11 @@ msgid "Connection closed by server"
 msgstr "تم إغلاق الإتصال من قبل الخادم"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:393
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:299
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:298
 msgid "Connection established, initializing TLS..."
 msgstr "تم تأسيس الإتصال ، جاري تهيئة TLS..."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:334
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:333
 msgid "Connection established, sending HTTP request"
 msgstr "تم تأسيس الإتصال ، جاري إرسال طلب HTTP"
 
@@ -2304,10 +2297,10 @@ msgstr "تعذر نسخ الروابط"
 msgid "Could not copy data"
 msgstr "تعذر نسخ البيانات"
 
-#: ../../locales/../src/interface/updater.cpp:419
-#, fuzzy, c-format
+#: ../../locales/../src/interface/updater.cpp:428
+#, c-format
 msgid "Could not create local file %s\n"
-msgstr "تعذرت الكتابة إلى الملف المحلي"
+msgstr "تعذر إنشاء الملف المحلي %s\n"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2568
 #: ../../locales/../src/interface/RemoteTreeView.cpp:899
@@ -2338,7 +2331,7 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "تعذر توليد سلسلة تسجيل الدخول المخصصة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1021
+#: ../../locales/../src/engine/tlssocket.cpp:1023
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2346,7 +2339,7 @@ msgstr ""
 "لا يمكن الحصول على الإسم الفارق من ناشر الشهادة , فشل "
 "gnutls_x509_get_issuer_dn"
 
-#: ../../locales/../src/engine/tlssocket.cpp:997
+#: ../../locales/../src/engine/tlssocket.cpp:999
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2366,11 +2359,11 @@ msgstr "تعذر الحصول على الرد من fzputtygen"
 msgid "Could not get temporary directory to download file into."
 msgstr "تعذر الحصول على الدليل المؤقت لتحميل معلومات الملف"
 
-#: ../../locales/../src/engine/tlssocket.cpp:939
+#: ../../locales/../src/engine/tlssocket.cpp:941
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "لا يمكن إستيراد شهادات النظير , فشل gnutls_x509_crt_import"
 
-#: ../../locales/../src/engine/tlssocket.cpp:933
+#: ../../locales/../src/engine/tlssocket.cpp:935
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2873,15 +2866,15 @@ msgstr "قطع الاتصال من الخادم"
 #: ../../locales/../src/engine/ControlSocket.cpp:956
 #: ../../locales/../src/engine/ControlSocket.cpp:1055
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:233
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:950
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:952
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:911
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:913
 #: ../../locales/../src/interface/QueueView.cpp:1056
 #: ../../locales/../src/interface/QueueView.cpp:1100
 msgid "Disconnected from server"
 msgstr "قطع الاتصال من الخادم"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1090
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:968
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:928
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "قطع الاتصال من الخادم : %s"
@@ -2993,7 +2986,7 @@ msgstr ""
 msgid "Downloading"
 msgstr "تحميل"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:352
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:351
 #, c-format
 msgid "Downloading %s"
 msgstr "تحميل %s"
@@ -3007,9 +3000,8 @@ msgid "Downloading search results"
 msgstr "تحميل نتائج البحث"
 
 #: resources.h:1013
-#, fuzzy
 msgid "Downloading update..."
-msgstr "تحميل"
+msgstr "جاري تحميل التحديث..."
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
 #: ../../locales/../src/interface/LocalTreeView.cpp:105
@@ -3436,7 +3428,7 @@ msgstr "فشل في بدأ محرك FTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:402
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:782
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:307
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:306
 msgid "Failed to initialize TLS."
 msgstr "فشل في تهيئة TLS"
 
@@ -3460,7 +3452,7 @@ msgid "Failed to open \"%s\" for reading"
 msgstr "فشل في فتح \"%s\" للقراءة"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2676
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:1086
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:1046
 #, c-format
 msgid "Failed to open \"%s\" for writing"
 msgstr "فشل في فتح \"%s\" للكتابة"
@@ -3469,7 +3461,7 @@ msgstr "فشل في فتح \"%s\" للكتابة"
 msgid "Failed to parse returned path."
 msgstr "تعذر تحليل المسار المرتد"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:315
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:314
 msgid "Failed to parse trusted root cert."
 msgstr "فشل في تحليل شهادة الجذر الموثوقة"
 
@@ -3542,11 +3534,11 @@ msgstr "فشل في وضع اللغة على %s ، إستعمال لغة الن�
 msgid "Failed to validate settings"
 msgstr "فشل في التحقق من الإعدادات"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1079
+#: ../../locales/../src/engine/tlssocket.cpp:1081
 msgid "Failed to verify peer certificate"
 msgstr "فشل في التحقق من شهادة النظير"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:554
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:551
 #, c-format
 msgid "Failed to write to file %s"
 msgstr "فشل في الكتابة إلى الملف %s"
@@ -4200,7 +4192,7 @@ msgstr ""
 "فى النمط السلبي الذى ينصح به لمعظم المستخدمين . البرنامج يسأل الخادم من أجل "
 "منفذ و يتصل بالمنفذ المعطى له , حيث لا يوجد الكثير من الضبط يجب عمله هنا"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1093
+#: ../../locales/../src/engine/tlssocket.cpp:1095
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4215,6 +4207,8 @@ msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
 msgstr ""
+"تعذر الحصول على معلومات حول أحدث إصدار من FileZill الرجاء المحاولة مرة أخرى "
+"لاحقا"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:772
 msgid "Initializing TLS..."
@@ -4240,11 +4234,11 @@ msgstr "الواجهة"
 msgid "Interrupted by user"
 msgstr "إنهاء من قبل المستخدم"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:786
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:758
 msgid "Invalid Content-Length"
 msgstr "طول محتوى غير صالح"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:611
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:608
 msgid "Invalid HTTP Response"
 msgstr "إستجابة HTTP غير صالحة"
 
@@ -4257,7 +4251,7 @@ msgstr ""
 "تم إستلام تسلسل رموز غير صالح , سيتم تعطيل UTF-8 . قم بتحديد خيار UTF-8 من "
 "مدير المواقع لإجبار UTF-8"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:910
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:872
 msgid "Invalid chunk size"
 msgstr "حجم قطعة غير صالح"
 
@@ -4317,7 +4311,7 @@ msgstr ""
 msgid "Invalid regular expression in search conditions."
 msgstr "تعبير إصطلاحي غير صالح في شروط البحث"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:621
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:618
 msgid "Invalid response code"
 msgstr "رمز إستجابة غير صالح"
 
@@ -4425,7 +4419,7 @@ msgstr "حد الحجم لملف السجل"
 msgid "Limit:"
 msgstr "الحدود :"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:853
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:825
 msgid "Line length exceeded"
 msgstr "تجاوز حد السطر"
 
@@ -4460,11 +4454,11 @@ msgstr "الملف المحلي"
 msgid "Local file does not exist."
 msgstr "الملف المحلي غير موجود"
 
-#: ../../locales/../src/interface/updater.cpp:346
-#: ../../locales/../src/interface/updater.cpp:423
-#, fuzzy, c-format
+#: ../../locales/../src/interface/updater.cpp:355
+#: ../../locales/../src/interface/updater.cpp:432
+#, c-format
 msgid "Local file is %s\n"
-msgstr "الملف المحلي"
+msgstr "الملف المحلي هو: %s\n"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:323
 msgid "Local file is a directory instead of a regular file."
@@ -4550,20 +4544,20 @@ msgstr "MAC:"
 msgid "Make sure the file can be accessed and is a well-formed XML document."
 msgstr "تأكد من أن الملف يمكن الوصول إليه و أنه مستند بتنسيق XML صالح"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:841
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:853
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:868
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:910
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:813
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:825
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:840
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:872
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "بيانات القطعة المحرفة : %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:786
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:758
 #, c-format
 msgid "Malformed header: %s"
 msgstr "المقدمة الرأسية المحرفة : %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:581
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:578
 msgid "Malformed reply, server not sending proper line endings"
 msgstr "إجابة محرفة ، الخادم لا يرسل نهايات صحيحة للسطر"
 
@@ -4895,9 +4889,8 @@ msgid "Once"
 msgstr "مرة"
 
 #: resources.h:948
-#, fuzzy
 msgid "Once a day"
-msgstr "مرة كل أسبوع"
+msgstr "مرة في اليوم"
 
 #: resources.h:949
 msgid "Once a week"
@@ -5399,7 +5392,7 @@ msgstr "إبقاء طوابع وقت الملف"
 msgid "Preview:"
 msgstr "معاينة:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1119
+#: ../../locales/../src/engine/tlssocket.cpp:1121
 msgid "Primary connection and data connection certificates don't match."
 msgstr "شهادة الإتصال الرئيسية و شهادة إتصال البيانات غير متطابقتين"
 
@@ -5658,8 +5651,15 @@ msgstr "إعدادات إعادة الاتصال"
 msgid "Reconnects to the last used server"
 msgstr "لاعادة الاتصال بأخر خادم مستخدم"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:718
-msgid "Redirection to invalid address"
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:674
+#, fuzzy, c-format
+msgid "Redirection to invalid or unsupported URI: %s"
+msgstr "إعادة توجيه الى عنوان غير صالح"
+
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:681
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:688
+#, fuzzy, c-format
+msgid "Redirection to invalid or unsupported address: %s"
 msgstr "إعادة توجيه الى عنوان غير صالح"
 
 #: resources.h:990 resources.h:991
@@ -5674,7 +5674,7 @@ msgstr "تذكر كلمات المرور ؟"
 msgid "Remote"
 msgstr "بعيد"
 
-#: ../../locales/../src/engine/tlssocket.cpp:908
+#: ../../locales/../src/engine/tlssocket.cpp:910
 msgid "Remote certificate not trusted."
 msgstr "الشهادة البعيدة غير موثوق بها"
 
@@ -5795,7 +5795,7 @@ msgid "Reset and requeue &all"
 msgstr "إستعادة و إ&عادة وضع الكل في قائمة الإنتظار"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1157
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:485
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:482
 #, c-format
 msgid "Resolving address of %s"
 msgstr "إستخلاص عنوان الـ %s"
@@ -5834,7 +5834,7 @@ msgstr "إسترجاع قائمة الدليل..."
 msgid "Retrieving external IP address from %s"
 msgstr "إسترجاع عنوان IP الخارجي من %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1100
+#: ../../locales/../src/engine/tlssocket.cpp:1102
 msgid "Root certificate is not trusted"
 msgstr "شهادة الجذر غير موثوق بها"
 
@@ -6145,7 +6145,7 @@ msgstr "رقم التسلسل:"
 msgid "Server &Type:"
 msgstr "نوع ال&خادم:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:786
+#: ../../locales/../src/engine/tlssocket.cpp:788
 msgid "Server did not properly shut down TLS connection"
 msgstr "الخادم ربما لم يغلق إتصال TLS بشكل صحيح"
 
@@ -6279,9 +6279,8 @@ msgid "Show both directory trees and continue comparing?"
 msgstr "إظهار تفرع الدليل و متابعة المقارنة ؟"
 
 #: resources.h:1024
-#, fuzzy
 msgid "Show details"
-msgstr "تفاصيل الجلسة"
+msgstr "إظهار التفاصيل"
 
 #: resources.h:616
 msgid "Shows available TLS ciphers"
@@ -6466,9 +6465,8 @@ msgid "Stable versions only"
 msgstr "الإصدارات المستقرة فقط"
 
 #: resources.h:953
-#, fuzzy
 msgid "Stable, beta and nightly versions"
-msgstr "الإصدارات المستقرة و إصدارات بيتا"
+msgstr "الإصدارات المستقرة و الإصدارات الليلية و بيتا"
 
 #: resources.h:378
 msgid "Start transfer &immediately"
@@ -6478,10 +6476,10 @@ msgstr "بدء الإرسال &فورا"
 msgid "Start with opened Site Manager"
 msgstr "البدء مع مدير مواقع مفتوح"
 
-#: ../../locales/../src/interface/updater.cpp:223
+#: ../../locales/../src/interface/updater.cpp:232
 #, c-format
 msgid "Started update check on %s\n"
-msgstr ""
+msgstr "بدأ التدقيق بحثا عن تحديث في %s\n"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2250
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1633
@@ -6584,7 +6582,7 @@ msgstr "النظام"
 msgid "T&oolbar"
 msgstr "شريط &أدوات"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:326
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:325
 msgid "TLS/SSL connection established, sending HTTP request"
 msgstr "تم تأسيس إتصال TLS/SSL ، إرسال طلب HTTP"
 
@@ -6859,13 +6857,12 @@ msgstr ""
 "أقل قيمة متاحة للمنفذ يجب ان تكون أقل من أعلى قيمة متاحة للمنفذ أو مساوية"
 
 #: resources.h:1017
-#, fuzzy
 msgid "The new version could not be downloaded, please retry later."
-msgstr "لا يمكن إضافة الخادم"
+msgstr "لا يمكن تحميل الإصدار الجديد، الرجاء إعادة المحاولة في وقت لاحق."
 
 #: resources.h:1015
 msgid "The new version has been saved in your Downloads directory."
-msgstr ""
+msgstr "تم حفظ النسخة الجديدة في مجلد التنزيلات الخاص بك"
 
 #: ../../locales/../src/interface/QueueView.cpp:1961
 msgid "The queue will not be saved."
@@ -7100,11 +7097,11 @@ msgstr "لتشغيل العرض لتفرع الدليل البعيد"
 msgid "Toggles the display of the transfer queue"
 msgstr "لتشغيل العرض لقائمة إنتظار الإرسال"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:593
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:590
 msgid "Too long header line"
 msgstr "سطر طويل جدا للمقدمة الرأسية"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:669
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:665
 msgid "Too many redirects"
 msgstr "عمليات إعادة توجيه كثيرة جدا"
 
@@ -7192,7 +7189,7 @@ msgstr "الوثوق بهذا المضيف و متابعة الاتصال؟"
 
 #: resources.h:1018 resources.h:1023
 msgid "Try again"
-msgstr ""
+msgstr "حاول ثانية"
 
 #: resources.h:383 ../../locales/../src/interface/edithandler.cpp:1113
 msgid "Type"
@@ -7298,11 +7295,11 @@ msgstr ""
 "مالم يتم إصلاح هذه المشكلة , لن يعمل نمط FTP النشط و بالتالي سوف يستخدم "
 "النمط السلبي"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1071
+#: ../../locales/../src/engine/tlssocket.cpp:1073
 msgid "Unsupported certificate type"
 msgstr "نوع شهادة غير مدعومة"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:653
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:650
 msgid "Unsupported redirect"
 msgstr "إعادة توجيه غير مدعومة"
 
@@ -7465,7 +7462,7 @@ msgstr "صالح إلى:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "رسائل سجل مطولة من wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1157
+#: ../../locales/../src/engine/tlssocket.cpp:1159
 msgid "Verifying certificate..."
 msgstr "جاري فحص الشهادة..."
 
@@ -7610,7 +7607,7 @@ msgstr "كت&ابة"
 msgid "Wrong external IP address"
 msgstr "عنوان IP خارجي خطأ"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:841
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:813
 msgid "Wrong line endings"
 msgstr "نهايات سطور خطأ"
 
@@ -7625,18 +7622,16 @@ msgid ""
 msgstr "يبدو أنك تستخدم مضيف IPv6 فقط. هذا المعالج لا يدعم هذه البيئة"
 
 #: resources.h:1026
-#, fuzzy
 msgid "You are using the latest version of FileZilla."
-msgstr "فشل في تحميل آخر نسخة من FileZilla"
+msgstr "أنت تستخدم آخر إصدار من FileZilla"
 
 #: resources.h:460
 msgid "You can always open this dialog again through the help menu."
 msgstr "يمكنك فتح هذه اللائحة مرة ثانية خلال قائمة تعليمات"
 
 #: resources.h:1020 resources.h:1025
-#, fuzzy
 msgid "You can download the latest version from the FileZilla website:"
-msgstr "فشل في تحميل آخر نسخة من FileZilla"
+msgstr "يمكنك تنزيل أحدث إصدار من موقع FileZilla:"
 
 #: ../../locales/../src/engine/server.cpp:65
 msgid "You can leave the port field empty to use the default port."
@@ -7849,7 +7844,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "fzsftp غير قادر على تشغيل"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1109
+#: ../../locales/../src/engine/tlssocket.cpp:1111
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers لم يرجع بشهادات"
 
@@ -7901,9 +7896,9 @@ msgstr "ملف قابل للقراءة للمالك"
 msgid "owner writeable"
 msgstr "ملف قابل للكتابة للمالك"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1168
-#: ../../locales/../src/engine/tlssocket.cpp:1179
-#: ../../locales/../src/engine/tlssocket.cpp:1194
+#: ../../locales/../src/engine/tlssocket.cpp:1170
+#: ../../locales/../src/engine/tlssocket.cpp:1181
+#: ../../locales/../src/engine/tlssocket.cpp:1196
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:29
 msgid "unknown"
 msgstr "غير معروف"
@@ -7923,157 +7918,3 @@ msgstr "ملف قابل للكتابة للعام"
 #: resources.h:175
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "%s bytes"
-#~ msgstr "%s بايت"
-
-#~ msgid "%s bytes (%s/s)"
-#~ msgstr "%s بايت (%s/ث)"
-
-#~ msgid "&Check for beta versions of FileZilla"
-#~ msgstr "التدقيق &بحثا عن نسخ beta من FileZilla"
-
-#~ msgid "&Finish"
-#~ msgstr "إ&نتهاء"
-
-#~ msgid "&Next >"
-#~ msgstr "ال&تالي >"
-
-#~ msgid ", %H:%M:%S left"
-#~ msgstr ", %H:%M:%S المتبقى"
-
-#~ msgid ", --:--:-- left"
-#~ msgstr ", --:--:-- المتبقي"
-
-#~ msgid "- Broken router and/or firewall"
-#~ msgstr "- جهاز توجيه معطل و/أو جدار حماية"
-
-#~ msgid "- File corrupted on mirror"
-#~ msgstr "- الملف تالف على المرآة"
-
-#~ msgid "- Malware on your system"
-#~ msgstr "- برنامج ضار على نظامك"
-
-#~ msgid "< &Back"
-#~ msgstr "< ال&خلف"
-
-#~ msgid "Advanced options:"
-#~ msgstr "خيارات متقدمة:"
-
-#~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
-#~ "recent version."
-#~ msgstr ""
-#~ "بدلا من ذلك ، قم بزيارة http://filezilla-project.org لتحميل آخر نسخة"
-
-#~ msgid "C&heck for nightly builds of FileZilla"
-#~ msgstr "ال&تدقيق بحثا عن الإصدارات المحايدة من FileZilla"
-
-#~ msgid "Click on next to download the new version."
-#~ msgstr "أنقر على التالي لتحميل النسخة الجديدة"
-
-#~ msgid "Connecting to server"
-#~ msgstr "إتصال بالخادم"
-
-#~ msgid ""
-#~ "Do you really want to check for beta versions?\n"
-#~ "Unless you want to test new features, keep using stable versions."
-#~ msgstr ""
-#~ "هل تريد فعلا التدقيق بحثا عن نسخ beta ؟\n"
-#~ "إذا لا تريد أن تجرب المميزات الجديدة ، أبقى على إستخدام النسخ المستقرة "
-#~ "العادية"
-
-#~ msgid "Error, file name cannot be parsed."
-#~ msgstr "خطأ ، إسم الملف لا يمكن تجزئته"
-
-#~ msgid "Error, local file exists but cannot be removed"
-#~ msgstr "خطأ ، الملف المحلي موجود لكن لا يمكن إزالته"
-
-#~ msgid "Every month"
-#~ msgstr "كل شهر"
-
-#~ msgid "Every two weeks"
-#~ msgstr "كل أسبوعين"
-
-#~ msgid "Executable"
-#~ msgstr "تنفيذى"
-
-#~ msgid "Failed to check for newer version of FileZilla."
-#~ msgstr "فشل البحث عن نسخة جديدة من FileZilla"
-
-#~ msgid ""
-#~ "In case you prefer automatic updates, you can enable automatic update "
-#~ "checks in the settings dialog."
-#~ msgstr ""
-#~ "فى حالة انك تفضل التحديثات التلقائية ، فانك تستطيع تمكين البحث عن تحديثات "
-#~ "تلقائيا من لائحة الإعدادات"
-
-#~ msgid "Log of update check:"
-#~ msgstr "سجل التدقيق عن التحديث:"
-
-#~ msgid "Package"
-#~ msgstr "حزمة"
-
-#~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
-#~ "FileZilla."
-#~ msgstr ""
-#~ "الرجاء تأكد من http://filezilla-project.org حول أحدث نسخة من FileZilla"
-
-#~ msgid ""
-#~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
-#~ "FileZilla."
-#~ msgstr ""
-#~ "أبحث في مدير الحزم في نظامك عن حزمة محدثة أو قم بزيارة http://filezilla-"
-#~ "project.org لتحميل رمز المصدر لـ FileZilla"
-
-#~ msgid ""
-#~ "Please retry downloading the update. Possible reasons if the problem "
-#~ "persists (listed in order of decreasing probability):"
-#~ msgstr ""
-#~ "الرجاء حاول مرة ثانية تحميل التحديث . الأسباب المحتملة إذا أستمرت المشكلة "
-#~ "(موجودة في الترتيب لخفض الإحتمالية):"
-
-#~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
-#~ "FileZilla."
-#~ msgstr ""
-#~ "الرجاء زيارة http://filezilla-project.org للمزيد من المعلومات حول "
-#~ "FileZilla"
-
-#~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
-#~ "version."
-#~ msgstr "الرجاء زيارة http://filezilla-project.org لتحميل آخر نسخة"
-
-#~ msgid "Resolving hostname"
-#~ msgstr "تحليل إسم المضيف"
-
-#~ msgid "Select download location for package"
-#~ msgstr ""
-#~ "تحديد الإجراء الإفتراضى المراد تنفيذه إذا كان الملف موجود مسبقا فقط "
-#~ "للملفات المحددة حاليا فى قائمة الإنتظار"
-
-#~ msgid ""
-#~ "The most recent version has been downloaded. Click on Finish to close "
-#~ "FileZilla and to start the installation."
-#~ msgstr "تم تحميل آخر نسخة . أنقر على إنهاء لإغلاق FileZilla و بدء التثبيت"
-
-#~ msgid ""
-#~ "The most recent version has been downloaded. Please install it the same "
-#~ "way you installed this version."
-#~ msgstr ""
-#~ "تم تحميل آخر نسخة . الرجاء تثبيتها مثلما فعلت في التثبيت السابق لهذه "
-#~ "النسخة"
-
-#~ msgid "Update wizard"
-#~ msgstr "معالج التحديث"
-
-#~ msgid "Using this wizard you can check for available updates to FileZilla."
-#~ msgstr "باستعمال هذا المعالج تستطيع معرفة التحديثات المتوفرة لـ FileZilla"
-
-#~ msgid ""
-#~ "You are already using the most recent version of FileZilla. Please check "
-#~ "again in future."
-#~ msgstr "انت تستخدم أحدث نسخة من FileZilla . الرجاء تحقق مرة ثانية مستقبلا"
