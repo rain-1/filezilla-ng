@@ -52,8 +52,7 @@ public:
 	bool m_gotHeader;
 	int m_responseCode;
 	wxString m_responseString;
-	wxString m_newLocation;
-	wxString m_newHostWithPort;
+	wxURI m_newLocation;
 	int m_redirectionCount;
 
 	wxLongLong m_totalSize;
@@ -367,8 +366,9 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 	m_pCurOpData = pData;
 	m_pHttpOpData = pData;
 
-	if (localFile != _T(""))
-	{
+	m_current_uri = wxURI(m_pCurrentServer->FormatServer() + pData->remotePath.FormatFilename(pData->remoteFile));
+
+	if (localFile != _T("")) {
 		pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile).GetValue();
 
 		pData->opState = filetransfer_waitfileexists;
@@ -423,6 +423,12 @@ int CHttpControlSocket::FileTransferSend()
 		return FZ_REPLY_ERROR;
 	}
 
+	if( !m_current_uri.HasScheme() || !m_current_uri.HasServer() || !m_current_uri.HasPath() ) {
+		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI().c_str());
+		ResetOperation(FZ_REPLY_INTERNALERROR);
+		return FZ_REPLY_ERROR;
+	}
+
 	CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
 
 	if (pData->opState == filetransfer_waitfileexists)
@@ -438,26 +444,17 @@ int CHttpControlSocket::FileTransferSend()
 			return res;
 	}
 
-	wxString location;
-	wxString hostWithPort;
-	if (pData->m_newLocation == _T(""))
-	{
-		if (m_pCurrentServer->GetProtocol() == HTTPS)
-			location = _T("https://") + wxString(m_pCurrentServer->FormatHost()) + wxString(pData->remotePath.FormatFilename(pData->remoteFile).c_str());
-		else
-			location = _T("http://") + wxString(m_pCurrentServer->FormatHost()) + wxString(pData->remotePath.FormatFilename(pData->remoteFile).c_str());
-		hostWithPort = wxString::Format(_T("%s:%d"), m_pCurrentServer->FormatHost(true).c_str(), m_pCurrentServer->GetPort());
+	wxString location = m_current_uri.GetPath();
+	if( m_current_uri.HasQuery() ) {
+		location += _T("?") + m_current_uri.GetQuery();
 	}
-	else
-	{
-		location = pData->m_newLocation;
-		hostWithPort = pData->m_newHostWithPort;
-	}
-
-	m_current_url = location;
-	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.c_str());
+	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.c_str() );
 	LogMessageRaw(Command, action);
 
+	wxString hostWithPort = m_current_uri.GetServer();
+	if( m_current_uri.HasPort() ) {
+		hostWithPort += _T(":") + m_current_uri.GetPort();
+	}
 	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n"), action.c_str(), hostWithPort.c_str(), wxString(PACKAGE_STRING, wxConvLocal).c_str());
 	if( pData->resume ) {
 		command += wxString::Format(_T("Range: bytes=%") wxFileOffsetFmtSpec _T("d-\r\n"), pData->localFileSize);
@@ -625,7 +622,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 
 			pData->m_responseCode = (m_pRecvBuffer[9] - '0') * 100 + (m_pRecvBuffer[10] - '0') * 10 + m_pRecvBuffer[11] - '0';
 
-			if( pData->m_responseCode == 416 && !m_current_url.empty()) {
+			if( pData->m_responseCode == 416 ) {
 				CHttpFileTransferOpData* pTransfer = reinterpret_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
 				if( pTransfer->resume ) {
 					// Sad, the server does not like our attempt to resume.
@@ -635,7 +632,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					if( res != FZ_REPLY_OK ) {
 						return res;
 					}
-					pData->m_newLocation = m_current_url;
+					pData->m_newLocation = m_current_uri;
 					pData->m_responseCode = 300;
 				}
 			}
@@ -664,8 +661,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				// Redirect if neccessary
 				if (pData->m_responseCode >= 300)
 				{
-					if (pData->m_redirectionCount++ == 5)
-					{
+					if (pData->m_redirectionCount++ == 6) {
 						LogMessage(::Error, _("Too many redirects"));
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -674,57 +670,32 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					ResetSocket();
 					ResetHttpData(pData);
 
-					wxString host;
-					enum ServerProtocol protocol;
-					int pos;
-					if ((pos = pData->m_newLocation.Find(_T("://"))) != -1)
-					{
-						protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.Left(pos));
-						host = pData->m_newLocation.Mid(pos + 3);
-					}
-					else
-					{
-						protocol = HTTP;
-						host = pData->m_newLocation;
-					}
-
-					if ((pos = host.Find(_T("/"))) != -1)
-						host = host.Left(pos);
-
-					unsigned long port;
-					if ((pos = host.Find(':', true)) != -1)
-					{
-						wxString strport = host.Mid(pos + 1);
-						if (!strport.ToULong(&port) || port < 1 || port > 65535)
-						{
-							if (protocol == HTTPS)
-								port = 443;
-							else
-								port = 80;
-						}
-						host = host.Left(pos);
-					}
-					else
-					{
-						if (protocol == HTTPS)
-							port = 443;
-						else
-							port = 80;
-					}
-
-					if (host == _T(""))
-					{
-						// Unsupported redirect
-						LogMessage(::Error, _("Redirection to invalid address"));
+					if( !pData->m_newLocation.HasScheme() || !pData->m_newLocation.HasServer() || !pData->m_newLocation.HasPath() ) {
+						LogMessage(::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI().c_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
-					pData->m_newHostWithPort = wxString::Format(_T("%s:%d"), host.c_str(), (int)port);
+
+					enum ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme());
+					if( protocol != HTTP && protocol != HTTPS ) {
+						LogMessage(::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
+						ResetOperation(FZ_REPLY_ERROR);
+						return FZ_REPLY_ERROR;
+					}
+
+					long port = CServer::GetDefaultPort(protocol);
+					if( pData->m_newLocation.HasPort() && !pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535 ) {
+						LogMessage(::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
+						ResetOperation(FZ_REPLY_ERROR);
+						return FZ_REPLY_ERROR;
+					}
+
+					m_current_uri = pData->m_newLocation;
 
 					// International domain names
-					host = ConvertDomainName(host);
+					wxString host = ConvertDomainName(m_current_uri.GetServer());
 
-					int res = InternalConnect(host, port, protocol == HTTPS);
+					int res = InternalConnect(host, static_cast<unsigned short>(port), protocol == HTTPS);
 					if (res == FZ_REPLY_WOULDBLOCK)
 						res |= FZ_REPLY_REDIRECTED;
 					return res;
@@ -764,7 +735,8 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 			}
 			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10))
 			{
-				pData->m_newLocation = wxString(m_pRecvBuffer + 10, wxConvLocal);
+				pData->m_newLocation = wxURI(wxString(m_pRecvBuffer + 10, wxConvLocal));
+				pData->m_newLocation.Resolve(m_current_uri);
 			}
 			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19))
 			{
@@ -884,34 +856,23 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 		else
 		{
 			// Read chunk size
-			char* q = p;
-			while (*q)
-			{
-				if (*q >= '0' && *q <= '9')
-				{
-					pData->m_chunkData.size *= 16;
+			for( char* q = p; *q && *q != ';' && *q != ' '; ++q ) {
+				pData->m_chunkData.size *= 16;
+				if (*q >= '0' && *q <= '9') {
 					pData->m_chunkData.size += *q - '0';
 				}
-				else if (*q >= 'A' && *q <= 'F')
-				{
-					pData->m_chunkData.size *= 16;
+				else if (*q >= 'A' && *q <= 'F') {
 					pData->m_chunkData.size += *q - 'A' + 10;
 				}
-				else if (*q >= 'a' && *q <= 'f')
-				{
-					pData->m_chunkData.size *= 16;
+				else if (*q >= 'a' && *q <= 'f') {
 					pData->m_chunkData.size += *q - 'a' + 10;
 				}
-				else if (*q == ';' || *q == ' ')
-					break;
-				else
-				{
+				else {
 					// Invalid size
 					LogMessage(::Error, _("Malformed chunk data: %s"), _("Invalid chunk size"));
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
-				q++;
 			}
 			if (pData->m_chunkData.size == 0)
 				pData->m_chunkData.getTrailer = true;
@@ -953,7 +914,6 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 		}
 		ResetSocket();
 		m_pHttpOpData = 0;
-		m_current_url.clear();
 	}
 
 	return CControlSocket::ResetOperation(nErrorCode);

@@ -1,6 +1,8 @@
 #ifndef __HTTPCONTROLSOCKET_H__
 #define __HTTPCONTROLSOCKET_H__
 
+#include <wx/uri.h>
+
 class CHttpOpData;
 class CTlsSocket;
 class CHttpFileTransferOpData;
@@ -54,7 +56,7 @@ protected:
 
 	CTlsSocket* m_pTlsSocket;
 
-	wxString m_current_url;
+	wxURI m_current_uri;
 };
 
 #endif //__HTTPCONTROLSOCKET_H__
