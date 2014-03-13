@@ -127,7 +127,7 @@ void CUpdater::Init()
 
 	SetState(s);
 
-	RunIfNeeded();
+	AutoRunIfNeeded();
 
 	update_timer_.SetOwner(this);
 	update_timer_.Start(1000 * 3600);
@@ -151,7 +151,7 @@ CUpdater* CUpdater::GetInstance()
 	return instance;
 }
 
-void CUpdater::RunIfNeeded()
+void CUpdater::AutoRunIfNeeded()
 {
 #if FZ_AUTOUPDATECHECK
 	if( state_ == failed || state_ == idle ) {
@@ -160,6 +160,15 @@ void CUpdater::RunIfNeeded()
 		}
 	}
 #endif
+}
+
+void CUpdater::RunIfNeeded()
+{
+	build const b = AvailableBuild();
+	if( state_ == idle || state_ == failed || LongTimeSinceLastCheck() || (state_ == newversion && !b.url_.empty()) ||
+		(state_ == newversion_ready && !VerifyChecksum( DownloadedFile(), b.size_, b.hash_ ) ) ) {
+		Run();
+	}
 }
 
 bool CUpdater::LongTimeSinceLastCheck() const
@@ -591,7 +600,7 @@ void CUpdater::ParseData()
 
 void CUpdater::OnTimer(wxTimerEvent&)
 {
-	RunIfNeeded();
+	AutoRunIfNeeded();
 }
 
 bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum )

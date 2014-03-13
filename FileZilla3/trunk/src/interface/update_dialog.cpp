@@ -82,9 +82,8 @@ int CUpdateDialog::ShowModal()
 
 	updater_.AddHandler(*this);
 
-	if( s == idle || s == failed || updater_.LongTimeSinceLastCheck() || (s == newversion && !updater_.AvailableBuild().url_.empty()) ) {
-		updater_.Run();
-	}
+	updater_.RunIfNeeded();
+
 	int ret = wxDialogEx::ShowModal();
 	updater_.RemoveHandler(*this);
 	
@@ -249,10 +248,7 @@ void CUpdateDialog::ShowDetails(wxHyperlinkEvent&)
 
 void CUpdateDialog::Retry(wxHyperlinkEvent&)
 {
-	UpdaterState s = updater_.GetState();
-	if( s == failed || (s == newversion && !updater_.AvailableBuild().url_.empty()) ) {
-		updater_.Run();
-	}
+	updater_.RunIfNeeded();
 }
 
 #endif
