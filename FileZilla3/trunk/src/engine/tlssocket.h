@@ -25,7 +25,7 @@ public:
 	bool Init();
 	void Uninit();
 
-	int Handshake(const CTlsSocket* pPrimarySocket = 0, bool try_resume = false);
+	int Handshake(const CTlsSocket* pPrimarySocket = 0, bool try_resume = 0);
 
 	virtual int Read(void *buffer, unsigned int size, int& error);
 	virtual int Peek(void *buffer, unsigned int size, int& error);
@@ -71,7 +71,7 @@ protected:
 
 	gnutls_certificate_credentials_t m_certCredentials;
 
-	void LogError(int code, const wxString& function);
+	void LogError(int code, const wxString& function, MessageType logLegel = ::Error);
 	void PrintAlert();
 
 	// Failure logs the error, uninits the session and sends a close event

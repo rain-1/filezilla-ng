@@ -1998,3 +1998,8 @@ void CSocket::SetSynchronousReadCallback(CCallback* cb)
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.Unlock();
 }
+
+wxString CSocket::GetPeerHost() const
+{
+	return m_host;
+}

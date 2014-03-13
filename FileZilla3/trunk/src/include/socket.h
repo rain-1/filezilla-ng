@@ -145,6 +145,9 @@ public:
 	wxString GetLocalIP(bool strip_zone_index = false) const;
 	wxString GetPeerIP(bool strip_zone_index = false) const;
 
+	// Returns the hostname passed to Connect()
+	wxString GetPeerHost() const;
+
 	// -1 on error
 	int GetLocalPort(int& error);
 	int GetRemotePort(int& error);
