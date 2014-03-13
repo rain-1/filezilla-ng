@@ -57,8 +57,6 @@ public:
 	void AddHandler( CUpdateHandler& handler );
 	void RemoveHandler( CUpdateHandler& handler );
 
-	bool Run();
-
 	UpdaterState GetState() const { return state_; }
 	build AvailableBuild() const { return version_information_.available_; }
 	wxString GetChangelog() const { return version_information_.changelog; }
@@ -75,10 +73,13 @@ public:
 
 	bool UpdatableBuild() const;
 
+	void RunIfNeeded();
+
 protected:
 	int Download(wxString const& url, wxString const& local_file = _T(""));
 
-	void RunIfNeeded();
+	void AutoRunIfNeeded();
+	bool Run();
 
 	int SendConnectCommand(wxString const& url);
 	int SendTransferCommand(wxString const& url, wxString const& local_file);
