@@ -192,7 +192,7 @@ void CTlsSocket::UninitSession()
 }
 
 
-void CTlsSocket::LogError(int code, const wxString& function)
+void CTlsSocket::LogError(int code, const wxString& function, MessageType logLevel)
 {
 	if (code == GNUTLS_E_WARNING_ALERT_RECEIVED || code == GNUTLS_E_FATAL_ALERT_RECEIVED)
 		PrintAlert();
@@ -203,16 +203,16 @@ void CTlsSocket::LogError(int code, const wxString& function)
 	{
 		wxString str(error, wxConvLocal);
 		if (function.IsEmpty())
-			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d: %s"), code, str.c_str());
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d: %s"), code, str.c_str());
 		else
-			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d in %s: %s"), code, function.c_str(), str.c_str());
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s: %s"), code, function.c_str(), str.c_str());
 	}
 	else
 	{
 		if (function.IsEmpty())
-			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d"), code);
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d"), code);
 		else
-			m_pOwner->LogMessage(::Error, _T("GnuTLS error %d in %s"), code, function.c_str());
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s"), code, function.c_str());
 	}
 }
 
@@ -471,15 +471,16 @@ bool CTlsSocket::ResumedSession() const
 	return gnutls_session_is_resumed(m_session) != 0;
 }
 
-int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/, bool try_resume /*=false*/)
+int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 {
 	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::Handshake()"));
 	wxASSERT(m_session);
 
 	m_tlsState = handshake;
 
-	if (pPrimarySocket)
-	{
+	wxString hostname;
+
+	if (pPrimarySocket) {
 		// Implicitly trust certificate of primary socket
 		unsigned int cert_list_size;
 		const gnutls_datum_t* const cert_list = gnutls_certificate_get_peers(pPrimarySocket->m_session, &cert_list_size);
@@ -495,6 +496,21 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket /*=0*/, bool try_resu
 		{
 			if (!CopySessionData(pPrimarySocket))
 				return FZ_REPLY_ERROR;
+		}
+
+		hostname = pPrimarySocket->m_pSocket->GetPeerHost();
+	}
+	else {
+		hostname = m_pSocket->GetPeerHost();
+	}
+
+	if( !hostname.empty() && !IsIpAddress(hostname) ) {
+		const wxWX2MBbuf utf8 = hostname.mb_str(wxConvUTF8);
+		if( utf8 ) {
+			int res = gnutls_server_name_set( m_session, GNUTLS_NAME_DNS, utf8, strlen(utf8) );
+			if( res ) {
+				LogError(res, _T("gnutls_server_name_set"), Debug_Warning );
+			}
 		}
 	}
 
