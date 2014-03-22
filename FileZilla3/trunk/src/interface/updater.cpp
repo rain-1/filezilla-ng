@@ -121,6 +121,10 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 
 void CUpdater::Init()
 {
+	if( state_ == checking || state_ == newversion_downloading ) {
+		return;
+	}
+
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
 	
 	UpdaterState s = ProcessFinishedData(FZ_AUTOUPDATECHECK);
@@ -549,7 +553,7 @@ void CUpdater::ParseData()
 			if (v <= ownVersionNumber)
 				continue;
 		}
-
+		
 		build* b = 0;
 		if( type == _T("nightly") && UpdatableBuild() ) {
 			b = &version_information_.nightly_;
@@ -560,11 +564,11 @@ void CUpdater::ParseData()
 		else if( type == _T("beta") ) {
 			b = &version_information_.beta_;
 		}
-		
-		if( b && UpdatableBuild() ) {
+
+		if( b ) {
 			b->version_ = versionOrDate;
 
-			if( tokens.CountTokens() == 4 ) {
+			if( UpdatableBuild() && tokens.CountTokens() == 4 ) {
 				wxString url = tokens.GetNextToken();
 				wxString sizestr = tokens.GetNextToken();
 				wxString hash_algo = tokens.GetNextToken();
@@ -591,9 +595,6 @@ void CUpdater::ParseData()
 	}
 
 	version_information_.update_available();
-	if( version_information_.empty() ) {
-		raw_version_information_.clear();
-	}
 	
 	COptions::Get()->SetOption( OPTION_UPDATECHECK_NEWVERSION, raw_version_information_ );
 }
@@ -764,7 +765,7 @@ wxULongLong CUpdater::BytesDownloaded() const
 }
 
 bool CUpdater::UpdatableBuild() const
-{return true;
+{
 	return CBuildInfo::GetBuildType() == _T("nightly") || CBuildInfo::GetBuildType() == _T("official");
 }
 
