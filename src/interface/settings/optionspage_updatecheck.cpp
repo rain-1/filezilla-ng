@@ -80,8 +80,13 @@ bool COptionsPageUpdateCheck::SavePage()
 
 void COptionsPageUpdateCheck::OnRunUpdateCheck(wxCommandEvent &event)
 {
+	if( !Validate() || !SavePage() ) {
+		return;
+	}
+
 	CUpdater* updater = CUpdater::GetInstance();
 	if( updater ) {
+		updater->Init();
 		CUpdateDialog dlg( this, *updater );
 		dlg.ShowModal();
 	}
