@@ -3213,11 +3213,11 @@ void CQueueView::ActionAfterWarnUser(ActionAfterState s)
 
 	wxString message;
 	wxString label;
-	if(s == ActionAfterState::ActionAfterState_Shutdown) {
+	if(s == ActionAfterState_Shutdown) {
 		message = _("The system will soon shut down unless you click Cancel.");
 		label = _("Shutdown now");
 	}
-	else if(s == ActionAfterState::ActionAfterState_Reboot) {
+	else if(s == ActionAfterState_Reboot) {
 		message = _("The system will soon reboot unless you click Cancel.");
 		label = _("Reboot now");
 	}
