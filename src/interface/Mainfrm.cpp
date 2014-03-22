@@ -1838,10 +1838,24 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		return;
 	}
 
-	if( s != newversion && s != newversion_ready ) {
+	if( s == idle ) {
+		wxMenu* m = 0;
+		wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId(), &m);
+		if( pItem && m ) {
+			for( int i = 0; i != m_pMenuBar->GetMenuCount(); ++i ) {
+				if( m_pMenuBar->GetMenu(i) == m ) {
+					m_pMenuBar->Remove(i);
+					delete m;
+					break;
+				}
+			}
+		}
 		return;
 	}
-	if( v.version_.empty() ) {
+	else if( s != newversion && s != newversion_ready ) {
+		return;
+	}
+	else if( v.version_.empty() ) {
 		return;
 	}
 
@@ -2138,6 +2152,11 @@ void CMainFrame::CheckChangedSettings()
 
 	m_pQueueView->SettingsChanged();
 	CAutoAsciiFiles::SettingsChanged();
+
+
+#if FZ_MANUALUPDATECHECK
+	m_pUpdater->Init();
+#endif
 }
 
 void CMainFrame::ConnectNavigationHandler(wxEvtHandler* handler)
