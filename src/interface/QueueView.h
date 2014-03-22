@@ -52,7 +52,8 @@ enum ActionAfterState
 #ifdef __WXMSW__
 	,
 	ActionAfterState_Reboot,
-	ActionAfterState_Shutdown
+	ActionAfterState_Shutdown,
+	ActionAfterState_Sleep
 #endif
 };
 
@@ -222,7 +223,7 @@ protected:
 	bool IsActionAfter(enum ActionAfterState);
 	void ActionAfter(bool warned = false);
 #ifdef __WXMSW__
-	void ActionAfterWarnUser(bool shutdown);
+	void ActionAfterWarnUser(ActionAfterState s);
 #endif
 
 	void ProcessNotification(t_EngineData* pEngineData, CNotification* pNotification);

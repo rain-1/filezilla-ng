@@ -30,6 +30,10 @@
 #include "../dbus/desktop_notification.h"
 #endif
 
+#ifdef __WXMSW__
+#include <powrprof.h>
+#endif
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -184,6 +188,7 @@ EVT_MENU(XRCID("ID_ACTIONAFTER_SHOWMESSAGE"), CQueueView::OnActionAfter)
 EVT_MENU(XRCID("ID_ACTIONAFTER_PLAYSOUND"), CQueueView::OnActionAfter)
 EVT_MENU(XRCID("ID_ACTIONAFTER_REBOOT"), CQueueView::OnActionAfter)
 EVT_MENU(XRCID("ID_ACTIONAFTER_SHUTDOWN"), CQueueView::OnActionAfter)
+EVT_MENU(XRCID("ID_ACTIONAFTER_SLEEP"), CQueueView::OnActionAfter)
 
 EVT_COMMAND(wxID_ANY, fzEVT_ASKFORPASSWORD, CQueueView::OnAskPassword)
 
@@ -2219,6 +2224,7 @@ void CQueueView::OnContextMenu(wxContextMenuEvent&)
 #ifdef __WXMSW__
 	pMenu->Check(XRCID("ID_ACTIONAFTER_REBOOT"), IsActionAfter(ActionAfterState_Reboot));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_SHUTDOWN"), IsActionAfter(ActionAfterState_Shutdown));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_SLEEP"), IsActionAfter(ActionAfterState_Sleep));
 #endif
 	pMenu->Enable(XRCID("ID_REMOVE"), has_selection);
 
@@ -2303,6 +2309,9 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SHUTDOWN"))
 		m_actionAfterState = ActionAfterState_Shutdown;
+
+	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SLEEP"))
+		m_actionAfterState = ActionAfterState_Sleep;
 
 #endif
 
@@ -3170,28 +3179,22 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		}
 #ifdef __WXMSW__
 		case ActionAfterState_Reboot:
-		{
-			if (!warned)
-			{
-				ActionAfterWarnUser(false);
-				return;
-			}
-			else
-				wxShutdown(wxSHUTDOWN_REBOOT);
-			break;
-		}
-
 		case ActionAfterState_Shutdown:
-		{
-			if (!warned)
-			{
-				ActionAfterWarnUser(true);
+			if (!warned) {
+				ActionAfterWarnUser(m_actionAfterState);
 				return;
 			}
 			else
-				wxShutdown(wxSHUTDOWN_POWEROFF);
+				wxShutdown((m_actionAfterState == ActionAfterState_Reboot) ? wxSHUTDOWN_REBOOT : wxSHUTDOWN_POWEROFF);
 			break;
-		}
+		case ActionAfterState_Sleep:
+			if (!warned) {
+				ActionAfterWarnUser(m_actionAfterState);
+				return;
+			}
+			else
+				SetSuspendState(false, false, true);
+			break;
 #else
 		(void)warned;
 #endif
@@ -3203,27 +3206,32 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 }
 
 #ifdef __WXMSW__
-void CQueueView::ActionAfterWarnUser(bool shutdown)
+void CQueueView::ActionAfterWarnUser(ActionAfterState s)
 {
 	if (m_actionAfterWarnDialog != NULL)
 		return;
 
 	wxString message;
-	if (shutdown)
+	wxString label;
+	if(s == ActionAfterState::ActionAfterState_Shutdown) {
 		message = _("The system will soon shut down unless you click Cancel.");
-	else
+		label = _("Shutdown now");
+	}
+	else if(s == ActionAfterState::ActionAfterState_Reboot) {
 		message = _("The system will soon reboot unless you click Cancel.");
+		label = _("Reboot now");
+	}
+	else {
+		message = _("Your computer will suspended unless you click Cancel.");
+		label = _("Suspend now");
+	}
 
 	m_actionAfterWarnDialog = new wxProgressDialog(_("Queue has been fully processed"), message, 150, m_pMainFrame, wxPD_CAN_ABORT | wxPD_AUTO_HIDE | wxPD_CAN_SKIP | wxPD_APP_MODAL);
 
 	// Magic id from wxWidgets' src/generic/propdlgg.cpp
 	wxWindow* pSkip = m_actionAfterWarnDialog->FindWindow(32000);
-	if (pSkip)
-	{
-		if (!shutdown)
-			pSkip->SetLabel(_("Reboot now"));
-		else
-			pSkip->SetLabel(_("Shutdown now"));
+	if (pSkip) {
+		pSkip->SetLabel(label);
 	}
 
 	CWrapEngine engine;

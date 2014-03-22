@@ -392,6 +392,10 @@
         <label>S&amp;hutdown system</label>
         <checkable>1</checkable>
       </object>
+      <object class="wxMenuItem" name="ID_ACTIONAFTER_SLEEP" platform="win">
+        <label>S&amp;uspend system</label>
+        <checkable>1</checkable>
+      </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_ACTIONAFTER_DISABLE">
         <label>Do &amp;nothing</label>
