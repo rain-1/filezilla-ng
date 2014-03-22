@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.0-rc1 (2014-03-22)
+
++ MSW: Added suspend as new queue completion action
+- Minor fixes to new updater
+
 3.8.0-beta2 (2014-03-13)
 
 + Use Server Name Indication (SNI) With FTP over TLS and HTTP over TLS
