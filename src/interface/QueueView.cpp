@@ -477,7 +477,7 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	m_filesWithUnknownSize = 0;
 
 	m_actionAfterState = ActionAfterState_Disabled;
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	m_actionAfterWarnDialog = 0;
 	m_actionAfterTimer = 0;
 	m_actionAfterTimerId = -1;
@@ -1626,7 +1626,7 @@ bool CQueueView::Quit()
 	if (!m_quit)
 		m_quit = 1;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	if (m_actionAfterWarnDialog)
 	{
 		m_actionAfterWarnDialog->Destroy();
@@ -2221,7 +2221,7 @@ void CQueueView::OnContextMenu(wxContextMenuEvent&)
 	pMenu->Check(XRCID("ID_ACTIONAFTER_RUNCOMMAND"), IsActionAfter(ActionAfterState_RunCommand));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_SHOWMESSAGE"), IsActionAfter(ActionAfterState_ShowMessage));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_PLAYSOUND"), IsActionAfter(ActionAfterState_PlaySound));
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	pMenu->Check(XRCID("ID_ACTIONAFTER_REBOOT"), IsActionAfter(ActionAfterState_Reboot));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_SHUTDOWN"), IsActionAfter(ActionAfterState_Shutdown));
 	pMenu->Check(XRCID("ID_ACTIONAFTER_SLEEP"), IsActionAfter(ActionAfterState_Sleep));
@@ -2230,7 +2230,7 @@ void CQueueView::OnContextMenu(wxContextMenuEvent&)
 
 	pMenu->Enable(XRCID("ID_PRIORITY"), has_selection);
 	pMenu->Enable(XRCID("ID_DEFAULT_FILEEXISTSACTION"), has_selection);
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	pMenu->Enable(XRCID("ID_ACTIONAFTER"), m_actionAfterWarnDialog == NULL);
 #endif
 
@@ -2256,7 +2256,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 		m_actionAfterState = ActionAfterState_Disabled;
 		m_actionAfterRunCommand = _T("");
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 		if (m_actionAfterWarnDialog)
 		{
 			m_actionAfterWarnDialog->Destroy();
@@ -2302,17 +2302,13 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 		m_actionAfterRunCommand = command;
 	}
 
-#ifdef __WXMSW__
-
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_REBOOT"))
 		m_actionAfterState = ActionAfterState_Reboot;
-
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SHUTDOWN"))
 		m_actionAfterState = ActionAfterState_Shutdown;
-
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SLEEP"))
 		m_actionAfterState = ActionAfterState_Sleep;
-
 #endif
 
 }
@@ -2927,7 +2923,7 @@ void CQueueView::OnTimer(wxTimerEvent& event)
 	const int id = event.GetId();
 	if (id == -1)
 		return;
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 	if (id == m_actionAfterTimerId)
 	{
 		OnActionAfterTimerTick();
@@ -3195,6 +3191,25 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 			else
 				SetSuspendState(false, false, true);
 			break;
+#elif defined(__WXMAC__)
+		case ActionAfterState_Reboot:
+		case ActionAfterState_Shutdown:
+		case ActionAfterState_Sleep:
+			if (!warned) {
+				ActionAfterWarnUser(m_actionAfterState);
+				return;
+			}
+			else {
+				wxString action;
+				if( m_actionAfterState == ActionAfterState_Reboot )
+					action = _T("restart");
+				else if( m_actionAfterState == ActionAfterState_Shutdown )
+					action = _T("shut down");
+				else
+					action = _T("sleep");
+				wxExecute(_T("osascript -e 'tell application \"System Events\" to ") + action + _T("'"));
+			}
+			break;
 #else
 		(void)warned;
 #endif
@@ -3205,7 +3220,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 	m_actionAfterState = ActionAfterState_Disabled; // Resetting the state.
 }
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__) || defined(__WXMAC__)
 void CQueueView::ActionAfterWarnUser(ActionAfterState s)
 {
 	if (m_actionAfterWarnDialog != NULL)
@@ -3283,7 +3298,7 @@ void CQueueView::OnActionAfterTimerTick()
 		ActionAfter(true);
 	}
 }
-#endif //__WXMSW__
+#endif
 
 bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 {
