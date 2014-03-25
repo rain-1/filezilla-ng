@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "local_filesys.h"
+#include <msgbox.h>
 
 #include <wx/dir.h>
 #include <wx/filename.h>
