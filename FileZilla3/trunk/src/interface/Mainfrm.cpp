@@ -1883,21 +1883,10 @@ void CMainFrame::TriggerUpdateDialog()
 		return;
 	}
 
-	if (wxDialogEx::ShownDialogs()) {
+	if( !wxDialogEx::CanShowPopupDialog() ) {
 		update_dialog_timer_.Start( 1000, true );
 		return;
 	}
-#ifdef __WXMSW__
-	// Don't check for changes if mouse is captured,
-	// e.g. if user is dragging a file
-	if (GetCapture()) {
-		update_dialog_timer_.Start( 1000, true );
-		return;
-	}
-
-	// All open menus need to be closed or app will become unresponsive.
-	::EndMenu();
-#endif
 
 	CUpdateDialog dlg(this, *m_pUpdater);
 	dlg.ShowModal();
