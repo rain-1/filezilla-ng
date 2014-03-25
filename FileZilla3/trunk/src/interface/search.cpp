@@ -656,13 +656,13 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 	const CServer* pServer = m_pState->GetServer();
 	if (!pServer)
 	{
-		wxMessageBox(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
 	path.SetType(pServer->GetType());
 	if (!path.SetPath(XRCCTRL(*this, "ID_PATH", wxTextCtrl)->GetValue()) || path.IsEmpty())
 	{
-		wxMessageBox(_("Need to enter valid remote path"), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Need to enter valid remote path"), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -672,13 +672,13 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 	wxString error;
 	if (!ValidateFilter(error, true))
 	{
-		wxMessageBox(wxString::Format(_("Invalid search conditions: %s"), error.c_str()), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(wxString::Format(_("Invalid search conditions: %s"), error.c_str()), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
 	m_search_filter = GetFilter();
 	if (!CFilterManager::CompileRegexes(m_search_filter))
 	{
-		wxMessageBox(_("Invalid regular expression in search conditions."), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Invalid regular expression in search conditions."), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
 	m_search_filter.matchCase = XRCCTRL(*this, "ID_CASE", wxCheckBox)->GetValue();
@@ -797,13 +797,13 @@ void CSearchDownloadDialog::OnOK(wxCommandEvent& event)
 	CLocalPath path(pText->GetValue());
 	if (path.empty())
 	{
-		wxMessageBox(_("You have to enter a local directory."), _("Download search results"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("You have to enter a local directory."), _("Download search results"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	if (!path.IsWriteable())
 	{
-		wxMessageBox(_("You have to enter a writable local directory."), _("Download search results"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("You have to enter a writable local directory."), _("Download search results"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -906,7 +906,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 
 	if (selected_dirs.size() > 1)
 	{
-		wxMessageBox(_("Downloading multiple unrelated directories is not yet supported"), _("Downloading search results"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Downloading multiple unrelated directories is not yet supported"), _("Downloading search results"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -997,7 +997,7 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 
 	if (selected_dirs.size() > 1)
 	{
-		wxMessageBox(_("Deleting multiple unrelated directories is not yet supported"), _("Deleting directories"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Deleting multiple unrelated directories is not yet supported"), _("Deleting directories"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -1013,7 +1013,7 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 		question.Printf(_("Really delete %s and %s from the server?"), files.c_str(), dirs.c_str());
 	}
 
-	if (wxMessageBox(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
+	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
 		return;
 
 	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
@@ -1074,7 +1074,7 @@ void CSearchDialog::LoadConditions()
 	TiXmlElement* pDocument = file.Load(_T("search"));
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
 	}
 
@@ -1095,7 +1095,7 @@ void CSearchDialog::SaveConditions()
 	TiXmlElement* pDocument = file.Load(_T("search"));
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
 	}
 

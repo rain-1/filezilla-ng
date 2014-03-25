@@ -85,20 +85,20 @@ public:
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
 			{
-				wxMessageBox(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
 			if (!m_pRemoteTreeView->m_pState->GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteTreeView->m_pState->GetServer()))
 			{
-				wxMessageBox(_("Drag&drop between different servers has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
 			// Make sure path path is valid
 			if (path == m_pRemoteDataObject->GetServerPath())
 			{
-				wxMessageBox(_("Source and path of the drop operation are identical"));
+				wxMessageBoxEx(_("Source and path of the drop operation are identical"));
 				return wxDragNone;
 			}
 
@@ -114,7 +114,7 @@ public:
 						return wxDragNone;
 					else if (dir.IsParentOf(path, false))
 					{
-						wxMessageBox(_("A directory cannot be dragged into one of its subdirectories."));
+						wxMessageBoxEx(_("A directory cannot be dragged into one of its subdirectories."));
 						return wxDragNone;
 					}
 				}
@@ -896,7 +896,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 			{
 				delete ext;
 				ext = 0;
-				wxMessageBox(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
+				wxMessageBoxEx(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
 				return;
 			}
 
@@ -1122,7 +1122,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
 	if (path.IsEmpty())
 		return;
 
-	if (wxMessageBox(_("Really delete all selected files and/or directories from the server?"), _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
+	if (wxMessageBoxEx(_("Really delete all selected files and/or directories from the server?"), _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
 		return;
 
 	const bool hasParent = path.HasParent();
@@ -1451,7 +1451,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 
 	if (!wxTheClipboard->Open())
 	{
-		wxMessageBox(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
 		return;
 	}
 

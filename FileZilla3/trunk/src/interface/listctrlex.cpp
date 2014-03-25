@@ -756,7 +756,7 @@ protected:
 		{
 			wxCheckListBox* pListBox = XRCCTRL(*this, "ID_ACTIVE", wxCheckListBox);
 			pListBox->Check(0);
-			wxMessageBox(_("The filename column can neither be hidden nor moved."), _("Column properties"));
+			wxMessageBoxEx(_("The filename column can neither be hidden nor moved."), _("Column properties"));
 		}
 	}
 };
@@ -806,7 +806,7 @@ void wxListCtrlEx::ShowColumnEditor()
 		if (!isChecked && !col)
 		{
 			isChecked = true;
-			wxMessageBox(_("The filename column cannot be hidden."));
+			wxMessageBoxEx(_("The filename column cannot be hidden."));
 		}
 		MoveColumn(col, i);
 		if (m_columnInfo[col].shown != isChecked)

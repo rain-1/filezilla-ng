@@ -25,7 +25,7 @@ void CImportDialog::Show()
 	const wxString& settings(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
 	if (path == settings)
 	{
-		wxMessageBox(_("You cannot import settings from FileZilla's own settings directory."), _("Error importing"), wxICON_ERROR, m_parent);
+		wxMessageBoxEx(_("You cannot import settings from FileZilla's own settings directory."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}
 
@@ -35,7 +35,7 @@ void CImportDialog::Show()
 	if (!LoadXmlDocument(xmlDocument, dlg.GetPath()))
 	{
 		delete xmlDocument;
-		wxMessageBox(_("Cannot load file, not a valid XML file."), _("Error importing"), wxICON_ERROR, m_parent);
+		wxMessageBoxEx(_("Cannot load file, not a valid XML file."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}
 
@@ -78,10 +78,10 @@ void CImportDialog::Show()
 			if (settings && XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->IsChecked())
 			{
 				COptions::Get()->Import(fz3Root->FirstChildElement("Settings"));
-				wxMessageBox(_("The settings have been imported. You have to restart FileZilla for all settings to have effect."), _("Import successful"), wxOK, this);
+				wxMessageBoxEx(_("The settings have been imported. You have to restart FileZilla for all settings to have effect."), _("Import successful"), wxOK, this);
 			}
 
-			wxMessageBox(_("The selected categories have been imported."), _("Import successful"), wxOK, this);
+			wxMessageBoxEx(_("The selected categories have been imported."), _("Import successful"), wxOK, this);
 
 			delete xmlDocument;
 			return;
@@ -92,7 +92,7 @@ void CImportDialog::Show()
 		bool sites_fz2 = fz2Root->FirstChildElement("Sites") != 0;
 		if (sites_fz2)
 		{
-			int res = wxMessageBox(_("The file you have selected contains site manager data from a previous version of FileZilla.\nDue to differences in the storage format, only host, port, username and password will be imported.\nContinue with the import?"),
+			int res = wxMessageBoxEx(_("The file you have selected contains site manager data from a previous version of FileZilla.\nDue to differences in the storage format, only host, port, username and password will be imported.\nContinue with the import?"),
 				_("Import data from older version"), wxICON_QUESTION | wxYES_NO);
 
 			if (res == wxYES)
@@ -105,7 +105,7 @@ void CImportDialog::Show()
 
 	delete xmlDocument;
 
-	wxMessageBox(_("File does not contain any importable data."), _("Error importing"), wxICON_ERROR, m_parent);
+	wxMessageBoxEx(_("File does not contain any importable data."), _("Error importing"), wxICON_ERROR, m_parent);
 }
 
 bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
@@ -117,7 +117,7 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
 	if (!pDocument)
 	{
 		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath().c_str());
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -308,7 +308,7 @@ bool CImportDialog::ImportSites(TiXmlElement* pSites)
 	if (!pDocument)
 	{
 		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath().c_str());
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}

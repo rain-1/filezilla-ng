@@ -140,13 +140,13 @@ void CFilterEditDialog::OnNew(wxCommandEvent&)
 
 	if (newName == _T(""))
 	{
-		wxMessageBox(_("No filter name given"), _("Cannot create new filter"), wxICON_INFORMATION);
+		wxMessageBoxEx(_("No filter name given"), _("Cannot create new filter"), wxICON_INFORMATION);
 		return;
 	}
 
 	if (m_pFilterListCtrl->FindString(newName) != wxNOT_FOUND)
 	{
-		wxMessageBox(_("The entered filter name already exists, please choose a different name."), _("Filter name already exists"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("The entered filter name already exists, please choose a different name."), _("Filter name already exists"), wxICON_ERROR, this);
 		return;
 	}
 
@@ -205,7 +205,7 @@ void CFilterEditDialog::OnRename(wxCommandEvent& event)
 
 	if (newName == _T(""))
 	{
-		wxMessageBox(_("Empty filter names are not allowed."), _("Empty name"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("Empty filter names are not allowed."), _("Empty name"), wxICON_ERROR, this);
 		return;
 	}
 
@@ -214,7 +214,7 @@ void CFilterEditDialog::OnRename(wxCommandEvent& event)
 
 	if (m_pFilterListCtrl->FindString(newName) != wxNOT_FOUND)
 	{
-		wxMessageBox(_("The entered filter name already exists, please choose a different name."), _("Filter name already exists"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("The entered filter name already exists, please choose a different name."), _("Filter name already exists"), wxICON_ERROR, this);
 		return;
 	}
 
@@ -247,13 +247,13 @@ void CFilterEditDialog::OnCopy(wxCommandEvent& event)
 	newName = dlg.GetValue();
 	if (newName == _T(""))
 	{
-		wxMessageBox(_("Empty filter names are not allowed."), _("Empty name"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("Empty filter names are not allowed."), _("Empty name"), wxICON_ERROR, this);
 		return;
 	}
 
 	if (m_pFilterListCtrl->FindString(newName) != wxNOT_FOUND)
 	{
-		wxMessageBox(_("The entered filter name already exists, please choose a different name."), _("Filter name already exists"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("The entered filter name already exists, please choose a different name."), _("Filter name already exists"), wxICON_ERROR, this);
 		return;
 	}
 
@@ -337,7 +337,7 @@ bool CFilterEditDialog::Validate()
 	if (!ValidateFilter(error))
 	{
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
-		wxMessageBox(error, _("Filter validation failed"), wxICON_ERROR, this);
+		wxMessageBoxEx(error, _("Filter validation failed"), wxICON_ERROR, this);
 		return false;
 	}
 
@@ -346,7 +346,7 @@ bool CFilterEditDialog::Validate()
 	{
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
 		XRCCTRL(*this, "ID_NAME", wxTextCtrl)->SetFocus();
-		wxMessageBox(_("Need to enter filter name"), _("Filter validation failed"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("Need to enter filter name"), _("Filter validation failed"), wxICON_ERROR, this);
 		return false;
 	}
 
@@ -355,7 +355,7 @@ bool CFilterEditDialog::Validate()
 	{
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
 		XRCCTRL(*this, "ID_NAME", wxTextCtrl)->SetFocus();
-		wxMessageBox(_("Filter name already exists"), _("Filter validation failed"), wxICON_ERROR, this);
+		wxMessageBoxEx(_("Filter name already exists"), _("Filter validation failed"), wxICON_ERROR, this);
 		return false;
 	}
 

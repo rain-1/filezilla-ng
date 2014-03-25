@@ -23,7 +23,7 @@ void CExportDialog::Show()
 
 	if (!sitemanager && !settings && !queue)
 	{
-		wxMessageBox(_("No category to export selected"), _("Error exporting settings"), wxICON_ERROR, m_parent);
+		wxMessageBoxEx(_("No category to export selected"), _("Error exporting settings"), wxICON_ERROR, m_parent);
 		return;
 	}
 

@@ -139,14 +139,14 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 			wxString ip = control->GetValue();
 			if (ip == _T(""))
 			{
-				wxMessageBox(_("Please enter your external IP address"));
+				wxMessageBoxEx(_("Please enter your external IP address"));
 				control->SetFocus();
 				event.Veto();
 				return;
 			}
 			if (!IsIpAddress(ip))
 			{
-				wxMessageBox(_("You have to enter a valid IP address."));
+				wxMessageBoxEx(_("You have to enter a valid IP address."));
 				control->SetFocus();
 				event.Veto();
 				return;
@@ -158,7 +158,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 			wxString address = pResolver->GetValue();
 			if (address == _T(""))
 			{
-				wxMessageBox(_("Please enter an URL where to get your external address from"));
+				wxMessageBoxEx(_("Please enter an URL where to get your external address from"));
 				pResolver->SetFocus();
 				event.Veto();
 				return;
@@ -179,7 +179,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 			if (!portMin.ToLong(&min) || !portMax.ToLong(&max) ||
 				min < 1024 || max > 65535 || min > max)
 			{
-				wxMessageBox(_("Please enter a valid portrange."));
+				wxMessageBoxEx(_("Please enter a valid portrange."));
 				pPortMin->SetFocus();
 				event.Veto();
 				return;
@@ -849,7 +849,7 @@ void CNetConfWizard::OnFinish(wxWizardEvent& event)
 {
 	if (m_testResult != successful)
 	{
-		if (wxMessageBox(_("The test did not succeed. Do you really want to save the settings?"), _("Save settings?"), wxYES_NO | wxICON_QUESTION) != wxYES)
+		if (wxMessageBoxEx(_("The test did not succeed. Do you really want to save the settings?"), _("Save settings?"), wxYES_NO | wxICON_QUESTION) != wxYES)
 			return;
 	}
 

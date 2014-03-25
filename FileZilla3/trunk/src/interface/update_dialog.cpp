@@ -52,7 +52,7 @@ int CUpdateDialog::ShowModal()
 	wxString version(PACKAGE_VERSION, wxConvLocal);
 	if (version[0] < '0' || version[0] > '9')
 	{
-		wxMessageBox(_("Executable contains no version info, cannot check for updates."), _("Check for updates failed"), wxICON_ERROR, parent_);
+		wxMessageBoxEx(_("Executable contains no version info, cannot check for updates."), _("Check for updates failed"), wxICON_ERROR, parent_);
 		return wxID_CANCEL;
 	}
 

@@ -1095,7 +1095,7 @@ int CEditHandlerStatusDialog::ShowModal()
 
 	if (!pEditHandler->GetFileCount(CEditHandler::none, CEditHandler::unknown))
 	{
-		wxMessageBox(_("No files are currently being edited."), _("Cannot show dialog"), wxICON_INFORMATION, m_pParent);
+		wxMessageBoxEx(_("No files are currently being edited."), _("Cannot show dialog"), wxICON_INFORMATION, m_pParent);
 		return wxID_CANCEL;
 	}
 
@@ -1514,12 +1514,12 @@ void CNewAssociationDialog::OnOK(wxCommandEvent& event)
 		wxString args;
 		if (!UnquoteCommand(editor, args) || editor.empty())
 		{
-			wxMessageBox(_("You need to enter a properly quoted command."), _("Cannot set file association"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("You need to enter a properly quoted command."), _("Cannot set file association"), wxICON_EXCLAMATION);
 			return;
 		}
 		if (!ProgramExists(editor))
 		{
-			wxMessageBox(_("Selected editor does not exist."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("Selected editor does not exist."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
 			return;
 		}
 
@@ -1558,7 +1558,7 @@ void CNewAssociationDialog::OnOK(wxCommandEvent& event)
 #endif
 				)
 			{
-				wxMessageBox(_("The default editor for text files could not be found."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("The default editor for text files could not be found."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
 				return;
 			}
 			if (cmd.Find(' ') != -1)
@@ -1598,7 +1598,7 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
 	if (!ProgramExists(editor))
 	{
 		XRCCTRL(*this, "ID_EDITOR", wxWindow)->SetFocus();
-		wxMessageBox(_("Selected editor does not exist."), _("File not found"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(_("Selected editor does not exist."), _("File not found"), wxICON_EXCLAMATION, this);
 		return;
 	}
 

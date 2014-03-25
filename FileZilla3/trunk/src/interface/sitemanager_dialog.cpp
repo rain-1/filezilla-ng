@@ -312,7 +312,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	m_pSiteManagerMutex = new CInterProcessMutex(MUTEX_SITEMANAGERGLOBAL, false);
 	if (m_pSiteManagerMutex->TryLock() == 0)
 	{
-		int answer = wxMessageBox(_("The Site Manager is opened in another instance of FileZilla 3.\nDo you want to continue? Any changes made in the Site Manager won't be saved then."),
+		int answer = wxMessageBoxEx(_("The Site Manager is opened in another instance of FileZilla 3.\nDo you want to continue? Any changes made in the Site Manager won't be saved then."),
 								  _("Site Manager already open"), wxYES_NO | wxICON_QUESTION);
 		if (answer != wxYES)
 			return false;
@@ -728,7 +728,7 @@ bool CSiteManagerDialog::Load()
 	if (!pDocument)
 	{
 		wxString msg = file.GetError() + _T("\n") + _("Any changes made in the Site Manager will not be saved unless you repair the file.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -783,7 +783,7 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 		if (!pDocument)
 		{
 			wxString msg = xml.GetError() + _T("\n") + _("Any changes made in the Site Manager could not be saved.");
-			wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+			wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 			return false;
 		}
@@ -807,7 +807,7 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 			if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 				return res;
 			wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFullPath().c_str(), error.c_str());
-			wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+			wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		}
 
 		return res;
@@ -942,7 +942,7 @@ bool CSiteManagerDialog::Verify()
 		if (host == _T(""))
 		{
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -953,7 +953,7 @@ bool CSiteManagerDialog::Verify()
 			logon_type == ACCOUNT)
 		{
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
-			wxMessageBox(_("'Account' logontype not supported by selected protocol"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("'Account' logontype not supported by selected protocol"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -972,7 +972,7 @@ bool CSiteManagerDialog::Verify()
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
 			XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
 			logon_type = ASK;
-			wxMessageBox(msg, _("Site Manager - Cannot remember password"), wxICON_INFORMATION, this);
+			wxMessageBoxEx(msg, _("Site Manager - Cannot remember password"), wxICON_INFORMATION, this);
 		}
 
 		// Set selected type
@@ -988,7 +988,7 @@ bool CSiteManagerDialog::Verify()
 		if (!server.ParseUrl(host, port, _T(""), _T(""), error, path))
 		{
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-			wxMessageBox(error, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(error, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -1002,7 +1002,7 @@ bool CSiteManagerDialog::Verify()
 			if (XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue() == _T(""))
 			{
 				XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetFocus();
-				wxMessageBox(_("Need to specify a character encoding"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("Need to specify a character encoding"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
@@ -1015,7 +1015,7 @@ bool CSiteManagerDialog::Verify()
 			user == _T(""))
 		{
 			XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to specify a user name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("You have to specify a user name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -1034,7 +1034,7 @@ bool CSiteManagerDialog::Verify()
 			if (space_only)
 			{
 				XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
-				wxMessageBox(_("Username cannot be a series of spaces"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("Username cannot be a series of spaces"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
@@ -1044,7 +1044,7 @@ bool CSiteManagerDialog::Verify()
 			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue() == _T(""))
 		{
 			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You have to enter an account name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("You have to enter an account name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -1058,7 +1058,7 @@ bool CSiteManagerDialog::Verify()
 			if (!remotePath.SetPath(remotePathRaw))
 			{
 				XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetFocus();
-				wxMessageBox(_("Default remote path cannot be parsed. Make sure it is a valid absolute path for the selected server type."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("Default remote path cannot be parsed. Make sure it is a valid absolute path for the selected server type."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
@@ -1069,7 +1069,7 @@ bool CSiteManagerDialog::Verify()
 			if (remotePathRaw.empty() || localPath.empty())
 			{
 				XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetFocus();
-				wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this site."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this site."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
@@ -1094,7 +1094,7 @@ bool CSiteManagerDialog::Verify()
 					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_server.GetType()).c_str());
 				else
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
-				wxMessageBox(msg, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(msg, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
@@ -1104,7 +1104,7 @@ bool CSiteManagerDialog::Verify()
 		if (remotePathRaw.empty() && localPath.empty())
 		{
 			XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("You need to enter at least one path, empty bookmarks are not supported."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("You need to enter at least one path, empty bookmarks are not supported."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
@@ -1113,7 +1113,7 @@ bool CSiteManagerDialog::Verify()
 			if (remotePathRaw.empty() || localPath.empty())
 			{
 				XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetFocus();
-				wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
@@ -1187,7 +1187,7 @@ void CSiteManagerDialog::OnEndLabelEdit(wxTreeEvent& event)
 			continue;
 		if (!name.CmpNoCase(pTree->GetItemText(child)))
 		{
-			wxMessageBox(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
 			event.Veto();
 			return;
 		}
@@ -1959,7 +1959,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 		if (!sourceName.CmpNoCase(childName))
 		{
-			wxMessageBox(_("An item with the same name as the dragged item already exists at the target location."), _("Failed to copy or move sites"), wxICON_INFORMATION);
+			wxMessageBoxEx(_("An item with the same name as the dragged item already exists at the target location."), _("Failed to copy or move sites"), wxICON_INFORMATION);
 			return false;
 		}
 
@@ -2171,7 +2171,7 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent& event)
 	if (!xml.Save(&error))
 	{
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), fn.GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
 

@@ -306,26 +306,26 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 
 	if (!m_pServer)
 	{
-		wxMessageBox(_("You need to specify a server."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("You need to specify a server."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	wxString local_file = XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->GetValue();
 	if (local_file == _T(""))
 	{
-		wxMessageBox(_("You need to specify a local file."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("You need to specify a local file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileType(local_file);
 	if (type == CLocalFileSystem::dir)
 	{
-		wxMessageBox(_("Local file is a directory instead of a regular file."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Local file is a directory instead of a regular file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 	if (!download && type != CLocalFileSystem::file && start)
 	{
-		wxMessageBox(_("Local file does not exist."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Local file does not exist."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -333,21 +333,21 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 
 	if (remote_file == _T(""))
 	{
-		wxMessageBox(_("You need to specify a remote file."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("You need to specify a remote file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	wxString remote_path_str = XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->GetValue();
 	if (remote_path_str == _T(""))
 	{
-		wxMessageBox(_("You need to specify a remote path."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("You need to specify a remote path."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	CServerPath path(remote_path_str, m_pServer->GetType());
 	if (path.IsEmpty())
 	{
-		wxMessageBox(_("Remote path could not be parsed."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Remote path could not be parsed."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -366,7 +366,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 
 	if (name.empty())
 	{
-		wxMessageBox(_("Local file is not a valid filename."), _("Manual transfer"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Local file is not a valid filename."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -430,7 +430,7 @@ bool CManualTransfer::VerifyServer()
 	if (host == _T(""))
 	{
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-		wxMessageBox(_("You have to enter a hostname."));
+		wxMessageBoxEx(_("You have to enter a hostname."));
 		return false;
 	}
 
@@ -442,7 +442,7 @@ bool CManualTransfer::VerifyServer()
 		logon_type == ACCOUNT)
 	{
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
-		wxMessageBox(_("'Account' logontype not supported by selected protocol"));
+		wxMessageBoxEx(_("'Account' logontype not supported by selected protocol"));
 		return false;
 	}
 
@@ -460,7 +460,7 @@ bool CManualTransfer::VerifyServer()
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
 		logon_type = ASK;
-		wxMessageBox(msg, _("Cannot remember password"), wxICON_INFORMATION, this);
+		wxMessageBoxEx(msg, _("Cannot remember password"), wxICON_INFORMATION, this);
 	}
 
 	CServer server;
@@ -476,7 +476,7 @@ bool CManualTransfer::VerifyServer()
 	if (!server.ParseUrl(host, XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue(), _T(""), _T(""), error, path))
 	{
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
-		wxMessageBox(error);
+		wxMessageBoxEx(error);
 		return false;
 	}
 
@@ -496,7 +496,7 @@ bool CManualTransfer::VerifyServer()
 		user == _T(""))
 	{
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
-		wxMessageBox(_("You have to specify a user name"));
+		wxMessageBoxEx(_("You have to specify a user name"));
 		return false;
 	}
 
@@ -515,7 +515,7 @@ bool CManualTransfer::VerifyServer()
 		if (space_only)
 		{
 			XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
-			wxMessageBox(_("Username cannot be a series of spaces"));
+			wxMessageBoxEx(_("Username cannot be a series of spaces"));
 			return false;
 		}
 
@@ -526,7 +526,7 @@ bool CManualTransfer::VerifyServer()
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue() == _T(""))
 	{
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
-		wxMessageBox(_("You have to enter an account name"));
+		wxMessageBoxEx(_("You have to enter an account name"));
 		return false;
 	}
 

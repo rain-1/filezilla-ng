@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include "dialogex.h"
+#include <msgbox.h>
 
 BEGIN_EVENT_TABLE(wxDialogEx, wxDialog)
 EVT_CHAR_HOOK(wxDialogEx::OnChar)
@@ -95,7 +96,7 @@ bool wxDialogEx::ReplaceControl(wxWindow* old, wxWindow* wnd)
 
 bool wxDialogEx::CanShowPopupDialog()
 {
-	if( ShownDialogs() ) {
+	if( ShownDialogs() || IsShowingMessageBox() ) {
 		return false;
 	}
 

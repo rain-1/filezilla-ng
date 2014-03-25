@@ -73,19 +73,19 @@ bool CCommandLine::Parse()
 
 	if (HasSwitch(sitemanager) && GetOption(site) != _T(""))
 	{
-		wxMessageBox(_("-s and -c cannot be present at the same time."), _("Syntax error in command line"));
+		wxMessageBoxEx(_("-s and -c cannot be present at the same time."), _("Syntax error in command line"));
 		return false;
 	}
 
 	if (HasSwitch(sitemanager) && m_parser.GetParamCount())
 	{
-		wxMessageBox(_("-s cannot be used together with an FTP URL."), _("Syntax error in command line"));
+		wxMessageBoxEx(_("-s cannot be used together with an FTP URL."), _("Syntax error in command line"));
 		return false;
 	}
 
 	if (GetOption(site) != _T("") && m_parser.GetParamCount())
 	{
-		wxMessageBox(_("-c cannot be used together with an FTP URL."), _("Syntax error in command line"));
+		wxMessageBoxEx(_("-c cannot be used together with an FTP URL."), _("Syntax error in command line"));
 		return false;
 	}
 
@@ -94,13 +94,13 @@ bool CCommandLine::Parse()
 	{
 		if (!m_parser.GetParamCount())
 		{
-			wxMessageBox(_("-l can only be used together with an FTP URL."), _("Syntax error in command line"));
+			wxMessageBoxEx(_("-l can only be used together with an FTP URL."), _("Syntax error in command line"));
 			return false;
 		}
 
 		if (type != _T("ask") && type != _T("interactive"))
 		{
-			wxMessageBox(_("Logontype has to be either 'ask' or 'interactive' (without the quotes)."), _("Syntax error in command line"));
+			wxMessageBoxEx(_("Logontype has to be either 'ask' or 'interactive' (without the quotes)."), _("Syntax error in command line"));
 			return false;
 		}
 	}

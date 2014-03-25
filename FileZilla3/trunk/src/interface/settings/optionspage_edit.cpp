@@ -124,7 +124,7 @@ void COptionsPageEdit::OnBrowseEditor(wxCommandEvent& event)
 	if (!ProgramExists(editor))
 	{
 		XRCCTRL(*this, "ID_EDITOR", wxWindow)->SetFocus();
-		wxMessageBox(_("Selected editor does not exist."), _("File not found"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(_("Selected editor does not exist."), _("File not found"), wxICON_EXCLAMATION, this);
 		return;
 	}
 

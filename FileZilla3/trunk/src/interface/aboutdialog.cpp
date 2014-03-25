@@ -239,7 +239,7 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 
 	if (!wxTheClipboard->Open())
 	{
-		wxMessageBox(_("Could not open clipboard"), _("Could not copy data"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy data"), wxICON_EXCLAMATION);
 		return;
 	}
 

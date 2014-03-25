@@ -50,7 +50,7 @@ bool COptionsPageLanguage::SavePage()
 	if (successful)
 		m_pOptions->SetOption(OPTION_LANGUAGE, code);
 	else
-		wxMessageBox(wxString::Format(_("Failed to set language to %s, using default system language"), pListBox->GetStringSelection().c_str()), _("Failed to change language"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), pListBox->GetStringSelection().c_str()), _("Failed to change language"), wxICON_EXCLAMATION, this);
 #endif
 	return true;
 }

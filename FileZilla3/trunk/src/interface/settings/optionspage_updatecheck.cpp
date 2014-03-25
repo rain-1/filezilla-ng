@@ -42,7 +42,7 @@ bool COptionsPageUpdateCheck::Validate()
 {
 	int type = GetChoice(XRCID("ID_UPDATETYPE"));
 	if( type == 2 && m_pOptions->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA) != 2 ) {
-		if (wxMessageBox(_("Warning, use nightly builds at your own risk.\nNo support is given for nightly builds.\nNightly builds may not work as expected and might even damage your system.\n\nDo you really want to check for nightly builds?"), _("Updates"), wxICON_EXCLAMATION | wxYES_NO, this) != wxYES) {
+		if (wxMessageBoxEx(_("Warning, use nightly builds at your own risk.\nNo support is given for nightly builds.\nNightly builds may not work as expected and might even damage your system.\n\nDo you really want to check for nightly builds?"), _("Updates"), wxICON_EXCLAMATION | wxYES_NO, this) != wxYES) {
 			bool tmp;
 			SetChoice(XRCID("ID_UPDATETYPE"), m_pOptions->GetOptionVal(OPTION_UPDATECHECK_CHECKBETA), tmp);
 		}

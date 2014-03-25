@@ -170,7 +170,7 @@ bool CSettingsDialog::LoadPages()
 
 	if (!LoadSettings())
 	{
-		wxMessageBox(_("Failed to load panels, invalid resource files?"));
+		wxMessageBoxEx(_("Failed to load panels, invalid resource files?"));
 		return false;
 	}
 

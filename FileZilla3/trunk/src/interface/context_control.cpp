@@ -76,7 +76,7 @@ void CContextControl::CreateTab()
 		pState = CContextManager::Get()->CreateState(m_pMainFrame);
 		if (!pState->CreateEngine())
 		{
-			wxMessageBox(_("Failed to initialize FTP engine"));
+			wxMessageBoxEx(_("Failed to initialize FTP engine"));
 		}
 	}
 
@@ -345,7 +345,7 @@ bool CContextControl::CloseTab(int tab)
 
 	if (!pState->m_pCommandQueue->Idle())
 	{
-		if (wxMessageBox(_("Cannot close tab while busy.\nCancel current operation and close tab?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) != wxYES)
+		if (wxMessageBoxEx(_("Cannot close tab while busy.\nCancel current operation and close tab?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) != wxYES)
 			return false;
 
 		Freeze();

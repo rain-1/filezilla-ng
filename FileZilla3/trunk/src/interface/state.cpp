@@ -246,7 +246,7 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 {
 	if (m_sync_browse.is_changing)
 	{
-		wxMessageBox(_T("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
+		wxMessageBoxEx(_T("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
 		return false;
 	}
 
@@ -275,14 +275,14 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 			wxString msg = wxString::Format(_("The local directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the local directory?"),
 					p.GetPath().c_str(),
 					m_sync_browse.local_root.GetPath().c_str());
-			if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 				return false;
 			SetSyncBrowse(false);
 		}
 		else if (!IsRemoteIdle())
 		{
 			wxString msg(_("A remote operation is in progress and synchronized browsing is enabled.\nDisable synchronized browsing and continue changing the local directory?"));
-			if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 				return false;
 			SetSyncBrowse(false);
 		}
@@ -294,7 +294,7 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error /*=0*/)
 				SetSyncBrowse(false);
 				wxString msg = wxString::Format(_("Could not obtain corresponding remote directory for the local directory '%s'.\nSynchronized browsing has been disabled."),
 					p.GetPath().c_str());
-				wxMessageBox(msg, _("Synchronized browsing"));
+				wxMessageBoxEx(msg, _("Synchronized browsing"));
 				return false;
 			}
 
@@ -393,7 +393,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 			wxString msg = wxString::Format(_("Current remote directory (%s) is not below the synchronization root (%s).\nSynchronized browsing has been disabled."),
 					m_pDirectoryListing->path.GetPath().c_str(),
 					m_sync_browse.remote_root.GetPath().c_str());
-			wxMessageBox(msg, _("Synchronized browsing"));
+			wxMessageBoxEx(msg, _("Synchronized browsing"));
 		}
 		else
 		{
@@ -403,7 +403,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 				SetSyncBrowse(false);
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nSynchronized browsing has been disabled."),
 					m_pDirectoryListing->path.GetPath().c_str());
-				wxMessageBox(msg, _("Synchronized browsing"));
+				wxMessageBoxEx(msg, _("Synchronized browsing"));
 				return true;
 			}
 
@@ -412,7 +412,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 			{
 				SetSyncBrowse(false);
 				wxString msg = error + _T("\n") + _("Synchronized browsing has been disabled.");
-				wxMessageBox(msg, _("Synchronized browsing"));
+				wxMessageBoxEx(msg, _("Synchronized browsing"));
 				return true;
 			}
 
@@ -839,7 +839,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		}
 	}
 	if (!error.IsEmpty())
-		wxMessageBox(error, _("Could not complete operation"));
+		wxMessageBoxEx(error, _("Could not complete operation"));
 #endif
 
 	RefreshLocal();
@@ -993,7 +993,7 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 		if (!subdir.empty() && !p.ChangePath(subdir))
 		{
 			wxString msg = wxString::Format(_("Could not get full remote path."));
-			wxMessageBox(msg, _("Synchronized browsing"));
+			wxMessageBoxEx(msg, _("Synchronized browsing"));
 			return false;
 		}
 
@@ -1002,14 +1002,14 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 			wxString msg = wxString::Format(_("The remote directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the remote directory?"),
 					p.GetPath().c_str(),
 					m_sync_browse.remote_root.GetPath().c_str());
-			if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 				return false;
 			SetSyncBrowse(false);
 		}
 		else if (!IsRemoteIdle() && !ignore_busy)
 		{
 			wxString msg(_("Another remote operation is already in progress, cannot change directory now."));
-			wxMessageBox(msg, _("Synchronized browsing"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_EXCLAMATION);
 			return false;
 		}
 		else
@@ -1020,14 +1020,14 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 			{
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nDisable synchronized browsing and continue changing the remote directory?"),
 					p.GetPath().c_str());
-				if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 					return false;
 				SetSyncBrowse(false);
 			}
 			else if (!local_path.Exists(&error))
 			{
 				wxString msg = error + _T("\n") + _("Disable synchronized browsing and continue changing the remote directory?");
-				if (wxMessageBox(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 					return false;
 				SetSyncBrowse(false);
 			}

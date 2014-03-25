@@ -102,13 +102,13 @@ public:
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
 			{
-				wxMessageBox(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
 			if (!m_pLocalTreeView->m_pState->GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalTreeView->m_pState->GetServer()))
 			{
-				wxMessageBox(_("Drag&drop between different servers has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
@@ -649,7 +649,7 @@ wxString CLocalTreeView::GetDirFromItem(wxTreeItemId item)
 			{
 				if (SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, path) != S_OK)
 				{
-					wxMessageBox(_("Failed to get desktop path"));
+					wxMessageBoxEx(_("Failed to get desktop path"));
 					return _T("/");
 				}
 			}
@@ -663,7 +663,7 @@ wxString CLocalTreeView::GetDirFromItem(wxTreeItemId item)
 			wxChar path[MAX_PATH + 1];
 			if (SHGetFolderPath(0, CSIDL_PERSONAL, 0, SHGFP_TYPE_CURRENT, path) != S_OK)
 			{
-				wxMessageBox(_("Failed to get 'My Documents' path"));
+				wxMessageBoxEx(_("Failed to get 'My Documents' path"));
 				return _T("/");
 			}
 			dir = path;
@@ -898,7 +898,7 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	if (!m_pState->SetLocalDir(dir, &error))
 	{
 		if (error != _T(""))
-			wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
+			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
 		m_setSelection = true;

@@ -323,7 +323,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 		m_pQueue->SetSelection(0);
 
 	if (failedToRequeueAll)
-		wxMessageBox(_("Not all items could be requeued for viewing/editing."));
+		wxMessageBoxEx(_("Not all items could be requeued for viewing/editing."));
 }
 
 void CQueueViewFailed::OnRequeueAll(wxCommandEvent& event)
@@ -348,7 +348,7 @@ void CQueueViewFailed::OnRequeueAll(wxCommandEvent& event)
 		m_pQueue->SetSelection(0);
 
 	if (!ret)
-		wxMessageBox(_("Not all items could be requeued for viewing/editing."));
+		wxMessageBoxEx(_("Not all items could be requeued for viewing/editing."));
 }
 
 void CQueueViewFailed::OnChar(wxKeyEvent& event)

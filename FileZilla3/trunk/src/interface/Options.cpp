@@ -213,7 +213,7 @@ COptions::COptions()
 	if (!m_pXmlFile->Load(wxFileName()))
 	{
 		wxString msg = m_pXmlFile->GetError() + _T("\n\n") + _("For this session the default settings will be used. Any changes to the settings will not be saved.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 		delete m_pXmlFile;
 		m_pXmlFile = 0;
 	}

@@ -532,7 +532,7 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	if (!m_pState->SetLocalDir(dir, &error))
 	{
 		if (error != _T(""))
-			wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
+			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
 		m_pComboBox->SetValue(m_pState->GetLocalDir().GetPath());
