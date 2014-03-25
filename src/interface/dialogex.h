@@ -17,6 +17,7 @@ public:
 
 	static int ShownDialogs() { return m_shown_dialogs; }
 
+	static bool CanShowPopupDialog();
 protected:
 
 	DECLARE_EVENT_TABLE()

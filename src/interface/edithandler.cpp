@@ -649,14 +649,11 @@ checkmodifications_loopbegin:
 			// File has changed, ask user what to do
 
 			m_busyTimer.Stop();
-			wxMouseState mouseState = wxGetMouseState();
-			if (mouseState.LeftDown() || mouseState.MiddleDown() || mouseState.RightDown())
-			{
+			if( !wxDialogEx::CanShowPopupDialog() ) {
 				m_busyTimer.Start(1000, true);
 				insideCheckForModifications = false;
 				return;
 			}
-
 			wxTopLevelWindow* pTopWindow = (wxTopLevelWindow*)wxTheApp->GetTopWindow();
 			if (pTopWindow && pTopWindow->IsIconized())
 			{

@@ -92,3 +92,24 @@ bool wxDialogEx::ReplaceControl(wxWindow* old, wxWindow* wnd)
 
 	return true;
 }
+
+bool wxDialogEx::CanShowPopupDialog()
+{
+	if( ShownDialogs() ) {
+		return false;
+	}
+
+	wxMouseState mouseState = wxGetMouseState();
+	if( mouseState.LeftDown() || mouseState.MiddleDown() || mouseState.RightDown() ) {
+		return false;
+	}
+#ifdef __WXMSW__
+	// Don't check for changes if mouse is captured,
+	// e.g. if user is dragging a file
+	if (GetCapture()) {
+		return false;
+	}
+#endif
+
+	return true;
+}
