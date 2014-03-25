@@ -312,7 +312,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 				CServerPath current_remote_path = pState->GetRemotePath();
 				if (!current_remote_path.IsEmpty() && current_remote_path.GetType() != remote_dir.GetType())
 				{
-					wxMessageBox(_("Selected global bookmark and current server use a different server type.\nUse site-specific bookmarks for this server."), _("Bookmark"), wxICON_EXCLAMATION, this);
+					wxMessageBoxEx(_("Selected global bookmark and current server use a different server type.\nUse site-specific bookmarks for this server."), _("Bookmark"), wxICON_EXCLAMATION, this);
 					return;
 				}
 				pState->ChangeRemoteDir(remote_dir);

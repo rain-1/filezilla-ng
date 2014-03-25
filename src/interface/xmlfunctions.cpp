@@ -520,7 +520,7 @@ bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/
 			if (error)
 				*error = msg;
 			else
-				wxMessageBox(msg);
+				wxMessageBoxEx(msg);
 			return false;
 		}
 	}
@@ -538,7 +538,7 @@ bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error /*=0*/
 		if (error)
 			*error = msg;
 		else
-			wxMessageBox(msg);
+			wxMessageBoxEx(msg);
 		return false;
 	}
 

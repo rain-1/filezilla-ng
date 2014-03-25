@@ -52,7 +52,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 	const wxString name = XRCCTRL(*this, "ID_NAME", wxTextCtrl)->GetValue();
 	if (name.empty())
 	{
-		wxMessageBox(_("You need to enter a name for the bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(_("You need to enter a name for the bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
 		return;
 	}
 
@@ -66,21 +66,21 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 			remote_path.SetType(m_server->GetType());
 		if (!remote_path.SetPath(remote_path_raw))
 		{
-			wxMessageBox(_("Could not parse remote path."), _("New bookmark"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Could not parse remote path."), _("New bookmark"), wxICON_EXCLAMATION);
 			return;
 		}
 	}
 
 	if (local_path.empty() && remote_path_raw.empty())
 	{
-		wxMessageBox(_("You need to enter at least one path, empty bookmarks are not supported."), _("New bookmark"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(_("You need to enter at least one path, empty bookmarks are not supported."), _("New bookmark"), wxICON_EXCLAMATION, this);
 		return;
 	}
 
 	bool sync = XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue();
 	if (sync && (local_path.empty() || remote_path_raw.empty()))
 	{
-		wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
 		return;
 	}
 
@@ -90,13 +90,13 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 
 		if (m_site_path.empty() || !CSiteManager::GetBookmarks(m_site_path, bookmarks))
 		{
-			if (wxMessageBox(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
+			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
 				return;
 
 			m_site_path = CSiteManager::AddServer(*m_server);
 			if (m_site_path == _T(""))
 			{
-				wxMessageBox(_("Could not add connection to Site Manager"), _("New bookmark"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("Could not add connection to Site Manager"), _("New bookmark"), wxICON_EXCLAMATION, this);
 				EndModal(wxID_CANCEL);
 				return;
 			}
@@ -105,7 +105,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 		{
 			if (*iter == name)
 			{
-				wxMessageBox(_("A bookmark with the entered name already exists. Please enter an unused name."), _("New bookmark"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("A bookmark with the entered name already exists. Please enter an unused name."), _("New bookmark"), wxICON_EXCLAMATION, this);
 				return;
 			}
 		}
@@ -169,7 +169,7 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
@@ -296,7 +296,7 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 	if (!pDocument)
 	{
 		wxString msg = file.GetError() + _T("\n\n") + _("The global bookmarks could not be saved.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
@@ -328,7 +328,7 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 	if (!file.Save(&error))
 	{
 		wxString msg = wxString::Format(_("Could not write \"%s\", the global bookmarks could no be saved: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
 
@@ -430,10 +430,10 @@ bool CBookmarksDialog::Verify()
 					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the current site's servertype (%s)."), server->GetNameFromServerType(server->GetType()).c_str());
 				else
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
-				wxMessageBox(msg);
+				wxMessageBoxEx(msg);
 			}
 			else
-				wxMessageBox(_("Remote path cannot be parsed. Make sure it is a valid absolute path."));
+				wxMessageBoxEx(_("Remote path cannot be parsed. Make sure it is a valid absolute path."));
 			return false;
 		}
 	}
@@ -443,14 +443,14 @@ bool CBookmarksDialog::Verify()
 	if (remotePathRaw.empty() && localPath.empty())
 	{
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetFocus();
-		wxMessageBox(_("You need to enter at least one path, empty bookmarks are not supported."));
+		wxMessageBoxEx(_("You need to enter at least one path, empty bookmarks are not supported."));
 		return false;
 	}
 
 	bool sync = XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue();
 	if (sync && (localPath.empty() || remotePathRaw.empty()))
 	{
-		wxMessageBox(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
+		wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("New bookmark"), wxICON_EXCLAMATION, this);
 		return false;
 	}
 
@@ -542,13 +542,13 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent& event)
 
 		if (m_site_path.empty() || !CSiteManager::GetBookmarks(m_site_path, bookmarks))
 		{
-			if (wxMessageBox(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
+			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
 				return;
 
 			m_site_path = CSiteManager::AddServer(*m_server);
 			if (m_site_path == _T(""))
 			{
-				wxMessageBox(_("Could not add connection to Site Manager"), _("New bookmark"), wxICON_EXCLAMATION, this);
+				wxMessageBoxEx(_("Could not add connection to Site Manager"), _("New bookmark"), wxICON_EXCLAMATION, this);
 				return;
 			}
 		}
@@ -710,7 +710,7 @@ void CBookmarksDialog::OnEndLabelEdit(wxTreeEvent& event)
 			continue;
 		if (!name.CmpNoCase(m_pTree->GetItemText(child)))
 		{
-			wxMessageBox(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
+			wxMessageBoxEx(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
 			event.Veto();
 			return;
 		}
@@ -728,7 +728,7 @@ bool CBookmarksDialog::GetBookmarks(std::list<wxString> &bookmarks)
 
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -769,7 +769,7 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -818,7 +818,7 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 	if (!pDocument)
 	{
 		wxString msg = file.GetError() + _T("\n\n") + _("The bookmark could not be added.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -833,7 +833,7 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 
 		if (!name.CmpNoCase(old_name))
 		{
-			wxMessageBox(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
 		if (name < old_name && !pInsertBefore)
@@ -856,7 +856,7 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 	if (!file.Save(&error))
 	{
 		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		return false;
 	}
 

@@ -166,7 +166,7 @@ public:
 			int code = errors[i];
 #endif
 			if (CSocket::GetErrorDescription(code).Len() < 15)
-				wxMessageBox(CSocket::GetErrorDescription(code));
+				wxMessageBoxEx(CSocket::GetErrorDescription(code));
 		}
 
 	}

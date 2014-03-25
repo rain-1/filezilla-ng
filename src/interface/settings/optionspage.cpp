@@ -212,7 +212,7 @@ bool COptionsPage::DisplayError(wxWindow* pWnd, const wxString& error)
 	if (pWnd)
 		pWnd->SetFocus();
 
-	wxMessageBox(error, _("Failed to validate settings"), wxICON_EXCLAMATION, this);
+	wxMessageBoxEx(error, _("Failed to validate settings"), wxICON_EXCLAMATION, this);
 
 	return false;
 }

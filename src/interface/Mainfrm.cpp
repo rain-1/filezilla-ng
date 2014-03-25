@@ -568,7 +568,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		const CServer* pServer = pState ? pState->GetServer() : 0;
 		if (!pServer)
 		{
-			wxMessageBox(_("Not connected to any server."), _("Cannot add server to Site Manager"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Not connected to any server."), _("Cannot add server to Site Manager"), wxICON_EXCLAMATION);
 			return;
 		}
 		OpenSiteManager(pServer);
@@ -636,7 +636,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		dlg.Create(this, _T("Ciphers"), _T("Priority string:"));
 		dlg.AllowEmpty(true);
 		if (dlg.ShowModal() == wxID_OK)
-			wxMessageBox(ListTlsCiphers(dlg.GetValue()), _T("Ciphers"));
+			wxMessageBoxEx(ListTlsCiphers(dlg.GetValue()), _T("Ciphers"));
 	}
 	else if (event.GetId() == XRCID("ID_CLEARCACHE_LAYOUT"))
 	{
@@ -1122,7 +1122,7 @@ void CMainFrame::OnCancel(wxCommandEvent& event)
 	if (!pState || pState->m_pCommandQueue->Idle())
 		return;
 
-	if (wxMessageBox(_("Really cancel current operation?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) == wxYES)
+	if (wxMessageBoxEx(_("Really cancel current operation?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) == wxYES)
 	{
 		pState->m_pCommandQueue->Cancel();
 		pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
@@ -1204,7 +1204,7 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 	}
 
 #ifdef __WXMSW__
-	// wxMessageBox does not use wxTopLevelWindow, close it too
+	// wxMessageBoxEx does not use wxTopLevelWindow, close it too
 	bool dialog = false;
 	EnumThreadWindows(GetCurrentThreadId(), FzEnumThreadWndProc, (LPARAM)&dialog);
 	if (dialog)
@@ -1573,7 +1573,7 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent& event)
 	if (oldLang != newLang)
 	{
 #ifdef __WXGTK__
-		wxMessageBox(_("FileZilla needs to be restarted for the language change to take effect."), _("Language changed"), wxICON_INFORMATION, this);
+		wxMessageBoxEx(_("FileZilla needs to be restarted for the language change to take effect."), _("Language changed"), wxICON_INFORMATION, this);
 #else
 		CreateQuickconnectBar();
 		wxGetApp().GetWrapEngine()->CheckLanguage();
@@ -2555,7 +2555,7 @@ void CMainFrame::ProcessCommandLine()
 		{
 			wxString str = _("Path not found:");
 			str += _T("\n") + local;
-			wxMessageBox(str, _("Syntax error in command line"));
+			wxMessageBoxEx(str, _("Syntax error in command line"));
 			return;
 		}
 		
@@ -2604,7 +2604,7 @@ void CMainFrame::ProcessCommandLine()
 		{
 			wxString str = _("Parameter not a valid URL");
 			str += _T("\n") + error;
-			wxMessageBox(error, _("Syntax error in command line"));
+			wxMessageBoxEx(error, _("Syntax error in command line"));
 		}
 
 		if (server.GetLogonType() == ASK ||

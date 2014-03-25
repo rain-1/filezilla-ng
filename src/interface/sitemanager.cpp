@@ -238,7 +238,7 @@ wxMenu* CSiteManager::GetSitesMenu()
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		if (!predefinedSites)
 			return predefinedSites;
@@ -422,7 +422,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	wxChar c = sitePath[0];
 	if (c != '0' && c != '1')
 	{
-		wxMessageBox(_("Site path has to begin with 0 or 1."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site path has to begin with 0 or 1."), _("Invalid site path"));
 		return 0;
 	}
 
@@ -442,7 +442,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 		const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
 		if (defaultsDir == _T(""))
 		{
-			wxMessageBox(_("Site does not exist."), _("Invalid site path"));
+			wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 			return 0;
 		}
 		wxFileName name(defaultsDir, _T("fzdefaults.xml"));
@@ -451,7 +451,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return 0;
 	}
@@ -459,21 +459,21 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
 	if (!pElement)
 	{
-		wxMessageBox(_("Site does not exist."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
 	std::list<wxString> segments;
 	if (!UnescapeSitePath(sitePath, segments) || segments.empty())
 	{
-		wxMessageBox(_("Site path is malformed."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
 	if (!pChild)
 	{
-		wxMessageBox(_("Site does not exist."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
@@ -491,7 +491,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 
 	if (!data)
 	{
-		wxMessageBox(_("Could not read server item."), _("Invalid site path"));
+		wxMessageBoxEx(_("Could not read server item."), _("Invalid site path"));
 		return 0;
 	}
 
@@ -550,7 +550,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 
 	if (!pDocument)
 	{
-		wxMessageBox(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -562,7 +562,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 	std::list<wxString> segments;
 	if (!UnescapeSitePath(sitePath, segments))
 	{
-		wxMessageBox(_("Site path is malformed."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
@@ -613,7 +613,7 @@ wxString CSiteManager::AddServer(CServer server)
 	if (!pDocument)
 	{
 		wxString msg = file.GetError() + _T("\n") + _("The server could not be added.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return _T("");
 	}
@@ -668,7 +668,7 @@ wxString CSiteManager::AddServer(CServer server)
 			return _T("");
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		return _T("");
 	}
 
@@ -727,7 +727,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	if (!pDocument)
 	{
 		wxString msg = file.GetError() + _T("\n") + _("The bookmark could not be added.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -739,14 +739,14 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	std::list<wxString> segments;
 	if (!UnescapeSitePath(sitePath, segments))
 	{
-		wxMessageBox(_("Site path is malformed."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
 	if (!pChild || strcmp(pChild->Value(), "Server"))
 	{
-		wxMessageBox(_("Site does not exist."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
@@ -763,7 +763,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 
 		if (name == old_name)
 		{
-			wxMessageBox(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
 		if (name < old_name && !pInsertBefore)
@@ -789,7 +789,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 			return true;
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 
 	return true;
@@ -812,7 +812,7 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	if (!pDocument)
 	{
 		wxString msg = file.GetError() + _T("\n") + _("The bookmarks could not be cleared.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -824,14 +824,14 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	std::list<wxString> segments;
 	if (!UnescapeSitePath(sitePath, segments))
 	{
-		wxMessageBox(_("Site path is malformed."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
 	if (!pChild || strcmp(pChild->Value(), "Server"))
 	{
-		wxMessageBox(_("Site does not exist."), _("Invalid site path"));
+		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
@@ -849,7 +849,7 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 			return true;
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 
 	return true;

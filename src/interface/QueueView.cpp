@@ -84,7 +84,7 @@ public:
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
 			{
-				wxMessageBox(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
@@ -97,7 +97,7 @@ public:
 
 			if (!pServer->EqualsNoPass(m_pRemoteDataObject->GetServer()))
 			{
-				wxMessageBox(_("Drag&drop between different servers has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
@@ -1950,7 +1950,7 @@ void CQueueView::SaveQueue()
 	if (!m_queue_storage.SaveQueue(m_serverList))
 	{
 		wxString msg = wxString::Format(_("An error occurred saving the transfer queue to \"%s\".\nSome queue items might not have been saved."), m_queue_storage.GetDatabaseFilename().c_str());
-		wxMessageBox(msg, _("Error saving queue"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error saving queue"), wxICON_ERROR);
 	}
 }
 
@@ -1964,7 +1964,7 @@ void CQueueView::LoadQueueFromXML()
 		if (!xml.GetError().empty())
 		{
 			wxString msg = xml.GetError() + _T("\n\n") + _("The queue will not be saved.");
-			wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+			wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 		}
 
 		return;
@@ -1985,7 +1985,7 @@ void CQueueView::LoadQueueFromXML()
 	if (!xml.Save(&error))
 	{
 		wxString msg = wxString::Format(_("Could not write \"%s\", the queue could not be saved.\n%s"), file.GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
 
@@ -2051,7 +2051,7 @@ void CQueueView::LoadQueue()
 	{
 		wxString file = CQueueStorage::GetDatabaseFilename();
 		wxString msg = wxString::Format(_("An error occurred loading the transfer queue from \"%s\".\nSome queue items might not have been restored."), file.c_str());
-		wxMessageBox(msg, _("Error loading queue"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading queue"), wxICON_ERROR);
 	}
 }
 
@@ -2295,7 +2295,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 
 		if (command == _T(""))
 		{
-			wxMessageBox(_("No command given, aborting."), _("Empty command"), wxICON_ERROR, m_pMainFrame);
+			wxMessageBoxEx(_("No command given, aborting."), _("Empty command"), wxICON_ERROR, m_pMainFrame);
 			m_actionAfterState = ActionAfterState_Disabled;
 			return;
 		}

@@ -24,7 +24,9 @@ libengine_a_SOURCES = \
 		local_filesys.cpp \
 		local_path.cpp \
 		logging.cpp \
-		misc.cpp notification.cpp \
+		misc.cpp \
+		msgbox.cpp \
+		notification.cpp \
 		option_change_event_handler.cpp \
 		pathcache.cpp \
 		proxy.cpp \

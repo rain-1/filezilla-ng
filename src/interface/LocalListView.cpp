@@ -102,13 +102,13 @@ public:
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
 			{
-				wxMessageBox(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
 			if (!m_pLocalListView->m_pState->GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalListView->m_pState->GetServer()))
 			{
-				wxMessageBox(_("Drag&drop between different servers has not been implemented yet."));
+				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
@@ -546,7 +546,7 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 			if (!m_pState->SetLocalDir(data->name, &error))
 			{
 				if (error != _T(""))
-					wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
+					wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 				else
 					wxBell();
 			}
@@ -626,7 +626,7 @@ void CLocalListView::OnMenuEnter(wxCommandEvent &event)
 	if (!m_pState->SetLocalDir(data->name, &error))
 	{
 		if (error != _T(""))
-			wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
+			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
 	}
@@ -1885,7 +1885,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 	{
 		if (COptions::Get()->GetOptionVal(OPTION_EDIT_TRACK_LOCAL))
 		{
-			wxMessageBox(_("Cannot edit file, not connected to any server."), _("Editing failed"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Cannot edit file, not connected to any server."), _("Editing failed"), wxICON_EXCLAMATION);
 			return;
 		}
 	}
@@ -1896,7 +1896,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		path = m_pState->GetRemotePath();
 		if (path.IsEmpty())
 		{
-			wxMessageBox(_("Cannot edit file, remote path unknown."), _("Editing failed"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Cannot edit file, remote path unknown."), _("Editing failed"), wxICON_EXCLAMATION);
 			return;
 		}
 	}
@@ -1962,19 +1962,19 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 			cmd = pEditHandler->CanOpen(CEditHandler::local, fn.GetFullPath(), dangerous, program_exists);
 			if (cmd.empty())
 			{
-				wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 				continue;
 			}
 		}
 		if (!program_exists)
 		{
 			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath().c_str(), cmd.c_str());
-			wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
 			continue;
 		}
 		if (dangerous)
 		{
-			int res = wxMessageBox(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
+			int res = wxMessageBoxEx(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
 			if (res != wxYES)
 			{
 				wxBell();
@@ -1987,11 +1987,11 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		{
 		case CEditHandler::upload:
 		case CEditHandler::upload_and_remove:
-			wxMessageBox(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
 			continue;
 		case CEditHandler::edit:
 			{
-				int res = wxMessageBox(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), fn.GetFullPath().c_str()), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
+				int res = wxMessageBoxEx(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), fn.GetFullPath().c_str()), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
 				if (res != wxYES)
 				{
 					wxBell();
@@ -2007,7 +2007,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		wxString file = fn.GetFullPath();
 		if (!pEditHandler->AddFile(CEditHandler::local, file, path, server))
 		{
-			wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 			continue;
 		}
 	}
@@ -2092,20 +2092,20 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 		}
 		if (cmd == _T(""))
 		{
-			wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 			continue;
 		}
 		if (!program_exists)
 		{
 			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath().c_str(), cmd.c_str());
-			wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
 			continue;
 		}
 
 		if (wxExecute(cmd))
 			continue;
 
-		wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 	}
 }
 
@@ -2179,7 +2179,7 @@ void CLocalListView::OnNavigationEvent(bool forward)
 		if (!m_pState->SetLocalDir(_T(".."), &error))
 		{
 			if (error != _T(""))
-				wxMessageBox(error, _("Failed to change directory"), wxICON_INFORMATION);
+				wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 			else
 				wxBell();
 		}

@@ -101,7 +101,7 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString name, wxString chall
 			user = XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->GetValue();
 			if (user == _T(""))
 			{
-				wxMessageBox(_("No username given."), _("Invalid input"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(_("No username given."), _("Invalid input"), wxICON_EXCLAMATION);
 				continue;
 			}
 		}

@@ -528,7 +528,7 @@ void CStatusBar::OnHandleLeftClick(wxWindow* pWnd)
 			dlg.ShowDialog(pSftpEncryptionNotification);
 		}
 		else
-			wxMessageBox(_("Certificate and session data are not available yet."), _("Security information"));
+			wxMessageBoxEx(_("Certificate and session data are not available yet."), _("Security information"));
 	}
 	else if (pWnd == m_pSpeedLimitsIndicator)
 	{

@@ -66,7 +66,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState || !pState->m_pEngine)
 	{
-		wxMessageBox(_("FTP Engine not initialized, can't connect"), _("FileZilla Error"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("FTP Engine not initialized, can't connect"), _("FileZilla Error"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -85,7 +85,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 		wxString msg = _("Could not parse server address:");
 		msg += _T("\n");
 		msg += error;
-		wxMessageBox(msg, _("Syntax error"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(msg, _("Syntax error"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -123,7 +123,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	if (protocol == HTTP || protocol == HTTPS)
 	{
 		wxString error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
-		wxMessageBox(error, _("Syntax error"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(error, _("Syntax error"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -202,7 +202,7 @@ void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState || !pState->m_pEngine)
 	{
-		wxMessageBox(_("FTP Engine not initialized, can't connect"), _("FileZilla Error"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("FTP Engine not initialized, can't connect"), _("FileZilla Error"), wxICON_EXCLAMATION);
 		return;
 	}
 

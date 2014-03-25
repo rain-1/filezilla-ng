@@ -31,19 +31,19 @@ void CClearPrivateDataDialog::Show()
 	wxCheckBox *pQueueCheck = XRCCTRL(*this, "ID_CLEARQUEUE", wxCheckBox);
 	if (pSitemanagerCheck->GetValue() && pQueueCheck->GetValue())
 	{
-		int res = wxMessageBox(_("Do you really want to delete all Site Manager entries and the transfer queue?"), _("Clear private data"), wxYES | wxNO | wxICON_QUESTION);
+		int res = wxMessageBoxEx(_("Do you really want to delete all Site Manager entries and the transfer queue?"), _("Clear private data"), wxYES | wxNO | wxICON_QUESTION);
 		if (res != wxYES)
 			return;
 	}
 	else if (pQueueCheck->GetValue())
 	{
-		int res = wxMessageBox(_("Do you really want to delete the transfer queue?"), _("Clear private data"), wxYES | wxNO | wxICON_QUESTION);
+		int res = wxMessageBoxEx(_("Do you really want to delete the transfer queue?"), _("Clear private data"), wxYES | wxNO | wxICON_QUESTION);
 		if (res != wxYES)
 			return;
 	}
 	else if (pSitemanagerCheck->GetValue())
 	{
-		int res = wxMessageBox(_("Do you really want to delete all Site Manager entries?"), _("Clear private data"), wxYES | wxNO | wxICON_QUESTION);
+		int res = wxMessageBoxEx(_("Do you really want to delete all Site Manager entries?"), _("Clear private data"), wxYES | wxNO | wxICON_QUESTION);
 		if (res != wxYES)
 			return;
 	}
@@ -74,7 +74,7 @@ void CClearPrivateDataDialog::Show()
 			{
 				if (!asked)
 				{
-					int res = wxMessageBox(_("Reconnect information cannot be cleared while connected to a server.\nIf you continue, your connection will be disconnected."), _("Clear private data"), wxOK | wxCANCEL);
+					int res = wxMessageBoxEx(_("Reconnect information cannot be cleared while connected to a server.\nIf you continue, your connection will be disconnected."), _("Clear private data"), wxOK | wxCANCEL);
 					if (res != wxOK)
 						return;
 					asked = true;
@@ -100,7 +100,7 @@ void CClearPrivateDataDialog::Show()
 		CInterProcessMutex sitemanagerMutex(MUTEX_SITEMANAGERGLOBAL, false);
 		while (sitemanagerMutex.TryLock() == 0)
 		{
-			int res = wxMessageBox(_("The Site Manager is opened in another instance of FileZilla 3.\nPlease close it or the data cannot be deleted."), _("Clear private data"), wxOK | wxCANCEL);
+			int res = wxMessageBoxEx(_("The Site Manager is opened in another instance of FileZilla 3.\nPlease close it or the data cannot be deleted."), _("Clear private data"), wxOK | wxCANCEL);
 			if (res != wxYES)
 				return;
 		}

@@ -99,13 +99,13 @@ public:
 
 		if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
 		{
-			wxMessageBox(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
+			wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 			return wxDragNone;
 		}
 
 		if (!m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteListView->m_pState->GetServer()))
 		{
-			wxMessageBox(_("Drag&drop between different servers has not been implemented yet."));
+			wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 			return wxDragNone;
 		}
 
@@ -138,7 +138,7 @@ public:
 		// Make sure target path is valid
 		if (target == m_pRemoteDataObject->GetServerPath())
 		{
-			wxMessageBox(_("Source and target of the drop operation are identical"));
+			wxMessageBoxEx(_("Source and target of the drop operation are identical"));
 			return wxDragNone;
 		}
 
@@ -154,7 +154,7 @@ public:
 					return wxDragNone;
 				else if (dir.IsParentOf(target, false))
 				{
-					wxMessageBox(_("A directory cannot be dragged into one of its subdirectories."));
+					wxMessageBoxEx(_("A directory cannot be dragged into one of its subdirectories."));
 					return wxDragNone;
 				}
 			}
@@ -1712,7 +1712,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 		question.Printf(_("Really delete %s and %s from the server?"), files.c_str(), dirs.c_str());
 	}
 
-	if (wxMessageBox(question, _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
+	if (wxMessageBoxEx(question, _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
 		return;
 
 	bool follow_symlink = false;
@@ -1908,7 +1908,7 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 	CServerPath newPath = m_pDirectoryListing->path;
 	if (!newPath.ChangePath(newFile, true))
 	{
-		wxMessageBox(_("Filename invalid"), _("Cannot rename file"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Filename invalid"), _("Cannot rename file"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -1922,7 +1922,7 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 		{
 			if (newFile == (*m_pDirectoryListing)[i].name)
 			{
-				if (wxMessageBox(_("Target filename already exists, really continue?"), _("File exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
+				if (wxMessageBoxEx(_("Target filename already exists, really continue?"), _("File exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
 					return false;
 
 				break;
@@ -2565,7 +2565,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent& event)
 			{
 				delete ext;
 				ext = 0;
-				wxMessageBox(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
+				wxMessageBoxEx(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
 				return;
 			}
 
@@ -2626,7 +2626,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 	const wxString& localDir = pEditHandler->GetLocalDirectory();
 	if (localDir == _T(""))
 	{
-		wxMessageBox(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
+		wxMessageBoxEx(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
 		return;
 	}
 
@@ -2665,19 +2665,19 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 			cmd = pEditHandler->CanOpen(CEditHandler::remote, entry.name, dangerous, program_exists);
 			if (cmd.empty())
 			{
-				wxMessageBox(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), entry.name.c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), entry.name.c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 				continue;
 			}
 		}
 		if (!program_exists)
 		{
 			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), entry.name.c_str(), cmd.c_str());
-			wxMessageBox(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
 			continue;
 		}
 		if (dangerous)
 		{
-			int res = wxMessageBox(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
+			int res = wxMessageBoxEx(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
 			if (res != wxYES)
 			{
 				wxBell();
@@ -2692,12 +2692,12 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 		case CEditHandler::upload:
 		case CEditHandler::upload_and_remove:
 		case CEditHandler::upload_and_remove_failed:
-			wxMessageBox(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
 			continue;
 		case CEditHandler::removing:
 			if (!pEditHandler->Remove(entry.name, path, server))
 			{
-				wxMessageBox(_("A file with that name is still being edited. Please close it and try again."), _("Selected file is already opened"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(_("A file with that name is still being edited. Please close it and try again."), _("Selected file is already opened"), wxICON_EXCLAMATION);
 				continue;
 			}
 			break;
@@ -2725,7 +2725,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 				{
 					if (!pEditHandler->Remove(entry.name, path, server))
 					{
-						wxMessageBox(_("The selected file is still opened in some other program, please close it."), _("Selected file is still being edited"), wxICON_EXCLAMATION);
+						wxMessageBoxEx(_("The selected file is still opened in some other program, please close it."), _("Selected file is still being edited"), wxICON_EXCLAMATION);
 						continue;
 					}
 				}
@@ -3062,7 +3062,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 
 	if (!wxTheClipboard->Open())
 	{
-		wxMessageBox(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -3178,7 +3178,7 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 		(newFileName.Find('>')  != -1) ||
 		(newFileName.Find('|')  != -1))
 	{
-		wxMessageBox(_("Filename may not contain any of the following characters: / \\ : * ? \" < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Filename may not contain any of the following characters: / \\ : * ? \" < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -3187,7 +3187,7 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 	{
 		if (newFileName == (*m_pDirectoryListing)[i].name)
 		{
-			wxMessageBox(_("Target filename already exists!"));
+			wxMessageBoxEx(_("Target filename already exists!"));
 			return;
 		}
 	}

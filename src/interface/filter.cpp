@@ -207,7 +207,7 @@ void CFilterDialog::SaveFilters()
 	if (!pDocument)
 	{
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters could not be saved.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
@@ -307,7 +307,7 @@ void CFilterDialog::OnFilterSelect(wxCommandEvent& event)
 	if (localOnly && event.GetEventObject() != pLocal)
 	{
 		pRemote->Check(item, false);
-		wxMessageBox(_("Selected filter only works for local files."), _("Cannot select filter"), wxICON_INFORMATION);
+		wxMessageBoxEx(_("Selected filter only works for local files."), _("Cannot select filter"), wxICON_INFORMATION);
 		return;
 	}
 
@@ -347,7 +347,7 @@ void CFilterDialog::OnSaveAs(wxCommandEvent& event)
 	wxString name = dlg.GetValue();
 	if (name == _T(""))
 	{
-		wxMessageBox(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
+		wxMessageBoxEx(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
 		return;
 	}
 	wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
@@ -362,7 +362,7 @@ void CFilterDialog::OnSaveAs(wxCommandEvent& event)
 	int pos = pChoice->FindString(name);
 	if (pos != wxNOT_FOUND)
 	{
-		if (wxMessageBox(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
+		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
 			return;
 	}
 
@@ -394,7 +394,7 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 
 	if (!old_pos)
 	{
-		wxMessageBox(_("This filter set cannot be renamed."));
+		wxMessageBoxEx(_("This filter set cannot be renamed."));
 		return;
 	}
 
@@ -416,14 +416,14 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 
 	if (name == _T(""))
 	{
-		wxMessageBox(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
+		wxMessageBoxEx(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
 		return;
 	}
 
 	int pos = pChoice->FindString(name);
 	if (pos != wxNOT_FOUND)
 	{
-		if (wxMessageBox(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
+		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
 			return;
 	}
 
@@ -459,7 +459,7 @@ void CFilterDialog::OnDeleteSet(wxCommandEvent& event)
 
 	if (!pos)
 	{
-		wxMessageBox(_("This filter set cannot be removed."));
+		wxMessageBoxEx(_("This filter set cannot be removed."));
 		return;
 	}
 
@@ -1029,7 +1029,7 @@ void CFilterManager::LoadFilters()
 	if (!pDocument)
 	{
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters will not be saved.");
-		wxMessageBox(msg, _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}

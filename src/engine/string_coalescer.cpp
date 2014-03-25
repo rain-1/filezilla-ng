@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include "string_coalescer.h"
+#include <msgbox.h>
 
 #include <wx/wx.h>
 
@@ -167,7 +168,7 @@ void BenchmarkStringCoalescer()
 	int median = stringLengths.empty() ? -1 : (stringLengths[stringLengths.size() / 2]);
 	float avg = tree_.empty() ? -1. : ((float)sum / tree_.size());
 
-	wxMessageBox(wxString::Format(_T("Looking up all strings a hundred times took %dms.\n\nEntries: %u\nAssumed memory consumption: %u\nAverage string length: %0.3f\nMedian string length: %d"),
+	wxMessageBoxEx(wxString::Format(_T("Looking up all strings a hundred times took %dms.\n\nEntries: %u\nAssumed memory consumption: %u\nAverage string length: %0.3f\nMedian string length: %d"),
 		(stop - start).GetMilliseconds().GetLo(),
 		(unsigned int)tree_.size(),
 		size_,

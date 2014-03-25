@@ -94,7 +94,7 @@ bool COptionsPageConnectionSFTP::LoadProcess()
 	int pos = executable.Find(wxFileName::GetPathSeparator(), true);
 	if (pos == -1)
 	{
-		wxMessageBox(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
 		return false;
 	}
 	else
@@ -116,7 +116,7 @@ bool COptionsPageConnectionSFTP::LoadProcess()
 		delete m_pProcess;
 		m_pProcess = 0;
 
-		wxMessageBox(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -136,7 +136,7 @@ bool COptionsPageConnectionSFTP::Send(const wxString& cmd)
 
 	if (stream->GetLastError() != wxSTREAM_NO_ERROR || stream->LastWrite() != len)
 	{
-		wxMessageBox(_("Could not send command to fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Could not send command to fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -150,7 +150,7 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 	wxInputStream *pStream = m_pProcess->GetInputStream();
 	if (!pStream)
 	{
-		wxMessageBox(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 		return failure;
 	}
 
@@ -167,7 +167,7 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 			int read;
 			if (pStream->Eof() || !(read = pStream->LastRead()))
 			{
-				wxMessageBox(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 				return failure;
 			}
 			buffer[read] = 0;
@@ -220,7 +220,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		if (!silent)
 		{
 			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile.c_str());
-			wxMessageBox(msg, _("Could not load keyfile"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Could not load keyfile"), wxICON_EXCLAMATION);
 		}
 		return false;
 	}
@@ -270,7 +270,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		else if (encrypted)
 			msg = wxString::Format(_("The file '%s' is password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile.c_str());
 
-		int res = wxMessageBox(msg, _("Convert keyfile"), wxICON_QUESTION | wxYES_NO);
+		int res = wxMessageBoxEx(msg, _("Convert keyfile"), wxICON_QUESTION | wxYES_NO);
 		if (res != wxYES)
 			return false;
 
@@ -297,7 +297,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		if (code != success)
 		{
 			wxString msg = wxString::Format(_("Failed to load private key: %s"), reply.c_str());
-			wxMessageBox(msg, _("Could not load private key"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Could not load private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 
@@ -312,7 +312,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		if (newName == keyFile)
 		{
 			// Not actually a requirement by fzputtygen, but be on the safe side. We don't want the user to lose his keys.
-			wxMessageBox(_("Source and target file may not be the same"), _("Could not convert private key"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(_("Source and target file may not be the same"), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 
@@ -322,7 +322,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 			return false;
 		if (code != success)
 		{
-			wxMessageBox(wxString::Format(_("Could not write keyfile: %s"), reply.c_str()), _("Could not convert private key"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("Could not write keyfile: %s"), reply.c_str()), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 		keyFile = newName;
@@ -386,7 +386,7 @@ bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
 	if (KeyFileExists(keyFile))
 	{
 		if (!silent)
-			wxMessageBox(_("Selected file is already loaded"), _("Cannot load keyfile"), wxICON_INFORMATION);
+			wxMessageBoxEx(_("Selected file is already loaded"), _("Cannot load keyfile"), wxICON_INFORMATION);
 		return false;
 	}
 

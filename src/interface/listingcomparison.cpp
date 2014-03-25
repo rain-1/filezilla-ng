@@ -71,7 +71,7 @@ bool CComparisonManager::CompareListings()
 	if (filters.HasActiveFilters() && !filters.HasSameLocalAndRemoteFilters())
 	{
 		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
-		wxMessageBox(_("Cannot compare directories, different filters for local and remote directories are enabled"), _("Directory comparison failed"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Cannot compare directories, different filters for local and remote directories are enabled"), _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -79,13 +79,13 @@ bool CComparisonManager::CompareListings()
 	if (!m_pLeft->CanStartComparison(&error))
 	{
 		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
-		wxMessageBox(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 	if (!m_pRight->CanStartComparison(&error))
 	{
 		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
-		wxMessageBox(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 

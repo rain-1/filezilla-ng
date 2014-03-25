@@ -986,7 +986,7 @@ bool CWrapEngine::LoadCache()
 	if (!pDocument)
 	{
 		m_use_cache = false;
-		wxMessageBox(xml.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		wxMessageBoxEx(xml.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
@@ -1145,7 +1145,7 @@ bool CWrapEngine::LoadCache()
 		m_use_cache = false;
 
 		wxString msg = wxString::Format(_("Could not write \"%s\": %s"), file.GetFullPath().c_str(), error.c_str());
-		wxMessageBox(msg, _("Error writing xml file"), wxICON_ERROR);
+		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 
 

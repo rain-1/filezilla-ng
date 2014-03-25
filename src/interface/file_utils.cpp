@@ -287,7 +287,7 @@ bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 		(to.Find('>') != -1) ||
 		(to.Find('|') != -1))
 	{
-		wxMessageBox(_("Filenames may not contain any of the following characters: / \\ : * ? \" < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Filenames may not contain any of the following characters: / \\ : * ? \" < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -312,7 +312,7 @@ bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 		(to.Find('>') != -1) ||
 		(to.Find('|') != -1))
 	{
-		wxMessageBox(_("Filenames may not contain any of the following characters: / * ? < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Filenames may not contain any of the following characters: / * ? < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
 		return false;
 	}
 

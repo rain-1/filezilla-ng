@@ -13,6 +13,7 @@
 #include <wx/tokenzr.h>
 #include "cmdline.h"
 #include "welcome_dialog.h"
+#include <msgbox.h>
 
 #include <wx/xrc/xh_animatctrl.h>
 #include <wx/xrc/xh_bmpbt.h>
@@ -94,7 +95,7 @@ bool IsServiceRunning(const wxString& serviceName)
 	SC_HANDLE hScm = OpenSCManager(0, 0, GENERIC_READ);
 	if (!hScm)
 	{
-		//wxMessageBox(_T("OpenSCManager failed"));
+		//wxMessageBoxEx(_T("OpenSCManager failed"));
 		return false;
 	}
 
@@ -102,7 +103,7 @@ bool IsServiceRunning(const wxString& serviceName)
 	if (!hService)
 	{
 		CloseServiceHandle(hScm);
-		//wxMessageBox(_T("OpenService failed"));
+		//wxMessageBoxEx(_T("OpenService failed"));
 		return false;
 	}
 
@@ -111,7 +112,7 @@ bool IsServiceRunning(const wxString& serviceName)
 	{
 		CloseServiceHandle(hService);
 		CloseServiceHandle(hScm);
-		//wxMessageBox(_T("ControlService failed"));
+		//wxMessageBoxEx(_T("ControlService failed"));
 		return false;
 	}
 
@@ -261,7 +262,7 @@ bool CFileZillaApp::OnInit()
 
 			error += _T("\n");
 			error += _("Please make sure the requested locale is installed on your system.");
-			wxMessageBox(error, _("Failed to change language"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(error, _("Failed to change language"), wxICON_EXCLAMATION);
 
 			COptions::Get()->SetOption(OPTION_LANGUAGE, _T(""));
 		}
@@ -269,9 +270,9 @@ bool CFileZillaApp::OnInit()
 		if (!pInfo || !SetLocale(pInfo->Language))
 		{
 			if (pInfo && pInfo->Description)
-				wxMessageBox(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description.c_str(), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description.c_str(), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
 			else
-				wxMessageBox(wxString::Format(_("Failed to set language to %s, using default system language"), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
 		}
 #endif
 	}
@@ -279,7 +280,7 @@ bool CFileZillaApp::OnInit()
 #ifndef _DEBUG
 	const wxString& buildType = CBuildInfo::GetBuildType();
 	if (buildType == _T("nightly"))
-		wxMessageBox(_T("You are using a nightly development version of FileZilla 3, do not expect anything to work.\r\nPlease use the official releases instead.\r\n\r\n\
+		wxMessageBoxEx(_T("You are using a nightly development version of FileZilla 3, do not expect anything to work.\r\nPlease use the official releases instead.\r\n\r\n\
 Unless explicitly instructed otherwise,\r\n\
 DO NOT post bugreports,\r\n\
 DO NOT use it in production environments,\r\n\
@@ -308,7 +309,7 @@ See http://support.microsoft.com/kb/931130 for background information.\n\n\
 Unless you either disable Windows Firewall or the Application Layer Gateway service,\n\
 FileZilla will timeout on big transfers.\
 ");
-		wxMessageBox(error, _("Operating system problem detected"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(error, _("Operating system problem detected"), wxICON_EXCLAMATION);
 	}
 #endif
 
@@ -492,7 +493,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	if (m_resourceDir == _T(""))
 	{
 		wxString msg = _("Could not find the resource files for FileZilla, closing FileZilla.\nYou can set the data directory of FileZilla using the '--datadir <custompath>' commandline option or by setting the FZ_DATADIR environment variable.");
-		wxMessageBox(msg, _("FileZilla Error"), wxOK | wxICON_ERROR);
+		wxMessageBoxEx(msg, _("FileZilla Error"), wxOK | wxICON_ERROR);
 		return false;
 	}
 
@@ -666,7 +667,7 @@ void CFileZillaApp::DisplayEncodingWarning()
 
 	displayedEncodingWarning = true;
 
-	wxMessageBox(_("A local filename could not be decoded.\nPlease make sure the LC_CTYPE (or LC_ALL) environment variable is set correctly.\nUnless you fix this problem, files might be missing in the file listings.\nNo further warning will be displayed this session."), _("Character encoding issue"), wxICON_EXCLAMATION);
+	wxMessageBoxEx(_("A local filename could not be decoded.\nPlease make sure the LC_CTYPE (or LC_ALL) environment variable is set correctly.\nUnless you fix this problem, files might be missing in the file listings.\nNo further warning will be displayed this session."), _("Character encoding issue"), wxICON_EXCLAMATION);
 }
 
 CWrapEngine* CFileZillaApp::GetWrapEngine()
@@ -687,7 +688,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 	executable += _T("/fzsftp");
 	if (!wxFileName::FileExists(executable))
 	{
-		wxMessageBox(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable.c_str()),
+		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable.c_str()),
 			_("File not found"), wxICON_ERROR);
 		executable.clear();
 	}
@@ -781,7 +782,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 
 	if (!found)
 	{
-		wxMessageBox(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the FZ_FZSFTP environment variable."), program.c_str(), program.c_str(), program.c_str()),
+		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the FZ_FZSFTP environment variable."), program.c_str(), program.c_str(), program.c_str()),
 			_("File not found"), wxICON_ERROR);
 		executable.clear();
 	}
@@ -908,5 +909,5 @@ void CFileZillaApp::ShowStartupProfile()
 		msg += _T("\n");
 	}
 
-	wxMessageBox(msg);
+	wxMessageBoxEx(msg);
 }
