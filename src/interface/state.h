@@ -165,6 +165,8 @@ public:
 	// returns the relative name of the subdirectory.
 	wxString GetPreviouslyVisitedLocalSubdir() const { return m_previouslyVisitedLocalSubdir; }
 	wxString GetPreviouslyVisitedRemoteSubdir() const { return m_previouslyVisitedRemoteSubdir; }
+	void ClearPreviouslyVisitedLocalSubdir() { m_previouslyVisitedLocalSubdir = _T(""); }
+	void ClearPreviouslyVisitedRemoteSubdir() { m_previouslyVisitedRemoteSubdir = _T(""); }
 
 protected:
 	void SetServer(const CServer* server);

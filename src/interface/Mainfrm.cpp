@@ -2116,13 +2116,14 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 	if (pData->m_localDir != _T(""))
 	{
 		CState *pState = CContextManager::Get()->GetCurrentContext();
-		bool set = pState && pState->SetLocalDir(pData->m_localDir);
+		if( pState ) {
+			pState->ClearPreviouslyVisitedLocalSubdir();
+			bool set = pState->SetLocalDir(pData->m_localDir);
 
-		if (set && pData->m_sync)
-		{
-			wxASSERT(!pData->m_remoteDir.IsEmpty());
-
-			pState->SetSyncBrowse(true, pData->m_remoteDir);
+			if (set && pData->m_sync) {
+				wxASSERT(!pData->m_remoteDir.IsEmpty());
+				pState->SetSyncBrowse(true, pData->m_remoteDir);
+			}
 		}
 	}
 
