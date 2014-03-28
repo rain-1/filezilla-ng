@@ -10,12 +10,15 @@ namespace
 	const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
 }
 
-wxString CSizeFormatBase::Format(COptionsBase* pOptions, const wxLongLong& size, bool add_bytes_suffix, enum CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
+wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool add_bytes_suffix, enum CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
 {
 	wxASSERT(format != formats_count);
+	wxASSERT(size >= 0);
+	if( size < 0 ) {
+		size = 0;
+	}
 
-	if (format == bytes)
-	{
+	if (format == bytes) {
 		wxString result = FormatNumber(pOptions, size, &thousands_separator);
 
 		if (!add_bytes_suffix)
@@ -46,28 +49,23 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, const wxLongLong& size,
 	wxLongLong r = size;
 	int remainder = 0;
 	bool clipped = false;
-	while (r > divider && p < 6)
-	{
+	while (r > divider && p < 6) {
 		const wxLongLong rr = r / divider;
 		if (remainder != 0)
 			clipped = true;
 		remainder = (r - rr * divider).GetLo();
 		r = rr;
-		p++;
+		++p;
 	}
-	if (!num_decimal_places)
-	{
+	if (!num_decimal_places) {
 		if (remainder != 0 || clipped)
-			r++;
+			++r;
 	}
-	else if (p) // Don't add decimal places on exact bytes
-	{
-		if (format != si1000)
-		{
+	else if (p) { // Don't add decimal places on exact bytes
+		if (format != si1000) {
 			// Binary, need to convert 1024 into range from 1-1000
-			if (clipped)
-			{
-				remainder++;
+			if (clipped) {
+				++remainder;
 				clipped = false;
 			}
 			remainder = (int)ceil((double)remainder * 1000 / 1024);
@@ -92,8 +90,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, const wxLongLong& size,
 			break;
 		}
 
-		if (num_decimal_places != 3)
-		{
+		if (num_decimal_places != 3) {
 			if (remainder % divider)
 				clipped = true;
 			remainder /= divider;
@@ -101,21 +98,19 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, const wxLongLong& size,
 
 		if (clipped)
 			remainder++;
-		if (remainder > max)
-		{
+		if (remainder > max) {
 			r++;
 			remainder = 0;
 		}
 
 		places.Printf(_T("%d"), remainder);
 		const size_t len = places.Len();
-		for (size_t i = len; i < static_cast<size_t>(num_decimal_places); i++)
+		for (size_t i = len; i < static_cast<size_t>(num_decimal_places); ++i)
 			places = _T("0") + places;
 	}
 
 	wxString result = r.ToString();
-	if (places != _T(""))
-	{
+	if (places != _T("")) {
 		const wxString& sep = GetRadixSeparator();
 
 		result += sep;
