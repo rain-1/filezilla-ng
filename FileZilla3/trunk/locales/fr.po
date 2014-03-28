@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-22 22:03+0100\n"
+"POT-Creation-Date: 2014-03-28 10:05+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -15,12 +15,12 @@ msgstr ""
 "X-Generator: Poedit 1.6.4\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
-#: ../../locales/../src/interface/statuslinectrl.cpp:230
+#: ../../locales/../src/interface/statuslinectrl.cpp:224
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S écoulée(s)"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:69
-#: ../../locales/../src/interface/statuslinectrl.cpp:238
+#: ../../locales/../src/interface/statuslinectrl.cpp:232
 msgid "%H:%M:%S left"
 msgstr "%H:%M:%S restante(s)"
 
@@ -76,7 +76,7 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d fichier. Taille totale : Au moins %s"
 msgstr[1] "%d fichiers. Taille totale : Au moins %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2950
+#: ../../locales/../src/interface/QueueView.cpp:2946
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d fichiers ajoutés à la file d'attente"
@@ -97,12 +97,12 @@ msgstr "%h - Hôte"
 msgid "%p - Password"
 msgstr "%p - Mot de passe"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:186
+#: ../../locales/../src/interface/statuslinectrl.cpp:180
 #, c-format
 msgid "%s (%s/s)"
 msgstr "%s (%s/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:189
+#: ../../locales/../src/interface/statuslinectrl.cpp:183
 #, c-format
 msgid "%s (? B/s)"
 msgstr "%s (? o/s)"
@@ -132,14 +132,14 @@ msgstr "%s et %s. Taille totale : %s"
 msgid "%s and %s. Total size: At least %s"
 msgstr "%s et %s. Taille totale : au moins %s"
 
-#: ../../locales/../src/engine/sizeformatting_base.cpp:31
+#: ../../locales/../src/engine/sizeformatting_base.cpp:34
 #, c-format
 msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s octet"
 msgstr[1] "%s octets"
 
-#: ../../locales/../src/interface/FileZilla.cpp:690
+#: ../../locales/../src/interface/FileZilla.cpp:691
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -154,7 +154,7 @@ msgstr ""
 "Veuillez télécharger Filezilla à nouveau. Si le problème persiste, merci de "
 "soumettre un rapport d'erreur."
 
-#: ../../locales/../src/interface/FileZilla.cpp:784
+#: ../../locales/../src/interface/FileZilla.cpp:785
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -1085,7 +1085,7 @@ msgstr "(en %s/s)"
 msgid "-"
 msgstr "-"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:241
+#: ../../locales/../src/interface/statuslinectrl.cpp:235
 msgid "--:--:-- left"
 msgstr "--:--:-- restant"
 
@@ -1186,7 +1186,7 @@ msgstr ""
 "Un fichier portant ce nom est encore en cours d'édition. Veuillez le fermer "
 "et réessayez."
 
-#: ../../locales/../src/interface/FileZilla.cpp:669
+#: ../../locales/../src/interface/FileZilla.cpp:670
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1381,7 +1381,7 @@ msgstr ""
 msgid "Algorithm:"
 msgstr "Algorithme :"
 
-#: ../../locales/../src/interface/QueueView.cpp:3139
+#: ../../locales/../src/interface/QueueView.cpp:3135
 msgid "All files have been successfully transferred"
 msgstr "Tous les fichiers ont été transférés avec succès"
 
@@ -1391,7 +1391,7 @@ msgstr ""
 "Tous les ports de la plage spécifiée doivent être compris entre 1024 et "
 "65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:3135
+#: ../../locales/../src/interface/QueueView.cpp:3131
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1586,8 +1586,8 @@ msgstr "Classement automatique par type de fichier"
 msgid "Available sizes"
 msgstr "Tailles disponibles"
 
-#: ../../locales/../src/engine/sizeformatting_base.cpp:129
-#: ../../locales/../src/engine/sizeformatting_base.cpp:188
+#: ../../locales/../src/engine/sizeformatting_base.cpp:124
+#: ../../locales/../src/engine/sizeformatting_base.cpp:183
 msgid "B <Unit symbol for bytes. Only translate first letter>"
 msgstr ""
 "o <Symbole unitaire pour octets. Traduire uniquement la première lettre>"
@@ -1604,8 +1604,8 @@ msgstr "Instructions pour une première utilisation"
 msgid "Behaviour"
 msgstr "Comportement"
 
-#: ../../locales/../src/interface/edithandler.cpp:1142
-#: ../../locales/../src/interface/edithandler.cpp:1170
+#: ../../locales/../src/interface/edithandler.cpp:1139
+#: ../../locales/../src/interface/edithandler.cpp:1167
 msgid "Being edited"
 msgstr "En cours d'édition"
 
@@ -1823,13 +1823,13 @@ msgstr "Impossible de sauvegarder le jeu de filtres"
 msgid "Cannot select filter"
 msgstr "Impossible de sélectionner le filtre"
 
-#: ../../locales/../src/interface/edithandler.cpp:1520
-#: ../../locales/../src/interface/edithandler.cpp:1525
-#: ../../locales/../src/interface/edithandler.cpp:1564
+#: ../../locales/../src/interface/edithandler.cpp:1517
+#: ../../locales/../src/interface/edithandler.cpp:1522
+#: ../../locales/../src/interface/edithandler.cpp:1561
 msgid "Cannot set file association"
 msgstr "Impossible de définir l'association de fichier"
 
-#: ../../locales/../src/interface/edithandler.cpp:1101
+#: ../../locales/../src/interface/edithandler.cpp:1098
 msgid "Cannot show dialog"
 msgstr "Impossible d'afficher le dialogue"
 
@@ -1877,7 +1877,7 @@ msgstr ""
 "Toutes modifications de paramètres du fichier journal nécessitent un "
 "redémarrage de FileZilla."
 
-#: ../../locales/../src/interface/FileZilla.cpp:669
+#: ../../locales/../src/interface/FileZilla.cpp:670
 msgid "Character encoding issue"
 msgstr "Problème d'encodage de caractères"
 
@@ -2161,7 +2161,7 @@ msgid "Connecting"
 msgstr "Connexion en cours"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:207
-#: ../../locales/../src/interface/statuslinectrl.cpp:280
+#: ../../locales/../src/interface/statuslinectrl.cpp:272
 #, c-format
 msgid "Connecting to %s"
 msgstr "Connexion à %s"
@@ -2342,7 +2342,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Impossible d'établir une connexion au serveur"
 
-#: ../../locales/../src/interface/FileZilla.cpp:494
+#: ../../locales/../src/interface/FileZilla.cpp:495
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2863,7 +2863,7 @@ msgstr "Dossier"
 
 #: resources.h:641 resources.h:916 resources.h:1004
 #: ../../locales/../src/interface/filelistctrl.cpp:449
-#: ../../locales/../src/interface/Mainfrm.cpp:2451
+#: ../../locales/../src/interface/Mainfrm.cpp:2441
 msgid "Directory comparison"
 msgstr "Comparaison de dossier"
 
@@ -2936,7 +2936,7 @@ msgid "Disconnected from server: %s"
 msgstr "Déconnecté du serveur : %s"
 
 #: ../../locales/../src/interface/QueueView.cpp:1422
-#: ../../locales/../src/interface/statuslinectrl.cpp:274
+#: ../../locales/../src/interface/statuslinectrl.cpp:266
 msgid "Disconnecting from previous server"
 msgstr "Déconnexion du précédent serveur"
 
@@ -3045,7 +3045,7 @@ msgstr ""
 "Vitesse de téléchargement : %s/s\n"
 "Vitesse d'envoi : %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1127
+#: ../../locales/../src/interface/edithandler.cpp:1124
 msgid "Downloading"
 msgstr "En cours de téléchargement"
 
@@ -3448,9 +3448,9 @@ msgstr "FTPS - FTP sur connexion implicite (TLS/SSL)"
 msgid "Failed to change directory"
 msgstr "Impossible de changer de dossier"
 
-#: ../../locales/../src/interface/FileZilla.cpp:264
-#: ../../locales/../src/interface/FileZilla.cpp:272
-#: ../../locales/../src/interface/FileZilla.cpp:274
+#: ../../locales/../src/interface/FileZilla.cpp:265
+#: ../../locales/../src/interface/FileZilla.cpp:273
+#: ../../locales/../src/interface/FileZilla.cpp:275
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:53
 msgid "Failed to change language"
 msgstr "Impossible de changer de langue"
@@ -3570,14 +3570,14 @@ msgstr "Impossible de récupérer l'adresse IP externe."
 msgid "Failed to send command."
 msgstr "Impossible d'envoyer la commande."
 
-#: ../../locales/../src/interface/FileZilla.cpp:272
+#: ../../locales/../src/interface/FileZilla.cpp:273
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr ""
 "Impossible de définir la langue sur %s (%s), utilisation de la langue par "
 "défaut du système"
 
-#: ../../locales/../src/interface/FileZilla.cpp:257
+#: ../../locales/../src/interface/FileZilla.cpp:258
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
@@ -3585,14 +3585,14 @@ msgstr ""
 "Impossible de définir la langue sur %s (%s), utilisation de la langue par "
 "défaut du système (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:245
+#: ../../locales/../src/interface/FileZilla.cpp:246
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr ""
 "Impossible de définir la langue sur %s (%s), utilisation de la langue par "
 "défaut du système."
 
-#: ../../locales/../src/interface/FileZilla.cpp:274
+#: ../../locales/../src/interface/FileZilla.cpp:275
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:53
 #, c-format
 msgid "Failed to set language to %s, using default system language"
@@ -3600,14 +3600,14 @@ msgstr ""
 "Impossible de définir la langue sur %s, utilisation de la langue par défaut "
 "du système"
 
-#: ../../locales/../src/interface/FileZilla.cpp:253
+#: ../../locales/../src/interface/FileZilla.cpp:254
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Impossible de définir la langue sur %s, utilisation de la langue par défaut "
 "du système (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:242
+#: ../../locales/../src/interface/FileZilla.cpp:243
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr ""
@@ -3679,9 +3679,9 @@ msgstr "Le fichier a été modifié"
 msgid "File lists"
 msgstr "Listes des fichiers"
 
-#: ../../locales/../src/interface/edithandler.cpp:1604
-#: ../../locales/../src/interface/FileZilla.cpp:691
-#: ../../locales/../src/interface/FileZilla.cpp:785
+#: ../../locales/../src/interface/edithandler.cpp:1601
+#: ../../locales/../src/interface/FileZilla.cpp:692
+#: ../../locales/../src/interface/FileZilla.cpp:786
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:127
 msgid "File not found"
 msgstr "Fichier introuvable"
@@ -3735,7 +3735,7 @@ msgstr "Transfert de fichier avec type de données ASCII."
 msgid "File would transfer with binary data type."
 msgstr "Transfert de fichier avec type de données binaires."
 
-#: ../../locales/../src/interface/FileZilla.cpp:495
+#: ../../locales/../src/interface/FileZilla.cpp:496
 #: ../../locales/../src/interface/quickconnectbar.cpp:69
 #: ../../locales/../src/interface/quickconnectbar.cpp:205
 msgid "FileZilla Error"
@@ -3766,7 +3766,7 @@ msgstr "Mises à jour de FileZilla"
 msgid "Filelist status &bars"
 msgstr "Barre d'état des ar&borescences"
 
-#: ../../locales/../src/interface/edithandler.cpp:1112
+#: ../../locales/../src/interface/edithandler.cpp:1109
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:278
 #: ../../locales/../src/interface/RemoteListView.cpp:372
@@ -4568,8 +4568,8 @@ msgstr "Contenu :"
 msgid "Lo&west available port:"
 msgstr "P&ort le plus bas disponible :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1160
-#: ../../locales/../src/interface/edithandler.cpp:1414
+#: ../../locales/../src/interface/edithandler.cpp:1157
+#: ../../locales/../src/interface/edithandler.cpp:1411
 msgid "Local"
 msgstr "Local"
 
@@ -4726,7 +4726,7 @@ msgid "Maximum simultaneous &transfers:"
 msgstr "Nombre maximum de &transferts simultanés :"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1975
+#: ../../locales/../src/interface/Mainfrm.cpp:1964
 msgid "Message log"
 msgstr "Journal des événements"
 
@@ -4883,7 +4883,7 @@ msgid "No external IP address set, trying default."
 msgstr ""
 "Aucune adresse IP externe spécifiée, utilisation des paramètres par défaut."
 
-#: ../../locales/../src/interface/edithandler.cpp:1101
+#: ../../locales/../src/interface/edithandler.cpp:1098
 msgid "No files are currently being edited."
 msgstr "Aucun fichier en cours d'édition."
 
@@ -4901,7 +4901,7 @@ msgstr "Aucun hôte spécifié, saisissez un hôte."
 msgid "No images available"
 msgstr "Aucune image disponible"
 
-#: ../../locales/../src/interface/QueueView.cpp:3168
+#: ../../locales/../src/interface/QueueView.cpp:3164
 msgid "No more files in the queue!"
 msgstr "Il n'y a plus de fichiers dans la file d'attente !"
 
@@ -5099,7 +5099,7 @@ msgstr ""
 msgid "Operating system"
 msgstr "Système d'exploitation"
 
-#: ../../locales/../src/interface/FileZilla.cpp:311
+#: ../../locales/../src/interface/FileZilla.cpp:312
 msgid "Operating system problem detected"
 msgstr "Un problème au niveau du système d'exploitation a été détecté"
 
@@ -5176,7 +5176,7 @@ msgstr "La commande PORT a été corrompue par le routeur ou le pare-feu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssif (recommandé)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2616
+#: ../../locales/../src/interface/Mainfrm.cpp:2606
 msgid "Parameter not a valid URL"
 msgstr "Le paramètre n'est pas une URL invalide"
 
@@ -5215,7 +5215,7 @@ msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
 "Le chemin ne peut pas être créé pour le dossier %s et le sous-dossier %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2567
+#: ../../locales/../src/interface/Mainfrm.cpp:2557
 msgid "Path not found:"
 msgstr "Chemin introuvable :"
 
@@ -5223,10 +5223,10 @@ msgstr "Chemin introuvable :"
 msgid "Paths"
 msgstr "Chemins"
 
-#: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/edithandler.cpp:1282
-#: ../../locales/../src/interface/edithandler.cpp:1381
-#: ../../locales/../src/interface/edithandler.cpp:1394
+#: ../../locales/../src/interface/edithandler.cpp:1136
+#: ../../locales/../src/interface/edithandler.cpp:1279
+#: ../../locales/../src/interface/edithandler.cpp:1378
+#: ../../locales/../src/interface/edithandler.cpp:1391
 msgid "Pending removal"
 msgstr "En attente de retrait"
 
@@ -5430,7 +5430,7 @@ msgstr ""
 "et que vous avez correctement saisi l'adresse nécessaire à la résolution des "
 "adresses."
 
-#: ../../locales/../src/interface/FileZilla.cpp:263
+#: ../../locales/../src/interface/FileZilla.cpp:264
 msgid "Please make sure the requested locale is installed on your system."
 msgstr "Assurez-vous que la requête locale est installée sur votre système."
 
@@ -5674,7 +5674,7 @@ msgstr "Algorithme de la clé publique :"
 msgid "Public permissions"
 msgstr "Permissions publiques"
 
-#: ../../locales/../src/interface/QueueView.cpp:3229
+#: ../../locales/../src/interface/QueueView.cpp:3244
 msgid "Queue has been fully processed"
 msgstr "La file d'attente a été complètement traitée"
 
@@ -5791,7 +5791,7 @@ msgstr ""
 msgid "Reason"
 msgstr "Raison"
 
-#: ../../locales/../src/interface/QueueView.cpp:3222
+#: ../../locales/../src/interface/QueueView.cpp:3237
 msgid "Reboot now"
 msgstr "Redémarrer maintenant"
 
@@ -5850,7 +5850,7 @@ msgstr "Actualiser la liste des dossiers et des fichiers"
 msgid "Remember passwords?"
 msgstr "Se souvenir des mots de passe?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1120
 msgid "Remote"
 msgstr "Distant"
 
@@ -5873,7 +5873,7 @@ msgstr "Recherche de fichiers distants"
 msgid "Remote filters:"
 msgstr "Filtres distants :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1114
+#: ../../locales/../src/interface/edithandler.cpp:1111
 msgid "Remote path"
 msgstr "Chemin distant"
 
@@ -6041,9 +6041,8 @@ msgid "S&top"
 msgstr "Arrê&ter"
 
 #: resources.h:606
-#, fuzzy
 msgid "S&uspend system"
-msgstr "Arrêter l'&ordinateur"
+msgstr "Mise en veille de l'ordinate&ur"
 
 #: resources.h:510
 msgid "S&ynchronized browsing"
@@ -6133,7 +6132,7 @@ msgstr ""
 "Sélectionnez une action par défaut à effectuer si le fichier cible d'un "
 "transfert existe déjà."
 
-#: ../../locales/../src/interface/edithandler.cpp:1584
+#: ../../locales/../src/interface/edithandler.cpp:1581
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:107
 msgid "Select default editor"
 msgstr "Sélection de l'éditeur par défaut"
@@ -6258,8 +6257,8 @@ msgstr "Sélection de %s et %s. Taille totale : %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Sélection de %s et %s. Taille totale : Au moins %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1525
-#: ../../locales/../src/interface/edithandler.cpp:1604
+#: ../../locales/../src/interface/edithandler.cpp:1522
+#: ../../locales/../src/interface/edithandler.cpp:1601
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:127
 msgid "Selected editor does not exist."
 msgstr "L'éditeur sélectionné n'existe pas."
@@ -6461,7 +6460,7 @@ msgstr "Afficher le contenu b&rut du dossier"
 msgid "Show &welcome dialog..."
 msgstr "Afficher le dialogue de &bienvenue..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2454
+#: ../../locales/../src/interface/Mainfrm.cpp:2444
 msgid "Show both directory trees and continue comparing?"
 msgstr "Afficher les arborescences des 2 côtés et continuer la comparaison ?"
 
@@ -6477,7 +6476,7 @@ msgstr "Afficher les chiffrements TLS disponibles"
 msgid "Shows this help dialog"
 msgstr "Afficher ce dialogue d'aide"
 
-#: ../../locales/../src/interface/QueueView.cpp:3218
+#: ../../locales/../src/interface/QueueView.cpp:3233
 msgid "Shutdown now"
 msgstr "Arrêter maintenant"
 
@@ -6696,7 +6695,7 @@ msgstr "Démarre le site local dans le chemin déterminé"
 msgid "State or province:"
 msgstr "État ou province :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1115
+#: ../../locales/../src/interface/edithandler.cpp:1112
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Status"
 msgstr "Statut"
@@ -6727,10 +6726,9 @@ msgstr "Transferts réussis"
 msgid "Summary of test results:"
 msgstr "Résumé des résultats du test :"
 
-#: ../../locales/../src/interface/QueueView.cpp:3226
-#, fuzzy
+#: ../../locales/../src/interface/QueueView.cpp:3241
 msgid "Suspend now"
-msgstr "Arrêter maintenant"
+msgstr "Mise en veille immédiate"
 
 #: resources.h:446
 msgid ""
@@ -6769,8 +6767,8 @@ msgstr "Erreur de syntaxe"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2569
-#: ../../locales/../src/interface/Mainfrm.cpp:2618
+#: ../../locales/../src/interface/Mainfrm.cpp:2559
+#: ../../locales/../src/interface/Mainfrm.cpp:2608
 msgid "Syntax error in command line"
 msgstr "Erreur de syntaxe dans la ligne de commande"
 
@@ -6872,7 +6870,7 @@ msgstr "La séquence d'identification personnalisée ne peut pas être vide."
 msgid "The data connection could not be established: %s"
 msgstr "La connexion des données ne peut pas être établie : %s"
 
-#: resources.h:411 ../../locales/../src/interface/edithandler.cpp:1564
+#: resources.h:411 ../../locales/../src/interface/edithandler.cpp:1561
 #, no-c-format
 msgid "The default editor for text files could not be found."
 msgstr "L'éditeur par défaut pour les fichiers texte est introuvable."
@@ -7166,12 +7164,12 @@ msgstr ""
 "Les paramètres ont été importé. Vous devez redémarrer FileZilla pour que "
 "ceux-ci prennent effet."
 
-#: ../../locales/../src/interface/QueueView.cpp:3221
+#: ../../locales/../src/interface/QueueView.cpp:3236
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
 "L'ordinateur va bientôt redémarrer à moins que vous ne cliquiez sur Annuler."
 
-#: ../../locales/../src/interface/QueueView.cpp:3217
+#: ../../locales/../src/interface/QueueView.cpp:3232
 msgid "The system will soon shut down unless you click Cancel."
 msgstr ""
 "Le système va bientôt s'arrêter à moins que vous ne cliquiez sur Annuler."
@@ -7254,13 +7252,13 @@ msgstr ""
 msgid "Title:"
 msgstr "Titre :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2452
+#: ../../locales/../src/interface/Mainfrm.cpp:2442
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Pour comparer des dossiers, les listes de fichiers doivent être alignées des "
 "deux côtés."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2453
+#: ../../locales/../src/interface/Mainfrm.cpp:2443
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Pour ce faire, les arborescences doivent être toutes deux visibles ou "
@@ -7370,7 +7368,7 @@ msgid "Transferred data got tainted."
 msgstr "Les données transferrées ont été corrompues."
 
 #: ../../locales/../src/interface/QueueView.cpp:1488
-#: ../../locales/../src/interface/statuslinectrl.cpp:283
+#: ../../locales/../src/interface/statuslinectrl.cpp:275
 msgid "Transferring"
 msgstr "Transfert en cours"
 
@@ -7378,8 +7376,8 @@ msgstr "Transfert en cours"
 msgid "Transfers"
 msgstr "Transferts"
 
-#: ../../locales/../src/interface/QueueView.cpp:3136
-#: ../../locales/../src/interface/QueueView.cpp:3139
+#: ../../locales/../src/interface/QueueView.cpp:3132
+#: ../../locales/../src/interface/QueueView.cpp:3135
 msgid "Transfers finished"
 msgstr "Transferts réussis"
 
@@ -7415,7 +7413,7 @@ msgstr "Approuver ce serveur et l'associer à la connexion ?"
 msgid "Try again"
 msgstr "Essayer à nouveau"
 
-#: resources.h:383 ../../locales/../src/interface/edithandler.cpp:1113
+#: resources.h:383 ../../locales/../src/interface/edithandler.cpp:1110
 msgid "Type"
 msgstr "Type"
 
@@ -7458,8 +7456,8 @@ msgstr "Code d'erreur non affecté %d"
 msgid "Unit:"
 msgstr "Unité :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1145
-#: ../../locales/../src/interface/edithandler.cpp:1173
+#: ../../locales/../src/interface/edithandler.cpp:1142
+#: ../../locales/../src/interface/edithandler.cpp:1170
 msgid "Unknown"
 msgstr "Inconnu"
 
@@ -7544,7 +7542,7 @@ msgstr "Mises à jour"
 msgid "Upload"
 msgstr "Envoyer"
 
-#: ../../locales/../src/interface/edithandler.cpp:1136
+#: ../../locales/../src/interface/edithandler.cpp:1133
 msgid "Upload failed"
 msgstr "Échec de l'envoi"
 
@@ -7573,19 +7571,19 @@ msgstr "Envoyer à nouveau ce fichier vers le serveur ?"
 msgid "Upload this file to the server?"
 msgstr "Envoyer ce fichier vers le serveur ?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1130
-#: ../../locales/../src/interface/edithandler.cpp:1164
-#: ../../locales/../src/interface/edithandler.cpp:1329
+#: ../../locales/../src/interface/edithandler.cpp:1127
+#: ../../locales/../src/interface/edithandler.cpp:1161
+#: ../../locales/../src/interface/edithandler.cpp:1326
 msgid "Uploading"
 msgstr "Envoi en cours"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
-#: ../../locales/../src/interface/edithandler.cpp:1331
+#: ../../locales/../src/interface/edithandler.cpp:1130
+#: ../../locales/../src/interface/edithandler.cpp:1328
 msgid "Uploading and pending removal"
 msgstr "Envoi et attente de retrait"
 
-#: ../../locales/../src/interface/edithandler.cpp:1167
-#: ../../locales/../src/interface/edithandler.cpp:1333
+#: ../../locales/../src/interface/edithandler.cpp:1164
+#: ../../locales/../src/interface/edithandler.cpp:1330
 msgid "Uploading and unediting"
 msgstr "Envoi et fin de l'édition"
 
@@ -7736,7 +7734,7 @@ msgstr "Attente d'une connexion pour la navigation"
 msgid "Waiting for password"
 msgstr "Attente du mot de passe"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:277
+#: ../../locales/../src/interface/statuslinectrl.cpp:269
 msgid "Waiting for transfer to be cancelled"
 msgstr "Attente d'annulation du transfert"
 
@@ -7744,7 +7742,7 @@ msgstr "Attente d'annulation du transfert"
 msgid "Waiting to retry..."
 msgstr "Attente avant nouvel essai..."
 
-#: ../../locales/../src/interface/FileZilla.cpp:302
+#: ../../locales/../src/interface/FileZilla.cpp:303
 msgid ""
 "Warning!\n"
 "\n"
@@ -7973,7 +7971,7 @@ msgstr "Vous devez saisir un nom pour le favori."
 msgid "You need to enter a name for the log file."
 msgstr "Vous devez saisir un nom pour le fichier journal."
 
-#: ../../locales/../src/interface/edithandler.cpp:1520
+#: ../../locales/../src/interface/edithandler.cpp:1517
 msgid "You need to enter a properly quoted command."
 msgstr "Vous devez saisir une commande correcte et placée entre guillemets."
 
@@ -8036,11 +8034,10 @@ msgstr ""
 "Vous ne devriez pas avoir de problèmes pour vous connecter à d'autres "
 "serveurs ; les transferts de fichiers devraient fonctionner correctement."
 
-#: ../../locales/../src/interface/QueueView.cpp:3225
-#, fuzzy
+#: ../../locales/../src/interface/QueueView.cpp:3240
 msgid "Your computer will suspended unless you click Cancel."
 msgstr ""
-"L'ordinateur va bientôt redémarrer à moins que vous ne cliquiez sur Annuler."
+"L'ordinateur sera mis en veille à moins que vous ne cliquiez sur Annuler."
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:125
 msgid "after"
