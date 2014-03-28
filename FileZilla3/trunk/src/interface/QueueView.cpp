@@ -3519,7 +3519,7 @@ wxFileOffset CQueueView::GetCurrentSpeed(bool countDownload, bool countUpload)
 		if ((isDownload && countDownload) || (!isDownload && countUpload))
 		{
 			wxFileOffset speed = pCtrl->GetCurrentSpeed();
-			if (speed != -1)
+			if (speed > 0)
 				totalSpeed += speed;
 		}
 	}

@@ -43,7 +43,7 @@ CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const 
 	m_transferStatusTimer.SetOwner(this);
 
 	m_pParent = pParent;
-	m_pStatus = 0;
+	status_valid_ = false;
 	m_lastOffset = -1;
 
 	m_gcLastTimeStamp = wxDateTime::Now();
@@ -79,12 +79,11 @@ CStatusLineCtrl::~CStatusLineCtrl()
 	delete m_mdc;
 	delete m_pPreviousStatusText;
 
-	if (m_pStatus && m_pStatus->totalSize >= 0)
-		m_pEngineData->pItem->SetSize(m_pStatus->totalSize);
+	if (status_valid_ && status_.totalSize >= 0)
+		m_pEngineData->pItem->SetSize(status_.totalSize);
 
 	if (m_transferStatusTimer.IsRunning())
 		m_transferStatusTimer.Stop();
-	delete m_pStatus;
 }
 
 void CStatusLineCtrl::OnPaint(wxPaintEvent&)
@@ -112,10 +111,8 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 	int bar_split = -1;
 	int permill = -1;
 
-	if (!m_pStatus)
-	{
-		if (!m_pPreviousStatusText || *m_pPreviousStatusText != m_statusText)
-		{
+	if (!status_valid_) {
+		if (!m_pPreviousStatusText || *m_pPreviousStatusText != m_statusText) {
 			// Clear background
 			m_mdc->SetFont(GetFont());
 			m_mdc->SetPen(GetBackgroundColour());
@@ -129,19 +126,16 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 			refresh = 0;
 		}
 	}
-	else
-	{
-		if (m_pPreviousStatusText)
-		{
+	else {
+		if (m_pPreviousStatusText) {
 			delete m_pPreviousStatusText;
 			m_pPreviousStatusText = 0;
 			refresh = 31;
 		}
 
 		int elapsed_seconds = 0;
-		if (m_pStatus->started.IsValid())
-		{
-			elapsed = wxDateTime::Now().Subtract(m_pStatus->started);
+		if (status_.started.IsValid()) {
+			elapsed = wxDateTime::Now().Subtract(status_.started);
 			elapsed_seconds = elapsed.GetSeconds().GetLo(); // Assume GetHi is always 0
 		}
 
@@ -156,9 +150,9 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		else
 			rate = GetSpeed(elapsed_seconds);
 
-		if (m_pStatus->totalSize > 0 && elapsed_seconds && rate > 0)
+		if (status_.totalSize > 0 && elapsed_seconds && rate > 0)
 		{
-			wxFileOffset r = m_pStatus->totalSize - m_pStatus->currentOffset;
+			wxFileOffset r = status_.totalSize - status_.currentOffset;
 			left = r / rate + 1;
 			if (r)
 				++left;
@@ -173,7 +167,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 			m_last_left = left;
 		}
 
-		const wxString bytestr = CSizeFormat::Format(m_pStatus->currentOffset, true, CSizeFormat::bytes, COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0, 0);
+		const wxString bytestr = CSizeFormat::Format(status_.currentOffset, true, CSizeFormat::bytes, COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0, 0);
 		if (elapsed_seconds && rate > -1)
 		{
 			CSizeFormat::_format format = static_cast<CSizeFormat::_format>(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
@@ -194,16 +188,16 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 			m_last_bytes_and_rate = bytes_and_rate;
 		}
 
-		if (m_pStatus->totalSize > 0)
+		if (status_.totalSize > 0)
 		{
-			bar_split = wxLongLong(m_pStatus->currentOffset * (PROGRESSBAR_WIDTH - 2) / m_pStatus->totalSize).GetLo();
+			bar_split = wxLongLong(status_.currentOffset * (PROGRESSBAR_WIDTH - 2) / status_.totalSize).GetLo();
 			if (bar_split > (PROGRESSBAR_WIDTH - 2))
 				bar_split = PROGRESSBAR_WIDTH - 2;
 
-			if (m_pStatus->currentOffset > m_pStatus->totalSize)
+			if (status_.currentOffset > status_.totalSize)
 				permill = 1001;
 			else
-				permill = wxLongLong(m_pStatus->currentOffset * 1000 / m_pStatus->totalSize).GetLo();
+				permill = wxLongLong(status_.currentOffset * 1000 / status_.totalSize).GetLo();
 		}
 
 		if (m_last_bar_split != bar_split || m_last_permill != permill)
@@ -261,12 +255,10 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 
 void CStatusLineCtrl::SetTransferStatus(const CTransferStatus* pStatus)
 {
-	if (!pStatus)
-	{
-		if (m_pStatus && m_pStatus->totalSize >= 0)
-			m_pParent->UpdateItemSize(m_pEngineData->pItem, m_pStatus->totalSize);
-		delete m_pStatus;
-		m_pStatus = 0;
+	if (!pStatus) {
+		if (status_valid_ && status_.totalSize >= 0)
+			m_pParent->UpdateItemSize(m_pEngineData->pItem, status_.totalSize);
+		status_valid_ = false;
 
 		switch (m_pEngineData->state)
 		{
@@ -288,13 +280,12 @@ void CStatusLineCtrl::SetTransferStatus(const CTransferStatus* pStatus)
 			m_transferStatusTimer.Stop();
 
 		m_past_data_index = -1;
+		m_gcLastOffset = -1;
+		m_gcLastSpeed = -1;
 	}
-	else
-	{
-		if (!m_pStatus)
-			m_pStatus = new CTransferStatus(*pStatus);
-		else
-			*m_pStatus = *pStatus;
+	else {
+		status_valid_ = true;
+		status_ = *pStatus;
 
 		m_lastOffset = pStatus->currentOffset;
 
@@ -393,20 +384,17 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 
 wxFileOffset CStatusLineCtrl::GetSpeed(int elapsedSeconds)
 {
-	if (!m_pStatus)
+	if (!status_valid_)
 		return -1;
 
 	if (elapsedSeconds <= 0)
 		return -1;
 
-	if (m_past_data_index < 9)
-	{
-
-		if (m_past_data_index == -1 || m_past_data[m_past_data_index].elapsed < elapsedSeconds)
-		{
+	if (m_past_data_index < 9) {
+		if (m_past_data_index == -1 || m_past_data[m_past_data_index].elapsed < elapsedSeconds) {
 			m_past_data_index++;
 			m_past_data[m_past_data_index].elapsed = elapsedSeconds;
-			m_past_data[m_past_data_index].offset = m_pStatus->currentOffset - m_pStatus->startOffset;
+			m_past_data[m_past_data_index].offset = status_.currentOffset - status_.startOffset;
 		}
 	}
 
@@ -418,12 +406,12 @@ wxFileOffset CStatusLineCtrl::GetSpeed(int elapsedSeconds)
 		}
 	}
 
-	return (m_pStatus->currentOffset - m_pStatus->startOffset - forget.offset) / (elapsedSeconds - forget.elapsed);
+	return (status_.currentOffset - status_.startOffset - forget.offset) / (elapsedSeconds - forget.elapsed);
 }
 
 wxFileOffset CStatusLineCtrl::GetCurrentSpeed()
 {
-	if (!m_pStatus)
+	if (!status_valid_)
 		return -1;
 
 	const wxTimeSpan timeDiff( wxDateTime::UNow().Subtract(m_gcLastTimeStamp) );
@@ -433,12 +421,14 @@ wxFileOffset CStatusLineCtrl::GetCurrentSpeed()
 
 	m_gcLastTimeStamp = wxDateTime::UNow();
 
-	if (m_gcLastOffset == -1)
-		m_gcLastOffset = m_pStatus->startOffset;
+	if (m_gcLastOffset < 0)
+		m_gcLastOffset = status_.startOffset;
 
-	const wxFileOffset fileOffsetDiff = m_pStatus->currentOffset - m_gcLastOffset;
-	m_gcLastOffset = m_pStatus->currentOffset;
-	m_gcLastSpeed = fileOffsetDiff * 1000 / timeDiff.GetMilliseconds().GetLo();
+	const wxFileOffset fileOffsetDiff = status_.currentOffset - m_gcLastOffset;
+	m_gcLastOffset = status_.currentOffset;
+	if( fileOffsetDiff >= 0 ) {
+		m_gcLastSpeed = fileOffsetDiff * 1000 / timeDiff.GetMilliseconds().GetLo();
+	}
 
 	return m_gcLastSpeed;
 }
