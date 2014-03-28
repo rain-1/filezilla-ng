@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.0 (2014-03-28)
+
++ OS X: Implemented the reboot, shutdown and suspend queue completion actions
+- Popup dialogs no longer automatically open if other dialogs are already open. This prevents FileZilla from becoming unresponsive on OS X
+- Fix calculation of current transfer speed. In some situations the transfer speed tooltip over the activity indicators showed negative speeds
+- Fix handling of focus item in local directory listings if connecting to a site with a default local directory
+
 3.8.0-rc1 (2014-03-22)
 
 + MSW: Added suspend as new queue completion action
