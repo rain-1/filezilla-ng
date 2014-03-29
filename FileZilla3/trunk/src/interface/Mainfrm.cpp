@@ -2113,12 +2113,10 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 	if (!ConnectToServer(pData->m_server, pData->m_remoteDir))
 		return false;
 
-	if (pData->m_localDir != _T(""))
-	{
+	if (pData->m_localDir != _T("")) {
 		CState *pState = CContextManager::Get()->GetCurrentContext();
 		if( pState ) {
-			pState->ClearPreviouslyVisitedLocalSubdir();
-			bool set = pState->SetLocalDir(pData->m_localDir);
+			bool set = pState->SetLocalDir(pData->m_localDir, 0, false);
 
 			if (set && pData->m_sync) {
 				wxASSERT(!pData->m_remoteDir.IsEmpty());
