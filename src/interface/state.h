@@ -99,7 +99,7 @@ public:
 	void DestroyEngine();
 
 	CLocalPath GetLocalDir() const;
-	bool SetLocalDir(const wxString& dir, wxString *error = 0);
+	bool SetLocalDir(const wxString& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
 
 	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
 	bool Disconnect();
