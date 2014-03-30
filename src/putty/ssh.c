@@ -516,7 +516,7 @@ static void do_ssh2_authconn(Ssh ssh, unsigned char *in, int inlen,
 #define OUR_V2_PACKETLIMIT 0x9000UL
 
 /* Maximum length of passwords/passphrases (arbitrary) */
-#define SSH_MAX_PASSWORD_LEN 100
+#define SSH_MAX_PASSWORD_LEN 4096 /* FZ: Changed from 100. No longer needed if finally updating PuTTY version. */
 
 const static struct ssh_signkey *hostkey_algs[] = { &ssh_rsa, &ssh_dss };
 
