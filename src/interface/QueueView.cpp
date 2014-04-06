@@ -3237,7 +3237,7 @@ void CQueueView::ActionAfterWarnUser(ActionAfterState s)
 		label = _("Reboot now");
 	}
 	else {
-		message = _("Your computer will suspended unless you click Cancel.");
+		message = _("Your computer will suspend unless you click Cancel.");
 		label = _("Suspend now");
 	}
 
