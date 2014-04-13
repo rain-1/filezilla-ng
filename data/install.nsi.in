@@ -599,9 +599,18 @@ Function RunUninstaller
   IfFileExists "$INSTDIR\uninstall.exe" 0 no_remove_uninstaller
 
     Delete "$R1"
+
+  ; Remove directory only if uninstalling for good
+  ${If} $PREVIOUS_VERSION_STATE == "same"
+  ${AndIf} $REINSTALL_UNINSTALL == "1"
+  ${AndIf} $PERFORM_UPDATE != "1"
     RMDir $INSTDIR
+  ${EndIf}
 
  no_remove_uninstaller:
+
+  BringToFront
+  Sleep 500
 
 FunctionEnd
 
@@ -811,8 +820,6 @@ Function PageInstfilesShow
   ${If} $REINSTALL_UNINSTALL != ""
 
     Call RunUninstaller
-    BringToFront
-    Sleep 500
 
   ${EndIf}
 
@@ -1285,7 +1292,11 @@ Section "Uninstall"
   RMDir "$INSTDIR\resources\16x16"
   RMDir "$INSTDIR\resources"
   RMDir "$INSTDIR\docs"
-  RMDir /REBOOTOK "$INSTDIR"
+
+  ${un.GetOptions} $R0 "/frominstall" $R1
+  ${If} ${Errors}
+    RMDir /REBOOTOK "$INSTDIR"
+  ${EndIf}
 
   ${If} $un.REMOVE_ALL_USERS == 1
     SetShellVarContext all
