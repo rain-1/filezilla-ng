@@ -804,8 +804,11 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxTextCtrl" name="ID_NUMTRANSFERS">
-                  <size>40,-1</size>
+                <object class="wxSpinCtrl" name="ID_NUMTRANSFERS">
+                  <min>1</min>
+                  <max>10</max>
+                  <size>45,-1</size>
+                  <style>wxSP_ARROW_KEYS</style>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
@@ -822,8 +825,11 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxTextCtrl" name="ID_NUMDOWNLOADS">
-                  <size>40,-1</size>
+                <object class="wxSpinCtrl" name="ID_NUMDOWNLOADS">
+                  <min>0</min>
+                  <max>10</max>
+                  <size>45,-1</size>
+                  <style>wxSP_ARROW_KEYS</style>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
@@ -840,8 +846,11 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxTextCtrl" name="ID_NUMUPLOADS">
-                  <size>40,-1</size>
+                <object class="wxSpinCtrl" name="ID_NUMUPLOADS">
+                  <min>0</min>
+                  <max>10</max>
+                  <size>45,-1</size>
+                  <style>wxSP_ARROW_KEYS</style>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>

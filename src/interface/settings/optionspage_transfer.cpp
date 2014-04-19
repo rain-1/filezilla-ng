@@ -38,9 +38,10 @@ bool COptionsPageTransfer::LoadPage()
 	pTextCtrl->ChangeValue(m_pOptions->GetOption(OPTION_SPEEDLIMIT_OUTBOUND));
 	pTextCtrl->Enable(enable_speedlimits);
 
-	SetTextFromOption(XRCID("ID_NUMTRANSFERS"), OPTION_NUMTRANSFERS, failure);
-	SetTextFromOption(XRCID("ID_NUMDOWNLOADS"), OPTION_CONCURRENTDOWNLOADLIMIT, failure);
-	SetTextFromOption(XRCID("ID_NUMUPLOADS"), OPTION_CONCURRENTUPLOADLIMIT, failure);
+	XRCCTRL(*this, "ID_NUMTRANSFERS", wxSpinCtrl)->SetValue(m_pOptions->GetOptionVal(OPTION_NUMTRANSFERS));
+	XRCCTRL(*this, "ID_NUMDOWNLOADS", wxSpinCtrl)->SetValue(m_pOptions->GetOptionVal(OPTION_CONCURRENTDOWNLOADLIMIT));
+	XRCCTRL(*this, "ID_NUMUPLOADS", wxSpinCtrl)->SetValue(m_pOptions->GetOptionVal(OPTION_CONCURRENTUPLOADLIMIT));
+
 	SetChoice(XRCID("ID_BURSTTOLERANCE"), m_pOptions->GetOptionVal(OPTION_SPEEDLIMIT_BURSTTOLERANCE), failure);
 	XRCCTRL(*this, "ID_BURSTTOLERANCE", wxChoice)->Enable(enable_speedlimits);
 
@@ -75,9 +76,11 @@ bool COptionsPageTransfer::LoadPage()
 bool COptionsPageTransfer::SavePage()
 {
 	SetOptionFromCheck(XRCID("ID_ENABLE_SPEEDLIMITS"), OPTION_SPEEDLIMIT_ENABLE);
-	SetOptionFromText(XRCID("ID_NUMTRANSFERS"), OPTION_NUMTRANSFERS);
-	SetOptionFromText(XRCID("ID_NUMDOWNLOADS"), OPTION_CONCURRENTDOWNLOADLIMIT);
-	SetOptionFromText(XRCID("ID_NUMUPLOADS"), OPTION_CONCURRENTUPLOADLIMIT);
+
+	m_pOptions->SetOption(OPTION_NUMTRANSFERS,				XRCCTRL(*this, "ID_NUMTRANSFERS", wxSpinCtrl)->GetValue());
+	m_pOptions->SetOption(OPTION_CONCURRENTDOWNLOADLIMIT,	XRCCTRL(*this, "ID_NUMDOWNLOADS", wxSpinCtrl)->GetValue());
+	m_pOptions->SetOption(OPTION_CONCURRENTUPLOADLIMIT,		XRCCTRL(*this, "ID_NUMUPLOADS", wxSpinCtrl)->GetValue());
+	
 	SetOptionFromText(XRCID("ID_DOWNLOADLIMIT"), OPTION_SPEEDLIMIT_INBOUND);
 	SetOptionFromText(XRCID("ID_UPLOADLIMIT"), OPTION_SPEEDLIMIT_OUTBOUND);
 	m_pOptions->SetOption(OPTION_SPEEDLIMIT_BURSTTOLERANCE, GetChoice(XRCID("ID_BURSTTOLERANCE")));
@@ -91,18 +94,23 @@ bool COptionsPageTransfer::Validate()
 {
 	long tmp;
 	wxTextCtrl* pCtrl;
+	wxSpinCtrl* pSpinCtrl;
+	int spinValue;
 
-	pCtrl = XRCCTRL(*this, "ID_NUMTRANSFERS", wxTextCtrl);
-	if (!pCtrl->GetValue().ToLong(&tmp) || tmp < 1 || tmp > 10)
-		return DisplayError(pCtrl, _("Please enter a number between 1 and 10 for the number of concurrent transfers."));
+	pSpinCtrl = XRCCTRL(*this, "ID_NUMTRANSFERS", wxSpinCtrl);
+	spinValue = pSpinCtrl->GetValue();
+	if (spinValue < 1 || spinValue > 10)
+		return DisplayError(pSpinCtrl, _("Please enter a number between 1 and 10 for the number of concurrent transfers."));
 
-	pCtrl = XRCCTRL(*this, "ID_NUMDOWNLOADS", wxTextCtrl);
-	if (!pCtrl->GetValue().ToLong(&tmp) || tmp < 0 || tmp > 10)
-		return DisplayError(pCtrl, _("Please enter a number between 0 and 10 for the number of concurrent downloads."));
+	pSpinCtrl = XRCCTRL(*this, "ID_NUMDOWNLOADS", wxSpinCtrl);
+	spinValue = pSpinCtrl->GetValue();
+	if (spinValue < 0 || spinValue > 10)
+		return DisplayError(pSpinCtrl, _("Please enter a number between 0 and 10 for the number of concurrent downloads."));
 
-	pCtrl = XRCCTRL(*this, "ID_NUMUPLOADS", wxTextCtrl);
-	if (!pCtrl->GetValue().ToLong(&tmp) || tmp < 0 || tmp > 10)
-		return DisplayError(pCtrl, _("Please enter a number between 0 and 10 for the number of concurrent uploads."));
+	pSpinCtrl = XRCCTRL(*this, "ID_NUMUPLOADS", wxSpinCtrl);
+	spinValue = pSpinCtrl->GetValue();
+	if (spinValue < 0 || spinValue > 10)
+		return DisplayError(pSpinCtrl, _("Please enter a number between 0 and 10 for the number of concurrent uploads."));
 
 	pCtrl = XRCCTRL(*this, "ID_DOWNLOADLIMIT", wxTextCtrl);
 	if (!pCtrl->GetValue().ToLong(&tmp) || (tmp < 0))
