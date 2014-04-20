@@ -39,7 +39,7 @@ CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
 
 wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
 {
-	if (!GetDrives())
+	if (!GetDriveLabels())
 		m_failure = true;
 
 	m_running = false;
@@ -50,14 +50,24 @@ wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
 	return 0;
 }
 
-bool CVolumeDescriptionEnumeratorThread::GetDrive(const wxChar* pDrive, const int len)
+void CVolumeDescriptionEnumeratorThread::ProcessDrive(wxString const& drive)
 {
-	wxChar* pVolume = new wxChar[len + 1];
-	wxStrcpy(pVolume, pDrive);
-	if (pVolume[len - 1] == '\\')
-		pVolume[len - 1] = 0;
-	if (!*pVolume)
-	{
+	if( GetDriveLabel(drive) ) {
+		wxCommandEvent evt(fzEVT_VOLUMEENUMERATED);
+		m_pEvtHandler->AddPendingEvent(evt);
+	}
+}
+
+bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
+{
+	int len = drive.size();
+	wxChar* pVolume = new wxChar[drive.size() + 1];
+	wxStrcpy(pVolume, drive);
+	if (pVolume[drive.size() - 1] == '\\') {
+		pVolume[drive.size() - 1] = 0;
+		--len;
+	}
+	if (!*pVolume) {
 		delete [] pVolume;
 		return false;
 	}
@@ -73,7 +83,6 @@ bool CVolumeDescriptionEnumeratorThread::GetDrive(const wxChar* pDrive, const in
 		volumeInfo.pVolumeName = share_name;
 		m_volumeInfo.push_back(volumeInfo);
 		m_crit_section.Leave();
-		pDrive += len + 1;
 		return true;
 	}
 	else
@@ -82,7 +91,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDrive(const wxChar* pDrive, const in
 	// Get the label of the drive
 	wxChar* pVolumeName = new wxChar[501];
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-	BOOL res = GetVolumeInformation(pDrive, pVolumeName, 500, 0, 0, 0, 0, 0);
+	BOOL res = GetVolumeInformation(drive, pVolumeName, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
 	if (res && pVolumeName[0])
 	{
@@ -101,89 +110,92 @@ bool CVolumeDescriptionEnumeratorThread::GetDrive(const wxChar* pDrive, const in
 	return false;
 }
 
-bool CVolumeDescriptionEnumeratorThread::GetDrives()
+bool CVolumeDescriptionEnumeratorThread::GetDriveLabels()
+{
+	std::list<wxString> drives = GetDrives();
+
+	if( drives.empty() ) {
+		return true;
+	}
+
+	std::list<wxString>::const_iterator drive_a = drives.end();
+	for( std::list<wxString>::const_iterator it = drives.begin(); it != drives.end() && !m_stop; ++it ) {
+		if (m_stop) {
+			return false;
+		}
+
+		wxString const& drive = *it;
+		if( drive[0] == 'a' || drive[0] == 'A' && drive_a == drives.end() ) {
+			// Defer processing of A:, most commonly the slowest of all drives.
+			drive_a = it;
+		}
+		else {
+			ProcessDrive(drive);
+		}
+	}
+
+	if( drive_a != drives.end() && !m_stop ) {
+		ProcessDrive(*drive_a);
+	}
+
+	return !m_stop;
+}
+
+long CVolumeDescriptionEnumeratorThread::GetDrivesToHide()
 {
 	long drivesToHide = 0;
 	// Adhere to the NODRIVES group policy
 	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
-	if (key.Exists())
-	{
+	if (key.Exists()) {
+		wxLogNull null; // QueryValue can fail if item has wrong type
 		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide))
 			drivesToHide = 0;
 	}
+	return drivesToHide;
+}
 
-	int len = GetLogicalDriveStrings(0, 0);
-	if (!len)
-		return false;
-
-	wxChar* drives = new wxChar[len + 1];
-
-	if (!GetLogicalDriveStrings(len, drives))
-	{
-		delete [] drives;
-		return false;
+bool CVolumeDescriptionEnumeratorThread::IsHidden(wxChar const* drive, long noDrives)
+{
+	int bit = 0;
+	if (drive && drive[0] != 0 && drive[1] == ':') {
+		wxChar letter = drive[0];
+		if (letter >= 'A' && letter <= 'Z')
+			bit = 1 << (letter - 'A');
+		else if (letter >= 'a' && letter <= 'z')
+			bit = 1 << (letter - 'a');
 	}
 
-	const wxChar* drive_a = 0;
+	return (noDrives & bit) != 0;
+}
 
-	const wxChar* pDrive = drives;
-	while (*pDrive)
-	{
-		if (m_stop)
-		{
-			delete [] drives;
-			return false;
-		}
+std::list<wxString> CVolumeDescriptionEnumeratorThread::GetDrives()
+{
+	std::list<wxString> ret;
 
-		// Check if drive should be hidden by default
-		if (pDrive[0] != 0 && pDrive[1] == ':')
-		{
-			int bit = 0;
-			char letter = pDrive[0];
-			if (letter >= 'A' && letter <= 'Z')
-				bit = 1 << (letter - 'A');
-			if (letter >= 'a' && letter <= 'z')
-				bit = 1 << (letter - 'a');
+	long drivesToHide = GetDrivesToHide();
 
-			if (drivesToHide & bit)
-			{
-				pDrive += wxStrlen(pDrive) + 1;
-				continue;
+	int len = GetLogicalDriveStrings(0, 0);
+	if (len) {
+		wxChar* drives = new wxChar[len + 1];
+		if (GetLogicalDriveStrings(len, drives)) {
+			const wxChar* pDrive = drives;
+			while (*pDrive) {
+				const int len = wxStrlen(pDrive);
+
+				if( !IsHidden(pDrive, drivesToHide) ) {
+					ret.push_back(pDrive);
+				}
+
+				pDrive += len + 1;
 			}
 		}
 
-		const int len = wxStrlen(pDrive);
-
-		if ((pDrive[0] == 'a' || pDrive[0] == 'A') && !drive_a)
-		{
-			// Defer processing of A:, most commonly the slowest of all drives.
-			drive_a = pDrive;
-			pDrive += len + 1;
-			continue;
-		}
-		if (GetDrive(pDrive, len))
-		{
-			wxCommandEvent evt(fzEVT_VOLUMEENUMERATED);
-			m_pEvtHandler->AddPendingEvent(evt);
-		}
-
-		pDrive += len + 1;
+		delete [] drives;
 	}
 
-	if (drive_a)
-	{
-		const int len = wxStrlen(drive_a);
-		if (GetDrive(drive_a, len))
-		{
-			wxCommandEvent evt(fzEVT_VOLUMEENUMERATED);
-			m_pEvtHandler->AddPendingEvent(evt);
-		}
-	}
-
-	delete [] drives;
-
-	return true;
+	return ret;
 }
+
 
 std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> CVolumeDescriptionEnumeratorThread::GetVolumes()
 {
