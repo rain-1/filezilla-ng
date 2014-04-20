@@ -635,59 +635,17 @@ void CLocalListView::OnMenuEnter(wxCommandEvent &event)
 #ifdef __WXMSW__
 void CLocalListView::DisplayDrives()
 {
-	long drivesToHide = 0;
-	// Adhere to the NODRIVES group policy
-	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
-	if (key.Exists())
-	{
-		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide))
-			drivesToHide = 0;
-	}
-
-	int len = GetLogicalDriveStrings(0, 0);
-	if (!len)
-		return;
-
-	wxChar* drives = new wxChar[len + 1];
-
-	if (!GetLogicalDriveStrings(len, drives))
-	{
-		delete [] drives;
-		return;
-	}
-
-	const wxChar* pDrive = drives;
-
 	int count = m_fileData.size();
-	int drive_count = 0;
-	while (*pDrive)
-	{
-		// Check if drive should be hidden by default
-		if (pDrive[0] != 0 && pDrive[1] == ':')
-		{
-			int bit = -1;
-			char letter = pDrive[0];
-			if (letter >= 'A' && letter <= 'Z')
-				bit = 1 << (letter - 'A');
-			if (letter >= 'a' && letter <= 'z')
-				bit = 1 << (letter - 'a');
 
-			if (bit != -1 && drivesToHide & bit)
-			{
-				pDrive += wxStrlen(pDrive) + 1;
-				continue;
-			}
-		}
-
-		drive_count++;
-
-		wxString path = pDrive;
-		if (path.Right(1) == _T("\\"))
-			path.Truncate(path.Length() - 1);
+	std::list<wxString> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
+	for( std::list<wxString>::const_iterator it = drives.begin(); it != drives.end(); ++it ) {
+		wxString drive = *it;
+		if (drive.Right(1) == _T("\\"))
+			drive.RemoveLast();
 
 		CLocalFileData data;
 		data.flags = normal;
-		data.name = path;
+		data.name = drive;
 		data.label = data.name;
 		data.dir = true;
 		data.icon = -2;
@@ -695,20 +653,15 @@ void CLocalListView::DisplayDrives()
 
 		m_fileData.push_back(data);
 		m_indexMapping.push_back(count);
-		pDrive += wxStrlen(pDrive) + 1;
 		count++;
 	}
 
-	delete [] drives;
-
 	if (m_pFilelistStatusBar)
-		m_pFilelistStatusBar->SetDirectoryContents(0, drive_count, 0, false, 0);
+		m_pFilelistStatusBar->SetDirectoryContents(0, drives.size(), 0, false, 0);
 
-	if (!m_pVolumeEnumeratorThread)
-	{
+	if (!m_pVolumeEnumeratorThread) {
 		m_pVolumeEnumeratorThread = new CVolumeDescriptionEnumeratorThread(this);
-		if (m_pVolumeEnumeratorThread->Failed())
-		{
+		if (m_pVolumeEnumeratorThread->Failed()) {
 			delete m_pVolumeEnumeratorThread;
 			m_pVolumeEnumeratorThread = 0;
 		}

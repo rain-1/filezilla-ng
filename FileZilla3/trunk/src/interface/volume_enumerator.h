@@ -3,6 +3,8 @@
 
 #include <threadex.h>
 
+#include <list>
+
 // Class to enumerate volume labels of volumes assigned
 // a drive letter under MSW.
 // Also gets the full UNC path for drive-mapped network
@@ -39,9 +41,15 @@ public:
 
 	std::list<t_VolumeInfo> GetVolumes();
 
+	static std::list<wxString> GetDrives();
+
+	static long GetDrivesToHide();
+	static bool IsHidden(wxChar const* drive, long noDrives);
+
 protected:
-	bool GetDrives();
-	bool GetDrive(const wxChar* pDrive, const int len);
+	bool GetDriveLabels();
+	void ProcessDrive(wxString const& drive);
+	bool GetDriveLabel(wxString const& drive);
 	virtual ExitCode Entry();
 
 	wxEvtHandler* m_pEvtHandler;

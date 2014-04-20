@@ -389,69 +389,27 @@ wxTreeItemId CLocalTreeView::GetSubdir(wxTreeItemId parent, const wxString& subD
 bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 {
 	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives"));
-	long drivesToHide = 0;
-	// Adhere to the NODRIVES group policy
-	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
-	if (key.Exists())
-	{
-		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide))
-			drivesToHide = 0;
-	}
 
-	int len = GetLogicalDriveStrings(0, 0);
-	if (!len)
-		return false;
-
-	wxChar* drives = new wxChar[len + 1];
-
-	if (!GetLogicalDriveStrings(len, drives))
-	{
-		delete [] drives;
-		return false;
-	}
+	std::list<wxString> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
 
 	m_pVolumeEnumeratorThread = new CVolumeDescriptionEnumeratorThread(this);
-	if (m_pVolumeEnumeratorThread->Failed())
-	{
+	if (m_pVolumeEnumeratorThread->Failed()) {
 		delete m_pVolumeEnumeratorThread;
 		m_pVolumeEnumeratorThread = 0;
 	}
 
-	const wxChar* pDrive = drives;
-	while (*pDrive)
-	{
-		// Check if drive should be hidden by default
-		if (pDrive[0] != 0 && pDrive[1] == ':')
-		{
-			int bit = 0;
-			char letter = pDrive[0];
-			if (letter >= 'A' && letter <= 'Z')
-				bit = 1 << (letter - 'A');
-			if (letter >= 'a' && letter <= 'z')
-				bit = 1 << (letter - 'a');
-
-			if (drivesToHide & bit)
-			{
-				pDrive += wxStrlen(pDrive) + 1;
-				continue;
-			}
-		}
-
-		wxString drive = pDrive;
+	for( std::list<wxString>::const_iterator it = drives.begin(); it != drives.end(); ++it ) {
+		wxString drive = *it;
 		if (drive.Right(1) == _T("\\"))
 			drive = drive.RemoveLast();
 
 		wxGetApp().AddStartupProfileRecord(wxString::Format(_T("CLocalTreeView::DisplayDrives adding drive %s"), drive.c_str()));
-		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(dir, pDrive));
+		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(dir, drive));
 		AppendItem(item, _T(""));
 		SortChildren(parent);
-
-		pDrive += wxStrlen(pDrive) + 1;
 	}
 
 	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives adding drives done"));
-
-	delete [] drives;
 
 	return true;
 }
@@ -1500,37 +1458,24 @@ void CLocalTreeView::OnDevicechange(WPARAM wParam, LPARAM lParam)
 	}
 }
 
-wxTreeItemId CLocalTreeView::AddDrive(wxChar drive)
+wxTreeItemId CLocalTreeView::AddDrive(wxChar letter)
 {
-	// Adhere to the NODRIVES group policy
-	long drivesToHide = 0;
-	wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Explorer"));
-	if (key.Exists())
-	{
-		if (!key.HasValue(_T("NoDrives")) || !key.QueryValue(_T("NoDrives"), &drivesToHide))
-			drivesToHide = 0;
-	}
+	wxString drive = letter;
+	drive += _T(":");
 
-	int bit = 0;
-	if (drive >= 'A' && drive <= 'Z')
-		bit = 1 << (drive - 'A');
-	else if (drive >= 'a' && drive <= 'z')
-		bit = 1 << (drive - 'a');
-	if (drivesToHide & bit)
+	long drivesToHide = CVolumeDescriptionEnumeratorThread::GetDrivesToHide();
+	if( CVolumeDescriptionEnumeratorThread::IsHidden(drive, drivesToHide) ) {
 		return wxTreeItemId();
-
-	wxString driveName = drive;
-	driveName += _T(":");
+	}
 
 	// Get the label of the drive
 	wxChar volumeName[501];
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-	BOOL res = GetVolumeInformation(driveName + _T("\\"), volumeName, 500, 0, 0, 0, 0, 0);
+	BOOL res = GetVolumeInformation(drive + _T("\\"), volumeName, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
 
-	wxString itemLabel = driveName;
-	if (res && volumeName[0])
-	{
+	wxString itemLabel = drive;
+	if (res && volumeName[0]) {
 		itemLabel += _T(" (");
 		itemLabel += volumeName;
 		itemLabel += _T(")");
@@ -1540,7 +1485,7 @@ wxTreeItemId CLocalTreeView::AddDrive(wxChar drive)
 	wxTreeItemId driveItem = GetFirstChild(m_drives, value);
 	while (driveItem)
 	{
-		if (!GetItemText(driveItem).Left(2).CmpNoCase(driveName))
+		if (!GetItemText(driveItem).Left(2).CmpNoCase(drive))
 			break;
 
 		driveItem = GetNextSibling(driveItem);
@@ -1548,7 +1493,7 @@ wxTreeItemId CLocalTreeView::AddDrive(wxChar drive)
 	if (driveItem)
 	{
 		SetItemText(driveItem, itemLabel);
-		int icon = GetIconIndex(dir, driveName + _T("\\"));
+		int icon = GetIconIndex(dir, drive + _T("\\"));
 		SetItemImage(driveItem, icon, wxTreeItemIcon_Normal);
 		SetItemImage(driveItem, icon, wxTreeItemIcon_Selected);
 		SetItemImage(driveItem, icon, wxTreeItemIcon_Expanded);
@@ -1557,7 +1502,7 @@ wxTreeItemId CLocalTreeView::AddDrive(wxChar drive)
 		return driveItem;
 	}
 
-	wxTreeItemId item = AppendItem(m_drives, itemLabel, GetIconIndex(dir, driveName + _T("\\")));
+	wxTreeItemId item = AppendItem(m_drives, itemLabel, GetIconIndex(dir, drive + _T("\\")));
 	AppendItem(item, _T(""));
 	SortChildren(m_drives);
 
