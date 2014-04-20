@@ -487,7 +487,9 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	extraCols.push_back(colTransferStatus);
 	CreateColumns(extraCols);
 
-	SettingsChanged();
+	RegisterOption(OPTION_NUMTRANSFERS);
+	RegisterOption(OPTION_CONCURRENTDOWNLOADLIMIT);
+	RegisterOption(OPTION_CONCURRENTUPLOADLIMIT);
 
 	SetDropTarget(new CQueueViewDropTarget(this));
 
@@ -2175,31 +2177,6 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 		RefreshListOnly();
 }
 
-void CQueueView::SettingsChanged()
-{
-	// Create missing engines if needed
-	int engineCount = 0;
-	for (std::vector<t_EngineData*>::const_iterator it = m_engineData.begin(); it != m_engineData.end(); ++it)
-		if (!(*it)->transient)
-			++engineCount;
-
-	const int newEngineCount = COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS);
-	if (newEngineCount > engineCount)
-	{
-		for (int i = 0; i < (newEngineCount - engineCount); i++)
-		{
-			t_EngineData *pData = new t_EngineData;
-			pData->pEngine = new CFileZillaEngine();
-			pData->pEngine->Init(this, COptions::Get());
-
-			m_engineData.push_back(pData);
-		}
-	}
-
-	if (m_activeMode)
-		AdvanceQueue();
-}
-
 void CQueueView::OnPostScroll()
 {
 	if (GetTopItem() != m_lastTopItem)
@@ -2691,13 +2668,16 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransi
 
 	t_EngineData* pFirstIdle = 0;
 
-	for (unsigned int i = 0; i < m_engineData.size(); i++)
-	{
+	int transient = 0;
+	for( unsigned int i = 0; i < m_engineData.size(); i++) {
 		if (m_engineData[i]->active)
 			continue;
 		
-		if (m_engineData[i]->transient && !allowTransient)
-			continue;
+		if (m_engineData[i]->transient) {
+			++transient;
+			if( !allowTransient )
+				continue;
+		}
 
 		if (!pServer)
 			return m_engineData[i];
@@ -2707,6 +2687,18 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransi
 
 		if (!pFirstIdle)
 			pFirstIdle = m_engineData[i];
+	}
+	
+	if( !pFirstIdle ) {
+		// Check whether we can create another engine
+		const int newEngineCount = COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS);
+		if (newEngineCount > static_cast<int>(m_engineData.size()) - transient) {
+			pFirstIdle = new t_EngineData;
+			pFirstIdle->pEngine = new CFileZillaEngine();
+			pFirstIdle->pEngine->Init(this, COptions::Get());
+
+			m_engineData.push_back(pFirstIdle);
+		}
 	}
 
 	return pFirstIdle;
@@ -3571,6 +3563,12 @@ WXLRESULT CQueueView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 			m_resize_timer.Start(GetDoubleClickTime() + 5, true);
 	}
 	return CQueueViewBase::MSWWindowProc(nMsg, wParam, lParam);
+}
+
+void CQueueView::OnOptionChanged(int)
+{
+	if (m_activeMode)
+		AdvanceQueue();
 }
 
 #endif

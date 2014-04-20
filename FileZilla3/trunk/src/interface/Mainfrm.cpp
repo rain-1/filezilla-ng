@@ -2138,9 +2138,7 @@ void CMainFrame::CheckChangedSettings()
 
 	m_pAsyncRequestQueue->RecheckDefaults();
 
-	m_pQueueView->SettingsChanged();
 	CAutoAsciiFiles::SettingsChanged();
-
 
 #if FZ_MANUALUPDATECHECK
 	m_pUpdater->Init();
