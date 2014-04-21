@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla in Corsican\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-03-10 22:52+0100\n"
+"POT-Creation-Date: 2014-04-21 12:17+0200\n"
 "PO-Revision-Date: 2014-02-22 19:51+0100\n"
 "Last-Translator: Patriccollu di Santa Maria Sichè <patrick.santa-"
 "maria@laposte.net>\n"
@@ -21,16 +21,16 @@ msgstr ""
 "X-Generator: Poedit 1.6.4\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
-#: ../../locales/../src/interface/statuslinectrl.cpp:230
+#: ../../locales/../src/interface/statuslinectrl.cpp:224
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S trascorsu"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:69
-#: ../../locales/../src/interface/statuslinectrl.cpp:238
+#: ../../locales/../src/interface/statuslinectrl.cpp:232
 msgid "%H:%M:%S left"
 msgstr "%H:%M:%S à a fine"
 
-#: resources.h:776
+#: resources.h:777
 #, no-c-format
 msgid ""
 "%a - Account (Lines containing this will be omitted if not using Account "
@@ -82,7 +82,7 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d schedariu. Dimensione tutale : almenu %s"
 msgstr[1] "%d schedarii. Dimensione tutale : almenu %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2941
+#: ../../locales/../src/interface/QueueView.cpp:2938
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d schedarii aghjunti à a lista d'attesa"
@@ -94,21 +94,21 @@ msgid_plural "%d seconds"
 msgstr[0] "%d seconda"
 msgstr[1] "%d seconde"
 
-#: resources.h:773
+#: resources.h:774
 msgid "%h - Host"
 msgstr "%h - Ospite"
 
-#: resources.h:775
+#: resources.h:776
 #, no-c-format
 msgid "%p - Password"
 msgstr "%p - Parolla d'intrata"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:186
+#: ../../locales/../src/interface/statuslinectrl.cpp:180
 #, c-format
 msgid "%s (%s/s)"
 msgstr "%s (%s/s)"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:189
+#: ../../locales/../src/interface/statuslinectrl.cpp:183
 #, c-format
 msgid "%s (? B/s)"
 msgstr "%s (? O/s)"
@@ -123,7 +123,7 @@ msgstr "%s - Certificatu scadutu !"
 msgid "%s - Not yet valid!"
 msgstr "%s - Mancu leghjittimu !"
 
-#: resources.h:777
+#: resources.h:778
 #, no-c-format
 msgid "%s - Proxy user"
 msgstr "%s - Utilizatore di u proxy"
@@ -138,14 +138,14 @@ msgstr "%s è %s. Dimensione tutale : %s"
 msgid "%s and %s. Total size: At least %s"
 msgstr "%s è %s. Dimensione tutale : almenu %s"
 
-#: ../../locales/../src/engine/sizeformatting_base.cpp:31
+#: ../../locales/../src/engine/sizeformatting_base.cpp:34
 #, c-format
 msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s ottettu"
 msgstr[1] "%s ottetti"
 
-#: ../../locales/../src/interface/FileZilla.cpp:690
+#: ../../locales/../src/interface/FileZilla.cpp:691
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -160,7 +160,7 @@ msgstr ""
 "Ci vole à telecaricà torna FileZilla. S'è u prublemu rivene, mandate puru un "
 "'bug report'."
 
-#: ../../locales/../src/interface/FileZilla.cpp:784
+#: ../../locales/../src/interface/FileZilla.cpp:785
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -183,12 +183,12 @@ msgstr ""
 msgid "%s with %d bits"
 msgstr "%s cù %d bits"
 
-#: resources.h:774
+#: resources.h:775
 #, no-c-format
 msgid "%u - Username"
 msgstr "%u - Nome d'utilizatore"
 
-#: resources.h:778
+#: resources.h:779
 #, no-c-format
 msgid "%w - Proxy password"
 msgstr "%w - Parolla d'intrata di u proxy"
@@ -201,7 +201,7 @@ msgstr "&Apprupositu..."
 msgid "&Account:"
 msgstr "&Contu :"
 
-#: resources.h:111 resources.h:678 resources.h:742
+#: resources.h:111 resources.h:679 resources.h:743
 msgid "&Active"
 msgstr "&Attivu"
 
@@ -213,11 +213,11 @@ msgstr "&Aghjunghje indetta..."
 msgid "&Add files to queue"
 msgstr "&Aghjunghje i schedarii à a lista d'attesa"
 
-#: resources.h:786
+#: resources.h:787
 msgid "&Add keyfile..."
 msgstr "&Aghjunghje schedariu di chjave..."
 
-#: resources.h:628 resources.h:647
+#: resources.h:629 resources.h:648
 msgid "&Add to queue"
 msgstr "&Aghjunghje à a lista d'attesa"
 
@@ -233,7 +233,7 @@ msgstr "Sempre fà fid&anza à stu certificatu in l'altre sessioni."
 msgid "&Always trust this host, add this key to the cache"
 msgstr "Sempre fà fid&anza à st'ospite, aghjunghje sta chjave à u cache"
 
-#: resources.h:939
+#: resources.h:940
 msgid "&Always use default editor"
 msgstr "&Aduprate sempre l'editore predefinitu"
 
@@ -245,11 +245,11 @@ msgstr "&Aduprate sempre una selezzione per i schedarii micca assuciati"
 msgid "&Always use this action"
 msgstr "&Aduprate sempre st'azzione"
 
-#: resources.h:754
+#: resources.h:755
 msgid "&Ask your operating system for the external IP address"
 msgstr "Dum&anda l'indirizzu IP esternu à u vostru sistemu"
 
-#: resources.h:522 resources.h:658 resources.h:824
+#: resources.h:522 resources.h:659 resources.h:825
 msgid "&Auto"
 msgstr "&Automaticu"
 
@@ -257,11 +257,11 @@ msgstr "&Automaticu"
 msgid "&Autodetect"
 msgstr "Rilevazione &Automatica"
 
-#: resources.h:524 resources.h:660 resources.h:826
+#: resources.h:524 resources.h:661 resources.h:827
 msgid "&Binary"
 msgstr "&Binariu"
 
-#: resources.h:899
+#: resources.h:900
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
 msgstr ""
 "Prefissi &binarii cù i simbuli di u Sistemu Internaziunale (SI). (p.i. 1 Ko "
@@ -272,17 +272,17 @@ msgid "&Bookmarks"
 msgstr "&Indette"
 
 #: resources.h:102 resources.h:353 resources.h:390 resources.h:396
-#: resources.h:413 resources.h:431 resources.h:936 resources.h:962
+#: resources.h:413 resources.h:431 resources.h:937 resources.h:963
 msgid "&Browse..."
 msgstr "&Sfuglià..."
 
-#: resources.h:814
+#: resources.h:815
 #, no-c-format
 msgid "&Burst tolerance:"
 msgstr "Tolleranza di &burst :"
 
 #: resources.h:138 resources.h:141 resources.h:208 resources.h:475
-#: resources.h:482 resources.h:726
+#: resources.h:482 resources.h:727
 msgid "&Cancel"
 msgstr "&Abbandunà"
 
@@ -290,7 +290,7 @@ msgstr "&Abbandunà"
 msgid "&Clear private data..."
 msgstr "&Sguassà i dati persunali..."
 
-#: resources.h:1009
+#: resources.h:1010
 #, fuzzy
 msgid "&Close"
 msgstr "Chjode l'&unghjetta"
@@ -299,7 +299,7 @@ msgstr "Chjode l'&unghjetta"
 msgid "&Close FileZilla"
 msgstr "&Chjode FileZilla"
 
-#: resources.h:668
+#: resources.h:669
 msgid "&Configure speed limits..."
 msgstr "&Cunfigurà i limiti di velocità per i trasferimenti..."
 
@@ -315,19 +315,19 @@ msgstr "&Cunnettà"
 msgid "&Copy current connection to Site Manager..."
 msgstr "&Cupià a cunnessione attuale versu u Ghjestiunariu di Siti..."
 
-#: resources.h:183 resources.h:608
+#: resources.h:183 resources.h:609
 msgid "&Copy to clipboard"
 msgstr "&Cupià versu u clipboard"
 
-#: resources.h:613
+#: resources.h:614
 msgid "&Crash"
 msgstr "Prova di &cullisione"
 
-#: resources.h:561 resources.h:575 resources.h:630 resources.h:651
+#: resources.h:561 resources.h:575 resources.h:631 resources.h:652
 msgid "&Create directory"
 msgstr "&Creà unu cartulare"
 
-#: resources.h:663
+#: resources.h:664
 msgid "&Create new tab"
 msgstr "&Creà una nova unghjetta"
 
@@ -335,11 +335,11 @@ msgstr "&Creà una nova unghjetta"
 msgid "&Debug"
 msgstr "&Spannà"
 
-#: resources.h:970
+#: resources.h:971
 msgid "&Debug information in message log:"
 msgstr "&Infurmazione per spannà in u ghjurnale di i messaghji :"
 
-#: resources.h:932
+#: resources.h:933
 msgid "&Default editor:"
 msgstr "&Editore predefinitu :"
 
@@ -347,12 +347,12 @@ msgstr "&Editore predefinitu :"
 msgid "&Default file exists action..."
 msgstr "&Azzione predefinita à fà nantu à i schedarii chì esistenu..."
 
-#: resources.h:736
+#: resources.h:737
 msgid "&Delay between failed login attempts:"
 msgstr "&Tempu frà e prove fiasche di login :"
 
 #: resources.h:86 resources.h:213 resources.h:227 resources.h:403
-#: resources.h:564 resources.h:653
+#: resources.h:564 resources.h:654
 msgid "&Delete"
 msgstr "&Sguassà"
 
@@ -376,13 +376,13 @@ msgstr "&Disghjunghje"
 msgid "&Disconnect from server"
 msgstr "&Disghjunghje da u servu"
 
-#: resources.h:875
+#: resources.h:876
 msgid "&Display momentary transfer speed instead of average speed"
 msgstr ""
 "&Affissà a velocità di trasferimentu di u mumentu piuttostu chì quella "
 "mediana"
 
-#: resources.h:897
+#: resources.h:898
 msgid "&Display size in bytes"
 msgstr "&Affissà a dimensione in ottetti"
 
@@ -394,15 +394,15 @@ msgstr "&Ùn micca arricurdassi di e parolle d'intrata"
 msgid "&Don't show this dialog again."
 msgstr "&Ùn mostrà più stu dialogu."
 
-#: resources.h:759
+#: resources.h:760
 msgid "&Don't use external IP address on local connections."
 msgstr "&Ùn impiegà micca d'indirizzu IP esternu per i cunnessioni lucali."
 
-#: resources.h:919
+#: resources.h:920
 msgid "&Double-click action on files:"
 msgstr "Azzione di u &dopiu-cliccu nantu à i schedarii :"
 
-#: resources.h:568 resources.h:626
+#: resources.h:568 resources.h:627
 msgid "&Download"
 msgstr "&Telecaricà"
 
@@ -410,11 +410,11 @@ msgstr "&Telecaricà"
 msgid "&Download to:"
 msgstr "&Telecaricà versu :"
 
-#: resources.h:661
+#: resources.h:662
 msgid "&Download..."
 msgstr "&Telecaricà..."
 
-#: resources.h:244 resources.h:836
+#: resources.h:244 resources.h:837
 msgid "&Downloads:"
 msgstr "&Telecaricamenti :"
 
@@ -426,11 +426,11 @@ msgstr "&Mudificà"
 msgid "&Edit filter rules..."
 msgstr "&Mudificà e regule di filtru..."
 
-#: resources.h:506 resources.h:526 resources.h:641 resources.h:667
+#: resources.h:506 resources.h:526 resources.h:642 resources.h:668
 msgid "&Enable"
 msgstr "P&ermette"
 
-#: resources.h:468 resources.h:809
+#: resources.h:468 resources.h:810
 msgid "&Enable speed limits"
 msgstr "P&ermette i limiti di velocità per i trasferimenti"
 
@@ -442,7 +442,7 @@ msgstr "&Cudificazione :"
 msgid "&Encryption:"
 msgstr "&Cifratura :"
 
-#: resources.h:607
+#: resources.h:608
 msgid "&Enter custom command..."
 msgstr "Scrivite una cummanda p&ersunalizata..."
 
@@ -454,11 +454,11 @@ msgstr "&Eseguisce"
 msgid "&Export Site Manager entries"
 msgstr "&Espurtà l'elementi di u Ghjestiunariu di Siti"
 
-#: resources.h:492 resources.h:657
+#: resources.h:492 resources.h:658
 msgid "&Export..."
 msgstr "&Espurtà..."
 
-#: resources.h:764
+#: resources.h:765
 msgid "&Fall back to active mode"
 msgstr "&Ritornu à u modu attivu"
 
@@ -466,7 +466,7 @@ msgstr "&Ritornu à u modu attivu"
 msgid "&File"
 msgstr "&Schedariu"
 
-#: resources.h:638
+#: resources.h:639
 msgid "&File Attributes..."
 msgstr "&Pruprietà di u schedariu..."
 
@@ -508,7 +508,7 @@ msgstr ""
 "&Seguitate a leia simbolica (symlink), sguassà i cuntenuti di i cartulari di "
 "destinazione"
 
-#: resources.h:757
+#: resources.h:758
 msgid "&Get external IP address from the following URL:"
 msgstr "&Aduprà l'indirizzu IP esternu chì si trova à st'URL :"
 
@@ -520,7 +520,7 @@ msgstr "&Ottene un aiutu..."
 msgid "&Global bookmark"
 msgstr "Indetta &glubale"
 
-#: resources.h:793
+#: resources.h:794
 msgid "&HTTP/1.1 using CONNECT method"
 msgstr "&HTTP/1.1 aduprendu u metodu CONNECT"
 
@@ -528,7 +528,7 @@ msgstr "&HTTP/1.1 aduprendu u metodu CONNECT"
 msgid "&Help"
 msgstr "Aiut&u"
 
-#: resources.h:509 resources.h:644
+#: resources.h:509 resources.h:645
 msgid "&Hide identical files"
 msgstr "&Piattà i schedarii uguali"
 
@@ -536,19 +536,19 @@ msgstr "&Piattà i schedarii uguali"
 msgid "&Highest"
 msgstr "&U più maiò"
 
-#: resources.h:752
+#: resources.h:753
 msgid "&Highest available port:"
 msgstr "&Portu u più maiò dispunibule :"
 
-#: resources.h:89 resources.h:365 resources.h:716
+#: resources.h:89 resources.h:365 resources.h:717
 msgid "&Host:"
 msgstr "&Ospite :"
 
-#: resources.h:898
+#: resources.h:899
 msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
 msgstr "&Prefissi binarii IEC (p.i. 1 Ko = 1024 ottetti)"
 
-#: resources.h:886
+#: resources.h:887
 msgid "&ISO 8601 (example: 2007-09-15)"
 msgstr "&ISO 8601 (p.i. : 2007-09-15)"
 
@@ -556,11 +556,11 @@ msgstr "&ISO 8601 (p.i. : 2007-09-15)"
 msgid "&Import..."
 msgstr "&Impurtà..."
 
-#: resources.h:941
+#: resources.h:942
 msgid "&Inherit system's filetype associations"
 msgstr "&Impiegà l'associ da tipu di schedariu di u sistemu"
 
-#: resources.h:1016
+#: resources.h:1017
 #, fuzzy
 msgid "&Install new version"
 msgstr "Versioni stabule è beta"
@@ -570,11 +570,11 @@ msgid "&Keep remote path structure relative to search root"
 msgstr ""
 "Mentene a struttura di u passeghju alluntanatu di l'urigine di a ricerca"
 
-#: resources.h:859
+#: resources.h:860
 msgid "&Layout of file and directory panes:"
 msgstr "&Piazzamentu di l'arburi di schedarii è di cartulari :"
 
-#: resources.h:749
+#: resources.h:750
 msgid "&Limit local ports used by FileZilla"
 msgstr "&Limità i porti lucali aduprati da FileZilla"
 
@@ -590,7 +590,7 @@ msgstr "Arburiscenza di u cartulare &lucale"
 msgid "&Local directory:"
 msgstr "Cartulare &lucale :"
 
-#: resources.h:960
+#: resources.h:961
 msgid "&Log to file"
 msgstr "Arregistrà u ghjurnale &Log in un schedariu"
 
@@ -618,7 +618,7 @@ msgstr "Trasferimentu &manuale..."
 msgid "&Maximum number of connections:"
 msgstr "&Numeru massimu di cunnessioni :"
 
-#: resources.h:734
+#: resources.h:735
 msgid "&Maximum number of retries:"
 msgstr "&Numeru massimu di prove :"
 
@@ -626,7 +626,7 @@ msgstr "&Numeru massimu di prove :"
 msgid "&Message log"
 msgstr "Ghjurnale di i &messaghji"
 
-#: resources.h:872
+#: resources.h:873
 msgid "&Minimize to tray"
 msgstr "Impuculì in lu spaziu di nutificazione di u sistemu"
 
@@ -646,7 +646,7 @@ msgstr "&Novu"
 msgid "&New Site"
 msgstr "&Novu Situ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1854
+#: ../../locales/../src/interface/Mainfrm.cpp:1868
 msgid "&New version available!"
 msgstr "&Nova versione dispunibule !"
 
@@ -654,7 +654,7 @@ msgstr "&Nova versione dispunibule !"
 msgid "&No"
 msgstr "&No"
 
-#: resources.h:767 resources.h:792
+#: resources.h:768 resources.h:793
 msgid "&None"
 msgstr "&Alcunu"
 
@@ -670,11 +670,11 @@ msgstr "&Valore numericu :"
 msgid "&OK"
 msgstr "&OK"
 
-#: resources.h:770
+#: resources.h:771
 msgid "&OPEN"
 msgstr "&APRE"
 
-#: resources.h:557 resources.h:649
+#: resources.h:557 resources.h:650
 msgid "&Open"
 msgstr "&Apre"
 
@@ -694,11 +694,11 @@ msgstr "&Parolla d'intrata :"
 msgid "&Play sound"
 msgstr "&Sunà"
 
-#: resources.h:90 resources.h:366 resources.h:720
+#: resources.h:90 resources.h:366 resources.h:721
 msgid "&Port:"
 msgstr "Port&u :"
 
-#: resources.h:865
+#: resources.h:866
 msgid "&Position of the message log:"
 msgstr "&Pusizione di u ghjurnale di i messaghji :"
 
@@ -710,7 +710,7 @@ msgstr "&Preservà a data è l'ora di i schedarii trasferiti"
 msgid "&Queue"
 msgstr "&Lista d'attesa"
 
-#: resources.h:722
+#: resources.h:723
 msgid "&Quickconnect"
 msgstr "&Cunnessione Pronta"
 
@@ -726,7 +726,7 @@ msgstr "&Leghje"
 msgid "&Reconnect"
 msgstr "&Ricunnessione"
 
-#: resources.h:503 resources.h:666
+#: resources.h:503 resources.h:667
 msgid "&Refresh"
 msgstr "&Attualizà"
 
@@ -746,11 +746,11 @@ msgstr "&Cartulare di reta in là :"
 msgid "&Remote path:"
 msgstr "&Passeghju di reta in là :"
 
-#: resources.h:830
+#: resources.h:831
 msgid "&Remove"
 msgstr "&Caccià"
 
-#: resources.h:787
+#: resources.h:788
 msgid "&Remove key"
 msgstr "&Caccià a chjave"
 
@@ -759,7 +759,7 @@ msgid "&Remove selected"
 msgstr "&Caccià selezziunati"
 
 #: resources.h:85 resources.h:228 resources.h:402 resources.h:566
-#: resources.h:582 resources.h:634 resources.h:655
+#: resources.h:582 resources.h:635 resources.h:656
 msgid "&Rename"
 msgstr "&Rinumà"
 
@@ -771,7 +771,7 @@ msgstr "&Rinumà..."
 msgid "&Reopen local file"
 msgstr "&Apre u schedariu lucale torna"
 
-#: resources.h:821
+#: resources.h:822
 msgid "&Replace invalid characters with:"
 msgstr "&Rimpiazzà i caratteri micca leghittimi cù :"
 
@@ -779,11 +779,11 @@ msgstr "&Rimpiazzà i caratteri micca leghittimi cù :"
 msgid "&Report a bug..."
 msgstr "&Riferisce un prublemu..."
 
-#: resources.h:618
+#: resources.h:619
 msgid "&Reset and requeue all"
 msgstr "&Riavvià è rimette tutti i schedarii in a lista d'attesa"
 
-#: resources.h:715
+#: resources.h:716
 msgid "&Restart Wizard"
 msgstr "&Rilancià l'assistente Stregone"
 
@@ -795,19 +795,19 @@ msgstr "&Cuntinuà"
 msgid "&Run command..."
 msgstr "&Eseguisce a cummanda..."
 
-#: resources.h:729
+#: resources.h:730
 msgid "&Run configuration wizard now..."
 msgstr "Impiegà l'assistente di cunfigurazione avà..."
 
-#: resources.h:955
+#: resources.h:956
 msgid "&Run update check now..."
 msgstr "Ricercà e nove versioni avà..."
 
-#: resources.h:769
+#: resources.h:770
 msgid "&SITE"
 msgstr "&SITU"
 
-#: resources.h:795
+#: resources.h:796
 msgid "&SOCKS 5"
 msgstr "&SOCKS 5"
 
@@ -827,7 +827,7 @@ msgstr "Ricerca i &schedarii alluntanati..."
 msgid "&Select Entry:"
 msgstr "&Sceglie un elementu :"
 
-#: resources.h:930
+#: resources.h:931
 msgid "&Select language:"
 msgstr "&Sceglie a lingua :"
 
@@ -847,7 +847,7 @@ msgstr "&Preferenze"
 msgid "&Settings..."
 msgstr "&Preferenze..."
 
-#: resources.h:969
+#: resources.h:970
 msgid "&Show debug menu"
 msgstr "&Affissà u 'Menu' per spannà"
 
@@ -855,7 +855,7 @@ msgstr "&Affissà u 'Menu' per spannà"
 msgid "&Show message"
 msgstr "&Affissà u messaghju"
 
-#: resources.h:959
+#: resources.h:960
 msgid "&Show timestamps in message log"
 msgstr "&Affissà date è ore in u ghjurnale di i messaghji"
 
@@ -879,11 +879,11 @@ msgstr "Limiti di &velocità"
 msgid "&Start transfer immediately"
 msgstr "Principià u trasferimentu avà"
 
-#: resources.h:864
+#: resources.h:865
 msgid "&Swap local and remote panes"
 msgstr "&Permutà i finestrini lucale è alluntanatu"
 
-#: resources.h:615
+#: resources.h:616
 msgid "&TLS Ciphers"
 msgstr "Cudificazione TLS"
 
@@ -891,7 +891,7 @@ msgstr "Cudificazione TLS"
 msgid "&Test"
 msgstr "&Prova"
 
-#: resources.h:878
+#: resources.h:879
 msgid "&Theme:"
 msgstr "&Temu :"
 
@@ -907,7 +907,7 @@ msgstr "&Modu di trasferimentu :"
 msgid "&Transfer queue"
 msgstr "Lista d'attesa di &trasferimentu"
 
-#: resources.h:833
+#: resources.h:834
 msgid "&Treat dotfiles as ASCII files"
 msgstr ""
 "&Trattà i schedarii chì anu un nome chì principia cù unu puntu cum'è "
@@ -921,11 +921,11 @@ msgstr "&Cancellà i cambiamenti"
 msgid "&Update cached key for this host"
 msgstr "&Mudificà a chjave piattata per st'ospite"
 
-#: resources.h:551 resources.h:645
+#: resources.h:551 resources.h:646
 msgid "&Upload"
 msgstr "&Incaricà"
 
-#: resources.h:254 resources.h:845
+#: resources.h:254 resources.h:846
 msgid "&Uploads:"
 msgstr "&Incaricamenti :"
 
@@ -937,19 +937,19 @@ msgstr "&Impiegà un prugrammu persunalizatu"
 msgid "&Use synchronized browsing"
 msgstr "Impiegà &u sfugliendu sincrunizatu"
 
-#: resources.h:934
+#: resources.h:935
 msgid "&Use system's default editor for text files"
 msgstr "&Impiegà l'editore predefinitu di u sistemu per i schedarii di testu"
 
-#: resources.h:755
+#: resources.h:756
 msgid "&Use the following IP address:"
 msgstr "&Impiegà quessu indirizzu IP :"
 
-#: resources.h:763
+#: resources.h:764
 msgid "&Use the server's external IP address instead"
 msgstr "&Impiegà piuttostu l'indirizzu IP esternu di u servu"
 
-#: resources.h:901
+#: resources.h:902
 msgid "&Use thousands separator"
 msgstr "&Impiegà u separadore di mille"
 
@@ -957,11 +957,11 @@ msgstr "&Impiegà u separadore di mille"
 msgid "&User:"
 msgstr "&Utilizatore :"
 
-#: resources.h:718
+#: resources.h:719
 msgid "&Username:"
 msgstr "&Nome d'utilizatore :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1848
+#: ../../locales/../src/interface/Mainfrm.cpp:1862
 #, c-format
 msgid "&Version %s"
 msgstr "&Versione %s"
@@ -974,12 +974,12 @@ msgstr "&Affissu"
 msgid "&View/Edit"
 msgstr "&Affissu / Mudificà"
 
-#: resources.h:940
+#: resources.h:941
 msgid "&Watch locally edited files and prompt to upload modifications"
 msgstr ""
 "Cuntrollà i schedarii mudificati in lucale è invità à incaricà i cambiamenti"
 
-#: resources.h:950
+#: resources.h:951
 msgid "&When checking for updates, check for:"
 msgstr "Quandu circate una nova versione, vulete :"
 
@@ -1044,23 +1044,23 @@ msgid_plural "(%d objects filtered)"
 msgstr[0] "(%d oghjettu filtratu)"
 msgstr[1] "(%d oghjetti filtrati)"
 
-#: resources.h:805 resources.h:807
+#: resources.h:806 resources.h:808
 msgid "(0 for no limit)"
 msgstr "(0 senza limitazione)"
 
-#: resources.h:735
+#: resources.h:736
 msgid "(0-99)"
 msgstr "(0-99)"
 
-#: resources.h:737
+#: resources.h:738
 msgid "(0-999 seconds)"
 msgstr "(0-999 seconde)"
 
-#: resources.h:803
+#: resources.h:804
 msgid "(1-10)"
 msgstr "(1-10)"
 
-#: resources.h:731
+#: resources.h:732
 msgid "(5-9999, 0 to disable)"
 msgstr "(5-9999, 0 per disattivà)"
 
@@ -1070,24 +1070,24 @@ msgstr "(5-9999, 0 per disattivà)"
 msgid "(app-compat is set to %d.%d)"
 msgstr "(app-compat hè definitu per %d.%d)"
 
-#: resources.h:894
+#: resources.h:895
 msgid "(example: %H:%M)"
 msgstr "(esempiu : %H:%M)"
 
-#: resources.h:888
+#: resources.h:889
 msgid "(example: %Y-%m-%d)"
 msgstr "(esempiu : %Y-%m-%d)"
 
-#: resources.h:470 resources.h:472 resources.h:811 resources.h:813
+#: resources.h:470 resources.h:472 resources.h:812 resources.h:814
 #, c-format
 msgid "(in %s/s)"
 msgstr "(in %s/s)"
 
-#: resources.h:703
+#: resources.h:704
 msgid "-"
 msgstr "-"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:241
+#: ../../locales/../src/interface/statuslinectrl.cpp:235
 msgid "--:--:-- left"
 msgstr "--:--:-- à a fine"
 
@@ -1107,19 +1107,19 @@ msgstr "-s è -c ùn ponu micca esse aduprati inseme."
 msgid "-s cannot be used together with an FTP URL."
 msgstr "-s ùn pò micca esse adupratu cù l'URL FTP."
 
-#: resources.h:971
+#: resources.h:972
 msgid "0 - None"
 msgstr "0 - Alcunu"
 
-#: resources.h:972
+#: resources.h:973
 msgid "1 - Warning"
 msgstr "1 - Avertimentu"
 
-#: resources.h:973
+#: resources.h:974
 msgid "2 - Info"
 msgstr "2 - Infurmazione"
 
-#: resources.h:974
+#: resources.h:975
 msgid "3 - Verbose"
 msgstr "3 - Verbosu"
 
@@ -1127,7 +1127,7 @@ msgstr "3 - Verbosu"
 msgid "32 bit system"
 msgstr "sistemu 32 bits"
 
-#: resources.h:975
+#: resources.h:976
 msgid "4 - Debug"
 msgstr "4 - Spannà"
 
@@ -1150,12 +1150,12 @@ msgstr "Ci vole à sceglie un editore predefinitu."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:117
-#: ../../locales/../src/interface/state.cpp:827
+#: ../../locales/../src/interface/state.cpp:825
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr ""
 "Un cartulare ùn pò micca esse tracinatu in unu di i so sottu-cartulari."
 
-#: resources.h:675
+#: resources.h:676
 msgid ""
 "A few servers don't allow passive mode or are misconfigured. In such cases "
 "you would have to use active mode. In active mode, FileZilla opens a port "
@@ -1169,14 +1169,14 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Un schedariu dighjà apertu hè statu cambiatu."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1994
+#: ../../locales/../src/interface/LocalListView.cpp:1947
 #, c-format
 msgid ""
 "A file with that name is already being edited. Do you want to reopen '%s'?"
 msgstr ""
 "Un schedariu cù stu nome hè statu dighjà mudificatu. Vulete apre '%s' torna ?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1990
+#: ../../locales/../src/interface/LocalListView.cpp:1943
 #: ../../locales/../src/interface/RemoteListView.cpp:2695
 msgid "A file with that name is already being transferred."
 msgstr "Un schedariu cù stu nome hè statu dighjà trasferitu."
@@ -1188,7 +1188,7 @@ msgstr ""
 "Un schedariu cù stu nome hè statu dighjà mudificatu. Ci vole à chjodellu è "
 "provà torna."
 
-#: ../../locales/../src/interface/FileZilla.cpp:669
+#: ../../locales/../src/interface/FileZilla.cpp:670
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1202,7 +1202,7 @@ msgstr ""
 "Osinnò qualchì schedariu puderia mancà nantu à a lista di i schedarii.\n"
 "Ghjè u solu messaghju d'avertimentu chì serà mandatu mentre sta sessione."
 
-#: resources.h:1010
+#: resources.h:1011
 #, fuzzy
 msgid "A new version of FileZilla is available:"
 msgstr "Una versione più nova di FileZilla hè dispunibule :"
@@ -1216,7 +1216,7 @@ msgstr ""
 "qualchì schedariu à l'utilizatore. Impiegate s'ozzione per forzà u servu à "
 "affissà tutti i schedarii."
 
-#: resources.h:747
+#: resources.h:748
 msgid ""
 "A proper server does not require this. Contact the server administrator if "
 "you need this."
@@ -1234,15 +1234,15 @@ msgstr ""
 "Vulete disattivà u sfugliendu sincrunizatu è cuntinuà u cambiamentu di u "
 "cartulare lucale ?"
 
-#: resources.h:523 resources.h:659 resources.h:825
+#: resources.h:523 resources.h:660 resources.h:826
 msgid "A&SCII"
 msgstr "A&SCII"
 
-#: resources.h:829
+#: resources.h:830
 msgid "A&dd"
 msgstr "A&ghjunghje"
 
-#: resources.h:856
+#: resources.h:857
 msgid "A&llow resume of ASCII files"
 msgstr "Permette a ripresa di i schedarii ASCII"
 
@@ -1258,7 +1258,7 @@ msgstr "Affetta solu l'incaricamenti"
 msgid "A&pply to all files and directories"
 msgstr "Affetta tutti i schedarii è i cartulari"
 
-#: resources.h:625
+#: resources.h:626
 msgid "A&utomatically remove successful transfers"
 msgstr "Cavà a&utomaticamente i trasferimenti riesciuti"
 
@@ -1275,7 +1275,7 @@ msgstr ""
 msgid "About FileZilla"
 msgstr "Apprupositu di FileZilla"
 
-#: resources.h:866
+#: resources.h:867
 msgid "Above the file lists"
 msgstr "Sopra e liste di schedarii"
 
@@ -1338,7 +1338,7 @@ msgstr ""
 "esternu ma u vostru 'router' o parafocu hà mudificatu l'indirizzu mandatu di "
 "una manera gattiva."
 
-#: resources.h:760
+#: resources.h:761
 msgid "Active mode IP"
 msgstr "IP in modu attivu"
 
@@ -1346,7 +1346,7 @@ msgstr "IP in modu attivu"
 msgid "Add files to &queue only"
 msgstr "Aghjunghje i schedarii solu à a lista d'attesa"
 
-#: resources.h:629 resources.h:648
+#: resources.h:630 resources.h:649
 msgid "Add selected directory to the transfer queue"
 msgstr ""
 "Aghjunghje u cartulare selezziunatu à a lista d'attesa di trasferimentu"
@@ -1357,7 +1357,7 @@ msgstr ""
 "Aghjunghje i cartulari è i schedarii selezziunati à a lista d'attesa di "
 "trasferimentu"
 
-#: resources.h:921 resources.h:927
+#: resources.h:922 resources.h:928
 msgid "Add to queue"
 msgstr "Aghjunghje à a lista d'attesa"
 
@@ -1369,7 +1369,7 @@ msgstr "Tipu d'indirizzu micca suppurtatu"
 msgid "Advanced"
 msgstr "Espertu"
 
-#: resources.h:954
+#: resources.h:955
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
@@ -1387,16 +1387,16 @@ msgstr ""
 msgid "Algorithm:"
 msgstr "Cudificazione :"
 
-#: ../../locales/../src/interface/QueueView.cpp:3130
+#: ../../locales/../src/interface/QueueView.cpp:3127
 msgid "All files have been successfully transferred"
 msgstr "Tutti i schedarii anu statu trasferiti bè"
 
-#: resources.h:704
+#: resources.h:705
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr ""
 "Tutti i porti di a stesa specificata devenu esse scelti trà 1024 è 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:3126
+#: ../../locales/../src/interface/QueueView.cpp:3123
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1405,11 +1405,11 @@ msgstr[0] ""
 msgstr[1] ""
 "Tutti i trasferimenti sò compii. %d schedarii ùn ponu micca esse trasferiti."
 
-#: resources.h:743
+#: resources.h:744
 msgid "Allow &fall back to other transfer mode on failure"
 msgstr "Permette u ritornu à un altru modu di tras&ferimentu in casu di fiascu"
 
-#: resources.h:679
+#: resources.h:680
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "Permette u ritornu à un altru modu di trasferimentu in casu di fiascu"
 
@@ -1417,7 +1417,7 @@ msgstr "Permette u ritornu à un altru modu di trasferimentu in casu di fiascu"
 msgid "Already connected"
 msgstr "Dighjà cunnettu"
 
-#: resources.h:788
+#: resources.h:789
 msgid ""
 "Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
 "FileZilla does recognize Pageant."
@@ -1425,7 +1425,7 @@ msgstr ""
 "Si pò dinù impiegà Pageant da PuTTY per a ghjestione di e vostre chjavi, chì "
 "FileZilla cunnosce st'attrezzu."
 
-#: resources.h:789
+#: resources.h:790
 msgid ""
 "Alternatively you can use your system's SSH agent. To do so, make sure the "
 "SSH_AUTH_SOCK environment variable is set."
@@ -1433,14 +1433,14 @@ msgstr ""
 "Si pò dinù impiegà l'agente SSH di u vostru sistemu. Per quessu, ci vole à "
 "definisce a variabile d'ambiente SSH_AUTH_SOCK."
 
-#: resources.h:1019
+#: resources.h:1020
 #, fuzzy
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
 msgstr "U telecaricamentu di l'ultima versione di FileZilla hè fiascu."
 
-#: ../../locales/../src/interface/QueueView.cpp:2048
+#: ../../locales/../src/interface/QueueView.cpp:2055
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1450,7 +1450,7 @@ msgstr ""
 "trasferimentu à partesi di \"%s\".\n"
 "Qualchì elementu di sta lista pò ùn esse micca risturatu."
 
-#: ../../locales/../src/interface/QueueView.cpp:1947
+#: ../../locales/../src/interface/QueueView.cpp:1954
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1478,7 +1478,7 @@ msgstr ""
 msgid "Anonymous"
 msgstr "Anonimu"
 
-#: ../../locales/../src/interface/state.cpp:1011
+#: ../../locales/../src/interface/state.cpp:1009
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
@@ -1527,11 +1527,11 @@ msgstr "A&ffettà solu i schedarii"
 msgid "Archive"
 msgstr "Archiviu"
 
-#: resources.h:868
+#: resources.h:869
 msgid "As tab in the transfer queue pane"
 msgstr "Cum'è un unghjetta in a finestra di a lista d'attesa di trasferimentu"
 
-#: resources.h:246 resources.h:256 resources.h:837 resources.h:846
+#: resources.h:246 resources.h:256 resources.h:838 resources.h:847
 msgid "Ask for action"
 msgstr "Dumandà l'azzione"
 
@@ -1541,11 +1541,11 @@ msgstr "Dumandà l'azzione"
 msgid "Ask for password"
 msgstr "Dumandà a parolla d'intrata"
 
-#: resources.h:700
+#: resources.h:701
 msgid "Ask operating system for a port."
 msgstr "Dumandà un portu à u sistemu."
 
-#: resources.h:690
+#: resources.h:691
 msgid "Ask your operating system for the external IP address"
 msgstr "Dumandà l'indirizzu IP esternu à u vostru sistemu"
 
@@ -1561,7 +1561,7 @@ msgstr "Prugrammu assuciatu micca trovu :"
 msgid "At least one filter condition is incomplete"
 msgstr "Almenu, una cundizione di filtru ùn hè micca cumpleta"
 
-#: resources.h:709
+#: resources.h:710
 msgid "At this point, all required information has been gathered."
 msgstr "À st'ora, tutti l'infurmazioni requiesi anu statu raccolti."
 
@@ -1573,7 +1573,7 @@ msgstr "Attributu"
 msgid "Authentication failed."
 msgstr "Autenticazione fiasca."
 
-#: resources.h:879
+#: resources.h:880
 msgid "Author:"
 msgstr "Autore :"
 
@@ -1581,16 +1581,16 @@ msgstr "Autore :"
 msgid "Auto"
 msgstr "Automaticu"
 
-#: resources.h:827
+#: resources.h:828
 msgid "Automatic file type classification"
 msgstr "Classificazione automatica da tipu di schedariu"
 
-#: resources.h:883
+#: resources.h:884
 msgid "Available sizes"
 msgstr "Dimensione dispunibule"
 
-#: ../../locales/../src/engine/sizeformatting_base.cpp:129
-#: ../../locales/../src/engine/sizeformatting_base.cpp:188
+#: ../../locales/../src/engine/sizeformatting_base.cpp:124
+#: ../../locales/../src/engine/sizeformatting_base.cpp:183
 msgid "B <Unit symbol for bytes. Only translate first letter>"
 msgstr "O <Unit symbol for bytes. Only translate first letter>"
 
@@ -1602,20 +1602,20 @@ msgstr "Sfrancassi da u prox&y"
 msgid "Basic usage instructions"
 msgstr "Instruzzioni d'utilizazione di basa"
 
-#: resources.h:870
+#: resources.h:871
 msgid "Behaviour"
 msgstr "Andamentu"
 
-#: ../../locales/../src/interface/edithandler.cpp:1142
-#: ../../locales/../src/interface/edithandler.cpp:1170
+#: ../../locales/../src/interface/edithandler.cpp:1139
+#: ../../locales/../src/interface/edithandler.cpp:1167
 msgid "Being edited"
 msgstr "In corsu di mudificazione"
 
-#: resources.h:612
+#: resources.h:613
 msgid "Benchmark string coalescer"
 msgstr "Sperimentà i pussibilità di a fusione di frase"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1086
+#: ../../locales/../src/engine/tlssocket.cpp:1088
 msgid "Beware! Certificate has been revoked"
 msgstr "Fate casu ! U certificatu hè statu revocatu"
 
@@ -1623,7 +1623,7 @@ msgstr "Fate casu ! U certificatu hè statu revocatu"
 msgid "Binary"
 msgstr "Binariu"
 
-#: resources.h:863
+#: resources.h:864
 msgid "Blackboard"
 msgstr "Tavula nera"
 
@@ -1653,7 +1653,7 @@ msgstr "Infurmazione di custruzzione"
 msgid "Business category:"
 msgstr "Categuria di faccenda :"
 
-#: resources.h:750
+#: resources.h:751
 msgid ""
 "By default uses any available local port to establish transfers in active "
 "mode. If you want to limit FileZilla to use only a small range of ports, "
@@ -1667,19 +1667,19 @@ msgstr ""
 msgid "C&ancel current operation"
 msgstr "&Abbandunà l'operazione currente"
 
-#: resources.h:609
+#: resources.h:610
 msgid "C&lear all"
 msgstr "Sguassà tuttu"
 
-#: resources.h:584 resources.h:636
+#: resources.h:584 resources.h:637
 msgid "C&opy URL(s) to clipboard"
 msgstr "Cupià URL(s) nantu à u clipb&oard"
 
-#: resources.h:887
+#: resources.h:888
 msgid "C&ustom"
 msgstr "Persunalizà"
 
-#: resources.h:942
+#: resources.h:943
 msgid "C&ustom filetype associations:"
 msgstr "Associ persunalizati da tipu di schedariu :"
 
@@ -1711,11 +1711,11 @@ msgstr "Ùn pò scrive nantu à u schedariu : %s"
 msgid "Cancel"
 msgstr "Abbandunà"
 
-#: resources.h:994
+#: resources.h:995
 msgid "Cancel current operation"
 msgstr "Abbandunà l'operazione in corsu"
 
-#: resources.h:995
+#: resources.h:996
 msgid "Cancels the current operation"
 msgstr "L'operazione in corsu hè abbandunata"
 
@@ -1756,18 +1756,18 @@ msgstr ""
 msgid "Cannot create new filter"
 msgstr "Ùn pò micca creà un novu filtru"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1972
-#: ../../locales/../src/interface/LocalListView.cpp:2101
+#: ../../locales/../src/interface/LocalListView.cpp:1925
+#: ../../locales/../src/interface/LocalListView.cpp:2054
 #: ../../locales/../src/interface/RemoteListView.cpp:2629
 #: ../../locales/../src/interface/RemoteListView.cpp:2675
 msgid "Cannot edit file"
 msgstr "Ùn pò micca mudificà u schedariu"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1888
+#: ../../locales/../src/interface/LocalListView.cpp:1841
 msgid "Cannot edit file, not connected to any server."
 msgstr "Ùn pò micca mudificà u schedariu, chì ùn hè micca cunnettu à un servu."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1899
+#: ../../locales/../src/interface/LocalListView.cpp:1852
 msgid "Cannot edit file, remote path unknown."
 msgstr "Ùn pò micca mudificà u schedariu, passeghju alluntanatu scunnisciutu."
 
@@ -1829,17 +1829,17 @@ msgstr "Ùn pò micca arregistrà u gruppu di filtri"
 msgid "Cannot select filter"
 msgstr "Ùn pò micca selezziunà u filtru"
 
-#: ../../locales/../src/interface/edithandler.cpp:1520
-#: ../../locales/../src/interface/edithandler.cpp:1525
-#: ../../locales/../src/interface/edithandler.cpp:1564
+#: ../../locales/../src/interface/edithandler.cpp:1517
+#: ../../locales/../src/interface/edithandler.cpp:1522
+#: ../../locales/../src/interface/edithandler.cpp:1561
 msgid "Cannot set file association"
 msgstr "Ùn hè micca pussibule di definisce l'associu di schedariu"
 
-#: ../../locales/../src/interface/edithandler.cpp:1101
+#: ../../locales/../src/interface/edithandler.cpp:1098
 msgid "Cannot show dialog"
 msgstr "Ùn pò micca fà vede u dialogu"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1990
+#: ../../locales/../src/interface/LocalListView.cpp:1943
 #: ../../locales/../src/interface/RemoteListView.cpp:2695
 msgid "Cannot view/edit selected file"
 msgstr "Ùn pò micca leghje o mudificà u schedariu selezziunatu"
@@ -1872,17 +1872,17 @@ msgstr "Cumpetizione :"
 msgid "Change file attributes"
 msgstr "Cambià l'attributi di u schedariu"
 
-#: resources.h:587 resources.h:639
+#: resources.h:587 resources.h:640
 msgid "Change the file permissions."
 msgstr "Cambià i diritti d'accessu à u schedariu."
 
-#: resources.h:967
+#: resources.h:968
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr ""
 "Cambià e preferenze di u ghjurnale di i messaghji richiede u rilanciu di "
 "FileZilla."
 
-#: ../../locales/../src/interface/FileZilla.cpp:669
+#: ../../locales/../src/interface/FileZilla.cpp:670
 msgid "Character encoding issue"
 msgstr "Prublema di cudificazione di caratteru"
 
@@ -1894,11 +1894,11 @@ msgstr "Gruppu di caratteri"
 msgid "Check for &updates..."
 msgstr "Cuntrollà e nove &versioni di FileZilla..."
 
-#: resources.h:946
+#: resources.h:947
 msgid "Check for FileZilla &updates automatically:"
 msgstr "Cuntrollà automaticamente e nove &versioni di FileZilla :"
 
-#: resources.h:1008
+#: resources.h:1009
 #, fuzzy
 msgid "Check for Updates"
 msgstr "Cuntrollu di e nove versioni di FileZilla"
@@ -1915,17 +1915,17 @@ msgstr "Fiascu mentre u cuntrollu di e nove versioni di FileZilla"
 msgid "Checking for correct external IP address"
 msgstr "Cuntrollu di l'indirizzu IP esternu chì hè currettu"
 
-#: resources.h:1021
+#: resources.h:1022
 #, fuzzy
 msgid "Checking for updates..."
 msgstr "Cuntrollu in corsu di e nove versioni di FileZilla"
 
-#: ../../locales/../src/interface/updater.cpp:651
+#: ../../locales/../src/interface/updater.cpp:661
 #, fuzzy, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Sfarenza di somma di cuntrollu per u schedariu telecaricatu."
 
-#: ../../locales/../src/interface/updater.cpp:647
+#: ../../locales/../src/interface/updater.cpp:657
 #, fuzzy, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Sfarenza di somma di cuntrollu per u schedariu telecaricatu."
@@ -1940,7 +1940,7 @@ msgstr "Sciglite u cartulare lucale predefinitu"
 msgid "Choose the local directory"
 msgstr "Sciglite u cartulare lucale"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:868
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:840
 msgid "Chunk data improperly terminated"
 msgstr "Ingutuppu di dati interrottu scurrettamente"
 
@@ -1948,11 +1948,11 @@ msgstr "Ingutuppu di dati interrottu scurrettamente"
 msgid "Cipher:"
 msgstr "Cudificazione :"
 
-#: resources.h:490 resources.h:664
+#: resources.h:490 resources.h:665
 msgid "Cl&ose tab"
 msgstr "Chjode l'&unghjetta"
 
-#: resources.h:860
+#: resources.h:861
 msgid "Classic"
 msgstr "Classicu"
 
@@ -1960,7 +1960,7 @@ msgstr "Classicu"
 msgid "Clear &Site Manager entries"
 msgstr "&Sguassà tutti l'elementi di u Ghjestiunariu di Siti"
 
-#: resources.h:610
+#: resources.h:611
 msgid "Clear &layout cache"
 msgstr "Sguassà &l'infurmazione d'accunciamentu"
 
@@ -1992,7 +1992,7 @@ msgstr "Sguassà i dati persunali"
 msgid "Clear quickconnect bar"
 msgstr "Sguassà a barra Cunnessione Pronta"
 
-#: resources.h:611
+#: resources.h:612
 msgid "Clear string coalescer"
 msgstr "Sguassà a fusione di frase"
 
@@ -2008,7 +2008,7 @@ msgstr "MAC per a cunnessione cliente à servu :"
 msgid "Client to server cipher:"
 msgstr "Cudificazione per a cunnessione cliente à servu :"
 
-#: resources.h:665
+#: resources.h:666
 msgid "Close &all other tabs"
 msgstr "Chjode tutte l'&altre unghjette"
 
@@ -2037,7 +2037,7 @@ msgstr "Pruprietà di a culonna"
 msgid "Column setup"
 msgstr "Ozzione di a culonna"
 
-#: resources.h:937
+#: resources.h:938
 msgid "Command and its arguments should be properly quoted."
 msgstr "A cummanda è i so parametri devenu esse scritti currettamente."
 
@@ -2074,15 +2074,15 @@ msgstr "Nome cumunu :"
 msgid "Communication tainted by router or firewall"
 msgstr "A cummunicazione hè alterata da un 'router' o un parafocu"
 
-#: resources.h:508 resources.h:643
+#: resources.h:508 resources.h:644
 msgid "Compare &modification time"
 msgstr "Paragunà a data è l'ora di &mudificazione"
 
-#: resources.h:507 resources.h:642
+#: resources.h:507 resources.h:643
 msgid "Compare file&size"
 msgstr "Paragunà a dimensione di u &schedariu"
 
-#: resources.h:917
+#: resources.h:918
 msgid "Comparison &threshold (in minutes):"
 msgstr "Sogliu di paragone (in minuti) :"
 
@@ -2110,7 +2110,7 @@ msgstr "Ozzioni di compilazione :"
 msgid "Compressed"
 msgstr "Strintu"
 
-#: resources.h:801
+#: resources.h:802
 msgid "Concurrent transfers"
 msgstr "Trasferimenti simultanei"
 
@@ -2118,15 +2118,15 @@ msgstr "Trasferimenti simultanei"
 msgid "Conditions are c&ase sensitive"
 msgstr "I &cundizioni facenu a distinzione trà maiuscule è minuscule"
 
-#: resources.h:708
+#: resources.h:709
 msgid "Configuration test"
 msgstr "Prova di cunfigurazione"
 
-#: resources.h:682
+#: resources.h:683
 msgid "Configure passive mode"
 msgstr "Cunfigurà u modu passivu"
 
-#: resources.h:698
+#: resources.h:699
 msgid "Configure port range"
 msgstr "Cunfigurà a stesa di i porti"
 
@@ -2138,9 +2138,9 @@ msgstr "Cunfigurazione di FileZilla è di a vostra reta"
 msgid "Confirm deletion"
 msgstr "Cunfirmà a sguassatura"
 
-#: ../../locales/../src/engine/local_filesys.cpp:134
-#: ../../locales/../src/interface/LocalListView.cpp:1943
-#: ../../locales/../src/interface/LocalListView.cpp:2062
+#: ../../locales/../src/engine/local_filesys.cpp:135
+#: ../../locales/../src/interface/LocalListView.cpp:1896
+#: ../../locales/../src/interface/LocalListView.cpp:2015
 #: ../../locales/../src/interface/RemoteListView.cpp:1715
 #: ../../locales/../src/interface/RemoteListView.cpp:2646
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1125
@@ -2163,12 +2163,12 @@ msgstr "Cunnettà à u situ specificatu in u Ghjestiunariu di Siti"
 msgid "Connected"
 msgstr "Cunnettu"
 
-#: ../../locales/../src/interface/QueueView.cpp:1446
+#: ../../locales/../src/interface/QueueView.cpp:1453
 msgid "Connecting"
 msgstr "Cunnessione in corsu"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:207
-#: ../../locales/../src/interface/statuslinectrl.cpp:280
+#: ../../locales/../src/interface/statuslinectrl.cpp:272
 #, c-format
 msgid "Connecting to %s"
 msgstr "Cunnessione in corsu à %s"
@@ -2189,7 +2189,7 @@ msgstr "Cunnessione in corsu à %s..."
 msgid "Connection"
 msgstr "Cunnessione"
 
-#: ../../locales/../src/interface/QueueView.cpp:1058
+#: ../../locales/../src/interface/QueueView.cpp:1065
 msgid "Connection attempt failed"
 msgstr "A prova di cunnessione hè fiasca"
 
@@ -2220,11 +2220,11 @@ msgid "Connection closed by server"
 msgstr "Cunnessione chjosa da u servu"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:393
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:299
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:298
 msgid "Connection established, initializing TLS..."
 msgstr "Cunnessione stabilita, lanciu di TLS in corsu..."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:334
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:333
 msgid "Connection established, sending HTTP request"
 msgstr "Cunnessione stabilita, mandà d'una dumanda HTTP"
 
@@ -2284,7 +2284,7 @@ msgstr "Cupià (%d) di %s"
 msgid "Copy of %s"
 msgstr "Cupià di %s"
 
-#: resources.h:585 resources.h:637
+#: resources.h:585 resources.h:638
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Cupià l'URLs di l'elementi selezziunati nantu à u clipboard."
 
@@ -2298,7 +2298,7 @@ msgstr "Ùn pò micca accettà a cunnessione : %s"
 msgid "Could not add connection to Site Manager"
 msgstr "Ùn pò micca aghjunghje a cunnessione à u Ghjestiunariu di Siti"
 
-#: ../../locales/../src/interface/state.cpp:842
+#: ../../locales/../src/interface/state.cpp:840
 msgid "Could not complete operation"
 msgstr "Ùn hè micca pussibule di compie l'operazione"
 
@@ -2331,7 +2331,7 @@ msgstr "Ùn pò micca cupià l'indirizzi URL"
 msgid "Could not copy data"
 msgstr "Ùn pò micca cupià i dati"
 
-#: ../../locales/../src/interface/updater.cpp:419
+#: ../../locales/../src/interface/updater.cpp:432
 #, fuzzy, c-format
 msgid "Could not create local file %s\n"
 msgstr "Ùn pò micca scrive in u schedariu lucale"
@@ -2351,7 +2351,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Ùn pò micca stabilisce a cunnessione cù u servu"
 
-#: ../../locales/../src/interface/FileZilla.cpp:494
+#: ../../locales/../src/interface/FileZilla.cpp:495
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2370,7 +2370,7 @@ msgstr ""
 "Ùn hè micca pussibule d'ingenereghjà una sequenza d'identificazione "
 "persunalizata."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1021
+#: ../../locales/../src/engine/tlssocket.cpp:1023
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2378,7 +2378,7 @@ msgstr ""
 "Ùn hè micca pussibule di sapè u nome di l'emettore di u certificatu, "
 "gnutls_x509_get_issuer_dn hè fiascu"
 
-#: ../../locales/../src/engine/tlssocket.cpp:997
+#: ../../locales/../src/engine/tlssocket.cpp:999
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2386,7 +2386,7 @@ msgstr ""
 "Ùn hè micca pussibule di sapè u nome di sughjettu di u certificatu, "
 "gnutls_x509_get_dn hè fiascu"
 
-#: ../../locales/../src/interface/state.cpp:995
+#: ../../locales/../src/interface/state.cpp:993
 msgid "Could not get full remote path."
 msgstr "Ùn hè micca pussibule di sapè u nome sanu di u passeghju alluntanatu."
 
@@ -2400,13 +2400,13 @@ msgid "Could not get temporary directory to download file into."
 msgstr ""
 "Ùn pò micca creà unu cartulare timpurariu per telecaricà u schedariu dentru."
 
-#: ../../locales/../src/engine/tlssocket.cpp:939
+#: ../../locales/../src/engine/tlssocket.cpp:941
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Ùn hè micca pussibule d'impurtà i certificati 'peer', gnutls_x509_crt_import "
 "hè fiascu"
 
-#: ../../locales/../src/engine/tlssocket.cpp:933
+#: ../../locales/../src/engine/tlssocket.cpp:935
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2434,7 +2434,7 @@ msgstr "Ùn pò micca caricà u schedariu di chjave"
 msgid "Could not load private key"
 msgstr "Ùn hè micca pussibule di caricà a chjave privata"
 
-#: ../../locales/../src/interface/state.cpp:1021
+#: ../../locales/../src/interface/state.cpp:1019
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory '%"
@@ -2446,7 +2446,7 @@ msgstr ""
 "Vulete disattivà u sfugliendu sincrunizatu è cuntinuà u cambiamentu di u "
 "cartulare alluntanatu ?"
 
-#: ../../locales/../src/interface/state.cpp:404
+#: ../../locales/../src/interface/state.cpp:402
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory '%"
@@ -2520,8 +2520,8 @@ msgstr "Ùn hè micca pussibule di creà un operazione d'Entrata/Esciuta"
 msgid "Could not start proxy handshake: %s"
 msgstr "Ùn hè micca pussibule di stabilisce u toccamanu cù u proxy : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1109
-#: ../../locales/../src/interface/QueueView.cpp:1114
+#: ../../locales/../src/interface/QueueView.cpp:1116
+#: ../../locales/../src/interface/QueueView.cpp:1121
 msgid "Could not start transfer"
 msgstr "Ùn hè micca pussibule di principià u trasferimentu"
 
@@ -2547,7 +2547,7 @@ msgstr ""
 "Ùn pò micca scrive \"%s\", l'indette glubale ùn ponu micca esse "
 "arregistrate : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1982
+#: ../../locales/../src/interface/QueueView.cpp:1989
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2575,7 +2575,7 @@ msgstr "Ùn pò micca scrive \"%s\" : %s"
 msgid "Could not write keyfile: %s"
 msgstr "Ùn pò micca scrive in u schedariu di chjave : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1103
+#: ../../locales/../src/interface/QueueView.cpp:1110
 msgid "Could not write to local file"
 msgstr "Ùn pò micca scrive in u schedariu lucale"
 
@@ -2595,7 +2595,7 @@ msgstr "Ùn pò micca scrive in socket : %s"
 msgid "Country:"
 msgstr "Paese :"
 
-#: resources.h:614
+#: resources.h:615
 msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
 msgstr "Tumbà FileZilla avà. À impiegà solu per spannà un 'exception handler'"
 
@@ -2603,7 +2603,7 @@ msgstr "Tumbà FileZilla avà. À impiegà solu per spannà un 'exception handle
 msgid "Crea&te new file"
 msgstr "Creà unu schedariu novu"
 
-#: resources.h:562 resources.h:576 resources.h:631 resources.h:652
+#: resources.h:562 resources.h:576 resources.h:632 resources.h:653
 msgid "Create a new subdirectory in the current directory"
 msgstr "Creà unu sottu-cartulare novu in u cartulare currente"
 
@@ -2611,8 +2611,8 @@ msgstr "Creà unu sottu-cartulare novu in u cartulare currente"
 msgid "Create a new, empty file in the current directory"
 msgstr "Creà unu schedariu novu è viotu in u cartulare currente"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1174
-#: ../../locales/../src/interface/LocalTreeView.cpp:1177
+#: ../../locales/../src/interface/LocalListView.cpp:1127
+#: ../../locales/../src/interface/LocalTreeView.cpp:1135
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1276
 msgid "Create directory"
@@ -2622,7 +2622,7 @@ msgstr "Creà unu cartulare"
 msgid "Create empty file"
 msgstr "Creà unu schedariu viotu"
 
-#: ../../locales/../src/interface/QueueView.cpp:1519
+#: ../../locales/../src/interface/QueueView.cpp:1526
 msgid "Creating directory"
 msgstr "Creendu unu cartulare"
 
@@ -2647,7 +2647,7 @@ msgstr ""
 "Errore impurtantissimu di trasferimentu di schedariu dopu à avè trasferitu %"
 "s in %s"
 
-#: ../../locales/../src/interface/state.cpp:393
+#: ../../locales/../src/interface/state.cpp:391
 #, c-format
 msgid ""
 "Current remote directory (%s) is not below the synchronization root (%s).\n"
@@ -2669,7 +2669,7 @@ msgstr "Avà, u tipu di trasferimentu currente hè automaticu."
 msgid "Current transfer type is set to binary."
 msgstr "Avà, u tipu di trasferimentu currente hè binariu."
 
-#: resources.h:771 resources.h:893
+#: resources.h:772 resources.h:894
 msgid "Cus&tom"
 msgstr "Persunaliza&tu"
 
@@ -2685,7 +2685,7 @@ msgstr "Servu persunalizatu"
 msgid "D&ata type"
 msgstr "Tipu di d&atu"
 
-#: resources.h:900
+#: resources.h:901
 msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
 msgstr ""
 "Prefissi d&ecimale cù simbuli di u Sistemu Internaziunale (SI) (p.i. 1 Ko = "
@@ -2695,7 +2695,7 @@ msgstr ""
 msgid "D&efault"
 msgstr "Pr&edefinitu"
 
-#: resources.h:580 resources.h:632 resources.h:662
+#: resources.h:580 resources.h:633 resources.h:663
 msgid "D&elete"
 msgstr "Sguassà"
 
@@ -2703,11 +2703,11 @@ msgstr "Sguassà"
 msgid "D&isable all"
 msgstr "Disattivà tuttu"
 
-#: resources.h:871
+#: resources.h:872
 msgid "D&o not save passwords"
 msgstr "Ùn arregistrà micca e parolle d'intrata"
 
-#: resources.h:924
+#: resources.h:925
 msgid "D&ouble-click action on directories:"
 msgstr "Azzione di u d&opiu-cliccu nantu à i cartulari :"
 
@@ -2719,7 +2719,7 @@ msgstr "D&uplicà"
 msgid "DOS-like with virtual paths"
 msgstr "Accede à i passeghji virtuali à a manera di DOS"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1977
+#: ../../locales/../src/interface/LocalListView.cpp:1930
 #: ../../locales/../src/interface/RemoteListView.cpp:2680
 msgid "Dangerous filetype"
 msgstr "Tipu di schedariu periculosu"
@@ -2737,7 +2737,7 @@ msgstr "Socket di dati chjosu troppu tostu."
 msgid "Date"
 msgstr "Data"
 
-#: resources.h:884
+#: resources.h:885
 msgid "Date formatting"
 msgstr "Forma di a data"
 
@@ -2754,7 +2754,7 @@ msgstr "Data è ora scunnisciute"
 msgid "Debug"
 msgstr "Spannà"
 
-#: resources.h:968
+#: resources.h:969
 msgid "Debugging settings"
 msgstr "Preferenze per Spannà"
 
@@ -2770,7 +2770,7 @@ msgstr "Predefinitu (Detezione automatica)"
 msgid "Default editor not properly quoted."
 msgstr "Editore predefinitu micca specificatu currettamente."
 
-#: resources.h:242 resources.h:264 resources.h:854
+#: resources.h:242 resources.h:264 resources.h:855
 msgid "Default file exists action"
 msgstr "Azzione predefinita à fà nantu à i schedarii chì esistenu"
 
@@ -2791,15 +2791,15 @@ msgstr ""
 msgid "Default system language"
 msgstr "Lingua predefinita di u sistemu"
 
-#: resources.h:676
+#: resources.h:677
 msgid "Default transfer mode:"
 msgstr "Modu predefinitu di trasferimentu :"
 
-#: resources.h:823
+#: resources.h:824
 msgid "Default transfer type:"
 msgstr "Tipu predefinitu di trasferimentu :"
 
-#: resources.h:695 resources.h:758
+#: resources.h:696 resources.h:759
 msgid "Default: http://ip.filezilla-project.org/ip.php"
 msgstr "Predefinitu : http://ip.filezilla-project.org/ip.php"
 
@@ -2829,7 +2829,7 @@ msgstr[1] ""
 msgid "Delete Site Manager entry"
 msgstr "Sguassà l'elementu di u Ghjestiunariu di Siti"
 
-#: resources.h:633 resources.h:654
+#: resources.h:634 resources.h:655
 msgid "Delete selected directory"
 msgstr "Sguassà u cartulare selezziunatu"
 
@@ -2851,7 +2851,7 @@ msgstr ""
 msgid "Deleting symbolic link"
 msgstr "Sguassatura di a leia simbulica"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1043
+#: ../../locales/../src/interface/LocalTreeView.cpp:1001
 msgid "Desktop"
 msgstr "Scagnu"
 
@@ -2875,9 +2875,9 @@ msgstr "Direzzione"
 msgid "Directory"
 msgstr "Cartulare"
 
-#: resources.h:640 resources.h:915 resources.h:1003
+#: resources.h:641 resources.h:916 resources.h:1004
 #: ../../locales/../src/interface/filelistctrl.cpp:449
-#: ../../locales/../src/interface/Mainfrm.cpp:2432
+#: ../../locales/../src/interface/Mainfrm.cpp:2437
 msgid "Directory comparison"
 msgstr "Paragone di cartulare"
 
@@ -2913,7 +2913,7 @@ msgstr "Lista di u cartulare riesciuta"
 msgid "Disa&ble all"
 msgstr "Disattivà tuttu"
 
-#: ../../locales/../src/interface/state.cpp:1029
+#: ../../locales/../src/interface/state.cpp:1027
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
@@ -2928,7 +2928,7 @@ msgstr ""
 "Disattivà st'ozzione s'ellu ùn hè più pussibule di vede bè u cuntenutu di u "
 "cartulare."
 
-#: resources.h:996
+#: resources.h:997
 msgid "Disconnect from server"
 msgstr "Disghjunghje da u servu"
 
@@ -2936,25 +2936,25 @@ msgstr "Disghjunghje da u servu"
 #: ../../locales/../src/engine/ControlSocket.cpp:956
 #: ../../locales/../src/engine/ControlSocket.cpp:1055
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:233
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:950
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:952
-#: ../../locales/../src/interface/QueueView.cpp:1056
-#: ../../locales/../src/interface/QueueView.cpp:1100
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:911
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:913
+#: ../../locales/../src/interface/QueueView.cpp:1063
+#: ../../locales/../src/interface/QueueView.cpp:1107
 msgid "Disconnected from server"
 msgstr "Disghjuntu da u servu"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1090
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:968
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:928
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Disghjuntu da u servu : %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1417
-#: ../../locales/../src/interface/statuslinectrl.cpp:274
+#: ../../locales/../src/interface/QueueView.cpp:1424
+#: ../../locales/../src/interface/statuslinectrl.cpp:266
 msgid "Disconnecting from previous server"
 msgstr "Disghjunzione in corsu da u servu precedente"
 
-#: resources.h:997
+#: resources.h:998
 msgid "Disconnects from the currently visible server"
 msgstr "Disghjunghje da u servu attualemente videvule"
 
@@ -2962,11 +2962,11 @@ msgstr "Disghjunghje da u servu attualemente videvule"
 msgid "Display about dialog"
 msgstr "Affissà a finestra d'infurmazione Appropositu"
 
-#: resources.h:933
+#: resources.h:934
 msgid "Do &not use default editor"
 msgstr "Ù&n impiega micca l'editore predefinitu"
 
-#: resources.h:606
+#: resources.h:607
 msgid "Do &nothing"
 msgstr "Ùn fà &nunda"
 
@@ -3003,15 +3003,15 @@ msgstr "Site sicuru di mandà '%s' à u servu ?"
 msgid "Documentation"
 msgstr "Documentazione"
 
-#: resources.h:697
+#: resources.h:698
 msgid "Don't use external IP address on &local connections."
 msgstr "Ùn impiegà micca d'indirizzu IP esternu per i cunnessioni &lucali."
 
-#: resources.h:834
+#: resources.h:835
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
 msgstr "Dotfiles sò nomi di schedariu principiendu cù un puntu, i.e. .htaccess"
 
-#: resources.h:918
+#: resources.h:919
 msgid "Double-click action"
 msgstr "Azzione di u dopiu-cliccu"
 
@@ -3019,7 +3019,7 @@ msgstr "Azzione di u dopiu-cliccu"
 msgid "Download"
 msgstr "Telecaricà"
 
-#: resources.h:469 resources.h:810
+#: resources.h:469 resources.h:811
 msgid "Download &limit:"
 msgstr "Limitazione di telecaricamentu :"
 
@@ -3037,7 +3037,7 @@ msgstr "Limitazione di telecaricamentu : alcuna"
 msgid "Download search results"
 msgstr "Telecaricà i risultati di a ricerca"
 
-#: resources.h:627
+#: resources.h:628
 msgid "Download selected directory"
 msgstr "Telecaricà u cartulare selezziunatu"
 
@@ -3054,11 +3054,11 @@ msgstr ""
 "Velocità di telecaricamentu : %s/s\n"
 "Velocità d'incaricamentu : %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1127
+#: ../../locales/../src/interface/edithandler.cpp:1124
 msgid "Downloading"
 msgstr "Telecarichendu"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:352
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:351
 #, c-format
 msgid "Downloading %s"
 msgstr "Telecarichendu %s"
@@ -3073,14 +3073,14 @@ msgstr ""
 msgid "Downloading search results"
 msgstr "Telecarichendu i risultati di a ricerca"
 
-#: resources.h:1013
+#: resources.h:1014
 #, fuzzy
 msgid "Downloading update..."
 msgstr "Telecarichendu"
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
 #: ../../locales/../src/interface/LocalTreeView.cpp:105
-#: ../../locales/../src/interface/QueueView.cpp:83
+#: ../../locales/../src/interface/QueueView.cpp:87
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:88
 msgid ""
@@ -3091,7 +3091,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/LocalListView.cpp:111
 #: ../../locales/../src/interface/LocalTreeView.cpp:111
-#: ../../locales/../src/interface/QueueView.cpp:96
+#: ../../locales/../src/interface/QueueView.cpp:100
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:94
 msgid "Drag&drop between different servers has not been implemented yet."
@@ -3135,16 +3135,16 @@ msgid ""
 msgstr ""
 "Mudificà u schedariu cù l'editore è incaricà i cambiamenti nantu à u servu."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1888
-#: ../../locales/../src/interface/LocalListView.cpp:1899
+#: ../../locales/../src/interface/LocalListView.cpp:1841
+#: ../../locales/../src/interface/LocalListView.cpp:1852
 msgid "Editing failed"
 msgstr "Mudificazione fiasca"
 
-#: resources.h:881
+#: resources.h:882
 msgid "Email:"
 msgstr "Messaghju elettronicu :"
 
-#: ../../locales/../src/interface/QueueView.cpp:2292
+#: ../../locales/../src/interface/QueueView.cpp:2275
 msgid "Empty command"
 msgstr "Cummanda viota"
 
@@ -3182,7 +3182,7 @@ msgstr "A frasa framezu à e virgulette hè viota."
 msgid "En&able all"
 msgstr "&Attivà tuttu"
 
-#: resources.h:819
+#: resources.h:820
 msgid "Enable invalid character &filtering"
 msgstr "Attivà u filtru di i caratteri micca leghjittimi"
 
@@ -3211,7 +3211,7 @@ msgstr "Scrivite una &cummanda persunalizata..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Scrivite 0 per una velocità senza limitu."
 
-#: ../../locales/../src/interface/QueueView.cpp:2281
+#: ../../locales/../src/interface/QueueView.cpp:2264
 msgid "Enter command"
 msgstr "Scrivite una cummanda"
 
@@ -3219,7 +3219,7 @@ msgstr "Scrivite una cummanda"
 msgid "Enter custom command"
 msgstr "Scrivite una cummanda persunalizata"
 
-#: resources.h:925
+#: resources.h:926
 msgid "Enter directory"
 msgstr "Scrivite unu cartulare"
 
@@ -3245,7 +3245,7 @@ msgstr "Scrivite a parolla d'intrata"
 msgid "Enter selected directory"
 msgstr "Scrivite u cartulare selezziunatu"
 
-#: resources.h:717
+#: resources.h:718
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3283,7 +3283,7 @@ msgstr ""
 " Sapete chì u schedariu cunvertittu ùn serà micca prutettu cù una parolla "
 "d'intrata."
 
-#: resources.h:721
+#: resources.h:722
 msgid ""
 "Enter the port on which the server listens.\n"
 "The default for FTP is 21, the default for SFTP is 22."
@@ -3305,7 +3305,7 @@ msgstr "Errore mentre l'espurtazione di e preferenze"
 msgid "Error importing"
 msgstr "Errore mentre l'impurtazione"
 
-#: ../../locales/../src/interface/QueueView.cpp:2049
+#: ../../locales/../src/interface/QueueView.cpp:2056
 msgid "Error loading queue"
 msgstr "Errore mentre u caricamentu di a lista d'attesa"
 
@@ -3319,7 +3319,7 @@ msgstr "Errore mentre u caricamentu di a lista d'attesa"
 #: ../../locales/../src/interface/import.cpp:120
 #: ../../locales/../src/interface/import.cpp:311
 #: ../../locales/../src/interface/Options.cpp:216
-#: ../../locales/../src/interface/QueueView.cpp:1962
+#: ../../locales/../src/interface/QueueView.cpp:1969
 #: ../../locales/../src/interface/search.cpp:1077
 #: ../../locales/../src/interface/search.cpp:1098
 #: ../../locales/../src/interface/sitemanager.cpp:241
@@ -3334,7 +3334,7 @@ msgstr "Errore mentre u caricamentu di a lista d'attesa"
 msgid "Error loading xml file"
 msgstr "Errore mentre u caricamentu di u schedariu xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1948
+#: ../../locales/../src/interface/QueueView.cpp:1955
 msgid "Error saving queue"
 msgstr "Errore mentre l'arregistramentu di a lista d'attesa"
 
@@ -3345,7 +3345,7 @@ msgstr "Errore mentre l'iniziu di u prugrammu"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:331
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:859
-#: ../../locales/../src/interface/QueueView.cpp:1983
+#: ../../locales/../src/interface/QueueView.cpp:1990
 #: ../../locales/../src/interface/sitemanager.cpp:671
 #: ../../locales/../src/interface/sitemanager.cpp:792
 #: ../../locales/../src/interface/sitemanager.cpp:852
@@ -3365,11 +3365,11 @@ msgstr "Errore :"
 msgid "Establish connection in a new tab"
 msgstr "Stabilisce una cunnessione in una nova unghjetta"
 
-#: resources.h:944
+#: resources.h:945
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
 msgstr "Esempiu : png \"c:\\program files\\viewer\\viewer.exe\" -open"
 
-#: resources.h:903
+#: resources.h:904
 msgid "Examples"
 msgstr "Esempii"
 
@@ -3383,7 +3383,7 @@ msgstr ""
 "U schedariu da esecutà ùn hà micca d'infurmazione di versione, impussibule "
 "di cuntrollà e nove versioni."
 
-#: resources.h:861
+#: resources.h:862
 msgid "Explorer"
 msgstr "Espluratore"
 
@@ -3424,11 +3424,11 @@ msgstr "FTP - Protocollu di Trasferimentu di Schedariu senzà sicurità"
 msgid "FTP Engine not initialized, can't connect"
 msgstr "Mutore FTP micca dimaratu, ùn si pò micca cunnettà"
 
-#: resources.h:745
+#: resources.h:746
 msgid "FTP Keep-alive"
 msgstr "FTP Sempre-vivu"
 
-#: resources.h:765
+#: resources.h:766
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:120
 msgid "FTP Proxy"
 msgstr "Proxy di FTP"
@@ -3437,7 +3437,7 @@ msgstr "Proxy di FTP"
 msgid "FTP URL"
 msgstr "URL di FTP"
 
-#: resources.h:673
+#: resources.h:674
 msgid ""
 "FTP uses secondary connections for data transfers. These additional "
 "connections can be established in two ways."
@@ -3455,15 +3455,15 @@ msgstr "FTPS - FTP cù cunnessione TLS/SSL sottintesa"
 
 #: ../../locales/../src/interface/LocalListView.cpp:549
 #: ../../locales/../src/interface/LocalListView.cpp:629
-#: ../../locales/../src/interface/LocalListView.cpp:2182
-#: ../../locales/../src/interface/LocalTreeView.cpp:901
+#: ../../locales/../src/interface/LocalListView.cpp:2135
+#: ../../locales/../src/interface/LocalTreeView.cpp:859
 #: ../../locales/../src/interface/viewheader.cpp:535
 msgid "Failed to change directory"
 msgstr "U cambiamentu di cartulare hè fiascu"
 
-#: ../../locales/../src/interface/FileZilla.cpp:264
-#: ../../locales/../src/interface/FileZilla.cpp:272
-#: ../../locales/../src/interface/FileZilla.cpp:274
+#: ../../locales/../src/interface/FileZilla.cpp:265
+#: ../../locales/../src/interface/FileZilla.cpp:273
+#: ../../locales/../src/interface/FileZilla.cpp:275
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:53
 msgid "Failed to change language"
 msgstr "U cambiamentu di lingua hè fiascu"
@@ -3487,11 +3487,11 @@ msgstr ""
 "Ùn hè micca pussibule di creà u socket d'ascoltu per u modu di trasferimentu "
 "attivu"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:666
+#: ../../locales/../src/interface/LocalTreeView.cpp:624
 msgid "Failed to get 'My Documents' path"
 msgstr "Fiascu per truvà u passeghju di 'My Documents'"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:652
+#: ../../locales/../src/interface/LocalTreeView.cpp:610
 msgid "Failed to get desktop path"
 msgstr "Fiascu per truvà u passeghju di u scagnu 'desktop'"
 
@@ -3513,7 +3513,7 @@ msgstr "Fiascu per dimarrà u mutore FTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:402
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:782
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:307
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:306
 msgid "Failed to initialize TLS."
 msgstr "Fiascu per dimarrà TLS."
 
@@ -3538,7 +3538,7 @@ msgid "Failed to open \"%s\" for reading"
 msgstr "Fiascu per apre \"%s\" per leghjelu"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2676
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:1086
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:1046
 #, c-format
 msgid "Failed to open \"%s\" for writing"
 msgstr "Fiascu per apre \"%s\" per scrivelu"
@@ -3547,7 +3547,7 @@ msgstr "Fiascu per apre \"%s\" per scrivelu"
 msgid "Failed to parse returned path."
 msgstr "Fiascu per determinà u passeghju riturnatu."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:315
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:314
 msgid "Failed to parse trusted root cert."
 msgstr "Fiascu per determinà u certificatu d'urigine accreditu."
 
@@ -3584,14 +3584,14 @@ msgstr "Fiascu per ritruvà l'indirizzu IP esternu."
 msgid "Failed to send command."
 msgstr "Fiascu per mandà a cummanda."
 
-#: ../../locales/../src/interface/FileZilla.cpp:272
+#: ../../locales/../src/interface/FileZilla.cpp:273
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr ""
 "Fiascu per sceglie %s (%s), cum'è lingua, impiegu di a lingua predefinita di "
 "u sistemu"
 
-#: ../../locales/../src/interface/FileZilla.cpp:257
+#: ../../locales/../src/interface/FileZilla.cpp:258
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
@@ -3599,14 +3599,14 @@ msgstr ""
 "Fiascu per sceglie %s (%s) cum'è lingua, impiegu di a lingua predefinita di "
 "u sistemu (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:245
+#: ../../locales/../src/interface/FileZilla.cpp:246
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr ""
 "Fiascu per sceglie %s (%s), cum'è lingua, impiegu di a lingua predefinita di "
 "u sistemu."
 
-#: ../../locales/../src/interface/FileZilla.cpp:274
+#: ../../locales/../src/interface/FileZilla.cpp:275
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:53
 #, c-format
 msgid "Failed to set language to %s, using default system language"
@@ -3614,14 +3614,14 @@ msgstr ""
 "Fiascu per sceglie %s, cum'è lingua, impiegu di a lingua predefinita di u "
 "sistemu"
 
-#: ../../locales/../src/interface/FileZilla.cpp:253
+#: ../../locales/../src/interface/FileZilla.cpp:254
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Fiascu per sceglie %s, cum'è lingua, impiegu di a lingua predefinita di u "
 "sistemu (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:242
+#: ../../locales/../src/interface/FileZilla.cpp:243
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr ""
@@ -3632,11 +3632,11 @@ msgstr ""
 msgid "Failed to validate settings"
 msgstr "Ùn hè micca pussibule di validà e preferenze"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1079
+#: ../../locales/../src/engine/tlssocket.cpp:1081
 msgid "Failed to verify peer certificate"
 msgstr "Ùn hè micca pussibule di verificà u certificatu paru"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:554
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:551
 #, c-format
 msgid "Failed to write to file %s"
 msgstr "Fiascu per scrive nantu à u schedariu %s"
@@ -3649,7 +3649,7 @@ msgstr "Fiascu per scrive nantu à u schedariu xml"
 msgid "Failed transfers"
 msgstr "Trasferimenti fiaschi"
 
-#: resources.h:688
+#: resources.h:689
 msgid "Fall back to active mode"
 msgstr "Ritornu à u modu attivu"
 
@@ -3693,14 +3693,14 @@ msgstr "U schedariu hà cambiatu"
 msgid "File lists"
 msgstr "Liste di schedarii"
 
-#: ../../locales/../src/interface/edithandler.cpp:1604
-#: ../../locales/../src/interface/FileZilla.cpp:691
-#: ../../locales/../src/interface/FileZilla.cpp:785
+#: ../../locales/../src/interface/edithandler.cpp:1601
+#: ../../locales/../src/interface/FileZilla.cpp:692
+#: ../../locales/../src/interface/FileZilla.cpp:786
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:127
 msgid "File not found"
 msgstr "U schedariu ùn esiste micca"
 
-#: resources.h:1007
+#: resources.h:1008
 msgid "File search"
 msgstr "Ricerca di schedariu"
 
@@ -3749,13 +3749,13 @@ msgstr "U schedariu duveria esse trasferatu cù u tipu di dati ASCII."
 msgid "File would transfer with binary data type."
 msgstr "U schedariu duveria esse trasferatu cù u tipu di dati binariu."
 
-#: ../../locales/../src/interface/FileZilla.cpp:495
+#: ../../locales/../src/interface/FileZilla.cpp:496
 #: ../../locales/../src/interface/quickconnectbar.cpp:69
 #: ../../locales/../src/interface/quickconnectbar.cpp:205
 msgid "FileZilla Error"
 msgstr "Errore di FileZilla"
 
-#: resources.h:710
+#: resources.h:711
 msgid ""
 "FileZilla can now test your configuration to ensure everything is configured "
 "properly."
@@ -3773,7 +3773,7 @@ msgstr ""
 "Ci vole à chjode FileZilla è aprellu torna per piglià in contu u cambiamentu "
 "di lingua."
 
-#: resources.h:957
+#: resources.h:958
 msgid "FileZilla updates"
 msgstr "Cambiamenti di FileZilla"
 
@@ -3781,7 +3781,7 @@ msgstr "Cambiamenti di FileZilla"
 msgid "Filelist status &bars"
 msgstr "Barre di &statu di l'arburiscenze"
 
-#: ../../locales/../src/interface/edithandler.cpp:1112
+#: ../../locales/../src/interface/edithandler.cpp:1109
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:278
 #: ../../locales/../src/interface/RemoteListView.cpp:372
@@ -3816,7 +3816,7 @@ msgstr ""
 msgid "Filename unchanged"
 msgstr "U nome di schedariu ùn hà micca cambiatu"
 
-#: resources.h:294 resources.h:961
+#: resources.h:294 resources.h:962
 msgid "Filename:"
 msgstr "Nome di schedariu :"
 
@@ -3852,7 +3852,7 @@ msgstr "Forma di a dimensione di schedariu"
 msgid "Filetype"
 msgstr "Tipu di schedariu"
 
-#: resources.h:945
+#: resources.h:946
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:133
 msgid "Filetype associations"
 msgstr "Associ da tipu di schedariu"
@@ -3861,7 +3861,7 @@ msgstr "Associ da tipu di schedariu"
 msgid "Filter applies to:"
 msgstr "U filtru hè applicatu à :"
 
-#: resources.h:818
+#: resources.h:819
 msgid "Filter invalid characters in filenames"
 msgstr "Filtratura di i caratteri micca leghjittimi in i nomi di schedarii"
 
@@ -3889,7 +3889,7 @@ msgstr "Filtrà l'elementi chì ùn currispondenu à alcuna di ste cundizione"
 msgid "Filter set already exists"
 msgstr "U gruppu di filtru esiste dighjà"
 
-#: resources.h:1000
+#: resources.h:1001
 msgid "Filter the directory listings"
 msgstr "Filtrà u cuntenutu di u cartulare"
 
@@ -3915,7 +3915,7 @@ msgstr "Impronta :"
 msgid "Firewall and router configuration wizard"
 msgstr "Assistente di cunfigurazione di parafocu è 'router'"
 
-#: resources.h:728
+#: resources.h:729
 msgid ""
 "For more detailed information about what these options do, please run the "
 "network configuration wizard."
@@ -3923,7 +3923,7 @@ msgstr ""
 "Per cunnosce l'effetti di st'ozzioni, impiegate l'Assistente di "
 "cunfigurazione di a reta."
 
-#: resources.h:705
+#: resources.h:706
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "Per più d'assicuranza, ci vole à indicà una stesa d'almenu 10 porti."
 
@@ -3947,11 +3947,11 @@ msgstr "Forzà l'affissu di i schedarii &piattati"
 msgid "Force showing hidden files"
 msgstr "Forzà l'affissu di i schedarii piattati"
 
-#: resources.h:772
+#: resources.h:773
 msgid "Format specifications:"
 msgstr "Specificazioni di a forma :"
 
-#: resources.h:943
+#: resources.h:944
 msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr ""
 "Forma : L'estensione seguita da a cummanda è i so parametri scritti "
@@ -3969,12 +3969,12 @@ msgstr "Generale"
 msgid "General SOCKS server failure"
 msgstr "Fiascu generale di u servu SOCKS"
 
-#: resources.h:790
+#: resources.h:791
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:122
 msgid "Generic proxy"
 msgstr "Proxy genericu"
 
-#: resources.h:694
+#: resources.h:695
 msgid "Get external IP address from the following URL:"
 msgstr "&Ottene l'indirizzu IP esternu chì si trova à st'URL :"
 
@@ -4015,7 +4015,7 @@ msgstr "Hash :"
 msgid "Hidden"
 msgstr "Piattatu"
 
-#: resources.h:816 ../../locales/../src/interface/queue.cpp:924
+#: resources.h:817 ../../locales/../src/interface/queue.cpp:924
 #: ../../locales/../src/interface/queue.cpp:1011
 msgid "High"
 msgstr "Altu"
@@ -4066,7 +4066,7 @@ msgstr "Ospite :"
 msgid "Hours,"
 msgstr "Ore,"
 
-#: resources.h:892
+#: resources.h:893
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (esempiu : 15:47)"
 
@@ -4074,7 +4074,7 @@ msgstr "I&SO 8601 (esempiu : 15:47)"
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "L'indirizzi IPv6 ùn sò micca suppurtati cù un proxy SOCKS4"
 
-#: resources.h:732
+#: resources.h:733
 msgid ""
 "If no data is sent or received during an operation for longer than the "
 "specified time, the connection will be closed and FileZilla will try to "
@@ -4084,13 +4084,13 @@ msgstr ""
 "più longa chì stu valore, a cunnessione serà interrotta è FileZilla pruverà "
 "di ricunnettassi."
 
-#: resources.h:977
+#: resources.h:978
 msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
 msgstr ""
 "S'è voi mandate un raportu d'errore, ci vole à mandà dinù u ghjurnale cù i "
 "ditaglii di livellu \"Verbose\"."
 
-#: resources.h:685
+#: resources.h:686
 msgid ""
 "If the automatic test at the end of this wizard succeeds, but you cannot "
 "transfer files to a particular server, the server might be misconfigured and "
@@ -4102,7 +4102,7 @@ msgstr ""
 "podasse mal cunfiguratu, è duveriate pruvà u modu attivu. Pudete definisce "
 "un modu di trasferimentu per ogni servu cù u Ghjestiunariu di Siti."
 
-#: resources.h:680
+#: resources.h:681
 msgid ""
 "If the fallback option is enabled, you will be able to connect to "
 "misconfigured servers which reject the selected transfer mode."
@@ -4134,7 +4134,7 @@ msgstr ""
 "S'è u prublemu ùn smarisce micca, vole si dì chì u 'router' è/o u parafocu "
 "interrompe sempre a cunnessione."
 
-#: resources.h:966
+#: resources.h:967
 msgid ""
 "If the size of the logfile reaches the limit, it gets renamed by adding \".1"
 "\" to the end of the filename (possibly overwriting older logfiles) and a "
@@ -4166,7 +4166,7 @@ msgstr ""
 "S'è stu prublemu ùn smarisce micca, ci vole à chjamà u custruttore di u "
 "'router'."
 
-#: resources.h:265 resources.h:855
+#: resources.h:265 resources.h:856
 msgid ""
 "If using 'overwrite if newer', your system time has to be synchronized with "
 "the server. If the time differs (e.g. different timezone), specify a "
@@ -4177,7 +4177,7 @@ msgstr ""
 "fusu orariu sfarente), ci vole à indicà a sfarenza di u fusu orariu cù u "
 "Ghjestiunariu di Siti."
 
-#: resources.h:916
+#: resources.h:917
 msgid ""
 "If using timestamp based comparison, consider two files equal if their "
 "timestamp difference does not exceed this threshold."
@@ -4185,11 +4185,11 @@ msgstr ""
 "S'è u paragone impiegatu hè fundatu nantu à l'ora, dui schedarii sò "
 "cunsiderati uguale s'è a so sfarenza d'ora ùn eccede micca stu sogliu."
 
-#: resources.h:931
+#: resources.h:932
 msgid "If you change the language, you should restart FileZilla."
 msgstr "S'è voi cambiate a lingua, ci vole à rilancià FileZilla."
 
-#: resources.h:711
+#: resources.h:712
 msgid ""
 "If you click on test, FileZilla will connect to probe.filezilla-project.org "
 "and will perform some simple tests."
@@ -4201,7 +4201,7 @@ msgstr ""
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "S'è voi chjudate FileZilla, i vostri cambiamenti seranu persi."
 
-#: resources.h:831
+#: resources.h:832
 msgid ""
 "If you enter the wrong filetypes, those files may get corrupted when "
 "transferred."
@@ -4209,12 +4209,12 @@ msgstr ""
 "S'è voi entrite un tipu di schedariu micca leghjittimu, sti schedarii "
 "puderianu esse alterati quand'elli seranu trasferati."
 
-#: resources.h:712
+#: resources.h:713
 msgid "If you get any errors, your configuration is not correct."
 msgstr ""
 "S'ella s'affaca un errore, vole si dì chì a vostra cunfigurazione hè gattiva."
 
-#: resources.h:744
+#: resources.h:745
 msgid ""
 "If you have problems to retrieve directory listings or to transfer files, "
 "try to change the default transfer mode."
@@ -4233,7 +4233,7 @@ msgstr ""
 "casu, pruvate di sbilancià in modu passivu è chjamate l'amministratore per "
 "ottene aiutu."
 
-#: resources.h:671
+#: resources.h:672
 msgid ""
 "If you successfully complete the wizard and the final test succeeds, any "
 "firewalls and routers you have should be configured properly."
@@ -4241,7 +4241,7 @@ msgstr ""
 "S'è l'assistente di cunfigurazione è a so prova finale si sò passati bè, "
 "tutti i vostri 'router' è parafochi duverianu esse ben cunfigurati."
 
-#: resources.h:707
+#: resources.h:708
 msgid ""
 "If you use a firewall, make sure FileZilla is allowed to accept connection "
 "on all given ports."
@@ -4249,7 +4249,7 @@ msgstr ""
 "S'è voi impiegate un parafocu, assicuratevvi chì FileZilla sia auturizatu à "
 "accettà cunnessioni nantu à tutti i porti indicati."
 
-#: resources.h:706
+#: resources.h:707
 msgid ""
 "If you use a router, make sure all these ports are forwarded to the machine "
 "you're running FileZilla on."
@@ -4283,7 +4283,7 @@ msgstr "Impurtazione riesciuta"
 msgid "Improperly quoted association."
 msgstr "Associu micca specificatu currettamente."
 
-#: resources.h:699
+#: resources.h:700
 msgid ""
 "In active mode, FileZilla has to listen on a port for data transfers. You "
 "have to specify which ports FileZilla will use."
@@ -4291,7 +4291,7 @@ msgstr ""
 "In modu attivu, FileZilla deve ascultà un portu per i trasferimenti di dati. "
 "Ci vole à indicà chì porti FileZilla hà da impiegà."
 
-#: resources.h:701
+#: resources.h:702
 msgid ""
 "In case you have a router, you will have to forward all available ports, as "
 "FileZilla has no influence on the ports your system chooses."
@@ -4300,7 +4300,7 @@ msgstr ""
 "perchè FileZilla ùn hà micca d'azzione nantu à u vostru sistemu per sceglie "
 "i porti."
 
-#: resources.h:689 resources.h:753
+#: resources.h:690 resources.h:754
 msgid ""
 "In order to use active mode, FileZilla needs to know your external IP "
 "address."
@@ -4308,7 +4308,7 @@ msgstr ""
 "Per aduprà u modu attivu, FileZilla deve cunnosce u vostru indirizzu IP "
 "esternu."
 
-#: resources.h:674
+#: resources.h:675
 msgid ""
 "In passive mode, which is recommended for most users, FileZilla asks the "
 "server for a port and connects to the given port. Not much configuration has "
@@ -4317,7 +4317,7 @@ msgstr ""
 "In modu passivu, ricumandatu per a parte maiò di l'utilizatori, FileZilla "
 "dumanda un portu à u servu è si ci cunnetta. Ùn ci hè nunda à fà di più."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1093
+#: ../../locales/../src/engine/tlssocket.cpp:1095
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4325,11 +4325,11 @@ msgstr ""
 "Catena micca cumpleta, u certificatu principale ùn hè micca un certificatu "
 "auto-firmatu da un auturità qualificata"
 
-#: ../../locales/../src/interface/QueueView.cpp:1052
+#: ../../locales/../src/interface/QueueView.cpp:1059
 msgid "Incorrect password"
 msgstr "A parolla d'intrata hè falsa"
 
-#: resources.h:1022
+#: resources.h:1023
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4354,16 +4354,16 @@ msgid "Interface"
 msgstr "Interfaccia"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:219
-#: ../../locales/../src/interface/QueueView.cpp:1009
-#: ../../locales/../src/interface/QueueView.cpp:1588
+#: ../../locales/../src/interface/QueueView.cpp:1016
+#: ../../locales/../src/interface/QueueView.cpp:1595
 msgid "Interrupted by user"
 msgstr "Interrottu da l'utilizatore"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:786
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:758
 msgid "Invalid Content-Length"
 msgstr "Lunghezza di u cuntenutu ùn hè micca leghjittima"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:611
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:608
 msgid "Invalid HTTP Response"
 msgstr "Risposta HTTP micca leghjittima"
 
@@ -4377,7 +4377,7 @@ msgstr ""
 "disattivatu. Selezziunate UTF-8 in u Ghjestiunariu di Siti per forzà "
 "l'impiegu d'UTF-8."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:910
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:872
 msgid "Invalid chunk size"
 msgstr "Dimensione di l'ingutuppu micca leghjittima"
 
@@ -4441,7 +4441,7 @@ msgstr ""
 msgid "Invalid regular expression in search conditions."
 msgstr "Espressione regulare micca leghjittima in i cundizioni di ricerca."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:621
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:618
 msgid "Invalid response code"
 msgstr "Codice di risposta micca leghjittimu"
 
@@ -4484,7 +4484,7 @@ msgstr "Cità di ghjuridizzione :"
 msgid "Jurisdiction state or province:"
 msgstr "Pruvincia di ghjuridizzione :"
 
-#: resources.h:913
+#: resources.h:914
 msgid "Keep directories on top"
 msgstr "Mentene i cartulari in capu"
 
@@ -4511,7 +4511,7 @@ msgstr "Scambiu di chjave :"
 msgid "L&owest"
 msgstr "A più bassa"
 
-#: resources.h:929
+#: resources.h:930
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:131
 msgid "Language"
 msgstr "Lingua"
@@ -4526,31 +4526,31 @@ msgstr "Lingua mudificata"
 msgid "Last modified"
 msgstr "Mudificatu u"
 
-#: resources.h:858
+#: resources.h:859
 msgid "Layout"
 msgstr "Accunciamentu"
 
-#: resources.h:804
+#: resources.h:805
 msgid "Limit for concurrent &downloads:"
 msgstr "Limitazione &di telecaricamenti simultanei :"
 
-#: resources.h:806
+#: resources.h:807
 msgid "Limit for concurrent &uploads:"
 msgstr "Limitazione d'incaricamenti sim&ultanei :"
 
-#: resources.h:748
+#: resources.h:749
 msgid "Limit local ports"
 msgstr "Limità i porti lucali"
 
-#: resources.h:963
+#: resources.h:964
 msgid "Limit size of logfile"
 msgstr "Dimensione massima di u ghjurnale di i messaghji"
 
-#: resources.h:964
+#: resources.h:965
 msgid "Limit:"
 msgstr "Limitazione :"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:853
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:825
 msgid "Line length exceeded"
 msgstr "Lunghezza di a linea trapassata"
 
@@ -4568,12 +4568,12 @@ msgstr "Socket d'ascoltu chjosu"
 msgid "Listing:"
 msgstr "Cuntenutu :"
 
-#: resources.h:751
+#: resources.h:752
 msgid "Lo&west available port:"
 msgstr "P&ortu u più bassu dispunibule :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1160
-#: ../../locales/../src/interface/edithandler.cpp:1414
+#: ../../locales/../src/interface/edithandler.cpp:1157
+#: ../../locales/../src/interface/edithandler.cpp:1411
 msgid "Local"
 msgstr "Lucale"
 
@@ -4585,8 +4585,8 @@ msgstr "Schedariu lucale"
 msgid "Local file does not exist."
 msgstr "U schedariu lucale ùn esiste micca."
 
-#: ../../locales/../src/interface/updater.cpp:346
-#: ../../locales/../src/interface/updater.cpp:423
+#: ../../locales/../src/interface/updater.cpp:359
+#: ../../locales/../src/interface/updater.cpp:436
 #, fuzzy, c-format
 msgid "Local file is %s\n"
 msgstr "Schedariu lucale"
@@ -4615,7 +4615,7 @@ msgstr "Cummuna :"
 msgid "Log file"
 msgstr "Ghjurnale di i messaghji"
 
-#: resources.h:958
+#: resources.h:959
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:140
 msgid "Logging"
 msgstr "Arregistramentu di i messaghji"
@@ -4683,20 +4683,20 @@ msgstr ""
 "Assicuratevvi chì u schedariu sia accessibule è sia un ducumentu XML "
 "leghjittimu."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:841
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:853
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:868
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:910
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:813
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:825
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:840
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:872
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Ingutuppu malcunciliu di dati : %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:786
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:758
 #, c-format
 msgid "Malformed header: %s"
 msgstr "In-capu malcunciliu : %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:581
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:578
 msgid "Malformed reply, server not sending proper line endings"
 msgstr "Risposta malcuncilia, u servu ùn manda micca fine di linea currette"
 
@@ -4723,20 +4723,20 @@ msgstr "Currisponde à almenu una di ste cundizioni"
 msgid "Match none of the following"
 msgstr "Ùn currisponde à alcuna di ste cundizioni"
 
-#: resources.h:802
+#: resources.h:803
 msgid "Maximum simultaneous &transfers:"
 msgstr "Numeru di trasferimenti simultanei :"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1961
+#: ../../locales/../src/interface/Mainfrm.cpp:1964
 msgid "Message log"
 msgstr "Ghjurnale di i messaghji"
 
-#: resources.h:869
+#: resources.h:870
 msgid "Message log position"
 msgstr "Pusizione di u ghjurnale di i messaghji"
 
-#: resources.h:965
+#: resources.h:966
 msgid "MiB"
 msgstr "MiO"
 
@@ -4752,11 +4752,11 @@ msgstr "Move in&ghjò"
 msgid "Move &up"
 msgstr "Move in&sù"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1062
+#: ../../locales/../src/interface/LocalTreeView.cpp:1020
 msgid "My Computer"
 msgstr "U mo Urdinatore"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1052
+#: ../../locales/../src/interface/LocalTreeView.cpp:1010
 msgid "My Documents"
 msgstr "I mo Ducumenti"
 
@@ -4805,7 +4805,7 @@ msgstr "Ci vole à indicà una cudificazione di caratteru"
 msgid "Network unreachable"
 msgstr "Reta inaccessibile"
 
-#: resources.h:947
+#: resources.h:948
 msgid "Never"
 msgstr "Mai"
 
@@ -4839,7 +4839,7 @@ msgstr "Nova Indetta"
 msgid "New bookmark"
 msgstr "Nova indetta"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1180
+#: ../../locales/../src/interface/LocalTreeView.cpp:1138
 #: ../../locales/../src/interface/RemoteListView.cpp:1631
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1290
 msgid "New directory"
@@ -4864,7 +4864,7 @@ msgstr "Novu cartulare"
 msgid "New site"
 msgstr "Novu situ"
 
-#: resources.h:867
+#: resources.h:868
 msgid "Next to the transfer queue"
 msgstr "Seguente in a lista d'attesa di trasferimentu"
 
@@ -4876,7 +4876,7 @@ msgstr "No"
 msgid "No category to export selected"
 msgstr "Alcuna categuria selezziunata per l'espurtazione"
 
-#: ../../locales/../src/interface/QueueView.cpp:2292
+#: ../../locales/../src/interface/QueueView.cpp:2275
 msgid "No command given, aborting."
 msgstr "Alcuna cummanda indicata, abbandonu in corsu."
 
@@ -4885,7 +4885,7 @@ msgid "No external IP address set, trying default."
 msgstr ""
 "Alcunu indirizzu IP esternu indicatu, prova di l'impiegu di u predefinitu."
 
-#: ../../locales/../src/interface/edithandler.cpp:1101
+#: ../../locales/../src/interface/edithandler.cpp:1098
 msgid "No files are currently being edited."
 msgstr "Alcunu schedariu in corsu di mudificazione."
 
@@ -4903,7 +4903,7 @@ msgstr "Alcunu ospite indicatu, ci vole à indicà un ospite."
 msgid "No images available"
 msgstr "Alcuna imaghjina dispunibule"
 
-#: ../../locales/../src/interface/QueueView.cpp:3159
+#: ../../locales/../src/interface/QueueView.cpp:3156
 msgid "No more files in the queue!"
 msgstr "Ùn ci sò più di schedarii in a lista d'attesa !"
 
@@ -4940,7 +4940,7 @@ msgstr "Metodu d'autenticazione SOCKS5 micca suppurtatu"
 msgid "No username given."
 msgstr "Alcunu nome d'utilizatore indicatu."
 
-#: resources.h:923 resources.h:928
+#: resources.h:924 resources.h:929
 #: ../../locales/../src/interface/verifycertdialog.cpp:54
 msgid "None"
 msgstr "Alcunu"
@@ -4949,7 +4949,7 @@ msgstr "Alcunu"
 msgid "None selected yet"
 msgstr "Mancunu selezziunatu"
 
-#: resources.h:815 ../../locales/../src/engine/server.cpp:854
+#: resources.h:816 ../../locales/../src/engine/server.cpp:854
 #: ../../locales/../src/engine/server.cpp:873
 #: ../../locales/../src/interface/manual_transfer.cpp:160
 #: ../../locales/../src/interface/manual_transfer.cpp:185
@@ -4968,7 +4968,7 @@ msgstr ""
 "lettura / mudificazione."
 
 #: ../../locales/../src/interface/state.cpp:199
-#: ../../locales/../src/interface/state.cpp:527
+#: ../../locales/../src/interface/state.cpp:525
 msgid "Not connected"
 msgstr "Micca cunnettu"
 
@@ -4988,16 +4988,16 @@ msgstr "Micca cunnettu."
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "Fate casu chì sta funzione hè solu suppurtata cù u protocollu FTP."
 
-#: resources.h:782
+#: resources.h:783
 msgid "Note: This only works with plain, unencrypted FTP connections."
 msgstr "Nota : Quessu funziuneghja solu cù cunnessioni FTP micca cifrate."
 
-#: resources.h:800
+#: resources.h:801
 msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr ""
 "Nota : L'impiegu d'un proxy genericu forza e cunnessioni FTP in modu passivu."
 
-#: resources.h:902
+#: resources.h:903
 msgid "Number of decimal places:"
 msgstr "Numeru di decimali :"
 
@@ -5015,11 +5015,11 @@ msgstr "A&pre u schedariu"
 #: resources.h:282 resources.h:290 resources.h:313 resources.h:321
 #: resources.h:340 resources.h:346 resources.h:379 resources.h:393
 #: resources.h:415 resources.h:438 resources.h:447 resources.h:461
-#: resources.h:474 resources.h:481 resources.h:725
+#: resources.h:474 resources.h:481 resources.h:726
 msgid "OK"
 msgstr "OK"
 
-#: resources.h:681
+#: resources.h:682
 msgid ""
 "On the following pages, the selected transfer mode will be configured, as "
 "well as the fallback mode if enabled."
@@ -5031,28 +5031,28 @@ msgstr ""
 msgid "Once"
 msgstr "Una volta"
 
-#: resources.h:948
+#: resources.h:949
 #, fuzzy
 msgid "Once a day"
 msgstr "Una volta per settimana"
 
-#: resources.h:949
+#: resources.h:950
 msgid "Once a week"
 msgstr "Una volta per settimana"
 
-#: resources.h:650
+#: resources.h:651
 msgid "Open directory in system's file manager"
 msgstr "Apre u cartulare in u ghjestiunariu di schedarii di u sistemu"
 
-#: resources.h:979
+#: resources.h:980
 msgid "Open the Site Manager"
 msgstr "Apre u Ghjestiunariu di Siti"
 
-#: resources.h:980
+#: resources.h:981
 msgid "Open the Site Manager."
 msgstr "Apre u Ghjestiunariu di Siti."
 
-#: resources.h:981
+#: resources.h:982
 msgid "Open the Site Manager. Right-click for a list of sites."
 msgstr ""
 "Apre u Ghjestiunariu di Siti. Cliccu dirittu per affissà a lista di i siti."
@@ -5069,10 +5069,10 @@ msgstr "Apre u dialogu di e preferenze di FileZilla"
 msgid "Opened as:"
 msgstr "Apertu cum'è :"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1965
-#: ../../locales/../src/interface/LocalListView.cpp:2010
-#: ../../locales/../src/interface/LocalListView.cpp:2095
-#: ../../locales/../src/interface/LocalListView.cpp:2108
+#: ../../locales/../src/interface/LocalListView.cpp:1918
+#: ../../locales/../src/interface/LocalListView.cpp:1963
+#: ../../locales/../src/interface/LocalListView.cpp:2048
+#: ../../locales/../src/interface/LocalListView.cpp:2061
 #: ../../locales/../src/interface/RemoteListView.cpp:2668
 msgid "Opening failed"
 msgstr "Apertura fiasca"
@@ -5085,7 +5085,7 @@ msgstr "Apre una nova unghjetta"
 msgid "Opens the Site Manager"
 msgstr "Apre u Ghjestiunariu di Siti"
 
-#: resources.h:1001
+#: resources.h:1002
 msgid ""
 "Opens the directory listing filter dialog. Right-click to toggle filters."
 msgstr ""
@@ -5096,7 +5096,7 @@ msgstr ""
 msgid "Operating system"
 msgstr "Sistemu d'operazione"
 
-#: ../../locales/../src/interface/FileZilla.cpp:311
+#: ../../locales/../src/interface/FileZilla.cpp:312
 msgid "Operating system problem detected"
 msgstr "Un errore s'hè affacatu in u sistemu d'operazione"
 
@@ -5108,7 +5108,7 @@ msgstr "Urganismu :"
 msgid "Other:"
 msgstr "Altru :"
 
-#: resources.h:727
+#: resources.h:728
 msgid "Overview"
 msgstr "Descrizzione generale"
 
@@ -5116,20 +5116,20 @@ msgstr "Descrizzione generale"
 msgid "Overwrite &if source newer"
 msgstr "R&impiazzà s'è l'urigine hè più recente"
 
-#: resources.h:247 resources.h:257 resources.h:838 resources.h:847
+#: resources.h:247 resources.h:257 resources.h:839 resources.h:848
 msgid "Overwrite file"
 msgstr "Rimpiazzà u schedariu"
 
-#: resources.h:249 resources.h:259 resources.h:840 resources.h:849
+#: resources.h:249 resources.h:259 resources.h:841 resources.h:850
 msgid "Overwrite file if size differs"
 msgstr "Rimpiazzà u schedariu s'è a dimensione hè sfarente"
 
-#: resources.h:250 resources.h:260 resources.h:841 resources.h:850
+#: resources.h:250 resources.h:260 resources.h:842 resources.h:851
 msgid "Overwrite file if size differs or source file is newer"
 msgstr ""
 "Rimpiazzà u schedariu s'è a dimensione hè sfarente o l'urigine hè più recente"
 
-#: resources.h:248 resources.h:258 resources.h:839 resources.h:848
+#: resources.h:248 resources.h:258 resources.h:840 resources.h:849
 msgid "Overwrite file if source file newer"
 msgstr "Rimpiazzà u schedariu s'è l'urigine hè più recente"
 
@@ -5150,7 +5150,7 @@ msgstr "Permessi di u pruprietariu"
 msgid "Owner/Group"
 msgstr "Pruprietariu / Gruppu"
 
-#: resources.h:873
+#: resources.h:874
 msgid ""
 "P&revent system from entering idle sleep during transfers and other "
 "operations"
@@ -5158,7 +5158,7 @@ msgstr ""
 "&Impedisce a messa in veghja di l'urdinatore mentre i trasferimenti è "
 "l'altre operazioni"
 
-#: resources.h:779 resources.h:796
+#: resources.h:780 resources.h:797
 #, no-c-format
 msgid "P&roxy host:"
 msgstr "Ospite p&roxy :"
@@ -5167,23 +5167,23 @@ msgstr "Ospite p&roxy :"
 msgid "PORT command tainted by router or firewall."
 msgstr "A cummanda PORT hè statu alterata da u 'router' o u parafocu."
 
-#: resources.h:741
+#: resources.h:742
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssivu (ricumandatu)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2597
+#: ../../locales/../src/interface/Mainfrm.cpp:2602
 msgid "Parameter not a valid URL"
 msgstr "U parametru ùn hè micca un URL leghjittima"
 
-#: resources.h:95 resources.h:370 resources.h:719
+#: resources.h:95 resources.h:370 resources.h:720
 msgid "Pass&word:"
 msgstr "&Parolla d'intrata :"
 
-#: resources.h:677
+#: resources.h:678
 msgid "Passive (recommended)"
 msgstr "Passivu (ricumandatu)"
 
-#: resources.h:761
+#: resources.h:762
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:119
 msgid "Passive mode"
 msgstr "Modu passivu"
@@ -5212,7 +5212,7 @@ msgstr ""
 "U passeghju ùn pò micca esse custruttu per u cartulare %s è sottu-cartulare %"
 "s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2548
+#: ../../locales/../src/interface/Mainfrm.cpp:2553
 msgid "Path not found:"
 msgstr "U passeghju ùn esiste micca :"
 
@@ -5220,10 +5220,10 @@ msgstr "U passeghju ùn esiste micca :"
 msgid "Paths"
 msgstr "Passeghji"
 
-#: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/edithandler.cpp:1282
-#: ../../locales/../src/interface/edithandler.cpp:1381
-#: ../../locales/../src/interface/edithandler.cpp:1394
+#: ../../locales/../src/interface/edithandler.cpp:1136
+#: ../../locales/../src/interface/edithandler.cpp:1279
+#: ../../locales/../src/interface/edithandler.cpp:1378
+#: ../../locales/../src/interface/edithandler.cpp:1391
 msgid "Pending removal"
 msgstr "In attesa di ritiru"
 
@@ -5248,7 +5248,7 @@ msgstr ""
 "Verificate nantu à http://filezilla-project.org/probe.php chì u servu sia "
 "lanciatu è cuntrollate torna e vostre preferenze precisamente."
 
-#: resources.h:683
+#: resources.h:684
 msgid ""
 "Please configure any firewalls and routers so that FileZilla can establish "
 "outgoing connection to arbitrary ports."
@@ -5283,7 +5283,7 @@ msgid ""
 "Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18."
 msgstr "Scrivite una data in a forma AAAA-MM-GG cum'è per indettu 2010-07-18."
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:111
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:119
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #, c-format
 msgid "Please enter a download speed limit greater or equal to 0 %s/s."
@@ -5308,7 +5308,7 @@ msgstr "Scrivite un novu nome per u gruppu di filtri \"%s\""
 msgid "Please enter a new name for the filter."
 msgstr "Scrivite un novu nome per u filtru."
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:101
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:108
 msgid ""
 "Please enter a number between 0 and 10 for the number of concurrent "
 "downloads."
@@ -5316,13 +5316,13 @@ msgstr ""
 "Scrivite un numeru sceltu trà 0 è 10 per u numeru di telecaricamenti "
 "simultanei."
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:105
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:113
 msgid ""
 "Please enter a number between 0 and 10 for the number of concurrent uploads."
 msgstr ""
 "Scrivite un numeru sceltu trà 0 è 10 per u numeru d'incaricamenti simultanei."
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:97
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:103
 msgid ""
 "Please enter a number between 1 and 10 for the number of concurrent "
 "transfers."
@@ -5334,7 +5334,7 @@ msgstr ""
 msgid "Please enter a password for this server:"
 msgstr "Scrivite una parolla d'intrata per stu servu :"
 
-#: ../../locales/../src/interface/QueueView.cpp:2281
+#: ../../locales/../src/interface/QueueView.cpp:2264
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5368,7 +5368,7 @@ msgstr "Scrivite una stesa di porti leghjittima."
 msgid "Please enter an URL where to get your external address from"
 msgstr "Scrivite un URL induve si trova u vostru indirizzu esternu"
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:118
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:126
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 #, c-format
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
@@ -5383,8 +5383,8 @@ msgstr ""
 "Scrivite una cummanda FTP cruda.\n"
 "L'impiegu d'una tale cummanda spurgulerà u 'cache' di u cartulare."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1174
-#: ../../locales/../src/interface/LocalTreeView.cpp:1177
+#: ../../locales/../src/interface/LocalListView.cpp:1127
+#: ../../locales/../src/interface/LocalTreeView.cpp:1135
 #: ../../locales/../src/interface/RemoteListView.cpp:1617
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1276
 msgid "Please enter the name of the directory which should be created:"
@@ -5414,7 +5414,7 @@ msgstr ""
 "cunniscite micca u vostru indirizzu esternu, impiegate l'ozzione di "
 "risuluzione esterna."
 
-#: resources.h:670
+#: resources.h:671
 msgid ""
 "Please follow the instructions carefully, as wrong configuration will "
 "prevent successful FTP connections."
@@ -5431,7 +5431,7 @@ msgstr ""
 "è chì l'indirizzu di u risolutore d'indirizzi sia statu scrittu "
 "currettamente."
 
-#: ../../locales/../src/interface/FileZilla.cpp:263
+#: ../../locales/../src/interface/FileZilla.cpp:264
 msgid "Please make sure the requested locale is installed on your system."
 msgstr ""
 "Assicuratevvi chì a lingua richiesta sia installata nantu à u vostru sistemu."
@@ -5448,7 +5448,7 @@ msgstr ""
 "currettamente. Ci vole à impiegà u rigiru manuale di i porti. Ùn impiegate "
 "micca u vostru 'router' cù l'ozzioni 'Modu DMZ' o 'Modu Ghjocu'."
 
-#: resources.h:684
+#: resources.h:685
 msgid ""
 "Please note that FileZilla has no influence on the port the server chooses. "
 "So the server might choose a port which your firewall thinks is only used by "
@@ -5469,7 +5469,7 @@ msgstr ""
 "Fate casu chì a cunservazione di a data è ora di l'incaricamenti nantu à i "
 "servi FTP, FTPS è FTPES funziuneghja solu s'elli suppurtanu a cummanda MFMT."
 
-#: resources.h:738
+#: resources.h:739
 msgid ""
 "Please note that some servers might ban you if you try to reconnect too "
 "often or in too short intervals."
@@ -5477,7 +5477,7 @@ msgstr ""
 "Fate casu chì qualchì servu risicheghja di sbannivvi s'è voi pruvate di "
 "ricunnettavvi troppu aspessu o cù cumparti troppu corti."
 
-#: resources.h:889 resources.h:895
+#: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
 "Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
@@ -5503,7 +5503,7 @@ msgstr "Selezziunate un azzione :"
 msgid "Please select the categories you would like to import."
 msgstr "Selezziunate e categurie chì ci vole à impurtà."
 
-#: resources.h:672
+#: resources.h:673
 msgid "Please select the default transfer mode you would like to use."
 msgstr ""
 "Selezziunate u modu predefinitu di trasferimentu ch'ellu ci vole à impiegà."
@@ -5565,7 +5565,7 @@ msgstr "Cunservà data è ora di i schedarii"
 msgid "Preview:"
 msgstr "Avvistu :"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1119
+#: ../../locales/../src/engine/tlssocket.cpp:1121
 msgid "Primary connection and data connection certificates don't match."
 msgstr ""
 "I certificati di a cunnessione primaria è di a cunnessione di dati ùn "
@@ -5579,7 +5579,7 @@ msgstr "Stampà l'infurmazioni di diagnosticu di u lanciu di FileZilla"
 msgid "Print version information to stdout and exit"
 msgstr "Stampà l'infurmazioni di versione nantu à 'stdout' è esce"
 
-#: resources.h:912
+#: resources.h:913
 msgid "Prioritize directories (default)"
 msgstr "Dà a priurità à i cartulari (predefinitu)"
 
@@ -5587,7 +5587,7 @@ msgstr "Dà a priurità à i cartulari (predefinitu)"
 msgid "Priority"
 msgstr "Priurità"
 
-#: resources.h:956
+#: resources.h:957
 msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
@@ -5596,7 +5596,7 @@ msgstr ""
 "FileZilla, u nome di u vostru sistemu, è l'architettura di u vostru "
 "prucessore, seranu mandate à u servu."
 
-#: resources.h:785
+#: resources.h:786
 msgid "Private &keys:"
 msgstr "Chjavi private :"
 
@@ -5604,7 +5604,7 @@ msgstr "Chjavi private :"
 msgid "Pro&tocol:"
 msgstr "Pro&tocollu :"
 
-#: resources.h:781 resources.h:799
+#: resources.h:782 resources.h:800
 msgid "Pro&xy password:"
 msgstr "Parolla d'intrata di u Pro&xy :"
 
@@ -5616,11 +5616,11 @@ msgstr "Trattà è mette in a &lista d'attesa"
 msgid "Protocol:"
 msgstr "Protocollu :"
 
-#: resources.h:797
+#: resources.h:798
 msgid "Proxy &port:"
 msgstr "&Portu di u proxy :"
 
-#: resources.h:780 resources.h:798
+#: resources.h:781 resources.h:799
 msgid "Proxy &user:"
 msgstr "&Utilizatore di u proxy :"
 
@@ -5660,7 +5660,7 @@ msgid "Proxy set but proxy host or port invalid"
 msgstr ""
 "Proxy specificatu ma l'ospite di u proxy, o u portu, ùn hè micca leghjittimu"
 
-#: resources.h:783
+#: resources.h:784
 msgid "Public Key Authentication"
 msgstr "Autenticazione da Chjave Publica"
 
@@ -5672,7 +5672,7 @@ msgstr "Cudificazione di a chjave publica :"
 msgid "Public permissions"
 msgstr "Permessi publichi"
 
-#: ../../locales/../src/interface/QueueView.cpp:3217
+#: ../../locales/../src/interface/QueueView.cpp:3236
 msgid "Queue has been fully processed"
 msgstr "A lista d'attesa hè stata cumpletamente trattata"
 
@@ -5691,7 +5691,7 @@ msgstr "Lista d'attesa : %s%s"
 msgid "Queue: empty"
 msgstr "Lista d'attesa : viota"
 
-#: ../../locales/../src/interface/QueueView.cpp:455
+#: ../../locales/../src/interface/QueueView.cpp:460
 msgid "Queued files"
 msgstr "Schedarii in a lista d'attesa"
 
@@ -5707,7 +5707,7 @@ msgstr "Riavvià l'urdinator&e"
 msgid "R&emote directory tree"
 msgstr "Arburiscenza di u cartulare all&untanatu"
 
-#: resources.h:620 resources.h:624
+#: resources.h:621 resources.h:625
 msgid "R&eset and requeue selected files"
 msgstr "Riavvià è rim&ette tutti i schedarii selezziunati in a lista d'attesa"
 
@@ -5778,7 +5778,7 @@ msgstr ""
 "Site sicuru di vulè caccià tutti i schedarii è/o i cartulari selezziunati di "
 "u servu ?"
 
-#: ../../locales/../src/engine/local_filesys.cpp:134
+#: ../../locales/../src/engine/local_filesys.cpp:135
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr ""
 "Site sicuru di vulè caccià tutti i schedarii è/o i cartulari selezziunati di "
@@ -5788,7 +5788,7 @@ msgstr ""
 msgid "Reason"
 msgstr "Raghjone"
 
-#: ../../locales/../src/interface/QueueView.cpp:3224
+#: ../../locales/../src/interface/QueueView.cpp:3229
 msgid "Reboot now"
 msgstr "Riavvià l'urdinatore avà"
 
@@ -5796,12 +5796,12 @@ msgstr "Riavvià l'urdinatore avà"
 msgid "Rec&urse into subdirectories"
 msgstr "Inc&urpurà i sottu-cartulari"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:3070
+#: ../../locales/../src/engine/directorylistingparser.cpp:3071
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Ricezzione d'una lista di cartulare chì pare esse in forma EBCDIC."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2081
-#: ../../locales/../src/engine/directorylistingparser.cpp:2096
+#: ../../locales/../src/engine/directorylistingparser.cpp:2082
+#: ../../locales/../src/engine/directorylistingparser.cpp:2097
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Ricezzione d'una linea di più di 10000 caratteri, abbandonu in corsu."
 
@@ -5820,19 +5820,26 @@ msgstr ""
 "cunnettu à un servu.\n"
 "S'è voi cuntinuate, a vostra cunnessione serà interrotta."
 
-#: resources.h:739
+#: resources.h:740
 msgid "Reconnection settings"
 msgstr "Preferenze di ricunnessione"
 
-#: resources.h:998 resources.h:999
+#: resources.h:999 resources.h:1000
 msgid "Reconnects to the last used server"
 msgstr "Si cunnetta torna à l'ultimu servu adupratu"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:718
-msgid "Redirection to invalid address"
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:674
+#, fuzzy, c-format
+msgid "Redirection to invalid or unsupported URI: %s"
 msgstr "Ridirezzione verdi un indirizzu micca leghjittimu"
 
-#: resources.h:990 resources.h:991
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:681
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:688
+#, fuzzy, c-format
+msgid "Redirection to invalid or unsupported address: %s"
+msgstr "Ridirezzione verdi un indirizzu micca leghjittimu"
+
+#: resources.h:991 resources.h:992
 msgid "Refresh the file and folder lists"
 msgstr "Attualizà e liste di i schedarii è di i cartulari"
 
@@ -5840,11 +5847,11 @@ msgstr "Attualizà e liste di i schedarii è di i cartulari"
 msgid "Remember passwords?"
 msgstr "Arricurdassi di e parolle d'intrata ?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1120
 msgid "Remote"
 msgstr "Alluntanatu"
 
-#: ../../locales/../src/engine/tlssocket.cpp:908
+#: ../../locales/../src/engine/tlssocket.cpp:910
 msgid "Remote certificate not trusted."
 msgstr "Certificatu alluntanatu micca degnu di cridenza."
 
@@ -5863,7 +5870,7 @@ msgstr "Ricerca di schedarii alluntanati"
 msgid "Remote filters:"
 msgstr "Filtri alluntanati :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1114
+#: ../../locales/../src/interface/edithandler.cpp:1111
 msgid "Remote path"
 msgstr "Passeghju alluntanatu"
 
@@ -5911,20 +5918,20 @@ msgstr "Passeghju alluntanatu :"
 msgid "Remote site:"
 msgstr "Situ alluntanatu :"
 
-#: resources.h:617 resources.h:621
+#: resources.h:618 resources.h:622
 msgid "Remove &all"
 msgstr "Caccià &tuttu"
 
-#: resources.h:619 resources.h:623
+#: resources.h:620 resources.h:624
 msgid "Remove &selected"
 msgstr "&Caccià l'elementi selezziunati"
 
-#: resources.h:252 resources.h:262 resources.h:843 resources.h:852
+#: resources.h:252 resources.h:262 resources.h:844 resources.h:853
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:256
 msgid "Rename file"
 msgstr "Rinumà u schedariu"
 
-#: resources.h:635 resources.h:656
+#: resources.h:636 resources.h:657
 msgid "Rename selected directory"
 msgstr "Rinumà u cartulare selezziunatu"
 
@@ -5967,12 +5974,12 @@ msgstr "Richiede FTP cù TLS (esplicitu)"
 msgid "Require implicit FTP over TLS"
 msgstr "Richiede FTP cù TLS (sottintesu)"
 
-#: resources.h:622
+#: resources.h:623
 msgid "Reset and requeue &all"
 msgstr "Riavvià è rimette tutti i schedarii in a lista d'&attesa"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1157
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:485
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:482
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Risuluzione di l'indirizzu di %s"
@@ -5988,11 +5995,11 @@ msgstr "Risposta :"
 msgid "Results:"
 msgstr "Risultati :"
 
-#: resources.h:251 resources.h:261 resources.h:842 resources.h:851
+#: resources.h:251 resources.h:261 resources.h:843 resources.h:852
 msgid "Resume file transfer"
 msgstr "Ripiglià u trasferimentu di u schedariu"
 
-#: resources.h:857
+#: resources.h:858
 msgid ""
 "Resuming ASCII files can cause problems if server uses a different line "
 "ending format than the client."
@@ -6011,7 +6018,7 @@ msgstr "Ricuperazione di a lista di u cartulare..."
 msgid "Retrieving external IP address from %s"
 msgstr "Ricuperazione di l'indirizzu IP esternu dapoi %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1100
+#: ../../locales/../src/engine/tlssocket.cpp:1102
 msgid "Root certificate is not trusted"
 msgstr "Certificatu di radica micca degnu di cridenza"
 
@@ -6019,7 +6026,7 @@ msgstr "Certificatu di radica micca degnu di cridenza"
 msgid "S&how files currently being edited..."
 msgstr "&Visualizzà i schedarii in corsu di mudificazione..."
 
-#: resources.h:874
+#: resources.h:875
 msgid "S&how the Site Manager on startup"
 msgstr "Apre u Ghjestiunariu di Siti à u principiu di FileZilla"
 
@@ -6031,6 +6038,11 @@ msgstr "Piantà l'urdinatore"
 msgid "S&top"
 msgstr "Pian&tà"
 
+#: resources.h:606
+#, fuzzy
+msgid "S&uspend system"
+msgstr "Piantà l'urdinatore"
+
 #: resources.h:510
 msgid "S&ynchronized browsing"
 msgstr "Sfugliendu s&incrunizatu"
@@ -6039,7 +6051,7 @@ msgstr "Sfugliendu s&incrunizatu"
 msgid "SFTP"
 msgstr "SFTP"
 
-#: resources.h:794
+#: resources.h:795
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
@@ -6068,11 +6080,11 @@ msgstr ""
 msgid "Saving of passwords has been disabled by you."
 msgstr "Avete disattivatu l'arregistramentu di e parolle d'intrata."
 
-#: ../../locales/../src/interface/QueueView.cpp:1831
+#: ../../locales/../src/interface/QueueView.cpp:1838
 msgid "Scanning for files to add to queue"
 msgstr "Esame di i schedarii à aghjunghje à a lista d'attesa"
 
-#: ../../locales/../src/interface/QueueView.cpp:1833
+#: ../../locales/../src/interface/QueueView.cpp:1840
 msgid "Scanning for files to upload"
 msgstr "Esame di i schedarii à incaricà"
 
@@ -6084,7 +6096,7 @@ msgstr "&Cundizioni di ricerca :"
 msgid "Search &directory:"
 msgstr "Passeghju &di ricerca :"
 
-#: resources.h:1006
+#: resources.h:1007
 msgid "Search for files recursively."
 msgstr "Ricerca più ampia di schedarii."
 
@@ -6105,22 +6117,22 @@ msgstr "Vede ancu : http://wiki.filezilla-project.org/Network_Configuration"
 msgid "Sele&ct server"
 msgstr "Selezziunà u servu"
 
-#: resources.h:724
+#: resources.h:725
 msgid "Select &page:"
 msgstr "Selezziunà una &pagina :"
 
-#: resources.h:877
+#: resources.h:878
 msgid "Select Theme"
 msgstr "Selezziunà u Temu"
 
-#: resources.h:835
+#: resources.h:836
 msgid ""
 "Select default action to perform if target file of a transfer already exists."
 msgstr ""
 "Selezziunà un azzione predefinita à fà s'è u schedariu di destinazione d'un "
 "trasferimentu esiste dighjà."
 
-#: ../../locales/../src/interface/edithandler.cpp:1584
+#: ../../locales/../src/interface/edithandler.cpp:1581
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:107
 msgid "Select default editor"
 msgstr "Selezziunà l'editore predefinitu"
@@ -6246,13 +6258,13 @@ msgstr "%s è %s selezziunati. Dimensione tutale : %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "%s è %s selezziunati. Dimensione tutale : Almenu %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1525
-#: ../../locales/../src/interface/edithandler.cpp:1604
+#: ../../locales/../src/interface/edithandler.cpp:1522
+#: ../../locales/../src/interface/edithandler.cpp:1601
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:127
 msgid "Selected editor does not exist."
 msgstr "L'editore selezziunatu ùn esiste micca."
 
-#: resources.h:307 ../../locales/../src/interface/LocalListView.cpp:1994
+#: resources.h:307 ../../locales/../src/interface/LocalListView.cpp:1947
 msgid "Selected file already being edited"
 msgstr "U schedariu selezziunatu hè dighjà in corsu di mudificazione"
 
@@ -6286,7 +6298,7 @@ msgid "Selected port usually in use by a different protocol."
 msgstr ""
 "D'abbitudine, u portu selezziunatu hè impiegatu da un altru protoccollu."
 
-#: resources.h:746
+#: resources.h:747
 msgid "Send FTP &keep-alive commands"
 msgstr "Mandà cummande FTP sempre-vivu"
 
@@ -6308,7 +6320,7 @@ msgstr "Numeru di seria :"
 msgid "Server &Type:"
 msgstr "&Tipu di servu :"
 
-#: ../../locales/../src/engine/tlssocket.cpp:786
+#: ../../locales/../src/engine/tlssocket.cpp:788
 msgid "Server did not properly shut down TLS connection"
 msgstr "U servu ùn hà micca chjosu currettamente a cunnessione TLS"
 
@@ -6440,11 +6452,11 @@ msgstr "Definisce i permessi da '%s' à '%s'"
 msgid "SetSocketBufferSize called without socket"
 msgstr "SetSocketBufferSize chjamatu senza socket"
 
-#: resources.h:723
+#: resources.h:724
 msgid "Settings"
 msgstr "Preferenze di FileZilla"
 
-#: resources.h:978
+#: resources.h:979
 msgid "Show &raw directory listing"
 msgstr "Presentà a lista c&ruda di u cartulare"
 
@@ -6452,16 +6464,16 @@ msgstr "Presentà a lista c&ruda di u cartulare"
 msgid "Show &welcome dialog..."
 msgstr "Presentà u dialogu di &benvenuta..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2435
+#: ../../locales/../src/interface/Mainfrm.cpp:2440
 msgid "Show both directory trees and continue comparing?"
 msgstr "Presentà l'arburiscenze per i dui lati è cuntinuà u paragone ?"
 
-#: resources.h:1024
+#: resources.h:1025
 #, fuzzy
 msgid "Show details"
 msgstr "Ditaglii di a sessione"
 
-#: resources.h:616
+#: resources.h:617
 msgid "Shows available TLS ciphers"
 msgstr "Presentà e cudificazioni TLS dispunibule"
 
@@ -6469,7 +6481,7 @@ msgstr "Presentà e cudificazioni TLS dispunibule"
 msgid "Shows this help dialog"
 msgstr "Presentà stu dialogu d'aiutu"
 
-#: ../../locales/../src/interface/QueueView.cpp:3226
+#: ../../locales/../src/interface/QueueView.cpp:3225
 msgid "Shutdown now"
 msgstr "Piantà u sistemu"
 
@@ -6546,7 +6558,7 @@ msgstr ""
 msgid "Size"
 msgstr "Dimensione"
 
-#: resources.h:896
+#: resources.h:897
 msgid "Size formatting"
 msgstr "Forma di a dimensione"
 
@@ -6555,7 +6567,7 @@ msgstr "Forma di a dimensione"
 msgid "Size unknown"
 msgstr "Dimensione scunnisciuta"
 
-#: resources.h:253 resources.h:263 resources.h:844 resources.h:853
+#: resources.h:253 resources.h:263 resources.h:845 resources.h:854
 msgid "Skip file"
 msgstr "Saltà u schedariu"
 
@@ -6581,7 +6593,7 @@ msgstr ""
 "Certi schedarii sò sempre in corsu di mudificazione o anu bisognu d'esse "
 "incaricati."
 
-#: resources.h:686 resources.h:762
+#: resources.h:687 resources.h:763
 msgid ""
 "Some misconfigured remote servers which are behind a router, may reply with "
 "their local IP address."
@@ -6589,7 +6601,7 @@ msgstr ""
 "Certi servi alluntanati mal cunfigurati, chì sò daretu un 'router', ponu "
 "risponde cù i so indirizzi IP lucali."
 
-#: resources.h:914
+#: resources.h:915
 msgid "Sort directories inline"
 msgstr "Classificà i cartulari in-linea"
 
@@ -6599,11 +6611,11 @@ msgstr ""
 "L'ordine di classificazione ùn pò micca esse mudificatu mentre u paragone di "
 "i cartulari."
 
-#: resources.h:910
+#: resources.h:911
 msgid "Sorting"
 msgstr "Classificazione in corsu"
 
-#: resources.h:911
+#: resources.h:912
 msgid "Sorting &mode:"
 msgstr "Modu di classificazione :"
 
@@ -6630,7 +6642,7 @@ msgstr "Schedariu d'urigine :"
 msgid "Speed Limits"
 msgstr "Limiti di Velocità per i Trasferimenti"
 
-#: resources.h:808
+#: resources.h:809
 msgid "Speed limits"
 msgstr "Limiti di velocità per i trasferimenti"
 
@@ -6645,15 +6657,15 @@ msgid "Speed limits are enabled, click to change."
 msgstr ""
 "A limitazione di velocità per i trasferimenti hè attiva, cliccu per cambià."
 
-#: resources.h:952
+#: resources.h:953
 msgid "Stable and beta versions"
 msgstr "Versioni stabule è beta"
 
-#: resources.h:951
+#: resources.h:952
 msgid "Stable versions only"
 msgstr "Versioni stabule solu"
 
-#: resources.h:953
+#: resources.h:954
 #, fuzzy
 msgid "Stable, beta and nightly versions"
 msgstr "Versioni stabule è beta"
@@ -6666,7 +6678,7 @@ msgstr "Principià u trasferimentu &avà"
 msgid "Start with opened Site Manager"
 msgstr "Principià cù l'apertura di u Ghjestiunariu di Siti"
 
-#: ../../locales/../src/interface/updater.cpp:223
+#: ../../locales/../src/interface/updater.cpp:236
 #, fuzzy, c-format
 msgid "Started update check on %s\n"
 msgstr "P&ermette u cuntrolu automaticu di e nove versioni"
@@ -6691,7 +6703,7 @@ msgstr "Lancia u situ lucale in u passeghju indicatu"
 msgid "State or province:"
 msgstr "Statu o pruvincia :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1115
+#: ../../locales/../src/interface/edithandler.cpp:1112
 #: ../../locales/../src/interface/queue.cpp:1225
 msgid "Status"
 msgstr "Statu"
@@ -6718,9 +6730,14 @@ msgstr "Sughjettu di u certificatu"
 msgid "Successful transfers"
 msgstr "Trasferimenti riesciuti"
 
-#: resources.h:714
+#: resources.h:715
 msgid "Summary of test results:"
 msgstr "Riassuntu di i resultati di a prova :"
+
+#: ../../locales/../src/interface/QueueView.cpp:3233
+#, fuzzy
+msgid "Suspend now"
+msgstr "Piantà u sistemu"
 
 #: resources.h:446
 msgid ""
@@ -6730,22 +6747,22 @@ msgstr ""
 "E leie simboliche (symlink) versu i schedarii ùn sò micca affette da sta "
 "scelta, chì tale leie sò sempre sguassate."
 
-#: resources.h:1005 ../../locales/../src/interface/state.cpp:249
+#: resources.h:1006 ../../locales/../src/interface/state.cpp:249
 #: ../../locales/../src/interface/state.cpp:278
 #: ../../locales/../src/interface/state.cpp:285
 #: ../../locales/../src/interface/state.cpp:297
-#: ../../locales/../src/interface/state.cpp:396
-#: ../../locales/../src/interface/state.cpp:406
-#: ../../locales/../src/interface/state.cpp:415
-#: ../../locales/../src/interface/state.cpp:996
-#: ../../locales/../src/interface/state.cpp:1005
-#: ../../locales/../src/interface/state.cpp:1012
-#: ../../locales/../src/interface/state.cpp:1023
-#: ../../locales/../src/interface/state.cpp:1030
+#: ../../locales/../src/interface/state.cpp:394
+#: ../../locales/../src/interface/state.cpp:404
+#: ../../locales/../src/interface/state.cpp:413
+#: ../../locales/../src/interface/state.cpp:994
+#: ../../locales/../src/interface/state.cpp:1003
+#: ../../locales/../src/interface/state.cpp:1010
+#: ../../locales/../src/interface/state.cpp:1021
+#: ../../locales/../src/interface/state.cpp:1028
 msgid "Synchronized browsing"
 msgstr "Sfugliendu sincrunizatu"
 
-#: ../../locales/../src/interface/state.cpp:414
+#: ../../locales/../src/interface/state.cpp:412
 msgid "Synchronized browsing has been disabled."
 msgstr "Avà, u sfugliendu sincrunizatu ùn hè più attivu."
 
@@ -6759,8 +6776,8 @@ msgstr "Sbagliu di sintassa"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2550
-#: ../../locales/../src/interface/Mainfrm.cpp:2599
+#: ../../locales/../src/interface/Mainfrm.cpp:2555
+#: ../../locales/../src/interface/Mainfrm.cpp:2604
 msgid "Syntax error in command line"
 msgstr "Sbagliu di sintassa in a linea di cummanda"
 
@@ -6772,7 +6789,7 @@ msgstr "Sistemu"
 msgid "T&oolbar"
 msgstr "&Barra d'attrezzi"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:326
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:325
 msgid "TLS/SSL connection established, sending HTTP request"
 msgstr "Cunnessione TLS/SSL stabilita, mandà d'una dumanda HTTP"
 
@@ -6806,7 +6823,7 @@ msgid "Target filename already exists, really continue?"
 msgstr ""
 "U nome di u schedariu di destinazione esiste dighjà ! Vulete cuntinuà ?"
 
-#: resources.h:713
+#: resources.h:714
 msgid "Test results"
 msgstr "Risultati di a prova"
 
@@ -6865,7 +6882,7 @@ msgstr "A sequenza d'identificazione persunalizata ùn pò micca esse viota."
 msgid "The data connection could not be established: %s"
 msgstr "A cunnessione di dati ùn pò micca esse stabila : %s"
 
-#: resources.h:411 ../../locales/../src/interface/edithandler.cpp:1564
+#: resources.h:411 ../../locales/../src/interface/edithandler.cpp:1561
 #, no-c-format
 msgid "The default editor for text files could not be found."
 msgstr "L'editore predefinitu per i schedarii di testu ùn si trova micca."
@@ -6896,8 +6913,8 @@ msgstr ""
 "U schedariu %s esiste dighjà.\n"
 "Scrivite un altru nome :"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1971
-#: ../../locales/../src/interface/LocalListView.cpp:2100
+#: ../../locales/../src/interface/LocalListView.cpp:1924
+#: ../../locales/../src/interface/LocalListView.cpp:2053
 #: ../../locales/../src/interface/RemoteListView.cpp:2674
 #, c-format
 msgid ""
@@ -6921,8 +6938,8 @@ msgstr ""
 msgid "The file '%s' could not be loaded."
 msgstr "U schedariu '%s' ùn pò micca esse caricatu."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1965
-#: ../../locales/../src/interface/LocalListView.cpp:2095
+#: ../../locales/../src/interface/LocalListView.cpp:1918
+#: ../../locales/../src/interface/LocalListView.cpp:2048
 #: ../../locales/../src/interface/RemoteListView.cpp:2668
 #, c-format
 msgid ""
@@ -6933,8 +6950,8 @@ msgstr ""
 "Ùn ci hè micca di prugrammu assuciatu cù stu tipu di schedariu nantu u "
 "vostru sistemu."
 
-#: ../../locales/../src/interface/LocalListView.cpp:2010
-#: ../../locales/../src/interface/LocalListView.cpp:2108
+#: ../../locales/../src/interface/LocalListView.cpp:1963
+#: ../../locales/../src/interface/LocalListView.cpp:2061
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7003,12 +7020,12 @@ msgstr ""
 msgid "The filename column cannot be hidden."
 msgstr "A culonna di u nome di schedariu ùn pò micca esse piattata."
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:68
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:69
 #, c-format
 msgid "The following character will be replaced: %s"
 msgstr "U caratteru seguente serà rimpiazzatu : %s"
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:65
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:66
 #, c-format
 msgid "The following characters will be replaced: %s"
 msgstr "I caratteri seguente seranu rimpiazzati : %s"
@@ -7025,7 +7042,7 @@ msgstr "A soluzione FTP libera in 'Open Source'"
 msgid "The global bookmarks could not be saved."
 msgstr "L'indette glubale ùn ponu micca esse arregistrate."
 
-#: resources.h:976
+#: resources.h:977
 msgid ""
 "The higher the debug level, the more information will be displayed in the "
 "message log. Displaying debug information has a negative impact on "
@@ -7057,20 +7074,20 @@ msgstr ""
 "U portu dispunibule u più bassu deve esse inferiore o uguale à u portu u più "
 "maiò."
 
-#: resources.h:1017
+#: resources.h:1018
 #, fuzzy
 msgid "The new version could not be downloaded, please retry later."
 msgstr "U servu ùn pò micca esse aghjuntu."
 
-#: resources.h:1015
+#: resources.h:1016
 msgid "The new version has been saved in your Downloads directory."
 msgstr ""
 
-#: ../../locales/../src/interface/QueueView.cpp:1961
+#: ../../locales/../src/interface/QueueView.cpp:1968
 msgid "The queue will not be saved."
 msgstr "A lista d'attesa ùn serà micca arregistrata."
 
-#: ../../locales/../src/interface/state.cpp:1002
+#: ../../locales/../src/interface/state.cpp:1000
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7103,7 +7120,7 @@ msgstr ""
 "U schedariu selezziunatu hè ancu apertu in qualchì altru prugrammu, ci vole "
 "à chjodellu."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1977
+#: ../../locales/../src/interface/LocalListView.cpp:1930
 #: ../../locales/../src/interface/RemoteListView.cpp:2680
 msgid ""
 "The selected file would be executed directly.\n"
@@ -7162,13 +7179,13 @@ msgstr ""
 "E preferenze sò statu impurtate. Ci vole à rilancià FileZilla per piglialle "
 "in contu."
 
-#: ../../locales/../src/interface/QueueView.cpp:3215
+#: ../../locales/../src/interface/QueueView.cpp:3228
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
 "L'urdinatore hè prontu hà ridimarrà, osinnò ci vole à cliccà nantu à "
 "Abbandunà."
 
-#: ../../locales/../src/interface/QueueView.cpp:3213
+#: ../../locales/../src/interface/QueueView.cpp:3224
 msgid "The system will soon shut down unless you click Cancel."
 msgstr ""
 "L'urdinatore hè prontu hà piantassi, osinnò ci vole à cliccà nantu à "
@@ -7208,7 +7225,7 @@ msgstr ""
 "Vole si dì chì qualchì 'router' è/o parafocu interferisce sempre cù "
 "FileZilla."
 
-#: resources.h:691
+#: resources.h:692
 msgid ""
 "This only works if you are not behind a router, else your system would just "
 "return your internal address."
@@ -7216,7 +7233,7 @@ msgstr ""
 "Quessu funziuneghja solu s'è ùn site micca daretu un 'router', altrimente u "
 "vostru sistemu riturnerà u vostru indirizzu internu."
 
-#: resources.h:669
+#: resources.h:670
 msgid ""
 "This wizard will help you to properly configure any routers and firewalls "
 "you have and tests your configuration."
@@ -7228,16 +7245,16 @@ msgstr ""
 msgid "Time"
 msgstr "Ora"
 
-#: resources.h:890
+#: resources.h:891
 msgid "Time formatting"
 msgstr "Forma di l'ora"
 
-#: resources.h:730
+#: resources.h:731
 msgid "Time&out in seconds:"
 msgstr "Cump&ortu d'attesa in seconde :"
 
-#: resources.h:733 ../../locales/../src/interface/QueueView.cpp:1054
-#: ../../locales/../src/interface/QueueView.cpp:1098
+#: resources.h:734 ../../locales/../src/interface/QueueView.cpp:1061
+#: ../../locales/../src/interface/QueueView.cpp:1105
 msgid "Timeout"
 msgstr "Cumportu d'attesa"
 
@@ -7255,17 +7272,17 @@ msgstr ""
 msgid "Title:"
 msgstr "Titulu :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2433
+#: ../../locales/../src/interface/Mainfrm.cpp:2438
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Per paragunà i cartulari, e duie liste di schedarii devenu esse infilate."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2434
+#: ../../locales/../src/interface/Mainfrm.cpp:2439
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Per fà quessu, l'arburiscenze devenu esse treminduie palisate o piattate."
 
-#: resources.h:784
+#: resources.h:785
 msgid ""
 "To support public key authentication, FileZilla needs to know the private "
 "keys to use."
@@ -7273,7 +7290,7 @@ msgstr ""
 "Per supportà l'autenticazione da chjave privata, FileZilla deve cunnosce e "
 "chjave private à impiegà."
 
-#: resources.h:1002
+#: resources.h:1003
 msgid ""
 "Toggle directory comparison. Right-click to change comparison mode.\n"
 "\n"
@@ -7290,7 +7307,7 @@ msgstr ""
 "Verde : U schedariu hè più recente chì quessu micca marcatu di l'altru latu\n"
 "Rossu : E dimensioni di i schedarii sò sfarente"
 
-#: resources.h:1004
+#: resources.h:1005
 msgid ""
 "Toggle synchronized browsing.\n"
 "If enabled, navigating the local directory hierarchy will also change the "
@@ -7300,32 +7317,32 @@ msgstr ""
 "S'ellu hè attivu, navigà in l'arburiscenza lucale cambierà dinù u cartulare "
 "nantu à u servu è viciversa."
 
-#: resources.h:992 resources.h:993
+#: resources.h:993 resources.h:994
 msgid "Toggles processing of the transfer queue"
 msgstr ""
 "Attiva o disattiva u trattamentu di a lista d'attesa di i trasferimenti"
 
-#: resources.h:984 resources.h:985
+#: resources.h:985 resources.h:986
 msgid "Toggles the display of the local directory tree"
 msgstr "Affissa o piatta l'arburiscenza di u cartulare lucale"
 
-#: resources.h:982 resources.h:983
+#: resources.h:983 resources.h:984
 msgid "Toggles the display of the message log"
 msgstr "Affissa o piatta a finestra di u ghjurnale di i messaghji"
 
-#: resources.h:986 resources.h:987
+#: resources.h:987 resources.h:988
 msgid "Toggles the display of the remote directory tree"
 msgstr "Affissa o piatta l'arburiscenza di u cartulare alluntanatu"
 
-#: resources.h:988 resources.h:989
+#: resources.h:989 resources.h:990
 msgid "Toggles the display of the transfer queue"
 msgstr "Affissa o piatta a finestra di a lista d'attesa di trasferimentu"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:593
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:590
 msgid "Too long header line"
 msgstr "Linea d'in-capu troppu longa"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:669
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:665
 msgid "Too many redirects"
 msgstr "Troppu di ridirezzioni"
 
@@ -7335,7 +7352,7 @@ msgstr "Troppu di ridirezzioni"
 msgid "Trace:"
 msgstr "Traccia :"
 
-#: resources.h:920 resources.h:926
+#: resources.h:921 resources.h:927
 msgid "Transfer"
 msgstr "Trasferisce"
 
@@ -7347,11 +7364,11 @@ msgstr "&Direzzione di u trasferimentu"
 msgid "Transfer &type"
 msgstr "&Tipu di trasferimentu"
 
-#: resources.h:740
+#: resources.h:741
 msgid "Transfer Mode"
 msgstr "Modu di trasferimentu"
 
-#: resources.h:876
+#: resources.h:877
 msgid "Transfer Queue"
 msgstr "Lista d'attesa di trasferimentu"
 
@@ -7369,8 +7386,8 @@ msgstr "Cunnessione di trasferimentu interrotta : %s"
 msgid "Transferred data got tainted."
 msgstr "I dati trasferiti sò statu alterati."
 
-#: ../../locales/../src/interface/QueueView.cpp:1483
-#: ../../locales/../src/interface/statuslinectrl.cpp:283
+#: ../../locales/../src/interface/QueueView.cpp:1490
+#: ../../locales/../src/interface/statuslinectrl.cpp:275
 msgid "Transferring"
 msgstr "Trasferimentu in corsu"
 
@@ -7378,16 +7395,16 @@ msgstr "Trasferimentu in corsu"
 msgid "Transfers"
 msgstr "Trasferimenti"
 
+#: ../../locales/../src/interface/QueueView.cpp:3124
 #: ../../locales/../src/interface/QueueView.cpp:3127
-#: ../../locales/../src/interface/QueueView.cpp:3130
 msgid "Transfers finished"
 msgstr "Trasferimenti cumpletti"
 
-#: resources.h:832
+#: resources.h:833
 msgid "Treat files &without extension as ASCII file"
 msgstr "Trattà i schedarii senza estensione cum'è schedarii ASCII"
 
-#: resources.h:828
+#: resources.h:829
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Trattà sti tipi di schedarii cum'è schedarii ASCII :"
 
@@ -7411,19 +7428,19 @@ msgstr "Appruvà stu certificatu è assuciallu à a cunnessione ?"
 msgid "Trust this host and carry on connecting?"
 msgstr "Appruvà stu servu è assuciallu à a cunnessione ?"
 
-#: resources.h:1018 resources.h:1023
+#: resources.h:1019 resources.h:1024
 msgid "Try again"
 msgstr ""
 
-#: resources.h:383 ../../locales/../src/interface/edithandler.cpp:1113
+#: resources.h:383 ../../locales/../src/interface/edithandler.cpp:1110
 msgid "Type"
 msgstr "Tipu"
 
-#: resources.h:766
+#: resources.h:767
 msgid "Type of FTP Proxy:"
 msgstr "Tipu di proxy FTP :"
 
-#: resources.h:791
+#: resources.h:792
 msgid "Type of generic proxy:"
 msgstr "Tipu di proxy predefinitu :"
 
@@ -7431,20 +7448,20 @@ msgstr "Tipu di proxy predefinitu :"
 msgid "U&pload"
 msgstr "&Incaricà"
 
-#: resources.h:471 resources.h:812
+#: resources.h:471 resources.h:813
 #, no-c-format
 msgid "U&pload limit:"
 msgstr "Limitazione d'incaricamentu :"
 
-#: resources.h:938
+#: resources.h:939
 msgid "U&se filetype associations if available"
 msgstr "Impiegà l'associ da tipu di schedariu, s'elli sò dispunibule"
 
-#: resources.h:891
+#: resources.h:892
 msgid "U&se system defaults"
 msgstr "Impiegà i parametri predefiniti di u &sistemu"
 
-#: resources.h:768
+#: resources.h:769
 msgid "USER@&HOST"
 msgstr "UTILIZATORE@OSPITE"
 
@@ -7458,8 +7475,8 @@ msgstr "Codice d'errore micca affettatu %d"
 msgid "Unit:"
 msgstr "Unità :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1145
-#: ../../locales/../src/interface/edithandler.cpp:1173
+#: ../../locales/../src/interface/edithandler.cpp:1142
+#: ../../locales/../src/interface/edithandler.cpp:1170
 msgid "Unknown"
 msgstr "Scunnisciutu"
 
@@ -7523,11 +7540,11 @@ msgstr ""
 "Tantu chì stu prublemu ùn hè micca currettu, u modu FTP attivu ùn "
 "funziuneghja micca è u modu passivu deve esse impiegatu."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1071
+#: ../../locales/../src/engine/tlssocket.cpp:1073
 msgid "Unsupported certificate type"
 msgstr "Tipu di certificatu micca suppurtatu"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:653
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:650
 msgid "Unsupported redirect"
 msgstr "Ridirezzione micca suppurtata"
 
@@ -7544,7 +7561,7 @@ msgstr "Installà a nova versione di FileZilla"
 msgid "Upload"
 msgstr "Incaricà"
 
-#: ../../locales/../src/interface/edithandler.cpp:1136
+#: ../../locales/../src/interface/edithandler.cpp:1133
 msgid "Upload failed"
 msgstr "Incaricamentu fiascu"
 
@@ -7557,7 +7574,7 @@ msgstr "Limitazione d'incaricamentu : %s/s"
 msgid "Upload limit: none"
 msgstr "Limitazione d'incaricamentu : alcuna"
 
-#: resources.h:646
+#: resources.h:647
 msgid "Upload selected directory"
 msgstr "Incaricà u cartulare selezziunatu"
 
@@ -7573,19 +7590,19 @@ msgstr "Incaricà stu schedariu mudificatu versu u servu ?"
 msgid "Upload this file to the server?"
 msgstr "Incaricà stu schedariu versu u servu ?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1130
-#: ../../locales/../src/interface/edithandler.cpp:1164
-#: ../../locales/../src/interface/edithandler.cpp:1329
+#: ../../locales/../src/interface/edithandler.cpp:1127
+#: ../../locales/../src/interface/edithandler.cpp:1161
+#: ../../locales/../src/interface/edithandler.cpp:1326
 msgid "Uploading"
 msgstr "Incaricamentu in corsu"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
-#: ../../locales/../src/interface/edithandler.cpp:1331
+#: ../../locales/../src/interface/edithandler.cpp:1130
+#: ../../locales/../src/interface/edithandler.cpp:1328
 msgid "Uploading and pending removal"
 msgstr "Incaricamentu in corsu è in attesa di ritiru"
 
-#: ../../locales/../src/interface/edithandler.cpp:1167
-#: ../../locales/../src/interface/edithandler.cpp:1333
+#: ../../locales/../src/interface/edithandler.cpp:1164
+#: ../../locales/../src/interface/edithandler.cpp:1330
 msgid "Uploading and unediting"
 msgstr "Incaricamentu è abbandonu di a mudificazione"
 
@@ -7593,7 +7610,7 @@ msgstr "Incaricamentu è abbandonu di a mudificazione"
 msgid "Use &custom charset"
 msgstr "Impiegà un gruppu persunalizatu di &caratteri"
 
-#: resources.h:935
+#: resources.h:936
 msgid "Use &custom editor:"
 msgstr "Impiegà l'editore persunalizatu :"
 
@@ -7627,30 +7644,30 @@ msgstr "Impiegà u servu chì hè dighjà cunnettu"
 msgid "Use server from site manager"
 msgstr "Impiegà u servu da u Ghjestiunariu di Siti"
 
-#: resources.h:885
+#: resources.h:886
 msgid "Use system &defaults"
 msgstr "Impiegà i parametri pre&definiti di u sistemu"
 
-#: resources.h:692
+#: resources.h:693
 msgid "Use the following IP address:"
 msgstr "Impiegà quessu indirizzu IP :"
 
-#: resources.h:702
+#: resources.h:703
 msgid "Use the following port range:"
 msgstr "Impiegà sta stesa di porti :"
 
-#: resources.h:687
+#: resources.h:688
 msgid "Use the server's external IP address instead"
 msgstr "Impiegà piuttostu l'indirizzu IP esternu di u servu"
 
-#: resources.h:693 resources.h:756
+#: resources.h:694 resources.h:757
 msgid ""
 "Use this if you're behind a router and have a static external IP address."
 msgstr ""
 "Impiegà quessu s'è voi site daretu un 'router' è avete un indirizzu IP "
 "esternu staticu."
 
-#: resources.h:696
+#: resources.h:697
 msgid ""
 "Use this option if you have a dynamic IP address. FileZilla will contact the "
 "above server once each session as soon as you use active mode for the first "
@@ -7694,7 +7711,7 @@ msgstr "Valevule fine à :"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Messaghji ditagliati di u ghjurnale di wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1157
+#: ../../locales/../src/engine/tlssocket.cpp:1159
 msgid "Verifying certificate..."
 msgstr "Verificazione di u certificatu in corsu..."
 
@@ -7702,7 +7719,7 @@ msgstr "Verificazione di u certificatu in corsu..."
 msgid "Version:"
 msgstr "Versione :"
 
-#: resources.h:817
+#: resources.h:818
 msgid "Very high"
 msgstr "Assai altu"
 
@@ -7712,7 +7729,7 @@ msgstr ""
 "L'ozzione d'affissà i schedarii piattati hè attiva, ma ùn hè micca "
 "suppurtata da u servu"
 
-#: resources.h:922
+#: resources.h:923
 msgid "View/Edit"
 msgstr "Affissu / Mudificà"
 
@@ -7724,19 +7741,19 @@ msgstr "Culonne videvule"
 msgid "W&rite"
 msgstr "Sc&rive"
 
-#: ../../locales/../src/interface/QueueView.cpp:1790
+#: ../../locales/../src/interface/QueueView.cpp:1797
 msgid "Waiting"
 msgstr "In attesa"
 
-#: ../../locales/../src/interface/QueueView.cpp:1386
+#: ../../locales/../src/interface/QueueView.cpp:1393
 msgid "Waiting for browsing connection"
 msgstr "In attesa d'una cunnessione per u sfugliendu"
 
-#: ../../locales/../src/interface/QueueView.cpp:1433
+#: ../../locales/../src/interface/QueueView.cpp:1440
 msgid "Waiting for password"
 msgstr "In attesa di a parolla d'intrata"
 
-#: ../../locales/../src/interface/statuslinectrl.cpp:277
+#: ../../locales/../src/interface/statuslinectrl.cpp:269
 msgid "Waiting for transfer to be cancelled"
 msgstr "In attesa d'abbandunà u trasferimentu"
 
@@ -7744,7 +7761,7 @@ msgstr "In attesa d'abbandunà u trasferimentu"
 msgid "Waiting to retry..."
 msgstr "In attesa nanzu à un altra prova…"
 
-#: ../../locales/../src/interface/FileZilla.cpp:302
+#: ../../locales/../src/interface/FileZilla.cpp:303
 msgid ""
 "Warning!\n"
 "\n"
@@ -7808,7 +7825,7 @@ msgstr "Benvenutu in FileZilla"
 msgid "What's new"
 msgstr "Cosa hè di novu ?"
 
-#: resources.h:1012
+#: resources.h:1013
 msgid "What's new:"
 msgstr "Cio chì hè novu :"
 
@@ -7821,7 +7838,7 @@ msgstr ""
 "cunnettavvi torna à i servi senza avè à scrivelle mentre e prussime sessioni "
 "di FileZilla."
 
-#: resources.h:820
+#: resources.h:821
 msgid ""
 "When enabled, characters that are not supported by the local operating "
 "system in filenames are replaced if downloading such a file."
@@ -7830,7 +7847,7 @@ msgstr ""
 "micca suppurtati da u sistemu lucale, seranu rimpiazzati s'è un tale "
 "schedariu hè telecaricatu."
 
-#: resources.h:862
+#: resources.h:863
 msgid "Widescreen"
 msgstr "Screnu largu"
 
@@ -7847,7 +7864,7 @@ msgstr "Scr&ive"
 msgid "Wrong external IP address"
 msgstr "Indirizzu IP esternu incurrettu"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:841
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:813
 msgid "Wrong line endings"
 msgstr "Fine di linea gattive"
 
@@ -7863,7 +7880,7 @@ msgstr ""
 "Pare chì voi impiegavate solu un indirizzu IPv6. St'assistente ùn supporta "
 "micca sta configurazione."
 
-#: resources.h:1026
+#: resources.h:1027
 #, fuzzy
 msgid "You are using the latest version of FileZilla."
 msgstr "U telecaricamentu di l'ultima versione di FileZilla hè fiascu."
@@ -7872,7 +7889,7 @@ msgstr "U telecaricamentu di l'ultima versione di FileZilla hè fiascu."
 msgid "You can always open this dialog again through the help menu."
 msgstr "Ghjè sempre pussibule d'apre stu dialogu per via à l'Aiutu."
 
-#: resources.h:1020 resources.h:1025
+#: resources.h:1021 resources.h:1026
 #, fuzzy
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "U telecaricamentu di l'ultima versione di FileZilla hè fiascu."
@@ -7895,7 +7912,7 @@ msgstr ""
 "Ùn hè micca pussibule d'impurtà e preferenze da u propiu cartulare di "
 "preferenze di FileZilla."
 
-#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:137
+#: ../../locales/../src/interface/settings/optionspage_transfer.cpp:145
 msgid ""
 "You cannot replace an invalid character with another invalid character. "
 "Please enter a character that is allowed in filenames."
@@ -7912,7 +7929,7 @@ msgstr ""
 msgid "You have selected at least one symbolic link."
 msgstr "Avete selezziunatu al menu una leia simbulica."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1944
+#: ../../locales/../src/interface/LocalListView.cpp:1897
 #: ../../locales/../src/interface/RemoteListView.cpp:2647
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -7921,7 +7938,7 @@ msgstr ""
 "Avete selezziunatu più di 10 schedarii per mudificalli, site sicuru di vulè "
 "continuà ?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2063
+#: ../../locales/../src/interface/LocalListView.cpp:2016
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -7973,7 +7990,7 @@ msgstr "Ci vole à entre un nome per l'indetta."
 msgid "You need to enter a name for the log file."
 msgstr "Ci vole à entre un nome per u ghjurnale di i messaghji."
 
-#: ../../locales/../src/interface/edithandler.cpp:1520
+#: ../../locales/../src/interface/edithandler.cpp:1517
 msgid "You need to enter a properly quoted command."
 msgstr "Ci vole à entre una cummanda leghjittima trà virgulette."
 
@@ -8035,6 +8052,13 @@ msgid ""
 msgstr ""
 "Ùn duveriate micca avè prublemi per cunnettavvi à d'altri servi, i "
 "trasferimenti di schedariu duverianu funziunà bè."
+
+#: ../../locales/../src/interface/QueueView.cpp:3232
+#, fuzzy
+msgid "Your computer will suspend unless you click Cancel."
+msgstr ""
+"L'urdinatore hè prontu hà ridimarrà, osinnò ci vole à cliccà nantu à "
+"Abbandunà."
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:125
 msgid "after"
@@ -8101,7 +8125,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "fzsftp ùn hè micca statu lanciatu"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1109
+#: ../../locales/../src/engine/tlssocket.cpp:1111
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers ùn hà riturnatu alcunu certificatu"
 
@@ -8153,9 +8177,9 @@ msgstr "lettura da u pruprietariu"
 msgid "owner writeable"
 msgstr "scrittura da u pruprietariu"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1168
-#: ../../locales/../src/engine/tlssocket.cpp:1179
-#: ../../locales/../src/engine/tlssocket.cpp:1194
+#: ../../locales/../src/engine/tlssocket.cpp:1170
+#: ../../locales/../src/engine/tlssocket.cpp:1181
+#: ../../locales/../src/engine/tlssocket.cpp:1196
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:29
 msgid "unknown"
 msgstr "scunnisciutu"
