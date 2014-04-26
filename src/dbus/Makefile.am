@@ -8,6 +8,7 @@ libfzdbus_a_CFLAGS = $(WX_CFLAGS_ONLY)
 
 
 libfzdbus_a_SOURCES = \
+		dbushandler.cpp \
 		desktop_notification.cpp \
 		power_management_inhibitor.cpp \
 		session_manager.cpp \
@@ -15,6 +16,7 @@ libfzdbus_a_SOURCES = \
 		wxdbusmessage.cpp
 
 noinst_HEADERS = \
+		dbushandler.h \
 		desktop_notification.h \
 		power_management_inhibitor.h \
 		session_manager.h \

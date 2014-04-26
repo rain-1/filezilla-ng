@@ -1,10 +1,10 @@
 #include <wx/wx.h>
+#include "dbushandler.h"
 #include "power_management_inhibitor.h"
 #include "wxdbusconnection.h"
 #include "wxdbusmessage.h"
-#include <memory>
 
-class CPowerManagementInhibitorImpl : private wxEvtHandler
+class CPowerManagementInhibitorImpl : private CDBusHandlerInterface
 {
 public:
 	CPowerManagementInhibitorImpl();
@@ -13,11 +13,7 @@ public:
 	void RequestIdle();
 	void RequestBusy();
 private:
-	wxDBusConnection* m_pConnection;
-
-	DECLARE_EVENT_TABLE()
-	void OnSignal(wxDBusConnectionEvent& event);
-	void OnAsyncReply(wxDBusConnectionEvent& event);
+	CDBusHandler* m_handler;
 
 	enum _state
 	{
@@ -28,20 +24,18 @@ private:
 		request_idle
 	};
 
-	enum _state m_state;
+	bool HandleReply(wxDBusMessage& msg);
+	bool HandleSignal(wxDBusMessage& msg);
 
-	bool m_debug;
+	enum _state m_state;
 
 	enum _state m_intended_state;
 	unsigned int m_cookie;
 
 	bool m_use_gsm;
-};
 
-BEGIN_EVENT_TABLE(CPowerManagementInhibitorImpl, wxEvtHandler)
-EVT_DBUS_SIGNAL(wxID_ANY, CPowerManagementInhibitorImpl::OnSignal)
-EVT_DBUS_ASYNC_RESPONSE(wxID_ANY, CPowerManagementInhibitorImpl::OnAsyncReply)
-END_EVENT_TABLE()
+	unsigned int m_serial;
+};
 
 CPowerManagementInhibitor::CPowerManagementInhibitor()
 {
@@ -64,24 +58,16 @@ void CPowerManagementInhibitor::RequestIdle()
 }
 
 CPowerManagementInhibitorImpl::CPowerManagementInhibitorImpl()
+	: m_serial()
 {
-#ifdef __WXDEBUG__
-	m_debug = true;
-#else
-	m_debug = false;
-	wxString v;
-	if (wxGetEnv(_T("FZDEBUG"), &v) && v == _T("1"))
-		m_debug = true;
-#endif
-	m_pConnection = new wxDBusConnection(wxID_ANY, this, false);
-	if (!m_pConnection->IsConnected())
-	{
-		if (m_debug)
-			printf("wxD-Bus: Could not connect to session bus\n");
+	m_handler = CDBusHandler::AddRef(this);
+
+	if (m_handler->Conn()) {
+		m_state = idle;
+	}
+	else {
 		m_state = error;
 	}
-	else
-		m_state = idle;
 
 	m_intended_state = idle;
 	m_cookie = 0;
@@ -91,7 +77,7 @@ CPowerManagementInhibitorImpl::CPowerManagementInhibitorImpl()
 CPowerManagementInhibitorImpl::~CPowerManagementInhibitorImpl()
 {
 	// Closing connection clears the inhibition
-	delete m_pConnection;
+	CDBusHandler::Unref(this);
 }
 
 void CPowerManagementInhibitorImpl::RequestIdle()
@@ -100,7 +86,7 @@ void CPowerManagementInhibitorImpl::RequestIdle()
 	if (m_state == error || m_state == idle || m_state == request_idle || m_state == request_busy)
 		return;
 
-	if (m_debug)
+	if (m_handler->Debug())
 		printf("wxD-Bus: CPowerManagementInhibitor: Requesting idle\n");
 
 	wxDBusMethodCall *call;
@@ -121,11 +107,14 @@ void CPowerManagementInhibitorImpl::RequestIdle()
 
 	call->AddUnsignedInt(m_cookie);
 
-	if (!call->CallAsync(m_pConnection, 1000))
+	if (!call->CallAsync(m_handler->Conn(), 1000))
 	{
 		m_state = error;
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: CPowerManagementInhibitor: Request failed\n");
+	}
+	else {
+		m_serial = call->GetSerial();
 	}
 
 	delete call;
@@ -138,7 +127,7 @@ void CPowerManagementInhibitorImpl::RequestBusy()
 	if (m_state == error || m_state == busy || m_state == request_busy || m_state == request_idle)
 		return;
 
-	if (m_debug)
+	if (m_handler->Debug())
 		printf("wxD-Bus: CPowerManagementInhibitor: Requesting busy\n");
 
 	wxDBusMethodCall *call;
@@ -164,44 +153,46 @@ void CPowerManagementInhibitorImpl::RequestBusy()
 	if (m_use_gsm)
 		call->AddUnsignedInt(8);
 
-	if (!call->CallAsync(m_pConnection, 1000))
+	if (!call->CallAsync(m_handler->Conn(), 1000))
 	{
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: CPowerManagementInhibitor: Request failed\n");
 		if (m_use_gsm)
 			m_state = error;
 		else
 		{
-			if (m_debug)
+			if (m_handler->Debug())
 				printf("wxD-Bus: Falling back to org.gnome.SessionManager\n");
 			m_use_gsm = true;
 			RequestBusy();
 		}
 	}
+	else {
+		m_serial = call->GetSerial();
+	}
 
 	delete call;
 }
 
-void CPowerManagementInhibitorImpl::OnSignal(wxDBusConnectionEvent& event)
+bool CPowerManagementInhibitorImpl::HandleSignal(wxDBusMessage&)
 {
-	std::auto_ptr<wxDBusMessage> msg(wxDBusMessage::ExtractFromEvent(&event));
+	return false;
 }
 
-void CPowerManagementInhibitorImpl::OnAsyncReply(wxDBusConnectionEvent& event)
+bool CPowerManagementInhibitorImpl::HandleReply(wxDBusMessage& msg)
 {
-	std::auto_ptr<wxDBusMessage> msg(wxDBusMessage::ExtractFromEvent(&event));
+	if( msg.GetReplySerial() != m_serial ) {
+		return false;
+	}
 
-	if (m_state == error)
-		return;
-
-	if (msg->GetType() == DBUS_MESSAGE_TYPE_ERROR)
+	if (msg.GetType() == DBUS_MESSAGE_TYPE_ERROR)
 	{
-		if (m_debug)
-			printf("wxD-Bus: Reply: Error: %s\n", msg->GetString());
+		if (m_handler->Debug())
+			printf("wxD-Bus: Reply: Error: %s\n", msg.GetString());
 
 		if (m_state == request_busy && !m_use_gsm)
 		{
-			if (m_debug)
+			if (m_handler->Debug())
 				printf("wxD-Bus: Falling back to org.gnome.SessionManager\n");
 			m_use_gsm = true;
 			m_state = idle;
@@ -210,32 +201,30 @@ void CPowerManagementInhibitorImpl::OnAsyncReply(wxDBusConnectionEvent& event)
 		}
 		else
 			m_state = error;
-		return;
 	}
-
-	if (m_state == request_idle)
+	else if (m_state == request_idle)
 	{
 		m_state = idle;
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: CPowerManagementInhibitor: Request successful\n");
 		if (m_intended_state == busy)
 			RequestBusy();
-		return;
 	}
 	else if (m_state == request_busy)
 	{
 		m_state = busy;
-		msg->GetUInt(m_cookie);
-		if (m_debug)
+		msg.GetUInt(m_cookie);
+		if (m_handler->Debug())
 			printf("wxD-Bus: CPowerManagementInhibitor: Request successful, cookie is %u\n", m_cookie);
 		if (m_intended_state == idle)
 			RequestIdle();
-		return;
 	}
 	else
 	{
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: Unexpected reply in state %d\n", m_state);
 		m_state = error;
 	}
+
+	return true;
 }
