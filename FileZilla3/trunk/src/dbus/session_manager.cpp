@@ -3,9 +3,10 @@
  */
 #include <wx/wx.h>
 #include "session_manager.h"
+#include "dbushandler.h"
 #include "wxdbusconnection.h"
 #include "wxdbusmessage.h"
-#include <memory>
+#include "dbushandler.h"
 
 enum state
 {
@@ -18,37 +19,30 @@ enum state
 	unregister
 };
 
-class CSessionManagerImpl : public wxEvtHandler
+class CSessionManagerImpl : public CDBusHandlerInterface
 {
 public:
 	CSessionManagerImpl();
 	virtual ~CSessionManagerImpl();
+
+	CDBusHandler* m_handler;
 
 	bool ConfirmEndSession();
 	bool Unregister();
 
 	bool SendEvent(bool query, bool* veto = 0);
 
-	wxDBusConnection* m_pConnection;
-
-	DECLARE_EVENT_TABLE()
-	void OnSignal(wxDBusConnectionEvent& event);
-	void OnAsyncReply(wxDBusConnectionEvent& event);
+	bool HandleReply(wxDBusMessage& msg);
+	bool HandleSignal(wxDBusMessage& msg);
 
 	enum state m_state;
 
 	char* m_client_object_path;
 
-	bool m_debug;
+	unsigned int m_serial;
 };
 
 static CSessionManagerImpl* the_gnome_session_manager;
-
-
-BEGIN_EVENT_TABLE(CSessionManagerImpl, wxEvtHandler)
-EVT_DBUS_SIGNAL(wxID_ANY, CSessionManagerImpl::OnSignal)
-EVT_DBUS_ASYNC_RESPONSE(wxID_ANY, CSessionManagerImpl::OnAsyncReply)
-END_EVENT_TABLE()
 
 CSessionManager::CSessionManager()
 {
@@ -59,24 +53,13 @@ CSessionManager::~CSessionManager()
 }
 
 CSessionManagerImpl::CSessionManagerImpl()
+	: m_client_object_path()
+	, m_serial()
 {
-#ifdef __WXDEBUG__
-	m_debug = true;
-#else
-	m_debug = false;
-	wxString v;
-	if (wxGetEnv(_T("FZDEBUG"), &v) && v == _T("1"))
-		m_debug = true;
-#endif
-	m_pConnection = new wxDBusConnection(wxID_ANY, this, false);
-	if (!m_pConnection->IsConnected())
-	{
-		if (m_debug)
-			printf("wxD-Bus: Could not connect to session bus\n");
-		m_state = error;
-	}
-	else
-	{
+	m_handler = CDBusHandler::AddRef(this);
+
+	wxDBusConnection* c = m_handler->Conn();
+	if( c ) {
 		wxDBusMethodCall call(
 			"org.gnome.SessionManager",
 			"/org/gnome/SessionManager",
@@ -90,17 +73,21 @@ CSessionManagerImpl::CSessionManagerImpl()
 		call.AddString(pid);
 		call.AddString(pid); // What's this "startup identifier"?
 
-		if (!call.CallAsync(m_pConnection, 1000))
+		if (!call.CallAsync(c, 1000))
 			m_state = error;
+		else {
+			m_serial = call.GetSerial();
+		}
 	}
-
-	m_client_object_path = 0;
+	else {
+		m_state = error;
+	}
 }
 
 CSessionManagerImpl::~CSessionManagerImpl()
 {
+	CDBusHandler::Unref(this);
 	delete [] m_client_object_path;
-	delete m_pConnection;
 }
 
 bool CSessionManager::Init()
@@ -123,98 +110,77 @@ bool CSessionManager::Uninit()
 	return true;
 }
 
-void CSessionManagerImpl::OnSignal(wxDBusConnectionEvent& event)
+bool CSessionManagerImpl::HandleSignal(wxDBusMessage& msg)
 {
-	std::auto_ptr<wxDBusMessage> msg(wxDBusMessage::ExtractFromEvent(&event));
+	if (!strcmp(msg.GetPath(), "org.gnome.SessionManager"))
+		return false;
+
+	if (!m_client_object_path || strcmp(msg.GetPath(), m_client_object_path)) {
+		return false;
+	}
+
 	if (m_state == error || m_state == unregister)
 	{
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: OnSignal during bad state: %d\n", m_state);
-		return;
+		return true;
 	}
 
-	if (msg->GetType() == DBUS_MESSAGE_TYPE_ERROR)
+
+	const char* member = msg.GetMember();
+	if (!strcmp(member, "QueryEndSession"))
 	{
-		if (m_debug)
-			printf("wxD-Bus: Signal: Error: %s\n", msg->GetString());
-		return;
-	}
+		m_state = query_end_session;
 
-	const char* path = msg->GetPath();
-	if (!path)
+		bool veto;
+
+		wxUint32 flags;
+		if (msg.GetUInt(flags) && flags & 1)
+			veto = true;
+		else
+			veto = false;
+
+		bool res = SendEvent(true, &veto);
+
+		wxDBusMethodCall call(
+			"org.gnome.SessionManager",
+			m_client_object_path,
+			0,//"org.gnome.SessionManager.ClientPrivate",
+			"EndSessionResponse");
+		call.AddBool(!res || !veto);
+		call.AddString("No reason given");
+		call.CallAsync(m_handler->Conn(), 1000);
+		m_serial = call.GetSerial();
+	}
+	else if (!strcmp(member, "EndSession"))
 	{
-		if (m_debug)
-			printf("wxD-Bus: Signal contains no path\n");
-		return;
+		m_state = end_session;
+
+		if (!SendEvent(false))
+			ConfirmEndSession();
 	}
-
-	if (!strcmp(path, "org.gnome.SessionManager"))
-	{
-		if (m_debug)
-			printf("wxD-Bus: Signal from %s, member %s\n", msg->GetPath(), msg->GetMember());
-		return;
-	}
-
-	if (m_client_object_path && !strcmp(path, m_client_object_path))
-	{
-		const char* member = msg->GetMember();
-		if (m_debug)
-			printf("wxD-Bus: Signal from %s, member %s\n", msg->GetPath(), member);
-		if (!strcmp(member, "QueryEndSession"))
-		{
-			m_state = query_end_session;
-
-			bool veto;
-
-			wxUint32 flags;
-			if (msg->GetUInt(flags) && flags & 1)
-				veto = true;
-			else
-				veto = false;
-
-			bool res = SendEvent(true, &veto);
-
-			wxDBusMethodCall call(
-				"org.gnome.SessionManager",
-				m_client_object_path,
-				0,//"org.gnome.SessionManager.ClientPrivate",
-				"EndSessionResponse");
-			call.AddBool(!res || !veto);
-			call.AddString("No reason given");
-			call.CallAsync(m_pConnection, 1000);
-		}
-		else if (!strcmp(member, "EndSession"))
-		{
-			m_state = end_session;
-
-			if (!SendEvent(false))
-				ConfirmEndSession();
-		}
-		return;
-	}
+	return true;
 }
 
-void CSessionManagerImpl::OnAsyncReply(wxDBusConnectionEvent& event)
+bool CSessionManagerImpl::HandleReply(wxDBusMessage& msg)
 {
-	std::auto_ptr<wxDBusMessage> msg(wxDBusMessage::ExtractFromEvent(&event));
+	if( msg.GetReplySerial() != m_serial ) {
+		return false;
+	}
 
-	if (m_state == error)
-		return;
-
-	if (msg->GetType() == DBUS_MESSAGE_TYPE_ERROR)
+	if (msg.GetType() == DBUS_MESSAGE_TYPE_ERROR)
 	{
-		if (m_debug)
-			printf("wxD-Bus: Reply: Error: %s\n", msg->GetString());
-		m_state = error;
-		return;
+		if (m_handler->Debug())
+			printf("wxD-Bus: Signal: Error: %s\n", msg.GetString());
+		return true;
 	}
 
 	if (m_state == register_client)
 	{
-		const char* obj_path = msg->GetObjectPath();
+		const char* obj_path = msg.GetObjectPath();
 		if (!obj_path)
 		{
-			if (m_debug)
+			if (m_handler->Debug())
 				printf("wxD-Bus: Reply to RegisterClient does not contain our object path\n");
 			m_state = error;
 		}
@@ -222,8 +188,8 @@ void CSessionManagerImpl::OnAsyncReply(wxDBusConnectionEvent& event)
 		{
 			m_client_object_path = new char[strlen(obj_path) + 1];
 			strcpy(m_client_object_path, obj_path);
-			if (m_debug)
-				printf("wxD-Bus: Reply to RegisterClient, our object path is %s\n", msg->GetObjectPath());
+			if (m_handler->Debug())
+				printf("wxD-Bus: Reply to RegisterClient, our object path is %s\n", msg.GetObjectPath());
 			m_state = initialized;
 		}
 	}
@@ -233,7 +199,7 @@ void CSessionManagerImpl::OnAsyncReply(wxDBusConnectionEvent& event)
 	}
 	else if (m_state == ended_session)
 	{
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: Session is over\n");
 		m_state = unregister;
 
@@ -244,22 +210,24 @@ void CSessionManagerImpl::OnAsyncReply(wxDBusConnectionEvent& event)
 			"UnregisterClient");
 		call.AddObjectPath(m_client_object_path);
 
-		call.CallAsync(m_pConnection, 1000);
-
+		call.CallAsync(m_handler->Conn(), 1000);
+		m_serial = call.GetSerial();
 	}
 	else if (m_state == unregister)
 	{
 		// We're so done
 		m_state = error;
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: Unregistered\n");
 	}
 	else
 	{
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: Unexpected reply in state %d\n", m_state);
 		m_state = error;
 	}
+
+	return true;
 }
 
 bool CSessionManagerImpl::ConfirmEndSession()
@@ -267,7 +235,7 @@ bool CSessionManagerImpl::ConfirmEndSession()
 	if (m_state != end_session)
 		return false;
 
-	if (m_debug)
+	if (m_handler->Debug())
 		printf("wxD-Bus: Confirm session end\n");
 
 	m_state = ended_session;
@@ -278,7 +246,7 @@ bool CSessionManagerImpl::ConfirmEndSession()
 		"EndSessionResponse");
 	call.AddBool(true);
 	call.AddString("");
-	call.CallAsync(m_pConnection, 1000);
+	call.CallAsync(m_handler->Conn(), 1000);
 
 	return true;
 }
@@ -319,11 +287,11 @@ bool CSessionManagerImpl::Unregister()
 		"UnregisterClient");
 	call->AddObjectPath(m_client_object_path);
 
-	wxDBusMessage *result = call->Call(m_pConnection, 1000);
+	wxDBusMessage *result = call->Call(m_handler->Conn(), 1000);
 	if (result)
 	{
 		delete result;
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: Unregistered\n");
 	}
 

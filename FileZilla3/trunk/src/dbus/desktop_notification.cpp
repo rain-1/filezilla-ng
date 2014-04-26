@@ -1,11 +1,11 @@
 #include <wx/wx.h>
+#include "dbushandler.h"
 #include "desktop_notification.h"
 #include "wxdbusconnection.h"
 #include "wxdbusmessage.h"
 #include <list>
-#include <memory>
 
-class CDesktopNotificationImpl : private wxEvtHandler
+class CDesktopNotificationImpl : private CDBusHandlerInterface
 {
 public:
 	CDesktopNotificationImpl();
@@ -14,11 +14,9 @@ public:
 	void Notify(const wxString& summary, const wxString& body, const wxString& category);
 
 protected:
-	wxDBusConnection* m_pConnection;
+	CDBusHandler* m_handler;
 
 	void EmitNotifications();
-
-	bool m_debug;
 
 	enum _state
 	{
@@ -35,15 +33,11 @@ protected:
 	};
 	std::list<struct _notification> m_notifications;
 
-	DECLARE_EVENT_TABLE()
-	void OnSignal(wxDBusConnectionEvent& event);
-	void OnAsyncReply(wxDBusConnectionEvent& event);
-};
+	bool HandleReply(wxDBusMessage& msg);
+	bool HandleSignal(wxDBusMessage& msg);
 
-BEGIN_EVENT_TABLE(CDesktopNotificationImpl, wxEvtHandler)
-EVT_DBUS_SIGNAL(wxID_ANY, CDesktopNotificationImpl::OnSignal)
-EVT_DBUS_ASYNC_RESPONSE(wxID_ANY, CDesktopNotificationImpl::OnAsyncReply)
-END_EVENT_TABLE()
+	unsigned int m_serial;
+};
 
 CDesktopNotification::CDesktopNotification()
 {
@@ -61,29 +55,21 @@ void CDesktopNotification::Notify(const wxString& summary, const wxString& body,
 }
 
 CDesktopNotificationImpl::CDesktopNotificationImpl()
+	: m_serial()
 {
-#ifdef __WXDEBUG__
-	m_debug = true;
-#else
-	m_debug = false;
-	wxString v;
-	if (wxGetEnv(_T("FZDEBUG"), &v) && v == _T("1"))
-		m_debug = true;
-#endif
-	m_pConnection = new wxDBusConnection(wxID_ANY, this, false);
-	if (!m_pConnection->IsConnected())
-	{
-		if (m_debug)
-			printf("wxD-Bus: Could not connect to session bus\n");
+	m_handler = CDBusHandler::AddRef(this);
+
+	if (m_handler->Conn()) {
+		m_state = idle;
+	}
+	else {
 		m_state = error;
 	}
-	else
-		m_state = idle;
 }
 
 CDesktopNotificationImpl::~CDesktopNotificationImpl()
 {
-	delete m_pConnection;
+	CDBusHandler::Unref(this);
 }
 
 void CDesktopNotificationImpl::Notify(const wxString& summary, const wxString& body, const wxString& category)
@@ -141,37 +127,40 @@ void CDesktopNotificationImpl::EmitNotifications()
 
 	call->AddInt(-1);
 
-	if (!call->CallAsync(m_pConnection, 1000))
+	if (!call->CallAsync(m_handler->Conn(), 1000))
 	{
 		m_state = error;
-		if (m_debug)
+		if (m_handler->Debug())
 			printf("wxD-Bus: CPowerManagementInhibitor: Request failed\n");
+	}
+	else {
+		m_serial = call->GetSerial();
 	}
 
 	delete call;
 }
 
-void CDesktopNotificationImpl::OnSignal(wxDBusConnectionEvent& event)
+bool CDesktopNotificationImpl::HandleSignal(wxDBusMessage&)
 {
-	std::auto_ptr<wxDBusMessage> msg(wxDBusMessage::ExtractFromEvent(&event));
+	return false;
 }
 
-void CDesktopNotificationImpl::OnAsyncReply(wxDBusConnectionEvent& event)
+bool CDesktopNotificationImpl::HandleReply(wxDBusMessage& msg)
 {
-	std::auto_ptr<wxDBusMessage> msg(wxDBusMessage::ExtractFromEvent(&event));
-
-	if (m_state == error)
-		return;
-
-	if (msg->GetType() == DBUS_MESSAGE_TYPE_ERROR)
-	{
-		if (m_debug)
-			printf("wxD-Bus: Reply: Error: %s\n", msg->GetString());
-
-		m_state = error;
-		return;
+	if( msg.GetReplySerial() != m_serial ) {
+		return false;
 	}
 
-	m_state = idle;
+	if (msg.GetType() == DBUS_MESSAGE_TYPE_ERROR)
+	{
+		if (m_handler->Debug())
+			printf("wxD-Bus: Reply: Error: %s\n", msg.GetString());
+
+		m_state = error;
+	}
+	else {
+		m_state = idle;
+	}
 	EmitNotifications();
+	return true;
 }
