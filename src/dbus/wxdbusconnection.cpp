@@ -269,7 +269,7 @@ void DBusThread::remove_watch(DBusWatch *watch, void *data)
 		thread->LeaveCriticalSection();
 }
 
-void DBusThread::toggle_watch(DBusWatch *watch, void *data)
+void DBusThread::toggle_watch(DBusWatch *, void *data)
 {
 	DBusThread * thread = (DBusThread *) data;
 
@@ -414,7 +414,7 @@ wxDBusError &wxDBusConnection::GetLastError()
 	return * m_error;
 }
 
-DBusHandlerResult handle_notification(DBusConnection *connection, DBusMessage *message, void *user_data)
+DBusHandlerResult handle_notification(DBusConnection *, DBusMessage *message, void *user_data)
 {
 	wxDBusConnection * _connection = (wxDBusConnection *) user_data;
 	DBusMessage * msg = dbus_message_copy(message);
@@ -423,7 +423,7 @@ DBusHandlerResult handle_notification(DBusConnection *connection, DBusMessage *m
 	return DBUS_HANDLER_RESULT_HANDLED;
 }
 
-DBusHandlerResult handle_message(DBusConnection *connection, DBusMessage *message, void *user_data)
+DBusHandlerResult handle_message(DBusConnection *, DBusMessage *message, void *user_data)
 {
 	wxDBusConnection * _connection = (wxDBusConnection *) user_data;
 	DBusMessage * msg = dbus_message_copy(message);
