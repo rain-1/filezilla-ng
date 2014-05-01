@@ -856,7 +856,12 @@ Section "FileZilla Client" SecMain
   File "..\src\interface\${LT_EXEDIR}FileZilla.exe"
   File "..\src\putty\${LT_EXEDIR}fzsftp.exe"
   File "..\src\putty\${LT_EXEDIR}fzputtygen.exe"
-  File "${srcdir}\mingwm10.dll"
+
+  # MinGW runtime libraries
+  File "${srcdir}\libgcc_s_sjlj-1.dll"
+  File "${srcdir}\libstdc++-6.dll"
+  File "${srcdir}\libwinpthread-1.dll"
+
   File "${top_srcdir}\GPL.html"
   File "${top_srcdir}\NEWS"
   File "${top_srcdir}\AUTHORS"
@@ -1251,7 +1256,12 @@ Section "Uninstall"
   Delete "$INSTDIR\filezilla.exe"
   Delete "$INSTDIR\fzsftp.exe"
   Delete "$INSTDIR\fzputtygen.exe"
-  Delete "$INSTDIR\mingwm10.dll"
+
+  # MinGW runtime libraries
+  Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
+  Delete "$INSTDIR\libstdc++-6.dll"
+  Delete "$INSTDIR\libwinpthread-1.dll"
+
   Delete "$INSTDIR\GPL.html"
   Delete "$INSTDIR\NEWS"
   Delete "$INSTDIR\AUTHORS"
