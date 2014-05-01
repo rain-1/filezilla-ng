@@ -1,6 +1,8 @@
 dist_noinst_DATA = install.nsi.in \
 		makezip.sh.in \
-		mingwm10.dll \
+		libgcc_s_sjlj-1.dll \
+		libstdc++-6.dll \
+		libwinpthread-1.dll \
 		nsis_appid.dll \
 		nsis_appid.txt \
 		process_running.nsh \
