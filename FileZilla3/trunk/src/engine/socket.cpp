@@ -115,6 +115,8 @@ static int ConvertMSWErrorCode(int error)
 {
 	switch (error)
 	{
+	case WSAECONNREFUSED:
+		return ECONNREFUSED;
 	case WSAEINVAL:
 		return EAI_BADFLAGS;
 	case WSANO_RECOVERY:
