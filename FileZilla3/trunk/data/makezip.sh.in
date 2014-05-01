@@ -34,7 +34,7 @@ copy_libtool()
 {
   local target
 
-  if [ "$3" == "" ]; then
+  if [ "$3" = "" ]; then
     target="$2"
   else
     target="$3"
@@ -54,9 +54,9 @@ copy_libtool "src/putty" "fzputtygen.exe"
 copy_libtool "src/fzshellext" "libfzshellext-0.dll" "fzshellext.dll"
 
 cp "$top_srcdir/src/fzshellext/fzshellext_64.dll" "$targetdir/fzshellext_64.dll" || exit 1
-cp "$top_srcdir/data/libgcc_s_sjlj-1.dll" || exit 1
-cp "$top_srcdir/data/libstdc++-6.dll" || exit 1
-cp "$top_srcdir/data/libwinpthread-1.dll" || exit 1
+cp "$top_srcdir/data/libgcc_s_sjlj-1.dll" "$targetdir/libgcc_s_sjlj-1.dll" || exit 1
+cp "$top_srcdir/data/libstdc++-6.dll" "$targetdir/libstdc++-6.dll" || exit 1
+cp "$top_srcdir/data/libwinpthread-1.dll" "$targetdir/libwinpthread-1.dll" || exit 1
 
 echo Copying locales
 
