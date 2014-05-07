@@ -550,7 +550,7 @@ void CNetConfWizard::CloseSocket()
 	if (!m_connectSuccessful)
 	{
 		text[0] = _("Connection with the test server failed.");
-		text[1] = _("Please check on http://filezilla-project.org/probe.php that the server is running and carefully check your settings again.");
+		text[1] = _("Please check on https://filezilla-project.org/probe.php that the server is running and carefully check your settings again.");
 		text[2] = _("If the problem persists, some router and/or firewall keeps blocking FileZilla.");
 	}
 	else
@@ -561,7 +561,7 @@ void CNetConfWizard::CloseSocket()
 			text[0] = _("Connection with server got closed prematurely.");
 			text[1] = _("Please ensure you have a stable internet connection and carefully check your settings again.");
 			text[2] = _("If the problem persists, some router and/or firewall keeps interrupting the connection.");
-			text[3] = _("See also: http://wiki.filezilla-project.org/Network_Configuration");
+			text[3] = _("See also: https://wiki.filezilla-project.org/Network_Configuration");
 			break;
 		case successful:
 			text[0] = _("Congratulations, your configuration seems to be working.");
@@ -574,7 +574,7 @@ void CNetConfWizard::CloseSocket()
 			text[0] = _("The server sent an unexpected or unrecognized reply.");
 			text[1] = _("This means that some router and/or firewall is still interfering with FileZilla.");
 			text[2] = _("Re-run the wizard and carefully check your settings and configure all routers and firewalls accordingly.");
-			text[3] = _("See also: http://wiki.filezilla-project.org/Network_Configuration");
+			text[3] = _("See also: https://wiki.filezilla-project.org/Network_Configuration");
 			break;
 		case tainted:
 			text[0] = _("Active mode FTP test failed. FileZilla knows the correct external IP address, but your router or firewall has misleadingly modified the sent address.");
