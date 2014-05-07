@@ -275,7 +275,7 @@ void CDirectoryListingParserTest::InitEntries()
 	// EPLF directory listings
 	// -----------------------
 
-	// See http://cr.yp.to/ftp/list/eplf.html (mirrored at http://filezilla-project.org/specs/eplf.html)
+	// See http://cr.yp.to/ftp/list/eplf.html (mirrored at https://filezilla-project.org/specs/eplf.html)
 
 	wxDateTime utc(1, wxDateTime::Mar, 1996, 22, 15, 3);
 	utc.MakeFromTimezone(wxDateTime::UTC);
@@ -1363,7 +1363,7 @@ void CDirectoryListingParserTest::InitEntries()
 	});
 
 	// MVS entry with a large number of used blocks:
-	// http://forum.filezilla-project.org/viewtopic.php?t=21667
+	// http://sforum.filezilla-project.org/viewtopic.php?t=21667
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
 	m_entries.push_back((t_entry){
 			"GISBWI 3390   2011/08/25  2 ++++  FB     904 18080  PS  80-MVS.FILE",
@@ -1380,7 +1380,7 @@ void CDirectoryListingParserTest::InitEntries()
 	});
 
 	// MVS entry with PO-E Dsorg indicating direrctory. See
-	// http://forum.filezilla-project.org/viewtopic.php?t=19374 for reference.
+	// http://sforum.filezilla-project.org/viewtopic.php?t=19374 for reference.
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
 	m_entries.push_back((t_entry){
 			"WYOSPT 3420   2003/05/21  1 3 U 6447    6447  PO-E 81-MVS.DIR",
