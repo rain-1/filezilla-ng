@@ -53,6 +53,8 @@ protected:
 
 	bool CheckSubdirStatus(wxTreeItemId& item, const wxString& path);
 
+	wxString MenuMkdir();
+
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
 #ifdef __WXMSW__
@@ -69,6 +71,7 @@ protected:
 	void OnContextMenu(wxTreeEvent& event);
 	void OnMenuUpload(wxCommandEvent& event);
 	void OnMenuMkdir(wxCommandEvent& event);
+	void OnMenuMkdirChgDir(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnBeginLabelEdit(wxTreeEvent& event);

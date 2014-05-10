@@ -248,6 +248,7 @@ BEGIN_EVENT_TABLE(CLocalListView, CFileListCtrl<CLocalFileData>)
 	EVT_MENU(XRCID("ID_UPLOAD"), CLocalListView::OnMenuUpload)
 	EVT_MENU(XRCID("ID_ADDTOQUEUE"), CLocalListView::OnMenuUpload)
 	EVT_MENU(XRCID("ID_MKDIR"), CLocalListView::OnMenuMkdir)
+	EVT_MENU(XRCID("ID_MKDIR_CHGDIR"), CLocalListView::OnMenuMkdirChgDir)
 	EVT_MENU(XRCID("ID_DELETE"), CLocalListView::OnMenuDelete)
 	EVT_MENU(XRCID("ID_RENAME"), CLocalListView::OnMenuRename)
 	EVT_KEY_DOWN(CLocalListView::OnKeyDown)
@@ -1121,19 +1122,49 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		m_pQueue->QueueFile_Finish(!queue_only);
 }
 
+// Create a new Directory
 void CLocalListView::OnMenuMkdir(wxCommandEvent& event)
+{
+	wxString newdir = MenuMkdir();
+	if (!newdir.empty()) {
+		m_pState->RefreshLocal();
+	}
+}
+
+// Create a new Directory and enter the new Directory
+void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+{
+	wxString newdir = MenuMkdir();
+	if (newdir.empty()) {
+		return;
+	}
+	
+	// OnMenuEnter
+	wxString error;
+	if (!m_pState->SetLocalDir(newdir, &error))
+	{
+		if (error != _T(""))
+			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
+		else
+			wxBell();
+	}
+}
+
+// Helper-Function to create a new Directory
+// Returns the name of the new directory
+wxString CLocalListView::MenuMkdir()
 {
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
-		return;
+		return _T("");
 
 	if (dlg.ShowModal() != wxID_OK)
-		return;
+		return _T("");
 
 	if (dlg.GetValue() == _T(""))
 	{
 		wxBell();
-		return;
+		return _T("");
 	}
 
 	wxFileName fn(dlg.GetValue(), _T(""));
@@ -1146,10 +1177,15 @@ void CLocalListView::OnMenuMkdir(wxCommandEvent& event)
 		res = fn.Mkdir(fn.GetPath(), 0777, wxPATH_MKDIR_FULL);
 	}
 
-	if (!res)
+	if (!res) {
 		wxBell();
+		return _T("");
+	}
 
-	DisplayDir(m_dir);
+	// Return name of the New Directory
+	// return dlg.GetValue();
+	// return fn.GetDirs().Last();
+	return fn.GetPath();
 }
 
 void CLocalListView::OnMenuDelete(wxCommandEvent& event)
