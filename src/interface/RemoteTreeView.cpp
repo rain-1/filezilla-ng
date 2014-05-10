@@ -463,7 +463,7 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay /*=_T(""
 		wxImage unknownIcon = wxArtProvider::GetBitmap(overlay, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)).ConvertToImage();
 
 		// Convert mask into alpha channel
-		if (!unknownIcon.HasAlpha())
+		if (unknownIcon.IsOk() && !unknownIcon.HasAlpha())
 		{
 			wxASSERT(unknownIcon.HasMask());
 			unknownIcon.InitAlpha();

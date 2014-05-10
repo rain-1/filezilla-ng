@@ -6,19 +6,20 @@ resourcesdir = $(pkgdatadir)/resources
 
 dist_resources_DATA = \
 	defaultfilters.xml \
-	dialogs.xrc \
 	down.png \
 	dropdown.png \
 	finished.wav \
 	leds.png \
-	menus.xrc \
-	netconfwizard.xrc \
-	quickconnectbar.xrc \
-	settings.xrc \
 	theme.xml \
-	toolbar.xrc \
 	up.png \
-	update.xrc
+	xrc/dialogs.xrc \
+	xrc/inputdialog.xrc \
+	xrc/menus.xrc \
+	xrc/netconfwizard.xrc \
+	xrc/quickconnectbar.xrc \
+	xrc/settings.xrc \
+	xrc/toolbar.xrc \
+	xrc/update.xrc
 
 resources20dir = $(pkgdatadir)/resources/20x20
 dist_resources20_DATA = 20x20/unknown.png

@@ -115,7 +115,7 @@ The default for FTP is 21, the default for SFTP is 22.</tooltip>
                 <object class="wxBitmapButton" name="ID_QUICKCONNECT_DROPDOWN">
                   <size>-1,-1</size>
                   <style>wxBU_AUTODRAW|wxBU_EXACTFIT</style>
-                  <bitmap>dropdown.png</bitmap>
+                  <bitmap>../dropdown.png</bitmap>
                 </object>
               </object>
             </object>
