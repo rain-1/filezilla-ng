@@ -48,7 +48,7 @@ if ! test "$localesonly" = "yes"; then
     CXXFLAGS="$CXXFLAGS -Wall -g -fexceptions"
   fi
 
-  CHECK_CXX0X
+  CHECK_CXX11
 
   # Add build information to config.h
   # ---------------------------------
