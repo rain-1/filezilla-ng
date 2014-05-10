@@ -340,6 +340,7 @@ BEGIN_EVENT_TABLE(CRemoteListView, CFileListCtrl<CGenericFileData>)
 	EVT_MENU(XRCID("ID_DOWNLOAD"), CRemoteListView::OnMenuDownload)
 	EVT_MENU(XRCID("ID_ADDTOQUEUE"), CRemoteListView::OnMenuDownload)
 	EVT_MENU(XRCID("ID_MKDIR"), CRemoteListView::OnMenuMkdir)
+	EVT_MENU(XRCID("ID_MKDIR_CHGDIR"), CRemoteListView::OnMenuMkdirChgDir)
 	EVT_MENU(XRCID("ID_NEW_FILE"), CRemoteListView::OnMenuNewfile)
 	EVT_MENU(XRCID("ID_DELETE"), CRemoteListView::OnMenuDelete)
 	EVT_MENU(XRCID("ID_RENAME"), CRemoteListView::OnMenuRename)
@@ -1406,6 +1407,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 		pMenu->Enable(XRCID("ID_MKDIR"), false);
+		pMenu->Enable(XRCID("ID_MKDIR_CHGDIR"), false);
 		pMenu->Enable(XRCID("ID_DELETE"), false);
 		pMenu->Enable(XRCID("ID_RENAME"), false);
 		pMenu->Enable(XRCID("ID_CHMOD"), false);
@@ -1605,17 +1607,34 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	}
 }
 
+// Create a new Directory
 void CRemoteListView::OnMenuMkdir(wxCommandEvent& event)
+{
+	MenuMkdir();
+}
+
+// Create a new Directory and enter the new Directory
+void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+{
+	CServerPath newdir = MenuMkdir();
+	if (!newdir.IsEmpty()) {
+		m_pState->ChangeRemoteDir(newdir);
+	}
+}
+
+// Help-Function to create a new Directory
+// Returns the name of the new directory
+CServerPath CRemoteListView::MenuMkdir()
 {
 	if (!m_pDirectoryListing || !m_pState->IsRemoteIdle())
 	{
 		wxBell();
-		return;
+		return _T("");
 	}
 
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
-		return;
+		return _T("");
 
 	CServerPath path = m_pDirectoryListing->path;
 
@@ -1637,23 +1656,26 @@ void CRemoteListView::OnMenuMkdir(wxCommandEvent& event)
 	const CServerPath oldPath = m_pDirectoryListing->path;
 
 	if (dlg.ShowModal() != wxID_OK)
-		return;
+		return _T("");
 
 	if (!m_pDirectoryListing || oldPath != m_pDirectoryListing->path ||
 		!m_pState->IsRemoteIdle())
 	{
 		wxBell();
-		return;
+		return _T("");
 	}
 
 	path = m_pDirectoryListing->path;
 	if (!path.ChangePath(dlg.GetValue()))
 	{
 		wxBell();
-		return;
+		return _T("");
 	}
 
 	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(path));
+	
+	// Return name of the New Directory
+	return path; 	
 }
 
 void CRemoteListView::OnMenuDelete(wxCommandEvent& event)

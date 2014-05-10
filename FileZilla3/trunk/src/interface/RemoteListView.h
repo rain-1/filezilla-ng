@@ -100,11 +100,14 @@ protected:
 		CLocalPath local_path;
 	} *m_pLinkResolveState;
 
+	CServerPath MenuMkdir();
+
 	DECLARE_EVENT_TABLE()
 	void OnItemActivated(wxListEvent &event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnMenuDownload(wxCommandEvent& event);
 	void OnMenuMkdir(wxCommandEvent& event);
+	void OnMenuMkdirChgDir(wxCommandEvent& event);
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);

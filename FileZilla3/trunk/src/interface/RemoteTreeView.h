@@ -50,6 +50,8 @@ protected:
 	wxTreeItemId m_ExpandAfterList;
 
 	wxTreeItemId m_dropHighlight;
+	
+	CServerPath MenuMkdir();
 
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
@@ -67,6 +69,7 @@ protected:
 	void OnBeginLabelEdit(wxTreeEvent& event);
 	void OnEndLabelEdit(wxTreeEvent& event);
 	void OnMkdir(wxCommandEvent& event);
+	void OnMenuMkdirChgDir(wxCommandEvent& event);
 	void OnChar(wxKeyEvent& event);
 	void OnMenuGeturl(wxCommandEvent& event);
 

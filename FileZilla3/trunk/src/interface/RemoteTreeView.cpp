@@ -232,6 +232,7 @@ EVT_MENU(XRCID("ID_RENAME"), CRemoteTreeView::OnMenuRename)
 EVT_TREE_BEGIN_LABEL_EDIT(wxID_ANY, CRemoteTreeView::OnBeginLabelEdit)
 EVT_TREE_END_LABEL_EDIT(wxID_ANY, CRemoteTreeView::OnEndLabelEdit)
 EVT_MENU(XRCID("ID_MKDIR"), CRemoteTreeView::OnMkdir)
+EVT_MENU(XRCID("ID_MKDIR_CHGDIR"), CRemoteTreeView::OnMenuMkdirChgDir)
 EVT_CHAR(CRemoteTreeView::OnChar)
 EVT_MENU(XRCID("ID_GETURL"), CRemoteTreeView::OnMenuGeturl)
 END_EVENT_TABLE()
@@ -943,9 +944,9 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 		pMenu->Enable(XRCID("ID_MKDIR"), false);
+		pMenu->Enable(XRCID("ID_MKDIR_CHGDIR"), false);
 		pMenu->Enable(XRCID("ID_DELETE"), false);
 		pMenu->Enable(XRCID("ID_CHMOD"), false);
-		pMenu->Enable(XRCID("ID_MKDIR"), false);
 		pMenu->Enable(XRCID("ID_RENAME"), false);
 		pMenu->Enable(XRCID("ID_GETURL"), false);
 	}
@@ -1260,21 +1261,54 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		m_pState->ChangeRemoteDir(currentPath);
 }
 
+
+// Create a new Directory
 void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 {
+	CServerPath newpath = MenuMkdir();
+	
+	CServerPath listed;
+	if (newpath.HasParent())
+	{
+		listed = newpath.GetParent();
+		m_pState->ChangeRemoteDir(listed);
+	}
+
+	CServerPath currentPath;
+	const wxTreeItemId selected = GetSelection();
+	if (selected)
+		currentPath = GetPathFromItem(selected);
+	if (!currentPath.IsEmpty() && currentPath != listed)
+		m_pState->ChangeRemoteDir(currentPath);
+	
+}
+
+// Create a new Directory and enter the new Directory
+void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+{
+	CServerPath newpath = MenuMkdir();
+	if (!newpath.IsEmpty()) {
+		m_pState->ChangeRemoteDir(newpath);
+	}
+}
+
+// Help-Function to create a new Directory
+// Returns the name of the new directory
+CServerPath CRemoteTreeView::MenuMkdir()
+{
 	if (!m_pState->IsRemoteIdle())
-		return;
+		return CServerPath();
 
 	if (!m_contextMenuItem)
-		return;
+		return CServerPath();
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
 	if (path.IsEmpty())
-		return;
+		return CServerPath();
 
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
-		return;
+		return CServerPath();
 
 	CServerPath newPath = path;
 
@@ -1294,29 +1328,18 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 	}
 
 	if (dlg.ShowModal() != wxID_OK)
-		return;
+		return CServerPath();
 
 	newPath = path;
 	if (!newPath.ChangePath(dlg.GetValue()))
 	{
 		wxBell();
-		return;
+		return CServerPath();
 	}
 
 	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(newPath));
-	CServerPath listed;
-	if (newPath.HasParent())
-	{
-		listed = newPath.GetParent();
-		m_pState->ChangeRemoteDir(listed);
-	}
-
-	CServerPath currentPath;
-	const wxTreeItemId selected = GetSelection();
-	if (selected)
-		currentPath = GetPathFromItem(selected);
-	if (!currentPath.IsEmpty() && currentPath != listed)
-		m_pState->ChangeRemoteDir(currentPath);
+	
+	return newPath;
 }
 
 bool CRemoteTreeView::ListExpand(wxTreeItemId item)
