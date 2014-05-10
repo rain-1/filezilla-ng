@@ -486,7 +486,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 bool CFileZillaApp::LoadResourceFiles()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::LoadResourceFiles"));
-	m_resourceDir = GetDataDir(_T("/resources/menus.xrc"));
+	m_resourceDir = GetDataDir(_T("/resources/xrc/menus.xrc"));
 
 	wxImage::AddHandler(new wxPNGHandler());
 
@@ -541,7 +541,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	resourceDir.Replace(_T(":"), _T("%3A"));
 	resourceDir.Replace(_T("#"), _T("%23"));
 #endif
-	pResource->Load(resourceDir + _T("*.xrc"));
+	pResource->Load(resourceDir + _T("xrc/*.xrc"));
 
 	return true;
 }
