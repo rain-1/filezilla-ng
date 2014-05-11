@@ -66,7 +66,7 @@ struct fast_equal
 	bool operator()(wxString const& lhs, wxString const& rhs) const
 	{
 		// wxString is CoW, yet it doesn't even do this fast pointer
-		// comparison in it's less and/or equal operator(s).
+		// comparison in its less and/or equal operator(s).
 		return lhs.c_str() == rhs.c_str() || lhs == rhs;
 	}
 };
@@ -130,7 +130,6 @@ void Coalesce(wxString& s)
 			lru_.pop_front();
 		}
 
-		tree::iterator it = tree_.insert(std::make_pair(s, backref_holder())).first;
 		lru_.push_back(it);
 		it->second.b_ = new backref(--lru_.end());
 	}
