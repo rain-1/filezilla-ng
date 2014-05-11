@@ -8,22 +8,19 @@
 class CServerPathData
 {
 public:
-	CServerPathData();
-	CServerPathData(const CServerPathData& v);
 	std::deque<wxString> m_segments;
 	wxString m_prefix;
 
 	bool operator==(const CServerPathData& cmp) const;
 };
 
-class CServerPath
+class CServerPath final
 {
 public:
 	CServerPath();
-	CServerPath(wxString path, ServerType type = DEFAULT);
+	explicit CServerPath(wxString const& path, ServerType type = DEFAULT);
 	CServerPath(const CServerPath &path, wxString subdir); // Ignores parent on absolute subdir
 	CServerPath(const CServerPath &path);
-	virtual ~CServerPath();
 
 	bool IsEmpty() const { return m_bEmpty; };
 	void Clear();
