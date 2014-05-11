@@ -1629,12 +1629,12 @@ CServerPath CRemoteListView::MenuMkdir()
 	if (!m_pDirectoryListing || !m_pState->IsRemoteIdle())
 	{
 		wxBell();
-		return _T("");
+		return CServerPath();
 	}
 
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
-		return _T("");
+		return CServerPath();
 
 	CServerPath path = m_pDirectoryListing->path;
 
@@ -1656,20 +1656,20 @@ CServerPath CRemoteListView::MenuMkdir()
 	const CServerPath oldPath = m_pDirectoryListing->path;
 
 	if (dlg.ShowModal() != wxID_OK)
-		return _T("");
+		return CServerPath();
 
 	if (!m_pDirectoryListing || oldPath != m_pDirectoryListing->path ||
 		!m_pState->IsRemoteIdle())
 	{
 		wxBell();
-		return _T("");
+		return CServerPath();
 	}
 
 	path = m_pDirectoryListing->path;
 	if (!path.ChangePath(dlg.GetValue()))
 	{
 		wxBell();
-		return _T("");
+		return CServerPath();
 	}
 
 	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(path));
