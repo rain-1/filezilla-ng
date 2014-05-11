@@ -125,7 +125,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabels()
 		}
 
 		wxString const& drive = *it;
-		if( drive[0] == 'a' || drive[0] == 'A' && drive_a == drives.end() ) {
+		if( (drive[0] == 'a' || drive[0] == 'A') && drive_a == drives.end() ) {
 			// Defer processing of A:, most commonly the slowest of all drives.
 			drive_a = it;
 		}
