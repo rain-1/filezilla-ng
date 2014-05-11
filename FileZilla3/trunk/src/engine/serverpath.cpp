@@ -30,16 +30,6 @@ static const CServerTypeTraits traits[SERVERTYPE_MAX] = {
 	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  }  // Cygwin is like Unix but has optional prefix of form "//server"
 };
 
-CServerPathData::CServerPathData()
-{
-}
-
-CServerPathData::CServerPathData(const CServerPathData& v)
-	: m_segments(v.m_segments)
-	, m_prefix(v.m_prefix)
-{
-}
-
 bool CServerPathData::operator==(const CServerPathData& cmp) const
 {
 	if (m_prefix != cmp.m_prefix)
@@ -76,14 +66,10 @@ CServerPath::CServerPath(const CServerPath &path)
 {
 }
 
-CServerPath::CServerPath(wxString path, ServerType type /*=DEFAULT*/)
+CServerPath::CServerPath(wxString const& path, ServerType type /*=DEFAULT*/)
 	: m_type(type)
 {
 	SetPath(path);
-}
-
-CServerPath::~CServerPath()
-{
 }
 
 void CServerPath::Clear()
