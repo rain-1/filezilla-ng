@@ -62,10 +62,10 @@ XGETTEXT_ARGS=-C -k_ -kwxGetTranslation -kwxTRANSLATE -kwxPLURAL:1,2 -s -j
 # generate resources.h from the xrc files. We have to do this since
 # xgettext cannot handle xrc files. So export all translatable strings from
 # the resource files into resources.h using wxrc.
-resources.h: $(srcdir)/../src/interface/resources/*.xrc
+resources.h: $(srcdir)/../src/interface/resources/xrc/*.xrc
 	@if [ -f $@~ ]; then rm $@~; fi
 
-	@WXRC@ -g -e $(srcdir)/../src/interface/resources/*.xrc > "$@~" || exit 1
+	@WXRC@ -g -e $(srcdir)/../src/interface/resources/xrc/*.xrc > "$@~" || exit 1
 
 # strip strings not marked for translation (enclosed in <>)
 	cat $@~ | sed "s/_(\"<.*>\")\;//" > $@~~ || exit 1
