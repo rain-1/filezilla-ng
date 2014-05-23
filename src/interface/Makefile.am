@@ -1,5 +1,4 @@
 SUBDIRS = resources .
-INCLUDES = -I$(srcdir)/../include
 #########################################################################
 # APPLICATION SECTION
 #########################################################################
@@ -241,7 +240,8 @@ endif
 
 filezilla_DEPENDENCIES = ../engine/libengine.a
 
-filezilla_CPPFLAGS = $(WX_CPPFLAGS)
+filezilla_CPPFLAGS = -I$(srcdir)/../include
+filezilla_CPPFLAGS += $(WX_CPPFLAGS)
 filezilla_CXXFLAGS = $(WX_CXXFLAGS_ONLY)
 filezilla_CFLAGS = $(WX_CFLAGS_ONLY)
 

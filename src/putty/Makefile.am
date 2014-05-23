@@ -49,7 +49,7 @@ if USE_RESOURCEFILE
   RESOURCEFILE = windows/psftp.o
 endif
 
-INCLUDES = -I$(srcdir)/$(FRONTEND) -I../../config.h
+AM_CPPFLAGS = -I$(srcdir)/$(FRONTEND) -I../../config.h
 
 fzsftp_LDADD = libfzputtycommon.a
 

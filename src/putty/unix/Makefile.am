@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libfzsftp_ux.a libfzputtycommon_ux.a
 
-INCLUDES = -I$(srcdir)/.. -I../../include
+AM_CPPFLAGS = -I$(srcdir)/.. -I../../include
 
 libfzputtycommon_ux_a_SOURCES = uxcons.c \
 			     uxmisc.c \
