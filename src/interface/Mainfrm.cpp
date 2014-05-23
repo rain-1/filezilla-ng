@@ -1842,7 +1842,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		wxMenu* m = 0;
 		wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId(), &m);
 		if( pItem && m ) {
-			for( int i = 0; i != m_pMenuBar->GetMenuCount(); ++i ) {
+			for( size_t i = 0; i != m_pMenuBar->GetMenuCount(); ++i ) {
 				if( m_pMenuBar->GetMenu(i) == m ) {
 					m_pMenuBar->Remove(i);
 					delete m;

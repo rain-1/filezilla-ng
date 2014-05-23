@@ -331,6 +331,8 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 #ifdef __WXDEBUG__
 		wxString unwrapped = UnwrapText(text);
 		wxASSERT(original == unwrapped || containsURL);
+#else
+	(void)containsURL;
 #endif
 
 	return true;
