@@ -1,6 +1,6 @@
 noinst_LIBRARIES = libfzsftp_win.a libfzputtycommon_win.a
 
-INCLUDES = -I$(srcdir)/..
+AM_CPPFLAGS = -I$(srcdir)/..
 
 libfzputtycommon_win_a_CFLAGS = $(AM_CFLAGS) \
 				-D_WINDOWS -D_WIN32_IE=0x0500 -DWINVER=0x0500 -D_WIN32_WINDOWS=0x0410 -D_WIN32_WINNT=0x0500 -DSECURITY_WIN32

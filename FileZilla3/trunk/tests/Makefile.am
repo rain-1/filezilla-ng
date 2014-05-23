@@ -1,8 +1,5 @@
 # Rules for the test code (use `make check` to execute)
 
-INCLUDES = -I$(top_srcdir)/src/include
-INCLUDES += -I$(top_srcdir)/src/engine
-
 TESTS = test
 check_PROGRAMS = $(TESTS)
 
@@ -12,7 +9,9 @@ test_SOURCES =  test.cpp \
 		localpathtest.cpp \
 		serverpathtest.cpp
 
-test_CPPFLAGS = $(WX_CPPFLAGS)
+test_CPPFLAGS = -I$(top_srcdir)/src/include
+test_CPPFLAGS += -I$(top_srcdir)/src/engine
+test_CPPFLAGS += $(WX_CPPFLAGS)
 test_CXXFLAGS = $(WX_CXXFLAGS_ONLY) $(CPPUNIT_CFLAGS)
 
 test_LDFLAGS = $(CPPUNIT_LIBS)
