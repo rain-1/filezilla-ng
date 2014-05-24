@@ -188,7 +188,7 @@ protected:
 	// Called by ResetOperation if there's a queued operation
 	virtual int ParseSubcommandResult(int prevResult);
 
-	wxString ConvertDomainName(wxString domain);
+	wxString ConvertDomainName(wxString const& domain);
 
 	int CheckOverwriteFile();
 
