@@ -6,12 +6,7 @@
 #include <gnutls/x509.h>
 #include <errno.h>
 
-#if GNUTLS_VERSION_NUMBER >= 0x030100
 char const ciphers[] = "SECURE256:+SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
-#else
-// Versions before 3.1.0 cannot combine level keywords
-char const ciphers[] = "SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
-#endif
 
 //#define TLSDEBUG 1
 #if TLSDEBUG
@@ -141,9 +136,6 @@ bool CTlsSocket::InitSession()
 	gnutls_transport_set_push_function(m_session, PushFunction);
 	gnutls_transport_set_pull_function(m_session, PullFunction);
 	gnutls_transport_set_ptr(m_session, (gnutls_transport_ptr_t)this);
-#if GNUTLS_VERSION_NUMBER < 0x020c00
-	gnutls_transport_set_lowat(m_session, 0);
-#endif
 
 	return true;
 }
@@ -1231,19 +1223,15 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 
 	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());
 
-#if GNUTLS_VERSION_NUMBER >= 0x030009
 	gnutls_priority_t pcache;
 	const char *err = 0;
 	int ret = gnutls_priority_init(&pcache, priority.mb_str(), &err);
-	if (ret < 0)
-	{
+	if (ret < 0) {
 		list += wxString::Format(_T("gnutls_priority_init failed with code %d: %s"), ret, wxString::FromUTF8(err ? err : "").c_str());
 		return list;
 	}
-	else
-	{
-		for (size_t i = 0; ; i++)
-		{
+	else {
+		for (size_t i = 0; ; i++) {
 			unsigned int idx;
 			ret = gnutls_priority_get_cipher_suite_index(pcache, i, &idx);
 			if (ret == GNUTLS_E_REQUESTED_DATA_NOT_AVAILABLE)
@@ -1266,9 +1254,6 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 			}
 		}
 	}
-#else
-	list += _T("Unknown\n");
-#endif
 
 	return list;
 }
