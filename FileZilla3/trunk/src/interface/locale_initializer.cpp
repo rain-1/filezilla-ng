@@ -7,6 +7,7 @@
 #endif
 #include <string>
 #include <locale.h>
+#include <sys/stat.h>
 
 #ifdef ENABLE_BINRELOC
 	#define BR_PTHREADS 0
@@ -165,23 +166,22 @@ std::string CInitializer::GetDefaultsXmlFile()
 	if (!file.empty())
 		return file;
 
-	std::string home = mkstr(getenv("HOME"));
-	if (!home.empty())
-	{
-		if (home[home.size() - 1] != '/')
-			home += '/';
-		home += ".filezilla/fzdefaults.xml";
+	file = GetUnadjustedSettingsDir() + "fzdefaults.xml";
 
-		struct stat buf;
-		if (!stat(home.c_str(), &buf))
-			return home;
+	{
+		struct stat buf{};
+		if (!stat(file.c_str(), &buf)) {
+			return file;
+		}
 	}
 
 	file = "/etc/filezilla/fzdefaults.xml";
 
-	struct stat buf;
-	if (!stat(file.c_str(), &buf))
-		return file;
+	{
+		struct stat buf{};
+		if (!stat(file.c_str(), &buf))
+			return file;
+	}
 
 
 	file = CheckPathForDefaults(mkstr(SELFPATH), 2, "share/filezilla/fzdefaults.xml");
@@ -288,7 +288,55 @@ std::string CInitializer::GetSettingFromFile(std::string file, const std::string
 	return "";
 }
 
-std::string CInitializer::GetSettingsDir()
+namespace {
+std::string TryDirectory( std::string const& env, std::string const& suffix, bool check_exists )
+{
+	std::string path = mkstr(getenv(env.c_str()));
+	if( !path.empty() && path.front() == '/' ) {
+		if( path.back() != '/' ) {
+			path.push_back('/');
+		}
+
+		path += suffix;
+
+		if( check_exists ) {
+			struct stat buf{};
+			int res = stat(path.c_str(), &buf);
+			if( res || !S_ISDIR(buf.st_mode) ) {
+				path.clear();
+			}
+		}
+	}
+	else {
+		path.clear();
+	}
+	return path;
+}
+}
+
+std::string CInitializer::GetUnadjustedSettingsDir()
+{
+	std::string cfg = TryDirectory("XDG_CONFIG_HOME", "filezilla/", true);
+	if( cfg.empty() ) {
+		cfg = TryDirectory("HOME", ".filezilla/", true);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory("HOME", ".config/filezilla/", true);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory("XDG_CONFIG_HOME", "filezilla/", false);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory("HOME", ".config/filezilla/", false);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory("HOME", ".filezilla/", false);
+	}
+
+	return cfg;
+}
+
+std::string CInitializer::GetAdjustedSettingsDir()
 {
 	std::string defaults = GetDefaultsXmlFile();
 	if (!defaults.empty())
@@ -298,20 +346,12 @@ std::string CInitializer::GetSettingsDir()
 			return dir;
 	}
 
-	std::string home = mkstr(getenv("HOME"));
-	if (home.empty())
-		 return "";
-
-	if (home[home.size() - 1] != '/')
-		home += '/';
-	home += ".filezilla/";
-
-	return home;
+	return GetUnadjustedSettingsDir();
 }
 
 std::string CInitializer::GetLocaleOption()
 {
-	const std::string dir = GetSettingsDir();
+	const std::string dir = GetAdjustedSettingsDir();
 	if (dir.empty())
 		return "";
 

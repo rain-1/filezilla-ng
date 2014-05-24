@@ -14,7 +14,8 @@ public:
 	static bool error;
 
 protected:
-	static std::string GetSettingsDir();
+	static std::string GetAdjustedSettingsDir(); // Returns settings from fzdefaults.xml if it exists, otherwise calls GetSettingsDir
+	static std::string GetUnadjustedSettingsDir(); // Returns standard settings dir as if there were no fzdefaults.xml
 	static std::string ReadSettingsFromDefaults(std::string file);
 	static std::string GetSettingFromFile(std::string file, const std::string& name);
 	static std::string GetDefaultsXmlFile();

@@ -780,6 +780,75 @@ void COptions::SaveIfNeeded()
 	Save();
 }
 
+namespace {
+wxString TryDirectory( wxString path, wxString const& suffix, bool check_exists )
+{
+	if( !path.empty() && path[0] == '/' ) {
+		if( path[path.size() - 1] != '/' ) {
+			path += '/';
+		}
+
+		path += suffix;
+
+		if( check_exists ) {
+			if( !wxFileName::DirExists(path) ) {
+				path.clear();
+			}
+		}
+	}
+	else {
+		path.clear();
+	}
+	return path;
+}
+
+wxString GetEnv(wxString const& env)
+{
+	wxString ret;
+	if( !wxGetEnv(env, &ret) ) {
+		ret.clear();
+	}
+	return ret;
+}
+}
+
+wxString COptions::GetUnadjustedSettingsDir()
+{
+	wxFileName fn;
+#ifdef __WXMSW__
+	wxChar buffer[MAX_PATH * 2 + 1];
+
+	if (SUCCEEDED(SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
+		fn = wxFileName(buffer, _T(""));
+		fn.AppendDir(_T("FileZilla"));
+	}
+	else {
+		// Fall back to directory where the executable is
+		if (GetModuleFileName(0, buffer, MAX_PATH * 2))
+			fn = buffer;
+	}
+#else
+	wxString cfg = TryDirectory(GetEnv(_T("XDG_CONFIG_HOME")), _T("filezilla/"), true);
+	if( cfg.empty() ) {
+		cfg = TryDirectory(wxGetHomeDir(), _T(".config/filezilla/"), true);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory(wxGetHomeDir(), _T(".filezilla/"), true);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory(GetEnv(_T("XDG_CONFIG_HOME")), _T("filezilla/"), false);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory(wxGetHomeDir(), _T(".config/filezilla/"), false);
+	}
+	if( cfg.empty() ) {
+		cfg = TryDirectory(wxGetHomeDir(), _T(".filezilla/"), false);
+	}
+	fn = wxFileName(cfg, _T(""));
+#endif
+	return fn.GetPath();
+}
+
 void COptions::InitSettingsDir()
 {
 	wxFileName fn;
@@ -812,29 +881,12 @@ void COptions::InitSettingsDir()
 		fn = wxFileName(dir, _T(""));
 		fn.Normalize(wxPATH_NORM_ALL, wxGetApp().GetDefaultsDir());
 	}
-	else
-	{
-#ifdef __WXMSW__
-		wxChar buffer[MAX_PATH * 2 + 1];
-
-		if (SUCCEEDED(SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer)))
-		{
-			fn = wxFileName(buffer, _T(""));
-			fn.AppendDir(_T("FileZilla"));
-		}
-		else
-		{
-			// Fall back to directory where the executable is
-			if (GetModuleFileName(0, buffer, MAX_PATH * 2))
-				fn = buffer;
-		}
-#else
-		fn = wxFileName(wxGetHomeDir(), _T(""));
-		fn.AppendDir(_T(".filezilla"));
-#endif
+	else {
+		fn = wxFileName(GetUnadjustedSettingsDir(), _T(""));
 	}
+
 	if (!fn.DirExists())
-		wxMkdir(fn.GetPath(), 0700);
+		wxFileName::Mkdir( fn.GetPath(), 0700, wxPATH_MKDIR_FULL );
 	SetOption(OPTION_DEFAULT_SETTINGSDIR, fn.GetPath());
 }
 
