@@ -277,6 +277,7 @@ void SHA512_Final(SHA512_State *s, unsigned char *digest) {
     }
 }
 
+#ifndef SHA512_STANDALONE
 void SHA512_Simple(const void *p, int len, unsigned char *output) {
     SHA512_State s;
 
@@ -284,6 +285,7 @@ void SHA512_Simple(const void *p, int len, unsigned char *output) {
     SHA512_Bytes(&s, p, len);
     SHA512_Final(&s, output);
 }
+#endif
 
 #ifdef TEST
 
