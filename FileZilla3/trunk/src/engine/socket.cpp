@@ -44,62 +44,6 @@ union sockaddr_u
 	struct sockaddr_in6 in6;
 };
 
-// --------------------------
-// Windows 2000 compatibility
-// --------------------------
-#ifdef __WXMSW__
-
-// Stupid Win2K has no getaddrinfo
-// Apparently it is too hard for the richest company in the
-// world to add this simple function with a service pack...
-
-extern "C"
-{
-	typedef int (WINAPI *t_getaddrinfo)(const char *nodename, const char *servname,
-						const struct addrinfo *hints, struct addrinfo **res);
-	typedef void (WINAPI *t_freeaddrinfo)(struct addrinfo* ai);
-	typedef int (WINAPI *t_getnameinfo)(const struct sockaddr* sa, socklen_t salen,
-						char* host, DWORD hostlen, char* serv, DWORD servlen, int flags);
-}
-
-static t_getaddrinfo p_getaddrinfo = 0;
-static t_freeaddrinfo p_freeaddrinfo = 0;
-static t_getnameinfo p_getnameinfo = 0;
-
-class CGetAddrinfoLoader
-{
-public:
-	CGetAddrinfoLoader()
-	{
-		HMODULE m_hDll = LoadLibrary(_T("ws2_32.dll"));
-		if (m_hDll)
-		{
-			p_getaddrinfo = (t_getaddrinfo)GetProcAddress(m_hDll, "getaddrinfo");
-			if (p_getaddrinfo)
-				p_freeaddrinfo = (t_freeaddrinfo)GetProcAddress(m_hDll, "freeaddrinfo");
-			p_getnameinfo = (t_getnameinfo)GetProcAddress(m_hDll, "getnameinfo");
-		}
-	}
-
-	~CGetAddrinfoLoader()
-	{
-		if (m_hDll)
-			FreeLibrary(m_hDll);
-	}
-protected:
-	HMODULE m_hDll;
-};
-static CGetAddrinfoLoader addrinfo_loader;
-
-#define getaddrinfo p_getaddrinfo
-#define freeaddrinfo p_freeaddrinfo
-#define getnameinfo p_getnameinfo
-
-#endif //__WXMSW__
-// ------------------------------
-// End Windows 2000 compatibility
-// ------------------------------
-
 #define WAIT_CONNECT 0x01
 #define WAIT_READ	 0x02
 #define WAIT_WRITE	 0x04
@@ -621,63 +565,6 @@ protected:
 		hints.ai_family = m_pSocket->m_family;
 		hints.ai_socktype = SOCK_STREAM;
 
-#ifdef __WXMSW__
-		if (!getaddrinfo)
-		{
-			// Win2K fallback
-			int port = atoi(pPort);
-
-			struct hostent* h = gethostbyname(pHost);
-
-			delete [] pHost;
-			delete [] pPort;
-
-			if (!Lock())
-			{
-				if (m_pSocket)
-					m_pSocket->m_state = CSocket::closed;
-				return false;
-			}
-
-			if (!h)
-			{
-				if (m_pSocket->m_pEvtHandler)
-				{
-					int res = ConvertMSWErrorCode(WSAGetLastError());
-					CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, CSocketEvent::connection, res);
-					CSocketEventDispatcher::Get().SendEvent(evt);
-				}
-				m_pSocket->m_state = CSocket::closed;
-				return false;
-			}
-
-			struct sockaddr_in addr_in = {0};
-			addr_in.sin_family = AF_INET;
-			addr_in.sin_addr = *((struct in_addr*)h->h_addr_list[0]);
-			addr_in.sin_port = htons(port);
-
-			struct addrinfo addr = {0};
-			addr.ai_family = AF_INET;
-			addr.ai_socktype = SOCK_STREAM;
-			addr.ai_addr = (struct sockaddr*)&addr_in;
-			addr.ai_addrlen = sizeof(struct sockaddr_in);
-
-			int res = TryConnectHost(&addr);
-			if (res == 1)
-				return true;
-
-			if (m_pSocket)
-			{
-				if (!res && m_pSocket->m_pEvtHandler)
-				{
-					CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, CSocketEvent::connection, ECONNABORTED);
-					CSocketEventDispatcher::Get().SendEvent(evt);
-				}
-				m_pSocket->m_state = CSocket::closed;
-			}
-			return false;
-		}
-#endif
 		int res = getaddrinfo(pHost, pPort, &hints, &addressList);
 
 		delete [] pHost;
@@ -1587,24 +1474,6 @@ wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, boo
 	char hostbuf[NI_MAXHOST];
 	char portbuf[NI_MAXSERV];
 
-#ifdef __WXMSW__
-	if (!getnameinfo)
-	{
-		// Win2K fallback
-		if (addr->sa_family != AF_INET)
-			return _T("");
-		char* s = inet_ntoa(((struct sockaddr_in*)addr)->sin_addr);
-		if (!s)
-			return _T("");
-
-		wxString host = wxString(s, wxConvLibc);
-		if (!with_port)
-			return host;
-
-		return host + wxString::Format(_T(":%d"), (int)ntohs(((struct sockaddr_in*)addr)->sin_port));
-	}
-#endif
-
 	int res = getnameinfo(addr, addr_len, hostbuf, NI_MAXHOST, portbuf, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
 	if (res) // Should never fail
 		return _T("");
@@ -1696,31 +1565,6 @@ int CSocket::Listen(enum address_family family, int port /*=0*/)
 		return EINVAL;
 	}
 
-#ifdef __WXMSW__
-	if (!getaddrinfo)
-	{
-		m_fd = socket(AF_INET, SOCK_STREAM, 0);
-		if (m_fd == -1)
-			return ConvertMSWErrorCode(WSAGetLastError());
-
-		SetNonblocking(m_fd);
-
-		struct sockaddr_in addr = {0};
-		addr.sin_family = AF_INET;
-		addr.sin_port = htons(port);
-
-		int res = bind(m_fd, (sockaddr *)&addr, sizeof(addr));
-		if (res)
-		{
-			res = WSAGetLastError();
-			closesocket(m_fd);
-			m_fd = -1;
-
-			return ConvertMSWErrorCode(res);
-		}
-	}
-	else
-#endif
 	{
 		struct addrinfo hints = {0};
 		hints.ai_family = m_family;
