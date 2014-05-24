@@ -23,19 +23,19 @@
     #define _WIN32_IE 0x0600
   #endif
 
-  // Win XP or higher
+  // Windows Vista or higher
   #ifndef _WIN32_WINNT
-    #define _WIN32_WINNT 0x0501
-  #elif _WIN32_WINNT <= 0x0501
+    #define _WIN32_WINNT 0x0600
+  #elif _WIN32_WINNT < 0x0600
     #undef _WIN32_WINNT
-    #define _WIN32_WINNT 0x0501
+    #define _WIN32_WINNT 0x0600
   #endif
 
-  // Win XP or higher
+  // Windows Vista or higher
   #ifndef WINVER
-    #define WINVER 0x0501
-  #elif WINVER <= 0x0501
+    #define WINVER 0x0600
+  #elif WINVER < 0x0600
     #undef WINVER
-    #define WINVER 0x0501
+    #define WINVER 0x0600
   #endif
 #endif

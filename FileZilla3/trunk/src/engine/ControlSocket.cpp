@@ -11,10 +11,12 @@
 #include <wx/file.h>
 #include <wx/filename.h>
 
+#ifndef __WXMSW__
 #include <idna.h>
 extern "C" {
 #include <idn-free.h>
 }
+#endif
 
 #include <errno.h>
 
@@ -256,8 +258,26 @@ int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 	return nErrorCode;
 }
 
-wxString CControlSocket::ConvertDomainName(wxString domain)
+wxString CControlSocket::ConvertDomainName(wxString const& domain)
 {
+#ifdef __WXMSW__
+	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain, domain.size() + 1, 0, 0);
+	if( !len ) {
+		LogMessage(::Debug_Warning, _T("Could not convert domain name"));
+		return domain;
+	}
+
+	wchar_t* output = new wchar_t[len];
+	int res = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain, domain.size() + 1, output, len);
+	if( !res ) {
+		LogMessage(::Debug_Warning, _T("Could not convert domain name"));
+		return domain;
+	}
+	
+	wxString ret(output);
+	delete [] output;
+	return ret;
+#else
 	const wxWCharBuffer buffer = wxConvCurrent->cWX2WC(domain);
 
 	int len = 0;
@@ -280,6 +300,7 @@ wxString CControlSocket::ConvertDomainName(wxString domain)
 	wxString result = wxConvCurrent->cMB2WX(output);
 	idn_free(output);
 	return result;
+#endif
 }
 
 void CControlSocket::Cancel()
