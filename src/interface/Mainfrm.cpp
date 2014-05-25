@@ -2841,27 +2841,37 @@ bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path 
 	if (!pState)
 		return false;
 
-	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
-	{
-		wxDialogEx dlg;
-		if (dlg.Load(this, _T("ID_ALREADYCONNECTED")))
-		{
-			if (COptions::Get()->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE) != 0)
+	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
+		int action = COptions::Get()->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE);
+		if( action < 2 ) {
+			wxDialogEx dlg;
+			if (!dlg.Load(this, _T("ID_ALREADYCONNECTED")))
+				return false;
+
+			if (action != 0)
 				XRCCTRL(dlg, "ID_OLDTAB", wxRadioButton)->SetValue(true);
 			else
 				XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->SetValue(true);
-
+			
 			if (dlg.ShowModal() != wxID_OK)
 				return false;
 
-			if (XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->GetValue())
-			{
-				m_pContextControl->CreateTab();
-				pState = CContextManager::Get()->GetCurrentContext();
-				COptions::Get()->SetOption(OPTION_ALREADYCONNECTED_CHOICE, 0);
+			if (XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->GetValue()) {
+				action = 0;
 			}
-			else
-				COptions::Get()->SetOption(OPTION_ALREADYCONNECTED_CHOICE, 1);
+			else {
+				action = 1;
+			}
+
+			if( XRCCTRL(dlg, "ID_REMEMBER", wxCheckBox)->IsChecked() ) {
+				action |= 2;
+			}
+			COptions::Get()->SetOption(OPTION_ALREADYCONNECTED_CHOICE, action);
+		}
+
+		if( !(action & 1) ) {
+			m_pContextControl->CreateTab();
+			pState = CContextManager::Get()->GetCurrentContext();
 		}
 	}
 
