@@ -317,8 +317,8 @@ FunctionEnd
 
 Function .onInit
 
-  ${Unless} ${AtLeastWin2000}
-    MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows XP and may not work correctly on your system.$\nDo you really want to continue with the installation?" /SD IDNO IDYES installonoldwindows
+  ${Unless} ${AtLeastWinVista}
+    MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows Vista and may not work correctly on your system.$\nDo you really want to continue with the installation?" /SD IDNO IDYES installonoldwindows
     Abort
 installonoldwindows:
   ${EndUnless}
