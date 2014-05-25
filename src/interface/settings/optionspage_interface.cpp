@@ -42,6 +42,14 @@ bool COptionsPageInterface::LoadPage()
 
 	SetCheckFromOption(XRCID("ID_INTERFACE_SITEMANAGER_ON_STARTUP"), OPTION_INTERFACE_SITEMANAGER_ON_STARTUP, failure);
 
+	int action = m_pOptions->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE);
+	if( action & 2 ) {
+		action = 1 + (action & 1);
+	}
+	else {
+		action = 0;
+	}
+	SetChoice(XRCID("ID_NEWCONN_ACTION"), action, failure);
 	return !failure;
 }
 
@@ -64,6 +72,15 @@ bool COptionsPageInterface::SavePage()
 		SetOptionFromCheck(XRCID("ID_DONT_SAVE_PASSWORDS"), OPTION_DEFAULT_KIOSKMODE);
 
 	SetOptionFromCheck(XRCID("ID_INTERFACE_SITEMANAGER_ON_STARTUP"), OPTION_INTERFACE_SITEMANAGER_ON_STARTUP);
+
+	int action = GetChoice(XRCID("ID_NEWCONN_ACTION"));
+	if( !action ) {
+		action = m_pOptions->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE) & 1;
+	}
+	else {
+		action += 1;
+	}
+	m_pOptions->SetOption(OPTION_ALREADYCONNECTED_CHOICE, action);
 
 	return true;
 }
