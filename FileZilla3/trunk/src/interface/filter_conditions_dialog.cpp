@@ -804,7 +804,7 @@ void CFilterConditionsDialog::OnNavigationKeyEvent(wxNavigationKeyEvent& event)
 			{
 				target = m_filterControls[i].pValue;
 				if (!target)
-					m_filterControls[i].pSet;
+					target = m_filterControls[i].pSet;
 				break;
 			}
 			if (m_filterControls[i].pSet == source || m_filterControls[i].pValue == source)
@@ -855,7 +855,7 @@ void CFilterConditionsDialog::OnNavigationKeyEvent(wxNavigationKeyEvent& event)
 				{
 					target = m_filterControls[i].pValue;
 					if (!target)
-						m_filterControls[i].pSet;
+						target = m_filterControls[i].pSet;
 					break;
 				}
 			}

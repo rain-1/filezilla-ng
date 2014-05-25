@@ -2731,7 +2731,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 					wxBell();
 					continue;
 				}
-				dlg.SetLabel(XRCID("ID_FILENAME"), entry.name);
+				dlg.SetChildLabel(XRCID("ID_FILENAME"), entry.name);
 				if (dlg.ShowModal() != wxID_OK)
 				{
 					wxBell();

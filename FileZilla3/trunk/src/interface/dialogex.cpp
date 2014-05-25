@@ -31,7 +31,7 @@ bool wxDialogEx::Load(wxWindow* pParent, const wxString& name)
 	return true;
 }
 
-bool wxDialogEx::SetLabel(int id, const wxString& label, unsigned long maxLength /*=0*/)
+bool wxDialogEx::SetChildLabel(int id, const wxString& label, unsigned long maxLength /*=0*/)
 {
 	wxStaticText* pText = wxDynamicCast(FindWindow(id), wxStaticText);
 	if (!pText)
@@ -49,7 +49,7 @@ bool wxDialogEx::SetLabel(int id, const wxString& label, unsigned long maxLength
 	return true;
 }
 
-wxString wxDialogEx::GetLabel(int id)
+wxString wxDialogEx::GetChildLabel(int id)
 {
 	wxStaticText* pText = wxDynamicCast(FindWindow(id), wxStaticText);
 	if (!pText)

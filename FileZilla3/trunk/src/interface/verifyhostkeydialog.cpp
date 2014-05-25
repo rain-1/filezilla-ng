@@ -25,8 +25,8 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 	dlg.WrapText(&dlg, XRCID("ID_DESC"), 400);
 
 	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort());
-	dlg.SetLabel(XRCID("ID_HOST"), host);
-	dlg.SetLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
+	dlg.SetChildLabel(XRCID("ID_HOST"), host);
+	dlg.SetChildLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
 
 	dlg.GetSizer()->Fit(&dlg);
 	dlg.GetSizer()->SetSizeHints(&dlg);

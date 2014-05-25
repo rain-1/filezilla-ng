@@ -2566,10 +2566,8 @@ void CMainFrame::ProcessCommandLine()
 	}	
 	
 	wxString site;
-	if (pCommandLine->HasSwitch(CCommandLine::sitemanager))
-	{
-		if (!COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) != 0)
-		{
+	if (pCommandLine->HasSwitch(CCommandLine::sitemanager)) {
+		if (COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) == 0) {
 			Show();
 			OpenSiteManager();
 		}
