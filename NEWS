@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.1-rc2 (2014-05-25)
+
+- Rebuilt to address a problem with the filenames of the rc1 binaries.
+
 3.8.1-rc1 (2014-05-25)
 
 + MSW: Windows XP and derivatives are no longer supported. Minimum supported operating system is Windows Vista.
