@@ -1336,6 +1336,22 @@
               </object>
               <cols>1</cols>
               <vgap>5</vgap>
+              <object class="spacer"/>
+              <object class="sizeritem">
+                <object class="wxStaticText">
+                  <label>When st&amp;arting a new connection while already connected:</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxChoice" name="ID_NEWCONN_ACTION">
+                  <content>
+                    <item>Ask for action</item>
+                    <item>Connect in new tab</item>
+                    <item>Connect in current tab</item>
+                  </content>
+                  <selection>0</selection>
+                </object>
+              </object>
             </object>
             <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>
             <border>4</border>
@@ -1992,7 +2008,7 @@
                   </content>
                   <selection>1</selection>
                 </object>
-              </object>              
+              </object>
               <object class="spacer">
                 <size>0,10</size>
               </object>
