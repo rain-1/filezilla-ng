@@ -3,7 +3,6 @@ SUBDIRS = 16x16 32x32 cyril blukis lone minimal opencrystal tango
 CLEANFILES = filezilla.o
 
 resourcesdir = $(pkgdatadir)/resources
-
 dist_resources_DATA = \
 	defaultfilters.xml \
 	down.png \
@@ -11,7 +10,10 @@ dist_resources_DATA = \
 	finished.wav \
 	leds.png \
 	theme.xml \
-	up.png \
+	up.png
+
+xrcdir = $(pkgdatadir)/resources/xrc
+dist_xrc_DATA = \
 	xrc/dialogs.xrc \
 	xrc/inputdialog.xrc \
 	xrc/menus.xrc \
@@ -41,7 +43,6 @@ filezilla.o: $(srcdir)/filezilla.rc $(srcdir)/windows_manifest.xml version.rc
 	mv $@~ $@
 endif
 
-
 dist_noinst_DATA = filezilla.rc FileZilla.ico \
 		FileZilla.icns MacInfo.plist.in \
 		version.rc.in windows_manifest.xml
@@ -53,6 +54,10 @@ mac-copy-resources: $(dist_resources_DATA)
 
 	for i in $(dist_resources_DATA); \
 		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources"; \
+	done
+	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/xrc"
+	for i in $(dist_xrc_DATA); \
+		do cp -f "$(srcdir)/$$i" "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/xrc"; \
 	done
 	mkdir -p "$(top_builddir)/FileZilla.app/Contents/SharedSupport/resources/20x20"
 	for i in $(dist_resources20_DATA); \
