@@ -1311,9 +1311,10 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	delete m_pStateEventHandler;
 	m_pStateEventHandler = 0;
 
-	if (!m_pQueueView->Quit())
-	{
-		event.Veto();
+	if (!m_pQueueView->Quit()) {
+		if( event.CanVeto() ) {
+			event.Veto();
+		}
 		return;
 	}
 
@@ -1336,9 +1337,10 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 			res = false;
 	}
 
-	if (!res)
-	{
-		event.Veto();
+	if (!res) {
+		if( event.CanVeto() ) {
+			event.Veto();
+		}
 		return;
 	}
 
