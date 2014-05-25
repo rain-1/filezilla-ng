@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.1-rc3 (2014-05-25)
+
+- Fixed bundling of .xrc resources in non-Windows binaries
+
 3.8.1-rc2 (2014-05-25)
 
 - Rebuilt to address a problem with the filenames of the rc1 binaries.
