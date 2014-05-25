@@ -20,44 +20,44 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	{
 		if (cert.GetActivationTime() > wxDateTime::Now())
 		{
-			pDlg->SetLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().FormatDate().c_str()));
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().FormatDate().c_str()));
 			warning = true;
 		}
 		else
-			pDlg->SetLabel(XRCID("ID_ACTIVATION_TIME"), cert.GetActivationTime().FormatDate());
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), cert.GetActivationTime().FormatDate());
 	}
 	else
 	{
 		warning = true;
-		pDlg->SetLabel(XRCID("ID_ACTIVATION_TIME"), _("Invalid date"));
+		pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), _("Invalid date"));
 	}
 
 	if (cert.GetExpirationTime().IsValid())
 	{
 		if (cert.GetExpirationTime() < wxDateTime::Now())
 		{
-			pDlg->SetLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().FormatDate().c_str()));
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().FormatDate().c_str()));
 			warning = true;
 		}
 		else
-			pDlg->SetLabel(XRCID("ID_EXPIRATION_TIME"), cert.GetExpirationTime().FormatDate());
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), cert.GetExpirationTime().FormatDate());
 	}
 	else
 	{
 		warning = true;
-		pDlg->SetLabel(XRCID("ID_EXPIRATION_TIME"), _("Invalid date"));
+		pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), _("Invalid date"));
 	}
 
 	if (cert.GetSerial() != _T(""))
-		pDlg->SetLabel(XRCID("ID_SERIAL"), cert.GetSerial());
+		pDlg->SetChildLabel(XRCID("ID_SERIAL"), cert.GetSerial());
 	else
-		pDlg->SetLabel(XRCID("ID_SERIAL"), _("None"));
+		pDlg->SetChildLabel(XRCID("ID_SERIAL"), _("None"));
 
-	pDlg->SetLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName().c_str(), cert.GetPkAlgoBits()));
-	pDlg->SetLabel(XRCID("ID_SIGNALGO"), cert.GetSignatureAlgorithm());
+	pDlg->SetChildLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName().c_str(), cert.GetPkAlgoBits()));
+	pDlg->SetChildLabel(XRCID("ID_SIGNALGO"), cert.GetSignatureAlgorithm());
 
-	pDlg->SetLabel(XRCID("ID_FINGERPRINT_MD5"), cert.GetFingerPrintMD5());
-	pDlg->SetLabel(XRCID("ID_FINGERPRINT_SHA1"), cert.GetFingerPrintSHA1());
+	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_MD5"), cert.GetFingerPrintMD5());
+	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_SHA1"), cert.GetFingerPrintSHA1());
 
 	ParseDN(pDlg, cert.GetSubject(), m_pSubjectSizer);
 	ParseDN(pDlg, cert.GetIssuer(), m_pIssuerSizer);
@@ -100,7 +100,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 		pChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(CVerifyCertDialog::OnCertificateChoice), 0, this);
 	}
 
-	m_pDlg->SetLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort()));
+	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort()));
 
 	m_pSubjectSizer = XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->GetContainingSizer();
 	XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->Destroy();
@@ -120,10 +120,10 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 
 	bool warning = DisplayCert(m_pDlg, m_certificates[0]);
 
-	m_pDlg->SetLabel(XRCID("ID_PROTOCOL"), pNotification->GetProtocol());
-	m_pDlg->SetLabel(XRCID("ID_KEYEXCHANGE"), pNotification->GetKeyExchange());
-	m_pDlg->SetLabel(XRCID("ID_CIPHER"), pNotification->GetSessionCipher());
-	m_pDlg->SetLabel(XRCID("ID_MAC"), pNotification->GetSessionMac());
+	m_pDlg->SetChildLabel(XRCID("ID_PROTOCOL"), pNotification->GetProtocol());
+	m_pDlg->SetChildLabel(XRCID("ID_KEYEXCHANGE"), pNotification->GetKeyExchange());
+	m_pDlg->SetChildLabel(XRCID("ID_CIPHER"), pNotification->GetSessionCipher());
+	m_pDlg->SetChildLabel(XRCID("ID_MAC"), pNotification->GetSessionMac());
 
 	if (warning)
 	{

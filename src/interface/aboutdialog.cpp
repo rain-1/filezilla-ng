@@ -25,7 +25,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 	wxString version = CBuildInfo::GetVersion();
 	if (CBuildInfo::GetBuildType() == _T("nightly"))
 		version += _T("-nightly");
-	if (!SetLabel(XRCID("ID_VERSION"), version))
+	if (!SetChildLabel(XRCID("ID_VERSION"), version))
 		return false;
 
 	wxStaticText* pHost = XRCCTRL(*this, "ID_HOST", wxStaticText);
@@ -62,10 +62,10 @@ bool CAboutDialog::Create(wxWindow* parent)
 	else
 		pBuild->SetLabel(build);
 
-	if (!SetLabel(XRCID("ID_BUILDDATE"), CBuildInfo::GetBuildDateString()))
+	if (!SetChildLabel(XRCID("ID_BUILDDATE"), CBuildInfo::GetBuildDateString()))
 		return false;
 
-	if (!SetLabel(XRCID("ID_COMPILEDWITH"), CBuildInfo::GetCompiler(), 200))
+	if (!SetChildLabel(XRCID("ID_COMPILEDWITH"), CBuildInfo::GetCompiler(), 200))
 		return false;
 
 	wxStaticText* pCompilerFlags = XRCCTRL(*this, "ID_CFLAGS", wxStaticText);

@@ -714,7 +714,7 @@ int CEditHandler::DisplayChangeNotification(CEditHandler::fileType type, std::li
 	else
 		XRCCTRL(dlg, "ID_DESC_UPLOAD_REMOTE", wxStaticText)->Hide();
 
-	dlg.SetLabel(XRCID("ID_FILENAME"), iter->name);
+	dlg.SetChildLabel(XRCID("ID_FILENAME"), iter->name);
 
 	if (type == local)
 	{
@@ -734,10 +734,10 @@ int CEditHandler::DisplayChangeNotification(CEditHandler::fileType type, std::li
 			XRCCTRL(dlg, "ID_OPENEDAS", wxStaticText)->Hide();
 		}
 		else
-			dlg.SetLabel(XRCID("ID_OPENEDAS"), file);
+			dlg.SetChildLabel(XRCID("ID_OPENEDAS"), file);
 	}
-	dlg.SetLabel(XRCID("ID_SERVER"), iter->server.FormatServer());
-	dlg.SetLabel(XRCID("ID_REMOTEPATH"), iter->remotePath.GetPath());
+	dlg.SetChildLabel(XRCID("ID_SERVER"), iter->server.FormatServer());
+	dlg.SetChildLabel(XRCID("ID_REMOTEPATH"), iter->remotePath.GetPath());
 
 	dlg.GetSizer()->Fit(&dlg);
 

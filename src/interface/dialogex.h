@@ -8,8 +8,8 @@ class wxDialogEx : public wxDialog, public CWrapEngine
 public:
 	bool Load(wxWindow *pParent, const wxString& name);
 
-	bool SetLabel(int id, const wxString& label, unsigned long maxLength = 0);
-	wxString GetLabel(int id);
+	bool SetChildLabel(int id, const wxString& label, unsigned long maxLength = 0);
+	wxString GetChildLabel(int id);
 
 	virtual int ShowModal();
 
