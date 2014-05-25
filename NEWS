@@ -10,6 +10,19 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.1-rc1 (2014-05-25)
+
++ MSW: Windows XP and derivatives are no longer supported. Minimum supported operating system is Windows Vista.
++ OS X: The old PowerPC architecture is no longer supported
++ Added checkbox to remember the selected action of the "Already connected" dialog
++ Added context menu item in file lists to create and enter a new directory
++ *nix: FileZilla now honors the XDG_CONFIG_HOME environment variable
++ Small usability improvement for setting number of concurrent transfers in the settings dialog
+- Additional fixes to the focus handling in directory listings
+- Fixed compatibility with FTP servers sending French directory listings
+- *nix: Fixed DBus integration
+- MSW: Fixed installation error when auto-uninstalling in order to update to a new version.
+
 3.8.0 (2014-03-28)
 
 + OS X: Implemented the reboot, shutdown and suspend queue completion actions
