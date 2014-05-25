@@ -4569,18 +4569,26 @@
               </object>
               <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_NEWTAB">
-                  <label>Establish connection in a new tab</label>
+                  <label>&amp;Establish connection in a new tab</label>
                   <focused>1</focused>
                   <style>wxRB_GROUP</style>
                 </object>
               </object>
               <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_OLDTAB">
-                  <label>Abort previous connection and connect in current tab</label>
+                  <label>&amp;Abort previous connection and connect in current tab</label>
                 </object>
               </object>
               <cols>1</cols>
               <vgap>5</vgap>
+              <object class="spacer">
+                <size>-1,2</size>
+              </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_REMEMBER">
+                  <label>Al&amp;ways perform this action</label>
+                </object>
+              </object>
             </object>
             <flag>wxALL</flag>
             <border>5</border>
