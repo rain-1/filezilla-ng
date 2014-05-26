@@ -1128,13 +1128,13 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
 }
 
 // Create a new Directory and enter the new Directory
-void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	wxString newdir = MenuMkdir();
 	if (newdir == _T("")) {
 		return;
 	}
-	
+
 	// OnMenuEnter
 	wxString error;
 	if (!m_pState->SetLocalDir(newdir, &error))

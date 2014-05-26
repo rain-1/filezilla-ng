@@ -24,7 +24,7 @@ CThemeProvider::~CThemeProvider()
 {
 	if( instance == this ) {
 		instance = 0;
-	}	
+	}
 }
 
 CThemeProvider* CThemeProvider::Get()

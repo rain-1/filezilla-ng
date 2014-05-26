@@ -1266,7 +1266,7 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 {
 	CServerPath newpath = MenuMkdir();
-	
+
 	CServerPath listed;
 	if (newpath.HasParent())
 	{
@@ -1280,11 +1280,11 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 		currentPath = GetPathFromItem(selected);
 	if (!currentPath.IsEmpty() && currentPath != listed)
 		m_pState->ChangeRemoteDir(currentPath);
-	
+
 }
 
 // Create a new Directory and enter the new Directory
-void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	CServerPath newpath = MenuMkdir();
 	if (!newpath.IsEmpty()) {
@@ -1338,7 +1338,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 	}
 
 	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(newPath));
-	
+
 	return newPath;
 }
 

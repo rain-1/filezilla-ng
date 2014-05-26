@@ -786,7 +786,7 @@ wxString CWrapEngine::UnwrapText(const wxString& text)
 			if (unwrapped[pos - 1] == ' ')
 				unwrapped = unwrapped.Left(pos + 2) + _T(" ") + unwrapped.Mid(pos + 3);
 			else
-				unwrapped = unwrapped.Left(pos + 2) + unwrapped.Mid(pos + 3);				
+				unwrapped = unwrapped.Left(pos + 2) + unwrapped.Mid(pos + 3);
 		}
 
 		unwrapped.Replace(_T("\n"), _T(" "));

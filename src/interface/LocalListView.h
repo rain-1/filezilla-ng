@@ -86,15 +86,15 @@ protected:
 	wxDropTarget* m_pDropTarget;
 	int m_dropTarget;
 
-    wxString MenuMkdir();
-    
+	wxString MenuMkdir();
+
 	// Event handlers
 	DECLARE_EVENT_TABLE()
 	void OnItemActivated(wxListEvent& event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnMenuUpload(wxCommandEvent& event);
 	void OnMenuMkdir(wxCommandEvent& event);
-    void OnMenuMkdirChgDir(wxCommandEvent& event);
+	void OnMenuMkdirChgDir(wxCommandEvent& event);
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);

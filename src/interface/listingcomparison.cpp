@@ -107,7 +107,7 @@ bool CComparisonManager::CompareListings()
 	bool remoteDir = false;
 	wxLongLong localSize, remoteSize;
 	CDateTime localDate, remoteDate;
-	
+
 	const int dirSortMode = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
 
 	const bool hide_identical = COptions::Get()->GetOptionVal(OPTION_COMPARE_HIDEIDENTICAL) != 0;
@@ -175,7 +175,7 @@ bool CComparisonManager::CompareListings()
 			gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate);
 			continue;
 		}
-		
+
 		if (cmp == -1) {
 			m_pLeft->CompareAddFile(CComparableListing::lonely);
 			m_pRight->CompareAddFile(CComparableListing::fill);

@@ -2672,7 +2672,7 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransi
 	for( unsigned int i = 0; i < m_engineData.size(); i++) {
 		if (m_engineData[i]->active)
 			continue;
-		
+
 		if (m_engineData[i]->transient) {
 			++transient;
 			if( !allowTransient )
@@ -2688,7 +2688,7 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransi
 		if (!pFirstIdle)
 			pFirstIdle = m_engineData[i];
 	}
-	
+
 	if( !pFirstIdle ) {
 		// Check whether we can create another engine
 		const int newEngineCount = COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS);
@@ -3054,7 +3054,7 @@ void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 		pCommandQueue->ReleaseEngine();
 		return;
 	}
-	
+
 	wxASSERT(pEngineData->state == t_EngineData::waitprimary);
 	if (pEngineData->state != t_EngineData::waitprimary)
 		return;

@@ -273,7 +273,7 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 		LogMessage(::Debug_Warning, _T("Could not convert domain name"));
 		return domain;
 	}
-	
+
 	wxString ret(output);
 	delete [] output;
 	return ret;

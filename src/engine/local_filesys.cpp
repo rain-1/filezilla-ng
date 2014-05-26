@@ -318,7 +318,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 
 #ifdef __WXMSW__
 
-// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch. 
+// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
 static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
 
 bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIME &ft)
@@ -330,7 +330,7 @@ bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIM
 	// Directly converting to time_t
 
 	wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
-	t /= 10000; // Convert hundreds of nanoseconds to milliseconds. 
+	t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
 	t -= EPOCH_OFFSET_IN_MSEC;
 	if (t < 0) {
 		return false;

@@ -72,7 +72,7 @@ int CUpdateDialog::ShowModal()
 	XRCCTRL(*this, "ID_WAIT_CHECK", wxAnimationCtrl)->Play();
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->SetAnimation(a);
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->Play();
-	
+
 	Wrap();
 
 	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Hide();
@@ -86,7 +86,7 @@ int CUpdateDialog::ShowModal()
 
 	int ret = wxDialogEx::ShowModal();
 	updater_.RemoveHandler(*this);
-	
+
 	return ret;
 }
 

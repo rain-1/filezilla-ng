@@ -59,7 +59,7 @@ void CFileExistsDlg::CreateControls()
 	wxString localSize = _("Size unknown");
 	if (m_pNotification->localSize != -1)
 		localSize = CSizeFormat::Format(m_pNotification->localSize, true, CSizeFormat::bytes, thousands_separator, 0);
-	
+
 	wxString remoteSize = _("Size unknown");
 	if (m_pNotification->remoteSize != -1)
 		remoteSize = CSizeFormat::Format(m_pNotification->remoteSize, true, CSizeFormat::bytes, thousands_separator, 0);

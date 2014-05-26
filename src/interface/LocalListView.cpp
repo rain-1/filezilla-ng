@@ -1132,13 +1132,13 @@ void CLocalListView::OnMenuMkdir(wxCommandEvent& event)
 }
 
 // Create a new Directory and enter the new Directory
-void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	wxString newdir = MenuMkdir();
 	if (newdir.empty()) {
 		return;
 	}
-	
+
 	// OnMenuEnter
 	wxString error;
 	if (!m_pState->SetLocalDir(newdir, &error))

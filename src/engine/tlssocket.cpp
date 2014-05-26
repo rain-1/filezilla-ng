@@ -920,7 +920,7 @@ static wxString bin2hex(const unsigned char* in, size_t size)
 bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 {
 	const gnutls_datum_t* datum = reinterpret_cast<const gnutls_datum_t*>(in);
-	
+
 	gnutls_x509_crt_t cert;
 	if (gnutls_x509_crt_init(&cert))
 	{
