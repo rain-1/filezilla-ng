@@ -42,10 +42,8 @@ XGETTEXT=@xgettext@
 # common xgettext args: C++ syntax, use the specified macro names as markers
 XGETTEXT_ARGS=-C -k_ -kwxGetTranslation -kwxTRANSLATE -kwxPLURAL:1,2 -s -j
 
-SUFFIXES = .po .mo
-
 # implicit rules
-.po.mo:
+%.mo: %.po.new
 	$(MSGFMT) -o $@ $< || exit 1
 
 # a PO file must be updated from wxstd.po to include new translations
