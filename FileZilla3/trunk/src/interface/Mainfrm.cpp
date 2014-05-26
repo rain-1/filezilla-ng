@@ -296,7 +296,7 @@ CMainFrame::CMainFrame()
 	}
 
 	m_closeEventTimer.SetOwner(this);
-	
+
 	if (CFilterManager::HasActiveFilters(true))
 	{
 		if (COptions::Get()->GetOptionVal(OPTION_FILTERTOGGLESTATE))
@@ -2130,7 +2130,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 	SetBookmarksFromPath(pData->m_path);
 	if (m_pMenuBar)
 		m_pMenuBar->UpdateBookmarkMenu();
-		
+
 	return true;
 }
 
@@ -2549,7 +2549,7 @@ void CMainFrame::ProcessCommandLine()
 	wxString local;
 	if ((local = pCommandLine->GetOption(CCommandLine::local)) != _T(""))
 	{
-		
+
 		if (!wxDir::Exists(local))
 		{
 			wxString str = _("Path not found:");
@@ -2557,14 +2557,14 @@ void CMainFrame::ProcessCommandLine()
 			wxMessageBoxEx(str, _("Syntax error in command line"));
 			return;
 		}
-		
+
 		CState *pState = CContextManager::Get()->GetCurrentContext();
 		if (!pState)
 			return;
-			
+
 		pState->SetLocalDir(local);
-	}	
-	
+	}
+
 	wxString site;
 	if (pCommandLine->HasSwitch(CCommandLine::sitemanager)) {
 		if (COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) == 0) {
@@ -2852,7 +2852,7 @@ bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path 
 				XRCCTRL(dlg, "ID_OLDTAB", wxRadioButton)->SetValue(true);
 			else
 				XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->SetValue(true);
-			
+
 			if (dlg.ShowModal() != wxID_OK)
 				return false;
 

@@ -1,6 +1,6 @@
 CLEANFILES = *.po.new *.mo resources.h filezilla.pot filezilla.pot.new filezilla.pot~
 
-dist_noinst_DATA = filezilla.pot @FILEZILLA_LINGUAS_PO@ 
+dist_noinst_DATA = filezilla.pot @FILEZILLA_LINGUAS_PO@
 
 install-data-local: install-filezilla-catalogs
 
@@ -78,7 +78,7 @@ resources.h: $(srcdir)/../src/interface/resources/xrc/*.xrc
 
 	@if [ -f $@~ ]; then rm $@~; fi
 
-filezilla.pot: resources.h $(srcdir)/../src/include/*.h $(srcdir)/../src/engine/*.h $(srcdir)/../src/interface/*.h  $(srcdir)/../src/engine/*.cpp $(srcdir)/../src/interface/*.cpp 
+filezilla.pot: resources.h $(srcdir)/../src/include/*.h $(srcdir)/../src/engine/*.h $(srcdir)/../src/interface/*.h  $(srcdir)/../src/engine/*.cpp $(srcdir)/../src/interface/*.cpp
 	@rm -f $@.new
 	@touch $@.new
 
@@ -87,7 +87,7 @@ filezilla.pot: resources.h $(srcdir)/../src/include/*.h $(srcdir)/../src/engine/
 
 # change charset declaration in template file to UTF-8
 	cat $@.new | sed -e "s/^\"Content-Type: .*$$/\"Content-Type: text\\/plain; charset=UTF-8\\\\n\"/" > $@.new~
-	@mv $@.new~ $@.new  
+	@mv $@.new~ $@.new
 
 	if [ -f $@ ]; then \
 	  touch $@; \

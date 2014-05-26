@@ -80,7 +80,7 @@ bool COptionsPageTransfer::SavePage()
 	m_pOptions->SetOption(OPTION_NUMTRANSFERS,				XRCCTRL(*this, "ID_NUMTRANSFERS", wxSpinCtrl)->GetValue());
 	m_pOptions->SetOption(OPTION_CONCURRENTDOWNLOADLIMIT,	XRCCTRL(*this, "ID_NUMDOWNLOADS", wxSpinCtrl)->GetValue());
 	m_pOptions->SetOption(OPTION_CONCURRENTUPLOADLIMIT,		XRCCTRL(*this, "ID_NUMUPLOADS", wxSpinCtrl)->GetValue());
-	
+
 	SetOptionFromText(XRCID("ID_DOWNLOADLIMIT"), OPTION_SPEEDLIMIT_INBOUND);
 	SetOptionFromText(XRCID("ID_UPLOADLIMIT"), OPTION_SPEEDLIMIT_OUTBOUND);
 	m_pOptions->SetOption(OPTION_SPEEDLIMIT_BURSTTOLERANCE, GetChoice(XRCID("ID_BURSTTOLERANCE")));

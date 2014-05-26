@@ -680,7 +680,7 @@ TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxSt
 	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it)
 	{
 		const wxString & segment = *it;
-		
+
 		TiXmlElement* pChild;
 		for (pChild = pNode->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement())
 		{

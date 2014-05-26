@@ -50,7 +50,7 @@ protected:
 	wxTreeItemId m_ExpandAfterList;
 
 	wxTreeItemId m_dropHighlight;
-	
+
 	CServerPath MenuMkdir();
 
 	DECLARE_EVENT_TABLE()

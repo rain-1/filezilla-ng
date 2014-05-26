@@ -878,7 +878,7 @@ protected:
 		{
 			evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::close, m_triggered_errors[4]);
 		}
-		CSocketEventDispatcher::Get().SendEvent(evt);			
+		CSocketEventDispatcher::Get().SendEvent(evt);
 	}
 
 	// Call only while locked

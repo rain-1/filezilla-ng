@@ -206,7 +206,7 @@ bool CDateTime::Set( int year, int month, int day, int hour, int minute, int sec
 {
 	if (year < 1900 || year > 3000)
 		return false;
-	
+
 	if (month < 1 || month > 12)
 		return false;
 

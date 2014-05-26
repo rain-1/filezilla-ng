@@ -126,7 +126,7 @@ void CUpdater::Init()
 	}
 
 	raw_version_information_ = COptions::Get()->GetOption( OPTION_UPDATECHECK_NEWVERSION );
-	
+
 	UpdaterState s = ProcessFinishedData(FZ_AUTOUPDATECHECK);
 
 	SetState(s);
@@ -296,7 +296,7 @@ void CUpdater::OnEngineEvent(wxEvent&)
 	if (!engine_)
 		return;
 
-	CNotification *notification; 
+	CNotification *notification;
 	while( (notification = engine_->GetNextNotification()) ) {
 		ProcessNotification(notification);
 		delete notification;
@@ -443,7 +443,7 @@ wxString CUpdater::GetLocalFile( build const& b, bool allow_existing )
 {
 	wxString const fn = GetFilename( b.url_ );
 	wxString const dl = GetDownloadDir().GetPath();
-	
+
 	int i = 1;
 	wxString f = dl + fn;
 
@@ -476,7 +476,7 @@ void CUpdater::ProcessData(CNotification* notification)
 	if( state_ != checking ) {
 		return;
 	}
-	
+
 	CDataNotification* pData = reinterpret_cast<CDataNotification*>(notification);
 
 	int len;
@@ -553,7 +553,7 @@ void CUpdater::ParseData()
 			if (v <= ownVersionNumber)
 				continue;
 		}
-		
+
 		build* b = 0;
 		if( type == _T("nightly") && UpdatableBuild() ) {
 			b = &version_information_.nightly_;
@@ -586,7 +586,7 @@ void CUpdater::ParseData()
 				if( !sizestr.ToULongLong(&l) ) {
 					continue;
 				}
-				
+
 				b->url_ = url;
 				b->size_ = l;
 				b->hash_ = hash;
@@ -595,7 +595,7 @@ void CUpdater::ParseData()
 	}
 
 	version_information_.update_available();
-	
+
 	COptions::Get()->SetOption( OPTION_UPDATECHECK_NEWVERSION, raw_version_information_ );
 }
 

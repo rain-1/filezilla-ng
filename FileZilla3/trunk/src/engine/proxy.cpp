@@ -141,7 +141,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 			return EINVAL;
 		}
 
-		if (!IsIpAddress(m_host)) {			
+		if (!IsIpAddress(m_host)) {
 			wxIPV4address address;
 			if (!address.Hostname(host)) {
 				m_pOwner->LogMessage(Error, _("Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."));
@@ -150,8 +150,8 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 			ip = address.IPAddress();
 		}
 
-		m_pOwner->LogMessage(Status, _("SOCKS4 proxy will connect to: %s"), ip.c_str());		
-		
+		m_pOwner->LogMessage(Status, _("SOCKS4 proxy will connect to: %s"), ip.c_str());
+
 		m_pSendBuffer = new char[9];
 		m_pSendBuffer[0] = 4; // Protocol version
 		m_pSendBuffer[1] = 1; // Stream mode
@@ -170,7 +170,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 			buf[i] += c - '0';
 		}
 		m_pSendBuffer[8] = 0;
-		m_sendBufferLen = 9;		
+		m_sendBufferLen = 9;
 		m_pRecvBuffer = new char[8];
 		m_recvBufferLen = 8;
 		m_recvBufferPos = 0;
@@ -380,7 +380,7 @@ void CProxySocket::OnReceive()
 					m_can_read = false;
 				return;
 			}
-			
+
 			if (!read)
 			{
 				m_proxyState = noconn;
@@ -395,7 +395,7 @@ void CProxySocket::OnReceive()
 				continue;
 
 			m_recvBufferPos = 0;
-			
+
 			if (m_pRecvBuffer[1] != 0x5A) {
 				wxString error;
 				switch (m_pRecvBuffer[1]) {
@@ -407,7 +407,7 @@ void CProxySocket::OnReceive()
 						break;
 					case 0x5D:
 						error = _("Request failed - client's identd could not confirm the user ID string");
-						break;				
+						break;
 					default:
 						error.Printf(_("Unassigned error code %d"), (int)(unsigned char) m_pRecvBuffer[1]);
 						break;

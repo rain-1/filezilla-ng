@@ -59,7 +59,7 @@ wxString CCommandLine::GetOption(enum CCommandLine::t_option option) const
 	case local:
 		if (m_parser.Found(_T("a"), &value))
 			return value;
-		break;		
+		break;
 	}
 
 	return _T("");

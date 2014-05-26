@@ -1614,7 +1614,7 @@ void CRemoteListView::OnMenuMkdir(wxCommandEvent& event)
 }
 
 // Create a new Directory and enter the new Directory
-void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent& event) 
+void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	CServerPath newdir = MenuMkdir();
 	if (!newdir.IsEmpty()) {
@@ -1673,9 +1673,9 @@ CServerPath CRemoteListView::MenuMkdir()
 	}
 
 	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(path));
-	
+
 	// Return name of the New Directory
-	return path; 	
+	return path;
 }
 
 void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
