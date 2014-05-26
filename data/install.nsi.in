@@ -977,7 +977,7 @@ ${MementoSectionEnd}
 
 ${MementoSection} "Shell Extension" SecShellExt
 
-SetOutPath "$INSTDIR"
+  SetOutPath "$INSTDIR"
   !define LIBRARY_SHELL_EXTENSION
   !define LIBRARY_COM
   !define LIBRARY_IGNORE_VERSION
@@ -995,6 +995,7 @@ ${MementoSectionEnd}
 
 ${MementoUnselectedSection} "Desktop Icon" SecDesktop
 
+  SetOutPath "$INSTDIR"
   CreateShortCut "$DESKTOP\FileZilla Client.lnk" "$INSTDIR\filezilla.exe" "" "$INSTDIR\filezilla.exe" 0
 
 ${MementoSectionEnd}
