@@ -30,6 +30,10 @@
 	<true/>
 	<key>LSRequiresCarbon</key>
 	<true/>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+	<key>NSHighResolutionCapable</key>
+	<true/>
 	<key>NSHumanReadableCopyright</key>
 	<string>Copyright (C) 2004-2014  Tim Kosse</string>
 </dict>
