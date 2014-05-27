@@ -2,12 +2,12 @@
 #ifdef __WXMSW__
   // MinGW needs this for getaddrinfo
   #if defined(_WIN32_WINNT)
-    #if _WIN32_WINNT < 0x0501
+    #if _WIN32_WINNT < 0x0600
       #undef _WIN32_WINNT
-      #define _WIN32_WINNT 0x0501
+      #define _WIN32_WINNT 0x0600
     #endif
   #else
-    #define _WIN32_WINNT 0x0501
+    #define _WIN32_WINNT 0x0600
   #endif
   #include <winsock2.h>
   #include <ws2tcpip.h>
