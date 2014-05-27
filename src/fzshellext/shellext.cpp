@@ -51,17 +51,15 @@
 #include <tchar.h>
 
 //---------------------------------------------------------------------------
-#define DEBUG_MSG(MSG) \
-	if (GLogOn) \
-	{ \
-		Debug(MSG); \
-	}
-
-#define DEBUG_MSG_W(MSG) \
-	if (GLogOn) \
-	{ \
-		DebugW(MSG); \
-	}
+#ifdef DEBUG
+#define DEBUG_MSG(MSG) Debug(MSG)
+#define DEBUG_MSG_W(MSG) DebugW(MSG)
+#define DEBUG_LOG_VERSION(MSG) LogVersion(MSG)
+#else
+#define DEBUG_MSG(MSG)
+#define DEBUG_MSG_W(MSG)
+#define DEBUG_LOG_VERSION(MSG)
+#endif
 
 //---------------------------------------------------------------------------
 #define DRAG_EXT_REG_KEY _T("Software\\FileZilla 3\\fzshellext")
@@ -117,6 +115,7 @@ protected:
 };
 
 //---------------------------------------------------------------------------
+namespace {
 unsigned int GRefThisDll = 0;
 bool GEnabled = false;
 char GLogFile[MAX_PATH] = "";
@@ -135,49 +134,43 @@ void Debug(const char* Message)
 	if (WaitResult == WAIT_TIMEOUT)
 		return;
 
-	try
-	{
-		if (GLogHandle == NULL)
-		{
-			if (strlen(GLogFile) == 0)
-			{
-				GLogOn = false;
-				ReleaseMutex(GLogMutex);
-				return;
-			}
-
-			GLogHandle = fopen(GLogFile, "at");
-			if (GLogHandle == NULL)
-			{
-				GLogOn = false;
-				ReleaseMutex(GLogMutex);
-				return;
-			}
-
-			setbuf(GLogHandle, NULL);
-			fprintf(GLogHandle, "----------------------------\n");
+	if (GLogHandle == NULL) {
+		if (strlen(GLogFile) == 0) {
+			GLogOn = false;
+			ReleaseMutex(GLogMutex);
+			return;
 		}
 
-		SYSTEMTIME Time;
-		GetSystemTime(&Time);
+		GLogHandle = fopen(GLogFile, "at");
+		if (GLogHandle == NULL) {
+			GLogOn = false;
+			ReleaseMutex(GLogMutex);
+			return;
+		}
 
-		fprintf(GLogHandle, "[%4d-%02d-%02d %2d:%02d:%02d.%03d][%04x:%04x] %s\n",
-			Time.wYear, Time.wMonth, Time.wDay, Time.wHour, Time.wMinute,
-			Time.wSecond, Time.wMilliseconds,
-			(unsigned int)GetCurrentProcessId(), (unsigned int)GetCurrentThreadId(),
-			Message);
+		setbuf(GLogHandle, NULL);
+		fprintf(GLogHandle, "----------------------------\n");
 	}
-	catch(...)
-	{
-	}
+
+	SYSTEMTIME Time;
+	GetSystemTime(&Time);
+
+	fprintf(GLogHandle, "[%4d-%02d-%02d %2d:%02d:%02d.%03d][%04x:%04x] %s\n",
+		Time.wYear, Time.wMonth, Time.wDay, Time.wHour, Time.wMinute,
+		Time.wSecond, Time.wMilliseconds,
+		(unsigned int)GetCurrentProcessId(), (unsigned int)GetCurrentThreadId(),
+		Message);
+
 	ReleaseMutex(GLogMutex);
 }
 
 void DebugW(const wchar_t* Message)
 {
+	if (!GLogOn)
+		return;
+
 	int bytes = WideCharToMultiByte(CP_UTF8, 0, Message, -1, 0, 0, 0, 0);
-	if (bytes <= 0)
-	{
+	if (bytes <= 0) {
 		Debug("WideCharToMultiByte failed");
 		return;
 	}
@@ -185,8 +178,7 @@ void DebugW(const wchar_t* Message)
 	int written = WideCharToMultiByte(CP_UTF8, 0, Message, -1, buffer, bytes, 0, 0);
 	if (!written)
 		Debug("WideCharToMultiByte failed");
-	else
-	{
+	else {
 		buffer[written] = 0;
 		Debug(buffer);
 	}
@@ -200,23 +192,22 @@ void LogVersion(HINSTANCE HInstance)
 		return;
 
 	char FileName[MAX_PATH];
-	if (!GetModuleFileNameA(HInstance, FileName, sizeof(FileName)))
+	if (!GetModuleFileNameA(HInstance, FileName, sizeof(FileName))) {
 		return;
+	}
 
 	Debug(FileName);
 
 	DWORD InfoHandle;
 	DWORD Size = GetFileVersionInfoSizeA(FileName, &InfoHandle);
-	if (!Size)
-	{
+	if (!Size) {
 		Debug("LogVersion return: No version info");
 		return;
 	}
 
 	char* Info;
 	Info = new char[Size];
-	if (!GetFileVersionInfoA(FileName, InfoHandle, Size, Info))
-	{
+	if (!GetFileVersionInfoA(FileName, InfoHandle, Size, Info)) {
 		Debug("LogVersion return: cannot read version info");
 		delete [] Info;
 		return;
@@ -224,8 +215,7 @@ void LogVersion(HINSTANCE HInstance)
 
 	VS_FIXEDFILEINFO* VersionInfo;
 	unsigned int VersionInfoSize;
-	if (!VerQueryValueA(Info, "\\", reinterpret_cast<void**>(&VersionInfo), &VersionInfoSize))
-	{
+	if (!VerQueryValueA(Info, "\\", reinterpret_cast<void**>(&VersionInfo), &VersionInfoSize)) {
 		delete [] Info;
 		Debug("LogVersion return: no fixed version info");
 		return;
@@ -241,26 +231,24 @@ void LogVersion(HINSTANCE HInstance)
 
 	delete [] Info;
 }
+}
 
 //---------------------------------------------------------------------------
 extern "C" int APIENTRY
 DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 {
-	if (Reason == DLL_PROCESS_ATTACH)
-	{
+	if (Reason == DLL_PROCESS_ATTACH) {
 		GInstance = HInstance;
 
 		if (!GLogMutex)
 			GLogMutex = CreateMutex(NULL, false, _T("FileZilla3DragDropExtLogMutex"));
 
-		if (GRefThisDll != 0)
-		{
+		if (GRefThisDll != 0) {
 			DEBUG_MSG("DllMain return: settings already loaded");
 			return 1;
 		}
 
-		for (int Root = 0; Root <= 1; Root++)
-		{
+		for (int Root = 0; Root <= 1; Root++) {
 			HKEY Key;
 			if (RegOpenKeyEx(Root == 0 ? HKEY_LOCAL_MACHINE : HKEY_CURRENT_USER,
 				DRAG_EXT_REG_KEY, 0,
@@ -293,23 +281,19 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 				RegCloseKey(Key);
 			}
 		}
-		if (GEnabled)
-		{
+		if (GEnabled) {
 			DEBUG_MSG("DllMain loaded settings, extension is enabled");
 		}
-		else
-		{
+		else {
 			DEBUG_MSG("DllMain loaded settings, extension is disabled");
 		}
-		LogVersion(HInstance);
+		DEBUG_LOG_VERSION(HInstance);
 
 		DEBUG_MSG("DllMain leave");
 	}
-	else if (Reason == DLL_PROCESS_DETACH)
-	{
+	else if (Reason == DLL_PROCESS_DETACH) {
 		DEBUG_MSG("DllMain detaching process");
-		if (GLogMutex)
-		{
+		if (GLogMutex) {
 			CloseHandle(GLogMutex);
 			GLogMutex = 0;
 		}
@@ -435,6 +419,7 @@ STDEXPORTAPI DllRegisterServer()
 }
 
 //---------------------------------------------------------------------------
+namespace {
 static bool RegDeleteEmptyKey(HKEY root, LPCTSTR name)
 {
 	HKEY key;
@@ -457,6 +442,7 @@ static bool RegDeleteEmptyKey(HKEY root, LPCTSTR name)
 	RegDeleteKey(root, name);
 
 	return true;
+}
 }
 
 bool UnregisterServer(bool AllUsers)
@@ -532,13 +518,11 @@ STDEXPORTAPI DllUnregisterServer()
 	DEBUG_MSG("DllUnregisterServer enter");
 
 	HRESULT Result = SELFREG_E_CLASS;
-	if (UnregisterServer(true))
-	{
+	if (UnregisterServer(true))	{
 		Result = S_OK;
 	}
 
-	if (UnregisterServer(false))
-	{
+	if (UnregisterServer(false)) {
 		Result = S_OK;
 	}
 
@@ -574,8 +558,7 @@ STDMETHODIMP CShellExtClassFactory::QueryInterface(REFIID Riid, LPVOID FAR* Ppv)
 
 	// Any interface on this object is the object pointer
 
-	if (IsEqualIID(Riid, IID_IUnknown) || IsEqualIID(Riid, IID_IClassFactory))
-	{
+	if (IsEqualIID(Riid, IID_IUnknown) || IsEqualIID(Riid, IID_IClassFactory)) {
 		DEBUG_MSG("QueryInterface is IUnknown or IClassFactory");
 
 		*Ppv = (LPCLASSFACTORY)this;
@@ -600,8 +583,7 @@ STDMETHODIMP_(ULONG) CShellExtClassFactory::Release()
 {
 	DEBUG_MSG("Release");
 
-	if (--FReferenceCounter)
-	{
+	if (--FReferenceCounter) {
 		return FReferenceCounter;
 	}
 
@@ -620,8 +602,7 @@ STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN UnkOuter,
 
 	// Shell extensions typically don't support aggregation (inheritance)
 
-	if (UnkOuter)
-	{
+	if (UnkOuter) {
 		return CLASS_E_NOAGGREGATION;
 	}
 
@@ -631,8 +612,7 @@ STDMETHODIMP CShellExtClassFactory::CreateInstance(LPUNKNOWN UnkOuter,
 
 	CShellExt* ShellExt = new CShellExt();  //Create the CShellExt object
 
-	if (NULL == ShellExt)
-	{
+	if (NULL == ShellExt) {
 		return E_OUTOFMEMORY;
 	}
 
@@ -669,8 +649,7 @@ CShellExt::~CShellExt()
 {
 	DEBUG_MSG("~CShellExt enter");
 
-	if (FDataObj)
-	{
+	if (FDataObj) {
 		FDataObj->Release();
 	}
 
@@ -689,25 +668,20 @@ STDMETHODIMP CShellExt::QueryInterface(REFIID Riid, LPVOID FAR* Ppv)
 	HRESULT Result = E_NOINTERFACE;
 	*Ppv = NULL;
 
-	if (!GEnabled)
-	{
+	if (!GEnabled) {
 		DEBUG_MSG("CShellExt::QueryInterface shelext disabled");
 	}
-	else
-	{
-		if (IsEqualIID(Riid, IID_IShellExtInit) || IsEqualIID(Riid, IID_IUnknown))
-		{
+	else {
+		if (IsEqualIID(Riid, IID_IShellExtInit) || IsEqualIID(Riid, IID_IUnknown)) {
 			DEBUG_MSG("CShellExt::QueryInterface is IShellExtInit or IUnknown");
 			*Ppv = (LPSHELLEXTINIT)this;
 		}
-		else if (IsEqualIID(Riid, IID_IShellCopyHook))
-		{
+		else if (IsEqualIID(Riid, IID_IShellCopyHook)) {
 			DEBUG_MSG("CShellExt::QueryInterface is IShellCopyHook");
 			*Ppv = (LPCOPYHOOK)this;
 		}
 
-		if (*Ppv)
-		{
+		if (*Ppv) {
 			AddRef();
 
 			Result = NOERROR;
@@ -731,8 +705,7 @@ STDMETHODIMP_(ULONG) CShellExt::AddRef()
 STDMETHODIMP_(ULONG) CShellExt::Release()
 {
 	DEBUG_MSG("CShellExt::Release");
-	if (--FReferenceCounter)
-	{
+	if (--FReferenceCounter) {
 		return FReferenceCounter;
 	}
 
@@ -747,16 +720,14 @@ STDMETHODIMP CShellExt::Initialize(LPCITEMIDLIST IDFolder,
 {
 	DEBUG_MSG("CShellExt::Initialize enter");
 
-	if (FDataObj != NULL)
-	{
+	if (FDataObj != NULL) {
 		FDataObj->Release();
 		FDataObj = NULL;
 	}
 
 	// duplicate the object pointer and registry handle
 
-	if (DataObj != NULL)
-	{
+	if (DataObj != NULL) {
 		FDataObj = DataObj;
 		DataObj->AddRef();
 	}
@@ -772,31 +743,26 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 {
 	UINT Result = IDYES;
 
-	if (!GEnabled)
-	{
+	if (!GEnabled) {
 		DEBUG_MSG("CShellExt::CopyCallback return: Not enabled");
 		return Result;
 	}
 
-	if (wFunc != FO_COPY && wFunc != FO_MOVE)
-	{
+	if (wFunc != FO_COPY && wFunc != FO_MOVE) {
 		char buffer[100];
 		sprintf(buffer, "CShellExt::CopyCallback return: wFunc is %u, NOT FO_COPY nor FO_MOVE", (unsigned int)wFunc);
 		DEBUG_MSG(buffer);
 		return Result;
 	}
-	else if (wFunc == FO_COPY)
-	{
+	else if (wFunc == FO_COPY) {
 		DEBUG_MSG("CShellExt::CopyCallback: wFunc is FO_COPY");
 	}
-	else
-	{
+	else {
 		DEBUG_MSG("CShellExt::CopyCallback: wFunc is FO_MOVE");
 	}
 
 	unsigned long Ticks = GetTickCount();
-	if ((Ticks - FLastTicks) < 100 && FLastTicks <= Ticks)
-	{
+	if ((Ticks - FLastTicks) < 100 && FLastTicks <= Ticks) {
 		DEBUG_MSG("CShellExt::CopyCallback return; interval NOT elapsed");
 		return Result;
 	}
@@ -809,49 +775,40 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 
 	LPCTSTR BackPtr = _tcsrchr(SrcFile, '\\');
 
-	if (BackPtr == NULL || (_tcsncmp(BackPtr + 1, DRAG_EXT_DUMMY_DIR_PREFIX, DRAG_EXT_DUMMY_DIR_PREFIX_LEN) != 0))
-	{
+	if (BackPtr == NULL || (_tcsncmp(BackPtr + 1, DRAG_EXT_DUMMY_DIR_PREFIX, DRAG_EXT_DUMMY_DIR_PREFIX_LEN) != 0)) {
 		DEBUG_MSG("CShellExt::CopyCallback return: filename has NOT prefix");
 		return Result;
 	}
 
 	HANDLE MapFile = OpenFileMapping(FILE_MAP_ALL_ACCESS, false, DRAG_EXT_MAPPING);
 
-	if (MapFile == NULL)
-	{
+	if (MapFile == NULL) {
 		DEBUG_MSG("CShellExt::CopyCallback return: mapfile NOT found");
 		return Result;
 	}
 
 	char* data = reinterpret_cast<char *>(MapViewOfFile(MapFile, FILE_MAP_ALL_ACCESS, 0, 0, DRAG_EXT_MAPPING_LENGTH));
 
-	if (data != NULL)
-	{
+	if (data != NULL) {
 		DEBUG_MSG("CShellExt::CopyCallback mapview created");
 		unsigned long WaitResult = WaitForSingleObject(FMutex, 1000);
-		if (WaitResult != WAIT_TIMEOUT)
-		{
+		if (WaitResult != WAIT_TIMEOUT) {
 			DEBUG_MSG("CShellExt::CopyCallback mutex got");
-			if (*data >= DRAG_EXT_VERSION)
-			{
+			if (*data >= DRAG_EXT_VERSION) {
 				DEBUG_MSG("CShellExt::CopyCallback supported structure version");
-				if (data[1] == 1)
-				{
+				if (data[1] == 1) {
 					DEBUG_MSG("CShellExt::CopyCallback dragging");
 
 					wchar_t* file = reinterpret_cast<wchar_t *>(data + 2);
 					DEBUG_MSG("Dragged file:");
 					DEBUG_MSG_W(file);
 
-					if (_wcsicmp(file, SrcFile) == 0)
-					{
+					if (_wcsicmp(file, SrcFile) == 0) {
 						data[1] = 2;
-						if (_tcslen(DestFile) > MAX_PATH)
-						{
+						if (_tcslen(DestFile) > MAX_PATH) {
 							DEBUG_MSG("CShellExt::CopyCallback length of DestFile exceeding MAX_PATH");
 						}
-						else
-						{
+						else {
 							wcsncpy(file, DestFile, MAX_PATH);
 							file[MAX_PATH] = 0;
 							DEBUG_MSG("CShellExt::CopyCallback destination written into buffer");
@@ -859,32 +816,27 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 						Result = IDNO;
 						DEBUG_MSG("CShellExt::CopyCallback dragging refused");
 					}
-					else
-					{
+					else {
 						data[1] = 3;
 						DEBUG_MSG("CShellExt::CopyCallback dragged file does NOT match");
 					}
 				}
-				else
-				{
+				else {
 					DEBUG_MSG("CShellExt::CopyCallback NOT dragging");
 				}
 			}
-			else
-			{
+			else {
 				DEBUG_MSG("CShellExt::CopyCallback unsupported structure version");
 			}
 			ReleaseMutex(FMutex);
 			DEBUG_MSG("CShellExt::CopyCallback mutex released");
 		}
-		else
-		{
+		else {
 			DEBUG_MSG("CShellExt::CopyCallback mutex timeout");
 		}
 		UnmapViewOfFile(data);
 	}
-	else
-	{
+	else {
 		DEBUG_MSG("CShellExt::CopyCallback mapview NOT created");
 	}
 
