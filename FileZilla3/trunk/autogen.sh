@@ -44,7 +44,7 @@ rm -rf  configure config.log aclocal.m4 \
   config.status config autom4te.cache libtool
 find . -name "Makefile.in" | xargs rm -f
 find . -name "Makefile" | xargs rm -f
-echo done
+echo 'done'
 
 findsuffix()
 {
@@ -94,20 +94,20 @@ version_check()
     shift 1
   fi
 
-  PACKAGE=$1
-  PACKAGENAME=$1
-  MAJOR=$2
-  MINOR=$3
-  MICRO=$4
-  SILENT=$5
-  WRONGVERSION=$6
+  PACKAGE="$1"
+  PACKAGENAME="$1"
+  MAJOR="$2"
+  MINOR="$3"
+  MICRO="$4"
+  SILENT="$5"
+  WRONGVERSION="$6"
 
-  VERSION=$MAJOR
+  VERSION="$MAJOR"
 
-  if [ ! -z "$MINOR" ]; then VERSION=$VERSION.$MINOR; else MINOR=0; fi
-  if [ ! -z "$MICRO" ]; then VERSION=$VERSION.$MICRO; else MICRO=0; fi
+  if [ ! -z "$MINOR" ]; then VERSION="$VERSION.$MINOR"; else MINOR=0; fi
+  if [ ! -z "$MICRO" ]; then VERSION="$VERSION.$MICRO"; else MICRO=0; fi
 
-  if [ x$SILENT != x2 ]; then
+  if [ "x$SILENT" != "x2" ]; then
     if [ ! -z "$VERSION" ]; then
       printf "Checking for $PACKAGE >= $VERSION ... "
     else
@@ -122,7 +122,7 @@ version_check()
         VERSION="1.2.3"
       else
         # Retry again, append a suffix if needed
-        version_check usesuffix $PACKAGE $MAJOR $MINOR $MICRO 2
+        version_check usesuffix "$PACKAGE" "$MAJOR" "$MINOR" "$MICRO" 2
         return
       fi
       printerror_notfound
@@ -137,10 +137,10 @@ version_check()
   fi
 
   # the following line is carefully crafted sed magic
-  pkg_version=`$PACKAGE --version|head -n 1|sed 's/([^)]*)//g;s/^[a-zA-Z\.\ \-]*//;s/ .*$//'`
-  pkg_major=`echo $pkg_version | cut -d. -f1`
-  pkg_minor=`echo $pkg_version | sed s/[-,a-z,A-Z].*// | cut -d. -f2`
-  pkg_micro=`echo $pkg_version | sed s/[-,a-z,A-Z].*// | cut -d. -f3`
+  pkg_version=$($PACKAGE --version|head -n 1|sed 's/([^)]*)//g;s/^[a-zA-Z\.\ \-]*//;s/ .*$//')
+  pkg_major=$(echo "$pkg_version" | cut -d. -f1)
+  pkg_minor=$(echo "$pkg_version" | sed s/[-,a-z,A-Z].*// | cut -d. -f2)
+  pkg_micro=$(echo "$pkg_version" | sed s/[-,a-z,A-Z].*// | cut -d. -f3)
   [ -z "$pkg_minor" ] && pkg_minor=0
   [ -z "$pkg_micro" ] && pkg_micro=0
 
@@ -165,10 +165,10 @@ version_check()
     WRONGVERSION=$pkg_version
     # Retry again, append a suffix if needed
     if [ -z "$USESUFFIX" ]; then
-      version_check usesuffix $PACKAGE $MAJOR $MINOR $MICRO 2 "$pkg_version"
+      version_check usesuffix "$PACKAGE" "$MAJOR" "$MINOR" "$MICRO" 2 "$pkg_version"
       return
     fi
-    if [ x$SILENT = x1 ]; then
+    if [ "x$SILENT" = "x1" ]; then
       return 2;
     fi
     printerror_notfound
@@ -187,7 +187,7 @@ checkTools()
     echo "$N. Checking required tools... skipped"
     automake="automake"
     aclocal="aclocal"
-    autoeader="autoheader"
+    autoheader="autoheader"
     autoconf="autoconf"
     libtoolize="libtoolize"
     return 0
@@ -239,7 +239,7 @@ if test ! -f configure || test ! -f config/ltmain.sh || test ! -f Makefile.in; t
 
   exit 1
 fi
-echo done
+echo 'done'
 printf "\nScript completed successfully.\n"
 printf "Now run \033[1m./configure\033[0m, see \033[1m./configure --help\033[0m for more information\n"
 
