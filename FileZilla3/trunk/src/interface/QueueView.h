@@ -23,6 +23,7 @@ public:
 	const enum t_type m_type;
 
 	CFolderProcessingEntry(enum t_type type) : m_type(type) {}
+	virtual ~CFolderProcessingEntry() {}
 };
 
 class t_newEntry : public CFolderProcessingEntry
