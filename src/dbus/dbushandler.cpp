@@ -73,10 +73,10 @@ void CDBusHandler::OnSignal(wxDBusConnectionEvent& event)
 		return;
 	}
 
-	if (msg->GetType() == DBUS_MESSAGE_TYPE_ERROR)
-	{
+	if (msg->GetType() == DBUS_MESSAGE_TYPE_ERROR) {
 		if (m_debug)
 			printf("wxD-Bus: Signal: Error: %s\n", msg->GetString());
+		delete msg;
 		return;
 	}
 
@@ -85,6 +85,7 @@ void CDBusHandler::OnSignal(wxDBusConnectionEvent& event)
 	{
 		if (m_debug)
 			printf("wxD-Bus: Signal contains no path\n");
+		delete msg;
 		return;
 	}
 
