@@ -96,9 +96,9 @@ void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
 				f.l_start = 0;
 				f.l_len = 1;
 				f.l_pid = getpid();
-				if (fcntl(fd, F_SETLK, &f))
-				{
+				if (fcntl(fd, F_SETLK, &f)) {
 					// In use by other process
+					close(fd);
 					continue;
 				}
 				close(fd);
