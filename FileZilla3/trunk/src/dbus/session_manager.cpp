@@ -280,14 +280,14 @@ bool CSessionManagerImpl::Unregister()
 
 	m_state = unregister;
 
-	wxDBusMethodCall* call = new wxDBusMethodCall(
+	wxDBusMethodCall call(
 		"org.gnome.SessionManager",
 		"/org/gnome/SessionManager",
 		"org.gnome.SessionManager",
 		"UnregisterClient");
-	call->AddObjectPath(m_client_object_path);
+	call.AddObjectPath(m_client_object_path);
 
-	wxDBusMessage *result = call->Call(m_handler->Conn(), 1000);
+	wxDBusMessage *result = call.Call(m_handler->Conn(), 1000);
 	if (result)
 	{
 		delete result;
