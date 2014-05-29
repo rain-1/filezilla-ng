@@ -684,7 +684,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			dlg.AddText(_("A proper server always shows all files, but some broken servers hide files from the user. Use this option to force the server to show all files."));
 			dlg.AddText(_("Keep in mind that not all servers support this feature and may return incorrect listings if this option is enabled. Although FileZilla performs some tests to check if the server supports this feature, the test may fail."));
 			dlg.AddText(_("Disable this option again if you will not be able to see the correct directory contents anymore."));
-			dlg.Run();
+			(void)dlg.Run();
 		}
 
 		COptions::Get()->SetOption(OPTION_VIEW_HIDDEN_FILES, showHidden ? 1 : 0);
@@ -855,7 +855,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		if (event.GetId() == XRCID("ID_BOOKMARK_ADD"))
 		{
 			CNewBookmarkDialog dlg(this, controls->site_bookmarks->path, pServer);
-			res = dlg.ShowModal(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
+			res = dlg.ShowModal(pState ? pState->GetLocalDir().GetPath() : wxString(), pState ? pState->GetRemotePath() : CServerPath());
 		}
 		else
 		{
