@@ -189,8 +189,8 @@ void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 	if (index >= m_recentServers.size())
 		return;
 
-	std::list<CServer>::const_iterator iter;
-	for (iter = m_recentServers.begin(); index; index--, iter++);
+	std::list<CServer>::const_iterator iter = m_recentServers.begin();
+	std::advance(iter, index);
 
 	CServer server = *iter;
 	if (server.GetLogonType() == ASK)
