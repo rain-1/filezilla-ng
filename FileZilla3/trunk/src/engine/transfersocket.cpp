@@ -72,9 +72,11 @@ CTransferSocket::~CTransferSocket()
 void CTransferSocket::ResetSocket()
 {
 	delete m_pProxyBackend;
+	if( m_pBackend == m_pTlsSocket ) {
+		m_pBackend = 0;
+	}
 	delete m_pTlsSocket;
-	if( m_pBackend != m_pTlsSocket)
-		delete m_pBackend;
+	delete m_pBackend;
 	delete m_pSocketServer;
 	delete m_pSocket;
 	m_pProxyBackend = 0;
