@@ -213,6 +213,7 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 			const wxString& address = event.GetData();
 			m_pOwner->LogMessage(Status, _("Connecting to %s..."), address.c_str());
 		}
+		break;
 	case CSocketEvent::connection_next:
 		if (event.GetError())
 			m_pOwner->LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
