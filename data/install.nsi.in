@@ -1020,14 +1020,14 @@ FunctionEnd
 
 Function PageFinishPre
   ${If} $PERFORM_UPDATE == 1
-    UAC_unicode::Exec '' '"$INSTDIR/filezilla.exe"' '' ''
+    UAC_unicode::Exec '' '"$INSTDIR\filezilla.exe"' '' ''
     Quit
   ${EndIf}
 FunctionEnd
 
 Function CustomFinishRun
 
-  UAC_unicode::Exec '' '"$INSTDIR/filezilla.exe"' '' ''
+  UAC_unicode::Exec '' '"$INSTDIR\filezilla.exe"' '' ''
 
 FunctionEnd
 
