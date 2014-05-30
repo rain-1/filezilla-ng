@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-#
+# 
 # Translators:
 # 2. Roman Neumüller <email@katpatuka.org>, 2007
 # Kaya Zeren <kayazeren@gmail.com>, 2014
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-25 11:00+0200\n"
-"PO-Revision-Date: 2014-05-23 22:53+0000\n"
+"POT-Creation-Date: 2014-05-30 11:18+0200\n"
+"PO-Revision-Date: 2014-05-26 12:00+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "filezilla/language/tr_TR/)\n"
@@ -185,9 +185,8 @@ msgid "%w - Proxy password"
 msgstr "%w - Vekil sunucu parolası"
 
 #: resources.h:463
-#, fuzzy
 msgid "&Abort previous connection and connect in current tab"
-msgstr "Önceki bağlantıyı iptal ederek geçerli sekmede bağlanın"
+msgstr "Ö&nceki bağlantıyı iptal ederek geçerli sekmede bağlanın"
 
 #: resources.h:550
 msgid "&About..."
@@ -438,9 +437,8 @@ msgid "&Enter custom command..."
 msgstr "Öz&el komut yazın..."
 
 #: resources.h:462
-#, fuzzy
 msgid "&Establish connection in a new tab"
-msgstr "Bağlantı yeni sekmede açılsın"
+msgstr "Bağlantı y&eni sekmede açılsın"
 
 #: resources.h:144
 msgid "&Execute"
@@ -1329,7 +1327,7 @@ msgstr "Seçili dosya ve klasörler aktarım kuyruğuna eklensin"
 msgid "Add to queue"
 msgstr "Aktarım kuyruğuna eklensin"
 
-#: ../../locales/../src/engine/proxy.cpp:553
+#: ../../locales/../src/engine/proxy.cpp:554
 msgid "Address type not supported"
 msgstr "Adres tipi desteklenmiyor"
 
@@ -1353,9 +1351,8 @@ msgstr ""
 "size aittir."
 
 #: resources.h:464
-#, fuzzy
 msgid "Al&ways perform this action"
-msgstr "Her z&aman şu işlem yapılsın"
+msgstr "Her &zaman şu işlem yapılsın"
 
 #: resources.h:322
 msgid "Algorithm:"
@@ -1652,17 +1649,17 @@ msgstr "Ö&zel dosya tipi ilişkileri:"
 msgid "Calculating timezone offset of server..."
 msgstr "Sunucunun saat dilimi farkı hesaplanıyor..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:725
+#: ../../locales/../src/engine/transfersocket.cpp:727
 msgid "Can't read from file"
 msgstr "Dosya okunamıyor"
 
-#: ../../locales/../src/engine/transfersocket.cpp:704
-#: ../../locales/../src/engine/transfersocket.cpp:778
+#: ../../locales/../src/engine/transfersocket.cpp:706
+#: ../../locales/../src/engine/transfersocket.cpp:780
 msgid "Can't write data to file."
 msgstr "Veri dosyaya yazılamıyor."
 
-#: ../../locales/../src/engine/transfersocket.cpp:702
-#: ../../locales/../src/engine/transfersocket.cpp:776
+#: ../../locales/../src/engine/transfersocket.cpp:704
+#: ../../locales/../src/engine/transfersocket.cpp:778
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Veri %s dosyasına yazılamıyor"
@@ -1998,7 +1995,7 @@ msgstr "Komut ve parametreleri düzgün yazılmış olmalı."
 msgid "Command failed"
 msgstr "Komut yürütülemedi"
 
-#: ../../locales/../src/engine/proxy.cpp:550
+#: ../../locales/../src/engine/proxy.cpp:551
 msgid "Command not supported"
 msgstr "Komut desteklenmiyor"
 
@@ -2107,14 +2104,12 @@ msgid "Connect bypassing proxy settings"
 msgstr "Vekil sunucu ayarları atlanarak bağlanılsın"
 
 #: resources.h:888
-#, fuzzy
 msgid "Connect in current tab"
-msgstr "Geçerli sekmeyi kapatır"
+msgstr "Geçerli sekmede bağlansın"
 
 #: resources.h:887
-#, fuzzy
 msgid "Connect in new tab"
-msgstr "Bağlantı zaman aşımına uğradı"
+msgstr "Yeni sekmede bağlansın"
 
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
@@ -2155,7 +2150,7 @@ msgid "Connection attempt failed"
 msgstr "Bağlantı kurulamadı"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1016
-#: ../../locales/../src/engine/proxy.cpp:218
+#: ../../locales/../src/engine/proxy.cpp:219
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "\"%s\" ile bağlantı kurulamadı, sonraki adres deneniyor."
@@ -2196,11 +2191,11 @@ msgstr "Bağlanıldı, hoş geldin iletisi bekleniyor..."
 msgid "Connection lost"
 msgstr "Bağlantı koptu"
 
-#: ../../locales/../src/engine/proxy.cpp:535
+#: ../../locales/../src/engine/proxy.cpp:536
 msgid "Connection not allowed by ruleset"
 msgstr "Kural seti bağlantıya izin vermedi"
 
-#: ../../locales/../src/engine/proxy.cpp:544
+#: ../../locales/../src/engine/proxy.cpp:545
 msgid "Connection refused"
 msgstr "Bağlantı reddedildi"
 
@@ -2216,7 +2211,7 @@ msgstr "Bağlantı zaman aşımına uğradı."
 msgid "Connection to server lost."
 msgstr "Sunucuyla bağlantı kesildi."
 
-#: ../../locales/../src/engine/proxy.cpp:230
+#: ../../locales/../src/engine/proxy.cpp:231
 msgid "Connection with proxy established, performing handshake..."
 msgstr "Vekil sunucu ile bağlantı sağlandı, iletişim kuruluyor..."
 
@@ -2248,7 +2243,7 @@ msgstr "%s kopyası"
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Seçili ögelerin İnternet adresleri panoya kopyalansın."
 
-#: ../../locales/../src/engine/transfersocket.cpp:219
+#: ../../locales/../src/engine/transfersocket.cpp:221
 #, c-format
 msgid "Could not accept connection: %s"
 msgstr "%s bağlantısı kabul edilemedi"
@@ -3872,7 +3867,7 @@ msgstr "Ayrıntılı bilgiler"
 msgid "General"
 msgstr "Genel"
 
-#: ../../locales/../src/engine/proxy.cpp:532
+#: ../../locales/../src/engine/proxy.cpp:533
 msgid "General SOCKS server failure"
 msgstr "Genel SOCKS sunucu hatası"
 
@@ -3959,7 +3954,7 @@ msgstr "Sunucu anahtarı uyuşmazlığı"
 msgid "Host starts with '[' but no closing bracket found."
 msgstr "Sunucu adı '[' ile başlıyor ama kapatma parantezi bulunamadı."
 
-#: ../../locales/../src/engine/proxy.cpp:541
+#: ../../locales/../src/engine/proxy.cpp:542
 msgid "Host unreachable"
 msgstr "Sunucuya ulaşılamıyor"
 
@@ -4699,7 +4694,7 @@ msgstr "Geçerli bir yol yazmalısınız"
 msgid "Need to specify a character encoding"
 msgstr "Karakter kodlaması belirtilmeli"
 
-#: ../../locales/../src/engine/proxy.cpp:538
+#: ../../locales/../src/engine/proxy.cpp:539
 msgid "Network unreachable"
 msgstr "Ağa ulaşılamıyor"
 
@@ -4829,7 +4824,7 @@ msgstr "Arama sonuç vermedi"
 msgid "No sites available"
 msgstr "Henüz kayıtlı bir site yok"
 
-#: ../../locales/../src/engine/proxy.cpp:506
+#: ../../locales/../src/engine/proxy.cpp:507
 msgid "No supported SOCKS5 auth method"
 msgstr "Desteklenmeyen SOCKS5 kimlik denetimi kipi"
 
@@ -5063,7 +5058,7 @@ msgstr "PORT komutu yöneltici ya da güvenlik duvarı tarafından bozuldu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&sif (önerilen)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2604
+#: ../../locales/../src/interface/Mainfrm.cpp:2602
 msgid "Parameter not a valid URL"
 msgstr "Parametre geçerli bir İnternet adresi değil"
 
@@ -5429,9 +5424,8 @@ msgstr ""
 "yazılımları varsa bunları devre dışı bırakmalısınız."
 
 #: resources.h:875
-#, fuzzy
 msgid "Positio&n of the message log:"
-msgstr "İleti &günlüğünün konumu:"
+msgstr "İleti gü&nlüğünün konumu:"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
 #: ../../locales/../src/interface/verifycertdialog.cpp:188
@@ -5507,12 +5501,12 @@ msgstr "Vekil sunucu ka&pısı:"
 msgid "Proxy &user:"
 msgstr "Vekil sunucu k&ullanıcı adı:"
 
-#: ../../locales/../src/engine/proxy.cpp:517
+#: ../../locales/../src/engine/proxy.cpp:518
 msgid "Proxy authentication failed"
 msgstr "Vekil sunucu oturumu açılamadı"
 
-#: ../../locales/../src/engine/transfersocket.cpp:135
-#: ../../locales/../src/engine/transfersocket.cpp:149
+#: ../../locales/../src/engine/transfersocket.cpp:137
+#: ../../locales/../src/engine/transfersocket.cpp:151
 #, c-format
 msgid "Proxy handshake failed: %s"
 msgstr "Vekil sunucu ile iletişim kurulamadı: %s"
@@ -5521,18 +5515,18 @@ msgstr "Vekil sunucu ile iletişim kurulamadı: %s"
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "Vekil sunucu adı '[' ile başlıyor ama kapatma parantezi bulunamadı."
 
-#: ../../locales/../src/engine/proxy.cpp:351
+#: ../../locales/../src/engine/proxy.cpp:352
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "Vekil sunucu yanıtı: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:415
-#: ../../locales/../src/engine/proxy.cpp:560
+#: ../../locales/../src/engine/proxy.cpp:416
+#: ../../locales/../src/engine/proxy.cpp:561
 #, c-format
 msgid "Proxy request failed: %s"
 msgstr "Vekil sunucu isteği başarısız oldu: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:582
+#: ../../locales/../src/engine/proxy.cpp:583
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr ""
 "Vekil sunucu isteği başarısız oldu: CONNECT yanıtında bilinmeyen adres tipi"
@@ -5820,20 +5814,20 @@ msgstr "'%s' adı '%s' olarak değiştiriliyor"
 msgid "Reporting bugs and feature requests"
 msgstr "Hataları ve isteklerinizi iletebilirsiniz"
 
-#: ../../locales/../src/engine/proxy.cpp:406
+#: ../../locales/../src/engine/proxy.cpp:407
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
 "İstek gerçekleştirilemedi - istemcide identd çalışmıyor (ya da sunucu "
 "tarafından erişilemiyor)"
 
-#: ../../locales/../src/engine/proxy.cpp:409
+#: ../../locales/../src/engine/proxy.cpp:410
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
 "İstek gerçekleştirilemedi - istemcideki identd kullanıcı kodu dizgesini "
 "onaylayamadı"
 
-#: ../../locales/../src/engine/proxy.cpp:403
+#: ../../locales/../src/engine/proxy.cpp:404
 msgid "Request rejected or failed"
 msgstr "İstek gerçekleştirilemedi ya da reddedildi"
 
@@ -6303,7 +6297,7 @@ msgstr "Öncelik &Belirleyin"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "'%s' izinlerini '%s' üzerine atayın"
 
-#: ../../locales/../src/engine/transfersocket.cpp:852
+#: ../../locales/../src/engine/transfersocket.cpp:854
 msgid "SetSocketBufferSize called without socket"
 msgstr "Soket olmadan SetSocketBufferSize çağrıldı"
 
@@ -6620,7 +6614,7 @@ msgstr "Sözdizimi hatası"
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
 #: ../../locales/../src/interface/Mainfrm.cpp:2557
-#: ../../locales/../src/interface/Mainfrm.cpp:2606
+#: ../../locales/../src/interface/Mainfrm.cpp:2604
 msgid "Syntax error in command line"
 msgstr "Komut satırında sözdizimi hatası"
 
@@ -6644,7 +6638,7 @@ msgstr "TSL/SSL bağlantısı sağlandı, hoş geldin iletisi bekleniyor..."
 msgid "TLS/SSL connection established."
 msgstr "TLS/SSL bağlantısı kuruldu."
 
-#: ../../locales/../src/engine/proxy.cpp:547
+#: ../../locales/../src/engine/proxy.cpp:548
 msgid "TTL expired"
 msgstr "TTL süresi doldu"
 
@@ -6717,7 +6711,7 @@ msgstr "Bu bağlantı şifrelenmiş. Ayrıntılar için simgeye tıklayın."
 msgid "The custom login sequence cannot be empty."
 msgstr "Özel giriş sıralaması boş olamaz."
 
-#: ../../locales/../src/engine/transfersocket.cpp:176
+#: ../../locales/../src/engine/transfersocket.cpp:178
 #, c-format
 msgid "The data connection could not be established: %s"
 msgstr "Veri bağlantısı kurulamadı: %s"
@@ -7192,8 +7186,8 @@ msgstr "Aktarım Kuyruğu"
 msgid "Transfer Settings"
 msgstr "Aktarım Ayarları"
 
-#: ../../locales/../src/engine/transfersocket.cpp:513
-#: ../../locales/../src/engine/transfersocket.cpp:537
+#: ../../locales/../src/engine/transfersocket.cpp:515
+#: ../../locales/../src/engine/transfersocket.cpp:539
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "Aktarım bağlantısı kesildi: %s"
@@ -7281,8 +7275,8 @@ msgstr "Sistem var&sayılanları kullanılsın"
 msgid "USER@&HOST"
 msgstr "KULLANICI@&SUNUCU"
 
-#: ../../locales/../src/engine/proxy.cpp:412
-#: ../../locales/../src/engine/proxy.cpp:556
+#: ../../locales/../src/engine/proxy.cpp:413
+#: ../../locales/../src/engine/proxy.cpp:557
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "Atanmamış hata kodu %d"
@@ -7302,7 +7296,7 @@ msgstr ""
 "Bilinmeyen FTP vekil sunucu tipi yüzünden oturum açma işlemi sıralaması "
 "yürütülemedi."
 
-#: ../../locales/../src/engine/proxy.cpp:470
+#: ../../locales/../src/engine/proxy.cpp:471
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "Bilinmeyen SOCKS iletişim kuralı sürümü: %d"
@@ -7323,7 +7317,7 @@ msgstr ""
 msgid "Unknown host key"
 msgstr "Bilinmeyen sunucu anahtarı"
 
-#: ../../locales/../src/engine/proxy.cpp:480
+#: ../../locales/../src/engine/proxy.cpp:481
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -7653,7 +7647,7 @@ msgstr ""
 
 #: resources.h:885
 msgid "When st&arting a new connection while already connected:"
-msgstr ""
+msgstr "Z&aten bağlıyken yeni bir bağlantı başlatıldığında:"
 
 #: resources.h:872
 msgid "Widescreen"
