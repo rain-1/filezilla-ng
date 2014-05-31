@@ -38,6 +38,7 @@ protected:
 	void OnTimer(wxTimerEvent& ev);
 	void ShowDetails(wxHyperlinkEvent& ev);
 	void Retry(wxHyperlinkEvent& ev);
+	void OnDebugLog(wxCommandEvent&);
 };
 
 #endif

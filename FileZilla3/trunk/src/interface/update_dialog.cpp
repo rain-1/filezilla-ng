@@ -16,6 +16,7 @@ EVT_TIMER(wxID_ANY, CUpdateDialog::OnTimer)
 EVT_HYPERLINK(XRCID("ID_SHOW_DETAILS"), CUpdateDialog::ShowDetails)
 EVT_HYPERLINK(XRCID("ID_RETRY"), CUpdateDialog::Retry)
 EVT_HYPERLINK(XRCID("ID_DOWNLOAD_RETRY"), CUpdateDialog::Retry)
+EVT_BUTTON(XRCID("ID_DEBUGLOG"), CUpdateDialog::OnDebugLog)
 END_EVENT_TABLE()
 
 namespace pagenames {
@@ -249,6 +250,11 @@ void CUpdateDialog::ShowDetails(wxHyperlinkEvent&)
 void CUpdateDialog::Retry(wxHyperlinkEvent&)
 {
 	updater_.RunIfNeeded();
+}
+
+void CUpdateDialog::OnDebugLog(wxCommandEvent&)
+{
+	wxMessageBox(updater_.GetLog());
 }
 
 #endif
