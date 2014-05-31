@@ -4,16 +4,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 11:18+0200\n"
-"PO-Revision-Date: 2014-05-27 09:02+0700\n"
+"POT-Creation-Date: 2014-05-31 23:52+0200\n"
+"PO-Revision-Date: 2014-05-31 05:04+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: Indonesian\n"
+"Language: id\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.5.5\n"
+"X-Generator: Poedit 1.6.5\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
 #: ../../locales/../src/interface/statuslinectrl.cpp:224
@@ -182,7 +182,7 @@ msgstr "%w - Kata sandi proxy"
 
 #: resources.h:463
 msgid "&Abort previous connection and connect in current tab"
-msgstr "B&atalkan koneksi sebelumnya dan hubungkan pada tab aktual"
+msgstr "B&atalkan koneksi sebelumnya dan buka koneksi pada tab aktual"
 
 #: resources.h:550
 msgid "&About..."
@@ -279,7 +279,7 @@ msgstr "&Batal"
 msgid "&Clear private data..."
 msgstr "&Hapus data privat..."
 
-#: resources.h:1023
+#: resources.h:1024
 msgid "&Close"
 msgstr "&Tutup"
 
@@ -434,7 +434,7 @@ msgstr "&Masukkan perintah sendiri..."
 
 #: resources.h:462
 msgid "&Establish connection in a new tab"
-msgstr "&Buat koneksi pada tab baru"
+msgstr "Buat kon&eksi pada tab baru"
 
 #: resources.h:144
 msgid "&Execute"
@@ -548,7 +548,7 @@ msgstr "&Import..."
 msgid "&Inherit system's filetype associations"
 msgstr "&Turunkan asosiasi jenis berkas sistem"
 
-#: resources.h:1030
+#: resources.h:1031
 msgid "&Install new version"
 msgstr "&Install versi baru"
 
@@ -1184,7 +1184,7 @@ msgstr ""
 "daftar.\n"
 "Tidak ada pesan lain yang akan ditampilkan pada sesi ini."
 
-#: resources.h:1024
+#: resources.h:1025
 msgid "A new version of FileZilla is available:"
 msgstr "Versi baru dari FileZilla sudah tersedia:"
 
@@ -1405,7 +1405,7 @@ msgstr ""
 "Alternatif lain, Anda bisa menggunakan agent SSH sistem Anda. Untuk "
 "melakukannya, pastikan variabel lingkungan SSH_AUTH_SOCK sudah diset."
 
-#: resources.h:1033
+#: resources.h:1034
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
@@ -1867,7 +1867,7 @@ msgstr "Periksa untuk Update"
 msgid "Check for newer versions of FileZilla"
 msgstr "Periksa versi baru dari FileZilla"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Check for updates failed"
 msgstr "Pemeriksaan update gagal"
 
@@ -1875,16 +1875,16 @@ msgstr "Pemeriksaan update gagal"
 msgid "Checking for correct external IP address"
 msgstr "Memeriksa alamat IP eksternal yang benar"
 
-#: resources.h:1035
+#: resources.h:1036
 msgid "Checking for updates..."
 msgstr "Memeriksa update..."
 
-#: ../../locales/../src/interface/updater.cpp:661
+#: ../../locales/../src/interface/updater.cpp:697
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Pemeriksaan checksum cocok pada berkas %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:657
+#: ../../locales/../src/interface/updater.cpp:693
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Pemeriksaan checksum tidak cocok pada berkas %s\n"
@@ -2295,7 +2295,7 @@ msgstr "Tidak dapat menyalin URL"
 msgid "Could not copy data"
 msgstr "Tidak dapat menyalin data"
 
-#: ../../locales/../src/interface/updater.cpp:432
+#: ../../locales/../src/interface/updater.cpp:439
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Tidak bisa membuat berkas lokal%s\n"
@@ -2563,7 +2563,7 @@ msgstr "Membuat sub direkori baru di direktori saat ini"
 msgid "Create a new subdirectory in the current directory and change into it"
 msgstr ""
 "Membuat sub direkori baru di direktori saat ini dan berpindah ke direktori "
-"tersebut"
+"baru tersebut"
 
 #: resources.h:583
 msgid "Create a new, empty file in the current directory"
@@ -2571,7 +2571,7 @@ msgstr "Membuat berkas kosong baru di direktori saat ini"
 
 #: resources.h:564 resources.h:580 resources.h:638 resources.h:661
 msgid "Create director&y and enter it"
-msgstr "Membuat direktor&i dan masuk didalamnya"
+msgstr "Membuat direktor&i dan masuk"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1158
 #: ../../locales/../src/interface/LocalTreeView.cpp:1167
@@ -3022,7 +3022,7 @@ msgstr "Menndownload banyak direktori yang tidak berhubungan belum didukung"
 msgid "Downloading search results"
 msgstr "Mendownload hasil pencarian"
 
-#: resources.h:1027
+#: resources.h:1028
 msgid "Downloading update..."
 msgstr "Mendownload update..."
 
@@ -3319,7 +3319,7 @@ msgstr "Contoh"
 msgid "Exe&cute"
 msgstr "Jal&ankan"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Executable contains no version info, cannot check for updates."
 msgstr "Aplikasi tidak berisi informasi versi, tidak bisa memeriksa update."
 
@@ -3878,6 +3878,11 @@ msgstr ""
 "Format: Ekstensi diikuti dengan perintah dan argumen yang diberi tanda kutip "
 "dengan benar."
 
+#: ../../locales/../src/interface/updater.cpp:628
+#, fuzzy, c-format
+msgid "Found new %s %s\n"
+msgstr "Tidak bisa menulis \"%s\": %s"
+
 #: resources.h:453
 msgid "Further documentation"
 msgstr "Dokumentasi lebih lanjut"
@@ -4246,7 +4251,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Kata kunci salah"
 
-#: resources.h:1036
+#: resources.h:1037
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4502,8 +4507,8 @@ msgstr "Berkas lokal"
 msgid "Local file does not exist."
 msgstr "Berkas lokal tidak ada."
 
-#: ../../locales/../src/interface/updater.cpp:359
-#: ../../locales/../src/interface/updater.cpp:436
+#: ../../locales/../src/interface/updater.cpp:366
+#: ../../locales/../src/interface/updater.cpp:443
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Berkas lokal adalah %s\n"
@@ -5047,6 +5052,11 @@ msgstr "Timpa jika &ukuran berbeda"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Timpa jika uku&ran berbeda atau sumber lebih baru"
 
+#: ../../locales/../src/interface/updater.cpp:243
+#, c-format
+msgid "Own build type: %s\n"
+msgstr ""
+
 #: resources.h:141
 msgid "Owner permissions"
 msgstr "Hak akses pemilik"
@@ -5078,6 +5088,11 @@ msgstr "Pa&sif (disarankan)"
 #: ../../locales/../src/interface/Mainfrm.cpp:2602
 msgid "Parameter not a valid URL"
 msgstr "Parameter bukan URL yang valid"
+
+#: ../../locales/../src/interface/updater.cpp:525
+#, c-format
+msgid "Parsing %d bytes of version information.\n"
+msgstr ""
 
 #: resources.h:95 resources.h:367 resources.h:729
 msgid "Pass&word:"
@@ -5438,7 +5453,7 @@ msgstr ""
 
 #: resources.h:875
 msgid "Positio&n of the message log:"
-msgstr "Posi&si dari pesan log:"
+msgstr "Posisi dari pesa&n log:"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
 #: ../../locales/../src/interface/verifycertdialog.cpp:188
@@ -5694,6 +5709,16 @@ msgstr "Menerima baris melebihi 10000 karakter, dibatalkan."
 #: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Data yang diterima ditolak"
+
+#: ../../locales/../src/interface/updater.cpp:504
+#, fuzzy
+msgid "Received invalid character in version information"
+msgstr "&Ganti karakter yang tidak valid dengan:"
+
+#: ../../locales/../src/interface/updater.cpp:497
+#, fuzzy
+msgid "Received version information is too large"
+msgstr "Cetak informasi versi pada stdout dan selesai"
 
 #: ../../locales/../src/interface/clearprivatedata.cpp:77
 msgid ""
@@ -6327,7 +6352,7 @@ msgid "Show both directory trees and continue comparing?"
 msgstr ""
 "Tampilkan struktur pohon dari dua direktori dan melanjutkan perbandingan?"
 
-#: resources.h:1038
+#: resources.h:1039
 msgid "Show details"
 msgstr "Tampilkan detail"
 
@@ -6526,7 +6551,7 @@ msgstr "Mulai transfer &secepatnya"
 msgid "Start with opened Site Manager"
 msgstr "Mulai dengan Manajemen Situs yang terbuka"
 
-#: ../../locales/../src/interface/updater.cpp:236
+#: ../../locales/../src/interface/updater.cpp:237
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Pemeriksaan update dimulai pada %s\n"
@@ -6915,11 +6940,11 @@ msgstr ""
 "Port terendah yang tersedia harus lebih rendah atau sama dengan port "
 "tertinggi yang tersedia."
 
-#: resources.h:1031
+#: resources.h:1032
 msgid "The new version could not be downloaded, please retry later."
 msgstr "Versi baru tidak bisa didownload, harap mencoba kembali lagi."
 
-#: resources.h:1029
+#: resources.h:1030
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Versi baru telah disimpan pada direktori Downloads Anda."
 
@@ -7254,7 +7279,7 @@ msgstr "Percayai sertifikat ini dan lanjutkan dengan menghubungkan diri?"
 msgid "Trust this host and carry on connecting?"
 msgstr "Percayai mesin ini dan lanjutkan dengan koneksi?"
 
-#: resources.h:1032 resources.h:1037
+#: resources.h:1033 resources.h:1038
 msgid "Try again"
 msgstr "Coba kembali"
 
@@ -7643,7 +7668,7 @@ msgstr "Selamat datang ke FileZilla"
 msgid "What's new"
 msgstr "Apa yang baru"
 
-#: resources.h:1026
+#: resources.h:1027
 msgid "What's new:"
 msgstr "Apa yang baru:"
 
@@ -7701,7 +7726,7 @@ msgstr ""
 "Tampaknya Anda menggunakan host berbasis IPv6. Panduan ini tidak mendukung "
 "lingkungan ini."
 
-#: resources.h:1040
+#: resources.h:1041
 msgid "You are using the latest version of FileZilla."
 msgstr "Anda menggunakan versi terbaru dari FileZilla."
 
@@ -7709,7 +7734,7 @@ msgstr "Anda menggunakan versi terbaru dari FileZilla."
 msgid "You can always open this dialog again through the help menu."
 msgstr "Anda selalu bisa membuka dialog ini kemudian melalui menu bantuan."
 
-#: resources.h:1034 resources.h:1039
+#: resources.h:1035 resources.h:1040
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Anda bisa mendownload versi terbaru dari website FileZilla:"
 
@@ -7894,6 +7919,11 @@ msgstr "byte"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:90
 msgid "contains"
 msgstr "berisi"
+
+#: ../../locales/../src/interface/updater.cpp:241
+#, fuzzy
+msgid "custom"
+msgstr "&Kustomisasi"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:95
 msgid "does not contain"

@@ -1,10 +1,10 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 2014-05-26\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 11:18+0200\n"
-"PO-Revision-Date: 2014-05-26 11:19+0100\n"
-"Last-Translator: bovirus <bovirus@libero.it>\n"
+"POT-Creation-Date: 2014-05-31 23:52+0200\n"
+"PO-Revision-Date: 2014-05-30 22:21+0100\n"
+"Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
 "MIME-Version: 1.0\n"
@@ -189,7 +189,7 @@ msgstr "%w - Password proxy"
 
 #: resources.h:463
 msgid "&Abort previous connection and connect in current tab"
-msgstr "Interrompi connessione precedente e connetti nella scheda attuale"
+msgstr "Interrompi connessione precedente e connetti nella sched&a attuale"
 
 #: resources.h:550
 msgid "&About..."
@@ -287,7 +287,7 @@ msgstr "A&nnulla"
 msgid "&Clear private data..."
 msgstr "&Elimina i dati personali..."
 
-#: resources.h:1023
+#: resources.h:1024
 msgid "&Close"
 msgstr "&Chiudi"
 
@@ -443,7 +443,7 @@ msgstr "&Esegui comando personalizzato..."
 
 #: resources.h:462
 msgid "&Establish connection in a new tab"
-msgstr "Stabilisci la conn&essione in una nuova scheda"
+msgstr "Stabilisci conn&essione in una nuova scheda"
 
 #: resources.h:144
 msgid "&Execute"
@@ -559,7 +559,7 @@ msgstr "&Importa..."
 msgid "&Inherit system's filetype associations"
 msgstr "Eredita le assoc&iazioni dal sistema"
 
-#: resources.h:1030
+#: resources.h:1031
 msgid "&Install new version"
 msgstr "&Installa nuova versione"
 
@@ -1194,7 +1194,7 @@ msgstr ""
 "negli elenchi.\n"
 "Durante questa sessione non saranno visualizzati altri avvisi."
 
-#: resources.h:1024
+#: resources.h:1025
 msgid "A new version of FileZilla is available:"
 msgstr "È disponibile una versione nuova di FileZilla:"
 
@@ -1421,7 +1421,7 @@ msgstr ""
 "È possibile alternativamente usare il vostro agente SSH di sistema. Per fare "
 "ciò assicuratevi che la variabile SSH_AUTH_SOCK sia impostata."
 
-#: resources.h:1033
+#: resources.h:1034
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
@@ -1885,7 +1885,7 @@ msgstr "Controllo disponibnilità aggiornamenti"
 msgid "Check for newer versions of FileZilla"
 msgstr "Verifica l'esistenza di versioni più recenti di FileZilla"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Check for updates failed"
 msgstr "Verifica aggiornamenti non riuscita"
 
@@ -1893,16 +1893,16 @@ msgstr "Verifica aggiornamenti non riuscita"
 msgid "Checking for correct external IP address"
 msgstr "Controllo di correttezza dell'IP esterno"
 
-#: resources.h:1035
+#: resources.h:1036
 msgid "Checking for updates..."
 msgstr "Controllo disponibilità aggiornamenti..."
 
-#: ../../locales/../src/interface/updater.cpp:661
+#: ../../locales/../src/interface/updater.cpp:697
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Corrispondenza checksum nel file %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:657
+#: ../../locales/../src/interface/updater.cpp:693
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Discordanza checksum nel file %s\n"
@@ -2138,7 +2138,7 @@ msgstr "Connetti nella scheda attuale"
 
 #: resources.h:887
 msgid "Connect in new tab"
-msgstr "Connetti un una nuova scheda"
+msgstr "Connetti in una nuova scheda"
 
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
@@ -2316,7 +2316,7 @@ msgstr "Impossibile copiare gli URL"
 msgid "Could not copy data"
 msgstr "Impossibile copiare i dati"
 
-#: ../../locales/../src/interface/updater.cpp:432
+#: ../../locales/../src/interface/updater.cpp:439
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Impossibile creare il file locale %s\n"
@@ -3057,7 +3057,7 @@ msgstr "Download di cartelle multiple non dipendenti non supportato"
 msgid "Downloading search results"
 msgstr "Download risultati ricerca"
 
-#: resources.h:1027
+#: resources.h:1028
 msgid "Downloading update..."
 msgstr "Download aggiornamento..."
 
@@ -3357,7 +3357,7 @@ msgstr "Esempi"
 msgid "Exe&cute"
 msgstr "Esecu&zione"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Il file eseguibile non contiene informazioni sulla versione, non è possibile "
@@ -3940,6 +3940,11 @@ msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr ""
 "Formato: estensione seguita da comando e parametri correttamente specificati."
 
+#: ../../locales/../src/interface/updater.cpp:628
+#, fuzzy, c-format
+msgid "Found new %s %s\n"
+msgstr "Impossibile scrivere su \"%s\": %s"
+
 #: resources.h:453
 msgid "Further documentation"
 msgstr "Altra documentazione"
@@ -4309,7 +4314,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Password non corretta"
 
-#: resources.h:1036
+#: resources.h:1037
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4567,8 +4572,8 @@ msgstr "File locale"
 msgid "Local file does not exist."
 msgstr "Il file locale non esiste."
 
-#: ../../locales/../src/interface/updater.cpp:359
-#: ../../locales/../src/interface/updater.cpp:436
+#: ../../locales/../src/interface/updater.cpp:366
+#: ../../locales/../src/interface/updater.cpp:443
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Il file locale è %s\n"
@@ -5122,6 +5127,11 @@ msgstr "Sovrascrivi se &dimensione differente"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Sovrascrivi se dimensione dif&ferente o sorgente più recente"
 
+#: ../../locales/../src/interface/updater.cpp:243
+#, c-format
+msgid "Own build type: %s\n"
+msgstr ""
+
 #: resources.h:141
 msgid "Owner permissions"
 msgstr "Permessi proprietario"
@@ -5155,6 +5165,11 @@ msgstr "Pa&ssiva (consigliata)"
 #: ../../locales/../src/interface/Mainfrm.cpp:2602
 msgid "Parameter not a valid URL"
 msgstr "Il parametro non è una URL valida"
+
+#: ../../locales/../src/interface/updater.cpp:525
+#, c-format
+msgid "Parsing %d bytes of version information.\n"
+msgstr ""
 
 #: resources.h:95 resources.h:367 resources.h:729
 msgid "Pass&word:"
@@ -5516,7 +5531,7 @@ msgstr ""
 
 #: resources.h:875
 msgid "Positio&n of the message log:"
-msgstr "&Percorso del registro messaggi:"
+msgstr "Posizio&ne del registro messaggi:"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
 #: ../../locales/../src/interface/verifycertdialog.cpp:188
@@ -5775,6 +5790,16 @@ msgstr "Ricevuta una linea eccedente i 10000 caratteri, interruzione."
 #: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Ricevuti dati corrotti"
+
+#: ../../locales/../src/interface/updater.cpp:504
+#, fuzzy
+msgid "Received invalid character in version information"
+msgstr "&Sostituisci i caratteri non validi con:"
+
+#: ../../locales/../src/interface/updater.cpp:497
+#, fuzzy
+msgid "Received version information is too large"
+msgstr "Invia informazioni versione a stdout e esci"
 
 #: ../../locales/../src/interface/clearprivatedata.cpp:77
 msgid ""
@@ -6419,7 +6444,7 @@ msgid "Show both directory trees and continue comparing?"
 msgstr ""
 "Visualizzare entrambi gli alberi delle cartelle e continuare la comparazione?"
 
-#: resources.h:1038
+#: resources.h:1039
 msgid "Show details"
 msgstr "Visualizza dettagli"
 
@@ -6622,7 +6647,7 @@ msgstr "Avvia &immediatamente il trasferimento"
 msgid "Start with opened Site Manager"
 msgstr "Avvia aprendo Gestore siti"
 
-#: ../../locales/../src/interface/updater.cpp:236
+#: ../../locales/../src/interface/updater.cpp:237
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Controllo aggiornamenti su %s\n"
@@ -7013,11 +7038,11 @@ msgstr ""
 "La porta minima disponibile deve essere minore o uguale alla massima "
 "disponibile."
 
-#: resources.h:1031
+#: resources.h:1032
 msgid "The new version could not be downloaded, please retry later."
 msgstr "La nuova versione non può essere scaricata. Riprova più tardi."
 
-#: resources.h:1029
+#: resources.h:1030
 msgid "The new version has been saved in your Downloads directory."
 msgstr "La nuova versione è stata salvata nella cartella dei download."
 
@@ -7361,7 +7386,7 @@ msgid "Trust this host and carry on connecting?"
 msgstr ""
 "Considerare come attendibile questo computer e procedere con la connessione?"
 
-#: resources.h:1032 resources.h:1037
+#: resources.h:1033 resources.h:1038
 msgid "Try again"
 msgstr "Riprova"
 
@@ -7749,7 +7774,7 @@ msgstr "benvenuti in FileZilla"
 msgid "What's new"
 msgstr "Novità"
 
-#: resources.h:1026
+#: resources.h:1027
 msgid "What's new:"
 msgstr "Novità:"
 
@@ -7772,7 +7797,7 @@ msgstr ""
 
 #: resources.h:885
 msgid "When st&arting a new connection while already connected:"
-msgstr "Qu&ando avvi una nuova conenssione mentre sei già connesso:"
+msgstr "Qu&ando avvi una nuova connessione mentre sei già connesso:"
 
 #: resources.h:872
 msgid "Widescreen"
@@ -7807,7 +7832,7 @@ msgstr ""
 "Sembra che tu stia usando un host solo IPv6. Questa procedura guidata non "
 "supporta questa configurazione."
 
-#: resources.h:1040
+#: resources.h:1041
 msgid "You are using the latest version of FileZilla."
 msgstr "La versione di FileZilla è aggiornata."
 
@@ -7816,7 +7841,7 @@ msgid "You can always open this dialog again through the help menu."
 msgstr ""
 "E' possibile aprire questa finestra di dialogo dal menu della Guida in linea."
 
-#: resources.h:1034 resources.h:1039
+#: resources.h:1035 resources.h:1040
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Puoi scaricare la versione più recente di FileZilla dal sito web:"
 
@@ -7998,6 +8023,11 @@ msgstr "byte"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:90
 msgid "contains"
 msgstr "contiene"
+
+#: ../../locales/../src/interface/updater.cpp:241
+#, fuzzy
+msgid "custom"
+msgstr "&Personalizza"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:95
 msgid "does not contain"
