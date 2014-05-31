@@ -539,10 +539,17 @@ void CUpdater::ParseData()
 			version_information_.changelog = raw_version_information;
 			version_information_.changelog.Trim(true);
 			version_information_.changelog.Trim(false);
+
+			if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+				log_ += wxString::Format(_T("Changelog: %s\n"), version_information_.changelog.c_str());
+			}
 			break;
 		}
 
 		if( tokens.CountTokens() != 2 && tokens.CountTokens() != 6 ) {
+			if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+				log_ += wxString::Format(_T("Skipping line with %d tokens\n"), static_cast<int>(tokens.CountTokens()));
+			}
 			continue;
 		}
 
@@ -552,12 +559,19 @@ void CUpdater::ParseData()
 		if (type == _T("nightly")) {
 			wxDateTime nightlyDate;
 			if( !nightlyDate.ParseFormat(versionOrDate, _T("%Y-%m-%d")) ) {
+				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+					log_ += _T("Could not parse nightly date");
+				}
 				continue;
 			}
 
 			wxDateTime buildDate = CBuildInfo::GetBuildDate();
-			if (!buildDate.IsValid() || !nightlyDate.IsValid() || nightlyDate <= buildDate)
+			if (!buildDate.IsValid() || !nightlyDate.IsValid() || nightlyDate <= buildDate) {
+				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+					log_ += _T("Nightly isn't newer");
+				}
 				continue;
+			}
 		}
 		else {
 			wxLongLong v = CBuildInfo::ConvertToVersionNumber(versionOrDate);
