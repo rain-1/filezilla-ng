@@ -18,6 +18,12 @@
           <object class="sizeritem">
             <object class="wxBoxSizer">
               <object class="sizeritem">
+                <object class="wxButton" name="ID_DEBUGLOG">
+                  <label>&lt;show log&gt;</label>
+                  <hidden>1</hidden>
+                </object>
+              </object>
+              <object class="sizeritem">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>&amp;Close</label>
                 </object>
