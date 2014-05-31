@@ -521,7 +521,7 @@ void CUpdater::ParseData()
 
 	wxString raw_version_information = raw_version_information_;
 
-	log_ += wxString::Format(_("Parsing %s bytes of version information.\n"), static_cast<int>(raw_version_information.size()));
+	log_ += wxString::Format(_("Parsing %d bytes of version information.\n"), static_cast<int>(raw_version_information.size()));
 
 	while( !raw_version_information.empty() ) {
 		wxString line;
