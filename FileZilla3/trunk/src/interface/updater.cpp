@@ -8,6 +8,7 @@
 #include "file_utils.h"
 #include <local_filesys.h>
 #include <wx/tokenzr.h>
+#include <string>
 
 // This is ugly but does the job
 #define SHA512_STANDALONE
