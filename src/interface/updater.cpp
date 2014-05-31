@@ -489,12 +489,14 @@ void CUpdater::ProcessData(CNotification* notification)
 	char* data = pData->Detach(len);
 
 	if( raw_version_information_.size() + len > 131072 ) {
+		log_ += _("Received version information is too large");
 		engine_->Command(CCancelCommand());
 		SetState(failed);
 	}
 	else {
 		for (int i = 0; i < len; i++) {
 			if (data[i] < 10 || (unsigned char)data[i] > 127) {
+				log_ += _("Received invalid character in version information");
 				SetState(failed);
 				engine_->Command(CCancelCommand());
 				break;
@@ -514,6 +516,8 @@ void CUpdater::ParseData()
 	version_information_ = version_information();
 
 	wxString raw_version_information = raw_version_information_;
+
+	log_ += _("Parsing received version information.\n");
 
 	while( !raw_version_information.empty() ) {
 		wxString line;
@@ -547,8 +551,9 @@ void CUpdater::ParseData()
 
 		if (type == _T("nightly")) {
 			wxDateTime nightlyDate;
-			if (!nightlyDate.ParseDate(versionOrDate))
+			if( !nightlyDate.ParseFormat(versionOrDate, _T("%Y-%m-%d")) ) {
 				continue;
+			}
 
 			wxDateTime buildDate = CBuildInfo::GetBuildDate();
 			if (!buildDate.IsValid() || !nightlyDate.IsValid() || nightlyDate <= buildDate)
@@ -597,7 +602,7 @@ void CUpdater::ParseData()
 				b->size_ = l;
 				b->hash_ = hash;
 
-				log_ += wxString::Format(_("Found %s %s\n"), type.c_str(), b->version_.c_str());
+				log_ += wxString::Format(_("Found new %s %s\n"), type.c_str(), b->version_.c_str());
 			}
 		}
 	}
