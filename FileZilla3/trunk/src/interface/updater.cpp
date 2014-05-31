@@ -488,13 +488,17 @@ void CUpdater::ProcessData(CNotification* notification)
 	int len;
 	char* data = pData->Detach(len);
 
+	if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+		log_ += wxString::Format(_T("ProcessData %d\n"), len);
+	}
+
 	if( raw_version_information_.size() + len > 131072 ) {
 		log_ += _("Received version information is too large");
 		engine_->Command(CCancelCommand());
 		SetState(failed);
 	}
 	else {
-		for (int i = 0; i < len; i++) {
+		for (int i = 0; i < len; ++i) {
 			if (data[i] < 10 || (unsigned char)data[i] > 127) {
 				log_ += _("Received invalid character in version information");
 				SetState(failed);
@@ -517,18 +521,16 @@ void CUpdater::ParseData()
 
 	wxString raw_version_information = raw_version_information_;
 
-	log_ += _("Parsing received version information.\n");
+	log_ += wxString::Format(_("Parsing %s bytes of version information.\n"), static_cast<int>(raw_version_information.size()));
 
 	while( !raw_version_information.empty() ) {
 		wxString line;
 		int pos = raw_version_information.Find('\n');
-		if (pos != -1)
-		{
+		if (pos != -1) {
 			line = raw_version_information.Left(pos);
 			raw_version_information = raw_version_information.Mid(pos + 1);
 		}
-		else
-		{
+		else {
 			line = raw_version_information;
 			raw_version_information = _T("");
 		}
