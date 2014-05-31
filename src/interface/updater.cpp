@@ -235,6 +235,12 @@ bool CUpdater::Run()
 	local_file_.clear();
 	log_ = wxString::Format(_("Started update check on %s\n"), t.Format().c_str());
 
+	wxString build = CBuildInfo::GetBuildType();
+	if( build.empty() ) {
+		build = _("custom");
+	}
+	log_ += wxString::Format(_("Own build type: %s\n"), build.c_str());
+
 	SetState(checking);
 
 	update_options_->m_use_internal_rootcert = true;
@@ -590,6 +596,8 @@ void CUpdater::ParseData()
 				b->url_ = url;
 				b->size_ = l;
 				b->hash_ = hash;
+
+				log_ += wxString::Format(_("Found %s %s\n"), type.c_str(), b->version_.c_str());
 			}
 		}
 	}
