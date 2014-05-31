@@ -562,7 +562,7 @@ void CUpdater::ParseData()
 			wxDateTime nightlyDate;
 			if( !nightlyDate.ParseFormat(versionOrDate, _T("%Y-%m-%d")) ) {
 				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-					log_ += _T("Could not parse nightly date");
+					log_ += _T("Could not parse nightly date\n");
 				}
 				continue;
 			}
@@ -570,7 +570,7 @@ void CUpdater::ParseData()
 			wxDateTime buildDate = CBuildInfo::GetBuildDate();
 			if (!buildDate.IsValid() || !nightlyDate.IsValid() || nightlyDate <= buildDate) {
 				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-					log_ += _T("Nightly isn't newer");
+					log_ += _T("Nightly isn't newer\n");
 				}
 				continue;
 			}
@@ -596,12 +596,15 @@ void CUpdater::ParseData()
 			b->version_ = versionOrDate;
 
 			if( UpdatableBuild() && tokens.CountTokens() == 4 ) {
-				wxString url = tokens.GetNextToken();
-				wxString sizestr = tokens.GetNextToken();
-				wxString hash_algo = tokens.GetNextToken();
-				wxString hash = tokens.GetNextToken();
+				wxString const url = tokens.GetNextToken();
+				wxString const sizestr = tokens.GetNextToken();
+				wxString const hash_algo = tokens.GetNextToken();
+				wxString const hash = tokens.GetNextToken();
 
 				if( GetFilename(url).empty() ) {
+					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+						log_ += wxString::Format(_T("Could not extract filename from URL: %s\n"), url.c_str());
+					}
 					continue;
 				}
 
@@ -611,6 +614,9 @@ void CUpdater::ParseData()
 
 				unsigned long long l = 0;
 				if( !sizestr.ToULongLong(&l) ) {
+					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+						log_ += wxString::Format(_T("Could not parse size: %s"), sizestr.c_str());
+					}
 					continue;
 				}
 
@@ -713,9 +719,9 @@ wxString CUpdater::GetFilename( wxString const& url) const
 	if( pos != -1 ) {
 		ret = url.Mid(pos + 1);
 	}
-	pos = ret.find_first_of(_T("?#"));
-	if( pos != -1 ) {
-		ret = ret.Left(pos);
+	std::size_t p = ret.find_first_of(_T("?#"));
+	if( p != std::string::npos ) {
+		ret = ret.substr(0, p);
 	}
 #ifdef __WXMSW__
 	ret.Replace(_T(":"), _T("_"));
