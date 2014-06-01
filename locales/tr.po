@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # 2. Roman Neumüller <email@katpatuka.org>, 2007
 # Kaya Zeren <kayazeren@gmail.com>, 2014
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 11:18+0200\n"
-"PO-Revision-Date: 2014-05-26 12:00+0000\n"
+"POT-Creation-Date: 2014-05-31 23:52+0200\n"
+"PO-Revision-Date: 2014-06-01 08:52+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "filezilla/language/tr_TR/)\n"
@@ -283,7 +283,7 @@ msgstr "İ&ptal"
 msgid "&Clear private data..."
 msgstr "&Kişisel verileri silin..."
 
-#: resources.h:1023
+#: resources.h:1024
 msgid "&Close"
 msgstr "&Kapatın"
 
@@ -552,7 +552,7 @@ msgstr "&Alın..."
 msgid "&Inherit system's filetype associations"
 msgstr "Sistem dosya tipi &ilişkileri devralınsın"
 
-#: resources.h:1030
+#: resources.h:1031
 msgid "&Install new version"
 msgstr "&Yeni sürümü yükleyin"
 
@@ -1181,7 +1181,7 @@ msgstr ""
 "Bu sorunu çözmezseniz listelemelerde bazı dosyalar görünmeyebilir.\n"
 "Bu oturum boyunca başka uyarı almayacaksınız."
 
-#: resources.h:1024
+#: resources.h:1025
 msgid "A new version of FileZilla is available:"
 msgstr "Yeni bir FileZilla sürümü yayınlanmış:"
 
@@ -1400,7 +1400,7 @@ msgstr ""
 "Alternatif olarak sisteminizdeki SSH programını kullanabilirsiniz. Bunu "
 "yapmak için SSH_AUTH_SOCK değişkeninin ayarlandığından emin olun."
 
-#: resources.h:1033
+#: resources.h:1034
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
@@ -1856,7 +1856,7 @@ msgstr "Güncellemeleri denetleyin"
 msgid "Check for newer versions of FileZilla"
 msgstr "Yeni FileZilla sürümlerini denetleyin"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Check for updates failed"
 msgstr "Güncellemeler denetlenemedi"
 
@@ -1864,16 +1864,16 @@ msgstr "Güncellemeler denetlenemedi"
 msgid "Checking for correct external IP address"
 msgstr "Doğru dış IP adresi denetleniyor"
 
-#: resources.h:1035
+#: resources.h:1036
 msgid "Checking for updates..."
 msgstr "Güncellemeler denetleniyor..."
 
-#: ../../locales/../src/interface/updater.cpp:661
+#: ../../locales/../src/interface/updater.cpp:697
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "%s dosyasının sağlaması tutuyor\n"
 
-#: ../../locales/../src/interface/updater.cpp:657
+#: ../../locales/../src/interface/updater.cpp:693
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "%s dosyasının sağlaması tutmuyor\n"
@@ -2284,7 +2284,7 @@ msgstr "İnternet adresleri kopyalanamadı"
 msgid "Could not copy data"
 msgstr "Veri kopyalanamadı"
 
-#: ../../locales/../src/interface/updater.cpp:432
+#: ../../locales/../src/interface/updater.cpp:439
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "%s yerel dosyası oluşturulamıyor\n"
@@ -3000,7 +3000,7 @@ msgstr "Birden fazla bağlantısız klasörü indirme işlemi henüz desteklenmi
 msgid "Downloading search results"
 msgstr "Arama sonuçları indiriliyor"
 
-#: resources.h:1027
+#: resources.h:1028
 msgid "Downloading update..."
 msgstr "Güncelleme indiriliyor..."
 
@@ -3300,7 +3300,7 @@ msgstr "Örnekler"
 msgid "Exe&cute"
 msgstr "Çal&ıştırma"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Kullandığınız uygulama sürüm bilgisini içermediğinden güncelleme denetimi "
@@ -3859,6 +3859,11 @@ msgstr ""
 "Yazım biçimi: Dosya tipini izleyecek şekilde tırnak içine alınmış komut ve "
 "ardından parametreler."
 
+#: ../../locales/../src/interface/updater.cpp:628
+#, c-format
+msgid "Found new %s %s\n"
+msgstr "Yeni %s %s bulundu\n"
+
 #: resources.h:453
 msgid "Further documentation"
 msgstr "Ayrıntılı bilgiler"
@@ -4223,7 +4228,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Parola yanlış"
 
-#: resources.h:1036
+#: resources.h:1037
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4480,8 +4485,8 @@ msgstr "Yerel dosya"
 msgid "Local file does not exist."
 msgstr "Yerel dosya bulunamadı."
 
-#: ../../locales/../src/interface/updater.cpp:359
-#: ../../locales/../src/interface/updater.cpp:436
+#: ../../locales/../src/interface/updater.cpp:366
+#: ../../locales/../src/interface/updater.cpp:443
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Yerel dosya %s\n"
@@ -5030,6 +5035,11 @@ msgstr "&Boyut farklı ise üstüne yazılsın"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Boyut farklı ya da kaynak daha yeni ise üstüne ya&zılsın"
 
+#: ../../locales/../src/interface/updater.cpp:243
+#, c-format
+msgid "Own build type: %s\n"
+msgstr "Kendi tipinizi oluşturun: %s\n"
+
 #: resources.h:141
 msgid "Owner permissions"
 msgstr "Sahip izinleri"
@@ -5061,6 +5071,11 @@ msgstr "Pa&sif (önerilen)"
 #: ../../locales/../src/interface/Mainfrm.cpp:2602
 msgid "Parameter not a valid URL"
 msgstr "Parametre geçerli bir İnternet adresi değil"
+
+#: ../../locales/../src/interface/updater.cpp:525
+#, c-format
+msgid "Parsing %d bytes of version information.\n"
+msgstr "Sürüm bilgisinin %d baytı işleniyor.\n"
 
 #: resources.h:95 resources.h:367 resources.h:729
 msgid "Pass&word:"
@@ -5679,6 +5694,14 @@ msgstr "10.000 karakterden uzun bir satır alındı, iptal ediliyor."
 #: ../../locales/../src/interface/netconfwizard.cpp:1037
 msgid "Received data tainted"
 msgstr "Alınan veri bozuk"
+
+#: ../../locales/../src/interface/updater.cpp:504
+msgid "Received invalid character in version information"
+msgstr "Sürüm bilgisinde geçersiz karakterler alındı."
+
+#: ../../locales/../src/interface/updater.cpp:497
+msgid "Received version information is too large"
+msgstr "Alınan sürüm bilgisi çok büyük"
 
 #: ../../locales/../src/interface/clearprivatedata.cpp:77
 msgid ""
@@ -6317,7 +6340,7 @@ msgstr "&Hoş geldiniz penceresi görüntülensin..."
 msgid "Show both directory trees and continue comparing?"
 msgstr "Her iki klasör ağacı görüntülenerek karşılaştırmaya devam edilsin"
 
-#: resources.h:1038
+#: resources.h:1039
 msgid "Show details"
 msgstr "Ayrıntılara bakın"
 
@@ -6516,7 +6539,7 @@ msgstr "Aktarıma &hemen başlayın"
 msgid "Start with opened Site Manager"
 msgstr "Başlangıçta Site Yöneticisi açılsın"
 
-#: ../../locales/../src/interface/updater.cpp:236
+#: ../../locales/../src/interface/updater.cpp:237
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Güncelleme denetimi %s zamanında başlatıldı\n"
@@ -6900,11 +6923,11 @@ msgid ""
 "port."
 msgstr "En küçük kapı, en büyük kapı sayısından küçük ya da eşit olmalı."
 
-#: resources.h:1031
+#: resources.h:1032
 msgid "The new version could not be downloaded, please retry later."
 msgstr "Yeni sürüm indirilemedi, lütfen daha sonra yeniden deneyin."
 
-#: resources.h:1029
+#: resources.h:1030
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Yeni sürüm İndirmeler klasörüne kaydedildi."
 
@@ -7238,7 +7261,7 @@ msgstr "Sertifikaya güvenilip bağlanmaya devam edilsin mi?"
 msgid "Trust this host and carry on connecting?"
 msgstr "Bu sunucuya güvenilip bağlantı kurulsun mu?"
 
-#: resources.h:1032 resources.h:1037
+#: resources.h:1033 resources.h:1038
 msgid "Try again"
 msgstr "Yeniden deneyin"
 
@@ -7625,7 +7648,7 @@ msgstr "FileZilla'ya Hoş Geldiniz"
 msgid "What's new"
 msgstr "Yenilikler:"
 
-#: resources.h:1026
+#: resources.h:1027
 msgid "What's new:"
 msgstr "Yenilikler:"
 
@@ -7682,7 +7705,7 @@ msgstr ""
 "Kullandığınız bilgisayar yalnız IPv6 kullanıyor gibi. Bu yardımcı, bu ortamı "
 "desteklemiyor."
 
-#: resources.h:1040
+#: resources.h:1041
 msgid "You are using the latest version of FileZilla."
 msgstr "Son FileZilla sürümünü kullanıyorsunuz."
 
@@ -7690,7 +7713,7 @@ msgstr "Son FileZilla sürümünü kullanıyorsunuz."
 msgid "You can always open this dialog again through the help menu."
 msgstr "Bu pencereyi yardım menüsünden açabilirsiniz"
 
-#: resources.h:1034 resources.h:1039
+#: resources.h:1035 resources.h:1040
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Son sürümü FileZilla web sitesinden indirebilirsiniz:"
 
@@ -7872,6 +7895,10 @@ msgstr "bayt"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:90
 msgid "contains"
 msgstr "içeren"
+
+#: ../../locales/../src/interface/updater.cpp:241
+msgid "custom"
+msgstr "özel"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:95
 msgid "does not contain"
