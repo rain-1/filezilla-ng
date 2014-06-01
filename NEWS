@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.8.1 (2014-06-01)
+
+! Updated official binaries to use GnuTLS 3.2.15, addressing CVE-2014-3466
++ OS X: Partial support for retina displays
+- Fixed several small memory leaks
+
 3.8.1-rc3 (2014-05-25)
 
 - Fixed bundling of .xrc resources in non-Windows binaries
