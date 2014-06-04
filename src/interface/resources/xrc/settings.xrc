@@ -1712,6 +1712,26 @@
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
+                <object class="sizeritem">
+                  <object class="wxStaticText">
+                    <label>_Name sorting mode:</label>
+                  </object>
+                  <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                </object>
+                  <object class="sizeritem">
+                    <object class="wxChoice" name="ID_NAMESORTMODE">
+                      <selection>0</selection>
+                      <content>
+                        <item platform="win">Case insensitive (default)</item>
+                        <item platform="mac|unix">Case insensitive</item>
+                        <item platform="win">Case sensitive</item>
+                        <item platform="mac|unix">Case sensitive (default)</item>
+                        <item>Natural sort</item>
+                      </content>
+                    </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                </object>
+              <vgap>5</vgap>
               <hgap>5</hgap>
             </object>
             <flag>wxBOTTOM|wxLEFT|wxRIGHT</flag>

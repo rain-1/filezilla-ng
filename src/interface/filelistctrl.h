@@ -33,9 +33,89 @@ public:
 		dirsort_onbottom,
 		dirsort_inline
 	};
+	enum NameSortMode
+	{
+		namesort_caseinsensitive,
+		namesort_casesensitive,
+		namesort_natural
+	};
 
 	virtual bool operator()(int a, int b) const = 0;
 	virtual ~CListViewSort() {} // Without this empty destructor GCC complains
+
+	static int CmpCase(const wxString& str1, const wxString& str2)
+	{
+		return str1.Cmp(str2);
+	}
+
+	static int CmpNoCase(const wxString& str1, const wxString& str2)
+	{
+		int cmp = str1.CmpNoCase(str2);
+		if (cmp)
+			return cmp;
+		return str1.Cmp(str2);
+	}
+
+	static int CmpNatural(const wxString& str1, const wxString& str2)
+	{
+		wxString::const_iterator p1 = str1.begin();
+		wxString::const_iterator p2 = str2.begin();
+
+		int res = 0;
+		int zeroCount = 0;
+		bool isNumber = false;
+		for (; p1 != str1.end() && p2 != str2.end(); ++p1, ++p2) {
+			int diff = static_cast<int>(wxTolower(*p1)) - static_cast<int>(wxTolower(*p2));
+			if (isNumber) {
+				if (res == 0)
+					res = diff;
+				int nbDigits = (wxIsdigit(*p1) ? 1 : 0) + (wxIsdigit(*p2) ? 1 : 0);
+				if (nbDigits == 0 && res == 0) {
+					if (zeroCount)
+						break;
+					isNumber = false;
+				} else if (nbDigits != 2)
+					break;
+			} else if (wxIsdigit(*p1) && wxIsdigit(*p2)) {
+				zeroCount = 0;
+				for(; *p1 == '0' && p1+1 != str1.end() && wxIsdigit(*(p1+1)); ++p1)
+					zeroCount++;
+				for(; *p2 == '0' && p2+1 != str2.end() && wxIsdigit(*(p2+1)); ++p2)
+					zeroCount--;
+				res = *p1 - *p2;
+				isNumber = true;
+			} else if (diff)
+				return diff;
+		}
+
+		if (res == 0 && isNumber)
+			res = zeroCount;
+
+		if (p1 == str1.end() && p2 == str2.end())
+			return res;
+		if (!isNumber || res == 0)
+			 return p1 == str1.end() ? -1 : 1;
+		if (p1 != str1.end() && wxIsdigit(*p1))
+			return 1;       //more digits
+		if (p2 != str2.end() && wxIsdigit(*p2))
+			return -1;      //fewer digits
+		return res;         //same length, compare first different digit in the sequence
+	}
+
+	typedef int (* CompareFunction)(const wxString&, const wxString&);
+	static CompareFunction GetCmpFunction(NameSortMode mode)
+	{
+		switch (mode)
+		{
+		default:
+		case CListViewSort::namesort_caseinsensitive:
+			return &CListViewSort::CmpNoCase;
+		case CListViewSort::namesort_casesensitive:
+			return &CListViewSort::CmpCase;
+		case CListViewSort::namesort_natural:
+			return &CListViewSort::CmpNatural;
+		}
+	}
 };
 
 namespace genericTypes {
@@ -100,6 +180,7 @@ protected:
 	void InitSort(int optionID); // Has to be called after initializing columns
 	void SortList(int column = -1, int direction = -1, bool updateSelections = true);
 	enum CListViewSort::DirSortMode GetDirSortMode();
+	enum CListViewSort::NameSortMode GetNameSortMode();
 	virtual CSortComparisonObject GetSortComparisonObject() = 0;
 
 	// An empty path denotes a virtual file

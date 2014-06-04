@@ -63,24 +63,24 @@ class CSearchDialogFileList;
 class CSearchSort : public CListViewSort
 {
 public:
-	CSearchSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData> &fileData, enum DirSortMode dirSortMode)
-		: m_fileData(fileData), m_dirSortMode(dirSortMode), m_pListCtrl(pListCtrl)
+	CSearchSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData> &fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: m_fileData(fileData), m_dirSortMode(dirSortMode), m_nameSortMode(nameSortMode), m_pListCtrl(pListCtrl)
 	{
 	}
 
 	#define CMP(f, data1, data2) \
 		{\
 			int res = f(data1, data2);\
-			if (res == -1)\
+			if (res < 0)\
 				return true;\
-			else if (res == 1)\
+			else if (res > 0)\
 				return false;\
 		}
 
 	#define CMP_LESS(f, data1, data2) \
 		{\
 			int res = f(data1, data2);\
-			if (res == -1)\
+			if (res < 0)\
 				return true;\
 			else\
 				return false;\
@@ -128,11 +128,18 @@ public:
 
 	inline int CmpName(const CDirentry &data1, const CDirentry &data2) const
 	{
-#ifdef __WXMSW__
-		return data1.name.CmpNoCase(data2.name);
-#else
-		return data1.name.Cmp(data2.name);
-#endif
+		switch (m_nameSortMode)
+		{
+		case namesort_casesensitive:
+			return CmpCase(data1.name, data2.name);
+
+		default:
+		case namesort_caseinsensitive:
+			return CmpNoCase(data1.name, data2.name);
+
+		case namesort_natural:
+			return CmpNatural(data1.name, data2.name);
+		}
 	}
 
 	inline int CmpSize(const CDirentry &data1, const CDirentry &data2) const
@@ -168,6 +175,7 @@ protected:
 	std::vector<CSearchFileData> &m_fileData;
 
 	const enum DirSortMode m_dirSortMode;
+	const enum NameSortMode m_nameSortMode;
 
 	CSearchDialogFileList* m_pListCtrl;
 };
@@ -175,8 +183,8 @@ protected:
 template<class T> class CReverseSort : public T
 {
 public:
-	CReverseSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: T(pListCtrl, fileData, dirSortMode)
+	CReverseSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum CSearchSort::NameSortMode nameSortMode)
+		: T(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -189,8 +197,8 @@ public:
 class CSearchSortName : public CSearchSort
 {
 public:
-	CSearchSortName(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortName(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -209,8 +217,8 @@ typedef CReverseSort<CSearchSortName> CSearchSortName_Reverse;
 class CSearchSortPath : public CSearchSort
 {
 public:
-	CSearchSortPath(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortPath(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -232,8 +240,8 @@ typedef CReverseSort<CSearchSortPath> CSearchSortPath_Reverse;
 class CSearchSortSize : public CSearchSort
 {
 public:
-	CSearchSortSize(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortSize(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -254,8 +262,8 @@ typedef CReverseSort<CSearchSortSize> CSearchSortSize_Reverse;
 class CSearchSortType : public CSearchSort
 {
 public:
-	CSearchSortType(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortType(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -281,8 +289,8 @@ typedef CReverseSort<CSearchSortType> CSearchSortType_Reverse;
 class CSearchSortTime : public CSearchSort
 {
 public:
-	CSearchSortTime(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortTime(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -303,8 +311,8 @@ typedef CReverseSort<CSearchSortTime> CSearchSortTime_Reverse;
 class CSearchSortPermissions : public CSearchSort
 {
 public:
-	CSearchSortPermissions(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortPermissions(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -325,8 +333,8 @@ typedef CReverseSort<CSearchSortPermissions> CSearchSortPermissions_Reverse;
 class CSearchSortOwnerGroup : public CSearchSort
 {
 public:
-	CSearchSortOwnerGroup(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode)
+	CSearchSortOwnerGroup(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -389,40 +397,41 @@ wxLongLong CSearchDialogFileList::ItemGetSize(int index) const
 CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
 {
 	CSearchSort::DirSortMode dirSortMode = GetDirSortMode();
+	CSearchSort::NameSortMode nameSortMode = GetNameSortMode();
 
 	if (!m_sortDirection)
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPath(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPath(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortSize(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortSize(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortType(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortType(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 4)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortTime(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortTime(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 5)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPermissions(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPermissions(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 6)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortOwnerGroup(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortOwnerGroup(this, m_fileData, dirSortMode, nameSortMode));
 		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortName(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortName(this, m_fileData, dirSortMode, nameSortMode));
 	}
 	else
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPath_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPath_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortSize_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortSize_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortType_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortType_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 4)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortTime_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortTime_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 5)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPermissions_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPermissions_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 		else if (m_sortColumn == 6)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortOwnerGroup_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortOwnerGroup_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortName_Reverse(this, m_fileData, dirSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortName_Reverse(this, m_fileData, dirSortMode, nameSortMode));
 	}
 }
 

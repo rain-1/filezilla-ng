@@ -7,7 +7,8 @@ test_SOURCES =  test.cpp \
 		ipaddress.cpp \
 		dirparsertest.cpp \
 		localpathtest.cpp \
-		serverpathtest.cpp
+		serverpathtest.cpp \
+		cmpnatural.cpp
 
 test_CPPFLAGS = -I$(top_srcdir)/src/include
 test_CPPFLAGS += -I$(top_srcdir)/src/engine

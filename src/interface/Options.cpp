@@ -46,6 +46,14 @@ struct t_Option
 	const Flags flags; // internal items won't get written to settings file nor loaded from there
 };
 
+#ifdef __WXMSW__
+//case insensitive
+#define DEFAULT_FILENAME_SORT   _T("0")
+#else
+//case sensitive
+#define DEFAULT_FILENAME_SORT   _T("1")
+#endif
+
 static const t_Option options[OPTIONS_NUM] =
 {
 	// Note: A few options are versioned due to a changed
@@ -126,6 +134,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "File Pane Swap", number, _T("0"), normal },
 	{ "Last local directory", string, _T(""), normal },
 	{ "Filelist directory sort", number, _T("0"), normal },
+	{ "Filelist name sort", number, DEFAULT_FILENAME_SORT, normal },
 	{ "Queue successful autoclear", number, _T("0"), normal },
 	{ "Queue column widths", string, _T(""), normal },
 	{ "Local filelist colwidths", string, _T(""), normal },
@@ -456,6 +465,7 @@ int COptions::Validate(unsigned int nID, int value)
 			value = 0;
 		break;
 	case OPTION_FILELIST_DIRSORT:
+	case OPTION_FILELIST_NAMESORT:
 		if (value < 0 || value > 2)
 			value = 0;
 		break;

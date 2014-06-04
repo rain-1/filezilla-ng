@@ -11,6 +11,7 @@
 #include "queue.h"
 #include "QueueView.h"
 #include "themeprovider.h"
+#include "Options.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -281,6 +282,20 @@ void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notificat
 void CRemoteTreeView::SetDirectoryListing(const CSharedPointer<const CDirectoryListing> &pListing, bool modified)
 {
 	m_busy = true;
+
+	switch (COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT))
+	{
+	case 0:
+	default:
+		m_nameSortMode = CListViewSort::namesort_caseinsensitive;
+		break;
+	case 1:
+		m_nameSortMode = CListViewSort::namesort_casesensitive;
+		break;
+	case 2:
+		m_nameSortMode = CListViewSort::namesort_natural;
+		break;
+	}
 
 	if (!pListing)
 	{
@@ -556,17 +571,6 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 	SortChildren(parent);
 }
 
-static bool sortfunc(const wxString& a, const wxString& b)
-{
-	int cmp = a.CmpNoCase(b);
-
-	if (!cmp)
-		cmp = a.Cmp(b);
-
-	return cmp < 0;
-}
-
-
 void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& listing, bool will_select_parent)
 {
 	SetItemImages(parent, false);
@@ -583,7 +587,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	const wxString path = listing.path.GetPath();
 
-	std::list<wxString> dirs;
+	wxArrayString dirs;
 	for (unsigned int i = 0; i < listing.GetCount(); i++)
 	{
 		if (!listing[i].is_dir())
@@ -593,11 +597,11 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 			dirs.push_back(listing[i].name);
 	}
 
-	dirs.sort(sortfunc);
+	dirs.Sort(CListViewSort::GetCmpFunction(m_nameSortMode));
 
 	bool inserted = false;
 	child = GetLastChild(parent);
-	std::list<wxString>::reverse_iterator iter = dirs.rbegin();
+	wxArrayString::reverse_iterator iter = dirs.rbegin();
 	while (child && iter != dirs.rend())
 	{
 		int cmp = GetItemText(child).CmpNoCase(*iter);
@@ -703,10 +707,18 @@ int CRemoteTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemI
 	wxString label1 = GetItemText(item1);
 	wxString label2 = GetItemText(item2);
 
-	int cmp = label1.CmpNoCase(label2);
-	if (cmp)
-		return cmp;
-	return label1.Cmp(label2);
+	switch (m_nameSortMode)
+	{
+	case CListViewSort::namesort_casesensitive:
+		return CListViewSort::CmpCase(label1, label2);
+
+	default:
+	case CListViewSort::namesort_caseinsensitive:
+		return CListViewSort::CmpNoCase(label1, label2);
+
+	case CListViewSort::namesort_natural:
+		return CListViewSort::CmpNatural(label1, label2);
+	}
 }
 
 void CRemoteTreeView::OnItemExpanding(wxTreeEvent& event)

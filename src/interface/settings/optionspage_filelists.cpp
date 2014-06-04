@@ -10,6 +10,7 @@ bool COptionsPageFilelists::LoadPage()
 	bool failure = false;
 
 	SetChoice(XRCID("ID_SORTMODE"), m_pOptions->GetOptionVal(OPTION_FILELIST_DIRSORT), failure);
+	SetChoice(XRCID("ID_NAMESORTMODE"), m_pOptions->GetOptionVal(OPTION_FILELIST_NAMESORT), failure);
 
 	SetTextFromOption(XRCID("ID_COMPARISON_THRESHOLD"), OPTION_COMPARISON_THRESHOLD, failure);
 
@@ -22,6 +23,7 @@ bool COptionsPageFilelists::LoadPage()
 bool COptionsPageFilelists::SavePage()
 {
 	m_pOptions->SetOption(OPTION_FILELIST_DIRSORT, GetChoice(XRCID("ID_SORTMODE")));
+	m_pOptions->SetOption(OPTION_FILELIST_NAMESORT, GetChoice(XRCID("ID_NAMESORTMODE")));
 
 	SetOptionFromText(XRCID("ID_COMPARISON_THRESHOLD"), OPTION_COMPARISON_THRESHOLD);
 
