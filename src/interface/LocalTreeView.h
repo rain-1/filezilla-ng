@@ -92,7 +92,7 @@ protected:
 
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;
-	enum CListViewSort::NameSortMode m_nameSortMode;
+	enum CFileListCtrlSortBase::NameSortMode m_nameSortMode;
 };
 
 #endif

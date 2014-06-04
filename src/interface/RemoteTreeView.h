@@ -75,7 +75,7 @@ protected:
 	void OnMenuGeturl(wxCommandEvent& event);
 
 	wxTreeItemId m_contextMenuItem;
-	enum CListViewSort::NameSortMode m_nameSortMode;
+	enum CFileListCtrlSortBase::NameSortMode m_nameSortMode;
 
 };
 

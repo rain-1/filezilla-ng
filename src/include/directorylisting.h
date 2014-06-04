@@ -61,6 +61,8 @@ public:
 class CDirectoryListing
 {
 public:
+	typedef CDirentry value_type;
+
 	CDirectoryListing();
 	CDirectoryListing(const CDirectoryListing& listing);
 
