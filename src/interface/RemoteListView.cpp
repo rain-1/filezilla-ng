@@ -462,7 +462,6 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 	{
 		const CDirentry& entry = (*pDirectoryListing)[i];
 		CGenericFileData data;
-		data.comparison_flags = normal;
 		if (entry.is_dir())
 		{
 			data.icon = m_dirIcon;
@@ -471,8 +470,6 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 				data.icon += 3;
 #endif
 		}
-		else
-			data.icon = -2;
 		m_fileData.push_back(data);
 
 		if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
@@ -803,7 +800,6 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 		{
 			const CDirentry& entry = (*m_pDirectoryListing)[i];
 			CGenericFileData data;
-			data.comparison_flags = normal;
 			if (entry.is_dir())
 			{
 				data.icon = m_dirIcon;
@@ -812,8 +808,6 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 					data.icon += 3;
 #endif
 			}
-			else
-				data.icon = -2;
 			m_fileData.push_back(data);
 
 			if (filter.FilenameFiltered(entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))

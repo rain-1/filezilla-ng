@@ -351,7 +351,6 @@ bool CLocalListView::DisplayDir(wxString dirname)
 	{
 		CLocalFileData data;
 		data.dir = true;
-		data.icon = -2;
 		data.name = _T("..");
 #ifdef __WXMSW__
 		data.label = _T("..");
@@ -398,7 +397,6 @@ regular_dir:
 
 		int num = m_fileData.size();
 		CLocalFileData data;
-		data.icon = -2;
 		bool wasLink;
 		while (local_filesystem.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes))
 		{
@@ -643,11 +641,9 @@ void CLocalListView::DisplayDrives()
 			drive.RemoveLast();
 
 		CLocalFileData data;
-		data.comparison_flags = normal;
 		data.name = drive;
 		data.label = data.name;
 		data.dir = true;
-		data.icon = -2;
 		data.size = -1;
 
 		m_fileData.push_back(data);
@@ -700,13 +696,11 @@ void CLocalListView::DisplayShares(wxString computer)
 				continue;
 
 			CLocalFileData data;
-			data.comparison_flags = normal;
 			data.name = p->shi1_netname;
 #ifdef __WXMSW__
 			data.label = data.name;
 #endif
 			data.dir = true;
-			data.icon = -2;
 			data.size = -1;
 
 			m_fileData.push_back(data);
