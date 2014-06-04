@@ -673,13 +673,13 @@ void CLocalTreeView::Refresh()
 	{
 	case 0:
 	default:
-		m_nameSortMode = CListViewSort::namesort_caseinsensitive;
+		m_nameSortMode = CFileListCtrlSortBase::namesort_caseinsensitive;
 		break;
 	case 1:
-		m_nameSortMode = CListViewSort::namesort_casesensitive;
+		m_nameSortMode = CFileListCtrlSortBase::namesort_casesensitive;
 		break;
 	case 2:
-		m_nameSortMode = CListViewSort::namesort_natural;
+		m_nameSortMode = CFileListCtrlSortBase::namesort_natural;
 		break;
 	}
 
@@ -761,7 +761,7 @@ void CLocalTreeView::Refresh()
 
 			dirs.push_back(file);
 		}
-		dirs.Sort(CListViewSort::GetCmpFunction(m_nameSortMode));
+		dirs.Sort(CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode));
 
 		bool inserted = false;
 
@@ -879,15 +879,15 @@ int CLocalTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId
 
 	switch (m_nameSortMode)
 	{
-	case CListViewSort::namesort_casesensitive:
-		return CListViewSort::CmpCase(label1, label2);
+	case CFileListCtrlSortBase::namesort_casesensitive:
+		return CFileListCtrlSortBase::CmpCase(label1, label2);
 
 	default:
-	case CListViewSort::namesort_caseinsensitive:
-		return CListViewSort::CmpNoCase(label1, label2);
+	case CFileListCtrlSortBase::namesort_caseinsensitive:
+		return CFileListCtrlSortBase::CmpNoCase(label1, label2);
 
-	case CListViewSort::namesort_natural:
-		return CListViewSort::CmpNatural(label1, label2);
+	case CFileListCtrlSortBase::namesort_natural:
+		return CFileListCtrlSortBase::CmpNatural(label1, label2);
 	}
 }
 

@@ -116,7 +116,7 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 
 				const int index = m_indexMapping[item];
 				const CFileData& data = m_fileData[index];
-				if (data.flags == fill)
+				if (data.comparison_flags == fill)
 					continue;
 
 				if (ItemIsDir(index))
@@ -137,7 +137,7 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 
 				const int index = m_indexMapping[i];
 				const CFileData& data = m_fileData[index];
-				if (data.flags == fill)
+				if (data.comparison_flags == fill)
 					continue;
 
 				if (ItemIsDir(index))
@@ -408,47 +408,47 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelectio
 	}
 }
 
-template<class CFileData> CListViewSort::DirSortMode CFileListCtrl<CFileData>::GetDirSortMode()
+template<class CFileData> CFileListCtrlSortBase::DirSortMode CFileListCtrl<CFileData>::GetDirSortMode()
 {
 	const int dirSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
 
-	enum CListViewSort::DirSortMode dirSortMode;
+	enum CFileListCtrlSortBase::DirSortMode dirSortMode;
 	switch (dirSortOption)
 	{
 	case 0:
 	default:
-		dirSortMode = CListViewSort::dirsort_ontop;
+		dirSortMode = CFileListCtrlSortBase::dirsort_ontop;
 		break;
 	case 1:
 		if (m_sortDirection)
-			dirSortMode = CListViewSort::dirsort_onbottom;
+			dirSortMode = CFileListCtrlSortBase::dirsort_onbottom;
 		else
-			dirSortMode = CListViewSort::dirsort_ontop;
+			dirSortMode = CFileListCtrlSortBase::dirsort_ontop;
 		break;
 	case 2:
-		dirSortMode = CListViewSort::dirsort_inline;
+		dirSortMode = CFileListCtrlSortBase::dirsort_inline;
 		break;
 	}
 
 	return dirSortMode;
 }
 
-template<class CFileData> CListViewSort::NameSortMode CFileListCtrl<CFileData>::GetNameSortMode()
+template<class CFileData> CFileListCtrlSortBase::NameSortMode CFileListCtrl<CFileData>::GetNameSortMode()
 {
 	const int nameSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT);
 
-	enum CListViewSort::NameSortMode nameSortMode;
+	enum CFileListCtrlSortBase::NameSortMode nameSortMode;
 	switch (nameSortOption)
 	{
 	case 0:
 	default:
-		nameSortMode = CListViewSort::namesort_caseinsensitive;
+		nameSortMode = CFileListCtrlSortBase::namesort_caseinsensitive;
 		break;
 	case 1:
-		nameSortMode = CListViewSort::namesort_casesensitive;
+		nameSortMode = CFileListCtrlSortBase::namesort_casesensitive;
 		break;
 	case 2:
-		nameSortMode = CListViewSort::namesort_natural;
+		nameSortMode = CFileListCtrlSortBase::namesort_natural;
 		break;
 	}
 
@@ -626,7 +626,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnExitComparisonMode()
 	m_indexMapping.swap(m_originalIndexMapping);
 
 	for (unsigned int i = 0; i < m_fileData.size() - 1; i++)
-		m_fileData[i].flags = normal;
+		m_fileData[i].comparison_flags = normal;
 
 	SetItemCount(m_indexMapping.size());
 
@@ -644,7 +644,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::CompareAddFile(t_fileEn
 	}
 
 	int index = m_originalIndexMapping[m_comparisonIndex];
-	m_fileData[index].flags = flags;
+	m_fileData[index].comparison_flags = flags;
 
 	m_indexMapping.push_back(index);
 }
@@ -661,7 +661,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRememberSelec
 	{
 		SetItemState(focus, 0, wxLIST_STATE_FOCUSED);
 		int index = m_indexMapping[focus];
-		if (m_fileData[index].flags == fill)
+		if (m_fileData[index].comparison_flags == fill)
 			focus = -1;
 		else
 			focus = index;
@@ -677,7 +677,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRememberSelec
 		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
 		{
 			int index = m_indexMapping[item];
-			if (m_fileData[index].flags == fill)
+			if (m_fileData[index].comparison_flags == fill)
 				continue;
 			m_comparisonSelections.push_back(index);
 		}
@@ -779,7 +779,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnItemSelected(wxListEv
 
 	const int index = m_indexMapping[item];
 	const CFileData& data = m_fileData[index];
-	if (data.flags == fill)
+	if (data.comparison_flags == fill)
 		return;
 
 	if (ItemIsDir(index))
@@ -815,7 +815,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnItemDeselected(wxList
 
 	const int index = m_indexMapping[item];
 	const CFileData& data = m_fileData[index];
-	if (data.flags == fill)
+	if (data.comparison_flags == fill)
 		return;
 
 	if (ItemIsDir(index))
@@ -1003,7 +1003,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& e
 		for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); i++)
 		{
 			const CFileData& data = m_fileData[m_indexMapping[i]];
-			if (data.flags != fill)
+			if (data.comparison_flags != fill)
 				SetSelection(i, true);
 			else
 				SetSelection(i, false);

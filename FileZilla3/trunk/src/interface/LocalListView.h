@@ -18,8 +18,9 @@ public:
 	wxString label;
 #endif
 	bool dir;
+	bool is_dir() const { return dir; }
 	wxLongLong size;
-	CDateTime lastModified;
+	CDateTime time;
 	int attributes;
 };
 

@@ -287,13 +287,13 @@ void CRemoteTreeView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 	{
 	case 0:
 	default:
-		m_nameSortMode = CListViewSort::namesort_caseinsensitive;
+		m_nameSortMode = CFileListCtrlSortBase::namesort_caseinsensitive;
 		break;
 	case 1:
-		m_nameSortMode = CListViewSort::namesort_casesensitive;
+		m_nameSortMode = CFileListCtrlSortBase::namesort_casesensitive;
 		break;
 	case 2:
-		m_nameSortMode = CListViewSort::namesort_natural;
+		m_nameSortMode = CFileListCtrlSortBase::namesort_natural;
 		break;
 	}
 
@@ -597,7 +597,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 			dirs.push_back(listing[i].name);
 	}
 
-	dirs.Sort(CListViewSort::GetCmpFunction(m_nameSortMode));
+	dirs.Sort(CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode));
 
 	bool inserted = false;
 	child = GetLastChild(parent);
@@ -709,15 +709,15 @@ int CRemoteTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemI
 
 	switch (m_nameSortMode)
 	{
-	case CListViewSort::namesort_casesensitive:
-		return CListViewSort::CmpCase(label1, label2);
+	case CFileListCtrlSortBase::namesort_casesensitive:
+		return CFileListCtrlSortBase::CmpCase(label1, label2);
 
 	default:
-	case CListViewSort::namesort_caseinsensitive:
-		return CListViewSort::CmpNoCase(label1, label2);
+	case CFileListCtrlSortBase::namesort_caseinsensitive:
+		return CFileListCtrlSortBase::CmpNoCase(label1, label2);
 
-	case CListViewSort::namesort_natural:
-		return CListViewSort::CmpNatural(label1, label2);
+	case CFileListCtrlSortBase::namesort_natural:
+		return CFileListCtrlSortBase::CmpNatural(label1, label2);
 	}
 }
 

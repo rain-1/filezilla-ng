@@ -16,15 +16,15 @@ class CGtkEventCallbackProxyBase;
 class CGenericFileData
 {
 public:
-	int icon;
+	int icon{-2};
 	wxString fileType;
 
 	// t_fileEntryFlags is defined in listingcomparison.h as it will be used for
 	// both local and remote listings
-	CComparableListing::t_fileEntryFlags flags;
+	CComparableListing::t_fileEntryFlags comparison_flags{CComparableListing::normal};
 };
 
-class CListViewSort
+class CFileListCtrlSortBase
 {
 public:
 	enum DirSortMode
@@ -41,7 +41,25 @@ public:
 	};
 
 	virtual bool operator()(int a, int b) const = 0;
-	virtual ~CListViewSort() {} // Without this empty destructor GCC complains
+	virtual ~CFileListCtrlSortBase() {} // Without this empty destructor GCC complains
+
+	#define CMP(f, data1, data2) \
+		{\
+			int res = f(data1, data2);\
+			if (res < 0)\
+				return true;\
+			else if (res > 0)\
+				return false;\
+		}
+
+	#define CMP_LESS(f, data1, data2) \
+		{\
+			int res = f(data1, data2);\
+			if (res < 0)\
+				return true;\
+			else\
+				return false;\
+		}
 
 	static int CmpCase(const wxString& str1, const wxString& str2)
 	{
@@ -108,14 +126,299 @@ public:
 		switch (mode)
 		{
 		default:
-		case CListViewSort::namesort_caseinsensitive:
-			return &CListViewSort::CmpNoCase;
-		case CListViewSort::namesort_casesensitive:
-			return &CListViewSort::CmpCase;
-		case CListViewSort::namesort_natural:
-			return &CListViewSort::CmpNatural;
+		case CFileListCtrlSortBase::namesort_caseinsensitive:
+			return &CFileListCtrlSortBase::CmpNoCase;
+		case CFileListCtrlSortBase::namesort_casesensitive:
+			return &CFileListCtrlSortBase::CmpCase;
+		case CFileListCtrlSortBase::namesort_natural:
+			return &CFileListCtrlSortBase::CmpNatural;
 		}
 	}
+};
+
+// Helper classes for fast sorting using std::sort
+// -----------------------------------------------
+
+template<typename Listing>
+class CFileListCtrlSort : public CFileListCtrlSortBase
+{
+public:
+	typedef typename Listing List;
+	typedef typename Listing::value_type value_type;
+
+	CFileListCtrlSort(Listing const& listing, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: m_listing(listing), m_dirSortMode(dirSortMode), m_nameSortMode(nameSortMode)
+	{
+	}
+
+	inline int CmpDir(value_type const& data1, value_type const& data2) const
+	{
+		switch (m_dirSortMode)
+		{
+		default:
+		case dirsort_ontop:
+			if (data1.is_dir()) {
+				if (!data2.is_dir())
+					return -1;
+				else
+					return 0;
+			}
+			else {
+				if (data2.is_dir())
+					return 1;
+				else
+					return 0;
+			}
+		case dirsort_onbottom:
+			if (data1.is_dir()) {
+				if (!data2.is_dir())
+					return 1;
+				else
+					return 0;
+			}
+			else {
+				if (data2.is_dir())
+					return -1;
+				else
+					return 0;
+			}
+		case dirsort_inline:
+			return 0;
+		}
+	}
+
+	inline int CmpName(const value_type &data1, const value_type &data2) const
+	{
+		switch (m_nameSortMode)
+		{
+		case namesort_casesensitive:
+			return CmpCase(data1.name, data2.name);
+
+		default:
+		case namesort_caseinsensitive:
+			return CmpNoCase(data1.name, data2.name);
+
+		case namesort_natural:
+			return CmpNatural(data1.name, data2.name);
+		}
+	}
+
+	inline int CmpSize(const value_type &data1, const value_type &data2) const
+	{
+		const wxLongLong diff = data1.size - data2.size;
+		if (diff < 0)
+			return -1;
+		else if (diff > 0)
+			return 1;
+		else
+			return 0;
+	}
+
+	inline int CmpStringNoCase(const wxString &data1, const wxString &data2) const
+	{
+		return data1.CmpNoCase(data2);
+	}
+
+	inline int CmpTime(const value_type &data1, const value_type &data2) const
+	{
+		if( data1.time < data2.time ) {
+			return -1;
+		}
+		else if( data1.time > data2.time ) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
+protected:
+	Listing const& m_listing;
+
+	const enum DirSortMode m_dirSortMode;
+	const enum NameSortMode m_nameSortMode;
+};
+
+template<class CFileData> class CFileListCtrl;
+
+template<class T, typename DataEntry> class CReverseSort : public T
+{
+public:
+	CReverseSort(typename T::List const& listing, std::vector<DataEntry>& fileData, enum CFileListCtrlSort::DirSortMode dirSortMode, enum CFileListCtrlSort::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: T(listing, fileData, dirSortMode, nameSortMode, pListView)
+	{
+	}
+
+	inline bool operator()(int a, int b) const
+	{
+		return T::operator()(b, a);
+	}
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortName : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortName(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_listing[a];
+		value_type const& data2 = m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortSize : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortSize(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_listing[a];
+		value_type const& data2 = m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+
+		CMP(CmpSize, data1, data2);
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortType : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortType(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode), m_pListView(pListView), m_fileData(fileData)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_listing[a];
+		value_type const& data2 = m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+
+		DataEntry &type1 = m_fileData[a];
+		DataEntry &type2 = m_fileData[b];
+		if (type1.fileType.IsEmpty())
+			type1.fileType = m_pListView->GetType(data1.name, data1.is_dir());
+		if (type2.fileType.IsEmpty())
+			type2.fileType = m_pListView->GetType(data2.name, data2.is_dir());
+
+		CMP(CmpStringNoCase, type1.fileType, type2.fileType);
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+
+protected:
+	CFileListCtrl<DataEntry>* const m_pListView;
+	std::vector<DataEntry>& m_fileData;
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortTime : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortTime(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_listing[a];
+		value_type const& data2 = m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+
+		CMP(CmpTime, data1, data2);
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortPermissions : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortPermissions(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_listing[a];
+		value_type const& data2 = m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+
+		CMP(CmpStringNoCase, data1.permissions, data2.permissions);
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortOwnerGroup : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortOwnerGroup(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_listing[a];
+		value_type const& data2 = m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+
+		CMP(CmpStringNoCase, data1.ownerGroup, data2.ownerGroup);
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+};
+
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortPath : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortPath(Listing const& listing, std::vector<DataEntry>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		, m_fileData(fileData)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		value_type const& data1 = m_fileData[a];
+		value_type const& data2 = m_fileData[b];
+
+		if (m_listing[a].path < m_fileData[b].path)
+			return true;
+		if (m_listing[a].path != m_fileData[b].path)
+			return false;
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+	std::vector<DataEntry>& m_fileData;
 };
 
 namespace genericTypes {
@@ -127,6 +430,7 @@ namespace genericTypes {
 
 template<class CFileData> class CFileListCtrl : public wxListCtrlEx, public CComparableListing
 {
+	template<typename Listing, typename DataEntry> friend class CFileListCtrlSortType;
 public:
 	CFileListCtrl(wxWindow* pParent, CState *pState, CQueueView *pQueue, bool border = false);
 	virtual ~CFileListCtrl();
@@ -134,7 +438,7 @@ public:
 	class CSortComparisonObject : public std::binary_function<int,int,bool>
 	{
 	public:
-		CSortComparisonObject(CListViewSort* pObject)
+		CSortComparisonObject(CFileListCtrlSortBase* pObject)
 			: m_pObject(pObject)
 		{
 		}
@@ -149,7 +453,7 @@ public:
 			return m_pObject->operator ()(a, b);
 		}
 	protected:
-		CListViewSort* m_pObject;
+		CFileListCtrlSortBase* m_pObject;
 	};
 
 	void SetFilelistStatusBar(CFilelistStatusBar* pFilelistStatusBar) { m_pFilelistStatusBar = pFilelistStatusBar; }
@@ -179,8 +483,8 @@ protected:
 
 	void InitSort(int optionID); // Has to be called after initializing columns
 	void SortList(int column = -1, int direction = -1, bool updateSelections = true);
-	enum CListViewSort::DirSortMode GetDirSortMode();
-	enum CListViewSort::NameSortMode GetNameSortMode();
+	enum CFileListCtrlSortBase::DirSortMode GetDirSortMode();
+	enum CFileListCtrlSortBase::NameSortMode GetNameSortMode();
 	virtual CSortComparisonObject GetSortComparisonObject() = 0;
 
 	// An empty path denotes a virtual file

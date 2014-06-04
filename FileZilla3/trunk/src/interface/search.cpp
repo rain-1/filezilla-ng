@@ -13,12 +13,10 @@
 #include "timeformatting.h"
 #include "window_state_manager.h"
 
-class CSearchFileData : public CGenericFileData
+class CSearchFileData : public CGenericFileData, public CDirentry
 {
 public:
 	CServerPath path;
-
-	CDirentry entry;
 };
 
 class CSearchDialogFileList : public CFileListCtrl<CSearchFileData>
@@ -56,302 +54,6 @@ private:
 	int m_dirIcon;
 };
 
-// Helper classes for fast sorting using std::sort
-// -----------------------------------------------
-
-class CSearchDialogFileList;
-class CSearchSort : public CListViewSort
-{
-public:
-	CSearchSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData> &fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: m_fileData(fileData), m_dirSortMode(dirSortMode), m_nameSortMode(nameSortMode), m_pListCtrl(pListCtrl)
-	{
-	}
-
-	#define CMP(f, data1, data2) \
-		{\
-			int res = f(data1, data2);\
-			if (res < 0)\
-				return true;\
-			else if (res > 0)\
-				return false;\
-		}
-
-	#define CMP_LESS(f, data1, data2) \
-		{\
-			int res = f(data1, data2);\
-			if (res < 0)\
-				return true;\
-			else\
-				return false;\
-		}
-
-	inline int CmpDir(const CDirentry &data1, const CDirentry &data2) const
-	{
-		switch (m_dirSortMode)
-		{
-		default:
-		case dirsort_ontop:
-			if (data1.is_dir())
-			{
-				if (!data2.is_dir())
-					return -1;
-				else
-					return 0;
-			}
-			else
-			{
-				if (data2.is_dir())
-					return 1;
-				else
-					return 0;
-			}
-		case dirsort_onbottom:
-			if (data1.is_dir())
-			{
-				if (!data2.is_dir())
-					return 1;
-				else
-					return 0;
-			}
-			else
-			{
-				if (data2.is_dir())
-					return -1;
-				else
-					return 0;
-			}
-		case dirsort_inline:
-			return 0;
-		}
-	}
-
-	inline int CmpName(const CDirentry &data1, const CDirentry &data2) const
-	{
-		switch (m_nameSortMode)
-		{
-		case namesort_casesensitive:
-			return CmpCase(data1.name, data2.name);
-
-		default:
-		case namesort_caseinsensitive:
-			return CmpNoCase(data1.name, data2.name);
-
-		case namesort_natural:
-			return CmpNatural(data1.name, data2.name);
-		}
-	}
-
-	inline int CmpSize(const CDirentry &data1, const CDirentry &data2) const
-	{
-		const wxLongLong diff = data1.size - data2.size;
-		if (diff < 0)
-			return -1;
-		else if (diff > 0)
-			return 1;
-		else
-			return 0;
-	}
-
-	inline int CmpStringNoCase(const wxString &data1, const wxString &data2) const
-	{
-		return data1.CmpNoCase(data2);
-	}
-
-	inline int CmpTime(const CDirentry &data1, const CDirentry &data2) const
-	{
-		if( data1.time < data2.time ) {
-			return -1;
-		}
-		else if( data1.time > data2.time ) {
-			return 1;
-		}
-		else {
-			return 0;
-		}
-	}
-
-protected:
-	std::vector<CSearchFileData> &m_fileData;
-
-	const enum DirSortMode m_dirSortMode;
-	const enum NameSortMode m_nameSortMode;
-
-	CSearchDialogFileList* m_pListCtrl;
-};
-
-template<class T> class CReverseSort : public T
-{
-public:
-	CReverseSort(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum CSearchSort::NameSortMode nameSortMode)
-		: T(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	inline bool operator()(int a, int b) const
-	{
-		return T::operator()(b, a);
-	}
-};
-
-class CSearchSortName : public CSearchSort
-{
-public:
-	CSearchSortName(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		const CDirentry& data1 = m_fileData[a].entry;
-		const CDirentry& data2 = m_fileData[b].entry;
-
-		CMP(CmpDir, data1, data2);
-
-		CMP_LESS(CmpName, data1, data2);
-	}
-};
-typedef CReverseSort<CSearchSortName> CSearchSortName_Reverse;
-
-class CSearchSortPath : public CSearchSort
-{
-public:
-	CSearchSortPath(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		const CDirentry& data1 = m_fileData[a].entry;
-		const CDirentry& data2 = m_fileData[b].entry;
-
-		if (m_fileData[a].path < m_fileData[b].path)
-			return true;
-		if (m_fileData[a].path != m_fileData[b].path)
-			return false;
-
-		CMP_LESS(CmpName, data1, data2);
-	}
-};
-typedef CReverseSort<CSearchSortPath> CSearchSortPath_Reverse;
-
-class CSearchSortSize : public CSearchSort
-{
-public:
-	CSearchSortSize(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		const CDirentry& data1 = m_fileData[a].entry;
-		const CDirentry& data2 = m_fileData[b].entry;
-
-		CMP(CmpDir, data1, data2);
-
-		CMP(CmpSize, data1, data2);
-
-		CMP_LESS(CmpName, data1, data2);
-	}
-};
-typedef CReverseSort<CSearchSortSize> CSearchSortSize_Reverse;
-
-class CSearchSortType : public CSearchSort
-{
-public:
-	CSearchSortType(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		CSearchFileData &data1 = m_fileData[a];
-		CSearchFileData &data2 = m_fileData[b];
-
-		CMP(CmpDir, data1.entry, data2.entry);
-
-		if (data1.fileType.IsEmpty())
-			data1.fileType = m_pListCtrl->GetType(data1.entry.name, data1.entry.is_dir());
-		if (data2.fileType.IsEmpty())
-			data2.fileType = m_pListCtrl->GetType(data2.entry.name, data2.entry.is_dir());
-
-		CMP(CmpStringNoCase, data1.fileType, data2.fileType);
-
-		CMP_LESS(CmpName, data1.entry, data2.entry);
-	}
-};
-typedef CReverseSort<CSearchSortType> CSearchSortType_Reverse;
-
-class CSearchSortTime : public CSearchSort
-{
-public:
-	CSearchSortTime(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		const CDirentry& data1 = m_fileData[a].entry;
-		const CDirentry& data2 = m_fileData[b].entry;
-
-		CMP(CmpDir, data1, data2);
-
-		CMP(CmpTime, data1, data2);
-
-		CMP_LESS(CmpName, data1, data2);
-	}
-};
-typedef CReverseSort<CSearchSortTime> CSearchSortTime_Reverse;
-
-class CSearchSortPermissions : public CSearchSort
-{
-public:
-	CSearchSortPermissions(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		const CDirentry& data1 = m_fileData[a].entry;
-		const CDirentry& data2 = m_fileData[b].entry;
-
-		CMP(CmpDir, data1, data2);
-
-		CMP(CmpStringNoCase, data1.permissions, data2.permissions);
-
-		CMP_LESS(CmpName, data1, data2);
-	}
-};
-typedef CReverseSort<CSearchSortPermissions> CSearchSortPermissions_Reverse;
-
-class CSearchSortOwnerGroup : public CSearchSort
-{
-public:
-	CSearchSortOwnerGroup(CSearchDialogFileList* pListCtrl, std::vector<CSearchFileData>& fileData, enum CSearchSort::DirSortMode dirSortMode, enum NameSortMode nameSortMode)
-		: CSearchSort(pListCtrl, fileData, dirSortMode, nameSortMode)
-	{
-	}
-
-	bool operator()(int a, int b) const
-	{
-		const CDirentry& data1 = m_fileData[a].entry;
-		const CDirentry& data2 = m_fileData[b].entry;
-
-		CMP(CmpDir, data1, data2);
-
-		CMP(CmpStringNoCase, data1.ownerGroup, data2.ownerGroup);
-
-		CMP_LESS(CmpName, data1, data2);
-	}
-};
-typedef CReverseSort<CSearchSortOwnerGroup> CSearchSortOwnerGroup_Reverse;
-
 // Search dialog file list
 // -----------------------
 
@@ -386,52 +88,52 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pSt
 
 bool CSearchDialogFileList::ItemIsDir(int index) const
 {
-	return m_fileData[index].entry.is_dir();
+	return m_fileData[index].is_dir();
 }
 
 wxLongLong CSearchDialogFileList::ItemGetSize(int index) const
 {
-	return m_fileData[index].entry.size;
+	return m_fileData[index].size;
 }
 
 CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
 {
-	CSearchSort::DirSortMode dirSortMode = GetDirSortMode();
-	CSearchSort::NameSortMode nameSortMode = GetNameSortMode();
+	CFileListCtrlSortBase::DirSortMode dirSortMode = GetDirSortMode();
+	CFileListCtrlSortBase::NameSortMode nameSortMode = GetNameSortMode();
 
 	if (!m_sortDirection)
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPath(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortSize(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortType(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 4)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortTime(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 5)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPermissions(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortPermissions<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 6)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortOwnerGroup(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortOwnerGroup<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortName(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortName<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 	}
 	else
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPath_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortSize_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortType_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 4)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortTime_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 5)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortPermissions_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPermissions<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 6)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortOwnerGroup_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortOwnerGroup<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CSearchSortName_Reverse(this, m_fileData, dirSortMode, nameSortMode));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortName<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 	}
 }
 
@@ -441,7 +143,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return _T("");
 	int index = m_indexMapping[item];
 
-	const CDirentry& entry = m_fileData[index].entry;
+	const CDirentry& entry = m_fileData[index];
 	if (!column)
 		return entry.name;
 	else if (column == 1)
@@ -487,7 +189,7 @@ int CSearchDialogFileList::OnGetItemImage(long item) const
 	if (icon != -2)
 		return icon;
 
-	icon = pThis->GetIconIndex(file, pThis->m_fileData[index].entry.name, false);
+	icon = pThis->GetIconIndex(file, pThis->m_fileData[index].name, false);
 	return icon;
 }
 
@@ -632,8 +334,7 @@ void CSearchDialog::ProcessDirectoryListing()
 			continue;
 
 		CSearchFileData data;
-		data.flags = CComparableListing::normal;
-		data.entry = entry;
+		static_cast<CDirentry&>(data) = entry;
 		data.path = listing->path;
 		data.icon = entry.is_dir() ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
@@ -828,10 +529,10 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 			continue;
 		int index = m_results->m_indexMapping[sel];
 
-		if (m_results->m_fileData[index].entry.is_dir())
+		if (m_results->m_fileData[index].is_dir())
 		{
 			CServerPath path = m_results->m_fileData[index].path;
-			path.ChangePath(m_results->m_fileData[index].entry.name);
+			path.ChangePath(m_results->m_fileData[index].name);
 			if (path.IsEmpty())
 				continue;
 
@@ -945,7 +646,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 
 	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
 	{
-		const CDirentry& entry = m_results->m_fileData[*iter].entry;
+		const CDirentry& entry = m_results->m_fileData[*iter];
 
 		CLocalPath target_path = path;
 		if (!flatten)
@@ -1027,7 +728,7 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 
 	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
 	{
-		const CDirentry& entry = m_results->m_fileData[*iter].entry;
+		const CDirentry& entry = m_results->m_fileData[*iter];
 		std::list<wxString> files_to_delete;
 		files_to_delete.push_back(entry.name);
 		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[*iter].path, files_to_delete));
@@ -1067,7 +768,7 @@ int CSearchDialogFileList::GetOverlayIndex(int item)
 		return -1;
 	int index = m_indexMapping[item];
 
-	if (m_fileData[index].entry.is_link())
+	if (m_fileData[index].is_link())
 		return GetLinkOverlayIndex();
 
 	return 0;

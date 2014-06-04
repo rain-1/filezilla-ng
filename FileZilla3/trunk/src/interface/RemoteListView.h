@@ -13,8 +13,6 @@ class CRemoteListViewDropTarget;
 class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandler
 {
 	friend class CRemoteListViewDropTarget;
-	friend class CRemoteListViewSortType;
-
 public:
 	CRemoteListView(wxWindow* pParent, CState* pState, CQueueView* pQueue);
 	virtual ~CRemoteListView();
