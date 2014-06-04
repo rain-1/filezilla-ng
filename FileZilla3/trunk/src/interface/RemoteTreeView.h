@@ -5,6 +5,7 @@
 #include "state.h"
 #include "filter.h"
 #include "treectrlex.h"
+#include "filelistctrl.h"
 
 class CQueueView;
 class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
@@ -74,6 +75,8 @@ protected:
 	void OnMenuGeturl(wxCommandEvent& event);
 
 	wxTreeItemId m_contextMenuItem;
+	enum CListViewSort::NameSortMode m_nameSortMode;
+
 };
 
 #endif

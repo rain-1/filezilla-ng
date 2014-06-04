@@ -902,24 +902,24 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 class CRemoteListViewSort : public CListViewSort
 {
 public:
-	CRemoteListViewSort(const CDirectoryListing* const pDirectoryListing, enum DirSortMode dirSortMode)
-		: m_pDirectoryListing(pDirectoryListing), m_dirSortMode(dirSortMode)
+	CRemoteListViewSort(const CDirectoryListing* const pDirectoryListing, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: m_pDirectoryListing(pDirectoryListing), m_dirSortMode(dirSortMode), m_nameSortMode(nameSortMode)
 	{
 	}
 
 	#define CMP(f, data1, data2) \
 		{\
 			int res = f(data1, data2);\
-			if (res == -1)\
+			if (res < 0)\
 				return true;\
-			else if (res == 1)\
+			else if (res > 0)\
 				return false;\
 		}
 
 	#define CMP_LESS(f, data1, data2) \
 		{\
 			int res = f(data1, data2);\
-			if (res == -1)\
+			if (res < 0)\
 				return true;\
 			else\
 				return false;\
@@ -967,11 +967,18 @@ public:
 
 	inline int CmpName(const CDirentry &data1, const CDirentry &data2) const
 	{
-#ifdef __WXMSW__
-		return data1.name.CmpNoCase(data2.name);
-#else
-		return data1.name.Cmp(data2.name);
-#endif
+		switch (m_nameSortMode)
+		{
+		case namesort_casesensitive:
+			return CmpCase(data1.name, data2.name);
+
+		default:
+		case namesort_caseinsensitive:
+			return CmpNoCase(data1.name, data2.name);
+
+		case namesort_natural:
+			return CmpNatural(data1.name, data2.name);
+		}
 	}
 
 	inline int CmpSize(const CDirentry &data1, const CDirentry &data2) const
@@ -1007,13 +1014,14 @@ protected:
 	const CDirectoryListing* const m_pDirectoryListing;
 
 	const enum DirSortMode m_dirSortMode;
+	const enum NameSortMode m_nameSortMode;
 };
 
 template<class T> class CReverseSort : public T
 {
 public:
-	CReverseSort(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum CRemoteListViewSort::DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: T(pDirectoryListing, fileData, dirSortMode, pRemoteListView)
+	CReverseSort(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum CRemoteListViewSort::DirSortMode dirSortMode, enum CRemoteListViewSort::NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: T(pDirectoryListing, fileData, dirSortMode, nameSortMode, pRemoteListView)
 	{
 	}
 
@@ -1026,8 +1034,8 @@ public:
 class CRemoteListViewSortName : public CRemoteListViewSort
 {
 public:
-	CRemoteListViewSortName(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: CRemoteListViewSort(pDirectoryListing, dirSortMode)
+	CRemoteListViewSortName(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: CRemoteListViewSort(pDirectoryListing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -1046,8 +1054,8 @@ typedef CReverseSort<CRemoteListViewSortName> CRemoteListViewSortName_Reverse;
 class CRemoteListViewSortSize : public CRemoteListViewSort
 {
 public:
-	CRemoteListViewSortSize(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: CRemoteListViewSort(pDirectoryListing, dirSortMode)
+	CRemoteListViewSortSize(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: CRemoteListViewSort(pDirectoryListing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -1068,8 +1076,8 @@ typedef CReverseSort<CRemoteListViewSortSize> CRemoteListViewSortSize_Reverse;
 class CRemoteListViewSortType : public CRemoteListViewSort
 {
 public:
-	CRemoteListViewSortType(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: CRemoteListViewSort(pDirectoryListing, dirSortMode), m_pRemoteListView(pRemoteListView), m_fileData(fileData)
+	CRemoteListViewSortType(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: CRemoteListViewSort(pDirectoryListing, dirSortMode, nameSortMode), m_pRemoteListView(pRemoteListView), m_fileData(fileData)
 	{
 	}
 
@@ -1101,8 +1109,8 @@ typedef CReverseSort<CRemoteListViewSortType> CRemoteListViewSortType_Reverse;
 class CRemoteListViewSortTime : public CRemoteListViewSort
 {
 public:
-	CRemoteListViewSortTime(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: CRemoteListViewSort(pDirectoryListing, dirSortMode)
+	CRemoteListViewSortTime(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: CRemoteListViewSort(pDirectoryListing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -1123,8 +1131,8 @@ typedef CReverseSort<CRemoteListViewSortTime> CRemoteListViewSortTime_Reverse;
 class CRemoteListViewSortPermissions : public CRemoteListViewSort
 {
 public:
-	CRemoteListViewSortPermissions(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: CRemoteListViewSort(pDirectoryListing, dirSortMode)
+	CRemoteListViewSortPermissions(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: CRemoteListViewSort(pDirectoryListing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -1145,8 +1153,8 @@ typedef CReverseSort<CRemoteListViewSortPermissions> CRemoteListViewSortPermissi
 class CRemoteListViewSortOwnerGroup : public CRemoteListViewSort
 {
 public:
-	CRemoteListViewSortOwnerGroup(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, CRemoteListView* const pRemoteListView)
-		: CRemoteListViewSort(pDirectoryListing, dirSortMode)
+	CRemoteListViewSortOwnerGroup(const CDirectoryListing* const pDirectoryListing, std::vector<CGenericFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CRemoteListView* const pRemoteListView)
+		: CRemoteListViewSort(pDirectoryListing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -2978,37 +2986,38 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 CFileListCtrl<CGenericFileData>::CSortComparisonObject CRemoteListView::GetSortComparisonObject()
 {
 	CRemoteListViewSort::DirSortMode dirSortMode = GetDirSortMode();
+	CRemoteListViewSort::NameSortMode nameSortMode = GetNameSortMode();
 
 	const CDirectoryListing* pDirectoryListing = m_pDirectoryListing.Value();
 	if (!m_sortDirection)
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortSize(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortSize(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortType(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortType(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortTime(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortTime(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 4)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortPermissions(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortPermissions(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 5)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortOwnerGroup(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortOwnerGroup(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortName(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortName(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 	}
 	else
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortSize_Reverse(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortSize_Reverse(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortType_Reverse(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortType_Reverse(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortTime_Reverse(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortTime_Reverse(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 4)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortPermissions_Reverse(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortPermissions_Reverse(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 5)
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortOwnerGroup_Reverse(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortOwnerGroup_Reverse(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortName_Reverse(pDirectoryListing, m_fileData, dirSortMode, this));
+			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CRemoteListViewSortName_Reverse(pDirectoryListing, m_fileData, dirSortMode, nameSortMode, this));
 	}
 }
 

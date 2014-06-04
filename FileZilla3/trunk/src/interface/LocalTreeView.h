@@ -4,6 +4,7 @@
 #include "systemimagelist.h"
 #include "state.h"
 #include "treectrlex.h"
+#include "filelistctrl.h"
 
 class CQueueView;
 
@@ -91,6 +92,7 @@ protected:
 
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;
+	enum CListViewSort::NameSortMode m_nameSortMode;
 };
 
 #endif

@@ -433,6 +433,28 @@ template<class CFileData> CListViewSort::DirSortMode CFileListCtrl<CFileData>::G
 	return dirSortMode;
 }
 
+template<class CFileData> CListViewSort::NameSortMode CFileListCtrl<CFileData>::GetNameSortMode()
+{
+	const int nameSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT);
+
+	enum CListViewSort::NameSortMode nameSortMode;
+	switch (nameSortOption)
+	{
+	case 0:
+	default:
+		nameSortMode = CListViewSort::namesort_caseinsensitive;
+		break;
+	case 1:
+		nameSortMode = CListViewSort::namesort_casesensitive;
+		break;
+	case 2:
+		nameSortMode = CListViewSort::namesort_natural;
+		break;
+	}
+
+	return nameSortMode;
+}
+
 template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListEvent &event)
 {
 	int col = m_pVisibleColumnMapping[event.GetColumn()];

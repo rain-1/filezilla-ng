@@ -9,6 +9,7 @@
 #include "inputdialog.h"
 #include "local_filesys.h"
 #include "dragdropmanager.h"
+#include "Options.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -660,15 +661,6 @@ struct t_dir
 	wxTreeItemId item;
 };
 
-static bool sortfunc(const wxString& a, const wxString& b)
-{
-#ifdef __WXMSW__
-	return b.CmpNoCase(a) > 0;
-#else
-	return b.Cmp(a) > 0;
-#endif
-}
-
 void CLocalTreeView::Refresh()
 {
 	wxLogNull nullLog;
@@ -676,6 +668,20 @@ void CLocalTreeView::Refresh()
 	const wxString separator = wxFileName::GetPathSeparator();
 
 	std::list<t_dir> dirsToCheck;
+
+	switch (COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT))
+	{
+	case 0:
+	default:
+		m_nameSortMode = CListViewSort::namesort_caseinsensitive;
+		break;
+	case 1:
+		m_nameSortMode = CListViewSort::namesort_casesensitive;
+		break;
+	case 2:
+		m_nameSortMode = CListViewSort::namesort_natural;
+		break;
+	}
 
 #ifdef __WXMSW__
 	int prevErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
@@ -734,7 +740,7 @@ void CLocalTreeView::Refresh()
 		}
 
 		// Step 2: Enumerate subdirectories on disk and sort them
-		std::list<wxString> dirs;
+		wxArrayString dirs;
 
 		wxString file;
 		const wxLongLong size(-1);
@@ -755,13 +761,13 @@ void CLocalTreeView::Refresh()
 
 			dirs.push_back(file);
 		}
-		dirs.sort(sortfunc);
+		dirs.Sort(CListViewSort::GetCmpFunction(m_nameSortMode));
 
 		bool inserted = false;
 
 		// Step 3: Merge list of subdirectories with subtree.
 		wxTreeItemId child = GetLastChild(dir.item);
-		std::list<wxString>::reverse_iterator iter = dirs.rbegin();
+		wxArrayString::reverse_iterator iter = dirs.rbegin();
 		while (child || iter != dirs.rend())
 		{
 			int cmp;
@@ -870,11 +876,19 @@ int CLocalTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId
 {
 	wxString label1 = GetItemText(item1);
 	wxString label2 = GetItemText(item2);
-#ifdef __WXMSW__
-	return label1.CmpNoCase(label2);
-#else
-	return label1.Cmp(label2);
-#endif
+
+	switch (m_nameSortMode)
+	{
+	case CListViewSort::namesort_casesensitive:
+		return CListViewSort::CmpCase(label1, label2);
+
+	default:
+	case CListViewSort::namesort_caseinsensitive:
+		return CListViewSort::CmpNoCase(label1, label2);
+
+	case CListViewSort::namesort_natural:
+		return CListViewSort::CmpNatural(label1, label2);
+	}
 }
 
 void CLocalTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)

@@ -753,8 +753,8 @@ bool CLocalListView::IsItemValid(unsigned int item) const
 class CLocalListViewSort : public CListViewSort
 {
 public:
-	CLocalListViewSort(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode)
-		: m_fileData(fileData), m_dirSortMode(dirSortMode)
+	CLocalListViewSort(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+		: m_fileData(fileData), m_dirSortMode(dirSortMode), m_nameSortMode(nameSortMode)
 	{
 	}
 
@@ -765,16 +765,16 @@ public:
 	#define CMP(f, data1, data2) \
 		{\
 			int res = f(data1, data2);\
-			if (res == -1)\
+			if (res < 0)\
 				return true;\
-			else if (res == 1)\
+			else if (res > 0)\
 				return false;\
 		}
 
 	#define CMP_LESS(f, data1, data2) \
 		{\
 			int res = f(data1, data2);\
-			if (res == -1)\
+			if (res < 0)\
 				return true;\
 			else\
 				return false;\
@@ -822,11 +822,18 @@ public:
 
 	inline int CmpName(const CLocalFileData &data1, const CLocalFileData &data2) const
 	{
-#ifdef __WXMSW__
-		return data1.name.CmpNoCase(data2.name);
-#else
-		return data1.name.Cmp(data2.name);
-#endif
+		switch (m_nameSortMode)
+		{
+		case namesort_casesensitive:
+			return CmpCase(data1.name, data2.name);
+
+		default:
+		case namesort_caseinsensitive:
+			return CmpNoCase(data1.name, data2.name);
+
+		case namesort_natural:
+			return CmpNatural(data1.name, data2.name);
+		}
 	}
 
 	inline int CmpSize(const CLocalFileData &data1, const CLocalFileData &data2) const
@@ -861,14 +868,15 @@ public:
 protected:
 	std::vector<CLocalFileData>& m_fileData;
 
-	DirSortMode m_dirSortMode;
+	const enum DirSortMode m_dirSortMode;
+	const enum NameSortMode m_nameSortMode;
 };
 
 template<class T> class CReverseSort : public T
 {
 public:
-	CReverseSort(std::vector<CLocalFileData>& fileData, enum CLocalListViewSort::DirSortMode dirSortMode, CLocalListView* pListView)
-		: T(fileData, dirSortMode, pListView)
+	CReverseSort(std::vector<CLocalFileData>& fileData, enum CLocalListViewSort::DirSortMode dirSortMode, enum CLocalListViewSort::NameSortMode nameSortMode, CLocalListView* pListView)
+		: T(fileData, dirSortMode, nameSortMode, pListView)
 	{
 	}
 
@@ -881,8 +889,8 @@ public:
 class CLocalListViewSortName : public CLocalListViewSort
 {
 public:
-	CLocalListViewSortName(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, CLocalListView* pListView)
-		: CLocalListViewSort(fileData, dirSortMode)
+	CLocalListViewSortName(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CLocalListView* pListView)
+		: CLocalListViewSort(fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -901,8 +909,8 @@ typedef CReverseSort<CLocalListViewSortName> CLocalListViewSortName_Reverse;
 class CLocalListViewSortSize : public CLocalListViewSort
 {
 public:
-	CLocalListViewSortSize(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, CLocalListView* pListView)
-		: CLocalListViewSort(fileData, dirSortMode)
+	CLocalListViewSortSize(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CLocalListView* pListView)
+		: CLocalListViewSort(fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -923,8 +931,8 @@ typedef CReverseSort<CLocalListViewSortSize> CLocalListViewSortSize_Reverse;
 class CLocalListViewSortType : public CLocalListViewSort
 {
 public:
-	CLocalListViewSortType(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, CLocalListView* pListView)
-		: CLocalListViewSort(fileData, dirSortMode)
+	CLocalListViewSortType(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CLocalListView* pListView)
+		: CLocalListViewSort(fileData, dirSortMode, nameSortMode)
 	{
 		m_pListView = pListView;
 	}
@@ -954,8 +962,8 @@ typedef CReverseSort<CLocalListViewSortType> CLocalListViewSortType_Reverse;
 class CLocalListViewSortTime : public CLocalListViewSort
 {
 public:
-	CLocalListViewSortTime(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, CLocalListView* pListView)
-		: CLocalListViewSort(fileData, dirSortMode)
+	CLocalListViewSortTime(std::vector<CLocalFileData>& fileData, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode, CLocalListView* pListView)
+		: CLocalListViewSort(fileData, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -976,28 +984,29 @@ typedef CReverseSort<CLocalListViewSortTime> CLocalListViewSortTime_Reverse;
 CFileListCtrl<CLocalFileData>::CSortComparisonObject CLocalListView::GetSortComparisonObject()
 {
 	CLocalListViewSort::DirSortMode dirSortMode = GetDirSortMode();
+	CLocalListViewSort::NameSortMode nameSortMode = GetNameSortMode();
 
 	if (!m_sortDirection)
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortSize(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortSize(m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortType(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortType(m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortTime(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortTime(m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortName(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortName(m_fileData, dirSortMode, nameSortMode, this));
 	}
 	else
 	{
 		if (m_sortColumn == 1)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortSize_Reverse(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortSize_Reverse(m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortType_Reverse(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortType_Reverse(m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 3)
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortTime_Reverse(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortTime_Reverse(m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortName_Reverse(m_fileData, dirSortMode, this));
+			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CLocalListViewSortName_Reverse(m_fileData, dirSortMode, nameSortMode, this));
 	}
 }
 
