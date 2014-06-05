@@ -244,7 +244,7 @@ template<class CFileData> class CFileListCtrl;
 template<class T, typename DataEntry> class CReverseSort : public T
 {
 public:
-	CReverseSort(typename T::List const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CReverseSort(typename T::List const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: T(listing, fileData, dirSortMode, nameSortMode, pListView)
 	{
 	}
@@ -259,7 +259,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortName : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortName(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortName(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -279,7 +279,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortSize : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortSize(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortSize(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -301,7 +301,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortType : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortType(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortType(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode), m_pListView(pListView), m_fileData(fileData)
 	{
 	}
@@ -334,7 +334,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortTime : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortTime(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortTime(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -356,7 +356,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortPermissions : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortPermissions(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortPermissions(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -378,7 +378,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortOwnerGroup : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortOwnerGroup(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortOwnerGroup(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -400,7 +400,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortPath : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortPath(Listing const& listing, std::vector<DataEntry>& fileData, typename enum DirSortMode dirSortMode, typename enum NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortPath(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
 		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
 		, m_fileData(fileData)
 	{
