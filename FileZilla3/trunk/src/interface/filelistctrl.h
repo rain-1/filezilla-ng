@@ -260,7 +260,7 @@ class CFileListCtrlSortName : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortName(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -280,7 +280,7 @@ class CFileListCtrlSortSize : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortSize(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -302,7 +302,7 @@ class CFileListCtrlSortType : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortType(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode), m_pListView(pListView), m_fileData(fileData)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode), m_pListView(pListView), m_fileData(fileData)
 	{
 	}
 
@@ -335,7 +335,7 @@ class CFileListCtrlSortTime : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortTime(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -357,7 +357,7 @@ class CFileListCtrlSortPermissions : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortPermissions(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -379,7 +379,7 @@ class CFileListCtrlSortOwnerGroup : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortOwnerGroup(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
 
@@ -401,7 +401,7 @@ class CFileListCtrlSortPath : public CFileListCtrlSort<Listing>
 {
 public:
 	CFileListCtrlSortPath(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
-		: CFileListCtrlSort(listing, dirSortMode, nameSortMode)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 		, m_fileData(fileData)
 	{
 	}
