@@ -45,7 +45,7 @@ public:
 
 	#define CMP(f, data1, data2) \
 		{\
-			int res = f(data1, data2);\
+			int res = this->f(data1, data2);\
 			if (res < 0)\
 				return true;\
 			else if (res > 0)\
@@ -54,7 +54,7 @@ public:
 
 	#define CMP_LESS(f, data1, data2) \
 		{\
-			int res = f(data1, data2);\
+			int res = this->f(data1, data2);\
 			if (res < 0)\
 				return true;\
 			else\
@@ -266,8 +266,8 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_listing[a];
-		value_type const& data2 = m_listing[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
 		CMP(CmpDir, data1, data2);
 
@@ -286,8 +286,8 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_listing[a];
-		value_type const& data2 = m_listing[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
 		CMP(CmpDir, data1, data2);
 
@@ -308,8 +308,8 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_listing[a];
-		value_type const& data2 = m_listing[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
 		CMP(CmpDir, data1, data2);
 
@@ -341,8 +341,8 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_listing[a];
-		value_type const& data2 = m_listing[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
 		CMP(CmpDir, data1, data2);
 
@@ -363,8 +363,8 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_listing[a];
-		value_type const& data2 = m_listing[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
 		CMP(CmpDir, data1, data2);
 
@@ -385,8 +385,8 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_listing[a];
-		value_type const& data2 = m_listing[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
 		CMP(CmpDir, data1, data2);
 
@@ -408,12 +408,12 @@ public:
 
 	bool operator()(int a, int b) const
 	{
-		value_type const& data1 = m_fileData[a];
-		value_type const& data2 = m_fileData[b];
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
 
-		if (m_listing[a].path < m_fileData[b].path)
+		if (this->m_listing[a].path < m_fileData[b].path)
 			return true;
-		if (m_listing[a].path != m_fileData[b].path)
+		if (this->m_listing[a].path != m_fileData[b].path)
 			return false;
 
 		CMP_LESS(CmpName, data1, data2);

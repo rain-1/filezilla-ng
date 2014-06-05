@@ -916,7 +916,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnProcessFocusChange(wx
 
 		const int index = m_indexMapping[i];
 		const CFileData& data = m_fileData[index];
-		if (data.flags == fill)
+		if (data.comparison_flags == fill)
 			continue;
 
 		if (selected)
