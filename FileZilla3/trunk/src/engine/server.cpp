@@ -73,8 +73,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 {
 	m_type = DEFAULT;
 
-	if (host == _T(""))
-	{
+	if (host.empty()) {
 		error = _("No host given, please enter a host.");
 		return false;
 	}
@@ -168,10 +167,8 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 			error = _("Host starts with '[' but no closing bracket found.");
 			return false;
 		}
-		if (host[pos + 1])
-		{
-			if (host[pos + 1] != ':')
-			{
+		if (pos + 1 < static_cast<int>(host.Len()) ) {
+			if (host[pos + 1] != ':') {
 				error = _("Invalid host, after closing bracket only colon and port may follow.");
 				return false;
 			}
@@ -213,16 +210,14 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	host.Trim(true);
 	host.Trim(false);
 
-	if (host == _T(""))
-	{
+	if (host.empty()) {
 		error = _("No host given, please enter a host.");
 		return false;
 	}
 
 	m_host = host;
 
-	if (m_host[0] == '[')
-	{
+	if (m_host[0] == '[') {
 		m_host.RemoveLast();
 		m_host = m_host.Mid(1);
 	}

@@ -7,7 +7,7 @@
 
 wxString GetIPV6LongForm(wxString short_address)
 {
-	if (short_address[0] == '[')
+	if (!short_address.empty() && short_address[0] == '[')
 	{
 		if (short_address.Last() != ']')
 			return _T("");
@@ -34,15 +34,16 @@ wxString GetIPV6LongForm(wxString short_address)
 	// First part, before possible ::
 	unsigned int i = 0;
 	unsigned int grouplength = 0;
-	for (i = 0; i < len + 1; i++)
+
+	wxChar const* s = short_address.c_str();
+	for (i = 0; i < len; ++i)
 	{
-		const wxChar& c = short_address[i];
-		if (c == ':' || !c)
-		{
+		const wxChar& c = s[i];
+		if (c == ':') {
 			if (!grouplength)
 			{
 				// Empty group length, not valid
-				if (!c || short_address[i + 1] != ':')
+				if (!c || s[i + 1] != ':')
 					return _T("");
 				i++;
 				break;
@@ -50,7 +51,7 @@ wxString GetIPV6LongForm(wxString short_address)
 
 			out += 4 - grouplength;
 			for (unsigned int j = grouplength; j > 0; j--)
-				*out++ = short_address[i - j];
+				*out++ = s[i - j];
 			// End of string...
 			if (!c)
 			{
@@ -70,7 +71,7 @@ wxString GetIPV6LongForm(wxString short_address)
 			out++;
 
 			grouplength = 0;
-			if (short_address[i + 1] == ':')
+			if (s[i + 1] == ':')
 			{
 				i++;
 				break;
@@ -101,7 +102,7 @@ wxString GetIPV6LongForm(wxString short_address)
 			return _T("");
 		}
 
-		const wxChar& c = short_address[i];
+		const wxChar& c = s[i];
 		if (c == ':')
 		{
 			if (!grouplength)
@@ -242,9 +243,10 @@ bool IsIpAddress(const wxString& address)
 		const char& c = address[i];
 		if (c == '.')
 		{
-			if (address[i + 1] == '.')
+			if (i + 1 < address.Len() && address[i + 1] == '.') {
 				// Disallow multiple dots in a row
 				return false;
+			}
 
 			if (segment > 255)
 				return false;
