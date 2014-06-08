@@ -1187,7 +1187,7 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 	}
 }
 
-#define ERRORDECL(c, desc) { c, _T(#c), wxTRANSLATE(desc) },
+#define ERRORDECL(c, desc) { c, _T(#c), desc },
 
 struct Error_table
 {
@@ -1198,73 +1198,73 @@ struct Error_table
 
 static struct Error_table error_table[] =
 {
-	ERRORDECL(EACCES, "Permission denied")
-	ERRORDECL(EADDRINUSE, "Local address in use")
-	ERRORDECL(EAFNOSUPPORT, "The specified address family is not supported")
-	ERRORDECL(EINPROGRESS, "Operation in progress")
-	ERRORDECL(EINVAL, "Invalid argument passed")
-	ERRORDECL(EMFILE, "Process file table overflow")
-	ERRORDECL(ENFILE, "System limit of open files exceeded")
-	ERRORDECL(ENOBUFS, "Out of memory")
-	ERRORDECL(ENOMEM, "Out of memory")
-	ERRORDECL(EPERM, "Permission denied")
-	ERRORDECL(EPROTONOSUPPORT, "Protocol not supported")
-	ERRORDECL(EAGAIN, "Resource temporarily unavailable")
-	ERRORDECL(EALREADY, "Operation already in progress")
-	ERRORDECL(EBADF, "Bad file descriptor")
-	ERRORDECL(ECONNREFUSED, "Connection refused by server")
-	ERRORDECL(EFAULT, "Socket address outside address space")
-	ERRORDECL(EINTR, "Interrupted by signal")
-	ERRORDECL(EISCONN, "Socket already connected")
-	ERRORDECL(ENETUNREACH, "Network unreachable")
-	ERRORDECL(ENOTSOCK, "File descriptior not a socket")
-	ERRORDECL(ETIMEDOUT, "Connection attempt timed out")
-	ERRORDECL(EHOSTUNREACH, "No route to host")
-	ERRORDECL(ENOTCONN, "Socket not connected")
-	ERRORDECL(ENETRESET, "Connection reset by network")
-	ERRORDECL(EOPNOTSUPP, "Operation not supported")
-	ERRORDECL(ESHUTDOWN, "Socket has been shut down")
-	ERRORDECL(EMSGSIZE, "Message too large")
-	ERRORDECL(ECONNABORTED, "Connection aborted")
-	ERRORDECL(ECONNRESET, "Connection reset by peer")
-	ERRORDECL(EPIPE, "Local endpoint has been closed")
+	ERRORDECL(EACCES, TRANSLATE_T("Permission denied"))
+	ERRORDECL(EADDRINUSE, TRANSLATE_T("Local address in use"))
+	ERRORDECL(EAFNOSUPPORT, TRANSLATE_T("The specified address family is not supported"))
+	ERRORDECL(EINPROGRESS, TRANSLATE_T("Operation in progress"))
+	ERRORDECL(EINVAL, TRANSLATE_T("Invalid argument passed"))
+	ERRORDECL(EMFILE, TRANSLATE_T("Process file table overflow"))
+	ERRORDECL(ENFILE, TRANSLATE_T("System limit of open files exceeded"))
+	ERRORDECL(ENOBUFS, TRANSLATE_T("Out of memory"))
+	ERRORDECL(ENOMEM, TRANSLATE_T("Out of memory"))
+	ERRORDECL(EPERM, TRANSLATE_T("Permission denied"))
+	ERRORDECL(EPROTONOSUPPORT, TRANSLATE_T("Protocol not supported"))
+	ERRORDECL(EAGAIN, TRANSLATE_T("Resource temporarily unavailable"))
+	ERRORDECL(EALREADY, TRANSLATE_T("Operation already in progress"))
+	ERRORDECL(EBADF, TRANSLATE_T("Bad file descriptor"))
+	ERRORDECL(ECONNREFUSED, TRANSLATE_T("Connection refused by server"))
+	ERRORDECL(EFAULT, TRANSLATE_T("Socket address outside address space"))
+	ERRORDECL(EINTR, TRANSLATE_T("Interrupted by signal"))
+	ERRORDECL(EISCONN, TRANSLATE_T("Socket already connected"))
+	ERRORDECL(ENETUNREACH, TRANSLATE_T("Network unreachable"))
+	ERRORDECL(ENOTSOCK, TRANSLATE_T("File descriptior not a socket"))
+	ERRORDECL(ETIMEDOUT, TRANSLATE_T("Connection attempt timed out"))
+	ERRORDECL(EHOSTUNREACH, TRANSLATE_T("No route to host"))
+	ERRORDECL(ENOTCONN, TRANSLATE_T("Socket not connected"))
+	ERRORDECL(ENETRESET, TRANSLATE_T("Connection reset by network"))
+	ERRORDECL(EOPNOTSUPP, TRANSLATE_T("Operation not supported"))
+	ERRORDECL(ESHUTDOWN, TRANSLATE_T("Socket has been shut down"))
+	ERRORDECL(EMSGSIZE, TRANSLATE_T("Message too large"))
+	ERRORDECL(ECONNABORTED, TRANSLATE_T("Connection aborted"))
+	ERRORDECL(ECONNRESET, TRANSLATE_T("Connection reset by peer"))
+	ERRORDECL(EPIPE, TRANSLATE_T("Local endpoint has been closed"))
 
 	// Getaddrinfo related
 #ifndef __WXMSW__
-	ERRORDECL(EAI_ADDRFAMILY, "Network host does not have any network addresses in the requested address family")
+	ERRORDECL(EAI_ADDRFAMILY, TRANSLATE_T("Network host does not have any network addresses in the requested address family"))
 #endif
-	ERRORDECL(EAI_AGAIN, "Temporary failure in name resolution")
-	ERRORDECL(EAI_BADFLAGS, "Invalid value for ai_flags")
+	ERRORDECL(EAI_AGAIN, TRANSLATE_T("Temporary failure in name resolution"))
+	ERRORDECL(EAI_BADFLAGS, TRANSLATE_T("Invalid value for ai_flags"))
 #ifdef EAI_BADHINTS
-	ERRORDECL(EAI_BADHINTS, "Invalid value for hints")
+	ERRORDECL(EAI_BADHINTS, TRANSLATE_T("Invalid value for hints"))
 #endif
-	ERRORDECL(EAI_FAIL, "Nonrecoverable failure in name resolution")
-	ERRORDECL(EAI_FAMILY, "The ai_family member is not supported")
-	ERRORDECL(EAI_MEMORY, "Memory allocation failure")
+	ERRORDECL(EAI_FAIL, TRANSLATE_T("Nonrecoverable failure in name resolution"))
+	ERRORDECL(EAI_FAMILY, TRANSLATE_T("The ai_family member is not supported"))
+	ERRORDECL(EAI_MEMORY, TRANSLATE_T("Memory allocation failure"))
 #ifdef EAI_NODATA
-	ERRORDECL(EAI_NODATA, "No address associated with nodename")
+	ERRORDECL(EAI_NODATA, TRANSLATE_T("No address associated with nodename"))
 #endif
-	ERRORDECL(EAI_NONAME, "Neither nodename nor servname provided, or not known")
+	ERRORDECL(EAI_NONAME, TRANSLATE_T("Neither nodename nor servname provided, or not known"))
 #ifdef EAI_OVERFLOW
-	ERRORDECL(EAI_OVERFLOW, "Argument buffer overflow")
+	ERRORDECL(EAI_OVERFLOW, TRANSLATE_T("Argument buffer overflow"))
 #endif
 #ifdef EAI_PROTOCOL
-	ERRORDECL(EAI_PROTOCOL, "Resolved protocol is unknown")
+	ERRORDECL(EAI_PROTOCOL, TRANSLATE_T("Resolved protocol is unknown"))
 #endif
-	ERRORDECL(EAI_SERVICE, "The servname parameter is not supported for ai_socktype")
-	ERRORDECL(EAI_SOCKTYPE, "The ai_socktype member is not supported")
+	ERRORDECL(EAI_SERVICE, TRANSLATE_T("The servname parameter is not supported for ai_socktype"))
+	ERRORDECL(EAI_SOCKTYPE, TRANSLATE_T("The ai_socktype member is not supported"))
 #ifndef __WXMSW__
-	ERRORDECL(EAI_SYSTEM, "Other system error")
+	ERRORDECL(EAI_SYSTEM, TRANSLATE_T("Other system error"))
 #endif
 
 	// Codes that have no POSIX equivalence
 #ifdef __WXMSW__
-	ERRORDECL(WSANOTINITIALISED, "Not initialized, need to call WSAStartup")
-	ERRORDECL(WSAENETDOWN, "System's network subsystem has failed")
-	ERRORDECL(WSAEPROTOTYPE, "Protocol not supported on given socket type")
-	ERRORDECL(WSAESOCKTNOSUPPORT, "Socket type not supported for address family")
-	ERRORDECL(WSAEADDRNOTAVAIL, "Cannot assign requested address")
-	ERRORDECL(ERROR_NETNAME_DELETED, "The specified network name is no longer available")
+	ERRORDECL(WSANOTINITIALISED, TRANSLATE_T("Not initialized, need to call WSAStartup"))
+	ERRORDECL(WSAENETDOWN, TRANSLATE_T("System's network subsystem has failed"))
+	ERRORDECL(WSAEPROTOTYPE, TRANSLATE_T("Protocol not supported on given socket type"))
+	ERRORDECL(WSAESOCKTNOSUPPORT, TRANSLATE_T("Socket type not supported for address family"))
+	ERRORDECL(WSAEADDRNOTAVAIL, TRANSLATE_T("Cannot assign requested address"))
+	ERRORDECL(ERROR_NETNAME_DELETED, TRANSLATE_T("The specified network name is no longer available"))
 #endif
 	{ 0, 0, 0 }
 };

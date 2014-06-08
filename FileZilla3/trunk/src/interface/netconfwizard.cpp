@@ -775,13 +775,13 @@ void CNetConfWizard::SendNextCommand()
 			m_externalIP = ip;
 
 			wxString hexIP = ip;
-			for (unsigned int i = 0; i < hexIP.Length(); i++)
-			{
-				wxChar& c = hexIP[i];
+			for (unsigned int i = 0; i < hexIP.Length(); i++) {
+				wxChar c = hexIP[i];
 				if (c == '.')
 					c = '-';
 				else
 					c = c - '0' + 'a';
+				hexIP.SetChar(i, c);
 			}
 
 			if (!Send(_T("IP ") + ip + _T(" ") + hexIP))

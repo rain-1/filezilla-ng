@@ -289,7 +289,7 @@ void CCommandQueue::GrantExclusiveEngineRequest()
 
 	wxCommandEvent evt(fzEVT_GRANTEXCLUSIVEENGINEACCESS);
 	evt.SetId(m_requestId);
-	m_pMainFrame->GetQueue()->AddPendingEvent(evt);
+	m_pMainFrame->GetQueue()->GetEventHandler()->AddPendingEvent(evt);
 }
 
 CFileZillaEngine* CCommandQueue::GetEngineExclusive(int requestId)

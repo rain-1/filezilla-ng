@@ -8,6 +8,7 @@
 #include "update_dialog.h"
 #include "themeprovider.h"
 
+#include <wx/animate.h>
 #include <wx/hyperlink.h>
 
 BEGIN_EVENT_TABLE(CUpdateDialog, wxDialogEx)
@@ -216,7 +217,7 @@ void CUpdateDialog::OnInstall(wxCommandEvent&)
 #else
 	bool program_exists = false;
 	wxString cmd = GetSystemOpenCommand(f, program_exists);
-	if( program_exists && cmd ) {
+	if( program_exists && !cmd.empty() ) {
 		if (wxExecute(cmd))
 			return;
 	}

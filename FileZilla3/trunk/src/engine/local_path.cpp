@@ -37,181 +37,166 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 
 	const wxChar* in = path.c_str();
 
+	{
+		wxStringBuffer start(m_path, path.Len() + 2);
+		wxChar* out = start;
+
 #ifdef __WXMSW__
-	if (path == _T("\\"))
-	{
-		m_path = _T("\\");
-		if (file)
-			file->clear();
-		return true;
-	}
-
-	wxChar* out;
-	wxChar* start;
-	if (*in == '\\')
-	{
-		// possibly UNC
-
-		in++;
-		if (*in++ != '\\')
+		if (path == _T("\\"))
 		{
-			m_path.clear();
-			return false;
+			*out++ = '\\';
+			*out++ = 0;
+			if (file)
+				file->clear();
+			return true;
 		}
 
-		start = m_path.GetWriteBuf(path.Len() + 2);
-		out = start;
-		*out++ = '\\';
-		*out++ = '\\';
+		if (*in == '\\') {
+			// possibly UNC
 
-		// UNC path
-		while (*in)
-		{
-			if (*in == '/' || *in == '\\')
-				break;
-			*out++ = *in++;
-		}
-		*out++ = path_separator;
-
-		if (out - start <= 3)
-		{
-			// not a valid UNC path
-			*start = 0;
-			m_path.UngetWriteBuf( 0 );
-			return false;
-		}
-
-		segments.push_back(out);
-	}
-	else if ((*in >= 'a' && *in <= 'z') || (*in >= 'A' || *in <= 'Z'))
-	{
-		// Regular path
-
-		start = m_path.GetWriteBuf(path.Len() + 2);
-		out = start;
-		*out++ = *in++;
-
-		if (*in++ != ':')
-		{
-			*start = 0;
-			m_path.UngetWriteBuf( 0 );
-			return false;
-		}
-		*out++ = ':';
-		if (*in != '/' && *in != '\\' && *in)
-		{
-			*start = 0;
-			m_path.UngetWriteBuf( 0 );
-			return false;
-		}
-		*out++ = path_separator;
-		segments.push_back(out);
-	}
-	else
-	{
-		m_path.clear();
-		return false;
-	}
-#else
-	if (*in++ != '/')
-	{
-		// SetPath only accepts absolute paths
-		m_path.clear();
-		return false;
-	}
-
-	wxChar* start = m_path.GetWriteBuf(path.Len() + 2);
-	wxChar* out = start;
-
-	*out++ = '/';
-	segments.push_back(out);
-#endif
-
-	enum _last
-	{
-		separator,
-		dot,
-		dotdot,
-		segment
-	};
-	enum _last last = separator;
-
-	while (*in)
-	{
-		if (*in == '/'
-#ifdef __WXMSW__
-			|| *in == '\\'
-#endif
-			)
-		{
 			in++;
-			if (last == separator)
-			{
-				// /foo//bar is equal to /foo/bar
-				continue;
-			}
-			else if (last == dot)
-			{
-				// /foo/./bar is equal to /foo/bar
-				last = separator;
-				out = segments.back();
-				continue;
-			}
-			else if (last == dotdot)
-			{
-				last = separator;
-
-				// Go two segments back if possible
-				if (segments.size() > 1)
-					segments.pop_back();
-				wxASSERT(!segments.empty());
-				out = segments.back();
-				continue;
+			if (*in++ != '\\') {
+				*start = 0;
+				return false;
 			}
 
-			// Ordinary segment just ended.
+			*out++ = '\\';
+			*out++ = '\\';
+
+			// UNC path
+			while (*in)
+			{
+				if (*in == '/' || *in == '\\')
+					break;
+				*out++ = *in++;
+			}
+			*out++ = path_separator;
+
+			if (out - start <= 3) {
+				// not a valid UNC path
+				*start = 0;
+				return false;
+			}
+
+			segments.push_back(out);
+		}
+		else if ((*in >= 'a' && *in <= 'z') || (*in >= 'A' || *in <= 'Z'))
+		{
+			// Regular path
+			*out++ = *in++;
+
+			if (*in++ != ':') {
+				*start = 0;
+				return false;
+			}
+			*out++ = ':';
+			if (*in != '/' && *in != '\\' && *in) {
+				*start = 0;
+				return false;
+			}
 			*out++ = path_separator;
 			segments.push_back(out);
-			last = separator;
-			continue;
 		}
-		else if (*in == '.')
+		else {
+			*start = 0;
+			return false;
+		}
+#else
+		if (*in++ != '/')
 		{
-			if (last == separator)
-				last = dot;
-			else if (last == dot)
-				last = dotdot;
-			else if (last == dotdot)
+			// SetPath only accepts absolute paths
+			*start = 0;
+			return false;
+		}
+
+		*out++ = '/';
+		segments.push_back(out);
+#endif
+
+		enum _last
+		{
+			separator,
+			dot,
+			dotdot,
+			segment
+		};
+		enum _last last = separator;
+
+		while (*in)
+		{
+			if (*in == '/'
+	#ifdef __WXMSW__
+				|| *in == '\\'
+	#endif
+				)
+			{
+				in++;
+				if (last == separator)
+				{
+					// /foo//bar is equal to /foo/bar
+					continue;
+				}
+				else if (last == dot)
+				{
+					// /foo/./bar is equal to /foo/bar
+					last = separator;
+					out = segments.back();
+					continue;
+				}
+				else if (last == dotdot)
+				{
+					last = separator;
+
+					// Go two segments back if possible
+					if (segments.size() > 1)
+						segments.pop_back();
+					wxASSERT(!segments.empty());
+					out = segments.back();
+					continue;
+				}
+
+				// Ordinary segment just ended.
+				*out++ = path_separator;
+				segments.push_back(out);
+				last = separator;
+				continue;
+			}
+			else if (*in == '.')
+			{
+				if (last == separator)
+					last = dot;
+				else if (last == dot)
+					last = dotdot;
+				else if (last == dotdot)
+					last = segment;
+			}
+			else
 				last = segment;
-		}
-		else
-			last = segment;
 
-		*out++ = *in++;
-	}
-	if (last == dot)
-		out = segments.back();
-	else if (last == dotdot)
-	{
-		if (segments.size() > 1)
-			segments.pop_back();
-		out = segments.back();
-	}
-	else if (last == segment)
-	{
-		if (file)
-		{
-			*out = 0;
+			*out++ = *in++;
+		}
+		if (last == dot)
 			out = segments.back();
-			*file = out;
+		else if (last == dotdot)
+		{
+			if (segments.size() > 1)
+				segments.pop_back();
+			out = segments.back();
 		}
-		else
-			*out++ = path_separator;
+		else if (last == segment)
+		{
+			if (file)
+			{
+				*out = 0;
+				out = segments.back();
+				*file = out;
+			}
+			else
+				*out++ = path_separator;
+		}
+
+		*out = 0;
 	}
-
-	*out = 0;
-
-	m_path.UngetWriteBuf( out - start );
 
 	::Coalesce(m_path);
 

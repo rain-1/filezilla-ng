@@ -21,6 +21,7 @@
 #include <wx/datetime.h>
 #include <wx/event.h>
 #include <wx/string.h>
+#include <wx/translation.h>
 
 #include <list>
 #include <vector>
@@ -36,5 +37,7 @@
 #include "directorylisting.h"
 
 #include "misc.h"
+
+#define TRANSLATE_T(str) _T(str)
 
 #endif //__LIBFILEZILLA_H__

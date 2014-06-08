@@ -757,16 +757,15 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			// Unbelievable, but wxWidgets does not have any method
 			// to urlencode strings.
 			// Do a crude approach: Drop everything unexpected...
-			for (unsigned int i = 0; i < version.Len(); i++)
-			{
-				wxChar& c = version[i];
-				if ((version[i] >= '0' && version[i] <= '9') ||
-					(version[i] >= 'a' && version[i] <= 'z') ||
-					(version[i] >= 'A' && version[i] <= 'Z') ||
-					version[i] == '-' || version[i] == '.' ||
-					version[i] == '_')
+			for (unsigned int i = 0; i < version.Len(); i++) {
+				wxChar c = version.GetChar(i);
+				if ((c >= '0' && c <= '9') ||
+					(c >= 'a' && c <= 'z') ||
+					(c >= 'A' && c <= 'Z') ||
+					c == '-' || c == '.' ||
+					c == '_')
 				{
-					url += c;
+					url.Append(c);
 				}
 			}
 		}
@@ -784,7 +783,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			{
 				pStatusBar->Show(show);
 				wxSizeEvent evt;
-				controls->pLocalListViewPanel->ProcessEvent(evt);
+				controls->pLocalListViewPanel->ProcessWindowEvent(evt);
 			}
 		}
 		if (controls && controls->pRemoteListViewPanel)
@@ -794,7 +793,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			{
 				pStatusBar->Show(show);
 				wxSizeEvent evt;
-				controls->pRemoteListViewPanel->ProcessEvent(evt);
+				controls->pRemoteListViewPanel->ProcessWindowEvent(evt);
 			}
 		}
 	}

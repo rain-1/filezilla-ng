@@ -232,24 +232,24 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 	bool containsURL = false;
 	for (int i = 0; i <= strLen; i++)
 	{
-		if ((text[i] == ':' && text[i + 1] == '/' && text[i + 2] == '/') || // absolute
-			(text[i] == '/' && (!i || text[i - 1] == ' '))) // relative
+		if ((i < strLen - 2 && text[i] == ':' && text[i + 1] == '/' && text[i + 2] == '/') || // absolute
+			(i < strLen && text[i] == '/' && (!i || text[i - 1] == ' '))) // relative
 		{
 			url = true;
 			containsURL = true;
 		}
-		if (text[i] != ' ' && text[i] != 0)
+		if (i < strLen && text[i] != ' ')
 		{
 			// If url, wrap on slashes and ampersands, but not first slash of something://
 			if (!url ||
-				 ((text[i] != '/' || text[i + 1] == '/') && (text[i] != '&' || text[i + 1] == '&') && text[i] != '?'))
+				 ((i < strLen - 1 && (text[i] != '/' || text[i + 1] == '/')) && (i < strLen - 1 && (text[i] != '&' || text[i + 1] == '&')) && text[i] != '?'))
 			continue;
 		}
 
 		wxString segment;
 		if (wrapAfter == -1)
 		{
-			if (text[i] == '/' || text[i] == '?' || text[i] == '&')
+			if (i < strLen && (text[i] == '/' || text[i] == '?' || text[i] == '&'))
 				segment = text.Mid(start, i - start + 1);
 			else
 				segment = text.Mid(start, i - start);
@@ -257,7 +257,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 		}
 		else
 		{
-			if (text[i] == '/' || text[i] == '?' || text[i] == '&')
+			if (i < strLen && (text[i] == '/' || text[i] == '?' || text[i] == '&'))
 				segment = text.Mid(wrapAfter + 1, i - wrapAfter);
 			else
 				segment = text.Mid(wrapAfter + 1, i - wrapAfter - 1);
@@ -272,7 +272,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			if (wrappedText != _T(""))
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, wrapAfter - start);
-			if (text[wrapAfter] != ' ' && text[wrapAfter] != '\0')
+			if (wrapAfter < strLen && text[wrapAfter] != ' ' && text[wrapAfter] != '\0')
 				wrappedText += text[wrapAfter];
 
 			if (width + spaceWidth >= (int)maxLength)
@@ -302,7 +302,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			if (wrappedText != _T(""))
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, i - start);
-			if (text[i] != ' ' && text[i] != '\0')
+			if (i < strLen && text[i] != ' ' && text[i] != '\0')
 				wrappedText += text[i];
 			start = i + 1;
 			wrapAfter = -1;
@@ -316,7 +316,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			wrapAfter = i;
 		}
 
-		if (text[i] == ' ')
+		if (i < strLen && text[i] == ' ')
 			url = false;
 	}
 	if (start < strLen)

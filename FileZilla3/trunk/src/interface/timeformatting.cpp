@@ -23,7 +23,7 @@ public:
 
 		if (dateFormat == _T("1"))
 			m_dateFormat = _T("%Y-%m-%d");
-		else if (dateFormat[0] == '2')
+		else if (!dateFormat.IsEmpty() && dateFormat[0] == '2')
 			m_dateFormat = dateFormat.Mid(1);
 		else
 			m_dateFormat = _T("%x");
@@ -33,7 +33,7 @@ public:
 
 		if (timeFormat == _T("1"))
 			m_dateTimeFormat += _T("%H:%M");
-		else if (timeFormat[0] == '2')
+		else if (!timeFormat.IsEmpty() && timeFormat[0] == '2')
 			m_dateTimeFormat += timeFormat.Mid(1);
 		else
 			m_dateTimeFormat += _T("%X");

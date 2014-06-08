@@ -72,5 +72,6 @@
 #include <wx/toolbar.h>
 #include <wx/treectrl.h>
 #include <wx/xrc/xmlres.h>
+#include <wx/xml/xml.h>
 
 #endif

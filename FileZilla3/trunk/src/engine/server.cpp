@@ -12,18 +12,18 @@ struct t_protocolInfo
 };
 
 static const t_protocolInfo protocolInfos[] = {
-	{ FTP,          _T("ftp"),    false, 21,  true,  wxTRANSLATE("FTP - File Transfer Protocol with optional encryption"),                 true  },
+	{ FTP,          _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - File Transfer Protocol with optional encryption"),                 true  },
 	{ SFTP,         _T("sftp"),   true,  22,  false, _T("SFTP - SSH File Transfer Protocol"),                              false },
 	{ HTTP,         _T("http"),   true,  80,  false, _T("HTTP - Hypertext Transfer Protocol"),                             false  },
-	{ HTTPS,        _T("https"),  true, 443,  true,  wxTRANSLATE("HTTPS - HTTP over TLS"),                                 false  },
-	{ FTPS,         _T("ftps"),   true, 990,  true,  wxTRANSLATE("FTPS - FTP over implicit TLS/SSL"),                      true  },
-	{ FTPES,        _T("ftpes"),  true,  21,  true,  wxTRANSLATE("FTPES - FTP over explicit TLS/SSL"),                     true  },
-	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  wxTRANSLATE("FTP - Insecure File Transfer Protocol"), true  },
+	{ HTTPS,        _T("https"),  true, 443,  true,  TRANSLATE_T("HTTPS - HTTP over TLS"),                                 false  },
+	{ FTPS,         _T("ftps"),   true, 990,  true,  TRANSLATE_T("FTPS - FTP over implicit TLS/SSL"),                      true  },
+	{ FTPES,        _T("ftpes"),  true,  21,  true,  TRANSLATE_T("FTPES - FTP over explicit TLS/SSL"),                     true  },
+	{ INSECURE_FTP, _T("ftp"),    false, 21,  true,  TRANSLATE_T("FTP - Insecure File Transfer Protocol"), true  },
 	{ UNKNOWN,      _T(""),       false, 21,  false, _T(""), false }
 };
 
 static const wxString typeNames[SERVERTYPE_MAX] = {
-	wxTRANSLATE("Default (Autodetect)"),
+	TRANSLATE_T("Default (Autodetect)"),
 	_T("Unix"),
 	_T("VMS"),
 	_T("DOS"),
@@ -31,7 +31,7 @@ static const wxString typeNames[SERVERTYPE_MAX] = {
 	_T("VxWorks"),
 	_T("z/VM"),
 	_T("HP NonStop"),
-	wxTRANSLATE("DOS-like with virtual paths"),
+	TRANSLATE_T("DOS-like with virtual paths"),
 	_T("Cygwin")
 };
 
