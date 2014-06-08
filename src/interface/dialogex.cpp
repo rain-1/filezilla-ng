@@ -101,7 +101,7 @@ bool wxDialogEx::CanShowPopupDialog()
 	}
 
 	wxMouseState mouseState = wxGetMouseState();
-	if( mouseState.LeftDown() || mouseState.MiddleDown() || mouseState.RightDown() ) {
+	if( mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown() ) {
 		return false;
 	}
 #ifdef __WXMSW__

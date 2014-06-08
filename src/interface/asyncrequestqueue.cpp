@@ -439,7 +439,7 @@ bool CAsyncRequestQueue::CheckWindowState()
 {
 	m_timer.Stop();
 	wxMouseState mouseState = wxGetMouseState();
-	if (mouseState.LeftDown() || mouseState.MiddleDown() || mouseState.RightDown())
+	if (mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown())
 	{
 		m_timer.Start(1000, true);
 		return false;

@@ -2692,7 +2692,7 @@ void CMainFrame::OnIconize(wxIconizeEvent& event)
 	if (m_taskbar_is_uniconizing)
 		return;
 #endif
-	if (!event.Iconized())
+	if (!event.IsIconized())
 	{
 		if (m_taskBarIcon)
 			m_taskBarIcon->RemoveIcon();
