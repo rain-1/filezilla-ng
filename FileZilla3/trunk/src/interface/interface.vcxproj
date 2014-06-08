@@ -64,7 +64,7 @@
       <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>.;../include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION="3.7.4.1";USED_HOST="i586-pc-mingw32msvc";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION="3.8.0-rc3";USED_HOST="i686-w64-mingw32";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>true</BufferSecurityCheck>
@@ -189,6 +189,7 @@
     <ClCompile Include="led.cpp" />
     <ClCompile Include="listctrlex.cpp" />
     <ClCompile Include="listingcomparison.cpp" />
+    <ClCompile Include="locale_initializer.cpp" />
     <ClCompile Include="LocalListView.cpp" />
     <ClCompile Include="LocalTreeView.cpp" />
     <ClCompile Include="loginmanager.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="led.h" />
     <ClInclude Include="listctrlex.h" />
     <ClInclude Include="listingcomparison.h" />
+    <ClInclude Include="locale_initializer.h" />
     <ClInclude Include="LocalListView.h" />
     <ClInclude Include="LocalTreeView.h" />
     <ClInclude Include="loginmanager.h" />
