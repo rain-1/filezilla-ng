@@ -1870,6 +1870,7 @@ void CSiteManagerDialog::OnBeginDrag(wxTreeEvent& event)
 		event.Veto();
 		return;
 	}
+	UpdateItem();
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -1903,6 +1904,8 @@ void CSiteManagerDialog::OnBeginDrag(wxTreeEvent& event)
 	source.DoDragDrop(predefined ? wxDrag_CopyOnly : wxDrag_DefaultMove);
 
 	m_dropSource = wxTreeItemId();
+
+	SetCtrlState();
 }
 
 struct itempair
