@@ -232,7 +232,7 @@ std::string CInitializer::ReadSettingsFromDefaults(std::string file)
 			dir = dir.substr(pos + 1);
 		}
 
-		if (token[0] == '$')
+		if (!token.empty() && token[0] == '$')
 		{
 			if (token[1] == '$')
 				result += token.substr(1);

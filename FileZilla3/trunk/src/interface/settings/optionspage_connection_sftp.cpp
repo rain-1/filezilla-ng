@@ -104,7 +104,7 @@ bool COptionsPageConnectionSFTP::LoadProcess()
 		executable += _T(".exe");
 #endif
 		// Restore quotes
-		if (executable[0] == '"')
+		if (!executable.empty() && executable[0] == '"')
 			executable += '"';
 	}
 
@@ -188,6 +188,9 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 		if (!pos2)
 		{
 			input = input.Mid(pos + 1);
+			continue;
+		}
+		if( input.empty() ) {
 			continue;
 		}
 		wxChar c = input[0];

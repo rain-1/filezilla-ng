@@ -871,7 +871,7 @@ wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists
 	}
 
 	wxString command = COptions::Get()->GetOption(OPTION_EDIT_DEFAULTEDITOR);
-	if (command[0] == '0')
+	if (command.empty() || command[0] == '0')
 		return _T(""); // None set
 	else if (command[0] == '1')
 	{

@@ -397,7 +397,7 @@ bool CManualTransfer::UpdateServer()
 	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port);
 	wxString host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
 	// SetHost does not accept URL syntax
-	if (host[0] == '[')
+	if (!host.empty() && host[0] == '[')
 	{
 		host.RemoveLast();
 		host = host.Mid(1);

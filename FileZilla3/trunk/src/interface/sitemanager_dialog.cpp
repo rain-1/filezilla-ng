@@ -1344,7 +1344,7 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port);
 	wxString host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
 	// SetHost does not accept URL syntax
-	if (host[0] == '[')
+	if (!host.empty() && host[0] == '[')
 	{
 		host.RemoveLast();
 		host = host.Mid(1);
@@ -1830,7 +1830,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 	pTree->SetItemImage(m_predefinedSites, 1, wxTreeItemIcon_SelectedExpanded);
 
 	wxString lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
-	if (lastSelection[0] == '1')
+	if (!lastSelection.empty() && lastSelection[0] == '1')
 	{
 		if (lastSelection == _T("1"))
 			pTree->SelectItem(m_predefinedSites);

@@ -237,7 +237,7 @@ protected:
 			case sftpRequest:
 				{
 					const wxString& line = ReadLine(pInputStream, error);
-					if (error)
+					if (error || line.empty())
 						goto loopexit;
 					int requestType = line[0] - '0';
 					if (requestType == sftpReqHostkey || requestType == sftpReqHostkeyChanged)
