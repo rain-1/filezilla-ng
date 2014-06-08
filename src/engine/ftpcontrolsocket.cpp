@@ -427,6 +427,11 @@ void CFtpControlSocket::OnConnect()
 
 void CFtpControlSocket::ParseResponse()
 {
+	if( m_Response.empty() ) {
+		LogMessage(Debug_Warning, _T("No reply in ParseResponse"));
+		return;
+	}
+
 	if (m_Response[0] != '1')
 	{
 		if (m_pendingReplies > 0)
@@ -1221,13 +1226,15 @@ int CFtpControlSocket::LogonSend()
 
 int CFtpControlSocket::GetReplyCode() const
 {
-	if (m_Response == _T(""))
+	if (m_Response.empty()) {
 		return 0;
-
-	if (m_Response[0] < '0' || m_Response[0] > '9')
+	}
+	else if (m_Response[0] < '0' || m_Response[0] > '9') {
 		return 0;
-
-	return m_Response[0] - '0';
+	}
+	else {
+		return m_Response[0] - '0';
+	}
 }
 
 bool CFtpControlSocket::Send(wxString str, bool maskArgs, bool measureRTT)
@@ -4410,7 +4417,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		pData->host = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST);
 
 		int pos = -1;
-		if (pData->host[0] == '[')
+		if (!pData->host.empty() && pData->host[0] == '[')
 		{
 			// Probably IPv6 address
 			pos = pData->host.Find(']');

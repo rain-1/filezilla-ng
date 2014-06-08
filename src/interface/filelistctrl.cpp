@@ -736,7 +736,12 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnRightClicked(wx
 template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
 {
 	wxString sortInfo = COptions::Get()->GetOption(optionID);
-	m_sortDirection = sortInfo[0] - '0';
+	if( !sortInfo.empty() ) {
+		m_sortDirection = sortInfo[0] - '0';
+	}
+	else {
+		m_sortDirection = 0;
+	}
 	if (m_sortDirection < 0 || m_sortDirection > 1)
 		m_sortDirection = 0;
 

@@ -406,7 +406,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 
 	if (m_protocol == CSocket::ipv6)
 	{
-		if (m_data[0] == '[')
+		if (!m_data.empty() && m_data[0] == '[')
 		{
 			if (m_data.Last() != ']')
 			{

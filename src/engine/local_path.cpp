@@ -354,19 +354,16 @@ bool CLocalPath::ChangePath(const wxString& path)
 	if (path.empty())
 		return false;
 #ifdef __WXMSW__
-	if (path == _T("\\") || path == _T("/"))
-	{
+	if (path == _T("\\") || path == _T("/")) {
 		m_path = _T("\\");
 		return true;
 	}
 
-	if (path[0] == '\\' && path[1] == '\\')
-	{
+	if (path.Len() >= 2 && path[0] == '\\' && path[1] == '\\') {
 		// Absolute UNC
 		return SetPath(path);
 	}
-	if (path[0] && path[1] == ':')
-	{
+	if (path.Len() >= 2 && path[0] && path[1] == ':') {
 		// Absolute path
 		return SetPath(path);
 	}
@@ -375,19 +372,16 @@ bool CLocalPath::ChangePath(const wxString& path)
 	if (m_path.empty())
 		return false;
 
-	if ((path[0] == '\\' || path[0] == '/') && m_path[1] == ':')
-	{
+	if (path.Len() >= 2 && (path[0] == '\\' || path[0] == '/') && m_path[1] == ':') {
 		// Relative to drive root
 		return SetPath(m_path.Left(2) + path);
 	}
-	else
-	{
+	else {
 		// Relative to current directory
 		return SetPath(m_path + path);
 	}
 #else
-	if (path[0] == path_separator)
-	{
+	if (!path.empty() && path[0] == path_separator) {
 		// Absolute path
 		return SetPath(path);
 	}
