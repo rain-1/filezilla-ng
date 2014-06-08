@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include "verifycertdialog.h"
+#include <wx/statbox.h>
 #include <wx/tokenzr.h>
 #include "dialogex.h"
 #include "ipcmutex.h"
@@ -59,8 +60,8 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_MD5"), cert.GetFingerPrintMD5());
 	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_SHA1"), cert.GetFingerPrintSHA1());
 
-	ParseDN(pDlg, cert.GetSubject(), m_pSubjectSizer);
-	ParseDN(pDlg, cert.GetIssuer(), m_pIssuerSizer);
+	ParseDN(XRCCTRL(*pDlg, "ID_SUBJECT_BOX", wxStaticBox), cert.GetSubject(), m_pSubjectSizer);
+	ParseDN(XRCCTRL(*pDlg, "ID_ISSUER_BOX", wxStaticBox), cert.GetIssuer(), m_pIssuerSizer);
 
 	return warning;
 }
@@ -103,10 +104,10 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort()));
 
 	m_pSubjectSizer = XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->GetContainingSizer();
-	XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->Destroy();
+	m_pSubjectSizer->Clear(true);
 
 	m_pIssuerSizer = XRCCTRL(*m_pDlg, "ID_ISSUER_DUMMY", wxStaticText)->GetContainingSizer();
-	XRCCTRL(*m_pDlg, "ID_ISSUER_DUMMY", wxStaticText)->Destroy();
+	m_pIssuerSizer->Clear(true);
 
 	wxSize minSize(0, 0);
 	for (unsigned int i = 0; i < m_certificates.size(); ++i)
@@ -166,7 +167,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 	m_pDlg = 0;
 }
 
-void CVerifyCertDialog::ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSizer)
+void CVerifyCertDialog::ParseDN(wxWindow* parent, const wxString& dn, wxSizer* pSizer)
 {
 	pSizer->Clear(true);
 
@@ -176,22 +177,22 @@ void CVerifyCertDialog::ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSi
 	while (tokens.HasMoreTokens())
 		tokenlist.push_back(tokens.GetNextToken());
 
-	ParseDN_by_prefix(pDlg, tokenlist, _T("CN"), _("Common name:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("O"), _("Organization:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("2.5.4.15"), _("Business category:"), pSizer, true);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("OU"), _("Unit:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("T"), _("Title:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("C"), _("Country:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("ST"), _("State or province:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("L"), _("Locality:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("2.5.4.17"), _("Postal code:"), pSizer, true);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("postalCode"), _("Postal code:"), pSizer, true);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("STREET"), _("Street:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("EMAIL"), _("E-Mail:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("serialNumber"), _("Serial number:"), pSizer);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.3"), _("Jurisdiction country:"), pSizer, true);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.2"), _("Jurisdiction state or province:"), pSizer, true);
-	ParseDN_by_prefix(pDlg, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.1"), _("Jurisdiction locality:"), pSizer, true);
+	ParseDN_by_prefix(parent, tokenlist, _T("CN"), _("Common name:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("O"), _("Organization:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("2.5.4.15"), _("Business category:"), pSizer, true);
+	ParseDN_by_prefix(parent, tokenlist, _T("OU"), _("Unit:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("T"), _("Title:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("C"), _("Country:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("ST"), _("State or province:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("L"), _("Locality:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("2.5.4.17"), _("Postal code:"), pSizer, true);
+	ParseDN_by_prefix(parent, tokenlist, _T("postalCode"), _("Postal code:"), pSizer, true);
+	ParseDN_by_prefix(parent, tokenlist, _T("STREET"), _("Street:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("EMAIL"), _("E-Mail:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("serialNumber"), _("Serial number:"), pSizer);
+	ParseDN_by_prefix(parent, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.3"), _("Jurisdiction country:"), pSizer, true);
+	ParseDN_by_prefix(parent, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.2"), _("Jurisdiction state or province:"), pSizer, true);
+	ParseDN_by_prefix(parent, tokenlist, _T("1.3.6.1.4.1.311.60.2.1.1"), _("Jurisdiction locality:"), pSizer, true);
 
 	if (!tokenlist.empty())
 	{
@@ -199,12 +200,12 @@ void CVerifyCertDialog::ParseDN(wxDialog* pDlg, const wxString& dn, wxSizer* pSi
 		for (std::list<wxString>::const_iterator iter = ++tokenlist.begin(); iter != tokenlist.end(); ++iter)
 			value += _T(",") + *iter;
 
-		pSizer->Add(new wxStaticText(pDlg, wxID_ANY, _("Other:")));
-		pSizer->Add(new wxStaticText(pDlg, wxID_ANY, value));
+		pSizer->Add(new wxStaticText(parent, wxID_ANY, _("Other:")));
+		pSizer->Add(new wxStaticText(parent, wxID_ANY, value));
 	}
 }
 
-void CVerifyCertDialog::ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& tokens, wxString prefix, const wxString& name, wxSizer* pSizer, bool decode /*=false*/)
+void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>& tokens, wxString prefix, const wxString& name, wxSizer* pSizer, bool decode /*=false*/)
 {
 	prefix += _T("=");
 	int len = prefix.Length();
@@ -251,8 +252,8 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxDialog* pDlg, std::list<wxString>& t
 
 	if (value != _T(""))
 	{
-		pSizer->Add(new wxStaticText(pDlg, wxID_ANY, name));
-		pSizer->Add(new wxStaticText(pDlg, wxID_ANY, value));
+		pSizer->Add(new wxStaticText(parent, wxID_ANY, name));
+		pSizer->Add(new wxStaticText(parent, wxID_ANY, value));
 	}
 }
 
