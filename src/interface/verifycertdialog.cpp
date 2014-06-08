@@ -506,7 +506,7 @@ wxString CVerifyCertDialog::DecodeValue(const wxString& value)
 	// #xxxx466F6F626172 -> Foobar
 	// First two encoded bytes are ignored, some weird type information I don't care about
 	// Only accepts ASCII for now.
-	if (value[0] != '#')
+	if (value.empty() || value[0] != '#')
 		return value;
 
 	unsigned int len = value.Len();
