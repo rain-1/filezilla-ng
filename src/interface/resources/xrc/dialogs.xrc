@@ -4682,7 +4682,6 @@
                     </object>
                   </object>
                   <cols>1</cols>
-                  <rows>2</rows>
                   <vgap>5</vgap>
                   <object class="sizeritem">
                     <object class="wxStaticText">
