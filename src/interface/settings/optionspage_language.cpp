@@ -81,7 +81,7 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 		pListBox->SetSelection(n);
 
 	m_locale.push_back(_locale_info());
-	m_locale.back().code = _T("en");
+	m_locale.back().code = _T("en_US");
 	m_locale.back().name = _T("English");
 
 	wxString localesDir = wxGetApp().GetLocalesDir();
