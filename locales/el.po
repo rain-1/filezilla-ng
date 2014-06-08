@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla Client 3.8.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-05-30 11:18+0200\n"
-"PO-Revision-Date: 2014-05-30 12:52+0200\n"
+"POT-Creation-Date: 2014-06-08 09:42+0200\n"
+"PO-Revision-Date: 2014-06-05 11:48+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -47,9 +47,9 @@ msgid_plural "%d directories"
 msgstr[0] "%d φάκελος"
 msgstr[1] "%d φάκελοι"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1733
-#: ../../locales/../src/interface/search.cpp:759
-#: ../../locales/../src/interface/search.cpp:1012
+#: ../../locales/../src/interface/RemoteListView.cpp:1458
+#: ../../locales/../src/interface/search.cpp:469
+#: ../../locales/../src/interface/search.cpp:722
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -58,9 +58,9 @@ msgstr[1] "οι φάκελοι %d καθώς και τα περιεχόμενα 
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:62
 #: ../../locales/../src/interface/filelist_statusbar.cpp:85
-#: ../../locales/../src/interface/RemoteListView.cpp:1732
-#: ../../locales/../src/interface/search.cpp:758
-#: ../../locales/../src/interface/search.cpp:1011
+#: ../../locales/../src/interface/RemoteListView.cpp:1457
+#: ../../locales/../src/interface/search.cpp:468
+#: ../../locales/../src/interface/search.cpp:721
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -235,7 +235,7 @@ msgid "&Always trust this host, add this key to the cache"
 msgstr ""
 "&Πάντα να εμπιστεύεσαι αυτό τον κόμβο, πρόσθεσε αυτό το κλειδί στην μνήμη"
 
-#: resources.h:953
+#: resources.h:959
 msgid "&Always use default editor"
 msgstr "&Χρήση πάντα του προκαθορισμένου επεξεργαστή"
 
@@ -272,7 +272,7 @@ msgid "&Bookmarks"
 msgstr "&Σελιδοδείκτες"
 
 #: resources.h:102 resources.h:350 resources.h:387 resources.h:393
-#: resources.h:410 resources.h:428 resources.h:950 resources.h:976
+#: resources.h:410 resources.h:428 resources.h:956 resources.h:982
 msgid "&Browse..."
 msgstr "&Περιήγηση..."
 
@@ -290,7 +290,7 @@ msgstr "&Άκυρο"
 msgid "&Clear private data..."
 msgstr "&Καθαρισμός των προσωπικών δεδομένων..."
 
-#: resources.h:1023
+#: resources.h:1030
 msgid "&Close"
 msgstr "&Τερματισμός"
 
@@ -334,11 +334,11 @@ msgstr "&Δημιουργία νέας καρτέλας"
 msgid "&Debug"
 msgstr "&Αποσφαλμάτωση"
 
-#: resources.h:984
+#: resources.h:990
 msgid "&Debug information in message log:"
 msgstr "&Πληροφορίες αποσφαλμάτωσης στο αρχείο συμβάντων:"
 
-#: resources.h:946
+#: resources.h:952
 msgid "&Default editor:"
 msgstr "&Προκαθορισμένος επεξεργαστής:"
 
@@ -397,7 +397,7 @@ msgstr "&Να μην εμφανιστεί ξανά αυτό το παράθυρ�
 msgid "&Don't use external IP address on local connections."
 msgstr "&Να μη γίνεται χρήση εξωτερικής διεύθυνσης IP στις τοπικές συνδέσεις."
 
-#: resources.h:933
+#: resources.h:939
 msgid "&Double-click action on files:"
 msgstr "&Διπλό-κλικ ως ενέργεια στα αρχεία:"
 
@@ -558,11 +558,11 @@ msgstr "&ISO 8601 (παράδειγμα: 2007-09-15)"
 msgid "&Import..."
 msgstr "&Εισαγωγή..."
 
-#: resources.h:955
+#: resources.h:961
 msgid "&Inherit system's filetype associations"
 msgstr "&Οικειοποίηση των συσχετίσεων από το σύστημα"
 
-#: resources.h:1030
+#: resources.h:1037
 msgid "&Install new version"
 msgstr "&Εγκαταστήστε νέα έκδοση"
 
@@ -590,7 +590,7 @@ msgstr "&Δομή τοπικών φακέλων"
 msgid "&Local directory:"
 msgstr "&Τοπικός φάκελος:"
 
-#: resources.h:974
+#: resources.h:980
 msgid "&Log to file"
 msgstr "&Συμβάντα στο αρχείο"
 
@@ -629,6 +629,10 @@ msgstr "&Αρχείο συμβάντων"
 #: resources.h:882
 msgid "&Minimize to tray"
 msgstr "&Ελαχιστοποίηση στην περιοχή ειδοποιήσεων"
+
+#: resources.h:929
+msgid "&Name sorting mode:"
+msgstr "&Όνομα λειτουργίας ταξινόμησης:"
 
 #: resources.h:384
 msgid "&Name:"
@@ -796,7 +800,7 @@ msgstr "&Εκτέλεση εντολής..."
 msgid "&Run configuration wizard now..."
 msgstr "&Εκτέλεση οδηγού ρύθμισης τώρα..."
 
-#: resources.h:969
+#: resources.h:975
 msgid "&Run update check now..."
 msgstr "&Εκτέλεση ελέγχου αναβαθμίσεων τώρα..."
 
@@ -824,7 +828,7 @@ msgstr "&Αναζήτηση απομακρυσμένων αρχείων..."
 msgid "&Select Entry:"
 msgstr "&Επιλογή εγγραφής:"
 
-#: resources.h:944
+#: resources.h:950
 msgid "&Select language:"
 msgstr "&Επιλογή γλώσσας:"
 
@@ -844,7 +848,7 @@ msgstr "&Ρυθμίσεις"
 msgid "&Settings..."
 msgstr "&Ρυθμίσεις..."
 
-#: resources.h:983
+#: resources.h:989
 msgid "&Show debug menu"
 msgstr "&Εμφάνιση του μενού αποσφαλμάτωσης"
 
@@ -852,7 +856,7 @@ msgstr "&Εμφάνιση του μενού αποσφαλμάτωσης"
 msgid "&Show message"
 msgstr "&Εμφάνιση μηνύματος"
 
-#: resources.h:973
+#: resources.h:979
 msgid "&Show timestamps in message log"
 msgstr "&Ενεργοποίηση καταγραφής ώρας στο αρχείο συμβάντων"
 
@@ -932,7 +936,7 @@ msgstr "&Χρήση προσαρμοσμένης εφαρμογής"
 msgid "&Use synchronized browsing"
 msgstr "&Χρήση συγχρονισμένης περιήγησης"
 
-#: resources.h:948
+#: resources.h:954
 msgid "&Use system's default editor for text files"
 msgstr "&Χρήση του προκαθορισμένου από το σύστημα επεξεργαστή αρχείων κειμένων"
 
@@ -970,13 +974,13 @@ msgstr "&Προβολή"
 msgid "&View/Edit"
 msgstr "&Προβολή/Επεξεργασία"
 
-#: resources.h:954
+#: resources.h:960
 msgid "&Watch locally edited files and prompt to upload modifications"
 msgstr ""
 "&Προβολή των τροποποιημένων τοπικών αρχείων και υπόμνηση για την αποστολή "
 "των τροποποιήσεων"
 
-#: resources.h:964
+#: resources.h:970
 msgid "&When checking for updates, check for:"
 msgstr "Κατά τον έλεγχο ενημερώσεων, ελέγξτε:"
 
@@ -1105,19 +1109,19 @@ msgstr "-s και -c δε μπορούν να είναι συγχρόνως πα
 msgid "-s cannot be used together with an FTP URL."
 msgstr "-s δε μπορεί να χρησιμοποιηθεί συγχρόνως με μία διεύθυνση FTP."
 
-#: resources.h:985
+#: resources.h:991
 msgid "0 - None"
 msgstr "0 - Καμία"
 
-#: resources.h:986
+#: resources.h:992
 msgid "1 - Warning"
 msgstr "1 - Προειδοποιήσεις"
 
-#: resources.h:987
+#: resources.h:993
 msgid "2 - Info"
 msgstr "2 - Πληροφορίες"
 
-#: resources.h:988
+#: resources.h:994
 msgid "3 - Verbose"
 msgstr "3 - Αναλυτικές"
 
@@ -1125,7 +1129,7 @@ msgstr "3 - Αναλυτικές"
 msgid "32 bit system"
 msgstr "32 bit σύστημα"
 
-#: resources.h:989
+#: resources.h:995
 msgid "4 - Debug"
 msgstr "4 - Αποσφαλματώσεις"
 
@@ -1148,7 +1152,7 @@ msgid "A default editor needs to be set."
 msgstr "Πρέπει να οριστεί ένας προκαθοριμένος επεξεργαστής."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
-#: ../../locales/../src/interface/RemoteTreeView.cpp:117
+#: ../../locales/../src/interface/RemoteTreeView.cpp:118
 #: ../../locales/../src/interface/state.cpp:825
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Ο φάκελος δε μπορεί να συρθεί μέσα σε έναν από τους υποφακέλους του."
@@ -1168,7 +1172,7 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Το αρχείο που ανοίχτηκε νωρίτερα έχει αλλάξει."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1983
+#: ../../locales/../src/interface/LocalListView.cpp:1748
 #, c-format
 msgid ""
 "A file with that name is already being edited. Do you want to reopen '%s'?"
@@ -1176,12 +1180,12 @@ msgstr ""
 "Ένα αρχείο με αυτό το όνομα επεξεργάζεται ήδη. Να ανοιχθεί ξανά το αρχείο '%"
 "s';"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1979
-#: ../../locales/../src/interface/RemoteListView.cpp:2717
+#: ../../locales/../src/interface/LocalListView.cpp:1744
+#: ../../locales/../src/interface/RemoteListView.cpp:2442
 msgid "A file with that name is already being transferred."
 msgstr "Ένα αρχείο με αυτό το όνομα έχει ήδη μεταφερθεί."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2722
+#: ../../locales/../src/interface/RemoteListView.cpp:2447
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr ""
@@ -1202,7 +1206,7 @@ msgstr ""
 "Αν δε διορθωθεί το πρόβλημα, πιθανόν να λείπουν αρχεία από τις λίστες.\n"
 "Καμία άλλη προειδοποίηση δε θα εμφανιστεί σε αυτή τη σύνοδο."
 
-#: resources.h:1024
+#: resources.h:1031
 msgid "A new version of FileZilla is available:"
 msgstr "Μία νέα έκδοση του FileZilla είναι διαθέσιμη:"
 
@@ -1350,7 +1354,7 @@ msgid "Add selected files and folders to the transfer queue"
 msgstr ""
 "Προσθήκη των επιλεγμένων αρχείων και φακέλων στη λίστα αναμονής για μεταφορά"
 
-#: resources.h:935 resources.h:941
+#: resources.h:941 resources.h:947
 msgid "Add to queue"
 msgstr "Προσθήκη στη λίστα αναμονής"
 
@@ -1362,7 +1366,7 @@ msgstr "Μη υποστηριζόμενος τύπος διεύθυνσης"
 msgid "Advanced"
 msgstr "Για προχωρημένους"
 
-#: resources.h:968
+#: resources.h:974
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
@@ -1427,7 +1431,7 @@ msgstr ""
 "Εναλλακτικά, μπορείτε να χρησιμοποιήσετε το αναγνωριστικό SSH του συστήματος "
 "σας. Βεβαιωθείτε ότι οι μεταβλητές περιβάλλοντος SSH_AUTH_SOCK έχουν οριστεί."
 
-#: resources.h:1033
+#: resources.h:1040
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
@@ -1672,7 +1676,7 @@ msgstr "&Αντιγραφή των URLs στο πρόχειρο"
 msgid "C&ustom"
 msgstr "Π&ροσαρμογή"
 
-#: resources.h:956
+#: resources.h:962
 msgid "C&ustom filetype associations:"
 msgstr "Π&ροσαρμοσμένες συσχετίσεις:"
 
@@ -1704,11 +1708,11 @@ msgstr "Αδύνατη η εγγραφή δεδομένων στο αρχείο:
 msgid "Cancel"
 msgstr "Άκυρο"
 
-#: resources.h:1008
+#: resources.h:1014
 msgid "Cancel current operation"
 msgstr "Ακύρωση τρέχουσας λειτουργίας"
 
-#: resources.h:1009
+#: resources.h:1015
 msgid "Cancels the current operation"
 msgstr "Ακυρώνει την τρέχουσα λειτουργία"
 
@@ -1738,7 +1742,7 @@ msgstr ""
 "Αδυναμία σύγκρισης φακέλων, λόγω ενεργοποίησης διαφορετικών φίλτρων στους "
 "τοπικούς και στους απομακρυσμένους φακέλους."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2821
+#: ../../locales/../src/interface/RemoteListView.cpp:2546
 msgid "Cannot compare directories, not connected to a server."
 msgstr ""
 "Αδύνατη η σύγκριση των φακέλων, δεν υπάρχει σύνδεση με τον εξυπηρετητή."
@@ -1747,19 +1751,19 @@ msgstr ""
 msgid "Cannot create new filter"
 msgstr "Αδυναμία δημιουργίας νέου φίλτρου"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1961
-#: ../../locales/../src/interface/LocalListView.cpp:2090
-#: ../../locales/../src/interface/RemoteListView.cpp:2651
-#: ../../locales/../src/interface/RemoteListView.cpp:2697
+#: ../../locales/../src/interface/LocalListView.cpp:1726
+#: ../../locales/../src/interface/LocalListView.cpp:1855
+#: ../../locales/../src/interface/RemoteListView.cpp:2376
+#: ../../locales/../src/interface/RemoteListView.cpp:2422
 msgid "Cannot edit file"
 msgstr "Αδύνατη η επεξεργασία του αρχείου"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1877
+#: ../../locales/../src/interface/LocalListView.cpp:1642
 msgid "Cannot edit file, not connected to any server."
 msgstr ""
 "Αδύνατη η επεξεργασία του αρχείου, δεν υπάρχει σύνδεση με τον εξυπηρετητή."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1888
+#: ../../locales/../src/interface/LocalListView.cpp:1653
 msgid "Cannot edit file, remote path unknown."
 msgstr "Αδύνατη η επεξεργασία του αρχείου, άγνωστη απομακρυσμένη διαδρομή."
 
@@ -1797,7 +1801,7 @@ msgstr "Να μην αποθηκεύονται οι κωδικοί πρόσβα�
 msgid "Cannot rename entry"
 msgstr "Δε μπορεί να μετονομαστεί η είσοδος"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1933
+#: ../../locales/../src/interface/RemoteListView.cpp:1658
 msgid "Cannot rename file"
 msgstr "Το αρχείο δε μπορεί να μετονομαστεί"
 
@@ -1826,10 +1830,26 @@ msgstr "Δεν έχει ορισθεί συσχετιζόμενο αρχείο"
 msgid "Cannot show dialog"
 msgstr "Ο διάλογος δε μπορεί να εμφανιστεί"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1979
-#: ../../locales/../src/interface/RemoteListView.cpp:2717
+#: ../../locales/../src/interface/LocalListView.cpp:1744
+#: ../../locales/../src/interface/RemoteListView.cpp:2442
 msgid "Cannot view/edit selected file"
 msgstr "Το επιλεγμένο αρχείο δε μπορεί να προβληθεί/επεξεργαστεί"
+
+#: resources.h:931
+msgid "Case insensitive"
+msgstr "Αγνόηση διάκρισης χαρακτήρων"
+
+#: resources.h:930
+msgid "Case insensitive (default)"
+msgstr "Αγνόηση διάκρισης χαρακτήρων (προεπιλογή)"
+
+#: resources.h:932
+msgid "Case sensitive"
+msgstr "Διάκριση χαρακτήρων"
+
+#: resources.h:933
+msgid "Case sensitive (default)"
+msgstr "Διάκριση χαρακτήρων (προεπιλογή)"
 
 #: resources.h:267
 msgid "Categories"
@@ -1863,7 +1883,7 @@ msgstr "Αλλαγή ιδιοτήτων αρχείου"
 msgid "Change the file permissions."
 msgstr "Αλλαγή δικαιωμάτων αρχείου"
 
-#: resources.h:981
+#: resources.h:987
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr ""
 "Για την εφαρμογή των αλλαγών στο αρχείο συμβάντων απαιτείται η επανεκκίνηση "
@@ -1881,11 +1901,11 @@ msgstr "Κωδικοποίηση χαρακτήρων"
 msgid "Check for &updates..."
 msgstr "Έλεγχος για &αναβαθμίσεις..."
 
-#: resources.h:960
+#: resources.h:966
 msgid "Check for FileZilla &updates automatically:"
 msgstr "Έλεγχος για &ενημερώσεις FileZilla αυτόματα:"
 
-#: resources.h:1022
+#: resources.h:1028
 msgid "Check for Updates"
 msgstr "Έλεγχος για ενημερώσεις"
 
@@ -1893,7 +1913,7 @@ msgstr "Έλεγχος για ενημερώσεις"
 msgid "Check for newer versions of FileZilla"
 msgstr "Έλεγχος για νεώτερες εκδόσεις του FileZilla"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Check for updates failed"
 msgstr "Επέτυχε ο έλεγχος για αναβαθμίσεις"
 
@@ -1901,16 +1921,16 @@ msgstr "Επέτυχε ο έλεγχος για αναβαθμίσεις"
 msgid "Checking for correct external IP address"
 msgstr "Έλεγχος για τη σωστή εξωτερική διεύθυνση IP"
 
-#: resources.h:1035
+#: resources.h:1042
 msgid "Checking for updates..."
 msgstr "Έλεγχος για ενημερώσεις ..."
 
-#: ../../locales/../src/interface/updater.cpp:661
+#: ../../locales/../src/interface/updater.cpp:697
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Αναντιστοιχία αθροίσματος ελέγχου (checksum) στο αρχείο %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:657
+#: ../../locales/../src/interface/updater.cpp:693
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Αναντιστοιχία αθροίσματος ελέγχου (checksum) στο αρχείο %s\n"
@@ -2022,7 +2042,7 @@ msgstr "Ιδιότητες στήλης"
 msgid "Column setup"
 msgstr "Ρύθμιση στήλης"
 
-#: resources.h:951
+#: resources.h:957
 msgid "Command and its arguments should be properly quoted."
 msgstr "Η εντολή και τα ορίσματα αυτής, πρέπει να παραθέτονται σωστά."
 
@@ -2069,11 +2089,11 @@ msgstr "Σύγκριση αριθμού &τροποποιήσεων"
 msgid "Compare file&size"
 msgstr "Σύγκριση &μεγέθους αρχείου"
 
-#: resources.h:931
+#: resources.h:937
 msgid "Comparison &threshold (in minutes):"
 msgstr "Κατώτατο όριο σύγκρισης (σε λεπτά):"
 
-#: ../../locales/../src/interface/settings/optionspage_filelists.cpp:39
+#: ../../locales/../src/interface/settings/optionspage_filelists.cpp:41
 msgid "Comparison threshold needs to be between 0 and 1440 minutes."
 msgstr "Το κατώτατο όριο σύγκρισης πρέπει να είναι μεταξύ 0 και 1440 λεπτά."
 
@@ -2121,16 +2141,16 @@ msgstr "Ρύθμιση εύρους θύρας"
 msgid "Configuring FileZilla and your network"
 msgstr "Ρύθμιση του FileZilla και του δικτύου σας"
 
-#: ../../locales/../src/interface/search.cpp:1016
+#: ../../locales/../src/interface/search.cpp:726
 msgid "Confirm deletion"
 msgstr "Επιβεβαίωση διαγραφής"
 
 #: ../../locales/../src/engine/local_filesys.cpp:135
-#: ../../locales/../src/interface/LocalListView.cpp:1932
-#: ../../locales/../src/interface/LocalListView.cpp:2051
-#: ../../locales/../src/interface/RemoteListView.cpp:1737
-#: ../../locales/../src/interface/RemoteListView.cpp:2668
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1126
+#: ../../locales/../src/interface/LocalListView.cpp:1697
+#: ../../locales/../src/interface/LocalListView.cpp:1816
+#: ../../locales/../src/interface/RemoteListView.cpp:1462
+#: ../../locales/../src/interface/RemoteListView.cpp:2393
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1138
 msgid "Confirmation needed"
 msgstr "Χρειάζεται επιβεβαίωση"
 
@@ -2247,7 +2267,7 @@ msgstr "Η σύνδεση διακόπηκε"
 msgid "Connection timed out."
 msgstr "Τέλος χρονικού ορίου σύνδεσης."
 
-#: ../../locales/../src/interface/search.cpp:659
+#: ../../locales/../src/interface/search.cpp:369
 msgid "Connection to server lost."
 msgstr "Διακόπηκε η σύνδεση με τον εξυπηρετητή."
 
@@ -2315,8 +2335,8 @@ msgstr "Αδυναμία μετατροπής εντολής στην κωδικ
 msgid "Could not convert private key"
 msgstr "Αδυναμία μετατροπής ιδιωτικού κλειδιού"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3087
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1477
+#: ../../locales/../src/interface/RemoteListView.cpp:2813
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1489
 msgid "Could not copy URLs"
 msgstr "Αδυναμία αντιγραφής των URLs"
 
@@ -2324,13 +2344,13 @@ msgstr "Αδυναμία αντιγραφής των URLs"
 msgid "Could not copy data"
 msgstr "Αδυναμία αντιγραφής δεδομένων"
 
-#: ../../locales/../src/interface/updater.cpp:432
+#: ../../locales/../src/interface/updater.cpp:439
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Δεν ήταν δυνατή η δημιουργία τοπικού αρχείου %s\n"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2590
-#: ../../locales/../src/interface/RemoteTreeView.cpp:900
+#: ../../locales/../src/interface/RemoteListView.cpp:2315
+#: ../../locales/../src/interface/RemoteTreeView.cpp:912
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2385,7 +2405,7 @@ msgstr "Αδυναμία εύρεσης της πλήρους απομακρυσ
 msgid "Could not get reply from fzputtygen."
 msgstr "Αδυναμία λήψης του κατάλληλου τύπου από το fzputtygen."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2651
+#: ../../locales/../src/interface/RemoteListView.cpp:2376
 msgid "Could not get temporary directory to download file into."
 msgstr "Δε βρέθηκε ο προσωρινός φάκελος για να αποθηκευτεί εκεί το αρχείο."
 
@@ -2457,8 +2477,8 @@ msgstr ""
 "Ο συγχρονισμός περιήγησης έχει απενεργοποιηθεί."
 
 #: ../../locales/../src/interface/aboutdialog.cpp:242
-#: ../../locales/../src/interface/RemoteListView.cpp:3087
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1477
+#: ../../locales/../src/interface/RemoteListView.cpp:2813
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1489
 msgid "Could not open clipboard"
 msgstr "Αδυναμία ανοίγματος του προχείρου"
 
@@ -2611,14 +2631,14 @@ msgstr "Δημιουργία ενός νέου κενού αρχείου στο�
 msgid "Create director&y and enter it"
 msgstr "Δημιουργήστε κατά&λογο και εισέλθετε σε αυτόν"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1158
-#: ../../locales/../src/interface/LocalTreeView.cpp:1167
-#: ../../locales/../src/interface/RemoteListView.cpp:1636
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1310
+#: ../../locales/../src/interface/LocalListView.cpp:925
+#: ../../locales/../src/interface/LocalTreeView.cpp:1181
+#: ../../locales/../src/interface/RemoteListView.cpp:1361
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1322
 msgid "Create directory"
 msgstr "Δημιουργία φακέλου"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3178
+#: ../../locales/../src/interface/RemoteListView.cpp:2904
 msgid "Create empty file"
 msgstr "Δημιουργία κενού αρχείου"
 
@@ -2704,7 +2724,7 @@ msgstr "Α&πενεργοποίηση όλων"
 msgid "D&o not save passwords"
 msgstr "Ν&α μην αποθηκεύονται οι κωδικοί πρόσβασης"
 
-#: resources.h:938
+#: resources.h:944
 msgid "D&ouble-click action on directories:"
 msgstr "Ενέργεια δι&πλό-κλικ στους φακέλους:"
 
@@ -2716,8 +2736,8 @@ msgstr "Δι&πλότυπο"
 msgid "DOS-like with virtual paths"
 msgstr "Σαν DOS με εικονικές διαδρομές"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1966
-#: ../../locales/../src/interface/RemoteListView.cpp:2702
+#: ../../locales/../src/interface/LocalListView.cpp:1731
+#: ../../locales/../src/interface/RemoteListView.cpp:2427
 msgid "Dangerous filetype"
 msgstr "Επικίνδυνος τύπος αρχείου"
 
@@ -2751,7 +2771,7 @@ msgstr "Άγνωστη ημερομηνία ή/και ώρα"
 msgid "Debug"
 msgstr "Αποσφαλμάτωση"
 
-#: resources.h:982
+#: resources.h:988
 msgid "Debugging settings"
 msgstr "Ρυμίσεις αποσφαλμάτωσης"
 
@@ -2833,11 +2853,11 @@ msgstr "Διαγραφή επιλεγμένου φακέλου"
 msgid "Delete selected files and directories"
 msgstr "Διαγραφή επιλεγμένων αρχείων και φακέλων"
 
-#: ../../locales/../src/interface/search.cpp:1000
+#: ../../locales/../src/interface/search.cpp:710
 msgid "Deleting directories"
 msgstr "Διαγραφή φακέλων"
 
-#: ../../locales/../src/interface/search.cpp:1000
+#: ../../locales/../src/interface/search.cpp:710
 msgid "Deleting multiple unrelated directories is not yet supported"
 msgstr ""
 "Δεν υποστηρίζεται προς το παρόν η διαγραφή πολλαπλών ανεξάρτητων φακέλων."
@@ -2846,7 +2866,7 @@ msgstr ""
 msgid "Deleting symbolic link"
 msgstr "Διαγραφή συμβολικής σύνδεσης"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1002
+#: ../../locales/../src/interface/LocalTreeView.cpp:1016
 msgid "Desktop"
 msgstr "Επιφάνεια Εργασίας"
 
@@ -2870,8 +2890,8 @@ msgstr "Κατεύθυνση"
 msgid "Directory"
 msgstr "Φάκελος"
 
-#: resources.h:648 resources.h:929 resources.h:1017
-#: ../../locales/../src/interface/filelistctrl.cpp:449
+#: resources.h:648 resources.h:935 resources.h:1023
+#: ../../locales/../src/interface/filelistctrl.cpp:471
 #: ../../locales/../src/interface/Mainfrm.cpp:2439
 msgid "Directory comparison"
 msgstr "Σύγκριση φακέλου"
@@ -2892,7 +2912,7 @@ msgstr ""
 msgid "Directory listing aborted by user"
 msgstr "Λίστα φακέλου ακυρώθηκε από τον χρήστη"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2392
+#: ../../locales/../src/interface/RemoteListView.cpp:2117
 msgid "Directory listing failed"
 msgstr "Λίστα φακέλου απέτυχε"
 
@@ -2923,7 +2943,7 @@ msgstr ""
 "Απενεργοποιείστε ξανά αυτή την επιλογή εάν δεν εμφανίζονται σωστά τα "
 "περιεχόμενα του φακέλλου."
 
-#: resources.h:1010
+#: resources.h:1016
 msgid "Disconnect from server"
 msgstr "Αποσύνδεση από τον εξυπηρετητή"
 
@@ -2949,7 +2969,7 @@ msgstr "Αποσύνδεση από τον εξυπηρετητή: %s"
 msgid "Disconnecting from previous server"
 msgstr "Αποσύνδεση από τον προηγούμενο εξυπηρετητή"
 
-#: resources.h:1011
+#: resources.h:1017
 msgid "Disconnects from the currently visible server"
 msgstr "Αποσύνδεση από τον παρόντα ορατό εξυπηρετητή"
 
@@ -2957,7 +2977,7 @@ msgstr "Αποσύνδεση από τον παρόντα ορατό εξυπη�
 msgid "Display about dialog"
 msgstr "Εμφάνιση του διαλόγου Μνεία"
 
-#: resources.h:947
+#: resources.h:953
 msgid "Do &not use default editor"
 msgstr "Να μη γίνει χρήση του προκαθορισμένου επεξεργαστή"
 
@@ -3007,7 +3027,7 @@ msgstr ""
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
 msgstr "Τα αρχεία που ξεκινούν με τελεία, π.χ. .htaccess"
 
-#: resources.h:932
+#: resources.h:938
 msgid "Double-click action"
 msgstr "Ενέργεια διπλό-κλικ"
 
@@ -3028,8 +3048,8 @@ msgstr "Όριο λήψης: %s/s"
 msgid "Download limit: none"
 msgstr "Όριο λήψης: όχι"
 
-#: resources.h:425 ../../locales/../src/interface/search.cpp:800
-#: ../../locales/../src/interface/search.cpp:806
+#: resources.h:425 ../../locales/../src/interface/search.cpp:510
+#: ../../locales/../src/interface/search.cpp:516
 msgid "Download search results"
 msgstr "Λήψη αποτελεσμάτων αναζήτησης"
 
@@ -3059,23 +3079,23 @@ msgstr "Λήψη"
 msgid "Downloading %s"
 msgstr "Λήψη %s"
 
-#: ../../locales/../src/interface/search.cpp:909
+#: ../../locales/../src/interface/search.cpp:619
 msgid "Downloading multiple unrelated directories is not yet supported"
 msgstr "Δεν υποστηρίζεται προς το παρόν η λήψη πολλαπλών ανεξάρτητων φακέλων."
 
-#: ../../locales/../src/interface/search.cpp:909
+#: ../../locales/../src/interface/search.cpp:619
 msgid "Downloading search results"
 msgstr "Λήψη των αποτελεσμάτων αναζήτησης"
 
-#: resources.h:1027
+#: resources.h:1034
 msgid "Downloading update..."
 msgstr "Λήψη ενημέρωσης..."
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
-#: ../../locales/../src/interface/LocalTreeView.cpp:105
+#: ../../locales/../src/interface/LocalTreeView.cpp:106
 #: ../../locales/../src/interface/QueueView.cpp:87
 #: ../../locales/../src/interface/RemoteListView.cpp:102
-#: ../../locales/../src/interface/RemoteTreeView.cpp:88
+#: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
 "Drag&drop between different instances of FileZilla has not been implemented "
 "yet."
@@ -3084,10 +3104,10 @@ msgstr ""
 "υλοποιηθεί."
 
 #: ../../locales/../src/interface/LocalListView.cpp:111
-#: ../../locales/../src/interface/LocalTreeView.cpp:111
+#: ../../locales/../src/interface/LocalTreeView.cpp:112
 #: ../../locales/../src/interface/QueueView.cpp:100
 #: ../../locales/../src/interface/RemoteListView.cpp:108
-#: ../../locales/../src/interface/RemoteTreeView.cpp:94
+#: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
 msgstr ""
 "Το Drag&Drop ανάμεσα σε διαφορετικούς εξυπηρετητές δεν έχει υλοποιηθεί."
@@ -3131,8 +3151,8 @@ msgstr ""
 "Τροποποιήστε το αρχείο με έναν επεξεργαστή και στείλτε τις αλλαγές στον "
 "εξυπηρετητή."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1877
-#: ../../locales/../src/interface/LocalListView.cpp:1888
+#: ../../locales/../src/interface/LocalListView.cpp:1642
+#: ../../locales/../src/interface/LocalListView.cpp:1653
 msgid "Editing failed"
 msgstr "Αποτυχία Επεξεργασίας"
 
@@ -3148,7 +3168,7 @@ msgstr "Κενή εντολή"
 msgid "Empty command."
 msgstr "Κενή εντολή."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2394
+#: ../../locales/../src/interface/RemoteListView.cpp:2119
 msgid "Empty directory listing"
 msgstr "Άδειασμα λίστας φακέλου"
 
@@ -3194,7 +3214,7 @@ msgstr "Κρυπτογράφηση"
 msgid "Encryption details"
 msgstr "Λεπτομέρειες κρυπτογράφησης"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:451
+#: ../../locales/../src/interface/filelistctrl.cpp:473
 msgid "End comparison and change sorting order?"
 msgstr "Να ολοκληρωθεί σύγκριση και η αλλαγή των ορισμάτων ταξινόμησης;"
 
@@ -3215,7 +3235,7 @@ msgstr "Εισαγωγή εντολής"
 msgid "Enter custom command"
 msgstr "Εισαγωγή προσαρμοσμένης εντολής"
 
-#: resources.h:939
+#: resources.h:945
 msgid "Enter directory"
 msgstr "Εισαγωγή φακέλου"
 
@@ -3315,10 +3335,10 @@ msgstr "Σφάλμα κατά τη φόρτωση της Λίστας αναμο
 #: ../../locales/../src/interface/filter.cpp:1032
 #: ../../locales/../src/interface/import.cpp:120
 #: ../../locales/../src/interface/import.cpp:311
-#: ../../locales/../src/interface/Options.cpp:216
+#: ../../locales/../src/interface/Options.cpp:225
 #: ../../locales/../src/interface/QueueView.cpp:1969
-#: ../../locales/../src/interface/search.cpp:1077
-#: ../../locales/../src/interface/search.cpp:1098
+#: ../../locales/../src/interface/search.cpp:787
+#: ../../locales/../src/interface/search.cpp:808
 #: ../../locales/../src/interface/sitemanager.cpp:241
 #: ../../locales/../src/interface/sitemanager.cpp:454
 #: ../../locales/../src/interface/sitemanager.cpp:553
@@ -3358,7 +3378,7 @@ msgstr "Σφάλμα εγγραφής αρχείου xml"
 msgid "Error:"
 msgstr "Σφάλμα:"
 
-#: resources.h:958
+#: resources.h:964
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
 msgstr "Παράδειγμα: png \"c:\\program files\\viewer\\viewer.exe\" -open"
 
@@ -3370,7 +3390,7 @@ msgstr "Παραδείγματα"
 msgid "Exe&cute"
 msgstr "Εκτ&έλεση"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Το εκτελέσιμο δεν περιέχει πληροφορίες έκδοσης, δεν είναι εφικτός ο έλεγχος "
@@ -3447,12 +3467,12 @@ msgstr "FTPES - FTP over explicit TLS/SSL"
 msgid "FTPS - FTP over implicit TLS/SSL"
 msgstr "FTPS - FTP over implicit TLS/SSL"
 
-#: ../../locales/../src/interface/LocalListView.cpp:550
-#: ../../locales/../src/interface/LocalListView.cpp:630
-#: ../../locales/../src/interface/LocalListView.cpp:1147
-#: ../../locales/../src/interface/LocalListView.cpp:2171
-#: ../../locales/../src/interface/LocalTreeView.cpp:860
-#: ../../locales/../src/interface/LocalTreeView.cpp:1143
+#: ../../locales/../src/interface/LocalListView.cpp:546
+#: ../../locales/../src/interface/LocalListView.cpp:626
+#: ../../locales/../src/interface/LocalListView.cpp:914
+#: ../../locales/../src/interface/LocalListView.cpp:1936
+#: ../../locales/../src/interface/LocalTreeView.cpp:866
+#: ../../locales/../src/interface/LocalTreeView.cpp:1157
 #: ../../locales/../src/interface/viewheader.cpp:535
 msgid "Failed to change directory"
 msgstr "Απέτυχε η αλλαγή φακέλου"
@@ -3482,11 +3502,11 @@ msgid "Failed to create listening socket for active mode transfer"
 msgstr ""
 "Αποτυχία δημιουργίας listen socket για μεταφορά σε ενεργητική κατάσταση"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:625
+#: ../../locales/../src/interface/LocalTreeView.cpp:626
 msgid "Failed to get 'My Documents' path"
 msgstr "Αποτυχία πρόσβασης στην διαδρομή 'Τα Εγγραφά Μου'"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:611
+#: ../../locales/../src/interface/LocalTreeView.cpp:612
 msgid "Failed to get desktop path"
 msgstr "Αποτυχία πρόσβασης στην διαδρομή της επιφάνειας εργασίας"
 
@@ -3668,7 +3688,7 @@ msgstr "Το αρχείο δεν περιέχει δεδομένα για εισ
 msgid "File editing"
 msgstr "Επεξεργασία αρχείου"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1947
+#: ../../locales/../src/interface/RemoteListView.cpp:1672
 msgid "File exists"
 msgstr "Το αρχείο υπάρχει"
 
@@ -3691,7 +3711,7 @@ msgstr "Λίστες αρχείων"
 msgid "File not found"
 msgstr "Το αρχείο δε βρέθηκε"
 
-#: resources.h:1021
+#: resources.h:1027
 msgid "File search"
 msgstr "Aναζήτηση αρχείου"
 
@@ -3761,7 +3781,7 @@ msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "Το FileZilla πρέπει να επανεκκινηθεί για να εφαρμοστεί η γλωσσική αλλαγή."
 
-#: resources.h:971
+#: resources.h:977
 msgid "FileZilla updates"
 msgstr "Ενημερώσεις FileZilla"
 
@@ -3773,7 +3793,7 @@ msgstr "&Γραμμές κατάστασης"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:279
 #: ../../locales/../src/interface/RemoteListView.cpp:373
-#: ../../locales/../src/interface/search.cpp:369
+#: ../../locales/../src/interface/search.cpp:79
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:39
 msgid "Filename"
 msgstr "Όνομα αρχείου"
@@ -3789,11 +3809,11 @@ msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr ""
 "Δε μπορεί να κατασκευαστεί όνομα αρχείου για τον φάκελο %s και το αρχείο %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1933
+#: ../../locales/../src/interface/RemoteListView.cpp:1658
 msgid "Filename invalid"
 msgstr "Λανθασμένο όνομα αρχείου"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3203
+#: ../../locales/../src/interface/RemoteListView.cpp:2929
 msgid ""
 "Filename may not contain any of the following characters: / \\ : * ? \" < > |"
 msgstr ""
@@ -3804,7 +3824,7 @@ msgstr ""
 msgid "Filename unchanged"
 msgstr "Το όνομα αρχείου δεν αλλάχθηκε"
 
-#: resources.h:291 resources.h:975
+#: resources.h:291 resources.h:981
 msgid "Filename:"
 msgstr "Όνομα αρχείου:"
 
@@ -3829,7 +3849,7 @@ msgstr "Αρχεία που επεξεργάζονται"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:135
 #: ../../locales/../src/interface/LocalListView.cpp:280
 #: ../../locales/../src/interface/RemoteListView.cpp:374
-#: ../../locales/../src/interface/search.cpp:371
+#: ../../locales/../src/interface/search.cpp:81
 msgid "Filesize"
 msgstr "Μέγεθος αρχείου"
 
@@ -3839,11 +3859,11 @@ msgstr "Μορφή μεγέθους αρχείου"
 
 #: ../../locales/../src/interface/LocalListView.cpp:281
 #: ../../locales/../src/interface/RemoteListView.cpp:375
-#: ../../locales/../src/interface/search.cpp:372
+#: ../../locales/../src/interface/search.cpp:82
 msgid "Filetype"
 msgstr "Τύπος αρχείου"
 
-#: resources.h:959
+#: resources.h:965
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:133
 msgid "Filetype associations"
 msgstr "Συσχετίσεις τύπων αρχείων"
@@ -3880,7 +3900,7 @@ msgstr "Ταίριασμα με κανένα από τα ακόλουθα"
 msgid "Filter set already exists"
 msgstr "Τα ορίσματα φίλτρου υπάρχουν ήδη"
 
-#: resources.h:1014
+#: resources.h:1020
 msgid "Filter the directory listings"
 msgstr "Φιλτράρισμα λιστών φακέλων"
 
@@ -3918,7 +3938,7 @@ msgstr ""
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "Για αξιοπιστία πρέπει να ορίσετε ένα εύρος από το λιγότερο 10 θύρες."
 
-#: ../../locales/../src/interface/Options.cpp:215
+#: ../../locales/../src/interface/Options.cpp:224
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -3942,11 +3962,16 @@ msgstr "Εξαναγκασμένη εμφάνιση των κρυφών αρχε
 msgid "Format specifications:"
 msgstr "Προδιαγραφές μορφοποίησης:"
 
-#: resources.h:957
+#: resources.h:963
 msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr ""
 "Μορφή: Μετά την επέκταση παραθέτεται (μέσα σε εισαγωγικά) η πλήρης διαδρομή "
 "της συσχετιζόμενης εφαρμογής και ακολουθούν τα ορίσματα, με σωστή σύνταξη."
+
+#: ../../locales/../src/interface/updater.cpp:628
+#, c-format
+msgid "Found new %s %s\n"
+msgstr "Βρέθηκε νέα %s %s\n"
 
 #: resources.h:453
 msgid "Further documentation"
@@ -4074,7 +4099,7 @@ msgstr ""
 "μεγαλύτερο από το προκαθορισμένο, η σύνδεση θα τερματιστεί και το FileZilla "
 "θα επιχειρήσει να επανασυνδεθεί."
 
-#: resources.h:991
+#: resources.h:997
 msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
 msgstr ""
 "Για την αποστολή αναφορών σφαλμάτων, απαιτούνται \"Αναλυτικές\" πληροφορίες "
@@ -4126,7 +4151,7 @@ msgstr ""
 "Εάν το πρόβλημα συνέχισει να υπάρχει, πιθανόν κάποιος δρομολογητής (router) "
 "ή/και τοίχος προστασίας (firewall) συνεχίζει να διακόπτει τη σύνδεση."
 
-#: resources.h:980
+#: resources.h:986
 msgid ""
 "If the size of the logfile reaches the limit, it gets renamed by adding \".1"
 "\" to the end of the filename (possibly overwriting older logfiles) and a "
@@ -4171,7 +4196,7 @@ msgstr ""
 "διαφέρει (δλδ. διαφορετική ζώνη), όριστε την διαφορά ζώνης στο διαχειριστή "
 "τοποθεσιών."
 
-#: resources.h:930
+#: resources.h:936
 msgid ""
 "If using timestamp based comparison, consider two files equal if their "
 "timestamp difference does not exceed this threshold."
@@ -4180,7 +4205,7 @@ msgstr ""
 "χρονικής σφραγίδας, θα πρέπει η διαφορά της χρονικής σφραγίδας να μην "
 "υπερβαίνει το κατώτατο όριο που έχει οριστεί."
 
-#: resources.h:945
+#: resources.h:951
 msgid "If you change the language, you should restart FileZilla."
 msgstr ""
 "Για να εφαρμοστούν οι αλλαγές στη γλώσσα θα πρέπει να επανεκκινηθεί το "
@@ -4327,7 +4352,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Λανθασμένος κωδικός πρόσβασης"
 
-#: resources.h:1036
+#: resources.h:1043
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4393,7 +4418,7 @@ msgstr "Λανθασμένη ημερομηνία"
 
 #: ../../locales/../src/interface/file_utils.cpp:290
 #: ../../locales/../src/interface/file_utils.cpp:315
-#: ../../locales/../src/interface/RemoteListView.cpp:3203
+#: ../../locales/../src/interface/RemoteListView.cpp:2929
 msgid "Invalid filename"
 msgstr "Λανθασμένο όνομα αρχείου"
 
@@ -4436,7 +4461,7 @@ msgstr ""
 "Μη έγκυρος κόμβος. Μετά την αγκύλη κλεισίματος πρέπει να ακολουθούν η άνω "
 "κάτω τελεία και η θύρα."
 
-#: ../../locales/../src/interface/search.cpp:681
+#: ../../locales/../src/interface/search.cpp:391
 msgid "Invalid regular expression in search conditions."
 msgstr "Μη έγκυρη έκφραση στις συνθήκες αναζήτησης."
 
@@ -4444,7 +4469,7 @@ msgstr "Μη έγκυρη έκφραση στις συνθήκες αναζήτ�
 msgid "Invalid response code"
 msgstr "Μη έγκυρος κωδικός απάντησης"
 
-#: ../../locales/../src/interface/search.cpp:675
+#: ../../locales/../src/interface/search.cpp:385
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Μη έγκυρες συνθήκες αναζήτησης: %s"
@@ -4510,7 +4535,7 @@ msgstr "Ανταλλαγή κλειδιού:"
 msgid "L&owest"
 msgstr "Χ&αμηλότερη"
 
-#: resources.h:943
+#: resources.h:949
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:131
 msgid "Language"
 msgstr "Γλώσσα"
@@ -4521,7 +4546,7 @@ msgstr "Εφαρμογή τροποποίησης γλώσσας"
 
 #: ../../locales/../src/interface/LocalListView.cpp:282
 #: ../../locales/../src/interface/RemoteListView.cpp:376
-#: ../../locales/../src/interface/search.cpp:373
+#: ../../locales/../src/interface/search.cpp:83
 msgid "Last modified"
 msgstr "Τελευταία τροποποίηση"
 
@@ -4541,11 +4566,11 @@ msgstr "Όριο ταυτόχρονων &αποστολών:"
 msgid "Limit local ports"
 msgstr "Όριο τοπικών θυρών"
 
-#: resources.h:977
+#: resources.h:983
 msgid "Limit size of logfile"
 msgstr "Όριο μεγέθους του αρχείου συμβάντων"
 
-#: resources.h:978
+#: resources.h:984
 msgid "Limit:"
 msgstr "Όριο:"
 
@@ -4584,8 +4609,8 @@ msgstr "Τοπικό αρχείο"
 msgid "Local file does not exist."
 msgstr "Το τοπικό αρχείο δεν υπάρχει."
 
-#: ../../locales/../src/interface/updater.cpp:359
-#: ../../locales/../src/interface/updater.cpp:436
+#: ../../locales/../src/interface/updater.cpp:366
+#: ../../locales/../src/interface/updater.cpp:443
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Τοπικό αρχείο %s\n"
@@ -4614,7 +4639,7 @@ msgstr "Τοποθεσία:"
 msgid "Log file"
 msgstr "Αρχείο Συμβάντων"
 
-#: resources.h:972
+#: resources.h:978
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:140
 msgid "Logging"
 msgstr "Καταγραφή"
@@ -4738,7 +4763,7 @@ msgstr "Αρχείο συμβάντων"
 msgid "Message log position"
 msgstr "Θέση αρχείου συμβάντων"
 
-#: resources.h:979
+#: resources.h:985
 msgid "MiB"
 msgstr "MiB"
 
@@ -4754,11 +4779,11 @@ msgstr "Μετακίνηση &κάτω"
 msgid "Move &up"
 msgstr "Μετακίνηση &πάνω"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1021
+#: ../../locales/../src/interface/LocalTreeView.cpp:1035
 msgid "My Computer"
 msgstr "Ο Υπολογιστής Μου"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1011
+#: ../../locales/../src/interface/LocalTreeView.cpp:1025
 msgid "My Documents"
 msgstr "Τα Εγγραφά Μου"
 
@@ -4791,11 +4816,15 @@ msgstr "To εν λόγω όνομα σελιδοδείκτη υπάρχει ήδ
 msgid "Name:"
 msgstr "Όνομα:"
 
+#: resources.h:934
+msgid "Natural sort"
+msgstr "Κανονική ταξινόμηση"
+
 #: ../../locales/../src/interface/filteredit.cpp:349
 msgid "Need to enter filter name"
 msgstr "Πρέπει να καταχωρίσετε όνομα φίλτρου"
 
-#: ../../locales/../src/interface/search.cpp:665
+#: ../../locales/../src/interface/search.cpp:375
 msgid "Need to enter valid remote path"
 msgstr "Πρέπει να καταχωρίσετε έγκυρη απομακρυσμένη διαδρομή"
 
@@ -4807,7 +4836,7 @@ msgstr "Πρέπει να ορίσετε μία κωδικοποίηση χαρ�
 msgid "Network unreachable"
 msgstr "Μη προσπελάσιμο δίκτυο"
 
-#: resources.h:961
+#: resources.h:967
 msgid "Never"
 msgstr "Ποτέ"
 
@@ -4841,9 +4870,9 @@ msgstr "Νέος σελιδο&δείκτης"
 msgid "New bookmark"
 msgstr "Νέος σελιδοδείκτης"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1170
-#: ../../locales/../src/interface/RemoteListView.cpp:1650
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1324
+#: ../../locales/../src/interface/LocalTreeView.cpp:1184
+#: ../../locales/../src/interface/RemoteListView.cpp:1375
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1336
 msgid "New directory"
 msgstr "Νέος φάκελος"
 
@@ -4925,7 +4954,7 @@ msgstr ""
 "Καμία εφαρμογή δεν έχει συσχετιστεί για να επεξεργαστεί αρχεία με επέκταση '%"
 "s'."
 
-#: ../../locales/../src/interface/search.cpp:523
+#: ../../locales/../src/interface/search.cpp:234
 msgid "No search results"
 msgstr "Κανένα αποτέλεσμα αναζήτησης"
 
@@ -4943,7 +4972,7 @@ msgstr "Μη υποστηριζόμενη μέθοδος έγκρισης SOCKS5
 msgid "No username given."
 msgstr "Δε δόθηκε όνομα χρήστη."
 
-#: resources.h:937 resources.h:942
+#: resources.h:943 resources.h:948
 #: ../../locales/../src/interface/verifycertdialog.cpp:54
 msgid "None"
 msgstr "Κανένα"
@@ -4975,7 +5004,7 @@ msgstr ""
 msgid "Not connected"
 msgstr "Δε συνδέθηκε"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2390
+#: ../../locales/../src/interface/RemoteListView.cpp:2115
 msgid "Not connected to any server"
 msgstr "Δε συνδέθηκε με κανέναν εξυπηρετητή"
 
@@ -5036,11 +5065,11 @@ msgstr ""
 msgid "Once"
 msgstr "Μία"
 
-#: resources.h:962
+#: resources.h:968
 msgid "Once a day"
 msgstr "Μία φορά την ημέρα"
 
-#: resources.h:963
+#: resources.h:969
 msgid "Once a week"
 msgstr "Κάθε εβδομάδα"
 
@@ -5048,15 +5077,15 @@ msgstr "Κάθε εβδομάδα"
 msgid "Open directory in system's file manager"
 msgstr "Ανοικτός κατάλογος στο διαχειριστή αρχείων του συστήματος"
 
-#: resources.h:993
+#: resources.h:999
 msgid "Open the Site Manager"
 msgstr "Άνοιγμα του διαχειριστή τοποθεσιών"
 
-#: resources.h:994
+#: resources.h:1000
 msgid "Open the Site Manager."
 msgstr "Άνοιγμα του Διαχειριστή τοποθεσιών."
 
-#: resources.h:995
+#: resources.h:1001
 msgid "Open the Site Manager. Right-click for a list of sites."
 msgstr ""
 "Άνοιγμα του Διαχειριστή τοποθεσιών. Δεξί-πλήκτρο για τη λίστα αρχείων της "
@@ -5074,11 +5103,11 @@ msgstr "Ανοίγμα διαλόγου ρυθμίσεων του FileZilla"
 msgid "Opened as:"
 msgstr "Ανοιγμένα ως:"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1954
-#: ../../locales/../src/interface/LocalListView.cpp:1999
-#: ../../locales/../src/interface/LocalListView.cpp:2084
-#: ../../locales/../src/interface/LocalListView.cpp:2097
-#: ../../locales/../src/interface/RemoteListView.cpp:2690
+#: ../../locales/../src/interface/LocalListView.cpp:1719
+#: ../../locales/../src/interface/LocalListView.cpp:1764
+#: ../../locales/../src/interface/LocalListView.cpp:1849
+#: ../../locales/../src/interface/LocalListView.cpp:1862
+#: ../../locales/../src/interface/RemoteListView.cpp:2415
 msgid "Opening failed"
 msgstr "Αποτυχία ανοίγματος"
 
@@ -5090,7 +5119,7 @@ msgstr "Άνοιγμα νέας καρτέλας"
 msgid "Opens the Site Manager"
 msgstr "Άνοιγμα του διαχειριστή τοποθεσιών"
 
-#: resources.h:1015
+#: resources.h:1021
 msgid ""
 "Opens the directory listing filter dialog. Right-click to toggle filters."
 msgstr ""
@@ -5146,12 +5175,17 @@ msgstr "Αντικατάσταση αν είναι &διαφορετικού μ�
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Αντικατάσταση αν είναι διαφορετικού &μεγέθους ή αν είναι νεώτερο"
 
+#: ../../locales/../src/interface/updater.cpp:243
+#, c-format
+msgid "Own build type: %s\n"
+msgstr "Τύπος ίδιας κατασκευής: %s\n"
+
 #: resources.h:141
 msgid "Owner permissions"
 msgstr "Δικαιώματα ιδιοκτήτη"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:378
-#: ../../locales/../src/interface/search.cpp:375
+#: ../../locales/../src/interface/search.cpp:85
 msgid "Owner/Group"
 msgstr "Ιδιοκτήτης/Ομάδα"
 
@@ -5182,6 +5216,11 @@ msgstr "Πα&θητική (συνιστάται)"
 msgid "Parameter not a valid URL"
 msgstr "Η παράμετρος δεν είναι έγκυρη URL"
 
+#: ../../locales/../src/interface/updater.cpp:525
+#, c-format
+msgid "Parsing %d bytes of version information.\n"
+msgstr "Αναλύθηκαν τα %d bytes των πληροφοριών της έκδοσης.\n"
+
 #: resources.h:95 resources.h:367 resources.h:729
 msgid "Pass&word:"
 msgstr "Κωδ&ικός πρόσβασης:"
@@ -5206,7 +5245,7 @@ msgid "Password required"
 msgstr "Απαιτείται κωδικός πρόσβασης"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:150
-#: ../../locales/../src/interface/search.cpp:370
+#: ../../locales/../src/interface/search.cpp:80
 msgid "Path"
 msgstr "Διαδρομή"
 
@@ -5236,7 +5275,7 @@ msgid "Permission"
 msgstr "Άδεια"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:377
-#: ../../locales/../src/interface/search.cpp:374
+#: ../../locales/../src/interface/search.cpp:84
 msgid "Permissions"
 msgstr "Δικαιώματα"
 
@@ -5392,14 +5431,14 @@ msgstr ""
 "Παρακαλώ, καταχωρίστε μία ακατέργαστη εντολή FTP.\n"
 "Η χρήση ακατέργαστων εντολών FTP θα καθαρίσουν την προσωρινή μνήμη φακέλων."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1158
-#: ../../locales/../src/interface/LocalTreeView.cpp:1167
-#: ../../locales/../src/interface/RemoteListView.cpp:1636
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1310
+#: ../../locales/../src/interface/LocalListView.cpp:925
+#: ../../locales/../src/interface/LocalTreeView.cpp:1181
+#: ../../locales/../src/interface/RemoteListView.cpp:1361
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1322
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Παρακαλώ, καταχωρίστε το όνομα του φακέλου που πρέπει να δημιουργηθεί:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3178
+#: ../../locales/../src/interface/RemoteListView.cpp:2904
 msgid "Please enter the name of the file which should be created:"
 msgstr "Παρακαλώ, καταχωρίστε το όνομα του αρχείου που πρέπει να δημιουργηθεί:"
 
@@ -5605,7 +5644,7 @@ msgstr "Προταιρεότητα στους φακέλους (προκαθορ
 msgid "Priority"
 msgstr "Προτεραιότητα"
 
-#: resources.h:970
+#: resources.h:976
 msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
@@ -5764,8 +5803,8 @@ msgstr "Μόνο-Ανάγνωση"
 msgid "Really cancel current operation?"
 msgstr "Ακύρωση τρέχουσας λειτουργίας;"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1729
-#: ../../locales/../src/interface/search.cpp:1008
+#: ../../locales/../src/interface/RemoteListView.cpp:1454
+#: ../../locales/../src/interface/search.cpp:718
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
@@ -5774,21 +5813,21 @@ msgstr[0] "Να διαγραφεί ο φάκελος %d, καθώς και τα 
 msgstr[1] ""
 "Να διαγραφούν οι φάκελοι %d, καθώς και τα περιεχόμενα τους από το διακομιστή;"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1727
-#: ../../locales/../src/interface/search.cpp:1006
+#: ../../locales/../src/interface/RemoteListView.cpp:1452
+#: ../../locales/../src/interface/search.cpp:716
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
 msgstr[0] "Να διαγραφεί το αρχείο %d από το διακομιστή;"
 msgstr[1] "Να διαγραφούν τα αρχεία %d από το διακομιστή;"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1734
-#: ../../locales/../src/interface/search.cpp:1013
+#: ../../locales/../src/interface/RemoteListView.cpp:1459
+#: ../../locales/../src/interface/search.cpp:723
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "Να διαγραφεί το %s και το %s από το διακομιστή;"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1126
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1138
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
 "Να διαγραφούν όλα τα επιλεγμένα αρχεία και/ή οι φάκελοι από το διακομιστή;"
@@ -5828,6 +5867,14 @@ msgstr "Λήφθηκε μια γραμμή με πάνω από 10000 χαρακ
 msgid "Received data tainted"
 msgstr "Λαμβάνονται ανεπιθύμητα δεδομένα"
 
+#: ../../locales/../src/interface/updater.cpp:504
+msgid "Received invalid character in version information"
+msgstr "Λήφθηκαν μη έγκυροι χαρακτήρες στις πληροφορίες έκδοσης"
+
+#: ../../locales/../src/interface/updater.cpp:497
+msgid "Received version information is too large"
+msgstr "Λήφθηκαν πληροφοριών έκδοσης υπερβολικά μεγάλες"
+
 #: ../../locales/../src/interface/clearprivatedata.cpp:77
 msgid ""
 "Reconnect information cannot be cleared while connected to a server.\n"
@@ -5841,7 +5888,7 @@ msgstr ""
 msgid "Reconnection settings"
 msgstr "Ρυθμίσεις επανασύνδεσης"
 
-#: resources.h:1012 resources.h:1013
+#: resources.h:1018 resources.h:1019
 msgid "Reconnects to the last used server"
 msgstr "Επανασύνδεση στον εξυπηρετητή που χρησιμοποιήθηκε την τελευταία φορά"
 
@@ -5856,7 +5903,7 @@ msgstr "Σφάλμα κατά την αναδρομολόγηση ή δεν υπ
 msgid "Redirection to invalid or unsupported address: %s"
 msgstr "Σφάλμα κατά την αναδρομολόγηση ή λάθος διεύθυνση: %s"
 
-#: resources.h:1004 resources.h:1005
+#: resources.h:1010 resources.h:1011
 msgid "Refresh the file and folder lists"
 msgstr "Ανανέωση των λιστών αρχείων και φακέλων"
 
@@ -5876,10 +5923,10 @@ msgstr "Απομακρυσμένο πιστοποιητικό μη εμπιστ�
 msgid "Remote file"
 msgstr "Απομακρυσμένο αρχείο"
 
-#: resources.h:424 ../../locales/../src/interface/search.cpp:659
-#: ../../locales/../src/interface/search.cpp:665
-#: ../../locales/../src/interface/search.cpp:675
-#: ../../locales/../src/interface/search.cpp:681
+#: resources.h:424 ../../locales/../src/interface/search.cpp:369
+#: ../../locales/../src/interface/search.cpp:375
+#: ../../locales/../src/interface/search.cpp:385
+#: ../../locales/../src/interface/search.cpp:391
 msgid "Remote file search"
 msgstr "Αναζήτηση απομακρυσμένου αρχείου"
 
@@ -6113,7 +6160,7 @@ msgstr "Όροι &αναζήτησης:"
 msgid "Search &directory:"
 msgstr "Aναζήτηση &φακέλου:"
 
-#: resources.h:1020
+#: resources.h:1026
 msgid "Search for files recursively."
 msgstr "Αναζήτηση αρχείων"
 
@@ -6208,7 +6255,7 @@ msgstr "Επιλογή ονόματος αρχείου για το αρχείο-
 msgid "Select how these files should be opened."
 msgstr "Επιλέξτε τον τρόπο με τον οποίο αυτά τα αρχεία θα ανοιχτούν."
 
-#: ../../locales/../src/interface/search.cpp:788
+#: ../../locales/../src/interface/search.cpp:498
 msgid "Select target download directory"
 msgstr "Επιλογή προορισμού του φακέλου λήψης"
 
@@ -6224,7 +6271,7 @@ msgstr "Επιλογή κατηγοριών για εξαγωγή:"
 msgid "Select the private data you would like to delete."
 msgstr "Επιλέξτε τα προσωπικά δεδομένα που θέλετε να διαγράψετε."
 
-#: ../../locales/../src/interface/search.cpp:755
+#: ../../locales/../src/interface/search.cpp:465
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6239,7 +6286,7 @@ msgid_plural "Selected %d directories."
 msgstr[0] "Επιλεγμένος %d φάκελος."
 msgstr[1] "Επιλεγμένοι %d φάκελοι."
 
-#: ../../locales/../src/interface/search.cpp:753
+#: ../../locales/../src/interface/search.cpp:463
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6260,7 +6307,7 @@ msgid_plural "Selected %d files. Total size: At least %s"
 msgstr[0] "Επιλεγμένο %d αρχείο. Συνολικό μέγεθος: Τουλάχιστον %s"
 msgstr[1] "Επιλεγμένα %d αρχεία. Συνολικό μέγεθος: Τουλάχιστον %s"
 
-#: ../../locales/../src/interface/search.cpp:760
+#: ../../locales/../src/interface/search.cpp:470
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Επιλέχθηκε το %s και το %s για μεταφορά."
@@ -6281,7 +6328,7 @@ msgstr "Επιλεγμένα %s και %s. Συνολικό μέγεθος: Το
 msgid "Selected editor does not exist."
 msgstr "Ο επιλεγμένος επεξεργαστής δεν υπάρχει."
 
-#: resources.h:304 ../../locales/../src/interface/LocalListView.cpp:1983
+#: resources.h:304 ../../locales/../src/interface/LocalListView.cpp:1748
 msgid "Selected file already being edited"
 msgstr "Το επιλεγμένο αρχείο ήδη επεξεργάζεται"
 
@@ -6289,11 +6336,11 @@ msgstr "Το επιλεγμένο αρχείο ήδη επεξεργάζεται
 msgid "Selected file is already loaded"
 msgstr "Το επιλεγμένο αρχείο έχει ήδη φορτωθεί"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2722
+#: ../../locales/../src/interface/RemoteListView.cpp:2447
 msgid "Selected file is already opened"
 msgstr "Το επιλεγμένο αρχείο είναι ήδη ανοιχτό"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2750
+#: ../../locales/../src/interface/RemoteListView.cpp:2475
 msgid "Selected file is still being edited"
 msgstr "Το επιλεγμένο αρχείο είναι ακόμα προς επεξεργασία"
 
@@ -6465,7 +6512,7 @@ msgstr "SetSocketBufferSize κλήθηκε χωρίς όνομα υποδοχή�
 msgid "Settings"
 msgstr "Ρυθμίσεις"
 
-#: resources.h:992
+#: resources.h:998
 msgid "Show &raw directory listing"
 msgstr "Εμφάνιση της &ακατέργαστης λίστας φακέλου"
 
@@ -6478,7 +6525,7 @@ msgid "Show both directory trees and continue comparing?"
 msgstr ""
 "Να εμφανιστούν οι δομές των φακέλων και να συνεχιστεί η σύγκριση μεταξύ τους;"
 
-#: resources.h:1038
+#: resources.h:1045
 msgid "Show details"
 msgstr "Εμφάνιση λεπτομερειών"
 
@@ -6613,7 +6660,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Ταξινόμηση φακέλων σε σειρά"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:450
+#: ../../locales/../src/interface/filelistctrl.cpp:472
 msgid "Sort order cannot be changed if comparing directories."
 msgstr ""
 "Η εντολή ταξινόμησης δε μπορεί να αλλάξει κατά την σύγκριση των φακέλων."
@@ -6626,7 +6673,7 @@ msgstr "Ταξινόμηση"
 msgid "Sorting &mode:"
 msgstr "&Κατάσταση ταξινόμησης:"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:101
+#: ../../locales/../src/interface/RemoteTreeView.cpp:102
 msgid "Source and path of the drop operation are identical"
 msgstr "Η προέλευση και η διαδρομή της ενέργειας Drop είναι ταυτόσημη"
 
@@ -6659,15 +6706,15 @@ msgstr "Τα όρια ταχύτητας είναι ανενεργά, πιέστ
 msgid "Speed limits are enabled, click to change."
 msgstr "Τα όρια ταχύτητας είναι ενεργά, πιέστε για να αλλάξουν."
 
-#: resources.h:966
+#: resources.h:972
 msgid "Stable and beta versions"
 msgstr "Σταθερές και δοκιμαστικές εκδόσεις"
 
-#: resources.h:965
+#: resources.h:971
 msgid "Stable versions only"
 msgstr "Σταθερές εκδόσεις μόνο"
 
-#: resources.h:967
+#: resources.h:973
 msgid "Stable, beta and nightly versions"
 msgstr "Σταθερές και δοκιμαστικές εκδόσεις"
 
@@ -6679,7 +6726,7 @@ msgstr "&Επείγουσα έναρξη μεταφοράς"
 msgid "Start with opened Site Manager"
 msgstr "Εκκίνηση με άνοιγμα του διαχειριστή τοποθεσιών"
 
-#: ../../locales/../src/interface/updater.cpp:236
+#: ../../locales/../src/interface/updater.cpp:237
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Εκκίνηση έλεγχου ενημέρωσης %s\n"
@@ -6747,7 +6794,7 @@ msgstr ""
 "Οι Συμβολικές συνδέσεις στα αρχεία δεν επηρεάζονται από αυτή την επιλογή, "
 "τέτοιες συμβολικές συνδέσεις διαγράφονται πάντα."
 
-#: resources.h:1019 ../../locales/../src/interface/state.cpp:249
+#: resources.h:1025 ../../locales/../src/interface/state.cpp:249
 #: ../../locales/../src/interface/state.cpp:278
 #: ../../locales/../src/interface/state.cpp:285
 #: ../../locales/../src/interface/state.cpp:297
@@ -6813,11 +6860,11 @@ msgstr "Το αρχείο υπάρχει ήδη"
 msgid "Target file:"
 msgstr "Απομακρυσμένο αρχείο:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3212
+#: ../../locales/../src/interface/RemoteListView.cpp:2938
 msgid "Target filename already exists!"
 msgstr "Το αρχείο προορισμού υπάρχει ήδη!"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1947
+#: ../../locales/../src/interface/RemoteListView.cpp:1672
 msgid "Target filename already exists, really continue?"
 msgstr "Το όνομα του αρχείου υπάρχει ήδη, θέλετε να συνεχίσετε;"
 
@@ -6911,9 +6958,9 @@ msgstr ""
 "Το αρχείο %s υπάρχει ήδη.\n"
 "Παρακαλώ, καταχωρίστε ένα νέο όνομα:"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1960
-#: ../../locales/../src/interface/LocalListView.cpp:2089
-#: ../../locales/../src/interface/RemoteListView.cpp:2696
+#: ../../locales/../src/interface/LocalListView.cpp:1725
+#: ../../locales/../src/interface/LocalListView.cpp:1854
+#: ../../locales/../src/interface/RemoteListView.cpp:2421
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -6934,9 +6981,9 @@ msgstr "Το αρχείο '%s' δε μπορεί να φορτωθεί ή δεν
 msgid "The file '%s' could not be loaded."
 msgstr "Το αρχείο '%s' δε μπορεί να φορτωθεί."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1954
-#: ../../locales/../src/interface/LocalListView.cpp:2084
-#: ../../locales/../src/interface/RemoteListView.cpp:2690
+#: ../../locales/../src/interface/LocalListView.cpp:1719
+#: ../../locales/../src/interface/LocalListView.cpp:1849
+#: ../../locales/../src/interface/RemoteListView.cpp:2415
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -6945,8 +6992,8 @@ msgstr ""
 "Το αρχείο '%s' δε μπορεί να ανοιχθεί:\n"
 "Κανένα πρόγραμμα δεν έχει συσχετιστεί με αυτόν τον τύπο αρχείου."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1999
-#: ../../locales/../src/interface/LocalListView.cpp:2097
+#: ../../locales/../src/interface/LocalListView.cpp:1764
+#: ../../locales/../src/interface/LocalListView.cpp:1862
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7038,7 +7085,7 @@ msgstr ""
 msgid "The global bookmarks could not be saved."
 msgstr "Οι καθολικοί σελιδοδείκτες ήταν αδύνατο να αποθηκευτούν."
 
-#: resources.h:990
+#: resources.h:996
 msgid ""
 "The higher the debug level, the more information will be displayed in the "
 "message log. Displaying debug information has a negative impact on "
@@ -7070,11 +7117,11 @@ msgstr ""
 "Η χαμηλότερη θύρα πρέπει να είναι λιγότερο ή ίσο με την υψηλότερη διαθέσιμη "
 "θύρα."
 
-#: resources.h:1031
+#: resources.h:1038
 msgid "The new version could not be downloaded, please retry later."
 msgstr "Η νέα έκδοση δεν εντοπίστηκε, παρακαλώ δοκιμάστε ξανά αργότερα."
 
-#: resources.h:1029
+#: resources.h:1036
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Η νέα έκδοση έχει αποθηκευτεί στον κατάλογο λήψεων σας."
 
@@ -7107,15 +7154,15 @@ msgstr ""
 msgid "The selected file is already being edited:"
 msgstr "Το επιλεγμένο αρχείο ήδη επεξεργάζεται:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2750
+#: ../../locales/../src/interface/RemoteListView.cpp:2475
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr ""
 "Το επιλεγμένο αρχείο είναι ήδη ανοιγμένο σε κάποιο άλλο πρόγραμμα, παρακαλώ "
 "κλείστε το."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1966
-#: ../../locales/../src/interface/RemoteListView.cpp:2702
+#: ../../locales/../src/interface/LocalListView.cpp:1731
+#: ../../locales/../src/interface/RemoteListView.cpp:2427
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and damage your system.\n"
@@ -7285,7 +7332,7 @@ msgstr ""
 "Για να υποστηρίξει το FileZilla την πιστοποίηση του δημόσιου κλειδιού, "
 "πρέπει να γνωρίζει το ιδιωτικό κλειδί του χρήστη."
 
-#: resources.h:1016
+#: resources.h:1022
 msgid ""
 "Toggle directory comparison. Right-click to change comparison mode.\n"
 "\n"
@@ -7302,7 +7349,7 @@ msgstr ""
 "πλευρά\n"
 "Κόκκινο: Διαφορετικό μέγεθος αρχείου"
 
-#: resources.h:1018
+#: resources.h:1024
 msgid ""
 "Toggle synchronized browsing.\n"
 "If enabled, navigating the local directory hierarchy will also change the "
@@ -7313,24 +7360,24 @@ msgstr ""
 "ανάλογες αλλαγές στη δομή των απομακρυσμένων φακέλων στον εξυπηρετητή ή και "
 "αντίστροφα."
 
-#: resources.h:1006 resources.h:1007
+#: resources.h:1012 resources.h:1013
 msgid "Toggles processing of the transfer queue"
 msgstr "Εναλλαγές σχετικές με την επεξεργασία της λίστας αναμονής μεταφορών"
 
-#: resources.h:998 resources.h:999
+#: resources.h:1004 resources.h:1005
 msgid "Toggles the display of the local directory tree"
 msgstr "Εναλλαγές σχετικές με την εμφάνιση της δομής των τοπικών φακέλων"
 
-#: resources.h:996 resources.h:997
+#: resources.h:1002 resources.h:1003
 msgid "Toggles the display of the message log"
 msgstr "Εναλλαγές σχετικές με την εμφάνιση του αρχείου συμβάντων"
 
-#: resources.h:1000 resources.h:1001
+#: resources.h:1006 resources.h:1007
 msgid "Toggles the display of the remote directory tree"
 msgstr ""
 "Εναλλαγές σχετικές με την εμφάνιση της δομής των απομακρυσμένων φακέλων"
 
-#: resources.h:1002 resources.h:1003
+#: resources.h:1008 resources.h:1009
 msgid "Toggles the display of the transfer queue"
 msgstr "Εναλλαγές σχετικές με την εμφάνιση της λίστας αναμονής μεταφορών"
 
@@ -7348,7 +7395,7 @@ msgstr "Πάρα πολλές αναδρομολογήσεις"
 msgid "Trace:"
 msgstr "Εντοπισμός:"
 
-#: resources.h:934 resources.h:940
+#: resources.h:940 resources.h:946
 msgid "Transfer"
 msgstr "Μεταφορά"
 
@@ -7424,7 +7471,7 @@ msgstr "Να θεωρηθεί έμπιστο αυτό το πιστοποιητ�
 msgid "Trust this host and carry on connecting?"
 msgstr "Να θεωρηθεί έμπιστος αυτός ο κόμβος και να συνεχίσει η σύνδεση;"
 
-#: resources.h:1032 resources.h:1037
+#: resources.h:1039 resources.h:1044
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
@@ -7449,7 +7496,7 @@ msgstr "Α&ποστολή"
 msgid "U&pload limit:"
 msgstr "Όριο α&ποστολής:"
 
-#: resources.h:952
+#: resources.h:958
 msgid "U&se filetype associations if available"
 msgstr "Χ&ρήση διαθέσιμων συσχετίσεων"
 
@@ -7605,7 +7652,7 @@ msgstr "Αποστολή και αναίρεση επεξεργασίας"
 msgid "Use &custom charset"
 msgstr "Χρήση &προσαρμοσμένης κωδικοποίησης χαρακτήρων"
 
-#: resources.h:949
+#: resources.h:955
 msgid "Use &custom editor:"
 msgstr "Χρήση &προκαθορισμένου επεξεργαστή:"
 
@@ -7727,7 +7774,7 @@ msgid "View hidden option set, but unsupported by server"
 msgstr ""
 "Προβολή κρυφών ενεργοποιήθηκε, αλλά δεν υποστηρίζεται από τον εξυπηρετητή"
 
-#: resources.h:936
+#: resources.h:942
 msgid "View/Edit"
 msgstr "Προβολή/Επεξεργασία"
 
@@ -7822,7 +7869,7 @@ msgstr "Καλωσορίσατε στο FileZilla"
 msgid "What's new"
 msgstr "Τι νέο υπάρχει"
 
-#: resources.h:1026
+#: resources.h:1033
 msgid "What's new:"
 msgstr "Ενημερώσεις:"
 
@@ -7881,7 +7928,7 @@ msgstr ""
 "Φαίνεται να χρησιμοποιείτε μόνο IPv6 κόμβο. Αυτός ο οδηγός δεν υποστηρίζει "
 "αυτό το περιβάλλον."
 
-#: resources.h:1040
+#: resources.h:1047
 msgid "You are using the latest version of FileZilla."
 msgstr "Χρησιμοποιείτε την τελευταία έκδοση του FileZilla."
 
@@ -7890,7 +7937,7 @@ msgid "You can always open this dialog again through the help menu."
 msgstr ""
 "Μπορείτε να ανοίξετε τον εν λόγω διάλογο επιλογών και μέσα από τη βοήθεια."
 
-#: resources.h:1034 resources.h:1039
+#: resources.h:1041 resources.h:1046
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Μπορείτε να κατεβάσετε την τελευταία έκδοση από την ιστοσελίδα:"
 
@@ -7929,8 +7976,8 @@ msgstr "Δε δώσατε νέο όνομα στο αρχείο. Αντικατ�
 msgid "You have selected at least one symbolic link."
 msgstr "Έχετε επιλέξει μία τουλάχιστον συμβολική σύνδεση."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1933
-#: ../../locales/../src/interface/RemoteListView.cpp:2669
+#: ../../locales/../src/interface/LocalListView.cpp:1698
+#: ../../locales/../src/interface/RemoteListView.cpp:2394
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
@@ -7938,7 +7985,7 @@ msgstr ""
 "Έχετε επιλέξει περισσότερα από 10 αρχεία για επεξεργασία, θέλετε πραγματικά "
 "να συνεχιστείτε;"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2052
+#: ../../locales/../src/interface/LocalListView.cpp:1817
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -7951,7 +7998,7 @@ msgstr ""
 msgid "You have to enter a hostname."
 msgstr "Πρέπει να καταχωρίσετε ένα όνομα κόμβου."
 
-#: ../../locales/../src/interface/search.cpp:800
+#: ../../locales/../src/interface/search.cpp:510
 msgid "You have to enter a local directory."
 msgstr "Πρέπει να καταχωρίσετε ένα τοπικό φάκελο."
 
@@ -7960,7 +8007,7 @@ msgstr "Πρέπει να καταχωρίσετε ένα τοπικό φάκε�
 msgid "You have to enter a valid IP address."
 msgstr "Πρέπει να καταχωρίσετε μία έγκυση διεύθυνση IP."
 
-#: ../../locales/../src/interface/search.cpp:806
+#: ../../locales/../src/interface/search.cpp:516
 msgid "You have to enter a writable local directory."
 msgstr "Πρέπει να καταχωρίσετε έναν εγγράψιμο τοπικό φάκελο."
 
@@ -8079,6 +8126,10 @@ msgstr "bytes"
 msgid "contains"
 msgstr "περιέχει"
 
+#: ../../locales/../src/interface/updater.cpp:241
+msgid "custom"
+msgstr "προσαρμοσμένη"
+
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:95
 msgid "does not contain"
 msgstr "δεν περιέχει"
@@ -8097,10 +8148,10 @@ msgstr "τελειώνει με"
 msgid "equals"
 msgstr "ισούται"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:513
-#: ../../locales/../src/interface/filelistctrl.cpp:532
-#: ../../locales/../src/interface/filelistctrl.cpp:559
-#: ../../locales/../src/interface/filelistctrl.cpp:575
+#: ../../locales/../src/interface/filelistctrl.cpp:535
+#: ../../locales/../src/interface/filelistctrl.cpp:554
+#: ../../locales/../src/interface/filelistctrl.cpp:581
+#: ../../locales/../src/interface/filelistctrl.cpp:597
 msgid "file"
 msgstr "αρχείο"
 
