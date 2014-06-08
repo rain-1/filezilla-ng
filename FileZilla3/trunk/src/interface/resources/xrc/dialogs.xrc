@@ -2732,7 +2732,6 @@
               <label>Export &amp;Queue</label>
             </object>
           </object>
-          <rows>2</rows>
           <vgap>5</vgap>
           <object class="sizeritem">
             <object class="wxGridSizer">
