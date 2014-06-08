@@ -738,7 +738,7 @@ bool CSiteManagerDialog::Load()
 		return true;
 
 	wxString lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
-	if (lastSelection[0] == '0')
+	if (!lastSelection.empty() && lastSelection[0] == '0')
 	{
 		if (lastSelection == _T("0"))
 			pTree->SelectItem(treeId);
