@@ -479,6 +479,8 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 	{
 		delete controls.pValue;
 		controls.pValue = 0;
+		delete controls.pLabel;
+		controls.pLabel = 0;
 
 		pos = wxPoint(posx, posy);
 		wxSize size(maxwidth, -1);
