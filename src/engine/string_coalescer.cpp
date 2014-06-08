@@ -65,9 +65,7 @@ struct fast_equal
 {
 	bool operator()(wxString const& lhs, wxString const& rhs) const
 	{
-		// wxString is CoW, yet it doesn't even do this fast pointer
-		// comparison in its less and/or equal operator(s).
-		return lhs.c_str() == rhs.c_str() || lhs == rhs;
+		return lhs == rhs;
 	}
 };
 

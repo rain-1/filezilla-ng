@@ -133,9 +133,7 @@ struct fast_equal
 {
 	bool operator()(wxString const& lhs, wxString const& rhs) const
 	{
-		// wxString is CoW, yet it doesn't even do this fast pointer
-		// comparison in it's less and/or equal operator(s).
-		return lhs.c_str() == rhs.c_str() || lhs == rhs;
+		return lhs == rhs;
 	}
 };
 
@@ -558,27 +556,20 @@ bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, wxLongLong_t 
 }
 
 
+#ifndef __WXMSW__
 extern "C" {
 static void custom_free(void* v)
 {
-#ifdef __WXMSW__
-	wxStringData* data = reinterpret_cast<wxStringData*>(v) - 1;
-	data->Unlock();
-#else
 	char* s = reinterpret_cast<char*>(v);
 	delete [] s;
+}
+}
 #endif
-}
-}
 
 bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, const wxString& value)
 {
 #ifdef __WXMSW__
-	// Increase string reference and pass the data to sqlite with a custom deallocator that
-	// reduces the reference once sqlite is done with it.
-	wxStringData* data = reinterpret_cast<wxStringData*>(const_cast<wxChar*>(value.c_str())) - 1;
-	data->Lock();
-	return sqlite3_bind_text16(statement, index, data + 1, data->nDataLength * 2, custom_free) == SQLITE_OK;
+	return sqlite3_bind_text16(statement, index, value.wc_str(), value.length() * 2, SQLITE_TRANSIENT) == SQLITE_OK;
 #else
 	char* out = new char[value.size() * 2];
 	size_t outlen = utf16_.FromWChar(out, value.size() * 2, value.c_str(), value.size());
@@ -831,12 +822,14 @@ wxString CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int index, 
 	int len = sqlite3_column_bytes16(statement, index);
 	if (text)
 	{
-		wxChar* out = ret.GetWriteBuf( len );
+		wxStringBuffer buffer(ret, len);
+		wxChar* out = buffer;
+
 		int outlen = utf16_.ToWChar( out, len, text, len );
-		ret.UngetWriteBuf( outlen );
-		if (shrink)
-			ret.Shrink();
+		buffer[outlen] = 0;
 	}
+	if (shrink)
+		ret.Shrink();
 #endif
 
 	return ret;

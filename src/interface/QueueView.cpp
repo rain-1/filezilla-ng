@@ -3443,45 +3443,44 @@ wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
 	const wxChar replace = COptions::Get()->GetOption(OPTION_INVALID_CHAR_REPLACE)[0];
 
 	wxString result;
-
-	wxChar* start = result.GetWriteBuf(filename.Len() + 1);
-	wxChar* buf = start;
-
-	const wxChar* p = filename.c_str();
-	while (*p)
 	{
-		const wxChar c = *p;
-		switch (c)
-		{
-		case '/':
-#ifdef __WXMSW__
-		case '\\':
-		case ':':
-		case '*':
-		case '?':
-		case '"':
-		case '<':
-		case '>':
-		case '|':
-#endif
-			if (replace)
-				*buf++ = replace;
-			break;
-		default:
-#ifdef __WXMSW__
-			if (c < 0x20)
-				*buf++ = replace;
-			else
-#endif
-			{
-				*buf++ = c;
-			}
-		}
-		p++;
-	}
-	*buf = 0;
+		wxStringBuffer start( result, filename.Len() + 1 );
+		wxChar* buf = start;
 
-	result.UngetWriteBuf( buf - start );
+		const wxChar* p = filename.c_str();
+		while (*p)
+		{
+			const wxChar c = *p;
+			switch (c)
+			{
+			case '/':
+	#ifdef __WXMSW__
+			case '\\':
+			case ':':
+			case '*':
+			case '?':
+			case '"':
+			case '<':
+			case '>':
+			case '|':
+	#endif
+				if (replace)
+					*buf++ = replace;
+				break;
+			default:
+	#ifdef __WXMSW__
+				if (c < 0x20)
+					*buf++ = replace;
+				else
+	#endif
+				{
+					*buf++ = c;
+				}
+			}
+			p++;
+		}
+		*buf = 0;
+	}
 
 	return result;
 }

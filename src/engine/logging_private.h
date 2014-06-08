@@ -7,9 +7,50 @@ public:
 	CLogging(CFileZillaEnginePrivate *pEngine);
 	virtual ~CLogging();
 
-	void LogMessage(MessageType nMessageType, const wxChar *msgFormat, ...) const;
+	template<typename...Args>
+	void LogMessage(MessageType nMessageType, wxChar const* msgFormat, Args...args) const
+	{
+		if( !ShouldLog(nMessageType) ) {
+			return;
+		}
+
+		CLogmsgNotification *notification = new CLogmsgNotification;
+		notification->msgType = nMessageType;
+		notification->msg.Printf(msgFormat, args...);
+
+		LogToFile(nMessageType, notification->msg);
+		m_pEngine->AddNotification(notification);
+	}
+
 	void LogMessageRaw(MessageType nMessageType, const wxChar *msg) const;
-	void LogMessage(wxString sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType, const wxChar *msgFormat, ...) const;
+
+	template<typename...Args>
+	void LogMessage(wxString sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType
+					, wxChar const* msgFormat, Args...args) const
+	{
+		if( !ShouldLog(nMessageType) ) {
+			return;
+		}
+
+		int pos = sourceFile.Find('\\', true);
+		if (pos != -1)
+			sourceFile = sourceFile.Mid(pos+1);
+
+		pos = sourceFile.Find('/', true);
+		if (pos != -1)
+			sourceFile = sourceFile.Mid(pos+1);
+
+		wxString text = wxString::Format(msgFormat, args...);
+
+		CLogmsgNotification *notification = new CLogmsgNotification;
+		notification->msgType = nMessageType;
+		notification->msg.Printf(_T("%s(%d): %s   caller=%p"), sourceFile, nSourceLine, text, pInstance);
+
+		LogToFile(nMessageType, notification->msg);
+		m_pEngine->AddNotification(notification);
+	}
+
+	bool ShouldLog(MessageType nMessageType) const;
 
 private:
 	CFileZillaEnginePrivate *m_pEngine;

@@ -94,7 +94,7 @@ if test "$buildmain" = "yes"; then
 
   AM_OPTIONS_WXCONFIG
 
-  MIN_WX_VERSION="2.8.12"
+  MIN_WX_VERSION="3.0.0"
   AM_PATH_WXCONFIG($MIN_WX_VERSION, wxWin=1, , [aui,xrc,adv,core,xml,net,base], [--unicode=yes --universal=no])
   if test "$wxWin" != 1; then
     AC_MSG_ERROR([
@@ -110,9 +110,6 @@ if test "$buildmain" = "yes"; then
         'wx-config --libs' command) is in LD_LIBRARY_PATH or
         equivalent variable and wxWidgets version is $MIN_WX_VERSION or above.
     ])
-  fi
-  if test "$wx_config_major_version" -gt "2" || test "$wx_config_minor_version" -gt "8"; then
-    AC_MSG_ERROR([You need to use wxWidgets 2.8.x to compile this program.])
   fi
 
   # --universal=no doesn't work correctly, it still accepts universal builds. Reject it manually here.

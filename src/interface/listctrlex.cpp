@@ -71,13 +71,9 @@ wxListCtrlEx::~wxListCtrlEx()
 }
 
 #ifndef __WXMSW__
-wxScrolledWindow* wxListCtrlEx::GetMainWindow() const
+wxWindow* wxListCtrlEx::GetMainWindow() const
 {
-#ifdef __WXMAC__
-	return (wxScrolledWindow*)m_genericImpl->m_mainWin;
-#else
-	return (wxScrolledWindow*)m_mainWin;
-#endif
+	return reinterpret_cast<wxWindow*>(m_mainWin);
 }
 #endif
 
@@ -109,6 +105,9 @@ void wxListCtrlEx::OnScrollEvent(wxScrollWinEvent& event)
 
 void wxListCtrlEx::OnMouseWheel(wxMouseEvent& event)
 {
+#if __WXGTK__
+    ScrollList(0, GetItemSpacing().y * ((event.GetWheelRotation() > 0) ? -1 : 1));
+#endif
 	event.Skip();
 	OnPreEmitPostScrollEvent();
 }
@@ -121,7 +120,6 @@ void wxListCtrlEx::OnSelectionChanged(wxListEvent& event)
 
 void wxListCtrlEx::ScrollTopItem(int item)
 {
-#ifdef __WXMSW__
 	const int current = GetTopItem();
 
 	int delta = item - current;
@@ -133,10 +131,6 @@ void wxListCtrlEx::ScrollTopItem(int item)
 
 	delta *= rect.GetHeight();
 	ScrollList(0, delta);
-#else
-	GetMainWindow()->Scroll(0, item);
-	EnsureVisible(item);
-#endif
 }
 
 

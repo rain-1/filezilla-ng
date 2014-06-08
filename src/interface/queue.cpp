@@ -1310,10 +1310,9 @@ void CQueueViewBase::DisplayNumberQueuedFiles()
 	}
 	else
 	{
+		str = m_title;
 		if (m_folderScanCount)
-			str.Printf(m_title + _T(" (0+)"), m_fileCount);
-		else
-			str = m_title;
+			str += _T(" (0+)");
 	}
 	m_pQueue->SetPageText(m_pageIndex, str);
 
@@ -1442,7 +1441,7 @@ void CQueueViewBase::RefreshItem(const CQueueItem* pItem)
 void CQueueViewBase::OnNavigationKey(wxNavigationKeyEvent& event)
 {
 	event.SetEventObject(m_pQueue);
-	m_pQueue->ProcessEvent(event);
+	m_pQueue->ProcessWindowEvent(event);
 }
 
 void CQueueViewBase::OnChar(wxKeyEvent& event)

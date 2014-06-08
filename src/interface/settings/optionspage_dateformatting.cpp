@@ -16,7 +16,7 @@ bool COptionsPageDateFormatting::LoadPage()
 	const wxString& dateFormat = m_pOptions->GetOption(OPTION_DATE_FORMAT);
 	if (dateFormat == _T("1"))
 		SetRCheck(XRCID("ID_DATEFORMAT_ISO"), true, failure);
-	else if (dateFormat[0] == '2')
+	else if (!dateFormat.IsEmpty() && dateFormat[0] == '2')
 	{
 		SetRCheck(XRCID("ID_DATEFORMAT_CUSTOM"), true, failure);
 		SetText(XRCID("ID_CUSTOM_DATEFORMAT"), dateFormat.Mid(1), failure);
@@ -27,7 +27,7 @@ bool COptionsPageDateFormatting::LoadPage()
 	const wxString& timeFormat = m_pOptions->GetOption(OPTION_TIME_FORMAT);
 	if (timeFormat == _T("1"))
 		SetRCheck(XRCID("ID_TIMEFORMAT_ISO"), true, failure);
-	else if (timeFormat[0] == '2')
+	else if (!timeFormat.IsEmpty() && timeFormat[0] == '2')
 	{
 		SetRCheck(XRCID("ID_TIMEFORMAT_CUSTOM"), true, failure);
 		SetText(XRCID("ID_CUSTOM_TIMEFORMAT"), timeFormat.Mid(1), failure);

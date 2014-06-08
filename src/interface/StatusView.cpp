@@ -71,7 +71,7 @@ public:
 	{
 		wxWindow* parent = GetParent();
 		event.SetEventObject(parent);
-		parent->ProcessEvent(event);
+		parent->ProcessWindowEvent(event);
 	}
 #else
 	void OnKeyDown(wxKeyEvent& event)
@@ -89,7 +89,7 @@ public:
 		navEvent.SetDirection(!event.ShiftDown());
 		navEvent.SetFromTab(true);
 		navEvent.ResumePropagation(1);
-		parent->ProcessEvent(navEvent);
+		parent->ProcessWindowEvent(navEvent);
 	}
 #endif
 };

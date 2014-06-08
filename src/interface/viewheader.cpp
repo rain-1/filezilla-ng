@@ -67,7 +67,7 @@ protected:
 		navEvent.SetDirection(!event.ShiftDown());
 		navEvent.SetFromTab(true);
 		navEvent.ResumePropagation(1);
-		m_parent->ProcessEvent(navEvent);
+		m_parent->GetEventHandler()->ProcessEvent(navEvent);
 	}
 
 	void OnChar(wxKeyEvent& event)

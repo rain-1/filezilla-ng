@@ -525,6 +525,8 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 
 bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmarks)
 {
+	if (sitePath.IsEmpty())
+		return false;
 	wxChar c = sitePath[0];
 	if (c != '0' && c != '1')
 		return false;

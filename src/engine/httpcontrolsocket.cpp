@@ -424,7 +424,7 @@ int CHttpControlSocket::FileTransferSend()
 	}
 
 	if( !m_current_uri.HasScheme() || !m_current_uri.HasServer() || !m_current_uri.HasPath() ) {
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI().c_str());
+		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}

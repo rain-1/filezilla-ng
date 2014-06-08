@@ -51,132 +51,42 @@ CLogging::~CLogging()
 	}
 }
 
-void CLogging::LogMessage(MessageType nMessageType, const wxChar *msgFormat, ...) const
+bool CLogging::ShouldLog(MessageType nMessageType) const
 {
-	InitLogFile();
-
 	const int debugLevel = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
 	switch (nMessageType)
 	{
 	case Debug_Warning:
 		if (!debugLevel)
-			return;
+			return false;
 		break;
 	case Debug_Info:
 		if (debugLevel < 2)
-			return;
+			return false;
 		break;
 	case Debug_Verbose:
 		if (debugLevel < 3)
-			return;
+			return false;
 		break;
 	case Debug_Debug:
 		if (debugLevel != 4)
-			return;
+			return false;
 		break;
 	case RawList:
 		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_RAWLISTING))
-			return;
+			return false;
 		break;
 	default:
 		break;
 	}
-
-	va_list ap;
-
-	va_start(ap, msgFormat);
-	wxString text = wxString::FormatV(msgFormat, ap);
-	va_end(ap);
-
-	LogToFile(nMessageType, text);
-
-	CLogmsgNotification *notification = new CLogmsgNotification;
-	notification->msgType = nMessageType;
-	notification->msg = text;
-	m_pEngine->AddNotification(notification);
+	return true;
 }
 
 void CLogging::LogMessageRaw(MessageType nMessageType, const wxChar *msg) const
 {
-	InitLogFile();
-
-	const int debugLevel = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
-	switch (nMessageType)
-	{
-	case Debug_Warning:
-		if (!debugLevel)
-			return;
-		break;
-	case Debug_Info:
-		if (debugLevel < 2)
-			return;
-		break;
-	case Debug_Verbose:
-		if (debugLevel < 3)
-			return;
-		break;
-	case Debug_Debug:
-		if (debugLevel != 4)
-			return;
-		break;
-	case RawList:
-		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_RAWLISTING))
-			return;
-		break;
-	default:
-		break;
+	if( !ShouldLog(nMessageType) ) {
+		return;
 	}
-
-	LogToFile(nMessageType, msg);
-
-	CLogmsgNotification *notification = new CLogmsgNotification;
-	notification->msgType = nMessageType;
-	notification->msg = msg;
-	m_pEngine->AddNotification(notification);
-}
-
-void CLogging::LogMessage(wxString SourceFile, int nSourceLine, void *, MessageType nMessageType, const wxChar *msgFormat, ...) const
-{
-	InitLogFile();
-
-	const int debugLevel = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
-	switch (nMessageType)
-	{
-	case Debug_Warning:
-		if (!debugLevel)
-			return;
-		break;
-	case Debug_Info:
-		if (debugLevel < 2)
-			return;
-		break;
-	case Debug_Verbose:
-		if (debugLevel < 3)
-			return;
-		break;
-	case Debug_Debug:
-		if (debugLevel != 4)
-			return;
-		break;
-	default:
-		break;
-	}
-
-	int pos = SourceFile.Find('\\', true);
-	if (pos != -1)
-		SourceFile = SourceFile.Mid(pos+1);
-
-	pos = SourceFile.Find('/', true);
-	if (pos != -1)
-		SourceFile = SourceFile.Mid(pos+1);
-
-	va_list ap;
-
-	va_start(ap, msgFormat);
-	wxString text = wxString::FormatV(msgFormat, ap);
-	va_end(ap);
-
-	wxString msg = wxString::Format(_T("%s(%d): %s   caller=%p"), SourceFile.c_str(), nSourceLine, text.c_str(), this);
 
 	LogToFile(nMessageType, msg);
 
@@ -231,6 +141,7 @@ void CLogging::InitLogFile() const
 
 void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 {
+	InitLogFile();
 #ifdef __WXMSW__
 	if (m_log_fd == INVALID_HANDLE_VALUE)
 		return;

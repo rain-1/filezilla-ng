@@ -3,8 +3,6 @@
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
 
-wxColor wxAuiStepColour(const wxColor& c, int ialpha);
-
 #ifdef __WXMSW__
 #define TABCOLOUR wxSYS_COLOUR_3DFACE
 #else
@@ -67,8 +65,8 @@ public:
 					m_original_dc->DrawRectangle(x, y, width, height);
 				else
 				{
-					wxColour new_init = wxAuiStepColour(c, 150);
-					wxColour new_dest = wxAuiStepColour(c, 100);
+					wxColour new_init = c.ChangeLightness(150);
+					wxColour new_dest = c.ChangeLightness(100);
 					m_original_dc->GradientFillLinear(wxRect(x, y, width + 1, height), new_init, new_dest, wxNORTH);
 				}
 			}
@@ -77,7 +75,7 @@ public:
 		{
 			wxColour c = wxSystemSettings::GetColour(TABCOLOUR);
 			if (c.Red() + c.Green() + c.Blue() < 384)
-				m_original_dc->SetBrush(wxBrush(wxAuiStepColour(c, 100)));
+				m_original_dc->SetBrush(wxBrush( c.ChangeLightness(100) ) );
 			m_original_dc->DrawRectangle(x, y, width, height);
 		}
 	}
@@ -96,8 +94,8 @@ public:
 			}
 
 			// Dark theme
-			wxColour new_init = wxAuiStepColour(initialColour, 100);
-			wxColour new_dest = wxAuiStepColour(initialColour, 120);
+			wxColour new_init = initialColour.ChangeLightness(100);
+			wxColour new_dest = initialColour.ChangeLightness(120);
 			m_original_dc->GradientFillLinear(rect, new_init, new_dest, nDirection);
 		}
 		else if (!m_type)
@@ -120,12 +118,12 @@ public:
 			if (m_gradient_called == 1)
 			{
 				// Lighter inner border
-				m_original_dc->SetBrush(wxBrush(wxAuiStepColour(destColour, 105)));
-				m_original_dc->SetPen(wxPen(wxAuiStepColour(destColour, 105)));
+				m_original_dc->SetBrush(wxBrush(destColour.ChangeLightness(105)));
+				m_original_dc->SetPen(wxPen(destColour.ChangeLightness(105)));
 				m_original_dc->DrawRectangle(r2);
 
-				wxColour new_init = wxAuiStepColour(destColour, 95);
-				wxColour new_dest = wxAuiStepColour(destColour, 65);
+				wxColour new_init = destColour.ChangeLightness(95);
+				wxColour new_dest = destColour.ChangeLightness(65);
 				m_original_dc->GradientFillLinear(r, new_init, new_dest, nDirection);
 
 				if (!m_bottom)
@@ -145,11 +143,11 @@ public:
 					r2.height += 1;
 
 				// Lighter inner border
-				m_original_dc->SetBrush(wxBrush(wxAuiStepColour(destColour, 105)));
-				m_original_dc->SetPen(wxPen(wxAuiStepColour(destColour, 105)));
+				m_original_dc->SetBrush(wxBrush(destColour.ChangeLightness(105)));
+				m_original_dc->SetPen(wxPen(destColour.ChangeLightness(105)));
 				m_original_dc->DrawRectangle(r2);
 
-				wxColour new_dest = wxAuiStepColour(destColour, 65);
+				wxColour new_dest = destColour.ChangeLightness(65);
 				if (!m_bottom)
 					r.height++;
 				m_original_dc->GradientFillLinear(r, new_dest, new_dest, nDirection);
@@ -171,22 +169,19 @@ public:
 				wxColour new_init, new_dest;
 				if (m_bottom)
 				{
-					new_init = wxAuiStepColour(c, 70);
-					new_dest = wxAuiStepColour(c, 100);
+					new_init = c.ChangeLightness(70);
+					new_dest = c.ChangeLightness(100);
 				}
 				else
 				{
-					new_init = wxAuiStepColour(c, 85);
-					new_dest = wxAuiStepColour(c, 100);
+					new_init = c.ChangeLightness(85);
+					new_dest = c.ChangeLightness(100);
 				}
 				m_original_dc->GradientFillLinear(rect, new_init, new_dest, nDirection);
 			}
 		}
 	}
 
-#ifdef __WXGTK__
-	virtual GdkWindow* GetGDKWindow() const { return m_original_dc->GetGDKWindow(); }
-#endif
 protected:
 	int m_gradient_called;
 	int m_rectangle_called;
@@ -215,9 +210,9 @@ public:
 	virtual wxAuiTabArt* Clone()
 	{
 		wxAuiTabArtEx *art = new wxAuiTabArtEx(m_pNotebook, m_bottom, m_data);
-		art->SetNormalFont(m_normal_font);
-		art->SetSelectedFont(m_selected_font);
-		art->SetMeasuringFont(m_measuring_font);
+		art->SetNormalFont(m_normalFont);
+		art->SetSelectedFont(m_selectedFont);
+		art->SetMeasuringFont(m_measuringFont);
 		return art;
 	}
 
@@ -257,12 +252,12 @@ public:
 						 int* x_extent)
 	{
 #ifndef __WXMAC__
-		m_base_colour = wxSystemSettings::GetColour(TABCOLOUR);
+		m_baseColour = wxSystemSettings::GetColour(TABCOLOUR);
 #endif
 		if (!pane.active)
 		{
-			if (m_base_colour.Red() + m_base_colour.Green() + m_base_colour.Blue() >= 384)
-				m_base_colour = wxColour( m_base_colour.Red() * 0.95, m_base_colour.Green() * 0.95, m_base_colour.Blue() * 0.95 );
+			if (m_baseColour.Red() + m_baseColour.Green() + m_baseColour.Blue() >= 384)
+				m_baseColour = wxColour( m_baseColour.Red() * 0.95, m_baseColour.Green() * 0.95, m_baseColour.Blue() * 0.95 );
 
 			dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 			if (m_pNotebook->Highlighted(m_pNotebook->GetPageIndex(pane.window)))
@@ -270,27 +265,25 @@ public:
 				if (!m_fonts_initialized)
 				{
 					m_fonts_initialized = true;
-					m_original_normal_font = m_normal_font;
-					m_highlighted_font = m_normal_font;
+					m_original_normal_font = m_normalFont;
+					m_highlighted_font = m_normalFont;
 					m_highlighted_font.SetWeight(wxFONTWEIGHT_BOLD);
 					m_highlighted_font.SetStyle(wxFONTSTYLE_ITALIC);
 				}
-				m_normal_font = m_highlighted_font;
+				m_normalFont = m_highlighted_font;
 			}
 			else if (m_fonts_initialized)
-				m_normal_font = m_original_normal_font;
+				m_normalFont = m_original_normal_font;
 		}
-
-		CFilterDC filter_dc(dc, pane.active ? 1 : 0, (m_tab_ctrl_height % 2) != 0, m_bottom);
-		wxAuiDefaultTabArt::DrawTab(*((wxDC*)&filter_dc), wnd, pane, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
-
-		m_base_colour = wxSystemSettings::GetColour(TABCOLOUR);
+		CFilterDC filter_dc(dc, pane.active ? 1 : 0, (m_tabCtrlHeight % 2) != 0, m_bottom);
+		wxAuiGenericTabArt::DrawTab(*((wxDC*)&filter_dc), wnd, pane, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+		m_baseColour = wxSystemSettings::GetColour(TABCOLOUR);
 	}
 
 	virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 	{
-		CFilterDC filter_dc(dc, 2, (m_tab_ctrl_height % 2) != 0, m_bottom);
-		wxAuiDefaultTabArt::DrawBackground(*((wxDC*)&filter_dc), wnd, rect);
+		CFilterDC filter_dc(dc, 2, (m_tabCtrlHeight % 2) != 0, m_bottom);
+		wxAuiGenericTabArt::DrawBackground(*((wxDC*)&filter_dc), wnd, rect);
 	}
 protected:
 	wxAuiNotebookEx* m_pNotebook;

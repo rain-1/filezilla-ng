@@ -258,31 +258,31 @@ wxString CServerPath::GetSafePath() const
 		len += iter->Length() + 2 + INTLENGTH;
 
 	wxString safepath;
-	wxChar* start = safepath.GetWriteBuf(len);
-	wxChar* t = start;
-
-	t = fast_sprint_number(t, m_type);
-	*(t++) = ' ';
-	t = fast_sprint_number(t, m_data->m_prefix.size());
-
-	if (!m_data->m_prefix.empty())
 	{
-		*(t++) = ' ';
-		tstrcpy(t, m_data->m_prefix);
-		t += m_data->m_prefix.size();
-	}
+		wxStringBuffer start(safepath, len);
+		wxChar* t = start;
 
-	for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter)
-	{
+		t = fast_sprint_number(t, m_type);
 		*(t++) = ' ';
-		t = fast_sprint_number(t, iter->size());
-		*(t++) = ' ';
-		tstrcpy(t, *iter);
-		t += iter->size();
-	}
-	*t = 0;
+		t = fast_sprint_number(t, m_data->m_prefix.size());
 
-	safepath.UngetWriteBuf( t - start );
+		if (!m_data->m_prefix.empty())
+		{
+			*(t++) = ' ';
+			tstrcpy(t, m_data->m_prefix);
+			t += m_data->m_prefix.size();
+		}
+
+		for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter)
+		{
+			*(t++) = ' ';
+			t = fast_sprint_number(t, iter->size());
+			*(t++) = ' ';
+			tstrcpy(t, *iter);
+			t += iter->size();
+		}
+		*t = 0;
+	}
 	safepath.Shrink();
 
 	return safepath;
