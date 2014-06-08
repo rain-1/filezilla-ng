@@ -10,6 +10,7 @@
 #include "chmoddialog.h"
 #include "filter.h"
 #include <algorithm>
+#include <wx/dcclient.h>
 #include <wx/dnd.h>
 #include "dndobjects.h"
 #include "Options.h"

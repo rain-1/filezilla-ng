@@ -6,6 +6,7 @@
 #include "optionspage_themes.h"
 #include "../themeprovider.h"
 
+#include <wx/dcclient.h>
 #include <wx/scrolwin.h>
 
 BEGIN_EVENT_TABLE(COptionsPageThemes, COptionsPage)

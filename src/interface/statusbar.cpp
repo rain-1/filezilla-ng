@@ -7,6 +7,8 @@
 #include "themeprovider.h"
 #include "verifycertdialog.h"
 
+#include <wx/dcclient.h>
+
 static const int statbarWidths[3] = {
 	-3, 0, 35
 };
