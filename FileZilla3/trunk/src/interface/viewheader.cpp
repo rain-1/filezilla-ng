@@ -10,6 +10,7 @@
 #endif
 
 #include <wx/combobox.h>
+#include <wx/dcclient.h>
 
 #ifdef __WXMSW__
 const int border_offset = 0;

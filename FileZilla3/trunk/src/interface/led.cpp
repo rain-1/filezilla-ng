@@ -2,6 +2,8 @@
 #include "led.h"
 #include "filezillaapp.h"
 
+#include <wx/dcclient.h>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
