@@ -1,5 +1,7 @@
 #ifndef __LOCALE_INITIALIZER_H__
 
+wxString GetFallbackLocale(wxString const& locale);
+
 #ifdef __WXGTK__
 
 #include <string>

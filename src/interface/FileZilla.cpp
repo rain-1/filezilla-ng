@@ -53,9 +53,7 @@
 #include <wx/stdpaths.h>
 #endif
 
-#ifdef __WXGTK__
 #include "locale_initializer.h"
-#endif
 
 #ifdef ENABLE_BINRELOC
 	#define BR_PTHREADS 0
@@ -176,6 +174,65 @@ static void SetAppId()
 
 #endif //__WXMSW__
 
+void CFileZillaApp::InitLocale()
+{
+		wxString language = COptions::Get()->GetOption(OPTION_LANGUAGE);
+	const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(language);
+	if (language != _T(""))
+	{
+#ifdef __WXGTK__
+		if (CInitializer::error)
+		{
+			wxString error;
+
+			wxLocale *loc = wxGetLocale();
+			const wxLanguageInfo* currentInfo = loc ? loc->GetLanguageInfo(loc->GetLanguage()) : 0;
+			if (!loc || !currentInfo)
+			{
+				if (!pInfo)
+					error.Printf(_("Failed to set language to %s, using default system language."),
+						language.c_str());
+				else
+					error.Printf(_("Failed to set language to %s (%s), using default system language."),
+						pInfo->Description.c_str(), language.c_str());
+			}
+			else
+			{
+				wxString currentName = currentInfo->CanonicalName;
+
+				if (!pInfo)
+					error.Printf(_("Failed to set language to %s, using default system language (%s, %s)."),
+						language.c_str(), loc->GetLocale(),
+						currentName.c_str());
+				else
+					error.Printf(_("Failed to set language to %s (%s), using default system language (%s, %s)."),
+						pInfo->Description.c_str(), language.c_str(), loc->GetLocale(),
+						currentName.c_str());
+			}
+
+			error += _T("\n");
+			error += _("Please make sure the requested locale is installed on your system.");
+			wxMessageBoxEx(error, _("Failed to change language"), wxICON_EXCLAMATION);
+
+			COptions::Get()->SetOption(OPTION_LANGUAGE, _T(""));
+		}
+#else
+		if (!pInfo || !SetLocale(pInfo->Language)) {
+			for( language = GetFallbackLocale(language); !language.empty(); language = GetFallbackLocale(language) ) {
+				const wxLanguageInfo* fallbackInfo = wxLocale::FindLanguageInfo(language);
+				if( fallbackInfo && SetLocale(fallbackInfo->Language )) {
+					return;
+				}
+			}
+			if (pInfo && !pInfo->Description.IsEmpty())
+				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description.c_str(), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
+			else
+				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
+		}
+#endif
+	}
+}
+
 bool CFileZillaApp::OnInit()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::OnInit()"));
@@ -226,56 +283,7 @@ bool CFileZillaApp::OnInit()
 
 	COptions::Init();
 
-	wxString language = COptions::Get()->GetOption(OPTION_LANGUAGE);
-	const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(language);
-	if (language != _T(""))
-	{
-#ifdef __WXGTK__
-		if (CInitializer::error)
-		{
-			wxString error;
-
-			wxLocale *loc = wxGetLocale();
-			const wxLanguageInfo* currentInfo = loc ? loc->GetLanguageInfo(loc->GetLanguage()) : 0;
-			if (!loc || !currentInfo)
-			{
-				if (!pInfo)
-					error.Printf(_("Failed to set language to %s, using default system language."),
-						language.c_str());
-				else
-					error.Printf(_("Failed to set language to %s (%s), using default system language."),
-						pInfo->Description.c_str(), language.c_str());
-			}
-			else
-			{
-				wxString currentName = currentInfo->CanonicalName;
-
-				if (!pInfo)
-					error.Printf(_("Failed to set language to %s, using default system language (%s, %s)."),
-						language.c_str(), loc->GetLocale(),
-						currentName.c_str());
-				else
-					error.Printf(_("Failed to set language to %s (%s), using default system language (%s, %s)."),
-						pInfo->Description.c_str(), language.c_str(), loc->GetLocale(),
-						currentName.c_str());
-			}
-
-			error += _T("\n");
-			error += _("Please make sure the requested locale is installed on your system.");
-			wxMessageBoxEx(error, _("Failed to change language"), wxICON_EXCLAMATION);
-
-			COptions::Get()->SetOption(OPTION_LANGUAGE, _T(""));
-		}
-#else
-		if (!pInfo || !SetLocale(pInfo->Language))
-		{
-			if (pInfo && !pInfo->Description.IsEmpty())
-				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description.c_str(), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
-			else
-				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
-		}
-#endif
-	}
+	InitLocale();
 
 #ifndef _DEBUG
 	const wxString& buildType = CBuildInfo::GetBuildType();
