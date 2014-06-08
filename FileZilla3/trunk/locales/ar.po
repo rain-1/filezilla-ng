@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-21 12:17+0200\n"
-"PO-Revision-Date: 2014-04-06 15:08+0300\n"
+"POT-Creation-Date: 2014-06-08 09:42+0200\n"
+"PO-Revision-Date: 2014-06-03 10:20+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Language: ar\n"
 "Plural-Forms: nplurals=6; plural= n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Poedit 1.6.4\n"
+"X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:65
@@ -29,7 +29,7 @@ msgstr "المنقضي %H:%M:%S"
 msgid "%H:%M:%S left"
 msgstr "المتبقي %H:%M:%S"
 
-#: resources.h:777
+#: resources.h:786
 #, no-c-format
 msgid ""
 "%a - Account (Lines containing this will be omitted if not using Account "
@@ -49,9 +49,9 @@ msgstr[3] "%d مجلدات"
 msgstr[4] "%d مجلد"
 msgstr[5] "%d مجلد"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1711
-#: ../../locales/../src/interface/search.cpp:759
-#: ../../locales/../src/interface/search.cpp:1012
+#: ../../locales/../src/interface/RemoteListView.cpp:1458
+#: ../../locales/../src/interface/search.cpp:469
+#: ../../locales/../src/interface/search.cpp:722
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -64,9 +64,9 @@ msgstr[5] "%d مجلد مع محتوياتها"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:62
 #: ../../locales/../src/interface/filelist_statusbar.cpp:85
-#: ../../locales/../src/interface/RemoteListView.cpp:1710
-#: ../../locales/../src/interface/search.cpp:758
-#: ../../locales/../src/interface/search.cpp:1011
+#: ../../locales/../src/interface/RemoteListView.cpp:1457
+#: ../../locales/../src/interface/search.cpp:468
+#: ../../locales/../src/interface/search.cpp:721
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -104,7 +104,7 @@ msgstr[5] "%d ملف . الحجم الكلي : على الأقل %s"
 msgid "%d files added to queue"
 msgstr "تمت إضافة %d ملف إلى قائمة الإنتظار"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:104
+#: ../../locales/../src/engine/ControlSocket.cpp:106
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -115,11 +115,11 @@ msgstr[3] "%d ثواني"
 msgstr[4] "%d ثواني"
 msgstr[5] "%d ثانية"
 
-#: resources.h:774
+#: resources.h:783
 msgid "%h - Host"
 msgstr "%h - المضيف"
 
-#: resources.h:776
+#: resources.h:785
 #, no-c-format
 msgid "%p - Password"
 msgstr "%p - كلمة المرور"
@@ -132,7 +132,7 @@ msgstr "%s (%s/ث)"
 #: ../../locales/../src/interface/statuslinectrl.cpp:183
 #, c-format
 msgid "%s (? B/s)"
-msgstr "(%s (؟ ب/ث"
+msgstr "%s (? ب/ث)"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:39
 #, c-format
@@ -144,7 +144,7 @@ msgstr "%s - أنتهت صلاحية الشهادة"
 msgid "%s - Not yet valid!"
 msgstr "%s - ليست صالحة بعد"
 
-#: resources.h:778
+#: resources.h:787
 #, no-c-format
 msgid "%s - Proxy user"
 msgstr "%s - مستخدم الملقم"
@@ -170,7 +170,7 @@ msgstr[3] "%s بايتات"
 msgstr[4] "%s بايت"
 msgstr[5] "%s بايت"
 
-#: ../../locales/../src/interface/FileZilla.cpp:691
+#: ../../locales/../src/interface/FileZilla.cpp:696
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -184,7 +184,7 @@ msgstr ""
 "الرجاء تحميل FileZilla مرة ثانية . إذا أستمرت هذه المشكلة أرسل لنا تقرير عن "
 "الخطأ"
 
-#: ../../locales/../src/interface/FileZilla.cpp:785
+#: ../../locales/../src/interface/FileZilla.cpp:790
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -205,41 +205,45 @@ msgstr ""
 msgid "%s with %d bits"
 msgstr "%s مع %d بت"
 
-#: resources.h:775
+#: resources.h:784
 #, no-c-format
 msgid "%u - Username"
 msgstr "%u - المستخدم"
 
-#: resources.h:779
+#: resources.h:788
 #, no-c-format
 msgid "%w - Proxy password"
 msgstr "%w - كلمة مرور الملقم الوكيل"
 
-#: resources.h:549
+#: resources.h:463
+msgid "&Abort previous connection and connect in current tab"
+msgstr "&قطع الإتصال السابق و الإتصال في تبويب جديد"
+
+#: resources.h:550
 msgid "&About..."
 msgstr "&حول..."
 
-#: resources.h:96 resources.h:371
+#: resources.h:96 resources.h:368
 msgid "&Account:"
 msgstr "&الحساب:"
 
-#: resources.h:111 resources.h:679 resources.h:743
+#: resources.h:111 resources.h:688 resources.h:752
 msgid "&Active"
 msgstr "&نشط"
 
-#: resources.h:540
+#: resources.h:541
 msgid "&Add bookmark..."
 msgstr "إ&ضافة عنوان مفضل..."
 
-#: resources.h:553 resources.h:570
+#: resources.h:554 resources.h:573
 msgid "&Add files to queue"
 msgstr "إ&ضافة ملفات إلى قائمة الإنتظار"
 
-#: resources.h:787
+#: resources.h:796
 msgid "&Add keyfile..."
 msgstr "إ&ضافة ملف مفتاح..."
 
-#: resources.h:629 resources.h:648
+#: resources.h:634 resources.h:655
 msgid "&Add to queue"
 msgstr "إ&ضافة إلى قائمة الإنتظار"
 
@@ -251,15 +255,15 @@ msgstr "ضبط &فارق التوقيت للخادم:"
 msgid "&Always trust certificate in future sessions."
 msgstr "الوثوق &دائما بالشهادة في الجلسات المستقبلية"
 
-#: resources.h:193
+#: resources.h:190
 msgid "&Always trust this host, add this key to the cache"
 msgstr "دائما الوثوق بهذا ال&مضيف , إضافة هذا المفتاح إلى المخزون المؤقت"
 
-#: resources.h:940
+#: resources.h:959
 msgid "&Always use default editor"
 msgstr "&دائما إستخدام المحرر الإفتراضي"
 
-#: resources.h:414
+#: resources.h:411
 msgid "&Always use selection for unassociated files"
 msgstr "دائما أ&ستخدم التحديد للملفات الغير مشروكة"
 
@@ -267,11 +271,11 @@ msgstr "دائما أ&ستخدم التحديد للملفات الغير مشر
 msgid "&Always use this action"
 msgstr "دائما إستخدام هذا الإ&جراء"
 
-#: resources.h:755
+#: resources.h:764
 msgid "&Ask your operating system for the external IP address"
 msgstr "ال&طلب من نظام التشغيل العنوان الخارجي لـ IP"
 
-#: resources.h:522 resources.h:659 resources.h:825
+#: resources.h:523 resources.h:668 resources.h:834
 msgid "&Auto"
 msgstr "&آلي"
 
@@ -279,50 +283,50 @@ msgstr "&آلي"
 msgid "&Autodetect"
 msgstr "&كشف آلي"
 
-#: resources.h:524 resources.h:661 resources.h:827
+#: resources.h:525 resources.h:670 resources.h:836
 msgid "&Binary"
 msgstr "&ثنائى"
 
-#: resources.h:900
+#: resources.h:913
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
 msgstr "&بادئات ثنائية تستخدم رموز SI (مثال : 1 كب = 1024 بايت)"
 
-#: resources.h:539
+#: resources.h:540
 msgid "&Bookmarks"
 msgstr "ال&عناوين المفضلة"
 
-#: resources.h:102 resources.h:353 resources.h:390 resources.h:396
-#: resources.h:413 resources.h:431 resources.h:937 resources.h:963
+#: resources.h:102 resources.h:350 resources.h:387 resources.h:393
+#: resources.h:410 resources.h:428 resources.h:956 resources.h:982
 msgid "&Browse..."
 msgstr "ت&صفح..."
 
-#: resources.h:815
+#: resources.h:824
 #, no-c-format
 msgid "&Burst tolerance:"
 msgstr "إ&قحام التجاوب :"
 
-#: resources.h:138 resources.h:141 resources.h:208 resources.h:475
-#: resources.h:482 resources.h:727
+#: resources.h:138 resources.h:205 resources.h:473 resources.h:480
+#: resources.h:484 resources.h:736
 msgid "&Cancel"
 msgstr "إ&لغاء الأمر"
 
-#: resources.h:499
+#: resources.h:500
 msgid "&Clear private data..."
 msgstr "&مسح بيانات الخصوصية..."
 
-#: resources.h:1010
+#: resources.h:1030
 msgid "&Close"
 msgstr "&إغلاق"
 
-#: resources.h:599
+#: resources.h:604
 msgid "&Close FileZilla"
 msgstr "إغلاق FileZilla"
 
-#: resources.h:669
+#: resources.h:678
 msgid "&Configure speed limits..."
 msgstr "ت&كوين حدود السرعة..."
 
-#: resources.h:527
+#: resources.h:528
 msgid "&Configure..."
 msgstr "ت&كوين..."
 
@@ -330,23 +334,23 @@ msgstr "ت&كوين..."
 msgid "&Connect"
 msgstr "إ&تصال"
 
-#: resources.h:487
+#: resources.h:488
 msgid "&Copy current connection to Site Manager..."
 msgstr "&نسخ الإتصال الحالي إلى مدير الموقع..."
 
-#: resources.h:183 resources.h:609
+#: resources.h:180 resources.h:614
 msgid "&Copy to clipboard"
 msgstr "نسخ &إلى الحافظة"
 
-#: resources.h:614
+#: resources.h:619
 msgid "&Crash"
 msgstr "الأ&عطال"
 
-#: resources.h:561 resources.h:575 resources.h:631 resources.h:652
+#: resources.h:562 resources.h:578 resources.h:636 resources.h:659
 msgid "&Create directory"
 msgstr "إنشاء دليل"
 
-#: resources.h:664
+#: resources.h:673
 msgid "&Create new tab"
 msgstr "إ&نشاء تبويب جديد"
 
@@ -354,56 +358,56 @@ msgstr "إ&نشاء تبويب جديد"
 msgid "&Debug"
 msgstr "ت&صحيح"
 
-#: resources.h:971
+#: resources.h:990
 msgid "&Debug information in message log:"
 msgstr "&معلومات التصحيح في سجل الرسالة"
 
-#: resources.h:933
+#: resources.h:952
 msgid "&Default editor:"
 msgstr "ال&محرر الإفتراضي:"
 
-#: resources.h:520 resources.h:591
+#: resources.h:521 resources.h:596
 msgid "&Default file exists action..."
 msgstr "ال&إجراء الإفتراضي للملف الموجود..."
 
-#: resources.h:737
+#: resources.h:746
 msgid "&Delay between failed login attempts:"
 msgstr "ال&تأخير بين المحاولات الفاشلة لتسجيل الدخول :"
 
-#: resources.h:86 resources.h:213 resources.h:227 resources.h:403
-#: resources.h:564 resources.h:654
+#: resources.h:86 resources.h:210 resources.h:224 resources.h:400
+#: resources.h:567 resources.h:663
 msgid "&Delete"
 msgstr "&حذف"
 
-#: resources.h:444
+#: resources.h:441
 msgid "&Delete symlink"
 msgstr "&حذف الرابط الترميزي"
 
-#: resources.h:505
+#: resources.h:506
 msgid "&Directory comparison"
 msgstr "مقارنة الأ&دلة"
 
-#: resources.h:312
+#: resources.h:309
 msgid "&Discard local file then download and edit file anew"
 msgstr "الت&خلي عن الملف المحلي ثم التحميل و تحرير الملف بشكل جديد"
 
-#: resources.h:533
+#: resources.h:534
 msgid "&Disconnect"
 msgstr "&قطع الإتصال"
 
-#: resources.h:600
+#: resources.h:605
 msgid "&Disconnect from server"
 msgstr "قطع الإ&تصال من الخادم"
 
-#: resources.h:876
+#: resources.h:889
 msgid "&Display momentary transfer speed instead of average speed"
 msgstr "عرض &سرعة النقل فورا بدلا من معدل السرعة"
 
-#: resources.h:898
+#: resources.h:911
 msgid "&Display size in bytes"
 msgstr "عرض ال&حجم بالبايت"
 
-#: resources.h:480
+#: resources.h:478
 msgid "&Do not remember passwords"
 msgstr "&عدم تذكر كلمات المرور"
 
@@ -411,43 +415,43 @@ msgstr "&عدم تذكر كلمات المرور"
 msgid "&Don't show this dialog again."
 msgstr "&عدم إظهار هذه اللائحة مرة ثانية"
 
-#: resources.h:760
+#: resources.h:769
 msgid "&Don't use external IP address on local connections."
 msgstr "عدم إ&ستخدام عنوان IP خارجى مع الإتصالات المحلية"
 
-#: resources.h:920
+#: resources.h:939
 msgid "&Double-click action on files:"
 msgstr "إجراء ال&نقرة المزدوجة على الملفات:"
 
-#: resources.h:568 resources.h:627
+#: resources.h:571 resources.h:632
 msgid "&Download"
 msgstr "ت&حميل"
 
-#: resources.h:430
+#: resources.h:427
 msgid "&Download to:"
 msgstr "التحميل &إلى:"
 
-#: resources.h:662
+#: resources.h:671
 msgid "&Download..."
 msgstr "ت&حميل..."
 
-#: resources.h:244 resources.h:837
+#: resources.h:241 resources.h:846
 msgid "&Downloads:"
 msgstr "&عمليات التحميل:"
 
-#: resources.h:497 resources.h:559
+#: resources.h:498 resources.h:560
 msgid "&Edit"
 msgstr "ت&حرير"
 
-#: resources.h:221
+#: resources.h:218
 msgid "&Edit filter rules..."
 msgstr "تحرير &قواعد المرشح..."
 
-#: resources.h:506 resources.h:526 resources.h:642 resources.h:668
+#: resources.h:507 resources.h:527 resources.h:649 resources.h:677
 msgid "&Enable"
 msgstr "ت&مكين"
 
-#: resources.h:468 resources.h:810
+#: resources.h:466 resources.h:819
 msgid "&Enable speed limits"
 msgstr "ت&مكين حدود السرعة"
 
@@ -459,134 +463,138 @@ msgstr "ال&ترميز:"
 msgid "&Encryption:"
 msgstr "ال&تشفير :"
 
-#: resources.h:608
+#: resources.h:613
 msgid "&Enter custom command..."
 msgstr "إدخال &أمر مخصص..."
 
-#: resources.h:147
+#: resources.h:462
+msgid "&Establish connection in a new tab"
+msgstr "تأسيس الإتصال في تبويب &جديد"
+
+#: resources.h:144
 msgid "&Execute"
 msgstr "ت&نفيذ"
 
-#: resources.h:279
+#: resources.h:276
 msgid "&Export Site Manager entries"
 msgstr "ت&صدير مدخلات مدير الموقع"
 
-#: resources.h:492 resources.h:658
+#: resources.h:493 resources.h:667
 msgid "&Export..."
 msgstr "ت&صدير..."
 
-#: resources.h:765
+#: resources.h:774
 msgid "&Fall back to active mode"
 msgstr "&رجوع كامل إلى النمط النشط"
 
-#: resources.h:484
+#: resources.h:485
 msgid "&File"
 msgstr "&ملف"
 
-#: resources.h:639
+#: resources.h:646
 msgid "&File Attributes..."
 msgstr "&خصائص الملف..."
 
-#: resources.h:586
+#: resources.h:591
 msgid "&File permissions..."
 msgstr "&أذونات الملف..."
 
-#: resources.h:352
+#: resources.h:349
 msgid "&File:"
 msgstr "ال&ملف:"
 
-#: resources.h:231
+#: resources.h:228
 msgid "&Filter conditions:"
 msgstr "&شروط المرشح:"
 
-#: resources.h:210
+#: resources.h:207
 msgid "&Filter sets:"
 msgstr "&مجموعات المرشح:"
 
-#: resources.h:225
+#: resources.h:222
 msgid "&Filters:"
 msgstr "ال&مرشحات:"
 
-#: resources.h:304
+#: resources.h:301
 msgid "&Finish editing and delete local file"
 msgstr "إ&نتهاء تحرير و حذف الملف المحلي"
 
-#: resources.h:434
+#: resources.h:431
 msgid ""
 "&Flatten remote paths, download all contained files directly into target "
 "directory"
 msgstr ""
 "ت&سطيح المسارات البعيدة ، تحميل كافة الملفات المحتوية مباشرة إلى الدليل الهدف"
 
-#: resources.h:445
+#: resources.h:442
 msgid "&Follow symlink, delete target directory contents"
 msgstr "تتبع &الرابط الترميزي ، حذف محتويات الدليل الهدف"
 
-#: resources.h:758
+#: resources.h:767
 msgid "&Get external IP address from the following URL:"
 msgstr "الحصول على عنوان IP الخارجى من الرابط التالي :"
 
-#: resources.h:547
+#: resources.h:548
 msgid "&Getting help..."
 msgstr "ال&حصول على تعليمات..."
 
-#: resources.h:384
+#: resources.h:381
 msgid "&Global bookmark"
 msgstr "العنوان المفضل ال&شامل"
 
-#: resources.h:794
+#: resources.h:803
 msgid "&HTTP/1.1 using CONNECT method"
 msgstr "&HTTP/1.1 باستخدام طريقة CONNECT"
 
-#: resources.h:543
+#: resources.h:544
 msgid "&Help"
 msgstr "تعل&يمات"
 
-#: resources.h:509 resources.h:645
+#: resources.h:510 resources.h:652
 msgid "&Hide identical files"
 msgstr "إ&خفاء الملفات المتطابقة"
 
-#: resources.h:593
+#: resources.h:598
 msgid "&Highest"
 msgstr "ال&أعلى"
 
-#: resources.h:753
+#: resources.h:762
 msgid "&Highest available port:"
 msgstr "أ&على منفذ متوفر:"
 
-#: resources.h:89 resources.h:365 resources.h:717
+#: resources.h:89 resources.h:362 resources.h:726
 msgid "&Host:"
 msgstr "ال&مضيف:"
 
-#: resources.h:899
+#: resources.h:912
 msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
 msgstr "البادئات الثنائية &IEC (مثال : 1 كي.ب = 1024 بايت)"
 
-#: resources.h:887
+#: resources.h:900
 msgid "&ISO 8601 (example: 2007-09-15)"
 msgstr "&ISO 8601 (مثال: 2007-09-15)"
 
-#: resources.h:493
+#: resources.h:494
 msgid "&Import..."
 msgstr "إ&ستيراد..."
 
-#: resources.h:942
+#: resources.h:961
 msgid "&Inherit system's filetype associations"
 msgstr "إ&شراكات متوارثة لأنواع ملفات النظام"
 
-#: resources.h:1017
+#: resources.h:1037
 msgid "&Install new version"
 msgstr "تثبيت &الإصدار الجديد"
 
-#: resources.h:433
+#: resources.h:430
 msgid "&Keep remote path structure relative to search root"
 msgstr "إ&بقاء تركيبة المسار البعيد مقارب إلى جذر البحث"
 
-#: resources.h:860
+#: resources.h:869
 msgid "&Layout of file and directory panes:"
 msgstr "تخطيط &لوائح الملفات و الأدلة:"
 
-#: resources.h:750
+#: resources.h:759
 msgid "&Limit local ports used by FileZilla"
 msgstr "&حدود المنافذ المحلية المستخدمة من قبل FileZilla"
 
@@ -594,15 +602,15 @@ msgstr "&حدود المنافذ المحلية المستخدمة من قبل F
 msgid "&Limit number of simultaneous connections"
 msgstr "حدود &عدد الإتصالات المتزامنة"
 
-#: resources.h:515
+#: resources.h:516
 msgid "&Local directory tree"
 msgstr "ت&فرع المجلد المحلى"
 
-#: resources.h:389 resources.h:395
+#: resources.h:386 resources.h:392
 msgid "&Local directory:"
 msgstr "ال&دليل المحلى:"
 
-#: resources.h:961
+#: resources.h:980
 msgid "&Log to file"
 msgstr "&سجل إلى ملف"
 
@@ -610,19 +618,19 @@ msgstr "&سجل إلى ملف"
 msgid "&Logon Type:"
 msgstr "&نوع الدخول:"
 
-#: resources.h:368
+#: resources.h:365
 msgid "&Logontype:"
 msgstr "&نوع الدخول:"
 
-#: resources.h:596
+#: resources.h:601
 msgid "&Low"
 msgstr "&منخفض"
 
-#: resources.h:541
+#: resources.h:542
 msgid "&Manage bookmarks..."
 msgstr "إ&دارة العناوين المفضلة..."
 
-#: resources.h:529
+#: resources.h:530
 msgid "&Manual transfer..."
 msgstr "&إرسال يدوي..."
 
@@ -630,27 +638,32 @@ msgstr "&إرسال يدوي..."
 msgid "&Maximum number of connections:"
 msgstr "أ&قصى عدد للإتصالات:"
 
-#: resources.h:735
+#: resources.h:744
 msgid "&Maximum number of retries:"
 msgstr "&أقصى عدد للمحاولات:"
 
-#: resources.h:514
+#: resources.h:515
 msgid "&Message log"
 msgstr "سجل ال&رسائل"
 
-#: resources.h:873
+#: resources.h:882
 msgid "&Minimize to tray"
 msgstr "ت&صغير إلى جوار الساعة"
 
-#: resources.h:387
+#: resources.h:929
+#, fuzzy
+msgid "&Name sorting mode:"
+msgstr "&نمط الترتيب:"
+
+#: resources.h:384
 msgid "&Name:"
 msgstr "الأ&سم:"
 
-#: resources.h:498
+#: resources.h:499
 msgid "&Network configuration wizard..."
 msgstr "معالج ت&كوين الشبكة..."
 
-#: resources.h:226
+#: resources.h:223
 msgid "&New"
 msgstr "&جديد"
 
@@ -658,35 +671,35 @@ msgstr "&جديد"
 msgid "&New Site"
 msgstr "&موقع جديد"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1868
+#: ../../locales/../src/interface/Mainfrm.cpp:1870
 msgid "&New version available!"
 msgstr "يتوفر &نسخة جديدة"
 
-#: resources.h:306
+#: resources.h:303
 msgid "&No"
 msgstr "&لا"
 
-#: resources.h:768 resources.h:793
+#: resources.h:777 resources.h:802
 msgid "&None"
 msgstr "&بدون"
 
-#: resources.h:595
+#: resources.h:600
 msgid "&Normal"
 msgstr "&عادى"
 
-#: resources.h:156
+#: resources.h:153
 msgid "&Numeric value:"
 msgstr "ال&قيمة العددية:"
 
-#: resources.h:124 resources.h:137 resources.h:405
+#: resources.h:124 resources.h:137 resources.h:402
 msgid "&OK"
 msgstr "&حسنا"
 
-#: resources.h:771
+#: resources.h:780
 msgid "&OPEN"
 msgstr "&فتح"
 
-#: resources.h:557 resources.h:650
+#: resources.h:558 resources.h:657
 msgid "&Open"
 msgstr "&فتح"
 
@@ -702,43 +715,39 @@ msgstr "&سلبي"
 msgid "&Password:"
 msgstr "&كلمة المرور:"
 
-#: resources.h:603
+#: resources.h:608
 msgid "&Play sound"
 msgstr "تشغيل &صوت"
 
-#: resources.h:90 resources.h:366 resources.h:721
+#: resources.h:90 resources.h:363 resources.h:730
 msgid "&Port:"
 msgstr "ال&منفذ:"
 
-#: resources.h:866
-msgid "&Position of the message log:"
-msgstr "&مكان سجل الرسائل :"
-
-#: resources.h:525
+#: resources.h:526
 msgid "&Preserve timestamps of transferred files"
 msgstr "الإ&حتفاظ بطوابع وقت الملفات المنقولة"
 
-#: resources.h:288
+#: resources.h:285
 msgid "&Queue"
 msgstr "&قائمة الإنتظار"
 
-#: resources.h:723
+#: resources.h:732
 msgid "&Quickconnect"
 msgstr "إ&تصال سريع"
 
-#: resources.h:513
+#: resources.h:514
 msgid "&Quickconnect bar"
 msgstr "&شريط الإتصال السريع"
 
-#: resources.h:145
+#: resources.h:142
 msgid "&Read"
 msgstr "&قراءة"
 
-#: resources.h:532
+#: resources.h:533
 msgid "&Reconnect"
 msgstr "إ&عادة الإتصال"
 
-#: resources.h:503 resources.h:667
+#: resources.h:504 resources.h:676
 msgid "&Refresh"
 msgstr "ت&حديث"
 
@@ -746,56 +755,56 @@ msgstr "ت&حديث"
 msgid "&Remember password until FileZilla is closed"
 msgstr "تذكر &كلمة المرور إلى أن يتم إغلاق FileZilla"
 
-#: resources.h:479
+#: resources.h:477
 msgid "&Remember passwords"
 msgstr "تذكر &كلمات المرور"
 
-#: resources.h:391 resources.h:397
+#: resources.h:388 resources.h:394
 msgid "&Remote directory:"
 msgstr "ال&دليل البعيد:"
 
-#: resources.h:355
+#: resources.h:352
 msgid "&Remote path:"
 msgstr "ال&مسار البعيد:"
 
-#: resources.h:831
+#: resources.h:840
 msgid "&Remove"
 msgstr "إ&زالة"
 
-#: resources.h:788
+#: resources.h:797
 msgid "&Remove key"
 msgstr "إ&زالة المفتاح"
 
-#: resources.h:590
+#: resources.h:595
 msgid "&Remove selected"
 msgstr "إزالة المحددة"
 
-#: resources.h:85 resources.h:228 resources.h:402 resources.h:566
-#: resources.h:582 resources.h:635 resources.h:656
+#: resources.h:85 resources.h:225 resources.h:399 resources.h:569
+#: resources.h:587 resources.h:642 resources.h:665
 msgid "&Rename"
 msgstr "&تسمية"
 
-#: resources.h:212
+#: resources.h:209
 msgid "&Rename..."
 msgstr "&تسمية..."
 
-#: resources.h:311
+#: resources.h:308
 msgid "&Reopen local file"
 msgstr "إ&عادة فتح الملف المحلي"
 
-#: resources.h:822
+#: resources.h:831
 msgid "&Replace invalid characters with:"
 msgstr "إ&ستبدال الرموز الغير صالحة مع :"
 
-#: resources.h:548
+#: resources.h:549
 msgid "&Report a bug..."
 msgstr "التبليغ عن &خطأ..."
 
-#: resources.h:619
+#: resources.h:624
 msgid "&Reset and requeue all"
 msgstr "إ&ستعادة و إعادة وضع الكل في قائمة الإنتظار"
 
-#: resources.h:716
+#: resources.h:725
 msgid "&Restart Wizard"
 msgstr "إ&عادة تشغيل المعالج"
 
@@ -803,35 +812,35 @@ msgstr "إ&عادة تشغيل المعالج"
 msgid "&Resume"
 msgstr "إ&ستئناف"
 
-#: resources.h:601
+#: resources.h:606
 msgid "&Run command..."
 msgstr "ت&شغيل أمر..."
 
-#: resources.h:730
+#: resources.h:739
 msgid "&Run configuration wizard now..."
 msgstr "ت&شغيل معالج التكوين الآن..."
 
-#: resources.h:956
+#: resources.h:975
 msgid "&Run update check now..."
 msgstr "تشغيل &وحدة التحديث الآن..."
 
-#: resources.h:770
+#: resources.h:779
 msgid "&SITE"
 msgstr "&SITE"
 
-#: resources.h:796
+#: resources.h:805
 msgid "&SOCKS 5"
 msgstr "&SOCKS 5"
 
-#: resources.h:211
+#: resources.h:208
 msgid "&Save as..."
 msgstr "حفظ &باسم..."
 
-#: resources.h:419
+#: resources.h:416
 msgid "&Search"
 msgstr "&بحث"
 
-#: resources.h:534
+#: resources.h:535
 msgid "&Search remote files..."
 msgstr "&بحث عن ملفات بعيدة..."
 
@@ -839,43 +848,43 @@ msgstr "&بحث عن ملفات بعيدة..."
 msgid "&Select Entry:"
 msgstr "ت&حديد مدخلة:"
 
-#: resources.h:931
+#: resources.h:950
 msgid "&Select language:"
 msgstr "تحديد ال&لغة:"
 
-#: resources.h:343
+#: resources.h:340
 msgid "&Select the columns that should be displayed:"
 msgstr "تحديد الأ&عمدة المراد عرضها :"
 
-#: resources.h:357 resources.h:530
+#: resources.h:354 resources.h:531
 msgid "&Server"
 msgstr "&خادم"
 
-#: resources.h:287
+#: resources.h:284
 msgid "&Settings"
 msgstr "إ&عدادات"
 
-#: resources.h:500
+#: resources.h:501
 msgid "&Settings..."
 msgstr "إ&عدادات..."
 
-#: resources.h:970
+#: resources.h:989
 msgid "&Show debug menu"
 msgstr "إ&ظهار قائمة التصحيح"
 
-#: resources.h:602
+#: resources.h:607
 msgid "&Show message"
 msgstr "إظهار ال&رسالة"
 
-#: resources.h:960
+#: resources.h:979
 msgid "&Show timestamps in message log"
 msgstr "إ&ظهار طوابع الوقت في سجل الرسائل"
 
-#: resources.h:485
+#: resources.h:486
 msgid "&Site Manager..."
 msgstr "&مدير المواقع..."
 
-#: resources.h:385
+#: resources.h:382
 msgid "&Site-specific bookmark"
 msgstr "عنوان مفضل لموقع-&معين"
 
@@ -883,19 +892,19 @@ msgstr "عنوان مفضل لموقع-&معين"
 msgid "&Skip"
 msgstr "ت&جاوز"
 
-#: resources.h:528
+#: resources.h:529
 msgid "&Speed limits"
 msgstr "&حدود السرعة"
 
-#: resources.h:436
+#: resources.h:433
 msgid "&Start transfer immediately"
 msgstr "&بدء الإرسال فورا"
 
-#: resources.h:865
+#: resources.h:874
 msgid "&Swap local and remote panes"
 msgstr "الت&بديل بين اللوائح المحلية و البعيدة"
 
-#: resources.h:616
+#: resources.h:621
 msgid "&TLS Ciphers"
 msgstr "&تشفير TLS"
 
@@ -903,11 +912,11 @@ msgstr "&تشفير TLS"
 msgid "&Test"
 msgstr "&فحص"
 
-#: resources.h:879
+#: resources.h:892
 msgid "&Theme:"
 msgstr "ال&سمة :"
 
-#: resources.h:518
+#: resources.h:519
 msgid "&Transfer"
 msgstr "إ&رسال"
 
@@ -915,31 +924,31 @@ msgstr "إ&رسال"
 msgid "&Transfer mode:"
 msgstr "&نمط الإرسال"
 
-#: resources.h:517
+#: resources.h:518
 msgid "&Transfer queue"
 msgstr "&قائمة إنتظار الإرسال"
 
-#: resources.h:834
+#: resources.h:843
 msgid "&Treat dotfiles as ASCII files"
 msgstr "&معاملة الملفات ذات النقط بهيئة ملفات ASCII"
 
-#: resources.h:317
+#: resources.h:314
 msgid "&Unedit"
 msgstr "ال&وحدة:"
 
-#: resources.h:206
+#: resources.h:203
 msgid "&Update cached key for this host"
 msgstr "ت&حديث المفتاح المخزن مؤقتا لهذا المضيف"
 
-#: resources.h:551 resources.h:646
+#: resources.h:552 resources.h:653
 msgid "&Upload"
 msgstr "&رفع"
 
-#: resources.h:254 resources.h:846
+#: resources.h:251 resources.h:855
 msgid "&Uploads:"
 msgstr "عمليات ال&رفع:"
 
-#: resources.h:412
+#: resources.h:409
 msgid "&Use custom program"
 msgstr "إ&ستخدام برنامج مخصص"
 
@@ -947,56 +956,56 @@ msgstr "إ&ستخدام برنامج مخصص"
 msgid "&Use synchronized browsing"
 msgstr "إستخدام &تصفح متزامن"
 
-#: resources.h:935
+#: resources.h:954
 msgid "&Use system's default editor for text files"
 msgstr "إ&ستخدم محرر النظام الإفتراضي للملفات النصية"
 
-#: resources.h:756
+#: resources.h:765
 msgid "&Use the following IP address:"
 msgstr "إ&ستخدام عنوان IP التالي :"
 
-#: resources.h:764
+#: resources.h:773
 msgid "&Use the server's external IP address instead"
 msgstr "إ&ستخدام عنوان IP الخارجي للخادم بدلا من ذلك"
 
-#: resources.h:902
+#: resources.h:915
 msgid "&Use thousands separator"
 msgstr "إ&ستخدام ألوف الفواصل"
 
-#: resources.h:94 resources.h:134 resources.h:369
+#: resources.h:94 resources.h:134 resources.h:366
 msgid "&User:"
 msgstr "&المستخدم:"
 
-#: resources.h:719
+#: resources.h:728
 msgid "&Username:"
 msgstr "&المستخدم:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1862
+#: ../../locales/../src/interface/Mainfrm.cpp:1864
 #, c-format
 msgid "&Version %s"
 msgstr "ال&نسخة %s"
 
-#: resources.h:502
+#: resources.h:503
 msgid "&View"
 msgstr "&عرض"
 
-#: resources.h:574
+#: resources.h:577
 msgid "&View/Edit"
 msgstr "&عرض/تحرير"
 
-#: resources.h:941
+#: resources.h:960
 msgid "&Watch locally edited files and prompt to upload modifications"
 msgstr "&مراقبة الملفات المعدلة محليا و المطالبة برفع التعديلات"
 
-#: resources.h:951
+#: resources.h:970
 msgid "&When checking for updates, check for:"
 msgstr "&عند التحقق من التحديثات, التحقق أيضا من:"
 
-#: resources.h:146
+#: resources.h:143
 msgid "&Write"
 msgstr "&كتابة"
 
-#: resources.h:305
+#: resources.h:302
 msgid "&Yes"
 msgstr "&نعم"
 
@@ -1023,16 +1032,16 @@ msgid ""
 "'Normal' and 'Account' logontypes are not available, using 'Ask for "
 "password' instead."
 msgstr ""
-"أنواع تسجيل الدخول العادية للحساب ليست متوفرة،, يمكنك استخدام 'Ask for "
-"password' بدلا من ذلك"
+"أنواع تسجيل الدخول ’عادي’ و ’الحساب’ ليست متوفرة، يمكنك استخدام 'طلب كلمة "
+"المرور' بدلا من ذلك"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:971
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
 "changed to 'Ask for password'."
 msgstr ""
-"أنواع تسجيل الدخول العادية للحساب ليست متوفرة،, تم تغيير الإدخال الخاص بك "
-"إلى 'Ask for password' ـ"
+"أنواع تسجيل الدخول ’عادي’ و ’الحساب’ ليست متوفرة، حيث تم تغيير الإدخال الخاص "
+"بك إلى 'طلب كلمة المرور' ـ"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:601
 msgid ""
@@ -1056,23 +1065,23 @@ msgstr[3] "(تم فرز %d كائنات)"
 msgstr[4] "(تم فرز %d كائن)"
 msgstr[5] "(تم فرز %d كائن)"
 
-#: resources.h:806 resources.h:808
+#: resources.h:815 resources.h:817
 msgid "(0 for no limit)"
 msgstr "(0 غير محدود)"
 
-#: resources.h:736
+#: resources.h:745
 msgid "(0-99)"
 msgstr "(0-99)"
 
-#: resources.h:738
+#: resources.h:747
 msgid "(0-999 seconds)"
 msgstr "(0-999 ثانية)"
 
-#: resources.h:804
+#: resources.h:813
 msgid "(1-10)"
 msgstr "(1-10)"
 
-#: resources.h:732
+#: resources.h:741
 msgid "(5-9999, 0 to disable)"
 msgstr "(5-9999 , 0 للتعطيل)"
 
@@ -1082,20 +1091,20 @@ msgstr "(5-9999 , 0 للتعطيل)"
 msgid "(app-compat is set to %d.%d)"
 msgstr "(app-compat is set to %d.%d)"
 
-#: resources.h:895
+#: resources.h:908
 msgid "(example: %H:%M)"
 msgstr "(مثال: %H:%M)"
 
-#: resources.h:889
+#: resources.h:902
 msgid "(example: %Y-%m-%d)"
 msgstr "(مثال: %Y-%m-%d)"
 
-#: resources.h:470 resources.h:472 resources.h:812 resources.h:814
+#: resources.h:468 resources.h:470 resources.h:821 resources.h:823
 #, c-format
 msgid "(in %s/s)"
 msgstr "(في %s/ث)"
 
-#: resources.h:704
+#: resources.h:713
 msgid "-"
 msgstr "-"
 
@@ -1119,19 +1128,19 @@ msgstr "لا يمكن أن يتواجد -c و -s في نفس الوقت"
 msgid "-s cannot be used together with an FTP URL."
 msgstr "لا يمكن إستخدام -s مع رابط FTP"
 
-#: resources.h:972
+#: resources.h:991
 msgid "0 - None"
 msgstr "0 - بدون"
 
-#: resources.h:973
+#: resources.h:992
 msgid "1 - Warning"
 msgstr "1 - تحذير"
 
-#: resources.h:974
+#: resources.h:993
 msgid "2 - Info"
 msgstr "2 - معلومات"
 
-#: resources.h:975
+#: resources.h:994
 msgid "3 - Verbose"
 msgstr "3 - مسهب"
 
@@ -1139,7 +1148,7 @@ msgstr "3 - مسهب"
 msgid "32 bit system"
 msgstr "نظام 32 بت"
 
-#: resources.h:976
+#: resources.h:995
 msgid "4 - Debug"
 msgstr "4 - تصحيح"
 
@@ -1147,7 +1156,7 @@ msgstr "4 - تصحيح"
 msgid "64 bit system"
 msgstr "نظام 64 بت"
 
-#: resources.h:542
+#: resources.h:543
 msgid "?"
 msgstr "؟"
 
@@ -1161,12 +1170,12 @@ msgid "A default editor needs to be set."
 msgstr "يجب وضع المحرر إفتراضي"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
-#: ../../locales/../src/interface/RemoteTreeView.cpp:117
+#: ../../locales/../src/interface/RemoteTreeView.cpp:118
 #: ../../locales/../src/interface/state.cpp:825
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "لا يمكن سحب المجلد إلى أحد مجلداته الفرعية"
 
-#: resources.h:676
+#: resources.h:685
 msgid ""
 "A few servers don't allow passive mode or are misconfigured. In such cases "
 "you would have to use active mode. In active mode, FileZilla opens a port "
@@ -1176,27 +1185,27 @@ msgstr ""
 "مثل هذه الحالات قد تستخدم النمط النشط . حيث أنه في النمط النشط يقوم "
 "FileZilla بفتح منفذ و من ثم يطلب من الخادم الإتصال به"
 
-#: resources.h:293
+#: resources.h:290
 msgid "A file previously opened has been changed."
 msgstr "تم تغيير ملف مفتوح مسبقا"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1947
+#: ../../locales/../src/interface/LocalListView.cpp:1748
 #, c-format
 msgid ""
 "A file with that name is already being edited. Do you want to reopen '%s'?"
 msgstr "تم تعديل ملف بهذا الإسم مسبقا . هل تريد إعادة فتح '%s' ؟"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1943
-#: ../../locales/../src/interface/RemoteListView.cpp:2695
+#: ../../locales/../src/interface/LocalListView.cpp:1744
+#: ../../locales/../src/interface/RemoteListView.cpp:2442
 msgid "A file with that name is already being transferred."
 msgstr "تم إرسال ملف بهذا الإسم مسبقا"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2700
+#: ../../locales/../src/interface/RemoteListView.cpp:2447
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "يتم الآن تعديل ملف بهذا الإسم . الرجاء إغلاقه ثم حاول مرة ثانية"
 
-#: ../../locales/../src/interface/FileZilla.cpp:670
+#: ../../locales/../src/interface/FileZilla.cpp:675
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1209,7 +1218,7 @@ msgstr ""
 "مالم تصلح هذه المشكلة ، فقد تفقد الملفات في نتائج الملفات\n"
 "لن يتم عرض تحذير في هذه الجلسة"
 
-#: resources.h:1011
+#: resources.h:1031
 msgid "A new version of FileZilla is available:"
 msgstr "يتوفر نسخة جديدة من FileZilla:"
 
@@ -1221,7 +1230,7 @@ msgstr ""
 "الخادم الصحيح يعرض دائما كافة الملفات ، لكن بعض الخادمات المتعطلة تخفي "
 "الملفات عن المستخدمين . أستخدم هذا الخيار لإجبار الخادم على عرض كافة الملفات"
 
-#: resources.h:748
+#: resources.h:757
 msgid ""
 "A proper server does not require this. Contact the server administrator if "
 "you need this."
@@ -1235,15 +1244,15 @@ msgstr ""
 "عملية بعيدة مستمرة و التصفح المتزامن في وضع التمكين\n"
 "عطل التصفح المتزامن و تابع تغيير الدليل المحلي ؟"
 
-#: resources.h:523 resources.h:660 resources.h:826
+#: resources.h:524 resources.h:669 resources.h:835
 msgid "A&SCII"
 msgstr "A&SCII"
 
-#: resources.h:830
+#: resources.h:839
 msgid "A&dd"
 msgstr "إض&افة"
 
-#: resources.h:857
+#: resources.h:866
 msgid "A&llow resume of ASCII files"
 msgstr "ال&سماح باستئناف ملفات ASCII"
 
@@ -1255,27 +1264,23 @@ msgstr "ت&طبيق فقط على عمليات التحميل"
 msgid "A&pply only to uploads"
 msgstr "ت&طبيق فقط على عمليات الرفع"
 
-#: resources.h:159
+#: resources.h:156
 msgid "A&pply to all files and directories"
 msgstr "ت&طبيق على كافة الملفات و الأدلة"
 
-#: resources.h:626
+#: resources.h:631
 msgid "A&utomatically remove successful transfers"
 msgstr "إ&زالة عمليات الإرسال الناجحة تلقائيا"
 
-#: resources.h:376
+#: resources.h:373
 msgid "ASCII"
 msgstr "ASCII"
 
-#: resources.h:466
-msgid "Abort previous connection and connect in current tab"
-msgstr "قطع الإتصال السابق و الإتصال في تبويب جديد"
-
-#: resources.h:164
+#: resources.h:161
 msgid "About FileZilla"
 msgstr "حول FileZilla"
 
-#: resources.h:867
+#: resources.h:876
 msgid "Above the file lists"
 msgstr "فوق قوائم الملفات"
 
@@ -1291,15 +1296,15 @@ msgstr "فوق قوائم الملفات"
 msgid "Account"
 msgstr "الحساب"
 
-#: resources.h:598
+#: resources.h:603
 msgid "Action after queue &completion"
 msgstr "الإجراء بعد إ&كتمال قائمة الإنتظار"
 
-#: resources.h:316
+#: resources.h:313
 msgid "Action on selected file:"
 msgstr "الإجراء مع الملف المحدد :"
 
-#: resources.h:310
+#: resources.h:307
 msgid "Action to perform:"
 msgstr "الإجراء للتنفيذ :"
 
@@ -1335,27 +1340,27 @@ msgstr ""
 "التوجيه الخاص بك أو برنامج الجدار الناري قام بتعديل عنوان الإرسال إلى جهة "
 "غير صحيحة"
 
-#: resources.h:761
+#: resources.h:770
 msgid "Active mode IP"
 msgstr "IP النمط النشط"
 
-#: resources.h:437
+#: resources.h:434
 msgid "Add files to &queue only"
 msgstr "إ&ضافة الملفات فقط إلى قائمة الإنتظار"
 
-#: resources.h:630 resources.h:649
+#: resources.h:635 resources.h:656
 msgid "Add selected directory to the transfer queue"
 msgstr "إ&ضافة الدليل المحدد إلى قائمة إنتظار الإرسال"
 
-#: resources.h:554 resources.h:571
+#: resources.h:555 resources.h:574
 msgid "Add selected files and folders to the transfer queue"
 msgstr "إضافة الملفات المحددة و المجلدات الى قائمة إنتظار الإرسال"
 
-#: resources.h:922 resources.h:928
+#: resources.h:941 resources.h:947
 msgid "Add to queue"
 msgstr "إ&ضافة إلى قائمة الإنتظار"
 
-#: ../../locales/../src/engine/proxy.cpp:553
+#: ../../locales/../src/engine/proxy.cpp:554
 msgid "Address type not supported"
 msgstr "نوع العنوان غير معتمد"
 
@@ -1363,7 +1368,7 @@ msgstr "نوع العنوان غير معتمد"
 msgid "Advanced"
 msgstr "متقدم"
 
-#: resources.h:955
+#: resources.h:974
 msgid ""
 "Advice: Unless you want to test new features, please keep using stable "
 "versions only. Beta versions and nightly builds are development versions "
@@ -1377,7 +1382,11 @@ msgstr ""
 "متوقع، وقد تؤدي حتى إلى تلف النظام الخاص بك. وبالتالي فإن استخدام هذه "
 "الإصدارات يكون على مسؤوليتك الخاصة"
 
-#: resources.h:325
+#: resources.h:464
+msgid "Al&ways perform this action"
+msgstr "دائما تنفيذ هذا الإجراء:"
+
+#: resources.h:322
 msgid "Algorithm:"
 msgstr "الخوارزمية:"
 
@@ -1385,7 +1394,7 @@ msgstr "الخوارزمية:"
 msgid "All files have been successfully transferred"
 msgstr "تم إرسال كافة الملفات بنجاح"
 
-#: resources.h:705
+#: resources.h:714
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "كل المنافذ في المجال الذى تم إدخاله يجب ان تكون بين 1024 و 65535"
 
@@ -1400,19 +1409,19 @@ msgstr[3] "كافة عمليات الإرسال أنتهت . تعذر إرسال
 msgstr[4] "كافة عمليات الإرسال أنتهت . تعذر إرسال %d ملفات"
 msgstr[5] "كافة عمليات الإرسال أنتهت . تعذر إرسال %d ملف"
 
-#: resources.h:744
+#: resources.h:753
 msgid "Allow &fall back to other transfer mode on failure"
 msgstr "السماح بالتراجع الكامل إلى نمط إرسال آخر &عند الفشل"
 
-#: resources.h:680
+#: resources.h:689
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "السماح بالتراجع الكامل إلى نمط آخر عند الفشل"
 
-#: resources.h:463
+#: resources.h:460
 msgid "Already connected"
 msgstr "متصل مسبقا"
 
-#: resources.h:789
+#: resources.h:798
 msgid ""
 "Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
 "FileZilla does recognize Pageant."
@@ -1420,7 +1429,7 @@ msgstr ""
 "بدلا من ذلك يمكنك أن تستخدم أداة Pageant من PuTTY لإدارة مفاتيحك ، FileZilla "
 "لا يتعرف على Pageant"
 
-#: resources.h:790
+#: resources.h:799
 msgid ""
 "Alternatively you can use your system's SSH agent. To do so, make sure the "
 "SSH_AUTH_SOCK environment variable is set."
@@ -1428,7 +1437,7 @@ msgstr ""
 "ممكن تستخدم بدلا عن ذلك وكيل SSH في نظامك . و لعمل ذلك ، تأكد من أن متغير "
 "بيئة SSH_AUTH_SOCK موضوع"
 
-#: resources.h:1020
+#: resources.h:1040
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
@@ -1493,11 +1502,11 @@ msgstr "أي تغييرات تتم مع المرشحات قد لا يمكن حف
 msgid "Any changes made to the filters will not be saved."
 msgstr "سوف لن يتم حفظ أي تغييرات تمت على المرشحات"
 
-#: resources.h:161
+#: resources.h:158
 msgid "App&ly to directories only"
 msgstr "ت&طبيق فقط على الأدلة"
 
-#: resources.h:224
+#: resources.h:221
 msgid "Apply"
 msgstr "تطبيق"
 
@@ -1505,7 +1514,7 @@ msgstr "تطبيق"
 msgid "Apply to &current queue only"
 msgstr "تطبيق فقط على &قائمة الانتظار الحالية"
 
-#: resources.h:160
+#: resources.h:157
 msgid "Apply to &files only"
 msgstr "تطبيق فقط على ال&ملفات"
 
@@ -1513,11 +1522,12 @@ msgstr "تطبيق فقط على ال&ملفات"
 msgid "Archive"
 msgstr "إ&رشيف"
 
-#: resources.h:869
+#: resources.h:878
 msgid "As tab in the transfer queue pane"
 msgstr "كعلامة في لائحة قائمة الإنتظار للإرسال"
 
-#: resources.h:246 resources.h:256 resources.h:838 resources.h:847
+#: resources.h:243 resources.h:253 resources.h:847 resources.h:856
+#: resources.h:886
 msgid "Ask for action"
 msgstr "المطالبة بالإجراء"
 
@@ -1527,15 +1537,15 @@ msgstr "المطالبة بالإجراء"
 msgid "Ask for password"
 msgstr "طلب كلمة المرور"
 
-#: resources.h:701
+#: resources.h:710
 msgid "Ask operating system for a port."
 msgstr "سؤال نظام التشغيل من اجل منفذ"
 
-#: resources.h:691
+#: resources.h:700
 msgid "Ask your operating system for the external IP address"
 msgstr "سؤال نظام التشغيل الخاص بك عن عنوان IP خارجي"
 
-#: resources.h:458
+#: resources.h:455
 msgid "Asking questions in the FileZilla forums"
 msgstr "طرح أسئلة في منتديات FileZilla"
 
@@ -1547,7 +1557,7 @@ msgstr "البرنامج المشروك غير موجود :"
 msgid "At least one filter condition is incomplete"
 msgstr "هناك على الاقل شرط واحد للمرشح غير مكتمل"
 
-#: resources.h:710
+#: resources.h:719
 msgid "At this point, all required information has been gathered."
 msgstr "عند هذه النقطة ، تم تجميع كافة المعلومات المطلوبة"
 
@@ -1559,19 +1569,19 @@ msgstr "الخاصية"
 msgid "Authentication failed."
 msgstr "فشلت المصادقة"
 
-#: resources.h:880
+#: resources.h:893
 msgid "Author:"
 msgstr "المؤلف:"
 
-#: resources.h:373
+#: resources.h:370
 msgid "Auto"
 msgstr "آلي"
 
-#: resources.h:828
+#: resources.h:837
 msgid "Automatic file type classification"
 msgstr "تصنيف آلي لنوع الملف"
 
-#: resources.h:884
+#: resources.h:897
 msgid "Available sizes"
 msgstr "الأحجام المتوفرة"
 
@@ -1584,11 +1594,11 @@ msgstr "ب <رمز وحدة البايت . تترجم الحرف الأول فق
 msgid "B&ypass proxy"
 msgstr "ت&جاوز الملقم الوكيل"
 
-#: resources.h:454
+#: resources.h:451
 msgid "Basic usage instructions"
 msgstr "تعليمات الإستخدام الأساسية"
 
-#: resources.h:871
+#: resources.h:880
 msgid "Behaviour"
 msgstr "السلوك"
 
@@ -1597,19 +1607,19 @@ msgstr "السلوك"
 msgid "Being edited"
 msgstr "يتم التحرير"
 
-#: resources.h:613
+#: resources.h:618
 msgid "Benchmark string coalescer"
 msgstr "وضع علامة على زوائد العبارة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1088
+#: ../../locales/../src/engine/tlssocket.cpp:1080
 msgid "Beware! Certificate has been revoked"
 msgstr "أنتبه! تم إبطال الشهادة"
 
-#: resources.h:377
+#: resources.h:374
 msgid "Binary"
 msgstr "ثنائى"
 
-#: resources.h:864
+#: resources.h:873
 msgid "Blackboard"
 msgstr "لوحة سوداء"
 
@@ -1619,19 +1629,19 @@ msgstr "لوحة سوداء"
 msgid "Bookmark"
 msgstr "عنوان مفضل"
 
-#: resources.h:400
+#: resources.h:397
 msgid "Bookmark:"
 msgstr "العنوان المفضل:"
 
-#: resources.h:399
+#: resources.h:396
 msgid "Bookmarks"
 msgstr "عناوين مفضلة"
 
-#: resources.h:172
+#: resources.h:169
 msgid "Build date:"
 msgstr "تاريخ الإصدار"
 
-#: resources.h:169
+#: resources.h:166
 msgid "Build information"
 msgstr "معلومات الإصدار"
 
@@ -1639,7 +1649,7 @@ msgstr "معلومات الإصدار"
 msgid "Business category:"
 msgstr "فئة العمل :"
 
-#: resources.h:751
+#: resources.h:760
 msgid ""
 "By default uses any available local port to establish transfers in active "
 "mode. If you want to limit FileZilla to use only a small range of ports, "
@@ -1649,23 +1659,23 @@ msgstr ""
 "كنت تريد أن تفرض على FileZilla أن يستخدم مجال صغير من المنافذ , فالرجاء "
 "إدخال مجال المنفذ أسفل"
 
-#: resources.h:531
+#: resources.h:532
 msgid "C&ancel current operation"
 msgstr "إ&لغاء العملية الحالية"
 
-#: resources.h:610
+#: resources.h:615
 msgid "C&lear all"
 msgstr "&مسح الكل"
 
-#: resources.h:584 resources.h:637
+#: resources.h:589 resources.h:644
 msgid "C&opy URL(s) to clipboard"
 msgstr "&نسخ الرابط إلى الحافظة"
 
-#: resources.h:888
+#: resources.h:901
 msgid "C&ustom"
 msgstr "&مخصص"
 
-#: resources.h:943
+#: resources.h:962
 msgid "C&ustom filetype associations:"
 msgstr "إ&شراكات مخصصة لأنواع الملفات :"
 
@@ -1674,34 +1684,34 @@ msgstr "إ&شراكات مخصصة لأنواع الملفات :"
 msgid "Calculating timezone offset of server..."
 msgstr "تعداد فارق التوقيت للخادم..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:725
+#: ../../locales/../src/engine/transfersocket.cpp:727
 msgid "Can't read from file"
 msgstr "تعذرت القراءة من الملف"
 
-#: ../../locales/../src/engine/transfersocket.cpp:704
-#: ../../locales/../src/engine/transfersocket.cpp:778
+#: ../../locales/../src/engine/transfersocket.cpp:706
+#: ../../locales/../src/engine/transfersocket.cpp:780
 msgid "Can't write data to file."
 msgstr "تعذرت كتابة البيانات إلى الملف"
 
-#: ../../locales/../src/engine/transfersocket.cpp:702
-#: ../../locales/../src/engine/transfersocket.cpp:776
+#: ../../locales/../src/engine/transfersocket.cpp:704
+#: ../../locales/../src/engine/transfersocket.cpp:778
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "تعذرت كتابة البيانات إلى الملف : %s"
 
-#: resources.h:30 resources.h:79 resources.h:125 resources.h:163
-#: resources.h:195 resources.h:223 resources.h:240 resources.h:267
-#: resources.h:276 resources.h:283 resources.h:291 resources.h:314
-#: resources.h:347 resources.h:380 resources.h:394 resources.h:406
-#: resources.h:416 resources.h:439 resources.h:448 resources.h:467
+#: resources.h:30 resources.h:79 resources.h:125 resources.h:160
+#: resources.h:192 resources.h:220 resources.h:237 resources.h:264
+#: resources.h:273 resources.h:280 resources.h:288 resources.h:311
+#: resources.h:344 resources.h:377 resources.h:391 resources.h:403
+#: resources.h:413 resources.h:436 resources.h:445 resources.h:465
 msgid "Cancel"
 msgstr "إلغاء الأمر"
 
-#: resources.h:995
+#: resources.h:1014
 msgid "Cancel current operation"
 msgstr "الغاء العملية الحالية"
 
-#: resources.h:996
+#: resources.h:1015
 msgid "Cancels the current operation"
 msgstr "لإلغاء العملية الحالية"
 
@@ -1730,7 +1740,7 @@ msgstr ""
 "لا يمكن مقارنة المجلدات ، مرشحات مختلفة للأدلة المحلية و البعيدة في وضع "
 "التمكين"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2799
+#: ../../locales/../src/interface/RemoteListView.cpp:2546
 msgid "Cannot compare directories, not connected to a server."
 msgstr "لا يمكن مقارنة الأدلة ، غير متصل بأي خادم"
 
@@ -1738,18 +1748,18 @@ msgstr "لا يمكن مقارنة الأدلة ، غير متصل بأي خاد
 msgid "Cannot create new filter"
 msgstr "تعذر إنشاء مرشح جديد"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1925
-#: ../../locales/../src/interface/LocalListView.cpp:2054
-#: ../../locales/../src/interface/RemoteListView.cpp:2629
-#: ../../locales/../src/interface/RemoteListView.cpp:2675
+#: ../../locales/../src/interface/LocalListView.cpp:1726
+#: ../../locales/../src/interface/LocalListView.cpp:1855
+#: ../../locales/../src/interface/RemoteListView.cpp:2376
+#: ../../locales/../src/interface/RemoteListView.cpp:2422
 msgid "Cannot edit file"
 msgstr "تعذر تحرير الملف"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1841
+#: ../../locales/../src/interface/LocalListView.cpp:1642
 msgid "Cannot edit file, not connected to any server."
 msgstr "تعذر تحرير الملف , غير متصل بأي خادم"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1852
+#: ../../locales/../src/interface/LocalListView.cpp:1653
 msgid "Cannot edit file, remote path unknown."
 msgstr "لا يمكن تحرير الملف ، المسار البعيد غير معروف"
 
@@ -1785,7 +1795,7 @@ msgstr "لا يمكن تذكر كلمة المرور"
 msgid "Cannot rename entry"
 msgstr "تعذرت تسمية المدخلة"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1911
+#: ../../locales/../src/interface/RemoteListView.cpp:1658
 msgid "Cannot rename file"
 msgstr "تعذرت تسمية الملف"
 
@@ -1812,12 +1822,32 @@ msgstr "تعذر وضع إشراك الملف"
 msgid "Cannot show dialog"
 msgstr "تعذر إظهار اللائحة"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1943
-#: ../../locales/../src/interface/RemoteListView.cpp:2695
+#: ../../locales/../src/interface/LocalListView.cpp:1744
+#: ../../locales/../src/interface/RemoteListView.cpp:2442
 msgid "Cannot view/edit selected file"
 msgstr "تعذر عرض/تحرير الملف المحدد"
 
-#: resources.h:270
+#: resources.h:931
+#, fuzzy
+msgid "Case insensitive"
+msgstr "حالة الشروط &حساسة"
+
+#: resources.h:930
+#, fuzzy
+msgid "Case insensitive (default)"
+msgstr "إستخدام إ&فتراضي النظام"
+
+#: resources.h:932
+#, fuzzy
+msgid "Case sensitive"
+msgstr "حالة الشروط &حساسة"
+
+#: resources.h:933
+#, fuzzy
+msgid "Case sensitive (default)"
+msgstr "إستخدام إ&فتراضي النظام"
+
+#: resources.h:267
 msgid "Categories"
 msgstr "الفئات"
 
@@ -1841,19 +1871,19 @@ msgstr "ناشر الشهادة"
 msgid "Challenge:"
 msgstr "الإعتراض :"
 
-#: resources.h:142
+#: resources.h:139
 msgid "Change file attributes"
 msgstr "تغيير خواص الملف"
 
-#: resources.h:587 resources.h:640
+#: resources.h:592 resources.h:647
 msgid "Change the file permissions."
 msgstr "تغيير أذونات الملف"
 
-#: resources.h:968
+#: resources.h:987
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "التغيير لإعدادات ملف السجل يتطلب إعادة تشغيل FileZilla"
 
-#: ../../locales/../src/interface/FileZilla.cpp:670
+#: ../../locales/../src/interface/FileZilla.cpp:675
 msgid "Character encoding issue"
 msgstr "حالة ترميز الرمز"
 
@@ -1861,23 +1891,23 @@ msgstr "حالة ترميز الرمز"
 msgid "Charset"
 msgstr "مجموعة الرموز"
 
-#: resources.h:544
+#: resources.h:545
 msgid "Check for &updates..."
 msgstr "التدقيق &بحثا عن تحديثات..."
 
-#: resources.h:947
+#: resources.h:966
 msgid "Check for FileZilla &updates automatically:"
 msgstr "البحث من &تحديثات FileZilla تلقائيا:"
 
-#: resources.h:1009
+#: resources.h:1028
 msgid "Check for Updates"
 msgstr "التحقق من التحديثات"
 
-#: resources.h:545
+#: resources.h:546
 msgid "Check for newer versions of FileZilla"
 msgstr "التدقيق بحثا عن نسخ جديدة من FileZilla"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Check for updates failed"
 msgstr "فشل البحث عن تحديثات"
 
@@ -1885,16 +1915,16 @@ msgstr "فشل البحث عن تحديثات"
 msgid "Checking for correct external IP address"
 msgstr "جارى التحقق من عنوان رقم الانترنت الخارجى الصحيح"
 
-#: resources.h:1022
+#: resources.h:1042
 msgid "Checking for updates..."
 msgstr "يتم التحقق من التحديثات..."
 
-#: ../../locales/../src/interface/updater.cpp:661
+#: ../../locales/../src/interface/updater.cpp:697
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "تطابق المجموع الاختباري على ملف %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:657
+#: ../../locales/../src/interface/updater.cpp:693
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "عدم تطابق المجموع الاختباري على ملف %s\n"
@@ -1917,31 +1947,31 @@ msgstr "تم إنهاء قطعة البيانات بشكل غير صحيح"
 msgid "Cipher:"
 msgstr "الشفرة :"
 
-#: resources.h:490 resources.h:665
+#: resources.h:491 resources.h:674
 msgid "Cl&ose tab"
 msgstr "إ&غلاق التبويب"
 
-#: resources.h:861
+#: resources.h:870
 msgid "Classic"
 msgstr "كلاسيكي"
 
-#: resources.h:273
+#: resources.h:270
 msgid "Clear &Site Manager entries"
 msgstr "&مسح مدخلات مدير المواقع"
 
-#: resources.h:611
+#: resources.h:616
 msgid "Clear &layout cache"
 msgstr "مسح المخزون المؤقت &للمخطط"
 
-#: resources.h:271
+#: resources.h:268
 msgid "Clear &quickconnect history"
 msgstr "مسح محفوظات الإ&تصال السريع"
 
-#: resources.h:272
+#: resources.h:269
 msgid "Clear &reconnect information"
 msgstr "مسح معلومات &إعادة الإتصال"
 
-#: resources.h:274
+#: resources.h:271
 msgid "Clear &transfer queue"
 msgstr "مسح &قائمة إنتظار الإرسال"
 
@@ -1949,7 +1979,7 @@ msgstr "مسح &قائمة إنتظار الإرسال"
 msgid "Clear history"
 msgstr "مسح المحفوظات"
 
-#: resources.h:268 ../../locales/../src/interface/clearprivatedata.cpp:34
+#: resources.h:265 ../../locales/../src/interface/clearprivatedata.cpp:34
 #: ../../locales/../src/interface/clearprivatedata.cpp:40
 #: ../../locales/../src/interface/clearprivatedata.cpp:46
 #: ../../locales/../src/interface/clearprivatedata.cpp:77
@@ -1961,7 +1991,7 @@ msgstr "مسح البيانات الخصوصية"
 msgid "Clear quickconnect bar"
 msgstr "مسح شريط الاتصال السريع"
 
-#: resources.h:612
+#: resources.h:617
 msgid "Clear string coalescer"
 msgstr "مسح زوائد العبارة"
 
@@ -1969,19 +1999,19 @@ msgstr "مسح زوائد العبارة"
 msgid "Click on Finish to save your configuration."
 msgstr "أنقر على إنهاء لحفظ تكوينك"
 
-#: resources.h:334
+#: resources.h:331
 msgid "Client to server MAC:"
 msgstr "العميل إلى خادم MAC :"
 
-#: resources.h:332
+#: resources.h:329
 msgid "Client to server cipher:"
 msgstr "التابع إلى شفرة الخادم :"
 
-#: resources.h:666
+#: resources.h:675
 msgid "Close &all other tabs"
 msgstr "إ&غلاق كافة التبويبات الأخرى"
 
-#: resources.h:496 ../../locales/../src/interface/Mainfrm.cpp:1241
+#: resources.h:497 ../../locales/../src/interface/Mainfrm.cpp:1241
 #: ../../locales/../src/interface/Mainfrm.cpp:1264
 msgid "Close FileZilla"
 msgstr "إغلاق FileZilla"
@@ -1990,7 +2020,7 @@ msgstr "إغلاق FileZilla"
 msgid "Close all running instances of FileZilla"
 msgstr "إغلاق أي وجود لـ FileZilla"
 
-#: resources.h:491
+#: resources.h:492
 msgid "Closes current tab"
 msgstr "لإغلاق التبويب الحالي"
 
@@ -2002,11 +2032,11 @@ msgstr "تع&ليقات"
 msgid "Column properties"
 msgstr "خصائص العامود"
 
-#: resources.h:341
+#: resources.h:338
 msgid "Column setup"
 msgstr "إعداد العامود"
 
-#: resources.h:938
+#: resources.h:957
 msgid "Command and its arguments should be properly quoted."
 msgstr "يجب أن يتم إقتباس الأمر و عبارات التعامل الخاصة به بشكل صحيح"
 
@@ -2016,7 +2046,7 @@ msgstr "يجب أن يتم إقتباس الأمر و عبارات التعام�
 msgid "Command failed"
 msgstr "فشل الأمر"
 
-#: ../../locales/../src/engine/proxy.cpp:550
+#: ../../locales/../src/engine/proxy.cpp:551
 msgid "Command not supported"
 msgstr "الأمر غير مدعوم"
 
@@ -2043,35 +2073,35 @@ msgstr "الإسم المشترك:"
 msgid "Communication tainted by router or firewall"
 msgstr "تم تلويث الإتصال بواسطة جهاز التوجيه أو جدار الحماية"
 
-#: resources.h:508 resources.h:644
+#: resources.h:509 resources.h:651
 msgid "Compare &modification time"
 msgstr "مقارنة &وقت التعديل"
 
-#: resources.h:507 resources.h:643
+#: resources.h:508 resources.h:650
 msgid "Compare file&size"
 msgstr "مقارنة &حجم الملف"
 
-#: resources.h:918
+#: resources.h:937
 msgid "Comparison &threshold (in minutes):"
 msgstr "&عتبة المقارنة (بالدقائق) :"
 
-#: ../../locales/../src/interface/settings/optionspage_filelists.cpp:39
+#: ../../locales/../src/interface/settings/optionspage_filelists.cpp:41
 msgid "Comparison threshold needs to be between 0 and 1440 minutes."
 msgstr "عتبة المقارنة يجب أن تكون بين 0 و 1440 دقيقة"
 
-#: resources.h:170
+#: resources.h:167
 msgid "Compiled for:"
 msgstr "مجمع من أجل:"
 
-#: resources.h:171
+#: resources.h:168
 msgid "Compiled on:"
 msgstr "مجمع في :"
 
-#: resources.h:173
+#: resources.h:170
 msgid "Compiled with:"
 msgstr "مجمع بواسطة"
 
-#: resources.h:174
+#: resources.h:171
 msgid "Compiler flags:"
 msgstr "علامات المجمع:"
 
@@ -2079,40 +2109,40 @@ msgstr "علامات المجمع:"
 msgid "Compressed"
 msgstr "مضغوط"
 
-#: resources.h:802
+#: resources.h:811
 msgid "Concurrent transfers"
 msgstr "عمليات الإرسال المتزامنة"
 
-#: resources.h:235 resources.h:425
+#: resources.h:232 resources.h:422
 msgid "Conditions are c&ase sensitive"
 msgstr "حالة الشروط &حساسة"
 
-#: resources.h:709
+#: resources.h:718
 msgid "Configuration test"
 msgstr "فحص التكوين"
 
-#: resources.h:683
+#: resources.h:692
 msgid "Configure passive mode"
 msgstr "تكوين النمط السلبي"
 
-#: resources.h:699
+#: resources.h:708
 msgid "Configure port range"
 msgstr "تكوين نطاق المنفذ"
 
-#: resources.h:455
+#: resources.h:452
 msgid "Configuring FileZilla and your network"
 msgstr "تكوين FileZilla و شبكتك"
 
-#: ../../locales/../src/interface/search.cpp:1016
+#: ../../locales/../src/interface/search.cpp:726
 msgid "Confirm deletion"
 msgstr "تأكيد الحذف"
 
 #: ../../locales/../src/engine/local_filesys.cpp:135
-#: ../../locales/../src/interface/LocalListView.cpp:1896
-#: ../../locales/../src/interface/LocalListView.cpp:2015
-#: ../../locales/../src/interface/RemoteListView.cpp:1715
-#: ../../locales/../src/interface/RemoteListView.cpp:2646
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1125
+#: ../../locales/../src/interface/LocalListView.cpp:1697
+#: ../../locales/../src/interface/LocalListView.cpp:1816
+#: ../../locales/../src/interface/RemoteListView.cpp:1462
+#: ../../locales/../src/interface/RemoteListView.cpp:2393
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1138
 msgid "Confirmation needed"
 msgstr "التأكيد مطلوب"
 
@@ -2123,6 +2153,14 @@ msgstr "مبروك , يبدو أن إعداداتك تعمل"
 #: ../../locales/../src/interface/quickconnectbar.cpp:148
 msgid "Connect bypassing proxy settings"
 msgstr "إعدادات تجاوز إتصال ملقم الوكيل"
+
+#: resources.h:888
+msgid "Connect in current tab"
+msgstr "الإتصال في التبويب الحالي"
+
+#: resources.h:887
+msgid "Connect in new tab"
+msgstr "الإتصال في تبويب جديد"
 
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
@@ -2142,12 +2180,12 @@ msgstr "اتصال"
 msgid "Connecting to %s"
 msgstr "إتصال إلى %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1122
+#: ../../locales/../src/engine/ControlSocket.cpp:1143
 #, c-format
 msgid "Connecting to %s through proxy"
 msgstr "الإتصال إلى %s خلال ملقم الوكيل"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:990
+#: ../../locales/../src/engine/ControlSocket.cpp:1011
 #: ../../locales/../src/engine/proxy.cpp:214
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:394
 #, c-format
@@ -2162,18 +2200,18 @@ msgstr "الإتصال"
 msgid "Connection attempt failed"
 msgstr "محاولة الاتصال فشلت"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:995
-#: ../../locales/../src/engine/proxy.cpp:218
+#: ../../locales/../src/engine/ControlSocket.cpp:1016
+#: ../../locales/../src/engine/proxy.cpp:219
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "محاولة الإتصال فشلت مع \"%s\" ، محاولة العنوان التالي"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1000
+#: ../../locales/../src/engine/ControlSocket.cpp:1021
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "محاولة الإتصال فشلت مع \"%s\" ."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:186
+#: ../../locales/../src/engine/ControlSocket.cpp:188
 #: ../../locales/../src/engine/engineprivate.cpp:320
 msgid "Connection attempt interrupted by user"
 msgstr "تم إنهاء محاولة الإتصال من قبل المستخدم"
@@ -2182,7 +2220,7 @@ msgstr "تم إنهاء محاولة الإتصال من قبل المستخدم
 msgid "Connection closed"
 msgstr "تم إغلاق الإتصال"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1088
+#: ../../locales/../src/engine/ControlSocket.cpp:1109
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:241
 msgid "Connection closed by server"
 msgstr "تم إغلاق الإتصال من قبل الخادم"
@@ -2204,15 +2242,15 @@ msgstr "تم تأسيس الإتصال ، في انتظار رسالة التر�
 msgid "Connection lost"
 msgstr "الاتصال فقد"
 
-#: ../../locales/../src/engine/proxy.cpp:535
+#: ../../locales/../src/engine/proxy.cpp:536
 msgid "Connection not allowed by ruleset"
 msgstr "الإتصال غير مسموح به من قبل مجموعة القاعدة"
 
-#: ../../locales/../src/engine/proxy.cpp:544
+#: ../../locales/../src/engine/proxy.cpp:545
 msgid "Connection refused"
 msgstr "تم رفض الإتصال"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:637
+#: ../../locales/../src/engine/ControlSocket.cpp:658
 msgid "Connection timed out"
 msgstr "إنقضاء مهملة الإتصال"
 
@@ -2220,11 +2258,11 @@ msgstr "إنقضاء مهملة الإتصال"
 msgid "Connection timed out."
 msgstr "إنقضاء مهملة الإتصال"
 
-#: ../../locales/../src/interface/search.cpp:659
+#: ../../locales/../src/interface/search.cpp:369
 msgid "Connection to server lost."
 msgstr "فقد الإتصال بالخادم"
 
-#: ../../locales/../src/engine/proxy.cpp:230
+#: ../../locales/../src/engine/proxy.cpp:231
 msgid "Connection with proxy established, performing handshake..."
 msgstr "تم تأسيس الإتصال بالملقم الوكيل , جاري تنفيذ الربط..."
 
@@ -2252,11 +2290,11 @@ msgstr "نسخ (%d) من %s"
 msgid "Copy of %s"
 msgstr "نسخة من %s"
 
-#: resources.h:585 resources.h:638
+#: resources.h:590 resources.h:645
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "نسخ الرابط للمواد المحددة إلى الحافظة"
 
-#: ../../locales/../src/engine/transfersocket.cpp:219
+#: ../../locales/../src/engine/transfersocket.cpp:221
 #, c-format
 msgid "Could not accept connection: %s"
 msgstr "تعذر قبول الإتصال : %s"
@@ -2270,11 +2308,11 @@ msgstr "تعذر إضافة الإتصال إلى مدير الموقع"
 msgid "Could not complete operation"
 msgstr "تعذّر إكمال العملية"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:188
+#: ../../locales/../src/engine/ControlSocket.cpp:190
 msgid "Could not connect to server"
 msgstr "تعذر الإتصال بالخادم"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1164
+#: ../../locales/../src/engine/ControlSocket.cpp:1185
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "تعذر الإتصال بالخادم : %s"
@@ -2288,8 +2326,8 @@ msgstr "تعذر تحويل الأمر إلى ترميز الخادم"
 msgid "Could not convert private key"
 msgstr "تعذر تحويل المفتاح الخاص"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3065
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1454
+#: ../../locales/../src/interface/RemoteListView.cpp:2813
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1489
 msgid "Could not copy URLs"
 msgstr "تعذر نسخ الروابط"
 
@@ -2297,13 +2335,13 @@ msgstr "تعذر نسخ الروابط"
 msgid "Could not copy data"
 msgstr "تعذر نسخ البيانات"
 
-#: ../../locales/../src/interface/updater.cpp:432
+#: ../../locales/../src/interface/updater.cpp:439
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "تعذر إنشاء الملف المحلي %s\n"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2568
-#: ../../locales/../src/interface/RemoteTreeView.cpp:899
+#: ../../locales/../src/interface/RemoteListView.cpp:2315
+#: ../../locales/../src/interface/RemoteTreeView.cpp:912
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2331,7 +2369,7 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "تعذر توليد سلسلة تسجيل الدخول المخصصة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1023
+#: ../../locales/../src/engine/tlssocket.cpp:1015
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2339,7 +2377,7 @@ msgstr ""
 "لا يمكن الحصول على الإسم الفارق من ناشر الشهادة , فشل "
 "gnutls_x509_get_issuer_dn"
 
-#: ../../locales/../src/engine/tlssocket.cpp:999
+#: ../../locales/../src/engine/tlssocket.cpp:991
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2355,15 +2393,15 @@ msgstr "تعذر الحصول على كامل المسار البعيد"
 msgid "Could not get reply from fzputtygen."
 msgstr "تعذر الحصول على الرد من fzputtygen"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2629
+#: ../../locales/../src/interface/RemoteListView.cpp:2376
 msgid "Could not get temporary directory to download file into."
 msgstr "تعذر الحصول على الدليل المؤقت لتحميل معلومات الملف"
 
-#: ../../locales/../src/engine/tlssocket.cpp:941
+#: ../../locales/../src/engine/tlssocket.cpp:933
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "لا يمكن إستيراد شهادات النظير , فشل gnutls_x509_crt_import"
 
-#: ../../locales/../src/engine/tlssocket.cpp:935
+#: ../../locales/../src/engine/tlssocket.cpp:927
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2419,8 +2457,8 @@ msgstr ""
 "تم تعطيل التصفح المتزامن"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:242
-#: ../../locales/../src/interface/RemoteListView.cpp:3065
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1454
+#: ../../locales/../src/interface/RemoteListView.cpp:2813
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1489
 msgid "Could not open clipboard"
 msgstr "تعذرت فتح الحافظة"
 
@@ -2465,7 +2503,7 @@ msgstr "تعذر إرسال الأمر إلى fzputtygen"
 msgid "Could not spawn IO thread"
 msgstr "لا يمكن تفقيس مؤشر ترابط إدخال/إخراج"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1137
+#: ../../locales/../src/engine/ControlSocket.cpp:1158
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "تعذر بدء ربط الملقم الوكيل : %s"
@@ -2509,7 +2547,7 @@ msgstr ""
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "لا يمكن كتابة \"%s\" , تعذر تصدير المواقع المحددة : %s"
 
-#: ../../locales/../src/interface/wrapengine.cpp:1147
+#: ../../locales/../src/interface/wrapengine.cpp:1149
 #, c-format
 msgid "Could not write \"%s\": %s"
 msgstr "تعذرت كتابة \"%s\" : %s"
@@ -2529,8 +2567,8 @@ msgstr "تعذرت الكتابة إلى الملف المحلي"
 msgid "Could not write to log file: %s"
 msgstr "تعذرت الكتابة إلى ملف السجل : %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:955
-#: ../../locales/../src/engine/ControlSocket.cpp:1053
+#: ../../locales/../src/engine/ControlSocket.cpp:976
+#: ../../locales/../src/engine/ControlSocket.cpp:1074
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "تعذرت الكتابة إلى المقبس : %s"
@@ -2539,30 +2577,38 @@ msgstr "تعذرت الكتابة إلى المقبس : %s"
 msgid "Country:"
 msgstr "البلد:"
 
-#: resources.h:615
+#: resources.h:620
 msgid "Crashes FileZilla instantly. Only used to debug the exception handler"
 msgstr "أعطال FileZilla الفورية . تستخدم فقط في تصحيح معالجة الإستثناء"
 
-#: resources.h:577
+#: resources.h:582
 msgid "Crea&te new file"
 msgstr "إ&نشاء ملف جديد"
 
-#: resources.h:562 resources.h:576 resources.h:632 resources.h:653
+#: resources.h:563 resources.h:579 resources.h:637 resources.h:660
 msgid "Create a new subdirectory in the current directory"
 msgstr "إنشاء دليل فرعي جديد في الدليل الحالي"
 
-#: resources.h:578
+#: resources.h:565 resources.h:581 resources.h:639 resources.h:662
+msgid "Create a new subdirectory in the current directory and change into it"
+msgstr "قم بإنشاء مجلد فرعي جديد داخل المجلد الحالي ثم قم بالتغيير إليه"
+
+#: resources.h:583
 msgid "Create a new, empty file in the current directory"
 msgstr "إنشاء ملف فارغ و جديد في الدليل الحالي"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1127
-#: ../../locales/../src/interface/LocalTreeView.cpp:1135
-#: ../../locales/../src/interface/RemoteListView.cpp:1617
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1276
+#: resources.h:564 resources.h:580 resources.h:638 resources.h:661
+msgid "Create director&y and enter it"
+msgstr "قم بإنشاء مجلد ثم قم بادخاله"
+
+#: ../../locales/../src/interface/LocalListView.cpp:925
+#: ../../locales/../src/interface/LocalTreeView.cpp:1181
+#: ../../locales/../src/interface/RemoteListView.cpp:1361
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1322
 msgid "Create directory"
 msgstr "إنشاء دليل"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3156
+#: ../../locales/../src/interface/RemoteListView.cpp:2904
 msgid "Create empty file"
 msgstr "إنشاء ملف فارغ"
 
@@ -2576,15 +2622,15 @@ msgstr "إنشاء دليل"
 msgid "Creating directory '%s'..."
 msgstr "جاري إنشاء الدليل '%s'..."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:174
+#: ../../locales/../src/engine/ControlSocket.cpp:176
 msgid "Critical error"
 msgstr "خطأ حرج"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:137
+#: ../../locales/../src/engine/ControlSocket.cpp:139
 msgid "Critical file transfer error"
 msgstr "خطأ حرج في إرسال الملف"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:120
+#: ../../locales/../src/engine/ControlSocket.cpp:122
 #, c-format
 msgid "Critical file transfer error after transferring %s in %s"
 msgstr "خطأ حرج في إرسال الملفِ بعد إرسال %s في %s ـ"
@@ -2610,7 +2656,7 @@ msgstr "نوع الإرسال الحالي موضوع على الإكتشاف ا
 msgid "Current transfer type is set to binary."
 msgstr "نوع الإرسال الحالي موضوع على ثنائي"
 
-#: resources.h:772 resources.h:894
+#: resources.h:781 resources.h:907
 msgid "Cus&tom"
 msgstr "&مخصص"
 
@@ -2618,15 +2664,15 @@ msgstr "&مخصص"
 msgid "Custom filter set"
 msgstr "مجموعة مرشحات من ضبط المستخدم"
 
-#: resources.h:363 resources.h:364
+#: resources.h:360 resources.h:361
 msgid "Custom server"
 msgstr "خادم مخصص"
 
-#: resources.h:372
+#: resources.h:369
 msgid "D&ata type"
 msgstr "&نوع البيانات"
 
-#: resources.h:901
+#: resources.h:914
 msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
 msgstr "بادئات &عشرية تستخدم رموز SI مثال : (1 كب = 1000 بايت)"
 
@@ -2634,23 +2680,23 @@ msgstr "بادئات &عشرية تستخدم رموز SI مثال : (1 كب = 1
 msgid "D&efault"
 msgstr "الإ&فتراضى"
 
-#: resources.h:580 resources.h:633 resources.h:663
+#: resources.h:585 resources.h:640 resources.h:672
 msgid "D&elete"
 msgstr "&حذف"
 
-#: resources.h:216
+#: resources.h:213
 msgid "D&isable all"
 msgstr "ت&عطيل الكل"
 
-#: resources.h:872
+#: resources.h:881
 msgid "D&o not save passwords"
 msgstr "&لا تحفظ كلمات المرور"
 
-#: resources.h:925
+#: resources.h:944
 msgid "D&ouble-click action on directories:"
 msgstr "إجراء ال&نقرة المزدوجة على الأدلة :"
 
-#: resources.h:229 resources.h:404
+#: resources.h:226 resources.h:401
 msgid "D&uplicate"
 msgstr "ت&كرار"
 
@@ -2658,8 +2704,8 @@ msgstr "ت&كرار"
 msgid "DOS-like with virtual paths"
 msgstr "DOS-like مع مسارات ظاهرية"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1930
-#: ../../locales/../src/interface/RemoteListView.cpp:2680
+#: ../../locales/../src/interface/LocalListView.cpp:1731
+#: ../../locales/../src/interface/RemoteListView.cpp:2427
 msgid "Dangerous filetype"
 msgstr "نوع ملف خطير"
 
@@ -2676,7 +2722,7 @@ msgstr "تم إغلاق مقبس البيانات مبكرا جدا"
 msgid "Date"
 msgstr "تاريخ"
 
-#: resources.h:885
+#: resources.h:898
 msgid "Date formatting"
 msgstr "تنسيق البيانات"
 
@@ -2693,7 +2739,7 @@ msgstr "التاريخ/الوقت غير معروف"
 msgid "Debug"
 msgstr "التصحيح"
 
-#: resources.h:969
+#: resources.h:988
 msgid "Debugging settings"
 msgstr "إعدادات التصحيح"
 
@@ -2709,7 +2755,7 @@ msgstr "إفتراضي (كشف آلي)"
 msgid "Default editor not properly quoted."
 msgstr "لم يتم إقتباس المحرر الإفتراضي بشكل جيد"
 
-#: resources.h:242 resources.h:264 resources.h:855
+#: resources.h:239 resources.h:261 resources.h:864
 msgid "Default file exists action"
 msgstr "إجراء الملف موجود الإفتراضى"
 
@@ -2729,15 +2775,15 @@ msgstr ""
 msgid "Default system language"
 msgstr "لغة النظام الإفتراضية"
 
-#: resources.h:677
+#: resources.h:686
 msgid "Default transfer mode:"
 msgstr "نمط الإرسال الإفتراضى:"
 
-#: resources.h:824
+#: resources.h:833
 msgid "Default transfer type:"
 msgstr "نوع الإرسال الإفتراضى:"
 
-#: resources.h:696 resources.h:759
+#: resources.h:705 resources.h:768
 msgid "Default: http://ip.filezilla-project.org/ip.php"
 msgstr "http://ip.filezilla-project.org/ip.php الافتراضى"
 
@@ -2765,39 +2811,39 @@ msgstr[5] "تأخير الإتصال لمدة %d ثانية بسبب محاول�
 msgid "Delete Site Manager entry"
 msgstr "حذف مدخلة مدير الموقع"
 
-#: resources.h:634 resources.h:655
+#: resources.h:641 resources.h:664
 msgid "Delete selected directory"
 msgstr "حذف الدليل المحدد"
 
-#: resources.h:565 resources.h:581
+#: resources.h:568 resources.h:586
 msgid "Delete selected files and directories"
 msgstr "حذف الملفات المحددة و الأدلة"
 
-#: ../../locales/../src/interface/search.cpp:1000
+#: ../../locales/../src/interface/search.cpp:710
 msgid "Deleting directories"
 msgstr "حذف الأدلة"
 
-#: ../../locales/../src/interface/search.cpp:1000
+#: ../../locales/../src/interface/search.cpp:710
 msgid "Deleting multiple unrelated directories is not yet supported"
 msgstr "لم يتم بعد دعم الحذف للأدلة المتعددة الغير مرتبطة"
 
-#: resources.h:440
+#: resources.h:437
 msgid "Deleting symbolic link"
 msgstr "حذف الرابط الترميزي"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1001
+#: ../../locales/../src/interface/LocalTreeView.cpp:1016
 msgid "Desktop"
 msgstr "سطح المكتب"
 
-#: resources.h:4 resources.h:33 resources.h:187
+#: resources.h:4 resources.h:33 resources.h:184
 msgid "Details"
 msgstr "تفاصيل"
 
-#: resources.h:200
+#: resources.h:197
 msgid "Details for new key:"
 msgstr "التفاصيل للمفتاح الجديد:"
 
-#: resources.h:238
+#: resources.h:235
 msgid "Dire&ctories"
 msgstr "الا&دلة"
 
@@ -2809,9 +2855,9 @@ msgstr "الإتجاه"
 msgid "Directory"
 msgstr "الدليل"
 
-#: resources.h:641 resources.h:916 resources.h:1004
-#: ../../locales/../src/interface/filelistctrl.cpp:449
-#: ../../locales/../src/interface/Mainfrm.cpp:2437
+#: resources.h:648 resources.h:935 resources.h:1023
+#: ../../locales/../src/interface/filelistctrl.cpp:471
+#: ../../locales/../src/interface/Mainfrm.cpp:2439
 msgid "Directory comparison"
 msgstr "مقارنة الأدلة"
 
@@ -2825,23 +2871,23 @@ msgstr "فشلت مقارنة الأدلة"
 msgid "Directory containing the logfile does not exist or filename is invalid."
 msgstr "الدليل الذي يحتوي على ملف السجل غير موجود أو إسم الملف غير صالح"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:192
+#: ../../locales/../src/engine/ControlSocket.cpp:194
 msgid "Directory listing aborted by user"
 msgstr "تم إنهاء الرفع من قبل المستخدم"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2370
+#: ../../locales/../src/interface/RemoteListView.cpp:2117
 msgid "Directory listing failed"
 msgstr "فشل الرفع"
 
-#: resources.h:209
+#: resources.h:206
 msgid "Directory listing filters"
 msgstr "مرشحات الرفع"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:196
+#: ../../locales/../src/engine/ControlSocket.cpp:198
 msgid "Directory listing successful"
 msgstr "تم بنجاح الرفع"
 
-#: resources.h:219
+#: resources.h:216
 msgid "Disa&ble all"
 msgstr "تعط&يل الكل"
 
@@ -2858,13 +2904,13 @@ msgstr ""
 "قم بتعطيل هذا الخيار ثانية إذا كنت لم تعد قادرا على مشاهدة محتويات الدليل "
 "بشكل صحيح"
 
-#: resources.h:997
+#: resources.h:1016
 msgid "Disconnect from server"
 msgstr "قطع الاتصال من الخادم"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:82
-#: ../../locales/../src/engine/ControlSocket.cpp:956
-#: ../../locales/../src/engine/ControlSocket.cpp:1055
+#: ../../locales/../src/engine/ControlSocket.cpp:84
+#: ../../locales/../src/engine/ControlSocket.cpp:977
+#: ../../locales/../src/engine/ControlSocket.cpp:1076
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:233
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:911
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:913
@@ -2873,7 +2919,7 @@ msgstr "قطع الاتصال من الخادم"
 msgid "Disconnected from server"
 msgstr "قطع الاتصال من الخادم"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1090
+#: ../../locales/../src/engine/ControlSocket.cpp:1111
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:928
 #, c-format
 msgid "Disconnected from server: %s"
@@ -2884,19 +2930,19 @@ msgstr "قطع الاتصال من الخادم : %s"
 msgid "Disconnecting from previous server"
 msgstr "قطع الاتصال من الخادم السابق"
 
-#: resources.h:998
+#: resources.h:1017
 msgid "Disconnects from the currently visible server"
 msgstr "لقطع الاتصال من الخادم الظاهر حاليا"
 
-#: resources.h:550
+#: resources.h:551
 msgid "Display about dialog"
 msgstr "عرض لائحة حول"
 
-#: resources.h:934
+#: resources.h:953
 msgid "Do &not use default editor"
 msgstr "&عدم إستخدام المحرر الإفتراضي"
 
-#: resources.h:607
+#: resources.h:612
 msgid "Do &nothing"
 msgstr "بدون إ&جراء"
 
@@ -2927,27 +2973,27 @@ msgstr "هل تريد فعلا حذف قائمة إنتظار الإرسال ه�
 msgid "Do you really want to send '%s' to the server?"
 msgstr "هل تريد فعلا إرسال '%s' إلى الخادم ؟"
 
-#: resources.h:453
+#: resources.h:450
 msgid "Documentation"
 msgstr "وثائق تعليمات"
 
-#: resources.h:698
+#: resources.h:707
 msgid "Don't use external IP address on &local connections."
 msgstr "&عدم إستخدام عنوان IP خارجي مع الإتصالات المحلية"
 
-#: resources.h:835
+#: resources.h:844
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
 msgstr "الملفات ذات النقط هي أسماء الملفات تبدأ بنقطة مثل : - .htaccess"
 
-#: resources.h:919
+#: resources.h:938
 msgid "Double-click action"
 msgstr "إجراء النقرة المزدوجة"
 
-#: resources.h:349
+#: resources.h:346
 msgid "Download"
 msgstr "تحميل"
 
-#: resources.h:469 resources.h:811
+#: resources.h:467 resources.h:820
 msgid "Download &limit:"
 msgstr "حدود التحميل&:"
 
@@ -2960,16 +3006,16 @@ msgstr "حدود التحميل: %s/ث"
 msgid "Download limit: none"
 msgstr "حدود التحميل : بدون"
 
-#: resources.h:428 ../../locales/../src/interface/search.cpp:800
-#: ../../locales/../src/interface/search.cpp:806
+#: resources.h:425 ../../locales/../src/interface/search.cpp:510
+#: ../../locales/../src/interface/search.cpp:516
 msgid "Download search results"
 msgstr "تحميل نتائج البحث"
 
-#: resources.h:628
+#: resources.h:633
 msgid "Download selected directory"
 msgstr "تحميل الدليل المحدد"
 
-#: resources.h:569
+#: resources.h:572
 msgid "Download selected files and directories"
 msgstr "تحميل الملفات المحددة و الأدلة"
 
@@ -2991,33 +3037,33 @@ msgstr "تحميل"
 msgid "Downloading %s"
 msgstr "تحميل %s"
 
-#: ../../locales/../src/interface/search.cpp:909
+#: ../../locales/../src/interface/search.cpp:619
 msgid "Downloading multiple unrelated directories is not yet supported"
 msgstr "لم يتم بعد دعم التحميل للأدلة المتعددة الغير مرتبطة"
 
-#: ../../locales/../src/interface/search.cpp:909
+#: ../../locales/../src/interface/search.cpp:619
 msgid "Downloading search results"
 msgstr "تحميل نتائج البحث"
 
-#: resources.h:1014
+#: resources.h:1034
 msgid "Downloading update..."
 msgstr "جاري تحميل التحديث..."
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
-#: ../../locales/../src/interface/LocalTreeView.cpp:105
+#: ../../locales/../src/interface/LocalTreeView.cpp:106
 #: ../../locales/../src/interface/QueueView.cpp:87
 #: ../../locales/../src/interface/RemoteListView.cpp:102
-#: ../../locales/../src/interface/RemoteTreeView.cpp:88
+#: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
 "Drag&drop between different instances of FileZilla has not been implemented "
 "yet."
 msgstr "السحب و الإفلات بين حالات وجود مختلفة من FileZilla لا ينطبق بعد"
 
 #: ../../locales/../src/interface/LocalListView.cpp:111
-#: ../../locales/../src/interface/LocalTreeView.cpp:111
+#: ../../locales/../src/interface/LocalTreeView.cpp:112
 #: ../../locales/../src/interface/QueueView.cpp:100
 #: ../../locales/../src/interface/RemoteListView.cpp:108
-#: ../../locales/../src/interface/RemoteTreeView.cpp:94
+#: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
 msgstr "السحب و الإفلات بين خوادم مختلفة لا ينطبق بعد"
 
@@ -3025,19 +3071,19 @@ msgstr "السحب و الإفلات بين خوادم مختلفة لا ينط�
 msgid "Dupl&icate"
 msgstr "ت&كرار"
 
-#: resources.h:215
+#: resources.h:212
 msgid "E&nable all"
 msgstr "ت&مكين الكل"
 
-#: resources.h:555 resources.h:572
+#: resources.h:556 resources.h:575
 msgid "E&nter directory"
 msgstr "إ&دخال دليل"
 
-#: resources.h:151
+#: resources.h:148
 msgid "E&xecute"
 msgstr "ت&نفيذ"
 
-#: resources.h:495
+#: resources.h:496
 msgid "E&xit"
 msgstr "&خروج"
 
@@ -3049,21 +3095,21 @@ msgstr "البريد:"
 msgid "Each filter needs at least one condition."
 msgstr "كل مرشح يحتاج على الأقل شرط واحد"
 
-#: resources.h:241
+#: resources.h:238
 msgid "Edit filters"
 msgstr "تحرير المرشحات"
 
-#: resources.h:560
+#: resources.h:561
 msgid ""
 "Edit the file with the configured editor and upload changes to the server."
 msgstr "تحرير الملف بواسطة محرر سبق تكوينه و من ثم رفع التغييرات إلى الخادم"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1841
-#: ../../locales/../src/interface/LocalListView.cpp:1852
+#: ../../locales/../src/interface/LocalListView.cpp:1642
+#: ../../locales/../src/interface/LocalListView.cpp:1653
 msgid "Editing failed"
 msgstr "فشل التحرير"
 
-#: resources.h:882
+#: resources.h:895
 msgid "Email:"
 msgstr "البريد :"
 
@@ -3075,7 +3121,7 @@ msgstr "أمر فارغ"
 msgid "Empty command."
 msgstr "أمر فارغ"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2372
+#: ../../locales/../src/interface/RemoteListView.cpp:2119
 msgid "Empty directory listing"
 msgstr "قائمة دليل فارغ"
 
@@ -3101,11 +3147,11 @@ msgstr "إسم فارغ"
 msgid "Empty quoted string."
 msgstr "عبارة مقتبسة فارغة"
 
-#: resources.h:218
+#: resources.h:215
 msgid "En&able all"
 msgstr "ت&مكين الكل"
 
-#: resources.h:820
+#: resources.h:829
 msgid "Enable invalid character &filtering"
 msgstr "تمكين ال&فرز للرموز الغير صالحة"
 
@@ -3113,23 +3159,23 @@ msgstr "تمكين ال&فرز للرموز الغير صالحة"
 msgid "Encrypted"
 msgstr "مشفر"
 
-#: resources.h:331
+#: resources.h:328
 msgid "Encryption"
 msgstr "التشفير"
 
-#: resources.h:323
+#: resources.h:320
 msgid "Encryption details"
 msgstr "تفاصيل التشفير"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:451
+#: ../../locales/../src/interface/filelistctrl.cpp:473
 msgid "End comparison and change sorting order?"
 msgstr "إنهاء المقارنة و تغيير نظام الترتيب ؟"
 
-#: resources.h:536
+#: resources.h:537
 msgid "Enter &custom command..."
 msgstr "إدخال أمر &مخصص..."
 
-#: resources.h:473
+#: resources.h:471
 #, no-c-format
 msgid "Enter 0 for unlimited speed."
 msgstr "أدخل 0 للسرعة الغير المحدودة"
@@ -3142,7 +3188,7 @@ msgstr "إدخال أمر"
 msgid "Enter custom command"
 msgstr "إدخال أمر مخصص"
 
-#: resources.h:926
+#: resources.h:945
 msgid "Enter directory"
 msgstr "إدخال دليل"
 
@@ -3164,11 +3210,11 @@ msgstr "إدخال إسم جديد لمجموعة الملف"
 msgid "Enter password"
 msgstr "إدخل كلمة المرور"
 
-#: resources.h:556 resources.h:573
+#: resources.h:557 resources.h:576
 msgid "Enter selected directory"
 msgstr "إدخال دليل محدد"
 
-#: resources.h:718
+#: resources.h:727
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3204,7 +3250,7 @@ msgstr ""
 "أدخل كلمة المرور للملف '%s'\n"
 "الرجاء ملاحظة أن الملف المحول لن يكون محميا بكلمة مرور"
 
-#: resources.h:722
+#: resources.h:731
 msgid ""
 "Enter the port on which the server listens.\n"
 "The default for FTP is 21, the default for SFTP is 22."
@@ -3239,10 +3285,10 @@ msgstr "خطأ في تحميل قائمة الإنتظار"
 #: ../../locales/../src/interface/filter.cpp:1032
 #: ../../locales/../src/interface/import.cpp:120
 #: ../../locales/../src/interface/import.cpp:311
-#: ../../locales/../src/interface/Options.cpp:216
+#: ../../locales/../src/interface/Options.cpp:225
 #: ../../locales/../src/interface/QueueView.cpp:1969
-#: ../../locales/../src/interface/search.cpp:1077
-#: ../../locales/../src/interface/search.cpp:1098
+#: ../../locales/../src/interface/search.cpp:787
+#: ../../locales/../src/interface/search.cpp:808
 #: ../../locales/../src/interface/sitemanager.cpp:241
 #: ../../locales/../src/interface/sitemanager.cpp:454
 #: ../../locales/../src/interface/sitemanager.cpp:553
@@ -3251,7 +3297,7 @@ msgstr "خطأ في تحميل قائمة الإنتظار"
 #: ../../locales/../src/interface/sitemanager.cpp:815
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:731
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:786
-#: ../../locales/../src/interface/wrapengine.cpp:989
+#: ../../locales/../src/interface/wrapengine.cpp:991
 msgid "Error loading xml file"
 msgstr "خطأ في تحميل ملف xml"
 
@@ -3272,7 +3318,7 @@ msgstr "خطأ في تشغيل البرنامج"
 #: ../../locales/../src/interface/sitemanager.cpp:852
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:810
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:2174
-#: ../../locales/../src/interface/wrapengine.cpp:1148
+#: ../../locales/../src/interface/wrapengine.cpp:1150
 msgid "Error writing xml file"
 msgstr "خطأ في كتابة ملف xml"
 
@@ -3282,45 +3328,41 @@ msgstr "خطأ في كتابة ملف xml"
 msgid "Error:"
 msgstr "الخطأ:"
 
-#: resources.h:465
-msgid "Establish connection in a new tab"
-msgstr "تأسيس إتصال في تبويب جديد"
-
-#: resources.h:945
+#: resources.h:964
 msgid "Example: png \"c:\\program files\\viewer\\viewer.exe\" -open"
 msgstr "مثال : png \"c:\\program files\\viewer\\viewer.exe\" -open"
 
-#: resources.h:904
+#: resources.h:917
 msgid "Examples"
 msgstr "أمثلة"
 
-#: resources.h:155
+#: resources.h:152
 msgid "Exe&cute"
 msgstr "ت&نفيذ"
 
-#: ../../locales/../src/interface/update_dialog.cpp:55
+#: ../../locales/../src/interface/update_dialog.cpp:56
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "الملف التنفيذي لا يحتوي على أي معلومات عن النسخة ، لا يمكن التدقيق بحثا عن "
 "تحديثات"
 
-#: resources.h:862
+#: resources.h:871
 msgid "Explorer"
 msgstr "المستكشف"
 
-#: resources.h:281
+#: resources.h:278
 msgid "Export &Queue"
 msgstr "تصدير &فائمة الإنتظار"
 
-#: resources.h:280
+#: resources.h:277
 msgid "Export &Settings"
 msgstr "تصدير الإ&عدادات"
 
-#: resources.h:277
+#: resources.h:274
 msgid "Export settings"
 msgstr "تصدير الإعدادات"
 
-#: resources.h:230
+#: resources.h:227
 msgid "F&ilter name:"
 msgstr "اسم الم&رشح"
 
@@ -3345,11 +3387,11 @@ msgstr "FTP - بروتوكول نقل الغير آمن للملفات"
 msgid "FTP Engine not initialized, can't connect"
 msgstr "لم يتم تهيئة محرك FTP ، لا يمكن الإتصال"
 
-#: resources.h:746
+#: resources.h:755
 msgid "FTP Keep-alive"
 msgstr "FTP Keep-alive"
 
-#: resources.h:766
+#: resources.h:775
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:120
 msgid "FTP Proxy"
 msgstr "ملقم FTP"
@@ -3358,7 +3400,7 @@ msgstr "ملقم FTP"
 msgid "FTP URL"
 msgstr "رابط FTP"
 
-#: resources.h:674
+#: resources.h:683
 msgid ""
 "FTP uses secondary connections for data transfers. These additional "
 "connections can be established in two ways."
@@ -3374,10 +3416,12 @@ msgstr "FTPES - FTP over explicit TLS/SSL"
 msgid "FTPS - FTP over implicit TLS/SSL"
 msgstr "FTPS - FTP over implicit TLS/SSL"
 
-#: ../../locales/../src/interface/LocalListView.cpp:549
-#: ../../locales/../src/interface/LocalListView.cpp:629
-#: ../../locales/../src/interface/LocalListView.cpp:2135
-#: ../../locales/../src/interface/LocalTreeView.cpp:859
+#: ../../locales/../src/interface/LocalListView.cpp:546
+#: ../../locales/../src/interface/LocalListView.cpp:626
+#: ../../locales/../src/interface/LocalListView.cpp:914
+#: ../../locales/../src/interface/LocalListView.cpp:1936
+#: ../../locales/../src/interface/LocalTreeView.cpp:866
+#: ../../locales/../src/interface/LocalTreeView.cpp:1157
 #: ../../locales/../src/interface/viewheader.cpp:535
 msgid "Failed to change directory"
 msgstr "فشل في تغيير الدليل"
@@ -3406,11 +3450,11 @@ msgstr "فشل في إنشاء مقبس الإستماع . إنهاء"
 msgid "Failed to create listening socket for active mode transfer"
 msgstr "فشل في إنشاء مقبس الإستماع لنمط الإرسال النشط"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:624
+#: ../../locales/../src/interface/LocalTreeView.cpp:626
 msgid "Failed to get 'My Documents' path"
 msgstr "فشل الحصول على مسار 'المستندات'"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:610
+#: ../../locales/../src/interface/LocalTreeView.cpp:612
 msgid "Failed to get desktop path"
 msgstr "فشل الحصول على مسار سطح المكتب"
 
@@ -3457,7 +3501,7 @@ msgstr "فشل في فتح \"%s\" للقراءة"
 msgid "Failed to open \"%s\" for writing"
 msgstr "فشل في فتح \"%s\" للكتابة"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:418
+#: ../../locales/../src/engine/ControlSocket.cpp:439
 msgid "Failed to parse returned path."
 msgstr "تعذر تحليل المسار المرتد"
 
@@ -3469,7 +3513,7 @@ msgstr "فشل في تحليل شهادة الجذر الموثوقة"
 msgid "Failed to receive data"
 msgstr "فشل في إستقبال البيانات"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:194
+#: ../../locales/../src/engine/ControlSocket.cpp:196
 msgid "Failed to retrieve directory listing"
 msgstr "فشل في إستخلاص قائمة الدليل"
 
@@ -3534,7 +3578,7 @@ msgstr "فشل في وضع اللغة على %s ، إستعمال لغة الن�
 msgid "Failed to validate settings"
 msgstr "فشل في التحقق من الإعدادات"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1081
+#: ../../locales/../src/engine/tlssocket.cpp:1073
 msgid "Failed to verify peer certificate"
 msgstr "فشل في التحقق من شهادة النظير"
 
@@ -3551,15 +3595,15 @@ msgstr "فشل في الكتابة إلى الملف xml"
 msgid "Failed transfers"
 msgstr "عمليات إرسال فاشلة"
 
-#: resources.h:689
+#: resources.h:698
 msgid "Fall back to active mode"
 msgstr "رجوع كامل إلى النمط النشط"
 
-#: resources.h:356
+#: resources.h:353
 msgid "Fil&e:"
 msgstr "ال&ملف:"
 
-#: resources.h:237
+#: resources.h:234
 msgid "Fil&es"
 msgstr "م&لفات"
 
@@ -3579,7 +3623,7 @@ msgstr "الملف لا يحتوي على أي بيانات قابلة للإس�
 msgid "File editing"
 msgstr "تحرير الملف"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1925
+#: ../../locales/../src/interface/RemoteListView.cpp:1672
 msgid "File exists"
 msgstr "الملف موجود"
 
@@ -3587,7 +3631,7 @@ msgstr "الملف موجود"
 msgid "File exists action"
 msgstr "إجراء وجود الملف"
 
-#: resources.h:292
+#: resources.h:289
 msgid "File has changed"
 msgstr "تم تغيير الملف"
 
@@ -3596,43 +3640,43 @@ msgid "File lists"
 msgstr "قوائم الملف"
 
 #: ../../locales/../src/interface/edithandler.cpp:1601
-#: ../../locales/../src/interface/FileZilla.cpp:692
-#: ../../locales/../src/interface/FileZilla.cpp:786
+#: ../../locales/../src/interface/FileZilla.cpp:697
+#: ../../locales/../src/interface/FileZilla.cpp:791
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:127
 msgid "File not found"
 msgstr "الملف غير موجود"
 
-#: resources.h:1008
+#: resources.h:1027
 msgid "File search"
 msgstr "بحث عن ملف"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:128
+#: ../../locales/../src/engine/ControlSocket.cpp:130
 msgid "File transfer aborted by user"
 msgstr "تمت مقاطعة إرسال الملف من قبل المستخدم"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:118
+#: ../../locales/../src/engine/ControlSocket.cpp:120
 #, c-format
 msgid "File transfer aborted by user after transferring %s in %s"
 msgstr "تمت مقاطعة إرسال الملف من قبل المستخدم بعد إرسال %s في %s ـ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:139
+#: ../../locales/../src/engine/ControlSocket.cpp:141
 msgid "File transfer failed"
 msgstr "فشل إرسال الملف"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:122
+#: ../../locales/../src/engine/ControlSocket.cpp:124
 #, c-format
 msgid "File transfer failed after transferring %s in %s"
 msgstr "فشل إرسال الملف بعد إرسال %s في %s ـ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:134
+#: ../../locales/../src/engine/ControlSocket.cpp:136
 msgid "File transfer skipped"
 msgstr "تم تجاوز إرسال الملف"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:132
+#: ../../locales/../src/engine/ControlSocket.cpp:134
 msgid "File transfer successful"
 msgstr "تم إرسال الملف بنجاح"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:115
+#: ../../locales/../src/engine/ControlSocket.cpp:117
 #, c-format
 msgid "File transfer successful, transferred %s in %s"
 msgstr "نجاح إرسال الملف ، تم إرسال %s في %s"
@@ -3641,11 +3685,11 @@ msgstr "نجاح إرسال الملف ، تم إرسال %s في %s"
 msgid "File transfers still in progress."
 msgstr "عمليات إرسال الملف مستمرة"
 
-#: resources.h:374
+#: resources.h:371
 msgid "File would transfer with ASCII data type."
 msgstr "قد يرسل الملف بنوع بيانات ASCII"
 
-#: resources.h:375
+#: resources.h:372
 msgid "File would transfer with binary data type."
 msgstr "قد يرسل الملف بنوع بيانات ثنائية"
 
@@ -3655,39 +3699,39 @@ msgstr "قد يرسل الملف بنوع بيانات ثنائية"
 msgid "FileZilla Error"
 msgstr "خطأ FileZilla"
 
-#: resources.h:711
+#: resources.h:720
 msgid ""
 "FileZilla can now test your configuration to ensure everything is configured "
 "properly."
 msgstr ""
 "يمكن الآن لـ FileZilla أن يفحص تكوينك للتأكد من أن كل شيء تم تكوينه بشكل صحيح"
 
-#: resources.h:464
+#: resources.h:461
 msgid "FileZilla is already connected to a server."
 msgstr "متصل مسبقا إلى خادم ما FileZilla"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1576
+#: ../../locales/../src/interface/Mainfrm.cpp:1578
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "يحتاج FileZilla إلى إعادة التشغيل لتغيير اللغة لتصبح سارية المفعول"
 
-#: resources.h:958
+#: resources.h:977
 msgid "FileZilla updates"
 msgstr "تحديثات FileZilla"
 
-#: resources.h:511
+#: resources.h:512
 msgid "Filelist status &bars"
 msgstr "أ&شرطة حالة قائمة الملفات"
 
 #: ../../locales/../src/interface/edithandler.cpp:1109
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
-#: ../../locales/../src/interface/LocalListView.cpp:278
-#: ../../locales/../src/interface/RemoteListView.cpp:372
-#: ../../locales/../src/interface/search.cpp:369
+#: ../../locales/../src/interface/LocalListView.cpp:279
+#: ../../locales/../src/interface/RemoteListView.cpp:373
+#: ../../locales/../src/interface/search.cpp:79
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:39
 msgid "Filename"
 msgstr "إسم الملف"
 
-#: resources.h:504
+#: resources.h:505
 msgid "Filename &filters..."
 msgstr "&مرشحات إسم الملف..."
 
@@ -3697,11 +3741,11 @@ msgstr "&مرشحات إسم الملف..."
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "إسم الملف لا يمكن أن يتم بناؤه للدليل %s و إسم الملف %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1911
+#: ../../locales/../src/interface/RemoteListView.cpp:1658
 msgid "Filename invalid"
 msgstr "إسم ملف غير صالح"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3181
+#: ../../locales/../src/interface/RemoteListView.cpp:2929
 msgid ""
 "Filename may not contain any of the following characters: / \\ : * ? \" < > |"
 msgstr ""
@@ -3711,7 +3755,7 @@ msgstr ""
 msgid "Filename unchanged"
 msgstr "لم يتغير إسم الملف"
 
-#: resources.h:294 resources.h:962
+#: resources.h:291 resources.h:981
 msgid "Filename:"
 msgstr "إسم الملف:"
 
@@ -3726,14 +3770,14 @@ msgid ""
 msgstr ""
 "أسماء الملفات لا يمكن ان تحتوى على رمز من الرموز الاتية / \\ : * ? \" < > |"
 
-#: resources.h:322
+#: resources.h:319
 msgid "Files currently being edited"
 msgstr "الملفات حاليا يتم تحريرها"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:135
-#: ../../locales/../src/interface/LocalListView.cpp:279
-#: ../../locales/../src/interface/RemoteListView.cpp:373
-#: ../../locales/../src/interface/search.cpp:371
+#: ../../locales/../src/interface/LocalListView.cpp:280
+#: ../../locales/../src/interface/RemoteListView.cpp:374
+#: ../../locales/../src/interface/search.cpp:81
 msgid "Filesize"
 msgstr "حجم الملف"
 
@@ -3741,22 +3785,22 @@ msgstr "حجم الملف"
 msgid "Filesize format"
 msgstr "تنسيق حجم الملف"
 
-#: ../../locales/../src/interface/LocalListView.cpp:280
-#: ../../locales/../src/interface/RemoteListView.cpp:374
-#: ../../locales/../src/interface/search.cpp:372
+#: ../../locales/../src/interface/LocalListView.cpp:281
+#: ../../locales/../src/interface/RemoteListView.cpp:375
+#: ../../locales/../src/interface/search.cpp:82
 msgid "Filetype"
 msgstr "نوع الملف"
 
-#: resources.h:946
+#: resources.h:965
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:133
 msgid "Filetype associations"
 msgstr "إشراكات نوع الملف"
 
-#: resources.h:236
+#: resources.h:233
 msgid "Filter applies to:"
 msgstr "المرشح يطبق على:"
 
-#: resources.h:819
+#: resources.h:828
 msgid "Filter invalid characters in filenames"
 msgstr "فرز الرموز الغير صالحة في أسماء الملفات"
 
@@ -3767,15 +3811,15 @@ msgstr "فرز الرموز الغير صالحة في أسماء الملفات
 msgid "Filter name already exists"
 msgstr "أسم المرشح موجود مسبقا"
 
-#: resources.h:232
+#: resources.h:229
 msgid "Filter out items matching all of the following"
 msgstr "فرز المواد المطابقة لكل مما يلي"
 
-#: resources.h:233
+#: resources.h:230
 msgid "Filter out items matching any of the following"
 msgstr "فرز المواد المطابقة لأي مما يلي"
 
-#: resources.h:234
+#: resources.h:231
 msgid "Filter out items matching none of the following"
 msgstr "فرز المواد التي لا تطابق مما يلي"
 
@@ -3784,7 +3828,7 @@ msgstr "فرز المواد التي لا تطابق مما يلي"
 msgid "Filter set already exists"
 msgstr "مجموعة المرشح موجودة مسبقا"
 
-#: resources.h:1001
+#: resources.h:1020
 msgid "Filter the directory listings"
 msgstr "فرز قوائم الدليل"
 
@@ -3802,7 +3846,7 @@ msgstr "بصمة الأصبع (MD5):"
 msgid "Fingerprint (SHA-1):"
 msgstr "بصمة الأصبع (SHA-1):"
 
-#: resources.h:190 resources.h:203
+#: resources.h:187 resources.h:200
 msgid "Fingerprint:"
 msgstr "بصمة الأصبع:"
 
@@ -3810,7 +3854,7 @@ msgstr "بصمة الأصبع:"
 msgid "Firewall and router configuration wizard"
 msgstr "معالج تكوين جهاز التوجيه و جدار الحماية"
 
-#: resources.h:729
+#: resources.h:738
 msgid ""
 "For more detailed information about what these options do, please run the "
 "network configuration wizard."
@@ -3818,11 +3862,11 @@ msgstr ""
 "من أجل مزيد من المعلومات حول تأثير هذه الخيارات , الرجاء تشغيل معالج تكوين "
 "الشبكة"
 
-#: resources.h:706
+#: resources.h:715
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "من أجل الفعالية يجب عليك على الأقل تحديد 10 منافذ"
 
-#: ../../locales/../src/interface/Options.cpp:215
+#: ../../locales/../src/interface/Options.cpp:224
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -3834,7 +3878,7 @@ msgstr ""
 msgid "Force &UTF-8"
 msgstr "إجبار &UTF-8"
 
-#: resources.h:538
+#: resources.h:539
 msgid "Force showing &hidden files"
 msgstr "إ&جبار إظهار الملفات المخفية"
 
@@ -3842,15 +3886,20 @@ msgstr "إ&جبار إظهار الملفات المخفية"
 msgid "Force showing hidden files"
 msgstr "إجبار إظهار الملفات المخفية"
 
-#: resources.h:773
+#: resources.h:782
 msgid "Format specifications:"
 msgstr "مواصفات التنسيق :"
 
-#: resources.h:944
+#: resources.h:963
 msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr "التنسيق : الإمتداد متبوع بالأمر المقتبس بشكل صحيح و المعاملات"
 
-#: resources.h:456
+#: ../../locales/../src/interface/updater.cpp:628
+#, c-format
+msgid "Found new %s %s\n"
+msgstr "الجديد المكتشف %s %s\n"
+
+#: resources.h:453
 msgid "Further documentation"
 msgstr "تعليمات موسعة"
 
@@ -3858,20 +3907,20 @@ msgstr "تعليمات موسعة"
 msgid "General"
 msgstr "عام"
 
-#: ../../locales/../src/engine/proxy.cpp:532
+#: ../../locales/../src/engine/proxy.cpp:533
 msgid "General SOCKS server failure"
 msgstr "فشل SOCKS عام للخادم"
 
-#: resources.h:791
+#: resources.h:800
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:122
 msgid "Generic proxy"
 msgstr "ملقم وكيل عام"
 
-#: resources.h:695
+#: resources.h:704
 msgid "Get external IP address from the following URL:"
 msgstr "الحصول على عنوان IP خارجي من الرابط التالي :"
 
-#: resources.h:457
+#: resources.h:454
 msgid "Getting help"
 msgstr "الحصول على تعليمات"
 
@@ -3884,15 +3933,15 @@ msgstr "إسم مجموعة المرشحات المعطى موجود مسبقا 
 msgid "Global bookmarks"
 msgstr "عناوين مفضلة شاملة"
 
-#: resources.h:176
+#: resources.h:173
 msgid "GnuTLS:"
 msgstr "GnuTLS:"
 
-#: resources.h:148
+#: resources.h:145
 msgid "Group permissions"
 msgstr "أذونات المجموعة"
 
-#: resources.h:594
+#: resources.h:599
 msgid "H&igh"
 msgstr "ع&الى"
 
@@ -3900,7 +3949,7 @@ msgstr "ع&الى"
 msgid "HTTPS - HTTP over TLS"
 msgstr "HTTPS - HTTP over TLS"
 
-#: resources.h:327
+#: resources.h:324
 msgid "Hash:"
 msgstr "التجزئة :"
 
@@ -3908,7 +3957,7 @@ msgstr "التجزئة :"
 msgid "Hidden"
 msgstr "مخفي"
 
-#: resources.h:817 ../../locales/../src/interface/queue.cpp:924
+#: resources.h:826 ../../locales/../src/interface/queue.cpp:924
 #: ../../locales/../src/interface/queue.cpp:1011
 msgid "High"
 msgstr "عالى"
@@ -3922,22 +3971,22 @@ msgstr "أعلى"
 msgid "Highest available port has to be a number between 1024 and 65535."
 msgstr "اعلى منفذ متاح يجب ان يكون رقما بين 1024 و 65535"
 
-#: resources.h:220
+#: resources.h:217
 msgid ""
 "Hold the shift key to toggle the filter state on both sides simultaneously."
 msgstr ""
 "إستمر بالضغط على مفتاح shift للتبديل بين حالتي المرشح على كلا الجانبين في "
 "الوقت نفسه"
 
-#: resources.h:167
+#: resources.h:164
 msgid "Homepage:"
 msgstr "الصفحة الرئيسية"
 
-#: resources.h:329
+#: resources.h:326
 msgid "Host key fingerprint:"
 msgstr "مفتاح بصمة الإصبع للمضيف :"
 
-#: resources.h:196
+#: resources.h:193
 msgid "Host key mismatch"
 msgstr "مفتاح مضيف غير مطابق"
 
@@ -3945,12 +3994,12 @@ msgstr "مفتاح مضيف غير مطابق"
 msgid "Host starts with '[' but no closing bracket found."
 msgstr "الإستضافة تبدأ مع '[' لكن لا يوجد قوس مثله للإغلاق"
 
-#: ../../locales/../src/engine/proxy.cpp:541
+#: ../../locales/../src/engine/proxy.cpp:542
 msgid "Host unreachable"
 msgstr "الإستضافة غير قابلة للوصول"
 
-#: resources.h:17 resources.h:46 resources.h:131 resources.h:188
-#: resources.h:201
+#: resources.h:17 resources.h:46 resources.h:131 resources.h:185
+#: resources.h:198
 msgid "Host:"
 msgstr "المضيف:"
 
@@ -3958,7 +4007,7 @@ msgstr "المضيف:"
 msgid "Hours,"
 msgstr "ساعات،"
 
-#: resources.h:893
+#: resources.h:906
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (مثال: 15:47)"
 
@@ -3966,7 +4015,7 @@ msgstr "I&SO 8601 (مثال: 15:47)"
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "IPv6 addresses are not supported with SOCKS4 proxy"
 
-#: resources.h:733
+#: resources.h:742
 msgid ""
 "If no data is sent or received during an operation for longer than the "
 "specified time, the connection will be closed and FileZilla will try to "
@@ -3975,11 +4024,11 @@ msgstr ""
 "إذا تعذر إرسال أو إستقبال بيانات اثناء التشغيل لأكثر من الوقت المحدد سيتم "
 "إغلاق الإتصال و من ثم سيتم إعادة الإتصال"
 
-#: resources.h:978
+#: resources.h:997
 msgid "If reporting bugs, please provide logs with \"Verbose\" logging level."
 msgstr "عند التقرير عن خطأ , الرجاء تقديم سجلات مع مستوى سجل \"Verbose\""
 
-#: resources.h:686
+#: resources.h:695
 msgid ""
 "If the automatic test at the end of this wizard succeeds, but you cannot "
 "transfer files to a particular server, the server might be misconfigured and "
@@ -3990,7 +4039,7 @@ msgstr ""
 "خادم ما فقد يكون الخادم غير مكون و بالتالي ينبغي عليك أن تجرب النمط النشط . "
 "يمكنك وضع نمط الإرسال حسب كل خادم فى مدير الموقع"
 
-#: resources.h:681
+#: resources.h:690
 msgid ""
 "If the fallback option is enabled, you will be able to connect to "
 "misconfigured servers which reject the selected transfer mode."
@@ -3998,7 +4047,7 @@ msgstr ""
 "اذا كان خيار التراجع في وضع التمكين ، سيكون في إمكانك أن تتصل بالخوادم الغير "
 "مكونة و التي ترفض نمط الإرسال المحدد"
 
-#: resources.h:199
+#: resources.h:196
 msgid ""
 "If the host key change was not expected, please contact the server "
 "administrator."
@@ -4020,7 +4069,7 @@ msgstr ""
 "عند إستمرار المشكلة ، بعض أجهزة التوجيه و/أو برامج جدران الحماية تواصل "
 "مقاطعة الإتصال"
 
-#: resources.h:967
+#: resources.h:986
 msgid ""
 "If the size of the logfile reaches the limit, it gets renamed by adding \".1"
 "\" to the end of the filename (possibly overwriting older logfiles) and a "
@@ -4029,7 +4078,7 @@ msgstr ""
 "عند وصول حجم ملف السجل إلى الحد ، يتم تسميته بإضافة \"1\" إلى نهاية إسم "
 "الملف (و قد يتم الكتابة على ملفات السجلات القديمة) و من ثم إنشاء ملف جديد"
 
-#: resources.h:442
+#: resources.h:439
 msgid ""
 "If the symlink points to a directory, FileZilla can either delete the "
 "symbolic link or remove the contents of the linked directory."
@@ -4049,7 +4098,7 @@ msgstr ""
 msgid "If this problem stays, please contact your router manufacturer."
 msgstr "إذا أستمرت هذه المشكلة ، فالرجاء أتصل بمصنع جهاز التوجيه الخاص بك"
 
-#: resources.h:265 resources.h:856
+#: resources.h:262 resources.h:865
 msgid ""
 "If using 'overwrite if newer', your system time has to be synchronized with "
 "the server. If the time differs (e.g. different timezone), specify a "
@@ -4059,7 +4108,7 @@ msgstr ""
 "مع توقيت الخادم . إذا أختلف الوقت (نطاق زمنى مختلف) قم بتعييد فارق التوقيت "
 "في مدير المواقع"
 
-#: resources.h:917
+#: resources.h:936
 msgid ""
 "If using timestamp based comparison, consider two files equal if their "
 "timestamp difference does not exceed this threshold."
@@ -4067,11 +4116,11 @@ msgstr ""
 "عند إستخدام مقارنة تعتمد على طابع الوقت ، يكون الملفان متساويان إذا كان "
 "إختلاف طابع الوقت لهما لا يتجاوز هذه العتبة"
 
-#: resources.h:932
+#: resources.h:951
 msgid "If you change the language, you should restart FileZilla."
 msgstr "عند تغيير اللغة ، يجب إعادة تشغيل FileZilla"
 
-#: resources.h:712
+#: resources.h:721
 msgid ""
 "If you click on test, FileZilla will connect to probe.filezilla-project.org "
 "and will perform some simple tests."
@@ -4083,17 +4132,17 @@ msgstr ""
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "عند إغلاق FileZilla ، ستفقد تغييراتك"
 
-#: resources.h:832
+#: resources.h:841
 msgid ""
 "If you enter the wrong filetypes, those files may get corrupted when "
 "transferred."
 msgstr "عند إدخال أنواع ملفات خاطئة ، فإن هذه الملفات قد تتلف أثناء الإرسال"
 
-#: resources.h:713
+#: resources.h:722
 msgid "If you get any errors, your configuration is not correct."
 msgstr "اذا حصلت على اى خطأ ، فإن تكوينك غير صحيح"
 
-#: resources.h:745
+#: resources.h:754
 msgid ""
 "If you have problems to retrieve directory listings or to transfer files, "
 "try to change the default transfer mode."
@@ -4111,7 +4160,7 @@ msgstr ""
 "برنامج جدار الحماية ربما لم يتم تكوينه بطريقة صحيحة . في هذه الحالة حاول "
 "تشغيل النمط السلبي و التواصل مع مدير الخادم للمساعدة"
 
-#: resources.h:672
+#: resources.h:681
 msgid ""
 "If you successfully complete the wizard and the final test succeeds, any "
 "firewalls and routers you have should be configured properly."
@@ -4119,7 +4168,7 @@ msgstr ""
 "عند إكمال المعالج بنجاح و عند نجاح الفحص النهائي ينبغي تكوين أي جهاز للتوجيه "
 "أو أي برنامج جدار حماية بشكل صحيح"
 
-#: resources.h:708
+#: resources.h:717
 msgid ""
 "If you use a firewall, make sure FileZilla is allowed to accept connection "
 "on all given ports."
@@ -4127,7 +4176,7 @@ msgstr ""
 "اذا كنت تستخدم جدار نارى ، تأكد من ان البرنامج مسموح له باستقبال اتصالات على "
 "كل المنافذ المعطاة"
 
-#: resources.h:707
+#: resources.h:716
 msgid ""
 "If you use a router, make sure all these ports are forwarded to the machine "
 "you're running FileZilla on."
@@ -4147,7 +4196,7 @@ msgstr ""
 msgid "Import data from older version"
 msgstr "إستيراد البيانات من نسخة قديمة"
 
-#: resources.h:284
+#: resources.h:281
 msgid "Import settings"
 msgstr "إستيراد الإعدادات"
 
@@ -4161,7 +4210,7 @@ msgstr "نجاح الإستيراد"
 msgid "Improperly quoted association."
 msgstr "إشراكات مقتبسة بشكل غير صحيح"
 
-#: resources.h:700
+#: resources.h:709
 msgid ""
 "In active mode, FileZilla has to listen on a port for data transfers. You "
 "have to specify which ports FileZilla will use."
@@ -4169,7 +4218,7 @@ msgstr ""
 "فى النمط النشط ، البرنامج يستمع على منفذ من أجل إرسال البيانات . يتوجب عليك "
 "تحديد أي المنافذ التي سوف يستخدمها البرنامج"
 
-#: resources.h:702
+#: resources.h:711
 msgid ""
 "In case you have a router, you will have to forward all available ports, as "
 "FileZilla has no influence on the ports your system chooses."
@@ -4177,13 +4226,13 @@ msgstr ""
 "فى حالة انه لديك جهاز توجيه ، فانه يجب تقديم كافة المنافذ المتاحة , بما أن "
 "FileZilla ليس له تأثير على المنافذ التي يختارها نظامك"
 
-#: resources.h:690 resources.h:754
+#: resources.h:699 resources.h:763
 msgid ""
 "In order to use active mode, FileZilla needs to know your external IP "
 "address."
 msgstr "لكي تستعمل النمط النشط ، FileZilla يحتاج معرفة عنوان IP الخارجي"
 
-#: resources.h:675
+#: resources.h:684
 msgid ""
 "In passive mode, which is recommended for most users, FileZilla asks the "
 "server for a port and connects to the given port. Not much configuration has "
@@ -4192,7 +4241,7 @@ msgstr ""
 "فى النمط السلبي الذى ينصح به لمعظم المستخدمين . البرنامج يسأل الخادم من أجل "
 "منفذ و يتصل بالمنفذ المعطى له , حيث لا يوجد الكثير من الضبط يجب عمله هنا"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1095
+#: ../../locales/../src/engine/tlssocket.cpp:1087
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4202,7 +4251,7 @@ msgstr "السلسلة ناقصة ، الشهادة العليا ليست شها
 msgid "Incorrect password"
 msgstr "كلمة مرور غير صحيحة"
 
-#: resources.h:1023
+#: resources.h:1043
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4228,7 +4277,7 @@ msgstr "تفاعلي"
 msgid "Interface"
 msgstr "الواجهة"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:219
+#: ../../locales/../src/engine/ControlSocket.cpp:221
 #: ../../locales/../src/interface/QueueView.cpp:1016
 #: ../../locales/../src/interface/QueueView.cpp:1595
 msgid "Interrupted by user"
@@ -4242,8 +4291,8 @@ msgstr "طول محتوى غير صالح"
 msgid "Invalid HTTP Response"
 msgstr "إستجابة HTTP غير صالحة"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:536
-#: ../../locales/../src/engine/ControlSocket.cpp:582
+#: ../../locales/../src/engine/ControlSocket.cpp:557
+#: ../../locales/../src/engine/ControlSocket.cpp:603
 msgid ""
 "Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
 "site manager to force UTF-8."
@@ -4268,7 +4317,7 @@ msgstr "تاريخ غير صالح"
 
 #: ../../locales/../src/interface/file_utils.cpp:290
 #: ../../locales/../src/interface/file_utils.cpp:315
-#: ../../locales/../src/interface/RemoteListView.cpp:3181
+#: ../../locales/../src/interface/RemoteListView.cpp:2929
 msgid "Invalid filename"
 msgstr "اسم ملف غير صالح"
 
@@ -4307,7 +4356,7 @@ msgid ""
 msgstr ""
 "خادم الإستضافة غير صالح، بعد إغلاق القوس فقط النقطة و المنفذ قد يلي كلاحقة"
 
-#: ../../locales/../src/interface/search.cpp:681
+#: ../../locales/../src/interface/search.cpp:391
 msgid "Invalid regular expression in search conditions."
 msgstr "تعبير إصطلاحي غير صالح في شروط البحث"
 
@@ -4315,7 +4364,7 @@ msgstr "تعبير إصطلاحي غير صالح في شروط البحث"
 msgid "Invalid response code"
 msgstr "رمز إستجابة غير صالح"
 
-#: ../../locales/../src/interface/search.cpp:675
+#: ../../locales/../src/interface/search.cpp:385
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "شروط بحث غير صالحة : %s"
@@ -4354,7 +4403,7 @@ msgstr "مركز السلطة القضائية :"
 msgid "Jurisdiction state or province:"
 msgstr "ولاية أو محافظة السلطة القضائية :"
 
-#: resources.h:914
+#: resources.h:927
 msgid "Keep directories on top"
 msgstr "إبقاء الأدلة في الأعلى"
 
@@ -4368,7 +4417,7 @@ msgstr ""
 "الخيار في وضع التمكين . و مع ذلك فإن FileZilla يؤدي بعض الفحوصات للتأكد من "
 "أن الخادم يدعم هذه الميزة ، و الفحص قد يفشل"
 
-#: resources.h:324
+#: resources.h:321
 msgid "Key exchange"
 msgstr "تبديل المفتاح"
 
@@ -4376,46 +4425,46 @@ msgstr "تبديل المفتاح"
 msgid "Key exchange:"
 msgstr "تبديل المفتاح:"
 
-#: resources.h:597
+#: resources.h:602
 msgid "L&owest"
 msgstr "الأ&قل"
 
-#: resources.h:930
+#: resources.h:949
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:131
 msgid "Language"
 msgstr "اللغة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1576
+#: ../../locales/../src/interface/Mainfrm.cpp:1578
 msgid "Language changed"
 msgstr "تم تغيير اللغة"
 
-#: ../../locales/../src/interface/LocalListView.cpp:281
-#: ../../locales/../src/interface/RemoteListView.cpp:375
-#: ../../locales/../src/interface/search.cpp:373
+#: ../../locales/../src/interface/LocalListView.cpp:282
+#: ../../locales/../src/interface/RemoteListView.cpp:376
+#: ../../locales/../src/interface/search.cpp:83
 msgid "Last modified"
 msgstr "اخر تغيير"
 
-#: resources.h:859
+#: resources.h:868
 msgid "Layout"
 msgstr "التخطيط"
 
-#: resources.h:805
+#: resources.h:814
 msgid "Limit for concurrent &downloads:"
 msgstr "الحد لعمليات ال&تحميل المتزامنة:"
 
-#: resources.h:807
+#: resources.h:816
 msgid "Limit for concurrent &uploads:"
 msgstr "الحد لعمليات ال&رفع المتزامنة:"
 
-#: resources.h:749
+#: resources.h:758
 msgid "Limit local ports"
 msgstr "حدود المنافذ المحلية"
 
-#: resources.h:964
+#: resources.h:983
 msgid "Limit size of logfile"
 msgstr "حد الحجم لملف السجل"
 
-#: resources.h:965
+#: resources.h:984
 msgid "Limit:"
 msgstr "الحدود :"
 
@@ -4423,7 +4472,7 @@ msgstr "الحدود :"
 msgid "Line length exceeded"
 msgstr "تجاوز حد السطر"
 
-#: resources.h:178
+#: resources.h:175
 msgid "Linked against"
 msgstr "مرتبط إلى"
 
@@ -4437,7 +4486,7 @@ msgstr "مقبس الإستماع مغلق"
 msgid "Listing:"
 msgstr "القائمة:"
 
-#: resources.h:752
+#: resources.h:761
 msgid "Lo&west available port:"
 msgstr "المنفذ المتوفر ال&أدنى :"
 
@@ -4446,7 +4495,7 @@ msgstr "المنفذ المتوفر ال&أدنى :"
 msgid "Local"
 msgstr "محليا"
 
-#: resources.h:351
+#: resources.h:348
 msgid "Local file"
 msgstr "الملف المحلي"
 
@@ -4454,8 +4503,8 @@ msgstr "الملف المحلي"
 msgid "Local file does not exist."
 msgstr "الملف المحلي غير موجود"
 
-#: ../../locales/../src/interface/updater.cpp:359
-#: ../../locales/../src/interface/updater.cpp:436
+#: ../../locales/../src/interface/updater.cpp:366
+#: ../../locales/../src/interface/updater.cpp:443
 #, c-format
 msgid "Local file is %s\n"
 msgstr "الملف المحلي هو: %s\n"
@@ -4468,7 +4517,7 @@ msgstr "الملف المحلي هو دليل بدلا من ملف عادي"
 msgid "Local file is not a valid filename."
 msgstr "إسم الملف المحلي ليس صالح"
 
-#: resources.h:214
+#: resources.h:211
 msgid "Local filters:"
 msgstr "المرشحات المحلية"
 
@@ -4484,7 +4533,7 @@ msgstr "المحلية:"
 msgid "Log file"
 msgstr "ملف السجل"
 
-#: resources.h:959
+#: resources.h:978
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:140
 msgid "Logging"
 msgstr "السجل"
@@ -4561,7 +4610,7 @@ msgstr "المقدمة الرأسية المحرفة : %s"
 msgid "Malformed reply, server not sending proper line endings"
 msgstr "إجابة محرفة ، الخادم لا يرسل نهايات صحيحة للسطر"
 
-#: resources.h:381 ../../locales/../src/interface/manual_transfer.cpp:309
+#: resources.h:378 ../../locales/../src/interface/manual_transfer.cpp:309
 #: ../../locales/../src/interface/manual_transfer.cpp:316
 #: ../../locales/../src/interface/manual_transfer.cpp:323
 #: ../../locales/../src/interface/manual_transfer.cpp:328
@@ -4572,32 +4621,32 @@ msgstr "إجابة محرفة ، الخادم لا يرسل نهايات صحي�
 msgid "Manual transfer"
 msgstr "إرسال يدوي"
 
-#: resources.h:421
+#: resources.h:418
 msgid "Match all of the following"
 msgstr "مطابقة كل ما يأتي"
 
-#: resources.h:422
+#: resources.h:419
 msgid "Match any of the following"
 msgstr "مطابقة أي مما يلي"
 
-#: resources.h:423
+#: resources.h:420
 msgid "Match none of the following"
 msgstr "عدم مطابقة ما يلي"
 
-#: resources.h:803
+#: resources.h:812
 msgid "Maximum simultaneous &transfers:"
 msgstr "أقصى &عمليات متزامنة للإرسال :"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1964
+#: ../../locales/../src/interface/Mainfrm.cpp:1966
 msgid "Message log"
 msgstr "سجل الرسائل"
 
-#: resources.h:870
+#: resources.h:879
 msgid "Message log position"
 msgstr "مكان سجل الرسائل"
 
-#: resources.h:966
+#: resources.h:985
 msgid "MiB"
 msgstr "مب"
 
@@ -4605,19 +4654,19 @@ msgstr "مب"
 msgid "Minutes"
 msgstr "دقائق"
 
-#: resources.h:345
+#: resources.h:342
 msgid "Move &down"
 msgstr "تحريك ل&تحت"
 
-#: resources.h:344
+#: resources.h:341
 msgid "Move &up"
 msgstr "تحريك ل&فوق"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1020
+#: ../../locales/../src/interface/LocalTreeView.cpp:1035
 msgid "My Computer"
 msgstr "جهاز الكمبيوتر"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1010
+#: ../../locales/../src/interface/LocalTreeView.cpp:1025
 msgid "My Documents"
 msgstr "المستندات"
 
@@ -4632,7 +4681,7 @@ msgstr "مواقعى"
 msgid "N/a"
 msgstr "بدون"
 
-#: resources.h:386
+#: resources.h:383
 msgid "Name"
 msgstr "الإسم"
 
@@ -4646,15 +4695,19 @@ msgstr "الإسم موجود مسبقا"
 msgid "Name of bookmark already exists."
 msgstr "الإسم للعنوان المفضل موجود مسبقا"
 
-#: resources.h:130 resources.h:179
+#: resources.h:130 resources.h:176
 msgid "Name:"
 msgstr "الاسم:"
+
+#: resources.h:934
+msgid "Natural sort"
+msgstr ""
 
 #: ../../locales/../src/interface/filteredit.cpp:349
 msgid "Need to enter filter name"
 msgstr "يجب ادخال اسم مرشح"
 
-#: ../../locales/../src/interface/search.cpp:665
+#: ../../locales/../src/interface/search.cpp:375
 msgid "Need to enter valid remote path"
 msgstr "مطلوب إدخال مسار بعيد صالح"
 
@@ -4662,11 +4715,11 @@ msgstr "مطلوب إدخال مسار بعيد صالح"
 msgid "Need to specify a character encoding"
 msgstr "يجب تحديد ترميز للحروف"
 
-#: ../../locales/../src/engine/proxy.cpp:538
+#: ../../locales/../src/engine/proxy.cpp:539
 msgid "Network unreachable"
 msgstr "الشبكة غير قابلة للوصول"
 
-#: resources.h:948
+#: resources.h:967
 msgid "Never"
 msgstr "بدون"
 
@@ -4674,15 +4727,15 @@ msgstr "بدون"
 msgid "New &Folder"
 msgstr "مجلد &جديد"
 
-#: resources.h:488
+#: resources.h:489
 msgid "New &tab"
 msgstr "&تبويب جديد"
 
-#: resources.h:84 resources.h:401
+#: resources.h:84 resources.h:398
 msgid "New Book&mark"
 msgstr "&عنوان مفضل جديد"
 
-#: resources.h:382 ../../locales/../src/interface/bookmarks_dialog.cpp:55
+#: resources.h:379 ../../locales/../src/interface/bookmarks_dialog.cpp:55
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:69
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:76
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:83
@@ -4700,9 +4753,9 @@ msgstr "&عنوان مفضل جديد"
 msgid "New bookmark"
 msgstr "علامة جديدة"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1138
-#: ../../locales/../src/interface/RemoteListView.cpp:1631
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1290
+#: ../../locales/../src/interface/LocalTreeView.cpp:1184
+#: ../../locales/../src/interface/RemoteListView.cpp:1375
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1336
 msgid "New directory"
 msgstr "دليل جديد"
 
@@ -4725,7 +4778,7 @@ msgstr "مجلد جديد"
 msgid "New site"
 msgstr "موقع جديد"
 
-#: resources.h:868
+#: resources.h:877
 msgid "Next to the transfer queue"
 msgstr "التالي إلى قائمة إنتظار الإرسال"
 
@@ -4772,16 +4825,16 @@ msgstr "لا يوجد المزيد من الملفات في قائمة الإن�
 msgid "No name for the filterset given."
 msgstr "لم يتم وضع إسم لمجموعة المرشح"
 
-#: resources.h:417
+#: resources.h:414
 msgid "No program associated with filetype"
 msgstr "لا يوجد برنامج مشروك مع نوع الملف"
 
-#: resources.h:407
+#: resources.h:404
 #, c-format
 msgid "No program has been associated to edit files with the extension '%s'."
 msgstr "لا يوجد برنامج مشروك من أجل تحرير الملفات ذات الإمتداد '%s'"
 
-#: ../../locales/../src/interface/search.cpp:523
+#: ../../locales/../src/interface/search.cpp:234
 msgid "No search results"
 msgstr "لا يوجد نتائج بحث"
 
@@ -4791,7 +4844,7 @@ msgstr "لا يوجد نتائج بحث"
 msgid "No sites available"
 msgstr "لا يتوفر مواقع"
 
-#: ../../locales/../src/engine/proxy.cpp:506
+#: ../../locales/../src/engine/proxy.cpp:507
 msgid "No supported SOCKS5 auth method"
 msgstr "لا يوجد طريقة مصادقة SOCKS5 مدعومة"
 
@@ -4799,16 +4852,16 @@ msgstr "لا يوجد طريقة مصادقة SOCKS5 مدعومة"
 msgid "No username given."
 msgstr "لم يتم وضع إسم المستخدم"
 
-#: resources.h:924 resources.h:929
+#: resources.h:943 resources.h:948
 #: ../../locales/../src/interface/verifycertdialog.cpp:54
 msgid "None"
 msgstr "بدون"
 
-#: resources.h:361
+#: resources.h:358
 msgid "None selected yet"
 msgstr "الغير محددة بعد"
 
-#: resources.h:816 ../../locales/../src/engine/server.cpp:854
+#: resources.h:825 ../../locales/../src/engine/server.cpp:854
 #: ../../locales/../src/engine/server.cpp:873
 #: ../../locales/../src/interface/manual_transfer.cpp:160
 #: ../../locales/../src/interface/manual_transfer.cpp:185
@@ -4830,7 +4883,7 @@ msgstr ""
 msgid "Not connected"
 msgstr "غير متصل"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2368
+#: ../../locales/../src/interface/RemoteListView.cpp:2115
 msgid "Not connected to any server"
 msgstr "غير متصل بأي خادم"
 
@@ -4846,15 +4899,15 @@ msgstr "غير متصل"
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "لاحظ أن هذه الميزة مدعومة فقط باستخدام بروتوكول FTP"
 
-#: resources.h:783
+#: resources.h:792
 msgid "Note: This only works with plain, unencrypted FTP connections."
 msgstr "ملاحظة : هذه تعمل فقط مع إتصالات FTP العادية الغير مشفرة"
 
-#: resources.h:801
+#: resources.h:810
 msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr "ملاحظة : إستخدام ملقم وكيل عام يقوم بفرض النمط السلبي مع إتصالات FTP"
 
-#: resources.h:903
+#: resources.h:916
 msgid "Number of decimal places:"
 msgstr "الرقم للمواضع العشرية:"
 
@@ -4862,21 +4915,21 @@ msgstr "الرقم للمواضع العشرية:"
 msgid "Number of retries has to be between 0 and 99."
 msgstr "عدد المحاولات يجب أن يكون بين 0 و 99"
 
-#: resources.h:320
+#: resources.h:317
 msgid "O&pen file"
 msgstr "&فتح ملف"
 
-#: resources.h:29 resources.h:56 resources.h:78 resources.h:140
-#: resources.h:162 resources.h:184 resources.h:194 resources.h:207
-#: resources.h:222 resources.h:239 resources.h:266 resources.h:275
-#: resources.h:282 resources.h:290 resources.h:313 resources.h:321
-#: resources.h:340 resources.h:346 resources.h:379 resources.h:393
-#: resources.h:415 resources.h:438 resources.h:447 resources.h:461
-#: resources.h:474 resources.h:481 resources.h:726
+#: resources.h:29 resources.h:56 resources.h:78 resources.h:159
+#: resources.h:181 resources.h:191 resources.h:204 resources.h:219
+#: resources.h:236 resources.h:263 resources.h:272 resources.h:279
+#: resources.h:287 resources.h:310 resources.h:318 resources.h:337
+#: resources.h:343 resources.h:376 resources.h:390 resources.h:412
+#: resources.h:435 resources.h:444 resources.h:458 resources.h:472
+#: resources.h:479 resources.h:483 resources.h:735
 msgid "OK"
 msgstr "حسنا"
 
-#: resources.h:682
+#: resources.h:691
 msgid ""
 "On the following pages, the selected transfer mode will be configured, as "
 "well as the fallback mode if enabled."
@@ -4888,64 +4941,64 @@ msgstr ""
 msgid "Once"
 msgstr "مرة"
 
-#: resources.h:949
+#: resources.h:968
 msgid "Once a day"
 msgstr "مرة في اليوم"
 
-#: resources.h:950
+#: resources.h:969
 msgid "Once a week"
 msgstr "مرة كل أسبوع"
 
-#: resources.h:651
+#: resources.h:658
 msgid "Open directory in system's file manager"
 msgstr "فتح الدليل في مدير ملفات النظام"
 
-#: resources.h:980
+#: resources.h:999
 msgid "Open the Site Manager"
 msgstr "فتح مدير المواقع"
 
-#: resources.h:981
+#: resources.h:1000
 msgid "Open the Site Manager."
 msgstr "فتح إذارة المواقع"
 
-#: resources.h:982
+#: resources.h:1001
 msgid "Open the Site Manager. Right-click for a list of sites."
 msgstr "لفتح إذارة المواقع, أنقر باليمين لعرض قائمة بالمواقع"
 
-#: resources.h:558
+#: resources.h:559
 msgid "Open the file."
 msgstr "فتح الملف"
 
-#: resources.h:501
+#: resources.h:502
 msgid "Open the settings dialog of FileZilla"
 msgstr "فتح لائحة إعدادات FileZilla"
 
-#: resources.h:296
+#: resources.h:293
 msgid "Opened as:"
 msgstr "فتح بهيئة:"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1918
-#: ../../locales/../src/interface/LocalListView.cpp:1963
-#: ../../locales/../src/interface/LocalListView.cpp:2048
-#: ../../locales/../src/interface/LocalListView.cpp:2061
-#: ../../locales/../src/interface/RemoteListView.cpp:2668
+#: ../../locales/../src/interface/LocalListView.cpp:1719
+#: ../../locales/../src/interface/LocalListView.cpp:1764
+#: ../../locales/../src/interface/LocalListView.cpp:1849
+#: ../../locales/../src/interface/LocalListView.cpp:1862
+#: ../../locales/../src/interface/RemoteListView.cpp:2415
 msgid "Opening failed"
 msgstr "فشل الفتح"
 
-#: resources.h:489
+#: resources.h:490
 msgid "Opens a new tab"
 msgstr "لفتح تبويب جديد"
 
-#: resources.h:486
+#: resources.h:487
 msgid "Opens the Site Manager"
 msgstr "لفتح مدير المواقع"
 
-#: resources.h:1002
+#: resources.h:1021
 msgid ""
 "Opens the directory listing filter dialog. Right-click to toggle filters."
 msgstr "لفتح لائحة مرشح قائمة الدليل . النقرة اليمنى لتبديل المرشحات"
 
-#: resources.h:182
+#: resources.h:179
 msgid "Operating system"
 msgstr "نظام التشغيل"
 
@@ -4961,7 +5014,7 @@ msgstr "المنظمة:"
 msgid "Other:"
 msgstr "أخرى :"
 
-#: resources.h:728
+#: resources.h:737
 msgid "Overview"
 msgstr "ترجمة الأستاذ عوض الغامدي"
 
@@ -4969,19 +5022,19 @@ msgstr "ترجمة الأستاذ عوض الغامدي"
 msgid "Overwrite &if source newer"
 msgstr "الكتابة على ال&ملف اذا المصدر أحدث"
 
-#: resources.h:247 resources.h:257 resources.h:839 resources.h:848
+#: resources.h:244 resources.h:254 resources.h:848 resources.h:857
 msgid "Overwrite file"
 msgstr "كتابة على الملف"
 
-#: resources.h:249 resources.h:259 resources.h:841 resources.h:850
+#: resources.h:246 resources.h:256 resources.h:850 resources.h:859
 msgid "Overwrite file if size differs"
 msgstr "الكتابة على الملف اذا الحجم مختلف"
 
-#: resources.h:250 resources.h:260 resources.h:842 resources.h:851
+#: resources.h:247 resources.h:257 resources.h:851 resources.h:860
 msgid "Overwrite file if size differs or source file is newer"
 msgstr "الكتابة على الملف اذا المصدر أحدث أو الحجم مختلف"
 
-#: resources.h:248 resources.h:258 resources.h:840 resources.h:849
+#: resources.h:245 resources.h:255 resources.h:849 resources.h:858
 msgid "Overwrite file if source file newer"
 msgstr "الكتابة على الملف اذا المصدر أحدث"
 
@@ -4993,23 +5046,28 @@ msgstr "الكتابة على الملف إ&ذا الحجم مختلف"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "الكتابة &على الملف إذا المصدر أحدث أو الحجم مختلف"
 
-#: resources.h:144
+#: ../../locales/../src/interface/updater.cpp:243
+#, c-format
+msgid "Own build type: %s\n"
+msgstr "نوع الإصدار المملوك: %s\n"
+
+#: resources.h:141
 msgid "Owner permissions"
 msgstr "أذونات المالك"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:377
-#: ../../locales/../src/interface/search.cpp:375
+#: ../../locales/../src/interface/RemoteListView.cpp:378
+#: ../../locales/../src/interface/search.cpp:85
 msgid "Owner/Group"
 msgstr "المالك/المجموعة"
 
-#: resources.h:874
+#: resources.h:883
 msgid ""
 "P&revent system from entering idle sleep during transfers and other "
 "operations"
 msgstr ""
 "م&نع النظام من دخول وضعية الإسبات أثناء عمليات الإرسال و العمليات الأخرى"
 
-#: resources.h:780 resources.h:797
+#: resources.h:789 resources.h:806
 #, no-c-format
 msgid "P&roxy host:"
 msgstr "الملقم ال&وكيل:"
@@ -5018,7 +5076,7 @@ msgstr "الملقم ال&وكيل:"
 msgid "PORT command tainted by router or firewall."
 msgstr "تم تحريف الأمر PORT بواسطة جهاز التوجيه أو جدار الحماية"
 
-#: resources.h:742
+#: resources.h:751
 msgid "Pa&ssive (recommended)"
 msgstr "&سلبي (مستحسن)"
 
@@ -5026,15 +5084,20 @@ msgstr "&سلبي (مستحسن)"
 msgid "Parameter not a valid URL"
 msgstr "المعيار ليس رابط صالح"
 
-#: resources.h:95 resources.h:370 resources.h:720
+#: ../../locales/../src/interface/updater.cpp:525
+#, c-format
+msgid "Parsing %d bytes of version information.\n"
+msgstr "تحليل %d بايت من معلومات الإصدار\n"
+
+#: resources.h:95 resources.h:367 resources.h:729
 msgid "Pass&word:"
 msgstr "كلمة &المرور:"
 
-#: resources.h:678
+#: resources.h:687
 msgid "Passive (recommended)"
 msgstr "سلبي (مستحسن)"
 
-#: resources.h:762
+#: resources.h:771
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:119
 msgid "Passive mode"
 msgstr "النمط السلبي"
@@ -5050,7 +5113,7 @@ msgid "Password required"
 msgstr "مطلوب كلمة مرور"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:150
-#: ../../locales/../src/interface/search.cpp:370
+#: ../../locales/../src/interface/search.cpp:80
 msgid "Path"
 msgstr "مسار"
 
@@ -5060,11 +5123,11 @@ msgstr "مسار"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "لا يمكن بناء المسار للمجلد %s و للمجلد الفرعي %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2553
+#: ../../locales/../src/interface/Mainfrm.cpp:2555
 msgid "Path not found:"
 msgstr "المسار غير موجود"
 
-#: resources.h:388
+#: resources.h:385
 msgid "Paths"
 msgstr "مسارات"
 
@@ -5079,24 +5142,24 @@ msgstr "تعليق الإزالة"
 msgid "Permission"
 msgstr "الترخيص"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:376
-#: ../../locales/../src/interface/search.cpp:374
+#: ../../locales/../src/interface/RemoteListView.cpp:377
+#: ../../locales/../src/interface/search.cpp:84
 msgid "Permissions"
 msgstr "الأذونات"
 
-#: resources.h:181
+#: resources.h:178
 msgid "Platform:"
 msgstr "النظام الأساسي:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"الرجاء زيارة http://filezilla-project.org/probe.php لمعرفة إذا الخادم شغال و "
-"تاكد من إعداداتك بعناية مرة ثانية"
+"الرجاء زيارة https://filezilla-project.org/probe.php لمعرفة إذا الخادم شغال "
+"و تاكد من إعداداتك بعناية مرة ثانية"
 
-#: resources.h:684
+#: resources.h:693
 msgid ""
 "Please configure any firewalls and routers so that FileZilla can establish "
 "outgoing connection to arbitrary ports."
@@ -5220,14 +5283,14 @@ msgstr ""
 "الرجاء إدخال أمر FTP خام\n"
 "إستخدام أوامر ftp سوف يمسح مخزون الدليل المؤقت"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1127
-#: ../../locales/../src/interface/LocalTreeView.cpp:1135
-#: ../../locales/../src/interface/RemoteListView.cpp:1617
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1276
+#: ../../locales/../src/interface/LocalListView.cpp:925
+#: ../../locales/../src/interface/LocalTreeView.cpp:1181
+#: ../../locales/../src/interface/RemoteListView.cpp:1361
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1322
 msgid "Please enter the name of the directory which should be created:"
 msgstr "من فضلك أدخل اسم الدليل المراد إنشاؤه :"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3156
+#: ../../locales/../src/interface/RemoteListView.cpp:2904
 msgid "Please enter the name of the file which should be created:"
 msgstr "الرجاء ادخال إسم الملف المراد إنشاؤه:"
 
@@ -5249,7 +5312,7 @@ msgstr ""
 "الرجاء إدخال عنوان IP خارجى فى صفحة النمط النشط لهذا المعالج ، فى حالة أنه "
 "يوجد لديك عنوان فعال او لا تعرف عنوانك الخارجى ، أستخدم خيار التحليل الخارجى"
 
-#: resources.h:671
+#: resources.h:680
 msgid ""
 "Please follow the instructions carefully, as wrong configuration will "
 "prevent successful FTP connections."
@@ -5280,7 +5343,7 @@ msgstr ""
 "تكوينه بشكل صحيح . يجب عليك إستخدام توجيه المنفذ يدويا . لا تقوم بتشغيل جهاز "
 "التوجيه الخاص بك في 'نمط DMZ' أو 'نمط اللعب' ."
 
-#: resources.h:685
+#: resources.h:694
 msgid ""
 "Please note that FileZilla has no influence on the port the server chooses. "
 "So the server might choose a port which your firewall thinks is only used by "
@@ -5299,7 +5362,7 @@ msgstr ""
 "الرجاء ملاحظة أن إبقاء طوابع الوقت مع عمليات الرفع على خوادم FTP و FTPS و "
 "FTPES تعمل فقط إذا كانت تدعم الأمر MFMT ."
 
-#: resources.h:739
+#: resources.h:748
 msgid ""
 "Please note that some servers might ban you if you try to reconnect too "
 "often or in too short intervals."
@@ -5307,7 +5370,7 @@ msgstr ""
 "الرجاء ملاحظة أن بعض الخوادم قد تعمل لك حظر إذا حاولت إعادة الاتصال في فترات "
 "زمنية متقاربة أو بمعدل كبير"
 
-#: resources.h:890 resources.h:896
+#: resources.h:903 resources.h:909
 #, no-c-format
 msgid ""
 "Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
@@ -5325,15 +5388,15 @@ msgstr ""
 "من فضلك قم بتشغيل المعالج مرة ثانية فى حالة تغيير فى بيئة الشبكة أو فى حالة "
 "حدوث مشاكل مع الخوادم التي كانت تعمل سابقا"
 
-#: resources.h:443
+#: resources.h:440
 msgid "Please select an action:"
 msgstr "الرجاء تحديد إجراء :"
 
-#: resources.h:289
+#: resources.h:286
 msgid "Please select the categories you would like to import."
 msgstr "الرجاء تحديد الفئات المراد إستيرادها"
 
-#: resources.h:673
+#: resources.h:682
 msgid "Please select the default transfer mode you would like to use."
 msgstr "من فضلك قم باختيار نمط الإرسال الافتراضي المراد إستخدامه"
 
@@ -5374,6 +5437,10 @@ msgstr ""
 "توجيهك فيما يسمى بـ 'نمط DMZ' أو 'نمط اللعب' . كما يجب تعطيل أشياء أخرى مثل "
 "تفتيش البروتوكول أو بروتوكول 'fixups' معين"
 
+#: resources.h:875
+msgid "Positio&n of the message log:"
+msgstr "المكان لسجل ال&رسائل:"
+
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
 #: ../../locales/../src/interface/verifycertdialog.cpp:188
 msgid "Postal code:"
@@ -5392,7 +5459,7 @@ msgstr "إبقاء طوابع وقت الملف"
 msgid "Preview:"
 msgstr "معاينة:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1121
+#: ../../locales/../src/engine/tlssocket.cpp:1113
 msgid "Primary connection and data connection certificates don't match."
 msgstr "شهادة الإتصال الرئيسية و شهادة إتصال البيانات غير متطابقتين"
 
@@ -5404,7 +5471,7 @@ msgstr "طباعة معلومات التشخيص المتعلقة ببدء تش�
 msgid "Print version information to stdout and exit"
 msgstr "طباعة معلومات النسخة إلى الناتج المعياري ثم خروج"
 
-#: resources.h:913
+#: resources.h:926
 msgid "Prioritize directories (default)"
 msgstr "وضع الأولوية للمجلدات (الإفتراضي)"
 
@@ -5412,7 +5479,7 @@ msgstr "وضع الأولوية للمجلدات (الإفتراضي)"
 msgid "Priority"
 msgstr "الأولوية"
 
-#: resources.h:957
+#: resources.h:976
 msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
@@ -5420,7 +5487,7 @@ msgstr ""
 "سياسة الخصوصية: سيتم تقديم معلومات فقط عن الإصدار الخاص بك من FileZilla "
 "ونظام التشغيل المستخدم وبنية الـ CPU الخاصة بكمبيوترك إلى الخادم"
 
-#: resources.h:786
+#: resources.h:795
 msgid "Private &keys:"
 msgstr "&مفاتيح الخصوصية:"
 
@@ -5428,11 +5495,11 @@ msgstr "&مفاتيح الخصوصية:"
 msgid "Pro&tocol:"
 msgstr "ال&بروتوكول :"
 
-#: resources.h:782 resources.h:800
+#: resources.h:791 resources.h:809
 msgid "Pro&xy password:"
 msgstr "كلمة المرور لل&ملقم:"
 
-#: resources.h:519 resources.h:588
+#: resources.h:520 resources.h:593
 msgid "Process &Queue"
 msgstr "معالجة قائمة الإنتظار"
 
@@ -5440,20 +5507,20 @@ msgstr "معالجة قائمة الإنتظار"
 msgid "Protocol:"
 msgstr "البروتوكول:"
 
-#: resources.h:798
+#: resources.h:807
 msgid "Proxy &port:"
 msgstr "منفذ &الملقم:"
 
-#: resources.h:781 resources.h:799
+#: resources.h:790 resources.h:808
 msgid "Proxy &user:"
 msgstr "&مستخدم الملقم:"
 
-#: ../../locales/../src/engine/proxy.cpp:517
+#: ../../locales/../src/engine/proxy.cpp:518
 msgid "Proxy authentication failed"
 msgstr "فشلت مصادقة الملقم"
 
-#: ../../locales/../src/engine/transfersocket.cpp:135
-#: ../../locales/../src/engine/transfersocket.cpp:149
+#: ../../locales/../src/engine/transfersocket.cpp:137
+#: ../../locales/../src/engine/transfersocket.cpp:151
 #, c-format
 msgid "Proxy handshake failed: %s"
 msgstr "فشلت مصافحة الملقم : %s"
@@ -5462,18 +5529,18 @@ msgstr "فشلت مصافحة الملقم : %s"
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "ملقم الإستضافة بدأ بـ '[' لكن لا يوجد قوس الإغلاق"
 
-#: ../../locales/../src/engine/proxy.cpp:351
+#: ../../locales/../src/engine/proxy.cpp:352
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "رد الملقم : %s"
 
-#: ../../locales/../src/engine/proxy.cpp:415
-#: ../../locales/../src/engine/proxy.cpp:560
+#: ../../locales/../src/engine/proxy.cpp:416
+#: ../../locales/../src/engine/proxy.cpp:561
 #, c-format
 msgid "Proxy request failed: %s"
 msgstr "فشل طلب الملقم : %s"
 
-#: ../../locales/../src/engine/proxy.cpp:582
+#: ../../locales/../src/engine/proxy.cpp:583
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr "فشل طلب الملقم الوكيل : نوع العنوان غير معروف في الرد CONNECT"
 
@@ -5481,7 +5548,7 @@ msgstr "فشل طلب الملقم الوكيل : نوع العنوان غير �
 msgid "Proxy set but proxy host or port invalid"
 msgstr "تم وضع الملقم الوكيل لكن مضيف الوكيل أو المنفذ غير صالح"
 
-#: resources.h:784
+#: resources.h:793
 msgid "Public Key Authentication"
 msgstr "مصادقة المفتاح العام"
 
@@ -5489,7 +5556,7 @@ msgstr "مصادقة المفتاح العام"
 msgid "Public key algorithm:"
 msgstr "خوارزمية المفتاح العام:"
 
-#: resources.h:152
+#: resources.h:149
 msgid "Public permissions"
 msgstr "أذونات عمومية"
 
@@ -5516,19 +5583,19 @@ msgstr "قائمة الانتظار : فارغة"
 msgid "Queued files"
 msgstr "ملفات في الإنتظار"
 
-#: resources.h:435
+#: resources.h:432
 msgid "Queueing:"
 msgstr "وضع بالإنتظار:"
 
-#: resources.h:604
+#: resources.h:609
 msgid "R&eboot system"
 msgstr "إ&عادة تشغيل النظام"
 
-#: resources.h:516
+#: resources.h:517
 msgid "R&emote directory tree"
 msgstr "ت&فرع الدليل البعيد"
 
-#: resources.h:621 resources.h:625
+#: resources.h:626 resources.h:630
 msgid "R&eset and requeue selected files"
 msgstr "&إستعادة و إعادة وضع الملفات المحددة في قائمة الإنتظار"
 
@@ -5536,11 +5603,11 @@ msgstr "&إستعادة و إعادة وضع الملفات المحددة في 
 msgid "Raw FTP command"
 msgstr "أمر FTP خام"
 
-#: resources.h:149
+#: resources.h:146
 msgid "Re&ad"
 msgstr "قر&اءة"
 
-#: resources.h:563 resources.h:579
+#: resources.h:566 resources.h:584
 msgid "Re&fresh"
 msgstr "ت&حديث"
 
@@ -5556,7 +5623,7 @@ msgstr ""
 "قم بإعادة تشغيل المعالج و تأكد من إعدادات بدقة ثم قم بتكوين أجهزة التوجيه و "
 "برامج جدران الحماية حسب ذلك"
 
-#: resources.h:153
+#: resources.h:150
 msgid "Rea&d"
 msgstr "قر&اءة"
 
@@ -5568,8 +5635,8 @@ msgstr "للقراءة فقط"
 msgid "Really cancel current operation?"
 msgstr "إلغاء العملية الحالية فعلا ؟"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1707
-#: ../../locales/../src/interface/search.cpp:1008
+#: ../../locales/../src/interface/RemoteListView.cpp:1454
+#: ../../locales/../src/interface/search.cpp:718
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
@@ -5581,8 +5648,8 @@ msgstr[3] "هل تريد فعلا حذف %d مجلدات من الخادم مع 
 msgstr[4] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياتها ؟"
 msgstr[5] "هل تريد فعلا حذف %d مجلد من الخادم مع محتوياتها ؟"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1705
-#: ../../locales/../src/interface/search.cpp:1006
+#: ../../locales/../src/interface/RemoteListView.cpp:1452
+#: ../../locales/../src/interface/search.cpp:716
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
@@ -5593,13 +5660,13 @@ msgstr[3] "هل تريد فعلا حذف %d ملفات من الخادم؟"
 msgstr[4] "هل تريد فعلا حذف %d ملف من الخادم؟"
 msgstr[5] "هل تريد فعلا حذف %d ملف من الخادم؟"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1712
-#: ../../locales/../src/interface/search.cpp:1013
+#: ../../locales/../src/interface/RemoteListView.cpp:1459
+#: ../../locales/../src/interface/search.cpp:723
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "هل تريد حذف فعلا %s و %s من الخادم؟"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1125
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1138
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الخادم؟"
 
@@ -5615,7 +5682,7 @@ msgstr "السبب"
 msgid "Reboot now"
 msgstr "إعادة تشغيل الكمبيوتر الآن"
 
-#: resources.h:158
+#: resources.h:155
 msgid "Rec&urse into subdirectories"
 msgstr "التكرار &ضمن الأدلة الفرعية"
 
@@ -5635,6 +5702,14 @@ msgstr "تلقى خط تتجاوز 10000 حرف ، مقاطعة"
 msgid "Received data tainted"
 msgstr "تلف البيانات المستقبلة"
 
+#: ../../locales/../src/interface/updater.cpp:504
+msgid "Received invalid character in version information"
+msgstr "استقبال حرف غير صالح في معلومات الإصدار"
+
+#: ../../locales/../src/interface/updater.cpp:497
+msgid "Received version information is too large"
+msgstr "معلومات الإصدار المستلمة ضخمة جدا"
+
 #: ../../locales/../src/interface/clearprivatedata.cpp:77
 msgid ""
 "Reconnect information cannot be cleared while connected to a server.\n"
@@ -5643,11 +5718,11 @@ msgstr ""
 "معلومات إعادة الإتصال لا يمكن مسحها أثناء الإتصال بالخادم\n"
 "عند الإستمرار ، سيتم قطع إتصالك"
 
-#: resources.h:740
+#: resources.h:749
 msgid "Reconnection settings"
 msgstr "إعدادات إعادة الاتصال"
 
-#: resources.h:999 resources.h:1000
+#: resources.h:1018 resources.h:1019
 msgid "Reconnects to the last used server"
 msgstr "لاعادة الاتصال بأخر خادم مستخدم"
 
@@ -5662,11 +5737,11 @@ msgstr "إعادة توجيه إلى رابط غير صالح أو غير معت
 msgid "Redirection to invalid or unsupported address: %s"
 msgstr "إعادة توجيه إلى عنوان غير صالح أو غير معتمد: %s"
 
-#: resources.h:991 resources.h:992
+#: resources.h:1010 resources.h:1011
 msgid "Refresh the file and folder lists"
 msgstr "تحديث قوائم الملفات و المجلدات"
 
-#: resources.h:483
+#: resources.h:481
 msgid "Remember passwords?"
 msgstr "تذكر كلمات المرور ؟"
 
@@ -5674,22 +5749,22 @@ msgstr "تذكر كلمات المرور ؟"
 msgid "Remote"
 msgstr "بعيد"
 
-#: ../../locales/../src/engine/tlssocket.cpp:910
+#: ../../locales/../src/engine/tlssocket.cpp:902
 msgid "Remote certificate not trusted."
 msgstr "الشهادة البعيدة غير موثوق بها"
 
-#: resources.h:354 ../../locales/../src/interface/queue.cpp:1225
+#: resources.h:351 ../../locales/../src/interface/queue.cpp:1225
 msgid "Remote file"
 msgstr "الملف البعيد"
 
-#: resources.h:427 ../../locales/../src/interface/search.cpp:659
-#: ../../locales/../src/interface/search.cpp:665
-#: ../../locales/../src/interface/search.cpp:675
-#: ../../locales/../src/interface/search.cpp:681
+#: resources.h:424 ../../locales/../src/interface/search.cpp:369
+#: ../../locales/../src/interface/search.cpp:375
+#: ../../locales/../src/interface/search.cpp:385
+#: ../../locales/../src/interface/search.cpp:391
 msgid "Remote file search"
 msgstr "البحث عن بعد عن ملف"
 
-#: resources.h:217
+#: resources.h:214
 msgid "Remote filters:"
 msgstr "المرشحات البعيدة:"
 
@@ -5725,11 +5800,11 @@ msgstr "تعذر تحليل المسار البعيد . تأكد من أنه م�
 msgid "Remote path could not be parsed."
 msgstr "لا يمكن تحليل المسار البعيد"
 
-#: resources.h:432
+#: resources.h:429
 msgid "Remote path handling:"
 msgstr "معالجة المسار البعيد :"
 
-#: resources.h:300
+#: resources.h:297
 msgid "Remote path:"
 msgstr "المسار البعيد:"
 
@@ -5737,24 +5812,24 @@ msgstr "المسار البعيد:"
 msgid "Remote site:"
 msgstr "الموقع البعيد:"
 
-#: resources.h:618 resources.h:622
+#: resources.h:623 resources.h:627
 msgid "Remove &all"
 msgstr "&إزالة الكل"
 
-#: resources.h:620 resources.h:624
+#: resources.h:625 resources.h:629
 msgid "Remove &selected"
 msgstr "إ&زالة المحددة"
 
-#: resources.h:252 resources.h:262 resources.h:844 resources.h:853
+#: resources.h:249 resources.h:259 resources.h:853 resources.h:862
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:256
 msgid "Rename file"
 msgstr "تسمية الملف"
 
-#: resources.h:636 resources.h:657
+#: resources.h:643 resources.h:666
 msgid "Rename selected directory"
 msgstr "تسمية الدليل المحدد"
 
-#: resources.h:567 resources.h:583
+#: resources.h:570 resources.h:588
 msgid "Rename selected files and directories"
 msgstr "تسمية الملفات المحددة و الأدلة"
 
@@ -5764,21 +5839,21 @@ msgstr "تسمية الملفات المحددة و الأدلة"
 msgid "Renaming '%s' to '%s'"
 msgstr "تسمية '%s' إلى '%s'"
 
-#: resources.h:459
+#: resources.h:456
 msgid "Reporting bugs and feature requests"
 msgstr "التبليغ عن أخطاء و طلب إضافة وظيفة ما"
 
-#: ../../locales/../src/engine/proxy.cpp:406
+#: ../../locales/../src/engine/proxy.cpp:407
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
 "Request failed - client is not running identd (or not reachable from server)"
 
-#: ../../locales/../src/engine/proxy.cpp:409
+#: ../../locales/../src/engine/proxy.cpp:410
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr "Request failed - client's identd could not confirm the user ID string"
 
-#: ../../locales/../src/engine/proxy.cpp:403
+#: ../../locales/../src/engine/proxy.cpp:404
 msgid "Request rejected or failed"
 msgstr "Request rejected or failed"
 
@@ -5790,11 +5865,11 @@ msgstr "يتطلب FTP صريح عبر TLS"
 msgid "Require implicit FTP over TLS"
 msgstr "يتطلب FTP ضمني عبر TLS"
 
-#: resources.h:623
+#: resources.h:628
 msgid "Reset and requeue &all"
 msgstr "إستعادة و إ&عادة وضع الكل في قائمة الإنتظار"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1157
+#: ../../locales/../src/engine/ControlSocket.cpp:1178
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:482
 #, c-format
 msgid "Resolving address of %s"
@@ -5807,15 +5882,15 @@ msgstr "إستخلاص عنوان الـ %s"
 msgid "Response:"
 msgstr "الإستجابة:"
 
-#: resources.h:426
+#: resources.h:423
 msgid "Results:"
 msgstr "النتائج :"
 
-#: resources.h:251 resources.h:261 resources.h:843 resources.h:852
+#: resources.h:248 resources.h:258 resources.h:852 resources.h:861
 msgid "Resume file transfer"
 msgstr "إستئناف إرسال الملف"
 
-#: resources.h:858
+#: resources.h:867
 msgid ""
 "Resuming ASCII files can cause problems if server uses a different line "
 "ending format than the client."
@@ -5834,31 +5909,31 @@ msgstr "إسترجاع قائمة الدليل..."
 msgid "Retrieving external IP address from %s"
 msgstr "إسترجاع عنوان IP الخارجي من %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1102
+#: ../../locales/../src/engine/tlssocket.cpp:1094
 msgid "Root certificate is not trusted"
 msgstr "شهادة الجذر غير موثوق بها"
 
-#: resources.h:494
+#: resources.h:495
 msgid "S&how files currently being edited..."
 msgstr "إ&ظهار الملفات التي حاليا يتم تحريرها..."
 
-#: resources.h:875
+#: resources.h:884
 msgid "S&how the Site Manager on startup"
 msgstr "إ&ظهار مدير الموقع عند تشغيل"
 
-#: resources.h:605
+#: resources.h:610
 msgid "S&hutdown system"
 msgstr "إ&غلاق الكمبيوتر"
 
-#: resources.h:424
+#: resources.h:421
 msgid "S&top"
 msgstr "إ&يقاف"
 
-#: resources.h:606
+#: resources.h:611
 msgid "S&uspend system"
 msgstr "إستبعاد &النظام"
 
-#: resources.h:510
+#: resources.h:511
 msgid "S&ynchronized browsing"
 msgstr "تصفح &متزامن"
 
@@ -5866,7 +5941,7 @@ msgstr "تصفح &متزامن"
 msgid "SFTP"
 msgstr "SFTP"
 
-#: resources.h:795
+#: resources.h:804
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
@@ -5875,7 +5950,7 @@ msgstr "SOC&KS 4"
 msgid "SOCKS4 proxy will connect to: %s"
 msgstr "SOCKS4 proxy will connect to: %s"
 
-#: resources.h:177
+#: resources.h:174
 msgid "SQLite:"
 msgstr "SQLite:"
 
@@ -5901,19 +5976,19 @@ msgstr "البحث عن الملفات لاضافتها إلى قائمة الإ
 msgid "Scanning for files to upload"
 msgstr "البحث عن ملفات لرفعها"
 
-#: resources.h:420
+#: resources.h:417
 msgid "Search &conditions:"
 msgstr "&شروط البحث:"
 
-#: resources.h:418
+#: resources.h:415
 msgid "Search &directory:"
 msgstr "&دليل البحث :"
 
-#: resources.h:1007
+#: resources.h:1026
 msgid "Search for files recursively."
 msgstr "بحث عن الملفات بشكل تكراري"
 
-#: resources.h:535
+#: resources.h:536
 msgid "Search server for files"
 msgstr "البحث في الخادم عن الملفات"
 
@@ -5923,22 +5998,22 @@ msgstr "معلومات الأمان"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "شاهد أيضا : http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "شاهد أيضا : https://wiki.filezilla-project.org/Network_Configuration"
 
-#: resources.h:362
+#: resources.h:359
 msgid "Sele&ct server"
 msgstr "ت&حديد الخادم"
 
-#: resources.h:725
+#: resources.h:734
 msgid "Select &page:"
 msgstr "منتديات عميد التعريب"
 
-#: resources.h:878
+#: resources.h:891
 msgid "Select Theme"
 msgstr "تحديد سمة"
 
-#: resources.h:836
+#: resources.h:845
 msgid ""
 "Select default action to perform if target file of a transfer already exists."
 msgstr ""
@@ -5999,12 +6074,12 @@ msgstr "تحديد ملف للرفع"
 msgid "Select filename for converted keyfile"
 msgstr "تحديد الإسم للملف المفتاح المحول"
 
-#: resources.h:408
+#: resources.h:405
 #, no-c-format
 msgid "Select how these files should be opened."
 msgstr "تحديد كيفية فتح هذه الملفات"
 
-#: ../../locales/../src/interface/search.cpp:788
+#: ../../locales/../src/interface/search.cpp:498
 msgid "Select target download directory"
 msgstr "تحديد الدليل الهدف للتحميل"
 
@@ -6012,15 +6087,15 @@ msgstr "تحديد الدليل الهدف للتحميل"
 msgid "Select target filename"
 msgstr "تحديد إسم الملف الهدف"
 
-#: resources.h:278
+#: resources.h:275
 msgid "Select the categories to export:"
 msgstr "تحديد الفئات للتصدير :"
 
-#: resources.h:269
+#: resources.h:266
 msgid "Select the private data you would like to delete."
 msgstr "تحديد البيانات الخاصة المراد حذفها"
 
-#: ../../locales/../src/interface/search.cpp:755
+#: ../../locales/../src/interface/search.cpp:465
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6042,7 +6117,7 @@ msgstr[3] "المحدد %d أدلة"
 msgstr[4] "المحدد %d أدلة"
 msgstr[5] "المحدد %d دليل"
 
-#: ../../locales/../src/interface/search.cpp:753
+#: ../../locales/../src/interface/search.cpp:463
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6075,7 +6150,7 @@ msgstr[3] "المحددة %d ملفات . الحجم الكلي : على الأ�
 msgstr[4] "المحددة %d ملف . الحجم الكلي : على الأقل %s"
 msgstr[5] "المحددة %d ملف . الحجم الكلي : على الأقل %s"
 
-#: ../../locales/../src/interface/search.cpp:760
+#: ../../locales/../src/interface/search.cpp:470
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "المحدد %s و %s للإرسال"
@@ -6096,7 +6171,7 @@ msgstr "المحددة %s و %s . الحجم الكلي : على الأقل %s"
 msgid "Selected editor does not exist."
 msgstr "المحرر المحدد غير موجود"
 
-#: resources.h:307 ../../locales/../src/interface/LocalListView.cpp:1947
+#: resources.h:304 ../../locales/../src/interface/LocalListView.cpp:1748
 msgid "Selected file already being edited"
 msgstr "الملف المحدد يتم تحريره حاليا"
 
@@ -6104,11 +6179,11 @@ msgstr "الملف المحدد يتم تحريره حاليا"
 msgid "Selected file is already loaded"
 msgstr "الملف المحدد يتم التعامل معه حاليا"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2700
+#: ../../locales/../src/interface/RemoteListView.cpp:2447
 msgid "Selected file is already opened"
 msgstr "الملف المحدد مفتوح مسبقا"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2728
+#: ../../locales/../src/interface/RemoteListView.cpp:2475
 msgid "Selected file is still being edited"
 msgstr "الملف المحدد لا يزال قيد التحرير"
 
@@ -6128,11 +6203,11 @@ msgstr ""
 msgid "Selected port usually in use by a different protocol."
 msgstr "المنفذ المحدد عادة قيد الإستخدام من قبل بروتوكول مختلف"
 
-#: resources.h:747
+#: resources.h:756
 msgid "Send FTP &keep-alive commands"
 msgstr "إرسال &أوامر البقاء نشطا لـ FTP"
 
-#: resources.h:537
+#: resources.h:538
 msgid "Send custom command to the server otherwise not available"
 msgstr "إرسال أمر مخصص إلى الخادم ، غير ذلك فانه غير متاح"
 
@@ -6149,7 +6224,7 @@ msgstr "رقم التسلسل:"
 msgid "Server &Type:"
 msgstr "نوع ال&خادم:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:788
+#: ../../locales/../src/engine/tlssocket.cpp:780
 msgid "Server did not properly shut down TLS connection"
 msgstr "الخادم ربما لم يغلق إتصال TLS بشكل صحيح"
 
@@ -6193,7 +6268,7 @@ msgid ""
 "Manager"
 msgstr "الخادم قد يتطلب حساب . حاول تعيين حساب باستعمال مدير الموقع"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:420
+#: ../../locales/../src/engine/ControlSocket.cpp:441
 msgid "Server returned empty path."
 msgstr "الخادم أرسل رد بمسار فارغ"
 
@@ -6228,15 +6303,15 @@ msgstr ""
 msgid "Server sent unexpected reply."
 msgstr "الخادم أرسل رد غير متوقع"
 
-#: resources.h:338
+#: resources.h:335
 msgid "Server to client MAC:"
 msgstr "الخادم إلى MAC العميل :"
 
-#: resources.h:336
+#: resources.h:333
 msgid "Server to client cipher:"
 msgstr "الخادم إلى شفرة العميل :"
 
-#: resources.h:367
+#: resources.h:364
 msgid "Server&type:"
 msgstr "نوع &الخادم:"
 
@@ -6244,7 +6319,7 @@ msgstr "نوع &الخادم:"
 msgid "Server/Local file"
 msgstr "الخادم/الملف المحلى"
 
-#: resources.h:298 resources.h:360
+#: resources.h:295 resources.h:357
 msgid "Server:"
 msgstr "&الخادم :"
 
@@ -6252,7 +6327,7 @@ msgstr "&الخادم :"
 msgid "Session details"
 msgstr "تفاصيل الجلسة"
 
-#: resources.h:592
+#: resources.h:597
 msgid "Set &Priority"
 msgstr "&وضع الاولوية"
 
@@ -6262,31 +6337,31 @@ msgstr "&وضع الاولوية"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "وضع الأذونات لـ '%s' إلى '%s'"
 
-#: ../../locales/../src/engine/transfersocket.cpp:852
+#: ../../locales/../src/engine/transfersocket.cpp:854
 msgid "SetSocketBufferSize called without socket"
 msgstr "تم إستدعاء SetSocketBufferSize بدون مقبس"
 
-#: resources.h:724
+#: resources.h:733
 msgid "Settings"
 msgstr "إعدادات"
 
-#: resources.h:979
+#: resources.h:998
 msgid "Show &raw directory listing"
 msgstr "إظهار &قائمة الدليل الخام"
 
-#: resources.h:546
+#: resources.h:547
 msgid "Show &welcome dialog..."
 msgstr "إظهار لائحة &مرحبا بك..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2440
+#: ../../locales/../src/interface/Mainfrm.cpp:2442
 msgid "Show both directory trees and continue comparing?"
 msgstr "إظهار تفرع الدليل و متابعة المقارنة ؟"
 
-#: resources.h:1025
+#: resources.h:1045
 msgid "Show details"
 msgstr "إظهار التفاصيل"
 
-#: resources.h:617
+#: resources.h:622
 msgid "Shows available TLS ciphers"
 msgstr "لعرض تشفير TLS المتوفر"
 
@@ -6302,7 +6377,7 @@ msgstr "إغلاق الكمبيوتر الآن"
 msgid "Signature algorithm:"
 msgstr "خوارزمية التواقيع:"
 
-#: resources.h:286
+#: resources.h:283
 msgid "Site &Manager entries"
 msgstr "مدخلات مدير المواقع"
 
@@ -6370,7 +6445,7 @@ msgstr ""
 msgid "Size"
 msgstr "الحجم"
 
-#: resources.h:897
+#: resources.h:910
 msgid "Size formatting"
 msgstr "تنسيق الحجم"
 
@@ -6379,22 +6454,22 @@ msgstr "تنسيق الحجم"
 msgid "Size unknown"
 msgstr "الحجم غير معروف"
 
-#: resources.h:253 resources.h:263 resources.h:845 resources.h:854
+#: resources.h:250 resources.h:260 resources.h:854 resources.h:863
 msgid "Skip file"
 msgstr "تجاوز الملف"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1229
-#: ../../locales/../src/engine/ControlSocket.cpp:1248
-#: ../../locales/../src/engine/ControlSocket.cpp:1273
-#: ../../locales/../src/engine/ControlSocket.cpp:1339
+#: ../../locales/../src/engine/ControlSocket.cpp:1250
+#: ../../locales/../src/engine/ControlSocket.cpp:1269
+#: ../../locales/../src/engine/ControlSocket.cpp:1294
+#: ../../locales/../src/engine/ControlSocket.cpp:1360
 #, c-format
 msgid "Skipping download of %s"
 msgstr "تجاوز التحميل لـ %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1233
-#: ../../locales/../src/engine/ControlSocket.cpp:1252
-#: ../../locales/../src/engine/ControlSocket.cpp:1277
-#: ../../locales/../src/engine/ControlSocket.cpp:1343
+#: ../../locales/../src/engine/ControlSocket.cpp:1254
+#: ../../locales/../src/engine/ControlSocket.cpp:1273
+#: ../../locales/../src/engine/ControlSocket.cpp:1298
+#: ../../locales/../src/engine/ControlSocket.cpp:1364
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "تجاوز الرفع لـ %s"
@@ -6403,7 +6478,7 @@ msgstr "تجاوز الرفع لـ %s"
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "بعض الملفات ما زالت قيد التحرير أو تحتاج إلى رفع"
 
-#: resources.h:687 resources.h:763
+#: resources.h:696 resources.h:772
 msgid ""
 "Some misconfigured remote servers which are behind a router, may reply with "
 "their local IP address."
@@ -6411,23 +6486,23 @@ msgstr ""
 "بعض الخوادم البعيدة التي لم يتم تكوينها و التي تكون من وراء جهاز توجيه ، قد "
 "ترد بعنوان IP المحلي الخاص بها"
 
-#: resources.h:915
+#: resources.h:928
 msgid "Sort directories inline"
 msgstr "ترتيب الأدلة بشكل مصطف"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:450
+#: ../../locales/../src/interface/filelistctrl.cpp:472
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "طريقة الترتيب لا يمكن تغييرها عند مقارنة الأدلة"
 
-#: resources.h:911
+#: resources.h:924
 msgid "Sorting"
 msgstr "الترتيب"
 
-#: resources.h:912
+#: resources.h:925
 msgid "Sorting &mode:"
 msgstr "&نمط الترتيب:"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:101
+#: ../../locales/../src/interface/RemoteTreeView.cpp:102
 msgid "Source and path of the drop operation are identical"
 msgstr "مصدر ومسار عملية الإفلات متطابقين"
 
@@ -6443,12 +6518,12 @@ msgstr "المصدر والهدف لعملية الإفلات غير متطاب�
 msgid "Source file:"
 msgstr "ملف المصدر :"
 
-#: resources.h:476 ../../locales/../src/interface/speedlimits_dialog.cpp:54
+#: resources.h:474 ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 msgid "Speed Limits"
 msgstr "حدود السرعة"
 
-#: resources.h:809
+#: resources.h:818
 msgid "Speed limits"
 msgstr "حدود السرعة"
 
@@ -6460,19 +6535,19 @@ msgstr "تم تعطيل حدود السرعة , أنقر للتغيير"
 msgid "Speed limits are enabled, click to change."
 msgstr "تم تمكين حدود السرعة , أنقر للتغيير"
 
-#: resources.h:953
+#: resources.h:972
 msgid "Stable and beta versions"
 msgstr "الإصدارات المستقرة و إصدارات بيتا"
 
-#: resources.h:952
+#: resources.h:971
 msgid "Stable versions only"
 msgstr "الإصدارات المستقرة فقط"
 
-#: resources.h:954
+#: resources.h:973
 msgid "Stable, beta and nightly versions"
 msgstr "الإصدارات المستقرة و الإصدارات الليلية و بيتا"
 
-#: resources.h:378
+#: resources.h:375
 msgid "Start transfer &immediately"
 msgstr "بدء الإرسال &فورا"
 
@@ -6480,7 +6555,7 @@ msgstr "بدء الإرسال &فورا"
 msgid "Start with opened Site Manager"
 msgstr "البدء مع مدير مواقع مفتوح"
 
-#: ../../locales/../src/interface/updater.cpp:236
+#: ../../locales/../src/interface/updater.cpp:237
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "بدأ التدقيق بحثا عن تحديث في %s\n"
@@ -6516,7 +6591,7 @@ msgstr "الحالة"
 msgid "Status:"
 msgstr "الحالة:"
 
-#: resources.h:589
+#: resources.h:594
 msgid "Stop and remove &all"
 msgstr "ايقاف و ازالة &الكل"
 
@@ -6532,7 +6607,7 @@ msgstr "موضوع الشهادة"
 msgid "Successful transfers"
 msgstr "عمليات إرسال ناجحة"
 
-#: resources.h:715
+#: resources.h:724
 msgid "Summary of test results:"
 msgstr "ملخص لنتائج الفحص"
 
@@ -6540,7 +6615,7 @@ msgstr "ملخص لنتائج الفحص"
 msgid "Suspend now"
 msgstr "الإستبعاد الآن"
 
-#: resources.h:446
+#: resources.h:443
 msgid ""
 "Symlinks to files are not affected by this choice, such symlinks are always "
 "deleted."
@@ -6548,7 +6623,7 @@ msgstr ""
 "الروابط الترميزية إلى الملفات لا تتأثر بهذا الإختيار ، لأن الروابط الترميزية "
 "يتم حذفها دائما"
 
-#: resources.h:1006 ../../locales/../src/interface/state.cpp:249
+#: resources.h:1025 ../../locales/../src/interface/state.cpp:249
 #: ../../locales/../src/interface/state.cpp:278
 #: ../../locales/../src/interface/state.cpp:285
 #: ../../locales/../src/interface/state.cpp:297
@@ -6577,7 +6652,7 @@ msgstr "خطأ فى بناء الجملة"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2555
+#: ../../locales/../src/interface/Mainfrm.cpp:2557
 #: ../../locales/../src/interface/Mainfrm.cpp:2604
 msgid "Syntax error in command line"
 msgstr "خطأ فى بناء الجملة في سطر الأمر"
@@ -6586,7 +6661,7 @@ msgstr "خطأ فى بناء الجملة في سطر الأمر"
 msgid "System"
 msgstr "النظام"
 
-#: resources.h:512
+#: resources.h:513
 msgid "T&oolbar"
 msgstr "شريط &أدوات"
 
@@ -6602,7 +6677,7 @@ msgstr "تم تأسيس إتصال TLS/SSL , إنتظار رسالة الترح�
 msgid "TLS/SSL connection established."
 msgstr "تم تأسيس إتصال TLS/SSL"
 
-#: ../../locales/../src/engine/proxy.cpp:547
+#: ../../locales/../src/engine/proxy.cpp:548
 msgid "TTL expired"
 msgstr "أنتهت صلاحية TTL"
 
@@ -6614,15 +6689,15 @@ msgstr "الملف المستهدف موجود اصلا"
 msgid "Target file:"
 msgstr "الملف الهدف :"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:3190
+#: ../../locales/../src/interface/RemoteListView.cpp:2938
 msgid "Target filename already exists!"
 msgstr "الملف المستهدف موجود مسبقا"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1925
+#: ../../locales/../src/interface/RemoteListView.cpp:1672
 msgid "Target filename already exists, really continue?"
 msgstr "الملف الهدف موجود مسبقا ، هل تريد الإستمرار ؟"
 
-#: resources.h:714
+#: resources.h:723
 msgid "Test results"
 msgstr "نتائج الفحص"
 
@@ -6674,17 +6749,17 @@ msgstr "الإتصال مشفر . أنقر على أيقونة للتفاصيل"
 msgid "The custom login sequence cannot be empty."
 msgstr "سلسلة تسجيل الدخول المخصصة لا يمكن أن تكون فارغة"
 
-#: ../../locales/../src/engine/transfersocket.cpp:176
+#: ../../locales/../src/engine/transfersocket.cpp:178
 #, c-format
 msgid "The data connection could not be established: %s"
 msgstr "تعذّر تأسيس إتّصال البيانات: %s"
 
-#: resources.h:411 ../../locales/../src/interface/edithandler.cpp:1561
+#: resources.h:408 ../../locales/../src/interface/edithandler.cpp:1561
 #, no-c-format
 msgid "The default editor for text files could not be found."
 msgstr "تعذر العثور على المحرر الإفتراضي للملفات النصية"
 
-#: resources.h:410
+#: resources.h:407
 #, c-format
 msgid "The default editor for text files is '%s'."
 msgstr "المحرر الإفتراضي للملفات النصية هو '%s'"
@@ -6710,9 +6785,9 @@ msgstr ""
 "الملف %s موجود مسبقا\n"
 "الرجاء إدخال إسم جديد :"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1924
-#: ../../locales/../src/interface/LocalListView.cpp:2053
-#: ../../locales/../src/interface/RemoteListView.cpp:2674
+#: ../../locales/../src/interface/LocalListView.cpp:1725
+#: ../../locales/../src/interface/LocalListView.cpp:1854
+#: ../../locales/../src/interface/RemoteListView.cpp:2421
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -6733,9 +6808,9 @@ msgstr "تعذر تفعيل الملف '%s' أو لا يحتوي على مفتا
 msgid "The file '%s' could not be loaded."
 msgstr "لا يمكن تحميل الملف '%s'"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1918
-#: ../../locales/../src/interface/LocalListView.cpp:2048
-#: ../../locales/../src/interface/RemoteListView.cpp:2668
+#: ../../locales/../src/interface/LocalListView.cpp:1719
+#: ../../locales/../src/interface/LocalListView.cpp:1849
+#: ../../locales/../src/interface/RemoteListView.cpp:2415
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -6744,8 +6819,8 @@ msgstr ""
 "تعذر فتح الملف '%s' :\n"
 "لا يوجد برنامج مشروك على نظامك مع نوع الملف هذا"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1963
-#: ../../locales/../src/interface/LocalListView.cpp:2061
+#: ../../locales/../src/interface/LocalListView.cpp:1764
+#: ../../locales/../src/interface/LocalListView.cpp:1862
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -6823,11 +6898,11 @@ msgstr "الرمز التالي سيستبدل : %s"
 msgid "The following characters will be replaced: %s"
 msgstr "الرموز التالية ستستبدل : %s"
 
-#: resources.h:315
+#: resources.h:312
 msgid "The following files are currently being edited:"
 msgstr "يتم حاليا تحرير الملفات التالية :"
 
-#: resources.h:450
+#: resources.h:447
 msgid "The free open source FTP solution"
 msgstr "الحل مع FTP المصدر المجاني المفتوح"
 
@@ -6835,7 +6910,7 @@ msgstr "الحل مع FTP المصدر المجاني المفتوح"
 msgid "The global bookmarks could not be saved."
 msgstr "لا يمكن حفظ العناوين المفضلة الشاملة"
 
-#: resources.h:977
+#: resources.h:996
 msgid ""
 "The higher the debug level, the more information will be displayed in the "
 "message log. Displaying debug information has a negative impact on "
@@ -6864,11 +6939,11 @@ msgid ""
 msgstr ""
 "أقل قيمة متاحة للمنفذ يجب ان تكون أقل من أعلى قيمة متاحة للمنفذ أو مساوية"
 
-#: resources.h:1018
+#: resources.h:1038
 msgid "The new version could not be downloaded, please retry later."
 msgstr "لا يمكن تحميل الإصدار الجديد، الرجاء إعادة المحاولة في وقت لاحق."
 
-#: resources.h:1016
+#: resources.h:1036
 msgid "The new version has been saved in your Downloads directory."
 msgstr "تم حفظ النسخة الجديدة في مجلد التنزيلات الخاص بك"
 
@@ -6889,22 +6964,22 @@ msgstr ""
 msgid "The selected categories have been imported."
 msgstr "تم إستيراد الفئات المحددة"
 
-#: resources.h:285
+#: resources.h:282
 msgid ""
 "The selected file contains importable data for the following categories:"
 msgstr "يحتوي الملف المحدد على بيانات قابلة للإستيراد للفئات التالية :"
 
-#: resources.h:308
+#: resources.h:305
 msgid "The selected file is already being edited:"
 msgstr "الملف المحدد يتم تحريره حاليا :"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2728
+#: ../../locales/../src/interface/RemoteListView.cpp:2475
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr "لا يزال الملف المحدد مفتوح في برنامج آخر ، الرجاء إغلاقه"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1930
-#: ../../locales/../src/interface/RemoteListView.cpp:2680
+#: ../../locales/../src/interface/LocalListView.cpp:1731
+#: ../../locales/../src/interface/RemoteListView.cpp:2427
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and damage your system.\n"
@@ -6934,7 +7009,7 @@ msgstr ""
 "شهادة هذا الخادم غير معروفة . الرجاء فحص الشهادة بعناية للتأكد من أن الخادم "
 "يمكن الوثوق به"
 
-#: resources.h:198
+#: resources.h:195
 msgid ""
 "The server's host key does not match the key that has been cached. This "
 "means that either the administrator has changed the host key, or you are "
@@ -6944,7 +7019,7 @@ msgstr ""
 "المسؤول قد قام بتغيير مفتاح الإستضافة أو أنه في الواقع أنت تحاول الإتصال "
 "بكمبيوتر آخر يتظاهر بأنه هو الخادم"
 
-#: resources.h:186
+#: resources.h:183
 msgid ""
 "The server's host key is unknown. You have no guarantee that the server is "
 "the computer you think it is."
@@ -6998,14 +7073,14 @@ msgstr ""
 "هذا يعني بأن جهاز التوجيه أو برنامج جدار الحماية أو كليهما يمنعان إتصال "
 "FileZilla"
 
-#: resources.h:692
+#: resources.h:701
 msgid ""
 "This only works if you are not behind a router, else your system would just "
 "return your internal address."
 msgstr ""
 "هذا يعمل فقط اذا لم تكن وراء جهاز توجيه , أو سوف يرجع نظامك بعنوانك الداخلى"
 
-#: resources.h:670
+#: resources.h:679
 msgid ""
 "This wizard will help you to properly configure any routers and firewalls "
 "you have and tests your configuration."
@@ -7017,15 +7092,15 @@ msgstr ""
 msgid "Time"
 msgstr "الوقت"
 
-#: resources.h:891
+#: resources.h:904
 msgid "Time formatting"
 msgstr "تنسيق الوقت"
 
-#: resources.h:731
+#: resources.h:740
 msgid "Time&out in seconds:"
 msgstr "إ&نقضاء الوقت بالثواني:"
 
-#: resources.h:734 ../../locales/../src/interface/QueueView.cpp:1061
+#: resources.h:743 ../../locales/../src/interface/QueueView.cpp:1061
 #: ../../locales/../src/interface/QueueView.cpp:1105
 msgid "Timeout"
 msgstr "إنقضاء الوقت"
@@ -7044,22 +7119,22 @@ msgstr ""
 msgid "Title:"
 msgstr "العنوان:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2438
+#: ../../locales/../src/interface/Mainfrm.cpp:2440
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "لمقارنة الأدلة ، يجب محاذاة كلتا قائمتي الملف"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2439
+#: ../../locales/../src/interface/Mainfrm.cpp:2441
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "لعمل هذا، يجب إظهار أو إخفاء كلا التفرعين للدليل معا"
 
-#: resources.h:785
+#: resources.h:794
 msgid ""
 "To support public key authentication, FileZilla needs to know the private "
 "keys to use."
 msgstr ""
 "لدعم مصادقة المفتاح العام ، يحتاج FileZilla لمعرفة المفاتيح الخاصة للإستخدام"
 
-#: resources.h:1003
+#: resources.h:1022
 msgid ""
 "Toggle directory comparison. Right-click to change comparison mode.\n"
 "\n"
@@ -7075,7 +7150,7 @@ msgstr ""
 "الأخضر : الملف أحدث من الملف الغير مؤشر على الجانب الآخر\n"
 "الأحمر : أحجام الملف مختلفة"
 
-#: resources.h:1005
+#: resources.h:1024
 msgid ""
 "Toggle synchronized browsing.\n"
 "If enabled, navigating the local directory hierarchy will also change the "
@@ -7085,23 +7160,23 @@ msgstr ""
 "عند التمكين ، التنقل في الدليل المحلي بشكل هرمي سيغير أيضا الدليل على الخادم "
 "وفقا لذلك و العكس بالعكس"
 
-#: resources.h:993 resources.h:994
+#: resources.h:1012 resources.h:1013
 msgid "Toggles processing of the transfer queue"
 msgstr "لتشغيل معالجة قائمة انتظار الإرسال"
 
-#: resources.h:985 resources.h:986
+#: resources.h:1004 resources.h:1005
 msgid "Toggles the display of the local directory tree"
 msgstr "لتشغيل العرض لتفرع الدليل المحلي"
 
-#: resources.h:983 resources.h:984
+#: resources.h:1002 resources.h:1003
 msgid "Toggles the display of the message log"
 msgstr "لتبديل العرض لسجل الرسائل"
 
-#: resources.h:987 resources.h:988
+#: resources.h:1006 resources.h:1007
 msgid "Toggles the display of the remote directory tree"
 msgstr "لتشغيل العرض لتفرع الدليل البعيد"
 
-#: resources.h:989 resources.h:990
+#: resources.h:1008 resources.h:1009
 msgid "Toggles the display of the transfer queue"
 msgstr "لتشغيل العرض لقائمة إنتظار الإرسال"
 
@@ -7119,23 +7194,23 @@ msgstr "عمليات إعادة توجيه كثيرة جدا"
 msgid "Trace:"
 msgstr "الأثر:"
 
-#: resources.h:921 resources.h:927
+#: resources.h:940 resources.h:946
 msgid "Transfer"
 msgstr "الإرسال"
 
-#: resources.h:348
+#: resources.h:345
 msgid "Transfer &direction"
 msgstr "إ&تجاه الإرسال"
 
-#: resources.h:521
+#: resources.h:522
 msgid "Transfer &type"
 msgstr "&نوع الإرسال"
 
-#: resources.h:741
+#: resources.h:750
 msgid "Transfer Mode"
 msgstr "نمط الإرسال"
 
-#: resources.h:877
+#: resources.h:890
 msgid "Transfer Queue"
 msgstr "قائمة إنتظار الإرسال"
 
@@ -7143,8 +7218,8 @@ msgstr "قائمة إنتظار الإرسال"
 msgid "Transfer Settings"
 msgstr "إعدادات الإرسال"
 
-#: ../../locales/../src/engine/transfersocket.cpp:513
-#: ../../locales/../src/engine/transfersocket.cpp:537
+#: ../../locales/../src/engine/transfersocket.cpp:515
+#: ../../locales/../src/engine/transfersocket.cpp:539
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "تم إنهاء إتصال الإرسال : %s"
@@ -7167,11 +7242,11 @@ msgstr "عمليات الإرسال"
 msgid "Transfers finished"
 msgstr "إنتهاء عمليات الإرسال"
 
-#: resources.h:833
+#: resources.h:842
 msgid "Treat files &without extension as ASCII file"
 msgstr "معاملة الملفات &بدون إمتداد بهيئة ملف ASCII"
 
-#: resources.h:829
+#: resources.h:838
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "معاملة أنواع الملفات &التالية بهيئة ملفات ASCII :"
 
@@ -7183,7 +7258,7 @@ msgstr "الثقة في Hostkey المتغيرة :"
 msgid "Trust new Hostkey:"
 msgstr "الثقة في Hostkey الجديدة :"
 
-#: resources.h:205
+#: resources.h:202
 msgid "Trust the new key and carry on connecting?"
 msgstr "الوثوق بالمفتاح الجديد و متابعة الإتصال ؟"
 
@@ -7191,49 +7266,49 @@ msgstr "الوثوق بالمفتاح الجديد و متابعة الإتصا�
 msgid "Trust this certificate and carry on connecting?"
 msgstr "الوثوق بهذه الشهادة و متابعة الإتصال؟"
 
-#: resources.h:192
+#: resources.h:189
 msgid "Trust this host and carry on connecting?"
 msgstr "الوثوق بهذا المضيف و متابعة الاتصال؟"
 
-#: resources.h:1019 resources.h:1024
+#: resources.h:1039 resources.h:1044
 msgid "Try again"
 msgstr "حاول ثانية"
 
-#: resources.h:383 ../../locales/../src/interface/edithandler.cpp:1110
+#: resources.h:380 ../../locales/../src/interface/edithandler.cpp:1110
 msgid "Type"
 msgstr "النوع"
 
-#: resources.h:767
+#: resources.h:776
 msgid "Type of FTP Proxy:"
 msgstr "توع ملقم الـ FTP :"
 
-#: resources.h:792
+#: resources.h:801
 msgid "Type of generic proxy:"
 msgstr "توع ملقم االعمومي :"
 
-#: resources.h:318
+#: resources.h:315
 msgid "U&pload"
 msgstr "&رفع"
 
-#: resources.h:471 resources.h:813
+#: resources.h:469 resources.h:822
 #, no-c-format
 msgid "U&pload limit:"
 msgstr "حدود الر&فع:"
 
-#: resources.h:939
+#: resources.h:958
 msgid "U&se filetype associations if available"
 msgstr "إ&ستخدام إشراكات أنواع الملفات إذا توفرت"
 
-#: resources.h:892
+#: resources.h:905
 msgid "U&se system defaults"
 msgstr "إستخدام إ&فتراضي النظام"
 
-#: resources.h:769
+#: resources.h:778
 msgid "USER@&HOST"
 msgstr "USER@&HOST"
 
-#: ../../locales/../src/engine/proxy.cpp:412
-#: ../../locales/../src/engine/proxy.cpp:556
+#: ../../locales/../src/engine/proxy.cpp:413
+#: ../../locales/../src/engine/proxy.cpp:557
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "رمز خطأ غير محدد %d"
@@ -7251,7 +7326,7 @@ msgstr "غير معروف"
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr "نوع ملقم وكيل FTP غير معروف ، لا يمكن توليد سلسلة تسجيل الدخول"
 
-#: ../../locales/../src/engine/proxy.cpp:470
+#: ../../locales/../src/engine/proxy.cpp:471
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "نسخة بروتوكول SOCKS غير معروفة : %d"
@@ -7268,11 +7343,11 @@ msgstr ""
 "خطأ غير معروف في فتح الملف . تأكد من أن الملف يمكن الوصول إليه و أن مستند "
 "XML منسق بشكل جيد"
 
-#: resources.h:185
+#: resources.h:182
 msgid "Unknown host key"
 msgstr "مفتاح مضيف غير معروف"
 
-#: ../../locales/../src/engine/proxy.cpp:480
+#: ../../locales/../src/engine/proxy.cpp:481
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -7303,7 +7378,7 @@ msgstr ""
 "مالم يتم إصلاح هذه المشكلة , لن يعمل نمط FTP النشط و بالتالي سوف يستخدم "
 "النمط السلبي"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1073
+#: ../../locales/../src/engine/tlssocket.cpp:1065
 msgid "Unsupported certificate type"
 msgstr "نوع شهادة غير مدعومة"
 
@@ -7311,7 +7386,7 @@ msgstr "نوع شهادة غير مدعومة"
 msgid "Unsupported redirect"
 msgstr "إعادة توجيه غير مدعومة"
 
-#: resources.h:319
+#: resources.h:316
 msgid "Up&load and unedit"
 msgstr "&رفع و عدم تحرير"
 
@@ -7320,7 +7395,7 @@ msgstr "&رفع و عدم تحرير"
 msgid "Updates"
 msgstr "التحديثات"
 
-#: resources.h:350
+#: resources.h:347
 msgid "Upload"
 msgstr "رفع"
 
@@ -7337,19 +7412,19 @@ msgstr "حدود الإرسال: %s/ث"
 msgid "Upload limit: none"
 msgstr "حدود الرفع : بدون"
 
-#: resources.h:647
+#: resources.h:654
 msgid "Upload selected directory"
 msgstr "رفع الأدلة المحددة"
 
-#: resources.h:552
+#: resources.h:553
 msgid "Upload selected files and directories"
 msgstr "رفع الملفات و الأدلة المحددة"
 
-#: resources.h:303
+#: resources.h:300
 msgid "Upload this file back to the server?"
 msgstr "إرجاع هذا الملف إلى الخادم ؟"
 
-#: resources.h:302
+#: resources.h:299
 msgid "Upload this file to the server?"
 msgstr "رفع هذا الملف إلى الخادم ؟"
 
@@ -7373,15 +7448,15 @@ msgstr "الرفع و عدم التحرير"
 msgid "Use &custom charset"
 msgstr "مجموعة &رموز مخصصة"
 
-#: resources.h:936
+#: resources.h:955
 msgid "Use &custom editor:"
 msgstr "إ&ستخدام محرر مخصص:"
 
-#: resources.h:409
+#: resources.h:406
 msgid "Use &default editor for text files"
 msgstr "إستخدام المحرر الإ&فتراضي للملفات النصية"
 
-#: resources.h:392 resources.h:398
+#: resources.h:389 resources.h:395
 msgid "Use &synchronized browsing"
 msgstr "إستخدام ال&تصفح المتزامن"
 
@@ -7390,7 +7465,7 @@ msgid "Use UTF-8 if the server supports it, else use local charset."
 msgstr ""
 "إستخدام UTF-8 إذا كان الخادم يدعم ذلك و إلا إستخدام مجموعة الرموز المحلية"
 
-#: resources.h:245 resources.h:255
+#: resources.h:242 resources.h:252
 msgid "Use default action"
 msgstr "إستخدم الإجراء الأفتراضى"
 
@@ -7398,36 +7473,36 @@ msgstr "إستخدم الإجراء الأفتراضى"
 msgid "Use plain FTP"
 msgstr "استخدام FTP عادي"
 
-#: resources.h:358
+#: resources.h:355
 msgid "Use server currently connected to"
 msgstr "إستخدام الخادم المتصل حاليا إلى"
 
-#: resources.h:359
+#: resources.h:356
 msgid "Use server from site manager"
 msgstr "إستخدام الخادم من مدير الموقع"
 
-#: resources.h:886
+#: resources.h:899
 msgid "Use system &defaults"
 msgstr "إستخدام إفتراضيات النظام"
 
-#: resources.h:693
+#: resources.h:702
 msgid "Use the following IP address:"
 msgstr "إستخدام عنوان IP التالي :"
 
-#: resources.h:703
+#: resources.h:712
 msgid "Use the following port range:"
 msgstr "إستخدام نطاق المنفذ التالي :"
 
-#: resources.h:688
+#: resources.h:697
 msgid "Use the server's external IP address instead"
 msgstr "إستخدام عنوان IP الخارجي للخادم بدلا من ذلك"
 
-#: resources.h:694 resources.h:757
+#: resources.h:703 resources.h:766
 msgid ""
 "Use this if you're behind a router and have a static external IP address."
 msgstr "أستعمل هذا إذا كنت وراء جهاز توجيه و له عنوان IP خارجي ثابت"
 
-#: resources.h:697
+#: resources.h:706
 msgid ""
 "Use this option if you have a dynamic IP address. FileZilla will contact the "
 "above server once each session as soon as you use active mode for the first "
@@ -7470,15 +7545,15 @@ msgstr "صالح إلى:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "رسائل سجل مطولة من wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1159
+#: ../../locales/../src/engine/tlssocket.cpp:1151
 msgid "Verifying certificate..."
 msgstr "جاري فحص الشهادة..."
 
-#: resources.h:180
+#: resources.h:177
 msgid "Version:"
 msgstr "النسخة :"
 
-#: resources.h:818
+#: resources.h:827
 msgid "Very high"
 msgstr "مرتفعة جدا"
 
@@ -7486,15 +7561,15 @@ msgstr "مرتفعة جدا"
 msgid "View hidden option set, but unsupported by server"
 msgstr "عرض مجموعة الخيارات المخفية ، لكنها غير معتمدة من قبل الخادم"
 
-#: resources.h:923
+#: resources.h:942
 msgid "View/Edit"
 msgstr "عرض/تحرير"
 
-#: resources.h:342
+#: resources.h:339
 msgid "Visible columns"
 msgstr "الأعمدة المرئية"
 
-#: resources.h:150
+#: resources.h:147
 msgid "W&rite"
 msgstr "ك&تابة"
 
@@ -7565,23 +7640,23 @@ msgstr ""
 "\n"
 "هل تريد فعلا التدقيق بحثا عن إصدارات المحايدة ؟"
 
-#: resources.h:197
+#: resources.h:194
 msgid "Warning: Potential security breach!"
 msgstr "تحذير : إختراق أمني محتمل"
 
-#: resources.h:462
+#: resources.h:459
 msgid "Welcome to FileZilla"
 msgstr "مرحبا بك FileZilla"
 
-#: resources.h:451
+#: resources.h:448
 msgid "What's new"
 msgstr "ما هو الجديد"
 
-#: resources.h:1013
+#: resources.h:1033
 msgid "What's new:"
 msgstr "ما هو الجديد :"
 
-#: resources.h:478
+#: resources.h:476
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
@@ -7590,7 +7665,7 @@ msgstr ""
 "الاتصال من دون الحاجة إلى إعادة إدخال كلمة المرور الخاصة بك عند إعادة تشغيل "
 "FileZilla"
 
-#: resources.h:821
+#: resources.h:830
 msgid ""
 "When enabled, characters that are not supported by the local operating "
 "system in filenames are replaced if downloading such a file."
@@ -7598,15 +7673,19 @@ msgstr ""
 "عند التمكين ، يتم إستبدال الرموز التي لا يدعمها نظام التشغيل المحلي في أسماء "
 "الملفات عند تحميل مثل هذا الملف"
 
-#: resources.h:863
+#: resources.h:885
+msgid "When st&arting a new connection while already connected:"
+msgstr "&عند بدء أي إتصال جديد في الوقت الذي أنت فيه متصل:"
+
+#: resources.h:872
 msgid "Widescreen"
 msgstr "شاشة عريضة"
 
-#: resources.h:477
+#: resources.h:475
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "هل تريد أن يتذكر FileZilla كلمة المرور هذه ؟"
 
-#: resources.h:154
+#: resources.h:151
 msgid "Wr&ite"
 msgstr "كت&ابة"
 
@@ -7629,15 +7708,15 @@ msgid ""
 "environment."
 msgstr "يبدو أنك تستخدم مضيف IPv6 فقط. هذا المعالج لا يدعم هذه البيئة"
 
-#: resources.h:1027
+#: resources.h:1047
 msgid "You are using the latest version of FileZilla."
 msgstr "أنت تستخدم آخر إصدار من FileZilla"
 
-#: resources.h:460
+#: resources.h:457
 msgid "You can always open this dialog again through the help menu."
 msgstr "يمكنك فتح هذه اللائحة مرة ثانية خلال قائمة تعليمات"
 
-#: resources.h:1021 resources.h:1026
+#: resources.h:1041 resources.h:1046
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "يمكنك تنزيل أحدث إصدار من موقع FileZilla:"
 
@@ -7645,7 +7724,7 @@ msgstr "يمكنك تنزيل أحدث إصدار من موقع FileZilla:"
 msgid "You can leave the port field empty to use the default port."
 msgstr "يمكنك ترك حقل المنفذ فارغا لاستخدام المنفذ الافتراضي"
 
-#: resources.h:157
+#: resources.h:154
 msgid ""
 "You can use an x at any position to keep the permission the original files "
 "have."
@@ -7667,18 +7746,18 @@ msgstr ""
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
 msgstr "أنت لم تدخل اسم جديد للملف ، هل تكتب على الملف بدلا من ذلك ؟"
 
-#: resources.h:441
+#: resources.h:438
 msgid "You have selected at least one symbolic link."
 msgstr "أنت قمت بتحديد رابط ترميزي واحد على الأقل"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1897
-#: ../../locales/../src/interface/RemoteListView.cpp:2647
+#: ../../locales/../src/interface/LocalListView.cpp:1698
+#: ../../locales/../src/interface/RemoteListView.cpp:2394
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
 msgstr "أنت قمت بتحديد أكثر من 10 ملفات للتحرير ، هل تريد فعلا الإستمرار ؟"
 
-#: ../../locales/../src/interface/LocalListView.cpp:2016
+#: ../../locales/../src/interface/LocalListView.cpp:1817
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -7690,7 +7769,7 @@ msgstr ""
 msgid "You have to enter a hostname."
 msgstr "يجب أن تدخل أسم مضيف"
 
-#: ../../locales/../src/interface/search.cpp:800
+#: ../../locales/../src/interface/search.cpp:510
 msgid "You have to enter a local directory."
 msgstr "يجب إدخال دليل محلي"
 
@@ -7699,7 +7778,7 @@ msgstr "يجب إدخال دليل محلي"
 msgid "You have to enter a valid IP address."
 msgstr "يجب أن تدخل عنوان IP صالح"
 
-#: ../../locales/../src/interface/search.cpp:806
+#: ../../locales/../src/interface/search.cpp:516
 msgid "You have to enter a writable local directory."
 msgstr "يجب إدخال دليل محلي قابل للكتابة"
 
@@ -7788,7 +7867,6 @@ msgstr ""
 "يعمل بشكل صحيح"
 
 #: ../../locales/../src/interface/QueueView.cpp:3232
-#, fuzzy
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "سيتم إستبعاد النظام الخاص بك مالم تنقر على زر إلغاء الأمر"
 
@@ -7813,6 +7891,10 @@ msgstr "بايت"
 msgid "contains"
 msgstr "يحتوى"
 
+#: ../../locales/../src/interface/updater.cpp:241
+msgid "custom"
+msgstr "مخصص"
+
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:95
 msgid "does not contain"
 msgstr "لا يحتوي على"
@@ -7831,10 +7913,10 @@ msgstr "ينتهى بـ"
 msgid "equals"
 msgstr "يساوى"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:513
-#: ../../locales/../src/interface/filelistctrl.cpp:532
-#: ../../locales/../src/interface/filelistctrl.cpp:559
-#: ../../locales/../src/interface/filelistctrl.cpp:575
+#: ../../locales/../src/interface/filelistctrl.cpp:535
+#: ../../locales/../src/interface/filelistctrl.cpp:554
+#: ../../locales/../src/interface/filelistctrl.cpp:581
+#: ../../locales/../src/interface/filelistctrl.cpp:597
 msgid "file"
 msgstr "ملف"
 
@@ -7857,7 +7939,7 @@ msgstr ""
 msgid "fzsftp could not be started"
 msgstr "fzsftp غير قادر على تشغيل"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1111
+#: ../../locales/../src/engine/tlssocket.cpp:1103
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers لم يرجع بشهادات"
 
@@ -7909,9 +7991,9 @@ msgstr "ملف قابل للقراءة للمالك"
 msgid "owner writeable"
 msgstr "ملف قابل للكتابة للمالك"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1170
-#: ../../locales/../src/engine/tlssocket.cpp:1181
-#: ../../locales/../src/engine/tlssocket.cpp:1196
+#: ../../locales/../src/engine/tlssocket.cpp:1162
+#: ../../locales/../src/engine/tlssocket.cpp:1173
+#: ../../locales/../src/engine/tlssocket.cpp:1188
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:29
 msgid "unknown"
 msgstr "غير معروف"
@@ -7928,6 +8010,6 @@ msgstr "ملف قابل للقراءة للعام"
 msgid "world writeable"
 msgstr "ملف قابل للكتابة للعام"
 
-#: resources.h:175
+#: resources.h:172
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
