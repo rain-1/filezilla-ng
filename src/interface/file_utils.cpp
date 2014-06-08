@@ -157,7 +157,7 @@ wxString GetSystemOpenCommand(wxString file, bool &program_exists)
 		{
 			// Might need to quote filename, wxWidgets doesn't do it
 			if ((!pos || (args[pos - 1] != '\'' && args[pos - 1] != '"')) &&
-				args[pos + file.Length()] != '\'' && args[pos + file.Length()] != '"')
+				(pos + file.Length() >= args.Length() || (args[pos + file.Length()] != '\'' && args[pos + file.Length()] != '"')))
 			{
 				// Filename in command arguments isn't quoted. Repeat with quoted filename
 				file = _T("\"") + file + _T("\"");
@@ -236,10 +236,10 @@ bool ProgramExists(const wxString& editor)
 bool PathExpand(wxString& cmd)
 {
 #ifndef __WXMSW__
-	if (cmd[0] == '/')
+	if (!cmd.empty() && cmd[0] == '/')
 		return true;
 #else
-	if (cmd[0] == '\\')
+	if (!cmd.empty() && cmd[0] == '\\')
 		// UNC or root of current working dir, whatever that is
 		return true;
 	if (cmd.Len() > 2 && cmd[1] == ':')

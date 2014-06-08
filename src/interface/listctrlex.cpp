@@ -177,8 +177,7 @@ void wxListCtrlEx::HandlePrefixSearch(wxChar character)
 
 	int newPos = FindItemWithPrefix(newPrefix, start);
 
-	if (newPos == -1 && m_prefixSearch_prefix[0] == character && !m_prefixSearch_prefix[1] && item != -1 && beep)
-	{
+	if (newPos == -1 && (m_prefixSearch_prefix.Len() == 1 && m_prefixSearch_prefix[0] == character) && item != -1 && beep) {
 		// Search the next item that starts with the same letter
 		newPrefix = m_prefixSearch_prefix;
 		newPos = FindItemWithPrefix(newPrefix, item + 1);

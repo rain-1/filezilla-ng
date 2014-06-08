@@ -65,7 +65,7 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString remote_file, enum ServerTyp
 	if (server_type == VMS)
 		remote_file = StripVMSRevision(remote_file);
 
-	if (remote_file[0] == '.')
+	if (!remote_file.empty() && remote_file[0] == '.')
 		return COptions::Get()->GetOptionVal(OPTION_ASCIIDOTFILE) != 0;
 
 	int pos = remote_file.Find('.', true);

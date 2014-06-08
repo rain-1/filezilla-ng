@@ -131,10 +131,10 @@ public:
 
 			// Use same sorting as site tree in site manager
 #ifdef __WXMSW__
-			if (pItem->GetLabel().CmpNoCase(name) > 0)
+			if (pItem->GetItemLabelText().CmpNoCase(name) > 0)
 				break;
 #else
-			if (pItem->GetLabel() > name)
+			if (pItem->GetItemLabelText() > name)
 				break;
 #endif
 		}
@@ -419,7 +419,7 @@ wxString CSiteManager::BuildPath(wxChar root, std::list<wxString> const& segment
 
 CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 {
-	wxChar c = sitePath[0];
+	wxChar c = sitePath.empty() ? 0 : sitePath[0];
 	if (c != '0' && c != '1')
 	{
 		wxMessageBoxEx(_("Site path has to begin with 0 or 1."), _("Invalid site path"));
@@ -714,7 +714,8 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	if (local_dir.empty() && remote_dir.IsEmpty())
 		return false;
 
-	if (sitePath[0] != '0')
+	wxChar c = sitePath.empty() ? 0 : sitePath[0];
+	if (c != '0')
 		return false;
 
 	sitePath = sitePath.Mid(1);
@@ -799,6 +800,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 
 bool CSiteManager::ClearBookmarks(wxString sitePath)
 {
+	wxChar c = sitePath.empty() ? 0 : sitePath[0];
 	if (sitePath[0] != '0')
 		return false;
 
