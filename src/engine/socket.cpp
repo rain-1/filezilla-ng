@@ -61,6 +61,8 @@ static int ConvertMSWErrorCode(int error)
 	{
 	case WSAECONNREFUSED:
 		return ECONNREFUSED;
+	case WSAECONNABORTED:
+		return ECONNABORTED;
 	case WSAEINVAL:
 		return EAI_BADFLAGS;
 	case WSANO_RECOVERY:
