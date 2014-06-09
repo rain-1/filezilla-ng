@@ -10,6 +10,7 @@
 #include "wrapengine.h"
 #include "xmlfunctions.h"
 
+#include <wx/dcclient.h>
 #include <wx/dnd.h>
 
 #ifdef __WXMSW__
