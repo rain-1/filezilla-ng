@@ -180,14 +180,14 @@ void CViewHeader::OnComboPaint(wxPaintEvent& event)
 	else
 #endif //wxUSE_UXTHEME
 	{
-		dc.SetPen(wxPen(wxSystemSettings::GetColour(box->IsEnabled() ? wxSYS_COLOUR_WINDOW : wxSYS_COLOUR_BTNFACE)));
+		dc.SetPen(wxPen(wxSystemSettings::GetColour(IsEnabled() ? wxSYS_COLOUR_WINDOW : wxSYS_COLOUR_BTNFACE)));
 		wxRect rect = box->GetClientRect();
 		rect.Deflate(1);
 		wxRect rect2 = rect;
 		rect2.SetWidth(rect.GetWidth() - thumbWidth);
 		dc.DrawRectangle(rect2);
 
-		if (!m_bLeftMousePressed || !box->IsEnabled())
+		if (!m_bLeftMousePressed || !IsEnabled())
 		{
 			wxPoint topLeft = rect.GetTopLeft();
 			wxPoint bottomRight = rect.GetBottomRight();
@@ -336,11 +336,6 @@ void CViewHeader::AddRecentDirectory(const wxString &directory)
 void CViewHeader::SetFocus()
 {
 	m_pComboBox->SetFocus();
-}
-
-bool CViewHeader::IsEnabled() const
-{
-	return m_pComboBox->IsEnabled();
 }
 
 #ifdef __WXGTK__
@@ -562,7 +557,7 @@ CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState* pState)
 	: CViewHeader(pParent, _("Remote site:")), CStateEventHandler(pState)
 {
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
-	m_pComboBox->Disable();
+	Disable();
 }
 
 void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
@@ -574,7 +569,7 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 	if (m_path.IsEmpty())
 	{
 		m_pComboBox->SetValue(_T(""));
-		m_pComboBox->Disable();
+		Disable();
 	}
 	else
 	{
@@ -585,7 +580,7 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 			m_recentDirectories.clear();
 			m_lastServer = *pServer;
 		}
-		m_pComboBox->Enable();
+		Enable();
 		AddRecentDirectory(m_path.GetPath());
 	}
 }
