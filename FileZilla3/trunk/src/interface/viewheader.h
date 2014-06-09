@@ -21,8 +21,6 @@ public:
 
 	virtual void SetFocus();
 
-	virtual bool IsEnabled() const;
-
 protected:
 	CComboBoxEx* m_pComboBox;
 	wxStaticText* m_pLabel;
