@@ -14,9 +14,6 @@ BEGIN_EVENT_TABLE(CLed, wxWindow)
 	EVT_PAINT(CLed::OnPaint)
 	EVT_TIMER(wxID_ANY, CLed::OnTimer)
 	EVT_ENTER_WINDOW(CLed::OnEnterWindow)
-#ifdef __WXMSW__
-	EVT_ERASE_BACKGROUND(CLed::OnEraseBackground)
-#endif
 END_EVENT_TABLE()
 
 #define LED_OFF 1
@@ -115,9 +112,3 @@ void CLed::Ping()
 	Set();
 	m_timer.Start(100);
 }
-
-#ifdef __WXMSW__
-void CLed::OnEraseBackground(wxEraseEvent& event)
-{
-}
-#endif
