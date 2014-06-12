@@ -29,9 +29,6 @@ protected:
 	void OnPaint(wxPaintEvent& event);
 	void OnTimer(wxTimerEvent& event);
 	void OnEnterWindow(wxMouseEvent& event);
-#ifdef __WXMSW__
-	void OnEraseBackground(wxEraseEvent& event);
-#endif
 };
 
 #endif //__LED_H__
