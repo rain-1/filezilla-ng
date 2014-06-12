@@ -30,7 +30,7 @@ exist or compilation will fail
 --------------
 
 If using source from the project's Subversion repository,
-execute ./autogen.sh first to generate configure. This step is
+execute autoreconf -i first to generate configure. This step is
 not necessary for source distributions.
 
 Assuming you are in the top source directory, execute the following commands:
