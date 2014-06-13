@@ -153,13 +153,14 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	{
 		const wxString path = dirsToVisit.front();
 		dirsToVisit.pop_front();
-		dirsToDelete.push_front(path);
 
 		if (GetFileType(path) != dir)
 		{
 			wxRemoveFile(path);
 			continue;
 		}
+
+		dirsToDelete.push_front(path);
 
 		wxDir dir;
 		if (!dir.Open(path))
