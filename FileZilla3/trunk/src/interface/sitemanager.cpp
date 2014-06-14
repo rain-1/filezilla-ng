@@ -800,8 +800,8 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 
 bool CSiteManager::ClearBookmarks(wxString sitePath)
 {
-	wxChar c = sitePath.empty() ? 0 : sitePath[0];
-	if (sitePath[0] != '0')
+	wxChar const c = sitePath.empty() ? 0 : sitePath[0];
+	if (c != '0')
 		return false;
 
 	sitePath = sitePath.Mid(1);
@@ -813,8 +813,7 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	CXmlFile file;
 	TiXmlElement* pDocument = file.Load(_T("sitemanager"));
 
-	if (!pDocument)
-	{
+	if (!pDocument) {
 		wxString msg = file.GetError() + _T("\n") + _("The bookmarks could not be cleared.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -826,29 +825,25 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 		return false;
 
 	std::list<wxString> segments;
-	if (!UnescapeSitePath(sitePath, segments))
-	{
+	if (!UnescapeSitePath(sitePath, segments)) {
 		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
-	if (!pChild || strcmp(pChild->Value(), "Server"))
-	{
+	if (!pChild || strcmp(pChild->Value(), "Server")) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
 	TiXmlElement *pBookmark = pChild->FirstChildElement("Bookmark");
-	while (pBookmark)
-	{
+	while (pBookmark) {
 		pChild->RemoveChild(pBookmark);
 		pBookmark = pChild->FirstChildElement("Bookmark");
 	}
 
 	wxString error;
-	if (!file.Save(&error))
-	{
+	if (!file.Save(&error)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 			return true;
 
