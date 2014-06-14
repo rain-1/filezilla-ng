@@ -191,10 +191,11 @@ bool CSettingsDialog::LoadPages()
 	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
 		size.IncTo(iter->page->GetSizer()->GetMinSize());
 
+	wxSize panelSize = size;
 #ifdef __WXGTK__
-	size.x += 1;
+	panelSize.x += 1;
 #endif
-	parentPanel->SetInitialSize(size);
+	parentPanel->SetInitialSize(panelSize);
 
 	// Adjust pages sizes according to maximum size
 	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
