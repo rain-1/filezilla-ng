@@ -157,7 +157,7 @@ bool IsRoutableAddress(const wxString& address, enum CSocket::address_family fam
 	if (family == CSocket::ipv6)
 	{
 		wxString long_address = GetIPV6LongForm(address);
-		if (long_address.empty())
+		if (long_address.size() != 39)
 			return false;
 		if (long_address[0] == '0')
 		{

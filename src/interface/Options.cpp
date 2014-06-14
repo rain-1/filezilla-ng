@@ -871,9 +871,9 @@ void COptions::InitSettingsDir()
 		while (tokenizer.HasMoreTokens())
 		{
 			wxString token = tokenizer.GetNextToken();
-			if (token[0] == '$')
+			if (!token.empty() && token[0] == '$')
 			{
-				if (token[1] == '$')
+				if (token.size() > 1 && token[1] == '$')
 					token = token.Mid(1);
 				else
 				{
@@ -902,8 +902,7 @@ void COptions::InitSettingsDir()
 
 void COptions::SetDefaultValues()
 {
-	for (int i = 0; i < OPTIONS_NUM; ++i)
-	{
+	for (int i = 0; i < OPTIONS_NUM; ++i) {
 		if (options[i].type == string)
 			m_optionsCache[i].strValue = options[i].defaultValue;
 		else

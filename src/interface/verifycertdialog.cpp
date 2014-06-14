@@ -510,12 +510,10 @@ wxString CVerifyCertDialog::DecodeValue(const wxString& value)
 		return value;
 
 	unsigned int len = value.Len();
-	//if (!(len % 2))
-	//	return value;
 
 	wxString out;
 
-	for (unsigned int i = 5; i < len; i += 2)
+	for (unsigned int i = 5; i + 1 < len; i += 2)
 	{
 		wxChar c = value[i];
 		wxChar d = value[i + 1];
@@ -539,8 +537,6 @@ wxString CVerifyCertDialog::DecodeValue(const wxString& value)
 			//return value;
 
 		c = c * 16 + d;
-		//if (c > 127)
-		//	return value;
 		if (c > 127 || c < 32)
 			continue;
 		out += c;
