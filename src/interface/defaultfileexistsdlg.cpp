@@ -18,6 +18,8 @@ bool CDefaultFileExistsDlg::Load(wxWindow *parent, bool fromQueue)
 		XRCCTRL(*this, "ID_DESCRIPTION", wxStaticText)->SetLabel(_("Select default file exists action if the target file already exists. This selection is valid only for the current session."));
 
 	WrapRecursive(this, 1.8, "DEFAULTFILEEXISTS");
+	GetSizer()->Fit(this);
+	GetSizer()->SetSizeHints(this);
 
 	if (fromQueue)
 		return true;
