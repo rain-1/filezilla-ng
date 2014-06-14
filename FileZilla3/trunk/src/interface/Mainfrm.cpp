@@ -436,10 +436,6 @@ CMainFrame::CMainFrame()
 	ConnectNavigationHandler(m_pStatusView);
 	ConnectNavigationHandler(m_pQueuePane);
 
-	wxNavigationKeyEvent evt;
-	evt.SetDirection(true);
-	AddPendingEvent(evt);
-
 	CEditHandler::Create()->SetQueue(m_pQueueView);
 
 	CAutoAsciiFiles::SettingsChanged();
@@ -2272,24 +2268,20 @@ void CMainFrame::FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<w
 {
 	std::list<wxWindow*>::iterator start = iter;
 
-	while (skipFirst || !(*iter)->IsShownOnScreen() || !(*iter)->IsEnabled())
-	{
+	while (skipFirst || !(*iter)->IsShownOnScreen() || !(*iter)->IsEnabled()) {
 		skipFirst = false;
-		if (forward)
-		{
+		if (forward) {
 			++iter;
 			if (iter == windowOrder.end())
 				iter = windowOrder.begin();
 		}
-		else
-		{
+		else {
 			if (iter == windowOrder.begin())
 				iter = windowOrder.end();
 			--iter;
 		}
 
-		if (iter == start)
-		{
+		if (iter == start) {
 			wxBell();
 			return;
 		}
@@ -2773,6 +2765,9 @@ void CMainFrame::OnSearch(wxCommandEvent& event)
 
 void CMainFrame::PostInitialize()
 {
+	// Focus first control
+	NavigateIn(wxNavigationKeyEvent::IsForward);
+
 #if FZ_MANUALUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
 	if( !m_pUpdater ) {
