@@ -60,7 +60,6 @@ public:
 				// Scroll bar would appear, need to adjust width
 				size.SetHeight(vheight);
 				SetVirtualSize(size);
-				SetVirtualSizeHints(size, size);
 				SetScrollRate(0, m_iconSize.GetHeight() + BORDER);
 
 				wxSize size2 = GetClientSize();
@@ -81,7 +80,6 @@ public:
 			}
 		}
 		SetVirtualSize(size);
-		SetVirtualSizeHints(size, size);
 		SetScrollRate(0, m_iconSize.GetHeight() + BORDER);
 	}
 
