@@ -1219,7 +1219,7 @@ static struct Error_table error_table[] =
 	ERRORDECL(EINTR, TRANSLATE_T("Interrupted by signal"))
 	ERRORDECL(EISCONN, TRANSLATE_T("Socket already connected"))
 	ERRORDECL(ENETUNREACH, TRANSLATE_T("Network unreachable"))
-	ERRORDECL(ENOTSOCK, TRANSLATE_T("File descriptior not a socket"))
+	ERRORDECL(ENOTSOCK, TRANSLATE_T("File descriptor not a socket"))
 	ERRORDECL(ETIMEDOUT, TRANSLATE_T("Connection attempt timed out"))
 	ERRORDECL(EHOSTUNREACH, TRANSLATE_T("No route to host"))
 	ERRORDECL(ENOTCONN, TRANSLATE_T("Socket not connected"))
