@@ -791,6 +791,7 @@ void COptions::SaveIfNeeded()
 }
 
 namespace {
+#ifndef __WXMSW__
 wxString TryDirectory( wxString path, wxString const& suffix, bool check_exists )
 {
 	if( !path.empty() && path[0] == '/' ) {
@@ -811,6 +812,7 @@ wxString TryDirectory( wxString path, wxString const& suffix, bool check_exists 
 	}
 	return path;
 }
+#endif
 
 wxString GetEnv(wxString const& env)
 {
@@ -864,22 +866,16 @@ void COptions::InitSettingsDir()
 	wxFileName fn;
 
 	wxString dir(GetOption(OPTION_DEFAULT_SETTINGSDIR));
-	if (!dir.empty())
-	{
+	if (!dir.empty()) {
 		wxStringTokenizer tokenizer(dir, _T("/\\"), wxTOKEN_RET_EMPTY_ALL);
 		dir = _T("");
-		while (tokenizer.HasMoreTokens())
-		{
+		while (tokenizer.HasMoreTokens()) {
 			wxString token = tokenizer.GetNextToken();
-			if (!token.empty() && token[0] == '$')
-			{
+			if (!token.empty() && token[0] == '$') {
 				if (token.size() > 1 && token[1] == '$')
 					token = token.Mid(1);
-				else
-				{
-					wxString value;
-					if (wxGetEnv(token.Mid(1), &value))
-						token = value;
+				else {
+					token = GetEnv(token.Mid(1));
 				}
 			}
 			dir += token;
