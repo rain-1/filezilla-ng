@@ -363,7 +363,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 
 #if WRAPDEBUG >= 3
 	static int level = 1;
-	plvl printf("Enter with max = %d\n", max);
+	plvl printf("Enter with max = %d, current = %d\n", max, wnd ? wnd->GetRect().GetWidth() : -1);
 #endif
 
 	if (max <= 0)
@@ -470,6 +470,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 		else if ((subSizer = item->GetSizer()))
 		{
 			int subBorder = 0;
+			wxWindow* subWnd = wnd;
 
 			// Add border of static box sizer
 			wxStaticBoxSizer* sboxSizer;
@@ -477,13 +478,14 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 			{
 				int top, other;
 				sboxSizer->GetStaticBox()->GetBordersForSizer(&top, &other);
-				subBorder += other;
+				subBorder += other * 2;
+				subWnd = sboxSizer->GetStaticBox();
 			}
 
 #if WRAPDEBUG >= 3
 			level++;
 #endif
-			result |= WrapRecursive(0, subSizer, max - rborder - subBorder);
+			result |= WrapRecursive(subWnd, subSizer, max - rborder - subBorder);
 #if WRAPDEBUG >= 3
 			level--;
 #endif
@@ -500,7 +502,6 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 #if WRAPDEBUG >= 3
 	plvl printf("Leave: Success\n");
 #endif
-
 
 	return result;
 }
@@ -1020,7 +1021,7 @@ bool CWrapEngine::LoadCache()
 	if (!pResources)
 		pResources = pElement->LinkEndChild(new TiXmlElement("Resources"))->ToElement();
 
-	wxString resourceDir = wxGetApp().GetResourceDir();
+	wxString resourceDir = wxGetApp().GetResourceDir() + _T("xrc/");
 	wxDir dir(resourceDir);
 
 	wxLogNull log;
