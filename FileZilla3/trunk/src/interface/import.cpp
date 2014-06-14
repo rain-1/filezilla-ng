@@ -134,6 +134,10 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
 
 wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 {
+	if( pass.size() % 3 ) {
+		return wxString();
+	}
+
 	wxString output;
 	const char* key = "FILEZILLA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 

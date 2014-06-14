@@ -4421,13 +4421,13 @@ int CFtpControlSocket::Connect(const CServer &server)
 		{
 			// Probably IPv6 address
 			pos = pData->host.Find(']');
-			if (pos == -1)
+			if (pos < 0)
 			{
 				LogMessage(::Error, _("Proxy host starts with '[' but no closing bracket found."));
 				DoClose(FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			if (pData->host[pos + 1])
+			if (pData->host.size() > static_cast<std::size_t>(pos + 1) && pData->host[pos + 1])
 			{
 				if (pData->host[pos + 1] != ':')
 				{

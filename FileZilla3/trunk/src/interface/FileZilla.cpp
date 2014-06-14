@@ -365,12 +365,12 @@ int CFileZillaApp::OnExit()
 bool CFileZillaApp::FileExists(const wxString& file) const
 {
 	int pos = file.Find('*');
-	if (pos == -1)
+	if (pos < 0)
 		return wxFileExists(file);
 
 	wxASSERT(pos > 0);
 	wxASSERT(file[pos - 1] == '/');
-	wxASSERT(file[pos + 1] == '/');
+	wxASSERT(file.size() > static_cast<std::size_t>(pos + 1) && file[pos + 1] == '/');
 
 	wxLogNull nullLog;
 	wxDir dir(file.Left(pos));
