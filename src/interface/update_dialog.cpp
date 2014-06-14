@@ -111,10 +111,11 @@ void CUpdateDialog::Wrap()
 	for (std::vector<wxPanel*>::iterator iter = panels_.begin(); iter != panels_.end(); ++iter)
 		size.IncTo((*iter)->GetSizer()->GetMinSize());
 
+	wxSize panelSize = size;
 #ifdef __WXGTK__
-	size.x += 1;
+	panelSize.x += 1;
 #endif
-	parentPanel->SetInitialSize(size);
+	parentPanel->SetInitialSize(panelSize);
 
 	// Adjust pages sizes according to maximum size
 	for (std::vector<wxPanel*>::iterator iter = panels_.begin(); iter != panels_.end(); ++iter) {
