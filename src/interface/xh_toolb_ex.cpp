@@ -32,49 +32,127 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 {
 	if (m_class == wxT("tool"))
 	{
-		wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: tool not within a toolbar!"));
-
-		if (GetPosition() != wxDefaultPosition)
+		if (!m_toolbar)
 		{
-			m_toolbar->AddTool(GetID(),
-							   GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
-							   GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
-							   GetBool(wxT("toggle")),
-							   GetPosition().x,
-							   GetPosition().y,
-							   NULL,
-							   GetText(wxT("tooltip")),
-							   GetText(wxT("longhelp")));
+			ReportError("tool only allowed inside a wxToolBar");
+			return NULL;
 		}
-		else
+
+		wxItemKind kind = wxITEM_NORMAL;
+		if (GetBool(wxT("radio")))
+			kind = wxITEM_RADIO;
+
+		if (GetBool(wxT("toggle")))
 		{
-			wxItemKind kind = wxITEM_NORMAL;
-			if (GetBool(wxT("radio")))
-				kind = wxITEM_RADIO;
-			if (GetBool(wxT("toggle")))
+			if (kind != wxITEM_NORMAL)
 			{
-				wxASSERT_MSG( kind == wxITEM_NORMAL,
-							  _T("can't have both toggleable and radion button at once") );
-				kind = wxITEM_CHECK;
+				ReportParamError
+					(
+					"toggle",
+					"tool can't have both <radio> and <toggle> properties"
+					);
 			}
-			m_toolbar->AddTool(GetID(),
-							   GetText(wxT("label")),
-							   GetBitmap(wxT("bitmap"), wxART_TOOLBAR, m_iconSize),
-							   GetBitmap(wxT("bitmap2"), wxART_TOOLBAR, m_iconSize),
-							   kind,
-							   GetText(wxT("tooltip")),
-							   GetText(wxT("longhelp")));
 
-			if ( GetBool(wxT("disabled")) )
-				m_toolbar->EnableTool(GetID(), false);
+			kind = wxITEM_CHECK;
 		}
+
+#if wxUSE_MENUS
+		// check whether we have dropdown tag inside
+		wxMenu *menu = NULL; // menu for drop down items
+		wxXmlNode * const nodeDropdown = GetParamNode("dropdown");
+		if (nodeDropdown)
+		{
+			if (kind != wxITEM_NORMAL)
+			{
+				ReportParamError
+					(
+					"dropdown",
+					"drop-down tool can't have neither <radio> nor <toggle> properties"
+					);
+			}
+
+			kind = wxITEM_DROPDOWN;
+
+			// also check for the menu specified inside dropdown (it is
+			// optional and may be absent for e.g. dynamically-created
+			// menus)
+			wxXmlNode * const nodeMenu = nodeDropdown->GetChildren();
+			if (nodeMenu)
+			{
+				wxObject *res = CreateResFromNode(nodeMenu, NULL);
+				menu = wxDynamicCast(res, wxMenu);
+				if (!menu)
+				{
+					ReportError
+						(
+						nodeMenu,
+						"drop-down tool contents can only be a wxMenu"
+						);
+				}
+
+				if (nodeMenu->GetNext())
+				{
+					ReportError
+						(
+						nodeMenu->GetNext(),
+						"unexpected extra contents under drop-down tool"
+						);
+				}
+			}
+		}
+#endif
+		wxToolBarToolBase * const tool =
+			m_toolbar->AddTool
+			(
+			GetID(),
+			GetText(wxT("label")),
+			GetBitmap(wxT("bitmap"), wxART_TOOLBAR, m_iconSize),
+			GetBitmap(wxT("bitmap2"), wxART_TOOLBAR, m_iconSize),
+			kind,
+			GetText(wxT("tooltip")),
+			GetText(wxT("longhelp"))
+			);
+
+		if (GetBool(wxT("disabled")))
+			m_toolbar->EnableTool(GetID(), false);
+
+		if (GetBool(wxS("checked")))
+		{
+			if (kind == wxITEM_NORMAL)
+			{
+				ReportParamError
+					(
+					"checked",
+					"only <radio> nor <toggle> tools can be checked"
+					);
+			}
+			else
+			{
+				m_toolbar->ToggleTool(GetID(), true);
+			}
+		}
+
+#if wxUSE_MENUS
+		if (menu)
+			tool->SetDropdownMenu(menu);
+#endif
+
 		return m_toolbar; // must return non-NULL
 	}
 
-	else if (m_class == wxT("separator"))
+	else if (m_class == wxT("separator") || m_class == wxT("space"))
 	{
-		wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: separator not within a toolbar!"));
-		m_toolbar->AddSeparator();
+		if (!m_toolbar)
+		{
+			ReportError("separators only allowed inside wxToolBar");
+			return NULL;
+		}
+
+		if (m_class == wxT("separator"))
+			m_toolbar->AddSeparator();
+		else
+			m_toolbar->AddStretchableSpace();
+
 		return m_toolbar; // must return non-NULL
 	}
 
@@ -87,20 +165,15 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 
 		XRC_MAKE_INSTANCE(toolbar, wxToolBar)
 
-		toolbar->Create(m_parentAsWindow,
-						 GetID(),
-						 GetPosition(),
-						 GetSize(),
-						 style,
-						 GetName());
+			toolbar->Create(m_parentAsWindow,
+			GetID(),
+			GetPosition(),
+			GetSize(),
+			style,
+			GetName());
+		SetupWindow(toolbar);
 
-		wxSize bmpsize;
-		if (m_iconSize.IsFullySpecified())
-			bmpsize = m_iconSize;
-		else
-			bmpsize = GetSize(wxT("bitmapsize"));
-		if (!(bmpsize == wxDefaultSize))
-			toolbar->SetToolBitmapSize(bmpsize);
+		toolbar->SetToolBitmapSize(m_iconSize);
 		wxSize margins = GetSize(wxT("margins"));
 		if (!(margins == wxDefaultSize))
 			toolbar->SetMargins(margins.x, margins.y);
@@ -110,12 +183,10 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 		long separation = GetLong(wxT("separation"), -1);
 		if (separation != -1)
 			toolbar->SetToolSeparation(separation);
-		if (HasParam(wxT("bg")))
-			toolbar->SetBackgroundColour(GetColour(wxT("bg")));
 
 		wxXmlNode *children_node = GetParamNode(wxT("object"));
 		if (!children_node)
-		   children_node = GetParamNode(wxT("object_ref"));
+			children_node = GetParamNode(wxT("object_ref"));
 
 		if (children_node == NULL) return toolbar;
 
@@ -133,6 +204,7 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 				wxControl *control = wxDynamicCast(created, wxControl);
 				if (!IsOfClass(n, wxT("tool")) &&
 					!IsOfClass(n, wxT("separator")) &&
+					!IsOfClass(n, wxT("space")) &&
 					control != NULL)
 					toolbar->AddControl(control);
 			}
@@ -142,14 +214,14 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 		m_isInside = false;
 		m_toolbar = NULL;
 
-		toolbar->Realize();
-
 		if (m_parentAsWindow && !GetBool(wxT("dontattachtoframe")))
 		{
 			wxFrame *parentFrame = wxDynamicCast(m_parent, wxFrame);
 			if (parentFrame)
 				parentFrame->SetToolBar(toolbar);
 		}
+
+		toolbar->Realize();
 
 		return toolbar;
 	}
