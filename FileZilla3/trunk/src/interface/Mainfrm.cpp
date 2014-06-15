@@ -508,17 +508,17 @@ void CMainFrame::OnSize(wxSizeEvent &event)
 bool CMainFrame::CreateMenus()
 {
 	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateMenus"));
-	if (m_pMenuBar)
-	{
-		SetMenuBar(0);
-		delete m_pMenuBar;
-	}
+	CMenuBar* old = m_pMenuBar;
+
 	m_pMenuBar = CMenuBar::Load(this);
 
-	if (!m_pMenuBar)
+	if (!m_pMenuBar) {
+		m_pMenuBar = old;
 		return false;
+	}
 
 	SetMenuBar(m_pMenuBar);
+	delete old;
 
 	return true;
 }
