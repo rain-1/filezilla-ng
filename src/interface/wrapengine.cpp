@@ -334,7 +334,6 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 #else
 	(void)containsURL;
 #endif
-
 	return true;
 }
 
@@ -478,14 +477,14 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 			{
 				int top, other;
 				sboxSizer->GetStaticBox()->GetBordersForSizer(&top, &other);
-				subBorder += other * 2 + 2;
+				subBorder += other * 2;
 				subWnd = sboxSizer->GetStaticBox();
 			}
 
 #if WRAPDEBUG >= 3
 			level++;
 #endif
-			result |= WrapRecursive(subWnd, subSizer, max - rborder - subBorder);
+			result |= WrapRecursive(subWnd, subSizer, max - lborder - rborder - subBorder);
 #if WRAPDEBUG >= 3
 			level--;
 #endif
@@ -496,16 +495,18 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 #endif
 				return result;
 			}
-
-			if( sboxSizer ) {
-				sboxSizer->GetStaticBox()->CacheBestSize(wxSize());
-			}
 		}
 	}
 
 #if WRAPDEBUG >= 3
 	plvl printf("Leave: Success, new min: %d\n", sizer->CalcMin().x);
 #endif
+
+	wxStaticBoxSizer* sboxSizer = wxDynamicCast(sizer, wxStaticBoxSizer);
+	if( sboxSizer ) {
+		sboxSizer->GetStaticBox()->CacheBestSize(wxSize());
+	}
+
 	return result;
 }
 
