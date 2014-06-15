@@ -304,7 +304,7 @@ CMainFrame::CMainFrame()
 	}
 
 	CreateMenus();
-	CreateToolBar();
+	CreateMainToolBar();
 	if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUICKCONNECT))
 		CreateQuickconnectBar();
 
@@ -1066,9 +1066,9 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
 	m_pActivityLed[1]->SetToolTip(tooltipText);
 }
 
-bool CMainFrame::CreateToolBar()
+bool CMainFrame::CreateMainToolBar()
 {
-	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateToolBar"));
+	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CreateMainToolBar"));
 	if (m_pToolBar)
 	{
 #ifdef __WXMAC__
@@ -1551,7 +1551,7 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent& event)
 		oldThemeSize != newThemeSize ||
 		oldLang != newLang)
 	{
-		CreateToolBar();
+		CreateMainToolBar();
 		if (m_pToolBar)
 			m_pToolBar->UpdateToolbarState();
 	}
@@ -2883,7 +2883,7 @@ void CMainFrame::OnToggleToolBar(wxCommandEvent& event)
 	if (m_pToolBar)
 		m_pToolBar->Show( event.IsChecked() );
 #else
-	CreateToolBar();
+	CreateMainToolBar();
 	if (m_pToolBar)
 		m_pToolBar->UpdateToolbarState();
 	HandleResize();

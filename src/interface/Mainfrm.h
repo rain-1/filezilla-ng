@@ -72,7 +72,7 @@ protected:
 	bool CloseDialogsAndQuit(wxCloseEvent &event);
 	bool CreateMenus();
 	bool CreateQuickconnectBar();
-	bool CreateToolBar();
+	bool CreateMainToolBar();
 	void OpenSiteManager(const CServer* pServer = 0);
 
 	void FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<wxWindow*>::iterator iter, bool skipFirst, bool forward);
