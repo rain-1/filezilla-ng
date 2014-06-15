@@ -25,7 +25,7 @@ class CComboBoxEx : public wxComboBox
 {
 public:
 	CComboBoxEx(CViewHeader* parent)
-		: wxComboBox(parent, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, wxArrayString(), wxCB_DROPDOWN | wxTE_PROCESS_ENTER | wxCB_SORT)
+		: wxComboBox(parent, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, wxArrayString(), wxCB_DROPDOWN | wxTE_PROCESS_ENTER)
 	{
 		m_parent = parent;
 	}
@@ -327,7 +327,14 @@ void CViewHeader::AddRecentDirectory(const wxString &directory)
 	}
 
 	m_recentDirectories.push_back(directory);
-	int item = m_pComboBox->Append(directory);
+
+	unsigned int pos = 0;
+	for( ; pos < m_pComboBox->GetCount(); ++pos ) {
+		if( m_pComboBox->GetString(pos).CmpNoCase(directory) > 0 ) {
+			break;
+		}
+	}
+	int item = m_pComboBox->Insert(directory, pos);
 	m_pComboBox->SetSelection(item);
 	m_pComboBox->SetSelection(len, len);
 	return;
