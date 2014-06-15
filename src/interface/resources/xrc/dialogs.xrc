@@ -1752,12 +1752,14 @@
                     <object class="wxStaticText">
                       <label>Homepage:</label>
                     </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
                   <object class="sizeritem">
                     <object class="wxHyperlinkCtrl" name="ID_URL">
                       <label>&lt;https://filezilla-project.org&gt;</label>
                       <url>https://filezilla-project.org</url>
                     </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
                   <vgap>3</vgap>
                   <hgap>5</hgap>
