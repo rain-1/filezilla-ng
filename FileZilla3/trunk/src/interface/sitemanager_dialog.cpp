@@ -366,7 +366,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 #ifdef __WXMAC__
 		width += 20; // Guessed
 #else
-		width += 10;
+		width += 20;
 #endif
 	}
 
