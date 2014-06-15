@@ -304,7 +304,7 @@ namespace {
 std::string TryDirectory( std::string const& env, std::string const& suffix, bool check_exists )
 {
 	std::string path = mkstr(getenv(env.c_str()));
-	if( !path.empty() && path.front() == '/' ) {
+	if( !path.empty() && path[0] == '/' ) {
 		if( path.back() != '/' ) {
 			path.push_back('/');
 		}
