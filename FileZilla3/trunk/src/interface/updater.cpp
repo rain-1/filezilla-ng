@@ -10,6 +10,8 @@
 #include <wx/tokenzr.h>
 #include <string>
 
+#include <string>
+
 // This is ugly but does the job
 #define SHA512_STANDALONE
 typedef unsigned int uint32;
