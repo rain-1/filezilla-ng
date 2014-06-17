@@ -1,6 +1,8 @@
 #ifndef __LOGGING_PRIVATE_H__
 #define __LOGGING_PRIVATE_H__
 
+#include <utility>
+
 class CLogging
 {
 public:
@@ -8,7 +10,7 @@ public:
 	virtual ~CLogging();
 
 	template<typename...Args>
-	void LogMessage(MessageType nMessageType, wxChar const* msgFormat, Args...args) const
+	void LogMessage(MessageType nMessageType, wxChar const* msgFormat, Args&& ...args) const
 	{
 		if( !ShouldLog(nMessageType) ) {
 			return;
@@ -16,7 +18,7 @@ public:
 
 		CLogmsgNotification *notification = new CLogmsgNotification;
 		notification->msgType = nMessageType;
-		notification->msg.Printf(msgFormat, args...);
+		notification->msg.Printf(msgFormat, std::forward<Args>(args)...);
 
 		LogToFile(nMessageType, notification->msg);
 		m_pEngine->AddNotification(notification);
@@ -26,7 +28,7 @@ public:
 
 	template<typename...Args>
 	void LogMessage(wxString sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType
-					, wxChar const* msgFormat, Args...args) const
+					, wxChar const* msgFormat, Args&& ...args) const
 	{
 		if( !ShouldLog(nMessageType) ) {
 			return;
@@ -40,7 +42,7 @@ public:
 		if (pos != -1)
 			sourceFile = sourceFile.Mid(pos+1);
 
-		wxString text = wxString::Format(msgFormat, args...);
+		wxString text = wxString::Format(msgFormat, std::forward<Args>(args)...);
 
 		CLogmsgNotification *notification = new CLogmsgNotification;
 		notification->msgType = nMessageType;
