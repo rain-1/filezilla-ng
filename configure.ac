@@ -441,16 +441,17 @@ if test "$buildmain" = "yes"; then
   AC_MSG_RESULT([$with_dbus])
 
   # We want xdg-open on *nix
-  if echo "$WX_CPPFLAGS" | grep __WXGTK__ > /dev/null 2>&1; then
-
+  if echo "`$WX_CONFIG_WITH_ARGS --basename`" | grep -i gtk > /dev/null 2>&1; then
     AC_PATH_PROG(xdgopen, xdg-open)
     if test -z "$xdgopen"; then
       AC_MSG_ERROR([xdg-open not found. This program is the preferred way to launch the default browser. Please install the xdg-utils.])
     fi
 
-    PKG_CHECK_MODULES(LIBGTK, gtk+-2.0,, [
-      AC_MSG_ERROR([gtk+-2.0 was not found, even though the used version of wxWidgets depends on it. Are you missing the gtk+2.0 development files?])
-    ])
+    if echo "`$WX_CONFIG_WITH_ARGS --basename`" | grep -i gtk2 > /dev/null 2>&1; then
+      PKG_CHECK_MODULES(LIBGTK, gtk+-2.0,, [
+        AC_MSG_ERROR([gtk+-2.0 was not found, even though the used version of wxWidgets depends on it. Are you missing the gtk+2.0 development files?])
+      ])
+    fi
 
     AC_SUBST(LIBGTK_LIBS)
     AC_SUBST(LIBGTK_CFLAGS)
