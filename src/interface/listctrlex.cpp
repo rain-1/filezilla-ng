@@ -105,9 +105,6 @@ void wxListCtrlEx::OnScrollEvent(wxScrollWinEvent& event)
 
 void wxListCtrlEx::OnMouseWheel(wxMouseEvent& event)
 {
-#if __WXGTK__
-    ScrollList(0, GetItemSpacing().y * ((event.GetWheelRotation() > 0) ? -1 : 1));
-#endif
 	event.Skip();
 	OnPreEmitPostScrollEvent();
 }
