@@ -63,51 +63,16 @@ public:
 		return m_len;
 	}
 
-	wxString GetString(unsigned int type = 0)
+	wxString GetString()
 	{
 		if (!m_pToken)
-			return _T("");
+			return wxString();
 
-		if (type > 2)
-			return _T("");
-
-		if (!m_str[type].IsEmpty())
-			return m_str[type];
-
-		if (!type)
-		{
-			wxString str(m_pToken, m_len);
-			m_str[type] = str;
-			return str;
-		}
-		else if (type == 1)
-		{
-			if (!IsRightNumeric() || IsNumeric())
-				return _T("");
-
-			int pos = m_len - 1;
-			while (m_pToken[pos] >= '0' && m_pToken[pos] <= '9')
-				--pos;
-
-			wxString str(m_pToken, pos + 1);
-			m_str[type] = str;
-			return str;
-		}
-		else if (type == 2)
-		{
-			if (!IsLeftNumeric() || IsNumeric())
-				return _T("");
-
-			int pos = 0;
-			while (m_pToken[pos] >= '0' && m_pToken[pos] <= '9')
-				++pos;
-
-			wxString str(m_pToken + pos, m_len - pos);
-			m_str[type] = str;
-			return str;
+		if( m_str.empty() ) {
+			m_str.assign(m_pToken, m_len);
 		}
 
-		return _T("");
+		return m_str;
 	}
 
 	bool IsNumeric(t_numberBase base = decimal)
@@ -304,7 +269,7 @@ protected:
 	TokenInformation m_leftNumeric;
 	TokenInformation m_rightNumeric;
 	wxLongLong m_number;
-	wxString m_str[3];
+	wxString m_str;
 };
 
 class CLine
@@ -979,7 +944,14 @@ bool CDirectoryListingParser::ParseAsUnix(CLine *pLine, CDirentry &entry, bool e
 		{
 			if (!entry.ownerGroup.IsEmpty())
 				entry.ownerGroup += _T(" ");
-			entry.ownerGroup += token.GetString(1);
+
+			wxString const group = token.GetString();
+			int i;
+			for( i = group.size() - 1;
+				 i >= 0 && group[i] >= '0' && group[i] <= '9';
+				 --i ) {}
+
+			entry.ownerGroup += group.Left(i + 1);
 		}
 
 		if (expect_date)
