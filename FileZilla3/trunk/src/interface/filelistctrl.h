@@ -9,7 +9,7 @@ class CQueueView;
 class CFileListCtrl_SortComparisonObject;
 class CState;
 class CFilelistStatusBar;
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
 class CGtkEventCallbackProxyBase;
 #endif
 
@@ -536,7 +536,7 @@ private:
 	int m_pending_focus_processing;
 #endif
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
 	CSharedPointer<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
 #endif
 

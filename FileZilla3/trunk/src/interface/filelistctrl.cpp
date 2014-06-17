@@ -8,7 +8,7 @@
 #include "conditionaldialog.h"
 #include <algorithm>
 #include "filelist_statusbar.h"
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
 #include <gtk/gtk.h>
 #endif
 
@@ -201,7 +201,7 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 }
 #endif
 
-#ifdef __WXGTK__
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
 // Need to call a member function of a C++ template class
 // from a C function.
 // Sadly template functions with C linkage aren't possible,
@@ -272,7 +272,7 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 	m_focusItem = -1;
 #endif
 
-#ifdef __WXGTK__
+#if defined __WXGTK__ && !defined(__WXGTK3__)
 	m_gtkEventCallbackProxy = new CGtkEventCallbackProxy<CFileData>(this);
 
 	GtkWidget* widget = GetMainWindow()->GetConnectWidget();
