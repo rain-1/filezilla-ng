@@ -24,6 +24,8 @@ protected:
 
 	COptionsPage* m_activePanel;
 
+	void AddPage( wxString const& name, COptionsPage* page, int nest );
+
 	struct t_page
 	{
 		wxTreeItemId id;

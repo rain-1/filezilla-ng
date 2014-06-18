@@ -26,47 +26,6 @@
 #include "../filezillaapp.h"
 #include "../Mainfrm.h"
 
-enum pagenames
-{
-	page_none = -1,
-	page_connection = 0,
-	page_connection_ftp,
-	page_connection_active,
-	page_connection_passive,
-	page_connection_ftp_proxy,
-	page_connection_sftp,
-	page_connection_proxy,
-	page_transfer,
-	page_filetype,
-	page_fileexists,
-	page_interface,
-	page_themes,
-	page_dateformatting,
-	page_sizeformatting,
-	page_filelists,
-	page_language,
-	page_edit,
-	page_edit_associations,
-#if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	page_updatecheck,
-#endif
-	page_logging,
-	page_debug
-};
-
-// Helper macro to add pages in the most simplistic way
-#define ADD_PAGE(name, classname, parent)										\
-	wxASSERT(parent < (int)m_pages.size());										\
-	page.page = new classname;													\
-	if (parent == page_none)													\
-		page.id = treeCtrl->AppendItem(root, name);								\
-	else																		\
-	{																			\
-		page.id = treeCtrl->AppendItem(m_pages[(unsigned int)parent].id, name);	\
-		treeCtrl->Expand(m_pages[(unsigned int)parent].id);						\
-	}																			\
-	m_pages.push_back(page);
-
 BEGIN_EVENT_TABLE(CSettingsDialog, wxDialogEx)
 EVT_TREE_SEL_CHANGING(XRCID("ID_TREE"), CSettingsDialog::OnPageChanging)
 EVT_TREE_SEL_CHANGED(XRCID("ID_TREE"), CSettingsDialog::OnPageChanged)
@@ -100,6 +59,25 @@ bool CSettingsDialog::Create(CMainFrame* pMainFrame)
 	return true;
 }
 
+void CSettingsDialog::AddPage(wxString const& name, COptionsPage* page, int nest)
+{
+	wxTreeCtrl* treeCtrl = XRCCTRL(*this, "ID_TREE", wxTreeCtrl);
+	wxTreeItemId parent = treeCtrl->GetRootItem();
+	while( nest-- ) {
+		parent = treeCtrl->GetLastChild(parent);
+		wxCHECK_RET( parent != wxTreeItemId(), "" );
+	}
+
+	t_page p;
+	p.page = page;
+	p.id = treeCtrl->AppendItem(parent, name);
+	if( parent != treeCtrl->GetRootItem() ) {
+		treeCtrl->Expand(parent);
+	}
+
+	m_pages.push_back(p);
+}
+
 bool CSettingsDialog::LoadPages()
 {
 	// Get the tree control.
@@ -109,36 +87,34 @@ bool CSettingsDialog::LoadPages()
 	if (!treeCtrl)
 		return false;
 
-	wxTreeItemId root = treeCtrl->AddRoot(_T(""));
+	treeCtrl->AddRoot(_T(""));
 
 	// Create the instances of the page classes and fill the tree.
-	t_page page;
-	ADD_PAGE(_("Connection"), COptionsPageConnection, page_none);
-	ADD_PAGE(_("FTP"), COptionsPageConnectionFTP, page_connection);
-	ADD_PAGE(_("Active mode"), COptionsPageConnectionActive, page_connection_ftp);
-	ADD_PAGE(_("Passive mode"), COptionsPageConnectionPassive, page_connection_ftp);
-	ADD_PAGE(_("FTP Proxy"), COptionsPageFtpProxy, page_connection_ftp);
-	ADD_PAGE(_("SFTP"), COptionsPageConnectionSFTP, page_connection);
-	ADD_PAGE(_("Generic proxy"), COptionsPageProxy, page_connection);
-	ADD_PAGE(_("Transfers"), COptionsPageTransfer, page_none);
-	ADD_PAGE(_("File Types"), COptionsPageFiletype, page_transfer);
-	ADD_PAGE(_("File exists action"), COptionsPageFileExists, page_transfer);
-	ADD_PAGE(_("Interface"), COptionsPageInterface, page_none);
-	ADD_PAGE(_("Themes"), COptionsPageThemes, page_interface);
-	ADD_PAGE(_("Date/time format"), COptionsPageDateFormatting, page_interface);
-	ADD_PAGE(_("Filesize format"), COptionsPageSizeFormatting, page_interface);
-	ADD_PAGE(_("File lists"), COptionsPageFilelists, page_interface);
-	ADD_PAGE(_("Language"), COptionsPageLanguage, page_none);
-	ADD_PAGE(_("File editing"), COptionsPageEdit, page_none);
-	ADD_PAGE(_("Filetype associations"), COptionsPageEditAssociations, page_edit);
+	AddPage(_("Connection"), new COptionsPageConnection, 0);
+	AddPage(_("FTP"), new COptionsPageConnectionFTP, 1);
+	AddPage(_("Active mode"), new COptionsPageConnectionActive, 2);
+	AddPage(_("Passive mode"), new COptionsPageConnectionPassive, 2);
+	AddPage(_("FTP Proxy"), new COptionsPageFtpProxy, 2);
+	AddPage(_("SFTP"), new COptionsPageConnectionSFTP, 1);
+	AddPage(_("Generic proxy"), new COptionsPageProxy, 1);
+	AddPage(_("Transfers"), new COptionsPageTransfer, 0);
+	AddPage(_("File Types"), new COptionsPageFiletype, 1);
+	AddPage(_("File exists action"), new COptionsPageFileExists, 1);
+	AddPage(_("Interface"), new COptionsPageInterface, 0);
+	AddPage(_("Themes"), new COptionsPageThemes, 1);
+	AddPage(_("Date/time format"), new COptionsPageDateFormatting, 1);
+	AddPage(_("Filesize format"), new COptionsPageSizeFormatting, 1);
+	AddPage(_("File lists"), new COptionsPageFilelists, 1);
+	AddPage(_("Language"), new COptionsPageLanguage, 0);
+	AddPage(_("File editing"), new COptionsPageEdit, 0);
+	AddPage(_("Filetype associations"), new COptionsPageEditAssociations, 1);
 #if FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK))
-	{
-		ADD_PAGE(_("Updates"), COptionsPageUpdateCheck, page_none);
+	if (!COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK)) {
+		AddPage(_("Updates"), new COptionsPageUpdateCheck, 0);
 	}
 #endif //FZ_MANUALUPDATECHECK && FZ_AUTOUPDATECHECK
-	ADD_PAGE(_("Logging"), COptionsPageLogging, page_none);
-	ADD_PAGE(_("Debug"), COptionsPageDebug, page_none);
+	AddPage(_("Logging"), new COptionsPageLogging, 0);
+	AddPage(_("Debug"), new COptionsPageDebug, 0);
 
 	treeCtrl->SetQuickBestSize(false);
 	treeCtrl->InvalidateBestSize();
