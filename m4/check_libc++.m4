@@ -6,7 +6,7 @@ AC_DEFUN([CHECK_LIBCXX], [
 
   AC_LANG_PUSH(C++)
 
-  AC_MSG_CHECKING([for whether we need -std=libc++])
+  AC_MSG_CHECKING([for whether we need -stdlib=libc++])
 
   AC_COMPILE_IFELSE([
     AC_LANG_PROGRAM([[
