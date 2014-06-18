@@ -454,6 +454,11 @@ if test "$buildmain" = "yes"; then
         AC_MSG_ERROR([gtk+-2.0 was not found, even though the used version of wxWidgets depends on it. Are you missing the gtk+2.0 development files?])
       ])
     fi
+    if echo "`$WX_CONFIG_WITH_ARGS --basename`" | grep -i gtk3 > /dev/null 2>&1; then
+      PKG_CHECK_MODULES(LIBGTK, gtk+-3.0,, [
+        AC_MSG_ERROR([gtk+-3.0 was not found, even though the used version of wxWidgets depends on it. Are you missing the gtk+2.0 development files?])
+      ])
+    fi
 
     AC_SUBST(LIBGTK_LIBS)
     AC_SUBST(LIBGTK_CFLAGS)
