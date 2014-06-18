@@ -50,8 +50,8 @@ if ! test "$localesonly" = "yes"; then
 
   # Check for C++11 support
   AX_CXX_COMPILE_STDCXX_11([],[mandatory])
-  CHECK_CXX11
   CHECK_LIBCXX
+  CHECK_CXX11
 
   # Add build information to config.h
   # ---------------------------------
