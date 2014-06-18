@@ -9,6 +9,10 @@
 #include <wx/statbox.h>
 #include <wx/wizard.h>
 
+#ifdef __WXGTK3__
+#include <gtk/gtk.h>
+#endif
+
 bool CWrapEngine::m_use_cache = true;
 
 #define WRAPDEBUG 0
@@ -422,8 +426,14 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 					return result | wrap_failed;
 				}
 				text->SetLabel(str);
-
 				result |= wrap_didwrap;
+
+#ifdef __WXGTK3__
+				gtk_widget_set_size_request(text->GetHandle(), -1, -1);
+				GtkRequisition req;
+				gtk_widget_get_preferred_size(text->GetHandle(), 0, &req);
+				text->CacheBestSize(wxSize(req.width, req.height));
+#endif
 				continue;
 			}
 
@@ -498,14 +508,21 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 		}
 	}
 
+	wxStaticBoxSizer* sboxSizer = wxDynamicCast(sizer, wxStaticBoxSizer);
+	if( sboxSizer ) {
+#ifdef __WXGTK3__
+		gtk_widget_set_size_request(sboxSizer->GetStaticBox()->GetHandle(), -1, -1);
+		GtkRequisition req;
+		gtk_widget_get_preferred_size(sboxSizer->GetStaticBox()->GetHandle(), 0, &req);
+		sboxSizer->GetStaticBox()->CacheBestSize(wxSize(req.width, req.height));
+#else
+		sboxSizer->GetStaticBox()->CacheBestSize(wxDefaultSize);
+#endif
+	}
+
 #if WRAPDEBUG >= 3
 	plvl printf("Leave: Success, new min: %d\n", sizer->CalcMin().x);
 #endif
-
-	wxStaticBoxSizer* sboxSizer = wxDynamicCast(sizer, wxStaticBoxSizer);
-	if( sboxSizer ) {
-		sboxSizer->GetStaticBox()->CacheBestSize(wxSize());
-	}
 
 	return result;
 }
