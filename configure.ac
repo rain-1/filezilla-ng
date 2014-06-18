@@ -48,6 +48,8 @@ if ! test "$localesonly" = "yes"; then
     CXXFLAGS="$CXXFLAGS -Wall -g -fexceptions"
   fi
 
+  # Check for C++11 support
+  AX_CXX_COMPILE_STDCXX_11([],[mandatory])
   CHECK_CXX11
 
   # Add build information to config.h
