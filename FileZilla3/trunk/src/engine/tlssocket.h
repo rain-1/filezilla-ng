@@ -75,7 +75,7 @@ protected:
 	void PrintAlert();
 
 	// Failure logs the error, uninits the session and sends a close event
-	void Failure(int code, int socket_error, const wxString& function = _T(""));
+	void Failure(int code, int socket_error, const wxString& function = wxString());
 
 	static ssize_t PushFunction(gnutls_transport_ptr_t ptr, const void* data, size_t len);
 	static ssize_t PullFunction(gnutls_transport_ptr_t ptr, void* data, size_t len);

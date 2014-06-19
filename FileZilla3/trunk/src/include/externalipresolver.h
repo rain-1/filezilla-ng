@@ -27,7 +27,7 @@ public:
 	virtual ~CExternalIPResolver();
 
 	bool Done() const { return m_done; }
-	bool Successful() const { return m_ip != _T(""); }
+	bool Successful() const { return !m_ip.empty(); }
 	wxString GetIP() const { return m_ip; }
 
 	void GetExternalIP(const wxString& address, enum CSocket::address_family protocol, bool force = false);

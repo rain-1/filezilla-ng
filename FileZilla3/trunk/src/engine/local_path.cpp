@@ -562,17 +562,15 @@ wxString CLocalPath::GetLastSegment() const
 #else
 	const int min = 0;
 #endif
-	for (int i = (int)m_path.Len() - 2; i >= min; i--)
-	{
-		if (m_path[i] == path_separator)
-		{
+	for (int i = (int)m_path.Len() - 2; i >= min; i--) {
+		if (m_path[i] == path_separator) {
 			wxString last = m_path.Mid(i + 1);
 			last.RemoveLast();
 			return last;
 		}
 	}
 
-	return _T("");
+	return wxString();
 }
 
 void CLocalPath::Coalesce()

@@ -109,7 +109,7 @@ DECLARE_COMMAND(CListCommand, cmd_list)
 	// no sane way to distinguish between symlinks to files and symlinks to
 	// directories.
 	CListCommand(int flags = 0);
-	CListCommand(CServerPath path, wxString subDir = _T(""), int flags = 0);
+	CListCommand(CServerPath path, wxString subDir = wxString(), int flags = 0);
 
 	CServerPath GetPath() const;
 	wxString GetSubDir() const;

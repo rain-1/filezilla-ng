@@ -403,45 +403,39 @@ bool CControlSocket::ParsePwdReply(wxString reply, bool unquoted /*=false*/, con
 	{
 		int pos1 = reply.Find('"');
 		int pos2 = reply.Find('"', true);
-		if (pos1 == -1 || pos1 >= pos2)
-		{
+		if (pos1 == -1 || pos1 >= pos2) {
 			pos1 = reply.Find('\'');
 			pos2 = reply.Find('\'', true);
 
 			if (pos1 != -1 && pos1 < pos2)
 				LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Broken server sending single-quoted path instead of double-quoted path."));
 		}
-		if (pos1 == -1 || pos1 >= pos2)
-		{
+		if (pos1 == -1 || pos1 >= pos2) {
 			LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Broken server, no quoted path found in pwd reply, trying first token as path"));
 			pos1 = reply.Find(' ');
-			if (pos1 != -1)
-			{
+			if (pos1 != -1) {
 				reply = reply.Mid(pos1 + 1);
 				pos2 = reply.Find(' ');
 				if (pos2 != -1)
 					reply = reply.Left(pos2);
 			}
 			else
-				reply = _T("");
+				reply.clear();
 		}
-		else
-		{
+		else {
 			reply = reply.Mid(pos1 + 1, pos2 - pos1 - 1);
 			reply.Replace(_T("\"\""), _T("\""));
 		}
 	}
 
 	m_CurrentPath.SetType(m_pCurrentServer->GetType());
-	if (reply == _T("") || !m_CurrentPath.SetPath(reply))
-	{
-		if (reply != _T(""))
-			LogMessage(::Error, _("Failed to parse returned path."));
-		else
+	if (reply.empty() || !m_CurrentPath.SetPath(reply)) {
+		if (reply.empty())
 			LogMessage(::Error, _("Server returned empty path."));
+		else
+			LogMessage(::Error, _("Failed to parse returned path."));
 
-		if (!defaultPath.IsEmpty())
-		{
+		if (!defaultPath.IsEmpty()) {
 			LogMessage(Debug_Warning, _T("Assuming path is '%s'."), defaultPath.GetPath().c_str());
 			m_CurrentPath = defaultPath;
 			return true;
@@ -572,7 +566,7 @@ wxString CControlSocket::ConvToLocal(const char* buffer)
 
 	wxCSConv conv(_T("ISO-8859-1"));
 	wxString str = conv.cMB2WX(buffer);
-	if (str == _T(""))
+	if (str.empty())
 		str = wxConvCurrent->cMB2WX(buffer);
 
 	return str;
@@ -1138,8 +1132,7 @@ int CRealControlSocket::ContinueConnect()
 	unsigned int port = 0;
 
 	const int proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE);
-	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy())
-	{
+	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy()) {
 		LogMessage(::Status, _("Connecting to %s through proxy"), m_pCurrentServer->FormatHost().c_str());
 
 		host = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST);
@@ -1153,23 +1146,19 @@ int CRealControlSocket::ContinueConnect()
 											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_USER),
 											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_PASS));
 
-		if (res != EINPROGRESS)
-		{
+		if (res != EINPROGRESS) {
 			LogMessage(::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res).c_str());
 			DoClose();
 			return FZ_REPLY_ERROR;
 		}
 	}
-	else
-	{
-		if (m_pCurOpData && m_pCurOpData->opId == cmd_connect)
-		{
+	else {
+		if (m_pCurOpData && m_pCurOpData->opId == cmd_connect) {
 			CConnectOpData* pData(static_cast<CConnectOpData*>(m_pCurOpData));
 			host = ConvertDomainName(pData->host);
 			port = pData->port;
 		}
-		if (host == _T(""))
-		{
+		if (host.empty()) {
 			host = m_pCurrentServer->GetHost();
 			port = m_pCurrentServer->GetPort();
 		}
@@ -1180,8 +1169,7 @@ int CRealControlSocket::ContinueConnect()
 	int res = m_pSocket->Connect(host, port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
-	if (res && res != EINPROGRESS)
-	{
+	if (res && res != EINPROGRESS) {
 		LogMessage(::Error, _("Could not connect to server: %s"), CSocket::GetErrorDescription(res).c_str());
 		DoClose();
 		return FZ_REPLY_ERROR;
