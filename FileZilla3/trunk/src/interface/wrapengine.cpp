@@ -13,6 +13,11 @@
 #include <gtk/gtk.h>
 #endif
 
+#ifdef max
+#undef max
+#endif
+#include <algorithm>
+
 bool CWrapEngine::m_use_cache = true;
 
 #define WRAPDEBUG 0
@@ -656,7 +661,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		}
 
 #if WRAPDEBUG > 0
-		printf("Current: % 4dx% 4d   desiredWidth: %d, min: %d, max: %d\n", size.GetWidth(), size.GetHeight(), desiredWidth, min, max);
+		printf("After current wrapping: size=%dx%d  desiredWidth=%d  min=%d  max=%d  res=%d\n", size.GetWidth(), size.GetHeight(), desiredWidth, min, max, res);
 #endif
 		if (size.GetWidth() > desiredWidth)
 		{
@@ -679,7 +684,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 		double newRatio = ((double)(size.GetWidth() + canvas.x) / (size.GetHeight() + canvas.y));
 #if WRAPDEBUG > 0
-		printf("Ratio: %f\n", (float)newRatio);
+		printf("New ratio: %f\n", (float)newRatio);
 #endif
 
 		if (newRatio < ratio)
@@ -689,7 +694,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 			if (ratio - newRatio < bestRatioDiff)
 			{
 				bestRatioDiff = ratio - newRatio;
-				bestWidth = actualWidth;
+				bestWidth = std::max(desiredWidth, actualWidth);
 			}
 
 			if (min >= actualWidth)
@@ -703,24 +708,19 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 			if (newRatio - ratio < bestRatioDiff)
 			{
 				bestRatioDiff = newRatio - ratio;
-				bestWidth = actualWidth;
+				bestWidth = std::max(desiredWidth, actualWidth);
 			}
 
 			if (max == actualWidth)
 				break;
-			if( desiredWidth > actualWidth ) {
-				max = desiredWidth;
-			}
-			else {
-				max = actualWidth;
-			}
+			max = std::max(desiredWidth, actualWidth);
 		}
 		else
 		{
 			UnwrapRecursive_Wrapped(didwrap, windows);
 
 			bestRatioDiff = ratio - newRatio;
-			bestWidth = actualWidth;
+			max = std::max(desiredWidth, actualWidth);
 			break;
 		}
 
