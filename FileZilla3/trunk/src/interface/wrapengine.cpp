@@ -645,10 +645,11 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		std::list<int> didwrap;
 
 		wxSize size = minRequestedSize;
+		int res = 0;
 		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
 		{
 			wxSizer* pSizer = (*iter)->GetSizer();
-			int res = WrapRecursive(*iter, pSizer, desiredWidth - offset);
+			res = WrapRecursive(*iter, pSizer, desiredWidth - offset);
 			if (res & wrap_didwrap)
 				pSizer->Layout();
 			didwrap.push_back(res);
