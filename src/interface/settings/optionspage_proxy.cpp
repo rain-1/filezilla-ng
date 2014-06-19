@@ -75,7 +75,7 @@ bool COptionsPageProxy::Validate()
 	wxString host = pTextCtrl->GetValue();
 	host.Trim(false);
 	host.Trim(true);
-	if (host == _T(""))
+	if (host.empty())
 		return DisplayError(_T("ID_PROXY_HOST"), _("You need to enter a proxy host."));
 	else
 	{

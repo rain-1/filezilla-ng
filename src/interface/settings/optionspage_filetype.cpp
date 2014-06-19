@@ -38,31 +38,26 @@ bool COptionsPageFiletype::LoadPage()
 
 	wxListCtrl* pListCtrl = XRCCTRL(*this, "ID_EXTENSIONS", wxListCtrl);
 	pListCtrl->ClearAll();
-	pListCtrl->InsertColumn(0, _T(""));
+	pListCtrl->InsertColumn(0, wxString());
 
 	wxString extensions = m_pOptions->GetOption(OPTION_ASCIIFILES);
 	wxString ext;
 	int pos = extensions.Find(_T("|"));
-	while (pos != -1)
-	{
-		if (!pos)
-		{
-			if (ext != _T(""))
-			{
+	while (pos != -1) {
+		if (!pos) {
+			if (!ext.empty()) {
 				ext.Replace(_T("\\\\"), _T("\\"));
 				pListCtrl->InsertItem(pListCtrl->GetItemCount(), ext);
-				ext = _T("");
+				ext.clear();
 			}
 		}
-		else if (extensions.c_str()[pos - 1] != '\\')
-		{
+		else if (extensions.c_str()[pos - 1] != '\\') {
 			ext += extensions.Left(pos);
 			ext.Replace(_T("\\\\"), _T("\\"));
 			pListCtrl->InsertItem(pListCtrl->GetItemCount(), ext);
-			ext = _T("");
+			ext.clear();
 		}
-		else
-		{
+		else {
 			ext += extensions.Left(pos - 1) + _T("|");
 		}
 		extensions = extensions.Mid(pos + 1);
@@ -96,12 +91,11 @@ bool COptionsPageFiletype::SavePage()
 
 	wxString extensions;
 
-	for (int i = 0; i < pListCtrl->GetItemCount(); i++)
-	{
+	for (int i = 0; i < pListCtrl->GetItemCount(); i++) {
 		wxString ext = pListCtrl->GetItemText(i);
 		ext.Replace(_T("\\"), _T("\\\\"));
 		ext.Replace(_T("|"), _T("\\|"));
-		if (extensions != _T(""))
+		if (!extensions.empty())
 			extensions += _T("|");
 		extensions += ext;
 	}
@@ -122,7 +116,7 @@ void COptionsPageFiletype::SetCtrlState()
 	pListCtrl->SetColumnWidth(0, wxLIST_AUTOSIZE);
 
 	FindWindow(XRCID("ID_REMOVE"))->Enable(pListCtrl->GetSelectedItemCount() != 0);
-	FindWindow(XRCID("ID_ADD"))->Enable(GetText(XRCID("ID_EXTENSION")) != _T(""));
+	FindWindow(XRCID("ID_ADD"))->Enable( !GetText(XRCID("ID_EXTENSION")).empty() );
 }
 
 void COptionsPageFiletype::OnRemove(wxCommandEvent& event)
@@ -143,7 +137,7 @@ void COptionsPageFiletype::OnRemove(wxCommandEvent& event)
 void COptionsPageFiletype::OnAdd(wxCommandEvent& event)
 {
 	wxString ext = GetText(XRCID("ID_EXTENSION"));
-	if (ext == _T(""))
+	if (ext.empty())
 	{
 		wxBell();
 		return;

@@ -35,28 +35,27 @@ extern bool ProgramExists(const wxString& editor);
 bool COptionsPageEditAssociations::Validate()
 {
 	wxString associations = GetText(XRCID("ID_ASSOCIATIONS")) + _T("\n");
-	associations.Replace(_T("\r"), _T(""));
+	associations.Replace(_T("\r"), wxString());
 	int pos;
-	while ((pos = associations.Find('\n')) != -1)
-	{
+	while ((pos = associations.Find('\n')) != -1) {
 		wxString assoc = associations.Left(pos);
 		associations = associations.Mid(pos + 1);
 
-		if (assoc == _T(""))
+		if (assoc.empty())
 			continue;
 
 		wxString command;
 		if (!UnquoteCommand(assoc, command))
 			return DisplayError(_T("ID_ASSOCIATIONS"), _("Improperly quoted association."));
 
-		if (assoc == _T(""))
+		if (assoc.empty())
 			return DisplayError(_T("ID_ASSOCIATIONS"), _("Empty file extension."));
 
 		wxString args;
 		if (!UnquoteCommand(command, args))
 			return DisplayError(_T("ID_ASSOCIATIONS"), _("Improperly quoted association."));
 
-		if (command == _T(""))
+		if (command.empty())
 			return DisplayError(_T("ID_ASSOCIATIONS"), _("Empty command."));
 
 		if (!ProgramExists(command))

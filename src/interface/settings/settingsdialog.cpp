@@ -65,7 +65,7 @@ void CSettingsDialog::AddPage(wxString const& name, COptionsPage* page, int nest
 	wxTreeItemId parent = treeCtrl->GetRootItem();
 	while( nest-- ) {
 		parent = treeCtrl->GetLastChild(parent);
-		wxCHECK_RET( parent != wxTreeItemId(), "" );
+		wxCHECK_RET( parent != wxTreeItemId(), "Nesting level too deep" );
 	}
 
 	t_page p;
@@ -87,7 +87,7 @@ bool CSettingsDialog::LoadPages()
 	if (!treeCtrl)
 		return false;
 
-	treeCtrl->AddRoot(_T(""));
+	treeCtrl->AddRoot(wxString());
 
 	// Create the instances of the page classes and fill the tree.
 	AddPage(_("Connection"), new COptionsPageConnection, 0);
@@ -138,14 +138,12 @@ bool CSettingsDialog::LoadPages()
 	// Keep track of maximum page size
 	size = wxSize();
 
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
-	{
-		if (!iter->page->CreatePage(m_pOptions, this, parentPanel, size))
+	for (auto const& page : m_pages) {
+		if (!page.page->CreatePage(m_pOptions, this, parentPanel, size))
 			return false;
 	}
 
-	if (!LoadSettings())
-	{
+	if (!LoadSettings()) {
 		wxMessageBoxEx(_("Failed to load panels, invalid resource files?"));
 		return false;
 	}
@@ -156,16 +154,16 @@ bool CSettingsDialog::LoadPages()
 
 	// Wrap pages nicely
 	std::vector<wxWindow*> pages;
-	for (unsigned int i = 0; i < m_pages.size(); i++)
-	{
-		pages.push_back(m_pages[i].page);
+	for (auto const& page : m_pages) {
+		pages.push_back(page.page);
 	}
 	wxGetApp().GetWrapEngine()->WrapRecursive(pages, 1.33, "Settings", canvas);
 
 	// Keep track of maximum page size
 	size = wxSize(0, 0);
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
-		size.IncTo(iter->page->GetSizer()->GetMinSize());
+	for (auto const& page : m_pages) {
+		size.IncTo(page.page->GetSizer()->GetMinSize());
+	}
 
 	wxSize panelSize = size;
 #ifdef __WXGTK__
@@ -174,11 +172,10 @@ bool CSettingsDialog::LoadPages()
 	parentPanel->SetInitialSize(panelSize);
 
 	// Adjust pages sizes according to maximum size
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
-	{
-		iter->page->GetSizer()->SetMinSize(size);
-		iter->page->GetSizer()->Fit(iter->page);
-		iter->page->GetSizer()->SetSizeHints(iter->page);
+	for (auto const& page : m_pages) {
+		page.page->GetSizer()->SetMinSize(size);
+		page.page->GetSizer()->Fit(page.page);
+		page.page->GetSizer()->SetSizeHints(page.page);
 	}
 
 	GetSizer()->Fit(this);
@@ -189,13 +186,13 @@ bool CSettingsDialog::LoadPages()
 	Show();
 #endif
 
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
-		iter->page->Hide();
+	for (auto const& page : m_pages) {
+		page.page->Hide();
+	}
 
 	// Select first page
 	treeCtrl->SelectItem(m_pages[0].id);
-	if (!m_activePanel)
-	{
+	if (!m_activePanel)	{
 		m_activePanel = m_pages[0].page;
 		m_activePanel->Display();
 	}
@@ -205,9 +202,8 @@ bool CSettingsDialog::LoadPages()
 
 bool CSettingsDialog::LoadSettings()
 {
-	for (std::vector<t_page>::iterator iter = m_pages.begin(); iter != m_pages.end(); ++iter)
-	{
-		if (!iter->page->LoadPage())
+	for (auto const& page : m_pages) {
+		if (!page.page->LoadPage())
 			return false;
 	}
 
@@ -221,12 +217,9 @@ void CSettingsDialog::OnPageChanged(wxTreeEvent& event)
 
 	wxTreeItemId item = event.GetItem();
 
-	unsigned int size = m_pages.size();
-	for (unsigned int i = 0; i < size; i++)
-	{
-		if (m_pages[i].id == item)
-		{
-			m_activePanel = m_pages[i].page;
+	for( auto const& page : m_pages ) {
+		if (page.id == item) {
+			m_activePanel = page.page;
 			m_activePanel->Display();
 			break;
 		}
@@ -235,22 +228,19 @@ void CSettingsDialog::OnPageChanged(wxTreeEvent& event)
 
 void CSettingsDialog::OnOK(wxCommandEvent& event)
 {
-	unsigned int size = m_pages.size();
-	for (unsigned int i = 0; i < size; i++)
-	{
-		if (!m_pages[i].page->Validate())
-		{
-			if (m_activePanel != m_pages[i].page)
-			{
+	for( auto const& page : m_pages ) {
+		if (!page.page->Validate()) {
+			if (m_activePanel != page.page) {
 				wxTreeCtrl* treeCtrl = XRCCTRL(*this, "ID_TREE", wxTreeCtrl);
-				treeCtrl->SelectItem(m_pages[i].id);
+				treeCtrl->SelectItem(page.id);
 			}
 			return;
 		}
 	}
 
-	for (unsigned int i = 0; i < size; i++)
-		m_pages[i].page->SavePage();
+	for( auto const& page : m_pages ) {
+		page.page->SavePage();
+	}
 
 	EndModal(wxID_OK);
 }
