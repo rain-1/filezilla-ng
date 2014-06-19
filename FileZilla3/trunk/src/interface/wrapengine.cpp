@@ -468,7 +468,8 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 			if (wxDynamicCast(window, wxCheckBox) || wxDynamicCast(window, wxRadioButton) || wxDynamicCast(window, wxChoice))
 			{
 #if WRAPDEBUG >= 3
-				plvl printf("Leave: WrapRecursive on unshrinkable controls failed\n");
+				plvl printf("Leave: WrapRecursive on unshrinkable control failed: %s\n",
+					static_cast<char const*>(wxString(window->GetClassInfo()->GetClassName())));
 #endif
 				result |= wrap_failed;
 				return result;
@@ -515,8 +516,10 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 		GtkRequisition req;
 		gtk_widget_get_preferred_size(sboxSizer->GetStaticBox()->GetHandle(), 0, &req);
 		sboxSizer->GetStaticBox()->CacheBestSize(wxSize(req.width, req.height));
+#elif defined(__WXMAC__)
+		sboxSizer->GetStaticBox()->CacheBestSize(wxSize(0, 0));
 #else
-		sboxSizer->GetStaticBox()->CacheBestSize(wxDefaultSize);
+		sboxSizer->GetStaticBox()->CacheBeseSize(wxDefaultSize);
 #endif
 	}
 
