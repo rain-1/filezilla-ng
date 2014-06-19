@@ -173,10 +173,8 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 		std::list<wxString> filesToDelete;
 
 		wxString file;
-		for (bool found = dir.GetFirst(&file); found; found = dir.GetNext(&file))
-		{
-			if (file == _T(""))
-			{
+		for (bool found = dir.GetFirst(&file); found; found = dir.GetNext(&file)) {
+			if (file.empty()) {
 				encodingError = true;
 				continue;
 			}
@@ -433,11 +431,9 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 #ifdef __WXMSW__
 	if (!m_found)
 		return false;
-	do
-	{
+	do {
 		name = m_find_data.cFileName;
-		if (name == _T(""))
-		{
+		if (name.empty()) {
 			m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 			return true;
 		}

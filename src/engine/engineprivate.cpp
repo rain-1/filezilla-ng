@@ -336,10 +336,10 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 	if (!IsConnected())
 		return FZ_REPLY_NOTCONNECTED;
 
-	if (command.GetPath().IsEmpty() && command.GetSubDir() != _T(""))
+	if (command.GetPath().IsEmpty() && !command.GetSubDir().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
-	if (command.GetFlags() & LIST_FLAG_LINK && command.GetSubDir() == _T(""))
+	if (command.GetFlags() & LIST_FLAG_LINK && command.GetSubDir().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
 	bool refresh = (command.GetFlags() & LIST_FLAG_REFRESH) != 0;
@@ -411,7 +411,7 @@ int CFileZillaEnginePrivate::RawCommand(const CRawCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	if (command.GetCommand() == _T(""))
+	if (command.GetCommand().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
 	m_pCurrentCommand = command.Clone();
@@ -443,7 +443,7 @@ int CFileZillaEnginePrivate::RemoveDir(const CRemoveDirCommand& command)
 		return FZ_REPLY_BUSY;
 
 	if (command.GetPath().IsEmpty() ||
-		command.GetSubDir() == _T(""))
+		command.GetSubDir().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
 	m_pCurrentCommand = command.Clone();
@@ -474,7 +474,7 @@ int CFileZillaEnginePrivate::Rename(const CRenameCommand& command)
 		return FZ_REPLY_BUSY;
 
 	if (command.GetFromPath().IsEmpty() || command.GetToPath().IsEmpty() ||
-		command.GetFromFile() == _T("") || command.GetToFile() == _T(""))
+		command.GetFromFile().empty() || command.GetToFile().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
 	m_pCurrentCommand = command.Clone();
@@ -490,7 +490,7 @@ int CFileZillaEnginePrivate::Chmod(const CChmodCommand& command)
 		return FZ_REPLY_BUSY;
 
 	if (command.GetPath().IsEmpty() || command.GetFile().IsEmpty() ||
-		command.GetPermission() == _T(""))
+		command.GetPermission().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
 	m_pCurrentCommand = command.Clone();

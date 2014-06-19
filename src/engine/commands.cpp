@@ -16,7 +16,7 @@ CListCommand::CListCommand(int flags /*=0*/)
 {
 }
 
-CListCommand::CListCommand(CServerPath path, wxString subDir /*=_T("")*/, int flags /*=0*/)
+CListCommand::CListCommand(CServerPath path, wxString subDir, int flags)
 	: m_path(path), m_subDir(subDir), m_flags(flags)
 {
 }

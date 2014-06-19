@@ -66,9 +66,9 @@ public:
 	// No error checking is done in the constructors
 	CServer();
 	CServer(wxString host, unsigned int);
-	CServer(wxString host, unsigned int, wxString user, wxString pass = _T(""));
+	CServer(wxString host, unsigned int, wxString user, wxString pass = wxString());
 	CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int);
-	CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int, wxString user, wxString pass = _T(""), wxString account = _T(""));
+	CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int, wxString user, wxString pass = wxString(), wxString account = wxString());
 
 	void SetType(enum ServerType type);
 
@@ -94,7 +94,7 @@ public:
 	bool SetHost(wxString Host, unsigned int port);
 
 	void SetLogonType(enum LogonType logonType);
-	bool SetUser(const wxString& user, const wxString& pass = _T(""));
+	bool SetUser(const wxString& user, const wxString& pass = wxString());
 	bool SetAccount(const wxString& account);
 
 	CServer& operator=(const CServer &op);
@@ -110,7 +110,7 @@ public:
 	wxString FormatHost(bool always_omit_port = false) const;
 	wxString FormatServer(const bool always_include_prefix = false) const;
 
-	bool SetEncodingType(enum CharsetEncoding type, const wxString& encoding = _T(""));
+	bool SetEncodingType(enum CharsetEncoding type, const wxString& encoding = wxString());
 	bool SetCustomEncoding(const wxString& encoding);
 	enum CharsetEncoding GetEncodingType() const;
 	wxString GetCustomEncoding() const;

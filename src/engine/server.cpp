@@ -79,8 +79,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	}
 
 	int pos = host.Find(_T("://"));
-	if (pos != -1)
-	{
+	if (pos != -1) {
 		wxString protocol = host.Left(pos).Lower();
 		host = host.Mid(pos + 3);
 		if (protocol.Left(3) == _T("fz_"))
@@ -95,8 +94,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	}
 
 	pos = host.Find('@');
-	if (pos != -1)
-	{
+	if (pos != -1) {
 		// Check if it's something like
 		//   user@name:password@host:port/path
 		// => If there are multiple at signs, username/port ends at last at before
@@ -107,8 +105,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 			slash += pos + 1;
 
 		int next_at = host.Mid(pos + 1).Find('@');
-		while (next_at != -1)
-		{
+		while (next_at != -1) {
 			next_at += pos + 1;
 			if (slash != -1 && next_at > slash)
 				break;
@@ -122,8 +119,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 
 		// Extract password (if any) from username
 		pos = user.Find(':');
-		if (pos != -1)
-		{
+		if (pos != -1) {
 			pass = user.Mid(pos + 1);
 			user = user.Left(pos);
 		}
@@ -132,38 +128,32 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		user.Trim(true);
 		user.Trim(false);
 
-		if (user == _T(""))
-		{
+		if (user.empty()) {
 			error = _("Invalid username given.");
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		// Remove leading and trailing whitespace
 		user.Trim(true);
 		user.Trim(false);
 
-		if (user == _T("") && m_logonType != ASK && m_logonType != INTERACTIVE)
-		{
+		if (user.empty() && m_logonType != ASK && m_logonType != INTERACTIVE) {
 			user = _T("anonymous");
 			pass = _T("anonymous@example.com");
 		}
 	}
 
 	pos = host.Find('/');
-	if (pos != -1)
-	{
+	if (pos != -1) {
 		path = CServerPath(host.Mid(pos));
 		host = host.Left(pos);
 	}
 
-	if (host[0] == '[')
-	{
+	if (!host.empty() && host[0] == '[') {
 		// Probably IPv6 address
 		pos = host.Find(']');
-		if (pos == -1)
-		{
+		if (pos == -1) {
 			error = _("Host starts with '[' but no closing bracket found.");
 			return false;
 		}
@@ -179,29 +169,24 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	}
 	else
 		pos = host.Find(':');
-	if (pos != -1)
-	{
-		if (!pos)
-		{
+	if (pos != -1) {
+		if (!pos) {
 			error = _("No host given, please enter a host.");
 			return false;
 		}
 
 		long tmp;
-		if (!host.Mid(pos + 1).ToLong(&tmp) || tmp < 1 || tmp > 65535)
-		{
+		if (!host.Mid(pos + 1).ToLong(&tmp) || tmp < 1 || tmp > 65535) {
 			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
 			return false;
 		}
 		port = tmp;
 		host = host.Left(pos);
 	}
-	else
-	{
+	else {
 		if (!port)
 			port = GetDefaultPort(m_protocol);
-		else if (port > 65535)
-		{
+		else if (port > 65535) {
 			error = _("Invalid port given. The port has to be a value from 1 to 65535.");
 			return false;
 		}
@@ -225,10 +210,9 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 	m_port = port;
 	m_user = user;
 	m_pass = pass;
-	m_account = _T("");
-	if (m_logonType != ASK && m_logonType != INTERACTIVE)
-	{
-		if (m_user == _T(""))
+	m_account.clear();
+	if (m_logonType != ASK && m_logonType != INTERACTIVE) {
+		if (m_user.empty())
 			m_logonType = ANONYMOUS;
 		else if (m_user == _T("anonymous"))
 			if (m_pass.IsEmpty() || m_pass == _T("anonymous@example.com"))
@@ -284,7 +268,7 @@ wxString CServer::GetPass() const
 wxString CServer::GetAccount() const
 {
 	if (m_logonType != ACCOUNT)
-		return _T("");
+		return wxString();
 
 	return m_account;
 }
@@ -486,8 +470,7 @@ bool CServer::EqualsNoPass(const CServer &op) const
 		return false;
 	else if (m_encodingType != op.m_encodingType)
 		return false;
-	else if (m_encodingType == ENCODING_CUSTOM)
-	{
+	else if (m_encodingType == ENCODING_CUSTOM) {
 		if (m_customEncoding != op.m_customEncoding)
 			return false;
 	}
@@ -501,7 +484,7 @@ bool CServer::EqualsNoPass(const CServer &op) const
 	return true;
 }
 
-CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int port, wxString user, wxString pass /*=_T("")*/, wxString account /*=_T("")*/)
+CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int port, wxString user, wxString pass, wxString account)
 {
 	Initialize();
 	m_protocol = protocol;
@@ -551,7 +534,7 @@ void CServer::SetProtocol(enum ServerProtocol serverProtocol)
 
 bool CServer::SetHost(wxString host, unsigned int port)
 {
-	if (host == _T(""))
+	if (host.empty())
 		return false;
 
 	if (port < 1 || port > 65535)
@@ -566,16 +549,15 @@ bool CServer::SetHost(wxString host, unsigned int port)
 	return true;
 }
 
-bool CServer::SetUser(const wxString& user, const wxString& pass /*=_T("")*/)
+bool CServer::SetUser(const wxString& user, const wxString& pass)
 {
 	if (m_logonType == ANONYMOUS)
 		return true;
 
-	if (user == _T(""))
-	{
+	if (user.empty()) {
 		if (m_logonType != ASK && m_logonType != INTERACTIVE)
 			return false;
-		m_pass = _T("");
+		m_pass.clear();
 	}
 	else
 		m_pass = pass;
@@ -669,23 +651,23 @@ void CServer::Initialize()
 {
 	m_protocol = UNKNOWN;
 	m_type = DEFAULT;
-	m_host = _T("");
+	m_host.clear();
 	m_port = 21;
 	m_logonType = ANONYMOUS;
-	m_user = _T("");
-	m_pass = _T("");
-	m_account = _T("");
+	m_user.clear();
+	m_pass.clear();
+	m_account.clear();
 	m_timezoneOffset = 0;
 	m_pasvMode = MODE_DEFAULT;
 	m_maximumMultipleConnections = 0;
 	m_encodingType = ENCODING_AUTO;
-	m_customEncoding = _T("");
+	m_customEncoding.clear();
 	m_bypassProxy = false;
 }
 
-bool CServer::SetEncodingType(enum CharsetEncoding type, const wxString& encoding /*=_T("")*/)
+bool CServer::SetEncodingType(enum CharsetEncoding type, const wxString& encoding)
 {
-	if (type == ENCODING_CUSTOM && encoding == _T(""))
+	if (type == ENCODING_CUSTOM && encoding.empty())
 		return false;
 
 	m_encodingType = type;
@@ -696,7 +678,7 @@ bool CServer::SetEncodingType(enum CharsetEncoding type, const wxString& encodin
 
 bool CServer::SetCustomEncoding(const wxString& encoding)
 {
-	if (encoding == _T(""))
+	if (encoding.empty())
 		return false;
 
 	m_encodingType = ENCODING_CUSTOM;
@@ -754,7 +736,7 @@ wxString CServer::GetProtocolName(enum ServerProtocol protocol)
 			return protocolInfo->name;
 	}
 
-	return _T("");
+	return wxString();
 }
 
 enum ServerProtocol CServer::GetProtocolFromName(const wxString& name)

@@ -52,7 +52,7 @@ CServerPath::CServerPath(const CServerPath &path, wxString subdir)
 	, m_type(path.m_type)
 	, m_data(path.m_data)
 {
-	if (subdir == _T(""))
+	if (subdir.empty())
 		return;
 
 	if (!ChangePath(subdir))
@@ -89,7 +89,7 @@ bool CServerPath::SetPath(wxString &newPath, bool isFile)
 	wxString path = newPath;
 	wxString file;
 
-	if (path == _T(""))
+	if (path.empty())
 		return false;
 
 	if (m_type == DEFAULT)
@@ -136,7 +136,7 @@ bool CServerPath::SetPath(wxString &newPath, bool isFile)
 wxString CServerPath::GetPath() const
 {
 	if (m_bEmpty)
-		return _T("");
+		return wxString();
 
 	wxString path;
 
@@ -148,19 +148,16 @@ wxString CServerPath::GetPath() const
 	if (m_data->m_segments.empty() && (!traits[m_type].has_root || m_data->m_prefix.empty() || traits[m_type].separator_after_prefix))
 		path += traits[m_type].separators[0];
 
-	for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter)
-	{
+	for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter) {
 		const wxString& segment = *iter;
 		if (iter != m_data->m_segments.begin())
 			path += traits[m_type].separators[0];
-		else if (traits[m_type].has_root)
-		{
+		else if (traits[m_type].has_root) {
 			if (m_data->m_prefix.empty() || traits[m_type].separator_after_prefix)
 				path += traits[m_type].separators[0];
 		}
 
-		if (traits[m_type].separatorEscape)
-		{
+		if (traits[m_type].separatorEscape) {
 			wxString tmp = segment;
 			EscapeSeparators(m_type, tmp);
 			path += tmp;
@@ -213,12 +210,12 @@ CServerPath CServerPath::GetParent() const
 wxString CServerPath::GetLastSegment() const
 {
 	if (!HasParent())
-		return _T("");
+		return wxString();
 
 	if (!m_data->m_segments.empty())
 		return m_data->m_segments.back();
 	else
-		return _T("");
+		return wxString();
 }
 
 // libc sprintf can be so slow at times...
@@ -246,7 +243,7 @@ wxChar* fast_sprint_number(wxChar* s, size_t n)
 wxString CServerPath::GetSafePath() const
 {
 	if (m_bEmpty)
-		return _T("");
+		return wxString();
 
 	#define INTLENGTH 20 // 2^64 - 1
 
@@ -254,8 +251,9 @@ wxString CServerPath::GetSafePath() const
 		+ INTLENGTH; // Max length of prefix
 
 	len += m_data->m_prefix.size();
-	for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter)
-		len += iter->Length() + 2 + INTLENGTH;
+	for( auto const& segment : m_data->m_segments ) {
+		len += segment.size() + 2 + INTLENGTH;
+	}
 
 	wxString safepath;
 	{
@@ -266,20 +264,18 @@ wxString CServerPath::GetSafePath() const
 		*(t++) = ' ';
 		t = fast_sprint_number(t, m_data->m_prefix.size());
 
-		if (!m_data->m_prefix.empty())
-		{
+		if (!m_data->m_prefix.empty()) {
 			*(t++) = ' ';
 			tstrcpy(t, m_data->m_prefix);
 			t += m_data->m_prefix.size();
 		}
 
-		for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter)
-		{
+		for( auto const& segment : m_data->m_segments ) {
 			*(t++) = ' ';
-			t = fast_sprint_number(t, iter->size());
+			t = fast_sprint_number(t, segment.size());
 			*(t++) = ' ';
-			tstrcpy(t, *iter);
-			t += iter->size();
+			tstrcpy(t, segment);
+			t += segment.size();
 		}
 		*t = 0;
 	}
@@ -433,17 +429,15 @@ bool CServerPath::IsSubdirOf(const CServerPath &path, bool cmpNoCase) const
 
 	// On MVS, dirs like 'FOO.BAR' without trailing dot cannot have
 	// subdirectories
-	if (traits[m_type].prefixmode == 1 && path.m_data->m_prefix == _T(""))
+	if (traits[m_type].prefixmode == 1 && path.m_data->m_prefix.empty())
 		return false;
 
 	tConstSegmentIter iter1 = m_data->m_segments.begin();
 	tConstSegmentIter iter2 = path.m_data->m_segments.begin();
-	while (iter1 != m_data->m_segments.end())
-	{
+	while (iter1 != m_data->m_segments.end()) {
 		if (iter2 == path.m_data->m_segments.end())
 			return true;
-		if (cmpNoCase)
-		{
+		if (cmpNoCase) {
 			if (iter1->CmpNoCase(*iter2))
 				return false;
 		}
@@ -476,7 +470,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 	wxString dir = subdir;
 	wxString file;
 
-	if (dir == _T(""))
+	if (dir.empty())
 	{
 		if (IsEmpty() || isFile)
 			return false;
@@ -573,8 +567,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 				c = dir.c_str()[++i];
 			dir.Remove(0, i);
 
-			while (dir != _T(""))
-			{
+			while (!dir.empty()) {
 				c = dir.Last();
 				if (c != FTP_MVS_DOUBLE_QUOTE)
 					break;
@@ -582,11 +575,10 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 					dir.RemoveLast();
 			}
 		}
-		if (dir == _T(""))
+		if (dir.empty())
 			return false;
 
-		if (dir.c_str()[0] == traits[m_type].left_enclosure)
-		{
+		if (dir.c_str()[0] == traits[m_type].left_enclosure) {
 			if (dir.Last() != traits[m_type].right_enclosure)
 				return false;
 
@@ -600,8 +592,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 		else if (m_bEmpty)
 			return false;
 
-		if (dir.Last() == ')')
-		{
+		if (dir.Last() == ')') {
 			// Partitioned dataset member
 			if (!isFile)
 				return false;
@@ -613,21 +604,19 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 			file = dir.Mid(pos + 1);
 			dir = dir.Left(pos);
 
-			if (!m_bEmpty && data.m_prefix == _T("") && !dir.empty())
+			if (!m_bEmpty && data.m_prefix.empty() && !dir.empty())
 				return false;
 
 			data.m_prefix.clear();
 		}
-		else
-		{
-			if (!m_bEmpty && data.m_prefix == _T(""))
+		else {
+			if (!m_bEmpty && data.m_prefix.empty())
 			{
 				if (dir.Find('.') != -1 || !isFile)
 					return false;
 			}
 
-			if (isFile)
-			{
+			if (isFile) {
 				if (!ExtractFile(dir, file))
 					return false;
 				data.m_prefix = _T(".");
@@ -776,8 +765,7 @@ bool CServerPath::operator<(const CServerPath &op) const
 		return true;
 
 	tConstSegmentIter iter1, iter2;
-	for (iter1 = m_data->m_segments.begin(), iter2 = op.m_data->m_segments.begin(); iter1 != m_data->m_segments.end(); ++iter1, ++iter2)
-	{
+	for (iter1 = m_data->m_segments.begin(), iter2 = op.m_data->m_segments.begin(); iter1 != m_data->m_segments.end(); ++iter1, ++iter2) {
 		if (iter2 == op.m_data->m_segments.end())
 			return false;
 
@@ -796,11 +784,11 @@ wxString CServerPath::FormatFilename(const wxString &filename, bool omitPath /*=
 	if (m_bEmpty)
 		return filename;
 
-	if (filename == _T(""))
-		return _T("");
+	if (filename.empty())
+		return wxString();
 
 	if (m_bEmpty)
-		return _T("");
+		return wxString();
 
 	if (omitPath && (!traits[m_type].prefixmode || m_data->m_prefix == _T(".")))
 		return filename;
@@ -851,8 +839,7 @@ int CServerPath::CmpNoCase(const CServerPath &op) const
 
 	tConstSegmentIter iter = m_data->m_segments.begin();
 	tConstSegmentIter iter2 = op.m_data->m_segments.begin();
-	while (iter != m_data->m_segments.end())
-	{
+	while (iter != m_data->m_segments.end()) {
 		int res = iter++->CmpNoCase(*iter2++);
 		if (res)
 			return res;
@@ -909,8 +896,7 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 
 	tConstSegmentIter last = m_data->m_segments.end();
 	tConstSegmentIter last2 = path.m_data->m_segments.end();
-	if (traits[m_type].prefixmode == 1)
-	{
+	if (traits[m_type].prefixmode == 1) {
 		if (m_data->m_prefix.empty())
 			--last;
 		if (path.m_data->m_prefix.empty())
@@ -922,10 +908,8 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 
 	tConstSegmentIter iter = m_data->m_segments.begin();
 	tConstSegmentIter iter2 = path.m_data->m_segments.begin();
-	while (iter != last && iter2 != last2)
-	{
-		if (*iter != *iter2)
-		{
+	while (iter != last && iter2 != last2) {
+		if (*iter != *iter2) {
 			if (!traits[m_type].has_root && parentData.m_segments.empty())
 				return CServerPath();
 			else
@@ -1033,8 +1017,7 @@ bool CServerPath::ExtractFile(wxString& dir, wxString& file)
 
 void CServerPath::EscapeSeparators(ServerType type, wxString& subdir)
 {
-	if (traits[type].separatorEscape)
-	{
+	if (traits[type].separatorEscape) {
 		for (const wxChar* p = traits[type].separators; *p; ++p)
 			subdir.Replace((wxString)*p, (wxString)traits[type].separatorEscape + traits[type].separators[0]);
 	}
@@ -1044,6 +1027,7 @@ void CServerPath::Coalesce()
 {
 	CServerPathData& data = m_data.Get();
 	::Coalesce(data.m_prefix);
-	for (tSegmentIter iter = data.m_segments.begin(); iter != data.m_segments.end(); ++iter)
-		::Coalesce(*iter);
+	for (auto& segment : data.m_segments) {
+		::Coalesce(segment);
+	}
 }

@@ -427,7 +427,7 @@ wxString CIOThread::GetError()
 {
 	wxMutexLocker locker(m_mutex);
 	if (!m_error_description)
-		return _T("");
+		return wxString();
 
 	return wxString(m_error_description);
 }

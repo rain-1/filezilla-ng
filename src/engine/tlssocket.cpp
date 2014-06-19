@@ -986,8 +986,7 @@ bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 	}
 	else
 		LogError(res, _T("gnutls_x509_crt_get_dn"));
-	if (subject == _T(""))
-	{
+	if (subject.empty()) {
 		m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
 		gnutls_x509_crt_deinit(cert);
 		return false;
@@ -1010,8 +1009,7 @@ bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 	}
 	else
 		LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
-	if (issuer == _T(""))
-	{
+	if (issuer.empty() ) {
 		m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
 		gnutls_x509_crt_deinit(cert);
 		return false;
@@ -1202,7 +1200,7 @@ bool CTlsSocket::AddTrustedRootCertificate(const wxString& cert)
 	if (!m_initialized)
 		return false;
 
-	if (cert == _T(""))
+	if (cert.empty())
 		return false;
 
 	m_require_root_trust = true;
@@ -1227,7 +1225,7 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 	const char *err = 0;
 	int ret = gnutls_priority_init(&pcache, priority.mb_str(), &err);
 	if (ret < 0) {
-		list += wxString::Format(_T("gnutls_priority_init failed with code %d: %s"), ret, wxString::FromUTF8(err ? err : "").c_str());
+		list += wxString::Format(_T("gnutls_priority_init failed with code %d: %s"), ret, err ? wxString::FromUTF8(err) : _T("Unknown error"));
 		return list;
 	}
 	else {

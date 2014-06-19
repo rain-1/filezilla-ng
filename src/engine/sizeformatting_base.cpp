@@ -110,7 +110,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool a
 	}
 
 	wxString result = r.ToString();
-	if (places != _T("")) {
+	if (!places.empty()) {
 		const wxString& sep = GetRadixSeparator();
 
 		result += sep;

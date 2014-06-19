@@ -104,7 +104,7 @@ void CLogging::InitLogFile() const
 	m_logfile_initialized = true;
 
 	m_file = m_pEngine->GetOptions()->GetOption(OPTION_LOGGING_FILE);
-	if (m_file == _T(""))
+	if (m_file.empty())
 		return;
 
 #ifdef __WXMSW__
@@ -214,8 +214,8 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				ReleaseMutex(hMutex);
 				CloseHandle(hMutex);
 
-				if (error != _T(""))
-					LogMessage(Error, _("Could not open log file: %s"), error.c_str());
+				if (!error.empty())
+					LogMessage(Error, _("Could not open log file: %s"), error);
 			}
 		}
 		DWORD len = (DWORD)strlen((const char*)utf8);

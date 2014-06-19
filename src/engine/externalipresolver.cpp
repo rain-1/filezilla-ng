@@ -83,8 +83,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::a
 	else
 		m_port = 80;
 
-	if (host == _T(""))
-	{
+	if (host.empty()) {
 		m_done = true;
 		return;
 	}
@@ -92,8 +91,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::a
 	m_pSocket = new CSocket(this);
 
 	int res = m_pSocket->Connect(host, m_port, protocol);
-	if (res && res != EINPROGRESS)
-	{
+	if (res && res != EINPROGRESS) {
 		Close(false);
 		return;
 	}
@@ -136,16 +134,15 @@ void CExternalIPResolver::OnConnect(int error)
 
 void CExternalIPResolver::OnClose()
 {
-	if (m_data != _T(""))
-		OnData(0, 0);
-	else
+	if (m_data.empty())
 		Close(false);
+	else
+		OnData(0, 0);
 }
 
 void CExternalIPResolver::OnReceive()
 {
-	if (!m_pRecvBuffer)
-	{
+	if (!m_pRecvBuffer) {
 		m_pRecvBuffer = new char[m_recvBufferLen];
 		m_recvBufferPos = 0;
 	}
@@ -153,8 +150,7 @@ void CExternalIPResolver::OnReceive()
 	if (m_pSendBuffer)
 		return;
 
-	while (m_pSocket)
-	{
+	while (m_pSocket) {
 		unsigned int len = m_recvBufferLen - m_recvBufferPos;
 		int error;
 		int read = m_pSocket->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
@@ -241,11 +237,10 @@ void CExternalIPResolver::Close(bool successful)
 	m_done = true;
 
 	if (!successful)
-		m_ip = _T("");
+		m_ip.clear();
 	m_checked = true;
 
-	if (m_handler)
-	{
+	if (m_handler) {
 		fzExternalIPResolveEvent event;
 		wxPostEvent(m_handler, event);
 		m_handler = 0;
@@ -450,9 +445,9 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 void CExternalIPResolver::ResetHttpData(bool resetRedirectCount)
 {
 	m_gotHeader = false;
-	m_location = _T("");
+	m_location.clear();
 	m_responseCode = 0;
-	m_responseString = _T("");
+	m_responseString.clear();
 	if (resetRedirectCount)
 		m_redirectCount = 0;
 
