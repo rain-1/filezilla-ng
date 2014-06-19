@@ -1,4 +1,4 @@
-AC_INIT(FileZilla, 3.8.1, tim.kosse@filezilla-project.org)
+AC_INIT([FileZilla],[3.8.1],[tim.kosse@filezilla-project.org],[],[https://filezilla-project.org/])
 AC_CONFIG_HEADERS([src/include/config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(config)
@@ -9,18 +9,20 @@ AC_CANONICAL_HOST
 AC_PROG_CXX
 AM_PROG_CC_C_O
 AC_PROG_INSTALL
-AC_PROG_LIBTOOL
+
+LT_INIT
+LT_LANG([C++])
 
 AC_CACHE_SAVE
 
-AC_ARG_ENABLE(locales, AC_HELP_STRING([--enable-locales], [Build message catalogs]), \
+AC_ARG_ENABLE(locales, AS_HELP_STRING([--enable-locales],[Build message catalogs]), \
         [locales="$enableval"], [locales="yes"])
 
 # Todo: Investigate using sub-configure scripts
-AC_ARG_ENABLE(localesonly, AC_HELP_STRING([--enable-localesonly], [Just build locales]), \
+AC_ARG_ENABLE(localesonly, AS_HELP_STRING([--enable-localesonly],[Just build locales]), \
         [localesonly="$enableval"], [localesonly="no"])
 
-AC_ARG_ENABLE(shellextonly, AC_HELP_STRING([--enable-shellextonly], [Just build Explorer shell extension (MSW specific flag)]), \
+AC_ARG_ENABLE(shellextonly, AS_HELP_STRING([--enable-shellextonly],[Just build Explorer shell extension (MSW specific flag)]), \
         [shellextonly="$enableval"], [shellextonly="no"])
 
 if test "$locales" != "yes" -a "$localesonly" = "yes"; then
@@ -70,7 +72,7 @@ if ! test "$localesonly" = "yes"; then
   fi
 
   # Get buildtype.
-  AC_ARG_ENABLE(buildtype, AC_HELP_STRING([--enable-buildtype=TYPE], [DO NOT USE. Reserved for use by official maintainer. TYPE can either be 'official' or 'nightly'.]),
+  AC_ARG_ENABLE(buildtype, AS_HELP_STRING([--enable-buildtype=TYPE],[DO NOT USE. Reserved for use by official maintainer. TYPE can either be 'official' or 'nightly'.]),
     [buildtype=$enableval], [buildtype=])
   buildtype_valid=false
   if test -z "$buildtype"; then
@@ -290,7 +292,7 @@ if test "$buildmain" = "yes"; then
     ])
 
     AC_ARG_WITH(idn-lib,
-        AC_HELP_STRING([--with-idn-lib=FILE], [Use the given path to the idn library.]),
+        AS_HELP_STRING([--with-idn-lib=FILE],[Use the given path to the idn library.]),
     [
       if test "$withval" != "yes" -a "$withval" != ""; then
           IDN_LIB=$withval
@@ -327,7 +329,7 @@ if test "$buildmain" = "yes"; then
 
   AC_MSG_CHECKING([whether to use precompiled headers])
   use_precomp=""
-  AC_ARG_ENABLE(precomp, AC_HELP_STRING([--enable-precomp], [Use precompiled headers]), \
+  AC_ARG_ENABLE(precomp, AS_HELP_STRING([--enable-precomp],[Use precompiled headers]), \
                 use_precomp="$enableval")
   if test "x$enable_dependency_tracking" = "xno"; then
     use_precomp="no"
@@ -366,7 +368,7 @@ if test "$buildmain" = "yes"; then
   # Updatecheck related flags
   # -------------------------
 
-  AC_ARG_ENABLE(manualupdatecheck, AC_HELP_STRING([--disable-manualupdatecheck], [Disallow the user to manually check for new versions. Implies --disable-autoupdatecheck]),
+  AC_ARG_ENABLE(manualupdatecheck, AS_HELP_STRING([--disable-manualupdatecheck],[Disallow the user to manually check for new versions. Implies --disable-autoupdatecheck]),
     [manualupdatecheck=$enableval], [manualupdatecheck="yes"])
 
   if test "$manualupdatecheck" = "no"; then
@@ -376,7 +378,7 @@ if test "$buildmain" = "yes"; then
   fi
   AC_DEFINE_UNQUOTED(FZ_MANUALUPDATECHECK, $manualupdatecheck, [Set to 1 to enable user initiated update checks])
 
-  AC_ARG_ENABLE(autoupdatecheck, AC_HELP_STRING([--disable-autoupdatecheck], [Disables the ability of FileZilla to check for new versions automatically.]),
+  AC_ARG_ENABLE(autoupdatecheck, AS_HELP_STRING([--disable-autoupdatecheck],[Disables the ability of FileZilla to check for new versions automatically.]),
     [autoupdatecheck=$enableval], [autoupdatecheck="yes"])
 
   if test "$manualupdatecheck" = "1" -a "$autoupdatecheck" != "no"; then
@@ -404,7 +406,7 @@ if test "$buildmain" = "yes"; then
   # Libdbus
   # -------
 
-  AC_ARG_WITH(dbus, AC_HELP_STRING([--with-dbus], [Enable D-Bus support through libdbus. Used for GNOME Session manager D-Bus API. Default: auto]),
+  AC_ARG_WITH(dbus, AS_HELP_STRING([--with-dbus],[Enable D-Bus support through libdbus. Used for GNOME Session manager D-Bus API. Default: auto]),
     [
     ],
     [
