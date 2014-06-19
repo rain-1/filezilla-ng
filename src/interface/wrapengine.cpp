@@ -519,7 +519,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 #elif defined(__WXMAC__)
 		sboxSizer->GetStaticBox()->CacheBestSize(wxSize(0, 0));
 #else
-		sboxSizer->GetStaticBox()->CacheBeseSize(wxDefaultSize);
+		sboxSizer->GetStaticBox()->CacheBestSize(wxDefaultSize);
 #endif
 	}
 
