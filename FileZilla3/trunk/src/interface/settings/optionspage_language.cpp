@@ -33,15 +33,13 @@ bool COptionsPageLanguage::SavePage()
 	m_pOptions->SetOption(OPTION_LANGUAGE, code);
 #else
 	bool successful = false;
-	if (code == _T(""))
-	{
+	if (code.empty()) {
 		wxGetApp().SetLocale(wxLANGUAGE_DEFAULT);
 
 		// Default language cannot fail, has to silently fall back to English
 		successful = true;
 	}
-	else
-	{
+	else {
 		const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(code);
 		if (pInfo)
 			successful = wxGetApp().SetLocale(pInfo->Language);
@@ -77,7 +75,7 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 
 	const wxString defaultName = _("Default system language");
 	int n = pListBox->Append(defaultName);
-	if (currentLanguage == _T(""))
+	if (currentLanguage.empty())
 		pListBox->SetSelection(n);
 
 	m_locale.push_back(_locale_info());
@@ -85,18 +83,15 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 	m_locale.back().name = _T("English");
 
 	wxString localesDir = wxGetApp().GetLocalesDir();
-	if (localesDir == _T("") || !wxDir::Exists(localesDir))
-	{
+	if (localesDir.empty() || !wxDir::Exists(localesDir)) {
 		pListBox->GetContainingSizer()->Layout();
 		return true;
 	}
 
 	wxDir dir(localesDir);
 	wxString locale;
-	for (bool found = dir.GetFirst(&locale); found; found = dir.GetNext(&locale))
-	{
-		if (!wxFileName::FileExists(localesDir + locale + _T("/filezilla.mo")))
-		{
+	for (bool found = dir.GetFirst(&locale); found; found = dir.GetNext(&locale)) {
+		if (!wxFileName::FileExists(localesDir + locale + _T("/filezilla.mo"))) {
 			if (!wxFileName::FileExists(localesDir + locale + _T("/LC_MESSAGES/filezilla.mo")))
 				continue;
 		}
@@ -105,23 +100,19 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 		const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(locale);
 		if (!pInfo)
 			continue;
-		if (pInfo->Description != _T(""))
+		if (!pInfo->Description.empty())
 			name = pInfo->Description;
 		else
 			name = locale;
 
-		m_locale.push_back(_locale_info());
-		m_locale.back().code = locale;
-		m_locale.back().name = name;
+		m_locale.push_back({name, locale});
 	}
 
 	std::sort(m_locale.begin(), m_locale.end(), compareLangAsc);
 
-	std::vector<struct _locale_info>::const_iterator iter;
-	for (iter = m_locale.begin(); iter != m_locale.end(); ++iter)
-	{
-		n = pListBox->Append(iter->name + _T(" (") + iter->code + _T(")"));
-		if (iter->code == currentLanguage)
+	for(auto const& locale : m_locale) {
+		n = pListBox->Append(locale.name + _T(" (") + locale.code + _T(")"));
+		if (locale.code == currentLanguage)
 			pListBox->SetSelection(n);
 	}
 	pListBox->GetContainingSizer()->Layout();

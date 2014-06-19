@@ -17,7 +17,7 @@ bool COptionsPageLogging::LoadPage()
 	SetCheck(XRCID("ID_TIMESTAMPS"), m_pOptions->GetOptionVal(OPTION_MESSAGELOG_TIMESTAMP) ? true : false, failure);
 
 	const wxString filename = m_pOptions->GetOption(OPTION_LOGGING_FILE);
-	SetCheck(XRCID("ID_LOGFILE"), filename != _T(""), failure);
+	SetCheck(XRCID("ID_LOGFILE"), !filename.empty(), failure);
 	SetText(XRCID("ID_FILENAME"), filename, failure);
 
 	int limit = m_pOptions->GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
@@ -94,7 +94,7 @@ void COptionsPageLogging::SetCtrlState()
 
 void COptionsPageLogging::OnBrowse(wxCommandEvent& event)
 {
-	wxFileDialog dlg(this, _("Log file"), _T(""), _T("filezilla.log"), _T("Log files (*.log)|*.log"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	wxFileDialog dlg(this, _("Log file"), wxString(), _T("filezilla.log"), _T("Log files (*.log)|*.log"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 	if (dlg.ShowModal() != wxID_OK)
 		return;

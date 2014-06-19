@@ -67,8 +67,7 @@ bool COptionsPageEdit::Validate()
 {
 	const bool custom = GetRCheck(XRCID("ID_DEFAULT_CUSTOM"));
 	wxString editor;
-	if (custom)
-	{
+	if (custom) {
 		bool failure = false;
 
 		editor = GetText(XRCID("ID_EDITOR"));
@@ -76,13 +75,12 @@ bool COptionsPageEdit::Validate()
 		editor.Trim(false);
 		SetText(XRCID("EDITOR"), editor, failure);
 
-		if (editor != _T(""))
-		{
+		if (!editor.empty()) {
 			wxString args;
 			if (!UnquoteCommand(editor, args))
 				return DisplayError(_T("ID_EDITOR"), _("Default editor not properly quoted."));
 
-			if (editor == _T(""))
+			if (editor.empty())
 				return DisplayError(_T("ID_EDITOR"), _("Empty quoted string."));
 
 			if (!ProgramExists(editor))
@@ -90,8 +88,7 @@ bool COptionsPageEdit::Validate()
 		}
 	}
 
-	if (GetRCheck(XRCID("ID_USEDEFAULT")))
-	{
+	if (GetRCheck(XRCID("ID_USEDEFAULT"))) {
 		if (GetRCheck(XRCID("ID_DEFAULT_NONE")) ||
 			(custom && editor.empty()))
 		{
@@ -104,7 +101,7 @@ bool COptionsPageEdit::Validate()
 
 void COptionsPageEdit::OnBrowseEditor(wxCommandEvent& event)
 {
-	wxFileDialog dlg(this, _("Select default editor"), _T(""), _T(""),
+	wxFileDialog dlg(this, _("Select default editor"), wxString(), wxString(),
 #ifdef __WXMSW__
 		_T("Executable file (*.exe)|*.exe"),
 #elif __WXMAC__
@@ -118,7 +115,7 @@ void COptionsPageEdit::OnBrowseEditor(wxCommandEvent& event)
 		return;
 
 	wxString editor = dlg.GetPath();
-	if (editor == _T(""))
+	if (editor.empty())
 		return;
 
 	if (!ProgramExists(editor))

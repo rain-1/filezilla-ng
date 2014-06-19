@@ -60,21 +60,18 @@ bool COptionsPageConnectionSFTP::LoadPage()
 bool COptionsPageConnectionSFTP::SavePage()
 {
 	// Don't save keys on process error
-	if (!m_initialized || m_pProcess)
-	{
+	if (!m_initialized || m_pProcess) {
 		wxString keyFiles;
 		wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
-		for (int i = 0; i < pKeys->GetItemCount(); i++)
-		{
-			if (keyFiles != _T(""))
+		for (int i = 0; i < pKeys->GetItemCount(); i++) {
+			if (!keyFiles.empty())
 				keyFiles += _T("\n");
 			keyFiles += pKeys->GetItemText(i);
 		}
 		m_pOptions->SetOption(OPTION_SFTP_KEYFILES, keyFiles);
 	}
 
-	if (m_pProcess)
-	{
+	if (m_pProcess) {
 		m_pProcess->CloseOutput();
 		m_pProcess->Detach();
 		m_pProcess = 0;
@@ -304,12 +301,12 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 			return false;
 		}
 
-		wxFileDialog dlg(this, _("Select filename for converted keyfile"), _T(""), _T(""), _T("PuTTY private key files (*.ppk)|*.ppk"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		wxFileDialog dlg(this, _("Select filename for converted keyfile"), wxString(), wxString(), _T("PuTTY private key files (*.ppk)|*.ppk"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 		if (dlg.ShowModal() != wxID_OK)
 			return false;
 
 		wxString newName = dlg.GetPath();
-		if (newName == _T(""))
+		if (newName .empty())
 			return false;
 
 		if (newName == keyFile)
@@ -360,7 +357,7 @@ void COptionsPageConnectionSFTP::OnEndProcess(wxProcessEvent& event)
 
 void COptionsPageConnectionSFTP::OnAdd(wxCommandEvent& event)
 {
-	wxFileDialog dlg(this, _("Select file containing private key"), _T(""), _T(""), wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+	wxFileDialog dlg(this, _("Select file containing private key"), wxString(), wxString(), wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
