@@ -311,7 +311,7 @@ void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notificatio
 
 void CSearchDialog::ProcessDirectoryListing()
 {
-	CSharedPointer<const CDirectoryListing> listing = m_pState->GetRemoteDir();
+	std::shared_ptr<CDirectoryListing> listing = m_pState->GetRemoteDir();
 
 	if (!listing || listing->m_failed)
 		return;

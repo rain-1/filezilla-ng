@@ -5,6 +5,8 @@
 #include "systemimagelist.h"
 #include "listingcomparison.h"
 
+#include <memory>
+
 class CQueueView;
 class CFileListCtrl_SortComparisonObject;
 class CState;
@@ -537,7 +539,7 @@ private:
 #endif
 
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
-	CSharedPointer<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
+	std::unique_ptr<CGtkEventCallbackProxyBase> m_gtkEventCallbackProxy;
 #endif
 
 	wxString m_genericTypes[2];

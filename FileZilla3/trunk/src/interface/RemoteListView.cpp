@@ -444,7 +444,7 @@ bool CRemoteListView::IsItemValid(unsigned int item) const
 	return true;
 }
 
-void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CDirectoryListing> &pDirectoryListing)
+void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryListing> const& pDirectoryListing)
 {
 	const unsigned int to_add = pDirectoryListing->GetCount() - m_pDirectoryListing->GetCount();
 	m_pDirectoryListing = pDirectoryListing;
@@ -535,7 +535,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(const CSharedPointer<const CD
 	wxASSERT(m_indexMapping.size() <= pDirectoryListing->GetCount() + 1);
 }
 
-void CRemoteListView::UpdateDirectoryListing_Removed(const CSharedPointer<const CDirectoryListing> &pDirectoryListing)
+void CRemoteListView::UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryListing> const& pDirectoryListing)
 {
 	const unsigned int removed = m_pDirectoryListing->GetCount() - pDirectoryListing->GetCount();
 	if (!removed)
@@ -670,7 +670,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(const CSharedPointer<const 
 	SaveSetItemCount(m_indexMapping.size());
 }
 
-bool CRemoteListView::UpdateDirectoryListing(const CSharedPointer<const CDirectoryListing> &pDirectoryListing)
+bool CRemoteListView::UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing)
 {
 	wxASSERT(!IsComparing());
 
@@ -717,7 +717,7 @@ bool CRemoteListView::UpdateDirectoryListing(const CSharedPointer<const CDirecto
 	return true;
 }
 
-void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryListing> &pDirectoryListing, bool modified /*=false*/)
+void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified)
 {
 	CancelLabelEdit();
 
@@ -773,7 +773,7 @@ void CRemoteListView::SetDirectoryListing(const CSharedPointer<const CDirectoryL
 	if (m_pFilelistStatusBar)
 	{
 		m_pFilelistStatusBar->UnselectAll();
-		m_pFilelistStatusBar->SetConnected(pDirectoryListing);
+		m_pFilelistStatusBar->SetConnected(pDirectoryListing != 0);
 	}
 
 	m_pDirectoryListing = pDirectoryListing;
@@ -2706,7 +2706,7 @@ CFileListCtrl<CGenericFileData>::CSortComparisonObject CRemoteListView::GetSortC
 	CFileListCtrlSort<CDirectoryListing>::DirSortMode dirSortMode = GetDirSortMode();
 	CFileListCtrlSort<CDirectoryListing>::NameSortMode nameSortMode = GetNameSortMode();
 
-	CDirectoryListing const& directoryListing = *m_pDirectoryListing.Value();
+	CDirectoryListing const& directoryListing = *m_pDirectoryListing;
 	if (!m_sortDirection)
 	{
 		if (m_sortColumn == 1)

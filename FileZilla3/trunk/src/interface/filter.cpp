@@ -635,41 +635,36 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 
 bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const
 {
-	for (std::list<CFilter>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
-	{
-		if (FilenameFilteredByFilter(*iter, name, path, dir, size, attributes, date))
+	for( auto const& filter : filters ) {
+		if (FilenameFilteredByFilter(filter, name, path, dir, size, attributes, date))
 			return true;
 	}
 
 	return false;
 }
 
-static bool StringMatch(const wxString& subject, const wxString& filter, int condition, bool matchCase, const CSharedPointer<const wxRegEx>& pRegEx)
+static bool StringMatch(const wxString& subject, const wxString& filter, int condition, bool matchCase, std::shared_ptr<const wxRegEx> const& pRegEx)
 {
 	bool match = false;
 
 	switch (condition)
 	{
 	case 0:
-		if (matchCase)
-		{
+		if (matchCase) {
 			if (subject.Contains(filter))
 				match = true;
 		}
-		else
-		{
+		else {
 			if (subject.Lower().Contains(filter.Lower()))
 				match = true;
 		}
 		break;
 	case 1:
-		if (matchCase)
-		{
+		if (matchCase) {
 			if (subject == filter)
 				match = true;
 		}
-		else
-		{
+		else {
 			if (!subject.CmpNoCase(filter))
 				match = true;
 		}
@@ -677,13 +672,11 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	case 2:
 		{
 			const wxString& left = subject.Left(filter.Len());
-			if (matchCase)
-			{
+			if (matchCase) {
 				if (left == filter)
 					match = true;
 			}
-			else
-			{
+			else {
 				if (!left.CmpNoCase(filter))
 					match = true;
 			}
@@ -692,13 +685,11 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	case 3:
 		{
 			const wxString& right = subject.Right(filter.Len());
-			if (matchCase)
-			{
+			if (matchCase) {
 				if (right == filter)
 					match = true;
 			}
-			else
-			{
+			else {
 				if (!right.CmpNoCase(filter))
 					match = true;
 			}
@@ -710,13 +701,11 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 			match = true;
 		break;
 	case 5:
-		if (matchCase)
-		{
+		if (matchCase) {
 			if (!subject.Contains(filter))
 				match = true;
 		}
-		else
-		{
+		else {
 			if (!subject.Lower().Contains(filter.Lower()))
 				match = true;
 		}
@@ -901,17 +890,15 @@ bool CFilterManager::CompileRegexes(CFilter& filter)
 	for (std::vector<CFilterCondition>::iterator iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
 	{
 		CFilterCondition& condition = *iter;
-		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4)
-		{
-			condition.pRegEx = new wxRegEx(condition.strValue);
-			if (!condition.pRegEx->IsValid())
-			{
-				condition.pRegEx.clear();
+		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4) {
+			condition.pRegEx = std::make_shared<wxRegEx>(condition.strValue);
+			if (!condition.pRegEx->IsValid()) {
+				condition.pRegEx.reset();
 				return false;
 			}
 		}
 		else
-			condition.pRegEx.clear();
+			condition.pRegEx.reset();
 	}
 
 	return true;

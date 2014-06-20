@@ -54,10 +54,10 @@ protected:
 
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 	void ApplyCurrentFilter();
-	void SetDirectoryListing(const CSharedPointer<const CDirectoryListing> &pDirectoryListing, bool modified = false);
-	bool UpdateDirectoryListing(const CSharedPointer<const CDirectoryListing> &pDirectoryListing);
-	void UpdateDirectoryListing_Removed(const CSharedPointer<const CDirectoryListing> &pDirectoryListing);
-	void UpdateDirectoryListing_Added(const CSharedPointer<const CDirectoryListing> &pDirectoryListing);
+	void SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified = false);
+	bool UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
+	void UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
+	void UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
 
 #ifdef __WXDEBUG__
 	void ValidateIndexMapping();
@@ -65,7 +65,7 @@ protected:
 
 	virtual void OnNavigationEvent(bool forward);
 
-	CSharedPointer <const CDirectoryListing> m_pDirectoryListing;
+	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
 	// Caller is responsible to check selection is valid!
 	void TransferSelectedFiles(const CLocalPath& local_parent, bool queueOnly);

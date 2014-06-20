@@ -4,6 +4,8 @@
 #include <wx/aui/auibook.h>
 #include "state.h"
 
+#include <memory>
+
 class wxAuiNotebookEx;
 class CLocalListView;
 class CLocalTreeView;
@@ -45,7 +47,7 @@ public:
 			wxString path;
 			std::list<wxString> bookmarks;
 		};
-		CSharedPointer<struct _site_bookmarks> site_bookmarks;
+		std::shared_ptr<_site_bookmarks> site_bookmarks;
 	};
 
 	CContextControl(CMainFrame* pMainFrame);

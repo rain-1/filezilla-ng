@@ -3,6 +3,8 @@
 
 #include "local_path.h"
 
+#include <memory>
+
 enum t_statechange_notifications
 {
 	STATECHANGE_NONE, // Used to unregister all notifications
@@ -105,8 +107,8 @@ public:
 	bool Disconnect();
 
 	bool ChangeRemoteDir(const CServerPath& path, const wxString& subdir = _T(""), int flags = 0, bool ignore_busy = false);
-	bool SetRemoteDir(const CDirectoryListing *m_pDirectoryListing, bool modified = false);
-	CSharedPointer<const CDirectoryListing> GetRemoteDir() const;
+	bool SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified = false);
+	std::shared_ptr<CDirectoryListing> GetRemoteDir() const;
 	const CServerPath GetRemotePath() const;
 
 	const CServer* GetServer() const;
@@ -172,7 +174,7 @@ protected:
 	void SetServer(const CServer* server);
 
 	CLocalPath m_localDir;
-	CSharedPointer<const CDirectoryListing> m_pDirectoryListing;
+	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
 	CServer* m_pServer;
 	wxString m_title;

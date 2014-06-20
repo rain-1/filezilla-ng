@@ -3,6 +3,8 @@
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
 
+#include <memory>
+
 #ifdef __WXMSW__
 #define TABCOLOUR wxSYS_COLOUR_3DFACE
 #else
@@ -199,7 +201,7 @@ struct wxAuiTabArtExData
 class wxAuiTabArtEx : public wxAuiDefaultTabArt
 {
 public:
-	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom, CSharedPointer<struct wxAuiTabArtExData> data)
+	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom, std::shared_ptr<wxAuiTabArtExData> const& data)
 	{
 		m_pNotebook = pNotebook;
 		m_fonts_initialized = false;
@@ -288,7 +290,7 @@ public:
 protected:
 	wxAuiNotebookEx* m_pNotebook;
 
-	CSharedPointer<struct wxAuiTabArtExData> m_data;
+	std::shared_ptr<wxAuiTabArtExData> m_data;
 
 	wxFont m_original_normal_font;
 	wxFont m_highlighted_font;
@@ -321,7 +323,7 @@ void wxAuiNotebookEx::RemoveExtraBorders()
 
 void wxAuiNotebookEx::SetExArtProvider()
 {
-	SetArtProvider(new wxAuiTabArtEx(this, (GetWindowStyle() & wxAUI_NB_BOTTOM) != 0, new struct wxAuiTabArtExData));
+	SetArtProvider(new wxAuiTabArtEx(this, (GetWindowStyle() & wxAUI_NB_BOTTOM) != 0, std::make_shared<wxAuiTabArtExData>()));
 }
 
 bool wxAuiNotebookEx::SetPageText(size_t page_idx, const wxString& text)
