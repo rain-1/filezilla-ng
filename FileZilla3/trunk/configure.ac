@@ -203,7 +203,7 @@ if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
         hostaliaswindres="$host_alias-windres"
       fi
       AC_MSG_RESULT([yes])
-      AC_PATH_PROGS([WINDRES], [windres $hostaliaswindres $host_os-windres])
+      AC_PATH_PROGS([WINDRES], [$hostaliaswindres $host_os-windres windres])
       if test "x$WINDRES" = "x"; then
         AC_MSG_ERROR([windres could not be found, please make sure this program is within your path.])
       fi
