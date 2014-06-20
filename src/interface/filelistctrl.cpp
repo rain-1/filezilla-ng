@@ -273,7 +273,7 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 #endif
 
 #if defined __WXGTK__ && !defined(__WXGTK3__)
-	m_gtkEventCallbackProxy = std::unique_ptr<CGtkEventCallbackProxy<CFileData>>(this));
+	m_gtkEventCallbackProxy = std::unique_ptr<CGtkEventCallbackProxy<CFileData>>(this);
 
 	GtkWidget* widget = GetMainWindow()->GetConnectWidget();
 	g_signal_connect(widget, "button_release_event", G_CALLBACK(gtk_button_release_event), m_gtkEventCallbackProxy.get());
