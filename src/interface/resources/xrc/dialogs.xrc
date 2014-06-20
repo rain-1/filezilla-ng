@@ -3220,24 +3220,20 @@
           </object>
           <vgap>5</vgap>
           <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <orient>wxHORIZONTAL</orient>
-              <object class="sizeritem">
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
                 <object class="wxButton" name="wxID_OK">
                   <label>OK</label>
                   <default>1</default>
                 </object>
-                <flag>wxGROW|wxRIGHT</flag>
-                <border>5</border>
               </object>
-              <object class="sizeritem">
-                <flag>wxGROW</flag>
+              <object class="button">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>Cancel</label>
                 </object>
               </object>
             </object>
-            <flag>wxALIGN_RIGHT|wxTOP</flag>
+            <flag>wxGROW|wxTOP</flag>
             <border>5</border>
           </object>
         </object>
@@ -3383,29 +3379,25 @@
       </object>
       <object class="sizeritem">
         <object class="wxStaticLine"/>
-        <flag>wxTOP|wxALL|wxGROW</flag>
+        <flag>wxTOP|wxLEFT|wxRIGHT|wxGROW</flag>
         <border>5</border>
       </object>
       <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
               <label>&amp;OK</label>
               <default>1</default>
             </object>
-            <flag>wxALL|wxGROW</flag>
-            <border>5</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
               <label>Cancel</label>
             </object>
-            <flag>wxALL|wxGROW</flag>
-            <border>5</border>
           </object>
         </object>
-        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <flag>wxALL|wxGROW</flag>
+        <border>6</border>
       </object>
     </object>
   </object>
