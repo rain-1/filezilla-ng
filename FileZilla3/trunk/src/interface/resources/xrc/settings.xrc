@@ -33,7 +33,7 @@
             <object class="wxButton" name="wxID_CANCEL">
               <label>&amp;Cancel</label>
             </object>
-            <flag>wxBOTTOM|wxGROW</flag>
+            <flag>wxTOP|wxBOTTOM|wxGROW</flag>
             <border>2</border>
           </object>
         </object>
