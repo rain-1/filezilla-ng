@@ -2521,12 +2521,10 @@ void CMainFrame::OnDropdownComparisonHide(wxCommandEvent& event)
 		return;
 
 	bool old_mode = COptions::Get()->GetOptionVal(OPTION_COMPARE_HIDEIDENTICAL) != 0;
-	bool new_mode = event.IsChecked();
-
-	COptions::Get()->SetOption(OPTION_COMPARE_HIDEIDENTICAL, new_mode ? 1 : 0);
+	COptions::Get()->SetOption(OPTION_COMPARE_HIDEIDENTICAL, old_mode ? 0 : 1);
 
 	CComparisonManager* pComparisonManager = pState->GetComparisonManager();
-	if (old_mode != new_mode && pComparisonManager && pComparisonManager->IsComparing())
+	if (pComparisonManager && pComparisonManager->IsComparing())
 		pComparisonManager->CompareListings();
 }
 
