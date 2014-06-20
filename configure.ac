@@ -197,13 +197,8 @@ if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
   AC_MSG_CHECKING([whether to use windres])
   if echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
     if echo $WX_CPPFLAGS | grep __WXMSW__ > /dev/null 2>&1; then
-      if test -z "$host_alias"; then
-        hostaliaswindres=
-      else
-        hostaliaswindres="$host_alias-windres"
-      fi
       AC_MSG_RESULT([yes])
-      AC_PATH_PROGS([WINDRES], [$hostaliaswindres $host_os-windres windres])
+      AC_CHECK_TOOL([WINDRES], [windres])
       if test "x$WINDRES" = "x"; then
         AC_MSG_ERROR([windres could not be found, please make sure this program is within your path.])
       fi
