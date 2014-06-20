@@ -25,9 +25,9 @@ enum capabilities CCapabilities::GetCapability(enum capabilityNames name, int* p
 	return iter->second.cap;
 }
 
-void CCapabilities::SetCapability(enum capabilityNames name, enum capabilities cap, const wxString& option /*=_T("")*/)
+void CCapabilities::SetCapability(enum capabilityNames name, enum capabilities cap, const wxString& option)
 {
-	wxASSERT(cap == yes || option == _T(""));
+	wxASSERT(cap == yes || option.empty());
 	struct CCapabilities::t_cap tcap;
 	tcap.cap = cap;
 	tcap.option = option;

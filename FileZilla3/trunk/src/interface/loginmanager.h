@@ -11,12 +11,12 @@ class CLoginManager
 public:
 	static CLoginManager& Get() { return m_theLoginManager; }
 
-	bool GetPassword(CServer& server, bool silent, wxString name = _T(""), wxString challenge = _T(""));
+	bool GetPassword(CServer& server, bool silent, wxString const& name = wxString(), wxString const& challenge = wxString());
 
 	void CachedPasswordFailed(const CServer& server);
 
 protected:
-	bool DisplayDialog(CServer& server, wxString name, wxString challenge);
+	bool DisplayDialog(CServer& server, wxString const& name, wxString challenge);
 
 	static CLoginManager m_theLoginManager;
 

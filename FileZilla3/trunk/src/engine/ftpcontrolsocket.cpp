@@ -1164,7 +1164,7 @@ int CFtpControlSocket::LogonSend()
 					res = Send(cmd.command);
 				break;
 			case other:
-				wxASSERT(cmd.command != _T(""));
+				wxASSERT(!cmd.command.empty());
 				res = Send(cmd.command, cmd.hide_arguments);
 				break;
 			default:
@@ -1386,7 +1386,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		if (pData->path.IsEmpty())
 		{
 			pData->path = m_CurrentPath;
-			wxASSERT(pData->subDir == _T(""));
+			wxASSERT(pData->subDir.empty());
 			wxASSERT(!pData->path.IsEmpty());
 		}
 
@@ -1641,7 +1641,7 @@ int CFtpControlSocket::ListSend()
 		CDirectoryListing listing;
 		CDirectoryCache cache;
 		bool is_outdated = false;
-		wxASSERT(pData->subDir == _T("")); // Did do ChangeDir before trying to lock
+		wxASSERT(pData->subDir.empty()); // Did do ChangeDir before trying to lock
 		bool found = cache.Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
 		if (found && !is_outdated && !listing.m_hasUnsureEntries &&
 			listing.m_firstListTime > pData->m_time_before_locking)
@@ -1996,7 +1996,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download)
 	{
 		pData->tryMkdOnFail = true;
-		wxASSERT(subDir == _T(""));
+		wxASSERT(subDir.empty());
 	}
 
 
@@ -3029,7 +3029,7 @@ public:
 
 int CFtpControlSocket::RawCommand(const wxString& command)
 {
-	wxASSERT(command != _T(""));
+	wxASSERT(!command.empty());
 
 	m_pCurOpData = new CRawCommandOpData(command);
 
