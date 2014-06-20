@@ -542,6 +542,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->AddHandler(new wxScrolledWindowXmlHandler);
 	pResource->AddHandler(new wxHyperlinkCtrlXmlHandler);
 	pResource->AddHandler(new wxAnimationCtrlXmlHandler);
+	pResource->AddHandler(new wxStdDialogButtonSizerXmlHandler);
 
 	wxString resourceDir = m_resourceDir;
 #if wxUSE_FILESYSTEM
