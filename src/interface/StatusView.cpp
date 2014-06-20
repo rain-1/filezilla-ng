@@ -174,7 +174,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 #ifndef __WXGTK__
 	wxWindowUpdateLocker *pLock = 0;
 #endif //__WXGTK__
-    if (m_nLineCount == MAX_LINECOUNT) {
+	if (m_nLineCount == MAX_LINECOUNT) {
 #ifndef __WXGTK__
 		pLock = new wxWindowUpdateLocker(m_pTextCtrl);
 #endif //__WXGTK__
@@ -185,7 +185,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	else
 		m_nLineCount++;
 #ifdef __WXMAC__
-    m_pTextCtrl->SetInsertionPointEnd();
+	m_pTextCtrl->SetInsertionPointEnd();
 #endif
 
 	int lineLength = m_attributeCache[messagetype].len + messageLength;
@@ -205,7 +205,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	}
 
 #ifdef __WXMAC__
-    m_pTextCtrl->SetDefaultStyle(m_attributeCache[messagetype].attr);
+	m_pTextCtrl->SetDefaultStyle(m_attributeCache[messagetype].attr);
 #elif __WXGTK__
 	m_pTextCtrl->SetDefaultColor(m_attributeCache[messagetype].attr.GetTextColour());
 #endif
@@ -232,14 +232,6 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	}
 
 	m_lineLengths.push_back(lineLength);
-    for( int i = 0; i < message.size(); ++i ) {
-        wxChar c = message[i];
-        if( c == '\n') continue;
-        if( c >= 32 && c < 127 ) continue;
-        if( c == '\n' || c == '\t' ) continue;
-        std::cerr << (int)c << "\n";
-        abort();
-    }
 	prefix += message;
 #if defined(__WXGTK__)
 	// AppendText always calls SetInsertionPointEnd, which is very expensive.
