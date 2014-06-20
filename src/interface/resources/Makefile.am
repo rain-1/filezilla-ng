@@ -20,6 +20,7 @@ dist_xrc_DATA = \
 	xrc/netconfwizard.xrc \
 	xrc/quickconnectbar.xrc \
 	xrc/settings.xrc \
+	xrc/sitemanager.xrc \
 	xrc/toolbar.xrc \
 	xrc/update.xrc
 
