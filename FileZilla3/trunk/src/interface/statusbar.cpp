@@ -10,7 +10,7 @@
 #include <wx/dcclient.h>
 
 static const int statbarWidths[3] = {
-	-3, 0, 35
+	-3, 0, 25
 };
 #define FIELD_QUEUESIZE 1
 
@@ -91,11 +91,7 @@ void wxStatusBarEx::FixupFieldWidth(int field)
 	if (field != GetFieldsCount() - 1)
 		return;
 
-#ifdef __WXMSW__
-	// Gripper overlaps last field if not maximized
-	if (!m_parentWasMaximized && m_columnWidths[field] > 0)
-		m_columnWidths[field] += 6;
-#elif __WXGTK20__
+#if __WXGTK20__
 	// Gripper overlaps last all the time
 	if (m_columnWidths[field] > 0)
 		m_columnWidths[field] += 15;
@@ -140,9 +136,9 @@ void wxStatusBarEx::OnSize(wxSizeEvent&)
 			m_parentWasMaximized = isMaximized;
 
 			if (isMaximized)
-				m_columnWidths[count - 1] -= 6;
+				m_columnWidths[count - 1] -= 16;
 			else
-				m_columnWidths[count - 1] += 6;
+				m_columnWidths[count - 1] += 16;
 
 			wxStatusBar::SetStatusWidths(count, m_columnWidths);
 			Refresh();
@@ -231,11 +227,13 @@ void CWidgetsStatusBar::PositionChildren(int field)
 
 	int offset = 2;
 
+#ifndef __WXMSW__
 	if (field + 1 == GetFieldsCount())
 	{
 		rect.SetWidth(m_columnWidths[field]);
 		offset += 5 + GetGripperWidth();
 	}
+#endif
 
 	for (std::map<int, struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); ++iter)
 	{
@@ -258,44 +256,11 @@ void CWidgetsStatusBar::SetFieldWidth(int field, int width)
 		PositionChildren(i);
 }
 
-#ifdef __WXMSW__
-class wxStaticBitmapEx : public wxStaticBitmap
-{
-public:
-	wxStaticBitmapEx(wxWindow* parent, int id, const wxBitmap& bmp)
-		: wxStaticBitmap(parent, id, bmp)
-	{
-	};
-
-protected:
-	DECLARE_EVENT_TABLE()
-
-	// Make sure it is truly transparent, i.e. also works with
-	// themed status bars.
-	void OnErase(wxEraseEvent& event)
-	{
-	}
-
-	void OnPaint(wxPaintEvent& event)
-	{
-		wxPaintDC dc(this);
-		dc.DrawBitmap(GetBitmap(), 0, 0, true);
-	}
-};
-
-BEGIN_EVENT_TABLE(wxStaticBitmapEx, wxStaticBitmap)
-EVT_ERASE_BACKGROUND(wxStaticBitmapEx::OnErase)
-EVT_PAINT(wxStaticBitmapEx::OnPaint)
-END_EVENT_TABLE()
-#else
-#define wxStaticBitmapEx wxStaticBitmap
-#endif
-
-class CIndicator : public wxStaticBitmapEx
+class CIndicator : public wxStaticBitmap
 {
 public:
 	CIndicator(CStatusBar* pStatusBar, const wxBitmap& bmp)
-		: wxStaticBitmapEx(pStatusBar, wxID_ANY, bmp)
+		: wxStaticBitmap(pStatusBar, wxID_ANY, bmp)
 	{
 		m_pStatusBar = pStatusBar;
 	}
@@ -314,7 +279,7 @@ protected:
 	}
 };
 
-BEGIN_EVENT_TABLE(CIndicator, wxStaticBitmapEx)
+BEGIN_EVENT_TABLE(CIndicator, wxStaticBitmap)
 EVT_LEFT_UP(CIndicator::OnLeftMouseUp)
 EVT_RIGHT_UP(CIndicator::OnRightMouseUp)
 END_EVENT_TABLE()
