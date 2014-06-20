@@ -28,22 +28,18 @@
           </object>
           <object class="sizeritem">
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
-            <object class="wxGridSizer">
-              <cols>2</cols>
-              <object class="sizeritem">
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
                 <object class="wxButton" name="wxID_OK">
                   <label>OK</label>
                   <default>1</default>
                 </object>
-                <flag>wxGROW</flag>
               </object>
-              <object class="sizeritem">
+              <object class="button">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>&amp;Cancel</label>
                 </object>
-                <flag>wxGROW</flag>
               </object>
-              <hgap>5</hgap>
             </object>
           </object>
           <cols>1</cols>
