@@ -118,6 +118,9 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 #endif
 
 	m_pTextCtrl->Connect(wxID_ANY, wxEVT_CONTEXT_MENU, wxContextMenuEventHandler(CStatusView::OnContextMenu), 0, this);
+#ifdef __WXMSW__
+	::SendMessage((HWND)m_pTextCtrl->GetHandle(), EM_SETOLECALLBACK, 0, 0);
+#endif
 
 	m_nLineCount = 0;
 
@@ -136,8 +139,7 @@ CStatusView::~CStatusView()
 
 void CStatusView::OnSize(wxSizeEvent &event)
 {
-	if (m_pTextCtrl)
-	{
+	if (m_pTextCtrl) {
 		wxSize s = GetClientSize();
 		m_pTextCtrl->SetSize(0, 0, s.GetWidth(), s.GetHeight());
 	}
@@ -150,8 +152,7 @@ void CStatusView::AddToLog(CLogmsgNotification *pNotification)
 
 void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message, const wxDateTime& time)
 {
-	if (!m_shown)
-	{
+	if (!m_shown) {
 		struct t_line line;
 		line.messagetype = messagetype;
 		line.message = message;
