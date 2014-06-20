@@ -1293,7 +1293,6 @@
                                   <object class="wxTextCtrl" name="ID_ENCODING"/>
                                   <flag>wxALIGN_CENTRE_VERTICAL</flag>
                                 </object>
-                                <cols>2</cols>
                                 <rows>1</rows>
                                 <hgap>5</hgap>
                               </object>
@@ -1528,7 +1527,6 @@
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxGridSizer">
-              <cols>3</cols>
               <rows>1</rows>
               <object class="sizeritem">
                 <object class="wxCheckBox" name="ID_OWNERREAD">
@@ -1563,7 +1561,6 @@
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxGridSizer">
-              <cols>3</cols>
               <rows>1</rows>
               <object class="sizeritem">
                 <object class="wxCheckBox" name="ID_GROUPREAD">
@@ -1598,7 +1595,6 @@
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxGridSizer">
-              <cols>3</cols>
               <rows>1</rows>
               <object class="sizeritem">
                 <object class="wxCheckBox" name="ID_PUBLICREAD">
@@ -2364,7 +2360,6 @@
               <object class="sizeritem">
                 <object class="wxGridSizer">
                   <cols>2</cols>
-                  <rows>2</rows>
                   <object class="sizeritem">
                     <object class="wxButton" name="ID_NEW">
                       <label>&amp;New</label>
@@ -2435,7 +2430,6 @@
                     </object>
                     <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
-                  <cols>2</cols>
                   <rows>1</rows>
                   <hgap>5</hgap>
                 </object>
@@ -2473,7 +2467,6 @@
                       <label>Dire&amp;ctories</label>
                     </object>
                   </object>
-                  <cols>2</cols>
                   <rows>1</rows>
                   <hgap>5</hgap>
                 </object>
@@ -3045,7 +3038,6 @@
                 <flag>wxGROW</flag>
               </object>
               <cols>2</cols>
-              <rows>2</rows>
               <vgap>5</vgap>
               <hgap>5</hgap>
               <object class="sizeritem">
@@ -4274,7 +4266,6 @@
                   <label>Cancel</label>
                 </object>
               </object>
-              <cols>2</cols>
               <rows>1</rows>
               <hgap>5</hgap>
             </object>
