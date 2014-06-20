@@ -330,10 +330,9 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error, bool rememberPrev
 	return true;
 }
 
-bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modified /*=false*/)
+bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified)
 {
-	if (!pDirectoryListing)
-	{
+	if (!pDirectoryListing) {
 		SetSyncBrowse(false);
 		if (modified)
 			return false;
@@ -355,12 +354,9 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 	else
 		m_previouslyVisitedRemoteSubdir = _T("");
 
-	if (modified)
-	{
-		if (!m_pDirectoryListing || m_pDirectoryListing->path != pDirectoryListing->path)
-		{
+	if (modified) {
+		if (!m_pDirectoryListing || m_pDirectoryListing->path != pDirectoryListing->path) {
 			// We aren't interested in these listings
-			delete pDirectoryListing;
 			return true;
 		}
 	}
@@ -371,7 +367,6 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 		pDirectoryListing->m_failed)
 	{
 		// We still got an old listing, no need to display the new one
-		delete pDirectoryListing;
 		return true;
 	}
 
@@ -382,8 +377,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 	else
 		NotifyHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
 
-	if (m_sync_browse.is_changing && !modified)
-	{
+	if (m_sync_browse.is_changing && !modified) {
 		m_sync_browse.is_changing = false;
 		if (m_pDirectoryListing->path != m_sync_browse.remote_root && !m_pDirectoryListing->path.IsSubdirOf(m_sync_browse.remote_root, false))
 		{
@@ -393,11 +387,9 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 					m_sync_browse.remote_root.GetPath().c_str());
 			wxMessageBoxEx(msg, _("Synchronized browsing"));
 		}
-		else
-		{
+		else {
 			CLocalPath local_path = GetSynchronizedDirectory(m_pDirectoryListing->path);
-			if (local_path.empty())
-			{
+			if (local_path.empty()) {
 				SetSyncBrowse(false);
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nSynchronized browsing has been disabled."),
 					m_pDirectoryListing->path.GetPath().c_str());
@@ -406,8 +398,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 			}
 
 			wxString error;
-			if (!local_path.Exists(&error))
-			{
+			if (!local_path.Exists(&error)) {
 				SetSyncBrowse(false);
 				wxString msg = error + _T("\n") + _("Synchronized browsing has been disabled.");
 				wxMessageBoxEx(msg, _("Synchronized browsing"));
@@ -427,7 +418,7 @@ bool CState::SetRemoteDir(const CDirectoryListing *pDirectoryListing, bool modif
 	return true;
 }
 
-CSharedPointer<const CDirectoryListing> CState::GetRemoteDir() const
+std::shared_ptr<CDirectoryListing> CState::GetRemoteDir() const
 {
 	return m_pDirectoryListing;
 }

@@ -46,7 +46,7 @@ void CRecursiveOperation::OnStateChange(CState* pState, enum t_statechange_notif
 	{
 		wxASSERT(pState);
 		wxASSERT(notification == STATECHANGE_REMOTE_DIR);
-		ProcessDirectoryListing(pState->GetRemoteDir().Value());
+		ProcessDirectoryListing(pState->GetRemoteDir().get());
 	}
 }
 

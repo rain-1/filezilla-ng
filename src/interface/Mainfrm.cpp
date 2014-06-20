@@ -981,12 +981,11 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 					pState->SetRemoteDir(0, false);
 				else
 				{
-					CDirectoryListing* pListing = new CDirectoryListing;
+					std::shared_ptr<CDirectoryListing> pListing = std::make_shared<CDirectoryListing>();
 					if (pListingNotification->Failed() ||
 						pState->m_pEngine->CacheLookup(pListingNotification->GetPath(), *pListing) != FZ_REPLY_OK)
 					{
-						delete pListing;
-						pListing = new CDirectoryListing;
+						pListing = std::make_shared<CDirectoryListing>();
 						pListing->path = pListingNotification->GetPath();
 						pListing->m_failed = true;
 						pListing->m_firstListTime = CMonotonicTime::Now();
@@ -2803,9 +2802,8 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 	if (!m_pContextControl)
 		return;
 
-	CSharedPointer<CContextControl::_context_controls::_site_bookmarks> site_bookmarks;
-	for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-	{
+	std::shared_ptr<CContextControl::_context_controls::_site_bookmarks> site_bookmarks;
+	for (int i = 0; i < m_pContextControl->GetTabCount(); i++) {
 		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
 		if (i == m_pContextControl->GetCurrentTab())
 			continue;
@@ -2815,9 +2813,8 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 		site_bookmarks = controls->site_bookmarks;
 		site_bookmarks->bookmarks.clear();
 	}
-	if (!site_bookmarks)
-	{
-		site_bookmarks = new CContextControl::_context_controls::_site_bookmarks;
+	if (!site_bookmarks) {
+		site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
 		site_bookmarks->path = path;
 	}
 
@@ -2871,7 +2868,7 @@ bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path 
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromState(pState);
 	if (!isReconnect && controls)
-		controls->site_bookmarks.clear();
+		controls->site_bookmarks.reset();
 
 	return pState->Connect(server, path);
 }

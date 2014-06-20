@@ -4,6 +4,8 @@
 #include "dialogex.h"
 #include <wx/regex.h>
 
+#include <memory>
+
 enum t_filterType
 {
 	filter_name = 0x01,
@@ -34,7 +36,7 @@ public:
 	wxLongLong value; // If type is size
 	CDateTime date; // If type is date
 	bool matchCase;
-	CSharedPointer<const wxRegEx> pRegEx;
+	std::shared_ptr<wxRegEx> pRegEx;
 };
 
 class CFilter

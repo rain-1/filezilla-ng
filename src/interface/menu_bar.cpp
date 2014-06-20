@@ -234,7 +234,7 @@ void CMenuBar::ClearBookmarks()
 	CContextControl::_context_controls* controls = pContextControl ? pContextControl->GetCurrentControls() : 0;
 
 	if (!controls->site_bookmarks)
-		controls->site_bookmarks = new CContextControl::_context_controls::_site_bookmarks;
+		controls->site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
 	UpdateBookmarkMenu();
 }
 

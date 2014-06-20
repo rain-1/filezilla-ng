@@ -277,7 +277,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	else
 	{
 		context_controls.tab_index = 0;
-		context_controls.site_bookmarks = new CContextControl::_context_controls::_site_bookmarks;
+		context_controls.site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
 
 		context_controls.site_bookmarks->path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
 		CSiteManager::GetBookmarks(context_controls.site_bookmarks->path,
@@ -384,7 +384,7 @@ bool CContextControl::CloseTab(int tab)
 		m_tabs = 0;
 
 		m_context_controls[i].tab_index = -1;
-		m_context_controls[i].site_bookmarks.clear();
+		m_context_controls[i].site_bookmarks.reset();
 
 		CContextManager::Get()->SetCurrentContext(m_context_controls[j].pState);
 
@@ -412,7 +412,7 @@ bool CContextControl::CloseTab(int tab)
 				m_context_controls[j].tab_index--;
 		}
 		m_context_controls[i].tab_index = -1;
-		m_context_controls[i].site_bookmarks.clear();
+		m_context_controls[i].site_bookmarks.reset();
 		m_tabs->DeletePage(tab);
 	}
 
