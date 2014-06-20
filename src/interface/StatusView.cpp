@@ -126,10 +126,6 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 	InitDefAttr();
 
 	m_shown = IsShown();
-
-#ifdef __WXMAC__
-	m_insertionPoint = 0;
-#endif
 }
 
 CStatusView::~CStatusView()
@@ -178,24 +174,19 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 #ifndef __WXGTK__
 	wxWindowUpdateLocker *pLock = 0;
 #endif //__WXGTK__
-
-	if (m_nLineCount == MAX_LINECOUNT) {
+    if (m_nLineCount == MAX_LINECOUNT) {
 #ifndef __WXGTK__
 		pLock = new wxWindowUpdateLocker(m_pTextCtrl);
 #endif //__WXGTK__
 		int oldLength = m_lineLengths.front();
-#ifdef __WXMAC__
-		m_insertionPoint -= oldLength + 1;
-#endif
 		m_pTextCtrl->Remove(0, oldLength + 1);
 		m_lineLengths.pop_front();
-
-#ifdef __WXMAC__
-		m_pTextCtrl->SetInsertionPoint(m_insertionPoint);
-#endif
 	}
 	else
 		m_nLineCount++;
+#ifdef __WXMAC__
+    m_pTextCtrl->SetInsertionPointEnd();
+#endif
 
 	int lineLength = m_attributeCache[messagetype].len + messageLength;
 
@@ -214,12 +205,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	}
 
 #ifdef __WXMAC__
-	int current = m_pTextCtrl->GetInsertionPoint();
-	if (current != m_insertionPoint) {
-		m_pTextCtrl->SetInsertionPointEnd();
-		m_insertionPoint = m_pTextCtrl->GetInsertionPoint();
-	}
-	m_pTextCtrl->SetStyle(-1, -1, m_attributeCache[messagetype].attr);
+    m_pTextCtrl->SetDefaultStyle(m_attributeCache[messagetype].attr);
 #elif __WXGTK__
 	m_pTextCtrl->SetDefaultColor(m_attributeCache[messagetype].attr.GetTextColour());
 #endif
@@ -246,7 +232,14 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	}
 
 	m_lineLengths.push_back(lineLength);
-
+    for( int i = 0; i < message.size(); ++i ) {
+        wxChar c = message[i];
+        if( c == '\n') continue;
+        if( c >= 32 && c < 127 ) continue;
+        if( c == '\n' || c == '\t' ) continue;
+        std::cerr << (int)c << "\n";
+        abort();
+    }
 	prefix += message;
 #if defined(__WXGTK__)
 	// AppendText always calls SetInsertionPointEnd, which is very expensive.
@@ -257,9 +250,6 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 		m_pTextCtrl->WriteText(prefix);
 #elif defined(__WXMAC__)
 	m_pTextCtrl->WriteText(prefix);
-	m_insertionPoint += lineLength;
-	if (m_nLineCount > 1)
-		m_insertionPoint += 1;
 	delete pLock;
 #else
 	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[messagetype].cf);
@@ -420,10 +410,6 @@ void CStatusView::OnClear(wxCommandEvent& event)
 		m_pTextCtrl->Clear();
 	m_nLineCount = 0;
 	m_lineLengths.clear();
-
-#ifdef __WXMAC__
-	m_insertionPoint = 0;
-#endif
 }
 
 void CStatusView::OnCopy(wxCommandEvent& event)
