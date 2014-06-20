@@ -21,7 +21,7 @@ class CFastTextCtrl : public wxTextCtrl
 {
 public:
 	CFastTextCtrl(wxWindow* parent)
-		: wxTextCtrl(parent, -1, _T(""), wxDefaultPosition, wxDefaultSize,
+		: wxTextCtrl(parent, -1, wxString(), wxDefaultPosition, wxDefaultSize,
 					 wxNO_BORDER | wxVSCROLL | wxTE_MULTILINE |
 					 wxTE_READONLY | wxTE_RICH | wxTE_RICH2 | wxTE_NOHIDESEL |
 					 wxTAB_TRAVERSAL)
@@ -219,7 +219,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 		m_pTextCtrl->SetInsertionPointEnd();
 		m_insertionPoint = m_pTextCtrl->GetInsertionPoint();
 	}
-	m_pTextCtrl->SetStyle(m_insertionPoint, m_insertionPoint, m_attributeCache[messagetype].attr);
+	m_pTextCtrl->SetStyle(-1, -1, m_attributeCache[messagetype].attr);
 #elif __WXGTK__
 	m_pTextCtrl->SetDefaultColor(m_attributeCache[messagetype].attr.GetTextColour());
 #endif
@@ -261,7 +261,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	if (m_nLineCount > 1)
 		m_insertionPoint += 1;
 	delete pLock;
-#elif !defined(__WXMAC__)
+#else
 	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[messagetype].cf);
 	delete pLock;
 #endif
@@ -291,26 +291,31 @@ void CStatusView::InitDefAttr()
 	wxCoord width = 0;
 	wxCoord height = 0;
 	dc.GetTextExtent(_("Error:"), &width, &height);
-	int maxWidth = width;
+	int maxPrefixWidth = width;
 	dc.GetTextExtent(_("Command:"), &width, &height);
-	if (width > maxWidth)
-		maxWidth = width;
+	if (width > maxPrefixWidth)
+		maxPrefixWidth = width;
 	dc.GetTextExtent(_("Response:"), &width, &height);
-	if (width > maxWidth)
-		maxWidth = width;
+	if (width > maxPrefixWidth)
+		maxPrefixWidth = width;
 	dc.GetTextExtent(_("Trace:"), &width, &height);
-	if (width > maxWidth)
-		maxWidth = width;
+	if (width > maxPrefixWidth)
+		maxPrefixWidth = width;
 	dc.GetTextExtent(_("Listing:"), &width, &height);
-	if (width > maxWidth)
-		maxWidth = width;
+	if (width > maxPrefixWidth)
+		maxPrefixWidth = width;
 	dc.GetTextExtent(_("Status:"), &width, &height);
-	if (width > maxWidth)
-		maxWidth = width;
+	if (width > maxPrefixWidth)
+		maxPrefixWidth = width;
+
+#ifdef __WXMAC__
+	wxCoord spaceWidth;
+	dc.GetTextExtent(_T(" "), &spaceWidth, &height);
+#endif
 
 	dc.SetMapMode(wxMM_LOMETRIC);
 
-	maxWidth = dc.DeviceToLogicalX(maxWidth) + 20;
+	int maxWidth = dc.DeviceToLogicalX(maxPrefixWidth) + 20;
 	if (timestampWidth != 0) {
 		timestampWidth = dc.DeviceToLogicalX(timestampWidth) + 20;
 		maxWidth += timestampWidth;
@@ -378,6 +383,14 @@ void CStatusView::InitDefAttr()
 			entry.attr.SetTextColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
 			break;
 		}
+
+#ifdef __WXMAC__
+		// Fill with blanks to approach best size
+		dc.GetTextExtent(entry.prefix, &width, &height);
+		wxASSERT(width <= maxPrefixWidth);
+		wxCoord spaces = (maxPrefixWidth - width) / spaceWidth;
+		entry.prefix += wxString(spaces, ' ');
+#endif
 		entry.prefix += _T("\t");
 		entry.len = entry.prefix.Length();
 
