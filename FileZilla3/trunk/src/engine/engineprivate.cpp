@@ -609,11 +609,6 @@ void CFileZillaEnginePrivate::OnTimer(wxTimerEvent&)
 	}
 	wxASSERT(!IsConnected());
 
-#if 0//__WXDEBUG__
-	const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
-	wxASSERT(!GetRemainingReconnectDelay(pConnectCommand->GetServer()));
-#endif
-
 	delete m_pControlSocket;
 	m_pControlSocket = 0;
 

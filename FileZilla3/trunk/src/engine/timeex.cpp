@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "timeex.h"
 
+#define TIME_ASSERT(x) //wxASSERT(x)
+
 CDateTime::CDateTime()
 : a_(days)
 {
@@ -30,7 +32,7 @@ CDateTime::CDateTime( int year, int month, int day, int hour, int minute, int se
 CDateTime::CDateTime( wxDateTime const& t, Accuracy a )
 : a_(a), t_(t)
 {
-	wxASSERT(IsClamped());
+	TIME_ASSERT(IsClamped());
 }
 
 CDateTime CDateTime::Now()
@@ -94,18 +96,18 @@ int CDateTime::Compare( CDateTime const& op ) const
 		else if( t_ > op.t_ ) {
 			ret = 1;
 		}
-		wxASSERT( CompareSlow(op) == ret );
+		TIME_ASSERT( CompareSlow(op) == ret );
 		return ret;
 	}
 
 	// Second fast path: Lots of difference, at least 2 days
 	wxLongLong diff = t_.GetValue() - op.t_.GetValue();
 	if( diff > 60 * 60 * 24 * 1000 * 2 ) {
-		wxASSERT( CompareSlow(op) == 1 );
+		TIME_ASSERT( CompareSlow(op) == 1 );
 		return 1;
 	}
 	else if( diff < -60 * 60 * 24 * 1000 * 2 ) {
-		wxASSERT( CompareSlow(op) == -1 );
+		TIME_ASSERT( CompareSlow(op) == -1 );
 		return -1;
 	}
 
@@ -216,20 +218,20 @@ bool CDateTime::Set( int year, int month, int day, int hour, int minute, int sec
 
 	if( hour == -1 ) {
 		a_ = days;
-		wxASSERT(minute == -1);
-		wxASSERT(second == -1);
-		wxASSERT(millisecond == -1);
+		TIME_ASSERT(minute == -1);
+		TIME_ASSERT(second == -1);
+		TIME_ASSERT(millisecond == -1);
 		hour = minute = second = millisecond = 0;
 	}
 	else if( minute == -1 ) {
 		a_ = hours;
-		wxASSERT(second == -1);
-		wxASSERT(millisecond == -1);
+		TIME_ASSERT(second == -1);
+		TIME_ASSERT(millisecond == -1);
 		minute = second = millisecond = 0;
 	}
 	else if( second == -1 ) {
 		a_ = minutes;
-		wxASSERT(millisecond == -1);
+		TIME_ASSERT(millisecond == -1);
 		second = millisecond = 0;
 	}
 	else if( millisecond == -1 ) {
@@ -265,7 +267,7 @@ bool CDateTime::ImbueTime( int hour, int minute, int second, int millisecond )
 
 	if( second == -1 ) {
 		a_ = minutes;
-		wxASSERT(millisecond == -1);
+		TIME_ASSERT(millisecond == -1);
 		second = millisecond = 0;
 	}
 	else if( millisecond == -1 ) {
