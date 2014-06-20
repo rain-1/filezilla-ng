@@ -289,7 +289,6 @@
                   <object class="sizeritem">
                     <object class="wxFlexGridSizer">
                       <cols>2</cols>
-                      <rows>2</rows>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Lo&amp;west available port:</label>
@@ -427,7 +426,6 @@
               </object>
               <cols>1</cols>
               <vgap>3</vgap>
-              <rows>3</rows>
             </object>
             <flag>wxLEFT|wxRIGHT|wxBOTTOM</flag>
             <border>4</border>
@@ -1393,7 +1391,6 @@
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
               <cols>2</cols>
-              <rows>3</rows>
               <object class="sizeritem">
                 <object class="wxStaticText">
                   <label>&amp;Theme:</label>
