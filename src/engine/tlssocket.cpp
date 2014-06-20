@@ -728,8 +728,6 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 		m_writeSkip += res;
 		m_lastWriteFailed = false;
 		m_canTriggerWrite = true;
-
-		wxASSERT(GNUTLS_E_INVALID_REQUEST == gnutls_record_send(m_session, 0, 0));
 	}
 	if (m_lastReadFailed)
 	{

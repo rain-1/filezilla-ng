@@ -4,10 +4,10 @@
 
 CLoginManager CLoginManager::m_theLoginManager;
 
-bool CLoginManager::GetPassword(CServer &server, bool silent, wxString name /*=_T("")*/, wxString challenge /*=_T("")*/)
+bool CLoginManager::GetPassword(CServer &server, bool silent, wxString const& name, wxString const& challenge)
 {
 	wxASSERT(!silent || server.GetLogonType() == ASK || server.GetLogonType() == INTERACTIVE);
-	wxASSERT(challenge == _T("") || server.GetLogonType() == INTERACTIVE);
+	wxASSERT(challenge.empty() || server.GetLogonType() == INTERACTIVE);
 
 	if (server.GetLogonType() == ASK)
 	{
@@ -31,7 +31,7 @@ bool CLoginManager::GetPassword(CServer &server, bool silent, wxString name /*=_
 	return DisplayDialog(server, name, challenge);
 }
 
-bool CLoginManager::DisplayDialog(CServer &server, wxString name, wxString challenge)
+bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxString challenge)
 {
 	wxDialog pwdDlg;
 	wxXmlResource::Get()->LoadDialog(&pwdDlg, wxGetApp().GetTopWindow(), _T("ID_ENTERPASSWORD"));

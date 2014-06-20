@@ -1359,7 +1359,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 		!static_cast<CSftpFileTransferOpData *>(pData->pNextOpData)->download)
 	{
 		pData->tryMkdOnFail = true;
-		wxASSERT(subDir == _T(""));
+		wxASSERT(subDir.empty());
 	}
 
 	m_pCurOpData = pData;

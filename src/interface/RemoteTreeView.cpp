@@ -386,7 +386,7 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 		pieces.push_front(path.GetLastSegment());
 		path = path.GetParent();
 	}
-	wxASSERT(path.GetPath() != _T(""));
+	wxASSERT(!path.GetPath().empty());
 	pieces.push_front(path.GetPath());
 
 	const wxTreeItemId root = GetRootItem();
@@ -860,7 +860,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 	{
 		const wxString& file = ext->GetDragDirectory();
 
-		wxASSERT(file != _T(""));
+		wxASSERT(!file.empty());
 
 		wxFileDataObject *pFileDataObject = new wxFileDataObject;
 		pFileDataObject->AddFile(file);

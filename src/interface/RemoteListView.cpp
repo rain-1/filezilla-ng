@@ -727,10 +727,7 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 	else if (m_pDirectoryListing->path != pDirectoryListing->path)
 		reset = true;
 	else if (m_pDirectoryListing->m_firstListTime == pDirectoryListing->m_firstListTime && !IsComparing()
-#ifndef __WXDEBUG__
-		&& m_pDirectoryListing->GetCount() > 200
-#endif
-		)
+		&& m_pDirectoryListing->GetCount() > 200)
 	{
 		// Updated directory listing. Check if we can use process it in a different,
 		// more efficient way.
@@ -739,7 +736,7 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 		{
 			wxASSERT(GetItemCount() == (int)m_indexMapping.size());
 			wxASSERT(GetItemCount() <= (int)m_fileData.size());
-			wxASSERT(CFilterManager::HasActiveFilters() || GetItemCount() == (int)m_fileData.size());
+			wxASSERT(GetItemCount() == (int)m_fileData.size() || CFilterManager::HasActiveFilters());
 			wxASSERT(m_pDirectoryListing->GetCount() + 1 >= (unsigned int)GetItemCount());
 			wxASSERT(m_indexMapping[0] == m_pDirectoryListing->GetCount());
 
@@ -2232,7 +2229,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent& event)
 	{
 		const wxString& file = ext->GetDragDirectory();
 
-		wxASSERT(file != _T(""));
+		wxASSERT(!file.empty());
 
 		wxFileDataObject *pFileDataObject = new wxFileDataObject;
 		pFileDataObject->AddFile(file);

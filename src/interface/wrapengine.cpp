@@ -21,6 +21,13 @@
 bool CWrapEngine::m_use_cache = true;
 
 #define WRAPDEBUG 0
+
+#if WRAPDEBUG
+#define WRAPASSERT(x) wxASSERT(x)
+#else
+#define WRAPASSERT(x)
+#endif
+
 // Chinese equivalents to ".", "," and ":"
 static const wxChar noWrapChars_Chinese[] = { '.', ',', ':', 0x3002, 0xFF0C, 0xFF1A, 0};
 // Remark: Chinese (Taiwan) uses ascii punctuation marks though, but those
@@ -46,11 +53,11 @@ bool CWrapEngine::CanWrapBefore(const wxChar& c)
 
 bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned long maxLength)
 {
-	wxASSERT(text.Find(_T("  ")) == -1);
-	wxASSERT(text.Find(_T(" \n")) == -1);
-	wxASSERT(text.Find(_T("\n ")) == -1);
-	wxASSERT(text.Last() != ' ');
-	wxASSERT(text.Last() != '\n');
+	WRAPASSERT(text.Find(_T("  ")) == -1);
+	WRAPASSERT(text.Find(_T(" \n")) == -1);
+	WRAPASSERT(text.Find(_T("\n ")) == -1);
+	WRAPASSERT(text.Last() != ' ');
+	WRAPASSERT(text.Last() != '\n');
 
 	// See comment at start of WrapText function what this function does
 	wxString wrappedText;
@@ -95,7 +102,7 @@ bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned lon
 			else
 				lineLength += iter->second;
 
-			wxASSERT(*p != '\r');
+			WRAPASSERT(*p != '\r');
 			if (*p == '\n')
 			{
 				// Wrap on newline
@@ -384,8 +391,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 
 	int result = 0;
 
-	for (unsigned int i = 0; i < sizer->GetChildren().GetCount(); i++)
-	{
+	for (unsigned int i = 0; i < sizer->GetChildren().GetCount(); ++i) {
 		wxSizerItem* item = sizer->GetItem(i);
 		if (!item || !item->IsShown())
 			continue;
@@ -409,11 +415,9 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 
 		wxWindow* window;
 		wxSizer* subSizer = 0;
-		if ((window = item->GetWindow()))
-		{
+		if ((window = item->GetWindow())) {
 			wxStaticText* text = wxDynamicCast(window, wxStaticText);
-			if (text)
-			{
+			if (text) {
 #ifdef __WXMAC__
 				const int offset = 3;
 #else
