@@ -154,7 +154,7 @@ bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned lon
 		}
 	}
 
-#ifdef __WXDEBUG__
+#if WRAPDEBUG
 	wxString temp = wrappedText;
 	wxASSERT(temp.Find(_T("  ")) == -1);
 	wxASSERT(temp.Find(_T(" \n")) == -1);
@@ -211,14 +211,14 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 	if (!m_font.IsOk())
 		m_font = parent->GetFont();
 
-#ifdef __WXDEBUG__
+#if WRAPDEBUG
 	const wxString original = text;
 #endif
 
 	if (m_wrapOnEveryChar)
 	{
 		bool res = WrapTextChinese(parent, text, maxLength);
-#ifdef __WXDEBUG__
+#if WRAPDEBUG
 		wxString unwrapped = UnwrapText(text);
 		wxASSERT(original == unwrapped);
 #endif
@@ -337,7 +337,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 
 	text = wrappedText;
 
-#ifdef __WXDEBUG__
+#if WRAPDEBUG
 		wxString unwrapped = UnwrapText(text);
 		wxASSERT(original == unwrapped || containsURL);
 #else
@@ -586,14 +586,14 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 			pSizer->Layout();
 
-#ifdef __WXDEBUG__
+#if WRAPDEBUG
 			int res =
 #endif
 			WrapRecursive(*iter, pSizer, maxWidth - offset);
 			wxASSERT(!(res & wrap_failed));
 			pSizer->Layout();
 			pSizer->Fit(*iter);
-#ifdef __WXDEBUG__
+#if WRAPDEBUG
 			wxSize size = pSizer->GetMinSize();
 #endif
 			wxASSERT(size.x <= maxWidth);
