@@ -4281,7 +4281,6 @@
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
           </object>
           <cols>1</cols>
-          <rows>2</rows>
           <vgap>5</vgap>
           <hgap>5</hgap>
         </object>
