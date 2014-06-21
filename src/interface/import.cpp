@@ -12,7 +12,7 @@ CImportDialog::CImportDialog(wxWindow* parent, CQueueView* pQueueView)
 
 void CImportDialog::Show()
 {
-	wxFileDialog dlg(m_parent, _("Select file to import settings from"), _T(""),
+	wxFileDialog dlg(m_parent, _("Select file to import settings from"), wxString(),
 					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	dlg.CenterOnParent();
@@ -23,8 +23,7 @@ void CImportDialog::Show()
 	wxFileName fn(dlg.GetPath());
 	const wxString& path = fn.GetPath();
 	const wxString& settings(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
-	if (path == settings)
-	{
+	if (path == settings) {
 		wxMessageBoxEx(_("You cannot import settings from FileZilla's own settings directory."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}
@@ -32,8 +31,7 @@ void CImportDialog::Show()
 	TiXmlDocument* xmlDocument = new TiXmlDocument();
 	xmlDocument->SetCondenseWhiteSpace(false);
 
-	if (!LoadXmlDocument(xmlDocument, dlg.GetPath()))
-	{
+	if (!LoadXmlDocument(xmlDocument, dlg.GetPath())) {
 		delete xmlDocument;
 		wxMessageBoxEx(_("Cannot load file, not a valid XML file."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
@@ -42,14 +40,12 @@ void CImportDialog::Show()
 	TiXmlElement* fz3Root = xmlDocument->FirstChildElement("FileZilla3");
 	TiXmlElement* fz2Root = xmlDocument->FirstChildElement("FileZilla");
 
-	if (fz3Root)
-	{
+	if (fz3Root) {
 		bool settings = fz3Root->FirstChildElement("Settings") != 0;
 		bool queue = fz3Root->FirstChildElement("Queue") != 0;
 		bool sites = fz3Root->FirstChildElement("Servers") != 0;
 
-		if (settings || queue || sites)
-		{
+		if (settings || queue || sites) {
 			Load(m_parent, _T("ID_IMPORT"));
 			if (!queue)
 				XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->Hide();
@@ -57,26 +53,22 @@ void CImportDialog::Show()
 				XRCCTRL(*this, "ID_SITEMANAGER", wxCheckBox)->Hide();
 			if (!settings)
 				XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->Hide();
-			Fit();
+			GetSizer()->Fit(this);
 
-			if (ShowModal() != wxID_OK)
-			{
+			if (ShowModal() != wxID_OK) {
 				delete xmlDocument;
 				return;
 			}
 
-			if (queue && XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->IsChecked())
-			{
+			if (queue && XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->IsChecked()) {
 				m_pQueueView->ImportQueue(fz3Root->FirstChildElement("Queue"), true);
 			}
 
-			if (sites && XRCCTRL(*this, "ID_SITEMANAGER", wxCheckBox)->IsChecked())
-			{
+			if (sites && XRCCTRL(*this, "ID_SITEMANAGER", wxCheckBox)->IsChecked()) {
 				ImportSites(fz3Root->FirstChildElement("Servers"));
 			}
 
-			if (settings && XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->IsChecked())
-			{
+			if (settings && XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->IsChecked()) {
 				COptions::Get()->Import(fz3Root->FirstChildElement("Settings"));
 				wxMessageBoxEx(_("The settings have been imported. You have to restart FileZilla for all settings to have effect."), _("Import successful"), wxOK, this);
 			}
@@ -87,11 +79,9 @@ void CImportDialog::Show()
 			return;
 		}
 	}
-	else if (fz2Root)
-	{
+	else if (fz2Root) {
 		bool sites_fz2 = fz2Root->FirstChildElement("Sites") != 0;
-		if (sites_fz2)
-		{
+		if (sites_fz2) {
 			int res = wxMessageBoxEx(_("The file you have selected contains site manager data from a previous version of FileZilla.\nDue to differences in the storage format, only host, port, username and password will be imported.\nContinue with the import?"),
 				_("Import data from older version"), wxICON_QUESTION | wxYES_NO);
 
@@ -114,9 +104,8 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
 
 	CXmlFile file(_T("sitemanager"));
 	TiXmlElement* pDocument = file.Load();
-	if (!pDocument)
-	{
-		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath().c_str());
+	if (!pDocument) {
+		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath());
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
@@ -147,7 +136,7 @@ wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 		if (pass[i] < '0' || pass[i] > '9' ||
 			pass[i + 1] < '0' || pass[i + 1] > '9' ||
 			pass[i + 2] < '0' || pass[i + 2] > '9')
-			return _T("");
+			return wxString();
 		int number = (pass[i] - '0') * 100 +
 						(pass[i + 1] - '0') * 10 +
 						(pass[i + 2] - '0');
@@ -160,31 +149,28 @@ wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 
 bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement* pExistingSites)
 {
-	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder"))
-	{
+	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder")) {
 		wxString name = GetTextAttribute(pImportFolder, "Name");
-		if (name == _T(""))
+		if (name.empty())
 			continue;
 
 		wxString newName = name;
 		int i = 2;
 		TiXmlElement* pFolder;
-		while (!(pFolder = GetFolderWithName(pExistingSites, newName)))
-		{
-			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
+		while (!(pFolder = GetFolderWithName(pExistingSites, newName))) {
+			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
 		ImportLegacySites(pImportFolder, pFolder);
 	}
 
-	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Site"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Site"))
-	{
+	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Site"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Site")) {
 		wxString name = GetTextAttribute(pImportSite, "Name");
-		if (name == _T(""))
+		if (name.empty())
 			continue;
 
 		wxString host = GetTextAttribute(pImportSite, "Host");
-		if (host == _T(""))
+		if (host.empty())
 			continue;
 
 		int port = GetAttributeInt(pImportSite, "Port");
@@ -227,15 +213,14 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement
 		wxString user = GetTextAttribute(pImportSite, "User");
 		wxString pass = DecodeLegacyPassword(GetTextAttribute(pImportSite, "Pass"));
 		wxString account = GetTextAttribute(pImportSite, "Account");
-		if (logontype && user == _T(""))
+		if (logontype && user.empty())
 			continue;
 
 		// Find free name
 		wxString newName = name;
 		int i = 2;
-		while (HasEntryWithName(pExistingSites, newName))
-		{
-			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
+		while (HasEntryWithName(pExistingSites, newName)) {
+			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
 		TiXmlElement* pServer = pExistingSites->LinkEndChild(new TiXmlElement("Server"))->ToElement();
@@ -256,16 +241,14 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement
 bool CImportDialog::HasEntryWithName(TiXmlElement* pElement, const wxString& name)
 {
 	TiXmlElement* pChild;
-	for (pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server"))
-	{
+	for (pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server")) {
 		wxString childName = GetTextElement(pChild);
 		childName.Trim(true);
 		childName.Trim(false);
 		if (!name.CmpNoCase(childName))
 			return true;
 	}
-	for (pChild = pElement->FirstChildElement("Folder"); pChild; pChild = pChild->NextSiblingElement("Folder"))
-	{
+	for (pChild = pElement->FirstChildElement("Folder"); pChild; pChild = pChild->NextSiblingElement("Folder")) {
 		wxString childName = GetTextElement(pChild);
 		childName.Trim(true);
 		childName.Trim(false);
@@ -279,8 +262,7 @@ bool CImportDialog::HasEntryWithName(TiXmlElement* pElement, const wxString& nam
 TiXmlElement* CImportDialog::GetFolderWithName(TiXmlElement* pElement, const wxString& name)
 {
 	TiXmlElement* pChild;
-	for (pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server"))
-	{
+	for (pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server")) {
 		wxString childName = GetTextElement(pChild);
 		childName.Trim(true);
 		childName.Trim(false);
@@ -288,8 +270,7 @@ TiXmlElement* CImportDialog::GetFolderWithName(TiXmlElement* pElement, const wxS
 			return 0;
 	}
 
-	for (pChild = pElement->FirstChildElement("Folder"); pChild; pChild = pChild->NextSiblingElement("Folder"))
-	{
+	for (pChild = pElement->FirstChildElement("Folder"); pChild; pChild = pChild->NextSiblingElement("Folder")) {
 		wxString childName = GetTextElement(pChild);
 		childName.Trim(true);
 		childName.Trim(false);
@@ -309,9 +290,8 @@ bool CImportDialog::ImportSites(TiXmlElement* pSites)
 
 	CXmlFile file(_T("sitemanager"));
 	TiXmlElement* pDocument = file.Load();
-	if (!pDocument)
-	{
-		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath().c_str());
+	if (!pDocument) {
+		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath());
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
@@ -329,12 +309,11 @@ bool CImportDialog::ImportSites(TiXmlElement* pSites)
 
 bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExistingSites)
 {
-	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder"))
-	{
+	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder")) {
 		wxString name = GetTextElement_Trimmed(pImportFolder, "Name");
-		if (name == _T(""))
+		if (name.empty())
 			name = GetTextElement_Trimmed(pImportFolder);
-		if (name == _T(""))
+		if (name.empty())
 			continue;
 
 		wxString newName = name;
@@ -342,26 +321,24 @@ bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExi
 		TiXmlElement* pFolder;
 		while (!(pFolder = GetFolderWithName(pExistingSites, newName)))
 		{
-			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
+			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
 		ImportSites(pImportFolder, pFolder);
 	}
 
-	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Server"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Server"))
-	{
+	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Server"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Server")) {
 		wxString name = GetTextElement_Trimmed(pImportSite, "Name");
-		if (name == _T(""))
+		if (name.empty())
 			name = GetTextElement_Trimmed(pImportSite);
-		if (name == _T(""))
+		if (name.empty())
 			continue;
 
 		// Find free name
 		wxString newName = name;
 		int i = 2;
-		while (HasEntryWithName(pExistingSites, newName))
-		{
-			newName = wxString::Format(_T("%s %d"), name.c_str(), i++);
+		while (HasEntryWithName(pExistingSites, newName)) {
+			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
 		TiXmlElement* pServer = pExistingSites->InsertEndChild(*pImportSite)->ToElement();
