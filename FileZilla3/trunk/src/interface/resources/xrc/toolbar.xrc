@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <resource version="2.3.0.1" xmlns="http://www.wxwindows.org/wxxrc">
   <object class="wxToolBar" name="ID_TOOLBAR" subclass="CToolBar">
-    <style>wxTB_FLAT|wxTB_HORIZONTAL</style>
+    <style>wxTB_FLAT|wxTB_HORIZONTAL|wxTB_NODIVIDER</style>
     <bitmapsize>16,16</bitmapsize>
     <object class="tool" name="ID_TOOLBAR_SITEMANAGER">
       <bitmap stock_id="ART_SITEMANAGER"></bitmap>
