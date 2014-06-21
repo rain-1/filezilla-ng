@@ -1114,24 +1114,20 @@
         <border>21</border>
       </object>
       <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
               <label>OK</label>
               <default>1</default>
             </object>
-            <flag>wxRIGHT|wxGROW</flag>
-            <border>5</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
               <label>Cancel</label>
             </object>
-            <flag>wxGROW</flag>
           </object>
         </object>
-        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <flag>wxALL|wxGROW</flag>
         <border>5</border>
       </object>
     </object>
@@ -1733,8 +1729,8 @@
               </object>
               <object class="sizeritem">
                 <object class="wxGridSizer">
-                  <cols>3</cols>
-                  <hgap>5</hgap>
+                  <rows>1</rows>
+                  <hgap>6</hgap>
                   <object class="sizeritem">
                     <object class="wxButton" name="wxID_OK">
                       <label>OK</label>
@@ -1916,24 +1912,20 @@
         <border>5</border>
       </object>
       <object class="sizeritem">
-        <object class="wxGridSizer">
-          <cols>2</cols>
-          <hgap>5</hgap>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
               <label>OK</label>
               <default>1</default>
             </object>
-            <flag>wxGROW</flag>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
               <label>Cancel</label>
             </object>
-            <flag>wxGROW</flag>
           </object>
         </object>
-        <flag>wxALL|wxALIGN_CENTRE</flag>
+        <flag>wxALL|wxGROW</flag>
         <border>5</border>
       </object>
     </object>
@@ -2098,24 +2090,20 @@
             <flag>wxGROW</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxGridSizer">
-              <object class="sizeritem">
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
                 <object class="wxButton" name="wxID_OK">
                   <label>OK</label>
                   <default>1</default>
                 </object>
-                <flag>wxGROW</flag>
               </object>
-              <object class="sizeritem">
+              <object class="button">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>Cancel</label>
                 </object>
-                <flag>wxGROW</flag>
               </object>
-              <cols>2</cols>
-              <hgap>5</hgap>
             </object>
-            <flag>wxALIGN_RIGHT</flag>
+            <flag>wxGROW</flag>
           </object>
           <cols>1</cols>
           <vgap>5</vgap>
@@ -3060,25 +3048,20 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <orient>wxHORIZONTAL</orient>
-              <object class="sizeritem">
-                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxGROW</flag>
-                <border>5</border>
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
                 <object class="wxButton" name="wxID_OK">
                   <label>OK</label>
                   <default>1</default>
                 </object>
               </object>
-              <object class="sizeritem">
-                <flag>wxALIGN_CENTER_VERTICAL|wxALL|wxGROW</flag>
-                <border>5</border>
+              <object class="button">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>Cancel</label>
                 </object>
               </object>
             </object>
-            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+            <flag>wxGROW</flag>
           </object>
           <growablecols>0</growablecols>
         </object>
@@ -3537,7 +3520,7 @@
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <cols>3</cols>
-          <vgap>5</vgap>
+          <vgap>7</vgap>
           <hgap>5</hgap>
           <growablecols>1</growablecols>
         </object>
@@ -3934,7 +3917,7 @@
               <label>OK</label>
               <default>1</default>
             </object>
-            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+            <flag>wxALIGN_RIGHT</flag>
           </object>
           <cols>1</cols>
           <vgap>5</vgap>
@@ -3996,22 +3979,19 @@
         </object>
       </object>
       <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
               <default>1</default>
             </object>
-            <flag>wxRIGHT</flag>
-            <border>5</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
               <label>Cancel</label>
             </object>
           </object>
-          <orient>wxHORIZONTAL</orient>
         </object>
-        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <flag>wxALL|wxGROW</flag>
         <border>5</border>
       </object>
     </object>
@@ -4100,22 +4080,20 @@
             <flag>wxGROW</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <object class="sizeritem">
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
                 <object class="wxButton" name="wxID_OK">
                   <label>OK</label>
                   <default>1</default>
                 </object>
               </object>
-              <object class="sizeritem">
+              <object class="button">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>&amp;Cancel</label>
                 </object>
               </object>
-              <cols>2</cols>
-              <hgap>5</hgap>
             </object>
-            <flag>wxALIGN_RIGHT</flag>
+            <flag>wxGROW</flag>
           </object>
         </object>
         <flag>wxALL</flag>
