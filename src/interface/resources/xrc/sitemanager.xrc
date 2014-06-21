@@ -159,7 +159,6 @@
                               <cellpos>3,0</cellpos>
                               <cellspan>0,2</cellspan>
                             </object>
-                            
                             <object class="sizeritem">
                               <object class="wxStaticText">
                                 <label>&amp;Logon Type:</label>
