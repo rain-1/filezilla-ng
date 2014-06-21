@@ -140,7 +140,7 @@ void BenchmarkStringCoalescer()
 	wxDateTime start = wxDateTime::UNow();
 	for (int i = 0; i < 100; ++i)
 	{
-		for( std::deque<wxString>::iterator it = s.begin(); it != s.end(); ++it)
+		for( auto it = s.begin(); it != s.end(); ++it)
 			Coalesce( *it );
 	}
 	wxDateTime stop = wxDateTime::UNow();

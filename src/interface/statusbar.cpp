@@ -239,7 +239,7 @@ void CWidgetsStatusBar::PositionChildren(int field)
 	}
 #endif
 
-	for (std::map<int, struct t_statbar_child>::iterator iter = m_children.begin(); iter != m_children.end(); ++iter)
+	for (auto iter = m_children.begin(); iter != m_children.end(); ++iter)
 	{
 		if (iter->second.field != field)
 			continue;

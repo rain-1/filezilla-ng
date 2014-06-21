@@ -232,9 +232,9 @@ public:
 
 	virtual ~CFolderProcessingThread()
 	{
-		for (std::list<CFolderProcessingEntry*>::iterator iter = m_entryList.begin(); iter != m_entryList.end(); ++iter)
+		for (auto iter = m_entryList.begin(); iter != m_entryList.end(); ++iter)
 			delete *iter;
-		for (std::list<t_internalDirPair*>::iterator iter = m_dirsToCheck.begin(); iter != m_dirsToCheck.end(); ++iter)
+		for (auto iter = m_dirsToCheck.begin(); iter != m_dirsToCheck.end(); ++iter)
 			delete *iter;
 	}
 
@@ -850,7 +850,7 @@ bool CQueueView::TryStartNextTransfer()
 
 	// Find inactive file. Check all servers for
 	// the file with the highest priority
-	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
 		t_EngineData* pEngineData = 0;
 		CServerItem* currentServerItem = *iter;
@@ -1209,7 +1209,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 		if (data.pItem->GetType() == QueueItemType_File)
 		{
 			wxASSERT(data.pStatusLineCtrl);
-			for (std::list<CStatusLineCtrl*>::iterator iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
+			for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
 			{
 				if (*iter == data.pStatusLineCtrl)
 				{
@@ -1562,7 +1562,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 	if (!active)
 	{
 		m_activeMode = 0;
-		for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+		for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 			(*iter)->QueueImmediateFiles();
 
 		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
@@ -1647,7 +1647,7 @@ bool CQueueView::Quit()
 		if (!m_queuedFolders[i].empty())
 		{
 			canQuit = false;
-			for (std::list<CFolderScanItem*>::iterator iter = m_queuedFolders[i].begin(); iter != m_queuedFolders[i].end(); ++iter)
+			for (auto iter = m_queuedFolders[i].begin(); iter != m_queuedFolders[i].end(); ++iter)
 				(*iter)->m_remove = true;
 		}
 	}
@@ -1739,7 +1739,7 @@ void CQueueView::UpdateStatusLinePositions()
 	m_lastTopItem = GetTopItem();
 	int bottomItem = m_lastTopItem + GetCountPerPage();
 
-	for (std::list<CStatusLineCtrl*>::iterator iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
+	for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
 	{
 		CStatusLineCtrl *pCtrl = *iter;
 		int index = GetItemIndex(pCtrl->GetItem()) + 1;
@@ -2308,7 +2308,7 @@ void CQueueView::RemoveAll()
 
 	std::vector<CServerItem*> newServerList;
 	m_itemCount = 0;
-	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
 		if ((*iter)->TryRemoveAll())
 			delete *iter;
@@ -2322,8 +2322,8 @@ void CQueueView::RemoveAll()
 	// Clear list of queued directories that aren't busy
 	for (unsigned int i = 0; i < 2; i++)
 	{
-		std::list<CFolderScanItem*>::iterator begin = m_queuedFolders[i].begin();
-		std::list<CFolderScanItem*>::iterator end = m_queuedFolders[i].end();
+		auto begin = m_queuedFolders[i].begin();
+		auto end = m_queuedFolders[i].end();
 		if (begin != end && (*begin)->m_active)
 			++begin;
 		m_queuedFolders[i].erase(begin, end);
@@ -2345,7 +2345,7 @@ void CQueueView::RemoveQueuedFolderItem(CFolderScanItem* pFolder)
 {
 	for (unsigned int i = 0; i < 2; i++)
 	{
-		for (std::list<CFolderScanItem*>::iterator iter = m_queuedFolders[i].begin(); iter != m_queuedFolders[i].end(); ++iter)
+		for (auto iter = m_queuedFolders[i].begin(); iter != m_queuedFolders[i].end(); ++iter)
 		{
 			if (*iter != pFolder)
 				continue;
@@ -2530,7 +2530,7 @@ void CQueueView::OnFolderThreadFiles(wxCommandEvent&)
 
 void CQueueView::SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction)
 {
-	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 		(*iter)->SetDefaultFileExistsAction(action, direction);
 }
 
@@ -3299,7 +3299,7 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 
 	t_EngineData* pEngineData = *ppEngineData;
 
-	std::vector<t_EngineData*>::iterator iter = m_engineData.begin();
+	auto iter = m_engineData.begin();
 	for (; iter != m_engineData.end(); ++iter)
 	{
 		t_EngineData* pNewEngineData = *iter;
@@ -3353,7 +3353,7 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 
 bool CQueueView::IsOtherEngineConnected(t_EngineData* pEngineData)
 {
-	for (std::vector<t_EngineData*>::iterator iter = m_engineData.begin(); iter != m_engineData.end(); ++iter)
+	for (auto iter = m_engineData.begin(); iter != m_engineData.end(); ++iter)
 	{
 		t_EngineData* current = *iter;
 
@@ -3501,7 +3501,7 @@ wxFileOffset CQueueView::GetCurrentSpeed(bool countDownload, bool countUpload)
 {
 	wxFileOffset totalSpeed = 0;
 
-	for (std::list<CStatusLineCtrl*>::iterator iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
+	for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
 	{
 		CStatusLineCtrl *pCtrl = *iter;
 		const CFileItem *pItem = pCtrl->GetItem();

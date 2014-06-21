@@ -129,7 +129,7 @@ void CLoginManager::CachedPasswordFailed(const CServer& server)
 	if (server.GetLogonType() != ASK)
 		return;
 
-	for (std::list<t_passwordcache>::iterator iter = m_passwordCache.begin(); iter != m_passwordCache.end(); ++iter)
+	for (auto iter = m_passwordCache.begin(); iter != m_passwordCache.end(); ++iter)
 	{
 		if (iter->host != server.GetHost())
 			continue;

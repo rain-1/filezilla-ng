@@ -64,7 +64,7 @@ public:
 	virtual ~CSftpInputThread()
 	{
 		m_criticalSection.Enter();
-		for (std::list<sftp_message*>::iterator iter = m_sftpMessages.begin(); iter != m_sftpMessages.end(); ++iter)
+		for (auto iter = m_sftpMessages.begin(); iter != m_sftpMessages.end(); ++iter)
 			delete *iter;
 		m_criticalSection.Leave();
 	}
@@ -604,7 +604,7 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 
 	std::list<sftp_message*> messages;
 	m_pInputThread->GetMessages(messages);
-	for (std::list<sftp_message*>::iterator iter = messages.begin(); iter != messages.end(); ++iter)
+	for (auto iter = messages.begin(); iter != messages.end(); ++iter)
 	{
 		if (!m_pInputThread)
 		{

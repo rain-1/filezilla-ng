@@ -225,7 +225,7 @@ public:
 		int pos;
 		if ((pos = caption.Find(_T(" ("))) != -1)
 			text = text.Left(pos);
-		std::map<wxString, int>::iterator iter = m_data->maxSizes.find(text);
+		auto iter = m_data->maxSizes.find(text);
 		if (iter == m_data->maxSizes.end())
 			m_data->maxSizes[text] = size.x;
 		else

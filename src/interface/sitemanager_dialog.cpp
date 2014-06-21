@@ -2036,7 +2036,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 		pTree->Delete(source);
 	}
 
-	for (std::list<wxTreeItemId>::iterator iter = expand.begin(); iter != expand.end(); ++iter)
+	for (auto iter = expand.begin(); iter != expand.end(); ++iter)
 		pTree->Expand(*iter);
 
 	pTree->Expand(target);

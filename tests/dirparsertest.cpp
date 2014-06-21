@@ -1408,7 +1408,7 @@ void CDirectoryListingParserTest::InitEntries()
 */
 
 	// Fix line endings
-	for (std::vector<t_entry>::iterator iter = m_entries.begin(); iter != m_entries.end(); iter++)
+	for (auto iter = m_entries.begin(); iter != m_entries.end(); iter++)
 		iter->data += "\r\n";
 }
 

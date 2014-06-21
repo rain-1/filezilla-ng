@@ -205,13 +205,13 @@ int CSystemImageList::GetIconIndex(enum filetype type, const wxString& fileName 
 
 	if (symlink)
 	{
-		std::map<wxString, int>::iterator cacheIter = m_iconCache.find(ext);
+		auto cacheIter = m_iconCache.find(ext);
 		if (cacheIter != m_iconCache.end())
 			return cacheIter->second;
 	}
 	else
 	{
-		std::map<wxString, int>::iterator cacheIter = m_iconSymlinkCache.find(ext);
+		auto cacheIter = m_iconSymlinkCache.find(ext);
 		if (cacheIter != m_iconSymlinkCache.end())
 			return cacheIter->second;
 	}

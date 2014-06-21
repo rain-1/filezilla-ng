@@ -26,7 +26,7 @@ CDBusHandler* CDBusHandler::AddRef(CDBusHandlerInterface* interface)
 void CDBusHandler::Unref(CDBusHandlerInterface* interface)
 {
 	if( s_refCount > 0 ) {
-		for( std::vector<CDBusHandlerInterface*>::iterator it = s_handler->m_interfaces.begin(); it != s_handler->m_interfaces.end(); ++it ) {
+		for( auto it = s_handler->m_interfaces.begin(); it != s_handler->m_interfaces.end(); ++it ) {
 			if( *it == interface ) {
 				s_handler->m_interfaces.erase(it);
 				break;
@@ -92,7 +92,7 @@ void CDBusHandler::OnSignal(wxDBusConnectionEvent& event)
 	if (m_debug)
 		printf("wxD-Bus: Signal from %s, member %s\n", msg->GetPath(), msg->GetMember());
 
-	for( std::vector<CDBusHandlerInterface*>::iterator it = s_handler->m_interfaces.begin(); it != s_handler->m_interfaces.end(); ++it ) {
+	for( auto it = s_handler->m_interfaces.begin(); it != s_handler->m_interfaces.end(); ++it ) {
 		if( (*it)->HandleSignal(*msg) ) {
 			break;
 		}
@@ -111,7 +111,7 @@ void CDBusHandler::OnAsyncReply(wxDBusConnectionEvent& event)
 	if (m_debug)
 		printf("wxD-Bus: Reply with serial %u\n", msg->GetReplySerial());
 
-	for( std::vector<CDBusHandlerInterface*>::iterator it = s_handler->m_interfaces.begin(); it != s_handler->m_interfaces.end(); ++it ) {
+	for( auto it = s_handler->m_interfaces.begin(); it != s_handler->m_interfaces.end(); ++it ) {
 		if( (*it)->HandleReply(*msg) ) {
 			break;
 		}

@@ -609,7 +609,7 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		// Some servers send a combination of month name and number,
 		// Add corresponding numbers to the month names.
 		std::map<wxString, int> combo;
-		for (std::map<wxString, int>::iterator iter = m_MonthNamesMap.begin(); iter != m_MonthNamesMap.end(); ++iter)
+		for (auto iter = m_MonthNamesMap.begin(); iter != m_MonthNamesMap.end(); ++iter)
 		{
 			// January could be 1 or 0, depends how the server counts
 			combo[wxString::Format(_T("%s%02d"), iter->first.c_str(), iter->second)] = iter->second;
@@ -653,7 +653,7 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 
 CDirectoryListingParser::~CDirectoryListingParser()
 {
-	for (std::list<t_list>::iterator iter = m_DataList.begin(); iter != m_DataList.end(); ++iter)
+	for (auto iter = m_DataList.begin(); iter != m_DataList.end(); ++iter)
 		delete [] iter->p;
 
 	delete m_prevLine;
@@ -2004,7 +2004,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 	while (!m_DataList.empty())
 	{
 		// Trim empty lines and spaces
-		std::list<t_list>::iterator iter = m_DataList.begin();
+		auto iter = m_DataList.begin();
 		int len = iter->len;
 		while (iter->p[m_currentOffset]=='\r' || iter->p[m_currentOffset]=='\n' || iter->p[m_currentOffset]==' ' || iter->p[m_currentOffset]=='\t')
 		{
@@ -2076,7 +2076,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		int respos = 0;
 
 		// Copy line data
-		std::list<t_list>::iterator i = m_DataList.begin();
+		auto i = m_DataList.begin();
 		while (i != iter && reslen)
 		{
 			int copylen = i->len - startpos;
@@ -2779,7 +2779,7 @@ bool CDirectoryListingParser::ParseAsOS9(CLine *pLine, CDirentry &entry)
 
 void CDirectoryListingParser::Reset()
 {
-	for (std::list<t_list>::iterator iter = m_DataList.begin(); iter != m_DataList.end(); ++iter)
+	for (auto iter = m_DataList.begin(); iter != m_DataList.end(); ++iter)
 		delete [] iter->p;
 	m_DataList.clear();
 
@@ -2940,7 +2940,7 @@ bool CDirectoryListingParser::ParseAsHPNonstop(CLine *pLine, CDirentry &entry)
 
 bool CDirectoryListingParser::GetMonthFromName(const wxString& name, int &month)
 {
-	std::map<wxString, int>::iterator iter = m_MonthNamesMap.find(name.Lower());
+	auto iter = m_MonthNamesMap.find(name.Lower());
 	if (iter == m_MonthNamesMap.end())
 	{
 		wxString lower(name);
@@ -3039,7 +3039,7 @@ void CDirectoryListingParser::DeduceEncoding()
 	{
 		m_pControlSocket->LogMessage(::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
 		m_listingEncoding = listingEncoding::ebcdic;
-		for (std::list<t_list>::iterator it = m_DataList.begin(); it != m_DataList.end(); ++it)
+		for (auto it = m_DataList.begin(); it != m_DataList.end(); ++it)
 			ConvertEncoding(it->p, it->len);
 	}
 	else

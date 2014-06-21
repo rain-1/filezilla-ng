@@ -21,7 +21,7 @@ CDirectoryCache::~CDirectoryCache()
 	if (m_nRefCount)
 		return;
 
-	for (std::list<CServerEntry>::iterator sit = m_serverList.begin(); sit != m_serverList.end(); ++sit)
+	for (auto sit = m_serverList.begin(); sit != m_serverList.end(); ++sit)
 	{
 		for (tCacheIter cit = sit->cacheList.begin(); cit != sit->cacheList.end(); ++cit)
 		{
@@ -339,7 +339,7 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 
 void CDirectoryCache::InvalidateServer(const CServer& server)
 {
-	for (std::list<CServerEntry>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
 		if (iter->server != server)
 			continue;

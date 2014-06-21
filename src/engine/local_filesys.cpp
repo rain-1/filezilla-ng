@@ -94,7 +94,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	wxChar* pBuffer = new wxChar[len];
 	wxChar* p = pBuffer;
 
-	for (std::list<wxString>::iterator iter = dirsToVisit.begin(); iter != dirsToVisit.end(); ++iter)
+	for (auto iter = dirsToVisit.begin(); iter != dirsToVisit.end(); ++iter)
 	{
 		wxString& path = *iter;
 		if (path.Last() == wxFileName::GetPathSeparator())
@@ -136,7 +136,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 			return true;
 	}
 
-	for (std::list<wxString>::iterator iter = dirsToVisit.begin(); iter != dirsToVisit.end(); ++iter)
+	for (auto iter = dirsToVisit.begin(); iter != dirsToVisit.end(); ++iter)
 	{
 		wxString& path = *iter;
 		if (path.Last() == '/' && path != _T("/"))

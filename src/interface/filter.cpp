@@ -887,7 +887,7 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 
 bool CFilterManager::CompileRegexes(CFilter& filter)
 {
-	for (std::vector<CFilterCondition>::iterator iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
+	for (auto iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
 	{
 		CFilterCondition& condition = *iter;
 		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4) {
