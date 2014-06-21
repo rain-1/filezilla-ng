@@ -14,6 +14,7 @@ dist_resources_DATA = \
 
 xrcdir = $(pkgdatadir)/resources/xrc
 dist_xrc_DATA = \
+	xrc/certificate.xrc \
 	xrc/dialogs.xrc \
 	xrc/inputdialog.xrc \
 	xrc/menus.xrc \
