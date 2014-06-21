@@ -101,13 +101,28 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 			}
 		}
 #endif
+		wxBitmap bitmap = GetBitmap(wxT("bitmap"), wxART_TOOLBAR, m_iconSize);
+		wxBitmap bitmap2 = GetBitmap(wxT("bitmap2"), wxART_TOOLBAR, m_iconSize);
+#ifdef __WXMAC__
+		if( bitmap.IsOk() ) {
+			if( bitmap.GetSize().x < 24 ) {
+				bitmap = wxBitmap(bitmap.ConvertToImage().Size(wxSize(24, 24), wxPoint(4, 4)));
+			}
+		}
+
+		if( bitmap2.IsOk() ) {
+			if( bitmap2.GetSize().x < 24 ) {
+				bitmap2 = wxBitmap(bitmap2.ConvertToImage().Size(wxSize(24, 24), wxPoint(4, 4)));
+			}
+		}
+#endif
 		wxToolBarToolBase * const tool =
 			m_toolbar->AddTool
 			(
 			GetID(),
 			GetText(wxT("label")),
-			GetBitmap(wxT("bitmap"), wxART_TOOLBAR, m_iconSize),
-			GetBitmap(wxT("bitmap2"), wxART_TOOLBAR, m_iconSize),
+			bitmap,
+			bitmap2,
 			kind,
 			GetText(wxT("tooltip")),
 			GetText(wxT("longhelp"))
