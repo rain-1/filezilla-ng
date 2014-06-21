@@ -65,7 +65,7 @@ class CMonotonicTime
 {
 public:
 	CMonotonicTime(const CDateTime& time);
-	CMonotonicTime();
+	CMonotonicTime() = default;
 
 	static CMonotonicTime Now();
 
@@ -84,7 +84,7 @@ protected:
 	static int m_lastOffset;
 
 	CDateTime m_time;
-	int m_offset;
+	int m_offset{};
 };
 
 #endif //__TIMEEX_H__

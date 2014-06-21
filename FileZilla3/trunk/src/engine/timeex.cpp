@@ -304,15 +304,9 @@ bool CDateTime::ImbueTime( int hour, int minute, int second, int millisecond )
 CDateTime CMonotonicTime::m_lastTime = CDateTime::Now();
 int CMonotonicTime::m_lastOffset = 0;
 
-CMonotonicTime::CMonotonicTime()
-{
-	m_offset = 0;
-}
-
 CMonotonicTime::CMonotonicTime(const CDateTime& time)
+	: m_time(time)
 {
-	m_time = time;
-	m_offset = 0;
 }
 
 CMonotonicTime CMonotonicTime::Now()
