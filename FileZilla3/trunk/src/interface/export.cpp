@@ -21,8 +21,7 @@ void CExportDialog::Show()
 	bool settings = XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->GetValue();
 	bool queue = XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->GetValue();
 
-	if (!sitemanager && !settings && !queue)
-	{
+	if (!sitemanager && !settings && !queue) {
 		wxMessageBoxEx(_("No category to export selected"), _("Error exporting settings"), wxICON_ERROR, m_parent);
 		return;
 	}
@@ -37,7 +36,7 @@ void CExportDialog::Show()
 	else
 		str = _("Select file for exported data");
 
-	wxFileDialog dlg(m_parent, str, _T(""),
+	wxFileDialog dlg(m_parent, str, wxString(),
 					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
@@ -49,34 +48,29 @@ void CExportDialog::Show()
 
 	TiXmlElement* exportRoot = xml.CreateEmpty();
 
-	if (sitemanager)
-	{
+	if (sitemanager) {
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 		CXmlFile file(_T("sitemanager"));
 		TiXmlElement* pDocument = file.Load();
-		if (pDocument)
-		{
+		if (pDocument) {
 			TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
 			if (pElement)
 				exportRoot->InsertEndChild(*pElement);
 		}
 	}
-	if (settings)
-	{
+	if (settings) {
 		CInterProcessMutex mutex(MUTEX_OPTIONS);
 		CXmlFile file(_T("filezilla"));
 		TiXmlElement* pDocument = file.Load();
-		if (pDocument)
-		{
+		if (pDocument) {
 			TiXmlElement* pElement = pDocument->FirstChildElement("Settings");
 			if (pElement)
 				exportRoot->InsertEndChild(*pElement);
 		}
 	}
 
-	if (queue)
-	{
+	if (queue) {
 		m_pQueueView->WriteToFile(exportRoot);
 	}
 
