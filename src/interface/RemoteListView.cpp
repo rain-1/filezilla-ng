@@ -2509,26 +2509,19 @@ void CRemoteListView::ValidateIndexMapping()
 	memset(buffer, 0, m_pDirectoryListing->GetCount() + 1);
 
 	// Injectivity
-	for (unsigned int i = 0; i < m_indexMapping.size(); i++)
-	{
-		unsigned int item = m_indexMapping[i];
-		if (item > m_pDirectoryListing->GetCount())
-		{
-			int *x = 0;
-			*x = 0;
+	for (auto const& item : m_indexMapping) {
+		if (item > m_pDirectoryListing->GetCount()) {
+			abort();
 		}
-		if (buffer[item])
-		{
-			int *x = 0;
-			*x = 0;
+		else if (buffer[item]) {
+			abort();
 		}
 
 		buffer[item] = 1;
 	}
 
 	// Surjectivity
-	for (unsigned int i = 0; i < m_pDirectoryListing->GetCount() + 1; i++)
-	{
+	for (unsigned int i = 0; i < m_pDirectoryListing->GetCount() + 1; i++) {
 		wxASSERT(buffer[i] != 0);
 	}
 
@@ -2538,8 +2531,7 @@ void CRemoteListView::ValidateIndexMapping()
 
 bool CRemoteListView::CanStartComparison(wxString* pError)
 {
-	if (!m_pDirectoryListing)
-	{
+	if (!m_pDirectoryListing) {
 		if (pError)
 			*pError = _("Cannot compare directories, not connected to a server.");
 		return false;

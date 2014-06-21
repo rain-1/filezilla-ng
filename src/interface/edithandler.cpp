@@ -762,8 +762,8 @@ bool CEditHandler::UploadFile(const wxString& file, bool unedit)
 
 bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterator iter, bool unedit)
 {
-	wxASSERT(type != none);
-
+	wxCHECK(type != none, false);
+		
 	if (iter == m_fileDataList[type].end())
 		return false;
 
