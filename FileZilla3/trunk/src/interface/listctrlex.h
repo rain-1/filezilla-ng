@@ -50,7 +50,7 @@ public:
 	void SetLabelEditBlock(bool block);
 
 #ifndef __WXMSW__
-    wxWindow* GetMainWindow() const;
+	wxWindow* GetMainWindow() const;
 #endif
 
 	bool HasSelection() const;

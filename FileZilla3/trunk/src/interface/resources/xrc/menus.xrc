@@ -266,7 +266,7 @@
     <object class="wxMenuItem" name="ID_MKDIR_CHGDIR">
       <label>Create director&amp;y and enter it</label>
       <help>Create a new subdirectory in the current directory and change into it</help>
-    </object> 
+    </object>
     <object class="wxMenuItem" name="ID_CONTEXT_REFRESH">
       <label>Re&amp;fresh</label>
     </object>
@@ -306,7 +306,7 @@
     <object class="wxMenuItem" name="ID_MKDIR_CHGDIR">
       <label>Create director&amp;y and enter it</label>
       <help>Create a new subdirectory in the current directory and change into it</help>
-    </object> 
+    </object>
     <object class="wxMenuItem" name="ID_NEW_FILE">
       <label>Crea&amp;te new file</label>
       <help>Create a new, empty file in the current directory</help>
@@ -499,7 +499,7 @@
     <object class="wxMenuItem" name="ID_MKDIR_CHGDIR">
       <label>Create director&amp;y and enter it</label>
       <help>Create a new subdirectory in the current directory and change into it</help>
-    </object> 
+    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_DELETE">
       <label>D&amp;elete</label>
@@ -563,7 +563,7 @@
     <object class="wxMenuItem" name="ID_MKDIR_CHGDIR">
       <label>Create director&amp;y and enter it</label>
       <help>Create a new subdirectory in the current directory and change into it</help>
-    </object> 
+    </object>
     <object class="separator"/>
     <object class="wxMenuItem" name="ID_DELETE">
       <label>&amp;Delete</label>
