@@ -202,11 +202,10 @@ class wxAuiTabArtEx : public wxAuiDefaultTabArt
 {
 public:
 	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom, std::shared_ptr<wxAuiTabArtExData> const& data)
+		: m_pNotebook(pNotebook)
+		, m_data(data)
+		, m_bottom(bottom)
 	{
-		m_pNotebook = pNotebook;
-		m_fonts_initialized = false;
-		m_bottom = bottom;
-		m_data = data;
 	}
 
 	virtual wxAuiTabArt* Clone()
@@ -295,7 +294,7 @@ protected:
 
 	wxFont m_original_normal_font;
 	wxFont m_highlighted_font;
-	bool m_fonts_initialized;
+	bool m_fonts_initialized{};
 	bool m_bottom;
 };
 
