@@ -279,11 +279,12 @@ public:
 		}
 		CFilterDC filter_dc(dc, pane.active ? 1 : 0, (m_tabCtrlHeight % 2) != 0, m_bottom);
 		wxAuiGenericTabArt::DrawTab(*((wxDC*)&filter_dc), wnd, pane, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
-		m_baseColour = wxSystemSettings::GetColour(TABCOLOUR);
+		
 	}
-
+	
 	virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect)
 	{
+		m_baseColour = wxSystemSettings::GetColour(TABCOLOUR);
 		CFilterDC filter_dc(dc, 2, (m_tabCtrlHeight % 2) != 0, m_bottom);
 		wxAuiGenericTabArt::DrawBackground(*((wxDC*)&filter_dc), wnd, rect);
 	}
