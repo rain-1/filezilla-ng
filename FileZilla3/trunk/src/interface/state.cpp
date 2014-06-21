@@ -120,7 +120,7 @@ void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_sta
 		for (int i = 0; i < STATECHANGE_MAX; i++)
 		{
 			std::list<t_handler> &handlers = m_handlers[i];
-			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
+			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
 			{
 				if (iter->pHandler == pHandler)
 				{
@@ -133,7 +133,7 @@ void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_sta
 	else
 	{
 		std::list<t_handler> &handlers = m_handlers[notification];
-		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
+		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
 		{
 			if (iter->pHandler == pHandler)
 			{
@@ -228,7 +228,7 @@ CState::~CState()
 	// Unregister all handlers
 	for (int i = 0; i < STATECHANGE_MAX; i++)
 	{
-		for (std::list<t_handler>::iterator iter = m_handlers[i].begin(); iter != m_handlers[i].end(); ++iter)
+		for (auto iter = m_handlers[i].begin(); iter != m_handlers[i].end(); ++iter)
 		{
 			iter->pHandler->m_pState = 0;
 		}
@@ -619,7 +619,7 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 		for (int i = 0; i < STATECHANGE_MAX; i++)
 		{
 			std::list<t_handler> &handlers = m_handlers[i];
-			for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
+			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
 			{
 				if (iter->pHandler == pHandler)
 				{
@@ -632,7 +632,7 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	else
 	{
 		std::list<t_handler> &handlers = m_handlers[notification];
-		for (std::list<t_handler>::iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
+		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
 		{
 			if (iter->pHandler == pHandler)
 			{

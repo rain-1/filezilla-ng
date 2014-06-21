@@ -294,7 +294,7 @@ wxMenu* CSiteManager::GetSitesMenu()
 
 void CSiteManager::ClearIdMap()
 {
-	for (std::map<int, CSiteManagerItemData_Site*>::iterator iter = m_idMap.begin(); iter != m_idMap.end(); ++iter)
+	for (auto iter = m_idMap.begin(); iter != m_idMap.end(); ++iter)
 		delete iter->second;
 
 	m_idMap.clear();
@@ -337,7 +337,7 @@ wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData
 
 CSiteManagerItemData_Site* CSiteManager::GetSiteById(int id)
 {
-	std::map<int, CSiteManagerItemData_Site*>::iterator iter = m_idMap.find(id);
+	auto iter = m_idMap.find(id);
 
 	CSiteManagerItemData_Site *pData;
 	if (iter != m_idMap.end())

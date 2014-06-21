@@ -495,7 +495,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		const int item = insertPos - m_indexMapping.begin();
 		m_indexMapping.insert(insertPos, i);
 
-		for (std::list<unsigned int>::iterator iter = added.begin(); iter != added.end(); ++iter)
+		for (auto iter = added.begin(); iter != added.end(); ++iter)
 		{
 			unsigned int &pos = *iter;
 			if (pos >= (unsigned int)item)
@@ -655,7 +655,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryL
 	// Erase indexes
 	wxASSERT(!toRemove);
 	wxASSERT(removedIndexes.size() == removed);
-	for (std::list<int>::iterator iter = removedIndexes.begin(); iter != removedIndexes.end(); ++iter)
+	for (auto iter = removedIndexes.begin(); iter != removedIndexes.end(); ++iter)
 	{
 		m_indexMapping.erase(m_indexMapping.begin() + *iter);
 	}

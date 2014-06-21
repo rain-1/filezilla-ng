@@ -583,7 +583,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 	int maxWidth = GetWidthFromCache(name);
 	if (maxWidth) {
-		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter) {
+		for (auto iter = windows.begin(); iter != windows.end(); ++iter) {
 			wxSizer* pSizer = (*iter)->GetSizer();
 			if (!pSizer)
 				continue;
@@ -609,7 +609,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 	wxSize size = minRequestedSize;
 
-	for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
+	for (auto iter = windows.begin(); iter != windows.end(); ++iter)
 	{
 		wxSizer* pSizer = (*iter)->GetSizer();
 		if (!pSizer)
@@ -650,7 +650,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 		wxSize size = minRequestedSize;
 		int res = 0;
-		for (std::vector<wxWindow*>::iterator iter = windows.begin(); iter != windows.end(); ++iter)
+		for (auto iter = windows.begin(); iter != windows.end(); ++iter)
 		{
 			wxSizer* pSizer = (*iter)->GetSizer();
 			res = WrapRecursive(*iter, pSizer, desiredWidth - offset);
@@ -739,7 +739,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		printf("Performing final wrap with bestwidth %d\n", bestWidth);
 #endif
 
-	for (std::vector<wxWindow*>::iterator iter = all_windows.begin(); iter != all_windows.end(); ++iter)
+	for (auto iter = all_windows.begin(); iter != all_windows.end(); ++iter)
 	{
 		wxSizer *pSizer = (*iter)->GetSizer();
 

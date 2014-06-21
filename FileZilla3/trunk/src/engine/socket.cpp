@@ -129,7 +129,7 @@ CSocketEventDispatcher::CSocketEventDispatcher()
 
 CSocketEventDispatcher::~CSocketEventDispatcher()
 {
-	for (std::list<CSocketEvent*>::iterator iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
+	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
 		delete *iter;
 }
 
@@ -158,7 +158,7 @@ void CSocketEventDispatcher::RemovePending(const CSocketEventHandler* pHandler)
 	wxCriticalSectionLocker lock(m_sync);
 
 	std::list<CSocketEvent*> keep;
-	for (std::list<CSocketEvent*>::iterator iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
+	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
 	{
 		if ((*iter)->GetSocketEventHandler() != pHandler)
 		{
@@ -176,7 +176,7 @@ void CSocketEventDispatcher::RemovePending(const CSocketEventSource* pSource)
 	wxCriticalSectionLocker lock(m_sync);
 
 	std::list<CSocketEvent*> keep;
-	for (std::list<CSocketEvent*>::iterator iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
+	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
 	{
 		if ((*iter)->GetSocketEventSource() != pSource)
 		{
@@ -193,7 +193,7 @@ void CSocketEventDispatcher::UpdatePending(const CSocketEventHandler* pOldHandle
 {
 	wxCriticalSectionLocker lock(m_sync);
 
-	for (std::list<CSocketEvent*>::iterator iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
+	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
 	{
 		CSocketEvent* evt = *iter;
 		if (evt->GetSocketEventSource() != pOldSource || evt->GetSocketEventHandler() != pOldHandler)

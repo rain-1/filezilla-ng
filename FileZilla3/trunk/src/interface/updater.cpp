@@ -738,7 +738,7 @@ void CUpdater::SetState( UpdaterState s )
 	if( s != state_ ) {
 		state_ = s;
 		build b = version_information_.available_;
-		for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+		for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
 			if( *it ) {
 				(*it)->UpdaterStateChanged( s, b );
 			}
@@ -758,12 +758,12 @@ wxString CUpdater::DownloadedFile() const
 void CUpdater::AddHandler( CUpdateHandler& handler )
 {
 
-	for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+	for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
 		if( *it == &handler ) {
 			return;
 		}
 	}
-	for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+	for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
 		if( !*it ) {
 			*it = &handler;
 			return;
@@ -774,7 +774,7 @@ void CUpdater::AddHandler( CUpdateHandler& handler )
 
 void CUpdater::RemoveHandler( CUpdateHandler& handler )
 {
-	for( std::list<CUpdateHandler*>::iterator it = handlers_.begin(); it != handlers_.end(); ++it ) {
+	for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
 		if( *it == &handler ) {
 			*it = 0;
 			return;

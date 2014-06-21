@@ -8,9 +8,9 @@
 
 CVerifyCertDialog::~CVerifyCertDialog()
 {
-	for (std::list<t_certData>::iterator iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); ++iter)
+	for (auto iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); ++iter)
 		delete [] iter->data;
-	for (std::list<t_certData>::iterator iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); ++iter)
+	for (auto iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); ++iter)
 		delete [] iter->data;
 }
 
@@ -214,7 +214,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 
 	bool append = false;
 
-	std::list<wxString>::iterator iter = tokens.begin();
+	auto iter = tokens.begin();
 	while (iter != tokens.end())
 	{
 		if (!append)
@@ -243,7 +243,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 			len = 0;
 		}
 
-		std::list<wxString>::iterator remove = iter++;
+		auto remove = iter++;
 		tokens.erase(remove);
 	}
 

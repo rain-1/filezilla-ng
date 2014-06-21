@@ -113,7 +113,7 @@ void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, 
 	if (!target.IsEmpty())
 	{
 		// Unfortunately O(n), don't know of a faster way.
-		for (std::map<CSourcePath, CServerPath>::iterator serverIter = iter->second->begin(); serverIter != iter->second->end();)
+		for (auto serverIter = iter->second->begin(); serverIter != iter->second->end();)
 		{
 			if (serverIter->second == target || target.IsParentOf(serverIter->second, false))
 				iter->second->erase(serverIter++);

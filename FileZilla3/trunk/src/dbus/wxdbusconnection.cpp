@@ -154,7 +154,7 @@ wxThread::ExitCode DBusThread::Entry()
 		fd_array[0].events = POLLIN;
 
 		unsigned int nfds = 1;
-		for (std::list<DBusWatch *>::iterator it = bus_watches.begin(); it != bus_watches.end(); ++it) {
+		for (auto it = bus_watches.begin(); it != bus_watches.end(); ++it) {
 			if (dbus_watch_get_enabled(*it))
 			{
 #if WITH_LIBDBUS >= 2
@@ -186,7 +186,7 @@ wxThread::ExitCode DBusThread::Entry()
 				continue;
 			}
 
-			for (std::list<DBusWatch *>::iterator it = bus_watches.begin(); it != bus_watches.end(); ++it) {
+			for (auto it = bus_watches.begin(); it != bus_watches.end(); ++it) {
 				if (!dbus_watch_get_enabled(*it))
 					continue;
 #if WITH_LIBDBUS >= 2

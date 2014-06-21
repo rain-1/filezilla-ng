@@ -375,7 +375,7 @@ bool CEditHandler::RemoveAll(bool force)
 	m_fileDataList[remote].swap(keep);
 	keep.clear();
 
-	for (std::list<t_fileData>::iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
+	for (auto iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
 	{
 		if (force)
 			continue;
@@ -400,7 +400,7 @@ bool CEditHandler::RemoveAll(enum fileState state, const CServer* pServer /*=0*/
 
 	std::list<t_fileData> keep;
 
-	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
+	for (auto iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
 	{
 		if (iter->state != state)
 		{
@@ -495,7 +495,7 @@ std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const 
 
 void CEditHandler::FinishTransfer(bool successful, const wxString& fileName)
 {
-	std::list<t_fileData>::iterator iter = GetFile(fileName);
+	auto iter = GetFile(fileName);
 	if (iter == m_fileDataList[local].end())
 		return;
 
@@ -521,7 +521,7 @@ void CEditHandler::FinishTransfer(bool successful, const wxString& fileName)
 
 void CEditHandler::FinishTransfer(bool successful, const wxString& fileName, const CServerPath& remotePath, const CServer& server)
 {
-	std::list<t_fileData>::iterator iter = GetFile(fileName, remotePath, server);
+	auto iter = GetFile(fileName, remotePath, server);
 	if (iter == m_fileDataList[remote].end())
 		return;
 
@@ -572,7 +572,7 @@ void CEditHandler::FinishTransfer(bool successful, const wxString& fileName, con
 
 bool CEditHandler::StartEditing(const wxString& file)
 {
-	std::list<t_fileData>::iterator iter = GetFile(file);
+	auto iter = GetFile(file);
 	if (iter == m_fileDataList[local].end())
 		return false;
 
@@ -581,7 +581,7 @@ bool CEditHandler::StartEditing(const wxString& file)
 
 bool CEditHandler::StartEditing(const wxString& file, const CServerPath& remotePath, const CServer& server)
 {
-	std::list<t_fileData>::iterator iter = GetFile(file, remotePath, server);
+	auto iter = GetFile(file, remotePath, server);
 	if (iter == m_fileDataList[remote].end())
 		return false;
 
@@ -626,7 +626,7 @@ void CEditHandler::CheckForModifications(bool emitEvent)
 	for (int i = 0; i < 2; i++)
 	{
 checkmodifications_loopbegin:
-		for (std::list<t_fileData>::iterator iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); ++iter)
+		for (auto iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); ++iter)
 		{
 			if (iter->state != edit)
 				continue;

@@ -77,7 +77,7 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 	delete m_pCurrentCommand;
 
 	// Delete notification list
-	for (std::list<CNotification *>::iterator iter = m_NotificationList.begin(); iter != m_NotificationList.end(); ++iter)
+	for (auto iter = m_NotificationList.begin(); iter != m_NotificationList.end(); ++iter)
 		delete *iter;
 
 	// Remove ourself from the engine list

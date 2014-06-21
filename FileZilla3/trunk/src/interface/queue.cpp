@@ -18,15 +18,13 @@ CQueueItem::CQueueItem(CQueueItem* parent)
 
 CQueueItem::~CQueueItem()
 {
-	std::vector<CQueueItem*>::iterator iter;
-	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
+	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
 		delete *iter;
 }
 
 void CQueueItem::SetPriority(enum QueuePriority priority)
 {
-	std::vector<CQueueItem*>::iterator iter;
-	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
+	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
 		(*iter)->SetPriority(priority);
 }
 
@@ -129,9 +127,8 @@ unsigned int CQueueItem::GetChildrenCount(bool recursive)
 bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
 {
 	int oldVisibleOffspring = m_visibleOffspring;
-	std::vector<CQueueItem*>::iterator iter;
 	bool deleted = false;
-	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
+	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
 	{
 		if (*iter == pItem)
 		{
@@ -472,7 +469,7 @@ void CServerItem::AddFileItemToList(CFileItem* pItem)
 void CServerItem::RemoveFileItemFromList(CFileItem* pItem)
 {
 	std::list<CFileItem*>& fileList = m_fileList[pItem->queued() ? 0 : 1][pItem->GetPriority()];
-	for (std::list<CFileItem*>::iterator iter = fileList.begin(); iter != fileList.end(); ++iter)
+	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter)
 	{
 		if (*iter == pItem)
 		{
@@ -485,7 +482,7 @@ void CServerItem::RemoveFileItemFromList(CFileItem* pItem)
 
 void CServerItem::SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction)
 {
-	for (std::vector<CQueueItem*>::iterator iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
+	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
 	{
 		CQueueItem *pItem = *iter;
 		if (pItem->GetType() == QueueItemType_File)
@@ -512,7 +509,7 @@ CFileItem* CServerItem::GetIdleChild(bool immediateOnly, enum TransferDirection 
 	for (i = (PRIORITY_COUNT - 1); i >= 0; i--)
 	{
 		std::list<CFileItem*>& fileList = m_fileList[1][i];
-		for (std::list<CFileItem*>::iterator iter = fileList.begin(); iter != fileList.end(); ++iter)
+		for (auto iter = fileList.begin(); iter != fileList.end(); ++iter)
 		{
 			CFileItem* item = *iter;
 			if (item->IsActive())
@@ -536,7 +533,7 @@ CFileItem* CServerItem::GetIdleChild(bool immediateOnly, enum TransferDirection 
 	for (i = (PRIORITY_COUNT - 1); i >= 0; i--)
 	{
 		std::list<CFileItem*>& fileList = m_fileList[0][i];
-		for (std::list<CFileItem*>::iterator iter = fileList.begin(); iter != fileList.end(); ++iter)
+		for (auto iter = fileList.begin(); iter != fileList.end(); ++iter)
 		{
 			CFileItem* item = *iter;
 			if (item->IsActive())
@@ -600,7 +597,7 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 		return;
 
 	std::list<CFileItem*>& fileList = m_fileList[1][pItem->GetPriority()];
-	for (std::list<CFileItem*>::iterator iter = fileList.begin(); iter != fileList.end(); ++iter)
+	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter)
 	{
 		if (*iter != pItem)
 			continue;
@@ -729,7 +726,7 @@ void CServerItem::SetChildPriority(CFileItem* pItem, enum QueuePriority oldPrior
 {
 	int i = pItem->queued() ? 0 : 1;
 
-	for (std::list<CFileItem*>::iterator iter = m_fileList[i][oldPriority].begin(); iter != m_fileList[i][oldPriority].end(); ++iter)
+	for (auto iter = m_fileList[i][oldPriority].begin(); iter != m_fileList[i][oldPriority].end(); ++iter)
 	{
 		if (*iter != pItem)
 			continue;
@@ -1244,7 +1241,7 @@ void CQueueViewBase::CreateColumns(std::list<ColumnId> const& extraColumns)
 
 CServerItem* CQueueViewBase::GetServerItem(const CServer& server)
 {
-	for (std::vector<CServerItem*>::iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
 		if ((*iter)->GetServer() == server)
 			return *iter;
