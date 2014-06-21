@@ -620,11 +620,8 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		wizard.Run();
 	}
 	// Debug menu
-	else if (event.GetId() == XRCID("ID_CRASH"))
-	{
-		// Cause a crash
-		int *x = 0;
-		*x = 0;
+	else if (event.GetId() == XRCID("ID_CRASH")) {
+		abort();
 	}
 	else if (event.GetId() == XRCID("ID_CIPHERS"))
 	{

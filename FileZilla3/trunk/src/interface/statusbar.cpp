@@ -101,23 +101,23 @@ void wxStatusBarEx::FixupFieldWidth(int field)
 void wxStatusBarEx::SetFieldWidth(int field, int width)
 {
 	field = GetFieldIndex(field);
+	if( field < 0 ) {
+		return;
+	}
+
 	m_columnWidths[field] = width;
-
 	FixupFieldWidth(field);
-
 	wxStatusBar::SetStatusWidths(GetFieldsCount(), m_columnWidths);
 }
 
 int wxStatusBarEx::GetFieldIndex(int field)
 {
-	if (field >= 0)
-	{
-		wxASSERT(field <= GetFieldsCount());
+	if (field >= 0) {
+		wxCHECK(field <= GetFieldsCount(), -1);
 	}
-	else
-	{
+	else {
 		field = GetFieldsCount() + field;
-		wxASSERT(field >= 0);
+		wxCHECK(field >= 0, -1);
 	}
 
 	return field;
@@ -196,9 +196,12 @@ void CWidgetsStatusBar::OnSize(wxSizeEvent& event)
 #endif
 }
 
-void CWidgetsStatusBar::AddChild(int field, int idx, wxWindow* pChild)
+bool CWidgetsStatusBar::AddChild(int field, int idx, wxWindow* pChild)
 {
 	field = GetFieldIndex(field);
+	if( field < 0 ) {
+		return false;
+	}
 
 	t_statbar_child data;
 	data.field = field;
@@ -207,13 +210,14 @@ void CWidgetsStatusBar::AddChild(int field, int idx, wxWindow* pChild)
 	m_children[idx] = data;
 
 	PositionChildren(field);
+
+	return true;
 }
 
 void CWidgetsStatusBar::RemoveChild(int idx)
 {
-	std::map<int, struct t_statbar_child>::iterator iter = m_children.find(idx);
-	if (iter != m_children.end())
-	{
+	auto iter = m_children.find(idx);
+	if (iter != m_children.end()) {
 		int field = iter->second.field;
 		m_children.erase(iter);
 		PositionChildren(field);
