@@ -923,15 +923,15 @@ wxString CLocalListView::MenuMkdir()
 {
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
-		return _T("");
+		return wxString();
 
 	if (dlg.ShowModal() != wxID_OK)
-		return _T("");
+		return wxString();
 
 	if (dlg.GetValue().empty())
 	{
 		wxBell();
-		return _T("");
+		return wxString();
 	}
 
 	wxFileName fn(dlg.GetValue(), _T(""));
@@ -946,7 +946,7 @@ wxString CLocalListView::MenuMkdir()
 
 	if (!res) {
 		wxBell();
-		return _T("");
+		return wxString();
 	}
 
 	// Return name of the New Directory
@@ -1594,7 +1594,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 {
 	CLocalFileData *data = GetData(item);
 	if (!data)
-		return _T("");
+		return wxString();
 
 	if (!column)
 	{
@@ -1607,17 +1607,17 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 	else if (column == 1)
 	{
 		if (data->size < 0)
-			return _T("");
+			return wxString();
 		else
 			return CSizeFormat::Format(data->size);
 	}
 	else if (column == 2)
 	{
 		if (!item && m_hasParent)
-			return _T("");
+			return wxString();
 
 		if (data->comparison_flags == fill)
-			return _T("");
+			return wxString();
 
 		if (data->fileType.empty())
 			data->fileType = GetType(data->name, data->dir, m_dir);
@@ -1627,7 +1627,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 	else if (column == 3) {
 		return CTimeFormat::Format(data->time);
 	}
-	return _T("");
+	return wxString();
 }
 
 void CLocalListView::OnMenuEdit(wxCommandEvent& event)

@@ -458,7 +458,7 @@ wxString CUpdater::GetLocalFile( build const& b, bool allow_existing )
 
 	while( CLocalFileSystem::GetFileType(f) != CLocalFileSystem::unknown && (!allow_existing || !VerifyChecksum(f, b.size_, b.hash_))) {
 		if( ++i > 99 ) {
-			return _T("");
+			return wxString();
 		}
 		wxString ext;
 		int pos;

@@ -2639,7 +2639,7 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 {
 	int index = GetItemIndex(item);
 	if (index == -1)
-		return _T("");
+		return wxString();
 
 	if (!column)
 	{
@@ -2648,19 +2648,19 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		else if ((unsigned int)index < m_pDirectoryListing->GetCount())
 			return (*m_pDirectoryListing)[index].name;
 		else
-			return _T("");
+			return wxString();
 	}
 	if (!item)
-		return _T(""); //.. has no attributes
+		return wxString(); //.. has no attributes
 
 	if ((unsigned int)index >= m_pDirectoryListing->GetCount())
-		return _T("");
+		return wxString();
 
 	if (column == 1)
 	{
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
 		if (entry.is_dir() || entry.size < 0)
-			return _T("");
+			return wxString();
 		else
 			return CSizeFormat::Format(entry.size);
 	}
@@ -2687,7 +2687,7 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		return (*m_pDirectoryListing)[index].permissions;
 	else if (column == 5)
 		return (*m_pDirectoryListing)[index].ownerGroup;
-	return _T("");
+	return wxString();
 }
 
 CFileListCtrl<CGenericFileData>::CSortComparisonObject CRemoteListView::GetSortComparisonObject()

@@ -17,7 +17,7 @@ wxString GetAsURL(const wxString& dir)
 	const wxWX2MBbuf utf8 = dir.mb_str(wxConvUTF8);
 
 	if (!utf8)
-		return wxEmptyString;
+		return wxString();
 
 	const char* p = utf8;
 	while (*p)
@@ -100,24 +100,24 @@ wxString GetSystemOpenCommand(wxString file, bool &program_exists)
 
 	const wxString& ext = fn.GetExt();
 	if (ext.empty())
-		return _T("");
+		return wxString();
 
 	for (;;)
 	{
 		wxFileType* pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
 		if (!pType)
-			return _T("");
+			return wxString();
 
 		wxString cmd;
 		if (!pType->GetOpenCommand(&cmd, wxFileType::MessageParameters(file)))
 		{
 			delete pType;
-			return _T("");
+			return wxString();
 		}
 		delete pType;
 
 		if (cmd.empty())
-			return wxEmptyString;
+			return wxString();
 
 		program_exists = false;
 
@@ -168,7 +168,7 @@ wxString GetSystemOpenCommand(wxString file, bool &program_exists)
 		return cmd;
 	}
 
-	return wxEmptyString;
+	return wxString();
 }
 
 bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde)

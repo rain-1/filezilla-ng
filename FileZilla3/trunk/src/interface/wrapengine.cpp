@@ -992,7 +992,7 @@ static wxString GetLocaleFile(const wxString& localesDir, wxString name)
 			return name + _T("/LC_MESSAGES");
 	}
 
-	return _T("");
+	return wxString();
 }
 
 bool CWrapEngine::LoadCache()

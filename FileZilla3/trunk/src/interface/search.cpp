@@ -140,7 +140,7 @@ CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::Get
 wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 {
 	if (item < 0 || item >= (int)m_indexMapping.size())
-		return _T("");
+		return wxString();
 	int index = m_indexMapping[item];
 
 	const CDirentry& entry = m_fileData[index];
@@ -151,7 +151,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 	else if (column == 2)
 	{
 		if (entry.is_dir() || entry.size < 0)
-			return _T("");
+			return wxString();
 		else
 			return CSizeFormat::Format(entry.size);
 	}
@@ -174,7 +174,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return entry.permissions;
 	else if (column == 6)
 		return entry.ownerGroup;
-	return _T("");
+	return wxString();
 }
 
 int CSearchDialogFileList::OnGetItemImage(long item) const

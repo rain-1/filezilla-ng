@@ -155,7 +155,7 @@ protected:
 				else
 					m_pOwner->LogMessage(Debug_Warning, _T("Uknown input stream error"));
 				error = true;
-				return _T("");
+				return wxString();
 			}
 
 			if (c == '\n')
@@ -173,7 +173,7 @@ protected:
 		{
 			m_pOwner->LogMessage(Debug_Warning, _T("Unexpected EOF."));
 			error = true;
-			return _T("");
+			return wxString();
 		}
 
 		if (read && buffer[read - 1] == '\r')

@@ -45,31 +45,31 @@ CShellExtensionInterface::~CShellExtensionInterface()
 wxString CShellExtensionInterface::InitDrag()
 {
 	if (!m_shellExtension)
-		return _T("");
+		return wxString();
 
 	if (!m_hMutex)
-		return _T("");
+		return wxString();
 
 	if (!CreateDragDirectory())
-		return _T("");
+		return wxString();
 
 	m_hMapping = CreateFileMapping(0, 0, PAGE_READWRITE, 0, DRAG_EXT_MAPPING_LENGTH, DRAG_EXT_MAPPING);
 	if (!m_hMapping)
-		return _T("");
+		return wxString();
 
 	char* data = (char*)MapViewOfFile(m_hMapping, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, DRAG_EXT_MAPPING_LENGTH);
 	if (!data)
 	{
 		CloseHandle(m_hMapping);
 		m_hMapping = 0;
-		return _T("");
+		return wxString();
 	}
 
 	DWORD result = WaitForSingleObject(m_hMutex, 250);
 	if (result != WAIT_OBJECT_0)
 	{
 		UnmapViewOfFile(data);
-		return _T("");
+		return wxString();
 	}
 
 	*data = DRAG_EXT_VERSION;
@@ -86,27 +86,27 @@ wxString CShellExtensionInterface::InitDrag()
 wxString CShellExtensionInterface::GetTarget()
 {
 	if (!m_shellExtension)
-		return _T("");
+		return wxString();
 
 	if (!m_hMutex)
-		return _T("");
+		return wxString();
 
 	if (!m_hMapping)
-		return _T("");
+		return wxString();
 
 	char* data = (char*)MapViewOfFile(m_hMapping, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, DRAG_EXT_MAPPING_LENGTH);
 	if (!data)
 	{
 		CloseHandle(m_hMapping);
 		m_hMapping = 0;
-		return _T("");
+		return wxString();
 	}
 
 	DWORD result = WaitForSingleObject(m_hMutex, 250);
 	if (result != WAIT_OBJECT_0)
 	{
 		UnmapViewOfFile(data);
-		return _T("");
+		return wxString();
 	}
 
 	wxString target;
@@ -128,7 +128,7 @@ wxString CShellExtensionInterface::GetTarget()
 		target.RemoveLast();
 	int pos = target.Find('\\', true);
 	if (pos < 1)
-		return _T("");
+		return wxString();
 	target = target.Left(pos + 1);
 
 	return target;

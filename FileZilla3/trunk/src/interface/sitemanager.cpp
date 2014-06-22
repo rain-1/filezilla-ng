@@ -617,12 +617,12 @@ wxString CSiteManager::AddServer(CServer server)
 		wxString msg = file.GetError() + _T("\n") + _("The server could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
-		return _T("");
+		return wxString();
 	}
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
 	if (!pElement)
-		return _T("");
+		return wxString();
 
 	std::list<wxString> names;
 	for (TiXmlElement* pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server"))
@@ -667,11 +667,11 @@ wxString CSiteManager::AddServer(CServer server)
 	if (!file.Save(&error))
 	{
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-			return _T("");
+			return wxString();
 
 		wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
-		return _T("");
+		return wxString();
 	}
 
 	return _T("0/") + EscapeSegment(name);

@@ -2226,11 +2226,11 @@ wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item, bool stripBookmark)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
-		return _T("");
+		return wxString();
 
 	CSiteManagerItemData* pData = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!pData)
-		return _T("");
+		return wxString();
 
 	if (stripBookmark && pData->m_type == CSiteManagerItemData::BOOKMARK)
 		item = pTree->GetItemParent(item);
@@ -2254,11 +2254,11 @@ wxString CSiteManagerDialog::GetSitePath(bool stripBookmark)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
-		return _T("");
+		return wxString();
 
 	wxTreeItemId item = pTree->GetSelection();
 	if (!item.IsOk())
-		return _T("");
+		return wxString();
 
 	return GetSitePath(item, stripBookmark);
 }

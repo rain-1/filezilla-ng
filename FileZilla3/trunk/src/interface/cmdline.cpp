@@ -62,7 +62,7 @@ wxString CCommandLine::GetOption(enum CCommandLine::t_option option) const
 		break;
 	}
 
-	return _T("");
+	return wxString();
 }
 
 bool CCommandLine::Parse()
@@ -119,7 +119,7 @@ void CCommandLine::DisplayUsage()
 wxString CCommandLine::GetParameter() const
 {
 	if (!m_parser.GetParamCount())
-		return _T("");
+		return wxString();
 
 	return m_parser.GetParam();
 }

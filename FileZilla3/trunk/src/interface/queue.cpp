@@ -856,13 +856,13 @@ void CQueueViewBase::OnEraseBackground(wxEraseEvent& event)
 wxString CQueueViewBase::OnGetItemText(long item, long column) const
 {
 	if (column < 0 || static_cast<size_t>(column) >= m_columns.size())
-		return _T("");
+		return wxString();
 
 	CQueueViewBase* pThis = const_cast<CQueueViewBase*>(this);
 
 	CQueueItem* pItem = pThis->GetQueueItem(item);
 	if (!pItem)
-		return _T("");
+		return wxString();
 
 	return OnGetItemText(pItem, m_columns[column]);
 }
@@ -1024,7 +1024,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 		break;
 	}
 
-	return _T("");
+	return wxString();
 }
 
 int CQueueViewBase::OnGetItemImage(long item) const
