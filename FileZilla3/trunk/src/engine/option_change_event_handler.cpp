@@ -18,7 +18,7 @@ void COptionChangeEventHandler::RegisterOption(int option)
 	if (option < 0 )
 		return;
 
-	while (static_cast<std::size_t>(option) >= m_handlers.size())
+	while (static_cast<size_t>(option) >= m_handlers.size())
 		m_handlers.push_back(std::set<COptionChangeEventHandler*>());
 
 	m_handled_options.insert(option);
@@ -33,7 +33,7 @@ void COptionChangeEventHandler::UnregisterOption(int option)
 
 void COptionChangeEventHandler::UnregisterAll()
 {
-	for (std::size_t i = 0; i < m_handlers.size(); i++)
+	for (size_t i = 0; i < m_handlers.size(); i++)
 	{
 		for (auto iter = m_handlers[i].begin(); iter != m_handlers[i].end(); ++iter)
 		{
@@ -45,7 +45,7 @@ void COptionChangeEventHandler::UnregisterAll()
 
 void COptionChangeEventHandler::DoNotify(int option)
 {
-	if (option < 0 || static_cast<std::size_t>(option) >= m_handlers.size())
+	if (option < 0 || static_cast<size_t>(option) >= m_handlers.size())
 		return;
 
 	for (auto iter = m_handlers[option].begin(); iter != m_handlers[option].end(); ++iter)

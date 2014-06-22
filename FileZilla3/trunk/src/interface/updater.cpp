@@ -722,7 +722,7 @@ wxString CUpdater::GetFilename( wxString const& url) const
 	if( pos != -1 ) {
 		ret = url.Mid(pos + 1);
 	}
-	std::size_t p = ret.find_first_of(_T("?#"));
+	size_t p = ret.find_first_of(_T("?#"));
 	if( p != std::string::npos ) {
 		ret = ret.substr(0, p);
 	}
