@@ -202,7 +202,10 @@ void CEditHandler::Release()
 			close(m_lockfile_descriptor);
 #endif
 
-		wxRemoveFile(m_localDir + _T("empty_file_yq744zm"));
+		{
+			wxLogNull log;
+			wxRemoveFile(m_localDir + _T("empty_file_yq744zm"));
+		}
 
 		RemoveAll(true);
 		wxRmdir(m_localDir);
