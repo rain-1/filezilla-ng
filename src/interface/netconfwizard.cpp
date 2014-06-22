@@ -766,7 +766,7 @@ void CNetConfWizard::SendNextCommand()
 			wxString ip = GetExternalIPAddress();
 			if (ip.empty())
 				return;
-			if (!GetIPV6LongForm(ip).IsEmpty())
+			if (!GetIPV6LongForm(ip).empty())
 			{
 				PrintMessage(_("You appear to be using an IPv6-only host. This wizard does not support this environment."), 1);
 				CloseSocket();

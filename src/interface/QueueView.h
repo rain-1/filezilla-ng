@@ -134,7 +134,7 @@ public:
 	int QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const enum CFileExistsNotification::OverwriteAction defaultFileExistsAction);
 	bool QueueFolder(bool queueOnly, bool download, const CLocalPath& localPath, const CServerPath& remotePath, const CServer& server);
 
-	bool IsEmpty() const;
+	bool empty() const;
 	int IsActive() const { return m_activeMode; }
 	bool SetActive(bool active = true);
 	bool Quit();

@@ -942,7 +942,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine *pLine, CDirentry &entry, bool e
 		// Append missing group to ownerGroup
 		if (!token.IsNumeric() && token.IsRightNumeric())
 		{
-			if (!entry.ownerGroup.IsEmpty())
+			if (!entry.ownerGroup.empty())
 				entry.ownerGroup += _T(" ");
 
 			wxString const group = token.GetString();
@@ -1714,19 +1714,19 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 		const int len = token.GetLength();
 		if (len > 2 && token[0] == '(' && token[len - 1] == ')')
 		{
-			if (!entry.permissions.IsEmpty())
+			if (!entry.permissions.empty())
 				entry.permissions += _T(" ");
 			entry.permissions += token.GetString().Mid(1, len - 2);
 		}
 		else if (len > 2 && token[0] == '[' && token[len - 1] == ']')
 		{
-			if (!entry.ownerGroup.IsEmpty())
+			if (!entry.ownerGroup.empty())
 				entry.ownerGroup += _T(" ");
 			entry.ownerGroup += token.GetString().Mid(1, len - 2);
 		}
 		else
 		{
-			if (!entry.permissions.IsEmpty())
+			if (!entry.permissions.empty())
 				entry.permissions += _T(" ");
 			entry.ownerGroup += token.GetString();
 		}
@@ -2118,10 +2118,10 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		else
 		{
 			wxString str(res, wxConvUTF8);
-			if (str.IsEmpty())
+			if (str.empty())
 			{
 				str = wxString(res, wxConvLocal);
-				if (str.IsEmpty())
+				if (str.empty())
 					str = wxString(res, wxConvISO8859_1);
 			}
 			buffer = new wxChar[str.Len() + 1];
@@ -2581,7 +2581,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 		return 0;
 
 	wxString facts = token.GetString();
-	if (facts.IsEmpty())
+	if (facts.empty())
 		return 0;
 
 	entry.flags = 0;
@@ -2591,7 +2591,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 
 	wxString owner, group, uid, gid;
 
-	while (!facts.IsEmpty())
+	while (!facts.empty())
 	{
 		int delim = facts.Find(';');
 		if (delim < 3)

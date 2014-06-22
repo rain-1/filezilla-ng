@@ -215,7 +215,7 @@ bool CServer::ParseUrl(wxString host, unsigned int port, wxString user, wxString
 		if (m_user.empty())
 			m_logonType = ANONYMOUS;
 		else if (m_user == _T("anonymous"))
-			if (m_pass.IsEmpty() || m_pass == _T("anonymous@example.com"))
+			if (m_pass.empty() || m_pass == _T("anonymous@example.com"))
 				m_logonType = ANONYMOUS;
 			else
 				m_logonType = NORMAL;

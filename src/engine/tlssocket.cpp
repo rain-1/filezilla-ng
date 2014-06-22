@@ -194,14 +194,14 @@ void CTlsSocket::LogError(int code, const wxString& function, MessageType logLev
 	if (error)
 	{
 		wxString str(error, wxConvLocal);
-		if (function.IsEmpty())
+		if (function.empty())
 			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d: %s"), code, str.c_str());
 		else
 			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s: %s"), code, function.c_str(), str.c_str());
 	}
 	else
 	{
-		if (function.IsEmpty())
+		if (function.empty())
 			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d"), code);
 		else
 			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s"), code, function.c_str());
@@ -1214,7 +1214,7 @@ bool CTlsSocket::AddTrustedRootCertificate(const wxString& cert)
 
 wxString CTlsSocket::ListTlsCiphers(wxString priority)
 {
-	if (priority.IsEmpty())
+	if (priority.empty())
 		priority = wxString::FromUTF8(ciphers);
 
 	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());

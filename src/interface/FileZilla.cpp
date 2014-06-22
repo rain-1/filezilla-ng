@@ -224,7 +224,7 @@ void CFileZillaApp::InitLocale()
 					return;
 				}
 			}
-			if (pInfo && !pInfo->Description.IsEmpty())
+			if (pInfo && !pInfo->Description.empty())
 				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description.c_str(), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
 			else
 				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
