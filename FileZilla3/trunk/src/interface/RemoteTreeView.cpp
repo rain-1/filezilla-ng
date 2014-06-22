@@ -70,7 +70,7 @@ public:
 			return wxDragNone;
 
 		CServerPath path = m_pRemoteTreeView->GetPathFromItem(hit);
-		if (path.IsEmpty())
+		if (path.empty())
 			return wxDragNone;
 
 		if (!GetData())
@@ -144,7 +144,7 @@ public:
 			return false;
 
 		const CServerPath& path = m_pRemoteTreeView->GetPathFromItem(hit);
-		if (path.IsEmpty())
+		if (path.empty())
 			return false;
 
 		return true;
@@ -161,7 +161,7 @@ public:
 
 		const CServerPath& path = m_pRemoteTreeView->GetPathFromItem(hit);
 
-		if (path.IsEmpty())
+		if (path.empty())
 		{
 			ClearDropHighlight();
 			return CServerPath();
@@ -188,7 +188,7 @@ public:
 		}
 
 		const CServerPath& path = DisplayDropHighlight(wxPoint(x, y));
-		if (path.IsEmpty())
+		if (path.empty())
 			return wxDragNone;
 
 		if (def == wxDragLink)
@@ -780,8 +780,8 @@ void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 		return;
 
 	const CServerPath path = GetPathFromItem(item);
-	wxASSERT(!path.IsEmpty());
-	if (path.IsEmpty())
+	wxASSERT(!path.empty());
+	if (path.empty())
 		return;
 
 	m_pState->ChangeRemoteDir(path);
@@ -833,7 +833,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 		return;
 
 	const CServerPath& path = GetPathFromItem(item);
-	if (path.IsEmpty() || !path.HasParent())
+	if (path.empty() || !path.HasParent())
 		return;
 
 	const CServerPath& parent = path.GetParent();
@@ -951,7 +951,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 		return;
 
 	const CServerPath& path = m_contextMenuItem ? GetPathFromItem(m_contextMenuItem) : CServerPath();
-	if (!m_pState->IsRemoteIdle() || path.IsEmpty())
+	if (!m_pState->IsRemoteIdle() || path.empty())
 	{
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
@@ -984,7 +984,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent& event)
 		return;
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
+	if (path.empty())
 		return;
 
 	const bool hasParent = path.HasParent();
@@ -1103,7 +1103,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 		return;
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
+	if (path.empty())
 		return;
 
 	const wxString& name = GetItemText(m_contextMenuItem);
@@ -1132,7 +1132,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
 		return;
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
+	if (path.empty())
 		return;
 
 	if (wxMessageBoxEx(_("Really delete all selected files and/or directories from the server?"), _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
@@ -1159,7 +1159,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
 	const wxTreeItemId selected = GetSelection();
 	if (selected)
 		currentPath = GetPathFromItem(selected);
-	if (!currentPath.IsEmpty() && (path == currentPath || path.IsParentOf(currentPath, false)))
+	if (!currentPath.empty() && (path == currentPath || path.IsParentOf(currentPath, false)))
 		currentPath = startDir;
 
 	CFilterManager filter;
@@ -1175,7 +1175,7 @@ void CRemoteTreeView::OnMenuRename(wxCommandEvent& event)
 		return;
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
+	if (path.empty())
 		return;
 
 	if (!path.HasParent())
@@ -1193,7 +1193,7 @@ void CRemoteTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 	}
 
 	const CServerPath& path = GetPathFromItem(event.GetItem());
-	if (path.IsEmpty())
+	if (path.empty())
 	{
 		event.Veto();
 		return;
@@ -1245,7 +1245,7 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	const wxTreeItemId selected = GetSelection();
 	if (selected)
 		currentPath = GetPathFromItem(selected);
-	if (currentPath.IsEmpty())
+	if (currentPath.empty())
 		return;
 
 	if (currentPath == old_path || currentPath.IsSubdirOf(old_path, false))
@@ -1290,7 +1290,7 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 	const wxTreeItemId selected = GetSelection();
 	if (selected)
 		currentPath = GetPathFromItem(selected);
-	if (!currentPath.IsEmpty() && currentPath != listed)
+	if (!currentPath.empty() && currentPath != listed)
 		m_pState->ChangeRemoteDir(currentPath);
 
 }
@@ -1299,7 +1299,7 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	CServerPath newpath = MenuMkdir();
-	if (!newpath.IsEmpty()) {
+	if (!newpath.empty()) {
 		m_pState->ChangeRemoteDir(newpath);
 	}
 }
@@ -1315,7 +1315,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 		return CServerPath();
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
+	if (path.empty())
 		return CServerPath();
 
 	CInputDialog dlg;
@@ -1357,8 +1357,8 @@ CServerPath CRemoteTreeView::MenuMkdir()
 bool CRemoteTreeView::ListExpand(wxTreeItemId item)
 {
 	const CServerPath path = GetPathFromItem(item);
-	wxASSERT(!path.IsEmpty());
-	if (path.IsEmpty())
+	wxASSERT(!path.empty());
+	if (path.empty())
 		return false;
 
 	CDirectoryListing listing;
@@ -1404,7 +1404,7 @@ void CRemoteTreeView::ApplyFilters()
 	for (wxTreeItemId child = GetFirstChild(root, cookie); child; child = GetNextSibling(child))
 	{
 		CServerPath path = GetPathFromItem(child);
-		if (path.IsEmpty())
+		if (path.empty())
 			continue;
 
 		struct _parents dir;
@@ -1427,7 +1427,7 @@ void CRemoteTreeView::ApplyFilters()
 			for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child))
 			{
 				CServerPath path = GetPathFromItem(child);
-				if (path.IsEmpty())
+				if (path.empty())
 					continue;
 
 				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, CDateTime()))
@@ -1454,7 +1454,7 @@ void CRemoteTreeView::ApplyFilters()
 		for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child))
 		{
 			CServerPath path = GetPathFromItem(child);
-			if (path.IsEmpty())
+			if (path.empty())
 				continue;
 
 			struct _parents dir;
@@ -1471,7 +1471,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 		return;
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.IsEmpty())
+	if (path.empty())
 	{
 		wxBell();
 		return;

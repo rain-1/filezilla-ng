@@ -345,7 +345,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	}
 
 	CServerPath path(remote_path_str, m_pServer->GetType());
-	if (path.IsEmpty())
+	if (path.empty())
 	{
 		wxMessageBoxEx(_("Remote path could not be parsed."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;

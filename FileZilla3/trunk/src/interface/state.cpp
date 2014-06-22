@@ -289,7 +289,7 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error, bool rememberPrev
 		else
 		{
 			CServerPath remote_path = GetSynchronizedDirectory(p);
-			if (remote_path.IsEmpty())
+			if (remote_path.empty())
 			{
 				SetSyncBrowse(false);
 				wxString msg = wxString::Format(_("Could not obtain corresponding remote directory for the local directory '%s'.\nSynchronized browsing has been disabled."),
@@ -499,13 +499,13 @@ void CState::SetServer(const CServer* server)
 	if (server)
 	{
 		if (m_last_server != *server)
-			m_last_path.Clear();
+			m_last_path.clear();
 		m_last_server = *server;
 
 		m_pServer = new CServer(*server);
 
 		const wxString& name = server->GetName();
-		if (!name.IsEmpty())
+		if (!name.empty())
 			m_title = name + _T(" - ") + server->FormatServer();
 		else
 			m_title = server->FormatServer();
@@ -827,7 +827,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 			}
 		}
 	}
-	if (!error.IsEmpty())
+	if (!error.empty())
 		wxMessageBoxEx(error, _("Could not complete operation"));
 #endif
 
@@ -1041,16 +1041,16 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 
 	if (!enable)
 	{
-		wxASSERT(assumed_remote_root.IsEmpty());
+		wxASSERT(assumed_remote_root.empty());
 		m_sync_browse.local_root.clear();
-		m_sync_browse.remote_root.Clear();
+		m_sync_browse.remote_root.clear();
 		m_sync_browse.is_changing = false;
 
 		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
 		return false;
 	}
 
-	if (!m_pDirectoryListing && assumed_remote_root.IsEmpty())
+	if (!m_pDirectoryListing && assumed_remote_root.empty())
 	{
 		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
 		return false;
@@ -1059,7 +1059,7 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 	m_sync_browse.is_changing = false;
 	m_sync_browse.local_root = m_localDir;
 
-	if (assumed_remote_root.IsEmpty())
+	if (assumed_remote_root.empty())
 		m_sync_browse.remote_root = m_pDirectoryListing->path;
 	else
 	{

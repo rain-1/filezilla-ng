@@ -759,7 +759,7 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 		ClearSelection();
 
 		prevFocused = m_pState->GetPreviouslyVisitedRemoteSubdir();
-		ensureVisible = !prevFocused.IsEmpty();
+		ensureVisible = !prevFocused.empty();
 	}
 	else
 	{
@@ -1340,7 +1340,7 @@ void CRemoteListView::OnMenuMkdir(wxCommandEvent& event)
 void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	CServerPath newdir = MenuMkdir();
-	if (!newdir.IsEmpty()) {
+	if (!newdir.empty()) {
 		m_pState->ChangeRemoteDir(newdir);
 	}
 }
@@ -2667,7 +2667,7 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 	else if (column == 2)
 	{
 		CGenericFileData& data = m_fileData[index];
-		if (data.fileType.IsEmpty())
+		if (data.fileType.empty())
 		{
 			const CDirentry& entry = (*m_pDirectoryListing)[index];
 			if (m_pDirectoryListing->path.GetType() == VMS)

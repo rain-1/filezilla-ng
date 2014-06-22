@@ -573,7 +573,7 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 	(void)notification;
 
 	m_path = pState->GetRemotePath();
-	if (m_path.IsEmpty())
+	if (m_path.empty())
 	{
 		m_pComboBox->SetValue(_T(""));
 		Disable();

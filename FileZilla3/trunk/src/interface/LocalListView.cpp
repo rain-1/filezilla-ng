@@ -323,8 +323,8 @@ bool CLocalListView::DisplayDir(wxString dirname)
 
 		ClearSelection();
 		focused = m_pState->GetPreviouslyVisitedLocalSubdir();
-		ensureVisible = !focused.IsEmpty();
-		if (focused.IsEmpty())
+		ensureVisible = !focused.empty();
+		if (focused.empty())
 			focused = _T("..");
 
 		if (GetItemCount())
@@ -400,7 +400,7 @@ regular_dir:
 		bool wasLink;
 		while (local_filesystem.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes))
 		{
-			if (data.name.IsEmpty())
+			if (data.name.empty())
 			{
 				wxGetApp().DisplayEncodingWarning();
 				continue;
@@ -585,7 +585,7 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 	}
 
 	CServerPath path = m_pState->GetRemotePath();
-	if (path.IsEmpty())
+	if (path.empty())
 	{
 		wxBell();
 		return;
@@ -865,7 +865,7 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 			continue;
 
 		CServerPath path = m_pState->GetRemotePath();
-		if (path.IsEmpty())
+		if (path.empty())
 		{
 			wxBell();
 			break;
@@ -1327,7 +1327,7 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 		obj.AddFile(name);
 	}
 
-	if (obj.GetFilenames().IsEmpty())
+	if (obj.GetFilenames().empty())
 	{
 		pDragDropManager->Release();
 		return;
@@ -1619,7 +1619,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 		if (data->comparison_flags == fill)
 			return _T("");
 
-		if (data->fileType.IsEmpty())
+		if (data->fileType.empty())
 			data->fileType = GetType(data->name, data->dir, m_dir);
 
 		return data->fileType;
@@ -1648,7 +1648,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		server = *m_pState->GetServer();
 
 		path = m_pState->GetRemotePath();
-		if (path.IsEmpty())
+		if (path.empty())
 		{
 			wxMessageBoxEx(_("Cannot edit file, remote path unknown."), _("Editing failed"), wxICON_EXCLAMATION);
 			return;
