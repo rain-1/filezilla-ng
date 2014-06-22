@@ -855,7 +855,7 @@ void CQueueViewBase::OnEraseBackground(wxEraseEvent& event)
 
 wxString CQueueViewBase::OnGetItemText(long item, long column) const
 {
-	if (column < 0 || static_cast<std::size_t>(column) >= m_columns.size())
+	if (column < 0 || static_cast<size_t>(column) >= m_columns.size())
 		return _T("");
 
 	CQueueViewBase* pThis = const_cast<CQueueViewBase*>(this);

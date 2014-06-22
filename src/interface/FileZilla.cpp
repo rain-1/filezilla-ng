@@ -370,7 +370,7 @@ bool CFileZillaApp::FileExists(const wxString& file) const
 
 	wxASSERT(pos > 0);
 	wxASSERT(file[pos - 1] == '/');
-	wxASSERT(file.size() > static_cast<std::size_t>(pos + 1) && file[pos + 1] == '/');
+	wxASSERT(file.size() > static_cast<size_t>(pos + 1) && file[pos + 1] == '/');
 
 	wxLogNull nullLog;
 	wxDir dir(file.Left(pos));

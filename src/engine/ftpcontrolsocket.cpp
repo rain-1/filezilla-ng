@@ -4427,7 +4427,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 				DoClose(FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			if (pData->host.size() > static_cast<std::size_t>(pos + 1) && pData->host[pos + 1])
+			if (pData->host.size() > static_cast<size_t>(pos + 1) && pData->host[pos + 1])
 			{
 				if (pData->host[pos + 1] != ':')
 				{
