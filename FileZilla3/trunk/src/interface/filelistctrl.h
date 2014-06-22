@@ -317,9 +317,9 @@ public:
 
 		DataEntry &type1 = m_fileData[a];
 		DataEntry &type2 = m_fileData[b];
-		if (type1.fileType.IsEmpty())
+		if (type1.fileType.empty())
 			type1.fileType = m_pListView->GetType(data1.name, data1.is_dir());
-		if (type2.fileType.IsEmpty())
+		if (type2.fileType.empty())
 			type2.fileType = m_pListView->GetType(data2.name, data2.is_dir());
 
 		CMP(CmpStringNoCase, type1.fileType, type2.fileType);

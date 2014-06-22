@@ -412,7 +412,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			m_data = m_data.Mid(1);
 		}
 
-		if (GetIPV6LongForm(m_data).IsEmpty())
+		if (GetIPV6LongForm(m_data).empty())
 		{
 			Close(false);
 			return;

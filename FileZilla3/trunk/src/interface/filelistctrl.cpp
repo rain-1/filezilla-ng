@@ -510,7 +510,7 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 
 	wxString type;
 	int flags = SHGFI_TYPENAME;
-	if (path.IsEmpty())
+	if (path.empty())
 		flags |= SHGFI_USEFILEATTRIBUTES;
 	else if (path == _T("\\"))
 		name += _T("\\");
@@ -527,7 +527,7 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	{
 		if (!*shFinfo.szTypeName)
 		{
-			if (!ext.IsEmpty())
+			if (!ext.empty())
 			{
 				type = ext;
 				type.MakeUpper();
@@ -540,13 +540,13 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 		else
 		{
 			type = shFinfo.szTypeName;
-			if (!dir && !ext.IsEmpty())
+			if (!dir && !ext.empty())
 				m_fileTypeMap[ext.MakeLower()] = type;
 		}
 	}
 	else
 	{
-		if (!ext.IsEmpty())
+		if (!ext.empty())
 		{
 			type = ext;
 			type.MakeUpper();

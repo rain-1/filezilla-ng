@@ -85,7 +85,7 @@ bool CFilterConditionsDialog::CreateListControl(int conditions /*=common*/)
 	ReplaceControl(wnd, m_pListCtrl);
 	CalcMinListWidth();
 
-	if (stringConditionTypes.IsEmpty())
+	if (stringConditionTypes.empty())
 	{
 		stringConditionTypes.Add(_("contains"));
 		stringConditionTypes.Add(_("is equal to"));

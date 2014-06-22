@@ -83,7 +83,7 @@ bool OpenInFileManager(const wxString& dir)
 #endif
 	{
 		wxString url = GetAsURL(dir);
-		if (!url.IsEmpty())
+		if (!url.empty())
 			ret = wxLaunchDefaultBrowser(url);
 	}
 
@@ -386,7 +386,7 @@ CLocalPath GetDownloadDir()
 					if (pos != wxNOT_FOUND) {
 						wxString value = line.AfterFirst(wxT('='));
 						value = ShellUnescape(value);
-						if (!value.IsEmpty() && wxDirExists(value))
+						if (!value.empty() && wxDirExists(value))
 							return CLocalPath(value);
 						else
 							break;
