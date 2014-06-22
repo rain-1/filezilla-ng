@@ -25,7 +25,7 @@ void CSftpEncryptioInfoDialog::ShowDialog(CSftpEncryptionNotification* pNotifica
 
 void CSftpEncryptioInfoDialog::SetLabel(wxDialogEx* pDlg, int id, const wxString& text)
 {
-	if (text == _T(""))
+	if (text.empty())
 		pDlg->SetChildLabel(id, _("unknown"));
 	else
 		pDlg->SetChildLabel(id, text);

@@ -35,14 +35,14 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 {
 	wxDialog pwdDlg;
 	wxXmlResource::Get()->LoadDialog(&pwdDlg, wxGetApp().GetTopWindow(), _T("ID_ENTERPASSWORD"));
-	if (name == _T(""))
+	if (name.empty())
 	{
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAMELABEL", wxStaticText), false, true);
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_NAME", wxStaticText), false, true);
 	}
 	else
 		XRCCTRL(pwdDlg, "ID_NAME", wxStaticText)->SetLabel(name);
-	if (challenge == _T(""))
+	if (challenge.empty())
 	{
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGELABEL", wxStaticText), false, true);
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl), false, true);
@@ -58,7 +58,7 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 	}
 	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.FormatHost());
 
-	if (server.GetUser() == _T(""))
+	if (server.GetUser().empty())
 	{
 		pwdDlg.SetTitle(_("Enter username and password"));
 		XRCCTRL(pwdDlg, "ID_OLD_USER_LABEL", wxStaticText)->Hide();
@@ -91,15 +91,15 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 	pwdDlg.GetSizer()->SetSizeHints(&pwdDlg);
 
 	wxString user;
-	while (user == _T(""))
+	while (user.empty())
 	{
 		if (pwdDlg.ShowModal() != wxID_OK)
 			return false;
 
-		if (server.GetUser() == _T(""))
+		if (server.GetUser().empty())
 		{
 			user = XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->GetValue();
-			if (user == _T(""))
+			if (user.empty())
 			{
 				wxMessageBoxEx(_("No username given."), _("Invalid input"), wxICON_EXCLAMATION);
 				continue;

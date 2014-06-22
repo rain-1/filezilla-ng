@@ -15,7 +15,7 @@ void CAutoAsciiFiles::SettingsChanged()
 	{
 		if (!pos)
 		{
-			if (ext != _T(""))
+			if (!ext.empty())
 			{
 				ext.Replace(_T("\\\\"), _T("\\"));
 				m_ascii_extensions.push_back(ext);
@@ -73,7 +73,7 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString remote_file, enum ServerTyp
 		return COptions::Get()->GetOptionVal(OPTION_ASCIINOEXT) != 0;
 	remote_file = remote_file.Mid(pos + 1);
 
-	if (remote_file == _T(""))
+	if (remote_file.empty())
 		return false;
 
 	for (std::list<wxString>::const_iterator iter = m_ascii_extensions.begin(); iter != m_ascii_extensions.end(); ++iter)

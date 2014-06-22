@@ -123,7 +123,7 @@ void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
 
 wxString CEditHandler::GetLocalDirectory()
 {
-	if (m_localDir != _T(""))
+	if (!m_localDir.empty())
 		return m_localDir;
 
 	wxFileName tmpdir(wxFileName::GetTempDir(), _T(""));
@@ -131,7 +131,7 @@ wxString CEditHandler::GetLocalDirectory()
 	// which will cause problems when calculating maximum allowed file
 	// length
 	wxString dir = tmpdir.GetLongPath();
-	if (dir == _T("") || !wxFileName::DirExists(dir))
+	if (dir.empty() || !wxFileName::DirExists(dir))
 		return _T("");
 
 	if (dir.Last() != wxFileName::GetPathSeparator())
@@ -190,7 +190,7 @@ void CEditHandler::Release()
 	if (m_busyTimer.IsRunning())
 		m_busyTimer.Stop();
 
-	if (m_localDir != _T(""))
+	if (!m_localDir.empty())
 	{
 #ifdef __WXMSW__
 		if (m_lockfile_handle != INVALID_HANDLE_VALUE)
@@ -859,13 +859,13 @@ wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists
 	if (!COptions::Get()->GetOptionVal(OPTION_EDIT_ALWAYSDEFAULT))
 	{
 		const wxString command = GetCustomOpenCommand(file, program_exists);
-		if (command != _T(""))
+		if (!command.empty())
 			return command;
 
 		if (COptions::Get()->GetOptionVal(OPTION_EDIT_INHERITASSOCIATIONS))
 		{
 			const wxString command = GetSystemOpenCommand(file, program_exists);
-			if (command != _T(""))
+			if (!command.empty())
 				return command;
 		}
 	}
@@ -910,7 +910,7 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 	wxFileName fn(file);
 
 	wxString ext = fn.GetExt();
-	if (ext == _T(""))
+	if (ext.empty())
 	{
 		if (fn.GetFullName()[0] == '.')
 			ext = _T(".");
@@ -926,7 +926,7 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 		wxString assoc = associations.Left(pos);
 		associations = associations.Mid(pos + 1);
 
-		if (assoc == _T(""))
+		if (assoc.empty())
 			continue;
 
 		wxString command;
@@ -942,7 +942,7 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 		if (!UnquoteCommand(prog, args))
 			return _T("");
 
-		if (prog == _T(""))
+		if (prog.empty())
 			return _T("");
 
 		if (!ProgramExists(prog))
@@ -975,7 +975,7 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 	if (max != -1)
 	{
 		name = TruncateFilename(m_localDir, name, max);
-		if (name == _T(""))
+		if (name.empty())
 			return _T("");
 	}
 
@@ -995,7 +995,7 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 			cutoff *= 10;
 			max--;
 			name = TruncateFilename(m_localDir, name, max);
-			if (name == _T(""))
+			if (name.empty())
 				return _T("");
 		}
 
@@ -1592,7 +1592,7 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
 		return;
 
 	wxString editor = dlg.GetPath();
-	if (editor == _T(""))
+	if (editor.empty())
 		return;
 
 	if (!ProgramExists(editor))

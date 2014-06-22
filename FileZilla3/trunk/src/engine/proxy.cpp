@@ -76,7 +76,7 @@ static wxString base64encode(const wxString& str)
 
 int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass)
 {
-	if (type == CProxySocket::unknown || host == _T("") || port < 1 || port > 65535)
+	if (type == CProxySocket::unknown || host.empty() || port < 1 || port > 65535)
 		return EINVAL;
 
 	if (m_proxyState != noconn)
@@ -101,7 +101,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 
 		wxWX2MBbuf challenge;
 		int challenge_len;
-		if (user != _T(""))
+		if (!user.empty())
 		{
 			challenge = base64encode(user + _T(":") + pass).mb_str(wxConvUTF8);
 			challenge_len = strlen(challenge);
@@ -180,7 +180,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 	{
 		m_pSendBuffer = new char[4];
 		m_pSendBuffer[0] = 5; // Protocol version
-		if (user != _T(""))
+		if (!user.empty())
 		{
 			m_pSendBuffer[1] = 2; // # auth methods supported
 			m_pSendBuffer[2] = 0; // Method: No auth

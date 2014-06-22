@@ -261,7 +261,7 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 					int res = dlg.ShowModal();
 					if (res == wxID_OK)
 					{
-						if (dlg.GetValue() == _T(""))
+						if (dlg.GetValue().empty())
 							continue; // Disallow empty names
 						if (dlg.GetValue() == defaultName)
 						{

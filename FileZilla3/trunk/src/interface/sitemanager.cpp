@@ -303,7 +303,7 @@ void CSiteManager::ClearIdMap()
 wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData_Site*> &idMap)
 {
 	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-	if (defaultsDir == _T(""))
+	if (defaultsDir.empty())
 		return 0;
 
 	wxFileName name(defaultsDir, _T("fzdefaults.xml"));
@@ -395,7 +395,7 @@ bool CSiteManager::UnescapeSitePath(wxString path, std::list<wxString>& result)
 	}
 	if (lastBackslash)
 		return false;
-	if (name != _T(""))
+	if (!name.empty())
 		result.push_back(name);
 
 	return !result.empty();
@@ -440,7 +440,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	else
 	{
 		const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-		if (defaultsDir == _T(""))
+		if (defaultsDir.empty())
 		{
 			wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 			return 0;
@@ -545,7 +545,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 	else
 	{
 		const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-		if (defaultsDir == _T(""))
+		if (defaultsDir.empty())
 			return false;
 		pDocument = file.Load(wxFileName(defaultsDir, _T("fzdefaults.xml")));
 	}

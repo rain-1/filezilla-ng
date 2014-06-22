@@ -129,7 +129,7 @@ public:
 			return false;
 
 		const wxString dir = GetDirFromItem(hit);
-		if (dir == _T("") || !CLocalPath(dir).IsWriteable())
+		if (dir.empty() || !CLocalPath(dir).IsWriteable())
 			return false;
 
 		return true;
@@ -146,7 +146,7 @@ public:
 
 		wxString dir = GetDirFromItem(hit);
 
-		if (dir == _T(""))
+		if (dir.empty())
 		{
 			ClearDropHighlight();
 			return _T("");
@@ -174,7 +174,7 @@ public:
 		}
 
 		const wxString& dir = DisplayDropHighlight(wxPoint(x, y));
-		if (dir == _T(""))
+		if (dir.empty())
 			return wxDragNone;
 
 		if (def == wxDragLink)
@@ -301,7 +301,7 @@ void CLocalTreeView::SetDir(wxString localDir)
 		return;
 	}
 
-	if (subDirs == _T(""))
+	if (subDirs.empty())
 	{
 		SafeSelectItem(parent);
 		return;
@@ -345,7 +345,7 @@ wxTreeItemId CLocalTreeView::GetNearestParent(wxString& localDir)
 		wxTreeItemId root = GetRootItem();
 #endif
 
-	while (localDir != _T(""))
+	while (!localDir.empty())
 	{
 		wxString subDir;
 		int pos = localDir.Find(separator);
@@ -426,7 +426,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		wxLogNull log;
 		if (!local_filesystem.BeginFindFiles(dirname, true))
 		{
-			if (knownSubdir != _T(""))
+			if (!knownSubdir.empty())
 			{
 				wxTreeItemId item = GetSubdir(parent, knownSubdir);
 				if (item != wxTreeItemId())
@@ -470,7 +470,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
 	{
 		wxASSERT(is_dir);
-		if (file == _T(""))
+		if (file.empty())
 		{
 			wxGetApp().DisplayEncodingWarning();
 			continue;
@@ -500,7 +500,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		CheckSubdirStatus(item, fullName);
 	}
 
-	if (!matchedKnown && knownSubdir != _T(""))
+	if (!matchedKnown && !knownSubdir.empty())
 	{
 		const wxString fullName = dirname + knownSubdir;
 		wxTreeItemId item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName),
@@ -536,7 +536,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
 	{
 		wxASSERT(is_dir);
-		if (file == _T(""))
+		if (file.empty())
 		{
 			wxGetApp().DisplayEncodingWarning();
 			continue;
@@ -555,7 +555,7 @@ wxTreeItemId CLocalTreeView::MakeSubdirs(wxTreeItemId parent, wxString dirname, 
 {
 	const wxString& separator = wxFileName::GetPathSeparator();
 
-	while (subDir != _T(""))
+	while (!subDir.empty())
 	{
 		int pos = subDir.Find(separator);
 		wxString segment;
@@ -591,7 +591,7 @@ void CLocalTreeView::OnItemExpanding(wxTreeEvent& event)
 
 	wxTreeItemIdValue value;
 	wxTreeItemId child = GetFirstChild(item, value);
-	if (child && GetItemText(child) == _T(""))
+	if (child && GetItemText(child).empty())
 		DisplayDir(item, GetDirFromItem(item));
 }
 
@@ -750,7 +750,7 @@ void CLocalTreeView::Refresh()
 		CDateTime date;
 		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes))
 		{
-			if (file == _T(""))
+			if (file.empty())
 			{
 				wxGetApp().DisplayEncodingWarning();
 				continue;
@@ -862,7 +862,7 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	wxString error;
 	if (!m_pState->SetLocalDir(dir, &error))
 	{
-		if (error != _T(""))
+		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
@@ -1011,7 +1011,7 @@ bool CLocalTreeView::CreateRoot()
 {
 	int iconIndex, openIconIndex;
 	wxString name = GetSpecialFolder(CSIDL_DESKTOP, iconIndex, openIconIndex);
-	if (name == _T(""))
+	if (name.empty())
 	{
 		name = _("Desktop");
 		iconIndex = openIconIndex = -1;
@@ -1020,7 +1020,7 @@ bool CLocalTreeView::CreateRoot()
 	m_desktop = AddRoot(name, iconIndex, openIconIndex);
 
 	name = GetSpecialFolder(CSIDL_PERSONAL, iconIndex, openIconIndex);
-	if (name == _T(""))
+	if (name.empty())
 	{
 		name = _("My Documents");
 		iconIndex = openIconIndex = -1;
@@ -1030,7 +1030,7 @@ bool CLocalTreeView::CreateRoot()
 
 
 	name = GetSpecialFolder(CSIDL_DRIVES, iconIndex, openIconIndex);
-	if (name == _T(""))
+	if (name.empty())
 	{
 		name = _("My Computer");
 		iconIndex = openIconIndex = -1;
@@ -1135,7 +1135,7 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
 {
 	wxString newdir = MenuMkdir();
-	if (newdir != _T("")) {
+	if (!newdir.empty()) {
 		Refresh();
 		m_pState->RefreshLocal();
 	}
@@ -1145,7 +1145,7 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
 void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
 {
 	wxString newdir = MenuMkdir();
-	if (newdir == _T("")) {
+	if (newdir.empty()) {
 		return;
 	}
 
@@ -1153,7 +1153,7 @@ void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
 	wxString error;
 	if (!m_pState->SetLocalDir(newdir, &error))
 	{
-		if (error != _T(""))
+		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
@@ -1333,7 +1333,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 	const wxString& oldName = GetItemText(item);
 	const wxString& newName = event.GetLabel();
-	if (newName == _T(""))
+	if (newName.empty())
 	{
 		wxBell();
 		event.Veto();
@@ -1427,7 +1427,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 
 	if (child)
 	{
-		if (GetItemText(child) != _T(""))
+		if (!GetItemText(child).empty())
 			return false;
 
 		CTreeItemData* pData = (CTreeItemData*)GetItemData(child);
@@ -1451,7 +1451,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 	}
 
 	wxString sub = HasSubdir(path);
-	if (sub != _T(""))
+	if (!sub.empty())
 	{
 		wxTreeItemId subItem = AppendItem(item, _T(""));
 		SetItemData(subItem, new CTreeItemData(sub));
@@ -1599,7 +1599,7 @@ void CLocalTreeView::OnMenuOpen(wxCommandEvent& event)
 		return;
 
 	wxString path = GetDirFromItem(m_contextMenuItem);
-	if (path == _T(""))
+	if (path.empty())
 		return;
 
 	OpenInFileManager(path);

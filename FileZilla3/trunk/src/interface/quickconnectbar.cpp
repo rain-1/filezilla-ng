@@ -102,7 +102,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	default:
 		{
 			const wxString prefix = server.GetPrefixFromProtocol(protocol);
-			if (prefix != _T(""))
+			if (!prefix.empty())
 				host = prefix + _T("://") + host;
 		}
 		break;

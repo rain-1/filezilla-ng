@@ -584,7 +584,7 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 	}
 
 	wxString desc;
-	if (pType->GetDescription(&desc) && desc != _T(""))
+	if (pType->GetDescription(&desc) && !desc.empty())
 	{
 		delete pType;
 		m_fileTypeMap[ext] = desc;

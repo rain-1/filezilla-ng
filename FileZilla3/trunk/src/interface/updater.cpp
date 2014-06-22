@@ -181,7 +181,7 @@ void CUpdater::RunIfNeeded()
 bool CUpdater::LongTimeSinceLastCheck() const
 {
 	wxString const lastCheckStr = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTDATE);
-	if (lastCheckStr == _T(""))
+	if (lastCheckStr.empty())
 		return true;
 
 	wxDateTime lastCheck;
@@ -204,7 +204,7 @@ bool CUpdater::LongTimeSinceLastCheck() const
 wxString CUpdater::GetUrl()
 {
 	wxString host = CBuildInfo::GetHostname();
-	if (host == _T(""))
+	if (host.empty())
 		host = _T("unknown");
 
 	wxString version(PACKAGE_VERSION, wxConvLocal);

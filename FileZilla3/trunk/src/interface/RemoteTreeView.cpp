@@ -399,7 +399,7 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 
 		wxTreeItemIdValue cookie;
 		wxTreeItemId child = GetFirstChild(parent, cookie);
-		if (child && GetItemText(child) == _T(""))
+		if (child && GetItemText(child).empty())
 		{
 			Delete(child);
 			child = wxTreeItemId();
@@ -473,7 +473,7 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay /*=_T(""
 	GetSystemImageList()->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
 
 	// Load overlay
-	if (overlay != _T(""))
+	if (!overlay.empty())
 	{
 		wxImage unknownIcon = wxArtProvider::GetBitmap(overlay, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)).ConvertToImage();
 
@@ -577,7 +577,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	wxTreeItemIdValue cookie;
 	wxTreeItemId child = GetFirstChild(parent, cookie);
-	if (!child || GetItemText(child) == _T(""))
+	if (!child || GetItemText(child).empty())
 	{
 		DisplayItem(parent, listing);
 		return;
@@ -838,7 +838,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 
 	const CServerPath& parent = path.GetParent();
 	const wxString& lastSegment = path.GetLastSegment();
-	if (lastSegment == _T(""))
+	if (lastSegment.empty())
 		return;
 
 	wxDataObjectComposite object;
@@ -1369,7 +1369,7 @@ bool CRemoteTreeView::ListExpand(wxTreeItemId item)
 		SetItemImages(item, true);
 
 		wxTreeItemId child = GetLastChild(item);
-		if (!child || GetItemText(child) == _T(""))
+		if (!child || GetItemText(child).empty())
 			return false;
 	}
 

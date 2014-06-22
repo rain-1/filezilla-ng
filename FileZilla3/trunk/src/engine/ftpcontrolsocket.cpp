@@ -294,7 +294,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 		if (pData->waitChallenge)
 		{
 			wxString& challenge = pData->challenge;
-			if (challenge != _T(""))
+			if (!challenge.empty())
 #ifdef __WXMSW__
 				challenge += _T("\r\n");
 #else
@@ -350,7 +350,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 	//Check for multi-line responses
 	if (line.Len() > 3)
 	{
-		if (m_MultilineResponseCode != _T(""))
+		if (!m_MultilineResponseCode.empty())
 		{
 			if (line.Left(4) == m_MultilineResponseCode)
 			{
@@ -525,7 +525,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
-		if (server.GetAccount() != _T(""))
+		if (!server.GetAccount().empty())
 		{
 			cmd.hide_arguments = false;
 			cmd.type = account;
@@ -535,7 +535,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	else if (pData->ftp_proxy_type == 1)
 	{
 		const wxString& proxyUser = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_USER);
-		if (proxyUser != _T(""))
+		if (!proxyUser.empty())
 		{
 			// Proxy logon (if credendials are set)
 			t_loginCommand cmd = {false, false, other, _T("USER ") + proxyUser};
@@ -557,7 +557,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
-		if (server.GetAccount() != _T(""))
+		if (!server.GetAccount().empty())
 		{
 			cmd.hide_arguments = false;
 			cmd.type = account;
@@ -567,7 +567,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	else if (pData->ftp_proxy_type == 2 || pData->ftp_proxy_type == 3)
 	{
 		const wxString& proxyUser = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_USER);
-		if (proxyUser != _T(""))
+		if (!proxyUser.empty())
 		{
 			// Proxy logon (if credendials are set)
 			t_loginCommand cmd = {false, false, other, _T("USER ") + proxyUser};
@@ -598,7 +598,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
-		if (server.GetAccount() != _T(""))
+		if (!server.GetAccount().empty())
 		{
 			cmd.hide_arguments = false;
 			cmd.type = account;
@@ -627,7 +627,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			token.Trim(true);
 			token.Trim(false);
 
-			if (token == _T(""))
+			if (token.empty())
 				continue;
 
 			bool isHost = false;
@@ -650,15 +650,15 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			bool isAccount = false;
 			if (token.Find(_T("%a")) != -1)
 			{
-				if (account == _T(""))
+				if (account.empty())
 					continue;
 				else
 					isAccount = true;
 			}
 
-			if (isProxyUser && !isHost && !isUser && proxyUser == _T(""))
+			if (isProxyUser && !isHost && !isUser && proxyUser.empty())
 				continue;
-			if (isProxyPass && !isHost && !isUser && proxyUser == _T(""))
+			if (isProxyPass && !isHost && !isUser && proxyUser.empty())
 				continue;
 
 			token.Replace(_T("%s"), proxyUser);
@@ -864,7 +864,7 @@ int CFtpControlSocket::LogonParseResponse()
 		else if (code == 3 && pData->loginSequence.empty())
 		{
 			LogMessage(::Error, _("Login sequence fully executed yet not logged in. Aborting."));
-			if (cmd.type == pass && m_pCurrentServer->GetAccount() == _T(""))
+			if (cmd.type == pass && m_pCurrentServer->GetAccount().empty())
 				LogMessage(::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
 			DoClose(FZ_REPLY_CRITICALERROR);
 			return FZ_REPLY_ERROR;
@@ -1128,13 +1128,13 @@ int CFtpControlSocket::LogonSend()
 					pData->challenge = _T("");
 				}
 
-				if (cmd.command == _T(""))
+				if (cmd.command.empty())
 					res = Send(_T("USER ") + m_pCurrentServer->GetUser());
 				else
 					res = Send(cmd.command);
 				break;
 			case pass:
-				if (pData->challenge != _T(""))
+				if (!pData->challenge.empty())
 				{
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(pData->challenge);
 					pNotification->server = *m_pCurrentServer;
@@ -1145,7 +1145,7 @@ int CFtpControlSocket::LogonSend()
 					return FZ_REPLY_WOULDBLOCK;
 				}
 
-				if (cmd.command == _T(""))
+				if (cmd.command.empty())
 					res = Send(_T("PASS ") + m_pCurrentServer->GetPass(), true);
 				else
 				{
@@ -1158,7 +1158,7 @@ int CFtpControlSocket::LogonSend()
 				}
 				break;
 			case account:
-				if (cmd.command == _T(""))
+				if (cmd.command.empty())
 					res = Send(_T("ACCT ") + m_pCurrentServer->GetAccount());
 				else
 					res = Send(cmd.command);
@@ -1949,7 +1949,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 	}
 	else
 	{
-		if (subDir != _T(""))
+		if (!subDir.empty())
 		{
 			// Check if the target is in cache already
 			target = CPathCache::Lookup(*m_pCurrentServer, path, subDir);
@@ -2050,7 +2050,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			else
 			{
 				m_CurrentPath = pData->target;
-				if (pData->subDir == _T(""))
+				if (pData->subDir.empty())
 				{
 					ResetOperation(FZ_REPLY_OK);
 					return FZ_REPLY_OK;
@@ -2070,7 +2070,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			if (pData->target.IsEmpty())
 				CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 
-			if (pData->subDir == _T(""))
+			if (pData->subDir.empty())
 			{
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
@@ -2084,7 +2084,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			{
 				CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 			}
-			if (pData->subDir == _T(""))
+			if (pData->subDir.empty())
 			{
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
@@ -2216,7 +2216,7 @@ int CFtpControlSocket::ChangeDirSend()
 		m_CurrentPath.Clear();
 		break;
 	case cwd_cwd_subdir:
-		if (pData->subDir == _T(""))
+		if (pData->subDir.empty())
 		{
 			ResetOperation(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
@@ -2229,7 +2229,7 @@ int CFtpControlSocket::ChangeDirSend()
 		break;
 	}
 
-	if (cmd != _T(""))
+	if (!cmd.empty())
 		if (!Send(cmd))
 			return FZ_REPLY_ERROR;
 
@@ -2242,7 +2242,7 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 {
 	LogMessage(Debug_Verbose, _T("CFtpControlSocket::FileTransfer()"));
 
-	if (localFile == _T(""))
+	if (localFile.empty())
 	{
 		if (!download)
 			ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
@@ -2811,7 +2811,7 @@ int CFtpControlSocket::FileTransferSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (cmd != _T(""))
+	if (!cmd.empty())
 		if (!Send(cmd))
 			return FZ_REPLY_ERROR;
 
@@ -3131,7 +3131,7 @@ int CFtpControlSocket::DeleteSend()
 	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 
 	const wxString& file = pData->files.front();
-	if (file == _T(""))
+	if (file.empty())
 	{
 		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Empty filename"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
@@ -3139,7 +3139,7 @@ int CFtpControlSocket::DeleteSend()
 	}
 
 	wxString filename = pData->path.FormatFilename(file, pData->omitPath);
-	if (filename == _T(""))
+	if (filename.empty())
 	{
 		LogMessage(::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath().c_str(), file.c_str());
 		ResetOperation(FZ_REPLY_ERROR);
@@ -3936,7 +3936,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 		if (mode == 1)
 		{
 			wxString ip = m_pEngine->GetOptions()->GetOption(OPTION_EXTERNALIP);
-			if (ip != _T(""))
+			if (!ip.empty())
 			{
 				address = ip;
 				return FZ_REPLY_OK;
@@ -3950,7 +3950,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 			{
 				const wxString& localAddress = m_pSocket->GetLocalIP();
 
-				if (localAddress != _T("") && localAddress == m_pEngine->GetOptions()->GetOption(OPTION_LASTRESOLVEDIP))
+				if (!localAddress.empty() && localAddress == m_pEngine->GetOptions()->GetOption(OPTION_LASTRESOLVEDIP))
 				{
 					LogMessage(::Debug_Verbose, _T("Using cached external IP address"));
 
@@ -3995,7 +3995,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 getLocalIP:
 
 	address = m_pSocket->GetLocalIP(true);
-	if (address == _T(""))
+	if (address.empty())
 	{
 		LogMessage(::Error, _("Failed to retrieve local ip address."), 1);
 		return FZ_REPLY_ERROR;
@@ -4266,7 +4266,7 @@ int CFtpControlSocket::TransferSend()
 			else if (res == FZ_REPLY_OK)
 			{
 				wxString portArgument = m_pTransferSocket->SetupActiveTransfer(address);
-				if (portArgument != _T(""))
+				if (!portArgument.empty())
 				{
 					pData->bTriedActive = true;
 					if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
@@ -4326,7 +4326,7 @@ int CFtpControlSocket::TransferSend()
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
-	if (cmd != _T(""))
+	if (!cmd.empty())
 		if (!Send(cmd, false, measureRTT))
 			return FZ_REPLY_ERROR;
 
@@ -4454,7 +4454,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		else
 			pData->port = 21;
 
-		if (pData->host == _T("") || pData->port < 1 || pData->port > 65535)
+		if (pData->host.empty() || pData->port < 1 || pData->port > 65535)
 		{
 			LogMessage(::Error, _("Proxy set but proxy host or port invalid"));
 			DoClose(FZ_REPLY_CRITICALERROR);

@@ -553,7 +553,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 	wxASSERT(node);
 
 	wxString host = GetTextElement(node, "Host");
-	if (host == _T(""))
+	if (host.empty())
 		return false;
 
 	int port = GetTextElementInt(node, "Port");
@@ -595,7 +595,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 		if ((long)ACCOUNT == logonType)
 		{
 			wxString account = GetTextElement(node, "Account");
-			if (account == _T(""))
+			if (account.empty())
 				return false;
 			if (!server.SetAccount(account))
 				return false;
@@ -625,7 +625,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 	else if (encodingType == _T("Custom"))
 	{
 		wxString customEncoding = GetTextElement(node, "CustomEncoding");
-		if (customEncoding == _T(""))
+		if (customEncoding.empty())
 			return false;
 		if (!server.SetEncodingType(ENCODING_CUSTOM, customEncoding))
 			return false;
@@ -646,7 +646,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 				if (textNode && textNode->ToText())
 				{
 					wxString command = ConvLocal(textNode->Value());
-					if (command != _T(""))
+					if (!command.empty())
 						postLoginCommands.push_back(command);
 				}
 
@@ -744,7 +744,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 
 	AddTextElementRaw(node, "BypassProxy", server.GetBypassProxy() ? "1" : "0");
 	const wxString& name = server.GetName();
-	if (name != _T(""))
+	if (!name.empty())
 		AddTextElement(node, "Name", name);
 }
 

@@ -84,7 +84,7 @@ public:
 		}
 
 		CLocalPath dir = m_pLocalListView->m_pState->GetLocalDir();
-		if (subdir != _T(""))
+		if (!subdir.empty())
 		{
 			if (!dir.ChangePath(subdir))
 				return wxDragError;
@@ -201,7 +201,7 @@ public:
 		const wxString& subdir = DoDisplayDropHighlight(wxPoint(x, y));
 
 		CLocalPath dir = m_pLocalListView->m_pState->GetLocalDir();
-		if (subdir == _T(""))
+		if (subdir.empty())
 		{
 			const CDragDropManager* pDragDropManager = CDragDropManager::Get();
 			if (pDragDropManager && pDragDropManager->localParent == m_pLocalListView->m_dir)
@@ -542,7 +542,7 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 			wxString error;
 			if (!m_pState->SetLocalDir(data->name, &error))
 			{
-				if (error != _T(""))
+				if (!error.empty())
 					wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 				else
 					wxBell();
@@ -622,7 +622,7 @@ void CLocalListView::OnMenuEnter(wxCommandEvent &event)
 	wxString error;
 	if (!m_pState->SetLocalDir(data->name, &error))
 	{
-		if (error != _T(""))
+		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
@@ -910,7 +910,7 @@ void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent& event)
 	wxString error;
 	if (!m_pState->SetLocalDir(newdir, &error))
 	{
-		if (error != _T(""))
+		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
@@ -928,7 +928,7 @@ wxString CLocalListView::MenuMkdir()
 	if (dlg.ShowModal() != wxID_OK)
 		return _T("");
 
-	if (dlg.GetValue() == _T(""))
+	if (dlg.GetValue().empty())
 	{
 		wxBell();
 		return _T("");
@@ -1069,7 +1069,7 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 	if (!index && m_hasParent)
 		return false;
 
-	if (event.GetLabel() == _T(""))
+	if (event.GetLabel().empty())
 		return false;
 
 	if (!m_pState->GetLocalDir().IsWriteable())
@@ -1214,7 +1214,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 
 	if (selectedNames.empty())
 	{
-		if (focused == _T(""))
+		if (focused.empty())
 			return;
 		for (unsigned int i = 0; i < m_indexMapping.size(); i++)
 		{
@@ -1267,7 +1267,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 		if (i == (int)m_indexMapping.size())
 			break;
 	}
-	if (focused != _T(""))
+	if (!focused.empty())
 	{
 		if (firstSelected != -1)
 			SetItemState(firstSelected, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
@@ -1838,13 +1838,13 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 
 		bool program_exists = false;
 		wxString cmd = GetSystemOpenCommand(fn.GetFullPath(), program_exists);
-		if (cmd == _T(""))
+		if (cmd.empty())
 		{
 			int pos = data->name.Find('.') == -1;
 			if (pos == -1 || (pos == 0 && data->name.Mid(1).Find('.') == -1))
 				cmd = pEditHandler->GetOpenCommand(fn.GetFullPath(), program_exists);
 		}
-		if (cmd == _T(""))
+		if (cmd.empty())
 		{
 			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath().c_str()), _("Opening failed"), wxICON_EXCLAMATION);
 			continue;
@@ -1932,7 +1932,7 @@ void CLocalListView::OnNavigationEvent(bool forward)
 		wxString error;
 		if (!m_pState->SetLocalDir(_T(".."), &error))
 		{
-			if (error != _T(""))
+			if (!error.empty())
 				wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 			else
 				wxBell();

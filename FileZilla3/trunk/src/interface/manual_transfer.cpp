@@ -109,7 +109,7 @@ void CManualTransfer::SetAutoAsciiState()
 	if (XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue())
 	{
 		wxString remote_file = XRCCTRL(*this, "ID_REMOTEFILE", wxTextCtrl)->GetValue();
-		if (remote_file == _T(""))
+		if (remote_file.empty())
 		{
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Hide();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Hide();
@@ -174,7 +174,7 @@ void CManualTransfer::DisplayServer()
 			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(_T(""));
 
 		const wxString& protocolName = CServer::GetProtocolName(m_pServer->GetProtocol());
-		if (protocolName != _T(""))
+		if (!protocolName.empty())
 			XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->SetStringSelection(protocolName);
 		else
 			XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->SetStringSelection(CServer::GetProtocolName(FTP));
@@ -311,7 +311,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	}
 
 	wxString local_file = XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->GetValue();
-	if (local_file == _T(""))
+	if (local_file.empty())
 	{
 		wxMessageBoxEx(_("You need to specify a local file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
@@ -331,14 +331,14 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 
 	wxString remote_file = XRCCTRL(*this, "ID_REMOTEFILE", wxTextCtrl)->GetValue();
 
-	if (remote_file == _T(""))
+	if (remote_file.empty())
 	{
 		wxMessageBoxEx(_("You need to specify a remote file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	wxString remote_path_str = XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->GetValue();
-	if (remote_path_str == _T(""))
+	if (remote_path_str.empty())
 	{
 		wxMessageBoxEx(_("You need to specify a remote path."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
@@ -427,7 +427,7 @@ bool CManualTransfer::UpdateServer()
 bool CManualTransfer::VerifyServer()
 {
 	const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
-	if (host == _T(""))
+	if (host.empty())
 	{
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 		wxMessageBoxEx(_("You have to enter a hostname."));
@@ -484,7 +484,7 @@ bool CManualTransfer::VerifyServer()
 	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString::Format(_T("%d"), server.GetPort()));
 
 	protocolName = CServer::GetProtocolName(server.GetProtocol());
-	if (protocolName == _T(""))
+	if (protocolName.empty())
 		CServer::GetProtocolName(FTP);
 	XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->SetStringSelection(protocolName);
 
@@ -493,7 +493,7 @@ bool CManualTransfer::VerifyServer()
 	if (logon_type != ANONYMOUS &&
 		logon_type != ASK &&
 		logon_type != INTERACTIVE &&
-		user == _T(""))
+		user.empty())
 	{
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
 		wxMessageBoxEx(_("You have to specify a user name"));
@@ -501,7 +501,7 @@ bool CManualTransfer::VerifyServer()
 	}
 
 	// The way TinyXML handles blanks, we can't use username of only spaces
-	if (user != _T(""))
+	if (!user.empty())
 	{
 		bool space_only = true;
 		for (unsigned int i = 0; i < user.Len(); ++i)
@@ -523,7 +523,7 @@ bool CManualTransfer::VerifyServer()
 
 	// Require account for account logon type
 	if (logon_type == ACCOUNT &&
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue() == _T(""))
+		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue().empty())
 	{
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
 		wxMessageBoxEx(_("You have to enter an account name"));

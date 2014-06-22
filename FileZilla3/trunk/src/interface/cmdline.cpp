@@ -71,7 +71,7 @@ bool CCommandLine::Parse()
 	if (res != 0)
 		return false;
 
-	if (HasSwitch(sitemanager) && GetOption(site) != _T(""))
+	if (HasSwitch(sitemanager) && !GetOption(site).empty())
 	{
 		wxMessageBoxEx(_("-s and -c cannot be present at the same time."), _("Syntax error in command line"));
 		return false;
@@ -83,14 +83,14 @@ bool CCommandLine::Parse()
 		return false;
 	}
 
-	if (GetOption(site) != _T("") && m_parser.GetParamCount())
+	if (!GetOption(site).empty() && m_parser.GetParamCount())
 	{
 		wxMessageBoxEx(_("-c cannot be used together with an FTP URL."), _("Syntax error in command line"));
 		return false;
 	}
 
 	wxString type = GetOption(logontype);
-	if (type != _T(""))
+	if (!type.empty())
 	{
 		if (!m_parser.GetParamCount())
 		{

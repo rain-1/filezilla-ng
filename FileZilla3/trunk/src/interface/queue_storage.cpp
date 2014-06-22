@@ -846,7 +846,7 @@ wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 	server = CServer();
 
 	wxString host = GetColumnText(selectServersQuery_, server_table_column_names::host);
-	if (host == _T(""))
+	if (host.empty())
 		return INVALID_DATA;
 
 	int port = GetColumnInt(selectServersQuery_, server_table_column_names::port);
@@ -888,7 +888,7 @@ wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 		if ((long)ACCOUNT == logonType)
 		{
 			wxString account = GetColumnText(selectServersQuery_, server_table_column_names::account);
-			if (account == _T(""))
+			if (account.empty())
 				return INVALID_DATA;
 			if (!server.SetAccount(account))
 				return INVALID_DATA;

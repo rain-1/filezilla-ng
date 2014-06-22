@@ -49,7 +49,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 		pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), _("Invalid date"));
 	}
 
-	if (cert.GetSerial() != _T(""))
+	if (!cert.GetSerial().empty())
 		pDlg->SetChildLabel(XRCID("ID_SERIAL"), cert.GetSerial());
 	else
 		pDlg->SetChildLabel(XRCID("ID_SERIAL"), _("None"));
@@ -225,7 +225,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 				continue;
 			}
 
-			if (value != _T(""))
+			if (!value.empty())
 				value += _T("\n");
 		}
 		else
@@ -250,7 +250,7 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 	if (decode)
 		value = DecodeValue(value);
 
-	if (value != _T(""))
+	if (!value.empty())
 	{
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, name));
 		pSizer->Add(new wxStaticText(parent, wxID_ANY, value));
@@ -400,7 +400,7 @@ void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
 		TiXmlElement* pRemove = 0;
 
 		t_certData data;
-		if (value == _T("") || !(data.data = ConvertStringToHex(value, data.len)))
+		if (value.empty() || !(data.data = ConvertStringToHex(value, data.len)))
 			pRemove = pCert;
 
 		data.host = GetTextElement(pCert, "Host");

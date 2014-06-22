@@ -345,7 +345,7 @@ void CFilterDialog::OnSaveAs(wxCommandEvent& event)
 		return;
 
 	wxString name = dlg.GetValue();
-	if (name == _T(""))
+	if (name.empty())
 	{
 		wxMessageBoxEx(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
 		return;
@@ -414,7 +414,7 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 		return;
 	}
 
-	if (name == _T(""))
+	if (name.empty())
 	{
 		wxMessageBoxEx(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
 		return;
@@ -967,7 +967,7 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		}
 		condition.strValue = GetTextElement(pCondition, "Value");
 		condition.matchCase = filter.matchCase;
-		if (condition.strValue == _T(""))
+		if (condition.strValue.empty())
 			continue;
 
 		// TODO: 64bit filesize
@@ -1033,7 +1033,7 @@ void CFilterManager::LoadFilters()
 
 		bool loaded = LoadFilter(pFilter, filter);
 
-		if (loaded && filter.name != _T("") && !filter.filters.empty())
+		if (loaded && !filter.name.empty() && !filter.filters.empty())
 			m_globalFilters.push_back(filter);
 
 		pFilter = pFilter->NextSiblingElement("Filter");
@@ -1062,7 +1062,7 @@ void CFilterManager::LoadFilters()
 		if (!m_globalFilterSets.empty())
 		{
 			set.name = GetTextElement(pSet, "Name");
-			if (set.name == _T(""))
+			if (set.name.empty())
 				continue;
 		}
 

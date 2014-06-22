@@ -37,7 +37,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 		return false;
 
 	wxString host = CBuildInfo::GetHostname();
-	if (host == _T(""))
+	if (host.empty())
 	{
 		pHost->Hide();
 		pHostDesc->Hide();
@@ -54,7 +54,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 		return false;
 
 	wxString build = CBuildInfo::GetBuildSystem();
-	if (build == _T(""))
+	if (build.empty())
 	{
 		pBuild->Hide();
 		pBuildDesc->Hide();
@@ -77,7 +77,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 		return false;
 
 	wxString compilerFlags = CBuildInfo::GetCompilerFlags();
-	if (compilerFlags == _T(""))
+	if (compilerFlags.empty())
 	{
 		pCompilerFlags->Hide();
 		pCompilerFlagsDesc->Hide();

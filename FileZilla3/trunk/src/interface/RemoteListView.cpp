@@ -133,7 +133,7 @@ public:
 			if (target.HasParent())
 				target = target.GetParent();
 		}
-		else if (subdir != _T(""))
+		else if (!subdir.empty())
 			target.AddSegment(subdir);
 
 		// Make sure target path is valid
@@ -1968,7 +1968,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 
 	if (selectedNames.empty())
 	{
-		if (focused == _T(""))
+		if (focused.empty())
 			return;
 
 		for (unsigned int i = 1; i < m_indexMapping.size(); i++)
@@ -2036,7 +2036,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 		if (i == m_indexMapping.size())
 			break;
 	}
-	if (focused != _T(""))
+	if (!focused.empty())
 	{
 		if (firstSelected != -1)
 			SetItemState(firstSelected, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
@@ -2117,7 +2117,7 @@ void CRemoteListView::SetInfoText()
 			text = _("Empty directory listing");
 	}
 
-	if (text == _T(""))
+	if (text.empty())
 	{
 		delete m_pInfoText;
 		m_pInfoText = 0;
@@ -2369,7 +2369,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 
 
 	const wxString& localDir = pEditHandler->GetLocalDirectory();
-	if (localDir == _T(""))
+	if (localDir.empty())
 	{
 		wxMessageBoxEx(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
 		return;
@@ -2897,7 +2897,7 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
-	if (dlg.GetValue() == _T(""))
+	if (dlg.GetValue().empty())
 	{
 		wxBell();
 		return;

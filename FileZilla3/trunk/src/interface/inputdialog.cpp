@@ -63,7 +63,7 @@ void CInputDialog::AllowEmpty(bool allowEmpty)
 void CInputDialog::OnValueChanged(wxCommandEvent& event)
 {
 	wxString value = m_pTextCtrl->GetValue();
-	XRCCTRL(*this, "wxID_OK", wxButton)->Enable(m_allowEmpty ? true : (value != _T("")));
+	XRCCTRL(*this, "wxID_OK", wxButton)->Enable(m_allowEmpty ? true : !value.empty());
 }
 
 void CInputDialog::SetValue(const wxString& value)

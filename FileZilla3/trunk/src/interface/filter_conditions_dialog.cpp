@@ -603,13 +603,13 @@ CFilter CFilterConditionsDialog::GetFilter()
 		{
 		case filter_name:
 		case filter_path:
-			if (controls.pValue->GetValue() == _T(""))
+			if (controls.pValue->GetValue().empty())
 				continue;
 			condition.strValue = controls.pValue->GetValue();
 			break;
 		case filter_size:
 			{
-				if (controls.pValue->GetValue() == _T(""))
+				if (controls.pValue->GetValue().empty())
 					continue;
 				condition.strValue = controls.pValue->GetValue();
 				unsigned long tmp;
@@ -631,7 +631,7 @@ CFilter CFilterConditionsDialog::GetFilter()
 			}
 			break;
 		case filter_date:
-			if (controls.pValue->GetValue() == _T(""))
+			if (controls.pValue->GetValue().empty())
 				continue;
 			else {
 				condition.strValue = controls.pValue->GetValue();
@@ -701,7 +701,7 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 		const CFilterControls& controls = m_filterControls[i];
 		enum t_filterType type = GetTypeFromTypeSelection(controls.pType->GetSelection());
 
-		if ((type == filter_name || type == filter_path) && controls.pValue->GetValue() == _T(""))
+		if ((type == filter_name || type == filter_path) && controls.pValue->GetValue().empty())
 		{
 			if (allow_empty)
 				continue;
@@ -715,7 +715,7 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 		else if (type == filter_size)
 		{
 			const wxString v = controls.pValue->GetValue();
-			if (v == _T("") && allow_empty)
+			if (v.empty() && allow_empty)
 				continue;
 
 			long number;
@@ -731,7 +731,7 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 		else if (type == filter_date)
 		{
 			const wxString d = controls.pValue->GetValue();
-			if (d == _T("") && allow_empty)
+			if (d.empty() && allow_empty)
 				continue;
 
 			wxDateTime date;

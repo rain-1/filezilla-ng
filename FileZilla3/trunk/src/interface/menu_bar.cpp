@@ -476,7 +476,7 @@ void CMenuBar::UpdateMenubarState()
 	else
 	{
 		CServer tmp;
-		canReconnect = pState->GetLastServer().GetHost() != _T("");
+		canReconnect = !pState->GetLastServer().GetHost().empty();
 	}
 	Enable(XRCID("ID_MENU_SERVER_RECONNECT"), canReconnect);
 

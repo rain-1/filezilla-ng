@@ -113,7 +113,7 @@ void CDesktopNotificationImpl::EmitNotifications()
 	call->AddString(notification.body.mb_str(wxConvUTF8));
 	call->AddArrayOfString(0, 0);
 
-	if (notification.category != _T(""))
+	if (!notification.category.empty())
 	{
 		const wxWX2MBbuf category = notification.category.mb_str(wxConvUTF8);
 		const char *hints[2];
