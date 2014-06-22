@@ -973,7 +973,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 	{
 		// QueueItemType_Folder
 		if ((download && localPath.empty()) ||
-			(!download && remotePath.IsEmpty()))
+			(!download && remotePath.empty()))
 		{
 			return INVALID_DATA;
 		}
@@ -993,7 +993,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 		int overwrite_action = GetColumnInt(selectFilesQuery_, file_table_column_names::default_exists_action, CFileExistsNotification::unknown);
 
 		if (sourceFile.empty() || localPath.empty() ||
-			remotePath.IsEmpty() ||
+			remotePath.empty() ||
 			size < -1 ||
 			priority < 0 || priority >= PRIORITY_COUNT ||
 			errorCount < 0)

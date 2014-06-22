@@ -1439,9 +1439,9 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 		data = *pSiteData;
 		if (!pData->m_localDir.empty())
 			data.m_localDir = pData->m_localDir;
-		if (!pData->m_remoteDir.IsEmpty())
+		if (!pData->m_remoteDir.empty())
 			data.m_remoteDir = pData->m_remoteDir;
-		if (data.m_localDir.empty() || data.m_remoteDir.IsEmpty())
+		if (data.m_localDir.empty() || data.m_remoteDir.empty())
 			data.m_sync = false;
 		else
 			data.m_sync = pData->m_sync;

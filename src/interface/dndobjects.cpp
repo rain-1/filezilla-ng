@@ -202,7 +202,7 @@ CRemoteDataObject::CRemoteDataObject()
 
 size_t CRemoteDataObject::GetDataSize() const
 {
-	wxASSERT(!m_path.IsEmpty());
+	wxASSERT(!m_path.empty());
 
 	wxCHECK(m_xmlFile.GetElement(), 0);
 
@@ -211,7 +211,7 @@ size_t CRemoteDataObject::GetDataSize() const
 
 bool CRemoteDataObject::GetDataHere(void *buf) const
 {
-	wxASSERT(!m_path.IsEmpty());
+	wxASSERT(!m_path.empty());
 
 	wxCHECK(m_xmlFile.GetElement(), false);
 

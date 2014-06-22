@@ -981,7 +981,7 @@ int CSftpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDi
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
-	pData->fallback_to_current = !path.IsEmpty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
+	pData->fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
 
 	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
 	if (res != FZ_REPLY_OK)
@@ -1192,7 +1192,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		{
 			// List current directory instead
 			pData->fallback_to_current = false;
-			pData->path.Clear();
+			pData->path.clear();
 			pData->subDir = _T("");
 			int res = ChangeDir();
 			if (res != FZ_REPLY_OK)
@@ -1205,7 +1205,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		}
 	}
 
-	if (pData->path.IsEmpty())
+	if (pData->path.empty())
 		pData->path = m_CurrentPath;
 
 	if (!pData->refresh)
@@ -1301,9 +1301,9 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 		path.SetType(m_pCurrentServer->GetType());
 
 	CServerPath target;
-	if (path.IsEmpty())
+	if (path.empty())
 	{
-		if (m_CurrentPath.IsEmpty())
+		if (m_CurrentPath.empty())
 			state = cwd_pwd;
 		else
 			return FZ_REPLY_OK;
@@ -1315,7 +1315,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 			// Check if the target is in cache already
 			CPathCache cache;
 			target = cache.Lookup(*m_pCurrentServer, path, subDir);
-			if (!target.IsEmpty())
+			if (!target.empty())
 			{
 				if (m_CurrentPath == target)
 					return FZ_REPLY_OK;
@@ -1328,9 +1328,9 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 			{
 				// Target unknown, check for the parent's target
 				target = cache.Lookup(*m_pCurrentServer, path, _T(""));
-				if (m_CurrentPath == path || (!target.IsEmpty() && target == m_CurrentPath))
+				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				{
-					target.Clear();
+					target.clear();
 					state = cwd_cwd_subdir;
 				}
 				else
@@ -1341,7 +1341,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 		{
 			CPathCache cache;
 			target = cache.Lookup(*m_pCurrentServer, path, _T(""));
-			if (m_CurrentPath == path || (!target.IsEmpty() && target == m_CurrentPath))
+			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				return FZ_REPLY_OK;
 			state = cwd_cwd;
 		}
@@ -1417,7 +1417,7 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 				return FZ_REPLY_OK;
 			}
 
-			pData->target.Clear();
+			pData->target.clear();
 			pData->opState = cwd_cwd_subdir;
 		}
 		else
@@ -1497,7 +1497,7 @@ int CSftpControlSocket::ChangeDirSend()
 				return FZ_REPLY_WOULDBLOCK;
 		}
 		cmd = _T("cd ") + QuoteFilename(pData->path.GetPath());
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		break;
 	case cwd_cwd_subdir:
 		if (pData->subDir.empty())
@@ -1507,7 +1507,7 @@ int CSftpControlSocket::ChangeDirSend()
 		}
 		else
 			cmd = _T("cd ") + QuoteFilename(pData->subDir);
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		break;
 	}
 
@@ -2048,7 +2048,7 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
 
-	if (!m_CurrentPath.IsEmpty())
+	if (!m_CurrentPath.empty())
 	{
 		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
 		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false))
@@ -2200,7 +2200,7 @@ int CSftpControlSocket::MkdirSend()
 	{
 	case mkd_findparent:
 	case mkd_cwdsub:
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		res = Send(_T("cd ") + QuoteFilename(pData->currentPath.GetPath()));
 		break;
 	case mkd_mkdsub:
@@ -2345,7 +2345,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	pData->subDir = subDir;
 
 	CServerPath fullPath = CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir);
-	if (fullPath.IsEmpty())
+	if (fullPath.empty())
 	{
 		CServerPath fullPath = pData->path;
 
@@ -2387,7 +2387,7 @@ int CSftpControlSocket::RemoveDirParseResponse(bool successful, const wxString&)
 	}
 
 	CSftpRemoveDirOpData *pData = static_cast<CSftpRemoveDirOpData *>(m_pCurOpData);
-	if (pData->path.IsEmpty())
+	if (pData->path.empty())
 	{
 		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Empty pData->path"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
@@ -2646,7 +2646,7 @@ int CSftpControlSocket::RenameSend()
 			{
 				// Need to invalidate current working directories
 				CServerPath path = CPathCache::Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-				if (path.IsEmpty())
+				if (path.empty())
 				{
 					path = pData->m_cmd.GetFromPath();
 					path.AddSegment(pData->m_cmd.GetFromFile());

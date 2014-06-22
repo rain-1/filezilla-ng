@@ -1095,7 +1095,7 @@ void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 	const bool hasParent = path.HasParent();
 	const bool writeable = path.IsWriteable();
 
-	const bool remoteConnected = m_pState->IsRemoteConnected() && !m_pState->GetRemotePath().IsEmpty();
+	const bool remoteConnected = m_pState->IsRemoteConnected() && !m_pState->GetRemotePath().empty();
 
 	pMenu->Enable(XRCID("ID_UPLOAD"), hasParent && remoteConnected);
 	pMenu->Enable(XRCID("ID_ADDTOQUEUE"), hasParent && remoteConnected);
@@ -1122,7 +1122,7 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 
 	const CServer server = *m_pState->GetServer();
 	CServerPath remotePath = m_pState->GetRemotePath();
-	if (remotePath.IsEmpty())
+	if (remotePath.empty())
 		return;
 
 	if (!remotePath.ChangePath(GetItemText(m_contextMenuItem)))

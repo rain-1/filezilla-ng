@@ -1,4 +1,4 @@
-#include <filezilla.h>
+	#include <filezilla.h>
 #include "sitemanager.h"
 
 #include "filezillaapp.h"
@@ -55,13 +55,13 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 					if (remoteDir)
 						data->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
 
-					if (data->m_localDir.empty() && data->m_remoteDir.IsEmpty())
+					if (data->m_localDir.empty() && data->m_remoteDir.empty())
 					{
 						delete data;
 						continue;
 					}
 
-					if (!data->m_localDir.empty() && !data->m_remoteDir.IsEmpty())
+					if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
 						data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 
 					pHandler->AddBookmark(name, data);
@@ -100,7 +100,7 @@ CSiteManagerItemData_Site* CSiteManager::ReadServerElement(TiXmlElement *pElemen
 	if (remoteDir)
 		data->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
 
-	if (!data->m_localDir.empty() && !data->m_remoteDir.IsEmpty())
+	if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
 		data->m_sync = GetTextElementBool(pElement, "SyncBrowsing", false);
 
 	return data;
@@ -384,7 +384,7 @@ bool CSiteManager::UnescapeSitePath(wxString path, std::list<wxString>& result)
 			}
 			else
 			{
-				if (!name.IsEmpty())
+				if (!name.empty())
 					result.push_back(name);
 				name.clear();
 			}
@@ -507,7 +507,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 		TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
 		if (remoteDir)
 			remotePath.SetSafePath(ConvLocal(remoteDir->Value()));
-		if (!localPath.empty() && !remotePath.IsEmpty())
+		if (!localPath.empty() && !remotePath.empty())
 		{
 			data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 		}
@@ -525,7 +525,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 
 bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmarks)
 {
-	if (sitePath.IsEmpty())
+	if (sitePath.empty())
 		return false;
 	wxChar c = sitePath[0];
 	if (c != '0' && c != '1')
@@ -594,7 +594,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 		if (remoteDir)
 			remotePath.SetSafePath(ConvLocal(remoteDir->Value()));
 
-		if (localPath.empty() && remotePath.IsEmpty())
+		if (localPath.empty() && remotePath.empty())
 			continue;
 
 		bookmarks.push_back(name);
@@ -711,7 +711,7 @@ TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxSt
 
 bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync)
 {
-	if (local_dir.empty() && remote_dir.IsEmpty())
+	if (local_dir.empty() && remote_dir.empty())
 		return false;
 
 	wxChar c = sitePath.empty() ? 0 : sitePath[0];
@@ -780,7 +780,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	AddTextElement(pBookmark, "Name", name);
 	if (!local_dir.empty())
 		AddTextElement(pBookmark, "LocalDir", local_dir);
-	if (!remote_dir.IsEmpty())
+	if (!remote_dir.empty())
 		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
 	if (sync)
 		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");

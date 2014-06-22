@@ -266,7 +266,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			return;
 
 		pState->SetSyncBrowse(false);
-		if (!pData->m_remoteDir.IsEmpty() && pState->IsRemoteIdle())
+		if (!pData->m_remoteDir.empty() && pState->IsRemoteIdle())
 		{
 			const CServer* pServer = pState->GetServer();
 			if (!pServer || *pServer != pData->m_server)
@@ -283,7 +283,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 
 			if (set && pData->m_sync)
 			{
-				wxASSERT(!pData->m_remoteDir.IsEmpty());
+				wxASSERT(!pData->m_remoteDir.empty());
 				pState->SetSyncBrowse(true, pData->m_remoteDir);
 			}
 		}
@@ -304,13 +304,13 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			return;
 
 		pState->SetSyncBrowse(false);
-		if (!remote_dir.IsEmpty() && pState->IsRemoteIdle())
+		if (!remote_dir.empty() && pState->IsRemoteIdle())
 		{
 			const CServer* pServer = pState->GetServer();
 			if (pServer)
 			{
 				CServerPath current_remote_path = pState->GetRemotePath();
-				if (!current_remote_path.IsEmpty() && current_remote_path.GetType() != remote_dir.GetType())
+				if (!current_remote_path.empty() && current_remote_path.GetType() != remote_dir.GetType())
 				{
 					wxMessageBoxEx(_("Selected global bookmark and current server use a different server type.\nUse site-specific bookmarks for this server."), _("Bookmark"), wxICON_EXCLAMATION, this);
 					return;
@@ -324,7 +324,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 
 			if (set && sync)
 			{
-				wxASSERT(!remote_dir.IsEmpty());
+				wxASSERT(!remote_dir.empty());
 				pState->SetSyncBrowse(true, remote_dir);
 			}
 		}

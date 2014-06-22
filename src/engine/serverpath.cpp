@@ -56,7 +56,7 @@ CServerPath::CServerPath(const CServerPath &path, wxString subdir)
 		return;
 
 	if (!ChangePath(subdir))
-		Clear();
+		clear();
 }
 
 CServerPath::CServerPath(const CServerPath &path)
@@ -72,7 +72,7 @@ CServerPath::CServerPath(wxString const& path, ServerType type /*=DEFAULT*/)
 	SetPath(path);
 }
 
-void CServerPath::Clear()
+void CServerPath::clear()
 {
 	m_bEmpty = true;
 	m_type = DEFAULT;
@@ -472,7 +472,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 
 	if (dir.empty())
 	{
-		if (IsEmpty() || isFile)
+		if (empty() || isFile)
 			return false;
 		else
 			return true;
@@ -493,7 +493,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 
 				if (isFile)
 				{
-					if (IsEmpty())
+					if (empty())
 						return false;
 
 					file = dir;
@@ -647,7 +647,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 		{
 			if (dir[0] != ':')
 			{
-				if (IsEmpty())
+				if (empty())
 					return false;
 			}
 			else
@@ -850,7 +850,7 @@ int CServerPath::CmpNoCase(const CServerPath &op) const
 
 bool CServerPath::AddSegment(const wxString& segment)
 {
-	if (IsEmpty())
+	if (empty())
 		return false;
 
 	// TODO: Check for invalid characters

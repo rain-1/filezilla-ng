@@ -232,7 +232,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 
 	if (m_invalidateCurrentPath)
 	{
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		m_invalidateCurrentPath = false;
 	}
 
@@ -435,7 +435,7 @@ bool CControlSocket::ParsePwdReply(wxString reply, bool unquoted /*=false*/, con
 		else
 			LogMessage(::Error, _("Failed to parse returned path."));
 
-		if (!defaultPath.IsEmpty()) {
+		if (!defaultPath.empty()) {
 			LogMessage(Debug_Warning, _T("Assuming path is '%s'."), defaultPath.GetPath().c_str());
 			m_CurrentPath = defaultPath;
 			return true;
@@ -468,7 +468,7 @@ int CControlSocket::CheckOverwriteFile()
 	bool matchedCase;
 	CDirectoryCache cache;
 	CServerPath remotePath;
-	if (pData->tryAbsolutePath || m_CurrentPath.IsEmpty())
+	if (pData->tryAbsolutePath || m_CurrentPath.empty())
 		remotePath = pData->remotePath;
 	else
 		remotePath = m_CurrentPath;
@@ -884,8 +884,8 @@ bool CControlSocket::IsWaitingForLock()
 
 void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 {
-	wxASSERT(!path.IsEmpty());
-	if (m_CurrentPath.IsEmpty())
+	wxASSERT(!path.empty());
+	if (m_CurrentPath.empty())
 		return;
 
 	if (m_CurrentPath == path || path.IsParentOf(m_CurrentPath, false))
@@ -893,7 +893,7 @@ void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 		if (m_pCurOpData)
 			m_invalidateCurrentPath = true;
 		else
-			m_CurrentPath.Clear();
+			m_CurrentPath.clear();
 	}
 }
 

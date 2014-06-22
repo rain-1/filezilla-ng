@@ -686,7 +686,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		{
 			CState* pState = *iter;
 			CServerPath path = pState->GetRemotePath();
-			if (!path.IsEmpty() && pState->m_pCommandQueue)
+			if (!path.empty() && pState->m_pCommandQueue)
 				pState->ChangeRemoteDir(path, _T(""), LIST_FLAG_REFRESH);
 		}
 	}
@@ -974,7 +974,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 			{
 				const CDirectoryListingNotification* const pListingNotification = reinterpret_cast<CDirectoryListingNotification *>(pNotification);
 
-				if (pListingNotification->GetPath().IsEmpty())
+				if (pListingNotification->GetPath().empty())
 					pState->SetRemoteDir(0, false);
 				else
 				{
@@ -2112,7 +2112,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 			bool set = pState->SetLocalDir(pData->m_localDir, 0, false);
 
 			if (set && pData->m_sync) {
-				wxASSERT(!pData->m_remoteDir.IsEmpty());
+				wxASSERT(!pData->m_remoteDir.empty());
 				pState->SetSyncBrowse(true, pData->m_remoteDir);
 			}
 		}

@@ -36,7 +36,7 @@ int CNewBookmarkDialog::ShowModal(const wxString &local_path, const CServerPath 
 		return wxID_CANCEL;
 
 	XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl)->ChangeValue(local_path);
-	if (!remote_path.IsEmpty())
+	if (!remote_path.empty())
 		XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->ChangeValue(remote_path.GetPath());
 
 	if (!m_server)
@@ -192,11 +192,11 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 			if (!remote_dir.SetSafePath(remote_dir_raw))
 				continue;
 		}
-		if (local_dir.empty() && remote_dir.IsEmpty())
+		if (local_dir.empty() && remote_dir.empty())
 			continue;
 
 		bool sync;
-		if (local_dir.empty() || remote_dir.IsEmpty())
+		if (local_dir.empty() || remote_dir.empty())
 			sync = false;
 		else
 			sync = GetTextElementBool(pBookmark, "SyncBrowsing");
@@ -318,7 +318,7 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		AddTextElement(pBookmark, "Name", m_pTree->GetItemText(child));
 		if (!data->m_local_dir.empty())
 			AddTextElement(pBookmark, "LocalDir", data->m_local_dir);
-		if (!data->m_remote_dir.IsEmpty())
+		if (!data->m_remote_dir.empty())
 			AddTextElement(pBookmark, "RemoteDir", data->m_remote_dir.GetSafePath());
 		if (data->m_sync)
 			AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
@@ -751,7 +751,7 @@ bool CBookmarksDialog::GetBookmarks(std::list<wxString> &bookmarks)
 			if (!remote_dir.SetSafePath(remote_dir_raw))
 				continue;
 		}
-		if (local_dir.empty() && remote_dir.IsEmpty())
+		if (local_dir.empty() && remote_dir.empty())
 			continue;
 
 		bookmarks.push_back(name);
@@ -805,9 +805,9 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 
 bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_dir, const CServerPath &remote_dir, bool sync)
 {
-	if (local_dir.empty() && remote_dir.IsEmpty())
+	if (local_dir.empty() && remote_dir.empty())
 		return false;
-	if ((local_dir.empty() || remote_dir.IsEmpty()) && sync)
+	if ((local_dir.empty() || remote_dir.empty()) && sync)
 		return false;
 
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
@@ -847,7 +847,7 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 	AddTextElement(pBookmark, "Name", name);
 	if (!local_dir.empty())
 		AddTextElement(pBookmark, "LocalDir", local_dir);
-	if (!remote_dir.IsEmpty())
+	if (!remote_dir.empty())
 		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
 	if (sync)
 		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");

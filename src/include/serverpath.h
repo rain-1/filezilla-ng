@@ -22,8 +22,8 @@ public:
 	CServerPath(const CServerPath &path, wxString subdir); // Ignores parent on absolute subdir
 	CServerPath(const CServerPath &path);
 
-	bool IsEmpty() const { return m_bEmpty; };
-	void Clear();
+	bool empty() const { return m_bEmpty; }
+	void clear();
 
 	bool SetPath(wxString newPath);
 	bool SetPath(wxString &newPath, bool isFile);

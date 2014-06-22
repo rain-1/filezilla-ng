@@ -355,7 +355,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 			if (line.Left(4) == m_MultilineResponseCode)
 			{
 				// end of multi-line found
-				m_MultilineResponseCode.Clear();
+				m_MultilineResponseCode.clear();
 				m_Response = line;
 				ParseResponse();
 				m_Response = _T("");
@@ -1022,7 +1022,7 @@ int CFtpControlSocket::LogonParseResponse()
 				// Create a list of all facts understood by both FZ and the server.
 				// Check if there's any supported fact not enabled by default, should that
 				// be the case we need to send OPTS MLST
-				while (!facts.IsEmpty())
+				while (!facts.empty())
 				{
 					int delim = facts.Find(';');
 					if (delim == -1)
@@ -1334,7 +1334,7 @@ int CFtpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDir
 	pData->path = path;
 	pData->subDir = subDir;
 	pData->refresh = (flags & LIST_FLAG_REFRESH) != 0;
-	pData->fallback_to_current = !path.IsEmpty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
+	pData->fallback_to_current = !path.empty() && (flags & LIST_FLAG_FALLBACK_CURRENT) != 0;
 
 	int res = ChangeDir(path, subDir, (flags & LIST_FLAG_LINK) != 0);
 	if (res != FZ_REPLY_OK)
@@ -1371,7 +1371,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			{
 				// List current directory instead
 				pData->fallback_to_current = false;
-				pData->path.Clear();
+				pData->path.clear();
 				pData->subDir = _T("");
 				int res = ChangeDir();
 				if (res != FZ_REPLY_OK)
@@ -1383,11 +1383,11 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				return FZ_REPLY_ERROR;
 			}
 		}
-		if (pData->path.IsEmpty())
+		if (pData->path.empty())
 		{
 			pData->path = m_CurrentPath;
 			wxASSERT(pData->subDir.empty());
-			wxASSERT(!pData->path.IsEmpty());
+			wxASSERT(!pData->path.empty());
 		}
 
 		if (!pData->refresh)
@@ -1940,9 +1940,9 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 		path.SetType(m_pCurrentServer->GetType());
 
 	CServerPath target;
-	if (path.IsEmpty())
+	if (path.empty())
 	{
-		if (m_CurrentPath.IsEmpty())
+		if (m_CurrentPath.empty())
 			state = cwd_pwd;
 		else
 			return FZ_REPLY_OK;
@@ -1953,7 +1953,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 		{
 			// Check if the target is in cache already
 			target = CPathCache::Lookup(*m_pCurrentServer, path, subDir);
-			if (!target.IsEmpty())
+			if (!target.empty())
 			{
 				if (m_CurrentPath == target)
 					return FZ_REPLY_OK;
@@ -1966,9 +1966,9 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 			{
 				// Target unknown, check for the parent's target
 				target = CPathCache::Lookup(*m_pCurrentServer, path, _T(""));
-				if (m_CurrentPath == path || (!target.IsEmpty() && target == m_CurrentPath))
+				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				{
-					target.Clear();
+					target.clear();
 					state = cwd_cwd_subdir;
 				}
 				else
@@ -1978,7 +1978,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 		else
 		{
 			target = CPathCache::Lookup(*m_pCurrentServer, path, _T(""));
-			if (m_CurrentPath == path || (!target.IsEmpty() && target == m_CurrentPath))
+			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				return FZ_REPLY_OK;
 			state = cwd_cwd;
 		}
@@ -2045,7 +2045,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		}
 		else
 		{
-			if (pData->target.IsEmpty())
+			if (pData->target.empty())
 				pData->opState = cwd_pwd_cwd;
 			else
 			{
@@ -2056,7 +2056,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 					return FZ_REPLY_OK;
 				}
 
-				pData->target.Clear();
+				pData->target.clear();
 				pData->opState = cwd_cwd_subdir;
 			}
 		}
@@ -2067,7 +2067,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			LogMessage(Debug_Warning, _T("PWD failed, assuming path is '%s'."), pData->path.GetPath().c_str());
 			m_CurrentPath = pData->path;
 
-			if (pData->target.IsEmpty())
+			if (pData->target.empty())
 				CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 
 			if (pData->subDir.empty())
@@ -2080,7 +2080,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		}
 		else if (ParsePwdReply(m_Response, false, pData->path))
 		{
-			if (pData->target.IsEmpty())
+			if (pData->target.empty())
 			{
 				CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 			}
@@ -2121,7 +2121,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			if (pData->subDir == _T(".."))
 			{
 				if (!assumedPath.HasParent())
-					assumedPath.Clear();
+					assumedPath.clear();
 				else
 					assumedPath = assumedPath.GetParent();
 			}
@@ -2130,12 +2130,12 @@ int CFtpControlSocket::ChangeDirParseResponse()
 
 			if (code != 2 && code != 3)
 			{
-				if (!assumedPath.IsEmpty())
+				if (!assumedPath.empty())
 				{
 					LogMessage(Debug_Warning, _T("PWD failed, assuming path is '%s'."), assumedPath.GetPath().c_str());
 					m_CurrentPath = assumedPath;
 
-					if (pData->target.IsEmpty())
+					if (pData->target.empty())
 					{
 						CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 					}
@@ -2151,7 +2151,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			}
 			else if (ParsePwdReply(m_Response, false, assumedPath))
 			{
-				if (pData->target.IsEmpty())
+				if (pData->target.empty())
 				{
 					CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 				}
@@ -2213,7 +2213,7 @@ int CFtpControlSocket::ChangeDirSend()
 				return FZ_REPLY_WOULDBLOCK;
 		}
 		cmd = _T("CWD ") + pData->path.GetPath();
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		break;
 	case cwd_cwd_subdir:
 		if (pData->subDir.empty())
@@ -2225,7 +2225,7 @@ int CFtpControlSocket::ChangeDirSend()
 			cmd = _T("CDUP");
 		else
 			cmd = _T("CWD ") + pData->path.FormatSubdir(pData->subDir);
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		break;
 	}
 
@@ -3050,7 +3050,7 @@ int CFtpControlSocket::RawCommandSend()
 	CDirectoryCache cache;
 	cache.InvalidateServer(*m_pCurrentServer);
 	CPathCache::InvalidateServer(*m_pCurrentServer);
-	m_CurrentPath.Clear();
+	m_CurrentPath.clear();
 
 	m_lastTypeBinary = -1;
 
@@ -3279,7 +3279,7 @@ int CFtpControlSocket::RemoveDirSend()
 	cache.InvalidateFile(*m_pCurrentServer, pData->path, pData->subDir);
 
 	CServerPath path(CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
-	if (path.IsEmpty())
+	if (path.empty())
 	{
 		path = pData->path;
 		path.AddSegment(pData->subDir);
@@ -3349,7 +3349,7 @@ int CFtpControlSocket::Mkdir(const CServerPath& path)
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
 
-	if (!m_CurrentPath.IsEmpty())
+	if (!m_CurrentPath.empty())
 	{
 		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
 		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false))
@@ -3523,7 +3523,7 @@ int CFtpControlSocket::MkdirSend()
 	{
 	case mkd_findparent:
 	case mkd_cwdsub:
-		m_CurrentPath.Clear();
+		m_CurrentPath.clear();
 		res = Send(_T("CWD ") + pData->currentPath.GetPath());
 		break;
 	case mkd_mkdsub:
@@ -3669,7 +3669,7 @@ int CFtpControlSocket::RenameSend()
 			cache.InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			CServerPath path(CPathCache::Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile()));
-			if (path.IsEmpty())
+			if (path.empty())
 			{
 				path = pData->m_cmd.GetFromPath();
 				path.AddSegment(pData->m_cmd.GetFromFile());

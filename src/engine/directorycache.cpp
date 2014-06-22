@@ -389,13 +389,13 @@ void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, 
 
 	CServerPath absolutePath = path;
 	if (!absolutePath.AddSegment(filename))
-		absolutePath.Clear();
+		absolutePath.clear();
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); )
 	{
 		CCacheEntry &entry = *iter;
 		// Delete exact matches and subdirs
-		if (!absolutePath.IsEmpty() && (entry.listing.path == absolutePath || absolutePath.IsParentOf(entry.listing.path, true)))
+		if (!absolutePath.empty() && (entry.listing.path == absolutePath || absolutePath.IsParentOf(entry.listing.path, true)))
 		{
 			m_totalFileCount -= entry.listing.GetCount();
 			tLruList::iterator* lruIt = (tLruList::iterator*)iter->lruIt;

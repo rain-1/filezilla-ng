@@ -75,7 +75,7 @@ public:
 				return wxDragNone;
 
 			const CServerPath& path = pState->GetRemotePath();
-			if (path.IsEmpty())
+			if (path.empty())
 				return wxDragNone;
 
 			pState->UploadDroppedFiles(m_pFileDataObject, path, true);
@@ -130,7 +130,7 @@ public:
 		}
 
 		CDragDropManager* pDragDropManager = CDragDropManager::Get();
-		if (pDragDropManager && !pDragDropManager->remoteParent.IsEmpty())
+		if (pDragDropManager && !pDragDropManager->remoteParent.empty())
 		{
 			// Drag from remote to queue, check if local path is writeable
 			CState* const pState = CContextManager::Get()->GetCurrentContext();
