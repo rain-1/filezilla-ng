@@ -20,8 +20,11 @@ END_EVENT_TABLE()
 #define LED_ON 0
 
 CLed::CLed(wxWindow *parent, unsigned int index)
-	: wxWindow(parent, -1, wxDefaultPosition, wxSize(11, 11))
 {
+	SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+
+	Create(parent, -1, wxDefaultPosition, wxSize(11, 11));
+
 	if (index == 1)
 		m_index = 1;
 	else
