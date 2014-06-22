@@ -2677,6 +2677,8 @@ void CMainFrame::OnIconize(wxIconizeEvent& event)
 #ifdef __WXGTK__
 	if (m_taskbar_is_uniconizing)
 		return;
+	if (m_taskBarIcon && m_taskBarIcon->IsIconInstalled()) // Only way to uniconize is via the taskbar icon.
+		return;
 #endif
 	if (!event.IsIconized())
 	{
@@ -2689,7 +2691,6 @@ void CMainFrame::OnIconize(wxIconizeEvent& event)
 
 		return;
 	}
-
 
 	if (!COptions::Get()->GetOptionVal(OPTION_MINIMIZE_TRAY))
 		return;
