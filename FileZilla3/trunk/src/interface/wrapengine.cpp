@@ -525,7 +525,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 		GtkRequisition req;
 		gtk_widget_get_preferred_size(sboxSizer->GetStaticBox()->GetHandle(), 0, &req);
 		sboxSizer->GetStaticBox()->CacheBestSize(wxSize(req.width, req.height));
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) || defined(__WXGTK__)
 		sboxSizer->GetStaticBox()->CacheBestSize(wxSize(0, 0));
 #else
 		sboxSizer->GetStaticBox()->CacheBestSize(wxDefaultSize);
