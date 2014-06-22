@@ -309,7 +309,7 @@ void CHttpControlSocket::OnConnect()
 			}
 
 			const wxString trusted_rootcert = m_pEngine->GetOptions()->GetOption(OPTION_INTERNAL_ROOTCERT);
-			if (trusted_rootcert != _T("") && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert))
+			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert))
 			{
 				LogMessage(::Error, _("Failed to parse trusted root cert."));
 				DoClose();
@@ -368,7 +368,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	m_current_uri = wxURI(m_pCurrentServer->FormatServer() + pData->remotePath.FormatFilename(pData->remoteFile));
 
-	if (localFile != _T("")) {
+	if (!localFile.empty()) {
 		pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile).GetValue();
 
 		pData->opState = filetransfer_waitfileexists;
@@ -536,7 +536,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		SetTransferStatusStartTime();
 	}
 
-	if (pData->localFile == _T(""))
+	if (pData->localFile.empty())
 	{
 		char* q = new char[len];
 		memcpy(q, p, len);
@@ -596,7 +596,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 
 		m_pRecvBuffer[i] = 0;
 		const wxString& line = wxString(m_pRecvBuffer, wxConvLocal);
-		if (line != _T(""))
+		if (!line.empty())
 			LogMessageRaw(Response, line);
 
 		if (pData->m_responseCode == -1)

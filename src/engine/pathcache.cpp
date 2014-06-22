@@ -103,7 +103,7 @@ void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, 
 		iter->second->erase(serverIter);
 	}
 
-	if (target.IsEmpty() && subdir != _T(""))
+	if (target.IsEmpty() && !subdir.empty())
 	{
 		target = path;
 		if (!target.AddSegment(subdir))

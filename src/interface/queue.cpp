@@ -988,7 +988,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 			case colRemoteName:
 				if (!pFolderItem->Download())
 				{
-					if (pFolderItem->GetRemoteFile() == _T(""))
+					if (pFolderItem->GetRemoteFile().empty())
 						return pFolderItem->GetRemotePath().GetPath();
 					else
 						return pFolderItem->GetRemotePath().FormatFilename(pFolderItem->GetRemoteFile());

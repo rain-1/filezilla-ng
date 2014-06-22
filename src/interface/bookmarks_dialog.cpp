@@ -94,7 +94,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 				return;
 
 			m_site_path = CSiteManager::AddServer(*m_server);
-			if (m_site_path == _T(""))
+			if (m_site_path.empty())
 			{
 				wxMessageBoxEx(_("Could not add connection to Site Manager"), _("New bookmark"), wxICON_EXCLAMATION, this);
 				EndModal(wxID_CANCEL);
@@ -415,7 +415,7 @@ bool CBookmarksDialog::Verify()
 		server = 0;
 
 	const wxString remotePathRaw = XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue();
-	if (remotePathRaw != _T(""))
+	if (!remotePathRaw.empty())
 	{
 		CServerPath remotePath;
 		if (server)
@@ -474,7 +474,7 @@ void CBookmarksDialog::UpdateBookmark()
 		server = 0;
 
 	const wxString remotePathRaw = XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue();
-	if (remotePathRaw != _T(""))
+	if (!remotePathRaw.empty())
 	{
 		if (server)
 			data->m_remote_dir.SetType(server->GetType());
@@ -546,7 +546,7 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent& event)
 				return;
 
 			m_site_path = CSiteManager::AddServer(*m_server);
-			if (m_site_path == _T(""))
+			if (m_site_path.empty())
 			{
 				wxMessageBoxEx(_("Could not add connection to Site Manager"), _("New bookmark"), wxICON_EXCLAMATION, this);
 				return;

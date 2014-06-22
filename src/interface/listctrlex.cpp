@@ -165,7 +165,7 @@ void wxListCtrlEx::HandlePrefixSearch(wxChar character)
 		if (text.Length() >= m_prefixSearch_prefix.Length() && !m_prefixSearch_prefix.CmpNoCase(text.Left(m_prefixSearch_prefix.Length())))
 			beep = true;
 	}
-	else if (m_prefixSearch_prefix == _T(""))
+	else if (m_prefixSearch_prefix.empty())
 		beep = true;
 
 	int start = item;

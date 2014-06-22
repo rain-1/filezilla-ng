@@ -940,7 +940,7 @@ bool CSiteManagerDialog::Verify()
 	if (data->m_type == CSiteManagerItemData::SITE)
 	{
 		const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
-		if (host == _T(""))
+		if (host.empty())
 		{
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -1000,7 +1000,7 @@ bool CSiteManagerDialog::Verify()
 
 		if (XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxRadioButton)->GetValue())
 		{
-			if (XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue() == _T(""))
+			if (XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue().empty())
 			{
 				XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetFocus();
 				wxMessageBoxEx(_("Need to specify a character encoding"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -1013,7 +1013,7 @@ bool CSiteManagerDialog::Verify()
 		if (logon_type != ANONYMOUS &&
 			logon_type != ASK &&
 			logon_type != INTERACTIVE &&
-			user == _T(""))
+			user.empty())
 		{
 			XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You have to specify a user name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -1021,7 +1021,7 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		// The way TinyXML handles blanks, we can't use username of only spaces
-		if (user != _T(""))
+		if (!user.empty())
 		{
 			bool space_only = true;
 			for (unsigned int i = 0; i < user.Len(); ++i)
@@ -1042,7 +1042,7 @@ bool CSiteManagerDialog::Verify()
 
 		// Require account for account logon type
 		if (logon_type == ACCOUNT &&
-			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue() == _T(""))
+			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue().empty())
 		{
 			XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You have to enter an account name"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -1050,7 +1050,7 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
-		if (remotePathRaw != _T(""))
+		if (!remotePathRaw.empty())
 		{
 			const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
 
@@ -1083,7 +1083,7 @@ bool CSiteManagerDialog::Verify()
 			return false;
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue();
-		if (remotePathRaw != _T(""))
+		if (!remotePathRaw.empty())
 		{
 			CServerPath remotePath;
 			remotePath.SetType(pServer->m_server.GetType());
@@ -1804,7 +1804,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 bool CSiteManagerDialog::LoadDefaultSites()
 {
 	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-	if (defaultsDir == _T(""))
+	if (defaultsDir.empty())
 		return false;
 
 	wxFileName name(defaultsDir, _T("fzdefaults.xml"));

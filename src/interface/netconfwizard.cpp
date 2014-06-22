@@ -137,7 +137,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		{
 			wxTextCtrl* control = XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl);
 			wxString ip = control->GetValue();
-			if (ip == _T(""))
+			if (ip.empty())
 			{
 				wxMessageBoxEx(_("Please enter your external IP address"));
 				control->SetFocus();
@@ -156,7 +156,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		{
 			wxTextCtrl* pResolver = XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl);
 			wxString address = pResolver->GetValue();
-			if (address == _T(""))
+			if (address.empty())
 			{
 				wxMessageBoxEx(_("Please enter an URL where to get your external address from"));
 				pResolver->SetFocus();
@@ -764,7 +764,7 @@ void CNetConfWizard::SendNextCommand()
 		{
 			PrintMessage(_("Checking for correct external IP address"), 0);
 			wxString ip = GetExternalIPAddress();
-			if (ip == _T(""))
+			if (ip.empty())
 				return;
 			if (!GetIPV6LongForm(ip).IsEmpty())
 			{

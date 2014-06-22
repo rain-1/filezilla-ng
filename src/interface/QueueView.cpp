@@ -2089,7 +2089,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				int overwrite_action = GetTextElementInt(pFile, "OverwriteAction", CFileExistsNotification::unknown);
 
 				CServerPath remotePath;
-				if (localFile != _T("") && remoteFile != _T("") && remotePath.SetSafePath(safeRemotePath) &&
+				if (!localFile.empty() && !remoteFile.empty() && remotePath.SetSafePath(safeRemotePath) &&
 					size >= -1 && priority < PRIORITY_COUNT)
 				{
 					wxString localFileName;
@@ -2126,7 +2126,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				if (download)
 				{
 					wxString localFile = GetTextElement(pFolder, "LocalFile");
-					if (localFile == _T(""))
+					if (localFile.empty())
 						continue;
 					folderItem = new CFolderItem(pServerItem, true, CLocalPath(localFile));
 				}
@@ -2134,7 +2134,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				{
 					wxString remoteFile = GetTextElement(pFolder, "RemoteFile");
 					wxString safeRemotePath = GetTextElement(pFolder, "RemotePath");
-					if (safeRemotePath == _T(""))
+					if (safeRemotePath.empty())
 						continue;
 
 					CServerPath remotePath;
@@ -2270,7 +2270,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 		}
 		const wxString &command = dlg.GetValue();
 
-		if (command == _T(""))
+		if (command.empty())
 		{
 			wxMessageBoxEx(_("No command given, aborting."), _("Empty command"), wxICON_ERROR, m_pMainFrame);
 			m_actionAfterState = ActionAfterState_Disabled;

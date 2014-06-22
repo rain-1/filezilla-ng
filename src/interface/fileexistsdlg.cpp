@@ -192,7 +192,7 @@ void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 
 	wxFileName fn(file);
 	wxString ext = fn.GetExt();
-	if (ext == _T(""))
+	if (ext.empty())
 		return;
 
 	wxFileType *pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);

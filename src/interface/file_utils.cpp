@@ -99,7 +99,7 @@ wxString GetSystemOpenCommand(wxString file, bool &program_exists)
 	wxFileName fn(file);
 
 	const wxString& ext = fn.GetExt();
-	if (ext == _T(""))
+	if (ext.empty())
 		return _T("");
 
 	for (;;)
@@ -175,7 +175,7 @@ bool UnquoteCommand(wxString& command, wxString& arguments, bool is_dde)
 {
 	arguments = _T("");
 
-	if (command == _T(""))
+	if (command.empty())
 		return true;
 
 	wxChar inQuotes = 0;

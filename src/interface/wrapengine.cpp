@@ -169,7 +169,7 @@ bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned lon
 	wxASSERT(temp.Last() != ' ');
 	wxASSERT(temp.Last() != '\n');
 	temp.Replace(_T("&"), _T(""));
-	while (temp != _T(""))
+	while (!temp.empty())
 	{
 		wxString piece;
 		int pos = temp.Find(_T("\n"));
@@ -285,7 +285,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 		if (lineLength + spaceWidth + width > maxLength)
 		{
 			// Cannot be appended to current line without overflow, so start a new line
-			if (wrappedText != _T(""))
+			if (!wrappedText.empty())
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, wrapAfter - start);
 			if (wrapAfter < strLen && text[wrapAfter] != ' ' && text[wrapAfter] != '\0')
@@ -297,7 +297,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 
 				if( i != wrapAfter )
 				{
-					if (wrappedText != _T(""))
+					if (!wrappedText.empty())
 						wrappedText += _T("\n");
 					wrappedText += text.Mid(wrapAfter + 1, i - wrapAfter - 1);
 				}
@@ -315,7 +315,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 		}
 		else if (lineLength + spaceWidth + width + spaceWidth >= maxLength)
 		{
-			if (wrappedText != _T(""))
+			if (!wrappedText.empty())
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, i - start);
 			if (i < strLen && text[i] != ' ' && text[i] != '\0')
@@ -337,7 +337,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 	}
 	if (start < strLen)
 	{
-		if (wrappedText != _T(""))
+		if (!wrappedText.empty())
 			wrappedText += _T("\n");
 		wrappedText += text.Mid(start);
 	}
@@ -1088,7 +1088,7 @@ bool CWrapEngine::LoadCache()
 
 	// Get current language
 	wxString language = wxGetApp().GetCurrentLanguageCode();
-	if (language == _T(""))
+	if (language.empty())
 		language = _T("default");
 
 	TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
@@ -1133,7 +1133,7 @@ bool CWrapEngine::LoadCache()
 	const wxString& localesDir = wxGetApp().GetLocalesDir();
 	wxString name = GetLocaleFile(localesDir, language);
 
-	if (name != _T(""))
+	if (!name.empty())
 	{
 		wxFileName fn(localesDir + name + _T("/filezilla.mo"));
 		wxDateTime date = fn.GetModificationTime();

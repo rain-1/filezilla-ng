@@ -178,7 +178,7 @@ void CFileZillaApp::InitLocale()
 {
 		wxString language = COptions::Get()->GetOption(OPTION_LANGUAGE);
 	const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(language);
-	if (language != _T(""))
+	if (!language.empty())
 	{
 #ifdef __WXGTK__
 		if (CInitializer::error)
@@ -428,7 +428,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 		wxString datadir(SELFPATH , *wxConvCurrent);
 		wxFileName fn(datadir);
 		datadir = fn.GetPath();
-		if (datadir != _T(""))
+		if (!datadir.empty())
 			pathList.Add(datadir);
 
 	}
@@ -436,7 +436,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 	if (path && *path)
 	{
 		wxString datadir(DATADIR, *wxConvCurrent);
-		if (datadir != _T(""))
+		if (!datadir.empty())
 			pathList.Add(datadir);
 	}
 #elif defined __WXMSW__
@@ -498,7 +498,7 @@ bool CFileZillaApp::LoadResourceFiles()
 
 	wxImage::AddHandler(new wxPNGHandler());
 
-	if (m_resourceDir == _T(""))
+	if (m_resourceDir.empty())
 	{
 		wxString msg = _("Could not find the resource files for FileZilla, closing FileZilla.\nYou can set the data directory of FileZilla using the '--datadir <custompath>' commandline option or by setting the FZ_DATADIR environment variable.");
 		wxMessageBoxEx(msg, _("FileZilla Error"), wxOK | wxICON_ERROR);
@@ -574,7 +574,7 @@ bool CFileZillaApp::InitDefaultsDir()
 		m_defaultsDir = GetDataDir(_T("/fzdefaults.xml"));
 	}
 
-	return m_defaultsDir != _T("");
+	return !m_defaultsDir.empty();
 }
 
 bool CFileZillaApp::LoadLocales()
@@ -582,9 +582,9 @@ bool CFileZillaApp::LoadLocales()
 	AddStartupProfileRecord(_T("CFileZillaApp::LoadLocales"));
 #ifndef __WXMAC__
 	m_localesDir = GetDataDir(_T("/../locale/*/filezilla.mo"));
-	if (m_localesDir == _T(""))
+	if (m_localesDir.empty())
 		m_localesDir = GetDataDir(_T("/../locale/*/LC_MESSAGES/filezilla.mo"));
-	if (m_localesDir != _T(""))
+	if (!m_localesDir.empty())
 	{
 		if (m_localesDir[m_localesDir.Length() - 1] != wxFileName::GetPathSeparator())
 			m_localesDir += wxFileName::GetPathSeparator();
@@ -594,7 +594,7 @@ bool CFileZillaApp::LoadLocales()
 	else
 	{
 		m_localesDir = GetDataDir(_T("/locales/*/filezilla.mo"));
-		if (m_localesDir != _T(""))
+		if (!m_localesDir.empty())
 		{
 			if (m_localesDir[m_localesDir.Length() - 1] != wxFileName::GetPathSeparator())
 				m_localesDir += wxFileName::GetPathSeparator();
@@ -606,7 +606,7 @@ bool CFileZillaApp::LoadLocales()
 	m_localesDir = wxStandardPaths::Get().GetDataDir() + _T("/locales");
 #endif
 
-	if (m_localesDir != _T(""))
+	if (!m_localesDir.empty())
 	{
 		wxFileName fn(m_localesDir, _T(""));
 		fn.Normalize();
@@ -755,7 +755,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 		pathList.Add(cwd + _T("/putty"));
 
 		executable = pathList.FindAbsoluteValidPath(program);
-		if (executable != _T(""))
+		if (!executable.empty())
 			found = true;
 	}
 
@@ -786,7 +786,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 		wxPathList pathList;
 		pathList.AddEnvList(_T("PATH"));
 		executable = pathList.FindAbsoluteValidPath(program);
-		if (executable != _T(""))
+		if (!executable.empty())
 			found = true;
 	}
 

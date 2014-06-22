@@ -199,7 +199,7 @@ protected:
 				else
 				{
 					m_pMainFrame->SetTitle(pState->GetTitle() + _T(" - FileZilla"));
-					if (pServer->GetName() == _T(""))
+					if (pServer->GetName().empty())
 					{
 						// Can only happen through quickconnect bar
 						CMenuBar* pMenuBar = wxDynamicCast(m_pMainFrame->GetMenuBar(), CMenuBar);
@@ -1439,7 +1439,7 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 			continue;
 
 		const wxString& path = controls->site_bookmarks->path;
-		if (path == _T(""))
+		if (path.empty())
 			continue;
 		if (handled_paths.find(path) != handled_paths.end())
 			continue;
@@ -2094,7 +2094,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 	wxASSERT(pData);
 
 	if (pData->m_server.GetLogonType() == ASK ||
-		(pData->m_server.GetLogonType() == INTERACTIVE && pData->m_server.GetUser() == _T("")))
+		(pData->m_server.GetLogonType() == INTERACTIVE && pData->m_server.GetUser().empty()))
 	{
 		if (!CLoginManager::Get().GetPassword(pData->m_server, false, pData->m_server.GetName()))
 			return false;
@@ -2106,7 +2106,7 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newT
 	if (!ConnectToServer(pData->m_server, pData->m_remoteDir))
 		return false;
 
-	if (pData->m_localDir != _T("")) {
+	if (!pData->m_localDir.empty()) {
 		CState *pState = CContextManager::Get()->GetCurrentContext();
 		if( pState ) {
 			bool set = pState->SetLocalDir(pData->m_localDir, 0, false);
@@ -2569,7 +2569,7 @@ void CMainFrame::ProcessCommandLine()
 	}
 
 	wxString param = pCommandLine->GetParameter();
-	if (param != _T(""))
+	if (!param.empty())
 	{
 		wxString error;
 
@@ -2590,7 +2590,7 @@ void CMainFrame::ProcessCommandLine()
 		}
 
 		if (server.GetLogonType() == ASK ||
-			(server.GetLogonType() == INTERACTIVE && server.GetUser() == _T("")))
+			(server.GetLogonType() == INTERACTIVE && server.GetUser().empty()))
 		{
 			if (!CLoginManager::Get().GetPassword(server, false))
 				return;

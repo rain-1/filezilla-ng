@@ -708,7 +708,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const w
 	CServerPath path = m_pDirectoryListing->path;
 	if (subdir == _T("..") && path.HasParent())
 		path = path.GetParent();
-	else if (subdir != _T(""))
+	else if (!subdir.empty())
 		path.AddSegment(subdir);
 
 	UploadDroppedFiles(pFileDataObject, path, queueOnly);
@@ -870,7 +870,7 @@ bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 		wxString file;
 		while (fs.GetNextFile(file, is_link, is_dir, 0, 0, 0))
 		{
-			if (file == _T(""))
+			if (file.empty())
 			{
 				wxGetApp().DisplayEncodingWarning();
 				continue;

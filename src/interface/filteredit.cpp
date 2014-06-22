@@ -138,7 +138,7 @@ void CFilterEditDialog::OnNew(wxCommandEvent&)
 		return;
 	newName = dlg.GetValue();
 
-	if (newName == _T(""))
+	if (newName.empty())
 	{
 		wxMessageBoxEx(_("No filter name given"), _("Cannot create new filter"), wxICON_INFORMATION);
 		return;
@@ -203,7 +203,7 @@ void CFilterEditDialog::OnRename(wxCommandEvent& event)
 	const wxString& newName = pDlg->GetValue();
 	delete pDlg;
 
-	if (newName == _T(""))
+	if (newName.empty())
 	{
 		wxMessageBoxEx(_("Empty filter names are not allowed."), _("Empty name"), wxICON_ERROR, this);
 		return;
@@ -245,7 +245,7 @@ void CFilterEditDialog::OnCopy(wxCommandEvent& event)
 		return;
 
 	newName = dlg.GetValue();
-	if (newName == _T(""))
+	if (newName.empty())
 	{
 		wxMessageBoxEx(_("Empty filter names are not allowed."), _("Empty name"), wxICON_ERROR, this);
 		return;
@@ -342,7 +342,7 @@ bool CFilterEditDialog::Validate()
 	}
 
 	wxString name = XRCCTRL(*this, "ID_NAME", wxTextCtrl)->GetValue();
-	if (name == _T(""))
+	if (name.empty())
 	{
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
 		XRCCTRL(*this, "ID_NAME", wxTextCtrl)->SetFocus();

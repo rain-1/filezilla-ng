@@ -521,12 +521,12 @@ void COptions::SetServer(wxString path, const CServer& server)
 	if (!m_pXmlFile)
 		return;
 
-	if (path == _T(""))
+	if (path.empty())
 		return;
 
 	TiXmlElement *element = m_pXmlFile->GetElement();
 
-	while (path != _T(""))
+	while (!path.empty())
 	{
 		wxString sub;
 		int pos = path.Find('/');
@@ -571,14 +571,14 @@ void COptions::SetServer(wxString path, const CServer& server)
 
 bool COptions::GetServer(wxString path, CServer& server)
 {
-	if (path == _T(""))
+	if (path.empty())
 		return false;
 
 	if (!m_pXmlFile)
 		return false;
 	TiXmlElement *element = m_pXmlFile->GetElement();
 
-	while (path != _T(""))
+	while (!path.empty())
 	{
 		wxString sub;
 		int pos = path.Find('/');
@@ -742,7 +742,7 @@ void COptions::LoadOptionFromElement(TiXmlElement* pOption, const std::map<std::
 void COptions::LoadGlobalDefaultOptions(const std::map<std::string, int>& nameOptionMap)
 {
 	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-	if (defaultsDir == _T(""))
+	if (defaultsDir.empty())
 		return;
 
 	wxFileName name(defaultsDir, _T("fzdefaults.xml"));

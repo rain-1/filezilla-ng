@@ -22,7 +22,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			return true;
 		}
 
-		if (greetingVersion != _T("") &&
+		if (!greetingVersion.empty() &&
 			CBuildInfo::ConvertToVersionNumber(ownVersion) <= CBuildInfo::ConvertToVersionNumber(greetingVersion))
 		{
 			// Been there done that
@@ -46,7 +46,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
 	pNews->SetURL(wxString::Format(url, _T("news")) + _T("&oldversion=") + greetingVersion);
 
-	if (greetingVersion != _T(""))
+	if (!greetingVersion.empty())
 	{
 		wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
 		pNews->SetLabel(wxString::Format(_("New features and improvements in %s"), CBuildInfo::GetVersion().c_str()));

@@ -219,7 +219,7 @@ void CChmodDialog::OnNumericChanged(wxCommandEvent& event)
 	}
 	for (int i = 0; i < 3; i++)
 	{
-		if (oldNumeric != _T("") && numeric[i] == oldNumeric[i])
+		if (!oldNumeric.empty() && numeric[i] == oldNumeric[i])
 			continue;
 		if (numeric[i] == 'x')
 		{

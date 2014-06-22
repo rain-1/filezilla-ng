@@ -374,7 +374,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 #endif
 
 	wxString str = m_pComboBox->GetValue();
-	if (str == _T("") || str.Right(1) == _T("/"))
+	if (str.empty() || str.Right(1) == _T("/"))
 	{
 		m_oldValue = str;
 		return;
@@ -426,7 +426,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 	const wxString path = fn.GetPath();
 
 	wxDir dir;
-	if (name == _T("") || path == _T(""))
+	if (name.empty() || path.empty())
 	{
 		m_oldValue = str;
 		return;
@@ -484,7 +484,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 #ifdef __WXGTK__
 void CLocalViewHeader::OnSelectTextEvent(wxCommandEvent&)
 {
-	if (m_autoCompletionText == _T(""))
+	if (m_autoCompletionText.empty())
 		return;
 
 	const wxString& oldValue = m_pComboBox->GetValue();
@@ -506,7 +506,7 @@ void CLocalViewHeader::OnSelectionChanged(wxCommandEvent& event)
 #endif
 
 	wxString dir = event.GetString();
-	if (dir == _T(""))
+	if (dir.empty())
 		return;
 
 	if (!wxDir::Exists(dir))
@@ -534,7 +534,7 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	wxString error;
 	if (!m_pState->SetLocalDir(dir, &error))
 	{
-		if (error != _T(""))
+		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
@@ -596,7 +596,7 @@ void CRemoteViewHeader::OnTextEnter(wxCommandEvent&)
 {
 	CServerPath path = m_path;
 	wxString value = m_pComboBox->GetValue();
-	if (value == _T("") || !path.ChangePath(value))
+	if (value.empty() || !path.ChangePath(value))
 	{
 		wxBell();
 		return;
@@ -614,7 +614,7 @@ void CRemoteViewHeader::OnTextEnter(wxCommandEvent&)
 void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
 {
 	const wxString& dir = event.GetString();
-	if (dir == _T(""))
+	if (dir.empty())
 		return;
 
 	CServerPath path = m_path;

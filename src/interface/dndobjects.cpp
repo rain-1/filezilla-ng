@@ -38,7 +38,7 @@ CShellExtensionInterface::~CShellExtensionInterface()
 	if (m_hMutex)
 		CloseHandle(m_hMutex);
 
-	if (m_dragDirectory != _T(""))
+	if (!m_dragDirectory.empty())
 		RemoveDirectory(m_dragDirectory);
 }
 
@@ -121,7 +121,7 @@ wxString CShellExtensionInterface::GetTarget()
 
 	UnmapViewOfFile(data);
 
-	if (target == _T(""))
+	if (target.empty())
 		return target;
 
 	if (target.Last() == '\\')
@@ -171,7 +171,7 @@ CShellExtensionInterface* CShellExtensionInterface::CreateInitialized()
 		return 0;
 	}
 
-	if (ext->InitDrag() == _T(""))
+	if (ext->InitDrag().empty())
 	{
 		delete ext;
 		return 0;
@@ -268,7 +268,7 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 		return false;
 
 	wxString path = GetTextElement(pElement, "Path");
-	if (path == _T("") || !m_path.SetSafePath(path))
+	if (path.empty() || !m_path.SetSafePath(path))
 		return false;
 
 	m_fileList.clear();
@@ -280,7 +280,7 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 	{
 		t_fileInfo info;
 		info.name = GetTextElement(pFile, "Name");
-		if (info.name == _T(""))
+		if (info.name.empty())
 			return false;
 
 		const int dir = GetTextElementInt(pFile, "Dir", -1);
