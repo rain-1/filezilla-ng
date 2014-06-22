@@ -132,7 +132,7 @@ wxString CEditHandler::GetLocalDirectory()
 	// length
 	wxString dir = tmpdir.GetLongPath();
 	if (dir.empty() || !wxFileName::DirExists(dir))
-		return _T("");
+		return wxString();
 
 	if (dir.Last() != wxFileName::GetPathSeparator())
 		dir += wxFileName::GetPathSeparator();
@@ -151,7 +151,7 @@ wxString CEditHandler::GetLocalDirectory()
 			continue;
 
 		if (!wxMkdir(newDir, 0700))
-			return _T("");
+			return wxString();
 
 		m_localDir = newDir + wxFileName::GetPathSeparator();
 		break;
@@ -872,7 +872,7 @@ wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists
 
 	wxString command = COptions::Get()->GetOption(OPTION_EDIT_DEFAULTEDITOR);
 	if (command.empty() || command[0] == '0')
-		return _T(""); // None set
+		return wxString(); // None set
 	else if (command[0] == '1')
 	{
 		// Text editor
@@ -888,12 +888,12 @@ wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists
 		command = command.Mid(1);
 
 	if (command.empty())
-		return _T("");
+		return wxString();
 
 	wxString args;
 	wxString editor = command;
 	if (!UnquoteCommand(editor, args))
-		return _T("");
+		return wxString();
 
 	if (!ProgramExists(editor))
 	{
@@ -940,10 +940,10 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 
 		wxString args;
 		if (!UnquoteCommand(prog, args))
-			return _T("");
+			return wxString();
 
 		if (prog.empty())
-			return _T("");
+			return wxString();
 
 		if (!ProgramExists(prog))
 		{
@@ -955,7 +955,7 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 		return command + _T(" \"") + fn.GetFullPath() + _T("\"");
 	}
 
-	return _T("");
+	return wxString();
 }
 
 void CEditHandler::OnChangedFileEvent(wxCommandEvent& event)
@@ -976,7 +976,7 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 	{
 		name = TruncateFilename(m_localDir, name, max);
 		if (name.empty())
-			return _T("");
+			return wxString();
 	}
 
 	wxString file = m_localDir + name;
@@ -996,7 +996,7 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 			max--;
 			name = TruncateFilename(m_localDir, name, max);
 			if (name.empty())
-				return _T("");
+				return wxString();
 		}
 
 		int pos = name.Find('.', true);
@@ -1009,7 +1009,7 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 			return file;
 	}
 
-	return _T("");
+	return wxString();
 }
 
 wxString CEditHandler::TruncateFilename(const wxString path, const wxString& name, int max)
@@ -1025,7 +1025,7 @@ wxString CEditHandler::TruncateFilename(const wxString path, const wxString& nam
 			if (pathlen + extlen >= max)
 			{
 				// Cannot truncate extension
-				return _T("");
+				return wxString();
 			}
 
 			return name.Left(max - pathlen - extlen) + name.Mid(pos);

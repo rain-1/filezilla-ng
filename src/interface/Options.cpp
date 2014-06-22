@@ -263,7 +263,7 @@ int COptions::GetOptionVal(unsigned int nID)
 wxString COptions::GetOption(unsigned int nID)
 {
 	if (nID >= OPTIONS_NUM)
-		return _T("");
+		return wxString();
 
 	if (options[nID].type != string)
 		return wxString::Format(_T("%d"), GetOptionVal(nID));

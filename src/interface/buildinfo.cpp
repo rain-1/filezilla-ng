@@ -75,7 +75,7 @@ wxString CBuildInfo::GetCompiler()
 wxString CBuildInfo::GetCompilerFlags()
 {
 #ifndef USED_CXXFLAGS
-	return _T("");
+	return wxString();
 #else
 	wxString flags(USED_CXXFLAGS, wxConvLocal);
 	return flags;
@@ -89,7 +89,7 @@ wxString CBuildInfo::GetBuildType()
 	if (buildtype == _T("official") || buildtype == _T("nightly"))
 		return buildtype;
 #endif
-	return _T("");
+	return wxString();
 }
 
 wxLongLong CBuildInfo::ConvertToVersionNumber(const wxChar* version)
@@ -157,7 +157,7 @@ wxLongLong CBuildInfo::ConvertToVersionNumber(const wxChar* version)
 wxString CBuildInfo::GetHostname()
 {
 #ifndef USED_HOST
-	return _T("");
+	return wxString();
 #else
 	wxString flags(USED_HOST, wxConvLocal);
 	return flags;
@@ -167,7 +167,7 @@ wxString CBuildInfo::GetHostname()
 wxString CBuildInfo::GetBuildSystem()
 {
 #ifndef USED_BUILD
-	return _T("");
+	return wxString();
 #else
 	wxString flags(USED_BUILD, wxConvLocal);
 	return flags;

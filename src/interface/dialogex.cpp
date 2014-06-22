@@ -53,7 +53,7 @@ wxString wxDialogEx::GetChildLabel(int id)
 {
 	wxStaticText* pText = wxDynamicCast(FindWindow(id), wxStaticText);
 	if (!pText)
-		return _T("");
+		return wxString();
 
 	return pText->GetLabel();
 }

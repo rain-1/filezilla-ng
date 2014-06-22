@@ -687,7 +687,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 		{
 			PrintMessage(_("Failed to retrieve local ip address. Aborting"), 1);
 			CloseSocket();
-			return _T("");
+			return wxString();
 		}
 
 		return addr.IPAddress();
@@ -709,7 +709,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			m_pIPResolver = new CExternalIPResolver(this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
 			if (!m_pIPResolver->Done())
-				return _T("");
+				return wxString();
 		}
 		if (!m_pIPResolver->Successful())
 		{
@@ -720,7 +720,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 			m_testResult = externalfailed;
 			CloseSocket();
-			return _T("");
+			return wxString();
 		}
 
 		wxString ip = m_pIPResolver->GetIP();
@@ -731,7 +731,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 		return ip;
 	}
 
-	return _T("");
+	return wxString();
 }
 
 void CNetConfWizard::OnExternalIPAddress(fzExternalIPResolveEvent& event)

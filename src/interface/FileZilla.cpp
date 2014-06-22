@@ -408,7 +408,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 	if (FileExists(path + fileToFind))
 		return path;
 
-	return _T("");
+	return wxString();
 #else
 
 	wxPathList pathList;
@@ -487,7 +487,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 			return cur + _T("/../..");
 	}
 
-	return _T("");
+	return wxString();
 #endif //__WXMAC__
 }
 
@@ -662,7 +662,7 @@ int CFileZillaApp::GetCurrentLanguage() const
 wxString CFileZillaApp::GetCurrentLanguageCode() const
 {
 	if (!m_pLocale)
-		return _T("");
+		return wxString();
 
 	return m_pLocale->GetCanonicalName();
 }

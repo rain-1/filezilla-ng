@@ -58,7 +58,7 @@ public:
 
 #ifdef __WXMSW__
 		if (dir == _T("/"))
-			return _T("");
+			return wxString();
 #endif
 
 		return dir;
@@ -141,7 +141,7 @@ public:
 		if (!hit)
 		{
 			ClearDropHighlight();
-			return _T("");
+			return wxString();
 		}
 
 		wxString dir = GetDirFromItem(hit);
@@ -149,7 +149,7 @@ public:
 		if (dir.empty())
 		{
 			ClearDropHighlight();
-			return _T("");
+			return wxString();
 		}
 
 		const wxTreeItemId dropHighlight = m_pLocalTreeView->m_dropHighlight;
@@ -525,7 +525,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 
 	CLocalFileSystem local_filesystem;
 	if (!local_filesystem.BeginFindFiles(dirname, true))
-		return _T("");
+		return wxString();
 
 	wxString file;
 	bool wasLink;
@@ -548,7 +548,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 		return file;
 	}
 
-	return _T("");
+	return wxString();
 }
 
 wxTreeItemId CLocalTreeView::MakeSubdirs(wxTreeItemId parent, wxString dirname, wxString subDir)
@@ -976,17 +976,17 @@ wxString CLocalTreeView::GetSpecialFolder(int folder, int &iconIndex, int &openI
 {
 	LPITEMIDLIST list;
 	if (SHGetSpecialFolderLocation((HWND)GetHandle(), folder, &list) != S_OK)
-		return _T("");
+		return wxString();
 
 	SHFILEINFO shFinfo;
 	if (!SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON))
-		return _T("");
+		return wxString();
 
 	DestroyIcon(shFinfo.hIcon);
 	iconIndex = shFinfo.iIcon;
 
 	if (!SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_OPENICON | SHGFI_DISPLAYNAME))
-		return _T("");
+		return wxString();
 
 	DestroyIcon(shFinfo.hIcon);
 	openIconIndex = shFinfo.iIcon;
@@ -1165,7 +1165,7 @@ void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
 wxString CLocalTreeView::MenuMkdir()
 {
 	if (!m_contextMenuItem.IsOk())
-		return _T("");
+		return wxString();
 
 	wxString path = GetDirFromItem(m_contextMenuItem);
 	if (path.Last() != wxFileName::GetPathSeparator())
@@ -1174,25 +1174,25 @@ wxString CLocalTreeView::MenuMkdir()
 	if (!CLocalPath(path).IsWriteable())
 	{
 		wxBell();
-		return _T("");
+		return wxString();
 	}
 
 	CInputDialog dlg;
 	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
-		return _T("");
+		return wxString();
 
 	wxString newName = _("New directory");
 	dlg.SetValue(path + newName);
 	dlg.SelectText(path.Len(), path.Len() + newName.Len());
 
 	if (dlg.ShowModal() != wxID_OK)
-		return _T("");
+		return wxString();
 
 	wxFileName fn(dlg.GetValue(), _T(""));
 	if (!fn.Normalize(wxPATH_NORM_ALL, path))
 	{
 		wxBell();
-		return _T("");
+		return wxString();
 	}
 
 	bool res;
@@ -1203,7 +1203,7 @@ wxString CLocalTreeView::MenuMkdir()
 
 	if (!res) {
 		wxBell();
-		return _T("");
+		return wxString();
 	}
 
 	return fn.GetPath();

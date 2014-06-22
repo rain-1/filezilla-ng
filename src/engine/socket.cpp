@@ -255,7 +255,7 @@ CSocketEvent::~CSocketEvent()
 wxString CSocketEvent::GetData() const
 {
 	if (!m_data)
-		return wxEmptyString;
+		return wxString();
 
 	return m_data;
 }

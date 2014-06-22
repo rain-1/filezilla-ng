@@ -273,11 +273,11 @@ wxString GetTextElement(TiXmlElement* node, const char* name)
 
 	TiXmlElement* element = node->FirstChildElement(name);
 	if (!element)
-		return _T("");
+		return wxString();
 
 	TiXmlNode* textNode = element->FirstChild();
 	if (!textNode || !textNode->ToText())
-		return _T("");
+		return wxString();
 
 	return ConvLocal(textNode->Value());
 }
@@ -303,7 +303,7 @@ wxString GetTextElement(TiXmlElement* node)
 		return ConvLocal(pChild->Value());
 	}
 
-	return _T("");
+	return wxString();
 }
 
 int GetTextElementInt(TiXmlElement* node, const char* name, int defValue /*=0*/)
@@ -766,7 +766,7 @@ wxString GetTextAttribute(TiXmlElement* node, const char* name)
 
 	const char* value = node->Attribute(name);
 	if (!value)
-		return _T("");
+		return wxString();
 
 	return ConvLocal(value);
 }
