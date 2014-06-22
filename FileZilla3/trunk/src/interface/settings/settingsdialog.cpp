@@ -159,6 +159,11 @@ bool CSettingsDialog::LoadPages()
 	}
 	wxGetApp().GetWrapEngine()->WrapRecursive(pages, 1.33, "Settings", canvas);
 
+#ifdef __WXGTK__
+	// Pre-show dialog under GTK, else panels won't get initialized properly
+	Show();
+#endif
+
 	// Keep track of maximum page size
 	size = wxSize(0, 0);
 	for (auto const& page : m_pages) {
@@ -180,11 +185,6 @@ bool CSettingsDialog::LoadPages()
 
 	GetSizer()->Fit(this);
 	GetSizer()->SetSizeHints(this);
-
-#ifdef __WXGTK__
-	// Pre-show dialog under GTK, else panels won't get initialized properly
-	Show();
-#endif
 
 	for (auto const& page : m_pages) {
 		page.page->Hide();
