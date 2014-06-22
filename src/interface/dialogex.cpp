@@ -110,3 +110,23 @@ bool wxDialogEx::CanShowPopupDialog()
 
 	return true;
 }
+
+void wxDialogEx::InitDialog()
+{
+#ifdef __WXGTK__
+	// Some controls only report proper size after the call to Show(), e.g.
+	// wxStaticBox::GetBordersForSizer is affected by this.
+	// Re-fit window to compensate.
+	wxSizer* s = GetSizer();
+	if( s ) {
+		wxSize min = GetMinClientSize();
+		wxSize smin = s->GetMinSize();
+		if( min.x < smin.x || min.y < smin.y ) {
+			s->Fit(this);
+			SetMinSize(GetSize());
+		}
+	}
+#endif
+
+	wxDialog::InitDialog();
+}

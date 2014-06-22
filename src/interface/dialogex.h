@@ -19,6 +19,7 @@ public:
 
 	static bool CanShowPopupDialog();
 protected:
+	virtual void InitDialog();
 
 	DECLARE_EVENT_TABLE()
 	virtual void OnChar(wxKeyEvent& event);
