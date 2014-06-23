@@ -70,8 +70,10 @@ int CUpdateDialog::ShowModal()
 	}
 
 	wxAnimation a = CThemeProvider::Get()->CreateAnimation(_T("ART_THROBBER"), wxSize(16,16));
+	XRCCTRL(*this, "ID_WAIT_CHECK", wxAnimationCtrl)->SetMinSize(a.GetSize());
 	XRCCTRL(*this, "ID_WAIT_CHECK", wxAnimationCtrl)->SetAnimation(a);
 	XRCCTRL(*this, "ID_WAIT_CHECK", wxAnimationCtrl)->Play();
+	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->SetMinSize(a.GetSize());
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->SetAnimation(a);
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->Play();
 
