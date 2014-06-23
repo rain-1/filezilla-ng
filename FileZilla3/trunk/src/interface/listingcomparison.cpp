@@ -158,10 +158,10 @@ bool CComparisonManager::CompareListings()
 
 					localFlag = CComparableListing::normal;
 					remoteFlag = CComparableListing::normal;
-					if( cmp == -1 ) {
+					if( cmp < 0 ) {
 						remoteFlag = CComparableListing::newer;
 					}
-					else if( cmp == 1 ) {
+					else if( cmp > 0 ) {
 						localFlag = CComparableListing::newer;
 					}
 					if (!hide_identical || localFlag != CComparableListing::normal || remoteFlag != CComparableListing::normal || localFile == _T(".."))
@@ -176,7 +176,7 @@ bool CComparisonManager::CompareListings()
 			continue;
 		}
 
-		if (cmp == -1) {
+		if (cmp < 0) {
 			m_pLeft->CompareAddFile(CComparableListing::lonely);
 			m_pRight->CompareAddFile(CComparableListing::fill);
 			gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate);
