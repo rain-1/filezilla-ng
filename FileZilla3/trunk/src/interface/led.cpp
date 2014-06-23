@@ -21,7 +21,9 @@ END_EVENT_TABLE()
 
 CLed::CLed(wxWindow *parent, unsigned int index)
 {
+#ifdef __WXGTK__
 	SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
+#endif
 
 	Create(parent, -1, wxDefaultPosition, wxSize(11, 11));
 
