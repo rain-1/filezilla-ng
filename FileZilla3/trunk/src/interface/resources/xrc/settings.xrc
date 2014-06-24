@@ -27,14 +27,14 @@
               <label>OK</label>
             </object>
             <flag>wxTOP|wxBOTTOM|wxGROW</flag>
-            <border>5</border>
+            <border>6</border>
           </object>
           <object class="sizeritem">
             <object class="wxButton" name="wxID_CANCEL">
               <label>&amp;Cancel</label>
             </object>
             <flag>wxTOP|wxBOTTOM|wxGROW</flag>
-            <border>2</border>
+            <border>3</border>
           </object>
         </object>
         <flag>wxALL|wxGROW</flag>
