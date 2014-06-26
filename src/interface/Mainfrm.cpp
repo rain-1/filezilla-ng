@@ -1635,53 +1635,38 @@ void CMainFrame::OnToggleLocalTreeView(wxCommandEvent& event)
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 	bool show = !controls || !controls->pLocalSplitter->IsSplit();
-
-	if (!show)
-	{
-		for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-		{
-			CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromTabIndex(i);
-			if (!controls)
-				continue;
-
-			if (!controls->pLocalSplitter->IsSplit())
-				continue;
-
-			controls->pLocalListViewPanel->SetHeader(controls->pLocalTreeViewPanel->DetachHeader());
-			controls->pLocalSplitter->Unsplit(controls->pLocalTreeViewPanel);
-		}
-	}
-	else
-		ShowLocalTree();
-
-	COptions::Get()->SetOption(OPTION_SHOW_TREE_LOCAL, show);
+	ShowLocalTree(show);
 }
 
-void CMainFrame::ShowLocalTree()
+void CMainFrame::ShowLocalTree(bool show)
 {
 	if (!m_pContextControl)
 		return;
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
-	for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-	{
+	for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 		CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromTabIndex(i);
 		if (!controls)
 			continue;
 
-		if (controls->pLocalSplitter->IsSplit())
-			continue;
+		if (show && !controls->pLocalSplitter->IsSplit()) {
+			controls->pLocalTreeViewPanel->SetHeader(controls->pLocalListViewPanel->DetachHeader());
 
-		controls->pLocalTreeViewPanel->SetHeader(controls->pLocalListViewPanel->DetachHeader());
-
-		if (layout == 3 && swap)
-			controls->pLocalSplitter->SplitVertically(controls->pLocalListViewPanel, controls->pLocalTreeViewPanel);
-		else if (layout)
-			controls->pLocalSplitter->SplitVertically(controls->pLocalTreeViewPanel, controls->pLocalListViewPanel);
-		else
-			controls->pLocalSplitter->SplitHorizontally(controls->pLocalTreeViewPanel, controls->pLocalListViewPanel);
+			if (layout == 3 && swap)
+				controls->pLocalSplitter->SplitVertically(controls->pLocalListViewPanel, controls->pLocalTreeViewPanel);
+			else if (layout)
+				controls->pLocalSplitter->SplitVertically(controls->pLocalTreeViewPanel, controls->pLocalListViewPanel);
+			else
+				controls->pLocalSplitter->SplitHorizontally(controls->pLocalTreeViewPanel, controls->pLocalListViewPanel);
+		}
+		else if(!show && controls->pLocalSplitter->IsSplit()) {
+			controls->pLocalListViewPanel->SetHeader(controls->pLocalTreeViewPanel->DetachHeader());
+			controls->pLocalSplitter->Unsplit(controls->pLocalTreeViewPanel);
+		}
 	}
+	
+	COptions::Get()->SetOption(OPTION_SHOW_TREE_LOCAL, show);
 }
 
 void CMainFrame::OnToggleRemoteTreeView(wxCommandEvent& event)
@@ -1691,53 +1676,38 @@ void CMainFrame::OnToggleRemoteTreeView(wxCommandEvent& event)
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 	bool show = !controls || !controls->pRemoteSplitter->IsSplit();
-
-	if (!show)
-	{
-		for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-		{
-			CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromTabIndex(i);
-			if (!controls)
-				continue;
-
-			if (!controls->pRemoteSplitter->IsSplit())
-				continue;
-
-			controls->pRemoteListViewPanel->SetHeader(controls->pRemoteTreeViewPanel->DetachHeader());
-			controls->pRemoteSplitter->Unsplit(controls->pRemoteTreeViewPanel);
-		}
-	}
-	else
-		ShowRemoteTree();
-
-	COptions::Get()->SetOption(OPTION_SHOW_TREE_REMOTE, show);
+	ShowRemoteTree(show);
 }
 
-void CMainFrame::ShowRemoteTree()
+void CMainFrame::ShowRemoteTree(bool show)
 {
 	if (!m_pContextControl)
 		return;
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
-	for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-	{
+	for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 		CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromTabIndex(i);
 		if (!controls)
 			continue;
 
-		if (controls->pRemoteSplitter->IsSplit())
-			continue;
+		if (show && !controls->pRemoteSplitter->IsSplit()) {
+			controls->pRemoteTreeViewPanel->SetHeader(controls->pRemoteListViewPanel->DetachHeader());
 
-		controls->pRemoteTreeViewPanel->SetHeader(controls->pRemoteListViewPanel->DetachHeader());
-
-		if (layout == 3 && !swap)
-			controls->pRemoteSplitter->SplitVertically(controls->pRemoteListViewPanel, controls->pRemoteTreeViewPanel);
-		else if (layout)
-			controls->pRemoteSplitter->SplitVertically(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
-		else
-			controls->pRemoteSplitter->SplitHorizontally(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
+			if (layout == 3 && !swap)
+				controls->pRemoteSplitter->SplitVertically(controls->pRemoteListViewPanel, controls->pRemoteTreeViewPanel);
+			else if (layout)
+				controls->pRemoteSplitter->SplitVertically(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
+			else
+				controls->pRemoteSplitter->SplitHorizontally(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
+		}
+		else if( !show && !controls->pRemoteSplitter->IsSplit()) {
+			controls->pRemoteListViewPanel->SetHeader(controls->pRemoteTreeViewPanel->DetachHeader());
+			controls->pRemoteSplitter->Unsplit(controls->pRemoteTreeViewPanel);
+		}
 	}
+
+	COptions::Get()->SetOption(OPTION_SHOW_TREE_REMOTE, show);
 }
 
 void CMainFrame::OnToggleQueueView(wxCommandEvent& event)
@@ -2427,15 +2397,14 @@ void CMainFrame::OnToolbarComparison(wxCommandEvent& event)
 			dlg.AddText(_("To compare directories, both file lists have to be aligned."));
 			dlg.AddText(_("To do this, the directory trees need to be both shown or both hidden."));
 			dlg.AddText(_("Show both directory trees and continue comparing?"));
-			if (!dlg.Run())
-			{
+			if (!dlg.Run()) {
 				// Needed to restore non-toggle state of button
 				pState->NotifyHandlers(STATECHANGE_COMPARISON);
 				return;
 			}
 
-			ShowLocalTree();
-			ShowRemoteTree();
+			ShowLocalTree(true);
+			ShowRemoteTree(true);
 		}
 
 		int pos = (controls->pLocalSplitter->GetSashPosition() + controls->pRemoteSplitter->GetSashPosition()) / 2;
