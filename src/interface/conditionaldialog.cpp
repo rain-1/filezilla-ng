@@ -26,31 +26,28 @@ CConditionalDialog::CConditionalDialog(wxWindow* parent, enum DialogType type, e
 	pCheckBox->SetValue(checked);
 	pSizer->Add(pCheckBox, 0, wxTOP | wxBOTTOM, 5);
 
-	if (mode == ok)
-	{
+	wxStdDialogButtonSizer* buttons = new wxStdDialogButtonSizer();
+	pVertSizer->Add(buttons, 0, wxGROW | wxALL, 5);
+
+	if (mode == ok) {
 		pMainSizer->Prepend(new wxStaticBitmap(this, wxID_ANY, wxArtProvider::GetBitmap(wxART_INFORMATION)), 0, wxLEFT | wxBOTTOM | wxTOP, 10);
 
-		wxButton* pOk = new wxButton(this, wxID_OK);
-		pOk->SetDefault();
-		pSizer->Add(pOk, 0, wxALIGN_CENTER_HORIZONTAL);
-
+		wxButton* ok = new wxButton(this, wxID_OK);
+		ok->SetDefault();
+		buttons->AddButton(ok);
 		SetEscapeId(wxID_OK);
 	}
-	else
-	{
+	else {
 		pMainSizer->Prepend(new wxStaticBitmap(this, wxID_ANY, wxArtProvider::GetBitmap(wxART_QUESTION)), 0, wxLEFT | wxBOTTOM | wxTOP, 10);
 
-		wxSizer* pGrid = new wxGridSizer(2, 5, 5);
-		pVertSizer->Add(pGrid, 0, wxLEFT | wxRIGHT | wxBOTTOM | wxALIGN_CENTER_HORIZONTAL, 5);
+		wxButton* yes = new wxButton(this, wxID_YES);
+		yes->SetDefault();
+		buttons->AddButton(yes);
 
-		wxButton* pYes = new wxButton(this, wxID_YES);
-		pYes->SetDefault();
-		pGrid->Add(pYes, 0, wxGROW);
-
-		pGrid->Add(new wxButton(this, wxID_NO), 0, wxGROW);
-
+		buttons->AddButton(new wxButton(this, wxID_NO));
 		SetEscapeId(wxID_NO);
 	}
+	buttons->Realize();
 
 	SetSizer(pVertSizer);
 }
