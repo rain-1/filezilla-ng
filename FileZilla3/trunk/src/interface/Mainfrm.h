@@ -101,8 +101,8 @@ protected:
 	wxTimer update_dialog_timer_;
 #endif
 
-	void ShowLocalTree();
-	void ShowRemoteTree();
+	void ShowLocalTree(bool show);
+	void ShowRemoteTree(bool show);
 
 	void ShowDropdownMenu(wxMenu* pMenu, wxToolBar* pToolBar, wxCommandEvent& event);
 
