@@ -36,8 +36,12 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 1);
 	}
 
-	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_WELCOME")))
+	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_WELCOME"))) {
+		if( delay ) {
+			delete this;
+		}
 		return false;
+	}
 
 	XRCCTRL(*this, "ID_FZVERSION", wxStaticText)->SetLabel(_T("FileZilla ") + CBuildInfo::GetVersion());
 
