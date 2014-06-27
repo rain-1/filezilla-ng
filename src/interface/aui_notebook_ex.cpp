@@ -11,6 +11,7 @@
 #define TABCOLOUR wxSYS_COLOUR_WINDOWFRAME
 #endif
 
+#ifndef __WXGTK__
 // Special DC to filter some calls.
 // We can (mis)use wxMirrorDC since it already
 // forwards all calls to another DC.
@@ -190,6 +191,7 @@ protected:
 	bool m_odd_tab_height;
 	bool m_bottom;
 };
+#endif
 
 struct wxAuiTabArtExData
 {
