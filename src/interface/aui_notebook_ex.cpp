@@ -23,8 +23,6 @@ public:
 	CFilterDC(wxDC& dc, int type, bool odd_tab_height, bool bottom)
 		: wxMirrorDC(dc, false), m_original_dc(&dc), m_type(type), m_odd_tab_height(odd_tab_height)
 	{
-		m_gradient_called = 0;
-		m_rectangle_called = 0;
 		m_bottom = bottom;
 	}
 
@@ -185,8 +183,8 @@ public:
 	}
 
 protected:
-	int m_gradient_called;
-	int m_rectangle_called;
+	int m_gradient_called{};
+	int m_rectangle_called{};
 	wxDC *m_original_dc;
 	const int m_type;
 	bool m_odd_tab_height;
@@ -240,9 +238,9 @@ public:
 		}
 
 		return size;
-	};
+	}
 
-
+#ifndef __WXGTK__
 	virtual void DrawTab(wxDC& dc,
 						 wxWindow* wnd,
 						 const wxAuiNotebookPage& pane,
@@ -287,14 +285,17 @@ public:
 		CFilterDC filter_dc(dc, 2, (m_tabCtrlHeight % 2) != 0, m_bottom);
 		wxAuiGenericTabArt::DrawBackground(*((wxDC*)&filter_dc), wnd, rect);
 	}
+#endif
 protected:
 	wxAuiNotebookEx* m_pNotebook;
 
 	std::shared_ptr<wxAuiTabArtExData> m_data;
 
+#ifndef __WXGTK__
 	wxFont m_original_normal_font;
 	wxFont m_highlighted_font;
 	bool m_fonts_initialized{};
+#endif
 	bool m_bottom;
 };
 
