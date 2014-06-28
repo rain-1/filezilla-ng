@@ -1492,13 +1492,6 @@
                 <flag>wxLEFT</flag>
                 <border>17</border>
               </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Please read http://wiki.filezilla-project.org/Date__and__Time__formatting for details</label>
-                </object>
-                <flag>wxLEFT</flag>
-                <border>17</border>
-              </object>
               <cols>1</cols>
               <vgap>5</vgap>
             </object>
@@ -1548,13 +1541,6 @@
                 <flag>wxLEFT</flag>
                 <border>17</border>
               </object>
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Please read http://wiki.filezilla-project.org/Date__and__Time__formatting for details</label>
-                </object>
-                <flag>wxLEFT</flag>
-                <border>17</border>
-              </object>
               <cols>1</cols>
               <vgap>5</vgap>
             </object>
@@ -1563,6 +1549,14 @@
           </object>
         </object>
         <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxHyperlinkCtrl">
+          <label>Show details about custom date and time formats</label>
+          <url>https://wiki.filezilla-project.org/Date_and_Time_formatting</url>
+        </object>
+        <flag>wxTOP|wxBOTTOM</flag>
+        <border>7</border>
       </object>
     </object>
   </object>
