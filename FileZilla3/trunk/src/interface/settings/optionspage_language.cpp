@@ -58,11 +58,6 @@ bool COptionsPageLanguage::Validate()
 	return true;
 }
 
-static bool compareLangAsc(const struct COptionsPageLanguage::_locale_info &lang1, const struct COptionsPageLanguage::_locale_info &lang2)
-{
-	return lang1.name.wxString::Cmp(lang2.name) <= 0;
-}
-
 bool COptionsPageLanguage::OnDisplayedFirstTime()
 {
 	wxListBox* pListBox = XRCCTRL(*this, "ID_LANGUAGES", wxListBox);
@@ -108,7 +103,7 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 		m_locale.push_back({name, locale});
 	}
 
-	std::sort(m_locale.begin(), m_locale.end(), compareLangAsc);
+	std::sort(m_locale.begin(), m_locale.end(), [](_locale_info const& l, _locale_info const& r){ return l.name < r.name; });
 
 	for(auto const& locale : m_locale) {
 		n = pListBox->Append(locale.name + _T(" (") + locale.code + _T(")"));
