@@ -11,188 +11,6 @@
 #define TABCOLOUR wxSYS_COLOUR_WINDOWFRAME
 #endif
 
-#ifdef __WXMAC__
-// Special DC to filter some calls.
-// We can (mis)use wxMirrorDC since it already
-// forwards all calls to another DC.
-//
-// We use this class to change the colours wxAuiTabArt uses
-// for drawing the tabs on dark themes.
-class CFilterDC : public wxMirrorDC
-{
-public:
-	CFilterDC(wxDC& dc, int type, bool odd_tab_height, bool bottom)
-		: wxMirrorDC(dc, false), m_original_dc(&dc), m_type(type), m_odd_tab_height(odd_tab_height)
-	{
-		m_bottom = bottom;
-	}
-
-	virtual void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
-	{
-		if (m_type != 1)
-		{
-			m_original_dc->DrawLine(x1, y1, x2, y2);
-			return;
-		}
-
-		wxColour c = wxSystemSettings::GetColour(TABCOLOUR);
-		if (c.Red() + c.Green() + c.Blue() >= 384)
-			m_original_dc->DrawLine(x1, y1, x2, y2);
-		else
-		{
-			// Draw dark line instead of bright line
-			m_original_dc->SetPen(wxPen(c));
-			m_original_dc->DrawLine(x1, y1, x2, y2);
-		}
-	}
-
-	virtual void DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
-	{
-		if (!m_type)
-		{
-			m_original_dc->DrawRectangle(x, y, width, height);
-			return;
-		}
-		else if (m_type == 1)
-		{
-			m_rectangle_called++;
-
-			wxColour c = wxSystemSettings::GetColour(TABCOLOUR);
-			if (c.Red() + c.Green() + c.Blue() >= 384)
-				m_original_dc->DrawRectangle(x, y, width, height);
-			else
-			{
-				if (m_rectangle_called != 2)
-					m_original_dc->DrawRectangle(x, y, width, height);
-				else
-				{
-					wxColour new_init = c.ChangeLightness(150);
-					wxColour new_dest = c.ChangeLightness(100);
-					m_original_dc->GradientFillLinear(wxRect(x, y, width + 1, height), new_init, new_dest, wxNORTH);
-				}
-			}
-		}
-		else
-		{
-			wxColour c = wxSystemSettings::GetColour(TABCOLOUR);
-			if (c.Red() + c.Green() + c.Blue() < 384)
-				m_original_dc->SetBrush(wxBrush( c.ChangeLightness(100) ) );
-			m_original_dc->DrawRectangle(x, y, width, height);
-		}
-	}
-
-	virtual void DoGradientFillLinear(const wxRect& rect, const wxColour& initialColour, const wxColour& destColour, wxDirection nDirection = wxEAST)
-	{
-		m_gradient_called++;
-
-		if (m_type == 1)
-		{
-			if (initialColour.Red() + initialColour.Green() + initialColour.Blue() >= 384)
-			{
-				// Light theme
-				m_original_dc->GradientFillLinear(rect, initialColour, destColour, nDirection);
-				return;
-			}
-
-			// Dark theme
-			wxColour new_init = initialColour.ChangeLightness(100);
-			wxColour new_dest = initialColour.ChangeLightness(120);
-			m_original_dc->GradientFillLinear(rect, new_init, new_dest, nDirection);
-		}
-		else if (!m_type)
-		{
-			if (destColour.Red() + destColour.Green() + destColour.Blue() >= 384)
-			{
-				// Light theme
-				m_original_dc->GradientFillLinear(rect, initialColour, destColour, nDirection);
-				return;
-			}
-
-			// Dark theme
-			wxRect r = rect;
-			r.x--;
-			r.width++;
-
-			wxRect r2 = r;
-			r2.x--;
-			r2.width += 2;
-			if (m_gradient_called == 1)
-			{
-				// Lighter inner border
-				m_original_dc->SetBrush(wxBrush(destColour.ChangeLightness(105)));
-				m_original_dc->SetPen(wxPen(destColour.ChangeLightness(105)));
-				m_original_dc->DrawRectangle(r2);
-
-				wxColour new_init = destColour.ChangeLightness(95);
-				wxColour new_dest = destColour.ChangeLightness(65);
-				m_original_dc->GradientFillLinear(r, new_init, new_dest, nDirection);
-
-				if (!m_bottom)
-				{
-					m_original_dc->SetPen(wxPen(destColour));
-					m_original_dc->DrawPoint(r.x, r.y);
-					m_original_dc->DrawPoint(r.x + r.width - 1, r.y);
-				}
-
-			}
-			else
-			{
-				// Correct for rounding error in AUI code
-				if (!m_odd_tab_height)
-					r.height -= 1;
-				else
-					r2.height += 1;
-
-				// Lighter inner border
-				m_original_dc->SetBrush(wxBrush(destColour.ChangeLightness(105)));
-				m_original_dc->SetPen(wxPen(destColour.ChangeLightness(105)));
-				m_original_dc->DrawRectangle(r2);
-
-				wxColour new_dest = destColour.ChangeLightness(65);
-				if (!m_bottom)
-					r.height++;
-				m_original_dc->GradientFillLinear(r, new_dest, new_dest, nDirection);
-				if (m_bottom)
-				{
-					m_original_dc->SetPen(wxPen(destColour));
-					m_original_dc->DrawPoint(r.x, r.y + r.height - 1);
-					m_original_dc->DrawPoint(r.x + r.width - 1, r.y + r.height - 1);
-				}
-			}
-		}
-		else if (m_type == 2)
-		{
-			wxColour c = wxSystemSettings::GetColour(TABCOLOUR);
-			if (c.Red() + c.Green() + c.Blue() >= 384)
-				m_original_dc->GradientFillLinear(rect, initialColour, destColour, nDirection);
-			else
-			{
-				wxColour new_init, new_dest;
-				if (m_bottom)
-				{
-					new_init = c.ChangeLightness(70);
-					new_dest = c.ChangeLightness(100);
-				}
-				else
-				{
-					new_init = c.ChangeLightness(85);
-					new_dest = c.ChangeLightness(100);
-				}
-				m_original_dc->GradientFillLinear(rect, new_init, new_dest, nDirection);
-			}
-		}
-	}
-
-protected:
-	int m_gradient_called{};
-	int m_rectangle_called{};
-	wxDC *m_original_dc;
-	const int m_type;
-	bool m_odd_tab_height;
-	bool m_bottom;
-};
-#endif
-
 struct wxAuiTabArtExData
 {
 	std::map<wxString, int> maxSizes;
@@ -201,16 +19,15 @@ struct wxAuiTabArtExData
 class wxAuiTabArtEx : public wxAuiDefaultTabArt
 {
 public:
-	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, bool bottom, std::shared_ptr<wxAuiTabArtExData> const& data)
+	wxAuiTabArtEx(wxAuiNotebookEx* pNotebook, std::shared_ptr<wxAuiTabArtExData> const& data)
 		: m_pNotebook(pNotebook)
 		, m_data(data)
-		, m_bottom(bottom)
 	{
 	}
 
 	virtual wxAuiTabArt* Clone()
 	{
-		wxAuiTabArtEx *art = new wxAuiTabArtEx(m_pNotebook, m_bottom, m_data);
+		wxAuiTabArtEx *art = new wxAuiTabArtEx(m_pNotebook, m_data);
 		art->SetNormalFont(m_normalFont);
 		art->SetSelectedFont(m_selectedFont);
 		art->SetMeasuringFont(m_measuringFont);
@@ -242,63 +59,10 @@ public:
 		return size;
 	}
 
-#ifdef __WXMAC__
-	virtual void DrawTab(wxDC& dc,
-						 wxWindow* wnd,
-						 const wxAuiNotebookPage& pane,
-						 const wxRect& in_rect,
-						 int close_button_state,
-						 wxRect* out_tab_rect,
-						 wxRect* out_button_rect,
-						 int* x_extent)
-	{
-#ifndef __WXMAC__
-		m_baseColour = wxSystemSettings::GetColour(TABCOLOUR);
-#endif
-		if (!pane.active)
-		{
-			if (m_baseColour.Red() + m_baseColour.Green() + m_baseColour.Blue() >= 384)
-				m_baseColour = wxColour( m_baseColour.Red() * 0.95, m_baseColour.Green() * 0.95, m_baseColour.Blue() * 0.95 );
-
-			dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-			if (m_pNotebook->Highlighted(m_pNotebook->GetPageIndex(pane.window)))
-			{
-				if (!m_fonts_initialized)
-				{
-					m_fonts_initialized = true;
-					m_original_normal_font = m_normalFont;
-					m_highlighted_font = m_normalFont;
-					m_highlighted_font.SetWeight(wxFONTWEIGHT_BOLD);
-					m_highlighted_font.SetStyle(wxFONTSTYLE_ITALIC);
-				}
-				m_normalFont = m_highlighted_font;
-			}
-			else if (m_fonts_initialized)
-				m_normalFont = m_original_normal_font;
-		}
-		CFilterDC filter_dc(dc, pane.active ? 1 : 0, (m_tabCtrlHeight % 2) != 0, m_bottom);
-		wxAuiGenericTabArt::DrawTab(*((wxDC*)&filter_dc), wnd, pane, in_rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
-
-	}
-
-	virtual void DrawBackground(wxDC& dc, wxWindow* wnd, const wxRect& rect)
-	{
-		m_baseColour = wxSystemSettings::GetColour(TABCOLOUR);
-		CFilterDC filter_dc(dc, 2, (m_tabCtrlHeight % 2) != 0, m_bottom);
-		wxAuiGenericTabArt::DrawBackground(*((wxDC*)&filter_dc), wnd, rect);
-	}
-#endif
 protected:
 	wxAuiNotebookEx* m_pNotebook;
 
 	std::shared_ptr<wxAuiTabArtExData> m_data;
-
-#ifdef __WXMAC__
-	wxFont m_original_normal_font;
-	wxFont m_highlighted_font;
-	bool m_fonts_initialized{};
-#endif
-	bool m_bottom;
 };
 
 BEGIN_EVENT_TABLE(wxAuiNotebookEx, wxAuiNotebook)
@@ -326,7 +90,7 @@ void wxAuiNotebookEx::RemoveExtraBorders()
 
 void wxAuiNotebookEx::SetExArtProvider()
 {
-	SetArtProvider(new wxAuiTabArtEx(this, (GetWindowStyle() & wxAUI_NB_BOTTOM) != 0, std::make_shared<wxAuiTabArtExData>()));
+	SetArtProvider(new wxAuiTabArtEx(this, std::make_shared<wxAuiTabArtExData>()));
 }
 
 bool wxAuiNotebookEx::SetPageText(size_t page_idx, const wxString& text)
@@ -405,9 +169,9 @@ void wxAuiNotebookEx::AdvanceTab(bool forward)
 {
 	int page = GetSelection();
 	if (forward)
-		page++;
+		++page;
 	else
-		page--;
+		--page;
 	if (page >= (int)GetPageCount())
 		page = 0;
 	else if (page < 0)
