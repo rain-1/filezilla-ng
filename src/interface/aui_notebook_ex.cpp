@@ -11,7 +11,7 @@
 #define TABCOLOUR wxSYS_COLOUR_WINDOWFRAME
 #endif
 
-#ifndef __WXGTK__
+#ifdef __WXMAC__
 // Special DC to filter some calls.
 // We can (mis)use wxMirrorDC since it already
 // forwards all calls to another DC.
@@ -242,7 +242,7 @@ public:
 		return size;
 	}
 
-#ifndef __WXGTK__
+#ifdef __WXMAC__
 	virtual void DrawTab(wxDC& dc,
 						 wxWindow* wnd,
 						 const wxAuiNotebookPage& pane,
@@ -293,7 +293,7 @@ protected:
 
 	std::shared_ptr<wxAuiTabArtExData> m_data;
 
-#ifndef __WXGTK__
+#ifdef __WXMAC__
 	wxFont m_original_normal_font;
 	wxFont m_highlighted_font;
 	bool m_fonts_initialized{};
