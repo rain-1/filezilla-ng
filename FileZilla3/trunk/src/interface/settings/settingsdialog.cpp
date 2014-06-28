@@ -181,6 +181,9 @@ bool CSettingsDialog::LoadPages()
 		page.page->GetSizer()->SetMinSize(size);
 		page.page->GetSizer()->Fit(page.page);
 		page.page->GetSizer()->SetSizeHints(page.page);
+		if( GetLayoutDirection() == wxLayout_RightToLeft ) {
+			page.page->Move(wxPoint(1, 0));
+		}
 	}
 
 	GetSizer()->Fit(this);
