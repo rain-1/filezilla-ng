@@ -5,7 +5,7 @@ class CWrapEngine
 {
 public:
 	CWrapEngine();
-	virtual ~CWrapEngine();
+	virtual ~CWrapEngine() {}
 
 	bool LoadCache();
 
@@ -44,10 +44,11 @@ protected:
 	std::map<wxChar, unsigned int> m_charWidths;
 
 	bool CanWrapBefore(const wxChar& c);
-	bool m_wrapOnEveryChar;
-	const wxChar* m_noWrapChars;
+	bool m_wrapOnEveryChar{};
+	const wxChar* m_noWrapChars{};
 
 	wxFont m_font;
+	int m_spaceWidth{-1};
 
 	static bool m_use_cache;
 };

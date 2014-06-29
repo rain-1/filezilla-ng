@@ -236,8 +236,9 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 
 	int width = 0, height = 0;
 
-	int spaceWidth = 0;
-	parent->GetTextExtent(_T(" "), &spaceWidth, &height, 0, 0, &m_font);
+	if (m_spaceWidth == -1) {
+		parent->GetTextExtent(_T(" "), &m_spaceWidth, &height, 0, 0, &m_font);
+	}
 
 	int strLen = text.Length();
 	int wrapAfter = -1;
@@ -246,16 +247,14 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 
 	bool url = false;
 	bool containsURL = false;
-	for (int i = 0; i <= strLen; i++)
-	{
+	for (int i = 0; i <= strLen; i++) {
 		if ((i < strLen - 2 && text[i] == ':' && text[i + 1] == '/' && text[i + 2] == '/') || // absolute
 			(i < strLen && text[i] == '/' && (!i || text[i - 1] == ' '))) // relative
 		{
 			url = true;
 			containsURL = true;
 		}
-		if (i < strLen && text[i] != ' ')
-		{
+		if (i < strLen && text[i] != ' ') {
 			// If url, wrap on slashes and ampersands, but not first slash of something://
 			if (!url ||
 				 ((i < strLen - 1 && (text[i] != '/' || text[i + 1] == '/')) && (i < strLen - 1 && (text[i] != '&' || text[i + 1] == '&')) && text[i] != '?'))
@@ -263,16 +262,14 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 		}
 
 		wxString segment;
-		if (wrapAfter == -1)
-		{
+		if (wrapAfter == -1) {
 			if (i < strLen && (text[i] == '/' || text[i] == '?' || text[i] == '&'))
 				segment = text.Mid(start, i - start + 1);
 			else
 				segment = text.Mid(start, i - start);
 			wrapAfter = i;
 		}
-		else
-		{
+		else {
 			if (i < strLen && (text[i] == '/' || text[i] == '?' || text[i] == '&'))
 				segment = text.Mid(wrapAfter + 1, i - wrapAfter);
 			else
@@ -282,8 +279,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 		segment = wxStripMenuCodes(segment);
 		parent->GetTextExtent(segment, &width, &height, 0, 0, &m_font);
 
-		if (lineLength + spaceWidth + width > maxLength)
-		{
+		if (lineLength + m_spaceWidth + width > maxLength) {
 			// Cannot be appended to current line without overflow, so start a new line
 			if (!wrappedText.empty())
 				wrappedText += _T("\n");
@@ -291,12 +287,10 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			if (wrapAfter < strLen && text[wrapAfter] != ' ' && text[wrapAfter] != '\0')
 				wrappedText += text[wrapAfter];
 
-			if (width + spaceWidth >= (int)maxLength)
-			{
+			if (width + m_spaceWidth >= (int)maxLength) {
 				// Current segment too big to even fit into a line just by itself
 
-				if( i != wrapAfter )
-				{
+				if( i != wrapAfter ) {
 					if (!wrappedText.empty())
 						wrappedText += _T("\n");
 					wrappedText += text.Mid(wrapAfter + 1, i - wrapAfter - 1);
@@ -306,15 +300,13 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 				wrapAfter = -1;
 				lineLength = 0;
 			}
-			else
-			{
+			else {
 				start = wrapAfter + 1;
 				wrapAfter = i;
 				lineLength = width;
 			}
 		}
-		else if (lineLength + spaceWidth + width + spaceWidth >= maxLength)
-		{
+		else if (lineLength + m_spaceWidth + width + m_spaceWidth >= maxLength) {
 			if (!wrappedText.empty())
 				wrappedText += _T("\n");
 			wrappedText += text.Mid(start, i - start);
@@ -324,10 +316,9 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 			wrapAfter = -1;
 			lineLength = 0;
 		}
-		else
-		{
+		else {
 			if (lineLength)
-				lineLength += spaceWidth;
+				lineLength += m_spaceWidth;
 			lineLength += width;
 			wrapAfter = i;
 		}
@@ -335,8 +326,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 		if (i < strLen && text[i] == ' ')
 			url = false;
 	}
-	if (start < strLen)
-	{
+	if (start < strLen) {
 		if (!wrappedText.empty())
 			wrappedText += _T("\n");
 		wrappedText += text.Mid(start);
@@ -959,10 +949,6 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 CWrapEngine::CWrapEngine()
 {
 	CheckLanguage();
-}
-
-CWrapEngine::~CWrapEngine()
-{
 }
 
 static wxString GetLocaleFile(const wxString& localesDir, wxString name)
