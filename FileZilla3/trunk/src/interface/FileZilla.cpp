@@ -258,13 +258,12 @@ bool CFileZillaApp::OnInit()
 	wxSystemOptions::SetOption(_T("no-maskblt"), 0);
 	wxSystemOptions::SetOption(_T("msw.window.no-clip-children"), 0);
 	wxSystemOptions::SetOption(_T("msw.font.no-proof-quality"), 0);
-#endif
-
-#ifdef __WXMSW__
 	wxSystemOptions::SetOption(_T("msw.remap"), 0);
+	wxSystemOptions::SetOption(_T("msw.staticbox.optimized-paint"), 0);
 #endif
 #ifdef __WXMAC__
 	wxSystemOptions::SetOption(_T("mac.listctrl.always_use_generic"), 1);
+	wxSystemOptions::SetOption(_T("mac.textcontrol-use-spell-checker"), 0);
 #endif
 
 	int cmdline_result = ProcessCommandLine();
