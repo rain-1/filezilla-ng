@@ -1554,6 +1554,7 @@
         <object class="wxHyperlinkCtrl">
           <label>Show details about custom date and time formats</label>
           <url>https://wiki.filezilla-project.org/Date_and_Time_formatting</url>
+          <tooltip>https://wiki.filezilla-project.org/Date__and__Time__formatting</tooltip>
         </object>
         <flag>wxTOP|wxBOTTOM</flag>
         <border>7</border>
