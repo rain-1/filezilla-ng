@@ -124,6 +124,9 @@ void CUpdateDialog::Wrap()
 		(*iter)->GetSizer()->SetMinSize(size);
 		(*iter)->GetSizer()->Fit(*iter);
 		(*iter)->GetSizer()->SetSizeHints(*iter);
+		if (GetLayoutDirection() == wxLayout_RightToLeft) {
+			(*iter)->Move(wxPoint(0, 0));
+		}
 	}
 
 	GetSizer()->Fit(this);
