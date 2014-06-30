@@ -116,6 +116,12 @@ wxObject *wxToolBarXmlHandlerEx::DoCreateResource()
 			}
 		}
 #endif
+#ifdef __WXGTK3__
+		// We need to provide a disabled bitmap.
+		if( !bitmap2.IsOk() && bitmap.IsOk() ) {
+			bitmap2 = wxBitmap(bitmap.ConvertToImage().ConvertToGreyscale());
+		}
+#endif
 		wxToolBarToolBase * const tool =
 			m_toolbar->AddTool
 			(
