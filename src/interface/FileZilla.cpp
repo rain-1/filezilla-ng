@@ -176,7 +176,7 @@ static void SetAppId()
 
 void CFileZillaApp::InitLocale()
 {
-		wxString language = COptions::Get()->GetOption(OPTION_LANGUAGE);
+	wxString language = COptions::Get()->GetOption(OPTION_LANGUAGE);
 	const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(language);
 	if (!language.empty())
 	{
