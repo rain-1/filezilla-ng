@@ -209,9 +209,9 @@ void CContextControl::CreateContextControls(CState* pState)
 			context_controls.pViewSplitter->SplitVertically(context_controls.pLocalSplitter, context_controls.pRemoteSplitter);
 	}
 
-	context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalSplitter, pState);
 	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL))
 	{
+		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalTreeViewPanel, pState);
 		context_controls.pLocalTreeViewPanel->SetHeader(context_controls.pLocalViewHeader);
 		if (layout == 3 && swap)
 			context_controls.pLocalSplitter->SplitVertically(context_controls.pLocalListViewPanel, context_controls.pLocalTreeViewPanel);
@@ -223,13 +223,14 @@ void CContextControl::CreateContextControls(CState* pState)
 	else
 	{
 		context_controls.pLocalTreeViewPanel->Hide();
+		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalListViewPanel, pState);
 		context_controls.pLocalListViewPanel->SetHeader(context_controls.pLocalViewHeader);
 		context_controls.pLocalSplitter->Initialize(context_controls.pLocalListViewPanel);
 	}
 
-	context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteSplitter, pState);
 	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE))
 	{
+		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteTreeViewPanel, pState);
 		context_controls.pRemoteTreeViewPanel->SetHeader(context_controls.pRemoteViewHeader);
 		if (layout == 3 && !swap)
 			context_controls.pRemoteSplitter->SplitVertically(context_controls.pRemoteListViewPanel, context_controls.pRemoteTreeViewPanel);
@@ -241,6 +242,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	else
 	{
 		context_controls.pRemoteTreeViewPanel->Hide();
+		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteListViewPanel, pState);
 		context_controls.pRemoteListViewPanel->SetHeader(context_controls.pRemoteViewHeader);
 		context_controls.pRemoteSplitter->Initialize(context_controls.pRemoteListViewPanel);
 	}
