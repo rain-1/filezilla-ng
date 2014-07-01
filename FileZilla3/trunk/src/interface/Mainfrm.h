@@ -79,23 +79,23 @@ protected:
 
 	void SetBookmarksFromPath(const wxString& path);
 
-	CStatusBar* m_pStatusBar;
-	CMenuBar* m_pMenuBar;
-	CToolBar* m_pToolBar;
-	CQuickconnectBar* m_pQuickconnectBar;
+	CStatusBar* m_pStatusBar{};
+	CMenuBar* m_pMenuBar{};
+	CToolBar* m_pToolBar{};
+	CQuickconnectBar* m_pQuickconnectBar{};
 
-	CSplitterWindowEx* m_pTopSplitter; // If log position is 0, splits message log from rest of panes
-	CSplitterWindowEx* m_pBottomSplitter; // Top contains view splitter, bottom queue (or queuelog splitter if in position 1)
-	CSplitterWindowEx* m_pQueueLogSplitter;
+	CSplitterWindowEx* m_pTopSplitter{}; // If log position is 0, splits message log from rest of panes
+	CSplitterWindowEx* m_pBottomSplitter{}; // Top contains view splitter, bottom queue (or queuelog splitter if in position 1)
+	CSplitterWindowEx* m_pQueueLogSplitter{};
 
-	CContextControl* m_pContextControl;
+	CContextControl* m_pContextControl{};
 
-	CStatusView* m_pStatusView;
-	CQueueView* m_pQueueView;
+	CStatusView* m_pStatusView{};
+	CQueueView* m_pQueueView{};
 	CLed* m_pActivityLed[2];
-	CThemeProvider* m_pThemeProvider;
+	CThemeProvider* m_pThemeProvider{};
 #if FZ_MANUALUPDATECHECK
-	CUpdater* m_pUpdater;
+	CUpdater* m_pUpdater{};
 	virtual void UpdaterStateChanged( UpdaterState s, build const& v );
 	void TriggerUpdateDialog();
 	wxTimer update_dialog_timer_;
@@ -159,20 +159,20 @@ protected:
 	void OnMenuNewTab(wxCommandEvent& event);
 	void OnMenuCloseTab(wxCommandEvent& event);
 
-	bool m_bInitDone;
-	bool m_bQuit;
-	wxEventType m_closeEvent;
+	bool m_bInitDone{};
+	bool m_bQuit{};
+	wxEventType m_closeEvent{};
 	wxTimer m_closeEventTimer;
 
-	CAsyncRequestQueue* m_pAsyncRequestQueue;
-	CMainFrameStateEventHandler* m_pStateEventHandler;
+	CAsyncRequestQueue* m_pAsyncRequestQueue{};
+	CMainFrameStateEventHandler* m_pStateEventHandler{};
 
-	CWindowStateManager* m_pWindowStateManager;
+	CWindowStateManager* m_pWindowStateManager{};
 
-	CQueue* m_pQueuePane;
+	CQueue* m_pQueuePane{};
 
 #ifndef __WXMAC__
-	wxTaskBarIcon* m_taskBarIcon;
+	wxTaskBarIcon* m_taskBarIcon{};
 #endif
 #ifdef __WXGTK__
 	// There is a bug in KDE, causing the window to toggle iconized state
@@ -180,10 +180,10 @@ protected:
 	// Set m_taskbar_is_uniconizing in OnTaskBarClick and unset the
 	// next time the pending event processing runs and calls OnTaskBarClick_Delayed.
 	// While set, ignore iconize events.
-	bool m_taskbar_is_uniconizing;
+	bool m_taskbar_is_uniconizing{};
 #endif
 
-	int m_comparisonToggleAcceleratorId;
+	int m_comparisonToggleAcceleratorId{};
 };
 
 #endif

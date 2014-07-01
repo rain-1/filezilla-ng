@@ -219,6 +219,8 @@ protected:
 CMainFrame::CMainFrame()
 	: m_comparisonToggleAcceleratorId(wxNewId())
 {
+	m_pActivityLed[0] = m_pActivityLed[1] = 0;
+
 	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CMainFrame"));
 	wxRect screen_size = CWindowStateManager::GetScreenDimensions();
 
@@ -228,14 +230,6 @@ CMainFrame::CMainFrame()
 
 	Create(NULL, -1, _T("FileZilla"), wxDefaultPosition, initial_size);
 	SetSizeHints(250, 250);
-
-#ifndef __WXMAC__
-	m_taskBarIcon = 0;
-#endif
-#ifdef __WXGTK__
-	m_taskbar_is_uniconizing = 0;
-#endif
-
 
 #ifdef __WXMSW__
 	// In order for the --close commandline argument to work,
@@ -252,23 +246,6 @@ CMainFrame::CMainFrame()
 #else
 	SetIcons(CThemeProvider::GetIconBundle(_T("ART_FILEZILLA")));
 #endif
-
-	m_pContextControl = 0;
-	m_pStatusBar = NULL;
-	m_pMenuBar = NULL;
-	m_pToolBar = 0;
-	m_pQuickconnectBar = NULL;
-	m_pTopSplitter = NULL;
-	m_pBottomSplitter = NULL;
-	m_pQueueLogSplitter = 0;
-	m_bInitDone = false;
-	m_bQuit = false;
-	m_closeEvent = 0;
-#if FZ_MANUALUPDATECHECK
-	m_pUpdater = 0;
-#endif
-	m_pQueuePane = 0;
-	m_pStatusView = 0;
 
 	m_pThemeProvider = new CThemeProvider();
 
@@ -288,11 +265,6 @@ CMainFrame::CMainFrame()
 		m_pStatusBar->AddChild(-1, widget_led_send, m_pActivityLed[0]);
 
 		SetStatusBar(m_pStatusBar);
-	}
-	else
-	{
-		m_pActivityLed[0] = 0;
-		m_pActivityLed[1] = 0;
 	}
 
 	m_closeEventTimer.SetOwner(this);
