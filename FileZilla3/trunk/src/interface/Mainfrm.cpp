@@ -1274,7 +1274,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	delete m_pStateEventHandler;
 	m_pStateEventHandler = 0;
 
-	if (!m_pQueueView->Quit()) {
+	if (m_pQueueView && !m_pQueueView->Quit()) {
 		if( event.CanVeto() ) {
 			event.Veto();
 		}
@@ -1282,16 +1282,14 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
-	if (pEditHandler)
-	{
+	if (pEditHandler) {
 		pEditHandler->RemoveAll(true);
 		pEditHandler->Release();
 	}
 
 	bool res = true;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-	{
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 		CState* pState = *iter;
 		if (!pState->m_pCommandQueue)
 			continue;
