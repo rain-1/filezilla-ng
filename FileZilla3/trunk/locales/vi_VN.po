@@ -2,12 +2,12 @@
 # Copyright (C) 2004-2014 Tim Kosse <tim.kosse@filezilla-project.org>.
 # This file is distributed under the same license as the FileZilla package.
 # First translated by Trần Ngọc Quân <vnwildman@gmail.com>, 2008-2014.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: filezilla 3.9.0-beta1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-26 20:37+0200\n"
+"POT-Creation-Date: 2014-07-01 16:18+0200\n"
 "PO-Revision-Date: 2014-06-25 08:44+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
@@ -138,7 +138,7 @@ msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s byte"
 
-#: ../../locales/../src/interface/FileZilla.cpp:705
+#: ../../locales/../src/interface/FileZilla.cpp:704
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -153,7 +153,7 @@ msgstr ""
 "Làm ơn tải lại FileZilla. Nếu vấn đề không được giải quyết, hãy báo lỗi tới "
 "chúng tôi."
 
-#: ../../locales/../src/interface/FileZilla.cpp:799
+#: ../../locales/../src/interface/FileZilla.cpp:798
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -645,7 +645,7 @@ msgstr "Tạo &mới"
 msgid "&New Site"
 msgstr "Địa chỉ &mới"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1831
+#: ../../locales/../src/interface/Mainfrm.cpp:1795
 msgid "&New version available!"
 msgstr "Đã có bả&n mới!"
 
@@ -955,7 +955,7 @@ msgstr "&Tài khoản:"
 msgid "&Username:"
 msgstr "Tên tài kh&oản:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1825
+#: ../../locales/../src/interface/Mainfrm.cpp:1789
 #, c-format
 msgid "&Version %s"
 msgstr "&Phiên bản %s"
@@ -1018,7 +1018,7 @@ msgstr ""
 "Kiểu đăng nhập “Thông thường” và “ Tài khoản” không sẵn sàng. Mục này được "
 "thay đổi thành “Hỏi mật khẩu”."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:597
+#: ../../locales/../src/interface/Mainfrm.cpp:569
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1061,7 +1061,7 @@ msgstr "(5-9999, 0 là tắt)"
 msgid "(app-compat is set to %d.%d)"
 msgstr "(app-compat được đặt thành %d.%d)"
 
-#: resources.h:862
+#: resources.h:861
 msgid "(example: %H:%M)"
 msgstr "(ví dụ: %H:%M)"
 
@@ -1176,7 +1176,7 @@ msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "Tập tin đó vẫn đang bị biên tập. Làm ơn đóng nó lại và thử lại."
 
-#: ../../locales/../src/interface/FileZilla.cpp:684
+#: ../../locales/../src/interface/FileZilla.cpp:683
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1195,7 +1195,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Đã có phiên bản FileZilla mới hơn:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:677
+#: ../../locales/../src/interface/Mainfrm.cpp:649
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1706,7 +1706,7 @@ msgstr "Hủy công việc hiện hành"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "Không thể truy cập “%s”,không có đĩa hay ổ đĩa không sẵn sàng."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:567
+#: ../../locales/../src/interface/Mainfrm.cpp:539
 msgid "Cannot add server to Site Manager"
 msgstr "Không thể thêm địa chỉ máy chủ vào Danh bạ"
 
@@ -1714,7 +1714,7 @@ msgstr "Không thể thêm địa chỉ máy chủ vào Danh bạ"
 msgid "Cannot assign requested address"
 msgstr "Không thể gán địa chỉ đã yêu cầu"
 
-#: ../../locales/../src/interface/context_control.cpp:348
+#: ../../locales/../src/interface/context_control.cpp:350
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -1774,7 +1774,7 @@ msgstr "Không thể tải tập tin, tập tin XML không hợp lệ."
 msgid "Cannot load keyfile"
 msgstr "Không thể tải tập tin khóa"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1087
+#: ../../locales/../src/interface/Mainfrm.cpp:1059
 msgid "Cannot load toolbar from resource file"
 msgstr "Không thể tải thanh công cụ từ tập tin nguồn"
 
@@ -1873,7 +1873,7 @@ msgstr "Thay đổi quyền truy cập tập tin."
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "Sửa tập tin nhật ký cần phải khởi động lại FileZilla"
 
-#: ../../locales/../src/interface/FileZilla.cpp:684
+#: ../../locales/../src/interface/FileZilla.cpp:683
 msgid "Character encoding issue"
 msgstr "Dạng ký tự mã hóa"
 
@@ -2001,8 +2001,8 @@ msgstr "Kiểu mã hóa từ máy khách tới máy chủ:"
 msgid "Close &all other tabs"
 msgstr "Đóng tất cả các t&ab khác"
 
-#: resources.h:451 ../../locales/../src/interface/Mainfrm.cpp:1232
-#: ../../locales/../src/interface/Mainfrm.cpp:1255
+#: resources.h:451 ../../locales/../src/interface/Mainfrm.cpp:1204
+#: ../../locales/../src/interface/Mainfrm.cpp:1227
 msgid "Close FileZilla"
 msgstr "Đóng FileZilla"
 
@@ -2366,7 +2366,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Không thể thiết lập kết nối tới máy chủ"
 
-#: ../../locales/../src/interface/FileZilla.cpp:503
+#: ../../locales/../src/interface/FileZilla.cpp:502
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2564,7 +2564,7 @@ msgstr ""
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "Không thể ghi \"%s\", các địa chỉ đã chọn không thể xuất ra: %s"
 
-#: ../../locales/../src/interface/wrapengine.cpp:1169
+#: ../../locales/../src/interface/wrapengine.cpp:1155
 #, c-format
 msgid "Could not write \"%s\": %s"
 msgstr "Không thể ghi \"%s\": %s"
@@ -2675,7 +2675,7 @@ msgstr "Kiểu truyền hiện tại được đặt chế độ dò tìm tự �
 msgid "Current transfer type is set to binary."
 msgstr "Kiểu truyền hiện tại được đặt là nhị phân."
 
-#: resources.h:735 resources.h:861
+#: resources.h:735 resources.h:860
 msgid "Cus&tom"
 msgstr "T&ùy chọn của bạn"
 
@@ -2790,7 +2790,7 @@ msgstr ""
 "Không thể phân tích đường dẫn máy mạng mặc định. Hãy chắc chắn là nó hợp lệ "
 "và được hỗ trợ bởi kiểu máy chủ."
 
-#: ../../locales/../src/interface/settings/optionspage_language.cpp:76
+#: ../../locales/../src/interface/settings/optionspage_language.cpp:71
 msgid "Default system language"
 msgstr "Ngôn ngữ hệ thống mặc định"
 
@@ -2872,7 +2872,7 @@ msgstr "Thư mục"
 
 #: resources.h:602 resources.h:889 resources.h:1023
 #: ../../locales/../src/interface/filelistctrl.cpp:471
-#: ../../locales/../src/interface/Mainfrm.cpp:2396
+#: ../../locales/../src/interface/Mainfrm.cpp:2357
 msgid "Directory comparison"
 msgstr "So sánh thư mục"
 
@@ -2912,7 +2912,7 @@ msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr "Bạn có muốn tắt chức năng duyệt động bộ và tiếp tục thay đổi thư mục?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:679
+#: ../../locales/../src/interface/Mainfrm.cpp:651
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -2961,8 +2961,8 @@ msgstr "&Không dùng trình soạn thảo mặc định"
 msgid "Do &nothing"
 msgstr "Khô&ng làm gì cả"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1235
-#: ../../locales/../src/interface/Mainfrm.cpp:1259
+#: ../../locales/../src/interface/Mainfrm.cpp:1207
+#: ../../locales/../src/interface/Mainfrm.cpp:1231
 msgid "Do you really want to close FileZilla?"
 msgstr "Bạn có thật sự muốn thoát khỏi FileZilla không?"
 
@@ -2985,7 +2985,7 @@ msgstr "Bạn có thật sự muốn xóa tất cả các đề mục đã chọ
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Bạn có thật sự muốn xóa tất cả hàng đợi truyền đã chọn không?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:598
+#: ../../locales/../src/interface/Mainfrm.cpp:570
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Bạn có thật sự muốn gửi “%s” tới máy chủ không?"
@@ -3036,7 +3036,7 @@ msgstr "Tải về thư mục đã chọn"
 msgid "Download selected files and directories"
 msgstr "Tải về các tập tin và thư mục đã chọn"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1059
+#: ../../locales/../src/interface/Mainfrm.cpp:1031
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3203,7 +3203,7 @@ msgstr "Nhập 0 để không giới hạn tốc độ"
 msgid "Enter command"
 msgstr "Nhập lệnh vào"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:579
+#: ../../locales/../src/interface/Mainfrm.cpp:551
 msgid "Enter custom command"
 msgstr "Nhập vào lệnh của bạn"
 
@@ -3316,7 +3316,7 @@ msgstr "Lỗi khi tải hàng đợi"
 #: ../../locales/../src/interface/sitemanager.cpp:818
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:732
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:787
-#: ../../locales/../src/interface/wrapengine.cpp:1011
+#: ../../locales/../src/interface/wrapengine.cpp:997
 msgid "Error loading xml file"
 msgstr "Lỗi tải tập tin xml"
 
@@ -3337,7 +3337,7 @@ msgstr "Lỗi khởi động chương trình"
 #: ../../locales/../src/interface/sitemanager.cpp:851
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:811
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:2178
-#: ../../locales/../src/interface/wrapengine.cpp:1170
+#: ../../locales/../src/interface/wrapengine.cpp:1156
 msgid "Error writing xml file"
 msgstr "Lỗi ghi tập tin xml"
 
@@ -3667,8 +3667,8 @@ msgid "File lists"
 msgstr "Danh sách các tập tin"
 
 #: ../../locales/../src/interface/edithandler.cpp:1604
-#: ../../locales/../src/interface/FileZilla.cpp:706
-#: ../../locales/../src/interface/FileZilla.cpp:800
+#: ../../locales/../src/interface/FileZilla.cpp:705
+#: ../../locales/../src/interface/FileZilla.cpp:799
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Tập tin không tìm thấy"
@@ -3708,7 +3708,7 @@ msgstr "Tập tin được truyền đi thành công"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Tập tin được truyền đi thành công, đã truyền %s trong %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1234
+#: ../../locales/../src/interface/Mainfrm.cpp:1206
 msgid "File transfers still in progress."
 msgstr "Tập tin truyền đi vẫn đang trong tiến trình."
 
@@ -3720,7 +3720,7 @@ msgstr "Tập tin được truyền với dạng dữ liệu kiểu ASCII."
 msgid "File would transfer with binary data type."
 msgstr "Tập tin được truyền với dạng dữ liệu kiểu nhị phân."
 
-#: ../../locales/../src/interface/FileZilla.cpp:504
+#: ../../locales/../src/interface/FileZilla.cpp:503
 #: ../../locales/../src/interface/quickconnectbar.cpp:69
 #: ../../locales/../src/interface/quickconnectbar.cpp:205
 msgid "FileZilla Error"
@@ -3737,7 +3737,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla đã sẵn sàng kết nối tới máy chủ."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1569
+#: ../../locales/../src/interface/Mainfrm.cpp:1537
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla cần phải khởi động lại để thay đổi ngôn ngữ có tác dụng."
 
@@ -3907,7 +3907,7 @@ msgstr "Phải dùng bộ mã &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "&Hiển thị tập tin ẩn"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:674
+#: ../../locales/../src/interface/Mainfrm.cpp:646
 msgid "Force showing hidden files"
 msgstr "Hiển thị các tập tin ẩn"
 
@@ -4035,7 +4035,7 @@ msgstr "Máy chủ:"
 msgid "Hours,"
 msgstr "Giờ,"
 
-#: resources.h:860
+#: resources.h:859
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (ví dụ: 15:47)"
 
@@ -4153,7 +4153,8 @@ msgstr ""
 "bằng nhau nếu dấu thời gian sai lệch của chúng không vượt quá ngưỡng này."
 
 #: resources.h:905
-msgid "If you change the language, you should restart FileZilla."
+#, fuzzy
+msgid "If you change the language, you need to restart FileZilla."
 msgstr "Nếu bạn thay đổi ngôn ngữ, bạn phải khởi động lại FileZilla."
 
 #: resources.h:675
@@ -4164,7 +4165,7 @@ msgstr ""
 "Nếu bạn chon thử kiểm tra, FileZilla sẽ kết nối tới probe.filezilla-project."
 "org và sẽ thi hành vài kiểm tra đơn giản."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1258
+#: ../../locales/../src/interface/Mainfrm.cpp:1230
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Nếu bạn đóng FileZilla, những thay đổi của bạn sẽ mất."
 
@@ -4470,7 +4471,7 @@ msgstr "Khu vực của bang hay tỉnh:"
 msgid "Keep directories on top"
 msgstr "Giữ thư mục ở trên cao nhất"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:678
+#: ../../locales/../src/interface/Mainfrm.cpp:650
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4498,7 +4499,7 @@ msgstr "Thấp &nhất"
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1569
+#: ../../locales/../src/interface/Mainfrm.cpp:1537
 msgid "Language changed"
 msgstr "Ngôn ngữ đã thay đổi"
 
@@ -4719,8 +4720,8 @@ msgstr "Tối đa số truyền đi đồng &thời:"
 msgid "Memory allocation failure"
 msgstr "Gặp lỗi nghiêm trọng khi phân bổ bộ nhớ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1927
+#: ../../locales/../src/interface/Mainfrm.cpp:359
+#: ../../locales/../src/interface/Mainfrm.cpp:1891
 msgid "Message log"
 msgstr "Nhật ký thông tin"
 
@@ -4856,7 +4857,7 @@ msgstr "Tạo dấu trang mới"
 msgid "New directory"
 msgstr "Thư &mục mới"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:52
+#: ../../locales/../src/interface/welcome_dialog.cpp:56
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "Các đặc tính mới các sự cải tiến trong phiên bản %s"
@@ -4997,7 +4998,7 @@ msgstr "Chưa được kết nối"
 msgid "Not connected to any server"
 msgstr "Không kết nối tới bất kỳ máy chủ nào"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:567
+#: ../../locales/../src/interface/Mainfrm.cpp:539
 msgid "Not connected to any server."
 msgstr "Không có bất kỳ kết nối tới máy chủ."
 
@@ -5009,7 +5010,7 @@ msgstr "Chưa được kết nối."
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Chưa được khởi tạo, cần gọi WSAStartup"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:676
+#: ../../locales/../src/interface/Mainfrm.cpp:648
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "Chú ý rằng đặc tính này chỉ hỗ trợ dùng giao thức FTP."
 
@@ -5119,7 +5120,7 @@ msgstr ""
 msgid "Operating system"
 msgstr "Hệ điều hành"
 
-#: ../../locales/../src/interface/FileZilla.cpp:320
+#: ../../locales/../src/interface/FileZilla.cpp:319
 msgid "Operating system problem detected"
 msgstr "Trục trặc của hệ điều hành đã tìm ra"
 
@@ -5219,7 +5220,7 @@ msgstr "Lệnh PORT hỏng bởi bộ định tuyến router hoặc tường l�
 msgid "Pa&ssive (recommended)"
 msgstr "Thụ độn&g (nên dùng)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2556
+#: ../../locales/../src/interface/Mainfrm.cpp:2517
 msgid "Parameter not a valid URL"
 msgstr "Tham số không hợp chuẩn URL"
 
@@ -5262,7 +5263,7 @@ msgstr "Đường dẫn"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Đường dẫn không thể xây dựng từ thư mục %s và thư mục con %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2509
+#: ../../locales/../src/interface/Mainfrm.cpp:2470
 msgid "Path not found:"
 msgstr "Không tìm thấy đường dẫn:"
 
@@ -5423,7 +5424,7 @@ msgstr ""
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr "Hãy nhập giới hạn tốc độ tải lên có giá trị lớn hơn hoặc bằng 0 %s/s."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:579
+#: ../../locales/../src/interface/Mainfrm.cpp:551
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5507,7 +5508,7 @@ msgstr ""
 "cho rằng nó chỉ dùng bởi trojans hay malware. Điều này có thể kích hoạt một "
 "cảnh báo sai bạn có thể loại bỏ một cách an toàn."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:726
+#: ../../locales/../src/interface/Mainfrm.cpp:698
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5522,15 +5523,6 @@ msgid ""
 msgstr ""
 "Xin chú ý là một số máy chủ có thể cấm bạn nếu bạn thử kết nối đi kết nối "
 "lại quá nhiều lần hay trong khoảng thời gian quá ngắn."
-
-#: resources.h:857 resources.h:863
-#, no-c-format
-msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
-"details"
-msgstr ""
-"Xin hãy đọc http://wiki.filezilla-project.org/Date_and_Time_formatting để "
-"biết thêm chi tiết"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
 msgid ""
@@ -5605,7 +5597,7 @@ msgstr "Mã bưu điện:"
 msgid "Predefined Sites"
 msgstr "Giới hạn trước các địa chỉ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:725
+#: ../../locales/../src/interface/Mainfrm.cpp:697
 msgid "Preserving file timestamps"
 msgstr "Lưu giữ dấu thời gian của tập tin"
 
@@ -5766,7 +5758,7 @@ msgstr "Cây thư mụ&c máy mạng"
 msgid "R&eset and requeue selected files"
 msgstr "Đặt và xếp &lại hàng đợi với các tập tin đã chọn"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:595
+#: ../../locales/../src/interface/Mainfrm.cpp:567
 msgid "Raw FTP command"
 msgstr "Lệnh FTP thô"
 
@@ -5798,7 +5790,7 @@ msgstr "Đọ&c"
 msgid "Read-only"
 msgstr "Chỉ đọc"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1116
+#: ../../locales/../src/interface/Mainfrm.cpp:1088
 msgid "Really cancel current operation?"
 msgstr "Bạn có thực sự muốn hủy hoạt động hiện hành không?"
 
@@ -6506,13 +6498,18 @@ msgstr "Hiển thị danh sách thư mục &thô"
 msgid "Show &welcome dialog..."
 msgstr "Hiển thị hộp thoại &chào mừng..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2399
+#: ../../locales/../src/interface/Mainfrm.cpp:2360
 msgid "Show both directory trees and continue comparing?"
 msgstr "Hiển thị cả cây thư mục và tiếp tục so sánh?"
 
 #: resources.h:1045
 msgid "Show details"
 msgstr "Hiển thị chi tiết"
+
+#: resources.h:862
+#, no-c-format
+msgid "Show details about custom date and time formats"
+msgstr ""
 
 #: resources.h:576
 msgid "Shows available TLS ciphers"
@@ -6647,7 +6644,7 @@ msgstr "Ổ cắm chưa được kết nối"
 msgid "Socket type not supported for address family"
 msgstr "Kiểu ổ cắm không hỗ trợ họ địa chỉ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1257
+#: ../../locales/../src/interface/Mainfrm.cpp:1229
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Có một vài tập tin vẫn đang sửa hay cần phải tải lên."
 
@@ -6825,8 +6822,8 @@ msgstr "Cấu trúc sai"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2511
-#: ../../locales/../src/interface/Mainfrm.cpp:2558
+#: ../../locales/../src/interface/Mainfrm.cpp:2472
+#: ../../locales/../src/interface/Mainfrm.cpp:2519
 msgid "Syntax error in command line"
 msgstr "Cấu trúc dòng lệnh sai"
 
@@ -7304,7 +7301,8 @@ msgstr ""
 msgid "Time"
 msgstr "Thời gian"
 
-#: resources.h:858
+#: resources.h:857
+#, no-c-format
 msgid "Time formatting"
 msgstr "Định dạng thời gian"
 
@@ -7331,11 +7329,11 @@ msgstr ""
 msgid "Title:"
 msgstr "Tựa đề:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2397
+#: ../../locales/../src/interface/Mainfrm.cpp:2358
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "So sánh các thư mục, tất cả các danh sách tập tin phải được sắp xếp."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2398
+#: ../../locales/../src/interface/Mainfrm.cpp:2359
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "Làm điều này, các cây thư mục cần phải hiển thị tất cả hay ẩn tất cả."
 
@@ -7512,7 +7510,7 @@ msgstr "Giới hạn tải &lên:"
 msgid "U&se filetype associations if available"
 msgstr "&Dùng ràng buộc xử lý kiểu tập tin nếu được"
 
-#: resources.h:859
+#: resources.h:858
 msgid "U&se system defaults"
 msgstr "&Dùng hệ thống mặc định"
 
@@ -7809,7 +7807,7 @@ msgstr "Việc chờ truyền bị hủy"
 msgid "Waiting to retry..."
 msgstr "Đang thử lại xin chờ..."
 
-#: ../../locales/../src/interface/FileZilla.cpp:311
+#: ../../locales/../src/interface/FileZilla.cpp:310
 msgid ""
 "Warning!\n"
 "\n"
@@ -8183,6 +8181,13 @@ msgstr "nhóm được phép đọc"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:116
 msgid "group writeable"
 msgstr "nhóm được phép ghi"
+
+#: resources.h:863
+#, fuzzy
+msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
+msgstr ""
+"Xin hãy đọc http://wiki.filezilla-project.org/Date_and_Time_formatting để "
+"biết thêm chi tiết"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:91
 msgid "is equal to"
