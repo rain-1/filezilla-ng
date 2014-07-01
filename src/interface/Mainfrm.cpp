@@ -740,7 +740,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 	{
 		bool show = COptions::Get()->GetOptionVal(OPTION_FILELIST_STATUSBAR) == 0;
 		COptions::Get()->SetOption(OPTION_FILELIST_STATUSBAR, show ? 1 : 0);
-		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
+		CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
 		if (controls && controls->pLocalListViewPanel)
 		{
 			wxStatusBar* pStatusBar = controls->pLocalListViewPanel->GetStatusBar();
@@ -2097,11 +2097,9 @@ void CMainFrame::OnNavigationKeyEvent(wxNavigationKeyEvent& event)
 	if (m_pStatusView)
 		windowOrder.push_back(m_pStatusView);
 
-	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-	if (controls)
-	{
-		if (COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP) == 0)
-		{
+	CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
+	if (controls) {
+		if (COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP) == 0) {
 			windowOrder.push_back(controls->pLocalViewHeader);
 			windowOrder.push_back(controls->pLocalTreeView);
 			windowOrder.push_back(controls->pLocalListView);
@@ -2109,8 +2107,7 @@ void CMainFrame::OnNavigationKeyEvent(wxNavigationKeyEvent& event)
 			windowOrder.push_back(controls->pRemoteTreeView);
 			windowOrder.push_back(controls->pRemoteListView);
 		}
-		else
-		{
+		else {
 			windowOrder.push_back(controls->pRemoteViewHeader);
 			windowOrder.push_back(controls->pRemoteTreeView);
 			windowOrder.push_back(controls->pRemoteListView);
