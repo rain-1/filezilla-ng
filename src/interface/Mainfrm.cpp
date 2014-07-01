@@ -1305,7 +1305,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		return;
 	}
 
-	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
+	CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
 	if (controls)
 	{
 		COptions::Get()->SetLastServer(controls->pState->GetLastServer());
