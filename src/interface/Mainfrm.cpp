@@ -1665,7 +1665,7 @@ void CMainFrame::ShowRemoteTree(bool show)
 			else
 				controls->pRemoteSplitter->SplitHorizontally(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
 		}
-		else if( !show && !controls->pRemoteSplitter->IsSplit()) {
+		else if( !show && controls->pRemoteSplitter->IsSplit()) {
 			controls->pRemoteListViewPanel->SetHeader(controls->pRemoteTreeViewPanel->DetachHeader());
 			controls->pRemoteSplitter->Unsplit(controls->pRemoteTreeViewPanel);
 		}
