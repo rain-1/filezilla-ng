@@ -42,8 +42,11 @@ CDateTime CDateTime::Now()
 
 bool CDateTime::operator<( CDateTime const& op ) const
 {
-	if( t_.IsValid() != op.t_.IsValid() ) {
-		return !t_.IsValid();
+	if( !t_.IsValid() ) {
+		return op.t_.IsValid();
+	}
+	else if( !op.t_.IsValid() ) {
+		return false;
 	}
 
 	if( t_ < op.t_ ) {
@@ -87,6 +90,13 @@ bool CDateTime::IsClamped()
 
 int CDateTime::Compare( CDateTime const& op ) const
 {
+	if( !t_.IsValid() ) {
+		return op.t_.IsValid();
+	}
+	else if( !op.t_.IsValid() ) {
+		return false;
+	}
+
 	if( a_ == op.a_ ) {
 		// First fast path: Same accuracy
 		int ret = 0;
