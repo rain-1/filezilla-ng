@@ -1015,8 +1015,8 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
 {
 	wxString tooltipText;
 
-	wxFileOffset downloadSpeed = m_pQueueView->GetCurrentDownloadSpeed();
-	wxFileOffset uploadSpeed = m_pQueueView->GetCurrentUploadSpeed();
+	wxFileOffset downloadSpeed = m_pQueueView ? m_pQueueView->GetCurrentDownloadSpeed() : 0;
+	wxFileOffset uploadSpeed = m_pQueueView ? m_pQueueView->GetCurrentUploadSpeed() : 0;
 
 	CSizeFormat::_format format = static_cast<CSizeFormat::_format>(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
 	if (format == CSizeFormat::bytes)
