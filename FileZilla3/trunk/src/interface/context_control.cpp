@@ -16,6 +16,8 @@
 #include "view.h"
 #include "viewheader.h"
 
+#include <wx/wupdlock.h>
+
 DECLARE_EVENT_TYPE(fzEVT_TAB_CLOSING_DEFERRED, -1)
 DEFINE_EVENT_TYPE(fzEVT_TAB_CLOSING_DEFERRED)
 
@@ -51,7 +53,11 @@ void CContextControl::Create(wxWindow *parent)
 void CContextControl::CreateTab()
 {
 	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateTab"));
-	Freeze();
+#ifndef __WXMAC__
+	// Some reparenting is being done when creating tabs. Reparenting of frozen windows isn't working
+	// on OS X.
+	wxWindowUpdateLocker lock(this);
+#endif
 
 	CState* pState = 0;
 
@@ -101,8 +107,6 @@ void CContextControl::CreateTab()
 
 	if (m_tabs)
 		m_tabs->SetSelection(m_tabs->GetPageCount() - 1);
-
-	Thaw();
 }
 
 void CContextControl::CreateContextControls(CState* pState)
@@ -349,14 +353,16 @@ bool CContextControl::CloseTab(int tab)
 	{
 		if (wxMessageBoxEx(_("Cannot close tab while busy.\nCancel current operation and close tab?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) != wxYES)
 			return false;
-
-		Freeze();
-
-		pState->m_pCommandQueue->Cancel();
-		pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	}
-	else
-		Freeze();
+
+#ifndef __WXMAC__
+	// Some reparenting is being done when closing tabs. Reparenting of frozen windows isn't working
+	// on OS X.
+	wxWindowUpdateLocker lock(this);
+#endif
+
+	pState->m_pCommandQueue->Cancel();
+	pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 
 	pState->GetComparisonManager()->SetListings(0, 0);
 
@@ -419,8 +425,6 @@ bool CContextControl::CloseTab(int tab)
 	}
 
 	pState->Disconnect();
-
-	Thaw();
 
 	return true;
 }
