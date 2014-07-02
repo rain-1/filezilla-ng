@@ -29,7 +29,6 @@
             <flag>wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL</flag>
             <object class="wxTextCtrl" name="ID_QUICKCONNECT_HOST">
               <size>110,-1</size>
-              <value></value>
               <style>wxTE_PROCESS_ENTER</style>
               <tooltip>Enter the address of the server.
 To specify the server protocol, prepend the host with the protocol identifier. If no protocol is specified, the default protocol (ftp://) will be used.
