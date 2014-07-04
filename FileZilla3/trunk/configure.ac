@@ -249,11 +249,21 @@ if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
   AC_SUBST(PACKAGE_VERSION_MICRO)
   AC_SUBST(PACKAGE_VERSION_NANO)
 
-  # Enable DEP and ASLR
-  # -------------------
+  # Enable DEP and ASLR linker flags
+  # --------------------------------
 
   AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
   AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
+
+  # Set Windows-specific linker flags
+  # ---------------------------------
+  if echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
+    # Todo: Once Microsoft ends support for some XP derivatives, increase to Vista.
+    AX_CHECK_LINK_FLAG([-Wl,--major-subsystem-version -Wl,5], [LDFLAGS="$LDFLAGS -Wl,--major-subsystem-version -Wl,5"])
+    AX_CHECK_LINK_FLAG([-Wl,--minor-subsystem-version -Wl,1], [LDFLAGS="$LDFLAGS -Wl,--minor-subsystem-version -Wl,1"])
+    AX_CHECK_LINK_FLAG([-Wl,--major-os-version -Wl,5], [LDFLAGS="$LDFLAGS -Wl,--major-os-version -Wl,5"])
+    AX_CHECK_LINK_FLAG([-Wl,--minor-os-version -Wl,1], [LDFLAGS="$LDFLAGS -Wl,--minor-os-version -Wl,1"])
+  fi
 fi
 
 if test "$buildmain" = "yes"; then
