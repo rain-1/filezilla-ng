@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0-rc1 (2014-07-04)
+
++ Binaries are now being built with DEP and ASLR enabled where supported
+- OS X: Fixed creating new tabs
+- OS X: Fixed assertion and crash when renaming files
+- Fixed assertion when sorting by modification time
+- Fixed toolbar button to hide remote directory tree
+
 3.9.0-beta3 (2014-07-01)
 
 - OS X: Fixed rendering of the main window
