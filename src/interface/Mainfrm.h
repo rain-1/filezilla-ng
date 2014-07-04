@@ -5,6 +5,8 @@
 #include <wx/taskbar.h>
 #endif
 
+#include "statusbar.h"
+
 class CAsyncRequestQueue;
 class CContextControl;
 class CLed;
@@ -15,7 +17,6 @@ class CQueueView;
 class CQuickconnectBar;
 class CSiteManagerItemData_Site;
 class CSplitterWindowEx;
-class CStatusBar;
 class CStatusView;
 class CState;
 class CThemeProvider;
@@ -56,7 +57,7 @@ public:
 
 	void ConnectNavigationHandler(wxEvtHandler* handler);
 
-	CStatusBar* GetStatusBar() { return m_pStatusBar; }
+	wxStatusBar* GetStatusBar() { return m_pStatusBar; }
 
 	void ProcessCommandLine();
 

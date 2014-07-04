@@ -35,7 +35,6 @@
 #include "edithandler.h"
 #include "inputdialog.h"
 #include "window_state_manager.h"
-#include "statusbar.h"
 #include "cmdline.h"
 #include "buildinfo.h"
 #include "filelist_statusbar.h"

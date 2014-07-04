@@ -1781,7 +1781,7 @@ void CQueueView::CalculateQueueSize()
 
 void CQueueView::DisplayQueueSize()
 {
-	CStatusBar* pStatusBar = m_pMainFrame->GetStatusBar();
+	CStatusBar* pStatusBar = dynamic_cast<CStatusBar*>(m_pMainFrame->GetStatusBar());
 	if (!pStatusBar)
 		return;
 	pStatusBar->DisplayQueueSize(m_totalQueueSize, m_filesWithUnknownSize != 0);
