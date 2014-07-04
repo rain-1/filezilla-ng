@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-21 17:09+0200\n"
-"PO-Revision-Date: 2014-06-16 16:12+0300\n"
+"POT-Creation-Date: 2014-07-04 21:16+0200\n"
+"PO-Revision-Date: 2014-07-03 13:52+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -170,7 +170,7 @@ msgstr[3] "%s بايتات"
 msgstr[4] "%s بايت"
 msgstr[5] "%s بايت"
 
-#: ../../locales/../src/interface/FileZilla.cpp:705
+#: ../../locales/../src/interface/FileZilla.cpp:703
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -184,7 +184,7 @@ msgstr ""
 "الرجاء تحميل FileZilla مرة ثانية . إذا أستمرت هذه المشكلة أرسل لنا تقرير عن "
 "الخطأ"
 
-#: ../../locales/../src/interface/FileZilla.cpp:799
+#: ../../locales/../src/interface/FileZilla.cpp:797
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -670,7 +670,7 @@ msgstr "&جديد"
 msgid "&New Site"
 msgstr "&موقع جديد"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1861
+#: ../../locales/../src/interface/Mainfrm.cpp:1794
 msgid "&New version available!"
 msgstr "يتوفر &نسخة جديدة"
 
@@ -979,7 +979,7 @@ msgstr "&المستخدم:"
 msgid "&Username:"
 msgstr "&المستخدم:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1855
+#: ../../locales/../src/interface/Mainfrm.cpp:1788
 #, c-format
 msgid "&Version %s"
 msgstr "ال&نسخة %s"
@@ -1042,7 +1042,7 @@ msgstr ""
 "أنواع تسجيل الدخول ’عادي’ و ’الحساب’ ليست متوفرة، حيث تم تغيير الإدخال الخاص "
 "بك إلى 'طلب كلمة المرور' ـ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:597
+#: ../../locales/../src/interface/Mainfrm.cpp:568
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1090,7 +1090,7 @@ msgstr "(5-9999 , 0 للتعطيل)"
 msgid "(app-compat is set to %d.%d)"
 msgstr "(app-compat is set to %d.%d)"
 
-#: resources.h:862
+#: resources.h:861
 msgid "(example: %H:%M)"
 msgstr "(مثال: %H:%M)"
 
@@ -1204,7 +1204,7 @@ msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "يتم الآن تعديل ملف بهذا الإسم . الرجاء إغلاقه ثم حاول مرة ثانية"
 
-#: ../../locales/../src/interface/FileZilla.cpp:684
+#: ../../locales/../src/interface/FileZilla.cpp:682
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1221,7 +1221,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "يتوفر نسخة جديدة من FileZilla:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:677
+#: ../../locales/../src/interface/Mainfrm.cpp:648
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1609,8 +1609,8 @@ msgstr "تعليمات الإستخدام الأساسية"
 msgid "Behaviour"
 msgstr "السلوك"
 
-#: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/edithandler.cpp:1167
+#: ../../locales/../src/interface/edithandler.cpp:1142
+#: ../../locales/../src/interface/edithandler.cpp:1170
 msgid "Being edited"
 msgstr "يتم التحرير"
 
@@ -1727,7 +1727,7 @@ msgstr "لإلغاء العملية الحالية"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "لا يمكن دخول '%s' ، لا يوجد وسيطة مدخلة أو محرك الأقراص غير جاهز"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:567
+#: ../../locales/../src/interface/Mainfrm.cpp:538
 msgid "Cannot add server to Site Manager"
 msgstr "تعذرت إضافة الخادم إلى مدير الموقع"
 
@@ -1735,7 +1735,7 @@ msgstr "تعذرت إضافة الخادم إلى مدير الموقع"
 msgid "Cannot assign requested address"
 msgstr "لا يمكن تعيين العنوان المطلوب"
 
-#: ../../locales/../src/interface/context_control.cpp:348
+#: ../../locales/../src/interface/context_control.cpp:354
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -1793,7 +1793,7 @@ msgstr "لا يمكن تحميل الملف ، ليس ملف XML صالح"
 msgid "Cannot load keyfile"
 msgstr "تعذر تحميل ملف المفتاح"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1087
+#: ../../locales/../src/interface/Mainfrm.cpp:1058
 msgid "Cannot load toolbar from resource file"
 msgstr "تعذر تحميل شريط الأدوات من ملف الموارد"
 
@@ -1823,13 +1823,13 @@ msgstr "تعذر حفظ مجموعة المرشح"
 msgid "Cannot select filter"
 msgstr "تعذر تحديد المرشح"
 
-#: ../../locales/../src/interface/edithandler.cpp:1517
-#: ../../locales/../src/interface/edithandler.cpp:1522
-#: ../../locales/../src/interface/edithandler.cpp:1561
+#: ../../locales/../src/interface/edithandler.cpp:1520
+#: ../../locales/../src/interface/edithandler.cpp:1525
+#: ../../locales/../src/interface/edithandler.cpp:1564
 msgid "Cannot set file association"
 msgstr "تعذر وضع إشراك الملف"
 
-#: ../../locales/../src/interface/edithandler.cpp:1098
+#: ../../locales/../src/interface/edithandler.cpp:1101
 msgid "Cannot show dialog"
 msgstr "تعذر إظهار اللائحة"
 
@@ -1890,7 +1890,7 @@ msgstr "تغيير أذونات الملف"
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "التغيير لإعدادات ملف السجل يتطلب إعادة تشغيل FileZilla"
 
-#: ../../locales/../src/interface/FileZilla.cpp:684
+#: ../../locales/../src/interface/FileZilla.cpp:682
 msgid "Character encoding issue"
 msgstr "حالة ترميز الرمز"
 
@@ -2018,8 +2018,8 @@ msgstr "التابع إلى شفرة الخادم :"
 msgid "Close &all other tabs"
 msgstr "إ&غلاق كافة التبويبات الأخرى"
 
-#: resources.h:451 ../../locales/../src/interface/Mainfrm.cpp:1232
-#: ../../locales/../src/interface/Mainfrm.cpp:1255
+#: resources.h:451 ../../locales/../src/interface/Mainfrm.cpp:1203
+#: ../../locales/../src/interface/Mainfrm.cpp:1226
 msgid "Close FileZilla"
 msgstr "إغلاق FileZilla"
 
@@ -2381,7 +2381,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "تعذر تأسيس الإتصال مع الخادم"
 
-#: ../../locales/../src/interface/FileZilla.cpp:503
+#: ../../locales/../src/interface/FileZilla.cpp:502
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2574,7 +2574,7 @@ msgstr ""
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "لا يمكن كتابة \"%s\" , تعذر تصدير المواقع المحددة : %s"
 
-#: ../../locales/../src/interface/wrapengine.cpp:1169
+#: ../../locales/../src/interface/wrapengine.cpp:1155
 #, c-format
 msgid "Could not write \"%s\": %s"
 msgstr "تعذرت كتابة \"%s\" : %s"
@@ -2683,7 +2683,7 @@ msgstr "نوع الإرسال الحالي موضوع على الإكتشاف ا
 msgid "Current transfer type is set to binary."
 msgstr "نوع الإرسال الحالي موضوع على ثنائي"
 
-#: resources.h:735 resources.h:861
+#: resources.h:735 resources.h:860
 msgid "Cus&tom"
 msgstr "&مخصص"
 
@@ -2798,7 +2798,7 @@ msgstr ""
 "لا يمكن تحليل المسار الإفتراضي البعيد . تأكد من أن المسار فريد و صالح لنوع "
 "الخادم المحدد"
 
-#: ../../locales/../src/interface/settings/optionspage_language.cpp:76
+#: ../../locales/../src/interface/settings/optionspage_language.cpp:71
 msgid "Default system language"
 msgstr "لغة النظام الإفتراضية"
 
@@ -2884,7 +2884,7 @@ msgstr "الدليل"
 
 #: resources.h:602 resources.h:889 resources.h:1023
 #: ../../locales/../src/interface/filelistctrl.cpp:471
-#: ../../locales/../src/interface/Mainfrm.cpp:2426
+#: ../../locales/../src/interface/Mainfrm.cpp:2356
 msgid "Directory comparison"
 msgstr "مقارنة الأدلة"
 
@@ -2923,7 +2923,7 @@ msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr "تعطيل التصفح المتزامن و الإستمرار في تغيير الدليل البعيد ؟"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:679
+#: ../../locales/../src/interface/Mainfrm.cpp:650
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -2973,8 +2973,8 @@ msgstr "&عدم إستخدام المحرر الإفتراضي"
 msgid "Do &nothing"
 msgstr "بدون إ&جراء"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1235
-#: ../../locales/../src/interface/Mainfrm.cpp:1259
+#: ../../locales/../src/interface/Mainfrm.cpp:1206
+#: ../../locales/../src/interface/Mainfrm.cpp:1230
 msgid "Do you really want to close FileZilla?"
 msgstr "هل تريد فعلا إغلاق FileZilla ؟"
 
@@ -2995,7 +2995,7 @@ msgstr "هل تريد فعلا حذف المدخلة المحددة ؟"
 msgid "Do you really want to delete the transfer queue?"
 msgstr "هل تريد فعلا حذف قائمة إنتظار الإرسال هذه ؟"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:598
+#: ../../locales/../src/interface/Mainfrm.cpp:569
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "هل تريد فعلا إرسال '%s' إلى الخادم ؟"
@@ -3046,7 +3046,7 @@ msgstr "تحميل الدليل المحدد"
 msgid "Download selected files and directories"
 msgstr "تحميل الملفات المحددة و الأدلة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1059
+#: ../../locales/../src/interface/Mainfrm.cpp:1030
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3055,7 +3055,7 @@ msgstr ""
 "سرعة التنزيل: %s/s\n"
 "سرعة الرفع: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1124
+#: ../../locales/../src/interface/edithandler.cpp:1127
 msgid "Downloading"
 msgstr "تحميل"
 
@@ -3211,7 +3211,7 @@ msgstr "أدخل 0 للسرعة الغير المحدودة"
 msgid "Enter command"
 msgstr "إدخال أمر"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:579
+#: ../../locales/../src/interface/Mainfrm.cpp:550
 msgid "Enter custom command"
 msgstr "إدخال أمر مخصص"
 
@@ -3324,7 +3324,7 @@ msgstr "خطأ في تحميل قائمة الإنتظار"
 #: ../../locales/../src/interface/sitemanager.cpp:818
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:732
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:787
-#: ../../locales/../src/interface/wrapengine.cpp:1011
+#: ../../locales/../src/interface/wrapengine.cpp:997
 msgid "Error loading xml file"
 msgstr "خطأ في تحميل ملف xml"
 
@@ -3345,7 +3345,7 @@ msgstr "خطأ في تشغيل البرنامج"
 #: ../../locales/../src/interface/sitemanager.cpp:851
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:811
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:2178
-#: ../../locales/../src/interface/wrapengine.cpp:1170
+#: ../../locales/../src/interface/wrapengine.cpp:1156
 msgid "Error writing xml file"
 msgstr "خطأ في كتابة ملف xml"
 
@@ -3453,9 +3453,9 @@ msgstr "FTPS - FTP over implicit TLS/SSL"
 msgid "Failed to change directory"
 msgstr "فشل في تغيير الدليل"
 
-#: ../../locales/../src/interface/FileZilla.cpp:215
-#: ../../locales/../src/interface/FileZilla.cpp:228
-#: ../../locales/../src/interface/FileZilla.cpp:230
+#: ../../locales/../src/interface/FileZilla.cpp:216
+#: ../../locales/../src/interface/FileZilla.cpp:229
+#: ../../locales/../src/interface/FileZilla.cpp:231
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 msgid "Failed to change language"
 msgstr "فشل في تغيير اللغة"
@@ -3493,7 +3493,7 @@ msgstr "فشل الحصول على عنوان النظير لإتصال التح
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "فشل الحصول على عنوان النظير لإتصال البيانات ، تم إغلاق الإتصال"
 
-#: ../../locales/../src/interface/context_control.cpp:79
+#: ../../locales/../src/interface/context_control.cpp:85
 msgid "Failed to initialize FTP engine"
 msgstr "فشل في بدأ محرك FTP"
 
@@ -3568,35 +3568,35 @@ msgstr "فشل في لإسترداد عنوان IP الخارجي"
 msgid "Failed to send command."
 msgstr "فشل في إرسال الأمر"
 
-#: ../../locales/../src/interface/FileZilla.cpp:228
+#: ../../locales/../src/interface/FileZilla.cpp:229
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr "فشل في وضع اللغة على %s (%s) إستخدام لغة النظام الافتراضية"
 
-#: ../../locales/../src/interface/FileZilla.cpp:208
+#: ../../locales/../src/interface/FileZilla.cpp:209
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
 msgstr ""
 "فشل في وضع اللغة على %s (%s) ، إستعمال لغة النظام الإفتراضية (%s, %s) ."
 
-#: ../../locales/../src/interface/FileZilla.cpp:196
+#: ../../locales/../src/interface/FileZilla.cpp:197
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr "فشل في وضع اللغة على %s (%s) ، إستعمال لغة النظام الإفتراضية"
 
-#: ../../locales/../src/interface/FileZilla.cpp:230
+#: ../../locales/../src/interface/FileZilla.cpp:231
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 #, c-format
 msgid "Failed to set language to %s, using default system language"
 msgstr "يتم استخدام لغة النظام الافتراضية%s فشل في ضبط اللغة الى"
 
-#: ../../locales/../src/interface/FileZilla.cpp:204
+#: ../../locales/../src/interface/FileZilla.cpp:205
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr "فشل في وضع اللغة على %s ، إستعمال لغة النظام الإفتراضية (%s, %s) ."
 
-#: ../../locales/../src/interface/FileZilla.cpp:193
+#: ../../locales/../src/interface/FileZilla.cpp:194
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr "فشل في وضع اللغة على %s ، إستعمال لغة النظام الإفتراضية"
@@ -3670,9 +3670,9 @@ msgstr "تم تغيير الملف"
 msgid "File lists"
 msgstr "قوائم الملف"
 
-#: ../../locales/../src/interface/edithandler.cpp:1601
-#: ../../locales/../src/interface/FileZilla.cpp:706
-#: ../../locales/../src/interface/FileZilla.cpp:800
+#: ../../locales/../src/interface/edithandler.cpp:1604
+#: ../../locales/../src/interface/FileZilla.cpp:704
+#: ../../locales/../src/interface/FileZilla.cpp:798
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "الملف غير موجود"
@@ -3712,7 +3712,7 @@ msgstr "تم إرسال الملف بنجاح"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "نجاح إرسال الملف ، تم إرسال %s في %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1234
+#: ../../locales/../src/interface/Mainfrm.cpp:1205
 msgid "File transfers still in progress."
 msgstr "عمليات إرسال الملف مستمرة"
 
@@ -3724,7 +3724,7 @@ msgstr "قد يرسل الملف بنوع بيانات ASCII"
 msgid "File would transfer with binary data type."
 msgstr "قد يرسل الملف بنوع بيانات ثنائية"
 
-#: ../../locales/../src/interface/FileZilla.cpp:504
+#: ../../locales/../src/interface/FileZilla.cpp:503
 #: ../../locales/../src/interface/quickconnectbar.cpp:69
 #: ../../locales/../src/interface/quickconnectbar.cpp:205
 msgid "FileZilla Error"
@@ -3741,7 +3741,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "متصل مسبقا إلى خادم ما FileZilla"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1569
+#: ../../locales/../src/interface/Mainfrm.cpp:1536
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "يحتاج FileZilla إلى إعادة التشغيل لتغيير اللغة لتصبح سارية المفعول"
 
@@ -3753,7 +3753,7 @@ msgstr "تحديثات FileZilla"
 msgid "Filelist status &bars"
 msgstr "أ&شرطة حالة قائمة الملفات"
 
-#: ../../locales/../src/interface/edithandler.cpp:1109
+#: ../../locales/../src/interface/edithandler.cpp:1112
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:279
 #: ../../locales/../src/interface/RemoteListView.cpp:374
@@ -3913,7 +3913,7 @@ msgstr "إجبار &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "إ&جبار إظهار الملفات المخفية"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:674
+#: ../../locales/../src/interface/Mainfrm.cpp:645
 msgid "Force showing hidden files"
 msgstr "إجبار إظهار الملفات المخفية"
 
@@ -4038,7 +4038,7 @@ msgstr "المضيف:"
 msgid "Hours,"
 msgstr "ساعات،"
 
-#: resources.h:860
+#: resources.h:859
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (مثال: 15:47)"
 
@@ -4148,8 +4148,8 @@ msgstr ""
 "إختلاف طابع الوقت لهما لا يتجاوز هذه العتبة"
 
 #: resources.h:905
-msgid "If you change the language, you should restart FileZilla."
-msgstr "عند تغيير اللغة ، يجب إعادة تشغيل FileZilla"
+msgid "If you change the language, you need to restart FileZilla."
+msgstr "عند تغيير اللغة، يجب إعادة تشغيل FileZilla"
 
 #: resources.h:675
 msgid ""
@@ -4159,7 +4159,7 @@ msgstr ""
 "عند النقر على فحص ، FileZilla سيتصل بـ probe.filezilla-project.org و سينفذ "
 "بعض الفحوصات البسيطة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1258
+#: ../../locales/../src/interface/Mainfrm.cpp:1229
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "عند إغلاق FileZilla ، ستفقد تغييراتك"
 
@@ -4454,7 +4454,7 @@ msgstr "ولاية أو محافظة السلطة القضائية :"
 msgid "Keep directories on top"
 msgstr "إبقاء الأدلة في الأعلى"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:678
+#: ../../locales/../src/interface/Mainfrm.cpp:649
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4481,7 +4481,7 @@ msgstr "الأ&قل"
 msgid "Language"
 msgstr "اللغة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1569
+#: ../../locales/../src/interface/Mainfrm.cpp:1536
 msgid "Language changed"
 msgstr "تم تغيير اللغة"
 
@@ -4537,8 +4537,8 @@ msgstr "القائمة:"
 msgid "Lo&west available port:"
 msgstr "المنفذ المتوفر ال&أدنى :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1157
-#: ../../locales/../src/interface/edithandler.cpp:1411
+#: ../../locales/../src/interface/edithandler.cpp:1160
+#: ../../locales/../src/interface/edithandler.cpp:1414
 msgid "Local"
 msgstr "محليا"
 
@@ -4696,8 +4696,8 @@ msgstr "أقصى &عمليات متزامنة للإرسال :"
 msgid "Memory allocation failure"
 msgstr "فشل في تخصيص الذاكرة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1957
+#: ../../locales/../src/interface/Mainfrm.cpp:358
+#: ../../locales/../src/interface/Mainfrm.cpp:1890
 msgid "Message log"
 msgstr "سجل الرسائل"
 
@@ -4833,7 +4833,7 @@ msgstr "علامة جديدة"
 msgid "New directory"
 msgstr "دليل جديد"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:52
+#: ../../locales/../src/interface/welcome_dialog.cpp:56
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "الميزات الجديدة و التحسينات في %s"
@@ -4876,7 +4876,7 @@ msgstr "لم يتم وضع أمر , مقاطعة"
 msgid "No external IP address set, trying default."
 msgstr "لم يتم تحديد IP خارجى ، محاولة الافتراضى"
 
-#: ../../locales/../src/interface/edithandler.cpp:1098
+#: ../../locales/../src/interface/edithandler.cpp:1101
 msgid "No files are currently being edited."
 msgstr "لا يوجد ملفات حاليا يتم تحريرها"
 
@@ -4973,7 +4973,7 @@ msgstr "غير متصل"
 msgid "Not connected to any server"
 msgstr "غير متصل بأي خادم"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:567
+#: ../../locales/../src/interface/Mainfrm.cpp:538
 msgid "Not connected to any server."
 msgstr "غير متصل بأي خادم"
 
@@ -4985,7 +4985,7 @@ msgstr "غير متصل"
 msgid "Not initialized, need to call WSAStartup"
 msgstr "غير مهيأ، بحاجة إلى استدعاء WSAStartup"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:676
+#: ../../locales/../src/interface/Mainfrm.cpp:647
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "لاحظ أن هذه الميزة مدعومة فقط باستخدام بروتوكول FTP"
 
@@ -5191,7 +5191,7 @@ msgstr "تم تحريف الأمر PORT بواسطة جهاز التوجيه أ�
 msgid "Pa&ssive (recommended)"
 msgstr "&سلبي (مستحسن)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2587
+#: ../../locales/../src/interface/Mainfrm.cpp:2516
 msgid "Parameter not a valid URL"
 msgstr "المعيار ليس رابط صالح"
 
@@ -5234,7 +5234,7 @@ msgstr "مسار"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "لا يمكن بناء المسار للمجلد %s و للمجلد الفرعي %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2540
+#: ../../locales/../src/interface/Mainfrm.cpp:2469
 msgid "Path not found:"
 msgstr "المسار غير موجود"
 
@@ -5242,10 +5242,10 @@ msgstr "المسار غير موجود"
 msgid "Paths"
 msgstr "مسارات"
 
-#: ../../locales/../src/interface/edithandler.cpp:1136
-#: ../../locales/../src/interface/edithandler.cpp:1279
-#: ../../locales/../src/interface/edithandler.cpp:1378
-#: ../../locales/../src/interface/edithandler.cpp:1391
+#: ../../locales/../src/interface/edithandler.cpp:1139
+#: ../../locales/../src/interface/edithandler.cpp:1282
+#: ../../locales/../src/interface/edithandler.cpp:1381
+#: ../../locales/../src/interface/edithandler.cpp:1394
 msgid "Pending removal"
 msgstr "تعليق الإزالة"
 
@@ -5391,7 +5391,7 @@ msgstr "من فضلك أدخل رابط للحصول على عنوانك الخ�
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr "أدخل من فضلك حدود سرعة الإرسال تساوي أو أكبر من 0 %s/ث"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:579
+#: ../../locales/../src/interface/Mainfrm.cpp:550
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5444,7 +5444,7 @@ msgstr ""
 "الرجاء التأكد من أن FileZilla مسموح له بتأسيس إتصالات صادرة و من أنك كتبت "
 "العنوان بشكل صحيح"
 
-#: ../../locales/../src/interface/FileZilla.cpp:214
+#: ../../locales/../src/interface/FileZilla.cpp:215
 msgid "Please make sure the requested locale is installed on your system."
 msgstr "الرجاء تأكد من ملف اللغة المطلوب مثبت على نظامك"
 
@@ -5470,7 +5470,7 @@ msgstr ""
 "لذا فان الخادم قد يختار منفذ بحيث يظن الجدار الحماية أنه منفذ مستخدم فقط من "
 "قبل تروجان أو برنامج ضار آخر . قد يسبب ذلك إنذار خاطىء لكن تجاهله"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:726
+#: ../../locales/../src/interface/Mainfrm.cpp:697
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5485,15 +5485,6 @@ msgid ""
 msgstr ""
 "الرجاء ملاحظة أن بعض الخوادم قد تعمل لك حظر إذا حاولت إعادة الاتصال في فترات "
 "زمنية متقاربة أو بمعدل كبير"
-
-#: resources.h:857 resources.h:863
-#, no-c-format
-msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
-"details"
-msgstr ""
-"الرجاء قراءة http://wiki.filezilla-project.org/Date_and_Time_formatting "
-"للتفاصيل"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
 msgid ""
@@ -5567,7 +5558,7 @@ msgstr "الرمز البريدي :"
 msgid "Predefined Sites"
 msgstr "المواقع المحددة مسبقاً"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:725
+#: ../../locales/../src/interface/Mainfrm.cpp:696
 msgid "Preserving file timestamps"
 msgstr "إبقاء طوابع وقت الملف"
 
@@ -5727,7 +5718,7 @@ msgstr "ت&فرع الدليل البعيد"
 msgid "R&eset and requeue selected files"
 msgstr "&إستعادة و إعادة وضع الملفات المحددة في قائمة الإنتظار"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:595
+#: ../../locales/../src/interface/Mainfrm.cpp:566
 msgid "Raw FTP command"
 msgstr "أمر FTP خام"
 
@@ -5759,7 +5750,7 @@ msgstr "قر&اءة"
 msgid "Read-only"
 msgstr "للقراءة فقط"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1116
+#: ../../locales/../src/interface/Mainfrm.cpp:1087
 msgid "Really cancel current operation?"
 msgstr "إلغاء العملية الحالية فعلا ؟"
 
@@ -5873,7 +5864,7 @@ msgstr "تحديث قوائم الملفات و المجلدات"
 msgid "Remember passwords?"
 msgstr "تذكر كلمات المرور ؟"
 
-#: ../../locales/../src/interface/edithandler.cpp:1120
+#: ../../locales/../src/interface/edithandler.cpp:1123
 msgid "Remote"
 msgstr "بعيد"
 
@@ -5896,7 +5887,7 @@ msgstr "البحث عن بعد عن ملف"
 msgid "Remote filters:"
 msgstr "المرشحات البعيدة:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1114
 msgid "Remote path"
 msgstr "المسار البعيد"
 
@@ -6156,7 +6147,7 @@ msgstr ""
 "تحديد الإجراء الإفتراضى المراد تنفيذه إذا كان الملف المستهدف للإرسال موجود "
 "مسبقا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1581
+#: ../../locales/../src/interface/edithandler.cpp:1584
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "تحديد المحرر الإفتراضي"
@@ -6301,8 +6292,8 @@ msgstr "المحددة %s و %s . الحجم الكلي : %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "المحددة %s و %s . الحجم الكلي : على الأقل %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1522
-#: ../../locales/../src/interface/edithandler.cpp:1601
+#: ../../locales/../src/interface/edithandler.cpp:1525
+#: ../../locales/../src/interface/edithandler.cpp:1604
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "المحرر المحدد غير موجود"
@@ -6489,13 +6480,18 @@ msgstr "إظهار &قائمة الدليل الخام"
 msgid "Show &welcome dialog..."
 msgstr "إظهار لائحة &مرحبا بك..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2429
+#: ../../locales/../src/interface/Mainfrm.cpp:2359
 msgid "Show both directory trees and continue comparing?"
 msgstr "إظهار تفرع الدليل و متابعة المقارنة ؟"
 
 #: resources.h:1045
 msgid "Show details"
 msgstr "إظهار التفاصيل"
+
+#: resources.h:862
+#, no-c-format
+msgid "Show details about custom date and time formats"
+msgstr "إظهار تفاصيل حول تنسيقات الوقت والتاريخ المخصصة"
 
 #: resources.h:576
 msgid "Shows available TLS ciphers"
@@ -6630,7 +6626,7 @@ msgstr "لم يتم توصيل المقبس"
 msgid "Socket type not supported for address family"
 msgstr "نوع مأخذ التوصيل غير معتمد لأسرة العنوان"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1257
+#: ../../locales/../src/interface/Mainfrm.cpp:1228
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "بعض الملفات ما زالت قيد التحرير أو تحتاج إلى رفع"
 
@@ -6736,7 +6732,7 @@ msgstr "لتشغيل الموقع المحلي في المسار المعطى"
 msgid "State or province:"
 msgstr "الولاية أو المحافظة :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1112
+#: ../../locales/../src/interface/edithandler.cpp:1115
 #: ../../locales/../src/interface/queue.cpp:1222
 msgid "Status"
 msgstr "الحالة"
@@ -6808,8 +6804,8 @@ msgstr "خطأ فى بناء الجملة"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2542
-#: ../../locales/../src/interface/Mainfrm.cpp:2589
+#: ../../locales/../src/interface/Mainfrm.cpp:2471
+#: ../../locales/../src/interface/Mainfrm.cpp:2518
 msgid "Syntax error in command line"
 msgstr "خطأ فى بناء الجملة في سطر الأمر"
 
@@ -6930,7 +6926,7 @@ msgstr "سلسلة تسجيل الدخول المخصصة لا يمكن أن ت�
 msgid "The data connection could not be established: %s"
 msgstr "تعذّر تأسيس إتّصال البيانات: %s"
 
-#: resources.h:362 ../../locales/../src/interface/edithandler.cpp:1561
+#: resources.h:362 ../../locales/../src/interface/edithandler.cpp:1564
 #, no-c-format
 msgid "The default editor for text files could not be found."
 msgstr "تعذر العثور على المحرر الإفتراضي للملفات النصية"
@@ -7280,7 +7276,8 @@ msgstr ""
 msgid "Time"
 msgstr "الوقت"
 
-#: resources.h:858
+#: resources.h:857
+#, no-c-format
 msgid "Time formatting"
 msgstr "تنسيق الوقت"
 
@@ -7307,11 +7304,11 @@ msgstr ""
 msgid "Title:"
 msgstr "العنوان:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2427
+#: ../../locales/../src/interface/Mainfrm.cpp:2357
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "لمقارنة الأدلة ، يجب محاذاة كلتا قائمتي الملف"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2428
+#: ../../locales/../src/interface/Mainfrm.cpp:2358
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "لعمل هذا، يجب إظهار أو إخفاء كلا التفرعين للدليل معا"
 
@@ -7462,7 +7459,7 @@ msgstr "الوثوق بهذا المضيف و متابعة الاتصال؟"
 msgid "Try again"
 msgstr "حاول ثانية"
 
-#: resources.h:334 ../../locales/../src/interface/edithandler.cpp:1110
+#: resources.h:334 ../../locales/../src/interface/edithandler.cpp:1113
 msgid "Type"
 msgstr "النوع"
 
@@ -7487,7 +7484,7 @@ msgstr "حدود الر&فع:"
 msgid "U&se filetype associations if available"
 msgstr "إ&ستخدام إشراكات أنواع الملفات إذا توفرت"
 
-#: resources.h:859
+#: resources.h:858
 msgid "U&se system defaults"
 msgstr "إستخدام إ&فتراضي النظام"
 
@@ -7505,8 +7502,8 @@ msgstr "رمز خطأ غير محدد %d"
 msgid "Unit:"
 msgstr "وحدة:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1142
-#: ../../locales/../src/interface/edithandler.cpp:1170
+#: ../../locales/../src/interface/edithandler.cpp:1145
+#: ../../locales/../src/interface/edithandler.cpp:1173
 msgid "Unknown"
 msgstr "غير معروف"
 
@@ -7587,7 +7584,7 @@ msgstr "التحديثات"
 msgid "Upload"
 msgstr "رفع"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1136
 msgid "Upload failed"
 msgstr "فشل الرفع"
 
@@ -7616,19 +7613,19 @@ msgstr "إرجاع هذا الملف إلى الخادم ؟"
 msgid "Upload this file to the server?"
 msgstr "رفع هذا الملف إلى الخادم ؟"
 
-#: ../../locales/../src/interface/edithandler.cpp:1127
-#: ../../locales/../src/interface/edithandler.cpp:1161
-#: ../../locales/../src/interface/edithandler.cpp:1326
+#: ../../locales/../src/interface/edithandler.cpp:1130
+#: ../../locales/../src/interface/edithandler.cpp:1164
+#: ../../locales/../src/interface/edithandler.cpp:1329
 msgid "Uploading"
 msgstr "رفع"
 
-#: ../../locales/../src/interface/edithandler.cpp:1130
-#: ../../locales/../src/interface/edithandler.cpp:1328
+#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1331
 msgid "Uploading and pending removal"
 msgstr "الرفع و تأجيل الإزالة"
 
-#: ../../locales/../src/interface/edithandler.cpp:1164
-#: ../../locales/../src/interface/edithandler.cpp:1330
+#: ../../locales/../src/interface/edithandler.cpp:1167
+#: ../../locales/../src/interface/edithandler.cpp:1333
 msgid "Uploading and unediting"
 msgstr "الرفع و عدم التحرير"
 
@@ -7995,7 +7992,7 @@ msgstr "يجب إدخال إسم للعنوان المفضل"
 msgid "You need to enter a name for the log file."
 msgstr "يجب إدخال إسم لملف السجل"
 
-#: ../../locales/../src/interface/edithandler.cpp:1517
+#: ../../locales/../src/interface/edithandler.cpp:1520
 msgid "You need to enter a properly quoted command."
 msgstr "يجب إدخال أمر مناسب بين أقواس"
 
@@ -8146,6 +8143,10 @@ msgstr "تجميع القابلة للقراءة"
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:116
 msgid "group writeable"
 msgstr "تجميع القابلة للكتابة"
+
+#: resources.h:863
+msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
+msgstr "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:91
 msgid "is equal to"
