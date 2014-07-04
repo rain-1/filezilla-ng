@@ -215,6 +215,9 @@ if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
   AC_SUBST(WINDRES)
   AC_SUBST(WINDRESFLAGS)
 
+  # Set version macros
+  # ------------------
+
   # version.rc.in needs a major, minor and micro version number
   vnumber=${PACKAGE_VERSION%-*}
   PACKAGE_VERSION_MAJOR=${vnumber%%.*}
@@ -246,6 +249,11 @@ if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
   AC_SUBST(PACKAGE_VERSION_MICRO)
   AC_SUBST(PACKAGE_VERSION_NANO)
 
+  # Enable DEP and ASLR
+  # -------------------
+
+  AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
+  AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
 fi
 
 if test "$buildmain" = "yes"; then
