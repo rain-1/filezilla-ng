@@ -484,7 +484,7 @@ int CLocalListView::OnGetItemImage(long item) const
 				path = m_dir + data->name;
 		}
 
-		icon = pThis->GetIconIndex(data->dir ? dir : file, path);
+		icon = pThis->GetIconIndex(data->dir ? iconType::dir : iconType::file, path);
 	}
 	return icon;
 }

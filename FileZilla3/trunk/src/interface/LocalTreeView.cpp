@@ -250,10 +250,10 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, 
 	CreateRoot();
 #else
 	wxTreeItemId root = AddRoot(_T("/"));
-	SetItemImage(root, GetIconIndex(dir), wxTreeItemIcon_Normal);
-	SetItemImage(root, GetIconIndex(opened_dir), wxTreeItemIcon_Selected);
-	SetItemImage(root, GetIconIndex(dir), wxTreeItemIcon_Expanded);
-	SetItemImage(root, GetIconIndex(opened_dir), wxTreeItemIcon_SelectedExpanded);
+	SetItemImage(root, GetIconIndex(iconType::dir), wxTreeItemIcon_Normal);
+	SetItemImage(root, GetIconIndex(iconType::opened_dir), wxTreeItemIcon_Selected);
+	SetItemImage(root, GetIconIndex(iconType::dir), wxTreeItemIcon_Expanded);
+	SetItemImage(root, GetIconIndex(iconType::opened_dir), wxTreeItemIcon_SelectedExpanded);
 
 	SetDir(_T("/"));
 #endif
@@ -406,7 +406,7 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 			drive = drive.RemoveLast();
 
 		wxGetApp().AddStartupProfileRecord(wxString::Format(_T("CLocalTreeView::DisplayDrives adding drive %s"), drive.c_str()));
-		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(dir, drive));
+		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(iconType::dir, drive));
 		AppendItem(item, _T(""));
 		SortChildren(parent);
 	}
@@ -433,11 +433,11 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 					return;
 
 				const wxString fullName = dirname + knownSubdir;
-				item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName),
+				item = AppendItem(parent, knownSubdir, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
 						-1
 #else
-						GetIconIndex(opened_dir, fullName)
+						GetIconIndex(iconType::opened_dir, fullName)
 #endif
 					);
 				CheckSubdirStatus(item, fullName);
@@ -489,11 +489,11 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		else
 			matchedKnown = true;
 
-		wxTreeItemId item = AppendItem(parent, file, GetIconIndex(::dir, fullName),
+		wxTreeItemId item = AppendItem(parent, file, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
 				-1
 #else
-				GetIconIndex(opened_dir, fullName)
+				GetIconIndex(iconType::opened_dir, fullName)
 #endif
 			);
 
@@ -503,11 +503,11 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	if (!matchedKnown && !knownSubdir.empty())
 	{
 		const wxString fullName = dirname + knownSubdir;
-		wxTreeItemId item = AppendItem(parent, knownSubdir, GetIconIndex(::dir, fullName),
+		wxTreeItemId item = AppendItem(parent, knownSubdir, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
 				-1
 #else
-				GetIconIndex(opened_dir, fullName)
+				GetIconIndex(iconType::opened_dir, fullName)
 #endif
 			);
 
@@ -823,11 +823,11 @@ void CLocalTreeView::Refresh()
 			{
 				// New subdirectory, add treeitem
 				wxString fullname = dir.dir + *iter + separator;
-				wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(::dir, fullname),
+				wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(iconType::dir, fullname),
 #ifdef __WXMSW__
 						-1
 #else
-						GetIconIndex(opened_dir, fullname)
+						GetIconIndex(iconType::opened_dir, fullname)
 #endif
 					);
 
@@ -1540,7 +1540,7 @@ wxTreeItemId CLocalTreeView::AddDrive(wxChar letter)
 	if (driveItem)
 	{
 		SetItemText(driveItem, itemLabel);
-		int icon = GetIconIndex(dir, drive + _T("\\"));
+		int icon = GetIconIndex(iconType::dir, drive + _T("\\"));
 		SetItemImage(driveItem, icon, wxTreeItemIcon_Normal);
 		SetItemImage(driveItem, icon, wxTreeItemIcon_Selected);
 		SetItemImage(driveItem, icon, wxTreeItemIcon_Expanded);
@@ -1549,7 +1549,7 @@ wxTreeItemId CLocalTreeView::AddDrive(wxChar letter)
 		return driveItem;
 	}
 
-	wxTreeItemId item = AppendItem(m_drives, itemLabel, GetIconIndex(dir, drive + _T("\\")));
+	wxTreeItemId item = AppendItem(m_drives, itemLabel, GetIconIndex(iconType::dir, drive + _T("\\")));
 	AppendItem(item, _T(""));
 	SortChildren(m_drives);
 
@@ -1585,7 +1585,7 @@ void CLocalTreeView::OnSelectionChanging(wxTreeEvent& event)
 
 	if (GetItemImage(item, wxTreeItemIcon_Selected) == -1)
 	{
-		int icon = GetIconIndex(opened_dir, GetDirFromItem(item));
+		int icon = GetIconIndex(iconType::opened_dir, GetDirFromItem(item));
 		SetItemImage(item, icon, wxTreeItemIcon_Selected);
 		SetItemImage(item, icon, wxTreeItemIcon_SelectedExpanded);
 	}

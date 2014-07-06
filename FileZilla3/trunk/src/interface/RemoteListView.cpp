@@ -381,7 +381,7 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState *pState, CQueueView* 
 
 	InitSort(OPTION_REMOTEFILELIST_SORTORDER);
 
-	m_dirIcon = GetIconIndex(dir);
+	m_dirIcon = GetIconIndex(iconType::dir);
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
 
 	InitHeaderSortImageList();
@@ -416,7 +416,7 @@ int CRemoteListView::OnGetItemImage(long item) const
 	if (icon != -2)
 		return icon;
 
-	icon = pThis->GetIconIndex(file, (*m_pDirectoryListing)[index].name, false, (*m_pDirectoryListing)[index].is_dir());
+	icon = pThis->GetIconIndex(iconType::file, (*m_pDirectoryListing)[index].name, false, (*m_pDirectoryListing)[index].is_dir());
 	return icon;
 }
 

@@ -68,7 +68,7 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pSt
 
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
 
-	m_dirIcon = GetIconIndex(dir);
+	m_dirIcon = GetIconIndex(iconType::dir);
 
 	InitSort(OPTION_SEARCH_SORTORDER);
 
@@ -189,7 +189,7 @@ int CSearchDialogFileList::OnGetItemImage(long item) const
 	if (icon != -2)
 		return icon;
 
-	icon = pThis->GetIconIndex(file, pThis->m_fileData[index].name, false);
+	icon = pThis->GetIconIndex(iconType::file, pThis->m_fileData[index].name, false);
 	return icon;
 }
 
