@@ -262,8 +262,6 @@ void CFtpControlSocket::OnReceive()
 					continue;
 				}
 
-				if (len > MAXLINELEN)
-					len = MAXLINELEN;
 				p = 0;
 				wxString line = ConvToLocal(start);
 				start = m_receiveBuffer + i + 1;
@@ -1435,7 +1433,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		}
 
 		delete m_pTransferSocket;
-		m_pTransferSocket = new CTransferSocket(m_pEngine, this, ::list);
+		m_pTransferSocket = new CTransferSocket(m_pEngine, this, TransferMode::list);
 
 		// Assume that a server supporting UTF-8 does not send EBCDIC listings.
 		listingEncoding::type encoding = listingEncoding::unknown;
@@ -1489,7 +1487,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 					pData->transferEndReason = TransferEndReason::successful;
 					pData->tranferCommandSent = false;
 					delete m_pTransferSocket;
-					m_pTransferSocket = new CTransferSocket(m_pEngine, this, ::list);
+					m_pTransferSocket = new CTransferSocket(m_pEngine, this, TransferMode::list);
 					pData->m_pDirectoryListingParser->Reset();
 					m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
 
@@ -1557,7 +1555,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 						pData->transferEndReason = TransferEndReason::successful;
 						pData->tranferCommandSent = false;
 						delete m_pTransferSocket;
-						m_pTransferSocket = new CTransferSocket(m_pEngine, this, ::list);
+						m_pTransferSocket = new CTransferSocket(m_pEngine, this, TransferMode::list);
 						pData->m_pDirectoryListingParser->Reset();
 						m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
 
@@ -2786,7 +2784,7 @@ int CFtpControlSocket::FileTransferSend()
 			}
 		}
 
-		m_pTransferSocket = new CTransferSocket(m_pEngine, this, pData->download ? download : upload);
+		m_pTransferSocket = new CTransferSocket(m_pEngine, this, pData->download ? TransferMode::download : TransferMode::upload);
 		m_pTransferSocket->m_binaryMode = pData->transferSettings.binary;
 
 		if (pData->download)
@@ -4390,7 +4388,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 					pData->opState = filetransfer_waitresumetest;
 					pData->resumeOffset = pData->remoteFileSize - 1;
 
-					m_pTransferSocket = new CTransferSocket(m_pEngine, this, resumetest);
+					m_pTransferSocket = new CTransferSocket(m_pEngine, this, TransferMode::resumetest);
 
 					return Transfer(_T("RETR ") + pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath), pData);
 				}

@@ -703,9 +703,9 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 		for (std::vector<CQueueItem*>::const_iterator it = children.begin() + item.GetRemovedAtFront(); it != children.end(); ++it)
 		{
 			CQueueItem* item = *it;
-			if (item->GetType() == QueueItemType_File)
+			if (item->GetType() == QueueItemType::File)
 				ret &= SaveFile(serverId, *reinterpret_cast<CFileItem*>(item));
-			else if (item->GetType() == QueueItemType_Folder)
+			else if (item->GetType() == QueueItemType::Folder)
 				ret &= SaveDirectory(serverId, *reinterpret_cast<CFolderItem*>(item));
 		}
 	}
@@ -741,7 +741,7 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 		Bind(insertFileQuery_, file_table_column_names::error_count, file.m_errorCount);
 	else
 		BindNull(insertFileQuery_, file_table_column_names::error_count);
-	Bind(insertFileQuery_, file_table_column_names::priority, file.GetPriority());
+	Bind(insertFileQuery_, file_table_column_names::priority, static_cast<int>(file.GetPriority()));
 	Bind(insertFileQuery_, file_table_column_names::ascii_file, file.m_transferSettings.binary ? 0 : 1);
 
 	if (file.m_defaultFileExistsAction != CFileExistsNotification::unknown)
@@ -762,7 +762,7 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 
 bool CQueueStorage::Impl::SaveDirectory(wxLongLong server, const CFolderItem& directory)
 {
-	if (download)
+	if (directory.Download())
 		BindNull(insertFileQuery_, file_table_column_names::source_file);
 	else
 		Bind(insertFileQuery_, file_table_column_names::source_file, directory.GetSourceFile());
@@ -782,7 +782,7 @@ bool CQueueStorage::Impl::SaveDirectory(wxLongLong server, const CFolderItem& di
 		Bind(insertFileQuery_, file_table_column_names::error_count, directory.m_errorCount);
 	else
 		BindNull(insertFileQuery_, file_table_column_names::error_count);
-	Bind(insertFileQuery_, file_table_column_names::priority, directory.GetPriority());
+	Bind(insertFileQuery_, file_table_column_names::priority, static_cast<int>(directory.GetPriority()));
 	BindNull(insertFileQuery_, file_table_column_names::ascii_file);
 
 	BindNull(insertFileQuery_, file_table_column_names::default_exists_action);
@@ -971,7 +971,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 
 	if (localPathId == -1 || remotePathId == -1)
 	{
-		// QueueItemType_Folder
+		// QueueItemType::Folder
 		if ((download && localPath.empty()) ||
 			(!download && remotePath.empty()))
 		{
@@ -987,7 +987,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 	{
 		wxLongLong size = GetColumnInt64(selectFilesQuery_, file_table_column_names::size);
 		int errorCount = GetColumnInt(selectFilesQuery_, file_table_column_names::error_count);
-		int priority = GetColumnInt(selectFilesQuery_, file_table_column_names::priority, priority_normal);
+		int priority = GetColumnInt(selectFilesQuery_, file_table_column_names::priority, static_cast<int>(QueuePriority::normal));
 
 		bool binary = GetColumnInt(selectFilesQuery_, file_table_column_names::ascii_file) == 0;
 		int overwrite_action = GetColumnInt(selectFilesQuery_, file_table_column_names::default_exists_action, CFileExistsNotification::unknown);
@@ -995,7 +995,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 		if (sourceFile.empty() || localPath.empty() ||
 			remotePath.empty() ||
 			size < -1 ||
-			priority < 0 || priority >= PRIORITY_COUNT ||
+			priority < 0 || priority >= static_cast<int>(QueuePriority::count) ||
 			errorCount < 0)
 		{
 			return INVALID_DATA;
@@ -1004,7 +1004,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 		CFileItem* fileItem = new CFileItem(0, true, download, sourceFile, targetFile, localPath, remotePath, size);
 		*pItem = fileItem;
 		fileItem->m_transferSettings.binary = binary;
-		fileItem->SetPriorityRaw((enum QueuePriority)priority);
+		fileItem->SetPriorityRaw(QueuePriority(priority));
 		fileItem->m_errorCount = errorCount;
 
 		if (overwrite_action > 0 && overwrite_action < CFileExistsNotification::ACTION_COUNT)

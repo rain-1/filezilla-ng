@@ -5,26 +5,25 @@
 #include "listctrlex.h"
 #include "edithandler.h"
 
-#define PRIORITY_COUNT 5
-enum QueuePriority
-{
-	priority_lowest = 0,
-	priority_low = 1,
-	priority_normal = 2,
-	priority_high = 3,
-	priority_highest = 4
+enum class QueuePriority {
+	lowest,
+	low,
+	normal,
+	high,
+	highest,
+
+	count
 };
 
-enum QueueItemType
-{
-	QueueItemType_Server,
-	QueueItemType_File,
-	QueueItemType_Folder,
-	QueueItemType_FolderScan,
-	QueueItemType_Status
+enum class QueueItemType {
+	Server,
+	File,
+	Folder,
+	FolderScan,
+	Status
 };
 
-enum TransferDirection
+enum class TransferDirection
 {
 	both,
 	download,
@@ -37,7 +36,7 @@ class CQueueItem
 public:
 	virtual ~CQueueItem();
 
-	virtual void SetPriority(enum QueuePriority priority);
+	virtual void SetPriority(QueuePriority priority);
 
 	virtual void AddChild(CQueueItem* pItem);
 	unsigned int GetChildrenCount(bool recursive);
@@ -53,7 +52,7 @@ public:
 	int GetItemIndex() const; // Return the visible item index relative to the topmost parent item.
 	virtual void SaveItem(TiXmlElement*) const {}
 
-	virtual enum QueueItemType GetType() const = 0;
+	virtual QueueItemType GetType() const = 0;
 
 	wxDateTime GetTime() const { return m_time; }
 	void UpdateTime() { m_time = wxDateTime::Now(); }
@@ -99,14 +98,14 @@ class CServerItem : public CQueueItem
 public:
 	CServerItem(const CServer& server);
 	virtual ~CServerItem();
-	virtual enum QueueItemType GetType() const { return QueueItemType_Server; }
+	virtual QueueItemType GetType() const { return QueueItemType::Server; }
 
 	const CServer& GetServer() const;
 	wxString GetName() const;
 
 	virtual void AddChild(CQueueItem* pItem);
 
-	CFileItem* GetIdleChild(bool immadiateOnly, enum TransferDirection direction);
+	CFileItem* GetIdleChild(bool immadiateOnly, TransferDirection direction);
 	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true); // Removes a child item with is somewhere in the tree of children
 	wxLongLong GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const;
 
@@ -115,15 +114,15 @@ public:
 
 	virtual void SaveItem(TiXmlElement* pElement) const;
 
-	void SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction);
+	void SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction);
 
 	virtual bool TryRemoveAll();
 
 	void DetachChildren();
 
-	virtual void SetPriority(enum QueuePriority priority);
+	virtual void SetPriority(QueuePriority priority);
 
-	void SetChildPriority(CFileItem* pItem, enum QueuePriority oldPriority, enum QueuePriority newPriority);
+	void SetChildPriority(CFileItem* pItem, QueuePriority oldPriority, QueuePriority newPriority);
 
 	int m_activeCount;
 
@@ -136,7 +135,7 @@ protected:
 	// array of item lists, sorted by priority. Used by scheduler to find
 	// next file to transfer
 	// First index specifies whether the item is queued (0) or immediate (1)
-	std::list<CFileItem*> m_fileList[2][PRIORITY_COUNT];
+	std::list<CFileItem*> m_fileList[2][static_cast<int>(QueuePriority::count)];
 };
 
 struct t_EngineData;
@@ -150,9 +149,9 @@ public:
 
 	virtual ~CFileItem();
 
-	virtual void SetPriority(enum QueuePriority priority);
-	void SetPriorityRaw(enum QueuePriority priority);
-	enum QueuePriority GetPriority() const;
+	virtual void SetPriority(QueuePriority priority);
+	void SetPriorityRaw(QueuePriority priority);
+	QueuePriority GetPriority() const;
 
 	const wxString& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile.empty() ? m_sourceFile : m_targetFile); }
 	const wxString& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile.empty() ? m_sourceFile : m_targetFile); }
@@ -182,7 +181,7 @@ public:
 			flags &= ~flag_remove;
 	}
 
-	virtual enum QueueItemType GetType() const { return QueueItemType_File; }
+	virtual QueueItemType GetType() const { return QueueItemType::File; }
 
 	bool IsActive() const { return (flags & flag_active) != 0; }
 	virtual void SetActive(bool active);
@@ -203,7 +202,7 @@ public:
 
 	t_EngineData* m_pEngineData;
 
-	enum CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
+	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
 
 	inline bool made_progress() const { return (flags & flag_made_progress) != 0; }
 	inline void set_made_progress(bool made_progress)
@@ -214,7 +213,7 @@ public:
 			flags &= ~flag_made_progress;
 	}
 
-	enum CFileExistsNotification::OverwriteAction m_onetime_action;
+	CFileExistsNotification::OverwriteAction m_onetime_action;
 
 protected:
 	enum
@@ -227,7 +226,7 @@ protected:
 	};
 	int flags;
 
-	enum QueuePriority m_priority;
+	QueuePriority m_priority;
 
 	wxString m_sourceFile;
 	wxString m_targetFile;
@@ -242,7 +241,7 @@ public:
 	CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath);
 	CFolderItem(CServerItem* parent, bool queued, const CServerPath& remotePath, const wxString& remoteFile);
 
-	virtual enum QueueItemType GetType() const { return QueueItemType_Folder; }
+	virtual QueueItemType GetType() const { return QueueItemType::Folder; }
 
 	virtual void SaveItem(TiXmlElement* pElement) const;
 
@@ -255,7 +254,7 @@ public:
 	CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath);
 	virtual ~CFolderScanItem() {}
 
-	virtual enum QueueItemType GetType() const { return QueueItemType_FolderScan; }
+	virtual QueueItemType GetType() const { return QueueItemType::FolderScan; }
 	CLocalPath GetLocalPath() const { return m_localPath; }
 	CServerPath GetRemotePath() const { return m_remotePath; }
 	bool Download() const { return m_download; }
@@ -272,7 +271,7 @@ public:
 
 	int m_count;
 
-	enum CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
+	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
 
 	bool m_dir_is_empty;
 	CLocalPath m_current_local_path;
@@ -291,7 +290,7 @@ public:
 	CStatusItem() {}
 	virtual ~CStatusItem() {}
 
-	virtual enum QueueItemType GetType() const { return QueueItemType_Status; }
+	virtual QueueItemType GetType() const { return QueueItemType::Status; }
 };
 
 class CQueue;

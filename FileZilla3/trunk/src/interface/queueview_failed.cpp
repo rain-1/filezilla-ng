@@ -110,13 +110,13 @@ void CQueueViewFailed::OnRemoveSelected(wxCommandEvent& event)
 
 		CQueueItem* pTopLevelItem = pItem->GetTopLevelItem();
 
-		if (pItem->GetType() == QueueItemType_Server)
+		if (pItem->GetType() == QueueItemType::Server)
 		{
 			CServerItem* pServerItem = (CServerItem*)pItem;
 			if (pEditHandler && pEditHandler->GetFileCount(CEditHandler::remote, CEditHandler::upload_and_remove_failed, &pServerItem->GetServer()))
 				pEditHandler->RemoveAll(CEditHandler::upload_and_remove_failed, &pServerItem->GetServer());
 		}
-		else if (pItem->GetType() == QueueItemType_File)
+		else if (pItem->GetType() == QueueItemType::File)
 		{
 			CFileItem* pFileItem = (CFileItem*)pItem;
 			if (pFileItem->m_edit == CEditHandler::remote && pEditHandler)
@@ -271,7 +271,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 			continue;
 
 		CQueueItem* pItem = GetQueueItem(item);
-		if (pItem->GetType() == QueueItemType_Server)
+		if (pItem->GetType() == QueueItemType::Server)
 			skipTo = item + pItem->GetChildrenCount(true) + 1;
 		selectedItems.push_back(GetQueueItem(item));
 	}
@@ -286,7 +286,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 		CQueueItem* pItem = selectedItems.front();
 		selectedItems.pop_front();
 
-		if (pItem->GetType() == QueueItemType_Server)
+		if (pItem->GetType() == QueueItemType::Server)
 		{
 			CServerItem* pServerItem = (CServerItem*)pItem;
 			failedToRequeueAll |= !RequeueServerItem(pServerItem);

@@ -161,17 +161,17 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 	for (auto iter = panels_.begin(); iter != panels_.end(); ++iter) {
 		(*iter)->Hide();
 	}
-	if( s == idle ) {
+	if( s == UpdaterState::idle ) {
 		panels_[pagenames::latest]->Show();
 	}
-	else if( s == failed ) {
+	else if( s == UpdaterState::failed ) {
 		XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->ChangeValue(updater_.GetLog());
 		panels_[pagenames::failed]->Show();
 	}
-	else if( s == checking ) {
+	else if( s == UpdaterState::checking ) {
 		panels_[pagenames::checking]->Show();
 	}
-	else if( s == newversion || s == newversion_ready || s == newversion_downloading ) {
+	else if( s == UpdaterState::newversion || s == UpdaterState::newversion_ready || s == UpdaterState::newversion_downloading ) {
 		XRCCTRL(*this, "ID_VERSION", wxStaticText)->SetLabel(v.version_);
 		wxString news = updater_.GetChangelog();
 		XRCCTRL(*this, "ID_NEWS_LABEL", wxStaticText)->Show(!news.empty());
@@ -179,7 +179,7 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		if( news != XRCCTRL(*this, "ID_NEWS", wxTextCtrl)->GetValue() ) {
 			XRCCTRL(*this, "ID_NEWS", wxTextCtrl)->ChangeValue(news);
 		}
-		bool downloading = s == newversion_downloading;
+		bool downloading = s == UpdaterState::newversion_downloading;
 		XRCCTRL(*this, "ID_DOWNLOAD_LABEL", wxStaticText)->Show(downloading);
 		XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->Show(downloading);
 		XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->Show(downloading);
@@ -189,12 +189,12 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 			OnTimer(ev);
 		}
 
-		bool ready = s == newversion_ready;
+		bool ready = s == UpdaterState::newversion_ready;
 		XRCCTRL(*this, "ID_DOWNLOADED", wxStaticText)->Show(ready);
 		XRCCTRL(*this, "ID_INSTALL", wxButton)->Show(ready);
 
-		bool manual = s == newversion;
-		bool dlfail = s == newversion && !v.url_.empty();
+		bool manual = s == UpdaterState::newversion;
+		bool dlfail = s == UpdaterState::newversion && !v.url_.empty();
 		XRCCTRL(*this, "ID_DOWNLOAD_FAIL", wxStaticText)->Show(dlfail);
 		XRCCTRL(*this, "ID_DOWNLOAD_RETRY", wxHyperlinkCtrl)->Show(dlfail);
 

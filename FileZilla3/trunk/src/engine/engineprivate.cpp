@@ -342,8 +342,9 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 	if (command.GetFlags() & LIST_FLAG_LINK && command.GetSubDir().empty())
 		return FZ_REPLY_SYNTAXERROR;
 
-	bool refresh = (command.GetFlags() & LIST_FLAG_REFRESH) != 0;
-	bool avoid = (command.GetFlags() & LIST_FLAG_AVOID) != 0;
+	int flags = command.GetFlags();
+	bool const refresh = (command.GetFlags() & LIST_FLAG_REFRESH) != 0;
+	bool const avoid = (command.GetFlags() & LIST_FLAG_AVOID) != 0;
 	if (refresh && avoid)
 		return FZ_REPLY_SYNTAXERROR;
 
@@ -364,11 +365,9 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 				if (found && !is_outdated)
 				{
 					if (pListing->m_hasUnsureEntries)
-						refresh = true;
-					else
-					{
-						if (!avoid)
-						{
+						flags |= LIST_FLAG_REFRESH;
+					else {
+						if (!avoid) {
 							m_lastListDir = pListing->path;
 							m_lastListTime = CDateTime::Now();
 							CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(pListing->path);
@@ -379,7 +378,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 					}
 				}
 				if (is_outdated)
-					refresh = true;
+					flags |= LIST_FLAG_REFRESH;
 				delete pListing;
 			}
 		}
@@ -388,7 +387,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 		return FZ_REPLY_BUSY;
 
 	m_pCurrentCommand = command.Clone();
-	return m_pControlSocket->List(command.GetPath(), command.GetSubDir(), command.GetFlags());
+	return m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
 }
 
 int CFileZillaEnginePrivate::FileTransfer(const CFileTransferCommand &command)

@@ -311,7 +311,7 @@ void CStatusLineCtrl::OnTimer(wxTimerEvent&)
 	else if (changed)
 	{
 		if (status.madeProgress && !status.list &&
-			m_pEngineData->pItem->GetType() == QueueItemType_File)
+			m_pEngineData->pItem->GetType() == QueueItemType::File)
 		{
 			CFileItem* pItem = (CFileItem*)m_pEngineData->pItem;
 			pItem->set_made_progress(true);

@@ -114,7 +114,7 @@ public:
 static CUpdater* instance = 0;
 
 CUpdater::CUpdater(CUpdateHandler& parent)
-	: state_(idle)
+	: state_(UpdaterState::idle)
 	, engine_(new CFileZillaEngine)
 	, update_options_(new CUpdaterOptions())
 {
@@ -124,7 +124,7 @@ CUpdater::CUpdater(CUpdateHandler& parent)
 
 void CUpdater::Init()
 {
-	if( state_ == checking || state_ == newversion_downloading ) {
+	if( state_ == UpdaterState::checking || state_ == UpdaterState::newversion_downloading ) {
 		return;
 	}
 
@@ -161,7 +161,7 @@ CUpdater* CUpdater::GetInstance()
 void CUpdater::AutoRunIfNeeded()
 {
 #if FZ_AUTOUPDATECHECK
-	if( state_ == failed || state_ == idle ) {
+	if( state_ == UpdaterState::failed || state_ == UpdaterState::idle ) {
 		if( !COptions::Get()->GetOptionVal(OPTION_DEFAULT_DISABLEUPDATECHECK) && COptions::Get()->GetOptionVal(OPTION_UPDATECHECK) != 0 && LongTimeSinceLastCheck() ) {
 			Run();
 		}
@@ -172,8 +172,10 @@ void CUpdater::AutoRunIfNeeded()
 void CUpdater::RunIfNeeded()
 {
 	build const b = AvailableBuild();
-	if( state_ == idle || state_ == failed || LongTimeSinceLastCheck() || (state_ == newversion && !b.url_.empty()) ||
-		(state_ == newversion_ready && !VerifyChecksum( DownloadedFile(), b.size_, b.hash_ ) ) ) {
+	if( state_ == UpdaterState::idle || state_ == UpdaterState::failed ||
+		LongTimeSinceLastCheck() || (state_ == UpdaterState::newversion && !b.url_.empty()) ||
+		(state_ == UpdaterState::newversion_ready && !VerifyChecksum( DownloadedFile(), b.size_, b.hash_ ) ) )
+	{
 		Run();
 	}
 }
@@ -228,7 +230,9 @@ wxString CUpdater::GetUrl()
 
 bool CUpdater::Run()
 {
-	if( state_ != idle && state_ != failed && state_ != newversion && state_ != newversion_ready ) {
+	if( state_ != UpdaterState::idle && state_ != UpdaterState::failed &&
+		state_ != UpdaterState::newversion && state_ != UpdaterState::newversion_ready )
+	{
 		return false;
 	}
 
@@ -244,17 +248,17 @@ bool CUpdater::Run()
 	}
 	log_ += wxString::Format(_("Own build type: %s\n"), build.c_str());
 
-	SetState(checking);
+	SetState(UpdaterState::checking);
 
 	update_options_->m_use_internal_rootcert = true;
 	int res = Download(GetUrl(), _T(""));
 
 	if (res != FZ_REPLY_WOULDBLOCK) {
-		SetState(failed);
+		SetState(UpdaterState::failed);
 	}
 	raw_version_information_.clear();
 
-	return state_ == checking;
+	return state_ == UpdaterState::checking;
 }
 
 int CUpdater::Download(wxString const& url, wxString const& local_file)
@@ -314,7 +318,7 @@ void CUpdater::OnEngineEvent(wxEvent&)
 
 void CUpdater::ProcessNotification(CNotification* notification)
 {
-	if (state_ != checking && state_ != newversion_downloading) {
+	if (state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading) {
 		return;
 	}
 
@@ -352,12 +356,12 @@ void CUpdater::ProcessNotification(CNotification* notification)
 
 UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 {
-	UpdaterState s = failed;
+	UpdaterState s = UpdaterState::failed;
 
 	ParseData();
 
 	if( version_information_.available_.version_.empty() ) {
-		s = idle;
+		s = UpdaterState::idle;
 	}
 	else if( !version_information_.available_.url_.empty() ) {
 
@@ -366,48 +370,48 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 		if( !local_file.empty() && CLocalFileSystem::GetFileType(local_file) != CLocalFileSystem::unknown) {
 			local_file_ = local_file;
 			log_ += wxString::Format(_("Local file is %s\n"), local_file.c_str());
-			s = newversion_ready;
+			s = UpdaterState::newversion_ready;
 		}
 		else {
 			// We got a checksum over a secure channel already.
 			update_options_->m_use_internal_rootcert = false;
 
 			if( temp.empty() || local_file.empty() ) {
-				s = newversion;
+				s = UpdaterState::newversion;
 			}
 			else {
-				s = newversion_downloading;
+				s = UpdaterState::newversion_downloading;
 				wxLongLong size = CLocalFileSystem::GetSize(temp);
 				if( size >= 0 && static_cast<unsigned long long>(size.GetValue()) >= version_information_.available_.size_ ) {
 					s = ProcessFinishedDownload();
 				}
 				else if( !can_download || Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
-					s = newversion;
+					s = UpdaterState::newversion;
 				}
 			}
 		}
 	}
 	else {
-		s = newversion;
+		s = UpdaterState::newversion;
 	}
 
 	return s;
 }
 void CUpdater::ProcessOperation(CNotification* notification)
 {
-	if( state_ != checking && state_ != newversion_downloading ) {
+	if( state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading ) {
 		return;
 	}
 
-	UpdaterState s = failed;
+	UpdaterState s = UpdaterState::failed;
 
 	COperationNotification* operation = reinterpret_cast<COperationNotification*>(notification);
 	if (operation->nReplyCode != FZ_REPLY_OK) {
-		if( state_ != checking ) {
-			s = newversion;
+		if( state_ != UpdaterState::checking ) {
+			s = UpdaterState::newversion;
 		}
 	}
-	else if( state_ == checking ) {
+	else if( state_ == UpdaterState::checking ) {
 		s = ProcessFinishedData(true);
 	}
 	else {
@@ -418,25 +422,25 @@ void CUpdater::ProcessOperation(CNotification* notification)
 
 UpdaterState CUpdater::ProcessFinishedDownload()
 {
-	UpdaterState s = newversion;
+	UpdaterState s = UpdaterState::newversion;
 
 	wxString const temp = GetTempFile();
 	if( temp.empty() ) {
-		s = newversion;
+		s = UpdaterState::newversion;
 	}
 	else if( !VerifyChecksum( temp, version_information_.available_.size_, version_information_.available_.hash_ ) ) {
 		wxLogNull log;
 		wxRemoveFile(temp);
-		s = newversion;
+		s = UpdaterState::newversion;
 	}
 	else {
-		s = newversion_ready;
+		s = UpdaterState::newversion_ready;
 
 		wxString local_file = GetLocalFile( version_information_.available_, false );
 
 		wxLogNull log;
 		if (local_file.empty() || !wxRenameFile( temp, local_file, false ) ) {
-			s = newversion;
+			s = UpdaterState::newversion;
 			wxRemoveFile( temp );
 			log_ += wxString::Format(_("Could not create local file %s\n"), local_file.c_str());
 		}
@@ -482,7 +486,7 @@ wxString CUpdater::GetLocalFile( build const& b, bool allow_existing )
 
 void CUpdater::ProcessData(CNotification* notification)
 {
-	if( state_ != checking ) {
+	if( state_ != UpdaterState::checking ) {
 		return;
 	}
 
@@ -498,20 +502,20 @@ void CUpdater::ProcessData(CNotification* notification)
 	if( raw_version_information_.size() + len > 131072 ) {
 		log_ += _("Received version information is too large");
 		engine_->Execute(CCancelCommand());
-		SetState(failed);
+		SetState(UpdaterState::failed);
 	}
 	else {
 		for (int i = 0; i < len; ++i) {
 			if (data[i] < 10 || (unsigned char)data[i] > 127) {
 				log_ += _("Received invalid character in version information");
-				SetState(failed);
+				SetState(UpdaterState::failed);
 				engine_->Execute(CCancelCommand());
 				break;
 			}
 		}
 	}
 
-	if( state_ == checking ) {
+	if( state_ == UpdaterState::checking ) {
 		raw_version_information_ += wxString(data, wxConvUTF8, len);
 	}
 	delete [] data;
@@ -749,7 +753,7 @@ void CUpdater::SetState( UpdaterState s )
 wxString CUpdater::DownloadedFile() const
 {
 	wxString ret;
-	if( state_ == newversion_ready ) {
+	if( state_ == UpdaterState::newversion_ready ) {
 		ret = local_file_;
 	}
 	return ret;
@@ -785,12 +789,12 @@ void CUpdater::RemoveHandler( CUpdateHandler& handler )
 wxULongLong CUpdater::BytesDownloaded() const
 {
 	wxLongLong ret;
-	if( state_ == newversion_ready ) {
+	if( state_ == UpdaterState::newversion_ready ) {
 		if( !local_file_.empty() ) {
 			ret = CLocalFileSystem::GetSize(local_file_);
 		}
 	}
-	else if( state_ == newversion_downloading ) {
+	else if( state_ == UpdaterState::newversion_downloading ) {
 		wxString const temp = GetTempFile();
 		if( !temp.empty() ) {
 			ret = CLocalFileSystem::GetSize(temp);

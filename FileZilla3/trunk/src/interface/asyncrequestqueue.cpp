@@ -201,16 +201,16 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 								p->overwriteAction = CFileExistsNotification::OverwriteAction(action);
 						}
 
-						enum TransferDirection direction;
+						TransferDirection direction;
 						if (directionOnly)
 						{
 							if (pNotification->download)
-								direction = download;
+								direction = TransferDirection::download;
 							else
-								direction = upload;
+								direction = TransferDirection::upload;
 						}
 						else
-							direction = both;
+							direction = TransferDirection::both;
 
 						if (m_pQueueView)
 							m_pQueueView->SetDefaultFileExistsAction(action, direction);
