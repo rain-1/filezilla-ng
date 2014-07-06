@@ -172,7 +172,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 
 	wxString prefix;
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
-		(!m_pCurOpData || m_pCurOpData->opId != cmd_transfer))
+		(!m_pCurOpData || m_pCurOpData->opId != Command::transfer))
 	{
 		prefix = _("Critical error:") + _T(" ");
 	}
@@ -182,18 +182,18 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		const enum Command commandId = m_pCurOpData->opId;
 		switch (commandId)
 		{
-		case cmd_none:
+		case Command::none:
 			if( !prefix.empty() ) {
 				LogMessage(MessageType::Error, _("Critical error"));
 			}
 			break;
-		case cmd_connect:
+		case Command::connect:
 			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
 				LogMessage(MessageType::Error, prefix + _("Connection attempt interrupted by user"));
 			else if (nErrorCode != FZ_REPLY_OK)
 				LogMessage(MessageType::Error, prefix + _("Could not connect to server"));
 			break;
-		case cmd_list:
+		case Command::list:
 			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
 				LogMessage(MessageType::Error, prefix + _("Directory listing aborted by user"));
 			else if (nErrorCode != FZ_REPLY_OK)
@@ -201,7 +201,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			else
 				LogMessage(MessageType::Status, _("Directory listing successful"));
 			break;
-		case cmd_transfer:
+		case Command::transfer:
 			{
 				CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
 				if (!pData->download && pData->transferInitiated)
@@ -308,9 +308,9 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 
 void CControlSocket::Cancel()
 {
-	if (GetCurrentCommandId() != cmd_none)
+	if (GetCurrentCommandId() != Command::none)
 	{
-		if (GetCurrentCommandId() == cmd_connect)
+		if (GetCurrentCommandId() == Command::connect)
 			DoClose(FZ_REPLY_CANCELED);
 		else
 			ResetOperation(FZ_REPLY_CANCELED);
@@ -524,7 +524,7 @@ int CControlSocket::CheckOverwriteFile()
 }
 
 CFileTransferOpData::CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path) :
-	COpData(cmd_transfer),
+	COpData(Command::transfer),
 	localFile(local_file), remoteFile(remote_file), remotePath(remote_path),
 	download(is_download),
 	localFileSize(-1), remoteFileSize(-1),
@@ -1069,7 +1069,7 @@ void CRealControlSocket::OnSend()
 			if (error != EAGAIN)
 			{
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error).c_str());
-				if (GetCurrentCommandId() != cmd_connect)
+				if (GetCurrentCommandId() != Command::connect)
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				DoClose();
 			}
@@ -1100,7 +1100,7 @@ void CRealControlSocket::OnClose(int error)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CRealControlSocket::OnClose(%d)"), error);
 
-	if (GetCurrentCommandId() != cmd_connect)
+	if (GetCurrentCommandId() != Command::connect)
 	{
 		if (!error)
 			LogMessage(MessageType::Error, _("Connection closed by server"));
@@ -1156,7 +1156,7 @@ int CRealControlSocket::ContinueConnect()
 		}
 	}
 	else {
-		if (m_pCurOpData && m_pCurOpData->opId == cmd_connect) {
+		if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
 			CConnectOpData* pData(static_cast<CConnectOpData*>(m_pCurOpData));
 			host = ConvertDomainName(pData->host);
 			port = pData->port;
@@ -1213,7 +1213,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 {
 	wxASSERT(pFileExistsNotification);
 
-	if (!m_pCurOpData || m_pCurOpData->opId != cmd_transfer)
+	if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer)
 	{
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pFileExistsNotification->GetRequestID());
 		return false;

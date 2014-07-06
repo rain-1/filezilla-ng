@@ -70,11 +70,11 @@ void CCommandQueue::ProcessNextCommand()
 	{
 		CCommand *pCommand = m_CommandList.front();
 
-		int res = m_pEngine->Command(*pCommand);
+		int res = m_pEngine->Execute(*pCommand);
 
-		if (pCommand->GetId() != cmd_cancel &&
-			pCommand->GetId() != cmd_connect &&
-			pCommand->GetId() != cmd_disconnect)
+		if (pCommand->GetId() != Command::cancel &&
+			pCommand->GetId() != Command::connect &&
+			pCommand->GetId() != Command::disconnect)
 		{
 			if (res == FZ_REPLY_NOTCONNECTED)
 			{
@@ -99,7 +99,7 @@ void CCommandQueue::ProcessNextCommand()
 		}
 		else if (res == FZ_REPLY_ALREADYCONNECTED)
 		{
-			res = m_pEngine->Command(CDisconnectCommand());
+			res = m_pEngine->Execute(CDisconnectCommand());
 			if (res == FZ_REPLY_WOULDBLOCK)
 			{
 				m_CommandList.push_front(new CDisconnectCommand);
@@ -117,7 +117,7 @@ void CCommandQueue::ProcessNextCommand()
 		{
 			wxBell();
 
-			if (pCommand->GetId() == cmd_list)
+			if (pCommand->GetId() == Command::list)
 				m_pState->ListingFailed(res);
 
 			m_CommandList.pop_front();
@@ -164,7 +164,7 @@ bool CCommandQueue::Cancel()
 		return true;
 	}
 
-	int res = m_pEngine->Command(CCancelCommand());
+	int res = m_pEngine->Execute(CCancelCommand());
 	if (res == FZ_REPLY_WOULDBLOCK)
 		return false;
 	else
@@ -180,7 +180,7 @@ void CCommandQueue::Finish(COperationNotification *pNotification)
 {
 	if (pNotification->nReplyCode & FZ_REPLY_DISCONNECTED)
 	{
-		if (pNotification->commandId == cmd_none && !m_CommandList.empty())
+		if (pNotification->commandId == Command::none && !m_CommandList.empty())
 		{
 			// Pending event, has no relevance during command execution
 			delete pNotification;
@@ -207,7 +207,7 @@ void CCommandQueue::Finish(COperationNotification *pNotification)
 
 	CCommand* pCommand = m_CommandList.front();
 
-	if (pCommand->GetId() == cmd_list && pNotification->nReplyCode != FZ_REPLY_OK)
+	if (pCommand->GetId() == Command::list && pNotification->nReplyCode != FZ_REPLY_OK)
 	{
 		if (pNotification->nReplyCode & FZ_REPLY_LINKNOTDIR)
 		{
@@ -222,14 +222,14 @@ void CCommandQueue::Finish(COperationNotification *pNotification)
 			m_pState->ListingFailed(pNotification->nReplyCode);
 		m_CommandList.pop_front();
 	}
-	else if (pCommand->GetId() == cmd_connect && pNotification->nReplyCode != FZ_REPLY_OK)
+	else if (pCommand->GetId() == Command::connect && pNotification->nReplyCode != FZ_REPLY_OK)
 	{
 		// Remove pending events
 		m_CommandList.pop_front();
 		while (!m_CommandList.empty())
 		{
 			CCommand* pPendingCommand = m_CommandList.front();
-			if (pPendingCommand->GetId() == cmd_connect)
+			if (pPendingCommand->GetId() == Command::connect)
 				break;
 			m_CommandList.pop_front();
 			delete pPendingCommand;
@@ -239,7 +239,7 @@ void CCommandQueue::Finish(COperationNotification *pNotification)
 		// operation, stop the recursive operation
 		m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	}
-	else if (pCommand->GetId() == cmd_connect && pNotification->nReplyCode == FZ_REPLY_OK)
+	else if (pCommand->GetId() == Command::connect && pNotification->nReplyCode == FZ_REPLY_OK)
 	{
 		m_pState->SetSuccessfulConnect();
 		m_CommandList.pop_front();

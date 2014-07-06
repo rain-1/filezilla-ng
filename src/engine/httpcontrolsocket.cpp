@@ -126,7 +126,7 @@ int CHttpControlSocket::SendNextCommand()
 
 	switch (m_pCurOpData->opId)
 	{
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferSend();
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
@@ -141,7 +141,7 @@ int CHttpControlSocket::SendNextCommand()
 int CHttpControlSocket::ContinueConnect()
 {
 	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("CHttpControlSocket::ContinueConnect() m_pEngine=%p"), m_pEngine);
-	if (GetCurrentCommandId() != cmd_connect ||
+	if (GetCurrentCommandId() != Command::connect ||
 		!m_pCurrentServer)
 	{
 		LogMessage(MessageType::Debug_Warning, _T("Invalid context for call to ContinueConnect(), cmd=%d, m_pCurrentServer=%p"), GetCurrentCommandId(), m_pCurrentServer);
@@ -168,7 +168,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	{
 	case reqId_fileexists:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != cmd_transfer)
+			if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer)
 			{
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pNotification->GetRequestID());
 				return false;
@@ -232,7 +232,7 @@ int CHttpControlSocket::DoReceive()
 
 		m_pEngine->SetActive(CFileZillaEngine::recv);
 
-		if (!m_pCurOpData || m_pCurOpData->opId == cmd_connect)
+		if (!m_pCurOpData || m_pCurOpData->opId == Command::connect)
 		{
 			// Just ignore all further data
 			m_recvBufferPos = 0;
@@ -287,7 +287,7 @@ int CHttpControlSocket::DoReceive()
 
 void CHttpControlSocket::OnConnect()
 {
-	wxASSERT(GetCurrentCommandId() == cmd_connect);
+	wxASSERT(GetCurrentCommandId() == Command::connect);
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
@@ -701,7 +701,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					return res;
 				}
 
-				if( pData->m_pOpData && pData->m_pOpData->opId == cmd_transfer) {
+				if( pData->m_pOpData && pData->m_pOpData->opId == Command::transfer) {
 					CHttpFileTransferOpData* pTransfer = reinterpret_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
 					if( pTransfer->resume && pData->m_responseCode != 206 ) {
 						pTransfer->resume = false;
@@ -896,7 +896,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 
 int CHttpControlSocket::ResetOperation(int nErrorCode)
 {
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_transfer)
+	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer)
 	{
 		CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
 		delete pData->pFile;
@@ -991,7 +991,7 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 	enum Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
-	case cmd_transfer:
+	case Command::transfer:
 		res = FileTransferParseResponse(p, len);
 		break;
 	default:
@@ -1018,7 +1018,7 @@ int CHttpControlSocket::ParseSubcommandResult(int prevResult)
 
 	switch (m_pCurOpData->opId)
 	{
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferSubcommandResult(prevResult);
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);

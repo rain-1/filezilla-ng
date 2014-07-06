@@ -326,7 +326,7 @@ class CSftpDeleteOpData : public COpData
 {
 public:
 	CSftpDeleteOpData()
-		: COpData(cmd_delete)
+		: COpData(Command::del)
 	{
 		m_needSendListing = false;
 		m_deleteFailed = false;
@@ -374,7 +374,7 @@ class CSftpConnectOpData : public COpData
 {
 public:
 	CSftpConnectOpData()
-		: COpData(cmd_connect)
+		: COpData(Command::connect)
 	{
 		pLastChallenge = 0;
 		criticalFailure = false;
@@ -648,7 +648,7 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 			switch(message->reqType)
 			{
 			case sftpReqPassword:
-				if (!m_pCurOpData || m_pCurOpData->opId != cmd_connect)
+				if (!m_pCurOpData || m_pCurOpData->opId != Command::connect)
 				{
 					LogMessage(MessageType::Debug_Warning, _T("sftpReqPassword outside connect operation, ignoring."));
 					break;
@@ -709,7 +709,7 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 			{
 				if (m_pTransferStatus && !m_pTransferStatus->madeProgress)
 				{
-					if (m_pCurOpData && m_pCurOpData->opId == cmd_transfer)
+					if (m_pCurOpData && m_pCurOpData->opId == Command::transfer)
 					{
 						CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
 						if (pData->download)
@@ -866,7 +866,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	case reqId_hostkey:
 	case reqId_hostkeyChanged:
 		{
-			if (GetCurrentCommandId() != cmd_connect ||
+			if (GetCurrentCommandId() != Command::connect ||
 				!m_pCurrentServer)
 			{
 				LogMessage(MessageType::Debug_Info, _T("SetAsyncRequestReply called to wrong time"));
@@ -883,7 +883,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 			if (!pHostKeyNotification->m_trust)
 			{
 				Send(_T(""), show + _("No"));
-				if (m_pCurOpData && m_pCurOpData->opId == cmd_connect)
+				if (m_pCurOpData && m_pCurOpData->opId == Command::connect)
 				{
 					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
 					pData->criticalFailure = true;
@@ -923,7 +923,7 @@ class CSftpListOpData : public COpData
 {
 public:
 	CSftpListOpData()
-		: COpData(cmd_list)
+		: COpData(Command::list)
 		, pParser()
 		, refresh()
 		, fallback_to_current()
@@ -1124,10 +1124,10 @@ int CSftpControlSocket::ListParseEntry(const wxString& entry)
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData->opId != cmd_list)
+	if (m_pCurOpData->opId != Command::list)
 	{
 		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Listentry received, but current operation is not cmd_list"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Listentry received, but current operation is not Command::list"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1359,7 +1359,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 	pData->target = target;
 	pData->link_discovery = link_discovery;
 
-	if (pData->pNextOpData && pData->pNextOpData->opId == cmd_transfer &&
+	if (pData->pNextOpData && pData->pNextOpData->opId == Command::transfer &&
 		!static_cast<CSftpFileTransferOpData *>(pData->pNextOpData)->download)
 	{
 		pData->tryMkdOnFail = true;
@@ -1527,23 +1527,23 @@ int CSftpControlSocket::ProcessReply(bool successful, const wxString& reply /*=_
 	enum Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
-	case cmd_connect:
+	case Command::connect:
 		return ConnectParseResponse(successful, reply);
-	case cmd_list:
+	case Command::list:
 		return ListParseResponse(successful, reply);
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferParseResponse(successful, reply);
-	case cmd_cwd:
+	case Command::cwd:
 		return ChangeDirParseResponse(successful, reply);
-	case cmd_mkdir:
+	case Command::mkdir:
 		return MkdirParseResponse(successful, reply);
-	case cmd_delete:
+	case Command::del:
 		return DeleteParseResponse(successful, reply);
-	case cmd_removedir:
+	case Command::removedir:
 		return RemoveDirParseResponse(successful, reply);
-	case cmd_chmod:
+	case Command::chmod:
 		return ChmodParseResponse(successful, reply);
-	case cmd_rename:
+	case Command::rename:
 		return RenameParseResponse(successful, reply);
 	default:
 		LogMessage(MessageType::Debug_Warning, _T("No action for parsing replies to command %d"), (int)commandId);
@@ -1555,7 +1555,7 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ResetOperation(%d)"), nErrorCode);
 
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_connect)
+	if (m_pCurOpData && m_pCurOpData->opId == Command::connect)
 	{
 		CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
 		if (pData->opState == connect_init && (nErrorCode & FZ_REPLY_CANCELED) != FZ_REPLY_CANCELED)
@@ -1563,7 +1563,7 @@ int CSftpControlSocket::ResetOperation(int nErrorCode)
 		if (pData->criticalFailure)
 			nErrorCode |= FZ_REPLY_CRITICALERROR;
 	}
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_delete && !(nErrorCode & FZ_REPLY_DISCONNECTED))
+	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 	{
 		CSftpDeleteOpData *pData = static_cast<CSftpDeleteOpData *>(m_pCurOpData);
 		if (pData->m_needSendListing)
@@ -1591,21 +1591,21 @@ int CSftpControlSocket::SendNextCommand()
 
 	switch (m_pCurOpData->opId)
 	{
-	case cmd_connect:
+	case Command::connect:
 		return ConnectSend();
-	case cmd_list:
+	case Command::list:
 		return ListSend();
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferSend();
-	case cmd_cwd:
+	case Command::cwd:
 		return ChangeDirSend();
-	case cmd_mkdir:
+	case Command::mkdir:
 		return MkdirSend();
-	case cmd_rename:
+	case Command::rename:
 		return RenameSend();
-	case cmd_chmod:
+	case Command::chmod:
 		return ChmodSend();
-	case cmd_delete:
+	case Command::del:
 		return DeleteSend();
 	default:
 		LogMessage(MessageType::Debug_Warning, __TFILE__, __LINE__, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
@@ -2019,7 +2019,7 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 
 void CSftpControlSocket::Cancel()
 {
-	if (GetCurrentCommandId() != cmd_none)
+	if (GetCurrentCommandId() != Command::none)
 	{
 		DoClose(FZ_REPLY_CANCELED);
 	}
@@ -2328,7 +2328,7 @@ class CSftpRemoveDirOpData : public COpData
 {
 public:
 	CSftpRemoveDirOpData()
-		: COpData(cmd_removedir)
+		: COpData(Command::removedir)
 	{
 	}
 
@@ -2409,7 +2409,7 @@ class CSftpChmodOpData : public COpData
 {
 public:
 	CSftpChmodOpData(const CChmodCommand& command)
-		: COpData(cmd_chmod), m_cmd(command)
+		: COpData(Command::chmod), m_cmd(command)
 	{
 		m_useAbsolute = false;
 	}
@@ -2531,7 +2531,7 @@ class CSftpRenameOpData : public COpData
 {
 public:
 	CSftpRenameOpData(const CRenameCommand& command)
-		: COpData(cmd_rename), m_cmd(command)
+		: COpData(Command::rename), m_cmd(command)
 	{
 		m_useAbsolute = false;
 	}
@@ -2740,15 +2740,15 @@ int CSftpControlSocket::ParseSubcommandResult(int prevResult)
 
 	switch (m_pCurOpData->opId)
 	{
-	case cmd_cwd:
+	case Command::cwd:
 		return ChangeDirSubcommandResult(prevResult);
-	case cmd_list:
+	case Command::list:
 		return ListSubcommandResult(prevResult);
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferSubcommandResult(prevResult);
-	case cmd_rename:
+	case Command::rename:
 		return RenameSubcommandResult(prevResult);
-	case cmd_chmod:
+	case Command::chmod:
 		return ChmodSubcommandResult(prevResult);
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in ParseSubcommandResult"), m_pCurOpData->opId);

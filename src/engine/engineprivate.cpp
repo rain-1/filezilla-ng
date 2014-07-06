@@ -142,10 +142,10 @@ const CCommand *CFileZillaEnginePrivate::GetCurrentCommand() const
 	return m_pCurrentCommand;
 }
 
-enum Command CFileZillaEnginePrivate::GetCurrentCommandId() const
+Command CFileZillaEnginePrivate::GetCurrentCommandId() const
 {
 	if (!m_pCurrentCommand)
-		return cmd_none;
+		return Command::none;
 
 	else
 		return GetCurrentCommand()->GetId();
@@ -183,7 +183,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 			m_pLogging->LogMessage(MessageType::Error, _("Command not supported by this protocol"));
 		}
 
-		if (m_pCurrentCommand->GetId() == cmd_connect)
+		if (m_pCurrentCommand->GetId() == Command::connect)
 		{
 			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) &&
 				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))
@@ -227,7 +227,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 		{
 			COperationNotification *notification = new COperationNotification();
 			notification->nReplyCode = nErrorCode;
-			notification->commandId = cmd_none;
+			notification->commandId = Command::none;
 			AddNotification(notification);
 		}
 	}
@@ -307,7 +307,7 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 
 	if (m_retryTimer.IsRunning())
 	{
-		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == cmd_connect);
+		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
 
 		delete m_pControlSocket;
 		m_pControlSocket = 0;
@@ -320,7 +320,7 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
 		COperationNotification *notification = new COperationNotification();
 		notification->nReplyCode = FZ_REPLY_DISCONNECTED|FZ_REPLY_CANCELED;
-		notification->commandId = cmd_connect;
+		notification->commandId = Command::connect;
 		AddNotification(notification);
 
 		return FZ_REPLY_WOULDBLOCK;
@@ -602,9 +602,9 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 
 void CFileZillaEnginePrivate::OnTimer(wxTimerEvent&)
 {
-	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != cmd_connect)
+	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect)
 	{
-		wxFAIL_MSG(_T("CFileZillaEnginePrivate::OnTimer called without pending cmd_connect"));
+		wxFAIL_MSG(_T("CFileZillaEnginePrivate::OnTimer called without pending Command::connect"));
 		return;
 	}
 	wxASSERT(!IsConnected());

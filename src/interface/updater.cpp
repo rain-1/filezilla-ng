@@ -259,7 +259,7 @@ bool CUpdater::Run()
 
 int CUpdater::Download(wxString const& url, wxString const& local_file)
 {
-	engine_->Command(CDisconnectCommand());
+	engine_->Execute(CDisconnectCommand());
 	int res = SendConnectCommand(url);
 	if( res == FZ_REPLY_OK ) {
 		res = SendTransferCommand(url, local_file);
@@ -277,7 +277,7 @@ int CUpdater::SendConnectCommand(wxString const& url)
 		return FZ_REPLY_ERROR;
 	}
 
-	return engine_->Command(CConnectCommand(s));
+	return engine_->Execute(CConnectCommand(s));
 }
 
 int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_file)
@@ -294,7 +294,7 @@ int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_fil
 	path = path.GetParent();
 
 	CFileTransferCommand cmd(local_file, path, file, true, transferSettings);
-	int res = engine_->Command(cmd);
+	int res = engine_->Execute(cmd);
 
 	wxASSERT(res != FZ_REPLY_OK);
 	return res;
@@ -497,7 +497,7 @@ void CUpdater::ProcessData(CNotification* notification)
 
 	if( raw_version_information_.size() + len > 131072 ) {
 		log_ += _("Received version information is too large");
-		engine_->Command(CCancelCommand());
+		engine_->Execute(CCancelCommand());
 		SetState(failed);
 	}
 	else {
@@ -505,7 +505,7 @@ void CUpdater::ProcessData(CNotification* notification)
 			if (data[i] < 10 || (unsigned char)data[i] > 127) {
 				log_ += _("Received invalid character in version information");
 				SetState(failed);
-				engine_->Command(CCancelCommand());
+				engine_->Execute(CCancelCommand());
 				break;
 			}
 		}

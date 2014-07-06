@@ -5,24 +5,24 @@
 
 // Command IDs
 // -----------
-enum Command
+enum class Command
 {
-	cmd_none = 0,
-	cmd_connect,
-	cmd_disconnect,
-	cmd_cancel,
-	cmd_list,
-	cmd_transfer,
-	cmd_delete,
-	cmd_removedir,
-	cmd_mkdir,
-	cmd_rename,
-	cmd_chmod,
-	cmd_raw,
+	none = 0,
+	connect,
+	disconnect,
+	cancel,
+	list,
+	transfer,
+	del,
+	removedir,
+	mkdir,
+	rename,
+	chmod,
+	raw,
 
 	// Only used internally
-	cmd_cwd,
-	cmd_rawtransfer
+	cwd,
+	rawtransfer
 };
 
 // Reply codes
@@ -54,7 +54,7 @@ enum Command
 	class name : public CCommand \
 	{ \
 	public: \
-		virtual enum Command GetId() const { return id; } \
+		virtual Command GetId() const { return id; } \
 		virtual CCommand* Clone() const { return new name(*this); }
 
 // --------------- //
@@ -66,11 +66,11 @@ class CCommand
 public:
 	CCommand() {}
 	virtual ~CCommand() {}
-	virtual enum Command GetId() const = 0;
+	virtual Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
 };
 
-DECLARE_COMMAND(CConnectCommand, cmd_connect)
+DECLARE_COMMAND(CConnectCommand, Command::connect)
 	CConnectCommand(const CServer &server, bool retry_conncting = true);
 
 	const CServer GetServer() const;
@@ -80,17 +80,17 @@ protected:
 	bool m_retry_connecting;
 };
 
-DECLARE_COMMAND(CDisconnectCommand, cmd_disconnect)
+DECLARE_COMMAND(CDisconnectCommand, Command::disconnect)
 };
 
-DECLARE_COMMAND(CCancelCommand, cmd_cancel)
+DECLARE_COMMAND(CCancelCommand, Command::cancel)
 };
 
 #define LIST_FLAG_REFRESH 1
 #define LIST_FLAG_AVOID 2
 #define LIST_FLAG_FALLBACK_CURRENT 4
 #define LIST_FLAG_LINK 8
-DECLARE_COMMAND(CListCommand, cmd_list)
+DECLARE_COMMAND(CListCommand, Command::list)
 	// Without a given directory, the current directory will be listed.
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
@@ -122,7 +122,7 @@ protected:
 	int m_flags;
 };
 
-DECLARE_COMMAND(CFileTransferCommand, cmd_transfer)
+DECLARE_COMMAND(CFileTransferCommand, Command::transfer)
 
 	class t_transferSettings
 	{
@@ -154,7 +154,7 @@ protected:
 	t_transferSettings m_transferSettings;
 };
 
-DECLARE_COMMAND(CRawCommand, cmd_raw)
+DECLARE_COMMAND(CRawCommand, Command::raw)
 	CRawCommand(const wxString &command);
 
 	wxString GetCommand() const;
@@ -163,7 +163,7 @@ protected:
 	wxString m_command;
 };
 
-DECLARE_COMMAND(CDeleteCommand, cmd_delete)
+DECLARE_COMMAND(CDeleteCommand, Command::del)
 	CDeleteCommand(const CServerPath& path, const std::list<wxString>& files);
 
 	CServerPath GetPath() const { return m_path; }
@@ -175,7 +175,7 @@ protected:
 	const std::list<wxString> m_files;
 };
 
-DECLARE_COMMAND(CRemoveDirCommand, cmd_removedir)
+DECLARE_COMMAND(CRemoveDirCommand, Command::removedir)
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
 	CRemoveDirCommand(const CServerPath& path, const wxString& subdDir);
@@ -189,7 +189,7 @@ protected:
 	wxString m_subDir;
 };
 
-DECLARE_COMMAND(CMkdirCommand, cmd_mkdir)
+DECLARE_COMMAND(CMkdirCommand, Command::mkdir)
 	CMkdirCommand(const CServerPath& path);
 
 	CServerPath GetPath() const { return m_path; }
@@ -199,7 +199,7 @@ protected:
 	CServerPath m_path;
 };
 
-DECLARE_COMMAND(CRenameCommand, cmd_rename)
+DECLARE_COMMAND(CRenameCommand, Command::rename)
 	CRenameCommand(const CServerPath& fromPath, const wxString& fromFile,
 				   const CServerPath& toPath, const wxString& toFile);
 
@@ -215,7 +215,7 @@ protected:
 	wxString m_toFile;
 };
 
-DECLARE_COMMAND(CChmodCommand, cmd_chmod)
+DECLARE_COMMAND(CChmodCommand, Command::chmod)
 	// The permission string should be given in a format understandable by the server.
 	// Most likely it's the defaut octal representation used by the unix chmod command,
 	// i.e. chmod 755 foo.bar

@@ -24,7 +24,7 @@ class CConnectOpData : public COpData
 {
 public:
 	CConnectOpData()
-		: COpData(cmd_connect),
+		: COpData(Command::connect),
 		port(0)
 	{
 	}
@@ -61,7 +61,7 @@ class CMkdirOpData : public COpData
 {
 public:
 	CMkdirOpData()
-		: COpData(cmd_mkdir)
+		: COpData(Command::mkdir)
 	{
 	}
 
@@ -79,7 +79,7 @@ class CChangeDirOpData : public COpData
 {
 public:
 	CChangeDirOpData()
-		: COpData(cmd_cwd)
+		: COpData(Command::cwd)
 	{
 		tryMkdOnFail = false;
 		link_discovery = false;

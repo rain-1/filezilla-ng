@@ -21,7 +21,7 @@ public:
 
 	// Execute the given command. See commands.h for a list of the available
 	// commands and reply codes.
-	int Command(const CCommand &command);
+	int Execute(const CCommand &command);
 
 	bool IsBusy() const;
 	bool IsConnected() const;
