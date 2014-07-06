@@ -1764,7 +1764,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		return;
 	}
 
-	if( s == idle ) {
+	if( s == UpdaterState::idle ) {
 		wxMenu* m = 0;
 		wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId(), &m);
 		if( pItem && m ) {
@@ -1778,7 +1778,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		}
 		return;
 	}
-	else if( s != newversion && s != newversion_ready ) {
+	else if( s != UpdaterState::newversion && s != UpdaterState::newversion_ready ) {
 		return;
 	}
 	else if( v.version_.empty() ) {

@@ -28,7 +28,7 @@ struct version_information
 	wxString changelog;
 };
 
-enum UpdaterState
+enum class UpdaterState
 {
 	idle,
 	failed,

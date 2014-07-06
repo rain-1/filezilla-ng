@@ -350,7 +350,7 @@ protected:
 	{
 #ifdef __WXDEBUG__
 		wxMutexGuiEnter();
-		wxASSERT(m_pFolderItem->GetTopLevelItem() && m_pFolderItem->GetTopLevelItem()->GetType() == QueueItemType_Server);
+		wxASSERT(m_pFolderItem->GetTopLevelItem() && m_pFolderItem->GetTopLevelItem()->GetType() == QueueItemType::Server);
 		wxMutexGuiLeave();
 #endif
 
@@ -679,7 +679,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 				CFileExistsNotification* pFileExistsNotification = (CFileExistsNotification *)pNotification;
 				pFileExistsNotification->overwriteAction = pEngineData->pItem->m_defaultFileExistsAction;
 
-				if (pEngineData->pItem->GetType() == QueueItemType_File)
+				if (pEngineData->pItem->GetType() == QueueItemType::File)
 				{
 					CFileItem* pFileItem = (CFileItem*)pEngineData->pItem;
 
@@ -725,7 +725,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 			if (pEngineData->active)
 			{
 				if (pStatus && pStatus->madeProgress && !pStatus->list &&
-					pEngineData->pItem->GetType() == QueueItemType_File)
+					pEngineData->pItem->GetType() == QueueItemType::File)
 				{
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
 					pItem->set_made_progress(true);
@@ -823,18 +823,18 @@ bool CQueueView::TryStartNextTransfer()
 	// Check limits for concurrent up/downloads
 	const int maxDownloads = COptions::Get()->GetOptionVal(OPTION_CONCURRENTDOWNLOADLIMIT);
 	const int maxUploads = COptions::Get()->GetOptionVal(OPTION_CONCURRENTUPLOADLIMIT);
-	enum TransferDirection wantedDirection;
+	TransferDirection wantedDirection;
 	if (maxDownloads && m_activeCountDown >= maxDownloads)
 	{
 		if (maxUploads && m_activeCountUp >= maxUploads)
 			return false;
 		else
-			wantedDirection = upload;
+			wantedDirection = TransferDirection::upload;
 	}
 	else if (maxUploads && m_activeCountUp >= maxUploads)
-		wantedDirection = download;
+		wantedDirection = TransferDirection::download;
 	else
-		wantedDirection = both;
+		wantedDirection = TransferDirection::both;
 
 	struct t_bestMatch
 	{
@@ -860,7 +860,7 @@ bool CQueueView::TryStartNextTransfer()
 
 		CFileItem* newFileItem = currentServerItem->GetIdleChild(m_activeMode == 1, wantedDirection);
 
-		while (newFileItem && newFileItem->Download() && newFileItem->GetType() == QueueItemType_Folder)
+		while (newFileItem && newFileItem->Download() && newFileItem->GetType() == QueueItemType::Folder)
 		{
 			CLocalPath localPath(newFileItem->GetLocalPath());
 			localPath.AddSegment(newFileItem->GetLocalFile());
@@ -887,7 +887,7 @@ bool CQueueView::TryStartNextTransfer()
 			bestMatch.serverItem = currentServerItem;
 			bestMatch.fileItem = newFileItem;
 			bestMatch.pEngineData = pEngineData;
-			if (newFileItem->GetPriority() == priority_highest)
+			if (newFileItem->GetPriority() == QueuePriority::highest)
 				break;
 		}
 	}
@@ -941,13 +941,13 @@ bool CQueueView::TryStartNextTransfer()
 		}
 		else if (oldServer != bestMatch.serverItem->GetServer())
 			pEngineData->state = t_EngineData::disconnect;
-		else if (pEngineData->pItem->GetType() == QueueItemType_File)
+		else if (pEngineData->pItem->GetType() == QueueItemType::File)
 			pEngineData->state = t_EngineData::transfer;
 		else
 			pEngineData->state = t_EngineData::mkdir;
 	}
 
-	if (bestMatch.fileItem->GetType() == QueueItemType_File)
+	if (bestMatch.fileItem->GetType() == QueueItemType::File)
 	{
 		// Create status line
 
@@ -1005,7 +1005,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 				reason = remove;
 			else
 			{
-				if (pEngineData->pItem->GetType() == QueueItemType_File && ((CFileItem*)pEngineData->pItem)->made_progress())
+				if (pEngineData->pItem->GetType() == QueueItemType::File && ((CFileItem*)pEngineData->pItem)->made_progress())
 				{
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
 					pItem->set_made_progress(false);
@@ -1041,7 +1041,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 		}
 		else if (replyCode == FZ_REPLY_OK)
 		{
-			if (pEngineData->pItem->GetType() == QueueItemType_File)
+			if (pEngineData->pItem->GetType() == QueueItemType::File)
 				pEngineData->state = t_EngineData::transfer;
 			else
 				pEngineData->state = t_EngineData::mkdir;
@@ -1089,7 +1089,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 		// Increase error count only if item didn't make any progress. This keeps
 		// user interaction at a minimum if connection is unstable.
 
-		if (pEngineData->pItem->GetType() == QueueItemType_File && ((CFileItem*)pEngineData->pItem)->made_progress() &&
+		if (pEngineData->pItem->GetType() == QueueItemType::File && ((CFileItem*)pEngineData->pItem)->made_progress() &&
 			(replyCode & FZ_REPLY_WRITEFAILED) != FZ_REPLY_WRITEFAILED)
 		{
 			// Don't increase error count if there has been progress
@@ -1206,7 +1206,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 				pServerItem->m_activeCount--;
 		}
 
-		if (data.pItem->GetType() == QueueItemType_File)
+		if (data.pItem->GetType() == QueueItemType::File)
 		{
 			wxASSERT(data.pStatusLineCtrl);
 			for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
@@ -1280,7 +1280,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 		}
 		else if (reason == failure)
 		{
-			if (data.pItem->GetType() == QueueItemType_File || data.pItem->GetType() == QueueItemType_Folder)
+			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder)
 			{
 				const CServer server = ((CServerItem*)data.pItem->GetTopLevelItem())->GetServer();
 
@@ -1296,7 +1296,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 		}
 		else if (reason == success)
 		{
-			if (data.pItem->GetType() == QueueItemType_File || data.pItem->GetType() == QueueItemType_Folder)
+			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder)
 			{
 				CQueueViewSuccessful* pQueueViewSuccessful = m_pQueue->GetQueueView_Successful();
 				if (pQueueViewSuccessful->AutoClear())
@@ -1356,7 +1356,7 @@ bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount
 {
 	// RemoveItem assumes that the item has already been removed from all engines
 
-	if (item->GetType() == QueueItemType_File)
+	if (item->GetType() == QueueItemType::File)
 	{
 		// Update size information
 		const CFileItem* const pFileItem = (const CFileItem* const)item;
@@ -1467,7 +1467,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 
 			if (res == FZ_REPLY_OK)
 			{
-				if (engineData.pItem->GetType() == QueueItemType_File)
+				if (engineData.pItem->GetType() == QueueItemType::File)
 				{
 					engineData.state = t_EngineData::transfer;
 					if (engineData.active)
@@ -2080,7 +2080,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				bool download = GetTextElementInt(pFile, "Download") != 0;
 				wxLongLong size = GetTextElementLongLong(pFile, "Size", -1);
 				unsigned int errorCount = GetTextElementInt(pFile, "ErrorCount");
-				unsigned int priority = GetTextElementInt(pFile, "Priority", priority_normal);
+				unsigned int priority = GetTextElementInt(pFile, "Priority", static_cast<unsigned int>(QueuePriority::normal));
 
 				int dataType = GetTextElementInt(pFile, "DataType", -1);
 				if (dataType == -1)
@@ -2090,7 +2090,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 
 				CServerPath remotePath;
 				if (!localFile.empty() && !remoteFile.empty() && remotePath.SetSafePath(safeRemotePath) &&
-					size >= -1 && priority < PRIORITY_COUNT)
+					size >= -1 && priority < static_cast<int>(QueuePriority::count))
 				{
 					wxString localFileName;
 					CLocalPath localPath(localFile, &localFileName);
@@ -2110,7 +2110,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 						(remoteFile != localFileName) ? (download ? localFileName : remoteFile) : wxString(),
 						previousLocalPath, previousRemotePath, size);
 					fileItem->m_transferSettings.binary = binary;
-					fileItem->SetPriorityRaw((enum QueuePriority)priority);
+					fileItem->SetPriorityRaw(QueuePriority(priority));
 					fileItem->m_errorCount = errorCount;
 					InsertItem(pServerItem, fileItem);
 
@@ -2143,13 +2143,12 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 					folderItem = new CFolderItem(pServerItem, true, remotePath, remoteFile);
 				}
 
-				unsigned int priority = GetTextElementInt(pFolder, "Priority", priority_normal);
-				if (priority >= PRIORITY_COUNT)
-				{
+				unsigned int priority = GetTextElementInt(pFolder, "Priority", static_cast<int>(QueuePriority::normal));
+				if (priority >= static_cast<int>(QueuePriority::count)) {
 					delete folderItem;
 					continue;
 				}
-				folderItem->SetPriority((enum QueuePriority)priority);
+				folderItem->SetPriority(QueuePriority(priority));
 
 				InsertItem(pServerItem, folderItem);
 			}
@@ -2383,9 +2382,9 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 		CQueueItem* pItem = selectedItems.front();
 		selectedItems.pop_front();
 
-		if (pItem->GetType() == QueueItemType_Status)
+		if (pItem->GetType() == QueueItemType::Status)
 			continue;
-		else if (pItem->GetType() == QueueItemType_FolderScan)
+		else if (pItem->GetType() == QueueItemType::FolderScan)
 		{
 			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
 			if (pFolder->m_active)
@@ -2396,7 +2395,7 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 			else
 				RemoveQueuedFolderItem(pFolder);
 		}
-		else if (pItem->GetType() == QueueItemType_Server)
+		else if (pItem->GetType() == QueueItemType::Server)
 		{
 			CServerItem* pServer = (CServerItem*)pItem;
 			StopItem(pServer);
@@ -2404,8 +2403,8 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 			// Server items get deleted automatically if all children are gone
 			continue;
 		}
-		else if (pItem->GetType() == QueueItemType_File ||
-				 pItem->GetType() == QueueItemType_Folder)
+		else if (pItem->GetType() == QueueItemType::File ||
+				 pItem->GetType() == QueueItemType::Folder)
 		{
 			CFileItem* pFile = (CFileItem*)pItem;
 			if (pFile->IsActive())
@@ -2471,7 +2470,7 @@ bool CQueueView::StopItem(CServerItem* pServerItem)
 	for (std::list<CQueueItem*>::reverse_iterator iter = items.rbegin(); iter != items.rend(); ++iter)
 	{
 		CQueueItem* pItem = *iter;
-		if (pItem->GetType() == QueueItemType_FolderScan)
+		if (pItem->GetType() == QueueItemType::FolderScan)
 		{
 			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
 			if (pFolder->m_active)
@@ -2480,8 +2479,8 @@ bool CQueueView::StopItem(CServerItem* pServerItem)
 				continue;
 			}
 		}
-		else if (pItem->GetType() == QueueItemType_File ||
-				 pItem->GetType() == QueueItemType_Folder)
+		else if (pItem->GetType() == QueueItemType::File ||
+				 pItem->GetType() == QueueItemType::Folder)
 		{
 			CFileItem* pFile = (CFileItem*)pItem;
 			if (pFile->IsActive())
@@ -2528,7 +2527,7 @@ void CQueueView::OnFolderThreadFiles(wxCommandEvent&)
 		m_folderscan_item_refresh_timer.Start(200, true);
 }
 
-void CQueueView::SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction)
+void CQueueView::SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const TransferDirection direction)
 {
 	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 		(*iter)->SetDefaultFileExistsAction(action, direction);
@@ -2564,14 +2563,14 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 
 		switch (pItem->GetType())
 		{
-		case QueueItemType_FolderScan:
+		case QueueItemType::FolderScan:
 			if (uploadAction == CFileExistsNotification::unknown)
 				uploadAction = ((CFolderScanItem*)pItem)->m_defaultFileExistsAction;
 			else if (((CFolderScanItem*)pItem)->m_defaultFileExistsAction != uploadAction)
 				upload_unknown = true;
 			has_upload = true;
 			break;
-		case QueueItemType_File:
+		case QueueItemType::File:
 			{
 				CFileItem *pFileItem = (CFileItem*)pItem;
 				if (pFileItem->Download())
@@ -2592,7 +2591,7 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 				}
 			}
 			break;
-		case QueueItemType_Server:
+		case QueueItemType::Server:
 			{
 				download_unknown = true;
 				upload_unknown = true;
@@ -2625,12 +2624,12 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 
 		switch (pItem->GetType())
 		{
-		case QueueItemType_FolderScan:
+		case QueueItemType::FolderScan:
 			if (!has_upload)
 				break;
 			((CFolderScanItem*)pItem)->m_defaultFileExistsAction = uploadAction;
 			break;
-		case QueueItemType_File:
+		case QueueItemType::File:
 			{
 				CFileItem *pFileItem = (CFileItem*)pItem;
 				if (pFileItem->Download())
@@ -2647,13 +2646,13 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 				}
 			}
 			break;
-		case QueueItemType_Server:
+		case QueueItemType::Server:
 			{
 				CServerItem *pServerItem = (CServerItem*)pItem;
 				if (has_download)
-					pServerItem->SetDefaultFileExistsAction(downloadAction, download);
+					pServerItem->SetDefaultFileExistsAction(downloadAction, TransferDirection::download);
 				if (has_upload)
-					pServerItem->SetDefaultFileExistsAction(uploadAction, upload);
+					pServerItem->SetDefaultFileExistsAction(uploadAction, TransferDirection::upload);
 			}
 			break;
 		default:
@@ -2891,7 +2890,7 @@ void CQueueView::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 {
 	CQueueViewBase::InsertItem(pServerItem, pItem);
 
-	if (pItem->GetType() == QueueItemType_File)
+	if (pItem->GetType() == QueueItemType::File)
 	{
 		CFileItem* pFileItem = (CFileItem*)pItem;
 
@@ -2988,19 +2987,19 @@ void CQueueView::OnSetPriority(wxCommandEvent& event)
 		return;
 #endif
 
-	enum QueuePriority priority;
+	QueuePriority priority;
 
 	const int id = event.GetId();
 	if (id == XRCID("ID_PRIORITY_LOWEST"))
-		priority = priority_lowest;
+		priority = QueuePriority::lowest;
 	else if (id == XRCID("ID_PRIORITY_LOW"))
-		priority = priority_low;
+		priority = QueuePriority::low;
 	else if (id == XRCID("ID_PRIORITY_HIGH"))
-		priority = priority_high;
+		priority = QueuePriority::high;
 	else if (id == XRCID("ID_PRIORITY_HIGHEST"))
-		priority = priority_highest;
+		priority = QueuePriority::highest;
 	else
-		priority = priority_normal;
+		priority = QueuePriority::normal;
 
 
 	CQueueItem* pSkip = 0;
@@ -3011,7 +3010,7 @@ void CQueueView::OnSetPriority(wxCommandEvent& event)
 		if (!pItem)
 			continue;
 
-		if (pItem->GetType() == QueueItemType_Server)
+		if (pItem->GetType() == QueueItemType::Server)
 			pSkip = pItem;
 		else if (pItem->GetTopLevelItem() == pSkip)
 			continue;
@@ -3073,7 +3072,7 @@ void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 		return;
 	}
 
-	if (pEngineData->pItem->GetType() == QueueItemType_File)
+	if (pEngineData->pItem->GetType() == QueueItemType::File)
 		pEngineData->state = t_EngineData::transfer;
 	else
 		pEngineData->state = t_EngineData::mkdir;
@@ -3335,7 +3334,7 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 			pEngineData->pStatusLineCtrl->SetEngineData(pEngineData);
 		}
 
-		if (pNewEngineData->pItem->GetType() == QueueItemType_File)
+		if (pNewEngineData->pItem->GetType() == QueueItemType::File)
 			pNewEngineData->state = t_EngineData::transfer;
 		else
 			pNewEngineData->state = t_EngineData::mkdir;
@@ -3419,7 +3418,7 @@ void CQueueView::RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString&
 	if (!pEngineData || !pEngineData->pItem)
 		return;
 
-	if (pEngineData->pItem->GetType() != QueueItemType_File)
+	if (pEngineData->pItem->GetType() != QueueItemType::File)
 		return;
 
 	CFileItem* pFile = (CFileItem*)pEngineData->pItem;

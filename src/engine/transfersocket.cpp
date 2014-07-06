@@ -13,7 +13,7 @@ BEGIN_EVENT_TABLE(CTransferSocket, wxEvtHandler)
 	EVT_IOTHREAD(wxID_ANY, CTransferSocket::OnIOThreadEvent)
 END_EVENT_TABLE()
 
-CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, enum TransferMode transferMode)
+CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, TransferMode transferMode)
 {
 	m_pEngine = pEngine;
 	m_pControlSocket = pControlSocket;
@@ -56,12 +56,12 @@ CTransferSocket::~CTransferSocket()
 
 	if (m_pControlSocket)
 	{
-		if (m_transferMode == upload || m_transferMode == download)
+		if (m_transferMode == TransferMode::upload || m_transferMode == TransferMode::download)
 		{
 			CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
 			if (pData && pData->pIOThread)
 			{
-				if (m_transferMode == download)
+				if (m_transferMode == TransferMode::download)
 					FinalizeWrite();
 				pData->pIOThread->SetEventHandler(0);
 			}
@@ -268,7 +268,7 @@ void CTransferSocket::OnReceive()
 		return;
 	}
 
-	if (m_transferMode == list)
+	if (m_transferMode == TransferMode::list)
 	{
 		for (;;)
 		{
@@ -312,7 +312,7 @@ void CTransferSocket::OnReceive()
 			}
 		}
 	}
-	else if (m_transferMode == download)
+	else if (m_transferMode == TransferMode::download)
 	{
 		for (;;)
 		{
@@ -355,7 +355,7 @@ void CTransferSocket::OnReceive()
 			}
 		}
 	}
-	else if (m_transferMode == resumetest)
+	else if (m_transferMode == TransferMode::resumetest)
 	{
 		for (;;)
 		{
@@ -419,7 +419,7 @@ void CTransferSocket::OnSend()
 		return;
 	}
 
-	if (m_transferMode != upload)
+	if (m_transferMode != TransferMode::upload)
 		return;
 
 	int error;
@@ -477,7 +477,7 @@ void CTransferSocket::OnClose(int error)
 		}
 	}
 
-	if (m_transferMode == upload)
+	if (m_transferMode == TransferMode::upload)
 	{
 		if (m_shutdown && m_pTlsSocket)
 		{
@@ -519,7 +519,7 @@ void CTransferSocket::OnClose(int error)
 		return;
 	}
 
-	if (m_transferMode == resumetest) {
+	if (m_transferMode == TransferMode::resumetest) {
 		if (m_transferBufferLen != 1) {
 			TransferEnd(TransferEndReason::failed_resumetest);
 			return;
@@ -573,7 +573,7 @@ void CTransferSocket::SetActive()
 {
 	if (m_transferEndReason != TransferEndReason::none)
 		return;
-	if (m_transferMode == download || m_transferMode == upload)
+	if (m_transferMode == TransferMode::download || m_transferMode == TransferMode::upload)
 	{
 		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
 		if (pData && pData->pIOThread)
@@ -728,9 +728,9 @@ void CTransferSocket::OnIOThreadEvent(CIOThreadEvent&)
 	if (!m_bActive || m_transferEndReason != TransferEndReason::none)
 		return;
 
-	if (m_transferMode == download)
+	if (m_transferMode == TransferMode::download)
 		OnReceive();
-	else if (m_transferMode == upload)
+	else if (m_transferMode == TransferMode::upload)
 		OnSend();
 }
 

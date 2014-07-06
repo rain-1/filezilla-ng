@@ -127,11 +127,11 @@ public:
 		const wxString& localFile, const wxString& remoteFile,
 		const CLocalPath& localPath, const CServerPath& remotePath,
 		const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit = CEditHandler::none,
-		QueuePriority priority = priority_normal);
+		QueuePriority priority = QueuePriority::normal);
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
 	bool QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject);
-	int QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const enum CFileExistsNotification::OverwriteAction defaultFileExistsAction);
+	int QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const CFileExistsNotification::OverwriteAction defaultFileExistsAction);
 	bool QueueFolder(bool queueOnly, bool download, const CLocalPath& localPath, const CServerPath& remotePath, const CServer& server);
 
 	bool empty() const;
@@ -141,7 +141,7 @@ public:
 
 	// This sets the default file exists action for all files currently in queue.
 	// This includes queued folders which are yet to be processed
-	void SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const enum TransferDirection direction);
+	void SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction);
 
 	void UpdateItemSize(CFileItem* pItem, wxLongLong size);
 
