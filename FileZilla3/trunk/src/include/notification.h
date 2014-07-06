@@ -93,7 +93,7 @@ public:
 	virtual enum NotificationId GetID() const;
 
 	int nReplyCode;
-	enum Command commandId;
+	Command commandId;
 };
 
 // You get this type of notification everytime a directory listing has been

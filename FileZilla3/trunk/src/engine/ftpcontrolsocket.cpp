@@ -41,7 +41,7 @@ EVT_TIMER(wxID_ANY, CFtpControlSocket::OnIdleTimer)
 END_EVENT_TABLE()
 
 CRawTransferOpData::CRawTransferOpData()
-	: COpData(cmd_rawtransfer)
+	: COpData(Command::rawtransfer)
 	, pOldData()
 	, bPasv(true)
 	, bTriedPasv()
@@ -160,7 +160,7 @@ class CFtpDeleteOpData : public COpData
 {
 public:
 	CFtpDeleteOpData()
-		: COpData(cmd_delete)
+		: COpData(Command::del)
 		, omitPath()
 		, m_needSendListing()
 		, m_deleteFailed()
@@ -229,7 +229,7 @@ void CFtpControlSocket::OnReceive()
 			if (error != EAGAIN)
 			{
 				LogMessage(MessageType::Error, _("Could not read from socket: %s"), CSocket::GetErrorDescription(error).c_str());
-				if (GetCurrentCommandId() != cmd_connect)
+				if (GetCurrentCommandId() != Command::connect)
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				DoClose();
 			}
@@ -288,7 +288,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 	LogMessageRaw(MessageType::Response, line);
 	SetAlive();
 
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_connect)
+	if (m_pCurOpData && m_pCurOpData->opId == Command::connect)
 	{
 		CFtpLogonOpData* pData = reinterpret_cast<CFtpLogonOpData *>(m_pCurOpData);
 		if (pData->waitChallenge)
@@ -464,40 +464,40 @@ void CFtpControlSocket::ParseResponse()
 	enum Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
-	case cmd_connect:
+	case Command::connect:
 		LogonParseResponse();
 		break;
-	case cmd_list:
+	case Command::list:
 		ListParseResponse();
 		break;
-	case cmd_cwd:
+	case Command::cwd:
 		ChangeDirParseResponse();
 		break;
-	case cmd_transfer:
+	case Command::transfer:
 		FileTransferParseResponse();
 		break;
-	case cmd_raw:
+	case Command::raw:
 		RawCommandParseResponse();
 		break;
-	case cmd_delete:
+	case Command::del:
 		DeleteParseResponse();
 		break;
-	case cmd_removedir:
+	case Command::removedir:
 		RemoveDirParseResponse();
 		break;
-	case cmd_mkdir:
+	case Command::mkdir:
 		MkdirParseResponse();
 		break;
-	case cmd_rename:
+	case Command::rename:
 		RenameParseResponse();
 		break;
-	case cmd_chmod:
+	case Command::chmod:
 		ChmodParseResponse();
 		break;
-	case cmd_rawtransfer:
+	case Command::rawtransfer:
 		TransferParseResponse();
 		break;
-	case cmd_none:
+	case Command::none:
 		LogMessage(MessageType::Debug_Verbose, _T("Out-of-order reply, ignoring."));
 		break;
 	default:
@@ -1280,7 +1280,7 @@ class CFtpListOpData : public COpData, public CFtpTransferOpData
 {
 public:
 	CFtpListOpData()
-		: COpData(cmd_list)
+		: COpData(Command::list)
 		, fallback_to_current()
 		, m_pDirectoryListingParser()
 		, refresh()
@@ -1799,7 +1799,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 
 	m_repliesToSkip = m_pendingReplies;
 
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_transfer)
+	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer)
 	{
 		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 		if (pData->tranferCommandSent)
@@ -1830,14 +1830,14 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 			}
 		}
 	}
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_delete && !(nErrorCode & FZ_REPLY_DISCONNECTED))
+	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 	{
 		CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 		if (pData->m_needSendListing)
 			m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
 	}
 
-	if (m_pCurOpData && m_pCurOpData->opId == cmd_rawtransfer &&
+	if (m_pCurOpData && m_pCurOpData->opId == Command::rawtransfer &&
 		nErrorCode != FZ_REPLY_OK)
 	{
 		CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
@@ -1886,27 +1886,27 @@ int CFtpControlSocket::SendNextCommand()
 
 	switch (m_pCurOpData->opId)
 	{
-	case cmd_list:
+	case Command::list:
 		return ListSend();
-	case cmd_connect:
+	case Command::connect:
 		return LogonSend();
-	case cmd_cwd:
+	case Command::cwd:
 		return ChangeDirSend();
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferSend();
-	case cmd_mkdir:
+	case Command::mkdir:
 		return MkdirSend();
-	case cmd_rename:
+	case Command::rename:
 		return RenameSend();
-	case cmd_chmod:
+	case Command::chmod:
 		return ChmodSend();
-	case cmd_rawtransfer:
+	case Command::rawtransfer:
 		return TransferSend();
-	case cmd_raw:
+	case Command::raw:
 		return RawCommandSend();
-	case cmd_delete:
+	case Command::del:
 		return DeleteSend();
-	case cmd_removedir:
+	case Command::removedir:
 		return RemoveDirSend();
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
@@ -2002,7 +2002,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 	pData->target = target;
 	pData->link_discovery = link_discovery;
 
-	if (pData->pNextOpData && pData->pNextOpData->opId == cmd_transfer &&
+	if (pData->pNextOpData && pData->pNextOpData->opId == Command::transfer &&
 		!static_cast<CFtpFileTransferOpData *>(pData->pNextOpData)->download)
 	{
 		pData->tryMkdOnFail = true;
@@ -2836,7 +2836,7 @@ void CFtpControlSocket::TransferEnd()
 	// We can safely ignore it.
 	// It does not cause problems, since before creating the next transfer socket, other
 	// messages which were added to the queue later than this one will be processed first.
-	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != cmd_rawtransfer)
+	if (!m_pCurOpData || !m_pTransferSocket || GetCurrentCommandId() != Command::rawtransfer)
 	{
 		LogMessage(MessageType::Debug_Verbose, _T("Call to TransferEnd at unusual time, ignoring"));
 		return;
@@ -2890,7 +2890,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 	{
 	case reqId_fileexists:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != cmd_transfer)
+			if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer)
 			{
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pNotification->GetRequestID());
 				return false;
@@ -2972,7 +2972,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 		break;
 	case reqId_interactiveLogin:
 		{
-			if (!m_pCurOpData || m_pCurOpData->opId != cmd_connect)
+			if (!m_pCurOpData || m_pCurOpData->opId != Command::connect)
 			{
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
 				return false;
@@ -3008,7 +3008,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				return false;
 			}
 
-			if (m_pCurOpData && m_pCurOpData->opId == cmd_connect &&
+			if (m_pCurOpData && m_pCurOpData->opId == Command::connect &&
 				m_pCurOpData->opState == LOGON_AUTH_WAIT)
 			{
 				m_pCurOpData->opState = LOGON_LOGON;
@@ -3029,7 +3029,7 @@ class CRawCommandOpData : public COpData
 {
 public:
 	CRawCommandOpData(const wxString& command)
-		: COpData(cmd_raw)
+		: COpData(Command::raw)
 	{
 		m_command = command;
 	}
@@ -3214,7 +3214,7 @@ class CFtpRemoveDirOpData : public COpData
 {
 public:
 	CFtpRemoveDirOpData()
-		: COpData(cmd_removedir)
+		: COpData(Command::removedir)
 		, omitPath()
 	{
 	}
@@ -3558,7 +3558,7 @@ class CFtpRenameOpData : public COpData
 {
 public:
 	CFtpRenameOpData(const CRenameCommand& command)
-		: COpData(cmd_rename), m_cmd(command)
+		: COpData(Command::rename), m_cmd(command)
 	{
 		m_useAbsolute = false;
 	}
@@ -3711,7 +3711,7 @@ class CFtpChmodOpData : public COpData
 {
 public:
 	CFtpChmodOpData(const CChmodCommand& command)
-		: COpData(cmd_chmod), m_cmd(command)
+		: COpData(Command::chmod), m_cmd(command)
 	{
 		m_useAbsolute = false;
 	}
@@ -4595,19 +4595,19 @@ int CFtpControlSocket::ParseSubcommandResult(int prevResult)
 
 	switch (m_pCurOpData->opId)
 	{
-	case cmd_cwd:
+	case Command::cwd:
 		return ChangeDirSubcommandResult(prevResult);
-	case cmd_list:
+	case Command::list:
 		return ListSubcommandResult(prevResult);
-	case cmd_transfer:
+	case Command::transfer:
 		return FileTransferSubcommandResult(prevResult);
-	case cmd_delete:
+	case Command::del:
 		return DeleteSubcommandResult(prevResult);
-	case cmd_removedir:
+	case Command::removedir:
 		return RemoveDirSubcommandResult(prevResult);
-	case cmd_rename:
+	case Command::rename:
 		return RenameSubcommandResult(prevResult);
-	case cmd_chmod:
+	case Command::chmod:
 		return ChmodSubcommandResult(prevResult);
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in ParseSubcommandResult"), m_pCurOpData->opId);

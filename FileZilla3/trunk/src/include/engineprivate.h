@@ -31,7 +31,7 @@ public:
 	bool IsConnected() const;
 
 	const CCommand *GetCurrentCommand() const;
-	enum Command GetCurrentCommandId() const;
+	Command GetCurrentCommandId() const;
 
 	COptionsBase *GetOptions() { return m_pOptions; }
 

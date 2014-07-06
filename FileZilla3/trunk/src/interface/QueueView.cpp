@@ -983,12 +983,12 @@ bool CQueueView::TryStartNextTransfer()
 void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification* pNotification)
 {
 	if (pNotification->nReplyCode & FZ_REPLY_DISCONNECTED &&
-		pNotification->commandId == cmd_none)
+		pNotification->commandId == ::Command::none)
 	{
 		// Queue is not interested in disconnect notifications
 		return;
 	}
-	wxASSERT(pNotification->commandId != cmd_none);
+	wxASSERT(pNotification->commandId != ::Command::none);
 
 	// Cancel pending requests
 	m_pAsyncRequestQueue->ClearPending(pEngineData->pEngine);
@@ -1423,7 +1423,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		{
 			engineData.pItem->m_statusMessage = _("Disconnecting from previous server");
 			RefreshItem(engineData.pItem);
-			if (engineData.pEngine->Command(CDisconnectCommand()) == FZ_REPLY_WOULDBLOCK)
+			if (engineData.pEngine->Execute(CDisconnectCommand()) == FZ_REPLY_WOULDBLOCK)
 				return;
 
 			if (engineData.lastServer.GetLogonType() == ASK && !CLoginManager::Get().GetPassword(engineData.lastServer, true))
@@ -1453,7 +1453,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			engineData.pItem->m_statusMessage = _("Connecting");
 			RefreshItem(engineData.pItem);
 
-			int res = engineData.pEngine->Command(CConnectCommand(engineData.lastServer, false));
+			int res = engineData.pEngine->Execute(CConnectCommand(engineData.lastServer, false));
 
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
 			if (res == FZ_REPLY_WOULDBLOCK)
@@ -1490,7 +1490,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			fileItem->m_statusMessage = _("Transferring");
 			RefreshItem(engineData.pItem);
 
-			int res = engineData.pEngine->Command(CFileTransferCommand(fileItem->GetLocalPath().GetPath() + fileItem->GetLocalFile(), fileItem->GetRemotePath(),
+			int res = engineData.pEngine->Execute(CFileTransferCommand(fileItem->GetLocalPath().GetPath() + fileItem->GetLocalFile(), fileItem->GetRemotePath(),
 												fileItem->GetRemoteFile(), fileItem->Download(), fileItem->m_transferSettings));
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
 			if (res == FZ_REPLY_WOULDBLOCK)
@@ -1526,7 +1526,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			fileItem->m_statusMessage = _("Creating directory");
 			RefreshItem(engineData.pItem);
 
-			int res = engineData.pEngine->Command(CMkdirCommand(fileItem->GetRemotePath()));
+			int res = engineData.pEngine->Execute(CMkdirCommand(fileItem->GetRemotePath()));
 
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
 			if (res == FZ_REPLY_WOULDBLOCK)
@@ -1600,7 +1600,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 				wxASSERT(pEngineData->pEngine);
 				if (!pEngineData->pEngine)
 					continue;
-				pEngineData->pEngine->Command(CCancelCommand());
+				pEngineData->pEngine->Execute(CCancelCommand());
 			}
 		}
 
@@ -2457,7 +2457,7 @@ bool CQueueView::StopItem(CFileItem* item)
 	}
 	else
 	{
-		item->m_pEngineData->pEngine->Command(CCancelCommand());
+		item->m_pEngineData->pEngine->Execute(CCancelCommand());
 		return false;
 	}
 }
@@ -2768,7 +2768,7 @@ void CQueueView::TryRefreshListings()
 		m_last_refresh_listing_time = pListing->m_firstListTime;
 
 		CListCommand command(pListing->path, _T(""), LIST_FLAG_AVOID);
-		int res = pEngineData->pEngine->Command(command);
+		int res = pEngineData->pEngine->Execute(command);
 		if (res != FZ_REPLY_WOULDBLOCK)
 			continue;
 
@@ -2949,7 +2949,7 @@ void CQueueView::OnTimer(wxTimerEvent& event)
 			pData->m_idleDisconnectTimer = 0;
 
 			if (pData->pEngine->IsConnected())
-				pData->pEngine->Command(CDisconnectCommand());
+				pData->pEngine->Execute(CDisconnectCommand());
 		}
 	}
 
