@@ -1404,9 +1404,9 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
-msgstr "หรืออีกวิธีหนึ่ง, เยี่ยมชม http://filezilla-project.org เพื่อดาวน์โหลดรุ่นล่าสุด"
+msgstr "หรืออีกวิธีหนึ่ง, เยี่ยมชม https://filezilla-project.org/ เพื่อดาวน์โหลดรุ่นล่าสุด"
 
 #: ../../locales/../src/interface/QueueView.cpp:2051
 #, c-format
@@ -5001,24 +5001,24 @@ msgstr "แพลตฟอร์ม:"
 
 #: resources.h:251
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
-msgstr "โปรดตรวจสอบ http://filezilla-project.org สำหรับรุ่นล่าสุดของ FileZilla"
+msgstr "โปรดตรวจสอบ https://filezilla-project.org/ สำหรับรุ่นล่าสุดของ FileZilla"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"โปรดตรวจสอบบน http://filezilla-project.org/probe.php ว่าแม่ข่ายนั้นกำลังทำงาน "
+"โปรดตรวจสอบบน https://filezilla-project.org/probe.php ว่าแม่ข่ายนั้นกำลังทำงาน "
 "และตรวจสอบการตั้งค่าของคุณอีกครั้งอย่างระมัดระวัง"
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
-"โปรดตรวจสอบตัวจัดการแพ็คเกจในระบบของคุณสำหรับแพ็คเกจรุ่นล่าสุด หรือไปที่ http://filezilla-"
+"โปรดตรวจสอบตัวจัดการแพ็คเกจในระบบของคุณสำหรับแพ็คเกจรุ่นล่าสุด หรือไปที่ https://filezilla-"
 "project.org เพื่อดาวน์โหลดซอร์สโค้ดของ FileZilla"
 
 #: resources.h:695
@@ -5220,10 +5220,10 @@ msgstr ""
 #: resources.h:900 resources.h:906
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"โปรดอ่าน http://wiki.filezilla-project.org/Date_and_Time_formatting "
+"โปรดอ่าน https://wiki.filezilla-project.org/Date_and_Time_formatting "
 "สำหรับรายละเอียดเพิ่มเติม"
 
 #: resources.h:247
@@ -5293,16 +5293,16 @@ msgstr ""
 
 #: resources.h:254
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
-msgstr "โปรดไปที่ http://filezilla-project.org สำหรับข้อมูลเพิ่มเติมเกี่ยวกับ FileZilla"
+msgstr "โปรดไปที่ https://filezilla-project.org/ สำหรับข้อมูลเพิ่มเติมเกี่ยวกับ FileZilla"
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
-msgstr "โปรดเยี่ยมชม http://filezilla-project.org เพื่อดาวน์โหลดรุ่นล่าสุด"
+msgstr "โปรดเยี่ยมชม https://filezilla-project.org/ เพื่อดาวน์โหลดรุ่นล่าสุด"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:184
 #: ../../locales/../src/interface/verifycertdialog.cpp:185
@@ -5789,8 +5789,8 @@ msgstr "ข้อมูลความปลอดภัย"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "ดูเพิ่มเติมที่: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "ดูเพิ่มเติมที่: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:376
 msgid "Sele&ct server"

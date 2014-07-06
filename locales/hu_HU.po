@@ -1477,10 +1477,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"Vagy pedig meglátogathatja a http://filezilla-project.org webcímet a "
+"Vagy pedig meglátogathatja a https://filezilla-project.org/ webcímet a "
 "legfrissebb verzió letöltéséhez."
 
 #: ../../locales/../src/interface/QueueView.cpp:2051
@@ -5294,27 +5294,27 @@ msgstr ""
 
 #: resources.h:251
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Kérem ellenőrizze a http://filezilla-project.org webcímen a FileZilla "
+"Kérem ellenőrizze a https://filezilla-project.org/ webcímen a FileZilla "
 "legfrissebb verzióját."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Kérem ellenőrizze a http://filezilla-project.org/probe.php webcímen, hogy a "
+"Kérem ellenőrizze a https://filezilla-project.org/probe.php webcímen, hogy a "
 "kiszolgáló fut-e, és figyelmesen ellenőrizze a beállításait ismét."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Kérem ellenőrizze a rendszer csomagkezelőjével, hogy van-e frissebb csomag, "
-"vagy látogassa meg a http://filezilla-project.org webcímet a FileZilla "
+"vagy látogassa meg a https://filezilla-project.org/ webcímet a FileZilla "
 "forráskódjának letöltéséhez."
 
 #: resources.h:695
@@ -5338,7 +5338,7 @@ msgid ""
 "settings again."
 msgstr ""
 "Győződjön meg róla, hogy az internetkapcsolata stabil, és ellenőrizze a "
-"http://filezilla-project.org/probe.php webcímen, hogy a kiszolgáló fut."
+"https://filezilla-project.org/probe.php webcímen, hogy a kiszolgáló fut."
 
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:70
 msgid "Please enter a custom date format."
@@ -5555,10 +5555,10 @@ msgstr ""
 #: resources.h:900 resources.h:906
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Látogassa meg az alábbi webcímet a részletes formázási tudnivalókért: http://"
+"Látogassa meg az alábbi webcímet a részletes formázási tudnivalókért: https://"
 "wiki.filezilla-project.org/Date_and_Time_formatting"
 
 #: resources.h:247
@@ -5628,19 +5628,19 @@ msgstr ""
 
 #: resources.h:254
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Kérem látogassa meg a http://filezilla-project.org webcímet, ha több "
+"Kérem látogassa meg a https://filezilla-project.org/ webcímet, ha több "
 "információt szeretne a FileZilla-ról."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"Kérem látogassa meg a http://filezilla-project.org webcímet a legújabb "
+"Kérem látogassa meg a https://filezilla-project.org/ webcímet a legújabb "
 "verzió letöltéséhez."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:184
@@ -6144,7 +6144,7 @@ msgstr "Biztonsági információk"
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 #, fuzzy
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr "Alapértelmezett: http://ip.filezilla-project.org/ip.php"
 
 #: resources.h:376

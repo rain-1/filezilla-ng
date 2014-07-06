@@ -1445,10 +1445,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"Namiesto toho navštívte http://filezilla-project.org a stiahnite si "
+"Namiesto toho navštívte https://filezilla-project.org/ a stiahnite si "
 "najnovšiu verziu."
 
 #: ../../locales/../src/interface/QueueView.cpp:2051
@@ -5141,27 +5141,27 @@ msgstr "Platforma:"
 
 #: resources.h:250
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Prosím, skontrolujte na http://filezilla-project.org či máte najnovšiu "
+"Prosím, skontrolujte na https://filezilla-project.org/ či máte najnovšiu "
 "verziu aplikácie FileZilla."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Prosím, skontrolujte na http://filezilla-project.org/probe.php že server "
+"Prosím, skontrolujte na https://filezilla-project.org/probe.php že server "
 "beží a pozorne znova prekontrolujte vaše nastavenia."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Prosím, skontrolujte aktuálny balík v systéme pre správu balíkov vášho "
-"systému alebo navštívte http://filezilla-project.org a stiahnite si zdrojový "
+"systému alebo navštívte https://filezilla-project.org/ a stiahnite si zdrojový "
 "kód aplikácie FileZilla."
 
 #: resources.h:685
@@ -5384,10 +5384,10 @@ msgstr ""
 #: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Prosím, prečítajte si http://wiki.filezilla-project.org/"
+"Prosím, prečítajte si https://wiki.filezilla-project.org/"
 "Date_and_Time_formatting kde sa dozviete viac informácií."
 
 #: resources.h:246
@@ -5458,19 +5458,19 @@ msgstr ""
 
 #: resources.h:253
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Prosím, navštívte http://filezilla-project.org kde sa dozviete viac "
+"Prosím, navštívte https://filezilla-project.org/ kde sa dozviete viac "
 "informácií o aplikácii FileZilla."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"Prosím, navštívte http://filezilla-project.org a stiahnite si najnovšiu "
+"Prosím, navštívte https://filezilla-project.org/ a stiahnite si najnovšiu "
 "verziu."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:184
@@ -5946,8 +5946,8 @@ msgstr "Informácie o bezpečnosti"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Pozri aj: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Pozri aj: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:375
 msgid "Sele&ct server"
@@ -8023,9 +8023,9 @@ msgstr "wxWidgets:"
 
 #~ msgid ""
 #~ "Please make sure you are running the latest version of FileZilla. Visit "
-#~ "http://filezilla-project.org for details."
+#~ "https://filezilla-project.org/ for details."
 #~ msgstr ""
-#~ "Prosím, navštívte http://filezilla-project.org a uistite sa, že používate "
+#~ "Prosím, navštívte https://filezilla-project.org/ a uistite sa, že používate "
 #~ "najnovšiu verziu aplikácie FileZilla."
 
 #~ msgid ""

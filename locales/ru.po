@@ -5122,10 +5122,10 @@ msgstr "Платформа:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Посетите http://filezilla-project.org/probe.php чтобы убедиться, что сервер "
+"Посетите https://filezilla-project.org/probe.php чтобы убедиться, что сервер "
 "работает и проверьте установки еще раз."
 
 #: resources.h:684
@@ -5347,10 +5347,10 @@ msgstr ""
 #: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Подробности на http://filezilla-project.org/wiki/index.php/"
+"Подробности на https://filezilla-project.org/wiki/index.php/"
 "Date_and_Time_formatting"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -5960,9 +5960,9 @@ msgstr "Информация о безопасности"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
-"Смотрите также: http://wiki.filezilla-project.org/Network_Configuration"
+"Смотрите также: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:362
 msgid "Sele&ct server"
@@ -8032,10 +8032,10 @@ msgstr "wxWidgets:"
 #~ msgstr "Дополнительные настройки:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Можете посетить http://filezilla-project.org чтобы скачать последнюю "
+#~ "Можете посетить https://filezilla-project.org/ чтобы скачать последнюю "
 #~ "версию."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8087,19 +8087,19 @@ msgstr "wxWidgets:"
 #~ msgstr "Архив"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Посетите http://filezilla-project.org чтобы скачать последнюю версию "
+#~ "Посетите https://filezilla-project.org/ чтобы скачать последнюю версию "
 #~ "FileZilla."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Проверьте ваш менеджер архивов на предмет обновлений, либо посетите "
-#~ "http://filezilla-project.org , чтобы скачать исходный код FileZilla."
+#~ "https://filezilla-project.org/ , чтобы скачать исходный код FileZilla."
 
 #~ msgid ""
 #~ "Please retry downloading the update. Possible reasons if the problem "
@@ -8109,17 +8109,17 @@ msgstr "wxWidgets:"
 #~ "возможные причины (перечислены в порядке уменьшения вероятности):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Пожалуйста, посетите http://filezilla-project.org для получения "
+#~ "Пожалуйста, посетите https://filezilla-project.org/ для получения "
 #~ "дополнительной информации о FileZilla."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Посетите http://filezilla-project.org чтобы скачать последнюю версию."
+#~ "Посетите https://filezilla-project.org/ чтобы скачать последнюю версию."
 
 #~ msgid "Resolving hostname"
 #~ msgstr "Определение имени хоста"

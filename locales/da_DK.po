@@ -5113,10 +5113,10 @@ msgstr "Platform:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Kontroller på http://filezilla-project.org/probe.php, at serverem kører, og "
+"Kontroller på https://filezilla-project.org/probe.php, at serverem kører, og "
 "kontroller omhyggeligt dine indstillinger en gang til."
 
 #: resources.h:684
@@ -5335,10 +5335,10 @@ msgstr ""
 #: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Besøg http://wiki.filezilla-project.org/Date_and_Time_formatting for flere "
+"Besøg https://wiki.filezilla-project.org/Date_and_Time_formatting for flere "
 "oplysninger"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -5952,8 +5952,8 @@ msgstr "Sikkerhedsinformation"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Se også: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Se også: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:362
 msgid "Sele&ct server"
@@ -8008,9 +8008,9 @@ msgstr "wxWidgets:"
 #~ msgstr "Avancerede indstillinger:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
-#~ msgstr "Besøg http://filezilla-project.org for at hente den nyeste version."
+#~ msgstr "Besøg https://filezilla-project.org/ for at hente den nyeste version."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
 #~ msgstr "Sø&g efter daglige byg af FileZilla"
@@ -8061,19 +8061,19 @@ msgstr "wxWidgets:"
 #~ msgstr "Pakke"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Kontroller på http://filezilla-project.org, om du har den nyeste version "
+#~ "Kontroller på https://filezilla-project.org/, om du har den nyeste version "
 #~ "af FileZilla."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Kontroller pakke-manageren på dit system for en opdateret pakke, eller "
-#~ "besøg http://filezilla-project.org for at hente kildekoden til FileZilla."
+#~ "besøg https://filezilla-project.org/ for at hente kildekoden til FileZilla."
 
 #~ msgid ""
 #~ "Please retry downloading the update. Possible reasons if the problem "
@@ -8083,15 +8083,15 @@ msgstr "wxWidgets:"
 #~ "følgende årsager mulige (sorteret faldende efter sandsynlighed):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Besøg http://filezilla-project.org for flere oplysninger om FileZilla."
+#~ "Besøg https://filezilla-project.org/ for flere oplysninger om FileZilla."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
-#~ msgstr "Besøg http://filezilla-project.org for at hente den nyeste version."
+#~ msgstr "Besøg https://filezilla-project.org/ for at hente den nyeste version."
 
 #~ msgid "Resolving hostname"
 #~ msgstr "Kontrollerer værtsnavn"

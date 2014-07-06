@@ -5306,7 +5306,7 @@ msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Por favor compruebe en http://filezilla-project.org que el servidor está "
+"Por favor compruebe en https://filezilla-project.org/ que el servidor está "
 "activo y vuelva a comprobar cuidadosamente su configuración."
 
 #: resources.h:693
@@ -5548,10 +5548,10 @@ msgstr ""
 #: resources.h:903 resources.h:909
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Por favor lea http://wiki.filezilla-project.org/Date_and_Time_formatting "
+"Por favor lea https://wiki.filezilla-project.org/Date_and_Time_formatting "
 "para más detalles"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -6202,7 +6202,7 @@ msgstr "Información de seguridad"
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 #, fuzzy
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Vea también: http://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Vea también: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:359
 msgid "Sele&ct server"
@@ -8309,10 +8309,10 @@ msgstr "wxWidgets:"
 #~ msgstr "Opciones avanzadas:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Alternativamente, visite http://filezilla-project.org para descargar la "
+#~ "Alternativamente, visite https://filezilla-project.org/ para descargar la "
 #~ "versión más reciente."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8364,19 +8364,19 @@ msgstr "wxWidgets:"
 #~ msgstr "Paquete"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Por favor vaya a http://filezilla-project.org para obtener la versión más "
+#~ "Por favor vaya a https://filezilla-project.org/ para obtener la versión más "
 #~ "reciente de FileZilla."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Por favor compruebe con el gestor de paquetes de sus sistema si hay un "
-#~ "paquete actualizado o visite http://filezilla-project.org para descargar "
+#~ "paquete actualizado o visite https://filezilla-project.org/ para descargar "
 #~ "el código fuente de FileZilla."
 
 #~ msgid ""
@@ -8388,17 +8388,17 @@ msgstr "wxWidgets:"
 #~ "decreciente):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Por favor visite http://filezilla-project.org para más información acerca "
+#~ "Por favor visite https://filezilla-project.org/ para más información acerca "
 #~ "de FileZilla."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Por favor visite http://filezilla-project.org para descargar la versión "
+#~ "Por favor visite https://filezilla-project.org/ para descargar la versión "
 #~ "más reciente."
 
 #~ msgid "Resolving hostname"

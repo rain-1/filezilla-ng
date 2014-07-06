@@ -5386,10 +5386,10 @@ msgstr ""
 #: resources.h:903 resources.h:909
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Harap baca http://wiki.filezilla-project.org/Date_and_Time_formatting untuk "
+"Harap baca https://wiki.filezilla-project.org/Date_and_Time_formatting untuk "
 "detailnya"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570

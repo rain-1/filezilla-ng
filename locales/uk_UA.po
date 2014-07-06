@@ -5364,7 +5364,7 @@ msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Перевірте http://filezilla-project.org/probe.php чи сервер працює і ще раз "
+"Перевірте https://filezilla-project.org/probe.php чи сервер працює і ще раз "
 "уважно перевірте свої налаштування."
 
 #: resources.h:647
@@ -5597,10 +5597,10 @@ msgstr ""
 #: resources.h:857 resources.h:863
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Дізнатися про подробиці ви можете тут http://wiki.filezilla-project.org/"
+"Дізнатися про подробиці ви можете тут https://wiki.filezilla-project.org/"
 "Date_and_Time_formatting"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -6244,7 +6244,7 @@ msgstr "Інформація безпеки"
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
-"Дивіться також: http://wiki.filezilla-project.org/Network_Configuration"
+"Дивіться також: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:313
 msgid "Sele&ct server"

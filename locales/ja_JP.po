@@ -1435,10 +1435,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"最新版をダウンロードするには http://filezilla-project.org を訪問してください."
+"最新版をダウンロードするには https://filezilla-project.org/ を訪問してください."
 
 #: ../../locales/../src/interface/QueueView.cpp:2051
 #, c-format
@@ -5122,26 +5122,26 @@ msgstr "プラットフォーム:"
 
 #: resources.h:251
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"FileZilla の最新版を http://filezilla-project.org でチェックしてください."
+"FileZilla の最新版を https://filezilla-project.org/ でチェックしてください."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"http://filezilla-project.org/probe.php 上でサーバの挙動をチェックして再度注意"
+"https://filezilla-project.org/probe.php 上でサーバの挙動をチェックして再度注意"
 "深く設定をチェックしてください."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "パッケージの更新のためにシステムのパッケージ マネージャをチェックするか "
-"FileZilla のソース コードをダウンロードするために http://filezilla-project."
+"FileZilla のソース コードをダウンロードするために https://filezilla-project."
 "org を訪問してください."
 
 #: resources.h:695
@@ -5367,10 +5367,10 @@ msgstr ""
 #: resources.h:900 resources.h:906
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"詳細は http://wiki.filezilla-project.org/Date_and_Time_formatting をお読みく"
+"詳細は https://wiki.filezilla-project.org/Date_and_Time_formatting をお読みく"
 "ださい"
 
 #: resources.h:247
@@ -5441,19 +5441,19 @@ msgstr ""
 
 #: resources.h:254
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"FileZilla についてのより多くの情報は http://filezilla-project.org を訪問して"
+"FileZilla についてのより多くの情報は https://filezilla-project.org/ を訪問して"
 "ください."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"最新版をダウンロードするには http://filezilla-project.org を訪問してください."
+"最新版をダウンロードするには https://filezilla-project.org/ を訪問してください."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:184
 #: ../../locales/../src/interface/verifycertdialog.cpp:185
@@ -5943,8 +5943,8 @@ msgstr "セキュリティ情報"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "ご覧ください: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "ご覧ください: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:376
 msgid "Sele&ct server"

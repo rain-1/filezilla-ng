@@ -5234,7 +5234,7 @@ msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Այցելեք http://filezilla-project.org/probe.php կայքը՝ համոզվելու համար, որ "
+"Այցելեք https://filezilla-project.org/probe.php կայքը՝ համոզվելու համար, որ "
 "սպասարկիչը աշխատում է:"
 
 #: resources.h:647
@@ -6069,7 +6069,7 @@ msgstr "Տեղեկություն անվտանգության մասին"
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Նայեք այստեղ՝ http://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Նայեք այստեղ՝ https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:313
 msgid "Sele&ct server"
@@ -8066,7 +8066,7 @@ msgstr "խմբային գրվող"
 #, fuzzy
 msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 msgstr ""
-"Մանրամասները http://filezilla-project.org/wiki/index.php/"
+"Մանրամասները https://filezilla-project.org/wiki/index.php/"
 "Date_and_Time_formatting-ում"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:91
@@ -8161,10 +8161,10 @@ msgstr "wxWidgets:"
 #~ msgstr "Լրացուցիչ կարգավորումներ."
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Կարող եք այցելել http://filezilla-project.org՝ վերջին տարբերակը բեռնելու "
+#~ "Կարող եք այցելել https://filezilla-project.org/՝ վերջին տարբերակը բեռնելու "
 #~ "համար։"
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8216,18 +8216,18 @@ msgstr "wxWidgets:"
 #~ msgstr "Արխիվ"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Այցելեք http://filezilla-project.org կայքը՝ FileZilla-ի վերջին տարբերակը "
+#~ "Այցելեք https://filezilla-project.org/ կայքը՝ FileZilla-ի վերջին տարբերակը "
 #~ "բեռնելու համար։"
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Ստուգեք արխիվային ծրագրի նոր տարբերակը, կամ այցելեք http://filezilla-"
+#~ "Ստուգեք արխիվային ծրագրի նոր տարբերակը, կամ այցելեք https://filezilla-"
 #~ "project.org՝ FileZilla-ի հիմնաֆայլերի կոդը բեռնելու համար։"
 
 #~ msgid ""
@@ -8236,17 +8236,17 @@ msgstr "wxWidgets:"
 #~ msgstr "Կրկին փորձեք։ Հնարավոր պատճառներն են՝"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Այցելեք http://filezilla-project.org՝ FileZilla-ի մասին մանրամասն "
+#~ "Այցելեք https://filezilla-project.org/՝ FileZilla-ի մասին մանրամասն "
 #~ "տեղեկություններ ստանալու համար։"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Այցելեք http://filezilla-project.org՝ ծրագրի վերջին տարբերակը բեռնելու "
+#~ "Այցելեք https://filezilla-project.org/՝ ծրագրի վերջին տարբերակը բեռնելու "
 #~ "համար։"
 
 #~ msgid "Resolving hostname"

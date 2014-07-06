@@ -1456,11 +1456,11 @@ msgstr ""
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 #, fuzzy
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
 "დააჭირეთ შემდეგ ახალი ვერსიის ჩამოსატვირთად.\n"
-"ალტერნატივა, ეწვიეთ http://filezilla-project.org და გადმოწერეთ შედარებით "
+"ალტერნატივა, ეწვიეთ https://filezilla-project.org/ და გადმოწერეთ შედარებით "
 "ახალი ვერსია."
 
 #: ../../locales/../src/interface/sitemanager.cpp:2304
@@ -5066,20 +5066,20 @@ msgstr ""
 
 #: resources.h:249
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 
 #: resources.h:679
@@ -5268,7 +5268,7 @@ msgstr ""
 #: resources.h:882 resources.h:888
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
 
@@ -5332,14 +5332,14 @@ msgstr ""
 
 #: resources.h:252
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
 
@@ -5801,7 +5801,7 @@ msgstr "აგების ინფორმაცია"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
 
 #: resources.h:374

@@ -1452,10 +1452,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1118
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"Alternativ, vizitează http://filezilla-project.org pentru a descărca cea mai "
+"Alternativ, vizitează https://filezilla-project.org/ pentru a descărca cea mai "
 "recentă versiune."
 
 #: ../../locales/../src/interface/QueueView.cpp:2042
@@ -5238,27 +5238,27 @@ msgstr "Platformă:"
 
 #: resources.h:260
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Vizitează http://filezilla-project.org pentru cea mai nouă versiune de "
+"Vizitează https://filezilla-project.org/ pentru cea mai nouă versiune de "
 "FileZilla."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Verifică la http://filezilla-project.org/probe.php dacă serverul rulează și "
+"Verifică la https://filezilla-project.org/probe.php dacă serverul rulează și "
 "apoi reverifică cu atenție setările programului."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1091
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Verifică cu administratorul de pachete al SO dacă există un pachet "
-"actualizat sau vizitează http://filezilla-project.org pentru a descărca "
+"actualizat sau vizitează https://filezilla-project.org/ pentru a descărca "
 "codul sursă FileZilla."
 
 #: resources.h:706
@@ -5479,10 +5479,10 @@ msgstr ""
 #: resources.h:911 resources.h:917
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Pentru detalii citește http://wiki.filezilla-project.org/"
+"Pentru detalii citește https://wiki.filezilla-project.org/"
 "Date_and_Time_formatting"
 
 #: resources.h:256
@@ -5554,19 +5554,19 @@ msgstr ""
 
 #: resources.h:263
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Vizitează http://filezilla-project.org pentru mai multe informații despre "
+"Vizitează https://filezilla-project.org/ pentru mai multe informații despre "
 "FileZilla."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1089
 #: ../../locales/../src/interface/updatewizard.cpp:1111
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"Vizitează http://filezilla-project.org pentru a descărca cea mai recentă "
+"Vizitează https://filezilla-project.org/ pentru a descărca cea mai recentă "
 "versiune."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
@@ -6091,8 +6091,8 @@ msgstr "Informații de Securitate"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Vezi și: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Vezi și: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:385
 msgid "Sele&ct server"
@@ -8279,10 +8279,10 @@ msgstr "wxWidgets:"
 
 #~ msgid ""
 #~ "Please make sure you are running the latest version of FileZilla. Visit "
-#~ "http://filezilla-project.org for details."
+#~ "https://filezilla-project.org/ for details."
 #~ msgstr ""
-#~ "Asigurați-vă că rulați ultima versiune de FileZilla. Vizitați http://"
-#~ "filezilla-project.org pentru detalii."
+#~ "Asigurați-vă că rulați ultima versiune de FileZilla. Vizitați https://"
+#~ "filezilla-project.org/ pentru detalii."
 
 #~ msgid ""
 #~ "Submit a bug report if this problem persists even with the latest version "
