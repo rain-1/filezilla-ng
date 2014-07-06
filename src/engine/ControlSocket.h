@@ -97,7 +97,7 @@ public:
 	bool link_discovery;
 };
 
-enum TransferEndReason
+enum class TransferEndReason
 {
 	none,
 	successful,

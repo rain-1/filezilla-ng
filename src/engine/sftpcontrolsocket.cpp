@@ -35,7 +35,7 @@ enum filetransferStates
 
 struct sftp_message
 {
-	sftpEventTypes type;
+	sftpEvent type;
 	wxString text;
 	union
 	{
@@ -194,37 +194,41 @@ protected:
 	virtual ExitCode Entry()
 	{
 		wxInputStream* pInputStream = m_pProcess->GetInputStream();
-		char eventType;
-
 		bool error = false;
 		while (!pInputStream->Eof() && !error)
 		{
-			pInputStream->Read(&eventType, 1);
+			char readType;
+			pInputStream->Read(&readType, 1);
 			if (pInputStream->LastRead() != 1)
 				break;
 
-			eventType -= '0';
+			readType -= '0';
+
+			sftpEvent eventType = sftpEvent::Unknown;
+			if( readType > 0 && readType <= static_cast<char>(sftpEvent::max) ) {
+				eventType = static_cast<sftpEvent>(readType);
+			}
 
 			switch(eventType)
 			{
-			case sftpReply:
-			case sftpListentry:
-			case sftpRequestPreamble:
-			case sftpRequestInstruction:
-			case sftpDone:
-			case sftpError:
-			case sftpVerbose:
-			case sftpStatus:
-			case sftpKexAlgorithm:
-			case sftpKexHash:
-			case sftpCipherClientToServer:
-			case sftpCipherServerToClient:
-			case sftpMacClientToServer:
-			case sftpMacServerToClient:
-			case sftpHostkey:
+			case sftpEvent::Reply:
+			case sftpEvent::Listentry:
+			case sftpEvent::RequestPreamble:
+			case sftpEvent::RequestInstruction:
+			case sftpEvent::Done:
+			case sftpEvent::Error:
+			case sftpEvent::Verbose:
+			case sftpEvent::Status:
+			case sftpEvent::KexAlgorithm:
+			case sftpEvent::KexHash:
+			case sftpEvent::CipherClientToServer:
+			case sftpEvent::CipherServerToClient:
+			case sftpEvent::MacClientToServer:
+			case sftpEvent::MacServerToClient:
+			case sftpEvent::Hostkey:
 				{
 					sftp_message* message = new sftp_message;
-					message->type = (sftpEventTypes)eventType;
+					message->type = eventType;
 					message->text = ReadLine(pInputStream, error).c_str();
 					if (error)
 					{
@@ -234,7 +238,7 @@ protected:
 					SendMessage(message);
 				}
 				break;
-			case sftpRequest:
+			case sftpEvent::Request:
 				{
 					const wxString& line = ReadLine(pInputStream, error);
 					if (error || line.empty())
@@ -257,28 +261,28 @@ protected:
 					else if (requestType == sftpReqPassword)
 					{
 						sftp_message* message = new sftp_message;
-						message->type = (sftpEventTypes)eventType;
+						message->type = eventType;
 						message->reqType = sftpReqPassword;
 						message->text = line.Mid(1).c_str();
 						SendMessage(message);
 					}
 				}
 				break;
-			case sftpRecv:
-			case sftpSend:
-			case sftpUsedQuotaRecv:
-			case sftpUsedQuotaSend:
+			case sftpEvent::Recv:
+			case sftpEvent::Send:
+			case sftpEvent::UsedQuotaRecv:
+			case sftpEvent::UsedQuotaSend:
 				{
 					sftp_message* message = new sftp_message;
-					message->type = (sftpEventTypes)eventType;
+					message->type = eventType;
 					SendMessage(message);
 				}
 				break;
-			case sftpRead:
-			case sftpWrite:
+			case sftpEvent::Read:
+			case sftpEvent::Write:
 				{
 					sftp_message* message = new sftp_message;
-					message->type = (sftpEventTypes)eventType;
+					message->type = eventType;
 					message->value = ReadNumber(pInputStream, error);
 					if (error)
 					{
@@ -294,7 +298,7 @@ protected:
 			default:
 				{
 					char tmp[2];
-					tmp[0] = eventType + '0';
+					tmp[0] = static_cast<char>(eventType) + '0';
 					tmp[1] = 0;
 					m_pOwner->LogMessage(Debug_Info, _T("Unknown eventType: %s"), tmp);
 				}
@@ -304,7 +308,7 @@ protected:
 loopexit:
 
 		return reinterpret_cast<ExitCode>(Close());
-	};
+	}
 
 	int Close()
 	{
@@ -616,31 +620,31 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 
 		switch (message->type)
 		{
-		case sftpReply:
+		case sftpEvent::Reply:
 			LogMessageRaw(Response, message->text);
 			ProcessReply(true, message->text);
 			break;
-		case sftpStatus:
+		case sftpEvent::Status:
 			LogMessageRaw(Status, message->text);
 			break;
-		case sftpError:
+		case sftpEvent::Error:
 			LogMessageRaw(::Error, message->text);
 			break;
-		case sftpVerbose:
+		case sftpEvent::Verbose:
 			LogMessageRaw(Debug_Info, message->text);
 			break;
-		case sftpDone:
+		case sftpEvent::Done:
 			{
 				ProcessReply(message->text == _T("1"));
 				break;
 			}
-		case sftpRequestPreamble:
+		case sftpEvent::RequestPreamble:
 			m_requestPreamble = message->text;
 			break;
-		case sftpRequestInstruction:
+		case sftpEvent::RequestInstruction:
 			m_requestInstruction = message->text;
 			break;
-		case sftpRequest:
+		case sftpEvent::Request:
 			switch(message->reqType)
 			{
 			case sftpReqPassword:
@@ -697,11 +701,11 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 				break;
 			}
 			break;
-		case sftpListentry:
+		case sftpEvent::Listentry:
 			ListParseEntry(message->text);
 			break;
-		case sftpRead:
-		case sftpWrite:
+		case sftpEvent::Read:
+		case sftpEvent::Write:
 			{
 				if (m_pTransferStatus && !m_pTransferStatus->madeProgress)
 				{
@@ -724,37 +728,37 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 				UpdateTransferStatus(message->value);
 			}
 			break;
-		case sftpRecv:
+		case sftpEvent::Recv:
 			SetActive(CFileZillaEngine::recv);
 			break;
-		case sftpSend:
+		case sftpEvent::Send:
 			SetActive(CFileZillaEngine::send);
 			break;
-		case sftpUsedQuotaRecv:
+		case sftpEvent::UsedQuotaRecv:
 			OnQuotaRequest(CRateLimiter::inbound);
 			break;
-		case sftpUsedQuotaSend:
+		case sftpEvent::UsedQuotaSend:
 			OnQuotaRequest(CRateLimiter::outbound);
 			break;
-		case sftpKexAlgorithm:
+		case sftpEvent::KexAlgorithm:
 			m_sftpEncryptionDetails.kexAlgorithm = message->text;
 			break;
-		case sftpKexHash:
+		case sftpEvent::KexHash:
 			m_sftpEncryptionDetails.kexHash = message->text;
 			break;
-		case sftpCipherClientToServer:
+		case sftpEvent::CipherClientToServer:
 			m_sftpEncryptionDetails.cipherClientToServer = message->text;
 			break;
-		case sftpCipherServerToClient:
+		case sftpEvent::CipherServerToClient:
 			m_sftpEncryptionDetails.cipherServerToClient = message->text;
 			break;
-		case sftpMacClientToServer:
+		case sftpEvent::MacClientToServer:
 			m_sftpEncryptionDetails.macClientToServer = message->text;
 			break;
-		case sftpMacServerToClient:
+		case sftpEvent::MacServerToClient:
 			m_sftpEncryptionDetails.macServerToClient = message->text;
 			break;
-		case sftpHostkey:
+		case sftpEvent::Hostkey:
 			m_sftpEncryptionDetails.hostKey = message->text;
 			break;
 		default:
