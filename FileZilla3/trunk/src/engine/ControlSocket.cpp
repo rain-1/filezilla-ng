@@ -170,10 +170,11 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			return ResetOperation(nErrorCode);
 	}
 
+	wxString prefix;
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
 		(!m_pCurOpData || m_pCurOpData->opId != cmd_transfer))
 	{
-		LogMessage(::Error, _("Critical error"));
+		prefix = _("Critial error:") + _T(" ");
 	}
 
 	if (m_pCurOpData)
@@ -182,18 +183,21 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		switch (commandId)
 		{
 		case cmd_none:
+			if( !prefix.empty() ) {
+				LogMessage(::Error, _("Critical error"));
+			}
 			break;
 		case cmd_connect:
 			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-				LogMessage(::Error, _("Connection attempt interrupted by user"));
+				LogMessage(::Error, prefix + _("Connection attempt interrupted by user"));
 			else if (nErrorCode != FZ_REPLY_OK)
-				LogMessage(::Error, _("Could not connect to server"));
+				LogMessage(::Error, prefix + _("Could not connect to server"));
 			break;
 		case cmd_list:
 			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-				LogMessage(::Error, _("Directory listing aborted by user"));
+				LogMessage(::Error, prefix + _("Directory listing aborted by user"));
 			else if (nErrorCode != FZ_REPLY_OK)
-				LogMessage(::Error, _("Failed to retrieve directory listing"));
+				LogMessage(::Error, prefix + _("Failed to retrieve directory listing"));
 			else
 				LogMessage(Status, _("Directory listing successful"));
 			break;
@@ -218,7 +222,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 			break;
 		default:
 			if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-				LogMessage(::Error, _("Interrupted by user"));
+				LogMessage(::Error, prefix + _("Interrupted by user"));
 			break;
 		}
 
@@ -230,8 +234,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 
 	SetWait(false);
 
-	if (m_invalidateCurrentPath)
-	{
+	if (m_invalidateCurrentPath) {
 		m_CurrentPath.clear();
 		m_invalidateCurrentPath = false;
 	}
