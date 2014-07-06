@@ -73,9 +73,9 @@ protected:
 	CFtpControlSocket *m_pControlSocket;
 
 	bool m_bActive;
-	enum TransferEndReason m_transferEndReason;
+	TransferEndReason m_transferEndReason;
 
-	enum TransferMode m_transferMode;
+	TransferMode m_transferMode;
 
 	char *m_pTransferBuffer;
 	int m_transferBufferLen;

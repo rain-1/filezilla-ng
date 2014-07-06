@@ -4,33 +4,34 @@
 #include "ControlSocket.h"
 #include <wx/process.h>
 
-typedef enum
-{
-	sftpUnknown = -1,
-	sftpReply = 0,
-	sftpDone,
-	sftpError,
-	sftpVerbose,
-	sftpStatus,
-	sftpRecv,
-	sftpSend,
-	sftpClose,
-	sftpRequest,
-	sftpListentry,
-	sftpRead,
-	sftpWrite,
-	sftpRequestPreamble,
-	sftpRequestInstruction,
-	sftpUsedQuotaRecv,
-	sftpUsedQuotaSend,
-	sftpKexAlgorithm,
-	sftpKexHash,
-	sftpCipherClientToServer,
-	sftpCipherServerToClient,
-	sftpMacClientToServer,
-	sftpMacServerToClient,
-	sftpHostkey
-} sftpEventTypes;
+enum class sftpEvent {
+	Unknown = -1,
+	Reply = 0,
+	Done,
+	Error,
+	Verbose,
+	Status,
+	Recv,
+	Send,
+	Close,
+	Request,
+	Listentry,
+	Read,
+	Write,
+	RequestPreamble,
+	RequestInstruction,
+	UsedQuotaRecv,
+	UsedQuotaSend,
+	KexAlgorithm,
+	KexHash,
+	CipherClientToServer,
+	CipherServerToClient,
+	MacClientToServer,
+	MacServerToClient,
+	Hostkey,
+
+	max = Hostkey
+};
 
 enum sftpRequestTypes
 {

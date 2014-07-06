@@ -52,7 +52,7 @@ CRawTransferOpData::CRawTransferOpData()
 
 CFtpTransferOpData::CFtpTransferOpData()
 {
-	transferEndReason = successful;
+	transferEndReason = TransferEndReason::successful;
 	tranferCommandSent = false;
 	resumeOffset = 0;
 	binary = true;
@@ -1486,7 +1486,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 					pData->directoryListing = listing;
 
 					// Reset status
-					pData->transferEndReason = successful;
+					pData->transferEndReason = TransferEndReason::successful;
 					pData->tranferCommandSent = false;
 					delete m_pTransferSocket;
 					m_pTransferSocket = new CTransferSocket(m_pEngine, this, ::list);
@@ -1554,7 +1554,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 					else
 					{
 						// Reset status
-						pData->transferEndReason = successful;
+						pData->transferEndReason = TransferEndReason::successful;
 						pData->tranferCommandSent = false;
 						delete m_pTransferSocket;
 						m_pTransferSocket = new CTransferSocket(m_pEngine, this, ::list);
@@ -1588,7 +1588,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 					// straight away. In this case, back to the previously retrieved listing.
 					// On other failures like timeouts and such, return an error
 					if (pData->viewHidden &&
-						pData->transferEndReason == transfer_command_failure_immediate)
+						pData->transferEndReason == TransferEndReason::transfer_command_failure_immediate)
 					{
 						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
 
@@ -1804,9 +1804,9 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 		if (pData->tranferCommandSent)
 		{
-			if (pData->transferEndReason == transfer_failure_critical)
+			if (pData->transferEndReason == TransferEndReason::transfer_failure_critical)
 				nErrorCode |= FZ_REPLY_CRITICALERROR | FZ_REPLY_WRITEFAILED;
-			if (pData->transferEndReason != transfer_command_failure_immediate || GetReplyCode() != 5)
+			if (pData->transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5)
 				pData->transferInitiated = true;
 			else
 			{
@@ -1841,14 +1841,14 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 		nErrorCode != FZ_REPLY_OK)
 	{
 		CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-		if (pData->pOldData->transferEndReason == successful)
+		if (pData->pOldData->transferEndReason == TransferEndReason::successful)
 		{
 			if ((nErrorCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT)
-				pData->pOldData->transferEndReason = timeout;
+				pData->pOldData->transferEndReason = TransferEndReason::timeout;
 			else if (!pData->pOldData->tranferCommandSent)
-				pData->pOldData->transferEndReason = pre_transfer_command_failure;
+				pData->pOldData->transferEndReason = TransferEndReason::pre_transfer_command_failure;
 			else
-				pData->pOldData->transferEndReason = failure;
+				pData->pOldData->transferEndReason = TransferEndReason::failure;
 		}
 	}
 
@@ -2568,7 +2568,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 	{
 		if (prevResult != FZ_REPLY_OK)
 		{
-			if (pData->transferEndReason == failed_resumetest)
+			if (pData->transferEndReason == TransferEndReason::failed_resumetest)
 			{
 				if (pData->localFileSize > ((wxFileOffset)1 << 32))
 				{
@@ -2842,18 +2842,18 @@ void CFtpControlSocket::TransferEnd()
 		return;
 	}
 
-	enum TransferEndReason reason = m_pTransferSocket->GetTransferEndreason();
-	if (reason == ::none)
+	TransferEndReason reason = m_pTransferSocket->GetTransferEndreason();
+	if (reason == TransferEndReason::none)
 	{
 		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Call to TransferEnd at unusual time"));
 		return;
 	}
 
-	if (reason == successful)
+	if (reason == TransferEndReason::successful)
 		SetAlive();
 
 	CRawTransferOpData *pData = static_cast<CRawTransferOpData *>(m_pCurOpData);
-	if (pData->pOldData->transferEndReason == successful)
+	if (pData->pOldData->transferEndReason == TransferEndReason::successful)
 		pData->pOldData->transferEndReason = reason;
 
 	switch (m_pCurOpData->opState)
@@ -2865,7 +2865,7 @@ void CFtpControlSocket::TransferEnd()
 		pData->opState = rawtransfer_waittransfer;
 		break;
 	case rawtransfer_waitsocket:
-		ResetOperation((reason == successful) ? FZ_REPLY_OK : FZ_REPLY_ERROR);
+		ResetOperation((reason == TransferEndReason::successful) ? FZ_REPLY_OK : FZ_REPLY_ERROR);
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("TransferEnd at unusual op state, ignoring"));
@@ -4037,7 +4037,7 @@ int CFtpControlSocket::Transfer(const wxString& cmd, CFtpTransferOpData* oldData
 
 	pData->cmd = cmd;
 	pData->pOldData = oldData;
-	pData->pOldData->transferEndReason = successful;
+	pData->pOldData->transferEndReason = TransferEndReason::successful;
 
 	if (m_pProxyBackend)
 	{
@@ -4160,45 +4160,41 @@ int CFtpControlSocket::TransferParseResponse()
 			pData->opState = rawtransfer_transfer;
 		break;
 	case rawtransfer_transfer:
-		if (code != 1)
-		{
-			if (pData->pOldData->transferEndReason == successful)
-				pData->pOldData->transferEndReason = transfer_command_failure_immediate;
+		if (code != 1) {
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
 			error = true;
 		}
 		else
 			pData->opState = rawtransfer_waitfinish;
 		break;
 	case rawtransfer_waittransferpre:
-		if (code != 1)
-		{
-			if (pData->pOldData->transferEndReason == successful)
-				pData->pOldData->transferEndReason = transfer_command_failure_immediate;
+		if (code != 1) {
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
 			error = true;
 		}
 		else
 			pData->opState = rawtransfer_waittransfer;
 		break;
 	case rawtransfer_waitfinish:
-		if (code != 2 && code != 3)
-		{
-			if (pData->pOldData->transferEndReason == successful)
-				pData->pOldData->transferEndReason = transfer_command_failure;
+		if (code != 2 && code != 3) {
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
 			error = true;
 		}
 		else
 			pData->opState = rawtransfer_waitsocket;
 		break;
 	case rawtransfer_waittransfer:
-		if (code != 2 && code != 3)
-		{
-			if (pData->pOldData->transferEndReason == successful)
-				pData->pOldData->transferEndReason = transfer_command_failure;
+		if (code != 2 && code != 3) {
+			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
+				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
 			error = true;
 		}
 		else
 		{
-			if (pData->pOldData->transferEndReason != successful)
+			if (pData->pOldData->transferEndReason != TransferEndReason::successful)
 			{
 				error = true;
 				break;
