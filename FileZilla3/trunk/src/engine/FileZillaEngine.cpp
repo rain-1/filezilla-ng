@@ -117,7 +117,7 @@ const CCommand *CFileZillaEngine::GetCurrentCommand() const
 	return CFileZillaEnginePrivate::GetCurrentCommand();
 }
 
-enum Command CFileZillaEngine::GetCurrentCommandId() const
+Command CFileZillaEngine::GetCurrentCommandId() const
 {
 	return CFileZillaEnginePrivate::GetCurrentCommandId();
 }

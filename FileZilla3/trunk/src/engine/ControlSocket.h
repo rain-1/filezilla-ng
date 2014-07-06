@@ -8,11 +8,11 @@
 class COpData
 {
 public:
-	COpData(enum Command op_Id);
+	COpData(Command op_Id);
 	virtual ~COpData();
 
 	int opState;
-	const enum Command opId;
+	Command const opId;
 
 	bool waitForAsyncRequest;
 	bool holdsLock;
@@ -135,7 +135,7 @@ public:
 
 	// If m_pCurrentOpData is zero, this function returns the current command
 	// from the engine.
-	enum Command GetCurrentCommandId() const;
+	Command GetCurrentCommandId() const;
 
 	virtual void TransferEnd() {}
 

@@ -588,7 +588,7 @@ void CTransferSocket::SetActive()
 		TriggerPostponedEvents();
 }
 
-void CTransferSocket::TransferEnd(enum TransferEndReason reason)
+void CTransferSocket::TransferEnd(TransferEndReason reason)
 {
 	m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::TransferEnd(%d)"), reason);
 

@@ -44,7 +44,7 @@ public:
 	CNotification* GetNextNotification();
 
 	const CCommand *GetCurrentCommand() const;
-	enum Command GetCurrentCommandId() const;
+	Command GetCurrentCommandId() const;
 
 	// Sets the reply to an async request, e.g. a file exists request.
 	// See notifiction.h for details.

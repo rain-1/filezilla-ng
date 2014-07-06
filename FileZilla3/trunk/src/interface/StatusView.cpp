@@ -145,7 +145,7 @@ void CStatusView::AddToLog(CLogmsgNotification *pNotification)
 	AddToLog(pNotification->msgType, pNotification->msg, wxDateTime::Now());
 }
 
-void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message, const wxDateTime& time)
+void CStatusView::AddToLog(MessageType messagetype, const wxString& message, const wxDateTime& time)
 {
 	if (!m_shown) {
 		struct t_line line;
@@ -244,7 +244,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	m_pTextCtrl->WriteText(prefix);
 	delete pLock;
 #else
-	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[messagetype].cf);
+	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[static_cast<int>(messagetype)].cf);
 	delete pLock;
 #endif
 }
