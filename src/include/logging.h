@@ -1,7 +1,7 @@
 #ifndef __LOGGING_H__
 #define __LOGGING_H__
 
-enum MessageType
+enum class MessageType
 {
 	Status,
 	Error,
@@ -14,7 +14,7 @@ enum MessageType
 
 	RawList,
 
-	MessageTypeCount
+	count
 };
 
 #endif

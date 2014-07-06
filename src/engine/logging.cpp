@@ -15,7 +15,7 @@ HANDLE CLogging::m_log_fd = INVALID_HANDLE_VALUE;
 #else
 int CLogging::m_log_fd = -1;
 #endif
-wxString CLogging::m_prefixes[MessageTypeCount];
+wxString CLogging::m_prefixes[static_cast<int>(MessageType::count)];
 unsigned int CLogging::m_pid;
 int CLogging::m_max_size;
 wxString CLogging::m_file;
@@ -56,23 +56,23 @@ bool CLogging::ShouldLog(MessageType nMessageType) const
 	const int debugLevel = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
 	switch (nMessageType)
 	{
-	case Debug_Warning:
+	case MessageType::Debug_Warning:
 		if (!debugLevel)
 			return false;
 		break;
-	case Debug_Info:
+	case MessageType::Debug_Info:
 		if (debugLevel < 2)
 			return false;
 		break;
-	case Debug_Verbose:
+	case MessageType::Debug_Verbose:
 		if (debugLevel < 3)
 			return false;
 		break;
-	case Debug_Debug:
+	case MessageType::Debug_Debug:
 		if (debugLevel != 4)
 			return false;
 		break;
-	case RawList:
+	case MessageType::RawList:
 		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_RAWLISTING))
 			return false;
 		break;
@@ -115,19 +115,19 @@ void CLogging::InitLogFile() const
 	if (m_log_fd == -1)
 #endif
 	{
-		LogMessage(Error, _("Could not open log file: %s"), wxSysErrorMsg());
+		LogMessage(MessageType::Error, _("Could not open log file: %s"), wxSysErrorMsg());
 		return;
 	}
 
-	m_prefixes[Status] = _("Status:");
-	m_prefixes[Error] = _("Error:");
-	m_prefixes[Command] = _("Command:");
-	m_prefixes[Response] = _("Response:");
-	m_prefixes[Debug_Warning] = _("Trace:");
-	m_prefixes[Debug_Info] = m_prefixes[Debug_Warning];
-	m_prefixes[Debug_Verbose] = m_prefixes[Debug_Warning];
-	m_prefixes[Debug_Debug] = m_prefixes[Debug_Warning];
-	m_prefixes[RawList] = _("Listing:");
+	m_prefixes[static_cast<int>(MessageType::Status)] = _("Status:");
+	m_prefixes[static_cast<int>(MessageType::Error)] = _("Error:");
+	m_prefixes[static_cast<int>(MessageType::Command)] = _("Command:");
+	m_prefixes[static_cast<int>(MessageType::Response)] = _("Response:");
+	m_prefixes[static_cast<int>(MessageType::Debug_Warning)] = _("Trace:");
+	m_prefixes[static_cast<int>(MessageType::Debug_Info)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
+	m_prefixes[static_cast<int>(MessageType::Debug_Verbose)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
+	m_prefixes[static_cast<int>(MessageType::Debug_Debug)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
+	m_prefixes[static_cast<int>(MessageType::RawList)] = _("Listing:");
 
 	m_pid = wxGetProcessId();
 
@@ -157,7 +157,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 #else
 		_T("\n"),
 #endif
-		now.Format(_T("%Y-%m-%d %H:%M:%S")).c_str(), m_pid, m_pEngine->GetEngineId(), m_prefixes[nMessageType].c_str(), msg.c_str()));
+		now.Format(_T("%Y-%m-%d %H:%M:%S")).c_str(), m_pid, m_pEngine->GetEngineId(), m_prefixes[static_cast<int>(nMessageType)].c_str(), msg.c_str()));
 
 	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
 	if (utf8)
@@ -184,7 +184,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					CloseHandle(hMutex);
 
 					m_log_fd = INVALID_HANDLE_VALUE;
-					LogMessage(Error, _("Could not open log file: %s"), error.c_str());
+					LogMessage(MessageType::Error, _("Could not open log file: %s"), error.c_str());
 					return;
 				}
 
@@ -215,7 +215,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				CloseHandle(hMutex);
 
 				if (!error.empty())
-					LogMessage(Error, _("Could not open log file: %s"), error);
+					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
 			}
 		}
 		DWORD len = (DWORD)strlen((const char*)utf8);
@@ -223,7 +223,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		BOOL res = WriteFile(m_log_fd, (const char*)utf8, len, &written, 0);
 		if (!res || written != len)
 		{
-			LogMessage(Error, _("Could not write to log file: %s"), wxSysErrorMsg());
+			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
 			CloseHandle(m_log_fd);
 			m_log_fd = INVALID_HANDLE_VALUE;
 		}
@@ -254,7 +254,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					close(m_log_fd);
 					m_log_fd = -1;
 
-					LogMessage(Error, error);
+					LogMessage(MessageType::Error, error);
 					return;
 				}
 				struct stat buf2;
@@ -280,7 +280,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT, 0644);
 				if (m_log_fd == -1)
 				{
-					LogMessage(Error, wxSysErrorMsg());
+					LogMessage(MessageType::Error, wxSysErrorMsg());
 					return;
 				}
 
@@ -294,7 +294,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		{
 			close(m_log_fd);
 			m_log_fd = -1;
-			LogMessage(Error, _("Could not write to log file: %s"), wxSysErrorMsg());
+			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
 		}
 #endif
 	}

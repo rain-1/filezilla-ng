@@ -66,7 +66,7 @@ private:
 #else
 	static int m_log_fd;
 #endif
-	static wxString m_prefixes[MessageTypeCount];
+	static wxString m_prefixes[static_cast<int>(MessageType::count)];
 	static unsigned int m_pid;
 	static int m_max_size;
 	static wxString m_file;

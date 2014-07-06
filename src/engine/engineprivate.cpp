@@ -170,7 +170,7 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 {
-	m_pLogging->LogMessage(Debug_Debug, _T("CFileZillaEnginePrivate::ResetOperation(%d)"), nErrorCode);
+	m_pLogging->LogMessage(MessageType::Debug_Debug, _T("CFileZillaEnginePrivate::ResetOperation(%d)"), nErrorCode);
 
 	if (nErrorCode & FZ_REPLY_DISCONNECTED)
 		m_lastListDir.clear();
@@ -180,7 +180,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 		if ((nErrorCode & FZ_REPLY_NOTSUPPORTED) == FZ_REPLY_NOTSUPPORTED)
 		{
 			wxASSERT(m_bIsInCommand);
-			m_pLogging->LogMessage(Error, _("Command not supported by this protocol"));
+			m_pLogging->LogMessage(MessageType::Error, _("Command not supported by this protocol"));
 		}
 
 		if (m_pCurrentCommand->GetId() == cmd_connect)
@@ -200,7 +200,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 						unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
 						if (!delay)
 							delay = 1;
-						m_pLogging->LogMessage(Status, _("Waiting to retry..."));
+						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
 						m_retryTimer.Start(delay, true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
@@ -278,7 +278,7 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 	{
 		ServerProtocol protocol = CServer::GetProtocolFromPort(command.GetServer().GetPort(), true);
 		if (protocol != UNKNOWN && protocol != command.GetServer().GetProtocol())
-			m_pLogging->LogMessage(Status, _("Selected port usually in use by a different protocol."));
+			m_pLogging->LogMessage(MessageType::Status, _("Selected port usually in use by a different protocol."));
 	}
 
 	return ContinueConnect();
@@ -317,7 +317,7 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 
 		m_retryTimer.Stop();
 
-		m_pLogging->LogMessage(::Error, _("Connection attempt interrupted by user"));
+		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
 		COperationNotification *notification = new COperationNotification();
 		notification->nReplyCode = FZ_REPLY_DISCONNECTED|FZ_REPLY_CANCELED;
 		notification->commandId = cmd_connect;
@@ -622,7 +622,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay)
 	{
-		m_pLogging->LogMessage(Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
+		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
 		m_retryTimer.Start(delay, true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -643,7 +643,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 		m_pControlSocket = new CHttpControlSocket(this);
 		break;
 	default:
-		m_pLogging->LogMessage(Debug_Warning, _T("Not a valid protocol: %d"), server.GetProtocol());
+		m_pLogging->LogMessage(MessageType::Debug_Warning, _T("Not a valid protocol: %d"), server.GetProtocol());
 		return FZ_REPLY_SYNTAXERROR|FZ_REPLY_DISCONNECTED;
 	}
 

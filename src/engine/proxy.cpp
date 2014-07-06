@@ -137,20 +137,20 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 	{
 		wxString ip = m_host;
 		if (GetIPV6LongForm(m_host).empty()) {
-			m_pOwner->LogMessage(Error, _("IPv6 addresses are not supported with SOCKS4 proxy"));
+			m_pOwner->LogMessage(MessageType::Error, _("IPv6 addresses are not supported with SOCKS4 proxy"));
 			return EINVAL;
 		}
 
 		if (!IsIpAddress(m_host)) {
 			wxIPV4address address;
 			if (!address.Hostname(host)) {
-				m_pOwner->LogMessage(Error, _("Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."));
+				m_pOwner->LogMessage(MessageType::Error, _("Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."));
 				return EINVAL;
 			}
 			ip = address.IPAddress();
 		}
 
-		m_pOwner->LogMessage(Status, _("SOCKS4 proxy will connect to: %s"), ip.c_str());
+		m_pOwner->LogMessage(MessageType::Status, _("SOCKS4 proxy will connect to: %s"), ip.c_str());
 
 		m_pSendBuffer = new char[9];
 		m_pSendBuffer[0] = 4; // Protocol version
@@ -211,12 +211,12 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 	case CSocketEvent::hostaddress:
 		{
 			const wxString& address = event.GetData();
-			m_pOwner->LogMessage(Status, _("Connecting to %s..."), address.c_str());
+			m_pOwner->LogMessage(MessageType::Status, _("Connecting to %s..."), address.c_str());
 		}
 		break;
 	case CSocketEvent::connection_next:
 		if (event.GetError())
-			m_pOwner->LogMessage(Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
+			m_pOwner->LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
 		break;
 	case CSocketEvent::connection:
 		if (event.GetError())
@@ -228,7 +228,7 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 		}
 		else
 		{
-			m_pOwner->LogMessage(Status, _("Connection with proxy established, performing handshake..."));
+			m_pOwner->LogMessage(MessageType::Status, _("Connection with proxy established, performing handshake..."));
 		}
 		break;
 	case CSocketEvent::read:
@@ -244,7 +244,7 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 		m_pEvtHandler->AddPendingEvent(event);*/
 		break;
 	default:
-		m_pOwner->LogMessage(Debug_Warning, _T("Unhandled socket event %d"), event.GetType());
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unhandled socket event %d"), event.GetType());
 		break;
 	}
 }
@@ -302,7 +302,7 @@ void CProxySocket::OnReceive()
 				if (m_pSendBuffer)
 				{
 					m_proxyState = noconn;
-					m_pOwner->LogMessage(Debug_Warning, _T("Incoming data before requst fully sent"));
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Incoming data before requst fully sent"));
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
 					return;
@@ -318,7 +318,7 @@ void CProxySocket::OnReceive()
 						if (m_recvBufferPos + read + 1 == m_recvBufferLen)
 						{
 							m_proxyState = noconn;
-							m_pOwner->LogMessage(Debug_Warning, _T("Incoming header too large"));
+							m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Incoming header too large"));
 							CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ENOMEM);
 							CSocketEventDispatcher::Get().SendEvent(evt);
 							return;
@@ -333,7 +333,7 @@ void CProxySocket::OnReceive()
 					if (read != do_read)
 					{
 						m_proxyState = noconn;
-						m_pOwner->LogMessage(Debug_Warning, _T("Could not read what got peeked"));
+						m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Could not read what got peeked"));
 						CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 						CSocketEventDispatcher::Get().SendEvent(evt);
 						return;
@@ -349,7 +349,7 @@ void CProxySocket::OnReceive()
 			wxASSERT(end);
 			*end = 0;
 			wxString reply(m_pRecvBuffer, wxConvUTF8);
-			m_pOwner->LogMessage(Response, _("Proxy reply: %s"), reply.c_str());
+			m_pOwner->LogMessage(MessageType::Response, _("Proxy reply: %s"), reply.c_str());
 
 			if (reply.Left(10) != _T("HTTP/1.1 2") && reply.Left(10) != _T("HTTP/1.0 2"))
 			{
@@ -413,7 +413,7 @@ void CProxySocket::OnReceive()
 						error.Printf(_("Unassigned error code %d"), (int)(unsigned char) m_pRecvBuffer[1]);
 						break;
 				}
-				m_pOwner->LogMessage(Error, _("Proxy request failed: %s"), error.c_str());
+				m_pOwner->LogMessage(MessageType::Error, _("Proxy request failed: %s"), error.c_str());
 				m_proxyState = noconn;
 				CSocketEventDispatcher::Get()
 					.SendEvent(new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED));
@@ -468,7 +468,7 @@ void CProxySocket::OnReceive()
 			default:
 				if (m_pRecvBuffer[0] != 5)
 				{
-					m_pOwner->LogMessage(Debug_Warning, _("Unknown SOCKS protocol version: %d"), (int)m_pRecvBuffer[0]);
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Unknown SOCKS protocol version: %d"), (int)m_pRecvBuffer[0]);
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
@@ -478,7 +478,7 @@ void CProxySocket::OnReceive()
 			case socks5_auth:
 				if (m_pRecvBuffer[0] != 1)
 				{
-					m_pOwner->LogMessage(Debug_Warning, _("Unknown protocol version of SOCKS Username/Password Authentication subnegotiation: %d"), (int)m_pRecvBuffer[0]);
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Unknown protocol version of SOCKS Username/Password Authentication subnegotiation: %d"), (int)m_pRecvBuffer[0]);
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
@@ -504,7 +504,7 @@ void CProxySocket::OnReceive()
 						m_handshakeState = socks5_auth;
 						break;
 					default:
-						m_pOwner->LogMessage(Debug_Warning, _("No supported SOCKS5 auth method"));
+						m_pOwner->LogMessage(MessageType::Debug_Warning, _("No supported SOCKS5 auth method"));
 						m_proxyState = noconn;
 						CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 						CSocketEventDispatcher::Get().SendEvent(evt);
@@ -515,7 +515,7 @@ void CProxySocket::OnReceive()
 			case socks5_auth:
 				if (m_pRecvBuffer[1] != 0)
 				{
-					m_pOwner->LogMessage(Debug_Warning, _("Proxy authentication failed"));
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy authentication failed"));
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
@@ -558,7 +558,7 @@ void CProxySocket::OnReceive()
 						break;
 					}
 
-					m_pOwner->LogMessage(Debug_Warning, _("Proxy request failed: %s"), error.c_str());
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: %s"), error.c_str());
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
@@ -580,7 +580,7 @@ void CProxySocket::OnReceive()
 					m_recvBufferLen = 17;
 					break;
 				default:
-					m_pOwner->LogMessage(Debug_Warning, _("Proxy request failed: Unknown address type in CONNECT reply"));
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: Unknown address type in CONNECT reply"));
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);
@@ -696,7 +696,7 @@ void CProxySocket::OnReceive()
 		break;
 	default:
 		m_proxyState = noconn;
-		m_pOwner->LogMessage(Debug_Warning, _T("Unhandled handshake state %d"), m_handshakeState);
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unhandled handshake state %d"), m_handshakeState);
 		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 		CSocketEventDispatcher::Get().SendEvent(evt);
 		return;

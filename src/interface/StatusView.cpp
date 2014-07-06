@@ -188,7 +188,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	m_pTextCtrl->SetInsertionPointEnd();
 #endif
 
-	int lineLength = m_attributeCache[messagetype].len + messageLength;
+	int lineLength = m_attributeCache[static_cast<int>(messagetype)].len + messageLength;
 
 	if (m_showTimestamps) {
 		if (time != m_lastTime) {
@@ -205,12 +205,12 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 	}
 
 #ifdef __WXMAC__
-	m_pTextCtrl->SetDefaultStyle(m_attributeCache[messagetype].attr);
+	m_pTextCtrl->SetDefaultStyle(m_attributeCache[static_cast<int>(messagetype)].attr);
 #elif __WXGTK__
-	m_pTextCtrl->SetDefaultColor(m_attributeCache[messagetype].attr.GetTextColour());
+	m_pTextCtrl->SetDefaultColor(m_attributeCache[static_cast<int>(messagetype)].attr.GetTextColour());
 #endif
 
-	prefix += m_attributeCache[messagetype].prefix;
+	prefix += m_attributeCache[static_cast<int>(messagetype)].prefix;
 
 	if (m_rtl) {
 		// Unicode control characters that control reading direction
@@ -222,7 +222,7 @@ void CStatusView::AddToLog(enum MessageType messagetype, const wxString& message
 		//const wxChar LTR_OVERRIDE = 0x202D;
 		//const wxChar RTL_OVERRIDE = 0x202E;
 
-		if (messagetype == Command || messagetype == Response || messagetype >= Debug_Warning) {
+		if (messagetype == MessageType::Command || messagetype == MessageType::Response || messagetype >= MessageType::Debug_Warning) {
 			// Commands, responses and debug message contain English text,
 			// set LTR reading order for them.
 			prefix += LTR_MARK;
@@ -319,41 +319,41 @@ void CStatusView::InitDefAttr()
 	const wxColour background = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
 	const bool is_dark = background.Red() + background.Green() + background.Blue() < 384;
 
-	for (int i = 0; i < MessageTypeCount; i++) {
+	for (int i = 0; i < static_cast<int>(MessageType::count); i++) {
 		t_attributeCache& entry = m_attributeCache[i];
 #ifndef __WXMAC__
 		entry.attr = defAttr;
 #endif
-		switch (i) {
-		case Error:
+		switch (static_cast<MessageType>(i)) {
+		case MessageType::Error:
 			entry.prefix = _("Error:");
 			entry.attr.SetTextColour(wxColour(255, 0, 0));
 			break;
-		case Command:
+		case MessageType::Command:
 			entry.prefix = _("Command:");
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(128, 128, 255));
 			else
 				entry.attr.SetTextColour(wxColour(0, 0, 128));
 			break;
-		case Response:
+		case MessageType::Response:
 			entry.prefix = _("Response:");
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(128, 255, 128));
 			else
 				entry.attr.SetTextColour(wxColour(0, 128, 0));
 			break;
-		case Debug_Warning:
-		case Debug_Info:
-		case Debug_Verbose:
-		case Debug_Debug:
+		case MessageType::Debug_Warning:
+		case MessageType::Debug_Info:
+		case MessageType::Debug_Verbose:
+		case MessageType::Debug_Debug:
 			entry.prefix = _("Trace:");
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(255, 128, 255));
 			else
 				entry.attr.SetTextColour(wxColour(128, 0, 128));
 			break;
-		case RawList:
+		case MessageType::RawList:
 			entry.prefix = _("Listing:");
 			if (is_dark)
 				entry.attr.SetTextColour(wxColour(128, 255, 255));

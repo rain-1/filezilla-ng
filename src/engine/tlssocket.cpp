@@ -18,7 +18,7 @@ void log_func(int level, const char* msg)
 		return;
 	wxString s(msg, wxConvLocal);
 	s.Trim();
-	pLoggingControlSocket->LogMessage(Debug_Debug, _T("tls: %d %s"), level, s.c_str());
+	pLoggingControlSocket->LogMessage(MessageType::Debug_Debug, _T("tls: %d %s"), level, s.c_str());
 }
 #endif
 
@@ -215,10 +215,10 @@ void CTlsSocket::PrintAlert()
 	if (alert)
 	{
 		wxString str(alert, wxConvLocal);
-		m_pOwner->LogMessage(::Debug_Warning, _T("GnuTLS alert %d: %s"), last_alert, str.c_str());
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d: %s"), last_alert, str.c_str());
 	}
 	else
-		m_pOwner->LogMessage(::Debug_Warning, _T("GnuTLS alert %d"), last_alert);
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d"), last_alert);
 }
 
 ssize_t CTlsSocket::PushFunction(gnutls_transport_ptr_t ptr, const void* data, size_t len)
@@ -234,7 +234,7 @@ ssize_t CTlsSocket::PullFunction(gnutls_transport_ptr_t ptr, void* data, size_t 
 ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 {
 #if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("CTlsSocket::PushFunction(%x, %d)"), data, len);
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PushFunction(%x, %d)"), data, len);
 #endif
 	if (!m_canWriteToSocket)
 	{
@@ -265,7 +265,7 @@ ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 	}
 
 #if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("  returning %d"), written);
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("  returning %d"), written);
 #endif
 
 	return written;
@@ -274,7 +274,7 @@ ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 {
 #if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("CTlsSocket::PullFunction(%x, %d)"), data, len);
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction(%x, %d)"), data, len);
 #endif
 	if (!m_pSocketBackend)
 	{
@@ -319,7 +319,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 		m_socket_eof = true;
 
 #if TLSDEBUG
-	m_pOwner->LogMessage(Debug_Debug, _T("  returning %d"), read);
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("  returning %d"), read);
 #endif
 
 	return read;
@@ -348,7 +348,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 			if (peeked >= 0)
 			{
 				if (peeked > 0)
-					m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::OnSocketEvent(): pending data, postponing close event"));
+					m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::OnSocketEvent(): pending data, postponing close event"));
 				else
 				{
 					m_socket_eof = true;
@@ -360,7 +360,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 					return;
 			}
 
-			m_pOwner->LogMessage(Debug_Info, _T("CTlsSocket::OnSocketEvent(): close event received"));
+			m_pOwner->LogMessage(MessageType::Debug_Info, _T("CTlsSocket::OnSocketEvent(): close event received"));
 
 			//Uninit();
 			CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
@@ -374,7 +374,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 
 void CTlsSocket::OnRead()
 {
-	m_pOwner->LogMessage(Debug_Debug, _T("CTlsSocket::OnRead()"));
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::OnRead()"));
 
 	m_canReadFromSocket = true;
 
@@ -398,7 +398,7 @@ void CTlsSocket::OnRead()
 
 void CTlsSocket::OnSend()
 {
-	m_pOwner->LogMessage(Debug_Debug, _T("CTlsSocket::OnSend()"));
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::OnSend()"));
 
 	m_canWriteToSocket = true;
 
@@ -425,7 +425,7 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 	gnutls_datum_t d;
 	int res = gnutls_session_get_data2(pPrimarySocket->m_session, &d);
 	if (res) {
-		m_pOwner->LogMessage(Debug_Warning, _T("gnutls_session_get_data2 on primary socket failed: %d"), res);
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("gnutls_session_get_data2 on primary socket failed: %d"), res);
 		return true;
 	}
 
@@ -433,13 +433,13 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 	res = gnutls_session_set_data(m_session, d.data, d.size );
 	gnutls_free(d.data);
 	if (res) {
-		m_pOwner->LogMessage(Debug_Info, _T("gnutls_session_set_data failed: %d. Going to reinitialize session."), res);
+		m_pOwner->LogMessage(MessageType::Debug_Info, _T("gnutls_session_set_data failed: %d. Going to reinitialize session."), res);
 		UninitSession();
 		if (!InitSession())
 			return false;
 	}
 	else
-		m_pOwner->LogMessage(Debug_Info, _T("Trying to resume existing TLS session."));
+		m_pOwner->LogMessage(MessageType::Debug_Info, _T("Trying to resume existing TLS session."));
 
 	return true;
 }
@@ -451,7 +451,7 @@ bool CTlsSocket::ResumedSession() const
 
 int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 {
-	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::Handshake()"));
+	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::Handshake()"));
 	wxASSERT(m_session);
 
 	m_tlsState = handshake;
@@ -487,7 +487,7 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 		if( utf8 ) {
 			int res = gnutls_server_name_set( m_session, GNUTLS_NAME_DNS, utf8, strlen(utf8) );
 			if( res ) {
-				LogError(res, _T("gnutls_server_name_set"), Debug_Warning );
+				LogError(res, _T("gnutls_server_name_set"), MessageType::Debug_Warning );
 			}
 		}
 	}
@@ -497,7 +497,7 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 
 int CTlsSocket::ContinueHandshake()
 {
-	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::ContinueHandshake()"));
+	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::ContinueHandshake()"));
 	wxASSERT(m_session);
 	wxASSERT(m_tlsState == handshake);
 
@@ -511,17 +511,17 @@ int CTlsSocket::ContinueHandshake()
 	}
 	if (!res)
 	{
-		m_pOwner->LogMessage(Debug_Info, _T("TLS Handshake successful"));
+		m_pOwner->LogMessage(MessageType::Debug_Info, _T("TLS Handshake successful"));
 
 		if (ResumedSession())
-			m_pOwner->LogMessage(Debug_Info, _T("TLS Session resumed"));
+			m_pOwner->LogMessage(MessageType::Debug_Info, _T("TLS Session resumed"));
 
 		const wxString protocol = GetProtocolName();
 		const wxString keyExchange = GetKeyExchange();
 		const wxString cipherName = GetCipherName();
 		const wxString macName = GetMacName();
 
-		m_pOwner->LogMessage(Debug_Info, _T("Protocol: %s, Key exchange: %s, Cipher: %s, MAC: %s"), protocol.c_str(), keyExchange.c_str(), cipherName.c_str(), macName.c_str());
+		m_pOwner->LogMessage(MessageType::Debug_Info, _T("Protocol: %s, Key exchange: %s, Cipher: %s, MAC: %s"), protocol.c_str(), keyExchange.c_str(), cipherName.c_str(), macName.c_str());
 
 		res = VerifyCertificate();
 		if (res != FZ_REPLY_OK)
@@ -763,7 +763,7 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 
 void CTlsSocket::Failure(int code, int socket_error, const wxString& function)
 {
-	m_pOwner->LogMessage(::Debug_Debug, _T("CTlsSocket::Failure(%d, %d)"), code, socket_error);
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::Failure(%d, %d)"), code, socket_error);
 	if (code)
 	{
 		LogError(code, function);
@@ -775,7 +775,7 @@ void CTlsSocket::Failure(int code, int socket_error, const wxString& function)
 #endif
 				)
 			{
-				m_pOwner->LogMessage(Status, _("Server did not properly shut down TLS connection"));
+				m_pOwner->LogMessage(MessageType::Status, _("Server did not properly shut down TLS connection"));
 			}
 		}
 	}
@@ -812,7 +812,7 @@ int CTlsSocket::Peek(void *buffer, unsigned int len, int& error)
 
 int CTlsSocket::Shutdown()
 {
-	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::Shutdown()"));
+	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::Shutdown()"));
 
 	if (m_tlsState == closed)
 		return 0;
@@ -823,7 +823,7 @@ int CTlsSocket::Shutdown()
 	if (m_tlsState == handshake || m_tlsState == verifycert)
 	{
 		// Shutdown during handshake is not a good idea.
-		m_pOwner->LogMessage(Debug_Verbose, _T("Shutdown during handshake, postponing"));
+		m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("Shutdown during handshake, postponing"));
 		m_shutdown_requested = true;
 		return EAGAIN;
 	}
@@ -851,7 +851,7 @@ int CTlsSocket::Shutdown()
 
 void CTlsSocket::ContinueShutdown()
 {
-	m_pOwner->LogMessage(Debug_Verbose, _T("CTlsSocket::ContinueShutdown()"));
+	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::ContinueShutdown()"));
 
 	int res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
 	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
@@ -874,7 +874,7 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 {
 	if (m_tlsState != verifycert)
 	{
-		m_pOwner->LogMessage(Debug_Warning, _T("TrustCurrentCert called at wrong time."));
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("TrustCurrentCert called at wrong time."));
 		return;
 	}
 
@@ -897,7 +897,7 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 		return;
 	}
 
-	m_pOwner->LogMessage(::Error, _("Remote certificate not trusted."));
+	m_pOwner->LogMessage(MessageType::Error, _("Remote certificate not trusted."));
 	Failure(0, ECONNABORTED);
 }
 
@@ -922,13 +922,13 @@ bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 	gnutls_x509_crt_t cert;
 	if (gnutls_x509_crt_init(&cert))
 	{
-		m_pOwner->LogMessage(::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
+		m_pOwner->LogMessage(MessageType::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
 		return false;
 	}
 
 	if (gnutls_x509_crt_import(cert, datum, GNUTLS_X509_FMT_DER))
 	{
-		m_pOwner->LogMessage(::Error, _("Could not import peer certificates, gnutls_x509_crt_import failed"));
+		m_pOwner->LogMessage(MessageType::Error, _("Could not import peer certificates, gnutls_x509_crt_import failed"));
 		gnutls_x509_crt_deinit(cert);
 		return false;
 	}
@@ -985,7 +985,7 @@ bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 	else
 		LogError(res, _T("gnutls_x509_crt_get_dn"));
 	if (subject.empty()) {
-		m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
+		m_pOwner->LogMessage(MessageType::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
 		gnutls_x509_crt_deinit(cert);
 		return false;
 	}
@@ -1008,7 +1008,7 @@ bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 	else
 		LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
 	if (issuer.empty() ) {
-		m_pOwner->LogMessage(::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
+		m_pOwner->LogMessage(MessageType::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
 		gnutls_x509_crt_deinit(cert);
 		return false;
 	}
@@ -1050,7 +1050,7 @@ int CTlsSocket::VerifyCertificate()
 {
 	if (m_tlsState != handshake)
 	{
-		m_pOwner->LogMessage(::Debug_Warning, _T("VerifyCertificate called at wrong time"));
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("VerifyCertificate called at wrong time"));
 		return FZ_REPLY_ERROR;
 	}
 
@@ -1058,7 +1058,7 @@ int CTlsSocket::VerifyCertificate()
 
 	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509)
 	{
-		m_pOwner->LogMessage(::Error, _("Unsupported certificate type"));
+		m_pOwner->LogMessage(MessageType::Error, _("Unsupported certificate type"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
@@ -1066,28 +1066,28 @@ int CTlsSocket::VerifyCertificate()
 	unsigned int status = 0;
 	if (gnutls_certificate_verify_peers2(m_session, &status) < 0)
 	{
-		m_pOwner->LogMessage(::Error, _("Failed to verify peer certificate"));
+		m_pOwner->LogMessage(MessageType::Error, _("Failed to verify peer certificate"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
 	if (status & GNUTLS_CERT_REVOKED)
 	{
-		m_pOwner->LogMessage(::Error, _("Beware! Certificate has been revoked"));
+		m_pOwner->LogMessage(MessageType::Error, _("Beware! Certificate has been revoked"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
 	if (status & GNUTLS_CERT_SIGNER_NOT_CA)
 	{
-		m_pOwner->LogMessage(::Error, _("Incomplete chain, top certificate is not self-signed certificate authority certificate"));
+		m_pOwner->LogMessage(MessageType::Error, _("Incomplete chain, top certificate is not self-signed certificate authority certificate"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
 	if (m_require_root_trust && status & GNUTLS_CERT_SIGNER_NOT_FOUND)
 	{
-		m_pOwner->LogMessage(::Error, _("Root certificate is not trusted"));
+		m_pOwner->LogMessage(MessageType::Error, _("Root certificate is not trusted"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
@@ -1096,7 +1096,7 @@ int CTlsSocket::VerifyCertificate()
 	const gnutls_datum_t* cert_list = gnutls_certificate_get_peers(m_session, &cert_list_size);
 	if (!cert_list || !cert_list_size)
 	{
-		m_pOwner->LogMessage(::Error, _("gnutls_certificate_get_peers returned no certificates"));
+		m_pOwner->LogMessage(MessageType::Error, _("gnutls_certificate_get_peers returned no certificates"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
@@ -1106,7 +1106,7 @@ int CTlsSocket::VerifyCertificate()
 		if (m_implicitTrustedCert.size != cert_list[0].size ||
 			memcmp(m_implicitTrustedCert.data, cert_list[0].data, cert_list[0].size))
 		{
-			m_pOwner->LogMessage(::Error, _("Primary connection and data connection certificates don't match."));
+			m_pOwner->LogMessage(MessageType::Error, _("Primary connection and data connection certificates don't match."));
 			Failure(0, ECONNABORTED);
 			return FZ_REPLY_ERROR;
 		}
@@ -1144,7 +1144,7 @@ int CTlsSocket::VerifyCertificate()
 
 	m_pOwner->SendAsyncRequest(pNotification);
 
-	m_pOwner->LogMessage(Status, _("Verifying certificate..."));
+	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 
 	return FZ_REPLY_WOULDBLOCK;
 }
