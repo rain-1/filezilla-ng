@@ -1994,8 +1994,7 @@
           <orient>wxVERTICAL</orient>
         </object>
         <option>1</option>
-        <flag>wxALL|wxGROW</flag>
-        <border>5</border>
+        <flag>wxGROW</flag>
       </object>
     </object>
   </object>
