@@ -1978,7 +1978,7 @@ bool CDirectoryListingParser::AddData(char *pData, int len)
 bool CDirectoryListingParser::AddLine(const wxChar* pLine)
 {
 	if (m_pControlSocket)
-		m_pControlSocket->LogMessageRaw(RawList, pLine);
+		m_pControlSocket->LogMessageRaw(MessageType::RawList, pLine);
 
 	while (*pLine == ' ' || *pLine == '\t')
 		++pLine;
@@ -2048,7 +2048,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 				{
 					if (reslen > 10000)
 					{
-						m_pControlSocket->LogMessage(::Error, _("Received a line exceeding 10000 characters, aborting."));
+						m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
 						error = true;
 						return 0;
 					}
@@ -2063,7 +2063,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 
 		if (reslen > 10000)
 		{
-			m_pControlSocket->LogMessage(::Error, _("Received a line exceeding 10000 characters, aborting."));
+			m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
 			error = true;
 			return 0;
 		}
@@ -2113,7 +2113,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		if (m_pControlSocket)
 		{
 			buffer = m_pControlSocket->ConvToLocalBuffer(res);
-			m_pControlSocket->LogMessageRaw(RawList, buffer);
+			m_pControlSocket->LogMessageRaw(MessageType::RawList, buffer);
 		}
 		else
 		{
@@ -3037,7 +3037,7 @@ void CDirectoryListingParser::DeduceEncoding()
 
 	if ((count[0x1f] || count[0x15] || count[0x25]) && !count[0x0a] && count['@'] && count['@'] > count[' '] && count_ebcdic > count_normal)
 	{
-		m_pControlSocket->LogMessage(::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
+		m_pControlSocket->LogMessage(MessageType::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
 		m_listingEncoding = listingEncoding::ebcdic;
 		for (auto it = m_DataList.begin(); it != m_DataList.end(); ++it)
 			ConvertEncoding(it->p, it->len);

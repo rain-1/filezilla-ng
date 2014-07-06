@@ -44,7 +44,7 @@ protected:
 #ifdef __WXMSW__
 		CHARFORMAT2 cf;
 #endif
-	} m_attributeCache[MessageTypeCount];
+	} m_attributeCache[static_cast<int>(MessageType::count)];
 
 	bool m_rtl;
 

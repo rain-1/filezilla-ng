@@ -110,17 +110,17 @@ CHttpControlSocket::~CHttpControlSocket()
 
 int CHttpControlSocket::SendNextCommand()
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::SendNextCommand()"));
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::SendNextCommand()"));
 	if (!m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("SendNextCommand called without active operation"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	if (m_pCurOpData->waitForAsyncRequest)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Waiting for async request, ignoring SendNextCommand"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Waiting for async request, ignoring SendNextCommand"));
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
@@ -129,7 +129,7 @@ int CHttpControlSocket::SendNextCommand()
 	case cmd_transfer:
 		return FileTransferSend();
 	default:
-		LogMessage(__TFILE__, __LINE__, this, ::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		break;
 	}
@@ -140,11 +140,11 @@ int CHttpControlSocket::SendNextCommand()
 
 int CHttpControlSocket::ContinueConnect()
 {
-	LogMessage(__TFILE__, __LINE__, this, Debug_Verbose, _T("CHttpControlSocket::ContinueConnect() m_pEngine=%p"), m_pEngine);
+	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("CHttpControlSocket::ContinueConnect() m_pEngine=%p"), m_pEngine);
 	if (GetCurrentCommandId() != cmd_connect ||
 		!m_pCurrentServer)
 	{
-		LogMessage(Debug_Warning, _T("Invalid context for call to ContinueConnect(), cmd=%d, m_pCurrentServer=%p"), GetCurrentCommandId(), m_pCurrentServer);
+		LogMessage(MessageType::Debug_Warning, _T("Invalid context for call to ContinueConnect(), cmd=%d, m_pCurrentServer=%p"), GetCurrentCommandId(), m_pCurrentServer);
 		return DoClose(FZ_REPLY_INTERNALERROR);
 	}
 
@@ -158,7 +158,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	{
 		if (!m_pCurOpData->waitForAsyncRequest)
 		{
-			LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Not waiting for request reply, ignoring request reply %d"), pNotification->GetRequestID());
+			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Not waiting for request reply, ignoring request reply %d"), pNotification->GetRequestID());
 			return false;
 		}
 		m_pCurOpData->waitForAsyncRequest = false;
@@ -170,7 +170,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		{
 			if (!m_pCurOpData || m_pCurOpData->opId != cmd_transfer)
 			{
-				LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pNotification->GetRequestID());
+				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pNotification->GetRequestID());
 				return false;
 			}
 
@@ -182,7 +182,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		{
 			if (!m_pTlsSocket || m_pTlsSocket->GetState() != CTlsSocket::verifycert)
 			{
-				LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
+				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %d"), pNotification->GetRequestID());
 				return false;
 			}
 
@@ -191,7 +191,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		}
 		break;
 	default:
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Unknown request %d"), pNotification->GetRequestID());
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown request %d"), pNotification->GetRequestID());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return false;
 	}
@@ -295,7 +295,7 @@ void CHttpControlSocket::OnConnect()
 	{
 		if (!m_pTlsSocket)
 		{
-			LogMessage(Status, _("Connection established, initializing TLS..."));
+			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
 			delete m_pBackend;
 			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
@@ -303,7 +303,7 @@ void CHttpControlSocket::OnConnect()
 
 			if (!m_pTlsSocket->Init())
 			{
-				LogMessage(::Error, _("Failed to initialize TLS."));
+				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
 				DoClose();
 				return;
 			}
@@ -311,7 +311,7 @@ void CHttpControlSocket::OnConnect()
 			const wxString trusted_rootcert = m_pEngine->GetOptions()->GetOption(OPTION_INTERNAL_ROOTCERT);
 			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert))
 			{
-				LogMessage(::Error, _("Failed to parse trusted root cert."));
+				LogMessage(MessageType::Error, _("Failed to parse trusted root cert."));
 				DoClose();
 				return;
 			}
@@ -322,7 +322,7 @@ void CHttpControlSocket::OnConnect()
 		}
 		else
 		{
-			LogMessage(Status, _("TLS/SSL connection established, sending HTTP request"));
+			LogMessage(MessageType::Status, _("TLS/SSL connection established, sending HTTP request"));
 			ResetOperation(FZ_REPLY_OK);
 		}
 
@@ -330,7 +330,7 @@ void CHttpControlSocket::OnConnect()
 	}
 	else
 	{
-		LogMessage(Status, _("Connection established, sending HTTP request"));
+		LogMessage(MessageType::Status, _("Connection established, sending HTTP request"));
 		ResetOperation(FZ_REPLY_OK);
 	}
 }
@@ -346,9 +346,9 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 							  const wxString &remoteFile, bool download,
 							  const CFileTransferCommand::t_transferSettings&)
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::FileTransfer()"));
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransfer()"));
 
-	LogMessage(Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile).c_str());
+	LogMessage(MessageType::Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile).c_str());
 
 	if (!download)
 	{
@@ -358,7 +358,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	if (m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("deleting nonzero pData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
 		delete m_pCurOpData;
 	}
 
@@ -394,11 +394,11 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::FileTransferSubcommandResult(%d)"), prevResult);
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSubcommandResult(%d)"), prevResult);
 
 	if (!m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -414,17 +414,17 @@ int CHttpControlSocket::FileTransferSubcommandResult(int prevResult)
 
 int CHttpControlSocket::FileTransferSend()
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::FileTransferSend()"));
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSend()"));
 
 	if (!m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	if( !m_current_uri.HasScheme() || !m_current_uri.HasServer() || !m_current_uri.HasPath() ) {
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI());
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -449,7 +449,7 @@ int CHttpControlSocket::FileTransferSend()
 		location += _T("?") + m_current_uri.GetQuery();
 	}
 	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.c_str() );
-	LogMessageRaw(Command, action);
+	LogMessageRaw(MessageType::Command, action);
 
 	wxString hostWithPort = m_current_uri.GetServer();
 	if( m_current_uri.HasPort() ) {
@@ -470,7 +470,7 @@ int CHttpControlSocket::FileTransferSend()
 
 int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool tls)
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::InternalConnect()"));
 
 	CHttpConnectOpData* pData = new CHttpConnectOpData;
 	pData->pNextOpData = m_pCurOpData;
@@ -479,7 +479,7 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 	pData->tls = tls;
 
 	if (!IsIpAddress(host))
-		LogMessage(Status, _("Resolving address of %s"), host.c_str());
+		LogMessage(MessageType::Status, _("Resolving address of %s"), host.c_str());
 
 	pData->host = host;
 	return DoInternalConnect();
@@ -487,11 +487,11 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 
 int CHttpControlSocket::DoInternalConnect()
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::DoInternalConnect()"));
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::DoInternalConnect()"));
 
 	if (!m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -513,11 +513,11 @@ int CHttpControlSocket::DoInternalConnect()
 
 int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::FileTransferParseResponse(%p, %d)"), p, len);
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferParseResponse(%p, %d)"), p, len);
 
 	if (!m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Info, _T("Empty m_pCurOpData"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -548,7 +548,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 
 		if (pData->pFile->Write(p, len) != len)
 		{
-			LogMessage(::Error, _("Failed to write to file %s"), pData->localFile.c_str());
+			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile.c_str());
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
 		}
@@ -575,7 +575,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 			{
 				if (m_pRecvBuffer[i + 1] != '\n')
 				{
-					LogMessage(::Error, _("Malformed reply, server not sending proper line endings"));
+					LogMessage(MessageType::Error, _("Malformed reply, server not sending proper line endings"));
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
@@ -587,7 +587,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 			if (m_recvBufferPos == m_recvBufferLen)
 			{
 				// We don't support header lines larger than 4096
-				LogMessage(::Error, _("Too long header line"));
+				LogMessage(MessageType::Error, _("Too long header line"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -597,7 +597,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 		m_pRecvBuffer[i] = 0;
 		const wxString& line = wxString(m_pRecvBuffer, wxConvLocal);
 		if (!line.empty())
-			LogMessageRaw(Response, line);
+			LogMessageRaw(MessageType::Response, line);
 
 		if (pData->m_responseCode == -1)
 		{
@@ -605,7 +605,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 			if (m_recvBufferPos < 16 || memcmp(m_pRecvBuffer, "HTTP/1.", 7))
 			{
 				// Invalid HTTP Status-Line
-				LogMessage(::Error, _("Invalid HTTP Response"));
+				LogMessage(MessageType::Error, _("Invalid HTTP Response"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -615,7 +615,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				m_pRecvBuffer[11] < '0' || m_pRecvBuffer[11] > '9')
 			{
 				// Invalid response code
-				LogMessage(::Error, _("Invalid response code"));
+				LogMessage(MessageType::Error, _("Invalid response code"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -647,7 +647,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 			if (pData->m_responseCode == 305)
 			{
 				// Unsupported redirect
-				LogMessage(::Error, _("Unsupported redirect"));
+				LogMessage(MessageType::Error, _("Unsupported redirect"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -662,7 +662,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				if (pData->m_responseCode >= 300)
 				{
 					if (pData->m_redirectionCount++ == 6) {
-						LogMessage(::Error, _("Too many redirects"));
+						LogMessage(MessageType::Error, _("Too many redirects"));
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -671,21 +671,21 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					ResetHttpData(pData);
 
 					if( !pData->m_newLocation.HasScheme() || !pData->m_newLocation.HasServer() || !pData->m_newLocation.HasPath() ) {
-						LogMessage(::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI().c_str());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI().c_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
 					enum ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme());
 					if( protocol != HTTP && protocol != HTTPS ) {
-						LogMessage(::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
 					long port = CServer::GetDefaultPort(protocol);
 					if( pData->m_newLocation.HasPort() && (!pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535) ) {
-						LogMessage(::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -755,7 +755,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				{
 					if (*p < '0' || *p > '9')
 					{
-						LogMessage(::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
+						LogMessage(MessageType::Error, _("Malformed header: %s"), _("Invalid Content-Length"));
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -810,7 +810,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			{
 				if (p[i + 1] != '\n')
 				{
-					LogMessage(::Error, _("Malformed chunk data: %s"), _("Wrong line endings"));
+					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Wrong line endings"));
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
@@ -822,7 +822,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			if (len == m_recvBufferLen)
 			{
 				// We don't support lines larger than 4096
-				LogMessage(::Error, _("Malformed chunk data: %s"), _("Line length exceeded"));
+				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Line length exceeded"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -837,7 +837,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 			{
 				// The chunk data has to end with CRLF. If i is nonzero,
 				// it didn't end with just CRLF.
-				LogMessage(::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated"));
+				LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Chunk data improperly terminated"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
@@ -869,7 +869,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 				}
 				else {
 					// Invalid size
-					LogMessage(::Error, _("Malformed chunk data: %s"), _("Invalid chunk size"));
+					LogMessage(MessageType::Error, _("Malformed chunk data: %s"), _("Invalid chunk size"));
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
@@ -908,9 +908,9 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 		if (m_pBackend)
 		{
 			if (nErrorCode == FZ_REPLY_OK)
-				LogMessage(Status, _("Disconnected from server"));
+				LogMessage(MessageType::Status, _("Disconnected from server"));
 			else
-				LogMessage(::Error, _("Disconnected from server"));
+				LogMessage(MessageType::Error, _("Disconnected from server"));
 		}
 		ResetSocket();
 		m_pHttpOpData = 0;
@@ -921,11 +921,11 @@ int CHttpControlSocket::ResetOperation(int nErrorCode)
 
 void CHttpControlSocket::OnClose(int error)
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::OnClose(%d)"), error);
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::OnClose(%d)"), error);
 
 	if (error)
 	{
-		LogMessage(::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).c_str());
+		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).c_str());
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
@@ -995,7 +995,7 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 		res = FileTransferParseResponse(p, len);
 		break;
 	default:
-		LogMessage(Debug_Warning, _T("No action for parsing data for command %d"), (int)commandId);
+		LogMessage(MessageType::Debug_Warning, _T("No action for parsing data for command %d"), (int)commandId);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		res = FZ_REPLY_ERROR;
 		break;
@@ -1008,10 +1008,10 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 
 int CHttpControlSocket::ParseSubcommandResult(int prevResult)
 {
-	LogMessage(Debug_Verbose, _T("CHttpControlSocket::SendNextCommand(%d)"), prevResult);
+	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::SendNextCommand(%d)"), prevResult);
 	if (!m_pCurOpData)
 	{
-		LogMessage(__TFILE__, __LINE__, this, Debug_Warning, _T("SendNextCommand called without active operation"));
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1021,7 +1021,7 @@ int CHttpControlSocket::ParseSubcommandResult(int prevResult)
 	case cmd_transfer:
 		return FileTransferSubcommandResult(prevResult);
 	default:
-		LogMessage(__TFILE__, __LINE__, this, ::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
+		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown opID (%d) in SendNextCommand"), m_pCurOpData->opId);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		break;
 	}
@@ -1043,7 +1043,7 @@ int CHttpControlSocket::OpenFile( CHttpFileTransferOpData* pData)
 
 	if (!pData->pFile->Open(pData->localFile, pData->resume ? wxFile::write_append : wxFile::write))
 	{
-		LogMessage(::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
+		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
