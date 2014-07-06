@@ -807,8 +807,18 @@ int CFtpControlSocket::LogonParseResponse()
 	{
 		t_loginCommand cmd = pData->loginSequence.front();
 
-		if (code != 2 && code != 3)
-		{
+		if (code != 2 && code != 3) {
+			if( cmd.type == loginCommandType::user || cmd.type == loginCommandType::pass ) {
+				wxString const user = m_pCurrentServer->GetUser();
+				if( user.StartsWith(_T(" ")) || user.EndsWith(_T(" ")) ) {
+					LogMessage(Status, _("Check your login credentials. The entered username starts or ends with a space character."));
+				}
+				wxString const pw = m_pCurrentServer->GetPass();
+				if( pw.StartsWith(_T(" ")) || pw.EndsWith(_T(" ")) ) {
+					LogMessage(Status, _("Check your login credentials. The entered password starts or ends with a space character."));
+				}
+			}
+
 			if (m_pCurrentServer->GetEncodingType() == ENCODING_AUTO && m_useUTF8)
 			{
 				// Fall back to local charset for the case that the server might not
