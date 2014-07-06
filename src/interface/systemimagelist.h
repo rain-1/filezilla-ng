@@ -6,7 +6,7 @@
 #include <commctrl.h>
 #endif
 
-enum filetype
+enum class iconType
 {
 	file,
 	dir,
@@ -38,7 +38,7 @@ public:
 
 	wxImageList* GetSystemImageList() { return m_pImageList; }
 
-	int GetIconIndex(enum filetype type, const wxString& fileName = _T(""), bool physical = true, bool symlink = false);
+	int GetIconIndex(iconType type, const wxString& fileName = _T(""), bool physical = true, bool symlink = false);
 
 #ifdef __WXMSW__
 	int GetLinkOverlayIndex();

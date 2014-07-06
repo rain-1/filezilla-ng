@@ -162,7 +162,7 @@ wxBitmap PrepareIcon(wxIcon icon, wxSize size)
 }
 #endif
 
-int CSystemImageList::GetIconIndex(enum filetype type, const wxString& fileName /*=_T("")*/, bool physical /*=true*/, bool symlink /*=false*/)
+int CSystemImageList::GetIconIndex(iconType type, const wxString& fileName /*=_T("")*/, bool physical /*=true*/, bool symlink /*=false*/)
 {
 	if (!m_pImageList)
 		return -1;
@@ -174,10 +174,10 @@ int CSystemImageList::GetIconIndex(enum filetype type, const wxString& fileName 
 	SHFILEINFO shFinfo;
 	memset(&shFinfo, 0, sizeof(SHFILEINFO));
 	if (SHGetFileInfo(!fileName.empty() ? fileName : _T("{B97D3074-1830-4b4a-9D8A-17A38B074052}"),
-		(type != file) ? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL,
+		(type != iconType::file) ? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL,
 		&shFinfo,
 		sizeof(SHFILEINFO),
-		SHGFI_ICON | ((type == opened_dir) ? SHGFI_OPENICON : 0) | ((physical) ? 0 : SHGFI_USEFILEATTRIBUTES) ) )
+		SHGFI_ICON | ((type == iconType::opened_dir) ? SHGFI_OPENICON : 0) | ((physical) ? 0 : SHGFI_USEFILEATTRIBUTES) ) )
 	{
 		int icon = shFinfo.iIcon;
 		// we only need the index from the system image list
@@ -188,13 +188,13 @@ int CSystemImageList::GetIconIndex(enum filetype type, const wxString& fileName 
 	int icon;
 	switch (type)
 	{
-	case file:
+	case iconType::file:
 	default:
 		icon = symlink ? 3 : 0;
 		break;
-	case dir:
+	case iconType::dir:
 		return symlink ? 4 : 1;
-	case opened_dir:
+	case iconType::opened_dir:
 		return symlink ? 5 : 2;
 	}
 
