@@ -49,12 +49,14 @@ public:
 	wxThreadEx(wxThreadKind kind = wxTHREAD_DETACHED);
 	virtual ~wxThreadEx();
 
+	wxThreadEx(wxThreadEx const&) = delete;
+	wxThreadEx& operator=(wxThreadEx const&) = delete;
+
 	wxThreadError Create(unsigned int stackSize = 0);
 	wxThreadError Run();
 	wxThread::ExitCode Wait();
 
 	virtual wxThread::ExitCode Entry() = 0;
-
 private:
 	wxMutex m_mutex;
 	wxCondition m_condition;
