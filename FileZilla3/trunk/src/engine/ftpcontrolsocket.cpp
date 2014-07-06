@@ -103,7 +103,7 @@ enum rawtransferStates
 	rawtransfer_waitsocket
 };
 
-enum loginCommandType
+enum class loginCommandType
 {
 	user,
 	pass,
@@ -115,7 +115,7 @@ struct t_loginCommand
 {
 	bool optional;
 	bool hide_arguments;
-	enum loginCommandType type;
+	loginCommandType type;
 
 	wxString command;
 };
@@ -515,20 +515,20 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	if (!pData->ftp_proxy_type)
 	{
 		// User
-		t_loginCommand cmd = {false, false, user, _T("")};
+		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
 		pData->loginSequence.push_back(cmd);
 
 		// Password
 		cmd.optional = true;
 		cmd.hide_arguments = true;
-		cmd.type = pass;
+		cmd.type = loginCommandType::pass;
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
 		if (!server.GetAccount().empty())
 		{
 			cmd.hide_arguments = false;
-			cmd.type = account;
+			cmd.type = loginCommandType::account;
 			pData->loginSequence.push_back(cmd);
 		}
 	}
@@ -538,7 +538,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		if (!proxyUser.empty())
 		{
 			// Proxy logon (if credendials are set)
-			t_loginCommand cmd = {false, false, other, _T("USER ") + proxyUser};
+			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
 			pData->loginSequence.push_back(cmd);
 			cmd.optional = true;
 			cmd.hide_arguments = true;
@@ -546,13 +546,13 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			pData->loginSequence.push_back(cmd);
 		}
 		// User@host
-		t_loginCommand cmd = {false, false, user, wxString::Format(_T("USER %s@%s"), server.GetUser().c_str(), server.FormatHost().c_str())};
+		t_loginCommand cmd = {false, false, loginCommandType::user, wxString::Format(_T("USER %s@%s"), server.GetUser().c_str(), server.FormatHost().c_str())};
 		pData->loginSequence.push_back(cmd);
 
 		// Password
 		cmd.optional = true;
 		cmd.hide_arguments = true;
-		cmd.type = pass;
+		cmd.type = loginCommandType::pass;
 		cmd.command = _T("");
 		pData->loginSequence.push_back(cmd);
 
@@ -560,7 +560,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		if (!server.GetAccount().empty())
 		{
 			cmd.hide_arguments = false;
-			cmd.type = account;
+			cmd.type = loginCommandType::account;
 			pData->loginSequence.push_back(cmd);
 		}
 	}
@@ -570,7 +570,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		if (!proxyUser.empty())
 		{
 			// Proxy logon (if credendials are set)
-			t_loginCommand cmd = {false, false, other, _T("USER ") + proxyUser};
+			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
 			pData->loginSequence.push_back(cmd);
 			cmd.optional = true;
 			cmd.hide_arguments = true;
@@ -579,7 +579,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		}
 
 		// Site or Open
-		t_loginCommand cmd = {false, false, user, _T("")};
+		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
 		if (pData->ftp_proxy_type == 2)
 			cmd.command = _T("SITE ") + server.FormatHost();
 		else
@@ -587,21 +587,21 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// User
-		cmd.type = user;
+		cmd.type = loginCommandType::user;
 		cmd.command = _T("");
 		pData->loginSequence.push_back(cmd);
 
 		// Password
 		cmd.optional = true;
 		cmd.hide_arguments = true;
-		cmd.type = pass;
+		cmd.type = loginCommandType::pass;
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
 		if (!server.GetAccount().empty())
 		{
 			cmd.hide_arguments = false;
-			cmd.type = account;
+			cmd.type = loginCommandType::account;
 			pData->loginSequence.push_back(cmd);
 		}
 	}
@@ -677,25 +677,25 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			else
 				cmd.hide_arguments = false;
 
-			if (isUser && !pass && !isAccount)
+			if (isUser && !password && !isAccount)
 			{
 				cmd.optional = false;
-				cmd.type = ::user;
+				cmd.type = loginCommandType::user;
 			}
-			else if (pass && !isUser && !isAccount)
+			else if (password && !isUser && !isAccount)
 			{
 				cmd.optional = true;
-				cmd.type = ::pass;
+				cmd.type = loginCommandType::pass;
 			}
-			else if (isAccount && !isUser && !pass)
+			else if (isAccount && !isUser && !password)
 			{
 				cmd.optional = true;
-				cmd.type = ::account;
+				cmd.type = loginCommandType::account;
 			}
 			else
 			{
 				cmd.optional = false;
-				cmd.type = other;
+				cmd.type = loginCommandType::other;
 			}
 
 			cmd.command = token;
@@ -829,7 +829,7 @@ int CFtpControlSocket::LogonParseResponse()
 					{
 						LogMessage(Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."), 0);
 						int error = FZ_REPLY_DISCONNECTED;
-						if (cmd.type == pass && code == 5)
+						if (cmd.type == loginCommandType::pass && code == 5)
 							error |= FZ_REPLY_PASSWORDFAILED;
 						DoClose(error);
 						return FZ_REPLY_ERROR;
@@ -839,7 +839,7 @@ int CFtpControlSocket::LogonParseResponse()
 					if (!GetLoginSequence(*m_pCurrentServer))
 					{
 						int error = FZ_REPLY_DISCONNECTED;
-						if (cmd.type == pass && code == 5)
+						if (cmd.type == loginCommandType::pass && code == 5)
 							error |= FZ_REPLY_PASSWORDFAILED;
 						DoClose(error);
 						return FZ_REPLY_ERROR;
@@ -849,7 +849,7 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 
 			int error = FZ_REPLY_DISCONNECTED;
-			if (cmd.type == pass && code == 5)
+			if (cmd.type == loginCommandType::pass && code == 5)
 				error |= FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED;
 			DoClose(error);
 			return FZ_REPLY_ERROR;
@@ -864,7 +864,7 @@ int CFtpControlSocket::LogonParseResponse()
 		else if (code == 3 && pData->loginSequence.empty())
 		{
 			LogMessage(::Error, _("Login sequence fully executed yet not logged in. Aborting."));
-			if (cmd.type == pass && m_pCurrentServer->GetAccount().empty())
+			if (cmd.type == loginCommandType::pass && m_pCurrentServer->GetAccount().empty())
 				LogMessage(::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
 			DoClose(FZ_REPLY_CRITICALERROR);
 			return FZ_REPLY_ERROR;
@@ -1121,7 +1121,7 @@ int CFtpControlSocket::LogonSend()
 			t_loginCommand cmd = pData->loginSequence.front();
 			switch (cmd.type)
 			{
-			case user:
+			case loginCommandType::user:
 				if (m_pCurrentServer->GetLogonType() == INTERACTIVE)
 				{
 					pData->waitChallenge = true;
@@ -1133,7 +1133,7 @@ int CFtpControlSocket::LogonSend()
 				else
 					res = Send(cmd.command);
 				break;
-			case pass:
+			case loginCommandType::pass:
 				if (!pData->challenge.empty())
 				{
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(pData->challenge);
@@ -1157,13 +1157,13 @@ int CFtpControlSocket::LogonSend()
 					res = Send(c, true);
 				}
 				break;
-			case account:
+			case loginCommandType::account:
 				if (cmd.command.empty())
 					res = Send(_T("ACCT ") + m_pCurrentServer->GetAccount());
 				else
 					res = Send(cmd.command);
 				break;
-			case other:
+			case loginCommandType::other:
 				wxASSERT(!cmd.command.empty());
 				res = Send(cmd.command, cmd.hide_arguments);
 				break;
