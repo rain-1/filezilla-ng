@@ -5301,7 +5301,7 @@ msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Xin kiểm tra tại http://filezilla-project.org/probe.php máy chủ này phải "
+"Xin kiểm tra tại https://filezilla-project.org/probe.php máy chủ này phải "
 "chạy được và cẩn thận kiểm tra lại cài đặt của bạn."
 
 #: resources.h:647
@@ -6163,7 +6163,7 @@ msgstr "Thông tin an ninh"
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Xem thêm: http://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Xem thêm: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:313
 msgid "Sele&ct server"
@@ -8186,7 +8186,7 @@ msgstr "nhóm được phép ghi"
 #, fuzzy
 msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 msgstr ""
-"Xin hãy đọc http://wiki.filezilla-project.org/Date_and_Time_formatting để "
+"Xin hãy đọc https://wiki.filezilla-project.org/Date_and_Time_formatting để "
 "biết thêm chi tiết"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:91
@@ -8281,10 +8281,10 @@ msgstr "wxWidgets:"
 #~ msgstr "Tùy chọn cao cấp:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Bạn có thể có lựa chọn khác là tải về bản mới từ http://filezilla-project."
+#~ "Bạn có thể có lựa chọn khác là tải về bản mới từ https://filezilla-project."
 #~ "org."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8336,19 +8336,19 @@ msgstr "wxWidgets:"
 #~ msgstr "Đóng gói"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Xin hãy kiểm tra phiên bản mới của FileZila tại http://filezilla-project."
+#~ "Xin hãy kiểm tra phiên bản mới của FileZila tại https://filezilla-project."
 #~ "org."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Xin kiểm tra lại chương trình quản lý đóng gói trong hệ thống của bạn cho "
-#~ "gói cập nhật hay truy cập http://filezilla-project.org để tải về mã nguồn "
+#~ "gói cập nhật hay truy cập https://filezilla-project.org/ để tải về mã nguồn "
 #~ "của FileZilla."
 
 #~ msgid ""
@@ -8359,17 +8359,17 @@ msgstr "wxWidgets:"
 #~ "(liệt kê theo thứ tự khả năng giảm dần):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Mời bạn truy cập http://filezilla-project.org để tìm thêm thông tin về "
+#~ "Mời bạn truy cập https://filezilla-project.org/ để tìm thêm thông tin về "
 #~ "FileZilla."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Mời bạn truy cập http://filezilla-project.org để tải phiên bản mới nhất "
+#~ "Mời bạn truy cập https://filezilla-project.org/ để tải phiên bản mới nhất "
 #~ "của FileZilla."
 
 #~ msgid "Resolving hostname"

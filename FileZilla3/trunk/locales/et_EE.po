@@ -1437,11 +1437,11 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"FileZilla värskeima versiooni allalaadimiseks külastage saiti http://"
-"filezilla-project.org."
+"FileZilla värskeima versiooni allalaadimiseks külastage saiti https://"
+"filezilla-project.org/."
 
 #: ../../locales/../src/interface/QueueView.cpp:2053
 #, c-format
@@ -5110,26 +5110,26 @@ msgstr "Platvorm:"
 
 #: resources.h:251
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"FileZilla värskeima versiooni leiate saidilt http://filezilla-project.org"
+"FileZilla värskeima versiooni leiate saidilt https://filezilla-project.org/"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Kontrollige http://filezilla-project.org/probe.php peal serveri töösolekut "
+"Kontrollige https://filezilla-project.org/probe.php peal serveri töösolekut "
 "ning vaadake hoolikalt veelkord üle oma seaded."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Kontrollige oma süsteemi pakihalduriga uuendatud paki olemasolu või "
-"külastage saiti http://filezilla-project.org FileZilla lähtekoodi "
+"külastage saiti https://filezilla-project.org/ FileZilla lähtekoodi "
 "allalaadimiseks."
 
 #: resources.h:697
@@ -5151,7 +5151,7 @@ msgid ""
 "Please ensure you have a stable internet connection and carefully check your "
 "settings again."
 msgstr ""
-"Veenduge, et interneti ühendus toimib stabiilselt ja kontrollige http://"
+"Veenduge, et interneti ühendus toimib stabiilselt ja kontrollige https://"
 "filezilla-project.org/probe.php peal serveri töösolekut."
 
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:70
@@ -5356,10 +5356,10 @@ msgstr ""
 #: resources.h:902 resources.h:908
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Rohkem infot loe saidilt http://wiki.filezilla-project.org/"
+"Rohkem infot loe saidilt https://wiki.filezilla-project.org/"
 "Date_and_Time_formatting"
 
 #: resources.h:247
@@ -5428,19 +5428,19 @@ msgstr ""
 
 #: resources.h:254
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Rohkem infot FileZilla kohta leiate saidilt http://filezilla-project.org."
+"Rohkem infot FileZilla kohta leiate saidilt https://filezilla-project.org/."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"FileZilla värskeima versiooni allalaadimiseks külastage saiti http://"
-"filezilla-project.org."
+"FileZilla värskeima versiooni allalaadimiseks külastage saiti https://"
+"filezilla-project.org/."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:184
 #: ../../locales/../src/interface/verifycertdialog.cpp:185
@@ -5936,8 +5936,8 @@ msgstr "Turvalisusinfo"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Vaata ka: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Vaata ka: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:376
 msgid "Sele&ct server"

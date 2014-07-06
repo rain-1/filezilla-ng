@@ -5162,10 +5162,10 @@ msgstr "Платформа:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Моля, проверете на http://filezilla-project.org/probe.php дали сървърът "
+"Моля, проверете на https://filezilla-project.org/probe.php дали сървърът "
 "работи и внимателно огледайте отново настройките си."
 
 #: resources.h:684
@@ -5394,10 +5394,10 @@ msgstr ""
 #: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Моля, прочетете http://wiki.filezilla-project.org/Date_and_Time_formatting "
+"Моля, прочетете https://wiki.filezilla-project.org/Date_and_Time_formatting "
 "за подробности"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -6013,9 +6013,9 @@ msgstr "Информация за защитата"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
-"Прочетете повече на: http://wiki.filezilla-project.org/Network_Configuration"
+"Прочетете повече на: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:362
 msgid "Sele&ct server"

@@ -8404,7 +8404,7 @@ msgstr "écriture par le groupe"
 #, fuzzy
 msgid "https://wiki.filezilla-project.org/Date_and_Time_formatting"
 msgstr ""
-"Visitez http://wiki.filezilla-project.org/Date_and_Time_formatting pour plus "
+"Visitez https://wiki.filezilla-project.org/Date_and_Time_formatting pour plus "
 "de détails"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:91

@@ -1421,10 +1421,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"Podètz anar tanben sul site http://filezilla-project.org per telecargar la "
+"Podètz anar tanben sul site https://filezilla-project.org/ per telecargar la "
 "darrièra version."
 
 #: ../../locales/../src/interface/sitemanager.cpp:2304
@@ -4962,24 +4962,24 @@ msgstr ""
 
 #: resources.h:249
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Mercé d'anar a http://filezilla-project.org per aver la darrièra version de "
+"Mercé d'anar a https://filezilla-project.org/ per aver la darrièra version de "
 "FileZilla."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Mercé de verificar sus http://filezilla-project.org/probe.php se lo servidor "
+"Mercé de verificar sus https://filezilla-project.org/probe.php se lo servidor "
 "fonciona e verificatz vòstres paramètres."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 
 #: resources.h:679
@@ -5179,10 +5179,10 @@ msgstr ""
 #: resources.h:882 resources.h:888
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Mercé de legir http://wiki.filezilla-project.org/Date_and_Time_formatting "
+"Mercé de legir https://wiki.filezilla-project.org/Date_and_Time_formatting "
 "pels detalhs"
 
 #: resources.h:245
@@ -5246,19 +5246,19 @@ msgstr ""
 
 #: resources.h:252
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Mercé d'anar sul site http://filezilla-project.org per mai d'informacions a "
+"Mercé d'anar sul site https://filezilla-project.org/ per mai d'informacions a "
 "prepaus de FileZilla."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"Mercé d'anar sul site http://filezilla-project.org per telecargar la "
+"Mercé d'anar sul site https://filezilla-project.org/ per telecargar la "
 "darrièra version."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:178
@@ -5708,9 +5708,9 @@ msgstr "Informacion de seguretat"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
-"De veire tanben: http://wiki.filezilla-project.org/Network_Configuration"
+"De veire tanben: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:374
 msgid "Sele&ct server"

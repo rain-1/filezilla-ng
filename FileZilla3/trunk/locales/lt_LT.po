@@ -5152,10 +5152,10 @@ msgstr "Platforma:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Svetainėje http://filezilla-project.org/probe.php patikrinkite ar serveris "
+"Svetainėje https://filezilla-project.org/probe.php patikrinkite ar serveris "
 "veikia, tada dar kartą patikrinkite savo nustatymus."
 
 #: resources.h:683
@@ -5380,10 +5380,10 @@ msgstr ""
 #: resources.h:889 resources.h:895
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Norėdami sužinoti daugiau apsilankykite http://wiki.filezilla-project.org/"
+"Norėdami sužinoti daugiau apsilankykite https://wiki.filezilla-project.org/"
 "Date_and_Time_formatting svetainėje"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -5986,9 +5986,9 @@ msgstr "Saugumo informacija"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
-"Taip pat žiūrėkite: http://wiki.filezilla-project.org/Network_Configuration"
+"Taip pat žiūrėkite: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:362
 msgid "Sele&ct server"
@@ -8048,10 +8048,10 @@ msgstr "wxWidgets:"
 #~ msgstr "Sudėtingesnės parinktys:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Aplankykite http://filezilla-project.org ir atsisiųskite naujausią "
+#~ "Aplankykite https://filezilla-project.org/ ir atsisiųskite naujausią "
 #~ "versiją."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8102,19 +8102,19 @@ msgstr "wxWidgets:"
 #~ msgstr "Paketas"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Naujausios FileZilla versijos ieškokite http://filezilla-project.org "
+#~ "Naujausios FileZilla versijos ieškokite https://filezilla-project.org/ "
 #~ "svetainėje."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Atnaujinto FileZilla paketo ieškokite savo sistemos paketų tvarkyklėje "
-#~ "arba apsilankykite http://filezilla-project.org ir atsisiųskite programos "
+#~ "arba apsilankykite https://filezilla-project.org/ ir atsisiųskite programos "
 #~ "FileZilla programos pradinį kodą."
 
 #~ msgid ""
@@ -8125,15 +8125,15 @@ msgstr "wxWidgets:"
 #~ "problema išlieka (išrikiuotos eilėje mažėjančia tikimybe):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
-#~ msgstr "Apie FileZilla galite sužinoti http://filezilla-project.org"
+#~ msgstr "Apie FileZilla galite sužinoti https://filezilla-project.org/"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Norėdami gauti naujausią FileZilla versiją aplankykite http://filezilla-"
+#~ "Norėdami gauti naujausią FileZilla versiją aplankykite https://filezilla-"
 #~ "project.org svetainę."
 
 #~ msgid "Resolving hostname"

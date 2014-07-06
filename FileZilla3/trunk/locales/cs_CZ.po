@@ -1463,10 +1463,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1118
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"Nebo navštivte http://filezilla-project.org pro získání nejnovější verze "
+"Nebo navštivte https://filezilla-project.org/ pro získání nejnovější verze "
 "aplikace FileZilla."
 
 #: ../../locales/../src/interface/QueueView.cpp:2046
@@ -5205,27 +5205,27 @@ msgstr "Platforma:"
 
 #: resources.h:261
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Podívejte se na http://filezilla-project.org pro získání nejnovější verze "
+"Podívejte se na https://filezilla-project.org/ pro získání nejnovější verze "
 "aplikace FileZilla."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Ověřte na stránce http://filezilla-project.org/probe.php, že server běží a "
+"Ověřte na stránce https://filezilla-project.org/probe.php, že server běží a "
 "znovu pečlivě zkontrolujte svá nastavení."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1091
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Zkontrolujte správce balíčků ve svém systému zda neobsahuje novější balíček "
-"nebo navštivte http://filezilla-project.org a stáhněte si zdrojový kód "
+"nebo navštivte https://filezilla-project.org/ a stáhněte si zdrojový kód "
 "aplikace FileZilla."
 
 #: resources.h:707
@@ -5448,10 +5448,10 @@ msgstr ""
 #: resources.h:912 resources.h:918
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Podrobné informace najdete na adrese: http://wiki.filezilla-project.org/"
+"Podrobné informace najdete na adrese: https://wiki.filezilla-project.org/"
 "Date_and_Time_formatting"
 
 #: resources.h:257
@@ -5523,19 +5523,19 @@ msgstr ""
 
 #: resources.h:264
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Navštivte http://filezilla-project.org pro získání více informací o aplikaci "
+"Navštivte https://filezilla-project.org/ pro získání více informací o aplikaci "
 "FileZilla."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1089
 #: ../../locales/../src/interface/updatewizard.cpp:1111
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"Navštivte http://filezilla-project.org pro získání nejnovější verze aplikace "
+"Navštivte https://filezilla-project.org/ pro získání nejnovější verze aplikace "
 "FileZilla."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
@@ -6054,8 +6054,8 @@ msgstr "Bezpečnostní informace"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Podívejte se: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Podívejte se: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:386
 msgid "Sele&ct server"

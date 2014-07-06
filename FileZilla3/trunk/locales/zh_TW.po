@@ -4966,10 +4966,10 @@ msgstr "平台:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"請檢查 http://filezilla-project.org/probe.php 有在運作並請再次仔細地檢查您的"
+"請檢查 https://filezilla-project.org/probe.php 有在運作並請再次仔細地檢查您的"
 "設定."
 
 #: resources.h:684
@@ -5178,10 +5178,10 @@ msgstr ""
 #: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"更多資訊請參閱 http://wiki.filezilla-project.org/Date_and_Time_formatting"
+"更多資訊請參閱 https://wiki.filezilla-project.org/Date_and_Time_formatting"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
 msgid ""
@@ -5772,8 +5772,8 @@ msgstr "安全資訊"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "也請見: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "也請見: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:362
 msgid "Sele&ct server"
@@ -7738,9 +7738,9 @@ msgstr "wxWidgets:"
 #~ msgstr "進階選項:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
-#~ msgstr "也可以拜訪 http://filezilla-project.org 下載最近的版本."
+#~ msgstr "也可以拜訪 https://filezilla-project.org/ 下載最近的版本."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
 #~ msgstr "檢查每日組建版的 FileZilla (&H)"
@@ -7788,16 +7788,16 @@ msgstr "wxWidgets:"
 #~ msgstr "套件"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
-#~ msgstr "請到 http://filezilla-project.org 檢查最近版本的 FileZilla."
+#~ msgstr "請到 https://filezilla-project.org/ 檢查最近版本的 FileZilla."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "請檢查您系統的套件管理程式來更新套件, 或是拜訪 http://filezilla-project."
+#~ "請檢查您系統的套件管理程式來更新套件, 或是拜訪 https://filezilla-project."
 #~ "org 下載 FileZilla 的原始碼."
 
 #~ msgid ""
@@ -7807,15 +7807,15 @@ msgstr "wxWidgets:"
 #~ "請重新嘗試下載更新. 如果此問題依舊持續, 可能的問題有 (依可能性遞減排列):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "請拜訪 http://filezilla-project.org 以獲得更多關於 FileZilla 的資訊."
+#~ "請拜訪 https://filezilla-project.org/ 以獲得更多關於 FileZilla 的資訊."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
-#~ msgstr "請到 http://filezilla-project.org 下載最近的版本."
+#~ msgstr "請到 https://filezilla-project.org/ 下載最近的版本."
 
 #~ msgid "Resolving hostname"
 #~ msgstr "正在解析主機名稱"

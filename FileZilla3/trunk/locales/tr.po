@@ -5519,10 +5519,10 @@ msgstr ""
 #: resources.h:857 resources.h:863
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Ayrıntılı bilgi için lütfen http://filezilla-project.org/wiki/index.php/"
+"Ayrıntılı bilgi için lütfen https://filezilla-project.org/wiki/index.php/"
 "Date_and_Time_formatting (İngilizce) makalesine başvurun"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570

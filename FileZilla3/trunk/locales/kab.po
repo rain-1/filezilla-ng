@@ -5152,7 +5152,7 @@ msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Vous pouvez également visiter http://filezilla-project.org pour télécharger "
+"Vous pouvez également visiter https://filezilla-project.org/ pour télécharger "
 "la dernière version."
 
 #: resources.h:693
@@ -5343,7 +5343,7 @@ msgstr ""
 #: resources.h:903 resources.h:909
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
 
@@ -7948,10 +7948,10 @@ msgstr ""
 #~ msgstr "Options avancées :"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Vous pouvez également visiter http://filezilla-project.org pour "
+#~ "Vous pouvez également visiter https://filezilla-project.org/ pour "
 #~ "télécharger la dernière version."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -7993,16 +7993,16 @@ msgstr ""
 
 #, fuzzy
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Vous pouvez également visiter http://filezilla-project.org pour "
+#~ "Vous pouvez également visiter https://filezilla-project.org/ pour "
 #~ "télécharger la dernière version."
 
 #, fuzzy
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Vous pouvez également visiter http://filezilla-project.org pour "
+#~ "Vous pouvez également visiter https://filezilla-project.org/ pour "
 #~ "télécharger la dernière version."

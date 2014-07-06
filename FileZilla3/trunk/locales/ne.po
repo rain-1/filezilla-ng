@@ -1479,10 +1479,10 @@ msgstr ""
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 #, fuzzy
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"कृपया सबभन्दा पछिल्लो संस्करण डाउनलोड गर्न http://filezilla-project.org हेर्नुहोस् ।"
+"कृपया सबभन्दा पछिल्लो संस्करण डाउनलोड गर्न https://filezilla-project.org/ हेर्नुहोस् ।"
 
 #: ../../locales/../src/interface/sitemanager.cpp:2304
 msgid ""
@@ -5198,27 +5198,27 @@ msgstr ""
 
 #: resources.h:249
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"फाइलजील्लाको सबै भन्दा पछिल्लो संस्करणका लागि कृपया http://filezilla-project.org "
+"फाइलजील्लाको सबै भन्दा पछिल्लो संस्करणका लागि कृपया https://filezilla-project.org/ "
 "जाँच गर्नुहोस् ।"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
 "कृपया सर्भर चलिरहेको छ र फेरी तपाईँको सेटिङ सावधानीपूर्वक चलिरहेको छ भन्ने थाहा पाउन "
-"http://filezilla-project.org/probe.php जाँच गर्नुहोस् ।"
+"https://filezilla-project.org/probe.php जाँच गर्नुहोस् ।"
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "एउटा अद्यावधिक गरिएको प्याकेजका लागि तपाईँको प्रणालीको प्याकेज प्रबन्धक जाँच गर्नुहोस् वा "
-"फाइलजील्लाको स्रोत कोड डाउनलोड गर्न http://filezilla-project.org हेर्नुहोस् ।"
+"फाइलजील्लाको स्रोत कोड डाउनलोड गर्न https://filezilla-project.org/ हेर्नुहोस् ।"
 
 #: resources.h:679
 msgid ""
@@ -5238,7 +5238,7 @@ msgid ""
 "Please ensure you have a stable internet connection and carefully check your "
 "settings again."
 msgstr ""
-"कृपया तपाईँसँग स्थिर इन्टरेट जडान छ भन्ने निश्चित गर्नुहोस् र सर्भर चलिरहेको हेर्न http://"
+"कृपया तपाईँसँग स्थिर इन्टरेट जडान छ भन्ने निश्चित गर्नुहोस् र सर्भर चलिरहेको हेर्न https://"
 "filezilla-project.org/probe.php मा जाँच गर्नुहोस् ।"
 
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:70
@@ -5429,10 +5429,10 @@ msgstr ""
 #: resources.h:882 resources.h:888
 #, fuzzy, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"कृपया फाइलजील्लाको बारेमा विस्तृत जानकारीका लागि http://filezilla-project.org "
+"कृपया फाइलजील्लाको बारेमा विस्तृत जानकारीका लागि https://filezilla-project.org/ "
 "हेर्नुहोस् ।"
 
 #: resources.h:245
@@ -5503,19 +5503,19 @@ msgstr ""
 #: resources.h:252
 #, fuzzy
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"कृपया फाइलजील्लाको बारेमा विस्तृत जानकारीका लागि http://filezilla-project.org "
+"कृपया फाइलजील्लाको बारेमा विस्तृत जानकारीका लागि https://filezilla-project.org/ "
 "हेर्नुहोस् ।"
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"कृपया सबभन्दा पछिल्लो संस्करण डाउनलोड गर्न http://filezilla-project.org हेर्नुहोस् ।"
+"कृपया सबभन्दा पछिल्लो संस्करण डाउनलोड गर्न https://filezilla-project.org/ हेर्नुहोस् ।"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:178
 msgid "Postal code:"
@@ -5979,7 +5979,7 @@ msgstr "सूचना निर्माण गर्नुहोस्"
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 #, fuzzy
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr "पूर्वानिर्धारण: http://ip.filezilla-project.org/ip.php"
 
 #: resources.h:374

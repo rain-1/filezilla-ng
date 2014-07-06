@@ -5252,7 +5252,7 @@ msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Controleer op http://filezilla-project.org/probe.php of de server draait en "
+"Controleer op https://filezilla-project.org/probe.php of de server draait en "
 "bekijk uw instellingen dan rustig opnieuw."
 
 #: resources.h:693
@@ -5482,10 +5482,10 @@ msgstr ""
 #: resources.h:903 resources.h:909
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Lees http://filezilla-project.org/wiki/index.php/Date_and_Time_formatting "
+"Lees https://filezilla-project.org/wiki/index.php/Date_and_Time_formatting "
 "voor details"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -6118,7 +6118,7 @@ msgstr "Beveiligingsinformatie"
 #: ../../locales/../src/interface/netconfwizard.cpp:577
 #, fuzzy
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Zie ook: http://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Zie ook: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:359
 msgid "Sele&ct server"
@@ -8209,10 +8209,10 @@ msgstr "wxWidgets:"
 #~ msgstr "Geavanceerde opties:"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Als alternatief bezoekt u http://filezilla-project.org om de nieuwste "
+#~ "Als alternatief bezoekt u https://filezilla-project.org/ om de nieuwste "
 #~ "versie te downloaden."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8264,18 +8264,18 @@ msgstr "wxWidgets:"
 #~ msgstr "Pakket"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Bezoek http://filezilla-project.org voor de nieuwste versie van FileZilla."
+#~ "Bezoek https://filezilla-project.org/ voor de nieuwste versie van FileZilla."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Controleer de pakketbeheerder van uw systeem voor een nieuwere versie of "
-#~ "bezoek http://filezilla-project.org om de broncode van FileZilla te "
+#~ "bezoek https://filezilla-project.org/ om de broncode van FileZilla te "
 #~ "downloaden."
 
 #~ msgid ""
@@ -8287,16 +8287,16 @@ msgstr "wxWidgets:"
 #~ "waarschijnlijkheid):"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Bezoek http://filezilla-project.org voor meer informatie over FileZilla."
+#~ "Bezoek https://filezilla-project.org/ voor meer informatie over FileZilla."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Bezoek http://filezilla-project.org om de nieuwste versie te downloaden."
+#~ "Bezoek https://filezilla-project.org/ om de nieuwste versie te downloaden."
 
 #~ msgid "Resolving hostname"
 #~ msgstr "Hostnaam ophalen"
@@ -8502,10 +8502,10 @@ msgstr "wxWidgets:"
 
 #~ msgid ""
 #~ "Please make sure you are running the latest version of FileZilla. Visit "
-#~ "http://filezilla-project.org for details."
+#~ "https://filezilla-project.org/ for details."
 #~ msgstr ""
-#~ "Zorg ervoor dat u de laatste versie van FileZilla gebruikt. Bezoek http://"
-#~ "filezilla-project.org voor details."
+#~ "Zorg ervoor dat u de laatste versie van FileZilla gebruikt. Bezoek https://"
+#~ "filezilla-project.org/ voor details."
 
 #~ msgid ""
 #~ "Submit a bug report if this problem persists even with the latest version "

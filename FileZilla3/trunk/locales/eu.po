@@ -1456,9 +1456,9 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1118
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
-msgstr "Aukeran, ikusi http://filezilla-project.org bertsio berriena jeisteko."
+msgstr "Aukeran, ikusi https://filezilla-project.org/ bertsio berriena jeisteko."
 
 #: ../../locales/../src/interface/QueueView.cpp:2055
 #, c-format
@@ -5232,27 +5232,27 @@ msgstr "Plataforma:"
 
 #: resources.h:259
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Mesedez egiaztatu http://filezilla-project.org FileZilla-ren bertsio "
+"Mesedez egiaztatu https://filezilla-project.org/ FileZilla-ren bertsio "
 "berrienerako."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Mesedez egiaztatu hemen: http://filezilla-project.org/probe.php zerbitzaria "
+"Mesedez egiaztatu hemen: https://filezilla-project.org/probe.php zerbitzaria "
 "ekinean dagoela eta zure ezarpenak berriro egiaztatzeko."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1091
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Mesedez egiaztatu zure sistemako pakete kudeatzailea pakete eguneratu "
-"baterako edo ikusi http://filezilla-project.org FileZilla-ren iturburu kodea "
+"baterako edo ikusi https://filezilla-project.org/ FileZilla-ren iturburu kodea "
 "jeisteko."
 
 #: resources.h:705
@@ -5479,10 +5479,10 @@ msgstr ""
 #: resources.h:910 resources.h:916
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Mesedez irakurri http://wiki.filezilla-project.org/Date_and_Time_formatting "
+"Mesedez irakurri https://wiki.filezilla-project.org/Date_and_Time_formatting "
 "xehetasunetarako"
 
 #: resources.h:255
@@ -5555,18 +5555,18 @@ msgstr ""
 
 #: resources.h:262
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Mesedez ikusi http://filezilla-project.org FileZillari buruzko argibide "
+"Mesedez ikusi https://filezilla-project.org/ FileZillari buruzko argibide "
 "gehiagorako."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1089
 #: ../../locales/../src/interface/updatewizard.cpp:1111
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
-msgstr "Mesedez ikusi http://filezilla-project.org bertsio berriena jeisteko."
+msgstr "Mesedez ikusi https://filezilla-project.org/ bertsio berriena jeisteko."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:186
 #: ../../locales/../src/interface/verifycertdialog.cpp:187
@@ -6086,8 +6086,8 @@ msgstr "Segurtasun argibideak"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Ikusi ere: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Ikusi ere: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:384
 msgid "Sele&ct server"

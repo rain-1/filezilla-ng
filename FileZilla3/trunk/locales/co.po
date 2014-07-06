@@ -5242,10 +5242,10 @@ msgstr "Piattaforma :"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Verificate nantu à http://filezilla-project.org/probe.php chì u servu sia "
+"Verificate nantu à https://filezilla-project.org/probe.php chì u servu sia "
 "lanciatu è cuntrollate torna e vostre preferenze precisamente."
 
 #: resources.h:684
@@ -5480,10 +5480,10 @@ msgstr ""
 #: resources.h:890 resources.h:896
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Andate nantu à http://wiki.filezilla-project.org/Date_and_Time_formatting "
+"Andate nantu à https://wiki.filezilla-project.org/Date_and_Time_formatting "
 "per avè più di ditaglii"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -6110,8 +6110,8 @@ msgstr "Infurmazione di sicurità"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Vede ancu : http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Vede ancu : https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:362
 msgid "Sele&ct server"
@@ -8237,10 +8237,10 @@ msgstr "wxWidgets :"
 #~ msgstr "Ozzioni di l'Espertu :"
 
 #~ msgid ""
-#~ "Alternatively, visit http://filezilla-project.org to download the most "
+#~ "Alternatively, visit https://filezilla-project.org/ to download the most "
 #~ "recent version."
 #~ msgstr ""
-#~ "Pudete visità dinù http://filezilla-project.org per telecaricà à più "
+#~ "Pudete visità dinù https://filezilla-project.org/ per telecaricà à più "
 #~ "recente versione."
 
 #~ msgid "C&heck for nightly builds of FileZilla"
@@ -8292,19 +8292,19 @@ msgstr "wxWidgets :"
 #~ msgstr "Pacchettu"
 
 #~ msgid ""
-#~ "Please check http://filezilla-project.org for the most recent version of "
+#~ "Please check https://filezilla-project.org/ for the most recent version of "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Andate puru nantu à http://filezilla-project.org per telecaricà l'ultima "
+#~ "Andate puru nantu à https://filezilla-project.org/ per telecaricà l'ultima "
 #~ "versione di FileZilla."
 
 #~ msgid ""
 #~ "Please check the package manager of your system for an updated package or "
-#~ "visit http://filezilla-project.org to download the source code of "
+#~ "visit https://filezilla-project.org/ to download the source code of "
 #~ "FileZilla."
 #~ msgstr ""
 #~ "Verificate u ghjestiunariu di pacchettu di u vostru sistemu per sapè "
-#~ "s'ella si trova una nova versione o visitate http://filezilla-project.org "
+#~ "s'ella si trova una nova versione o visitate https://filezilla-project.org/ "
 #~ "per telecaricà u codice surghjente di FileZilla."
 
 #~ msgid ""
@@ -8315,17 +8315,17 @@ msgstr "wxWidgets :"
 #~ "e raghjoni pussibule sò, da u più prubabile à u menu :"
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org for more information about "
+#~ "Please visit https://filezilla-project.org/ for more information about "
 #~ "FileZilla."
 #~ msgstr ""
-#~ "Andate nantu à http://filezilla-project.org per avè più di ditaglii à "
+#~ "Andate nantu à https://filezilla-project.org/ per avè più di ditaglii à "
 #~ "prupositu di FileZilla."
 
 #~ msgid ""
-#~ "Please visit http://filezilla-project.org to download the most recent "
+#~ "Please visit https://filezilla-project.org/ to download the most recent "
 #~ "version."
 #~ msgstr ""
-#~ "Andate nantu à http://filezilla-project.org per telecaricà à piu recente "
+#~ "Andate nantu à https://filezilla-project.org/ per telecaricà à piu recente "
 #~ "versione."
 
 #~ msgid "Resolving hostname"

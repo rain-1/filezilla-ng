@@ -1459,10 +1459,10 @@ msgstr ""
 
 #: ../../locales/../src/interface/updatewizard.cpp:1097
 msgid ""
-"Alternatively, visit http://filezilla-project.org to download the most "
+"Alternatively, visit https://filezilla-project.org/ to download the most "
 "recent version."
 msgstr ""
-"Alternativament, visiteu http://filezilla-project.org per a baixar-vos la "
+"Alternativament, visiteu https://filezilla-project.org/ per a baixar-vos la "
 "darrera versió."
 
 #: ../../locales/../src/interface/sitemanager.cpp:2304
@@ -5149,26 +5149,26 @@ msgstr ""
 
 #: resources.h:249
 msgid ""
-"Please check http://filezilla-project.org for the most recent version of "
+"Please check https://filezilla-project.org/ for the most recent version of "
 "FileZilla."
 msgstr ""
-"Visiteu http://filezilla-project.org per a la darrera versió de FileZilla."
+"Visiteu https://filezilla-project.org/ per a la darrera versió de FileZilla."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:553
 msgid ""
-"Please check on http://filezilla-project.org/probe.php that the server is "
+"Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
 msgstr ""
-"Comproveu http://filezilla-project.org/probe.php que el servidor s'està "
+"Comproveu https://filezilla-project.org/probe.php que el servidor s'està "
 "executant i comproveu curosament la vostra configuració una altra vegada"
 
 #: ../../locales/../src/interface/updatewizard.cpp:1076
 msgid ""
 "Please check the package manager of your system for an updated package or "
-"visit http://filezilla-project.org to download the source code of FileZilla."
+"visit https://filezilla-project.org/ to download the source code of FileZilla."
 msgstr ""
 "Comproveu el gestor de paquest del vostre sistema per un paquet actualitzat "
-"o visiteu http://filezilla-project.org per a baixar-vos el codi font del "
+"o visiteu https://filezilla-project.org/ per a baixar-vos el codi font del "
 "FileZilla."
 
 #: resources.h:679
@@ -5389,10 +5389,10 @@ msgstr ""
 #: resources.h:882 resources.h:888
 #, no-c-format
 msgid ""
-"Please read http://wiki.filezilla-project.org/Date_and_Time_formatting for "
+"Please read https://wiki.filezilla-project.org/Date_and_Time_formatting for "
 "details"
 msgstr ""
-"Llegiu http://wiki.filezilla-project.org/Date_and_Time_formatting per als "
+"Llegiu https://wiki.filezilla-project.org/Date_and_Time_formatting per als "
 "detalls"
 
 #: resources.h:245
@@ -5465,18 +5465,18 @@ msgstr ""
 
 #: resources.h:252
 msgid ""
-"Please visit http://filezilla-project.org for more information about "
+"Please visit https://filezilla-project.org/ for more information about "
 "FileZilla."
 msgstr ""
-"Visiteu http://filezilla-project.org per a més informació del FileZilla."
+"Visiteu https://filezilla-project.org/ per a més informació del FileZilla."
 
 #: ../../locales/../src/interface/updatewizard.cpp:1074
 #: ../../locales/../src/interface/updatewizard.cpp:1090
 msgid ""
-"Please visit http://filezilla-project.org to download the most recent "
+"Please visit https://filezilla-project.org/ to download the most recent "
 "version."
 msgstr ""
-"Visiteu http://filezilla-project.org per a baixar-vos la darrera versió."
+"Visiteu https://filezilla-project.org/ per a baixar-vos la darrera versió."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:178
 msgid "Postal code:"
@@ -5934,8 +5934,8 @@ msgstr "Informació sobre seguretat"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:564
 #: ../../locales/../src/interface/netconfwizard.cpp:577
-msgid "See also: http://wiki.filezilla-project.org/Network_Configuration"
-msgstr "Veure també: http://wiki.filezilla-project.org/Network_Configuration"
+msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
+msgstr "Veure també: https://wiki.filezilla-project.org/Network_Configuration"
 
 #: resources.h:374
 msgid "Sele&ct server"
