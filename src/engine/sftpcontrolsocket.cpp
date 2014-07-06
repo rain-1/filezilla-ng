@@ -205,7 +205,7 @@ protected:
 			readType -= '0';
 
 			sftpEvent eventType = sftpEvent::Unknown;
-			if( readType > 0 && readType <= static_cast<char>(sftpEvent::max) ) {
+			if( readType >= 0 && readType <= static_cast<char>(sftpEvent::max) ) {
 				eventType = static_cast<sftpEvent>(readType);
 			}
 
