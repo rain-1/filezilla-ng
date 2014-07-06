@@ -13,7 +13,7 @@ public:
 	virtual ~CStatusView();
 
 	void AddToLog(CLogmsgNotification *pNotification);
-	void AddToLog(enum MessageType messagetype, const wxString& message, const wxDateTime& time);
+	void AddToLog(MessageType messagetype, const wxString& message, const wxDateTime& time);
 
 	void InitDefAttr();
 

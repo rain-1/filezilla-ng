@@ -164,7 +164,7 @@ public:
 	CFtpTransferOpData();
 	virtual ~CFtpTransferOpData() {}
 
-	enum TransferEndReason transferEndReason;
+	TransferEndReason transferEndReason;
 	bool tranferCommandSent;
 
 	wxLongLong resumeOffset;

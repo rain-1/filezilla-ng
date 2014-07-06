@@ -988,7 +988,7 @@ void CHttpControlSocket::ResetHttpData(CHttpOpData* pData)
 int CHttpControlSocket::ProcessData(char* p, int len)
 {
 	int res;
-	enum Command commandId = GetCurrentCommandId();
+	Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
 	case Command::transfer:

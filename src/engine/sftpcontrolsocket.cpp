@@ -1524,7 +1524,7 @@ int CSftpControlSocket::ChangeDirSend()
 
 int CSftpControlSocket::ProcessReply(bool successful, const wxString& reply /*=_T("")*/)
 {
-	enum Command commandId = GetCurrentCommandId();
+	Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
 	case Command::connect:

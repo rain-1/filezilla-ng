@@ -34,14 +34,14 @@ public:
 
 	bool m_binaryMode;
 
-	enum TransferEndReason GetTransferEndreason() const { return m_transferEndReason; }
+	TransferEndReason GetTransferEndreason() const { return m_transferEndReason; }
 
 protected:
 	bool CheckGetNextWriteBuffer();
 	bool CheckGetNextReadBuffer();
 	void FinalizeWrite();
 
-	void TransferEnd(enum TransferEndReason reason);
+	void TransferEnd(TransferEndReason reason);
 
 	bool InitBackend();
 	bool InitTls(const CTlsSocket* pPrimaryTlsSocket);

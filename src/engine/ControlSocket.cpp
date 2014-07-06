@@ -34,7 +34,7 @@ BEGIN_EVENT_TABLE(CControlSocket, wxEvtHandler)
 	EVT_COMMAND(wxID_ANY, fzOBTAINLOCK, CControlSocket::OnObtainLock)
 END_EVENT_TABLE()
 
-COpData::COpData(enum Command op_Id)
+COpData::COpData(Command op_Id)
 	: opId(op_Id)
 {
 	opState = 0;
@@ -87,7 +87,7 @@ int CControlSocket::Disconnect()
 	return FZ_REPLY_OK;
 }
 
-enum Command CControlSocket::GetCurrentCommandId() const
+Command CControlSocket::GetCurrentCommandId() const
 {
 	if (m_pCurOpData)
 		return m_pCurOpData->opId;
@@ -179,7 +179,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 
 	if (m_pCurOpData)
 	{
-		const enum Command commandId = m_pCurOpData->opId;
+		const Command commandId = m_pCurOpData->opId;
 		switch (commandId)
 		{
 		case Command::none:

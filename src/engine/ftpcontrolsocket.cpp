@@ -461,7 +461,7 @@ void CFtpControlSocket::ParseResponse()
 		return;
 	}
 
-	enum Command commandId = GetCurrentCommandId();
+	Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
 	case Command::connect:
