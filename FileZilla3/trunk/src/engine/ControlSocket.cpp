@@ -174,7 +174,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	if ((nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR &&
 		(!m_pCurOpData || m_pCurOpData->opId != cmd_transfer))
 	{
-		prefix = _("Critial error:") + _T(" ");
+		prefix = _("Critical error:") + _T(" ");
 	}
 
 	if (m_pCurOpData)
