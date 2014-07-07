@@ -97,6 +97,9 @@ public:
 	CState(CMainFrame* pMainFrame);
 	~CState();
 
+	CState(CState const&) = delete;
+	CState& operator=(CState const&) = delete;
+
 	bool CreateEngine();
 	void DestroyEngine();
 
