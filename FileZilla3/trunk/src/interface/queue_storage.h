@@ -15,6 +15,9 @@ public:
 	CQueueStorage();
 	virtual ~CQueueStorage();
 
+	CQueueStorage(CQueueStorage const&) = delete;
+	CQueueStorage& operator=(CQueueStorage const&) = delete;
+
 	// Call before loading
 	bool BeginTransaction();
 
