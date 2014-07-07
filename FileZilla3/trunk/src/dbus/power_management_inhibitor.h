@@ -16,6 +16,9 @@ public:
 	CPowerManagementInhibitor();
 	virtual ~CPowerManagementInhibitor();
 
+	CPowerManagementInhibitor(CPowerManagementInhibitor const&) = delete;
+	CPowerManagementInhibitor& operator=(CPowerManagementInhibitor const&) = delete;
+
 	void RequestIdle();
 	void RequestBusy();
 private:
