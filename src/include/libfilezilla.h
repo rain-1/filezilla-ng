@@ -15,6 +15,12 @@
 #include "setup.h"
 
 #ifdef __WXMSW__
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+#ifndef STRICT
+#define STRICT 1
+#endif
 #include <windows.h>
 #endif
 

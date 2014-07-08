@@ -13,9 +13,6 @@
 #include <gtk/gtk.h>
 #endif
 
-#ifdef max
-#undef max
-#endif
 #include <algorithm>
 
 bool CWrapEngine::m_use_cache = true;
