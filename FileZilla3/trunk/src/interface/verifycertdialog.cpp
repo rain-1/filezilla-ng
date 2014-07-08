@@ -270,42 +270,37 @@ bool CVerifyCertDialog::IsTrusted(CCertificateNotification* pNotification)
 	return IsTrusted(pNotification->GetHost(), pNotification->GetPort(), data, len, false);
 }
 
-bool CVerifyCertDialog::IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly)
+bool CVerifyCertDialog::DoIsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, std::list<CVerifyCertDialog::t_certData> const& trustedCerts)
 {
-	for (std::list<t_certData>::const_iterator iter = m_trustedCerts.begin(); iter != m_trustedCerts.end(); ++iter)
-	{
-		if (host != iter->host)
-			continue;
-
-		if (port != iter->port)
-			continue;
-
-		if (iter->len != len)
-			continue;
-
-		if (!memcmp(iter->data, data, len))
-			return true;
+	if( !data || !len ) {
+		return false;
 	}
 
-	if (permanentOnly)
-		return false;
-
-	for (std::list<t_certData>::const_iterator iter = m_sessionTrustedCerts.begin(); iter != m_sessionTrustedCerts.end(); ++iter)
-	{
-		if (host != iter->host)
+	for ( auto const& cert : trustedCerts ) {
+		if (host != cert.host)
 			continue;
 
-		if (port != iter->port)
+		if (port != cert.port)
 			continue;
 
-		if (iter->len != len)
+		if (cert.len != len)
 			continue;
 
-		if (!memcmp(iter->data, data, len))
+		if (!memcmp(cert.data, data, len))
 			return true;
 	}
 
 	return false;
+}
+
+bool CVerifyCertDialog::IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly)
+{
+	bool trusted = DoIsTrusted(host, port, data, len, m_trustedCerts);
+	if( !trusted && !permanentOnly ) {
+		trusted = DoIsTrusted(host, port, data, len, m_sessionTrustedCerts);
+	}
+
+	return trusted;
 }
 
 wxString CVerifyCertDialog::ConvertHexToString(const unsigned char* data, unsigned int len)

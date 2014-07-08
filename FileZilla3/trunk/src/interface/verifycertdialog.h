@@ -13,7 +13,15 @@ public:
 	void ShowVerificationDialog(CCertificateNotification* pNotification, bool displayOnly = false);
 
 protected:
+	struct t_certData {
+		wxString host;
+		int port{};
+		unsigned char* data{};
+		unsigned int len{};
+	};
+
 	bool IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly);
+	bool DoIsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, std::list<t_certData> const& trustedCerts);
 
 	bool DisplayCert(wxDialogEx* pDlg, const CCertificate& cert);
 
@@ -29,15 +37,6 @@ protected:
 
 	void LoadTrustedCerts(bool close = true);
 
-	struct t_certData
-	{
-		t_certData() : port(), data(), len() {}
-
-		wxString host;
-		int port;
-		unsigned char* data;
-		unsigned int len;
-	};
 	std::list<t_certData> m_trustedCerts;
 	std::list<t_certData> m_sessionTrustedCerts;
 
