@@ -12,6 +12,7 @@ bool IsRoutableAddress(const wxString& address, enum CSocket::address_family fam
 
 bool IsIpAddress(const wxString& address);
 
+// Get a random number uniformly distributed in the closed interval [min, max]
 int GetRandomNumber(int low, int high);
 
 // Under some locales (e.g. Turkish), there is a different
