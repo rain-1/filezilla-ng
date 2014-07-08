@@ -11,33 +11,9 @@ wxEvent *wxFzEvent::Clone() const
 	return new wxFzEvent(*this);
 }
 
-CNotification::CNotification()
-{
-}
-
-CNotification::~CNotification()
-{
-}
-
-CLogmsgNotification::CLogmsgNotification()
-{
-}
-
-CLogmsgNotification::~CLogmsgNotification()
-{
-}
-
 enum NotificationId CLogmsgNotification::GetID() const
 {
 	return nId_logmsg;
-}
-
-COperationNotification::COperationNotification()
-{
-}
-
-COperationNotification::~COperationNotification()
-{
 }
 
 enum NotificationId COperationNotification::GetID() const
@@ -50,37 +26,14 @@ CDirectoryListingNotification::CDirectoryListingNotification(const CServerPath& 
 {
 }
 
-CDirectoryListingNotification::~CDirectoryListingNotification()
-{
-}
-
 enum NotificationId CDirectoryListingNotification::GetID() const
 {
 	return nId_listing;
 }
 
-CAsyncRequestNotification::CAsyncRequestNotification()
-{
-}
-
-CAsyncRequestNotification::~CAsyncRequestNotification()
-{
-}
-
 enum NotificationId CAsyncRequestNotification::GetID() const
 {
 	return nId_asyncrequest;
-}
-
-CFileExistsNotification::CFileExistsNotification()
-{
-	localSize = remoteSize = -1;
-	overwriteAction = unknown;
-	ascii = false;
-}
-
-CFileExistsNotification::~CFileExistsNotification()
-{
 }
 
 enum RequestId CFileExistsNotification::GetRequestID() const
@@ -90,11 +43,6 @@ enum RequestId CFileExistsNotification::GetRequestID() const
 
 CInteractiveLoginNotification::CInteractiveLoginNotification(const wxString& challenge)
 	: m_challenge(challenge)
-{
-	passwordSet = false;
-}
-
-CInteractiveLoginNotification::~CInteractiveLoginNotification()
 {
 }
 
@@ -108,18 +56,14 @@ CActiveNotification::CActiveNotification(int direction)
 {
 }
 
-CActiveNotification::~CActiveNotification()
-{
-}
-
 enum NotificationId CActiveNotification::GetID() const
 {
 	return nId_active;
 }
 
 CTransferStatusNotification::CTransferStatusNotification(CTransferStatus *pStatus)
+	: m_pStatus(pStatus)
 {
-	m_pStatus = pStatus;
 }
 
 CTransferStatusNotification::~CTransferStatusNotification()
@@ -138,11 +82,7 @@ const CTransferStatus* CTransferStatusNotification::GetStatus() const
 }
 
 CHostKeyNotification::CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed /*=false*/)
-	: m_trust(false), m_alwaysTrust(false), m_host(host), m_port(port), m_fingerprint(fingerprint), m_changed(changed)
-{
-}
-
-CHostKeyNotification::~CHostKeyNotification()
+	: m_host(host), m_port(port), m_fingerprint(fingerprint), m_changed(changed)
 {
 }
 
@@ -321,10 +261,4 @@ CCertificateNotification::CCertificateNotification(const wxString& host, unsigne
 	m_sessionMac = sessionMac;
 
 	m_certificates = certificates;
-
-	m_trusted = false;
-}
-
-CCertificateNotification::~CCertificateNotification()
-{
 }

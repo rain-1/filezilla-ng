@@ -67,20 +67,17 @@ enum RequestId
 class CNotification
 {
 public:
-	CNotification();
-	virtual ~CNotification();
+	virtual ~CNotification() = default;
 	virtual enum NotificationId GetID() const = 0;
 };
 
 class CLogmsgNotification : public CNotification
 {
 public:
-	CLogmsgNotification();
-	virtual ~CLogmsgNotification();
 	virtual enum NotificationId GetID() const;
 
 	wxString msg;
-	MessageType msgType; // Type of message, see logging.h for details
+	MessageType msgType{MessageType::Status}; // Type of message, see logging.h for details
 };
 
 // If CFileZillaEngine does return with FZ_REPLY_WOULDBLOCK, you will receive
@@ -88,12 +85,10 @@ public:
 class COperationNotification : public CNotification
 {
 public:
-	COperationNotification();
-	virtual ~COperationNotification();
 	virtual enum NotificationId GetID() const;
 
-	int nReplyCode;
-	Command commandId;
+	int nReplyCode{};
+	Command commandId{Command::none};
 };
 
 // You get this type of notification everytime a directory listing has been
@@ -104,51 +99,46 @@ class CDirectoryListingNotification : public CNotification
 {
 public:
 	CDirectoryListingNotification(const CServerPath& path, const bool modified = false, const bool failed = false);
-	virtual ~CDirectoryListingNotification();
 	virtual enum NotificationId GetID() const;
 	bool Modified() const { return m_modified; }
 	bool Failed() const { return m_failed; }
 	const CServerPath GetPath() const { return m_path; }
 
 protected:
-	bool m_modified;
-	bool m_failed;
+	bool m_modified{};
+	bool m_failed{};
 	CServerPath m_path;
 };
 
 class CAsyncRequestNotification : public CNotification
 {
 public:
-	CAsyncRequestNotification();
-	virtual ~CAsyncRequestNotification();
 	virtual enum NotificationId GetID() const;
 
 	virtual enum RequestId GetRequestID() const = 0;
 
-	unsigned int requestNumber; // Do never change this
+	unsigned int requestNumber{}; // Do never change this
 };
 
 class CFileExistsNotification : public CAsyncRequestNotification
 {
 public:
-	CFileExistsNotification();
-	virtual ~CFileExistsNotification();
 	virtual enum RequestId GetRequestID() const;
 
-	bool download;
+	bool download{};
 
 	wxString localFile;
-	wxLongLong localSize;
+	wxLongLong localSize{-1};
 	CDateTime localTime;
 
 	wxString remoteFile;
 	CServerPath remotePath;
-	wxLongLong remoteSize;
+	wxLongLong remoteSize{-1};
 	CDateTime remoteTime;
 
-	bool ascii;
+	bool ascii{};
 
-	bool canResume;
+	bool canResume{};
 
 	// overwriteAction will be set by the request handler
 	enum OverwriteAction
@@ -167,7 +157,7 @@ public:
 	};
 
 	// Set overwriteAction to the desired action
-	enum OverwriteAction overwriteAction;
+	OverwriteAction overwriteAction{unknown};
 
 	// Set to new filename if overwriteAction is rename. Might trigger further
 	// file exists notifications if new target file exists as well.
@@ -178,11 +168,10 @@ class CInteractiveLoginNotification : public CAsyncRequestNotification
 {
 public:
 	CInteractiveLoginNotification(const wxString& challenge);
-	virtual ~CInteractiveLoginNotification();
 	virtual enum RequestId GetRequestID() const;
 
 	// Set to true if you have set a password
-	bool passwordSet;
+	bool passwordSet{};
 
 	// Set password by calling server.SetUser
 	CServer server;
@@ -199,7 +188,6 @@ class CActiveNotification : public CNotification
 {
 public:
 	CActiveNotification(int direction);
-	virtual ~CActiveNotification();
 	virtual enum NotificationId GetID() const;
 	int GetDirection() const { return m_direction; }
 protected:
@@ -210,17 +198,17 @@ class CTransferStatus
 {
 public:
 	wxDateTime started;
-	wxFileOffset totalSize;		// Total size of the file to transfer, -1 if unknown
-	wxFileOffset startOffset;
-	wxFileOffset currentOffset;
+	wxFileOffset totalSize{-1};		// Total size of the file to transfer, -1 if unknown
+	wxFileOffset startOffset{-1};
+	wxFileOffset currentOffset{-1};
 
 	// True on download notifications iff currentOffset != startOffset.
 	// True on FTP upload notifications iff currentOffset != startOffset
 	// AND after the first accepted data after the first wxSOCKET_WOULDBLOCK.
 	// SFTP uploads: Set to true if currentOffset >= startOffset + 65536.
-	bool madeProgress;
+	bool madeProgress{};
 
-	bool list;
+	bool list{};
 };
 
 class CTransferStatusNotification : public CNotification
@@ -242,7 +230,6 @@ class CHostKeyNotification : public CAsyncRequestNotification
 {
 public:
 	CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed = false);
-	virtual ~CHostKeyNotification();
 	virtual enum RequestId GetRequestID() const;
 
 	wxString GetHost() const;
@@ -250,11 +237,11 @@ public:
 	wxString GetFingerprint() const;
 
 	// Set to true if you trust the server
-	bool m_trust;
+	bool m_trust{};
 
 	// If m_truest is true, set this to true to always trust this server
 	// in future.
-	bool m_alwaysTrust;
+	bool m_alwaysTrust{};
 
 protected:
 
@@ -343,7 +330,6 @@ public:
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
 		const std::vector<CCertificate> &certificates);
-	virtual ~CCertificateNotification();
 	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
 
 	const wxString& GetHost() const { return m_host; }
@@ -352,7 +338,7 @@ public:
 	const wxString& GetSessionCipher() const { return m_sessionCipher; }
 	const wxString& GetSessionMac() const { return m_sessionMac; }
 
-	bool m_trusted;
+	bool m_trusted{};
 
 	const std::vector<CCertificate> GetCertificates() const { return m_certificates; }
 
