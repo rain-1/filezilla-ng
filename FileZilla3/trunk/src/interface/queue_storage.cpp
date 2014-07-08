@@ -18,7 +18,7 @@ enum _column_type
 
 enum _column_flags
 {
-	not_null,
+	not_null = 1,
 	autoincrement
 };
 
