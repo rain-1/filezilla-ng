@@ -2732,7 +2732,7 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
 		if (i == m_pContextControl->GetCurrentTab())
 			continue;
-		if (controls->site_bookmarks->path != path)
+		if (!controls->site_bookmarks || controls->site_bookmarks->path != path)
 			continue;
 
 		site_bookmarks = controls->site_bookmarks;
