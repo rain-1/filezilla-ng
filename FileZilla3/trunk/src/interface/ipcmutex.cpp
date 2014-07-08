@@ -145,7 +145,14 @@ void CInterProcessMutex::Unlock()
 		f.l_start = m_type;
 		f.l_len = 1;
 		f.l_pid = getpid();
-		fcntl(m_fd, F_SETLKW, &f);
+		while (fcntl(m_fd, F_SETLKW, &f) == -1)
+		{
+			if (errno == EINTR) // Interrupted by signal, retry
+				continue;
+
+			// Can't do any locking in this case
+			return;
+		}
 	}
 #endif
 }
