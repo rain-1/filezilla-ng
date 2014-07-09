@@ -3,7 +3,6 @@
 #include "Options.h"
 
 #include <wx/dcclient.h>
-#include <wx/wupdlock.h>
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -177,12 +176,9 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 		prefix = _T("\n");
 #endif
 
-#ifndef __WXGTK__
-	wxWindowUpdateLocker *pLock = 0;
-#endif //__WXGTK__
 	if (m_nLineCount >= MAX_LINECOUNT) {
 #ifndef __WXGTK__
-		pLock = new wxWindowUpdateLocker(m_pTextCtrl);
+		m_pTextCtrl->Freeze();
 #endif //__WXGTK__
 		int oldLength = m_lineLengths.front();
 		m_pTextCtrl->Remove(0, oldLength + 1);
@@ -234,16 +230,6 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 		}
 	}
 
-	if (m_nLineCount >= MAX_LINECOUNT) {
-		auto it = m_lineLengths.begin();
-		*it = lineLength;
-		m_lineLengths.splice(m_lineLengths.end(), m_lineLengths, it);
-	}
-	else {
-		m_lineLengths.push_back(lineLength);
-		m_nLineCount++;
-	}
-
 	prefix += message;
 #if defined(__WXGTK__)
 	// AppendText always calls SetInsertionPointEnd, which is very expensive.
@@ -254,11 +240,22 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 		m_pTextCtrl->WriteText(prefix);
 #elif defined(__WXMAC__)
 	m_pTextCtrl->WriteText(prefix);
-	delete pLock;
 #else
 	m_pTextCtrl->AppendText(prefix, m_nLineCount, m_attributeCache[static_cast<int>(messagetype)].cf);
-	delete pLock;
 #endif
+
+	if (m_nLineCount >= MAX_LINECOUNT) {
+		auto it = m_lineLengths.begin();
+		*it = lineLength;
+		m_lineLengths.splice(m_lineLengths.end(), m_lineLengths, it);
+#ifndef __WXGTK__
+		m_pTextCtrl->Thaw();
+#endif
+	}
+	else {
+		m_lineLengths.push_back(lineLength);
+		m_nLineCount++;
+	}
 }
 
 void CStatusView::InitDefAttr()
