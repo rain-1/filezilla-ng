@@ -254,7 +254,7 @@ template<class T> bool CRefcountObject_Uninitialized<T>::operator<(const CRefcou
 	if (!cmp.data_)
 		return false;
 
-	return *data_.get() < *cmp.data_.get();
+	return *data_->get() < *cmp.data_->get();
 }
 
 template<class T> void CRefcountObject_Uninitialized<T>::clear()
