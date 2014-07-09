@@ -1,6 +1,23 @@
 #ifndef __REFCOUNT_H__
 #define __REFCOUNT_H__
 
+#include <memory>
+#include <type_traits>
+
+template<class T> struct CRefcountObjectData
+{
+	inline T* get() {
+		return static_cast<T*>(static_cast<void*>(&v_));
+	}
+
+	inline T const* get() const {
+		return static_cast<T const*>(static_cast<void const*>(&v_));
+	}
+
+	std::aligned_storage_t<sizeof(T)> v_;
+	int refcount_;
+};
+
 // Trivial template class to refcount objects with COW semantics.
 template<class T> class CRefcountObject
 {
@@ -23,8 +40,7 @@ public:
 
 	CRefcountObject<T>& operator=(const CRefcountObject<T>& v);
 protected:
-	int* m_refcount;
-	T* m_ptr;
+	CRefcountObjectData<T> *data_;
 };
 
 template<class T> class CRefcountObject_Uninitialized
@@ -53,221 +69,214 @@ public:
 
 	CRefcountObject_Uninitialized<T>& operator=(const CRefcountObject_Uninitialized<T>& v);
 
-	bool operator!() const { return m_ptr == 0; }
+	bool operator!() const { return data_ == 0; }
 protected:
-	int* m_refcount;
-	T* m_ptr;
+	CRefcountObjectData<T> *data_;
 };
 
 template<class T> bool CRefcountObject<T>::operator==(const CRefcountObject<T>& cmp) const
 {
-	if (m_ptr == cmp.m_ptr)
+	if (data_ == cmp.data_)
 		return true;
 
-	return *m_ptr == *cmp.m_ptr;
+	return *data_->get() == *cmp.data_->get();
 }
 
 template<class T> CRefcountObject<T>::CRefcountObject()
 {
-	m_refcount = new int(1);
-
-	m_ptr = new T;
+	data_ = new CRefcountObjectData<T>;
+	data_->refcount_ = 1;
+	new(&data_->v_) T;
 }
 
 template<class T> CRefcountObject<T>::CRefcountObject(const CRefcountObject<T>& v)
 {
-	m_refcount = v.m_refcount;
-	(*m_refcount)++;
-	m_ptr = v.m_ptr;
+	data_ = v.data_;
+	++(data_->refcount_);
 }
 
 template<class T> CRefcountObject<T>::CRefcountObject(const T& v)
 {
-	m_ptr = new T(v);
-	m_refcount = new int(1);
+	data_ = new CRefcountObjectData<T>;
+	data_->refcount_ = 1;
+	new(&data_->v_) T(v);
 }
 
 template<class T> CRefcountObject<T>::~CRefcountObject()
 {
-	if ((*m_refcount)-- == 1)
-	{
-		delete m_refcount;
-		delete m_ptr;
+	if (--(data_->refcount_) == 0) {
+		data_->get()->~T();
+		delete data_;
 	}
 }
 
 template<class T> T& CRefcountObject<T>::Get()
 {
-	if (*m_refcount != 1)
-	{
-		(*m_refcount)--;
-		m_refcount = new int(1);
-		T* ptr = new T(*m_ptr);
-		m_ptr = ptr;
+	if (data_->refcount_ != 1) {
+		--(data_->refcount_);
+		
+		CRefcountObjectData<T> *data = new CRefcountObjectData<T>;
+		data->refcount_ = 1;
+		new (&data->v_) T(*data_->get());
+		data_ = data;
 	}
 
-	return *m_ptr;
+	return *data_->get();
 }
 
 template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(const CRefcountObject<T>& v)
 {
-	if (m_ptr == v.m_ptr)
+	if (data_ == v.data_)
 		return *this;
-	if ((*m_refcount)-- == 1)
-	{
-		delete m_refcount;
-		delete m_ptr;
+	if (--(data_->refcount_) == 0) {
+		data_->get()->~T();
+		delete data_;
 	}
 
-	m_refcount = v.m_refcount;
-	(*m_refcount)++;
-	m_ptr = v.m_ptr;
+	data_ = v.data_;
+	++(data_->refcount_);
 	return *this;
 }
 
 template<class T> bool CRefcountObject<T>::operator<(const CRefcountObject<T>& cmp) const
 {
-	if (m_ptr == cmp.m_ptr)
+	if (data_ == cmp.data_)
 		return false;
 
-	return *m_ptr < *cmp.m_ptr;
+	return *data_->get() < *cmp.data_->get();
 }
 
 template<class T> void CRefcountObject<T>::clear()
 {
-	if (*m_refcount != 1)
-	{
-		(*m_refcount)--;
-		m_refcount = new int(1);
+	if (data_->refcount_ != 1) {
+		--(data_->refcount_);
+		data_ = new CRefcountObjectData<T>;
+		data_->refcount_ = 1;
 	}
-	else
-		delete m_ptr;
-	m_ptr = new T;
+	else {
+		data_->get()->~T();
+	}
+	new (&data_->v_) T;
 }
 
 template<class T> const T& CRefcountObject<T>::operator*() const
 {
-	return *m_ptr;
+	return *data_->get();
 }
 
 template<class T> const T* CRefcountObject<T>::operator->() const
 {
-	return m_ptr;
+	return data_->get();
 }
 
 // The same for the uninitialized version
 template<class T> bool CRefcountObject_Uninitialized<T>::operator==(const CRefcountObject_Uninitialized<T>& cmp) const
 {
-	if (m_ptr == cmp.m_ptr)
+	if (data_ == cmp.data_)
 		return true;
 
-	return *m_ptr == *cmp.m_ptr;
+	return *data_->get() == *data_->get();
 }
 
 template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized()
 {
-	m_refcount = 0;
-	m_ptr = 0;
+	data_ = 0;
 }
 
 template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized(const CRefcountObject_Uninitialized<T>& v)
 {
-	m_refcount = v.m_refcount;
-	if (m_refcount)
-		(*m_refcount)++;
-	m_ptr = v.m_ptr;
+	data_ = v.data_;
+	if( data_ ) {
+		++(data_->refcount_);
+	}
 }
 
 template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized(const T& v)
 {
-	m_ptr = new T(v);
-	m_refcount = new int(1);
+	data_ = new CRefcountObjectData<T>;
+	data_->refcount_ = 1;
+	new (&data_->v_) T(v);
 }
 
 template<class T> CRefcountObject_Uninitialized<T>::~CRefcountObject_Uninitialized()
 {
-	if (!m_refcount)
+	if (!data_)
 		return;
 
-	if (*m_refcount == 1)
-	{
-		delete m_refcount;
-		delete m_ptr;
+	if (--(data_->refcount_) == 0 ) {
+		data_->get()->~T();
+		delete data_;
 	}
-	else
-		(*m_refcount)--;
 }
 
 template<class T> T& CRefcountObject_Uninitialized<T>::Get()
 {
-	if (!m_refcount)
-	{
-		m_refcount= new int(1);
-		m_ptr = new T;
+	if (!data_) {
+		data_ = new CRefcountObjectData<T>;
+		data_->refcount_ = 1;
+		new (&data_->v_) T;
 	}
-	else if (*m_refcount != 1)
-	{
-		(*m_refcount)--;
-		m_refcount = new int(1);
-		T* ptr = new T(*m_ptr);
-		m_ptr = ptr;
+	else if (data_->refcount_ != 1) {
+		--(data_->refcount_);
+
+		CRefcountObjectData<T> *data = new CRefcountObjectData<T>;
+		data->refcount_ = 1;
+		new (&data->v_) T(*data_->get());
+		data_ = data;
 	}
 
-	return *m_ptr;
+	return *data_->get();
 }
 
 template<class T> CRefcountObject_Uninitialized<T>& CRefcountObject_Uninitialized<T>::operator=(const CRefcountObject_Uninitialized<T>& v)
 {
-	if (m_ptr == v.m_ptr)
+	if (data_ == v.data_)
 		return *this;
-	if (m_refcount && (*m_refcount)-- == 1)
-	{
-		delete m_refcount;
-		delete m_ptr;
+	if (data_ && --(data_->refcount_) == 0) {
+		data_->get()->~T();
+		delete data_;
 	}
 
-	m_refcount = v.m_refcount;
-	if (m_refcount)
-		(*m_refcount)++;
-	m_ptr = v.m_ptr;
+	data_ = v.data_;
+	if( data_ ) {
+		++(data_->refcount_);
+	}
+	
 	return *this;
 }
 
 template<class T> bool CRefcountObject_Uninitialized<T>::operator<(const CRefcountObject_Uninitialized<T>& cmp) const
 {
-	if (m_ptr == cmp.m_ptr)
+	if (data_ == cmp.data_)
 		return false;
-	if (!m_ptr)
+	if (!data_)
 		return true;
-	if (!cmp.m_ptr)
+	if (!cmp.data_)
 		return false;
 
-	return *m_ptr < *cmp.m_ptr;
+	return *data_.get() < *cmp.data_.get();
 }
 
 template<class T> void CRefcountObject_Uninitialized<T>::clear()
 {
-	if (!m_refcount)
+	if (!data_)
 		return;
-	else if (*m_refcount != 1)
-		(*m_refcount)--;
-	else
-	{
-		delete m_ptr;
-		delete m_refcount;
+
+	if (--(data_->refcount_) == 0) {
+		data_->get()->~T();
+		delete data_;
 	}
-	m_refcount = 0;
-	m_ptr = 0;
+	data_ = 0;
 }
 
 template<class T> const T& CRefcountObject_Uninitialized<T>::operator*() const
 {
-	return *m_ptr;
+	return *data_->get();
 }
 
 template<class T> const T* CRefcountObject_Uninitialized<T>::operator->() const
 {
-	return m_ptr;
+	return data_->get();
 }
 
 template<typename T> class CScopedArray
