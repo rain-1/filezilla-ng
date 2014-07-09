@@ -14,7 +14,7 @@ template<class T> struct CRefcountObjectData final
 		return static_cast<T const*>(static_cast<void const*>(&v_));
 	}
 
-	std::aligned_storage_t<sizeof(T)> v_;
+	typename std::aligned_storage<sizeof(T)>::type v_;
 	int refcount_;
 };
 
