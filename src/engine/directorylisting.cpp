@@ -59,8 +59,8 @@ CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
 wxString CDirentry::dump() const
 {
 	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n"),
-				name.c_str(), size.ToString().c_str(), permissions.c_str(), ownerGroup.c_str(), flags & flag_dir, flags & flag_link,
-				target.c_str(), flags & flag_unsure);
+				name, size.ToString(), permissions, ownerGroup, flags & flag_dir, flags & flag_link,
+				target ? *target : wxString(), flags & flag_unsure);
 
 	if( has_date() ) {
 		str += _T("date=") + time.Degenerate().FormatISODate() + _T("\n");

@@ -1,6 +1,7 @@
 #ifndef __DIRECTORYLISTING_H__
 #define __DIRECTORYLISTING_H__
 
+#include "optional.h"
 #include "timeex.h"
 
 #include <map>
@@ -48,7 +49,7 @@ public:
 		return time.IsValid() && time.GetAccuracy() >= CDateTime::seconds;
 	}
 
-	wxString target; // Set to linktarget it link is true
+	CSparseOptional<wxString> target; // Set to linktarget it link is true
 
 	CDateTime time;
 

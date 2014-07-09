@@ -12,6 +12,7 @@ noinst_HEADERS = commands.h \
 		 misc.h \
 		 msgbox.h \
 		 notification.h \
+		 optional.h \
 		 optionsbase.h \
 		 option_change_event_handler.h \
 		 refcount.h \

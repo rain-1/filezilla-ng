@@ -979,7 +979,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine *pLine, CDirentry &entry, bool e
 			int pos;
 			if ((pos = entry.name.Find(_T(" -> "))) != -1)
 			{
-				entry.target = entry.name.Mid(pos + 4);
+				entry.target = CSparseOptional<wxString>(entry.name.Mid(pos + 4));
 				entry.name = entry.name.Left(pos);
 			}
 		}
@@ -2625,7 +2625,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 			{
 				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
 				if (pos != -1)
-					entry.target = value.Mid(pos);
+					entry.target = CSparseOptional<wxString>(value.Mid(pos));
 			}
 			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && pos == -1)
 			{
