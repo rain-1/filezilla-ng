@@ -180,16 +180,13 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 #ifndef __WXGTK__
 	wxWindowUpdateLocker *pLock = 0;
 #endif //__WXGTK__
-	if (m_nLineCount == MAX_LINECOUNT) {
+	if (m_nLineCount >= MAX_LINECOUNT) {
 #ifndef __WXGTK__
 		pLock = new wxWindowUpdateLocker(m_pTextCtrl);
 #endif //__WXGTK__
 		int oldLength = m_lineLengths.front();
 		m_pTextCtrl->Remove(0, oldLength + 1);
-		m_lineLengths.pop_front();
 	}
-	else
-		m_nLineCount++;
 #ifdef __WXMAC__
 	m_pTextCtrl->SetInsertionPointEnd();
 #endif
@@ -237,7 +234,16 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 		}
 	}
 
-	m_lineLengths.push_back(lineLength);
+	if (m_nLineCount >= MAX_LINECOUNT) {
+		auto it = m_lineLengths.begin();
+		*it = lineLength;
+		m_lineLengths.splice(m_lineLengths.end(), m_lineLengths, it);
+	}
+	else {
+		m_lineLengths.push_back(lineLength);
+		m_nLineCount++;
+	}
+
 	prefix += message;
 #if defined(__WXGTK__)
 	// AppendText always calls SetInsertionPointEnd, which is very expensive.
