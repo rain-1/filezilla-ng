@@ -67,7 +67,7 @@ enum RequestId
 class CNotification
 {
 public:
-	virtual ~CNotification() = default;
+	virtual ~CNotification() {};
 	virtual enum NotificationId GetID() const = 0;
 };
 
