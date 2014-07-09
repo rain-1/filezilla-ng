@@ -140,12 +140,12 @@ wxString CServerPath::GetPath() const
 
 	wxString path;
 
-	if (!traits[m_type].prefixmode)
-		path = m_data->m_prefix;
+	if (!traits[m_type].prefixmode && m_data->m_prefix)
+		path = *m_data->m_prefix;
 
 	if (traits[m_type].left_enclosure != 0)
 		path += traits[m_type].left_enclosure;
-	if (m_data->m_segments.empty() && (!traits[m_type].has_root || m_data->m_prefix.empty() || traits[m_type].separator_after_prefix))
+	if (m_data->m_segments.empty() && (!traits[m_type].has_root || !m_data->m_prefix || traits[m_type].separator_after_prefix))
 		path += traits[m_type].separators[0];
 
 	for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter) {
@@ -153,7 +153,7 @@ wxString CServerPath::GetPath() const
 		if (iter != m_data->m_segments.begin())
 			path += traits[m_type].separators[0];
 		else if (traits[m_type].has_root) {
-			if (m_data->m_prefix.empty() || traits[m_type].separator_after_prefix)
+			if (!m_data->m_prefix || traits[m_type].separator_after_prefix)
 				path += traits[m_type].separators[0];
 		}
 
@@ -166,8 +166,8 @@ wxString CServerPath::GetPath() const
 			path += segment;
 	}
 
-	if (traits[m_type].prefixmode)
-		path += m_data->m_prefix;
+	if (traits[m_type].prefixmode && m_data->m_prefix)
+		path += *m_data->m_prefix;
 
 	if (traits[m_type].right_enclosure != 0)
 		path += traits[m_type].right_enclosure;
@@ -202,7 +202,7 @@ CServerPath CServerPath::GetParent() const
 	parent_data.m_segments.pop_back();
 
 	if (m_type == MVS)
-		parent_data.m_prefix = _T(".");
+		parent_data.m_prefix = CSparseOptional<wxString>(_T("."));
 
 	return parent;
 }
@@ -250,7 +250,7 @@ wxString CServerPath::GetSafePath() const
 	int len = 5 // Type and 2x' ' and terminating 0
 		+ INTLENGTH; // Max length of prefix
 
-	len += m_data->m_prefix.size();
+	len += m_data->m_prefix ? m_data->m_prefix->size() : 0;
 	for( auto const& segment : m_data->m_segments ) {
 		len += segment.size() + 2 + INTLENGTH;
 	}
@@ -262,12 +262,12 @@ wxString CServerPath::GetSafePath() const
 
 		t = fast_sprint_number(t, m_type);
 		*(t++) = ' ';
-		t = fast_sprint_number(t, m_data->m_prefix.size());
+		t = fast_sprint_number(t, m_data->m_prefix ? m_data->m_prefix->size() : 0);
 
-		if (!m_data->m_prefix.empty()) {
+		if (m_data->m_prefix) {
 			*(t++) = ' ';
-			tstrcpy(t, m_data->m_prefix);
-			t += m_data->m_prefix.size();
+			tstrcpy(t, *m_data->m_prefix);
+			t += m_data->m_prefix->size();
 		}
 
 		for( auto const& segment : m_data->m_segments ) {
@@ -350,9 +350,11 @@ bool CServerPath::SetSafePath(const wxString& path, bool coalesce)
 	if (prefix_len)
 	{
 		*(p + prefix_len) = 0;
-		data.m_prefix = p;
-		if (coalesce)
-			::Coalesce(data.m_prefix);
+		if( *p ) {
+			data.m_prefix = CSparseOptional<wxString>(p);
+			if (coalesce)
+				::Coalesce(*data.m_prefix);
+		}
 
 		p += prefix_len + 1;
 	}
@@ -419,17 +421,25 @@ bool CServerPath::IsSubdirOf(const CServerPath &path, bool cmpNoCase) const
 	if (!HasParent())
 		return false;
 
-	if (traits[m_type].prefixmode != 1)
-	{
-		if (cmpNoCase && m_data->m_prefix.CmpNoCase(path.m_data->m_prefix))
-			return false;
+	if (traits[m_type].prefixmode != 1) {
+		if (cmpNoCase ) {
+			if( m_data->m_prefix && !path.m_data->m_prefix ) {
+				return false;
+			}
+			else if( !m_data->m_prefix && path.m_data->m_prefix ) {
+				return false;
+			}
+			else if( m_data->m_prefix && path.m_data->m_prefix && m_data->m_prefix->CmpNoCase(*path.m_data->m_prefix) ) {
+				return false;
+			}
+		}
 		if (!cmpNoCase && m_data->m_prefix != path.m_data->m_prefix)
 			return false;
 	}
 
 	// On MVS, dirs like 'FOO.BAR' without trailing dot cannot have
 	// subdirectories
-	if (traits[m_type].prefixmode == 1 && path.m_data->m_prefix.empty())
+	if (traits[m_type].prefixmode == 1 && !path.m_data->m_prefix)
 		return false;
 
 	tConstSegmentIter iter1 = m_data->m_segments.begin();
@@ -515,7 +525,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 				dir = dir.Left(pos2);
 
 				if (pos1)
-					data.m_prefix = dir.Left(pos1);
+					data.m_prefix = CSparseOptional<wxString>(dir.Left(pos1));
 				dir = dir.Mid(pos1 + 1);
 
 				data.m_segments.clear();
@@ -604,13 +614,13 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 			file = dir.Mid(pos + 1);
 			dir = dir.Left(pos);
 
-			if (!m_bEmpty && data.m_prefix.empty() && !dir.empty())
+			if (!m_bEmpty && !data.m_prefix && !dir.empty())
 				return false;
 
 			data.m_prefix.clear();
 		}
 		else {
-			if (!m_bEmpty && data.m_prefix.empty())
+			if (!m_bEmpty && !data.m_prefix)
 			{
 				if (dir.Find('.') != -1 || !isFile)
 					return false;
@@ -619,10 +629,10 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 			if (isFile) {
 				if (!ExtractFile(dir, file))
 					return false;
-				data.m_prefix = _T(".");
+				data.m_prefix = CSparseOptional<wxString>(_T("."));
 			}
 			else if (dir.Last() == '.')
-				data.m_prefix = _T(".");
+				data.m_prefix = CSparseOptional<wxString>(_T("."));
 			else
 				data.m_prefix.clear();
 		}
@@ -655,7 +665,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 				int colon2;
 				if ((colon2 = dir.Mid(1).Find(':')) < 1)
 					return false;
-				data.m_prefix = dir.Left(colon2 + 2);
+				data.m_prefix = CSparseOptional<wxString>(dir.Left(colon2 + 2));
 				dir = dir.Mid(colon2 + 2);
 
 				data.m_segments.clear();
@@ -679,7 +689,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 				return false;
 			if (dir.Left(2) == _T("//"))
 			{
-				data.m_prefix = traits[m_type].separators[0];
+				data.m_prefix = CSparseOptional<wxString>(traits[m_type].separators[0]);
 				dir = dir.Mid(1);
 			}
 
@@ -753,11 +763,14 @@ bool CServerPath::operator<(const CServerPath &op) const
 	else if (op.m_bEmpty)
 		return true;
 
-	const int cmp = m_data->m_prefix.Cmp(op.m_data->m_prefix);
-	if (cmp < 0)
-		return true;
-	if (cmp > 0)
-		return false;
+	if( m_data->m_prefix || op.m_data->m_prefix ) {
+		if( m_data->m_prefix < op.m_data->m_prefix ) {
+			return true;
+		}
+		else if( op.m_data->m_prefix < m_data->m_prefix ) {
+			return false;
+		}
+	}
 
 	if (m_type > op.m_type)
 		return false;
@@ -790,7 +803,7 @@ wxString CServerPath::FormatFilename(const wxString &filename, bool omitPath /*=
 	if (m_bEmpty)
 		return wxString();
 
-	if (omitPath && (!traits[m_type].prefixmode || m_data->m_prefix == _T(".")))
+	if (omitPath && (!traits[m_type].prefixmode || (m_data->m_prefix && *m_data->m_prefix == _T("."))))
 		return filename;
 
 	wxString result = GetPath();
@@ -812,7 +825,7 @@ wxString CServerPath::FormatFilename(const wxString &filename, bool omitPath /*=
 			break;
 	}
 
-	if (traits[m_type].prefixmode == 1 && m_data->m_prefix.empty())
+	if (traits[m_type].prefixmode == 1 && !m_data->m_prefix)
 		result += _T("(") + filename + _T(")");
 	else
 		result += filename;
@@ -897,9 +910,9 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 	tConstSegmentIter last = m_data->m_segments.end();
 	tConstSegmentIter last2 = path.m_data->m_segments.end();
 	if (traits[m_type].prefixmode == 1) {
-		if (m_data->m_prefix.empty())
+		if (!m_data->m_prefix)
 			--last;
-		if (path.m_data->m_prefix.empty())
+		if (!path.m_data->m_prefix)
 			--last2;
 		parentData.m_prefix = GetParent().m_data->m_prefix;
 	}
@@ -1026,7 +1039,9 @@ void CServerPath::EscapeSeparators(ServerType type, wxString& subdir)
 void CServerPath::Coalesce()
 {
 	CServerPathData& data = m_data.Get();
-	::Coalesce(data.m_prefix);
+	if( data.m_prefix ) {
+		::Coalesce(*data.m_prefix);
+	}
 	for (auto& segment : data.m_segments) {
 		::Coalesce(segment);
 	}

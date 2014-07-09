@@ -1,6 +1,7 @@
 #ifndef __SERVERPATH_H__
 #define __SERVERPATH_H__
 
+#include "optional.h"
 #include "refcount.h"
 
 #include <deque>
@@ -9,7 +10,7 @@ class CServerPathData
 {
 public:
 	std::deque<wxString> m_segments;
-	wxString m_prefix;
+	CSparseOptional<wxString> m_prefix;
 
 	bool operator==(const CServerPathData& cmp) const;
 };

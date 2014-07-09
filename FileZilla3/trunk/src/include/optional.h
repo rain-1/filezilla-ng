@@ -95,7 +95,7 @@ template<class T> bool CSparseOptional<T>::operator==(CSparseOptional<T> const& 
 template<class T> bool CSparseOptional<T>::operator<(CSparseOptional<T> const& cmp) const
 {
 	if( !v_ || !cmp.v_ ) {
-		return cmp.v_;
+		return bool(cmp.v_);
 	}
 
 	return *v_ < *cmp.v_;
