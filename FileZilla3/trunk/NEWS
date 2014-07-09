@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0-rc2 (2014-07-09)
+
++ Display a helpful message if login fails and either username or password starts or begins with a space.
+- Small performance and memory consumption optimizations
+- Various code cleanup and modernization
+
 3.9.0-rc1 (2014-07-04)
 
 + Binaries are now being built with DEP and ASLR enabled where supported
