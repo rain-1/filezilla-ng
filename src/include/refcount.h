@@ -4,7 +4,7 @@
 #include <memory>
 #include <type_traits>
 
-template<class T> struct CRefcountObjectData
+template<class T> struct CRefcountObjectData final
 {
 	inline T* get() {
 		return static_cast<T*>(static_cast<void*>(&v_));
@@ -19,13 +19,13 @@ template<class T> struct CRefcountObjectData
 };
 
 // Trivial template class to refcount objects with COW semantics.
-template<class T> class CRefcountObject
+template<class T> class CRefcountObject final
 {
 public:
 	CRefcountObject();
 	CRefcountObject(const CRefcountObject<T>& v);
 	CRefcountObject(const T& v);
-	virtual ~CRefcountObject();
+	~CRefcountObject();
 
 	void clear();
 
@@ -43,7 +43,7 @@ protected:
 	CRefcountObjectData<T> *data_;
 };
 
-template<class T> class CRefcountObject_Uninitialized
+template<class T> class CRefcountObject_Uninitialized final
 {
 	/* Almost same as CRefcountObject but does not allocate
 	   an object initially.
@@ -54,7 +54,7 @@ public:
 	CRefcountObject_Uninitialized();
 	CRefcountObject_Uninitialized(const CRefcountObject_Uninitialized<T>& v);
 	CRefcountObject_Uninitialized(const T& v);
-	virtual ~CRefcountObject_Uninitialized();
+	~CRefcountObject_Uninitialized();
 
 	void clear();
 
