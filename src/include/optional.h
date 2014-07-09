@@ -101,4 +101,4 @@ template<class T> bool CSparseOptional<T>::operator<(CSparseOptional<T> const& c
 	return *v_ < *cmp.v_;
 }
 
-#endif FILEZILLA_OPTIONAL_HEADER
+#endif
