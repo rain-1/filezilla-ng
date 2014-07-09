@@ -148,14 +148,20 @@ void CStatusView::AddToLog(CLogmsgNotification *pNotification)
 void CStatusView::AddToLog(MessageType messagetype, const wxString& message, const wxDateTime& time)
 {
 	if (!m_shown) {
-		struct t_line line;
-		line.messagetype = messagetype;
-		line.message = message;
-		line.time = time;
-
-		m_hiddenLines.push_back(line);
-		if (m_hiddenLines.size() > MAX_LINECOUNT)
-			m_hiddenLines.pop_front();
+		if (m_hiddenLines.size() >= MAX_LINECOUNT) {
+			auto it = m_hiddenLines.begin();
+			it->messagetype = messagetype;
+			it->message = message;
+			it->time = time;
+			m_hiddenLines.splice(m_hiddenLines.end(), m_hiddenLines, it );
+		}
+		else {
+			t_line line;
+			line.messagetype = messagetype;
+			line.message = message;
+			line.time = time;
+			m_hiddenLines.push_back(line);
+		}
 		return;
 	}
 
