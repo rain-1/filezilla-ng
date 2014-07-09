@@ -43,6 +43,7 @@ protected:
 	wxTreeItemId m_documents;
 #endif
 
+	void UpdateSortMode();
 	virtual int OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2);
 
 	wxTreeItemId GetNearestParent(wxString& localDir);
