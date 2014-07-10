@@ -317,7 +317,7 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 	}
 	Enable(true);
 
-	if (pListing->m_hasUnsureEntries && !(pListing->m_hasUnsureEntries & ~(CDirectoryListing::unsure_unknown | CDirectoryListing::unsure_file_mask)))
+	if (pListing->get_unsure_flags() && !(pListing->get_unsure_flags() & ~(CDirectoryListing::unsure_unknown | CDirectoryListing::unsure_file_mask)))
 	{
 		// Just files changed, does not affect directory tree
 		m_busy = false;
@@ -512,7 +512,7 @@ void CRemoteTreeView::CreateImageList()
 
 bool CRemoteTreeView::HasSubdirs(const CDirectoryListing& listing, const CFilterManager& filter)
 {
-	if (!listing.m_hasDirs)
+	if (!listing.has_dirs())
 		return false;
 
 	if (!filter.HasActiveFilters())
@@ -1011,7 +1011,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent& event)
 				if (listing[i].name != name)
 					continue;
 
-				pChmodDlg->ConvertPermissions(listing[i].permissions, permissions);
+				pChmodDlg->ConvertPermissions(*listing[i].permissions, permissions);
 			}
 		}
 	}

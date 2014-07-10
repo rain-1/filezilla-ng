@@ -370,7 +370,7 @@ public:
 
 		CMP(CmpDir, data1, data2);
 
-		CMP(CmpStringNoCase, data1.permissions, data2.permissions);
+		CMP(CmpStringNoCase, *data1.permissions, *data2.permissions);
 
 		CMP_LESS(CmpName, data1, data2);
 	}
@@ -392,7 +392,7 @@ public:
 
 		CMP(CmpDir, data1, data2);
 
-		CMP(CmpStringNoCase, data1.ownerGroup, data2.ownerGroup);
+		CMP(CmpStringNoCase, *data1.ownerGroup, *data2.ownerGroup);
 
 		CMP_LESS(CmpName, data1, data2);
 	}

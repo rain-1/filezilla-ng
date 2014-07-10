@@ -11,8 +11,8 @@ class CDirentry
 public:
 	wxString name;
 	wxLongLong size;
-	wxString permissions;
-	wxString ownerGroup;
+	CRefcountObject<wxString> permissions;
+	CRefcountObject<wxString> ownerGroup;
 
 	enum _flags
 	{
@@ -95,7 +95,13 @@ public:
 		unsure_dir_changed = 0x20,
 		unsure_dir_mask = 0x38,
 		unsure_unknown = 0x40,
-		unsure_invalid = 0x80 // Recommended action: Do a full refresh
+		unsure_invalid = 0x80, // Recommended action: Do a full refresh
+		unsure_mask = 0xff,
+
+		listing_failed = 0x100,
+		listing_has_dirs = 0x200,
+		listing_has_perms = 0x400,
+		listing_has_usergroup = 0x800
 	};
 	// Lowest bit indicates a file got added
 	// Next bit indicates a file got removed
@@ -105,12 +111,13 @@ public:
 	//
 	// These bits should help the user interface to choose an appropriate sorting
 	// algorithm for modified listings
-	int m_hasUnsureEntries;
-	bool m_failed;
-	bool m_hasDirs;
+	int m_flags;
 
-	bool m_has_perms;
-	bool m_has_usergroup;
+	int get_unsure_flags() const { return m_flags & unsure_mask; }
+	bool failed() const { return (m_flags & listing_failed) != 0; }
+	bool has_dirs() const { return (m_flags & listing_has_dirs) != 0; }
+	bool has_perms() const { return (m_flags & listing_has_perms) != 0; }
+	bool has_usergroup() const { return (m_flags & listing_has_usergroup) != 0; }
 
 	CMonotonicTime m_firstListTime;
 

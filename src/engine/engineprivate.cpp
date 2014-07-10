@@ -364,7 +364,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 				bool found = cache.Lookup(*pListing, *pServer, path, true, is_outdated);
 				if (found && !is_outdated)
 				{
-					if (pListing->m_hasUnsureEntries)
+					if (pListing->get_unsure_flags())
 						flags |= LIST_FLAG_REFRESH;
 					else {
 						if (!avoid) {

@@ -674,7 +674,7 @@ bool CRemoteListView::UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> 
 {
 	wxASSERT(!IsComparing());
 
-	const int unsure = pDirectoryListing->m_hasUnsureEntries & ~(CDirectoryListing::unsure_unknown);
+	const int unsure = pDirectoryListing->get_unsure_flags() & ~(CDirectoryListing::unsure_unknown);
 
 	if (!unsure)
 		return false;
@@ -1719,7 +1719,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		name = entry.name;
 
 		char file_perms[9];
-		if (CChmodDialog::ConvertPermissions(entry.permissions, file_perms))
+		if (CChmodDialog::ConvertPermissions(*entry.permissions, file_perms))
 		{
 			for (int i = 0; i < 9; i++)
 			{
@@ -1800,7 +1800,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			(entry.is_dir() && applyType == 2))
 		{
 			char permissions[9];
-			bool res = pChmodDlg->ConvertPermissions(entry.permissions, permissions);
+			bool res = pChmodDlg->ConvertPermissions(*entry.permissions, permissions);
 			wxString newPerms = pChmodDlg->GetPermissions(res ? permissions : 0, entry.is_dir());
 
 			m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(m_pDirectoryListing->path, entry.name, newPerms));
@@ -2111,7 +2111,7 @@ void CRemoteListView::SetInfoText()
 	{
 		if (!m_pDirectoryListing)
 			text = _("Not connected to any server");
-		else if (m_pDirectoryListing->m_failed)
+		else if (m_pDirectoryListing->failed())
 			text = _("Directory listing failed");
 		else if (!m_pDirectoryListing->GetCount())
 			text = _("Empty directory listing");
@@ -2684,9 +2684,9 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		return CTimeFormat::Format(entry.time);
 	}
 	else if (column == 4)
-		return (*m_pDirectoryListing)[index].permissions;
+		return *(*m_pDirectoryListing)[index].permissions;
 	else if (column == 5)
-		return (*m_pDirectoryListing)[index].ownerGroup;
+		return *(*m_pDirectoryListing)[index].ownerGroup;
 	return wxString();
 }
 

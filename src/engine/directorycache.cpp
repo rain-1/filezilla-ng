@@ -99,7 +99,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 
 		UpdateLru(sit, iter);
 
-		if (!allowUnsureEntries && entry.listing.m_hasUnsureEntries)
+		if (!allowUnsureEntries && entry.listing.get_unsure_flags())
 			return false;
 
 		cacheIter = iter;
@@ -119,7 +119,7 @@ bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, 
 	tCacheIter iter;
 	if (Lookup(iter, sit, path, true, is_outdated))
 	{
-		hasUnsureEntries = iter->listing.m_hasUnsureEntries;
+		hasUnsureEntries = iter->listing.get_unsure_flags();
 		return true;
 	}
 
@@ -204,7 +204,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 				entry.listing[i].flags |= CDirentry::flag_unsure;
 			}
 		}
-		entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_unknown;
+		entry.listing.m_flags |= CDirectoryListing::unsure_unknown;
 		entry.modificationTime = CMonotonicTime::Now();
 	}
 
@@ -247,11 +247,11 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 		{
 			enum Filetype old_type = entry.listing[i].is_dir() ? dir : file;
 			if (type != old_type)
-				entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_invalid;
+				entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 			else if (type == dir)
-				entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_dir_changed;
+				entry.listing.m_flags |= CDirectoryListing::unsure_dir_changed;
 			else
-				entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_file_changed;
+				entry.listing.m_flags |= CDirectoryListing::unsure_file_changed;
 		}
 		else if (type != unknown && mayCreate)
 		{
@@ -267,20 +267,20 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 			switch (type)
 			{
 			case dir:
-				entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_dir_added;
+				entry.listing.m_flags |= CDirectoryListing::unsure_dir_added;
 				break;
 			case file:
-				entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_file_added;
+				entry.listing.m_flags |= CDirectoryListing::unsure_file_added;
 				break;
 			default:
-				entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_invalid;
+				entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 				break;
 			}
 
 			++m_totalFileCount;
 		}
 		else
-			entry.listing.m_hasUnsureEntries |= CDirectoryListing::unsure_unknown;
+			entry.listing.m_flags |= CDirectoryListing::unsure_unknown;
 		entry.modificationTime = CMonotonicTime::Now();
 
 		updated = true;
@@ -329,7 +329,7 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 				if (!filename.CmpNoCase(entry.listing[i].name))
 					iter->listing[i].flags |= CDirentry::flag_unsure;
 			}
-			iter->listing.m_hasUnsureEntries |= CDirectoryListing::unsure_invalid;
+			iter->listing.m_flags |= CDirectoryListing::unsure_invalid;
 		}
 		iter->modificationTime = CMonotonicTime::Now();
 	}
@@ -447,7 +447,7 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 				{
 					listing[i].name = fileTo;
 					listing[i].flags |= CDirentry::flag_unsure;
-					listing.m_hasUnsureEntries |= CDirectoryListing::unsure_unknown;
+					listing.m_flags |= CDirectoryListing::unsure_unknown;
 					listing.ClearFindMap();
 				}
 			}

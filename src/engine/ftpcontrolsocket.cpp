@@ -1651,7 +1651,7 @@ int CFtpControlSocket::ListSend()
 		bool is_outdated = false;
 		wxASSERT(pData->subDir.empty()); // Did do ChangeDir before trying to lock
 		bool found = cache.Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
-		if (found && !is_outdated && !listing.m_hasUnsureEntries &&
+		if (found && !is_outdated && !listing.get_unsure_flags() &&
 			listing.m_firstListTime > pData->m_time_before_locking)
 		{
 			m_pEngine->SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false, false);

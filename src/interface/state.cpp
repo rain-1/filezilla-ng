@@ -364,7 +364,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 		m_last_path = pDirectoryListing->path;
 
 	if (m_pDirectoryListing && m_pDirectoryListing->path == pDirectoryListing->path &&
-		pDirectoryListing->m_failed)
+		pDirectoryListing->failed())
 	{
 		// We still got an old listing, no need to display the new one
 		return true;
