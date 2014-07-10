@@ -24,7 +24,7 @@ template<class T> class CRefcountObject final
 public:
 	CRefcountObject();
 	CRefcountObject(const CRefcountObject<T>& v);
-	CRefcountObject(const T& v);
+	explicit CRefcountObject(const T& v);
 	~CRefcountObject();
 
 	void clear();
@@ -34,9 +34,11 @@ public:
 	const T& operator*() const;
 	const T* operator->() const;
 
-	bool operator==(const CRefcountObject<T>& cmp) const;
+	bool operator==(CRefcountObject<T> const& cmp) const;
+	bool operator==(T const& cmp) const;
 	inline bool operator!=(const CRefcountObject<T>& cmp) const { return !(*this == cmp); }
-	bool operator<(const CRefcountObject<T>& cmp) const;
+	bool operator<(CRefcountObject<T> const& cmp) const;
+	bool operator<(T const& cmp) const;
 
 	CRefcountObject<T>& operator=(const CRefcountObject<T>& v);
 protected:
@@ -74,12 +76,17 @@ protected:
 	CRefcountObjectData<T> *data_;
 };
 
-template<class T> bool CRefcountObject<T>::operator==(const CRefcountObject<T>& cmp) const
+template<class T> bool CRefcountObject<T>::operator==(CRefcountObject<T> const& cmp) const
 {
 	if (data_ == cmp.data_)
 		return true;
 
 	return *data_->get() == *cmp.data_->get();
+}
+
+template<class T> bool CRefcountObject<T>::operator==(T const& cmp) const
+{
+	return *data_->get() == cmp;
 }
 
 template<class T> CRefcountObject<T>::CRefcountObject()
@@ -138,12 +145,17 @@ template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(const CRefco
 	return *this;
 }
 
-template<class T> bool CRefcountObject<T>::operator<(const CRefcountObject<T>& cmp) const
+template<class T> bool CRefcountObject<T>::operator<(CRefcountObject<T> const& cmp) const
 {
 	if (data_ == cmp.data_)
 		return false;
 
 	return *data_->get() < *cmp.data_->get();
+}
+
+template<class T> bool CRefcountObject<T>::operator<(T const& cmp) const
+{
+	return *data_->get() < cmp;
 }
 
 template<class T> void CRefcountObject<T>::clear()
@@ -254,7 +266,7 @@ template<class T> bool CRefcountObject_Uninitialized<T>::operator<(const CRefcou
 	if (!cmp.data_)
 		return false;
 
-	return *data_->get() < *cmp.data_->get();
+	return *data_.get() < *cmp.data_.get();
 }
 
 template<class T> void CRefcountObject_Uninitialized<T>::clear()

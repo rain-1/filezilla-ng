@@ -171,7 +171,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	if (m_operationMode == recursive_none)
 		return;
 
-	if (pDirectoryListing->m_failed)
+	if (pDirectoryListing->failed())
 	{
 		// Ignore this.
 		// It will get handled by the failed command in ListingFailed
@@ -321,7 +321,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 				(entry.is_dir() && applyType == 2))
 			{
 				char permissions[9];
-				bool res = m_pChmodDlg->ConvertPermissions(entry.permissions, permissions);
+				bool res = m_pChmodDlg->ConvertPermissions(*entry.permissions, permissions);
 				wxString newPerms = m_pChmodDlg->GetPermissions(res ? permissions : 0, entry.is_dir());
 				m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(pDirectoryListing->path, entry.name, newPerms));
 			}

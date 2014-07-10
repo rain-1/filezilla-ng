@@ -171,9 +171,9 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 	else if (column == 4)
 		return CTimeFormat::Format(entry.time);
 	else if (column == 5)
-		return entry.permissions;
+		return *entry.permissions;
 	else if (column == 6)
-		return entry.ownerGroup;
+		return *entry.ownerGroup;
 	return wxString();
 }
 
@@ -313,7 +313,7 @@ void CSearchDialog::ProcessDirectoryListing()
 {
 	std::shared_ptr<CDirectoryListing> listing = m_pState->GetRemoteDir();
 
-	if (!listing || listing->m_failed)
+	if (!listing || listing->failed())
 		return;
 
 	// Do not process same directory multiple times

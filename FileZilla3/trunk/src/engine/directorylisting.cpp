@@ -3,30 +3,15 @@
 CDirectoryListing::CDirectoryListing()
 {
 	m_entryCount = 0;
-	m_hasUnsureEntries = 0;
-	m_failed = false;
-	m_hasDirs = false;
-	m_has_perms = false;
-	m_has_usergroup = false;
+	m_flags = 0;
 }
 
 CDirectoryListing::CDirectoryListing(const CDirectoryListing& listing)
-	: m_entries(listing.m_entries), m_searchmap_case(listing.m_searchmap_case), m_searchmap_nocase(listing.m_searchmap_nocase)
+	: path(listing.path)
+	, m_flags(listing.m_flags), m_firstListTime(listing.m_firstListTime)
+	, m_entries(listing.m_entries), m_searchmap_case(listing.m_searchmap_case), m_searchmap_nocase(listing.m_searchmap_nocase)
+	, m_entryCount(listing.m_entryCount)
 {
-	path = listing.path;
-
-	m_hasUnsureEntries = listing.m_hasUnsureEntries;
-	m_failed = listing.m_failed;
-
-	m_entryCount = listing.m_entryCount;
-
-	m_firstListTime = listing.m_firstListTime;
-
-	m_hasDirs = listing.m_hasDirs;
-
-	m_has_perms = listing.m_has_perms;
-	m_has_usergroup = listing.m_has_usergroup;
-
 }
 
 CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
@@ -38,20 +23,14 @@ CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
 
 	path = a.path;
 
-	m_hasUnsureEntries = a.m_hasUnsureEntries;
-	m_failed = a.m_failed;
+	m_flags = a.m_flags;
 
 	m_entryCount = a.m_entryCount;
 
 	m_firstListTime = a.m_firstListTime;
 
-	m_hasDirs = a.m_hasDirs;
-
 	m_searchmap_case = a.m_searchmap_case;
 	m_searchmap_nocase = a.m_searchmap_nocase;
-
-	m_has_perms = a.m_has_perms;
-	m_has_usergroup = a.m_has_usergroup;
 
 	return *this;
 }
@@ -59,7 +38,7 @@ CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
 wxString CDirentry::dump() const
 {
 	wxString str = wxString::Format(_T("name=%s\nsize=%s\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n"),
-				name, size.ToString(), permissions, ownerGroup, flags & flag_dir, flags & flag_link,
+				name, size.ToString(), *permissions, *ownerGroup, flags & flag_dir, flags & flag_link,
 				target ? *target : wxString(), flags & flag_unsure);
 
 	if( has_date() ) {
@@ -142,18 +121,16 @@ void CDirectoryListing::Assign(const std::list<CDirentry> &entries)
 	own_entries.clear();
 	own_entries.reserve(m_entryCount);
 
-	m_hasDirs = false;
-	m_has_perms = false;
-	m_has_usergroup = false;
+	m_flags &= ~(listing_has_dirs | listing_has_perms | listing_has_usergroup);
 
 	for (std::list<CDirentry>::const_iterator iter = entries.begin(); iter != entries.end(); ++iter)
 	{
 		if (iter->is_dir())
-			m_hasDirs = true;
-		if (!iter->permissions.empty())
-			m_has_usergroup = true;
-		if (!iter->ownerGroup.empty())
-			m_has_perms = true;
+			m_flags |= listing_has_dirs;
+		if (!iter->permissions->empty())
+			m_flags |= listing_has_perms;
+		if (!iter->ownerGroup->empty())
+			m_flags |= listing_has_usergroup;
 		own_entries.push_back(CRefcountObject<CDirentry>(*iter));
 	}
 
@@ -172,9 +149,9 @@ bool CDirectoryListing::RemoveEntry(unsigned int index)
 	std::vector<CRefcountObject<CDirentry> >& entries = m_entries.Get();
 	std::vector<CRefcountObject<CDirentry> >::iterator iter = entries.begin() + index;
 	if ((*iter)->is_dir())
-		m_hasUnsureEntries |= CDirectoryListing::unsure_dir_removed;
+		m_flags |= CDirectoryListing::unsure_dir_removed;
 	else
-		m_hasUnsureEntries |= CDirectoryListing::unsure_file_removed;
+		m_flags |= CDirectoryListing::unsure_file_removed;
 	entries.erase(iter);
 
 	--m_entryCount;

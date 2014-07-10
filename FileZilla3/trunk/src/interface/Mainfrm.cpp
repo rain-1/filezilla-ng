@@ -955,7 +955,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 					{
 						pListing = std::make_shared<CDirectoryListing>();
 						pListing->path = pListingNotification->GetPath();
-						pListing->m_failed = true;
+						pListing->m_flags |= CDirectoryListing::listing_failed;
 						pListing->m_firstListTime = CMonotonicTime::Now();
 					}
 
