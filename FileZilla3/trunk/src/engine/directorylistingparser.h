@@ -113,9 +113,15 @@ protected:
 
 	struct t_list
 	{
+		t_list() = default;
+		t_list(char* s, int l)
+			: p(s), len(l)
+		{}
+
 		char *p;
 		int len;
 	};
+
 	int m_currentOffset;
 
 	std::list<t_list> m_DataList;
