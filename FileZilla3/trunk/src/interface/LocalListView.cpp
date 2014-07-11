@@ -62,6 +62,9 @@ public:
 			def == wxDragNone ||
 			def == wxDragCancel)
 			return def;
+		if( def == wxDragLink ) {
+			def = wxDragCopy;
+		}
 
 		if (m_pLocalListView->m_fileData.empty())
 			return wxDragError;

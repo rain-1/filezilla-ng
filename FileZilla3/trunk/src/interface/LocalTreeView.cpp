@@ -81,6 +81,9 @@ public:
 			def == wxDragNone ||
 			def == wxDragCancel)
 			return def;
+		if( def == wxDragLink ) {
+			def = wxDragCopy;
+		}
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
 		if (!hit)
