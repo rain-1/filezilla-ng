@@ -28,7 +28,7 @@ struct ObjectCache
 		auto it = std::lower_bound( cache.begin(), cache.end(), v );
 		
 		if( it == cache.end() || !(*it == v) ) {
-			it = cache.insert(it, CRefcountObject<wxString>(v));
+			it = cache.emplace(it, v);
 		}
 		return *it;
 	}
@@ -852,7 +852,7 @@ bool CDirectoryListingParser::ParseLine(CLine *pLine, const enum ServerType serv
 		{
 			m_maybeMultilineVms = token.Find(';') != -1;
 			if (m_fileListOnly)
-				m_fileList.push_back(token.GetString());
+				m_fileList.emplace_back(token.GetString());
 		}
 	}
 	else
@@ -879,7 +879,7 @@ done:
 
 	entry.time += wxTimeSpan( 0, m_server.GetTimezoneOffset(), 0, 0);
 
-	m_entryList.push_back(entry);
+	m_entryList.emplace_back(std::move(entry));
 
 skip:
 	m_maybeMultilineVms = false;
@@ -1993,11 +1993,7 @@ bool CDirectoryListingParser::AddData(char *pData, int len)
 {
 	ConvertEncoding( pData, len );
 
-	t_list item;
-	item.p = pData;
-	item.len = len;
-
-	m_DataList.push_back(item);
+	m_DataList.emplace_back(pData, len);
 	m_totalData += len;
 
 	if (m_totalData < 512)
