@@ -48,7 +48,13 @@ protected:
 	public:
 		CCacheEntry() : lruIt() { };
 		CCacheEntry(const CCacheEntry &entry);
+		explicit CCacheEntry(CDirectoryListing const& l)
+			: listing(l)
+			, modificationTime(CMonotonicTime::Now())
+			, lruIt()
+		{}
 		~CCacheEntry() { };
+
 		CDirectoryListing listing;
 		CMonotonicTime modificationTime;
 
@@ -60,6 +66,11 @@ protected:
 	class CServerEntry
 	{
 	public:
+		CServerEntry() {}
+		explicit CServerEntry(CServer const& s)
+			: server(s)
+		{}
+
 		CServer server;
 		std::list<CCacheEntry> cacheList;
 	};
