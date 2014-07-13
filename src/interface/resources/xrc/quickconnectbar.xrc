@@ -11,7 +11,8 @@
         </object>
       </object>
       <object class="sizeritem">
-        <border>3</border>
+        <border platform="win|unix">3</border>
+        <border platform="mac">5</border>
         <flag>wxALL</flag>
         <object class="wxFlexGridSizer">
           <rows>1</rows>
