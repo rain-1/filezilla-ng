@@ -3036,7 +3036,7 @@ void CDirectoryListingParser::DeduceEncoding()
 	for (int i = '0'; i <= '9'; ++i ) {
 		count_normal += count[i];
 	}
-	for (int i = 'a'; i <= 'Z'; ++i ) {
+	for (int i = 'a'; i <= 'z'; ++i ) {
 		count_normal += count[i];
 	}
 	for (int i = 'A'; i <= 'Z'; ++i ) {
@@ -3052,13 +3052,13 @@ void CDirectoryListingParser::DeduceEncoding()
 	for (int i = 0xa2; i <= 0xa9; ++i ) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xc1; i <= 0x89; ++i ) {
+	for (int i = 0xc1; i <= 0xc9; ++i ) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xd1; i <= 0x99; ++i ) {
+	for (int i = 0xd1; i <= 0xd9; ++i ) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xe2; i <= 0xa9; ++i ) {
+	for (int i = 0xe2; i <= 0xe9; ++i ) {
 		count_ebcdic += count[i];
 	}
 	for (int i = 0xf0; i <= 0xf9; ++i ) {
