@@ -341,7 +341,6 @@
     <ClInclude Include="recursive_operation.h" />
     <ClInclude Include="RemoteListView.h" />
     <ClInclude Include="RemoteTreeView.h" />
-    <ClInclude Include="resources\resource.h" />
     <ClInclude Include="search.h" />
     <ClInclude Include="settings\settingsdialog.h" />
     <ClInclude Include="sftp_crypt_info_dlg.h" />
@@ -354,9 +353,7 @@
     <ClInclude Include="statusbar.h" />
     <ClInclude Include="statuslinectrl.h" />
     <ClInclude Include="StatusView.h" />
-    <ClInclude Include="subdir_check.h" />
     <ClInclude Include="systemimagelist.h" />
-    <ClInclude Include="taskbariconex.h" />
     <ClInclude Include="textctrlex.h" />
     <ClInclude Include="themeprovider.h" />
     <ClInclude Include="timeformatting.h" />
@@ -377,31 +374,7 @@
     <ClInclude Include="xmlfunctions.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\wx\msw\blank.cur" />
-    <None Include="resources\wx\msw\bullseye.cur" />
-    <None Include="resources\wx\msw\cross.cur" />
-    <None Include="resources\wx\msw\hand.cur" />
-    <None Include="resources\wx\msw\magnif1.cur" />
-    <None Include="resources\wx\msw\pbrush.cur" />
-    <None Include="resources\wx\msw\pencil.cur" />
-    <None Include="resources\wx\msw\pntleft.cur" />
-    <None Include="resources\wx\msw\pntright.cur" />
-    <None Include="resources\wx\msw\rightarr.cur" />
-    <None Include="resources\wx\msw\roller.cur" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\wx\msw\cdrom.ico" />
-    <Image Include="resources\wx\msw\colours.bmp" />
-    <Image Include="resources\wx\msw\computer.ico" />
-    <Image Include="resources\wx\msw\csquery.bmp" />
-    <Image Include="resources\wx\msw\drive.ico" />
-    <Image Include="resources\wx\msw\file1.ico" />
     <Image Include="resources\FileZilla.ico" />
-    <Image Include="resources\wx\msw\floppy.ico" />
-    <Image Include="resources\wx\msw\folder1.ico" />
-    <Image Include="resources\wx\msw\folder2.ico" />
-    <Image Include="resources\wx\msw\removble.ico" />
-    <Image Include="resources\wx\msw\std.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="resources\filezilla.rc" />
