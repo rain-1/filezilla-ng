@@ -122,7 +122,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			msg = _("Critical file transfer error after transferring %s in %s");
 		else
 			msg = _("File transfer failed after transferring %s in %s");
-		LogMessage(msgType, msg, size.c_str(), time.c_str());
+		LogMessage(msgType, msg, size, time);
 	}
 	else
 	{
@@ -439,7 +439,7 @@ bool CControlSocket::ParsePwdReply(wxString reply, bool unquoted /*=false*/, con
 			LogMessage(MessageType::Error, _("Failed to parse returned path."));
 
 		if (!defaultPath.empty()) {
-			LogMessage(MessageType::Debug_Warning, _T("Assuming path is '%s'."), defaultPath.GetPath().c_str());
+			LogMessage(MessageType::Debug_Warning, _T("Assuming path is '%s'."), defaultPath.GetPath());
 			m_CurrentPath = defaultPath;
 			return true;
 		}
@@ -970,7 +970,7 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 		{
 			if (error != EAGAIN)
 			{
-				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error).c_str());
+				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
 				LogMessage(MessageType::Error, _("Disconnected from server"));
 				DoClose();
 				return false;
@@ -1005,17 +1005,17 @@ void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
 	case CSocketEvent::hostaddress:
 		{
 			const wxString& address = event.GetData();
-			LogMessage(MessageType::Status, _("Connecting to %s..."), address.c_str());
+			LogMessage(MessageType::Status, _("Connecting to %s..."), address);
 		}
 		break;
 	case CSocketEvent::connection_next:
 		if (event.GetError())
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()));
 		break;
 	case CSocketEvent::connection:
 		if (event.GetError())
 		{
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()).c_str());
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()));
 			OnClose(event.GetError());
 		}
 		else
@@ -1068,7 +1068,7 @@ void CRealControlSocket::OnSend()
 		{
 			if (error != EAGAIN)
 			{
-				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error).c_str());
+				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
 				if (GetCurrentCommandId() != Command::connect)
 					LogMessage(MessageType::Error, _("Disconnected from server"));
 				DoClose();
@@ -1105,7 +1105,7 @@ void CRealControlSocket::OnClose(int error)
 		if (!error)
 			LogMessage(MessageType::Error, _("Connection closed by server"));
 		else
-			LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).c_str());
+			LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
 	}
 	DoClose();
 }
@@ -1116,7 +1116,7 @@ int CRealControlSocket::Connect(const CServer &server)
 
 	if (server.GetEncodingType() == ENCODING_CUSTOM)
 	{
-		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding().c_str());
+		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 	}
 
@@ -1136,7 +1136,7 @@ int CRealControlSocket::ContinueConnect()
 
 	const int proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE);
 	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy()) {
-		LogMessage(MessageType::Status, _("Connecting to %s through proxy"), m_pCurrentServer->FormatHost().c_str());
+		LogMessage(MessageType::Status, _("Connecting to %s through proxy"), m_pCurrentServer->FormatHost());
 
 		host = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST);
 		port = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_PORT);
@@ -1150,7 +1150,7 @@ int CRealControlSocket::ContinueConnect()
 											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_PASS));
 
 		if (res != EINPROGRESS) {
-			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res).c_str());
+			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));
 			DoClose();
 			return FZ_REPLY_ERROR;
 		}
@@ -1167,13 +1167,13 @@ int CRealControlSocket::ContinueConnect()
 		}
 	}
 	if (!IsIpAddress(host))
-		LogMessage(MessageType::Status, _("Resolving address of %s"), host.c_str());
+		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 
 	int res = m_pSocket->Connect(host, port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {
-		LogMessage(MessageType::Error, _("Could not connect to server: %s"), CSocket::GetErrorDescription(res).c_str());
+		LogMessage(MessageType::Error, _("Could not connect to server: %s"), CSocket::GetErrorDescription(res));
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}
@@ -1238,11 +1238,11 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			if (pData->download)
 			{
 				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-				LogMessage(MessageType::Status, _("Skipping download of %s"), filename.c_str());
+				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else
 			{
-				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile.c_str());
+				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
@@ -1252,16 +1252,13 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		Second compare flags the remaining case in which we need to send command : both size unknown */
 		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize == -1))
 			SendNextCommand();
-		else
-		{
-			if (pData->download)
-			{
+		else {
+			if (pData->download) {
 				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-				LogMessage(MessageType::Status, _("Skipping download of %s"), filename.c_str());
+				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
-			else
-			{
-				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile.c_str());
+			else {
+				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
@@ -1282,11 +1279,11 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			if (pData->download)
 			{
 				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-				LogMessage(MessageType::Status, _("Skipping download of %s"), filename.c_str());
+				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
 			else
 			{
-				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile.c_str());
+				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
@@ -1348,11 +1345,11 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		if (pData->download)
 		{
 			wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
-			LogMessage(MessageType::Status, _("Skipping download of %s"), filename.c_str());
+			LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 		}
 		else
 		{
-			LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile.c_str());
+			LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 		}
 		ResetOperation(FZ_REPLY_OK);
 		break;

@@ -400,7 +400,7 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 
 	CInputDialog dlg;
 
-	wxString msg = wxString::Format(_("Please enter a new name for the filter set \"%s\""), pChoice->GetStringSelection().c_str());
+	wxString msg = wxString::Format(_("Please enter a new name for the filter set \"%s\""), pChoice->GetStringSelection());
 
 	dlg.Create(this, _("Enter new name for filterset"), msg);
 	if (dlg.ShowModal() != wxID_OK)

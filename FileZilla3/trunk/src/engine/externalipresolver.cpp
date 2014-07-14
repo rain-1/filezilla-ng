@@ -96,7 +96,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::a
 		return;
 	}
 
-	wxString buffer = wxString::Format(_T("GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n"), address.c_str(), hostWithPort.c_str(), wxString(PACKAGE_STRING, wxConvLocal).c_str());
+	wxString buffer = wxString::Format(_T("GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n"), address, hostWithPort, wxString(PACKAGE_STRING, wxConvLocal));
 	m_pSendBuffer = new char[strlen(buffer.mb_str()) + 1];
 	strcpy(m_pSendBuffer, buffer.mb_str());
 }

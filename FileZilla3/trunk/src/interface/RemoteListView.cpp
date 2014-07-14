@@ -1454,7 +1454,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 	{
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", count_files), count_files);
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", count_dirs), count_dirs);
-		question.Printf(_("Really delete %s and %s from the server?"), files.c_str(), dirs.c_str());
+		question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
 	}
 
 	if (wxMessageBoxEx(question, _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
@@ -2410,13 +2410,13 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 			cmd = pEditHandler->CanOpen(CEditHandler::remote, entry.name, dangerous, program_exists);
 			if (cmd.empty())
 			{
-				wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), entry.name.c_str()), _("Opening failed"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), entry.name), _("Opening failed"), wxICON_EXCLAMATION);
 				continue;
 			}
 		}
 		if (!program_exists)
 		{
-			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), entry.name.c_str(), cmd.c_str());
+			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), entry.name, cmd);
 			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
 			continue;
 		}

@@ -48,12 +48,12 @@ bool COptionsPageTransfer::LoadPage()
 	wxStaticText* pUnit = XRCCTRL(*this, "ID_DOWNLOADLIMIT_UNIT", wxStaticText);
 	if (!pUnit)
 		return false;
-	pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024).c_str()));
+	pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024)));
 
 	pUnit = XRCCTRL(*this, "ID_UPLOADLIMIT_UNIT", wxStaticText);
 	if (!pUnit)
 		return false;
-	pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024).c_str()));
+	pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024)));
 
 	pTextCtrl = XRCCTRL(*this, "ID_REPLACE", wxTextCtrl);
 	pTextCtrl->SetMaxLength(1);
@@ -63,10 +63,10 @@ bool COptionsPageTransfer::LoadPage()
 
 #ifdef __WXMSW__
 	wxString invalid = _T("\\ / : * ? \" < > |");
-	wxString filtered = wxString::Format(_("The following characters will be replaced: %s"), invalid.c_str());
+	wxString filtered = wxString::Format(_("The following characters will be replaced: %s"), invalid);
 #else
 	wxString invalid = _T("/");
-	wxString filtered = wxString::Format(_("The following character will be replaced: %s"), invalid.c_str());
+	wxString filtered = wxString::Format(_("The following character will be replaced: %s"), invalid);
 #endif
 	XRCCTRL(*this, "ID_REPLACED", wxStaticText)->SetLabel(filtered);
 
@@ -116,14 +116,14 @@ bool COptionsPageTransfer::Validate()
 	if (!pCtrl->GetValue().ToLong(&tmp) || (tmp < 0))
 	{
 		const wxString unit = CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024);
-		return DisplayError(pCtrl, wxString::Format(_("Please enter a download speed limit greater or equal to 0 %s/s."), unit.c_str()));
+		return DisplayError(pCtrl, wxString::Format(_("Please enter a download speed limit greater or equal to 0 %s/s."), unit));
 	}
 
 	pCtrl = XRCCTRL(*this, "ID_UPLOADLIMIT", wxTextCtrl);
 	if (!pCtrl->GetValue().ToLong(&tmp) || (tmp < 0))
 	{
 		const wxString unit = CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024);
-		return DisplayError(pCtrl, wxString::Format(_("Please enter an upload speed limit greater or equal to 0 %s/s."), unit.c_str()));
+		return DisplayError(pCtrl, wxString::Format(_("Please enter an upload speed limit greater or equal to 0 %s/s."), unit));
 	}
 
 	pCtrl = XRCCTRL(*this, "ID_REPLACE", wxTextCtrl);

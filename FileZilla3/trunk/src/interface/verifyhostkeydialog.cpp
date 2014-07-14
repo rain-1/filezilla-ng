@@ -24,7 +24,7 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 
 	dlg.WrapText(&dlg, XRCID("ID_DESC"), 400);
 
-	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort());
+	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost(), pNotification->GetPort());
 	dlg.SetChildLabel(XRCID("ID_HOST"), host);
 	dlg.SetChildLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
 
@@ -51,11 +51,10 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 
 bool CVerifyHostkeyDialog::IsTrusted(CHostKeyNotification* pNotification)
 {
-	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort());
+	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost(), pNotification->GetPort());
 
-	for (std::list<struct t_keyData>::const_iterator iter = m_sessionTrustedKeys.begin(); iter != m_sessionTrustedKeys.end(); ++iter)
-	{
-		if (iter->host == host && iter->fingerprint == pNotification->GetFingerprint())
+	for(auto const& trusted : m_sessionTrustedKeys ) {
+		if (trusted.host == host && trusted.fingerprint == pNotification->GetFingerprint())
 			return true;
 	}
 

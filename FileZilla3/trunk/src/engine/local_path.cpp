@@ -437,7 +437,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 		if (!error)
 			return false;
 
-		error->Printf(_("'%s' does not exist or cannot be accessed."), path.c_str());
+		error->Printf(_("'%s' does not exist or cannot be accessed."), path);
 
 		if (m_path[0] == '\\')
 			return false;
@@ -447,13 +447,13 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 			return false;
 		int type = GetDriveType(m_path.Left(3));
 		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM)
-			error->Printf(_("Cannot access '%s', no media inserted or drive not ready."), path.c_str());
+			error->Printf(_("Cannot access '%s', no media inserted or drive not ready."), path);
 		return false;
 	}
 	else if (!(ret & FILE_ATTRIBUTE_DIRECTORY))
 	{
 		if (error)
-			error->Printf(_("'%s' is not a directory."), path.c_str());
+			error->Printf(_("'%s' is not a directory."), path);
 		return false;
 	}
 
@@ -474,20 +474,20 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 			return true;
 
 		if (error)
-			error->Printf(_("'%s' is not a directory."), path.c_str());
+			error->Printf(_("'%s' is not a directory."), path);
 
 		return false;
 	}
 	else if (result == ENOTDIR)
 	{
 		if (error)
-			error->Printf(_("'%s' is not a directory."), path.c_str());
+			error->Printf(_("'%s' is not a directory."), path);
 		return false;
 	}
 	else
 	{
 		if (error)
-			error->Printf(_("'%s' does not exist or cannot be accessed."), path.c_str());
+			error->Printf(_("'%s' does not exist or cannot be accessed."), path);
 		return false;
 	}
 #endif

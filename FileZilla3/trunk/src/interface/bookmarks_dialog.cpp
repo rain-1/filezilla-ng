@@ -327,7 +327,7 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 	wxString error;
 	if (!file.Save(&error))
 	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the global bookmarks could no be saved: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
+		wxString msg = wxString::Format(_("Could not write \"%s\", the global bookmarks could no be saved: %s"), file.GetFileName().GetFullPath(), error);
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
@@ -427,7 +427,7 @@ bool CBookmarksDialog::Verify()
 			{
 				wxString msg;
 				if (server->GetType() != DEFAULT)
-					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the current site's servertype (%s)."), server->GetNameFromServerType(server->GetType()).c_str());
+					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the current site's servertype (%s)."), server->GetNameFromServerType(server->GetType()));
 				else
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
 				wxMessageBoxEx(msg);
@@ -625,7 +625,7 @@ void CBookmarksDialog::OnCopy(wxCommandEvent& event)
 	wxTreeItemId parent = m_pTree->GetItemParent(item);
 
 	const wxString name = m_pTree->GetItemText(item);
-	wxString newName = wxString::Format(_("Copy of %s"), name.c_str());
+	wxString newName = wxString::Format(_("Copy of %s"), name);
 	int index = 2;
 	for (;;)
 	{
@@ -648,7 +648,7 @@ void CBookmarksDialog::OnCopy(wxCommandEvent& event)
 		if (!found)
 			break;
 
-		newName = wxString::Format(_("Copy (%d) of %s"), index++, name.c_str());
+		newName = wxString::Format(_("Copy (%d) of %s"), index++, name);
 	}
 
 	CBookmarkItemData* newData = new CBookmarkItemData(*data);
@@ -855,7 +855,7 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 	wxString error;
 	if (!file.Save(&error))
 	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName().GetFullPath().c_str(), error.c_str());
+		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName().GetFullPath(), error);
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		return false;
 	}

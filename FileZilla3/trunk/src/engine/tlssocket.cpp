@@ -18,7 +18,7 @@ void log_func(int level, const char* msg)
 		return;
 	wxString s(msg, wxConvLocal);
 	s.Trim();
-	pLoggingControlSocket->LogMessage(MessageType::Debug_Debug, _T("tls: %d %s"), level, s.c_str());
+	pLoggingControlSocket->LogMessage(MessageType::Debug_Debug, _T("tls: %d %s"), level, s);
 }
 #endif
 
@@ -195,16 +195,16 @@ void CTlsSocket::LogError(int code, const wxString& function, MessageType logLev
 	{
 		wxString str(error, wxConvLocal);
 		if (function.empty())
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d: %s"), code, str.c_str());
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d: %s"), code, str);
 		else
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s: %s"), code, function.c_str(), str.c_str());
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s: %s"), code, function, str);
 	}
 	else
 	{
 		if (function.empty())
 			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d"), code);
 		else
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s"), code, function.c_str());
+			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s"), code, function);
 	}
 }
 
@@ -215,7 +215,7 @@ void CTlsSocket::PrintAlert()
 	if (alert)
 	{
 		wxString str(alert, wxConvLocal);
-		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d: %s"), last_alert, str.c_str());
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d: %s"), last_alert, str);
 	}
 	else
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d"), last_alert);
@@ -521,7 +521,7 @@ int CTlsSocket::ContinueHandshake()
 		const wxString cipherName = GetCipherName();
 		const wxString macName = GetMacName();
 
-		m_pOwner->LogMessage(MessageType::Debug_Info, _T("Protocol: %s, Key exchange: %s, Cipher: %s, MAC: %s"), protocol.c_str(), keyExchange.c_str(), cipherName.c_str(), macName.c_str());
+		m_pOwner->LogMessage(MessageType::Debug_Info, _T("Protocol: %s, Key exchange: %s, Cipher: %s, MAC: %s"), protocol, keyExchange, cipherName, macName);
 
 		res = VerifyCertificate();
 		if (res != FZ_REPLY_OK)
@@ -1217,7 +1217,7 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 	if (priority.empty())
 		priority = wxString::FromUTF8(ciphers);
 
-	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority.c_str());
+	wxString list = wxString::Format(_T("Ciphers for %s:\n"), priority);
 
 	gnutls_priority_t pcache;
 	const char *err = 0;
@@ -1243,10 +1243,10 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 			{
 				list += wxString::Format(
 					_T("%-50s    0x%02x, 0x%02x    %s\n"),
-					wxString::FromUTF8(name).c_str(),
+					wxString::FromUTF8(name),
 					(unsigned char)id[0],
 					(unsigned char)id[1],
-					wxString::FromUTF8(gnutls_protocol_get_name(version)).c_str());
+					wxString::FromUTF8(gnutls_protocol_get_name(version)));
 			}
 		}
 	}

@@ -204,8 +204,8 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 	for (int i = 0; i < dependency::count; ++i)
 	{
 		text += wxString::Format(_T("  % -15s %s\n"),
-			(GetDependencyName(dependency::type(i)) + _T(":")).c_str(),
-			GetDependencyVersion(dependency::type(i)).c_str());
+			(GetDependencyName(dependency::type(i)) + _T(":")),
+			GetDependencyVersion(dependency::type(i)));
 	}
 
 	text += _T("\nOperating system:\n");
@@ -223,7 +223,7 @@ void CAboutDialog::OnCopy(wxCommandEvent& event)
 			version += _T(" ");
 			version += wxString::Format(_("(app-compat is set to %d.%d)"), fakeMajor, fakeMinor);
 		}
-		text += wxString::Format(_T("  Version:        %s\n"), version.c_str());
+		text += wxString::Format(_T("  Version:        %s\n"), version);
 	}
 
 #if defined(__WXMSW__)

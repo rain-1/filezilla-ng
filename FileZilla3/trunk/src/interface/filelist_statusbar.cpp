@@ -53,9 +53,9 @@ void CFilelistStatusBar::UpdateText()
 		{
 			const wxString size = CSizeFormat::Format(m_total_selected_size, true);
 			if (m_unknown_selected_size)
-				text = wxString::Format(wxPLURAL("Selected %d file. Total size: At least %s", "Selected %d files. Total size: At least %s", m_count_selected_files), m_count_selected_files, size.c_str());
+				text = wxString::Format(wxPLURAL("Selected %d file. Total size: At least %s", "Selected %d files. Total size: At least %s", m_count_selected_files), m_count_selected_files, size);
 			else
-				text = wxString::Format(wxPLURAL("Selected %d file. Total size: %s", "Selected %d files. Total size: %s", m_count_selected_files), m_count_selected_files, size.c_str());
+				text = wxString::Format(wxPLURAL("Selected %d file. Total size: %s", "Selected %d files. Total size: %s", m_count_selected_files), m_count_selected_files, size);
 		}
 		else
 		{
@@ -63,9 +63,9 @@ void CFilelistStatusBar::UpdateText()
 			const wxString dirs = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_selected_dirs), m_count_selected_dirs);
 			const wxString size = CSizeFormat::Format(m_total_selected_size, true);
 			if (m_unknown_selected_size)
-				text = wxString::Format(_("Selected %s and %s. Total size: At least %s"), files.c_str(), dirs.c_str(), size.c_str());
+				text = wxString::Format(_("Selected %s and %s. Total size: At least %s"), files, dirs, size);
 			else
-				text = wxString::Format(_("Selected %s and %s. Total size: %s"), files.c_str(), dirs.c_str(), size.c_str());
+				text = wxString::Format(_("Selected %s and %s. Total size: %s"), files, dirs, size);
 		}
 	}
 	else if (m_count_files || m_count_dirs)
@@ -76,9 +76,9 @@ void CFilelistStatusBar::UpdateText()
 		{
 			const wxString size = CSizeFormat::Format(m_total_size, true);
 			if (m_unknown_size)
-				text = wxString::Format(wxPLURAL("%d file. Total size: At least %s", "%d files. Total size: At least %s", m_count_files), m_count_files, size.c_str());
+				text = wxString::Format(wxPLURAL("%d file. Total size: At least %s", "%d files. Total size: At least %s", m_count_files), m_count_files, size);
 			else
-				text = wxString::Format(wxPLURAL("%d file. Total size: %s", "%d files. Total size: %s", m_count_files), m_count_files, size.c_str());
+				text = wxString::Format(wxPLURAL("%d file. Total size: %s", "%d files. Total size: %s", m_count_files), m_count_files, size);
 		}
 		else
 		{
@@ -86,9 +86,9 @@ void CFilelistStatusBar::UpdateText()
 			const wxString dirs = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_dirs), m_count_dirs);
 			const wxString size = CSizeFormat::Format(m_total_size, true);
 			if (m_unknown_size)
-				text = wxString::Format(_("%s and %s. Total size: At least %s"), files.c_str(), dirs.c_str(), size.c_str());
+				text = wxString::Format(_("%s and %s. Total size: At least %s"), files, dirs, size);
 			else
-				text = wxString::Format(_("%s and %s. Total size: %s"), files.c_str(), dirs.c_str(), size.c_str());
+				text = wxString::Format(_("%s and %s. Total size: %s"), files, dirs, size);
 		}
 		if (m_hidden)
 		{

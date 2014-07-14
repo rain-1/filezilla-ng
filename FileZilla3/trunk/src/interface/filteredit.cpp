@@ -131,7 +131,7 @@ void CFilterEditDialog::OnNew(wxCommandEvent&)
 	wxString name = _("New filter");
 	wxString newName = name;
 	while (m_pFilterListCtrl->FindString(newName) != wxNOT_FOUND)
-		newName = wxString::Format(_T("%s (%d)"), name.c_str(), ++index);
+		newName = wxString::Format(_T("%s (%d)"), name, ++index);
 
 	wxTextEntryDialog dlg(this, _("Please enter a name for the new filter."), _("Enter filter name"), newName);
 	if (dlg.ShowModal() != wxID_OK)
@@ -238,7 +238,7 @@ void CFilterEditDialog::OnCopy(wxCommandEvent& event)
 	const wxString& name = filter.name;
 	wxString newName = name;
 	while (m_pFilterListCtrl->FindString(newName) != wxNOT_FOUND)
-		newName = wxString::Format(_T("%s (%d)"), name.c_str(), ++index);
+		newName = wxString::Format(_T("%s (%d)"), name, ++index);
 
 	wxTextEntryDialog dlg(this, _("Please enter a new name for the copied filter."), _("Enter filter name"), newName);
 	if (dlg.ShowModal() != wxID_OK)

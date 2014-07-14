@@ -177,10 +177,10 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 														 format,
 														 COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
 														 COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
-			bytes_and_rate.Printf(_("%s (%s/s)"), bytestr.c_str(), ratestr.c_str() );
+			bytes_and_rate.Printf(_("%s (%s/s)"), bytestr, ratestr );
 		}
 		else
-			bytes_and_rate.Printf(_("%s (? B/s)"), bytestr.c_str());
+			bytes_and_rate.Printf(_("%s (? B/s)"), bytestr);
 
 		if (m_last_bytes_and_rate != bytes_and_rate)
 		{
@@ -269,7 +269,7 @@ void CStatusLineCtrl::SetTransferStatus(const CTransferStatus* pStatus)
 			m_statusText = _("Waiting for transfer to be cancelled");
 			break;
 		case t_EngineData::connect:
-			m_statusText = wxString::Format(_("Connecting to %s"), m_pEngineData->lastServer.FormatServer().c_str());
+			m_statusText = wxString::Format(_("Connecting to %s"), m_pEngineData->lastServer.FormatServer());
 			break;
 		default:
 			m_statusText = _("Transferring");
@@ -375,7 +375,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 		permill = 1000;
 	}
 
-	wxString text = wxString::Format(_T("%s%d.%d%%"), prefix.c_str(), permill / 10, permill % 10);
+	wxString text = wxString::Format(_T("%s%d.%d%%"), prefix, permill / 10, permill % 10);
 
 	wxCoord w, h;
 	dc.GetTextExtent(text, &w, &h);

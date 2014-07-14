@@ -395,7 +395,7 @@ public:
 
 int CSftpControlSocket::Connect(const CServer &server)
 {
-	LogMessage(MessageType::Status, _("Connecting to %s..."), server.FormatHost().c_str());
+	LogMessage(MessageType::Status, _("Connecting to %s..."), server.FormatHost());
 	SetWait(true);
 
 	m_sftpEncryptionDetails = CSftpEncryptionNotification();
@@ -403,7 +403,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	delete m_pCSConv;
 	if (server.GetEncodingType() == ENCODING_CUSTOM)
 	{
-		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding().c_str());
+		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 		m_useUTF8 = false;
 	}
@@ -435,7 +435,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	wxString executable = m_pEngine->GetOptions()->GetOption(OPTION_FZSFTP_EXECUTABLE);
 	if (executable.empty())
 		executable = _T("fzsftp");
-	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable.c_str());
+	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
 
 	m_pid = wxExecute(executable + _T(" -v"), wxEXEC_ASYNC, m_pProcess);
 	if (!m_pid)
@@ -464,7 +464,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& reply)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ConnectParseResponse(%s)"), reply.c_str());
+	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ConnectParseResponse(%s)"), reply);
 
 	if (!successful)
 	{
@@ -563,7 +563,7 @@ int CSftpControlSocket::ConnectSend()
 			}
 
 			wxString cmd = wxString::Format(_T("proxy %d \"%s\" %d"), type,
-											m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST).c_str(),
+											m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST),
 											m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_PORT));
 			wxString user = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_USER);
 			if (!user.empty())
@@ -584,7 +584,7 @@ int CSftpControlSocket::ConnectSend()
 		res = Send(_T("keyfile \"") + pData->pKeyFiles->GetNextToken() + _T("\""));
 		break;
 	case connect_open:
-		res = Send(wxString::Format(_T("open \"%s@%s\" %d"), m_pCurrentServer->GetUser().c_str(), m_pCurrentServer->GetHost().c_str(), m_pCurrentServer->GetPort()));
+		res = Send(wxString::Format(_T("open \"%s@%s\" %d"), m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state: %d"), pData->opState);
@@ -996,7 +996,7 @@ int CSftpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDi
 
 int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ListParseResponse(%s)"), reply.c_str());
+	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ListParseResponse(%s)"), reply);
 
 	if (!m_pCurOpData)
 	{
@@ -1634,11 +1634,11 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 	if (download)
 	{
 		wxString filename = remotePath.FormatFilename(remoteFile);
-		LogMessage(MessageType::Status, _("Starting download of %s"), filename.c_str());
+		LogMessage(MessageType::Status, _("Starting download of %s"), filename);
 	}
 	else
 	{
-		LogMessage(MessageType::Status, _("Starting upload of %s"), localFile.c_str());
+		LogMessage(MessageType::Status, _("Starting upload of %s"), localFile);
 	}
 	if (m_pCurOpData)
 	{
@@ -2047,7 +2047,7 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 	 */
 
 	if (!m_pCurOpData)
-		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath().c_str());
+		LogMessage(MessageType::Status, _("Creating directory '%s'..."), path.GetPath());
 
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
@@ -2310,7 +2310,7 @@ int CSftpControlSocket::DeleteSend()
 	wxString filename = pData->path.FormatFilename(file);
 	if (filename.empty())
 	{
-		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath().c_str(), file.c_str());
+		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath(), file);
 		return FZ_REPLY_ERROR;
 	}
 
@@ -2355,7 +2355,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 
 		if (!fullPath.AddSegment(subDir))
 		{
-			LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath().c_str(), subDir.c_str());
+			LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath(), subDir);
 			return FZ_REPLY_ERROR;
 		}
 	}
@@ -2435,7 +2435,7 @@ int CSftpControlSocket::Chmod(const CChmodCommand& command)
 		return FZ_REPLY_ERROR;
 	}
 
-	LogMessage(MessageType::Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()).c_str(), command.GetPermission().c_str());
+	LogMessage(MessageType::Status, _("Set permissions of '%s' to '%s'"), command.GetPath().FormatFilename(command.GetFile()), command.GetPermission());
 
 	CSftpChmodOpData *pData = new CSftpChmodOpData(command);
 	pData->opState = chmod_chmod;
@@ -2557,7 +2557,7 @@ int CSftpControlSocket::Rename(const CRenameCommand& command)
 		return FZ_REPLY_ERROR;
 	}
 
-	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()).c_str(), command.GetToPath().FormatFilename(command.GetToFile()).c_str());
+	LogMessage(MessageType::Status, _("Renaming '%s' to '%s'"), command.GetFromPath().FormatFilename(command.GetFromFile()), command.GetToPath().FormatFilename(command.GetToFile()));
 
 	CSftpRenameOpData *pData = new CSftpRenameOpData(command);
 	pData->opState = rename_rename;

@@ -348,7 +348,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransfer()"));
 
-	LogMessage(MessageType::Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile).c_str());
+	LogMessage(MessageType::Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile));
 
 	if (!download)
 	{
@@ -448,14 +448,14 @@ int CHttpControlSocket::FileTransferSend()
 	if( m_current_uri.HasQuery() ) {
 		location += _T("?") + m_current_uri.GetQuery();
 	}
-	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location.c_str() );
+	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location );
 	LogMessageRaw(MessageType::Command, action);
 
 	wxString hostWithPort = m_current_uri.GetServer();
 	if( m_current_uri.HasPort() ) {
 		hostWithPort += _T(":") + m_current_uri.GetPort();
 	}
-	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n"), action.c_str(), hostWithPort.c_str(), wxString(PACKAGE_STRING, wxConvLocal).c_str());
+	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n"), action, hostWithPort, wxString(PACKAGE_STRING, wxConvLocal));
 	if( pData->resume ) {
 		command += wxString::Format(_T("Range: bytes=%") + wxString(wxFileOffsetFmtSpec) + _T("d-\r\n"), pData->localFileSize);
 	}
@@ -479,7 +479,7 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 	pData->tls = tls;
 
 	if (!IsIpAddress(host))
-		LogMessage(MessageType::Status, _("Resolving address of %s"), host.c_str());
+		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 
 	pData->host = host;
 	return DoInternalConnect();
@@ -548,7 +548,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 
 		if (pData->pFile->Write(p, len) != len)
 		{
-			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile.c_str());
+			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile);
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
 		}
@@ -671,21 +671,21 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 					ResetHttpData(pData);
 
 					if( !pData->m_newLocation.HasScheme() || !pData->m_newLocation.HasServer() || !pData->m_newLocation.HasPath() ) {
-						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI().c_str());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported URI: %s"), m_current_uri.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
 					enum ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme());
 					if( protocol != HTTP && protocol != HTTPS ) {
-						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
 					long port = CServer::GetDefaultPort(protocol);
 					if( pData->m_newLocation.HasPort() && (!pData->m_newLocation.GetPort().ToLong(&port) || port < 1 || port > 65535) ) {
-						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI().c_str());
+						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
@@ -925,7 +925,7 @@ void CHttpControlSocket::OnClose(int error)
 
 	if (error)
 	{
-		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error).c_str());
+		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
@@ -1043,7 +1043,7 @@ int CHttpControlSocket::OpenFile( CHttpFileTransferOpData* pData)
 
 	if (!pData->pFile->Open(pData->localFile, pData->resume ? wxFile::write_append : wxFile::write))
 	{
-		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile.c_str());
+		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile);
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}

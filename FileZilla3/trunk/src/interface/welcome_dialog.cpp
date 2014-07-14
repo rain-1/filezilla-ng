@@ -53,7 +53,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	if (!greetingVersion.empty())
 	{
 		wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
-		pNews->SetLabel(wxString::Format(_("New features and improvements in %s"), CBuildInfo::GetVersion().c_str()));
+		pNews->SetLabel(wxString::Format(_("New features and improvements in %s"), CBuildInfo::GetVersion()));
 	}
 	else
 	{

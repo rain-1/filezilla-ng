@@ -382,7 +382,7 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 	wxString error;
 	if (!ValidateFilter(error, true))
 	{
-		wxMessageBoxEx(wxString::Format(_("Invalid search conditions: %s"), error.c_str()), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(wxString::Format(_("Invalid search conditions: %s"), error), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
 	m_search_filter = GetFilter();
@@ -467,7 +467,7 @@ public:
 		{
 			wxString files = wxString::Format(wxPLURAL("%d file", "%d files", count_files), count_files);
 			wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", count_dirs), count_dirs);
-			desc.Printf(_("Selected %s and %s for transfer."), files.c_str(), dirs.c_str());
+			desc.Printf(_("Selected %s and %s for transfer."), files, dirs);
 		}
 		XRCCTRL(*this, "ID_DESC", wxStaticText)->SetLabel(desc);
 
@@ -720,7 +720,7 @@ void CSearchDialog::OnDelete(wxCommandEvent& event)
 	{
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", selected_files.size()), selected_files.size());
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", selected_dirs.size()), selected_dirs.size());
-		question.Printf(_("Really delete %s and %s from the server?"), files.c_str(), dirs.c_str());
+		question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
 	}
 
 	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)

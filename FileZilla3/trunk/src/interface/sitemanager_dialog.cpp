@@ -807,7 +807,7 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 		{
 			if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 				return res;
-			wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFullPath().c_str(), error.c_str());
+			wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFullPath(), error);
 			wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		}
 
@@ -1092,7 +1092,7 @@ bool CSiteManagerDialog::Verify()
 				XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxString msg;
 				if (pServer->m_server.GetType() != DEFAULT)
-					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_server.GetType()).c_str());
+					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_server.GetType()));
 				else
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
 				wxMessageBoxEx(msg, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -1748,7 +1748,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 		parent = pTree->GetItemParent(item);
 
 	const wxString name = pTree->GetItemText(item);
-	wxString newName = wxString::Format(_("Copy of %s"), name.c_str());
+	wxString newName = wxString::Format(_("Copy of %s"), name);
 	int index = 2;
 	for (;;)
 	{
@@ -1771,7 +1771,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 		if (!found)
 			break;
 
-		newName = wxString::Format(_("Copy (%d) of %s"), ++index, name.c_str());
+		newName = wxString::Format(_("Copy (%d) of %s"), ++index, name);
 	}
 
 	wxTreeItemId newItem;
@@ -2174,7 +2174,7 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent& event)
 	wxString error;
 	if (!xml.Save(&error))
 	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), fn.GetFullPath().c_str(), error.c_str());
+		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), fn.GetFullPath(), error);
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
