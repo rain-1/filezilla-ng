@@ -115,7 +115,6 @@
   <ItemGroup>
     <ClInclude Include="backend.h" />
     <ClInclude Include="..\include\commands.h" />
-    <ClInclude Include="..\include\config.h" />
     <ClInclude Include="ControlSocket.h" />
     <ClInclude Include="directorycache.h" />
     <ClInclude Include="..\include\directorylisting.h" />
