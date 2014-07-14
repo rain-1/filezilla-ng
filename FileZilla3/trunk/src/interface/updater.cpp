@@ -103,7 +103,7 @@ public:
 		return COptions::Get()->SetOption(nID, value);
 	}
 
-	virtual bool SetOption(unsigned int nID, wxString value)
+	virtual bool SetOption(unsigned int nID, wxString const& value)
 	{
 		return COptions::Get()->SetOption(nID, value);
 	}

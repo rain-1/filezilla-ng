@@ -84,7 +84,7 @@ public:
 	virtual wxString GetOption(unsigned int nID) = 0;
 
 	virtual bool SetOption(unsigned int nID, int value) = 0;
-	virtual bool SetOption(unsigned int nID, wxString value) = 0;
+	virtual bool SetOption(unsigned int nID, wxString const& value) = 0;
 };
 
 #endif
