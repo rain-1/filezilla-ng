@@ -96,6 +96,11 @@ enum interfaceOptions
 
 struct t_OptionsCache
 {
+	bool operator==(wxString const& v) const { return strValue == v; }
+	bool operator==(int v) const { return numValue == v; }
+	t_OptionsCache& operator=(wxString const& v) { strValue = v; return *this; }
+	t_OptionsCache& operator=(int v) { numValue = v; return *this; }
+
 	bool from_default;
 	int numValue;
 	wxString strValue;
@@ -110,7 +115,7 @@ public:
 	virtual wxString GetOption(unsigned int nID);
 
 	virtual bool SetOption(unsigned int nID, int value);
-	virtual bool SetOption(unsigned int nID, wxString value);
+	virtual bool SetOption(unsigned int nID, wxString const& value);
 
 	bool OptionFromFzDefaultsXml(unsigned int nID);
 
@@ -132,20 +137,22 @@ protected:
 	virtual ~COptions();
 
 	int Validate(unsigned int nID, int value);
-	wxString Validate(unsigned int nID, wxString value);
+	wxString Validate(unsigned int nID, wxString const& value);
 
-	void SetXmlValue(unsigned int nID, wxString value);
+	template<typename T> void ContinueSetOption(unsigned int nID, T const& value);
+	void SetXmlValue(unsigned int nID, int value);
+	void SetXmlValue(unsigned int nID, wxString const& value);
 
 	// path is element path below document root, separated by slashes
 	void SetServer(wxString path, const CServer& server);
 	bool GetServer(wxString path, CServer& server);
 
-	void CreateSettingsXmlElement();
+	TiXmlElement* CreateSettingsXmlElement();
 
-	void GetNameOptionMap(std::map<std::string, int>& nameOptionMap) const; //Give me C++1x
-	void LoadOptions(const std::map<std::string, int>& nameOptionMap, TiXmlElement* settings = 0);
-	void LoadGlobalDefaultOptions(const std::map<std::string, int>& nameOptionMap);
-	void LoadOptionFromElement(TiXmlElement* pOption, const std::map<std::string, int>& nameOptionMap, bool allowDefault);
+	std::map<std::string, int> GetNameOptionMap() const;
+	void LoadOptions(std::map<std::string, int> const& nameOptionMap, TiXmlElement* settings = 0);
+	void LoadGlobalDefaultOptions(std::map<std::string, int> const& nameOptionMap);
+	void LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, int> const& nameOptionMap, bool allowDefault);
 	void InitSettingsDir();
 	void SetDefaultValues();
 
@@ -154,7 +161,6 @@ protected:
 	CXmlFile* m_pXmlFile;
 
 	t_OptionsCache m_optionsCache[OPTIONS_NUM];
-	bool m_acquired;
 
 	CServer* m_pLastServer;
 
