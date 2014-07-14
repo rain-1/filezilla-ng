@@ -243,14 +243,14 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 				wxString defaultName;
 				if (pNotification->download)
 				{
-					msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), pNotification->localFile.c_str());
+					msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), pNotification->localFile);
 					wxFileName fn = pNotification->localFile;
 					defaultName = fn.GetFullName();
 				}
 				else
 				{
 					wxString fullName = pNotification->remotePath.GetPath() + pNotification->remoteFile;
-					msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), fullName.c_str());
+					msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), fullName);
 					defaultName = pNotification->remoteFile;
 				}
 				wxTextEntryDialog dlg(m_pMainFrame, msg, _("Rename file"), defaultName);

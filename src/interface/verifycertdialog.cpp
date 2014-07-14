@@ -21,7 +21,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	{
 		if (cert.GetActivationTime() > wxDateTime::Now())
 		{
-			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().FormatDate().c_str()));
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().FormatDate()));
 			warning = true;
 		}
 		else
@@ -37,7 +37,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	{
 		if (cert.GetExpirationTime() < wxDateTime::Now())
 		{
-			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().FormatDate().c_str()));
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().FormatDate()));
 			warning = true;
 		}
 		else
@@ -54,7 +54,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	else
 		pDlg->SetChildLabel(XRCID("ID_SERIAL"), _("None"));
 
-	pDlg->SetChildLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName().c_str(), cert.GetPkAlgoBits()));
+	pDlg->SetChildLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName(), cert.GetPkAlgoBits()));
 	pDlg->SetChildLabel(XRCID("ID_SIGNALGO"), cert.GetSignatureAlgorithm());
 
 	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_MD5"), cert.GetFingerPrintMD5());
@@ -101,7 +101,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 		pChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(CVerifyCertDialog::OnCertificateChoice), 0, this);
 	}
 
-	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost().c_str(), pNotification->GetPort()));
+	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost(), pNotification->GetPort()));
 
 	m_pSubjectSizer = XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->GetContainingSizer();
 	m_pSubjectSizer->Clear(true);

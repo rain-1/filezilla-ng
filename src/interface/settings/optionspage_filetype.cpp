@@ -151,7 +151,7 @@ void COptionsPageFiletype::OnAdd(wxCommandEvent& event)
 		wxString text = pListCtrl->GetItemText(i);
 		if (text == ext)
 		{
-			DisplayError(0, wxString::Format(_("The extension '%s' does already exist in the list"), ext.c_str()));
+			DisplayError(0, wxString::Format(_("The extension '%s' does already exist in the list"), ext));
 			return;
 		}
 	}

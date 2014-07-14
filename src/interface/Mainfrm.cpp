@@ -566,7 +566,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			dlg.SetTitle(_("Raw FTP command"));
 
 			dlg.AddText(_("'quote' is usually a local command used by commandline clients to send the arguments following 'quote' to the server. You might want to enter the raw command without the leading 'quote'."));
-			dlg.AddText(wxString::Format(_("Do you really want to send '%s' to the server?"), command.c_str()));
+			dlg.AddText(wxString::Format(_("Do you really want to send '%s' to the server?"), command));
 
 			if (!dlg.Run())
 				return;
@@ -1027,7 +1027,7 @@ void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
 	const wxString uploadSpeedStr = CSizeFormat::Format(uploadSpeed, true, format,
 														COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0,
 														COptions::Get()->GetOptionVal(OPTION_SIZE_DECIMALPLACES));
-	tooltipText.Printf(_("Download speed: %s/s\nUpload speed: %s/s"), downloadSpeedStr.c_str(), uploadSpeedStr.c_str());
+	tooltipText.Printf(_("Download speed: %s/s\nUpload speed: %s/s"), downloadSpeedStr, uploadSpeedStr);
 
 	m_pActivityLed[0]->SetToolTip(tooltipText);
 	m_pActivityLed[1]->SetToolTip(tooltipText);
@@ -1785,7 +1785,7 @@ void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
 		return;
 	}
 
-	wxString const name = wxString::Format(_("&Version %s"), v.version_.c_str());
+	wxString const name = wxString::Format(_("&Version %s"), v.version_);
 
 	wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId());
 	if( !pItem ) {

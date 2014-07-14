@@ -35,11 +35,11 @@ void CSpeedLimitsDialog::Run(wxWindow* parent)
 
 	wxStaticText* pUnit = XRCCTRL(*this, "ID_DOWNLOADLIMIT_UNIT", wxStaticText);
 	if (pUnit)
-		pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), unit.c_str()));
+		pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), unit));
 
 	pUnit = XRCCTRL(*this, "ID_UPLOADLIMIT_UNIT", wxStaticText);
 	if (pUnit)
-		pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), unit.c_str()));
+		pUnit->SetLabel(wxString::Format(pUnit->GetLabel(), unit));
 
 	ShowModal();
 }
@@ -51,7 +51,7 @@ void CSpeedLimitsDialog::OnOK(wxCommandEvent& event)
 	if (!pCtrl->GetValue().ToLong(&download) || (download < 0))
 	{
 		const wxString unit = CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024);
-		wxMessageBoxEx(wxString::Format(_("Please enter a download speed limit greater or equal to 0 %s/s."), unit.c_str()), _("Speed Limits"), wxOK, this);
+		wxMessageBoxEx(wxString::Format(_("Please enter a download speed limit greater or equal to 0 %s/s."), unit), _("Speed Limits"), wxOK, this);
 		return;
 	}
 
@@ -59,7 +59,7 @@ void CSpeedLimitsDialog::OnOK(wxCommandEvent& event)
 	if (!pCtrl->GetValue().ToLong(&upload) || (upload < 0))
 	{
 		const wxString unit = CSizeFormat::GetUnitWithBase(CSizeFormat::kilo, 1024);
-		wxMessageBoxEx(wxString::Format(_("Please enter an upload speed limit greater or equal to 0 %s/s."), unit.c_str()), _("Speed Limits"), wxOK, this);
+		wxMessageBoxEx(wxString::Format(_("Please enter an upload speed limit greater or equal to 0 %s/s."), unit), _("Speed Limits"), wxOK, this);
 		return;
 	}
 

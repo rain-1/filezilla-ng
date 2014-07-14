@@ -1149,7 +1149,7 @@ bool CWrapEngine::LoadCache()
 	{
 		m_use_cache = false;
 
-		wxString msg = wxString::Format(_("Could not write \"%s\": %s"), file.GetFullPath().c_str(), error.c_str());
+		wxString msg = wxString::Format(_("Could not write \"%s\": %s"), file.GetFullPath(), error);
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 

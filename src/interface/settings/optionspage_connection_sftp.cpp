@@ -219,7 +219,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 	{
 		if (!silent)
 		{
-			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile.c_str());
+			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile);
 			wxMessageBoxEx(msg, _("Could not load keyfile"), wxICON_EXCLAMATION);
 		}
 		return false;
@@ -263,12 +263,12 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		if (needs_conversion)
 		{
 			if (!encrypted)
-				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile.c_str());
+				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
 			else
-				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nThe file is also password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into a supported, unprotected format?"), keyFile.c_str());
+				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nThe file is also password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into a supported, unprotected format?"), keyFile);
 		}
 		else if (encrypted)
-			msg = wxString::Format(_("The file '%s' is password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile.c_str());
+			msg = wxString::Format(_("The file '%s' is password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile);
 
 		int res = wxMessageBoxEx(msg, _("Convert keyfile"), wxICON_QUESTION | wxYES_NO);
 		if (res != wxYES)
@@ -276,7 +276,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 
 		if (encrypted)
 		{
-			wxString msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile.c_str());
+			wxString msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile);
 			CInputDialog dlg;
 			if (!dlg.Create(this, _("Password required"), msg))
 				return false;
@@ -296,7 +296,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 			return false;
 		if (code != success)
 		{
-			wxString msg = wxString::Format(_("Failed to load private key: %s"), reply.c_str());
+			wxString msg = wxString::Format(_("Failed to load private key: %s"), reply);
 			wxMessageBoxEx(msg, _("Could not load private key"), wxICON_EXCLAMATION);
 			return false;
 		}
@@ -322,7 +322,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 			return false;
 		if (code != success)
 		{
-			wxMessageBoxEx(wxString::Format(_("Could not write keyfile: %s"), reply.c_str()), _("Could not convert private key"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("Could not write keyfile: %s"), reply), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 		keyFile = newName;

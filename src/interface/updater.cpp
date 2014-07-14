@@ -212,7 +212,7 @@ wxString CUpdater::GetUrl()
 	wxString version(PACKAGE_VERSION, wxConvLocal);
 	version.Replace(_T(" "), _T("%20"));
 
-	wxString url = wxString::Format(_T("https://update.filezilla-project.org/update.php?platform=%s&version=%s"), host.c_str(), version.c_str());
+	wxString url = wxString::Format(_T("https://update.filezilla-project.org/update.php?platform=%s&version=%s"), host, version);
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	// Makes not much sense to submit OS version on Linux, *BSD and the likes, too many flavours.
 	wxString osVersion = wxString::Format(_T("&osversion=%d.%d"), wxPlatformInfo::Get().GetOSMajorVersion(), wxPlatformInfo::Get().GetOSMinorVersion());
@@ -240,18 +240,18 @@ bool CUpdater::Run()
 	COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTDATE, t.Format(_T("%Y-%m-%d %H:%M:%S")));
 
 	local_file_.clear();
-	log_ = wxString::Format(_("Started update check on %s\n"), t.Format().c_str());
+	log_ = wxString::Format(_("Started update check on %s\n"), t.Format());
 
 	wxString build = CBuildInfo::GetBuildType();
 	if( build.empty() ) {
 		build = _("custom");
 	}
-	log_ += wxString::Format(_("Own build type: %s\n"), build.c_str());
+	log_ += wxString::Format(_("Own build type: %s\n"), build);
 
 	SetState(UpdaterState::checking);
 
 	update_options_->m_use_internal_rootcert = true;
-	int res = Download(GetUrl(), _T(""));
+	int res = Download(GetUrl(), wxString());
 
 	if (res != FZ_REPLY_WOULDBLOCK) {
 		SetState(UpdaterState::failed);
@@ -277,7 +277,7 @@ int CUpdater::SendConnectCommand(wxString const& url)
 	CServer s;
 	CServerPath path;
 	wxString error;
-	if( !s.ParseUrl( url, 0, _T(""), _T(""), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
+	if( !s.ParseUrl( url, 0, wxString(), wxString(), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
 		return FZ_REPLY_ERROR;
 	}
 
@@ -291,7 +291,7 @@ int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_fil
 	CServer s;
 	CServerPath path;
 	wxString error;
-	if( !s.ParseUrl( url, 0, _T(""), _T(""), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
+	if( !s.ParseUrl( url, 0, wxString(), wxString(), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
 		return FZ_REPLY_ERROR;
 	}
 	wxString file = path.GetLastSegment();
@@ -369,7 +369,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 		wxString const local_file = GetLocalFile(version_information_.available_, true);
 		if( !local_file.empty() && CLocalFileSystem::GetFileType(local_file) != CLocalFileSystem::unknown) {
 			local_file_ = local_file;
-			log_ += wxString::Format(_("Local file is %s\n"), local_file.c_str());
+			log_ += wxString::Format(_("Local file is %s\n"), local_file);
 			s = UpdaterState::newversion_ready;
 		}
 		else {
@@ -442,11 +442,11 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 		if (local_file.empty() || !wxRenameFile( temp, local_file, false ) ) {
 			s = UpdaterState::newversion;
 			wxRemoveFile( temp );
-			log_ += wxString::Format(_("Could not create local file %s\n"), local_file.c_str());
+			log_ += wxString::Format(_("Could not create local file %s\n"), local_file);
 		}
 		else {
 			local_file_ = local_file;
-			log_ += wxString::Format(_("Local file is %s\n"), local_file.c_str());
+			log_ += wxString::Format(_("Local file is %s\n"), local_file);
 		}
 	}
 	return s;
@@ -539,7 +539,7 @@ void CUpdater::ParseData()
 		}
 		else {
 			line = raw_version_information;
-			raw_version_information = _T("");
+			raw_version_information.clear();
 		}
 
 		wxStringTokenizer tokens(line, _T(" \t\n"),  wxTOKEN_STRTOK);
@@ -550,7 +550,7 @@ void CUpdater::ParseData()
 			version_information_.changelog.Trim(false);
 
 			if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-				log_ += wxString::Format(_T("Changelog: %s\n"), version_information_.changelog.c_str());
+				log_ += wxString::Format(_T("Changelog: %s\n"), version_information_.changelog);
 			}
 			break;
 		}
@@ -610,7 +610,7 @@ void CUpdater::ParseData()
 
 				if( GetFilename(url).empty() ) {
 					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-						log_ += wxString::Format(_T("Could not extract filename from URL: %s\n"), url.c_str());
+						log_ += wxString::Format(_T("Could not extract filename from URL: %s\n"), url);
 					}
 					continue;
 				}
@@ -622,7 +622,7 @@ void CUpdater::ParseData()
 				unsigned long long l = 0;
 				if( !sizestr.ToULongLong(&l) ) {
 					if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-						log_ += wxString::Format(_T("Could not parse size: %s"), sizestr.c_str());
+						log_ += wxString::Format(_T("Could not parse size: %s"), sizestr);
 					}
 					continue;
 				}
@@ -631,7 +631,7 @@ void CUpdater::ParseData()
 				b->size_ = l;
 				b->hash_ = hash;
 
-				log_ += wxString::Format(_("Found new %s %s\n"), type.c_str(), b->version_.c_str());
+				log_ += wxString::Format(_("Found new %s %s\n"), type, b->version_);
 			}
 		}
 	}
@@ -696,11 +696,11 @@ bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString 
 	}
 
 	if (checksum.CmpNoCase(digest)) {
-		log_ += wxString::Format(_("Checksum mismatch on file %s\n"), file.c_str());
+		log_ += wxString::Format(_("Checksum mismatch on file %s\n"), file);
 		return false;
 	}
 
-	log_ += wxString::Format(_("Checksum match on file %s\n"), file.c_str());
+	log_ += wxString::Format(_("Checksum match on file %s\n"), file);
 	return true;
 }
 
@@ -742,9 +742,9 @@ void CUpdater::SetState( UpdaterState s )
 	if( s != state_ ) {
 		state_ = s;
 		build b = version_information_.available_;
-		for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
-			if( *it ) {
-				(*it)->UpdaterStateChanged( s, b );
+		for (auto const& handler : handlers_ ) {
+			if( handler ) {
+				handler->UpdaterStateChanged( s, b );
 			}
 		}
 	}
@@ -761,15 +761,14 @@ wxString CUpdater::DownloadedFile() const
 
 void CUpdater::AddHandler( CUpdateHandler& handler )
 {
-
-	for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
-		if( *it == &handler ) {
+	for( auto const& h : handlers_ ) {
+		if (h == &handler) {
 			return;
 		}
 	}
-	for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
-		if( !*it ) {
-			*it = &handler;
+	for( auto& h : handlers_ ) {
+		if( !h ) {
+			h = &handler;
 			return;
 		}
 	}
@@ -778,9 +777,10 @@ void CUpdater::AddHandler( CUpdateHandler& handler )
 
 void CUpdater::RemoveHandler( CUpdateHandler& handler )
 {
-	for( auto it = handlers_.begin(); it != handlers_.end(); ++it ) {
-		if( *it == &handler ) {
-			*it = 0;
+	for (auto& h : handlers_) {
+		if (h == &handler) {
+			// Set to 0 instead of removing from list to avoid issues with reentrancy.
+			h = 0;
 			return;
 		}
 	}

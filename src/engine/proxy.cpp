@@ -150,7 +150,7 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 			ip = address.IPAddress();
 		}
 
-		m_pOwner->LogMessage(MessageType::Status, _("SOCKS4 proxy will connect to: %s"), ip.c_str());
+		m_pOwner->LogMessage(MessageType::Status, _("SOCKS4 proxy will connect to: %s"), ip);
 
 		m_pSendBuffer = new char[9];
 		m_pSendBuffer[0] = 4; // Protocol version
@@ -211,12 +211,12 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 	case CSocketEvent::hostaddress:
 		{
 			const wxString& address = event.GetData();
-			m_pOwner->LogMessage(MessageType::Status, _("Connecting to %s..."), address.c_str());
+			m_pOwner->LogMessage(MessageType::Status, _("Connecting to %s..."), address);
 		}
 		break;
 	case CSocketEvent::connection_next:
 		if (event.GetError())
-			m_pOwner->LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()).c_str());
+			m_pOwner->LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()));
 		break;
 	case CSocketEvent::connection:
 		if (event.GetError())
@@ -349,7 +349,7 @@ void CProxySocket::OnReceive()
 			wxASSERT(end);
 			*end = 0;
 			wxString reply(m_pRecvBuffer, wxConvUTF8);
-			m_pOwner->LogMessage(MessageType::Response, _("Proxy reply: %s"), reply.c_str());
+			m_pOwner->LogMessage(MessageType::Response, _("Proxy reply: %s"), reply);
 
 			if (reply.Left(10) != _T("HTTP/1.1 2") && reply.Left(10) != _T("HTTP/1.0 2"))
 			{
@@ -413,7 +413,7 @@ void CProxySocket::OnReceive()
 						error.Printf(_("Unassigned error code %d"), (int)(unsigned char) m_pRecvBuffer[1]);
 						break;
 				}
-				m_pOwner->LogMessage(MessageType::Error, _("Proxy request failed: %s"), error.c_str());
+				m_pOwner->LogMessage(MessageType::Error, _("Proxy request failed: %s"), error);
 				m_proxyState = noconn;
 				CSocketEventDispatcher::Get()
 					.SendEvent(new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED));
@@ -558,7 +558,7 @@ void CProxySocket::OnReceive()
 						break;
 					}
 
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: %s"), error.c_str());
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: %s"), error);
 					m_proxyState = noconn;
 					CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, ECONNABORTED);
 					CSocketEventDispatcher::Get().SendEvent(evt);

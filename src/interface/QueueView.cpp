@@ -1951,7 +1951,7 @@ void CQueueView::SaveQueue()
 
 	if (!m_queue_storage.SaveQueue(m_serverList))
 	{
-		wxString msg = wxString::Format(_("An error occurred saving the transfer queue to \"%s\".\nSome queue items might not have been saved."), m_queue_storage.GetDatabaseFilename().c_str());
+		wxString msg = wxString::Format(_("An error occurred saving the transfer queue to \"%s\".\nSome queue items might not have been saved."), m_queue_storage.GetDatabaseFilename());
 		wxMessageBoxEx(msg, _("Error saving queue"), wxICON_ERROR);
 	}
 }
@@ -1986,7 +1986,7 @@ void CQueueView::LoadQueueFromXML()
 	wxString error;
 	if (!xml.Save(&error))
 	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the queue could not be saved.\n%s"), file.GetFullPath().c_str(), error.c_str());
+		wxString msg = wxString::Format(_("Could not write \"%s\", the queue could not be saved.\n%s"), file.GetFullPath(), error);
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
@@ -2052,7 +2052,7 @@ void CQueueView::LoadQueue()
 	if (error)
 	{
 		wxString file = CQueueStorage::GetDatabaseFilename();
-		wxString msg = wxString::Format(_("An error occurred loading the transfer queue from \"%s\".\nSome queue items might not have been restored."), file.c_str());
+		wxString msg = wxString::Format(_("An error occurred loading the transfer queue from \"%s\".\nSome queue items might not have been restored."), file);
 		wxMessageBoxEx(msg, _("Error loading queue"), wxICON_ERROR);
 	}
 }

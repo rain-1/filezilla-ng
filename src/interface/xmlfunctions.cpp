@@ -60,7 +60,7 @@ TiXmlElement* CXmlFile::Load(const wxFileName& fileName)
 	{
 		if (!error.empty())
 		{
-			m_error.Printf(_("The file '%s' could not be loaded."), m_fileName.GetFullPath().c_str());
+			m_error.Printf(_("The file '%s' could not be loaded."), m_fileName.GetFullPath());
 			if (!error.empty())
 				m_error += _T("\n") + error;
 			else
@@ -428,7 +428,7 @@ bool LoadXmlDocument(TiXmlDocument* pXmlDocument, const wxString& file, wxString
 			if (error)
 			{
 				const char* s = pXmlDocument->ErrorDesc();
-				error->Printf(_("The XML document is not well-formed: %s"), wxString(s, wxConvLibc).c_str());
+				error->Printf(_("The XML document is not well-formed: %s"), wxString(s, wxConvLibc));
 			}
 			return false;
 		}

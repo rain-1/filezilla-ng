@@ -192,10 +192,10 @@ void CFileZillaApp::InitLocale()
 			{
 				if (!pInfo)
 					error.Printf(_("Failed to set language to %s, using default system language."),
-						language.c_str());
+						language);
 				else
 					error.Printf(_("Failed to set language to %s (%s), using default system language."),
-						pInfo->Description.c_str(), language.c_str());
+						pInfo->Description, language);
 			}
 			else
 			{
@@ -203,12 +203,12 @@ void CFileZillaApp::InitLocale()
 
 				if (!pInfo)
 					error.Printf(_("Failed to set language to %s, using default system language (%s, %s)."),
-						language.c_str(), loc->GetLocale(),
-						currentName.c_str());
+						language, loc->GetLocale(),
+						currentName);
 				else
 					error.Printf(_("Failed to set language to %s (%s), using default system language (%s, %s)."),
-						pInfo->Description.c_str(), language.c_str(), loc->GetLocale(),
-						currentName.c_str());
+						pInfo->Description, language, loc->GetLocale(),
+						currentName);
 			}
 
 			error += _T("\n");
@@ -226,9 +226,9 @@ void CFileZillaApp::InitLocale()
 				}
 			}
 			if (pInfo && !pInfo->Description.empty())
-				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description.c_str(), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description, language), _("Failed to change language"), wxICON_EXCLAMATION);
 			else
-				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language.c_str()), _("Failed to change language"), wxICON_EXCLAMATION);
+				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), language), _("Failed to change language"), wxICON_EXCLAMATION);
 		}
 #endif
 	}
@@ -700,7 +700,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 	executable += _T("/fzsftp");
 	if (!wxFileName::FileExists(executable))
 	{
-		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable.c_str()),
+		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPlease download FileZilla again. If this problem persists, please submit a bug report."), executable),
 			_("File not found"), wxICON_ERROR);
 		executable.clear();
 	}
@@ -794,7 +794,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 
 	if (!found)
 	{
-		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the FZ_FZSFTP environment variable."), program.c_str(), program.c_str(), program.c_str()),
+		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the FZ_FZSFTP environment variable."), program, program, program),
 			_("File not found"), wxICON_ERROR | wxOK);
 		executable.clear();
 	}
@@ -838,7 +838,7 @@ int CFileZillaApp::ProcessCommandLine()
 
 		if (m_pCommandLine->HasSwitch(CCommandLine::version))
 		{
-			wxString out = wxString::Format(_T("FileZilla %s"), CBuildInfo::GetVersion().c_str());
+			wxString out = wxString::Format(_T("FileZilla %s"), CBuildInfo::GetVersion());
 			if (!CBuildInfo::GetBuildType().empty())
 				out += _T(" ") + CBuildInfo::GetBuildType() + _T(" build");
 			out += _T(", compiled on ") + CBuildInfo::GetBuildDateString();

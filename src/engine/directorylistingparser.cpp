@@ -638,16 +638,16 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		for (auto iter = m_MonthNamesMap.begin(); iter != m_MonthNamesMap.end(); ++iter)
 		{
 			// January could be 1 or 0, depends how the server counts
-			combo[wxString::Format(_T("%s%02d"), iter->first.c_str(), iter->second)] = iter->second;
-			combo[wxString::Format(_T("%s%02d"), iter->first.c_str(), iter->second - 1)] = iter->second;
+			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second)] = iter->second;
+			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second - 1)] = iter->second;
 			if (iter->second < 10)
-				combo[wxString::Format(_T("%s%d"), iter->first.c_str(), iter->second)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, iter->second)] = iter->second;
 			else
-				combo[wxString::Format(_T("%s%d"), iter->first.c_str(), iter->second % 10)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, iter->second % 10)] = iter->second;
 			if (iter->second <= 10)
-				combo[wxString::Format(_T("%s%d"), iter->first.c_str(), iter->second - 1)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, iter->second - 1)] = iter->second;
 			else
-				combo[wxString::Format(_T("%s%d"), iter->first.c_str(), (iter->second - 1) % 10)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, (iter->second - 1) % 10)] = iter->second;
 		}
 		m_MonthNamesMap.insert(combo.begin(), combo.end());
 

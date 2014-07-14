@@ -31,7 +31,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool a
 				last = (1000000000 + (size % 1000000000)).GetLo();
 			else
 				last = size.GetLo();
-			return wxString::Format(wxPLURAL("%s byte", "%s bytes", last), result.c_str());
+			return wxString::Format(wxPLURAL("%s byte", "%s bytes", last), result);
 		}
 	}
 
@@ -153,7 +153,7 @@ wxString CSizeFormatBase::FormatUnit(COptionsBase* pOptions, const wxLongLong& s
 		format = si1000;
 	else if (format != si1024)
 		format = iec;
-	return wxString::Format(_T("%s %s"), FormatNumber(pOptions, size).c_str(), GetUnit(pOptions, unit, format).c_str());
+	return wxString::Format(_T("%s %s"), FormatNumber(pOptions, size), GetUnit(pOptions, unit, format));
 }
 
 wxString CSizeFormatBase::GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base)

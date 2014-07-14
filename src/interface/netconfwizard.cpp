@@ -615,7 +615,7 @@ void CNetConfWizard::CloseSocket()
 		case externalfailed:
 			text[0] = _("Failed to retrieve the external IP address.");
 			text[1] = _("Please make sure FileZilla is allowed to establish outgoing connections and make sure you typed the address of the address resolver correctly.");
-			text[2] = wxString::Format(_("The address you entered was: %s"), XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl)->GetValue().c_str());
+			text[2] = wxString::Format(_("The address you entered was: %s"), XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl)->GetValue());
 			break;
 		case datatainted:
 			text[0] = _("Transferred data got tainted.");
@@ -704,7 +704,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			wxTextCtrl* pResolver = XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl);
 			wxString address = pResolver->GetValue();
 
-			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address.c_str()), 0);
+			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
 			m_pIPResolver = new CExternalIPResolver(this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
@@ -804,7 +804,7 @@ void CNetConfWizard::SendNextCommand()
 		}
 	case 5:
 		{
-			wxString cmd = wxString::Format(_T("PORT %s,%d,%d"), m_externalIP.c_str(), m_listenPort / 256, m_listenPort % 256);
+			wxString cmd = wxString::Format(_T("PORT %s,%d,%d"), m_externalIP, m_listenPort / 256, m_listenPort % 256);
 			cmd.Replace(_T("."), _T(","));
 			Send(cmd);
 		}

@@ -354,7 +354,7 @@ void CStatusBar::DisplayQueueSize(wxLongLong totalSize, bool hasUnknown)
 	}
 
 	wxString queueSize = wxString::Format(_("Queue: %s%s"), hasUnknown ? _T(">") : _T(""),
-		CSizeFormat::Format(totalSize, true, m_sizeFormat, m_sizeFormatThousandsSep, m_sizeFormatDecimalPlaces).c_str());
+		CSizeFormat::Format(totalSize, true, m_sizeFormat, m_sizeFormatThousandsSep, m_sizeFormatDecimalPlaces));
 
 	SetStatusText(queueSize, FIELD_QUEUESIZE);
 }
@@ -423,7 +423,7 @@ void CStatusBar::MeasureQueueSizeWidth()
 		for (int i = 0; i < m_sizeFormatDecimalPlaces; i++)
 			tmp += _T("8");
 	}
-	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s MiB"), tmp.c_str())));
+	s.IncTo(dc.GetTextExtent(wxString::Format(_("Queue: %s MiB"), tmp)));
 
 	SetFieldWidth(FIELD_QUEUESIZE, s.x + 10);
 }
@@ -565,12 +565,12 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 		tooltip = _("Speed limits are enabled, click to change.");
 		tooltip += _T("\n");
 		if (downloadLimit)
-			tooltip += wxString::Format(_("Download limit: %s/s"), CSizeFormat::FormatUnit(downloadLimit, CSizeFormat::kilo).c_str());
+			tooltip += wxString::Format(_("Download limit: %s/s"), CSizeFormat::FormatUnit(downloadLimit, CSizeFormat::kilo));
 		else
 			tooltip += _("Download limit: none");
 		tooltip += _T("\n");
 		if (uploadLimit)
-			tooltip += wxString::Format(_("Upload limit: %s/s"), CSizeFormat::FormatUnit(uploadLimit, CSizeFormat::kilo).c_str());
+			tooltip += wxString::Format(_("Upload limit: %s/s"), CSizeFormat::FormatUnit(uploadLimit, CSizeFormat::kilo));
 		else
 			tooltip += _("Upload limit: none");
 	}
