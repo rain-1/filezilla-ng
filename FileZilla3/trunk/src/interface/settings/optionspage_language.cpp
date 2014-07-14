@@ -77,17 +77,17 @@ bool COptionsPageLanguage::OnDisplayedFirstTime()
 	m_locale.back().code = _T("en_US");
 	m_locale.back().name = _T("English");
 
-	wxString localesDir = wxGetApp().GetLocalesDir();
-	if (localesDir.empty() || !wxDir::Exists(localesDir)) {
+	CLocalPath localesDir = wxGetApp().GetLocalesDir();
+	if (localesDir.empty() || !localesDir.Exists()) {
 		pListBox->GetContainingSizer()->Layout();
 		return true;
 	}
 
-	wxDir dir(localesDir);
+	wxDir dir(localesDir.GetPath());
 	wxString locale;
 	for (bool found = dir.GetFirst(&locale); found; found = dir.GetNext(&locale)) {
-		if (!wxFileName::FileExists(localesDir + locale + _T("/filezilla.mo"))) {
-			if (!wxFileName::FileExists(localesDir + locale + _T("/LC_MESSAGES/filezilla.mo")))
+		if (!wxFileName::FileExists(localesDir.GetPath() + locale + _T("/filezilla.mo"))) {
+			if (!wxFileName::FileExists(localesDir.GetPath() + locale + _T("/LC_MESSAGES/filezilla.mo")))
 				continue;
 		}
 

@@ -7,6 +7,7 @@ class wxDialogEx;
 class CVerifyCertDialog : protected wxEvtHandler
 {
 public:
+	CVerifyCertDialog();
 	virtual ~CVerifyCertDialog();
 
 	bool IsTrusted(CCertificateNotification* pNotification);
@@ -35,7 +36,7 @@ protected:
 
 	void SetPermanentlyTrusted(const CCertificateNotification* const pNotification);
 
-	void LoadTrustedCerts(bool close = true);
+	void LoadTrustedCerts();
 
 	std::list<t_certData> m_trustedCerts;
 	std::list<t_certData> m_sessionTrustedCerts;

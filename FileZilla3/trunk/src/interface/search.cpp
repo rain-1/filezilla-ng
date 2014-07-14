@@ -779,11 +779,9 @@ void CSearchDialog::LoadConditions()
 {
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
-	CXmlFile file;
-
-	TiXmlElement* pDocument = file.Load(_T("search"));
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
 	}
@@ -799,12 +797,10 @@ void CSearchDialog::LoadConditions()
 void CSearchDialog::SaveConditions()
 {
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-
-	CXmlFile file;
-
-	TiXmlElement* pDocument = file.Load(_T("search"));
-	if (!pDocument)
-	{
+	
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
 	}
@@ -816,5 +812,5 @@ void CSearchDialog::SaveConditions()
 
 	CFilterDialog::SaveFilter(pFilter, m_search_filter);
 
-	file.Save();
+	file.Save(true);
 }

@@ -1,4 +1,5 @@
 #include <filezilla.h>
+#include "filezillaapp.h"
 #include "import.h"
 #include "xmlfunctions.h"
 #include "ipcmutex.h"
@@ -21,25 +22,15 @@ void CImportDialog::Show()
 		return;
 
 	wxFileName fn(dlg.GetPath());
-	const wxString& path = fn.GetPath();
-	const wxString& settings(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
+	wxString const path = fn.GetPath();
+	wxString const settings(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
 	if (path == settings) {
 		wxMessageBoxEx(_("You cannot import settings from FileZilla's own settings directory."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}
 
-	TiXmlDocument* xmlDocument = new TiXmlDocument();
-	xmlDocument->SetCondenseWhiteSpace(false);
-
-	if (!LoadXmlDocument(xmlDocument, dlg.GetPath())) {
-		delete xmlDocument;
-		wxMessageBoxEx(_("Cannot load file, not a valid XML file."), _("Error importing"), wxICON_ERROR, m_parent);
-		return;
-	}
-
-	TiXmlElement* fz3Root = xmlDocument->FirstChildElement("FileZilla3");
-	TiXmlElement* fz2Root = xmlDocument->FirstChildElement("FileZilla");
-
+	CXmlFile fz3(dlg.GetPath());
+	TiXmlElement* fz3Root = fz3.Load();
 	if (fz3Root) {
 		bool settings = fz3Root->FirstChildElement("Settings") != 0;
 		bool queue = fz3Root->FirstChildElement("Queue") != 0;
@@ -56,7 +47,6 @@ void CImportDialog::Show()
 			GetSizer()->Fit(this);
 
 			if (ShowModal() != wxID_OK) {
-				delete xmlDocument;
 				return;
 			}
 
@@ -74,26 +64,23 @@ void CImportDialog::Show()
 			}
 
 			wxMessageBoxEx(_("The selected categories have been imported."), _("Import successful"), wxOK, this);
-
-			delete xmlDocument;
 			return;
 		}
 	}
-	else if (fz2Root) {
-		bool sites_fz2 = fz2Root->FirstChildElement("Sites") != 0;
+
+	CXmlFile fz2(dlg.GetPath(), _T("FileZilla"));
+	TiXmlElement* fz2Root = fz2.Load();
+	if (fz2Root) {
+		TiXmlElement* sites_fz2 = fz2Root->FirstChildElement("Sites");
 		if (sites_fz2) {
 			int res = wxMessageBoxEx(_("The file you have selected contains site manager data from a previous version of FileZilla.\nDue to differences in the storage format, only host, port, username and password will be imported.\nContinue with the import?"),
 				_("Import data from older version"), wxICON_QUESTION | wxYES_NO);
 
 			if (res == wxYES)
-				ImportLegacySites(fz2Root->FirstChildElement("Sites"));
-
-			delete xmlDocument;
+				ImportLegacySites(sites_fz2);
 			return;
 		}
 	}
-
-	delete xmlDocument;
 
 	wxMessageBoxEx(_("File does not contain any importable data."), _("Error importing"), wxICON_ERROR, m_parent);
 }
@@ -102,10 +89,10 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
 {
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	CXmlFile file(_T("sitemanager"));
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument) {
-		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath());
+		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName());
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
@@ -118,7 +105,7 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
 	if (!ImportLegacySites(pSites, pCurrentSites))
 		return false;
 
-	return file.Save();
+	return file.Save(true);
 }
 
 wxString CImportDialog::DecodeLegacyPassword(wxString pass)
@@ -288,10 +275,10 @@ bool CImportDialog::ImportSites(TiXmlElement* pSites)
 {
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	CXmlFile file(_T("sitemanager"));
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument) {
-		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName().GetFullPath());
+		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName());
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
@@ -304,7 +291,7 @@ bool CImportDialog::ImportSites(TiXmlElement* pSites)
 	if (!ImportSites(pSites, pCurrentSites))
 		return false;
 
-	return file.Save();
+	return file.Save(true);
 }
 
 bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExistingSites)

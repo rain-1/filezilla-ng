@@ -724,7 +724,7 @@ bool CSiteManagerDialog::Load()
 	pTree->SetItemImage(treeId, 1, wxTreeItemIcon_Expanded);
 	pTree->SetItemImage(treeId, 1, wxTreeItemIcon_SelectedExpanded);
 
-	CXmlFile file(_T("sitemanager"));
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument)
 	{
@@ -777,12 +777,10 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 		// to the same file or one is reading while the other one writes.
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-		wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("sitemanager.xml"));
-		CXmlFile xml(file);
+		CXmlFile xml(wxGetApp().GetSettingsFile(_T("sitemanager")));
 
 		TiXmlElement* pDocument = xml.Load();
-		if (!pDocument)
-		{
+		if (!pDocument) {
 			wxString msg = xml.GetError() + _T("\n") + _("Any changes made in the Site Manager could not be saved.");
 			wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -790,8 +788,7 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 		}
 
 		TiXmlElement *pServers = pDocument->FirstChildElement("Servers");
-		while (pServers)
-		{
+		while (pServers) {
 			pDocument->RemoveChild(pServers);
 			pServers = pDocument->FirstChildElement("Servers");
 		}
@@ -802,12 +799,10 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 
 		bool res = Save(pElement, m_ownSites);
 
-		wxString error;
-		if (!xml.Save(&error))
-		{
+		if (!xml.Save(false)) {
 			if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 				return res;
-			wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFullPath(), error);
+			wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), xml.GetFileName(), xml.GetError());
 			wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		}
 
@@ -1803,12 +1798,11 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 
 bool CSiteManagerDialog::LoadDefaultSites()
 {
-	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
+	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir.empty())
 		return false;
 
-	wxFileName name(defaultsDir, _T("fzdefaults.xml"));
-	CXmlFile file(name);
+	CXmlFile file(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument)
@@ -2163,18 +2157,15 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent& event)
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
-	wxFileName fn(dlg.GetPath());
-	CXmlFile xml(fn);
+	CXmlFile xml(dlg.GetPath());
 
 	TiXmlElement* exportRoot = xml.CreateEmpty();
 
 	TiXmlElement* pServers = exportRoot->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
 	SaveChild(pServers, m_contextMenuItem);
 
-	wxString error;
-	if (!xml.Save(&error))
-	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), fn.GetFullPath(), error);
+	if (!xml.Save(false)) {
+		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), xml.GetFileName(), xml.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }

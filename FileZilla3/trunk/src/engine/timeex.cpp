@@ -305,9 +305,11 @@ bool CDateTime::ImbueTime( int hour, int minute, int second, int millisecond )
 	return true;
 }
 
-
-
-
+void CDateTime::clear()
+{
+	a_ = days;
+	t_ = wxDateTime();
+}
 
 
 

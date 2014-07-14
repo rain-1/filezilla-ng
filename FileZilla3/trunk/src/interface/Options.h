@@ -86,7 +86,7 @@ enum interfaceOptions
 	OPTION_PROMPTPASSWORDSAVE,
 
 	// Default/internal options
-	OPTION_DEFAULT_SETTINGSDIR,
+	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated
 	OPTION_DEFAULT_KIOSKMODE,
 	OPTION_DEFAULT_DISABLEUPDATECHECK,
 
@@ -153,7 +153,7 @@ protected:
 	void LoadOptions(std::map<std::string, int> const& nameOptionMap, TiXmlElement* settings = 0);
 	void LoadGlobalDefaultOptions(std::map<std::string, int> const& nameOptionMap);
 	void LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, int> const& nameOptionMap, bool allowDefault);
-	void InitSettingsDir();
+	wxString InitSettingsDir();
 	void SetDefaultValues();
 
 	void Save();

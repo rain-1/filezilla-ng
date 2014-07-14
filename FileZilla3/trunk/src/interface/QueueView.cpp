@@ -1958,17 +1958,13 @@ void CQueueView::SaveQueue()
 
 void CQueueView::LoadQueueFromXML()
 {
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("queue.xml"));
-	CXmlFile xml(file);
-	TiXmlElement* pDocument = xml.Load(wxFileName());
-	if (!pDocument)
-	{
-		if (!xml.GetError().empty())
-		{
+	CXmlFile xml(wxGetApp().GetSettingsFile(_T("queue")));
+	TiXmlElement* pDocument = xml.Load();
+	if (!pDocument) {
+		if (!xml.GetError().empty()) {
 			wxString msg = xml.GetError() + _T("\n\n") + _("The queue will not be saved.");
 			wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 		}
-
 		return;
 	}
 
@@ -1983,10 +1979,8 @@ void CQueueView::LoadQueueFromXML()
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 		return;
 
-	wxString error;
-	if (!xml.Save(&error))
-	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the queue could not be saved.\n%s"), file.GetFullPath(), error);
+	if (!xml.Save(false)) {
+		wxString msg = wxString::Format(_("Could not write \"%s\", the queue could not be saved.\n%s"), xml.GetFileName(), xml.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
@@ -3160,7 +3154,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		}
 		case ActionAfterState_PlaySound:
 		{
-			wxSound sound(wxGetApp().GetResourceDir() + _T("finished.wav"));
+			wxSound sound(wxGetApp().GetResourceDir().GetPath() + _T("finished.wav"));
 			sound.Play(wxSOUND_ASYNC);
 			break;
 		}

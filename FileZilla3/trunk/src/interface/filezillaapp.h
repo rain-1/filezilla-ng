@@ -7,6 +7,8 @@
 
 #include <list>
 
+#include "local_path.h"
+
 class CWrapEngine;
 class CCommandLine;
 class CFileZillaApp : public wxApp
@@ -18,9 +20,12 @@ public:
 	virtual bool OnInit();
 	virtual int OnExit();
 
-	wxString GetResourceDir() const { return m_resourceDir; }
-	wxString GetDefaultsDir() const { return m_defaultsDir; }
-	wxString GetLocalesDir() const { return m_localesDir; }
+	// Always (back)slash-terminated
+	CLocalPath GetResourceDir() const { return m_resourceDir; }
+	CLocalPath GetDefaultsDir() const { return m_defaultsDir; }
+	CLocalPath GetLocalesDir() const { return m_localesDir; }
+
+	wxString GetSettingsFile(wxString const& name) const;
 
 	void CheckExistsFzsftp();
 
@@ -55,15 +60,15 @@ protected:
 
 	wxLocale* m_pLocale;
 
-	wxString m_resourceDir;
-	wxString m_defaultsDir;
-	wxString m_localesDir;
+	CLocalPath m_resourceDir;
+	CLocalPath m_defaultsDir;
+	CLocalPath m_localesDir;
 
 #if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
 	virtual void OnFatalException();
 #endif
 
-	wxString GetDataDir(wxString fileToFind) const;
+	CLocalPath GetDataDir(wxString fileToFind) const;
 
 	// FileExists accepts full paths as parameter,
 	// with the addition that path segments may be obmitted
