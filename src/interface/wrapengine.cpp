@@ -851,20 +851,14 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	if (!name || !*name)
 		return 0;
 
-	// We have to synchronize access to layout.xml so that multiple processed don't write
+	// We have to synchronize access to layout.xml so that multiple processes don't write
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
-	TiXmlElement* pDocument = GetXmlFile(file);
-
-	if (!pDocument)
-		return 0;
-
-	TiXmlElement* pElement = pDocument->FirstChildElement("Layout");
-	if (!pElement)
-	{
-		delete pDocument->GetDocument();
+	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
+	TiXmlElement* root = xml.Load();
+	TiXmlElement* pElement = root ? root->FirstChildElement("Layout") : 0;
+	if (!pElement) {
 		return 0;
 	}
 
@@ -873,22 +867,16 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 		language = _T("default");
 
 	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
-	if (!pLanguage)
-	{
-		delete pDocument->GetDocument();
+	if (!pLanguage) {
 		return 0;
 	}
 
 	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
-	if (!pDialog)
-	{
-		delete pDocument->GetDocument();
+	if (!pDialog) {
 		return 0;
 	}
 
 	int value = GetAttributeInt(pDialog, "width");
-
-	delete pDocument->GetDocument();
 
 	return value;
 }
@@ -901,20 +889,14 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	if (!name || !*name)
 		return;
 
-	// We have to synchronize access to layout.xml so that multiple processed don't write
+	// We have to synchronize access to layout.xml so that multiple processes don't write
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
-	TiXmlElement* pDocument = GetXmlFile(file);
-
-	if (!pDocument)
-		return;
-
-	TiXmlElement* pElement = pDocument->FirstChildElement("Layout");
-	if (!pElement)
-	{
-		delete pDocument->GetDocument();
+	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
+	TiXmlElement* root = xml.Load();
+	TiXmlElement* pElement = root ? root->FirstChildElement("Layout") : 0;
+	if (!pElement) {
 		return;
 	}
 
@@ -923,24 +905,18 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 		language = _T("default");
 
 	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
-	if (!pLanguage)
-	{
-		delete pDocument->GetDocument();
+	if (!pLanguage) {
 		return;
 	}
 
 	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
-	if (!pDialog)
-	{
+	if (!pDialog) {
 		pDialog = pLanguage->LinkEndChild(new TiXmlElement("Dialog"))->ToElement();
 		pDialog->SetAttribute("name", name);
 	}
 
 	pDialog->SetAttribute("width", width);
-	wxString error;
-	SaveXmlFile(file, pDocument, &error);
-
-	delete pDocument->GetDocument();
+	xml.Save(false);
 }
 
 CWrapEngine::CWrapEngine()
@@ -980,12 +956,11 @@ static wxString GetLocaleFile(const wxString& localesDir, wxString name)
 
 bool CWrapEngine::LoadCache()
 {
-	// We have to synchronize access to layout.xml so that multiple processed don't write
+	// We have to synchronize access to layout.xml so that multiple processes don't write
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
-	CXmlFile xml(file);
+	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
 	TiXmlElement* pDocument = xml.Load();
 
 	if (!pDocument)
@@ -1023,18 +998,19 @@ bool CWrapEngine::LoadCache()
 	if (!pResources)
 		pResources = pElement->LinkEndChild(new TiXmlElement("Resources"))->ToElement();
 
-	wxString resourceDir = wxGetApp().GetResourceDir() + _T("xrc/");
-	wxDir dir(resourceDir);
+	CLocalPath resourceDir = wxGetApp().GetResourceDir();
+	resourceDir.AddSegment(_T("xrc"));
+	wxDir dir(resourceDir.GetPath());
 
 	wxLogNull log;
 
 	wxString xrc;
 	for (bool found = dir.GetFirst(&xrc, _T("*.xrc")); found; found = dir.GetNext(&xrc))
 	{
-		if (!wxFileName::FileExists(resourceDir + xrc))
+		if (!wxFileName::FileExists(resourceDir.GetPath() + xrc))
 			continue;
 
-		wxFileName fn(resourceDir + xrc);
+		wxFileName fn(resourceDir.GetPath() + xrc);
 		wxDateTime date = fn.GetModificationTime();
 		wxLongLong ticks = date.GetTicks();
 
@@ -1113,12 +1089,12 @@ bool CWrapEngine::LoadCache()
 	pFrame->Destroy();
 
 	// Get language file
-	const wxString& localesDir = wxGetApp().GetLocalesDir();
-	wxString name = GetLocaleFile(localesDir, language);
+	CLocalPath const localesDir = wxGetApp().GetLocalesDir();
+	wxString name = GetLocaleFile(localesDir.GetPath(), language);
 
 	if (!name.empty())
 	{
-		wxFileName fn(localesDir + name + _T("/filezilla.mo"));
+		wxFileName fn(localesDir.GetPath() + name + _T("/filezilla.mo"));
 		wxDateTime date = fn.GetModificationTime();
 		wxLongLong ticks = date.GetTicks();
 
@@ -1144,25 +1120,17 @@ bool CWrapEngine::LoadCache()
 		return true;
 	}
 
-	wxString error;
-	if (!xml.Save(&error))
-	{
+	if (!xml.Save(true)) {
 		m_use_cache = false;
-
-		wxString msg = wxString::Format(_("Could not write \"%s\": %s"), file.GetFullPath(), error);
-		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
-
-
 	return true;
 }
 
 void CWrapEngine::ClearCache()
 {
-	// We have to synchronize access to layout.xml so that multiple processed don't write
+	// We have to synchronize access to layout.xml so that multiple processes don't write
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
-
 	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("layout.xml"));
 	if (file.FileExists())
 		wxRemoveFile(file.GetFullPath());

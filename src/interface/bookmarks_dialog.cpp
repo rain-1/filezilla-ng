@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include "bookmarks_dialog.h"
+#include "filezillaapp.h"
 #include "sitemanager.h"
 #include "ipcmutex.h"
 #include "themeprovider.h"
@@ -164,18 +165,15 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("bookmarks"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
 
-	for (TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
-	{
+	for (TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
 		wxString name;
 		wxString local_dir;
 		wxString remote_dir_raw;
@@ -290,11 +288,9 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("bookmarks"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxString msg = file.GetError() + _T("\n\n") + _("The global bookmarks could not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -324,10 +320,8 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 			AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
 	}
 
-	wxString error;
-	if (!file.Save(&error))
-	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the global bookmarks could no be saved: %s"), file.GetFileName().GetFullPath(), error);
+	if (!file.Save(false)) {
+		wxString msg = wxString::Format(_("Could not write \"%s\", the global bookmarks could no be saved: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 }
@@ -723,11 +717,9 @@ bool CBookmarksDialog::GetBookmarks(std::list<wxString> &bookmarks)
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("bookmarks"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
@@ -764,11 +756,9 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("bookmarks"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
@@ -812,11 +802,9 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("bookmarks"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxString msg = file.GetError() + _T("\n\n") + _("The bookmark could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -825,14 +813,12 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 
 	TiXmlElement *pInsertBefore = 0;
 	TiXmlElement *pBookmark;
-	for (pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
-	{
+	for (pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
 		wxString remote_dir_raw;
 
 		wxString old_name = GetTextElement(pBookmark, "Name");
 
-		if (!name.CmpNoCase(old_name))
-		{
+		if (!name.CmpNoCase(old_name)) {
 			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
@@ -852,10 +838,8 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 	if (sync)
 		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
 
-	wxString error;
-	if (!file.Save(&error))
-	{
-		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName().GetFullPath(), error);
+	if (!file.Save(false)) {
+		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		return false;
 	}

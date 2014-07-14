@@ -1,10 +1,16 @@
 #include <filezilla.h>
+#include "filezillaapp.h"
 #include "verifycertdialog.h"
 #include <wx/statbox.h>
 #include <wx/tokenzr.h>
 #include "dialogex.h"
 #include "ipcmutex.h"
 #include "Options.h"
+
+CVerifyCertDialog::CVerifyCertDialog()
+	: m_xmlFile(wxGetApp().GetSettingsFile(_T("trustedcerts")))
+{
+}
 
 CVerifyCertDialog::~CVerifyCertDialog()
 {
@@ -17,26 +23,21 @@ CVerifyCertDialog::~CVerifyCertDialog()
 bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 {
 	bool warning = false;
-	if (cert.GetActivationTime().IsValid())
-	{
-		if (cert.GetActivationTime() > wxDateTime::Now())
-		{
+	if (cert.GetActivationTime().IsValid()) {
+		if (cert.GetActivationTime() > wxDateTime::Now()) {
 			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().FormatDate()));
 			warning = true;
 		}
 		else
 			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), cert.GetActivationTime().FormatDate());
 	}
-	else
-	{
+	else {
 		warning = true;
 		pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), _("Invalid date"));
 	}
 
-	if (cert.GetExpirationTime().IsValid())
-	{
-		if (cert.GetExpirationTime() < wxDateTime::Now())
-		{
+	if (cert.GetExpirationTime().IsValid()) {
+		if (cert.GetExpirationTime() < wxDateTime::Now()) {
 			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().FormatDate()));
 			warning = true;
 		}
@@ -368,19 +369,15 @@ unsigned char* CVerifyCertDialog::ConvertStringToHex(const wxString& str, unsign
 	return data;
 }
 
-void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
+void CVerifyCertDialog::LoadTrustedCerts()
 {
 	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
-	if (!m_xmlFile.HasFileName() || m_xmlFile.Modified())
-		m_xmlFile.Load(_T("trustedcerts"));
-	else
+	if (!m_xmlFile.Modified()) {
 		return;
+	}
 
-	TiXmlElement* pElement = m_xmlFile.GetElement();
-	if (!pElement)
-	{
-		if (close)
-			m_xmlFile.Close();
+	TiXmlElement* pElement = m_xmlFile.Load();
+	if (!pElement) {
 		return;
 	}
 
@@ -392,8 +389,7 @@ void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
 	bool modified = false;
 
 	TiXmlElement* pCert = pElement->FirstChildElement("Certificate");
-	while (pCert)
-	{
+	while (pCert) {
 		wxString value = GetTextElement(pCert, "Data");
 
 		TiXmlElement* pRemove = 0;
@@ -433,10 +429,7 @@ void CVerifyCertDialog::LoadTrustedCerts(bool close /*=true*/)
 	}
 
 	if (modified)
-		m_xmlFile.Save();
-
-	if (close)
-		m_xmlFile.Close();
+		m_xmlFile.Save(false);
 }
 
 void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* const pNotification)
@@ -446,11 +439,9 @@ void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* co
 	const unsigned char* const data = certificate.GetRawData(len);
 
 	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
-	LoadTrustedCerts(false);
+	LoadTrustedCerts();
 
-	if (IsTrusted(pNotification->GetHost(), pNotification->GetPort(), data, len, true))
-	{
-		m_xmlFile.Close();
+	if (IsTrusted(pNotification->GetHost(), pNotification->GetPort(), data, len, true))	{
 		return;
 	}
 
@@ -462,19 +453,12 @@ void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* co
 	memcpy(cert.data, data, len);
 	m_trustedCerts.push_back(cert);
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
-
-	TiXmlElement* pElement = m_xmlFile.GetElement();
-	if (!pElement)
-	{
-		m_xmlFile.Load();
-		pElement = m_xmlFile.GetElement();
 	}
 
-	if (!pElement)
-	{
-		m_xmlFile.Close();
+	TiXmlElement* pElement = m_xmlFile.GetElement();
+	if (!pElement) {
 		return;
 	}
 
@@ -495,8 +479,7 @@ void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* co
 	AddTextElement(pCert, "Host", pNotification->GetHost());
 	AddTextElement(pCert, "Port", pNotification->GetPort());
 
-	m_xmlFile.Save();
-	m_xmlFile.Close();
+	m_xmlFile.Save(true);
 }
 
 wxString CVerifyCertDialog::DecodeValue(const wxString& value)

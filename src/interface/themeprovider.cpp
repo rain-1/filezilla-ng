@@ -65,9 +65,9 @@ std::list<wxString> CThemeProvider::GetSearchDirs(const wxSize& bestSize)
 		dirs.push_back(m_themePath + size);
 	}
 
-	const wxString resourceDir(wxGetApp().GetResourceDir());
+	CLocalPath const resourceDir(wxGetApp().GetResourceDir());
 	for (auto const& size : sizeStrings) {
-		dirs.push_back(resourceDir + size);
+		dirs.push_back(resourceDir.GetPath() + size);
 	}
 
 	return dirs;
@@ -144,15 +144,15 @@ std::vector<wxString> CThemeProvider::GetThemes()
 {
 	std::vector<wxString> themes;
 
-	const wxString& resourceDir = wxGetApp().GetResourceDir();
-	if (wxFileName::FileExists(resourceDir + _T("theme.xml")))
+	CLocalPath const resourceDir = wxGetApp().GetResourceDir();
+	if (wxFileName::FileExists(resourceDir.GetPath() + _T("theme.xml")))
 		themes.push_back(wxString());
 
-	wxDir dir(resourceDir);
+	wxDir dir(resourceDir.GetPath());
 	bool found;
 	wxString subdir;
 	for (found = dir.GetFirst(&subdir, _T("*"), wxDIR_DIRS); found; found = dir.GetNext(&subdir)) {
-		if (wxFileName::FileExists(resourceDir + subdir + _T("/") + _T("theme.xml")))
+		if (wxFileName::FileExists(resourceDir.GetPath() + subdir + _T("/") + _T("theme.xml")))
 			themes.push_back(subdir + _T("/"));
 	}
 
@@ -161,7 +161,7 @@ std::vector<wxString> CThemeProvider::GetThemes()
 
 std::vector<std::unique_ptr<wxBitmap>> CThemeProvider::GetAllImages(const wxString& theme, const wxSize& size)
 {
-	wxString path = wxGetApp().GetResourceDir() + theme;
+	wxString path = wxGetApp().GetResourceDir().GetPath() + theme;
 
 	wxLogNull log;
 
@@ -200,48 +200,42 @@ std::vector<std::unique_ptr<wxBitmap>> CThemeProvider::GetAllImages(const wxStri
 
 bool CThemeProvider::GetThemeData(const wxString& themePath, wxString& name, wxString& author, wxString& email)
 {
-	wxFileName fn(wxGetApp().GetResourceDir() + themePath, _T("theme.xml"));
-	TiXmlElement* pDocument = GetXmlFile(fn.GetFullPath());
-	if (!pDocument)
+	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
+	CXmlFile xml(file);
+	TiXmlElement* root = xml.Load();
+	TiXmlElement* theme = root ? root->FirstChildElement("Theme") : 0;
+	if (!theme)
 		return false;
 
-	TiXmlElement* pTheme = pDocument->FirstChildElement("Theme");
-	if (pTheme) {
-		name = GetTextElement(pTheme, "Name");
-		author = GetTextElement(pTheme, "Author");
-		email = GetTextElement(pTheme, "Mail");
-	}
-	delete pDocument->GetDocument();
-
-	return pTheme != 0;
+	name = GetTextElement(theme, "Name");
+	author = GetTextElement(theme, "Author");
+	email = GetTextElement(theme, "Mail");
+	return true;
 }
 
 std::vector<wxString> CThemeProvider::GetThemeSizes(const wxString& themePath)
 {
 	std::vector<wxString> sizes;
 
-	wxFileName fn(wxGetApp().GetResourceDir() + themePath, _T("theme.xml"));
-	TiXmlElement* pDocument = GetXmlFile(fn.GetFullPath());
-	if (!pDocument)
+	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
+	CXmlFile xml(file);
+	TiXmlElement* root = xml.Load();
+	TiXmlElement* theme = root ? root->FirstChildElement("Theme") : 0;
+	if (!theme)
 		return sizes;
 
-	TiXmlElement* pTheme = pDocument->FirstChildElement("Theme");
-	if (pTheme) {
-		for (TiXmlElement* pSize = pTheme->FirstChildElement("size"); pSize; pSize = pSize->NextSiblingElement("size")) {
-			const char* txt = pSize->GetText();
-			if (!txt)
-				continue;
+	for (TiXmlElement* pSize = theme->FirstChildElement("size"); pSize; pSize = pSize->NextSiblingElement("size")) {
+		const char* txt = pSize->GetText();
+		if (!txt)
+			continue;
 
-			wxString size = ConvLocal(txt);
-			if (size.empty())
-				continue;
+		wxString size = ConvLocal(txt);
+		if (size.empty())
+			continue;
 
-			sizes.push_back(size);
-		}
+		sizes.push_back(size);
 	}
-
-	delete pDocument->GetDocument();
-
+	
 	return sizes;
 }
 
@@ -257,10 +251,10 @@ wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&
 
 	const wxChar* dirs[] = { _T("16x16/"), _T("32x32/"), _T("48x48/") };
 
-	const wxString& resourcePath = wxGetApp().GetResourceDir();
+	CLocalPath const resourcePath = wxGetApp().GetResourceDir();
 
 	for (auto const& dir : dirs ) {
-		wxString file = resourcePath + dir + name + _T(".png");
+		wxString file = resourcePath.GetPath() + dir + name + _T(".png");
 		if (!wxFileName::FileExists(file))
 			continue;
 
@@ -272,47 +266,40 @@ wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&
 
 bool CThemeProvider::ThemeHasSize(const wxString& themePath, const wxString& size)
 {
-	wxFileName fn(wxGetApp().GetResourceDir() + themePath, _T("theme.xml"));
-	TiXmlElement* pDocument = GetXmlFile(fn.GetFullPath());
-	if (!pDocument)
-		return false;
-
-	TiXmlElement* pTheme = pDocument->FirstChildElement("Theme");
-
-	if (!pTheme) {
-		delete pDocument->GetDocument();
+	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
+	CXmlFile xml(file);
+	TiXmlElement* root = xml.Load();
+	TiXmlElement* theme = root ? root->FirstChildElement("Theme") : 0;
+	if (!theme) {
 		return false;
 	}
 
-	for (TiXmlElement* pSize = pTheme->FirstChildElement("size"); pSize; pSize = pSize->NextSiblingElement("size")) {
+	for (TiXmlElement* pSize = theme->FirstChildElement("size"); pSize; pSize = pSize->NextSiblingElement("size")) {
 		const char* txt = pSize->GetText();
 		if (!txt)
 			continue;
 
 		if (size == ConvLocal(txt)) {
-			delete pDocument->GetDocument();
 			return true;
 		}
 	}
-
-	delete pDocument->GetDocument();
 
 	return false;
 }
 
 wxString CThemeProvider::GetThemePath()
 {
-	const wxString& resourceDir = wxGetApp().GetResourceDir();
-	wxString themePath = resourceDir + COptions::Get()->GetOption(OPTION_THEME);
+	CLocalPath const resourceDir = wxGetApp().GetResourceDir();
+	wxString themePath = resourceDir.GetPath() + COptions::Get()->GetOption(OPTION_THEME);
 	if (wxFile::Exists(themePath + _T("theme.xml")))
 		return themePath;
 
-	themePath = resourceDir + _T("opencrystal/");
+	themePath = resourceDir.GetPath() + _T("opencrystal/");
 	if (wxFile::Exists(themePath + _T("theme.xml")))
 		return themePath;
 
-	wxASSERT(wxFile::Exists(resourceDir + _T("theme.xml")));
-	return resourceDir;
+	wxASSERT(wxFile::Exists(resourceDir.GetPath() + _T("theme.xml")));
+	return resourceDir.GetPath();
 }
 
 void CThemeProvider::OnOptionChanged(int option)

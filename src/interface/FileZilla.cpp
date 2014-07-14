@@ -390,7 +390,7 @@ bool CFileZillaApp::FileExists(const wxString& file) const
 	return false;
 }
 
-wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
+CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 {
 	/*
 	 * Finding the resources in all cases is a difficult task,
@@ -404,11 +404,11 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 	 */
 
 #ifdef __WXMAC__
-	wxString path = wxStandardPaths::Get().GetDataDir();
-	if (FileExists(path + fileToFind))
+	CLocalPath path = wxStandardPaths::Get().GetDataDir();
+	if (FileExists(path.GetPath() + fileToFind))
 		return path;
 
-	return wxString();
+	return CLocalPath();
 #else
 
 	wxPathList pathList;
@@ -445,7 +445,7 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 	if (res > 0 && res < 1000)
 	{
 		wxFileName fn(path);
-		pathList.Add(fn.GetPath());
+		pathList.Add(fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR));
 	}
 #endif //ENABLE_BINRELOC and __WXMSW__ blocks
 
@@ -460,41 +460,38 @@ wxString CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 	// For each path, check for the resources
 	wxPathList::const_iterator node;
-	for (node = pathList.begin(); node != pathList.end(); ++node)
-	{
-		wxString cur = *node;
+	for (node = pathList.begin(); node != pathList.end(); ++node) {
+		wxString cur = CLocalPath(*node).GetPath();
 		if (FileExists(cur + fileToFind))
-			return cur;
-		if (FileExists(cur + _T("/share/filezilla") + fileToFind))
-			return cur + _T("/share/filezilla");
-		if (FileExists(cur + _T("/filezilla") + fileToFind))
-			return cur + _T("/filezilla");
+			return CLocalPath(cur);
+		if (FileExists(cur + _T("share/filezilla/") + fileToFind))
+			return CLocalPath(cur + _T("/share/filezilla"));
+		if (FileExists(cur + _T("filezilla/") + fileToFind))
+			return CLocalPath(cur + _T("filezilla"));
 	}
 
-	for (node = pathList.begin(); node != pathList.end(); ++node)
-	{
-		wxString cur = *node;
-		if (FileExists(cur + _T("/..") + fileToFind))
-			return cur + _T("/..");
-		if (FileExists(cur + _T("/../share/filezilla") + fileToFind))
-			return cur + _T("/../share/filezilla");
+	for (node = pathList.begin(); node != pathList.end(); ++node) {
+		wxString cur = CLocalPath(*node).GetPath();
+		if (FileExists(cur + _T("../") + fileToFind))
+			return CLocalPath(cur + _T("/.."));
+		if (FileExists(cur + _T("../share/filezilla/") + fileToFind))
+			return CLocalPath(cur + _T("../share/filezilla"));
 	}
 
-	for (node = pathList.begin(); node != pathList.end(); ++node)
-	{
-		wxString cur = *node;
-		if (FileExists(cur + _T("/../../") + fileToFind))
-			return cur + _T("/../..");
+	for (node = pathList.begin(); node != pathList.end(); ++node) {
+		wxString cur = CLocalPath(*node).GetPath();
+		if (FileExists(cur + _T("../../") + fileToFind))
+			return CLocalPath(cur + _T("../.."));
 	}
 
-	return wxString();
+	return CLocalPath();
 #endif //__WXMAC__
 }
 
 bool CFileZillaApp::LoadResourceFiles()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::LoadResourceFiles"));
-	m_resourceDir = GetDataDir(_T("/resources/theme.xml"));
+	m_resourceDir = GetDataDir(_T("resources/theme.xml"));
 
 	wxImage::AddHandler(new wxPNGHandler());
 
@@ -504,10 +501,7 @@ bool CFileZillaApp::LoadResourceFiles()
 		return false;
 	}
 
-	if (m_resourceDir[m_resourceDir.Length() - 1] != wxFileName::GetPathSeparator())
-		m_resourceDir += wxFileName::GetPathSeparator();
-
-	m_resourceDir += _T("resources/");
+	m_resourceDir.AddSegment(_T("resources"));
 
 	wxXmlResource *pResource = wxXmlResource::Get();
 
@@ -543,11 +537,11 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->AddHandler(new wxAnimationCtrlXmlHandler);
 	pResource->AddHandler(new wxStdDialogButtonSizerXmlHandler);
 
-	if (CLocalFileSystem::GetFileType(m_resourceDir + _T("xrc/resources.xrc")) == CLocalFileSystem::file) {
-		pResource->LoadFile(m_resourceDir + _T("xrc/resources.xrc"));
+	if (CLocalFileSystem::GetFileType(m_resourceDir.GetPath() + _T("xrc/resources.xrc")) == CLocalFileSystem::file) {
+		pResource->LoadFile(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
 	}
 	else {
-		pResource->Load(m_resourceDir + _T("xrc/*.xrc"));
+		pResource->Load(m_resourceDir.GetPath() + _T("xrc/*.xrc"));
 	}
 
 	return true;
@@ -569,7 +563,7 @@ bool CFileZillaApp::InitDefaultsDir()
 
 #endif
 	if( m_defaultsDir.empty() ) {
-		m_defaultsDir = GetDataDir(_T("/fzdefaults.xml"));
+		m_defaultsDir = GetDataDir(_T("fzdefaults.xml"));
 	}
 
 	return !m_defaultsDir.empty();
@@ -579,38 +573,24 @@ bool CFileZillaApp::LoadLocales()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::LoadLocales"));
 #ifndef __WXMAC__
-	m_localesDir = GetDataDir(_T("/../locale/*/filezilla.mo"));
+	m_localesDir = GetDataDir(_T("../locale/*/filezilla.mo"));
 	if (m_localesDir.empty())
-		m_localesDir = GetDataDir(_T("/../locale/*/LC_MESSAGES/filezilla.mo"));
-	if (!m_localesDir.empty())
-	{
-		if (m_localesDir[m_localesDir.Length() - 1] != wxFileName::GetPathSeparator())
-			m_localesDir += wxFileName::GetPathSeparator();
-
-		m_localesDir += _T("../locale");
+		m_localesDir = GetDataDir(_T("../locale/*/LC_MESSAGES/filezilla.mo"));
+	if (!m_localesDir.empty()) {
+		m_localesDir.ChangePath( _T("../locale") );
 	}
-	else
-	{
-		m_localesDir = GetDataDir(_T("/locales/*/filezilla.mo"));
-		if (!m_localesDir.empty())
-		{
-			if (m_localesDir[m_localesDir.Length() - 1] != wxFileName::GetPathSeparator())
-				m_localesDir += wxFileName::GetPathSeparator();
-
-			m_localesDir += _T("locales");
+	else {
+		m_localesDir = GetDataDir(_T("locales/*/filezilla.mo"));
+		if (!m_localesDir.empty()) {
+			m_localesDir.AddSegment(_T("locales"));
 		}
 	}
 #else
-	m_localesDir = wxStandardPaths::Get().GetDataDir() + _T("/locales");
+	m_localesDir = wxStandardPaths::Get().GetDataDir() + _T("locales");
 #endif
 
-	if (!m_localesDir.empty())
-	{
-		wxFileName fn(m_localesDir, _T(""));
-		fn.Normalize();
-		m_localesDir = fn.GetFullPath();
-
-		wxLocale::AddCatalogLookupPathPrefix(m_localesDir);
+	if (!m_localesDir.empty()) {
+		wxLocale::AddCatalogLookupPathPrefix(m_localesDir.GetPath());
 	}
 
 	SetLocale(wxLANGUAGE_DEFAULT);
@@ -922,4 +902,9 @@ void CFileZillaApp::ShowStartupProfile()
 	}
 
 	wxMessageBoxEx(msg);
+}
+
+wxString CFileZillaApp::GetSettingsFile(wxString const& name) const
+{
+	return COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR) + name + _T(".xml");
 }

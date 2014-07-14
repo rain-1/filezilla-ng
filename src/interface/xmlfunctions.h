@@ -15,22 +15,20 @@
 class CXmlFile
 {
 public:
-	CXmlFile(const wxString& fileName);
-	CXmlFile(const wxFileName& fileName = wxFileName());
-
+	CXmlFile() {};
+	explicit CXmlFile(const wxString& fileName, wxString const& root = wxString());
+	
 	virtual ~CXmlFile();
 
 	TiXmlElement* CreateEmpty();
 
+	wxString GetFileName() const { return m_fileName; }
 	void SetFileName(const wxString& name);
-	void SetFileName(const wxFileName& fileName);
-	const wxFileName& GetFileName() const { return m_fileName; }
 
-	bool HasFileName() const { return m_fileName.IsOk(); }
+	bool HasFileName() const { return !m_fileName.empty(); }
 
 	// Sets error description on failure
-	TiXmlElement* Load(const wxString& name);
-	TiXmlElement* Load(const wxFileName& fileName = wxFileName());
+	TiXmlElement* Load();
 
 	wxString GetError() const { return m_error; }
 	int GetRawDataLength();
@@ -40,20 +38,31 @@ public:
 
 	void Close();
 
-	TiXmlElement* GetElement();
-	const TiXmlElement* GetElement() const;
+	TiXmlElement* GetElement() { return m_pElement; }
+	TiXmlElement const* GetElement() const { return m_pElement; }
 
 	bool Modified();
 
-	bool Save(wxString* error = 0);
-
+	bool Save(bool printError);
 protected:
-	wxDateTime m_modificationTime;
-	wxFileName m_fileName;
-	TiXmlDocument* m_pDocument;
-	TiXmlPrinter *m_pPrinter;
+	// Opens the specified XML file if it exists or creates a new one otherwise.
+	// Returns 0 on error.
+	void GetXmlFile();
+
+	bool LoadXmlDocument();
+
+	// Save the XML document to the given file
+	bool SaveXmlFile();
+
+	CDateTime m_modificationTime;
+	wxString m_fileName;
+	TiXmlDocument* m_pDocument{};
+	TiXmlElement* m_pElement{};
+	TiXmlPrinter *m_pPrinter{};
 
 	wxString m_error;
+
+	wxString m_rootName{_T("FileZilla3")};
 };
 
 // Convert the given string into an UTF-8 string. Returned string has to be deleted manually.
@@ -95,17 +104,8 @@ wxLongLong GetTextElementLongLong(TiXmlElement* node, const char* name, int defV
 
 bool GetTextElementBool(TiXmlElement* node, const char* name, bool defValue = false);
 
-// Opens the specified XML file if it exists or creates a new one otherwise.
-// Returns 0 on error.
-TiXmlElement* GetXmlFile(wxFileName file, wxString *error = 0);
-
-// Save the XML document to the given file
-bool SaveXmlFile(const wxFileName& file, TiXmlNode* node, wxString* error = 0, bool move = false);
-
 // Functions to save and retrieve CServer objects to the XML file
 void SetServer(TiXmlElement *node, const CServer& server);
 bool GetServer(TiXmlElement *node, CServer& server);
-
-bool LoadXmlDocument(TiXmlDocument* pXmlDocument, const wxString& file, wxString* error = 0);
 
 #endif //__XMLFUNCTIONS_H__

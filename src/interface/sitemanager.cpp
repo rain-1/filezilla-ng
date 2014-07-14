@@ -234,7 +234,7 @@ wxMenu* CSiteManager::GetSitesMenu()
 
 	wxMenu* predefinedSites = GetSitesMenu_Predefined(m_idMap);
 
-	CXmlFile file(_T("sitemanager"));
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument)
 	{
@@ -302,11 +302,11 @@ void CSiteManager::ClearIdMap()
 
 wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData_Site*> &idMap)
 {
-	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
+	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir.empty())
 		return 0;
 
-	wxFileName name(defaultsDir, _T("fzdefaults.xml"));
+	wxString const name(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	CXmlFile file(name);
 
 	TiXmlElement* pDocument = file.Load();
@@ -433,32 +433,26 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file;
-	TiXmlElement* pDocument = 0;
-
-	if (c == '0')
-		pDocument = file.Load(_T("sitemanager"));
-	else
-	{
-		const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-		if (defaultsDir.empty())
-		{
+	if (c == '0') {
+		file.SetFileName(wxGetApp().GetSettingsFile(_T("sitemanager")));
+	}
+	else {
+		CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
+		if (defaultsDir.empty()) {
 			wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 			return 0;
 		}
-		wxFileName name(defaultsDir, _T("fzdefaults.xml"));
-		pDocument = file.Load(name);
+		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	}
 
-	if (!pDocument)
-	{
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-
 		return 0;
 	}
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
-	{
+	if (!pElement) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
@@ -538,22 +532,21 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file;
-	TiXmlElement* pDocument = 0;
-
-	if (c == '0')
-		pDocument = file.Load(_T("sitemanager"));
-	else
-	{
-		const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
-		if (defaultsDir.empty())
-			return false;
-		pDocument = file.Load(wxFileName(defaultsDir, _T("fzdefaults.xml")));
+	if (c == '0') {
+		file.SetFileName(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	}
-
-	if (!pDocument)
-	{
+	else {
+		CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
+		if (defaultsDir.empty()) {
+			wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
+			return 0;
+		}
+		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
+	}
+	
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-
 		return false;
 	}
 
@@ -562,8 +555,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 		return false;
 
 	std::list<wxString> segments;
-	if (!UnescapeSitePath(sitePath, segments))
-	{
+	if (!UnescapeSitePath(sitePath, segments)) {
 		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
@@ -609,11 +601,9 @@ wxString CSiteManager::AddServer(CServer server)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("sitemanager"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxString msg = file.GetError() + _T("\n") + _("The server could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -663,13 +653,11 @@ wxString CSiteManager::AddServer(CServer server)
 		delete [] utf8;
 	}
 
-	wxString error;
-	if (!file.Save(&error))
-	{
+	if (!file.Save(false)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 			return wxString();
 
-		wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFileName().GetFullPath(), error);
+		wxString msg = wxString::Format(_("Could not write \"%s\", any changes to the Site Manager could not be saved: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 		return wxString();
 	}
@@ -724,11 +712,9 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("sitemanager"));
-
-	if (!pDocument)
-	{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
 		wxString msg = file.GetError() + _T("\n") + _("The bookmark could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -785,13 +771,11 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	if (sync)
 		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
 
-	wxString error;
-	if (!file.Save(&error))
-	{
+	if (!file.Save(false)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 			return true;
 
-		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName().GetFullPath(), error);
+		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 
@@ -810,9 +794,8 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	CXmlFile file;
-	TiXmlElement* pDocument = file.Load(_T("sitemanager"));
-
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
+	TiXmlElement *pDocument = file.Load();
 	if (!pDocument) {
 		wxString msg = file.GetError() + _T("\n") + _("The bookmarks could not be cleared.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
@@ -842,12 +825,11 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 		pBookmark = pChild->FirstChildElement("Bookmark");
 	}
 
-	wxString error;
-	if (!file.Save(&error)) {
+	if (!file.Save(false)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 			return true;
 
-		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName().GetFullPath(), error);
+		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), file.GetFileName(), file.GetError());
 		wxMessageBoxEx(msg, _("Error writing xml file"), wxICON_ERROR);
 	}
 

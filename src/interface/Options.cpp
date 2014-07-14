@@ -211,11 +211,11 @@ COptions::COptions()
 	auto const nameOptionMap = GetNameOptionMap();
 	LoadGlobalDefaultOptions(nameOptionMap);
 
-	InitSettingsDir();
+	wxString const dir = InitSettingsDir();
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile = new CXmlFile(_T("filezilla"));
-	if (!m_pXmlFile->Load(wxFileName())) {
+	m_pXmlFile = new CXmlFile(dir + _T("filezilla.xml"));
+	if (!m_pXmlFile->Load()) {
 		wxString msg = m_pXmlFile->GetError() + _T("\n\n") + _("For this session the default settings will be used. Any changes to the settings will not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 		delete m_pXmlFile;
@@ -525,7 +525,7 @@ void COptions::SetServer(wxString path, const CServer& server)
 		return;
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile->Save();
+	m_pXmlFile->Save(true);
 }
 
 bool COptions::GetServer(wxString path, CServer& server)
@@ -677,12 +677,11 @@ void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string
 
 void COptions::LoadGlobalDefaultOptions(std::map<std::string, int> const& nameOptionMap)
 {
-	const wxString& defaultsDir = wxGetApp().GetDefaultsDir();
+	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir.empty())
 		return;
 
-	wxFileName name(defaultsDir, _T("fzdefaults.xml"));
-	CXmlFile file(name);
+	CXmlFile file(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	if (!file.Load())
 		return;
 
@@ -713,7 +712,7 @@ void COptions::Save()
 		return;
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile->Save();
+	m_pXmlFile->Save(true);
 }
 
 void COptions::SaveIfNeeded()
@@ -796,7 +795,7 @@ wxString COptions::GetUnadjustedSettingsDir()
 	return fn.GetPath();
 }
 
-void COptions::InitSettingsDir()
+wxString COptions::InitSettingsDir()
 {
 	wxFileName fn;
 
@@ -820,7 +819,7 @@ void COptions::InitSettingsDir()
 		}
 
 		fn = wxFileName(dir, _T(""));
-		fn.Normalize(wxPATH_NORM_ALL, wxGetApp().GetDefaultsDir());
+		fn.Normalize(wxPATH_NORM_ALL, wxGetApp().GetDefaultsDir().GetPath());
 	}
 	else {
 		fn = wxFileName(GetUnadjustedSettingsDir(), _T(""));
@@ -828,7 +827,10 @@ void COptions::InitSettingsDir()
 
 	if (!fn.DirExists())
 		wxFileName::Mkdir( fn.GetPath(), 0700, wxPATH_MKDIR_FULL );
-	SetOption(OPTION_DEFAULT_SETTINGSDIR, fn.GetPath());
+	dir = fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
+	SetOption(OPTION_DEFAULT_SETTINGSDIR, dir);
+
+	return dir;
 }
 
 void COptions::SetDefaultValues()

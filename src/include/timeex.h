@@ -24,6 +24,7 @@ public:
 	wxDateTime Degenerate() const { return t_; }
 
 	bool IsValid() const { return t_.IsValid(); }
+	void clear();
 
 	Accuracy GetAccuracy() const { return a_; }
 

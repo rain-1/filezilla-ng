@@ -1,14 +1,16 @@
 #include <filezilla.h>
 #include "filter.h"
 #include "filteredit.h"
-#include "ipcmutex.h"
 #include "filezillaapp.h"
-#include "xmlfunctions.h"
-#include <wx/regex.h>
+#include "inputdialog.h"
+#include "ipcmutex.h"
+#include "local_filesys.h"
 #include "Mainfrm.h"
 #include "Options.h"
-#include "inputdialog.h"
 #include "state.h"
+#include "xmlfunctions.h"
+
+#include <wx/regex.h>
 
 bool CFilterManager::m_loaded = false;
 std::vector<CFilter> CFilterManager::m_globalFilters;
@@ -201,11 +203,9 @@ void CFilterDialog::SaveFilters()
 {
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("filters.xml"));
-	CXmlFile xml(file);
+	CXmlFile xml(wxGetApp().GetSettingsFile(_T("filters")));
 	TiXmlElement* pDocument = xml.Load();
-	if (!pDocument)
-	{
+	if (!pDocument) {
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters could not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -256,7 +256,7 @@ void CFilterDialog::SaveFilters()
 		}
 	}
 
-	xml.Save();
+	xml.Save(true);
 
 	m_filters_disabled = false;
 }
@@ -1007,14 +1007,14 @@ void CFilterManager::LoadFilters()
 
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
-	wxFileName file(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("filters.xml"));
-	if (!file.FileExists() || file.GetSize() == 0)
-		file = wxFileName(wxGetApp().GetResourceDir(), _T("defaultfilters.xml"));
+	wxString file(wxGetApp().GetSettingsFile(_T("filters")));
+	if (CLocalFileSystem::GetSize(file) < 1) {
+		file = wxGetApp().GetResourceDir().GetPath() + _T("defaultfilters.xml");
+	}
 
 	CXmlFile xml(file);
 	TiXmlElement* pDocument = xml.Load();
-	if (!pDocument)
-	{
+	if (!pDocument) {
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters will not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 

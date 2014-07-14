@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include "export.h"
+#include "filezillaapp.h"
 #include "xmlfunctions.h"
 #include "ipcmutex.h"
 #include "queue.h"
@@ -43,15 +44,14 @@ void CExportDialog::Show()
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
-	wxFileName fn(dlg.GetPath());
-	CXmlFile xml(fn);
+	CXmlFile xml(dlg.GetPath());
 
 	TiXmlElement* exportRoot = xml.CreateEmpty();
 
 	if (sitemanager) {
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-		CXmlFile file(_T("sitemanager"));
+		CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 		TiXmlElement* pDocument = file.Load();
 		if (pDocument) {
 			TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
@@ -61,7 +61,7 @@ void CExportDialog::Show()
 	}
 	if (settings) {
 		CInterProcessMutex mutex(MUTEX_OPTIONS);
-		CXmlFile file(_T("filezilla"));
+		CXmlFile file(wxGetApp().GetSettingsFile(_T("filezilla")));
 		TiXmlElement* pDocument = file.Load();
 		if (pDocument) {
 			TiXmlElement* pElement = pDocument->FirstChildElement("Settings");
@@ -74,5 +74,5 @@ void CExportDialog::Show()
 		m_pQueueView->WriteToFile(exportRoot);
 	}
 
-	xml.Save();
+	xml.Save(true);
 }

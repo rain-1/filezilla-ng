@@ -860,9 +860,9 @@ void wxListCtrlEx::InitHeaderSortImageList()
 
 	wxBitmap bmp;
 
-	bmp.LoadFile(wxGetApp().GetResourceDir() + _T("up.png"), wxBITMAP_TYPE_PNG);
+	bmp.LoadFile(wxGetApp().GetResourceDir().GetPath() + _T("up.png"), wxBITMAP_TYPE_PNG);
 	m_pHeaderImageList->Add(bmp);
-	bmp.LoadFile(wxGetApp().GetResourceDir() + _T("down.png"), wxBITMAP_TYPE_PNG);
+	bmp.LoadFile(wxGetApp().GetResourceDir().GetPath() + _T("down.png"), wxBITMAP_TYPE_PNG);
 	m_pHeaderImageList->Add(bmp);
 
 	HWND hWnd = (HWND)GetHandle();
