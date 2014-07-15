@@ -64,9 +64,9 @@ public:
 	// Adds a child window that gets repositioned on window resize
 	// Positioned in the field given in the constructor,
 	// right aligned and in reverse order.
-	bool AddChild(int field, int idx, wxWindow* pChild);
+	bool AddField(int field, int idx, wxWindow* pChild);
 
-	void RemoveChild(int idx);
+	void RemoveField(int idx);
 
 	virtual void SetFieldWidth(int field, int width);
 protected:

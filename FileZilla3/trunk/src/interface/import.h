@@ -10,7 +10,7 @@ class CImportDialog : public wxDialogEx
 public:
 	CImportDialog(wxWindow* parent, CQueueView* pQueueView);
 
-	void Show();
+	void Run();
 
 protected:
 

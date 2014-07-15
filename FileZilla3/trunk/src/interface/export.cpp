@@ -10,7 +10,7 @@ CExportDialog::CExportDialog(wxWindow* parent, CQueueView* pQueueView)
 {
 }
 
-void CExportDialog::Show()
+void CExportDialog::Run()
 {
 	if (!Load(m_parent, _T("ID_EXPORT")))
 		return;

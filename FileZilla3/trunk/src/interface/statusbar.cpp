@@ -196,7 +196,7 @@ void CWidgetsStatusBar::OnSize(wxSizeEvent& event)
 #endif
 }
 
-bool CWidgetsStatusBar::AddChild(int field, int idx, wxWindow* pChild)
+bool CWidgetsStatusBar::AddField(int field, int idx, wxWindow* pChild)
 {
 	field = GetFieldIndex(field);
 	if( field < 0 ) {
@@ -214,7 +214,7 @@ bool CWidgetsStatusBar::AddChild(int field, int idx, wxWindow* pChild)
 	return true;
 }
 
-void CWidgetsStatusBar::RemoveChild(int idx)
+void CWidgetsStatusBar::RemoveField(int idx)
 {
 	auto iter = m_children.find(idx);
 	if (iter != m_children.end()) {
@@ -370,7 +370,7 @@ void CStatusBar::DisplayDataType()
 	{
 		if (m_pDataTypeIndicator)
 		{
-			RemoveChild(widget_datatype);
+			RemoveField(widget_datatype);
 			m_pDataTypeIndicator->Destroy();
 			m_pDataTypeIndicator = 0;
 		}
@@ -401,7 +401,7 @@ void CStatusBar::DisplayDataType()
 		if (!m_pDataTypeIndicator)
 		{
 			m_pDataTypeIndicator = new CIndicator(this, bmp);
-			AddChild(0, widget_datatype, m_pDataTypeIndicator);
+			AddField(0, widget_datatype, m_pDataTypeIndicator);
 		}
 		else
 			m_pDataTypeIndicator->SetBitmap(bmp);
@@ -439,7 +439,7 @@ void CStatusBar::DisplayEncrypted()
 	{
 		if (m_pEncryptionIndicator)
 		{
-			RemoveChild(widget_encryption);
+			RemoveField(widget_encryption);
 			m_pEncryptionIndicator->Destroy();
 			m_pEncryptionIndicator = 0;
 		}
@@ -450,7 +450,7 @@ void CStatusBar::DisplayEncrypted()
 		if (!m_pEncryptionIndicator)
 		{
 			m_pEncryptionIndicator = new CIndicator(this, bmp);
-			AddChild(0, widget_encryption, m_pEncryptionIndicator);
+			AddField(0, widget_encryption, m_pEncryptionIndicator);
 			m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
 		}
 		else
@@ -578,7 +578,7 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 	if (!m_pSpeedLimitsIndicator)
 	{
 		m_pSpeedLimitsIndicator = new CIndicator(this, bmp);
-		AddChild(0, widget_speedlimit, m_pSpeedLimitsIndicator);
+		AddField(0, widget_speedlimit, m_pSpeedLimitsIndicator);
 	}
 	else
 		m_pSpeedLimitsIndicator->SetBitmap(bmp);

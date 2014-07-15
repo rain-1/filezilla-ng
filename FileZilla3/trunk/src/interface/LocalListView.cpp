@@ -1714,7 +1714,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		if (cmd.empty())
 		{
 			CNewAssociationDialog dlg(this);
-			if (!dlg.Show(fn.GetFullName()))
+			if (!dlg.Run(fn.GetFullName()))
 				continue;
 			cmd = pEditHandler->CanOpen(CEditHandler::local, fn.GetFullPath(), dangerous, program_exists);
 			if (cmd.empty())

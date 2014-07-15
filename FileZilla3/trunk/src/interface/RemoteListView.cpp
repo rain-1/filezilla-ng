@@ -2405,7 +2405,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
 		if (cmd.empty())
 		{
 			CNewAssociationDialog dlg(this);
-			if (!dlg.Show(entry.name))
+			if (!dlg.Run(entry.name))
 				continue;
 			cmd = pEditHandler->CanOpen(CEditHandler::remote, entry.name, dangerous, program_exists);
 			if (cmd.empty())

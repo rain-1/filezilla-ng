@@ -9,7 +9,7 @@ class CExportDialog : protected wxDialogEx
 public:
 	CExportDialog(wxWindow* parent, CQueueView* pQueueView);
 
-	void Show();
+	void Run();
 
 protected:
 	wxWindow* const m_parent;
