@@ -103,15 +103,16 @@ void CUpdateDialog::Wrap()
 
 	// Wrap pages nicely
 	std::vector<wxWindow*> pages;
-	for (unsigned int i = 0; i < panels_.size(); i++) {
-		pages.push_back(panels_[i]);
+	for (auto const& panel : panels_) {
+		pages.push_back(panel);
 	}
 	wxGetApp().GetWrapEngine()->WrapRecursive(pages, 1.33, "Update", canvas);
 
 	// Keep track of maximum page size
 	wxSize size = GetSizer()->GetMinSize();
-	for (auto iter = panels_.begin(); iter != panels_.end(); ++iter)
-		size.IncTo((*iter)->GetSizer()->GetMinSize());
+	for (auto const& panel : panels_) {
+		size.IncTo(panel->GetSizer()->GetMinSize());
+	}
 
 	wxSize panelSize = size;
 #ifdef __WXGTK__
@@ -120,12 +121,12 @@ void CUpdateDialog::Wrap()
 	parentPanel->SetInitialSize(panelSize);
 
 	// Adjust pages sizes according to maximum size
-	for (auto iter = panels_.begin(); iter != panels_.end(); ++iter) {
-		(*iter)->GetSizer()->SetMinSize(size);
-		(*iter)->GetSizer()->Fit(*iter);
-		(*iter)->GetSizer()->SetSizeHints(*iter);
+	for (auto const& panel : panels_) {
+		panel->GetSizer()->SetMinSize(size);
+		panel->GetSizer()->Fit(panel);
+		panel->GetSizer()->SetSizeHints(panel);
 		if (GetLayoutDirection() == wxLayout_RightToLeft) {
-			(*iter)->Move(wxPoint(0, 0));
+			panel->Move(wxPoint(0, 0));
 		}
 	}
 
@@ -137,8 +138,8 @@ void CUpdateDialog::Wrap()
 	Show();
 #endif
 
-	for (auto iter = panels_.begin(); iter != panels_.end(); ++iter) {
-		(*iter)->Hide();
+	for (auto const& panel : panels_) {
+		panel->Hide();
 	}
 	panels_[0]->Show();
 }
@@ -158,8 +159,8 @@ void CUpdateDialog::LoadPanel(wxString const& name)
 void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 {
 	timer_.Stop();
-	for (auto iter = panels_.begin(); iter != panels_.end(); ++iter) {
-		(*iter)->Hide();
+	for (auto const& panel : panels_) {
+		panel->Hide();
 	}
 	if( s == UpdaterState::idle ) {
 		panels_[pagenames::latest]->Show();
