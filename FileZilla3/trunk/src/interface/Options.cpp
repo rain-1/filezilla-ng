@@ -211,10 +211,10 @@ COptions::COptions()
 	auto const nameOptionMap = GetNameOptionMap();
 	LoadGlobalDefaultOptions(nameOptionMap);
 
-	wxString const dir = InitSettingsDir();
+	CLocalPath const dir = InitSettingsDir();
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
-	m_pXmlFile = new CXmlFile(dir + _T("filezilla.xml"));
+	m_pXmlFile = new CXmlFile(dir.GetPath() + _T("filezilla.xml"));
 	if (!m_pXmlFile->Load()) {
 		wxString msg = m_pXmlFile->GetError() + _T("\n\n") + _("For this session the default settings will be used. Any changes to the settings will not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
@@ -758,7 +758,7 @@ wxString GetEnv(wxString const& env)
 }
 }
 
-wxString COptions::GetUnadjustedSettingsDir()
+CLocalPath COptions::GetUnadjustedSettingsDir()
 {
 	wxFileName fn;
 #ifdef __WXMSW__
@@ -792,12 +792,12 @@ wxString COptions::GetUnadjustedSettingsDir()
 	}
 	fn = wxFileName(cfg, _T(""));
 #endif
-	return fn.GetPath();
+	return CLocalPath(fn.GetPath());
 }
 
-wxString COptions::InitSettingsDir()
+CLocalPath COptions::InitSettingsDir()
 {
-	wxFileName fn;
+	CLocalPath p;
 
 	wxString dir(GetOption(OPTION_DEFAULT_SETTINGSDIR));
 	if (!dir.empty()) {
@@ -818,19 +818,19 @@ wxString COptions::InitSettingsDir()
 				dir += delimiter;
 		}
 
-		fn = wxFileName(dir, _T(""));
-		fn.Normalize(wxPATH_NORM_ALL, wxGetApp().GetDefaultsDir().GetPath());
+		p.SetPath(wxGetApp().GetDefaultsDir().GetPath());
+		p.ChangePath(dir);
 	}
 	else {
-		fn = wxFileName(GetUnadjustedSettingsDir(), _T(""));
+		p = GetUnadjustedSettingsDir();
 	}
 
-	if (!fn.DirExists())
-		wxFileName::Mkdir( fn.GetPath(), 0700, wxPATH_MKDIR_FULL );
-	dir = fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR);
-	SetOption(OPTION_DEFAULT_SETTINGSDIR, dir);
+	if (!p.empty() && !p.Exists())
+		wxFileName::Mkdir( p.GetPath(), 0700, wxPATH_MKDIR_FULL );
 
-	return dir;
+	SetOption(OPTION_DEFAULT_SETTINGSDIR, p.GetPath());
+
+	return p;
 }
 
 void COptions::SetDefaultValues()

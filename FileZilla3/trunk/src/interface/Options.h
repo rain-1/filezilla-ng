@@ -1,6 +1,8 @@
 #ifndef __OPTIONS_H__
 #define __OPTIONS_H__
 
+#include "local_path.h"
+
 enum interfaceOptions
 {
 	OPTION_NUMTRANSFERS = OPTIONS_ENGINE_NUM,
@@ -130,7 +132,7 @@ public:
 
 	void SaveIfNeeded();
 
-	static wxString GetUnadjustedSettingsDir();
+	static CLocalPath GetUnadjustedSettingsDir();
 
 protected:
 	COptions();
@@ -153,7 +155,7 @@ protected:
 	void LoadOptions(std::map<std::string, int> const& nameOptionMap, TiXmlElement* settings = 0);
 	void LoadGlobalDefaultOptions(std::map<std::string, int> const& nameOptionMap);
 	void LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, int> const& nameOptionMap, bool allowDefault);
-	wxString InitSettingsDir();
+	CLocalPath InitSettingsDir();
 	void SetDefaultValues();
 
 	void Save();
