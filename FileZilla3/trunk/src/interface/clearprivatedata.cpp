@@ -19,7 +19,7 @@ CClearPrivateDataDialog::CClearPrivateDataDialog(CMainFrame* pMainFrame)
 {
 }
 
-void CClearPrivateDataDialog::Show()
+void CClearPrivateDataDialog::Run()
 {
 	if (!Load(m_pMainFrame, _T("ID_CLEARPRIVATEDATA")))
 		return;

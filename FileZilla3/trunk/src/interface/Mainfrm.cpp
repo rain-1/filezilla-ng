@@ -628,7 +628,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		if (!pDlg)
 			return;
 
-		pDlg->Show();
+		pDlg->Run();
 		pDlg->Delete();
 
 		if (m_pMenuBar)
@@ -818,13 +818,13 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		if (event.GetId() == XRCID("ID_BOOKMARK_ADD"))
 		{
 			CNewBookmarkDialog dlg(this, controls->site_bookmarks->path, pServer);
-			res = dlg.ShowModal(pState ? pState->GetLocalDir().GetPath() : wxString(), pState ? pState->GetRemotePath() : CServerPath());
+			res = dlg.Run(pState ? pState->GetLocalDir().GetPath() : wxString(), pState ? pState->GetRemotePath() : CServerPath());
 		}
 		else
 		{
 			CBookmarksDialog dlg(this, controls->site_bookmarks->path, pServer);
 
-			res = dlg.ShowModal(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
+			res = dlg.Run(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
 		}
 		if (res == wxID_OK)
 		{

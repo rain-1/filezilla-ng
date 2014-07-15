@@ -9,7 +9,7 @@ class CClearPrivateDataDialog : public wxDialogEx
 public:
 
 	static CClearPrivateDataDialog* Create(CMainFrame* pMainFrame) { return new CClearPrivateDataDialog(pMainFrame); }
-	void Show();
+	void Run();
 
 	void Delete();
 

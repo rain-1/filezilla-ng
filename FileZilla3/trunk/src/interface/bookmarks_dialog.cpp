@@ -31,7 +31,7 @@ CNewBookmarkDialog::CNewBookmarkDialog(wxWindow* parent, wxString& site_path, co
 {
 }
 
-int CNewBookmarkDialog::ShowModal(const wxString &local_path, const CServerPath &remote_path)
+int CNewBookmarkDialog::Run(const wxString &local_path, const CServerPath &remote_path)
 {
 	if (!Load(m_parent, _T("ID_NEWBOOKMARK")))
 		return wxID_CANCEL;
@@ -43,7 +43,7 @@ int CNewBookmarkDialog::ShowModal(const wxString &local_path, const CServerPath 
 	if (!m_server)
 		XRCCTRL(*this, "ID_TYPE_SITE", wxRadioButton)->Enable(false);
 
-	return wxDialogEx::ShowModal();
+	return ShowModal();
 }
 
 void CNewBookmarkDialog::OnOK(wxCommandEvent&)
@@ -234,7 +234,7 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 	m_pTree->SortChildren(m_bookmarks_site);
 }
 
-int CBookmarksDialog::ShowModal(const wxString &local_path, const CServerPath &remote_path)
+int CBookmarksDialog::Run(const wxString &local_path, const CServerPath &remote_path)
 {
 	if (!Load(m_parent, _T("ID_BOOKMARKS")))
 		return wxID_CANCEL;
@@ -281,7 +281,7 @@ int CBookmarksDialog::ShowModal(const wxString &local_path, const CServerPath &r
 
 	m_pTree->SelectItem(m_bookmarks_global);
 
-	return wxDialogEx::ShowModal();
+	return ShowModal();
 }
 
 void CBookmarksDialog::SaveGlobalBookmarks()

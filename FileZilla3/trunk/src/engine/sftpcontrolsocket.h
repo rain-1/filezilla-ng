@@ -114,7 +114,7 @@ protected:
 	int RenameSubcommandResult(int prevResult);
 	int RenameSend();
 
-	bool Send(wxString cmd, const wxString& show = _T(""));
+	bool SendCommand(wxString const& cmd, const wxString& show = wxString());
 	bool AddToStream(const wxString& cmd, bool force_utf8 = false);
 
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);

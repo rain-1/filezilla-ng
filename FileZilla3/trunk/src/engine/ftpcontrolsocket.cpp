@@ -1116,13 +1116,13 @@ int CFtpControlSocket::LogonSend()
 		LogMessage(MessageType::Debug_Info, _T("LogonSend() called during LOGON_AUTH_WAIT, ignoring"));
 		break;
 	case LOGON_AUTH_TLS:
-		res = Send(_T("AUTH TLS"), false, false);
+		res = SendCommand(_T("AUTH TLS"), false, false);
 		break;
 	case LOGON_AUTH_SSL:
-		res = Send(_T("AUTH SSL"), false, false);
+		res = SendCommand(_T("AUTH SSL"), false, false);
 		break;
 	case LOGON_SYST:
-		res = Send(_T("SYST"));
+		res = SendCommand(_T("SYST"));
 		break;
 	case LOGON_LOGON:
 		{
@@ -1137,9 +1137,9 @@ int CFtpControlSocket::LogonSend()
 				}
 
 				if (cmd.command.empty())
-					res = Send(_T("USER ") + m_pCurrentServer->GetUser());
+					res = SendCommand(_T("USER ") + m_pCurrentServer->GetUser());
 				else
-					res = Send(cmd.command);
+					res = SendCommand(cmd.command);
 				break;
 			case loginCommandType::pass:
 				if (!pData->challenge.empty())
@@ -1154,7 +1154,7 @@ int CFtpControlSocket::LogonSend()
 				}
 
 				if (cmd.command.empty())
-					res = Send(_T("PASS ") + m_pCurrentServer->GetPass(), true);
+					res = SendCommand(_T("PASS ") + m_pCurrentServer->GetPass(), true);
 				else
 				{
 					wxString c = cmd.command;
@@ -1162,18 +1162,18 @@ int CFtpControlSocket::LogonSend()
 					pass.Replace(_T("%"), _T("%%"));
 					c.Replace(_T("%p"), pass);
 					c.Replace(_T("%%"), _T("%"));
-					res = Send(c, true);
+					res = SendCommand(c, true);
 				}
 				break;
 			case loginCommandType::account:
 				if (cmd.command.empty())
-					res = Send(_T("ACCT ") + m_pCurrentServer->GetAccount());
+					res = SendCommand(_T("ACCT ") + m_pCurrentServer->GetAccount());
 				else
-					res = Send(cmd.command);
+					res = SendCommand(cmd.command);
 				break;
 			case loginCommandType::other:
 				wxASSERT(!cmd.command.empty());
-				res = Send(cmd.command, cmd.hide_arguments);
+				res = SendCommand(cmd.command, cmd.hide_arguments);
 				break;
 			default:
 				res = false;
@@ -1182,7 +1182,7 @@ int CFtpControlSocket::LogonSend()
 		}
 		break;
 	case LOGON_FEAT:
-		res = Send(_T("FEAT"));
+		res = SendCommand(_T("FEAT"));
 		break;
 	case LOGON_CLNT:
 		// Some servers refuse to enable UTF8 if client does not send CLNT command
@@ -1190,7 +1190,7 @@ int CFtpControlSocket::LogonSend()
 		// compatibility with other clients.
 		// Rather than forcing MS to fix Internet Explorer, letting other clients
 		// suffer is a questionable decision in my opinion.
-		res = Send(_T("CLNT FileZilla"));
+		res = SendCommand(_T("CLNT FileZilla"));
 		break;
 	case LOGON_OPTSUTF8:
 		// Handle servers that disobey RFC 2640 by having UTF8 in their FEAT
@@ -1198,13 +1198,13 @@ int CFtpControlSocket::LogonSend()
 		// However these servers obey a conflicting ietf draft:
 		// http://www.ietf.org/proceedings/02nov/I-D/draft-ietf-ftpext-utf-8-option-00.txt
 		// Example servers are, amongst others, G6 FTP Server and RaidenFTPd.
-		res = Send(_T("OPTS UTF8 ON"));
+		res = SendCommand(_T("OPTS UTF8 ON"));
 		break;
 	case LOGON_PBSZ:
-		res = Send(_T("PBSZ 0"));
+		res = SendCommand(_T("PBSZ 0"));
 		break;
 	case LOGON_PROT:
-		res = Send(_T("PROT P"));
+		res = SendCommand(_T("PROT P"));
 		break;
 	case LOGON_CUSTOMCOMMANDS:
 		if (pData->customCommandIndex >= m_pCurrentServer->GetPostLoginCommands().size())
@@ -1213,13 +1213,13 @@ int CFtpControlSocket::LogonSend()
 			DoClose(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
 		}
-		res = Send(m_pCurrentServer->GetPostLoginCommands()[pData->customCommandIndex]);
+		res = SendCommand(m_pCurrentServer->GetPostLoginCommands()[pData->customCommandIndex]);
 		break;
 	case LOGON_OPTSMLST:
 		{
 			wxString args;
 			CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command, &args);
-			res = Send(_T("OPTS MLST " + args));
+			res = SendCommand(_T("OPTS MLST " + args));
 		}
 		break;
 	default:
@@ -1245,7 +1245,7 @@ int CFtpControlSocket::GetReplyCode() const
 	}
 }
 
-bool CFtpControlSocket::Send(wxString str, bool maskArgs, bool measureRTT)
+bool CFtpControlSocket::SendCommand(wxString const& str, bool maskArgs, bool measureRTT)
 {
 	int pos;
 	if (maskArgs && (pos = str.Find(_T(" "))) != -1)
@@ -1256,8 +1256,7 @@ bool CFtpControlSocket::Send(wxString str, bool maskArgs, bool measureRTT)
 	else
 		LogMessageRaw(MessageType::Command, str);
 
-	str += _T("\r\n");
-	wxCharBuffer buffer = ConvToServer(str);
+	wxCharBuffer buffer = ConvToServer(str + _T("\r\n"));
 	if (!buffer)
 	{
 		LogMessage(MessageType::Error, _T("Failed to convert command to 8 bit charset"));
@@ -1668,7 +1667,7 @@ int CFtpControlSocket::ListSend()
 	{
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
 		wxString cmd = _T("MDTM ") + m_CurrentPath.FormatFilename(pData->directoryListing[pData->mdtm_index].name, true);
-		if (!Send(cmd))
+		if (!SendCommand(cmd))
 			return FZ_REPLY_ERROR;
 		else
 			return FZ_REPLY_WOULDBLOCK;
@@ -2238,7 +2237,7 @@ int CFtpControlSocket::ChangeDirSend()
 	}
 
 	if (!cmd.empty())
-		if (!Send(cmd))
+		if (!SendCommand(cmd))
 			return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -2818,7 +2817,7 @@ int CFtpControlSocket::FileTransferSend()
 	}
 
 	if (!cmd.empty())
-		if (!Send(cmd))
+		if (!SendCommand(cmd))
 			return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -3062,7 +3061,7 @@ int CFtpControlSocket::RawCommandSend()
 
 	CRawCommandOpData *pData = static_cast<CRawCommandOpData *>(m_pCurOpData);
 
-	if (!Send(pData->m_command, false, false))
+	if (!SendCommand(pData->m_command, false, false))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -3158,7 +3157,7 @@ int CFtpControlSocket::DeleteSend()
 	CDirectoryCache cache;
 	cache.InvalidateFile(*m_pCurrentServer, pData->path, file);
 
-	if (!Send(_T("DELE ") + filename))
+	if (!SendCommand(_T("DELE ") + filename))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -3296,11 +3295,11 @@ int CFtpControlSocket::RemoveDirSend()
 
 	if (pData->omitPath)
 	{
-		if (!Send(_T("RMD ") + pData->subDir))
+		if (!SendCommand(_T("RMD ") + pData->subDir))
 			return FZ_REPLY_ERROR;
 	}
 	else
-		if (!Send(_T("RMD ") + pData->fullPath.GetPath()))
+		if (!SendCommand(_T("RMD ") + pData->fullPath.GetPath()))
 			return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -3530,13 +3529,13 @@ int CFtpControlSocket::MkdirSend()
 	case mkd_findparent:
 	case mkd_cwdsub:
 		m_CurrentPath.clear();
-		res = Send(_T("CWD ") + pData->currentPath.GetPath());
+		res = SendCommand(_T("CWD ") + pData->currentPath.GetPath());
 		break;
 	case mkd_mkdsub:
-		res = Send(_T("MKD ") + pData->segments.front());
+		res = SendCommand(_T("MKD ") + pData->segments.front());
 		break;
 	case mkd_tryfull:
-		res = Send(_T("MKD ") + pData->path.GetPath());
+		res = SendCommand(_T("MKD ") + pData->path.GetPath());
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
@@ -3666,7 +3665,7 @@ int CFtpControlSocket::RenameSend()
 	switch (pData->opState)
 	{
 	case rename_rnfrom:
-		res = Send(_T("RNFR ") + pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
+		res = SendCommand(_T("RNFR ") + pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
 		break;
 	case rename_rnto:
 		{
@@ -3685,7 +3684,7 @@ int CFtpControlSocket::RenameSend()
 			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
-			res = Send(_T("RNTO ") + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
+			res = SendCommand(_T("RNTO ") + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 			break;
 		}
 	default:
@@ -3804,7 +3803,7 @@ int CFtpControlSocket::ChmodSend()
 	switch (pData->opState)
 	{
 	case chmod_chmod:
-		res = Send(_T("SITE CHMOD ") + pData->m_cmd.GetPermission() + _T(" ") + pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
+		res = SendCommand(_T("SITE CHMOD ") + pData->m_cmd.GetPermission() + _T(" ") + pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
@@ -4329,7 +4328,7 @@ int CFtpControlSocket::TransferSend()
 		return FZ_REPLY_ERROR;
 	}
 	if (!cmd.empty())
-		if (!Send(cmd, false, measureRTT))
+		if (!SendCommand(cmd, false, measureRTT))
 			return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -4556,7 +4555,7 @@ void CFtpControlSocket::OnIdleTimer(wxTimerEvent& event)
 	else
 		cmd = _T("PWD");
 
-	if (!Send(cmd))
+	if (!SendCommand(cmd))
 		return;
 	++m_repliesToSkip;
 }
