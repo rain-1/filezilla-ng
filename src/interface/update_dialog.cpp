@@ -176,7 +176,7 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 
 		wxString news = updater_.GetChangelog();
 		
-		int pos = news.find(v.version_ + _T(" (2"));
+		auto pos = news.find(v.version_ + _T(" (2"));
 		if (pos != wxString::npos) {
 			news = news.Mid(pos);
 		}
