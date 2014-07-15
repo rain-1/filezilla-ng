@@ -57,7 +57,7 @@ public:
 
 	void ConnectNavigationHandler(wxEvtHandler* handler);
 
-	wxStatusBar* GetStatusBar() { return m_pStatusBar; }
+	wxStatusBar* GetStatusBar() const { return m_pStatusBar; }
 
 	void ProcessCommandLine();
 

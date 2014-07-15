@@ -168,7 +168,7 @@ class CNewAssociationDialog : protected wxDialogEx
 public:
 	CNewAssociationDialog(wxWindow* parent);
 
-	bool Show(const wxString& file);
+	bool Run(const wxString& file);
 
 protected:
 	void SetCtrlState();

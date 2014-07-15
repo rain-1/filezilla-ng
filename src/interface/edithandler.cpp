@@ -1438,7 +1438,7 @@ CNewAssociationDialog::CNewAssociationDialog(wxWindow *parent)
 {
 }
 
-bool CNewAssociationDialog::Show(const wxString &file)
+bool CNewAssociationDialog::Run(const wxString &file)
 {
 	if (!Load(m_pParent, _T("ID_EDIT_NOPROGRAM")))
 		return true;

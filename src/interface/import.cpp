@@ -11,7 +11,7 @@ CImportDialog::CImportDialog(wxWindow* parent, CQueueView* pQueueView)
 {
 }
 
-void CImportDialog::Show()
+void CImportDialog::Run()
 {
 	wxFileDialog dlg(m_parent, _("Select file to import settings from"), wxString(),
 					_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"),
