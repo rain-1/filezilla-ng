@@ -276,7 +276,7 @@ void CLocalTreeView::SetDir(wxString localDir)
 {
 	if (m_currentDir == localDir)
 	{
-		Refresh();
+		RefreshListing();
 		return;
 	}
 
@@ -682,7 +682,7 @@ void CLocalTreeView::UpdateSortMode()
 	}
 }
 
-void CLocalTreeView::Refresh()
+void CLocalTreeView::RefreshListing()
 {
 	wxLogNull nullLog;
 
@@ -907,7 +907,7 @@ void CLocalTreeView::OnStateChange(CState* pState, enum t_statechange_notificati
 	else
 	{
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
-		Refresh();
+		RefreshListing();
 	}
 }
 
@@ -1145,7 +1145,7 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
 {
 	wxString newdir = MenuMkdir();
 	if (!newdir.empty()) {
-		Refresh();
+		RefreshListing();
 		m_pState->RefreshLocal();
 	}
 }
@@ -1264,7 +1264,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent& event)
 		if (GetItemParent(m_contextMenuItem) == GetSelection())
 			m_pState->RefreshLocal();
 		else
-			Refresh();
+			RefreshListing();
 		return;
 	}
 
@@ -1277,7 +1277,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent& event)
 		path = path.Left(pos);
 
 	m_pState->SetLocalDir(path);
-	Refresh();
+	RefreshListing();
 }
 
 void CLocalTreeView::OnBeginLabelEdit(wxTreeEvent& event)
@@ -1366,9 +1366,8 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	SetItemText(item, newName);
 
 	wxTreeItemId currentSel = GetSelection();
-	if (currentSel == wxTreeItemId())
-	{
-		Refresh();
+	if (currentSel == wxTreeItemId()) {
+		RefreshListing();
 		return;
 	}
 

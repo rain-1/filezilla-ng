@@ -578,14 +578,14 @@ int CSftpControlSocket::ConnectSend()
 				cmd += _T(" \"") + pass + _T("\"");
 				show += _T(" \"") + wxString('*', pass.Len()) + _T("\"");
 			}
-			res = Send(cmd, show);
+			res = SendCommand(cmd, show);
 		}
 		break;
 	case connect_keys:
-		res = Send(_T("keyfile \"") + pData->pKeyFiles->GetNextToken() + _T("\""));
+		res = SendCommand(_T("keyfile \"") + pData->pKeyFiles->GetNextToken() + _T("\""));
 		break;
 	case connect_open:
-		res = Send(wxString::Format(_T("open \"%s@%s\" %d"), m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
+		res = SendCommand(wxString::Format(_T("open \"%s@%s\" %d"), m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Unknown op state: %d"), pData->opState);
@@ -694,7 +694,7 @@ void CSftpControlSocket::OnSftpEvent(wxCommandEvent&)
 					const wxString pass = m_pCurrentServer->GetPass();
 					wxString show = _T("Pass: ");
 					show.Append('*', pass.Length());
-					Send(pass, show);
+					SendCommand(pass, show);
 				}
 				break;
 			default:
@@ -796,7 +796,7 @@ void CSftpControlSocket::OnTerminate(wxProcessEvent& event)
 	m_pProcess = 0;
 }
 
-bool CSftpControlSocket::Send(wxString cmd, const wxString& show /*=_T("")*/)
+bool CSftpControlSocket::SendCommand(wxString const& cmd, const wxString& show)
 {
 	SetWait(true);
 
@@ -815,9 +815,7 @@ bool CSftpControlSocket::Send(wxString cmd, const wxString& show /*=_T("")*/)
 		return false;
 	}
 
-	cmd += _T("\n");
-
-	return AddToStream(cmd);
+	return AddToStream(cmd + _T("\n"));
 }
 
 bool CSftpControlSocket::AddToStream(const wxString& cmd, bool force_utf8 /*=false*/)
@@ -883,7 +881,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 			show += ' ';
 			if (!pHostKeyNotification->m_trust)
 			{
-				Send(_T(""), show + _("No"));
+				SendCommand(_T(""), show + _("No"));
 				if (m_pCurOpData && m_pCurOpData->opId == Command::connect)
 				{
 					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
@@ -891,9 +889,9 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				}
 			}
 			else if (pHostKeyNotification->m_alwaysTrust)
-				Send(_T("y"), show + _("Yes"));
+				SendCommand(_T("y"), show + _("Yes"));
 			else
-				Send(_T("n"), show + _("Once"));
+				SendCommand(_T("n"), show + _("Once"));
 		}
 		break;
 	case reqId_interactiveLogin:
@@ -909,7 +907,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 			m_pCurrentServer->SetUser(m_pCurrentServer->GetUser(), pass);
 			wxString show = _T("Pass: ");
 			show.Append('*', pass.Length());
-			Send(pass, show);
+			SendCommand(pass, show);
 		}
 		break;
 	default:
@@ -1266,7 +1264,7 @@ int CSftpControlSocket::ListSend()
 	{
 		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer);
 		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
-		if (!Send(_T("ls")))
+		if (!SendCommand(_T("ls")))
 			return FZ_REPLY_ERROR;
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -1275,7 +1273,7 @@ int CSftpControlSocket::ListSend()
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
 		const wxString& name = pData->directoryListing[pData->mtime_index].name;
 		wxString quotedFilename = QuoteFilename(pData->directoryListing.path.FormatFilename(name, true));
-		if (!Send(_T("mtime ") + WildcardEscape(quotedFilename),
+		if (!SendCommand(_T("mtime ") + WildcardEscape(quotedFilename),
 			_T("mtime ") + quotedFilename))
 			return FZ_REPLY_ERROR;
 		return FZ_REPLY_WOULDBLOCK;
@@ -1517,7 +1515,7 @@ int CSftpControlSocket::ChangeDirSend()
 	}
 
 	if (!cmd.empty())
-		if (!Send(cmd))
+		if (!SendCommand(cmd))
 			return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -1873,7 +1871,7 @@ int CSftpControlSocket::FileTransferSend()
 	else if (pData->opState == filetransfer_mtime)
 	{
 		wxString quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
-		if (!Send(_T("mtime ") + WildcardEscape(quotedFilename),
+		if (!SendCommand(_T("mtime ") + WildcardEscape(quotedFilename),
 			_T("mtime ") + quotedFilename))
 			return FZ_REPLY_ERROR;
 	}
@@ -1891,7 +1889,7 @@ int CSftpControlSocket::FileTransferSend()
 		// Y2K38
 		time_t ticks = pData->fileTime.Degenerate().GetTicks(); // Already in UTC
 		wxString seconds = wxString::Format(_T("%d"), (int)ticks);
-		if (!Send(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),
+		if (!SendCommand(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),
 			_T("chmtime ") + seconds + _T(" ") + quotedFilename))
 			return FZ_REPLY_ERROR;
 	}
@@ -2210,13 +2208,13 @@ int CSftpControlSocket::MkdirSend()
 	case mkd_findparent:
 	case mkd_cwdsub:
 		m_CurrentPath.clear();
-		res = Send(_T("cd ") + QuoteFilename(pData->currentPath.GetPath()));
+		res = SendCommand(_T("cd ") + QuoteFilename(pData->currentPath.GetPath()));
 		break;
 	case mkd_mkdsub:
-		res = Send(_T("mkdir ") + QuoteFilename(pData->segments.front()));
+		res = SendCommand(_T("mkdir ") + QuoteFilename(pData->segments.front()));
 		break;
 	case mkd_tryfull:
-		res = Send(_T("mkdir ") + QuoteFilename(pData->path.GetPath()));
+		res = SendCommand(_T("mkdir ") + QuoteFilename(pData->path.GetPath()));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
@@ -2322,7 +2320,7 @@ int CSftpControlSocket::DeleteSend()
 	CDirectoryCache cache;
 	cache.InvalidateFile(*m_pCurrentServer, pData->path, file);
 
-	if (!Send(_T("rm ") + WildcardEscape(QuoteFilename(filename)),
+	if (!SendCommand(_T("rm ") + WildcardEscape(QuoteFilename(filename)),
 			  _T("rm ") + QuoteFilename(filename)))
 		return FZ_REPLY_ERROR;
 
@@ -2371,7 +2369,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	CPathCache::InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
 	m_pEngine->InvalidateCurrentWorkingDirs(fullPath);
-	if (!Send(_T("rmdir ") + WildcardEscape(QuoteFilename(fullPath.GetPath())),
+	if (!SendCommand(_T("rmdir ") + WildcardEscape(QuoteFilename(fullPath.GetPath())),
 			  _T("rmdir ") + QuoteFilename(fullPath.GetPath())))
 		return FZ_REPLY_ERROR;
 
@@ -2513,7 +2511,7 @@ int CSftpControlSocket::ChmodSend()
 
 			wxString quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 
-			res = Send(_T("chmod ") + pData->m_cmd.GetPermission() + _T(" ") + WildcardEscape(quotedFilename),
+			res = SendCommand(_T("chmod ") + pData->m_cmd.GetPermission() + _T(" ") + WildcardEscape(quotedFilename),
 					   _T("chmod ") + pData->m_cmd.GetPermission() + _T(" ") + quotedFilename);
 		}
 		break;
@@ -2663,7 +2661,7 @@ int CSftpControlSocket::RenameSend()
 				m_pEngine->InvalidateCurrentWorkingDirs(path);
 			}
 
-			res = Send(_T("mv ") + WildcardEscape(fromQuoted) + _T(" ") + toQuoted,
+			res = SendCommand(_T("mv ") + WildcardEscape(fromQuoted) + _T(" ") + toQuoted,
 					   _T("mv ") + fromQuoted + _T(" ") + toQuoted);
 		}
 		break;

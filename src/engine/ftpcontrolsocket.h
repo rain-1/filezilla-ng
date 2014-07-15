@@ -83,7 +83,7 @@ protected:
 	virtual void OnConnect();
 	virtual void OnReceive();
 
-	virtual bool Send(wxString str, bool maskArgs = false, bool measureRTT = true);
+	bool SendCommand(wxString const& str, bool maskArgs = false, bool measureRTT = true);
 
 	// Parse the latest reply line from the server
 	void ParseLine(wxString line);

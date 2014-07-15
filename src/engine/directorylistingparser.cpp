@@ -3066,7 +3066,7 @@ void CDirectoryListingParser::DeduceEncoding()
 	}
 
 
-	if ((count[0x1f] || count[0x15] || count[0x25]) && !count[0x0a] && count['@'] && count['@'] > count[' '] && count_ebcdic > count_normal)
+	if ((count[0x1f] || count[0x15] || count[0x25]) && !count[0x0a] && count[unsigned char('@')] && count[unsigned char('@')] > count[unsigned char(' ')] && count_ebcdic > count_normal)
 	{
 		m_pControlSocket->LogMessage(MessageType::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
 		m_listingEncoding = listingEncoding::ebcdic;

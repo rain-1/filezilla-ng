@@ -296,7 +296,7 @@ protected:
 	virtual void OnSend();
 	virtual void OnClose(int error);
 
-	virtual bool Send(const char *buffer, int len);
+	bool Send(const char *buffer, int len);
 
 	CSocket* m_pSocket;
 

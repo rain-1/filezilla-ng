@@ -9,7 +9,7 @@ public:
 	CNewBookmarkDialog(wxWindow* parent, wxString& site_path, const CServer* server);
 	virtual ~CNewBookmarkDialog() {}
 
-	virtual int ShowModal(const wxString &local_path, const CServerPath &remote_path);
+	int Run(const wxString &local_path, const CServerPath &remote_path);
 
 protected:
 	wxWindow* m_parent;
@@ -27,7 +27,7 @@ public:
 	CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server);
 	virtual ~CBookmarksDialog() {}
 
-	virtual int ShowModal(const wxString &local_path, const CServerPath &remote_path);
+	int Run(const wxString &local_path, const CServerPath &remote_path);
 
 	static bool GetBookmarks(std::list<wxString> &bookmarks);
 	static bool GetBookmark(const wxString& name, wxString &local_dir, CServerPath &remote_dir, bool &sync);
