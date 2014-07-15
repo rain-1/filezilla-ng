@@ -10,6 +10,7 @@
 #include "threadex.h"
 
 #include <wx/filename.h>
+#include <wx/log.h>
 #include <wx/process.h>
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
@@ -1999,7 +2000,11 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 	{
 		wxThreadEx* pThread = m_pInputThread;
 		m_pInputThread = 0;
-		wxProcess::Kill(m_pid, wxSIGKILL);
+		{
+			// Disable logging, fzsftp might have already closed itself.
+			wxLogNull log;
+			wxProcess::Kill(m_pid, wxSIGKILL);
+		}
 		m_inDestructor = true;
 		if (pThread)
 		{
