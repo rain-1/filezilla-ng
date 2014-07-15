@@ -104,19 +104,25 @@ void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
 				close(fd);
 			}
 #endif
-			wxRemoveFile(lockfile);
+			{
+				wxLogNull log;
+				wxRemoveFile(lockfile);
+			}
 			if (wxFileName::FileExists(lockfile))
 				continue;
 		}
 
 		{
+			wxLogNull log;
 			wxString file2;
 			wxDir dir2(temp + file);
 			bool res;
-			for ((res = dir2.GetFirst(&file2, _T(""), wxDIR_FILES)); res; res = dir2.GetNext(&file2));
+			for ((res = dir2.GetFirst(&file2, _T(""), wxDIR_FILES)); res; res = dir2.GetNext(&file2)) {
 				wxRemoveFile(temp + file + sep + file2);
+			}
 		}
 
+		wxLogNull log;
 		wxRmdir(temp + file + sep);
 	} while (dir.GetNext(&file));
 }
