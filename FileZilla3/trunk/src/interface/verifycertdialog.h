@@ -44,9 +44,9 @@ protected:
 	CXmlFile m_xmlFile;
 
 	std::vector<CCertificate> m_certificates;
-	wxDialogEx* m_pDlg;
-	wxSizer* m_pSubjectSizer;
-	wxSizer* m_pIssuerSizer;
+	wxDialogEx* m_pDlg{};
+	wxSizer* m_pSubjectSizer{};
+	wxSizer* m_pIssuerSizer{};
 
 	void OnCertificateChoice(wxCommandEvent& event);
 };
