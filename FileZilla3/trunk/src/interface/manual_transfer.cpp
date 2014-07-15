@@ -38,7 +38,7 @@ CManualTransfer::~CManualTransfer()
 	delete m_pLastSite;
 }
 
-void CManualTransfer::Show(wxWindow* pParent, CState* pState)
+void CManualTransfer::Run(wxWindow* pParent, CState* pState)
 {
 	if (!Load(pParent, _T("ID_MANUALTRANSFER")))
 		return;
