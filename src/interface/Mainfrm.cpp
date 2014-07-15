@@ -783,7 +783,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		}
 		CManualTransfer dlg(m_pQueueView);
-		dlg.Show(this, pState);
+		dlg.Run(this, pState);
 	}
 	else if (event.GetId() == XRCID("ID_BOOKMARK_ADD") || event.GetId() == XRCID("ID_BOOKMARK_MANAGE"))
 	{
