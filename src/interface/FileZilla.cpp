@@ -552,9 +552,9 @@ bool CFileZillaApp::InitDefaultsDir()
 	AddStartupProfileRecord(_T("InitDefaultsDir"));
 #ifdef __WXGTK__
 	m_defaultsDir = COptions::GetUnadjustedSettingsDir();
-	if( m_defaultsDir.empty() || !wxFileName::FileExists(m_defaultsDir + _T("fzdefaults.xml"))) {
+	if( m_defaultsDir.empty() || !wxFileName::FileExists(m_defaultsDir.GetPath() + _T("fzdefaults.xml"))) {
 		if (wxFileName::FileExists(_T("/etc/filezilla/fzdefaults.xml"))) {
-			m_defaultsDir = _T("/etc/filezilla");
+			m_defaultsDir.SetPath(_T("/etc/filezilla"));
 		}
 		else {
 			m_defaultsDir.clear();
