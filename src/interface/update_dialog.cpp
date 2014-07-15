@@ -173,7 +173,14 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 	}
 	else if( s == UpdaterState::newversion || s == UpdaterState::newversion_ready || s == UpdaterState::newversion_downloading ) {
 		XRCCTRL(*this, "ID_VERSION", wxStaticText)->SetLabel(v.version_);
+
 		wxString news = updater_.GetChangelog();
+		
+		int pos = news.find(v.version_ + _T(" (2"));
+		if (pos != wxString::npos) {
+			news = news.Mid(pos);
+		}
+
 		XRCCTRL(*this, "ID_NEWS_LABEL", wxStaticText)->Show(!news.empty());
 		XRCCTRL(*this, "ID_NEWS", wxTextCtrl)->Show(!news.empty());
 		if( news != XRCCTRL(*this, "ID_NEWS", wxTextCtrl)->GetValue() ) {
