@@ -719,8 +719,6 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		if (max - min < 2)
 			break;
 		desiredWidth = (min + max) / 2;
-
-		currentRatio = newRatio;
 	}
 #if WRAPDEBUG > 0
 		printf("Performing final wrap with bestwidth %d\n", bestWidth);
