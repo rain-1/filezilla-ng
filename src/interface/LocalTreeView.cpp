@@ -1602,7 +1602,7 @@ void CLocalTreeView::OnSelectionChanging(wxTreeEvent& event)
 
 #endif
 
-void CLocalTreeView::OnMenuOpen(wxCommandEvent& event)
+void CLocalTreeView::OnMenuOpen(wxCommandEvent&)
 {
 	if (!m_contextMenuItem.IsOk())
 		return;

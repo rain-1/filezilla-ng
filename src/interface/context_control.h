@@ -81,17 +81,17 @@ protected:
 
 protected:
 	DECLARE_EVENT_TABLE()
-	void OnTabRefresh(wxCommandEvent& event);
+	void OnTabRefresh(wxCommandEvent&);
 	void OnTabChanged(wxAuiNotebookEvent& event);
 	void OnTabClosing(wxAuiNotebookEvent& event);
 	void OnTabClosing_Deferred(wxCommandEvent& event);
-	void OnTabBgDoubleclick(wxAuiNotebookEvent& event);
+	void OnTabBgDoubleclick(wxAuiNotebookEvent&);
 	void OnTabRightclick(wxAuiNotebookEvent& event);
 	void OnTabContextClose(wxCommandEvent& event);
 	void OnTabContextCloseOthers(wxCommandEvent& event);
-	void OnTabContextNew(wxCommandEvent& event);
+	void OnTabContextNew(wxCommandEvent&);
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
 };
 
 #endif //__CONTEX_CONTROL_H__

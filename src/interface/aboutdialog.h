@@ -14,8 +14,8 @@ public:
 protected:
 
 	DECLARE_EVENT_TABLE()
-	void OnOK(wxCommandEvent& event);
-	void OnCopy(wxCommandEvent& event);
+	void OnOK(wxCommandEvent&);
+	void OnCopy(wxCommandEvent&);
 };
 
 #endif //__ABOUTDIALOG_H__

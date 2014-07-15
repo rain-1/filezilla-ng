@@ -261,7 +261,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortName : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortName(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortName(Listing const& listing, std::vector<DataEntry>&, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
 		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -281,7 +281,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortSize : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortSize(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortSize(Listing const& listing, std::vector<DataEntry>&, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
 		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -336,7 +336,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortTime : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortTime(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortTime(Listing const& listing, std::vector<DataEntry>&, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
 		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -358,7 +358,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortPermissions : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortPermissions(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortPermissions(Listing const& listing, std::vector<DataEntry>&, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
 		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -380,7 +380,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortOwnerGroup : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortOwnerGroup(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortOwnerGroup(Listing const& listing, std::vector<DataEntry>&, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
 		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 	{
 	}
@@ -402,7 +402,7 @@ template<typename Listing, typename DataEntry>
 class CFileListCtrlSortPath : public CFileListCtrlSort<Listing>
 {
 public:
-	CFileListCtrlSortPath(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const pListView)
+	CFileListCtrlSortPath(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
 		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
 		, m_fileData(fileData)
 	{
@@ -520,7 +520,7 @@ protected:
 #endif
 
 #ifdef __WXMSW__
-	virtual int GetOverlayIndex(int item) { return 0; }
+	virtual int GetOverlayIndex(int) { return 0; }
 #endif
 
 private:

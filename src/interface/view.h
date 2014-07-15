@@ -20,7 +20,7 @@ protected:
 	wxStatusBar* m_pStatusBar;
 
 	DECLARE_EVENT_TABLE()
-	void OnSize(wxSizeEvent& event);
+	void OnSize(wxSizeEvent&);
 };
 
 #endif //__VIEW_H__

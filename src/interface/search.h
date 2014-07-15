@@ -48,8 +48,8 @@ protected:
 	void OnSearch(wxCommandEvent& event);
 	void OnStop(wxCommandEvent& event);
 	void OnContextMenu(wxContextMenuEvent& event);
-	void OnDownload(wxCommandEvent& event);
-	void OnDelete(wxCommandEvent& event);
+	void OnDownload(wxCommandEvent&);
+	void OnDelete(wxCommandEvent&);
 	void OnCharHook(wxKeyEvent& event);
 
 	std::set<CServerPath> m_visited;

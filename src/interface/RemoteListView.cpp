@@ -315,7 +315,7 @@ public:
 protected:
 	wxString m_text;
 
-	void OnPaint(wxPaintEvent& event)
+	void OnPaint(wxPaintEvent&)
 	{
 		wxPaintDC paintDc(this);
 
@@ -717,7 +717,7 @@ bool CRemoteListView::UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> 
 	return true;
 }
 
-void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified)
+void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing)
 {
 	CancelLabelEdit();
 
@@ -1049,7 +1049,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 	}
 }
 
-void CRemoteListView::OnMenuEnter(wxCommandEvent &event)
+void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 {
 	if (!m_pState->IsRemoteIdle())
 	{
@@ -1331,13 +1331,13 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 }
 
 // Create a new Directory
-void CRemoteListView::OnMenuMkdir(wxCommandEvent& event)
+void CRemoteListView::OnMenuMkdir(wxCommandEvent&)
 {
 	MenuMkdir();
 }
 
 // Create a new Directory and enter the new Directory
-void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent& event)
+void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	CServerPath newdir = MenuMkdir();
 	if (!newdir.empty()) {
@@ -1401,7 +1401,7 @@ CServerPath CRemoteListView::MenuMkdir()
 	return path;
 }
 
-void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
+void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 	{
@@ -1524,7 +1524,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent& event)
 	}
 }
 
-void CRemoteListView::OnMenuRename(wxCommandEvent& event)
+void CRemoteListView::OnMenuRename(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 	{
@@ -2089,9 +2089,9 @@ void CRemoteListView::OnStateChange(CState* pState, enum t_statechange_notificat
 {
 	wxASSERT(pState);
 	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(pState->GetRemoteDir(), false);
+		SetDirectoryListing(pState->GetRemoteDir());
 	else if (notification == STATECHANGE_REMOTE_DIR_MODIFIED)
-		SetDirectoryListing(pState->GetRemoteDir(), true);
+		SetDirectoryListing(pState->GetRemoteDir());
 	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR)
 	{
 		wxASSERT(data2);
@@ -2140,7 +2140,7 @@ void CRemoteListView::SetInfoText()
 	RepositionInfoText();
 }
 
-void CRemoteListView::OnBeginDrag(wxListEvent& event)
+void CRemoteListView::OnBeginDrag(wxListEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 	{
@@ -2327,7 +2327,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent& event)
 }
 
 
-void CRemoteListView::OnMenuEdit(wxCommandEvent& event)
+void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteConnected() || !m_pDirectoryListing)
 	{
@@ -2631,8 +2631,6 @@ wxListItemAttr* CRemoteListView::OnGetItemAttr(long item) const
 	default:
 		return 0;
 	}
-
-	return 0;
 }
 
 wxString CRemoteListView::GetItemText(int item, unsigned int column)
@@ -2764,7 +2762,7 @@ void CRemoteListView::LinkIsNotDir(const CServerPath& path, const wxString& link
 	m_pLinkResolveState = 0;
 }
 
-void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
+void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 {
 	if (!m_pDirectoryListing)
 		return;
@@ -2856,7 +2854,7 @@ int CRemoteListView::GetOverlayIndex(int item)
 }
 #endif
 
-void CRemoteListView::OnMenuRefresh(wxCommandEvent& event)
+void CRemoteListView::OnMenuRefresh(wxCommandEvent&)
 {
 	if (m_pState)
 		m_pState->RefreshRemote();

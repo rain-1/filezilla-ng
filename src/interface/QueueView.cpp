@@ -3020,8 +3020,8 @@ void CQueueView::OnSetPriority(wxCommandEvent& event)
 void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 {
 	CFileZillaEngine* pEngine = 0;
-	CState* pState;
-	CCommandQueue* pCommandQueue;
+	CState* pState = 0;
+	CCommandQueue* pCommandQueue = 0;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 	{
@@ -3037,7 +3037,7 @@ void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 		break;
 	}
 
-	if (!pEngine)
+	if (!pState || !pCommandQueue || !pEngine)
 		return;
 
 	t_EngineData* pEngineData = GetEngineData(pEngine);

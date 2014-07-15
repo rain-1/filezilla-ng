@@ -17,8 +17,8 @@ protected:
 	const CServer* m_server;
 
 	DECLARE_EVENT_TABLE()
-	void OnOK(wxCommandEvent& event);
-	void OnBrowse(wxCommandEvent& event);
+	void OnOK(wxCommandEvent&);
+	void OnBrowse(wxCommandEvent&);
 };
 
 class CBookmarksDialog : public wxDialogEx

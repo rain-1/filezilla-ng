@@ -34,7 +34,7 @@ public:
 	virtual ~CLocalListView();
 
 protected:
-	void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void*);
 	bool DisplayDir(wxString dirname);
 	void ApplyCurrentFilter();
 
@@ -95,7 +95,7 @@ protected:
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnMenuUpload(wxCommandEvent& event);
 	void OnMenuMkdir(wxCommandEvent& event);
-	void OnMenuMkdirChgDir(wxCommandEvent& event);
+	void OnMenuMkdirChgDir(wxCommandEvent&);
 	void OnMenuDelete(wxCommandEvent& event);
 	void OnMenuRename(wxCommandEvent& event);
 	void OnKeyDown(wxKeyEvent& event);

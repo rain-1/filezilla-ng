@@ -60,7 +60,7 @@ public:
 
 	DECLARE_EVENT_TABLE()
 
-	void OnText(wxCommandEvent& event)
+	void OnText(wxCommandEvent&)
 	{
 		// Do nothing here.
 		// Having this event handler prevents the event from propagating up the
@@ -131,7 +131,7 @@ CStatusView::~CStatusView()
 {
 }
 
-void CStatusView::OnSize(wxSizeEvent &event)
+void CStatusView::OnSize(wxSizeEvent &)
 {
 	if (m_pTextCtrl) {
 		wxSize s = GetClientSize();
@@ -395,7 +395,7 @@ void CStatusView::InitDefAttr()
 	m_rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
 }
 
-void CStatusView::OnContextMenu(wxContextMenuEvent& event)
+void CStatusView::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_LOG"));
 	if (!pMenu)
@@ -405,7 +405,7 @@ void CStatusView::OnContextMenu(wxContextMenuEvent& event)
 	delete pMenu;
 }
 
-void CStatusView::OnClear(wxCommandEvent& event)
+void CStatusView::OnClear(wxCommandEvent&)
 {
 	if (m_pTextCtrl)
 		m_pTextCtrl->Clear();
@@ -413,7 +413,7 @@ void CStatusView::OnClear(wxCommandEvent& event)
 	m_lineLengths.clear();
 }
 
-void CStatusView::OnCopy(wxCommandEvent& event)
+void CStatusView::OnCopy(wxCommandEvent&)
 {
 	if (!m_pTextCtrl)
 		return;

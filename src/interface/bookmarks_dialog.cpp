@@ -46,7 +46,7 @@ int CNewBookmarkDialog::ShowModal(const wxString &local_path, const CServerPath 
 	return wxDialogEx::ShowModal();
 }
 
-void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
+void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 {
 	const bool global = XRCCTRL(*this, "ID_TYPE_GLOBAL", wxRadioButton)->GetValue();
 
@@ -124,7 +124,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent& event)
 	}
 }
 
-void CNewBookmarkDialog::OnBrowse(wxCommandEvent& event)
+void CNewBookmarkDialog::OnBrowse(wxCommandEvent&)
 {
 	wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
 

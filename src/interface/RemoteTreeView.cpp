@@ -269,7 +269,7 @@ CRemoteTreeView::~CRemoteTreeView()
 	delete m_pImageList;
 }
 
-void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_REMOTE_DIR)
 		SetDirectoryListing(pState->GetRemoteDir(), false);
@@ -975,7 +975,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 	delete pMenu;
 }
 
-void CRemoteTreeView::OnMenuChmod(wxCommandEvent& event)
+void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 		return;
@@ -1123,7 +1123,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, path, filter.GetActiveFilters(false), true, currentPath);
 }
 
-void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
+void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 		return;
@@ -1166,7 +1166,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent& event)
 	pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete, startDir, filter.GetActiveFilters(false), !hasParent, currentPath);
 }
 
-void CRemoteTreeView::OnMenuRename(wxCommandEvent& event)
+void CRemoteTreeView::OnMenuRename(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 		return;
@@ -1275,7 +1275,7 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 
 // Create a new Directory
-void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
+void CRemoteTreeView::OnMkdir(wxCommandEvent&)
 {
 	CServerPath newpath = MenuMkdir();
 
@@ -1296,7 +1296,7 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent& event)
 }
 
 // Create a new Directory and enter the new Directory
-void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
+void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	CServerPath newpath = MenuMkdir();
 	if (!newpath.empty()) {
@@ -1465,7 +1465,7 @@ void CRemoteTreeView::ApplyFilters()
 	}
 }
 
-void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
+void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
 {
 	if (!m_contextMenuItem)
 		return;

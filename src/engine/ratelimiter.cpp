@@ -137,7 +137,7 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 	}
 }
 
-void CRateLimiter::OnTimer(wxTimerEvent& event)
+void CRateLimiter::OnTimer(wxTimerEvent&)
 {
 	for (int i = 0; i < 2; ++i)
 	{

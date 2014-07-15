@@ -118,22 +118,22 @@ protected:
 	void OnSize(wxSizeEvent& event);
 	void OnMenuHandler(wxCommandEvent& event);
 	void OnEngineEvent(wxEvent& event);
-	void OnUpdateLedTooltip(wxCommandEvent& event);
-	void OnDisconnect(wxCommandEvent& event);
-	void OnCancel(wxCommandEvent& event);
+	void OnUpdateLedTooltip(wxCommandEvent&);
+	void OnDisconnect(wxCommandEvent&);
+	void OnCancel(wxCommandEvent&);
 	void OnClose(wxCloseEvent& event);
-	void OnReconnect(wxCommandEvent& event);
-	void OnRefresh(wxCommandEvent& event);
+	void OnReconnect(wxCommandEvent&);
+	void OnRefresh(wxCommandEvent&);
 	void OnTimer(wxTimerEvent& event);
-	void OnSiteManager(wxCommandEvent& event);
+	void OnSiteManager(wxCommandEvent&);
 	void OnProcessQueue(wxCommandEvent& event);
-	void OnMenuEditSettings(wxCommandEvent& event);
+	void OnMenuEditSettings(wxCommandEvent&);
 	void OnToggleToolBar(wxCommandEvent& event);
-	void OnToggleLogView(wxCommandEvent& event);
+	void OnToggleLogView(wxCommandEvent&);
 	void OnToggleLocalTreeView(wxCommandEvent& event);
 	void OnToggleRemoteTreeView(wxCommandEvent& event);
 	void OnToggleQueueView(wxCommandEvent& event);
-	void OnMenuHelpAbout(wxCommandEvent& event);
+	void OnMenuHelpAbout(wxCommandEvent&);
 	void OnFilter(wxCommandEvent& event);
 	void OnFilterRightclicked(wxCommandEvent& event);
 #if FZ_MANUALUPDATECHECK
@@ -151,7 +151,7 @@ protected:
 	void OnSyncBrowse(wxCommandEvent& event);
 #ifndef __WXMAC__
 	void OnIconize(wxIconizeEvent& event);
-	void OnTaskBarClick(wxTaskBarIconEvent& event);
+	void OnTaskBarClick(wxTaskBarIconEvent&);
 #endif
 #ifdef __WXGTK__
 	void OnTaskBarClick_Delayed(wxCommandEvent& event);

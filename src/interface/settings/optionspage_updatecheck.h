@@ -12,7 +12,7 @@ public:
 	virtual bool Validate();
 
 protected:
-	void OnRunUpdateCheck(wxCommandEvent& event);
+	void OnRunUpdateCheck(wxCommandEvent&);
 
 	DECLARE_EVENT_TABLE()
 };

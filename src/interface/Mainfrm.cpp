@@ -158,7 +158,7 @@ public:
 	}
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 	{
 		if (notification == STATECHANGE_CHANGEDCONTEXT)
 		{
@@ -1010,7 +1010,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 	}
 }
 
-void CMainFrame::OnUpdateLedTooltip(wxCommandEvent& event)
+void CMainFrame::OnUpdateLedTooltip(wxCommandEvent&)
 {
 	wxString tooltipText;
 
@@ -1066,7 +1066,7 @@ bool CMainFrame::CreateMainToolBar()
 	return true;
 }
 
-void CMainFrame::OnDisconnect(wxCommandEvent& event)
+void CMainFrame::OnDisconnect(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState || !pState->IsRemoteConnected())
@@ -1078,7 +1078,7 @@ void CMainFrame::OnDisconnect(wxCommandEvent& event)
 	pState->Disconnect();
 }
 
-void CMainFrame::OnCancel(wxCommandEvent& event)
+void CMainFrame::OnCancel(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState || pState->m_pCommandQueue->Idle())
@@ -1332,7 +1332,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	Destroy();
 }
 
-void CMainFrame::OnReconnect(wxCommandEvent &event)
+void CMainFrame::OnReconnect(wxCommandEvent &)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -1353,7 +1353,7 @@ void CMainFrame::OnReconnect(wxCommandEvent &event)
 	ConnectToServer(server, path, true);
 }
 
-void CMainFrame::OnRefresh(wxCommandEvent &event)
+void CMainFrame::OnRefresh(wxCommandEvent &)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -1461,7 +1461,7 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 		m_pMenuBar->UpdateBookmarkMenu();
 }
 
-void CMainFrame::OnSiteManager(wxCommandEvent& event)
+void CMainFrame::OnSiteManager(wxCommandEvent&)
 {
 	OpenSiteManager();
 }
@@ -1483,7 +1483,7 @@ void CMainFrame::OnProcessQueue(wxCommandEvent& event)
 		m_pQueueView->SetActive(event.IsChecked());
 }
 
-void CMainFrame::OnMenuEditSettings(wxCommandEvent& event)
+void CMainFrame::OnMenuEditSettings(wxCommandEvent&)
 {
 	CSettingsDialog dlg;
 	if (!dlg.Create(this))
@@ -1539,7 +1539,7 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent& event)
 	CheckChangedSettings();
 }
 
-void CMainFrame::OnToggleLogView(wxCommandEvent& event)
+void CMainFrame::OnToggleLogView(wxCommandEvent&)
 {
 	if (!m_pTopSplitter)
 		return;
@@ -1721,7 +1721,7 @@ void CMainFrame::OnToggleQueueView(wxCommandEvent& event)
 	COptions::Get()->SetOption(OPTION_SHOW_QUEUE, shown);
 }
 
-void CMainFrame::OnMenuHelpAbout(wxCommandEvent& event)
+void CMainFrame::OnMenuHelpAbout(wxCommandEvent&)
 {
 	CAboutDialog dlg;
 	if (!dlg.Create(this))
@@ -2642,7 +2642,7 @@ void CMainFrame::OnIconize(wxIconizeEvent& event)
 		Show(false);
 }
 
-void CMainFrame::OnTaskBarClick(wxTaskBarIconEvent& event)
+void CMainFrame::OnTaskBarClick(wxTaskBarIconEvent&)
 {
 #ifdef __WXGTK__
 	if (m_taskbar_is_uniconizing)
