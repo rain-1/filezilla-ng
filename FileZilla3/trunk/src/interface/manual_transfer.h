@@ -11,7 +11,7 @@ public:
 	CManualTransfer(CQueueView* pQueueView);
 	virtual ~CManualTransfer();
 
-	void Show(wxWindow* pParent, CState* pState);
+	void Run(wxWindow* pParent, CState* pState);
 
 protected:
 	void DisplayServer();
