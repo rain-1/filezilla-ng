@@ -167,12 +167,12 @@ bool CAboutDialog::Create(wxWindow* parent)
 	return true;
 }
 
-void CAboutDialog::OnOK(wxCommandEvent& event)
+void CAboutDialog::OnOK(wxCommandEvent&)
 {
 	EndModal(wxID_OK);
 }
 
-void CAboutDialog::OnCopy(wxCommandEvent& event)
+void CAboutDialog::OnCopy(wxCommandEvent&)
 {
 	wxString text = _T("FileZilla Client\n");
 	text += _T("----------------\n\n");

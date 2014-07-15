@@ -20,7 +20,7 @@ void CView::SetStatusBar(wxStatusBar* pStatusBar)
 	m_pStatusBar = pStatusBar;
 }
 
-void CView::OnSize(wxSizeEvent& event)
+void CView::OnSize(wxSizeEvent&)
 {
 	wxSize size = GetClientSize();
 	wxRect rect(size);

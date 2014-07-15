@@ -62,7 +62,7 @@ wxThreadEx::~wxThreadEx()
 		Wait();
 }
 
-wxThreadError wxThreadEx::Create(unsigned int stackSize /*=0*/)
+wxThreadError wxThreadEx::Create(unsigned int)
 {
 	return m_pThread->Create();
 }

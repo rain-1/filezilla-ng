@@ -54,7 +54,7 @@ protected:
 
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 	void ApplyCurrentFilter();
-	void SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified = false);
+	void SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
 	bool UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
 	void UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
 	void UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
@@ -104,18 +104,18 @@ protected:
 	void OnItemActivated(wxListEvent &event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnMenuDownload(wxCommandEvent& event);
-	void OnMenuMkdir(wxCommandEvent& event);
-	void OnMenuMkdirChgDir(wxCommandEvent& event);
-	void OnMenuDelete(wxCommandEvent& event);
-	void OnMenuRename(wxCommandEvent& event);
+	void OnMenuMkdir(wxCommandEvent&);
+	void OnMenuMkdirChgDir(wxCommandEvent&);
+	void OnMenuDelete(wxCommandEvent&);
+	void OnMenuRename(wxCommandEvent&);
 	void OnKeyDown(wxKeyEvent& event);
 	void OnMenuChmod(wxCommandEvent& event);
 	void OnSize(wxSizeEvent& event);
-	void OnBeginDrag(wxListEvent& event);
-	void OnMenuEdit(wxCommandEvent& event);
-	void OnMenuEnter(wxCommandEvent& event);
-	void OnMenuGeturl(wxCommandEvent& event);
-	void OnMenuRefresh(wxCommandEvent& event);
+	void OnBeginDrag(wxListEvent&);
+	void OnMenuEdit(wxCommandEvent&);
+	void OnMenuEnter(wxCommandEvent&);
+	void OnMenuGeturl(wxCommandEvent&);
+	void OnMenuRefresh(wxCommandEvent&);
 	void OnMenuNewfile(wxCommandEvent& event);
 };
 

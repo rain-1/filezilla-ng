@@ -78,7 +78,7 @@ bool COptionsPageUpdateCheck::SavePage()
 	return true;
 }
 
-void COptionsPageUpdateCheck::OnRunUpdateCheck(wxCommandEvent &event)
+void COptionsPageUpdateCheck::OnRunUpdateCheck(wxCommandEvent &)
 {
 	if( !Validate() || !SavePage() ) {
 		return;

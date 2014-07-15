@@ -137,7 +137,7 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 	return true;
 }
 
-void CChmodDialog::OnOK(wxCommandEvent& event)
+void CChmodDialog::OnOK(wxCommandEvent&)
 {
 	wxCheckBox* pRecurse = XRCCTRL(*this, "ID_RECURSE", wxCheckBox);
 	m_recursive = pRecurse->GetValue();
@@ -152,12 +152,12 @@ void CChmodDialog::OnOK(wxCommandEvent& event)
 	EndModal(wxID_OK);
 }
 
-void CChmodDialog::OnCancel(wxCommandEvent& event)
+void CChmodDialog::OnCancel(wxCommandEvent&)
 {
 	EndModal(wxID_CANCEL);
 }
 
-void CChmodDialog::OnCheckboxClick(wxCommandEvent& event)
+void CChmodDialog::OnCheckboxClick(wxCommandEvent&)
 {
 	lastChangedNumeric = false;
 	for (int i = 0; i < 9; i++)
@@ -199,7 +199,7 @@ void CChmodDialog::OnCheckboxClick(wxCommandEvent& event)
 	oldNumeric = numericValue;
 }
 
-void CChmodDialog::OnNumericChanged(wxCommandEvent& event)
+void CChmodDialog::OnNumericChanged(wxCommandEvent&)
 {
 	if (m_noUserTextChange)
 		return;
@@ -315,7 +315,7 @@ bool CChmodDialog::Recursive() const
 	return m_recursive;
 }
 
-void CChmodDialog::OnRecurseChanged(wxCommandEvent& event)
+void CChmodDialog::OnRecurseChanged(wxCommandEvent&)
 {
 	wxCheckBox* pRecurse = XRCCTRL(*this, "ID_RECURSE", wxCheckBox);
 	wxRadioButton* pApplyAll = XRCCTRL(*this, "ID_APPLYALL", wxRadioButton);

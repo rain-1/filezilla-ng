@@ -295,7 +295,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	m_context_controls.push_back(context_controls);
 }
 
-void CContextControl::OnTabRefresh(wxCommandEvent& event)
+void CContextControl::OnTabRefresh(wxCommandEvent&)
 {
 	if (m_right_clicked_tab == -1)
 		return;
@@ -429,7 +429,7 @@ bool CContextControl::CloseTab(int tab)
 	return true;
 }
 
-void CContextControl::OnTabBgDoubleclick(wxAuiNotebookEvent& event)
+void CContextControl::OnTabBgDoubleclick(wxAuiNotebookEvent&)
 {
 	CreateTab();
 }
@@ -567,7 +567,7 @@ void CContextControl::AdvanceTab(bool forward)
 	m_tabs->AdvanceTab(forward);
 }
 
-void CContextControl::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CContextControl::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_CHANGEDCONTEXT)
 	{
@@ -597,7 +597,7 @@ void CContextControl::OnStateChange(CState* pState, enum t_statechange_notificat
 	}
 }
 
-void CContextControl::OnTabContextNew(wxCommandEvent& event)
+void CContextControl::OnTabContextNew(wxCommandEvent&)
 {
 	CreateTab();
 }

@@ -487,7 +487,8 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListE
 }
 
 #ifdef __WXMSW__
-static wxString GetExt(const wxString& file)
+namespace {
+wxString GetExt(const wxString& file)
 {
 	wxString ret;
 
@@ -496,6 +497,7 @@ static wxString GetExt(const wxString& file)
 		ret = file.Mid(pos + 1);
 
 	return ret;
+}
 }
 #endif
 

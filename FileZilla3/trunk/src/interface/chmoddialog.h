@@ -29,12 +29,12 @@ public:
 protected:
 
 	DECLARE_EVENT_TABLE()
-	void OnOK(wxCommandEvent& event);
-	void OnCancel(wxCommandEvent& event);
-	void OnRecurseChanged(wxCommandEvent& event);
+	void OnOK(wxCommandEvent&);
+	void OnCancel(wxCommandEvent&);
+	void OnRecurseChanged(wxCommandEvent&);
 
-	void OnCheckboxClick(wxCommandEvent& event);
-	void OnNumericChanged(wxCommandEvent& event);
+	void OnCheckboxClick(wxCommandEvent&);
+	void OnNumericChanged(wxCommandEvent&);
 
 	wxCheckBox* m_checkBoxes[9];
 	char m_permissions[9];

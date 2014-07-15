@@ -27,12 +27,11 @@ protected:
 	wxString m_Content;
 	CFastTextCtrl *m_pTextCtrl;
 
-	void OnSize(wxSizeEvent &event);
-
 	DECLARE_EVENT_TABLE()
-	void OnContextMenu(wxContextMenuEvent& event);
-	void OnClear(wxCommandEvent& event);
-	void OnCopy(wxCommandEvent& event);
+	void OnSize(wxSizeEvent &);
+	void OnContextMenu(wxContextMenuEvent&);
+	void OnClear(wxCommandEvent& );
+	void OnCopy(wxCommandEvent& );
 
 	std::list<int> m_lineLengths;
 

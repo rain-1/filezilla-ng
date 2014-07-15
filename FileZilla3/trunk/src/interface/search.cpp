@@ -43,12 +43,12 @@ protected:
 #endif
 
 private:
-	virtual bool CanStartComparison(wxString* pError) { return false; }
+	virtual bool CanStartComparison(wxString*) { return false; }
 	virtual void StartComparison() {}
-	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date) { return false; }
-	virtual void CompareAddFile(CComparableListing::t_fileEntryFlags flags) {}
+	virtual bool GetNextFile(wxString&, bool &, wxLongLong &, CDateTime&) { return false; }
+	virtual void CompareAddFile(CComparableListing::t_fileEntryFlags) {}
 	virtual void FinishComparison() {}
-	virtual void ScrollTopItem(int item) {}
+	virtual void ScrollTopItem(int) {}
 	virtual void OnExitComparisonMode() {}
 
 	int m_dirIcon;
@@ -601,7 +601,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 	// covered by any of those directories.
 }
 
-void CSearchDialog::OnDownload(wxCommandEvent& event)
+void CSearchDialog::OnDownload(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 		return;
@@ -692,7 +692,7 @@ void CSearchDialog::OnDownload(wxCommandEvent& event)
 	}
 }
 
-void CSearchDialog::OnDelete(wxCommandEvent& event)
+void CSearchDialog::OnDelete(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 		return;

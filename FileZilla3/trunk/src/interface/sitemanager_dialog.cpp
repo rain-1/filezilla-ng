@@ -59,7 +59,7 @@ public:
 
 	virtual bool GetDataHere(void *buf) const { memset(buf, 0, 1); return true; }
 
-	virtual bool SetData(size_t len, const void *buf) { return true; }
+	virtual bool SetData(size_t, const void *) { return true; }
 };
 
 class CSiteManagerDropTarget : public wxDropTarget
@@ -518,7 +518,7 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	pEncryption->SetSelection(0);
 }
 
-void CSiteManagerDialog::OnOK(wxCommandEvent& event)
+void CSiteManagerDialog::OnOK(wxCommandEvent&)
 {
 	if (!Verify())
 		return;
@@ -532,7 +532,7 @@ void CSiteManagerDialog::OnOK(wxCommandEvent& event)
 	EndModal(wxID_OK);
 }
 
-void CSiteManagerDialog::OnCancel(wxCommandEvent& event)
+void CSiteManagerDialog::OnCancel(wxCommandEvent&)
 {
 	EndModal(wxID_CANCEL);
 }
@@ -2148,7 +2148,7 @@ void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
 	delete pMenu;
 }
 
-void CSiteManagerDialog::OnExportSelected(wxCommandEvent& event)
+void CSiteManagerDialog::OnExportSelected(wxCommandEvent&)
 {
 	wxFileDialog dlg(this, _("Select file for exported sites"), _T(""),
 					_T("sites.xml"), _T("XML files (*.xml)|*.xml"),
@@ -2170,7 +2170,7 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent& event)
 	}
 }
 
-void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent& event)
+void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -2191,7 +2191,7 @@ void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent& event)
 	XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetValue(dlg.GetPath());
 }
 
-void CSiteManagerDialog::OnNewBookmark(wxCommandEvent& event)
+void CSiteManagerDialog::OnNewBookmark(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -2311,6 +2311,4 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 /*	case 3:
 		return INSECURE_FTP;*/
 	}
-
-	return FTP;
 }

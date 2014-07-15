@@ -3877,7 +3877,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	pData->host = regex.GetMatch(m_Response, 2);
 
 	int i = pData->host.Find(',', true);
-	long number;
+	long number = 0;
 	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number))
 		return false;
 
@@ -4010,7 +4010,7 @@ getLocalIP:
 	return FZ_REPLY_OK;
 }
 
-void CFtpControlSocket::OnExternalIPAddress(fzExternalIPResolveEvent& event)
+void CFtpControlSocket::OnExternalIPAddress(fzExternalIPResolveEvent&)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::OnExternalIPAddress()"));
 	if (!m_pIPResolver)

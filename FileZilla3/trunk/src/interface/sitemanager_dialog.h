@@ -64,8 +64,8 @@ protected:
 	void MarkConnectedSites();
 	void MarkConnectedSite(int connected_site);
 
-	void OnOK(wxCommandEvent& event);
-	void OnCancel(wxCommandEvent& event);
+	void OnOK(wxCommandEvent&);
+	void OnCancel(wxCommandEvent&);
 	void OnConnect(wxCommandEvent& event);
 	void OnNewSite(wxCommandEvent& event);
 	void OnNewFolder(wxCommandEvent& event);
@@ -85,9 +85,9 @@ protected:
 	void OnChar(wxKeyEvent& event);
 	void OnCopySite(wxCommandEvent& event);
 	void OnContextMenu(wxTreeEvent& event);
-	void OnExportSelected(wxCommandEvent& event);
-	void OnNewBookmark(wxCommandEvent& event);
-	void OnBookmarkBrowse(wxCommandEvent& event);
+	void OnExportSelected(wxCommandEvent&);
+	void OnNewBookmark(wxCommandEvent&);
+	void OnBookmarkBrowse(wxCommandEvent&);
 
 	CInterProcessMutex* m_pSiteManagerMutex;
 

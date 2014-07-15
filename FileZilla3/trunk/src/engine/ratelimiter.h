@@ -45,7 +45,7 @@ protected:
 	void WakeupWaitingObjects();
 
 	DECLARE_EVENT_TABLE()
-	void OnTimer(wxTimerEvent& event);
+	void OnTimer(wxTimerEvent&);
 };
 
 class CRateLimiterObject

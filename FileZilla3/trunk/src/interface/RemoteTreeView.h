@@ -21,7 +21,7 @@ public:
 protected:
 	wxTreeItemId MakeParent(CServerPath path, bool select);
 	void SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pListing, bool modified);
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
 
 	void DisplayItem(wxTreeItemId parent, const CDirectoryListing& listing);
 	void RefreshItem(wxTreeItemId parent, const CDirectoryListing& listing, bool will_select_parent);
@@ -63,16 +63,16 @@ protected:
 	void OnKeyDown(wxKeyEvent& event);
 #endif
 	void OnContextMenu(wxTreeEvent& event);
-	void OnMenuChmod(wxCommandEvent& event);
+	void OnMenuChmod(wxCommandEvent&);
 	void OnMenuDownload(wxCommandEvent& event);
-	void OnMenuDelete(wxCommandEvent& event);
-	void OnMenuRename(wxCommandEvent& event);
+	void OnMenuDelete(wxCommandEvent&);
+	void OnMenuRename(wxCommandEvent&);
 	void OnBeginLabelEdit(wxTreeEvent& event);
 	void OnEndLabelEdit(wxTreeEvent& event);
-	void OnMkdir(wxCommandEvent& event);
-	void OnMenuMkdirChgDir(wxCommandEvent& event);
+	void OnMkdir(wxCommandEvent&);
+	void OnMenuMkdirChgDir(wxCommandEvent&);
 	void OnChar(wxKeyEvent& event);
-	void OnMenuGeturl(wxCommandEvent& event);
+	void OnMenuGeturl(wxCommandEvent&);
 
 	wxTreeItemId m_contextMenuItem;
 	enum CFileListCtrlSortBase::NameSortMode m_nameSortMode;

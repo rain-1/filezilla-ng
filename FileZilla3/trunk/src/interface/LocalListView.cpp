@@ -902,7 +902,7 @@ void CLocalListView::OnMenuMkdir(wxCommandEvent& event)
 }
 
 // Create a new Directory and enter the new Directory
-void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent& event)
+void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	wxString newdir = MenuMkdir();
 	if (newdir.empty()) {
@@ -1279,7 +1279,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	}
 }
 
-void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
 		DisplayDir(m_pState->GetLocalDir().GetPath());
@@ -1521,8 +1521,6 @@ wxListItemAttr* CLocalListView::OnGetItemAttr(long item) const
 	default:
 		return 0;
 	}
-
-	return 0;
 }
 
 void CLocalListView::StartComparison()

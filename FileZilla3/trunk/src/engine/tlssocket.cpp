@@ -1149,7 +1149,7 @@ int CTlsSocket::VerifyCertificate()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-void CTlsSocket::OnRateAvailable(enum CRateLimiter::rate_direction direction)
+void CTlsSocket::OnRateAvailable(enum CRateLimiter::rate_direction)
 {
 }
 

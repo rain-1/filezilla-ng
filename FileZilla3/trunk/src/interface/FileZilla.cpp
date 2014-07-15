@@ -140,7 +140,7 @@ bool CheckForWin2003FirewallBug()
 	if (!key.Exists() || !key.Open(wxRegKey::Read))
 		return false;
 
-	long value;
+	long value = 0;
 	if (!key.HasValue(_T("EnableFirewall")) || !key.QueryValue(_T("EnableFirewall"), &value))
 		return false;
 
@@ -788,7 +788,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 }
 
 #ifdef __WXMSW__
-extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM lParam)
+extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM)
 {
 	HWND child = FindWindowEx(hwnd, 0, 0, _T("FileZilla process identificator 3919DB0A-082D-4560-8E2F-381A35969FB4"));
 	if (child)
