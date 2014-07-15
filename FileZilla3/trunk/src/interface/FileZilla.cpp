@@ -586,7 +586,7 @@ bool CFileZillaApp::LoadLocales()
 		}
 	}
 #else
-	m_localesDir = wxStandardPaths::Get().GetDataDir() + _T("locales");
+	m_localesDir.SetPath(wxStandardPaths::Get().GetDataDir() + _T("/locales"));
 #endif
 
 	if (!m_localesDir.empty()) {
