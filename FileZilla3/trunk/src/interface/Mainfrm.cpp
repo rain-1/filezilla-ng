@@ -2689,8 +2689,10 @@ void CMainFrame::OnSearch(wxCommandEvent& event)
 
 void CMainFrame::PostInitialize()
 {
+#ifndef __WXGTK__
 	// Focus first control
 	NavigateIn(wxNavigationKeyEvent::IsForward);
+#endif
 
 #if FZ_MANUALUPDATECHECK
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
