@@ -2060,7 +2060,7 @@ void CRemoteListView::RepositionInfoText()
 
 	wxSize size = m_pInfoText->GetTextSize();
 
-	if (!m_indexMapping.size())
+	if (m_indexMapping.empty())
 		rect.y = 60;
 	else
 	{
