@@ -232,7 +232,7 @@ std::map<std::string, int> COptions::GetNameOptionMap() const
 	std::map<std::string, int> ret;
 	for (int i = 0; i < OPTIONS_NUM; ++i) {
 		if (options[i].flags != internal)
-			ret.emplace(std::make_pair(std::string(options[i].name), i));
+			ret.insert(std::make_pair(std::string(options[i].name), i));
 	}
 	return ret;
 }
