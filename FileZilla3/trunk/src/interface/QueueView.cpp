@@ -206,7 +206,7 @@ EVT_COMMAND(wxID_ANY, fzEVT_GRANTEXCLUSIVEENGINEACCESS, CQueueView::OnExclusiveE
 EVT_SIZE(CQueueView::OnSize)
 END_EVENT_TABLE()
 
-class CFolderProcessingThread : public wxThread
+class CFolderProcessingThread final : public wxThread
 {
 	struct t_internalDirPair
 	{
@@ -509,10 +509,8 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 
 CQueueView::~CQueueView()
 {
-	if (m_pFolderProcessingThread)
-	{
-		m_pFolderProcessingThread->Delete();
-		m_pFolderProcessingThread->Wait();
+	if (m_pFolderProcessingThread) {
+		m_pFolderProcessingThread->Delete(0, wxTHREAD_WAIT_BLOCK);
 		delete m_pFolderProcessingThread;
 	}
 
@@ -1867,7 +1865,7 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent&)
 
 	RemoveItem(pItem, true);
 
-	m_pFolderProcessingThread->Wait();
+	m_pFolderProcessingThread->Wait(wxTHREAD_WAIT_BLOCK);
 	delete m_pFolderProcessingThread;
 	m_pFolderProcessingThread = 0;
 

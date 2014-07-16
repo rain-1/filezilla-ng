@@ -9,7 +9,7 @@ DEFINE_EVENT_TYPE(fzEVT_VOLUMEENUMERATED)
 DEFINE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED)
 
 CVolumeDescriptionEnumeratorThread::CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler)
-	: wxThreadEx(wxTHREAD_JOINABLE),
+	: wxThread(wxTHREAD_JOINABLE),
 	  m_pEvtHandler(pEvtHandler)
 {
 	m_failure = false;
@@ -27,7 +27,7 @@ CVolumeDescriptionEnumeratorThread::CVolumeDescriptionEnumeratorThread(wxEvtHand
 CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
 {
 	m_stop = true;
-	Wait();
+	Wait(wxTHREAD_WAIT_BLOCK);
 
 	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); ++iter)
 	{

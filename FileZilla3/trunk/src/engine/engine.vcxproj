@@ -105,9 +105,6 @@
       <PrecompiledHeader />
     </ClCompile>
     <ClCompile Include="string_coalescer.cpp" />
-    <ClCompile Include="threadex.cpp">
-      <PrecompiledHeader />
-    </ClCompile>
     <ClCompile Include="timeex.cpp" />
     <ClCompile Include="tlssocket.cpp" />
     <ClCompile Include="transfersocket.cpp" />
@@ -146,7 +143,6 @@
     <ClInclude Include="..\include\sizeformatting_base.h" />
     <ClInclude Include="..\include\socket.h" />
     <ClInclude Include="..\include\string_coalescer.h" />
-    <ClInclude Include="..\include\threadex.h" />
     <ClInclude Include="..\include\timeex.h" />
     <ClInclude Include="tlssocket.h" />
     <ClInclude Include="transfersocket.h" />

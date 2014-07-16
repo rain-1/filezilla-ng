@@ -14,7 +14,6 @@
 #endif
 #include <filezilla.h>
 #include "socket.h"
-#include "threadex.h"
 #include <errno.h>
 #ifndef __WXMSW__
   #include <sys/types.h>
@@ -266,12 +265,12 @@ CSocketEventSource::~CSocketEventSource()
 	CSocketEventDispatcher::Get().RemovePending(this);
 }
 
-class CSocketThread : protected wxThreadEx
+class CSocketThread final : protected wxThread
 {
 	friend class CSocket;
 public:
 	CSocketThread()
-		: wxThreadEx(wxTHREAD_JOINABLE), m_condition(m_sync)
+		: wxThread(wxTHREAD_JOINABLE), m_condition(m_sync)
 	{
 		m_pSocket = 0;
 		m_pHost = 0;
@@ -1360,7 +1359,7 @@ bool CSocket::Cleanup(bool force)
 		}
 		pThread->m_sync.Unlock();
 
-		pThread->Wait();
+		pThread->Wait(wxTHREAD_WAIT_BLOCK);
 		delete pThread;
 		waiting_socket_threads.erase(current);
 	}

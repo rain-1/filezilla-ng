@@ -22,6 +22,5 @@ noinst_HEADERS = commands.h \
 		 sizeformatting_base.h \
 		 socket.h \
 		 string_coalescer.h \
-		 threadex.h \
 		 timeex.h
 
