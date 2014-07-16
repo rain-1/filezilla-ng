@@ -350,7 +350,7 @@ bool CDateTime::VerifyFormat(wxString const& fmt)
 	CrtAssertSuppressor suppressor;
 #endif
 
-	return wxStrftime(buf, sizeof(buf), fmt, t) != 0;
+	return wxStrftime(buf, sizeof(buf)/sizeof(wxChar), fmt, t) != 0;
 }
 
 CDateTime CMonotonicTime::m_lastTime = CDateTime::Now();
