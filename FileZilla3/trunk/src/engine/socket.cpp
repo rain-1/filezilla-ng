@@ -1001,7 +1001,6 @@ protected:
 
 CSocket::CSocket(CSocketEventHandler* pEvtHandler)
 	: m_pEvtHandler(pEvtHandler)
-	, m_synchronous_read_cb()
 {
 #ifdef ERRORCODETEST
 	CErrorCodeTest test;
