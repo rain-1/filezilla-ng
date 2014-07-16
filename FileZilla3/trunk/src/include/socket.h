@@ -66,7 +66,7 @@ private:
 
 	static CSocketEventDispatcher m_dispatcher;
 
-	bool m_inside_loop;
+	bool m_inside_loop{};
 };
 
 class CSocketEventHandler
