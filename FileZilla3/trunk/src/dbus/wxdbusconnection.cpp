@@ -51,7 +51,7 @@ typedef std::list<DBusWatch *> WatchesList;
 class DBusThread : public wxThread
 {
 public:
-	DBusThread(wxThreadKind kind, wxDBusConnection * parent, int ID, DBusConnection * connection) ;
+	DBusThread(wxThreadKind kind, wxDBusConnection * parent, int ID, DBusConnection * connection);
 	virtual ~DBusThread();
 	bool Init();
 	inline void SetExit() { m_exit = true; }
@@ -71,15 +71,15 @@ private:
 
 	int m_wakeup_pipe[2];
 	wxCriticalSection m_critical_section;
-	bool m_thread_holds_lock;
+	bool m_thread_holds_lock{};
 
 	int m_ID;
 	DBusConnection * m_connection;
 	wxDBusConnection * m_parent;
-	bool m_exit;
+	bool m_exit{};
 	std::list<DBusWatch *> bus_watches;
 
-	pthread_t m_parent_id;
+	pthread_t m_parent_id{};
 
 	static dbus_bool_t add_watch(DBusWatch *watch, void *data);
 	static void remove_watch(DBusWatch *watch, void *data);
@@ -100,8 +100,6 @@ DBusThread::DBusThread(wxThreadKind kind, wxDBusConnection * parent, int ID, DBu
 	m_ID = ID;
 	m_connection = connection;
 	m_parent = parent;
-	m_exit = false;
-	m_thread_holds_lock = false;
 	m_wakeup_pipe[0] = -1;
 	m_wakeup_pipe[1] = -1;
 }
@@ -123,7 +121,6 @@ bool DBusThread::Init()
 	do {
 		res = fcntl(m_wakeup_pipe[0], F_SETFL, O_NONBLOCK);
 	} while( res == -1 && errno == EINTR );
-	
 
 	m_parent_id = pthread_self();
 
