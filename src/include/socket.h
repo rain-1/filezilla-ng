@@ -98,6 +98,9 @@ public:
 	CSocket(CSocketEventHandler* pEvtHandler);
 	virtual ~CSocket();
 
+	CSocket(CSocket const&) = delete;
+	CSocket& operator=(CSocket const&) = delete;
+
 	enum SocketState
 	{
 		// How the socket is initially
@@ -206,7 +209,7 @@ protected:
 
 	int m_buffer_sizes[2];
 
-	CCallback* m_synchronous_read_cb;
+	CCallback* m_synchronous_read_cb{};
 };
 
 #ifdef __WXMSW__
