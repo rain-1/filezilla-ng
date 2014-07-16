@@ -440,10 +440,9 @@ bool CStatusView::Show(bool show /*=true*/)
 {
 	m_shown = show;
 
-	if (show) {
+	if (show && m_pTextCtrl) {
 		if (m_hiddenLines.size() == MAX_LINECOUNT) {
-			if (m_pTextCtrl)
-				m_pTextCtrl->Clear();
+			m_pTextCtrl->Clear();
 			m_nLineCount = 0;
 			m_lineLengths.clear();
 		}

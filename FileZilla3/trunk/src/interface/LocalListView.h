@@ -84,7 +84,6 @@ protected:
 
 	wxString m_dir;
 
-	wxDropTarget* m_pDropTarget;
 	int m_dropTarget;
 
 	wxString MenuMkdir();

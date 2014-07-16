@@ -84,7 +84,6 @@ protected:
 	virtual int GetOverlayIndex(int item);
 #endif
 
-	wxDropTarget* m_pDropTarget;
 	int m_dropTarget;
 
 	// Used to track state for resolving symlinks

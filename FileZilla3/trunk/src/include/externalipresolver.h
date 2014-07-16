@@ -37,19 +37,19 @@ protected:
 	void Close(bool successful);
 
 	wxString m_address;
-	enum CSocket::address_family m_protocol;
-	unsigned long m_port;
+	CSocket::address_family m_protocol{};
+	unsigned long m_port{80};
 	wxEvtHandler* m_handler;
 	int m_id;
 
-	bool m_done;
+	bool m_done{};
 
 	static wxString m_ip;
 	static bool m_checked;
 
 	wxString m_data;
 
-	CSocket *m_pSocket;
+	CSocket *m_pSocket{};
 
 	void OnSocketEvent(CSocketEvent& event);
 
@@ -61,11 +61,11 @@ protected:
 	void OnChunkedData();
 	void OnSend();
 
-	char* m_pSendBuffer;
-	unsigned int m_sendBufferPos;
+	char* m_pSendBuffer{};
+	unsigned int m_sendBufferPos{};
 
-	char* m_pRecvBuffer;
-	unsigned int m_recvBufferPos;
+	char* m_pRecvBuffer{};
+	unsigned int m_recvBufferPos{};
 
 	static const unsigned int m_recvBufferLen = 4096;
 

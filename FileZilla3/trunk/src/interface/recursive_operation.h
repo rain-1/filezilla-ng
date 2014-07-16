@@ -53,8 +53,6 @@ protected:
 
 	enum OperationMode m_operationMode;
 
-	CState* m_pState;
-
 	class CNewDir
 	{
 	public:
@@ -86,12 +84,12 @@ protected:
 	std::set<CServerPath> m_visitedDirs;
 	std::list<CNewDir> m_dirsToVisit;
 
-	bool m_allowParent;
+	bool m_allowParent{};
 
 	// Needed for recursive_chmod
-	CChmodDialog* m_pChmodDlg;
+	CChmodDialog* m_pChmodDlg{};
 
-	CQueueView* m_pQueue;
+	CQueueView* m_pQueue{};
 
 	std::list<CFilter> m_filters;
 

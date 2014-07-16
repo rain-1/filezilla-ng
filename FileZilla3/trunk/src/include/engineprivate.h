@@ -71,7 +71,7 @@ protected:
 	void OnEngineEvent(wxFzEngineEvent &event);
 	void OnTimer(wxTimerEvent& event);
 
-	wxEvtHandler *m_pEventHandler;
+	wxEvtHandler *m_pEventHandler{};
 
 	int m_engine_id;
 	static std::list<CFileZillaEnginePrivate*> m_engineList;
@@ -83,19 +83,19 @@ protected:
 	CServerPath m_lastListDir;
 	CMonotonicTime m_lastListTime;
 
-	CControlSocket *m_pControlSocket;
+	CControlSocket *m_pControlSocket{};
 
-	CCommand *m_pCurrentCommand;
+	CCommand *m_pCurrentCommand{};
 
 	std::list<CNotification*> m_NotificationList;
-	bool m_maySendNotificationEvent;
+	bool m_maySendNotificationEvent{true};
 
-	bool m_bIsInCommand; //true if Command is on the callstack
-	int m_nControlSocketError;
+	bool m_bIsInCommand{}; //true if Command is on the callstack
+	int m_nControlSocketError{};
 
-	COptionsBase *m_pOptions;
+	COptionsBase *m_pOptions{};
 
-	unsigned int m_asyncRequestCounter;
+	unsigned int m_asyncRequestCounter{};
 
 	// Used to synchronize access to the notification list
 	wxCriticalSection m_lock;
@@ -117,10 +117,10 @@ protected:
 		bool critical;
 	};
 	static std::list<t_failedLogins> m_failedLogins;
-	int m_retryCount;
+	int m_retryCount{};
 	wxTimer m_retryTimer;
 
-	CRateLimiter* m_pRateLimiter;
+	CRateLimiter* m_pRateLimiter{};
 };
 
 #endif //__FILEZILLAENGINEPRIVATE_H__
