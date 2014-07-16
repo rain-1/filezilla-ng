@@ -287,7 +287,6 @@ void response_notify(DBusPendingCall *pending, void *user_data);
 DBusHandlerResult handle_notification(DBusConnection *connection, DBusMessage *message, void *user_data);
 
 wxDBusConnection::wxDBusConnection(int ID, wxEvtHandler * EvtHandler, bool System)
-	: m_filter_installed()
 {
 	// Make sure libdbus locks its data structures, otherwise
 	// there'll be crashes if it gets used from multiple threads
@@ -298,7 +297,6 @@ wxDBusConnection::wxDBusConnection(int ID, wxEvtHandler * EvtHandler, bool Syste
 	m_connection = System ? dbus_bus_get(DBUS_BUS_SYSTEM, &(m_error->GetError())) : dbus_bus_get(DBUS_BUS_SESSION, &(m_error->GetError()));
 	if (!m_connection) {
 		fprintf(stderr, "Failed to connect to D-BUS: %s\n", m_error->GetError().message);
-		m_thread = NULL;
 	}
 	else
 	{
