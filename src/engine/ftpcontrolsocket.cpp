@@ -2306,7 +2306,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 	}
 
 	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
-	if (pData->opState == list_init)
+	if (pData->opState == filetransfer_init)
 		return FZ_REPLY_ERROR;
 
 	int code = GetReplyCode();
@@ -2897,8 +2897,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 			switch (pFileExistsNotification->overwriteAction)
 			{
 			case CFileExistsNotification::rename:
-				if (pData->download)
-				{
+				if (pData->download) {
 					wxFileName fn = pData->localFile;
 					fn.SetFullName(pFileExistsNotification->newName);
 					pData->localFile = fn.GetFullPath();
@@ -2913,8 +2912,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 					if (CheckOverwriteFile() == FZ_REPLY_OK)
 						SendNextCommand();
 				}
-				else
-				{
+				else {
 					pData->remoteFile = pFileExistsNotification->newName;
 					pData->remoteFileSize = -1;
 					pData->fileTime = CDateTime();
@@ -2935,27 +2933,21 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 					}
 					else // found and matched case
 					{
-						if (matched_case)
-						{
-							pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
-							if (entry.has_date())
-								pData->fileTime = entry.time;
+						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
+						if (entry.has_date())
+							pData->fileTime = entry.time;
 
-							if (pData->download &&
-								!entry.has_time() &&
-								m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-								CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
-							{
-								pData->opState = filetransfer_mdtm;
-							}
-							else
-							{
-								if (CheckOverwriteFile() != FZ_REPLY_OK)
-									break;
-							}
+						if (pData->download &&
+							!entry.has_time() &&
+							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
+						{
+							pData->opState = filetransfer_mdtm;
 						}
-						else
-							pData->opState = filetransfer_size;
+						else {
+							if (CheckOverwriteFile() != FZ_REPLY_OK)
+								break;
+						}
 					}
 					SendNextCommand();
 				}
