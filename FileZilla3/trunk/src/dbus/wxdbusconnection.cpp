@@ -119,7 +119,11 @@ bool DBusThread::Init()
 	if (Create() != wxTHREAD_NO_ERROR)
 		return false;
 
-	fcntl(m_wakeup_pipe[0], F_SETFL, O_NONBLOCK);
+	int res;
+	do {
+		res = fcntl(m_wakeup_pipe[0], F_SETFL, O_NONBLOCK);
+	} while( res == -1 && errno == EINTR );
+	
 
 	m_parent_id = pthread_self();
 
