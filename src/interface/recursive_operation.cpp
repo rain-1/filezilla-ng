@@ -17,13 +17,10 @@ CRecursiveOperation::CNewDir::CNewDir()
 
 CRecursiveOperation::CRecursiveOperation(CState* pState)
 	: CStateEventHandler(pState),
-	  m_operationMode(recursive_none), m_pState(pState)
+	  m_operationMode(recursive_none)
 {
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR, false);
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR, false);
-
-	m_pChmodDlg = 0;
-	m_pQueue = 0;
 }
 
 CRecursiveOperation::~CRecursiveOperation()

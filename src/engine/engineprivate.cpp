@@ -54,16 +54,7 @@ END_EVENT_TABLE()
 CFileZillaEnginePrivate::CFileZillaEnginePrivate()
 	: m_retryTimer(this)
 {
-	m_pRateLimiter = 0;
-	m_maySendNotificationEvent = true;
-	m_pEventHandler = 0;
-	m_pControlSocket = 0;
-	m_pCurrentCommand = 0;
-	m_bIsInCommand = false;
-	m_nControlSocketError = 0;
-	m_asyncRequestCounter = 0;
 	m_engineList.push_back(this);
-	m_retryCount = 0;
 
 	static int id = 0;
 	m_engine_id = ++id;
