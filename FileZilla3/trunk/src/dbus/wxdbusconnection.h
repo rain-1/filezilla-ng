@@ -133,12 +133,12 @@ public:
 	bool RegisterObjectPath(const char *path);
 	bool UnregisterObjectPath(const char *path);
 private:
-	int m_ID;
-	wxEvtHandler * m_EvtHandler;
-	DBusConnection * m_connection;
-	DBusThread * m_thread;
-	wxDBusError * m_error;
-	bool m_filter_installed;
+	int m_ID{};
+	wxEvtHandler * m_EvtHandler{};
+	DBusConnection * m_connection{};
+	DBusThread * m_thread{};
+	wxDBusError * m_error{};
+	bool m_filter_installed{};
 };
 
 #endif
