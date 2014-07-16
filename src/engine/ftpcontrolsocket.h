@@ -141,8 +141,6 @@ protected:
 
 	int m_lastTypeBinary;
 
-	int m_pendingTransferEndEvents;
-
 	// Used by keepalive code so that we're not using keep alive
 	// till the end of time. Stop after a couple of minutes.
 	wxDateTime m_lastCommandCompletionTime;
