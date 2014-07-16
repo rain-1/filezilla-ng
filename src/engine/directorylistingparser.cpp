@@ -1637,10 +1637,8 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 	wxString permissions;
 
 	// This field can either be the filesize, a username (at least that's what I think) enclosed in [] or a date.
-	if (!token.IsNumeric() && !token.IsLeftNumeric())
-	{
+	if (!token.IsNumeric() && !token.IsLeftNumeric()) {
 		// Must be username
-
 		const int len = token.GetLength();
 		if (len < 3 || token[0] != '[' || token[len - 1] != ']')
 			return false;
@@ -1659,10 +1657,8 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 	if (!pos)
 		return false;
 
-	if (token.IsNumeric() || (pos != -1 && token.Find('/', pos + 1) == -1))
-	{
+	if (token.IsNumeric() || (pos != -1 && token.Find('/', pos + 1) == -1)) {
 		// Definitely size
-
 		CToken sizeToken;
 		if (pos == -1)
 			sizeToken = token;
@@ -1675,16 +1671,9 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 		if (!pLine->GetToken(++index, token))
 			return false;
 	}
-	else if (pos == -1 && token.IsLeftNumeric())
-	{
+	else if (pos == -1 && token.IsLeftNumeric()) {
 		// Perhaps size
-		CToken sizeToken;
-		if (pos == -1)
-			sizeToken = token;
-		else
-			sizeToken = CToken(token.GetToken(), pos);
-		if (ParseComplexFileSize(sizeToken, entry.size, 512))
-		{
+		if (ParseComplexFileSize(token, entry.size, 512)) {
 			gotSize = true;
 
 			if (!pLine->GetToken(++index, token))
@@ -1700,8 +1689,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 	if (!pLine->GetToken(++index, token))
 		return true;
 
-	if (!ParseTime(token, entry))
-	{
+	if (!ParseTime(token, entry)) {
 		int len = token.GetLength();
 		if (token[0] == '[' && token[len - 1] != ']')
 			return false;
@@ -1714,8 +1702,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 		--index;
 	}
 
-	if (!gotSize)
-	{
+	if (!gotSize) {
 		// Get size
 		if (!pLine->GetToken(++index, token))
 			return false;
@@ -1737,23 +1724,19 @@ bool CDirectoryListingParser::ParseAsVms(CLine *pLine, CDirentry &entry)
 	}
 
 	// Owner / group and permissions
-	while (pLine->GetToken(++index, token))
-	{
+	while (pLine->GetToken(++index, token)) {
 		const int len = token.GetLength();
-		if (len > 2 && token[0] == '(' && token[len - 1] == ')')
-		{
+		if (len > 2 && token[0] == '(' && token[len - 1] == ')') {
 			if (!permissions.empty())
 				permissions += _T(" ");
 			permissions += token.GetString().Mid(1, len - 2);
 		}
-		else if (len > 2 && token[0] == '[' && token[len - 1] == ']')
-		{
+		else if (len > 2 && token[0] == '[' && token[len - 1] == ']') {
 			if (!ownerGroup.empty())
 				ownerGroup += _T(" ");
 			ownerGroup += token.GetString().Mid(1, len - 2);
 		}
-		else
-		{
+		else {
 			if (!ownerGroup.empty())
 				ownerGroup += _T(" ");
 			ownerGroup += token.GetString();
