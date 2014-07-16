@@ -66,11 +66,25 @@ bool COptionsPageDateFormatting::SavePage()
 
 bool COptionsPageDateFormatting::Validate()
 {
-	if (GetRCheck(XRCID("ID_DATEFORMAT_CUSTOM")) && XRCCTRL(*this, "ID_CUSTOM_DATEFORMAT", wxTextCtrl)->GetValue().empty())
-		return DisplayError(_T("ID_CUSTOM_DATEFORMAT"), _("Please enter a custom date format."));
-
-	if (GetRCheck(XRCID("ID_TIMEFORMAT_CUSTOM")) && XRCCTRL(*this, "ID_CUSTOM_TIMEFORMAT", wxTextCtrl)->GetValue().empty())
-		return DisplayError(_T("ID_CUSTOM_TIMEFORMAT"), _("Please enter a custom time format."));
+	if (GetRCheck(XRCID("ID_DATEFORMAT_CUSTOM"))) {
+		wxString const dateformat = XRCCTRL(*this, "ID_CUSTOM_DATEFORMAT", wxTextCtrl)->GetValue();
+		if (dateformat.empty()) {
+			return DisplayError(_T("ID_CUSTOM_DATEFORMAT"), _("Please enter a custom date format."));
+		}
+		if (!CDateTime::VerifyFormat(dateformat)) {
+			return DisplayError(_T("ID_CUSTOM_DATEFORMAT"), _("The custom date format is invalid or contains unsupported format specifiers."));
+		}
+	}
+		
+	if (GetRCheck(XRCID("ID_TIMEFORMAT_CUSTOM"))) {
+		wxString const timeformat = XRCCTRL(*this, "ID_CUSTOM_TIMEFORMAT", wxTextCtrl)->GetValue();
+		if (timeformat.empty()) {
+			return DisplayError(_T("ID_CUSTOM_TIMEFORMAT"), _("Please enter a custom time format."));
+		}
+		if (!CDateTime::VerifyFormat(timeformat)) {
+			return DisplayError(_T("ID_CUSTOM_TIMEFORMAT"), _("The custom time format is invalid or contains unsupported format specifiers."));
+		}
+	}
 
 	return true;
 }
