@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0-rc3 (2014-07-16)
+
+- OS X: Fix random crashes if adding text to the message log
+- Fixed drag&drop when dropping on local file list and directory tree
+- Fixed assertion when using format specified for date/time formatting
+- Fixed assertion when closing FileZilla in response to system shutdown
+- Various code cleanup
+
 3.9.0-rc2 (2014-07-09)
 
 + Display a helpful message if login fails and either username or password starts or begins with a space.
@@ -33,7 +41,7 @@ Legend:
 3.9.0-beta2 (2014-06-26)
 
 - Natural sort now also works with directory comparison
-- Toolbar state now updates if directory tree visibility is toggeled by enabling directory comparison
+- Toolbar state now updates if directory tree visibility is toggled by enabling directory comparison
 - *nix: Fixed minimizing to tray not working
 - Fixed background of activity indicators
 - Several dialog layout fixes
