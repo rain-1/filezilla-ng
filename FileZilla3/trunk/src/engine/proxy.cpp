@@ -18,20 +18,11 @@ enum handshake_state
 };
 
 CProxySocket::CProxySocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CBackend(pEvtHandler), m_pOwner(pOwner)
+	: CBackend(pEvtHandler)
+	, m_pSocket(pSocket)
+	, m_pOwner(pOwner)
 {
-	m_pSocket = pSocket;
 	m_pSocket->SetEventHandler(this);
-
-	m_proxyState = noconn;
-
-	m_pSendBuffer = 0;
-	m_pRecvBuffer = 0;
-
-	m_proxyType = unknown;
-
-	m_can_write = false;
-	m_can_read = false;
 }
 
 CProxySocket::~CProxySocket()

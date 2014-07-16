@@ -49,29 +49,29 @@ protected:
 	CSocket* m_pSocket;
 	CControlSocket* m_pOwner;
 
-	enum ProxyType m_proxyType;
+	ProxyType m_proxyType{unknown};
 	wxString m_host;
-	int m_port;
+	int m_port{};
 	wxString m_user;
 	wxString m_pass;
 
-	enum ProxyState m_proxyState;
+	ProxyState m_proxyState{noconn};
 
-	int m_handshakeState;
+	int m_handshakeState{};
 
-	char* m_pSendBuffer;
-	int m_sendBufferLen;
+	char* m_pSendBuffer{};
+	int m_sendBufferLen{};
 
-	char* m_pRecvBuffer;
-	int m_recvBufferPos;
-	int m_recvBufferLen;
+	char* m_pRecvBuffer{};
+	int m_recvBufferPos{};
+	int m_recvBufferLen{};
 
 	void OnSocketEvent(CSocketEvent& event);
 	void OnReceive();
 	void OnSend();
 
-	bool m_can_write;
-	bool m_can_read;
+	bool m_can_write{};
+	bool m_can_read{};
 };
 
 #endif //__PROXY_H__
