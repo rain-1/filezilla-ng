@@ -31,8 +31,7 @@ enum IORet
 	IO_Again = -1
 };
 
-#include "threadex.h"
-class CIOThread : public wxThreadEx
+class CIOThread final : public wxThread
 {
 public:
 	CIOThread();

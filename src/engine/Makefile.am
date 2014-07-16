@@ -38,7 +38,6 @@ libengine_a_SOURCES = \
 		socket.cpp \
 		string_coalescer.cpp \
 		tlssocket.cpp \
-		threadex.cpp \
 		timeex.cpp \
 		transfersocket.cpp
 

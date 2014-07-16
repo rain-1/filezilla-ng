@@ -7,7 +7,6 @@
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
-#include "threadex.h"
 
 #include <wx/filename.h>
 #include <wx/log.h>
@@ -53,11 +52,11 @@ EVT_COMMAND(wxID_ANY, fzEVT_SFTP, CSftpControlSocket::OnSftpEvent)
 EVT_END_PROCESS(wxID_ANY, CSftpControlSocket::OnTerminate)
 END_EVENT_TABLE()
 
-class CSftpInputThread : public wxThreadEx
+class CSftpInputThread final : public wxThread
 {
 public:
 	CSftpInputThread(CSftpControlSocket* pOwner, wxProcess* pProcess)
-		: wxThreadEx(wxTHREAD_JOINABLE), m_pProcess(pProcess),
+		: wxThread(wxTHREAD_JOINABLE), m_pProcess(pProcess),
 		  m_pOwner(pOwner)
 	{
 	}
@@ -788,7 +787,7 @@ void CSftpControlSocket::OnTerminate(wxProcessEvent& event)
 
 	CControlSocket::DoClose();
 
-	m_pInputThread->Wait();
+	m_pInputThread->Wait(wxTHREAD_WAIT_BLOCK);
 	delete m_pInputThread;
 	m_pInputThread = 0;
 	m_pid = 0;
@@ -1996,7 +1995,7 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 
 	if (m_pInputThread)
 	{
-		wxThreadEx* pThread = m_pInputThread;
+		wxThread* pThread = m_pInputThread;
 		m_pInputThread = 0;
 		{
 			// Disable logging, fzsftp might have already closed itself.
@@ -2006,7 +2005,7 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 		m_inDestructor = true;
 		if (pThread)
 		{
-			pThread->Wait();
+			pThread->Wait(wxTHREAD_WAIT_BLOCK);
 			delete pThread;
 		}
 		if (!m_termindatedInDestructor)

@@ -1,8 +1,6 @@
 #ifndef __VOLUME_ENUMERATOR_H__
 #define __VOLUME_ENUMERATOR_H__
 
-#include <threadex.h>
-
 #include <list>
 
 // Class to enumerate volume labels of volumes assigned
@@ -25,7 +23,7 @@
 DECLARE_EVENT_TYPE(fzEVT_VOLUMEENUMERATED, -1)
 DECLARE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED, -1)
 
-class CVolumeDescriptionEnumeratorThread : protected wxThreadEx
+class CVolumeDescriptionEnumeratorThread final : protected wxThread
 {
 public:
 	CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler);

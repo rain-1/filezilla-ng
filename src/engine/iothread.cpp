@@ -17,7 +17,7 @@ wxEvent* CIOThreadEvent::Clone() const
 }
 
 CIOThread::CIOThread()
-	: wxThreadEx(wxTHREAD_JOINABLE), m_evtHandler(0)
+	: wxThread(wxTHREAD_JOINABLE), m_evtHandler(0)
 	, m_read()
 	, m_binary()
 	, m_pFile(0)
@@ -69,13 +69,13 @@ bool CIOThread::Create(wxFile* pFile, bool read, bool binary)
 	}
 
 	m_running = true;
-	wxThreadEx::Create();
-	wxThreadEx::Run();
+	wxThread::Create();
+	wxThread::Run();
 
 	return true;
 }
 
-wxThreadEx::ExitCode CIOThread::Entry()
+wxThread::ExitCode CIOThread::Entry()
 {
 	if (m_read)
 	{
@@ -308,7 +308,7 @@ void CIOThread::Destroy()
 	}
 	m_mutex.Unlock();
 
-	Wait();
+	Wait(wxTHREAD_WAIT_BLOCK);
 }
 
 int CIOThread::ReadFromFile(char* pBuffer, int maxLen)
