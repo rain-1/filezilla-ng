@@ -50,6 +50,9 @@ std::vector<t_entry> CDirectoryListingParserTest::m_entries;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CDirectoryListingParserTest);
 
+typedef CRefcountObject<wxString> R;
+typedef CSparseOptional<wxString> O;
+
 static int calcYear(int month, int day)
 {
 	const int cur_year = wxDateTime::GetCurrentYear();
@@ -76,10 +79,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("01-unix-std dir"),
 				512,
-				_T("dr-xr-xr-x"),
-				_T("root other"),
+				R(_T("dr-xr-xr-x")),
+				R(_T("root other")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(1994, 4, 8)
 			},
 			DEFAULT
@@ -91,10 +94,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("02-unix-std file"),
 				531,
-				_T("-rw-r--r--"),
-				_T("root other"),
+				R(_T("-rw-r--r--")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(3, 29), 3, 29, 3, 26)
 			},
 			DEFAULT
@@ -106,10 +109,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("03-unix-nogroup dir"),
 				512,
-				_T("dr-xr-xr-x"),
-				_T("root"),
+				R(_T("dr-xr-xr-x")),
+				R(_T("root")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(1994, 4, 8)
 			},
 			DEFAULT
@@ -121,10 +124,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("04-unix-std link"),
 				7,
-				_T("lrwxrwxrwx"),
-				_T("root other"),
+				R(_T("lrwxrwxrwx")),
+				R(_T("root other")),
 				CDirentry::flag_dir | CDirentry::flag_link,
-				_T("usr/bin"),
+				O(_T("usr/bin")),
 				CDateTime(calcYear(1, 25), 1, 25, 0, 17)
 			},
 			DEFAULT
@@ -138,10 +141,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("05-unix-date file"),
 				531,
-				_T("-rw-r--r--"),
-				_T("root other"),
+				R(_T("-rw-r--r--")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2000, 9, 26)
 			},
 			DEFAULT
@@ -152,10 +155,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("06-unix-date file"),
 				531,
-				_T("-rw-r--r--"),
-				_T("root other"),
+				R(_T("-rw-r--r--")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(9, 26), 9, 26, 13, 45)
 			},
 			DEFAULT
@@ -166,10 +169,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("07-unix-date file"),
 				531,
-				_T("-rw-r--r--"),
-				_T("root other"),
+				R(_T("-rw-r--r--")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2005, 6, 7, 21, 22)
 			},
 			DEFAULT
@@ -182,10 +185,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("08-unix-namedsize file"),
 				335 * 1024 / 10,
-				_T("-rw-r--r--"),
-				_T("root other"),
+				R(_T("-rw-r--r--")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(10, 5), 10, 5, 21, 22)
 			},
 			DEFAULT
@@ -199,10 +202,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("09-netware dir"),
 				512,
-				_T("d [R----F--]"),
-				_T("supervisor"),
+				R(_T("d [R----F--]")),
+				R(_T("supervisor")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(calcYear(1, 16), 1, 16, 18, 53)
 			},
 			DEFAULT
@@ -213,10 +216,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("10-netware file"),
 				214059,
-				_T("- [R----F--]"),
-				_T("rhesus"),
+				R(_T("- [R----F--]")),
+				R(_T("rhesus")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(10, 20), 10, 20, 15, 27)
 			},
 			DEFAULT
@@ -234,10 +237,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("11-netpresenz file"),
 				1392298,
-				_T("-------r--"),
-				_T("1391972"),
+				R(_T("-------r--")),
+				R(_T("1391972")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(1995, 11, 22)
 			},
 			DEFAULT
@@ -248,10 +251,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("12-netpresenz dir"),
 				2,
-				_T("drwxrwxr-x"),
-				_T("folder"),
+				R(_T("drwxrwxr-x")),
+				R(_T("folder")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(1996, 5, 10)
 			},
 			DEFAULT
@@ -263,10 +266,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("13-unix-domain file"),
 				531,
-				_T("-rw-r--r--"),
-				_T("group domain user"),
+				R(_T("-rw-r--r--")),
+				R(_T("group domain user")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(1, 29), 1, 29, 3, 26)
 			},
 			DEFAULT
@@ -284,10 +287,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("14-eplf file"),
 				280,
-				_T("755"),
-				_T(""),
+				R(_T("755")),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
@@ -300,10 +303,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("15-eplf dir"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir | 0,
-				_T(""),
+				O(),
 				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
@@ -317,10 +320,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("16-dos-dateambiguous dir"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2000, 4, 27, 12, 9)
 			},
 			DEFAULT
@@ -332,10 +335,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("17-dos-dateambiguous file"),
 				589,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2000, 4, 6, 15, 47)
 			},
 			DEFAULT
@@ -346,10 +349,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("18-dos-longyear dir"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2002, 9, 2, 18, 48)
 			},
 			DEFAULT
@@ -360,10 +363,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("19-dos-longyear file"),
 				9730,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2002, 9, 2, 19, 6)
 			},
 			DEFAULT
@@ -377,10 +380,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("20-unix-numerical file"),
 				12345,
-				_T("0100644"),
-				_T("500 101"),
+				R(_T("0100644")),
+				R(_T("500 101")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
@@ -394,10 +397,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("21-vshell-old file"),
 				206876,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2000, 4, 4, 21, 6)
 			},
 			DEFAULT
@@ -408,10 +411,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("22-vshell-old dir"),
 				0,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2002, 12, 12, 2, 13)
 			},
 			DEFAULT
@@ -424,10 +427,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("23-vshell-new file"),
 				9,
-				_T("-rwxr-xr-x"),
-				_T("user group"),
+				R(_T("-rwxr-xr-x")),
+				R(_T("user group")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2002, 10, 8, 9, 47)
 			},
 			DEFAULT
@@ -442,10 +445,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("24-os2 file"),
 				36611,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 4, 23, 10, 57)
 			},
 			DEFAULT
@@ -456,10 +459,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("25-os2 file"),
 				1123,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(1999, 7, 14, 12, 37)
 			},
 			DEFAULT
@@ -471,10 +474,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("26-os2 dir"),
 				0,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2003, 2, 11, 16, 15)
 			},
 			DEFAULT
@@ -486,10 +489,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("27-os2 dir"),
 				1123,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2000, 10, 5, 23, 38)
 			},
 			DEFAULT
@@ -503,10 +506,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("28-datetest-ger dir"),
 				2235,
-				_T("dr-xr-xr-x"),
-				_T("root other"),
+				R(_T("dr-xr-xr-x")),
+				R(_T("root other")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(calcYear(7, 26), 7, 26, 20, 10)
 			},
 			DEFAULT
@@ -517,10 +520,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("28b-datetest-hungarian dir"),
 				2235,
-				_T("dr-xr-xr-x"),
-				_T("root other"),
+				R(_T("dr-xr-xr-x")),
+				R(_T("root other")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(calcYear(9, 26), 9, 26, 20, 10)
 			},
 			DEFAULT
@@ -531,10 +534,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("29-datetest-ger file"),
 				2235,
-				_T("-r-xr-xr-x"),
-				_T("root other"),
+				R(_T("-r-xr-xr-x")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 10, 2)
 			},
 			DEFAULT
@@ -545,10 +548,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("30-datetest file"),
 				2235,
-				_T("-r-xr-xr-x"),
-				_T("root other"),
+				R(_T("-r-xr-xr-x")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(1999, 10, 12, 17, 12)
 			},
 			DEFAULT
@@ -559,10 +562,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("31-datetest file"),
 				2235,
-				_T("-r-xr-xr-x"),
-				_T("root other"),
+				R(_T("-r-xr-xr-x")),
+				R(_T("root other")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 4, 24, 17, 12)
 			},
 			DEFAULT
@@ -576,10 +579,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("32-datatest-japanese file"),
 				8473,
-				_T("-rw-r--r--"),
-				_T("root sys"),
+				R(_T("-rw-r--r--")),
+				R(_T("root sys")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 4, 18)
 			},
 			DEFAULT
@@ -592,10 +595,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("33-asian date file"),
 				0,
-				_T("-rwxrwxrwx"),
-				_T("root staff"),
+				R(_T("-rwxrwxrwx")),
+				R(_T("root staff")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 3, 20)
 			},
 			DEFAULT
@@ -606,10 +609,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("34-asian date file"),
 				2096,
-				_T("-r--r--r--"),
-				_T("root root"),
+				R(_T("-r--r--r--")),
+				R(_T("root root")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(8, 17), 8, 17, 8, 52)
 			},
 			DEFAULT
@@ -620,10 +623,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("35-dotted-date file"),
 				96,
-				_T("-r-xr-xr-x"),
-				_T("root root"),
+				R(_T("-r-xr-xr-x")),
+				R(_T("root root")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2004, 7, 15)
 			},
 			DEFAULT
@@ -637,10 +640,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("36-vms-dir"),
 				512,
-				_T("RWE,RWE,RE,RE"),
-				_T("root,root"),
+				R(_T("RWE,RWE,RE,RE")),
+				R(_T("root,root")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2001, 11, 19, 21, 41)
 			},
 			DEFAULT
@@ -652,10 +655,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("37-vms-file;1"),
 				79360,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 7, 2, 10, 30, 13)
 			},
 			DEFAULT
@@ -667,10 +670,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("38-vms-notime-file;1"),
 				1024,
-				_T("RWED,RWED,RE,"),
-				_T("IV2_XXX"),
+				R(_T("RWED,RWED,RE,")),
+				R(_T("IV2_XXX")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2000, 1, 7)
 			},
 			DEFAULT
@@ -682,10 +685,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("39-vms-notime-file;1"),
 				3072,
-				_T("RWED,RWED,RE,"),
-				_T("PRONAS"),
+				R(_T("RWED,RWED,RE,")),
+				R(_T("PRONAS")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2002, 7, 15)
 			},
 			DEFAULT
@@ -696,10 +699,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("40-vms-multiline-file;1"),
 				87436288,
-				_T("RWED,RWED,RE,"),
-				_T("FTP_CLIENT,SCOT"),
+				R(_T("RWED,RWED,RE,")),
+				R(_T("FTP_CLIENT,SCOT")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 4, 24, 8, 16, 15)
 			},
 			DEFAULT
@@ -710,10 +713,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("41-vms-multiline-file;1"),
 				5120,
-				_T("RWED,RWED,RE,"),
-				_T("FTP_CLIENT,SCOT"),
+				R(_T("RWED,RWED,RE,")),
+				R(_T("FTP_CLIENT,SCOT")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 7, 2, 10, 30, 8)
 			},
 			DEFAULT
@@ -725,10 +728,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("42-vms-alternate-field-order-file;1"),
 				512,
-				_T("RWE,RWE,RE,"),
-				_T("SUMMARY"),
+				R(_T("RWE,RWE,RE,")),
+				R(_T("SUMMARY")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2006, 8, 2, 13, 5)
 			},
 			DEFAULT
@@ -739,10 +742,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("43-vms-alternate-field-order-file;1"),
 				3229696,
-				_T("RWED,RWED,R,"),
-				_T(""),
+				R(_T("RWED,RWED,R,")),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(1994, 6, 17, 17, 25, 37)
 			},
 			DEFAULT
@@ -757,10 +760,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("44-ibm-as400 dir"),
 				77824,
-				_T(""),
-				_T("QSYS"),
+				R(),
+				R(_T("QSYS")),
 				CDirentry::flag_dir | 0,
-				_T(""),
+				O(),
 				CDateTime(2000, 2, 23, 15, 9, 55)
 			},
 			DEFAULT
@@ -771,10 +774,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("45-ibm-as400-date file"),
 				77824,
-				_T(""),
-				_T("QSYS"),
+				R(),
+				R(_T("QSYS")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2000, 2, 23, 15, 9, 55)
 			},
 			DEFAULT
@@ -786,10 +789,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("46-unix-concatsize file"),
 				123456,
-				_T("-r-xr-xr-x"),
-				_T("longowner longgroup"),
+				R(_T("-r-xr-xr-x")),
+				R(_T("longowner longgroup")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(2, 12), 2, 12, 17, 20)
 			},
 			DEFAULT
@@ -801,10 +804,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("47_unix_shortdatemonth file"),
 				4512,
-				_T("-r-xr-xr-x"),
-				_T("owner group"),
+				R(_T("-r-xr-xr-x")),
+				R(_T("owner group")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(1999, 6, 1)
 			},
 			DEFAULT
@@ -816,10 +819,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("48-nortel-wfftp-file"),
 				1014196,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2004, 6, 3, 10, 20, 3)
 			},
 			DEFAULT
@@ -831,10 +834,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("49-nortel-vxworks dir"),
 				2048,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir | 0,
-				_T(""),
+				O(),
 				CDateTime(1998, 2, 28, 5, 23, 30)
 			},
 			DEFAULT
@@ -846,10 +849,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("50-conent file"),
 				1294495,
-				_T("-C--E-----FTP"),
-				_T("B BCC3I1 7670"),
+				R(_T("-C--E-----FTP")),
+				R(_T("B BCC3I1 7670")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(calcYear(1, 13), 1, 13, 7, 42)
 			},
 			DEFAULT
@@ -862,10 +865,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("51-OS-9 dir"),
 				85920,
-				_T("d-ewrewr"),
-				_T("20.20"),
+				R(_T("d-ewrewr")),
+				R(_T("20.20")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2007, 3, 29)
 			},
 			DEFAULT
@@ -877,10 +880,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("52-swapped-daymonth dir"),
 				512,
-				_T("drwxr-xr-x"),
-				_T("user group"),
+				R(_T("drwxr-xr-x")),
+				R(_T("user group")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2004, 10, 1)
 			},
 			DEFAULT
@@ -891,10 +894,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("53-noownergroup file"),
 				12,
-				_T("-r--r--r--"),
-				_T(""),
+				R(_T("-r--r--r--")),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2005, 11, 11)
 			},
 			DEFAULT
@@ -906,10 +909,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("54-asian date year first dir"),
 				512,
-				_T("drwxr-xr-x"),
-				_T("root sys"),
+				R(_T("drwxr-xr-x")),
+				R(_T("root sys")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2005, 1, 6)
 			},
 			DEFAULT
@@ -921,10 +924,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("55-AS400.FILE"),
 				36864,
-				_T(""),
-				_T("QPGMR"),
+				R(),
+				R(_T("QPGMR")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2006, 9, 18, 14, 21, 26)
 			},
 			DEFAULT
@@ -936,10 +939,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("56-VMS-complex-size;1"),
 				2048,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2005, 9, 23, 14, 57, 7)
 			},
 			DEFAULT
@@ -951,10 +954,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("57-HP_NonStop"),
 				528,
-				_T("\"oooo\""),
-				_T("255, 0"),
+				R(_T("\"oooo\"")),
+				R(_T("255, 0")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2007, 4, 6, 14, 21, 18)
 			},
 			HPNONSTOP
@@ -966,10 +969,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("58-HP_NonStop"),
 				528,
-				_T("\"oooo\""),
-				_T("255,255"),
+				R(_T("\"oooo\"")),
+				R(_T("255,255")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2007, 4, 6, 14, 21, 18)
 			},
 			HPNONSTOP
@@ -981,10 +984,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("59-localized-date-dir"),
 				1024,
-				_T("drwxr-xr-x"),
-				_T("user sys"),
+				R(_T("drwxr-xr-x")),
+				R(_T("user sys")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(calcYear(1, 30), 1, 30, 12, 40)
 			},
 			DEFAULT
@@ -1004,10 +1007,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("60-MVS.FILE"),
 				100,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 5, 21)
 		},
 		DEFAULT
@@ -1018,10 +1021,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("61-MVS.DATASET"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2004, 3, 04)
 		},
 		DEFAULT
@@ -1032,10 +1035,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("62-MVS-NONEDATE.DATASET"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime()
 		},
 		DEFAULT
@@ -1046,10 +1049,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("63-MVS.DATASET"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2005, 6, 6)
 		},
 		DEFAULT
@@ -1060,10 +1063,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("64-mvs-file"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 		},
 		DEFAULT
@@ -1081,10 +1084,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("65-MVS-PDS-MEMBER"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 		},
 		MVS
@@ -1096,10 +1099,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("66-MVSPDSMEMBER"),
 				128,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2004, 6, 22, 16, 32)
 		},
 		MVS
@@ -1111,10 +1114,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("67-MVSPDSMEMBER2"),
 				45832,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 		},
 		MVS
@@ -1125,10 +1128,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("68-MVSPDSMEMBER3"),
 				45832,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			MVS
@@ -1140,10 +1143,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("69-SOME.FILE"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			MVS
@@ -1172,10 +1175,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("70-ZVMFILE.TRACE"),
 				6955,
-				_T(""),
-				_T("060191"),
+				R(),
+				R(_T("060191")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2005, 10, 4, 15, 28, 42)
 			},
 			ZVM
@@ -1186,10 +1189,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("71-unix-dateless"),
 				512,
-				_T("drwxr-xr-x"),
-				_T("slopri devlab"),
+				R(_T("drwxr-xr-x")),
+				R(_T("slopri devlab")),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			DEFAULT
@@ -1202,10 +1205,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("72-MLSD-file"),
 				1234,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
@@ -1220,10 +1223,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("73-MSV-TAPE.FILE"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			MVS
@@ -1234,10 +1237,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("74-MLSD-whitespace trailing\t "),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			DEFAULT
@@ -1248,10 +1251,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("\t 75-MLSD-whitespace leading"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			DEFAULT
@@ -1264,10 +1267,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("75 MLSD file with empty permissions"),
 				65718921,
-				_T("00"),
-				_T("1179 1179"),
+				R(_T("00")),
+				R(_T("1179 1179")),
 				0,
-				_T(""),
+				O(),
 				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
@@ -1278,10 +1281,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("76 MLSD symlink"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir | CDirentry::flag_link,
-				_T("/foo"),
+				O(_T("/foo")),
 				CDateTime()
 			},
 			DEFAULT
@@ -1292,10 +1295,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("76b MLSD symlink"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir | CDirentry::flag_link,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			DEFAULT
@@ -1307,10 +1310,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("77 MLSD file no trailing semicolon after facts < mlst-07"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			DEFAULT
@@ -1321,10 +1324,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("77 MLSD symlink notarget"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir | CDirentry::flag_link,
-				_T(""),
+				O(),
 				CDateTime()
 			},
 			DEFAULT
@@ -1337,10 +1340,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("adsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file"),
 				1365694195,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(utc, CDateTime::seconds)
 			},
 			DEFAULT
@@ -1353,10 +1356,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("79-MVS.FILE"),
 				100,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2003, 5, 21)
 		},
 		DEFAULT
@@ -1370,10 +1373,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("80-MVS.FILE"),
 				100,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				0,
-				_T(""),
+				O(),
 				CDateTime(2011, 8, 25)
 		},
 		DEFAULT
@@ -1387,10 +1390,10 @@ void CDirectoryListingParserTest::InitEntries()
 			{
 				_T("81-MVS.DIR"),
 				-1,
-				_T(""),
-				_T(""),
+				R(),
+				R(),
 				CDirentry::flag_dir,
-				_T(""),
+				O(),
 				CDateTime(2003, 5, 21)
 		},
 		DEFAULT
