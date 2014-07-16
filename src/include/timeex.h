@@ -48,6 +48,8 @@ public:
 	bool Set( int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1 );
 	bool ImbueTime( int hour, int minute, int second = -1, int millisecond = -1 );
 
+	static bool VerifyFormat(wxString const& fmt);
+
 private:
 	int CompareSlow( CDateTime const& op ) const;
 

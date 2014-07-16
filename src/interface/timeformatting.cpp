@@ -18,13 +18,20 @@ public:
 
 	void InitFormat()
 	{
-		const wxString& dateFormat = COptions::Get()->GetOption(OPTION_DATE_FORMAT);
-		const wxString& timeFormat = COptions::Get()->GetOption(OPTION_TIME_FORMAT);
+		wxString dateFormat = COptions::Get()->GetOption(OPTION_DATE_FORMAT);
+		wxString timeFormat = COptions::Get()->GetOption(OPTION_TIME_FORMAT);
 
 		if (dateFormat == _T("1"))
 			m_dateFormat = _T("%Y-%m-%d");
-		else if (!dateFormat.empty() && dateFormat[0] == '2')
-			m_dateFormat = dateFormat.Mid(1);
+		else if (!dateFormat.empty() && dateFormat[0] == '2') {
+			dateFormat = dateFormat.Mid(1);
+			if (CDateTime::VerifyFormat(dateFormat)) {
+				m_dateFormat = dateFormat;
+			}
+			else {
+				m_dateFormat = _T("%x");
+			}
+		}
 		else
 			m_dateFormat = _T("%x");
 
@@ -33,8 +40,15 @@ public:
 
 		if (timeFormat == _T("1"))
 			m_dateTimeFormat += _T("%H:%M");
-		else if (!timeFormat.empty() && timeFormat[0] == '2')
-			m_dateTimeFormat += timeFormat.Mid(1);
+		else if (!timeFormat.empty() && timeFormat[0] == '2') {
+			timeFormat = timeFormat.Mid(1);
+			if (CDateTime::VerifyFormat(timeFormat)) {
+				m_dateTimeFormat += timeFormat;
+			}
+			else {
+				m_dateTimeFormat += _T("%X");
+			}
+		}
 		else
 			m_dateTimeFormat += _T("%X");
 	}

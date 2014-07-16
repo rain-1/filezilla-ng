@@ -311,7 +311,47 @@ void CDateTime::clear()
 	t_ = wxDateTime();
 }
 
+#ifdef __VISUALC__
 
+namespace {
+extern "C" void NullInvalidParameterHandler(const wchar_t*, const wchar_t*, const wchar_t*, unsigned int, uintptr_t)
+{
+}
+
+struct CrtAssertSuppressor
+{
+	CrtAssertSuppressor()
+	{
+		oldError = _CrtSetReportMode(_CRT_ERROR, 0);
+		oldAssert = _CrtSetReportMode(_CRT_ASSERT, 0);
+		oldHandler = _set_invalid_parameter_handler(NullInvalidParameterHandler);
+	}
+
+	~CrtAssertSuppressor()
+	{
+		_set_invalid_parameter_handler(oldHandler);
+		_CrtSetReportMode(_CRT_ASSERT, oldAssert);
+		_CrtSetReportMode(_CRT_ERROR, oldError);
+	}
+
+	int oldError;
+	int oldAssert;
+	_invalid_parameter_handler oldHandler;
+};
+}
+#endif __VISUALC__
+
+bool CDateTime::VerifyFormat(wxString const& fmt)
+{
+	wxChar buf[4096];
+	tm *t = wxDateTime::GetTmNow();
+
+#ifdef __VISUALC__
+	CrtAssertSuppressor suppressor;
+#endif
+
+	return wxStrftime(buf, sizeof(buf), fmt, t) != 0;
+}
 
 CDateTime CMonotonicTime::m_lastTime = CDateTime::Now();
 int CMonotonicTime::m_lastOffset = 0;
