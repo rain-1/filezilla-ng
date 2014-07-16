@@ -751,7 +751,8 @@ bool CXmlFile::ParseData(char* data)
 	m_pDocument->SetCondenseWhiteSpace(false);
 	m_pDocument->Parse(data);
 
-	if (!m_pDocument->FirstChildElement(m_rootName)) {
+	m_pElement = m_pDocument->FirstChildElement(m_rootName);
+	if (!m_pElement) {
 		Close();
 		return false;
 	}
