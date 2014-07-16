@@ -129,8 +129,9 @@ CSocketEventDispatcher::CSocketEventDispatcher()
 
 CSocketEventDispatcher::~CSocketEventDispatcher()
 {
-	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
-		delete *iter;
+	for (auto const& pendingEvent : m_pending_events ) {
+		delete pendingEvent;
+	}
 }
 
 CSocketEventDispatcher& CSocketEventDispatcher::Get()
@@ -157,45 +158,41 @@ void CSocketEventDispatcher::RemovePending(const CSocketEventHandler* pHandler)
 {
 	wxCriticalSectionLocker lock(m_sync);
 
-	std::list<CSocketEvent*> keep;
-	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
-	{
-		if ((*iter)->GetSocketEventHandler() != pHandler)
-		{
-			keep.push_back(*iter);
-			continue;
+	auto remaining = m_pending_events.begin();
+	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter) {
+		if ((*iter)->GetSocketEventHandler() != pHandler) {
+			*remaining = *iter;
+			++remaining;
 		}
-
-		delete *iter;
+		else {
+			delete *iter;
+		}
 	}
-	m_pending_events.swap(keep);
+	m_pending_events.erase(remaining, m_pending_events.end());
 }
 
 void CSocketEventDispatcher::RemovePending(const CSocketEventSource* pSource)
 {
 	wxCriticalSectionLocker lock(m_sync);
 
-	std::list<CSocketEvent*> keep;
-	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
-	{
-		if ((*iter)->GetSocketEventSource() != pSource)
-		{
-			keep.push_back(*iter);
-			continue;
+	auto remaining = m_pending_events.begin();
+	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter) {
+		if ((*iter)->GetSocketEventSource() != pSource) {
+			*remaining = *iter;
+			++remaining;
 		}
-
-		delete *iter;
+		else {
+			delete *iter;
+		}
 	}
-	m_pending_events.swap(keep);
+	m_pending_events.erase(remaining, m_pending_events.end());
 }
 
 void CSocketEventDispatcher::UpdatePending(const CSocketEventHandler* pOldHandler, const CSocketEventSource* pOldSource, CSocketEventHandler* pNewHandler, CSocketEventSource* pNewSource)
 {
 	wxCriticalSectionLocker lock(m_sync);
 
-	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter)
-	{
-		CSocketEvent* evt = *iter;
+	for (auto const& evt : m_pending_events ) {
 		if (evt->GetSocketEventSource() != pOldSource || evt->GetSocketEventHandler() != pOldHandler)
 			continue;
 
@@ -208,8 +205,7 @@ bool CSocketEventDispatcher::ProcessEvent(wxEvent& event)
 {
 	m_sync.Enter();
 	m_inside_loop = true;
-	while (!m_pending_events.empty())
-	{
+	while (!m_pending_events.empty()) {
 		CSocketEvent *evt = m_pending_events.front();
 		m_pending_events.pop_front();
 
