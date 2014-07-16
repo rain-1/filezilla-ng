@@ -134,13 +134,13 @@ bool CDirectoryCache::LookupFile(CDirentry &entry, const CServer &server, const 
 	const CDirectoryListing &listing = cacheEntry.listing;
 
 	int i = listing.FindFile_CmpCase(file);
-	if (i != -1) {
+	if (i >= 0) {
 		entry = listing[i];
 		matchedCase = true;
 		return true;
 	}
-	listing.FindFile_CmpNoCase(file);
-	if (i != -1) {
+	i = listing.FindFile_CmpNoCase(file);
+	if (i >= 0) {
 		entry = listing[i];
 		matchedCase = false;
 		return true;
