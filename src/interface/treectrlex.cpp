@@ -13,11 +13,18 @@ wxTreeCtrlEx::wxTreeCtrlEx(wxWindow *parent, wxWindowID id /*=wxID_ANY*/,
 
 void wxTreeCtrlEx::SafeSelectItem(const wxTreeItemId& item)
 {
-	const wxTreeItemId old_selection = GetSelection();
+	if( !item ) {
+		m_setSelection = true;
+		UnselectAll();
+		m_setSelection = false;
+	}
+	else {
+		const wxTreeItemId old_selection = GetSelection();
 
-	m_setSelection = true;
-	SelectItem(item);
-	m_setSelection = false;
-	if (item && item != old_selection)
-		EnsureVisible(item);
+		m_setSelection = true;
+		SelectItem(item);
+		m_setSelection = false;
+		if (item != old_selection)
+			EnsureVisible(item);
+	}
 }
