@@ -458,7 +458,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 			continue;
 
 		if (m_dirs_only) {
-#ifdef _DIRENT_HAVE_D_TYPE
+#if HAVE_STRUCT_DIRENT_D_TYPE
 			if (entry->d_type == DT_LNK)
 			{
 				bool wasLink;
@@ -545,7 +545,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 			!strcmp(entry->d_name, ".."))
 			continue;
 
-#ifdef _DIRENT_HAVE_D_TYPE
+#if HAVE_STRUCT_DIRENT_D_TYPE
 		if (m_dirs_only)
 		{
 			if (entry->d_type == DT_LNK)
@@ -571,7 +571,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 
 		if (type == unknown) // Happens for example in case of permission denied
 		{
-#ifdef _DIRENT_HAVE_D_TYPE
+#if HAVE_STRUCT_DIRENT_D_TYPE
 			type = entry->d_type == DT_DIR ? dir : file;
 #else
 			type = file;

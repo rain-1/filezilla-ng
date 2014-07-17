@@ -484,6 +484,9 @@ if test "$buildmain" = "yes"; then
   AC_CHECK_FUNC(setenv, [AC_DEFINE([HAVE_SETENV], [1], [Define to 1 if setenv function is available.])], [])
   AC_CHECK_FUNC(putenv, [AC_DEFINE([HAVE_PUTENV], [1], [Define to 1 if putenv function is available.])], [])
 
+  # Some platforms have no d_type entry in their dirent structure
+  gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
+
   # SQLite3
   # -------
 
