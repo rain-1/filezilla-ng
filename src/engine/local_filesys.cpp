@@ -85,28 +85,26 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	// SHFileOperation accepts a list of null-terminated strings. Go through all
 	// paths to get the required buffer length
 
-	int len = 1; // String list terminated by empty string
+	size_t len = 1; // String list terminated by empty string
 
-	for (std::list<wxString>::const_iterator const_iter = dirsToVisit.begin(); const_iter != dirsToVisit.end(); ++const_iter)
-		len += const_iter->Length() + 1;
+	for (auto const& dir : dirsToVisit) {
+		len += dir.size() + 1;
+	}
 
 	// Allocate memory
 	wxChar* pBuffer = new wxChar[len];
 	wxChar* p = pBuffer;
 
-	for (auto iter = dirsToVisit.begin(); iter != dirsToVisit.end(); ++iter)
-	{
-		wxString& path = *iter;
-		if (path.Last() == wxFileName::GetPathSeparator())
-			path.RemoveLast();
-		if (GetFileType(path) == unknown)
+	for (auto& dir : dirsToVisit) {
+		if (dir.Last() == wxFileName::GetPathSeparator())
+			dir.RemoveLast();
+		if (GetFileType(dir) == unknown)
 			continue;
 
-		_tcscpy(p, path);
-		p += path.Length() + 1;
+		_tcscpy(p, dir);
+		p += dir.size() + 1;
 	}
-	if (p != pBuffer)
-	{
+	if (p != pBuffer) {
 		*p = 0;
 
 		// Now we can delete the files in the buffer
@@ -116,8 +114,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 		op.wFunc = FO_DELETE;
 		op.pFrom = pBuffer;
 
-		if (parent)
-		{
+		if (parent) {
 			// Move to trash if shift is not pressed, else delete
 			op.fFlags = wxGetKeyState(WXK_SHIFT) ? 0 : FOF_ALLOWUNDO;
 		}
@@ -130,17 +127,14 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 
 	return true;
 #else
-	if (parent)
-	{
+	if (parent) {
 		if (wxMessageBoxEx(_("Really delete all selected files and/or directories from your computer?"), _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, parent) != wxYES)
 			return true;
 	}
 
-	for (auto iter = dirsToVisit.begin(); iter != dirsToVisit.end(); ++iter)
-	{
-		wxString& path = *iter;
-		if (path.Last() == '/' && path != _T("/"))
-			path.RemoveLast();
+	for (auto& dir : dirsToVisit) {
+		if (dir.Last() == '/' && dir != _T("/"))
+			dir.RemoveLast();
 	}
 
 	bool encodingError = false;
@@ -148,32 +142,33 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	// Remember the directories to delete after recursing into them
 	std::list<wxString> dirsToDelete;
 
-	// Process all dirctories that have to be visited
-	while (!dirsToVisit.empty())
-	{
-		const wxString path = dirsToVisit.front();
-		dirsToVisit.pop_front();
+	CLocalFileSystem fs;
 
-		if (GetFileType(path) != dir)
-		{
+	// Process all dirctories that have to be visited
+	while (!dirsToVisit.empty()) {
+		auto const iter = dirsToVisit.begin();
+		wxString const& path = *iter;
+
+		if (GetFileType(path) != dir) {
 			wxRemoveFile(path);
+			dirsToVisit.erase(iter);
 			continue;
 		}
 
-		dirsToDelete.push_front(path);
+		dirsToDelete.splice(dirsToDelete.begin(), dirsToVisit, iter);
 
-		wxDir dir;
-		if (!dir.Open(path))
+		if (!fs.BeginFindFiles(path, false)) {
 			continue;
+		}
 
 		// Depending on underlying platform, wxDir does not handle
 		// changes to the directory contents very well.
-		// See bug [ 1946574 ]
+		// See http://trac.filezilla-project.org/ticket/3482
 		// To work around this, delete files after enumerating everything in current directory
 		std::list<wxString> filesToDelete;
 
 		wxString file;
-		for (bool found = dir.GetFirst(&file); found; found = dir.GetNext(&file)) {
+		while (fs.GetNextFile(file)) {
 			if (file.empty()) {
 				encodingError = true;
 				continue;
@@ -186,15 +181,18 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 			else
 				filesToDelete.push_back(fullName);
 		}
+		fs.EndFindFiles();
 
 		// Delete all files and links in current directory enumerated before
-		for (std::list<wxString>::const_iterator iter = filesToDelete.begin(); iter != filesToDelete.end(); ++iter)
+		for (auto const& file : filesToDelete) {
 			wxRemoveFile(*iter);
+		}
 	}
 
 	// Delete the now empty directories
-	for (std::list<wxString>::const_iterator iter = dirsToDelete.begin(); iter != dirsToDelete.end(); ++iter)
-		wxRmdir(*iter);
+	for (auto const& dir : dirsToDelete) {
+		wxRmdir(dir);
+	}
 
 	return !encodingError;
 #endif
@@ -453,15 +451,13 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 		return false;
 
 	struct dirent* entry;
-	while ((entry = readdir(m_dir)))
-	{
+	while ((entry = readdir(m_dir))) {
 		if (!entry->d_name[0] ||
 			!strcmp(entry->d_name, ".") ||
 			!strcmp(entry->d_name, ".."))
 			continue;
 
-		if (m_dirs_only)
-		{
+		if (m_dirs_only) {
 #ifdef _DIRENT_HAVE_D_TYPE
 			if (entry->d_type == DT_LNK)
 			{
