@@ -185,7 +185,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 
 		// Delete all files and links in current directory enumerated before
 		for (auto const& file : filesToDelete) {
-			wxRemoveFile(*iter);
+			wxRemoveFile(file);
 		}
 	}
 
