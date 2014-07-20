@@ -1,4 +1,4 @@
-SUBDIRS = 16x16 32x32 cyril blukis lone minimal opencrystal tango
+SUBDIRS = 16x16 32x32 cyril blukis lone minimal opencrystal sun tango
 
 CLEANFILES = filezilla.o
 

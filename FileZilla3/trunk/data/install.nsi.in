@@ -952,6 +952,7 @@ ${MementoSection} "Icon sets" SecIconSets
   !insertmacro INSTALLICONSET lone
   !insertmacro INSTALLICONSET minimal
   !insertmacro INSTALLICONSET opencrystal
+  !insertmacro INSTALLICONSET sun
   !insertmacro INSTALLICONSET tango
 
 ${MementoSectionEnd}
@@ -1285,6 +1286,7 @@ Section "Uninstall"
   !insertmacro UNINSTALLICONSET lone
   !insertmacro UNINSTALLICONSET minimal
   !insertmacro UNINSTALLICONSET opencrystal
+  !insertmacro UNINSTALLICONSET sun
   !insertmacro UNINSTALLICONSET tango
 
 !if "@FILEZILLA_LINGUAS@" != ""
