@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0 (2014-07-21)
+
++ Added Lao translation
++ Added an additional icon set
++ OS X: Holding modifier key while clicking Site Manager toolbar icon now shows the site dropdown menu
+- MSW: Fix assertion when entering UNC paths
+- Fix button layout of editing dialogs
+- *nix, OS X: Small performance improvement recursing through local directories
+
 3.9.0-rc3 (2014-07-16)
 
 - OS X: Fix random crashes if adding text to the message log
