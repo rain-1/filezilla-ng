@@ -330,10 +330,10 @@ std::string CInitializer::GetUnadjustedSettingsDir()
 {
 	std::string cfg = TryDirectory("XDG_CONFIG_HOME", "filezilla/", true);
 	if( cfg.empty() ) {
-		cfg = TryDirectory("HOME", ".filezilla/", true);
+		cfg = TryDirectory("HOME", ".config/filezilla/", true);
 	}
 	if( cfg.empty() ) {
-		cfg = TryDirectory("HOME", ".config/filezilla/", true);
+		cfg = TryDirectory("HOME", ".filezilla/", true);
 	}
 	if( cfg.empty() ) {
 		cfg = TryDirectory("XDG_CONFIG_HOME", "filezilla/", false);
