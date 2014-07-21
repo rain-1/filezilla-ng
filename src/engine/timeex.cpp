@@ -339,7 +339,7 @@ struct CrtAssertSuppressor
 	_invalid_parameter_handler oldHandler;
 };
 }
-#endif __VISUALC__
+#endif
 
 bool CDateTime::VerifyFormat(wxString const& fmt)
 {
