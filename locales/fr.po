@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-16 14:56+0200\n"
+"POT-Creation-Date: 2014-07-21 16:26+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -654,7 +654,7 @@ msgstr "&Nouveau"
 msgid "&New Site"
 msgstr "&Nouveau Site"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1794
+#: ../../locales/../src/interface/Mainfrm.cpp:1803
 msgid "&New version available!"
 msgstr "&Nouvelle version disponible !"
 
@@ -965,7 +965,7 @@ msgstr "&Identifiant :"
 msgid "&Username:"
 msgstr "&Identifiant :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1788
+#: ../../locales/../src/interface/Mainfrm.cpp:1797
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -2018,7 +2018,7 @@ msgstr "Supprimer les informations de &reconnexion"
 msgid "Clear &transfer queue"
 msgstr "Supprimer la file d'a&ttente"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:150
+#: ../../locales/../src/interface/quickconnectbar.cpp:148
 msgid "Clear history"
 msgstr "Supprimer l'historique"
 
@@ -2030,7 +2030,7 @@ msgstr "Supprimer l'historique"
 msgid "Clear private data"
 msgstr "Suppression des données personnelles"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:149
+#: ../../locales/../src/interface/quickconnectbar.cpp:147
 msgid "Clear quickconnect bar"
 msgstr "Vider la barre de connexion rapide"
 
@@ -2180,7 +2180,7 @@ msgstr "Configuration de FileZilla et de votre réseau"
 msgid "Confirm deletion"
 msgstr "Confirmer la suppression"
 
-#: ../../locales/../src/engine/local_filesys.cpp:135
+#: ../../locales/../src/engine/local_filesys.cpp:131
 #: ../../locales/../src/interface/LocalListView.cpp:1698
 #: ../../locales/../src/interface/LocalListView.cpp:1817
 #: ../../locales/../src/interface/RemoteListView.cpp:1460
@@ -2193,7 +2193,7 @@ msgstr "Confirmation requise"
 msgid "Congratulations, your configuration seems to be working."
 msgstr "Félicitations, votre configuration semble fonctionnelle."
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:148
+#: ../../locales/../src/interface/quickconnectbar.cpp:146
 msgid "Connect bypassing proxy settings"
 msgstr "Connexion en ignorant les paramètres du Proxy"
 
@@ -2551,7 +2551,7 @@ msgstr "Impossible d'ouvrir le journal d'événements : %s"
 msgid "Could not parse remote path."
 msgstr "Impossible d'analyser le chemin distant."
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:85
+#: ../../locales/../src/interface/quickconnectbar.cpp:83
 msgid "Could not parse server address:"
 msgstr "Impossible d'analyser l'adresse du serveur :"
 
@@ -2953,7 +2953,7 @@ msgstr "Dossier"
 
 #: resources.h:602 resources.h:889 resources.h:1023
 #: ../../locales/../src/interface/filelistctrl.cpp:471
-#: ../../locales/../src/interface/Mainfrm.cpp:2356
+#: ../../locales/../src/interface/Mainfrm.cpp:2365
 msgid "Directory comparison"
 msgstr "Comparaison de dossier"
 
@@ -3491,8 +3491,8 @@ msgstr "FTP - Protocole de Transfert de Fichiers avec chiffrement optionnel"
 msgid "FTP - Insecure File Transfer Protocol"
 msgstr "FTP - Protocole de Transfert de Fichiers non sécurisé"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:69
-#: ../../locales/../src/interface/quickconnectbar.cpp:205
+#: ../../locales/../src/interface/quickconnectbar.cpp:67
+#: ../../locales/../src/interface/quickconnectbar.cpp:203
 msgid "FTP Engine not initialized, can't connect"
 msgstr "Le moteur FTP n'est pas initialisé, impossible de se connecter"
 
@@ -3827,8 +3827,8 @@ msgid "File would transfer with binary data type."
 msgstr "Transfert de fichier avec type de données binaires."
 
 #: ../../locales/../src/interface/FileZilla.cpp:500
-#: ../../locales/../src/interface/quickconnectbar.cpp:69
-#: ../../locales/../src/interface/quickconnectbar.cpp:205
+#: ../../locales/../src/interface/quickconnectbar.cpp:67
+#: ../../locales/../src/interface/quickconnectbar.cpp:203
 msgid "FileZilla Error"
 msgstr "Erreur de FileZilla"
 
@@ -3844,7 +3844,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla est déjà connecté à un serveur."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1536
+#: ../../locales/../src/interface/Mainfrm.cpp:1545
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla doit être redémarré pour que le changement de langue prenne effet."
@@ -4514,7 +4514,7 @@ msgid "Invalid port given. The port has to be a value from 1 to 65535."
 msgstr "Port spécifié invalide. Le port doit être compris entre 1 et 65535."
 
 #: ../../locales/../src/engine/server.cpp:91
-#: ../../locales/../src/interface/quickconnectbar.cpp:125
+#: ../../locales/../src/interface/quickconnectbar.cpp:123
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP,\n"
@@ -4623,7 +4623,7 @@ msgstr "La &plus basse"
 msgid "Language"
 msgstr "Langue"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1536
+#: ../../locales/../src/interface/Mainfrm.cpp:1545
 msgid "Language changed"
 msgstr "Langue modifiée"
 
@@ -4849,7 +4849,7 @@ msgid "Memory allocation failure"
 msgstr "Échec de l'allocation de mémoire"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:358
-#: ../../locales/../src/interface/Mainfrm.cpp:1890
+#: ../../locales/../src/interface/Mainfrm.cpp:1899
 msgid "Message log"
 msgstr "Journal des événements"
 
@@ -5362,7 +5362,7 @@ msgstr "La commande PORT a été corrompue par le routeur ou le pare-feu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssif (recommandé)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2516
+#: ../../locales/../src/interface/Mainfrm.cpp:2525
 msgid "Parameter not a valid URL"
 msgstr "Le paramètre n'est pas une URL invalide"
 
@@ -5406,7 +5406,7 @@ msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
 "Le chemin ne peut pas être créé pour le dossier %s et le sous-dossier %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2469
+#: ../../locales/../src/interface/Mainfrm.cpp:2478
 msgid "Path not found:"
 msgstr "Chemin introuvable :"
 
@@ -5984,7 +5984,7 @@ msgstr ""
 "Voulez-vous vraiment supprimer tous les fichiers et/ou dossiers sélectionnés "
 "du serveur ?"
 
-#: ../../locales/../src/engine/local_filesys.cpp:135
+#: ../../locales/../src/engine/local_filesys.cpp:131
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr ""
 "Voulez-vous vraiment supprimer tous les fichiers et/ou dossiers sélectionnés "
@@ -6679,7 +6679,7 @@ msgstr "Afficher le contenu b&rut du dossier"
 msgid "Show &welcome dialog..."
 msgstr "Afficher le dialogue de &bienvenue..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2359
+#: ../../locales/../src/interface/Mainfrm.cpp:2368
 msgid "Show both directory trees and continue comparing?"
 msgstr "Afficher les arborescences des 2 côtés et continuer la comparaison ?"
 
@@ -7004,8 +7004,8 @@ msgstr "Navigation synchronisée"
 msgid "Synchronized browsing has been disabled."
 msgstr "La navigation synchronisée a été désactivée."
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:88
-#: ../../locales/../src/interface/quickconnectbar.cpp:126
+#: ../../locales/../src/interface/quickconnectbar.cpp:86
+#: ../../locales/../src/interface/quickconnectbar.cpp:124
 msgid "Syntax error"
 msgstr "Erreur de syntaxe"
 
@@ -7014,8 +7014,8 @@ msgstr "Erreur de syntaxe"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2471
-#: ../../locales/../src/interface/Mainfrm.cpp:2518
+#: ../../locales/../src/interface/Mainfrm.cpp:2480
+#: ../../locales/../src/interface/Mainfrm.cpp:2527
 msgid "Syntax error in command line"
 msgstr "Erreur de syntaxe dans la ligne de commande"
 
@@ -7132,6 +7132,8 @@ msgstr "La connexion est chiffrée. Cliquez sur l'icône pour plus de détails."
 msgid ""
 "The custom date format is invalid or contains unsupported format specifiers."
 msgstr ""
+"Le format personnalisé de la date est invalide ou contient un prescripteur "
+"de format non pris en charge."
 
 #: ../../locales/../src/interface/settings/optionspage_ftpproxy.cpp:89
 msgid "The custom login sequence cannot be empty."
@@ -7141,6 +7143,8 @@ msgstr "La séquence d'identification personnalisée ne peut pas être vide."
 msgid ""
 "The custom time format is invalid or contains unsupported format specifiers."
 msgstr ""
+"Le format personnalisé de l'heure est invalide ou contient un prescripteur "
+"de format non pris en charge."
 
 #: ../../locales/../src/engine/transfersocket.cpp:169
 #, c-format
@@ -7542,13 +7546,13 @@ msgstr ""
 msgid "Title:"
 msgstr "Titre :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2357
+#: ../../locales/../src/interface/Mainfrm.cpp:2366
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Pour comparer des dossiers, les listes de fichiers doivent être alignées des "
 "deux côtés."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2358
+#: ../../locales/../src/interface/Mainfrm.cpp:2367
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Pour ce faire, les arborescences doivent être toutes deux visibles ou "

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-16 14:56+0200\n"
-"PO-Revision-Date: 2014-07-16 06:05+0300\n"
+"POT-Creation-Date: 2014-07-21 16:26+0200\n"
+"PO-Revision-Date: 2014-07-16 22:21+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -670,7 +670,7 @@ msgstr "&جديد"
 msgid "&New Site"
 msgstr "&موقع جديد"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1794
+#: ../../locales/../src/interface/Mainfrm.cpp:1803
 msgid "&New version available!"
 msgstr "يتوفر &نسخة جديدة"
 
@@ -979,7 +979,7 @@ msgstr "&المستخدم:"
 msgid "&Username:"
 msgstr "&المستخدم:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1788
+#: ../../locales/../src/interface/Mainfrm.cpp:1797
 #, c-format
 msgid "&Version %s"
 msgstr "ال&نسخة %s"
@@ -1994,7 +1994,7 @@ msgstr "مسح معلومات &إعادة الإتصال"
 msgid "Clear &transfer queue"
 msgstr "مسح &قائمة إنتظار الإرسال"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:150
+#: ../../locales/../src/interface/quickconnectbar.cpp:148
 msgid "Clear history"
 msgstr "مسح المحفوظات"
 
@@ -2006,7 +2006,7 @@ msgstr "مسح المحفوظات"
 msgid "Clear private data"
 msgstr "مسح البيانات الخصوصية"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:149
+#: ../../locales/../src/interface/quickconnectbar.cpp:147
 msgid "Clear quickconnect bar"
 msgstr "مسح شريط الاتصال السريع"
 
@@ -2156,7 +2156,7 @@ msgstr "تكوين FileZilla و شبكتك"
 msgid "Confirm deletion"
 msgstr "تأكيد الحذف"
 
-#: ../../locales/../src/engine/local_filesys.cpp:135
+#: ../../locales/../src/engine/local_filesys.cpp:131
 #: ../../locales/../src/interface/LocalListView.cpp:1698
 #: ../../locales/../src/interface/LocalListView.cpp:1817
 #: ../../locales/../src/interface/RemoteListView.cpp:1460
@@ -2169,7 +2169,7 @@ msgstr "التأكيد مطلوب"
 msgid "Congratulations, your configuration seems to be working."
 msgstr "مبروك , يبدو أن إعداداتك تعمل"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:148
+#: ../../locales/../src/interface/quickconnectbar.cpp:146
 msgid "Connect bypassing proxy settings"
 msgstr "إعدادات تجاوز إتصال ملقم الوكيل"
 
@@ -2512,7 +2512,7 @@ msgstr "تعذر فتح ملف السجل: %s"
 msgid "Could not parse remote path."
 msgstr "تعذر تحليل المسار البعيد"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:85
+#: ../../locales/../src/interface/quickconnectbar.cpp:83
 msgid "Could not parse server address:"
 msgstr "تعذر تحليل عنوان الخادم:"
 
@@ -2900,7 +2900,7 @@ msgstr "الدليل"
 
 #: resources.h:602 resources.h:889 resources.h:1023
 #: ../../locales/../src/interface/filelistctrl.cpp:471
-#: ../../locales/../src/interface/Mainfrm.cpp:2356
+#: ../../locales/../src/interface/Mainfrm.cpp:2365
 msgid "Directory comparison"
 msgstr "مقارنة الأدلة"
 
@@ -3424,8 +3424,8 @@ msgstr "FTP - بروتوكول نقل الملفات مع تشفير إختيا�
 msgid "FTP - Insecure File Transfer Protocol"
 msgstr "FTP - بروتوكول نقل الغير آمن للملفات"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:69
-#: ../../locales/../src/interface/quickconnectbar.cpp:205
+#: ../../locales/../src/interface/quickconnectbar.cpp:67
+#: ../../locales/../src/interface/quickconnectbar.cpp:203
 msgid "FTP Engine not initialized, can't connect"
 msgstr "لم يتم تهيئة محرك FTP ، لا يمكن الإتصال"
 
@@ -3740,8 +3740,8 @@ msgid "File would transfer with binary data type."
 msgstr "قد يرسل الملف بنوع بيانات ثنائية"
 
 #: ../../locales/../src/interface/FileZilla.cpp:500
-#: ../../locales/../src/interface/quickconnectbar.cpp:69
-#: ../../locales/../src/interface/quickconnectbar.cpp:205
+#: ../../locales/../src/interface/quickconnectbar.cpp:67
+#: ../../locales/../src/interface/quickconnectbar.cpp:203
 msgid "FileZilla Error"
 msgstr "خطأ FileZilla"
 
@@ -3756,7 +3756,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "متصل مسبقا إلى خادم ما FileZilla"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1536
+#: ../../locales/../src/interface/Mainfrm.cpp:1545
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "يحتاج FileZilla إلى إعادة التشغيل لتغيير اللغة لتصبح سارية المفعول"
 
@@ -4390,7 +4390,7 @@ msgid "Invalid port given. The port has to be a value from 1 to 65535."
 msgstr "تم أدخال منفذ غير صالح ، قيمة المنفذ يجب ان تكون بين 1 الى 65535"
 
 #: ../../locales/../src/engine/server.cpp:91
-#: ../../locales/../src/interface/quickconnectbar.cpp:125
+#: ../../locales/../src/interface/quickconnectbar.cpp:123
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP,\n"
@@ -4497,7 +4497,7 @@ msgstr "الأ&قل"
 msgid "Language"
 msgstr "اللغة"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1536
+#: ../../locales/../src/interface/Mainfrm.cpp:1545
 msgid "Language changed"
 msgstr "تم تغيير اللغة"
 
@@ -4713,7 +4713,7 @@ msgid "Memory allocation failure"
 msgstr "فشل في تخصيص الذاكرة"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:358
-#: ../../locales/../src/interface/Mainfrm.cpp:1890
+#: ../../locales/../src/interface/Mainfrm.cpp:1899
 msgid "Message log"
 msgstr "سجل الرسائل"
 
@@ -5207,7 +5207,7 @@ msgstr "تم تحريف الأمر PORT بواسطة جهاز التوجيه أ�
 msgid "Pa&ssive (recommended)"
 msgstr "&سلبي (مستحسن)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2516
+#: ../../locales/../src/interface/Mainfrm.cpp:2525
 msgid "Parameter not a valid URL"
 msgstr "المعيار ليس رابط صالح"
 
@@ -5250,7 +5250,7 @@ msgstr "مسار"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "لا يمكن بناء المسار للمجلد %s و للمجلد الفرعي %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2469
+#: ../../locales/../src/interface/Mainfrm.cpp:2478
 msgid "Path not found:"
 msgstr "المسار غير موجود"
 
@@ -5805,7 +5805,7 @@ msgstr "هل تريد حذف فعلا %s و %s من الخادم؟"
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الخادم؟"
 
-#: ../../locales/../src/engine/local_filesys.cpp:135
+#: ../../locales/../src/engine/local_filesys.cpp:131
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr "هل تريد فهلا حذف كافة الملفات و/أو المجلدات المحددة من الكمبيوتر؟"
 
@@ -6496,7 +6496,7 @@ msgstr "إظهار &قائمة الدليل الخام"
 msgid "Show &welcome dialog..."
 msgstr "إظهار لائحة &مرحبا بك..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2359
+#: ../../locales/../src/interface/Mainfrm.cpp:2368
 msgid "Show both directory trees and continue comparing?"
 msgstr "إظهار تفرع الدليل و متابعة المقارنة ؟"
 
@@ -6811,8 +6811,8 @@ msgstr "تصفح متزامن"
 msgid "Synchronized browsing has been disabled."
 msgstr "تم تعطيل التصفح المتزامن"
 
-#: ../../locales/../src/interface/quickconnectbar.cpp:88
-#: ../../locales/../src/interface/quickconnectbar.cpp:126
+#: ../../locales/../src/interface/quickconnectbar.cpp:86
+#: ../../locales/../src/interface/quickconnectbar.cpp:124
 msgid "Syntax error"
 msgstr "خطأ فى بناء الجملة"
 
@@ -6821,8 +6821,8 @@ msgstr "خطأ فى بناء الجملة"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2471
-#: ../../locales/../src/interface/Mainfrm.cpp:2518
+#: ../../locales/../src/interface/Mainfrm.cpp:2480
+#: ../../locales/../src/interface/Mainfrm.cpp:2527
 msgid "Syntax error in command line"
 msgstr "خطأ فى بناء الجملة في سطر الأمر"
 
@@ -6937,7 +6937,7 @@ msgstr "الإتصال مشفر . أنقر على أيقونة للتفاصيل"
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:75
 msgid ""
 "The custom date format is invalid or contains unsupported format specifiers."
-msgstr ""
+msgstr "تنسيق التاريخ المخصص غير صالح أو يحتوي على محددات تنسيق غير معتمدة."
 
 #: ../../locales/../src/interface/settings/optionspage_ftpproxy.cpp:89
 msgid "The custom login sequence cannot be empty."
@@ -6946,7 +6946,7 @@ msgstr "سلسلة تسجيل الدخول المخصصة لا يمكن أن ت�
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:85
 msgid ""
 "The custom time format is invalid or contains unsupported format specifiers."
-msgstr ""
+msgstr "تنسيق الوقت المخصص غير صالح أو يحتوي على محددات تنسيق غير معتمدة."
 
 #: ../../locales/../src/engine/transfersocket.cpp:169
 #, c-format
@@ -7331,11 +7331,11 @@ msgstr ""
 msgid "Title:"
 msgstr "العنوان:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2357
+#: ../../locales/../src/interface/Mainfrm.cpp:2366
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "لمقارنة الأدلة ، يجب محاذاة كلتا قائمتي الملف"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2358
+#: ../../locales/../src/interface/Mainfrm.cpp:2367
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "لعمل هذا، يجب إظهار أو إخفاء كلا التفرعين للدليل معا"
 
@@ -8230,6 +8230,3 @@ msgstr "ملف قابل للكتابة للعام"
 #: resources.h:126
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
-
-#~ msgid "Cannot load file, not a valid XML file."
-#~ msgstr "لا يمكن تحميل الملف ، ليس ملف XML صالح"
