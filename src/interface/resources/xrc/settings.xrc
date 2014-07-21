@@ -303,12 +303,14 @@
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>&amp;Highest available port:</label>
+                          <maxlength>5</maxlength>
                         </object>
                         <flag>wxALIGN_CENTRE_VERTICAL</flag>
                       </object>
                       <object class="sizeritem">
                         <object class="wxTextCtrl" name="ID_HIGHESTPORT">
                           <size>50,-1</size>
+                          <maxlength>5</maxlength>
                         </object>
                       </object>
                       <vgap>5</vgap>
@@ -735,6 +737,7 @@
                   <object class="sizeritem">
                     <object class="wxTextCtrl" name="ID_PROXY_PORT">
                       <size>50,-1</size>
+                      <maxlength>5</maxlength>
                     </object>
                     <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
