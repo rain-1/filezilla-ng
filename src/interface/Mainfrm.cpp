@@ -1461,8 +1461,17 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 		m_pMenuBar->UpdateBookmarkMenu();
 }
 
-void CMainFrame::OnSiteManager(wxCommandEvent&)
+void CMainFrame::OnSiteManager(wxCommandEvent& e)
 {
+#ifdef __WXMAC__
+	if (wxGetKeyState(WXK_SHIFT) ||
+		wxGetKeyState(WXK_ALT) ||
+		wxGetKeyState(WXK_CONTROL))
+	{
+		OnSitemanagerDropdown(e);
+		return;
+	}
+#endif
 	OpenSiteManager();
 }
 
