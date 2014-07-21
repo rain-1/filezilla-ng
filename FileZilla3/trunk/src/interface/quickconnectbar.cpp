@@ -56,8 +56,6 @@ bool CQuickconnectBar::Create(CMainFrame* pParent)
 		return false;
 	}
 
-	m_pPort->SetMaxLength(5);
-
 	return true;
 }
 

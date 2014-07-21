@@ -81,6 +81,7 @@ You can also enter complete URLs in the form protocol://user:pass@host:port here
               <style>wxTE_PROCESS_ENTER</style>
               <tooltip>Enter the port on which the server listens.
 The default for FTP is 21, the default for SFTP is 22.</tooltip>
+              <maxlength>5</maxlength>
             </object>
           </object>
           <object class="sizeritem">
