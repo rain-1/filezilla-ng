@@ -3,8 +3,15 @@
 set -e
 
 minify=
-if [ "$1" = "-m" ]; then
-  minify=1
+embed=
+
+while echo "$1" | grep '^-'; do
+  if [ "$1" = "-m" ]; then
+    minify=1
+  fi
+  if [ "$1" = "-e" ]; then
+    embed=1
+  fi
   shift
 fi
 
@@ -22,6 +29,11 @@ do_clean() {
     mv "$tmpfile" "$outfile"
   elif [ "$infile" != "$outfile" ]; then
     cp "$infile" "$outfile"
+  fi
+
+  if[ "$embed" = "1" ]; then
+    cat "$outfile" | sed -e 's/\(<?[^>]*>\)\?<resource[^>]*>//g' | sed -e 's/<\/resource>//g' > "$tmpfile"
+    mv "$tmpfile" "$outfile"
   fi
 
   # Remove newlines and lines containing only spaces from all given files
