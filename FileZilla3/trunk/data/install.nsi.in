@@ -858,9 +858,16 @@ Section "FileZilla Client" SecMain
   File "..\src\putty\${LT_EXEDIR}fzputtygen.exe"
 
   # MinGW runtime libraries
-  File "${srcdir}\libgcc_s_sjlj-1.dll"
-  File "${srcdir}\libstdc++-6.dll"
-  File "${srcdir}\libwinpthread-1.dll"
+
+  #  First get rid of remnants
+  !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libgcc_s_sjlj-1.dll"
+  !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libstdc++-6.dll"
+  !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libwinpthread-1.dll"
+  
+  #  Now install new version of runtime
+  !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${srcdir}\libgcc_s_sjlj-1.dll" "$INSTDIR\libgcc_s_sjlj-1.dll" "$INSTDIR"
+  !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${srcdir}\libstdc++-6.dll"     "$INSTDIR\libstdc++-6.dll"     "$INSTDIR"
+  !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${srcdir}\libwinpthread-1.dll" "$INSTDIR\libwinpthread-1.dll" "$INSTDIR"
 
   File "${top_srcdir}\GPL.html"
   File "${top_srcdir}\NEWS"
@@ -1262,9 +1269,9 @@ Section "Uninstall"
   Delete "$INSTDIR\fzputtygen.exe"
 
   # MinGW runtime libraries
-  Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
-  Delete "$INSTDIR\libstdc++-6.dll"
-  Delete "$INSTDIR\libwinpthread-1.dll"
+  !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libgcc_s_sjlj-1.dll"
+  !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libstdc++-6.dll"
+  !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libwinpthread-1.dll"
 
   Delete "$INSTDIR\GPL.html"
   Delete "$INSTDIR\NEWS"
