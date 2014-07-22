@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0.1 (2014-07-22)
+
+- MSW: Fix installation issue with locked DLLs affecting users of 32bit Windows
+
 3.9.0 (2014-07-21)
 
 + Added Lao translation
