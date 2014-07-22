@@ -631,6 +631,7 @@ void CUpdater::ParseData()
 				b->size_ = l;
 				b->hash_ = hash;
 
+				// @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
 				log_ += wxString::Format(_("Found new %s %s\n"), type, b->version_);
 			}
 		}
