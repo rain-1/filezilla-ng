@@ -1341,7 +1341,7 @@ void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	CServerPath newdir = MenuMkdir();
 	if (!newdir.empty()) {
-		m_pState->ChangeRemoteDir(newdir);
+		m_pState->ChangeRemoteDir(newdir, wxString(), 0, true);
 	}
 }
 
