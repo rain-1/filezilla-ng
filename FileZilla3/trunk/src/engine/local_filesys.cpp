@@ -39,6 +39,9 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileType(const wxStri
 	if (result == INVALID_FILE_ATTRIBUTES)
 		return unknown;
 
+	if (result & FILE_ATTRIBUTE_REPARSE_POINT)
+		return link;
+
 	if (result & FILE_ATTRIBUTE_DIRECTORY)
 		return dir;
 
@@ -231,6 +234,12 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 
 	if (mode)
 		*mode = (int)attributes.dwFileAttributes;
+
+	if (attributes.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
+		isLink = true;
+
+		// FIXME: Follow the reparse point
+	}
 
 	if (attributes.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 	{
@@ -507,7 +516,8 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 			continue;
 		name = m_find_data.cFileName;
 
-		isLink = false;
+		// FIXME: Follow the reparse point
+		isLink = (m_find_data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) != 0;
 
 		if (modificationTime)
 			ConvertFileTimeToCDateTime(*modificationTime, m_find_data.ftLastWriteTime);
@@ -651,14 +661,20 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 #endif
 }
 
-wxLongLong CLocalFileSystem::GetSize(const wxString& path)
+wxLongLong CLocalFileSystem::GetSize(wxString const& path, bool* isLink)
 {
 	wxLongLong ret = -1;
 	bool tmp;
-	local_fileType t = GetFileInfo(path, tmp, &ret, 0, 0);
+	local_fileType t = GetFileInfo(path, isLink ? *isLink : tmp, &ret, 0, 0);
 	if( t != file ) {
 		ret = -1;
 	}
 
 	return ret;
+}
+
+wxString CLocalFileSystem::GetSymbolicLinkTarget(wxString const& path)
+{
+	wxFAIL;
+	return wxString();
 }
