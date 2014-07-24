@@ -32,7 +32,7 @@ public:
 	static enum local_fileType GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int* mode);
 
 	// Shortcut, returns -1 on error.
-	static wxLongLong GetSize(const wxString& path);
+	static wxLongLong GetSize(wxString const& path, bool *isLink = 0);
 
 	// If parent window is given, display confirmation dialog
 	// Returns false iff there's an encoding error, e.g. program
@@ -47,6 +47,9 @@ public:
 
 	static CDateTime GetModificationTime(const wxString& path);
 	static bool SetModificationTime(const wxString& path, const CDateTime& t);
+
+	static wxString GetSymbolicLinkTarget(wxString const& path);
+
 protected:
 #ifdef __WXMSW__
 	static bool ConvertFileTimeToCDateTime(CDateTime& time, const FILETIME &ft);
