@@ -492,8 +492,10 @@ void CSiteManagerDialog::MarkConnectedSite(int connected_site)
 
 void CSiteManagerDialog::CreateControls(wxWindow* parent)
 {
-	wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_SITEMANAGER"));
-
+	if( !wxDialogEx::Load(parent, _T("ID_SITEMANAGER"))) {
+		return;
+	}
+	
 	wxChoice *pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
 	pProtocol->Append(_("FTP - File Transfer Protocol"));
 	pProtocol->Append(CServer::GetProtocolName(SFTP));
