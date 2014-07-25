@@ -185,6 +185,8 @@ protected:
 #endif
 
 	int m_comparisonToggleAcceleratorId{};
+	int m_pasteId{};
+	int m_selectAllId{};
 };
 
 #endif

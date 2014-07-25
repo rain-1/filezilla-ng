@@ -56,6 +56,8 @@
 #endif
 #ifndef __WXMAC__
 #include <wx/taskbar.h>
+#else
+#include <wx/combobox.h>
 #endif
 
 #ifdef _DEBUG
@@ -217,6 +219,8 @@ protected:
 
 CMainFrame::CMainFrame()
 	: m_comparisonToggleAcceleratorId(wxNewId())
+	, m_pasteId(wxNewId())
+	, m_selectAllId(wxNewId())
 {
 	m_pActivityLed[0] = m_pActivityLed[1] = 0;
 
@@ -392,7 +396,7 @@ CMainFrame::CMainFrame()
 	if (!RestoreSplitterPositions())
 		SetDefaultSplitterPositions();
 
-	wxAcceleratorEntry entries[11];
+	wxAcceleratorEntry entries[13];
 	//entries[0].Set(wxACCEL_CMD | wxACCEL_SHIFT, 'I', XRCID("ID_MENU_VIEW_FILTERS"));
 	for (int i = 0; i < 10; i++)
 	{
@@ -400,8 +404,14 @@ CMainFrame::CMainFrame()
 		entries[i].Set(wxACCEL_CMD, (int)'0' + i, tab_hotkey_ids[i]);
 	}
 	entries[10].Set(wxACCEL_CMD | wxACCEL_SHIFT, 'O', m_comparisonToggleAcceleratorId);
+	entries[11].Set(wxACCEL_CMD, 'V', m_pasteId);
+	entries[12].Set(wxACCEL_CMD, 'A', m_selectAllId);
 
-	wxAcceleratorTable accel(sizeof(entries) / sizeof(wxAcceleratorEntry), entries);
+	int size = sizeof(entries) / sizeof(wxAcceleratorEntry);
+#ifndef __WXMAC__
+	size -= 2;
+#endif
+	wxAcceleratorTable accel(size, entries);
 	SetAcceleratorTable(accel);
 
 	ConnectNavigationHandler(m_pStatusView);
@@ -870,6 +880,36 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		CComparisonManager* pComparisonManager = pState->GetComparisonManager();
 		if (pComparisonManager && pComparisonManager->IsComparing())
 			pComparisonManager->CompareListings();
+	}
+	else if (event.GetId() == m_pasteId) {
+#ifdef __WXMAC__
+		wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(FindFocus());
+		wxComboBox* combo = dynamic_cast<wxComboBox*>(FindFocus());
+		if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
+			text->Paste();
+		}
+		else if( combo ) {
+			combo->Paste();
+		}
+		else {
+			event.Skip();
+		}
+#endif
+	}
+	else if (event.GetId() == m_selectAllId) {
+#ifdef __WXMAC__
+		wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(FindFocus());
+		wxComboBox* combo = dynamic_cast<wxComboBox*>(FindFocus());
+		if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
+			text->SelectAll();
+		}
+		else if( combo ) {
+			combo->SelectAll();
+		}
+		else {
+			event.Skip();
+		}
+#endif
 	}
 	else
 	{
