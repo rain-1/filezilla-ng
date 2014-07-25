@@ -23,6 +23,11 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	virtual void OnChar(wxKeyEvent& event);
+	void OnMenuEvent(wxCommandEvent& event);
+
+#ifdef __WXMAC__
+	virtual bool ProcessEvent(wxEvent& event);
+#endif
 
 	static int m_shown_dialogs;
 };

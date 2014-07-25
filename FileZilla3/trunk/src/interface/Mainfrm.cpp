@@ -1,3 +1,4 @@
+#include <iostream>
 #include <filezilla.h>
 #include "Mainfrm.h"
 
@@ -78,6 +79,21 @@ static int GetAvailableUpdateMenuId()
 	return updateAvailableMenuId;
 }
 #endif
+
+wxTextEntry* GetSpecialTextEntry(wxWindow* w)
+{
+#ifdef __WXMAC__
+	wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(w);
+	if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
+		return text;
+	}
+	wxComboBox* combo = dynamic_cast<wxComboBox*>(w);
+	if( combo ) {
+		return combo;
+	}
+#endif
+	return 0;
+}
 
 BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
 	EVT_SIZE(CMainFrame::OnSize)
@@ -882,34 +898,23 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			pComparisonManager->CompareListings();
 	}
 	else if (event.GetId() == m_pasteId) {
-#ifdef __WXMAC__
-		wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(FindFocus());
-		wxComboBox* combo = dynamic_cast<wxComboBox*>(FindFocus());
-		if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
-			text->Paste();
-		}
-		else if( combo ) {
-			combo->Paste();
+std::cerr << "main Paste\n";
+		wxTextEntry* e = GetSpecialTextEntry(FindFocus());
+		if( e ) {
+			e->Paste();
 		}
 		else {
 			event.Skip();
 		}
-#endif
 	}
 	else if (event.GetId() == m_selectAllId) {
-#ifdef __WXMAC__
-		wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(FindFocus());
-		wxComboBox* combo = dynamic_cast<wxComboBox*>(FindFocus());
-		if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
-			text->SelectAll();
-		}
-		else if( combo ) {
-			combo->SelectAll();
+		wxTextEntry* e = GetSpecialTextEntry(FindFocus());
+		if( e ) {
+			e->SelectAll();
 		}
 		else {
 			event.Skip();
 		}
-#endif
 	}
 	else
 	{
