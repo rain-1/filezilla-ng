@@ -76,16 +76,6 @@ protected:
 		if (event.GetKeyCode() == WXK_TAB)
 			return;
 
-#ifdef __WXMAC__
-		if (event.GetKeyCode() == 'v' && event.GetModifiers() == wxMOD_CMD)
-		{
-			Paste();
-			wxTextCtrl* text = ((wxTextCtrl*)m_text);
-			text->SetStyle(0, text->GetLastPosition(), GetDefaultTextCtrlStyle(text));
-			return;
-		}
-#endif
-
 		event.Skip();
 	}
 };
