@@ -8,6 +8,33 @@ END_EVENT_TABLE()
 
 int wxDialogEx::m_shown_dialogs = 0;
 
+#ifdef __WXMAC__
+static int const pasteId = wxNewId();
+static int const selectAllId = wxNewId();
+
+extern wxTextEntry* GetSpecialTextEntry(wxWindow*);
+
+bool wxDialogEx::ProcessEvent(wxEvent& event)
+{
+	if(event.GetEventType() != wxEVT_MENU) {
+		return wxDialog::ProcessEvent(event);
+	}
+
+	wxTextEntry* e = GetSpecialTextEntry(FindFocus());
+	if( e && event.GetId() == pasteId ) {
+		e->Paste();
+		return true;
+	}
+	else if( e && event.GetId() == selectAllId ) {
+		e->SelectAll();
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+#endif
+
 void wxDialogEx::OnChar(wxKeyEvent& event)
 {
 	if (event.GetKeyCode() == WXK_ESCAPE)
@@ -27,6 +54,14 @@ bool wxDialogEx::Load(wxWindow* pParent, const wxString& name)
 
 	//GetSizer()->Fit(this);
 	//GetSizer()->SetSizeHints(this);
+
+#ifdef __WXMAC__
+	wxAcceleratorEntry entries[2];
+	entries[0].Set(wxACCEL_CMD, 'V', pasteId);
+	entries[1].Set(wxACCEL_CMD, 'A', selectAllId);
+	wxAcceleratorTable accel(sizeof(entries) / sizeof(wxAcceleratorEntry), entries);
+	SetAcceleratorTable(accel);
+#endif
 
 	return true;
 }
