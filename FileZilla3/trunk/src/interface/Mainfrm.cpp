@@ -1,4 +1,3 @@
-#include <iostream>
 #include <filezilla.h>
 #include "Mainfrm.h"
 
@@ -898,7 +897,6 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			pComparisonManager->CompareListings();
 	}
 	else if (event.GetId() == m_pasteId) {
-std::cerr << "main Paste\n";
 		wxTextEntry* e = GetSpecialTextEntry(FindFocus());
 		if( e ) {
 			e->Paste();
