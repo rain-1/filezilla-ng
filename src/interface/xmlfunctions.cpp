@@ -407,17 +407,26 @@ bool CXmlFile::SaveXmlFile()
 
 	bool isLink = false;
 	int flags = 0;
+
+	wxString redirectedName = m_fileName;
 	if (CLocalFileSystem::GetFileInfo( m_fileName, isLink, 0, 0, &flags ) == CLocalFileSystem::file) {
 #ifdef __WXMSW__
 		if (flags & FILE_ATTRIBUTE_HIDDEN)
 			SetFileAttributes(m_fileName, flags & ~FILE_ATTRIBUTE_HIDDEN);
 #endif
+		if (isLink) {
+			CLocalPath target(CLocalFileSystem::GetSymbolicLinkTarget(m_fileName));
+			if (!target.empty()) {
+				redirectedName = target.GetPath();
+				redirectedName.RemoveLast();
+			}
+		}
 
 		exists = true;
 		bool res;
 		{
 			wxLogNull null;
-			res = wxCopyFile(m_fileName, m_fileName + _T("~"));
+			res = wxCopyFile(redirectedName, redirectedName + _T("~"));
 		}
 		if (!res) {
 			m_error = _("Failed to create backup copy of xml file");
@@ -425,19 +434,20 @@ bool CXmlFile::SaveXmlFile()
 		}
 	}
 
-	wxFFile f(m_fileName, _T("w"));
+	wxFFile f(redirectedName, _T("w"));
 	if (!f.IsOpened() || !m_pDocument->SaveFile(f.fp())) {
-		wxRemoveFile(m_fileName);
+		f.Close();
+		wxRemoveFile(redirectedName);
 		if (exists) {
 			wxLogNull null;
-			wxRenameFile(m_fileName + _T("~"), m_fileName);
+			wxRenameFile(redirectedName + _T("~"), redirectedName);
 		}
 		m_error = _("Failed to write xml file");
 		return false;
 	}
 
 	if (exists)
-		wxRemoveFile(m_fileName + _T("~"));
+		wxRemoveFile(redirectedName + _T("~"));
 
 	return true;
 }
