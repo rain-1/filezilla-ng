@@ -67,6 +67,7 @@ protected:
 	WIN32_FIND_DATA m_find_data;
 	HANDLE m_hFind;
 	bool m_found;
+	wxString m_find_path;
 #else
 	char* m_raw_path;
 	char* m_file_part; // Points into m_raw_path past the trailing slash of the path part
