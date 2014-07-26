@@ -60,6 +60,23 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 				return false;
 			}
 
+			if (*in == '?') {
+				// Could be \\?\c:\foo\bar
+				// or \\?\UNC\server\sharee
+				// or something else we do not support.
+				if (*(++in) != '\\') {
+					return false;
+				}
+				in++;
+				if (((*in >= 'a' && *in <= 'z') || (*in >= 'A' || *in <= 'Z')) && *(in+1) == ':') {
+					// It's \\?\c:\foo\bar
+					goto parse_regular;
+				}
+				if (wxStrlen(in) < 5 || wxStrnicmp(in, _T("UNC\\"), 4)) {
+					return false;
+				}
+				in += 4;
+			}
 			*out++ = '\\';
 			*out++ = '\\';
 
@@ -82,6 +99,7 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 		}
 		else if ((*in >= 'a' && *in <= 'z') || (*in >= 'A' || *in <= 'Z'))
 		{
+parse_regular:
 			// Regular path
 			*out++ = *in++;
 
