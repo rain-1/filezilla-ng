@@ -767,7 +767,15 @@ wxString CLocalFileSystem::GetSymbolicLinkTarget(wxString const& path)
 		CloseHandle(hFile);
 	}
 #else
-	wxFAIL;
+	size_t const size = 1024;
+	char out[size];
+
+	const wxCharBuffer p = path.fn_str();
+	ssize_t res = readlink(static_cast<char const*>(p), out, size);
+	if( res > 0 && static_cast<size_t>(res) < size ) {
+		out[res] = 0;
+		target = wxString(out, *wxConvFileName);
+	}
 #endif
 	return target;
 }
