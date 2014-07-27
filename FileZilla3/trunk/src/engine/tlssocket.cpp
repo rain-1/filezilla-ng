@@ -588,7 +588,7 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 		return min;
 	}
 
-	int res = gnutls_record_recv(m_session, buffer, len);
+	int res = DoCallGnutlsRecordRecv(buffer, len);
 	if (res >= 0)
 	{
 		if (res > 0)
@@ -736,9 +736,8 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 		m_peekDataLen = 65536;
 		m_peekData = new char[m_peekDataLen];
 
-		int res = gnutls_record_recv(m_session, m_peekData, m_peekDataLen);
-		if (res < 0)
-		{
+		int res = DoCallGnutlsRecordRecv(m_peekData, m_peekDataLen);
+		if (res < 0) {
 			m_peekDataLen = 0;
 			delete [] m_peekData;
 			m_peekData = 0;
@@ -747,8 +746,7 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 			return;
 		}
 
-		if (!res)
-		{
+		if (!res) {
 			m_peekDataLen = 0;
 			delete [] m_peekData;
 			m_peekData = 0;
@@ -1252,4 +1250,21 @@ wxString CTlsSocket::ListTlsCiphers(wxString priority)
 	}
 
 	return list;
+}
+
+int CTlsSocket::DoCallGnutlsRecordRecv(void* data, size_t len)
+{
+	int res = gnutls_record_recv(m_session, data, len);
+	while( (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED) && m_canReadFromSocket && !gnutls_record_get_direction(m_session)) {
+		// Spurious EAGAIN. Can happen if GnuTLS gets a partial
+		// record and the socket got closed.
+		// The unexpected close is being ignored in this case, unless
+		// gnutls_record_recv is being called again.
+		// Manually call gnutls_record_recv as in case of eof on the socket,
+		// we are not getting another receive event.
+		m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("gnutls_record_recv returned spurious EAGAIN"));
+		res = gnutls_record_recv(m_session, data, len);
+	}
+
+	return res;
 }

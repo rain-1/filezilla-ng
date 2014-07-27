@@ -82,6 +82,8 @@ protected:
 	ssize_t PushFunction(const void* data, size_t len);
 	ssize_t PullFunction(void* data, size_t len);
 
+	int DoCallGnutlsRecordRecv(void* data, size_t len);
+
 	void TriggerEvents();
 
 	void OnSocketEvent(CSocketEvent& event);
