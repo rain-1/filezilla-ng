@@ -756,6 +756,9 @@ void CTransferSocket::FinalizeWrite()
 
 bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 {
+	// Disable Nagle algorithm during TlS handshake
+	m_pSocket->SetFlags(m_pSocket->GetFlags() | CSocket::flag_nodelay);
+
 	wxASSERT(!m_pBackend);
 	m_pTlsSocket = new CTlsSocket(this, m_pSocket, m_pControlSocket);
 
@@ -776,9 +779,6 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 	}
 
 	m_pBackend = m_pTlsSocket;
-
-	// Disable Nagle algorithm during TlS handshake
-	m_pSocket->SetFlags(m_pSocket->GetFlags() | CSocket::flag_nodelay);
 
 	return true;
 }
