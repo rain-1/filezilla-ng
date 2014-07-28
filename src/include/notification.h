@@ -67,7 +67,7 @@ enum RequestId
 class CNotification
 {
 public:
-	virtual ~CNotification() {};
+	virtual ~CNotification() {}; // TODO: One GCC >= 4.8 is in Debian Stable (Jessie by then), make default and add testcase to configure.
 	virtual NotificationId GetID() const = 0;
 
 protected:

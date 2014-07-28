@@ -55,7 +55,7 @@ class CCommand
 {
 public:
 	CCommand() = default;
-	virtual ~CCommand() {};
+	virtual ~CCommand() {}; // TODO: One GCC >= 4.8 is in Debian Stable (Jessie by then), make default and add testcase to configure.
 
 	virtual Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
