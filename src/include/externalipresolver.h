@@ -3,7 +3,7 @@
 
 #include "socket.h"
 
-class fzExternalIPResolveEvent : public wxEvent
+class fzExternalIPResolveEvent final : public wxEvent
 {
 public:
 	fzExternalIPResolveEvent(int id = wxID_ANY);
@@ -20,7 +20,7 @@ extern const wxEventType fzEVT_EXTERNALIPRESOLVE;
 		(wxObject *) NULL                \
 	),
 
-class CExternalIPResolver : public CSocketEventHandler
+class CExternalIPResolver final : public CSocketEventHandler
 {
 public:
 	CExternalIPResolver(wxEvtHandler* handler, int id = wxID_ANY);

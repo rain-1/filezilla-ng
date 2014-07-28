@@ -3,7 +3,7 @@
 
 #include "engineprivate.h"
 
-class CFileZillaEngine : public CFileZillaEnginePrivate
+class CFileZillaEngine final : public CFileZillaEnginePrivate
 {
 public:
 	CFileZillaEngine();

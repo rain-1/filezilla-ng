@@ -6,7 +6,7 @@
 
 #include <deque>
 
-class CServerPathData
+class CServerPathData final
 {
 public:
 	std::deque<wxString> m_segments;

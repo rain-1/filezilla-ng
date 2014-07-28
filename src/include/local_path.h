@@ -6,7 +6,7 @@
 // UNC paths.
 // On all other systems it uses /foo/bar/baz/
 
-class CLocalPath
+class CLocalPath final
 {
 public:
 	CLocalPath() {}

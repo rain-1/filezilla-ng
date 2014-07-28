@@ -6,7 +6,7 @@
 // general too slow.
 // This class offers exactly what's needed by FileZilla and
 // exploits some platform-specific features.
-class CLocalFileSystem
+class CLocalFileSystem final
 {
 public:
 	CLocalFileSystem();

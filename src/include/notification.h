@@ -32,7 +32,7 @@ extern const wxEventType fzEVT_NOTIFICATION;
 		(wxObject *) NULL           \
 	),
 
-class wxFzEvent : public wxEvent
+class wxFzEvent final : public wxEvent
 {
 public:
 	wxFzEvent(int id = wxID_ANY);
@@ -67,26 +67,39 @@ enum RequestId
 class CNotification
 {
 public:
-	virtual ~CNotification() {};
-	virtual enum NotificationId GetID() const = 0;
+	virtual ~CNotification() = default;
+	virtual NotificationId GetID() const = 0;
+
+protected:
+	CNotification() = default;
+	CNotification(CNotification const&) = default;
+	CNotification& operator=(CNotification const&) = default;
 };
 
-class CLogmsgNotification : public CNotification
+template<NotificationId id>
+class CNotificationHelper : public CNotification
 {
 public:
-	virtual enum NotificationId GetID() const;
+	virtual NotificationId GetID() const final { return id; }
 
+protected:
+	CNotificationHelper<id>() = default;
+	CNotificationHelper<id>(CNotificationHelper<id> const&) = default;
+	CNotificationHelper<id>& operator=(CNotificationHelper<id> const&) = default;
+};
+
+class CLogmsgNotification final : public CNotificationHelper<nId_logmsg>
+{
+public:
 	wxString msg;
 	MessageType msgType{MessageType::Status}; // Type of message, see logging.h for details
 };
 
 // If CFileZillaEngine does return with FZ_REPLY_WOULDBLOCK, you will receive
 // a nId_operation notification once the operation ends.
-class COperationNotification : public CNotification
+class COperationNotification final : public CNotificationHelper<nId_operation>
 {
 public:
-	virtual enum NotificationId GetID() const;
-
 	int nReplyCode{};
 	Command commandId{Command::none};
 };
@@ -95,11 +108,10 @@ public:
 // requested explicitely or when a directory listing was retrieved implicitely
 // during another operation, e.g. file transfers.
 class CDirectoryListing;
-class CDirectoryListingNotification : public CNotification
+class CDirectoryListingNotification final : public CNotificationHelper<nId_listing>
 {
 public:
-	CDirectoryListingNotification(const CServerPath& path, const bool modified = false, const bool failed = false);
-	virtual enum NotificationId GetID() const;
+	explicit CDirectoryListingNotification(const CServerPath& path, const bool modified = false, const bool failed = false);
 	bool Modified() const { return m_modified; }
 	bool Failed() const { return m_failed; }
 	const CServerPath GetPath() const { return m_path; }
@@ -110,17 +122,19 @@ protected:
 	CServerPath m_path;
 };
 
-class CAsyncRequestNotification : public CNotification
+class CAsyncRequestNotification : public CNotificationHelper<nId_asyncrequest>
 {
 public:
-	virtual enum NotificationId GetID() const;
-
 	virtual enum RequestId GetRequestID() const = 0;
-
 	unsigned int requestNumber{}; // Do never change this
+
+protected:
+	CAsyncRequestNotification() = default;
+	CAsyncRequestNotification(CAsyncRequestNotification const&) = default;
+	CAsyncRequestNotification& operator=(CAsyncRequestNotification const&) = default;
 };
 
-class CFileExistsNotification : public CAsyncRequestNotification
+class CFileExistsNotification final : public CAsyncRequestNotification
 {
 public:
 	virtual enum RequestId GetRequestID() const;
@@ -164,7 +178,7 @@ public:
 	wxString newName;
 };
 
-class CInteractiveLoginNotification : public CAsyncRequestNotification
+class CInteractiveLoginNotification final : public CAsyncRequestNotification
 {
 public:
 	CInteractiveLoginNotification(const wxString& challenge);
@@ -184,17 +198,17 @@ protected:
 };
 
 // Indicate network action.
-class CActiveNotification : public CNotification
+class CActiveNotification final : public CNotificationHelper<nId_active>
 {
 public:
-	CActiveNotification(int direction);
-	virtual enum NotificationId GetID() const;
+	explicit CActiveNotification(int direction);
+
 	int GetDirection() const { return m_direction; }
 protected:
 	const int m_direction;
 };
 
-class CTransferStatus
+class CTransferStatus final
 {
 public:
 	wxDateTime started;
@@ -211,12 +225,11 @@ public:
 	bool list{};
 };
 
-class CTransferStatusNotification : public CNotification
+class CTransferStatusNotification final : public CNotificationHelper<nId_transferstatus>
 {
 public:
 	CTransferStatusNotification(CTransferStatus *pStatus);
 	virtual ~CTransferStatusNotification();
-	virtual enum  NotificationId GetID() const;
 
 	const CTransferStatus *GetStatus() const;
 
@@ -226,7 +239,7 @@ protected:
 
 // Notification about new or changed hostkeys, only used by SSH/SFTP transfers.
 // GetRequestID() returns either reqId_hostkey or reqId_hostkeyChanged
-class CHostKeyNotification : public CAsyncRequestNotification
+class CHostKeyNotification final : public CAsyncRequestNotification
 {
 public:
 	CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed = false);
@@ -251,12 +264,11 @@ protected:
 	const bool m_changed;
 };
 
-class CDataNotification : public CNotification
+class CDataNotification final : public CNotificationHelper<nId_data>
 {
 public:
 	CDataNotification(char* pData, int len);
 	virtual ~CDataNotification();
-	virtual enum NotificationId GetID() const { return nId_data; }
 
 	char* Detach(int& len);
 
@@ -265,11 +277,10 @@ protected:
 	unsigned int m_len;
 };
 
-class CCertificate
+class CCertificate final
 {
 public:
-	CCertificate();
-
+	CCertificate() = default;
 	CCertificate(
 		const unsigned char* rawData, unsigned int len,
 		wxDateTime activationTime, wxDateTime expirationTime,
@@ -281,7 +292,7 @@ public:
 		const wxString& subject,
 		const wxString& issuer);
 	CCertificate(const CCertificate& op);
-	virtual ~CCertificate();
+	~CCertificate();
 
 	const unsigned char* GetRawData(unsigned int& len) const { len = m_len; return m_rawData; }
 	wxDateTime GetActivationTime() const { return m_activationTime; }
@@ -305,12 +316,12 @@ private:
 	wxDateTime m_activationTime;
 	wxDateTime m_expirationTime;
 
-	unsigned char* m_rawData;
-	unsigned int m_len;
+	unsigned char* m_rawData{};
+	unsigned int m_len{};
 
 	wxString m_serial;
 	wxString m_pkalgoname;
-	unsigned int m_pkalgobits;
+	unsigned int m_pkalgobits{};
 
 	wxString m_signalgoname;
 
@@ -321,7 +332,7 @@ private:
 	wxString m_issuer;
 };
 
-class CCertificateNotification : public CAsyncRequestNotification
+class CCertificateNotification final : public CAsyncRequestNotification
 {
 public:
 	CCertificateNotification(const wxString& host, unsigned int port,
@@ -347,7 +358,7 @@ public:
 
 protected:
 	wxString m_host;
-	unsigned int m_port;
+	unsigned int m_port{};
 
 	wxString m_protocol;
 	wxString m_keyExchange;
@@ -357,11 +368,9 @@ protected:
 	std::vector<CCertificate> m_certificates;
 };
 
-class CSftpEncryptionNotification : public CNotification
+class CSftpEncryptionNotification : public CNotificationHelper<nId_sftp_encryption>
 {
 public:
-	virtual enum NotificationId GetID() const { return nId_sftp_encryption; }
-
 	wxString hostKey;
 	wxString kexAlgorithm;
 	wxString kexHash;
@@ -371,11 +380,9 @@ public:
 	wxString macServerToClient;
 };
 
-class CLocalDirCreatedNotification : public CNotification
+class CLocalDirCreatedNotification : public CNotificationHelper<nId_local_dir_created>
 {
 public:
-	virtual enum NotificationId GetID() const { return nId_local_dir_created; }
-
 	CLocalPath dir;
 };
 

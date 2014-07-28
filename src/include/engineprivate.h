@@ -110,7 +110,7 @@ protected:
 	// Get the amount of time to wait till next reconnection attempt in milliseconds
 	unsigned int GetRemainingReconnectDelay(const CServer& server);
 
-	struct t_failedLogins
+	struct t_failedLogins final
 	{
 		CServer server;
 		wxDateTime time;
