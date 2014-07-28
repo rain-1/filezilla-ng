@@ -55,7 +55,7 @@ class CCommand
 {
 public:
 	CCommand() = default;
-	virtual ~CCommand() = default;
+	virtual ~CCommand() {};
 
 	virtual Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
