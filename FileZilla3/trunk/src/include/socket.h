@@ -178,6 +178,7 @@ public:
 		flag_keepalive = 0x02
 	};
 
+	int GetFlags() const { return m_flags; }
 	void SetFlags(int flags);
 
 	// If called on listen socket, sizes will be inherited by
