@@ -11,29 +11,9 @@ wxEvent *wxFzEvent::Clone() const
 	return new wxFzEvent(*this);
 }
 
-enum NotificationId CLogmsgNotification::GetID() const
-{
-	return nId_logmsg;
-}
-
-enum NotificationId COperationNotification::GetID() const
-{
-	return nId_operation;
-}
-
 CDirectoryListingNotification::CDirectoryListingNotification(const CServerPath& path, const bool modified /*=false*/, const bool failed /*=false*/)
 	: m_modified(modified), m_failed(failed), m_path(path)
 {
-}
-
-enum NotificationId CDirectoryListingNotification::GetID() const
-{
-	return nId_listing;
-}
-
-enum NotificationId CAsyncRequestNotification::GetID() const
-{
-	return nId_asyncrequest;
 }
 
 enum RequestId CFileExistsNotification::GetRequestID() const
@@ -56,11 +36,6 @@ CActiveNotification::CActiveNotification(int direction)
 {
 }
 
-enum NotificationId CActiveNotification::GetID() const
-{
-	return nId_active;
-}
-
 CTransferStatusNotification::CTransferStatusNotification(CTransferStatus *pStatus)
 	: m_pStatus(pStatus)
 {
@@ -69,11 +44,6 @@ CTransferStatusNotification::CTransferStatusNotification(CTransferStatus *pStatu
 CTransferStatusNotification::~CTransferStatusNotification()
 {
 	delete m_pStatus;
-}
-
-enum NotificationId CTransferStatusNotification::GetID() const
-{
-	return nId_transferstatus;
 }
 
 const CTransferStatus* CTransferStatusNotification::GetStatus() const
@@ -122,13 +92,6 @@ char* CDataNotification::Detach(int& len)
 	char* pData = m_pData;
 	m_pData = 0;
 	return pData;
-}
-
-CCertificate::CCertificate()
-	: m_rawData()
-	, m_len()
-	, m_pkalgobits()
-{
 }
 
 CCertificate::CCertificate(

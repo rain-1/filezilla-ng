@@ -21,7 +21,7 @@ protected:
 };
 
 class CSocket;
-class CSocketBackend : public CBackend, public CSocketEventSource
+class CSocketBackend final : public CBackend, public CSocketEventSource
 {
 public:
 	CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket);

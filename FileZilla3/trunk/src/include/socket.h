@@ -7,7 +7,7 @@
 
 class CSocketEventHandler;
 class CSocketEventSource;
-class CSocketEvent
+class CSocketEvent final
 {
 public:
 	enum EventType
@@ -44,7 +44,7 @@ protected:
 	friend class CSocketEventDispatcher;
 };
 
-class CSocketEventDispatcher : protected wxEvtHandler
+class CSocketEventDispatcher final : protected wxEvtHandler
 {
 public:
 	void SendEvent(CSocketEvent* evt);

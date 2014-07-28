@@ -47,16 +47,6 @@ enum class Command
 #define FZ_REPLY_WRITEFAILED	(0x2000 | FZ_REPLY_ERROR) // Happens if local file could not be written during transfer
 #define FZ_REPLY_LINKNOTDIR		(0x4000)
 
-// Small macro to simplify command class declaration
-// Basically all this macro does, is to declare the class and add the required
-// standard functions to it.
-#define DECLARE_COMMAND(name, id) \
-	class name : public CCommand \
-	{ \
-	public: \
-		virtual Command GetId() const { return id; } \
-		virtual CCommand* Clone() const { return new name(*this); }
-
 // --------------- //
 // Actual commands //
 // --------------- //
@@ -64,14 +54,42 @@ enum class Command
 class CCommand
 {
 public:
-	CCommand() {}
-	virtual ~CCommand() {}
+	CCommand() = default;
+	virtual ~CCommand() = default;
+
 	virtual Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
+
+protected:
+	CCommand(CCommand const&) = default;
+	CCommand& operator=(CCommand const&) = default;
 };
 
-DECLARE_COMMAND(CConnectCommand, Command::connect)
-	CConnectCommand(const CServer &server, bool retry_conncting = true);
+template<typename Derived, Command id>
+class CCommandHelper : public CCommand
+{
+public:
+	virtual Command GetId() const final { return id; }
+
+	virtual CCommand* Clone() const final {
+		return new Derived(static_cast<Derived const&>(*this));
+	}
+
+protected:
+	CCommandHelper<Derived, id>() = default;
+	CCommandHelper<Derived, id>(CCommandHelper<Derived, id> const&) = default;
+	CCommandHelper<Derived, id>& operator=(CCommandHelper<Derived, id> const&) = default;
+};
+
+template<Command id>
+class CBasicCommand final : public CCommandHelper<CBasicCommand<id>, id>
+{
+};
+
+class CConnectCommand final : public CCommandHelper<CConnectCommand, Command::connect>
+{
+public:
+	explicit CConnectCommand(const CServer &server, bool retry_conncting = true);
 
 	const CServer GetServer() const;
 	bool RetryConnecting() const { return m_retry_connecting; }
@@ -80,17 +98,15 @@ protected:
 	bool m_retry_connecting;
 };
 
-DECLARE_COMMAND(CDisconnectCommand, Command::disconnect)
-};
-
-DECLARE_COMMAND(CCancelCommand, Command::cancel)
-};
+typedef CBasicCommand<Command::disconnect> CDisconnectCommand;
+typedef CBasicCommand<Command::cancel> CCancelCommand;
 
 #define LIST_FLAG_REFRESH 1
 #define LIST_FLAG_AVOID 2
 #define LIST_FLAG_FALLBACK_CURRENT 4
 #define LIST_FLAG_LINK 8
-DECLARE_COMMAND(CListCommand, Command::list)
+class CListCommand final : public CCommandHelper<CListCommand, Command::list>
+{
 	// Without a given directory, the current directory will be listed.
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
@@ -108,8 +124,9 @@ DECLARE_COMMAND(CListCommand, Command::list)
 	// LIST_FLAG_LINK is used for symlink discovery. There's unfortunately
 	// no sane way to distinguish between symlinks to files and symlinks to
 	// directories.
-	CListCommand(int flags = 0);
-	CListCommand(CServerPath path, wxString subDir = wxString(), int flags = 0);
+public:
+	explicit CListCommand(int flags = 0);
+	explicit CListCommand(CServerPath path, wxString subDir = wxString(), int flags = 0);
 
 	CServerPath GetPath() const;
 	wxString GetSubDir() const;
@@ -122,9 +139,10 @@ protected:
 	int m_flags;
 };
 
-DECLARE_COMMAND(CFileTransferCommand, Command::transfer)
-
-	class t_transferSettings
+class CFileTransferCommand final : public CCommandHelper<CFileTransferCommand, Command::transfer>
+{
+public:
+	class t_transferSettings final
 	{
 	public:
 		t_transferSettings()
@@ -154,8 +172,10 @@ protected:
 	t_transferSettings m_transferSettings;
 };
 
-DECLARE_COMMAND(CRawCommand, Command::raw)
-	CRawCommand(const wxString &command);
+class CRawCommand final : public CCommandHelper<CRawCommand, Command::raw>
+{
+public:
+	explicit CRawCommand(const wxString &command);
 
 	wxString GetCommand() const;
 
@@ -163,19 +183,22 @@ protected:
 	wxString m_command;
 };
 
-DECLARE_COMMAND(CDeleteCommand, Command::del)
+class CDeleteCommand final : public CCommandHelper<CDeleteCommand, Command::del>
+{
+public:
 	CDeleteCommand(const CServerPath& path, const std::list<wxString>& files);
 
 	CServerPath GetPath() const { return m_path; }
 	const std::list<wxString>& GetFiles() const { return m_files; }
 
 protected:
-
 	const CServerPath m_path;
 	const std::list<wxString> m_files;
 };
 
-DECLARE_COMMAND(CRemoveDirCommand, Command::removedir)
+class CRemoveDirCommand final : public CCommandHelper<CRemoveDirCommand, Command::removedir>
+{
+public:
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
 	CRemoveDirCommand(const CServerPath& path, const wxString& subdDir);
@@ -184,22 +207,24 @@ DECLARE_COMMAND(CRemoveDirCommand, Command::removedir)
 	wxString GetSubDir() const { return m_subDir; }
 
 protected:
-
 	CServerPath m_path;
 	wxString m_subDir;
 };
 
-DECLARE_COMMAND(CMkdirCommand, Command::mkdir)
-	CMkdirCommand(const CServerPath& path);
+class CMkdirCommand final : public CCommandHelper<CMkdirCommand, Command::mkdir>
+{
+public:
+	explicit CMkdirCommand(const CServerPath& path);
 
 	CServerPath GetPath() const { return m_path; }
 
 protected:
-
 	CServerPath m_path;
 };
 
-DECLARE_COMMAND(CRenameCommand, Command::rename)
+class CRenameCommand final : public CCommandHelper<CRenameCommand, Command::rename>
+{
+public:
 	CRenameCommand(const CServerPath& fromPath, const wxString& fromFile,
 				   const CServerPath& toPath, const wxString& toFile);
 
@@ -215,7 +240,9 @@ protected:
 	wxString m_toFile;
 };
 
-DECLARE_COMMAND(CChmodCommand, Command::chmod)
+class CChmodCommand final : public CCommandHelper<CChmodCommand, Command::chmod>
+{
+public:
 	// The permission string should be given in a format understandable by the server.
 	// Most likely it's the defaut octal representation used by the unix chmod command,
 	// i.e. chmod 755 foo.bar

@@ -59,7 +59,7 @@ public:
 
 #include "refcount.h"
 
-class CDirectoryListing
+class CDirectoryListing final
 {
 public:
 	typedef CDirentry value_type;

@@ -59,7 +59,7 @@ enum CharsetEncoding
 };
 
 class CServerPath;
-class CServer
+class CServer final
 {
 public:
 

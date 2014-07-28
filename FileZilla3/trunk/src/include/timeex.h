@@ -3,7 +3,7 @@
 
 #include <wx/timer.h>
 
-class CDateTime
+class CDateTime final
 {
 public:
 	enum Accuracy {
@@ -64,7 +64,7 @@ private:
  * an extended time class in wich Now() never returns the same value.
  */
 
-class CMonotonicTime
+class CMonotonicTime final
 {
 public:
 	CMonotonicTime(const CDateTime& time);
