@@ -365,6 +365,12 @@ void CRecursiveOperation::ListingFailed(int error)
 	if (m_operationMode == recursive_none)
 		return;
 
+	if( (error & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
+		// User has cancelled operation
+		StopRecursiveOperation();
+		return;
+	}
+
 	wxASSERT(!m_dirsToVisit.empty());
 	if (m_dirsToVisit.empty())
 		return;
