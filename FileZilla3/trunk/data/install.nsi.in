@@ -989,13 +989,13 @@ ${MementoSection} "Shell Extension" SecShellExt
   !define LIBRARY_SHELL_EXTENSION
   !define LIBRARY_COM
   !define LIBRARY_IGNORE_VERSION
-  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_PROTECTED ../src/fzshellext/.libs\libfzshellext-0.dll $INSTDIR\fzshellext.dll "$INSTDIR"
+  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED ../src/fzshellext/.libs\libfzshellext-0.dll $INSTDIR\fzshellext.dll "$INSTDIR"
 
   !define LIBRARY_X64
   ${If} ${RunningX64}
-    !insertmacro InstallLib REGDLL NOTSHARED REBOOT_PROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
+    !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
   ${Else}
-    !insertmacro InstallLib DLL NOTSHARED REBOOT_PROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
+    !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
   ${Endif}
   !undef LIBRARY_X64
 
@@ -1254,13 +1254,13 @@ FunctionEnd
 
 Section "Uninstall"
 
-  !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_PROTECTED "$INSTDIR\fzshellext.dll"
+  !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\fzshellext.dll"
 
   !define LIBRARY_X64
   ${If} ${RunningX64}
-    !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_PROTECTED "$INSTDIR\fzshellext_64.dll"
+    !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\fzshellext_64.dll"
   ${Else}
-    !insertmacro UnInstallLib DLL NOTSHARED REBOOT_PROTECTED "$INSTDIR\fzshellext_64.dll"
+    !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\fzshellext_64.dll"
   ${Endif}
   !undef LIBRARY_X64
 
