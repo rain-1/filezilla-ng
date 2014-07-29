@@ -1399,6 +1399,20 @@ void CDirectoryListingParserTest::InitEntries()
 		DEFAULT
 	});
 
+	m_entries.push_back((t_entry){
+			"drwxrwxrwx   1 0        0               0 29 Jul 02:27 2014 Invoices",
+			{
+				_T("2014 Invoices"),
+				0,
+				R(_T("drwxrwxrwx")),
+				R(_T("0 0")),
+				CDirentry::flag_dir,
+				O(),
+				CDateTime(calcYear(7, 29), 7, 29, 2, 27)
+		},
+		DEFAULT
+	});
+
 /*
 	wxString name;
 	wxLongLong size;

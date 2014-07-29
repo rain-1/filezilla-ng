@@ -1117,8 +1117,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 		int dateDay;
 
 		// Check for non-numeric day
-		if (!token.IsNumeric() && !token.IsLeftNumeric())
-		{
+		if (!token.IsNumeric() && !token.IsLeftNumeric()) {
 			int offset = 0;
 			if (dateMonth.GetString().Right(1) == _T("."))
 				++offset;
@@ -1127,8 +1126,11 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine *pLine, int &index, CDiren
 			dateDay = dateMonth.GetNumber(0, dateMonth.GetLength() - offset).GetLo();
 			dateMonth = token;
 		}
-		else
-		{
+		else if( token.GetLength() == 5 && token[2] == ':' && token.IsRightNumeric() ) {
+			// This is a time. We consumed too much already.
+			return false;
+		}
+		else {
 			dateDay = token.GetNumber().GetLo();
 			if (token[token.GetLength() - 1] == ',')
 				bHasYearAndTime = true;
