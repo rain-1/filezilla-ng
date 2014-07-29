@@ -35,6 +35,10 @@ bool CCommandQueue::Idle() const
 
 void CCommandQueue::ProcessCommand(CCommand *pCommand)
 {
+	if (m_quit) {
+		delete pCommand;
+	}
+
 	m_CommandList.push_back(pCommand);
 	if (m_CommandList.size() == 1)
 	{
@@ -156,8 +160,7 @@ bool CCommandQueue::Cancel()
 	m_CommandList.clear();
 	m_CommandList.push_back(pCommand);
 
-	if (!m_pEngine)
-	{
+	if (!m_pEngine)	{
 		delete pCommand;
 		m_CommandList.clear();
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
@@ -167,8 +170,7 @@ bool CCommandQueue::Cancel()
 	int res = m_pEngine->Execute(CCancelCommand());
 	if (res == FZ_REPLY_WOULDBLOCK)
 		return false;
-	else
-	{
+	else {
 		delete pCommand;
 		m_CommandList.clear();
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
@@ -309,4 +311,10 @@ void CCommandQueue::ReleaseEngine()
 	m_exclusiveEngineLock = false;
 
 	ProcessNextCommand();
+}
+
+bool CCommandQueue::Quit()
+{
+	m_quit = true;
+	return Cancel();
 }

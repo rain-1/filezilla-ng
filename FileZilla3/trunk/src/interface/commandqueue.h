@@ -18,6 +18,7 @@ public:
 	void ProcessNextCommand();
 	bool Idle() const;
 	bool Cancel();
+	bool Quit();
 	void Finish(COperationNotification *pNotification);
 
 	void RequestExclusiveEngine(bool requestExclusive);
@@ -41,6 +42,8 @@ protected:
 	bool m_inside_commandqueue;
 
 	std::list<CCommand *> m_CommandList;
+
+	bool m_quit{};
 };
 
 #endif //__COMMANDQUEUE_H__

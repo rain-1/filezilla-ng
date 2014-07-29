@@ -1228,28 +1228,23 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 
 void CMainFrame::OnClose(wxCloseEvent &event)
 {
-	if (!m_bQuit)
-	{
+	if (!m_bQuit) {
 		static bool quit_confirmation_displayed = false;
-		if (quit_confirmation_displayed && event.CanVeto())
-		{
+		if (quit_confirmation_displayed && event.CanVeto()) {
 			event.Veto();
 			return;
 		}
-		if (event.CanVeto())
-		{
+		if (event.CanVeto()) {
 			quit_confirmation_displayed = true;
 
-			if (m_pQueueView && m_pQueueView->IsActive())
-			{
+			if (m_pQueueView && m_pQueueView->IsActive()) {
 				CConditionalDialog dlg(this, CConditionalDialog::confirmexit, CConditionalDialog::yesno);
 				dlg.SetTitle(_("Close FileZilla"));
 
 				dlg.AddText(_("File transfers still in progress."));
 				dlg.AddText(_("Do you really want to close FileZilla?"));
 
-				if (!dlg.Run())
-				{
+				if (!dlg.Run()) {
 					event.Veto();
 					quit_confirmation_displayed = false;
 					return;
@@ -1259,8 +1254,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 			}
 
 			CEditHandler* pEditHandler = CEditHandler::Get();
-			if (pEditHandler)
-			{
+			if (pEditHandler) {
 				if (pEditHandler->GetFileCount(CEditHandler::remote, CEditHandler::edit) || pEditHandler->GetFileCount(CEditHandler::none, CEditHandler::upload) ||
 					pEditHandler->GetFileCount(CEditHandler::none, CEditHandler::upload_and_remove) ||
 					pEditHandler->GetFileCount(CEditHandler::none, CEditHandler::upload_and_remove_failed))
@@ -1272,8 +1266,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 					dlg.AddText(_("If you close FileZilla, your changes will be lost."));
 					dlg.AddText(_("Do you really want to close FileZilla?"));
 
-					if (!dlg.Run())
-					{
+					if (!dlg.Run()) {
 						event.Veto();
 						quit_confirmation_displayed = false;
 						return;
@@ -1285,8 +1278,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 			quit_confirmation_displayed = false;
 		}
 
-		if (m_pWindowStateManager)
-		{
+		if (m_pWindowStateManager) {
 			m_pWindowStateManager->Remember(OPTION_MAINWINDOW_POSITION);
 			delete m_pWindowStateManager;
 			m_pWindowStateManager = 0;
@@ -1331,13 +1323,15 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 
 	bool res = true;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
-		CState* pState = *iter;
-		if (!pState->m_pCommandQueue)
-			continue;
-
-		if (!pState->m_pCommandQueue->Cancel())
-			res = false;
+	for (CState* pState : *pStates) {
+		if( pState->GetRecursiveOperationHandler() ) {
+			pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
+		}
+	
+		if (pState->m_pCommandQueue) {
+			if (!pState->m_pCommandQueue->Quit())
+				res = false;
+		}
 	}
 
 	if (!res) {
@@ -1348,23 +1342,20 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	}
 
 	CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
-	if (controls)
-	{
+	if (controls) {
 		COptions::Get()->SetLastServer(controls->pState->GetLastServer());
 		COptions::Get()->SetOption(OPTION_LASTSERVERPATH, controls->pState->GetLastServerPath().GetSafePath());
 		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, controls->site_bookmarks->path);
 	}
 
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-	{
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 		CState *pState = *iter;
 		pState->DestroyEngine();
 	}
 
 	CSiteManager::ClearIdMap();
 
-	if (controls)
-	{
+	if (controls) {
 		controls->pLocalListView->SaveColumnSettings(OPTION_LOCALFILELIST_COLUMN_WIDTHS, OPTION_LOCALFILELIST_COLUMN_SHOWN, OPTION_LOCALFILELIST_COLUMN_ORDER);
 		controls->pRemoteListView->SaveColumnSettings(OPTION_REMOTEFILELIST_COLUMN_WIDTHS, OPTION_REMOTEFILELIST_COLUMN_SHOWN, OPTION_REMOTEFILELIST_COLUMN_ORDER);
 	}
