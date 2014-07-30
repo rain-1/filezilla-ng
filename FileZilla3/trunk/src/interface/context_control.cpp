@@ -143,6 +143,11 @@ void CContextControl::CreateContextControls(CState* pState)
 			m_tabs->Connect(wxEVT_COMMAND_AUINOTEBOOK_BG_DCLICK, wxAuiNotebookEventHandler(CContextControl::OnTabBgDoubleclick), 0, this);
 			m_tabs->Connect(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, wxAuiNotebookEventHandler(CContextControl::OnTabClosing), 0, this);
 			m_tabs->Connect(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, wxAuiNotebookEventHandler(CContextControl::OnTabRightclick), 0, this);
+
+#ifdef __WXMAC__
+			// We need to select the first page as the default selection is -1. Not doing so prevents selecting other pages later on.
+			m_tabs->SetSelection(0);
+#endif
 		}
 
 		m_pMainFrame->RememberSplitterPositions();
