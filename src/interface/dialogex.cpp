@@ -12,7 +12,7 @@ int wxDialogEx::m_shown_dialogs = 0;
 static int const pasteId = wxNewId();
 static int const selectAllId = wxNewId();
 
-extern wxTextEntry* GetSpecialTextEntry(wxWindow*);
+extern wxTextEntry* GetSpecialTextEntry(wxWindow*, wxChar);
 
 bool wxDialogEx::ProcessEvent(wxEvent& event)
 {
@@ -20,7 +20,7 @@ bool wxDialogEx::ProcessEvent(wxEvent& event)
 		return wxDialog::ProcessEvent(event);
 	}
 
-	wxTextEntry* e = GetSpecialTextEntry(FindFocus());
+	wxTextEntry* e = GetSpecialTextEntry(FindFocus(), 'V');
 	if( e && event.GetId() == pasteId ) {
 		e->Paste();
 		return true;
