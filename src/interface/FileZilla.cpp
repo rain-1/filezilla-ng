@@ -287,7 +287,7 @@ bool CFileZillaApp::OnInit()
 
 #ifndef _DEBUG
 	const wxString& buildType = CBuildInfo::GetBuildType();
-	if (buildType == _T("nightly"))
+	if (buildType == _T("nightly")) {
 		wxMessageBoxEx(_T("You are using a nightly development version of FileZilla 3, do not expect anything to work.\r\nPlease use the official releases instead.\r\n\r\n\
 Unless explicitly instructed otherwise,\r\n\
 DO NOT post bugreports,\r\n\
@@ -295,6 +295,14 @@ DO NOT use it in production environments,\r\n\
 DO NOT distribute the binaries,\r\n\
 DO NOT complain about it\r\n\
 USE AT OWN RISK"), _T("Important Information"));
+	}
+	else {
+		wxString v;
+		if (!wxGetEnv(_T("FZDEBUG"), &v) || v != _T("1")) {
+			COptions::Get()->SetOption(OPTION_LOGGING_DEBUGLEVEL, 0);
+			COptions::Get()->SetOption(OPTION_LOGGING_RAWLISTING, 0);
+		}
+	}
 #endif
 
 	if (!LoadResourceFiles())
