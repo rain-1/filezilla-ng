@@ -62,8 +62,7 @@ void CContextControl::CreateTab()
 	CState* pState = 0;
 
 	// See if we can reuse an existing context
-	for (size_t i = 0; i < m_context_controls.size(); i++)
-	{
+	for (size_t i = 0; i < m_context_controls.size(); i++) {
 		if (m_context_controls[i].tab_index != -1)
 			continue;
 
@@ -77,11 +76,9 @@ void CContextControl::CreateTab()
 			m_current_context_controls--;
 		break;
 	}
-	if (!pState)
-	{
+	if (!pState) {
 		pState = CContextManager::Get()->CreateState(m_pMainFrame);
-		if (!pState->CreateEngine())
-		{
+		if (!pState->CreateEngine()) {
 			wxMessageBoxEx(_("Failed to initialize FTP engine"));
 		}
 	}
@@ -121,10 +118,8 @@ void CContextControl::CreateContextControls(CState* pState)
 	const wxPoint initial_position(wxDefaultPosition);
 #endif
 
-	if (!m_context_controls.empty())
-	{
-		if (!m_tabs)
-		{
+	if (!m_context_controls.empty()) {
+		if (!m_tabs) {
 			m_tabs = new wxAuiNotebookEx();
 
 			wxSize splitter_size = m_context_controls[m_current_context_controls].pViewSplitter->GetSize();
@@ -203,23 +198,20 @@ void CContextControl::CreateContextControls(CState* pState)
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
 
-	if (layout == 1)
-	{
+	if (layout == 1) {
 		if (swap)
 			context_controls.pViewSplitter->SplitHorizontally(context_controls.pRemoteSplitter, context_controls.pLocalSplitter);
 		else
 			context_controls.pViewSplitter->SplitHorizontally(context_controls.pLocalSplitter, context_controls.pRemoteSplitter);
 	}
-	else
-	{
+	else {
 		if (swap)
 			context_controls.pViewSplitter->SplitVertically(context_controls.pRemoteSplitter, context_controls.pLocalSplitter);
 		else
 			context_controls.pViewSplitter->SplitVertically(context_controls.pLocalSplitter, context_controls.pRemoteSplitter);
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL))
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL)) {
 		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalTreeViewPanel, pState);
 		context_controls.pLocalTreeViewPanel->SetHeader(context_controls.pLocalViewHeader);
 		if (layout == 3 && swap)
@@ -229,16 +221,14 @@ void CContextControl::CreateContextControls(CState* pState)
 		else
 			context_controls.pLocalSplitter->SplitHorizontally(context_controls.pLocalTreeViewPanel, context_controls.pLocalListViewPanel);
 	}
-	else
-	{
+	else {
 		context_controls.pLocalTreeViewPanel->Hide();
 		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalListViewPanel, pState);
 		context_controls.pLocalListViewPanel->SetHeader(context_controls.pLocalViewHeader);
 		context_controls.pLocalSplitter->Initialize(context_controls.pLocalListViewPanel);
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE))
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE)) {
 		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteTreeViewPanel, pState);
 		context_controls.pRemoteTreeViewPanel->SetHeader(context_controls.pRemoteViewHeader);
 		if (layout == 3 && !swap)
@@ -248,16 +238,14 @@ void CContextControl::CreateContextControls(CState* pState)
 		else
 			context_controls.pRemoteSplitter->SplitHorizontally(context_controls.pRemoteTreeViewPanel, context_controls.pRemoteListViewPanel);
 	}
-	else
-	{
+	else {
 		context_controls.pRemoteTreeViewPanel->Hide();
 		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteListViewPanel, pState);
 		context_controls.pRemoteListViewPanel->SetHeader(context_controls.pRemoteViewHeader);
 		context_controls.pRemoteSplitter->Initialize(context_controls.pRemoteListViewPanel);
 	}
 
-	if (layout == 3)
-	{
+	if (layout == 3) {
 		if (!swap)
 			context_controls.pRemoteSplitter->SetSashGravity(1.0);
 		else
@@ -273,8 +261,7 @@ void CContextControl::CreateContextControls(CState* pState)
 
 	pState->GetComparisonManager()->SetListings(context_controls.pLocalListView, context_controls.pRemoteListView);
 
-	if (m_tabs)
-	{
+	if (m_tabs) 	{
 		context_controls.tab_index = m_tabs->GetPageCount();
 		m_tabs->AddPage(context_controls.pViewSplitter, pState->GetTitle());
 
@@ -285,8 +272,7 @@ void CContextControl::CreateContextControls(CState* pState)
 
 		context_controls.site_bookmarks = m_context_controls[m_current_context_controls].site_bookmarks;
 	}
-	else
-	{
+	else {
 		context_controls.tab_index = 0;
 		context_controls.site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
 
