@@ -184,7 +184,9 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 		m_pTextCtrl->Remove(0, oldLength + 1);
 	}
 #ifdef __WXMAC__
-	m_pTextCtrl->SetInsertionPointEnd();
+	if (m_pTextCtrl->GetInsertionPoint() != m_pTextCtrl->GetLastPosition()) {
+		m_pTextCtrl->SetInsertionPointEnd();
+	}
 #endif
 
 	int lineLength = m_attributeCache[static_cast<int>(messagetype)].len + messageLength;
