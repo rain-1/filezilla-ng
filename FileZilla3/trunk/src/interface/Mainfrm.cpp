@@ -60,6 +60,9 @@
 #include <wx/combobox.h>
 #endif
 
+#include <functional>
+#include <map>
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -79,12 +82,16 @@ static int GetAvailableUpdateMenuId()
 }
 #endif
 
-wxTextEntry* GetSpecialTextEntry(wxWindow* w)
+std::map<int, std::pair<std::function<void(wxTextEntry*)>, wxChar>> keyboardCommands;
+
+wxTextEntry* GetSpecialTextEntry(wxWindow* w, wxChar cmd)
 {
 #ifdef __WXMAC__
-	wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(w);
-	if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
-		return text;
+	if( cmd == 'A' || cmd == 'V' ) {
+		wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(w);
+		if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
+			return text;
+		}
 	}
 	wxComboBox* combo = dynamic_cast<wxComboBox*>(w);
 	if( combo ) {
@@ -92,6 +99,23 @@ wxTextEntry* GetSpecialTextEntry(wxWindow* w)
 	}
 #endif
 	return 0;
+}
+
+bool HandleKeyboardCommand(wxCommandEvent& event, wxWindow& parent)
+{
+	auto const& it = keyboardCommands.find(event.GetId());
+	if( it == keyboardCommands.end() ) {
+		return false;
+	}
+
+	wxTextEntry* e = GetSpecialTextEntry(parent.FindFocus(), it->second.second);
+	if( e ) {
+		it->second.first(e);
+	}
+	else {
+		event.Skip();
+	}
+	return true;
 }
 
 BEGIN_EVENT_TABLE(CMainFrame, wxFrame)
@@ -234,9 +258,14 @@ protected:
 
 CMainFrame::CMainFrame()
 	: m_comparisonToggleAcceleratorId(wxNewId())
-	, m_pasteId(wxNewId())
-	, m_selectAllId(wxNewId())
 {
+#ifdef __WXMAC__
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Cut(); }, 'X');
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Copy(); }, 'C');
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Paste(); }, 'V');
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->SelectAll(); }, 'A');
+#endif
+
 	m_pActivityLed[0] = m_pActivityLed[1] = 0;
 
 	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CMainFrame"));
@@ -411,22 +440,19 @@ CMainFrame::CMainFrame()
 	if (!RestoreSplitterPositions())
 		SetDefaultSplitterPositions();
 
-	wxAcceleratorEntry entries[13];
+	std::vector<wxAcceleratorEntry> entries;
 	//entries[0].Set(wxACCEL_CMD | wxACCEL_SHIFT, 'I', XRCID("ID_MENU_VIEW_FILTERS"));
-	for (int i = 0; i < 10; i++)
-	{
+	for (int i = 0; i < 10; i++) {
 		tab_hotkey_ids[i] = wxNewId();
-		entries[i].Set(wxACCEL_CMD, (int)'0' + i, tab_hotkey_ids[i]);
+		entries.push_back(wxAcceleratorEntry(wxACCEL_CMD, (int)'0' + i, tab_hotkey_ids[i]));
 	}
-	entries[10].Set(wxACCEL_CMD | wxACCEL_SHIFT, 'O', m_comparisonToggleAcceleratorId);
-	entries[11].Set(wxACCEL_CMD, 'V', m_pasteId);
-	entries[12].Set(wxACCEL_CMD, 'A', m_selectAllId);
-
-	int size = sizeof(entries) / sizeof(wxAcceleratorEntry);
-#ifndef __WXMAC__
-	size -= 2;
+	entries.push_back(wxAcceleratorEntry(wxACCEL_CMD | wxACCEL_SHIFT, 'O', m_comparisonToggleAcceleratorId));
+#ifdef __WXMAC__
+	for (auto it = keyboardCommands.begin(); it != keyboardCommands.end(); ++it) {
+		entries.push_back(wxAcceleratorEntry(wxACCEL_CMD, it->second.second, it->first));
+	}
 #endif
-	wxAcceleratorTable accel(size, entries);
+	wxAcceleratorTable accel(entries.size(), &entries[0]);
 	SetAcceleratorTable(accel);
 
 	ConnectNavigationHandler(m_pStatusView);
@@ -896,23 +922,8 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		if (pComparisonManager && pComparisonManager->IsComparing())
 			pComparisonManager->CompareListings();
 	}
-	else if (event.GetId() == m_pasteId) {
-		wxTextEntry* e = GetSpecialTextEntry(FindFocus());
-		if( e ) {
-			e->Paste();
-		}
-		else {
-			event.Skip();
-		}
-	}
-	else if (event.GetId() == m_selectAllId) {
-		wxTextEntry* e = GetSpecialTextEntry(FindFocus());
-		if( e ) {
-			e->SelectAll();
-		}
-		else {
-			event.Skip();
-		}
+	else if (HandleKeyboardCommand(event, *this)) {
+		return;
 	}
 	else
 	{
