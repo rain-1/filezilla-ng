@@ -1356,7 +1356,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	if (controls) {
 		COptions::Get()->SetLastServer(controls->pState->GetLastServer());
 		COptions::Get()->SetOption(OPTION_LASTSERVERPATH, controls->pState->GetLastServerPath().GetSafePath());
-		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, controls->site_bookmarks->path);
+		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, controls->site_bookmarks ? controls->site_bookmarks->path : wxString());
 	}
 
 	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
@@ -2848,8 +2848,10 @@ bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path 
 	}
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromState(pState);
-	if (!isReconnect && controls)
+	if (!isReconnect && controls) {
 		controls->site_bookmarks.reset();
+		m_pMenuBar->ClearBookmarks();
+	}
 
 	return pState->Connect(server, path);
 }
