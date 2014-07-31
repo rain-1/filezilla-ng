@@ -536,4 +536,5 @@ void CVerifyCertDialog::OnCertificateChoice(wxCommandEvent& event)
 
 	m_pDlg->Layout();
 	m_pDlg->GetSizer()->Fit(m_pDlg);
+	m_pDlg->Refresh();
 }
