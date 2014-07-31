@@ -10,6 +10,18 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0.2 (2014-07-31)
+
++ Handle setting files redirected using symbolic links
+- MSW: Updated installer to fix an issue with re-registring the shell extension after a reboot on 32bit system if a another program keeps the extension locked
+- Closing FileZilla during a recursive operation no longer hangs
+- OS X: Manually handle CMD+V and CMD+A for password fields as Cocoa cannot seem to do it by itself
+- OS X: Manually handle CMD+X, CMD+C, CMD+V and CMD+A in the path combo boxes
+- OS X: Creating new tabs selects the newly created tab again
+- Detect some types TLS error conditions earlier instead of waiting for a timeout
+- Small performance imprvement for TLS handshakes
+- Do not show error message if "Create and enter" is used with synchronized browsing enabled
+
 3.9.0.1 (2014-07-22)
 
 - MSW: Fix installation issue with locked DLLs affecting users of 32bit Windows
