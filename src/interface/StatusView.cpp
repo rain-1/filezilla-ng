@@ -9,6 +9,7 @@
 #endif
 
 #define MAX_LINECOUNT 1000
+#define LINECOUNT_REMOVAL 10
 
 BEGIN_EVENT_TABLE(CStatusView, wxWindow)
 	EVT_SIZE(CStatusView::OnSize)
@@ -180,8 +181,13 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 #ifndef __WXGTK__
 		m_pTextCtrl->Freeze();
 #endif //__WXGTK__
-		int oldLength = m_lineLengths.front();
-		m_pTextCtrl->Remove(0, oldLength + 1);
+		int oldLength = 0;
+		auto it = m_lineLengths.begin();
+		for (int i = 0; i < LINECOUNT_REMOVAL; ++i) {
+			oldLength += *(it++) + 1;
+		}
+		m_unusedLineLengths.splice(m_unusedLineLengths.end(), m_lineLengths, m_lineLengths.begin(), it);
+		m_pTextCtrl->Remove(0, oldLength);
 	}
 #ifdef __WXMAC__
 	if (m_pTextCtrl->GetInsertionPoint() != m_pTextCtrl->GetLastPosition()) {
@@ -247,16 +253,20 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, con
 #endif
 
 	if (m_nLineCount >= MAX_LINECOUNT) {
-		auto it = m_lineLengths.begin();
-		*it = lineLength;
-		m_lineLengths.splice(m_lineLengths.end(), m_lineLengths, it);
+		m_nLineCount -= LINECOUNT_REMOVAL - 1;
 #ifndef __WXGTK__
 		m_pTextCtrl->Thaw();
 #endif
 	}
 	else {
-		m_lineLengths.push_back(lineLength);
 		m_nLineCount++;
+	}
+	if (m_unusedLineLengths.empty()) {
+		m_lineLengths.push_back(lineLength);
+	}
+	else {
+		m_unusedLineLengths.front() = lineLength;
+		m_lineLengths.splice(m_lineLengths.end(), m_unusedLineLengths, m_unusedLineLengths.begin());
 	}
 }
 
@@ -443,10 +453,10 @@ bool CStatusView::Show(bool show /*=true*/)
 	m_shown = show;
 
 	if (show && m_pTextCtrl) {
-		if (m_hiddenLines.size() == MAX_LINECOUNT) {
+		if (m_hiddenLines.size() >= MAX_LINECOUNT) {
 			m_pTextCtrl->Clear();
 			m_nLineCount = 0;
-			m_lineLengths.clear();
+			m_unusedLineLengths.splice(m_unusedLineLengths.end(), m_lineLengths, m_lineLengths.begin(), m_lineLengths.end());
 		}
 
 		for (auto const& line : m_hiddenLines) {

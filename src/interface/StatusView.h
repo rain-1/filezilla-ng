@@ -34,6 +34,7 @@ protected:
 	void OnCopy(wxCommandEvent& );
 
 	std::list<int> m_lineLengths;
+	std::list<int> m_unusedLineLengths;
 
 	struct t_attributeCache
 	{
