@@ -140,6 +140,7 @@ CSocketEventDispatcher& CSocketEventDispatcher::Get()
 
 void CSocketEventDispatcher::SendEvent(CSocketEvent* evt)
 {
+	wxASSERT(evt->GetSocketEventHandler());
 	wxCriticalSectionLocker lock(m_sync);
 
 	const bool send = m_pending_events.empty() && !m_inside_loop;
@@ -189,6 +190,7 @@ void CSocketEventDispatcher::RemovePending(const CSocketEventSource* pSource)
 
 void CSocketEventDispatcher::UpdatePending(const CSocketEventHandler* pOldHandler, const CSocketEventSource* pOldSource, CSocketEventHandler* pNewHandler, CSocketEventSource* pNewSource)
 {
+	wxASSERT(pNewHandler);
 	wxCriticalSectionLocker lock(m_sync);
 
 	for (auto const& evt : m_pending_events ) {
@@ -1131,12 +1133,10 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.Lock();
 
-	if (!pEvtHandler)
-	{
+	if (!pEvtHandler) {
 		CSocketEventDispatcher::Get().RemovePending(m_pEvtHandler);
 	}
-	else
-	{
+	else {
 		if (m_pEvtHandler)
 			CSocketEventDispatcher::Get().UpdatePending(m_pEvtHandler, this, pEvtHandler, this);
 	}
@@ -1144,6 +1144,7 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 	if (pEvtHandler && !m_pEvtHandler && m_state == closing && m_pSocketThread) {
 		// After getting FD_CLOSE, no further events are recorded, so send
 		// it out to new handler manually
+		m_pEvtHandler = pEvtHandler;
 		m_pSocketThread->SendCloseEvent();
 	}
 #else
@@ -1152,25 +1153,21 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 
 	m_pEvtHandler = pEvtHandler;
 
-	if (m_pSocketThread)
-	{
-		if (pEvtHandler && m_state == connected)
-		{
+	if (m_pSocketThread) {
+		if (pEvtHandler && m_state == connected) {
 #ifdef __WXMSW__
 			// If a graceful shutdown is going on in background already,
 			// no further events are recorded. Send out events we're not
 			// waiting for (i.e. they got triggered already) manually.
 
-			if (!(m_pSocketThread->m_waiting & WAIT_WRITE))
-			{
+			if (!(m_pSocketThread->m_waiting & WAIT_WRITE)) {
 				CSocketEvent *evt = new CSocketEvent(pEvtHandler, this, CSocketEvent::write, 0);
 				CSocketEventDispatcher::Get().SendEvent(evt);
 			}
 
 			CSocketEvent *evt = new CSocketEvent(pEvtHandler, this, CSocketEvent::read, 0);
 			CSocketEventDispatcher::Get().SendEvent(evt);
-			if (m_pSocketThread->m_waiting & WAIT_WRITE)
-			{
+			if (m_pSocketThread->m_waiting & WAIT_WRITE) {
 				m_pSocketThread->m_waiting &= ~WAIT_READ;
 				m_pSocketThread->WakeupThread(true);
 			}
