@@ -65,16 +65,13 @@ typedef struct fz_tagNMLVODSTATECHANGE
 
 template<class CFileData> WXLRESULT CFileListCtrl<CFileData>::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-	if (nMsg == WM_APPCOMMAND)
-	{
+	if (nMsg == WM_APPCOMMAND) {
 		DWORD cmd = GET_APPCOMMAND_LPARAM(lParam);
-		if (cmd == APPCOMMAND_BROWSER_FORWARD)
-		{
+		if (cmd == APPCOMMAND_BROWSER_FORWARD) {
 			OnNavigationEvent(true);
 			return true;
 		}
-		else if (cmd == APPCOMMAND_BROWSER_BACKWARD)
-		{
+		else if (cmd == APPCOMMAND_BROWSER_BACKWARD) {
 			OnNavigationEvent(false);
 			return true;
 		}
@@ -93,8 +90,7 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 	*result = 0;
 
 	NMHDR* pNmhdr = (NMHDR*)lParam;
-	if (pNmhdr->code == LVN_ODSTATECHANGED)
-	{
+	if (pNmhdr->code == LVN_ODSTATECHANGED) {
 		// A range of items got (de)selected
 
 		if (m_insideSetSelection)
@@ -109,8 +105,7 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 			// Even though it is very slow, we need to manually recount.
 			m_pFilelistStatusBar->UnselectAll();
 			int item = -1;
-			while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-			{
+			while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 				if (m_hasParent && !item)
 					continue;
 
@@ -125,13 +120,11 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 					m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
 			}
 		}
-		else
-		{
+		else {
 			fzNMLVODSTATECHANGE* pNmOdStateChange = (fzNMLVODSTATECHANGE*)lParam;
 
 			wxASSERT(pNmOdStateChange->iFrom <= pNmOdStateChange->iTo);
-			for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; i++)
-			{
+			for (int i = pNmOdStateChange->iFrom; i <= pNmOdStateChange->iTo; ++i) {
 				if (m_hasParent && !i)
 					continue;
 
@@ -148,8 +141,7 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 		}
 		return true;
 	}
-	else if (pNmhdr->code == LVN_ITEMCHANGED)
-	{
+	else if (pNmhdr->code == LVN_ITEMCHANGED) {
 		if (m_insideSetSelection)
 			return true;
 
@@ -161,12 +153,10 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 			m_pFilelistStatusBar->UnselectAll();
 		}
 	}
-	else if (pNmhdr->code == LVN_MARQUEEBEGIN)
-	{
+	else if (pNmhdr->code == LVN_MARQUEEBEGIN) {
 		SetFocus();
 	}
-	else if (pNmhdr->code == LVN_GETDISPINFO)
-	{
+	else if (pNmhdr->code == LVN_GETDISPINFO) {
 		// Handle this manually instead of using wx for it
 		// so that we can set the overlay image
 		LV_DISPINFO *info = (LV_DISPINFO *)lParam;
@@ -176,15 +166,13 @@ template<class CFileData> bool CFileListCtrl<CFileData>::MSWOnNotify(int idCtrl,
 
 		int column = m_pVisibleColumnMapping[lvi.iSubItem];
 
-		if (lvi.mask & LVIF_TEXT)
-		{
+		if (lvi.mask & LVIF_TEXT) {
 			wxString text = GetItemText(item, column);
 			wxStrncpy(lvi.pszText, text, lvi.cchTextMax - 1);
 			lvi.pszText[lvi.cchTextMax - 1] = 0;
 		}
 
-		if (lvi.mask & LVIF_IMAGE)
-		{
+		if (lvi.mask & LVIF_IMAGE) {
 			if (!lvi.iSubItem)
 				lvi.iImage = OnGetItemImage(item);
 			else

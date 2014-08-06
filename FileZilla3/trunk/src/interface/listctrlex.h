@@ -4,7 +4,7 @@
 #include "systemimagelist.h"
 #include <wx/dnd.h>
 
-class wxListCtrlEx : public wxListCtrl, public CSystemImageList
+class wxListCtrlEx : public wxNavigationEnabled<wxListCtrl>, public CSystemImageList
 {
 public:
 	wxListCtrlEx(wxWindow *parent,
@@ -75,12 +75,12 @@ protected:
 	// Has to be called after setting the image list for the items
 	void InitHeaderSortImageList();
 #ifdef __WXMSW__
-	wxImageListEx *m_pHeaderImageList;
+	wxImageListEx *m_pHeaderImageList{};
 #endif
 	struct _header_icon_index
 	{
-		int up;
-		int down;
+		int up{-1};
+		int down{-1};
 	} m_header_icon_index;
 
 private:
@@ -98,7 +98,7 @@ private:
 	void OnEndLabelEdit(wxListEvent& event);
 	void OnColumnDragging(wxListEvent& event);
 
-	bool m_prefixSearch_enabled;
+	bool m_prefixSearch_enabled{};
 	wxDateTime m_prefixSearch_lastKeyPress;
 	wxString m_prefixSearch_prefix;
 
@@ -120,11 +120,11 @@ private:
 		bool fixed;
 	};
 	std::vector<t_columnInfo> m_columnInfo;
-	unsigned int *m_pVisibleColumnMapping;
+	unsigned int *m_pVisibleColumnMapping{};
 
 #ifdef __WXMSW__
 	virtual bool MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
-	bool m_columnDragging;
+	bool m_columnDragging{};
 #endif
 
 #ifndef __WXMSW__
