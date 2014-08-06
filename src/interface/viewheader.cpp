@@ -85,17 +85,15 @@ EVT_KEY_DOWN(CComboBoxEx::OnKeyDown)
 EVT_CHAR(CComboBoxEx::OnChar)
 END_EVENT_TABLE()
 
-BEGIN_EVENT_TABLE(CViewHeader, wxWindow)
+BEGIN_EVENT_TABLE(CViewHeader, wxNavigationEnabled<wxWindow>)
 EVT_SIZE(CViewHeader::OnSize)
 EVT_PAINT(CViewHeader::OnPaint)
 END_EVENT_TABLE()
 
 CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
-	: wxWindow(pParent, wxID_ANY)
 {
-	m_cbOffset = 0;
-	m_labelHeight = 0;
-	m_alreadyInPaint = false;
+	Create(pParent, wxID_ANY);
+
 	m_pComboBox = new CComboBoxEx(this);
 	m_pLabel = new wxStaticText(this, wxID_ANY, label, wxDefaultPosition, wxDefaultSize);
 	wxSize size = GetSize();
@@ -122,13 +120,17 @@ void CViewHeader::OnSize(wxSizeEvent&)
 	rect.SetX(m_cbOffset);
 	rect.Deflate(0, border_offset / 2);
 	rect.SetWidth(rect.GetWidth() - border_offset / 2);
-	m_pComboBox->SetSize(rect);
+	if (m_pComboBox) {
+		m_pComboBox->SetSize(rect);
+	}
 
 	rect.SetX(5);
 	rect.SetWidth(m_cbOffset - 5);
 	rect.SetY((client_rect.GetHeight() - m_labelHeight) / 2 - 1);
 	rect.SetHeight(m_labelHeight);
-	m_pLabel->SetSize(rect);
+	if (m_pLabel) {
+		m_pLabel->SetSize(rect);
+	}
 
 	Refresh();
 }
