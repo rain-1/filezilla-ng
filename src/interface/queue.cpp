@@ -744,7 +744,6 @@ bool CFolderScanItem::TryRemoveAll()
 
 BEGIN_EVENT_TABLE(CQueueViewBase, wxListCtrlEx)
 EVT_ERASE_BACKGROUND(CQueueViewBase::OnEraseBackground)
-EVT_NAVIGATION_KEY(CQueueViewBase::OnNavigationKey)
 EVT_CHAR(CQueueViewBase::OnChar)
 EVT_LIST_COL_END_DRAG(wxID_ANY, CQueueViewBase::OnEndColumnDrag)
 EVT_TIMER(wxID_ANY, CQueueViewBase::OnTimer)
@@ -1411,17 +1410,10 @@ void CQueueViewBase::RefreshItem(const CQueueItem* pItem)
 #endif
 }
 
-void CQueueViewBase::OnNavigationKey(wxNavigationKeyEvent& event)
-{
-	event.SetEventObject(m_pQueue);
-	m_pQueue->ProcessWindowEvent(event);
-}
-
 void CQueueViewBase::OnChar(wxKeyEvent& event)
 {
 	const int code = event.GetKeyCode();
-	if (code != WXK_LEFT && code != WXK_RIGHT)
-	{
+	if (code != WXK_LEFT && code != WXK_RIGHT) {
 		event.Skip();
 		return;
 	}
