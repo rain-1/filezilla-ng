@@ -21,7 +21,7 @@
 DECLARE_EVENT_TYPE(fzEVT_POSTSCROLL, -1)
 DEFINE_EVENT_TYPE(fzEVT_POSTSCROLL)
 
-BEGIN_EVENT_TABLE(wxListCtrlEx, wxNavigationEnabled<wxListCtrl>)
+BEGIN_EVENT_TABLE(wxListCtrlEx, wxListCtrlExBase)
 EVT_COMMAND(wxID_ANY, fzEVT_POSTSCROLL, wxListCtrlEx::OnPostScrollEvent)
 EVT_SCROLLWIN(wxListCtrlEx::OnScrollEvent)
 EVT_MOUSEWHEEL(wxListCtrlEx::OnMouseWheel)
