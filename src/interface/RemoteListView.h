@@ -24,7 +24,6 @@ public:
 	virtual void OnExitComparisonMode();
 
 	void LinkIsNotDir(const CServerPath& path, const wxString& link);
-
 protected:
 	virtual wxString GetItemText(int item, unsigned int column);
 

@@ -312,6 +312,7 @@ public:
 
 	wxSize GetTextSize() const { return m_textSize; }
 
+	bool AcceptsFocus() const { return false; }
 protected:
 	wxString m_text;
 
@@ -874,14 +875,12 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 
 	SortList(-1, -1, false);
 
-	if (IsComparing())
-	{
+	if (IsComparing()) {
 		m_originalIndexMapping.clear();
 		RefreshComparison();
 		ReselectItems(selectedNames, prevFocused, ensureVisible);
 	}
-	else
-	{
+	else {
 		ReselectItems(selectedNames, prevFocused, ensureVisible);
 		RefreshListOnly(eraseBackground);
 	}
@@ -2862,16 +2861,13 @@ void CRemoteListView::OnMenuRefresh(wxCommandEvent&)
 
 void CRemoteListView::OnNavigationEvent(bool forward)
 {
-	if (!forward)
-	{
-		if (!m_pState->IsRemoteIdle())
-		{
+	if (!forward) {
+		if (!m_pState->IsRemoteIdle()) {
 			wxBell();
 			return;
 		}
 
-		if (!m_pDirectoryListing)
-		{
+		if (!m_pDirectoryListing) {
 			wxBell();
 			return;
 		}

@@ -21,7 +21,7 @@
 DECLARE_EVENT_TYPE(fzEVT_POSTSCROLL, -1)
 DEFINE_EVENT_TYPE(fzEVT_POSTSCROLL)
 
-BEGIN_EVENT_TABLE(wxListCtrlEx, wxListCtrl)
+BEGIN_EVENT_TABLE(wxListCtrlEx, wxNavigationEnabled<wxListCtrl>)
 EVT_COMMAND(wxID_ANY, fzEVT_POSTSCROLL, wxListCtrlEx::OnPostScrollEvent)
 EVT_SCROLLWIN(wxListCtrlEx::OnScrollEvent)
 EVT_MOUSEWHEEL(wxListCtrlEx::OnMouseWheel)
@@ -44,16 +44,9 @@ wxListCtrlEx::wxListCtrlEx(wxWindow *parent,
 						   long style,
 						   const wxValidator& validator,
 						   const wxString& name)
-						   : wxListCtrl(parent, id, pos, size, style, validator, name)
 {
-#ifdef __WXMSW__
-	m_pHeaderImageList = 0;
-#endif
-	m_header_icon_index.down = m_header_icon_index.up = -1;
-
-	m_pVisibleColumnMapping = 0;
-	m_prefixSearch_enabled = false;
-
+	Create(parent, id, pos, size, style, validator, name);
+	
 #ifndef __WXMSW__
 	m_editing = false;
 #else
