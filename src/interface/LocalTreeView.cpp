@@ -212,9 +212,7 @@ EVT_TREE_SEL_CHANGING(wxID_ANY, CLocalTreeView::OnSelectionChanging)
 #endif
 EVT_TREE_SEL_CHANGED(wxID_ANY, CLocalTreeView::OnSelectionChanged)
 EVT_TREE_BEGIN_DRAG(wxID_ANY, CLocalTreeView::OnBeginDrag)
-#ifndef __WXMSW__
-EVT_KEY_DOWN(CLocalTreeView::OnKeyDown)
-#else
+#ifdef __WXMSW__
 EVT_COMMAND(-1, fzEVT_VOLUMESENUMERATED, CLocalTreeView::OnVolumesEnumerated)
 EVT_COMMAND(-1, fzEVT_VOLUMEENUMERATED, CLocalTreeView::OnVolumesEnumerated)
 #endif //__WXMSW__
@@ -960,24 +958,6 @@ void CLocalTreeView::OnBeginDrag(wxTreeEvent& event)
 		m_pState->RefreshLocal();
 	}
 }
-
-#ifndef __WXMSW__
-void CLocalTreeView::OnKeyDown(wxKeyEvent& event)
-{
-	if (event.GetKeyCode() != WXK_TAB)
-	{
-		event.Skip();
-		return;
-	}
-
-	wxNavigationKeyEvent navEvent;
-	navEvent.SetEventObject(this);
-	navEvent.SetDirection(!event.ShiftDown());
-	navEvent.SetFromTab(true);
-	navEvent.ResumePropagation(1);
-	ProcessEvent(navEvent);
-}
-#endif
 
 #ifdef __WXMSW__
 

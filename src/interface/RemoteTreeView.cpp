@@ -221,9 +221,6 @@ EVT_TREE_ITEM_EXPANDING(wxID_ANY, CRemoteTreeView::OnItemExpanding)
 EVT_TREE_SEL_CHANGED(wxID_ANY, CRemoteTreeView::OnSelectionChanged)
 EVT_TREE_ITEM_ACTIVATED(wxID_ANY, CRemoteTreeView::OnItemActivated)
 EVT_TREE_BEGIN_DRAG(wxID_ANY, CRemoteTreeView::OnBeginDrag)
-#ifndef __WXMSW__
-EVT_KEY_DOWN(CRemoteTreeView::OnKeyDown)
-#endif //__WXMSW__
 EVT_TREE_ITEM_MENU(wxID_ANY, CRemoteTreeView::OnContextMenu)
 EVT_MENU(XRCID("ID_CHMOD"), CRemoteTreeView::OnMenuChmod)
 EVT_MENU(XRCID("ID_DOWNLOAD"), CRemoteTreeView::OnMenuDownload)
@@ -924,24 +921,6 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 	}
 #endif
 }
-
-#ifndef __WXMSW__
-void CRemoteTreeView::OnKeyDown(wxKeyEvent& event)
-{
-	if (event.GetKeyCode() != WXK_TAB)
-	{
-		event.Skip();
-		return;
-	}
-
-	wxNavigationKeyEvent navEvent;
-	navEvent.SetEventObject(this);
-	navEvent.SetDirection(!event.ShiftDown());
-	navEvent.SetFromTab(true);
-	navEvent.ResumePropagation(1);
-	ProcessEvent(navEvent);
-}
-#endif
 
 void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 {

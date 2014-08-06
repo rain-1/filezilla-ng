@@ -64,9 +64,7 @@ protected:
 #endif
 	void OnSelectionChanged(wxTreeEvent& event);
 	void OnBeginDrag(wxTreeEvent& event);
-#ifndef __WXMSW__
-	void OnKeyDown(wxKeyEvent& event);
-#else
+#ifdef __WXMSW__
 	void OnVolumesEnumerated(wxCommandEvent& event);
 	CVolumeDescriptionEnumeratorThread* m_pVolumeEnumeratorThread;
 #endif
