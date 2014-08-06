@@ -53,37 +53,7 @@ protected:
 		return wxComboBox::MSWDefWindowProc(nMsg, wParam, lParam);
 	}
 #endif //__WXMSW__
-
-	DECLARE_EVENT_TABLE()
-	void OnKeyDown(wxKeyEvent& event)
-	{
-		if (event.GetKeyCode() != WXK_TAB)
-		{
-			event.Skip();
-			return;
-		}
-
-		wxNavigationKeyEvent navEvent;
-		navEvent.SetEventObject(m_parent);
-		navEvent.SetDirection(!event.ShiftDown());
-		navEvent.SetFromTab(true);
-		navEvent.ResumePropagation(1);
-		m_parent->GetEventHandler()->ProcessEvent(navEvent);
-	}
-
-	void OnChar(wxKeyEvent& event)
-	{
-		if (event.GetKeyCode() == WXK_TAB)
-			return;
-
-		event.Skip();
-	}
 };
-
-BEGIN_EVENT_TABLE(CComboBoxEx, wxComboBox)
-EVT_KEY_DOWN(CComboBoxEx::OnKeyDown)
-EVT_CHAR(CComboBoxEx::OnChar)
-END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(CViewHeader, wxNavigationEnabled<wxWindow>)
 EVT_SIZE(CViewHeader::OnSize)
