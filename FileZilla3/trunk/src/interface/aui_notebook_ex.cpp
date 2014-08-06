@@ -67,7 +67,7 @@ protected:
 
 BEGIN_EVENT_TABLE(wxAuiNotebookEx, wxAuiNotebook)
 EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiNotebookEx::OnPageChanged)
-EVT_NAVIGATION_KEY(wxAuiNotebookEx::OnNavigationKey)
+//EVT_NAVIGATION_KEY(wxAuiNotebookEx::OnNavigationKey)
 END_EVENT_TABLE()
 
 wxAuiNotebookEx::wxAuiNotebookEx()
@@ -106,8 +106,7 @@ bool wxAuiNotebookEx::SetPageText(size_t page_idx, const wxString& text)
 	// update what's on screen
 	wxAuiTabCtrl* ctrl;
 	int ctrl_idx;
-	if (FindTab(page_info.window, &ctrl, &ctrl_idx))
-	{
+	if (FindTab(page_info.window, &ctrl, &ctrl_idx)) {
 		wxAuiNotebookPage& info = ctrl->GetPage(ctrl_idx);
 		info.caption = text;
 		ctrl->Refresh();
@@ -178,4 +177,23 @@ void wxAuiNotebookEx::AdvanceTab(bool forward)
 		page = GetPageCount() - 1;
 
 	SetSelection(page);
+}
+
+bool wxAuiNotebookEx::AddPage(wxWindow *page, const wxString &text, bool select, int imageId)
+{
+	bool const res = wxAuiNotebook::AddPage(page, text, select, imageId);
+	size_t const count = GetPageCount();
+
+	if (count > 1) {
+		GetPage(count - 1)->MoveAfterInTabOrder(GetPage(count - 2));
+	}
+
+	if (GetWindowStyle() & wxAUI_NB_BOTTOM) {
+		GetActiveTabCtrl()->MoveAfterInTabOrder(GetPage(count - 1));
+	}
+	else {
+		GetActiveTabCtrl()->MoveBeforeInTabOrder(GetPage(0));
+	}
+
+	return res;
 }
