@@ -6,7 +6,7 @@
 #endif
 
 class CFastTextCtrl;
-class CStatusView : public wxWindow
+class CStatusView : public wxNavigationEnabled<wxWindow>
 {
 public:
 	CStatusView(wxWindow* parent, wxWindowID id);
@@ -23,15 +23,16 @@ public:
 
 protected:
 
-	int m_nLineCount;
+	int m_nLineCount{};
 	wxString m_Content;
-	CFastTextCtrl *m_pTextCtrl;
+	CFastTextCtrl *m_pTextCtrl{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent &);
 	void OnContextMenu(wxContextMenuEvent&);
 	void OnClear(wxCommandEvent& );
 	void OnCopy(wxCommandEvent& );
+	void OnTimer(wxTimerEvent&);
 
 	std::list<int> m_lineLengths;
 	std::list<int> m_unusedLineLengths;
@@ -46,9 +47,9 @@ protected:
 #endif
 	} m_attributeCache[static_cast<int>(MessageType::count)];
 
-	bool m_rtl;
+	bool m_rtl{};
 
-	bool m_shown;
+	bool m_shown{};
 
 	// Don't update actual log window if not shown,
 	// do it later when showing the window.
@@ -60,7 +61,7 @@ protected:
 	};
 	std::list<t_line> m_hiddenLines;
 
-	bool m_showTimestamps;
+	bool m_showTimestamps{};
 	wxDateTime m_lastTime;
 	wxString m_lastTimeString;
 };
