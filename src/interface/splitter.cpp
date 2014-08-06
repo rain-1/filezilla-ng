@@ -215,19 +215,18 @@ bool CSplitterWindowEx::Unsplit(wxWindow* toRemove /*=NULL*/)
 	return wxSplitterWindow::Unsplit(toRemove);
 }
 
-bool CSplitterWindowEx::SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition /*=0*/)
+void CSplitterWindowEx::PrepareSplit(wxWindow* window1, wxWindow* window2, int sashPosition, bool horizontal)
 {
 	int w, h;
 	GetClientSize(&w, &h);
 
-	int size = h;
+	int size = horizontal ? h : w;
 
-	if (sashPosition == 0)
-	{
-		if (m_sashGravity == 0.5)
+	if (sashPosition == 0) {
+		if (m_sashGravity == 0.5) {
 			sashPosition = (int)(size * m_relative_sash_position);
-		else if (m_lastSashPosition != -1)
-		{
+		}
+		else if (m_lastSashPosition != -1) {
 			if (m_lastSashPosition < 0)
 				sashPosition = size + m_lastSashPosition - GetSashSize();
 			else
@@ -239,35 +238,20 @@ bool CSplitterWindowEx::SplitHorizontally(wxWindow* window1, wxWindow* window2, 
 	// Maximize window -> Unsplit -> Restore -> Split -> Resize window
 	m_lastSize = wxSize(w, h);
 
+	if (window1 && window2) {
+		window1->MoveBeforeInTabOrder(window2);
+	}
+}
+
+bool CSplitterWindowEx::SplitHorizontally(wxWindow* window1, wxWindow* window2, int sashPosition /*=0*/)
+{
+	PrepareSplit(window1, window2, sashPosition, true);
 	return wxSplitterWindow::SplitHorizontally(window1, window2, sashPosition);
 }
 
 bool CSplitterWindowEx::SplitVertically(wxWindow* window1, wxWindow* window2, int sashPosition /*=0*/)
 {
-	int w, h;
-	GetClientSize(&w, &h);
-
-	int size = w;
-
-	if (sashPosition == 0)
-	{
-		if (m_sashGravity == 0.5)
-		{
-			sashPosition = (int)(size * m_relative_sash_position);
-		}
-		else if (m_lastSashPosition != -1)
-		{
-			if (m_lastSashPosition < 0)
-				sashPosition = size + m_lastSashPosition - GetSashSize();
-			else
-				sashPosition = m_lastSashPosition;
-		}
-	}
-
-	// Needs to be set to avoid resizing oddity:
-	// Maximize window -> Unsplit -> Restore -> Split -> Resize window
-	m_lastSize = wxSize(w, h);
-
+	PrepareSplit(window1, window2, sashPosition, false);
 	return wxSplitterWindow::SplitVertically(window1, window2, sashPosition);
 }
 
