@@ -8,7 +8,7 @@ END_EVENT_TABLE()
 
 CView::CView(wxWindow* pParent)
 {
-	Create(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL|wxSUNKEN_BORDER);
+	Create(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER);
 }
 
 void CView::SetStatusBar(wxStatusBar* pStatusBar)
