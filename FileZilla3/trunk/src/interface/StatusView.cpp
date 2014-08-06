@@ -11,21 +11,21 @@
 #define MAX_LINECOUNT 1000
 #define LINECOUNT_REMOVAL 10
 
-BEGIN_EVENT_TABLE(CStatusView, wxWindow)
-	EVT_SIZE(CStatusView::OnSize)
-	EVT_MENU(XRCID("ID_CLEARALL"), CStatusView::OnClear)
-	EVT_MENU(XRCID("ID_COPYTOCLIPBOARD"), CStatusView::OnCopy)
+BEGIN_EVENT_TABLE(CStatusView, wxNavigationEnabled<wxWindow>)
+EVT_SIZE(CStatusView::OnSize)
+EVT_MENU(XRCID("ID_CLEARALL"), CStatusView::OnClear)
+EVT_MENU(XRCID("ID_COPYTOCLIPBOARD"), CStatusView::OnCopy)
 END_EVENT_TABLE()
 
-class CFastTextCtrl : public wxTextCtrl
+class CFastTextCtrl : public wxNavigationEnabled<wxTextCtrl>
 {
 public:
 	CFastTextCtrl(wxWindow* parent)
-		: wxTextCtrl(parent, -1, wxString(), wxDefaultPosition, wxDefaultSize,
-					 wxNO_BORDER | wxVSCROLL | wxTE_MULTILINE |
-					 wxTE_READONLY | wxTE_RICH | wxTE_RICH2 | wxTE_NOHIDESEL |
-					 wxTAB_TRAVERSAL)
 	{
+		Create(parent, -1, wxString(), wxDefaultPosition, wxDefaultSize,
+			wxNO_BORDER | wxVSCROLL | wxTE_MULTILINE |
+			wxTE_READONLY | wxTE_RICH | wxTE_RICH2 | wxTE_NOHIDESEL |
+			wxTAB_TRAVERSAL);
 	}
 #ifdef __WXMSW__
 	// wxTextCtrl::Remove is somewhat slow, this is a faster version
@@ -67,47 +67,16 @@ public:
 		// Having this event handler prevents the event from propagating up the
 		// window hierarchy which saves a few CPU cycles.
 	}
-
-#ifdef __WXMSW__
-	void OnNavigationKey(wxNavigationKeyEvent& event)
-	{
-		wxWindow* parent = GetParent();
-		event.SetEventObject(parent);
-		parent->ProcessWindowEvent(event);
-	}
-#else
-	void OnKeyDown(wxKeyEvent& event)
-	{
-		if (event.GetKeyCode() != WXK_TAB) {
-			event.Skip();
-			return;
-		}
-
-		wxWindow* parent = GetParent();
-
-		wxNavigationKeyEvent navEvent;
-		navEvent.SetEventObject(parent);
-		navEvent.SetDirection(!event.ShiftDown());
-		navEvent.SetFromTab(true);
-		navEvent.ResumePropagation(1);
-		parent->ProcessWindowEvent(navEvent);
-	}
-#endif
 };
 
-BEGIN_EVENT_TABLE(CFastTextCtrl, wxTextCtrl)
+BEGIN_EVENT_TABLE(CFastTextCtrl, wxNavigationEnabled<wxTextCtrl>)
 	EVT_TEXT(wxID_ANY, CFastTextCtrl::OnText)
-#ifdef __WXMSW__
-	EVT_NAVIGATION_KEY(CFastTextCtrl::OnNavigationKey)
-#else
-	EVT_KEY_DOWN(CFastTextCtrl::OnKeyDown)
-#endif
 END_EVENT_TABLE()
 
 
 CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
-	: wxWindow(parent, id, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER)
 {
+	Create(parent, id, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER);
 	m_pTextCtrl = new CFastTextCtrl(this);
 
 #ifdef __WXMAC__
@@ -120,8 +89,6 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 #ifdef __WXMSW__
 	::SendMessage((HWND)m_pTextCtrl->GetHandle(), EM_SETOLECALLBACK, 0, 0);
 #endif
-
-	m_nLineCount = 0;
 
 	InitDefAttr();
 
