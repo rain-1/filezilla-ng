@@ -1,7 +1,7 @@
 #ifndef __TREECTRLEX_H__
 #define __TREECTRLEX_H__
 
-class wxTreeCtrlEx : public wxTreeCtrl
+class wxTreeCtrlEx : public wxNavigationEnabled<wxTreeCtrl>
 {
 	DECLARE_CLASS(wxTreeCtrlEx)
 
@@ -13,7 +13,7 @@ public:
 	void SafeSelectItem(const wxTreeItemId& item);
 
 protected:
-	bool m_setSelection;
+	bool m_setSelection{};
 };
 
 #endif //__TREECTRLEX_H__
