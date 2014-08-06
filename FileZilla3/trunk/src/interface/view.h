@@ -2,12 +2,12 @@
 #define __VIEW_H__
 
 class CViewHeader;
-class CView : public wxWindow
+class CView : public wxNavigationEnabled<wxWindow>
 {
 public:
 	CView(wxWindow* pParent);
 
-	void SetWindow(wxWindow* pWnd) { m_pWnd = pWnd; }
+	void SetWindow(wxWindow* pWnd);
 	void SetHeader(CViewHeader* pWnd);
 	CViewHeader* GetHeader() { return m_pHeader; }
 	CViewHeader* DetachHeader();
@@ -15,9 +15,11 @@ public:
 	wxStatusBar* GetStatusBar() { return m_pStatusBar; }
 
 protected:
-	wxWindow* m_pWnd;
-	CViewHeader* m_pHeader;
-	wxStatusBar* m_pStatusBar;
+	void FixTabOrder();
+
+	wxWindow* m_pWnd{};
+	CViewHeader* m_pHeader{};
+	wxStatusBar* m_pStatusBar{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent&);
