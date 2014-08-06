@@ -313,9 +313,11 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 		return;
 	}
 	Enable(true);
+#ifdef __WXGTK__
+	GetParent()->m_dirtyTabOrder = true;
+#endif
 
-	if (pListing->get_unsure_flags() && !(pListing->get_unsure_flags() & ~(CDirectoryListing::unsure_unknown | CDirectoryListing::unsure_file_mask)))
-	{
+	if (pListing->get_unsure_flags() && !(pListing->get_unsure_flags() & ~(CDirectoryListing::unsure_unknown | CDirectoryListing::unsure_file_mask))) {
 		// Just files changed, does not affect directory tree
 		m_busy = false;
 		return;

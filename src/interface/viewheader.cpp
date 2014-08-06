@@ -550,6 +550,9 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 			m_lastServer = *pServer;
 		}
 		Enable();
+#ifdef __WXGTK__
+		GetParent()->m_dirtyTabOrder = true;
+#endif
 		AddRecentDirectory(m_path.GetPath());
 	}
 }

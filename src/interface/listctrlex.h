@@ -4,7 +4,12 @@
 #include "systemimagelist.h"
 #include <wx/dnd.h>
 
-class wxListCtrlEx : public wxNavigationEnabled<wxListCtrl>, public CSystemImageList
+#ifdef __WXMSW__
+typedef wxNavigationEnabled<wxListCtrl> wxListCtrlExBase;
+#else
+typedef wxListCtrl wxListCtrlExBase;
+#endif
+class wxListCtrlEx : public wxListCtrlExBase, public CSystemImageList
 {
 public:
 	wxListCtrlEx(wxWindow *parent,
