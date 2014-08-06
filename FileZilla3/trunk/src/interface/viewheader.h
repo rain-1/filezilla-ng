@@ -4,7 +4,7 @@
 #include "state.h"
 
 class CComboBoxEx;
-class CViewHeader : public wxWindow
+class CViewHeader : public wxNavigationEnabled<wxWindow>
 {
 	friend class CComboBoxEx;
 public:
@@ -22,9 +22,9 @@ public:
 	virtual void SetFocus();
 
 protected:
-	CComboBoxEx* m_pComboBox;
-	wxStaticText* m_pLabel;
-	bool m_alreadyInPaint;
+	CComboBoxEx* m_pComboBox{};
+	wxStaticText* m_pLabel{};
+	bool m_alreadyInPaint{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
@@ -33,14 +33,14 @@ protected:
 #ifdef __WXMSW__
 	void OnComboPaint(wxPaintEvent& event);
 	void OnComboMouseEvent(wxMouseEvent& event);
-	bool m_bLeftMousePressed;
+	bool m_bLeftMousePressed{};
 #endif //__WXMSW__
 
 	void AddRecentDirectory(const wxString &directory);
 	std::list<wxString> m_recentDirectories;
 
-	int m_cbOffset;
-	int m_labelHeight;
+	int m_cbOffset{};
+	int m_labelHeight{};
 };
 
 class CLocalViewHeader : public CViewHeader, CStateEventHandler
