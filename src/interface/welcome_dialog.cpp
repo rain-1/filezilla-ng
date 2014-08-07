@@ -23,7 +23,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 		}
 
 		if (!greetingVersion.empty() &&
-			CBuildInfo::ConvertToVersionNumber(ownVersion) <= CBuildInfo::ConvertToVersionNumber(greetingVersion))
+			CBuildInfo::ConvertToVersionNumber(ownVersion.c_str()) <= CBuildInfo::ConvertToVersionNumber(greetingVersion.c_str()))
 		{
 			// Been there done that
 			if (delay)

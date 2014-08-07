@@ -291,26 +291,22 @@ void CHttpControlSocket::OnConnect()
 
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
-	if (pData->tls)
-	{
-		if (!m_pTlsSocket)
-		{
+	if (pData->tls) {
+		if (!m_pTlsSocket) {
 			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
 			delete m_pBackend;
 			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
 
-			if (!m_pTlsSocket->Init())
-			{
+			if (!m_pTlsSocket->Init()) {
 				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
 				DoClose();
 				return;
 			}
 
 			const wxString trusted_rootcert = m_pEngine->GetOptions()->GetOption(OPTION_INTERNAL_ROOTCERT);
-			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert))
-			{
+			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert)) {
 				LogMessage(MessageType::Error, _("Failed to parse trusted root cert."));
 				DoClose();
 				return;
@@ -320,8 +316,7 @@ void CHttpControlSocket::OnConnect()
 			if (res == FZ_REPLY_ERROR)
 				DoClose();
 		}
-		else
-		{
+		else {
 			LogMessage(MessageType::Status, _("TLS/SSL connection established, sending HTTP request"));
 			ResetOperation(FZ_REPLY_OK);
 		}

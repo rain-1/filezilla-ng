@@ -1987,7 +1987,7 @@ bool CDirectoryListingParser::AddData(char *pData, int len)
 	return ParseData(true);
 }
 
-bool CDirectoryListingParser::AddLine(const wxChar* pLine)
+bool CDirectoryListingParser::AddLine(wxChar const* pLine)
 {
 	if (m_pControlSocket)
 		m_pControlSocket->LogMessageRaw(MessageType::RawList, pLine);

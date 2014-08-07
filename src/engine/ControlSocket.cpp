@@ -281,24 +281,14 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 	delete [] output;
 	return ret;
 #else
-	const wxWCharBuffer buffer = wxConvCurrent->cWX2WC(domain);
 
-	int len = 0;
-	while (buffer.data()[len])
-		len++;
+	wxScopedCharBuffer const utf8 = domain.utf8_str();
 
-	char *utf8 = new char[len * 2 + 2];
-	wxMBConvUTF8 conv;
-	conv.WC2MB(utf8, buffer, len * 2 + 2);
-
-	char *output;
-	if (idna_to_ascii_8z(utf8, &output, IDNA_ALLOW_UNASSIGNED))
-	{
-		delete [] utf8;
+	char *output = 0;
+	if (idna_to_ascii_8z(utf8, &output, IDNA_ALLOW_UNASSIGNED)) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
 		return domain;
 	}
-	delete [] utf8;
 
 	wxString result = wxConvCurrent->cMB2WX(output);
 	idn_free(output);
@@ -617,23 +607,21 @@ wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer)
 
 wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /*=false*/)
 {
-	if (m_useUTF8 || force_utf8)
-	{
-		wxCharBuffer buffer = wxConvUTF8.cWX2MB(str);
+	if (m_useUTF8 || force_utf8) {
+		wxCharBuffer const buffer = str.utf8_str();
 		if (buffer || force_utf8)
 			return buffer;
 	}
 
-	if (m_pCSConv)
-	{
-		wxCharBuffer buffer = m_pCSConv->cWX2MB(str);
+	if (m_pCSConv) {
+		wxCharBuffer const buffer = str.mb_str(*m_pCSConv);
 		if (buffer)
 			return buffer;
 	}
 
-	wxCharBuffer buffer = wxConvCurrent->cWX2MB(str);
+	wxCharBuffer buffer = str.mb_str(*wxConvCurrent);
 	if (!buffer)
-		buffer = wxCSConv(_T("ISO8859-1")).cWX2MB(str);
+		buffer = str.To8BitData();
 
 	return buffer;
 }

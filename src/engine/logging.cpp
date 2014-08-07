@@ -82,20 +82,6 @@ bool CLogging::ShouldLog(MessageType nMessageType) const
 	return true;
 }
 
-void CLogging::LogMessageRaw(MessageType nMessageType, const wxChar *msg) const
-{
-	if( !ShouldLog(nMessageType) ) {
-		return;
-	}
-
-	LogToFile(nMessageType, msg);
-
-	CLogmsgNotification *notification = new CLogmsgNotification;
-	notification->msgType = nMessageType;
-	notification->msg = msg;
-	m_pEngine->AddNotification(notification);
-}
-
 void CLogging::InitLogFile() const
 {
 	if (m_logfile_initialized)

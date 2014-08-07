@@ -755,12 +755,10 @@ wxString CWrapEngine::UnwrapText(const wxString& text)
 		lang == wxLANGUAGE_CHINESE_MACAU || lang == wxLANGUAGE_CHINESE_SINGAPORE ||
 		lang == wxLANGUAGE_CHINESE_TAIWAN)
 	{
-		const wxChar* p = text;
+		wxChar const* p = text.c_str();
 		bool wasAscii = false;
-		while (*p)
-		{
-			if (*p == '\n')
-			{
+		while (*p) {
+			if (*p == '\n') {
 				if (wasAscii)
 					unwrapped += ' ';
 				else if (*(p + 1) < 127)

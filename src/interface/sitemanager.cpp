@@ -358,7 +358,7 @@ bool CSiteManager::UnescapeSitePath(wxString path, std::list<wxString>& result)
 	result.clear();
 
 	wxString name;
-	const wxChar *p = path;
+	wxChar const* p = path.c_str();
 
 	// Undo escapement
 	bool lastBackslash = false;
@@ -646,11 +646,9 @@ wxString CSiteManager::AddServer(CServer server)
 	TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
 	SetServer(pServer, server);
 
-	char* utf8 = ConvUTF8(name);
-	if (utf8)
-	{
+	wxScopedCharBuffer utf8 = name.utf8_str();
+	if (utf8) {
 		pServer->LinkEndChild(new TiXmlText(utf8));
-		delete [] utf8;
 	}
 
 	if (!file.Save(false)) {

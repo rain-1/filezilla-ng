@@ -367,7 +367,7 @@ void COptions::SetXmlValue(unsigned int nID, wxString const& value)
 
 	// No checks are made about the validity of the value, that's done in SetOption
 
-	char *utf8 = ConvUTF8(value);
+	wxScopedCharBuffer utf8 = value.utf8_str();
 	if (!utf8)
 		return;
 
@@ -391,8 +391,6 @@ void COptions::SetXmlValue(unsigned int nID, wxString const& value)
 		}
 		setting->LinkEndChild(new TiXmlText(utf8));
 	}
-
-	delete [] utf8;
 }
 
 int COptions::Validate(unsigned int nID, int value)
@@ -500,19 +498,14 @@ void COptions::SetServer(wxString path, const CServer& server)
 			sub = path;
 			path = _T("");
 		}
-		char *utf8 = ConvUTF8(sub);
+		wxScopedCharBuffer utf8 = sub.utf8_str();
 		if (!utf8)
 			return;
 		TiXmlElement *newElement = element->FirstChildElement(utf8);
-		delete [] utf8;
 		if (newElement)
 			element = newElement;
 		else {
-			char *utf8 = ConvUTF8(sub);
-			if (!utf8)
-				return;
 			TiXmlNode *node = element->LinkEndChild(new TiXmlElement(utf8));
-			delete [] utf8;
 			if (!node || !node->ToElement())
 				return;
 			element = node->ToElement();
@@ -548,11 +541,10 @@ bool COptions::GetServer(wxString path, CServer& server)
 			sub = path;
 			path = _T("");
 		}
-		char *utf8 = ConvUTF8(sub);
+		wxScopedCharBuffer utf8 = sub.utf8_str();
 		if (!utf8)
 			return false;
 		element = element->FirstChildElement(utf8);
-		delete [] utf8;
 		if (!element)
 			return false;
 	}

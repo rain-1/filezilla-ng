@@ -104,22 +104,6 @@ TiXmlElement* CXmlFile::CreateEmpty()
 	return m_pElement;
 }
 
-char* ConvUTF8(const wxString& value)
-{
-	// First convert the string into unicode if neccessary.
-	const wxWCharBuffer buffer = wxConvCurrent->cWX2WC(value);
-
-	// Calculate utf-8 string length
-	wxMBConvUTF8 conv;
-	int len = conv.WC2MB(0, buffer, 0);
-
-	// Not convert the string
-	char *utf8 = new char[len + 1];
-	conv.WC2MB(utf8, buffer, len + 1);
-
-	return utf8;
-}
-
 wxString ConvLocal(const char *value)
 {
 	return wxString(wxConvUTF8.cMB2WC(value), *wxConvCurrent);
@@ -139,12 +123,11 @@ void AddTextElement(TiXmlElement* node, const char* name, const wxString& value,
 {
 	wxASSERT(node);
 
-	char* utf8 = ConvUTF8(value);
+	wxScopedCharBuffer  utf8 = value.utf8_str();
 	if (!utf8)
 		return;
 
 	AddTextElementRaw(node, name, utf8, overwrite);
-	delete [] utf8;
 }
 
 void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwrite)
@@ -180,12 +163,11 @@ void AddTextElement(TiXmlElement* node, const wxString& value)
 	wxASSERT(node);
 	wxASSERT(value);
 
-	char* utf8 = ConvUTF8(value);
+	wxScopedCharBuffer utf8 = value.utf8_str();
 	if (!utf8)
 		return;
 
 	AddTextElementRaw(node, utf8);
-	delete [] utf8;
 }
 
 void AddTextElement(TiXmlElement* node, int value)
@@ -650,12 +632,11 @@ void SetTextAttribute(TiXmlElement* node, const char* name, const wxString& valu
 {
 	wxASSERT(node);
 
-	char* utf8 = ConvUTF8(value);
+	wxScopedCharBuffer utf8 = value.utf8_str();
 	if (!utf8)
 		return;
 
 	node->SetAttribute(name, utf8);
-	delete [] utf8;
 }
 
 wxString GetTextAttribute(TiXmlElement* node, const char* name)

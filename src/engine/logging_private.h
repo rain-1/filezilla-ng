@@ -9,44 +9,55 @@ public:
 	CLogging(CFileZillaEnginePrivate *pEngine);
 	virtual ~CLogging();
 
-	template<typename...Args>
-	void LogMessage(MessageType nMessageType, wxChar const* msgFormat, Args&& ...args) const
+	template<typename String, typename...Args>
+	void LogMessage(MessageType nMessageType, String&& msgFormat, Args&& ...args) const
 	{
 		if( !ShouldLog(nMessageType) ) {
 			return;
 		}
 
-		CLogmsgNotification *notification = new CLogmsgNotification;
-		notification->msgType = nMessageType;
-		notification->msg.Printf(msgFormat, std::forward<Args>(args)...);
+		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType);
+		notification->msg.Printf(std::forward<String>(msgFormat), std::forward<Args>(args)...);
 
 		LogToFile(nMessageType, notification->msg);
 		m_pEngine->AddNotification(notification);
 	}
 
-	void LogMessageRaw(MessageType nMessageType, const wxChar *msg) const;
-
-	template<typename...Args>
-	void LogMessage(wxString sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType
-					, wxChar const* msgFormat, Args&& ...args) const
+	template<typename String>
+	void LogMessageRaw(MessageType nMessageType, String&& msg) const
 	{
 		if( !ShouldLog(nMessageType) ) {
 			return;
 		}
 
-		int pos = sourceFile.Find('\\', true);
+
+		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType, std::forward<String>(msg));
+
+		LogToFile(nMessageType, notification->msg);
+		m_pEngine->AddNotification(notification);
+	}
+
+	template<typename String, typename String2, typename...Args>
+	void LogMessage(String&& sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType
+					, String2&& msgFormat, Args&& ...args) const
+	{
+		if( !ShouldLog(nMessageType) ) {
+			return;
+		}
+
+		wxString source(sourceFile);
+		int pos = source.Find('\\', true);
 		if (pos != -1)
-			sourceFile = sourceFile.Mid(pos+1);
+			source = source.Mid(pos+1);
 
-		pos = sourceFile.Find('/', true);
+		pos = source.Find('/', true);
 		if (pos != -1)
-			sourceFile = sourceFile.Mid(pos+1);
+			source = source.Mid(pos+1);
 
-		wxString text = wxString::Format(msgFormat, std::forward<Args>(args)...);
+		wxString text = wxString::Format(std::forward<String2>(msgFormat), std::forward<Args>(args)...);
 
-		CLogmsgNotification *notification = new CLogmsgNotification;
-		notification->msgType = nMessageType;
-		notification->msg.Printf(_T("%s(%d): %s   caller=%p"), sourceFile, nSourceLine, text, pInstance);
+		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType);
+		notification->msg.Printf(_T("%s(%d): %s   caller=%p"), source, nSourceLine, text, pInstance);
 
 		LogToFile(nMessageType, notification->msg);
 		m_pEngine->AddNotification(notification);
