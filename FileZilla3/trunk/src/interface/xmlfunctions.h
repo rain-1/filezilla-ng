@@ -65,9 +65,6 @@ protected:
 	wxString m_rootName{_T("FileZilla3")};
 };
 
-// Convert the given string into an UTF-8 string. Returned string has to be deleted manually.
-char* ConvUTF8(const wxString& value);
-
 // Convert the given utf-8 string into wxString
 wxString ConvLocal(const char *value);
 

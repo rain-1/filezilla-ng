@@ -831,7 +831,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		return false;
 
 	wxString name = pTree->GetItemText(child);
-	char* utf8 = ConvUTF8(name);
+	wxScopedCharBuffer utf8 = name.utf8_str();
 
 	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
 	if (!data)
@@ -865,17 +865,14 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 
 		Save(pNode, child);
 
-		if (site_data->connected_item != -1)
-		{
-			if ((*m_connected_sites)[site_data->connected_item].server == site_data->m_server)
-			{
+		if (site_data->connected_item != -1) {
+			if ((*m_connected_sites)[site_data->connected_item].server == site_data->m_server) {
 				(*m_connected_sites)[site_data->connected_item].new_path = GetSitePath(child);
 				(*m_connected_sites)[site_data->connected_item].server = site_data->m_server;
 			}
 		}
 	}
-	else
-	{
+	else {
 		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
 
 		AddTextElement(pNode, "Name", name);
@@ -889,7 +886,6 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
 	}
 
-	delete [] utf8;
 	return true;
 }
 

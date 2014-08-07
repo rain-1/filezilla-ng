@@ -415,8 +415,7 @@ public:
 		char tmp = 0;
 
 		int ret;
-		do
-		{
+		do {
 			ret = write(m_pipe[1], &tmp, 1);
 		} while (ret == -1 && errno == EINTR);
 #endif
@@ -428,22 +427,19 @@ protected:
 
 	int TryConnectHost(struct addrinfo *addr)
 	{
-		if (m_pSocket->m_pEvtHandler)
-		{
-			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::hostaddress, CSocket::AddressToString(addr->ai_addr, addr->ai_addrlen));
+		if (m_pSocket->m_pEvtHandler) {
+			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::hostaddress, CSocket::AddressToString(addr->ai_addr, addr->ai_addrlen).c_str());
 			CSocketEventDispatcher::Get().SendEvent(evt);
 		}
 
 		int fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
-		if (fd == -1)
-		{
+		if (fd == -1) {
 #ifdef __WXMSW__
 			int res = ConvertMSWErrorCode(WSAGetLastError());
 #else
 			int res = errno;
 #endif
-			if (m_pSocket->m_pEvtHandler)
-			{
+			if (m_pSocket->m_pEvtHandler) {
 				CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, addr->ai_next ? CSocketEvent::connection_next : CSocketEvent::connection, res);
 				CSocketEventDispatcher::Get().SendEvent(evt);
 			}

@@ -266,7 +266,7 @@ wxString CServerPath::GetSafePath() const
 
 		if (m_data->m_prefix) {
 			*(t++) = ' ';
-			tstrcpy(t, *m_data->m_prefix);
+			tstrcpy(t, m_data->m_prefix->c_str());
 			t += m_data->m_prefix->size();
 		}
 
@@ -274,7 +274,7 @@ wxString CServerPath::GetSafePath() const
 			*(t++) = ' ';
 			t = fast_sprint_number(t, segment.size());
 			*(t++) = ' ';
-			tstrcpy(t, segment);
+			tstrcpy(t, segment.c_str());
 			t += segment.size();
 		}
 		*t = 0;
@@ -296,9 +296,10 @@ bool CServerPath::SetSafePath(const wxString& path, bool coalesce)
 	// most CPU cycles used during loading of transfer queues
 	// from file
 	const int len = (int)path.Len();
-	wxChar* begin = new wxChar[len + 1];
-	CScopedArray<wxChar> tmp(begin);
-	memcpy(begin, (const wxChar*)path, (len + 1) * sizeof(wxChar));
+	wxCharTypeBuffer<wxChar> buf(len + 1);
+	wxChar* begin = buf.data();
+
+	memcpy(begin, (const wxChar*)path.c_str(), (len + 1) * sizeof(wxChar));
 	wxChar* p = begin;
 
 	int type = 0;

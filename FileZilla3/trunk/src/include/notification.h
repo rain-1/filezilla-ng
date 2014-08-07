@@ -91,6 +91,17 @@ protected:
 class CLogmsgNotification final : public CNotificationHelper<nId_logmsg>
 {
 public:
+	explicit CLogmsgNotification(MessageType t)
+		: msgType(t)
+	{}
+
+	template<typename String>
+	CLogmsgNotification(MessageType t, String && m)
+		: msg(std::forward<String>(m))
+		, msgType(t)
+	{
+	}
+
 	wxString msg;
 	MessageType msgType{MessageType::Status}; // Type of message, see logging.h for details
 };
