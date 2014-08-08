@@ -1779,10 +1779,8 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 	std::list<CLocalFileData> selected_item_list;
 
 	item = -1;
-	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
-		if (!item && m_hasParent)
-		{
+	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
+		if (!item && m_hasParent) {
 			wxBell();
 			return;
 		}
@@ -1798,20 +1796,17 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
-	if (!pEditHandler)
-	{
+	if (!pEditHandler) {
 		wxBell();
 		return;
 	}
 
-	if (selected_item_list.empty())
-	{
+	if (selected_item_list.empty()) {
 		wxBell();
 		return;
 	}
 
-	if (selected_item_list.size() > 10)
-	{
+	if (selected_item_list.size() > 10) {
 
 		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
 		dlg.SetTitle(_("Confirmation needed"));
@@ -1821,12 +1816,10 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 			return;
 	}
 
-	for (std::list<CLocalFileData>::const_iterator data = selected_item_list.begin(); data != selected_item_list.end(); ++data)
-	{
-		if (data->dir)
-		{
+	for (auto const& data : selected_item_list) {
+		if (data.dir) {
 			CLocalPath path(m_dir);
-			if (!path.ChangePath(data->name)) {
+			if (!path.ChangePath(data.name)) {
 				wxBell();
 				continue;
 			}
@@ -1835,23 +1828,22 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 			continue;
 		}
 
-		wxFileName fn(m_dir, data->name);
-
+		wxFileName fn(m_dir, data.name);
+		if (wxLaunchDefaultApplication(fn.GetFullPath(), 0)) {
+			continue;
+		}
 		bool program_exists = false;
 		wxString cmd = GetSystemOpenCommand(fn.GetFullPath(), program_exists);
-		if (cmd.empty())
-		{
-			int pos = data->name.Find('.') == -1;
-			if (pos == -1 || (pos == 0 && data->name.Mid(1).Find('.') == -1))
+		if (cmd.empty()) {
+			int pos = data.name.Find('.') == -1;
+			if (pos == -1 || (pos == 0 && data.name.Mid(1).Find('.') == -1))
 				cmd = pEditHandler->GetOpenCommand(fn.GetFullPath(), program_exists);
 		}
-		if (cmd.empty())
-		{
+		if (cmd.empty()) {
 			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath()), _("Opening failed"), wxICON_EXCLAMATION);
 			continue;
 		}
-		if (!program_exists)
-		{
+		if (!program_exists) {
 			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fn.GetFullPath(), cmd);
 			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
 			continue;
