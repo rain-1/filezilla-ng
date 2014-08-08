@@ -1,4 +1,4 @@
-﻿# , 2009.
+# , 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: Filezilla 3.2.5\n"
