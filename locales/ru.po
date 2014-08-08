@@ -778,7 +778,7 @@ msgstr "&Сообщить об ошибке..."
 
 #: resources.h:619
 msgid "&Reset and requeue all"
-msgstr "&Очистить выбранные и получить снова"
+msgstr "&Очистить все и получить снова"
 
 #: resources.h:716
 msgid "&Restart Wizard"
