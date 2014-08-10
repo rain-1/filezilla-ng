@@ -14,6 +14,11 @@ public:
 
 protected:
 	bool m_setSelection{};
+
+#ifdef __WXMAC__
+	DECLARE_EVENT_TABLE()
+	void OnChar(wxKeyEvent& event);
+#endif
 };
 
 #endif //__TREECTRLEX_H__
