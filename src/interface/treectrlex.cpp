@@ -3,6 +3,12 @@
 
 IMPLEMENT_CLASS(wxTreeCtrlEx, wxNavigationEnabled<wxTreeCtrl>)
 
+#ifdef __WXMAC__
+BEGIN_EVENT_TABLE(wxTreeCtrlEx, wxNavigationEnabled<wxTreeCtrl>)
+EVT_CHAR(wxTreeCtrlEx::OnChar)
+END_EVENT_TABLE()
+#endif
+
 wxTreeCtrlEx::wxTreeCtrlEx(wxWindow *parent, wxWindowID id /*=wxID_ANY*/,
 			   const wxPoint& pos /*=wxDefaultPosition*/,
 			   const wxSize& size /*=wxDefaultSize*/,
@@ -28,3 +34,16 @@ void wxTreeCtrlEx::SafeSelectItem(const wxTreeItemId& item)
 			EnsureVisible(item);
 	}
 }
+
+#ifdef __WXMAC__
+void wxTreeCtrlEx::OnChar(wxKeyEvent& event)
+{
+	if (event.GetKeyCode() != WXK_TAB) {
+		event.Skip();
+		return;
+	}
+
+	HandleAsNavigationKey(event);
+}
+#endif
+
