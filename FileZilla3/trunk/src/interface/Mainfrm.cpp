@@ -171,7 +171,9 @@ BEGIN_EVENT_TABLE(CMainFrame, wxNavigationEnabled<wxFrame>)
 	EVT_MENU(XRCID("ID_COMPARE_DATE"), CMainFrame::OnDropdownComparisonMode)
 	EVT_MENU(XRCID("ID_COMPARE_HIDEIDENTICAL"), CMainFrame::OnDropdownComparisonHide)
 	EVT_TOOL(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), CMainFrame::OnSyncBrowse)
-#ifndef __WXMAC__
+#ifdef __WXMAC__
+	EVT_CHILD_FOCUS(CMainFrame::OnChildFocused)
+#else
 	EVT_ICONIZE(CMainFrame::OnIconize)
 #endif
 #ifdef __WXGTK__
@@ -2320,6 +2322,15 @@ void CMainFrame::OnActivate(wxActivateEvent& event)
 	if (!event.GetActive())
 		return;
 
+#ifdef __WXMAC__
+	// wxMac looses focus information if the window becomes inactive.
+	// Restore focus to the previously focused child, otherwise focus ends up
+	// in the quickconnect bar.
+	// Go via ID of the last focused child to avoid issues with window lifetime.
+	if (m_lastFocusedChild != -1)
+		m_winLastFocused = FindWindow(m_lastFocusedChild);
+#endif
+
 	CEditHandler* pEditHandler = CEditHandler::Get();
 	if (pEditHandler)
 		pEditHandler->CheckForModifications(true);
@@ -2820,3 +2831,11 @@ void CMainFrame::FixTabOrder()
 		m_pQuickconnectBar->MoveBeforeInTabOrder(m_pTopSplitter);
 	}
 }
+
+#ifdef __WXMAC__
+void CMainFrame::OnChildFocused(wxChildFocusEvent& event)
+{
+	m_lastFocusedChild = event.GetWindow()->GetId();
+}
+#endif
+
