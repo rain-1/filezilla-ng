@@ -150,7 +150,9 @@ protected:
 	void OnDropdownComparisonMode(wxCommandEvent& event);
 	void OnDropdownComparisonHide(wxCommandEvent& event);
 	void OnSyncBrowse(wxCommandEvent& event);
-#ifndef __WXMAC__
+#ifdef __WXMAC__
+	void OnChildFocused(wxChildFocusEvent& event);
+#else
 	void OnIconize(wxIconizeEvent& event);
 	void OnTaskBarClick(wxTaskBarIconEvent&);
 #endif
@@ -186,6 +188,10 @@ protected:
 #endif
 
 	int m_comparisonToggleAcceleratorId{};
+
+#ifdef __WXMAC__
+	int m_lastFocusedChild{-1};
+#endif
 };
 
 #endif
