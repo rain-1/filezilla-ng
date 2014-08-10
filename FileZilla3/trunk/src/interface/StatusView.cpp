@@ -67,10 +67,25 @@ public:
 		// Having this event handler prevents the event from propagating up the
 		// window hierarchy which saves a few CPU cycles.
 	}
+
+#ifdef __WXMAC__
+	void OnChar(wxKeyEvent& event)
+	{
+		if (event.GetKeyCode() != WXK_TAB) {
+			event.Skip();
+			return;
+		}
+
+		HandleAsNavigationKey(event);
+	}
+#endif
 };
 
 BEGIN_EVENT_TABLE(CFastTextCtrl, wxNavigationEnabled<wxTextCtrl>)
 	EVT_TEXT(wxID_ANY, CFastTextCtrl::OnText)
+#ifdef __WXMAC__
+	EVT_CHAR_HOOK(CFastTextCtrl::OnChar)
+#endif
 END_EVENT_TABLE()
 
 
