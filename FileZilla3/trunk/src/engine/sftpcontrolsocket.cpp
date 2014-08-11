@@ -1708,7 +1708,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				{
 					if (matchedCase)
 					{
-						pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
+						pData->remoteFileSize = entry.size.GetValue();
 						if (entry.has_date())
 							pData->fileTime = entry.time;
 
@@ -1770,7 +1770,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			{
 				if (matchedCase && !entry.is_unsure())
 				{
-					pData->remoteFileSize = entry.size.GetLo() + ((wxFileOffset)entry.size.GetHi() << 32);
+					pData->remoteFileSize = entry.size.GetValue();
 					if (!entry.has_date())
 						pData->fileTime = entry.time;
 
