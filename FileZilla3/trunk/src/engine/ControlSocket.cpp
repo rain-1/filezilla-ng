@@ -1313,7 +1313,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 				matched_case)
 			{
 				wxLongLong size = entry.size;
-				pData->remoteFileSize = size.GetLo() + ((wxFileOffset)size.GetHi() << 32);
+				pData->remoteFileSize = size.GetValue();
 				if (entry.has_date())
 					pData->fileTime = entry.time;
 
