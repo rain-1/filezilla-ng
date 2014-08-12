@@ -434,24 +434,20 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 			}
 
 			wxNotebook* book = wxDynamicCast(window, wxNotebook);
-			if (book)
-			{
+			if (book) {
 				int maxPageWidth = 0;
-				for (unsigned int i = 0; i < book->GetPageCount(); i++)
-				{
-					wxNotebookPage* page = book->GetPage(i);
+				for (unsigned int j = 0; j < book->GetPageCount(); ++j) {
+					wxNotebookPage* page = book->GetPage(j);
 					maxPageWidth = wxMax(maxPageWidth, page->GetRect().GetWidth());
 				}
 
-				for (unsigned int i = 0; i < book->GetPageCount(); i++)
-				{
-					wxNotebookPage* page = book->GetPage(i);
+				for (unsigned int j = 0; j < book->GetPageCount(); ++j) {
+					wxNotebookPage* page = book->GetPage(j);
 					wxRect pageRect = page->GetRect();
 					int pageMax = max - rect.GetLeft() - pageRect.GetLeft() - rborder - rect.GetWidth() + maxPageWidth;
 
 					result |= WrapRecursive(wnd, page->GetSizer(), pageMax);
-					if (result & wrap_failed)
-					{
+					if (result & wrap_failed) {
 #if WRAPDEBUG >= 3
 						plvl printf("Leave: WrapRecursive on notebook page failed\n");
 #endif
@@ -558,7 +554,7 @@ void CWrapEngine::UnwrapRecursive_Wrapped(const std::list<int> &wrapped, std::ve
 	}
 }
 
-bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, const char* name /*=""*/, wxSize canvas /*=wxSize()*/, wxSize minRequestedSize /*wxSize()*/)
+bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, const char* name, wxSize canvas, wxSize const& minRequestedSize)
 {
 #ifdef __WXMAC__
 	const int offset = 6;
@@ -596,9 +592,8 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 
 	wxSize size = minRequestedSize;
 
-	for (auto iter = windows.begin(); iter != windows.end(); ++iter)
-	{
-		wxSizer* pSizer = (*iter)->GetSizer();
+	for (auto const& window : windows) {
+		wxSizer* pSizer = window->GetSizer();
 		if (!pSizer)
 			return false;
 
@@ -607,8 +602,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 	}
 
 	double currentRatio = ((double)(size.GetWidth() + canvas.x) / (size.GetHeight() + canvas.y));
-	if (ratio >= currentRatio)
-	{
+	if (ratio >= currentRatio) {
 		// Nothing to do, can't wrap anything
 		return true;
 	}
@@ -631,16 +625,14 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 	printf("Initial min and max: %d %d\n", min, max);
 #endif
 
-	for (;;)
-	{
+	for (;;) {
 		std::list<int> didwrap;
 
-		wxSize size = minRequestedSize;
+		size = minRequestedSize;
 		int res = 0;
-		for (auto iter = windows.begin(); iter != windows.end(); ++iter)
-		{
-			wxSizer* pSizer = (*iter)->GetSizer();
-			res = WrapRecursive(*iter, pSizer, desiredWidth - offset);
+		for (auto const& window : windows) {
+			wxSizer* pSizer = window->GetSizer();
+			res = WrapRecursive(window, pSizer, desiredWidth - offset);
 			if (res & wrap_didwrap)
 				pSizer->Layout();
 			didwrap.push_back(res);
@@ -655,8 +647,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 #if WRAPDEBUG > 0
 		printf("After current wrapping: size=%dx%d  desiredWidth=%d  min=%d  max=%d  res=%d\n", size.GetWidth(), size.GetHeight(), desiredWidth, min, max, res);
 #endif
-		if (size.GetWidth() > desiredWidth)
-		{
+		if (size.GetWidth() > desiredWidth) {
 			// Wrapping failed
 
 			UnwrapRecursive_Wrapped(didwrap, windows, true);
@@ -679,12 +670,10 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		printf("New ratio: %f\n", (float)newRatio);
 #endif
 
-		if (newRatio < ratio)
-		{
+		if (newRatio < ratio) {
 			UnwrapRecursive_Wrapped(didwrap, windows, true);
 
-			if (ratio - newRatio < bestRatioDiff)
-			{
+			if (ratio - newRatio < bestRatioDiff) {
 				bestRatioDiff = ratio - newRatio;
 				bestWidth = std::max(desiredWidth, actualWidth);
 			}
@@ -694,11 +683,9 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 			else
 				min = actualWidth;
 		}
-		else if (newRatio > ratio)
-		{
+		else if (newRatio > ratio) {
 			UnwrapRecursive_Wrapped(didwrap, windows);
-			if (newRatio - ratio < bestRatioDiff)
-			{
+			if (newRatio - ratio < bestRatioDiff) {
 				bestRatioDiff = newRatio - ratio;
 				bestWidth = std::max(desiredWidth, actualWidth);
 			}
@@ -707,8 +694,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 				break;
 			max = std::max(desiredWidth, actualWidth);
 		}
-		else
-		{
+		else {
 			UnwrapRecursive_Wrapped(didwrap, windows);
 
 			bestRatioDiff = ratio - newRatio;
@@ -724,16 +710,14 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 		printf("Performing final wrap with bestwidth %d\n", bestWidth);
 #endif
 
-	for (auto iter = all_windows.begin(); iter != all_windows.end(); ++iter)
-	{
-		wxSizer *pSizer = (*iter)->GetSizer();
+	for (auto const& window : all_windows) {
+		wxSizer *pSizer = window->GetSizer();
 
-		int res = WrapRecursive(*iter, pSizer, bestWidth - offset);
+		int res = WrapRecursive(window, pSizer, bestWidth - offset);
 
-		if (res & wrap_didwrap)
-		{
+		if (res & wrap_didwrap) {
 			pSizer->Layout();
-			pSizer->Fit(*iter);
+			pSizer->Fit(window);
 		}
 #if WRAPDEBUG
 		size = pSizer->GetMinSize();
@@ -822,9 +806,9 @@ bool CWrapEngine::UnwrapRecursive(wxWindow* wnd, wxSizer* sizer)
 			wxNotebook* book = wxDynamicCast(window, wxNotebook);
 			if (book)
 			{
-				for (unsigned int i = 0; i < book->GetPageCount(); i++)
+				for (unsigned int j = 0; j < book->GetPageCount(); ++j)
 				{
-					wxNotebookPage* page = book->GetPage(i);
+					wxNotebookPage* page = book->GetPage(j);
 					UnwrapRecursive(wnd, page->GetSizer());
 				}
 				continue;
