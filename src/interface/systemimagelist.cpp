@@ -101,7 +101,7 @@ bool CSystemImageList::CreateSystemImageList(int size)
 		return true;
 
 #ifdef __WXMSW__
-	SHFILEINFO shFinfo;
+	SHFILEINFO shFinfo{};
 	wxChar buffer[MAX_PATH + 10];
 	if (!GetWindowsDirectory(buffer, MAX_PATH))
 #ifdef _tcscpy

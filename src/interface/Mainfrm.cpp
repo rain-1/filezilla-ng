@@ -843,6 +843,9 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 	{
 		CServer server;
 		CState* pState = CContextManager::Get()->GetCurrentContext();
+		if (!pState) {
+			return;
+		}
 		const CServer* pServer = pState ? pState->GetServer() : 0;
 
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();

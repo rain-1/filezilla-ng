@@ -53,7 +53,7 @@ wxString CShellExtensionInterface::InitDrag()
 	if (!CreateDragDirectory())
 		return wxString();
 
-	m_hMapping = CreateFileMapping(0, 0, PAGE_READWRITE, 0, DRAG_EXT_MAPPING_LENGTH, DRAG_EXT_MAPPING);
+	m_hMapping = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, DRAG_EXT_MAPPING_LENGTH, DRAG_EXT_MAPPING);
 	if (!m_hMapping)
 		return wxString();
 

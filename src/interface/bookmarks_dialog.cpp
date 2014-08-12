@@ -85,7 +85,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 		return;
 	}
 
-	if (!global)
+	if (!global && m_server)
 	{
 		std::list<wxString> bookmarks;
 
@@ -224,11 +224,11 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 		path = m_site_path + _T("/") + path;
 
 		CSiteManagerItemData_Site* data = CSiteManager::GetSiteByPath(path);
-
-		CBookmarkItemData* new_data = new CBookmarkItemData(data->m_localDir, data->m_remoteDir, data->m_sync);
-		m_pTree->AppendItem(m_bookmarks_site, *iter, 1, 1, new_data);
-
-		delete data;
+		if (data) {
+			CBookmarkItemData* new_data = new CBookmarkItemData(data->m_localDir, data->m_remoteDir, data->m_sync);
+			m_pTree->AppendItem(m_bookmarks_site, *iter, 1, 1, new_data);
+			delete data;
+		}
 	}
 
 	m_pTree->SortChildren(m_bookmarks_site);

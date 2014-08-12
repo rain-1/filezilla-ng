@@ -229,19 +229,18 @@ bool CQueueViewFailed::RequeueServerItem(CServerItem* pServerItem)
 	m_fileCount -= childrenCount;
 	m_itemCount -= childrenCount + 1;
 	pServerItem->DetachChildren();
-	delete pServerItem;
 
 	std::vector<CServerItem*>::iterator iter;
-	for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-	{
+	for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
 		if (*iter == pServerItem)
 			break;
 	}
 	if (iter != m_serverList.end())
 		m_serverList.erase(iter);
 
-	if (!pTargetServerItem->GetChildrenCount(false))
-	{
+	delete pServerItem;
+
+	if (!pTargetServerItem->GetChildrenCount(false)) {
 		pQueueView->CommitChanges();
 		pQueueView->RemoveItem(pTargetServerItem, true, true, true);
 	}

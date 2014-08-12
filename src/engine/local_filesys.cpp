@@ -742,7 +742,7 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 wxLongLong CLocalFileSystem::GetSize(wxString const& path, bool* isLink)
 {
 	wxLongLong ret = -1;
-	bool tmp;
+	bool tmp{};
 	local_fileType t = GetFileInfo(path, isLink ? *isLink : tmp, &ret, 0, 0);
 	if( t != file ) {
 		ret = -1;

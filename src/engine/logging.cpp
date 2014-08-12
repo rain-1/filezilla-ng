@@ -197,8 +197,10 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				else
 					m_log_fd = hFile;
 
-				ReleaseMutex(hMutex);
-				CloseHandle(hMutex);
+				if (hMutex) {
+					ReleaseMutex(hMutex);
+					CloseHandle(hMutex);
+				}
 
 				if (!error.empty())
 					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);

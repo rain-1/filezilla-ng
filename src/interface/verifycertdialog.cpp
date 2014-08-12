@@ -338,7 +338,7 @@ unsigned char* CVerifyCertDialog::ConvertStringToHex(const wxString& str, unsign
 	unsigned char* data = new unsigned char[len];
 
 	unsigned int j = 0;
-	for (unsigned int i = 0; i < str.size(); i++, j++)
+	for (unsigned int i = 0; i < str.size(); ++i, ++j)
 	{
 		wxChar high = str[i++];
 		wxChar low = str[i];
