@@ -278,7 +278,10 @@ void wxListCtrlEx::OnKeyDown(wxKeyEvent& event)
 
 	// Get the actual key
 	BYTE state[256];
-	GetKeyboardState(state);
+	if (!GetKeyboardState(state)) {
+		event.Skip();
+		return;
+	}
 	wxChar buffer[1];
 	int res = ToUnicode(event.GetRawKeyCode(), 0, state, buffer, 1, 0);
 	if (res != 1)
