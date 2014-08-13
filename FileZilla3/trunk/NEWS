@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0.3 (2014-08-13)
+
+- Fix potential crash on connection failures
+- Fixed navigating through the different controls in FileZilla's main window using the Tab key
+- OS X: If FileZilla becomes the active program, the focus no longer jumps to the quickconnect bar
+- MSW: Improve compatibility with DFS network shares
+
 3.9.0.2 (2014-07-31)
 
 + Handle setting files redirected using symbolic links
