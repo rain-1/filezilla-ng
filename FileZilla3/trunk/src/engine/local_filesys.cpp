@@ -204,8 +204,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int *mode)
 {
 #ifdef __WXMSW__
-	if (path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator())
-	{
+	if (path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
 		wxString tmp = path;
 		tmp.RemoveLast();
 		return GetFileInfo(tmp, isLink, size, modificationTime, mode);
@@ -215,8 +214,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 
 	WIN32_FILE_ATTRIBUTE_DATA attributes;
 	BOOL result = GetFileAttributesEx(path, GetFileExInfoStandard, &attributes);
-	if (!result)
-	{
+	if (!result) {
 		if (size)
 			*size = -1;
 		if (mode)
@@ -226,19 +224,12 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 		return unknown;
 	}
 
-	if (modificationTime)
-	{
-		if (!ConvertFileTimeToCDateTime(*modificationTime, attributes.ftLastWriteTime))
-			ConvertFileTimeToCDateTime(*modificationTime, attributes.ftCreationTime);
-	}
-
-	if (mode)
-		*mode = (int)attributes.dwFileAttributes;
+	bool is_dir = (attributes.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
 
 	if (attributes.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) {
 		isLink = true;
 
-		HANDLE hFile = CreateFile(path, FILE_READ_ATTRIBUTES | FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+		HANDLE hFile = is_dir ? INVALID_HANDLE_VALUE : CreateFile(path, FILE_READ_ATTRIBUTES | FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 		if (hFile != INVALID_HANDLE_VALUE) {
 			BY_HANDLE_FILE_INFORMATION info{};
 			int ret = GetFileInformationByHandle(hFile, &info);
@@ -272,19 +263,27 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 			*mode = 0;
 		if (modificationTime)
 			*modificationTime = CDateTime();
-		return unknown;
+		return is_dir ? dir : unknown;
 	}
 
-	if (attributes.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+	if (modificationTime) {
+		if (!ConvertFileTimeToCDateTime(*modificationTime, attributes.ftLastWriteTime))
+			ConvertFileTimeToCDateTime(*modificationTime, attributes.ftCreationTime);
+	}
+
+	if (mode)
+		*mode = (int)attributes.dwFileAttributes;
+
+	if (is_dir) {
 		if (size)
 			*size = -1;
 		return dir;
 	}
-
-	if (size)
-		*size = wxLongLong(attributes.nFileSizeHigh, attributes.nFileSizeLow);
-
-	return file;
+	else {
+		if (size)
+			*size = wxLongLong(attributes.nFileSizeHigh, attributes.nFileSizeLow);
+		return file;
+	}
 #else
 	if (path.Last() == '/' && path != _T("/"))
 	{
@@ -414,8 +413,7 @@ bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
 	}
 
 	m_hFind = FindFirstFileEx(path, FindExInfoStandard, &m_find_data, dirs_only ? FindExSearchLimitToDirectories : FindExSearchNameMatch, 0, 0);
-	if (m_hFind == INVALID_HANDLE_VALUE)
-	{
+	if (m_hFind == INVALID_HANDLE_VALUE) {
 		m_found = false;
 		return false;
 	}
@@ -541,8 +539,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 		return false;
 	do
 	{
-		if (!m_find_data.cFileName[0])
-		{
+		if (!m_find_data.cFileName[0]) {
 			m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 			return true;
 		}
@@ -553,9 +550,11 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 			continue;
 		name = m_find_data.cFileName;
 
+		is_dir = (m_find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+
 		isLink = (m_find_data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) != 0;
 		if (isLink) {
-			HANDLE hFile = CreateFile(m_find_path + name, FILE_READ_ATTRIBUTES | FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
+			HANDLE hFile = is_dir ? INVALID_HANDLE_VALUE : CreateFile(m_find_path + name, FILE_READ_ATTRIBUTES | FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 			if (hFile != INVALID_HANDLE_VALUE) {
 				BY_HANDLE_FILE_INFORMATION info{};
 				int ret = GetFileInformationByHandle(hFile, &info);
@@ -570,25 +569,25 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 					if (mode)
 						*mode = (int)info.dwFileAttributes;
 
-					if (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
-						if (size)
+					is_dir = (info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+					if (size) {
+						if (is_dir) {
 							*size = -1;
-						return dir;
+						}
+						else {
+							*size = wxLongLong(info.nFileSizeHigh, info.nFileSizeLow);
+						}
 					}
-
-					if (size)
-						*size = wxLongLong(info.nFileSizeHigh, info.nFileSizeLow);
 
 					m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 					return true;
 				}
 			}
 
-			if (m_dirs_only) {
+			if (m_dirs_only && !is_dir) {
 				continue;
 			}
 
-			is_dir = false;
 			if (size)
 				*size = -1;
 			if (mode)
@@ -603,17 +602,13 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 			if (mode)
 				*mode = (int)m_find_data.dwFileAttributes;
 
-			if (m_find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-			{
-				is_dir = true;
-				if (size)
+			if (size) {
+				if (is_dir) {
 					*size = -1;
-			}
-			else
-			{
-				is_dir = false;
-				if (size)
+				}
+				else {
 					*size = wxLongLong(m_find_data.nFileSizeHigh, m_find_data.nFileSizeLow);
+				}
 			}
 		}
 		m_found = FindNextFile(m_hFind, &m_find_data) != 0;
