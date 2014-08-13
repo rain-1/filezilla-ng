@@ -1,4 +1,4 @@
-AC_INIT([FileZilla],[3.9.0.2],[tim.kosse@filezilla-project.org],[],[https://filezilla-project.org/])
+AC_INIT([FileZilla],[3.9.0.3],[tim.kosse@filezilla-project.org],[],[https://filezilla-project.org/])
 AC_CONFIG_HEADERS([src/include/config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(config)
@@ -30,7 +30,7 @@ if test "$locales" != "yes" -a "$localesonly" = "yes"; then
 fi
 
 if test "$localesonly" = "yes" -a "$shellextonly" = "yes"; then
-  AC_MSG_ERROR([inalid flags: --enable-localesonly cannot be used together with --enable-shellextonly])
+  AC_MSG_ERROR([invalid flags: --enable-localesonly cannot be used together with --enable-shellextonly])
 fi
 
 if test "$localesonly" = "yes" -o "$shellextonly" = "yes"; then
