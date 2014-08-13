@@ -291,8 +291,7 @@ public:
 		m_triggered = 0;
 		m_threadwait = false;
 
-		for (int i = 0; i < WAIT_EVENTCOUNT; ++i)
-		{
+		for (int i = 0; i < WAIT_EVENTCOUNT; ++i) {
 			m_triggered_errors[i] = 0;
 		}
 	}
@@ -355,8 +354,7 @@ public:
 
 	int Start()
 	{
-		if (m_started)
-		{
+		if (m_started) {
 			m_sync.Lock();
 			wxASSERT(m_threadwait);
 			m_waiting = 0;
@@ -371,8 +369,7 @@ public:
 		if (m_sync_event == WSA_INVALID_EVENT)
 			return 1;
 #else
-		if (m_pipe[0] == -1)
-		{
+		if (m_pipe[0] == -1) {
 			if (pipe(m_pipe))
 				return errno;
 		}
@@ -393,15 +390,13 @@ public:
 		if (!already_locked)
 			m_sync.Lock();
 
-		if (!m_started || m_finished)
-		{
+		if (!m_started || m_finished) {
 			if (!already_locked)
 				m_sync.Unlock();
 			return;
 		}
 
-		if (m_threadwait)
-		{
+		if (m_threadwait) {
 			m_threadwait = false;
 			m_condition.Signal();
 			if (!already_locked)
@@ -458,8 +453,7 @@ protected:
 		CSocket::SetNonblocking(fd);
 
 		int res = connect(fd, addr->ai_addr, addr->ai_addrlen);
-		if (res == -1)
-		{
+		if (res == -1) {
 #ifdef __WXMSW__
 			// Map to POSIX error codes
 			int error = WSAGetLastError();
@@ -472,21 +466,18 @@ protected:
 #endif
 		}
 
-		if (res == EINPROGRESS)
-		{
+		if (res == EINPROGRESS) {
 
 			m_pSocket->m_fd = fd;
 
 			bool wait_successful;
-			do
-			{
+			do {
 				wait_successful = DoWait(WAIT_CONNECT);
 				if ((m_triggered & WAIT_CONNECT))
 					break;
 			} while (wait_successful);
 
-			if (!wait_successful)
-			{
+			if (!wait_successful) {
 #ifdef __WXMSW__
 				closesocket(fd);
 #else
@@ -501,10 +492,8 @@ protected:
 			res = m_triggered_errors[0];
 		}
 
-		if (res)
-		{
-			if (m_pSocket->m_pEvtHandler)
-			{
+		if (res) {
+			if (m_pSocket->m_pEvtHandler) {
 				CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, addr->ai_next ? CSocketEvent::connection_next : CSocketEvent::connection, res);
 				CSocketEventDispatcher::Get().SendEvent(evt);
 			}
@@ -516,13 +505,11 @@ protected:
 			close(fd);
 #endif
 		}
-		else
-		{
+		else {
 			m_pSocket->m_fd = fd;
 			m_pSocket->m_state = CSocket::connected;
 
-			if (m_pSocket->m_pEvtHandler)
-			{
+			if (m_pSocket->m_pEvtHandler) {
 				CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, CSocketEvent::connection, 0);
 				CSocketEventDispatcher::Get().SendEvent(evt);
 			}
@@ -542,8 +529,7 @@ protected:
 		char* pHost;
 		char* pPort;
 
-		if (!m_pHost || !m_pPort)
-		{
+		if (!m_pHost || !m_pPort) {
 			m_pSocket->m_state = CSocket::closed;
 			return false;
 		}
@@ -565,8 +551,7 @@ protected:
 		delete [] pHost;
 		delete [] pPort;
 
-		if (!Lock())
-		{
+		if (!Lock()) {
 			if (!res && addressList)
 				freeaddrinfo(addressList);
 			if (m_pSocket)
@@ -578,15 +563,13 @@ protected:
 		// If m_pHost is set, Close() was called and Connect()
 		// afterwards, state is back at connecting.
 		// In either case, we need to abort this connection attempt.
-		if (m_pSocket->m_state != CSocket::connecting || m_pHost)
-		{
+		if (m_pSocket->m_state != CSocket::connecting || m_pHost) {
 			if (!res && addressList)
 				freeaddrinfo(addressList);
 			return false;
 		}
 
-		if (res)
-		{
+		if (res) {
 #ifdef __WXMSW__
 			res = ConvertMSWErrorCode(res);
 #endif
@@ -601,26 +584,22 @@ protected:
 			return false;
 		}
 
-		for (struct addrinfo *addr = addressList; addr; addr = addr->ai_next)
-		{
+		for (struct addrinfo *addr = addressList; addr; addr = addr->ai_next) {
 			res = TryConnectHost(addr);
-			if (res == -1)
-			{
+			if (res == -1) {
 				freeaddrinfo(addressList);
 				if (m_pSocket)
 					m_pSocket->m_state = CSocket::closed;
 				return false;
 			}
-			else if (res)
-			{
+			else if (res) {
 				freeaddrinfo(addressList);
 				return true;
 			}
 		}
 		freeaddrinfo(addressList);
 
-		if (m_pSocket->m_pEvtHandler)
-		{
+		if (m_pSocket->m_pEvtHandler) {
 			CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, CSocketEvent::connection, ECONNABORTED);
 			CSocketEventDispatcher::Get().SendEvent(evt);
 		}
@@ -645,8 +624,7 @@ protected:
 	{
 		m_waiting |= wait;
 
-		for (;;)
-		{
+		for (;;) {
 #ifdef __WXMSW__
 			int wait_events = FD_CLOSE;
 			if (m_waiting & WAIT_CONNECT)
@@ -664,59 +642,47 @@ protected:
 			WSAWaitForMultipleEvents(1, &m_sync_event, false, WSA_INFINITE, false);
 
 			m_sync.Lock();
-			if (m_quit || !m_pSocket)
-			{
+			if (m_quit || !m_pSocket) {
 				return false;
 			}
 
 			WSANETWORKEVENTS events;
 			int res = WSAEnumNetworkEvents(m_pSocket->m_fd, m_sync_event, &events);
-			if (res)
-			{
+			if (res) {
 				res = ConvertMSWErrorCode(WSAGetLastError());
 				return false;
 			}
 
-			if (m_waiting & WAIT_CONNECT)
-			{
-				if (events.lNetworkEvents & FD_CONNECT)
-				{
+			if (m_waiting & WAIT_CONNECT) {
+				if (events.lNetworkEvents & FD_CONNECT) {
 					m_triggered |= WAIT_CONNECT;
 					m_triggered_errors[0] = ConvertMSWErrorCode(events.iErrorCode[FD_CONNECT_BIT]);
 					m_waiting &= ~WAIT_CONNECT;
 				}
 			}
-			if (m_waiting & WAIT_READ)
-			{
-				if (events.lNetworkEvents & FD_READ)
-				{
+			if (m_waiting & WAIT_READ) {
+				if (events.lNetworkEvents & FD_READ) {
 					m_triggered |= WAIT_READ;
 					m_triggered_errors[1] = ConvertMSWErrorCode(events.iErrorCode[FD_READ_BIT]);
 					m_waiting &= ~WAIT_READ;
 				}
 			}
-			if (m_waiting & WAIT_WRITE)
-			{
-				if (events.lNetworkEvents & FD_WRITE)
-				{
+			if (m_waiting & WAIT_WRITE) {
+				if (events.lNetworkEvents & FD_WRITE) {
 					m_triggered |= WAIT_WRITE;
 					m_triggered_errors[2] = ConvertMSWErrorCode(events.iErrorCode[FD_WRITE_BIT]);
 					m_waiting &= ~WAIT_WRITE;
 				}
 			}
-			if (m_waiting & WAIT_ACCEPT)
-			{
-				if (events.lNetworkEvents & FD_ACCEPT)
-				{
+			if (m_waiting & WAIT_ACCEPT) {
+				if (events.lNetworkEvents & FD_ACCEPT) {
 					m_triggered |= WAIT_ACCEPT;
 					m_triggered_errors[3] = ConvertMSWErrorCode(events.iErrorCode[FD_ACCEPT_BIT]);
 					m_waiting &= ~WAIT_ACCEPT;
 				}
 			}
-			if (m_waiting & WAIT_CLOSE)
-			{
-				if (events.lNetworkEvents & FD_CLOSE)
-				{
+			if (m_waiting & WAIT_CLOSE) {
+				if (events.lNetworkEvents & FD_CLOSE) {
 					m_triggered |= WAIT_CLOSE;
 					m_triggered_errors[4] = ConvertMSWErrorCode(events.iErrorCode[FD_CLOSE_BIT]);
 					m_waiting &= ~WAIT_CLOSE;
@@ -746,22 +712,19 @@ protected:
 
 			m_sync.Lock();
 
-			if (res > 0 && FD_ISSET(m_pipe[0], &readfds))
-			{
+			if (res > 0 && FD_ISSET(m_pipe[0], &readfds)) {
 				char buffer[100];
 				int damn_spurious_warning = read(m_pipe[0], buffer, 100);
 				(void)damn_spurious_warning; // We do not care about return value and this is definitely correct!
 			}
 
-			if (m_quit || !m_pSocket || m_pSocket->m_fd == -1)
-			{
+			if (m_quit || !m_pSocket || m_pSocket->m_fd == -1) {
 				return false;
 			}
 
 			if (!res)
 				continue;
-			if (res == -1)
-			{
+			if (res == -1) {
 				res = errno;
 				//printf("select failed: %s\n", (const char *)CSocket::GetErrorDescription(res).mb_str());
 				//fflush(stdout);
@@ -772,10 +735,8 @@ protected:
 				return false;
 			}
 
-			if (m_waiting & WAIT_CONNECT)
-			{
-				if (FD_ISSET(m_pSocket->m_fd, &writefds))
-				{
+			if (m_waiting & WAIT_CONNECT) {
+				if (FD_ISSET(m_pSocket->m_fd, &writefds)) {
 					int error;
 					socklen_t len = sizeof(error);
 					int res = getsockopt(m_pSocket->m_fd, SOL_SOCKET, SO_ERROR, &error, &len);
@@ -786,26 +747,20 @@ protected:
 					m_waiting &= ~WAIT_CONNECT;
 				}
 			}
-			else if (m_waiting & WAIT_ACCEPT)
-			{
-				if (FD_ISSET(m_pSocket->m_fd, &readfds))
-				{
+			else if (m_waiting & WAIT_ACCEPT) {
+				if (FD_ISSET(m_pSocket->m_fd, &readfds)) {
 					m_triggered |= WAIT_ACCEPT;
 					m_waiting &= ~WAIT_ACCEPT;
 				}
 			}
-			else if (m_waiting & WAIT_READ)
-			{
-				if (FD_ISSET(m_pSocket->m_fd, &readfds))
-				{
+			else if (m_waiting & WAIT_READ) {
+				if (FD_ISSET(m_pSocket->m_fd, &readfds)) {
 					m_triggered |= WAIT_READ;
 					m_waiting &= ~WAIT_READ;
 				}
 			}
-			if (m_waiting & WAIT_WRITE)
-			{
-				if (FD_ISSET(m_pSocket->m_fd, &writefds))
-				{
+			if (m_waiting & WAIT_WRITE) {
+				if (FD_ISSET(m_pSocket->m_fd, &writefds)) {
 					m_triggered |= WAIT_WRITE;
 					m_waiting &= ~WAIT_WRITE;
 				}
@@ -821,36 +776,31 @@ protected:
 	{
 		if (!m_pSocket || !m_pSocket->m_pEvtHandler)
 			return;
-		if (m_triggered & WAIT_READ)
-		{
+		if (m_triggered & WAIT_READ) {
 			if (m_pSocket->m_synchronous_read_cb)
 				m_pSocket->m_synchronous_read_cb->cb();
 			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::read, m_triggered_errors[1]);
 			CSocketEventDispatcher::Get().SendEvent(evt);
 			m_triggered &= ~WAIT_READ;
 		}
-		if (m_triggered & WAIT_WRITE)
-		{
+		if (m_triggered & WAIT_WRITE) {
 			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::write, m_triggered_errors[2]);
 			CSocketEventDispatcher::Get().SendEvent(evt);
 			m_triggered &= ~WAIT_WRITE;
 		}
-		if (m_triggered & WAIT_ACCEPT)
-		{
+		if (m_triggered & WAIT_ACCEPT) {
 			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::connection, m_triggered_errors[3]);
 			CSocketEventDispatcher::Get().SendEvent(evt);
 			m_triggered &= ~WAIT_ACCEPT;
 		}
-		if (m_triggered & WAIT_CLOSE)
-		{
+		if (m_triggered & WAIT_CLOSE) {
 			SendCloseEvent();
-			m_triggered &= ~WAIT_CLOSE;
 		}
 	}
 
 	void SendCloseEvent()
 	{
-		if( !m_pSocket ) {
+		if( !m_pSocket || !m_pSocket->m_pEvtHandler ) {
 			return;
 		}
 
@@ -872,6 +822,7 @@ protected:
 #endif
 		{
 			evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::close, m_triggered_errors[4]);
+			m_triggered &= ~WAIT_CLOSE;
 		}
 		CSocketEventDispatcher::Get().SendEvent(evt);
 	}
@@ -881,8 +832,7 @@ protected:
 	{
 		if (m_quit)
 			return false;
-		while (!m_pSocket || (!m_waiting && !m_pHost))
-		{
+		while (!m_pSocket || (!m_waiting && !m_pHost)) {
 			m_threadwait = true;
 			m_condition.Wait();
 
@@ -896,21 +846,16 @@ protected:
 	virtual ExitCode Entry()
 	{
 		m_sync.Lock();
-		for (;;)
-		{
-			if (!IdleLoop())
-			{
+		for (;;) {
+			if (!IdleLoop()) {
 				m_finished = true;
 				m_sync.Unlock();
 				return 0;
 			}
 
-			if (m_pSocket->m_state == CSocket::listening)
-			{
-				while (IdleLoop())
-				{
-					if (m_pSocket->m_fd == -1)
-					{
+			if (m_pSocket->m_state == CSocket::listening) {
+				while (IdleLoop()) {
+					if (m_pSocket->m_fd == -1) {
 						m_waiting = 0;
 						break;
 					}
@@ -919,10 +864,8 @@ protected:
 					SendEvents();
 				}
 			}
-			else
-			{
-				if (m_pSocket->m_state == CSocket::connecting)
-				{
+			else {
+				if (m_pSocket->m_state == CSocket::connecting) {
 					if (!DoConnect())
 						continue;
 				}
@@ -931,8 +874,7 @@ protected:
 				m_waiting |= WAIT_CLOSE;
 				int wait_close = WAIT_CLOSE;
 #endif
-				while (IdleLoop())
-				{
+				while (IdleLoop()) {
 					if (m_pSocket->m_fd == -1)
 					{
 						m_waiting = 0;
@@ -940,8 +882,7 @@ protected:
 					}
 					bool res = DoWait(0);
 
-					if (m_triggered & WAIT_CLOSE && m_pSocket)
-					{
+					if (m_triggered & WAIT_CLOSE && m_pSocket) {
 						m_pSocket->m_state = CSocket::closing;
 #ifdef __WXMSW__
 						wait_close = 0;
@@ -1136,16 +1077,6 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 		if (m_pEvtHandler)
 			CSocketEventDispatcher::Get().UpdatePending(m_pEvtHandler, this, pEvtHandler, this);
 	}
-#ifdef __WXMSW__
-	if (pEvtHandler && !m_pEvtHandler && m_state == closing && m_pSocketThread) {
-		// After getting FD_CLOSE, no further events are recorded, so send
-		// it out to new handler manually
-		m_pEvtHandler = pEvtHandler;
-		m_pSocketThread->SendCloseEvent();
-	}
-#else
-	wxASSERT(!pEvtHandler || m_state != closing);
-#endif
 
 	m_pEvtHandler = pEvtHandler;
 
@@ -1171,6 +1102,9 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 			m_pSocketThread->m_waiting |= WAIT_READ | WAIT_WRITE;
 			m_pSocketThread->WakeupThread(true);
 #endif
+		}
+		else if (pEvtHandler && m_state == closing) {
+			m_pSocketThread->SendEvents();
 		}
 		m_pSocketThread->m_sync.Unlock();
 	}
