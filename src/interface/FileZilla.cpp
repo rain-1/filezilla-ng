@@ -549,7 +549,17 @@ bool CFileZillaApp::LoadResourceFiles()
 		pResource->LoadFile(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
 	}
 	else {
-		pResource->Load(m_resourceDir.GetPath() + _T("xrc/*.xrc"));
+		CLocalFileSystem fs;
+		wxString dir = m_resourceDir.GetPath() + _T("xrc/");
+		bool found = fs.BeginFindFiles(dir, false);
+		while (found) {
+			wxString name;
+			found = fs.GetNextFile(name);
+			if (name.Right(4) != _T(".xrc")) {
+				continue;
+			}
+			pResource->LoadFile(dir + name);
+		}
 	}
 
 	return true;
