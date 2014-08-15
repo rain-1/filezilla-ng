@@ -86,19 +86,16 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 
 	m_proxyState = handshake;
 
-	if (type == HTTP)
-	{
+	if (type == HTTP) {
 		m_handshakeState = http_wait;
 
 		wxWX2MBbuf challenge;
 		int challenge_len;
-		if (!user.empty())
-		{
+		if (!user.empty()) {
 			challenge = base64encode(user + _T(":") + pass).mb_str(wxConvUTF8);
 			challenge_len = strlen(challenge);
 		}
-		else
-		{
+		else {
 			challenge = (size_t)0;
 			challenge_len = 0;
 		}
@@ -106,14 +103,12 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 		// Bit oversized, but be on the safe side
 		m_pSendBuffer = new char[70 + strlen(host_raw) * 2 + 2*5 + challenge_len + 23];
 
-		if (!challenge)
-		{
+		if (!challenge) {
 			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nUser-Agent: FileZilla\r\n\r\n",
 				(const char*)host_raw, port,
 				(const char*)host_raw, port);
 		}
-		else
-		{
+		else {
 			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nProxy-Authorization: Basic %s\r\nUser-Agent: FileZilla\r\n\r\n",
 				(const char*)host_raw, port,
 				(const char*)host_raw, port,
@@ -124,10 +119,9 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 		m_recvBufferLen = 4096;
 		m_recvBufferPos = 0;
 	}
-	else if (type == SOCKS4)
-	{
+	else if (type == SOCKS4) {
 		wxString ip = m_host;
-		if (GetIPV6LongForm(m_host).empty()) {
+		if (!GetIPV6LongForm(m_host).empty()) {
 			m_pOwner->LogMessage(MessageType::Error, _("IPv6 addresses are not supported with SOCKS4 proxy"));
 			return EINVAL;
 		}
@@ -167,19 +161,16 @@ int CProxySocket::Handshake(enum CProxySocket::ProxyType type, const wxString& h
 		m_recvBufferPos = 0;
 		m_handshakeState = socks4_handshake;
 	}
-	else
-	{
+	else {
 		m_pSendBuffer = new char[4];
 		m_pSendBuffer[0] = 5; // Protocol version
-		if (!user.empty())
-		{
+		if (!user.empty()) {
 			m_pSendBuffer[1] = 2; // # auth methods supported
 			m_pSendBuffer[2] = 0; // Method: No auth
 			m_pSendBuffer[3] = 2; // Method: Username and password
 			m_sendBufferLen = 4;
 		}
-		else
-		{
+		else {
 			m_pSendBuffer[1] = 1; // # auth methods supported
 			m_pSendBuffer[2] = 0; // Method: No auth
 			m_sendBufferLen = 3;
