@@ -3,6 +3,7 @@
 noinst_HEADERS = commands.h \
 		 directorylisting.h \
 		 engineprivate.h \
+		 event_loop.h \
 		 externalipresolver.h \
 		 FileZillaEngine.h \
 		 libfilezilla.h \

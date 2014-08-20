@@ -3,6 +3,8 @@
 
 #include "timeex.h"
 
+#include "event_loop.h"
+
 enum EngineNotificationType
 {
 	engineCancel,
@@ -13,6 +15,7 @@ class wxFzEngineEvent;
 class CControlSocket;
 class CLogging;
 class CRateLimiter;
+class CSocketEventDispatcher;
 class CFileZillaEnginePrivate : public wxEvtHandler
 {
 public:
@@ -48,7 +51,11 @@ public:
 
 	int GetEngineId() const {return m_engine_id; }
 
+	CEventLoop event_loop_;
+	CSocketEventDispatcher& GetSocketEventDispatcher();
+
 protected:
+
 	CFileZillaEnginePrivate();
 	virtual ~CFileZillaEnginePrivate();
 
@@ -70,6 +77,8 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnEngineEvent(wxFzEngineEvent &event);
 	void OnTimer(wxTimerEvent& event);
+
+	CSocketEventDispatcher* socket_event_dispatcher_{};
 
 	wxEvtHandler *m_pEventHandler{};
 

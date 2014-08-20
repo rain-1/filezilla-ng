@@ -8,7 +8,10 @@ CBackend::CBackend(CSocketEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler
 {
 }
 
-CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket) : CBackend(pEvtHandler), m_pSocket(pSocket)
+CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket)
+	: CBackend(pEvtHandler)
+	, CSocketEventSource(pEvtHandler->dispatcher_)
+	, m_pSocket(pSocket)
 {
 	m_pSocket->SetEventHandler(pEvtHandler);
 
@@ -79,5 +82,5 @@ void CSocketBackend::OnRateAvailable(enum CRateLimiter::rate_direction direction
 	else
 		evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::read);
 
-	CSocketEventDispatcher::Get().SendEvent(evt);
+	dispatcher_.SendEvent(evt);
 }

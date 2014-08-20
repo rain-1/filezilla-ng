@@ -4,18 +4,6 @@
 
 #include <wx/log.h>
 
-const wxEventType fzEVT_IOTHREAD = wxNewEventType();
-
-CIOThreadEvent::CIOThreadEvent(int id /*=wxID_ANY*/)
-	: wxEvent(id, fzEVT_IOTHREAD)
-{
-}
-
-wxEvent* CIOThreadEvent::Clone() const
-{
-	return new CIOThreadEvent(GetId());
-}
-
 CIOThread::CIOThread()
 	: wxThread(wxTHREAD_JOINABLE), m_evtHandler(0)
 	, m_read()
@@ -32,8 +20,7 @@ CIOThread::CIOThread()
 	, m_wasCarriageReturn()
 	, m_error_description()
 {
-	for (unsigned int i = 0; i < BUFFERCOUNT; i++)
-	{
+	for (unsigned int i = 0; i < BUFFERCOUNT; ++i) {
 		m_buffers[i] = new char[BUFFERSIZE];
 		m_bufferLens[i] = 0;
 	}
@@ -94,7 +81,7 @@ wxThread::ExitCode CIOThread::Entry()
 				}
 				m_appWaiting = false;
 				CIOThreadEvent evt;
-				wxPostEvent(m_evtHandler, evt);
+				m_evtHandler->SendEvent(evt);
 			}
 
 			if (len == wxInvalidOffset)
@@ -167,16 +154,14 @@ wxThread::ExitCode CIOThread::Entry()
 				m_running = false;
 			}
 
-			if (m_appWaiting)
-			{
-				if (!m_evtHandler)
-				{
+			if (m_appWaiting) {
+				if (!m_evtHandler) {
 					m_running = false;
 					break;
 				}
 				m_appWaiting = false;
 				CIOThreadEvent evt;
-				wxPostEvent(m_evtHandler, evt);
+				m_evtHandler->SendEvent(evt);
 			}
 
 			if (m_error)
@@ -198,8 +183,7 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer, int len /*=BUFFERSIZE*/)
 	if (m_error)
 		return IO_Error;
 
-	if (m_curAppBuf == -1)
-	{
+	if (m_curAppBuf == -1) {
 		m_curAppBuf = 0;
 		*pBuffer = m_buffers[0];
 		return IO_Success;
