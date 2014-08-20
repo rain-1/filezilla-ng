@@ -9,11 +9,9 @@
 #include "proxy.h"
 #include "servercapabilities.h"
 
-BEGIN_EVENT_TABLE(CTransferSocket, wxEvtHandler)
-	EVT_IOTHREAD(wxID_ANY, CTransferSocket::OnIOThreadEvent)
-END_EVENT_TABLE()
-
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, TransferMode transferMode)
+: CEventHandler(pEngine->GetSocketEventDispatcher().event_loop_)
+, CSocketEventHandler(pEngine->GetSocketEventDispatcher())
 {
 	m_pEngine = pEngine;
 	m_pControlSocket = pControlSocket;
@@ -27,8 +25,6 @@ CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSo
 	m_pDirectoryListingParser = 0;
 
 	m_bActive = false;
-
-	SetEvtHandlerEnabled(true);
 
 	m_transferMode = transferMode;
 
@@ -54,19 +50,18 @@ CTransferSocket::~CTransferSocket()
 		m_transferEndReason = TransferEndReason::successful;
 	ResetSocket();
 
-	if (m_pControlSocket)
-	{
-		if (m_transferMode == TransferMode::upload || m_transferMode == TransferMode::download)
-		{
+	if (m_pControlSocket) {
+		if (m_transferMode == TransferMode::upload || m_transferMode == TransferMode::download) {
 			CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
-			if (pData && pData->pIOThread)
-			{
+			if (pData && pData->pIOThread) {
 				if (m_transferMode == TransferMode::download)
 					FinalizeWrite();
 				pData->pIOThread->SetEventHandler(0);
 			}
 		}
 	}
+
+	RemoveHandler();
 }
 
 void CTransferSocket::ResetSocket()
@@ -284,7 +279,6 @@ void CTransferSocket::OnReceive()
 				}
 				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
 					TransferEnd(TransferEndReason::successful);
-
 				return;
 			}
 
@@ -532,7 +526,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 {
 	ResetSocket();
 
-	m_pSocket = new CSocket(this);
+	m_pSocket = new CSocket(this, dispatcher_);
 
 	if (m_pControlSocket->m_pProxyBackend)
 	{
@@ -559,6 +553,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 	SetSocketBufferSizes(m_pSocket);
 
+	m_pSocket->SetFlags(CSocket::flag_nodelay);
 	int res = m_pSocket->Connect(host, port);
 	if (res && res != EINPROGRESS)
 	{
@@ -603,7 +598,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 CSocket* CTransferSocket::CreateSocketServer(int port)
 {
-	CSocket* pServer = new CSocket(this);
+	CSocket* pServer = new CSocket(this, dispatcher_);
 	int res = pServer->Listen(m_pControlSocket->m_pSocket->GetAddressFamily(), port);
 	if (res) {
 		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Could not listen on port %d: %s"), port, CSocket::GetErrorDescription(res));
@@ -723,7 +718,7 @@ bool CTransferSocket::CheckGetNextReadBuffer()
 	return true;
 }
 
-void CTransferSocket::OnIOThreadEvent(CIOThreadEvent&)
+void CTransferSocket::OnIOThreadEvent(CIOThreadEvent const&)
 {
 	if (!m_bActive || m_transferEndReason != TransferEndReason::none)
 		return;
@@ -787,16 +782,14 @@ void CTransferSocket::TriggerPostponedEvents()
 {
 	wxASSERT(m_bActive);
 
-	if (m_postponedReceive)
-	{
+	if (m_postponedReceive) {
 		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Executing postponed receive"));
 		m_postponedReceive = false;
 		OnReceive();
 		if (m_transferEndReason != TransferEndReason::none)
 			return;
 	}
-	if (m_postponedSend)
-	{
+	if (m_postponedSend) {
 		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Executing postponed send"));
 		m_postponedSend = false;
 		OnSend();
@@ -812,8 +805,7 @@ bool CTransferSocket::InitBackend()
 	if (m_pBackend)
 		return true;
 
-	if (m_pControlSocket->m_protectDataChannel)
-	{
+	if (m_pControlSocket->m_protectDataChannel) {
 		if (!InitTls(m_pControlSocket->m_pTlsSocket))
 			return false;
 	}
@@ -830,4 +822,9 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 	const int size_read = m_pEngine->GetOptions()->GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
 	const int size_write = m_pEngine->GetOptions()->GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
 	pSocket->SetBufferSizes(size_read, size_write);
+}
+
+void CTransferSocket::operator()(CEventBase const& ev)
+{
+	Dispatch<CIOThreadEvent>(ev, this, &CTransferSocket::OnIOThreadEvent);
 }

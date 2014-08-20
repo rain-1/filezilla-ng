@@ -103,12 +103,9 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 {
-	for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter)
-	{
-		if (*iter == pObject)
-		{
-			for (int i = 0; i < 2; ++i)
-			{
+	for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
+		if (*iter == pObject) {
+			for (int i = 0; i < 2; ++i) {
 				// If an object already used up some of its assigned tokens, add them to m_tokenDebt,
 				// so that newly created objects get less initial tokens.
 				// That ensures that rapidly adding and removing objects does not exceed the rate
@@ -117,19 +114,15 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 				tokens /= m_objectList.size();
 				if ((*iter)->m_bytesAvailable[i] < tokens)
 					m_tokenDebt[i] += tokens - (*iter)->m_bytesAvailable[i];
-
 			}
 			m_objectList.erase(iter);
 			break;
 		}
 	}
 
-	for (int i = 0; i < 2; ++i)
-	{
-		for (auto iter = m_wakeupList[i].begin(); iter != m_wakeupList[i].end(); ++iter)
-		{
-			if (*iter == pObject)
-			{
+	for (int i = 0; i < 2; ++i) {
+		for (auto iter = m_wakeupList[i].begin(); iter != m_wakeupList[i].end(); ++iter) {
+			if (*iter == pObject) {
 				m_wakeupList[i].erase(iter);
 				break;
 			}

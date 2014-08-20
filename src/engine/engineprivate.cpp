@@ -86,6 +86,8 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 
 	if (m_engineList.empty())
 		CSocket::Cleanup(true);
+
+	delete socket_event_dispatcher_;
 }
 
 bool CFileZillaEnginePrivate::SendEvent(enum EngineNotificationType eventType, int data /*=0*/)
@@ -665,4 +667,13 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 
 		pEngine->m_pControlSocket->InvalidateCurrentWorkingDir(path);
 	}
+}
+
+CSocketEventDispatcher& CFileZillaEnginePrivate::GetSocketEventDispatcher()
+{
+	if (!socket_event_dispatcher_) {
+		socket_event_dispatcher_ = new CSocketEventDispatcher(event_loop_);
+	}
+
+	return *socket_event_dispatcher_;
 }

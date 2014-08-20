@@ -8,7 +8,7 @@
 
 char const ciphers[] = "SECURE256:+SECURE128:+ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP";
 
-//#define TLSDEBUG 1
+#define TLSDEBUG 1
 #if TLSDEBUG
 // This is quite ugly
 CControlSocket* pLoggingControlSocket;
@@ -23,8 +23,12 @@ void log_func(int level, const char* msg)
 #endif
 
 CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CBackend(pEvtHandler), m_pOwner(pOwner)
+	: CSocketEventHandler(pOwner->GetEngine()->GetSocketEventDispatcher())
+	, CBackend(pEvtHandler)
+	, CSocketEventSource(pOwner->GetEngine()->GetSocketEventDispatcher())
+	, m_pOwner(pOwner)
 {
+	wxASSERT(m_pSocket);
 	m_pSocket = pSocket;
 	m_pSocketBackend = new CSocketBackend(this, m_pSocket);
 
@@ -234,7 +238,7 @@ ssize_t CTlsSocket::PullFunction(gnutls_transport_ptr_t ptr, void* data, size_t 
 ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 {
 #if TLSDEBUG
-	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PushFunction(%x, %d)"), data, len);
+	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PushFunction(%d)"), len);
 #endif
 	if (!m_canWriteToSocket)
 	{
@@ -273,8 +277,8 @@ ssize_t CTlsSocket::PushFunction(const void* data, size_t len)
 
 ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 {
-#if TLSDEBUG
-	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction(%x, %d)"), data, len);
+#if 1
+	if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction(%d)"),  (int)len);
 #endif
 	if (!m_pSocketBackend)
 	{
@@ -288,6 +292,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	if (!m_canReadFromSocket)
 	{
 		gnutls_transport_set_errno(m_session, EAGAIN);
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction cannot read"));
 		return -1;
 	}
 
@@ -295,13 +300,13 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	int read = m_pSocketBackend->Read(data, len, error);
 	if (read < 0)
 	{
-		if (error == EAGAIN)
-		{
-			m_canReadFromSocket = false;
+		m_canReadFromSocket = false;
+		if (error == EAGAIN) {
+			if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction EAGAIN"));
 			if (m_canCheckCloseSocket && !m_pSocketBackend->IsWaiting(CRateLimiter::inbound))
 			{
 				CSocketEvent *evt = new CSocketEvent(this, m_pSocketBackend, CSocketEvent::close);
-				CSocketEventDispatcher::Get().SendEvent(evt);
+				CSocketEventSource::dispatcher_.SendEvent(evt);
 			}
 		}
 
@@ -312,21 +317,25 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	if (m_canCheckCloseSocket)
 	{
 		CSocketEvent *evt = new CSocketEvent(this, m_pSocketBackend, CSocketEvent::close);
-		CSocketEventDispatcher::Get().SendEvent(evt);
+		CSocketEventSource::dispatcher_.SendEvent(evt);
 	}
 
-	if (!read)
+	if (!read) {
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction eof"));
 		m_socket_eof = true;
+	}
 
 #if TLSDEBUG
 	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("  returning %d"), read);
 #endif
+	if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::PullFunction ret %d"), read);
 
 	return read;
 }
 
 void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 {
+	if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket socket event %d"), event.GetType());
 	wxASSERT(m_pSocket);
 	if (!m_session)
 		return;
@@ -364,7 +373,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 
 			//Uninit();
 			CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
-			CSocketEventDispatcher::Get().SendEvent(evt);
+			CSocketEventSource::dispatcher_.SendEvent(evt);
 		}
 		break;
 	default:
@@ -374,7 +383,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 
 void CTlsSocket::OnRead()
 {
-	m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::OnRead()"));
+	if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Debug_Debug, _T("CTlsSocket::OnRead()"));
 
 	m_canReadFromSocket = true;
 
@@ -382,8 +391,10 @@ void CTlsSocket::OnRead()
 		return;
 
 	const int direction = gnutls_record_get_direction(m_session);
-	if (direction && !m_lastReadFailed)
+	if (direction && !m_lastReadFailed) {
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _T("CTlsSocket::Postponing read"));
 		return;
+	}
 
 	if (m_tlsState == handshake)
 		ContinueHandshake();
@@ -533,7 +544,7 @@ int CTlsSocket::ContinueHandshake()
 			if (!error || error != EAGAIN)
 			{
 				CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
-				CSocketEventDispatcher::Get().SendEvent(evt);
+				CSocketEventSource::dispatcher_.SendEvent(evt);
 			}
 		}
 
@@ -561,6 +572,7 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 	}
 	else if (m_lastReadFailed)
 	{
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket returning last read failed"));
 		error = EAGAIN;
 		return -1;
 	}
@@ -568,6 +580,7 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 	if (m_peekDataLen)
 	{
 		unsigned int min = wxMin(len, m_peekDataLen);
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket returning peeked data %d %d %d"), m_peekDataLen, len, min);
 		memcpy(buffer, m_peekData, min);
 
 		if (min == m_peekDataLen)
@@ -589,12 +602,20 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 	}
 
 	int res = DoCallGnutlsRecordRecv(buffer, len);
+	while (res == GNUTLS_E_AGAIN && m_canReadFromSocket && !gnutls_record_get_direction(m_session)) {
+		// Spurious EAGAIN, try again.
+		// Can happen on early EOF.
+		m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket spurious EAGAIN in gnutls_record_recv. eof state: %d"), m_socket_eof);
+		res = gnutls_record_recv(m_session, buffer, len);
+	}
+	if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket gnutls_record_recv returned %d"), res);
 	if (res >= 0)
 	{
 		if (res > 0)
 			TriggerEvents();
 		else
 		{
+			if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket got bye"));
 			// Peer did already initiate a shutdown, reply to it
 			gnutls_bye(m_session, GNUTLS_SHUT_WR);
 			// Note: Theoretically this could return a write error.
@@ -695,15 +716,17 @@ void CTlsSocket::TriggerEvents()
 
 	if (m_canTriggerRead)
 	{
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket triggering read"));
 		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::read);
-		CSocketEventDispatcher::Get().SendEvent(evt);
+		CSocketEventSource::dispatcher_.SendEvent(evt);
 		m_canTriggerRead = false;
 	}
 
 	if (m_canTriggerWrite)
 	{
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket triggering read"));
 		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::write);
-		CSocketEventDispatcher::Get().SendEvent(evt);
+		CSocketEventSource::dispatcher_.SendEvent(evt);
 		m_canTriggerWrite = false;
 	}
 }
@@ -712,6 +735,7 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 {
 	if (m_lastWriteFailed)
 	{
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket last write failed"));
 		int res = GNUTLS_E_AGAIN;
 		while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
 			res = gnutls_record_send(m_session, 0, 0);
@@ -731,6 +755,7 @@ void CTlsSocket::CheckResumeFailedReadWrite()
 	}
 	if (m_lastReadFailed)
 	{
+		if (m_implicitTrustedCert.size) m_pOwner->LogMessage(MessageType::Error, _("CTlsSocket last read failed"));
 		wxASSERT(!m_peekData);
 
 		m_peekDataLen = 65536;
@@ -782,7 +807,7 @@ void CTlsSocket::Failure(int code, int socket_error, const wxString& function)
 	if (socket_error)
 	{
 		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, socket_error);
-		CSocketEventDispatcher::Get().SendEvent(evt);
+		CSocketEventSource::dispatcher_.SendEvent(evt);
 	}
 }
 
@@ -859,7 +884,7 @@ void CTlsSocket::ContinueShutdown()
 		m_tlsState = closed;
 
 		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
-		CSocketEventDispatcher::Get().SendEvent(evt);
+		CSocketEventSource::dispatcher_.SendEvent(evt);
 
 		return;
 	}
@@ -887,7 +912,7 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 		if (m_tlsState == conn)
 		{
 			CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::connection);
-			CSocketEventDispatcher::Get().SendEvent(evt);
+			CSocketEventSource::dispatcher_.SendEvent(evt);
 		}
 
 		TriggerEvents();

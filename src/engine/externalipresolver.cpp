@@ -20,10 +20,16 @@ wxEvent* fzExternalIPResolveEvent::Clone() const
 wxString CExternalIPResolver::m_ip;
 bool CExternalIPResolver::m_checked = false;
 
+//FIXME
+CEventLoop l;
+CSocketEventDispatcher d(l);
+
 CExternalIPResolver::CExternalIPResolver(wxEvtHandler* handler, int id /*=wxID_ANY*/)
-	: m_handler(handler)
+	: CSocketEventHandler(d)
+	, m_handler(handler)
 	, m_id(id)
 {
+	wxFAIL;//FIXME
 	ResetHttpData(true);
 }
 
@@ -81,7 +87,8 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::a
 		return;
 	}
 
-	m_pSocket = new CSocket(this);
+	wxFAIL; //FIXME
+	//m_pSocket = new CSocket(this);
 
 	int res = m_pSocket->Connect(host, m_port, protocol);
 	if (res && res != EINPROGRESS) {

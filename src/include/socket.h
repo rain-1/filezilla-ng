@@ -1,6 +1,8 @@
 #ifndef __SOCKET_H__
 #define __SOCKET_H__
 
+#include "event_loop.h"
+
 // IPv6 capable, non-blocking socket class for use with wxWidgets.
 // Error codes are the same as used by the POSIX socket functions,
 // see 'man 2 socket', 'man 2 connect', ...
@@ -44,44 +46,50 @@ protected:
 	friend class CSocketEventDispatcher;
 };
 
-class CSocketEventDispatcher final : protected wxEvtHandler
+class CSocketEventDispatcher final : public CEventHandler
 {
 public:
+	CSocketEventDispatcher(CEventLoop & event_loop);
+	~CSocketEventDispatcher();
+
 	void SendEvent(CSocketEvent* evt);
 	void RemovePending(const CSocketEventHandler* pHandler);
 	void RemovePending(const CSocketEventSource* pSource);
 	void UpdatePending(const CSocketEventHandler* pOldHandler, const CSocketEventSource* pOldSource, CSocketEventHandler* pNewHandler, CSocketEventSource* pNewSource);
 
-	static CSocketEventDispatcher& Get();
-
 private:
-	CSocketEventDispatcher();
-	~CSocketEventDispatcher();
-
-	virtual bool ProcessEvent(wxEvent& event);
+	virtual void operator()(CEventBase const& ev);
 
 	std::list<CSocketEvent*> m_pending_events;
 
 	wxCriticalSection m_sync;
-
-	static CSocketEventDispatcher m_dispatcher;
-
-	bool m_inside_loop{};
 };
 
 class CSocketEventHandler
 {
 public:
-	CSocketEventHandler() {};
+	CSocketEventHandler(CSocketEventDispatcher& dispatcher)
+		: dispatcher_(dispatcher)
+	{};
+
 	virtual ~CSocketEventHandler();
 
 	virtual void OnSocketEvent(CSocketEvent& event) = 0;
+
+	CSocketEventDispatcher& dispatcher_;
 };
 
 class CSocketEventSource
 {
 public:
+	CSocketEventSource(CSocketEventDispatcher& dispatcher)
+		: dispatcher_(dispatcher)
+	{
+	}
+
 	virtual ~CSocketEventSource();
+
+	CSocketEventDispatcher& dispatcher_;
 };
 
 class CCallback
@@ -95,7 +103,7 @@ class CSocket : public CSocketEventSource
 {
 	friend class CSocketThread;
 public:
-	CSocket(CSocketEventHandler* pEvtHandler);
+	CSocket(CSocketEventHandler* pEvtHandler, CSocketEventDispatcher& dispatcher);
 	virtual ~CSocket();
 
 	CSocket(CSocket const&) = delete;

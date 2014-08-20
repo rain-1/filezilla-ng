@@ -112,7 +112,7 @@ enum class TransferEndReason
 };
 
 class CTransferStatus;
-class CControlSocket: public wxEvtHandler, public CLogging
+class CControlSocket: public wxEvtHandler, public CLogging, public CEventHandler
 {
 public:
 	CControlSocket(CFileZillaEnginePrivate *pEngine);
@@ -269,9 +269,13 @@ protected:
 
 	bool m_invalidateCurrentPath;
 
+	virtual void operator()(CEventBase const& ev);
+	
+	void OnSimpleEvent(int const& ev);
+
 	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
-	void OnObtainLock(wxCommandEvent& event);
+	void OnObtainLock();
 };
 
 class CProxySocket;

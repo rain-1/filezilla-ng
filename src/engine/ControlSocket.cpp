@@ -31,7 +31,6 @@ std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 
 BEGIN_EVENT_TABLE(CControlSocket, wxEvtHandler)
 	EVT_TIMER(wxID_ANY, CControlSocket::OnTimer)
-	EVT_COMMAND(wxID_ANY, fzOBTAINLOCK, CControlSocket::OnObtainLock)
 END_EVENT_TABLE()
 
 COpData::COpData(Command op_Id)
@@ -53,6 +52,7 @@ COpData::~COpData()
 
 CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CLogging(pEngine)
+	, CEventHandler(pEngine->event_loop_)
 {
 	m_pEngine = pEngine;
 	m_pCurOpData = 0;
@@ -77,6 +77,8 @@ CControlSocket::~CControlSocket()
 
 	delete m_pCSConv;
 	m_pCSConv = 0;
+
+	RemoveHandler();
 }
 
 int CControlSocket::Disconnect()
@@ -245,8 +247,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 {
 	LogMessage(MessageType::Debug_Debug, _T("CControlSocket::DoClose(%d)"), nErrorCode);
-	if (m_closed)
-	{
+	if (m_closed) {
 		wxASSERT(!m_pCurOpData);
 		return nErrorCode;
 	}
@@ -815,8 +816,7 @@ void CControlSocket::UnlockCache()
 			continue;
 
 		// Send notification
-		wxCommandEvent evt(fzOBTAINLOCK);
-		iter->pControlSocket->AddPendingEvent(evt);
+		iter->pControlSocket->SendEvent(CSimpleEvent<int>(fzOBTAINLOCK));
 		break;
 	}
 }
@@ -854,7 +854,7 @@ enum CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 	return own->reason;
 }
 
-void CControlSocket::OnObtainLock(wxCommandEvent&)
+void CControlSocket::OnObtainLock()
 {
 	if (ObtainLockFromEvent() == lock_unknown)
 		return;
@@ -917,8 +917,9 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CControlSocket(pEngine)
+	, CSocketEventHandler(pEngine->GetSocketEventDispatcher())
 {
-	m_pSocket = new CSocket(this);
+	m_pSocket = new CSocket(this, dispatcher_);
 
 	m_pBackend = new CSocketBackend(this, m_pSocket);
 	m_pProxyBackend = 0;
@@ -1435,4 +1436,16 @@ int CControlSocket::Rename(const CRenameCommand&)
 int CControlSocket::Chmod(const CChmodCommand&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
+}
+
+void CControlSocket::operator()(CEventBase const& ev)
+{
+	DispatchSimple<int>(ev, this, &CControlSocket::OnSimpleEvent);
+}
+
+void CControlSocket::OnSimpleEvent(int const& ev)
+{
+	if (ev == fzOBTAINLOCK) {
+		OnObtainLock();
+	}
 }
