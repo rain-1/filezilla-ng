@@ -7,11 +7,8 @@
 #define BUFFERCOUNT 3
 #define BUFFERSIZE 65536
 
-enum class CIOThreadEventType
-{
-	value
-};
-typedef CSimpleEvent<CIOThreadEventType> CIOThreadEvent;
+struct io_thread_event_type{};
+typedef CEvent<io_thread_event_type> CIOThreadEvent;
 
 enum IORet
 {

@@ -20,8 +20,8 @@ extern "C" {
 
 #include <errno.h>
 
-DECLARE_EVENT_TYPE(fzOBTAINLOCK, -1)
-DEFINE_EVENT_TYPE(fzOBTAINLOCK)
+struct obtain_lock_event_type;
+typedef CEvent<obtain_lock_event_type> CObtainLockEvent;
 
 std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 
@@ -617,7 +617,7 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 	return buffer;
 }
 
-void CControlSocket::OnTimer(CTimerEvent const&)
+void CControlSocket::OnTimer(int timer_id)
 {
 	int timeout = m_pEngine->GetOptions()->GetOptionVal(OPTION_TIMEOUT);
 	if (!timeout)
@@ -805,7 +805,7 @@ void CControlSocket::UnlockCache()
 			continue;
 
 		// Send notification
-		iter->pControlSocket->SendEvent(CSimpleEvent<int>(fzOBTAINLOCK));
+		iter->pControlSocket->SendEvent(CObtainLockEvent());
 		break;
 	}
 }
@@ -1432,12 +1432,5 @@ void CControlSocket::operator()(CEventBase const& ev)
 	if (Dispatch<CTimerEvent>(ev, this, &CControlSocket::OnTimer)) {
 		return;
 	}
-	DispatchSimple<int>(ev, this, &CControlSocket::OnSimpleEvent);
-}
-
-void CControlSocket::OnSimpleEvent(int const& ev)
-{
-	if (ev == fzOBTAINLOCK) {
-		OnObtainLock();
-	}
+	Dispatch<CObtainLockEvent>(ev, this, &CControlSocket::OnObtainLock);
 }
