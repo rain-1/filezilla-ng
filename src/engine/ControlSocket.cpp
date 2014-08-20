@@ -23,15 +23,7 @@ extern "C" {
 DECLARE_EVENT_TYPE(fzOBTAINLOCK, -1)
 DEFINE_EVENT_TYPE(fzOBTAINLOCK)
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
-
-BEGIN_EVENT_TABLE(CControlSocket, wxEvtHandler)
-	EVT_TIMER(wxID_ANY, CControlSocket::OnTimer)
-END_EVENT_TABLE()
 
 COpData::COpData(Command op_Id)
 	: opId(op_Id)
@@ -63,8 +55,6 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 
 	m_pCSConv = 0;
 	m_useUTF8 = false;
-
-	m_timer.SetOwner(this);
 
 	m_closed = false;
 
@@ -627,7 +617,7 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 	return buffer;
 }
 
-void CControlSocket::OnTimer(wxTimerEvent&)
+void CControlSocket::OnTimer(CTimerEvent const&)
 {
 	int timeout = m_pEngine->GetOptions()->GetOptionVal(OPTION_TIMEOUT);
 	if (!timeout)
@@ -639,11 +629,9 @@ void CControlSocket::OnTimer(wxTimerEvent&)
 	if (IsWaitingForLock())
 		return;
 
-	if (m_stopWatch.Time() > (timeout * 1000))
-	{
+	if (m_stopWatch.Time() > (timeout * 1000)) {
 		LogMessage(MessageType::Error, _("Connection timed out"));
 		DoClose(FZ_REPLY_TIMEOUT);
-		wxASSERT(!m_timer.IsRunning());
 	}
 }
 
@@ -654,16 +642,17 @@ void CControlSocket::SetAlive()
 
 void CControlSocket::SetWait(bool wait)
 {
-	if (wait)
-	{
-		if (m_timer.IsRunning())
+	if (wait) {
+		if (m_timer != -1)
 			return;
 
 		m_stopWatch.Start();
-		m_timer.Start(1000);
+		m_timer = AddTimer(1000, false);
 	}
-	else if (m_timer.IsRunning())
-		m_timer.Stop();
+	else if (m_timer != -1) {
+		StopTimer(m_timer);
+		m_timer = -1;
+	}
 }
 
 int CControlSocket::SendNextCommand()
@@ -1440,6 +1429,9 @@ int CControlSocket::Chmod(const CChmodCommand&)
 
 void CControlSocket::operator()(CEventBase const& ev)
 {
+	if (Dispatch<CTimerEvent>(ev, this, &CControlSocket::OnTimer)) {
+		return;
+	}
 	DispatchSimple<int>(ev, this, &CControlSocket::OnSimpleEvent);
 }
 
