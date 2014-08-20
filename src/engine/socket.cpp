@@ -53,6 +53,9 @@ union sockaddr_u
 class CSocketThread;
 static std::list<CSocketThread*> waiting_socket_threads;
 
+struct socket_event_type;
+typedef CEvent<socket_event_type> CInternalSocketEvent;
+
 #ifdef __WXMSW__
 static int ConvertMSWErrorCode(int error)
 {
@@ -140,7 +143,7 @@ void CSocketEventDispatcher::SendEvent(CSocketEvent* evt)
 		m_pending_events.push_back(evt);
 	}
 
-	CEventHandler::SendEvent(CSimpleEvent<int>(0));
+	CEventHandler::SendEvent(CInternalSocketEvent());
 }
 
 void CSocketEventDispatcher::RemovePending(const CSocketEventHandler* pHandler)

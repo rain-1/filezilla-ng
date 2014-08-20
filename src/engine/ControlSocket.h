@@ -271,8 +271,7 @@ protected:
 
 	virtual void operator()(CEventBase const& ev);
 	
-	void OnSimpleEvent(int const& ev);
-	void OnTimer(CTimerEvent const&);
+	void OnTimer(int timer_id);
 	void OnObtainLock();
 };
 

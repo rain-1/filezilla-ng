@@ -640,7 +640,7 @@ int CSftpControlSocket::ConnectSend()
 		return FZ_REPLY_ERROR;
 }
 
-void CSftpControlSocket::OnSftpEvent(CSftpEvent const&)
+void CSftpControlSocket::OnSftpEvent()
 {
 	if (!m_pCurrentServer)
 		return;
@@ -809,7 +809,7 @@ void CSftpControlSocket::OnSftpEvent(CSftpEvent const&)
 	}
 }
 
-void CSftpControlSocket::OnTerminate(CTerminateEvent const&)
+void CSftpControlSocket::OnTerminate()
 {
 	if (m_pProcess) {
 		DoClose();

@@ -44,11 +44,11 @@ enum sftpRequestTypes
 class CProcess;
 class CSftpInputThread;
 
-enum class CSftpEventType{ value };
-typedef CSimpleEvent<CSftpEventType> CSftpEvent;
+struct sftp_event_type;
+typedef CEvent<sftp_event_type> CSftpEvent;
 
-enum class CTerminateEventType{ value };
-typedef CSimpleEvent<CTerminateEventType> CTerminateEvent;
+struct terminate_event_type;
+typedef CEvent<terminate_event_type> CTerminateEvent;
 
 class CSftpControlSocket : public CControlSocket, public CRateLimiterObject
 {
@@ -134,10 +134,9 @@ protected:
 	CProcess* m_pProcess;
 	CSftpInputThread* m_pInputThread;
 
-	void OnSftpEvent(CSftpEvent const&);
-
 	virtual void operator()(CEventBase const& ev);
-	void OnTerminate(CTerminateEvent const& event);
+	void OnSftpEvent();
+	void OnTerminate();
 
 	wxString m_requestPreamble;
 	wxString m_requestInstruction;

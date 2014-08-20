@@ -3,6 +3,8 @@
 
 #include <functional>
 
+#include "apply.h"
+
 using namespace std::placeholders;
 
 class CEventBase
@@ -18,7 +20,7 @@ public:
 };
 
 template<typename Derived>
-class CEvent : public CEventBase
+class CClonableEvent : public CEventBase
 {
 public:
 	virtual CEventBase* clone() const
@@ -27,55 +29,40 @@ public:
 	}
 };
 
-template<typename Value = int>
-class CSimpleEvent : public CEvent<CSimpleEvent<Value>>
+template<typename UniqueType, typename...Values>
+class CEvent final : public CClonableEvent<CEvent<UniqueType, Values...>>
 {
 public:
-	typedef Value value_type;
+	typedef UniqueType unique_type;
+	typedef std::tuple<Values...> tuple_type;
 
-	CSimpleEvent(value_type v = value_type())
-		: v_(v)
-	{}
-
-	CSimpleEvent(CSimpleEvent const& e)
-		: v_(e.v_)
-	{}
-
-	CSimpleEvent& operator=(CSimpleEvent const& e)
+	CEvent()
 	{
-		v_ = e.v_;
 	}
 
-	value_type const& value() const { return v_; }
-
-protected:
-	value_type v_;
-};
-
-// Strongly typed typedefs would be very handy.
-class CTimerEvent : public CEvent<CTimerEvent>
-{
-public:
-	typedef int value_type;
-
-	CTimerEvent(value_type v = value_type())
-		: v_(v)
-	{}
-
-	CTimerEvent(CTimerEvent const& e)
-		: v_(e.v_)
-	{}
-
-	CTimerEvent& operator=(CTimerEvent const& e)
+	template<typename Value, typename...Values>
+	explicit CEvent(Value&& value, Values&& ...values)
+		: v_(std::forward<Value>(value), std::forward<Values>(values)...)
 	{
-		v_ = e.v_;
 	}
 
-	value_type const& value() const { return v_; }
+	CEvent(CEvent const& op)
+		: v_(op.v_)
+	{
+	}
 
-protected:
-	value_type v_;
+	CEvent& operator=(CEvent const& op) {
+		if (this != &op) {
+			v_ = op.v_;
+		}
+		return *this;
+	}
+
+	std::tuple<Values...> v_;
 };
+
+struct timer_event_type{};
+typedef CEvent<timer_event_type, int> CTimerEvent;
 
 class CEventLoop;
 
@@ -125,35 +112,24 @@ protected:
 	virtual bool ProcessEvent(wxEvent& event);
 };
 
-template<typename T>
-bool Dispatch(CEventBase const& ev, std::function<void(T const&)> const& f)
+template<typename T, typename H, typename F>
+bool Dispatch(CEventBase const& ev, F&& f)
 {
 	T const* e = dynamic_cast<T const*>(&ev);
 	if (e) {
-		f(*e);
+		apply(std::forward<F>(f), e->v_);
 	}
 	return e != 0;
 }
 
-template<typename T, typename H>
-bool Dispatch(CEventBase const& ev, H* h, void(H::* f)(T const&))
+template<typename T, typename H, typename F>
+bool Dispatch(CEventBase const& ev, H* h, F&& f)
 {
 	T const* e = dynamic_cast<T const*>(&ev);
 	if (e) {
-		(h->*f)(*e);
+		apply(h, std::forward<F>(f), e->v_);
 	}
 	return e != 0;
 }
 
-template<typename T>
-bool DispatchSimple(CEventBase const& ev, std::function<void(T const&)> const& f)
-{
-	return Dispatch<CSimpleEvent<T>>(ev, [&](CSimpleEvent<T> const& ev){f(ev.value()); });
-}
-
-template<typename T, typename H>
-bool DispatchSimple(CEventBase const& ev, H* h, void(H::* f)(T const&))
-{
-	return Dispatch<CSimpleEvent<T>>(ev, [&](CSimpleEvent<T> const& ev) {(h->*f)(ev.value());});
-}
 #endif
