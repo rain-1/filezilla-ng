@@ -78,6 +78,7 @@
     <ClCompile Include="directorylisting.cpp" />
     <ClCompile Include="directorylistingparser.cpp" />
     <ClCompile Include="engineprivate.cpp" />
+    <ClCompile Include="engine_context.cpp" />
     <ClCompile Include="event_loop.cpp" />
     <ClCompile Include="externalipresolver.cpp" />
     <ClCompile Include="FileZillaEngine.cpp">
@@ -111,6 +112,7 @@
     <ClCompile Include="transfersocket.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\engine_context.h" />
     <ClInclude Include="..\include\event_loop.h" />
     <ClInclude Include="backend.h" />
     <ClInclude Include="..\include\commands.h" />

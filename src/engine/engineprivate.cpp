@@ -8,51 +8,16 @@
 #include "ratelimiter.h"
 #include "pathcache.h"
 
-class wxFzEngineEvent : public wxEvent
-{
-public:
-	wxFzEngineEvent(int id, enum EngineNotificationType eventType, int data = 0);
-	virtual wxEvent *Clone() const;
-
-	enum EngineNotificationType m_eventType;
-	int data;
-};
-
-extern const wxEventType fzEVT_ENGINE_NOTIFICATION;
-typedef void (wxEvtHandler::*fzEngineEventFunction)(wxFzEngineEvent&);
-
-#define EVT_FZ_ENGINE_NOTIFICATION(id, fn) \
-	DECLARE_EVENT_TABLE_ENTRY(             \
-		fzEVT_ENGINE_NOTIFICATION, id, -1, \
-		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzEngineEventFunction, &fn ), \
-		(wxObject *) NULL                  \
-	),
-
 std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
-DEFINE_EVENT_TYPE(fzEVT_ENGINE_NOTIFICATION)
-
-wxFzEngineEvent::wxFzEngineEvent(int id, enum EngineNotificationType eventType, int data /*=0*/) : wxEvent(id, fzEVT_ENGINE_NOTIFICATION)
-{
-	m_eventType = eventType;
-	wxFzEngineEvent::data = data;
-}
-
-wxEvent *wxFzEngineEvent::Clone() const
-{
-	return new wxFzEngineEvent(*this);
-}
-
-
-BEGIN_EVENT_TABLE(CFileZillaEnginePrivate, wxEvtHandler)
-	EVT_FZ_ENGINE_NOTIFICATION(wxID_ANY, CFileZillaEnginePrivate::OnEngineEvent)
-	EVT_TIMER(wxID_ANY, CFileZillaEnginePrivate::OnTimer)
-END_EVENT_TABLE()
-
-CFileZillaEnginePrivate::CFileZillaEnginePrivate()
-	: m_retryTimer(this)
+CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context)
+	: CEventHandler(context.GetEventLoop())
+	, event_loop_(context.GetEventLoop())
+	, socket_event_dispatcher_(context.GetSocketEventDispatcher())
+	, m_options(context.GetOptions())
+	, m_rateLimiter(context.GetRateLimiter())
 {
 	m_engineList.push_back(this);
 
@@ -81,25 +46,13 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 
 	delete m_pLogging;
 
-	if (m_pRateLimiter)
-		m_pRateLimiter->Free();
-
 	if (m_engineList.empty())
 		CSocket::Cleanup(true);
-
-	delete socket_event_dispatcher_;
 }
 
-bool CFileZillaEnginePrivate::SendEvent(enum EngineNotificationType eventType, int data /*=0*/)
+void CFileZillaEnginePrivate::OnEngineEvent(EngineNotificationType type)
 {
-	wxFzEngineEvent evt(wxID_ANY, eventType, data);
-	wxPostEvent(this, evt);
-	return true;
-}
-
-void CFileZillaEnginePrivate::OnEngineEvent(wxFzEngineEvent &event)
-{
-	switch (event.m_eventType)
+	switch (type)
 	{
 	case engineCancel:
 		if (!IsBusy())
@@ -149,12 +102,12 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 	m_lock.Enter();
 	m_NotificationList.push_back(pNotification);
 
-	if (m_maySendNotificationEvent && m_pEventHandler)
-	{
+	if (m_maySendNotificationEvent && m_pEventHandler) {
 		m_maySendNotificationEvent = false;
 		m_lock.Leave();
 		wxFzEvent evt(wxID_ANY);
-		evt.SetEventObject(this);
+		evt.engine_ = dynamic_cast<CFileZillaEngine*>(this);
+		wxASSERT(evt.engine_);
 		wxPostEvent(m_pEventHandler, evt);
 	}
 	else
@@ -185,16 +138,16 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 
 				RegisterFailedLoginAttempt(pConnectCommand->GetServer(), (nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR);
 
-				if ((nErrorCode & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR)
-				{
+				if ((nErrorCode & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR) {
 					++m_retryCount;
-					if (m_retryCount < m_pOptions->GetOptionVal(OPTION_RECONNECTCOUNT) && pConnectCommand->RetryConnecting())
-					{
+					if (m_retryCount < m_options.GetOptionVal(OPTION_RECONNECTCOUNT) && pConnectCommand->RetryConnecting()) {
 						unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
 						if (!delay)
 							delay = 1;
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
-						m_retryTimer.Start(delay, true);
+						if (m_retryTimer != -1)
+							StopTimer(m_retryTimer);
+						m_retryTimer = AddTimer(delay, true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
 				}
@@ -298,8 +251,7 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 	if (!IsBusy())
 		return FZ_REPLY_OK;
 
-	if (m_retryTimer.IsRunning())
-	{
+	if (m_retryTimer != -1) {
 		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
 
 		delete m_pControlSocket;
@@ -308,7 +260,8 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 		delete m_pCurrentCommand;
 		m_pCurrentCommand = 0;
 
-		m_retryTimer.Stop();
+		StopTimer(m_retryTimer);
+		m_retryTimer = -1;
 
 		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
 		COperationNotification *notification = new COperationNotification();
@@ -319,7 +272,7 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
-	SendEvent(engineCancel);
+	SendEvent(CFileZillaEngineEvent(engineCancel));
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -551,7 +504,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 	while (iter != m_failedLogins.end())
 	{
 		const wxTimeSpan span = wxDateTime::UNow() - iter->time;
-		if (span.GetSeconds() >= m_pOptions->GetOptionVal(OPTION_RECONNECTDELAY) ||
+		if (span.GetSeconds() >= m_options.GetOptionVal(OPTION_RECONNECTDELAY) ||
 			iter->server == server || (!critical && (iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())))
 		{
 			std::list<t_failedLogins>::iterator prev = iter;
@@ -574,7 +527,7 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 	while (iter != m_failedLogins.end())
 	{
 		const wxTimeSpan span = wxDateTime::UNow() - iter->time;
-		const int delay = m_pOptions->GetOptionVal(OPTION_RECONNECTDELAY);
+		const int delay = m_options.GetOptionVal(OPTION_RECONNECTDELAY);
 		if (span.GetSeconds() >= delay)
 		{
 			std::list<t_failedLogins>::iterator prev = iter;
@@ -592,10 +545,14 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 	return 0;
 }
 
-void CFileZillaEnginePrivate::OnTimer(wxTimerEvent&)
+void CFileZillaEnginePrivate::OnTimer(int)
 {
-	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect)
-	{
+	if (m_retryTimer == -1) {
+		return;
+	}
+	m_retryTimer = -1;
+
+	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect) {
 		wxFAIL_MSG(_T("CFileZillaEnginePrivate::OnTimer called without pending Command::connect"));
 		return;
 	}
@@ -612,10 +569,11 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
 	const CServer& server = pConnectCommand->GetServer();
 	unsigned int delay = GetRemainingReconnectDelay(server);
-	if (delay)
-	{
+	if (delay) {
 		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
-		m_retryTimer.Start(delay, true);
+		if (m_retryTimer != -1)
+			StopTimer(m_retryTimer);
+		m_retryTimer = AddTimer(delay, true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
@@ -640,7 +598,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	}
 
 	int res = m_pControlSocket->Connect(server);
-	if (m_retryTimer.IsRunning())
+	if (m_retryTimer != -1)
 		return FZ_REPLY_WOULDBLOCK;
 
 	return res;
@@ -669,11 +627,10 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 	}
 }
 
-CSocketEventDispatcher& CFileZillaEnginePrivate::GetSocketEventDispatcher()
+void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
 {
-	if (!socket_event_dispatcher_) {
-		socket_event_dispatcher_ = new CSocketEventDispatcher(event_loop_);
-	}
+	if (Dispatch<CTimerEvent>(ev, this, &CFileZillaEnginePrivate::OnTimer))
+		return;
 
-	return *socket_event_dispatcher_;
+	Dispatch<CFileZillaEngineEvent>(ev, this, &CFileZillaEnginePrivate::OnEngineEvent);
 }

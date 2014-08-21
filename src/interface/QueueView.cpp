@@ -620,9 +620,9 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 	return true;
 }
 
-void CQueueView::OnEngineEvent(wxEvent &event)
+void CQueueView::OnEngineEvent(wxFzEvent &event)
 {
-	t_EngineData* const pEngineData = GetEngineData(reinterpret_cast<CFileZillaEngine*>(event.GetEventObject()));
+	t_EngineData* const pEngineData = GetEngineData(event.engine_);
 	if (!pEngineData)
 		return;
 
@@ -2685,8 +2685,8 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransi
 		const int newEngineCount = COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS);
 		if (newEngineCount > static_cast<int>(m_engineData.size()) - transient) {
 			pFirstIdle = new t_EngineData;
-			pFirstIdle->pEngine = new CFileZillaEngine();
-			pFirstIdle->pEngine->Init(this, COptions::Get());
+			pFirstIdle->pEngine = new CFileZillaEngine(m_pMainFrame->GetEngineContext());
+			pFirstIdle->pEngine->Init(this);
 
 			m_engineData.push_back(pFirstIdle);
 		}

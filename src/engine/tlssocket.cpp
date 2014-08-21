@@ -23,14 +23,14 @@ void log_func(int level, const char* msg)
 #endif
 
 CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CSocketEventHandler(pOwner->GetEngine()->GetSocketEventDispatcher())
+	: CSocketEventHandler(pOwner->GetEngine()->socket_event_dispatcher_)
 	, CBackend(pEvtHandler)
-	, CSocketEventSource(pOwner->GetEngine()->GetSocketEventDispatcher())
+	, CSocketEventSource(pOwner->GetEngine()->socket_event_dispatcher_)
 	, m_pOwner(pOwner)
 {
 	wxASSERT(m_pSocket);
 	m_pSocket = pSocket;
-	m_pSocketBackend = new CSocketBackend(this, m_pSocket);
+	m_pSocketBackend = new CSocketBackend(this, m_pSocket, m_pOwner->GetEngine()->GetRateLimiter());
 
 	m_session = 0;
 	m_initialized = false;
@@ -1142,13 +1142,11 @@ int CTlsSocket::VerifyCertificate()
 	}
 
 	std::vector<CCertificate> certificates;
-	for (unsigned int i = 0; i < cert_list_size; i++)
-	{
+	for (unsigned int i = 0; i < cert_list_size; ++i) {
 		CCertificate cert;
 		if (ExtractCert(cert_list, cert))
 			certificates.push_back(cert);
-		else
-		{
+		else {
 			Failure(0, ECONNABORTED);
 			return FZ_REPLY_ERROR;
 		}

@@ -9,7 +9,7 @@ BEGIN_EVENT_TABLE(CNetConfWizard, wxWizard)
 EVT_WIZARD_PAGE_CHANGING(wxID_ANY, CNetConfWizard::OnPageChanging)
 EVT_WIZARD_PAGE_CHANGED(wxID_ANY, CNetConfWizard::OnPageChanged)
 EVT_SOCKET(wxID_ANY, CNetConfWizard::OnSocketEvent)
-EVT_FZ_EXTERNALIPRESOLVE(wxID_ANY, CNetConfWizard::OnExternalIPAddress)
+//EVT_FZ_EXTERNALIPRESOLVE(wxID_ANY, CNetConfWizard::OnExternalIPAddress)
 EVT_BUTTON(XRCID("ID_RESTART"), CNetConfWizard::OnRestart)
 EVT_WIZARD_FINISHED(wxID_ANY, CNetConfWizard::OnFinish)
 EVT_TIMER(wxID_ANY, CNetConfWizard::OnTimer)
@@ -692,27 +692,24 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 		return addr.IPAddress();
 	}
-	else if (mode == 1)
-	{
+	else if (mode == 1) {
 		wxTextCtrl* control = XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl);
 		return control->GetValue();
 	}
-	else if (mode == 2)
-	{
-		if (!m_pIPResolver)
-		{
+	else if (mode == 2) {
+		if (!m_pIPResolver) {
 			wxTextCtrl* pResolver = XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl);
 			wxString address = pResolver->GetValue();
 
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
-			m_pIPResolver = new CExternalIPResolver(this);
+			// FIXME XXX
+			m_pIPResolver = 0;// new CExternalIPResolver(this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
 			if (!m_pIPResolver->Done())
 				return wxString();
 		}
-		if (!m_pIPResolver->Successful())
-		{
+		if (!m_pIPResolver->Successful()) {
 			delete m_pIPResolver;
 			m_pIPResolver = 0;
 
@@ -734,7 +731,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 	return wxString();
 }
 
-void CNetConfWizard::OnExternalIPAddress(fzExternalIPResolveEvent& event)
+void CNetConfWizard::OnExternalIPAddress()
 {
 	if (!m_pIPResolver)
 		return;

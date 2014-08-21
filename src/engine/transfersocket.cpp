@@ -10,8 +10,8 @@
 #include "servercapabilities.h"
 
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, TransferMode transferMode)
-: CEventHandler(pEngine->GetSocketEventDispatcher().event_loop_)
-, CSocketEventHandler(pEngine->GetSocketEventDispatcher())
+: CEventHandler(pEngine->socket_event_dispatcher_.event_loop_)
+, CSocketEventHandler(pEngine->socket_event_dispatcher_)
 {
 	m_pEngine = pEngine;
 	m_pControlSocket = pControlSocket;
@@ -593,7 +593,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 	ResetSocket();
 
-	m_pEngine->SendEvent(engineTransferEnd);
+	m_pEngine->SendEvent(CFileZillaEngineEvent(engineTransferEnd));
 }
 
 CSocket* CTransferSocket::CreateSocketServer(int port)
@@ -613,7 +613,7 @@ CSocket* CTransferSocket::CreateSocketServer(int port)
 
 CSocket* CTransferSocket::CreateSocketServer()
 {
-	if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LIMITPORTS))
+	if (!m_pEngine->GetOptions().GetOptionVal(OPTION_LIMITPORTS))
 	{
 		// Ask the systen for a port
 		CSocket* pServer = CreateSocketServer(0);
@@ -632,8 +632,8 @@ CSocket* CTransferSocket::CreateSocketServer()
 
 	static int start = 0;
 
-	int low = m_pEngine->GetOptions()->GetOptionVal(OPTION_LIMITPORTS_LOW);
-	int high = m_pEngine->GetOptions()->GetOptionVal(OPTION_LIMITPORTS_HIGH);
+	int low = m_pEngine->GetOptions().GetOptionVal(OPTION_LIMITPORTS_LOW);
+	int high = m_pEngine->GetOptions().GetOptionVal(OPTION_LIMITPORTS_HIGH);
 	if (low > high)
 		low = high;
 
@@ -810,7 +810,7 @@ bool CTransferSocket::InitBackend()
 			return false;
 	}
 	else
-		m_pBackend = new CSocketBackend(this, m_pSocket);
+		m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
 
 	return true;
 }
@@ -819,8 +819,8 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 {
 	wxCHECK_RET(pSocket, _("SetSocketBufferSize called without socket"));
 
-	const int size_read = m_pEngine->GetOptions()->GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
-	const int size_write = m_pEngine->GetOptions()->GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
+	const int size_read = m_pEngine->GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
+	const int size_write = m_pEngine->GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
 	pSocket->SetBufferSizes(size_read, size_write);
 }
 

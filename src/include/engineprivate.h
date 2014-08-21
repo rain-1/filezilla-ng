@@ -3,7 +3,13 @@
 
 #include "timeex.h"
 
+#include "engine_context.h"
 #include "event_loop.h"
+
+class CControlSocket;
+class CLogging;
+class CRateLimiter;
+class CSocketEventDispatcher;
 
 enum EngineNotificationType
 {
@@ -11,12 +17,10 @@ enum EngineNotificationType
 	engineTransferEnd
 };
 
-class wxFzEngineEvent;
-class CControlSocket;
-class CLogging;
-class CRateLimiter;
-class CSocketEventDispatcher;
-class CFileZillaEnginePrivate : public wxEvtHandler
+struct filezilla_engine_event_type;
+typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
+
+class CFileZillaEnginePrivate : public CEventHandler
 {
 public:
 	int ResetOperation(int nErrorCode);
@@ -27,16 +31,14 @@ public:
 
 	unsigned int GetNextAsyncRequestNumber();
 
-	// Event handling
-	bool SendEvent(enum EngineNotificationType eventType, int data = 0);
-
 	bool IsBusy() const;
 	bool IsConnected() const;
 
 	const CCommand *GetCurrentCommand() const;
 	Command GetCurrentCommandId() const;
 
-	COptionsBase *GetOptions() { return m_pOptions; }
+	COptionsBase& GetOptions() { return m_options; }
+	CRateLimiter& GetRateLimiter() { return m_rateLimiter; }
 
 	void SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed);
 
@@ -51,12 +53,11 @@ public:
 
 	int GetEngineId() const {return m_engine_id; }
 
-	CEventLoop event_loop_;
-	CSocketEventDispatcher& GetSocketEventDispatcher();
+	CEventLoop& event_loop_;
+	CSocketEventDispatcher& socket_event_dispatcher_;
 
 protected:
-
-	CFileZillaEnginePrivate();
+	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
 	virtual ~CFileZillaEnginePrivate();
 
 	// Command handlers, only called by CFileZillaEngine::Command
@@ -74,11 +75,9 @@ protected:
 
 	int ContinueConnect();
 
-	DECLARE_EVENT_TABLE()
-	void OnEngineEvent(wxFzEngineEvent &event);
-	void OnTimer(wxTimerEvent& event);
-
-	CSocketEventDispatcher* socket_event_dispatcher_{};
+	void operator()(CEventBase const& ev);
+	void OnEngineEvent(EngineNotificationType type);
+	void OnTimer(int timer_id);
 
 	wxEvtHandler *m_pEventHandler{};
 
@@ -102,7 +101,7 @@ protected:
 	bool m_bIsInCommand{}; //true if Command is on the callstack
 	int m_nControlSocketError{};
 
-	COptionsBase *m_pOptions{};
+	COptionsBase& m_options;
 
 	unsigned int m_asyncRequestCounter{};
 
@@ -127,9 +126,9 @@ protected:
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount{};
-	wxTimer m_retryTimer;
+	int m_retryTimer{-1};
 
-	CRateLimiter* m_pRateLimiter{};
+	CRateLimiter& m_rateLimiter;
 };
 
 #endif //__FILEZILLAENGINEPRIVATE_H__

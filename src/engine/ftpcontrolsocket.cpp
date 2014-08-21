@@ -35,11 +35,6 @@
 #define LOGON_CUSTOMCOMMANDS 12
 #define LOGON_DONE		13
 
-BEGIN_EVENT_TABLE(CFtpControlSocket, CRealControlSocket)
-EVT_FZ_EXTERNALIPRESOLVE(wxID_ANY, CFtpControlSocket::OnExternalIPAddress)
-EVT_TIMER(wxID_ANY, CFtpControlSocket::OnIdleTimer)
-END_EVENT_TABLE()
-
 CRawTransferOpData::CRawTransferOpData()
 	: COpData(Command::rawtransfer)
 	, pOldData()
@@ -194,7 +189,6 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate *pEngine) : CRealCo
 	m_pTlsSocket = 0;
 	m_protectDataChannel = false;
 	m_lastTypeBinary = -1;
-	m_idleTimer.SetOwner(this);
 
 	// Enable TCP_NODELAY, speeds things up a bit.
 	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
@@ -212,7 +206,7 @@ CFtpControlSocket::~CFtpControlSocket()
 
 	DoClose();
 
-	m_idleTimer.Stop();
+	RemoveHandler();
 }
 
 void CFtpControlSocket::OnReceive()
@@ -532,7 +526,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	}
 	else if (pData->ftp_proxy_type == 1)
 	{
-		const wxString& proxyUser = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_USER);
+		const wxString& proxyUser = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		if (!proxyUser.empty())
 		{
 			// Proxy logon (if credendials are set)
@@ -540,7 +534,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			pData->loginSequence.push_back(cmd);
 			cmd.optional = true;
 			cmd.hide_arguments = true;
-			cmd.command = _T("PASS ") + m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_PASS);
+			cmd.command = _T("PASS ") + m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 			pData->loginSequence.push_back(cmd);
 		}
 		// User@host
@@ -564,7 +558,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	}
 	else if (pData->ftp_proxy_type == 2 || pData->ftp_proxy_type == 3)
 	{
-		const wxString& proxyUser = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_USER);
+		const wxString& proxyUser = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		if (!proxyUser.empty())
 		{
 			// Proxy logon (if credendials are set)
@@ -572,7 +566,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			pData->loginSequence.push_back(cmd);
 			cmd.optional = true;
 			cmd.hide_arguments = true;
-			cmd.command = _T("PASS ") + m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_PASS);
+			cmd.command = _T("PASS ") + m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 			pData->loginSequence.push_back(cmd);
 		}
 
@@ -605,8 +599,8 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	}
 	else if (pData->ftp_proxy_type == 4)
 	{
-		wxString proxyUser = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_USER);
-		wxString proxyPass = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_PASS);
+		wxString proxyUser = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_USER);
+		wxString proxyPass = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 		wxString host = server.FormatHost();
 		wxString user = server.GetUser();
 		wxString account = server.GetAccount();
@@ -616,7 +610,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		user.Replace(_T("%"), _T("%%"));
 		account.Replace(_T("%"), _T("%%"));
 
-		wxString loginSequence = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE);
+		wxString loginSequence = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE);
 		wxStringTokenizer tokens(loginSequence, _T("\n"), wxTOKEN_STRTOK);
 
 		while (tokens.HasMoreTokens())
@@ -1451,7 +1445,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			return Transfer(_T("MLSD"), pData);
 		else
 		{
-			if (m_pEngine->GetOptions()->GetOptionVal(OPTION_VIEW_HIDDEN_FILES))
+			if (m_pEngine->GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES))
 			{
 				enum capabilities cap = CServerCapabilities::GetCapability(*m_pCurrentServer, list_hidden_support);
 				if (cap == unknown)
@@ -1852,8 +1846,10 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	m_lastCommandCompletionTime = wxDateTime::Now();
 	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 		StartKeepaliveTimer();
-	else
-		m_idleTimer.Stop();
+	else if (m_idleTimer != -1) {
+		StopTimer(m_idleTimer);
+		m_idleTimer = -1;
+	}
 
 	return CControlSocket::ResetOperation(nErrorCode);
 }
@@ -2426,7 +2422,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
 				else if (pData->download &&
-					m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+					m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 					CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 				{
 					pData->opState = filetransfer_mdtm;
@@ -2448,7 +2444,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 
 						if (pData->download &&
 							!entry.has_time() &&
-							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+							m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 						{
 							pData->opState = filetransfer_mdtm;
@@ -2495,7 +2491,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				if (!dirDidExist)
 					pData->opState = filetransfer_size;
 				else if (pData->download &&
-					m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+					m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 					CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 				{
 					pData->opState = filetransfer_mdtm;
@@ -2513,7 +2509,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 
 					if (pData->download &&
 						!entry.has_time() &&
-						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+						m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 						CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 					{
 						pData->opState = filetransfer_mdtm;
@@ -2536,7 +2532,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 	}
 	else if (pData->opState == filetransfer_waittransfer)
 	{
-		if (prevResult == FZ_REPLY_OK && m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+		if (prevResult == FZ_REPLY_OK && m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 		{
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
@@ -2726,7 +2722,7 @@ int CFtpControlSocket::FileTransferSend()
 							LogMessage(MessageType::Debug_Info, _T("No need to resume, remote file size matches local file size."));
 							delete pFile;
 
-							if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+							if (m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
 								CDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
@@ -2925,7 +2921,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 					if (!cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) ||
 						!matched_case)
 					{
-						if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+						if (m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 						{
 							pData->opState = filetransfer_mdtm;
@@ -2939,7 +2935,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 						if (pData->download &&
 							!entry.has_time() &&
-							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
+							m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
 						{
 							pData->opState = filetransfer_mdtm;
@@ -3891,7 +3887,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	const wxString peerIP = m_pSocket->GetPeerIP();
 	if (!IsRoutableAddress(pData->host, m_pSocket->GetAddressFamily()) && IsRoutableAddress(peerIP, m_pSocket->GetAddressFamily()))
 	{
-		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive)
+		if (m_pEngine->GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive)
 		{
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
@@ -3904,7 +3900,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 			return false;
 		}
 	}
-	else if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2)
+	else if (m_pEngine->GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2)
 	{
 		// Always use server address
 		pData->host = peerIP;
@@ -3920,11 +3916,11 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 	// and NAT at the same time.
 	if (m_pSocket->GetAddressFamily() != CSocket::ipv6)
 	{
-		int mode = m_pEngine->GetOptions()->GetOptionVal(OPTION_EXTERNALIPMODE);
+		int mode = m_pEngine->GetOptions().GetOptionVal(OPTION_EXTERNALIPMODE);
 
 		if (mode)
 		{
-			if (m_pEngine->GetOptions()->GetOptionVal(OPTION_NOEXTERNALONLOCAL) &&
+			if (m_pEngine->GetOptions().GetOptionVal(OPTION_NOEXTERNALONLOCAL) &&
 				!IsRoutableAddress(m_pSocket->GetPeerIP(), m_pSocket->GetAddressFamily()))
 				// Skip next block, use local address
 				goto getLocalIP;
@@ -3932,7 +3928,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 
 		if (mode == 1)
 		{
-			wxString ip = m_pEngine->GetOptions()->GetOption(OPTION_EXTERNALIP);
+			wxString ip = m_pEngine->GetOptions().GetOption(OPTION_EXTERNALIP);
 			if (!ip.empty())
 			{
 				address = ip;
@@ -3941,45 +3937,39 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 
 			LogMessage(MessageType::Debug_Warning, _("No external IP address set, trying default."));
 		}
-		else if (mode == 2)
-		{
-			if (!m_pIPResolver)
-			{
+		else if (mode == 2) {
+			if (!m_pIPResolver) {
 				const wxString& localAddress = m_pSocket->GetLocalIP();
 
-				if (!localAddress.empty() && localAddress == m_pEngine->GetOptions()->GetOption(OPTION_LASTRESOLVEDIP))
-				{
+				if (!localAddress.empty() && localAddress == m_pEngine->GetOptions().GetOption(OPTION_LASTRESOLVEDIP)) {
 					LogMessage(MessageType::Debug_Verbose, _T("Using cached external IP address"));
 
 					address = localAddress;
 					return FZ_REPLY_OK;
 				}
 
-				wxString resolverAddress = m_pEngine->GetOptions()->GetOption(OPTION_EXTERNALIPRESOLVER);
+				wxString resolverAddress = m_pEngine->GetOptions().GetOption(OPTION_EXTERNALIPRESOLVER);
 
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
-				m_pIPResolver = new CExternalIPResolver(this);
+				m_pIPResolver = new CExternalIPResolver(dispatcher_, *this);
 				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
-				if (!m_pIPResolver->Done())
-				{
+				if (!m_pIPResolver->Done()) {
 					LogMessage(MessageType::Debug_Verbose, _T("Waiting for resolver thread"));
 					return FZ_REPLY_WOULDBLOCK;
 				}
 			}
-			if (!m_pIPResolver->Successful())
-			{
+			if (!m_pIPResolver->Successful()) {
 				delete m_pIPResolver;
 				m_pIPResolver = 0;
 
 				LogMessage(MessageType::Debug_Warning, _("Failed to retrieve external ip address, using local address"));
 			}
-			else
-			{
+			else {
 				LogMessage(MessageType::Debug_Info, _T("Got external IP address"));
 				address = m_pIPResolver->GetIP();
 
-				m_pEngine->GetOptions()->SetOption(OPTION_LASTRESOLVEDIP, address);
+				m_pEngine->GetOptions().SetOption(OPTION_LASTRESOLVEDIP, address);
 
 				delete m_pIPResolver;
 				m_pIPResolver = 0;
@@ -4001,11 +3991,10 @@ getLocalIP:
 	return FZ_REPLY_OK;
 }
 
-void CFtpControlSocket::OnExternalIPAddress(fzExternalIPResolveEvent&)
+void CFtpControlSocket::OnExternalIPAddress()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::OnExternalIPAddress()"));
-	if (!m_pIPResolver)
-	{
+	if (!m_pIPResolver) {
 		LogMessage(MessageType::Debug_Info, _T("Ignoring event"));
 		return;
 	}
@@ -4047,7 +4036,7 @@ int CFtpControlSocket::Transfer(const wxString& cmd, CFtpTransferOpData* oldData
 			pData->bPasv = false;
 			break;
 		default:
-			pData->bPasv = m_pEngine->GetOptions()->GetOptionVal(OPTION_USEPASV) != 0;
+			pData->bPasv = m_pEngine->GetOptions().GetOptionVal(OPTION_USEPASV) != 0;
 			break;
 		}
 	}
@@ -4096,7 +4085,7 @@ int CFtpControlSocket::TransferParseResponse()
 	case rawtransfer_port_pasv:
 		if (code != 2 && code != 3)
 		{
-			if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
+			if (!m_pEngine->GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
 			{
 				error = true;
 				break;
@@ -4120,7 +4109,7 @@ int CFtpControlSocket::TransferParseResponse()
 				parsed = ParsePasvResponse(pData);
 			if (!parsed)
 			{
-				if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
+				if (!m_pEngine->GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
 				{
 					error = true;
 					break;
@@ -4270,7 +4259,7 @@ int CFtpControlSocket::TransferSend()
 				}
 			}
 
-			if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || pData->bTriedPasv)
+			if (!m_pEngine->GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || pData->bTriedPasv)
 			{
 				LogMessage(MessageType::Error, _("Failed to create listening socket for active mode transfer"));
 				ResetOperation(FZ_REPLY_ERROR);
@@ -4403,11 +4392,11 @@ int CFtpControlSocket::Connect(const CServer &server)
 	m_pCurOpData = pData;
 
 	// Do not use FTP proxy if generic proxy is set
-	int generic_proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE);
+	int generic_proxy_type = m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
 	if ((generic_proxy_type <= CProxySocket::unknown || generic_proxy_type >= CProxySocket::proxytype_count) &&
-		(pData->ftp_proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_FTP_PROXY_TYPE)) && !server.GetBypassProxy())
+		(pData->ftp_proxy_type = m_pEngine->GetOptions().GetOptionVal(OPTION_FTP_PROXY_TYPE)) && !server.GetBypassProxy())
 	{
-		pData->host = m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST);
+		pData->host = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
 
 		int pos = -1;
 		if (!pData->host.empty() && pData->host[0] == '[')
@@ -4454,7 +4443,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 			return FZ_REPLY_ERROR;
 		}
 
-		LogMessage(MessageType::Status, _("Using proxy %s"), m_pEngine->GetOptions()->GetOption(OPTION_FTP_PROXY_HOST));
+		LogMessage(MessageType::Status, _("Using proxy %s"), m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_HOST));
 	}
 	else
 	{
@@ -4517,11 +4506,10 @@ bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const 
 	return true;
 }
 
-void CFtpControlSocket::OnIdleTimer(wxTimerEvent& event)
+void CFtpControlSocket::OnTimer(int timer_id)
 {
-	if (event.GetId() != m_idleTimer.GetId())
-	{
-		event.Skip();
+	if (timer_id != m_idleTimer) {
+		CControlSocket::OnTimer(timer_id);
 		return;
 	}
 
@@ -4554,7 +4542,7 @@ void CFtpControlSocket::OnIdleTimer(wxTimerEvent& event)
 
 void CFtpControlSocket::StartKeepaliveTimer()
 {
-	if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_FTP_SENDKEEPALIVE))
+	if (!m_pEngine->GetOptions().GetOptionVal(OPTION_FTP_SENDKEEPALIVE))
 		return;
 
 	if (m_repliesToSkip || m_pendingReplies)
@@ -4567,7 +4555,10 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	if (span.GetSeconds() >= (60 * 30))
 		return;
 
-	m_idleTimer.Start(30000, true);
+	if (m_idleTimer != -1) {
+		StopTimer(m_idleTimer);
+	}
+	m_idleTimer = AddTimer(30000, true);
 }
 
 int CFtpControlSocket::ParseSubcommandResult(int prevResult)
@@ -4603,4 +4594,17 @@ int CFtpControlSocket::ParseSubcommandResult(int prevResult)
 	}
 
 	return FZ_REPLY_ERROR;
+}
+
+void CFtpControlSocket::operator()(CEventBase const& ev)
+{
+	if (Dispatch<CTimerEvent>(ev, this, &CFtpControlSocket::OnTimer)) {
+		return;
+	}
+
+	if (Dispatch<CExternalIPResolveEvent>(ev, this, &CFtpControlSocket::OnExternalIPAddress)) {
+		return;
+	}
+
+	CRealControlSocket::operator()(ev);
 }

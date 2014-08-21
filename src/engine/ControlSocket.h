@@ -112,7 +112,7 @@ enum class TransferEndReason
 };
 
 class CTransferStatus;
-class CControlSocket: public wxEvtHandler, public CLogging, public CEventHandler
+class CControlSocket: public CLogging, public CEventHandler
 {
 public:
 	CControlSocket(CFileZillaEnginePrivate *pEngine);

@@ -318,7 +318,7 @@ protected:
 	wxFileOffset GetCurrentSpeed(bool countDownload, bool countUpload);
 
 	DECLARE_EVENT_TABLE()
-	void OnEngineEvent(wxEvent &event);
+	void OnEngineEvent(wxFzEvent &event);
 	void OnFolderThreadComplete(wxCommandEvent& event);
 	void OnFolderThreadFiles(wxCommandEvent& event);
 	void OnChar(wxKeyEvent& event);

@@ -3,27 +3,13 @@
 
 #include "socket.h"
 
-class fzExternalIPResolveEvent final : public wxEvent
-{
-public:
-	fzExternalIPResolveEvent(int id = wxID_ANY);
-	virtual wxEvent *Clone() const;
-};
-
-typedef void (wxEvtHandler::*fzExternalIPResolveEventFunction)(fzExternalIPResolveEvent&);
-
-extern const wxEventType fzEVT_EXTERNALIPRESOLVE;
-#define EVT_FZ_EXTERNALIPRESOLVE(id, fn) \
-	DECLARE_EVENT_TABLE_ENTRY(           \
-		fzEVT_EXTERNALIPRESOLVE, id, -1, \
-		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( fzExternalIPResolveEventFunction, &fn ), \
-		(wxObject *) NULL                \
-	),
+struct external_ip_resolve_event_type;
+typedef CEvent<external_ip_resolve_event_type> CExternalIPResolveEvent;
 
 class CExternalIPResolver final : public CSocketEventHandler
 {
 public:
-	CExternalIPResolver(wxEvtHandler* handler, int id = wxID_ANY);
+	CExternalIPResolver(CSocketEventDispatcher& dispatcher, CEventHandler & handler);
 	virtual ~CExternalIPResolver();
 
 	bool Done() const { return m_done; }
@@ -39,7 +25,7 @@ protected:
 	wxString m_address;
 	CSocket::address_family m_protocol{};
 	unsigned long m_port{80};
-	wxEvtHandler* m_handler;
+	CEventHandler * m_handler;
 	int m_id;
 
 	bool m_done{};

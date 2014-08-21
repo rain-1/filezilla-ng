@@ -18,9 +18,9 @@ enum handshake_state
 };
 
 CProxySocket::CProxySocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CSocketEventHandler(pOwner->GetEngine()->GetSocketEventDispatcher())
+	: CSocketEventHandler(pOwner->GetEngine()->socket_event_dispatcher_)
 	, CBackend(pEvtHandler)
-	, CSocketEventSource(pOwner->GetEngine()->GetSocketEventDispatcher())
+	, CSocketEventSource(pOwner->GetEngine()->socket_event_dispatcher_)
 	, m_pSocket(pSocket)
 	, m_pOwner(pOwner)
 {

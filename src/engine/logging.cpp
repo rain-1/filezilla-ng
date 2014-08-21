@@ -53,7 +53,7 @@ CLogging::~CLogging()
 
 bool CLogging::ShouldLog(MessageType nMessageType) const
 {
-	const int debugLevel = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
+	const int debugLevel = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
 	switch (nMessageType)
 	{
 	case MessageType::Debug_Warning:
@@ -73,7 +73,7 @@ bool CLogging::ShouldLog(MessageType nMessageType) const
 			return false;
 		break;
 	case MessageType::RawList:
-		if (!m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_RAWLISTING))
+		if (!m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_RAWLISTING))
 			return false;
 		break;
 	default:
@@ -89,7 +89,7 @@ void CLogging::InitLogFile() const
 
 	m_logfile_initialized = true;
 
-	m_file = m_pEngine->GetOptions()->GetOption(OPTION_LOGGING_FILE);
+	m_file = m_pEngine->GetOptions().GetOption(OPTION_LOGGING_FILE);
 	if (m_file.empty())
 		return;
 
@@ -117,7 +117,7 @@ void CLogging::InitLogFile() const
 
 	m_pid = wxGetProcessId();
 
-	m_max_size = m_pEngine->GetOptions()->GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
+	m_max_size = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
 	if (m_max_size < 0)
 		m_max_size = 0;
 	else if (m_max_size > 2000)
