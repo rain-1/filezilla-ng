@@ -6,12 +6,10 @@ class COptionsBase;
 class CRateLimiterObject;
 
 // This class implements a simple rate limiter based on the Token Bucket algorithm.
-class CRateLimiter : protected wxEvtHandler
+class CRateLimiter final : protected CEventHandler
 {
 public:
-	static CRateLimiter* Create(COptionsBase *pOptions);
-	static CRateLimiter* Get();
-	void Free();
+	CRateLimiter(CEventLoop& loop, COptionsBase& options);
 
 	enum rate_direction
 	{
@@ -27,25 +25,19 @@ protected:
 
 	int GetBucketSize() const;
 
-	CRateLimiter(COptionsBase* pOptions);
-	virtual ~CRateLimiter();
-
 	std::list<CRateLimiterObject*> m_objectList;
 	std::list<CRateLimiterObject*> m_wakeupList[2];
 
-	wxTimer m_timer;
-
-	static CRateLimiter *m_pTheRateLimiter;
-	unsigned int m_usageCount;
+	int m_timer{-1};
 
 	wxLongLong m_tokenDebt[2];
 
-	COptionsBase* m_pOptions;
+	COptionsBase& options_;
 
 	void WakeupWaitingObjects();
 
-	DECLARE_EVENT_TABLE()
-	void OnTimer(wxTimerEvent&);
+	void operator()(CEventBase const& ev);
+	void OnTimer(int timer_id);
 };
 
 class CRateLimiterObject

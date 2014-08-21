@@ -305,7 +305,7 @@ void CHttpControlSocket::OnConnect()
 				return;
 			}
 
-			const wxString trusted_rootcert = m_pEngine->GetOptions()->GetOption(OPTION_INTERNAL_ROOTCERT);
+			const wxString trusted_rootcert = m_pEngine->GetOptions().GetOption(OPTION_INTERNAL_ROOTCERT);
 			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert)) {
 				LogMessage(MessageType::Error, _("Failed to parse trusted root cert."));
 				DoClose();
@@ -494,7 +494,7 @@ int CHttpControlSocket::DoInternalConnect()
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
 	delete m_pBackend;
-	m_pBackend = new CSocketBackend(this, m_pSocket);
+	m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
 
 	int res = m_pSocket->Connect(pData->host, pData->port);
 	if (!res)

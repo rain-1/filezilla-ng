@@ -473,7 +473,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	pData->opState = connect_init;
 
-	wxStringTokenizer* pTokenizer = new wxStringTokenizer(m_pEngine->GetOptions()->GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
+	wxStringTokenizer* pTokenizer = new wxStringTokenizer(m_pEngine->GetOptions().GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
 	if (!pTokenizer->HasMoreTokens())
 		delete pTokenizer;
 	else
@@ -481,9 +481,9 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	m_pProcess = new CProcess(this);
 
-	CRateLimiter::Get()->AddObject(this);
+	m_pEngine->GetRateLimiter().AddObject(this);
 
-	wxString executable = m_pEngine->GetOptions()->GetOption(OPTION_FZSFTP_EXECUTABLE);
+	wxString executable = m_pEngine->GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE);
 	if (executable.empty())
 		executable = _T("fzsftp");
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
@@ -532,7 +532,7 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 	switch (pData->opState)
 	{
 	case connect_init:
-		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy())
+		if (m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy())
 			pData->opState = connect_proxy;
 		else if (pData->pKeyFiles)
 			pData->opState = connect_keys;
@@ -587,7 +587,7 @@ int CSftpControlSocket::ConnectSend()
 	case connect_proxy:
 		{
 			int type;
-			switch (m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE))
+			switch (m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE))
 			{
 			case CProxySocket::HTTP:
 				type = 1;
@@ -605,15 +605,15 @@ int CSftpControlSocket::ConnectSend()
 			}
 
 			wxString cmd = wxString::Format(_T("proxy %d \"%s\" %d"), type,
-											m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST),
-											m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_PORT));
-			wxString user = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_USER);
+											m_pEngine->GetOptions().GetOption(OPTION_PROXY_HOST),
+											m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_PORT));
+			wxString user = m_pEngine->GetOptions().GetOption(OPTION_PROXY_USER);
 			if (!user.empty())
 				cmd += _T(" \"") + user + _T("\"");
 
 			wxString show = cmd;
 
-			wxString pass = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_PASS);
+			wxString pass = m_pEngine->GetOptions().GetOption(OPTION_PROXY_PASS);
 			if (!pass.empty())
 			{
 				cmd += _T(" \"") + pass + _T("\"");
@@ -1714,7 +1714,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
 				else if (pData->download &&
-					m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+					m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 				{
 					pData->opState = filetransfer_mtime;
 				}
@@ -1734,7 +1734,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 							pData->fileTime = entry.time;
 
 						if (pData->download && !entry.has_time() &&
-							m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+							m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 						{
 							pData->opState = filetransfer_mtime;
 						}
@@ -1780,7 +1780,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				if (!dirDidExist)
 					pData->opState = filetransfer_mtime;
 				else if (pData->download &&
-					m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+					m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 				{
 					pData->opState = filetransfer_mtime;
 				}
@@ -1796,7 +1796,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 						pData->fileTime = entry.time;
 
 					if (pData->download && !entry.has_time() &&
-						m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+						m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 					{
 						pData->opState = filetransfer_mtime;
 					}
@@ -1938,7 +1938,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 			return FZ_REPLY_ERROR;
 		}
 
-		if (m_pEngine->GetOptions()->GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
+		if (m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
 		{
 			if (pData->download)
 			{
@@ -2012,7 +2012,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 
 int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 {
-	CRateLimiter::Get()->RemoveObject(this);
+	m_pEngine->GetRateLimiter().RemoveObject(this);
 
 	if (m_pProcess) {
 		m_pProcess->Kill();

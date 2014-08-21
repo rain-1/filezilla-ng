@@ -99,7 +99,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			elapsed);
 
 		wxLongLong transferred = m_pTransferStatus->currentOffset - m_pTransferStatus->startOffset;
-		wxString size = CSizeFormatBase::Format(m_pEngine->GetOptions(), transferred, true);
+		wxString size = CSizeFormatBase::Format(&m_pEngine->GetOptions(), transferred, true);
 
 		MessageType msgType = MessageType::Error;
 		wxString msg;
@@ -619,7 +619,7 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 
 void CControlSocket::OnTimer(int timer_id)
 {
-	int timeout = m_pEngine->GetOptions()->GetOptionVal(OPTION_TIMEOUT);
+	int timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT);
 	if (!timeout)
 		return;
 
@@ -906,11 +906,11 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate *pEngine)
 	: CControlSocket(pEngine)
-	, CSocketEventHandler(pEngine->GetSocketEventDispatcher())
+	, CSocketEventHandler(pEngine->socket_event_dispatcher_)
 {
 	m_pSocket = new CSocket(this, dispatcher_);
 
-	m_pBackend = new CSocketBackend(this, m_pSocket);
+	m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
 	m_pProxyBackend = 0;
 
 	m_pSendBuffer = 0;
@@ -991,17 +991,14 @@ void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
 			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()));
 		break;
 	case CSocketEvent::connection:
-		if (event.GetError())
-		{
+		if (event.GetError()) {
 			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()));
 			OnClose(event.GetError());
 		}
-		else
-		{
-			if (m_pProxyBackend && !m_pProxyBackend->Detached())
-			{
+		else {
+			if (m_pProxyBackend && !m_pProxyBackend->Detached()) {
 				m_pProxyBackend->Detach();
-				m_pBackend = new CSocketBackend(this, m_pSocket);
+				m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
 			}
 			OnConnect();
 		}
@@ -1112,20 +1109,20 @@ int CRealControlSocket::ContinueConnect()
 	wxString host;
 	unsigned int port = 0;
 
-	const int proxy_type = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_TYPE);
+	const int proxy_type = m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
 	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy()) {
 		LogMessage(MessageType::Status, _("Connecting to %s through proxy"), m_pCurrentServer->FormatHost());
 
-		host = m_pEngine->GetOptions()->GetOption(OPTION_PROXY_HOST);
-		port = m_pEngine->GetOptions()->GetOptionVal(OPTION_PROXY_PORT);
+		host = m_pEngine->GetOptions().GetOption(OPTION_PROXY_HOST);
+		port = m_pEngine->GetOptions().GetOptionVal(OPTION_PROXY_PORT);
 
 		delete m_pBackend;
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake((enum CProxySocket::ProxyType)proxy_type,
 											 m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(),
-											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_USER),
-											  m_pEngine->GetOptions()->GetOption(OPTION_PROXY_PASS));
+											  m_pEngine->GetOptions().GetOption(OPTION_PROXY_USER),
+											  m_pEngine->GetOptions().GetOption(OPTION_PROXY_PASS));
 
 		if (res != EINPROGRESS) {
 			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));

@@ -9,9 +9,9 @@
 // For example the event table entry could look like this:
 //     EVT_FZ_NOTIFICATION(wxID_ANY, CMainFrame::OnEngineEvent)
 // and the handler function has the following declaration:
-//     void OnEngineEvent(wxEvent& event);
-// You can get the engine which sent the event by calling
-//     event.GetEventObject()
+//     void OnEngineEvent(wxFzEvent& event);
+// You can get the engine which sent the event by reading
+//     event.engine_
 // Whenever you get a notification event,
 // CFileZillaEngine::GetNextNotification has to be called until it returns 0,
 // or you will lose important notifications or your memory will fill with
@@ -24,20 +24,20 @@
 #include "local_path.h"
 #include "timeex.h"
 
-extern const wxEventType fzEVT_NOTIFICATION;
-#define EVT_FZ_NOTIFICATION(id, fn) \
-	DECLARE_EVENT_TABLE_ENTRY(      \
-		fzEVT_NOTIFICATION, id, -1, \
-		(wxObjectEventFunction)(wxEventFunction) wxStaticCastEvent( wxEventFunction, &fn ), \
-		(wxObject *) NULL           \
-	),
-
+class CFileZillaEngine;
 class wxFzEvent final : public wxEvent
 {
 public:
 	wxFzEvent(int id = wxID_ANY);
 	virtual wxEvent *Clone() const;
+
+	CFileZillaEngine const* engine_{};
 };
+
+wxDECLARE_EVENT(fzEVT_NOTIFICATION, wxFzEvent);
+
+#define EVT_FZ_NOTIFICATION(id, func) \
+	wx__DECLARE_EVT1(fzEVT_NOTIFICATION, id, &func)
 
 enum NotificationId
 {

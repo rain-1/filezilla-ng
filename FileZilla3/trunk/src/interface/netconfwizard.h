@@ -34,10 +34,11 @@ protected:
 	void OnPageChanging(wxWizardEvent& event);
 	void OnPageChanged(wxWizardEvent& event);
 	void OnSocketEvent(wxSocketEvent& event);
-	void OnExternalIPAddress(fzExternalIPResolveEvent& event);
 	void OnRestart(wxCommandEvent& event);
 	void OnFinish(wxWizardEvent& event);
 	void OnTimer(wxTimerEvent& event);
+
+	void OnExternalIPAddress();
 
 	void OnReceive();
 	void ParseResponse(const char* line);

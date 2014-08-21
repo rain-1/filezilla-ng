@@ -12,6 +12,7 @@ libengine_a_SOURCES = \
 		directorycache.cpp \
 		directorylisting.cpp \
 		directorylistingparser.cpp \
+		engine_context.cpp \
 		engineprivate.cpp \
 		event_loop.cpp \
 		externalipresolver.cpp \

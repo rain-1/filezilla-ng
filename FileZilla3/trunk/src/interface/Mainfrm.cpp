@@ -258,7 +258,8 @@ protected:
 };
 
 CMainFrame::CMainFrame()
-	: m_comparisonToggleAcceleratorId(wxNewId())
+	: m_engineContext(*COptions::Get())
+	, m_comparisonToggleAcceleratorId(wxNewId())
 {
 #ifdef __WXMAC__
 	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Cut(); }, 'X');
@@ -963,17 +964,12 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 	}
 }
 
-void CMainFrame::OnEngineEvent(wxEvent &event)
+void CMainFrame::OnEngineEvent(wxFzEvent &event)
 {
-	CFileZillaEngine* pEngine = (CFileZillaEngine*)event.GetEventObject();
-	if (!pEngine)
-		return;
-
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	CState* pState = 0;
-	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-	{
-		if ((*iter)->m_pEngine != pEngine)
+	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
+		if ((*iter)->m_pEngine != event.engine_)
 			continue;
 
 		pState = *iter;
@@ -983,8 +979,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 		return;
 
 	CNotification *pNotification = pState->m_pEngine->GetNextNotification();
-	while (pNotification)
-	{
+	while (pNotification) {
 		switch (pNotification->GetID())
 		{
 		case nId_logmsg:
@@ -1028,7 +1023,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 			{
 				CAsyncRequestNotification* pAsyncRequest = reinterpret_cast<CAsyncRequestNotification *>(pNotification);
 				if (pAsyncRequest->GetRequestID() == reqId_fileexists)
-					m_pQueueView->ProcessNotification(pEngine, pNotification);
+					m_pQueueView->ProcessNotification(pState->m_pEngine, pNotification);
 				else
 				{
 					if (pAsyncRequest->GetRequestID() == reqId_certificate)
@@ -1045,7 +1040,7 @@ void CMainFrame::OnEngineEvent(wxEvent &event)
 			}
 			break;
 		case nId_transferstatus:
-			m_pQueueView->ProcessNotification(pEngine, pNotification);
+			m_pQueueView->ProcessNotification(pState->m_pEngine, pNotification);
 			break;
 		case nId_sftp_encryption:
 			{
@@ -2710,7 +2705,7 @@ void CMainFrame::PostInitialize()
 	// Need to do this after welcome screen to avoid simultaneous display of multiple dialogs
 	if( !m_pUpdater ) {
 		update_dialog_timer_.SetOwner(this);
-		m_pUpdater = new CUpdater(*this);
+		m_pUpdater = new CUpdater(*this, m_engineContext);
 		m_pUpdater->Init();
 	}
 #endif

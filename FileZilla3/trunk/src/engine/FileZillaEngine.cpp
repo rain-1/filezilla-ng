@@ -10,20 +10,19 @@
 #define new DEBUG_NEW
 #endif
 
-CFileZillaEngine::CFileZillaEngine()
+CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
+	: CFileZillaEnginePrivate(engine_context)
 {
 }
 
 CFileZillaEngine::~CFileZillaEngine()
 {
+	m_maySendNotificationEvent = false;
 }
 
-int CFileZillaEngine::Init(wxEvtHandler *pEventHandler, COptionsBase *pOptions)
+int CFileZillaEngine::Init(wxEvtHandler *pEventHandler)
 {
 	m_pEventHandler = pEventHandler;
-	m_pOptions = pOptions;
-	m_pRateLimiter = CRateLimiter::Create(m_pOptions);
-
 	return FZ_REPLY_OK;
 }
 

@@ -5,31 +5,14 @@
 #include <errno.h>
 #include "misc.h"
 
-const wxEventType fzEVT_EXTERNALIPRESOLVE = wxNewEventType();
-
-fzExternalIPResolveEvent::fzExternalIPResolveEvent(int id)
-	: wxEvent(id, fzEVT_EXTERNALIPRESOLVE)
-{
-}
-
-wxEvent* fzExternalIPResolveEvent::Clone() const
-{
-	return new fzExternalIPResolveEvent(GetId());
-}
-
+// FIXME xxx
 wxString CExternalIPResolver::m_ip;
 bool CExternalIPResolver::m_checked = false;
 
-//FIXME
-CEventLoop l;
-CSocketEventDispatcher d(l);
-
-CExternalIPResolver::CExternalIPResolver(wxEvtHandler* handler, int id /*=wxID_ANY*/)
-	: CSocketEventHandler(d)
-	, m_handler(handler)
-	, m_id(id)
+CExternalIPResolver::CExternalIPResolver(CSocketEventDispatcher& dispatcher, CEventHandler & handler)
+	: CSocketEventHandler(dispatcher)
+	, m_handler(&handler)
 {
-	wxFAIL;//FIXME
 	ResetHttpData(true);
 }
 
@@ -46,12 +29,10 @@ CExternalIPResolver::~CExternalIPResolver()
 
 void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::address_family protocol, bool force /*=false*/)
 {
-	if (m_checked)
-	{
+	if (m_checked) {
 		if (force)
 			m_checked = false;
-		else
-		{
+		else {
 			m_done = true;
 			return;
 		}
@@ -241,8 +222,7 @@ void CExternalIPResolver::Close(bool successful)
 	m_checked = true;
 
 	if (m_handler) {
-		fzExternalIPResolveEvent event;
-		wxPostEvent(m_handler, event);
+		m_handler->SendEvent(CExternalIPResolveEvent());
 		m_handler = 0;
 	}
 }

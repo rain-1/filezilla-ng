@@ -44,11 +44,12 @@ public:
 	virtual void UpdaterStateChanged( UpdaterState s, build const& v ) = 0;
 };
 
+class CFileZillaEngineContext;
 class CUpdaterOptions;
-class CUpdater : wxEvtHandler
+class CUpdater : public wxEvtHandler
 {
 public:
-	CUpdater( CUpdateHandler& parent );
+	CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context);
 	virtual ~CUpdater();
 
 	// 2-Stage initialization
@@ -101,7 +102,7 @@ protected:
 	void SetState( UpdaterState s );
 
 	DECLARE_EVENT_TABLE()
-	void OnEngineEvent(wxEvent& ev);
+	void OnEngineEvent(wxFzEvent& event);
 	void OnTimer(wxTimerEvent& ev);
 
 	UpdaterState state_;

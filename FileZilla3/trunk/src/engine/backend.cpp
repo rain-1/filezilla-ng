@@ -8,25 +8,20 @@ CBackend::CBackend(CSocketEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler
 {
 }
 
-CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket)
+CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CRateLimiter& rateLimiter)
 	: CBackend(pEvtHandler)
 	, CSocketEventSource(pEvtHandler->dispatcher_)
 	, m_pSocket(pSocket)
+	, m_rateLimiter(rateLimiter)
 {
 	m_pSocket->SetEventHandler(pEvtHandler);
-
-	CRateLimiter* pRateLimiter = CRateLimiter::Get();
-	if (pRateLimiter)
-		pRateLimiter->AddObject(this);
+	m_rateLimiter.AddObject(this);
 }
 
 CSocketBackend::~CSocketBackend()
 {
 	m_pSocket->SetEventHandler(0);
-
-	CRateLimiter* pRateLimiter = CRateLimiter::Get();
-	if (pRateLimiter)
-		pRateLimiter->RemoveObject(this);
+	m_rateLimiter.RemoveObject(this);
 }
 
 int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)

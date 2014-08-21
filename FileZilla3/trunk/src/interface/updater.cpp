@@ -113,13 +113,13 @@ public:
 
 static CUpdater* instance = 0;
 
-CUpdater::CUpdater(CUpdateHandler& parent)
+CUpdater::CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context)
 	: state_(UpdaterState::idle)
-	, engine_(new CFileZillaEngine)
+	, engine_(new CFileZillaEngine(engine_context))
 	, update_options_(new CUpdaterOptions())
 {
 	AddHandler(parent);
-	engine_->Init(this, update_options_);
+	engine_->Init(this); // FIXME xxx
 }
 
 void CUpdater::Init()
@@ -304,9 +304,9 @@ int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_fil
 	return res;
 }
 
-void CUpdater::OnEngineEvent(wxEvent&)
+void CUpdater::OnEngineEvent(wxFzEvent& event)
 {
-	if (!engine_)
+	if (!engine_ || engine_ != event.engine_)
 		return;
 
 	CNotification *notification;

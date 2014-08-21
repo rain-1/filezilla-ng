@@ -145,13 +145,14 @@ protected:
 	// till the end of time. Stop after a couple of minutes.
 	wxDateTime m_lastCommandCompletionTime;
 
-	wxTimer m_idleTimer;
+	int m_idleTimer{-1};
 
 	CLatencyMeasurement m_rtt;
 
-	DECLARE_EVENT_TABLE()
-	void OnExternalIPAddress(fzExternalIPResolveEvent&);
-	void OnIdleTimer(wxTimerEvent& event);
+	virtual void operator()(CEventBase const& ev);
+
+	void OnExternalIPAddress();
+	void OnTimer(int timer_id);
 };
 
 class CIOThread;

@@ -1,11 +1,7 @@
 #ifndef FILEZILLA_ENGINE_EVENT_LOOP_HEADER
 #define FILEZILLA_ENGINE_EVENT_LOOP_HEADER
 
-#include <functional>
-
 #include "apply.h"
-
-using namespace std::placeholders;
 
 class CEventBase
 {
