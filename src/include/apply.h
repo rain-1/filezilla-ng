@@ -2,6 +2,7 @@
 #define FILEZILLA_APPLY_HEADER
 
 #include <tuple>
+#include <type_traits>
 
 // apply takes a function and a tuple as argument
 // and calls the function with the tuple's elements as argument
