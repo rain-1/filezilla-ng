@@ -100,7 +100,6 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Proxy password", string, _T(""), normal },
 	{ "Logging file", string, _T(""), normal },
 	{ "Logging filesize limit", number, _T("10"), normal },
-	{ "Trusted root certificate", string, _T(""), internal },
 	{ "Size format", number, _T("0"), normal },
 	{ "Size thousands separator", number, _T("1"), normal },
 	{ "Size decimal places", number, _T("1"), normal },

@@ -44,9 +44,6 @@ public:
 
 	bool ResumedSession() const;
 
-	// PEM formatted
-	bool AddTrustedRootCertificate(const wxString& cert);
-
 	static wxString ListTlsCiphers(wxString priority);
 
 protected:
@@ -90,7 +87,7 @@ protected:
 	void OnRead();
 	void OnSend();
 
-	bool ExtractCert(const void* in, CCertificate& out);
+	bool ExtractCert(gnutls_datum_t const* datum, CCertificate& out);
 
 	bool m_canReadFromSocket;
 	bool m_canWriteToSocket;
@@ -124,8 +121,6 @@ protected:
 	gnutls_datum_t m_implicitTrustedCert;
 
 	bool m_socket_eof;
-
-	bool m_require_root_trust;
 };
 
 #endif //__TLSSOCKET_H__

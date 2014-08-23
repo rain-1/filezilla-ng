@@ -60,8 +60,6 @@ CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CCont
 	m_shutdown_requested = false;
 
 	m_socket_eof = false;
-
-	m_require_root_trust = false;
 }
 
 CTlsSocket::~CTlsSocket()
@@ -168,8 +166,6 @@ void CTlsSocket::Uninit()
 
 	delete [] m_implicitTrustedCert.data;
 	m_implicitTrustedCert.data = 0;
-
-	m_require_root_trust = false;
 
 #if TLSDEBUG
 	if (pLoggingControlSocket == m_pOwner)
@@ -938,19 +934,15 @@ static wxString bin2hex(const unsigned char* in, size_t size)
 }
 
 
-bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
+bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 {
-	const gnutls_datum_t* datum = reinterpret_cast<const gnutls_datum_t*>(in);
-
 	gnutls_x509_crt_t cert;
-	if (gnutls_x509_crt_init(&cert))
-	{
+	if (gnutls_x509_crt_init(&cert)) {
 		m_pOwner->LogMessage(MessageType::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
 		return false;
 	}
 
-	if (gnutls_x509_crt_import(cert, datum, GNUTLS_X509_FMT_DER))
-	{
+	if (gnutls_x509_crt_import(cert, datum, GNUTLS_X509_FMT_DER)) {
 		m_pOwner->LogMessage(MessageType::Error, _("Could not import peer certificates, gnutls_x509_crt_import failed"));
 		gnutls_x509_crt_deinit(cert);
 		return false;
@@ -1071,61 +1063,47 @@ bool CTlsSocket::ExtractCert(const void* in, CCertificate& out)
 
 int CTlsSocket::VerifyCertificate()
 {
-	if (m_tlsState != handshake)
-	{
+	if (m_tlsState != handshake) {
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("VerifyCertificate called at wrong time"));
 		return FZ_REPLY_ERROR;
 	}
 
 	m_tlsState = verifycert;
 
-	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509)
-	{
+	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509) {
 		m_pOwner->LogMessage(MessageType::Error, _("Unsupported certificate type"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
 	unsigned int status = 0;
-	if (gnutls_certificate_verify_peers2(m_session, &status) < 0)
-	{
+	if (gnutls_certificate_verify_peers2(m_session, &status) < 0) {
 		m_pOwner->LogMessage(MessageType::Error, _("Failed to verify peer certificate"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (status & GNUTLS_CERT_REVOKED)
-	{
+	if (status & GNUTLS_CERT_REVOKED) {
 		m_pOwner->LogMessage(MessageType::Error, _("Beware! Certificate has been revoked"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (status & GNUTLS_CERT_SIGNER_NOT_CA)
-	{
+	if (status & GNUTLS_CERT_SIGNER_NOT_CA) {
 		m_pOwner->LogMessage(MessageType::Error, _("Incomplete chain, top certificate is not self-signed certificate authority certificate"));
-		Failure(0, ECONNABORTED);
-		return FZ_REPLY_ERROR;
-	}
-
-	if (m_require_root_trust && status & GNUTLS_CERT_SIGNER_NOT_FOUND)
-	{
-		m_pOwner->LogMessage(MessageType::Error, _("Root certificate is not trusted"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
 	unsigned int cert_list_size;
 	const gnutls_datum_t* cert_list = gnutls_certificate_get_peers(m_session, &cert_list_size);
-	if (!cert_list || !cert_list_size)
-	{
+	if (!cert_list || !cert_list_size) {
 		m_pOwner->LogMessage(MessageType::Error, _("gnutls_certificate_get_peers returned no certificates"));
 		Failure(0, ECONNABORTED);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_implicitTrustedCert.data)
-	{
+	if (m_implicitTrustedCert.data) {
 		if (m_implicitTrustedCert.size != cert_list[0].size ||
 			memcmp(m_implicitTrustedCert.data, cert_list[0].data, cert_list[0].size))
 		{
@@ -1212,25 +1190,6 @@ wxString CTlsSocket::GetMacName()
 		return wxString(mac, wxConvUTF8);
 	else
 		return _T("unknown");
-}
-
-bool CTlsSocket::AddTrustedRootCertificate(const wxString& cert)
-{
-	if (!m_initialized)
-		return false;
-
-	if (cert.empty())
-		return false;
-
-	m_require_root_trust = true;
-
-	const wxWX2MBbuf str = cert.mb_str();
-
-	gnutls_datum_t datum;
-	datum.data = (unsigned char*)(const char*)str;
-	datum.size = strlen(str);
-
-	return gnutls_certificate_set_x509_trust_mem(m_certCredentials, &datum, GNUTLS_X509_FMT_PEM) > 0;
 }
 
 wxString CTlsSocket::ListTlsCiphers(wxString priority)

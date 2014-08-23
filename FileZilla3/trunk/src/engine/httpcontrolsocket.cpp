@@ -305,13 +305,6 @@ void CHttpControlSocket::OnConnect()
 				return;
 			}
 
-			const wxString trusted_rootcert = m_pEngine->GetOptions().GetOption(OPTION_INTERNAL_ROOTCERT);
-			if (!trusted_rootcert.empty() && !m_pTlsSocket->AddTrustedRootCertificate(trusted_rootcert)) {
-				LogMessage(MessageType::Error, _("Failed to parse trusted root cert."));
-				DoClose();
-				return;
-			}
-
 			int res = m_pTlsSocket->Handshake();
 			if (res == FZ_REPLY_ERROR)
 				DoClose();
