@@ -138,8 +138,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CControlSocket::ResetOperation(%d)"), nErrorCode);
 
-	if (nErrorCode & FZ_REPLY_WOULDBLOCK)
-	{
+	if (nErrorCode & FZ_REPLY_WOULDBLOCK) {
 		LogMessage(MessageType::Debug_Warning, _T("ResetOperation with FZ_REPLY_WOULDBLOCK in nErrorCode (%d)"), nErrorCode);
 	}
 

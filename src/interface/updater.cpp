@@ -7,6 +7,7 @@
 #include "Options.h"
 #include "file_utils.h"
 #include <local_filesys.h>
+#include <wx/base64.h>
 #include <wx/tokenzr.h>
 #include <string>
 
@@ -25,7 +26,8 @@ EVT_FZ_NOTIFICATION(wxID_ANY, CUpdater::OnEngineEvent)
 EVT_TIMER(wxID_ANY, CUpdater::OnTimer)
 END_EVENT_TABLE()
 
-static wxChar s_update_cert[] = _T("-----BEGIN CERTIFICATE-----\n\
+// BASE-64 encoded DER without the BEGIN/END CERTIFICATE
+static char s_update_cert[] = "\
 MIIFsTCCA5ugAwIBAgIESnXLbzALBgkqhkiG9w0BAQ0wSTELMAkGA1UEBhMCREUx\n\
 GjAYBgNVBAoTEUZpbGVaaWxsYSBQcm9qZWN0MR4wHAYDVQQDExVmaWxlemlsbGEt\n\
 cHJvamVjdC5vcmcwHhcNMDkwODAyMTcyMjU2WhcNMzEwNjI4MTcyMjU4WjBJMQsw\n\
@@ -57,8 +59,7 @@ qJU36tgxiO0XLRRSetl7jkSIO6U1okVH0/tvstrXEWp4XwdlmoZf92VVBrkg3San\n\
 fA5hBaI2gpQwtpyOJzwLzsd43n4b1YcPiyzhifJGcqRCBZA1uArNsH5iG6z/qHXp\n\
 KjuMxZu8aM8W2gp8Yg8QZfh5St/nut6hnXb5A8Qr+Ixp97t34t264TBRQD6MuZc3\n\
 PqQuF7sJR6POArUVYkRD/2LIWsB7\n\
------END CERTIFICATE-----\n\
-");
+";
 
 void version_information::update_available()
 {
@@ -76,50 +77,14 @@ void version_information::update_available()
 	}
 }
 
-
-class CUpdaterOptions : public COptionsBase
-{
-public:
-	CUpdaterOptions()
-		: m_use_internal_rootcert(true)
-	{
-	}
-
-	virtual int GetOptionVal(unsigned int nID)
-	{
-		return COptions::Get()->GetOptionVal(nID);
-	}
-
-	virtual wxString GetOption(unsigned int nID)
-	{
-		if (nID == OPTION_INTERNAL_ROOTCERT && m_use_internal_rootcert)
-			return s_update_cert;
-
-		return COptions::Get()->GetOption(nID);
-	}
-
-	virtual bool SetOption(unsigned int nID, int value)
-	{
-		return COptions::Get()->SetOption(nID, value);
-	}
-
-	virtual bool SetOption(unsigned int nID, wxString const& value)
-	{
-		return COptions::Get()->SetOption(nID, value);
-	}
-
-	bool m_use_internal_rootcert;
-};
-
 static CUpdater* instance = 0;
 
 CUpdater::CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context)
 	: state_(UpdaterState::idle)
 	, engine_(new CFileZillaEngine(engine_context))
-	, update_options_(new CUpdaterOptions())
 {
 	AddHandler(parent);
-	engine_->Init(this); // FIXME xxx
+	engine_->Init(this);
 }
 
 void CUpdater::Init()
@@ -150,7 +115,6 @@ CUpdater::~CUpdater()
 		instance  =0;
 	}
 	delete engine_;
-	delete update_options_;
 }
 
 CUpdater* CUpdater::GetInstance()
@@ -250,7 +214,7 @@ bool CUpdater::Run()
 
 	SetState(UpdaterState::checking);
 
-	update_options_->m_use_internal_rootcert = true;
+	m_use_internal_rootcert = true;
 	int res = Download(GetUrl(), wxString());
 
 	if (res != FZ_REPLY_WOULDBLOCK) {
@@ -332,7 +296,23 @@ void CUpdater::ProcessNotification(CNotification* notification)
 			}
 			else if (pData->GetRequestID() == reqId_certificate) {
 				CCertificateNotification* pCertNotification = (CCertificateNotification*)pData;
-				pCertNotification->m_trusted = true;
+				if (m_use_internal_rootcert) {
+					auto certs = pCertNotification->GetCertificates();
+					if( certs.size() > 1 ) {
+						auto ca = certs.back();
+						
+						unsigned int ca_data_length{};
+						unsigned char const* ca_data = ca.GetRawData(ca_data_length);
+
+						wxMemoryBuffer updater_root = wxBase64Decode(s_update_cert, wxNO_LEN, wxBase64DecodeMode_SkipWS);
+						if( ca_data_length == updater_root.GetDataLen() && !memcmp(ca_data, updater_root.GetData(), ca_data_length) ) {
+							pCertNotification->m_trusted = true;
+						}
+					}
+				}
+				else {
+					pCertNotification->m_trusted = true;
+				}
 			}
 			engine_->SetAsyncRequestReply(pData);
 		}
@@ -374,7 +354,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 		}
 		else {
 			// We got a checksum over a secure channel already.
-			update_options_->m_use_internal_rootcert = false;
+			m_use_internal_rootcert = false;
 
 			if( temp.empty() || local_file.empty() ) {
 				s = UpdaterState::newversion;

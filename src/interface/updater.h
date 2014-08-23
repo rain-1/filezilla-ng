@@ -45,7 +45,6 @@ public:
 };
 
 class CFileZillaEngineContext;
-class CUpdaterOptions;
 class CUpdater : public wxEvtHandler
 {
 public:
@@ -108,7 +107,7 @@ protected:
 	UpdaterState state_;
 	wxString local_file_;
 	CFileZillaEngine* engine_;
-	CUpdaterOptions* update_options_;
+	bool m_use_internal_rootcert{};
 
 	wxString raw_version_information_;
 
