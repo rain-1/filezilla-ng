@@ -28,7 +28,7 @@ auto apply_(F&& f, T&& t, int_seq<I...> const&) -> decltype(std::forward<F>(f)(s
 	return std::forward<F>(f)(std::get<I>(std::forward<T>(t))...);
 }
 
-template<typename F, typename T, typename Seq = int_seq_gen<std::tuple_size<std::remove_reference<T>::type>::value>::type>
+template<typename F, typename T, typename Seq = typename int_seq_gen<std::tuple_size<typename std::remove_reference<T>::type>::value>::type>
 auto apply(F && f, T&& args) -> decltype(apply_(std::forward<F>(f), std::forward<T>(args), Seq()))
 {
 	return apply_(std::forward<F>(f), std::forward<T>(args), Seq());
@@ -41,7 +41,7 @@ auto apply_(Obj&& obj, F&& f, T&& t, int_seq<I...> const&) -> decltype((std::for
 	return (std::forward<Obj>(obj)->*std::forward<F>(f))(std::get<I>(std::forward<T>(t))...);
 }
 
-template<typename Obj, typename F, typename T, typename Seq = int_seq_gen<std::tuple_size<std::remove_reference<T>::type>::value>::type>
+template<typename Obj, typename F, typename T, typename Seq = typename int_seq_gen<std::tuple_size<typename std::remove_reference<T>::type>::value>::type>
 auto apply(Obj&& obj, F && f, T&& args) -> decltype(apply_(std::forward<Obj>(obj), std::forward<F>(f), std::forward<T>(args), Seq()))
 {
 	return apply_(std::forward<Obj>(obj), std::forward<F>(f), std::forward<T>(args), Seq());
