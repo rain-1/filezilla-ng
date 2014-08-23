@@ -36,9 +36,9 @@ public:
 	{
 	}
 
-	template<typename Value, typename...Values>
-	explicit CEvent(Value&& value, Values&& ...values)
-		: v_(std::forward<Value>(value), std::forward<Values>(values)...)
+	template<typename First_Value, typename...Remaining_Values>
+	explicit CEvent(First_Value&& value, Remaining_Values&& ...values)
+		: v_(std::forward<First_Value>(value), std::forward<Remaining_Values>(values)...)
 	{
 	}
 
