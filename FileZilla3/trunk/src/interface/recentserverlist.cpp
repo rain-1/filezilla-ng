@@ -92,8 +92,8 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 void CRecentServerList::Clear()
 {
 	CInterProcessMutex mutex(MUTEX_MOSTRECENTSERVERS);
-	
-	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers"))); 
+
+	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
 	xmlFile.CreateEmpty();
 	xmlFile.Save(true);
 }

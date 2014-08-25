@@ -272,7 +272,7 @@ protected:
 	bool m_invalidateCurrentPath;
 
 	virtual void operator()(CEventBase const& ev);
-	
+
 	void OnTimer(int timer_id);
 	void OnObtainLock();
 };

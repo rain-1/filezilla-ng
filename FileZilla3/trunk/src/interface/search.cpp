@@ -797,7 +797,7 @@ void CSearchDialog::LoadConditions()
 void CSearchDialog::SaveConditions()
 {
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
-	
+
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument) {

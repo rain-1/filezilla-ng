@@ -46,7 +46,7 @@ wxListCtrlEx::wxListCtrlEx(wxWindow *parent,
 						   const wxString& name)
 {
 	Create(parent, id, pos, size, style, validator, name);
-	
+
 #ifndef __WXMSW__
 	m_editing = false;
 #else

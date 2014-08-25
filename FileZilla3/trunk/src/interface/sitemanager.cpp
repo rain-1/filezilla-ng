@@ -543,7 +543,7 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 		}
 		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	}
-	
+
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);

@@ -17,7 +17,7 @@ class CXmlFile
 public:
 	CXmlFile() {};
 	explicit CXmlFile(const wxString& fileName, wxString const& root = wxString());
-	
+
 	virtual ~CXmlFile();
 
 	TiXmlElement* CreateEmpty();

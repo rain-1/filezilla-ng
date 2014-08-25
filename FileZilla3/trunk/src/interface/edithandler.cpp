@@ -772,7 +772,7 @@ bool CEditHandler::UploadFile(const wxString& file, bool unedit)
 bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterator iter, bool unedit)
 {
 	wxCHECK(type != none, false);
-		
+
 	if (iter == m_fileDataList[type].end())
 		return false;
 

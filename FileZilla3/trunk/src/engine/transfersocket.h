@@ -54,7 +54,7 @@ protected:
 	virtual void OnReceive();
 	virtual void OnSend();
 	virtual void OnClose(int error);
-	
+
 	// Create a socket server
 	CSocket* CreateSocketServer();
 	CSocket* CreateSocketServer(int port);
