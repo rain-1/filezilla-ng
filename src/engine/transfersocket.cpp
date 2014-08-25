@@ -290,9 +290,8 @@ void CTransferSocket::OnReceive()
 					return;
 				}
 
-				m_pEngine->SetActive(CFileZillaEngine::recv);
-				if (!m_madeProgress)
-				{
+				m_pControlSocket->SetActive(CFileZillaEngine::recv);
+				if (!m_madeProgress) {
 					m_madeProgress = 2;
 					m_pControlSocket->SetTransferStatusMadeProgress();
 				}
@@ -326,11 +325,9 @@ void CTransferSocket::OnReceive()
 				return;
 			}
 
-			if (numread > 0)
-			{
-				m_pEngine->SetActive(CFileZillaEngine::recv);
-				if (!m_madeProgress)
-				{
+			if (numread > 0) {
+				m_pControlSocket->SetActive(CFileZillaEngine::recv);
+				if (!m_madeProgress) {
 					m_madeProgress = 2;
 					m_pControlSocket->SetTransferStatusMadeProgress();
 				}
@@ -418,8 +415,7 @@ void CTransferSocket::OnSend()
 
 	int error;
 	int written;
-	do
-	{
+	do {
 		if (!CheckGetNextReadBuffer())
 			return;
 
@@ -428,8 +424,7 @@ void CTransferSocket::OnSend()
 			break;
 
 		m_pEngine->SetActive(CFileZillaEngine::send);
-		if (m_madeProgress == 1)
-		{
+		if (m_madeProgress == 1) {
 			m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("Made progress in CTransferSocket::OnSend()"));
 			m_madeProgress = 2;
 			m_pControlSocket->SetTransferStatusMadeProgress();

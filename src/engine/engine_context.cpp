@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "engine_context.h"
 
+#include "directorycache.h"
 #include "ratelimiter.h"
 #include "socket.h"
 
@@ -20,6 +21,7 @@ public:
 	CEventLoop loop_;
 	CSocketEventDispatcher dispatcher_;
 	CRateLimiter limiter_;
+	CDirectoryCache directory_cache_;
 };
 
 CFileZillaEngineContext::CFileZillaEngineContext(COptionsBase & options)
@@ -50,4 +52,9 @@ CSocketEventDispatcher& CFileZillaEngineContext::GetSocketEventDispatcher()
 CRateLimiter& CFileZillaEngineContext::GetRateLimiter()
 {
 	return impl_->limiter_;
+}
+
+CDirectoryCache& CFileZillaEngineContext::GetDirectoryCache()
+{
+	return impl_->directory_cache_;
 }

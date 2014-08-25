@@ -230,10 +230,9 @@ int CHttpControlSocket::DoReceive()
 			return 0;
 		}
 
-		m_pEngine->SetActive(CFileZillaEngine::recv);
+		SetActive(CFileZillaEngine::recv);
 
-		if (!m_pCurOpData || m_pCurOpData->opId == Command::connect)
-		{
+		if (!m_pCurOpData || m_pCurOpData->opId == Command::connect) {
 			// Just ignore all further data
 			m_recvBufferPos = 0;
 			return 0;
@@ -241,8 +240,7 @@ int CHttpControlSocket::DoReceive()
 
 		m_recvBufferPos += read;
 
-		if (!m_pHttpOpData->m_gotHeader)
-		{
+		if (!m_pHttpOpData->m_gotHeader) {
 			if (!read)
 			{
 				ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);

@@ -146,14 +146,11 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		now.Format(_T("%Y-%m-%d %H:%M:%S")), m_pid, m_pEngine->GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
 
 	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
-	if (utf8)
-	{
+	if (utf8) {
 #ifdef __WXMSW__
-		if (m_max_size)
-		{
+		if (m_max_size) {
 			LARGE_INTEGER size;
-			if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size)
-			{
+			if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size) {
 				CloseHandle(m_log_fd);
 
 				// m_log_fd might no longer be the original file.
@@ -161,8 +158,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
 
 				HANDLE hFile = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-				if (hFile == INVALID_HANDLE_VALUE)
-				{
+				if (hFile == INVALID_HANDLE_VALUE) {
 					wxString error = wxSysErrorMsg();
 
 					// Oh dear..
@@ -175,8 +171,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				}
 
 				wxString error;
-				if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size)
-				{
+				if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size) {
 					CloseHandle(hFile);
 
 					// MoveFileEx can fail if trying to access a deleted file for which another process still has

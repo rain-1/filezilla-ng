@@ -158,6 +158,8 @@ public:
 	wxChar* ConvToLocalBuffer(const char* buffer, wxMBConv& conv);
 	wxCharBuffer ConvToServer(const wxString& str, bool force_utf8 = false);
 
+	void SetActive(CFileZillaEngine::_direction direction);
+
 	// ---
 	// The following two functions control the timeout behaviour:
 	// ---
@@ -203,7 +205,7 @@ protected:
 
 	CServerPath m_CurrentPath;
 
-	CTransferStatus *m_pTransferStatus;
+	CTransferStatus *m_pTransferStatus; // Todo: Need to mutex this
 	int m_transferStatusSendState;
 
 	wxCSConv *m_pCSConv;

@@ -99,7 +99,7 @@ bool CFileZillaEngine::IsConnected() const
 
 CNotification* CFileZillaEngine::GetNextNotification()
 {
-	wxCriticalSectionLocker lock(m_lock);
+	wxCriticalSectionLocker lock(notification_mutex_);
 
 	if (m_NotificationList.empty()) {
 		m_maySendNotificationEvent = true;
@@ -128,13 +128,13 @@ bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotifica
 	if (!IsBusy())
 		return false;
 
-	m_lock.Enter();
+	notification_mutex_.Enter();
 	if (pNotification->requestNumber != m_asyncRequestCounter)
 	{
-		m_lock.Leave();
+		notification_mutex_.Leave();
 		return false;
 	}
-	m_lock.Leave();
+	notification_mutex_.Leave();
 
 	if (!m_pControlSocket)
 		return false;
@@ -153,14 +153,15 @@ bool CFileZillaEngine::IsPendingAsyncRequestReply(const CAsyncRequestNotificatio
 	if (!IsBusy())
 		return false;
 
-	wxCriticalSectionLocker lock(m_lock);
+	wxCriticalSectionLocker lock(notification_mutex_);
 	return pNotification->requestNumber == m_asyncRequestCounter;
 }
 
 bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 {
-	if (m_activeStatus[direction] == 2)
-	{
+	wxCriticalSectionLocker lock(mutex_);
+
+	if (m_activeStatus[direction] == 2) {
 		m_activeStatus[direction] = 1;
 		return true;
 	}
@@ -171,8 +172,9 @@ bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 
 bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
 {
-	if (!m_pControlSocket)
-	{
+	wxCriticalSectionLocker lock(mutex_);
+
+	if (!m_pControlSocket) {
 		changed = false;
 		return false;
 	}
@@ -182,14 +184,16 @@ bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
 
 int CFileZillaEngine::CacheLookup(const CServerPath& path, CDirectoryListing& listing)
 {
+	// TODO: Possible optimization: Atomically get current server. The cache has its own mutex.
+	wxCriticalSectionLocker lock(mutex_);
+
 	if (!IsConnected())
 		return FZ_REPLY_ERROR;
 
 	wxASSERT(m_pControlSocket->GetCurrentServer());
 
-	CDirectoryCache cache;
 	bool is_outdated = false;
-	if (!cache.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
+	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_OK;
