@@ -1053,8 +1053,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 		if (res != FZ_REPLY_OK)
 			return res;
 
-		CDirectoryCache cache;
-		cache.Store(pData->directoryListing, *m_pCurrentServer);
+		m_pEngine->GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
 
 		m_pEngine->SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
 
@@ -1119,8 +1118,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 			}
 		}
 
-		CDirectoryCache cache;
-		cache.Store(pData->directoryListing, *m_pCurrentServer);
+		m_pEngine->GetDirectoryCache().Store(pData->directoryListing, *m_pCurrentServer);
 
 		m_pEngine->SendDirectoryListingNotification(m_CurrentPath, !pData->pNextOpData, true, false);
 
@@ -1236,11 +1234,10 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		wxASSERT(!pData->pNextOpData);
 
 		// Do a cache lookup now that we know the correct directory
-		CDirectoryCache cache;
-
+		
 		int hasUnsureEntries;
 		bool is_outdated = false;
-		bool found = cache.DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
+		bool found = m_pEngine->GetDirectoryCache().DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
 		if (found)
 		{
 			// We're done if listins is recent and has no outdated entries
@@ -1324,22 +1321,18 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 		path.SetType(m_pCurrentServer->GetType());
 
 	CServerPath target;
-	if (path.empty())
-	{
+	if (path.empty()) {
 		if (m_CurrentPath.empty())
 			state = cwd_pwd;
 		else
 			return FZ_REPLY_OK;
 	}
-	else
-	{
-		if (!subDir.empty())
-		{
+	else {
+		if (!subDir.empty()) {
 			// Check if the target is in cache already
 			CPathCache cache;
 			target = cache.Lookup(*m_pCurrentServer, path, subDir);
-			if (!target.empty())
-			{
+			if (!target.empty()) {
 				if (m_CurrentPath == target)
 					return FZ_REPLY_OK;
 
@@ -1347,8 +1340,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 				subDir = _T("");
 				state = cwd_cwd;
 			}
-			else
-			{
+			else {
 				// Target unknown, check for the parent's target
 				target = cache.Lookup(*m_pCurrentServer, path, _T(""));
 				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
@@ -1458,8 +1450,7 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 			else
 				error = true;
 		}
-		else if (ParsePwdReply(reply))
-		{
+		else if (ParsePwdReply(reply)) {
 			CPathCache cache;
 			cache.Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 
@@ -1707,8 +1698,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			CDirectoryCache cache;
-			bool found = cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found)
 			{
 				if (!dirDidExist)
@@ -1773,8 +1763,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
-			CDirectoryCache cache;
-			bool found = cache.LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
+			bool found = m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
 			if (!found)
 			{
 				if (!dirDidExist)
@@ -2041,11 +2030,6 @@ void CSftpControlSocket::Cancel()
 	}
 }
 
-void CSftpControlSocket::SetActive(bool recv)
-{
-	m_pEngine->SetActive(recv);
-}
-
 enum mkdStates
 {
 	mkd_init = 0,
@@ -2144,8 +2128,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			CDirectoryCache cache;
-			cache.UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
+			m_pEngine->GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
 			m_pEngine->SendDirectoryListingNotification(pData->currentPath, false, true, false);
 
 			pData->currentPath.AddSegment(pData->segments.front());
@@ -2281,8 +2264,7 @@ int CSftpControlSocket::DeleteParseResponse(bool successful, const wxString&)
 	{
 		const wxString& file = pData->files.front();
 
-		CDirectoryCache cache;
-		cache.RemoveFile(*m_pCurrentServer, pData->path, file);
+		m_pEngine->GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
 		wxDateTime now = wxDateTime::UNow();
 		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).GetSeconds() >= 1)
@@ -2330,8 +2312,7 @@ int CSftpControlSocket::DeleteSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	CDirectoryCache cache;
-	cache.InvalidateFile(*m_pCurrentServer, pData->path, file);
+	m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 
 	if (!SendCommand(_T("rm ") + WildcardEscape(QuoteFilename(filename)),
 			  _T("rm ") + QuoteFilename(filename)))
@@ -2376,8 +2357,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 		}
 	}
 
-	CDirectoryCache cache;
-	cache.InvalidateFile(*m_pCurrentServer, path, subDir);
+	m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, path, subDir);
 
 	CPathCache::InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
@@ -2414,8 +2394,7 @@ int CSftpControlSocket::RemoveDirParseResponse(bool successful, const wxString&)
 		return FZ_REPLY_ERROR;
 	}
 
-	CDirectoryCache cache;
-	cache.RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	m_pEngine->GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
 	m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
 
 	return ResetOperation(FZ_REPLY_OK);
@@ -2519,8 +2498,7 @@ int CSftpControlSocket::ChmodSend()
 	{
 	case chmod_chmod:
 		{
-			CDirectoryCache cache;
-			cache.UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
+			m_pEngine->GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
 
 			wxString quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 
@@ -2605,8 +2583,7 @@ int CSftpControlSocket::RenameParseResponse(bool successful, const wxString&)
 	const CServerPath& fromPath = pData->m_cmd.GetFromPath();
 	const CServerPath& toPath = pData->m_cmd.GetToPath();
 
-	CDirectoryCache cache;
-	cache.Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
+	m_pEngine->GetDirectoryCache().Rename(*m_pCurrentServer, fromPath, pData->m_cmd.GetFromFile(), toPath, pData->m_cmd.GetToFile());
 
 	m_pEngine->SendDirectoryListingNotification(fromPath, false, true, false);
 	if (fromPath != toPath)
@@ -2651,10 +2628,9 @@ int CSftpControlSocket::RenameSend()
 	{
 	case rename_rename:
 		{
-			CDirectoryCache cache;
 			bool wasDir = false;
-			cache.InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
-			cache.InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
+			m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			wxString fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
 			wxString toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));

@@ -39,6 +39,7 @@ public:
 
 	COptionsBase& GetOptions() { return m_options; }
 	CRateLimiter& GetRateLimiter() { return m_rateLimiter; }
+	CDirectoryCache& GetDirectoryCache() { return directory_cache_; }
 
 	void SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed);
 
@@ -79,9 +80,17 @@ protected:
 	void OnEngineEvent(EngineNotificationType type);
 	void OnTimer(int timer_id);
 
+	// General mutex for operations on the engine
+	// Todo: More fine-grained locking, a global mutex isn't nice
+	static wxCriticalSection mutex_;
+
+	// Used to synchronize access to the notification list
+	wxCriticalSection notification_mutex_;
+
 	wxEvtHandler *m_pEventHandler{};
 
 	int m_engine_id;
+
 	static std::list<CFileZillaEnginePrivate*> m_engineList;
 
 	// Indicicates if data has been received/sent and whether to send any notifications
@@ -95,18 +104,15 @@ protected:
 
 	CCommand *m_pCurrentCommand{};
 
+	// Protect access to these three with notification_mutex_
 	std::list<CNotification*> m_NotificationList;
 	bool m_maySendNotificationEvent{true};
+	unsigned int m_asyncRequestCounter{};
 
 	bool m_bIsInCommand{}; //true if Command is on the callstack
 	int m_nControlSocketError{};
 
 	COptionsBase& m_options;
-
-	unsigned int m_asyncRequestCounter{};
-
-	// Used to synchronize access to the notification list
-	wxCriticalSection m_lock;
 
 	CLogging* m_pLogging;
 
@@ -129,6 +135,7 @@ protected:
 	int m_retryTimer{-1};
 
 	CRateLimiter& m_rateLimiter;
+	CDirectoryCache& directory_cache_;
 };
 
 #endif //__FILEZILLAENGINEPRIVATE_H__

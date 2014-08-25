@@ -1,26 +1,12 @@
 #include <filezilla.h>
 #include "directorycache.h"
 
-int CDirectoryCache::m_nRefCount = 0;
-std::list<CDirectoryCache::CServerEntry> CDirectoryCache::m_serverList;
-
-CDirectoryCache::tLruList CDirectoryCache::m_leastRecentlyUsedList;
-
-wxLongLongNative CDirectoryCache::m_totalFileCount = 0;
-
-CDirectoryCache cache;
-
 CDirectoryCache::CDirectoryCache()
 {
-	m_nRefCount++;
 }
 
 CDirectoryCache::~CDirectoryCache()
 {
-	m_nRefCount--;
-	if (m_nRefCount)
-		return;
-
 	for( auto & serverEntry : m_serverList ) {
 		for (auto & cacheEntry : serverEntry.cacheList ) {
 #ifdef __WXDEBUG__
@@ -40,6 +26,8 @@ CDirectoryCache::~CDirectoryCache()
 
 void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &server)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = CreateServerEntry(server);
 	wxASSERT(sit != m_serverList.end());
 
@@ -65,6 +53,8 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 
 bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return false;
@@ -101,6 +91,8 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 
 bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return false;
@@ -116,6 +108,8 @@ bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, 
 
 bool CDirectoryCache::LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end()) {
 		dirDidExist = false;
@@ -167,6 +161,8 @@ CDirectoryCache::CCacheEntry::CCacheEntry(const CDirectoryCache::CCacheEntry &en
 
 bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool *wasDir /*=false*/)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return false;
@@ -194,6 +190,8 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 
 bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, enum Filetype type /*=file*/, wxLongLong size /*=-1*/)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return false;
@@ -272,6 +270,8 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 
 bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return false;
@@ -320,6 +320,8 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 
 void CDirectoryCache::InvalidateServer(const CServer& server)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
 		if (iter->server != server)
@@ -344,6 +346,8 @@ void CDirectoryCache::InvalidateServer(const CServer& server)
 
 bool CDirectoryCache::GetChangeTime(CMonotonicTime& time, const CServer &server, const CServerPath &path)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return false;
@@ -360,6 +364,8 @@ bool CDirectoryCache::GetChangeTime(CMonotonicTime& time, const CServer &server,
 
 void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath&)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	// TODO: This is not 100% foolproof and may not work properly
 	// Perhaps just throw away the complete cache?
 
@@ -393,6 +399,8 @@ void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, 
 
 void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
 		return;

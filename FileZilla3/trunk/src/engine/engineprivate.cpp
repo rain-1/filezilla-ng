@@ -8,6 +8,7 @@
 #include "ratelimiter.h"
 #include "pathcache.h"
 
+wxCriticalSection CFileZillaEnginePrivate::mutex_;
 std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
@@ -18,6 +19,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	, socket_event_dispatcher_(context.GetSocketEventDispatcher())
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
+	, directory_cache_(context.GetDirectoryCache())
 {
 	m_engineList.push_back(this);
 
@@ -99,19 +101,19 @@ Command CFileZillaEnginePrivate::GetCurrentCommandId() const
 
 void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 {
-	m_lock.Enter();
+	notification_mutex_.Enter();
 	m_NotificationList.push_back(pNotification);
 
 	if (m_maySendNotificationEvent && m_pEventHandler) {
 		m_maySendNotificationEvent = false;
-		m_lock.Leave();
+		notification_mutex_.Leave();
 		wxFzEvent evt(wxID_ANY);
 		evt.engine_ = dynamic_cast<CFileZillaEngine*>(this);
 		wxASSERT(evt.engine_);
 		wxPostEvent(m_pEventHandler, evt);
 	}
 	else
-		m_lock.Leave();
+		notification_mutex_.Leave();
 }
 
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
@@ -183,9 +185,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 
 void CFileZillaEnginePrivate::SetActive(int direction)
 {
-	if (m_pControlSocket)
-		m_pControlSocket->SetAlive();
-
+	wxCriticalSectionLocker lock(mutex_);
 	if (!m_activeStatus[direction])
 		AddNotification(new CActiveNotification(direction));
 	m_activeStatus[direction] = 2;
@@ -193,7 +193,7 @@ void CFileZillaEnginePrivate::SetActive(int direction)
 
 unsigned int CFileZillaEnginePrivate::GetNextAsyncRequestNumber()
 {
-	wxCriticalSectionLocker lock(m_lock);
+	wxCriticalSectionLocker lock(notification_mutex_);
 	return ++m_asyncRequestCounter;
 }
 
@@ -294,22 +294,17 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 	if (refresh && avoid)
 		return FZ_REPLY_SYNTAXERROR;
 
-	if (!refresh && !command.GetPath().empty())
-	{
+	if (!refresh && !command.GetPath().empty()) {
 		const CServer* pServer = m_pControlSocket->GetCurrentServer();
-		if (pServer)
-		{
+		if (pServer) {
 			CServerPath path(CPathCache::Lookup(*pServer, command.GetPath(), command.GetSubDir()));
 			if (path.empty() && command.GetSubDir().empty())
 				path = command.GetPath();
-			if (!path.empty())
-			{
+			if (!path.empty()) {
 				CDirectoryListing *pListing = new CDirectoryListing;
-				CDirectoryCache cache;
 				bool is_outdated = false;
-				bool found = cache.Lookup(*pListing, *pServer, path, true, is_outdated);
-				if (found && !is_outdated)
-				{
+				bool found = directory_cache_.Lookup(*pListing, *pServer, path, true, is_outdated);
+				if (found && !is_outdated) {
 					if (pListing->get_unsure_flags())
 						flags |= LIST_FLAG_REFRESH;
 					else {
@@ -461,10 +456,8 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 		return;
 	}
 
-	CDirectoryCache cache;
-
 	CMonotonicTime changeTime;
-	if (!cache.GetChangeTime(changeTime, *pOwnServer, path))
+	if (!directory_cache_.GetChangeTime(changeTime, *pOwnServer, path))
 		return;
 
 	CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, !onList);

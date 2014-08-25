@@ -31,7 +31,7 @@ public:
 		send,
 		recv
 	};
-	static bool IsActive(enum _direction direction);
+	static bool IsActive(_direction direction);
 
 	// Returns the next pending notification.
 	// It is mandatory to call this function until it returns 0 each time you

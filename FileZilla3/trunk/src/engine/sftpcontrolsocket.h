@@ -70,8 +70,6 @@ public:
 
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
-	void SetActive(bool recv);
-
 protected:
 	// Replaces filename"with"quotes with
 	// "filename""with""quotes"

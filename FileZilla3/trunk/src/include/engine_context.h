@@ -3,10 +3,11 @@
 
 #include <memory>
 
-class COptionsBase;
+class CDirectoryCache;
 class CEventLoop;
-class CSocketEventDispatcher;
+class COptionsBase;
 class CRateLimiter;
+class CSocketEventDispatcher;
 
 // There can be multiple engines, but there can be at most one context
 class CFileZillaEngineContext
@@ -19,6 +20,7 @@ public:
 	CEventLoop& GetEventLoop();
 	CSocketEventDispatcher& GetSocketEventDispatcher();
 	CRateLimiter& GetRateLimiter();
+	CDirectoryCache& GetDirectoryCache();
 
 protected:
 	COptionsBase& options_;
