@@ -261,7 +261,7 @@ void CContextControl::CreateContextControls(CState* pState)
 
 	pState->GetComparisonManager()->SetListings(context_controls.pLocalListView, context_controls.pRemoteListView);
 
-	if (m_tabs) 	{
+	if (m_tabs) {
 		context_controls.tab_index = m_tabs->GetPageCount();
 		m_tabs->AddPage(context_controls.pViewSplitter, pState->GetTitle());
 

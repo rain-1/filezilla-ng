@@ -121,7 +121,7 @@ template<class T> T& CRefcountObject<T>::Get()
 {
 	if (data_->refcount_ != 1) {
 		--(data_->refcount_);
-		
+
 		CRefcountObjectData<T> *data = new CRefcountObjectData<T>;
 		data->refcount_ = 1;
 		new (&data->v_) T(*data_->get());
@@ -253,7 +253,7 @@ template<class T> CRefcountObject_Uninitialized<T>& CRefcountObject_Uninitialize
 	if( data_ ) {
 		++(data_->refcount_);
 	}
-	
+
 	return *this;
 }
 

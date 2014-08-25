@@ -75,7 +75,7 @@ bool COptionsPageDateFormatting::Validate()
 			return DisplayError(_T("ID_CUSTOM_DATEFORMAT"), _("The custom date format is invalid or contains unsupported format specifiers."));
 		}
 	}
-		
+
 	if (GetRCheck(XRCID("ID_TIMEFORMAT_CUSTOM"))) {
 		wxString const timeformat = XRCCTRL(*this, "ID_CUSTOM_TIMEFORMAT", wxTextCtrl)->GetValue();
 		if (timeformat.empty()) {

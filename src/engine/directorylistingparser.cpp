@@ -26,7 +26,7 @@ struct ObjectCache
 	CRefcountObject<wxString> const& get(wxString const& v)
 	{
 		auto it = std::lower_bound( cache.begin(), cache.end(), v );
-		
+
 		if( it == cache.end() || !(*it == v) ) {
 			it = cache.emplace(it, v);
 		}

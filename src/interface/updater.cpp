@@ -300,7 +300,7 @@ void CUpdater::ProcessNotification(CNotification* notification)
 					auto certs = pCertNotification->GetCertificates();
 					if( certs.size() > 1 ) {
 						auto ca = certs.back();
-						
+
 						unsigned int ca_data_length{};
 						unsigned char const* ca_data = ca.GetRawData(ca_data_length);
 

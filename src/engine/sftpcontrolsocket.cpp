@@ -1234,7 +1234,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		wxASSERT(!pData->pNextOpData);
 
 		// Do a cache lookup now that we know the correct directory
-		
+
 		int hasUnsureEntries;
 		bool is_outdated = false;
 		bool found = m_pEngine->GetDirectoryCache().DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);

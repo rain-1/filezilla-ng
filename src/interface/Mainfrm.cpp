@@ -1339,7 +1339,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 		if( pState->GetRecursiveOperationHandler() ) {
 			pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 		}
-	
+
 		if (pState->m_pCommandQueue) {
 			if (!pState->m_pCommandQueue->Quit())
 				res = false;
@@ -1683,7 +1683,7 @@ void CMainFrame::ShowLocalTree(bool show)
 			controls->pLocalSplitter->Unsplit(controls->pLocalTreeViewPanel);
 		}
 	}
-	
+
 	COptions::Get()->SetOption(OPTION_SHOW_TREE_LOCAL, show);
 }
 

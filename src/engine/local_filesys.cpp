@@ -235,7 +235,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 			int ret = GetFileInformationByHandle(hFile, &info);
 			CloseHandle(hFile);
 			if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
-				
+
 				if (modificationTime) {
 					if (!ConvertFileTimeToCDateTime(*modificationTime, info.ftLastWriteTime))
 						ConvertFileTimeToCDateTime(*modificationTime, info.ftCreationTime);
@@ -256,7 +256,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 				return file;
 			}
 		}
-		
+
 		if (size)
 			*size = -1;
 		if (mode)

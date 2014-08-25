@@ -176,7 +176,7 @@ void CUpdateDialog::UpdaterStateChanged( UpdaterState s, build const& v )
 		XRCCTRL(*this, "ID_VERSION", wxStaticText)->SetLabel(v.version_);
 
 		wxString news = updater_.GetChangelog();
-		
+
 		auto pos = news.find(v.version_ + _T(" (2"));
 		if (pos != wxString::npos) {
 			news = news.Mid(pos);

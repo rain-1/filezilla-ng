@@ -235,7 +235,7 @@ std::vector<wxString> CThemeProvider::GetThemeSizes(const wxString& themePath)
 
 		sizes.push_back(size);
 	}
-	
+
 	return sizes;
 }
 
