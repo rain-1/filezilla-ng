@@ -1,41 +1,24 @@
 #include <filezilla.h>
 #include "pathcache.h"
 
-CPathCache::tCache CPathCache::m_cache;
-
-int CPathCache::m_hits = 0;
-int CPathCache::m_misses = 0;
-
-int CPathCache::m_instance_count = 0;
-
-static CPathCache cache;
-
 CPathCache::CPathCache()
 {
-	m_instance_count++;
 }
 
 CPathCache::~CPathCache()
 {
-	m_instance_count--;
-	if (!m_instance_count)
-		Clear();
 }
 
-void CPathCache::Store(const CServer& server, const CServerPath& target, const CServerPath& source, const wxString subdir/*=_T("")*/)
+void CPathCache::Store(CServer const& server, CServerPath const& target, CServerPath const& source, wxString const& subdir)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	wxASSERT(!target.empty() && !source.empty());
 
-	tServerCache *pServerCache;
 	tCacheIterator iter = m_cache.find(server);
-	if (iter != m_cache.end())
-		pServerCache = iter->second;
-	else
-	{
-		pServerCache = new tServerCache;
-		m_cache[server] = pServerCache;
-	}
-	tServerCache &serverCache = *pServerCache;
+	if (iter == m_cache.cend())
+		iter = m_cache.emplace(std::make_pair(server, tServerCache())).first;
+	tServerCache &serverCache = iter->second;
 
 	CSourcePath sourcePath;
 
@@ -45,13 +28,15 @@ void CPathCache::Store(const CServer& server, const CServerPath& target, const C
 	serverCache[sourcePath] = target;
 }
 
-CServerPath CPathCache::Lookup(const CServer& server, const CServerPath& source, const wxString subdir /*=_T("")*/)
+CServerPath CPathCache::Lookup(CServer const& server, CServerPath const& source, wxString const& subdir)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	const tCacheConstIterator iter = m_cache.find(server);
 	if (iter == m_cache.end())
 		return CServerPath();
 
-	CServerPath result = Lookup(*iter->second, source, subdir);
+	CServerPath result = Lookup(iter->second, source, subdir);
 
 	if (result.empty())
 		m_misses++;
@@ -61,7 +46,7 @@ CServerPath CPathCache::Lookup(const CServer& server, const CServerPath& source,
 	return result;
 }
 
-CServerPath CPathCache::Lookup(const tServerCache &serverCache, const CServerPath& source, const wxString subdir)
+CServerPath CPathCache::Lookup(tServerCache const& serverCache, CServerPath const& source, wxString const& subdir)
 {
 	CSourcePath sourcePath;
 	sourcePath.source = source;
@@ -74,51 +59,54 @@ CServerPath CPathCache::Lookup(const tServerCache &serverCache, const CServerPat
 	return serverIter->second;
 }
 
-void CPathCache::InvalidateServer(const CServer& server)
+void CPathCache::InvalidateServer(CServer const& server)
 {
+	wxCriticalSectionLocker lock(mutex_);
+
 	tCacheIterator iter = m_cache.find(server);
 	if (iter == m_cache.end())
 		return;
 
-	delete iter->second;
 	m_cache.erase(iter);
 }
 
-void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, const wxString& subdir /*=_T("")*/)
+void CPathCache::InvalidatePath(CServer const& server, CServerPath const& path, wxString const& subdir)
 {
-	tCacheIterator iter = m_cache.find(server);
-	if (iter == m_cache.end())
-		return;
+	wxCriticalSectionLocker lock(mutex_);
 
+	tCacheIterator iter = m_cache.find(server);
+	if (iter != m_cache.end()) {
+		InvalidatePath(iter->second, path, subdir);
+	}
+}
+
+void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& path, wxString const& subdir)
+{
 	CSourcePath sourcePath;
 
 	sourcePath.source = path;
 	sourcePath.subdir = subdir;
 
 	CServerPath target;
-	tServerCacheIterator serverIter = iter->second->find(sourcePath);
-	if (serverIter != iter->second->end())
-	{
+	tServerCacheIterator serverIter = serverCache.find(sourcePath);
+	if (serverIter != serverCache.end()) {
 		target = serverIter->second;
-		iter->second->erase(serverIter);
+		serverCache.erase(serverIter);
 	}
 
-	if (target.empty() && !subdir.empty())
-	{
+	if (target.empty() && !subdir.empty()) {
 		target = path;
 		if (!target.AddSegment(subdir))
 			return;
 	}
 
-	if (!target.empty())
-	{
+	if (!target.empty()) {
 		// Unfortunately O(n), don't know of a faster way.
-		for (auto serverIter = iter->second->begin(); serverIter != iter->second->end();)
-		{
+		for (auto serverIter = serverCache.begin(); serverIter != serverCache.end(); ) {
 			if (serverIter->second == target || target.IsParentOf(serverIter->second, false))
-				iter->second->erase(serverIter++);
+				serverCache.erase(serverIter++);
 			else if (serverIter->first.source == target || target.IsParentOf(serverIter->first.source, false))
-				iter->second->erase(serverIter++);
+				serverCache.erase(serverIter++);
 			else
 				++serverIter;
 		}
@@ -127,8 +115,6 @@ void CPathCache::InvalidatePath(const CServer& server, const CServerPath& path, 
 
 void CPathCache::Clear()
 {
-	for (tCacheIterator iter = m_cache.begin(); iter != m_cache.end(); ++iter)
-		delete iter->second;
-
+	wxCriticalSectionLocker lock(mutex_);
 	m_cache.clear();
 }

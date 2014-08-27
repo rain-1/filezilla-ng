@@ -1330,8 +1330,7 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 	else {
 		if (!subDir.empty()) {
 			// Check if the target is in cache already
-			CPathCache cache;
-			target = cache.Lookup(*m_pCurrentServer, path, subDir);
+			target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, subDir);
 			if (!target.empty()) {
 				if (m_CurrentPath == target)
 					return FZ_REPLY_OK;
@@ -1342,9 +1341,8 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 			}
 			else {
 				// Target unknown, check for the parent's target
-				target = cache.Lookup(*m_pCurrentServer, path, _T(""));
-				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
-				{
+				target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
+				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 					target.clear();
 					state = cwd_cwd_subdir;
 				}
@@ -1352,10 +1350,8 @@ int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString 
 					state = cwd_cwd;
 			}
 		}
-		else
-		{
-			CPathCache cache;
-			target = cache.Lookup(*m_pCurrentServer, path, _T(""));
+		else {
+			target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
 			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				return FZ_REPLY_OK;
 			state = cwd_cwd;
@@ -1421,13 +1417,10 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 		}
 		else if (reply.empty())
 			error = true;
-		else if (ParsePwdReply(reply))
-		{
-			CPathCache cache;
-			cache.Store(*m_pCurrentServer, m_CurrentPath, pData->path);
+		else if (ParsePwdReply(reply)) {
+			m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 
-			if (pData->subDir.empty())
-			{
+			if (pData->subDir.empty()) {
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
@@ -1451,8 +1444,7 @@ int CSftpControlSocket::ChangeDirParseResponse(bool successful, const wxString& 
 				error = true;
 		}
 		else if (ParsePwdReply(reply)) {
-			CPathCache cache;
-			cache.Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
+			m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
@@ -2345,7 +2337,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	pData->path = path;
 	pData->subDir = subDir;
 
-	CServerPath fullPath = CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir);
+	CServerPath fullPath = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir);
 	if (fullPath.empty())
 	{
 		CServerPath fullPath = pData->path;
@@ -2359,7 +2351,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 
 	m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, path, subDir);
 
-	CPathCache::InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
+	m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
 	m_pEngine->InvalidateCurrentWorkingDirs(fullPath);
 	if (!SendCommand(_T("rmdir ") + WildcardEscape(QuoteFilename(fullPath.GetPath())),
@@ -2394,7 +2386,7 @@ int CSftpControlSocket::RemoveDirParseResponse(bool successful, const wxString&)
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pEngine->GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	m_pEngine->GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
 	m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
 
 	return ResetOperation(FZ_REPLY_OK);
@@ -2635,13 +2627,13 @@ int CSftpControlSocket::RenameSend()
 			wxString fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
 			wxString toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 
-			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+			m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			if (wasDir)
 			{
 				// Need to invalidate current working directories
-				CServerPath path = CPathCache::Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+				CServerPath path = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 				if (path.empty())
 				{
 					path = pData->m_cmd.GetFromPath();
