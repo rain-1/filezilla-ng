@@ -1939,7 +1939,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 		if (!subDir.empty())
 		{
 			// Check if the target is in cache already
-			target = CPathCache::Lookup(*m_pCurrentServer, path, subDir);
+			target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, subDir);
 			if (!target.empty())
 			{
 				if (m_CurrentPath == target)
@@ -1952,7 +1952,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 			else
 			{
 				// Target unknown, check for the parent's target
-				target = CPathCache::Lookup(*m_pCurrentServer, path, _T(""));
+				target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
 				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				{
 					target.clear();
@@ -1964,7 +1964,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString s
 		}
 		else
 		{
-			target = CPathCache::Lookup(*m_pCurrentServer, path, _T(""));
+			target = m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
 			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
 				return FZ_REPLY_OK;
 			state = cwd_cwd;
@@ -2055,7 +2055,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			m_CurrentPath = pData->path;
 
 			if (pData->target.empty())
-				CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path);
+				m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 
 			if (pData->subDir.empty())
 			{
@@ -2069,7 +2069,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		{
 			if (pData->target.empty())
 			{
-				CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path);
+				m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 			}
 			if (pData->subDir.empty())
 			{
@@ -2124,7 +2124,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 
 					if (pData->target.empty())
 					{
-						CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
+						m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 					}
 
 					ResetOperation(FZ_REPLY_OK);
@@ -2140,7 +2140,7 @@ int CFtpControlSocket::ChangeDirParseResponse()
 			{
 				if (pData->target.empty())
 				{
-					CPathCache::Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
+					m_pEngine->GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 				}
 
 				ResetOperation(FZ_REPLY_OK);
@@ -3013,7 +3013,7 @@ int CFtpControlSocket::RawCommandSend()
 	}
 
 	m_pEngine->GetDirectoryCache().InvalidateServer(*m_pCurrentServer);
-	CPathCache::InvalidateServer(*m_pCurrentServer);
+	m_pEngine->GetPathCache().InvalidateServer(*m_pCurrentServer);
 	m_CurrentPath.clear();
 
 	m_lastTypeBinary = -1;
@@ -3239,7 +3239,7 @@ int CFtpControlSocket::RemoveDirSend()
 
 	m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, pData->subDir);
 
-	CServerPath path(CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	CServerPath path(m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
 	if (path.empty())
 	{
 		path = pData->path;
@@ -3247,7 +3247,7 @@ int CFtpControlSocket::RemoveDirSend()
 	}
 	m_pEngine->InvalidateCurrentWorkingDirs(path);
 
-	CPathCache::InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
+	m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
 	if (pData->omitPath)
 	{
@@ -3281,7 +3281,7 @@ int CFtpControlSocket::RemoveDirParseResponse()
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pEngine->GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, CPathCache::Lookup(*m_pCurrentServer, pData->path, pData->subDir));
+	m_pEngine->GetDirectoryCache().RemoveDir(*m_pCurrentServer, pData->path, pData->subDir, m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir));
 	m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
 
 	return ResetOperation(FZ_REPLY_OK);
@@ -3624,15 +3624,15 @@ int CFtpControlSocket::RenameSend()
 			m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 			m_pEngine->GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
-			CServerPath path(CPathCache::Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile()));
+			CServerPath path(m_pEngine->GetPathCache().Lookup(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile()));
 			if (path.empty()) {
 				path = pData->m_cmd.GetFromPath();
 				path.AddSegment(pData->m_cmd.GetFromFile());
 			}
 			m_pEngine->InvalidateCurrentWorkingDirs(path);
 
-			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
-			CPathCache::InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
+			m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
+			m_pEngine->GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
 			res = SendCommand(_T("RNTO ") + pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 			break;

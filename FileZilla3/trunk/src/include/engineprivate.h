@@ -40,6 +40,7 @@ public:
 	COptionsBase& GetOptions() { return m_options; }
 	CRateLimiter& GetRateLimiter() { return m_rateLimiter; }
 	CDirectoryCache& GetDirectoryCache() { return directory_cache_; }
+	CPathCache& GetPathCache() { return path_cache_; }
 
 	void SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed);
 
@@ -136,6 +137,7 @@ protected:
 
 	CRateLimiter& m_rateLimiter;
 	CDirectoryCache& directory_cache_;
+	CPathCache& path_cache_;
 };
 
 #endif //__FILEZILLAENGINEPRIVATE_H__

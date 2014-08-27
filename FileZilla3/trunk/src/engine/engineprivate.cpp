@@ -20,6 +20,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
 	, directory_cache_(context.GetDirectoryCache())
+	, path_cache_(context.GetPathCache())
 {
 	m_engineList.push_back(this);
 
@@ -297,7 +298,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 	if (!refresh && !command.GetPath().empty()) {
 		const CServer* pServer = m_pControlSocket->GetCurrentServer();
 		if (pServer) {
-			CServerPath path(CPathCache::Lookup(*pServer, command.GetPath(), command.GetSubDir()));
+			CServerPath path(path_cache_.Lookup(*pServer, command.GetPath(), command.GetSubDir()));
 			if (path.empty() && command.GetSubDir().empty())
 				path = command.GetPath();
 			if (!path.empty()) {

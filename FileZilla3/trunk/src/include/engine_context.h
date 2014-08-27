@@ -6,6 +6,7 @@
 class CDirectoryCache;
 class CEventLoop;
 class COptionsBase;
+class CPathCache;
 class CRateLimiter;
 class CSocketEventDispatcher;
 
@@ -21,6 +22,7 @@ public:
 	CSocketEventDispatcher& GetSocketEventDispatcher();
 	CRateLimiter& GetRateLimiter();
 	CDirectoryCache& GetDirectoryCache();
+	CPathCache& GetPathCache();
 
 protected:
 	COptionsBase& options_;
