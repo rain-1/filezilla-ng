@@ -1796,7 +1796,6 @@ void CMainFrame::OnFilter(wxCommandEvent& event)
 	CFilterDialog dlg;
 	dlg.Create(this);
 	dlg.ShowModal();
-	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
 }
 
 #if FZ_MANUALUPDATECHECK
