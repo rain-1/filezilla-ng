@@ -19,9 +19,9 @@ unsigned int CFilterManager::m_globalCurrentFilterSet = 0;
 bool CFilterManager::m_filters_disabled = false;
 
 BEGIN_EVENT_TABLE(CFilterDialog, wxDialogEx)
-EVT_BUTTON(XRCID("wxID_OK"), CFilterDialog::OnOK)
+EVT_BUTTON(XRCID("wxID_OK"), CFilterDialog::OnOkOrApply)
 EVT_BUTTON(XRCID("wxID_CANCEL"), CFilterDialog::OnCancel)
-EVT_BUTTON(XRCID("wxID_APPLY"), CFilterDialog::OnApply)
+EVT_BUTTON(XRCID("wxID_APPLY"), CFilterDialog::OnOkOrApply)
 EVT_BUTTON(XRCID("ID_EDIT"), CFilterDialog::OnEdit)
 EVT_CHECKLISTBOX(wxID_ANY, CFilterDialog::OnFilterSelect)
 EVT_BUTTON(XRCID("ID_SAVESET"), CFilterDialog::OnSaveAs)
@@ -109,7 +109,7 @@ bool CFilterDialog::Create(CMainFrame* parent)
 	return true;
 }
 
-void CFilterDialog::OnOK(wxCommandEvent& event)
+void CFilterDialog::OnOkOrApply(wxCommandEvent& event)
 {
 	m_globalFilters = m_filters;
 	CompileRegexes();
@@ -117,7 +117,12 @@ void CFilterDialog::OnOK(wxCommandEvent& event)
 	m_globalCurrentFilterSet = m_currentFilterSet;
 
 	SaveFilters();
-	EndModal(wxID_OK);
+
+	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
+
+	if (event.GetId() == wxID_OK) {
+		EndModal(wxID_OK);
+	}
 }
 
 void CFilterDialog::OnCancel(wxCommandEvent& event)
@@ -525,17 +530,6 @@ void CFilterDialog::OnChangeAll(wxCommandEvent& event)
 			(*pValues)[i] = check;
 		}
 	}
-}
-
-void CFilterDialog::OnApply(wxCommandEvent& event)
-{
-	m_globalFilters = m_filters;
-	m_globalFilterSets = m_filterSets;
-	m_globalCurrentFilterSet = m_currentFilterSet;
-
-	SaveFilters();
-
-	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
 }
 
 void CFilterDialog::SetCtrlState()
