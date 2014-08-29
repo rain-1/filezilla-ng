@@ -2,7 +2,7 @@ dnl Checks whether std::map has emplace
 
 AC_DEFUN([FZ_CHECK_MAP_EMPLACE], [
 
-  AC_LANG_PUSH(C)
+  AC_LANG_PUSH(C++)
 
   AC_MSG_CHECKING([whether std::map has emplace])
   AC_COMPILE_IFELSE([
@@ -21,5 +21,5 @@ AC_DEFUN([FZ_CHECK_MAP_EMPLACE], [
     ])
 
 
-  AC_LANG_POP(C)
+  AC_LANG_POP(C++)
 ])
