@@ -55,6 +55,9 @@ if ! test "$localesonly" = "yes"; then
   CHECK_LIBCXX
   CHECK_CXX11
 
+  # libstdc++ as shipped with GCC 4.7 lacks std::map::emplace
+  FZ_CHECK_MAP_EMPLACE
+
   # Add build information to config.h
   # ---------------------------------
 
