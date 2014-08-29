@@ -16,7 +16,7 @@ public:
 	bool Successful() const { return !m_ip.empty(); }
 	wxString GetIP() const { return m_ip; }
 
-	void GetExternalIP(const wxString& address, enum CSocket::address_family protocol, bool force = false);
+	void GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force = false);
 
 protected:
 
@@ -70,7 +70,7 @@ protected:
 		unknown
 	};
 
-	enum transferEncodings m_transferEncoding;
+	transferEncodings m_transferEncoding;
 
 	struct t_chunkData
 	{

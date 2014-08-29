@@ -25,12 +25,12 @@ public:
 		close
 	};
 
-	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, enum EventType type, const wxChar* data);
-	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, enum EventType type, int error = 0);
+	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, const wxChar* data);
+	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, int error = 0);
 	~CSocketEvent();
 
 	CSocketEventSource* GetSocketEventSource() const { return m_pSource; }
-	enum EventType GetType() const { return m_type; }
+	EventType GetType() const { return m_type; }
 	CSocketEventHandler* GetSocketEventHandler() const { return m_pSocketEventHandler; }
 
 	wxString GetData() const;
@@ -38,7 +38,7 @@ public:
 
 protected:
 	CSocketEventSource* m_pSource;
-	const enum EventType m_type;
+	const EventType m_type;
 	wxChar *m_data;
 	int m_error;
 	CSocketEventHandler* m_pSocketEventHandler;
@@ -126,7 +126,7 @@ public:
 		closing,
 		closed
 	};
-	enum SocketState GetState();
+	SocketState GetState();
 
 	enum address_family
 	{
@@ -142,7 +142,7 @@ public:
 	// If host is a name that can be resolved, a hostaddress socket event gets sent.
 	// Once connections got established, a connection event gets sent. If
 	// connection could not be established, a close event gets sent.
-	int Connect(wxString host, unsigned int port, enum address_family family = unspec);
+	int Connect(wxString host, unsigned int port, address_family family = unspec);
 
 	// After receiving a send or receive event, you can call these functions
 	// as long as their return value is positive.
@@ -164,7 +164,7 @@ public:
 	int GetRemotePort(int& error);
 
 	// If connected, either ipv4 or ipv6, unspec otherwise
-	enum address_family GetAddressFamily() const;
+	address_family GetAddressFamily() const;
 
 	static wxString GetErrorString(int error);
 	static wxString GetErrorDescription(int error);
@@ -177,7 +177,7 @@ public:
 
 	static wxString AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
 
-	int Listen(enum address_family family, int port = 0);
+	int Listen(address_family family, int port = 0);
 	CSocket* Accept(int& error);
 
 	enum Flags
@@ -206,7 +206,7 @@ protected:
 
 	int m_fd;
 
-	enum SocketState m_state;
+	SocketState m_state;
 
 	CSocketThread* m_pSocketThread;
 

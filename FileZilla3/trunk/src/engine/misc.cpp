@@ -148,7 +148,7 @@ int DigitHexToDecNum(wxChar c)
 		return c - '0';
 }
 
-bool IsRoutableAddress(const wxString& address, enum CSocket::address_family family)
+bool IsRoutableAddress(const wxString& address, CSocket::address_family family)
 {
 	if (family == CSocket::ipv6)
 	{
