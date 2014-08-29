@@ -67,21 +67,21 @@ public:
 	CServer();
 	CServer(wxString host, unsigned int);
 	CServer(wxString host, unsigned int, wxString user, wxString pass = wxString());
-	CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int);
-	CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int, wxString user, wxString pass = wxString(), wxString account = wxString());
+	CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int);
+	CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int, wxString user, wxString pass = wxString(), wxString account = wxString());
 
-	void SetType(enum ServerType type);
+	void SetType(ServerType type);
 
-	enum ServerProtocol GetProtocol() const;
-	enum ServerType GetType() const;
+	ServerProtocol GetProtocol() const;
+	ServerType GetType() const;
 	wxString GetHost() const;
 	unsigned int GetPort() const;
-	enum LogonType GetLogonType() const;
+	LogonType GetLogonType() const;
 	wxString GetUser() const;
 	wxString GetPass() const;
 	wxString GetAccount() const;
 	int GetTimezoneOffset() const;
-	enum PasvMode GetPasvMode() const;
+	PasvMode GetPasvMode() const;
 	int MaximumMultipleConnections() const;
 	bool GetBypassProxy() const;
 
@@ -90,10 +90,10 @@ public:
 	bool ParseUrl(wxString host, unsigned int port, wxString user, wxString pass, wxString &error, CServerPath &path);
 	bool ParseUrl(wxString host, wxString port, wxString user, wxString pass, wxString &error, CServerPath &path);
 
-	void SetProtocol(enum ServerProtocol serverProtocol);
+	void SetProtocol(ServerProtocol serverProtocol);
 	bool SetHost(wxString Host, unsigned int port);
 
-	void SetLogonType(enum LogonType logonType);
+	void SetLogonType(LogonType logonType);
 	bool SetUser(const wxString& user, const wxString& pass = wxString());
 	bool SetAccount(const wxString& account);
 
@@ -104,29 +104,29 @@ public:
 	bool EqualsNoPass(const CServer &op) const;
 
 	bool SetTimezoneOffset(int minutes);
-	void SetPasvMode(enum PasvMode pasvMode);
+	void SetPasvMode(PasvMode pasvMode);
 	void MaximumMultipleConnections(int maximum);
 
 	wxString FormatHost(bool always_omit_port = false) const;
 	wxString FormatServer(const bool always_include_prefix = false) const;
 
-	bool SetEncodingType(enum CharsetEncoding type, const wxString& encoding = wxString());
+	bool SetEncodingType(CharsetEncoding type, const wxString& encoding = wxString());
 	bool SetCustomEncoding(const wxString& encoding);
-	enum CharsetEncoding GetEncodingType() const;
+	CharsetEncoding GetEncodingType() const;
 	wxString GetCustomEncoding() const;
 
-	static unsigned int GetDefaultPort(enum ServerProtocol protocol);
-	static enum ServerProtocol GetProtocolFromPort(unsigned int port, bool defaultOnly = false);
+	static unsigned int GetDefaultPort(ServerProtocol protocol);
+	static ServerProtocol GetProtocolFromPort(unsigned int port, bool defaultOnly = false);
 
-	static wxString GetProtocolName(enum ServerProtocol protocol);
-	static enum ServerProtocol GetProtocolFromName(const wxString& name);
+	static wxString GetProtocolName(ServerProtocol protocol);
+	static ServerProtocol GetProtocolFromName(const wxString& name);
 
-	static enum ServerProtocol GetProtocolFromPrefix(const wxString& prefix);
-	static wxString GetPrefixFromProtocol(const enum ServerProtocol protocol);
+	static ServerProtocol GetProtocolFromPrefix(const wxString& prefix);
+	static wxString GetPrefixFromProtocol(const ServerProtocol protocol);
 
 	// Some protocol distinguish between ASCII and binary files for line-ending
 	// conversion.
-	static bool ProtocolHasDataTypeConcept(const enum ServerProtocol protocol);
+	static bool ProtocolHasDataTypeConcept(const ServerProtocol protocol);
 
 	// These commands will be executed after a successful login.
 	const std::vector<wxString>& GetPostLoginCommands() const { return m_postLoginCommands; }
@@ -138,27 +138,27 @@ public:
 	void SetName(const wxString& name) { m_name = name; }
 	wxString GetName() const { return m_name; }
 
-	static wxString GetNameFromServerType(enum ServerType type);
-	static enum ServerType GetServerTypeFromName(const wxString& name);
+	static wxString GetNameFromServerType(ServerType type);
+	static ServerType GetServerTypeFromName(const wxString& name);
 
-	static wxString GetNameFromLogonType(enum LogonType type);
-	static enum LogonType GetLogonTypeFromName(const wxString& name);
+	static wxString GetNameFromLogonType(LogonType type);
+	static LogonType GetLogonTypeFromName(const wxString& name);
 
 protected:
 	void Initialize();
 
-	enum ServerProtocol m_protocol;
-	enum ServerType m_type;
+	ServerProtocol m_protocol;
+	ServerType m_type;
 	wxString m_host;
 	unsigned int m_port;
-	enum LogonType m_logonType;
+	LogonType m_logonType;
 	wxString m_user;
 	wxString m_pass;
 	wxString m_account;
 	int m_timezoneOffset;
-	enum PasvMode m_pasvMode;
+	PasvMode m_pasvMode;
 	int m_maximumMultipleConnections;
-	enum CharsetEncoding m_encodingType;
+	CharsetEncoding m_encodingType;
 	wxString m_customEncoding;
 	wxString m_name;
 

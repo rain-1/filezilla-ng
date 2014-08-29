@@ -396,7 +396,7 @@ bool CServerPath::SetSafePath(const wxString& path, bool coalesce)
 	return true;
 }
 
-bool CServerPath::SetType(enum ServerType type)
+bool CServerPath::SetType(ServerType type)
 {
 	if (!m_bEmpty && m_type != DEFAULT)
 		return false;
@@ -406,7 +406,7 @@ bool CServerPath::SetType(enum ServerType type)
 	return true;
 }
 
-enum ServerType CServerPath::GetType() const
+ServerType CServerPath::GetType() const
 {
 	return m_type;
 }

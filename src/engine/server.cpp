@@ -2,7 +2,7 @@
 
 struct t_protocolInfo
 {
-	const enum ServerProtocol protocol;
+	const ServerProtocol protocol;
 	const wxString prefix;
 	bool alwaysShowPrefix;
 	unsigned int defaultPort;
@@ -484,7 +484,7 @@ bool CServer::EqualsNoPass(const CServer &op) const
 	return true;
 }
 
-CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int port, wxString user, wxString pass, wxString account)
+CServer::CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int port, wxString user, wxString pass, wxString account)
 {
 	Initialize();
 	m_protocol = protocol;
@@ -497,7 +497,7 @@ CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString ho
 	m_account = account;
 }
 
-CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString host, unsigned int port)
+CServer::CServer(ServerProtocol protocol, ServerType type, wxString host, unsigned int port)
 {
 	Initialize();
 	m_protocol = protocol;
@@ -506,23 +506,23 @@ CServer::CServer(enum ServerProtocol protocol, enum ServerType type, wxString ho
 	m_port = port;
 }
 
-void CServer::SetType(enum ServerType type)
+void CServer::SetType(ServerType type)
 {
 	m_type = type;
 }
 
-enum LogonType CServer::GetLogonType() const
+LogonType CServer::GetLogonType() const
 {
 	return m_logonType;
 }
 
-void CServer::SetLogonType(enum LogonType logonType)
+void CServer::SetLogonType(LogonType logonType)
 {
 	wxASSERT(logonType != LOGONTYPE_MAX);
 	m_logonType = logonType;
 }
 
-void CServer::SetProtocol(enum ServerProtocol serverProtocol)
+void CServer::SetProtocol(ServerProtocol serverProtocol)
 {
 	wxASSERT(serverProtocol != UNKNOWN);
 
@@ -592,12 +592,12 @@ int CServer::GetTimezoneOffset() const
 	return m_timezoneOffset;
 }
 
-enum PasvMode CServer::GetPasvMode() const
+PasvMode CServer::GetPasvMode() const
 {
 	return m_pasvMode;
 }
 
-void CServer::SetPasvMode(enum PasvMode pasvMode)
+void CServer::SetPasvMode(PasvMode pasvMode)
 {
 	m_pasvMode = pasvMode;
 }
@@ -665,7 +665,7 @@ void CServer::Initialize()
 	m_bypassProxy = false;
 }
 
-bool CServer::SetEncodingType(enum CharsetEncoding type, const wxString& encoding)
+bool CServer::SetEncodingType(CharsetEncoding type, const wxString& encoding)
 {
 	if (type == ENCODING_CUSTOM && encoding.empty())
 		return false;
@@ -687,7 +687,7 @@ bool CServer::SetCustomEncoding(const wxString& encoding)
 	return true;
 }
 
-enum CharsetEncoding CServer::GetEncodingType() const
+CharsetEncoding CServer::GetEncodingType() const
 {
 	return m_encodingType;
 }
@@ -697,14 +697,14 @@ wxString CServer::GetCustomEncoding() const
 	return m_customEncoding;
 }
 
-unsigned int CServer::GetDefaultPort(enum ServerProtocol protocol)
+unsigned int CServer::GetDefaultPort(ServerProtocol protocol)
 {
 	const t_protocolInfo& info = GetProtocolInfo(protocol);
 
 	return info.defaultPort;
 }
 
-enum ServerProtocol CServer::GetProtocolFromPort(unsigned int port, bool defaultOnly /*=false*/)
+ServerProtocol CServer::GetProtocolFromPort(unsigned int port, bool defaultOnly /*=false*/)
 {
 	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i)
 	{
@@ -719,7 +719,7 @@ enum ServerProtocol CServer::GetProtocolFromPort(unsigned int port, bool default
 	return FTP;
 }
 
-wxString CServer::GetProtocolName(enum ServerProtocol protocol)
+wxString CServer::GetProtocolName(ServerProtocol protocol)
 {
 	const t_protocolInfo *protocolInfo = protocolInfos;
 	while (protocolInfo->protocol != UNKNOWN)
@@ -739,7 +739,7 @@ wxString CServer::GetProtocolName(enum ServerProtocol protocol)
 	return wxString();
 }
 
-enum ServerProtocol CServer::GetProtocolFromName(const wxString& name)
+ServerProtocol CServer::GetProtocolFromName(const wxString& name)
 {
 	const t_protocolInfo *protocolInfo = protocolInfos;
 	while (protocolInfo->protocol != UNKNOWN)
@@ -772,7 +772,7 @@ bool CServer::SetPostLoginCommands(const std::vector<wxString>& postLoginCommand
 	return true;
 }
 
-enum ServerProtocol CServer::GetProtocolFromPrefix(const wxString& prefix)
+ServerProtocol CServer::GetProtocolFromPrefix(const wxString& prefix)
 {
 	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i)
 	{
@@ -783,7 +783,7 @@ enum ServerProtocol CServer::GetProtocolFromPrefix(const wxString& prefix)
 	return UNKNOWN;
 }
 
-wxString CServer::GetPrefixFromProtocol(const enum ServerProtocol protocol)
+wxString CServer::GetPrefixFromProtocol(const ServerProtocol protocol)
 {
 	const t_protocolInfo& info = GetProtocolInfo(protocol);
 
@@ -800,7 +800,7 @@ bool CServer::GetBypassProxy() const
   return m_bypassProxy;
 }
 
-bool CServer::ProtocolHasDataTypeConcept(const enum ServerProtocol protocol)
+bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)
 {
 	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
 		return true;
@@ -808,17 +808,16 @@ bool CServer::ProtocolHasDataTypeConcept(const enum ServerProtocol protocol)
 	return false;
 }
 
-wxString CServer::GetNameFromServerType(enum ServerType type)
+wxString CServer::GetNameFromServerType(ServerType type)
 {
 	wxASSERT(type != SERVERTYPE_MAX);
 	return wxGetTranslation(typeNames[type]);
 }
 
-enum ServerType CServer::GetServerTypeFromName(const wxString& name)
+ServerType CServer::GetServerTypeFromName(const wxString& name)
 {
-	for (int i = 0; i < SERVERTYPE_MAX; ++i)
-	{
-		enum ServerType type = (enum ServerType)i;
+	for (int i = 0; i < SERVERTYPE_MAX; ++i) {
+		ServerType type = static_cast<ServerType>(i);
 		if (name == CServer::GetNameFromServerType(type))
 			return type;
 	}
@@ -826,7 +825,7 @@ enum ServerType CServer::GetServerTypeFromName(const wxString& name)
 	return DEFAULT;
 }
 
-enum LogonType CServer::GetLogonTypeFromName(const wxString& name)
+LogonType CServer::GetLogonTypeFromName(const wxString& name)
 {
 	if (name == _("Normal"))
 		return NORMAL;
@@ -840,7 +839,7 @@ enum LogonType CServer::GetLogonTypeFromName(const wxString& name)
 		return ANONYMOUS;
 }
 
-wxString CServer::GetNameFromLogonType(enum LogonType type)
+wxString CServer::GetNameFromLogonType(LogonType type)
 {
 	wxASSERT(type != LOGONTYPE_MAX);
 

@@ -8,7 +8,7 @@ wxString GetIPV6LongForm(wxString short_address);
 
 int DigitHexToDecNum(wxChar c);
 
-bool IsRoutableAddress(const wxString& address, enum CSocket::address_family family);
+bool IsRoutableAddress(const wxString& address, CSocket::address_family family);
 
 bool IsIpAddress(const wxString& address);
 

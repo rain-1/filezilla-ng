@@ -44,8 +44,8 @@ public:
 
 	CServerPath GetCommonParent(const CServerPath& path) const;
 
-	bool SetType(enum ServerType type);
-	enum ServerType GetType() const;
+	bool SetType(ServerType type);
+	ServerType GetType() const;
 
 	bool IsSubdirOf(const CServerPath &path, bool cmpNoCase) const;
 	bool IsParentOf(const CServerPath &path, bool cmpNoCase) const;

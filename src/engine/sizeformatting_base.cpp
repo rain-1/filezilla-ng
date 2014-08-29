@@ -10,7 +10,7 @@ namespace
 	const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
 }
 
-wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool add_bytes_suffix, enum CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
+wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool add_bytes_suffix, CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
 {
 	wxASSERT(format != formats_count);
 	wxASSERT(size >= 0);

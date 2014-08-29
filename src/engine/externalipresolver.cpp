@@ -27,7 +27,7 @@ CExternalIPResolver::~CExternalIPResolver()
 	m_pSocket = 0;
 }
 
-void CExternalIPResolver::GetExternalIP(const wxString& address, enum CSocket::address_family protocol, bool force /*=false*/)
+void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force /*=false*/)
 {
 	if (m_checked) {
 		if (force)

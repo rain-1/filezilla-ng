@@ -214,7 +214,7 @@ void CSocketEventDispatcher::operator()(CEventBase const&)
 	delete evt;
 }
 
-CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, enum EventType type, const wxChar* data)
+CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, const wxChar* data)
 	: m_pSource(pSource), m_type(type), m_error(0), m_pSocketEventHandler(pSocketEventHandler)
 {
 	if (data)
@@ -226,7 +226,7 @@ CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEven
 		m_data = 0;
 }
 
-CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, enum EventType type, int error /*=0*/)
+CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, int error /*=0*/)
 	: m_pSource(pSource), m_type(type), m_error(error), m_pSocketEventHandler(pSocketEventHandler)
 {
 	m_data = 0;
@@ -986,7 +986,7 @@ void CSocket::DetachThread()
 	Cleanup(false);
 }
 
-int CSocket::Connect(wxString host, unsigned int port, enum address_family family /*=unsped*/)
+int CSocket::Connect(wxString host, unsigned int port, address_family family /*=unsped*/)
 {
 	if (m_state != none)
 		return EISCONN;
@@ -1248,9 +1248,9 @@ int CSocket::Close()
 	return 0;
 }
 
-enum CSocket::SocketState CSocket::GetState()
+CSocket::SocketState CSocket::GetState()
 {
-	enum SocketState state;
+	SocketState state;
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.Lock();
 	state = m_state;
@@ -1435,7 +1435,7 @@ wxString CSocket::GetPeerIP(bool strip_zone_index /*=false*/) const
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-enum CSocket::address_family CSocket::GetAddressFamily() const
+CSocket::address_family CSocket::GetAddressFamily() const
 {
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
@@ -1454,7 +1454,7 @@ enum CSocket::address_family CSocket::GetAddressFamily() const
 	}
 }
 
-int CSocket::Listen(enum address_family family, int port /*=0*/)
+int CSocket::Listen(address_family family, int port /*=0*/)
 {
 	if (m_state != none)
 		return EALREADY;
