@@ -33,21 +33,16 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 	SetParent(parent);
 
 	wxString title;
-	if (!dirCount)
-	{
-		if (fileCount == 1)
-		{
+	if (!dirCount) {
+		if (fileCount == 1) {
 			title = wxString::Format(_("Please select the new attributes for the file \"%s\"."), name);
 		}
 		else
 			title = _("Please select the new attributes for the selected files.");
 	}
-	else
-	{
-		if (!fileCount)
-		{
-			if (dirCount == 1)
-			{
+	else {
+		if (!fileCount) {
+			if (dirCount == 1) {
 				title = wxString::Format(_("Please select the new attributes for the directory \"%s\"."), name);
 			}
 			else
@@ -57,11 +52,11 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 			title = _("Please select the new attributes for the selected files and directories.");
 	}
 
-	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_CHMODDIALOG")))
+	if (!Load(parent, _T("ID_CHMODDIALOG"))) {
 		return false;
+	}
 
-	if (!this->SetChildLabel(XRCID("ID_DESC"), title, 300))
-	{
+	if (!SetChildLabel(XRCID("ID_DESC"), title, 300)) {
 		wxFAIL_MSG(_T("Could not set ID_DESC"));
 	}
 
@@ -74,8 +69,7 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 	if (!XRCCTRL(*this, "ID_NUMERIC", wxTextCtrl))
 		return false;
 
-	if (!WrapText(this, XRCID("ID_NUMERICTEXT"), 300))
-	{
+	if (!WrapText(this, XRCID("ID_NUMERICTEXT"), 300)) {
 		wxFAIL_MSG(_T("Wrapping of ID_NUMERICTEXT failed"));
 	}
 
@@ -86,8 +80,7 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 	if (!pRecurse || !pApplyAll || !pApplyFiles || !pApplyDirs)
 		return false;
 
-	if (!dirCount)
-	{
+	if (!dirCount) {
 		pRecurse->Hide();
 		pApplyAll->Hide();
 		pApplyFiles->Hide();
@@ -103,8 +96,7 @@ bool CChmodDialog::Create(wxWindow* parent, int fileCount, int dirCount,
 						   _T("ID_PUBLICREAD"), _T("ID_PUBLICWRITE"), _T("ID_PUBLICEXECUTE")
 						 };
 
-	for (int i = 0; i < 9; i++)
-	{
+	for (int i = 0; i < 9; ++i) {
 		int id = wxXmlResource::GetXRCID(IDs[i]);
 		m_checkBoxes[i] = wxDynamicCast(FindWindow(id), wxCheckBox);
 

@@ -14,13 +14,13 @@ public:
 	/// Creation
 	bool Create(wxWindow* parent);
 
-	/// Creates the controls and sizers
-	void CreateControls();
-
 	enum CFileExistsNotification::OverwriteAction GetAction() const;
 	bool Always(bool &directionOnly, bool &queueOnly) const;
 
 protected:
+	/// Creates the controls and sizers
+	bool CreateControls();
+
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
 	void OnCheck(wxCommandEvent& event);

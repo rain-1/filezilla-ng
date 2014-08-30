@@ -27,16 +27,21 @@ bool CFileExistsDlg::Create(wxWindow* parent)
 {
 	SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
 	SetParent(parent);
-	CreateControls();
+	if (!CreateControls()) {
+		return false;
+	}
 	GetSizer()->Fit(this);
 	GetSizer()->SetSizeHints(this);
 
 	return true;
 }
 
-void CFileExistsDlg::CreateControls()
+bool CFileExistsDlg::CreateControls()
 {
-	wxXmlResource::Get()->LoadDialog(this, GetParent(), _T("ID_FILEEXISTSDLG"));
+	if (!Load(GetParent(), _T("ID_FILEEXISTSDLG"))) {
+		return false;
+	}
+
 	m_pAction1 = wxDynamicCast(FindWindow(XRCID("ID_ACTION1")), wxRadioButton);
 	m_pAction2 = wxDynamicCast(FindWindow(XRCID("ID_ACTION2")), wxRadioButton);
 	m_pAction3 = wxDynamicCast(FindWindow(XRCID("ID_ACTION3")), wxRadioButton);
@@ -72,8 +77,7 @@ void CFileExistsDlg::CreateControls()
 	if (m_pNotification->remoteTime.IsValid())
 		remoteTime = CTimeFormat::Format(m_pNotification->remoteTime);
 
-	if (m_pNotification->download)
-	{
+	if (m_pNotification->download) {
 		wxStaticText *pStatText;
 
 		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_NAME")));
@@ -108,8 +112,7 @@ void CFileExistsDlg::CreateControls()
 		if (pCheckBox)
 			pCheckBox->SetLabel(_("A&pply only to downloads"));
 	}
-	else
-	{
+	else {
 		wxWindow *pStatText;
 
 		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_NAME")));
@@ -144,6 +147,8 @@ void CFileExistsDlg::CreateControls()
 		if (pCheckBox)
 			pCheckBox->SetLabel(_("A&pply only to uploads"));
 	}
+
+	return true;
 }
 
 void CFileExistsDlg::LoadIcon(int id, const wxString &file)
