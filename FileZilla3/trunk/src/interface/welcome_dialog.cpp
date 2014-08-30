@@ -13,10 +13,8 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	const wxString ownVersion = CBuildInfo::GetVersion();
 	wxString greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
 
-	if (!force)
-	{
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-		{
+	if (!force) {
+		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 			if (delay)
 				delete this;
 			return true;
@@ -36,7 +34,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 1);
 	}
 
-	if (!wxXmlResource::Get()->LoadDialog(this, parent, _T("ID_WELCOME"))) {
+	if (!Load(parent, _T("ID_WELCOME"))) {
 		if( delay ) {
 			delete this;
 		}
@@ -50,13 +48,11 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
 	pNews->SetURL(wxString::Format(url, _T("news")) + _T("&oldversion=") + greetingVersion);
 
-	if (!greetingVersion.empty())
-	{
+	if (!greetingVersion.empty()) {
 		wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
 		pNews->SetLabel(wxString::Format(_("New features and improvements in %s"), CBuildInfo::GetVersion()));
 	}
-	else
-	{
+	else {
 		XRCCTRL(*this, "ID_HEADING_NEWS", wxStaticText)->Hide();
 		pNews->Hide();
 	}

@@ -1382,8 +1382,7 @@ void CRemoteTreeView::ApplyFilters()
 
 	const wxTreeItemId root = GetRootItem();
 	wxTreeItemIdValue cookie;
-	for (wxTreeItemId child = GetFirstChild(root, cookie); child; child = GetNextSibling(child))
-	{
+	for (wxTreeItemId child = GetFirstChild(root, cookie); child; child = GetNextSibling(child)) {
 		CServerPath path = GetPathFromItem(child);
 		if (path.empty())
 			continue;
@@ -1395,29 +1394,24 @@ void CRemoteTreeView::ApplyFilters()
 	}
 
 	CFilterManager filter;
-	while (!parents.empty())
-	{
+	while (!parents.empty()) {
 		struct _parents parent = parents.back();
 		parents.pop_back();
 
 		CDirectoryListing listing;
 		if (m_pState->m_pEngine->CacheLookup(parent.path, listing) == FZ_REPLY_OK)
 			RefreshItem(parent.item, listing, false);
-		else if (filter.HasActiveFilters())
-		{
-			for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child))
-			{
+		else if (filter.HasActiveFilters()) {
+			for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child)) {
 				CServerPath path = GetPathFromItem(child);
 				if (path.empty())
 					continue;
 
-				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, CDateTime()))
-				{
+				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, CDateTime())) {
 					wxTreeItemId sel = GetSelection();
 					while (sel && sel != child)
 						sel = GetItemParent(sel);
-					if (!sel)
-					{
+					if (!sel) {
 						Delete(child);
 						continue;
 					}
@@ -1432,8 +1426,7 @@ void CRemoteTreeView::ApplyFilters()
 			// The stuff below has already been done above in this one case
 			continue;
 		}
-		for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child))
-		{
+		for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child)) {
 			CServerPath path = GetPathFromItem(child);
 			if (path.empty())
 				continue;
