@@ -21,6 +21,8 @@ protected:
 	/// Creates the controls and sizers
 	bool CreateControls();
 
+	void DisplayFile(bool left, wxString name, wxLongLong const& size, CDateTime const& time, wxString const& iconFile);
+
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);
 	void OnCheck(wxCommandEvent& event);
@@ -29,11 +31,10 @@ protected:
 	wxString GetPathEllipsis(wxString path, wxWindow *window);
 
 	CFileExistsNotification *m_pNotification;
-	wxRadioButton *m_pAction1, *m_pAction2, *m_pAction3, *m_pAction4, *m_pAction5, *m_pAction6, *m_pAction7;
 	enum CFileExistsNotification::OverwriteAction m_action;
-	bool m_always;
-	bool m_directionOnly;
-	bool m_queueOnly;
+	bool m_always{};
+	bool m_directionOnly{};
+	bool m_queueOnly{};
 };
 
 #endif //__FILEEXISTSDLG_H__

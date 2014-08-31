@@ -367,6 +367,7 @@
     <ClInclude Include="xh_menu_ex.h" />
     <ClInclude Include="xh_text_ex.h" />
     <ClInclude Include="xmlfunctions.h" />
+    <ClInclude Include="xrc_helper.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\FileZilla.ico" />
