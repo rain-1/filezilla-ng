@@ -1,5 +1,6 @@
 #include <filezilla.h>
 #include "ControlSocket.h"
+#include "event_loop.h"
 #include "ftpcontrolsocket.h"
 #include "sftpcontrolsocket.h"
 #include "directorycache.h"

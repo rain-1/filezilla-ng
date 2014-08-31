@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "ratelimiter.h"
 
+#include "event_loop.h"
+
 static const int tickDelay = 250;
 
 CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)

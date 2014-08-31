@@ -4,7 +4,8 @@
 #include "timeex.h"
 
 #include "engine_context.h"
-#include "event_loop.h"
+#include "event.h"
+#include "event_handler.h"
 
 class CControlSocket;
 class CLogging;
