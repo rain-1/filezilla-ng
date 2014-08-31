@@ -2,6 +2,7 @@
 #include "engine_context.h"
 
 #include "directorycache.h"
+#include "event_loop.h"
 #include "pathcache.h"
 #include "ratelimiter.h"
 #include "socket.h"

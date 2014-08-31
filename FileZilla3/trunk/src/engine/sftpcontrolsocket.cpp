@@ -2,6 +2,7 @@
 
 #include "directorycache.h"
 #include "directorylistingparser.h"
+#include "event_loop.h"
 #include "pathcache.h"
 #include "local_filesys.h"
 #include "proxy.h"
@@ -1624,8 +1625,7 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::FileTransfer(...)"));
 
-	if (localFile.empty())
-	{
+	if (localFile.empty()) {
 		if (!download)
 			ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
 		else
@@ -1633,17 +1633,14 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 		return FZ_REPLY_ERROR;
 	}
 
-	if (download)
-	{
+	if (download) {
 		wxString filename = remotePath.FormatFilename(remoteFile);
 		LogMessage(MessageType::Status, _("Starting download of %s"), filename);
 	}
-	else
-	{
+	else {
 		LogMessage(MessageType::Status, _("Starting upload of %s"), localFile);
 	}
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
 		delete m_pCurOpData;
 	}

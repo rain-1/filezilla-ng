@@ -2229,8 +2229,7 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::FileTransfer()"));
 
-	if (localFile.empty())
-	{
+	if (localFile.empty()) {
 		if (!download)
 			ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
 		else

@@ -6,6 +6,8 @@ noinst_HEADERS = \
 	directorylisting.h \
 	engine_context.h \
 	engineprivate.h \
+	event.h \
+	event_handler.h \
 	event_loop.h \
 	externalipresolver.h \
 	FileZillaEngine.h \
