@@ -4,6 +4,7 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 #include "themeprovider.h"
+#include "xrc_helper.h"
 
 #include <wx/display.h>
 
@@ -16,11 +17,7 @@ END_EVENT_TABLE()
 CFileExistsDlg::CFileExistsDlg(CFileExistsNotification *pNotification)
 {
 	m_pNotification = pNotification;
-	m_pAction1 = m_pAction2 = m_pAction3 = m_pAction4 = m_pAction5 = m_pAction6 = m_pAction7 = 0;
 	m_action = CFileExistsNotification::overwrite;
-	m_always = false;
-	m_queueOnly = false;
-	m_directionOnly = false;
 }
 
 bool CFileExistsDlg::Create(wxWindow* parent)
@@ -36,117 +33,43 @@ bool CFileExistsDlg::Create(wxWindow* parent)
 	return true;
 }
 
+void CFileExistsDlg::DisplayFile(bool left, wxString name, wxLongLong const& size, CDateTime const& time, wxString const& iconFile)
+{
+	name = GetPathEllipsis(name, FindWindow(left ? XRCID("ID_FILE1_NAME") : XRCID("ID_FILE2_NAME")));
+	name.Replace(_T("&"), _T("&&"));
+
+	const bool thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
+
+	wxString sizeStr = _("Size unknown");
+	if (size != -1) {
+		bool const thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
+		sizeStr = CSizeFormat::Format(size, true, CSizeFormat::bytes, thousands_separator, 0);
+	}
+	
+	wxString timeStr = _("Date/time unknown");
+	if (time.IsValid())
+		timeStr = CTimeFormat::Format(time);
+
+	xrc_call(*this, left ? "ID_FILE1_NAME" : "ID_FILE2_NAME", &wxStaticText::SetLabel, name);
+	xrc_call(*this, left ? "ID_FILE1_SIZE" : "ID_FILE2_SIZE", &wxStaticText::SetLabel, sizeStr);
+	xrc_call(*this, left ? "ID_FILE1_TIME" : "ID_FILE2_TIME", &wxStaticText::SetLabel, timeStr);
+
+	LoadIcon(left ? XRCID("ID_FILE1_ICON") : XRCID("ID_FILE2_ICON"), iconFile);
+}
+
 bool CFileExistsDlg::CreateControls()
 {
 	if (!Load(GetParent(), _T("ID_FILEEXISTSDLG"))) {
 		return false;
 	}
 
-	m_pAction1 = wxDynamicCast(FindWindow(XRCID("ID_ACTION1")), wxRadioButton);
-	m_pAction2 = wxDynamicCast(FindWindow(XRCID("ID_ACTION2")), wxRadioButton);
-	m_pAction3 = wxDynamicCast(FindWindow(XRCID("ID_ACTION3")), wxRadioButton);
-	m_pAction4 = wxDynamicCast(FindWindow(XRCID("ID_ACTION4")), wxRadioButton);
-	m_pAction5 = wxDynamicCast(FindWindow(XRCID("ID_ACTION5")), wxRadioButton);
-	m_pAction6 = wxDynamicCast(FindWindow(XRCID("ID_ACTION6")), wxRadioButton);
-	m_pAction7 = wxDynamicCast(FindWindow(XRCID("ID_ACTION7")), wxRadioButton);
-
 	wxString localFile = m_pNotification->localFile;
-
 	wxString remoteFile = m_pNotification->remotePath.FormatFilename(m_pNotification->remoteFile);
-	localFile = GetPathEllipsis(localFile, FindWindow(XRCID("ID_FILE1_NAME")));
-	remoteFile = GetPathEllipsis(remoteFile, FindWindow(XRCID("ID_FILE2_NAME")));
 
-	localFile.Replace(_T("&"), _T("&&"));
-	remoteFile.Replace(_T("&"), _T("&&"));
+	DisplayFile(m_pNotification->download, localFile, m_pNotification->localSize, m_pNotification->localTime, m_pNotification->localFile);
+	DisplayFile(!m_pNotification->download, remoteFile, m_pNotification->remoteSize, m_pNotification->remoteTime, m_pNotification->remoteFile);
 
-	const bool thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
-
-	wxString localSize = _("Size unknown");
-	if (m_pNotification->localSize != -1)
-		localSize = CSizeFormat::Format(m_pNotification->localSize, true, CSizeFormat::bytes, thousands_separator, 0);
-
-	wxString remoteSize = _("Size unknown");
-	if (m_pNotification->remoteSize != -1)
-		remoteSize = CSizeFormat::Format(m_pNotification->remoteSize, true, CSizeFormat::bytes, thousands_separator, 0);
-
-	wxString localTime = _("Date/time unknown");
-	if (m_pNotification->localTime.IsValid())
-		localTime = CTimeFormat::Format(m_pNotification->localTime);
-
-	wxString remoteTime = _("Date/time unknown");
-	if (m_pNotification->remoteTime.IsValid())
-		remoteTime = CTimeFormat::Format(m_pNotification->remoteTime);
-
-	if (m_pNotification->download) {
-		wxStaticText *pStatText;
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_NAME")));
-		if (pStatText)
-			pStatText->SetLabel(localFile);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_SIZE")));
-		if (pStatText)
-			pStatText->SetLabel(localSize);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_TIME")));
-		if (pStatText)
-			pStatText->SetLabel(localTime);
-
-		LoadIcon(XRCID("ID_FILE1_ICON"), m_pNotification->localFile);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_NAME")));
-		if (pStatText)
-			pStatText->SetLabel(remoteFile);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_SIZE")));
-		if (pStatText)
-			pStatText->SetLabel(remoteSize);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_TIME")));
-		if (pStatText)
-			pStatText->SetLabel(remoteTime);
-
-		LoadIcon(XRCID("ID_FILE2_ICON"), m_pNotification->remoteFile);
-
-		wxCheckBox *pCheckBox = reinterpret_cast<wxCheckBox *>(FindWindow(XRCID("ID_UPDOWNONLY")));
-		if (pCheckBox)
-			pCheckBox->SetLabel(_("A&pply only to downloads"));
-	}
-	else {
-		wxWindow *pStatText;
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_NAME")));
-		if (pStatText)
-			pStatText->SetLabel(remoteFile);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_SIZE")));
-		if (pStatText)
-			pStatText->SetLabel(remoteSize);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE1_TIME")));
-		if( pStatText )
-			pStatText->SetLabel(remoteTime);
-
-		LoadIcon(XRCID("ID_FILE1_ICON"), m_pNotification->remoteFile);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_NAME")));
-		if (pStatText)
-			pStatText->SetLabel(localFile);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_SIZE")));
-		if (pStatText)
-			pStatText->SetLabel(localSize);
-
-		pStatText = reinterpret_cast<wxStaticText *>(FindWindow(XRCID("ID_FILE2_TIME")));
-		if( pStatText )
-			pStatText->SetLabel(localTime);
-
-		LoadIcon(XRCID("ID_FILE2_ICON"), m_pNotification->localFile);
-
-		wxCheckBox *pCheckBox = reinterpret_cast<wxCheckBox *>(FindWindow(XRCID("ID_UPDOWNONLY")));
-		if (pCheckBox)
-			pCheckBox->SetLabel(_("A&pply only to uploads"));
-	}
+	xrc_call(*this, "ID_UPDOWNONLY", &wxCheckBox::SetLabel, m_pNotification->download ? _("A&pply only to downloads") : _("A&pply only to uploads"));
 
 	return true;
 }
@@ -165,8 +88,7 @@ void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 #ifdef __WXMSW__
 	SHFILEINFO fileinfo;
 	memset(&fileinfo, 0, sizeof(fileinfo));
-	if (SHGetFileInfo(file, FILE_ATTRIBUTE_NORMAL, &fileinfo, sizeof(fileinfo), SHGFI_ICON | SHGFI_USEFILEATTRIBUTES))
-	{
+	if (SHGetFileInfo(file, FILE_ATTRIBUTE_NORMAL, &fileinfo, sizeof(fileinfo), SHGFI_ICON | SHGFI_USEFILEATTRIBUTES)) {
 		wxBitmap bmp;
 		bmp.Create(size.x, size.y);
 
@@ -201,24 +123,20 @@ void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 		return;
 
 	wxFileType *pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
-	if (pType)
-	{
+	if (pType) {
 		wxIconLocation loc;
-		if (pType->GetIcon(&loc) && loc.IsOk())
-		{
+		if (pType->GetIcon(&loc) && loc.IsOk()) {
 			wxLogNull *tmp = new wxLogNull;
 			wxIcon icon(loc);
 			delete tmp;
-			if (!icon.Ok())
-			{
+			if (!icon.Ok()) {
 				delete pType;
 				return;
 			}
 
 			int width = icon.GetWidth();
 			int height = icon.GetHeight();
-			if (width && height)
-			{
+			if (width && height) {
 				wxBitmap bmp;
 				bmp.Create(icon.GetWidth(), icon.GetHeight());
 
@@ -247,26 +165,26 @@ void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 
 void CFileExistsDlg::OnOK(wxCommandEvent& event)
 {
-	if (m_pAction1 && m_pAction1->GetValue())
+	if (xrc_call(*this, "ID_ACTION1", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::overwrite;
-	else if (m_pAction2 && m_pAction2->GetValue())
+	else if (xrc_call(*this, "ID_ACTION2", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::overwriteNewer;
-	else if (m_pAction3 && m_pAction3->GetValue())
+	else if (xrc_call(*this, "ID_ACTION3", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::resume;
-	else if (m_pAction4 && m_pAction4->GetValue())
+	else if (xrc_call(*this, "ID_ACTION4", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::rename;
-	else if (m_pAction5 && m_pAction5->GetValue())
+	else if (xrc_call(*this, "ID_ACTION5", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::skip;
-	else if (m_pAction6 && m_pAction6->GetValue())
+	else if (xrc_call(*this, "ID_ACTION6", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::overwriteSizeOrNewer;
-	else if (m_pAction7 && m_pAction7->GetValue())
+	else if (xrc_call(*this, "ID_ACTION7", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::overwriteSize;
 	else
 		m_action = CFileExistsNotification::overwrite;
 
-	m_always = XRCCTRL(*this, "ID_ALWAYS", wxCheckBox)->GetValue();
-	m_directionOnly = XRCCTRL(*this, "ID_UPDOWNONLY", wxCheckBox)->GetValue();
-	m_queueOnly = XRCCTRL(*this, "ID_QUEUEONLY", wxCheckBox)->GetValue();
+	m_always = xrc_call(*this, "ID_ALWAYS", &wxCheckBox::GetValue);
+	m_directionOnly = xrc_call(*this, "ID_UPDOWNONLY", &wxCheckBox::GetValue);
+	m_queueOnly = xrc_call(*this, "ID_QUEUEONLY", &wxCheckBox::GetValue);
 	EndModal(wxID_OK);
 }
 
@@ -320,15 +238,12 @@ wxString CFileExistsDlg::GetPathEllipsis(wxString path, wxWindow *window)
 	window->GetTextExtent(right, &rightWidth, &y);
 
 	// continue removing one character at a time around the fill until path string is small enough
-	while ((leftWidth + fillWidth + rightWidth) > maxWidth)
-	{
-		if (leftWidth > rightWidth && left.Len() > 10)
-		{
+	while ((leftWidth + fillWidth + rightWidth) > maxWidth) {
+		if (leftWidth > rightWidth && left.Len() > 10) {
 			left.RemoveLast();
 			window->GetTextExtent(left, &leftWidth, &y);
 		}
-		else
-		{
+		else {
 			if (right.Len() <= 10)
 				break;
 

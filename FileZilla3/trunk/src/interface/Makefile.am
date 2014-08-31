@@ -232,7 +232,8 @@ noinst_HEADERS = aboutdialog.h \
 		 xh_menu_ex.h \
 		 xh_text_ex.h \
 		 xh_toolb_ex.h \
-		 xmlfunctions.h
+		 xmlfunctions.h \
+		 xrc_helper.h
 
 if USE_RESOURCEFILE
 RESOURCEFILE = resources/filezilla.o
