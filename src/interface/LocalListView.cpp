@@ -988,22 +988,24 @@ void CLocalListView::OnMenuDelete(wxCommandEvent& event)
 
 void CLocalListView::OnMenuRename(wxCommandEvent& event)
 {
+	if (GetEditControl()) {
+		GetEditControl()->SetFocus();
+		return;
+	}
+
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (item < 0 || (!item && m_hasParent))
-	{
+	if (item < 0 || (!item && m_hasParent)) {
 		wxBell();
 		return;
 	}
 
-	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1)
-	{
+	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1) {
 		wxBell();
 		return;
 	}
 
 	CLocalFileData *data = GetData(item);
-	if (!data || data->comparison_flags == fill)
-	{
+	if (!data || data->comparison_flags == fill) {
 		wxBell();
 		return;
 	}
