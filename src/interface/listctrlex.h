@@ -54,9 +54,8 @@ public:
 	void CancelLabelEdit();
 	void SetLabelEditBlock(bool block);
 
-#ifndef __WXMSW__
-	wxWindow* GetMainWindow() const;
-#endif
+	wxWindow* GetMainWindow();
+	wxWindow const* GetMainWindow() const;
 
 	bool HasSelection() const;
 

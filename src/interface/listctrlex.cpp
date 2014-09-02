@@ -63,12 +63,23 @@ wxListCtrlEx::~wxListCtrlEx()
 	delete [] m_pVisibleColumnMapping;
 }
 
-#ifndef __WXMSW__
-wxWindow* wxListCtrlEx::GetMainWindow() const
+wxWindow* wxListCtrlEx::GetMainWindow()
 {
+#ifdef __WXMSW__
+	return this;
+#else
 	return reinterpret_cast<wxWindow*>(m_mainWin);
-}
 #endif
+}
+
+wxWindow const* wxListCtrlEx::GetMainWindow() const
+{
+#ifdef __WXMSW__
+	return this;
+#else
+	return reinterpret_cast<wxWindow const*>(m_mainWin);
+#endif
+}
 
 void wxListCtrlEx::OnPostScroll()
 {
@@ -963,11 +974,7 @@ void wxListCtrlEx::SetHeaderSortIconIndex(int col, int icon)
 void wxListCtrlEx::RefreshListOnly(bool eraseBackground /*=true*/)
 {
 	// See comment in wxGenericListCtrl::Refresh
-#ifdef __WXMSW__
-	Refresh(eraseBackground);
-#else
 	GetMainWindow()->Refresh(eraseBackground);
-#endif
 }
 
 void wxListCtrlEx::CancelLabelEdit()
@@ -1148,18 +1155,13 @@ bool wxListCtrlEx::HasSelection() const
 
 wxRect wxListCtrlEx::GetListRect() const
 {
-#ifdef __WXMSW__
-	wxRect windowRect = GetClientRect();
-	{
-		wxRect topRect;
-		if (GetItemRect(0, topRect))
-		{
-			windowRect.height -= topRect.y;
-			windowRect.y += topRect.y;
-		}
-	}
-#else
 	wxRect windowRect = GetMainWindow()->GetClientRect();
+#ifdef __WXMSW__
+	wxRect topRect;
+	if (GetItemRect(0, topRect)) {
+		windowRect.height -= topRect.y;
+		windowRect.y += topRect.y;
+	}
 #endif
 
 	return windowRect;
@@ -1271,11 +1273,7 @@ bool CListCtrlDropTarget::IsBottomScroll(wxPoint p) const
 void CListCtrlDropTarget::OnTimer(wxTimerEvent& /*event*/)
 {
 	wxPoint p = wxGetMousePosition();
-#ifdef __WXMSW__
-	wxWindow* ctrl = m_pListCtrl;
-#else
 	wxWindow* ctrl = m_pListCtrl->GetMainWindow();
-#endif
 	p = ctrl->ScreenToClient(p);
 
 	if (IsTopScroll(p))

@@ -428,8 +428,7 @@ void CSearchDialog::SetCtrlState()
 
 void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 {
-	if (event.GetEventObject() != m_results)
-	{
+	if (event.GetEventObject() != m_results && event.GetEventObject() != m_results->GetMainWindow()) {
 		event.Skip();
 		return;
 	}
@@ -438,8 +437,7 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 	if (!pMenu)
 		return;
 
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DELETE"), false);
 	}
