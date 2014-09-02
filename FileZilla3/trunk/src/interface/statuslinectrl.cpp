@@ -29,11 +29,7 @@ CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const 
 
 	wxASSERT(pEngineData);
 
-#ifdef __WXMSW__
-	Create(pParent, wxID_ANY, initialPosition.GetPosition(), initialPosition.GetSize());
-#else
 	Create(pParent->GetMainWindow(), wxID_ANY, initialPosition.GetPosition(), initialPosition.GetSize());
-#endif
 
 	SetOwnFont(pParent->GetFont());
 	SetForegroundColour(pParent->GetForegroundColour());
