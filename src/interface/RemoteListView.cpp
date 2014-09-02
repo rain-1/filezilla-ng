@@ -1525,28 +1525,29 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 
 void CRemoteListView::OnMenuRename(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (GetEditControl()) {
+		GetEditControl()->SetFocus();
+		return;
+	}
+
+	if (!m_pState->IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
 
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (item <= 0)
-	{
+	if (item <= 0) {
 		wxBell();
 		return;
 	}
 
-	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1)
-	{
+	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1) {
 		wxBell();
 		return;
 	}
 
 	int index = GetItemIndex(item);
-	if (index == -1 || m_fileData[index].comparison_flags == fill)
-	{
+	if (index == -1 || m_fileData[index].comparison_flags == fill) {
 		wxBell();
 		return;
 	}
