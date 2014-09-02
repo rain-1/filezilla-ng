@@ -30,7 +30,7 @@ bool wxDialogEx::ProcessEvent(wxEvent& event)
 		return true;
 	}
 	else {
-		return false;
+		return wxDialog::ProcessEvent(event);
 	}
 }
 #endif
