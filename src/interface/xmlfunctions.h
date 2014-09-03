@@ -45,11 +45,13 @@ public:
 
 	bool Save(bool printError);
 protected:
+	wxString GetRedirectedName() const;
+
 	// Opens the specified XML file if it exists or creates a new one otherwise.
 	// Returns 0 on error.
-	void GetXmlFile();
+	bool GetXmlFile(wxString const& file);
 
-	bool LoadXmlDocument();
+	bool LoadXmlDocument(wxString const& file);
 
 	// Save the XML document to the given file
 	bool SaveXmlFile();
