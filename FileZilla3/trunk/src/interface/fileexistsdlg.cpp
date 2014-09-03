@@ -38,8 +38,6 @@ void CFileExistsDlg::DisplayFile(bool left, wxString name, wxLongLong const& siz
 	name = GetPathEllipsis(name, FindWindow(left ? XRCID("ID_FILE1_NAME") : XRCID("ID_FILE2_NAME")));
 	name.Replace(_T("&"), _T("&&"));
 
-	const bool thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
-
 	wxString sizeStr = _("Size unknown");
 	if (size != -1) {
 		bool const thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
