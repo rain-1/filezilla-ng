@@ -49,6 +49,7 @@ protected:
 	void OnStop(wxCommandEvent& event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnDownload(wxCommandEvent&);
+	void OnEdit(wxCommandEvent&);
 	void OnDelete(wxCommandEvent&);
 	void OnCharHook(wxKeyEvent& event);
 
