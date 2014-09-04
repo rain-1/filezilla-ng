@@ -1616,3 +1616,110 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
 
 	XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->ChangeValue(editor);
 }
+
+bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, wxLongLong size, wxWindow * parent)
+{
+	bool dangerous = false;
+	bool program_exists = false;
+	wxString cmd = CanOpen(type, fileName, dangerous, program_exists);
+	if (cmd.empty()) {
+		CNewAssociationDialog dlg(parent);
+		if (!dlg.Run(fileName))
+			return false;
+		cmd = CanOpen(type, fileName, dangerous, program_exists);
+		if (cmd.empty()) {
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fileName), _("Opening failed"), wxICON_EXCLAMATION);
+			return false;
+		}
+	}
+	if (!program_exists) {
+		wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fileName, cmd);
+		wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
+		return false;
+	}
+	if (dangerous) {
+		int res = wxMessageBoxEx(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
+		if (res != wxYES) {
+			wxBell();
+			return false;
+		}
+	}
+
+	CEditHandler::fileState state = GetFileState(fileName, path, server);
+	switch (state)
+	{
+	case CEditHandler::download:
+	case CEditHandler::upload:
+	case CEditHandler::upload_and_remove:
+	case CEditHandler::upload_and_remove_failed:
+		wxMessageBoxEx(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
+		return false;
+	case CEditHandler::removing:
+		if (!Remove(fileName, path, server)) {
+			wxMessageBoxEx(_("A file with that name is still being edited. Please close it and try again."), _("Selected file is already opened"), wxICON_EXCLAMATION);
+			return false;
+		}
+		break;
+	case CEditHandler::edit:
+		if (type == CEditHandler::local) {
+			int res = wxMessageBoxEx(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), fileName), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
+			if (res != wxYES) {
+				wxBell();
+				return false;
+			}
+			else {
+				StartEditing(fileName);
+				return true;
+			}
+		}
+		else {
+			wxDialogEx dlg;
+			if (!dlg.Load(parent, _T("ID_EDITEXISTING"))) {
+				wxBell();
+				return false;
+			}
+			dlg.SetChildLabel(XRCID("ID_FILENAME"), fileName);
+			if (dlg.ShowModal() != wxID_OK) {
+				wxBell();
+				return false;
+			}
+
+			if (XRCCTRL(dlg, "ID_REOPEN", wxRadioButton)->GetValue()) {
+				StartEditing(fileName, path, server);
+				return false;
+			}
+			else {
+				if (!Remove(fileName, path, server)) {
+					wxMessageBoxEx(_("The selected file is still opened in some other program, please close it."), _("Selected file is still being edited"), wxICON_EXCLAMATION);
+					return false;
+				}
+			}
+		}
+		break;
+	default:
+		break;
+	}
+
+	wxString file = fileName;
+	if (!AddFile(type, file, path, server)) {
+		if( type == CEditHandler::local) {
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fileName), _("Opening failed"), wxICON_EXCLAMATION);
+		}
+		else {
+			wxFAIL;
+			wxBell();
+			return false;
+		}
+	}
+
+	if (type == CEditHandler::remote) {
+		wxString localFile;
+		CLocalPath localPath(file, &localFile);
+
+		m_pQueue->QueueFile(false, true, fileName, (localFile != fileName) ? localFile : wxString(),
+			localPath, path, server, size, type, QueuePriority::high);
+		m_pQueue->QueueFile_Finish(true);
+	}
+
+	return true;
+}

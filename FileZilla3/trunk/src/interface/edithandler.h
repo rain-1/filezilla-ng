@@ -43,6 +43,10 @@ public:
 	// pServer may be set only if state isn't unknown
 	int GetFileCount(enum fileType type, enum fileState state, const CServer* pServer = 0) const;
 
+	// Starts editing the given file, queues it if needed. For local files, fileName must include local path.
+	// Can be used to edit files already being added, user is prompted for action.
+	bool Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, wxLongLong size, wxWindow* parent);
+
 	// Adds the file that doesn't exist yet. (Has to be in unknown state)
 	// The initial state will be download
 	bool AddFile(enum fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server);
