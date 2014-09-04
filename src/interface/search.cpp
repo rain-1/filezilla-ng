@@ -327,8 +327,7 @@ void CSearchDialog::ProcessDirectoryListing()
 	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing->GetCount());
 	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing->GetCount());
 
-	for (unsigned int i = 0; i < listing->GetCount(); i++)
-	{
+	for (unsigned int i = 0; i < listing->GetCount(); ++i) {
 		const CDirentry& entry = (*listing)[i];
 
 		if (!m_search_filter.filters.empty() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.time))
@@ -741,106 +740,11 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 			return;
 	}
 
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
-	{
-		const CDirentry& entry = m_results->m_fileData[*iter];
-		const CServerPath path = m_results->m_fileData[*iter].path;
+	for (auto const& item : selected_files) {
+		const CDirentry& entry = m_results->m_fileData[item];
+		const CServerPath path = m_results->m_fileData[item].path;
 
-		bool dangerous = false;
-		bool program_exists = false;
-		wxString cmd = pEditHandler->CanOpen(CEditHandler::remote, entry.name, dangerous, program_exists);
-		if (cmd.empty())
-		{
-			CNewAssociationDialog dlg(this);
-			if (!dlg.Run(entry.name))
-				continue;
-			cmd = pEditHandler->CanOpen(CEditHandler::remote, entry.name, dangerous, program_exists);
-			if (cmd.empty())
-			{
-				wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), entry.name), _("Opening failed"), wxICON_EXCLAMATION);
-				continue;
-			}
-		}
-		if (!program_exists)
-		{
-			wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), entry.name, cmd);
-			wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
-			continue;
-		}
-		if (dangerous)
-		{
-			int res = wxMessageBoxEx(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
-			if (res != wxYES)
-			{
-				wxBell();
-				continue;
-			}
-		}
-
-		CEditHandler::fileState state = pEditHandler->GetFileState(entry.name, path, *pServer);
-		switch (state)
-		{
-		case CEditHandler::download:
-		case CEditHandler::upload:
-		case CEditHandler::upload_and_remove:
-		case CEditHandler::upload_and_remove_failed:
-			wxMessageBoxEx(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
-			continue;
-		case CEditHandler::removing:
-			if (!pEditHandler->Remove(entry.name, path, *pServer))
-			{
-				wxMessageBoxEx(_("A file with that name is still being edited. Please close it and try again."), _("Selected file is already opened"), wxICON_EXCLAMATION);
-				continue;
-			}
-			break;
-		case CEditHandler::edit:
-			{
-				wxDialogEx dlg;
-				if (!dlg.Load(this, _T("ID_EDITEXISTING")))
-				{
-					wxBell();
-					continue;
-				}
-				dlg.SetChildLabel(XRCID("ID_FILENAME"), entry.name);
-				if (dlg.ShowModal() != wxID_OK)
-				{
-					wxBell();
-					continue;
-				}
-
-				if (XRCCTRL(dlg, "ID_REOPEN", wxRadioButton)->GetValue())
-				{
-					pEditHandler->StartEditing(entry.name, path, *pServer);
-					continue;
-				}
-				else
-				{
-					if (!pEditHandler->Remove(entry.name, path, *pServer))
-					{
-						wxMessageBoxEx(_("The selected file is still opened in some other program, please close it."), _("Selected file is still being edited"), wxICON_EXCLAMATION);
-						continue;
-					}
-				}
-			}
-			break;
-		default:
-			break;
-		}
-
-		wxString file = entry.name;
-		if (!pEditHandler->AddFile(CEditHandler::remote, file, path, *pServer))
-		{
-			wxFAIL;
-			wxBell();
-			continue;
-		}
-
-		wxString localFile;
-		CLocalPath localPath(file, &localFile);
-
-		m_pQueue->QueueFile(false, true, entry.name, (localFile != entry.name) ? localFile : wxString(),
-			localPath, path, *pServer, entry.size, CEditHandler::remote, QueuePriority::high);
-		m_pQueue->QueueFile_Finish(true);
+		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
 	}
 }
 
