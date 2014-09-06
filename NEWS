@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0.5 (2014-09-06)
+
+- Fix auto-updater not being able to download updates
+
 3.9.0.4 (2014-09-06)
 
 - MSW: Fixed crash if starting file rename in an unusual way
