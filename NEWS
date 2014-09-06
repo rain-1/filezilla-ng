@@ -10,6 +10,17 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.9.0.4 (2014-09-06)
+
+- MSW: Fixed crash if starting file rename in an unusual way
+- OS X: Fixed a bug im wxWidgets so that a right-click after a left-click no longer counts as double-click
+- OS X: Fixed pasting of passwords into the "Enter password" dialog 
+- OS X: Fixed context menu site manager tree not working
+- *nix, OS X: Fixed context menu of search dialog not working
+- Fixed loading of resources if FileZilla is installed in a directory containing the # character
+- Fixed support for SOCKS4 proxies
+- Attempt reading settings from temporary backup files if loading of settings files fails
+
 3.9.0.3 (2014-08-13)
 
 - Fix potential crash on connection failures
