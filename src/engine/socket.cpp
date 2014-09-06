@@ -1239,8 +1239,13 @@ int CSocket::Close()
 
 	m_state = none;
 
-	if (m_pSocketThread)
+	if (m_pSocketThread) {
+		m_pSocketThread->m_triggered = 0;
+		for (int i = 0; i < WAIT_EVENTCOUNT; ++i) {
+			m_pSocketThread->m_triggered_errors[i] = 0;
+		}
 		m_pSocketThread->m_sync.Unlock();
+	}
 
 	if (m_pEvtHandler)
 		dispatcher_.RemovePending(m_pEvtHandler);
