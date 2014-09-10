@@ -2,6 +2,7 @@
 
 #include "aboutdialog.h"
 #include "buildinfo.h"
+#include "xrc_helper.h"
 
 #include <misc.h>
 
@@ -18,9 +19,8 @@ bool CAboutDialog::Create(wxWindow* parent)
 	if (!Load(parent, _T("ID_ABOUT")))
 		return false;
 
-	XRCCTRL(*this, "ID_URL", wxHyperlinkCtrl)->SetLabel(_T("https://filezilla-project.org/"));
-
-	XRCCTRL(*this, "ID_COPYRIGHT", wxStaticText)->SetLabel(_T("Copyright (C) 2004-2014  Tim Kosse"));
+	xrc_call(*this, "ID_URL", &wxHyperlinkCtrl::SetLabel, _T("https://filezilla-project.org/"));
+	xrc_call(*this, "ID_COPYRIGHT", &wxStaticText::SetLabel, _T("Copyright (C) 2004-2014  Tim Kosse"));
 
 	wxString version = CBuildInfo::GetVersion();
 	if (CBuildInfo::GetBuildType() == _T("nightly"))
@@ -28,39 +28,23 @@ bool CAboutDialog::Create(wxWindow* parent)
 	if (!SetChildLabel(XRCID("ID_VERSION"), version))
 		return false;
 
-	wxStaticText* pHost = XRCCTRL(*this, "ID_HOST", wxStaticText);
-	if (!pHost)
-		return false;
-
-	wxStaticText* pHostDesc = XRCCTRL(*this, "ID_HOST_DESC", wxStaticText);
-	if (!pHostDesc)
-		return false;
-
-	wxString host = CBuildInfo::GetHostname();
-	if (host.empty())
-	{
-		pHost->Hide();
-		pHostDesc->Hide();
+	wxString const host = CBuildInfo::GetHostname();
+	if (host.empty()) {
+		xrc_call(*this, "ID_HOST", &wxStaticText::Hide);
+		xrc_call(*this, "ID_HOST_DESC", &wxStaticText::Hide);
 	}
-	else
-		pHost->SetLabel(host);
-
-	wxStaticText* pBuild = XRCCTRL(*this, "ID_BUILD", wxStaticText);
-	if (!pBuild)
-		return false;
-
-	wxStaticText* pBuildDesc = XRCCTRL(*this, "ID_BUILD_DESC", wxStaticText);
-	if (!pBuildDesc)
-		return false;
-
-	wxString build = CBuildInfo::GetBuildSystem();
-	if (build.empty())
-	{
-		pBuild->Hide();
-		pBuildDesc->Hide();
+	else {
+		xrc_call(*this, "ID_HOST", &wxStaticText::SetLabel, host);
 	}
-	else
-		pBuild->SetLabel(build);
+
+	wxString const build = CBuildInfo::GetBuildSystem();
+	if (build.empty()) {
+		xrc_call(*this, "ID_BUILD", &wxStaticText::Hide);
+		xrc_call(*this, "ID_BUILD_DESC", &wxStaticText::Hide);
+	}
+	else {
+		xrc_call(*this, "ID_BUILD", &wxStaticText::SetLabel, build);
+	}
 
 	if (!SetChildLabel(XRCID("ID_BUILDDATE"), CBuildInfo::GetBuildDateString()))
 		return false;
@@ -68,97 +52,52 @@ bool CAboutDialog::Create(wxWindow* parent)
 	if (!SetChildLabel(XRCID("ID_COMPILEDWITH"), CBuildInfo::GetCompiler(), 200))
 		return false;
 
-	wxStaticText* pCompilerFlags = XRCCTRL(*this, "ID_CFLAGS", wxStaticText);
-	if (!pCompilerFlags)
-		return false;
-
-	wxStaticText* pCompilerFlagsDesc = XRCCTRL(*this, "ID_CFLAGS_DESC", wxStaticText);
-	if (!pCompilerFlagsDesc)
-		return false;
-
 	wxString compilerFlags = CBuildInfo::GetCompilerFlags();
-	if (compilerFlags.empty())
-	{
-		pCompilerFlags->Hide();
-		pCompilerFlagsDesc->Hide();
+	if (compilerFlags.empty()) {
+		xrc_call(*this, "ID_CFLAGS", &wxStaticText::Hide);
+		xrc_call(*this, "ID_CFLAGS_DESC", &wxStaticText::Hide);
 	}
-	else
-	{
+	else {
 		WrapText(this, compilerFlags, 200);
-		pCompilerFlags->SetLabel(compilerFlags);
+		xrc_call(*this, "ID_CFLAGS", &wxStaticText::SetLabel, compilerFlags);
 	}
 
-	wxStaticText* pVer_wx = XRCCTRL(*this, "ID_VER_WX", wxStaticText);
-	if (pVer_wx)
-		pVer_wx->SetLabel(GetDependencyVersion(dependency::wxwidgets));
+	xrc_call(*this, "ID_VER_WX", &wxStaticText::SetLabel, GetDependencyVersion(dependency::wxwidgets));
+	xrc_call(*this, "ID_VER_GNUTLS", &wxStaticText::SetLabel, GetDependencyVersion(dependency::gnutls));
+	xrc_call(*this, "ID_VER_SQLITE", &wxStaticText::SetLabel, GetDependencyVersion(dependency::sqlite));
 
-	wxStaticText* pVer_gnutls = XRCCTRL(*this, "ID_VER_GNUTLS", wxStaticText);
-	if (pVer_gnutls)
-		pVer_gnutls->SetLabel(GetDependencyVersion(dependency::gnutls));
-
-	wxStaticText* pVer_sqlite = XRCCTRL(*this, "ID_VER_SQLITE", wxStaticText);
-	if (pVer_sqlite)
-		pVer_sqlite->SetLabel(GetDependencyVersion(dependency::sqlite));
-
-	wxStaticText* pSystemName = XRCCTRL(*this, "ID_SYSTEM_NAME", wxStaticText);
-	if (!pSystemName)
-		return false;
-
-	wxStaticText* pSystemNameDesc = XRCCTRL(*this, "ID_SYSTEM_NAME_DESC", wxStaticText);
-	if (!pSystemNameDesc)
-		return false;
-
-	wxString os = wxGetOsDescription();
-	if (os.empty())
-	{
-		pSystemName->Hide();
-		pSystemNameDesc->Hide();
+	wxString const os = wxGetOsDescription();
+	if (os.empty()) {
+		xrc_call(*this, "ID_SYSTEM_NAME", &wxStaticText::Hide);
+		xrc_call(*this, "ID_SYSTEM_NAME_DESC", &wxStaticText::Hide);
 	}
-	else
-		pSystemName->SetLabel(os);
-
-	wxStaticText* pSystemVersion = XRCCTRL(*this, "ID_SYSTEM_VER", wxStaticText);
-	if (!pSystemVersion)
-		return false;
-
-	wxStaticText* pSystemVersionDesc = XRCCTRL(*this, "ID_SYSTEM_VER_DESC", wxStaticText);
-	if (!pSystemVersionDesc)
-		return false;
+	else {
+		xrc_call(*this, "ID_SYSTEM_NAME", &wxStaticText::SetLabel, os);
+	}
 
 	int major, minor;
-	if (GetRealOsVersion(major, minor))
-	{
+	if (GetRealOsVersion(major, minor)) {
 		wxString version = wxString::Format(_T("%d.%d"), major, minor);
 		int fakeMajor, fakeMinor;
-		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor))
-		{
+		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor)) {
 			version += _T(" ");
 			version += wxString::Format(_("(app-compat is set to %d.%d)"), fakeMajor, fakeMinor);
 		}
-		pSystemVersion->SetLabel(version);
+		xrc_call(*this, "ID_SYSTEM_VER", &wxStaticText::SetLabel, version);
 	}
-	else
-	{
-		pSystemVersionDesc->Hide();
-		pSystemVersion->Hide();
+	else {
+		xrc_call(*this, "ID_SYSTEM_VER", &wxStaticText::Hide);
+		xrc_call(*this, "ID_SYSTEM_VER_DESC", &wxStaticText::Hide);
 	}
 
-	wxStaticText* pSystemPlatform = XRCCTRL(*this, "ID_SYSTEM_PLATFORM", wxStaticText);
-	if (!pSystemPlatform)
-		return false;
-
-	wxStaticText* pSystemPlatformDesc = XRCCTRL(*this, "ID_SYSTEM_PLATFORM_DESC", wxStaticText);
-	if (!pSystemPlatformDesc)
-		return false;
-
-#if defined(__WXMSW__)
+#ifdef __WXMSW__
 	if (::wxIsPlatform64Bit())
-		pSystemPlatform->SetLabel(_("64 bit system"));
+		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("64 bit system"));
 	else
-		pSystemPlatform->SetLabel(_("32 bit system"));
+		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("32 bit system"));
 #else
-	pSystemPlatform->Hide();
-	pSystemPlatformDesc->Hide();
+	xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::Hide);
+	xrc_call(*this, "ID_SYSTEM_PLATFORM_DESC", &wxStaticText::Hide);
 #endif
 
 	GetSizer()->Fit(this);
@@ -201,10 +140,9 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 		text += _T("  Compiler flags: ") + compilerFlags + _T("\n");
 
 	text += _T("\nLinked against:\n");
-	for (int i = 0; i < dependency::count; ++i)
-	{
+	for (int i = 0; i < dependency::count; ++i) {
 		text += wxString::Format(_T("  % -15s %s\n"),
-			(GetDependencyName(dependency::type(i)) + _T(":")),
+			GetDependencyName(dependency::type(i)) + _T(":"),
 			GetDependencyVersion(dependency::type(i)));
 	}
 
@@ -214,8 +152,7 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 		text += _T("  Name:           ") + os + _T("\n");
 
 	int major, minor;
-	if (GetRealOsVersion(major, minor))
-	{
+	if (GetRealOsVersion(major, minor)) {
 		wxString version = wxString::Format(_T("%d.%d"), major, minor);
 		int fakeMajor, fakeMinor;
 		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor))
@@ -226,19 +163,15 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 		text += wxString::Format(_T("  Version:        %s\n"), version);
 	}
 
-#if defined(__WXMSW__)
+#ifdef __WXMSW__
 	if (::wxIsPlatform64Bit())
 		text += _T("  Platform:       64 bit system\n");
 	else
 		text += _T("  Platform:       32 bit system\n");
-#endif
-
-#ifdef __WXMSW__
 	text.Replace(_T("\n"), _T("\r\n"));
 #endif
 
-	if (!wxTheClipboard->Open())
-	{
+	if (!wxTheClipboard->Open()) {
 		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy data"), wxICON_EXCLAMATION);
 		return;
 	}
