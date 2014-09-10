@@ -60,6 +60,8 @@ public:
 
 	virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = FixupDragResult(def);
+
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -238,7 +240,7 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		CListCtrlDropTarget::OnDragOver(x, y, def);
+		def = CListCtrlDropTarget::OnDragOver(x, y, def);
 
 		if (def == wxDragError ||
 			def == wxDragNone ||
@@ -248,8 +250,7 @@ public:
 			return def;
 		}
 
-		if (!m_pRemoteListView->m_pDirectoryListing)
-		{
+		if (!m_pRemoteListView->m_pDirectoryListing) {
 			ClearDropHighlight();
 			return wxDragNone;
 		}
@@ -276,7 +277,7 @@ public:
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		CListCtrlDropTarget::OnEnter(x, y, def);
+		def = CListCtrlDropTarget::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 

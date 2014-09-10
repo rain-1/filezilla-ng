@@ -38,12 +38,14 @@
 #define new DEBUG_NEW
 #endif
 
-class CQueueViewDropTarget : public wxDropTarget
+class CQueueViewDropTarget : public CListCtrlDropTarget
 {
 public:
 	CQueueViewDropTarget(CQueueView* pQueueView)
-		: m_pQueueView(pQueueView), m_pFileDataObject(new wxFileDataObject()),
-		m_pRemoteDataObject(new CRemoteDataObject())
+		: CListCtrlDropTarget(pQueueView)
+		, m_pQueueView(pQueueView)
+		, m_pFileDataObject(new wxFileDataObject())
+		, m_pRemoteDataObject(new CRemoteDataObject())
 	{
 		m_pDataObject = new wxDataObjectComposite;
 		m_pDataObject->Add(m_pRemoteDataObject, true);
@@ -53,6 +55,7 @@ public:
 
 	virtual wxDragResult OnData(wxCoord, wxCoord, wxDragResult def)
 	{
+		def = FixupDragResult(def);
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -120,8 +123,9 @@ public:
 		return true;
 	}
 
-	virtual wxDragResult OnDragOver(wxCoord, wxCoord, wxDragResult def)
+	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CListCtrlDropTarget::OnDragOver(x, y, def);
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -151,6 +155,7 @@ public:
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CListCtrlDropTarget::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 

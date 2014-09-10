@@ -1185,8 +1185,8 @@ bool CListCtrlDropTarget::OnDrop(wxCoord, wxCoord)
 
 wxDragResult CListCtrlDropTarget::OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 {
-	if (!m_timer.IsRunning() && IsScroll(wxPoint(x, y)))
-	{
+	def = FixupDragResult(def);
+	if (!m_timer.IsRunning() && IsScroll(wxPoint(x, y))) {
 		m_timer.Start(100, true);
 		m_count = 0;
 	}
@@ -1203,8 +1203,8 @@ void CListCtrlDropTarget::OnLeave()
 
 wxDragResult CListCtrlDropTarget::OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 {
-	if (!m_timer.IsRunning() && IsScroll(wxPoint(x, y)))
-	{
+	def = FixupDragResult(def);
+	if (!m_timer.IsRunning() && IsScroll(wxPoint(x, y))) {
 		m_timer.Start(100, true);
 		m_count = 0;
 	}
@@ -1221,7 +1221,7 @@ bool CListCtrlDropTarget::IsScroll(wxPoint p) const
 bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
 {
 	if (!m_pListCtrl->GetItemCount()) {
-		return true;
+		return false;
 	}
 
 	wxRect itemRect;
@@ -1252,7 +1252,7 @@ bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
 bool CListCtrlDropTarget::IsBottomScroll(wxPoint p) const
 {
 	if (!m_pListCtrl->GetItemCount()) {
-		return true;
+		return false;
 	}
 
 	wxRect itemRect;
@@ -1305,6 +1305,21 @@ void CListCtrlDropTarget::OnTimer(wxTimerEvent& /*event*/)
 	if (m_count < 90)
 		++m_count;
 	m_timer.Start(100 - m_count, true);
+}
+
+wxDragResult CListCtrlDropTarget::FixupDragResult(wxDragResult res)
+{
+#ifdef __WXMAC__
+	if (res == wxDragNone && wxGetKeyState(WXK_CONTROL)) {
+		res = wxDragCopy;
+	}
+#endif
+
+	if (res == wxDragLink) {
+		res = wxGetKeyState(WXK_CONTROL) ? wxDragCopy : wxDragMove;
+	}
+
+	return res;
 }
 
 BEGIN_EVENT_TABLE(CListCtrlDropTarget, wxEvtHandler)
