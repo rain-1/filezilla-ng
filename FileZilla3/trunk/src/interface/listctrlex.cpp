@@ -1220,6 +1220,10 @@ bool CListCtrlDropTarget::IsScroll(wxPoint p) const
 
 bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
 {
+	if (!m_pListCtrl->GetItemCount()) {
+		return true;
+	}
+
 	wxRect itemRect;
 	if (!m_pListCtrl->GetItemRect(m_pListCtrl->GetTopItem(), itemRect))
 		return false;
@@ -1247,6 +1251,10 @@ bool CListCtrlDropTarget::IsTopScroll(wxPoint p) const
 
 bool CListCtrlDropTarget::IsBottomScroll(wxPoint p) const
 {
+	if (!m_pListCtrl->GetItemCount()) {
+		return true;
+	}
+
 	wxRect itemRect;
 	if (!m_pListCtrl->GetItemRect(0, itemRect))
 		return false;
@@ -1272,23 +1280,23 @@ bool CListCtrlDropTarget::IsBottomScroll(wxPoint p) const
 
 void CListCtrlDropTarget::OnTimer(wxTimerEvent& /*event*/)
 {
+	if (!m_pListCtrl->GetItemCount()) {
+		return;
+	}
+
 	wxPoint p = wxGetMousePosition();
 	wxWindow* ctrl = m_pListCtrl->GetMainWindow();
 	p = ctrl->ScreenToClient(p);
 
-	if (IsTopScroll(p))
-	{
+	if (IsTopScroll(p)) {
 		int top = m_pListCtrl->GetTopItem();
 		m_pListCtrl->EnsureVisible(top - 1);
 	}
-	else if (IsBottomScroll(p))
-	{
+	else if (IsBottomScroll(p)) {
 		int top = m_pListCtrl->GetTopItem();
 		m_pListCtrl->EnsureVisible(top + m_pListCtrl->GetCountPerPage());
 	}
-	else
-	{
-		m_timer.Stop();
+	else {
 		return;
 	}
 
