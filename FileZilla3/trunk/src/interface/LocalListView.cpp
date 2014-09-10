@@ -58,13 +58,12 @@ public:
 
 	virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CListCtrlDropTarget::FixupDragResult(def);
+
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
 			return def;
-		if( def == wxDragLink ) {
-			def = wxDragCopy;
-		}
 
 		if (m_pLocalListView->m_fileData.empty())
 			return wxDragError;
@@ -185,7 +184,7 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		CListCtrlDropTarget::OnDragOver(x, y, def);
+		def = CListCtrlDropTarget::OnDragOver(x, y, def);
 
 		if (def == wxDragError ||
 			def == wxDragNone ||
@@ -219,9 +218,6 @@ public:
 		if (!dir.IsWriteable())
 			return wxDragNone;
 
-		if (def == wxDragLink)
-			def = wxDragCopy;
-
 		return def;
 	}
 
@@ -233,7 +229,7 @@ public:
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		CListCtrlDropTarget::OnEnter(x, y, def);
+		def = CListCtrlDropTarget::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 
