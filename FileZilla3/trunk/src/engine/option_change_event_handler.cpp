@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "option_change_event_handler.h"
 
+#include <algorithm>
+
 std::vector<std::vector<COptionChangeEventHandler*> > COptionChangeEventHandler::m_handlers;
 
 COptionChangeEventHandler::COptionChangeEventHandler()
