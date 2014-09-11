@@ -26,7 +26,7 @@ private:
 	static void DoNotify(int option);
 	static void UnregisterAll();
 
-	static std::vector<std::set<COptionChangeEventHandler*> > m_handlers;
+	static std::vector<std::vector<COptionChangeEventHandler*> > m_handlers;
 };
 
 #endif //__OPTION_CHANGE_EVENT_HANDLER_H__
