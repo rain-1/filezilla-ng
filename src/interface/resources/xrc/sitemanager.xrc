@@ -111,7 +111,7 @@
                                 </object>
                                 <object class="sizeritem">
                                   <object class="wxTextCtrl" name="ID_PORT">
-                                    <size>50,-1</size>
+                                    <size>27,-1d</size>
                                     <maxlength>5</maxlength>
                                   </object>
                                   <flag>wxLEFT</flag>
@@ -227,7 +227,7 @@
                         </object>
                         <object class="sizeritem">
                           <object class="wxTextCtrl" name="ID_COMMENTS">
-                            <size>-1,75</size>
+                            <size>-1,43d</size>
                             <style>wxTE_MULTILINE</style>
                           </object>
                           <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
@@ -340,7 +340,7 @@
                                 <value>0</value>
                                 <min>-24</min>
                                 <max>24</max>
-                                <size>50,-1</size>
+                                <size>28,-1d</size>
                               </object>
                             </object>
                             <object class="sizeritem">
@@ -357,7 +357,7 @@
                                 <value>0</value>
                                 <min>-59</min>
                                 <max>59</max>
-                                <size>50,-1</size>
+                                <size>28,-1d</size>
                               </object>
                             </object>
                             <object class="sizeritem">
@@ -434,7 +434,7 @@
                                 <value>0</value>
                                 <min>1</min>
                                 <max>10</max>
-                                <size>50,-1</size>
+                                <size>26,-1d</size>
                               </object>
                             </object>
                           </object>
@@ -500,7 +500,7 @@
                             <cols>1</cols>
                             <vgap>5</vgap>
                             <object class="spacer">
-                              <size>0,10</size>
+                              <size>0,6d</size>
                             </object>
                             <object class="sizeritem">
                               <object class="wxStaticText">

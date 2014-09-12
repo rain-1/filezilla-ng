@@ -808,7 +808,7 @@
                 <object class="wxSpinCtrl" name="ID_NUMTRANSFERS">
                   <min>1</min>
                   <max>10</max>
-                  <size>45,-1</size>
+                  <size>26,-1d</size>
                   <style>wxSP_ARROW_KEYS</style>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
@@ -829,7 +829,7 @@
                 <object class="wxSpinCtrl" name="ID_NUMDOWNLOADS">
                   <min>0</min>
                   <max>10</max>
-                  <size>45,-1</size>
+                  <size>26,-1d</size>
                   <style>wxSP_ARROW_KEYS</style>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
@@ -850,7 +850,7 @@
                 <object class="wxSpinCtrl" name="ID_NUMUPLOADS">
                   <min>0</min>
                   <max>10</max>
-                  <size>45,-1</size>
+                  <size>26,-1d</size>
                   <style>wxSP_ARROW_KEYS</style>
                 </object>
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
