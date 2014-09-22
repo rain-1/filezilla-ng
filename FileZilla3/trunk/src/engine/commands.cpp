@@ -2,8 +2,8 @@
 
 CConnectCommand::CConnectCommand(const CServer &server, bool retry_connecting /*=true*/)
 	: m_Server(server)
+	, m_retry_connecting(retry_connecting)
 {
-	m_retry_connecting = retry_connecting;
 }
 
 const CServer CConnectCommand::GetServer() const
@@ -31,13 +31,29 @@ wxString CListCommand::GetSubDir() const
 	return m_subDir;
 }
 
+bool CListCommand::valid() const
+{
+	if (GetPath().empty() && !GetSubDir().empty())
+		return false;
+
+	if (GetFlags() & LIST_FLAG_LINK && GetSubDir().empty())
+		return false;
+
+	bool const refresh = (m_flags & LIST_FLAG_REFRESH) != 0;
+	bool const avoid = (m_flags & LIST_FLAG_AVOID) != 0;
+	if (refresh && avoid)
+		return false;
+
+	return true;
+}
+
 CFileTransferCommand::CFileTransferCommand(const wxString &localFile, const CServerPath& remotePath,
 										   const wxString &remoteFile, bool download,
 										   const CFileTransferCommand::t_transferSettings& transferSettings)
 	: m_localFile(localFile), m_remotePath(remotePath), m_remoteFile(remoteFile)
+	, m_download(download)
+	, m_transferSettings(transferSettings)
 {
-	m_download = download;
-	m_transferSettings = transferSettings;
 }
 
 wxString CFileTransferCommand::GetLocalFile() const
@@ -80,23 +96,41 @@ CRemoveDirCommand::CRemoveDirCommand(const CServerPath& path, const wxString& su
 {
 }
 
+bool CRemoveDirCommand::valid() const
+{
+	return !GetPath().empty() && !GetSubDir().empty();
+}
+
 CMkdirCommand::CMkdirCommand(const CServerPath& path)
 	: m_path(path)
 {
 }
 
+bool CMkdirCommand::valid() const
+{
+	return !GetPath().empty() && GetPath().HasParent();
+}
+
 CRenameCommand::CRenameCommand(const CServerPath& fromPath, const wxString& fromFile,
 							   const CServerPath& toPath, const wxString& toFile)
+	: m_fromPath(fromPath)
+	, m_toPath(toPath)
+	, m_fromFile(fromFile)
+	, m_toFile(toFile)
+{}
+
+bool CRenameCommand::valid() const
 {
-	m_fromPath = fromPath;
-	m_toPath = toPath;
-	m_fromFile = fromFile;
-	m_toFile = toFile;
+	return !GetFromPath().empty() && !GetToPath().empty() && !GetFromFile().empty() && !GetToFile().empty();
 }
 
 CChmodCommand::CChmodCommand(const CServerPath& path, const wxString& file, const wxString& permission)
+	: m_path(path)
+	, m_file(file)
+	, m_permission(permission)
+{}
+
+bool CChmodCommand::valid() const
 {
-	m_path = path;
-	m_file = file;
-	m_permission = permission;
+	return !GetPath().empty() && !GetFile().empty() && !GetPermission().empty();
 }

@@ -17,19 +17,27 @@ CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
 
 CFileZillaEngine::~CFileZillaEngine()
 {
+	// fixme: Might be too late? Two-phase shutdown perhaps?
+	RemoveHandler();
 	m_maySendNotificationEvent = false;
 }
 
 int CFileZillaEngine::Init(wxEvtHandler *pEventHandler)
 {
+	wxCriticalSectionLocker lock(mutex_);
 	m_pEventHandler = pEventHandler;
 	return FZ_REPLY_OK;
 }
 
 int CFileZillaEngine::Execute(const CCommand &command)
 {
+	wxCriticalSectionLocker lock(mutex_);
 	if (command.GetId() != Command::cancel && IsBusy())
 		return FZ_REPLY_BUSY;
+
+	if (!command.valid()) {
+		return FZ_REPLY_SYNTAXERROR;
+	}
 
 	m_bIsInCommand = true;
 
@@ -87,16 +95,6 @@ int CFileZillaEngine::Execute(const CCommand &command)
 	return res;
 }
 
-bool CFileZillaEngine::IsBusy() const
-{
-	return CFileZillaEnginePrivate::IsBusy();
-}
-
-bool CFileZillaEngine::IsConnected() const
-{
-	return CFileZillaEnginePrivate::IsConnected();
-}
-
 CNotification* CFileZillaEngine::GetNextNotification()
 {
 	wxCriticalSectionLocker lock(notification_mutex_);
@@ -111,18 +109,9 @@ CNotification* CFileZillaEngine::GetNextNotification()
 	return pNotification;
 }
 
-const CCommand *CFileZillaEngine::GetCurrentCommand() const
-{
-	return CFileZillaEnginePrivate::GetCurrentCommand();
-}
-
-Command CFileZillaEngine::GetCurrentCommandId() const
-{
-	return CFileZillaEnginePrivate::GetCurrentCommandId();
-}
-
 bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
 {
+	wxCriticalSectionLocker lock(mutex_);
 	if (!pNotification)
 		return false;
 	if (!IsBusy())
@@ -150,6 +139,7 @@ bool CFileZillaEngine::IsPendingAsyncRequestReply(const CAsyncRequestNotificatio
 {
 	if (!pNotification)
 		return false;
+
 	if (!IsBusy())
 		return false;
 
