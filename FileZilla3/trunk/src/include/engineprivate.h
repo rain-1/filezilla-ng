@@ -130,7 +130,7 @@ protected:
 	{
 		CServer server;
 		wxDateTime time;
-		bool critical;
+		bool critical{};
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount{};
