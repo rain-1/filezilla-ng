@@ -60,6 +60,8 @@ public:
 	virtual Command GetId() const = 0;
 	virtual CCommand *Clone() const = 0;
 
+	virtual bool valid() const { return true; }
+
 protected:
 	CCommand(CCommand const&) = default;
 	CCommand& operator=(CCommand const&) = default;
@@ -94,8 +96,8 @@ public:
 	const CServer GetServer() const;
 	bool RetryConnecting() const { return m_retry_connecting; }
 protected:
-	CServer m_Server;
-	bool m_retry_connecting;
+	CServer const m_Server;
+	bool const m_retry_connecting;
 };
 
 typedef CBasicCommand<Command::disconnect> CDisconnectCommand;
@@ -133,10 +135,12 @@ public:
 
 	int GetFlags() const { return m_flags; }
 
+	bool valid() const;
+
 protected:
-	CServerPath m_path;
-	wxString m_subDir;
-	int m_flags;
+	CServerPath const m_path;
+	wxString const m_subDir;
+	int const m_flags;
 };
 
 class CFileTransferCommand final : public CCommandHelper<CFileTransferCommand, Command::transfer>
@@ -156,7 +160,7 @@ public:
 	// For downloads, localFile can be left empty if supported by protocol.
 	// Check for nId_data notification.
 	// FIXME: localFile empty iff protocol is HTTP.
-	CFileTransferCommand(const wxString &localFile, const CServerPath& remotePath, const wxString &remoteFile, bool download, const t_transferSettings& m_transferSettings);
+	CFileTransferCommand(wxString const& localFile, CServerPath const& remotePath, wxString const& remoteFile, bool download, t_transferSettings const& m_transferSettings);
 
 	wxString GetLocalFile() const;
 	CServerPath GetRemotePath() const;
@@ -165,11 +169,11 @@ public:
 	const t_transferSettings& GetTransferSettings() const { return m_transferSettings; }
 
 protected:
-	wxString m_localFile;
-	CServerPath m_remotePath;
-	wxString m_remoteFile;
-	bool m_download;
-	t_transferSettings m_transferSettings;
+	wxString const m_localFile;
+	CServerPath const m_remotePath;
+	wxString const m_remoteFile;
+	bool const m_download;
+	t_transferSettings const m_transferSettings;
 };
 
 class CRawCommand final : public CCommandHelper<CRawCommand, Command::raw>
@@ -179,6 +183,8 @@ public:
 
 	wxString GetCommand() const;
 
+	bool valid() const { return !m_command.empty(); }
+
 protected:
 	wxString m_command;
 };
@@ -186,14 +192,15 @@ protected:
 class CDeleteCommand final : public CCommandHelper<CDeleteCommand, Command::del>
 {
 public:
-	CDeleteCommand(const CServerPath& path, const std::list<wxString>& files);
+	CDeleteCommand(CServerPath const& path, std::list<wxString> const& files);
 
 	CServerPath GetPath() const { return m_path; }
 	const std::list<wxString>& GetFiles() const { return m_files; }
 
+	bool valid() const { return !GetPath().empty() && !GetFiles().empty(); }
 protected:
-	const CServerPath m_path;
-	const std::list<wxString> m_files;
+	CServerPath const m_path;
+	std::list<wxString> const m_files;
 };
 
 class CRemoveDirCommand final : public CCommandHelper<CRemoveDirCommand, Command::removedir>
@@ -201,43 +208,49 @@ class CRemoveDirCommand final : public CCommandHelper<CRemoveDirCommand, Command
 public:
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
-	CRemoveDirCommand(const CServerPath& path, const wxString& subdDir);
+	CRemoveDirCommand(CServerPath const& path, wxString const& subdDir);
 
 	CServerPath GetPath() const { return m_path; }
 	wxString GetSubDir() const { return m_subDir; }
 
+	bool valid() const;
+
 protected:
-	CServerPath m_path;
-	wxString m_subDir;
+	CServerPath const m_path;
+	wxString const m_subDir;
 };
 
 class CMkdirCommand final : public CCommandHelper<CMkdirCommand, Command::mkdir>
 {
 public:
-	explicit CMkdirCommand(const CServerPath& path);
+	explicit CMkdirCommand(CServerPath const& path);
 
 	CServerPath GetPath() const { return m_path; }
 
+	bool valid() const;
+
 protected:
-	CServerPath m_path;
+	CServerPath const m_path;
 };
 
 class CRenameCommand final : public CCommandHelper<CRenameCommand, Command::rename>
 {
 public:
-	CRenameCommand(const CServerPath& fromPath, const wxString& fromFile,
-				   const CServerPath& toPath, const wxString& toFile);
+	CRenameCommand(CServerPath const& fromPath, wxString const& fromFile,
+				   CServerPath const& toPath, wxString const& toFile);
 
 	CServerPath GetFromPath() const { return m_fromPath; }
 	CServerPath GetToPath() const { return m_toPath; }
 	wxString GetFromFile() const { return m_fromFile; }
 	wxString GetToFile() const { return m_toFile; }
 
+	bool valid() const;
+
 protected:
-	CServerPath m_fromPath;
-	CServerPath m_toPath;
-	wxString m_fromFile;
-	wxString m_toFile;
+	CServerPath const m_fromPath;
+	CServerPath const m_toPath;
+	wxString const m_fromFile;
+	wxString const m_toFile;
 };
 
 class CChmodCommand final : public CCommandHelper<CChmodCommand, Command::chmod>
@@ -252,10 +265,12 @@ public:
 	wxString GetFile() const { return m_file; }
 	wxString GetPermission() const { return m_permission; }
 
+	bool valid() const;
+
 protected:
-	CServerPath m_path;
-	wxString m_file;
-	wxString m_permission;
+	CServerPath const m_path;
+	wxString const m_file;
+	wxString const m_permission;
 };
 
 #endif

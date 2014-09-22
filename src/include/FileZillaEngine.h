@@ -18,10 +18,7 @@ public:
 
 	// Execute the given command. See commands.h for a list of the available
 	// commands and reply codes.
-	int Execute(const CCommand &command);
-
-	bool IsBusy() const;
-	bool IsConnected() const;
+	int Execute(CCommand const& command);
 
 	// IsActive returns true only if data has been transferred in the
 	// given direction since the last time IsActive was called with
@@ -40,12 +37,9 @@ public:
 	// See notification.h for details.
 	CNotification* GetNextNotification();
 
-	const CCommand *GetCurrentCommand() const;
-	Command GetCurrentCommandId() const;
-
 	// Sets the reply to an async request, e.g. a file exists request.
 	// See notifiction.h for details.
-	bool IsPendingAsyncRequestReply(const CAsyncRequestNotification *pNotification);
+	bool IsPendingAsyncRequestReply(CAsyncRequestNotification const* pNotification);
 	bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
 
 	// Get a progress update about the current transfer. changed will be set
@@ -53,7 +47,7 @@ public:
 	// GetTransferStatus was called.
 	bool GetTransferStatus(CTransferStatus &status, bool &changed);
 
-	int CacheLookup(const CServerPath& path, CDirectoryListing& listing);
+	int CacheLookup(CServerPath const& path, CDirectoryListing& listing);
 };
 
 #endif
