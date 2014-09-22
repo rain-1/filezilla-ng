@@ -15,6 +15,12 @@ EVT_WIZARD_FINISHED(wxID_ANY, CNetConfWizard::OnFinish)
 EVT_TIMER(wxID_ANY, CNetConfWizard::OnTimer)
 END_EVENT_TABLE()
 
+// Mark some strings used by wx as translatable
+#if 0
+TRANSLATE_T("&Next >");
+TRANSLATE_T("< &Back");
+#endif
+
 CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions)
 : m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
 {
