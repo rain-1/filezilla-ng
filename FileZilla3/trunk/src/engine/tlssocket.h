@@ -9,7 +9,7 @@ class CControlSocket;
 class CTlsSocket : protected CSocketEventHandler, public CBackend, public CSocketEventSource
 {
 public:
-	enum TlsState
+	enum class TlsState
 	{
 		noconn,
 		handshake,
@@ -35,7 +35,7 @@ public:
 
 	void TrustCurrentCert(bool trusted);
 
-	enum TlsState GetState() const { return m_tlsState; }
+	TlsState GetState() const { return m_tlsState; }
 
 	wxString GetProtocolName();
 	wxString GetKeyExchange();
@@ -59,14 +59,14 @@ protected:
 
 	int VerifyCertificate();
 
-	enum TlsState m_tlsState;
+	TlsState m_tlsState{TlsState::noconn};
 
-	CControlSocket* m_pOwner;
+	CControlSocket* m_pOwner{};
 
-	bool m_initialized;
-	gnutls_session_t m_session;
+	bool m_initialized{};
+	gnutls_session_t m_session{};
 
-	gnutls_certificate_credentials_t m_certCredentials;
+	gnutls_certificate_credentials_t m_certCredentials{};
 
 	void LogError(int code, const wxString& function, MessageType logLegel = MessageType::Error);
 	void PrintAlert();
@@ -89,19 +89,19 @@ protected:
 
 	bool ExtractCert(gnutls_datum_t const* datum, CCertificate& out);
 
-	bool m_canReadFromSocket;
-	bool m_canWriteToSocket;
-	bool m_canCheckCloseSocket;
+	bool m_canReadFromSocket{true};
+	bool m_canWriteToSocket{true};
+	bool m_canCheckCloseSocket{false};
 
-	bool m_canTriggerRead;
-	bool m_canTriggerWrite;
+	bool m_canTriggerRead{false};
+	bool m_canTriggerWrite{true};
 
-	bool m_socketClosed;
+	bool m_socketClosed{};
 
-	CSocketBackend* m_pSocketBackend;
-	CSocket* m_pSocket;
+	CSocketBackend* m_pSocketBackend{};
+	CSocket* m_pSocket{};
 
-	bool m_shutdown_requested;
+	bool m_shutdown_requested{};
 
 	// Due to the strange gnutls_record_send semantics, call it again
 	// with 0 data and 0 length after GNUTLS_E_AGAIN and store the number
@@ -110,17 +110,17 @@ protected:
 	// This avoids the rule to call it again with the -same- data after
 	// GNUTLS_E_AGAIN.
 	void CheckResumeFailedReadWrite();
-	bool m_lastReadFailed;
-	bool m_lastWriteFailed;
-	unsigned int m_writeSkip;
+	bool m_lastReadFailed{true};
+	bool m_lastWriteFailed{false};
+	unsigned int m_writeSkip{};
 
 	// Peek data
-	char* m_peekData;
-	unsigned int m_peekDataLen;
+	char* m_peekData{};
+	unsigned int m_peekDataLen{};
 
 	gnutls_datum_t m_implicitTrustedCert;
 
-	bool m_socket_eof;
+	bool m_socket_eof{};
 };
 
 #endif //__TLSSOCKET_H__

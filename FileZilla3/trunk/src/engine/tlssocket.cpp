@@ -27,39 +27,13 @@ CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CCont
 	, CBackend(pEvtHandler)
 	, CSocketEventSource(pOwner->GetEngine()->socket_event_dispatcher_)
 	, m_pOwner(pOwner)
+	, m_pSocket(pSocket)
 {
 	wxASSERT(pSocket);
-	m_pSocket = pSocket;
 	m_pSocketBackend = new CSocketBackend(this, m_pSocket, m_pOwner->GetEngine()->GetRateLimiter());
-
-	m_session = 0;
-	m_initialized = false;
-	m_certCredentials = 0;
-
-	m_canReadFromSocket = true;
-	m_canWriteToSocket = true;
-	m_canCheckCloseSocket = false;
-
-	m_canTriggerRead = false;
-	m_canTriggerWrite = true;
-
-	m_tlsState = noconn;
-
-	m_lastReadFailed = true;
-	m_lastWriteFailed = false;
-	m_writeSkip = 0;
-
-	m_peekData = 0;
-	m_peekDataLen = 0;
-
-	m_socketClosed = false;
 
 	m_implicitTrustedCert.data = 0;
 	m_implicitTrustedCert.size = 0;
-
-	m_shutdown_requested = false;
-
-	m_socket_eof = false;
 }
 
 CTlsSocket::~CTlsSocket()
@@ -73,24 +47,21 @@ bool CTlsSocket::Init()
 	// This function initializes GnuTLS
 	m_initialized = true;
 	int res = gnutls_global_init();
-	if (res)
-	{
+	if (res) {
 		LogError(res, _T("gnutls_global_init"));
 		Uninit();
 		return false;
 	}
 
 #if TLSDEBUG
-	if (!pLoggingControlSocket)
-	{
+	if (!pLoggingControlSocket) {
 		pLoggingControlSocket = m_pOwner;
 		gnutls_global_set_log_function(log_func);
 		gnutls_global_set_log_level(99);
 	}
 #endif
 	res = gnutls_certificate_allocate_credentials(&m_certCredentials);
-	if (res < 0)
-	{
+	if (res < 0) {
 		LogError(res, _T("gnutls_certificate_allocate_credentials"));
 		Uninit();
 		return false;
@@ -109,8 +80,7 @@ bool CTlsSocket::Init()
 bool CTlsSocket::InitSession()
 {
 	int res = gnutls_init(&m_session, GNUTLS_CLIENT);
-	if (res)
-	{
+	if (res) {
 		LogError(res, _T("gnutls_init"));
 		Uninit();
 		return false;
@@ -123,8 +93,7 @@ bool CTlsSocket::InitSession()
 	gnutls_db_set_cache_expiration(m_session, 100000000);
 
 	res = gnutls_priority_set_direct(m_session, ciphers, 0);
-	if (res)
-	{
+	if (res) {
 		LogError(res, _T("gnutls_priority_set_direct"));
 		Uninit();
 		return false;
@@ -146,19 +115,17 @@ void CTlsSocket::Uninit()
 {
 	UninitSession();
 
-	if (m_certCredentials)
-	{
+	if (m_certCredentials) {
 		gnutls_certificate_free_credentials(m_certCredentials);
 		m_certCredentials = 0;
 	}
 
-	if (m_initialized)
-	{
+	if (m_initialized) {
 		m_initialized = false;
 		gnutls_global_deinit();
 	}
 
-	m_tlsState = noconn;
+	m_tlsState = TlsState::noconn;
 
 	delete [] m_peekData;
 	m_peekData = 0;
@@ -176,8 +143,7 @@ void CTlsSocket::Uninit()
 
 void CTlsSocket::UninitSession()
 {
-	if (m_session)
-	{
+	if (m_session) {
 		gnutls_deinit(m_session);
 		m_session = 0;
 	}
@@ -382,11 +348,11 @@ void CTlsSocket::OnRead()
 		return;
 	}
 
-	if (m_tlsState == handshake)
+	if (m_tlsState == TlsState::handshake)
 		ContinueHandshake();
-	if (m_tlsState == closing)
+	if (m_tlsState == TlsState::closing)
 		ContinueShutdown();
-	else if (m_tlsState == conn)
+	else if (m_tlsState == TlsState::conn)
 	{
 		CheckResumeFailedReadWrite();
 		TriggerEvents();
@@ -406,11 +372,11 @@ void CTlsSocket::OnSend()
 	if (!direction && !m_lastWriteFailed)
 		return;
 
-	if (m_tlsState == handshake)
+	if (m_tlsState == TlsState::handshake)
 		ContinueHandshake();
-	else if (m_tlsState == closing)
+	else if (m_tlsState == TlsState::closing)
 		ContinueShutdown();
-	else if (m_tlsState == conn)
+	else if (m_tlsState == TlsState::conn)
 	{
 		CheckResumeFailedReadWrite();
 		TriggerEvents();
@@ -451,7 +417,7 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::Handshake()"));
 	wxASSERT(m_session);
 
-	m_tlsState = handshake;
+	m_tlsState = TlsState::handshake;
 
 	wxString hostname;
 
@@ -496,7 +462,7 @@ int CTlsSocket::ContinueHandshake()
 {
 	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::ContinueHandshake()"));
 	wxASSERT(m_session);
-	wxASSERT(m_tlsState == handshake);
+	wxASSERT(m_tlsState == TlsState::handshake);
 
 	int res = gnutls_handshake(m_session);
 	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED)
@@ -546,11 +512,11 @@ int CTlsSocket::ContinueHandshake()
 
 int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 {
-	if (m_tlsState == handshake || m_tlsState == verifycert) {
+	if (m_tlsState == TlsState::handshake || m_tlsState == TlsState::verifycert) {
 		error = EAGAIN;
 		return -1;
 	}
-	else if (m_tlsState != conn) {
+	else if (m_tlsState != TlsState::conn) {
 		error = ENOTCONN;
 		return -1;
 	}
@@ -619,11 +585,11 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 
 int CTlsSocket::Write(const void *buffer, unsigned int len, int& error)
 {
-	if (m_tlsState == handshake || m_tlsState == verifycert) {
+	if (m_tlsState == TlsState::handshake || m_tlsState == TlsState::verifycert) {
 		error = EAGAIN;
 		return -1;
 	}
-	else if (m_tlsState != conn) {
+	else if (m_tlsState != TlsState::conn) {
 		error = ENOTCONN;
 		return -1;
 	}
@@ -677,7 +643,7 @@ int CTlsSocket::Write(const void *buffer, unsigned int len, int& error)
 
 void CTlsSocket::TriggerEvents()
 {
-	if (m_tlsState != conn)
+	if (m_tlsState != TlsState::conn)
 		return;
 
 	if (m_canTriggerRead) {
@@ -794,13 +760,13 @@ int CTlsSocket::Shutdown()
 {
 	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::Shutdown()"));
 
-	if (m_tlsState == closed)
+	if (m_tlsState == TlsState::closed)
 		return 0;
 
-	if (m_tlsState == closing)
+	if (m_tlsState == TlsState::closing)
 		return EAGAIN;
 
-	if (m_tlsState == handshake || m_tlsState == verifycert)
+	if (m_tlsState == TlsState::handshake || m_tlsState == TlsState::verifycert)
 	{
 		// Shutdown during handshake is not a good idea.
 		m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("Shutdown during handshake, postponing"));
@@ -808,17 +774,17 @@ int CTlsSocket::Shutdown()
 		return EAGAIN;
 	}
 
-	if (m_tlsState != conn)
+	if (m_tlsState != TlsState::conn)
 		return ECONNABORTED;
 
-	m_tlsState = closing;
+	m_tlsState = TlsState::closing;
 
 	int res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
 	while ((res == GNUTLS_E_INTERRUPTED || res == GNUTLS_E_AGAIN) && m_canWriteToSocket)
 		res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
 	if (!res)
 	{
-		m_tlsState = closed;
+		m_tlsState = TlsState::closed;
 		return 0;
 	}
 
@@ -838,7 +804,7 @@ void CTlsSocket::ContinueShutdown()
 		res = gnutls_bye(m_session, GNUTLS_SHUT_WR);
 	if (!res)
 	{
-		m_tlsState = closed;
+		m_tlsState = TlsState::closed;
 
 		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
 		CSocketEventSource::dispatcher_.SendEvent(evt);
@@ -852,7 +818,7 @@ void CTlsSocket::ContinueShutdown()
 
 void CTlsSocket::TrustCurrentCert(bool trusted)
 {
-	if (m_tlsState != verifycert)
+	if (m_tlsState != TlsState::verifycert)
 	{
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("TrustCurrentCert called at wrong time."));
 		return;
@@ -860,13 +826,13 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 
 	if (trusted)
 	{
-		m_tlsState = conn;
+		m_tlsState = TlsState::conn;
 
 		if (m_lastWriteFailed)
 			m_lastWriteFailed = false;
 		CheckResumeFailedReadWrite();
 
-		if (m_tlsState == conn)
+		if (m_tlsState == TlsState::conn)
 		{
 			CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::connection);
 			CSocketEventSource::dispatcher_.SendEvent(evt);
@@ -1024,12 +990,12 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 
 int CTlsSocket::VerifyCertificate()
 {
-	if (m_tlsState != handshake) {
+	if (m_tlsState != TlsState::handshake) {
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("VerifyCertificate called at wrong time"));
 		return FZ_REPLY_ERROR;
 	}
 
-	m_tlsState = verifycert;
+	m_tlsState = TlsState::verifycert;
 
 	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509) {
 		m_pOwner->LogMessage(MessageType::Error, _("Unsupported certificate type"));
@@ -1075,7 +1041,7 @@ int CTlsSocket::VerifyCertificate()
 
 		TrustCurrentCert(true);
 
-		if (m_tlsState != conn)
+		if (m_tlsState != TlsState::conn)
 			return FZ_REPLY_ERROR;
 		return FZ_REPLY_OK;
 	}
