@@ -109,7 +109,6 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 {
 	{
 		wxCriticalSectionLocker lock(notification_mutex_);
-		notification_mutex_.Enter();
 		m_NotificationList.push_back(pNotification);
 
 		if (!m_maySendNotificationEvent || !m_pEventHandler) {
