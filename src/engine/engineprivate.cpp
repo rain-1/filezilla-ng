@@ -484,6 +484,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 	t_failedLogins failure;
 	failure.server = server;
 	failure.time = wxDateTime::UNow();
+	failure.critical = critical;
 	m_failedLogins.push_back(failure);
 }
 
