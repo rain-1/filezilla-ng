@@ -28,7 +28,7 @@ CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CCont
 	, CSocketEventSource(pOwner->GetEngine()->socket_event_dispatcher_)
 	, m_pOwner(pOwner)
 {
-	wxASSERT(m_pSocket);
+	wxASSERT(pSocket);
 	m_pSocket = pSocket;
 	m_pSocketBackend = new CSocketBackend(this, m_pSocket, m_pOwner->GetEngine()->GetRateLimiter());
 
