@@ -28,6 +28,7 @@ enum capabilityNames
 	tvfs_support, // Trivial virtual file store (RFC 3659)
 	list_hidden_support, // LIST -a command
 	rest_stream, // supports REST+STOR in addition to APPE
+	epsv_command,
 
 	// FTPS and HTTPS
 	tls_resume, // Does the server support resuming of TLS sessions?
