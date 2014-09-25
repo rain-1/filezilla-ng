@@ -4,21 +4,19 @@
 #include "backend.h"
 #include "socket.h"
 
-class CProxySocket : protected CSocketEventHandler, public CBackend, public CSocketEventSource
+class CProxySocket final : protected CSocketEventHandler, public CBackend, public CSocketEventSource
 {
 public:
 	CProxySocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner);
 	virtual ~CProxySocket();
 
-	enum ProxyState
-	{
+	enum ProxyState {
 		noconn,
 		handshake,
 		conn
 	};
 
-	enum ProxyType
-	{
+	enum ProxyType {
 		unknown,
 		HTTP,
 		SOCKS5,
@@ -27,13 +25,13 @@ public:
 		proxytype_count
 	};
 
-	int Handshake(enum ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass);
+	int Handshake(ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass);
 
-	enum ProxyState GetState() const { return m_proxyState; }
+	ProxyState GetState() const { return m_proxyState; }
 
 	// Past the initial handshake, proxies are transparent.
 	// Class users should detach socket and use a normal socket backend instead.
-	virtual void OnRateAvailable(enum CRateLimiter::rate_direction) {};
+	virtual void OnRateAvailable(CRateLimiter::rate_direction) {};
 	virtual int Read(void *buffer, unsigned int size, int& error);
 	virtual int Peek(void *buffer, unsigned int size, int& error);
 	virtual int Write(const void *buffer, unsigned int size, int& error);
@@ -41,9 +39,11 @@ public:
 	void Detach();
 	bool Detached() const { return m_pSocket == 0; }
 
-	enum ProxyType GetProxyType() const { return m_proxyType; }
+	ProxyType GetProxyType() const { return m_proxyType; }
 	wxString GetUser() const { return m_user; }
 	wxString GetPass() const { return m_pass; }
+
+	CSocket::address_family GetRemoteProtocol() const { return m_remote_protocol; }
 
 protected:
 	CSocket* m_pSocket;
@@ -72,6 +72,8 @@ protected:
 
 	bool m_can_write{};
 	bool m_can_read{};
+
+	CSocket::address_family m_remote_protocol{CSocket::unspec};
 };
 
 #endif //__PROXY_H__
