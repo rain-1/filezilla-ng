@@ -3803,7 +3803,13 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 	   return false;
 
 	pData->port = port;
-	pData->host = m_pSocket->GetPeerIP();
+
+	if (m_pProxyBackend) {
+		pData->host = m_pCurrentServer->GetHost();
+	}
+	else {
+		pData->host = m_pSocket->GetPeerIP();
+	}
 	return true;
 }
 
@@ -4058,17 +4064,14 @@ int CFtpControlSocket::TransferParseResponse()
 				pData->bPasv = true;
 			break;
 		}
-		if (pData->bPasv)
-		{
+		if (pData->bPasv) {
 			bool parsed;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
+			if (GetPassiveCommand(*pData) == _T("EPSV"))
 				parsed = ParseEpsvResponse(pData);
 			else
 				parsed = ParsePasvResponse(pData);
-			if (!parsed)
-			{
-				if (!m_pEngine->GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK))
-				{
+			if (!parsed) {
+				if (!m_pEngine->GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK)) {
 					error = true;
 					break;
 				}
