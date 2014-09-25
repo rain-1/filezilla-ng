@@ -523,19 +523,19 @@ void CProxySocket::OnReceive()
 				m_recvBufferLen = 3;
 				break;
 			case socks5_request_addrtype:
+				// We need to parse the returned address type to determine the length of the address that follows.
+				// Unfortunately the information in the type and address is useless, many proxies just return
+				// syntactically valid bogus values
 				switch (m_pRecvBuffer[1])
 				{
 				case 1:
 					m_recvBufferLen = 5;
-					m_remote_protocol = CSocket::ipv4;
 					break;
 				case 3:
 					m_recvBufferLen = m_pRecvBuffer[2] + 2;
-					m_remote_protocol = CSocket::unspec;
 					break;
 				case 4:
 					m_recvBufferLen = 17;
-					m_remote_protocol = CSocket::ipv6;
 					break;
 				default:
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: Unknown address type in CONNECT reply"));

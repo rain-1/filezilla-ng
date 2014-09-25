@@ -43,8 +43,6 @@ public:
 	wxString GetUser() const { return m_user; }
 	wxString GetPass() const { return m_pass; }
 
-	CSocket::address_family GetRemoteProtocol() const { return m_remote_protocol; }
-
 protected:
 	CSocket* m_pSocket;
 	CControlSocket* m_pOwner;
@@ -72,8 +70,6 @@ protected:
 
 	bool m_can_write{};
 	bool m_can_read{};
-
-	CSocket::address_family m_remote_protocol{CSocket::unspec};
 };
 
 #endif //__PROXY_H__
