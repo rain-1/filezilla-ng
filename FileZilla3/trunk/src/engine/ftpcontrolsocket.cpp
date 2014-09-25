@@ -4189,16 +4189,10 @@ int CFtpControlSocket::TransferSend()
 		measureRTT = true;
 		break;
 	case rawtransfer_port_pasv:
-		if (pData->bPasv)
-		{
-			pData->bTriedPasv = true;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
-				cmd = _T("EPSV");
-			else
-				cmd = _T("PASV");
+		if (pData->bPasv) {
+			cmd = GetPassiveCommand(*pData);
 		}
-		else
-		{
+		else {
 			wxString address;
 			int res = GetExternalIPAddress(address);
 			if (res == FZ_REPLY_WOULDBLOCK)
@@ -4225,12 +4219,8 @@ int CFtpControlSocket::TransferSend()
 			}
 			LogMessage(MessageType::Debug_Warning, _("Failed to create listening socket for active mode transfer"));
 			pData->bTriedActive = true;
-			pData->bTriedPasv = true;
 			pData->bPasv = true;
-			if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
-				cmd = _T("EPSV");
-			else
-				cmd = _T("PASV");
+			cmd = GetPassiveCommand(*pData);
 		}
 		break;
 	case rawtransfer_rest:
@@ -4565,4 +4555,26 @@ void CFtpControlSocket::operator()(CEventBase const& ev)
 	}
 
 	CRealControlSocket::operator()(ev);
+}
+
+wxString CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
+{
+	wxString ret = _T("PASV");
+
+	wxASSERT(data.bPasv);
+	data.bTriedPasv = true;
+
+	if (m_pProxyBackend) { 
+		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
+		// if the server supports it.
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, epsv_command) == yes) {
+			ret = _T("EPSV");
+		}
+	}
+	else if (m_pSocket->GetAddressFamily() == CSocket::ipv6) {
+		// EPSV is mandatory for IPv6, don't check capabilities
+		ret = _T("EPSV");
+	}
+
+	return ret;
 }
