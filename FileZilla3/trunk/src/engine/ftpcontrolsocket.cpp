@@ -322,6 +322,8 @@ void CFtpControlSocket::ParseLine(wxString line)
 				CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
 			else if (up == _T(" REST STREAM"))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
+			else if (up == _T(" EPSV"))
+				CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
 		}
 		else if (pData->opState == LOGON_WELCOME)
 		{
