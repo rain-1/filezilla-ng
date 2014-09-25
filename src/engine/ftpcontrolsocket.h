@@ -101,6 +101,7 @@ protected:
 	int LogonParseResponse();
 	int LogonSend();
 
+	wxString GetPassiveCommand(CRawTransferOpData& data);
 	bool ParsePasvResponse(CRawTransferOpData* pData);
 	bool ParseEpsvResponse(CRawTransferOpData* pData);
 
