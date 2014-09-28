@@ -292,8 +292,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 #endif
 			challenge += line;
 		}
-		else if (pData->opState == LOGON_FEAT)
-		{
+		else if (pData->opState == LOGON_FEAT) {
 			wxString up = line.Upper();
 			if (up == _T(" UTF8"))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
@@ -301,14 +300,13 @@ void CFtpControlSocket::ParseLine(wxString line)
 				CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
 			else if (up == _T(" MLSD") || up.Left(6) == _T(" MLSD "))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes);
-			else if (up == _T(" MLST") || up.Left(6) == _T(" MLST "))
-			{
+			else if (up == _T(" MLST") || up.Left(6) == _T(" MLST ")) {
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, line.Mid(6));
 
 				// MSLT/MLSD specs require use of UTC
 				CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 			}
-			else if (up == _T(" MODE Z") || up.Left(6) == _T(" MODE Z "))
+			else if (up == _T(" MODE Z") || up.Left(8) == _T(" MODE Z "))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
 			else if (up == _T(" MFMT") || up.Left(6) == _T(" MFMT "))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
@@ -325,12 +323,9 @@ void CFtpControlSocket::ParseLine(wxString line)
 			else if (up == _T(" EPSV"))
 				CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
 		}
-		else if (pData->opState == LOGON_WELCOME)
-		{
-			if (!pData->gotFirstWelcomeLine)
-			{
-				if (line.Upper().Left(3) == _T("SSH"))
-				{
+		else if (pData->opState == LOGON_WELCOME) {
+			if (!pData->gotFirstWelcomeLine) {
+				if (line.Upper().Left(3) == _T("SSH")) {
 					LogMessage(MessageType::Error, _("Cannot establish FTP connection to an SFTP server. Please select proper protocol."));
 					DoClose(FZ_REPLY_CRITICALERROR);
 					return;
@@ -340,12 +335,9 @@ void CFtpControlSocket::ParseLine(wxString line)
 		}
 	}
 	//Check for multi-line responses
-	if (line.Len() > 3)
-	{
-		if (!m_MultilineResponseCode.empty())
-		{
-			if (line.Left(4) == m_MultilineResponseCode)
-			{
+	if (line.Len() > 3) {
+		if (!m_MultilineResponseCode.empty()) {
+			if (line.Left(4) == m_MultilineResponseCode) {
 				// end of multi-line found
 				m_MultilineResponseCode.clear();
 				m_Response = line;
@@ -357,14 +349,12 @@ void CFtpControlSocket::ParseLine(wxString line)
 				m_MultilineResponseLines.push_back(line);
 		}
 		// start of new multi-line
-		else if (line.GetChar(3) == '-')
-		{
+		else if (line.GetChar(3) == '-') {
 			// DDD<SP> is the end of a multi-line response
 			m_MultilineResponseCode = line.Left(3) + _T(" ");
 			m_MultilineResponseLines.push_back(line);
 		}
-		else
-		{
+		else {
 			m_Response = line;
 			ParseResponse();
 			m_Response = _T("");
