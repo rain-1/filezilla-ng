@@ -28,6 +28,8 @@ public:
 	bool EngineLocked() const { return m_exclusiveEngineLock; }
 
 protected:
+	void ProcessReply(int nReplyCode, Command commandId);
+
 	void GrantExclusiveEngineRequest();
 
 	CFileZillaEngine *m_pEngine;
@@ -39,9 +41,9 @@ protected:
 	static int m_requestIdCounter;
 
 	// Used to make this class reentrance-safe
-	bool m_inside_commandqueue;
+	int m_inside_commandqueue{};
 
-	std::list<CCommand *> m_CommandList;
+	std::list<std::unique_ptr<CCommand>> m_CommandList;
 
 	bool m_quit{};
 };

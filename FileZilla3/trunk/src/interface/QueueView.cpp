@@ -999,17 +999,13 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 	// Process reply from the engine
 	int replyCode = pNotification->nReplyCode;
 
-	if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-	{
+	if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 		enum ResetReason reason;
-		if (pEngineData->pItem)
-		{
+		if (pEngineData->pItem) {
 			if (pEngineData->pItem->pending_remove())
 				reason = remove;
-			else
-			{
-				if (pEngineData->pItem->GetType() == QueueItemType::File && ((CFileItem*)pEngineData->pItem)->made_progress())
-				{
+			else {
+				if (pEngineData->pItem->GetType() == QueueItemType::File && ((CFileItem*)pEngineData->pItem)->made_progress()) {
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
 					pItem->set_made_progress(false);
 					pItem->m_onetime_action = CFileExistsNotification::resume;
@@ -1028,8 +1024,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 	switch (pEngineData->state)
 	{
 	case t_EngineData::disconnect:
-		if (pEngineData->active)
-		{
+		if (pEngineData->active) {
 			pEngineData->state = t_EngineData::connect;
 			pEngineData->pStatusLineCtrl->SetTransferStatus(0);
 		}
@@ -1037,13 +1032,11 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 			pEngineData->state = t_EngineData::none;
 		break;
 	case t_EngineData::connect:
-		if (!pEngineData->pItem)
-		{
+		if (!pEngineData->pItem) {
 			ResetEngine(*pEngineData, reset);
 			return;
 		}
-		else if (replyCode == FZ_REPLY_OK)
-		{
+		else if (replyCode == FZ_REPLY_OK) {
 			if (pEngineData->pItem->GetType() == QueueItemType::File)
 				pEngineData->state = t_EngineData::transfer;
 			else
@@ -1051,8 +1044,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 			if (pEngineData->active && pEngineData->pStatusLineCtrl)
 				pEngineData->pStatusLineCtrl->SetTransferStatus(0);
 		}
-		else
-		{
+		else {
 			if (replyCode & FZ_REPLY_PASSWORDFAILED)
 				CLoginManager::Get().CachedPasswordFailed(pEngineData->lastServer);
 
@@ -1079,13 +1071,11 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 		}
 		break;
 	case t_EngineData::transfer:
-		if (!pEngineData->pItem)
-		{
+		if (!pEngineData->pItem) {
 			ResetEngine(*pEngineData, reset);
 			return;
 		}
-		if (replyCode == FZ_REPLY_OK)
-		{
+		if (replyCode == FZ_REPLY_OK) {
 			ResetEngine(*pEngineData, success);
 			return;
 		}
@@ -1108,14 +1098,12 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 				pEngineData->pItem->m_statusMessage = _("Timeout");
 			else if (replyCode & FZ_REPLY_DISCONNECTED)
 				pEngineData->pItem->m_statusMessage = _("Disconnected from server");
-			else if ((replyCode & FZ_REPLY_WRITEFAILED) == FZ_REPLY_WRITEFAILED)
-			{
+			else if ((replyCode & FZ_REPLY_WRITEFAILED) == FZ_REPLY_WRITEFAILED) {
 				pEngineData->pItem->m_statusMessage = _("Could not write to local file");
 				ResetEngine(*pEngineData, failure);
 				return;
 			}
-			else if ((replyCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR)
-			{
+			else if ((replyCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR) {
 				pEngineData->pItem->m_statusMessage = _("Could not start transfer");
 				ResetEngine(*pEngineData, failure);
 				return;
@@ -1125,14 +1113,12 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification*
 			if (!IncreaseErrorCount(*pEngineData))
 				return;
 
-			if (replyCode & FZ_REPLY_DISCONNECTED && pEngineData->transient)
-			{
+			if (replyCode & FZ_REPLY_DISCONNECTED && pEngineData->transient) {
 				ResetEngine(*pEngineData, retry);
 				return;
 			}
 		}
-		if (replyCode & FZ_REPLY_DISCONNECTED)
-		{
+		if (replyCode & FZ_REPLY_DISCONNECTED) {
 			if (!SwitchEngine(&pEngineData))
 				pEngineData->state = t_EngineData::connect;
 		}
@@ -1725,7 +1711,7 @@ void CQueueView::CheckQueueState()
 
 bool CQueueView::IncreaseErrorCount(t_EngineData& engineData)
 {
-	engineData.pItem->m_errorCount++;
+	++engineData.pItem->m_errorCount;
 	if (engineData.pItem->m_errorCount <= COptions::Get()->GetOptionVal(OPTION_RECONNECTCOUNT))
 		return true;
 
@@ -3294,11 +3280,7 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 		return false;
 
 	t_EngineData* pEngineData = *ppEngineData;
-
-	auto iter = m_engineData.begin();
-	for (; iter != m_engineData.end(); ++iter)
-	{
-		t_EngineData* pNewEngineData = *iter;
+	for (auto & pNewEngineData : m_engineData) {
 		if (pNewEngineData == pEngineData)
 			continue;
 
@@ -3322,15 +3304,16 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 		delete pNewEngineData->m_idleDisconnectTimer;
 		pNewEngineData->m_idleDisconnectTimer = 0;
 
+		// Swap status line
 		CStatusLineCtrl* pOldStatusLineCtrl = pNewEngineData->pStatusLineCtrl;
 		pNewEngineData->pStatusLineCtrl = pEngineData->pStatusLineCtrl;
 		pNewEngineData->pStatusLineCtrl->SetEngineData(pNewEngineData);
-		if (pOldStatusLineCtrl)
-		{
+		if (pOldStatusLineCtrl) {
 			pEngineData->pStatusLineCtrl = pOldStatusLineCtrl;
 			pEngineData->pStatusLineCtrl->SetEngineData(pEngineData);
 		}
 
+		// Set new state
 		if (pNewEngineData->pItem->GetType() == QueueItemType::File)
 			pNewEngineData->state = t_EngineData::transfer;
 		else
