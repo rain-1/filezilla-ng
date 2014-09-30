@@ -82,7 +82,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 	if (!m_data.IsOk() || rect.GetWidth() != m_data.GetWidth() || rect.GetHeight() != m_data.GetHeight()) {
 		m_mdc.reset();
 		m_data = wxBitmap(rect.GetWidth(), rect.GetHeight());
-		m_mdc = std::make_unique<wxMemoryDC>(m_data);
+		m_mdc = make_unique<wxMemoryDC>(m_data);
 		// Use same layout direction as the DC which bitmap is drawn on.
 		// This avoids problem with mirrored characters on RTL locales.
 		m_mdc->SetLayoutDirection(dc.GetLayoutDirection());

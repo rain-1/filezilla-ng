@@ -48,4 +48,12 @@ wxString ListTlsCiphers(const wxString& priority);
 // wxGetOsVersion
 bool GetRealOsVersion( int& major, int& minor );
 
+// C++11 sadly lacks make_unique, provide our own.
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+	return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
+
 #endif //__MISC_H__
