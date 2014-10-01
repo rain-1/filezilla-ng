@@ -102,9 +102,9 @@ protected:
 	CServerPath m_lastListDir;
 	CMonotonicTime m_lastListTime;
 
-	CControlSocket *m_pControlSocket{};
+	std::unique_ptr<CControlSocket> m_pControlSocket;
 
-	CCommand *m_pCurrentCommand{};
+	std::unique_ptr<CCommand> m_pCurrentCommand;
 
 	// Protect access to these three with notification_mutex_
 	std::list<CNotification*> m_NotificationList;

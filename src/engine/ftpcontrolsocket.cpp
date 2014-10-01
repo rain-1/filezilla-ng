@@ -1766,23 +1766,19 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 
 	m_repliesToSkip = m_pendingReplies;
 
-	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer)
-	{
+	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
 		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
-		if (pData->tranferCommandSent)
-		{
+		if (pData->tranferCommandSent) {
 			if (pData->transferEndReason == TransferEndReason::transfer_failure_critical)
 				nErrorCode |= FZ_REPLY_CRITICALERROR | FZ_REPLY_WRITEFAILED;
 			if (pData->transferEndReason != TransferEndReason::transfer_command_failure_immediate || GetReplyCode() != 5)
 				pData->transferInitiated = true;
-			else
-			{
+			else {
 				if (nErrorCode == FZ_REPLY_ERROR)
 					nErrorCode |= FZ_REPLY_CRITICALERROR;
 			}
 		}
-		if (nErrorCode != FZ_REPLY_OK && pData->download && !pData->fileDidExist)
-		{
+		if (nErrorCode != FZ_REPLY_OK && pData->download && !pData->fileDidExist) {
 			delete pData->pIOThread;
 			pData->pIOThread = 0;
 			wxLongLong size;
@@ -1797,8 +1793,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 			}
 		}
 	}
-	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED))
-	{
+	if (m_pCurOpData && m_pCurOpData->opId == Command::del && !(nErrorCode & FZ_REPLY_DISCONNECTED)) {
 		CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 		if (pData->m_needSendListing)
 			m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
@@ -2520,19 +2515,14 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 		ResetOperation(prevResult);
 		return prevResult;
 	}
-	else if (pData->opState == filetransfer_waitresumetest)
-	{
-		if (prevResult != FZ_REPLY_OK)
-		{
-			if (pData->transferEndReason == TransferEndReason::failed_resumetest)
-			{
-				if (pData->localFileSize > ((wxFileOffset)1 << 32))
-				{
+	else if (pData->opState == filetransfer_waitresumetest) {
+		if (prevResult != FZ_REPLY_OK) {
+			if (pData->transferEndReason == TransferEndReason::failed_resumetest) {
+				if (pData->localFileSize > ((wxFileOffset)1 << 32)) {
 					CServerCapabilities::SetCapability(*m_pCurrentServer, resume4GBbug, yes);
 					LogMessage(MessageType::Error, _("Server does not support resume of files > 4GB."));
 				}
-				else
-				{
+				else {
 					CServerCapabilities::SetCapability(*m_pCurrentServer, resume2GBbug, yes);
 					LogMessage(MessageType::Error, _("Server does not support resume of files > 2GB."));
 				}
