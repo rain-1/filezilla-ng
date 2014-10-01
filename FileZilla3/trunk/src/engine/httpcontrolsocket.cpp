@@ -581,7 +581,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 		}
 
 		m_pRecvBuffer[i] = 0;
-		const wxString& line = wxString(m_pRecvBuffer, wxConvLocal);
+		wxString const line = wxString(m_pRecvBuffer, wxConvLocal);
 		if (!line.empty())
 			LogMessageRaw(MessageType::Response, line);
 
@@ -909,8 +909,7 @@ void CHttpControlSocket::OnClose(int error)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::OnClose(%d)"), error);
 
-	if (error)
-	{
+	if (error) {
 		LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
@@ -920,30 +919,24 @@ void CHttpControlSocket::OnClose(int error)
 	if (!m_pCurOpData)
 		return;
 
-	if (m_pCurOpData->pNextOpData)
-	{
+	if (m_pCurOpData->pNextOpData) {
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
 
-	if (!m_pHttpOpData->m_gotHeader)
-	{
+	if (!m_pHttpOpData->m_gotHeader) {
 		ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 		return;
 	}
 
-	if (m_pHttpOpData->m_transferEncoding == CHttpOpData::chunked)
-	{
-		if (!m_pHttpOpData->m_chunkData.getTrailer)
-		{
+	if (m_pHttpOpData->m_transferEncoding == CHttpOpData::chunked) {
+		if (!m_pHttpOpData->m_chunkData.getTrailer) {
 			ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 			return;
 		}
 	}
-	else
-	{
-		if (m_pHttpOpData->m_totalSize != -1 && m_pHttpOpData->m_receivedData != m_pHttpOpData->m_totalSize)
-		{
+	else {
+		if (m_pHttpOpData->m_totalSize != -1 && m_pHttpOpData->m_receivedData != m_pHttpOpData->m_totalSize) {
 			ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 			return;
 		}

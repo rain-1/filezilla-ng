@@ -33,8 +33,8 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 
 CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 {
-	delete m_pControlSocket;
-	delete m_pCurrentCommand;
+	m_pControlSocket.reset();
+	m_pCurrentCommand.reset();
 
 	// Delete notification list
 	for (auto iter = m_NotificationList.begin(); iter != m_NotificationList.end(); ++iter)
@@ -92,7 +92,7 @@ bool CFileZillaEnginePrivate::IsConnected() const
 const CCommand *CFileZillaEnginePrivate::GetCurrentCommand() const
 {
 	wxCriticalSectionLocker lock(mutex_);
-	return m_pCurrentCommand;
+	return m_pCurrentCommand.get();
 }
 
 Command CFileZillaEnginePrivate::GetCurrentCommandId() const
@@ -100,7 +100,6 @@ Command CFileZillaEnginePrivate::GetCurrentCommandId() const
 	wxCriticalSectionLocker lock(mutex_);
 	if (!m_pCurrentCommand)
 		return Command::none;
-
 	else
 		return GetCurrentCommand()->GetId();
 }
@@ -141,7 +140,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) &&
 				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))
 			{
-				const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
+				const CConnectCommand *pConnectCommand = reinterpret_cast<CConnectCommand*>(m_pCurrentCommand.get());
 
 				RegisterFailedLoginAttempt(pConnectCommand->GetServer(), (nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR);
 
@@ -170,8 +169,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 		else
 			m_nControlSocketError |= nErrorCode;
 
-		delete m_pCurrentCommand;
-		m_pCurrentCommand = 0;
+		m_pCurrentCommand.reset();
 	}
 	else if (nErrorCode & FZ_REPLY_DISCONNECTED) {
 		if (!m_bIsInCommand)
@@ -210,20 +208,15 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 
 	m_retryCount = 0;
 
-	if (m_pControlSocket)
-	{
-		// Need to delete before setting m_pCurrentCommand.
-		// The destructor can call CFileZillaEnginePrivate::ResetOperation
-		// which would delete m_pCurrentCommand
-		delete m_pControlSocket;
-		m_pControlSocket = 0;
-		m_nControlSocketError = 0;
-	}
+	// Need to delete before setting m_pCurrentCommand.
+	// The destructor can call CFileZillaEnginePrivate::ResetOperation
+	// which would delete m_pCurrentCommand
+	m_pControlSocket.reset();
+	m_nControlSocketError = 0;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 
-	if (command.GetServer().GetPort() != CServer::GetDefaultPort(command.GetServer().GetProtocol()))
-	{
+	if (command.GetServer().GetPort() != CServer::GetDefaultPort(command.GetServer().GetProtocol())) {
 		ServerProtocol protocol = CServer::GetProtocolFromPort(command.GetServer().GetPort(), true);
 		if (protocol != UNKNOWN && protocol != command.GetServer().GetProtocol())
 			m_pLogging->LogMessage(MessageType::Status, _("Selected port usually in use by a different protocol."));
@@ -237,12 +230,10 @@ int CFileZillaEnginePrivate::Disconnect(const CDisconnectCommand &command)
 	if (!IsConnected())
 		return FZ_REPLY_OK;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	int res = m_pControlSocket->Disconnect();
-	if (res == FZ_REPLY_OK)
-	{
-		delete m_pControlSocket;
-		m_pControlSocket = 0;
+	if (res == FZ_REPLY_OK) {
+		m_pControlSocket.reset();
 	}
 
 	return res;
@@ -256,11 +247,9 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 	if (m_retryTimer != -1) {
 		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
 
-		delete m_pControlSocket;
-		m_pControlSocket = 0;
+		m_pControlSocket.reset();
 
-		delete m_pCurrentCommand;
-		m_pCurrentCommand = 0;
+		m_pCurrentCommand.reset();
 
 		StopTimer(m_retryTimer);
 		m_retryTimer = -1;
@@ -321,7 +310,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
 }
 
@@ -333,7 +322,7 @@ int CFileZillaEnginePrivate::FileTransfer(const CFileTransferCommand &command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
 }
 
@@ -345,7 +334,7 @@ int CFileZillaEnginePrivate::RawCommand(const CRawCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->RawCommand(command.GetCommand());
 }
 
@@ -357,7 +346,7 @@ int CFileZillaEnginePrivate::Delete(const CDeleteCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Delete(command.GetPath(), command.GetFiles());
 }
 
@@ -369,7 +358,7 @@ int CFileZillaEnginePrivate::RemoveDir(const CRemoveDirCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->RemoveDir(command.GetPath(), command.GetSubDir());
 }
 
@@ -381,7 +370,7 @@ int CFileZillaEnginePrivate::Mkdir(const CMkdirCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Mkdir(command.GetPath());
 }
 
@@ -393,7 +382,7 @@ int CFileZillaEnginePrivate::Rename(const CRenameCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Rename(command);
 }
 
@@ -405,7 +394,7 @@ int CFileZillaEnginePrivate::Chmod(const CChmodCommand& command)
 	if (IsBusy())
 		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand = command.Clone();
+	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Chmod(command);
 }
 
@@ -526,8 +515,7 @@ void CFileZillaEnginePrivate::OnTimer(int)
 	}
 	wxASSERT(!IsConnected());
 
-	delete m_pControlSocket;
-	m_pControlSocket = 0;
+	m_pControlSocket.reset();
 
 	ContinueConnect();
 }
@@ -536,7 +524,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 {
 	wxCriticalSectionLocker lock(mutex_);
 
-	const CConnectCommand *pConnectCommand = (CConnectCommand *)m_pCurrentCommand;
+	const CConnectCommand *pConnectCommand = reinterpret_cast<CConnectCommand *>(m_pCurrentCommand.get());
 	const CServer& server = pConnectCommand->GetServer();
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay) {
@@ -553,14 +541,14 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	case FTPS:
 	case FTPES:
 	case INSECURE_FTP:
-		m_pControlSocket = new CFtpControlSocket(this);
+		m_pControlSocket = make_unique<CFtpControlSocket>(this);
 		break;
 	case SFTP:
-		m_pControlSocket = new CSftpControlSocket(this);
+		m_pControlSocket = make_unique<CSftpControlSocket>(this);
 		break;
 	case HTTP:
 	case HTTPS:
-		m_pControlSocket = new CHttpControlSocket(this);
+		m_pControlSocket = make_unique<CHttpControlSocket>(this);
 		break;
 	default:
 		m_pLogging->LogMessage(MessageType::Debug_Warning, _T("Not a valid protocol: %d"), server.GetProtocol());
