@@ -266,7 +266,7 @@ void CStatusView::InitDefAttr()
 		wxCoord width = 0;
 		wxCoord height = 0;
 #ifndef __WXMAC__
-		dc.GetTextExtent(_T("88:88:88"), &width, &height);
+		dc.GetTextExtent(_T("88:88:88 "), &width, &height);
 #else
 		dc.GetTextExtent(_T("88:88:88 "), &width, &height);
 #endif
@@ -275,21 +275,21 @@ void CStatusView::InitDefAttr()
 
 	wxCoord width = 0;
 	wxCoord height = 0;
-	dc.GetTextExtent(_("Error:"), &width, &height);
+	dc.GetTextExtent(_("Error:") + _T(" "), &width, &height);
 	int maxPrefixWidth = width;
-	dc.GetTextExtent(_("Command:"), &width, &height);
+	dc.GetTextExtent(_("Command:") + _T(" "), &width, &height);
 	if (width > maxPrefixWidth)
 		maxPrefixWidth = width;
-	dc.GetTextExtent(_("Response:"), &width, &height);
+	dc.GetTextExtent(_("Response:") + _T(" "), &width, &height);
 	if (width > maxPrefixWidth)
 		maxPrefixWidth = width;
-	dc.GetTextExtent(_("Trace:"), &width, &height);
+	dc.GetTextExtent(_("Trace:") + _T(" "), &width, &height);
 	if (width > maxPrefixWidth)
 		maxPrefixWidth = width;
-	dc.GetTextExtent(_("Listing:"), &width, &height);
+	dc.GetTextExtent(_("Listing:") + _T(" "), &width, &height);
 	if (width > maxPrefixWidth)
 		maxPrefixWidth = width;
-	dc.GetTextExtent(_("Status:"), &width, &height);
+	dc.GetTextExtent(_("Status:") + _T(" "), &width, &height);
 	if (width > maxPrefixWidth)
 		maxPrefixWidth = width;
 
