@@ -32,16 +32,17 @@ int CFileZillaEngine::Init(wxEvtHandler *pEventHandler)
 int CFileZillaEngine::Execute(const CCommand &command)
 {
 	wxCriticalSectionLocker lock(mutex_);
-	if (command.GetId() != Command::cancel && IsBusy())
-		return FZ_REPLY_BUSY;
 
-	if (!command.valid()) {
-		return FZ_REPLY_SYNTAXERROR;
+	int res = CheckPreconditions(command);
+	if (res != FZ_REPLY_OK) {
+		return res;
 	}
 
 	m_bIsInCommand = true;
 
-	int res = FZ_REPLY_INTERNALERROR;
+	m_pCurrentCommand.reset(command.Clone());
+
+	res = FZ_REPLY_INTERNALERROR;
 	switch (command.GetId())
 	{
 	case Command::connect:
@@ -118,8 +119,7 @@ bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotifica
 		return false;
 
 	notification_mutex_.Enter();
-	if (pNotification->requestNumber != m_asyncRequestCounter)
-	{
+	if (pNotification->requestNumber != m_asyncRequestCounter) {
 		notification_mutex_.Leave();
 		return false;
 	}
