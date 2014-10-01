@@ -37,16 +37,17 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 	m_pCurrentCommand.reset();
 
 	// Delete notification list
-	for (auto iter = m_NotificationList.begin(); iter != m_NotificationList.end(); ++iter)
-		delete *iter;
+	for (auto & notification : m_NotificationList) {
+		delete notification;
+	}
 
 	// Remove ourself from the engine list
-	for (std::list<CFileZillaEnginePrivate*>::iterator iter = m_engineList.begin(); iter != m_engineList.end(); ++iter)
-		if (*iter == this)
-		{
+	for (auto iter = m_engineList.begin(); iter != m_engineList.end(); ++iter) {
+		if (*iter == this) {
 			m_engineList.erase(iter);
 			break;
 		}
+	}
 
 	delete m_pLogging;
 
@@ -172,8 +173,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 		m_pCurrentCommand.reset();
 	}
 	else if (nErrorCode & FZ_REPLY_DISCONNECTED) {
-		if (!m_bIsInCommand)
-		{
+		if (!m_bIsInCommand) {
 			COperationNotification *notification = new COperationNotification();
 			notification->nReplyCode = nErrorCode;
 			notification->commandId = Command::none;
@@ -203,9 +203,6 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 	if (IsConnected())
 		return FZ_REPLY_ALREADYCONNECTED;
 
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
 	m_retryCount = 0;
 
 	// Need to delete before setting m_pCurrentCommand.
@@ -213,8 +210,6 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 	// which would delete m_pCurrentCommand
 	m_pControlSocket.reset();
 	m_nControlSocketError = 0;
-
-	m_pCurrentCommand.reset(command.Clone());
 
 	if (command.GetServer().GetPort() != CServer::GetDefaultPort(command.GetServer().GetProtocol())) {
 		ServerProtocol protocol = CServer::GetProtocolFromPort(command.GetServer().GetPort(), true);
@@ -230,7 +225,6 @@ int CFileZillaEnginePrivate::Disconnect(const CDisconnectCommand &command)
 	if (!IsConnected())
 		return FZ_REPLY_OK;
 
-	m_pCurrentCommand.reset(command.Clone());
 	int res = m_pControlSocket->Disconnect();
 	if (res == FZ_REPLY_OK) {
 		m_pControlSocket.reset();
@@ -270,9 +264,6 @@ int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
 
 int CFileZillaEnginePrivate::List(const CListCommand &command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
 	int flags = command.GetFlags();
 	bool const refresh = (command.GetFlags() & LIST_FLAG_REFRESH) != 0;
 	bool const avoid = (command.GetFlags() & LIST_FLAG_AVOID) != 0;
@@ -307,94 +298,42 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 			}
 		}
 	}
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
 
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
 }
 
 int CFileZillaEnginePrivate::FileTransfer(const CFileTransferCommand &command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
 }
 
 int CFileZillaEnginePrivate::RawCommand(const CRawCommand& command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->RawCommand(command.GetCommand());
 }
 
 int CFileZillaEnginePrivate::Delete(const CDeleteCommand& command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Delete(command.GetPath(), command.GetFiles());
 }
 
 int CFileZillaEnginePrivate::RemoveDir(const CRemoveDirCommand& command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->RemoveDir(command.GetPath(), command.GetSubDir());
 }
 
 int CFileZillaEnginePrivate::Mkdir(const CMkdirCommand& command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Mkdir(command.GetPath());
 }
 
 int CFileZillaEnginePrivate::Rename(const CRenameCommand& command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Rename(command);
 }
 
 int CFileZillaEnginePrivate::Chmod(const CChmodCommand& command)
 {
-	if (!IsConnected())
-		return FZ_REPLY_NOTCONNECTED;
-
-	if (IsBusy())
-		return FZ_REPLY_BUSY;
-
-	m_pCurrentCommand.reset(command.Clone());
 	return m_pControlSocket->Chmod(command);
 }
 
@@ -595,4 +534,18 @@ void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
 		return;
 
 	Dispatch<CFileZillaEngineEvent>(ev, this, &CFileZillaEnginePrivate::OnEngineEvent);
+}
+
+int CFileZillaEnginePrivate::CheckPreconditions(CCommand const& command)
+{
+	if (!command.valid()) {
+		return FZ_REPLY_SYNTAXERROR;
+	}
+	else if (command.GetId() != Command::cancel && IsBusy()) {
+		return FZ_REPLY_BUSY;
+	}
+	else if (command.GetId() != Command::connect && command.GetId() != Command::disconnect && command.GetId() != Command::cancel && !IsConnected()) {
+		return FZ_REPLY_NOTCONNECTED;
+	}
+	return FZ_REPLY_OK;
 }
