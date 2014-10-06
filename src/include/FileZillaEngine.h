@@ -20,6 +20,9 @@ public:
 	// commands and reply codes.
 	int Execute(CCommand const& command);
 
+	// Cancels the current command
+	int Cancel();
+
 	// IsActive returns true only if data has been transferred in the
 	// given direction since the last time IsActive was called with
 	// the same argument.
