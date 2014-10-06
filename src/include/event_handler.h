@@ -16,8 +16,8 @@ public:
 
 	void SendEvent(CEventBase const& evt);
 
-	int AddTimer(int ms_interval, bool one_shot);
-	void StopTimer(int timer_id);
+	timer_id AddTimer(int ms_interval, bool one_shot);
+	void StopTimer(timer_id id);
 
 	CEventLoop & event_loop_;
 };

@@ -212,7 +212,7 @@ protected:
 	bool m_useUTF8;
 
 	// Timeout data
-	int m_timer{ -1 };
+	timer_id m_timer{};
 	wxStopWatch m_stopWatch;
 
 	// -------------------------
@@ -273,7 +273,7 @@ protected:
 
 	virtual void operator()(CEventBase const& ev);
 
-	void OnTimer(int timer_id);
+	void OnTimer(timer_id id);
 	void OnObtainLock();
 };
 

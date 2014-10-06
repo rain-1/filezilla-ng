@@ -138,7 +138,7 @@ protected:
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount{};
-	int m_retryTimer{-1};
+	timer_id m_retryTimer{};
 
 	CRateLimiter& m_rateLimiter;
 	CDirectoryCache& directory_cache_;

@@ -4,8 +4,18 @@
 #include "apply.h"
 #include "event.h"
 #include "event_handler.h"
+#include "timeex.h"
 
-class CEventLoop : private wxEvtHandler
+struct timer_data final
+{
+	CEventHandler* handler_{};
+	timer_id id_{};
+	CDateTime deadline_;
+	int ms_interval_{};
+	bool one_shot_{true};
+};
+
+class CEventLoop final : private wxThread
 {
 public:
 	CEventLoop();
@@ -18,19 +28,28 @@ public:
 
 	void RemoveHandler(CEventHandler* handler);
 
-	int AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
-	void StopTimer(CEventHandler* handler, int timer_id);
+	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
+	void StopTimer(CEventHandler* handler, timer_id id);
 
 protected:
+	bool ProcessTimers();
+	int GetNextWaitInterval();
+
+	virtual wxThread::ExitCode Entry();
+
 	typedef std::list<std::pair<CEventHandler*, CEventBase*>> Events;
-	typedef std::multimap<CEventHandler*, wxTimer*> Timers;
+	typedef std::vector<timer_data> Timers;
 
 	Events pending_events_;
-	Timers active_timers_;
+	Timers timers_;
 
-	wxCriticalSection sync_;
+	wxMutex sync_;
 
-	virtual bool ProcessEvent(wxEvent& event);
+	wxCondition cond_;
+	bool signalled_{};
+	bool quit_{};
+
+	virtual bool ProcessEvent();
 };
 
 template<typename T, typename H, typename F>
