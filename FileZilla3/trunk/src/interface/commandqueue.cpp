@@ -105,7 +105,7 @@ bool CCommandQueue::Cancel()
 		return true;
 	}
 
-	int res = m_pEngine->Execute(CCancelCommand());
+	int res = m_pEngine->Cancel();
 	if (res == FZ_REPLY_WOULDBLOCK)
 		return false;
 	else {

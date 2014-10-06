@@ -481,7 +481,7 @@ void CUpdater::ProcessData(CNotification* notification)
 
 	if( raw_version_information_.size() + len > 131072 ) {
 		log_ += _("Received version information is too large");
-		engine_->Execute(CCancelCommand());
+		engine_->Cancel();
 		SetState(UpdaterState::failed);
 	}
 	else {
@@ -489,7 +489,7 @@ void CUpdater::ProcessData(CNotification* notification)
 			if (data[i] < 10 || (unsigned char)data[i] > 127) {
 				log_ += _("Received invalid character in version information");
 				SetState(UpdaterState::failed);
-				engine_->Execute(CCancelCommand());
+				engine_->Cancel();
 				break;
 			}
 		}

@@ -60,12 +60,7 @@ void CFileZillaEnginePrivate::OnEngineEvent(EngineNotificationType type)
 	switch (type)
 	{
 	case engineCancel:
-		if (!IsBusy())
-			break;
-		if (m_pControlSocket)
-			m_pControlSocket->Cancel();
-		else if (m_pCurrentCommand)
-			ResetOperation(FZ_REPLY_CANCELED);
+		DoCancel();
 		break;
 	case engineTransferEnd:
 		if (m_pControlSocket)
@@ -231,35 +226,6 @@ int CFileZillaEnginePrivate::Disconnect(const CDisconnectCommand &command)
 	}
 
 	return res;
-}
-
-int CFileZillaEnginePrivate::Cancel(const CCancelCommand &)
-{
-	if (!IsBusy())
-		return FZ_REPLY_OK;
-
-	if (m_retryTimer != -1) {
-		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
-
-		m_pControlSocket.reset();
-
-		m_pCurrentCommand.reset();
-
-		StopTimer(m_retryTimer);
-		m_retryTimer = -1;
-
-		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
-		COperationNotification *notification = new COperationNotification();
-		notification->nReplyCode = FZ_REPLY_DISCONNECTED|FZ_REPLY_CANCELED;
-		notification->commandId = Command::connect;
-		AddNotification(notification);
-
-		return FZ_REPLY_WOULDBLOCK;
-	}
-
-	SendEvent(CFileZillaEngineEvent(engineCancel));
-
-	return FZ_REPLY_WOULDBLOCK;
 }
 
 int CFileZillaEnginePrivate::List(const CListCommand &command)
@@ -534,6 +500,7 @@ void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
 		return;
 
 	Dispatch<CFileZillaEngineEvent>(ev, this, &CFileZillaEnginePrivate::OnEngineEvent);
+	Dispatch<CCommandEvent>(ev, this, &CFileZillaEnginePrivate::OnCommandEvent);
 }
 
 int CFileZillaEnginePrivate::CheckPreconditions(CCommand const& command)
@@ -548,4 +515,90 @@ int CFileZillaEnginePrivate::CheckPreconditions(CCommand const& command)
 		return FZ_REPLY_NOTCONNECTED;
 	}
 	return FZ_REPLY_OK;
+}
+
+void CFileZillaEnginePrivate::OnCommandEvent()
+{
+	wxCriticalSectionLocker lock(mutex_);
+
+	if (m_pCurrentCommand) {
+		CCommand& command = *m_pCurrentCommand;
+		Command id = command.GetId();
+
+		int res = CheckPreconditions(*m_pCurrentCommand);
+		switch (m_pCurrentCommand->GetId())
+		{
+		case Command::connect:
+			res = Connect(reinterpret_cast<const CConnectCommand &>(command));
+			break;
+		case Command::disconnect:
+			res = Disconnect(reinterpret_cast<const CDisconnectCommand &>(command));
+			break;
+		case Command::list:
+			res = List(reinterpret_cast<const CListCommand &>(command));
+			break;
+		case Command::transfer:
+			res = FileTransfer(reinterpret_cast<const CFileTransferCommand &>(command));
+			break;
+		case Command::raw:
+			res = RawCommand(reinterpret_cast<const CRawCommand&>(command));
+			break;
+		case Command::del:
+			res = Delete(reinterpret_cast<const CDeleteCommand&>(command));
+			break;
+		case Command::removedir:
+			res = RemoveDir(reinterpret_cast<const CRemoveDirCommand&>(command));
+			break;
+		case Command::mkdir:
+			res = Mkdir(reinterpret_cast<const CMkdirCommand&>(command));
+			break;
+		case Command::rename:
+			res = Rename(reinterpret_cast<const CRenameCommand&>(command));
+			break;
+		case Command::chmod:
+			res = Chmod(reinterpret_cast<const CChmodCommand&>(command));
+			break;
+		default:
+			res = FZ_REPLY_SYNTAXERROR;
+		}
+
+		if (id != Command::disconnect)
+			res |= m_nControlSocketError;
+		else if (res & FZ_REPLY_DISCONNECTED)
+			res = FZ_REPLY_OK;
+		m_nControlSocketError = 0;
+
+		if (res != FZ_REPLY_WOULDBLOCK)
+			ResetOperation(res);
+	}
+}
+
+void CFileZillaEnginePrivate::DoCancel()
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!IsBusy())
+		return;
+
+	if (m_retryTimer != -1) {
+		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
+
+		m_pControlSocket.reset();
+
+		m_pCurrentCommand.reset();
+
+		StopTimer(m_retryTimer);
+		m_retryTimer = -1;
+
+		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
+		COperationNotification *notification = new COperationNotification();
+		notification->nReplyCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_CANCELED;
+		notification->commandId = Command::connect;
+		AddNotification(notification);
+	}
+	else {
+		if (m_pControlSocket)
+			m_pControlSocket->Cancel();
+		else
+			ResetOperation(FZ_REPLY_CANCELED);
+	}
 }

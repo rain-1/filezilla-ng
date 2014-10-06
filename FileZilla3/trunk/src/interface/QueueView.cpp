@@ -1589,7 +1589,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 				wxASSERT(pEngineData->pEngine);
 				if (!pEngineData->pEngine)
 					continue;
-				pEngineData->pEngine->Execute(CCancelCommand());
+				pEngineData->pEngine->Cancel();
 			}
 		}
 
@@ -2439,7 +2439,7 @@ bool CQueueView::StopItem(CFileItem* item)
 	}
 	else
 	{
-		item->m_pEngineData->pEngine->Execute(CCancelCommand());
+		item->m_pEngineData->pEngine->Cancel();
 		return false;
 	}
 }

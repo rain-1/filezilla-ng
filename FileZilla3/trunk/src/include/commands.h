@@ -101,7 +101,6 @@ protected:
 };
 
 typedef CBasicCommand<Command::disconnect> CDisconnectCommand;
-typedef CBasicCommand<Command::cancel> CCancelCommand;
 
 #define LIST_FLAG_REFRESH 1
 #define LIST_FLAG_AVOID 2
