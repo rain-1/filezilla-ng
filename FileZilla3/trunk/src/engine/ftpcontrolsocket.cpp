@@ -1817,9 +1817,9 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	m_lastCommandCompletionTime = wxDateTime::Now();
 	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 		StartKeepaliveTimer();
-	else if (m_idleTimer != -1) {
+	else {
 		StopTimer(m_idleTimer);
-		m_idleTimer = -1;
+		m_idleTimer = 0;
 	}
 
 	return CControlSocket::ResetOperation(nErrorCode);
@@ -4437,10 +4437,10 @@ bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const 
 	return true;
 }
 
-void CFtpControlSocket::OnTimer(int timer_id)
+void CFtpControlSocket::OnTimer(timer_id id)
 {
-	if (timer_id != m_idleTimer) {
-		CControlSocket::OnTimer(timer_id);
+	if (id != m_idleTimer) {
+		CControlSocket::OnTimer(id);
 		return;
 	}
 
@@ -4486,9 +4486,7 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	if (span.GetSeconds() >= (60 * 30))
 		return;
 
-	if (m_idleTimer != -1) {
-		StopTimer(m_idleTimer);
-	}
+	StopTimer(m_idleTimer);
 	m_idleTimer = AddTimer(30000, true);
 }
 

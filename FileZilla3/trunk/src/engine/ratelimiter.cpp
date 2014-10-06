@@ -50,7 +50,7 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 			pObject->m_bytesAvailable[i] = -1;
 
 
-		if (m_timer != -1)
+		if (!m_timer)
 			m_timer = AddTimer(tickDelay, false);
 	}
 }
@@ -84,7 +84,7 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 	}
 }
 
-void CRateLimiter::OnTimer(int)
+void CRateLimiter::OnTimer(timer_id)
 {
 	for (int i = 0; i < 2; ++i) {
 		m_tokenDebt[i] = 0;
@@ -160,8 +160,10 @@ void CRateLimiter::OnTimer(int)
 	}
 	WakeupWaitingObjects();
 
-	if (m_objectList.empty() && m_timer != -1)
+	if (m_objectList.empty()) {
 		StopTimer(m_timer);
+		m_timer = 0;
+	}
 }
 
 void CRateLimiter::WakeupWaitingObjects()

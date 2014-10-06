@@ -28,7 +28,7 @@ protected:
 	std::list<CRateLimiterObject*> m_objectList;
 	std::list<CRateLimiterObject*> m_wakeupList[2];
 
-	int m_timer{-1};
+	timer_id m_timer{};
 
 	wxLongLong m_tokenDebt[2];
 
@@ -37,7 +37,7 @@ protected:
 	void WakeupWaitingObjects();
 
 	void operator()(CEventBase const& ev);
-	void OnTimer(int timer_id);
+	void OnTimer(timer_id id);
 };
 
 class CRateLimiterObject

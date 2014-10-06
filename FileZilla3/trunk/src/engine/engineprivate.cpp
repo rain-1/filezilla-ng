@@ -147,8 +147,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 						if (!delay)
 							delay = 1;
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
-						if (m_retryTimer != -1)
-							StopTimer(m_retryTimer);
+						StopTimer(m_retryTimer);
 						m_retryTimer = AddTimer(delay, true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
@@ -409,10 +408,10 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 
 void CFileZillaEnginePrivate::OnTimer(int)
 {
-	if (m_retryTimer == -1) {
+	if (!m_retryTimer) {
 		return;
 	}
-	m_retryTimer = -1;
+	m_retryTimer = 0;
 
 	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect) {
 		wxFAIL_MSG(_T("CFileZillaEnginePrivate::OnTimer called without pending Command::connect"));
@@ -434,8 +433,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay) {
 		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
-		if (m_retryTimer != -1)
-			StopTimer(m_retryTimer);
+		StopTimer(m_retryTimer);
 		m_retryTimer = AddTimer(delay, true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
@@ -461,7 +459,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	}
 
 	int res = m_pControlSocket->Connect(server);
-	if (m_retryTimer != -1)
+	if (m_retryTimer)
 		return FZ_REPLY_WOULDBLOCK;
 
 	return res;
@@ -579,7 +577,7 @@ void CFileZillaEnginePrivate::DoCancel()
 	if (!IsBusy())
 		return;
 
-	if (m_retryTimer != -1) {
+	if (m_retryTimer) {
 		wxASSERT(m_pCurrentCommand && m_pCurrentCommand->GetId() == Command::connect);
 
 		m_pControlSocket.reset();
@@ -587,7 +585,7 @@ void CFileZillaEnginePrivate::DoCancel()
 		m_pCurrentCommand.reset();
 
 		StopTimer(m_retryTimer);
-		m_retryTimer = -1;
+		m_retryTimer = 0;
 
 		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
 		COperationNotification *notification = new COperationNotification();

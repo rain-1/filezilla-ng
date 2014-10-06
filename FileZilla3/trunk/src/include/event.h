@@ -55,7 +55,8 @@ public:
 	std::tuple<Values...> v_;
 };
 
+typedef unsigned long long timer_id;
 struct timer_event_type{};
-typedef CEvent<timer_event_type, int> CTimerEvent;
+typedef CEvent<timer_event_type, timer_id> CTimerEvent;
 
 #endif

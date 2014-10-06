@@ -611,7 +611,7 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 	return buffer;
 }
 
-void CControlSocket::OnTimer(int timer_id)
+void CControlSocket::OnTimer(timer_id)
 {
 	int timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT);
 	if (!timeout)
@@ -637,15 +637,15 @@ void CControlSocket::SetAlive()
 void CControlSocket::SetWait(bool wait)
 {
 	if (wait) {
-		if (m_timer != -1)
+		if (m_timer)
 			return;
 
 		m_stopWatch.Start();
 		m_timer = AddTimer(1000, false);
 	}
-	else if (m_timer != -1) {
+	else {
 		StopTimer(m_timer);
-		m_timer = -1;
+		m_timer = 0;
 	}
 }
 
