@@ -107,7 +107,7 @@ bool CEventLoop::ProcessEvent()
 	}
 	ev = pending_events_.front();
 	pending_events_.pop_front();
-	requestMore = !pending_events_.empty();
+	requestMore = !pending_events_.empty() || quit_;
 	
 	sync_.Unlock();
 	if (ev.first && ev.second) {
@@ -132,6 +132,7 @@ wxThread::ExitCode CEventLoop::Entry()
 				cond_.WaitTimeout(wait);
 			}
 		}
+
 		signalled_ = false;
 
 		if (!ProcessTimers()) {
@@ -165,9 +166,14 @@ bool CEventLoop::ProcessTimers()
 				it->deadline_ = now + wxTimeSpan::Milliseconds(it->ms_interval_);
 			}
 
+			bool const requestMore = !pending_events_.empty() || quit_;
+
 			sync_.Unlock();
 			(*handler)(CTimerEvent(id));
 			sync_.Lock();
+
+			signalled_ |= requestMore;
+
 			return true;
 		}
 	}
