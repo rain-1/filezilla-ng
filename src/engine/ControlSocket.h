@@ -246,10 +246,6 @@ protected:
 
 	bool IsWaitingForLock();
 
-#ifdef __VISUALC__
-	// Retarded compiler does not like my code
-	public:
-#endif
 	struct t_lockInfo
 	{
 		CControlSocket* pControlSocket;
@@ -259,9 +255,6 @@ protected:
 		int lockcount;
 	};
 	static std::list<t_lockInfo> m_lockInfoList;
-#ifdef __VISUALC__
-	protected:
-#endif
 
 	const std::list<t_lockInfo>::iterator GetLockStatus();
 
