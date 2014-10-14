@@ -25,7 +25,7 @@ protected:
 	wxString m_address;
 	CSocket::address_family m_protocol{};
 	unsigned long m_port{80};
-	CEventHandler * m_handler;
+	CEventHandler * m_handler{};
 	int m_id;
 
 	bool m_done{};

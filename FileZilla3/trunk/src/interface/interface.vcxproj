@@ -142,6 +142,7 @@
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OutputFile>..\bin\FileZilla.exe</OutputFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
