@@ -25,8 +25,11 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 {
 	m_engineList.push_back(this);
 
-	static int id = 0;
-	m_engine_id = ++id;
+	{
+		wxCriticalSectionLocker lock(mutex_);
+		static int id = 0;
+		m_engine_id = ++id;
+	}
 
 	m_pLogging = new CLogging(this);
 }

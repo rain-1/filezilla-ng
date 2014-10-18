@@ -40,7 +40,7 @@ static wxString base64encode(const wxString& str)
 	// Code shamelessly taken from wxWidgets and adopted to encode UTF-8 strings.
 	// wxWidget's http class encodes string from arbitrary encoding into base64,
 	// could as well encode /dev/random
-	static const char *base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	static char const*const base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 	wxString buf;
 

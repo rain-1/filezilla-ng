@@ -3,7 +3,7 @@
 
 #include "event_loop.h"
 
-static const int tickDelay = 250;
+static int const tickDelay = 250;
 
 CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)
 	: CEventHandler(loop)

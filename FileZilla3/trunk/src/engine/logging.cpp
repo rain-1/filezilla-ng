@@ -21,28 +21,29 @@ int CLogging::m_max_size;
 wxString CLogging::m_file;
 
 int CLogging::m_refcount = 0;
+std::mutex CLogging::mutex_;
 
 CLogging::CLogging(CFileZillaEnginePrivate *pEngine)
 {
 	m_pEngine = pEngine;
+
+	std::lock_guard<std::mutex> l(mutex_);
 	m_refcount++;
 }
 
 CLogging::~CLogging()
 {
+	std::lock_guard<std::mutex> l(mutex_);
 	m_refcount--;
 
-	if (!m_refcount)
-	{
+	if (!m_refcount) {
 #ifdef __WXMSW__
-		if (m_log_fd != INVALID_HANDLE_VALUE)
-		{
+		if (m_log_fd != INVALID_HANDLE_VALUE) {
 			CloseHandle(m_log_fd);
 			m_log_fd = INVALID_HANDLE_VALUE;
 		}
 #else
-		if (m_log_fd != -1)
-		{
+		if (m_log_fd != -1) {
 			close(m_log_fd);
 			m_log_fd = -1;
 		}
@@ -54,8 +55,7 @@ CLogging::~CLogging()
 bool CLogging::ShouldLog(MessageType nMessageType) const
 {
 	const int debugLevel = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
-	switch (nMessageType)
-	{
+	switch (nMessageType) {
 	case MessageType::Debug_Warning:
 		if (!debugLevel)
 			return false;
@@ -127,6 +127,8 @@ void CLogging::InitLogFile() const
 
 void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 {
+	std::lock_guard<std::mutex> l(mutex_);
+
 	InitLogFile();
 #ifdef __WXMSW__
 	if (m_log_fd == INVALID_HANDLE_VALUE)
@@ -211,12 +213,10 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 			m_log_fd = INVALID_HANDLE_VALUE;
 		}
 #else
-		if (m_max_size)
-		{
+		if (m_max_size) {
 			struct stat buf;
 			int rc = fstat(m_log_fd, &buf);
-			while (!rc && buf.st_size > 10000)//m_max_size)
-			{
+			while (!rc && buf.st_size > m_max_size) {
 				struct flock lock = {0};
 				lock.l_type = F_WRLCK;
 				lock.l_whence = SEEK_SET;
@@ -230,8 +230,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 
 				// Ignore any other failures
 				int fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT, 0644);
-				if (fd == -1)
-				{
+				if (fd == -1) {
 					wxString error = wxSysErrorMsg();
 
 					close(m_log_fd);
@@ -244,8 +243,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				rc = fstat(fd, &buf2);
 
 				// Different files
-				if (!rc && buf.st_ino != buf2.st_ino)
-				{
+				if (!rc && buf.st_ino != buf2.st_ino) {
 					close(m_log_fd); // Releases the lock
 					m_log_fd = fd;
 					buf = buf2;
@@ -261,8 +259,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 
 				// Get the new file
 				m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT, 0644);
-				if (m_log_fd == -1)
-				{
+				if (m_log_fd == -1) {
 					LogMessage(MessageType::Error, wxSysErrorMsg());
 					return;
 				}
@@ -273,8 +270,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		}
 		size_t len = strlen((const char*)utf8);
 		size_t written = write(m_log_fd, (const char*)utf8, len);
-		if (written != len)
-		{
+		if (written != len) {
 			close(m_log_fd);
 			m_log_fd = -1;
 			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
