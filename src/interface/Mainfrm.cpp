@@ -139,13 +139,13 @@ BEGIN_EVENT_TABLE(CMainFrame, wxNavigationEnabled<wxFrame>)
 	EVT_TIMER(wxID_ANY, CMainFrame::OnTimer)
 	EVT_TOOL(XRCID("ID_TOOLBAR_PROCESSQUEUE"), CMainFrame::OnProcessQueue)
 	EVT_TOOL(XRCID("ID_TOOLBAR_LOGVIEW"), CMainFrame::OnToggleLogView)
-	EVT_TOOL(XRCID("ID_TOOLBAR_LOCALTREEVIEW"), CMainFrame::OnToggleLocalTreeView)
-	EVT_TOOL(XRCID("ID_TOOLBAR_REMOTETREEVIEW"), CMainFrame::OnToggleRemoteTreeView)
+	EVT_TOOL(XRCID("ID_TOOLBAR_LOCALTREEVIEW"), CMainFrame::OnToggleDirectoryTreeView)
+	EVT_TOOL(XRCID("ID_TOOLBAR_REMOTETREEVIEW"), CMainFrame::OnToggleDirectoryTreeView)
 	EVT_TOOL(XRCID("ID_TOOLBAR_QUEUEVIEW"), CMainFrame::OnToggleQueueView)
 	EVT_MENU(XRCID("ID_VIEW_TOOLBAR"), CMainFrame::OnToggleToolBar)
 	EVT_MENU(XRCID("ID_VIEW_MESSAGELOG"), CMainFrame::OnToggleLogView)
-	EVT_MENU(XRCID("ID_VIEW_LOCALTREE"), CMainFrame::OnToggleLocalTreeView)
-	EVT_MENU(XRCID("ID_VIEW_REMOTETREE"), CMainFrame::OnToggleRemoteTreeView)
+	EVT_MENU(XRCID("ID_VIEW_LOCALTREE"), CMainFrame::OnToggleDirectoryTreeView)
+	EVT_MENU(XRCID("ID_VIEW_REMOTETREE"), CMainFrame::OnToggleDirectoryTreeView)
 	EVT_MENU(XRCID("ID_VIEW_QUEUE"), CMainFrame::OnToggleQueueView)
 	EVT_MENU(wxID_ABOUT, CMainFrame::OnMenuHelpAbout)
 	EVT_TOOL(XRCID("ID_TOOLBAR_FILTER"), CMainFrame::OnFilter)
@@ -1646,17 +1646,20 @@ void CMainFrame::OnToggleLogView(wxCommandEvent&)
 		COptions::Get()->SetOption(OPTION_SHOW_MESSAGELOG, shown);
 }
 
-void CMainFrame::OnToggleLocalTreeView(wxCommandEvent& event)
+void CMainFrame::OnToggleDirectoryTreeView(wxCommandEvent& event)
 {
 	if (!m_pContextControl)
 		return;
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-	bool show = !controls || !controls->pLocalSplitter->IsSplit();
-	ShowLocalTree(show);
+
+	bool const local = event.GetId() == XRCID("ID_TOOLBAR_LOCALTREEVIEW") || event.GetId() == XRCID("ID_VIEW_LOCALTREE");
+	CSplitterWindowEx* splitter = local ? controls->pLocalSplitter : controls->pRemoteSplitter;
+	bool show = !controls || !splitter->IsSplit();
+	ShowDirectoryTree(local, show);
 }
 
-void CMainFrame::ShowLocalTree(bool show)
+void CMainFrame::ShowDirectoryTree(bool local, bool show)
 {
 	if (!m_pContextControl)
 		return;
@@ -1668,64 +1671,27 @@ void CMainFrame::ShowLocalTree(bool show)
 		if (!controls)
 			continue;
 
-		if (show && !controls->pLocalSplitter->IsSplit()) {
-			controls->pLocalTreeViewPanel->SetHeader(controls->pLocalListViewPanel->DetachHeader());
+		CSplitterWindowEx* splitter = local ? controls->pLocalSplitter : controls->pRemoteSplitter;
+		CView* tree = local ? controls->pLocalTreeViewPanel : controls->pRemoteTreeViewPanel;
+		CView* list = local ? controls->pLocalListViewPanel : controls->pRemoteListViewPanel;
+
+		if (show && !splitter->IsSplit()) {
+			tree->SetHeader(list->DetachHeader());
 
 			if (layout == 3 && swap)
-				controls->pLocalSplitter->SplitVertically(controls->pLocalListViewPanel, controls->pLocalTreeViewPanel);
+				splitter->SplitVertically(list, tree);
 			else if (layout)
-				controls->pLocalSplitter->SplitVertically(controls->pLocalTreeViewPanel, controls->pLocalListViewPanel);
+				splitter->SplitVertically(tree, list);
 			else
-				controls->pLocalSplitter->SplitHorizontally(controls->pLocalTreeViewPanel, controls->pLocalListViewPanel);
+				splitter->SplitHorizontally(tree, list);
 		}
-		else if(!show && controls->pLocalSplitter->IsSplit()) {
-			controls->pLocalListViewPanel->SetHeader(controls->pLocalTreeViewPanel->DetachHeader());
-			controls->pLocalSplitter->Unsplit(controls->pLocalTreeViewPanel);
+		else if (!show && splitter->IsSplit()) {
+			list->SetHeader(tree->DetachHeader());
+			splitter->Unsplit(tree);
 		}
 	}
 
-	COptions::Get()->SetOption(OPTION_SHOW_TREE_LOCAL, show);
-}
-
-void CMainFrame::OnToggleRemoteTreeView(wxCommandEvent& event)
-{
-	if (!m_pContextControl)
-		return;
-
-	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-	bool show = !controls || !controls->pRemoteSplitter->IsSplit();
-	ShowRemoteTree(show);
-}
-
-void CMainFrame::ShowRemoteTree(bool show)
-{
-	if (!m_pContextControl)
-		return;
-
-	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
-	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
-	for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
-		CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromTabIndex(i);
-		if (!controls)
-			continue;
-
-		if (show && !controls->pRemoteSplitter->IsSplit()) {
-			controls->pRemoteTreeViewPanel->SetHeader(controls->pRemoteListViewPanel->DetachHeader());
-
-			if (layout == 3 && !swap)
-				controls->pRemoteSplitter->SplitVertically(controls->pRemoteListViewPanel, controls->pRemoteTreeViewPanel);
-			else if (layout)
-				controls->pRemoteSplitter->SplitVertically(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
-			else
-				controls->pRemoteSplitter->SplitHorizontally(controls->pRemoteTreeViewPanel, controls->pRemoteListViewPanel);
-		}
-		else if( !show && controls->pRemoteSplitter->IsSplit()) {
-			controls->pRemoteListViewPanel->SetHeader(controls->pRemoteTreeViewPanel->DetachHeader());
-			controls->pRemoteSplitter->Unsplit(controls->pRemoteTreeViewPanel);
-		}
-	}
-
-	COptions::Get()->SetOption(OPTION_SHOW_TREE_REMOTE, show);
+	COptions::Get()->SetOption(local ? OPTION_SHOW_TREE_LOCAL : OPTION_SHOW_TREE_REMOTE, show);
 }
 
 void CMainFrame::OnToggleQueueView(wxCommandEvent& event)
@@ -2349,8 +2315,7 @@ void CMainFrame::OnToolbarComparison(wxCommandEvent& event)
 		return;
 	}
 
-	if (!COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT))
-	{
+	if (!COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT)) {
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 		if (!controls)
 			return;
@@ -2369,8 +2334,8 @@ void CMainFrame::OnToolbarComparison(wxCommandEvent& event)
 				return;
 			}
 
-			ShowLocalTree(true);
-			ShowRemoteTree(true);
+			ShowDirectoryTree(true, true);
+			ShowDirectoryTree(false, true);
 		}
 
 		int pos = (controls->pLocalSplitter->GetSashPosition() + controls->pRemoteSplitter->GetSashPosition()) / 2;
@@ -2835,4 +2800,3 @@ void CMainFrame::OnChildFocused(wxChildFocusEvent& event)
 	m_lastFocusedChild = event.GetWindow()->GetId();
 }
 #endif
-

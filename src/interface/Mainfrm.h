@@ -106,8 +106,7 @@ protected:
 	wxTimer update_dialog_timer_;
 #endif
 
-	void ShowLocalTree(bool show);
-	void ShowRemoteTree(bool show);
+	void ShowDirectoryTree(bool local, bool show);
 
 	void ShowDropdownMenu(wxMenu* pMenu, wxToolBar* pToolBar, wxCommandEvent& event);
 
@@ -134,8 +133,7 @@ protected:
 	void OnMenuEditSettings(wxCommandEvent&);
 	void OnToggleToolBar(wxCommandEvent& event);
 	void OnToggleLogView(wxCommandEvent&);
-	void OnToggleLocalTreeView(wxCommandEvent& event);
-	void OnToggleRemoteTreeView(wxCommandEvent& event);
+	void OnToggleDirectoryTreeView(wxCommandEvent& event);
 	void OnToggleQueueView(wxCommandEvent& event);
 	void OnMenuHelpAbout(wxCommandEvent&);
 	void OnFilter(wxCommandEvent& event);
