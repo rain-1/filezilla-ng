@@ -2,6 +2,7 @@
 #define __LOGGING_PRIVATE_H__
 
 #include <utility>
+#include <mutex>
 
 class CLogging
 {
@@ -29,7 +30,6 @@ public:
 		if( !ShouldLog(nMessageType) ) {
 			return;
 		}
-
 
 		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType, std::forward<String>(msg));
 
@@ -83,6 +83,8 @@ private:
 	static wxString m_file;
 
 	static int m_refcount;
+
+	static std::mutex mutex_;
 };
 
 #endif
