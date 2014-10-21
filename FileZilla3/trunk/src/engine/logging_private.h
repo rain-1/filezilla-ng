@@ -2,7 +2,6 @@
 #define __LOGGING_PRIVATE_H__
 
 #include <utility>
-#include <mutex>
 
 class CLogging
 {
@@ -84,7 +83,7 @@ private:
 
 	static int m_refcount;
 
-	static std::mutex mutex_;
+	static wxCriticalSection mutex_;
 };
 
 #endif

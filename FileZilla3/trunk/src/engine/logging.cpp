@@ -21,19 +21,19 @@ int CLogging::m_max_size;
 wxString CLogging::m_file;
 
 int CLogging::m_refcount = 0;
-std::mutex CLogging::mutex_;
+wxCriticalSection CLogging::mutex_;
 
 CLogging::CLogging(CFileZillaEnginePrivate *pEngine)
 {
 	m_pEngine = pEngine;
 
-	std::lock_guard<std::mutex> l(mutex_);
+	wxCriticalSectionLocker l(mutex_);
 	m_refcount++;
 }
 
 CLogging::~CLogging()
 {
-	std::lock_guard<std::mutex> l(mutex_);
+	wxCriticalSectionLocker l(mutex_);
 	m_refcount--;
 
 	if (!m_refcount) {
@@ -127,7 +127,7 @@ void CLogging::InitLogFile() const
 
 void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 {
-	std::lock_guard<std::mutex> l(mutex_);
+	wxCriticalSectionLocker l(mutex_);
 
 	InitLogFile();
 #ifdef __WXMSW__
