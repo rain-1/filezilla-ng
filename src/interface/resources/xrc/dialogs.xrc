@@ -3570,7 +3570,7 @@
         </object>
         <object class="sizeritem">
           <object class="wxRadioButton" name="ID_REMEMBER_NO">
-            <label>&amp;Do not remember passwords</label>
+            <label>&amp;Do not remember passwords (recommended)</label>
           </object>
         </object>
         <object class="sizeritem">
