@@ -504,15 +504,15 @@ void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
 	Dispatch<CCommandEvent>(ev, this, &CFileZillaEnginePrivate::OnCommandEvent);
 }
 
-int CFileZillaEnginePrivate::CheckPreconditions(CCommand const& command)
+int CFileZillaEnginePrivate::CheckPreconditions(CCommand const& command, bool checkBusy)
 {
 	if (!command.valid()) {
 		return FZ_REPLY_SYNTAXERROR;
 	}
-	else if (command.GetId() != Command::cancel && IsBusy()) {
+	else if (checkBusy && IsBusy()) {
 		return FZ_REPLY_BUSY;
 	}
-	else if (command.GetId() != Command::connect && command.GetId() != Command::disconnect && command.GetId() != Command::cancel && !IsConnected()) {
+	else if (command.GetId() != Command::connect && command.GetId() != Command::disconnect && !IsConnected()) {
 		return FZ_REPLY_NOTCONNECTED;
 	}
 	return FZ_REPLY_OK;
@@ -526,41 +526,43 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 		CCommand& command = *m_pCurrentCommand;
 		Command id = command.GetId();
 
-		int res = CheckPreconditions(*m_pCurrentCommand);
-		switch (m_pCurrentCommand->GetId())
-		{
-		case Command::connect:
-			res = Connect(reinterpret_cast<const CConnectCommand &>(command));
-			break;
-		case Command::disconnect:
-			res = Disconnect(reinterpret_cast<const CDisconnectCommand &>(command));
-			break;
-		case Command::list:
-			res = List(reinterpret_cast<const CListCommand &>(command));
-			break;
-		case Command::transfer:
-			res = FileTransfer(reinterpret_cast<const CFileTransferCommand &>(command));
-			break;
-		case Command::raw:
-			res = RawCommand(reinterpret_cast<const CRawCommand&>(command));
-			break;
-		case Command::del:
-			res = Delete(reinterpret_cast<const CDeleteCommand&>(command));
-			break;
-		case Command::removedir:
-			res = RemoveDir(reinterpret_cast<const CRemoveDirCommand&>(command));
-			break;
-		case Command::mkdir:
-			res = Mkdir(reinterpret_cast<const CMkdirCommand&>(command));
-			break;
-		case Command::rename:
-			res = Rename(reinterpret_cast<const CRenameCommand&>(command));
-			break;
-		case Command::chmod:
-			res = Chmod(reinterpret_cast<const CChmodCommand&>(command));
-			break;
-		default:
-			res = FZ_REPLY_SYNTAXERROR;
+		int res = CheckPreconditions(*m_pCurrentCommand, false);
+		if (res == FZ_REPLY_OK) {
+			switch (m_pCurrentCommand->GetId())
+			{
+			case Command::connect:
+				res = Connect(reinterpret_cast<const CConnectCommand &>(command));
+				break;
+			case Command::disconnect:
+				res = Disconnect(reinterpret_cast<const CDisconnectCommand &>(command));
+				break;
+			case Command::list:
+				res = List(reinterpret_cast<const CListCommand &>(command));
+				break;
+			case Command::transfer:
+				res = FileTransfer(reinterpret_cast<const CFileTransferCommand &>(command));
+				break;
+			case Command::raw:
+				res = RawCommand(reinterpret_cast<const CRawCommand&>(command));
+				break;
+			case Command::del:
+				res = Delete(reinterpret_cast<const CDeleteCommand&>(command));
+				break;
+			case Command::removedir:
+				res = RemoveDir(reinterpret_cast<const CRemoveDirCommand&>(command));
+				break;
+			case Command::mkdir:
+				res = Mkdir(reinterpret_cast<const CMkdirCommand&>(command));
+				break;
+			case Command::rename:
+				res = Rename(reinterpret_cast<const CRenameCommand&>(command));
+				break;
+			case Command::chmod:
+				res = Chmod(reinterpret_cast<const CChmodCommand&>(command));
+				break;
+			default:
+				res = FZ_REPLY_SYNTAXERROR;
+			}
 		}
 
 		if (id != Command::disconnect)

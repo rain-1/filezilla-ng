@@ -33,7 +33,7 @@ int CFileZillaEngine::Execute(const CCommand &command)
 {
 	wxCriticalSectionLocker lock(mutex_);
 
-	int res = CheckPreconditions(command);
+	int res = CheckPreconditions(command, true);
 	if (res != FZ_REPLY_OK) {
 		return res;
 	}

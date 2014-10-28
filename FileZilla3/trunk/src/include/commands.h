@@ -10,7 +10,6 @@ enum class Command
 	none = 0,
 	connect,
 	disconnect,
-	cancel,
 	list,
 	transfer,
 	del,

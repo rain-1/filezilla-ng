@@ -5,13 +5,13 @@
 #include "event_loop.h"
 #include "pathcache.h"
 #include "local_filesys.h"
+#include "process.h"
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
 
 #include <wx/filename.h>
 #include <wx/log.h>
-#include <wx/process.h>
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
 
@@ -45,73 +45,11 @@ struct sftp_message
 	};
 };
 
-class CProcess : protected wxProcess
-{
-public:
-	explicit CProcess(CEventHandler * handler)
-		: m_handler(handler)
-	{
-		Redirect();
-	}
-
-	bool Execute(wxString const& cmd)
-	{
-		wxASSERT(!m_pid && !m_terminated);
-		m_pid = wxExecute(cmd, wxEXEC_ASYNC, this);
-		return m_pid != 0;
-	}
-
-	void ClearHandler()
-	{
-		m_handler = 0;
-	}
-
-	virtual void OnTerminate(int, int)
-	{
-		m_terminated = true;
-		if (m_handler) {
-			m_handler->SendEvent(CTerminateEvent());
-		}
-		else {
-			delete this;
-		}
-	}
-
-	void Kill()
-	{
-		if (!m_terminated && m_pid) {
-			// Disable logging, fzsftp might have already closed itself.
-			wxLogNull log;
-			wxProcess::Kill(m_pid, wxSIGKILL);
-		}
-	}
-
-	void Detach()
-	{
-		m_handler = 0;
-		Kill();
-		if (m_terminated || !m_pid) {
-			delete this;
-		}
-	}
-
-	wxInputStream *GetInputStream() const { return wxProcess::GetInputStream(); }
-	wxInputStream *GetErrorStream() const { return wxProcess::GetErrorStream(); }
-	wxOutputStream *GetOutputStream() const { return wxProcess::GetOutputStream(); }
-
-protected:
-	~CProcess() {};
-
-	bool m_terminated{};
-	CEventHandler * m_handler{};
-	int m_pid{};
-};
-
 class CSftpInputThread final : public wxThread
 {
 public:
-	CSftpInputThread(CSftpControlSocket* pOwner, CProcess* pProcess)
-		: wxThread(wxTHREAD_JOINABLE), m_pProcess(pProcess),
+	CSftpInputThread(CSftpControlSocket* pOwner, CProcess& process)
+		: wxThread(wxTHREAD_JOINABLE), process_(process),
 		  m_pOwner(pOwner)
 	{
 	}
@@ -156,17 +94,15 @@ protected:
 			m_pOwner->SendEvent(CSftpEvent());
 	}
 
-	int ReadNumber(wxInputStream* pInputStream, bool &error)
+	int ReadNumber(bool &error)
 	{
 		int number = 0;
 
-		while(!pInputStream->Eof())
-		{
+		while(true) {
 			char c;
-			pInputStream->Read(&c, 1);
-			if (pInputStream->LastRead() != 1)
-			{
-				if (pInputStream->Eof())
+			int read = process_.Read(&c, 1);
+			if (read != 1) {
+				if (!read)
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
 				else
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Uknown input stream error"));
@@ -176,35 +112,25 @@ protected:
 
 			if (c == '\n')
 				break;
-			else if (c >= '0' && c <= '9')
-			{
+			else if (c >= '0' && c <= '9') {
 				number *= 10;
 				number += c - '0';
 			}
 		}
-		if (pInputStream->Eof())
-		{
-			m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
-			error = true;
-			return 0;
-		}
-
 		return number;
 	}
 
-	wxString ReadLine(wxInputStream* pInputStream, bool &error)
+	wxString ReadLine(bool &error)
 	{
-		int read = 0;
+		int len = 0;
 		const int buffersize = 4096;
 		char buffer[buffersize];
 
-		while(!pInputStream->Eof())
-		{
+		while(true) {
 			char c;
-			pInputStream->Read(&c, 1);
-			if (pInputStream->LastRead() != 1)
-			{
-				if (pInputStream->Eof())
+			int read = process_.Read(&c, 1);
+			if (read != 1) {
+				if (!read)
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
 				else
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Uknown input stream error"));
@@ -215,29 +141,22 @@ protected:
 			if (c == '\n')
 				break;
 
-			if (read == buffersize - 1)
+			if (len == buffersize - 1)
 			{
 				// Cap string length
 				continue;
 			}
 
-			buffer[read++] = c;
+			buffer[len++] = c;
 		}
-		if (pInputStream->Eof())
-		{
-			m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
-			error = true;
-			return wxString();
-		}
+		
+		while (len && buffer[len - 1] == '\r')
+			--len;
 
-		if (read && buffer[read - 1] == '\r')
-			--read;
-
-		buffer[read] = 0;
+		buffer[len] = 0;
 
 		const wxString line = m_pOwner->ConvToLocal(buffer);
-		if (read && line.empty())
-		{
+		if (len && line.empty()) {
 			m_pOwner->LogMessage(MessageType::Error, _T("Failed to convert reply to local character set."));
 			error = true;
 		}
@@ -247,13 +166,11 @@ protected:
 
 	virtual ExitCode Entry()
 	{
-		wxInputStream* pInputStream = m_pProcess->GetInputStream();
 		bool error = false;
-		while (!pInputStream->Eof() && !error)
-		{
-			char readType;
-			pInputStream->Read(&readType, 1);
-			if (pInputStream->LastRead() != 1)
+		while (!error) {
+			char readType = 0;
+			int read = process_.Read(&readType, 1);
+			if (read != 1)
 				break;
 
 			readType -= '0';
@@ -283,9 +200,8 @@ protected:
 				{
 					sftp_message* message = new sftp_message;
 					message->type = eventType;
-					message->text = ReadLine(pInputStream, error).c_str();
-					if (error)
-					{
+					message->text = ReadLine(error).c_str();
+					if (error) {
 						delete message;
 						goto loopexit;
 					}
@@ -294,19 +210,18 @@ protected:
 				break;
 			case sftpEvent::Request:
 				{
-					const wxString& line = ReadLine(pInputStream, error);
+					const wxString& line = ReadLine(error);
 					if (error || line.empty())
 						goto loopexit;
 					int requestType = line[0] - '0';
-					if (requestType == sftpReqHostkey || requestType == sftpReqHostkeyChanged)
-					{
-						const wxString& strPort = ReadLine(pInputStream, error);
+					if (requestType == sftpReqHostkey || requestType == sftpReqHostkeyChanged) {
+						const wxString& strPort = ReadLine(error);
 						if (error)
 							goto loopexit;
 						long port = 0;
 						if (!strPort.ToLong(&port))
 							goto loopexit;
-						const wxString& fingerprint = ReadLine(pInputStream, error);
+						const wxString& fingerprint = ReadLine(error);
 						if (error)
 							goto loopexit;
 
@@ -337,9 +252,8 @@ protected:
 				{
 					sftp_message* message = new sftp_message;
 					message->type = eventType;
-					message->value = ReadNumber(pInputStream, error);
-					if (error)
-					{
+					message->value = ReadNumber(error);
+					if (error) {
 						delete message;
 						goto loopexit;
 					}
@@ -361,6 +275,7 @@ protected:
 		}
 loopexit:
 
+		m_pOwner->SendEvent(CTerminateEvent());
 		return reinterpret_cast<ExitCode>(Close());
 	}
 
@@ -369,7 +284,7 @@ loopexit:
 		return 0;
 	}
 
-	CProcess* m_pProcess;
+	CProcess& process_;
 	CSftpControlSocket* m_pOwner;
 
 	std::list<sftp_message*> m_sftpMessages;
@@ -480,7 +395,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	else
 		pData->pKeyFiles = pTokenizer;
 
-	m_pProcess = new CProcess(this);
+	m_pProcess = new CProcess();
 
 	m_pEngine->GetRateLimiter().AddObject(this);
 
@@ -489,13 +404,13 @@ int CSftpControlSocket::Connect(const CServer &server)
 		executable = _T("fzsftp");
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
 
-	if (!m_pProcess->Execute(executable + _T(" -v"))) {
-		LogMessage(MessageType::Debug_Warning, _T("wxExecute failed"));
+	if (!m_pProcess->Execute(executable, _T("-v"))) {
+		LogMessage(MessageType::Debug_Warning, _T("Could not create process"));
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pInputThread = new CSftpInputThread(this, m_pProcess);
+	m_pInputThread = new CSftpInputThread(this, *m_pProcess);
 	if (!m_pInputThread->Init()) {
 		LogMessage(MessageType::Debug_Warning, _T("Thread creation failed"));
 		delete m_pInputThread;
@@ -841,26 +756,17 @@ bool CSftpControlSocket::SendCommand(wxString const& cmd, const wxString& show)
 
 bool CSftpControlSocket::AddToStream(const wxString& cmd, bool force_utf8 /*=false*/)
 {
-	const wxCharBuffer str = ConvToServer(cmd, force_utf8);
-
 	if (!m_pProcess)
 		return false;
 
-	if (!str)
-	{
+	wxCharBuffer const str = ConvToServer(cmd, force_utf8);
+	if (!str) {
 		LogMessage(MessageType::Error, _("Could not convert command to server encoding"));
 		return false;
 	}
 
-	wxOutputStream* pStream = m_pProcess->GetOutputStream();
-	if (!pStream)
-		return false;
-
 	unsigned int len = strlen(str);
-	if (pStream->Write(str, len).LastWrite() != len)
-		return false;
-
-	return true;
+	return m_pProcess->Write(str, len);
 }
 
 bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
@@ -1134,16 +1040,14 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 
 int CSftpControlSocket::ListParseEntry(const wxString& entry)
 {
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessageRaw(MessageType::RawList, entry);
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData->opId != Command::list)
-	{
+	if (m_pCurOpData->opId != Command::list) {
 		LogMessageRaw(MessageType::RawList, entry);
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Listentry received, but current operation is not Command::list"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
@@ -1151,16 +1055,14 @@ int CSftpControlSocket::ListParseEntry(const wxString& entry)
 	}
 
 	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessageRaw(MessageType::RawList, entry);
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData of wrong type"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (pData->opState != list_list)
-	{
+	if (pData->opState != list_list) {
 		LogMessageRaw(MessageType::RawList, entry);
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("ListParseResponse called at inproper time: %d"), pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
@@ -2006,7 +1908,7 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 		}
 	}
 	if (m_pProcess) {
-		m_pProcess->Detach();
+		delete m_pProcess;
 		m_pProcess = 0;
 	}
 	return CControlSocket::DoClose(nErrorCode);

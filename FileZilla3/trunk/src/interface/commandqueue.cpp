@@ -144,8 +144,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 		return;
 	}
 
-	if (commandId != Command::cancel &&
-		commandId != Command::connect &&
+	if (commandId != Command::connect &&
 		commandId != Command::disconnect)
 	{
 		if (nReplyCode == FZ_REPLY_NOTCONNECTED) {

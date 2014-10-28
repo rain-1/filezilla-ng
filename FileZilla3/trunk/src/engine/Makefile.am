@@ -29,6 +29,7 @@ libengine_a_SOURCES = \
 		notification.cpp \
 		option_change_event_handler.cpp \
 		pathcache.cpp \
+		process.cpp \
 		proxy.cpp \
 		ratelimiter.cpp \
 		rtt.cpp \
@@ -51,6 +52,7 @@ noinst_HEADERS = backend.h \
 		httpcontrolsocket.h iothread.h \
 		logging_private.h \
 		pathcache.h \
+		process.h \
 		proxy.h \
 		ratelimiter.h \
 		rtt.h \
