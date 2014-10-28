@@ -63,7 +63,7 @@ protected:
 	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
 	virtual ~CFileZillaEnginePrivate();
 
-	int CheckPreconditions(CCommand const& command);
+	int CheckPreconditions(CCommand const& command, bool checkBusy);
 
 	// Command handlers, only called by CFileZillaEngine::Command
 	int Connect(const CConnectCommand &command);

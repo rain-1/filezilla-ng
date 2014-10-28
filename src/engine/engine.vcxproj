@@ -96,6 +96,7 @@
     <ClCompile Include="notification.cpp" />
     <ClCompile Include="option_change_event_handler.cpp" />
     <ClCompile Include="pathcache.cpp" />
+    <ClCompile Include="process.cpp" />
     <ClCompile Include="proxy.cpp" />
     <ClCompile Include="ratelimiter.cpp" />
     <ClCompile Include="rtt.cpp" />
@@ -140,6 +141,7 @@
     <ClInclude Include="..\include\option_change_event_handler.h" />
     <ClInclude Include="..\include\optionsbase.h" />
     <ClInclude Include="pathcache.h" />
+    <ClInclude Include="process.h" />
     <ClInclude Include="proxy.h" />
     <ClInclude Include="ratelimiter.h" />
     <ClInclude Include="..\include\Server.h" />

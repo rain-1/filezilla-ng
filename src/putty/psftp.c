@@ -2608,8 +2608,8 @@ struct sftp_command *sftp_getcmd(FILE *fp, int mode, int modeflags)
 
     if (!line || !*line) {
 	cmd->obey = sftp_cmd_quit;
-	if ((mode == 0) || (modeflags & 1))
-	    printf("quit\n");
+	//if ((mode == 0) || (modeflags & 1))
+	//    printf("quit\n");
 	return cmd;		       /* eof */
     }
 
