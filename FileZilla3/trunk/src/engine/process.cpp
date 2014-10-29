@@ -1,6 +1,8 @@
 #include <filezilla.h>
 #include "process.h"
 
+#ifdef __WXMSW__
+
 namespace {
 void ResetHandle(HANDLE& handle)
 {
@@ -181,6 +183,188 @@ private:
 	Pipe out_;
 	Pipe err_;
 };
+
+#else
+
+#include <signal.h>
+#include <sys/wait.h>
+
+namespace {
+void ResetFd(int& fd)
+{
+	if (fd != -1) {
+		close(fd);
+		fd = -1;
+	}
+}
+
+class Pipe final
+{
+public:
+	Pipe() = default;
+
+	~Pipe()
+	{
+		reset();
+	}
+
+	Pipe(Pipe const&) = delete;
+	Pipe& operator=(Pipe const&) = delete;
+
+	bool Create()
+	{
+		reset();
+
+		int fds[2];
+		if (pipe(fds) != 0) {
+			return false;
+		}
+
+		read_ = fds[0];
+		write_ = fds[1];
+
+		return valid();
+	}
+
+	bool valid() const {
+		return read_ != -1 && write_ != -1;
+	}
+
+	void reset()
+	{
+		ResetFd(read_);
+		ResetFd(write_);
+	}
+
+	int read_{-1};
+	int write_{-1};
+};
+}
+
+class CProcess::Impl
+{
+public:
+	Impl() = default;
+	~Impl()
+	{
+		Kill();
+	}
+
+	Impl(Impl const&) = delete;
+	Impl& operator=(Impl const&) = delete;
+
+	bool CreatePipes()
+	{
+		return
+			in_.Create() &&
+			out_.Create() &&
+			err_.Create();
+	}
+
+	bool Execute(wxString const& cmd, wxString const& args)
+	{
+		if (!CreatePipes()) {
+			return false;
+		}
+
+		int pid = fork();
+		if (pid < 0) {
+			return false;
+		}
+		else if (!pid) {
+			// We're the child.
+
+			// Close uneeded descriptors
+			ResetFd(in_.write_);
+			ResetFd(out_.read_);
+			ResetFd(err_.read_);
+
+			// Redirect to pipe
+			if (dup2(in_.read_, STDIN_FILENO) == -1 ||
+				dup2(out_.write_, STDOUT_FILENO) == -1 ||
+				dup2(err_.write_, STDERR_FILENO) == -1)
+			{
+				_exit(-1);
+			}
+
+			// Execute process
+			execl(cmd, args, (char*)0); // noreturn on success
+
+			_exit(-1);
+		}
+		else {
+			// We're the parent
+			pid_ = pid;
+
+			// Close unneeded descriptors
+			ResetFd(in_.read_);
+			ResetFd(out_.write_);
+			ResetFd(err_.write_);
+		}
+
+		return true;
+	}
+
+	void Kill()
+	{
+		in_.reset();
+
+		if (pid_ != -1) {
+			kill(pid_, SIGTERM);
+
+			int ret;
+			do {
+			}
+			while((ret = waitpid(pid_, 0, 0)) == -1 && errno == EINTR);
+
+			(void)ret;
+
+			pid_ = -1;
+		}
+
+		out_.reset();
+		err_.reset();
+	}
+
+	int Read(char* buffer, unsigned int len)
+	{
+		int r;
+		do {
+			r = read(out_.read_, buffer, len);
+		}
+		while (r == -1 && (errno == EAGAIN || errno == EINTR));
+
+		return r;
+	}
+
+	bool Write(char const* buffer, unsigned int len)
+	{
+		while (len) {
+			int written;
+			do {
+				written = write(in_.write_, buffer, len);
+			}
+			while (written == -1 && (errno == EAGAIN || errno == EINTR));
+
+			if (written <= 0) {
+				return false;
+			}
+
+			len -= written;
+			buffer += written;
+		}
+		return true;
+	}
+
+	Pipe in_;
+	Pipe out_;
+	Pipe err_;
+
+	int pid_{-1};
+};
+
+#endif
+
 
 CProcess::CProcess()
 	: impl_(make_unique<Impl>())
