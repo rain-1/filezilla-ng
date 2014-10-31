@@ -9,6 +9,7 @@
 #include "inputdialog.h"
 #include "local_filesys.h"
 #include "dragdropmanager.h"
+#include "drop_target_ex.h"
 #include "Options.h"
 
 #ifdef _DEBUG
@@ -29,11 +30,12 @@ public:
 	wxString m_known_subdir;
 };
 
-class CLocalTreeViewDropTarget : public wxDropTarget
+class CLocalTreeViewDropTarget : public CScrollableDropTarget<wxTreeCtrlEx>
 {
 public:
 	CLocalTreeViewDropTarget(CLocalTreeView* pLocalTreeView)
-		: m_pLocalTreeView(pLocalTreeView), m_pFileDataObject(new wxFileDataObject()),
+		: CScrollableDropTarget(pLocalTreeView)
+		, m_pLocalTreeView(pLocalTreeView), m_pFileDataObject(new wxFileDataObject()),
 		m_pRemoteDataObject(new CRemoteDataObject())
 	{
 		m_pDataObject = new wxDataObjectComposite;
@@ -125,6 +127,10 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
+		if (!CScrollableDropTarget<wxTreeCtrlEx>::OnDrop(x, y)) {
+			return false;
+		}
+
 		ClearDropHighlight();
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
@@ -138,21 +144,19 @@ public:
 		return true;
 	}
 
-	wxString DisplayDropHighlight(wxPoint point)
+	wxTreeItemId DisplayDropHighlight(wxPoint point)
 	{
 		wxTreeItemId hit = GetHit(point);
-		if (!hit)
-		{
+		if (!hit) {
 			ClearDropHighlight();
-			return wxString();
+			return hit;
 		}
 
 		wxString dir = GetDirFromItem(hit);
 
-		if (dir.empty())
-		{
+		if (dir.empty()) {
 			ClearDropHighlight();
-			return wxString();
+			return wxTreeItemId();
 		}
 
 		const wxTreeItemId dropHighlight = m_pLocalTreeView->m_dropHighlight;
@@ -163,11 +167,13 @@ public:
 		m_pLocalTreeView->m_dropHighlight = hit;
 
 
-		return dir;
+		return hit;
 	}
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CScrollableDropTarget<wxTreeCtrlEx>::OnDragOver(x, y, def);
+
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -176,8 +182,8 @@ public:
 			return def;
 		}
 
-		const wxString& dir = DisplayDropHighlight(wxPoint(x, y));
-		if (dir.empty())
+		wxTreeItemId hit = DisplayDropHighlight(wxPoint(x, y));
+		if (!hit.IsOk())
 			return wxDragNone;
 
 		if (def == wxDragLink)
@@ -188,11 +194,13 @@ public:
 
 	virtual void OnLeave()
 	{
+		CScrollableDropTarget<wxTreeCtrlEx>::OnLeave();
 		ClearDropHighlight();
 	}
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CScrollableDropTarget<wxTreeCtrlEx>::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 

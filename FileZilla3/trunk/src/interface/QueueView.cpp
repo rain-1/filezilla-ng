@@ -26,6 +26,7 @@
 #include "recursive_operation.h"
 #include "auto_ascii_files.h"
 #include "dragdropmanager.h"
+#include "drop_target_ex.h"
 #if WITH_LIBDBUS
 #include "../dbus/desktop_notification.h"
 #endif
@@ -38,11 +39,11 @@
 #define new DEBUG_NEW
 #endif
 
-class CQueueViewDropTarget : public CListCtrlDropTarget
+class CQueueViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
 	CQueueViewDropTarget(CQueueView* pQueueView)
-		: CListCtrlDropTarget(pQueueView)
+		: CScrollableDropTarget<wxListCtrlEx>(pQueueView)
 		, m_pQueueView(pQueueView)
 		, m_pFileDataObject(new wxFileDataObject())
 		, m_pRemoteDataObject(new CRemoteDataObject())
@@ -125,7 +126,7 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::OnDragOver(x, y, def);
+		def = CScrollableDropTarget<wxListCtrlEx>::OnDragOver(x, y, def);
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -155,10 +156,11 @@ public:
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::OnEnter(x, y, def);
+		def = CScrollableDropTarget<wxListCtrlEx>::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 
+	int DisplayDropHighlight(wxPoint) { return -1; }
 protected:
 	CQueueView *m_pQueueView;
 	wxFileDataObject* m_pFileDataObject;

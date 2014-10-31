@@ -18,6 +18,7 @@
 #endif
 #include "edithandler.h"
 #include "dragdropmanager.h"
+#include "drop_target_ex.h"
 #include "local_filesys.h"
 #include "filelist_statusbar.h"
 #include "sizeformatting.h"
@@ -28,11 +29,11 @@
 #endif
 
 
-class CLocalListViewDropTarget : public CListCtrlDropTarget
+class CLocalListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
 	CLocalListViewDropTarget(CLocalListView* pLocalListView)
-		: CListCtrlDropTarget(pLocalListView)
+		: CScrollableDropTarget<wxListCtrlEx>(pLocalListView)
 		, m_pLocalListView(pLocalListView), m_pFileDataObject(new wxFileDataObject()),
 		m_pRemoteDataObject(new CRemoteDataObject())
 	{
@@ -58,7 +59,7 @@ public:
 
 	virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::FixupDragResult(def);
+		def = CScrollableDropTarget<wxListCtrlEx>::FixupDragResult(def);
 
 		if (def == wxDragError ||
 			def == wxDragNone ||
@@ -123,7 +124,7 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
-		CListCtrlDropTarget::OnDrop(x, y);
+		CScrollableDropTarget<wxListCtrlEx>::OnDrop(x, y);
 		ClearDropHighlight();
 
 		if (m_pLocalListView->m_fileData.empty())
@@ -132,9 +133,10 @@ public:
 		return true;
 	}
 
-	virtual void DisplayDropHighlight(wxPoint point)
+	virtual int DisplayDropHighlight(wxPoint point)
 	{
 		DoDisplayDropHighlight(point);
+		return -1;
 	}
 
 	virtual wxString DoDisplayDropHighlight(wxPoint point)
@@ -184,7 +186,7 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::OnDragOver(x, y, def);
+		def = CScrollableDropTarget<wxListCtrlEx>::OnDragOver(x, y, def);
 
 		if (def == wxDragError ||
 			def == wxDragNone ||
@@ -223,13 +225,13 @@ public:
 
 	virtual void OnLeave()
 	{
-		CListCtrlDropTarget::OnLeave();
+		CScrollableDropTarget<wxListCtrlEx>::OnLeave();
 		ClearDropHighlight();
 	}
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::OnEnter(x, y, def);
+		def = CScrollableDropTarget<wxListCtrlEx>::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 

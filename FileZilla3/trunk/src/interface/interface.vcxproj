@@ -164,6 +164,7 @@
     <ClCompile Include="dialogex.cpp" />
     <ClCompile Include="dndobjects.cpp" />
     <ClCompile Include="dragdropmanager.cpp" />
+    <ClCompile Include="drop_target_ex.cpp" />
     <ClCompile Include="edithandler.cpp" />
     <ClCompile Include="export.cpp" />
     <ClCompile Include="fileexistsdlg.cpp" />
@@ -279,6 +280,7 @@
     <ClInclude Include="dialogex.h" />
     <ClInclude Include="dndobjects.h" />
     <ClInclude Include="dragdropmanager.h" />
+    <ClInclude Include="drop_target_ex.h" />
     <ClInclude Include="edithandler.h" />
     <ClInclude Include="export.h" />
     <ClInclude Include="fileexistsdlg.h" />
