@@ -380,8 +380,7 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 
 	// Prepare filter
 	wxString error;
-	if (!ValidateFilter(error, true))
-	{
+	if (!ValidateFilter(error, true)) {
 		wxMessageBoxEx(wxString::Format(_("Invalid search conditions: %s"), error), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
