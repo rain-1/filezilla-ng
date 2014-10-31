@@ -334,16 +334,14 @@ bool CFilterEditDialog::Validate()
 		return true;
 
 	wxString error;
-	if (!ValidateFilter(error))
-	{
+	if (!ValidateFilter(error)) {
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
 		wxMessageBoxEx(error, _("Filter validation failed"), wxICON_ERROR, this);
 		return false;
 	}
 
 	wxString name = XRCCTRL(*this, "ID_NAME", wxTextCtrl)->GetValue();
-	if (name.empty())
-	{
+	if (name.empty()) {
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
 		XRCCTRL(*this, "ID_NAME", wxTextCtrl)->SetFocus();
 		wxMessageBoxEx(_("Need to enter filter name"), _("Filter validation failed"), wxICON_ERROR, this);
@@ -351,8 +349,7 @@ bool CFilterEditDialog::Validate()
 	}
 
 	int pos = m_pFilterListCtrl->FindString(name);
-	if (pos != wxNOT_FOUND && pos != m_currentSelection)
-	{
+	if (pos != wxNOT_FOUND && pos != m_currentSelection) {
 		m_pFilterListCtrl->SetSelection(m_currentSelection);
 		XRCCTRL(*this, "ID_NAME", wxTextCtrl)->SetFocus();
 		wxMessageBoxEx(_("Filter name already exists"), _("Filter validation failed"), wxICON_ERROR, this);

@@ -435,8 +435,7 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 		delete controls.pSet;
 		controls.pSet = 0;
 
-		if (condition.type == filter_size)
-		{
+		if (condition.type == filter_size) {
 			// Label needs to be aligned
 			int size_posy = posy;
 			if (conditionsRect.GetHeight() > m_size_label_size.GetHeight())
@@ -612,8 +611,8 @@ CFilter CFilterConditionsDialog::GetFilter()
 				if (controls.pValue->GetValue().empty())
 					continue;
 				condition.strValue = controls.pValue->GetValue();
-				unsigned long tmp;
-				condition.strValue.ToULong(&tmp);
+				unsigned long long tmp;
+				condition.strValue.ToULongLong(&tmp);
 				condition.value = tmp;
 			}
 			break;
@@ -696,13 +695,11 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 
 	wxASSERT(m_filterControls.size() == m_currentFilter.filters.size());
 
-	for (unsigned int i = 0; i < size; i++)
-	{
+	for (unsigned int i = 0; i < size; ++i) {
 		const CFilterControls& controls = m_filterControls[i];
 		enum t_filterType type = GetTypeFromTypeSelection(controls.pType->GetSelection());
 
-		if ((type == filter_name || type == filter_path) && controls.pValue->GetValue().empty())
-		{
+		if ((type == filter_name || type == filter_path) && controls.pValue->GetValue().empty()) {
 			if (allow_empty)
 				continue;
 
@@ -712,14 +709,13 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 			SetFilterCtrlState(false);
 			return false;
 		}
-		else if (type == filter_size)
-		{
+		else if (type == filter_size) {
 			const wxString v = controls.pValue->GetValue();
 			if (v.empty() && allow_empty)
 				continue;
 
-			long number;
-			if (!v.ToLong(&number) || number < 0)
+			long long number;
+			if (!v.ToLongLong(&number) || number < 0)
 			{
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
@@ -728,15 +724,13 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 				return false;
 			}
 		}
-		else if (type == filter_date)
-		{
+		else if (type == filter_date) {
 			const wxString d = controls.pValue->GetValue();
 			if (d.empty() && allow_empty)
 				continue;
 
 			wxDateTime date;
-			if (!date.ParseFormat(d, _T("%Y-%m-%d")) || !date.IsValid())
-			{
+			if (!date.ParseFormat(d, _T("%Y-%m-%d")) || !date.IsValid()) {
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
 				error = _("Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18.");
