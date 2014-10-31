@@ -28,6 +28,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		dialogex.cpp \
 		dndobjects.cpp \
 		dragdropmanager.cpp \
+		drop_target_ex.cpp \
 		edithandler.cpp \
 		export.cpp \
 		fileexistsdlg.cpp \
@@ -141,6 +142,7 @@ noinst_HEADERS = aboutdialog.h \
 		 dialogex.h \
 		 dndobjects.h \
 		 dragdropmanager.h \
+		 drop_target_ex.h \
 		 edithandler.h \
 		 export.h \
 		 fileexistsdlg.h \

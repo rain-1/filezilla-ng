@@ -47,3 +47,75 @@ void wxTreeCtrlEx::OnChar(wxKeyEvent& event)
 }
 #endif
 
+wxTreeItemId wxTreeCtrlEx::GetFirstItem() const
+{
+	wxTreeItemId root = GetRootItem();
+	if (root.IsOk() && GetWindowStyle() & wxTR_HIDE_ROOT) {
+		wxTreeItemIdValue cookie;
+		root = GetFirstChild(root, cookie);
+	}
+
+	return root;
+}
+
+wxTreeItemId wxTreeCtrlEx::GetLastItem() const
+{
+	wxTreeItemId cur = GetRootItem();
+	if (cur.IsOk() && GetWindowStyle() & wxTR_HIDE_ROOT) {
+		cur = GetLastChild(cur);
+	}
+
+	while (cur.IsOk() && HasChildren(cur) && IsExpanded(cur)) {
+		cur = GetLastChild(cur);
+	}
+
+	return cur;
+}
+
+wxTreeItemId wxTreeCtrlEx::GetBottomItem() const
+{
+	wxTreeItemId cur = GetFirstVisibleItem();
+	if (cur) {
+		wxTreeItemId next;
+		while ((next = GetNextVisible(cur)).IsOk()) {
+			cur = next;
+		}
+	}
+	return cur;
+}
+
+wxTreeItemId wxTreeCtrlEx::GetNextItemSimple(wxTreeItemId const& item) const
+{
+	if (item.IsOk() && ItemHasChildren(item) && IsExpanded(item)) {
+		wxTreeItemIdValue cookie;
+		return GetFirstChild(item, cookie);
+	}
+	else {
+		wxTreeItemId cur = item;
+		wxTreeItemId next = GetNextSibling(cur);
+		if (!next.IsOk() && cur.IsOk()) {
+			cur = GetItemParent(cur);
+			if (cur.IsOk()) {
+				next = GetNextSibling(cur);
+			}
+		}
+		return next;
+	}
+}
+
+wxTreeItemId wxTreeCtrlEx::GetPrevItemSimple(wxTreeItemId const& item) const
+{
+	wxTreeItemId cur = GetPrevSibling(item);
+	if (cur.IsOk()) {
+		while (cur.IsOk() && HasChildren(cur) && IsExpanded(cur)) {
+			cur = GetLastChild(cur);
+		}
+	}
+	else {
+		cur = GetItemParent(item);
+		if (cur.IsOk() && cur == GetRootItem() && (GetWindowStyle() && wxTR_HIDE_ROOT)) {
+			cur = wxTreeItemId();
+		}
+	}
+	return cur;
+}

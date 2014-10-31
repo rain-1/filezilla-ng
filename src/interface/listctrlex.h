@@ -12,6 +12,8 @@ typedef wxListCtrl wxListCtrlExBase;
 class wxListCtrlEx : public wxListCtrlExBase, public CSystemImageList
 {
 public:
+	typedef int Item;
+
 	wxListCtrlEx(wxWindow *parent,
 		wxWindowID id = wxID_ANY,
 		const wxPoint& pos = wxDefaultPosition,
@@ -60,7 +62,31 @@ public:
 	bool HasSelection() const;
 
 	// Returns the true rect of the area containing the actual list items
-	wxRect GetListRect() const;
+	wxRect GetActualClientRect() const;
+
+	bool Valid(int i) const { return i >= 0 && i < GetItemCount(); }
+	int GetFirstItem() const { return GetItemCount() ? 0 : -1; }
+	int GetLastItem() const { return GetItemCount() - 1; }
+	int GetBottomItem() const {
+		if (GetItemCount()) {
+			return wxMin(GetLastItem(), GetTopItem() + GetCountPerPage() - 1);
+		}
+		return -1;
+	}
+
+	int GetNextItemSimple(int i) const {
+		if (!Valid(++i)) {
+			i = -1;
+		}
+		return i;
+	}
+
+	int GetPrevItemSimple(int i) const {
+		if (!Valid(--i)) {
+			i = -1;
+		}
+		return i;
+	}
 
 protected:
 	virtual void OnPostScroll();
@@ -144,39 +170,6 @@ public:
 	virtual ~CLabelEditBlocker();
 private:
 	wxListCtrlEx& m_listCtrl;
-};
-
-class CListCtrlDropTarget : public wxEvtHandler, public wxDropTarget
-{
-public:
-	CListCtrlDropTarget(wxListCtrlEx* pListCtrl);
-
-	virtual bool OnDrop(wxCoord x, wxCoord y);
-
-	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def);
-
-	virtual void OnLeave();
-
-	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def);
-
-	virtual void DisplayDropHighlight(wxPoint) {}
-
-protected:
-	wxDragResult FixupDragResult(wxDragResult res);
-
-	bool IsScroll(wxPoint p) const;
-	bool IsTopScroll(wxPoint p) const;
-	bool IsBottomScroll(wxPoint p) const;
-
-	void OnTimer(wxTimerEvent& /*event*/);
-
-protected:
-	wxListCtrlEx *m_pListCtrl;
-
-	wxTimer m_timer;
-	int m_count;
-
-	DECLARE_EVENT_TABLE()
 };
 
 #endif //__LISTCTRLEX_H__

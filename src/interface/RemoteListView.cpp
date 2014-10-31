@@ -17,6 +17,7 @@
 #include "recursive_operation.h"
 #include "edithandler.h"
 #include "dragdropmanager.h"
+#include "drop_target_ex.h"
 #include <wx/clipbrd.h>
 #include "sizeformatting.h"
 #include "timeformatting.h"
@@ -29,11 +30,11 @@
 #define new DEBUG_NEW
 #endif
 
-class CRemoteListViewDropTarget : public CListCtrlDropTarget
+class CRemoteListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
 	CRemoteListViewDropTarget(CRemoteListView* pRemoteListView)
-		: CListCtrlDropTarget(pRemoteListView)
+		: CScrollableDropTarget<wxListCtrlEx>(pRemoteListView)
 		, m_pRemoteListView(pRemoteListView),
 		  m_pFileDataObject(new wxFileDataObject()),
 		  m_pRemoteDataObject(new CRemoteDataObject()),
@@ -181,7 +182,7 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
-		CListCtrlDropTarget::OnDrop(x, y);
+		CScrollableDropTarget<wxListCtrlEx>::OnDrop(x, y);
 		ClearDropHighlight();
 
 		if (!m_pRemoteListView->m_pDirectoryListing)
@@ -190,9 +191,10 @@ public:
 		return true;
 	}
 
-	virtual void DisplayDropHighlight(wxPoint point)
+	virtual int DisplayDropHighlight(wxPoint point)
 	{
 		DoDisplayDropHighlight(point);
+		return -1;
 	}
 
 	int DoDisplayDropHighlight(wxPoint point)
@@ -240,7 +242,7 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::OnDragOver(x, y, def);
+		def = CScrollableDropTarget<wxListCtrlEx>::OnDragOver(x, y, def);
 
 		if (def == wxDragError ||
 			def == wxDragNone ||
@@ -271,13 +273,13 @@ public:
 
 	virtual void OnLeave()
 	{
-		CListCtrlDropTarget::OnLeave();
+		CScrollableDropTarget<wxListCtrlEx>::OnLeave();
 		ClearDropHighlight();
 	}
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
-		def = CListCtrlDropTarget::OnEnter(x, y, def);
+		def = CScrollableDropTarget<wxListCtrlEx>::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 
