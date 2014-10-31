@@ -202,11 +202,10 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate *pEngine) : CRealCo
 
 CFtpControlSocket::~CFtpControlSocket()
 {
+	RemoveHandler();
 	m_pSocket->SetSynchronousReadCallback(0);
 
 	DoClose();
-
-	RemoveHandler();
 }
 
 void CFtpControlSocket::OnReceive()

@@ -49,6 +49,8 @@ protected:
 	bool signalled_{};
 	bool quit_{};
 
+	CEventHandler * active_handler_{};
+
 	virtual bool ProcessEvent();
 };
 

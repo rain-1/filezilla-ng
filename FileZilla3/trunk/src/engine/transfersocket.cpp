@@ -46,6 +46,7 @@ CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSo
 
 CTransferSocket::~CTransferSocket()
 {
+	RemoveHandler();
 	if (m_transferEndReason == TransferEndReason::none)
 		m_transferEndReason = TransferEndReason::successful;
 	ResetSocket();
@@ -60,8 +61,6 @@ CTransferSocket::~CTransferSocket()
 			}
 		}
 	}
-
-	RemoveHandler();
 }
 
 void CTransferSocket::ResetSocket()

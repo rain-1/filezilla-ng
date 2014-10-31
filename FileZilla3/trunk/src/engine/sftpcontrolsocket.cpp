@@ -325,9 +325,8 @@ CSftpControlSocket::CSftpControlSocket(CFileZillaEnginePrivate *pEngine) : CCont
 
 CSftpControlSocket::~CSftpControlSocket()
 {
-	DoClose();
-
 	RemoveHandler();
+	DoClose();
 }
 
 enum connectStates

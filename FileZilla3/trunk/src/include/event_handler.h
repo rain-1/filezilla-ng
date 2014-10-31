@@ -20,6 +20,10 @@ public:
 	void StopTimer(timer_id id);
 
 	CEventLoop & event_loop_;
+
+private:
+	friend class CEventLoop;
+	bool removing_{};
 };
 
 #endif

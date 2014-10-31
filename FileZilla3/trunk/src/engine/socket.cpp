@@ -132,6 +132,7 @@ CSocketEventDispatcher::CSocketEventDispatcher(CEventLoop & event_loop)
 
 CSocketEventDispatcher::~CSocketEventDispatcher()
 {
+	RemoveHandler();
 	for (auto const& pendingEvent : m_pending_events ) {
 		delete pendingEvent;
 	}
