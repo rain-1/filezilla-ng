@@ -33,15 +33,19 @@ void CEventLoop::SendEvent(CEventHandler* handler, CEventBase const& evt)
 {
 	{
 		wxMutexLocker lock(sync_);
-		pending_events_.emplace_back(handler, evt.clone());
-		signalled_ = true;
-		cond_.Signal();
+		if (!handler->removing_) {
+			pending_events_.emplace_back(handler, evt.clone());
+			signalled_ = true;
+			cond_.Signal();
+		}
 	}
 }
 
 void CEventLoop::RemoveHandler(CEventHandler* handler)
 {
-	wxMutexLocker lock(sync_);
+	sync_.Lock();
+
+	handler->removing_ = true;
 
 	pending_events_.erase(
 		std::remove_if(pending_events_.begin(), pending_events_.end(),
@@ -63,6 +67,14 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 		),
 		timers_.end()
 	);
+
+	while (active_handler_ == handler) {
+		sync_.Unlock();
+		wxMilliSleep(1);
+		sync_.Lock();
+	}
+
+	sync_.Unlock();
 }
 
 timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_shot)
@@ -76,11 +88,13 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 
 	wxMutexLocker lock(sync_);
 	static timer_id id{};
-	d.id_ = ++id; // 64bit, can this really ever overflow?
-	
-	timers_.emplace_back(d);
-	signalled_ = true;
-	cond_.Signal();
+	if (!handler->removing_) {
+		d.id_ = ++id; // 64bit, can this really ever overflow?
+
+		timers_.emplace_back(d);
+		signalled_ = true;
+		cond_.Signal();
+	}
 	return d.id_;
 }
 
@@ -109,12 +123,19 @@ bool CEventLoop::ProcessEvent()
 	pending_events_.pop_front();
 	requestMore = !pending_events_.empty() || quit_;
 	
-	sync_.Unlock();
-	if (ev.first && ev.second) {
-		(*ev.first)(*ev.second);
+	if (!ev.first->removing_) {
+		active_handler_ = ev.first;
+		sync_.Unlock();
+		if (ev.first && ev.second) {
+			(*ev.first)(*ev.second);
+		}
+		delete ev.second;
+		sync_.Lock();
+		active_handler_ = 0;
 	}
-	delete ev.second;
-	sync_.Lock();
+	else {
+		delete ev.second;
+	}
 
 	return requestMore;
 }
@@ -168,9 +189,13 @@ bool CEventLoop::ProcessTimers()
 
 			bool const requestMore = !pending_events_.empty() || quit_;
 
-			sync_.Unlock();
-			(*handler)(CTimerEvent(id));
-			sync_.Lock();
+			if (!handler->removing_) {
+				active_handler_ = handler;
+				sync_.Unlock();
+				(*handler)(CTimerEvent(id));
+				sync_.Lock();
+				active_handler_ = 0;
+			}
 
 			signalled_ |= requestMore;
 

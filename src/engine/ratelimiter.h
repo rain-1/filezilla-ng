@@ -10,6 +10,7 @@ class CRateLimiter final : protected CEventHandler
 {
 public:
 	CRateLimiter(CEventLoop& loop, COptionsBase& options);
+	~CRateLimiter();
 
 	enum rate_direction
 	{

@@ -13,6 +13,11 @@ CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)
 	m_tokenDebt[1] = 0;
 }
 
+CRateLimiter::~CRateLimiter()
+{
+	RemoveHandler();
+}
+
 wxLongLong CRateLimiter::GetLimit(enum rate_direction direction) const
 {
 	wxLongLong ret;

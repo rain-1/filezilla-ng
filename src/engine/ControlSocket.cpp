@@ -64,12 +64,12 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 
 CControlSocket::~CControlSocket()
 {
+	RemoveHandler();
+
 	DoClose();
 
 	delete m_pCSConv;
 	m_pCSConv = 0;
-
-	RemoveHandler();
 }
 
 int CControlSocket::Disconnect()

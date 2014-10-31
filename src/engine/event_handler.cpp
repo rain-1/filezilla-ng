@@ -10,6 +10,7 @@ CEventHandler::CEventHandler(CEventLoop& loop)
 
 CEventHandler::~CEventHandler()
 {
+	wxASSERT(removing_); // To avoid races, the base class must have removed us already
 	RemoveHandler();
 }
 
