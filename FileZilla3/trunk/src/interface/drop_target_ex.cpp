@@ -164,8 +164,8 @@ wxDragResult CScrollableDropTarget<Control>::FixupDragResult(wxDragResult res)
 }
 
 
-template CScrollableDropTarget<wxTreeCtrlEx>;
-template CScrollableDropTarget<wxListCtrlEx>;
+template class CScrollableDropTarget<wxTreeCtrlEx>;
+template class CScrollableDropTarget<wxListCtrlEx>;
 
 BEGIN_EVENT_TABLE(CScrollableDropTarget<wxTreeCtrlEx>, wxEvtHandler)
 EVT_TIMER(wxID_ANY, CScrollableDropTarget<wxTreeCtrlEx>::OnTimer)
