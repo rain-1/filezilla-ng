@@ -163,14 +163,9 @@ wxDragResult CScrollableDropTarget<Control>::FixupDragResult(wxDragResult res)
 	return res;
 }
 
+BEGIN_EVENT_TABLE_TEMPLATE1(CScrollableDropTarget, wxEvtHandler, Control)
+EVT_TIMER(wxID_ANY, CScrollableDropTarget::OnTimer)
+END_EVENT_TABLE()
 
 template class CScrollableDropTarget<wxTreeCtrlEx>;
 template class CScrollableDropTarget<wxListCtrlEx>;
-
-BEGIN_EVENT_TABLE(CScrollableDropTarget<wxTreeCtrlEx>, wxEvtHandler)
-EVT_TIMER(wxID_ANY, CScrollableDropTarget<wxTreeCtrlEx>::OnTimer)
-END_EVENT_TABLE()
-
-BEGIN_EVENT_TABLE(CScrollableDropTarget<wxListCtrlEx>, wxEvtHandler)
-EVT_TIMER(wxID_ANY, CScrollableDropTarget<wxListCtrlEx>::OnTimer)
-END_EVENT_TABLE()
