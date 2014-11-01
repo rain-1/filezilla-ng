@@ -19,7 +19,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxTreeCtrl" name="ID_SITETREE">
+                <object class="wxTreeCtrl" subclass="wxTreeCtrlEx" name="ID_SITETREE">
                   <focused>1</focused>
                   <style>wxSUNKEN_BORDER|wxTR_EDIT_LABELS|wxTR_HAS_BUTTONS</style>
                 </object>

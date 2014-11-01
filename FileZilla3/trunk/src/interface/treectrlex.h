@@ -5,11 +5,12 @@
 
 class wxTreeCtrlEx : public wxNavigationEnabled<wxTreeCtrl>
 {
-	DECLARE_CLASS(wxTreeCtrlEx)
+	DECLARE_DYNAMIC_CLASS(wxTreeCtrlEx)
 
 public:
 	typedef wxTreeItemId Item;
 
+	wxTreeCtrlEx();
 	wxTreeCtrlEx(wxWindow *parent, wxWindowID id = wxID_ANY,
 			   const wxPoint& pos = wxDefaultPosition,
 			   const wxSize& size = wxDefaultSize,
