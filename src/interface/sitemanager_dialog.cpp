@@ -337,7 +337,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	CreateControls(parent);
 
 	// Now create the imagelist for the site tree
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return false;
 
@@ -419,7 +419,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 
 	wxTreeItemId item = pTree->GetSelection();
 	if (!item.IsOk())
-		pTree->SelectItem(m_ownSites);
+		pTree->SafeSelectItem(m_ownSites);
 	SetCtrlState();
 
 	m_pWindowStateManager = new CWindowStateManager(this);
@@ -587,7 +587,7 @@ void CSiteManagerDialog::OnConnect(wxCommandEvent&)
 class CSiteManagerXmlHandler_Tree : public CSiteManagerXmlHandler
 {
 public:
-	CSiteManagerXmlHandler_Tree(wxTreeCtrl* pTree, wxTreeItemId root, const wxString& lastSelection, bool predefined)
+	CSiteManagerXmlHandler_Tree(wxTreeCtrlEx* pTree, wxTreeItemId root, const wxString& lastSelection, bool predefined)
 		: m_pTree(pTree), m_item(root), m_predefined(predefined)
 	{
 		if (!CSiteManager::UnescapeSitePath(lastSelection, m_lastSelection))
@@ -618,7 +618,7 @@ public:
 			{
 				m_lastSelection.pop_front();
 				if (m_lastSelection.empty())
-					m_pTree->SelectItem(newItem);
+					m_pTree->SafeSelectItem(newItem);
 			}
 			else
 				++m_wrong_sel_depth;
@@ -653,7 +653,7 @@ public:
 			{
 				m_lastSelection.pop_front();
 				if (m_lastSelection.empty())
-					m_pTree->SelectItem(newItem);
+					m_pTree->SafeSelectItem(newItem);
 			}
 			else
 				++m_wrong_sel_depth;
@@ -674,7 +674,7 @@ public:
 			if (first == name)
 			{
 				m_lastSelection.clear();
-				m_pTree->SelectItem(newItem);
+				m_pTree->SafeSelectItem(newItem);
 			}
 		}
 
@@ -704,7 +704,7 @@ public:
 	}
 
 protected:
-	wxTreeCtrl* m_pTree;
+	wxTreeCtrlEx* m_pTree;
 	wxTreeItemId m_item;
 
 	std::list<wxString> m_lastSelection;
@@ -718,7 +718,7 @@ protected:
 
 bool CSiteManagerDialog::Load()
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return false;
 
@@ -757,7 +757,7 @@ bool CSiteManagerDialog::Load()
 	if (!lastSelection.empty() && lastSelection[0] == '0')
 	{
 		if (lastSelection == _T("0"))
-			pTree->SelectItem(treeId);
+			pTree->SafeSelectItem(treeId);
 		else
 			lastSelection = lastSelection.Mid(1);
 	}
@@ -770,7 +770,7 @@ bool CSiteManagerDialog::Load()
 	pTree->SortChildren(treeId);
 	pTree->Expand(treeId);
 	if (!pTree->GetSelection())
-		pTree->SelectItem(treeId);
+		pTree->SafeSelectItem(treeId);
 
 	pTree->EnsureVisible(pTree->GetSelection());
 
@@ -904,7 +904,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 
 void CSiteManagerDialog::OnNewFolder(wxCommandEvent&event)
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return;
 
@@ -925,7 +925,7 @@ void CSiteManagerDialog::OnNewFolder(wxCommandEvent&event)
 	pTree->SetItemImage(newItem, 1, wxTreeItemIcon_SelectedExpanded);
 	pTree->SortChildren(item);
 	pTree->EnsureVisible(newItem);
-	pTree->SelectItem(newItem);
+	pTree->SafeSelectItem(newItem);
 	pTree->EditLabel(newItem);
 }
 
@@ -1218,7 +1218,7 @@ void CSiteManagerDialog::OnRename(wxCommandEvent& event)
 
 void CSiteManagerDialog::OnDelete(wxCommandEvent& event)
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return;
 
@@ -1241,7 +1241,7 @@ void CSiteManagerDialog::OnDelete(wxCommandEvent& event)
 	m_is_deleting = true;
 
 	pTree->Delete(item);
-	pTree->SelectItem(parent);
+	pTree->SafeSelectItem(parent);
 
 	m_is_deleting = false;
 }
@@ -1729,7 +1729,7 @@ void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent& event)
 
 void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return;
 
@@ -1756,18 +1756,15 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 	const wxString name = pTree->GetItemText(item);
 	wxString newName = wxString::Format(_("Copy of %s"), name);
 	int index = 2;
-	for (;;)
-	{
+	for (;;) {
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;
 		child = pTree->GetFirstChild(parent, cookie);
 		bool found = false;
-		while (child.IsOk())
-		{
+		while (child.IsOk()) {
 			wxString name = pTree->GetItemText(child);
 			int cmp = name.CmpNoCase(newName);
-			if (!cmp)
-			{
+			if (!cmp) {
 				found = true;
 				break;
 			}
@@ -1781,8 +1778,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 	}
 
 	wxTreeItemId newItem;
-	if (data->m_type == CSiteManagerItemData::SITE)
-	{
+	if (data->m_type == CSiteManagerItemData::SITE) {
 		CSiteManagerItemData_Site* newData = new CSiteManagerItemData_Site(*(CSiteManagerItemData_Site *)data);
 		newData->connected_item = -1;
 		newItem = pTree->AppendItem(parent, newName, 2, 2, newData);
@@ -1796,14 +1792,13 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 		if (pTree->IsExpanded(item))
 			pTree->Expand(newItem);
 	}
-	else
-	{
+	else {
 		CSiteManagerItemData* newData = new CSiteManagerItemData(*data);
 		newItem = pTree->AppendItem(parent, newName, 3, 3, newData);
 	}
 	pTree->SortChildren(parent);
 	pTree->EnsureVisible(newItem);
-	pTree->SelectItem(newItem);
+	pTree->SafeSelectItem(newItem);
 	pTree->EditLabel(newItem);
 }
 
@@ -1823,7 +1818,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 	if (!pElement)
 		return false;
 
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return false;
 
@@ -1836,10 +1831,9 @@ bool CSiteManagerDialog::LoadDefaultSites()
 	pTree->SetItemImage(m_predefinedSites, 1, wxTreeItemIcon_SelectedExpanded);
 
 	wxString lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
-	if (!lastSelection.empty() && lastSelection[0] == '1')
-	{
+	if (!lastSelection.empty() && lastSelection[0] == '1') {
 		if (lastSelection == _T("1"))
-			pTree->SelectItem(m_predefinedSites);
+			pTree->SafeSelectItem(m_predefinedSites);
 		else
 			lastSelection = lastSelection.Mid(1);
 	}
@@ -2105,7 +2099,7 @@ wxString CSiteManagerDialog::FindFirstFreeName(const wxTreeItemId &parent, const
 
 void CSiteManagerDialog::AddNewSite(wxTreeItemId parent, const CServer& server, bool connected /*=false*/)
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return;
 
@@ -2118,7 +2112,7 @@ void CSiteManagerDialog::AddNewSite(wxTreeItemId parent, const CServer& server, 
 	wxTreeItemId newItem = pTree->AppendItem(parent, name, 2, 2, pData);
 	pTree->SortChildren(parent);
 	pTree->EnsureVisible(newItem);
-	pTree->SelectItem(newItem);
+	pTree->SafeSelectItem(newItem);
 #ifdef __WXMAC__
 	// Need to trigger dirty processing of generic tree control.
 	// Else edit control will be hidden behind item
@@ -2129,7 +2123,7 @@ void CSiteManagerDialog::AddNewSite(wxTreeItemId parent, const CServer& server, 
 
 void CSiteManagerDialog::AddNewBookmark(wxTreeItemId parent)
 {
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
 		return;
 
@@ -2138,7 +2132,7 @@ void CSiteManagerDialog::AddNewBookmark(wxTreeItemId parent)
 	wxTreeItemId newItem = pTree->AppendItem(parent, name, 3, 3, new CSiteManagerItemData(CSiteManagerItemData::BOOKMARK));
 	pTree->SortChildren(parent);
 	pTree->EnsureVisible(newItem);
-	pTree->SelectItem(newItem);
+	pTree->SafeSelectItem(newItem);
 	pTree->EditLabel(newItem);
 }
 
