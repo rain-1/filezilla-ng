@@ -2,10 +2,12 @@
 #include "sitemanager_dialog.h"
 
 #include "conditionaldialog.h"
+#include "drop_target_ex.h"
 #include "filezillaapp.h"
 #include "ipcmutex.h"
 #include "Options.h"
 #include "themeprovider.h"
+#include "treectrlex.h"
 #include "window_state_manager.h"
 #include "wrapengine.h"
 #include "xmlfunctions.h"
@@ -62,12 +64,13 @@ public:
 	virtual bool SetData(size_t, const void *) { return true; }
 };
 
-class CSiteManagerDropTarget : public wxDropTarget
+class CSiteManagerDropTarget : public CScrollableDropTarget<wxTreeCtrlEx>
 {
 public:
 	CSiteManagerDropTarget(CSiteManagerDialog* pSiteManager)
-		: wxDropTarget(new CSiteManagerDialogDataObject())
+		: CScrollableDropTarget<wxTreeCtrlEx>(XRCCTRL(*pSiteManager, "ID_SITETREE", wxTreeCtrlEx))
 	{
+		SetDataObject(new CSiteManagerDialogDataObject());
 		m_pSiteManager = pSiteManager;
 	}
 
@@ -126,6 +129,7 @@ public:
 
 	virtual bool OnDrop(wxCoord x, wxCoord y)
 	{
+		CScrollableDropTarget<wxTreeCtrlEx>::OnDrop(x, y);
 		ClearDropHighlight();
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
@@ -167,11 +171,13 @@ public:
 
 	virtual void OnLeave()
 	{
+		CScrollableDropTarget<wxTreeCtrlEx>::OnLeave();
 		ClearDropHighlight();
 	}
 
 	virtual wxDragResult OnEnter(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CScrollableDropTarget<wxTreeCtrlEx>::OnEnter(x, y, def);
 		return OnDragOver(x, y, def);
 	}
 
@@ -190,6 +196,8 @@ public:
 
 	virtual wxDragResult OnDragOver(wxCoord x, wxCoord y, wxDragResult def)
 	{
+		def = CScrollableDropTarget<wxTreeCtrlEx>::OnDragOver(x, y, def);
+
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
@@ -256,7 +264,7 @@ public:
 			return wxDragNone;
 		}
 
-		DisplayDropHighlight(hit);
+		DisplayDropHighlight(wxPoint(x, y));
 
 		return def;
 	}
@@ -271,13 +279,18 @@ public:
 		m_dropHighlight = wxTreeItemId();
 	}
 
-	void DisplayDropHighlight(wxTreeItemId item)
+	wxTreeItemId DisplayDropHighlight(wxPoint p)
 	{
 		ClearDropHighlight();
 
-		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
-		pTree->SetItemDropHighlight(item, true);
-		m_dropHighlight = item;
+		wxTreeItemId hit = GetHit(p);
+		if (hit.IsOk()) {
+			wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
+			pTree->SetItemDropHighlight(hit, true);
+			m_dropHighlight = hit;
+		}
+
+		return hit;
 	}
 
 protected:

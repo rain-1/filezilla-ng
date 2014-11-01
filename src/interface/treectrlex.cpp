@@ -1,13 +1,17 @@
 #include <filezilla.h>
 #include "treectrlex.h"
 
-IMPLEMENT_CLASS(wxTreeCtrlEx, wxNavigationEnabled<wxTreeCtrl>)
+IMPLEMENT_DYNAMIC_CLASS(wxTreeCtrlEx, wxNavigationEnabled<wxTreeCtrl>)
 
 #ifdef __WXMAC__
 BEGIN_EVENT_TABLE(wxTreeCtrlEx, wxNavigationEnabled<wxTreeCtrl>)
 EVT_CHAR(wxTreeCtrlEx::OnChar)
 END_EVENT_TABLE()
 #endif
+
+wxTreeCtrlEx::wxTreeCtrlEx()
+{
+}
 
 wxTreeCtrlEx::wxTreeCtrlEx(wxWindow *parent, wxWindowID id /*=wxID_ANY*/,
 			   const wxPoint& pos /*=wxDefaultPosition*/,
@@ -113,7 +117,7 @@ wxTreeItemId wxTreeCtrlEx::GetPrevItemSimple(wxTreeItemId const& item) const
 	}
 	else {
 		cur = GetItemParent(item);
-		if (cur.IsOk() && cur == GetRootItem() && (GetWindowStyle() && wxTR_HIDE_ROOT)) {
+		if (cur.IsOk() && cur == GetRootItem() && (GetWindowStyle() & wxTR_HIDE_ROOT)) {
 			cur = wxTreeItemId();
 		}
 	}
