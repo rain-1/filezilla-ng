@@ -188,8 +188,7 @@ void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
 		TiXmlElement* pCondition = pConditions->LinkEndChild(new TiXmlElement("Condition"))->ToElement();
 		AddTextElement(pCondition, "Type", type);
 
-		if (condition.type == filter_size)
-		{
+		if (condition.type == filter_size) {
 			// Backwards compatibility sucks
 			int v = condition.condition;
 			if (v == 2)
@@ -218,26 +217,21 @@ void CFilterDialog::SaveFilters()
 	}
 
 	TiXmlElement *pFilters = pDocument->FirstChildElement("Filters");
-	while (pFilters)
-	{
+	while (pFilters) {
 		pDocument->RemoveChild(pFilters);
 		pFilters = pDocument->FirstChildElement("Filters");
 	}
 
 	pFilters = pDocument->LinkEndChild(new TiXmlElement("Filters"))->ToElement();
 
-	for (std::vector<CFilter>::const_iterator iter = m_globalFilters.begin(); iter != m_globalFilters.end(); ++iter)
-	{
-		const CFilter& filter = *iter;
-
+	for (auto const& filter : m_globalFilters) {
 		TiXmlElement* pElement = new TiXmlElement("Filter");
 		SaveFilter(pElement, filter);
 		pFilters->LinkEndChild(pElement);
 	}
 
 	TiXmlElement *pSets = pDocument->FirstChildElement("Sets");
-	while (pSets)
-	{
+	while (pSets) {
 		pDocument->RemoveChild(pSets);
 		pSets = pDocument->FirstChildElement("Sets");
 	}
@@ -245,16 +239,14 @@ void CFilterDialog::SaveFilters()
 	pSets = pDocument->LinkEndChild(new TiXmlElement("Sets"))->ToElement();
 	SetTextAttribute(pSets, "Current", wxString::Format(_T("%d"), m_currentFilterSet));
 
-	for (std::vector<CFilterSet>::const_iterator iter = m_globalFilterSets.begin(); iter != m_globalFilterSets.end(); ++iter)
-	{
-		const CFilterSet& set = *iter;
+	for (auto const& set : m_globalFilterSets) {
 		TiXmlElement* pSet = pSets->LinkEndChild(new TiXmlElement("Set"))->ToElement();
 
-		if (iter != m_globalFilterSets.begin())
+		if (!set.name.empty()) {
 			AddTextElement(pSet, "Name", set.name);
+		}
 
-		for (unsigned int i = 0; i < set.local.size(); i++)
-		{
+		for (unsigned int i = 0; i < set.local.size(); ++i) {
 			TiXmlElement* pItem = pSet->LinkEndChild(new TiXmlElement("Item"))->ToElement();
 			AddTextElement(pItem, "Local", set.local[i] ? _T("1") : _T("0"));
 			AddTextElement(pItem, "Remote", set.remote[i] ? _T("1") : _T("0"));
@@ -274,8 +266,7 @@ void CFilterDialog::DisplayFilters()
 	pLocalFilters->Clear();
 	pRemoteFilters->Clear();
 
-	for (unsigned int i = 0; i < m_filters.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_filters.size(); ++i) {
 		const CFilter& filter = m_filters[i];
 
 		const bool localOnly = filter.IsLocalFilter();
@@ -309,18 +300,15 @@ void CFilterDialog::OnFilterSelect(wxCommandEvent& event)
 
 	const CFilter& filter = m_filters[item];
 	const bool localOnly = filter.IsLocalFilter();
-	if (localOnly && event.GetEventObject() != pLocal)
-	{
+	if (localOnly && event.GetEventObject() != pLocal) {
 		pRemote->Check(item, false);
 		wxMessageBoxEx(_("Selected filter only works for local files."), _("Cannot select filter"), wxICON_INFORMATION);
 		return;
 	}
 
 
-	if (m_shiftClick)
-	{
-		if (event.GetEventObject() == pLocal)
-		{
+	if (m_shiftClick) {
+		if (event.GetEventObject() == pLocal) {
 			if (!localOnly)
 				pRemote->Check(item, pLocal->IsChecked(event.GetSelection()));
 		}
@@ -328,8 +316,7 @@ void CFilterDialog::OnFilterSelect(wxCommandEvent& event)
 			pLocal->Check(item, pRemote->IsChecked(event.GetSelection()));
 	}
 
-	if (m_currentFilterSet)
-	{
+	if (m_currentFilterSet) {
 		m_filterSets[0] = m_filterSets[m_currentFilterSet];
 		m_currentFilterSet = 0;
 		wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
@@ -350,8 +337,7 @@ void CFilterDialog::OnSaveAs(wxCommandEvent& event)
 		return;
 
 	wxString name = dlg.GetValue();
-	if (name.empty())
-	{
+	if (name.empty()) {
 		wxMessageBoxEx(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
 		return;
 	}
@@ -365,14 +351,12 @@ void CFilterDialog::OnSaveAs(wxCommandEvent& event)
 		set = m_filterSets[0];
 
 	int pos = pChoice->FindString(name);
-	if (pos != wxNOT_FOUND)
-	{
+	if (pos != wxNOT_FOUND) {
 		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
 			return;
 	}
 
-	if (pos == wxNOT_FOUND)
-	{
+	if (pos == wxNOT_FOUND) {
 		pos = m_filterSets.size();
 		m_filterSets.push_back(set);
 		pChoice->Append(name);
@@ -397,8 +381,7 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 	if (old_pos == -1)
 		return;
 
-	if (!old_pos)
-	{
+	if (!old_pos) {
 		wxMessageBoxEx(_("This filter set cannot be renamed."));
 		return;
 	}
@@ -413,21 +396,18 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 
 	wxString name = dlg.GetValue();
 
-	if (name == pChoice->GetStringSelection())
-	{
+	if (name == pChoice->GetStringSelection()) {
 		// Nothing changed
 		return;
 	}
 
-	if (name.empty())
-	{
+	if (name.empty()) {
 		wxMessageBoxEx(_("No name for the filterset given."), _("Cannot save filterset"), wxICON_INFORMATION);
 		return;
 	}
 
 	int pos = pChoice->FindString(name);
-	if (pos != wxNOT_FOUND)
-	{
+	if (pos != wxNOT_FOUND) {
 		if (wxMessageBoxEx(_("Given filterset name already exists, overwrite filter set?"), _("Filter set already exists"), wxICON_QUESTION | wxYES_NO) != wxYES)
 			return;
 	}
@@ -438,8 +418,7 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 	m_filterSets.erase(m_filterSets.begin() + old_pos);
 
 	pos = pChoice->FindString(name);
-	if (pos == wxNOT_FOUND)
-	{
+	if (pos == wxNOT_FOUND) {
 		pos = m_filterSets.size();
 		m_filterSets.push_back(set);
 		pChoice->Append(name);
@@ -462,8 +441,7 @@ void CFilterDialog::OnDeleteSet(wxCommandEvent& event)
 	if (pos == -1)
 		return;
 
-	if (!pos)
-	{
+	if (!pos) {
 		wxMessageBoxEx(_("This filter set cannot be removed."));
 		return;
 	}
@@ -496,36 +474,30 @@ void CFilterDialog::OnChangeAll(wxCommandEvent& event)
 	bool local;
 	std::vector<bool>* pValues;
 	wxCheckListBox* pListBox;
-	if (event.GetId() == XRCID("ID_LOCAL_ENABLEALL") || event.GetId() == XRCID("ID_LOCAL_DISABLEALL"))
-	{
+	if (event.GetId() == XRCID("ID_LOCAL_ENABLEALL") || event.GetId() == XRCID("ID_LOCAL_DISABLEALL")) {
 		pListBox = XRCCTRL(*this, "ID_LOCALFILTERS", wxCheckListBox);
 		pValues = &m_filterSets[0].local;
 		local = true;
 	}
-	else
-	{
+	else {
 		pListBox = XRCCTRL(*this, "ID_REMOTEFILTERS", wxCheckListBox);
 		pValues = &m_filterSets[0].remote;
 		local = false;
 	}
 
-	if (m_currentFilterSet)
-	{
+	if (m_currentFilterSet) {
 		m_filterSets[0] = m_filterSets[m_currentFilterSet];
 		m_currentFilterSet = 0;
 		wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
 		pChoice->SetSelection(0);
 	}
 
-	for (size_t i = 0; i < pListBox->GetCount(); i++)
-	{
-		if (!local && (m_filters[i].IsLocalFilter()))
-		{
+	for (size_t i = 0; i < pListBox->GetCount(); ++i) {
+		if (!local && (m_filters[i].IsLocalFilter())) {
 			pListBox->Check(i, false);
 			(*pValues)[i] = false;
 		}
-		else
-		{
+		else {
 			pListBox->Check(i, check);
 			(*pValues)[i] = check;
 		}
@@ -545,8 +517,7 @@ CFilterManager::CFilterManager()
 {
 	LoadFilters();
 
-	if (m_globalFilterSets.empty())
-	{
+	if (m_globalFilterSets.empty()) {
 		CFilterSet set;
 		set.local.resize(m_globalFilters.size(), false);
 		set.remote.resize(m_globalFilters.size(), false);
@@ -569,8 +540,7 @@ bool CFilterManager::HasActiveFilters(bool ignore_disabled /*=false*/)
 		return false;
 
 	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
-	for (unsigned int i = 0; i < m_globalFilters.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {
 		if (set.local[i])
 			return true;
 
@@ -608,16 +578,13 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
 
 	// Check active filters
-	for (unsigned int i = 0; i < m_globalFilters.size(); i++)
-	{
-		if (local)
-		{
+	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {
+		if (local) {
 			if (set.local[i])
 				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date))
 					return true;
 		}
-		else
-		{
+		else {
 			if (set.remote[i])
 				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date))
 					return true;
@@ -859,15 +826,13 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 			wxFAIL_MSG(_T("Unhandled filter type"));
 			break;
 		}
-		if (match)
-		{
+		if (match) {
 			if (filter.matchType == CFilter::any)
 				return true;
 			else if (filter.matchType == CFilter::none)
 				return false;
 		}
-		else
-		{
+		else {
 			if (filter.matchType == CFilter::all)
 				return false;
 		}
@@ -900,8 +865,9 @@ bool CFilterManager::CompileRegexes(CFilter& filter)
 
 bool CFilterManager::CompileRegexes()
 {
-	for (unsigned int i = 0; i < m_globalFilters.size(); i++)
-		CompileRegexes(m_globalFilters[i]);
+	for (auto & filter : m_globalFilters) {
+		CompileRegexes(filter);
+	}
 	return true;
 }
 
@@ -924,12 +890,10 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 	if (!pConditions)
 		return false;
 
-	for (TiXmlElement *pCondition = pConditions->FirstChildElement("Condition"); pCondition; pCondition = pCondition->NextSiblingElement("Condition"))
-	{
+	for (TiXmlElement *pCondition = pConditions->FirstChildElement("Condition"); pCondition; pCondition = pCondition->NextSiblingElement("Condition")) {
 		CFilterCondition condition;
 		int type = GetTextElementInt(pCondition, "Type", 0);
-		switch (type)
-		{
+		switch (type) {
 		case 0:
 			condition.type = filter_name;
 			break;
@@ -952,8 +916,7 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 			continue;
 		}
 		condition.condition = GetTextElementInt(pCondition, "Condition", 0);
-		if (condition.type == filter_size)
-		{
+		if (condition.type == filter_size) {
 			if (condition.value == 3)
 				condition.value = 2;
 			else if (condition.value >= 2)
@@ -964,22 +927,18 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		if (condition.strValue.empty())
 			continue;
 
-		// TODO: 64bit filesize
-		if (condition.type == filter_size)
-		{
-			unsigned long tmp;
-			condition.strValue.ToULong(&tmp);
+		if (condition.type == filter_size) {
+			unsigned long long tmp;
+			condition.strValue.ToULongLong(&tmp);
 			condition.value = tmp;
 		}
-		else if (condition.type == filter_attributes || condition.type == filter_permissions)
-		{
+		else if (condition.type == filter_attributes || condition.type == filter_permissions) {
 			if (condition.strValue == _T("0"))
 				condition.value = 0;
 			else
 				condition.value = 1;
 		}
-		else if (condition.type == filter_date)
-		{
+		else if (condition.type == filter_date) {
 			wxDateTime t;
 			if (!t.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !t.IsValid())
 				continue;
@@ -1021,8 +980,7 @@ void CFilterManager::LoadFilters()
 		return;
 
 	TiXmlElement *pFilter = pFilters->FirstChildElement("Filter");
-	while (pFilter)
-	{
+	while (pFilter) {
 		CFilter filter;
 
 		bool loaded = LoadFilter(pFilter, filter);
@@ -1039,12 +997,10 @@ void CFilterManager::LoadFilters()
 	if (!pSets)
 		return;
 
-	for (TiXmlElement* pSet = pSets->FirstChildElement("Set"); pSet; pSet = pSet->NextSiblingElement("Set"))
-	{
+	for (TiXmlElement* pSet = pSets->FirstChildElement("Set"); pSet; pSet = pSet->NextSiblingElement("Set")) {
 		CFilterSet set;
 		TiXmlElement* pItem = pSet->FirstChildElement("Item");
-		while (pItem)
-		{
+		while (pItem) {
 			wxString local = GetTextElement(pItem, "Local");
 			wxString remote = GetTextElement(pItem, "Remote");
 			set.local.push_back(local == _T("1") ? true : false);
@@ -1053,8 +1009,7 @@ void CFilterManager::LoadFilters()
 			pItem = pItem->NextSiblingElement("Item");
 		}
 
-		if (!m_globalFilterSets.empty())
-		{
+		if (!m_globalFilterSets.empty()) {
 			set.name = GetTextElement(pSet, "Name");
 			if (set.name.empty())
 				continue;
@@ -1066,8 +1021,7 @@ void CFilterManager::LoadFilters()
 
 	wxString attribute = GetTextAttribute(pSets, "Current");
 	unsigned long value;
-	if (attribute.ToULong(&value))
-	{
+	if (attribute.ToULong(&value)) {
 		if (value < m_globalFilterSets.size())
 			m_globalCurrentFilterSet = value;
 	}
@@ -1075,8 +1029,7 @@ void CFilterManager::LoadFilters()
 
 void CFilterManager::ToggleFilters()
 {
-	if (m_filters_disabled)
-	{
+	if (m_filters_disabled) {
 		m_filters_disabled = false;
 		return;
 	}
@@ -1095,15 +1048,12 @@ std::list<CFilter> CFilterManager::GetActiveFilters(bool local)
 	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
 
 	// Check active filters
-	for (unsigned int i = 0; i < m_globalFilters.size(); i++)
-	{
-		if (local)
-		{
+	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {
+		if (local) {
 			if (set.local[i])
 				filters.push_back(m_globalFilters[i]);
 		}
-		else
-		{
+		else {
 			if (set.remote[i])
 				filters.push_back(m_globalFilters[i]);
 		}
