@@ -4329,8 +4329,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		pData->host = m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_HOST);
 
 		int pos = -1;
-		if (!pData->host.empty() && pData->host[0] == '[')
-		{
+		if (!pData->host.empty() && pData->host[0] == '[') {
 			// Probably IPv6 address
 			pos = pData->host.Find(']');
 			if (pos < 0)
@@ -4355,8 +4354,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		else
 			pos = pData->host.Find(':');
 
-		if (pos != -1)
-		{
+		if (pos != -1) {
 			unsigned long port = 0;
 			if (!pData->host.Mid(pos + 1).ToULong(&port))
 				port = 0;
@@ -4366,8 +4364,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 		else
 			pData->port = 21;
 
-		if (pData->host.empty() || pData->port < 1 || pData->port > 65535)
-		{
+		if (pData->host.empty() || pData->port < 1 || pData->port > 65535) {
 			LogMessage(MessageType::Error, _("Proxy set but proxy host or port invalid"));
 			DoClose(FZ_REPLY_CRITICALERROR);
 			return FZ_REPLY_ERROR;
@@ -4375,20 +4372,17 @@ int CFtpControlSocket::Connect(const CServer &server)
 
 		LogMessage(MessageType::Status, _("Using proxy %s"), m_pEngine->GetOptions().GetOption(OPTION_FTP_PROXY_HOST));
 	}
-	else
-	{
+	else {
 		pData->ftp_proxy_type = 0;
 		pData->host = server.GetHost();
 		pData->port = server.GetPort();
 	}
 
-	if (server.GetProtocol() != FTPES /*&& server.GetProtocol() != FTP*/)
-	{
+	if (server.GetProtocol() != FTPES && server.GetProtocol() != FTP) {
 		pData->neededCommands[LOGON_AUTH_TLS] = 0;
 		pData->neededCommands[LOGON_AUTH_SSL] = 0;
 		pData->neededCommands[LOGON_AUTH_WAIT] = 0;
-		if (server.GetProtocol() != FTPS)
-		{
+		if (server.GetProtocol() != FTPS) {
 			pData->neededCommands[LOGON_PBSZ] = 0;
 			pData->neededCommands[LOGON_PROT] = 0;
 		}

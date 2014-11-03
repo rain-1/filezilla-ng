@@ -524,12 +524,10 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 		pChoice->Append(CServer::GetNameFromLogonType((enum LogonType)i));
 
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
-	// TODO: Finish threading of TLS code, then reanable auto-TLS
-//	pEncryption->Append(_("Use explicit FTP over TLS if available"));
-	pEncryption->Append(_("Use plain FTP"));
+	pEncryption->Append(_("Use explicit FTP over TLS if available"));
 	pEncryption->Append(_("Require explicit FTP over TLS"));
 	pEncryption->Append(_("Require implicit FTP over TLS"));
-//	pEncryption->Append(_("Only use plain FTP (insecure)"));
+	pEncryption->Append(_("Only use plain FTP (insecure)"));
 	pEncryption->SetSelection(0);
 }
 
@@ -2265,16 +2263,13 @@ void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 	wxStaticText* pEncryptionDesc = XRCCTRL(*this, "ID_ENCRYPTION_DESC", wxStaticText);
 
-	if (protocol == SFTP)
-	{
+	if (protocol == SFTP) {
 		pEncryption->Hide();
 		pEncryptionDesc->Hide();
 		pProtocol->SetSelection(1);
 	}
-	else
-	{
-		switch (protocol)
-		{
+	else {
+		switch (protocol) {
 		default:
 		case FTP:
 			pEncryption->SetSelection(0);
@@ -2285,9 +2280,9 @@ void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
 		case FTPS:
 			pEncryption->SetSelection(2);
 			break;
-/*		case INSECURE_FTP:
+		case INSECURE_FTP:
 			pEncryption->SetSelection(3);
-			break;*/
+			break;
 		}
 		pEncryption->Show();
 		pEncryptionDesc->Show();
@@ -2313,7 +2308,7 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 		return FTPES;
 	case 2:
 		return FTPS;
-/*	case 3:
-		return INSECURE_FTP;*/
+	case 3:
+		return INSECURE_FTP;
 	}
 }
