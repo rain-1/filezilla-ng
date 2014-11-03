@@ -710,8 +710,7 @@ int CFtpControlSocket::Logon()
 
 int CFtpControlSocket::LogonParseResponse()
 {
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("LogonParseResponse without m_pCurOpData called"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_INTERNALERROR;
@@ -721,10 +720,8 @@ int CFtpControlSocket::LogonParseResponse()
 
 	int code = GetReplyCode();
 
-	if (pData->opState == LOGON_WELCOME)
-	{
-		if (code != 2 && code != 3)
-		{
+	if (pData->opState == LOGON_WELCOME) {
+		if (code != 2 && code != 3) {
 			DoClose(code == 5 ? FZ_REPLY_CRITICALERROR : 0);
 			return FZ_REPLY_DISCONNECTED;
 		}
@@ -732,27 +729,25 @@ int CFtpControlSocket::LogonParseResponse()
 	else if (pData->opState == LOGON_AUTH_TLS ||
 			 pData->opState == LOGON_AUTH_SSL)
 	{
-		if (code != 2 && code != 3)
-		{
-			if (pData->opState == LOGON_AUTH_SSL)
-			{
-				if (m_pCurrentServer->GetProtocol() == FTP)
-				{
+		if (code != 2 && code != 3) {
+			CServerCapabilities::SetCapability(*m_pCurrentServer, (pData->opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, no);
+			if (pData->opState == LOGON_AUTH_SSL) {
+				if (m_pCurrentServer->GetProtocol() == FTP) 	{
 					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
 					LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
 
 					pData->opState = LOGON_LOGON;
 					return SendNextCommand();
 				}
-				else
-				{
+				else {
 					DoClose(code == 5 ? FZ_REPLY_CRITICALERROR : 0);
 					return FZ_REPLY_DISCONNECTED;
 				}
 			}
 		}
-		else
-		{
+		else {
+			CServerCapabilities::SetCapability(*m_pCurrentServer, (pData->opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, yes);
+
 			LogMessage(MessageType::Status, _("Initializing TLS..."));
 
 			wxASSERT(!m_pTlsSocket);
@@ -761,16 +756,14 @@ int CFtpControlSocket::LogonParseResponse()
 			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
 
-			if (!m_pTlsSocket->Init())
-			{
+			if (!m_pTlsSocket->Init()) {
 				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
 				DoClose(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
 
 			int res = m_pTlsSocket->Handshake();
-			if (res == FZ_REPLY_ERROR)
-			{
+			if (res == FZ_REPLY_ERROR) {
 				DoClose();
 				return FZ_REPLY_ERROR;
 			}
@@ -782,8 +775,7 @@ int CFtpControlSocket::LogonParseResponse()
 				return FZ_REPLY_WOULDBLOCK;
 		}
 	}
-	else if (pData->opState == LOGON_LOGON)
-	{
+	else if (pData->opState == LOGON_LOGON) {
 		t_loginCommand cmd = pData->loginSequence.front();
 
 		if (code != 2 && code != 3) {
@@ -812,10 +804,8 @@ int CFtpControlSocket::LogonParseResponse()
 				for (unsigned int i = 0; i < m_pCurrentServer->GetAccount().Length(); ++i)
 					if ((unsigned int)m_pCurrentServer->GetAccount()[i] > 127)
 						asciiOnly = false;
-				if (!asciiOnly)
-				{
-					if (pData->ftp_proxy_type)
-					{
+				if (!asciiOnly) {
+					if (pData->ftp_proxy_type) {
 						LogMessage(MessageType::Status, _("Login data contains non-ASCII characters and server might not be UTF-8 aware. Cannot fall back to local charset since using proxy."));
 						int error = FZ_REPLY_DISCONNECTED;
 						if (cmd.type == loginCommandType::pass && code == 5)
@@ -845,13 +835,11 @@ int CFtpControlSocket::LogonParseResponse()
 		}
 
 		pData->loginSequence.pop_front();
-		if (code == 2)
-		{
+		if (code == 2) {
 			while (!pData->loginSequence.empty() && pData->loginSequence.front().optional)
 				pData->loginSequence.pop_front();
 		}
-		else if (code == 3 && pData->loginSequence.empty())
-		{
+		else if (code == 3 && pData->loginSequence.empty()) {
 			LogMessage(MessageType::Error, _("Login sequence fully executed yet not logged in. Aborting."));
 			if (cmd.type == loginCommandType::pass && m_pCurrentServer->GetAccount().empty())
 				LogMessage(MessageType::Error, _("Server might require an account. Try specifying an account using the Site Manager"));
@@ -859,22 +847,19 @@ int CFtpControlSocket::LogonParseResponse()
 			return FZ_REPLY_ERROR;
 		}
 
-		if (!pData->loginSequence.empty())
-		{
+		if (!pData->loginSequence.empty()) {
 			pData->waitChallenge = false;
 
 			return SendNextCommand();
 		}
 	}
-	else if (pData->opState == LOGON_SYST)
-	{
+	else if (pData->opState == LOGON_SYST) {
 		if (code == 2)
 			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_Response.Mid(4));
 		else
 			CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, no);
 
-		if (m_pCurrentServer->GetType() == DEFAULT && code == 2)
-		{
+		if (m_pCurrentServer->GetType() == DEFAULT && code == 2) {
 			if (m_Response.Length() > 7 && m_Response.Mid(3, 4) == _T(" MVS"))
 				m_pCurrentServer->SetType(MVS);
 			else if (m_Response.Len() > 12 && m_Response.Mid(3, 9).Upper() == _T(" NONSTOP "))
@@ -887,16 +872,13 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 		}
 
-		if (m_Response.Find(_T("FileZilla")) != -1)
-		{
+		if (m_Response.Find(_T("FileZilla")) != -1) {
 			pData->neededCommands[LOGON_CLNT] = 0;
 			pData->neededCommands[LOGON_OPTSUTF8] = 0;
 		}
 	}
-	else if (pData->opState == LOGON_FEAT)
-	{
-		if (code == 2)
-		{
+	else if (pData->opState == LOGON_FEAT) {
+		if (code == 2) {
 			CServerCapabilities::SetCapability(*GetCurrentServer(), feat_command, yes);
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
 				CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, no);
@@ -916,24 +898,20 @@ int CFtpControlSocket::LogonParseResponse()
 			m_useUTF8 = false;
 		}
 	}
-	else if (pData->opState == LOGON_PROT)
-	{
+	else if (pData->opState == LOGON_PROT) {
 		if (code == 2 || code == 3)
 			m_protectDataChannel = true;
 	}
-	else if (pData->opState == LOGON_CUSTOMCOMMANDS)
-	{
+	else if (pData->opState == LOGON_CUSTOMCOMMANDS) {
 		++pData->customCommandIndex;
 		if (pData->customCommandIndex < m_pCurrentServer->GetPostLoginCommands().size())
 			return SendNextCommand();
 	}
 
-	for (;;)
-	{
+	for (;;) {
 		++pData->opState;
 
-		if (pData->opState == LOGON_DONE)
-		{
+		if (pData->opState == LOGON_DONE) {
 			LogMessage(MessageType::Status, _("Connected"));
 			ResetOperation(FZ_REPLY_OK);
 			LogMessage(MessageType::Debug_Info, _T("Measured latency of %d ms"), m_rtt.GetLatency());
@@ -942,16 +920,13 @@ int CFtpControlSocket::LogonParseResponse()
 
 		if (!pData->neededCommands[pData->opState])
 			continue;
-		else if (pData->opState == LOGON_SYST)
-		{
+		else if (pData->opState == LOGON_SYST) {
 			wxString system;
 			enum capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), syst_command, &system);
 			if (cap == unknown)
 				break;
-			else if (cap == yes)
-			{
-				if (m_pCurrentServer->GetType() == DEFAULT)
-				{
+			else if (cap == yes) {
+				if (m_pCurrentServer->GetType() == DEFAULT) {
 					if (system.Left(3) == _T("MVS"))
 						m_pCurrentServer->SetType(MVS);
 					else if (system.Left(4).Upper() == _T("Z/VM"))
@@ -960,49 +935,42 @@ int CFtpControlSocket::LogonParseResponse()
 						m_pCurrentServer->SetType(HPNONSTOP);
 				}
 
-				if (system.Find(_T("FileZilla")) != -1)
-				{
+				if (system.Find(_T("FileZilla")) != -1) {
 					pData->neededCommands[LOGON_CLNT] = 0;
 					pData->neededCommands[LOGON_OPTSUTF8] = 0;
 				}
 			}
 		}
-		else if (pData->opState == LOGON_FEAT)
-		{
+		else if (pData->opState == LOGON_FEAT) {
 			enum capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), feat_command);
 			if (cap == unknown)
 				break;
 			const enum CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
-			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
-			{
+			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
 				LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 				m_useUTF8 = false;
 			}
 		}
-		else if (pData->opState == LOGON_CLNT)
-		{
+		else if (pData->opState == LOGON_CLNT) {
 			if (!m_useUTF8)
 				continue;
 
 			if (CServerCapabilities::GetCapability(*GetCurrentServer(), clnt_command) == yes)
 				break;
 		}
-		else if (pData->opState == LOGON_OPTSUTF8)
-		{
+		else if (pData->opState == LOGON_OPTSUTF8) {
 			if (!m_useUTF8)
 				continue;
 
 			if (CServerCapabilities::GetCapability(*GetCurrentServer(), utf8_command) == yes)
 				break;
 		}
-		else if (pData->opState == LOGON_OPTSMLST)
-		{
+		else if (pData->opState == LOGON_OPTSMLST) {
 			wxString facts;
 			if (CServerCapabilities::GetCapability(*GetCurrentServer(), mlsd_command, &facts) != yes)
 				continue;
 			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command);
-			if (cap == unknown)
-			{
+			if (cap == unknown) {
 				MakeLowerAscii(facts);
 
 				bool had_unset = false;
@@ -1011,14 +979,12 @@ int CFtpControlSocket::LogonParseResponse()
 				// Create a list of all facts understood by both FZ and the server.
 				// Check if there's any supported fact not enabled by default, should that
 				// be the case we need to send OPTS MLST
-				while (!facts.empty())
-				{
+				while (!facts.empty()) {
 					int delim = facts.Find(';');
 					if (delim == -1)
 						break;
 
-					if (!delim)
-					{
+					if (!delim) {
 						facts = facts.Mid(1);
 						continue;
 					}
@@ -1026,18 +992,15 @@ int CFtpControlSocket::LogonParseResponse()
 					bool enabled;
 					wxString fact;
 
-					if (facts[delim - 1] == '*')
-					{
-						if (delim == 1)
-						{
+					if (facts[delim - 1] == '*') {
+						if (delim == 1) {
 							facts = facts.Mid(delim + 1);
 							continue;
 						}
 						enabled = true;
 						fact = facts.Left(delim - 1);
 					}
-					else
-					{
+					else {
 						enabled = false;
 						fact = facts.Left(delim);
 					}
@@ -1060,8 +1023,7 @@ int CFtpControlSocket::LogonParseResponse()
 					}
 				}
 
-				if (had_unset)
-				{
+				if (had_unset) {
 					CServerCapabilities::SetCapability(*GetCurrentServer(), opst_mlst_command, yes, opts_facts);
 					break;
 				}
@@ -4332,16 +4294,13 @@ int CFtpControlSocket::Connect(const CServer &server)
 		if (!pData->host.empty() && pData->host[0] == '[') {
 			// Probably IPv6 address
 			pos = pData->host.Find(']');
-			if (pos < 0)
-			{
+			if (pos < 0) {
 				LogMessage(MessageType::Error, _("Proxy host starts with '[' but no closing bracket found."));
 				DoClose(FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			if (pData->host.size() > static_cast<size_t>(pos + 1) && pData->host[pos + 1])
-			{
-				if (pData->host[pos + 1] != ':')
-				{
+			if (pData->host.size() > static_cast<size_t>(pos + 1) && pData->host[pos + 1]) {
+				if (pData->host[pos + 1] != ':') {
 					LogMessage(MessageType::Error, _("Invalid proxy host, after closing bracket only colon and port may follow."));
 					DoClose(FZ_REPLY_CRITICALERROR);
 					return FZ_REPLY_ERROR;
