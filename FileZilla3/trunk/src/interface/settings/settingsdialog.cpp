@@ -33,11 +33,10 @@ EVT_BUTTON(XRCID("wxID_OK"), CSettingsDialog::OnOK)
 EVT_BUTTON(XRCID("wxID_CANCEL"), CSettingsDialog::OnCancel)
 END_EVENT_TABLE()
 
-CSettingsDialog::CSettingsDialog()
+CSettingsDialog::CSettingsDialog(CFileZillaEngineContext & engine_context)
+	: m_engine_context(engine_context)
 {
-	m_pMainFrame = 0;
 	m_pOptions = COptions::Get();
-	m_activePanel = 0;
 }
 
 CSettingsDialog::~CSettingsDialog()

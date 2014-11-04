@@ -17,7 +17,6 @@ CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
 
 CFileZillaEngine::~CFileZillaEngine()
 {
-	// fixme: Might be too late? Two-phase shutdown perhaps?
 	RemoveHandler();
 	m_maySendNotificationEvent = false;
 }

@@ -10,10 +10,10 @@
 
 class COptions;
 
-class CNetConfWizard : public wxWizard, protected CWrapEngine
+class CNetConfWizard final : public wxWizard, protected CWrapEngine, protected CEventHandler
 {
 public:
-	CNetConfWizard(wxWindow* parent, COptions* pOptions);
+	CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & context);
 	virtual ~CNetConfWizard();
 
 	bool Load();
@@ -37,7 +37,9 @@ protected:
 	void OnRestart(wxCommandEvent& event);
 	void OnFinish(wxWizardEvent& event);
 	void OnTimer(wxTimerEvent& event);
+	void OnExternalIPAddress2(wxCommandEvent&);
 
+	virtual void operator()(CEventBase const& ev);
 	void OnExternalIPAddress();
 
 	void OnReceive();
@@ -94,6 +96,8 @@ protected:
 	char* m_pSendBuffer;
 
 	wxTimer m_timer;
+
+	CSocketEventDispatcher & dispatcher_;
 };
 
 #endif //__NETCONFWIZARD_H__

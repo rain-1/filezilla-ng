@@ -50,7 +50,7 @@ bool COptionsPageConnection::Validate()
 
 void COptionsPageConnection::OnWizard(wxCommandEvent& event)
 {
-	CNetConfWizard wizard(GetParent(), m_pOptions);
+	CNetConfWizard wizard(GetParent(), m_pOptions, m_pOwner->GetEngineContext());
 	if (!wizard.Load())
 		return;
 	if (wizard.Run())
