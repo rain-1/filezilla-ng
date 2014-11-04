@@ -1,18 +1,23 @@
 #include <filezilla.h>
+
+#include "event_loop.h"
 #include "netconfwizard.h"
 #include "Options.h"
 #include "dialogex.h"
 #include "filezillaapp.h"
 #include "externalipresolver.h"
 
+DECLARE_EVENT_TYPE(fzEVT_ON_EXTERNAL_IP_ADDRESS, -1)
+DEFINE_EVENT_TYPE(fzEVT_ON_EXTERNAL_IP_ADDRESS)
+
 BEGIN_EVENT_TABLE(CNetConfWizard, wxWizard)
 EVT_WIZARD_PAGE_CHANGING(wxID_ANY, CNetConfWizard::OnPageChanging)
 EVT_WIZARD_PAGE_CHANGED(wxID_ANY, CNetConfWizard::OnPageChanged)
 EVT_SOCKET(wxID_ANY, CNetConfWizard::OnSocketEvent)
-//EVT_FZ_EXTERNALIPRESOLVE(wxID_ANY, CNetConfWizard::OnExternalIPAddress)
 EVT_BUTTON(XRCID("ID_RESTART"), CNetConfWizard::OnRestart)
 EVT_WIZARD_FINISHED(wxID_ANY, CNetConfWizard::OnFinish)
 EVT_TIMER(wxID_ANY, CNetConfWizard::OnTimer)
+EVT_COMMAND(wxID_ANY, fzEVT_ON_EXTERNAL_IP_ADDRESS, CNetConfWizard::OnExternalIPAddress2)
 END_EVENT_TABLE()
 
 // Mark some strings used by wx as translatable
@@ -21,8 +26,10 @@ TRANSLATE_T("&Next >");
 TRANSLATE_T("< &Back");
 #endif
 
-CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions)
-: m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
+CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & engine_context)
+	: CEventHandler(engine_context.GetEventLoop())
+	, m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
+	, dispatcher_(engine_context.GetSocketEventDispatcher())
 {
 	m_socket = 0;
 	m_pIPResolver = 0;
@@ -37,6 +44,8 @@ CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions)
 
 CNetConfWizard::~CNetConfWizard()
 {
+	RemoveHandler();
+
 	delete m_socket;
 	delete m_pIPResolver;
 	delete [] m_pSendBuffer;
@@ -709,8 +718,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
-			// FIXME XXX
-			m_pIPResolver = 0;// new CExternalIPResolver(this);
+			m_pIPResolver = new CExternalIPResolver(dispatcher_, *this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
 			if (!m_pIPResolver->Done())
 				return wxString();
@@ -737,7 +745,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 	return wxString();
 }
 
-void CNetConfWizard::OnExternalIPAddress()
+void CNetConfWizard::OnExternalIPAddress2(wxCommandEvent&)
 {
 	if (!m_pIPResolver)
 		return;
@@ -952,24 +960,21 @@ void CNetConfWizard::OnAccept()
 		return;
 
 	wxIPV4address peerAddr, dataPeerAddr;
-	if (!m_socket->GetPeer(peerAddr))
-	{
+	if (!m_socket->GetPeer(peerAddr)) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
 		PrintMessage(_("Failed to get peer address of control connection, connection closed."), 1);
 		CloseSocket();
 		return;
 	}
-	if (!m_pDataSocket->GetPeer(dataPeerAddr))
-	{
+	if (!m_pDataSocket->GetPeer(dataPeerAddr)) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
 		PrintMessage(_("Failed to get peer address of data connection, connection closed."), 1);
 		CloseSocket();
 		return;
 	}
-	if (peerAddr.IPAddress() != dataPeerAddr.IPAddress())
-	{
+	if (peerAddr.IPAddress() != dataPeerAddr.IPAddress()) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
 		PrintMessage(_("Warning, ignoring data connection from wrong IP."), 0);
@@ -1034,8 +1039,7 @@ void CNetConfWizard::OnDataReceive()
 			ip = ip - (ip % 256) + (ip % 256) * 10 + *q - '0';
 	}
 	ip = wxUINT32_SWAP_ON_LE(ip);
-	if (memcmp(&ip, p, 4))
-	{
+	if (memcmp(&ip, p, 4)) {
 		m_testResult = datatainted;
 		PrintMessage(_("Received data tainted"), 1);
 		CloseSocket();
@@ -1045,8 +1049,7 @@ void CNetConfWizard::OnDataReceive()
 	delete m_pDataSocket;
 	m_pDataSocket = 0;
 
-	if (gotListReply)
-	{
+	if (gotListReply) {
 		m_state++;
 		SendNextCommand();
 	}
@@ -1078,4 +1081,16 @@ void CNetConfWizard::OnTimer(wxTimerEvent& event)
 
 	PrintMessage(_("Connection timed out."), 0);
 	CloseSocket();
+}
+
+void CNetConfWizard::operator()(CEventBase const& ev)
+{
+	if (Dispatch<CExternalIPResolveEvent>(ev, this, &CNetConfWizard::OnExternalIPAddress))
+		return;
+}
+
+void CNetConfWizard::OnExternalIPAddress()
+{
+	wxCommandEvent ev(fzEVT_ON_EXTERNAL_IP_ADDRESS);
+	wxPostEvent(this, ev);
 }
