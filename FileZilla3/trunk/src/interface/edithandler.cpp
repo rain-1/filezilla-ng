@@ -86,7 +86,7 @@ void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
 		if (wxFileName::FileExists(lockfile))
 		{
 #ifndef __WXMSW__
-			int fd = open(lockfile.mb_str(), O_RDWR, 0);
+			int fd = open(lockfile.mb_str(), O_RDWR | O_CLOEXEC, 0);
 			if (fd >= 0)
 			{
 				// Try to lock 1 byte region in the lockfile. m_type specifies the byte to lock.
@@ -172,7 +172,7 @@ wxString CEditHandler::GetLocalDirectory()
 	}
 #else
 	wxString file = m_localDir + _T("fz3temp-lockfile");
-	m_lockfile_descriptor = open(file.mb_str(), O_CREAT | O_RDWR, 0600);
+	m_lockfile_descriptor = open(file.mb_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0600);
 	if (m_lockfile_descriptor >= 0)
 	{
 		// Lock 1 byte region in the lockfile.

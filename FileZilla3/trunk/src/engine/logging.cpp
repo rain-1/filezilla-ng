@@ -97,7 +97,7 @@ void CLogging::InitLogFile() const
 	m_log_fd = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (m_log_fd == INVALID_HANDLE_VALUE)
 #else
-	m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT, 0644);
+	m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 	if (m_log_fd == -1)
 #endif
 	{
@@ -229,7 +229,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				while ((rc = fcntl(m_log_fd, F_SETLKW, &lock)) == -1 && errno == EINTR);
 
 				// Ignore any other failures
-				int fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT, 0644);
+				int fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 				if (fd == -1) {
 					wxString error = wxSysErrorMsg();
 
@@ -258,7 +258,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				close(fd);
 
 				// Get the new file
-				m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT, 0644);
+				m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 				if (m_log_fd == -1) {
 					LogMessage(MessageType::Error, wxSysErrorMsg());
 					return;
