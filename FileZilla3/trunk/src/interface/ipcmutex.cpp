@@ -20,7 +20,7 @@ CInterProcessMutex::CInterProcessMutex(enum t_ipcMutexType mutexType, bool initi
 	if (!m_instanceCount) {
 		// Open file only if this is the first instance
 		wxFileName fn(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR), _T("lockfile"));
-		m_fd = open(fn.GetFullPath().mb_str(), O_CREAT | O_RDW0R | O_CLOEXEC, 0644);
+		m_fd = open(fn.GetFullPath().mb_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0644);
 	}
 	m_instanceCount++;
 #endif
