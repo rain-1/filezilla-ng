@@ -6,7 +6,7 @@
 #include "misc.h"
 
 namespace {
-wxCriticalSection sync;
+wxCriticalSection s_sync;
 wxString ip;
 bool checked = false;
 }
@@ -32,7 +32,7 @@ CExternalIPResolver::~CExternalIPResolver()
 void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force /*=false*/)
 {
 	{
-		wxCriticalSectionLocker l(sync);
+		wxCriticalSectionLocker l(s_sync);
 		if (checked) {
 			if (force)
 				checked = false;
@@ -213,7 +213,7 @@ void CExternalIPResolver::Close(bool successful)
 	m_done = true;
 
 	{
-		wxCriticalSectionLocker l(sync);
+		wxCriticalSectionLocker l(s_sync);
 		if (!successful) {
 			ip.clear();
 		}
@@ -374,7 +374,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			return;
 		}
 
-		wxCriticalSectionLocker l(sync);
+		wxCriticalSectionLocker l(s_sync);
 		ip = m_data;
 	}
 	else {
@@ -391,7 +391,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			return;
 		}
 
-		wxCriticalSectionLocker l(sync); 
+		wxCriticalSectionLocker l(s_sync); 
 		ip = regex.GetMatch(m_data, 2);
 	}
 
@@ -524,12 +524,12 @@ void CExternalIPResolver::OnChunkedData()
 
 bool CExternalIPResolver::Successful() const
 {
-	wxCriticalSectionLocker l(sync);
+	wxCriticalSectionLocker l(s_sync);
 	return !ip.empty();
 }
 
 wxString CExternalIPResolver::GetIP() const
 {
-	wxCriticalSectionLocker l(sync);
+	wxCriticalSectionLocker l(s_sync);
 	return ip;
 }
