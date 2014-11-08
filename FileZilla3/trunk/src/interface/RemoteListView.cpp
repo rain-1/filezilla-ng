@@ -2775,8 +2775,7 @@ void CRemoteListView::OnNavigationEvent(bool forward)
 
 void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle() || !m_pDirectoryListing) {
 		wxBell();
 		return;
 	}
@@ -2788,34 +2787,16 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
-	if (dlg.GetValue().empty())
-	{
+	if (dlg.GetValue().empty()) {
 		wxBell();
 		return;
 	}
 
 	wxString newFileName = dlg.GetValue();
 
-	// Copied from elsewhere in the source, checks for characters that Windows deems invalid
-	if ((newFileName.Find('/')  != -1) ||
-		(newFileName.Find('\\') != -1) ||
-		(newFileName.Find(':')  != -1) ||
-		(newFileName.Find('*')  != -1) ||
-		(newFileName.Find('?')  != -1) ||
-		(newFileName.Find('"')  != -1) ||
-		(newFileName.Find('<')  != -1) ||
-		(newFileName.Find('>')  != -1) ||
-		(newFileName.Find('|')  != -1))
-	{
-		wxMessageBoxEx(_("Filename may not contain any of the following characters: / \\ : * ? \" < > |"), _("Invalid filename"), wxICON_EXCLAMATION);
-		return;
-	}
-
 	// Check if target file already exists
-	for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); i++)
-	{
-		if (newFileName == (*m_pDirectoryListing)[i].name)
-		{
+	for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); ++i) {
+		if (newFileName == (*m_pDirectoryListing)[i].name) {
 			wxMessageBoxEx(_("Target filename already exists!"));
 			return;
 		}
@@ -2834,8 +2815,7 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 	}
 
 	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxBell();
 		return;
 	}
