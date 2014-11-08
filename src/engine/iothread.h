@@ -4,8 +4,8 @@
 #include <wx/file.h>
 #include "event_loop.h"
 
-#define BUFFERCOUNT 3
-#define BUFFERSIZE 65536
+#define BUFFERCOUNT 5
+#define BUFFERSIZE 128*1024
 
 struct io_thread_event_type{};
 typedef CEvent<io_thread_event_type> CIOThreadEvent;
