@@ -227,6 +227,9 @@ bool CUpdater::Run()
 
 int CUpdater::Download(wxString const& url, wxString const& local_file)
 {
+	current_url_ = url;
+	current_local_file_ = local_file;
+
 	engine_->Execute(CDisconnectCommand());
 	int res = SendConnectCommand(url);
 	if( res == FZ_REPLY_OK ) {
@@ -386,7 +389,13 @@ void CUpdater::ProcessOperation(CNotification* notification)
 	UpdaterState s = UpdaterState::failed;
 
 	COperationNotification* operation = reinterpret_cast<COperationNotification*>(notification);
-	if (operation->nReplyCode != FZ_REPLY_OK) {
+	if (operation->commandId == Command::disconnect && operation->nReplyCode & FZ_REPLY_DISCONNECTED && !current_url_.empty()) {
+		int res = Download(current_url_, current_local_file_);
+		if (res == FZ_REPLY_WOULDBLOCK) {
+			return;
+		}
+	}
+	else if (operation->nReplyCode != FZ_REPLY_OK) {
 		if( state_ != UpdaterState::checking ) {
 			s = UpdaterState::newversion;
 		}
@@ -722,6 +731,11 @@ void CUpdater::SetState( UpdaterState s )
 {
 	if( s != state_ ) {
 		state_ = s;
+
+		if (s != UpdaterState::checking && s != UpdaterState::newversion_downloading) {
+			current_url_.clear();
+			current_local_file_.clear();
+		}
 		build b = version_information_.available_;
 		for (auto const& handler : handlers_ ) {
 			if( handler ) {
