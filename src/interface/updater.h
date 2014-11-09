@@ -118,6 +118,9 @@ protected:
 	wxString log_;
 
 	wxTimer update_timer_;
+
+	wxString current_url_;
+	wxString current_local_file_;
 };
 
 #endif //FZ_MANUALUPDATECHECK
