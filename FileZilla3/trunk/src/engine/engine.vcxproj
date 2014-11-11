@@ -82,6 +82,7 @@
     <ClCompile Include="event_handler.cpp" />
     <ClCompile Include="event_loop.cpp" />
     <ClCompile Include="externalipresolver.cpp" />
+    <ClCompile Include="file.cpp" />
     <ClCompile Include="FileZillaEngine.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -126,6 +127,7 @@
     <ClInclude Include="directorylistingparser.h" />
     <ClInclude Include="..\include\engineprivate.h" />
     <ClInclude Include="..\include\externalipresolver.h" />
+    <ClInclude Include="file.h" />
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />
     <ClInclude Include="FtpControlSocket.h" />
