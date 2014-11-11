@@ -57,6 +57,8 @@ public:
 protected:
 #ifdef __WXMSW__
 	HANDLE hFile_{INVALID_HANDLE_VALUE};
+#else
+	int fd_{-1};
 #endif
 };
 

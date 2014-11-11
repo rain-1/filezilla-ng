@@ -42,7 +42,7 @@ void CFile::Close()
 {
 	if (hFile_ != INVALID_HANDLE_VALUE) {
 		CloseHandle(hFile_);
-		hFile_ = 0;
+		hFile_ = INVALID_HANDLE_VALUE;
 	}
 }
 
@@ -102,5 +102,92 @@ ssize_t CFile::Write(void const* buf, size_t count)
 
 	return ret;
 }
+#else
 
+#include <sys/stat.h>
+
+bool CFile::Open(wxString const& f, mode m, disposition d)
+{
+	Close();
+
+	int flags = O_CLOEXEC;
+	if (m == read) {
+		flags |= O_RDONLY;
+	}
+	else {
+		flags |= O_WRONLY | O_CREAT;
+		if (d == truncate) {
+			flags |= O_TRUNC;
+		}
+	}
+	fd_ = open(f, flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+
+#if HAVE_POSIX_FADVISE
+	if (fd_ != -1) {
+		posix_fadvise(fd_, 0, 0, POSIX_FADV_SEQUENTIAL | POSIX_FADV_NOREUSE);
+	}
+#endif
+
+	return fd_ != -1;
+}
+
+void CFile::Close()
+{
+	if (fd_ != -1) {
+		close(fd_);
+		fd_ = -1;
+	}
+}
+
+wxFileOffset CFile::Length() const
+{
+	wxFileOffset ret = -1;
+
+	struct stat buf;
+	if (!fstat(fd_, &buf)) {
+		ret = buf.st_size;
+	}
+
+	return ret;
+}
+
+wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
+{
+	wxFileOffset ret = -1;
+
+	int whence = SEEK_SET;
+	if (m == current) {
+		whence = SEEK_CUR;
+	}
+	else if (m == end) {
+		whence = SEEK_END;
+	}
+
+	auto newPos = lseek(fd_, offset, whence);
+	if (newPos != static_cast<off_t>(-1)) {
+		ret = newPos;
+	}
+
+	return ret;
+}
+
+ssize_t CFile::Read(void *buf, size_t count)
+{
+	ssize_t ret;
+	do {
+		ret = ::read(fd_, buf, count);
+	} while (ret == -1 && (errno == EAGAIN || errno == EINTR));
+
+	return ret;
+}
+
+ssize_t CFile::Write(void const* buf, size_t count)
+{
+	ssize_t ret;
+	do {
+		ret = ::write(fd_, buf, count);
+	} while (ret == -1 && (errno == EAGAIN || errno == EINTR));
+
+	return ret;
+}
 #endif
