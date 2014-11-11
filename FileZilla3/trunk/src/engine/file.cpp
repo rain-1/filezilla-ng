@@ -120,7 +120,7 @@ bool CFile::Open(wxString const& f, mode m, disposition d)
 			flags |= O_TRUNC;
 		}
 	}
-	fd_ = open(f, flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+	fd_ = open(f.fn_str(), flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
 
 #if HAVE_POSIX_FADVISE
 	if (fd_ != -1) {
