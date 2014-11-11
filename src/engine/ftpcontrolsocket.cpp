@@ -3,12 +3,13 @@
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "externalipresolver.h"
+#include "file.h"
 #include "ftpcontrolsocket.h"
-#include "transfersocket.h"
 #include "iothread.h"
+#include "pathcache.h"
 #include "servercapabilities.h"
 #include "tlssocket.h"
-#include "pathcache.h"
+#include "transfersocket.h"
 #include "local_filesys.h"
 #include "proxy.h"
 
@@ -2540,9 +2541,8 @@ int CFtpControlSocket::FileTransferSend()
 		}
 
 		{
-			wxFile* pFile = new wxFile;
-			if (pData->download)
-			{
+			std::unique_ptr<CFile> pFile = make_unique<CFile>();
+			if (pData->download) {
 				// Be quiet
 				wxLogNull nullLog;
 
@@ -2551,11 +2551,8 @@ int CFtpControlSocket::FileTransferSend()
 				// Potentially racy
 				bool didExist = wxFile::Exists(pData->localFile);
 
-				if (pData->resume)
-				{
-					if (!pFile->Open(pData->localFile, wxFile::write_append))
-					{
-						delete pFile;
+				if (pData->resume) {
+					if (!pFile->Open(pData->localFile, CFile::write, CFile::existing)) {
 						LogMessage(MessageType::Error, _("Failed to open \"%s\" for appending/writing"), pData->localFile);
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -2563,10 +2560,9 @@ int CFtpControlSocket::FileTransferSend()
 
 					pData->fileDidExist = didExist;
 
-					startOffset = pFile->SeekEnd(0);
-					if (startOffset == wxInvalidOffset)
-					{
-						delete pFile;
+					startOffset = pFile->Seek(0, CFile::end);
+
+					if (startOffset == wxInvalidOffset) {
 						LogMessage(MessageType::Error, _("Could not seek to the end of the file"));
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -2574,36 +2570,28 @@ int CFtpControlSocket::FileTransferSend()
 					pData->localFileSize = startOffset;
 
 					// Check resume capabilities
-					if (pData->opState == filetransfer_resumetest)
-					{
+					if (pData->opState == filetransfer_resumetest) {
 						int res = FileTransferTestResumeCapability();
-						if ((res & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-						{
-							delete pFile;
+						if ((res & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 							// Server does not support resume but remote and local filesizes are equal
 							return FZ_REPLY_OK;
 						}
-						if (res != FZ_REPLY_OK)
-						{
-							delete pFile;
+						if (res != FZ_REPLY_OK) {
 							return res;
 						}
 					}
 				}
-				else
-				{
+				else {
 					CreateLocalDir(pData->localFile);
 
-					if (!pFile->Open(pData->localFile, wxFile::write))
-					{
-						delete pFile;
+					if (!pFile->Open(pData->localFile, CFile::write, CFile::truncate)) {
 						LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile);
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
 					}
 
 					pData->fileDidExist = didExist;
-					pData->localFileSize = pFile->Length();
+					pData->localFileSize = 0;
 				}
 
 				if (pData->resume)
@@ -2613,30 +2601,23 @@ int CFtpControlSocket::FileTransferSend()
 
 				InitTransferStatus(pData->remoteFileSize, startOffset, false);
 			}
-			else
-			{
-				if (!pFile->Open(pData->localFile, wxFile::read))
-				{
-					delete pFile;
+			else {
+				if (!pFile->Open(pData->localFile, CFile::read)) {
 					LogMessage(MessageType::Error, _("Failed to open \"%s\" for reading"), pData->localFile);
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
 				}
 
 				wxFileOffset startOffset;
-				if (pData->resume)
-				{
-					if (pData->remoteFileSize > 0)
-					{
+				if (pData->resume) {
+					if (pData->remoteFileSize > 0) {
 						startOffset = pData->remoteFileSize;
 
 						if (pData->localFileSize == -1)
 							pData->localFileSize = pFile->Length();
 
-						if (startOffset == pData->localFileSize && pData->binary)
-						{
+						if (startOffset == pData->localFileSize && pData->binary) {
 							LogMessage(MessageType::Debug_Info, _T("No need to resume, remote file size matches local file size."));
-							delete pFile;
 
 							if (m_pEngine->GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
@@ -2653,9 +2634,7 @@ int CFtpControlSocket::FileTransferSend()
 						}
 
 						// Assume native 64 bit type exists
-						if (pFile->Seek(startOffset, wxFromStart) == wxInvalidOffset)
-						{
-							delete pFile;
+						if (pFile->Seek(startOffset, CFile::begin) == wxInvalidOffset) {
 							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), wxLongLong(startOffset).ToString());
 							ResetOperation(FZ_REPLY_ERROR);
 							return FZ_REPLY_ERROR;
@@ -2667,13 +2646,11 @@ int CFtpControlSocket::FileTransferSend()
 				else
 					startOffset = 0;
 
-				if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes)
-				{
+				if (CServerCapabilities::GetCapability(*m_pCurrentServer, rest_stream) == yes) {
 					// Use REST + STOR if resuming
 					pData->resumeOffset = startOffset;
 				}
-				else
-				{
+				else {
 					// Play it safe, use APPE if resuming
 					pData->resumeOffset = 0;
 				}
@@ -2682,8 +2659,7 @@ int CFtpControlSocket::FileTransferSend()
 				InitTransferStatus(len, startOffset, false);
 			}
 			pData->pIOThread = new CIOThread;
-			if (!pData->pIOThread->Create(pFile, !pData->download, pData->binary))
-			{
+			if (!pData->pIOThread->Create(pFile.release(), !pData->download, pData->binary)) {
 				// CIOThread will delete pFile
 				delete pData->pIOThread;
 				pData->pIOThread = 0;

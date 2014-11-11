@@ -17,13 +17,14 @@ enum IORet
 	IO_Again = -1
 };
 
+class CFile;
 class CIOThread final : public wxThread
 {
 public:
 	CIOThread();
 	virtual ~CIOThread();
 
-	bool Create(wxFile* pFile, bool read, bool binary);
+	bool Create(CFile* pFile, bool read, bool binary);
 	virtual void Destroy(); // Only call that might be blocking
 
 	// Call before first call to one of the GetNext*Buffer functions
@@ -60,7 +61,7 @@ protected:
 
 	bool m_read;
 	bool m_binary;
-	wxFile* m_pFile;
+	CFile* m_pFile;
 
 	char* m_buffers[BUFFERCOUNT];
 	unsigned int m_bufferLens[BUFFERCOUNT];

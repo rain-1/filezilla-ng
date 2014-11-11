@@ -1,5 +1,6 @@
 #include <filezilla.h>
 
+#include "file.h"
 #include "iothread.h"
 
 #include <wx/log.h>
@@ -36,7 +37,7 @@ CIOThread::~CIOThread()
 	delete [] m_error_description;
 }
 
-bool CIOThread::Create(wxFile* pFile, bool read, bool binary)
+bool CIOThread::Create(CFile* pFile, bool read, bool binary)
 {
 	wxASSERT(pFile);
 	delete m_pFile;
@@ -44,13 +45,11 @@ bool CIOThread::Create(wxFile* pFile, bool read, bool binary)
 	m_read = read;
 	m_binary = binary;
 
-	if (read)
-	{
+	if (read) {
 		m_curAppBuf = BUFFERCOUNT - 1;
 		m_curThreadBuf = 0;
 	}
-	else
-	{
+	else {
 		m_curAppBuf = -1;
 		m_curThreadBuf = 0;
 	}
@@ -64,16 +63,13 @@ bool CIOThread::Create(wxFile* pFile, bool read, bool binary)
 
 wxThread::ExitCode CIOThread::Entry()
 {
-	if (m_read)
-	{
-		while (m_running)
-		{
+	if (m_read) {
+		while (m_running) {
 			int len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 
 			wxMutexLocker locker(m_mutex);
 
-			if (m_appWaiting)
-			{
+			if (m_appWaiting) {
 				if (!m_evtHandler)
 				{
 					m_running = false;
@@ -391,9 +387,10 @@ bool CIOThread::WriteToFile(char* pBuffer, int len)
 
 bool CIOThread::DoWrite(const char* pBuffer, int len)
 {
-	int fd = m_pFile->fd();
-	if (wxWrite(fd, pBuffer, len) == len)
+	int written = m_pFile->Write(pBuffer, len);
+	if (written == len) {
 		return true;
+	}
 
 	int code = wxSysErrorCode();
 

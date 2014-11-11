@@ -18,6 +18,7 @@ libengine_a_SOURCES = \
 		event_loop.cpp \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
+		file.cpp \
 		ftpcontrolsocket.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \
@@ -48,6 +49,7 @@ noinst_HEADERS = backend.h \
 		directorycache.h \
 		directorylistingparser.h \
 		filezilla.h \
+		file.h \
 		ftpcontrolsocket.h \
 		httpcontrolsocket.h iothread.h \
 		logging_private.h \
