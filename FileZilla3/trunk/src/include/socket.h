@@ -60,7 +60,7 @@ public:
 private:
 	virtual void operator()(CEventBase const& ev);
 
-	std::list<CSocketEvent*> m_pending_events;
+	std::deque<CSocketEvent*> m_pending_events;
 
 	wxCriticalSection m_sync;
 };

@@ -9,22 +9,10 @@ public:
 
 	CEventBase(CEventBase const&) = delete;
 	CEventBase& operator=(CEventBase const&) = delete;
-
-	virtual CEventBase* clone() const = 0;
-};
-
-template<typename Derived>
-class CClonableEvent : public CEventBase
-{
-public:
-	virtual CEventBase* clone() const
-	{
-		return new Derived(static_cast<Derived const&>(*this));
-	}
 };
 
 template<typename UniqueType, typename...Values>
-class CEvent final : public CClonableEvent<CEvent<UniqueType, Values...>>
+class CEvent final : public CEventBase
 {
 public:
 	typedef UniqueType unique_type;

@@ -54,6 +54,10 @@ bool CIOThread::Create(CFile* pFile, bool read, bool binary)
 		m_curThreadBuf = 0;
 	}
 
+#ifdef SIMULATE_IO
+	size_ = pFile->Length();
+#endif
+
 	m_running = true;
 	wxThread::Create();
 	wxThread::Run();
@@ -70,14 +74,12 @@ wxThread::ExitCode CIOThread::Entry()
 			wxMutexLocker locker(m_mutex);
 
 			if (m_appWaiting) {
-				if (!m_evtHandler)
-				{
+				if (!m_evtHandler) {
 					m_running = false;
 					break;
 				}
 				m_appWaiting = false;
-				CIOThreadEvent evt;
-				m_evtHandler->SendEvent(evt);
+				m_evtHandler->SendEvent<CIOThreadEvent>();
 			}
 
 			if (len == wxInvalidOffset)
@@ -156,8 +158,7 @@ wxThread::ExitCode CIOThread::Entry()
 					break;
 				}
 				m_appWaiting = false;
-				CIOThreadEvent evt;
-				m_evtHandler->SendEvent(evt);
+				m_evtHandler->SendEvent<CIOThreadEvent>();
 			}
 
 			if (m_error)
@@ -281,8 +282,7 @@ void CIOThread::Destroy()
 	m_mutex.Lock();
 
 	m_running = false;
-	if (m_threadWaiting)
-	{
+	if (m_threadWaiting) {
 		m_threadWaiting = false;
 		m_condition.Signal();
 	}
@@ -293,6 +293,14 @@ void CIOThread::Destroy()
 
 int CIOThread::ReadFromFile(char* pBuffer, int maxLen)
 {
+#ifdef SIMULATE_IO
+	if (size_ < 0) {
+		return 0;
+	}
+	size_ -= maxLen;
+	return maxLen;
+#endif
+
 	// In binary mode, no conversion has to be done.
 	// Also, under Windows the native newline format is already identical
 	// to the newline format of the FTP protocol
@@ -339,6 +347,9 @@ int CIOThread::ReadFromFile(char* pBuffer, int maxLen)
 
 bool CIOThread::WriteToFile(char* pBuffer, int len)
 {
+#ifdef SIMULATE_IO
+	return true;
+#endif
 	// In binary mode, no conversion has to be done.
 	// Also, under Windows the native newline format is already identical
 	// to the newline format of the FTP protocol

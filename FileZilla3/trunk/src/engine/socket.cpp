@@ -1,5 +1,8 @@
 #include <wx/defs.h>
 #ifdef __WXMSW__
+  #ifndef NOMINMAX
+  #define NOMINMAX
+  #endif
   // MinGW needs this for getaddrinfo
   #if defined(_WIN32_WINNT)
     #if _WIN32_WINNT < 0x0600
@@ -146,7 +149,7 @@ void CSocketEventDispatcher::SendEvent(CSocketEvent* evt)
 		m_pending_events.push_back(evt);
 	}
 
-	CEventHandler::SendEvent(CInternalSocketEvent());
+	CEventHandler::SendEvent<CInternalSocketEvent>();
 }
 
 void CSocketEventDispatcher::RemovePending(const CSocketEventHandler* pHandler)
@@ -1270,14 +1273,12 @@ CSocket::SocketState CSocket::GetState()
 
 bool CSocket::Cleanup(bool force)
 {
-	std::list<CSocketThread*>::iterator iter = waiting_socket_threads.begin();
-	while (iter != waiting_socket_threads.end())
-	{
-		std::list<CSocketThread*>::iterator current = iter++;
+	auto iter = waiting_socket_threads.begin();
+	while (iter != waiting_socket_threads.end()) {
+		auto current = iter++;
 		CSocketThread* pThread = *current;
 		pThread->m_sync.Lock();
-		if (!force && !pThread->m_finished)
-		{
+		if (!force && !pThread->m_finished) {
 			pThread->m_sync.Unlock();
 			continue;
 		}

@@ -38,7 +38,7 @@ int CFileZillaEngine::Execute(const CCommand &command)
 	}
 
 	m_pCurrentCommand.reset(command.Clone());
-	SendEvent(CCommandEvent());
+	SendEvent<CCommandEvent>();
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -142,6 +142,6 @@ int CFileZillaEngine::Cancel()
 	if (!IsBusy())
 		return FZ_REPLY_OK;
 
-	SendEvent(CFileZillaEngineEvent(engineCancel));
+	SendEvent<CFileZillaEngineEvent>(engineCancel);
 	return FZ_REPLY_WOULDBLOCK;
 }

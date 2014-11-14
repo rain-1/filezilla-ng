@@ -19,11 +19,6 @@ void CEventHandler::RemoveHandler()
 	event_loop_.RemoveHandler(this);
 }
 
-void CEventHandler::SendEvent(CEventBase const& evt)
-{
-	event_loop_.SendEvent(this, evt);
-}
-
 timer_id CEventHandler::AddTimer(int ms_interval, bool one_shot)
 {
 	return event_loop_.AddTimer(this, ms_interval, one_shot);

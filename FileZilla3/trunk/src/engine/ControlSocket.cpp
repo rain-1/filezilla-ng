@@ -796,7 +796,7 @@ void CControlSocket::UnlockCache()
 			continue;
 
 		// Send notification
-		lockInfo.pControlSocket->SendEvent(CObtainLockEvent());
+		lockInfo.pControlSocket->SendEvent<CObtainLockEvent>();
 		break;
 	}
 }

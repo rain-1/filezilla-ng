@@ -91,7 +91,7 @@ protected:
 		m_criticalSection.Leave();
 
 		if (sendEvent)
-			m_pOwner->SendEvent(CSftpEvent());
+			m_pOwner->SendEvent<CSftpEvent>();
 	}
 
 	int ReadNumber(bool &error)
@@ -275,7 +275,7 @@ protected:
 		}
 loopexit:
 
-		m_pOwner->SendEvent(CTerminateEvent());
+		m_pOwner->SendEvent<CTerminateEvent>();
 		return reinterpret_cast<ExitCode>(Close());
 	}
 

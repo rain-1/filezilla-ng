@@ -3,9 +3,9 @@
 
 #include "apply.h"
 #include "event.h"
-#include "event_handler.h"
 #include "timeex.h"
 
+class CEventHandler;
 struct timer_data final
 {
 	CEventHandler* handler_{};
@@ -24,20 +24,21 @@ public:
 	CEventLoop(CEventLoop const&) = delete;
 	CEventLoop& operator=(CEventLoop const&) = delete;
 
-	void SendEvent(CEventHandler* handler, CEventBase const& evt);
-
 	void RemoveHandler(CEventHandler* handler);
 
 	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
 	void StopTimer(CEventHandler* handler, timer_id id);
 
 protected:
+	friend class CEventHandler;
+	void SendEvent(CEventHandler* handler, CEventBase* evt);
+
 	bool ProcessTimers();
 	int GetNextWaitInterval();
 
 	virtual wxThread::ExitCode Entry();
 
-	typedef std::list<std::pair<CEventHandler*, CEventBase*>> Events;
+	typedef std::deque<std::pair<CEventHandler*, CEventBase*>> Events;
 	typedef std::vector<timer_data> Timers;
 
 	Events pending_events_;
