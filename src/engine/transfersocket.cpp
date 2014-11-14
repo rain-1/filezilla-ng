@@ -587,7 +587,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 	ResetSocket();
 
-	m_pEngine->SendEvent(CFileZillaEngineEvent(engineTransferEnd));
+	m_pEngine->SendEvent<CFileZillaEngineEvent>(engineTransferEnd);
 }
 
 CSocket* CTransferSocket::CreateSocketServer(int port)

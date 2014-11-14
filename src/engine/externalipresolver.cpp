@@ -221,7 +221,7 @@ void CExternalIPResolver::Close(bool successful)
 	}
 
 	if (m_handler) {
-		m_handler->SendEvent(CExternalIPResolveEvent());
+		m_handler->SendEvent<CExternalIPResolveEvent>();
 		m_handler = 0;
 	}
 }

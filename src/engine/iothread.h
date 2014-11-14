@@ -7,6 +7,11 @@
 #define BUFFERCOUNT 5
 #define BUFFERSIZE 128*1024
 
+// Does not actually read from or write to file
+// Useful for benchmarks to avoid IO bottleneck
+// skewing results
+//#define SIMULATE_IO
+
 struct io_thread_event_type{};
 typedef CEvent<io_thread_event_type> CIOThreadEvent;
 
@@ -82,6 +87,10 @@ protected:
 	bool m_wasCarriageReturn;
 
 	wxChar* m_error_description;
+
+#ifdef SIMULATE_IO
+	wxFileOffset size_;
+#endif
 };
 
 #endif //__IOTHREAD_H__

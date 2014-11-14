@@ -29,14 +29,17 @@ CEventLoop::~CEventLoop()
 	}
 }
 
-void CEventLoop::SendEvent(CEventHandler* handler, CEventBase const& evt)
+void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 {
 	{
 		wxMutexLocker lock(sync_);
 		if (!handler->removing_) {
-			pending_events_.emplace_back(handler, evt.clone());
+			pending_events_.emplace_back(handler, evt);
 			signalled_ = true;
 			cond_.Signal();
+		}
+		else {
+			delete evt;
 		}
 	}
 }
