@@ -100,8 +100,8 @@ struct t_OptionsCache
 {
 	bool operator==(wxString const& v) const { return strValue == v; }
 	bool operator==(int v) const { return numValue == v; }
-	t_OptionsCache& operator=(wxString const& v) { strValue = v; return *this; }
-	t_OptionsCache& operator=(int v) { numValue = v; return *this; }
+	t_OptionsCache& operator=(wxString const& v);
+	t_OptionsCache& operator=(int v);
 
 	bool from_default;
 	int numValue;
@@ -172,6 +172,8 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
+
+	wxCriticalSection m_sync_;
 };
 
 #endif //__OPTIONS_H__
