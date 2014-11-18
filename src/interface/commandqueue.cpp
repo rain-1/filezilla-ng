@@ -115,15 +115,14 @@ bool CCommandQueue::Cancel()
 	}
 }
 
-void CCommandQueue::Finish(COperationNotification *pNotification)
+void CCommandQueue::Finish(std::unique_ptr<COperationNotification> && pNotification)
 {
 	if (m_exclusiveEngineLock) {
-		m_pMainFrame->GetQueue()->ProcessNotification(m_pEngine, pNotification);
+		m_pMainFrame->GetQueue()->ProcessNotification(m_pEngine, std::move(pNotification));
 		return;
 	}
 
 	ProcessReply(pNotification->nReplyCode, pNotification->commandId);
-	delete pNotification;
 }
 
 void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)

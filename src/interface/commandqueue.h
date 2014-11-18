@@ -19,7 +19,7 @@ public:
 	bool Idle() const;
 	bool Cancel();
 	bool Quit();
-	void Finish(COperationNotification *pNotification);
+	void Finish(std::unique_ptr<COperationNotification> && pNotification);
 
 	void RequestExclusiveEngine(bool requestExclusive);
 

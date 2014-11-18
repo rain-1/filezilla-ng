@@ -276,14 +276,13 @@ void CUpdater::OnEngineEvent(wxFzEvent& event)
 	if (!engine_ || engine_ != event.engine_)
 		return;
 
-	CNotification *notification;
+	std::unique_ptr<CNotification> notification;
 	while( (notification = engine_->GetNextNotification()) ) {
-		ProcessNotification(notification);
-		delete notification;
+		ProcessNotification(std::move(notification));
 	}
 }
 
-void CUpdater::ProcessNotification(CNotification* notification)
+void CUpdater::ProcessNotification(std::unique_ptr<CNotification> && notification)
 {
 	if (state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading) {
 		return;
@@ -293,14 +292,14 @@ void CUpdater::ProcessNotification(CNotification* notification)
 	{
 	case nId_asyncrequest:
 		{
-			CAsyncRequestNotification* pData = reinterpret_cast<CAsyncRequestNotification *>(notification);
+			auto pData = unique_static_cast<CAsyncRequestNotification>(std::move(notification));
 			if (pData->GetRequestID() == reqId_fileexists) {
-				reinterpret_cast<CFileExistsNotification *>(pData)->overwriteAction = CFileExistsNotification::resume;
+				static_cast<CFileExistsNotification *>(pData.get())->overwriteAction = CFileExistsNotification::resume;
 			}
 			else if (pData->GetRequestID() == reqId_certificate) {
-				CCertificateNotification* pCertNotification = (CCertificateNotification*)pData;
+				auto & certNotification = static_cast<CCertificateNotification &>(*pData.get());
 				if (m_use_internal_rootcert) {
-					auto certs = pCertNotification->GetCertificates();
+					auto certs = certNotification.GetCertificates();
 					if( certs.size() > 1 ) {
 						auto ca = certs.back();
 
@@ -309,27 +308,27 @@ void CUpdater::ProcessNotification(CNotification* notification)
 
 						wxMemoryBuffer updater_root = wxBase64Decode(s_update_cert, wxNO_LEN, wxBase64DecodeMode_SkipWS);
 						if( ca_data_length == updater_root.GetDataLen() && !memcmp(ca_data, updater_root.GetData(), ca_data_length) ) {
-							pCertNotification->m_trusted = true;
+							certNotification.m_trusted = true;
 						}
 					}
 				}
 				else {
-					pCertNotification->m_trusted = true;
+					certNotification.m_trusted = true;
 				}
 			}
-			engine_->SetAsyncRequestReply(pData);
+			engine_->SetAsyncRequestReply(std::move(pData));
 		}
 		break;
 	case nId_data:
-		ProcessData(notification);
+		ProcessData(static_cast<CDataNotification&>(*notification.get()));
 		break;
 	case nId_operation:
-		ProcessOperation(notification);
+		ProcessOperation(static_cast<COperationNotification const&>(*notification.get()));
 		break;
 	case nId_logmsg:
 		{
-			CLogmsgNotification* msg = reinterpret_cast<CLogmsgNotification *>(notification);
-			log_ += msg->msg + _T("\n");
+			auto const& msg = static_cast<CLogmsgNotification const&>(*notification.get());
+			log_ += msg.msg + _T("\n");
 		}
 		break;
 	default:
@@ -380,7 +379,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 
 	return s;
 }
-void CUpdater::ProcessOperation(CNotification* notification)
+void CUpdater::ProcessOperation(COperationNotification const& operation)
 {
 	if( state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading ) {
 		return;
@@ -388,14 +387,13 @@ void CUpdater::ProcessOperation(CNotification* notification)
 
 	UpdaterState s = UpdaterState::failed;
 
-	COperationNotification* operation = reinterpret_cast<COperationNotification*>(notification);
-	if (operation->commandId == Command::disconnect && operation->nReplyCode & FZ_REPLY_DISCONNECTED && !current_url_.empty()) {
+	if (operation.commandId == Command::disconnect && operation.nReplyCode & FZ_REPLY_DISCONNECTED && !current_url_.empty()) {
 		int res = Download(current_url_, current_local_file_);
 		if (res == FZ_REPLY_WOULDBLOCK) {
 			return;
 		}
 	}
-	else if (operation->nReplyCode != FZ_REPLY_OK) {
+	else if (operation.nReplyCode != FZ_REPLY_OK) {
 		if( state_ != UpdaterState::checking ) {
 			s = UpdaterState::newversion;
 		}
@@ -473,16 +471,14 @@ wxString CUpdater::GetLocalFile( build const& b, bool allow_existing )
 	return f;
 }
 
-void CUpdater::ProcessData(CNotification* notification)
+void CUpdater::ProcessData(CDataNotification& dataNotification)
 {
 	if( state_ != UpdaterState::checking ) {
 		return;
 	}
 
-	CDataNotification* pData = reinterpret_cast<CDataNotification*>(notification);
-
 	int len;
-	char* data = pData->Detach(len);
+	char* data = dataNotification.Detach(len);
 
 	if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
 		log_ += wxString::Format(_T("ProcessData %d\n"), len);

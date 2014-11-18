@@ -157,7 +157,7 @@ public:
 
 	void WriteToFile(TiXmlElement* pElement) const;
 
-	void ProcessNotification(CFileZillaEngine* pEngine, CNotification* pNotification);
+	void ProcessNotification(CFileZillaEngine* pEngine, std::unique_ptr<CNotification>&& pNotification);
 
 	void RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString& newName, bool local);
 
@@ -189,7 +189,7 @@ protected:
 	bool ProcessFolderItems(int type = -1);
 	void ProcessUploadFolderItems();
 
-	void ProcessReply(t_EngineData* pEngineData, COperationNotification* pNotification);
+	void ProcessReply(t_EngineData* pEngineData, COperationNotification const& notification);
 	void SendNextCommand(t_EngineData& engineData);
 
 	enum ResetReason
@@ -226,7 +226,7 @@ protected:
 	void ActionAfterWarnUser(ActionAfterState s);
 #endif
 
-	void ProcessNotification(t_EngineData* pEngineData, CNotification* pNotification);
+	void ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<CNotification> && pNotification);
 
 	// Tries to refresh the current remote directory listing
 	// if there's an idle engine connected to the current server of

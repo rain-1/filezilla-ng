@@ -67,7 +67,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	return warning;
 }
 
-void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotification, bool displayOnly /*=false*/)
+void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly /*=false*/)
 {
 	LoadTrustedCerts();
 
@@ -84,17 +84,14 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 			XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->Hide();
 	}
 
-	m_certificates = pNotification->GetCertificates();
-	if (m_certificates.size() == 1)
-	{
+	m_certificates = notification.GetCertificates();
+	if (m_certificates.size() == 1) {
 		XRCCTRL(*m_pDlg, "ID_CHAIN_DESC", wxStaticText)->Hide();
 		XRCCTRL(*m_pDlg, "ID_CHAIN", wxChoice)->Hide();
 	}
-	else
-	{
+	else {
 		wxChoice* pChoice = XRCCTRL(*m_pDlg, "ID_CHAIN", wxChoice);
-		for (unsigned int i = 0; i < m_certificates.size(); i++)
-		{
+		for (unsigned int i = 0; i < m_certificates.size(); ++i) {
 			pChoice->Append(wxString::Format(_T("%d"), i));
 		}
 		pChoice->SetSelection(0);
@@ -102,7 +99,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 		pChoice->Connect(wxEVT_COMMAND_CHOICE_SELECTED, wxCommandEventHandler(CVerifyCertDialog::OnCertificateChoice), 0, this);
 	}
 
-	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), pNotification->GetHost(), pNotification->GetPort()));
+	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), notification.GetHost(), notification.GetPort()));
 
 	m_pSubjectSizer = XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->GetContainingSizer();
 	m_pSubjectSizer->Clear(true);
@@ -111,8 +108,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 	m_pIssuerSizer->Clear(true);
 
 	wxSize minSize(0, 0);
-	for (unsigned int i = 0; i < m_certificates.size(); ++i)
-	{
+	for (unsigned int i = 0; i < m_certificates.size(); ++i) {
 		DisplayCert(m_pDlg, m_certificates[i]);
 		m_pDlg->Layout();
 		m_pDlg->GetSizer()->Fit(m_pDlg);
@@ -122,13 +118,12 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 
 	bool warning = DisplayCert(m_pDlg, m_certificates[0]);
 
-	m_pDlg->SetChildLabel(XRCID("ID_PROTOCOL"), pNotification->GetProtocol());
-	m_pDlg->SetChildLabel(XRCID("ID_KEYEXCHANGE"), pNotification->GetKeyExchange());
-	m_pDlg->SetChildLabel(XRCID("ID_CIPHER"), pNotification->GetSessionCipher());
-	m_pDlg->SetChildLabel(XRCID("ID_MAC"), pNotification->GetSessionMac());
+	m_pDlg->SetChildLabel(XRCID("ID_PROTOCOL"), notification.GetProtocol());
+	m_pDlg->SetChildLabel(XRCID("ID_KEYEXCHANGE"), notification.GetKeyExchange());
+	m_pDlg->SetChildLabel(XRCID("ID_CIPHER"), notification.GetSessionCipher());
+	m_pDlg->SetChildLabel(XRCID("ID_MAC"), notification.GetSessionMac());
 
-	if (warning)
-	{
+	if (warning) {
 		XRCCTRL(*m_pDlg, "ID_IMAGE", wxStaticBitmap)->SetBitmap(wxArtProvider::GetBitmap(wxART_WARNING));
 		if (!displayOnly)
 			XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->Enable(false);
@@ -139,21 +134,18 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 
 	int res = m_pDlg->ShowModal();
 
-	if (!displayOnly)
-	{
-		if (res == wxID_OK)
-		{
-			wxASSERT(!IsTrusted(pNotification));
+	if (!displayOnly) {
+		if (res == wxID_OK) {
+			wxASSERT(!IsTrusted(notification));
 
-			pNotification->m_trusted = true;
+			notification.m_trusted = true;
 
 			if (!warning && XRCCTRL(*m_pDlg, "ID_ALWAYS", wxCheckBox)->GetValue())
-				SetPermanentlyTrusted(pNotification);
-			else
-			{
+				SetPermanentlyTrusted(notification);
+			else {
 				t_certData cert;
-				cert.host = pNotification->GetHost();
-				cert.port = pNotification->GetPort();
+				cert.host = notification.GetHost();
+				cert.port = notification.GetPort();
 				const unsigned char* data = m_certificates[0].GetRawData(cert.len);
 				cert.data = new unsigned char[cert.len];
 				memcpy(cert.data, data, cert.len);
@@ -161,7 +153,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification* pNotifi
 			}
 		}
 		else
-			pNotification->m_trusted = false;
+			notification.m_trusted = false;
 	}
 
 	delete m_pDlg;
@@ -258,17 +250,15 @@ void CVerifyCertDialog::ParseDN_by_prefix(wxWindow* parent, std::list<wxString>&
 	}
 }
 
-bool CVerifyCertDialog::IsTrusted(CCertificateNotification* pNotification)
+bool CVerifyCertDialog::IsTrusted(CCertificateNotification const& notification)
 {
 	LoadTrustedCerts();
 
-	wxASSERT(pNotification);
-
 	unsigned int len;
-	CCertificate cert =  pNotification->GetCertificates()[0];
+	CCertificate cert =  notification.GetCertificates()[0];
 	const unsigned char* data = cert.GetRawData(len);
 
-	return IsTrusted(pNotification->GetHost(), pNotification->GetPort(), data, len, false);
+	return IsTrusted(notification.GetHost(), notification.GetPort(), data, len, false);
 }
 
 bool CVerifyCertDialog::DoIsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, std::list<CVerifyCertDialog::t_certData> const& trustedCerts)
@@ -432,22 +422,22 @@ void CVerifyCertDialog::LoadTrustedCerts()
 		m_xmlFile.Save(false);
 }
 
-void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* const pNotification)
+void CVerifyCertDialog::SetPermanentlyTrusted(CCertificateNotification const& notification)
 {
-	const CCertificate certificate = pNotification->GetCertificates()[0];
+	const CCertificate certificate = notification.GetCertificates()[0];
 	unsigned int len;
 	const unsigned char* const data = certificate.GetRawData(len);
 
 	CReentrantInterProcessMutexLocker mutex(MUTEX_TRUSTEDCERTS);
 	LoadTrustedCerts();
 
-	if (IsTrusted(pNotification->GetHost(), pNotification->GetPort(), data, len, true))	{
+	if (IsTrusted(notification.GetHost(), notification.GetPort(), data, len, true))	{
 		return;
 	}
 
 	t_certData cert;
-	cert.host = pNotification->GetHost();
-	cert.port = pNotification->GetPort();
+	cert.host = notification.GetHost();
+	cert.port = notification.GetPort();
 	cert.len = len;
 	cert.data = new unsigned char[len];
 	memcpy(cert.data, data, len);
@@ -476,8 +466,8 @@ void CVerifyCertDialog::SetPermanentlyTrusted(const CCertificateNotification* co
 	time = certificate.GetExpirationTime().GetTicks();
 	AddTextElement(pCert, "ExpirationTime", time.ToString());
 
-	AddTextElement(pCert, "Host", pNotification->GetHost());
-	AddTextElement(pCert, "Port", pNotification->GetPort());
+	AddTextElement(pCert, "Host", notification.GetHost());
+	AddTextElement(pCert, "Port", notification.GetPort());
 
 	m_xmlFile.Save(true);
 }

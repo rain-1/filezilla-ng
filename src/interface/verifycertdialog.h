@@ -10,8 +10,8 @@ public:
 	CVerifyCertDialog();
 	virtual ~CVerifyCertDialog();
 
-	bool IsTrusted(CCertificateNotification* pNotification);
-	void ShowVerificationDialog(CCertificateNotification* pNotification, bool displayOnly = false);
+	bool IsTrusted(CCertificateNotification const& notification);
+	void ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly = false);
 
 protected:
 	struct t_certData {
@@ -34,7 +34,7 @@ protected:
 	wxString ConvertHexToString(const unsigned char* data, unsigned int len);
 	unsigned char* ConvertStringToHex(const wxString& str, unsigned int &len);
 
-	void SetPermanentlyTrusted(const CCertificateNotification* const pNotification);
+	void SetPermanentlyTrusted(CCertificateNotification const& notification);
 
 	void LoadTrustedCerts();
 

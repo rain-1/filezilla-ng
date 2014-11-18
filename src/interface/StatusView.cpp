@@ -122,9 +122,9 @@ void CStatusView::OnSize(wxSizeEvent &)
 	}
 }
 
-void CStatusView::AddToLog(CLogmsgNotification *pNotification)
+void CStatusView::AddToLog(CLogmsgNotification const& notification)
 {
-	AddToLog(pNotification->msgType, pNotification->msg, wxDateTime::Now());
+	AddToLog(notification.msgType, notification.msg, wxDateTime::Now());
 }
 
 void CStatusView::AddToLog(MessageType messagetype, const wxString& message, const wxDateTime& time)

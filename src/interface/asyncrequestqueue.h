@@ -11,7 +11,7 @@ public:
 	CAsyncRequestQueue(CMainFrame *pMainFrame);
 	~CAsyncRequestQueue();
 
-	bool AddRequest(CFileZillaEngine *pEngine, CAsyncRequestNotification *pNotification);
+	bool AddRequest(CFileZillaEngine *pEngine, std::unique_ptr<CAsyncRequestNotification> && pNotification);
 	void ClearPending(const CFileZillaEngine* pEngine);
 	void RecheckDefaults();
 
@@ -30,12 +30,18 @@ protected:
 	CVerifyCertDialog *m_pVerifyCertDlg;
 
 	bool ProcessNextRequest();
-	bool ProcessDefaults(CFileZillaEngine *pEngine, CAsyncRequestNotification *pNotification);
+	bool ProcessDefaults(CFileZillaEngine *pEngine, std::unique_ptr<CAsyncRequestNotification> & pNotification);
 
 	struct t_queueEntry
 	{
+		t_queueEntry(CFileZillaEngine *e, std::unique_ptr<CAsyncRequestNotification>&& n)
+			: pEngine(e)
+			, pNotification(std::move(n))
+		{
+		}
+
 		CFileZillaEngine *pEngine;
-		CAsyncRequestNotification *pNotification;
+		std::unique_ptr<CAsyncRequestNotification> pNotification;
 	};
 	std::list<t_queueEntry> m_requestList;
 

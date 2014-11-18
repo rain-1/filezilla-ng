@@ -43,7 +43,7 @@ int CFileZillaEngine::Execute(const CCommand &command)
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-CNotification* CFileZillaEngine::GetNextNotification()
+std::unique_ptr<CNotification> CFileZillaEngine::GetNextNotification()
 {
 	wxCriticalSectionLocker lock(notification_mutex_);
 
@@ -51,13 +51,13 @@ CNotification* CFileZillaEngine::GetNextNotification()
 		m_maySendNotificationEvent = true;
 		return 0;
 	}
-	CNotification* pNotification = m_NotificationList.front();
+	std::unique_ptr<CNotification> pNotification(m_NotificationList.front());
 	m_NotificationList.pop_front();
 
 	return pNotification;
 }
 
-bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
+bool CFileZillaEngine::SetAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> && pNotification)
 {
 	wxCriticalSectionLocker lock(mutex_);
 	if (!pNotification)
@@ -76,13 +76,13 @@ bool CFileZillaEngine::SetAsyncRequestReply(CAsyncRequestNotification *pNotifica
 		return false;
 
 	m_pControlSocket->SetAlive();
-	if (!m_pControlSocket->SetAsyncRequestReply(pNotification))
+	if (!m_pControlSocket->SetAsyncRequestReply(pNotification.get()))
 		return false;
 
 	return true;
 }
 
-bool CFileZillaEngine::IsPendingAsyncRequestReply(const CAsyncRequestNotification *pNotification)
+bool CFileZillaEngine::IsPendingAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> const& pNotification)
 {
 	if (!pNotification)
 		return false;

@@ -489,13 +489,11 @@ void CStatusBar::OnHandleLeftClick(wxWindow* pWnd)
 		CState* pState = CContextManager::Get()->GetCurrentContext();
 		CCertificateNotification *pCertificateNotification = 0;
 		CSftpEncryptionNotification *pSftpEncryptionNotification = 0;
-		if (pState->GetSecurityInfo(pCertificateNotification))
-		{
+		if (pState->GetSecurityInfo(pCertificateNotification)) {
 			CVerifyCertDialog dlg;
-			dlg.ShowVerificationDialog(pCertificateNotification, true);
+			dlg.ShowVerificationDialog(*pCertificateNotification, true);
 		}
-		else if (pState->GetSecurityInfo(pSftpEncryptionNotification))
-		{
+		else if (pState->GetSecurityInfo(pSftpEncryptionNotification)) {
 			CSftpEncryptioInfoDialog dlg;
 			dlg.ShowDialog(pSftpEncryptionNotification);
 		}

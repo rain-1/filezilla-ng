@@ -633,10 +633,9 @@ void CQueueView::OnEngineEvent(wxFzEvent &event)
 	if (!pEngineData)
 		return;
 
-	CNotification *pNotification = pEngineData->pEngine->GetNextNotification();
-	while (pNotification)
-	{
-		ProcessNotification(pEngineData, pNotification);
+	std::unique_ptr<CNotification> pNotification = pEngineData->pEngine->GetNextNotification();
+	while (pNotification) {
+		ProcessNotification(pEngineData, std::move(pNotification));
 
 		if (m_engineData.empty() || !pEngineData->pEngine)
 			break;
@@ -645,90 +644,78 @@ void CQueueView::OnEngineEvent(wxFzEvent &event)
 	}
 }
 
-void CQueueView::ProcessNotification(CFileZillaEngine* pEngine, CNotification* pNotification)
+void CQueueView::ProcessNotification(CFileZillaEngine* pEngine, std::unique_ptr<CNotification> && pNotification)
 {
 	t_EngineData* pEngineData = GetEngineData(pEngine);
-	if (!pEngineData || !pEngineData->active || !pEngineData->transient)
-	{
-		delete pNotification;
-		return;
+	if (pEngineData && pEngineData->active && pEngineData->transient) {
+		ProcessNotification(pEngineData, std::move(pNotification));
 	}
-
-	ProcessNotification(pEngineData, pNotification);
 }
 
-void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* pNotification)
+void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<CNotification> && pNotification)
 {
 	switch (pNotification->GetID())
 	{
 	case nId_logmsg:
-		m_pMainFrame->GetStatusView()->AddToLog(reinterpret_cast<CLogmsgNotification *>(pNotification));
-		delete pNotification;
+		m_pMainFrame->GetStatusView()->AddToLog(static_cast<CLogmsgNotification&>(*pNotification.get()));
 		if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2)
 			m_pQueue->Highlight(3);
 		break;
 	case nId_operation:
-		ProcessReply(pEngineData, reinterpret_cast<COperationNotification*>(pNotification));
-		delete pNotification;
+		ProcessReply(pEngineData, static_cast<COperationNotification&>(*pNotification.get()));
 		break;
 	case nId_asyncrequest:
-		if (!pEngineData->pItem)
-		{
-			delete pNotification;
-			break;
-		}
-		switch (reinterpret_cast<CAsyncRequestNotification *>(pNotification)->GetRequestID())
-		{
-		case reqId_fileexists:
-			{
-				CFileExistsNotification* pFileExistsNotification = (CFileExistsNotification *)pNotification;
-				pFileExistsNotification->overwriteAction = pEngineData->pItem->m_defaultFileExistsAction;
-
-				if (pEngineData->pItem->GetType() == QueueItemType::File)
+		if (pEngineData->pItem) {
+			auto asyncRequestNotification = unique_static_cast<CAsyncRequestNotification>(std::move(pNotification));
+			switch (asyncRequestNotification->GetRequestID()) {
+				case reqId_fileexists:
 				{
-					CFileItem* pFileItem = (CFileItem*)pEngineData->pItem;
+					CFileExistsNotification& fileExistsNotification = static_cast<CFileExistsNotification&>(*asyncRequestNotification.get());
+					fileExistsNotification.overwriteAction = pEngineData->pItem->m_defaultFileExistsAction;
 
-					switch (pFileItem->m_onetime_action)
-					{
-					case CFileExistsNotification::resume:
-						if (pFileExistsNotification->canResume &&
-							pFileItem->m_transferSettings.binary)
+					if (pEngineData->pItem->GetType() == QueueItemType::File) {
+						CFileItem* pFileItem = (CFileItem*)pEngineData->pItem;
+
+						switch (pFileItem->m_onetime_action)
 						{
-							pFileExistsNotification->overwriteAction = CFileExistsNotification::resume;
+						case CFileExistsNotification::resume:
+							if (fileExistsNotification.canResume &&
+								pFileItem->m_transferSettings.binary)
+							{
+								fileExistsNotification.overwriteAction = CFileExistsNotification::resume;
+							}
+							break;
+						case CFileExistsNotification::overwrite:
+							fileExistsNotification.overwriteAction = CFileExistsNotification::overwrite;
+							break;
+						default:
+							// Others are unused
+							break;
 						}
-						break;
-					case CFileExistsNotification::overwrite:
-						pFileExistsNotification->overwriteAction = CFileExistsNotification::overwrite;
-						break;
-					default:
-						// Others are unused
-						break;
+						pFileItem->m_onetime_action = CFileExistsNotification::unknown;
 					}
-					pFileItem->m_onetime_action = CFileExistsNotification::unknown;
 				}
+				break;
+			default:
+				break;
 			}
-			break;
-		default:
-			break;
-		}
 
-		m_pAsyncRequestQueue->AddRequest(pEngineData->pEngine, reinterpret_cast<CAsyncRequestNotification *>(pNotification));
+			m_pAsyncRequestQueue->AddRequest(pEngineData->pEngine, std::move(asyncRequestNotification));
+		}
 		break;
 	case nId_active:
 		{
-			CActiveNotification *pActiveNotification = reinterpret_cast<CActiveNotification *>(pNotification);
-			m_pMainFrame->UpdateActivityLed(pActiveNotification->GetDirection());
-			delete pNotification;
+			auto const& activeNotification = static_cast<CActiveNotification const&>(*pNotification.get());
+			m_pMainFrame->UpdateActivityLed(activeNotification.GetDirection());
 		}
 		break;
 	case nId_transferstatus:
 		if (pEngineData->pItem && pEngineData->pStatusLineCtrl)
 		{
-			CTransferStatusNotification *pTransferStatusNotification = reinterpret_cast<CTransferStatusNotification *>(pNotification);
-			const CTransferStatus *pStatus = pTransferStatusNotification->GetStatus();
+			auto const& transferStatusNotification = static_cast<CTransferStatusNotification const&>(*pNotification.get());
+			CTransferStatus const* pStatus = transferStatusNotification.GetStatus();
 
-			if (pEngineData->active)
-			{
+			if (pEngineData->active) {
 				if (pStatus && pStatus->madeProgress && !pStatus->list &&
 					pEngineData->pItem->GetType() == QueueItemType::File)
 				{
@@ -738,19 +725,16 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, CNotification* p
 				pEngineData->pStatusLineCtrl->SetTransferStatus(pStatus);
 			}
 		}
-		delete pNotification;
 		break;
 	case nId_local_dir_created:
 		{
-			CLocalDirCreatedNotification *pLocalDirCreatedNotification = reinterpret_cast<CLocalDirCreatedNotification *>(pNotification);
+			auto const& localDirCreatedNotification = static_cast<CLocalDirCreatedNotification const&>(*pNotification.get());
 			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-				(*iter)->LocalDirCreated(pLocalDirCreatedNotification->dir);
+				(*iter)->LocalDirCreated(localDirCreatedNotification.dir);
 		}
-		delete pNotification;
 		break;
 	default:
-		delete pNotification;
 		break;
 	}
 }
@@ -985,21 +969,21 @@ bool CQueueView::TryStartNextTransfer()
 	return true;
 }
 
-void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification* pNotification)
+void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification const& notification)
 {
-	if (pNotification->nReplyCode & FZ_REPLY_DISCONNECTED &&
-		pNotification->commandId == ::Command::none)
+	if (notification.nReplyCode & FZ_REPLY_DISCONNECTED &&
+		notification.commandId == ::Command::none)
 	{
 		// Queue is not interested in disconnect notifications
 		return;
 	}
-	wxASSERT(pNotification->commandId != ::Command::none);
+	wxASSERT(notification.commandId != ::Command::none);
 
 	// Cancel pending requests
 	m_pAsyncRequestQueue->ClearPending(pEngineData->pEngine);
 
 	// Process reply from the engine
-	int replyCode = pNotification->nReplyCode;
+	int replyCode = notification.nReplyCode;
 
 	if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
 		enum ResetReason reason;
