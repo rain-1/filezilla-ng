@@ -396,14 +396,12 @@ void CTransferSocket::OnReceive()
 
 void CTransferSocket::OnSend()
 {
-	if (!m_pBackend)
-	{
+	if (!m_pBackend) {
 		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("OnSend called without backend. Ignoring event."));
 		return;
 	}
 
-	if (!m_bActive)
-	{
+	if (!m_bActive) {
 		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Postponing send"));
 		m_postponedSend = true;
 		return;
@@ -414,7 +412,11 @@ void CTransferSocket::OnSend()
 
 	int error;
 	int written;
-	do {
+	
+	// Only doe a certain number of iterations in one go to keep the event loop going.
+	// Otherwise this behaves like a livelock on very large files read from a very fast
+	// SSD uploaded to a very fast server.
+	for (int i = 0; i < 100; ++i) {
 		if (!CheckGetNextReadBuffer())
 			return;
 
@@ -433,7 +435,6 @@ void CTransferSocket::OnSend()
 		m_pTransferBuffer += written;
 		m_transferBufferLen -= written;
 	}
-	while (true);
 
 	if (written < 0) {
 		if (error == EAGAIN) {
@@ -447,6 +448,10 @@ void CTransferSocket::OnSend()
 			m_pControlSocket->LogMessage(MessageType::Error, _T("Could not write to transfer socket: %s"), CSocket::GetErrorDescription(error));
 			TransferEnd(TransferEndReason::transfer_failure);
 		}
+	}
+	else if (written > 0) {
+		CSocketEvent *evt = new CSocketEvent(this, m_pSocket, CSocketEvent::write);
+		dispatcher_.SendEvent(evt);
 	}
 }
 
