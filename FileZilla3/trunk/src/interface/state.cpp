@@ -218,9 +218,6 @@ CState::~CState()
 {
 	delete m_pServer;
 
-	delete m_pCertificate;
-	delete m_pSftpEncryptionInfo;
-
 	delete m_pComparisonManager;
 	delete m_pCommandQueue;
 	delete m_pEngine;
@@ -479,8 +476,7 @@ void CState::LocalDirCreated(const CLocalPath& path)
 
 void CState::SetServer(const CServer* server)
 {
-	if (m_pServer)
-	{
+	if (m_pServer) {
 		if (server && *server == *m_pServer &&
 			server->GetName() == m_pServer->GetName() &&
 			server->MaximumMultipleConnections() == m_pServer->MaximumMultipleConnections())
@@ -491,13 +487,10 @@ void CState::SetServer(const CServer* server)
 
 		SetRemoteDir(0);
 		delete m_pServer;
-		delete m_pCertificate;
-		m_pCertificate = 0;
-		delete m_pSftpEncryptionInfo;
-		m_pSftpEncryptionInfo = 0;
+		m_pCertificate.reset();
+		m_pSftpEncryptionInfo.reset();
 	}
-	if (server)
-	{
+	if (server) {
 		if (m_last_server != *server)
 			m_last_path.clear();
 		m_last_server = *server;
@@ -510,8 +503,7 @@ void CState::SetServer(const CServer* server)
 		else
 			m_title = server->FormatServer();
 	}
-	else
-	{
+	else {
 		m_pServer = 0;
 		m_title = _("Not connected");
 	}
@@ -1130,28 +1122,26 @@ bool CState::RefreshRemote()
 
 bool CState::GetSecurityInfo(CCertificateNotification *& pInfo)
 {
-	pInfo = m_pCertificate;
+	pInfo = m_pCertificate.get();
 	return m_pCertificate != 0;
 }
 
 bool CState::GetSecurityInfo(CSftpEncryptionNotification *& pInfo)
 {
-	pInfo = m_pSftpEncryptionInfo;
+	pInfo = m_pSftpEncryptionInfo.get();
 	return m_pSftpEncryptionInfo != 0;
 }
 
 void CState::SetSecurityInfo(CCertificateNotification const& info)
 {
-	delete m_pCertificate;
-	m_pCertificate = new CCertificateNotification(info);
-	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = 0;
+	m_pSftpEncryptionInfo.reset();
+	m_pCertificate = make_unique<CCertificateNotification>(info);
+	NotifyHandlers(STATECHANGE_ENCRYPTION);
 }
 
 void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
 {
-	delete m_pCertificate;
-	m_pCertificate = 0;
-	delete m_pSftpEncryptionInfo;
-	m_pSftpEncryptionInfo = new CSftpEncryptionNotification(info);
+	m_pCertificate.reset();
+	m_pSftpEncryptionInfo = make_unique<CSftpEncryptionNotification>(info);
+	NotifyHandlers(STATECHANGE_ENCRYPTION);
 }
