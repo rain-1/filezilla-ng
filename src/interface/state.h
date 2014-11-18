@@ -23,6 +23,7 @@ enum t_statechange_notifications
 
 	STATECHANGE_REMOTE_IDLE,
 	STATECHANGE_SERVER,
+	STATECHANGE_ENCRYPTION,
 
 	STATECHANGE_SYNC_BROWSE,
 	STATECHANGE_COMPARISON,
@@ -211,8 +212,8 @@ protected:
 		bool compare;
 	} m_sync_browse;
 
-	CCertificateNotification* m_pCertificate;
-	CSftpEncryptionNotification* m_pSftpEncryptionInfo;
+	std::unique_ptr<CCertificateNotification> m_pCertificate;
+	std::unique_ptr<CSftpEncryptionNotification> m_pSftpEncryptionInfo;
 
 	wxString m_previouslyVisitedLocalSubdir;
 	wxString m_previouslyVisitedRemoteSubdir;

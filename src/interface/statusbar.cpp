@@ -313,6 +313,7 @@ CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
 
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, true, false);
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_ENCRYPTION, true, false);
 
 	m_pDataTypeIndicator = 0;
 	m_pEncryptionIndicator = 0;
@@ -431,24 +432,31 @@ void CStatusBar::MeasureQueueSizeWidth()
 void CStatusBar::DisplayEncrypted()
 {
 	const CServer* pServer = 0;
-	const CState* pState = CContextManager::Get()->GetCurrentContext();
+	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (pState)
 		pServer = pState->GetServer();
 
-	if (!pServer || (pServer->GetProtocol() != FTPS && pServer->GetProtocol() != FTPES && pServer->GetProtocol() != SFTP))
-	{
-		if (m_pEncryptionIndicator)
-		{
+	bool encrypted = false;
+	if (pServer) {
+		CCertificateNotification* info;
+		if (pServer->GetProtocol() == FTPS || pServer->GetProtocol() == FTPES || pServer->GetProtocol() == SFTP) {
+			encrypted = true;
+		}
+		else if (pServer->GetProtocol() == FTP && pState->GetSecurityInfo(info)) {
+			encrypted = true;
+		}
+	}
+
+	if (!encrypted) {
+		if (m_pEncryptionIndicator) {
 			RemoveField(widget_encryption);
 			m_pEncryptionIndicator->Destroy();
 			m_pEncryptionIndicator = 0;
 		}
 	}
-	else
-	{
+	else {
 		wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_LOCK"), wxART_OTHER,  CThemeProvider::GetIconSize(iconSizeSmall));
-		if (!m_pEncryptionIndicator)
-		{
+		if (!m_pEncryptionIndicator) {
 			m_pEncryptionIndicator = new CIndicator(this, bmp);
 			AddField(0, widget_encryption, m_pEncryptionIndicator);
 			m_pEncryptionIndicator->SetToolTip(_("The connection is encrypted. Click icon for details."));
@@ -614,9 +622,11 @@ void CStatusBar::OnOptionChanged(int option)
 
 void CStatusBar::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void*)
 {
-	if (notification == STATECHANGE_SERVER || notification == STATECHANGE_CHANGEDCONTEXT)
-	{
+	if (notification == STATECHANGE_SERVER || notification == STATECHANGE_CHANGEDCONTEXT) {
 		DisplayDataType();
+		DisplayEncrypted();
+	}
+	else if (notification == STATECHANGE_ENCRYPTION) {
 		DisplayEncrypted();
 	}
 }
