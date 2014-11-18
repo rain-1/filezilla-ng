@@ -38,12 +38,14 @@ public:
 	// get the pending notifications event, or you'll either lose notifications
 	// or your memory will fill with pending notifications.
 	// See notification.h for details.
-	CNotification* GetNextNotification();
+	std::unique_ptr<CNotification> GetNextNotification();
 
 	// Sets the reply to an async request, e.g. a file exists request.
 	// See notifiction.h for details.
-	bool IsPendingAsyncRequestReply(CAsyncRequestNotification const* pNotification);
-	bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification);
+	bool IsPendingAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> const& pNotification);
+
+	// Sets the reply to the asynchronous request. Takes ownership of the pointer.
+	bool SetAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> && pNotification);
 
 	// Get a progress update about the current transfer. changed will be set
 	// to true if the data has been updated compared to the last time

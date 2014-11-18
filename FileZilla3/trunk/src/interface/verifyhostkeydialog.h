@@ -7,8 +7,8 @@
 class CVerifyHostkeyDialog
 {
 public:
-	static bool IsTrusted(CHostKeyNotification* pNotification);
-	static void ShowVerificationDialog(wxWindow* parent, CHostKeyNotification* pNotification);
+	static bool IsTrusted(CHostKeyNotification const& pNotification);
+	static void ShowVerificationDialog(wxWindow* parent, CHostKeyNotification& pNotification);
 
 protected:
 	struct t_keyData

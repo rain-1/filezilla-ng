@@ -924,18 +924,17 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 	if (!pState)
 		return;
 
-	CNotification *pNotification = pState->m_pEngine->GetNextNotification();
+	std::unique_ptr<CNotification> pNotification = pState->m_pEngine->GetNextNotification();
 	while (pNotification) {
 		switch (pNotification->GetID())
 		{
 		case nId_logmsg:
-			m_pStatusView->AddToLog(reinterpret_cast<CLogmsgNotification *>(pNotification));
+			m_pStatusView->AddToLog(static_cast<CLogmsgNotification&>(*pNotification.get()));
 			if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 2)
 				m_pQueuePane->Highlight(3);
-			delete pNotification;
 			break;
 		case nId_operation:
-			pState->m_pCommandQueue->Finish(reinterpret_cast<COperationNotification*>(pNotification));
+			pState->m_pCommandQueue->Finish(unique_static_cast<COperationNotification>(std::move(pNotification)));
 			if (m_bQuit) {
 				Close();
 				return;
@@ -943,7 +942,7 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 			break;
 		case nId_listing:
 			{
-				const CDirectoryListingNotification* const pListingNotification = reinterpret_cast<CDirectoryListingNotification *>(pNotification);
+				const CDirectoryListingNotification* const pListingNotification = reinterpret_cast<CDirectoryListingNotification *>(pNotification.get());
 
 				if (pListingNotification->GetPath().empty())
 					pState->SetRemoteDir(0, false);
@@ -962,47 +961,41 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 					pState->SetRemoteDir(pListing, pListingNotification->Modified());
 				}
 			}
-			delete pNotification;
 			break;
 		case nId_asyncrequest:
 			{
-				CAsyncRequestNotification* pAsyncRequest = reinterpret_cast<CAsyncRequestNotification *>(pNotification);
+				auto pAsyncRequest = unique_static_cast<CAsyncRequestNotification>(std::move(pNotification));
 				if (pAsyncRequest->GetRequestID() == reqId_fileexists)
-					m_pQueueView->ProcessNotification(pState->m_pEngine, pNotification);
+					m_pQueueView->ProcessNotification(pState->m_pEngine, unique_static_cast<CNotification>(std::move(pAsyncRequest)));
 				else
 				{
 					if (pAsyncRequest->GetRequestID() == reqId_certificate)
-						pState->SetSecurityInfo(*(CCertificateNotification*)pNotification);
-					m_pAsyncRequestQueue->AddRequest(pState->m_pEngine, pAsyncRequest);
+						pState->SetSecurityInfo(static_cast<CCertificateNotification&>(*pAsyncRequest));
+					m_pAsyncRequestQueue->AddRequest(pState->m_pEngine, std::move(pAsyncRequest));
 				}
 			}
 			break;
 		case nId_active:
 			{
-				CActiveNotification *pActiveNotification = reinterpret_cast<CActiveNotification *>(pNotification);
-				UpdateActivityLed(pActiveNotification->GetDirection());
-				delete pNotification;
+				CActiveNotification const& activeNotification = static_cast<CActiveNotification const&>(*pNotification.get());
+				UpdateActivityLed(activeNotification.GetDirection());
 			}
 			break;
 		case nId_transferstatus:
-			m_pQueueView->ProcessNotification(pState->m_pEngine, pNotification);
+			m_pQueueView->ProcessNotification(pState->m_pEngine, std::move(pNotification));
 			break;
 		case nId_sftp_encryption:
 			{
-				pState->SetSecurityInfo(*reinterpret_cast<CSftpEncryptionNotification*>(pNotification));
-				delete pNotification;
+				pState->SetSecurityInfo(static_cast<CSftpEncryptionNotification&>(*pNotification));
 			}
 			break;
 		case nId_local_dir_created:
-			if (pState)
-			{
-				CLocalDirCreatedNotification *pLocalDirCreatedNotification = reinterpret_cast<CLocalDirCreatedNotification *>(pNotification);
-				pState->LocalDirCreated(pLocalDirCreatedNotification->dir);
+			if (pState) {
+				auto const& localDirCreatedNotification = static_cast<CLocalDirCreatedNotification const&>(*pNotification.get());
+				pState->LocalDirCreated(localDirCreatedNotification.dir);
 			}
-			delete pNotification;
 			break;
 		default:
-			delete pNotification;
 			break;
 		}
 
@@ -1470,11 +1463,6 @@ void CMainFrame::UpdateActivityLed(int direction)
 {
 	if (m_pActivityLed[direction])
 		m_pActivityLed[direction]->Ping();
-}
-
-void CMainFrame::AddToRequestQueue(CFileZillaEngine *pEngine, CAsyncRequestNotification *pNotification)
-{
-	m_pAsyncRequestQueue->AddRequest(pEngine, reinterpret_cast<CAsyncRequestNotification *>(pNotification));
 }
 
 void CMainFrame::OnProcessQueue(wxCommandEvent& event)

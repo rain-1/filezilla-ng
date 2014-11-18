@@ -85,9 +85,9 @@ protected:
 	int SendTransferCommand(wxString const& url, wxString const& local_file);
 
 	wxString GetUrl();
-	void ProcessNotification(CNotification* notification);
-	void ProcessOperation(CNotification* notification);
-	void ProcessData(CNotification* notification);
+	void ProcessNotification(std::unique_ptr<CNotification> && notification);
+	void ProcessOperation(COperationNotification const& operation);
+	void ProcessData(CDataNotification& dataNotification);
 	void ParseData();
 	UpdaterState ProcessFinishedDownload();
 	UpdaterState ProcessFinishedData(bool can_download);

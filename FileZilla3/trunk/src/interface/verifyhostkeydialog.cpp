@@ -6,55 +6,53 @@
 
 std::list<CVerifyHostkeyDialog::t_keyData> CVerifyHostkeyDialog::m_sessionTrustedKeys;
 
-void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNotification* pNotification)
+void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNotification& notification)
 {
 	wxDialogEx dlg;
 	bool loaded;
-	if (pNotification->GetRequestID() == reqId_hostkey)
+	if (notification.GetRequestID() == reqId_hostkey)
 		loaded = dlg.Load(parent, _T("ID_HOSTKEY"));
 	else
 		loaded = dlg.Load(parent, _T("ID_HOSTKEYCHANGED"));
-	if (!loaded)
-	{
-		pNotification->m_trust = false;
-		pNotification->m_alwaysTrust = false;
+	if (!loaded) {
+		notification.m_trust = false;
+		notification.m_alwaysTrust = false;
 		wxBell();
 		return;
 	}
 
 	dlg.WrapText(&dlg, XRCID("ID_DESC"), 400);
 
-	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost(), pNotification->GetPort());
+	const wxString host = wxString::Format(_T("%s:%d"), notification.GetHost(), notification.GetPort());
 	dlg.SetChildLabel(XRCID("ID_HOST"), host);
-	dlg.SetChildLabel(XRCID("ID_FINGERPRINT"), pNotification->GetFingerprint());
+	dlg.SetChildLabel(XRCID("ID_FINGERPRINT"), notification.GetFingerprint());
 
 	dlg.GetSizer()->Fit(&dlg);
 	dlg.GetSizer()->SetSizeHints(&dlg);
 
 	int res = dlg.ShowModal();
 
-	if (res == wxID_OK)
-	{
-		pNotification->m_trust = true;
-		pNotification->m_alwaysTrust = XRCCTRL(dlg, "ID_ALWAYS", wxCheckBox)->GetValue();
+	if (res == wxID_OK) {
+		notification.m_trust = true;
+		notification.m_alwaysTrust = XRCCTRL(dlg, "ID_ALWAYS", wxCheckBox)->GetValue();
 
 		struct t_keyData data;
 		data.host = host;
-		data.fingerprint = pNotification->GetFingerprint();
+		data.fingerprint = notification.GetFingerprint();
 		m_sessionTrustedKeys.push_back(data);
 		return;
 	}
 
-	pNotification->m_trust = false;
-	pNotification->m_alwaysTrust = false;
+	notification.m_trust = false;
+	notification.m_alwaysTrust = false;
 }
 
-bool CVerifyHostkeyDialog::IsTrusted(CHostKeyNotification* pNotification)
+bool CVerifyHostkeyDialog::IsTrusted(CHostKeyNotification const& notification)
 {
-	const wxString host = wxString::Format(_T("%s:%d"), pNotification->GetHost(), pNotification->GetPort());
+	const wxString host = wxString::Format(_T("%s:%d"), notification.GetHost(), notification.GetPort());
 
 	for(auto const& trusted : m_sessionTrustedKeys ) {
-		if (trusted.host == host && trusted.fingerprint == pNotification->GetFingerprint())
+		if (trusted.host == host && trusted.fingerprint == notification.GetFingerprint())
 			return true;
 	}
 

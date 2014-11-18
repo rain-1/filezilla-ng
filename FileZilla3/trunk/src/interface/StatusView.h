@@ -12,7 +12,7 @@ public:
 	CStatusView(wxWindow* parent, wxWindowID id);
 	virtual ~CStatusView();
 
-	void AddToLog(CLogmsgNotification *pNotification);
+	void AddToLog(CLogmsgNotification const& pNotification);
 	void AddToLog(MessageType messagetype, const wxString& message, const wxDateTime& time);
 
 	void InitDefAttr();
