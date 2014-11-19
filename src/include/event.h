@@ -40,7 +40,7 @@ public:
 		return *this;
 	}
 
-	std::tuple<Values...> v_;
+	tuple_type v_;
 };
 
 typedef unsigned long long timer_id;

@@ -63,7 +63,11 @@ protected:
 	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
 	virtual ~CFileZillaEnginePrivate();
 
-	int CheckPreconditions(CCommand const& command, bool checkBusy);
+	int CheckCommandPreconditions(CCommand const& command, bool checkBusy);
+
+
+	bool CheckAsyncRequestReplyPreconditions(std::unique_ptr<CAsyncRequestNotification> const& reply);
+	void OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsyncRequestNotification> const& reply);
 
 	// Command handlers, only called by CFileZillaEngine::Command
 	int Connect(const CConnectCommand &command);
@@ -147,5 +151,8 @@ protected:
 
 struct command_event_type{};
 typedef CEvent<command_event_type> CCommandEvent;
+
+struct async_request_reply_event_type{};
+typedef CEvent<async_request_reply_event_type, std::unique_ptr<CAsyncRequestNotification>> CAsyncRequestReplyEvent;
 
 #endif //__FILEZILLAENGINEPRIVATE_H__
