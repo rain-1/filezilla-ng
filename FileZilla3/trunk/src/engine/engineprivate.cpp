@@ -502,9 +502,11 @@ void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
 
 	Dispatch<CFileZillaEngineEvent>(ev, this, &CFileZillaEnginePrivate::OnEngineEvent);
 	Dispatch<CCommandEvent>(ev, this, &CFileZillaEnginePrivate::OnCommandEvent);
+
+	Dispatch<CAsyncRequestReplyEvent>(ev, this, &CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent);
 }
 
-int CFileZillaEnginePrivate::CheckPreconditions(CCommand const& command, bool checkBusy)
+int CFileZillaEnginePrivate::CheckCommandPreconditions(CCommand const& command, bool checkBusy)
 {
 	if (!command.valid()) {
 		return FZ_REPLY_SYNTAXERROR;
@@ -526,7 +528,7 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 		CCommand& command = *m_pCurrentCommand;
 		Command id = command.GetId();
 
-		int res = CheckPreconditions(*m_pCurrentCommand, false);
+		int res = CheckCommandPreconditions(*m_pCurrentCommand, false);
 		if (res == FZ_REPLY_OK) {
 			switch (m_pCurrentCommand->GetId())
 			{
@@ -604,4 +606,35 @@ void CFileZillaEnginePrivate::DoCancel()
 		else
 			ResetOperation(FZ_REPLY_CANCELED);
 	}
+}
+
+bool CFileZillaEnginePrivate::CheckAsyncRequestReplyPreconditions(std::unique_ptr<CAsyncRequestNotification> const& reply)
+{
+	if (!reply)
+		return false;
+	if (!IsBusy())
+		return false;
+
+	notification_mutex_.Enter();
+	if (reply->requestNumber != m_asyncRequestCounter) {
+		notification_mutex_.Leave();
+		return false;
+	}
+	notification_mutex_.Leave();
+
+	if (!m_pControlSocket)
+		return false;
+
+	return true;
+}
+
+void CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsyncRequestNotification> const& reply)
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!CheckAsyncRequestReplyPreconditions(reply)) {
+		return;
+	}
+
+	m_pControlSocket->SetAlive();
+	m_pControlSocket->SetAsyncRequestReply(reply.get());
 }

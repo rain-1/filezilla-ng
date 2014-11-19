@@ -32,7 +32,7 @@ int CFileZillaEngine::Execute(const CCommand &command)
 {
 	wxCriticalSectionLocker lock(mutex_);
 
-	int res = CheckPreconditions(command, true);
+	int res = CheckCommandPreconditions(command, true);
 	if (res != FZ_REPLY_OK) {
 		return res;
 	}
@@ -60,24 +60,11 @@ std::unique_ptr<CNotification> CFileZillaEngine::GetNextNotification()
 bool CFileZillaEngine::SetAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> && pNotification)
 {
 	wxCriticalSectionLocker lock(mutex_);
-	if (!pNotification)
-		return false;
-	if (!IsBusy())
-		return false;
-
-	notification_mutex_.Enter();
-	if (pNotification->requestNumber != m_asyncRequestCounter) {
-		notification_mutex_.Leave();
+	if (!CheckAsyncRequestReplyPreconditions(pNotification)) {
 		return false;
 	}
-	notification_mutex_.Leave();
 
-	if (!m_pControlSocket)
-		return false;
-
-	m_pControlSocket->SetAlive();
-	if (!m_pControlSocket->SetAsyncRequestReply(pNotification.get()))
-		return false;
+	SendEvent<CAsyncRequestReplyEvent>(std::move(pNotification));
 
 	return true;
 }

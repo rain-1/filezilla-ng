@@ -942,23 +942,22 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 			break;
 		case nId_listing:
 			{
-				const CDirectoryListingNotification* const pListingNotification = reinterpret_cast<CDirectoryListingNotification *>(pNotification.get());
+				auto const& listingNotification = static_cast<CDirectoryListingNotification const&>(*pNotification.get());
 
-				if (pListingNotification->GetPath().empty())
+				if (listingNotification.GetPath().empty())
 					pState->SetRemoteDir(0, false);
-				else
-				{
+				else {
 					std::shared_ptr<CDirectoryListing> pListing = std::make_shared<CDirectoryListing>();
-					if (pListingNotification->Failed() ||
-						pState->m_pEngine->CacheLookup(pListingNotification->GetPath(), *pListing) != FZ_REPLY_OK)
+					if (listingNotification.Failed() ||
+						pState->m_pEngine->CacheLookup(listingNotification.GetPath(), *pListing) != FZ_REPLY_OK)
 					{
 						pListing = std::make_shared<CDirectoryListing>();
-						pListing->path = pListingNotification->GetPath();
+						pListing->path = listingNotification.GetPath();
 						pListing->m_flags |= CDirectoryListing::listing_failed;
 						pListing->m_firstListTime = CMonotonicTime::Now();
 					}
 
-					pState->SetRemoteDir(pListing, pListingNotification->Modified());
+					pState->SetRemoteDir(pListing, listingNotification.Modified());
 				}
 			}
 			break;
@@ -966,9 +965,8 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 			{
 				auto pAsyncRequest = unique_static_cast<CAsyncRequestNotification>(std::move(pNotification));
 				if (pAsyncRequest->GetRequestID() == reqId_fileexists)
-					m_pQueueView->ProcessNotification(pState->m_pEngine, unique_static_cast<CNotification>(std::move(pAsyncRequest)));
-				else
-				{
+					m_pQueueView->ProcessNotification(pState->m_pEngine, std::move(pAsyncRequest));
+				else {
 					if (pAsyncRequest->GetRequestID() == reqId_certificate)
 						pState->SetSecurityInfo(static_cast<CCertificateNotification&>(*pAsyncRequest));
 					m_pAsyncRequestQueue->AddRequest(pState->m_pEngine, std::move(pAsyncRequest));
