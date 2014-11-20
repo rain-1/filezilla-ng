@@ -3251,7 +3251,9 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 		// Swap status line
 		CStatusLineCtrl* pOldStatusLineCtrl = pNewEngineData->pStatusLineCtrl;
 		pNewEngineData->pStatusLineCtrl = pEngineData->pStatusLineCtrl;
-		pNewEngineData->pStatusLineCtrl->SetEngineData(pNewEngineData);
+		if (pNewEngineData->pStatusLineCtrl) {
+			pNewEngineData->pStatusLineCtrl->SetEngineData(pNewEngineData);
+		}
 		if (pOldStatusLineCtrl) {
 			pEngineData->pStatusLineCtrl = pOldStatusLineCtrl;
 			pEngineData->pStatusLineCtrl->SetEngineData(pEngineData);
