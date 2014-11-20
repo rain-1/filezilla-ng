@@ -200,7 +200,7 @@ protected:
 				{
 					sftp_message* message = new sftp_message;
 					message->type = eventType;
-					message->text = ReadLine(error).c_str();
+					message->text = ReadLine(error);
 					if (error) {
 						delete message;
 						goto loopexit;
@@ -232,7 +232,7 @@ protected:
 						sftp_message* message = new sftp_message;
 						message->type = eventType;
 						message->reqType = sftpReqPassword;
-						message->text = line.Mid(1).c_str();
+						message->text = line.Mid(1);
 						SendMessage(message);
 					}
 				}
@@ -1084,7 +1084,7 @@ int CSftpControlSocket::ListParseEntry(const wxString& entry)
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	pData->pParser->AddLine(entry.c_str());
+	pData->pParser->AddLine(entry);
 
 	return FZ_REPLY_WOULDBLOCK;
 }
