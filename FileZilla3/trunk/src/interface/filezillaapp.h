@@ -38,7 +38,7 @@ public:
 
 	CWrapEngine* GetWrapEngine();
 
-	const CCommandLine* GetCommandLine() const { return m_pCommandLine; }
+	const CCommandLine* GetCommandLine() const { return m_pCommandLine.get(); }
 
 	void ShowStartupProfile();
 	void AddStartupProfileRecord(const wxString& msg);
@@ -49,7 +49,7 @@ protected:
 	bool LoadLocales();
 	int ProcessCommandLine();
 
-	wxLocale* m_pLocale;
+	std::unique_ptr<wxLocale> m_pLocale;
 
 	CLocalPath m_resourceDir;
 	CLocalPath m_defaultsDir;
@@ -67,9 +67,9 @@ protected:
 	// Example: FileExists(_T("/home/*/.filezilla/filezilla.xml"));
 	bool FileExists(const wxString& file) const;
 
-	CWrapEngine* m_pWrapEngine;
+	std::unique_ptr<CWrapEngine> m_pWrapEngine;
 
-	CCommandLine* m_pCommandLine;
+	std::unique_ptr<CCommandLine> m_pCommandLine;
 
 	bool m_profilingActive;
 	std::list<std::pair<wxDateTime, wxString> > m_startupProfile;

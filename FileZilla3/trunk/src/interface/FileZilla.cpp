@@ -61,10 +61,6 @@
 	#include "prefix.h"
 #endif
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 #ifndef __WXGTK__
 IMPLEMENT_APP(CFileZillaApp)
 #else
@@ -73,18 +69,12 @@ IMPLEMENT_APP_NO_MAIN(CFileZillaApp)
 
 CFileZillaApp::CFileZillaApp()
 {
-	m_pWrapEngine = 0;
-	m_pLocale = 0;
-	m_pCommandLine = 0;
 	m_profilingActive = true;
 	AddStartupProfileRecord(_T("CFileZillaApp::CFileZillaApp()"));
 }
 
 CFileZillaApp::~CFileZillaApp()
 {
-	delete m_pLocale;
-	delete m_pWrapEngine;
-	delete m_pCommandLine;
 	COptions::Destroy();
 }
 
@@ -92,23 +82,20 @@ CFileZillaApp::~CFileZillaApp()
 bool IsServiceRunning(const wxString& serviceName)
 {
 	SC_HANDLE hScm = OpenSCManager(0, 0, GENERIC_READ);
-	if (!hScm)
-	{
+	if (!hScm) {
 		//wxMessageBoxEx(_T("OpenSCManager failed"));
 		return false;
 	}
 
 	SC_HANDLE hService = OpenService(hScm, serviceName, GENERIC_READ);
-	if (!hService)
-	{
+	if (!hService) {
 		CloseServiceHandle(hScm);
 		//wxMessageBoxEx(_T("OpenService failed"));
 		return false;
 	}
 
 	SERVICE_STATUS status;
-	if (!ControlService(hService, SERVICE_CONTROL_INTERROGATE, &status))
-	{
+	if (!ControlService(hService, SERVICE_CONTROL_INTERROGATE, &status)) {
 		CloseServiceHandle(hService);
 		CloseServiceHandle(hScm);
 		//wxMessageBoxEx(_T("ControlService failed"));
@@ -182,14 +169,12 @@ void CFileZillaApp::InitLocale()
 	if (!language.empty())
 	{
 #ifdef __WXGTK__
-		if (CInitializer::error)
-		{
+		if (CInitializer::error) {
 			wxString error;
 
 			wxLocale *loc = wxGetLocale();
 			const wxLanguageInfo* currentInfo = loc ? loc->GetLanguageInfo(loc->GetLanguage()) : 0;
-			if (!loc || !currentInfo)
-			{
+			if (!loc || !currentInfo) {
 				if (!pInfo)
 					error.Printf(_("Failed to set language to %s, using default system language."),
 						language);
@@ -197,8 +182,7 @@ void CFileZillaApp::InitLocale()
 					error.Printf(_("Failed to set language to %s (%s), using default system language."),
 						pInfo->Description, language);
 			}
-			else
-			{
+			else {
 				wxString currentName = currentInfo->CanonicalName;
 
 				if (!pInfo)
@@ -273,9 +257,10 @@ bool CFileZillaApp::OnInit()
 
 	LoadLocales();
 
-	if (cmdline_result < 0)
-	{
-		m_pCommandLine->DisplayUsage();
+	if (cmdline_result < 0) {
+		if (m_pCommandLine) {
+			m_pCommandLine->DisplayUsage();
+		}
 		return false;
 	}
 
@@ -305,8 +290,7 @@ USE AT OWN RISK"), _T("Important Information"));
 	}
 #endif
 
-	if (!LoadResourceFiles())
-	{
+	if (!LoadResourceFiles()) {
 		COptions::Destroy();
 		return false;
 	}
@@ -314,8 +298,7 @@ USE AT OWN RISK"), _T("Important Information"));
 	CheckExistsFzsftp();
 
 #ifdef __WXMSW__
-	if (CheckForWin2003FirewallBug())
-	{
+	if (CheckForWin2003FirewallBug()) {
 		const wxString& error = _("Warning!\n\nA bug in Windows causes problems with FileZilla\n\n\
 The bug occurs if you have\n\
 - Windows Server 2003 or XP 64\n\
@@ -339,7 +322,7 @@ FileZilla will timeout on big transfers.\
 #endif
 
 	// Load the text wrapping engine
-	m_pWrapEngine = new CWrapEngine();
+	m_pWrapEngine = make_unique<CWrapEngine>();
 	m_pWrapEngine->LoadCache();
 
 	CMainFrame *frame = new CMainFrame();
@@ -387,8 +370,7 @@ bool CFileZillaApp::FileExists(const wxString& file) const
 
 	wxString subDir;
 	bool found = dir.GetFirst(&subDir, _T(""), wxDIR_DIRS);
-	while (found)
-	{
+	while (found) {
 		if (FileExists(file.Left(pos) + subDir + file.Mid(pos + 1)))
 			return true;
 
@@ -431,8 +413,7 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 #ifdef ENABLE_BINRELOC
 	const char* path = SELFPATH;
-	if (path && *path)
-	{
+	if (path && *path) {
 		wxString datadir(SELFPATH , *wxConvCurrent);
 		wxFileName fn(datadir);
 		datadir = fn.GetPath();
@@ -441,8 +422,7 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 
 	}
 	path = DATADIR;
-	if (path && *path)
-	{
+	if (path && *path) {
 		wxString datadir(DATADIR, *wxConvCurrent);
 		if (!datadir.empty())
 			pathList.Add(datadir);
@@ -450,8 +430,7 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 #elif defined __WXMSW__
 	wxChar path[1024];
 	int res = GetModuleFileName(0, path, 1000);
-	if (res > 0 && res < 1000)
-	{
+	if (res > 0 && res < 1000) {
 		wxFileName fn(path);
 		pathList.Add(fn.GetPath(wxPATH_GET_VOLUME | wxPATH_GET_SEPARATOR));
 	}
@@ -619,30 +598,25 @@ bool CFileZillaApp::LoadLocales()
 bool CFileZillaApp::SetLocale(int language)
 {
 	// First check if we can load the new locale
-	wxLocale* pLocale = new wxLocale();
+	auto pLocale = make_unique<wxLocale>();
 	wxLogNull log;
 	pLocale->Init(language);
-	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla")))
-	{
-		delete pLocale;
+	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla"))) {
 		return false;
 	}
 
 	// Now unload old locale
 	// We unload new locale as well, else the internal locale chain in wxWidgets get's broken.
-	delete pLocale;
-	delete m_pLocale;
-	m_pLocale = 0;
+	pLocale.reset();
+	m_pLocale.reset();
 
 	// Finally load new one
-	pLocale = new wxLocale();
+	pLocale = make_unique<wxLocale>();
 	pLocale->Init(language);
-	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla")))
-	{
-		delete pLocale;
+	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla"))) {
 		return false;
 	}
-	m_pLocale = pLocale;
+	m_pLocale = std::move(pLocale);
 
 	return true;
 }
@@ -682,7 +656,7 @@ void CFileZillaApp::DisplayEncodingWarning()
 
 CWrapEngine* CFileZillaApp::GetWrapEngine()
 {
-	return m_pWrapEngine;
+	return m_pWrapEngine.get();
 }
 
 void CFileZillaApp::CheckExistsFzsftp()
@@ -714,14 +688,12 @@ void CFileZillaApp::CheckExistsFzsftp()
 
 	// First check the FZ_FZSFTP environment variable
 	wxString executable;
-	if (wxGetEnv(_T("FZ_FZSFTP"), &executable))
-	{
+	if (wxGetEnv(_T("FZ_FZSFTP"), &executable)) {
 		if (wxFileName::FileExists(executable))
 			found = true;
 	}
 
-	if (!found)
-	{
+	if (!found) {
 		wxPathList pathList;
 
 		// Add current working directory
@@ -732,13 +704,11 @@ void CFileZillaApp::CheckExistsFzsftp()
 		// Add executable path
 		wxChar modulePath[1000];
 		DWORD len = GetModuleFileName(0, modulePath, 999);
-		if (len)
-		{
+		if (len) {
 			modulePath[len] = 0;
 			wxString path(modulePath);
 			int pos = path.Find('\\', true);
-			if (pos != -1)
-			{
+			if (pos != -1) {
 				path = path.Left(pos);
 				pathList.Add(path);
 			}
@@ -755,29 +725,25 @@ void CFileZillaApp::CheckExistsFzsftp()
 			found = true;
 	}
 
-	if (!found)
-	{
 #ifdef __UNIX__
+	if (!found) {
 		const wxString prefix = ((const wxStandardPaths&)wxStandardPaths::Get()).GetInstallPrefix();
-		if (prefix != _T("/usr/local"))
-		{
+		if (prefix != _T("/usr/local")) {
 			// /usr/local is the fallback value. /usr/local/bin is most likely in the PATH
 			// environment variable already so we don't have to check it. Furthermore, other
 			// directories might be listed before it (For example a developer's own
 			// application prefix)
 			wxFileName fn(prefix + _T("/bin/"), program);
 			fn.Normalize();
-			if (fn.FileExists())
-			{
+			if (fn.FileExists()) {
 				executable = fn.GetFullPath();
 				found = true;
 			}
 		}
-#endif
 	}
+#endif
 
-	if (!found)
-	{
+	if (!found) {
 		// Check PATH
 		wxPathList pathList;
 		pathList.AddEnvList(_T("PATH"));
@@ -790,8 +756,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 	if (executable.Find(_T(" ")) != -1 && executable[0] != '"' && executable[0] != '\'')
 		executable = _T("\"") + executable + _T("\"");
 
-	if (!found)
-	{
+	if (!found) {
 		wxMessageBoxEx(wxString::Format(_("%s could not be found. Without this component of FileZilla, SFTP will not work.\n\nPossible solutions:\n- Make sure %s is in a directory listed in your PATH environment variable.\n- Set the full path to %s in the FZ_FZSFTP environment variable."), program, program, program),
 			_("File not found"), wxICON_ERROR | wxOK);
 		executable.clear();
@@ -809,8 +774,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM)
 {
 	HWND child = FindWindowEx(hwnd, 0, 0, _T("FileZilla process identificator 3919DB0A-082D-4560-8E2F-381A35969FB4"));
-	if (child)
-	{
+	if (child) {
 		::PostMessage(hwnd, WM_ENDSESSION, (WPARAM)TRUE, (LPARAM)ENDSESSION_LOGOFF);
 	}
 
@@ -821,21 +785,18 @@ extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM)
 int CFileZillaApp::ProcessCommandLine()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::ProcessCommandLine"));
-	m_pCommandLine = new CCommandLine(argc, argv);
+	m_pCommandLine = make_unique<CCommandLine>(argc, argv);
 	int res = m_pCommandLine->Parse() ? 1 : -1;
 
-	if (res > 0)
-	{
-		if (m_pCommandLine->HasSwitch(CCommandLine::close))
-		{
+	if (res > 0) {
+		if (m_pCommandLine->HasSwitch(CCommandLine::close)) {
 #ifdef __WXMSW__
 			EnumWindows((WNDENUMPROC)EnumWindowCallback, 0);
 #endif
 			return 0;
 		}
 
-		if (m_pCommandLine->HasSwitch(CCommandLine::version))
-		{
+		if (m_pCommandLine->HasSwitch(CCommandLine::version)) {
 			wxString out = wxString::Format(_T("FileZilla %s"), CBuildInfo::GetVersion());
 			if (!CBuildInfo::GetBuildType().empty())
 				out += _T(" ") + CBuildInfo::GetBuildType() + _T(" build");
@@ -868,11 +829,10 @@ void CFileZillaApp::ShowStartupProfile()
 		return;
 
 	wxString msg = _T("Profile:\n");
-	for (std::list<std::pair<wxDateTime, wxString> >::const_iterator it = profile.begin(); it != profile.end(); ++it)
-	{
-		msg += it->first.Format(_T("%Y-%m-%d %H:%M:%S %l"));
+	for (auto const& p : profile) {
+		msg += p.first.Format(_T("%Y-%m-%d %H:%M:%S %l"));
 		msg += _T(" ");
-		msg += it->second;
+		msg += p.second;
 		msg += _T("\n");
 	}
 
