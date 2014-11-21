@@ -17,10 +17,10 @@
 #ifdef __WXMSW__
   // IE 6 or higher
   #ifndef _WIN32_IE
-    #define _WIN32_IE 0x0600
-  #elif _WIN32_IE <= 0x0600
+    #define _WIN32_IE 0x0700
+  #elif _WIN32_IE <= 0x0700
     #undef _WIN32_IE
-    #define _WIN32_IE 0x0600
+    #define _WIN32_IE 0x0700
   #endif
 
   // Windows Vista or higher
