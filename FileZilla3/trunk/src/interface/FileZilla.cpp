@@ -849,49 +849,6 @@ int CFileZillaApp::ProcessCommandLine()
 	return res;
 }
 
-#if USE_CHUNKED_PROCESS_PENDING_EVENTS
-void CFileZillaApp::ProcessPendingEvents()
-{
-	// Code copied from wxAppConsole::ProcessPendingEvents, adapted to
-	// process only 100 events in one go.
-#if wxUSE_THREADS
-	if ( !wxPendingEventsLocker )
-		return;
-#endif
-
-	// ensure that we're the only thread to modify the pending events list
-	wxENTER_CRIT_SECT( *wxPendingEventsLocker );
-
-	if ( !wxPendingEvents )
-	{
-		wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
-		return;
-	}
-
-	// iterate until the list becomes empty or 100 events have been
-	// processed, whichever comes first
-	wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
-	int idleCounter = 100;
-	while (node)
-	{
-		wxEvtHandler *handler = (wxEvtHandler *)node->GetData();
-		wxPendingEvents->Erase(node);
-
-		// In ProcessPendingEvents(), new handlers might be add
-		// and we can safely leave the critical section here.
-		wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
-
-		handler->ProcessPendingEvents();
-
-		wxENTER_CRIT_SECT( *wxPendingEventsLocker );
-
-		node = --idleCounter ? wxPendingEvents->GetFirst() : 0;
-	}
-
-	wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
-}
-#endif
-
 void CFileZillaApp::AddStartupProfileRecord(const wxString& msg)
 {
 	if (!m_profilingActive)
