@@ -26,10 +26,6 @@
 #include "commctrl.h"
 #endif
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 class CRemoteListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:

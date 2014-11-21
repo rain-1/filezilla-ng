@@ -12,10 +12,6 @@
 #include "drop_target_ex.h"
 #include "Options.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 #ifdef __WXMSW__
 #include <wx/msw/registry.h>
 #include <shlobj.h>

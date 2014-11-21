@@ -14,10 +14,6 @@
 #include "themeprovider.h"
 #include "Options.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 class CItemData : public wxTreeItemData
 {
 public:

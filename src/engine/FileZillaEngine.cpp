@@ -6,10 +6,6 @@
 #include "ControlSocket.h"
 #include "directorycache.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
 	: CFileZillaEnginePrivate(engine_context)
 {

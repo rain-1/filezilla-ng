@@ -4,10 +4,6 @@
 
 #include <wx/dcclient.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 DEFINE_EVENT_TYPE(fzEVT_UPDATE_LED_TOOLTIP)
 
 BEGIN_EVENT_TABLE(CLed, wxWindow)
