@@ -63,10 +63,6 @@
 #include <functional>
 #include <map>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 #ifdef __WXGTK__
 DECLARE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED, -1)
 DEFINE_EVENT_TYPE(fzEVT_TASKBAR_CLICK_DELAYED)

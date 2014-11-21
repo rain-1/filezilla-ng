@@ -35,10 +35,6 @@
 #include <powrprof.h>
 #endif
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 class CQueueViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:

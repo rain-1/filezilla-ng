@@ -18,10 +18,6 @@
 	#endif
 #endif
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 COptions* COptions::m_theOptions = 0;
 
 enum Type

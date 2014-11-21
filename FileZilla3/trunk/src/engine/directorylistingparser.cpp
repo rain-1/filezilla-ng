@@ -5,10 +5,6 @@
 #include <algorithm>
 #include <vector>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 std::map<wxString, int> CDirectoryListingParser::m_MonthNamesMap;
 
 //#define LISTDEBUG_MVS

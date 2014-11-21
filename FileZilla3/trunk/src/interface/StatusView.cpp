@@ -4,10 +4,6 @@
 
 #include <wx/dcclient.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
 #define MAX_LINECOUNT 1000
 #define LINECOUNT_REMOVAL 10
 

@@ -24,11 +24,6 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#endif
-
-
 class CLocalListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
 public:
