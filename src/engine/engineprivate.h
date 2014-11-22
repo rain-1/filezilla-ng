@@ -6,6 +6,7 @@
 #include "engine_context.h"
 #include "event.h"
 #include "event_handler.h"
+#include "FileZillaEngine.h"
 
 class CControlSocket;
 class CLogging;
@@ -21,22 +22,38 @@ enum EngineNotificationType
 struct filezilla_engine_event_type;
 typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
 
-class CFileZillaEnginePrivate : public CEventHandler
+class CFileZillaEnginePrivate final : public CEventHandler
 {
 public:
+	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
+	virtual ~CFileZillaEnginePrivate();
+
+	int Init(wxEvtHandler *pEventHandler);
+
+	int Execute(CCommand const& command);
+	int Cancel();
 	int ResetOperation(int nErrorCode);
-	void SetActive(int direction);
 
-	// Add new pending notification
-	void AddNotification(CNotification *pNotification);
-
-	unsigned int GetNextAsyncRequestNumber();
+	const CCommand *GetCurrentCommand() const;
+	Command GetCurrentCommandId() const;
 
 	bool IsBusy() const;
 	bool IsConnected() const;
 
-	const CCommand *GetCurrentCommand() const;
-	Command GetCurrentCommandId() const;
+	bool IsPendingAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> const& pNotification);
+	bool SetAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> && pNotification);
+	unsigned int GetNextAsyncRequestNumber();
+
+	bool GetTransferStatus(CTransferStatus &status, bool &changed);
+
+	int CacheLookup(CServerPath const& path, CDirectoryListing& listing);
+
+	static bool IsActive(CFileZillaEngine::_direction direction);
+	void SetActive(int direction);
+
+	// Add new pending notification
+	void AddNotification(CNotification *pNotification);
+	std::unique_ptr<CNotification> GetNextNotification();
 
 	COptionsBase& GetOptions() { return m_options; }
 	CRateLimiter& GetRateLimiter() { return m_rateLimiter; }
@@ -60,9 +77,6 @@ public:
 	CSocketEventDispatcher& socket_event_dispatcher_;
 
 protected:
-	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
-	virtual ~CFileZillaEnginePrivate();
-
 	int CheckCommandPreconditions(CCommand const& command, bool checkBusy);
 
 

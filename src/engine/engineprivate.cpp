@@ -1,13 +1,14 @@
 #include <filezilla.h>
 #include "ControlSocket.h"
+#include "directorycache.h"
+#include "engineprivate.h"
 #include "event_loop.h"
 #include "ftpcontrolsocket.h"
-#include "sftpcontrolsocket.h"
-#include "directorycache.h"
-#include "logging_private.h"
 #include "httpcontrolsocket.h"
-#include "ratelimiter.h"
+#include "logging_private.h"
 #include "pathcache.h"
+#include "ratelimiter.h"
+#include "sftpcontrolsocket.h"
 
 wxCriticalSection CFileZillaEnginePrivate::mutex_;
 std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
@@ -36,6 +37,9 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 
 CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 {
+	RemoveHandler();
+	m_maySendNotificationEvent = false;
+
 	m_pControlSocket.reset();
 	m_pCurrentCommand.reset();
 
@@ -637,4 +641,116 @@ void CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsync
 
 	m_pControlSocket->SetAlive();
 	m_pControlSocket->SetAsyncRequestReply(reply.get());
+}
+
+int CFileZillaEnginePrivate::Init(wxEvtHandler *pEventHandler)
+{
+	wxCriticalSectionLocker lock(mutex_);
+	m_pEventHandler = pEventHandler;
+	return FZ_REPLY_OK;
+}
+
+int CFileZillaEnginePrivate::Execute(const CCommand &command)
+{
+	wxCriticalSectionLocker lock(mutex_);
+
+	int res = CheckCommandPreconditions(command, true);
+	if (res != FZ_REPLY_OK) {
+		return res;
+	}
+
+	m_pCurrentCommand.reset(command.Clone());
+	SendEvent<CCommandEvent>();
+
+	return FZ_REPLY_WOULDBLOCK;
+}
+
+std::unique_ptr<CNotification> CFileZillaEnginePrivate::GetNextNotification()
+{
+	wxCriticalSectionLocker lock(notification_mutex_);
+
+	if (m_NotificationList.empty()) {
+		m_maySendNotificationEvent = true;
+		return 0;
+	}
+	std::unique_ptr<CNotification> pNotification(m_NotificationList.front());
+	m_NotificationList.pop_front();
+
+	return pNotification;
+}
+
+bool CFileZillaEnginePrivate::SetAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> && pNotification)
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!CheckAsyncRequestReplyPreconditions(pNotification)) {
+		return false;
+	}
+
+	SendEvent<CAsyncRequestReplyEvent>(std::move(pNotification));
+
+	return true;
+}
+
+bool CFileZillaEnginePrivate::IsPendingAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> const& pNotification)
+{
+	if (!pNotification)
+		return false;
+
+	if (!IsBusy())
+		return false;
+
+	wxCriticalSectionLocker lock(notification_mutex_);
+	return pNotification->requestNumber == m_asyncRequestCounter;
+}
+
+bool CFileZillaEnginePrivate::IsActive(CFileZillaEngine::_direction direction)
+{
+	wxCriticalSectionLocker lock(mutex_);
+
+	if (m_activeStatus[direction] == 2) {
+		m_activeStatus[direction] = 1;
+		return true;
+	}
+
+	m_activeStatus[direction] = 0;
+	return false;
+}
+
+bool CFileZillaEnginePrivate::GetTransferStatus(CTransferStatus &status, bool &changed)
+{
+	wxCriticalSectionLocker lock(mutex_);
+
+	if (!m_pControlSocket) {
+		changed = false;
+		return false;
+	}
+
+	return m_pControlSocket->GetTransferStatus(status, changed);
+}
+
+int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryListing& listing)
+{
+	// TODO: Possible optimization: Atomically get current server. The cache has its own mutex.
+	wxCriticalSectionLocker lock(mutex_);
+
+	if (!IsConnected())
+		return FZ_REPLY_ERROR;
+
+	wxASSERT(m_pControlSocket->GetCurrentServer());
+
+	bool is_outdated = false;
+	if (!directory_cache_.Lookup(listing, *m_pControlSocket->GetCurrentServer(), path, true, is_outdated))
+		return FZ_REPLY_ERROR;
+
+	return FZ_REPLY_OK;
+}
+
+int CFileZillaEnginePrivate::Cancel()
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!IsBusy())
+		return FZ_REPLY_OK;
+
+	SendEvent<CFileZillaEngineEvent>(engineCancel);
+	return FZ_REPLY_WOULDBLOCK;
 }

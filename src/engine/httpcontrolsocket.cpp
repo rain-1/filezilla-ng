@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "ControlSocket.h"
+#include "engineprivate.h"
 #include "httpcontrolsocket.h"
 #include "local_filesys.h"
 #include "tlssocket.h"

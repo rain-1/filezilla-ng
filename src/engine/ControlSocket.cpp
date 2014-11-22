@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "ControlSocket.h"
 #include "directorycache.h"
+#include "engineprivate.h"
 #include "event_loop.h"
 #include "local_filesys.h"
 #include "local_path.h"

@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "event_loop.h"
+#include "engine_context.h"
 #include "netconfwizard.h"
 #include "Options.h"
 #include "dialogex.h"

@@ -1,13 +1,15 @@
 #ifndef __FILEZILLAENGINE_H__
 #define __FILEZILLAENGINE_H__
 
-#include "engineprivate.h"
+#include "commands.h"
 
-class CFileZillaEngine final : public CFileZillaEnginePrivate
+class CFileZillaEngineContext;
+class CFileZillaEnginePrivate;
+class CFileZillaEngine final
 {
 public:
 	CFileZillaEngine(CFileZillaEngineContext& engine_context);
-	virtual ~CFileZillaEngine();
+	~CFileZillaEngine();
 
 	// Initialize the engine. Pass over the event handler that should receive notification
 	// events as defined in notification.h
@@ -22,6 +24,9 @@ public:
 
 	// Cancels the current command
 	int Cancel();
+
+	bool IsBusy() const;
+	bool IsConnected() const;
 
 	// IsActive returns true only if data has been transferred in the
 	// given direction since the last time IsActive was called with
@@ -53,6 +58,9 @@ public:
 	bool GetTransferStatus(CTransferStatus &status, bool &changed);
 
 	int CacheLookup(CServerPath const& path, CDirectoryListing& listing);
+
+private:
+	CFileZillaEnginePrivate* const impl_;
 };
 
 #endif

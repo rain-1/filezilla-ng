@@ -7,6 +7,8 @@
 
 #include "statusbar.h"
 
+#include "engine_context.h"
+
 class CAsyncRequestQueue;
 class CContextControl;
 class CLed;

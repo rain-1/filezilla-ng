@@ -2,6 +2,7 @@
 
 #include "directorycache.h"
 #include "directorylistingparser.h"
+#include "engineprivate.h"
 #include "event_loop.h"
 #include "pathcache.h"
 #include "local_filesys.h"

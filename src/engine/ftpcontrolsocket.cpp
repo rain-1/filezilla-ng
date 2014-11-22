@@ -2,6 +2,7 @@
 
 #include "directorycache.h"
 #include "directorylistingparser.h"
+#include "engineprivate.h"
 #include "externalipresolver.h"
 #include "file.h"
 #include "ftpcontrolsocket.h"

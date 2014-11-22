@@ -5,7 +5,6 @@ noinst_HEADERS = \
 	commands.h \
 	directorylisting.h \
 	engine_context.h \
-	engineprivate.h \
 	event.h \
 	event_handler.h \
 	event_loop.h \
