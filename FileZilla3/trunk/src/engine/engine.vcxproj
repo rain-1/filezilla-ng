@@ -125,8 +125,8 @@
     <ClInclude Include="directorycache.h" />
     <ClInclude Include="..\include\directorylisting.h" />
     <ClInclude Include="directorylistingparser.h" />
-    <ClInclude Include="..\include\engineprivate.h" />
     <ClInclude Include="..\include\externalipresolver.h" />
+    <ClInclude Include="engineprivate.h" />
     <ClInclude Include="file.h" />
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />

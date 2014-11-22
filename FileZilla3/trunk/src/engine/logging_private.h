@@ -1,6 +1,7 @@
 #ifndef __LOGGING_PRIVATE_H__
 #define __LOGGING_PRIVATE_H__
 
+#include "engineprivate.h"
 #include <utility>
 
 class CLogging

@@ -1,4 +1,5 @@
 #include <filezilla.h>
+#include "engineprivate.h"
 #include "tlssocket.h"
 #include "ControlSocket.h"
 
