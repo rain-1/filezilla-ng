@@ -53,3 +53,6 @@ endif
 desktopentrydir = $(datadir)/applications
 dist_desktopentry_DATA = filezilla.desktop
 
+appdatadir = $(datadir)/appdata
+dist_appdata_DATA = filezilla.appdata.xml
+
