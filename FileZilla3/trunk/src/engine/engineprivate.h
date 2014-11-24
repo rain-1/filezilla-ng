@@ -25,7 +25,7 @@ typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEn
 class CFileZillaEnginePrivate final : public CEventHandler
 {
 public:
-	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context);
+	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context, CFileZillaEngine& parent);
 	virtual ~CFileZillaEnginePrivate();
 
 	int Init(wxEvtHandler *pEventHandler);
@@ -161,6 +161,8 @@ protected:
 	CRateLimiter& m_rateLimiter;
 	CDirectoryCache& directory_cache_;
 	CPathCache& path_cache_;
+
+	CFileZillaEngine& parent_;
 };
 
 struct command_event_type{};

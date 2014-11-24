@@ -15,7 +15,7 @@ std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
-CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context)
+CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent)
 	: CEventHandler(context.GetEventLoop())
 	, event_loop_(context.GetEventLoop())
 	, socket_event_dispatcher_(context.GetSocketEventDispatcher())
@@ -23,6 +23,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	, m_rateLimiter(context.GetRateLimiter())
 	, directory_cache_(context.GetDirectoryCache())
 	, path_cache_(context.GetPathCache())
+	, parent_(parent)
 {
 	m_engineList.push_back(this);
 
@@ -120,8 +121,7 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 	}
 
 	wxFzEvent evt(wxID_ANY);
-	evt.engine_ = dynamic_cast<CFileZillaEngine*>(this);
-	wxASSERT(evt.engine_);
+	evt.engine_ = &parent_;
 	wxPostEvent(m_pEventHandler, evt);
 }
 

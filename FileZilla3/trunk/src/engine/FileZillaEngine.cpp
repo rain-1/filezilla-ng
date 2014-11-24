@@ -8,7 +8,7 @@
 #include "engineprivate.h"
 
 CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
-	: impl_(new CFileZillaEnginePrivate(engine_context))
+	: impl_(new CFileZillaEnginePrivate(engine_context, *this))
 {
 }
 
