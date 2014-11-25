@@ -59,6 +59,7 @@ static std::list<CSocketThread*> waiting_socket_threads;
 struct socket_event_type;
 typedef CEvent<socket_event_type> CInternalSocketEvent;
 
+namespace {
 #ifdef __WXMSW__
 static int ConvertMSWErrorCode(int error)
 {
@@ -102,6 +103,13 @@ static int ConvertMSWErrorCode(int error)
 		return error;
 	}
 }
+
+int GetLastSocketError()
+{
+	return ConvertMSWErrorCode(WSAGetLastError());
+}
+#else
+inline int GetLastSocketError() { return errno; }
 #endif
 
 #ifdef ERRORCODETEST
@@ -113,8 +121,7 @@ public:
 		int errors[] = {
 			0
 		};
-		for (int i = 0; errors[i]; ++i)
-		{
+		for (int i = 0; errors[i]; ++i) {
 #ifdef __WXMSW__
 			int code = ConvertMSWErrorCode(errors[i]);
 #else
@@ -127,6 +134,7 @@ public:
 	}
 };
 #endif
+}
 
 CSocketEventDispatcher::CSocketEventDispatcher(CEventLoop & event_loop)
 	: CEventHandler(event_loop)
@@ -413,6 +421,40 @@ public:
 	}
 
 protected:
+	static int CreateSocketFd(addrinfo const* addr)
+	{
+		int fd;
+#if defined(SOCK_CLOEXEC) && !defined(__WXMSW__)
+		fd = socket(addr->ai_family, addr->ai_socktype | SOCK_CLOEXEC, addr->ai_protocol);
+		if (fd == -1 && errno == EINVAL)
+#endif
+		{
+			fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+		}
+
+		if (fd != -1) {
+#if defined(SO_NOSIGPIPE) && !defined(MSG_NOSIGNAL)
+			// We do not want SIGPIPE if writing to socket.
+			const int value = 1;
+			setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &value, sizeof(int));
+#endif
+			CSocket::SetNonblocking(fd);
+		}
+
+		return fd;
+	}
+
+	static void CloseSocketFd(int& fd)
+	{
+		if (fd != -1) {
+	#ifdef __WXMSW__
+			closesocket(fd);
+	#else
+			close(fd);
+	#endif
+			fd = -1;
+		}
+	}
 
 	int TryConnectHost(struct addrinfo *addr)
 	{
@@ -421,14 +463,10 @@ protected:
 			m_pSocket->dispatcher_.SendEvent(evt);
 		}
 
-		int fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+		int fd = CreateSocketFd(addr);
 		if (fd == -1) {
-#ifdef __WXMSW__
-			int res = ConvertMSWErrorCode(WSAGetLastError());
-#else
-			int res = errno;
-#endif
 			if (m_pSocket->m_pEvtHandler) {
+				int res = GetLastSocketError();
 				CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, addr->ai_next ? CSocketEvent::connection_next : CSocketEvent::connection, res);
 				m_pSocket->dispatcher_.SendEvent(evt);
 			}
@@ -436,15 +474,8 @@ protected:
 			return 0;
 		}
 
-#if defined(SO_NOSIGPIPE) && !defined(MSG_NOSIGNAL)
-		// We do not want SIGPIPE if writing to socket.
-		const int value = 1;
-		setsockopt(fd, SOL_SOCKET, SO_NOSIGPIPE, &value, sizeof(int));
-#endif
-
 		CSocket::DoSetFlags(fd, m_pSocket->m_flags, m_pSocket->m_flags);
 		CSocket::DoSetBufferSizes(fd, m_pSocket->m_buffer_sizes[0], m_pSocket->m_buffer_sizes[1]);
-		CSocket::SetNonblocking(fd);
 
 		int res = connect(fd, addr->ai_addr, addr->ai_addrlen);
 		if (res == -1) {
@@ -472,11 +503,7 @@ protected:
 			} while (wait_successful);
 
 			if (!wait_successful) {
-#ifdef __WXMSW__
-				closesocket(fd);
-#else
-				close(fd);
-#endif
+				CloseSocketFd(fd);
 				if (m_pSocket)
 					m_pSocket->m_fd = -1;
 				return -1;
@@ -492,12 +519,8 @@ protected:
 				m_pSocket->dispatcher_.SendEvent(evt);
 			}
 
+			CloseSocketFd(fd);
 			m_pSocket->m_fd = -1;
-#ifdef __WXMSW__
-			closesocket(fd);
-#else
-			close(fd);
-#endif
 		}
 		else {
 			m_pSocket->m_fd = fd;
@@ -568,8 +591,7 @@ protected:
 			res = ConvertMSWErrorCode(res);
 #endif
 
-			if (m_pSocket->m_pEvtHandler)
-			{
+			if (m_pSocket->m_pEvtHandler) {
 				CSocketEvent *evt = new CSocketEvent(m_pSocket->GetEventHandler(), m_pSocket, CSocketEvent::connection, res);
 				m_pSocket->dispatcher_.SendEvent(evt);
 			}
@@ -869,8 +891,7 @@ protected:
 				int wait_close = WAIT_CLOSE;
 #endif
 				while (IdleLoop()) {
-					if (m_pSocket->m_fd == -1)
-					{
+					if (m_pSocket->m_fd == -1) {
 						m_waiting = 0;
 						break;
 					}
@@ -1234,14 +1255,7 @@ int CSocket::Close()
 		m_fd = -1;
 	}
 
-	if (fd != -1)
-	{
-#ifdef __WXMSW__
-		closesocket(fd);
-#else
-		close(fd);
-#endif
-	}
+	CSocketThread::CloseSocketFd(fd);
 
 	m_state = none;
 
@@ -1296,13 +1310,8 @@ int CSocket::Read(void* buffer, unsigned int size, int& error)
 {
 	int res = recv(m_fd, (char*)buffer, size, 0);
 
-	if (res == -1)
-	{
-#ifdef __WXMSW__
-		error = ConvertMSWErrorCode(WSAGetLastError());
-#else
-		error = errno;
-#endif
+	if (res == -1) {
+		error = GetLastSocketError();
 		if (error == EAGAIN) {
 			if (m_pSocketThread) {
 				m_pSocketThread->m_sync.Lock();
@@ -1324,13 +1333,8 @@ int CSocket::Peek(void* buffer, unsigned int size, int& error)
 {
 	int res = recv(m_fd, (char*)buffer, size, MSG_PEEK);
 
-	if (res == -1)
-	{
-#ifdef __WXMSW__
-		error = ConvertMSWErrorCode(WSAGetLastError());
-#else
-		error = errno;
-#endif
+	if (res == -1) {
+		error = GetLastSocketError();
 	}
 	else
 		error = 0;
@@ -1363,20 +1367,12 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 		sigaction(SIGPIPE, &old_action, 0);
 #endif
 
-	if (res == -1)
-	{
-#ifdef __WXMSW__
-		error = ConvertMSWErrorCode(WSAGetLastError());
-#else
-		error = errno;
-#endif
-		if (error == EAGAIN)
-		{
-			if (m_pSocketThread)
-			{
+	if (res == -1) {
+		error = GetLastSocketError();
+		if (error == EAGAIN) {
+			if (m_pSocketThread) {
 				m_pSocketThread->m_sync.Lock();
-				if (!(m_pSocketThread->m_waiting & WAIT_WRITE))
-				{
+				if (!(m_pSocketThread->m_waiting & WAIT_WRITE)) {
 					m_pSocketThread->m_waiting |= WAIT_WRITE;
 					m_pSocketThread->WakeupThread(true);
 				}
@@ -1404,10 +1400,8 @@ wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, boo
 
 	// IPv6 uses colons as separator, need to enclose address
 	// to avoid ambiguity if also showing port
-	if (addr->sa_family == AF_INET6)
-	{
-		if (strip_zone_index)
-		{
+	if (addr->sa_family == AF_INET6) {
+		if (strip_zone_index) {
 			int pos = host.Find('%');
 			if (pos != -1)
 				host.Truncate(pos);
@@ -1463,7 +1457,7 @@ CSocket::address_family CSocket::GetAddressFamily() const
 	}
 }
 
-int CSocket::Listen(address_family family, int port /*=0*/)
+int CSocket::Listen(address_family family, int port)
 {
 	if (m_state != none)
 		return EALREADY;
@@ -1502,8 +1496,7 @@ int CSocket::Listen(address_family family, int port /*=0*/)
 		struct addrinfo* addressList = 0;
 		int res = getaddrinfo(0, portstring, &hints, &addressList);
 
-		if (res)
-		{
+		if (res) {
 #ifdef __WXMSW__
 			return ConvertMSWErrorCode(res);
 #else
@@ -1511,30 +1504,19 @@ int CSocket::Listen(address_family family, int port /*=0*/)
 #endif
 		}
 
-		for (struct addrinfo* addr = addressList; addr; addr = addr->ai_next)
-		{
-			m_fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
-#ifdef __WXMSW__
-			res = ConvertMSWErrorCode(WSAGetLastError());
-#else
-			res = errno;
-#endif
+		for (struct addrinfo* addr = addressList; addr; addr = addr->ai_next) {
+			m_fd = CSocketThread::CreateSocketFd(addr);
+			res = GetLastSocketError();
+
 			if (m_fd == -1)
 				continue;
-
-			SetNonblocking(m_fd);
 
 			res = bind(m_fd, addr->ai_addr, addr->ai_addrlen);
 			if (!res)
 				break;
-#ifdef __WXMSW__
-			res = ConvertMSWErrorCode(WSAGetLastError());
-			closesocket(m_fd);
-#else
-			res = errno;
-			close(m_fd);
-#endif
-			m_fd = -1;
+
+			res = GetLastSocketError();
+			CSocketThread::CloseSocketFd(m_fd);
 		}
 		freeaddrinfo(addressList);
 		if (m_fd == -1)
@@ -1542,14 +1524,9 @@ int CSocket::Listen(address_family family, int port /*=0*/)
 	}
 
 	int res = listen(m_fd, 1);
-	if (res)
-	{
-#ifdef __WXMSW__
-		res = ConvertMSWErrorCode(res);
-		closesocket(m_fd);
-#else
-		close(m_fd);
-#endif
+	if (res) {
+		res = GetLastSocketError();
+		CSocketThread::CloseSocketFd(m_fd);
 		m_fd = -1;
 		return res;
 	}
@@ -1571,8 +1548,7 @@ int CSocket::GetLocalPort(int& error)
 	sockaddr_u addr;
 	socklen_t addr_len = sizeof(addr);
 	error = getsockname(m_fd, &addr.sockaddr, &addr_len);
-	if (error)
-	{
+	if (error) {
 #ifdef __WXMSW__
 		error = ConvertMSWErrorCode(error);
 #endif
@@ -1620,13 +1596,8 @@ CSocket* CSocket::Accept(int &error)
 		m_pSocketThread->m_sync.Unlock();
 	}
 	int fd = accept(m_fd, 0, 0);
-	if (fd == -1)
-	{
-#ifdef __WXMSW__
-		error = ConvertMSWErrorCode(WSAGetLastError());
-#else
-		error = errno;
-#endif
+	if (fd == -1) {
+		error = GetLastSocketError();
 		return 0;
 	}
 
@@ -1687,27 +1658,19 @@ void CSocket::SetFlags(int flags)
 
 int CSocket::DoSetFlags(int fd, int flags, int flags_mask)
 {
-	if (flags_mask & flag_nodelay)
-	{
+	if (flags_mask & flag_nodelay) {
 		const int value = (flags & flag_nodelay) ? 1 : 0;
 		int res = setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (const char*)&value, sizeof(value));
-		if (res != 0)
-#ifdef __WXMSW__
-			return ConvertMSWErrorCode(WSAGetLastError());
-#else
-			return errno;
-#endif
+		if (res != 0) {
+			return GetLastSocketError();
+		}
 	}
-	if (flags_mask & flag_keepalive)
-	{
+	if (flags_mask & flag_keepalive) {
 		const int value = (flags & flag_keepalive) ? 1 : 0;
 		int res = setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (const char*)&value, sizeof(value));
-		if (res != 0)
-#ifdef __WXMSW__
-			return ConvertMSWErrorCode(WSAGetLastError());
-#else
-			return errno;
-#endif
+		if (res != 0) {
+			return GetLastSocketError();
+		}
 	}
 
 	return 0;
@@ -1730,26 +1693,18 @@ void CSocket::SetBufferSizes(int size_read, int size_write)
 
 int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 {
-	if (size_read != -1)
-	{
+	if (size_read != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
-		if (res != 0)
-#ifdef __WXMSW__
-			return ConvertMSWErrorCode(WSAGetLastError());
-#else
-			return errno;
-#endif
+		if (res != 0) {
+			res = GetLastSocketError();
+		}
 	}
 
-	if (size_write != -1)
-	{
+	if (size_write != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (const char*)&size_write, sizeof(size_write));
-		if (res != 0)
-#ifdef __WXMSW__
-			return ConvertMSWErrorCode(WSAGetLastError());
-#else
-			return errno;
-#endif
+		if (res != 0) {
+			return GetLastSocketError();
+		}
 	}
 
 	return 0;
