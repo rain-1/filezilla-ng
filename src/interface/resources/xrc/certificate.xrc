@@ -50,9 +50,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_ACTIVATION_TIME">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_ACTIVATION_TIME" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -60,9 +58,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_EXPIRATION_TIME">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_EXPIRATION_TIME" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -70,9 +66,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_SERIAL">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_SERIAL" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -80,9 +74,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_PKALGO">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_PKALGO" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -90,9 +82,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_SIGNALGO">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_SIGNALGO" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -100,9 +90,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_FINGERPRINT_MD5">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_FINGERPRINT_MD5" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -110,9 +98,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_FINGERPRINT_SHA1">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_FINGERPRINT_SHA1" />
                       </object>
                       <vgap>3</vgap>
                       <hgap>3</hgap>
@@ -329,9 +315,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_ACTIVATION_TIME">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_ACTIVATION_TIME" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -339,9 +323,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_EXPIRATION_TIME">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_EXPIRATION_TIME" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -349,9 +331,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_SERIAL">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_SERIAL" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -359,9 +339,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_PKALGO">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_PKALGO" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -369,9 +347,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_SIGNALGO">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_SIGNALGO" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -379,9 +355,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_FINGERPRINT_MD5">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_FINGERPRINT_MD5" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -389,9 +363,7 @@
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_FINGERPRINT_SHA1">
-                          <label/>
-                        </object>
+                        <object class="wxStaticText" name="ID_FINGERPRINT_SHA1" />
                       </object>
                       <vgap>3</vgap>
                       <hgap>3</hgap>

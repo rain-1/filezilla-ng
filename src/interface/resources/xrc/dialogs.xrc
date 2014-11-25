@@ -283,9 +283,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_NAME">
-              <label/>
-            </object>
+            <object class="wxStaticText" name="ID_NAME" />
           </object>
           <object class="sizeritem">
             <object class="wxStaticText">
@@ -293,9 +291,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_HOST">
-              <label/>
-            </object>
+            <object class="wxStaticText" name="ID_HOST" />
           </object>
           <object class="sizeritem">
             <object class="wxStaticText" name="ID_OLD_USER_LABEL">
@@ -303,9 +299,7 @@
             </object>
           </object>
           <object class="sizeritem">
-            <object class="wxStaticText" name="ID_OLD_USER">
-              <label/>
-            </object>
+            <object class="wxStaticText" name="ID_OLD_USER" />
           </object>
           <vgap>5</vgap>
           <hgap>5</hgap>
@@ -660,9 +654,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="ID_HOST">
-                  <label/>
-                </object>
+                <object class="wxStaticText" name="ID_HOST" />
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_BUILD_DESC">
@@ -670,9 +662,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="ID_BUILD">
-                  <label/>
-                </object>
+                <object class="wxStaticText" name="ID_BUILD" />
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_BUILDDATE_DESC">
@@ -680,9 +670,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="ID_BUILDDATE">
-                  <label/>
-                </object>
+                <object class="wxStaticText" name="ID_BUILDDATE" />
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_COMPILEDWITH_DESC">
@@ -690,9 +678,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="ID_COMPILEDWITH">
-                  <label/>
-                </object>
+                <object class="wxStaticText" name="ID_COMPILEDWITH" />
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_CFLAGS_DESC">
@@ -700,9 +686,7 @@
                 </object>
               </object>
               <object class="sizeritem">
-                <object class="wxStaticText" name="ID_CFLAGS">
-                  <label/>
-                </object>
+                <object class="wxStaticText" name="ID_CFLAGS" />
               </object>
               <vgap>3</vgap>
               <hgap>5</hgap>
@@ -1080,7 +1064,6 @@
                   <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
                     <object class="wxCheckListBox" name="ID_LOCALFILTERS">
-                      <content/>
                       <size>-1,200</size>
                     </object>
                     <flag>wxALL|wxGROW</flag>
@@ -1116,7 +1099,6 @@
                   <orient>wxVERTICAL</orient>
                   <object class="sizeritem">
                     <object class="wxCheckListBox" name="ID_REMOTEFILTERS">
-                      <content/>
                       <size>-1, 200</size>
                     </object>
                     <flag>wxALL|wxGROW</flag>
@@ -2070,9 +2052,7 @@
                   <object class="sizeritem">
                     <object class="wxFlexGridSizer">
                       <object class="sizeritem">
-                        <object class="wxCheckListBox" name="ID_ACTIVE">
-                          <content/>
-                        </object>
+                        <object class="wxCheckListBox" name="ID_ACTIVE" />
                         <flag>wxGROW</flag>
                       </object>
                       <object class="sizeritem">
@@ -2362,7 +2342,6 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxChoice" name="ID_PROTOCOL">
-                          <content/>
                           <selection>0</selection>
                         </object>
                         <flag>wxGROW</flag>
@@ -2387,7 +2366,6 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxChoice" name="ID_LOGONTYPE">
-                          <content/>
                           <selection>0</selection>
                         </object>
                         <flag>wxGROW</flag>
