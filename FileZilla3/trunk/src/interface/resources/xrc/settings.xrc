@@ -948,7 +948,6 @@
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
-                  <label/>
                 </object>
               </object>
               <cols>2</cols>
@@ -1401,9 +1400,7 @@
                 <flag>wxALIGN_CENTRE_VERTICAL</flag>
               </object>
               <object class="sizeritem">
-                <object class="wxChoice" name="ID_THEME">
-                  <content/>
-                </object>
+                <object class="wxChoice" name="ID_THEME" />
               </object>
               <object class="sizeritem">
                 <object class="wxStaticText">
@@ -1841,7 +1838,6 @@
           </object>
           <object class="sizeritem">
             <object class="wxListBox" name="ID_LANGUAGES">
-              <content/>
               <style>wxLB_SINGLE|wxLB_NEEDED_SB</style>
             </object>
             <option>1</option>
