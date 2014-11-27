@@ -369,20 +369,22 @@ int CSftpControlSocket::Connect(const CServer &server)
 	m_sftpEncryptionDetails = CSftpEncryptionNotification();
 
 	delete m_pCSConv;
-	if (server.GetEncodingType() == ENCODING_CUSTOM)
-	{
+	if (server.GetEncodingType() == ENCODING_CUSTOM) {
 		LogMessage(MessageType::Debug_Info, _T("Using custom encoding: %s"), server.GetCustomEncoding());
 		m_pCSConv = new wxCSConv(server.GetCustomEncoding());
 		m_useUTF8 = false;
 	}
-	else
-	{
+	else {
 		m_pCSConv = 0;
 		m_useUTF8 = true;
 	}
 
 	delete m_pCurrentServer;
 	m_pCurrentServer = new CServer(server);
+
+	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown) {
+		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, 0);
+	}
 
 	CSftpConnectOpData* pData = new CSftpConnectOpData;
 	m_pCurOpData = pData;
@@ -965,25 +967,20 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 		ResetOperation(FZ_REPLY_OK);
 		return FZ_REPLY_OK;
 	}
-	else if (pData->opState == list_mtime)
-	{
-		if (successful && !reply.empty())
-		{
+	else if (pData->opState == list_mtime) {
+		if (successful && !reply.empty()) {
 			time_t seconds = 0;
 			bool parsed = true;
-			for (unsigned int i = 0; i < reply.Len(); ++i)
-			{
+			for (unsigned int i = 0; i < reply.Len(); ++i) {
 				wxChar c = reply[i];
-				if (c < '0' || c > '9')
-				{
+				if (c < '0' || c > '9') {
 					parsed = false;
 					break;
 				}
 				seconds *= 10;
 				seconds += c - '0';
 			}
-			if (parsed)
-			{
+			if (parsed) {
 				wxDateTime date = wxDateTime(seconds);
 				if (date.IsValid()) {
 					date.MakeTimezone(wxDateTime::GMT0);
@@ -1177,16 +1174,14 @@ int CSftpControlSocket::ListSend()
 	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (pData->opState == list_list)
-	{
+	if (pData->opState == list_list) {
 		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown, true);
 		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
 		if (!SendCommand(_T("ls")))
 			return FZ_REPLY_ERROR;
 		return FZ_REPLY_WOULDBLOCK;
 	}
-	else if (pData->opState == list_mtime)
-	{
+	else if (pData->opState == list_mtime) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
 		const wxString& name = pData->directoryListing[pData->mtime_index].name;
 		wxString quotedFilename = QuoteFilename(pData->directoryListing.path.FormatFilename(name, true));
@@ -2645,11 +2640,9 @@ int CSftpControlSocket::ListCheckTimezoneDetection()
 
 	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
 
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown)
-	{
+	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown) {
 		const int count = pData->directoryListing.GetCount();
-		for (int i = 0; i < count; ++i)
-		{
+		for (int i = 0; i < count; ++i) {
 			if (!pData->directoryListing[i].has_time())
 				continue;
 
