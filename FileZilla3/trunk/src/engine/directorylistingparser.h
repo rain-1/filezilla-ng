@@ -50,7 +50,7 @@ namespace listingEncoding
 class CDirectoryListingParser
 {
 public:
-	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding = listingEncoding::unknown);
+	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding = listingEncoding::unknown, bool sftp_mode = false);
 	~CDirectoryListingParser();
 
 	CDirectoryListing Parse(const CServerPath &path);
@@ -140,6 +140,8 @@ protected:
 	wxTimeSpan m_timezoneOffset;
 
 	listingEncoding::type m_listingEncoding;
+
+	bool sftp_mode_{};
 };
 
 #endif
