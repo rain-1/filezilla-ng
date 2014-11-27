@@ -845,7 +845,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	return true;
 }
 
-class CSftpListOpData : public COpData
+class CSftpListOpData final : public COpData
 {
 public:
 	CSftpListOpData()
@@ -888,13 +888,11 @@ int CSftpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDi
 {
 	LogMessage(MessageType::Status, _("Retrieving directory listing..."));
 
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("List called from other command"));
 	}
 
-	if (!m_pCurrentServer)
-	{
+	if (!m_pCurrentServer) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurrenServer == 0"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -987,8 +985,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 			if (parsed)
 			{
 				wxDateTime date = wxDateTime(seconds);
-				if (date.IsValid())
-				{
+				if (date.IsValid()) {
 					date.MakeTimezone(wxDateTime::GMT0);
 					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
 					wxDateTime listTime = pData->directoryListing[pData->mtime_index].time.Degenerate();
@@ -1182,7 +1179,7 @@ int CSftpControlSocket::ListSend()
 
 	if (pData->opState == list_list)
 	{
-		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer);
+		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown, true);
 		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
 		if (!SendCommand(_T("ls")))
 			return FZ_REPLY_ERROR;
