@@ -49,7 +49,7 @@ Legend:
 - OS X: Manually handle CMD+X, CMD+C, CMD+V and CMD+A in the path combo boxes
 - OS X: Creating new tabs selects the newly created tab again
 - Detect some types TLS error conditions earlier instead of waiting for a timeout
-- Small performance imprvement for TLS handshakes
+- Small performance improvement for TLS handshakes
 - Do not show error message if "Create and enter" is used with synchronized browsing enabled
 
 3.9.0.1 (2014-07-22)
