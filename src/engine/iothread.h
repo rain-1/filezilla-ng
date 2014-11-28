@@ -29,7 +29,7 @@ public:
 	CIOThread();
 	virtual ~CIOThread();
 
-	bool Create(CFile* pFile, bool read, bool binary);
+	bool Create(std::unique_ptr<CFile> && pFile, bool read, bool binary);
 	virtual void Destroy(); // Only call that might be blocking
 
 	// Call before first call to one of the GetNext*Buffer functions
@@ -56,6 +56,8 @@ public:
 	wxString GetError();
 
 protected:
+	void Close();
+
 	virtual ExitCode Entry();
 
 	int ReadFromFile(char* pBuffer, int maxLen);
@@ -66,7 +68,7 @@ protected:
 
 	bool m_read;
 	bool m_binary;
-	CFile* m_pFile;
+	std::unique_ptr<CFile> m_pFile;
 
 	char* m_buffers[BUFFERCOUNT];
 	unsigned int m_bufferLens[BUFFERCOUNT];
