@@ -29,7 +29,15 @@ CIOThread::CIOThread()
 
 CIOThread::~CIOThread()
 {
-	delete m_pFile;
+	if (m_pFile)
+	{
+		// The file might have been preallocated and the transfer stopped before being completed
+		// so always truncate the file to the actually written size before closing it.
+		if (!m_read)
+			m_pFile->Truncate();
+
+		delete m_pFile;
+	}
 
 	for (unsigned int i = 0; i < BUFFERCOUNT; i++)
 		delete [] m_buffers[i];
@@ -40,7 +48,17 @@ CIOThread::~CIOThread()
 bool CIOThread::Create(CFile* pFile, bool read, bool binary)
 {
 	wxASSERT(pFile);
-	delete m_pFile;
+
+	if (m_pFile)
+	{
+		// The file might have been preallocated and the transfer stopped before being completed
+		// so always truncate the file to the actually written size before closing it.
+		if (!m_read)
+			m_pFile->Truncate();
+
+		delete m_pFile;
+	}
+
 	m_pFile = pFile;
 	m_read = read;
 	m_binary = binary;
