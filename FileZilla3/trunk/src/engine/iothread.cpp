@@ -9,7 +9,6 @@ CIOThread::CIOThread()
 	: wxThread(wxTHREAD_JOINABLE), m_evtHandler(0)
 	, m_read()
 	, m_binary()
-	, m_pFile(0)
 	, m_condition(m_mutex)
 	, m_curAppBuf()
 	, m_curThreadBuf()
@@ -29,15 +28,7 @@ CIOThread::CIOThread()
 
 CIOThread::~CIOThread()
 {
-	if (m_pFile)
-	{
-		// The file might have been preallocated and the transfer stopped before being completed
-		// so always truncate the file to the actually written size before closing it.
-		if (!m_read)
-			m_pFile->Truncate();
-
-		delete m_pFile;
-	}
+	Close();
 
 	for (unsigned int i = 0; i < BUFFERCOUNT; i++)
 		delete [] m_buffers[i];
@@ -45,21 +36,25 @@ CIOThread::~CIOThread()
 	delete [] m_error_description;
 }
 
-bool CIOThread::Create(CFile* pFile, bool read, bool binary)
+void CIOThread::Close()
 {
-	wxASSERT(pFile);
-
-	if (m_pFile)
-	{
+	if (m_pFile) {
 		// The file might have been preallocated and the transfer stopped before being completed
 		// so always truncate the file to the actually written size before closing it.
 		if (!m_read)
 			m_pFile->Truncate();
 
-		delete m_pFile;
+		m_pFile.reset();
 	}
+}
 
-	m_pFile = pFile;
+bool CIOThread::Create(std::unique_ptr<CFile> && pFile, bool read, bool binary)
+{
+	wxASSERT(pFile);
+
+	Close();
+
+	m_pFile = std::move(pFile);
 	m_read = read;
 	m_binary = binary;
 

@@ -2677,7 +2677,7 @@ int CFtpControlSocket::FileTransferSend()
 				InitTransferStatus(len, startOffset, false);
 			}
 			pData->pIOThread = new CIOThread;
-			if (!pData->pIOThread->Create(pFile.release(), !pData->download, pData->binary)) {
+			if (!pData->pIOThread->Create(std::move(pFile), !pData->download, pData->binary)) {
 				// CIOThread will delete pFile
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
