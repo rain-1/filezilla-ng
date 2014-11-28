@@ -77,7 +77,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Speedlimit inbound", number, _T("100"), normal },
 	{ "Speedlimit outbound", number, _T("20"), normal },
 	{ "Speedlimit burst tolerance", number, _T("0"), normal },
-	{ "Preallocate space", number, _T("1"), normal },
+	{ "Preallocate space", number, _T("0"), normal },
 	{ "View hidden files", number, _T("0"), normal },
 	{ "Preserve timestamps", number, _T("0"), normal },
 	{ "Socket recv buffer size (v2)", number, _T("4194304"), normal }, // Make it large enough by default
