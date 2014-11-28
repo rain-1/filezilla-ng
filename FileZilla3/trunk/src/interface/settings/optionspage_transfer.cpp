@@ -70,8 +70,7 @@ bool COptionsPageTransfer::LoadPage()
 #endif
 	XRCCTRL(*this, "ID_REPLACED", wxStaticText)->SetLabel(filtered);
 
-	bool enable_preallocation = m_pOptions->GetOptionVal(OPTION_PREALLOCATE_SPACE) != 0;
-	SetCheck(XRCID("ID_ENABLE_PREALLOCATION"), enable_preallocation, failure);
+	SetCheckFromOption(XRCID("ID_ENABLE_PREALLOCATION"), OPTION_PREALLOCATE_SPACE, failure);
 
 	return !failure;
 }
