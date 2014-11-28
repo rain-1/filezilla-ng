@@ -79,6 +79,11 @@ wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
 	return ret;
 }
 
+bool CFile::Truncate()
+{
+	return !!SetEndOfFile(hFile_);
+}
+
 ssize_t CFile::Read(void *buf, size_t count)
 {
 	ssize_t ret = -1;
@@ -166,6 +171,20 @@ wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
 	auto newPos = lseek(fd_, offset, whence);
 	if (newPos != static_cast<off_t>(-1)) {
 		ret = newPos;
+	}
+
+	return ret;
+}
+
+bool CFile::Truncate()
+{
+	bool ret = false;
+
+	auto length = lseek(fd_, 0, SEEK_CUR);
+	if (length != static_cast<off_t>(-1)) {
+		do {
+			ret = !ftruncate(fd_, length);
+		} while (!ret && (errno == EAGAIN || errno == EINTR));
 	}
 
 	return ret;

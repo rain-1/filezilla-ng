@@ -48,6 +48,9 @@ public:
 	// On failure, the new position in the file is undefined.
 	wxFileOffset Seek(wxFileOffset offset, seekMode m);
 
+	// Truncate the file to the current position of the file pointer.
+	bool Truncate();
+
 	// Returns number of bytes read or -1 on error
 	ssize_t Read(void *buf, size_t count);
 
