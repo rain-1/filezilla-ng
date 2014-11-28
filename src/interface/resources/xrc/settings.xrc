@@ -1009,7 +1009,7 @@
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
             <object class="wxCheckBox" name="ID_ENABLE_PREALLOCATION">
-              <label>&amp;Preallocate space before downloading</label>
+              <label>Pre&amp;allocate space before downloading</label>
             </object>
             <flag>wxLEFT|wxRIGHT|wxTOP</flag>
             <border>4</border>
