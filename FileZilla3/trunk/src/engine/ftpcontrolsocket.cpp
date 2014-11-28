@@ -2608,7 +2608,7 @@ int CFtpControlSocket::FileTransferSend()
 					wxFileOffset sizeToPreallocate = pData->remoteFileSize - startOffset;
 					if (sizeToPreallocate > 0)
 					{
-						LogMessage(MessageType::Debug_Info, _T("Preallocating %") wxFileOffsetFmtSpec _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
+						LogMessage(MessageType::Debug_Info, _T("Preallocating %") + wxString(wxFileOffsetFmtSpec) + _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
 						wxFileOffset oldPos = pFile->Seek(0, CFile::current);
 						if (pFile->Seek(sizeToPreallocate, CFile::end) == pData->remoteFileSize)
 						{
