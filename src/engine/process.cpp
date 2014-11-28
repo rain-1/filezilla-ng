@@ -170,7 +170,7 @@ public:
 private:
 	std::unique_ptr<wxChar[]> GetCmdLine(wxString const& cmd, wxString const& args)
 	{
-		wxString cmdline = cmd; _T("\"") + cmd + _T("\" ") + args;
+		wxString cmdline = _T("\"") + cmd + _T("\" ") + args;
 		std::unique_ptr<wxChar[]> ret;
 		ret.reset(new wxChar[cmdline.size() + 1]);
 		wxStrcpy(ret.get(), cmdline);

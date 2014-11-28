@@ -407,7 +407,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
 
 	if (!m_pProcess->Execute(executable, _T("-v"))) {
-		LogMessage(MessageType::Debug_Warning, _T("Could not create process"));
+		LogMessage(MessageType::Debug_Warning, _T("Could not create process: %s"), wxSysErrorMsg());
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}
