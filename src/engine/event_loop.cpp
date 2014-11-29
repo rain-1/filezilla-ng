@@ -126,10 +126,10 @@ bool CEventLoop::ProcessEvent()
 	pending_events_.pop_front();
 	requestMore = !pending_events_.empty() || quit_;
 	
-	if (!ev.first->removing_) {
+	if (ev.first && !ev.first->removing_) {
 		active_handler_ = ev.first;
 		sync_.Unlock();
-		if (ev.first && ev.second) {
+		if (ev.second) {
 			(*ev.first)(*ev.second);
 		}
 		delete ev.second;
