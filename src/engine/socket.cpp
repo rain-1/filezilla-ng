@@ -1016,7 +1016,7 @@ void CSocket::DetachThread()
 	Cleanup(false);
 }
 
-int CSocket::Connect(wxString host, unsigned int port, address_family family /*=unsped*/)
+int CSocket::Connect(wxString host, unsigned int port, address_family family /*=unspec*/)
 {
 	if (m_state != none)
 		return EISCONN;
@@ -1039,19 +1039,16 @@ int CSocket::Connect(wxString host, unsigned int port, address_family family /*=
 		return EINVAL;
 	}
 
-	if (m_pSocketThread && m_pSocketThread->m_started)
-	{
+	if (m_pSocketThread && m_pSocketThread->m_started) {
 		m_pSocketThread->m_sync.Lock();
-		if (!m_pSocketThread->m_threadwait)
-		{
+		if (!m_pSocketThread->m_threadwait) {
 			m_pSocketThread->WakeupThread(true);
 			m_pSocketThread->m_sync.Unlock();
 			// Wait a small amount of time
 			wxMilliSleep(100);
 
 			m_pSocketThread->m_sync.Lock();
-			if (!m_pSocketThread->m_threadwait)
-			{
+			if (!m_pSocketThread->m_threadwait) {
 				// Inside a blocking call, e.g. getaddrinfo
 				m_pSocketThread->m_sync.Unlock();
 				DetachThread();
@@ -1062,8 +1059,7 @@ int CSocket::Connect(wxString host, unsigned int port, address_family family /*=
 		else
 			m_pSocketThread->m_sync.Unlock();
 	}
-	if (!m_pSocketThread)
-	{
+	if (!m_pSocketThread) {
 		m_pSocketThread = new CSocketThread();
 		m_pSocketThread->SetSocket(this);
 	}
@@ -1073,8 +1069,7 @@ int CSocket::Connect(wxString host, unsigned int port, address_family family /*=
 	m_host = host;
 	m_port = port;
 	int res = m_pSocketThread->Connect();
-	if (res)
-	{
+	if (res) {
 		m_state = none;
 		delete m_pSocketThread;
 		m_pSocketThread = 0;
