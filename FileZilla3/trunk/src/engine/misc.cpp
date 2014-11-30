@@ -234,11 +234,9 @@ bool IsIpAddress(const wxString& address)
 
 	int segment = 0;
 	int dotcount = 0;
-	for (size_t i = 0; i < address.Len(); i++)
-	{
-		const char& c = address[i];
-		if (c == '.')
-		{
+	for (size_t i = 0; i < address.Len(); ++i) {
+		wxChar const c = address[i];
+		if (c == '.') {
 			if (i + 1 < address.Len() && address[i + 1] == '.') {
 				// Disallow multiple dots in a row
 				return false;
