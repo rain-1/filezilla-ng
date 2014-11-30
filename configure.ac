@@ -301,27 +301,31 @@ if test "$buildmain" = "yes"; then
 
   IDN_LIB=
   if ! echo $WX_CPPFLAGS | grep __WXMSW__; then
+    AC_LANG_PUSH(C++)
+    AX_CHECK_DEFINE([netdb.h], [AI_IDN],
+      [],
+      [
+        AC_CHECK_HEADER(idna.h,,
+        [
+          AC_MSG_ERROR([idna.h not found which is part of GNU libidn.])
+        ])
 
-    AC_CHECK_HEADER(idna.h,,
-    [
-      AC_MSG_ERROR([idna.h not found which is part of GNU libidn.])
-    ])
+        AC_ARG_WITH(idn-lib,
+            AS_HELP_STRING([--with-idn-lib=FILE],[Use the given path to the idn library.]),
+        [
+          if test "$withval" != "yes" -a "$withval" != ""; then
+              IDN_LIB=$withval
+          fi
+        ])
 
-    AC_ARG_WITH(idn-lib,
-        AS_HELP_STRING([--with-idn-lib=FILE],[Use the given path to the idn library.]),
-    [
-      if test "$withval" != "yes" -a "$withval" != ""; then
-          IDN_LIB=$withval
-      fi
-    ])
-
-    if test "x$IDN_LIB" = "x"; then
-      AC_CHECK_LIB(idn, stringprep_check_version, IDN_LIB="-lidn",
-                   AC_MSG_ERROR([GNU libidn not found. Try using --with-idn-lib=FILE to specify the library path.])
-                   )
-    fi
+        if test "x$IDN_LIB" = "x"; then
+          AC_CHECK_LIB(idn, stringprep_check_version, IDN_LIB="-lidn",
+                       AC_MSG_ERROR([GNU libidn not found. Try using --with-idn-lib=FILE to specify the library path.])
+                       )
+        fi
+      ])
+    AC_LANG_POP(C++)
   fi
-
   AC_SUBST(IDN_LIB)
 
   # Binreloc
