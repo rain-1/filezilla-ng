@@ -562,6 +562,9 @@ protected:
 		struct addrinfo hints = {0};
 		hints.ai_family = m_pSocket->m_family;
 		hints.ai_socktype = SOCK_STREAM;
+#ifdef AI_IDN
+		hints.ai_flags |= AI_IDN;
+#endif
 
 		int res = getaddrinfo(pHost, pPort, &hints, &addressList);
 

@@ -14,10 +14,13 @@
 #include <wx/filename.h>
 
 #ifndef __WXMSW__
-#include <idna.h>
-extern "C" {
-#include <idn-free.h>
-}
+	#include <netdb.h>
+	#ifndef AI_IDN
+		#include <idna.h>
+		extern "C" {
+			#include <idn-free.h>
+		}
+	#endif
 #endif
 
 #include <errno.h>
@@ -268,8 +271,9 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 	wxString ret(output);
 	delete [] output;
 	return ret;
+#elif defined(AI_IDN)
+	return domain;
 #else
-
 	wxScopedCharBuffer const utf8 = domain.utf8_str();
 
 	char *output = 0;
