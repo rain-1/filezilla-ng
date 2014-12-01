@@ -98,6 +98,7 @@ inline unsigned int GetOverhead()
 
 void Coalesce(wxString& s)
 {
+	return;
 	std::pair<tree::iterator, bool> r = tree_.insert(std::make_pair(s, backref_holder()));
 	tree::iterator& it = r.first;
 	if( !r.second )
