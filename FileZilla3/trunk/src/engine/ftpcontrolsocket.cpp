@@ -1271,8 +1271,7 @@ int CFtpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDir
 {
 	LogMessage(MessageType::Status, _("Retrieving directory listing..."));
 
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("List called from other command"));
 	}
 	CFtpListOpData *pData = new CFtpListOpData;
@@ -3313,8 +3312,7 @@ int CFtpControlSocket::MkdirParseResponse()
 			pData->opState = mkd_tryfull;
 		break;
 	case mkd_mkdsub:
-		if (code != 2 && code != 3)
-		{
+		if (code != 2 && code != 3) {
 			// Don't fall back to using the full path if the error message
 			// is "already exists".
 			// Case 1: Full response a known "already exists" message.
@@ -3337,30 +3335,38 @@ int CFtpControlSocket::MkdirParseResponse()
 		}
 
 		{
-			if (pData->segments.empty())
-			{
+			if (pData->segments.empty()) {
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("  pData->segments is empty"));
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
+
+			// If entry did exist and is a file instead of a directory, report failure.
+			int result = FZ_REPLY_OK;
+			if (code != 2 && code != 3) {
+				CDirentry entry;
+				bool tmp;
+				if (m_pEngine->GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->currentPath, pData->segments.front(), tmp, tmp) && !entry.is_dir()) {
+					result = FZ_REPLY_ERROR;
+				}
+			}
+
 			m_pEngine->GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
 			m_pEngine->SendDirectoryListingNotification(pData->currentPath, false, true, false);
 
 			pData->currentPath.AddSegment(pData->segments.front());
 			pData->segments.pop_front();
 
-			if (pData->segments.empty())
-			{
-				ResetOperation(FZ_REPLY_OK);
-				return FZ_REPLY_OK;
+			if (pData->segments.empty() || result != FZ_REPLY_OK) {
+				ResetOperation(result);
+				return result;
 			}
 			else
 				pData->opState = mkd_cwdsub;
 		}
 		break;
 	case mkd_cwdsub:
-		if (code == 2 || code == 3)
-		{
+		if (code == 2 || code == 3) {
 			m_CurrentPath = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
