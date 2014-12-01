@@ -422,7 +422,7 @@ protected:
 	int m_len;
 	int m_trailing_whitespace;
 	wxChar* m_pLine;
-	unsigned int offset_;
+	unsigned int offset_{};
 };
 
 CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding, bool sftp_mode)
