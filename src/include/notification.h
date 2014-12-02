@@ -60,7 +60,7 @@ enum RequestId
 	reqId_interactiveLogin, // gives a challenge prompt for a password
 	reqId_hostkey,			// used only by SSH/SFTP to indicate new host key
 	reqId_hostkeyChanged,	// used only by SSH/SFTP to indicate changed host key
-	reqId_certificate		// sent after a successful TLS/SSL handshake to allow certificate
+	reqId_certificate		// sent after a successful TLS handshake to allow certificate
 							// validation
 };
 
