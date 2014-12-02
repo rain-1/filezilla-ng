@@ -378,8 +378,7 @@ void CFtpControlSocket::OnConnect()
 			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
 
-			if (!m_pTlsSocket->Init())
-			{
+			if (!m_pTlsSocket->Init()) {
 				LogMessage(MessageType::Error, _("Failed to initialize TLS."));
 				DoClose();
 				return;
@@ -392,11 +391,10 @@ void CFtpControlSocket::OnConnect()
 			return;
 		}
 		else
-			LogMessage(MessageType::Status, _("TLS/SSL connection established, waiting for welcome message..."));
+			LogMessage(MessageType::Status, _("TLS connection established, waiting for welcome message..."));
 	}
-	else if ((m_pCurrentServer->GetProtocol() == FTPES || m_pCurrentServer->GetProtocol() == FTP) && m_pTlsSocket)
-	{
-		LogMessage(MessageType::Status, _("TLS/SSL connection established."));
+	else if ((m_pCurrentServer->GetProtocol() == FTPES || m_pCurrentServer->GetProtocol() == FTP) && m_pTlsSocket) {
+		LogMessage(MessageType::Status, _("TLS connection established."));
 		return;
 	}
 	else
@@ -413,12 +411,10 @@ void CFtpControlSocket::ParseResponse()
 		return;
 	}
 
-	if (m_Response[0] != '1')
-	{
+	if (m_Response[0] != '1') {
 		if (m_pendingReplies > 0)
 			m_pendingReplies--;
-		else
-		{
+		else {
 			LogMessage(MessageType::Debug_Warning, _T("Unexpected reply, no reply was pending."));
 			return;
 		}

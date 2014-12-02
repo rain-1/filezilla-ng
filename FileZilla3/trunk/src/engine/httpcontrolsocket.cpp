@@ -310,7 +310,7 @@ void CHttpControlSocket::OnConnect()
 				DoClose();
 		}
 		else {
-			LogMessage(MessageType::Status, _("TLS/SSL connection established, sending HTTP request"));
+			LogMessage(MessageType::Status, _("TLS connection established, sending HTTP request"));
 			ResetOperation(FZ_REPLY_OK);
 		}
 
