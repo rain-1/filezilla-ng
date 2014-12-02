@@ -1269,7 +1269,20 @@ enum listStates
 
 int CFtpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDir /*=_T("")*/, int flags /*=0*/)
 {
-	LogMessage(MessageType::Status, _("Retrieving directory listing..."));
+	CServerPath newPath = m_CurrentPath;
+	if (!path.empty()) {
+		newPath = path;
+	}
+	if (!newPath.ChangePath(subDir)) {
+		newPath.clear();
+	}
+	
+	if (newPath.empty()) {
+		LogMessage(MessageType::Status, _("Retrieving directory listing..."));
+	}
+	else {
+		LogMessage(MessageType::Status, _("Retrieving directory listing of \"%s\"..."), newPath.GetPath());
+	}
 
 	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("List called from other command"));
