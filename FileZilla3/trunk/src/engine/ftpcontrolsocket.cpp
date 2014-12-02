@@ -395,6 +395,7 @@ void CFtpControlSocket::OnConnect()
 	}
 	else if ((m_pCurrentServer->GetProtocol() == FTPES || m_pCurrentServer->GetProtocol() == FTP) && m_pTlsSocket) {
 		LogMessage(MessageType::Status, _("TLS connection established."));
+		SendNextCommand();
 		return;
 	}
 	else
@@ -2910,7 +2911,6 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 			{
 				m_pCurOpData->opState = LOGON_LOGON;
 			}
-			SendNextCommand();
 		}
 		break;
 	default:
