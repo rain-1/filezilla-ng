@@ -150,8 +150,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 	if (m_pCurOpData && m_pCurOpData->holdsLock)
 		UnlockCache();
 
-	if (m_pCurOpData && m_pCurOpData->pNextOpData)
-	{
+	if (m_pCurOpData && m_pCurOpData->pNextOpData) {
 		COpData *pNext = m_pCurOpData->pNextOpData;
 		m_pCurOpData->pNextOpData = 0;
 		delete m_pCurOpData;
@@ -173,8 +172,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		prefix = _("Critical error:") + _T(" ");
 	}
 
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		const Command commandId = m_pCurOpData->opId;
 		switch (commandId)
 		{
@@ -194,8 +192,14 @@ int CControlSocket::ResetOperation(int nErrorCode)
 				LogMessage(MessageType::Error, prefix + _("Directory listing aborted by user"));
 			else if (nErrorCode != FZ_REPLY_OK)
 				LogMessage(MessageType::Error, prefix + _("Failed to retrieve directory listing"));
-			else
-				LogMessage(MessageType::Status, _("Directory listing successful"));
+			else {
+				if (m_CurrentPath.empty()) {
+					LogMessage(MessageType::Status, _("Directory listing successful"));
+				}
+				else {
+					LogMessage(MessageType::Status, _("Directory listing of \"%s\" successful"), m_CurrentPath.GetPath());
+				}
+			}
 			break;
 		case Command::transfer:
 			{
