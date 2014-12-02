@@ -21,7 +21,7 @@ public:
 		notification->msg.Printf(std::forward<String>(msgFormat), std::forward<Args>(args)...);
 
 		LogToFile(nMessageType, notification->msg);
-		m_pEngine->AddNotification(notification);
+		m_pEngine->AddLogNotification(notification);
 	}
 
 	template<typename String>
@@ -34,7 +34,7 @@ public:
 		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType, std::forward<String>(msg));
 
 		LogToFile(nMessageType, notification->msg);
-		m_pEngine->AddNotification(notification);
+		m_pEngine->AddLogNotification(notification);
 	}
 
 	template<typename String, typename String2, typename...Args>
@@ -60,7 +60,7 @@ public:
 		notification->msg.Printf(_T("%s(%d): %s   caller=%p"), source, nSourceLine, text, pInstance);
 
 		LogToFile(nMessageType, notification->msg);
-		m_pEngine->AddNotification(notification);
+		m_pEngine->AddLogNotification(notification);
 	}
 
 	bool ShouldLog(MessageType nMessageType) const;

@@ -3067,8 +3067,7 @@ int CFtpControlSocket::DeleteParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::DeleteParseResponse()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3079,15 +3078,13 @@ int CFtpControlSocket::DeleteParseResponse()
 	int code = GetReplyCode();
 	if (code != 2 && code != 3)
 		pData->m_deleteFailed = true;
-	else
-	{
+	else {
 		const wxString& file = pData->files.front();
 
 		m_pEngine->GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
 		wxDateTime now = wxDateTime::UNow();
-		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).GetSeconds() >= 1)
-		{
+		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).GetSeconds() >= 1) {
 			m_pEngine->SendDirectoryListingNotification(pData->path, false, true, false);
 			pData->m_time = now;
 			pData->m_needSendListing = false;

@@ -391,7 +391,11 @@ void CStatusView::OnContextMenu(wxContextMenuEvent&)
 	if (!pMenu)
 		return;
 
+	pMenu->Check(XRCID("ID_SHOW_DETAILED_LOG"), COptions::Get()->GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) != 0);
+
 	PopupMenu(pMenu);
+
+	COptions::Get()->SetOption(OPTION_LOGGING_SHOW_DETAILED_LOGS, pMenu->IsChecked(XRCID("ID_SHOW_DETAILED_LOG")) ? 1 : 0);
 	delete pMenu;
 }
 

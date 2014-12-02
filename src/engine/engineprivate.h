@@ -7,6 +7,7 @@
 #include "event.h"
 #include "event_handler.h"
 #include "FileZillaEngine.h"
+#include "option_change_event_handler.h"
 
 class CControlSocket;
 class CLogging;
@@ -22,7 +23,7 @@ enum EngineNotificationType
 struct filezilla_engine_event_type;
 typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
 
-class CFileZillaEnginePrivate final : public CEventHandler
+class CFileZillaEnginePrivate final : public CEventHandler, COptionChangeEventHandler
 {
 public:
 	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context, CFileZillaEngine& parent);
@@ -53,6 +54,7 @@ public:
 
 	// Add new pending notification
 	void AddNotification(CNotification *pNotification);
+	void AddLogNotification(CLogmsgNotification *pNotification);
 	std::unique_ptr<CNotification> GetNextNotification();
 
 	COptionsBase& GetOptions() { return m_options; }
@@ -77,6 +79,11 @@ public:
 	CSocketEventDispatcher& socket_event_dispatcher_;
 
 protected:
+	virtual void OnOptionChanged(int option);
+
+	void SendQueuedLogs(bool reset_flag = false);
+	void ClearQueuedLogs(bool reset_flag);
+
 	int CheckCommandPreconditions(CCommand const& command, bool checkBusy);
 
 
@@ -163,6 +170,9 @@ protected:
 	CPathCache& path_cache_;
 
 	CFileZillaEngine& parent_;
+
+	bool queue_logs_;
+	std::deque<CLogmsgNotification*> queued_logs_;
 };
 
 struct command_event_type{};
