@@ -34,6 +34,13 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	}
 
 	m_pLogging = new CLogging(this);
+
+	{
+		wxCriticalSectionLocker lock(notification_mutex_);
+		queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+	}
+
+	RegisterOption(OPTION_LOGGING_SHOW_DETAILED_LOGS);
 }
 
 CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
@@ -125,6 +132,63 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 	wxPostEvent(m_pEventHandler, evt);
 }
 
+void CFileZillaEnginePrivate::AddLogNotification(CLogmsgNotification *pNotification)
+{
+	wxCriticalSectionLocker lock(notification_mutex_);
+	
+	if (pNotification->msgType == MessageType::Error) {
+		queue_logs_ = false;
+		SendQueuedLogs();
+		AddNotification(pNotification);
+	}
+	else if (pNotification->msgType == MessageType::Status) {
+		ClearQueuedLogs(false);
+		AddNotification(pNotification);
+	}
+	else if (!queue_logs_) {
+		AddNotification(pNotification);
+	}
+	else {
+		queued_logs_.push_back(pNotification);
+	}
+}
+
+void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
+{
+	{
+		wxCriticalSectionLocker lock(notification_mutex_);
+		m_NotificationList.insert(m_NotificationList.end(), queued_logs_.begin(), queued_logs_.end());
+		queued_logs_.clear();
+
+		if (reset_flag) {
+			queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+		}
+
+		if (!m_maySendNotificationEvent || !m_pEventHandler || m_NotificationList.empty()) {
+			return;
+		}
+		m_maySendNotificationEvent = false;
+	}
+
+	wxFzEvent evt(wxID_ANY);
+	evt.engine_ = &parent_;
+	wxPostEvent(m_pEventHandler, evt);
+}
+
+void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
+{
+	wxCriticalSectionLocker lock(notification_mutex_);
+
+	for (auto msg : queued_logs_) {
+		delete msg;
+	}
+	queued_logs_.clear();
+
+	if (reset_flag) {
+		queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+	}
+}
+
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 {
 	wxCriticalSectionLocker lock(mutex_);
@@ -180,6 +244,13 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 			notification->commandId = Command::none;
 			AddNotification(notification);
 		}
+	}
+
+	if (nErrorCode != FZ_REPLY_OK) {
+		SendQueuedLogs(true);
+	}
+	else {
+		ClearQueuedLogs(true);
 	}
 
 	return nErrorCode;
@@ -281,11 +352,21 @@ int CFileZillaEnginePrivate::FileTransfer(const CFileTransferCommand &command)
 
 int CFileZillaEnginePrivate::RawCommand(const CRawCommand& command)
 {
+	{
+		wxCriticalSectionLocker lock(notification_mutex_);
+		queue_logs_ = false;
+	}
 	return m_pControlSocket->RawCommand(command.GetCommand());
 }
 
 int CFileZillaEnginePrivate::Delete(const CDeleteCommand& command)
 {
+	if (command.GetFiles().size() == 1) {
+		m_pLogging->LogMessage(MessageType::Status, _("Deleting \"%s\""), command.GetPath().FormatFilename(command.GetFiles().front()));
+	}
+	else {
+		m_pLogging->LogMessage(MessageType::Status, _("Deleting %d files from \"%s\""), command.GetFiles().size(), command.GetPath().GetPath());
+	}
 	return m_pControlSocket->Delete(command.GetPath(), command.GetFiles());
 }
 
@@ -753,4 +834,13 @@ int CFileZillaEnginePrivate::Cancel()
 
 	SendEvent<CFileZillaEngineEvent>(engineCancel);
 	return FZ_REPLY_WOULDBLOCK;
+}
+
+void CFileZillaEnginePrivate::OnOptionChanged(int option)
+{
+	wxCriticalSectionLocker lock(notification_mutex_);
+	queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+	if (!queue_logs_) {
+		SendQueuedLogs();
+	}
 }

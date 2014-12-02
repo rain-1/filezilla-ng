@@ -417,6 +417,10 @@
       <label>&amp;Enter custom command...</label>
     </object>
     <object class="separator"/>
+    <object class="wxMenuItem" name="ID_SHOW_DETAILED_LOG">
+      <label>&amp;Show detailed log</label>
+      <checkable>1</checkable>
+    </object>
     <object class="wxMenuItem" name="ID_COPYTOCLIPBOARD">
       <label>&amp;Copy to clipboard</label>
     </object>
