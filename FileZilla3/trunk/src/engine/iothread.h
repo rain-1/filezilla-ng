@@ -88,7 +88,7 @@ protected:
 
 	bool m_wasCarriageReturn;
 
-	wxChar* m_error_description;
+	wxString m_error_description;
 
 #ifdef SIMULATE_IO
 	wxFileOffset size_;

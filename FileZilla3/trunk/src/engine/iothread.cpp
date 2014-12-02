@@ -18,7 +18,6 @@ CIOThread::CIOThread()
 	, m_appWaiting()
 	, m_destroyed()
 	, m_wasCarriageReturn()
-	, m_error_description()
 {
 	for (unsigned int i = 0; i < BUFFERCOUNT; ++i) {
 		m_buffers[i] = new char[BUFFERSIZE];
@@ -32,8 +31,6 @@ CIOThread::~CIOThread()
 
 	for (unsigned int i = 0; i < BUFFERCOUNT; i++)
 		delete [] m_buffers[i];
-
-	delete [] m_error_description;
 }
 
 void CIOThread::Close()
@@ -421,9 +418,7 @@ bool CIOThread::DoWrite(const char* pBuffer, int len)
 	const wxString error = wxSysErrorMsg(code);
 
 	wxMutexLocker locker(m_mutex);
-	delete [] m_error_description;
-	m_error_description = new wxChar[error.Len() + 1];
-	wxStrcpy(m_error_description, error);
+	m_error_description = error;
 
 	return false;
 }
@@ -431,8 +426,5 @@ bool CIOThread::DoWrite(const char* pBuffer, int len)
 wxString CIOThread::GetError()
 {
 	wxMutexLocker locker(m_mutex);
-	if (!m_error_description)
-		return wxString();
-
-	return wxString(m_error_description);
+	return m_error_description;
 }
