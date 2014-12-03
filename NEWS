@@ -10,6 +10,16 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0-beta1 (2014-12-03)
+
++ FTP over TLS is now used by default if the server supports it. Use of plain FTP can be enforced for a server in the Site Manager
++ Connection handling and transferring files has been moved into its own thread to improve GUI responsivenes
++ The message log now only shows abbreviated logs unless an error occurs
++ Added option to pre-allocate disk space when downloading files
++ Files editing can now be started from the search dialog
++ Directory trees and the Site Manager tree can now be drag-scrolled
++ *nix: FileZilla no longer depends on libidn if getaddrinfo supports AI_IDN
+
 3.9.0.6 (2014-10-16)
 
 ! Disabled support for legacy SSL 3.0 to address the POODLE vulnerability in SSLv3. (CVE-2014-3566)
