@@ -97,7 +97,7 @@ wxTreeItemId wxTreeCtrlEx::GetNextItemSimple(wxTreeItemId const& item) const
 	else {
 		wxTreeItemId cur = item;
 		wxTreeItemId next = GetNextSibling(cur);
-		if (!next.IsOk() && cur.IsOk()) {
+		while (!next.IsOk() && cur.IsOk()) {
 			cur = GetItemParent(cur);
 			if (cur.IsOk()) {
 				next = GetNextSibling(cur);
