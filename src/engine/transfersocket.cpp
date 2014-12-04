@@ -425,7 +425,7 @@ void CTransferSocket::OnSend()
 		if (written <= 0)
 			break;
 
-		m_pEngine->SetActive(CFileZillaEngine::send);
+		m_pControlSocket->SetActive(CFileZillaEngine::send);
 		if (m_madeProgress == 1) {
 			m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("Made progress in CTransferSocket::OnSend()"));
 			m_madeProgress = 2;
