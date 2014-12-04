@@ -682,12 +682,12 @@ void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string
 			value.ToLong(&numValue);
 			numValue = Validate(iter->second, numValue);
 			wxCriticalSectionLocker l(m_sync_);
-			m_optionsCache[iter->second].numValue = numValue;
+			m_optionsCache[iter->second] = numValue;
 		}
 		else {
 			value = Validate(iter->second, value);
 			wxCriticalSectionLocker l(m_sync_);
-			m_optionsCache[iter->second].strValue = value;
+			m_optionsCache[iter->second] = value;
 		}
 	}
 }
