@@ -143,13 +143,6 @@ public:
 	virtual bool SetAsyncRequestReply(CAsyncRequestNotification *pNotification) = 0;
 	bool SetFileExistsAction(CFileExistsNotification *pFileExistsNotification);
 
-	void InitTransferStatus(wxFileOffset totalSize, wxFileOffset startOffset, bool list);
-	void SetTransferStatusStartTime();
-	void UpdateTransferStatus(wxFileOffset transferredBytes);
-	void ResetTransferStatus();
-	bool GetTransferStatus(CTransferStatus &status, bool &changed);
-	void SetTransferStatusMadeProgress();
-
 	const CServer* GetCurrentServer() const;
 
 	// Conversion function which convert between local and server charset.
@@ -204,9 +197,6 @@ protected:
 	CServer *m_pCurrentServer;
 
 	CServerPath m_CurrentPath;
-
-	CTransferStatus *m_pTransferStatus; // Todo: Need to mutex this
-	int m_transferStatusSendState;
 
 	wxCSConv *m_pCSConv;
 	bool m_useUTF8;

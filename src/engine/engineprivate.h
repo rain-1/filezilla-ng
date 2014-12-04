@@ -23,6 +23,33 @@ enum EngineNotificationType
 struct filezilla_engine_event_type;
 typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
 
+class CTransferStatusManager final
+{
+public:
+	CTransferStatusManager(CFileZillaEnginePrivate& engine);
+
+	CTransferStatusManager(CTransferStatusManager const&) = delete;
+	CTransferStatusManager& operator=(CTransferStatusManager const&) = delete;
+
+	bool Empty();
+
+	void Init(wxFileOffset totalSize, wxFileOffset startOffset, bool list);
+	void Reset();
+	void SetStartTime();
+	void SetMadeProgress();
+	void Update(wxFileOffset transferredBytes);
+
+	bool Get(CTransferStatus &status, bool &changed);
+
+protected:
+	wxCriticalSection mutex_;
+
+	std::unique_ptr<CTransferStatus> status_;
+	int send_state_{};
+
+	CFileZillaEnginePrivate& engine_;
+};
+
 class CFileZillaEnginePrivate final : public CEventHandler, COptionChangeEventHandler
 {
 public:
@@ -78,6 +105,7 @@ public:
 	CEventLoop& event_loop_;
 	CSocketEventDispatcher& socket_event_dispatcher_;
 
+	CTransferStatusManager transfer_status_;
 protected:
 	virtual void OnOptionChanged(int option);
 
