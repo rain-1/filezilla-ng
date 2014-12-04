@@ -96,7 +96,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 {
 	if (m_pTransferStatus && (nErrorCode == FZ_REPLY_OK || m_pTransferStatus->madeProgress))
 	{
-		int elapsed = wxTimeSpan(wxDateTime::Now() - m_pTransferStatus->started).GetSeconds().GetLo();
+		int elapsed = wxTimeSpan(wxDateTime::UNow() - m_pTransferStatus->started).GetSeconds().GetLo();
 		if (elapsed <= 0)
 			elapsed = 1;
 		wxString time = wxString::Format(
@@ -333,7 +333,7 @@ void CControlSocket::SetTransferStatusStartTime()
 	if (!m_pTransferStatus)
 		return;
 
-	m_pTransferStatus->started = wxDateTime::Now();
+	m_pTransferStatus->started = wxDateTime::UNow();
 }
 
 void CControlSocket::SetTransferStatusMadeProgress()

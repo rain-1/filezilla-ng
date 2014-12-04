@@ -5,6 +5,8 @@
 #include "Options.h"
 #include "sizeformatting.h"
 
+#include <algorithm>
+
 BEGIN_EVENT_TABLE(CStatusLineCtrl, wxWindow)
 EVT_PAINT(CStatusLineCtrl::OnPaint)
 EVT_TIMER(wxID_ANY, CStatusLineCtrl::OnTimer)
@@ -116,23 +118,23 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 			refresh = 31;
 		}
 
-		int elapsed_seconds = 0;
+		int elapsed_milli_seconds = 0;
 		if (status_.started.IsValid()) {
-			elapsed = wxDateTime::Now().Subtract(status_.started);
-			elapsed_seconds = elapsed.GetSeconds().GetLo(); // Assume GetHi is always 0
+			elapsed = wxDateTime::UNow().Subtract(status_.started);
+			elapsed_milli_seconds = elapsed.GetMilliseconds().GetLo(); // Assume GetHi is always 0
 		}
 
-		if (elapsed_seconds != m_last_elapsed_seconds) {
+		if (elapsed_milli_seconds / 1000 != m_last_elapsed_seconds) {
 			refresh |= 1;
-			m_last_elapsed_seconds = elapsed_seconds;
+			m_last_elapsed_seconds = elapsed_milli_seconds / 1000;
 		}
 
 		if (COptions::Get()->GetOptionVal(OPTION_SPEED_DISPLAY))
 			rate = GetCurrentSpeed();
 		else
-			rate = GetSpeed(elapsed_seconds);
+			rate = GetSpeed(elapsed_milli_seconds);
 
-		if (status_.totalSize > 0 && elapsed_seconds && rate > 0) {
+		if (status_.totalSize > 0 && elapsed_milli_seconds >= 1000 && rate > 0) {
 			wxFileOffset r = status_.totalSize - status_.currentOffset;
 			left = r / rate + 1;
 			if (r)
@@ -148,7 +150,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		}
 
 		const wxString bytestr = CSizeFormat::Format(status_.currentOffset, true, CSizeFormat::bytes, COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0, 0);
-		if (elapsed_seconds && rate > -1) {
+		if (elapsed_milli_seconds >= 1000 && rate > -1) {
 			CSizeFormat::_format format = static_cast<CSizeFormat::_format>(COptions::Get()->GetOptionVal(OPTION_SIZE_FORMAT));
 			if (format == CSizeFormat::bytes)
 				format = CSizeFormat::iec;
@@ -248,7 +250,7 @@ void CStatusLineCtrl::SetTransferStatus(const CTransferStatus* pStatus)
 		if (m_transferStatusTimer.IsRunning())
 			m_transferStatusTimer.Stop();
 
-		m_past_data_index = -1;
+		m_past_data_count = 0;
 		m_gcLastOffset = -1;
 		m_gcLastSpeed = -1;
 	}
@@ -347,31 +349,34 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 	dc.DrawText(text, x + PROGRESSBAR_WIDTH / 2 - w / 2, y + height / 2 - h / 2);
 }
 
-wxFileOffset CStatusLineCtrl::GetSpeed(int elapsedSeconds)
+wxFileOffset CStatusLineCtrl::GetSpeed(int elapsed_milli_seconds)
 {
 	if (!status_valid_)
 		return -1;
 
-	if (elapsedSeconds <= 0)
+	if (elapsed_milli_seconds <= 0) {
 		return -1;
-
-	if (m_past_data_index < 9) {
-		if (m_past_data_index == -1 || m_past_data[m_past_data_index].elapsed < elapsedSeconds) {
-			m_past_data_index++;
-			m_past_data[m_past_data_index].elapsed = elapsedSeconds;
-			m_past_data[m_past_data_index].offset = status_.currentOffset - status_.startOffset;
-		}
 	}
 
+	int elapsed_seconds = elapsed_milli_seconds / 1000;
+	while (m_past_data_count < 10 && elapsed_seconds > m_past_data_count) {
+		m_past_data[m_past_data_count].elapsed = elapsed_milli_seconds;
+		m_past_data[m_past_data_count].offset = status_.currentOffset - status_.startOffset;
+		++m_past_data_count;
+	}
+	
 	_past_data forget;
-	for (int i = m_past_data_index; i >= 0; i--) {
-		if (m_past_data[i].elapsed < elapsedSeconds) {
-			forget = m_past_data[i];
-			break;
-		}
+
+	int offset = (elapsed_seconds - 1) / 2;
+	if (offset > 0) {
+		forget = m_past_data[std::min(offset, m_past_data_count - 1)];
 	}
 
-	return (status_.currentOffset - status_.startOffset - forget.offset) / (elapsedSeconds - forget.elapsed);
+	if (elapsed_milli_seconds <= forget.elapsed) {
+		return -1;
+	}
+
+	return ((status_.currentOffset - status_.startOffset - forget.offset) * 1000) / (elapsed_milli_seconds - forget.elapsed);
 }
 
 wxFileOffset CStatusLineCtrl::GetCurrentSpeed()

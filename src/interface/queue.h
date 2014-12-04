@@ -55,7 +55,7 @@ public:
 	virtual QueueItemType GetType() const = 0;
 
 	wxDateTime GetTime() const { return m_time; }
-	void UpdateTime() { m_time = wxDateTime::Now(); }
+	void UpdateTime() { m_time = wxDateTime::UNow(); }
 
 	const wxString& GetIndent() const;
 
