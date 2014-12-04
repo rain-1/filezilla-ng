@@ -19,6 +19,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	: CEventHandler(context.GetEventLoop())
 	, event_loop_(context.GetEventLoop())
 	, socket_event_dispatcher_(context.GetSocketEventDispatcher())
+	, transfer_status_(*this)
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
 	, directory_cache_(context.GetDirectoryCache())
@@ -799,14 +800,7 @@ bool CFileZillaEnginePrivate::IsActive(CFileZillaEngine::_direction direction)
 
 bool CFileZillaEnginePrivate::GetTransferStatus(CTransferStatus &status, bool &changed)
 {
-	wxCriticalSectionLocker lock(mutex_);
-
-	if (!m_pControlSocket) {
-		changed = false;
-		return false;
-	}
-
-	return m_pControlSocket->GetTransferStatus(status, changed);
+	return transfer_status_.Get(status, changed);
 }
 
 int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryListing& listing)
@@ -843,4 +837,102 @@ void CFileZillaEnginePrivate::OnOptionChanged(int option)
 	if (!queue_logs_) {
 		SendQueuedLogs();
 	}
+}
+
+
+CTransferStatusManager::CTransferStatusManager(CFileZillaEnginePrivate& engine)
+	: engine_(engine)
+{
+}
+
+void CTransferStatusManager::Reset()
+{
+	{
+		wxCriticalSectionLocker lock(mutex_);
+		status_.reset();
+		send_state_ = 0;
+	}
+
+	engine_.AddNotification(new CTransferStatusNotification(0));
+}
+
+void CTransferStatusManager::Init(wxFileOffset totalSize, wxFileOffset startOffset, bool list)
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (startOffset < 0)
+		startOffset = 0;
+
+	status_ = make_unique<CTransferStatus>();
+	status_->list = list;
+	status_->totalSize = totalSize;
+	status_->startOffset = startOffset;
+	status_->currentOffset = startOffset;
+	status_->madeProgress = false;
+}
+
+void CTransferStatusManager::SetStartTime()
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!status_)
+		return;
+
+	status_->started = wxDateTime::UNow();
+}
+
+void CTransferStatusManager::SetMadeProgress()
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!status_)
+		return;
+
+	status_->madeProgress = true;
+}
+
+void CTransferStatusManager::Update(wxFileOffset transferredBytes)
+{
+	CNotification* notification = 0;
+
+	{
+		wxCriticalSectionLocker lock(mutex_);
+		if (!status_)
+			return;
+
+		status_->currentOffset += transferredBytes;
+
+		if (!send_state_)
+			notification = new CTransferStatusNotification(new CTransferStatus(*status_));
+		send_state_ = 2;
+	}
+
+	if (notification) {
+		engine_.AddNotification(notification);
+	}
+}
+
+bool CTransferStatusManager::Get(CTransferStatus &status, bool &changed)
+{
+	wxCriticalSectionLocker lock(mutex_);
+	if (!status_) {
+		changed = false;
+		send_state_ = 0;
+		return false;
+	}
+
+	status = *status_;
+	if (send_state_ == 2) {
+		changed = true;
+		send_state_ = 1;
+		return true;
+	}
+	else {
+		changed = false;
+		send_state_ = 0;
+		return true;
+	}
+}
+
+bool CTransferStatusManager::Empty()
+{
+	wxCriticalSectionLocker lock(mutex_);
+	return status_ != 0;
 }

@@ -293,9 +293,9 @@ void CTransferSocket::OnReceive()
 				m_pControlSocket->SetActive(CFileZillaEngine::recv);
 				if (!m_madeProgress) {
 					m_madeProgress = 2;
-					m_pControlSocket->SetTransferStatusMadeProgress();
+					m_pEngine->transfer_status_.SetMadeProgress();
 				}
-				m_pControlSocket->UpdateTransferStatus(numread);
+				m_pEngine->transfer_status_.Update(numread);
 			}
 			else
 			{
@@ -329,9 +329,9 @@ void CTransferSocket::OnReceive()
 				m_pControlSocket->SetActive(CFileZillaEngine::recv);
 				if (!m_madeProgress) {
 					m_madeProgress = 2;
-					m_pControlSocket->SetTransferStatusMadeProgress();
+					m_pEngine->transfer_status_.SetMadeProgress();
 				}
-				m_pControlSocket->UpdateTransferStatus(numread);
+				m_pEngine->transfer_status_.Update(numread);
 
 				m_pTransferBuffer += numread;
 				m_transferBufferLen -= numread;
@@ -429,9 +429,9 @@ void CTransferSocket::OnSend()
 		if (m_madeProgress == 1) {
 			m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("Made progress in CTransferSocket::OnSend()"));
 			m_madeProgress = 2;
-			m_pControlSocket->SetTransferStatusMadeProgress();
+			m_pEngine->transfer_status_.SetMadeProgress();
 		}
-		m_pControlSocket->UpdateTransferStatus(written);
+		m_pEngine->transfer_status_.Update(written);
 
 		m_pTransferBuffer += written;
 		m_transferBufferLen -= written;
@@ -442,7 +442,7 @@ void CTransferSocket::OnSend()
 			if (!m_madeProgress) {
 				m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("First EAGAIN in CTransferSocket::OnSend()"));
 				m_madeProgress = 1;
-				m_pControlSocket->SetTransferStatusMadeProgress();
+				m_pEngine->transfer_status_.SetMadeProgress();
 			}
 		}
 		else {

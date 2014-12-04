@@ -503,8 +503,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferParseResponse(%p, %d)"), p, len);
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -512,16 +511,14 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 
 	CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
 
-	if (!p)
-	{
+	if (!p) {
 		ResetOperation(FZ_REPLY_OK);
 		return FZ_REPLY_OK;
 	}
 
-	if (!m_pTransferStatus)
-	{
-		InitTransferStatus(pData->m_totalSize.GetValue(), 0, false);
-		SetTransferStatusStartTime();
+	if (m_pEngine->transfer_status_.Empty()) {
+		m_pEngine->transfer_status_.Init(pData->m_totalSize.GetValue(), 0, false);
+		m_pEngine->transfer_status_.SetStartTime();
 	}
 
 	if (pData->localFile.empty())
@@ -542,7 +539,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		}
 	}
 
-	UpdateTransferStatus(len);
+	m_pEngine->transfer_status_.Update(len);
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -553,8 +550,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 	// We do just the neccessary parsing and silently ignore most header fields
 	// Redirects are supported though if the server sends the Location field.
 
-	for (;;)
-	{
+	for (;;) {
 		// Find line ending
 		unsigned int i = 0;
 		for (i = 0; (i + 1) < m_recvBufferPos; i++)

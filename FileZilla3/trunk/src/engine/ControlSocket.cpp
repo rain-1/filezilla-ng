@@ -55,9 +55,7 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 	m_pCurOpData = 0;
 	m_nOpState = 0;
 	m_pCurrentServer = 0;
-	m_pTransferStatus = 0;
-	m_transferStatusSendState = 0;
-
+	
 	m_pCSConv = 0;
 	m_useUTF8 = false;
 
@@ -94,22 +92,23 @@ Command CControlSocket::GetCurrentCommandId() const
 
 void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData)
 {
-	if (m_pTransferStatus && (nErrorCode == FZ_REPLY_OK || m_pTransferStatus->madeProgress))
-	{
-		int elapsed = wxTimeSpan(wxDateTime::UNow() - m_pTransferStatus->started).GetSeconds().GetLo();
+	CTransferStatus status;
+	bool tmp;
+	
+	if (m_pEngine->transfer_status_.Get(status, tmp) && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
+		int elapsed = wxTimeSpan(wxDateTime::UNow() - status.started).GetSeconds().GetLo();
 		if (elapsed <= 0)
 			elapsed = 1;
 		wxString time = wxString::Format(
 			wxPLURAL("%d second", "%d seconds", elapsed),
 			elapsed);
 
-		wxLongLong transferred = m_pTransferStatus->currentOffset - m_pTransferStatus->startOffset;
+		wxLongLong transferred = status.currentOffset - status.startOffset;
 		wxString size = CSizeFormatBase::Format(&m_pEngine->GetOptions(), transferred, true);
 
 		MessageType msgType = MessageType::Error;
 		wxString msg;
-		if (nErrorCode == FZ_REPLY_OK)
-		{
+		if (nErrorCode == FZ_REPLY_OK) {
 			msgType = MessageType::Status;
 			msg = _("File transfer successful, transferred %s in %s");
 		}
@@ -121,8 +120,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			msg = _("File transfer failed after transferring %s in %s");
 		LogMessage(msgType, msg, size, time);
 	}
-	else
-	{
+	else {
 		if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
 			LogMessage(MessageType::Error, _("File transfer aborted by user"));
 		else if (nErrorCode == FZ_REPLY_OK)
@@ -226,7 +224,7 @@ int CControlSocket::ResetOperation(int nErrorCode)
 		m_pCurOpData = 0;
 	}
 
-	ResetTransferStatus();
+	m_pEngine->transfer_status_.Reset();
 
 	SetWait(false);
 
@@ -302,83 +300,6 @@ void CControlSocket::Cancel()
 			ResetOperation(FZ_REPLY_CANCELED);
 	}
 }
-
-void CControlSocket::ResetTransferStatus()
-{
-	delete m_pTransferStatus;
-	m_pTransferStatus = 0;
-
-	m_pEngine->AddNotification(new CTransferStatusNotification(0));
-
-	m_transferStatusSendState = 0;
-}
-
-void CControlSocket::InitTransferStatus(wxFileOffset totalSize, wxFileOffset startOffset, bool list)
-{
-	if (startOffset < 0)
-		startOffset = 0;
-
-	delete m_pTransferStatus;
-	m_pTransferStatus = new CTransferStatus();
-
-	m_pTransferStatus->list = list;
-	m_pTransferStatus->totalSize = totalSize;
-	m_pTransferStatus->startOffset = startOffset;
-	m_pTransferStatus->currentOffset = startOffset;
-	m_pTransferStatus->madeProgress = false;
-}
-
-void CControlSocket::SetTransferStatusStartTime()
-{
-	if (!m_pTransferStatus)
-		return;
-
-	m_pTransferStatus->started = wxDateTime::UNow();
-}
-
-void CControlSocket::SetTransferStatusMadeProgress()
-{
-	if (!m_pTransferStatus)
-		return;
-
-	m_pTransferStatus->madeProgress = true;
-}
-
-void CControlSocket::UpdateTransferStatus(wxFileOffset transferredBytes)
-{
-	// Todo: Mutex
-	if (!m_pTransferStatus)
-		return;
-
-	m_pTransferStatus->currentOffset += transferredBytes;
-
-	if (!m_transferStatusSendState)
-		m_pEngine->AddNotification(new CTransferStatusNotification(new CTransferStatus(*m_pTransferStatus)));
-	m_transferStatusSendState = 2;
-}
-
-bool CControlSocket::GetTransferStatus(CTransferStatus &status, bool &changed)
-{
-	// Todo: Mutex, called by interface.
-	if (!m_pTransferStatus) {
-		changed = false;
-		m_transferStatusSendState = 0;
-		return false;
-	}
-
-	status = *m_pTransferStatus;
-	if (m_transferStatusSendState == 2) {
-		changed = true;
-		m_transferStatusSendState = 1;
-		return true;
-	}
-	else {
-		changed = false;
-		m_transferStatusSendState = 0;
-		return true;
-	}
-}
-
 
 const CServer* CControlSocket::GetCurrentServer() const
 {

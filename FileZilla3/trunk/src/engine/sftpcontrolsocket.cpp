@@ -665,25 +665,24 @@ void CSftpControlSocket::OnSftpEvent()
 		case sftpEvent::Read:
 		case sftpEvent::Write:
 			{
-				if (m_pTransferStatus && !m_pTransferStatus->madeProgress)
-				{
-					if (m_pCurOpData && m_pCurOpData->opId == Command::transfer)
-					{
+				CTransferStatus status;
+				bool tmp;
+				if (m_pEngine->transfer_status_.Get(status, tmp) && !status.madeProgress) {
+					if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
 						CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
-						if (pData->download)
-						{
+						if (pData->download) {
 							if (message->value > 0)
-								SetTransferStatusMadeProgress();
+								m_pEngine->transfer_status_.SetMadeProgress();
 						}
 						else
 						{
-							if (m_pTransferStatus->currentOffset > m_pTransferStatus->startOffset + 65565)
-								SetTransferStatusMadeProgress();
+							if (status.currentOffset > status.startOffset + 65565)
+								m_pEngine->transfer_status_.SetMadeProgress();
 						}
 					}
 				}
 
-				UpdateTransferStatus(message->value);
+				m_pEngine->transfer_status_.Update(message->value);
 			}
 			break;
 		case sftpEvent::Recv:
@@ -1734,7 +1733,7 @@ int CSftpControlSocket::FileTransferSend()
 			if (!pData->resume)
 				CreateLocalDir(pData->localFile);
 
-			InitTransferStatus(pData->remoteFileSize, pData->resume ? pData->localFileSize : 0, false);
+			m_pEngine->transfer_status_.Init(pData->remoteFileSize, pData->resume ? pData->localFileSize : 0, false);
 			cmd += _T("get ");
 			cmd += QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath)) + _T(" ");
 
@@ -1743,15 +1742,13 @@ int CSftpControlSocket::FileTransferSend()
 			logstr += localFile;
 			LogMessageRaw(MessageType::Command, logstr);
 
-			if (!AddToStream(cmd) || !AddToStream(localFile + _T("\n"), true))
-			{
+			if (!AddToStream(cmd) || !AddToStream(localFile + _T("\n"), true)) {
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;
 			}
 		}
-		else
-		{
-			InitTransferStatus(pData->localFileSize, pData->resume ? pData->remoteFileSize : 0, false);
+		else {
+			m_pEngine->transfer_status_.Init(pData->localFileSize, pData->resume ? pData->remoteFileSize : 0, false);
 			cmd += _T("put ");
 
 			wxString logstr = cmd;
@@ -1769,7 +1766,7 @@ int CSftpControlSocket::FileTransferSend()
 				return FZ_REPLY_ERROR;
 			}
 		}
-		SetTransferStatusStartTime();
+		m_pEngine->transfer_status_.SetStartTime();
 
 		pData->transferInitiated = true;
 	}

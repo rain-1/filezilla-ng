@@ -1391,7 +1391,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		pData->m_pDirectoryListingParser->SetTimezoneOffset(GetTimezoneOffset());
 		m_pTransferSocket->m_pDirectoryListingParser = pData->m_pDirectoryListingParser;
 
-		InitTransferStatus(-1, 0, true);
+		m_pEngine->transfer_status_.Init(-1, 0, true);
 
 		pData->opState = list_waittransfer;
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command) == yes)
@@ -2609,7 +2609,7 @@ int CFtpControlSocket::FileTransferSend()
 				else
 					pData->resumeOffset = 0;
 
-				InitTransferStatus(pData->remoteFileSize, startOffset, false);
+				m_pEngine->transfer_status_.Init(pData->remoteFileSize, startOffset, false);
 
 				if (m_pEngine->GetOptions().GetOptionVal(OPTION_PREALLOCATE_SPACE))
 				{
@@ -2683,7 +2683,7 @@ int CFtpControlSocket::FileTransferSend()
 				}
 
 				wxFileOffset len = pFile->Length();
-				InitTransferStatus(len, startOffset, false);
+				m_pEngine->transfer_status_.Init(len, startOffset, false);
 			}
 			pData->pIOThread = new CIOThread;
 			if (!pData->pIOThread->Create(std::move(pFile), !pData->download, pData->binary)) {
@@ -4193,7 +4193,7 @@ int CFtpControlSocket::TransferSend()
 		cmd = pData->cmd;
 		pData->pOldData->tranferCommandSent = true;
 
-		SetTransferStatusStartTime();
+		m_pEngine->transfer_status_.SetStartTime();
 		m_pTransferSocket->SetActive();
 		break;
 	case rawtransfer_waitfinish:
