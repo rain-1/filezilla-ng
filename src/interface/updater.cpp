@@ -227,31 +227,45 @@ bool CUpdater::Run()
 
 int CUpdater::Download(wxString const& url, wxString const& local_file)
 {
-	current_url_ = url;
-	current_local_file_ = local_file;
+	wxASSERT(pending_commands_.empty());
+	pending_commands_.clear();
+	pending_commands_.emplace_back(new CDisconnectCommand);
+	if (!CreateConnectCommand(url) || !CreateTransferCommand(url, local_file)) {
+		return FZ_REPLY_ERROR;
+	}
 
-	engine_->Execute(CDisconnectCommand());
-	int res = SendConnectCommand(url);
-	if( res == FZ_REPLY_OK ) {
-		res = SendTransferCommand(url, local_file);
+	return ContinueDownload();
+}
+
+int CUpdater::ContinueDownload()
+{
+	if (pending_commands_.empty()) {
+		return FZ_REPLY_OK;
+	}
+
+	int res = engine_->Execute(*pending_commands_.front());
+	if (res == FZ_REPLY_OK) {
+		pending_commands_.pop_front();
+		return ContinueDownload();
 	}
 
 	return res;
 }
 
-int CUpdater::SendConnectCommand(wxString const& url)
+bool CUpdater::CreateConnectCommand(wxString const& url)
 {
 	CServer s;
 	CServerPath path;
 	wxString error;
 	if( !s.ParseUrl( url, 0, wxString(), wxString(), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
-		return FZ_REPLY_ERROR;
+		return false;
 	}
 
-	return engine_->Execute(CConnectCommand(s));
+	pending_commands_.emplace_back(new CConnectCommand(s));
+	return true;
 }
 
-int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_file)
+bool CUpdater::CreateTransferCommand(wxString const& url, wxString const& local_file)
 {
 	CFileTransferCommand::t_transferSettings transferSettings;
 
@@ -259,16 +273,13 @@ int CUpdater::SendTransferCommand(wxString const& url, wxString const& local_fil
 	CServerPath path;
 	wxString error;
 	if( !s.ParseUrl( url, 0, wxString(), wxString(), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
-		return FZ_REPLY_ERROR;
+		return false;
 	}
 	wxString file = path.GetLastSegment();
 	path = path.GetParent();
 
-	CFileTransferCommand cmd(local_file, path, file, true, transferSettings);
-	int res = engine_->Execute(cmd);
-
-	wxASSERT(res != FZ_REPLY_OK);
-	return res;
+	pending_commands_.emplace_back(new CFileTransferCommand(local_file, path, file, true, transferSettings));
+	return true;
 }
 
 void CUpdater::OnEngineEvent(wxFzEvent& event)
@@ -379,22 +390,32 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 
 	return s;
 }
+
 void CUpdater::ProcessOperation(COperationNotification const& operation)
 {
 	if( state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading ) {
 		return;
 	}
 
+	if (pending_commands_.empty()) {
+		SetState(UpdaterState::failed);
+		return;
+	}
+
+
 	UpdaterState s = UpdaterState::failed;
 
-	if (operation.commandId == Command::disconnect && operation.nReplyCode & FZ_REPLY_DISCONNECTED && !current_url_.empty()) {
-		int res = Download(current_url_, current_local_file_);
+	int res = operation.nReplyCode;
+	if (res == FZ_REPLY_OK || (operation.commandId == Command::disconnect && res & FZ_REPLY_DISCONNECTED)) {
+		pending_commands_.pop_front();
+		res = ContinueDownload();
 		if (res == FZ_REPLY_WOULDBLOCK) {
 			return;
 		}
 	}
-	else if (operation.nReplyCode != FZ_REPLY_OK) {
-		if( state_ != UpdaterState::checking ) {
+
+	if (res != FZ_REPLY_OK) {
+		if (state_ != UpdaterState::checking) {
 			s = UpdaterState::newversion;
 		}
 	}
@@ -729,8 +750,7 @@ void CUpdater::SetState( UpdaterState s )
 		state_ = s;
 
 		if (s != UpdaterState::checking && s != UpdaterState::newversion_downloading) {
-			current_url_.clear();
-			current_local_file_.clear();
+			pending_commands_.clear();
 		}
 		build b = version_information_.available_;
 		for (auto const& handler : handlers_ ) {
