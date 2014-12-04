@@ -15,7 +15,7 @@ public:
 	void SetTransferStatus(const CTransferStatus* pStatus);
 	wxLongLong GetLastOffset() const { return status_valid_ ? status_.currentOffset : m_lastOffset; }
 	wxLongLong GetTotalSize() const { return status_valid_ ? status_.totalSize : -1; }
-	wxFileOffset GetSpeed(int elapsedSeconds);
+	wxFileOffset GetSpeed(int elapsed_milli_seconds);
 	wxFileOffset GetCurrentSpeed();
 
 	virtual bool Show(bool show = true);
@@ -49,7 +49,7 @@ protected:
 		int elapsed{};
 		wxFileOffset offset{};
 	} m_past_data[10];
-	int m_past_data_index;
+	int m_past_data_count{};
 
 	//Used by getCurrentSpeed
 	wxDateTime m_gcLastTimeStamp;
