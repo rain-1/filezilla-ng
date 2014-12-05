@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0-beta2 (2014-12-05)
+
+- Fixed uploads constantly timing out
+- Log abbreviation now works correctly when cancelling a pending connection retry
+- Fixed a timing issue in the updater. Users of 3.10.0-beta1 need to update manually.
+- Speed limits no longer reset when opening the settings dialog
+- Fix reporting of transfer progress
+- Theme preview in the settings dialog now properly displays non-standard theme sizes
+
 3.10.0-beta1 (2014-12-03)
 
 + FTP over TLS is now used by default if the server supports it. Use of plain FTP can be enforced for a server in the Site Manager
