@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-10-23 13:51+0100\n"
+"PO-Revision-Date: 2014-12-04 12:08+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:54
@@ -907,9 +907,8 @@ msgid "&Show debug menu"
 msgstr "&Visualizza il menu di debug"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
-#, fuzzy
 msgid "&Show detailed log"
-msgstr "Visualizza dettagli"
+msgstr "Vi&sualizza registro dettagliato"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -3022,14 +3021,14 @@ msgid "Delete selected files and directories"
 msgstr "Elimina i file e cartelle selezionate"
 
 #: ../../locales/../src/engine/engineprivate.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting \"%s\""
-msgstr "Eliminazione cartelle"
+msgstr "Eliminazione di \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
 #, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr ""
+msgstr "Eliminazione di %d file da \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3102,9 +3101,9 @@ msgid "Directory listing filters"
 msgstr "Filtri di lettura contenuto cartella"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "Contenuto cartella letto con successo"
+msgstr "Elenco cartella di \"%s\" completato"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3651,14 +3650,12 @@ msgstr ""
 "connessioni aggiuntive possono essere stabilite in due modi."
 
 #: ../../locales/../src/engine/server.cpp:20
-#, fuzzy
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTPES - FTP su TLS/SSL esplicito"
+msgstr "FTPES - FTP su TLS esplicito"
 
 #: ../../locales/../src/engine/server.cpp:19
-#, fuzzy
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTPS - FTP su TLS/SSL implicito"
+msgstr "FTPS - FTP su TLS implicito"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -5899,12 +5896,11 @@ msgstr "CAP:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1012
 msgid "Pre&allocate space before downloading"
-msgstr ""
+msgstr "Pre&alloca spazio prima del download"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1008
-#, fuzzy
 msgid "Preallocation"
-msgstr "Direzione"
+msgstr "Preallocazione"
 
 #: ../../locales/../src/interface/sitemanager.cpp:280
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
@@ -6405,9 +6401,9 @@ msgstr ""
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1281
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "Lettura elenco cartelle..."
+msgstr "Recupero elenco cartella di \"%s\"..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7210,19 +7206,16 @@ msgid "T&oolbar"
 msgstr "&Barra strumenti"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
-#, fuzzy
 msgid "TLS connection established, sending HTTP request"
-msgstr "Connessione TSL/SSL stabilita, invio richiesta HTTP"
+msgstr "Connessione TSL stabilita. Invio richiesta HTTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
-#, fuzzy
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "Connessione TLS/SSL stabilita, in attesa del messaggio di benvenuto..."
+msgstr "Connessione TLS stabilita. In attesa del messaggio di benvenuto..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
-#, fuzzy
 msgid "TLS connection established."
-msgstr "Connessione TLS/SSL stabilita."
+msgstr "Connessione TLS stabilita."
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"

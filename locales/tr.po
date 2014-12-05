@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-01 02:51+0000\n"
-"Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
+"PO-Revision-Date: 2014-12-03 18:24+0200\n"
+"Last-Translator: Kaya Zeren <translator@zeron.net>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "filezilla/language/tr_TR/)\n"
 "Language: tr_TR\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Poedit 1.6.9\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:54
@@ -900,9 +901,8 @@ msgid "&Show debug menu"
 msgstr "Hata ayıklama menü&sü görüntülensin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
-#, fuzzy
 msgid "&Show detailed log"
-msgstr "Ayrıntılara bakın"
+msgstr "A&yrıntılı günlüğe bakın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -2969,14 +2969,14 @@ msgid "Delete selected files and directories"
 msgstr "Seçili dosya ve klasörleri silin"
 
 #: ../../locales/../src/engine/engineprivate.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting \"%s\""
-msgstr "Klasörler siliniyor"
+msgstr "\"%s\" siliniyor"
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
 #, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr ""
+msgstr "%d dosya \"%s\" üzerinden siliniyor"
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3047,9 +3047,9 @@ msgid "Directory listing filters"
 msgstr "Klasör listeleme süzgeçleri"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "Klasör listelendi"
+msgstr "\"%s\" klasörleri listelendi"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3593,14 +3593,12 @@ msgstr ""
 "şekilde sağlanabilir."
 
 #: ../../locales/../src/engine/server.cpp:20
-#, fuzzy
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTPES - FTP üzerinden açıkta TLS/SSL"
+msgstr "FTPES - FTP üzerinden açıkta TLS"
 
 #: ../../locales/../src/engine/server.cpp:19
-#, fuzzy
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTPS - FTP üzerinden örtülü TLS/SSL"
+msgstr "FTPS - FTP üzerinden örtülü TLS"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -6299,9 +6297,9 @@ msgstr ""
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1281
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "Klasör listesi alınıyor..."
+msgstr "\"%s\" klasör listesi alınıyor..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7097,19 +7095,16 @@ msgid "T&oolbar"
 msgstr "A&raç çubuğu"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
-#, fuzzy
 msgid "TLS connection established, sending HTTP request"
-msgstr "TLS/SSL bağlantısı kuruldu, HTTP isteği gönderiliyor"
+msgstr "TLS bağlantısı kuruldu, HTTP isteği gönderiliyor"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
-#, fuzzy
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "TSL/SSL bağlantısı sağlandı, hoş geldin iletisi bekleniyor..."
+msgstr "TSL bağlantısı kuruldu, hoşgeldin iletisi bekleniyor..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
-#, fuzzy
 msgid "TLS connection established."
-msgstr "TLS/SSL bağlantısı kuruldu."
+msgstr "TLS bağlantısı kuruldu."
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"
