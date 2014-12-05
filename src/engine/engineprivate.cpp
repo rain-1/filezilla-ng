@@ -685,6 +685,8 @@ void CFileZillaEnginePrivate::DoCancel()
 		notification->nReplyCode = FZ_REPLY_DISCONNECTED | FZ_REPLY_CANCELED;
 		notification->commandId = Command::connect;
 		AddNotification(notification);
+
+		ClearQueuedLogs(true);
 	}
 	else {
 		if (m_pControlSocket)
