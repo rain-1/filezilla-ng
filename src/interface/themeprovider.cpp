@@ -161,12 +161,15 @@ std::vector<wxString> CThemeProvider::GetThemes()
 
 std::vector<std::unique_ptr<wxBitmap>> CThemeProvider::GetAllImages(const wxString& theme, const wxSize& size)
 {
-	wxString path = wxGetApp().GetResourceDir().GetPath() + theme;
+	wxString path = wxGetApp().GetResourceDir().GetPath() + theme + _T("/");
 
 	wxLogNull log;
 
 	wxString strSize = wxString::Format(_T("%dx%d/"), size.GetWidth(), size.GetHeight());
-	if (!wxDir::Exists(strSize)) {
+	if (wxDir::Exists(path + strSize)) {
+		path += strSize;
+	}
+	else {
 		if (size.GetWidth() > 32)
 			path += _T("48x48/");
 		else if (size.GetWidth() > 16)
