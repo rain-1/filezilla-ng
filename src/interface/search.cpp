@@ -702,7 +702,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
 
-	if (selected_dirs.size() > 0)
+	if (!selected_dirs.empty())
 	{
 		wxMessageBoxEx(_("Editing directories is not supported"), _("Editing search results"), wxICON_EXCLAMATION);
 		return;

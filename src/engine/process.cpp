@@ -147,7 +147,7 @@ public:
 	{
 		DWORD read = 0;
 		BOOL res = ReadFile(out_.read_, buffer, len, &read, 0);
-		if (!res || read < 0) {
+		if (!res) {
 			return -1;
 		}
 		return read;
@@ -158,7 +158,7 @@ public:
 		while (len > 0) {
 			DWORD written = 0;
 			BOOL res = WriteFile(in_.write_, buffer, len, &written, 0);
-			if (!res || written <= 0) {
+			if (!res || written == 0) {
 				return false;
 			}
 			buffer += written;
