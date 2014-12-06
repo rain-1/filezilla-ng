@@ -391,7 +391,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			return;
 		}
 
-		wxCriticalSectionLocker l(s_sync); 
+		wxCriticalSectionLocker l(s_sync);
 		ip = regex.GetMatch(m_data, 2);
 	}
 

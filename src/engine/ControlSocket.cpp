@@ -55,7 +55,7 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate *pEngine)
 	m_pCurOpData = 0;
 	m_nOpState = 0;
 	m_pCurrentServer = 0;
-	
+
 	m_pCSConv = 0;
 	m_useUTF8 = false;
 
@@ -94,7 +94,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 {
 	CTransferStatus status;
 	bool tmp;
-	
+
 	if (m_pEngine->transfer_status_.Get(status, tmp) && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
 		int elapsed = wxTimeSpan(wxDateTime::UNow() - status.started).GetSeconds().GetLo();
 		if (elapsed <= 0)

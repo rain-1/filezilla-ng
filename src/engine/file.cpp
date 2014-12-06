@@ -20,7 +20,7 @@ CFile::~CFile()
 bool CFile::Open(wxString const& f, mode m, disposition d)
 {
 	Close();
-	
+
 	DWORD dispositionFlags;
 	if (m == write) {
 		if (d == truncate) {

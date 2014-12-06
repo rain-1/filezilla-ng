@@ -43,7 +43,7 @@ void CFileExistsDlg::DisplayFile(bool left, wxString name, wxLongLong const& siz
 		bool const thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
 		sizeStr = CSizeFormat::Format(size, true, CSizeFormat::bytes, thousands_separator, 0);
 	}
-	
+
 	wxString timeStr = _("Date/time unknown");
 	if (time.IsValid())
 		timeStr = CTimeFormat::Format(time);

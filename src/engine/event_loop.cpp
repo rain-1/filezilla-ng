@@ -125,7 +125,7 @@ bool CEventLoop::ProcessEvent()
 	ev = pending_events_.front();
 	pending_events_.pop_front();
 	requestMore = !pending_events_.empty() || quit_;
-	
+
 	if (ev.first && !ev.first->removing_) {
 		active_handler_ = ev.first;
 		sync_.Unlock();
@@ -221,7 +221,7 @@ int CEventLoop::GetNextWaitInterval()
 			timer.deadline_ = now + timer.ms_interval_;
 			diff = timer.ms_interval_;
 		}
-		
+
 		if (diff < wait) {
 			wait = diff;
 		}

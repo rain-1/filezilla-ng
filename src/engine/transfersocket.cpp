@@ -413,7 +413,7 @@ void CTransferSocket::OnSend()
 
 	int error;
 	int written;
-	
+
 	// Only doe a certain number of iterations in one go to keep the event loop going.
 	// Otherwise this behaves like a livelock on very large files read from a very fast
 	// SSD uploaded to a very fast server.
