@@ -693,7 +693,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle())
 		return;
-	
+
 	// Find all selected files and directories
 	std::list<CServerPath> selected_dirs;
 	std::list<int> selected_files;

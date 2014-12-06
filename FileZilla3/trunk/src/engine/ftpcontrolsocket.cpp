@@ -731,7 +731,7 @@ int CFtpControlSocket::LogonParseResponse()
 		if (code != 2 && code != 3) {
 			CServerCapabilities::SetCapability(*m_pCurrentServer, (pData->opState == LOGON_AUTH_TLS) ? auth_tls_command : auth_ssl_command, no);
 			if (pData->opState == LOGON_AUTH_SSL) {
-				if (m_pCurrentServer->GetProtocol() == FTP) 	{
+				if (m_pCurrentServer->GetProtocol() == FTP) {
 					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
 					LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
 
@@ -1273,7 +1273,7 @@ int CFtpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDir
 	if (!newPath.ChangePath(subDir)) {
 		newPath.clear();
 	}
-	
+
 	if (newPath.empty()) {
 		LogMessage(MessageType::Status, _("Retrieving directory listing..."));
 	}
@@ -4503,7 +4503,7 @@ wxString CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
 	wxASSERT(data.bPasv);
 	data.bTriedPasv = true;
 
-	if (m_pProxyBackend) { 
+	if (m_pProxyBackend) {
 		// We don't actually know the address family the other end of the proxy uses to reach the server. Hence prefer EPSV
 		// if the server supports it.
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, epsv_command) == yes) {

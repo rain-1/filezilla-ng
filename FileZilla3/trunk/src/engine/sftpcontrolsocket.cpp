@@ -150,7 +150,7 @@ protected:
 
 			buffer[len++] = c;
 		}
-		
+
 		while (len && buffer[len - 1] == '\r')
 			--len;
 

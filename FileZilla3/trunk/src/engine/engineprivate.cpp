@@ -136,7 +136,7 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 void CFileZillaEnginePrivate::AddLogNotification(CLogmsgNotification *pNotification)
 {
 	wxCriticalSectionLocker lock(notification_mutex_);
-	
+
 	if (pNotification->msgType == MessageType::Error) {
 		queue_logs_ = false;
 		SendQueuedLogs();

@@ -403,7 +403,7 @@ bool CXmlFile::GetXmlFile(wxString const& file)
 	if (CLocalFileSystem::GetSize(file) <= 0) {
 		return false;
 	}
-	
+
 	// File exists, open it
 	if (!LoadXmlDocument(file)) {
 		return false;

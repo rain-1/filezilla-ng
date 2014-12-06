@@ -21,7 +21,7 @@ public:
 	int GetItemCount() const { return GetCount(); }
 	wxTreeItemId GetTopItem() const { return GetFirstVisibleItem(); }
 	bool GetItemRect(wxTreeItemId const& item, wxRect &rect) const { return GetBoundingRect(item, rect); }
-	
+
 	wxRect GetActualClientRect() const { return GetClientRect(); }
 
 	bool Valid(wxTreeItemId const& i) const { return i.IsOk(); }

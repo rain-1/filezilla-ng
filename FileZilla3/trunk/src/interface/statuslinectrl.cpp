@@ -364,7 +364,7 @@ wxFileOffset CStatusLineCtrl::GetSpeed(int elapsed_milli_seconds)
 		m_past_data[m_past_data_count].offset = status_.currentOffset - status_.startOffset;
 		++m_past_data_count;
 	}
-	
+
 	_past_data forget;
 
 	int offset = (elapsed_seconds - 1) / 2;

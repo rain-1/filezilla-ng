@@ -50,7 +50,7 @@ void CIPAddressTest::testIPV6LongForm()
 	CPPUNIT_ASSERT_EQUAL( wxString("0000:0000:0000:0000:0000:0000:0000:0001"), GetIPV6LongForm(_T("[0:0:0:0:0:0:0:1]")) );
 	CPPUNIT_ASSERT_EQUAL( wxString("0000:0000:0000:0000:0000:0000:0000:0001"), GetIPV6LongForm(_T("[0:0:0::0:0:0:0:1]")) );
 	CPPUNIT_ASSERT_EQUAL( wxString("0000:0000:0000:0000:0000:0000:0000:0001"), GetIPV6LongForm(_T("[::0:0:0:0:0:0:0:1]")) );
-	CPPUNIT_ASSERT_EQUAL( wxString("0000:0000:0000:0000:0000:0000:0000:0001"), GetIPV6LongForm(_T("[0000:0000:0000:0000:0000:0000:0000:0001]"))                                                                                     );
+	CPPUNIT_ASSERT_EQUAL( wxString("0000:0000:0000:0000:0000:0000:0000:0001"), GetIPV6LongForm(_T("[0000:0000:0000:0000:0000:0000:0000:0001]")) );
 
 	// Invalid ones
 	CPPUNIT_ASSERT_EQUAL( wxString(), GetIPV6LongForm(_T("::")));

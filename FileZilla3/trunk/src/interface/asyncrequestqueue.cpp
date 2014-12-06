@@ -74,7 +74,7 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 	case reqId_hostkeyChanged:
 		{
 			auto & hostKeyNotification = static_cast<CHostKeyNotification&>(*pNotification.get());
-		
+
 			if (!CVerifyHostkeyDialog::IsTrusted(hostKeyNotification))
 				break;
 

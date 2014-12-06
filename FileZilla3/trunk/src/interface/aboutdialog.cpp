@@ -92,9 +92,9 @@ bool CAboutDialog::Create(wxWindow* parent)
 
 #ifdef __WXMSW__
 	if (::wxIsPlatform64Bit())
-		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("64 bit system"));
+		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("64-bit system"));
 	else
-		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("32 bit system"));
+		xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::SetLabel, _("32-bit system"));
 #else
 	xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::Hide);
 	xrc_call(*this, "ID_SYSTEM_PLATFORM_DESC", &wxStaticText::Hide);
@@ -165,9 +165,9 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 
 #ifdef __WXMSW__
 	if (::wxIsPlatform64Bit())
-		text += _T("  Platform:       64 bit system\n");
+		text += _T("  Platform:       64-bit system\n");
 	else
-		text += _T("  Platform:       32 bit system\n");
+		text += _T("  Platform:       32-bit system\n");
 	text.Replace(_T("\n"), _T("\r\n"));
 #endif
 

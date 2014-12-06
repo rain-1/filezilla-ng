@@ -21,7 +21,7 @@ public:
 
 	CFile();
 	CFile(wxString const& f, mode m, disposition d = existing);
-	
+
 	~CFile();
 
 	CFile(CFile const&) = delete;

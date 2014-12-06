@@ -39,7 +39,7 @@ public:
 
 	Pipe(Pipe const&) = delete;
 	Pipe& operator=(Pipe const&) = delete;
-	
+
 	bool Create(bool local_is_input)
 	{
 		reset();
@@ -91,7 +91,7 @@ public:
 
 	bool CreatePipes()
 	{
-		return 
+		return
 			in_.Create(false) &&
 			out_.Create(true) &&
 			err_.Create(true);
