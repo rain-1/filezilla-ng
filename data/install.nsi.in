@@ -1,40 +1,43 @@
-;FileZilla 3 installation script
-;Written by Tim Kosse <mailto:tim.kosse@filezilla-project.org>
+; FileZilla 3 installation script
+; Written by Tim Kosse <mailto:tim.kosse@filezilla-project.org>
 ;
-;Requires NSIS >= 2.35
+; Requires NSIS >= 2.35
 
 ;--------------------------------
 ; Build environment
+;--------------------------------
 
-  !define top_srcdir @top_srcdir@
-  !define srcdir @srcdir@
-  !define VERSION @PACKAGE_VERSION@
+  !define top_srcdir    @top_srcdir@
+  !define srcdir        @srcdir@
+  !define VERSION       @PACKAGE_VERSION@
   !define VERSION_MAJOR @PACKAGE_VERSION_MAJOR@
   !define VERSION_MINOR @PACKAGE_VERSION_MINOR@
   !define VERSION_FULL  @PACKAGE_VERSION_MAJOR@.@PACKAGE_VERSION_MINOR@.@PACKAGE_VERSION_MICRO@.@PACKAGE_VERSION_NANO@
-  !define PUBLISHER    "Tim Kosse"
-  !define WEBSITE_URL  "https://filezilla-project.org/"
-  !addplugindir @srcdir@
+  !define PUBLISHER     "Tim Kosse"
+  !define WEBSITE_URL   "https://filezilla-project.org/"
+  !addplugindir         @srcdir@
 
 ;--------------------------------
-;General
+; General
+;--------------------------------
 
-  ;Name and file
+  ; Name and file
   Name "FileZilla Client ${VERSION}"
   OutFile "FileZilla_3_setup.exe"
 
   SetCompressor /SOLID LZMA
 
-  ;Default installation folder
+  ; Default installation folder
   InstallDir "$PROGRAMFILES\FileZilla FTP Client"
 
-  ;Get installation folder from registry if available
+  ; Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\FileZilla Client" ""
 
   RequestExecutionLevel user
 
 ;--------------------------------
 ; Libtool executable target path
+;--------------------------------
 
   !include libtoolexecutablesubdir.nsh
   !ifndef LT_EXEDIR
@@ -42,7 +45,8 @@
   !endif
 
 ;--------------------------------
-;Include Modern UI and functions
+; Include Modern UI and functions
+;--------------------------------
 
   !include "MUI2.nsh"
   !include "WordFunc.nsh"
@@ -53,7 +57,8 @@
   !include "@srcdir@\process_running.nsh"
 
 ;--------------------------------
-;Installer's VersionInfo
+; Installer's VersionInfo
+;--------------------------------
 
   VIProductVersion                   "${VERSION_FULL}"
   VIAddVersionKey "CompanyName"      "${PUBLISHER}"
@@ -66,7 +71,8 @@
 
 
 ;--------------------------------
-;Required functions
+; Required functions
+;--------------------------------
 
   !insertmacro GetParameters
   !insertmacro GetOptions
@@ -74,7 +80,8 @@
   !insertmacro un.GetOptions
 
 ;--------------------------------
-;Variables
+; Variables
+;--------------------------------
 
   Var MUI_TEMP
   Var STARTMENU_FOLDER
@@ -93,7 +100,8 @@
   Var GetInstalledSize.total
 
 ;--------------------------------
-;Interface Settings
+; Interface Settings
+;--------------------------------
 
   !define MUI_ICON "${top_srcdir}/src/interface/resources/FileZilla.ico"
   !define MUI_UNICON "${srcdir}/uninstall.ico"
@@ -101,13 +109,15 @@
   !define MUI_ABORTWARNING
 
 ;--------------------------------
-;Memento settings
+; Memento settings
+;--------------------------------
 
 !define MEMENTO_REGISTRY_ROOT SHELL_CONTEXT
 !define MEMENTO_REGISTRY_KEY "Software\FileZilla Client"
 
 ;--------------------------------
-;Pages
+; Pages
+;--------------------------------
 
   !define MUI_PAGE_CUSTOMFUNCTION_PRE PageLicensePre
   !insertmacro MUI_PAGE_LICENSE "${top_srcdir}\COPYING"
@@ -121,7 +131,7 @@
   !define MUI_PAGE_CUSTOMFUNCTION_PRE PageDirectoryPre
   !insertmacro MUI_PAGE_DIRECTORY
 
-  ;Start Menu Folder Page Configuration
+  ; Start Menu Folder Page Configuration
   !define MUI_STARTMENUPAGE_REGISTRY_ROOT "SHCTX"
   !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\FileZilla Client"
   !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Startmenu"
@@ -234,7 +244,7 @@ Function ReadPreviousVersion
   Call CheckPrevInstallDirExists
 
   ${If} $PREVIOUS_INSTALLDIR != ""
-    ;Detect version
+    ; Detect version
     ReadRegStr $PREVIOUS_VERSION HKLM "Software\FileZilla Client" "Version"
     ${If} $PREVIOUS_VERSION != ""
       StrCpy $ALL_USERS 1
@@ -248,7 +258,7 @@ Function ReadPreviousVersion
   Call CheckPrevInstallDirExists
 
   ${If} $PREVIOUS_INSTALLDIR != ""
-    ;Detect version
+    ; Detect version
     ReadRegStr $PREVIOUS_VERSION HKCU "Software\FileZilla Client" "Version"
     ${If} $PREVIOUS_VERSION != ""
       StrCpy $ALL_USERS 0
@@ -326,7 +336,7 @@ installonoldwindows:
   UAC_unicode::RunElevated
   StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
   StrCmp 0 $0 0 UAC_Err ; Error?
-  StrCmp 1 $1 0 UAC_Success ;Are we the real deal or just the wrapper?
+  StrCmp 1 $1 0 UAC_Success ; Are we the real deal or just the wrapper?
   Quit
 UAC_Err:
   MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
@@ -581,7 +591,7 @@ Function RunUninstaller
     Return
   ${EndIf}
 
-  ;Run uninstaller
+  ; Run uninstaller
   HideWindow
 
   ClearErrors
@@ -840,12 +850,14 @@ Function .onInstSuccess
 FunctionEnd
 
 ;--------------------------------
-;Languages
+; Languages
+;--------------------------------
 
   !insertmacro MUI_LANGUAGE "English"
 
 ;--------------------------------
-;Installer Sections
+; Installer Sections
+;--------------------------------
 
 Section "FileZilla Client" SecMain
 
@@ -857,14 +869,14 @@ Section "FileZilla Client" SecMain
   File "..\src\putty\${LT_EXEDIR}fzsftp.exe"
   File "..\src\putty\${LT_EXEDIR}fzputtygen.exe"
 
-  # MinGW runtime libraries
+  ; MinGW runtime libraries
 
-  #  First get rid of remnants
+  ; First get rid of remnants
   !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libgcc_s_sjlj-1.dll"
   !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libstdc++-6.dll"
   !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libwinpthread-1.dll"
-  
-  #  Now install new version of runtime
+
+  ; Now install new version of runtime
   !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${srcdir}\libgcc_s_sjlj-1.dll" "$INSTDIR\libgcc_s_sjlj-1.dll" "$INSTDIR"
   !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${srcdir}\libstdc++-6.dll"     "$INSTDIR\libstdc++-6.dll"     "$INSTDIR"
   !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${srcdir}\libwinpthread-1.dll" "$INSTDIR\libwinpthread-1.dll" "$INSTDIR"
@@ -892,7 +904,7 @@ Section "FileZilla Client" SecMain
   SetOutPath "$INSTDIR\resources\48x48"
   File "${top_srcdir}/src\interface\resources\48x48\*.png"
 
-  ;Create uninstaller
+  ; Create uninstaller
   WriteUninstaller "$INSTDIR\uninstall.exe"
 
   WriteRegStr SHCTX "Software\FileZilla Client" "" $INSTDIR
@@ -920,7 +932,7 @@ Section "FileZilla Client" SecMain
 
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
-  ;Create shortcuts
+  ; Create shortcuts
   SetOutPath "$INSTDIR"
   CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
   CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
@@ -938,7 +950,7 @@ Section "FileZilla Client" SecMain
   Push $R0
   StrCpy $R0 "$STARTMENU_FOLDER" 1
   ${if} $R0 == ">"
-    ;Write folder to registry
+    ; Write folder to registry
     WriteRegStr "${MUI_STARTMENUPAGE_Application_REGISTRY_ROOT}" "${MUI_STARTMENUPAGE_Application_REGISTRY_KEY}" "${MUI_STARTMENUPAGE_Application_REGISTRY_VALUENAME}" ">"
   ${endif}
   Pop $R0
@@ -1011,7 +1023,8 @@ ${MementoSectionEnd}
 ${MementoSectionDone}
 
 ;--------------------------------
-;Functions
+; Functions
+;--------------------------------
 
 Function PostInstPage
 
@@ -1056,9 +1069,10 @@ Function GetInstalledSize
 FunctionEnd
 
 ;--------------------------------
-;Descriptions
+; Descriptions
+;--------------------------------
 
-  ;Language strings
+  ; Language strings
   LangString DESC_SecMain ${LANG_ENGLISH} "Required program files."
   LangString DESC_SecIconSets ${LANG_ENGLISH} "Additional icon sets."
 !if "@FILEZILLA_LINGUAS@" != ""
@@ -1067,7 +1081,7 @@ FunctionEnd
   LangString DESC_SecShellExt ${LANG_ENGLISH} "Shell extension for advanced drag && drop support. Required for drag && drop from FileZilla into Explorer."
   LangString DESC_SecDesktop ${LANG_ENGLISH} "Create desktop icon for FileZilla"
 
-  ;Assign language strings to sections
+  ; Assign language strings to sections
   !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
     !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} $(DESC_SecMain)
     !insertmacro MUI_DESCRIPTION_TEXT ${SecIconSets} $(DESC_SecIconSets)
@@ -1079,13 +1093,15 @@ FunctionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
-;Uninstaller Variables
+; Uninstaller Variables
+;--------------------------------
 
 Var un.REMOVE_ALL_USERS
 Var un.REMOVE_CURRENT_USER
 
 ;--------------------------------
-;Uninstaller Functions
+; Uninstaller Functions
+;--------------------------------
 
 Function un.GetUserInfo
   ClearErrors
@@ -1115,7 +1131,7 @@ Function un.ReadPreviousVersion
   ReadRegStr $R0 HKLM "Software\FileZilla Client" ""
 
   ${If} $R0 != ""
-    ;Detect version
+    ; Detect version
     ReadRegStr $R2 HKLM "Software\FileZilla Client" "Version"
     ${If} $R2 == ""
       StrCpy $R0 ""
@@ -1125,7 +1141,7 @@ Function un.ReadPreviousVersion
   ReadRegStr $R1 HKCU "Software\FileZilla Client" ""
 
   ${If} $R1 != ""
-    ;Detect version
+    ; Detect version
     ReadRegStr $R2 HKCU "Software\FileZilla Client" "Version"
     ${If} $R2 == ""
       StrCpy $R1 ""
@@ -1177,7 +1193,7 @@ Function un.RemoveStartmenu
   ${un.GetOptions} $R0 "/keepstartmenudir" $R1
   ${If} ${Errors}
 
-    ;Delete empty start menu parent diretories
+    ; Delete empty start menu parent diretories
     StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
 
     startMenuDeleteLoop:
@@ -1217,7 +1233,8 @@ Function un.FinishPagePre
 FunctionEnd
 
 ;--------------------------------
-;Uninstaller Section
+; Uninstaller Section
+;--------------------------------
 
 !if "@FILEZILLA_LINGUAS@" != ""
 
@@ -1268,7 +1285,7 @@ Section "Uninstall"
   Delete "$INSTDIR\fzsftp.exe"
   Delete "$INSTDIR\fzputtygen.exe"
 
-  # MinGW runtime libraries
+  ; MinGW runtime libraries
   !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libgcc_s_sjlj-1.dll"
   !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libstdc++-6.dll"
   !insertmacro UnInstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\libwinpthread-1.dll"
