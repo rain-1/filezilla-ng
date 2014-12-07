@@ -966,8 +966,9 @@ SectionEnd
 
 ${MementoSection} "Icon sets" SecIconSets
 
-  !insertmacro INSTALLICONSET cyril
   !insertmacro INSTALLICONSET blukis
+  !insertmacro INSTALLICONSET cyril
+  !insertmacro INSTALLICONSET flatzilla
   !insertmacro INSTALLICONSET lone
   !insertmacro INSTALLICONSET minimal
   !insertmacro INSTALLICONSET opencrystal
@@ -1307,6 +1308,7 @@ Section "Uninstall"
 
   !insertmacro UNINSTALLICONSET cyril
   !insertmacro UNINSTALLICONSET blukis
+  !insertmacro UNINSTALLICONSET flatzilla
   !insertmacro UNINSTALLICONSET lone
   !insertmacro UNINSTALLICONSET minimal
   !insertmacro UNINSTALLICONSET opencrystal
