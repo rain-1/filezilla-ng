@@ -609,6 +609,7 @@ src/interface/resources/32x32/Makefile data/Makefile
 src/interface/resources/cyril/Makefile
 src/interface/resources/cyril/16x16/Makefile
 src/interface/resources/blukis/Makefile
+src/interface/resources/flatzilla/Makefile
 src/interface/resources/lone/Makefile
 src/interface/resources/minimal/Makefile
 src/interface/resources/opencrystal/Makefile
