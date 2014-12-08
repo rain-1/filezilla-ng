@@ -7,6 +7,7 @@
 enum iconSize
 {
 	iconSizeSmall,
+	iconSize24,
 	iconSizeNormal,
 	iconSizeLarge
 };
@@ -24,6 +25,7 @@ public:
 	static wxIconBundle GetIconBundle(const wxArtID& id, const wxArtClient& client = wxART_OTHER);
 	static bool ThemeHasSize(const wxString& themePath, const wxString& size);
 
+	static wxSize GetIconSize(wxString const& str);
 	static wxSize GetIconSize(enum iconSize size);
 
 	static CThemeProvider* Get();

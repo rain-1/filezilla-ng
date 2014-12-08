@@ -323,12 +323,21 @@ wxSize CThemeProvider::GetIconSize(enum iconSize size)
 		if (s <= 0)
 			s = 16;
 	}
-	else if (size == iconSizeLarge) {
+	else if (size == iconSize24) {
 		s = wxSystemSettings::GetMetric(wxSYS_SMALLICON_X);
+		if (s <= 0) {
+			s = 24;
+		}
+		else {
+			s += s/2;
+		}
+	}
+	else if (size == iconSizeLarge) {
+		s = wxSystemSettings::GetMetric(wxSYS_ICON_X);
 		if (s <= 0)
 			s = 48;
 		else
-			s *= 3;
+			s += s/2;
 	}
 	else {
 		s = wxSystemSettings::GetMetric(wxSYS_ICON_X);
@@ -337,4 +346,19 @@ wxSize CThemeProvider::GetIconSize(enum iconSize size)
 	}
 
 	return wxSize(s, s);
+}
+
+wxSize CThemeProvider::GetIconSize(wxString const& str)
+{
+	wxSize iconSize;
+	if (str == _T("24x24"))
+		return CThemeProvider::GetIconSize(iconSize24);
+	else if (str == _T("32x32"))
+		iconSize = CThemeProvider::GetIconSize(iconSizeNormal);
+	else if (str == _T("48x48"))
+		iconSize = CThemeProvider::GetIconSize(iconSizeLarge);
+	else
+		iconSize = CThemeProvider::GetIconSize(iconSizeSmall);
+
+	return iconSize;
 }

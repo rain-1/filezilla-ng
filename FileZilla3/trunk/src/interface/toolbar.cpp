@@ -25,15 +25,8 @@ CToolBar::~CToolBar()
 CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 {
 	{
-		wxSize iconSize;
 		wxString str = COptions::Get()->GetOption(OPTION_THEME_ICONSIZE);
-		if (str == _T("32x32"))
-			iconSize = CThemeProvider::GetIconSize(iconSizeNormal);
-		else if (str == _T("48x48"))
-			iconSize = CThemeProvider::GetIconSize(iconSizeLarge);
-		else
-			iconSize = CThemeProvider::GetIconSize(iconSizeSmall);
-
+		wxSize iconSize = CThemeProvider::GetIconSize(str);
 		wxToolBarXmlHandlerEx::SetIconSize(iconSize);
 	}
 
