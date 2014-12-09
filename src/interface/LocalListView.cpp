@@ -1015,10 +1015,8 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 #endif
 
 	const int code = event.GetKeyCode();
-	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE)
-	{
-		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
-		{
+	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE) {
+		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1) {
 			wxBell();
 			return;
 		}
@@ -1026,21 +1024,21 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 		wxCommandEvent tmp;
 		OnMenuDelete(tmp);
 	}
-	else if (code == WXK_F2)
-	{
+	else if (code == WXK_F2) {
 		wxCommandEvent tmp;
 		OnMenuRename(tmp);
 	}
-	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey)
-	{
+	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey) {
 		wxListEvent evt;
 		evt.m_itemIndex = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
 		OnItemActivated(evt);
 	}
-	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey)
-	{
+	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey) {
 		wxCommandEvent cmdEvent;
 		OnMenuUpload(cmdEvent);
+	}
+	else if (code == 'N' && event.GetModifiers() == (wxMOD_CONTROL | wxMOD_SHIFT)) {
+		MenuMkdir();
 	}
 	else
 		event.Skip();
