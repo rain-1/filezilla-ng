@@ -366,7 +366,7 @@ int CFileZillaEnginePrivate::Delete(const CDeleteCommand& command)
 		m_pLogging->LogMessage(MessageType::Status, _("Deleting \"%s\""), command.GetPath().FormatFilename(command.GetFiles().front()));
 	}
 	else {
-		m_pLogging->LogMessage(MessageType::Status, _("Deleting %d files from \"%s\""), command.GetFiles().size(), command.GetPath().GetPath());
+		m_pLogging->LogMessage(MessageType::Status, _("Deleting %u files from \"%s\""), static_cast<unsigned int>(command.GetFiles().size()), command.GetPath().GetPath());
 	}
 	return m_pControlSocket->Delete(command.GetPath(), command.GetFiles());
 }
