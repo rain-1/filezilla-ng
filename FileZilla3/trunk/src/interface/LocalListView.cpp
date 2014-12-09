@@ -1038,7 +1038,8 @@ void CLocalListView::OnKeyDown(wxKeyEvent& event)
 		OnMenuUpload(cmdEvent);
 	}
 	else if (code == 'N' && event.GetModifiers() == (wxMOD_CONTROL | wxMOD_SHIFT)) {
-		MenuMkdir();
+		wxCommandEvent cmdEvent;
+		OnMenuMkdir(cmdEvent);
 	}
 	else
 		event.Skip();
