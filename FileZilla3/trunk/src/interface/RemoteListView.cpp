@@ -1347,8 +1347,7 @@ void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent&)
 // Returns the name of the new directory
 CServerPath CRemoteListView::MenuMkdir()
 {
-	if (!m_pDirectoryListing || !m_pState->IsRemoteIdle())
-	{
+	if (!m_pDirectoryListing || !m_pState->IsRemoteIdle()) {
 		wxBell();
 		return CServerPath();
 	}
@@ -1363,8 +1362,7 @@ CServerPath CRemoteListView::MenuMkdir()
 	// replace it with "New directory" later. This way we get the exact position of
 	// "New directory" and can preselect it in the dialog.
 	wxString tmpName = _T("25CF809E56B343b5A12D1F0466E3B37A49A9087FDCF8412AA9AF8D1E849D01CF");
-	if (path.AddSegment(tmpName))
-	{
+	if (path.AddSegment(tmpName)) {
 		wxString pathName = path.GetPath();
 		int pos = pathName.Find(tmpName);
 		wxASSERT(pos != -1);
@@ -1387,8 +1385,7 @@ CServerPath CRemoteListView::MenuMkdir()
 	}
 
 	path = m_pDirectoryListing->path;
-	if (!path.ChangePath(dlg.GetValue()))
-	{
+	if (!path.ChangePath(dlg.GetValue())) {
 		wxBell();
 		return CServerPath();
 	}
@@ -1401,8 +1398,7 @@ CServerPath CRemoteListView::MenuMkdir()
 
 void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -1412,8 +1408,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 	bool selected_link = false;
 
 	long item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (!item)
 			continue;
@@ -1563,10 +1558,8 @@ void CRemoteListView::OnKeyDown(wxKeyEvent& event)
 #endif
 
 	int code = event.GetKeyCode();
-	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE)
-	{
-		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
-		{
+	if (code == WXK_DELETE || code == WXK_NUMPAD_DELETE) {
+		if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1) {
 			wxBell();
 			return;
 		}
@@ -1575,21 +1568,21 @@ void CRemoteListView::OnKeyDown(wxKeyEvent& event)
 		OnMenuDelete(tmp);
 		return;
 	}
-	else if (code == WXK_F2)
-	{
+	else if (code == WXK_F2) {
 		wxCommandEvent tmp;
 		OnMenuRename(tmp);
 	}
-	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey)
-	{
+	else if (code == WXK_RIGHT && event.GetModifiers() == CursorModifierKey) {
 		wxListEvent evt;
 		evt.m_itemIndex = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
 		OnItemActivated(evt);
 	}
-	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey)
-	{
+	else if (code == WXK_DOWN && event.GetModifiers() == CursorModifierKey) {
 		wxCommandEvent cmdEvent;
 		OnMenuDownload(cmdEvent);
+	}
+	else if (code == 'N' && event.GetModifiers() == (wxMOD_CONTROL | wxMOD_SHIFT)) {
+		MenuMkdir();
 	}
 	else
 		event.Skip();
