@@ -229,10 +229,9 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 				else {
 					// For the notifications already in the request queue, we have to set the queue action directly
 					for (auto iter = ++m_requestList.begin(); iter != m_requestList.end(); ++iter) {
-						if (notification.GetRequestID() != reqId_fileexists)
+						if (!iter->pNotification || iter->pNotification->GetRequestID() != reqId_fileexists)
 							continue;
-
-						auto & p = static_cast<CFileExistsNotification&>(*entry.pNotification.get());
+						auto & p = static_cast<CFileExistsNotification&>(*iter->pNotification.get());
 
 						if (!directionOnly || notification.download == p.download)
 							p.overwriteAction = CFileExistsNotification::OverwriteAction(action);
