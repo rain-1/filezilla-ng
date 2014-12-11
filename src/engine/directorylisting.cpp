@@ -113,7 +113,7 @@ CDirentry& CDirectoryListing::operator[](unsigned int index)
 	return m_entries.Get()[index].Get();
 }
 
-void CDirectoryListing::Assign(const std::list<CDirentry> &entries)
+void CDirectoryListing::Assign(std::deque<CRefcountObject<CDirentry>> &entries)
 {
 	m_entryCount = entries.size();
 
@@ -123,15 +123,14 @@ void CDirectoryListing::Assign(const std::list<CDirentry> &entries)
 
 	m_flags &= ~(listing_has_dirs | listing_has_perms | listing_has_usergroup);
 
-	for (std::list<CDirentry>::const_iterator iter = entries.begin(); iter != entries.end(); ++iter)
-	{
-		if (iter->is_dir())
+	for (auto & entry : entries) {
+		if (entry->is_dir())
 			m_flags |= listing_has_dirs;
-		if (!iter->permissions->empty())
+		if (!entry->permissions->empty())
 			m_flags |= listing_has_perms;
-		if (!iter->ownerGroup->empty())
+		if (!entry->ownerGroup->empty())
 			m_flags |= listing_has_usergroup;
-		own_entries.push_back(CRefcountObject<CDirentry>(*iter));
+		own_entries.emplace_back(std::move(entry));
 	}
 
 	m_searchmap_case.clear();

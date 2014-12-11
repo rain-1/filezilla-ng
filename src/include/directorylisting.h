@@ -121,7 +121,7 @@ public:
 
 	CMonotonicTime m_firstListTime;
 
-	void Assign(const std::list<CDirentry> &entries);
+	void Assign(std::deque<CRefcountObject<CDirentry>> & entries);
 
 	bool RemoveEntry(unsigned int index);
 

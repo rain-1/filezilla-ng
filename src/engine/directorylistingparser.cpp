@@ -435,6 +435,7 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 	, m_maybeMultilineVms(false)
 	, m_listingEncoding(encoding)
 	, sftp_mode_(sftp_mode)
+	, today_(wxDateTime::Today())
 {
 	if (m_MonthNamesMap.empty()) {
 		//Fill the month names map
@@ -718,14 +719,12 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	listing.path = path;
 	listing.m_firstListTime = CMonotonicTime::Now();
 
-	if (!ParseData(false))
-	{
+	if (!ParseData(false)){
 		listing.m_flags |= CDirectoryListing::listing_failed;
 		return listing;
 	}
 
-	if (!m_fileList.empty())
-	{
+	if (!m_fileList.empty()) {
 		wxASSERT(m_entryList.empty());
 
 		listing.SetCount(m_fileList.size());
@@ -739,8 +738,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 			listing[i] = entry;
 		}
 	}
-	else
-	{
+	else {
 		listing.Assign(m_entryList);
 	}
 
@@ -749,7 +747,9 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 
 bool CDirectoryListingParser::ParseLine(CLine *pLine, const enum ServerType serverType, bool concatenated)
 {
-	CDirentry entry;
+	CRefcountObject<CDirentry> refEntry;
+	CDirentry & entry = refEntry.Get();
+
 	bool res;
 	int ires;
 
@@ -876,9 +876,12 @@ done:
 		}
 	}
 
-	entry.time += wxTimeSpan(0, m_server.GetTimezoneOffset(), 0, 0);
+	auto const timezoneOffset = m_server.GetTimezoneOffset();
+	if (timezoneOffset) {
+		entry.time += wxTimeSpan(0, timezoneOffset, 0, 0);
+	}
 
-	m_entryList.emplace_back(std::move(entry));
+	m_entryList.emplace_back(std::move(refEntry));
 
 skip:
 	m_maybeMultilineVms = false;
@@ -2655,25 +2658,38 @@ int CDirectoryListingParser::ParseAsMlsd(CLine *pLine, CDirentry &entry)
 		else if (factname == _T("modify") ||
 			(!entry.has_date() && factname == _T("create")))
 		{
-			wxDateTime dateTime;
-			const wxChar* time = dateTime.ParseFormat(value, _T("%Y%m%d"));
-
-			if (!time)
-				return 0;
-
-			if (*time) {
-				if (!dateTime.ParseFormat(time, _T("%H%M%S"), dateTime))
-					return 0;
-				entry.time = CDateTime(dateTime.FromTimezone(wxDateTime::UTC), CDateTime::seconds);
+			wxChar const* fmt;
+			CDateTime::Accuracy accuracy;
+			if (value.size() >= 14) {
+				fmt = _T("%Y%m%d%H%M%S");
+				accuracy = CDateTime::seconds;
+			}
+			else if (value.size() >= 12) {
+				fmt = _T("%Y%m%d%H%M");
+				accuracy = CDateTime::minutes;
+			}
+			else if (value.size() >= 10) {
+				fmt = _T("%Y%m%d%H");
+				accuracy = CDateTime::hours;
 			}
 			else {
-				entry.time = CDateTime(dateTime.FromTimezone(wxDateTime::UTC), CDateTime::days);
+				fmt = _T("%Y%m%d");
+				accuracy = CDateTime::days;
+			}
+
+			wxDateTime dateTime(today_);
+			if (!dateTime.ParseFormat(value, fmt))
+				return 0;
+
+			if (accuracy != CDateTime::days) {
+				entry.time = CDateTime(dateTime.FromTimezone(wxDateTime::UTC), accuracy);
+			}
+			else {
+				entry.time = CDateTime(dateTime, accuracy);
 			}
 		}
-		else if (factname == _T("perm"))
-		{
-			if (!value.empty())
-			{
+		else if (factname == _T("perm")) {
+			if (!value.empty()) {
 				if (!permissions.empty())
 					permissions = value + _T(" (") + permissions + _T(")");
 				else
