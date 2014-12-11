@@ -45,7 +45,7 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 			enum CFileExistsNotification::OverwriteAction action = pFileExistsNotification->overwriteAction;
 			if (action == CFileExistsNotification::unknown)
 				action = CDefaultFileExistsDlg::GetDefault(pFileExistsNotification->download);
-			if (action ==CFileExistsNotification::unknown) {
+			if (action == CFileExistsNotification::unknown) {
 				int option = COptions::Get()->GetOptionVal(pFileExistsNotification->download ? OPTION_FILEEXISTS_DOWNLOAD : OPTION_FILEEXISTS_UPLOAD);
 				if (option < CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
 					action = CFileExistsNotification::unknown;
@@ -129,158 +129,22 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 
 	t_queueEntry &entry = m_requestList.front();
 
-	if (!entry.pEngine->IsPendingAsyncRequestReply(entry.pNotification)) {
+	if (!entry.pEngine || !entry.pEngine->IsPendingAsyncRequestReply(entry.pNotification)) {
 		m_requestList.pop_front();
 		return true;
 	}
 
 	if (entry.pNotification->GetRequestID() == reqId_fileexists) {
-		auto & notification = static_cast<CFileExistsNotification&>(*entry.pNotification.get());
-
-		// Get the action, go up the hierarchy till one is found
-		enum CFileExistsNotification::OverwriteAction action = notification.overwriteAction;
-		if (action == CFileExistsNotification::unknown)
-			action = CDefaultFileExistsDlg::GetDefault(notification.download);
-		if (action == CFileExistsNotification::unknown) {
-			int option = COptions::Get()->GetOptionVal(notification.download ? OPTION_FILEEXISTS_DOWNLOAD : OPTION_FILEEXISTS_UPLOAD);
-			if (option <= CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
-				action = CFileExistsNotification::ask;
-			else
-				action = (enum CFileExistsNotification::OverwriteAction)option;
+		if (!ProcessFileExistsNotification(entry)) {
+			return false;
 		}
-
-		if (action == CFileExistsNotification::ask) {
-			if (!CheckWindowState())
-				return false;
-
-			CFileExistsDlg dlg(&notification);
-			dlg.Create(m_pMainFrame);
-			int res = dlg.ShowModal();
-
-			if (res == wxID_OK) {
-				action = dlg.GetAction();
-
-				bool directionOnly, queueOnly;
-				if (dlg.Always(directionOnly, queueOnly)) {
-					if (!queueOnly) {
-						if (notification.download || !directionOnly)
-							CDefaultFileExistsDlg::SetDefault(true, action);
-
-						if (!notification.download || !directionOnly)
-							CDefaultFileExistsDlg::SetDefault(false, action);
-					}
-					else {
-						// For the notifications already in the request queue, we have to set the queue action directly
-						for (auto iter = ++m_requestList.begin(); iter != m_requestList.end(); ++iter) {
-							if (notification.GetRequestID() != reqId_fileexists)
-								continue;
-
-							auto & p = static_cast<CFileExistsNotification&>(*entry.pNotification.get());
-
-							if (!directionOnly || notification.download == p.download)
-								p.overwriteAction = CFileExistsNotification::OverwriteAction(action);
-						}
-
-						TransferDirection direction;
-						if (directionOnly) {
-							if (notification.download)
-								direction = TransferDirection::download;
-							else
-								direction = TransferDirection::upload;
-						}
-						else
-							direction = TransferDirection::both;
-
-						if (m_pQueueView)
-							m_pQueueView->SetDefaultFileExistsAction(action, direction);
-					}
-				}
-			}
-			else
-				action = CFileExistsNotification::skip;
-		}
-
-		if (action == CFileExistsNotification::unknown || action == CFileExistsNotification::ask)
-			action = CFileExistsNotification::skip;
-
-		if (action == CFileExistsNotification::resume && notification.ascii) {
-			// Check if resuming ascii files is allowed
-			if (!COptions::Get()->GetOptionVal(OPTION_ASCIIRESUME))
-				// Overwrite instead
-				action = CFileExistsNotification::overwrite;
-		}
-
-		switch (action)
-		{
-		case CFileExistsNotification::rename:
-			{
-				if (!CheckWindowState())
-					return false;
-
-				wxString msg;
-				wxString defaultName;
-				if (notification.download) {
-					msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), notification.localFile);
-					wxFileName fn = notification.localFile;
-					defaultName = fn.GetFullName();
-				}
-				else {
-					wxString fullName = notification.remotePath.GetPath() + notification.remoteFile;
-					msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), fullName);
-					defaultName = notification.remoteFile;
-				}
-				wxTextEntryDialog dlg(m_pMainFrame, msg, _("Rename file"), defaultName);
-
-				// Repeat until user cancels or enters a new name
-				for (;;) {
-					int res = dlg.ShowModal();
-					if (res == wxID_OK) {
-						if (dlg.GetValue().empty())
-							continue; // Disallow empty names
-						if (dlg.GetValue() == defaultName) {
-							wxMessageDialog dlg2(m_pMainFrame, _("You did not enter a new name for the file. Overwrite the file instead?"), _("Filename unchanged"),
-								wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION | wxCANCEL);
-							int res = dlg2.ShowModal();
-
-							if (res == wxID_CANCEL)
-								notification.overwriteAction = CFileExistsNotification::skip;
-							else if (res == wxID_NO)
-								continue;
-							else
-								notification.overwriteAction = CFileExistsNotification::skip;
-						}
-						else {
-							notification.overwriteAction = CFileExistsNotification::rename;
-							notification.newName = dlg.GetValue();
-
-							// If request got processed successfully, notify queue about filename change
-							if (entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification)) && m_pQueueView)
-								m_pQueueView->RenameFileInTransfer(entry.pEngine, dlg.GetValue(), notification.download);
-
-							// Jump near end of function
-							goto ProcessNextRequest_done;
-						}
-					}
-					else
-						notification.overwriteAction = CFileExistsNotification::skip;
-					break;
-				}
-			}
-			break;
-		default:
-			notification.overwriteAction = action;
-			break;
-		}
-
-		entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification));
 	}
 	else if (entry.pNotification->GetRequestID() == reqId_interactiveLogin) {
 		auto & notification = static_cast<CInteractiveLoginNotification&>(*entry.pNotification.get());
 
 		if (CLoginManager::Get().GetPassword(notification.server, true, wxString(), notification.GetChallenge()))
 			notification.passwordSet = true;
-		else
-		{
+		else {
 			// Retry with prompt
 
 			if (!CheckWindowState())
@@ -320,10 +184,150 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification));
 	}
 
-ProcessNextRequest_done:
 	RecheckDefaults();
 	m_requestList.pop_front();
 
+	return true;
+}
+
+bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
+{
+	auto & notification = static_cast<CFileExistsNotification&>(*entry.pNotification.get());
+
+	// Get the action, go up the hierarchy till one is found
+	enum CFileExistsNotification::OverwriteAction action = notification.overwriteAction;
+	if (action == CFileExistsNotification::unknown)
+		action = CDefaultFileExistsDlg::GetDefault(notification.download);
+	if (action == CFileExistsNotification::unknown) {
+		int option = COptions::Get()->GetOptionVal(notification.download ? OPTION_FILEEXISTS_DOWNLOAD : OPTION_FILEEXISTS_UPLOAD);
+		if (option <= CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
+			action = CFileExistsNotification::ask;
+		else
+			action = (enum CFileExistsNotification::OverwriteAction)option;
+	}
+
+	if (action == CFileExistsNotification::ask) {
+		if (!CheckWindowState())
+			return false;
+
+		CFileExistsDlg dlg(&notification);
+		dlg.Create(m_pMainFrame);
+		int res = dlg.ShowModal();
+
+		if (res == wxID_OK) {
+			action = dlg.GetAction();
+
+			bool directionOnly, queueOnly;
+			if (dlg.Always(directionOnly, queueOnly)) {
+				if (!queueOnly) {
+					if (notification.download || !directionOnly)
+						CDefaultFileExistsDlg::SetDefault(true, action);
+
+					if (!notification.download || !directionOnly)
+						CDefaultFileExistsDlg::SetDefault(false, action);
+				}
+				else {
+					// For the notifications already in the request queue, we have to set the queue action directly
+					for (auto iter = ++m_requestList.begin(); iter != m_requestList.end(); ++iter) {
+						if (notification.GetRequestID() != reqId_fileexists)
+							continue;
+
+						auto & p = static_cast<CFileExistsNotification&>(*entry.pNotification.get());
+
+						if (!directionOnly || notification.download == p.download)
+							p.overwriteAction = CFileExistsNotification::OverwriteAction(action);
+					}
+
+					TransferDirection direction;
+					if (directionOnly) {
+						if (notification.download)
+							direction = TransferDirection::download;
+						else
+							direction = TransferDirection::upload;
+					}
+					else
+						direction = TransferDirection::both;
+
+					if (m_pQueueView)
+						m_pQueueView->SetDefaultFileExistsAction(action, direction);
+				}
+			}
+		}
+		else
+			action = CFileExistsNotification::skip;
+	}
+
+	if (action == CFileExistsNotification::unknown || action == CFileExistsNotification::ask)
+		action = CFileExistsNotification::skip;
+
+	if (action == CFileExistsNotification::resume && notification.ascii) {
+		// Check if resuming ascii files is allowed
+		if (!COptions::Get()->GetOptionVal(OPTION_ASCIIRESUME))
+			// Overwrite instead
+			action = CFileExistsNotification::overwrite;
+	}
+
+	switch (action)
+	{
+		case CFileExistsNotification::rename:
+		{
+			if (!CheckWindowState())
+				return false;
+
+			wxString msg;
+			wxString defaultName;
+			if (notification.download) {
+				msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), notification.localFile);
+				wxFileName fn = notification.localFile;
+				defaultName = fn.GetFullName();
+			}
+			else {
+				wxString fullName = notification.remotePath.GetPath() + notification.remoteFile;
+				msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), fullName);
+				defaultName = notification.remoteFile;
+			}
+			wxTextEntryDialog dlg(m_pMainFrame, msg, _("Rename file"), defaultName);
+
+			// Repeat until user cancels or enters a new name
+			for (;;) {
+				int res = dlg.ShowModal();
+				if (res == wxID_OK) {
+					if (dlg.GetValue().empty())
+						continue; // Disallow empty names
+					if (dlg.GetValue() == defaultName) {
+						wxMessageDialog dlg2(m_pMainFrame, _("You did not enter a new name for the file. Overwrite the file instead?"), _("Filename unchanged"),
+							wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION | wxCANCEL);
+						int res = dlg2.ShowModal();
+
+						if (res == wxID_CANCEL)
+							notification.overwriteAction = CFileExistsNotification::skip;
+						else if (res == wxID_NO)
+							continue;
+						else
+							notification.overwriteAction = CFileExistsNotification::skip;
+					}
+					else {
+						notification.overwriteAction = CFileExistsNotification::rename;
+						notification.newName = dlg.GetValue();
+
+						// If request got processed successfully, notify queue about filename change
+						if (entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification)) && m_pQueueView)
+							m_pQueueView->RenameFileInTransfer(entry.pEngine, dlg.GetValue(), notification.download);
+						return true;
+					}
+				}
+				else
+					notification.overwriteAction = CFileExistsNotification::skip;
+				break;
+			}
+		}
+		break;
+		default:
+			notification.overwriteAction = action;
+			break;
+	}
+
+	entry.pEngine->SetAsyncRequestReply(std::move(entry.pNotification));
 	return true;
 }
 
@@ -334,10 +338,8 @@ void CAsyncRequestQueue::ClearPending(const CFileZillaEngine *pEngine)
 
 	// Remove older requests coming from the same engine, but never the first
 	// entry in the list as that one displays a dialog at this moment.
-	for (auto iter = ++m_requestList.begin(); iter != m_requestList.end(); ++iter)
-	{
-		if (iter->pEngine == pEngine)
-		{
+	for (auto iter = ++m_requestList.begin(); iter != m_requestList.end(); ++iter) {
+		if (iter->pEngine == pEngine) {
 			m_requestList.erase(iter);
 
 			// At most one pending request per engine possible,

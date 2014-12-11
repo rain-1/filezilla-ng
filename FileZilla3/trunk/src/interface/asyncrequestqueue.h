@@ -45,6 +45,8 @@ protected:
 	};
 	std::list<t_queueEntry> m_requestList;
 
+	bool ProcessFileExistsNotification(t_queueEntry &entry);
+
 	DECLARE_EVENT_TABLE()
 	void OnProcessQueue(wxCommandEvent &event);
 	void OnTimer(wxTimerEvent& event);
