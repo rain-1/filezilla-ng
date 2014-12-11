@@ -125,7 +125,7 @@ protected:
 	int m_currentOffset;
 
 	std::list<t_list> m_DataList;
-	std::list<CDirentry> m_entryList;
+	std::deque<CRefcountObject<CDirentry>> m_entryList;
 	wxLongLong m_totalData;
 
 	CLine *m_prevLine;
@@ -142,6 +142,10 @@ protected:
 	listingEncoding::type m_listingEncoding;
 
 	bool sftp_mode_{};
+
+	// If not passing a default date/time to wxDateTime::ParseFormat, it internaly uses today as reference.
+	// Getting today is slow, so cache it.
+	wxDateTime const today_;
 };
 
 #endif

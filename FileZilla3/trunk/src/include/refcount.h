@@ -13,7 +13,8 @@ template<class T> class CRefcountObject final
 {
 public:
 	CRefcountObject();
-	CRefcountObject(const CRefcountObject<T>& v);
+	CRefcountObject(CRefcountObject<T> const& v);
+	CRefcountObject(CRefcountObject<T> && v);
 	explicit CRefcountObject(const T& v);
 
 	void clear();
@@ -32,7 +33,8 @@ public:
 
 	inline bool operator!=(const CRefcountObject<T>& cmp) const { return !(*this == cmp); }
 
-	CRefcountObject<T>& operator=(const CRefcountObject<T>& v);
+	CRefcountObject<T>& operator=(CRefcountObject<T> const& v);
+	CRefcountObject<T>& operator=(CRefcountObject<T> && v);
 protected:
 	std::shared_ptr<T> data_;
 };
@@ -85,9 +87,14 @@ template<class T> CRefcountObject<T>::CRefcountObject()
 	data_ = std::make_shared<T>();
 }
 
-template<class T> CRefcountObject<T>::CRefcountObject(const CRefcountObject<T>& v)
+template<class T> CRefcountObject<T>::CRefcountObject(CRefcountObject<T> const& v)
+	: data_(v.data_)
 {
-	data_ = v.data_;
+}
+
+template<class T> CRefcountObject<T>::CRefcountObject(CRefcountObject<T> && v)
+	: data_(std::move(v.data_))
+{
 }
 
 template<class T> CRefcountObject<T>::CRefcountObject(const T& v)
@@ -104,9 +111,15 @@ template<class T> T& CRefcountObject<T>::Get()
 	return *data_.get();
 }
 
-template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(const CRefcountObject<T>& v)
+template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(CRefcountObject<T> const& v)
 {
 	data_ = v.data_;
+	return *this;
+}
+
+template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(CRefcountObject<T> && v)
+{
+	data_ = std::move(v.data_);
 	return *this;
 }
 
