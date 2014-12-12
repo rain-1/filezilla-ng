@@ -2956,8 +2956,24 @@
             <flag>wxGROW</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxCheckBox" name="ID_CASE">
-              <label>Conditions are c&amp;ase sensitive</label>
+            <object class="wxFlexGridSizer">
+              <rows>1</rows>
+              <hgap>5</hgap>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_CASE">
+                  <label>Conditions are c&amp;ase sensitive</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_FIND_FILES">
+                  <label>Find &amp;files</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_FIND_DIRS">
+                  <label>Find d&amp;irectories</label>
+                </object>
+              </object>
             </object>
           </object>
           <cols>1</cols>

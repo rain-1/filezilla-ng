@@ -838,7 +838,7 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 		}
 	}
 
-	if (filter.matchType != CFilter::any)
+	if (filter.matchType != CFilter::any || filter.filters.empty())
 		return true;
 
 	return false;
