@@ -12,6 +12,7 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 #include "window_state_manager.h"
+#include "xrc_helper.h"
 
 class CSearchFileData : public CGenericFileData, public CDirentry
 {
@@ -246,7 +247,7 @@ bool CSearchDialog::Load()
 
 	const CServerPath path = m_pState->GetRemotePath();
 	if (!path.empty())
-		XRCCTRL(*this, "ID_PATH", wxTextCtrl)->ChangeValue(path.GetPath());
+		xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, path.GetPath());
 
 	SetCtrlState();
 
@@ -257,7 +258,10 @@ bool CSearchDialog::Load()
 
 	LoadConditions();
 	EditFilter(m_search_filter);
-	XRCCTRL(*this, "ID_CASE", wxCheckBox)->SetValue(m_search_filter.matchCase);
+
+	xrc_call(*this, "ID_CASE", &wxCheckBox::SetValue, m_search_filter.matchCase);
+	xrc_call(*this, "ID_FIND_FILES", &wxCheckBox::SetValue, m_search_filter.filterFiles);
+	xrc_call(*this, "ID_FIND_DIRS", &wxCheckBox::SetValue, m_search_filter.filterDirs);
 
 	return true;
 }
@@ -281,18 +285,15 @@ void CSearchDialog::Run()
 	m_pState->UnblockHandlers(STATECHANGE_REMOTE_DIR);
 	m_pState->UnblockHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
 
-	if (m_searching)
-	{
-		if (!m_pState->IsRemoteIdle())
-		{
+	if (m_searching) {
+		if (!m_pState->IsRemoteIdle()) {
 			m_pState->m_pCommandQueue->Cancel();
 			m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 		}
 		if (!m_original_dir.empty())
 			m_pState->ChangeRemoteDir(m_original_dir);
 	}
-	else
-	{
+	else {
 		if (m_pState->IsRemoteIdle() && !m_original_dir.empty())
 			m_pState->ChangeRemoteDir(m_original_dir);
 	}
@@ -330,7 +331,7 @@ void CSearchDialog::ProcessDirectoryListing()
 	for (unsigned int i = 0; i < listing->GetCount(); ++i) {
 		const CDirentry& entry = (*listing)[i];
 
-		if (!m_search_filter.filters.empty() && !CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.time))
+		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.time))
 			continue;
 
 		CSearchFileData data;
@@ -390,7 +391,9 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 		wxMessageBoxEx(_("Invalid regular expression in search conditions."), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
-	m_search_filter.matchCase = XRCCTRL(*this, "ID_CASE", wxCheckBox)->GetValue();
+	m_search_filter.matchCase = xrc_call(*this, "ID_CASE", &wxCheckBox::GetValue);
+	m_search_filter.filterFiles = xrc_call(*this, "ID_FIND_FILES", &wxCheckBox::GetValue);
+	m_search_filter.filterDirs = xrc_call(*this, "ID_FIND_DIRS", &wxCheckBox::GetValue);
 
 	// Delete old results
 	m_results->ClearSelection();
