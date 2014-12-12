@@ -346,11 +346,11 @@ void CSearchDialog::ProcessDirectoryListing()
 			m_results->GetFilelistStatusBar()->AddFile(entry.size);
 	}
 
-	m_results->SetItemCount(old_count + added);
-
-	m_results->SortList(-1, -1, true);
-
-	m_results->RefreshListOnly(false);
+	if (added) {
+		m_results->SetItemCount(old_count + added);
+		m_results->SortList(-1, -1, true);
+		m_results->RefreshListOnly(false);
+	}
 }
 
 void CSearchDialog::OnSearch(wxCommandEvent& event)
