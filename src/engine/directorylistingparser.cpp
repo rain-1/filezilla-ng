@@ -2086,7 +2086,8 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		m_currentOffset = currentOffset;
 
 		// Reslen is now the length of the line, including any terminating whitespace
-		char *res = new char[reslen + 1];
+		int const buflen = reslen + 1;
+		char *res = new char[buflen];
 		res[reslen] = 0;
 
 		int respos = 0;
@@ -2125,14 +2126,13 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		else
 			m_DataList.erase(m_DataList.begin(), iter);
 
+		size_t lineLength{};
 		wxChar* buffer;
-		if (m_pControlSocket)
-		{
-			buffer = m_pControlSocket->ConvToLocalBuffer(res);
+		if (m_pControlSocket) {
+			buffer = m_pControlSocket->ConvToLocalBuffer(res, buflen, lineLength);
 			m_pControlSocket->LogMessageRaw(MessageType::RawList, buffer);
 		}
-		else
-		{
+		else {
 			wxString str(res, wxConvUTF8);
 			if (str.empty())
 			{
@@ -2140,18 +2140,18 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 				if (str.empty())
 					str = wxString(res, wxConvISO8859_1);
 			}
+			lineLength = str.Len() + 1;
 			buffer = new wxChar[str.Len() + 1];
 			wxStrcpy(buffer, str.c_str());
 		}
 		delete [] res;
 
-		if (!buffer)
-		{
+		if (!buffer) {
 			// Line contained no usable data, start over
 			continue;
 		}
 
-		return new CLine(buffer, -1, emptylen);
+		return new CLine(buffer, lineLength - 1, emptylen);
 	}
 
 	return 0;

@@ -156,7 +156,7 @@ protected:
 
 		buffer[len] = 0;
 
-		const wxString line = m_pOwner->ConvToLocal(buffer);
+		const wxString line = m_pOwner->ConvToLocal(buffer, len + 1);
 		if (len && line.empty()) {
 			m_pOwner->LogMessage(MessageType::Error, _T("Failed to convert reply to local character set."));
 			error = true;

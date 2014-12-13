@@ -441,32 +441,28 @@ CFileTransferOpData::~CFileTransferOpData()
 {
 }
 
-wxString CControlSocket::ConvToLocal(const char* buffer)
+wxString CControlSocket::ConvToLocal(const char* buffer, size_t len)
 {
-	if (m_useUTF8)
-	{
-		wxChar* out = ConvToLocalBuffer(buffer, wxConvUTF8);
-		if (out)
-		{
-			wxString str = out;
+	size_t outLen{};
+	if (m_useUTF8) {
+		wxChar* out = ConvToLocalBuffer(buffer, wxConvUTF8, len, outLen);
+		if (out) {
+			wxString str(out, outLen - 1);
 			delete [] out;
 			return str;
 		}
 
 		// Fall back to local charset on error
-		if (m_pCurrentServer->GetEncodingType() != ENCODING_UTF8)
-		{
+		if (m_pCurrentServer->GetEncodingType() != ENCODING_UTF8) {
 			LogMessage(MessageType::Status, _("Invalid character sequence received, disabling UTF-8. Select UTF-8 option in site manager to force UTF-8."));
 			m_useUTF8 = false;
 		}
 	}
 
-	if (m_pCSConv)
-	{
-		wxChar* out = ConvToLocalBuffer(buffer, *m_pCSConv);
-		if (out)
-		{
-			wxString str = out;
+	if (m_pCSConv) {
+		wxChar* out = ConvToLocalBuffer(buffer, *m_pCSConv, len, outLen);
+		if (out) {
+			wxString str(out, outLen - 1);
 			delete [] out;
 			return str;
 		}
@@ -480,42 +476,53 @@ wxString CControlSocket::ConvToLocal(const char* buffer)
 	return str;
 }
 
-wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv)
+wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen)
 {
-	size_t len = conv.MB2WC(0, buffer, 0);
-	if (!len || len == wxCONV_FAILED)
+	wxASSERT(buffer && len > 0 && !buffer[len - 1]);
+	outlen = conv.ToWChar(0, 0, buffer, len);
+	if (!outlen || outlen == wxCONV_FAILED)
 		return 0;
 
-	wchar_t* unicode = new wchar_t[len + 1];
-	conv.MB2WC(unicode, buffer, len + 1);
+	wchar_t* unicode = new wchar_t[outlen];
+	conv.ToWChar(unicode, outlen, buffer, len);
 	return unicode;
 }
 
-wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer)
+wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen)
 {
-	if (m_useUTF8)
-	{
-		wxChar* res = ConvToLocalBuffer(buffer, wxConvUTF8);
+	if (m_useUTF8) {
+#ifdef __WXMSW__
+		// wxConvUTF8 is generic and slow.
+		// Use the highly optimized MultiByteToWideChar on Windows
+		// This helps when processing large directory listings.
+		int outlen2 = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, buffer, len, 0, 0);
+		if (outlen2 > 0) {
+			wxChar* out = new wxChar[outlen2];
+			MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, buffer, len, out, outlen2);
+			outlen = static_cast<size_t>(outlen2);
+			return out;
+		}
+#else
+		wxChar* res = ConvToLocalBuffer(buffer, wxConvUTF8, len, outlen);
 		if (res && *res)
 			return res;
+#endif
 
 		// Fall back to local charset on error
-		if (m_pCurrentServer->GetEncodingType() != ENCODING_UTF8)
-		{
+		if (m_pCurrentServer->GetEncodingType() != ENCODING_UTF8) {
 			LogMessage(MessageType::Status, _("Invalid character sequence received, disabling UTF-8. Select UTF-8 option in site manager to force UTF-8."));
 			m_useUTF8 = false;
 		}
 	}
 
-	if (m_pCSConv)
-	{
-		wxChar* res = ConvToLocalBuffer(buffer, *m_pCSConv);
+	if (m_pCSConv) {
+		wxChar* res = ConvToLocalBuffer(buffer, *m_pCSConv, len, outlen);
 		if (res && *res)
 			return res;
 	}
 
 	// Fallback: Conversion using current locale
-	wxChar* res = ConvToLocalBuffer(buffer, *wxConvCurrent);
+	wxChar* res = ConvToLocalBuffer(buffer, *wxConvCurrent, len, outlen);
 
 	return res;
 }
