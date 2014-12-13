@@ -258,7 +258,7 @@ void CFtpControlSocket::OnReceive()
 				}
 
 				p = 0;
-				wxString line = ConvToLocal(start);
+				wxString line = ConvToLocal(start, i + 1 - (start - m_receiveBuffer));
 				start = m_receiveBuffer + i + 1;
 
 				ParseLine(line);

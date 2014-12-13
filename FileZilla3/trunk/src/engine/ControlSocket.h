@@ -146,9 +146,9 @@ public:
 	const CServer* GetCurrentServer() const;
 
 	// Conversion function which convert between local and server charset.
-	wxString ConvToLocal(const char* buffer);
-	wxChar* ConvToLocalBuffer(const char* buffer);
-	wxChar* ConvToLocalBuffer(const char* buffer, wxMBConv& conv);
+	wxString ConvToLocal(const char* buffer, size_t len);
+	wxChar* ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen);
+	wxChar* ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen);
 	wxCharBuffer ConvToServer(const wxString& str, bool force_utf8 = false);
 
 	void SetActive(CFileZillaEngine::_direction direction);
