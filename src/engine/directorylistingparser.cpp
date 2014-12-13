@@ -876,9 +876,11 @@ done:
 		}
 	}
 
-	auto const timezoneOffset = m_server.GetTimezoneOffset();
-	if (timezoneOffset) {
-		entry.time += wxTimeSpan(0, timezoneOffset, 0, 0);
+	{
+		auto const timezoneOffset = m_server.GetTimezoneOffset();
+		if (timezoneOffset) {
+			entry.time += wxTimeSpan(0, timezoneOffset, 0, 0);
+		}
 	}
 
 	m_entryList.emplace_back(std::move(refEntry));
