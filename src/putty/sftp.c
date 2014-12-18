@@ -24,7 +24,6 @@ struct sftp_packet {
 };
 
 static const char *fxp_error_message;
-static char fxp_error_message_long[200];
 static int fxp_errtype;
 
 static void fxp_internal_error(char *msg);
@@ -49,15 +48,22 @@ static void sftp_pkt_addbyte(struct sftp_packet *pkt, unsigned char byte)
 {
     sftp_pkt_adddata(pkt, &byte, 1);
 }
+static void sftp_pkt_adduint32(struct sftp_packet *pkt,
+			       unsigned long value)
+{
+    unsigned char x[4];
+    PUT_32BIT(x, value);
+    sftp_pkt_adddata(pkt, x, 4);
+}
 static struct sftp_packet *sftp_pkt_init(int pkt_type)
 {
     struct sftp_packet *pkt;
     pkt = snew(struct sftp_packet);
     pkt->data = NULL;
     pkt->savedpos = -1;
+    pkt->length = 0;
     pkt->maxlen = 0;
-    pkt->length = 4;
-    sftp_pkt_ensure(pkt, 4);
+    sftp_pkt_adduint32(pkt, 0); /* length field will be filled in later */
     sftp_pkt_addbyte(pkt, (unsigned char) pkt_type);
     return pkt;
 }
@@ -67,13 +73,6 @@ static void sftp_pkt_addbool(struct sftp_packet *pkt, unsigned char value)
     sftp_pkt_adddata(pkt, &value, 1);
 }
 */
-static void sftp_pkt_adduint32(struct sftp_packet *pkt,
-			       unsigned long value)
-{
-    unsigned char x[4];
-    PUT_32BIT(x, value);
-    sftp_pkt_adddata(pkt, x, 4);
-}
 static void sftp_pkt_adduint64(struct sftp_packet *pkt, uint64 value)
 {
     unsigned char x[8];
@@ -116,28 +115,9 @@ static void sftp_pkt_addattrs(struct sftp_packet *pkt, struct fxp_attrs attrs)
     if (attrs.flags & SSH_FILEXFER_ATTR_PERMISSIONS) {
 	sftp_pkt_adduint32(pkt, attrs.permissions);
     }
-/*FZ: Does not work
-    if (attrs.flags & (SSH_FILEXFER_ATTR_CREATETIME | SSH_FILEXFER_ATTR_MODIFICATIONTIME)) {
-	if (attrs.flags & SSH_FILEXFER_ATTR_ACCESSTIME) {
-	    sftp_pkt_adduint32(pkt, attrs.atime.hi);
-	    sftp_pkt_adduint32(pkt, attrs.atime.lo);
-	}
-	if (attrs.flags & SSH_FILEXFER_ATTR_CREATETIME) {
-	    sftp_pkt_adduint32(pkt, attrs.ctime.hi);
-	    sftp_pkt_adduint32(pkt, attrs.ctime.lo);
-	}
-	if (attrs.flags & SSH_FILEXFER_ATTR_MODIFICATIONTIME) {
-	    sftp_pkt_adduint32(pkt, attrs.mtime.hi);
-	    sftp_pkt_adduint32(pkt, attrs.mtime.lo);
-	}
-    }
-    else
-*/
-    {
-	if (attrs.flags & SSH_FILEXFER_ATTR_ACMODTIME) {
-	    sftp_pkt_adduint32(pkt, attrs.atime.lo);
-	    sftp_pkt_adduint32(pkt, attrs.mtime.lo);
-	}
+    if (attrs.flags & SSH_FILEXFER_ATTR_ACMODTIME) {
+	sftp_pkt_adduint32(pkt, attrs.atime);
+	sftp_pkt_adduint32(pkt, attrs.mtime);
     }
     if (attrs.flags & SSH_FILEXFER_ATTR_EXTENDED) {
 	/*
@@ -173,7 +153,7 @@ static int sftp_pkt_getstring(struct sftp_packet *pkt,
     *p = NULL;
     if (pkt->length - pkt->savedpos < 4)
 	return 0;
-    *length = GET_32BIT(pkt->data + pkt->savedpos);
+    *length = toint(GET_32BIT(pkt->data + pkt->savedpos));
     pkt->savedpos += 4;
     if ((int)(pkt->length - pkt->savedpos) < *length || *length < 0) {
 	*length = 0;
@@ -203,38 +183,10 @@ static int sftp_pkt_getattrs(struct sftp_packet *pkt, struct fxp_attrs *ret)
 	if (!sftp_pkt_getuint32(pkt, &ret->permissions))
 	    return 0;
     }
-/*FZ: Does not work
-    if (ret->flags & (SSH_FILEXFER_ATTR_CREATETIME | SSH_FILEXFER_ATTR_MODIFICATIONTIME)) {
-	unsigned long hi, lo;
-	if (ret->flags & SSH_FILEXFER_ATTR_ACCESSTIME) {
-    	    if (!sftp_pkt_getuint32(pkt, &hi) ||
-		!sftp_pkt_getuint32(pkt, &lo))
-		return 0;
-	    ret->atime = uint64_make(hi, lo);
-	}
-	if (ret->flags & SSH_FILEXFER_ATTR_CREATETIME) {
-    	    if (!sftp_pkt_getuint32(pkt, &hi) ||
-		!sftp_pkt_getuint32(pkt, &lo))
-		return 0;
-	    ret->ctime = uint64_make(hi, lo);
-	}
-	if (ret->flags & SSH_FILEXFER_ATTR_MODIFICATIONTIME) {
-    	    if (!sftp_pkt_getuint32(pkt, &hi) ||
-		!sftp_pkt_getuint32(pkt, &lo))
-		return 0;
-	    ret->mtime = uint64_make(hi, lo);
-	}
-    }
-    else 
-*/
-    {
-	if (ret->flags & SSH_FILEXFER_ATTR_ACMODTIME) {
-    	    if (!sftp_pkt_getuint32(pkt, &ret->atime.lo) ||
-		!sftp_pkt_getuint32(pkt, &ret->mtime.lo))
-		return 0;
-	}
-	ret->atime.hi = ret->mtime.hi = 0;
-	ret->ctime.lo = ret->ctime.hi = 0;
+    if (ret->flags & SSH_FILEXFER_ATTR_ACMODTIME) {
+	if (!sftp_pkt_getuint32(pkt, &ret->atime) ||
+	    !sftp_pkt_getuint32(pkt, &ret->mtime))
+	    return 0;
     }
     if (ret->flags & SSH_FILEXFER_ATTR_EXTENDED) {
 	unsigned long count;
@@ -267,7 +219,7 @@ static void sftp_pkt_free(struct sftp_packet *pkt)
 int sftp_send(struct sftp_packet *pkt)
 {
     int ret;
-    PUT_32BIT(pkt->data, pkt->length-4);
+    PUT_32BIT(pkt->data, pkt->length - 4);
     ret = sftp_senddata(pkt->data, pkt->length);
     sftp_pkt_free(pkt);
     return ret;
@@ -409,11 +361,7 @@ struct sftp_request *sftp_find_request(struct sftp_packet *pktin)
     struct sftp_request *req;
 
     if (!pktin) {
-	char* tmp = dupcat("did not receive a valid SFTP packet: ", fxp_error_message, NULL);
-	strncpy(fxp_error_message_long, tmp, 200);
-	fxp_error_message_long[199] = 0;
-	sfree(tmp);
-	fxp_internal_error(fxp_error_message_long);
+	fxp_internal_error("did not receive a valid SFTP packet");
 	return NULL;
     }
 
@@ -425,7 +373,6 @@ struct sftp_request *sftp_find_request(struct sftp_packet *pktin)
 
     if (!req || !req->registered) {
 	fxp_internal_error("request ID mismatch");
-        sftp_pkt_free(pktin);
 	return NULL;
     }
 
@@ -607,7 +554,8 @@ char *fxp_realpath_recv(struct sftp_packet *pktin, struct sftp_request *req)
 /*
  * Open a file.
  */
-struct sftp_request *fxp_open_send(char *path, int type)
+struct sftp_request *fxp_open_send(char *path, int type,
+                                   struct fxp_attrs *attrs)
 {
     struct sftp_request *req = sftp_alloc_request();
     struct sftp_packet *pktout;
@@ -616,7 +564,10 @@ struct sftp_request *fxp_open_send(char *path, int type)
     sftp_pkt_adduint32(pktout, req->id);
     sftp_pkt_addstring(pktout, path);
     sftp_pkt_adduint32(pktout, type);
-    sftp_pkt_adduint32(pktout, 0);     /* (FIXME) empty ATTRS structure */
+    if (attrs)
+        sftp_pkt_addattrs(pktout, *attrs);
+    else
+        sftp_pkt_adduint32(pktout, 0); /* empty ATTRS structure */
     sftp_send(pktout);
 
     return req;
@@ -1192,7 +1143,7 @@ static struct fxp_xfer *xfer_init(struct fxp_handle *fh, uint64 offset)
     xfer->req_totalsize = 0;
     xfer->req_maxsize = 1048576*4;
     xfer->err = 0;
-    xfer->filesize = uint64_make(0xffffffffU, 0xffffffffU);
+    xfer->filesize = uint64_make(ULONG_MAX, ULONG_MAX);
     xfer->furthestdata = uint64_make(0, 0);
     fz_timer_init(&xfer->send_timer);
     xfer->sent_interval = 0;
@@ -1256,15 +1207,23 @@ struct fxp_xfer *xfer_download_init(struct fxp_handle *fh, uint64 offset)
     return xfer;
 }
 
+/*
+ * Returns INT_MIN to indicate that it didn't even get as far as
+ * fxp_read_recv and hence has not freed pktin.
+ */
 int xfer_download_gotpkt(struct fxp_xfer *xfer, struct sftp_packet *pktin)
 {
     struct sftp_request *rreq;
     struct req *rr;
 
     rreq = sftp_find_request(pktin);
+    if (!rreq)
+        return INT_MIN;            /* this packet doesn't even make sense */
     rr = (struct req *)fxp_get_userdata(rreq);
-    if (!rr)
-	return 0;		       /* this packet isn't ours */
+    if (!rr) {
+        fxp_internal_error("request ID is not part of the current download");
+	return INT_MIN;		       /* this packet isn't ours */
+    }
     rr->retlen = fxp_read_recv(pktin, rreq, rr->buffer, rr->len);
 #ifdef DEBUG_DOWNLOAD
     printf("read request %p has returned [%d]\n", rr, rr->retlen);
@@ -1435,6 +1394,10 @@ void xfer_upload_data(struct fxp_xfer *xfer, char *buffer, int len)
 #endif
 }
 
+/*
+ * Returns INT_MIN to indicate that it didn't even get as far as
+ * fxp_write_recv and hence has not freed pktin.
+ */
 int xfer_upload_gotpkt(struct fxp_xfer *xfer, struct sftp_packet *pktin)
 {
     struct sftp_request *rreq;
@@ -1442,9 +1405,13 @@ int xfer_upload_gotpkt(struct fxp_xfer *xfer, struct sftp_packet *pktin)
     int ret;
 
     rreq = sftp_find_request(pktin);
+    if (!rreq)
+        return INT_MIN;            /* this packet doesn't even make sense */
     rr = (struct req *)fxp_get_userdata(rreq);
-    if (!rr)
-	return 0;		       /* this packet isn't ours */
+    if (!rr) {
+        fxp_internal_error("request ID is not part of the current upload");
+	return INT_MIN;		       /* this packet isn't ours */
+    }
     ret = fxp_write_recv(pktin, rreq);
 #ifdef DEBUG_UPLOAD
     printf("write request %p has returned [%d]\n", rr, ret);

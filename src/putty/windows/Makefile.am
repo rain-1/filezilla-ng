@@ -13,14 +13,20 @@ libfzputtycommon_win_a_SOURCES = wincons.c \
 libfzsftp_win_a_CFLAGS = $(AM_CFLAGS) \
 			-D_WINDOWS -D_WIN32_IE=0x0500 -DWINVER=0x0500 -D_WIN32_WINDOWS=0x0410 -D_WIN32_WINNT=0x0500
 
-libfzsftp_win_a_SOURCES = winpgntc.c \
-		       winnet.c \
-		       windefs.c \
-		       wintime.c \
-		       winsftp.c \
-                       winhandl.c
+libfzsftp_win_a_SOURCES = \
+		windefs.c \
+                winhandl.c \
+		winhsock.c \
+		winnet.c \
+		winnpc.c \
+		winnps.c \
+		winpgntc.c \
+		winsecur.c \
+		winsftp.c \
+		winshare.c \
+		wintime.c
 
-noinst_HEADERS = winstuff.h rcstuff.h
+noinst_HEADERS = winsecur.h winstuff.h rcstuff.h
 
 dist_noinst_DATA = psftp.rc version.rc2 pscp.ico windows_manifest.xml
 

@@ -9,12 +9,14 @@ libfzputtycommon_ux_a_SOURCES = uxcons.c \
 
 libfzputtycommon_ux_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64
 
-libfzsftp_ux_a_SOURCES = uxsftp.c \
-			 uxnoise.c \
-			 uxagentc.c \
-			 uxsel.c \
-			 uxnet.c \
-			 uxproxy.c
+libfzsftp_ux_a_SOURCES = \
+			uxsftp.c \
+			uxnoise.c \
+			uxagentc.c \
+			uxsel.c \
+			uxnet.c \
+			uxproxy.c \
+			uxshare.c
 
 libfzsftp_ux_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64
 

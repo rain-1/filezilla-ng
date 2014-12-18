@@ -37,7 +37,11 @@ void set_busy_status(void *frontend, int status)
 {
 }
 
-void timer_change_notify(long next)
+void notify_remote_exit(void *frontend)
+{
+}
+
+void timer_change_notify(unsigned long next)
 {
 }
 
@@ -191,7 +195,7 @@ int askalg(void *frontend, const char *algtype, const char *algname,
  * Ask whether to wipe a session log file before writing to it.
  * Returns 2 for wipe, 1 for append, 0 for cancel (don't log).
  */
-int askappend(void *frontend, Filename filename,
+int askappend(void *frontend, Filename *filename,
 	      void (*callback)(void *ctx, int result), void *ctx)
 {
     HANDLE hin;
@@ -213,11 +217,11 @@ int askappend(void *frontend, Filename filename,
     char line[32];
 
     if (console_batch_mode) {
-	fprintf(stderr, msgtemplate_batch, FILENAME_MAX, filename.path);
+	fprintf(stderr, msgtemplate_batch, FILENAME_MAX, filename->path);
 	fflush(stderr);
 	return 0;
     }
-    fprintf(stderr, msgtemplate, FILENAME_MAX, filename.path);
+    fprintf(stderr, msgtemplate, FILENAME_MAX, filename->path);
     fflush(stderr);
 
     hin = GetStdHandle(STD_INPUT_HANDLE);
@@ -305,7 +309,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
     {
 	int i;
 	for (i = 0; i < (int)p->n_prompts; i++)
-	    memset(p->prompts[i]->result, 0, p->prompts[i]->result_len);
+            prompt_set_result(p->prompts[i], "");
     }
 
     /*
@@ -340,9 +344,9 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
      */
     /* We only print the `name' caption if we have to... */
     if (p->name_reqd && p->name)
-	fzprintf_raw_untrusted(sftpRequestInstruction, p->name);
+	fzprintf_raw_untrusted(sftpRequestPreamble, p->name);
     else
-	fzprintf_raw_untrusted(sftpRequestInstruction, "");
+	fzprintf_raw_untrusted(sftpRequestPreamble, "");
 
     /* ...but we always print any `instruction'. */
     if (p->instruction)
@@ -352,9 +356,9 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 
     for (curr_prompt = 0; curr_prompt < p->n_prompts; curr_prompt++) {
 
-	DWORD savemode, newmode, i = 0;
+	DWORD savemode, newmode;
+        int len;
 	prompt_t *pr = p->prompts[curr_prompt];
-	BOOL r;
 
 	GetConsoleMode(hin, &savemode);
 	newmode = savemode | ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT;
@@ -366,26 +370,46 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 
 	fzprintf_raw_untrusted(sftpRequest, "%d%s\n", (int)sftpReqPassword, pr->prompt);
 	
-	r = ReadFile(hin, pr->result, pr->result_len - 1, &i, NULL);
+        len = 0;
+        while (1) {
+            DWORD ret = 0;
+            BOOL r;
+
+            prompt_ensure_result_size(pr, len * 5 / 4 + 512);
+
+            r = ReadFile(hin, pr->result + len, pr->resultsize - len - 1,
+                         &ret, NULL);
+
+            if (!r || ret == 0) {
+                len = -1;
+                break;
+            }
+            len += ret;
+            if (pr->result[len - 1] == '\n') {
+                len--;
+                if (pr->result[len - 1] == '\r')
+                    len--;
+                break;
+            }
+        }
 
 	SetConsoleMode(hin, savemode);
-
-	if ((int) i > pr->result_len)
-	    i = pr->result_len - 1;
-	
-	pr->result[i--] = 0;
-	while (i >= 0 && (pr->result[i] == '\r' || pr->result[i] == '\n'))
-	    pr->result[i--] = '\0';
 
 /*	if (!pr->echo) {
 	    DWORD dummy;
 	    WriteFile(hout, "\r\n", 2, &dummy, NULL);
 	}*/
 
+        if (len < 0) {
+            return 0;                  /* failure due to read error */
+        }
+
+	do {
+	    pr->result[len--] = 0;
+	} while (len >= 0 && (pr->result[len] == '\r' || pr->result[len] == '\n'));
     }
 
     return 1; /* success */
-
 }
 
 void frontend_keypress(void *handle)

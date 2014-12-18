@@ -44,9 +44,6 @@
 #define SSH_FILEXFER_ATTR_UIDGID                  0x00000002
 #define SSH_FILEXFER_ATTR_PERMISSIONS             0x00000004
 #define SSH_FILEXFER_ATTR_ACMODTIME               0x00000008
-#define SSH_FILEXFER_ATTR_ACCESSTIME              0x00000008
-#define SSH_FILEXFER_ATTR_CREATETIME              0x00000010
-#define SSH_FILEXFER_ATTR_MODIFICATIONTIME        0x00000020
 #define SSH_FILEXFER_ATTR_EXTENDED                0x80000000
 
 #define SSH_FXF_READ                              0x00000001
@@ -81,10 +78,22 @@ struct fxp_attrs {
     unsigned long uid;
     unsigned long gid;
     unsigned long permissions;
-    uint64 atime;
-    uint64 mtime;
-    uint64 ctime;
+    unsigned long atime;
+    unsigned long mtime;
 };
+
+/*
+ * Copy between the possibly-unused permissions field in an fxp_attrs
+ * and a possibly-negative integer containing the same permissions.
+ */
+#define PUT_PERMISSIONS(attrs, perms)                   \
+    ((perms) >= 0 ?                                     \
+     ((attrs).flags |= SSH_FILEXFER_ATTR_PERMISSIONS,   \
+      (attrs).permissions = (perms)) :                  \
+     ((attrs).flags &= ~SSH_FILEXFER_ATTR_PERMISSIONS))
+#define GET_PERMISSIONS(attrs)                          \
+    ((attrs).flags & SSH_FILEXFER_ATTR_PERMISSIONS ?    \
+     (attrs).permissions : -1)
 
 struct fxp_handle {
     char *hstring;
@@ -120,9 +129,11 @@ struct sftp_request *fxp_realpath_send(char *path);
 char *fxp_realpath_recv(struct sftp_packet *pktin, struct sftp_request *req);
 
 /*
- * Open a file.
+ * Open a file. 'attrs' contains attributes to be applied to the file
+ * if it's being created.
  */
-struct sftp_request *fxp_open_send(char *path, int type);
+struct sftp_request *fxp_open_send(char *path, int type,
+                                   struct fxp_attrs *attrs);
 struct fxp_handle *fxp_open_recv(struct sftp_packet *pktin,
 				 struct sftp_request *req);
 
