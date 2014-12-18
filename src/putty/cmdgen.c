@@ -28,6 +28,18 @@ void modalfatalbox(char *fmt, ...)
     cleanup_exit(1);
 }
 
+void nonfatal(char *fmt, ...)
+{
+	va_list ap;
+	char* str;
+
+	va_start(ap, fmt);
+	str = dupvprintf(fmt, ap);
+	va_end(ap);
+	fzprintf(sftpError, "Error: %s", str);
+	sfree(str);
+}
+
 /*
  * Stubs to let everything else link sensibly.
  */
@@ -44,7 +56,7 @@ void sk_cleanup(void)
 
 int main(int argc, char **argv)
 {
-    Filename infilename;
+    Filename *infilename = NULL, *outfilename = NULL;
     int intype = SSH_KEYTYPE_UNOPENABLE;
     int encrypted = 0;
     char* origcomment = 0;
@@ -112,7 +124,7 @@ int main(int argc, char **argv)
 
 	    infilename = filename_from_str(args);
 
-	    intype = key_type(&infilename);
+	    intype = key_type(infilename);
 	    switch (intype)
 	    {
 	    case SSH_KEYTYPE_SSH1:
@@ -140,11 +152,11 @@ int main(int argc, char **argv)
 	    }
 	    
 	    if (intype == SSH_KEYTYPE_SSH1)
-		encrypted = rsakey_encrypted(&infilename, &origcomment);
+		encrypted = rsakey_encrypted(infilename, &origcomment);
 	    else if (intype == SSH_KEYTYPE_SSH2)
-		encrypted = ssh2_userkey_encrypted(&infilename, &origcomment);
+		encrypted = ssh2_userkey_encrypted(infilename, &origcomment);
 	    else
-		encrypted = import_encrypted(&infilename, intype, &origcomment);
+		encrypted = import_encrypted(infilename, intype, &origcomment);
 
 	    fzprintf(sftpReply, "%d", encrypted ? 1 : 0);
 	}
@@ -212,7 +224,7 @@ int main(int argc, char **argv)
 
 	    case SSH_KEYTYPE_SSH1:
 		ssh1key = snew(struct RSAKey);
-		ret = loadrsakey(&infilename, ssh1key, passphrase, &error);
+		ret = loadrsakey(infilename, ssh1key, passphrase, &error);
 		if (ret > 0)
 		    error = NULL;
 		else if (!error)
@@ -220,7 +232,7 @@ int main(int argc, char **argv)
 		break;
 
 	    case SSH_KEYTYPE_SSH2:
-		ssh2key = ssh2_load_userkey(&infilename, passphrase, &error);
+		ssh2key = ssh2_load_userkey(infilename, passphrase, &error);
 		if (ssh2key == SSH2_WRONG_PASSPHRASE)
 		{
 		    error = "wrong passphrase";
@@ -234,7 +246,7 @@ int main(int argc, char **argv)
 
 	    case SSH_KEYTYPE_OPENSSH:
 	    case SSH_KEYTYPE_SSHCOM:
-		ssh2key = import_ssh2(&infilename, intype, passphrase, &error);
+		ssh2key = import_ssh2(infilename, intype, passphrase, &error);
 		if (ssh2key) {
 		    if (ssh2key != SSH2_WRONG_PASSPHRASE)
 			error = NULL;
@@ -286,7 +298,6 @@ int main(int argc, char **argv)
 	}
 	else if (!strcmp(cmd, "write"))
 	{
-	    Filename outfilename;
 	    int ret;
 	    if (!args) {
 		fzprintf(sftpError, "No argument given");
@@ -302,7 +313,7 @@ int main(int argc, char **argv)
 
 	    if (ssh1key)
 	    {
-	        ret = saversakey(&outfilename, ssh1key, 0);
+	        ret = saversakey(outfilename, ssh1key, 0);
 		if (!ret) {
 		    fzprintf(sftpError, "Unable to save SSH-1 private key");
 		    continue;
@@ -310,7 +321,7 @@ int main(int argc, char **argv)
 	    }
 	    else if (ssh2key)
 	    {
-		ret = ssh2_save_userkey(&outfilename, ssh2key, 0);
+		ret = ssh2_save_userkey(outfilename, ssh2key, 0);
  		if (!ret) {
 		    fzprintf(sftpError, "Unable to save SSH-2 private key");
 		    continue;
