@@ -25,15 +25,31 @@ libfzputtycommon_a_SOURCES = misc.c \
 
 bin_PROGRAMS = fzsftp fzputtygen
 
-fzsftp_SOURCES = ssh.c sshcrc.c \
-		 sshsha.c sshblowf.c sshdh.c sshcrcda.c sshzlib.c \
-		 sshdss.c x11fwd.c portfwd.c \
-		 wildcard.c pinger.c ssharcf.c \
-		 sftp.c int64.c logging.c \
-		 be_none.c cproxy.c \
-		 psftp.c cmdline.c \
-		 timing.c version.c settings.c tree234.c proxy.c \
-		 fzsftp.c
+fzsftp_SOURCES = \
+		be_none.c \
+		callback.c \
+		conf.c \
+		cproxy.c \
+		errsock.c \
+		fzsftp.c \
+		portfwd.c \
+		proxy.c \
+		ssh.c \
+		sshblowf.c \
+		sshcrc.c \
+		sshecc.c \
+		sshsha.c \
+		sshshare.c \
+		sshdh.c sshcrcda.c sshzlib.c \
+		sshdss.c \
+		x11fwd.c \
+		wildcard.c pinger.c ssharcf.c \
+		sftp.c int64.c logging.c \
+		psftp.c cmdline.c \
+		timing.c \
+		version.c \
+		settings.c \
+		tree234.c
 
 fzputtygen_SOURCES = cmdgen.c \
 		     import.c \

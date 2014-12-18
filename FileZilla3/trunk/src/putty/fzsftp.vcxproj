@@ -98,8 +98,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="be_none.c" />
+    <ClCompile Include="callback.c" />
     <ClCompile Include="cmdline.c" />
+    <ClCompile Include="conf.c" />
     <ClCompile Include="cproxy.c" />
+    <ClCompile Include="errsock.c" />
     <ClCompile Include="fzprintf.c" />
     <ClCompile Include="fzsftp.c" />
     <ClCompile Include="import.c" />
@@ -123,6 +126,7 @@
     <ClCompile Include="sshdes.c" />
     <ClCompile Include="sshdh.c" />
     <ClCompile Include="sshdss.c" />
+    <ClCompile Include="sshecc.c" />
     <ClCompile Include="sshmd5.c" />
     <ClCompile Include="sshpubk.c" />
     <ClCompile Include="sshrand.c" />
@@ -130,6 +134,7 @@
     <ClCompile Include="sshsh256.c" />
     <ClCompile Include="sshsh512.c" />
     <ClCompile Include="sshsha.c" />
+    <ClCompile Include="sshshare.c" />
     <ClCompile Include="sshzlib.c" />
     <ClCompile Include="timing.c" />
     <ClCompile Include="tree234.c" />
@@ -138,11 +143,16 @@
     <ClCompile Include="windows\wincons.c" />
     <ClCompile Include="windows\windefs.c" />
     <ClCompile Include="windows\winhandl.c" />
+    <ClCompile Include="windows\winhsock.c" />
     <ClCompile Include="windows\winmisc.c" />
     <ClCompile Include="windows\winnet.c" />
     <ClCompile Include="windows\winnoise.c" />
+    <ClCompile Include="windows\winnpc.c" />
+    <ClCompile Include="windows\winnps.c" />
     <ClCompile Include="windows\winpgntc.c" />
+    <ClCompile Include="windows\winsecur.c" />
     <ClCompile Include="windows\winsftp.c" />
+    <ClCompile Include="windows\winshare.c" />
     <ClCompile Include="windows\winstore.c" />
     <ClCompile Include="windows\wintime.c" />
     <ClCompile Include="x11fwd.c" />
@@ -163,6 +173,7 @@
     <ClInclude Include="storage.h" />
     <ClInclude Include="tree234.h" />
     <ClInclude Include="windows\rcstuff.h" />
+    <ClInclude Include="windows\winsecur.h" />
     <ClInclude Include="windows\winstuff.h" />
   </ItemGroup>
   <ItemGroup>

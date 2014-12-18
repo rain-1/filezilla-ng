@@ -251,7 +251,7 @@ static void sha256_key_internal(void *handle, unsigned char *key, int len)
     SHA256_Init(&keys[1]);
     SHA256_Bytes(&keys[1], foo, 64);
 
-    memset(foo, 0, 64);		       /* burn the evidence */
+    smemclr(foo, 64);		       /* burn the evidence */
 }
 
 static void sha256_key(void *handle, unsigned char *key)

@@ -20,7 +20,7 @@ int get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
     return ret;
 }
 
-void platform_get_x11_auth(struct X11Display *display, const Config *cfg)
+void platform_get_x11_auth(struct X11Display *display, Conf *conf)
 {
     /* Do nothing, therefore no auth. */
 }
@@ -142,7 +142,8 @@ struct RFile {
 };
 
 RFile *open_existing_file(char *name, uint64 *size,
-			  unsigned long *mtime, unsigned long *atime)
+			  unsigned long *mtime, unsigned long *atime,
+                          long *perms)
 {
     HANDLE h;
     RFile *ret;
@@ -172,6 +173,9 @@ RFile *open_existing_file(char *name, uint64 *size,
 	    TIME_WIN_TO_POSIX(wrtime, *mtime);
     }
 
+    if (perms)
+        *perms = -1;
+
     return ret;
 }
 
@@ -196,7 +200,7 @@ struct WFile {
     HANDLE h;
 };
 
-WFile *open_new_file(char *name)
+WFile *open_new_file(char *name, long perms)
 {
     HANDLE h;
     WFile *ret;
@@ -585,17 +589,27 @@ extern int select_result(WPARAM, LPARAM);
 int do_eventsel_loop(HANDLE other_event)
 {
     int n, nhandles, nallhandles, netindex, otherindex;
-    long next, ticks;
+    unsigned long next, then;
+    long ticks;
     HANDLE *handles;
     SOCKET *sklist;
     int skcount;
-    long now = GETTICKCOUNT();
+    unsigned long now = GETTICKCOUNT();
 
-    if (run_timers(now, &next)) {
-	ticks = next - GETTICKCOUNT();
-	if (ticks < 0) ticks = 0;  /* just in case */
+    if (toplevel_callback_pending()) {
+        ticks = 0;
+        next = now;
+    } else if (run_timers(now, &next)) {
+	then = now;
+	now = GETTICKCOUNT();
+	if (now - then > next - then)
+	    ticks = 0;
+	else
+	    ticks = next - now;
     } else {
 	ticks = INFINITE;
+        /* no need to initialise next here because we can never get
+         * WAIT_TIMEOUT */
     }
 
     handles = handle_get_events(&nhandles);
@@ -679,6 +693,8 @@ int do_eventsel_loop(HANDLE other_event)
 
     sfree(handles);
 
+    run_toplevel_callbacks();
+
     if (n == WAIT_TIMEOUT) {
 	now = next;
     } else {
@@ -705,7 +721,7 @@ int ssh_sftp_loop_iteration(void)
     if (p_WSAEventSelect == NULL) {
 	fd_set readfds;
 	int ret;
-	long now = GETTICKCOUNT();
+	unsigned long now = GETTICKCOUNT(), then;
 
 	if (sftp_ssh_socket == INVALID_SOCKET)
 	    return -1;		       /* doom */
@@ -714,13 +730,17 @@ int ssh_sftp_loop_iteration(void)
 	    select_result((WPARAM) sftp_ssh_socket, (LPARAM) FD_WRITE);
 
 	do {
-	    long next, ticks;
+	    unsigned long next;
+	    long ticks;
 	    struct timeval tv, *ptv;
 
 	    if (run_timers(now, &next)) {
-		ticks = next - GETTICKCOUNT();
-		if (ticks <= 0)
-		    ticks = 1;	       /* just in case */
+		then = now;
+		now = GETTICKCOUNT();
+		if (now - then > next - then)
+		    ticks = 0;
+		else
+		    ticks = next - now;
 		tv.tv_sec = ticks / 1000;
 		tv.tv_usec = ticks % 1000 * 1000;
 		ptv = &tv;
