@@ -528,8 +528,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 	m_pSocket = new CSocket(this, dispatcher_);
 
-	if (m_pControlSocket->m_pProxyBackend)
-	{
+	if (m_pControlSocket->m_pProxyBackend) {
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, m_pControlSocket);
 
 		int res = m_pProxyBackend->Handshake(m_pControlSocket->m_pProxyBackend->GetProxyType(),
@@ -553,10 +552,8 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 	SetSocketBufferSizes(m_pSocket);
 
-	m_pSocket->SetFlags(CSocket::flag_nodelay);
 	int res = m_pSocket->Connect(host, port);
-	if (res && res != EINPROGRESS)
-	{
+	if (res && res != EINPROGRESS) {
 		ResetSocket();
 		return false;
 	}
