@@ -9,26 +9,29 @@ SUBDIRS = $(FRONTEND) .
 
 noinst_LIBRARIES = libfzputtycommon.a
 
-libfzputtycommon_a_SOURCES = misc.c \
-			     sshaes.c \
-			     sshdes.c \
-			     sshdss.c \
-			     sshbn.c \
-			     sshmd5.c \
-			     sshpubk.c \
-			     sshrand.c \
-			     sshrsa.c \
-			     sshsh256.c \
-			     sshsh512.c \
-			     sshsha.c \
-			     fzprintf.c
+libfzputtycommon_a_SOURCES = \
+			conf.c \
+			misc.c \
+			sshaes.c \
+			sshbn.c \
+			sshdes.c \
+			sshdss.c \
+			sshecc.c \
+			sshmd5.c \
+			sshpubk.c \
+			sshrand.c \
+			sshrsa.c \
+			sshsh256.c \
+			sshsh512.c \
+			sshsha.c \
+			tree234.c \
+			fzprintf.c
 
 bin_PROGRAMS = fzsftp fzputtygen
 
 fzsftp_SOURCES = \
 		be_none.c \
 		callback.c \
-		conf.c \
 		cproxy.c \
 		errsock.c \
 		fzsftp.c \
@@ -37,7 +40,6 @@ fzsftp_SOURCES = \
 		ssh.c \
 		sshblowf.c \
 		sshcrc.c \
-		sshecc.c \
 		sshsha.c \
 		sshshare.c \
 		sshdh.c sshcrcda.c sshzlib.c \
@@ -48,8 +50,7 @@ fzsftp_SOURCES = \
 		psftp.c cmdline.c \
 		timing.c \
 		version.c \
-		settings.c \
-		tree234.c
+		settings.c
 
 fzputtygen_SOURCES = cmdgen.c \
 		     import.c \
