@@ -734,6 +734,8 @@ int CFtpControlSocket::LogonParseResponse()
 				if (m_pCurrentServer->GetProtocol() == FTP) {
 					// For now. In future make TLS mandatory unless explicitly requested INSECURE_FTP as protocol
 					LogMessage(MessageType::Status, _("Insecure server, it does not support FTP over TLS."));
+					pData->neededCommands[LOGON_PBSZ] = 0;
+					pData->neededCommands[LOGON_PROT] = 0;
 
 					pData->opState = LOGON_LOGON;
 					return SendNextCommand();
