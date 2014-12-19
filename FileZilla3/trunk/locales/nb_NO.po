@@ -3,20 +3,21 @@ msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-11-17 12:26+0100\n"
-"Last-Translator: Åka Sikrom <a4@hush.com>\n"
+"PO-Revision-Date: 2014-12-05 19:39+0100\n"
+"Last-Translator: Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:54
 #: ../../locales/../src/interface/statuslinectrl.cpp:198
 msgid "%H:%M:%S elapsed"
-msgstr "%H:%M:%S forløpt"
+msgstr "%H:%M:%S brukt"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:59
@@ -48,8 +49,8 @@ msgstr[1] "%d mapper"
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
-msgstr[0] "%d mappe medregnet innhold"
-msgstr[1] "%d mapper medregnet innhold"
+msgstr[0] "%d mappe med innhold"
+msgstr[1] "%d mapper med innhold"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:62
 #: ../../locales/../src/interface/filelist_statusbar.cpp:85
@@ -898,9 +899,8 @@ msgid "&Show debug menu"
 msgstr "&Vis feilsøkingsmeny"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
-#, fuzzy
 msgid "&Show detailed log"
-msgstr "Vis detaljer"
+msgstr "&Vis detaljert logg"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -2986,14 +2986,14 @@ msgid "Delete selected files and directories"
 msgstr "Slett valgte filer og mapper"
 
 #: ../../locales/../src/engine/engineprivate.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting \"%s\""
-msgstr "Sletter mapper"
+msgstr "Sletter «%s»"
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
 #, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr ""
+msgstr "Sletter %d filer fra «%s»"
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3064,9 +3064,9 @@ msgid "Directory listing filters"
 msgstr "Filtre for mappevisning"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "Mappevisning fullført"
+msgstr "Mappevisning av «%s» vellykket"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3610,14 +3610,12 @@ msgstr ""
 "kan etableres på to måter."
 
 #: ../../locales/../src/engine/server.cpp:20
-#, fuzzy
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTPES - FTP via eksplisitt TLS/SSL"
+msgstr "FTPES - FTP via eksplisitt TLS"
 
 #: ../../locales/../src/engine/server.cpp:19
-#, fuzzy
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTPS - FTP via implisitt TLS/SSL"
+msgstr "FTPS - FTP via implisitt TLS"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -5805,12 +5803,11 @@ msgstr "Postnummer:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1012
 msgid "Pre&allocate space before downloading"
-msgstr ""
+msgstr "Tildel plass før nedlasting"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1008
-#, fuzzy
 msgid "Preallocation"
-msgstr "Retning"
+msgstr "Forhåndstildeling"
 
 #: ../../locales/../src/interface/sitemanager.cpp:280
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
@@ -6310,9 +6307,9 @@ msgstr ""
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1281
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "Mottar mappeliste …"
+msgstr "Mottar mappeliste for «%s» …"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7108,19 +7105,16 @@ msgid "T&oolbar"
 msgstr "&Verktøylinje"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
-#, fuzzy
 msgid "TLS connection established, sending HTTP request"
-msgstr "TLS/SSL-tilkobling etablert. Sender HTTP-forespørsel"
+msgstr "TLS-tilkobling etablert. Sender HTTP-forespørsel"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
-#, fuzzy
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "TLS/SSL-tilkobling etablert. Venter på velkomstmelding …"
+msgstr "TLS-tilkobling etablert. Venter på velkomstmelding …"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
-#, fuzzy
 msgid "TLS connection established."
-msgstr "TLS/SLL tilkobling etablert."
+msgstr "TLS tilkobling etablert."
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"
@@ -8193,7 +8187,7 @@ msgstr "Widescreen"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3534
 msgid "Would you like FileZilla to remember passwords?"
-msgstr "Vil du at FileZilla skal huske passordene dine?"
+msgstr "Vil du at FileZilla skal huske passord?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:483
 msgid "Wr&ite"
@@ -8222,7 +8216,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:241
 msgid "You are using the latest version of FileZilla."
-msgstr "Du bruker den nyeste versjonen av FileZilla."
+msgstr "Du bruker nyeste versjon av FileZilla."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "You can always open this dialog again through the help menu."
@@ -8330,7 +8324,7 @@ msgstr "Du må gi loggfila et navn."
 
 #: ../../locales/../src/interface/edithandler.cpp:1526
 msgid "You need to enter a properly quoted command."
-msgstr "Du må gi kommandoen korrekte hermetegn («\"»)."
+msgstr "Du må bruke korrekte hermetegn («\"») i kommandoen."
 
 #: ../../locales/../src/interface/settings/optionspage_ftpproxy.cpp:82
 #: ../../locales/../src/interface/settings/optionspage_proxy.cpp:79

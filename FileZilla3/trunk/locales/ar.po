@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-11-09 00:04+0300\n"
+"PO-Revision-Date: 2014-12-07 01:36+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural= n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
@@ -437,7 +437,7 @@ msgstr "عرض ال&حجم بالبايت"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3551
 msgid "&Do not remember passwords (recommended)"
-msgstr "&عدم تذكر كلمات المرور (مستحسن)"
+msgstr "عدم تذكر كلمات المرور (موصى به)"
 
 #: ../../locales/../src/interface/conditionaldialog.cpp:25
 msgid "&Don't show this dialog again."
@@ -930,9 +930,8 @@ msgid "&Show debug menu"
 msgstr "إ&ظهار قائمة التصحيح"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
-#, fuzzy
 msgid "&Show detailed log"
-msgstr "إظهار التفاصيل"
+msgstr "&عرض سجل مفصل"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -2991,14 +2990,14 @@ msgid "Delete selected files and directories"
 msgstr "حذف الملفات المحددة و الأدلة"
 
 #: ../../locales/../src/engine/engineprivate.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting \"%s\""
-msgstr "حذف الأدلة"
+msgstr "حذف \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
 #, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr ""
+msgstr "حذف %d ملف من \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3069,9 +3068,9 @@ msgid "Directory listing filters"
 msgstr "مرشحات الرفع"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "تم بنجاح الرفع"
+msgstr "وضع قائمة المجلد لـ \"%s\" بنجاح"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3609,14 +3608,12 @@ msgstr ""
 "تأسيسها بطريقتين"
 
 #: ../../locales/../src/engine/server.cpp:20
-#, fuzzy
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTPES - FTP over explicit TLS/SSL"
+msgstr "FTP - FTPES عبر TLS صريح"
 
 #: ../../locales/../src/engine/server.cpp:19
-#, fuzzy
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTPS - FTP over implicit TLS/SSL"
+msgstr "FTP - FTPS عبر TLS مضمن"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -5245,7 +5242,7 @@ msgstr "مرة كل أسبوع"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:530
 msgid "Only use plain FTP (insecure)"
-msgstr "استخدام FTP عادي (غير آمن)"
+msgstr "فقط استخدام FTP عادي (غير أمن)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:561
 msgid "Open directory in system's file manager"
@@ -5776,12 +5773,11 @@ msgstr "الرمز البريدي :"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1012
 msgid "Pre&allocate space before downloading"
-msgstr ""
+msgstr "تخصيص المساحة مسبقا &قبل التحميل"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1008
-#, fuzzy
 msgid "Preallocation"
-msgstr "الإتجاه"
+msgstr "تخصيص المساحة مسبقا"
 
 #: ../../locales/../src/interface/sitemanager.cpp:280
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
@@ -6278,9 +6274,9 @@ msgstr ""
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1281
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "إسترجاع قائمة الدليل..."
+msgstr "إسترجاع قائمة المجلد لـ \"%s\"..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7089,19 +7085,16 @@ msgid "T&oolbar"
 msgstr "شريط &أدوات"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
-#, fuzzy
 msgid "TLS connection established, sending HTTP request"
-msgstr "تم تأسيس إتصال TLS/SSL ، إرسال طلب HTTP"
+msgstr "تم تأسيس إتصال TLS، إرسال طلب HTTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
-#, fuzzy
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "تم تأسيس إتصال TLS/SSL , إنتظار رسالة الترحيب..."
+msgstr "تم تأسيس إتصال TLS, إنتظار رسالة الترحيب..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
-#, fuzzy
 msgid "TLS connection established."
-msgstr "تم تأسيس إتصال TLS/SSL"
+msgstr "تم تأسيس إتصال TLS"
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"
@@ -7945,7 +7938,7 @@ msgstr "إستخدم الإجراء الأفتراضى"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:527
 msgid "Use explicit FTP over TLS if available"
-msgstr "استخدام FTP صريح عبر TLS حسب التوفر"
+msgstr "استخدام بروتوكول نقل الملفات صريح على TLS إذا كان متوفرا"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2245
 msgid "Use server currently connected to"
@@ -8496,6 +8489,21 @@ msgstr "ملف قابل للكتابة للعام"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "FTPES - FTP over explicit TLS/SSL"
+#~ msgstr "FTPES - FTP over explicit TLS/SSL"
+
+#~ msgid "FTPS - FTP over implicit TLS/SSL"
+#~ msgstr "FTPS - FTP over implicit TLS/SSL"
+
+#~ msgid "TLS/SSL connection established, sending HTTP request"
+#~ msgstr "تم تأسيس إتصال TLS/SSL ، إرسال طلب HTTP"
+
+#~ msgid "TLS/SSL connection established, waiting for welcome message..."
+#~ msgstr "تم تأسيس إتصال TLS/SSL , إنتظار رسالة الترحيب..."
+
+#~ msgid "TLS/SSL connection established."
+#~ msgstr "تم تأسيس إتصال TLS/SSL"
 
 #~ msgid ""
 #~ "Filename may not contain any of the following characters: / \\ : * ? \" < "

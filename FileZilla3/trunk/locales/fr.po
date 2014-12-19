@@ -914,9 +914,8 @@ msgid "&Show debug menu"
 msgstr "&Afficher le menu de débogage"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
-#, fuzzy
 msgid "&Show detailed log"
-msgstr "Afficher les détails"
+msgstr "Afficher les détail&s du journal"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -1203,6 +1202,7 @@ msgid "3 - Verbose"
 msgstr "3 - Détailler"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:97
+#, fuzzy
 msgid "32 bit system"
 msgstr "Système 32 bits"
 
@@ -1211,6 +1211,7 @@ msgid "4 - Debug"
 msgstr "4 - Déboguer"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:95
+#, fuzzy
 msgid "64 bit system"
 msgstr "Système 64 bits"
 
@@ -3043,14 +3044,14 @@ msgid "Delete selected files and directories"
 msgstr "Supprimer les fichiers et dossiers sélectionnés"
 
 #: ../../locales/../src/engine/engineprivate.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting \"%s\""
-msgstr "Suppression des dossiers"
+msgstr "Suppression de \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr ""
+msgstr "Suppression de %u fichiers de \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3124,9 +3125,9 @@ msgid "Directory listing filters"
 msgstr "Filtres d'affichage du contenu du dossier"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "Contenu du dossier affiché avec succès"
+msgstr "Contenu du dossier \"%s\" affiché avec succès"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3676,14 +3677,12 @@ msgstr ""
 "connexions supplémentaires peuvent être établies de deux manières."
 
 #: ../../locales/../src/engine/server.cpp:20
-#, fuzzy
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTPES - FTP sur connexion explicite (TLS/SSL)"
+msgstr "FTPES - FTP sur connexion explicite TLS"
 
 #: ../../locales/../src/engine/server.cpp:19
-#, fuzzy
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTPS - FTP sur connexion implicite (TLS/SSL)"
+msgstr "FTPS - FTP sur connexion implicite TLS"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -5950,12 +5949,11 @@ msgstr "Code postal :"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1012
 msgid "Pre&allocate space before downloading"
-msgstr ""
+msgstr "Espace pré&alloué avant téléchargement"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1008
-#, fuzzy
 msgid "Preallocation"
-msgstr "Direction"
+msgstr "Préallocation"
 
 #: ../../locales/../src/interface/sitemanager.cpp:280
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
@@ -6464,9 +6462,9 @@ msgstr ""
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1281
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "Récupération du contenu du dossier..."
+msgstr "Récupération du contenu du dossier \"%s\"..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7281,19 +7279,16 @@ msgid "T&oolbar"
 msgstr "Barre d'&outils"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
-#, fuzzy
 msgid "TLS connection established, sending HTTP request"
-msgstr "Connexion TLS/SSL établie, envoi d'une requête HTTP"
+msgstr "Connexion TLS établie, envoi d'une requête HTTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
-#, fuzzy
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "Connexion TLS/SSL établie, attente du message d'accueil..."
+msgstr "Connexion TLS établie, attente du message d'accueil..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
-#, fuzzy
 msgid "TLS connection established."
-msgstr "Connexion TLS/SSL établie."
+msgstr "Connexion TLS établie."
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"
@@ -8752,10 +8747,3 @@ msgstr "écriture par tous"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets :"
-
-#~ msgid ""
-#~ "Filename may not contain any of the following characters: / \\ : * ? \" < "
-#~ "> |"
-#~ msgstr ""
-#~ "Les noms de fichier ne peuvent pas contenir les caractères suivants : / "
-#~ "\\ : * ? \" < > |"
