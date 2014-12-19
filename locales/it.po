@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-04 12:08+0100\n"
+"PO-Revision-Date: 2014-12-10 14:32+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7\n"
+"X-Generator: Poedit 1.7.1\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:54
@@ -1190,16 +1190,18 @@ msgid "3 - Verbose"
 msgstr "3 - Informazioni dettagliate"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:97
+#, fuzzy
 msgid "32 bit system"
-msgstr "sistema a 32bit"
+msgstr "Sistema a 32bit"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2229
 msgid "4 - Debug"
 msgstr "4 - Debug"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:95
+#, fuzzy
 msgid "64 bit system"
-msgstr "sistema a 64bit"
+msgstr "Sistema a 64bit"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:27
 msgid "< &Back"
@@ -3026,9 +3028,9 @@ msgid "Deleting \"%s\""
 msgstr "Eliminazione di \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr "Eliminazione di %d file da \"%s\""
+msgstr "Eliminazione di %u file da \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
