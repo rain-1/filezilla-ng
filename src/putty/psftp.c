@@ -1051,18 +1051,13 @@ int sftp_cmd_quit(struct sftp_command *cmd)
 
 int sftp_cmd_keyfile(struct sftp_command *cmd)
 {
-    /*Keyfile_list *list;
-
     if (cmd->nwords != 2) {
 	fzprintf(sftpError, "No keyfile given");
 	return 0;
     }
 
-    list = snew(Keyfile_list);
-    list->file = filename_from_str(cmd->words[1]);
-    list->next = cfg.keyfile_list;
-    cfg.keyfile_list = list;
-*/
+    conf_set_str_str(conf, CONF_fz_keyfiles, cmd->words[1], "");
+
     fznotify1(sftpDone, 1);
     return 1;
 }

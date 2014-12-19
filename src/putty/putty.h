@@ -688,6 +688,7 @@ void cleanup_exit(int);
     X(INT, NONE, change_username) /* allow username switching in SSH-2 */ \
     X(INT, INT, ssh_cipherlist) \
     X(FILENAME, NONE, keyfile) \
+    X(STR, STR, fz_keyfiles) \
     X(INT, NONE, sshprot) /* use v1 or v2 when both available */ \
     X(INT, NONE, ssh2_des_cbc) /* "des-cbc" unrecommended SSH-2 cipher */ \
     X(INT, NONE, ssh_no_userauth) /* bypass "ssh-userauth" (SSH-2 only) */ \
