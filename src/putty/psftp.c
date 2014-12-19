@@ -3321,7 +3321,7 @@ int psftp_init_utf8_locale()
 }
 #endif
 
-const int share_can_be_downstream = TRUE;
+const int share_can_be_downstream = FALSE; // FZ: We're standalone
 const int share_can_be_upstream = FALSE;
 
 /*
