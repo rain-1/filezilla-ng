@@ -1069,7 +1069,7 @@ int sftp_cmd_keyfile(struct sftp_command *cmd)
 
 int sftp_cmd_proxy(struct sftp_command *cmd)
 {
-/*    int proxy_type;
+    int proxy_type;
     int portnumber;
 
     if (cmd->nwords < 2) {
@@ -1078,7 +1078,7 @@ int sftp_cmd_proxy(struct sftp_command *cmd)
     }
 
     if (!strcmp(cmd->words[1], "0")) {
-	cfg.proxy_type = PROXY_NONE;
+	conf_set_int(conf, CONF_proxy_type, PROXY_NONE);
         fznotify1(sftpDone, 1);
 	return 1;
     }
@@ -1104,36 +1104,23 @@ int sftp_cmd_proxy(struct sftp_command *cmd)
 	return 0;
     }
 
-    if (strlen(cmd->words[2]) >= sizeof(cfg.proxy_host)) {
-	fzprintf(sftpError,  "Host too long");
-	return 0;
-    }
-    if (cmd->nwords > 4 && strlen(cmd->words[4]) >= sizeof(cfg.proxy_username)) {
-	fzprintf(sftpError,  "User too long");
-	return 0;
-    }
-    if (cmd->nwords > 5 && strlen(cmd->words[5]) >= sizeof(cfg.proxy_password)) {
-	fzprintf(sftpError,  "Password too long");
-	return 0;
-    }
-
     if (cmd->nwords > 5) {
-	strcpy(cfg.proxy_username, cmd->words[4]);
-	strcpy(cfg.proxy_password, cmd->words[5]);
+	conf_set_str(conf, CONF_proxy_username, cmd->words[4]);
+	conf_set_str(conf, CONF_proxy_password, cmd->words[5]);
     }
     else if (cmd->nwords > 4) {
-	strcpy(cfg.proxy_username, cmd->words[4]);
-	cfg.proxy_password[0] = 0;
+	conf_set_str(conf, CONF_proxy_username, cmd->words[4]);
+	conf_set_str(conf, CONF_proxy_password, "");
     }
     else {
-	cfg.proxy_username[0] = 0;
-	cfg.proxy_password[0] = 0;
+	conf_set_str(conf, CONF_proxy_username, "");
+	conf_set_str(conf, CONF_proxy_password, "");
     }
 
-    cfg.proxy_type = proxy_type;
-    strcpy(cfg.proxy_host, cmd->words[2]);
-    cfg.proxy_port = portnumber;
-*/
+    conf_set_int(conf, CONF_proxy_type, proxy_type);
+    conf_set_str(conf, CONF_proxy_host, cmd->words[2]);
+    conf_set_int(conf, CONF_proxy_port, portnumber);
+
     fznotify1(sftpDone, 1);
     return 1;
 }
@@ -3354,9 +3341,6 @@ int psftp_main(int argc, char *argv[])
     int modeflags = 0;
     char *batchfile = NULL;
 
-    // FZ: Set proxy to none
-//    cfg.proxy_type = PROXY_NONE;
-
     fzprintf(sftpReply, "fzSftp started");
 
 #ifndef _WINDOWS
@@ -3379,6 +3363,9 @@ int psftp_main(int argc, char *argv[])
     conf = conf_new();
     do_defaults(NULL, conf);
     loaded_session = FALSE;
+
+    // FZ: Set proxy to none
+    conf_set_int(conf, CONF_proxy_type, PROXY_NONE);
 
     for (i = 1; i < argc; i++) {
 	int ret;
