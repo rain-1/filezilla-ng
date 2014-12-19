@@ -10,6 +10,16 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0-beta3 (2014-12-19)
+
++ The search dialog now has checkboxes to only search for files or directories
++ In the file lists, Ctrl+Shift+N can now be used to create new directories
++ Added an additional icon theme
++ Small performance improvements parsing large directory listings
++ Updated SFTP components from PuTTY
+- Fixed applying file exists actions to files currently in the queue
+- Don't send the PBSZ and PROT commands to servers that have rejected AUTH TLS/SSL
+
 3.10.0-beta2 (2014-12-05)
 
 - Fixed uploads constantly timing out
