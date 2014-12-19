@@ -1,4 +1,4 @@
-AC_INIT([FileZilla],[3.10.0-beta2],[tim.kosse@filezilla-project.org],[],[https://filezilla-project.org/])
+AC_INIT([FileZilla],[3.10.0-beta3],[tim.kosse@filezilla-project.org],[],[https://filezilla-project.org/])
 AC_CONFIG_HEADERS([src/include/config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(config)
