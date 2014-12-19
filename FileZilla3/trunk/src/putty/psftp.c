@@ -67,19 +67,6 @@ struct sftp_packet *sftp_wait_for_reply(struct sftp_request *req)
  * Higher-level helper functions used in commands.
  */
 
-void compare_req_rreq(struct sftp_request *req, struct sftp_request *rreq)
-{
-    if (!rreq) {
-	fzprintf(sftpError, "%s", fxp_error());
-	cleanup_exit(1);
-    }
-
-    if (rreq != req) {
-	fzprintf(sftpError, "ID of request and reply do not match");
-	cleanup_exit(1);
-    }
-}
-
 /*
  * Attempt to canonify a pathname starting from the pwd. If
  * canonification fails, at least fall back to returning a _valid_
@@ -2029,15 +2016,15 @@ static int sftp_action_chmtime(void *vmtime, char *fname)
 {
     struct fxp_attrs attrs = {0};
     struct sftp_packet *pktin;
-    struct sftp_request *req, *rreq;
+    struct sftp_request *req;
     int result;
     uint64 *mtime = (uint64*)vmtime;
 
     attrs.flags = SSH_FILEXFER_ATTR_ACMODTIME;
-    sftp_register(req = fxp_stat_send(fname));
-    rreq = sftp_find_request(pktin = sftp_recv());
-    compare_req_rreq(req, rreq);
-    result = fxp_stat_recv(pktin, rreq, &attrs);
+
+    req = fxp_stat_send(fname);
+    pktin = sftp_wait_for_reply(req);
+    result = fxp_stat_recv(pktin, req, &attrs);
 
     if (!result || !(attrs.flags & SSH_FILEXFER_ATTR_ACMODTIME)) {
 	fzprintf(sftpError, "get attrs for %s: %s", fname,
@@ -2053,10 +2040,9 @@ static int sftp_action_chmtime(void *vmtime, char *fname)
     }
     attrs.mtime = mtime->lo;
 
-    sftp_register(req = fxp_setstat_send(fname, attrs));
-    rreq = sftp_find_request(pktin = sftp_recv());
-    compare_req_rreq(req, rreq);
-    result = fxp_setstat_recv(pktin, rreq);
+    req = fxp_setstat_send(fname, attrs);
+    pktin = sftp_wait_for_reply(req);
+    result = fxp_setstat_recv(pktin, req);
 
     if (!result) {
 	fzprintf(sftpError, "set attrs for %s: %s", fname, fxp_error());
@@ -2110,7 +2096,7 @@ static int sftp_cmd_mtime(struct sftp_command *cmd)
     uint64 mtime;
     struct fxp_attrs attrs = {0};
     struct sftp_packet *pktin;
-    struct sftp_request *req, *rreq;
+    struct sftp_request *req;
     
     if (back == NULL) {
 	not_connected();
@@ -2138,10 +2124,9 @@ static int sftp_cmd_mtime(struct sftp_command *cmd)
 	return 0;
     }
     attrs.flags = SSH_FILEXFER_ATTR_ACMODTIME;
-    sftp_register(req = fxp_stat_send(cname));
-    rreq = sftp_find_request(pktin = sftp_recv());
-    compare_req_rreq(req, rreq);
-    result = fxp_stat_recv(pktin, rreq, &attrs);
+    req = fxp_stat_send(cname);
+    pktin = sftp_wait_for_reply(req);
+    result = fxp_stat_recv(pktin, req, &attrs);
 
     if (!result) {
 	fzprintf(sftpError, "get attrs for %s: %s", cname,
