@@ -797,8 +797,7 @@ static DWORD WINAPI command_read_thread(void *param)
 char *ssh_sftp_get_cmdline(char *prompt, int no_fds_ok)
 {
     int ret;
-    struct command_read_ctx actx, *ctx = &actx;
-    DWORD threadid;
+    struct command_read_ctx actx;
 
     /* Not used in fzsftp
     fputs(prompt, stdout);
@@ -814,23 +813,26 @@ char *ssh_sftp_get_cmdline(char *prompt, int no_fds_ok)
      * Create a second thread to read from stdin. Process network
      * and timing events until it terminates.
      */
-    ctx->event = CreateEvent(NULL, FALSE, FALSE, NULL);
-    ctx->line = NULL;
+    actx.event = CreateEvent(NULL, FALSE, FALSE, NULL);
+    actx.line = NULL;
 
-    if (!CreateThread(NULL, 0, command_read_thread,
-		      ctx, 0, &threadid)) {
+    HANDLE hThread = CreateThread(NULL, 0, command_read_thread, &actx, 0, 0);
+    if (!hThread) {
+	CloseHandle(actx.event);
 	fzprintf(sftpError, "Unable to create command input thread");
 	cleanup_exit(1);
     }
 
     do {
-	ret = do_eventsel_loop(ctx->event);
+	ret = do_eventsel_loop(actx.event);
 
 	/* Error return can only occur if netevent==NULL, and it ain't. */
 	assert(ret >= 0);
     } while (ret == 0);
 
-    return ctx->line;
+    CloseHandle(hThread);
+    CloseHandle(actx.event);
+    return actx.line;
 }
 
 /* ----------------------------------------------------------------------
