@@ -797,7 +797,7 @@ Socket sk_newlistener(char *srcaddr, int port, Plug plug, int local_host_only, i
 {
     int s;
 #ifndef NO_IPV6
-    struct addrinfo hints, *ai;
+    struct addrinfo hints, *ai = NULL;
     char portstr[6];
 #endif
     union sockaddr_union u;
@@ -945,6 +945,12 @@ Socket sk_newlistener(char *srcaddr, int port, Plug plug, int local_host_only, i
     }
 
     retcode = bind(s, &addr->sa, addrlen);
+
+#ifndef NO_IPV6
+    if (ai)
+	freeaddrinfo(ai);
+#endif
+
     if (retcode < 0) {
         close(s);
 	ret->error = strerror(errno);
