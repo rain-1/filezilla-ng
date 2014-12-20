@@ -3,7 +3,7 @@
   <assemblyIdentity
     name="FileZilla"
     processorArchitecture="*"
-    version="3.10.0"
+    version="3.10.0.0"
     type="win32"
   />
   <description>FileZilla FTP client</description>
