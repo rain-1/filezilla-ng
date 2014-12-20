@@ -100,6 +100,7 @@ char *canonify(char *name, int parent_only)
         suffix = strrchr(fullname, '/');
 	if (!suffix) {
 	    /* Cosmic rays make this happen */
+            sfree(fullname);
 	    return NULL;
 	}
 	else if (suffix == fullname) {
