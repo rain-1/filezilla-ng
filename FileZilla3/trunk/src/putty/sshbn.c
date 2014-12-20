@@ -1259,6 +1259,7 @@ Bignum bignum_random_in_range(const Bignum lower, const Bignum upper)
         }
 
         ret = bignum_from_bytes(bytes, upper_bytes);
+        sfree(bytes);
     } while (bignum_cmp(ret, lower) < 0 || bignum_cmp(ret, upper) > 0);
 
     return ret;
