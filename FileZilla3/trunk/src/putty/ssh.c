@@ -4971,6 +4971,7 @@ static int do_ssh1_login(Ssh ssh, unsigned char *in, int inlen,
 	sfree(s->publickey_comment);
     }
     free_loaded_keyfiles(s->loaded_keyfile_list);
+    s->loaded_keyfile_list = NULL;
 
     logevent("Authentication successful");
 
@@ -10470,6 +10471,7 @@ static void do_ssh2_authconn(Ssh ssh, unsigned char *in, int inlen,
 	sfree(s->agent_response);
 
     free_loaded_keyfiles(s->loaded_keyfile_list);
+    s->loaded_keyfile_list = NULL;
 
     if (s->userauth_success && !ssh->bare_connection) {
 	/*
