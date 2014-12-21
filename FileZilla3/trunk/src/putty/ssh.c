@@ -1049,7 +1049,6 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
     {
 	++num_tried;
 
-	sfree(val);
 	Loaded_keyfile_list* loaded = new_loaded_keyfile(file);
 
 	type = key_type(loaded->file);
