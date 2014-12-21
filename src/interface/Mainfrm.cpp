@@ -2150,11 +2150,9 @@ bool CMainFrame::RestoreSplitterPositions()
 		return false;
 
 	long * aPosValues = new long[count];
-	for (int i = 0; i < count; i++)
-	{
+	for (int i = 0; i < count; ++i) {
 		wxString token = tokens.GetNextToken();
-		if (!token.ToLong(aPosValues + i))
-		{
+		if (!token.ToLong(aPosValues + i)) {
 			delete [] aPosValues;
 			return false;
 		}
@@ -2165,8 +2163,10 @@ bool CMainFrame::RestoreSplitterPositions()
 	m_pBottomSplitter->SetSashPosition(aPosValues[1]);
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-	if (!controls)
+	if (!controls) {
+		delete [] aPosValues;
 		return false;
+	}
 
 	double pos = (double)aPosValues[2] / 1000000000;
 	if (pos >= 0 && pos <= 1)

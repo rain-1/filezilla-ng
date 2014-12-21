@@ -20,10 +20,6 @@ public:
 	bool HideTool(int id);
 
 protected:
-#if defined(EVT_TOOL_DROPDOWN) && defined(__WXMSW__)
-	void MakeDropdownTool(int id);
-#endif
-
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionChanged(int option);
 

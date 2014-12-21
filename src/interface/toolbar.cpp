@@ -51,10 +51,6 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	toolbar->RegisterOption(OPTION_SHOW_TREE_REMOTE);
 	toolbar->RegisterOption(OPTION_MESSAGELOG_POSITION);
 
-#if defined(EVT_TOOL_DROPDOWN) && defined(__WXMSW__)
-	toolbar->MakeDropdownTool(XRCID("ID_TOOLBAR_SITEMANAGER"));
-#endif
-
 #ifdef __WXMSW__
 	int majorVersion, minorVersion;
 	wxGetOsVersion(& majorVersion, & minorVersion);
@@ -173,26 +169,6 @@ void CToolBar::OnOptionChanged(int option)
 		break;
 	}
 }
-
-#if defined(EVT_TOOL_DROPDOWN) && defined(__WXMSW__)
-void CToolBar::MakeDropdownTool(int id)
-{
-	wxToolBarToolBase* pOldTool = FindById(id);
-	if (!pOldTool)
-		return;
-
-	wxToolBarToolBase* pTool = new wxToolBarToolBase(0, id,
-		pOldTool->GetLabel(), pOldTool->GetNormalBitmap(), pOldTool->GetDisabledBitmap(),
-		wxITEM_DROPDOWN, NULL, pOldTool->GetShortHelp(), pOldTool->GetLongHelp());
-
-	int pos = GetToolPos(id);
-	wxASSERT(pos != wxNOT_FOUND);
-
-	DeleteToolByPos(pos);
-	InsertTool(pos, pTool);
-	Realize();
-}
-#endif
 
 bool CToolBar::ShowTool(int id)
 {
