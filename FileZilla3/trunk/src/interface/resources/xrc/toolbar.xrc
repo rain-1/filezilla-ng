@@ -8,6 +8,7 @@
       <longhelp>Open the Site Manager</longhelp>
       <tooltip platform="win">Open the Site Manager.</tooltip>
       <tooltip platform="mac|unix">Open the Site Manager. Right-click for a list of sites.</tooltip>
+      <dropdown />
     </object>
     <object class="separator"/>
     <object class="tool" name="ID_TOOLBAR_LOGVIEW">
