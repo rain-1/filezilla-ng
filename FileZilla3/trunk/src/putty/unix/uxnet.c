@@ -948,7 +948,7 @@ Socket sk_newlistener(char *srcaddr, int port, Plug plug, int local_host_only, i
 
 #ifndef NO_IPV6
     if (ai)
-	freeaddrinfo(ai);
+        freeaddrinfo(ai);
 #endif
 
     if (retcode < 0) {
