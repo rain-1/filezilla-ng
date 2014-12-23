@@ -797,12 +797,12 @@ static DWORD WINAPI command_read_thread(void *param)
 char *ssh_sftp_get_cmdline(char *prompt, int no_fds_ok)
 {
     int ret;
-    struct command_read_ctx actx;
+    struct command_read_ctx actx, *ctx = &actx;
+    DWORD threadid;
+    HANDLE hThread;
 
-    /* Not used in fzsftp
     fputs(prompt, stdout);
     fflush(stdout);
-    */
 
     if ((sftp_ssh_socket == INVALID_SOCKET && no_fds_ok) ||
 	p_WSAEventSelect == NULL) {
@@ -813,26 +813,27 @@ char *ssh_sftp_get_cmdline(char *prompt, int no_fds_ok)
      * Create a second thread to read from stdin. Process network
      * and timing events until it terminates.
      */
-    actx.event = CreateEvent(NULL, FALSE, FALSE, NULL);
-    actx.line = NULL;
+    ctx->event = CreateEvent(NULL, FALSE, FALSE, NULL);
+    ctx->line = NULL;
 
-    HANDLE hThread = CreateThread(NULL, 0, command_read_thread, &actx, 0, 0);
+    hThread = CreateThread(NULL, 0, command_read_thread, ctx, 0, &threadid);
     if (!hThread) {
-	CloseHandle(actx.event);
+	CloseHandle(ctx->event);
 	fzprintf(sftpError, "Unable to create command input thread");
 	cleanup_exit(1);
     }
 
     do {
-	ret = do_eventsel_loop(actx.event);
+	ret = do_eventsel_loop(ctx->event);
 
 	/* Error return can only occur if netevent==NULL, and it ain't. */
 	assert(ret >= 0);
     } while (ret == 0);
 
     CloseHandle(hThread);
-    CloseHandle(actx.event);
-    return actx.line;
+    CloseHandle(ctx->event);
+
+    return ctx->line;
 }
 
 /* ----------------------------------------------------------------------
