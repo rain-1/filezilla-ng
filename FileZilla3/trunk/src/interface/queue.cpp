@@ -10,7 +10,6 @@
 CQueueItem::CQueueItem(CQueueItem* parent)
 	: m_parent(parent)
 	, m_visibleOffspring(0)
-	, m_indent(0)
 	, m_maxCachedIndex(-1)
 	, m_removed_at_front(0)
 {
@@ -30,12 +29,10 @@ void CQueueItem::SetPriority(QueuePriority priority)
 
 void CQueueItem::AddChild(CQueueItem* item)
 {
-	if (m_removed_at_front)
-	{
+	if (m_removed_at_front) {
 		m_children.erase(m_children.begin(), m_children.begin() + m_removed_at_front);
 		m_removed_at_front = 0;
 	}
-	item->m_indent = m_indent + 1;
 	m_children.push_back(item);
 
 	m_visibleOffspring += 1 + item->m_visibleOffspring;
@@ -275,20 +272,6 @@ int CQueueItem::GetItemIndex() const
 	}
 
 	return index + pParent->GetItemIndex();
-}
-
-const wxString& CQueueItem::GetIndent() const
-{
-	wxASSERT(m_indent < 5);
-	static const wxString indents[5] =
-	{
-		_T(""),
-		_T("  "),
-		_T("    "),
-		_T("      "),
-		_T("        ")
-	};
-	return indents[m_indent];
 }
 
 CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
@@ -859,7 +842,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 			switch (column)
 			{
 			case colLocalName:
-				return pFileItem->GetIndent() + pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile();
+				return _T("  ") + pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile();
 			case colDirection:
 				if (pFileItem->Download())
 					if (pFileItem->queued())
@@ -946,7 +929,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 			{
 			case colLocalName:
 				if (pFolderItem->Download())
-					return pFolderItem->GetIndent() + pFolderItem->GetLocalPath().GetPath() + pFolderItem->GetLocalFile();
+					return _T("  ") + pFolderItem->GetLocalPath().GetPath() + pFolderItem->GetLocalFile();
 				break;
 			case colDirection:
 				if (pFolderItem->Download())
