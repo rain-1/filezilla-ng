@@ -1,6 +1,8 @@
 #ifndef __LOCAL_PATH_H__
 #define __LOCAL_PATH_H__
 
+#include "refcount.h"
+
 // This class encapsulates local paths.
 // On Windows it uses the C:\foo\bar\ syntax and also supports
 // UNC paths.
@@ -20,13 +22,13 @@ public:
 	bool SetPath(const wxString& path, wxString* file = 0);
 
 	// Always terminated by a separator
-	const wxString& GetPath() const { return m_path; }
+	const wxString& GetPath() const { return *m_path; }
 
 	bool empty() const;
 	void clear();
 
 	// On failure the path is undefined
-	bool ChangePath(const wxString& path);
+	bool ChangePath(const wxString& new_path);
 
 	// Do not call with separators in the segment
 	void AddSegment(const wxString& segment);
@@ -63,10 +65,8 @@ public:
 	bool operator==(const CLocalPath& op) const;
 	bool operator!=(const CLocalPath& op) const;
 
-	void Coalesce();
 protected:
-
-	wxString m_path;
+	CRefcountObject<wxString> m_path;
 };
 
 #endif //__LOCAL_PATH_H__

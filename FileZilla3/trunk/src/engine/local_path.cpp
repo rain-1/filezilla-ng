@@ -1,6 +1,5 @@
 #include <filezilla.h>
 #include "local_path.h"
-#include "string_coalescer.h"
 #ifndef __WXMSW__
 #include <errno.h>
 #endif
@@ -27,8 +26,7 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 {
 	// This function ensures that the path is in canonical form on success.
 
-	if (path.empty())
-	{
+	if (path.empty()) {
 		m_path.clear();
 		return false;
 	}
@@ -38,7 +36,7 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 	const wxChar* in = path.c_str();
 
 	{
-		wxStringBuffer start(m_path, path.Len() + 2);
+		wxStringBuffer start(m_path.Get(), path.Len() + 2);
 		wxChar* out = start;
 
 #ifdef __WXMSW__
@@ -216,14 +214,12 @@ parse_regular:
 		*out = 0;
 	}
 
-	::Coalesce(m_path);
-
 	return true;
 }
 
 bool CLocalPath::empty() const
 {
-	return m_path.empty();
+	return m_path->empty();
 }
 
 void CLocalPath::clear()
@@ -233,7 +229,7 @@ void CLocalPath::clear()
 
 bool CLocalPath::IsWriteable() const
 {
-	if (m_path.empty())
+	if (m_path->empty())
 		return false;
 
 #ifdef __WXMSW__
@@ -241,10 +237,9 @@ bool CLocalPath::IsWriteable() const
 		// List of drives not writeable
 		return false;
 
-	if (m_path.Left(2) == _T("\\\\"))
-	{
-		int pos = m_path.Mid(2).Find('\\');
-		if (pos == -1 || pos + 3 == (int)m_path.Len())
+	if (m_path->Left(2) == _T("\\\\")) {
+		int pos = m_path->Mid(2).Find('\\');
+		if (pos == -1 || pos + 3 == (int)m_path->Len())
 			// List of shares on a computer not writeable
 			return false;
 	}
@@ -264,9 +259,8 @@ bool CLocalPath::HasParent() const
 #else
 	const int min = 0;
 #endif
-	for (int i = (int)m_path.Len() - 2; i >= min; i--)
-	{
-		if (m_path[i] == path_separator)
+	for (int i = (int)m_path->Len() - 2; i >= min; --i) {
+		if ((*m_path)[i] == path_separator)
 			return true;
 	}
 
@@ -276,7 +270,7 @@ bool CLocalPath::HasParent() const
 bool CLocalPath::HasLogicalParent() const
 {
 #ifdef __WXMSW__
-	if (m_path.Len() == 3 && m_path[0] != '\\') // Drive root
+	if (m_path->Len() == 3 && (*m_path)[0] != '\\') // Drive root
 		return true;
 #endif
 	return HasParent();
@@ -287,7 +281,7 @@ CLocalPath CLocalPath::GetParent(wxString* last_segment /*=0*/) const
 	CLocalPath parent;
 
 #ifdef __WXMSW__
-	if (m_path.Len() == 3 && m_path[0] != '\\') // Drive root
+	if (m_path->Len() == 3 && (*m_path)[0] != '\\') // Drive root
 	{
 		if (last_segment)
 			last_segment->clear();
@@ -302,16 +296,13 @@ CLocalPath CLocalPath::GetParent(wxString* last_segment /*=0*/) const
 #else
 	const int min = 0;
 #endif
-	for (int i = (int)m_path.Len() - 2; i >= min; i--)
-	{
-		if (m_path[i] == path_separator)
-		{
-			if (last_segment)
-			{
-				*last_segment = m_path.Mid(i + 1);
+	for (int i = (int)m_path->Len() - 2; i >= min; --i) {
+		if ((*m_path)[i] == path_separator) {
+			if (last_segment) {
+				*last_segment = m_path->Mid(i + 1);
 				last_segment->RemoveLast();
 			}
-			return CLocalPath(m_path.Left(i + 1));
+			return CLocalPath(m_path->Left(i + 1));
 		}
 	}
 
@@ -320,10 +311,12 @@ CLocalPath CLocalPath::GetParent(wxString* last_segment /*=0*/) const
 
 bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
 {
+	wxString& path = m_path.Get();
+
 #ifdef __WXMSW__
-	if (m_path.Len() == 3 && m_path[0] != '\\') // Drive root
+	if (path.Len() == 3 && path[0] != '\\') // Drive root
 	{
-		m_path = _T("\\");
+		path = _T("\\");
 		return true;
 	}
 
@@ -335,16 +328,13 @@ bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
 #else
 	const int min = 0;
 #endif
-	for (int i = (int)m_path.Len() - 2; i >= min; i--)
-	{
-		if (m_path[i] == path_separator)
-		{
-			if (last_segment)
-			{
-				*last_segment = m_path.Mid(i + 1);
+	for (int i = (int)path.Len() - 2; i >= min; --i) {
+		if (path[i] == path_separator) {
+			if (last_segment) {
+				*last_segment = path.Mid(i + 1);
 				last_segment->RemoveLast();
 			}
-			m_path = m_path.Left(i + 1);
+			path = path.Left(i + 1);
 			return true;
 		}
 	}
@@ -354,71 +344,75 @@ bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
 
 void CLocalPath::AddSegment(const wxString& segment)
 {
-	wxASSERT(!m_path.empty());
+	wxString& path = m_path.Get();
+
+	wxASSERT(!path.empty());
 	wxASSERT(segment.Find(_T("/")) == -1);
 #ifdef __WXMSW__
 	wxASSERT(segment.Find(_T("\\")) == -1);
 #endif
 
-	if (!segment.empty())
-	{
-		m_path += segment;
-		m_path += path_separator;
+	if (!segment.empty()) {
+		path += segment;
+		path += path_separator;
 	}
 }
 
-bool CLocalPath::ChangePath(const wxString& path)
+bool CLocalPath::ChangePath(const wxString& new_path)
 {
-	if (path.empty())
+	if (new_path.empty())
 		return false;
+
+	wxString& path = m_path.Get();
+
 #ifdef __WXMSW__
-	if (path == _T("\\") || path == _T("/")) {
-		m_path = _T("\\");
+	if (new_path == _T("\\") || new_path == _T("/")) {
+		path = _T("\\");
 		return true;
 	}
 
-	if (path.Len() >= 2 && path[0] == '\\' && path[1] == '\\') {
+	if (new_path.Len() >= 2 && new_path[0] == '\\' && new_path[1] == '\\') {
 		// Absolute UNC
-		return SetPath(path);
+		return SetPath(new_path);
 	}
-	if (path.Len() >= 2 && path[0] && path[1] == ':') {
-		// Absolute path
-		return SetPath(path);
+	if (new_path.Len() >= 2 && new_path[0] && new_path[1] == ':') {
+		// Absolute new_path
+		return SetPath(new_path);
 	}
 
-	// Relative path
-	if (m_path.empty())
+	// Relative new_path
+	if (path.empty())
 		return false;
 
-	if (path.Len() >= 2 && (path[0] == '\\' || path[0] == '/') && m_path[1] == ':') {
+	if (new_path.Len() >= 2 && (new_path[0] == '\\' || new_path[0] == '/') && path[1] == ':') {
 		// Relative to drive root
-		return SetPath(m_path.Left(2) + path);
+		return SetPath(path.Left(2) + new_path);
 	}
 	else {
 		// Relative to current directory
-		return SetPath(m_path + path);
+		return SetPath(path + new_path);
 	}
 #else
-	if (!path.empty() && path[0] == path_separator) {
-		// Absolute path
-		return SetPath(path);
+	if (!new_path.empty() && new_path[0] == path_separator) {
+		// Absolute new_path
+		return SetPath(new_path);
 	}
 	else
 	{
-		// Relative path
+		// Relative new_path
 
-		if (m_path.empty())
+		if (path.empty())
 			return false;
 
-		return SetPath(m_path + path);
+		return SetPath(path + new_path);
 	}
 #endif
 }
 
 bool CLocalPath::Exists(wxString *error /*=0*/) const
 {
-	wxASSERT(!m_path.empty());
-	if (m_path.empty())
+	wxASSERT(!m_path->empty());
+	if (m_path->empty())
 		return false;
 
 #ifdef __WXMSW__
@@ -428,48 +422,44 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 		return true;
 	}
 
-	if (m_path[0] == '\\')
-	{
+	if ((*m_path)[0] == '\\') {
 		// \\server\share\ UNC path
 
 		size_t pos;
 
 		// Search for backslash separating server from share
-		for (pos = 3; pos < m_path.Len(); pos++)
-			if (m_path[pos] == '\\')
+		for (pos = 3; pos < m_path->Len(); pos++)
+			if ((*m_path)[pos] == '\\')
 				break;
 		pos++;
-		if (pos >= m_path.Len())
-		{
+		if (pos >= m_path->Len()) {
 			// Partial UNC path
 			return true;
 		}
 	}
 
-	wxString path = m_path;
+	wxString path = *m_path;
 	if (path.Len() > 3)
 		path.RemoveLast();
 	DWORD ret = ::GetFileAttributes(path);
-	if (ret == INVALID_FILE_ATTRIBUTES)
-	{
+	if (ret == INVALID_FILE_ATTRIBUTES) {
 		if (!error)
 			return false;
 
 		error->Printf(_("'%s' does not exist or cannot be accessed."), path);
 
-		if (m_path[0] == '\\')
+		if ((*m_path)[0] == '\\')
 			return false;
 
 		// Check for removable drive, display a more specific error message in that case
 		if (::GetLastError() != ERROR_NOT_READY)
 			return false;
-		int type = GetDriveType(m_path.Left(3));
+		int type = GetDriveType(m_path->Left(3));
 		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM)
 			error->Printf(_("Cannot access '%s', no media inserted or drive not ready."), path);
 		return false;
 	}
-	else if (!(ret & FILE_ATTRIBUTE_DIRECTORY))
-	{
+	else if (!(ret & FILE_ATTRIBUTE_DIRECTORY)) {
 		if (error)
 			error->Printf(_("'%s' is not a directory."), path);
 		return false;
@@ -477,7 +467,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 
 	return true;
 #else
-	wxString path = m_path;
+	wxString path = *m_path;
 	if (path.Len() > 1)
 		path.RemoveLast();
 
@@ -486,8 +476,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 	struct stat buf;
 	int result = stat(s, &buf);
 
-	if (!result)
-	{
+	if (!result) {
 		if (S_ISDIR(buf.st_mode))
 			return true;
 
@@ -496,14 +485,12 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 
 		return false;
 	}
-	else if (result == ENOTDIR)
-	{
+	else if (result == ENOTDIR) {
 		if (error)
 			error->Printf(_("'%s' is not a directory."), path);
 		return false;
 	}
-	else
-	{
+	else {
 		if (error)
 			error->Printf(_("'%s' does not exist or cannot be accessed."), path);
 		return false;
@@ -514,7 +501,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 bool CLocalPath::operator==(const CLocalPath& op) const
 {
 #ifdef __WXMSW__
-	return m_path.CmpNoCase(op.m_path) == 0;
+	return m_path->CmpNoCase(*op.m_path) == 0;
 #else
 	return m_path == op.m_path;
 #endif
@@ -523,7 +510,7 @@ bool CLocalPath::operator==(const CLocalPath& op) const
 bool CLocalPath::operator!=(const CLocalPath& op) const
 {
 #ifdef __WXMSW__
-	return m_path.CmpNoCase(op.m_path) != 0;
+	return m_path->CmpNoCase(*op.m_path) != 0;
 #else
 	return m_path != op.m_path;
 #endif
@@ -534,14 +521,14 @@ bool CLocalPath::IsParentOf(const CLocalPath &path) const
 	if (empty() || path.empty())
 		return false;
 
-	if (path.m_path.Len() < m_path.Len())
+	if (path.m_path->Len() < m_path->Len())
 		return false;
 
 #ifdef __WXMSW__
-	if (m_path.CmpNoCase(path.m_path.Left(m_path.Len())))
+	if (m_path->CmpNoCase(path.m_path->Left(m_path->Len())))
 		return false;
 #else
-	if (m_path != path.m_path.Left(m_path.Len()))
+	if (*m_path != path.m_path->Left(m_path->Len()))
 		return false;
 #endif
 
@@ -553,14 +540,14 @@ bool CLocalPath::IsSubdirOf(const CLocalPath &path) const
 	if (empty() || path.empty())
 		return false;
 
-	if (path.m_path.Len() > m_path.Len())
+	if (path.m_path->Len() > m_path->Len())
 		return false;
 
 #ifdef __WXMSW__
-	if (path.m_path.CmpNoCase(m_path.Left(path.m_path.Len())))
+	if (path.m_path->CmpNoCase(m_path->Left(path.m_path->Len())))
 		return false;
 #else
-	if (path.m_path != m_path.Left(path.m_path.Len()))
+	if (*path.m_path != m_path->Left(path.m_path->Len()))
 		return false;
 #endif
 
@@ -580,18 +567,13 @@ wxString CLocalPath::GetLastSegment() const
 #else
 	const int min = 0;
 #endif
-	for (int i = (int)m_path.Len() - 2; i >= min; i--) {
-		if (m_path[i] == path_separator) {
-			wxString last = m_path.Mid(i + 1);
+	for (int i = (int)m_path->Len() - 2; i >= min; i--) {
+		if ((*m_path)[i] == path_separator) {
+			wxString last = m_path->Mid(i + 1);
 			last.RemoveLast();
 			return last;
 		}
 	}
 
 	return wxString();
-}
-
-void CLocalPath::Coalesce()
-{
-	::Coalesce(m_path);
 }

@@ -65,6 +65,7 @@ public:
 	CRefcountObject_Uninitialized<T>& operator=(const CRefcountObject_Uninitialized<T>& v);
 
 	bool operator!() const { return !data_; }
+	explicit operator bool() const { return data_; }
 
 	bool empty() const { return data_.get(); }
 protected:
