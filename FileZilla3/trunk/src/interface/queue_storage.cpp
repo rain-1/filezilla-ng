@@ -986,7 +986,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 	else
 	{
 		wxLongLong size = GetColumnInt64(selectFilesQuery_, file_table_column_names::size);
-		int errorCount = GetColumnInt(selectFilesQuery_, file_table_column_names::error_count);
+		unsigned char errorCount = static_cast<unsigned char>(GetColumnInt(selectFilesQuery_, file_table_column_names::error_count));
 		int priority = GetColumnInt(selectFilesQuery_, file_table_column_names::priority, static_cast<int>(QueuePriority::normal));
 
 		bool ascii = GetColumnInt(selectFilesQuery_, file_table_column_names::ascii_file) != 0;

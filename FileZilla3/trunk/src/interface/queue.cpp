@@ -9,9 +9,6 @@
 
 CQueueItem::CQueueItem(CQueueItem* parent)
 	: m_parent(parent)
-	, m_visibleOffspring(0)
-	, m_maxCachedIndex(-1)
-	, m_removed_at_front(0)
 {
 }
 
@@ -278,13 +275,6 @@ CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 					 const wxString& sourceFile, const wxString& targetFile,
 					 const CLocalPath& localPath, const CServerPath& remotePath, wxLongLong size)
 	: CQueueItem(parent)
-	, m_errorCount(0)
-	, m_edit(CEditHandler::none)
-	, m_pEngineData(0)
-	, m_defaultFileExistsAction(CFileExistsNotification::unknown)
-	, m_onetime_action(CFileExistsNotification::unknown)
-	, flags(0)
-	, m_priority(QueuePriority::normal)
 	, m_sourceFile(sourceFile)
 	, m_targetFile(targetFile)
 	, m_localPath(localPath)
