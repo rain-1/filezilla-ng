@@ -19,7 +19,7 @@ public:
 	const wxWindow* pDragSource;
 	const wxWindow* pDropTarget;
 
-	wxString localParent;
+	CLocalPath localParent;
 	std::list<wxString> m_localFiles;
 
 	CServer server;

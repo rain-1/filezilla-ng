@@ -200,8 +200,7 @@ public:
 		const wxString& subdir = DoDisplayDropHighlight(wxPoint(x, y));
 
 		CLocalPath dir = m_pLocalListView->m_pState->GetLocalDir();
-		if (subdir.empty())
-		{
+		if (subdir.empty()) {
 			const CDragDropManager* pDragDropManager = CDragDropManager::Get();
 			if (pDragDropManager && pDragDropManager->localParent == m_pLocalListView->m_dir)
 				return wxDragNone;
@@ -303,7 +302,7 @@ CLocalListView::~CLocalListView()
 #endif
 }
 
-bool CLocalListView::DisplayDir(wxString dirname)
+bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 {
 	CancelLabelEdit();
 
@@ -341,10 +340,9 @@ bool CLocalListView::DisplayDir(wxString dirname)
 	m_fileData.clear();
 	m_indexMapping.clear();
 
-	m_hasParent = CLocalPath(dirname).HasLogicalParent();
+	m_hasParent = m_dir.HasLogicalParent();
 
-	if (m_hasParent)
-	{
+	if (m_hasParent) {
 		CLocalFileData data;
 		data.dir = true;
 		data.name = _T("..");
@@ -357,18 +355,17 @@ bool CLocalListView::DisplayDir(wxString dirname)
 	}
 
 #ifdef __WXMSW__
-	if (dirname == _T("\\"))
-	{
+	if (m_dir.GetPath() == _T("\\")) {
 		DisplayDrives();
 	}
-	else if (dirname.Left(2) == _T("\\\\"))
+	else if (m_dir.GetPath().Left(2) == _T("\\\\"))
 	{
-		int pos = dirname.Mid(2).Find('\\');
-		if (pos != -1 && pos + 3 != (int)dirname.Len())
+		int pos = m_dir.GetPath().Mid(2).Find('\\');
+		if (pos != -1 && pos + 3 != (int)m_dir.GetPath().Len())
 			goto regular_dir;
 
 		// UNC path without shares
-		DisplayShares(dirname);
+		DisplayShares(m_dir.GetPath());
 	}
 	else
 #endif
@@ -379,8 +376,7 @@ regular_dir:
 		CFilterManager filter;
 		CLocalFileSystem local_filesystem;
 
-		if (!local_filesystem.BeginFindFiles(dirname, false))
-		{
+		if (!local_filesystem.BeginFindFiles(m_dir.GetPath(), false)) {
 			SetItemCount(1);
 			return false;
 		}
@@ -394,10 +390,8 @@ regular_dir:
 		int num = m_fileData.size();
 		CLocalFileData data;
 		bool wasLink;
-		while (local_filesystem.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes))
-		{
-			if (data.name.empty())
-			{
+		while (local_filesystem.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
+			if (data.name.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
@@ -406,12 +400,10 @@ regular_dir:
 #endif
 
 			m_fileData.push_back(data);
-			if (!filter.FilenameFiltered(data.name, dirname, data.dir, data.size, true, data.attributes, data.time))
-			{
+			if (!filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
 				if (data.dir)
 					totalDirCount++;
-				else
-				{
+				else {
 					if (data.size != -1)
 						totalSize += data.size;
 					else
@@ -429,11 +421,9 @@ regular_dir:
 			m_pFilelistStatusBar->SetDirectoryContents(totalFileCount, totalDirCount, totalSize, unknown_sizes, hidden);
 	}
 
-	if (m_dropTarget != -1)
-	{
+	if (m_dropTarget != -1) {
 		CLocalFileData* data = GetData(m_dropTarget);
-		if (!data || !data->dir)
-		{
+		if (!data || !data->dir) {
 			SetItemState(m_dropTarget, 0, wxLIST_STATE_DROPHILITED);
 			m_dropTarget = -1;
 		}
@@ -445,8 +435,7 @@ regular_dir:
 
 	SortList(-1, -1, false);
 
-	if (IsComparing())
-	{
+	if (IsComparing()) {
 		m_originalIndexMapping.clear();
 		RefreshComparison();
 	}
@@ -473,11 +462,11 @@ int CLocalListView::OnGetItemImage(long item) const
 		if (data->name != _T(".."))
 		{
 #ifdef __WXMSW__
-			if (m_dir == _T("\\"))
+			if (m_dir.GetPath() == _T("\\"))
 				path = data->name + _T("\\");
 			else
 #endif
-				path = m_dir + data->name;
+				path = m_dir.GetPath() + data->name;
 		}
 
 		icon = pThis->GetIconIndex(data->dir ? iconType::dir : iconType::file, path);
@@ -589,7 +578,7 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 
 	const bool queue_only = action == 1;
 
-	m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, CLocalPath(m_dir), path, *pServer, data->size);
+	m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, path, *pServer, data->size);
 	m_pQueue->QueueFile_Finish(true);
 }
 
@@ -861,23 +850,20 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 			continue;
 
 		CServerPath path = m_pState->GetRemotePath();
-		if (path.empty())
-		{
+		if (path.empty()) {
 			wxBell();
 			break;
 		}
 
-		if (data->dir)
-		{
+		if (data->dir) {
 			path.ChangePath(data->name);
 
 			CLocalPath localPath(m_dir);
 			localPath.AddSegment(data->name);
 			m_pQueue->QueueFolder(event.GetId() == XRCID("ID_ADDTOQUEUE"), false, localPath, path, *pServer);
 		}
-		else
-		{
-			m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, CLocalPath(m_dir), path, *pServer, data->size);
+		else {
+			m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, path, *pServer, data->size);
 			added = true;
 		}
 	}
@@ -931,7 +917,7 @@ wxString CLocalListView::MenuMkdir()
 	}
 
 	wxFileName fn(dlg.GetValue(), _T(""));
-	fn.Normalize(wxPATH_NORM_ALL, m_dir);
+	fn.Normalize(wxPATH_NORM_ALL, m_dir.GetPath());
 
 	bool res;
 
@@ -953,14 +939,9 @@ wxString CLocalListView::MenuMkdir()
 
 void CLocalListView::OnMenuDelete(wxCommandEvent& event)
 {
-	wxString dir = m_dir;
-	if (dir.Right(1) != _T("\\") && dir.Right(1) != _T("/"))
-		dir += _T("\\");
-
 	std::list<wxString> pathsToDelete;
 	long item = -1;
-	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
+	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		if (!item && m_hasParent)
 			continue;
 
@@ -971,7 +952,7 @@ void CLocalListView::OnMenuDelete(wxCommandEvent& event)
 		if (data->comparison_flags == fill)
 			continue;
 
-		pathsToDelete.push_back(dir + data->name);
+		pathsToDelete.push_back(m_dir.GetPath() + data->name);
 	}
 	if (!CLocalFileSystem::RecursiveDelete(pathsToDelete, this))
 		wxGetApp().DisplayEncodingWarning();
@@ -1084,7 +1065,7 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 	if (newname == data->name)
 		return false;
 
-	if (!RenameFile(this, m_dir, data->name, newname))
+	if (!RenameFile(this, m_dir.GetPath(), data->name, newname))
 		return false;
 
 	data->name = newname;
@@ -1127,7 +1108,7 @@ void CLocalListView::ApplyCurrentFilter()
 		const CLocalFileData& data = m_fileData[i];
 		if (data.comparison_flags == fill)
 			continue;
-		if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.time)) {
+		if (filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
 			hidden++;
 			continue;
 		}
@@ -1276,7 +1257,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
-		DisplayDir(m_pState->GetLocalDir().GetPath());
+		DisplayDir(m_pState->GetLocalDir());
 	else if (notification == STATECHANGE_APPLYFILTER)
 		ApplyCurrentFilter();
 	else
@@ -1306,8 +1287,7 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 	pDragDropManager->localParent = m_dir;
 
 	item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -1319,13 +1299,12 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 		if (data->comparison_flags == fill)
 			continue;
 
-		const wxString name = m_dir + data->name;
+		wxString const name = m_dir.GetPath() + data->name;
 		pDragDropManager->m_localFiles.push_back(name);
 		obj.AddFile(name);
 	}
 
-	if (obj.GetFilenames().empty())
-	{
+	if (obj.GetFilenames().empty()) {
 		pDragDropManager->Release();
 		return;
 	}
@@ -1353,7 +1332,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	CLocalFileData data;
 
 	bool wasLink;
-	enum CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(m_dir + file, wasLink, &data.size, &data.time, &data.attributes);
+	enum CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(m_dir.GetPath() + file, wasLink, &data.size, &data.time, &data.attributes);
 	if (type == CLocalFileSystem::unknown)
 		return;
 
@@ -1364,7 +1343,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	data.dir = type == CLocalFileSystem::dir;
 
 	CFilterManager filter;
-	if (filter.FilenameFiltered(data.name, m_dir, data.dir, data.size, true, data.attributes, data.time))
+	if (filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time))
 		return;
 
 	CancelLabelEdit();
@@ -1615,7 +1594,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 			return wxString();
 
 		if (data->fileType.empty())
-			data->fileType = GetType(data->name, data->dir, m_dir);
+			data->fileType = GetType(data->name, data->dir, m_dir.GetPath());
 
 		return data->fileType;
 	}
@@ -1687,8 +1666,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 	}
 
 	for (auto const& entry : selected_item_list) {
-		wxFileName fn(m_dir, entry.name);
-		pEditHandler->Edit(CEditHandler::local, fn.GetFullPath(), path, server, entry.size, this);
+		pEditHandler->Edit(CEditHandler::local, m_dir.GetPath() + entry.name, path, server, entry.size, this);
 	}
 }
 
@@ -1696,7 +1674,7 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 {
 	long item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	if (item == -1) {
-		OpenInFileManager(m_dir);
+		OpenInFileManager(m_dir.GetPath());
 		return;
 	}
 
@@ -1751,7 +1729,7 @@ void CLocalListView::OnMenuOpen(wxCommandEvent& event)
 			continue;
 		}
 
-		wxFileName fn(m_dir, data.name);
+		wxFileName fn(m_dir.GetPath(), data.name);
 		if (wxLaunchDefaultApplication(fn.GetFullPath(), 0)) {
 			continue;
 		}
@@ -1805,7 +1783,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		m_pVolumeEnumeratorThread = 0;
 	}
 
-	if (m_dir != _T("\\"))
+	if (m_dir.GetPath() != _T("\\"))
 		return;
 
 	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter)
