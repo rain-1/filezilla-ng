@@ -719,10 +719,11 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 		return true;
 
 	Bind(insertFileQuery_, file_table_column_names::source_file, file.GetSourceFile());
-	if (file.GetTargetFile().empty())
-		BindNull(insertFileQuery_, file_table_column_names::target_file);
+	auto const& targetFile = file.GetTargetFile();
+	if (targetFile)
+		Bind(insertFileQuery_, file_table_column_names::target_file, *targetFile);
 	else
-		Bind(insertFileQuery_, file_table_column_names::target_file, file.GetTargetFile());
+		BindNull(insertFileQuery_, file_table_column_names::target_file);
 
 	wxLongLong_t localPathId = SaveLocalPath(file.GetLocalPath());
 	wxLongLong_t remotePathId = SaveRemotePath(file.GetRemotePath());

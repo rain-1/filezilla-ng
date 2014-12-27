@@ -360,11 +360,10 @@ bool CFileItem::TryRemoveAll()
 	return false;
 }
 
-void CFileItem::SetTargetFile(const wxString &file)
+void CFileItem::SetTargetFile(wxString const& file)
 {
-	wxASSERT(!file.empty());
-	if (file != m_sourceFile)
-		m_targetFile = file;
+	if (!file.empty() && file != m_sourceFile)
+		*m_targetFile = file;
 	else
 		m_targetFile.clear();
 }
