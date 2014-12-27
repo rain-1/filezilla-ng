@@ -23,7 +23,7 @@ public:
 	CServerPath(const CServerPath &path, wxString subdir); // Ignores parent on absolute subdir
 	CServerPath(const CServerPath &path);
 
-	bool empty() const { return m_bEmpty; }
+	bool empty() const { return !m_data; }
 	void clear();
 
 	bool SetPath(wxString newPath);
@@ -68,7 +68,9 @@ public:
 	void Coalesce();
 
 protected:
-	bool m_bEmpty;
+	bool DoSetSafePath(const wxString& path, bool coalesce = true);
+	bool DoChangePath(wxString &subdir, bool isFile);
+
 	ServerType m_type;
 
 	typedef std::deque<wxString> tSegmentList;
@@ -80,7 +82,7 @@ protected:
 
 	static void EscapeSeparators(ServerType type, wxString& subdir);
 
-	CRefcountObject<CServerPathData> m_data;
+	CRefcountObject_Uninitialized<CServerPathData> m_data;
 };
 
 #endif
