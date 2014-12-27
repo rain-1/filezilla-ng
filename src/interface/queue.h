@@ -4,6 +4,7 @@
 #include "aui_notebook_ex.h"
 #include "listctrlex.h"
 #include "edithandler.h"
+#include "optional.h"
 
 enum class QueuePriority : char {
 	lowest,
@@ -149,10 +150,10 @@ public:
 	void SetPriorityRaw(QueuePriority priority);
 	QueuePriority GetPriority() const;
 
-	const wxString& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile.empty() ? m_sourceFile : m_targetFile); }
-	const wxString& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile.empty() ? m_sourceFile : m_targetFile); }
+	const wxString& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
+	const wxString& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
 	const wxString& GetSourceFile() const { return m_sourceFile; }
-	const wxString& GetTargetFile() const { return m_targetFile; }
+	CSparseOptional<wxString> const& GetTargetFile() const { return m_targetFile; }
 	const CLocalPath& GetLocalPath() const { return m_localPath; }
 	const CServerPath& GetRemotePath() const { return m_remotePath; }
 	const wxLongLong& GetSize() const { return m_size; }
@@ -187,7 +188,7 @@ public:
 	virtual bool TryRemoveAll(); // Removes a inactive childrens, queues active children for removal.
 								 // Returns true if item can be removed itself
 
-	void SetTargetFile(const wxString &file);
+	void SetTargetFile(wxString const& file);
 
 	unsigned char m_errorCount{};
 	CEditHandler::fileType m_edit{};
@@ -236,7 +237,7 @@ public:
 
 protected:
 	wxString m_sourceFile;
-	wxString m_targetFile;
+	CSparseOptional<wxString> m_targetFile;
 	const CLocalPath m_localPath;
 	const CServerPath m_remotePath;
 	wxLongLong m_size;
