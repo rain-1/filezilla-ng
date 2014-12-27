@@ -57,8 +57,6 @@ public:
 	wxDateTime GetTime() const { return m_time; }
 	void UpdateTime() { m_time = wxDateTime::UNow(); }
 
-	const wxString& GetIndent() const;
-
 	const std::vector<CQueueItem*>& GetChildren() const { return m_children; }
 	int GetRemovedAtFront() const { return m_removed_at_front; }
 
@@ -68,7 +66,6 @@ protected:
 	CQueueItem* m_parent;
 
 	int m_visibleOffspring; // Visible offspring over all sublevels
-	int m_indent;
 
 	int m_maxCachedIndex;
 
