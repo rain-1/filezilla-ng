@@ -65,6 +65,8 @@ public:
 	CRefcountObject_Uninitialized<T>& operator=(const CRefcountObject_Uninitialized<T>& v);
 
 	bool operator!() const { return !data_; }
+
+	bool empty() const { return data_.get(); }
 protected:
 	std::shared_ptr<T> data_;
 };
@@ -171,12 +173,11 @@ template<class T> bool CRefcountObject_Uninitialized<T>::operator==(const CRefco
 	else if (!cmp.data_) {
 		return false;
 	}
-	return *data_->get() == *cmp.data_->get();
+	return *data_.get() == *cmp.data_.get();
 }
 
 template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized()
 {
-	data_ = 0;
 }
 
 template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized(const CRefcountObject_Uninitialized<T>& v)
