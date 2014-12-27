@@ -213,7 +213,7 @@ class CFolderProcessingThread final : public wxThread
 {
 	struct t_internalDirPair
 	{
-		wxString localPath;
+		CLocalPath localPath;
 		CServerPath remotePath;
 	};
 public:
@@ -228,8 +228,8 @@ public:
 		m_processing_entries = false;
 
 		t_internalDirPair* pair = new t_internalDirPair;
-		pair->localPath = pFolderItem->GetLocalPath().GetPath().c_str();
-		pair->remotePath.SetSafePath(pFolderItem->GetRemotePath().GetSafePath().c_str(), false);
+		pair->localPath = pFolderItem->GetLocalPath();
+		pair->remotePath = pFolderItem->GetRemotePath();
 		m_dirsToCheck.push_back(pair);
 	}
 
@@ -250,8 +250,7 @@ public:
 		m_didSendEvent = false;
 		m_processing_entries = true;
 
-		if (m_throttleWait)
-		{
+		if (m_throttleWait) {
 			m_throttleWait = false;
 			m_condition.Signal();
 		}
@@ -261,27 +260,27 @@ public:
 	{
 	public:
 		t_dirPair() : CFolderProcessingEntry(CFolderProcessingEntry::dir) {}
-		wxString localPath;
-		wxString remotePath;
+		CLocalPath localPath;
+		CServerPath remotePath;
 	};
 
-	void ProcessDirectory(const CLocalPath& localPath, CServerPath remotePath, const wxString& name)
+	void ProcessDirectory(const CLocalPath& localPath, CServerPath const& remotePath, const wxString& name)
 	{
 		wxMutexLocker locker(m_sync);
 
 		t_internalDirPair* pair = new t_internalDirPair;
 
 		{
-			pair->localPath = (localPath.GetPath() + name).c_str();
+			pair->localPath = localPath;
+			pair->localPath.AddSegment(name);
 
-			remotePath.AddSegment(name);
-			pair->remotePath.SetSafePath(remotePath.GetSafePath().c_str(), false);
+			pair->remotePath = remotePath;
+			pair->remotePath.AddSegment(name);
 		}
 
 		m_dirsToCheck.push_back(pair);
 
-		if (m_threadWaiting)
-		{
+		if (m_threadWaiting) {
 			m_threadWaiting = false;
 			m_condition.Signal();
 		}
@@ -294,8 +293,7 @@ public:
 
 		m_processing_entries = false;
 
-		if (m_threadWaiting && (!m_dirsToCheck.empty() || m_entryList.empty()))
-		{
+		if (m_threadWaiting && (!m_dirsToCheck.empty() || m_entryList.empty())) {
 			m_threadWaiting = false;
 			m_condition.Signal();
 		}
@@ -320,11 +318,9 @@ protected:
 		// This reduces overhead
 		bool send;
 
-		if (m_didSendEvent)
-		{
+		if (m_didSendEvent) {
 			send = false;
-			if (m_entryList.size() >= 100)
-			{
+			if (m_entryList.size() >= 100) {
 				m_throttleWait = true;
 				m_condition.Wait();
 			}
@@ -339,8 +335,7 @@ protected:
 
 		m_sync.Unlock();
 
-		if (send)
-		{
+		if (send) {
 			// We send the notification after leaving the critical section, else we
 			// could get into a deadlock. wxWidgets event system does internal
 			// locking.
@@ -359,18 +354,12 @@ protected:
 
 		wxASSERT(!m_pFolderItem->Download());
 
-		wxString currentLocalPath;
-		CServerPath currentRemotePath;
-
 		CLocalFileSystem localFileSystem;
 
-		while (!TestDestroy() && !m_pFolderItem->m_remove)
-		{
+		while (!TestDestroy() && !m_pFolderItem->m_remove) {
 			m_sync.Lock();
-			if (m_dirsToCheck.empty())
-			{
-				if (!m_didSendEvent && !m_entryList.empty())
-				{
+			if (m_dirsToCheck.empty()) {
+				if (!m_didSendEvent && !m_entryList.empty()) {
 					m_didSendEvent = true;
 					m_sync.Unlock();
 					wxCommandEvent evt(fzEVT_FOLDERTHREAD_FILES, wxID_ANY);
@@ -378,8 +367,7 @@ protected:
 					continue;
 				}
 
-				if (!m_didSendEvent && !m_processing_entries)
-				{
+				if (!m_didSendEvent && !m_processing_entries) {
 					m_sync.Unlock();
 					break;
 				}
@@ -399,20 +387,14 @@ protected:
 
 			m_sync.Unlock();
 
-			if (!localFileSystem.BeginFindFiles(pair->localPath, false))
-			{
+			if (!localFileSystem.BeginFindFiles(pair->localPath.GetPath(), false)) {
 				delete pair;
 				continue;
 			}
 
 			t_dirPair* pair2 = new t_dirPair;
-
-			{
-				// wx' refcounted wxString isn't thread-safe. Force a deep copy.
-				pair2->localPath = pair->localPath.c_str();
-				pair2->remotePath = pair->remotePath.GetSafePath().c_str();
-			}
-
+			pair2->localPath = pair->localPath;
+			pair2->remotePath = pair->remotePath;
 			AddEntry(pair2);
 
 			t_newEntry* entry = new t_newEntry;
@@ -420,12 +402,11 @@ protected:
 			wxString name;
 			bool is_link;
 			bool is_dir;
-			while (localFileSystem.GetNextFile(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes))
-			{
+			while (localFileSystem.GetNextFile(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes)) {
 				if (is_link)
 					continue;
-				// wx' refcounted wxString isn't thread-safe. Force a deep copy.
-				entry->name = name.c_str();
+
+				entry->name = name;
 				entry->dir = is_dir;
 
 				AddEntry(entry);
@@ -551,9 +532,9 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 	{
 		fileItem = new CFileItem(pServerItem, queueOnly, download, sourceFile, targetFile, localPath, remotePath, size);
 		if (download)
-			fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferRemoteAsAscii(sourceFile, remotePath.GetType());
+			fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(sourceFile, remotePath.GetType()));
 		else
-			fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferLocalAsAscii(sourceFile, remotePath.GetType());
+			fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(sourceFile, remotePath.GetType()));
 		fileItem->m_edit = edit;
 		if (edit != CEditHandler::none)
 			fileItem->m_onetime_action = CFileExistsNotification::overwrite;
@@ -600,20 +581,19 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 
 	const std::list<CRemoteDataObject::t_fileInfo>& files = dataObject.GetFiles();
 
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-	{
-		if (iter->dir)
+	for (auto const& fileInfo : files) {
+		if (fileInfo.dir)
 			continue;
 
 		CFileItem* fileItem;
-		wxString localFile = ReplaceInvalidCharacters(iter->name);
+		wxString localFile = ReplaceInvalidCharacters(fileInfo.name);
 		if (dataObject.GetServerPath().GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localFile = StripVMSRevision(localFile);
 
 		fileItem = new CFileItem(pServerItem, queueOnly, true,
-			iter->name, (iter->name != localFile) ? localFile : wxString(),
-			localPath, dataObject.GetServerPath(), iter->size);
-		fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferRemoteAsAscii(iter->name, dataObject.GetServerPath().GetType());
+			fileInfo.name, (fileInfo.name != localFile) ? localFile : wxString(),
+			localPath, dataObject.GetServerPath(), fileInfo.size);
+		fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(fileInfo.name, dataObject.GetServerPath().GetType()));
 
 		InsertItem(pServerItem, fileItem);
 	}
@@ -676,7 +656,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 						{
 						case CFileExistsNotification::resume:
 							if (fileExistsNotification.canResume &&
-								pFileItem->m_transferSettings.binary)
+								!pFileItem->Ascii())
 							{
 								fileExistsNotification.overwriteAction = CFileExistsNotification::resume;
 							}
@@ -1448,8 +1428,10 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			fileItem->m_statusMessage = _("Transferring");
 			RefreshItem(engineData.pItem);
 
+			CFileTransferCommand::t_transferSettings transferSettings;
+			transferSettings.binary = !fileItem->Ascii();
 			int res = engineData.pEngine->Execute(CFileTransferCommand(fileItem->GetLocalPath().GetPath() + fileItem->GetLocalFile(), fileItem->GetRemotePath(),
-												fileItem->GetRemoteFile(), fileItem->Download(), fileItem->m_transferSettings));
+												fileItem->GetRemoteFile(), fileItem->Download(), transferSettings));
 			wxASSERT((res & FZ_REPLY_BUSY) != FZ_REPLY_BUSY);
 			if (res == FZ_REPLY_WOULDBLOCK)
 				return;
@@ -1825,23 +1807,20 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 	for (std::list<CFolderProcessingEntry*>::const_iterator iter = entryList.begin(); iter != entryList.end(); ++iter)
 	{
 		const CFolderProcessingEntry* entry = *iter;
-		if (entry->m_type == CFolderProcessingEntry::dir)
-		{
-			if (m_pFolderProcessingThread->GetFolderScanItem()->m_dir_is_empty)
-			{
+		if (entry->m_type == CFolderProcessingEntry::dir) {
+			if (m_pFolderProcessingThread->GetFolderScanItem()->m_dir_is_empty) {
 				CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, pFolderScanItem->m_current_remote_path, _T(""));
 				InsertItem(pServerItem, fileItem);
 				added++;
 			}
 
 			const CFolderProcessingThread::t_dirPair* entry = (const CFolderProcessingThread::t_dirPair*)*iter;
-			pFolderScanItem->m_current_local_path = CLocalPath(entry->localPath);
-			pFolderScanItem->m_current_remote_path.SetSafePath(entry->remotePath);
+			pFolderScanItem->m_current_local_path = entry->localPath;
+			pFolderScanItem->m_current_remote_path = entry->remotePath;
 			pFolderScanItem->m_dir_is_empty = true;
 			delete entry;
 		}
-		else
-		{
+		else {
 			const t_newEntry* entry = (const t_newEntry*)*iter;
 			if (filters.FilenameFiltered(entry->name, pFolderScanItem->m_current_local_path.GetPath(), entry->dir, entry->size, true, entry->attributes, entry->time)) {
 				delete entry;
@@ -1859,9 +1838,9 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, download, entry->name, wxEmptyString, pFolderScanItem->m_current_local_path, pFolderScanItem->m_current_remote_path, entry->size);
 
 			if (download)
-				fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferRemoteAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType());
+				fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType()));
 			else
-				fileItem->m_transferSettings.binary = !CAutoAsciiFiles::TransferLocalAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType());
+				fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType()));
 
 			fileItem->m_defaultFileExistsAction = defaultFileExistsAction;
 
@@ -2042,7 +2021,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 						download ? remoteFile : localFileName,
 						(remoteFile != localFileName) ? (download ? localFileName : remoteFile) : wxString(),
 						previousLocalPath, previousRemotePath, size);
-					fileItem->m_transferSettings.binary = binary;
+					fileItem->SetAscii(!binary);
 					fileItem->SetPriorityRaw(QueuePriority(priority));
 					fileItem->m_errorCount = errorCount;
 					InsertItem(pServerItem, fileItem);
