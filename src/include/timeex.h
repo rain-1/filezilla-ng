@@ -6,7 +6,7 @@
 class CDateTime final
 {
 public:
-	enum Accuracy {
+	enum Accuracy : char {
 		days,
 		hours,
 		minutes,
@@ -55,8 +55,8 @@ private:
 
 	bool IsClamped();
 
-	Accuracy a_;
 	wxDateTime t_;
+	Accuracy a_;
 };
 
 /* If called multiple times in a row, wxDateTime::Now may return the same
