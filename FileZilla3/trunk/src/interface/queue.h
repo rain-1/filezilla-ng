@@ -195,8 +195,6 @@ public:
 
 	wxString m_statusMessage;
 
-	CFileTransferCommand::t_transferSettings m_transferSettings;
-
 	t_EngineData* m_pEngineData;
 
 	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
@@ -212,6 +210,18 @@ public:
 
 	CFileExistsNotification::OverwriteAction m_onetime_action;
 
+	bool Ascii() const { return (flags & flag_ascii) != 0; }
+
+	void SetAscii(bool ascii)
+	{
+		if (ascii) {
+			flags |= flag_ascii;
+		}
+		else {
+			flags &= ~flag_ascii;
+		}
+	}
+
 protected:
 	enum
 	{
@@ -219,7 +229,8 @@ protected:
 		flag_active = 0x02,
 		flag_made_progress = 0x04,
 		flag_queued = 0x08,
-		flag_remove = 0x10
+		flag_remove = 0x10,
+		flag_ascii = 0x20
 	};
 	int flags;
 

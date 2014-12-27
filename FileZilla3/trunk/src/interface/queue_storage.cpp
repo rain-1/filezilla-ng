@@ -742,7 +742,7 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 	else
 		BindNull(insertFileQuery_, file_table_column_names::error_count);
 	Bind(insertFileQuery_, file_table_column_names::priority, static_cast<int>(file.GetPriority()));
-	Bind(insertFileQuery_, file_table_column_names::ascii_file, file.m_transferSettings.binary ? 0 : 1);
+	Bind(insertFileQuery_, file_table_column_names::ascii_file, file.Ascii() ? 1 : 0);
 
 	if (file.m_defaultFileExistsAction != CFileExistsNotification::unknown)
 		Bind(insertFileQuery_, file_table_column_names::default_exists_action, file.m_defaultFileExistsAction);
@@ -989,7 +989,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 		int errorCount = GetColumnInt(selectFilesQuery_, file_table_column_names::error_count);
 		int priority = GetColumnInt(selectFilesQuery_, file_table_column_names::priority, static_cast<int>(QueuePriority::normal));
 
-		bool binary = GetColumnInt(selectFilesQuery_, file_table_column_names::ascii_file) == 0;
+		bool ascii = GetColumnInt(selectFilesQuery_, file_table_column_names::ascii_file) != 0;
 		int overwrite_action = GetColumnInt(selectFilesQuery_, file_table_column_names::default_exists_action, CFileExistsNotification::unknown);
 
 		if (sourceFile.empty() || localPath.empty() ||
@@ -1003,7 +1003,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 
 		CFileItem* fileItem = new CFileItem(0, true, download, sourceFile, targetFile, localPath, remotePath, size);
 		*pItem = fileItem;
-		fileItem->m_transferSettings.binary = binary;
+		fileItem->SetAscii(ascii);
 		fileItem->SetPriorityRaw(QueuePriority(priority));
 		fileItem->m_errorCount = errorCount;
 
