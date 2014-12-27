@@ -35,7 +35,7 @@ public:
 
 protected:
 	void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void*);
-	bool DisplayDir(wxString dirname);
+	bool DisplayDir(CLocalPath const& dirname);
 	void ApplyCurrentFilter();
 
 	// Declared const due to design error in wxWidgets.
@@ -82,7 +82,7 @@ protected:
 	virtual bool OnBeginRename(const wxListEvent& event);
 	virtual bool OnAcceptRename(const wxListEvent& event);
 
-	wxString m_dir;
+	CLocalPath m_dir;
 
 	int m_dropTarget;
 
