@@ -105,6 +105,7 @@ public:
 	void DestroyEngine();
 
 	CLocalPath GetLocalDir() const;
+	bool SetLocalDir(CLocalPath const& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
 	bool SetLocalDir(const wxString& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
 
 	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
