@@ -1991,7 +1991,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				wxString safeRemotePath = GetTextElement(pFile, "RemotePath");
 				bool download = GetTextElementInt(pFile, "Download") != 0;
 				wxLongLong size = GetTextElementLongLong(pFile, "Size", -1);
-				unsigned int errorCount = GetTextElementInt(pFile, "ErrorCount");
+				unsigned char errorCount = static_cast<unsigned char>(GetTextElementInt(pFile, "ErrorCount"));
 				unsigned int priority = GetTextElementInt(pFile, "Priority", static_cast<unsigned int>(QueuePriority::normal));
 
 				int dataType = GetTextElementInt(pFile, "DataType", -1);

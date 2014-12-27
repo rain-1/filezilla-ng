@@ -20,7 +20,7 @@ public:
 		removing
 	};
 
-	enum fileType
+	enum fileType : char
 	{
 		none = -1,
 		local,

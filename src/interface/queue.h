@@ -5,7 +5,7 @@
 #include "listctrlex.h"
 #include "edithandler.h"
 
-enum class QueuePriority {
+enum class QueuePriority : char {
 	lowest,
 	low,
 	normal,
@@ -65,9 +65,8 @@ protected:
 
 	CQueueItem* m_parent;
 
-	int m_visibleOffspring; // Visible offspring over all sublevels
-
-	int m_maxCachedIndex;
+	int m_visibleOffspring{}; // Visible offspring over all sublevels
+	int m_maxCachedIndex{-1};
 
 	struct t_cacheItem
 	{
@@ -86,7 +85,7 @@ private:
 	// Number of items removed at front of list
 	// Increased instead of calling slow m_children.erase(0),
 	// resetted on insert.
-	int m_removed_at_front;
+	int m_removed_at_front{};
 };
 
 class CFileItem;
@@ -190,14 +189,29 @@ public:
 
 	void SetTargetFile(const wxString &file);
 
-	int m_errorCount;
-	CEditHandler::fileType m_edit;
+	unsigned char m_errorCount{};
+	CEditHandler::fileType m_edit{};
+	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction{};
+	CFileExistsNotification::OverwriteAction m_onetime_action{};
+	QueuePriority m_priority{QueuePriority::normal};
 
+protected:
+	enum : char
+	{
+		flag_download = 0x01,
+		flag_active = 0x02,
+		flag_made_progress = 0x04,
+		flag_queued = 0x08,
+		flag_remove = 0x10,
+		flag_ascii = 0x20
+	};
+	char flags{};
+
+public:
 	wxString m_statusMessage;
 
-	t_EngineData* m_pEngineData;
+	t_EngineData* m_pEngineData{};
 
-	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
 
 	inline bool made_progress() const { return (flags & flag_made_progress) != 0; }
 	inline void set_made_progress(bool made_progress)
@@ -207,8 +221,6 @@ public:
 		else
 			flags &= ~flag_made_progress;
 	}
-
-	CFileExistsNotification::OverwriteAction m_onetime_action;
 
 	bool Ascii() const { return (flags & flag_ascii) != 0; }
 
@@ -223,19 +235,6 @@ public:
 	}
 
 protected:
-	enum
-	{
-		flag_download = 0x01,
-		flag_active = 0x02,
-		flag_made_progress = 0x04,
-		flag_queued = 0x08,
-		flag_remove = 0x10,
-		flag_ascii = 0x20
-	};
-	int flags;
-
-	QueuePriority m_priority;
-
 	wxString m_sourceFile;
 	wxString m_targetFile;
 	const CLocalPath m_localPath;

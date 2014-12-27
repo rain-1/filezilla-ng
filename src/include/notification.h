@@ -166,7 +166,7 @@ public:
 	bool canResume{};
 
 	// overwriteAction will be set by the request handler
-	enum OverwriteAction
+	enum OverwriteAction : char
 	{
 		unknown = -1,
 		ask,

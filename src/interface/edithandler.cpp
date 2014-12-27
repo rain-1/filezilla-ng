@@ -683,7 +683,7 @@ checkmodifications_loopbegin:
 			}
 			else if (remove)
 			{
-				if (i == remote)
+				if (i == static_cast<int>(remote))
 				{
 					if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file || wxRemoveFile(iter->file))
 					{
