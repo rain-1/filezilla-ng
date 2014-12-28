@@ -190,7 +190,25 @@ public:
 
 	void SetTargetFile(wxString const& file);
 
-	void SetStatusMessage(wxString const& message);
+	enum Status : char {
+		none,
+		incorrect_password,
+		timeout,
+		disconnecting,
+		disconnected,
+		connecting,
+		connection_failed,
+		interrupted,
+		wait_browsing,
+		wait_password,
+		local_file_unwriteable,
+		could_not_start,
+		transferring,
+		creating_dir
+	};
+
+	wxString const& GetStatusMessage() const;
+	void SetStatusMessage(Status status);
 
 	unsigned char m_errorCount{};
 	CEditHandler::fileType m_edit{};
@@ -209,10 +227,9 @@ protected:
 		flag_ascii = 0x20
 	};
 	char flags{};
+	Status m_status{};
 
 public:
-	CSparseOptional<wxString> m_statusMessage;
-
 	t_EngineData* m_pEngineData{};
 
 
@@ -238,10 +255,10 @@ public:
 	}
 
 protected:
-	wxString m_sourceFile;
+	wxString const m_sourceFile;
 	CSparseOptional<wxString> m_targetFile;
-	const CLocalPath m_localPath;
-	const CServerPath m_remotePath;
+	CLocalPath const m_localPath;
+	CServerPath const m_remotePath;
 	wxLongLong m_size;
 };
 
