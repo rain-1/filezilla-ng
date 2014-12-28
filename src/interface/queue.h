@@ -190,6 +190,8 @@ public:
 
 	void SetTargetFile(wxString const& file);
 
+	void SetStatusMessage(wxString const& message);
+
 	unsigned char m_errorCount{};
 	CEditHandler::fileType m_edit{};
 	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction{};
@@ -209,7 +211,7 @@ protected:
 	char flags{};
 
 public:
-	wxString m_statusMessage;
+	CSparseOptional<wxString> m_statusMessage;
 
 	t_EngineData* m_pEngineData{};
 
