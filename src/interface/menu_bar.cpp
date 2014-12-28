@@ -241,10 +241,11 @@ void CMenuBar::ClearBookmarks()
 void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
+	if (!pState)
+		return;
 
 	std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_site.find(event.GetId());
-	if (iter != m_bookmark_menu_id_map_site.end())
-	{
+	if (iter != m_bookmark_menu_id_map_site.end()) {
 		// We hit a site-specific bookmark
 		CContextControl* pContextControl = m_pMainFrame ? m_pMainFrame->GetContextControl() : 0;
 		CContextControl::_context_controls* controls = pContextControl ? pContextControl->GetCurrentControls() : 0;
@@ -258,37 +259,28 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 		name.Replace(_T("/"), _T("\\/"));
 		name = controls->site_bookmarks->path + _T("/") + name;
 
-		CSiteManagerItemData_Site *pData = CSiteManager::GetSiteByPath(name);
+		std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteByPath(name);
 		if (!pData)
 			return;
 
-		if (!pState)
-			return;
-
 		pState->SetSyncBrowse(false);
-		if (!pData->m_remoteDir.empty() && pState->IsRemoteIdle())
-		{
+		if (!pData->m_remoteDir.empty() && pState->IsRemoteIdle()) {
 			const CServer* pServer = pState->GetServer();
-			if (!pServer || *pServer != pData->m_server)
-			{
-				m_pMainFrame->ConnectToSite(pData);
+			if (!pServer || *pServer != pData->m_server) {
+				m_pMainFrame->ConnectToSite(*pData);
 				pData->m_localDir.clear(); // So not to set again below
 			}
 			else
 				pState->ChangeRemoteDir(pData->m_remoteDir);
 		}
-		if (!pData->m_localDir.empty())
-		{
+		if (!pData->m_localDir.empty()) {
 			bool set = pState->SetLocalDir(pData->m_localDir);
 
-			if (set && pData->m_sync)
-			{
+			if (set && pData->m_sync) {
 				wxASSERT(!pData->m_remoteDir.empty());
 				pState->SetSyncBrowse(true, pData->m_remoteDir);
 			}
 		}
-
-		delete pData;
 
 		return;
 	}

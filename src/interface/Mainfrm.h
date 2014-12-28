@@ -68,7 +68,7 @@ public:
 
 	CContextControl* GetContextControl() { return m_pContextControl; }
 
-	bool ConnectToSite(CSiteManagerItemData_Site* const pData, bool newTab = false);
+	bool ConnectToSite(CSiteManagerItemData_Site & data, bool newTab = false);
 
 	CFileZillaEngineContext& GetEngineContext() { return m_engineContext; }
 protected:

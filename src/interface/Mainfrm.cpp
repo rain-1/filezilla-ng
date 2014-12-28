@@ -810,11 +810,10 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		if (!pServer && !controls->site_bookmarks->path.empty()) {
 			// Get server from site manager
-			CSiteManagerItemData_Site* data = CSiteManager::GetSiteByPath(controls->site_bookmarks->path);
+			std::unique_ptr<CSiteManagerItemData_Site> data = CSiteManager::GetSiteByPath(controls->site_bookmarks->path);
 			if (data) {
 				server = data->m_server;
 				pServer = &server;
-				delete data;
 			}
 			else {
 				controls->site_bookmarks->path.clear();
@@ -893,16 +892,14 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		}
 
-		CSiteManagerItemData_Site* pData = CSiteManager::GetSiteById(event.GetId());
+		std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteById(event.GetId());
 
 		if (!pData) {
 			event.Skip();
-			return;
 		}
-
-		ConnectToSite(pData);
-
-		delete pData;
+		else {
+			ConnectToSite(*pData);
+		}
 	}
 }
 
@@ -1432,7 +1429,7 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 		if (!dlg.GetServer(data))
 			return;
 
-		ConnectToSite(&data);
+		ConnectToSite(data);
 	}
 
 	if (m_pMenuBar)
@@ -1962,43 +1959,40 @@ void CMainFrame::OnSitemanagerDropdown(wxCommandEvent& event)
 	if (!m_pToolBar)
 		return;
 
-	wxMenu *pMenu = CSiteManager::GetSitesMenu();
-	if (!pMenu)
-		return;
-
-	ShowDropdownMenu(pMenu, m_pToolBar, event);
+	std::unique_ptr<wxMenu> pMenu = CSiteManager::GetSitesMenu();
+	if (pMenu) {
+		ShowDropdownMenu(pMenu.release(), m_pToolBar, event);
+	}
 }
 
-bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site* const pData, bool newTab)
+bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site & data, bool newTab)
 {
-	wxASSERT(pData);
-
-	if (pData->m_server.GetLogonType() == ASK ||
-		(pData->m_server.GetLogonType() == INTERACTIVE && pData->m_server.GetUser().empty()))
+	if (data.m_server.GetLogonType() == ASK ||
+		(data.m_server.GetLogonType() == INTERACTIVE && data.m_server.GetUser().empty()))
 	{
-		if (!CLoginManager::Get().GetPassword(pData->m_server, false, pData->m_server.GetName()))
+		if (!CLoginManager::Get().GetPassword(data.m_server, false, data.m_server.GetName()))
 			return false;
 	}
 
 	if (newTab)
 		m_pContextControl->CreateTab();
 
-	if (!ConnectToServer(pData->m_server, pData->m_remoteDir))
+	if (!ConnectToServer(data.m_server, data.m_remoteDir))
 		return false;
 
-	if (!pData->m_localDir.empty()) {
+	if (!data.m_localDir.empty()) {
 		CState *pState = CContextManager::Get()->GetCurrentContext();
 		if( pState ) {
-			bool set = pState->SetLocalDir(pData->m_localDir, 0, false);
+			bool set = pState->SetLocalDir(data.m_localDir, 0, false);
 
-			if (set && pData->m_sync) {
-				wxASSERT(!pData->m_remoteDir.empty());
-				pState->SetSyncBrowse(true, pData->m_remoteDir);
+			if (set && data.m_sync) {
+				wxASSERT(!data.m_remoteDir.empty());
+				pState->SetSyncBrowse(true, data.m_remoteDir);
 			}
 		}
 	}
 
-	SetBookmarksFromPath(pData->m_path);
+	SetBookmarksFromPath(data.m_path);
 	if (m_pMenuBar)
 		m_pMenuBar->UpdateBookmarkMenu();
 
@@ -2384,20 +2378,16 @@ void CMainFrame::ProcessCommandLine()
 			OpenSiteManager();
 		}
 	}
-	else if ((site = pCommandLine->GetOption(CCommandLine::site)) != _T(""))
-	{
-		CSiteManagerItemData_Site* pData = CSiteManager::GetSiteByPath(site);
+	else if ((site = pCommandLine->GetOption(CCommandLine::site)) != _T("")) {
+		std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteByPath(site);
 
-		if (pData)
-		{
-			ConnectToSite(pData);
-			delete pData;
+		if (pData) {
+			ConnectToSite(*pData);
 		}
 	}
 
 	wxString param = pCommandLine->GetParameter();
-	if (!param.empty())
-	{
+	if (!param.empty()) {
 		wxString error;
 
 		CServer server;
