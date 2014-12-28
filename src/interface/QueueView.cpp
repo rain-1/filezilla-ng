@@ -974,7 +974,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 				}
 				reason = reset;
 			}
-			pEngineData->pItem->SetStatusMessage(_("Interrupted by user"));
+			pEngineData->pItem->SetStatusMessage(CFileItem::interrupted);
 		}
 		else
 			reason = reset;
@@ -1011,15 +1011,15 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 				CLoginManager::Get().CachedPasswordFailed(pEngineData->lastServer);
 
 			if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-				pEngineData->pItem->m_statusMessage.clear();
+				pEngineData->pItem->SetStatusMessage(CFileItem::none);
 			else if (replyCode & FZ_REPLY_PASSWORDFAILED)
-				pEngineData->pItem->SetStatusMessage(_("Incorrect password"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::incorrect_password);
 			else if ((replyCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT)
-				pEngineData->pItem->SetStatusMessage(_("Timeout"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::timeout);
 			else if (replyCode & FZ_REPLY_DISCONNECTED)
-				pEngineData->pItem->SetStatusMessage(_("Disconnected from server"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::disconnected);
 			else
-				pEngineData->pItem->SetStatusMessage(_("Connection attempt failed"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::connection_failed);
 
 			if (replyCode != (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED) ||
 				!IsOtherEngineConnected(pEngineData))
@@ -1055,23 +1055,23 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 		else
 		{
 			if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
-				pEngineData->pItem->m_statusMessage.clear();
+				pEngineData->pItem->SetStatusMessage(CFileItem::none);
 			else if ((replyCode & FZ_REPLY_TIMEOUT) == FZ_REPLY_TIMEOUT)
-				pEngineData->pItem->SetStatusMessage(_("Timeout"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::timeout);
 			else if (replyCode & FZ_REPLY_DISCONNECTED)
-				pEngineData->pItem->SetStatusMessage(_("Disconnected from server"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::disconnected);
 			else if ((replyCode & FZ_REPLY_WRITEFAILED) == FZ_REPLY_WRITEFAILED) {
-				pEngineData->pItem->SetStatusMessage(_("Could not write to local file"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::local_file_unwriteable);
 				ResetEngine(*pEngineData, failure);
 				return;
 			}
 			else if ((replyCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR) {
-				pEngineData->pItem->SetStatusMessage(_("Could not start transfer"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::could_not_start);
 				ResetEngine(*pEngineData, failure);
 				return;
 			}
 			else
-				pEngineData->pItem->SetStatusMessage(_("Could not start transfer"));
+				pEngineData->pItem->SetStatusMessage(CFileItem::could_not_start);
 			if (!IncreaseErrorCount(*pEngineData))
 				return;
 
@@ -1261,7 +1261,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 					CServerItem* pServerItem = pQueueViewSuccessful->CreateServerItem(server);
 					data.pItem->UpdateTime();
 					data.pItem->SetParent(pServerItem);
-					data.pItem->SetStatusMessage(wxString());
+					data.pItem->SetStatusMessage(CFileItem::none);
 					pQueueViewSuccessful->InsertItem(pServerItem, data.pItem);
 					pQueueViewSuccessful->CommitChanges();
 				}
@@ -1340,7 +1340,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 {
 	for (;;) {
 		if (engineData.state == t_EngineData::waitprimary) {
-			engineData.pItem->SetStatusMessage(_("Waiting for browsing connection"));
+			engineData.pItem->SetStatusMessage(CFileItem::wait_browsing);
 
 			wxASSERT(engineData.pEngine);
 			if (!engineData.pEngine) {
@@ -1367,7 +1367,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		}
 
 		if (engineData.state == t_EngineData::disconnect) {
-			engineData.pItem->SetStatusMessage(_("Disconnecting from previous server"));
+			engineData.pItem->SetStatusMessage(CFileItem::disconnecting);
 			RefreshItem(engineData.pItem);
 			if (engineData.pEngine->Execute(CDisconnectCommand()) == FZ_REPLY_WOULDBLOCK)
 				return;
@@ -1382,7 +1382,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		}
 
 		if (engineData.state == t_EngineData::askpassword) {
-			engineData.pItem->SetStatusMessage(_("Waiting for password"));
+			engineData.pItem->SetStatusMessage(CFileItem::wait_password);
 			RefreshItem(engineData.pItem);
 			if (m_waitingForPassword.empty()) {
 				wxCommandEvent evt(fzEVT_ASKFORPASSWORD);
@@ -1393,7 +1393,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		}
 
 		if (engineData.state == t_EngineData::connect) {
-			engineData.pItem->SetStatusMessage(_("Connecting"));
+			engineData.pItem->SetStatusMessage(CFileItem::connecting);
 			RefreshItem(engineData.pItem);
 
 			int res = engineData.pEngine->Execute(CConnectCommand(engineData.lastServer, false));
@@ -1426,7 +1426,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		if (engineData.state == t_EngineData::transfer) {
 			CFileItem* fileItem = engineData.pItem;
 
-			fileItem->SetStatusMessage(_("Transferring"));
+			fileItem->SetStatusMessage(CFileItem::transferring);
 			RefreshItem(engineData.pItem);
 
 			CFileTransferCommand::t_transferSettings transferSettings;
@@ -1460,7 +1460,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 		if (engineData.state == t_EngineData::mkdir) {
 			CFileItem* fileItem = engineData.pItem;
 
-			fileItem->SetStatusMessage(_("Creating directory"));
+			fileItem->SetStatusMessage(CFileItem::creating_dir);
 			RefreshItem(engineData.pItem);
 
 			int res = engineData.pEngine->Execute(CMkdirCommand(fileItem->GetRemotePath()));
@@ -1522,7 +1522,7 @@ bool CQueueView::SetActive(bool active /*=true*/)
 
 			if (pEngineData->state == t_EngineData::waitprimary) {
 				if (pEngineData->pItem)
-					pEngineData->pItem->SetStatusMessage(_("Interrupted by user"));
+					pEngineData->pItem->SetStatusMessage(CFileItem::interrupted);
 				ResetEngine(*pEngineData, reset);
 			}
 			else {
@@ -2363,7 +2363,7 @@ bool CQueueView::StopItem(CFileItem* item)
 		else
 			reason = reset;
 		if (item->m_pEngineData->pItem)
-			item->m_pEngineData->pItem->m_statusMessage.clear();
+			item->m_pEngineData->pItem->SetStatusMessage(CFileItem::none);
 		ResetEngine(*item->m_pEngineData, reason);
 		return true;
 	}

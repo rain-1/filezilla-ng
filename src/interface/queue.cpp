@@ -368,12 +368,31 @@ void CFileItem::SetTargetFile(wxString const& file)
 		m_targetFile.clear();
 }
 
-void CFileItem::SetStatusMessage(wxString const& message)
+void CFileItem::SetStatusMessage(CFileItem::Status status)
 {
-	if (!message.empty())
-		*m_statusMessage = message;
-	else
-		m_statusMessage.clear();
+	m_status = status;
+}
+
+wxString const& CFileItem::GetStatusMessage() const
+{
+	static wxString statusTexts[] = {
+		wxString(),
+		_("Incorrect password"),
+		_("Timeout"),
+		_("Disconnecting from previous server"),
+		_("Disconnected from server"),
+		_("Connecting"),
+		_("Connection attempt failed"),
+		_("Interrupted by user"),
+		_("Waiting for browsing connection"),
+		_("Waiting for password"),
+		_("Could not write to local file"),
+		_("Could not start transfer"),
+		_("Transferring"),
+		_("Creating directory")
+	};
+
+	return statusTexts[m_status];
 }
 
 CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath)
@@ -880,7 +899,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 				break;
 			case colTransferStatus:
 			case colErrorReason:
-				return pFileItem->m_statusMessage ? *pFileItem->m_statusMessage : wxString();
+				return pFileItem->GetStatusMessage();
 			case colTime:
 				return CTimeFormat::FormatDateTime(pItem->GetTime());
 			default:
@@ -967,7 +986,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 				break;
 			case colTransferStatus:
 			case colErrorReason:
-				return pFolderItem->m_statusMessage ? *pFolderItem->m_statusMessage : wxString();
+				return pFolderItem->GetStatusMessage();
 			case colTime:
 				return CTimeFormat::FormatDateTime(pItem->GetTime());
 			default:
