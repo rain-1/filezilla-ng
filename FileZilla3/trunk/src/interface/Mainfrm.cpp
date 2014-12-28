@@ -2621,10 +2621,11 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 
 	std::shared_ptr<CContextControl::_context_controls::_site_bookmarks> site_bookmarks;
 	for (int i = 0; i < m_pContextControl->GetTabCount(); i++) {
-		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
 		if (i == m_pContextControl->GetCurrentTab())
 			continue;
-		if (!controls->site_bookmarks || controls->site_bookmarks->path != path)
+
+		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
+		if (!controls || !controls->site_bookmarks || controls->site_bookmarks->path != path)
 			continue;
 
 		site_bookmarks = controls->site_bookmarks;
@@ -2636,8 +2637,7 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 	}
 
 	CContextControl::_context_controls *controls = m_pContextControl->GetCurrentControls();
-	if (controls)
-	{
+	if (controls) {
 		controls->site_bookmarks = site_bookmarks;
 		CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
 	}
