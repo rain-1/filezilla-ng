@@ -801,8 +801,10 @@ char *ssh_sftp_get_cmdline(char *prompt, int no_fds_ok)
     DWORD threadid;
     HANDLE hThread;
 
+    /* Not used in fzsftp
     fputs(prompt, stdout);
     fflush(stdout);
+    */
 
     if ((sftp_ssh_socket == INVALID_SOCKET && no_fds_ok) ||
 	p_WSAEventSelect == NULL) {
