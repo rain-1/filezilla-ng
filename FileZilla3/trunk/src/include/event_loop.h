@@ -27,7 +27,7 @@ public:
 	void RemoveHandler(CEventHandler* handler);
 
 	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
-	void StopTimer(CEventHandler* handler, timer_id id);
+	void StopTimer(timer_id id);
 
 protected:
 	friend class CEventHandler;

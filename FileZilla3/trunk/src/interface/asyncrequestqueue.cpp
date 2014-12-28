@@ -370,7 +370,7 @@ void CAsyncRequestQueue::SetQueue(CQueueView *pQueue)
 	m_pQueueView = pQueue;
 }
 
-void CAsyncRequestQueue::OnProcessQueue(wxCommandEvent &event)
+void CAsyncRequestQueue::OnProcessQueue(wxCommandEvent &)
 {
 	if (m_inside_request)
 		return;
@@ -425,7 +425,7 @@ bool CAsyncRequestQueue::CheckWindowState()
 	return true;
 }
 
-void CAsyncRequestQueue::OnTimer(wxTimerEvent& event)
+void CAsyncRequestQueue::OnTimer(wxTimerEvent&)
 {
 	TriggerProcessing();
 }

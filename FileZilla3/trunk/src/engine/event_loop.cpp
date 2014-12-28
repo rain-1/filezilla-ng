@@ -101,7 +101,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 	return d.id_;
 }
 
-void CEventLoop::StopTimer(CEventHandler* handler, timer_id id)
+void CEventLoop::StopTimer(timer_id id)
 {
 	if (id) {
 		wxMutexLocker lock(sync_);
