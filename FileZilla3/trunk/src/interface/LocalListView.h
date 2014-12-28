@@ -10,18 +10,18 @@ class CLocalListViewDropTarget;
 class CVolumeDescriptionEnumeratorThread;
 #endif
 
-class CLocalFileData : public CGenericFileData
+class CLocalFileData final : public CGenericFileData
 {
 public:
 	wxString name;
 #ifdef __WXMSW__
-	wxString label;
+	CSparseOptional<wxString> label;
 #endif
+	CDateTime time;
+	wxLongLong size;
+	int attributes;
 	bool dir;
 	bool is_dir() const { return dir; }
-	wxLongLong size;
-	CDateTime time;
-	int attributes;
 };
 
 class CLocalListView : public CFileListCtrl<CLocalFileData>, CStateEventHandler

@@ -346,9 +346,6 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 		CLocalFileData data;
 		data.dir = true;
 		data.name = _T("..");
-#ifdef __WXMSW__
-		data.label = _T("..");
-#endif
 		data.size = -1;
 		m_fileData.push_back(data);
 		m_indexMapping.push_back(0);
@@ -395,9 +392,6 @@ regular_dir:
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
-#ifdef __WXMSW__
-			data.label = data.name;
-#endif
 
 			m_fileData.push_back(data);
 			if (!filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
@@ -627,7 +621,7 @@ void CLocalListView::DisplayDrives()
 
 		CLocalFileData data;
 		data.name = drive;
-		data.label = data.name;
+		*data.label = data.name;
 		data.dir = true;
 		data.size = -1;
 
@@ -683,7 +677,7 @@ void CLocalListView::DisplayShares(wxString computer)
 			CLocalFileData data;
 			data.name = p->shi1_netname;
 #ifdef __WXMSW__
-			data.label = data.name;
+			*data.label = data.name;
 #endif
 			data.dir = true;
 			data.size = -1;
@@ -1070,7 +1064,7 @@ bool CLocalListView::OnAcceptRename(const wxListEvent& event)
 
 	data->name = newname;
 #ifdef __WXMSW__
-	data->label = data->name;
+	data->label.clear();
 #endif
 	m_pState->RefreshLocal();
 
@@ -1337,9 +1331,6 @@ void CLocalListView::RefreshFile(const wxString& file)
 		return;
 
 	data.name = file;
-#ifdef __WXMSW__
-	data.label = file;
-#endif
 	data.dir = type == CLocalFileSystem::dir;
 
 	CFilterManager filter;
@@ -1570,23 +1561,20 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 	if (!data)
 		return wxString();
 
-	if (!column)
-	{
+	if (!column) {
 #ifdef __WXMSW__
-		return data->label;
+		return data->label ? *data->label : data->name;
 #else
 		return data->name;
 #endif
 	}
-	else if (column == 1)
-	{
+	else if (column == 1) {
 		if (data->size < 0)
 			return wxString();
 		else
 			return CSizeFormat::Format(data->size);
 	}
-	else if (column == 2)
-	{
+	else if (column == 2) {
 		if (!item && m_hasParent)
 			return wxString();
 
@@ -1786,8 +1774,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 	if (m_dir.GetPath() != _T("\\"))
 		return;
 
-	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter)
-	{
+	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter) {
 		wxString drive = iter->volume;
 
 		unsigned int item, index;
@@ -1800,7 +1787,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		if (item >= m_indexMapping.size())
 			continue;
 
-		m_fileData[index].label = drive + _T(" (") + iter->volumeName + _T(")");
+		*m_fileData[index].label = drive + _T(" (") + iter->volumeName + _T(")");
 
 		RefreshItem(item);
 	}

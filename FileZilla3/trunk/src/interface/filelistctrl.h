@@ -18,8 +18,8 @@ class CGtkEventCallbackProxyBase;
 class CGenericFileData
 {
 public:
-	int icon{-2};
 	wxString fileType;
+	int icon{-2};
 
 	// t_fileEntryFlags is defined in listingcomparison.h as it will be used for
 	// both local and remote listings
