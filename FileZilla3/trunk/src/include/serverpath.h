@@ -30,8 +30,8 @@ public:
 	bool SetPath(wxString &newPath, bool isFile);
 	bool SetSafePath(const wxString& path, bool coalesce = true);
 
-	// If ChangePath returns false, the object will be left an
-	// undefined state
+	// If ChangePath returns false, the object will be left
+	// empty.
 	bool ChangePath(wxString subdir);
 	bool ChangePath(wxString &subdir, bool isFile);
 
