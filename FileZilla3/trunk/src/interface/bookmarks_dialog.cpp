@@ -223,11 +223,10 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 		path.Replace(_T("/"), _T("\\/"));
 		path = m_site_path + _T("/") + path;
 
-		CSiteManagerItemData_Site* data = CSiteManager::GetSiteByPath(path);
+		std::unique_ptr<CSiteManagerItemData_Site> data = CSiteManager::GetSiteByPath(path);
 		if (data) {
 			CBookmarkItemData* new_data = new CBookmarkItemData(data->m_localDir, data->m_remoteDir, data->m_sync);
 			m_pTree->AppendItem(m_bookmarks_site, *iter, 1, 1, new_data);
-			delete data;
 		}
 	}
 

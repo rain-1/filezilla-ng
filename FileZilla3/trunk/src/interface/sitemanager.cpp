@@ -6,17 +6,15 @@
 #include "Options.h"
 #include "xmlfunctions.h"
 
-std::map<int, CSiteManagerItemData_Site*> CSiteManager::m_idMap;
+std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> CSiteManager::m_idMap;
 
 bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler)
 {
 	wxASSERT(pElement);
 	wxASSERT(pHandler);
 
-	for (TiXmlElement* pChild = pElement->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement())
-	{
-		if (!strcmp(pChild->Value(), "Folder"))
-		{
+	for (TiXmlElement* pChild = pElement->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement()) {
+		if (!strcmp(pChild->Value(), "Folder")) {
 			wxString name = GetTextElement_Trimmed(pChild);
 			if (name.empty())
 				continue;
@@ -28,24 +26,21 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 			if (!pHandler->LevelUp())
 				return false;
 		}
-		else if (!strcmp(pChild->Value(), "Server"))
-		{
-			CSiteManagerItemData_Site* data = ReadServerElement(pChild);
+		else if (!strcmp(pChild->Value(), "Server")) {
+			std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(pChild);
 
-			if (data)
-			{
-				pHandler->AddSite(data);
+			if (data) {
+				pHandler->AddSite(std::move(data));
 
 				// Bookmarks
-				for (TiXmlElement* pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
-				{
+				for (TiXmlElement* pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
 					TiXmlHandle handle(pBookmark);
 
 					wxString name = GetTextElement_Trimmed(pBookmark, "Name");
 					if (name.empty())
 						continue;
 
-					CSiteManagerItemData* data = new CSiteManagerItemData(CSiteManagerItemData::BOOKMARK);
+					auto data = make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
 
 					TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
 					if (localDir)
@@ -55,16 +50,14 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 					if (remoteDir)
 						data->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
 
-					if (data->m_localDir.empty() && data->m_remoteDir.empty())
-					{
-						delete data;
+					if (data->m_localDir.empty() && data->m_remoteDir.empty()) {
 						continue;
 					}
 
 					if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
 						data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 
-					pHandler->AddBookmark(name, data);
+					pHandler->AddBookmark(name, std::move(data));
 				}
 
 				if (!pHandler->LevelUp())
@@ -76,7 +69,7 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 	return true;
 }
 
-CSiteManagerItemData_Site* CSiteManager::ReadServerElement(TiXmlElement *pElement)
+std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(TiXmlElement *pElement)
 {
 	CServer server;
 	if (!::GetServer(pElement, server))
@@ -84,7 +77,7 @@ CSiteManagerItemData_Site* CSiteManager::ReadServerElement(TiXmlElement *pElemen
 	if (server.GetName().empty())
 		return 0;
 
-	CSiteManagerItemData_Site* data = new CSiteManagerItemData_Site(server);
+	auto data = make_unique<CSiteManagerItemData_Site>(server);
 
 	TiXmlHandle handle(pElement);
 
@@ -109,7 +102,7 @@ CSiteManagerItemData_Site* CSiteManager::ReadServerElement(TiXmlElement *pElemen
 class CSiteManagerXmlHandler_Menu : public CSiteManagerXmlHandler
 {
 public:
-	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, CSiteManagerItemData_Site*> *idMap, bool predefined)
+	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> *idMap, bool predefined)
 		: m_pMenu(pMenu), m_idMap(idMap)
 	{
 		m_added_site = false;
@@ -154,7 +147,7 @@ public:
 		return true;
 	}
 
-	virtual bool AddSite(CSiteManagerItemData_Site* data)
+	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data)
 	{
 		wxString newName(data->m_server.GetName());
 		int i = GetInsertIndex(m_pMenu, newName);
@@ -163,16 +156,15 @@ public:
 
 		data->m_path = path + _T("/") + CSiteManager::EscapeSegment(data->m_server.GetName());
 
-		(*m_idMap)[pItem->GetId()] = data;
+		(*m_idMap)[pItem->GetId()] = std::move(data);
 
 		m_added_site = true;
 
 		return true;
 	}
 
-	virtual bool AddBookmark(const wxString& name, CSiteManagerItemData* data)
+	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data)
 	{
-		delete data;
 		return true;
 	}
 
@@ -213,7 +205,7 @@ public:
 protected:
 	wxMenu* m_pMenu;
 
-	std::map<int, CSiteManagerItemData_Site*> *m_idMap;
+	std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> *m_idMap;
 
 	std::list<wxMenu*> m_parents;
 	std::list<wxString> m_childNames;
@@ -224,7 +216,7 @@ protected:
 	std::list<wxString> m_paths;
 };
 
-wxMenu* CSiteManager::GetSitesMenu()
+std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 {
 	ClearIdMap();
 
@@ -232,53 +224,48 @@ wxMenu* CSiteManager::GetSitesMenu()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	wxMenu* predefinedSites = GetSitesMenu_Predefined(m_idMap);
+	std::unique_ptr<wxMenu> predefinedSites = GetSitesMenu_Predefined(m_idMap);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	TiXmlElement* pDocument = file.Load();
-	if (!pDocument)
-	{
+	if (!pDocument) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
-		if (!predefinedSites)
+		if (predefinedSites)
 			return predefinedSites;
 
-		wxMenu *pMenu = new wxMenu;
+		auto pMenu = make_unique<wxMenu>();
 		wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
 		pItem->Enable(false);
 		return pMenu;
 	}
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
-	{
+	if (!pElement) {
 		if (predefinedSites)
 			return predefinedSites;
 
-		wxMenu *pMenu = new wxMenu;
+		auto pMenu = make_unique<wxMenu>();
 		wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
 		pItem->Enable(false);
 		return pMenu;
 	}
 
-	wxMenu* pMenu = new wxMenu;
-	CSiteManagerXmlHandler_Menu handler(pMenu, &m_idMap, false);
+	auto pMenu = make_unique<wxMenu>();
+	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &m_idMap, false);
 
 	bool res = Load(pElement, &handler);
-	if (!res || !pMenu->GetMenuItemCount())
-	{
-		delete pMenu;
-		pMenu = 0;
+	if (!res || !pMenu->GetMenuItemCount()) {
+		pMenu.reset();
 	}
 
-	if (pMenu)
-	{
+	if (pMenu) {
 		if (!predefinedSites)
 			return pMenu;
 
-		wxMenu* pRootMenu = new wxMenu;
-		pRootMenu->AppendSubMenu(predefinedSites, _("Predefined Sites"));
-		pRootMenu->AppendSubMenu(pMenu, _("My Sites"));
+		auto pRootMenu = make_unique<wxMenu>();
+		pRootMenu->AppendSubMenu(predefinedSites.release(), _("Predefined Sites"));
+		pRootMenu->AppendSubMenu(pMenu.release(), _("My Sites"));
 
 		return pRootMenu;
 	}
@@ -286,7 +273,7 @@ wxMenu* CSiteManager::GetSitesMenu()
 	if (predefinedSites)
 		return predefinedSites;
 
-	pMenu = new wxMenu;
+	pMenu = make_unique<wxMenu>();
 	wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
 	pItem->Enable(false);
 	return pMenu;
@@ -294,13 +281,10 @@ wxMenu* CSiteManager::GetSitesMenu()
 
 void CSiteManager::ClearIdMap()
 {
-	for (auto iter = m_idMap.begin(); iter != m_idMap.end(); ++iter)
-		delete iter->second;
-
 	m_idMap.clear();
 }
 
-wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData_Site*> &idMap)
+std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap)
 {
 	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir.empty())
@@ -317,37 +301,28 @@ wxMenu* CSiteManager::GetSitesMenu_Predefined(std::map<int, CSiteManagerItemData
 	if (!pElement)
 		return 0;
 
-	wxMenu* pMenu = new wxMenu;
-	CSiteManagerXmlHandler_Menu handler(pMenu, &idMap, true);
+	auto pMenu = make_unique<wxMenu>();
+	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &idMap, true);
 
-	if (!Load(pElement, &handler))
-	{
-		delete pMenu;
+	if (!Load(pElement, &handler)) {
 		return 0;
 	}
 
-	if (!pMenu->GetMenuItemCount())
-	{
-		delete pMenu;
+	if (!pMenu->GetMenuItemCount()) {
 		return 0;
 	}
 
 	return pMenu;
 }
 
-CSiteManagerItemData_Site* CSiteManager::GetSiteById(int id)
+std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteById(int id)
 {
 	auto iter = m_idMap.find(id);
 
-	CSiteManagerItemData_Site *pData;
-	if (iter != m_idMap.end())
-	{
-		pData = iter->second;
-		iter->second = 0;
+	std::unique_ptr<CSiteManagerItemData_Site> pData;
+	if (iter != m_idMap.end()) {
+		pData = std::move(iter->second);
 	}
-	else
-		pData = 0;
-
 	ClearIdMap();
 
 	return pData;
@@ -417,11 +392,10 @@ wxString CSiteManager::BuildPath(wxChar root, std::list<wxString> const& segment
 	return ret;
 }
 
-CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
+std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteByPath(wxString sitePath)
 {
 	wxChar c = sitePath.empty() ? 0 : sitePath[0];
-	if (c != '0' && c != '1')
-	{
+	if (c != '0' && c != '1') {
 		wxMessageBoxEx(_("Site path has to begin with 0 or 1."), _("Invalid site path"));
 		return 0;
 	}
@@ -481,16 +455,14 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 	else
 		pBookmark = 0;
 
-	CSiteManagerItemData_Site* data = ReadServerElement(pChild);
+	std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(pChild);
 
-	if (!data)
-	{
+	if (!data) {
 		wxMessageBoxEx(_("Could not read server item."), _("Invalid site path"));
 		return 0;
 	}
 
-	if (pBookmark)
-	{
+	if (pBookmark) {
 		TiXmlHandle handle(pBookmark);
 
 		wxString localPath;
@@ -501,8 +473,7 @@ CSiteManagerItemData_Site* CSiteManager::GetSiteByPath(wxString sitePath)
 		TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
 		if (remoteDir)
 			remotePath.SetSafePath(ConvLocal(remoteDir->Value()));
-		if (!localPath.empty() && !remotePath.empty())
-		{
+		if (!localPath.empty() && !remotePath.empty()) {
 			data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 		}
 		else

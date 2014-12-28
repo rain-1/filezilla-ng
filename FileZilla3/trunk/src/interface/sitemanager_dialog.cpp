@@ -627,7 +627,7 @@ public:
 		return true;
 	}
 
-	virtual bool AddSite(CSiteManagerItemData_Site* data)
+	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data)
 	{
 		if (m_kiosk && !m_predefined &&
 			data->m_server.GetLogonType() == NORMAL)
@@ -639,16 +639,14 @@ public:
 
 		const wxString name(data->m_server.GetName());
 
-		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 2, 2, data);
+		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 2, 2, data.release());
 
 		m_item = newItem;
 		m_expand.push_back(true);
 
-		if (!m_wrong_sel_depth && !m_lastSelection.empty())
-		{
+		if (!m_wrong_sel_depth && !m_lastSelection.empty()) {
 			const wxString& first = m_lastSelection.front();
-			if (first == name)
-			{
+			if (first == name) {
 				m_lastSelection.pop_front();
 				if (m_lastSelection.empty())
 					m_pTree->SafeSelectItem(newItem);
@@ -662,15 +660,13 @@ public:
 		return true;
 	}
 
-	virtual bool AddBookmark(const wxString& name, CSiteManagerItemData* data)
+	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data)
 	{
-		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 3, 3, data);
+		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 3, 3, data.release());
 
-		if (!m_wrong_sel_depth && !m_lastSelection.empty())
-		{
+		if (!m_wrong_sel_depth && !m_lastSelection.empty()) {
 			const wxString& first = m_lastSelection.front();
-			if (first == name)
-			{
+			if (first == name) {
 				m_lastSelection.clear();
 				m_pTree->SafeSelectItem(newItem);
 			}

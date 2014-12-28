@@ -535,18 +535,15 @@ bool CManualTransfer::VerifyServer()
 
 void CManualTransfer::OnSelectSite(wxCommandEvent& event)
 {
-	wxMenu *pMenu = CSiteManager::GetSitesMenu();
-	if (!pMenu)
-		return;
-
-	PopupMenu(pMenu);
-
-	delete pMenu;
+	std::unique_ptr<wxMenu> pMenu = CSiteManager::GetSitesMenu();
+	if (pMenu) {
+		PopupMenu(pMenu.get());
+	}
 }
 
 void CManualTransfer::OnSelectedSite(wxCommandEvent& event)
 {
-	CSiteManagerItemData_Site* pData = CSiteManager::GetSiteById(event.GetId());
+	std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteById(event.GetId());
 	if (!pData)
 		return;
 
@@ -556,8 +553,6 @@ void CManualTransfer::OnSelectedSite(wxCommandEvent& event)
 	m_pLastSite = new CServer(pData->m_server);
 
 	XRCCTRL(*this, "ID_SERVER_SITE_SERVER", wxStaticText)->SetLabel(m_pServer->GetName());
-
-	delete pData;
 
 	DisplayServer();
 }
