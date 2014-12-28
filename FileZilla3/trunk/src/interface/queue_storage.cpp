@@ -996,8 +996,7 @@ wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 		if (sourceFile.empty() || localPath.empty() ||
 			remotePath.empty() ||
 			size < -1 ||
-			priority < 0 || priority >= static_cast<int>(QueuePriority::count) ||
-			errorCount < 0)
+			priority < 0 || priority >= static_cast<int>(QueuePriority::count))
 		{
 			return INVALID_DATA;
 		}
