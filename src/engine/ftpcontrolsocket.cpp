@@ -1563,8 +1563,6 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
-
-	return SendNextCommand();
 }
 
 int CFtpControlSocket::ListSend()
@@ -2613,20 +2611,19 @@ int CFtpControlSocket::FileTransferSend()
 
 				m_pEngine->transfer_status_.Init(pData->remoteFileSize, startOffset, false);
 
-				if (m_pEngine->GetOptions().GetOptionVal(OPTION_PREALLOCATE_SPACE))
-				{
+				if (m_pEngine->GetOptions().GetOptionVal(OPTION_PREALLOCATE_SPACE)) {
 					// Try to preallocate the file in order to reduce fragmentation
 					wxFileOffset sizeToPreallocate = pData->remoteFileSize - startOffset;
-					if (sizeToPreallocate > 0)
-					{
+					if (sizeToPreallocate > 0) {
 						LogMessage(MessageType::Debug_Info, _T("Preallocating %") + wxString(wxFileOffsetFmtSpec) + _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
 						wxFileOffset oldPos = pFile->Seek(0, CFile::current);
-						if (pFile->Seek(sizeToPreallocate, CFile::end) == pData->remoteFileSize)
-						{
-							if (!pFile->Truncate())
-								LogMessage(MessageType::Debug_Warning, _T("Impossible to preallocate the file"));
+						if (oldPos != -1) {
+							if (pFile->Seek(sizeToPreallocate, CFile::end) == pData->remoteFileSize) {
+								if (!pFile->Truncate())
+									LogMessage(MessageType::Debug_Warning, _T("Could not preallocate the file"));
+							}
+							pFile->Seek(oldPos, CFile::begin);
 						}
-						pFile->Seek(oldPos, CFile::begin);
 					}
 				}
 			}
