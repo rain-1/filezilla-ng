@@ -11,6 +11,7 @@
 class CIPAddressTest : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(CIPAddressTest);
+	CPPUNIT_TEST(testIsIpAddress);
 	CPPUNIT_TEST(testIPV6LongForm);
 	CPPUNIT_TEST(testIsRoutableAddress4);
 	CPPUNIT_TEST(testIsRoutableAddress6);
@@ -20,6 +21,7 @@ public:
 	void setUp() {}
 	void tearDown() {}
 
+	void testIsIpAddress();
 	void testIPV6LongForm();
 	void testIsRoutableAddress4();
 	void testIsRoutableAddress6();
@@ -28,6 +30,19 @@ protected:
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CIPAddressTest);
+
+void CIPAddressTest::testIsIpAddress()
+{
+	CPPUNIT_ASSERT(IsIpAddress(_T("255.255.255.255")));
+	CPPUNIT_ASSERT(IsIpAddress(_T("127.0.0.1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.0.0.0.1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.-0.0.1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.a.0.1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.256.0.1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.0.1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.0..1")));
+	CPPUNIT_ASSERT(!IsIpAddress(_T("127.0..0.1")));
+}
 
 void CIPAddressTest::testIPV6LongForm()
 {
