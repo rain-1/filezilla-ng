@@ -1,14 +1,15 @@
 #include <filezilla.h>
 
 CDirectoryListing::CDirectoryListing()
+	: m_flags()
+	, m_entryCount()
 {
-	m_entryCount = 0;
-	m_flags = 0;
 }
 
 CDirectoryListing::CDirectoryListing(const CDirectoryListing& listing)
 	: path(listing.path)
-	, m_flags(listing.m_flags), m_firstListTime(listing.m_firstListTime)
+	, m_firstListTime(listing.m_firstListTime)
+	, m_flags(listing.m_flags)
 	, m_entries(listing.m_entries), m_searchmap_case(listing.m_searchmap_case), m_searchmap_nocase(listing.m_searchmap_nocase)
 	, m_entryCount(listing.m_entryCount)
 {

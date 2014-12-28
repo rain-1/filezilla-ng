@@ -37,11 +37,11 @@ public:
 	int GetError() const { return m_error; }
 
 protected:
-	CSocketEventSource* m_pSource;
-	const EventType m_type;
-	wxChar *m_data;
-	int m_error;
 	CSocketEventHandler* m_pSocketEventHandler;
+	CSocketEventSource* m_pSource;
+	wxChar *m_data;
+	const EventType m_type;
+	int m_error;
 
 	friend class CSocketEventDispatcher;
 };

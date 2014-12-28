@@ -229,10 +229,9 @@ void CSocketEventDispatcher::operator()(CEventBase const&)
 }
 
 CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, const wxChar* data)
-	: m_pSource(pSource), m_type(type), m_error(0), m_pSocketEventHandler(pSocketEventHandler)
+	: m_pSocketEventHandler(pSocketEventHandler), m_pSource(pSource), m_type(type), m_error(0)
 {
-	if (data)
-	{
+	if (data) {
 		m_data = new wxChar[wxStrlen(data) + 1];
 		wxStrcpy(m_data, data);
 	}
@@ -241,9 +240,8 @@ CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEven
 }
 
 CSocketEvent::CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, int error /*=0*/)
-	: m_pSource(pSource), m_type(type), m_error(error), m_pSocketEventHandler(pSocketEventHandler)
+	: m_pSocketEventHandler(pSocketEventHandler), m_pSource(pSource), m_data(), m_type(type), m_error(error)
 {
-	m_data = 0;
 }
 
 CSocketEvent::~CSocketEvent()

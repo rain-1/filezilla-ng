@@ -84,6 +84,8 @@ public:
 
 	void ClearFindMap();
 
+	CMonotonicTime m_firstListTime;
+
 	enum
 	{
 		unsure_file_added = 0x01,
@@ -118,8 +120,6 @@ public:
 	bool has_dirs() const { return (m_flags & listing_has_dirs) != 0; }
 	bool has_perms() const { return (m_flags & listing_has_perms) != 0; }
 	bool has_usergroup() const { return (m_flags & listing_has_usergroup) != 0; }
-
-	CMonotonicTime m_firstListTime;
 
 	void Assign(std::deque<CRefcountObject<CDirentry>> & entries);
 
