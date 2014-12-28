@@ -368,6 +368,14 @@ void CFileItem::SetTargetFile(wxString const& file)
 		m_targetFile.clear();
 }
 
+void CFileItem::SetStatusMessage(wxString const& message)
+{
+	if (!message.empty())
+		*m_statusMessage = message;
+	else
+		m_statusMessage.clear();
+}
+
 CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath)
 	: CFileItem(parent, queued, true, wxEmptyString, wxEmptyString, localPath, CServerPath(), -1)
 {
@@ -872,7 +880,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 				break;
 			case colTransferStatus:
 			case colErrorReason:
-				return pFileItem->m_statusMessage;
+				return pFileItem->m_statusMessage ? *pFileItem->m_statusMessage : wxString();
 			case colTime:
 				return CTimeFormat::FormatDateTime(pItem->GetTime());
 			default:
@@ -959,7 +967,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 				break;
 			case colTransferStatus:
 			case colErrorReason:
-				return pFolderItem->m_statusMessage;
+				return pFolderItem->m_statusMessage ? *pFolderItem->m_statusMessage : wxString();
 			case colTime:
 				return CTimeFormat::FormatDateTime(pItem->GetTime());
 			default:
