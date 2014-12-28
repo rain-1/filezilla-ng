@@ -26,5 +26,5 @@ timer_id CEventHandler::AddTimer(int ms_interval, bool one_shot)
 
 void CEventHandler::StopTimer(timer_id id)
 {
-	event_loop_.StopTimer(this, id);
+	event_loop_.StopTimer(id);
 }

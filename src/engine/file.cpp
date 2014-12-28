@@ -8,7 +8,7 @@ CFile::CFile()
 
 CFile::CFile(wxString const& f, mode m, disposition d)
 {
-	Open(f, m);
+	Open(f, m, d);
 }
 
 CFile::~CFile()

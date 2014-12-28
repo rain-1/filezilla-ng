@@ -293,7 +293,7 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 	return ContinueConnect();
 }
 
-int CFileZillaEnginePrivate::Disconnect(const CDisconnectCommand &command)
+int CFileZillaEnginePrivate::Disconnect(CDisconnectCommand const&)
 {
 	if (!IsConnected())
 		return FZ_REPLY_OK;
@@ -832,7 +832,7 @@ int CFileZillaEnginePrivate::Cancel()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-void CFileZillaEnginePrivate::OnOptionChanged(int option)
+void CFileZillaEnginePrivate::OnOptionChanged(int)
 {
 	wxCriticalSectionLocker lock(notification_mutex_);
 	queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
