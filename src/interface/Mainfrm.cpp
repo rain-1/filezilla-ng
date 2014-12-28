@@ -1576,10 +1576,12 @@ void CMainFrame::OnToggleDirectoryTreeView(wxCommandEvent& event)
 		return;
 
 	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
+	if (!controls)
+		return;
 
 	bool const local = event.GetId() == XRCID("ID_TOOLBAR_LOCALTREEVIEW") || event.GetId() == XRCID("ID_VIEW_LOCALTREE");
 	CSplitterWindowEx* splitter = local ? controls->pLocalSplitter : controls->pRemoteSplitter;
-	bool show = !controls || !splitter->IsSplit();
+	bool show = !splitter->IsSplit();
 	ShowDirectoryTree(local, show);
 }
 
