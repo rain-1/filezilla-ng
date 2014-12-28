@@ -1405,8 +1405,9 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		gotYear = true;
 	}
 
-	if (!gotMonth || !gotDay || !gotYear)
-		return false;
+	wxASSERT(gotYear);
+	wxASSERT(gotMonth);
+	wxASSERT(gotDay);
 
 	if( !entry.time.Set( year, month, day ) ) {
 		return false;
