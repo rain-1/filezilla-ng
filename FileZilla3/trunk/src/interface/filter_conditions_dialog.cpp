@@ -381,8 +381,7 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 	}
 
 	pos = wxPoint(10 + typeRect.GetWidth(), posy);
-	if (!controls.pCondition)
-	{
+	if (!controls.pCondition) {
 		switch (condition.type)
 		{
 		case filter_name:
@@ -405,7 +404,9 @@ void CFilterConditionsDialog::MakeControls(const CFilterCondition& condition, in
 			wxFAIL_MSG(_T("Unhandled condition"));
 			break;
 		}
-		controls.pCondition->MoveAfterInTabOrder(controls.pType);
+		if (controls.pCondition && controls.pType) {
+			controls.pCondition->MoveAfterInTabOrder(controls.pType);
+		}
 	}
 	else
 		controls.pCondition->SetPosition(pos);
