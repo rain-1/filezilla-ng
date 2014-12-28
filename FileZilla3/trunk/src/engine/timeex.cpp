@@ -9,8 +9,8 @@ CDateTime::CDateTime()
 }
 
 CDateTime::CDateTime( CDateTime const& op )
-: a_(op.a_)
-, t_(op.t_)
+: t_(op.t_)
+, a_(op.a_)
 {
 }
 
