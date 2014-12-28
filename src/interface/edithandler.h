@@ -86,7 +86,7 @@ public:
 		CServer server;
 	};
 
-	const std::list<t_fileData>& GetFiles(enum fileType type) const { wxASSERT(type != none); return m_fileDataList[type]; }
+	const std::list<t_fileData>& GetFiles(enum fileType type) const { wxASSERT(type != none); return m_fileDataList[(type == local) ? 0 : 1]; }
 
 	bool UploadFile(const wxString& file, bool unedit);
 	bool UploadFile(const wxString& file, const CServerPath& remotePath, const CServer& server, bool unedit);
