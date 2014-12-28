@@ -249,10 +249,12 @@ bool IsIpAddress(const wxString& address)
 			dotcount++;
 			segment = 0;
 		}
-		else if (c < '0' || c > '9')
+		else if (c < '0' || c > '9') {
 			return false;
-
-		segment = segment * 10 + c - '0';
+		}
+		else {
+			segment = segment * 10 + c - '0';
+		}
 	}
 	if (dotcount != 3)
 		return false;
