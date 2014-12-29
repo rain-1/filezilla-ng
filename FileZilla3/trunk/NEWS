@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0-rc1 (2014-12-29)
+
++ Reduced memory consumption of large queues
++ Preliminary support for Windows 10 technical preview
++ MSW: FileZilla running on a 64bit Windows can now use up to 4GiB of RAM, up from 2GiB
+- Fixed memory leaks in SFTP component
+- Fixed fzsftp crashing on disconnect if using keyfiles
+- Various code cleanup and minor fixes
+
 3.10.0-beta3 (2014-12-19)
 
 + The search dialog now has checkboxes to only search for files or directories
