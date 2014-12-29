@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-05 19:39+0100\n"
+"PO-Revision-Date: 2014-12-25 22:49+0100\n"
 "Last-Translator: Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>\n"
 "Language-Team: \n"
 "Language: nb_NO\n"
@@ -210,7 +210,7 @@ msgstr "&Legg til bokmerke …"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:245
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:291
 msgid "&Add files to queue"
-msgstr "&Legg filer i køen"
+msgstr "&Legg filer i kø"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:645
 msgid "&Add keyfile..."
@@ -247,7 +247,7 @@ msgstr "&Bruk alltid denne handlinga"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:341
 msgid "&Ask your operating system for the external IP address"
-msgstr "&Spør operativsystemet etter ekstern IP-adresse"
+msgstr "&Be operativsystemet om å oppgi ekstern IP-adresse"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:140
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:589
@@ -827,7 +827,7 @@ msgstr "&Rapporter en feil …"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:458
 msgid "&Reset and requeue all"
-msgstr "&Nullstill og legg alle tilbake i køen"
+msgstr "&Nullstill og legg alle tilbake i kø"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:428
 msgid "&Restart Wizard"
@@ -956,7 +956,7 @@ msgstr "&Overføringsmodus:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:122
 msgid "&Transfer queue"
-msgstr "&Overfør køen"
+msgstr "&Overfør kø"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1122
 msgid "&Treat dotfiles as ASCII files"
@@ -1180,6 +1180,7 @@ msgid "3 - Verbose"
 msgstr "3 - Detaljert"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:97
+#, fuzzy
 msgid "32 bit system"
 msgstr "32-bit-system"
 
@@ -1188,6 +1189,7 @@ msgid "4 - Debug"
 msgstr "4 - Feilsøking"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:95
+#, fuzzy
 msgid "64 bit system"
 msgstr "64-bit-system"
 
@@ -1457,8 +1459,8 @@ msgstr "Alle porter i rekken må være mellom 1024 og 65535."
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
-msgstr[0] "Alle overføringene er ferdig. %d fil ble ikke overført."
-msgstr[1] "Alle overføringene er ferdig. %d filer ble ikke overført."
+msgstr[0] "Alle overføringer er fullført. %d fil ble ikke overført."
+msgstr[1] "Alle overføringer er fullført. %d filer ble ikke overført."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:213
 msgid "Allow &fall back to other transfer mode on failure"
@@ -2076,7 +2078,7 @@ msgstr "Tøm «koble til på nytt»-informasjon"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1508
 msgid "Clear &transfer queue"
-msgstr "Tøm &overføringskøen"
+msgstr "Tøm &overføringskø"
 
 #: ../../locales/../src/interface/quickconnectbar.cpp:147
 msgid "Clear history"
@@ -2991,9 +2993,9 @@ msgid "Deleting \"%s\""
 msgstr "Sletter «%s»"
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr "Sletter %d filer fra «%s»"
+msgstr "Sletter %u filer fra «%s»"
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3553,7 +3555,7 @@ msgstr "Utforsker"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1567
 msgid "Export &Queue"
-msgstr "Eksporter &køen"
+msgstr "Eksporter &kø"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1562
 msgid "Export &Settings"
@@ -5053,7 +5055,7 @@ msgstr "Ny tjener"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1308
 msgid "Next to the transfer queue"
-msgstr "Ved siden av overføringskøen"
+msgstr "Ved siden av overføringskø"
 
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:813
 msgid "No"
@@ -5095,7 +5097,7 @@ msgstr "Ingen bilder tilgjengelig"
 
 #: ../../locales/../src/interface/QueueView.cpp:3078
 msgid "No more files in the queue!"
-msgstr "Ingen flere filer i køen!"
+msgstr "Ingen flere filer i kø!"
 
 #: ../../locales/../src/interface/filter.cpp:341
 #: ../../locales/../src/interface/filter.cpp:405
@@ -5866,7 +5868,7 @@ msgstr "Passo&rd på mellomtjener:"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:129
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:338
 msgid "Process &Queue"
-msgstr "Behandle &køen"
+msgstr "Behandle &kø"
 
 #: ../../locales/../src/engine/socket.cpp:1143
 msgid "Process file table overflow"
@@ -5944,7 +5946,7 @@ msgstr "Allmenne rettigheter"
 
 #: ../../locales/../src/interface/QueueView.cpp:3158
 msgid "Queue has been fully processed"
-msgstr "Køen er ferdigbehandlet."
+msgstr "Overføringskø er ferdigbehandlet."
 
 #: ../../locales/../src/interface/statusbar.cpp:427
 #, c-format
@@ -5963,7 +5965,7 @@ msgstr "Kø: tom"
 
 #: ../../locales/../src/interface/QueueView.cpp:463
 msgid "Queued files"
-msgstr "Filer i køen"
+msgstr "Filer i kø"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3049
 msgid "Queueing:"
@@ -5980,7 +5982,7 @@ msgstr "&Eksternt mappetre"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:465
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:480
 msgid "R&eset and requeue selected files"
-msgstr "&Nullstill og legg tilbake valgte filer i køen"
+msgstr "&Nullstill og legg tilbake valgte filer i kø"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:610
 msgid "Raw FTP command"
@@ -6263,7 +6265,7 @@ msgstr "Krev implisitt FTP via TLS"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:473
 msgid "Reset and requeue &all"
-msgstr "Nullstill og legg &alle tilbake i køen"
+msgstr "Nullstill og legg &alle tilbake i kø"
 
 #: ../../locales/../src/engine/socket.cpp:1189
 msgid "Resolved protocol is unknown"
@@ -6379,7 +6381,7 @@ msgstr "Du har slått av passordlagring."
 
 #: ../../locales/../src/interface/QueueView.cpp:1777
 msgid "Scanning for files to add to queue"
-msgstr "Søker etter filer å legge til i køen"
+msgstr "Søker etter filer som skal legges i kø"
 
 #: ../../locales/../src/interface/QueueView.cpp:1779
 msgid "Scanning for files to upload"
@@ -7709,7 +7711,7 @@ msgstr "Overføringsmodus"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1392
 msgid "Transfer Queue"
-msgstr "Overfør køen"
+msgstr "Overføringskø"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:376
 msgid "Transfer Settings"
@@ -8533,6 +8535,12 @@ msgstr "overskrivbar for alle"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Find &files"
+#~ msgstr "Søk etter &filer"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "Søk etter m&apper"
 
 #~ msgid "%s (%d.%d KB/s)"
 #~ msgstr "%s (%d.%d KB/s)"
