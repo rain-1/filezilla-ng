@@ -109,7 +109,6 @@
     <ClCompile Include="socket.cpp">
       <PrecompiledHeader />
     </ClCompile>
-    <ClCompile Include="string_coalescer.cpp" />
     <ClCompile Include="timeex.cpp" />
     <ClCompile Include="tlssocket.cpp" />
     <ClCompile Include="transfersocket.cpp" />
@@ -153,7 +152,6 @@
     <ClInclude Include="sftpcontrolsocket.h" />
     <ClInclude Include="..\include\sizeformatting_base.h" />
     <ClInclude Include="..\include\socket.h" />
-    <ClInclude Include="..\include\string_coalescer.h" />
     <ClInclude Include="..\include\timeex.h" />
     <ClInclude Include="tlssocket.h" />
     <ClInclude Include="transfersocket.h" />

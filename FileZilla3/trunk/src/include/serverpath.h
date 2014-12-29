@@ -28,7 +28,7 @@ public:
 
 	bool SetPath(wxString newPath);
 	bool SetPath(wxString &newPath, bool isFile);
-	bool SetSafePath(const wxString& path, bool coalesce = true);
+	bool SetSafePath(const wxString& path);
 
 	// If ChangePath returns false, the object will be left
 	// empty.
@@ -65,10 +65,8 @@ public:
 
 	bool AddSegment(const wxString& segment);
 
-	void Coalesce();
-
 protected:
-	bool DoSetSafePath(const wxString& path, bool coalesce = true);
+	bool DoSetSafePath(const wxString& path);
 	bool DoChangePath(wxString &subdir, bool isFile);
 
 	ServerType m_type;
