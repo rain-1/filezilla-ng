@@ -266,6 +266,11 @@ if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
     AX_CHECK_LINK_FLAG([-Wl,--minor-subsystem-version -Wl,0], [LDFLAGS="$LDFLAGS -Wl,--minor-subsystem-version -Wl,0"])
     AX_CHECK_LINK_FLAG([-Wl,--major-os-version -Wl,6], [LDFLAGS="$LDFLAGS -Wl,--major-os-version -Wl,6"])
     AX_CHECK_LINK_FLAG([-Wl,--minor-os-version -Wl,0], [LDFLAGS="$LDFLAGS -Wl,--minor-os-version -Wl,0"])
+
+    # Set the Large Address Aware flag on 32bit Windows
+    if ! echo $host_cpu | grep "x86_64" > /dev/null 2>&1; then
+      AX_CHECK_LINK_FLAG([-Wl,--large-address-aware], [LDFLAGS="$LDFLAGS -Wl,--large-address-aware"])
+    fi
   fi
 fi
 
