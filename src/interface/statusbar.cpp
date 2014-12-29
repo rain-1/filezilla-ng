@@ -484,8 +484,7 @@ void CStatusBar::UpdateSizeFormat()
 
 void CStatusBar::OnHandleLeftClick(wxWindow* pWnd)
 {
-	if (pWnd == m_pEncryptionIndicator)
-	{
+	if (pWnd == m_pEncryptionIndicator) {
 		CState* pState = CContextManager::Get()->GetCurrentContext();
 		CCertificateNotification *pCertificateNotification = 0;
 		CSftpEncryptionNotification *pSftpEncryptionNotification = 0;
@@ -500,40 +499,21 @@ void CStatusBar::OnHandleLeftClick(wxWindow* pWnd)
 		else
 			wxMessageBoxEx(_("Certificate and session data are not available yet."), _("Security information"));
 	}
-	else if (pWnd == m_pSpeedLimitsIndicator)
-	{
+	else if (pWnd == m_pSpeedLimitsIndicator) {
 		CSpeedLimitsDialog dlg;
 		dlg.Run(m_pParent);
+	}
+	else if (pWnd == m_pDataTypeIndicator) {
+		ShowDataTypeMenu();
 	}
 }
 
 void CStatusBar::OnHandleRightClick(wxWindow* pWnd)
 {
-	if (pWnd == m_pDataTypeIndicator)
-	{
-		wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_TRANSFER_TYPE_CONTEXT"));
-		if (!pMenu)
-			return;
-
-		const int type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
-		switch (type)
-		{
-		case 1:
-			pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_ASCII"), true);
-			break;
-		case 2:
-			pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_BINARY"), true);
-			break;
-		default:
-			pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_AUTO"), true);
-			break;
-		}
-
-		PopupMenu(pMenu);
-		delete pMenu;
+	if (pWnd == m_pDataTypeIndicator) {
+		ShowDataTypeMenu();
 	}
-	else if (pWnd == m_pSpeedLimitsIndicator)
-	{
+	else if (pWnd == m_pSpeedLimitsIndicator) {
 		wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_SPEEDLIMITCONTEXT"));
 		if (!pMenu)
 			return;
@@ -548,6 +528,30 @@ void CStatusBar::OnHandleRightClick(wxWindow* pWnd)
 		PopupMenu(pMenu);
 		delete pMenu;
 	}
+}
+
+void CStatusBar::ShowDataTypeMenu()
+{
+	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_TRANSFER_TYPE_CONTEXT"));
+	if (!pMenu)
+		return;
+
+	const int type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
+	switch (type)
+	{
+	case 1:
+		pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_ASCII"), true);
+		break;
+	case 2:
+		pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_BINARY"), true);
+		break;
+	default:
+		pMenu->Check(XRCID("ID_MENU_TRANSFER_TYPE_AUTO"), true);
+		break;
+	}
+
+	PopupMenu(pMenu);
+	delete pMenu;
 }
 
 void CStatusBar::UpdateSpeedLimitsIcon()
