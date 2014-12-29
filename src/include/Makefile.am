@@ -26,6 +26,5 @@ noinst_HEADERS = \
 	setup.h \
 	sizeformatting_base.h \
 	socket.h \
-	string_coalescer.h \
 	timeex.h
 

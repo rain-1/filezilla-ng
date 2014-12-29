@@ -1,6 +1,5 @@
 #include <filezilla.h>
 #include "serverpath.h"
-#include "string_coalescer.h"
 
 #define FTP_MVS_DOUBLE_QUOTE (wxChar)0xDC
 
@@ -276,9 +275,9 @@ wxString CServerPath::GetSafePath() const
 	return safepath;
 }
 
-bool CServerPath::SetSafePath(const wxString& path, bool coalesce)
+bool CServerPath::SetSafePath(const wxString& path)
 {
-	bool const ret = DoSetSafePath(path, coalesce);
+	bool const ret = DoSetSafePath(path);
 	if (!ret) {
 		clear();
 	}
@@ -286,7 +285,7 @@ bool CServerPath::SetSafePath(const wxString& path, bool coalesce)
 	return ret;
 }
 
-bool CServerPath::DoSetSafePath(const wxString& path, bool coalesce)
+bool CServerPath::DoSetSafePath(const wxString& path)
 {
 	CServerPathData& data = m_data.Get();
 	data.m_prefix.clear();
@@ -351,8 +350,6 @@ bool CServerPath::DoSetSafePath(const wxString& path, bool coalesce)
 		*(p + prefix_len) = 0;
 		if( *p ) {
 			data.m_prefix = CSparseOptional<wxString>(p);
-			if (coalesce)
-				::Coalesce(*data.m_prefix);
 		}
 
 		p += prefix_len + 1;
@@ -382,8 +379,6 @@ bool CServerPath::DoSetSafePath(const wxString& path, bool coalesce)
 			return false;
 		*(p + segment_len) = 0;
 		wxString s(p);
-		if (coalesce)
-			::Coalesce(s);
 		data.m_segments.push_back(s);
 
 		p += segment_len + 1;
@@ -1028,16 +1023,5 @@ void CServerPath::EscapeSeparators(ServerType type, wxString& subdir)
 	if (traits[type].separatorEscape) {
 		for (const wxChar* p = traits[type].separators; *p; ++p)
 			subdir.Replace((wxString)*p, (wxString)traits[type].separatorEscape + traits[type].separators[0]);
-	}
-}
-
-void CServerPath::Coalesce()
-{
-	CServerPathData& data = m_data.Get();
-	if( data.m_prefix ) {
-		::Coalesce(*data.m_prefix);
-	}
-	for (auto& segment : data.m_segments) {
-		::Coalesce(segment);
 	}
 }
