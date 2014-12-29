@@ -7,17 +7,17 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-10-21 18:06+0200\n"
+"PO-Revision-Date: 2014-12-27 23:36+0200\n"
 "Last-Translator: Igor Chomko <igorchomko@gmail.com>\n"
-"Language-Team: Ihor Chomko <igorchomko@gmail.com>\n"
+"Language-Team: Igor Chomko <igorchomko@gmail.com>\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.6.10\n"
-"X-Poedit-SourceCharset: utf-8\n"
+"X-Generator: Poedit 1.7.1\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 948,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
@@ -422,9 +422,8 @@ msgid "&Display size in bytes"
 msgstr "&Показати розмір в байтах"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3551
-#, fuzzy
 msgid "&Do not remember passwords (recommended)"
-msgstr "&Не зберігати паролів"
+msgstr "&Не пам'ятати паролів (рекомендовано)"
 
 #: ../../locales/../src/interface/conditionaldialog.cpp:25
 msgid "&Don't show this dialog again."
@@ -919,9 +918,8 @@ msgid "&Show debug menu"
 msgstr "&Показати меню відлагодження"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
-#, fuzzy
 msgid "&Show detailed log"
-msgstr "Показати подробиці"
+msgstr "&Показати деталізований журнал повідомлень"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -3017,14 +3015,14 @@ msgid "Delete selected files and directories"
 msgstr "Видалити обрані файли і каталоги"
 
 #: ../../locales/../src/engine/engineprivate.cpp:365
-#, fuzzy, c-format
+#, c-format
 msgid "Deleting \"%s\""
-msgstr "Видалення каталогів"
+msgstr "Видалення \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr ""
+msgstr "Видалення файлів %u з \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3095,9 +3093,9 @@ msgid "Directory listing filters"
 msgstr "Фільтри списку каталогів"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:200
-#, fuzzy, c-format
+#, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "Вдалий список каталогів"
+msgstr "Вдалий список каталогів \"%s\""
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3645,14 +3643,12 @@ msgstr ""
 "з'єднання можна встановити двома шляхами."
 
 #: ../../locales/../src/engine/server.cpp:20
-#, fuzzy
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTPES - FTP через визначений TLS/SSL"
+msgstr "FTPES - FTP над явною TLS"
 
 #: ../../locales/../src/engine/server.cpp:19
-#, fuzzy
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTPS - FTP через не явний TLS/SSL"
+msgstr "FTPS - FTP по неявній TLS"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -5329,7 +5325,7 @@ msgstr "Раз в тиждень"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:530
 msgid "Only use plain FTP (insecure)"
-msgstr ""
+msgstr "Використовувати лише простий FTP (незахищений)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:561
 msgid "Open directory in system's file manager"
@@ -5882,12 +5878,11 @@ msgstr "Поштовий індекс:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1012
 msgid "Pre&allocate space before downloading"
-msgstr ""
+msgstr "Попередньо &виділити місце перед завантаженням"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1008
-#, fuzzy
 msgid "Preallocation"
-msgstr "Напрямок"
+msgstr "Попереднє виділення"
 
 #: ../../locales/../src/interface/sitemanager.cpp:280
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
@@ -6382,9 +6377,9 @@ msgstr ""
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1281
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
-#, fuzzy, c-format
+#, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "Видобування списку каталогів..."
+msgstr "Видобування списку каталогів з \"%s\"..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7187,19 +7182,16 @@ msgid "T&oolbar"
 msgstr "П&анель інструментів"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
-#, fuzzy
 msgid "TLS connection established, sending HTTP request"
-msgstr "Встановлено з'єднання TLS/SSL, надсилається запит HTTP"
+msgstr "З'єднання TLS встановлено, надсилається запит HTTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
-#, fuzzy
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "Встановлено зв'зок TLS/SSL, очікування вітального повідомлення..."
+msgstr "З'єднання встановлено, очікуємо на вітальне повідомлення..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
-#, fuzzy
 msgid "TLS connection established."
-msgstr "Встановлено зв'зок TLS/SSL."
+msgstr "З'єднання TLS встановлено."
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"
@@ -7867,7 +7859,7 @@ msgstr "Тип"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:453
 msgid "Type of FTP Proxy:"
-msgstr "Тип Проксі FTP:"
+msgstr "Тип проксі FTP:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:695
 msgid "Type of generic proxy:"
@@ -8062,9 +8054,8 @@ msgid "Use default action"
 msgstr "Використати типову дію"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:527
-#, fuzzy
 msgid "Use explicit FTP over TLS if available"
-msgstr "Потрібне явне FTP через TLS"
+msgstr "Використовувати явне FTP через TLS, якщо доступно"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2245
 msgid "Use server currently connected to"
@@ -8550,11 +8541,11 @@ msgstr ""
 
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1472
 msgid "fzsftp could not be started"
-msgstr "fzsftp неможливо запустити"
+msgstr "функцію fzsftp неможливо запустити"
 
 #: ../../locales/../src/engine/tlssocket.cpp:1029
 msgid "gnutls_certificate_get_peers returned no certificates"
-msgstr "gnutls_certificate_get_peers не поверув сертифікатів"
+msgstr "функція gnutls_certificate_get_peers не повернула сертифікатів"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:97
 msgid "greater than"
@@ -8631,6 +8622,18 @@ msgstr "глобальний запис"
 msgid "wxWidgets:"
 msgstr "wxВіджети:"
 
+#~ msgid "32-bit system"
+#~ msgstr "32-бітна система"
+
+#~ msgid "64-bit system"
+#~ msgstr "64-бітна система"
+
+#~ msgid "Find &files"
+#~ msgstr "Знайти &файли"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "Знайти ка&талоги"
+
 #~ msgid ""
 #~ "Filename may not contain any of the following characters: / \\ : * ? \" < "
 #~ "> |"
@@ -8646,3 +8649,18 @@ msgstr "wxВіджети:"
 
 #~ msgid "Root certificate is not trusted"
 #~ msgstr "Ненадійний кореневий сертифікат"
+
+#~ msgid "FTPES - FTP over explicit TLS/SSL"
+#~ msgstr "FTPES - FTP через визначений TLS/SSL"
+
+#~ msgid "FTPS - FTP over implicit TLS/SSL"
+#~ msgstr "FTPS - FTP через не явний TLS/SSL"
+
+#~ msgid "TLS/SSL connection established, sending HTTP request"
+#~ msgstr "Встановлено з'єднання TLS/SSL, надсилається запит HTTP"
+
+#~ msgid "TLS/SSL connection established, waiting for welcome message..."
+#~ msgstr "Встановлено зв'зок TLS/SSL, очікування вітального повідомлення..."
+
+#~ msgid "TLS/SSL connection established."
+#~ msgstr "Встановлено зв'зок TLS/SSL."

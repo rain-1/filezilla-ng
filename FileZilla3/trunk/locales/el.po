@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: FileZilla Client 3.10.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-14 11:08+0200\n"
+"PO-Revision-Date: 2014-12-29 18:28+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -8749,6 +8749,9 @@ msgstr "wxWidgets:"
 
 #~ msgid "Find d&irectories"
 #~ msgstr "Αναζήτηση &φακέλων"
+
+#~ msgid "Not all items could be requeued for transfer."
+#~ msgstr "Δεν τοποθετήθηκαν όλα τα στοιχεία στη λίστα αναμονής για μεταφορά."
 
 #~ msgid "&Do not remember passwords"
 #~ msgstr "&Να μην αποθηκεύονται οι κωδικοί πρόσβασης"

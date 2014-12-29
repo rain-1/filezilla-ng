@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-07 01:36+0300\n"
+"PO-Revision-Date: 2014-12-27 22:39+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language: ar\n"
@@ -437,7 +437,7 @@ msgstr "عرض ال&حجم بالبايت"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3551
 msgid "&Do not remember passwords (recommended)"
-msgstr "عدم تذكر كلمات المرور (موصى به)"
+msgstr "&عدم تذكر كلمات المرور (مستحسن)"
 
 #: ../../locales/../src/interface/conditionaldialog.cpp:25
 msgid "&Don't show this dialog again."
@@ -931,7 +931,7 @@ msgstr "إ&ظهار قائمة التصحيح"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:421
 msgid "&Show detailed log"
-msgstr "&عرض سجل مفصل"
+msgstr "إ&ظهار معلومات تفصيلية"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Show message"
@@ -2995,9 +2995,9 @@ msgid "Deleting \"%s\""
 msgstr "حذف \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr "حذف %d ملف من \"%s\""
+msgstr "حذف %u ملف من \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -3070,7 +3070,7 @@ msgstr "مرشحات الرفع"
 #: ../../locales/../src/engine/ControlSocket.cpp:200
 #, c-format
 msgid "Directory listing of \"%s\" successful"
-msgstr "وضع قائمة المجلد لـ \"%s\" بنجاح"
+msgstr "تم بنجاح وضع قائمة المجلد\"%s\""
 
 #: ../../locales/../src/engine/ControlSocket.cpp:197
 msgid "Directory listing successful"
@@ -3609,11 +3609,11 @@ msgstr ""
 
 #: ../../locales/../src/engine/server.cpp:20
 msgid "FTPES - FTP over explicit TLS"
-msgstr "FTP - FTPES عبر TLS صريح"
+msgstr "FTPES-FTP عبر TLS صريح"
 
 #: ../../locales/../src/engine/server.cpp:19
 msgid "FTPS - FTP over implicit TLS"
-msgstr "FTP - FTPS عبر TLS مضمن"
+msgstr "FTPS-FTP عبر TLS ضمني"
 
 #: ../../locales/../src/interface/LocalListView.cpp:542
 #: ../../locales/../src/interface/LocalListView.cpp:622
@@ -5242,7 +5242,7 @@ msgstr "مرة كل أسبوع"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:530
 msgid "Only use plain FTP (insecure)"
-msgstr "فقط استخدام FTP عادي (غير أمن)"
+msgstr "استخدام FTP عادي (غير آمن)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:561
 msgid "Open directory in system's file manager"
@@ -5773,11 +5773,11 @@ msgstr "الرمز البريدي :"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1012
 msgid "Pre&allocate space before downloading"
-msgstr "تخصيص المساحة مسبقا &قبل التحميل"
+msgstr "تخصيص مسبق للمساحة &قبل التنزيل"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1008
 msgid "Preallocation"
-msgstr "تخصيص المساحة مسبقا"
+msgstr "تخصيص مسبق"
 
 #: ../../locales/../src/interface/sitemanager.cpp:280
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
@@ -6276,7 +6276,7 @@ msgstr ""
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:903
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
-msgstr "إسترجاع قائمة المجلد لـ \"%s\"..."
+msgstr "إسترجاع قائمة المجلد \"%s\" ..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:900
@@ -7086,15 +7086,15 @@ msgstr "شريط &أدوات"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:313
 msgid "TLS connection established, sending HTTP request"
-msgstr "تم تأسيس إتصال TLS، إرسال طلب HTTP"
+msgstr "تم تأسيس إتصال TLS/SSL ، إرسال طلب HTTP"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:394
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "تم تأسيس إتصال TLS, إنتظار رسالة الترحيب..."
+msgstr "تم تأسيس إتصال TLS/SSL , إنتظار رسالة الترحيب..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:397
 msgid "TLS connection established."
-msgstr "تم تأسيس إتصال TLS"
+msgstr "تم تأسيس إتصال TLS/SSL"
 
 #: ../../locales/../src/engine/proxy.cpp:504
 msgid "TTL expired"
@@ -7938,7 +7938,7 @@ msgstr "إستخدم الإجراء الأفتراضى"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:527
 msgid "Use explicit FTP over TLS if available"
-msgstr "استخدام بروتوكول نقل الملفات صريح على TLS إذا كان متوفرا"
+msgstr "استخدام FTP صريح عبر TLS حسب التوفر"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2245
 msgid "Use server currently connected to"
@@ -8489,6 +8489,18 @@ msgstr "ملف قابل للكتابة للعام"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "32-bit system"
+#~ msgstr "نظام 32 بت"
+
+#~ msgid "64-bit system"
+#~ msgstr "نظام 64 بت"
+
+#~ msgid "Find &files"
+#~ msgstr "&بحث عن ملفات"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "بحث &عن مجلدات"
 
 #~ msgid "FTPES - FTP over explicit TLS/SSL"
 #~ msgstr "FTPES - FTP over explicit TLS/SSL"

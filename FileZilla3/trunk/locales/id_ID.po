@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-06 00:50+0700\n"
+"PO-Revision-Date: 2014-12-22 02:31+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "Language: id\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 1.6.11\n"
+"X-Generator: Poedit 1.7.1\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:54
@@ -1178,16 +1178,18 @@ msgid "3 - Verbose"
 msgstr "3 - Detail"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:97
+#, fuzzy
 msgid "32 bit system"
-msgstr "Sistem 32 bit"
+msgstr "Sistem 32-bit"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2229
 msgid "4 - Debug"
 msgstr "4 - Debug"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:95
+#, fuzzy
 msgid "64 bit system"
-msgstr "Sistem 64 bit"
+msgstr "Sistem 64-bit"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:27
 msgid "< &Back"
@@ -2991,9 +2993,9 @@ msgid "Deleting \"%s\""
 msgstr "Menghapus \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr "Menghapus %d berkas dari \"%s\""
+msgstr "Menghapus %u berkas dari \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -8547,6 +8549,12 @@ msgstr "dapat ditulisi oleh semua"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Find &files"
+#~ msgstr "Mencari &berkas"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "Mencari d&irektori"
 
 #~ msgid ""
 #~ "Filename may not contain any of the following characters: / \\ : * ? \" < "

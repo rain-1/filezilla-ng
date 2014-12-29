@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla 3 pt\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-05 13:39-0000\n"
+"PO-Revision-Date: 2014-12-27 23:05-0000\n"
 "Last-Translator: Inácio Barroso <caderno@hotmail.com>\n"
 "Language-Team: enVide neFelibata <info@envidenefelibata.com>\n"
 "Language: pt_PT\n"
@@ -1192,6 +1192,7 @@ msgid "3 - Verbose"
 msgstr "3 - Verboso"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:97
+#, fuzzy
 msgid "32 bit system"
 msgstr "sistema de 32 bits"
 
@@ -1200,6 +1201,7 @@ msgid "4 - Debug"
 msgstr "4 - Correcção de erros"
 
 #: ../../locales/../src/interface/aboutdialog.cpp:95
+#, fuzzy
 msgid "64 bit system"
 msgstr "sistema de 64 bits"
 
@@ -3023,9 +3025,9 @@ msgid "Deleting \"%s\""
 msgstr "A apagar \"%s\""
 
 #: ../../locales/../src/engine/engineprivate.cpp:368
-#, c-format
+#, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr "A apagar %d ficheiros de \"%s\""
+msgstr "A apagar %u ficheiros de \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -8673,6 +8675,12 @@ msgstr "universo de arquivo"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Find &files"
+#~ msgstr "Procurar &ficheiros"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "Procurar &pastas"
 
 #~ msgid ""
 #~ "Filename may not contain any of the following characters: / \\ : * ? \" < "
