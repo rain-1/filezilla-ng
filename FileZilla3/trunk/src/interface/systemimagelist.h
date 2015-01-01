@@ -44,7 +44,7 @@ public:
 	int GetLinkOverlayIndex();
 #endif
 
-protected:
+private:
 	wxImageListEx *m_pImageList;
 
 #ifndef __WXMSW__
