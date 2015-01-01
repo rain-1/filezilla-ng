@@ -11,6 +11,9 @@ public:
 	CFileZillaEngine(CFileZillaEngineContext& engine_context);
 	~CFileZillaEngine();
 
+	CFileZillaEngine(CFileZillaEngine const&) = delete;
+	CFileZillaEngine& operator=(CFileZillaEngine const&) = delete;
+
 	// Initialize the engine. Pass over the event handler that should receive notification
 	// events as defined in notification.h
 	int Init(wxEvtHandler *pEventHandler);
