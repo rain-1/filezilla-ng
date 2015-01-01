@@ -102,7 +102,6 @@ public:
 
 	int GetEngineId() const {return m_engine_id; }
 
-	CEventLoop& event_loop_;
 	CSocketEventDispatcher& socket_event_dispatcher_;
 
 	CTransferStatusManager transfer_status_;
