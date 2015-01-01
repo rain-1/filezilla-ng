@@ -17,7 +17,6 @@ std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_fa
 
 CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent)
 	: CEventHandler(context.GetEventLoop())
-	, event_loop_(context.GetEventLoop())
 	, socket_event_dispatcher_(context.GetSocketEventDispatcher())
 	, transfer_status_(*this)
 	, m_options(context.GetOptions())
