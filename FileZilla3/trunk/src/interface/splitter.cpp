@@ -215,7 +215,7 @@ bool CSplitterWindowEx::Unsplit(wxWindow* toRemove /*=NULL*/)
 	return wxSplitterWindow::Unsplit(toRemove);
 }
 
-void CSplitterWindowEx::PrepareSplit(wxWindow* window1, wxWindow* window2, int sashPosition, bool horizontal)
+void CSplitterWindowEx::PrepareSplit(wxWindow* window1, wxWindow* window2, int & sashPosition, bool horizontal)
 {
 	int w, h;
 	GetClientSize(&w, &h);
