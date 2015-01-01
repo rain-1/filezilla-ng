@@ -10,7 +10,7 @@
 
 #define INVALID_DATA -1
 
-enum _column_type
+enum class Column_type
 {
 	text,
 	integer
@@ -25,7 +25,7 @@ enum _column_flags
 struct _column
 {
 	const wxChar* const name;
-	_column_type type;
+	Column_type type;
 	unsigned int flags;
 };
 
@@ -53,22 +53,22 @@ namespace server_table_column_names
 }
 
 _column server_table_columns[] = {
-	{ _T("id"), integer, not_null | autoincrement },
-	{ _T("host"), text, not_null },
-	{ _T("port"), integer, 0 },
-	{ _T("user"), text, 0 },
-	{ _T("password"), text, 0 },
-	{ _T("account"), text, 0 },
-	{ _T("protocol"), integer, 0 },
-	{ _T("type"), integer, 0 },
-	{ _T("logontype"), integer, 0 },
-	{ _T("timezone_offset"), integer, 0 },
-	{ _T("transfer_mode"), text, 0 },
-	{ _T("max_connections"), integer, 0 },
-	{ _T("encoding"), text, 0 },
-	{ _T("bypass_proxy"), integer, 0 },
-	{ _T("post_login_commands"), text, 0 },
-	{ _T("name"), text, 0 }
+	{ _T("id"), Column_type::integer, not_null | autoincrement },
+	{ _T("host"), Column_type::text, not_null },
+	{ _T("port"), Column_type::integer, 0 },
+	{ _T("user"), Column_type::text, 0 },
+	{ _T("password"), Column_type::text, 0 },
+	{ _T("account"), Column_type::text, 0 },
+	{ _T("protocol"), Column_type::integer, 0 },
+	{ _T("type"), Column_type::integer, 0 },
+	{ _T("logontype"), Column_type::integer, 0 },
+	{ _T("timezone_offset"), Column_type::integer, 0 },
+	{ _T("transfer_mode"), Column_type::text, 0 },
+	{ _T("max_connections"), Column_type::integer, 0 },
+	{ _T("encoding"), Column_type::text, 0 },
+	{ _T("bypass_proxy"), Column_type::integer, 0 },
+	{ _T("post_login_commands"), Column_type::text, 0 },
+	{ _T("name"), Column_type::text, 0 }
 };
 
 namespace file_table_column_names
@@ -91,18 +91,18 @@ namespace file_table_column_names
 }
 
 _column file_table_columns[] = {
-	{ _T("id"), integer, not_null | autoincrement },
-	{ _T("server"), integer, not_null },
-	{ _T("source_file"), text, 0 },
-	{ _T("target_file"), text, 0 },
-	{ _T("local_path"), integer, 0 },
-	{ _T("remote_path"), integer, 0 },
-	{ _T("download"), integer, not_null },
-	{ _T("size"), integer, 0 },
-	{ _T("error_count"), integer, 0 },
-	{ _T("priority"), integer, 0 },
-	{ _T("ascii_file"), integer, 0 },
-	{ _T("default_exists_action"), integer, 0 }
+	{ _T("id"), Column_type::integer, not_null | autoincrement },
+	{ _T("server"), Column_type::integer, not_null },
+	{ _T("source_file"), Column_type::text, 0 },
+	{ _T("target_file"), Column_type::text, 0 },
+	{ _T("local_path"), Column_type::integer, 0 },
+	{ _T("remote_path"), Column_type::integer, 0 },
+	{ _T("download"), Column_type::integer, not_null },
+	{ _T("size"), Column_type::integer, 0 },
+	{ _T("error_count"), Column_type::integer, 0 },
+	{ _T("priority"), Column_type::integer, 0 },
+	{ _T("ascii_file"), Column_type::integer, 0 },
+	{ _T("default_exists_action"), Column_type::integer, 0 }
 };
 
 namespace path_table_column_names
@@ -115,8 +115,8 @@ namespace path_table_column_names
 }
 
 _column path_table_columns[] = {
-	{ _T("id"), integer, not_null | autoincrement },
-	{ _T("path"), text, not_null }
+	{ _T("id"), Column_type::integer, not_null | autoincrement },
+	{ _T("path"), Column_type::text, not_null }
 };
 
 struct fast_equal
@@ -372,7 +372,7 @@ wxString CQueueStorage::Impl::CreateColumnDefs(_column* columns, size_t count)
 		if (i)
 			query += _T(", ");
 		query += columns[i].name;
-		if (columns[i].type == integer)
+		if (columns[i].type == Column_type::integer)
 			query += _T(" INTEGER");
 		else
 			query += _T(" TEXT");
