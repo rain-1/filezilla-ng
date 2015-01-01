@@ -1672,8 +1672,10 @@ int CSocket::DoSetFlags(int fd, int flags, int flags_mask)
 	return 0;
 }
 
-void CSocket::SetBufferSizes(int size_read, int size_write)
+int CSocket::SetBufferSizes(int size_read, int size_write)
 {
+	int ret = 0;
+
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.Lock();
 
@@ -1681,29 +1683,33 @@ void CSocket::SetBufferSizes(int size_read, int size_write)
 	m_buffer_sizes[1] = size_write;
 
 	if (m_fd != -1)
-		DoSetBufferSizes(m_fd, size_read, size_write);
+		ret = DoSetBufferSizes(m_fd, size_read, size_write);
 
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.Unlock();
+
+	return ret;
 }
 
 int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 {
+	int ret = 0;
+
 	if (size_read != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
 		if (res != 0) {
-			res = GetLastSocketError();
+			ret = GetLastSocketError();
 		}
 	}
 
 	if (size_write != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_SNDBUF, (const char*)&size_write, sizeof(size_write));
 		if (res != 0) {
-			return GetLastSocketError();
+			ret = GetLastSocketError();
 		}
 	}
 
-	return 0;
+	return ret;
 }
 
 void CSocket::SetSynchronousReadCallback(CCallback* cb)

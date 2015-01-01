@@ -191,7 +191,7 @@ public:
 
 	// If called on listen socket, sizes will be inherited by
 	// accepted sockets
-	void SetBufferSizes(int size_read, int size_write);
+	int SetBufferSizes(int size_read, int size_write);
 
 	void SetSynchronousReadCallback(CCallback* cb);
 
