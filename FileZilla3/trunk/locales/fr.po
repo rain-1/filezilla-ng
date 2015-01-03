@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.10\n"
+"X-Generator: Poedit 1.7.1\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:54
@@ -1712,7 +1712,7 @@ msgstr "En cours d'édition"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:440
 msgid "Benchmark string coalescer"
-msgstr "Evaluer les performances du string coalescer"
+msgstr ""
 
 #: ../../locales/../src/engine/tlssocket.cpp:1015
 msgid "Beware! Certificate has been revoked"
@@ -2141,7 +2141,7 @@ msgstr "Vider la barre de connexion rapide"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:437
 msgid "Clear string coalescer"
-msgstr "Vider le string coalescer"
+msgstr ""
 
 #: ../../locales/../src/interface/netconfwizard.cpp:587
 msgid "Click on Finish to save your configuration."
@@ -3051,7 +3051,7 @@ msgstr "Suppression de \"%s\""
 #: ../../locales/../src/engine/engineprivate.cpp:368
 #, fuzzy, c-format
 msgid "Deleting %d files from \"%s\""
-msgstr "Suppression de %u fichiers de \"%s\""
+msgstr "Suppression de %u fichiers à partir de \"%s\""
 
 #: ../../locales/../src/interface/search.cpp:765
 msgid "Deleting directories"
@@ -5283,10 +5283,11 @@ msgstr "Normale"
 
 #: ../../locales/../src/interface/queueview_failed.cpp:325
 #: ../../locales/../src/interface/queueview_failed.cpp:350
+#, fuzzy
 msgid "Not all items could be requeued for viewing/editing."
 msgstr ""
-"Tous les objets ne peuvent pas être replacés en file d'attente pour "
-"visualisation ou édition."
+"Tous les objets ne peuvent pas être replacés en file d'attente pour le "
+"transfert."
 
 #: ../../locales/../src/interface/state.cpp:199
 #: ../../locales/../src/interface/state.cpp:508
@@ -8747,3 +8748,9 @@ msgstr "écriture par tous"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets :"
+
+#~ msgid "Find &files"
+#~ msgstr "Retrouver des &fichiers"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "Retrouver des doss&iers"

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-10 14:32+0100\n"
+"PO-Revision-Date: 2015-01-03 12:24+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -5247,10 +5247,9 @@ msgstr "Normale"
 
 #: ../../locales/../src/interface/queueview_failed.cpp:325
 #: ../../locales/../src/interface/queueview_failed.cpp:350
+#, fuzzy
 msgid "Not all items could be requeued for viewing/editing."
-msgstr ""
-"Non è possibile rimettere in coda tutti gli oggetti per la visualizzazione / "
-"modifica."
+msgstr "Non tutti gli elementi possono essere richiesti per il trasferimento."
 
 #: ../../locales/../src/interface/state.cpp:199
 #: ../../locales/../src/interface/state.cpp:508
@@ -8657,6 +8656,12 @@ msgstr "scrivibile per gli altri"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Find &files"
+#~ msgstr "Trova &file"
+
+#~ msgid "Find d&irectories"
+#~ msgstr "Trova &cartelle"
 
 #~ msgid ""
 #~ "Filename may not contain any of the following characters: / \\ : * ? \" < "
