@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-03 14:18+0100\n"
-"PO-Revision-Date: 2014-12-22 02:31+0700\n"
+"PO-Revision-Date: 2015-01-02 13:48+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "Language: id\n"
@@ -5178,8 +5178,9 @@ msgstr "Normal"
 
 #: ../../locales/../src/interface/queueview_failed.cpp:325
 #: ../../locales/../src/interface/queueview_failed.cpp:350
+#, fuzzy
 msgid "Not all items could be requeued for viewing/editing."
-msgstr "Tidak semua barang bisa di antrikan ulang untuk dilihat/diedit."
+msgstr "Tidak semua barang bisa di antrikan ulang untuk transfer."
 
 #: ../../locales/../src/interface/state.cpp:199
 #: ../../locales/../src/interface/state.cpp:508
