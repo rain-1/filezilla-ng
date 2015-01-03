@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0-rc1 (2015-01-03)
+
++ Added Welsh translation
++ Data type indicator in the status bar now reacts to left-clicks as well
+- MSW: Fix crash when displaying the drive list
+
 3.10.0-rc1 (2014-12-29)
 
 + Reduced memory consumption of large queues
