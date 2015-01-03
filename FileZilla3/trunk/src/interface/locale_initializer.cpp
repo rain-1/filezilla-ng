@@ -35,9 +35,11 @@ struct t_fallbacks fallbacks[] = {
 	// Base names
 	{ "ar", "ar_EG" },
 	{ "ca", "ca_ES" },
+	{ "cy", "cy_GB" },
 	{ "de", "de_DE" },
 	{ "el", "el_GR" },
 	{ "es", "es_ES" },
+	{ "et", "et_EE" },
 	{ "fr", "fr_FR" },
 	{ "it", "it_IT" },
 	{ "nl", "nl_NL" },
