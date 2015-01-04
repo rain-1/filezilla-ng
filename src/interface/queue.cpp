@@ -716,11 +716,6 @@ void CServerItem::SetChildPriority(CFileItem* pItem, QueuePriority oldPriority, 
 
 CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath)
 	: CQueueItem(parent)
-	, m_remove(false)
-	, m_active(false)
-	, m_count(0)
-	, m_defaultFileExistsAction(CFileExistsNotification::unknown)
-	, m_dir_is_empty(false)
 	, m_queued(queued)
 	, m_localPath(localPath)
 	, m_remotePath(remotePath)

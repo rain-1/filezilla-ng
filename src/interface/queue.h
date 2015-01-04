@@ -212,8 +212,8 @@ public:
 
 	unsigned char m_errorCount{};
 	CEditHandler::fileType m_edit{};
-	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction{};
-	CFileExistsNotification::OverwriteAction m_onetime_action{};
+	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction{CFileExistsNotification::unknown};
+	CFileExistsNotification::OverwriteAction m_onetime_action{CFileExistsNotification::unknown};
 	QueuePriority m_priority{QueuePriority::normal};
 
 protected:
@@ -293,14 +293,14 @@ public:
 
 	wxString m_statusMessage;
 
-	volatile bool m_remove;
-	bool m_active;
+	volatile bool m_remove{};
+	bool m_active{};
 
-	int m_count;
+	int m_count{};
 
-	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction;
+	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction{CFileExistsNotification::unknown};
 
-	bool m_dir_is_empty;
+	bool m_dir_is_empty{};
 	CLocalPath m_current_local_path;
 	CServerPath m_current_remote_path;
 
