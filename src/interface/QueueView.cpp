@@ -339,8 +339,7 @@ protected:
 			// We send the notification after leaving the critical section, else we
 			// could get into a deadlock. wxWidgets event system does internal
 			// locking.
-			wxCommandEvent evt(fzEVT_FOLDERTHREAD_FILES, wxID_ANY);
-			wxPostEvent(m_pOwner, evt);
+			m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
 		}
 	}
 
@@ -362,8 +361,7 @@ protected:
 				if (!m_didSendEvent && !m_entryList.empty()) {
 					m_didSendEvent = true;
 					m_sync.Unlock();
-					wxCommandEvent evt(fzEVT_FOLDERTHREAD_FILES, wxID_ANY);
-					wxPostEvent(m_pOwner, evt);
+					m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
 					continue;
 				}
 
@@ -373,8 +371,7 @@ protected:
 				}
 				m_threadWaiting = true;
 				m_condition.Wait();
-				if (m_dirsToCheck.empty())
-				{
+				if (m_dirsToCheck.empty()) {
 					m_sync.Unlock();
 					break;
 				}
@@ -418,9 +415,7 @@ protected:
 			delete pair;
 		}
 
-		wxCommandEvent evt(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY);
-		wxPostEvent(m_pOwner, evt);
-
+		m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY));
 		return 0;
 	}
 
@@ -1385,8 +1380,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			engineData.pItem->SetStatusMessage(CFileItem::wait_password);
 			RefreshItem(engineData.pItem);
 			if (m_waitingForPassword.empty()) {
-				wxCommandEvent evt(fzEVT_ASKFORPASSWORD);
-				wxPostEvent(this, evt);
+				QueueEvent(new wxCommandEvent(fzEVT_ASKFORPASSWORD));
 			}
 			m_waitingForPassword.push_back(engineData.pEngine);
 			return;

@@ -417,8 +417,7 @@ DBusHandlerResult handle_notification(DBusConnection *, DBusMessage *message, vo
 {
 	wxDBusConnection * _connection = (wxDBusConnection *) user_data;
 	DBusMessage * msg = dbus_message_copy(message);
-	wxDBusConnectionEvent event(wxEVT_DBUS_NOTIFICATION, _connection->GetID(), msg);
-	_connection->GetEvtHandler()->AddPendingEvent(event);
+	_connection->GetEvtHandler()->QueueEvent(new wxDBusConnectionEvent(wxEVT_DBUS_NOTIFICATION, _connection->GetID(), msg));
 	return DBUS_HANDLER_RESULT_HANDLED;
 }
 
@@ -426,8 +425,7 @@ DBusHandlerResult handle_message(DBusConnection *, DBusMessage *message, void *u
 {
 	wxDBusConnection * _connection = (wxDBusConnection *) user_data;
 	DBusMessage * msg = dbus_message_copy(message);
-	wxDBusConnectionEvent event(wxEVT_DBUS_SIGNAL, _connection->GetID(), msg);
-	_connection->GetEvtHandler()->AddPendingEvent(event);
+	_connection->GetEvtHandler()->QueueEvent(new wxDBusConnectionEvent(wxEVT_DBUS_SIGNAL, _connection->GetID(), msg));
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
@@ -437,8 +435,7 @@ void response_notify(DBusPendingCall *pending, void *user_data)
 	reply = dbus_pending_call_steal_reply(pending);
 	DBusMessage * msg = dbus_message_copy(reply);
 	wxDBusConnection * connection = (wxDBusConnection *) user_data;
-	wxDBusConnectionEvent event(wxEVT_DBUS_ASYNC_RESPONSE, connection->GetID(), msg);
-	connection->GetEvtHandler()->AddPendingEvent(event);
+	connection->GetEvtHandler()->QueueEvent(new wxDBusConnectionEvent(wxEVT_DBUS_ASYNC_RESPONSE, connection->GetID(), msg));
 	dbus_message_unref(reply);
 	dbus_pending_call_unref(pending);
 }

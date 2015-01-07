@@ -297,19 +297,17 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 		break;
 	}
 
-	if (!pListing)
-	{
+	if (!pListing) {
 		m_ExpandAfterList = wxTreeItemId();
 		DeleteAllItems();
 		AddRoot(_T(""));
 		m_busy = false;
-		if (FindFocus() == this)
-		{
-			wxNavigationKeyEvent evt;
-			evt.SetFromTab(true);
-			evt.SetEventObject(this);
-			evt.SetDirection(true);
-			AddPendingEvent(evt);
+		if (FindFocus() == this) {
+			wxNavigationKeyEvent *evt = new wxNavigationKeyEvent();
+			evt->SetFromTab(true);
+			evt->SetEventObject(this);
+			evt->SetDirection(true);
+			QueueEvent(evt);
 		}
 		Enable(false);
 		m_contextMenuItem = wxTreeItemId();

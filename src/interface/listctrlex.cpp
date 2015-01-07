@@ -97,8 +97,7 @@ void wxListCtrlEx::OnPreEmitPostScrollEvent()
 
 void wxListCtrlEx::EmitPostScrollEvent()
 {
-	wxCommandEvent evt(fzEVT_POSTSCROLL, wxID_ANY);
-	AddPendingEvent(evt);
+	QueueEvent(new wxCommandEvent(fzEVT_POSTSCROLL, wxID_ANY));
 }
 
 void wxListCtrlEx::OnScrollEvent(wxScrollWinEvent& event)

@@ -835,12 +835,12 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnFocusChanged(wxListEv
 	const int focusItem = event.GetIndex();
 
 	// Need to defer processing, as focus it set before selection by wxWidgets internally
-	wxCommandEvent evt;
-	evt.SetEventType(fz_EVT_FILELIST_FOCUSCHANGE);
-	evt.SetInt(m_focusItem);
-	evt.SetExtraLong((long)focusItem);
+	wxCommandEvent *evt = new wxCommandEvent();
+	evt->SetEventType(fz_EVT_FILELIST_FOCUSCHANGE);
+	evt->SetInt(m_focusItem);
+	evt->SetExtraLong((long)focusItem);
 	m_pending_focus_processing++;
-	AddPendingEvent(evt);
+	QueueEvent(evt);
 
 	m_focusItem = focusItem;
 }
@@ -936,9 +936,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnLeftDown(wxMouseEvent
 	// Left clicks in the whitespace around the items deselect everything
 	// but does not change focus. Defer event.
 	event.Skip();
-	wxCommandEvent evt;
-	evt.SetEventType(fz_EVT_DEFERRED_MOUSEEVENT);
-	AddPendingEvent(evt);
+	wxCommandEvent *evt = new wxCommandEvent();
+	evt->SetEventType(fz_EVT_DEFERRED_MOUSEEVENT);
+	QueueEvent(evt);
 }
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnProcessMouseEvent(wxCommandEvent&)

@@ -127,9 +127,7 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 		m_maySendNotificationEvent = false;
 	}
 
-	wxFzEvent evt(wxID_ANY);
-	evt.engine_ = &parent_;
-	wxPostEvent(m_pEventHandler, evt);
+	m_pEventHandler->QueueEvent(new wxFzEvent(&parent_));
 }
 
 void CFileZillaEnginePrivate::AddLogNotification(CLogmsgNotification *pNotification)
@@ -170,9 +168,7 @@ void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
 		m_maySendNotificationEvent = false;
 	}
 
-	wxFzEvent evt(wxID_ANY);
-	evt.engine_ = &parent_;
-	wxPostEvent(m_pEventHandler, evt);
+	m_pEventHandler->QueueEvent(new wxFzEvent(&parent_));
 }
 
 void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)

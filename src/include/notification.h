@@ -28,10 +28,14 @@ class CFileZillaEngine;
 class wxFzEvent final : public wxEvent
 {
 public:
-	wxFzEvent(int id = wxID_ANY);
+	wxFzEvent();
+
+	explicit wxFzEvent(int id);
+	explicit wxFzEvent(CFileZillaEngine const* engine);
+
 	virtual wxEvent *Clone() const;
 
-	CFileZillaEngine const* engine_{};
+	CFileZillaEngine const* engine_;
 };
 
 wxDECLARE_EVENT(fzEVT_NOTIFICATION, wxFzEvent);

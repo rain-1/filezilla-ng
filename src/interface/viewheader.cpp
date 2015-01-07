@@ -432,9 +432,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 
 #ifdef __WXGTK__
 	m_autoCompletionText = found.Mid(name.Length()) + wxFileName::GetPathSeparator();
-
-	wxCommandEvent evt(fzEVT_LOCALVIEWHEADERSETTEXTSEL);
-	wxPostEvent(this, evt);
+	QueueEvent(new wxCommandEvent(fzEVT_LOCALVIEWHEADERSETTEXTSEL));
 #else
 	m_pComboBox->SetValue(str + found.Mid(name.Length()) + wxFileName::GetPathSeparator());
 	m_pComboBox->SetSelection(str.Length(), m_pComboBox->GetValue().Length() + 1);

@@ -2,7 +2,21 @@
 
 wxDEFINE_EVENT(fzEVT_NOTIFICATION, wxFzEvent);
 
-wxFzEvent::wxFzEvent(int id /*=wxID_ANY*/) : wxEvent(id, fzEVT_NOTIFICATION)
+wxFzEvent::wxFzEvent()
+	: wxEvent(wxID_ANY, fzEVT_NOTIFICATION)
+	, engine_()
+{
+}
+
+wxFzEvent::wxFzEvent(CFileZillaEngine const* engine)
+	: wxEvent(wxID_ANY, fzEVT_NOTIFICATION)
+	, engine_(engine)
+{
+}
+
+wxFzEvent::wxFzEvent(int id)
+	: wxEvent(id, fzEVT_NOTIFICATION)
+	, engine_()
 {
 }
 

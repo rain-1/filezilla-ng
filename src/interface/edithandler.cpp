@@ -623,10 +623,8 @@ void CEditHandler::CheckForModifications(bool emitEvent)
 	if (insideCheckForModifications)
 		return;
 
-	if (emitEvent)
-	{
-		wxCommandEvent evt(fzEDIT_CHANGEDFILE);
-		AddPendingEvent(evt);
+	if (emitEvent) {
+		QueueEvent(new wxCommandEvent(fzEDIT_CHANGEDFILE));
 		return;
 	}
 

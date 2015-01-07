@@ -115,8 +115,7 @@ bool CAsyncRequestQueue::AddRequest(CFileZillaEngine *pEngine, std::unique_ptr<C
 	m_requestList.emplace_back(pEngine, std::move(pNotification));
 
 	if (m_requestList.size() == 1) {
-		wxCommandEvent evt(fzEVT_PROCESSASYNCREQUESTQUEUE);
-		wxPostEvent(this, evt);
+		QueueEvent(new wxCommandEvent(fzEVT_PROCESSASYNCREQUESTQUEUE));
 	}
 
 	return true;
@@ -379,10 +378,8 @@ void CAsyncRequestQueue::OnProcessQueue(wxCommandEvent &)
 	bool success = ProcessNextRequest();
 	m_inside_request = false;
 
-	if (success && !m_requestList.empty())
-	{
-		wxCommandEvent evt(fzEVT_PROCESSASYNCREQUESTQUEUE);
-		wxPostEvent(this, evt);
+	if (success && !m_requestList.empty()) {
+		QueueEvent(new wxCommandEvent(fzEVT_PROCESSASYNCREQUESTQUEUE));
 	}
 }
 
@@ -391,8 +388,7 @@ void CAsyncRequestQueue::TriggerProcessing()
 	if (m_inside_request)
 		return;
 
-	wxCommandEvent evt(fzEVT_PROCESSASYNCREQUESTQUEUE);
-	wxPostEvent(this, evt);
+	QueueEvent(new wxCommandEvent(fzEVT_PROCESSASYNCREQUESTQUEUE));
 }
 
 bool CAsyncRequestQueue::CheckWindowState()
