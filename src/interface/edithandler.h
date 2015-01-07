@@ -20,7 +20,7 @@ public:
 		removing
 	};
 
-	enum fileType : char
+	enum fileType : signed char
 	{
 		none = -1,
 		local,
