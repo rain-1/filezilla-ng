@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0 (2015-01-07)
+
+- Fixed default file exists actions broken by rc1
+
 3.10.0-rc2 (2015-01-03)
 
 + Added Welsh translation
