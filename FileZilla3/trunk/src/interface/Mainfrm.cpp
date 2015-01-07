@@ -1340,9 +1340,9 @@ void CMainFrame::OnTimer(wxTimerEvent& event)
 
 		// When we get idle event, a dialog's event loop has been left.
 		// Now we can close the top level window on the stack.
-		wxCloseEvent evt(m_closeEvent);
-		evt.SetCanVeto(false);
-		AddPendingEvent(evt);
+		wxCloseEvent *evt = new wxCloseEvent(m_closeEvent);
+		evt->SetCanVeto(false);
+		QueueEvent(evt);
 	}
 #if FZ_MANUALUPDATECHECK
 	else if( event.GetId() == update_dialog_timer_.GetId() ) {
@@ -2543,8 +2543,7 @@ void CMainFrame::OnTaskBarClick(wxTaskBarIconEvent&)
 		m_pAsyncRequestQueue->TriggerProcessing();
 
 #ifdef __WXGTK__
-	wxCommandEvent evt(fzEVT_TASKBAR_CLICK_DELAYED);
-	AddPendingEvent(evt);
+	QueueEvent(new wxCommandEvent(fzEVT_TASKBAR_CLICK_DELAYED));
 #endif
 }
 

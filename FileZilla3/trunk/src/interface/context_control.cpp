@@ -454,14 +454,12 @@ void CContextControl::OnTabContextClose(wxCommandEvent& event)
 
 	// Need to defer event, wxAUI would write to free'd memory
 	// if we'd actually delete tab and potenially the notebook with it
-	wxCommandEvent evt(fzEVT_TAB_CLOSING_DEFERRED, m_right_clicked_tab);
-	AddPendingEvent(evt);
+	QueueEvent(new wxCommandEvent(fzEVT_TAB_CLOSING_DEFERRED, m_right_clicked_tab));
 }
 
 void CContextControl::OnTabContextCloseOthers(wxCommandEvent& event)
 {
-	wxCommandEvent evt(fzEVT_TAB_CLOSING_DEFERRED, -m_right_clicked_tab - 1);
-	AddPendingEvent(evt);
+	QueueEvent(new wxCommandEvent (fzEVT_TAB_CLOSING_DEFERRED, -m_right_clicked_tab - 1));
 }
 
 void CContextControl::OnTabClosing_Deferred(wxCommandEvent& event)
@@ -502,8 +500,7 @@ void CContextControl::OnTabClosing(wxAuiNotebookEvent& event)
 {
 	// Need to defer event, wxAUI would write to free'd memory
 	// if we'd actually delete tab and potenially the notebook with it
-	wxCommandEvent evt(fzEVT_TAB_CLOSING_DEFERRED, event.GetSelection());
-	AddPendingEvent(evt);
+	QueueEvent(new wxCommandEvent(fzEVT_TAB_CLOSING_DEFERRED, event.GetSelection()));
 
 	event.Veto();
 }

@@ -44,8 +44,7 @@ wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
 
 	m_running = false;
 
-	wxCommandEvent evt(fzEVT_VOLUMESENUMERATED);
-	m_pEvtHandler->AddPendingEvent(evt);
+	m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMESENUMERATED));
 
 	return 0;
 }
@@ -53,8 +52,7 @@ wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
 void CVolumeDescriptionEnumeratorThread::ProcessDrive(wxString const& drive)
 {
 	if( GetDriveLabel(drive) ) {
-		wxCommandEvent evt(fzEVT_VOLUMEENUMERATED);
-		m_pEvtHandler->AddPendingEvent(evt);
+		m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMEENUMERATED));
 	}
 }
 

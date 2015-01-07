@@ -1092,6 +1092,5 @@ void CNetConfWizard::operator()(CEventBase const& ev)
 
 void CNetConfWizard::OnExternalIPAddress()
 {
-	wxCommandEvent ev(fzEVT_ON_EXTERNAL_IP_ADDRESS);
-	wxPostEvent(this, ev);
+	QueueEvent(new wxCommandEvent(fzEVT_ON_EXTERNAL_IP_ADDRESS));
 }

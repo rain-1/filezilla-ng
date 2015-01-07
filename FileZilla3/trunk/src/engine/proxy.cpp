@@ -221,9 +221,6 @@ void CProxySocket::OnSocketEvent(CSocketEvent& event)
 		break;
 	case CSocketEvent::close:
 		OnReceive();
-		/*if (m_proxyState == handshake)
-			m_proxyState = noconn;
-		m_pEvtHandler->AddPendingEvent(event);*/
 		break;
 	default:
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unhandled socket event %d"), event.GetType());
