@@ -109,6 +109,7 @@ ssize_t CFile::Write(void const* buf, size_t count)
 }
 #else
 
+#include <errno.h>
 #include <sys/stat.h>
 
 bool CFile::Open(wxString const& f, mode m, disposition d)
