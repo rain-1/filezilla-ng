@@ -502,11 +502,11 @@ bool GetServer(TiXmlElement *node, CServer& server)
 	if (!server.SetHost(host, port))
 		return false;
 
-	int protocol = GetTextElementInt(node, "Protocol");
-	if (protocol < 0)
+	int const protocol = GetTextElementInt(node, "Protocol");
+	if (protocol < 0 || protocol > ServerProtocol::MAX_VALUE) {
 		return false;
-
-	server.SetProtocol((enum ServerProtocol)protocol);
+	}
+	server.SetProtocol(static_cast<ServerProtocol>(protocol));
 
 	int type = GetTextElementInt(node, "Type");
 	if (type < 0 || type >= SERVERTYPE_MAX)
@@ -559,8 +559,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 		server.SetEncodingType(ENCODING_AUTO);
 	else if (encodingType == _T("UTF-8"))
 		server.SetEncodingType(ENCODING_UTF8);
-	else if (encodingType == _T("Custom"))
-	{
+	else if (encodingType == _T("Custom")) {
 		wxString customEncoding = GetTextElement(node, "CustomEncoding");
 		if (customEncoding.empty())
 			return false;
@@ -570,7 +569,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 	else
 		server.SetEncodingType(ENCODING_AUTO);
 
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES) {
+	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
 		std::vector<wxString> postLoginCommands;
 		TiXmlElement* pElement = node->FirstChildElement("PostLoginCommands");
 		if (pElement) {
@@ -663,12 +662,9 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		break;
 	}
 
-	const enum ServerProtocol protocol = server.GetProtocol();
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
-	{
-		const std::vector<wxString>& postLoginCommands = server.GetPostLoginCommands();
-		if (!postLoginCommands.empty())
-		{
+	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
+		std::vector<wxString> const& postLoginCommands = server.GetPostLoginCommands();
+		if (!postLoginCommands.empty()) {
 			TiXmlElement* pElement = node->LinkEndChild(new TiXmlElement("PostLoginCommands"))->ToElement();
 			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter)
 				AddTextElement(pElement, "Command", *iter);

@@ -126,11 +126,13 @@ public:
 
 	// Some protocol distinguish between ASCII and binary files for line-ending
 	// conversion.
-	static bool ProtocolHasDataTypeConcept(const ServerProtocol protocol);
+	static bool ProtocolHasDataTypeConcept(ServerProtocol const protocol);
 
 	// These commands will be executed after a successful login.
 	const std::vector<wxString>& GetPostLoginCommands() const { return m_postLoginCommands; }
 	bool SetPostLoginCommands(const std::vector<wxString>& postLoginCommands);
+	static bool SupportsPostLoginCommands(ServerProtocol const protocol);
+
 	void SetBypassProxy(bool val);
 
 	// Abstract server name.

@@ -742,15 +742,12 @@ wxString CServer::GetProtocolName(ServerProtocol protocol)
 ServerProtocol CServer::GetProtocolFromName(const wxString& name)
 {
 	const t_protocolInfo *protocolInfo = protocolInfos;
-	while (protocolInfo->protocol != UNKNOWN)
-	{
-		if (protocolInfo->translateable)
-		{
+	while (protocolInfo->protocol != UNKNOWN) {
+		if (protocolInfo->translateable) {
 			if (wxGetTranslation(protocolInfo->name) == name)
 				return protocolInfo->protocol;
 		}
-		else
-		{
+		else {
 			if (protocolInfo->name == name)
 				return protocolInfo->protocol;
 		}
@@ -762,9 +759,8 @@ ServerProtocol CServer::GetProtocolFromName(const wxString& name)
 
 bool CServer::SetPostLoginCommands(const std::vector<wxString>& postLoginCommands)
 {
-	if (m_protocol != FTP && m_protocol != FTPS && m_protocol != FTPES)
-	{
-		// Currently, only regular FTP supports it
+	if (!SupportsPostLoginCommands(m_protocol)) {
+		m_postLoginCommands.clear();
 		return false;
 	}
 
@@ -772,10 +768,14 @@ bool CServer::SetPostLoginCommands(const std::vector<wxString>& postLoginCommand
 	return true;
 }
 
+bool CServer::SupportsPostLoginCommands(ServerProtocol const protocol)
+{
+	return protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP;
+}
+
 ServerProtocol CServer::GetProtocolFromPrefix(const wxString& prefix)
 {
-	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i)
-	{
+	for (unsigned int i = 0; protocolInfos[i].protocol != UNKNOWN; ++i) {
 		if (!protocolInfos[i].prefix.CmpNoCase(prefix))
 			return protocolInfos[i].protocol;
 	}
@@ -802,7 +802,7 @@ bool CServer::GetBypassProxy() const
 
 bool CServer::ProtocolHasDataTypeConcept(const ServerProtocol protocol)
 {
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
+	if (protocol == FTP || protocol == FTPS || protocol == FTPES || protocol == INSECURE_FTP)
 		return true;
 
 	return false;
