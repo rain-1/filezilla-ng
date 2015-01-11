@@ -659,15 +659,11 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 		break;
 	}
 
-	const enum ServerProtocol protocol = server.GetProtocol();
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
-	{
+	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
 		const std::vector<wxString>& postLoginCommands = server.GetPostLoginCommands();
-		if (!postLoginCommands.empty())
-		{
+		if (!postLoginCommands.empty()) {
 			wxString commands;
-			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter)
-			{
+			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter) {
 				if (!commands.empty())
 					commands += _T("\n");
 				commands += *iter;
@@ -857,11 +853,10 @@ wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 	if (!server.SetHost(host, port))
 		return INVALID_DATA;
 
-	int protocol = GetColumnInt(selectServersQuery_, server_table_column_names::protocol);
+	int const protocol = GetColumnInt(selectServersQuery_, server_table_column_names::protocol);
 	if (protocol < 0 || protocol > MAX_VALUE)
 		return INVALID_DATA;
-
-	server.SetProtocol((enum ServerProtocol)protocol);
+	server.SetProtocol(static_cast<ServerProtocol>(protocol));
 
 	int type = GetColumnInt(selectServersQuery_, server_table_column_names::type);
 	if (type < 0 || type >= SERVERTYPE_MAX)
@@ -924,8 +919,7 @@ wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 			return INVALID_DATA;
 	}
 
-	if (protocol == FTP || protocol == FTPS || protocol == FTPES)
-	{
+	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
 		std::vector<wxString> postLoginCommands;
 
 		wxString commands = GetColumnText(selectServersQuery_, server_table_column_names::post_login_commands);
