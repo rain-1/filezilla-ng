@@ -465,9 +465,13 @@ bool CXmlFile::SaveXmlFile()
 		}
 	}
 
-	wxFFile f(redirectedName, _T("w"));
-	if (!f.IsOpened() || !m_pDocument->SaveFile(f.fp())) {
-		f.Close();
+	bool success = false;
+	{
+		wxFFile f(redirectedName, _T("w"));
+		success = f.IsOpened() && m_pDocument->SaveFile(f.fp());
+	}
+
+	if (!success) {
 		wxRemoveFile(redirectedName);
 		if (exists) {
 			wxLogNull null;
