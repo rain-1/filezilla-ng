@@ -33,7 +33,13 @@ bool CFile::Open(wxString const& f, mode m, disposition d)
 	else {
 		dispositionFlags = OPEN_EXISTING;
 	}
-	hFile_ = CreateFile(f, (m == read) ? GENERIC_READ : GENERIC_WRITE, FILE_SHARE_READ, 0, dispositionFlags, FILE_FLAG_SEQUENTIAL_SCAN, 0);
+
+	DWORD shareMode = FILE_SHARE_READ;
+	if (m == read) {
+		shareMode |= FILE_SHARE_WRITE;
+	}
+
+	hFile_ = CreateFile(f, (m == read) ? GENERIC_READ : GENERIC_WRITE, shareMode, 0, dispositionFlags, FILE_FLAG_SEQUENTIAL_SCAN, 0);
 
 	return hFile_ != INVALID_HANDLE_VALUE;
 }
