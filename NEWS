@@ -10,6 +10,14 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.0.1 (2015-01-12)
+
+- TLS handshakes no longer stall if the server sends ginormous packets during the handshake that do not fit into a single TLS record
+- Fix loading and saving the same queue item multiple times
+- Post-login commands now work with the protocol set to plain FTP
+- MSW: Allow uploading files that are locally opened for writing by another program
+- OS X: Fix layout issues in search dialog and filter conditions dialog
+
 3.10.0 (2015-01-07)
 
 - Fixed default file exists actions broken by rc1
