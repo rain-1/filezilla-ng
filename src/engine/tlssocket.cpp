@@ -466,15 +466,13 @@ int CTlsSocket::ContinueHandshake()
 	wxASSERT(m_tlsState == TlsState::handshake);
 
 	int res = gnutls_handshake(m_session);
-	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED)
-	{
-		if ( gnutls_record_get_direction(m_session) != 1 || !m_canWriteToSocket )
+	while (res == GNUTLS_E_AGAIN || res == GNUTLS_E_INTERRUPTED) {
+		if (!(gnutls_record_get_direction(m_session) ? m_canWriteToSocket : m_canReadFromSocket)) {
 			break;
-
+		}
 		res = gnutls_handshake(m_session);
 	}
-	if (!res)
-	{
+	if (!res) {
 		m_pOwner->LogMessage(MessageType::Debug_Info, _T("TLS Handshake successful"));
 
 		if (ResumedSession())
@@ -491,11 +489,9 @@ int CTlsSocket::ContinueHandshake()
 		if (res != FZ_REPLY_OK)
 			return res;
 
-		if (m_shutdown_requested)
-		{
+		if (m_shutdown_requested) {
 			int error = Shutdown();
-			if (!error || error != EAGAIN)
-			{
+			if (!error || error != EAGAIN) {
 				CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
 				CSocketEventSource::dispatcher_.SendEvent(evt);
 			}
@@ -526,19 +522,16 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 		return -1;
 	}
 
-	if (m_peekDataLen)
-	{
+	if (m_peekDataLen) {
 		unsigned int min = wxMin(len, m_peekDataLen);
 		memcpy(buffer, m_peekData, min);
 
-		if (min == m_peekDataLen)
-		{
+		if (min == m_peekDataLen) {
 			m_peekDataLen = 0;
 			delete [] m_peekData;
 			m_peekData = 0;
 		}
-		else
-		{
+		else {
 			memmove(m_peekData, m_peekData + min, m_peekDataLen - min);
 			m_peekDataLen -= min;
 		}
