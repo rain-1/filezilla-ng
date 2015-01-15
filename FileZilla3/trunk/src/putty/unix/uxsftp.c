@@ -137,7 +137,7 @@ RFile *open_existing_file(char *name, uint64 *size,
     ret = snew(RFile);
     ret->fd = fd;
 
-    if (size || mtime || atime) {
+    if (size || mtime || atime || perms) {
 	struct stat statbuf;
 	if (fstat(fd, &statbuf) < 0) {
 	    fzprintf(sftpStatus, "%s: stat: %s", name, strerror(errno));
