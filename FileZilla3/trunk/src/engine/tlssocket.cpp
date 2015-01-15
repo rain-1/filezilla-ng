@@ -543,12 +543,6 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 	}
 
 	int res = DoCallGnutlsRecordRecv(buffer, len);
-	while (res == GNUTLS_E_AGAIN && m_canReadFromSocket && !gnutls_record_get_direction(m_session)) {
-		// Spurious EAGAIN, try again.
-		// Can happen on early EOF.
-		m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket spurious EAGAIN in gnutls_record_recv. eof state: %d"), m_socket_eof);
-		res = gnutls_record_recv(m_session, buffer, len);
-	}
 	if (res >= 0) {
 		if (res > 0)
 			TriggerEvents();
