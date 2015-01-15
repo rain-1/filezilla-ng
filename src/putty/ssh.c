@@ -999,11 +999,13 @@ static void free_loaded_keyfile(Loaded_keyfile_list* item)
     sfree(item->publickey_blob);
 
     if (item->ssh2key) {
-        item->ssh2key->alg->freekey(item->ssh2key->data);
-        sfree(item->ssh2key);
+	item->ssh2key->alg->freekey(item->ssh2key->data);
+	sfree(item->ssh2key);
     }
-    else
-        freersakey(item->ssh1key);
+    if (item->ssh1key) {
+	freersakey(item->ssh1key);
+	sfree(item->ssh1key);
+    }
     filename_free(item->file);
     sfree(item);
 }
@@ -1064,10 +1066,8 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
 	    }
 
 	    loaded->ssh1key = snew(struct RSAKey);
-	    if (loadrsakey(loaded->file, loaded->ssh1key, 0, 0) <= 0)
-	    {
-		sfree(loaded->publickey_blob);
-		freersakey(loaded->ssh1key);
+	    memset(loaded->ssh1key, 0, sizeof(struct RSAKey));
+	    if (loadrsakey(loaded->file, loaded->ssh1key, 0, 0) <= 0) {
 		free_loaded_keyfile(loaded);
 		continue;
 	    }
@@ -1075,8 +1075,7 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
 	else if (type == SSH_KEYTYPE_SSH2) {
 	    const char* error = NULL;
 	    loaded->ssh2key = ssh2_load_userkey(loaded->file, 0, &error);
-	    if (loaded->ssh2key == SSH2_WRONG_PASSPHRASE || !loaded->ssh2key)
-	    {
+	    if (loaded->ssh2key == SSH2_WRONG_PASSPHRASE || !loaded->ssh2key) {
 		if (!error) {
 		    error = "unknown";
 		}
