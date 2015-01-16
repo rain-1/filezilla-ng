@@ -80,11 +80,14 @@ void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
 		return;
 
 	const wxChar& sep = wxFileName::GetPathSeparator();
-	do
-	{
+	do {
+		if (!m_localDir.empty() && temp + file + sep == m_localDir) {
+			// Don't delete own working directory
+			continue;
+		}
+
 		const wxString lockfile = temp + file + sep + _("fz3temp-lockfile");
-		if (wxFileName::FileExists(lockfile))
-		{
+		if (wxFileName::FileExists(lockfile)) {
 #ifndef __WXMSW__
 			int fd = open(lockfile.mb_str(), O_RDWR | O_CLOEXEC, 0);
 			if (fd >= 0)
@@ -143,8 +146,6 @@ wxString CEditHandler::GetLocalDirectory()
 	if (dir.Last() != wxFileName::GetPathSeparator())
 		dir += wxFileName::GetPathSeparator();
 
-	RemoveTemporaryFiles(dir);
-
 	// On POSIX, the permissions of the created directory (700) ensure
 	// that this is a safe operation.
 	// On Windows, the user's profile directory and associated temp dir
@@ -162,6 +163,12 @@ wxString CEditHandler::GetLocalDirectory()
 		m_localDir = newDir + wxFileName::GetPathSeparator();
 		break;
 	} while (true);
+
+	// Defer deleting stale directories until after having created our own
+	// working directory.
+	// This avoids some strange errors where freshly deleted directories
+	// cannot be instantly recreated.
+	RemoveTemporaryFiles(dir);
 
 #ifdef __WXMSW__
 	m_lockfile_handle = ::CreateFile(m_localDir + _T("fz3temp-lockfile"), GENERIC_WRITE, 0, 0, CREATE_NEW, FILE_ATTRIBUTE_TEMPORARY, 0);
