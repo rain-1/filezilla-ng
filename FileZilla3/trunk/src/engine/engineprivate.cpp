@@ -203,14 +203,14 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 			if (!(nErrorCode & ~(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED | FZ_REPLY_TIMEOUT | FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED)) &&
 				nErrorCode & (FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED))
 			{
-				const CConnectCommand *pConnectCommand = reinterpret_cast<CConnectCommand*>(m_pCurrentCommand.get());
+				CConnectCommand const& connectCommand = static_cast<CConnectCommand const&>(*m_pCurrentCommand.get());
 
-				RegisterFailedLoginAttempt(pConnectCommand->GetServer(), (nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR);
+				RegisterFailedLoginAttempt(connectCommand.GetServer(), (nErrorCode & FZ_REPLY_CRITICALERROR) == FZ_REPLY_CRITICALERROR);
 
 				if ((nErrorCode & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR) {
 					++m_retryCount;
-					if (m_retryCount < m_options.GetOptionVal(OPTION_RECONNECTCOUNT) && pConnectCommand->RetryConnecting()) {
-						unsigned int delay = GetRemainingReconnectDelay(pConnectCommand->GetServer());
+					if (m_retryCount < m_options.GetOptionVal(OPTION_RECONNECTCOUNT) && connectCommand.RetryConnecting()) {
+						unsigned int delay = GetRemainingReconnectDelay(connectCommand.GetServer());
 						if (!delay)
 							delay = 1;
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
@@ -606,42 +606,42 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 	wxCriticalSectionLocker lock(mutex_);
 
 	if (m_pCurrentCommand) {
-		CCommand& command = *m_pCurrentCommand;
+		CCommand const& command = *m_pCurrentCommand;
 		Command id = command.GetId();
 
-		int res = CheckCommandPreconditions(*m_pCurrentCommand, false);
+		int res = CheckCommandPreconditions(command, false);
 		if (res == FZ_REPLY_OK) {
-			switch (m_pCurrentCommand->GetId())
+			switch (command.GetId())
 			{
 			case Command::connect:
-				res = Connect(reinterpret_cast<const CConnectCommand &>(command));
+				res = Connect(static_cast<CConnectCommand const&>(command));
 				break;
 			case Command::disconnect:
-				res = Disconnect(reinterpret_cast<const CDisconnectCommand &>(command));
+				res = Disconnect(static_cast<CDisconnectCommand const&>(command));
 				break;
 			case Command::list:
-				res = List(reinterpret_cast<const CListCommand &>(command));
+				res = List(static_cast<CListCommand const&>(command));
 				break;
 			case Command::transfer:
-				res = FileTransfer(reinterpret_cast<const CFileTransferCommand &>(command));
+				res = FileTransfer(static_cast<CFileTransferCommand const&>(command));
 				break;
 			case Command::raw:
-				res = RawCommand(reinterpret_cast<const CRawCommand&>(command));
+				res = RawCommand(static_cast<CRawCommand const&>(command));
 				break;
 			case Command::del:
-				res = Delete(reinterpret_cast<const CDeleteCommand&>(command));
+				res = Delete(static_cast<CDeleteCommand const&>(command));
 				break;
 			case Command::removedir:
-				res = RemoveDir(reinterpret_cast<const CRemoveDirCommand&>(command));
+				res = RemoveDir(static_cast<CRemoveDirCommand const&>(command));
 				break;
 			case Command::mkdir:
-				res = Mkdir(reinterpret_cast<const CMkdirCommand&>(command));
+				res = Mkdir(static_cast<CMkdirCommand const&>(command));
 				break;
 			case Command::rename:
-				res = Rename(reinterpret_cast<const CRenameCommand&>(command));
+				res = Rename(static_cast<CRenameCommand const&>(command));
 				break;
 			case Command::chmod:
-				res = Chmod(reinterpret_cast<const CChmodCommand&>(command));
+				res = Chmod(static_cast<CChmodCommand const&>(command));
 				break;
 			default:
 				res = FZ_REPLY_SYNTAXERROR;
