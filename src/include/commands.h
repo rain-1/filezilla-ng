@@ -90,9 +90,9 @@ class CBasicCommand final : public CCommandHelper<CBasicCommand<id>, id>
 class CConnectCommand final : public CCommandHelper<CConnectCommand, Command::connect>
 {
 public:
-	explicit CConnectCommand(const CServer &server, bool retry_conncting = true);
+	explicit CConnectCommand(CServer const& server, bool retry_conncting = true);
 
-	const CServer GetServer() const;
+	CServer const& GetServer() const;
 	bool RetryConnecting() const { return m_retry_connecting; }
 protected:
 	CServer const m_Server;

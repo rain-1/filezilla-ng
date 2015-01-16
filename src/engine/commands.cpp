@@ -1,12 +1,12 @@
 #include <filezilla.h>
 
-CConnectCommand::CConnectCommand(const CServer &server, bool retry_connecting /*=true*/)
+CConnectCommand::CConnectCommand(CServer const& server, bool retry_connecting /*=true*/)
 	: m_Server(server)
 	, m_retry_connecting(retry_connecting)
 {
 }
 
-const CServer CConnectCommand::GetServer() const
+CServer const& CConnectCommand::GetServer() const
 {
 	return m_Server;
 }
