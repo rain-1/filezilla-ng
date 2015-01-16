@@ -859,8 +859,7 @@ CRealControlSocket::~CRealControlSocket()
 bool CRealControlSocket::Send(const char *buffer, int len)
 {
 	SetWait(true);
-	if (m_pSendBuffer)
-	{
+	if (m_pSendBuffer) {
 		char *tmp = m_pSendBuffer;
 		m_pSendBuffer = new char[m_nSendBufferLen + len];
 		memcpy(m_pSendBuffer, tmp, m_nSendBufferLen);
@@ -868,14 +867,11 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 		m_nSendBufferLen += len;
 		delete [] tmp;
 	}
-	else
-	{
+	else {
 		int error;
 		int written = m_pBackend->Write(buffer, len, error);
-		if (written < 0)
-		{
-			if (error != EAGAIN)
-			{
+		if (written < 0) {
+			if (error != EAGAIN) {
 				LogMessage(MessageType::Error, _("Could not write to socket: %s"), CSocket::GetErrorDescription(error));
 				LogMessage(MessageType::Error, _("Disconnected from server"));
 				DoClose();
@@ -887,14 +883,10 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 		if (written)
 			SetActive(CFileZillaEngine::send);
 
-		if (written < len)
-		{
-			char *tmp = m_pSendBuffer;
-			m_pSendBuffer = new char[m_nSendBufferLen + len - written];
-			memcpy(m_pSendBuffer, tmp, m_nSendBufferLen);
-			memcpy(m_pSendBuffer + m_nSendBufferLen, buffer, len - written);
-			m_nSendBufferLen += len - written;
-			delete [] tmp;
+		if (written < len) {
+			m_nSendBufferLen = len - written;
+			m_pSendBuffer = new char[m_nSendBufferLen];
+			memcpy(m_pSendBuffer, buffer, len - written);
 		}
 	}
 
