@@ -123,6 +123,7 @@ public:
 		process_ = pi.hProcess;
 
 		// We don't need to use these
+		ResetHandle(pi.hThread);
 		ResetHandle(in_.read_);
 		ResetHandle(out_.write_);
 		ResetHandle(err_.write_);
