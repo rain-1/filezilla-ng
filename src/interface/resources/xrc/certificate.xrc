@@ -86,11 +86,11 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
-                          <label>Fingerprint (MD5):</label>
+                          <label>Fingerprint (SHA-256):</label>
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_FINGERPRINT_MD5" />
+                        <object class="wxStaticText" name="ID_FINGERPRINT_SHA256" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
@@ -351,11 +351,11 @@
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">
-                          <label>Fingerprint (MD5):</label>
+                          <label>Fingerprint (SHA-256):</label>
                         </object>
                       </object>
                       <object class="sizeritem">
-                        <object class="wxStaticText" name="ID_FINGERPRINT_MD5" />
+                        <object class="wxStaticText" name="ID_FINGERPRINT_SHA256" />
                       </object>
                       <object class="sizeritem">
                         <object class="wxStaticText">

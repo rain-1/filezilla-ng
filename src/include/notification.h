@@ -302,7 +302,7 @@ public:
 		const wxString& serial,
 		const wxString& pkalgoname, unsigned int bits,
 		const wxString& signalgoname,
-		const wxString& fingerprint_md5,
+		const wxString& fingerprint_sha256,
 		const wxString& fingerprint_sha1,
 		const wxString& subject,
 		const wxString& issuer);
@@ -319,7 +319,7 @@ public:
 
 	const wxString& GetSignatureAlgorithm() const { return m_signalgoname; }
 
-	const wxString& GetFingerPrintMD5() const { return m_fingerprint_md5; }
+	const wxString& GetFingerPrintSHA256() const { return m_fingerprint_sha256; }
 	const wxString& GetFingerPrintSHA1() const { return m_fingerprint_sha1; }
 
 	const wxString& GetSubject() const { return m_subject; }
@@ -340,7 +340,7 @@ private:
 
 	wxString m_signalgoname;
 
-	wxString m_fingerprint_md5;
+	wxString m_fingerprint_sha256;
 	wxString m_fingerprint_sha1;
 
 	wxString m_subject;

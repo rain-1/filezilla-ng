@@ -109,40 +109,35 @@ char* CDataNotification::Detach(int& len)
 }
 
 CCertificate::CCertificate(
-		const unsigned char* rawData, unsigned int len,
+		unsigned char const* rawData, unsigned int len,
 		wxDateTime activationTime, wxDateTime expirationTime,
-		const wxString& serial,
-		const wxString& pkalgoname, unsigned int bits,
-		const wxString& signalgoname,
-		const wxString& fingerprint_md5,
-		const wxString& fingerprint_sha1,
-		const wxString& subject,
-		const wxString& issuer)
+		wxString const& serial,
+		wxString const& pkalgoname, unsigned int bits,
+		wxString const& signalgoname,
+		wxString const& fingerprint_sha256,
+		wxString const& fingerprint_sha1,
+		wxString const& subject,
+		wxString const& issuer)
+	: m_activationTime(activationTime)
+	, m_expirationTime(expirationTime)
+	, m_len(len)
+	, m_serial(serial)
+	, m_pkalgoname(pkalgoname)
+	, m_pkalgobits(bits)
+	, m_signalgoname(signalgoname)
+	, m_fingerprint_sha256(fingerprint_sha256)
+	, m_fingerprint_sha1(fingerprint_sha1)
+	, m_subject(subject)
+	, m_issuer(issuer)
 {
 	wxASSERT(len);
-	if (len)
-	{
+	if (len) {
 		m_rawData = new unsigned char[len];
 		memcpy(m_rawData, rawData, len);
 	}
-	else
-		m_rawData = 0;
-	m_len = len;
 
 	m_activationTime = activationTime;
 	m_expirationTime = expirationTime;
-
-	m_serial = serial;
-	m_pkalgoname = pkalgoname;
-	m_pkalgobits = bits;
-
-	m_signalgoname = signalgoname;
-
-	m_fingerprint_md5 = fingerprint_md5;
-	m_fingerprint_sha1 = fingerprint_sha1;
-
-	m_subject = subject;
-	m_issuer = issuer;
 }
 
 CCertificate::CCertificate(const CCertificate &op)
@@ -171,7 +166,7 @@ CCertificate::CCertificate(const CCertificate &op)
 
 	m_signalgoname = op.m_signalgoname;
 
-	m_fingerprint_md5 = op.m_fingerprint_md5;
+	m_fingerprint_sha256 = op.m_fingerprint_sha256;
 	m_fingerprint_sha1 = op.m_fingerprint_sha1;
 
 	m_subject = op.m_subject;
@@ -189,11 +184,9 @@ CCertificate& CCertificate::operator=(const CCertificate &op)
 		return *this;
 
 	delete [] m_rawData;
-	if (op.m_rawData)
-	{
+	if (op.m_rawData) {
 		wxASSERT(op.m_len);
-		if (op.m_len)
-		{
+		if (op.m_len) {
 			m_rawData = new unsigned char[op.m_len];
 			memcpy(m_rawData, op.m_rawData, op.m_len);
 		}
@@ -213,7 +206,7 @@ CCertificate& CCertificate::operator=(const CCertificate &op)
 
 	m_signalgoname = op.m_signalgoname;
 
-	m_fingerprint_md5 = op.m_fingerprint_md5;
+	m_fingerprint_sha256 = op.m_fingerprint_sha256;
 	m_fingerprint_sha1 = op.m_fingerprint_sha1;
 
 	m_subject = op.m_subject;
