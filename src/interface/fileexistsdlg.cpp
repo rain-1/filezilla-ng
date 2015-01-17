@@ -206,11 +206,16 @@ bool CFileExistsDlg::Always(bool &directionOnly, bool &queueOnly) const
 
 wxString CFileExistsDlg::GetPathEllipsis(wxString path, wxWindow *window)
 {
+	int dn = wxDisplay::GetFromWindow(window);
+	if (dn < 0) {
+		return path;
+	}
+
 	int string_width; // width of the path string in pixels
 	int y;			// dummy variable
 	window->GetTextExtent(path, &string_width, &y);
 
-	wxDisplay display(wxDisplay::GetFromWindow(window));
+	wxDisplay display(dn);
 	wxRect rect = display.GetClientArea();
 	const int DESKTOP_WIDTH = rect.GetWidth(); // width of the desktop in pixels
 	const int maxWidth = (int)(DESKTOP_WIDTH * 0.75);
