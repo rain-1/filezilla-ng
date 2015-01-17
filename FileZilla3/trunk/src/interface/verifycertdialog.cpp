@@ -44,8 +44,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 		else
 			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), cert.GetExpirationTime().FormatDate());
 	}
-	else
-	{
+	else {
 		warning = true;
 		pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), _("Invalid date"));
 	}
@@ -58,7 +57,8 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	pDlg->SetChildLabel(XRCID("ID_PKALGO"), wxString::Format(_("%s with %d bits"), cert.GetPkAlgoName(), cert.GetPkAlgoBits()));
 	pDlg->SetChildLabel(XRCID("ID_SIGNALGO"), cert.GetSignatureAlgorithm());
 
-	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_MD5"), cert.GetFingerPrintMD5());
+	wxString const& sha256 = cert.GetFingerPrintSHA256();
+	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_SHA256"), sha256.Left(sha256.size() / 2 + 1) + _T("\n") + sha256.Mid(sha256.size() / 2 + 1));
 	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_SHA1"), cert.GetFingerPrintSHA1());
 
 	ParseDN(XRCCTRL(*pDlg, "ID_SUBJECT_BOX", wxStaticBox), cert.GetSubject(), m_pSubjectSizer);
@@ -74,8 +74,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 	m_pDlg = new wxDialogEx;
 	if (displayOnly)
 		m_pDlg->Load(0, _T("ID_DISPLAYCERT"));
-	else
-	{
+	else {
 		m_pDlg->Load(0, _T("ID_VERIFYCERT"));
 
 		m_pDlg->WrapText(m_pDlg, XRCID("ID_DESC"), 400);

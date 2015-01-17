@@ -943,15 +943,14 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		return false;
 	}
 
-	wxString fingerprint_md5;
+	wxString fingerprint_sha256;
 	wxString fingerprint_sha1;
 
 	unsigned char digest[100];
 	size = sizeof(digest) - 1;
-	if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_MD5, digest, &size))
-	{
+	if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_SHA256, digest, &size)) {
 		digest[size] = 0;
-		fingerprint_md5 = bin2hex(digest, size);
+		fingerprint_sha256 = bin2hex(digest, size);
 	}
 	size = sizeof(digest) - 1;
 	if (!gnutls_x509_crt_get_fingerprint(cert, GNUTLS_DIG_SHA1, digest, &size))
@@ -968,7 +967,7 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		serial,
 		pkAlgoName, pkBits,
 		signAlgoName,
-		fingerprint_md5,
+		fingerprint_sha256,
 		fingerprint_sha1,
 		subject,
 		issuer);
