@@ -22,6 +22,8 @@ CFileExistsDlg::CFileExistsDlg(CFileExistsNotification *pNotification)
 
 bool CFileExistsDlg::Create(wxWindow* parent)
 {
+	wxASSERT(parent);
+
 	SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
 	SetParent(parent);
 	if (!CreateControls()) {
@@ -206,7 +208,7 @@ bool CFileExistsDlg::Always(bool &directionOnly, bool &queueOnly) const
 
 wxString CFileExistsDlg::GetPathEllipsis(wxString path, wxWindow *window)
 {
-	int dn = wxDisplay::GetFromWindow(window);
+	int dn = wxDisplay::GetFromWindow(GetParent()); // Use parent window as the dialog isn't realized yet.
 	if (dn < 0) {
 		return path;
 	}
