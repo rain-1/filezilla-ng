@@ -2151,7 +2151,7 @@ bool CMainFrame::RestoreSplitterPositions()
 
 	m_pBottomSplitter->SetSashPosition(aPosValues[1]);
 
-	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
+	CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
 	if (!controls) {
 		delete [] aPosValues;
 		return false;
@@ -2184,9 +2184,8 @@ void CMainFrame::SetDefaultSplitterPositions()
 
 	m_pQueueLogSplitter->SetSashPosition(0);
 
-	CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-	if (controls)
-	{
+	CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
+	if (controls) {
 		controls->pViewSplitter->SetSashPosition(0);
 		controls->pLocalSplitter->SetRelativeSashPosition(0.4);
 		controls->pRemoteSplitter->SetRelativeSashPosition(0.4);
