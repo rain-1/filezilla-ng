@@ -23,10 +23,10 @@ CMenuBar::CMenuBar()
 
 CMenuBar::~CMenuBar()
 {
-	for (auto menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); ++menu_iter)
-	{
-		for (auto iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter)
-			delete iter->second;
+	for (auto hidden_menu : m_hidden_items) {
+		for (auto hidden_item : hidden_menu.second) {
+			delete hidden_item.second;
+		}
 	}
 
 	m_pMainFrame->Disconnect(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CMenuBar::OnMenuEvent), 0, this);
