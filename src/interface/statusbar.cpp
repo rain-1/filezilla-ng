@@ -559,19 +559,20 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 	bool enable = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0;
 
 	wxBitmap bmp = wxArtProvider::GetBitmap(_T("ART_SPEEDLIMITS"), wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
+	if (!bmp.Ok()) {
+		return;
+	}
 	wxString tooltip;
 
 	int downloadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_INBOUND);
 	int uploadLimit = COptions::Get()->GetOptionVal(OPTION_SPEEDLIMIT_OUTBOUND);
-	if (!enable || (!downloadLimit && !uploadLimit))
-	{
+	if (!enable || (!downloadLimit && !uploadLimit)) {
 		wxImage img = bmp.ConvertToImage();
 		img = img.ConvertToGreyscale();
 		bmp = wxBitmap(img);
 		tooltip = _("Speed limits are disabled, click to change.");
 	}
-	else
-	{
+	else {
 		tooltip = _("Speed limits are enabled, click to change.");
 		tooltip += _T("\n");
 		if (downloadLimit)
@@ -585,8 +586,7 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 			tooltip += _("Upload limit: none");
 	}
 
-	if (!m_pSpeedLimitsIndicator)
-	{
+	if (!m_pSpeedLimitsIndicator) {
 		m_pSpeedLimitsIndicator = new CIndicator(this, bmp);
 		AddField(0, widget_speedlimit, m_pSpeedLimitsIndicator);
 	}
