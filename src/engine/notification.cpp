@@ -110,14 +110,15 @@ char* CDataNotification::Detach(int& len)
 
 CCertificate::CCertificate(
 		unsigned char const* rawData, unsigned int len,
-		wxDateTime activationTime, wxDateTime expirationTime,
+		wxDateTime const& activationTime, wxDateTime const& expirationTime,
 		wxString const& serial,
 		wxString const& pkalgoname, unsigned int bits,
 		wxString const& signalgoname,
 		wxString const& fingerprint_sha256,
 		wxString const& fingerprint_sha1,
+		wxString const& issuer,
 		wxString const& subject,
-		wxString const& issuer)
+		std::vector<wxString> const& altSubjectNames)
 	: m_activationTime(activationTime)
 	, m_expirationTime(expirationTime)
 	, m_len(len)
@@ -127,26 +128,22 @@ CCertificate::CCertificate(
 	, m_signalgoname(signalgoname)
 	, m_fingerprint_sha256(fingerprint_sha256)
 	, m_fingerprint_sha1(fingerprint_sha1)
-	, m_subject(subject)
 	, m_issuer(issuer)
+	, m_subject(subject)
+	, m_altSubjectNames(altSubjectNames)
 {
 	wxASSERT(len);
 	if (len) {
 		m_rawData = new unsigned char[len];
 		memcpy(m_rawData, rawData, len);
 	}
-
-	m_activationTime = activationTime;
-	m_expirationTime = expirationTime;
 }
 
 CCertificate::CCertificate(const CCertificate &op)
 {
-	if (op.m_rawData)
-	{
+	if (op.m_rawData) {
 		wxASSERT(op.m_len);
-		if (op.m_len)
-		{
+		if (op.m_len) {
 			m_rawData = new unsigned char[op.m_len];
 			memcpy(m_rawData, op.m_rawData, op.m_len);
 		}
@@ -169,8 +166,9 @@ CCertificate::CCertificate(const CCertificate &op)
 	m_fingerprint_sha256 = op.m_fingerprint_sha256;
 	m_fingerprint_sha1 = op.m_fingerprint_sha1;
 
-	m_subject = op.m_subject;
 	m_issuer = op.m_issuer;
+	m_subject = op.m_subject;
+	m_altSubjectNames = op.m_altSubjectNames;
 }
 
 CCertificate::~CCertificate()
@@ -209,8 +207,9 @@ CCertificate& CCertificate::operator=(const CCertificate &op)
 	m_fingerprint_sha256 = op.m_fingerprint_sha256;
 	m_fingerprint_sha1 = op.m_fingerprint_sha1;
 
-	m_subject = op.m_subject;
 	m_issuer = op.m_issuer;
+	m_subject = op.m_subject;
+	m_altSubjectNames = op.m_altSubjectNames;
 
 	return *this;
 }

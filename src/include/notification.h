@@ -297,16 +297,18 @@ class CCertificate final
 public:
 	CCertificate() = default;
 	CCertificate(
-		const unsigned char* rawData, unsigned int len,
-		wxDateTime activationTime, wxDateTime expirationTime,
-		const wxString& serial,
-		const wxString& pkalgoname, unsigned int bits,
-		const wxString& signalgoname,
-		const wxString& fingerprint_sha256,
-		const wxString& fingerprint_sha1,
-		const wxString& subject,
-		const wxString& issuer);
-	CCertificate(const CCertificate& op);
+		unsigned char const* rawData, unsigned int len,
+		wxDateTime const& activationTime, wxDateTime const& expirationTime,
+		wxString const& serial,
+		wxString const& pkalgoname, unsigned int bits,
+		wxString const& signalgoname,
+		wxString const& fingerprint_sha256,
+		wxString const& fingerprint_sha1,
+		wxString const& issuer,
+		wxString const& subject,
+		std::vector<wxString> const& altSubjectNames);
+	
+	CCertificate(CCertificate const& op);
 	~CCertificate();
 
 	const unsigned char* GetRawData(unsigned int& len) const { len = m_len; return m_rawData; }
@@ -325,7 +327,7 @@ public:
 	const wxString& GetSubject() const { return m_subject; }
 	const wxString& GetIssuer() const { return m_issuer; }
 
-	CCertificate& operator=(const CCertificate &op);
+	CCertificate& operator=(CCertificate const& op);
 
 private:
 	wxDateTime m_activationTime;
@@ -343,8 +345,10 @@ private:
 	wxString m_fingerprint_sha256;
 	wxString m_fingerprint_sha1;
 
-	wxString m_subject;
 	wxString m_issuer;
+	wxString m_subject;
+
+	std::vector<wxString> m_altSubjectNames;
 };
 
 class CCertificateNotification final : public CAsyncRequestNotification
