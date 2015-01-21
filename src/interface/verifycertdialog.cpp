@@ -61,8 +61,21 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_SHA256"), sha256.Left(sha256.size() / 2 + 1) + _T("\n") + sha256.Mid(sha256.size() / 2 + 1));
 	pDlg->SetChildLabel(XRCID("ID_FINGERPRINT_SHA1"), cert.GetFingerPrintSHA1());
 
-	ParseDN(XRCCTRL(*pDlg, "ID_SUBJECT_BOX", wxStaticBox), cert.GetSubject(), m_pSubjectSizer);
 	ParseDN(XRCCTRL(*pDlg, "ID_ISSUER_BOX", wxStaticBox), cert.GetIssuer(), m_pIssuerSizer);
+
+	auto subjectBox = XRCCTRL(*pDlg, "ID_SUBJECT_BOX", wxStaticBox);
+	ParseDN(subjectBox, cert.GetSubject(), m_pSubjectSizer);
+
+	auto const& altNames = cert.GetAltSubjectNames();
+	if (!altNames.empty()) {
+		wxString str;
+		for (auto const& altName : altNames) {
+			str += altName + _T("\n");
+		}
+		str.RemoveLast();
+		m_pSubjectSizer->Add(new wxStaticText(subjectBox, wxID_ANY, wxPLURAL("Alternative name:", "Alternative names:", altNames.size())));
+		m_pSubjectSizer->Add(new wxStaticText(subjectBox, wxID_ANY, str));
+	}
 
 	return warning;
 }
