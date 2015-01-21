@@ -290,27 +290,24 @@ bool CEditHandler::AddFile(enum CEditHandler::fileType type, wxString& fileName,
 {
 	wxASSERT(type != none);
 
-	enum fileState state;
+	fileState state;
 	if (type == local)
 		state = GetFileState(fileName);
 	else
 		state = GetFileState(fileName, remotePath, server);
-	if (state != unknown)
-	{
+	if (state != unknown) {
 		wxFAIL_MSG(_T("File state not unknown"));
 		return false;
 	}
 
 	t_fileData data;
-	if (type == remote)
-	{
+	if (type == remote) {
 		data.state = download;
 		data.name = fileName;
 		data.file = GetTemporaryFile(fileName);
 		fileName = data.file;
 	}
-	else
-	{
+	else {
 		data.file = fileName;
 		data.name = wxFileName(fileName).GetFullName();
 		data.state = edit;
@@ -1650,7 +1647,11 @@ bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CS
 		}
 	}
 
-	CEditHandler::fileState state = GetFileState(fileName, path, server);
+	fileState state;
+	if (type == local)
+		state = GetFileState(fileName);
+	else
+		state = GetFileState(fileName, path, server);
 	switch (state)
 	{
 	case CEditHandler::download:
