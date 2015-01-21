@@ -88,7 +88,7 @@ protected:
 	void OnSend();
 
 	bool ExtractCert(gnutls_datum_t const* datum, CCertificate& out);
-	std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert);
+	std::vector<wxString> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
 
 	bool m_canReadFromSocket{true};
 	bool m_canWriteToSocket{true};
