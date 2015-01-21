@@ -3849,7 +3849,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 		}
 		else if (mode == 2) {
 			if (!m_pIPResolver) {
-				const wxString& localAddress = m_pSocket->GetLocalIP();
+				const wxString& localAddress = m_pSocket->GetLocalIP(true);
 
 				if (!localAddress.empty() && localAddress == m_pEngine->GetOptions().GetOption(OPTION_LASTRESOLVEDIP)) {
 					LogMessage(MessageType::Debug_Verbose, _T("Using cached external IP address"));

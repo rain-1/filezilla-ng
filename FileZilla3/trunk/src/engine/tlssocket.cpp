@@ -918,6 +918,8 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		return false;
 	}
 
+	std::vector<wxString> alt_subject_names = GetCertSubjectAltNames(cert);
+
 	size = 0;
 	res = gnutls_x509_crt_get_issuer_dn(cert, 0, &size);
 	if (size)
@@ -967,10 +969,44 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		signAlgoName,
 		fingerprint_sha256,
 		fingerprint_sha1,
+		issuer,
 		subject,
-		issuer);
+		alt_subject_names);
 
 	return true;
+}
+
+
+std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
+{
+	std::vector<wxString> ret;
+
+	char san[4096];
+	for (unsigned int i = 0; i < 10000; ++i) { // I assume this is a sane limit
+		size_t san_size = sizeof(san) - 1;
+		int const type_or_error = gnutls_x509_crt_get_subject_alt_name(cert, i, san, &san_size, 0);
+		if (type_or_error == GNUTLS_E_SHORT_MEMORY_BUFFER) {
+			continue;
+		}
+		else if (type_or_error < 0) {
+			break;
+		}
+
+		if (type_or_error == GNUTLS_SAN_DNSNAME || type_or_error == GNUTLS_SAN_RFC822NAME) {
+			wxString dns = wxString(san, wxConvUTF8);
+			if (!dns.empty()) {
+				ret.push_back(dns);
+			}
+		}
+		else if (type_or_error == GNUTLS_SAN_IPADDRESS) {
+			wxString ip = CSocket::AddressToString(san, san_size);
+			if (!ip.empty()) {
+				ret.push_back(ip);
+			}
+		}
+	}
+
+	return ret;
 }
 
 int CTlsSocket::VerifyCertificate()

@@ -176,6 +176,7 @@ public:
 	static bool Cleanup(bool force);
 
 	static wxString AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
+	static wxString AddressToString(char const* buf, int buf_len);
 
 	int Listen(address_family family, int port = 0);
 	CSocket* Accept(int& error);

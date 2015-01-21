@@ -1412,6 +1412,26 @@ wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, boo
 		return host;
 }
 
+wxString CSocket::AddressToString(char const* buf, int buf_len)
+{
+	if (buf_len != 4 && buf_len != 16) {
+		return wxString();
+	}
+
+	sockaddr_u addr;
+	if (buf_len == 16) {
+		memcpy(&addr.in6.sin6_addr, buf, buf_len);
+		addr.in6.sin6_family = AF_INET6;
+	}
+	else {
+		memcpy(&addr.in4.sin_addr, buf, buf_len);
+		addr.in4.sin_family = AF_INET;
+	}
+	
+	
+	return AddressToString(&addr.sockaddr, sizeof(addr), false, true);
+}
+
 wxString CSocket::GetLocalIP(bool strip_zone_index /*=false*/) const
 {
 	struct sockaddr_storage addr;
