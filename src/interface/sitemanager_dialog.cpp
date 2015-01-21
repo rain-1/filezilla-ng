@@ -1234,6 +1234,8 @@ void CSiteManagerDialog::OnDelete(wxCommandEvent& event)
 	pTree->SafeSelectItem(parent);
 
 	m_is_deleting = false;
+
+	SetCtrlState();
 }
 
 void CSiteManagerDialog::OnSelChanging(wxTreeEvent& event)
