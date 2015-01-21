@@ -748,15 +748,14 @@ bool CSiteManagerDialog::Load()
 		return true;
 
 	wxString lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
-	if (!lastSelection.empty() && lastSelection[0] == '0')
-	{
+	if (!lastSelection.empty() && lastSelection[0] == '0') {
 		if (lastSelection == _T("0"))
 			pTree->SafeSelectItem(treeId);
 		else
 			lastSelection = lastSelection.Mid(1);
 	}
 	else
-		lastSelection = _T("");
+		lastSelection.clear();
 	CSiteManagerXmlHandler_Tree handler(pTree, treeId, lastSelection, false);
 
 	bool res = CSiteManager::Load(pElement, &handler);
@@ -937,8 +936,7 @@ bool CSiteManagerDialog::Verify()
 	if (!data)
 		return true;
 
-	if (data->m_type == CSiteManagerItemData::SITE)
-	{
+	if (data->m_type == CSiteManagerItemData::SITE) {
 		const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
 		if (host.empty())
 		{
@@ -971,7 +969,7 @@ bool CSiteManagerDialog::Verify()
 			msg += _T("\n");
 			msg += _("'Normal' and 'Account' logontypes are not available. Your entry has been changed to 'Ask for password'.");
 			XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
-			XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
+			XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(wxString());
 			logon_type = ASK;
 			wxMessageBoxEx(msg, _("Site Manager - Cannot remember password"), wxICON_INFORMATION, this);
 		}
@@ -986,22 +984,24 @@ bool CSiteManagerDialog::Verify()
 		wxString port = XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue();
 		CServerPath path;
 		wxString error;
-		if (!server.ParseUrl(host, port, _T(""), _T(""), error, path))
-		{
+		if (!server.ParseUrl(host, port, wxString(), wxString(), error, path)) {
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(error, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetValue(server.FormatHost(true));
-		XRCCTRL(*this, "ID_PORT", wxTextCtrl)->SetValue(wxString::Format(_T("%d"), server.GetPort()));
+		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(server.FormatHost(true));
+		if (server.GetPort() != CServer::GetDefaultPort(server.GetProtocol())) {
+			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString::Format(_T("%d"), server.GetPort()));
+		}
+		else {
+			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString());
+		}
 
 		SetProtocol(server.GetProtocol());
 
-		if (XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxRadioButton)->GetValue())
-		{
-			if (XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue().empty())
-			{
+		if (XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxRadioButton)->GetValue()) {
+			if (XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue().empty()) {
 				XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetFocus();
 				wxMessageBoxEx(_("Need to specify a character encoding"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
@@ -1021,19 +1021,15 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		// The way TinyXML handles blanks, we can't use username of only spaces
-		if (!user.empty())
-		{
+		if (!user.empty()) {
 			bool space_only = true;
-			for (unsigned int i = 0; i < user.Len(); ++i)
-			{
-				if (user[i] != ' ')
-				{
+			for (unsigned int i = 0; i < user.Len(); ++i) {
+				if (user[i] != ' ') {
 					space_only = false;
 					break;
 				}
 			}
-			if (space_only)
-			{
+			if (space_only) {
 				XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
 				wxMessageBoxEx(_("Username cannot be a series of spaces"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
@@ -1471,7 +1467,7 @@ void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
 	wxDirDialog dlg(this, _("Choose the default local directory"), XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue(), wxDD_NEW_DIR_BUTTON);
 	if (dlg.ShowModal() == wxID_OK)
 	{
-		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->SetValue(dlg.GetPath());
+		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(dlg.GetPath());
 	}
 }
 
@@ -1515,8 +1511,7 @@ void CSiteManagerDialog::SetCtrlState()
 	CSiteManagerItemData* data = 0;
 	if (item.IsOk())
 		data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
-	{
+	if (!data) {
 		m_pNotebook_Site->Show();
 		m_pNotebook_Bookmark->Hide();
 		m_pNotebook_Site->GetContainingSizer()->Layout();
@@ -1534,19 +1529,19 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(false);
 
 		// Empty all site information
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetValue(_T(""));
-		XRCCTRL(*this, "ID_PORT", wxTextCtrl)->SetValue(_T(""));
+		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString());
 		SetProtocol(FTP);
 		XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->SetValue(false);
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(_("Anonymous"));
-		XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetValue(_T(""));
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetValue(_T(""));
-		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->SetValue(_T(""));
+		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(wxString());
 
 		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
-		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->SetValue(_T(""));
-		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetValue(_T(""));
+		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(false);
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(0);
 		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->SetValue(0);
@@ -1556,13 +1551,12 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->SetValue(1);
 
 		XRCCTRL(*this, "ID_CHARSET_AUTO", wxRadioButton)->SetValue(true);
-		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetValue(_T(""));
+		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->ChangeValue(wxString());
 #ifdef __WXGTK__
 		XRCCTRL(*this, "wxID_OK", wxButton)->SetDefault();
 #endif
 	}
-	else if (data->m_type == CSiteManagerItemData::SITE)
-	{
+	else if (data->m_type == CSiteManagerItemData::SITE) {
 		m_pNotebook_Site->Show();
 		m_pNotebook_Bookmark->Hide();
 		m_pNotebook_Site->GetContainingSizer()->Layout();
@@ -1580,13 +1574,13 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(true);
 
 		XRCCTRL(*this, "ID_HOST", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetValue(site_data->m_server.FormatHost(true));
+		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(site_data->m_server.FormatHost(true));
 		unsigned int port = site_data->m_server.GetPort();
 
 		if (port != CServer::GetDefaultPort(site_data->m_server.GetProtocol()))
-			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->SetValue(wxString::Format(_T("%d"), port));
+			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString::Format(_T("%d"), port));
 		else
-			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->SetValue(_T(""));
+			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_PORT", wxWindow)->Enable(!predefined);
 
 		SetProtocol(site_data->m_server.GetProtocol());
@@ -1601,17 +1595,17 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
 		XRCCTRL(*this, "ID_LOGONTYPE", wxWindow)->Enable(!predefined);
 
-		XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetValue(site_data->m_server.GetUser());
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetValue(site_data->m_server.GetAccount());
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(site_data->m_server.GetPass());
-		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->SetValue(site_data->m_comments);
+		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(site_data->m_server.GetUser());
+		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(site_data->m_server.GetAccount());
+		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(site_data->m_server.GetPass());
+		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(site_data->m_comments);
 		XRCCTRL(*this, "ID_COMMENTS", wxWindow)->Enable(!predefined);
 
 		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(site_data->m_server.GetType());
 		XRCCTRL(*this, "ID_SERVERTYPE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->SetValue(site_data->m_localDir);
+		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(site_data->m_localDir);
 		XRCCTRL(*this, "ID_LOCALDIR", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetValue(site_data->m_remoteDir.GetPath());
+		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->ChangeValue(site_data->m_remoteDir.GetPath());
 		XRCCTRL(*this, "ID_REMOTEDIR", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->Enable(!predefined);
 		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(site_data->m_sync);
@@ -1662,7 +1656,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_CHARSET_UTF8", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetEncodingType() == ENCODING_CUSTOM);
-		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->SetValue(site_data->m_server.GetCustomEncoding());
+		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->ChangeValue(site_data->m_server.GetCustomEncoding());
 #ifdef __WXGTK__
 		XRCCTRL(*this, "ID_CONNECT", wxButton)->SetDefault();
 #endif
@@ -1682,9 +1676,9 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(true);
 
-		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetValue(data->m_localDir);
+		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(data->m_localDir);
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetValue(data->m_remoteDir.GetPath());
+		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->ChangeValue(data->m_remoteDir.GetPath());
 		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxWindow)->Enable(!predefined);
 
 		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->Enable(true);
@@ -1818,7 +1812,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 
 	int style = pTree->GetWindowStyle();
 	pTree->SetWindowStyle(style | wxTR_HIDE_ROOT);
-	wxTreeItemId root = pTree->AddRoot(_T(""), 0, 0);
+	wxTreeItemId root = pTree->AddRoot(wxString(), 0, 0);
 
 	m_predefinedSites = pTree->AppendItem(root, _("Predefined Sites"), 0, 0);
 	pTree->SetItemImage(m_predefinedSites, 1, wxTreeItemIcon_Expanded);
@@ -1832,7 +1826,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 			lastSelection = lastSelection.Mid(1);
 	}
 	else
-		lastSelection = _T("");
+		lastSelection.clear();
 	CSiteManagerXmlHandler_Tree handler(pTree, m_predefinedSites, lastSelection, true);
 
 	CSiteManager::Load(pElement, &handler);
@@ -2149,7 +2143,7 @@ void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
 
 void CSiteManagerDialog::OnExportSelected(wxCommandEvent&)
 {
-	wxFileDialog dlg(this, _("Select file for exported sites"), _T(""),
+	wxFileDialog dlg(this, _("Select file for exported sites"), wxString(),
 					_T("sites.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
@@ -2187,7 +2181,7 @@ void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent&)
 	if (dlg.ShowModal() != wxID_OK)
 		return;
 
-	XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetValue(dlg.GetPath());
+	XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(dlg.GetPath());
 }
 
 void CSiteManagerDialog::OnNewBookmark(wxCommandEvent&)
