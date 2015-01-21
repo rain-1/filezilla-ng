@@ -153,39 +153,37 @@ void CTlsSocket::UninitSession()
 
 void CTlsSocket::LogError(int code, const wxString& function, MessageType logLevel)
 {
-	if (code == GNUTLS_E_WARNING_ALERT_RECEIVED || code == GNUTLS_E_FATAL_ALERT_RECEIVED)
-		PrintAlert();
-
-	const char* error = gnutls_strerror(code);
-
-	if (error)
-	{
-		wxString str(error, wxConvLocal);
-		if (function.empty())
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d: %s"), code, str);
-		else
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s: %s"), code, function, str);
+	if (code == GNUTLS_E_WARNING_ALERT_RECEIVED || code == GNUTLS_E_FATAL_ALERT_RECEIVED) {
+		PrintAlert(logLevel);
 	}
-	else
-	{
-		if (function.empty())
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d"), code);
-		else
-			m_pOwner->LogMessage(logLevel, _T("GnuTLS error %d in %s"), code, function);
+	else {
+		const char* error = gnutls_strerror(code);
+		if (error) {
+			wxString str(error, wxConvLocal);
+			if (function.empty())
+				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d: %s"), code, str);
+			else
+				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d in %s: %s"), code, function, str);
+		}
+		else {
+			if (function.empty())
+				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d"), code);
+			else
+				m_pOwner->LogMessage(logLevel, _("GnuTLS error %d in %s"), code, function);
+		}
 	}
 }
 
-void CTlsSocket::PrintAlert()
+void CTlsSocket::PrintAlert(MessageType logLevel)
 {
 	gnutls_alert_description_t last_alert = gnutls_alert_get(m_session);
 	const char* alert = gnutls_alert_get_name(last_alert);
-	if (alert)
-	{
+	if (alert) {
 		wxString str(alert, wxConvLocal);
-		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d: %s"), last_alert, str);
+		m_pOwner->LogMessage(logLevel, _("Received TLS alert from the server: %s (%d)"), str, last_alert);
 	}
 	else
-		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("GnuTLS alert %d"), last_alert);
+		m_pOwner->LogMessage(logLevel, _("Received unknown TLS alert %d from the server"), last_alert);
 }
 
 ssize_t CTlsSocket::PushFunction(gnutls_transport_ptr_t ptr, const void* data, size_t len)

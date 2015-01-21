@@ -69,7 +69,7 @@ protected:
 	gnutls_certificate_credentials_t m_certCredentials{};
 
 	void LogError(int code, const wxString& function, MessageType logLegel = MessageType::Error);
-	void PrintAlert();
+	void PrintAlert(MessageType logLevel);
 
 	// Failure logs the error, uninits the session and sends a close event
 	void Failure(int code, int socket_error, const wxString& function = wxString());
