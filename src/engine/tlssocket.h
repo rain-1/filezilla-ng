@@ -72,7 +72,7 @@ protected:
 	void PrintAlert(MessageType logLevel);
 
 	// Failure logs the error, uninits the session and sends a close event
-	void Failure(int code, int socket_error, const wxString& function = wxString());
+	void Failure(int code, bool send_close, const wxString& function = wxString());
 
 	static ssize_t PushFunction(gnutls_transport_ptr_t ptr, const void* data, size_t len);
 	static ssize_t PullFunction(gnutls_transport_ptr_t ptr, void* data, size_t len);
@@ -122,6 +122,7 @@ protected:
 	gnutls_datum_t m_implicitTrustedCert;
 
 	bool m_socket_eof{};
+	int m_socket_error{ECONNABORTED}; // Set in the push and pull functions if reading/writing fails fatally
 };
 
 #endif //__TLSSOCKET_H__
