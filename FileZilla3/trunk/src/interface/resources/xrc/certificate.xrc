@@ -100,8 +100,8 @@
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_FINGERPRINT_SHA1" />
                       </object>
-                      <vgap>3</vgap>
-                      <hgap>3</hgap>
+                      <vgap>1d</vgap>
+                      <hgap>3d</hgap>
                     </object>
                     <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                     <border>4</border>
@@ -123,8 +123,8 @@
                             </object>
                           </object>
                           <cols>2</cols>
-                          <vgap>2</vgap>
-                          <hgap>2</hgap>
+                          <vgap>1d</vgap>
+                          <hgap>3d</hgap>
                         </object>
                         <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                         <border>4</border>
@@ -146,8 +146,8 @@
                               <label>&lt;Dummy&gt;</label>
                             </object>
                           </object>
-                          <vgap>2</vgap>
-                          <hgap>2</hgap>
+                          <vgap>1d</vgap>
+                          <hgap>3d</hgap>
                         </object>
                         <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                         <border>4</border>
@@ -168,8 +168,8 @@
                   <object class="sizeritem">
                     <object class="wxFlexGridSizer">
                       <cols>2</cols>
-                      <vgap>3</vgap>
-                      <hgap>3</hgap>
+                      <vgap>1d</vgap>
+                      <hgap>3d</hgap>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Host:</label>
@@ -238,7 +238,7 @@
                 </object>
               </object>
               <cols>1</cols>
-              <vgap>5</vgap>
+              <vgap>3d</vgap>
               <growablecols>0</growablecols>
               <growablerows>3</growablerows>
             </object>
@@ -365,8 +365,8 @@
                       <object class="sizeritem">
                         <object class="wxStaticText" name="ID_FINGERPRINT_SHA1" />
                       </object>
-                      <vgap>3</vgap>
-                      <hgap>3</hgap>
+                      <vgap>1d</vgap>
+                      <hgap>3d</hgap>
                     </object>
                     <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                     <border>4</border>
@@ -388,8 +388,8 @@
                               <label>&lt;Dummy&gt;</label>
                             </object>
                           </object>
-                          <vgap>2</vgap>
-                          <hgap>2</hgap>
+                          <vgap>1d</vgap>
+                          <hgap>3d</hgap>
                         </object>
                         <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                         <border>4</border>
@@ -411,8 +411,8 @@
                               <label>&lt;Dummy&gt;</label>
                             </object>
                           </object>
-                          <vgap>2</vgap>
-                          <hgap>2</hgap>
+                          <vgap>1d</vgap>
+                          <hgap>3d</hgap>
                         </object>
                         <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                         <border>4</border>
@@ -433,8 +433,8 @@
                   <object class="sizeritem">
                     <object class="wxFlexGridSizer">
                       <cols>2</cols>
-                      <vgap>3</vgap>
-                      <hgap>3</hgap>
+                      <vgap>1d</vgap>
+                      <hgap>3d</hgap>
                       <object class="sizeritem">
                         <object class="wxStaticText">
                           <label>Host:</label>
@@ -493,7 +493,7 @@
                 <flag>wxGROW</flag>
               </object>
               <cols>1</cols>
-              <vgap>5</vgap>
+              <vgap>3d</vgap>
               <growablecols>0</growablecols>
               <growablerows>2</growablerows>
             </object>

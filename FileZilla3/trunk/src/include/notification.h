@@ -329,6 +329,8 @@ public:
 
 	CCertificate& operator=(CCertificate const& op);
 
+	std::vector<wxString> const& GetAltSubjectNames() const { return m_altSubjectNames; }
+
 private:
 	wxDateTime m_activationTime;
 	wxDateTime m_expirationTime;
