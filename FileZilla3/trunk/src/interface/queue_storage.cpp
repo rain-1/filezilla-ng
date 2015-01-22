@@ -339,12 +339,12 @@ wxLongLong_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 
 wxLongLong_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
 {
-	wxString safePath = path.GetSafePath();
+	wxString const& safePath = path.GetSafePath();
 	std::unordered_map<wxString, wxLongLong_t, wxStringHash>::const_iterator it = remotePaths_.find(safePath);
 	if (it != remotePaths_.end())
 		return it->second;
 
-	Bind(insertRemotePathQuery_, path_table_column_names::path, path.GetSafePath());
+	Bind(insertRemotePathQuery_, path_table_column_names::path, safePath);
 
 	int res;
 	do {
@@ -353,8 +353,7 @@ wxLongLong_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
 
 	sqlite3_reset(insertRemotePathQuery_);
 
-	if (res == SQLITE_DONE)
-	{
+	if (res == SQLITE_DONE) {
 		wxLongLong_t id = sqlite3_last_insert_rowid(db_);
 		remotePaths_[safePath] = id;
 		return id;
@@ -367,8 +366,7 @@ wxLongLong_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
 wxString CQueueStorage::Impl::CreateColumnDefs(_column* columns, size_t count)
 {
 	wxString query = _T("(");
-	for (unsigned int i = 0; i < count; ++i)
-	{
+	for (unsigned int i = 0; i < count; ++i) {
 		if (i)
 			query += _T(", ");
 		query += columns[i].name;
@@ -1042,8 +1040,7 @@ bool CQueueStorage::SaveQueue(std::vector<CServerItem*> const& queue)
 	d_->ClearCaches();
 
 	bool ret = true;
-	if (sqlite3_exec(d_->db_, "BEGIN TRANSACTION", 0, 0, 0) == SQLITE_OK)
-	{
+	if (sqlite3_exec(d_->db_, "BEGIN TRANSACTION", 0, 0, 0) == SQLITE_OK) {
 		for (std::vector<CServerItem*>::const_iterator it = queue.begin(); it != queue.end(); ++it)
 			ret &= d_->SaveServer(**it);
 
