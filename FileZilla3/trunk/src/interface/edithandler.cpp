@@ -8,6 +8,7 @@
 #include "Options.h"
 #include "queue.h"
 #include "window_state_manager.h"
+#include "xrc_helper.h"
 
 class CChangedFileDialog : public wxDialogEx
 {
@@ -1654,9 +1655,9 @@ bool CEditHandler::Edit(CEditHandler::fileType type, std::vector<FileData> const
 	}
 
 	bool success = true;
-
+	int already_editing_action{};
 	for (auto const& file : data) {
-		if (!DoEdit(type, file, path, server, parent)) {
+		if (!DoEdit(type, file, path, server, parent, data.size(), already_editing_action)) {
 			success = false;
 		}
 	}
@@ -1664,7 +1665,7 @@ bool CEditHandler::Edit(CEditHandler::fileType type, std::vector<FileData> const
 	return success;
 }
 
-bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow * parent)
+bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow * parent, size_t fileCount, int & already_editing_action)
 {
 	bool dangerous = false;
 	bool program_exists = false;
@@ -1713,32 +1714,47 @@ bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CSe
 		}
 		break;
 	case CEditHandler::edit:
-		if (type == CEditHandler::local) {
-			int res = wxMessageBoxEx(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), file.name), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
-			if (res != wxYES) {
-				wxBell();
-				return false;
-			}
-			else {
-				StartEditing(file.name);
-				return true;
-			}
-		}
-		else {
-			wxDialogEx dlg;
-			if (!dlg.Load(parent, _T("ID_EDITEXISTING"))) {
-				wxBell();
-				return false;
-			}
-			dlg.SetChildLabel(XRCID("ID_FILENAME"), file.name);
-			if (dlg.ShowModal() != wxID_OK) {
-				wxBell();
-				return false;
+		{
+			int action = already_editing_action;
+			if (!action) {
+				wxDialogEx dlg;
+				if (!dlg.Load(parent, type == CEditHandler::local ? _T("ID_EDITEXISTING_LOCAL") : _T("ID_EDITEXISTING_REMOTE"))) {
+					wxBell();
+					return false;
+				}
+				dlg.SetChildLabel(XRCID("ID_FILENAME"), file.name);
+				if (fileCount < 2) {
+					xrc_call(dlg, "ID_ALWAYS", &wxCheckBox::Hide);
+				}
+				dlg.GetSizer()->Fit(&dlg);
+				int res = dlg.ShowModal();
+				if (res != wxID_OK && res != wxID_YES) {
+					wxBell();
+					action = -1;
+				}
+				else if (type == CEditHandler::local || xrc_call(dlg, "ID_REOPEN", &wxRadioButton::GetValue)) {
+					action = 1;
+				}
+				else {
+					action = 2;
+				}
+
+				if (xrc_call(dlg, "ID_ALWAYS", &wxCheckBox::GetValue)) {
+					already_editing_action = action;
+				}
 			}
 
-			if (XRCCTRL(dlg, "ID_REOPEN", wxRadioButton)->GetValue()) {
-				StartEditing(file.name, path, server);
+			if (action == -1) {
 				return false;
+			}
+			else if (action == 1) {
+				if (type == CEditHandler::local) {
+					StartEditing(file.name);
+				}
+				else {
+					StartEditing(file.name, path, server);
+				}
+				return true;
 			}
 			else {
 				if (!Remove(file.name, path, server)) {
