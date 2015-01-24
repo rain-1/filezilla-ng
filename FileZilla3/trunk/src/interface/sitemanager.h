@@ -61,7 +61,7 @@ public:
 	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data) = 0;
 
 	// Go up a level
-	virtual bool LevelUp() = 0; // *Ding*
+	virtual bool LevelUp() { return true; } // *Ding*
 };
 
 class TiXmlElement;
@@ -87,8 +87,11 @@ public:
 	static bool UnescapeSitePath(wxString path, std::list<wxString>& result);
 	static wxString EscapeSegment( wxString segment );
 
+	static bool HasSites();
+
 protected:
-	static bool Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler);
+	static bool Load(CSiteManagerXmlHandler& pHandler);
+	static bool Load(TiXmlElement *pElement, CSiteManagerXmlHandler& pHandler);
 	static std::unique_ptr<CSiteManagerItemData_Site> ReadServerElement(TiXmlElement *pElement);
 
 	static TiXmlElement* GetElementByPath(TiXmlElement* pNode, std::list<wxString> const& segments);
@@ -98,6 +101,8 @@ protected:
 
 	// The map maps event id's to sites
 	static std::unique_ptr<wxMenu> GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap);
+
+	static bool LoadPredefined(CSiteManagerXmlHandler& handler);
 };
 
 #endif //__SITEMANAGER_H__

@@ -8,10 +8,26 @@
 
 std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> CSiteManager::m_idMap;
 
-bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler)
+bool CSiteManager::Load(CSiteManagerXmlHandler& handler)
+{
+	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
+	TiXmlElement* pDocument = file.Load();
+	if (!pDocument) {
+		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
+		return false;
+	}
+
+	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
+	if (!pElement) {
+		return false;
+	}
+
+	return Load(pElement, handler);
+}
+
+bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler& handler)
 {
 	wxASSERT(pElement);
-	wxASSERT(pHandler);
 
 	for (TiXmlElement* pChild = pElement->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement()) {
 		if (!strcmp(pChild->Value(), "Folder")) {
@@ -20,17 +36,17 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 				continue;
 
 			const bool expand = GetTextAttribute(pChild, "expanded") != _T("0");
-			if (!pHandler->AddFolder(name, expand))
+			if (!handler.AddFolder(name, expand))
 				return false;
-			Load(pChild, pHandler);
-			if (!pHandler->LevelUp())
+			Load(pChild, handler);
+			if (!handler.LevelUp())
 				return false;
 		}
 		else if (!strcmp(pChild->Value(), "Server")) {
 			std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(pChild);
 
 			if (data) {
-				pHandler->AddSite(std::move(data));
+				handler.AddSite(std::move(data));
 
 				// Bookmarks
 				for (TiXmlElement* pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
@@ -57,10 +73,10 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler* pHandler
 					if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
 						data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 
-					pHandler->AddBookmark(name, std::move(data));
+					handler.AddBookmark(name, std::move(data));
 				}
 
-				if (!pHandler->LevelUp())
+				if (!handler.LevelUp())
 					return false;
 			}
 		}
@@ -216,6 +232,33 @@ protected:
 	std::list<wxString> m_paths;
 };
 
+
+class CSiteManagerXmlHandler_Stats : public CSiteManagerXmlHandler
+{
+public:
+	virtual bool AddFolder(const wxString& name, bool)
+	{
+		++directories_;
+		return true;
+	}
+
+	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data)
+	{
+		++sites_;
+		return true;
+	}
+
+	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data)
+	{
+		++bookmarks_;
+		return true;
+	}
+
+	unsigned int sites_{};
+	unsigned int directories_{};
+	unsigned int bookmarks_{};
+};
+
 std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 {
 	ClearIdMap();
@@ -226,35 +269,10 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 
 	std::unique_ptr<wxMenu> predefinedSites = GetSitesMenu_Predefined(m_idMap);
 
-	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
-		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-
-		if (predefinedSites)
-			return predefinedSites;
-
-		auto pMenu = make_unique<wxMenu>();
-		wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
-		pItem->Enable(false);
-		return pMenu;
-	}
-
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement) {
-		if (predefinedSites)
-			return predefinedSites;
-
-		auto pMenu = make_unique<wxMenu>();
-		wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
-		pItem->Enable(false);
-		return pMenu;
-	}
-
 	auto pMenu = make_unique<wxMenu>();
 	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &m_idMap, false);
 
-	bool res = Load(pElement, &handler);
+	bool res = Load(handler);
 	if (!res || !pMenu->GetMenuItemCount()) {
 		pMenu.reset();
 	}
@@ -284,27 +302,36 @@ void CSiteManager::ClearIdMap()
 	m_idMap.clear();
 }
 
-std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap)
+bool CSiteManager::LoadPredefined(CSiteManagerXmlHandler& handler)
 {
 	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir.empty())
-		return 0;
+		return false;
 
 	wxString const name(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	CXmlFile file(name);
 
 	TiXmlElement* pDocument = file.Load();
 	if (!pDocument)
-		return 0;
+		return false;
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
 	if (!pElement)
-		return 0;
+		return false;
 
+	if (!Load(pElement, handler)) {
+		return false;
+	}
+
+	return true;
+}
+
+std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap)
+{
 	auto pMenu = make_unique<wxMenu>();
 	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &idMap, true);
 
-	if (!Load(pElement, &handler)) {
+	if (!LoadPredefined(handler)) {
 		return 0;
 	}
 
@@ -803,4 +830,12 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	}
 
 	return true;
+}
+
+bool CSiteManager::HasSites()
+{
+	CSiteManagerXmlHandler_Stats handler;
+	Load(handler);
+
+	return handler.sites_ > 0;
 }
