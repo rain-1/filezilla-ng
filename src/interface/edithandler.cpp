@@ -1,12 +1,13 @@
 #include <filezilla.h>
-#include "edithandler.h"
+#include "conditionaldialog.h"
 #include "dialogex.h"
+#include "edithandler.h"
 #include "filezillaapp.h"
 #include "file_utils.h"
-#include "queue.h"
-#include "Options.h"
-#include "window_state_manager.h"
 #include "local_filesys.h"
+#include "Options.h"
+#include "queue.h"
+#include "window_state_manager.h"
 
 class CChangedFileDialog : public wxDialogEx
 {
@@ -1621,26 +1622,71 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
 
 bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, wxLongLong size, wxWindow * parent)
 {
+	std::vector<FileData> data;
+	FileData d{fileName, size};
+	data.push_back(d);
+
+	return Edit(type, data, path, server, parent);
+}
+
+bool CEditHandler::Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, CServer const& server, wxWindow * parent)
+{
+	if (type == CEditHandler::remote) {
+		wxString const& localDir = GetLocalDirectory();
+		if (localDir.empty()) {
+			wxMessageBoxEx(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
+			return false;
+		}
+	}
+
+	if (data.empty()) {
+		wxBell();
+		return false;
+	}
+
+	if (data.size() > 10) {
+		CConditionalDialog dlg(parent, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
+		dlg.SetTitle(_("Confirmation needed"));
+		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
+
+		if (!dlg.Run())
+			return false;
+	}
+
+	bool success = true;
+
+	for (auto const& file : data) {
+		if (!DoEdit(type, file, path, server, parent)) {
+			success = false;
+		}
+	}
+
+	return success;
+}
+
+bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow * parent)
+{
 	bool dangerous = false;
 	bool program_exists = false;
-	wxString cmd = CanOpen(type, fileName, dangerous, program_exists);
+	wxString cmd = CanOpen(type, file.name, dangerous, program_exists);
 	if (cmd.empty()) {
 		CNewAssociationDialog dlg(parent);
-		if (!dlg.Run(fileName))
+		if (!dlg.Run(file.name)) {
 			return false;
-		cmd = CanOpen(type, fileName, dangerous, program_exists);
+		}
+		cmd = CanOpen(type, file.name, dangerous, program_exists);
 		if (cmd.empty()) {
-			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fileName), _("Opening failed"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), file.name), _("Opening failed"), wxICON_EXCLAMATION);
 			return false;
 		}
 	}
 	if (!program_exists) {
-		wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), fileName, cmd);
+		wxString msg = wxString::Format(_("The file '%s' cannot be opened:\nThe associated program (%s) could not be found.\nPlease check your filetype associations."), file.name, cmd);
 		wxMessageBoxEx(msg, _("Cannot edit file"), wxICON_EXCLAMATION);
 		return false;
 	}
 	if (dangerous) {
-		int res = wxMessageBoxEx(_("The selected file would be executed directly.\nThis can be dangerous and damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
+		int res = wxMessageBoxEx(_("The selected file would be executed directly.\nThis can be dangerous and might damage your system.\nDo you really want to continue?"), _("Dangerous filetype"), wxICON_EXCLAMATION | wxYES_NO);
 		if (res != wxYES) {
 			wxBell();
 			return false;
@@ -1649,9 +1695,9 @@ bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CS
 
 	fileState state;
 	if (type == local)
-		state = GetFileState(fileName);
+		state = GetFileState(file.name);
 	else
-		state = GetFileState(fileName, path, server);
+		state = GetFileState(file.name, path, server);
 	switch (state)
 	{
 	case CEditHandler::download:
@@ -1661,20 +1707,20 @@ bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CS
 		wxMessageBoxEx(_("A file with that name is already being transferred."), _("Cannot view/edit selected file"), wxICON_EXCLAMATION);
 		return false;
 	case CEditHandler::removing:
-		if (!Remove(fileName, path, server)) {
+		if (!Remove(file.name, path, server)) {
 			wxMessageBoxEx(_("A file with that name is still being edited. Please close it and try again."), _("Selected file is already opened"), wxICON_EXCLAMATION);
 			return false;
 		}
 		break;
 	case CEditHandler::edit:
 		if (type == CEditHandler::local) {
-			int res = wxMessageBoxEx(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), fileName), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
+			int res = wxMessageBoxEx(wxString::Format(_("A file with that name is already being edited. Do you want to reopen '%s'?"), file.name), _("Selected file already being edited"), wxICON_QUESTION | wxYES_NO);
 			if (res != wxYES) {
 				wxBell();
 				return false;
 			}
 			else {
-				StartEditing(fileName);
+				StartEditing(file.name);
 				return true;
 			}
 		}
@@ -1684,18 +1730,18 @@ bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CS
 				wxBell();
 				return false;
 			}
-			dlg.SetChildLabel(XRCID("ID_FILENAME"), fileName);
+			dlg.SetChildLabel(XRCID("ID_FILENAME"), file.name);
 			if (dlg.ShowModal() != wxID_OK) {
 				wxBell();
 				return false;
 			}
 
 			if (XRCCTRL(dlg, "ID_REOPEN", wxRadioButton)->GetValue()) {
-				StartEditing(fileName, path, server);
+				StartEditing(file.name, path, server);
 				return false;
 			}
 			else {
-				if (!Remove(fileName, path, server)) {
+				if (!Remove(file.name, path, server)) {
 					wxMessageBoxEx(_("The selected file is still opened in some other program, please close it."), _("Selected file is still being edited"), wxICON_EXCLAMATION);
 					return false;
 				}
@@ -1706,10 +1752,10 @@ bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CS
 		break;
 	}
 
-	wxString file = fileName;
-	if (!AddFile(type, file, path, server)) {
+	wxString localFile = file.name;
+	if (!AddFile(type, localFile, path, server)) {
 		if( type == CEditHandler::local) {
-			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), fileName), _("Opening failed"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), file.name), _("Opening failed"), wxICON_EXCLAMATION);
 		}
 		else {
 			wxFAIL;
@@ -1719,11 +1765,11 @@ bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CS
 	}
 
 	if (type == CEditHandler::remote) {
-		wxString localFile;
-		CLocalPath localPath(file, &localFile);
+		wxString localFileName;
+		CLocalPath localPath(localFile, &localFile);
 
-		m_pQueue->QueueFile(false, true, fileName, (localFile != fileName) ? localFile : wxString(),
-			localPath, path, server, size, type, QueuePriority::high);
+		m_pQueue->QueueFile(false, true, file.name, (localFileName != file.name) ? localFileName : wxString(),
+			localPath, path, server, file.size, type, QueuePriority::high);
 		m_pQueue->QueueFile_Finish(true);
 	}
 

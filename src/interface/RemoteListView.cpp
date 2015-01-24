@@ -2295,7 +2295,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 
 	long item = -1;
 
-	std::list<CDirentry> selected_item_list;
+	std::vector<CEditHandler::FileData> selected_items;
 	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		if (!item) {
 			wxBell();
@@ -2312,7 +2312,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 			return;
 		}
 
-		selected_item_list.push_back(entry);
+		selected_items.push_back({entry.name, entry.size});
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
@@ -2321,33 +2321,9 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 		return;
 	}
 
-	const wxString& localDir = pEditHandler->GetLocalDirectory();
-	if (localDir.empty()) {
-		wxMessageBoxEx(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
-		return;
-	}
-
 	const CServerPath path = m_pDirectoryListing->path;
 	const CServer server = *m_pState->GetServer();
-
-	if (selected_item_list.empty()) {
-		wxBell();
-		return;
-	}
-
-	if (selected_item_list.size() > 10) {
-
-		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
-		dlg.SetTitle(_("Confirmation needed"));
-		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
-
-		if (!dlg.Run())
-			return;
-	}
-
-	for (auto const& entry : selected_item_list) {
-		pEditHandler->Edit(CEditHandler::remote, entry.name, path, server, entry.size, this);
-	}
+	pEditHandler->Edit(CEditHandler::remote, selected_items, path, server, this);
 }
 
 #ifdef __WXDEBUG__
