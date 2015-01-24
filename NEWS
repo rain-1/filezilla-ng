@@ -10,6 +10,19 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.1-rc1 (2015-01-24)
+
++ Fixed wording of some error messages when using FTP over TLS
++ Display subject alternative names in certificate verification dialog
++ If re-editing multiple files already being edited, add a checkbox to apply action to all selected file
+- Editing the same local file multiple times no longer results in an error message
+- Display SHA-256 fingerprints in certificate verification dialog, no longer display MD5 fingerprints.
+- Disable insecure RC4 algorithm in FTP over TLS
+- *nix: Fix assertion when opening the file exists dialog on some multi-display systems
+- Deleting items in the Site Manager now correctly upates the right-hand side of the dialog
+- Dragging items in the Site Manager no longer makes the default port appear in the port input box
+- OS X: Multi-line text edit controls no longer act like rich-text edit controls and no longer perform quote substitution
+
 3.10.0.2 (2015-01-16)
 
 - Fix a crash if a keyfile has been configured for SFTP and this file has become missing or corrupted
