@@ -94,7 +94,8 @@ protected:
 		CServerPath remote_path;
 		wxString link;
 		CLocalPath local_path;
-	} *m_pLinkResolveState;
+	};
+	std::unique_ptr<t_linkResolveState> m_pLinkResolveState;
 
 	CServerPath MenuMkdir();
 
