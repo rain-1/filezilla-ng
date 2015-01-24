@@ -47,6 +47,12 @@ public:
 	// Can be used to edit files already being added, user is prompted for action.
 	bool Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, wxLongLong size, wxWindow* parent);
 
+	struct FileData {
+		wxString name;
+		wxLongLong size;
+	};
+	bool Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, CServer const& server, wxWindow* parent);
+	
 	// Adds the file that doesn't exist yet. (Has to be in unknown state)
 	// The initial state will be download
 	bool AddFile(enum fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server);
@@ -96,6 +102,8 @@ public:
 	wxString GetOpenCommand(const wxString& file, bool& program_exists);
 
 protected:
+	bool DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow* parent);
+
 	CEditHandler();
 	virtual ~CEditHandler() {}
 

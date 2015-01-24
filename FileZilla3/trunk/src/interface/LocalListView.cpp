@@ -1613,7 +1613,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		}
 	}
 
-	std::list<CLocalFileData> selected_item_list;
+	std::vector<CEditHandler::FileData> selected_item;
 
 	long item = -1;
 	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
@@ -1634,28 +1634,11 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 		if (data->comparison_flags == fill)
 			continue;
 
-		selected_item_list.push_back(*data);
+		selected_item.push_back({m_dir.GetPath() + data->name, data->size});
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
-
-	if (selected_item_list.empty()) {
-		wxBell();
-		return;
-	}
-
-	if (selected_item_list.size() > 10) {
-		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
-		dlg.SetTitle(_("Confirmation needed"));
-		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
-
-		if (!dlg.Run())
-			return;
-	}
-
-	for (auto const& entry : selected_item_list) {
-		pEditHandler->Edit(CEditHandler::local, m_dir.GetPath() + entry.name, path, server, entry.size, this);
-	}
+	pEditHandler->Edit(CEditHandler::local, selected_item, path, server, this);
 }
 
 void CLocalListView::OnMenuOpen(wxCommandEvent& event)
