@@ -758,7 +758,7 @@ bool CSiteManagerDialog::Load()
 		lastSelection.clear();
 	CSiteManagerXmlHandler_Tree handler(pTree, treeId, lastSelection, false);
 
-	bool res = CSiteManager::Load(pElement, &handler);
+	bool res = CSiteManager::Load(pElement, handler);
 
 	pTree->SortChildren(treeId);
 	pTree->Expand(treeId);
@@ -1809,7 +1809,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 		lastSelection.clear();
 	CSiteManagerXmlHandler_Tree handler(pTree, m_predefinedSites, lastSelection, true);
 
-	CSiteManager::Load(pElement, &handler);
+	CSiteManager::Load(pElement, handler);
 
 	return true;
 }

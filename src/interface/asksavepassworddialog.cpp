@@ -2,6 +2,8 @@
 #include "asksavepassworddialog.h"
 #include "Options.h"
 #include "filezillaapp.h"
+#include "xrc_helper.h"
+#include "sitemanager.h"
 
 BEGIN_EVENT_TABLE(CAskSavePasswordDialog, wxDialogEx)
 EVT_RADIOBUTTON(XRCID("ID_REMEMBER_YES"), CAskSavePasswordDialog::OnRadioButtonChanged)
@@ -23,16 +25,14 @@ bool CAskSavePasswordDialog::Run(wxWindow* parent)
 {
 	bool ret = true;
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 0 && COptions::Get()->GetOptionVal(OPTION_PROMPTPASSWORDSAVE) != 0)
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 0 && COptions::Get()->GetOptionVal(OPTION_PROMPTPASSWORDSAVE) != 0 && !CSiteManager::HasSites()) {
 		CAskSavePasswordDialog dlg(parent);
 
 		ret = dlg.ShowModal() == wxID_OK;
-		if (ret)
-		{
-			wxRadioButton* btn = XRCCTRL(dlg, "ID_REMEMBER_NO", wxRadioButton);
-			if (btn && btn->GetValue())
+		if (ret) {
+			if (xrc_call(dlg, "ID_REMEMBER_NO", &wxRadioButton::GetValue)) {
 				COptions::Get()->SetOption(OPTION_DEFAULT_KIOSKMODE, 1);
+			}
 			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 0);
 		}
 	}
