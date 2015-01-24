@@ -1756,7 +1756,7 @@
       </object>
     </object>
   </object>
-  <object class="wxDialog" name="ID_EDITEXISTING">
+  <object class="wxDialog" name="ID_EDITEXISTING_REMOTE">
     <title>Selected file already being edited</title>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
@@ -1795,6 +1795,13 @@
             </object>
           </object>
           <object class="sizeritem">
+            <flag>wxTOP</flag>
+            <border>5d</border>
+            <object class="wxCheckBox" name="ID_ALWAYS">
+              <label>Do the same with &amp;all selected files already being edited</label>
+            </object>
+          </object>
+          <object class="sizeritem">
             <object class="wxStdDialogButtonSizer">
               <object class="button">
                 <object class="wxButton" name="wxID_OK">
@@ -1805,6 +1812,61 @@
               <object class="button">
                 <object class="wxButton" name="wxID_CANCEL">
                   <label>Cancel</label>
+                </object>
+              </object>
+            </object>
+            <flag>wxGROW</flag>
+          </object>
+        </object>
+        <flag>wxALL</flag>
+        <border>5</border>
+      </object>
+    </object>
+  </object>
+  <object class="wxDialog" name="ID_EDITEXISTING_LOCAL">
+    <title>Selected file already being edited</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxFlexGridSizer">
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>The selected file is already being edited:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_FILENAME">
+              <label>&lt;filename&gt;</label>
+            </object>
+          </object>
+          <cols>1</cols>
+          <vgap>5</vgap>
+          <object class="spacer">
+            <size>0,5</size>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Do you want to reopen this file?</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <flag>wxTOP</flag>
+            <border>5d</border>
+            <object class="wxCheckBox" name="ID_ALWAYS">
+              <label>Do the same with &amp;all selected files already being edited</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStdDialogButtonSizer">
+              <object class="button">
+                <object class="wxButton" name="wxID_OK">
+                  <label>&amp;Yes</label>
+                  <default>1</default>
+                </object>
+              </object>
+              <object class="button">
+                <object class="wxButton" name="wxID_CANCEL">
+                  <label>&amp;No</label>
                 </object>
               </object>
             </object>

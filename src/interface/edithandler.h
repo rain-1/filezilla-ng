@@ -102,7 +102,7 @@ public:
 	wxString GetOpenCommand(const wxString& file, bool& program_exists);
 
 protected:
-	bool DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow* parent);
+	bool DoEdit(CEditHandler::fileType type, FileData const& file, CServerPath const& path, CServer const& server, wxWindow* parent, size_t fileCount, int & already_editing_action);
 
 	CEditHandler();
 	virtual ~CEditHandler() {}
