@@ -938,16 +938,17 @@ bool CSiteManagerDialog::Verify()
 
 	if (data->m_type == CSiteManagerItemData::SITE) {
 		const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
-		if (host.empty())
-		{
+		if (host.empty()) {
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You have to enter a hostname."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
-		enum LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
+		LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
 
-		enum ServerProtocol protocol = GetProtocol();
+		ServerProtocol protocol = GetProtocol();
+		wxASSERT(protocol != UNKNOWN);
+
 		if (protocol == SFTP &&
 			logon_type == ACCOUNT)
 		{
@@ -977,9 +978,7 @@ bool CSiteManagerDialog::Verify()
 		// Set selected type
 		CServer server;
 		server.SetLogonType(logon_type);
-
-		if (protocol != UNKNOWN)
-			server.SetProtocol(protocol);
+		server.SetProtocol(protocol);
 
 		wxString port = XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue();
 		CServerPath path;
@@ -1046,8 +1045,7 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
-		if (!remotePathRaw.empty())
-		{
+		if (!remotePathRaw.empty()) {
 			const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
 
 			CServerPath remotePath;
@@ -1061,30 +1059,25 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		const wxString localPath = XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue();
-		if (XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue())
-		{
-			if (remotePathRaw.empty() || localPath.empty())
-			{
+		if (XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue()) {
+			if (remotePathRaw.empty() || localPath.empty()) {
 				XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetFocus();
 				wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this site."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
 			}
 		}
 	}
-	else
-	{
+	else {
 		wxTreeItemId parent = pTree->GetItemParent(item);
 		CSiteManagerItemData_Site* pServer = reinterpret_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
 		if (!pServer)
 			return false;
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue();
-		if (!remotePathRaw.empty())
-		{
+		if (!remotePathRaw.empty()) {
 			CServerPath remotePath;
 			remotePath.SetType(pServer->m_server.GetType());
-			if (!remotePath.SetPath(remotePathRaw))
-			{
+			if (!remotePath.SetPath(remotePathRaw)) {
 				XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxString msg;
 				if (pServer->m_server.GetType() != DEFAULT)
@@ -1098,17 +1091,14 @@ bool CSiteManagerDialog::Verify()
 
 		const wxString localPath = XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->GetValue();
 
-		if (remotePathRaw.empty() && localPath.empty())
-		{
+		if (remotePathRaw.empty() && localPath.empty()) {
 			XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->SetFocus();
 			wxMessageBoxEx(_("You need to enter at least one path, empty bookmarks are not supported."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 			return false;
 		}
 
-		if (XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue())
-		{
-			if (remotePathRaw.empty() || localPath.empty())
-			{
+		if (XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue()) {
+			if (remotePathRaw.empty() || localPath.empty()) {
 				XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetFocus();
 				wxMessageBoxEx(_("You need to enter both a local and a remote path to enable synchronized browsing for this bookmark."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
@@ -1122,24 +1112,20 @@ bool CSiteManagerDialog::Verify()
 void CSiteManagerDialog::OnBeginLabelEdit(wxTreeEvent& event)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
-	{
+	if (!pTree) {
 		event.Veto();
 		return;
 	}
 
-	if (event.GetItem() != pTree->GetSelection())
-	{
-		if (!Verify())
-		{
+	if (event.GetItem() != pTree->GetSelection()) {
+		if (!Verify()) {
 			event.Veto();
 			return;
 		}
 	}
 
 	wxTreeItemId item = event.GetItem();
-	if (!item.IsOk() || item == pTree->GetRootItem() || item == m_ownSites || IsPredefinedItem(item))
-	{
+	if (!item.IsOk() || item == pTree->GetRootItem() || item == m_ownSites || IsPredefinedItem(item)) {
 		event.Veto();
 		return;
 	}
@@ -1151,24 +1137,20 @@ void CSiteManagerDialog::OnEndLabelEdit(wxTreeEvent& event)
 		return;
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
-	{
+	if (!pTree) {
 		event.Veto();
 		return;
 	}
 
 	wxTreeItemId item = event.GetItem();
-	if (item != pTree->GetSelection())
-	{
-		if (!Verify())
-		{
+	if (item != pTree->GetSelection()) {
+		if (!Verify()) {
 			event.Veto();
 			return;
 		}
 	}
 
-	if (!item.IsOk() || item == pTree->GetRootItem() || item == m_ownSites || IsPredefinedItem(item))
-	{
+	if (!item.IsOk() || item == pTree->GetRootItem() || item == m_ownSites || IsPredefinedItem(item)) {
 		event.Veto();
 		return;
 	}
@@ -1178,12 +1160,10 @@ void CSiteManagerDialog::OnEndLabelEdit(wxTreeEvent& event)
 	wxTreeItemId parent = pTree->GetItemParent(item);
 
 	wxTreeItemIdValue cookie;
-	for (wxTreeItemId child = pTree->GetFirstChild(parent, cookie); child.IsOk(); child = pTree->GetNextChild(parent, cookie))
-	{
+	for (wxTreeItemId child = pTree->GetFirstChild(parent, cookie); child.IsOk(); child = pTree->GetNextChild(parent, cookie)) {
 		if (child == item)
 			continue;
-		if (!name.CmpNoCase(pTree->GetItemText(child)))
-		{
+		if (!name.CmpNoCase(pTree->GetItemText(child))) {
 			wxMessageBoxEx(_("Name already exists"), _("Cannot rename entry"), wxICON_EXCLAMATION, this);
 			event.Veto();
 			return;
@@ -1339,23 +1319,21 @@ bool CSiteManagerDialog::UpdateBookmark(CSiteManagerItemData &bookmark, const CS
 
 bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const wxString &name)
 {
+	ServerProtocol const protocol = GetProtocol();
+	wxASSERT(protocol != UNKNOWN);
+	server.m_server.SetProtocol(protocol);
+
 	unsigned long port;
-	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port);
+	if (!XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port) || !port || port > 65535) {
+		port = CServer::GetDefaultPort(protocol);
+	}
 	wxString host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
 	// SetHost does not accept URL syntax
-	if (!host.empty() && host[0] == '[')
-	{
+	if (!host.empty() && host[0] == '[') {
 		host.RemoveLast();
 		host = host.Mid(1);
 	}
 	server.m_server.SetHost(host, port);
-
-
-	const enum ServerProtocol protocol = GetProtocol();
-	if (protocol != UNKNOWN)
-		server.m_server.SetProtocol(protocol);
-	else
-		server.m_server.SetProtocol(FTP);
 
 	enum LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
 	server.m_server.SetLogonType(logon_type);
