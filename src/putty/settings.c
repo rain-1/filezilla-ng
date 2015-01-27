@@ -661,14 +661,14 @@ void load_settings(char *section, Conf *conf)
     void *sesskey;
 
     sesskey = open_settings_r(section);
-    load_open_settings(sesskey, conf);
+    load_open_settings(sesskey, conf, section ? 0 : 1);
     close_settings_r(sesskey);
 
     if (conf_launchable(conf))
         add_session_to_jumplist(section);
 }
 
-void load_open_settings(void *sesskey, Conf *conf)
+void load_open_settings(void *sesskey, Conf *conf, int load_proxy_settings)
 {
     int i;
     char *prot;
@@ -724,6 +724,7 @@ void load_open_settings(void *sesskey, Conf *conf)
     }
 
     /* proxy settings */
+    if (load_proxy_settings) { /*fz*/
     gpps(sesskey, "ProxyExcludeList", "", conf, CONF_proxy_exclude_list);
     i = gppi_raw(sesskey, "ProxyDNS", 1); conf_set_int(conf, CONF_proxy_dns, (i+1)%3);
     gppi(sesskey, "ProxyLocalhost", 0, conf, CONF_even_proxy_localhost);
@@ -752,7 +753,8 @@ void load_open_settings(void *sesskey, Conf *conf)
     gpps(sesskey, "ProxyUsername", "", conf, CONF_proxy_username);
     gpps(sesskey, "ProxyPassword", "", conf, CONF_proxy_password);
     gpps(sesskey, "ProxyTelnetCommand", "connect %host %port\\n",
-	 conf, CONF_proxy_telnet_command);
+         conf, CONF_proxy_telnet_command);
+    }
     gppmap(sesskey, "Environment", conf, CONF_environmt);
     gpps(sesskey, "UserName", "", conf, CONF_username);
     gppi(sesskey, "UserNameFromEnvironment", 0, conf, CONF_username_from_env);
