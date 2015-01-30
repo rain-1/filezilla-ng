@@ -110,7 +110,7 @@ void CEditHandler::RemoveTemporaryFilesInSpecificDir(wxString const& temp)
 			if (fcntl(fd, F_SETLK, &f)) {
 				// In use by other process
 				close(fd);
-				continue;
+				return;
 			}
 			close(fd);
 		}
@@ -260,7 +260,7 @@ int CEditHandler::GetFileCount(enum CEditHandler::fileType type, enum CEditHandl
 			count += m_fileDataList[remote].size();
 	}
 	else {
-		auto f = [state, pServer](decltype(m_fileDataList[0]) const& items) {
+		auto f = [state, pServer](decltype(m_fileDataList[0]) & items) {
 			int count = 0;
 			for (auto const& data : items) {
 				if (data.state != state)
