@@ -131,7 +131,8 @@ protected:
 	wxTimer m_timer;
 	wxTimer m_busyTimer;
 
-	void RemoveTemporaryFiles(const wxString& temp);
+	void RemoveTemporaryFiles(wxString const& temp);
+	void RemoveTemporaryFilesInSpecificDir(wxString const& temp);
 
 	wxString GetTemporaryFile(wxString name);
 	wxString TruncateFilename(const wxString path, const wxString& name, int max);
