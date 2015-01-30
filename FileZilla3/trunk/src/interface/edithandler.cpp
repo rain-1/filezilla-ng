@@ -71,7 +71,7 @@ CEditHandler* CEditHandler::Get()
 	return m_pEditHandler;
 }
 
-void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
+void CEditHandler::RemoveTemporaryFiles(wxString const& temp)
 {
 	wxDir dir(temp);
 	if (!dir.IsOpened())
@@ -81,55 +81,61 @@ void CEditHandler::RemoveTemporaryFiles(const wxString& temp)
 	if (!dir.GetFirst(&file, _T("fz3temp-*"), wxDIR_DIRS))
 		return;
 
-	const wxChar& sep = wxFileName::GetPathSeparator();
+	wxChar const& sep = wxFileName::GetPathSeparator();
 	do {
 		if (!m_localDir.empty() && temp + file + sep == m_localDir) {
 			// Don't delete own working directory
 			continue;
 		}
 
-		const wxString lockfile = temp + file + sep + _("fz3temp-lockfile");
-		if (wxFileName::FileExists(lockfile)) {
-#ifndef __WXMSW__
-			int fd = open(lockfile.mb_str(), O_RDWR | O_CLOEXEC, 0);
-			if (fd >= 0)
-			{
-				// Try to lock 1 byte region in the lockfile. m_type specifies the byte to lock.
-				struct flock f = {0};
-				f.l_type = F_WRLCK;
-				f.l_whence = SEEK_SET;
-				f.l_start = 0;
-				f.l_len = 1;
-				f.l_pid = getpid();
-				if (fcntl(fd, F_SETLK, &f)) {
-					// In use by other process
-					close(fd);
-					continue;
-				}
-				close(fd);
-			}
-#endif
-			{
-				wxLogNull log;
-				wxRemoveFile(lockfile);
-			}
-			if (wxFileName::FileExists(lockfile))
-				continue;
-		}
+		RemoveTemporaryFilesInSpecificDir(temp + file + sep);
+	} while (dir.GetNext(&file));
+}
 
+void CEditHandler::RemoveTemporaryFilesInSpecificDir(wxString const& temp)
+{
+	const wxString lockfile = temp + _("fz3temp-lockfile");
+	if (wxFileName::FileExists(lockfile)) {
+#ifndef __WXMSW__
+		int fd = open(lockfile.mb_str(), O_RDWR | O_CLOEXEC, 0);
+		if (fd >= 0)
+		{
+			// Try to lock 1 byte region in the lockfile. m_type specifies the byte to lock.
+			struct flock f = { 0 };
+			f.l_type = F_WRLCK;
+			f.l_whence = SEEK_SET;
+			f.l_start = 0;
+			f.l_len = 1;
+			f.l_pid = getpid();
+			if (fcntl(fd, F_SETLK, &f)) {
+				// In use by other process
+				close(fd);
+				continue;
+			}
+			close(fd);
+		}
+#endif
 		{
 			wxLogNull log;
-			wxString file2;
-			wxDir dir2(temp + file);
-			bool res;
-			for ((res = dir2.GetFirst(&file2, _T(""), wxDIR_FILES)); res; res = dir2.GetNext(&file2)) {
-				wxRemoveFile(temp + file + sep + file2);
-			}
+			wxRemoveFile(lockfile);
 		}
+		if (wxFileName::FileExists(lockfile))
+			return;
+	}
 
-		wxLogNull log;
-		wxRmdir(temp + file + sep);
-	} while (dir.GetNext(&file));
+	wxLogNull log;
+
+	{
+		wxString file;
+		wxDir dir(temp);
+		bool res;
+		for ((res = dir.GetFirst(&file, _T(""), wxDIR_FILES)); res; res = dir.GetNext(&file)) {
+			wxRemoveFile(temp + file);
+		}
+	}
+
+	wxRmdir(temp);
+
 }
 
 wxString CEditHandler::GetLocalDirectory()
@@ -153,8 +159,7 @@ wxString CEditHandler::GetLocalDirectory()
 	// On Windows, the user's profile directory and associated temp dir
 	// already has the correct permissions which get inherited.
 	int i = 1;
-	do
-	{
+	do {
 		wxString newDir = dir + wxString::Format(_T("fz3temp-%d"), i++);
 		if (wxFileName::FileExists(newDir) || wxFileName::DirExists(newDir))
 			continue;
@@ -205,8 +210,7 @@ void CEditHandler::Release()
 	if (m_busyTimer.IsRunning())
 		m_busyTimer.Stop();
 
-	if (!m_localDir.empty())
-	{
+	if (!m_localDir.empty()) {
 #ifdef __WXMSW__
 		if (m_lockfile_handle != INVALID_HANDLE_VALUE)
 			CloseHandle(m_lockfile_handle);
@@ -217,13 +221,10 @@ void CEditHandler::Release()
 			close(m_lockfile_descriptor);
 #endif
 
-		{
-			wxLogNull log;
-			wxRemoveFile(m_localDir + _T("empty_file_yq744zm"));
-		}
-
+		wxLogNull log;
+		wxRemoveFile(m_localDir + _T("empty_file_yq744zm"));
 		RemoveAll(true);
-		wxRmdir(m_localDir);
+		RemoveTemporaryFilesInSpecificDir(m_localDir);
 	}
 
 	m_pEditHandler = 0;
@@ -251,37 +252,30 @@ enum CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName
 int CEditHandler::GetFileCount(enum CEditHandler::fileType type, enum CEditHandler::fileState state, const CServer* pServer /*=0*/) const
 {
 	int count = 0;
-	if (state == unknown)
-	{
+	if (state == unknown) {
 		wxASSERT(!pServer);
 		if (type != remote)
 			count += m_fileDataList[local].size();
 		if (type != local)
 			count += m_fileDataList[remote].size();
 	}
-	else
-	{
-		if (type != remote)
-		{
-			for (std::list<t_fileData>::const_iterator iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
-			{
-				if (iter->state != state)
+	else {
+		auto f = [state, pServer](decltype(m_fileDataList[0]) const& items) {
+			int count = 0;
+			for (auto const& data : items) {
+				if (data.state != state)
 					continue;
 
-				if (!pServer || iter->server == *pServer)
-					count++;
+				if (!pServer || data.server == *pServer)
+					++count;
 			}
+			return count;
+		};
+		if (type != remote) {
+			count += f(m_fileDataList[local]);
 		}
-		if (type != local)
-		{
-			for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
-			{
-				if (iter->state != state)
-					continue;
-
-				if (!pServer || iter->server == *pServer)
-					count++;
-			}
+		if (type != local) {
+			count += f(m_fileDataList[remote]);
 		}
 	}
 
@@ -369,18 +363,14 @@ bool CEditHandler::RemoveAll(bool force)
 {
 	std::list<t_fileData> keep;
 
-	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
-	{
-		if (!force && (iter->state == download || iter->state == upload || iter->state == upload_and_remove))
-		{
+	for (std::list<t_fileData>::iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter) {
+		if (!force && (iter->state == download || iter->state == upload || iter->state == upload_and_remove)) {
 			keep.push_back(*iter);
 			continue;
 		}
 
-		if (wxFileName::FileExists(iter->file))
-		{
-			if (!wxRemoveFile(iter->file))
-			{
+		if (wxFileName::FileExists(iter->file)) {
+			if (!wxRemoveFile(iter->file)) {
 				iter->state = removing;
 				keep.push_back(*iter);
 				continue;
@@ -390,13 +380,11 @@ bool CEditHandler::RemoveAll(bool force)
 	m_fileDataList[remote].swap(keep);
 	keep.clear();
 
-	for (auto iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
-	{
+	for (auto iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter) {
 		if (force)
 			continue;
 
-		if (iter->state == upload || iter->state == upload_and_remove)
-		{
+		if (iter->state == upload || iter->state == upload_and_remove) {
 			keep.push_back(*iter);
 			continue;
 		}
@@ -415,24 +403,19 @@ bool CEditHandler::RemoveAll(enum fileState state, const CServer* pServer /*=0*/
 
 	std::list<t_fileData> keep;
 
-	for (auto iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
-	{
-		if (iter->state != state)
-		{
+	for (auto iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter) {
+		if (iter->state != state) {
 			keep.push_back(*iter);
 			continue;
 		}
 
-		if (pServer && iter->server != *pServer)
-		{
+		if (pServer && iter->server != *pServer) {
 			keep.push_back(*iter);
 			continue;
 		}
 
-		if (wxFileName::FileExists(iter->file))
-		{
-			if (!wxRemoveFile(iter->file))
-			{
+		if (wxFileName::FileExists(iter->file)) {
+			if (!wxRemoveFile(iter->file)) {
 				iter->state = removing;
 				keep.push_back(*iter);
 				continue;
@@ -447,8 +430,7 @@ bool CEditHandler::RemoveAll(enum fileState state, const CServer* pServer /*=0*/
 std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxString& fileName)
 {
 	std::list<t_fileData>::iterator iter;
-	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
-	{
+	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter) {
 		if (iter->file == fileName)
 			break;
 	}
@@ -459,8 +441,7 @@ std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxStri
 std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const wxString& fileName) const
 {
 	std::list<t_fileData>::const_iterator iter;
-	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter)
-	{
+	for (iter = m_fileDataList[local].begin(); iter != m_fileDataList[local].end(); ++iter) {
 		if (iter->file == fileName)
 			break;
 	}
@@ -471,8 +452,7 @@ std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const 
 std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxString& fileName, const CServerPath& remotePath, const CServer& server)
 {
 	std::list<t_fileData>::iterator iter;
-	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
-	{
+	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter) {
 		if (iter->name != fileName)
 			continue;
 
@@ -491,8 +471,7 @@ std::list<CEditHandler::t_fileData>::iterator CEditHandler::GetFile(const wxStri
 std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const
 {
 	std::list<t_fileData>::const_iterator iter;
-	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
-	{
+	for (iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter) {
 		if (iter->name != fileName)
 			continue;
 
