@@ -1,13 +1,13 @@
 # Filezilla FTP Client written by Tim Kosse. 
 # Translation into Arabic.
 # Mohamed Magdy <alnokta@yahoo.com>, 2006.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-24 16:46+0100\n"
-"PO-Revision-Date: 2015-01-23 03:45+0300\n"
+"POT-Creation-Date: 2015-01-31 14:43+0100\n"
+"PO-Revision-Date: 2015-01-24 23:02+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language: ar\n"
@@ -1265,11 +1265,11 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "تم تغيير ملف مفتوح مسبقا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "A file with that name is already being transferred."
 msgstr "تم إرسال ملف بهذا الإسم مسبقا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "يتم الآن تعديل ملف بهذا الإسم . الرجاء إغلاقه ثم حاول مرة ثانية"
@@ -1697,8 +1697,8 @@ msgstr "تعليمات الإستخدام الأساسية"
 msgid "Behaviour"
 msgstr "السلوك"
 
-#: ../../locales/../src/interface/edithandler.cpp:1152
-#: ../../locales/../src/interface/edithandler.cpp:1180
+#: ../../locales/../src/interface/edithandler.cpp:1131
+#: ../../locales/../src/interface/edithandler.cpp:1159
 msgid "Being edited"
 msgstr "يتم التحرير"
 
@@ -1859,8 +1859,8 @@ msgstr "لا يمكن مقارنة الأدلة ، غير متصل بأي خاد
 msgid "Cannot create new filter"
 msgstr "تعذر إنشاء مرشح جديد"
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
-#: ../../locales/../src/interface/edithandler.cpp:1686
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1665
 #: ../../locales/../src/interface/LocalListView.cpp:1720
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Cannot edit file"
@@ -1919,17 +1919,17 @@ msgstr "تعذر حفظ مجموعة المرشح"
 msgid "Cannot select filter"
 msgstr "تعذر تحديد المرشح"
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1509
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "Cannot set file association"
 msgstr "تعذر وضع إشراك الملف"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "Cannot show dialog"
 msgstr "تعذر إظهار اللائحة"
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "Cannot view/edit selected file"
 msgstr "تعذر عرض/تحرير الملف المحدد"
 
@@ -2262,7 +2262,7 @@ msgid "Confirm deletion"
 msgstr "تأكيد الحذف"
 
 #: ../../locales/../src/engine/local_filesys.cpp:134
-#: ../../locales/../src/interface/edithandler.cpp:1650
+#: ../../locales/../src/interface/edithandler.cpp:1629
 #: ../../locales/../src/interface/LocalListView.cpp:1684
 #: ../../locales/../src/interface/RemoteListView.cpp:1421
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1120
@@ -2538,7 +2538,7 @@ msgstr "تعذر الحصول على كامل المسار البعيد"
 msgid "Could not get reply from fzputtygen."
 msgstr "تعذر الحصول على الرد من fzputtygen"
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
+#: ../../locales/../src/interface/edithandler.cpp:1617
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Could not get temporary directory to download file into."
 msgstr "تعذر الحصول على الدليل المؤقت لتحميل معلومات الملف"
@@ -2867,7 +2867,7 @@ msgstr "ت&كرار"
 msgid "DOS-like with virtual paths"
 msgstr "DOS-like مع مسارات ظاهرية"
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid "Dangerous filetype"
 msgstr "نوع ملف خطير"
 
@@ -3132,9 +3132,8 @@ msgstr "بدون إ&جراء"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1801
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1856
-#, fuzzy
 msgid "Do the same with &all selected files already being edited"
-msgstr "الملف المحدد يتم تحريره حاليا :"
+msgstr "عمل نفس الاجراء مع &كافة الملفات المحددة التي تم تحريرها حاليا"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1179
 #: ../../locales/../src/interface/Mainfrm.cpp:1201
@@ -3164,9 +3163,8 @@ msgid "Do you really want to send '%s' to the server?"
 msgstr "هل تريد فعلا إرسال '%s' إلى الخادم ؟"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1849
-#, fuzzy
 msgid "Do you want to reopen this file?"
-msgstr "هل تريد فعلا إغلاق FileZilla ؟"
+msgstr "هل تريد فعلا إعادة هذا الملف؟"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "Documentation"
@@ -3225,7 +3223,7 @@ msgstr ""
 "سرعة التنزيل: %s/s\n"
 "سرعة الرفع: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1116
 msgid "Downloading"
 msgstr "تحميل"
 
@@ -3421,7 +3419,6 @@ msgid "Enter selected directory"
 msgstr "إدخال دليل محدد"
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:34
-#, fuzzy
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3443,10 +3440,10 @@ msgstr ""
 "علما إن القيم في الحقول الأخرى سيتم الكتابة عليها بعد ذلك\n"
 "\n"
 "البروتوكولات المعتمدة هي :\n"
-"- ftp:// لـ FTP العادي\n"
+"- ftp:// لـ FTP العادي مع تشفير اختياري\n"
 "- sftp:// لـ SSH بروتوكول إرسال الملفات\n"
-"- ftps:// لـ FTP فوق TLS (ضمني)\n"
-"- ftpes:// لـ FTP فوق TLS (واضح)"
+"- ftps:// لـ FTP عبر TLS (ضمني)\n"
+"- ftpes:// لـ FTP عبر TLS (صريح)"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
 #, c-format
@@ -3845,7 +3842,7 @@ msgstr "تم تغيير الملف"
 msgid "File lists"
 msgstr "قوائم الملف"
 
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/FileZilla.cpp:675
 #: ../../locales/../src/interface/FileZilla.cpp:760
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
@@ -3928,7 +3925,7 @@ msgstr "تحديثات FileZilla"
 msgid "Filelist status &bars"
 msgstr "أ&شرطة حالة قائمة الملفات"
 
-#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1101
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:274
 #: ../../locales/../src/interface/RemoteListView.cpp:374
@@ -4582,7 +4579,6 @@ msgstr "تم أدخال منفذ غير صالح ، قيمة المنفذ يجب
 
 #: ../../locales/../src/engine/server.cpp:91
 #: ../../locales/../src/interface/quickconnectbar.cpp:122
-#, fuzzy
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP with optional encryption,\n"
@@ -4591,10 +4587,10 @@ msgid ""
 "ftpes:// for FTP over TLS (explicit)."
 msgstr ""
 "تم تعيين بروتوكول غير صالح . البروتوكولات الصالحة هي :\n"
-"ftp:// لـ FTP العادي\n"
+"ftp:// لـ FTP العادي مع تشفير اختياري\n"
 "sftp:// لـ SSH بروتوكول إرسال الملفات\n"
-"ftps:// لـ FTP فوق TLS (ضمني)\n"
-"ftpes:// لـ FTP فوق TLS (واضح)"
+"ftps:// لـ FTP عبر TLS (ضمني)\n"
+"ftpes:// لـ FTP عبر TLS (صريح)"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4304
 msgid ""
@@ -4746,8 +4742,8 @@ msgstr "القائمة:"
 msgid "Lo&west available port:"
 msgstr "المنفذ المتوفر ال&أدنى :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1170
-#: ../../locales/../src/interface/edithandler.cpp:1424
+#: ../../locales/../src/interface/edithandler.cpp:1149
+#: ../../locales/../src/interface/edithandler.cpp:1403
 msgid "Local"
 msgstr "محليا"
 
@@ -5090,7 +5086,7 @@ msgstr "لم يتم وضع أمر , مقاطعة"
 msgid "No external IP address set, trying default."
 msgstr "لم يتم تحديد IP خارجى ، محاولة الافتراضى"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "No files are currently being edited."
 msgstr "لا يوجد ملفات حاليا يتم تحريرها"
 
@@ -5304,8 +5300,8 @@ msgstr "فتح لائحة إعدادات FileZilla"
 msgid "Opened as:"
 msgstr "فتح بهيئة:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1659
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 msgid "Opening failed"
@@ -5492,10 +5488,10 @@ msgstr "المسار غير موجود"
 msgid "Paths"
 msgstr "مسارات"
 
-#: ../../locales/../src/interface/edithandler.cpp:1149
-#: ../../locales/../src/interface/edithandler.cpp:1292
-#: ../../locales/../src/interface/edithandler.cpp:1391
-#: ../../locales/../src/interface/edithandler.cpp:1404
+#: ../../locales/../src/interface/edithandler.cpp:1128
+#: ../../locales/../src/interface/edithandler.cpp:1271
+#: ../../locales/../src/interface/edithandler.cpp:1370
+#: ../../locales/../src/interface/edithandler.cpp:1383
 msgid "Pending removal"
 msgstr "تعليق الإزالة"
 
@@ -6141,7 +6137,7 @@ msgstr "تحديث قوائم الملفات و المجلدات"
 msgid "Remember passwords?"
 msgstr "تذكر كلمات المرور ؟"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1112
 msgid "Remote"
 msgstr "بعيد"
 
@@ -6166,7 +6162,7 @@ msgstr "البحث عن بعد عن ملف"
 msgid "Remote filters:"
 msgstr "المرشحات البعيدة:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1124
+#: ../../locales/../src/interface/edithandler.cpp:1103
 msgid "Remote path"
 msgstr "المسار البعيد"
 
@@ -6438,7 +6434,7 @@ msgstr ""
 "تحديد الإجراء الإفتراضى المراد تنفيذه إذا كان الملف المستهدف للإرسال موجود "
 "مسبقا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1594
+#: ../../locales/../src/interface/edithandler.cpp:1573
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "تحديد المحرر الإفتراضي"
@@ -6582,8 +6578,8 @@ msgstr "المحددة %s و %s . الحجم الكلي : %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "المحددة %s و %s . الحجم الكلي : على الأقل %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "المحرر المحدد غير موجود"
@@ -6597,11 +6593,11 @@ msgstr "الملف المحدد يتم تحريره حاليا"
 msgid "Selected file is already loaded"
 msgstr "الملف المحدد يتم التعامل معه حاليا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid "Selected file is already opened"
 msgstr "الملف المحدد مفتوح مسبقا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid "Selected file is still being edited"
 msgstr "الملف المحدد لا يزال قيد التحرير"
 
@@ -7031,7 +7027,7 @@ msgstr "لتشغيل الموقع المحلي في المسار المعطى"
 msgid "State or province:"
 msgstr "الولاية أو المحافظة :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1125
+#: ../../locales/../src/interface/edithandler.cpp:1104
 #: ../../locales/../src/interface/queue.cpp:1191
 msgid "Status"
 msgstr "الحالة"
@@ -7238,7 +7234,7 @@ msgid "The data connection could not be established: %s"
 msgstr "تعذّر تأسيس إتّصال البيانات: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2895
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "The default editor for text files could not be found."
 msgstr "تعذر العثور على المحرر الإفتراضي للملفات النصية"
 
@@ -7268,7 +7264,7 @@ msgstr ""
 "الملف %s موجود مسبقا\n"
 "الرجاء إدخال إسم جديد :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1685
+#: ../../locales/../src/interface/edithandler.cpp:1664
 #: ../../locales/../src/interface/LocalListView.cpp:1719
 #, c-format
 msgid ""
@@ -7290,7 +7286,7 @@ msgstr "تعذر تفعيل الملف '%s' أو لا يحتوي على مفتا
 msgid "The file '%s' could not be loaded."
 msgstr "لا يمكن تحميل الملف '%s'"
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
+#: ../../locales/../src/interface/edithandler.cpp:1659
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #, c-format
 msgid ""
@@ -7300,7 +7296,7 @@ msgstr ""
 "تعذر فتح الملف '%s' :\n"
 "لا يوجد برنامج مشروك على نظامك مع نوع الملف هذا"
 
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 #, c-format
 msgid ""
@@ -7455,13 +7451,12 @@ msgstr "يحتوي الملف المحدد على بيانات قابلة للإ
 msgid "The selected file is already being edited:"
 msgstr "الملف المحدد يتم تحريره حاليا :"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr "لا يزال الملف المحدد مفتوح في برنامج آخر ، الرجاء إغلاقه"
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
-#, fuzzy
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
@@ -7469,7 +7464,7 @@ msgid ""
 msgstr ""
 "قد يتم تفعيل الملف المحدد مباشرة\n"
 "هذا ربما يكون خطرا و قد يضر بنظامك\n"
-"هل تريد فعلا الإستمرار ؟"
+"هل تريد فعلا الإستمرار؟"
 
 #: ../../locales/../src/interface/sitemanager.cpp:605
 msgid "The server could not be added."
@@ -7781,7 +7776,7 @@ msgid "Try again"
 msgstr "حاول ثانية"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2568
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1102
 msgid "Type"
 msgstr "النوع"
 
@@ -7824,8 +7819,8 @@ msgstr "رمز خطأ غير محدد %d"
 msgid "Unit:"
 msgstr "وحدة:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1155
-#: ../../locales/../src/interface/edithandler.cpp:1183
+#: ../../locales/../src/interface/edithandler.cpp:1134
+#: ../../locales/../src/interface/edithandler.cpp:1162
 msgid "Unknown"
 msgstr "غير معروف"
 
@@ -7907,7 +7902,7 @@ msgstr "التحديثات"
 msgid "Upload"
 msgstr "رفع"
 
-#: ../../locales/../src/interface/edithandler.cpp:1146
+#: ../../locales/../src/interface/edithandler.cpp:1125
 msgid "Upload failed"
 msgstr "فشل الرفع"
 
@@ -7936,19 +7931,19 @@ msgstr "إرجاع هذا الملف إلى الخادم ؟"
 msgid "Upload this file to the server?"
 msgstr "رفع هذا الملف إلى الخادم ؟"
 
-#: ../../locales/../src/interface/edithandler.cpp:1140
-#: ../../locales/../src/interface/edithandler.cpp:1174
-#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1119
+#: ../../locales/../src/interface/edithandler.cpp:1153
+#: ../../locales/../src/interface/edithandler.cpp:1318
 msgid "Uploading"
 msgstr "رفع"
 
-#: ../../locales/../src/interface/edithandler.cpp:1143
-#: ../../locales/../src/interface/edithandler.cpp:1341
+#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1320
 msgid "Uploading and pending removal"
 msgstr "الرفع و تأجيل الإزالة"
 
-#: ../../locales/../src/interface/edithandler.cpp:1177
-#: ../../locales/../src/interface/edithandler.cpp:1343
+#: ../../locales/../src/interface/edithandler.cpp:1156
+#: ../../locales/../src/interface/edithandler.cpp:1322
 msgid "Uploading and unediting"
 msgstr "الرفع و عدم التحرير"
 
@@ -8264,7 +8259,7 @@ msgstr "أنت لم تدخل اسم جديد للملف ، هل تكتب على 
 msgid "You have selected at least one symbolic link."
 msgstr "أنت قمت بتحديد رابط ترميزي واحد على الأقل"
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
+#: ../../locales/../src/interface/edithandler.cpp:1630
 #: ../../locales/../src/interface/search.cpp:739
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -8321,7 +8316,7 @@ msgstr "يجب إدخال إسم للعنوان المفضل"
 msgid "You need to enter a name for the log file."
 msgstr "يجب إدخال إسم لملف السجل"
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
+#: ../../locales/../src/interface/edithandler.cpp:1509
 msgid "You need to enter a properly quoted command."
 msgstr "يجب إدخال أمر مناسب بين أقواس"
 
@@ -8434,7 +8429,7 @@ msgstr "يساوى"
 msgid "file"
 msgstr "ملف"
 
-#: ../../locales/../src/interface/edithandler.cpp:91
+#: ../../locales/../src/interface/edithandler.cpp:97
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-lockfile"
 
