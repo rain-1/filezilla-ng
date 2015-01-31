@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# 
+#
 # Translators:
 # 2. Roman Neumüller <email@katpatuka.org>, 2007
 # Kaya Zeren <kayazeren@gmail.com>, 2014-2015
@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-24 16:46+0100\n"
-"PO-Revision-Date: 2015-01-23 08:11+0000\n"
+"POT-Creation-Date: 2015-01-31 14:43+0100\n"
+"PO-Revision-Date: 2015-01-24 20:42+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "filezilla/language/tr_TR/)\n"
@@ -1232,11 +1232,11 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Önceden açılmış olan bir dosya değiştirilmiş."
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "A file with that name is already being transferred."
 msgstr "Aynı adlı bir dosya zaten aktarıldı."
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr ""
@@ -1661,8 +1661,8 @@ msgstr "Basit kullanım bilgileri"
 msgid "Behaviour"
 msgstr "Davranış"
 
-#: ../../locales/../src/interface/edithandler.cpp:1152
-#: ../../locales/../src/interface/edithandler.cpp:1180
+#: ../../locales/../src/interface/edithandler.cpp:1131
+#: ../../locales/../src/interface/edithandler.cpp:1159
 msgid "Being edited"
 msgstr "Düzenlendi"
 
@@ -1823,8 +1823,8 @@ msgstr "Sunucuyla bağlantı kurulamadığından klasörler karşılaştırılam
 msgid "Cannot create new filter"
 msgstr "Yeni süzgeç oluşturulamıyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
-#: ../../locales/../src/interface/edithandler.cpp:1686
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1665
 #: ../../locales/../src/interface/LocalListView.cpp:1720
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Cannot edit file"
@@ -1886,17 +1886,17 @@ msgstr "Süzgeç seti kaydedilemiyor"
 msgid "Cannot select filter"
 msgstr "Süzgeç seçilemiyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1509
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "Cannot set file association"
 msgstr "Dosya ilişkisi ayarlanamıyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "Cannot show dialog"
 msgstr "Pencere görüntülenemiyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "Cannot view/edit selected file"
 msgstr "Seçilen dosyada görüntüleme/düzenleme yapılamıyor"
 
@@ -2230,7 +2230,7 @@ msgid "Confirm deletion"
 msgstr "Silme işlemini onaylayın"
 
 #: ../../locales/../src/engine/local_filesys.cpp:134
-#: ../../locales/../src/interface/edithandler.cpp:1650
+#: ../../locales/../src/interface/edithandler.cpp:1629
 #: ../../locales/../src/interface/LocalListView.cpp:1684
 #: ../../locales/../src/interface/RemoteListView.cpp:1421
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1120
@@ -2505,7 +2505,7 @@ msgstr "Uzaktaki yolun tamamı okunamadı."
 msgid "Could not get reply from fzputtygen."
 msgstr "fzputtygen yanıt vermiyor."
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
+#: ../../locales/../src/interface/edithandler.cpp:1617
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Could not get temporary directory to download file into."
 msgstr "Dosyanın kayıt edileceği geçici klasöre erişilemedi."
@@ -2841,7 +2841,7 @@ msgstr "K&opyalayın"
 msgid "DOS-like with virtual paths"
 msgstr "DOS benzeri sanal yollar"
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid "Dangerous filetype"
 msgstr "Tehlikeli dosya tipi"
 
@@ -3199,7 +3199,7 @@ msgstr ""
 "İndirme hızı: %s/s\n"
 "Yükleme hızı: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1116
 msgid "Downloading"
 msgstr "İndiriliyor"
 
@@ -3398,7 +3398,6 @@ msgid "Enter selected directory"
 msgstr "Seçili klasöre geçin"
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:34
-#, fuzzy
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3422,7 +3421,7 @@ msgstr ""
 "katılmaz.\n"
 "\n"
 "Desteklenen iletişim kuralları:\n"
-"- ftp:// normal FTP için\n"
+"- ftp:// isteğe bağlı şifreleme ile normal FTP için\n"
 "- sftp:// SSH dosya aktarım iletişim kuralı için\n"
 "- ftps:// TLS (örtülü) üzerinden FTP için\n"
 "- ftpes:// TLS (açıkta) üzerinden FTP"
@@ -3828,7 +3827,7 @@ msgstr "Dosya değiştirildi"
 msgid "File lists"
 msgstr "Dosya listeleri"
 
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/FileZilla.cpp:675
 #: ../../locales/../src/interface/FileZilla.cpp:760
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
@@ -3912,7 +3911,7 @@ msgstr "FileZilla güncellemeleri"
 msgid "Filelist status &bars"
 msgstr "Dosya listesi durum &çubukları"
 
-#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1101
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:274
 #: ../../locales/../src/interface/RemoteListView.cpp:374
@@ -4581,7 +4580,6 @@ msgstr "Yazılan kapı geçersiz. Kapı değeri 1 ile 65535 arasında olmalıdı
 
 #: ../../locales/../src/engine/server.cpp:91
 #: ../../locales/../src/interface/quickconnectbar.cpp:122
-#, fuzzy
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP with optional encryption,\n"
@@ -4590,7 +4588,7 @@ msgid ""
 "ftpes:// for FTP over TLS (explicit)."
 msgstr ""
 "Belirtilen iletişim kuralı geçersiz. Geçerli iletişim kuralları şunlardır:\n"
-"ftp:// normal FTP için,\n"
+"ftp:// isteğe bağlı şifreleme ile normal FTP için,\n"
 "sftp:// SSH dosya aktarım iletişim kuralı için,\n"
 "ftps:// TLS (örtülü) üzerinden FTP ve\n"
 "ftpes:// TLS (açıkta) üzerinde FTP."
@@ -4747,8 +4745,8 @@ msgstr "Sıralama:"
 msgid "Lo&west available port:"
 msgstr "Kullanılabilecek e&n küçük kapı:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1170
-#: ../../locales/../src/interface/edithandler.cpp:1424
+#: ../../locales/../src/interface/edithandler.cpp:1149
+#: ../../locales/../src/interface/edithandler.cpp:1403
 msgid "Local"
 msgstr "Yerel"
 
@@ -5097,7 +5095,7 @@ msgstr "Komut verilmedi, vazgeçiliyor."
 msgid "No external IP address set, trying default."
 msgstr "Dış IP adresi belirtilmemiş, varsayılan deneniyor."
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "No files are currently being edited."
 msgstr "Şu an düzenlenen bir dosya yok."
 
@@ -5315,8 +5313,8 @@ msgstr "FileZilla ayarları penceresini açar"
 msgid "Opened as:"
 msgstr "Olarak açılan:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1659
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 msgid "Opening failed"
@@ -5504,10 +5502,10 @@ msgstr "Yol bulunamadı:"
 msgid "Paths"
 msgstr "Yollar"
 
-#: ../../locales/../src/interface/edithandler.cpp:1149
-#: ../../locales/../src/interface/edithandler.cpp:1292
-#: ../../locales/../src/interface/edithandler.cpp:1391
-#: ../../locales/../src/interface/edithandler.cpp:1404
+#: ../../locales/../src/interface/edithandler.cpp:1128
+#: ../../locales/../src/interface/edithandler.cpp:1271
+#: ../../locales/../src/interface/edithandler.cpp:1370
+#: ../../locales/../src/interface/edithandler.cpp:1383
 msgid "Pending removal"
 msgstr "Silinmesi bekleniyor"
 
@@ -6155,7 +6153,7 @@ msgstr "Dosya ve klasör listelerini yenileyin"
 msgid "Remember passwords?"
 msgstr "Parolalar hatırlansın"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1112
 msgid "Remote"
 msgstr "Uzaktaki"
 
@@ -6180,7 +6178,7 @@ msgstr "Uzak dosya arayın"
 msgid "Remote filters:"
 msgstr "Uzaktaki süzgeçler:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1124
+#: ../../locales/../src/interface/edithandler.cpp:1103
 msgid "Remote path"
 msgstr "Uzaktaki yol"
 
@@ -6457,7 +6455,7 @@ msgid ""
 msgstr ""
 "Aktarılan hedef dosya zaten var ise yapılmasını istediğiniz işlemi seçin."
 
-#: ../../locales/../src/interface/edithandler.cpp:1594
+#: ../../locales/../src/interface/edithandler.cpp:1573
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Varsayılan düzenleyiciyi seçin"
@@ -6576,8 +6574,8 @@ msgstr "Seçilmiş %s ve %s. Toplam boyut: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Seçilmiş %s ve %s. Toplam boyut: En az %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Seçilmiş düzenleyici bulunamadı."
@@ -6591,11 +6589,11 @@ msgstr "Seçilmiş dosya zaten düzenleniyor"
 msgid "Selected file is already loaded"
 msgstr "Seçilmiş dosya zaten yüklenmiş"
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid "Selected file is already opened"
 msgstr "Seçilmiş dosya zaten açık"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid "Selected file is still being edited"
 msgstr "Seçilmiş dosya şu anda düzenleniyor"
 
@@ -7036,7 +7034,7 @@ msgstr "Yerel site verilmiş yol ile başlatılır"
 msgid "State or province:"
 msgstr "Şehir:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1125
+#: ../../locales/../src/interface/edithandler.cpp:1104
 #: ../../locales/../src/interface/queue.cpp:1191
 msgid "Status"
 msgstr "Durum"
@@ -7248,7 +7246,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Veri bağlantısı kurulamadı: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2895
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "The default editor for text files could not be found."
 msgstr "Metin dosyaları için varsayılan düzenleyici bulunamadı."
 
@@ -7278,7 +7276,7 @@ msgstr ""
 "%s adında bir dosya zaten var.\n"
 "Lütfen yeni bir ad yazın:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1685
+#: ../../locales/../src/interface/edithandler.cpp:1664
 #: ../../locales/../src/interface/LocalListView.cpp:1719
 #, c-format
 msgid ""
@@ -7300,7 +7298,7 @@ msgstr "'%s' dosyası yüklenemedi ya da özel bir anahtar içermiyor."
 msgid "The file '%s' could not be loaded."
 msgstr "'%s' dosyası yüklenemedi."
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
+#: ../../locales/../src/interface/edithandler.cpp:1659
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #, c-format
 msgid ""
@@ -7310,7 +7308,7 @@ msgstr ""
 "'%s' dosyası açılamıyor:\n"
 "Sisteminizde bu dosya tipi ile ilişkilendirilmiş bir program yok."
 
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 #, c-format
 msgid ""
@@ -7465,14 +7463,14 @@ msgstr "Seçilen dosya şu kategoriler için alınabilir veriler içeriyor:"
 msgid "The selected file is already being edited:"
 msgstr "Seçilen dosya zaten düzenleniyor:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr ""
 "Seçilen dosya başka bir program tarafından açılmış durumda, lütfen önce onu "
 "kapatın."
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1669
 #, fuzzy
 msgid ""
 "The selected file would be executed directly.\n"
@@ -7798,7 +7796,7 @@ msgid "Try again"
 msgstr "Yeniden deneyin"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2568
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1102
 msgid "Type"
 msgstr "Tip"
 
@@ -7841,8 +7839,8 @@ msgstr "Atanmamış hata kodu %d"
 msgid "Unit:"
 msgstr "Birim:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1155
-#: ../../locales/../src/interface/edithandler.cpp:1183
+#: ../../locales/../src/interface/edithandler.cpp:1134
+#: ../../locales/../src/interface/edithandler.cpp:1162
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
@@ -7925,7 +7923,7 @@ msgstr "Güncellemeler"
 msgid "Upload"
 msgstr "Karşıya Yükleyin"
 
-#: ../../locales/../src/interface/edithandler.cpp:1146
+#: ../../locales/../src/interface/edithandler.cpp:1125
 msgid "Upload failed"
 msgstr "Karşıya yüklenemedi"
 
@@ -7954,19 +7952,19 @@ msgstr "Bu dosya sunucuya geri yüklensin mi?"
 msgid "Upload this file to the server?"
 msgstr "Bu dosya sunucuya yüklensin mi?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1140
-#: ../../locales/../src/interface/edithandler.cpp:1174
-#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1119
+#: ../../locales/../src/interface/edithandler.cpp:1153
+#: ../../locales/../src/interface/edithandler.cpp:1318
 msgid "Uploading"
 msgstr "Yükleniyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1143
-#: ../../locales/../src/interface/edithandler.cpp:1341
+#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1320
 msgid "Uploading and pending removal"
 msgstr "Karşıya yükleniyor ve silinmesi bekleniyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1177
-#: ../../locales/../src/interface/edithandler.cpp:1343
+#: ../../locales/../src/interface/edithandler.cpp:1156
+#: ../../locales/../src/interface/edithandler.cpp:1322
 msgid "Uploading and unediting"
 msgstr "Karşıya yüklenip kapatılıyor"
 
@@ -8289,7 +8287,7 @@ msgstr ""
 msgid "You have selected at least one symbolic link."
 msgstr "En az bir sembolik bağlantı seçmelisiniz."
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
+#: ../../locales/../src/interface/edithandler.cpp:1630
 #: ../../locales/../src/interface/search.cpp:739
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -8350,7 +8348,7 @@ msgstr "Yer imi için bir ad yazmalısınız"
 msgid "You need to enter a name for the log file."
 msgstr "Günlük dosyası için bir ad yazmalısınız."
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
+#: ../../locales/../src/interface/edithandler.cpp:1509
 msgid "You need to enter a properly quoted command."
 msgstr "Uygun şekilde düzenlenmiş bir komut yazmalısınız."
 
@@ -8465,7 +8463,7 @@ msgstr "eşittir"
 msgid "file"
 msgstr "dosya"
 
-#: ../../locales/../src/interface/edithandler.cpp:91
+#: ../../locales/../src/interface/edithandler.cpp:97
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-lockfile"
 

@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: FileZilla Client 3.10.0.2\n"
+"Project-Id-Version: FileZilla Client 3.10.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-24 16:46+0100\n"
-"PO-Revision-Date: 2015-01-24 10:21+0200\n"
+"POT-Creation-Date: 2015-01-31 14:43+0100\n"
+"PO-Revision-Date: 2015-01-25 22:31+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -22,7 +22,6 @@ msgstr ""
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
 #: ../../locales/../src/interface/statuslinectrl.cpp:200
-#, fuzzy
 msgid "%H:%M:%S elapsed"
 msgstr "%H:%M:%S πέρασαν"
 
@@ -1250,11 +1249,11 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Το αρχείο που ανοίχτηκε νωρίτερα έχει αλλάξει."
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "A file with that name is already being transferred."
 msgstr "Ένα αρχείο με αυτό το όνομα έχει ήδη μεταφερθεί."
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr ""
@@ -1693,8 +1692,8 @@ msgstr "Βασικές οδηγίες χρήσης"
 msgid "Behaviour"
 msgstr "Συμπεριφορά"
 
-#: ../../locales/../src/interface/edithandler.cpp:1152
-#: ../../locales/../src/interface/edithandler.cpp:1180
+#: ../../locales/../src/interface/edithandler.cpp:1131
+#: ../../locales/../src/interface/edithandler.cpp:1159
 msgid "Being edited"
 msgstr "Επεξεργάστηκε"
 
@@ -1858,8 +1857,8 @@ msgstr ""
 msgid "Cannot create new filter"
 msgstr "Αδυναμία δημιουργίας νέου φίλτρου"
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
-#: ../../locales/../src/interface/edithandler.cpp:1686
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1665
 #: ../../locales/../src/interface/LocalListView.cpp:1720
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Cannot edit file"
@@ -1923,17 +1922,17 @@ msgstr "Αδυναμία αποθήκευσης των ορισμάτων φίλ
 msgid "Cannot select filter"
 msgstr "Αδυναμία επιλογής φίλτρου"
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1509
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "Cannot set file association"
 msgstr "Δεν έχει ορισθεί συσχετιζόμενο αρχείο"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "Cannot show dialog"
 msgstr "Ο διάλογος δε μπορεί να εμφανιστεί"
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "Cannot view/edit selected file"
 msgstr "Το επιλεγμένο αρχείο δε μπορεί να προβληθεί/επεξεργαστεί"
 
@@ -2270,7 +2269,7 @@ msgid "Confirm deletion"
 msgstr "Επιβεβαίωση διαγραφής"
 
 #: ../../locales/../src/engine/local_filesys.cpp:134
-#: ../../locales/../src/interface/edithandler.cpp:1650
+#: ../../locales/../src/interface/edithandler.cpp:1629
 #: ../../locales/../src/interface/LocalListView.cpp:1684
 #: ../../locales/../src/interface/RemoteListView.cpp:1421
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1120
@@ -2551,7 +2550,7 @@ msgstr "Αδυναμία εύρεσης της πλήρους απομακρυσ
 msgid "Could not get reply from fzputtygen."
 msgstr "Αδυναμία λήψης του κατάλληλου τύπου από το fzputtygen."
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
+#: ../../locales/../src/interface/edithandler.cpp:1617
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Could not get temporary directory to download file into."
 msgstr ""
@@ -2901,7 +2900,7 @@ msgstr "Δι&πλότυπο"
 msgid "DOS-like with virtual paths"
 msgstr "Σαν DOS με εικονικές διαδρομές"
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid "Dangerous filetype"
 msgstr "Επικίνδυνος τύπος αρχείου"
 
@@ -3173,9 +3172,9 @@ msgstr "&Καμία ενέργεια"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1801
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1856
-#, fuzzy
 msgid "Do the same with &all selected files already being edited"
-msgstr "Το επιλεγμένο αρχείο ήδη επεξεργάζεται:"
+msgstr ""
+"Κάντε το ίδιο με όλα τα επιλεγμένα αρχεία που είναι ήδη υπό επεξεργασία"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1179
 #: ../../locales/../src/interface/Mainfrm.cpp:1201
@@ -3207,9 +3206,8 @@ msgid "Do you really want to send '%s' to the server?"
 msgstr "Θέλετε πραγματικά να στείλετε το '%s' στον εξυπηρετητή;"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1849
-#, fuzzy
 msgid "Do you want to reopen this file?"
-msgstr "Θέλετε πραγματικά να κλείσετε το FileZilla;"
+msgstr "Θέλετε να ανοίξει εκ νέου αυτό το αρχείο;"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "Documentation"
@@ -3269,7 +3267,7 @@ msgstr ""
 "Tαχύτητα λήψης: %s/s\n"
 "Tαχύτητα αποστολής: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1116
 msgid "Downloading"
 msgstr "Λήψη"
 
@@ -3491,10 +3489,10 @@ msgstr ""
 ".Μπορείτε επίσης να εισάγετε πλήρη διευθύνση με τη μορφή: //user: pass@host:"
 "port, οι τιμές στους άλλους τομείς θα αντικατασταθούν στη συνέχεια.\n"
 ".\n"
-"Υποστηριζόμενα πρωτόκολλα είναι: \n"
-"- ftp: // για την κανονική FTP με προαιρετική κρυπτογράφηση \n"
+"Υποστηριζόμενα πρωτόκολλα είναι:\n"
+"- ftp: // για την κανονική FTP με προαιρετική κρυπτογράφηση\n"
 "- sftp: // για SSH πρωτόκολλο μεταφοράς αρχείων\n"
-"- ftps: // για FTP μέσω TLS (σιωπηρά) \n"
+"- ftps: // για FTP μέσω TLS (σιωπηρά)\n"
 "- ftpes: // για FTP μέσω TLS (σαφή)"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
@@ -3910,7 +3908,7 @@ msgstr "Το αρχείο άλλαξε"
 msgid "File lists"
 msgstr "Λίστες αρχείων"
 
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/FileZilla.cpp:675
 #: ../../locales/../src/interface/FileZilla.cpp:760
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
@@ -3995,7 +3993,7 @@ msgstr "Ενημερώσεις FileZilla"
 msgid "Filelist status &bars"
 msgstr "&Γραμμές κατάστασης"
 
-#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1101
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:274
 #: ../../locales/../src/interface/RemoteListView.cpp:374
@@ -4848,8 +4846,8 @@ msgstr "Λίστα:"
 msgid "Lo&west available port:"
 msgstr "Χα&μηλότερη διαθέσιμη θύρα:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1170
-#: ../../locales/../src/interface/edithandler.cpp:1424
+#: ../../locales/../src/interface/edithandler.cpp:1149
+#: ../../locales/../src/interface/edithandler.cpp:1403
 msgid "Local"
 msgstr "Τοπικά"
 
@@ -5206,7 +5204,7 @@ msgid "No external IP address set, trying default."
 msgstr ""
 "Καμία εξωτερική διεύθυνση IP δεν έχει οριστεί, δοκιμή της προκαθορισμένης."
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "No files are currently being edited."
 msgstr "Δεν υπάρχουν αρχεία που να βρίσκονται υπό επεξεργασία."
 
@@ -5427,8 +5425,8 @@ msgstr "Ανοίγμα διαλόγου ρυθμίσεων του FileZilla"
 msgid "Opened as:"
 msgstr "Ανοιγμένα ως:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1659
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 msgid "Opening failed"
@@ -5621,10 +5619,10 @@ msgstr "Η διαδρομή δεν βρέθηκε:"
 msgid "Paths"
 msgstr "Διαδρομές"
 
-#: ../../locales/../src/interface/edithandler.cpp:1149
-#: ../../locales/../src/interface/edithandler.cpp:1292
-#: ../../locales/../src/interface/edithandler.cpp:1391
-#: ../../locales/../src/interface/edithandler.cpp:1404
+#: ../../locales/../src/interface/edithandler.cpp:1128
+#: ../../locales/../src/interface/edithandler.cpp:1271
+#: ../../locales/../src/interface/edithandler.cpp:1370
+#: ../../locales/../src/interface/edithandler.cpp:1383
 msgid "Pending removal"
 msgstr "Αναμονή διαγραφής"
 
@@ -6304,7 +6302,7 @@ msgstr "Ανανέωση των λιστών αρχείων και φακέλω�
 msgid "Remember passwords?"
 msgstr "Απομνημόνευση κωδικών πρόσβασης;"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1112
 msgid "Remote"
 msgstr "Αφαίρεση"
 
@@ -6329,7 +6327,7 @@ msgstr "Αναζήτηση απομακρυσμένου αρχείου"
 msgid "Remote filters:"
 msgstr "Απομακρυσμένα φίλτρα:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1124
+#: ../../locales/../src/interface/edithandler.cpp:1103
 msgid "Remote path"
 msgstr "Απομακρυσμένη διαδρομή"
 
@@ -6611,7 +6609,7 @@ msgstr ""
 "Επιλογή προκαθορισμένης ενέργειας στην περίπτωση που ένα αρχείο σε μία "
 "μεταφορά υπάρχει ήδη."
 
-#: ../../locales/../src/interface/edithandler.cpp:1594
+#: ../../locales/../src/interface/edithandler.cpp:1573
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Επιλογή προκαθορισμένου επεξεργαστή"
@@ -6736,8 +6734,8 @@ msgstr "Επιλεγμένα %s και %s. Συνολικό μέγεθος: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Επιλεγμένα %s και %s. Συνολικό μέγεθος: Τουλάχιστον %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Ο επιλεγμένος επεξεργαστής δεν υπάρχει."
@@ -6751,11 +6749,11 @@ msgstr "Το επιλεγμένο αρχείο ήδη επεξεργάζεται
 msgid "Selected file is already loaded"
 msgstr "Το επιλεγμένο αρχείο έχει ήδη φορτωθεί"
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid "Selected file is already opened"
 msgstr "Το επιλεγμένο αρχείο είναι ήδη ανοιχτό"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid "Selected file is still being edited"
 msgstr "Το επιλεγμένο αρχείο είναι ακόμα προς επεξεργασία"
 
@@ -7201,7 +7199,7 @@ msgstr "Εκκίνηση τοπικής τοποθεσίας στη δεδομέ
 msgid "State or province:"
 msgstr "Περιφέρεια ή νομαρχία:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1125
+#: ../../locales/../src/interface/edithandler.cpp:1104
 #: ../../locales/../src/interface/queue.cpp:1191
 msgid "Status"
 msgstr "Κατάσταση"
@@ -7413,7 +7411,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Η σύνδεση δεδομένων δεν εδραιώθηκε: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2895
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "The default editor for text files could not be found."
 msgstr "Ο προκαθορισμένος επεξεργαστής αρχείων κειμένου δεν εντοπίσθηκε."
 
@@ -7444,7 +7442,7 @@ msgstr ""
 "Το αρχείο %s υπάρχει ήδη.\n"
 "Παρακαλώ, καταχωρίστε ένα νέο όνομα:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1685
+#: ../../locales/../src/interface/edithandler.cpp:1664
 #: ../../locales/../src/interface/LocalListView.cpp:1719
 #, c-format
 msgid ""
@@ -7466,7 +7464,7 @@ msgstr "Το αρχείο '%s' δε μπορεί να φορτωθεί ή δεν
 msgid "The file '%s' could not be loaded."
 msgstr "Το αρχείο '%s' δε μπορεί να φορτωθεί."
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
+#: ../../locales/../src/interface/edithandler.cpp:1659
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #, c-format
 msgid ""
@@ -7476,7 +7474,7 @@ msgstr ""
 "Το αρχείο '%s' δε μπορεί να ανοιχθεί:\n"
 "Κανένα πρόγραμμα δεν έχει συσχετιστεί με αυτόν τον τύπο αρχείου."
 
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 #, c-format
 msgid ""
@@ -7639,23 +7637,22 @@ msgstr ""
 msgid "The selected file is already being edited:"
 msgstr "Το επιλεγμένο αρχείο ήδη επεξεργάζεται:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr ""
 "Το επιλεγμένο αρχείο είναι ήδη ανοιγμένο σε κάποιο άλλο πρόγραμμα, παρακαλώ "
 "κλείστε το."
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
-#, fuzzy
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
 "Do you really want to continue?"
 msgstr ""
-"Το επιλεγμένο αρχείο θα εκτελεστεί άμεσα.\n"
-"Αυτό μπορεί να είναι επικίνδυνο και να βλάψει το σύστημα σας.\n"
-"Θέλετε να συνεχίσετε;"
+"Το επιλεγμένο αρχείο θα πρέπει να εκτελεστεί άμεσα.\n"
+"Αυτό μπορεί να είναι επικίνδυνο και μπορεί να βλάψει το σύστημά σας.\n"
+"Θέλετε πραγματικά να συνεχίσετε;"
 
 #: ../../locales/../src/interface/sitemanager.cpp:605
 msgid "The server could not be added."
@@ -7985,7 +7982,7 @@ msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2568
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1102
 msgid "Type"
 msgstr "Τύπος"
 
@@ -8028,8 +8025,8 @@ msgstr "Απροσδιόριστος ο κωδικός σφάλματος %d"
 msgid "Unit:"
 msgstr "Μονάδα:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1155
-#: ../../locales/../src/interface/edithandler.cpp:1183
+#: ../../locales/../src/interface/edithandler.cpp:1134
+#: ../../locales/../src/interface/edithandler.cpp:1162
 msgid "Unknown"
 msgstr "Άγνωστο"
 
@@ -8114,7 +8111,7 @@ msgstr "Ενημερώσεις"
 msgid "Upload"
 msgstr "Αποστολή"
 
-#: ../../locales/../src/interface/edithandler.cpp:1146
+#: ../../locales/../src/interface/edithandler.cpp:1125
 msgid "Upload failed"
 msgstr "Αποτυχία αποστολής"
 
@@ -8143,19 +8140,19 @@ msgstr "Ααποστολή αυτού του αρχείου πίσω στον ε
 msgid "Upload this file to the server?"
 msgstr "Αποστολή αυτού του αρχείου στον εξυπηρετητή;"
 
-#: ../../locales/../src/interface/edithandler.cpp:1140
-#: ../../locales/../src/interface/edithandler.cpp:1174
-#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1119
+#: ../../locales/../src/interface/edithandler.cpp:1153
+#: ../../locales/../src/interface/edithandler.cpp:1318
 msgid "Uploading"
 msgstr "Αποστολή"
 
-#: ../../locales/../src/interface/edithandler.cpp:1143
-#: ../../locales/../src/interface/edithandler.cpp:1341
+#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1320
 msgid "Uploading and pending removal"
 msgstr "Αποστολή και αναμονή αφαίρεσης"
 
-#: ../../locales/../src/interface/edithandler.cpp:1177
-#: ../../locales/../src/interface/edithandler.cpp:1343
+#: ../../locales/../src/interface/edithandler.cpp:1156
+#: ../../locales/../src/interface/edithandler.cpp:1322
 msgid "Uploading and unediting"
 msgstr "Αποστολή και αναίρεση επεξεργασίας"
 
@@ -8493,7 +8490,7 @@ msgstr "Δεν έχετε εισάγει νέο όνομα για το αρχε�
 msgid "You have selected at least one symbolic link."
 msgstr "Έχετε επιλέξει μία τουλάχιστον συμβολική σύνδεση."
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
+#: ../../locales/../src/interface/edithandler.cpp:1630
 #: ../../locales/../src/interface/search.cpp:739
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -8554,7 +8551,7 @@ msgstr "Απαιτείται η εισαγωγή ονόματος για τον 
 msgid "You need to enter a name for the log file."
 msgstr "Απαιτείται η εισαγωγή ονόματος για το αρχείο συμβάντων."
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
+#: ../../locales/../src/interface/edithandler.cpp:1509
 msgid "You need to enter a properly quoted command."
 msgstr "Πρέπει να καταχωρίσετε μία κατάλληλη αναφορά εντολής."
 
@@ -8672,7 +8669,7 @@ msgstr "ισούται"
 msgid "file"
 msgstr "αρχείο"
 
-#: ../../locales/../src/interface/edithandler.cpp:91
+#: ../../locales/../src/interface/edithandler.cpp:97
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-lockfile"
 
@@ -8775,6 +8772,15 @@ msgstr "wxWidgets:"
 #~ msgstr ""
 #~ "Ένα αρχείο με αυτό το όνομα επεξεργάζεται ήδη. Να ανοιχθεί ξανά το αρχείο "
 #~ "'%s';"
+
+#~ msgid ""
+#~ "The selected file would be executed directly.\n"
+#~ "This can be dangerous and damage your system.\n"
+#~ "Do you really want to continue?"
+#~ msgstr ""
+#~ "Το επιλεγμένο αρχείο θα εκτελεστεί άμεσα.\n"
+#~ "Αυτό μπορεί να είναι επικίνδυνο και να βλάψει το σύστημα σας.\n"
+#~ "Θέλετε να συνεχίσετε;"
 
 #~ msgid ""
 #~ "Enter the address of the server.\n"
