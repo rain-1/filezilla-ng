@@ -1761,7 +1761,7 @@ bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CSe
 
 	if (type == CEditHandler::remote) {
 		wxString localFileName;
-		CLocalPath localPath(localFile, &localFile);
+		CLocalPath localPath(localFile, &localFileName);
 
 		m_pQueue->QueueFile(false, true, file.name, (localFileName != file.name) ? localFileName : wxString(),
 			localPath, path, server, file.size, type, QueuePriority::high);
