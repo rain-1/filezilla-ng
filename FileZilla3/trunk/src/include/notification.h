@@ -226,10 +226,23 @@ protected:
 class CTransferStatus final
 {
 public:
+	CTransferStatus() {}
+	CTransferStatus(wxFileOffset total, wxFileOffset start, bool l)
+		: totalSize(total)
+		, startOffset(start)
+		, currentOffset(start)
+		, list(l)
+	{}
+
 	wxDateTime started;
 	wxFileOffset totalSize{-1};		// Total size of the file to transfer, -1 if unknown
 	wxFileOffset startOffset{-1};
 	wxFileOffset currentOffset{-1};
+
+	void clear() { startOffset = -1; }
+	bool empty() const { return startOffset < 0; }
+
+	explicit operator bool() const { return !empty(); }
 
 	// True on download notifications iff currentOffset != startOffset.
 	// True on FTP upload notifications iff currentOffset != startOffset
@@ -243,13 +256,13 @@ public:
 class CTransferStatusNotification final : public CNotificationHelper<nId_transferstatus>
 {
 public:
-	CTransferStatusNotification(CTransferStatus *pStatus);
-	virtual ~CTransferStatusNotification();
+	CTransferStatusNotification() {}
+	CTransferStatusNotification(CTransferStatus const& status);
 
-	const CTransferStatus *GetStatus() const;
+	CTransferStatus const& GetStatus() const;
 
 protected:
-	CTransferStatus *m_pStatus;
+	CTransferStatus const status_;
 };
 
 // Notification about new or changed hostkeys, only used by SSH/SFTP transfers.

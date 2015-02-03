@@ -848,11 +848,11 @@ void CTransferStatusManager::Reset()
 {
 	{
 		wxCriticalSectionLocker lock(mutex_);
-		status_.reset();
+		status_.clear();
 		send_state_ = 0;
 	}
 
-	engine_.AddNotification(new CTransferStatusNotification(0));
+	engine_.AddNotification(new CTransferStatusNotification());
 }
 
 void CTransferStatusManager::Init(wxFileOffset totalSize, wxFileOffset startOffset, bool list)
@@ -861,12 +861,7 @@ void CTransferStatusManager::Init(wxFileOffset totalSize, wxFileOffset startOffs
 	if (startOffset < 0)
 		startOffset = 0;
 
-	status_ = make_unique<CTransferStatus>();
-	status_->list = list;
-	status_->totalSize = totalSize;
-	status_->startOffset = startOffset;
-	status_->currentOffset = startOffset;
-	status_->madeProgress = false;
+	status_ = CTransferStatus(totalSize, startOffset, list);
 }
 
 void CTransferStatusManager::SetStartTime()
@@ -875,7 +870,7 @@ void CTransferStatusManager::SetStartTime()
 	if (!status_)
 		return;
 
-	status_->started = wxDateTime::UNow();
+	status_.started = wxDateTime::UNow();
 }
 
 void CTransferStatusManager::SetMadeProgress()
@@ -884,7 +879,7 @@ void CTransferStatusManager::SetMadeProgress()
 	if (!status_)
 		return;
 
-	status_->madeProgress = true;
+	status_.madeProgress = true;
 }
 
 void CTransferStatusManager::Update(wxFileOffset transferredBytes)
@@ -896,10 +891,10 @@ void CTransferStatusManager::Update(wxFileOffset transferredBytes)
 		if (!status_)
 			return;
 
-		status_->currentOffset += transferredBytes;
+		status_.currentOffset += transferredBytes;
 
 		if (!send_state_)
-			notification = new CTransferStatusNotification(new CTransferStatus(*status_));
+			notification = new CTransferStatusNotification(status_);
 		send_state_ = 2;
 	}
 
@@ -917,7 +912,7 @@ bool CTransferStatusManager::Get(CTransferStatus &status, bool &changed)
 		return false;
 	}
 
-	status = *status_;
+	status = status_;
 	if (send_state_ == 2) {
 		changed = true;
 		send_state_ = 1;
@@ -933,5 +928,5 @@ bool CTransferStatusManager::Get(CTransferStatus &status, bool &changed)
 bool CTransferStatusManager::Empty()
 {
 	wxCriticalSectionLocker lock(mutex_);
-	return status_ != 0;
+	return status_.empty();
 }
