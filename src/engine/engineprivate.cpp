@@ -795,9 +795,9 @@ bool CFileZillaEnginePrivate::IsActive(CFileZillaEngine::_direction direction)
 	return false;
 }
 
-bool CFileZillaEnginePrivate::GetTransferStatus(CTransferStatus &status, bool &changed)
+CTransferStatus CFileZillaEnginePrivate::GetTransferStatus(bool &changed)
 {
-	return transfer_status_.Get(status, changed);
+	return transfer_status_.Get(changed);
 }
 
 int CFileZillaEnginePrivate::CacheLookup(const CServerPath& path, CDirectoryListing& listing)
@@ -903,26 +903,22 @@ void CTransferStatusManager::Update(wxFileOffset transferredBytes)
 	}
 }
 
-bool CTransferStatusManager::Get(CTransferStatus &status, bool &changed)
+CTransferStatus CTransferStatusManager::Get(bool &changed)
 {
 	wxCriticalSectionLocker lock(mutex_);
 	if (!status_) {
 		changed = false;
 		send_state_ = 0;
-		return false;
 	}
-
-	status = status_;
-	if (send_state_ == 2) {
+	else if (send_state_ == 2) {
 		changed = true;
 		send_state_ = 1;
-		return true;
 	}
 	else {
 		changed = false;
 		send_state_ = 0;
-		return true;
 	}
+	return status_;
 }
 
 bool CTransferStatusManager::Empty()

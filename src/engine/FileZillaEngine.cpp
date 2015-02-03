@@ -47,9 +47,9 @@ bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
 	return CFileZillaEnginePrivate::IsActive(direction);
 }
 
-bool CFileZillaEngine::GetTransferStatus(CTransferStatus &status, bool &changed)
+CTransferStatus CFileZillaEngine::GetTransferStatus(bool &changed)
 {
-	return impl_->GetTransferStatus(status, changed);
+	return impl_->GetTransferStatus(changed);
 }
 
 int CFileZillaEngine::CacheLookup(const CServerPath& path, CDirectoryListing& listing)

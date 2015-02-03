@@ -58,7 +58,7 @@ public:
 	// Get a progress update about the current transfer. changed will be set
 	// to true if the data has been updated compared to the last time
 	// GetTransferStatus was called.
-	bool GetTransferStatus(CTransferStatus &status, bool &changed);
+	CTransferStatus GetTransferStatus(bool &changed);
 
 	int CacheLookup(CServerPath const& path, CDirectoryListing& listing);
 

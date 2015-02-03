@@ -39,7 +39,7 @@ public:
 	void SetMadeProgress();
 	void Update(wxFileOffset transferredBytes);
 
-	bool Get(CTransferStatus &status, bool &changed);
+	CTransferStatus Get(bool &changed);
 
 protected:
 	wxCriticalSection mutex_;
@@ -72,7 +72,7 @@ public:
 	bool SetAsyncRequestReply(std::unique_ptr<CAsyncRequestNotification> && pNotification);
 	unsigned int GetNextAsyncRequestNumber();
 
-	bool GetTransferStatus(CTransferStatus &status, bool &changed);
+	CTransferStatus GetTransferStatus(bool &changed);
 
 	int CacheLookup(CServerPath const& path, CDirectoryListing& listing);
 
