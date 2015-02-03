@@ -274,15 +274,15 @@ void CStatusLineCtrl::SetTransferStatus(CTransferStatus const& status)
 
 void CStatusLineCtrl::OnTimer(wxTimerEvent&)
 {
-	bool changed;
-	CTransferStatus status;
-
 	if (!m_pEngineData || !m_pEngineData->pEngine) {
 		m_transferStatusTimer.Stop();
 		return;
 	}
 
-	if (!m_pEngineData->pEngine->GetTransferStatus(status, changed))
+	bool changed;
+	CTransferStatus status = m_pEngineData->pEngine->GetTransferStatus(changed);
+
+	if (status.empty())
 		ClearTransferStatus();
 	else if (changed) {
 		if (status.madeProgress && !status.list &&

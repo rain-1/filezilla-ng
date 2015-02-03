@@ -92,10 +92,10 @@ Command CControlSocket::GetCurrentCommandId() const
 
 void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpData *pData)
 {
-	CTransferStatus status;
 	bool tmp;
 
-	if (m_pEngine->transfer_status_.Get(status, tmp) && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
+	CTransferStatus const status = m_pEngine->transfer_status_.Get(tmp);
+	if (!status.empty() && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
 		int elapsed = wxTimeSpan(wxDateTime::UNow() - status.started).GetSeconds().GetLo();
 		if (elapsed <= 0)
 			elapsed = 1;
@@ -123,8 +123,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 	else {
 		if ((nErrorCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED)
 			LogMessage(MessageType::Error, _("File transfer aborted by user"));
-		else if (nErrorCode == FZ_REPLY_OK)
-		{
+		else if (nErrorCode == FZ_REPLY_OK) {
 			if (pData->transferInitiated)
 				LogMessage(MessageType::Status, _("File transfer successful"));
 			else

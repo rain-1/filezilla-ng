@@ -663,9 +663,9 @@ void CSftpControlSocket::OnSftpEvent()
 			break;
 		case sftpEvent::Transfer:
 			{
-				CTransferStatus status;
 				bool tmp;
-				if (m_pEngine->transfer_status_.Get(status, tmp) && !status.madeProgress) {
+				CTransferStatus status = m_pEngine->transfer_status_.Get(tmp);
+				if (!status.empty() && !status.madeProgress) {
 					if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
 						CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
 						if (pData->download) {
