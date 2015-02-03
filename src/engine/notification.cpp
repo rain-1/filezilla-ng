@@ -50,19 +50,14 @@ CActiveNotification::CActiveNotification(int direction)
 {
 }
 
-CTransferStatusNotification::CTransferStatusNotification(CTransferStatus *pStatus)
-	: m_pStatus(pStatus)
+CTransferStatusNotification::CTransferStatusNotification(CTransferStatus const& status)
+	: status_(status)
 {
 }
 
-CTransferStatusNotification::~CTransferStatusNotification()
+CTransferStatus const& CTransferStatusNotification::GetStatus() const
 {
-	delete m_pStatus;
-}
-
-const CTransferStatus* CTransferStatusNotification::GetStatus() const
-{
-	return m_pStatus;
+	return status_;
 }
 
 CHostKeyNotification::CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed /*=false*/)

@@ -35,9 +35,9 @@ CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const 
 
 	m_transferStatusTimer.SetOwner(this);
 
-	SetTransferStatus(0);
-
 	InitFieldOffsets();
+
+	ClearTransferStatus();
 }
 
 void CStatusLineCtrl::InitFieldOffsets()
@@ -67,7 +67,7 @@ void CStatusLineCtrl::InitFieldOffsets()
 
 CStatusLineCtrl::~CStatusLineCtrl()
 {
-	if (status_valid_ && status_.totalSize >= 0)
+	if (!status_.empty() && status_.totalSize >= 0)
 		m_pEngineData->pItem->SetSize(status_.totalSize);
 
 	if (m_transferStatusTimer.IsRunning())
@@ -98,7 +98,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 	int bar_split = -1;
 	int permill = -1;
 
-	if (!status_valid_) {
+	if (status_.empty()) {
 		if (m_previousStatusText != m_statusText) {
 			// Clear background
 			m_mdc->SetFont(GetFont());
@@ -224,46 +224,52 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 	dc.Blit(0, 0, rect.GetWidth(), rect.GetHeight(), m_mdc.get(), 0, 0);
 }
 
-void CStatusLineCtrl::SetTransferStatus(const CTransferStatus* pStatus)
+void CStatusLineCtrl::ClearTransferStatus()
 {
-	if (!pStatus) {
-		if (status_valid_ && status_.totalSize >= 0)
-			m_pParent->UpdateItemSize(m_pEngineData->pItem, status_.totalSize);
-		status_valid_ = false;
+	if (!status_.empty() && status_.totalSize >= 0) {
+		m_pParent->UpdateItemSize(m_pEngineData->pItem, status_.totalSize);
+	}
+	status_.clear();
 
-		switch (m_pEngineData->state)
-		{
-		case t_EngineData::disconnect:
-			m_statusText = _("Disconnecting from previous server");
-			break;
-		case t_EngineData::cancel:
-			m_statusText = _("Waiting for transfer to be cancelled");
-			break;
-		case t_EngineData::connect:
-			m_statusText = wxString::Format(_("Connecting to %s"), m_pEngineData->lastServer.FormatServer());
-			break;
-		default:
-			m_statusText = _("Transferring");
-			break;
-		}
+	switch (m_pEngineData->state)
+	{
+	case t_EngineData::disconnect:
+		m_statusText = _("Disconnecting from previous server");
+		break;
+	case t_EngineData::cancel:
+		m_statusText = _("Waiting for transfer to be cancelled");
+		break;
+	case t_EngineData::connect:
+		m_statusText = wxString::Format(_("Connecting to %s"), m_pEngineData->lastServer.FormatServer());
+		break;
+	default:
+		m_statusText = _("Transferring");
+		break;
+	}
 
-		if (m_transferStatusTimer.IsRunning())
-			m_transferStatusTimer.Stop();
+	if (m_transferStatusTimer.IsRunning())
+		m_transferStatusTimer.Stop();
 
-		m_past_data_count = 0;
-		m_gcLastOffset = -1;
-		m_gcLastSpeed = -1;
+	m_past_data_count = 0;
+	m_gcLastOffset = -1;
+	m_gcLastSpeed = -1;
+	Refresh(false);
+}
+
+void CStatusLineCtrl::SetTransferStatus(CTransferStatus const& status)
+{
+	if (!status) {
+		ClearTransferStatus();
 	}
 	else {
-		status_valid_ = true;
-		status_ = *pStatus;
+		status_ = status;
 
-		m_lastOffset = pStatus->currentOffset;
+		m_lastOffset = status.currentOffset;
 
 		if (!m_transferStatusTimer.IsRunning())
 			m_transferStatusTimer.Start(100);
+		Refresh(false);
 	}
-	Refresh(false);
 }
 
 void CStatusLineCtrl::OnTimer(wxTimerEvent&)
@@ -277,7 +283,7 @@ void CStatusLineCtrl::OnTimer(wxTimerEvent&)
 	}
 
 	if (!m_pEngineData->pEngine->GetTransferStatus(status, changed))
-		SetTransferStatus(0);
+		ClearTransferStatus();
 	else if (changed) {
 		if (status.madeProgress && !status.list &&
 			m_pEngineData->pItem->GetType() == QueueItemType::File)
@@ -285,7 +291,7 @@ void CStatusLineCtrl::OnTimer(wxTimerEvent&)
 			CFileItem* pItem = (CFileItem*)m_pEngineData->pItem;
 			pItem->set_made_progress(true);
 		}
-		SetTransferStatus(&status);
+		SetTransferStatus(status);
 	}
 	else
 		m_transferStatusTimer.Stop();
@@ -351,7 +357,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 
 wxFileOffset CStatusLineCtrl::GetSpeed(int elapsed_milli_seconds)
 {
-	if (!status_valid_)
+	if (status_.empty())
 		return -1;
 
 	if (elapsed_milli_seconds <= 0) {
@@ -381,7 +387,7 @@ wxFileOffset CStatusLineCtrl::GetSpeed(int elapsed_milli_seconds)
 
 wxFileOffset CStatusLineCtrl::GetCurrentSpeed()
 {
-	if (!status_valid_)
+	if (status_.empty())
 		return -1;
 
 	const wxTimeSpan timeDiff( wxDateTime::UNow().Subtract(m_gcLastTimeStamp) );

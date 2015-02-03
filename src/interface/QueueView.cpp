@@ -684,16 +684,15 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 		if (pEngineData->pItem && pEngineData->pStatusLineCtrl)
 		{
 			auto const& transferStatusNotification = static_cast<CTransferStatusNotification const&>(*pNotification.get());
-			CTransferStatus const* pStatus = transferStatusNotification.GetStatus();
-
+			CTransferStatus const& status = transferStatusNotification.GetStatus();
 			if (pEngineData->active) {
-				if (pStatus && pStatus->madeProgress && !pStatus->list &&
+				if (status && status.madeProgress && !status.list &&
 					pEngineData->pItem->GetType() == QueueItemType::File)
 				{
 					CFileItem* pItem = (CFileItem*)pEngineData->pItem;
 					pItem->set_made_progress(true);
 				}
-				pEngineData->pStatusLineCtrl->SetTransferStatus(pStatus);
+				pEngineData->pStatusLineCtrl->SetTransferStatus(status);
 			}
 		}
 		break;
@@ -927,7 +926,7 @@ bool CQueueView::TryStartNextTransfer()
 			pEngineData->pStatusLineCtrl = new CStatusLineCtrl(this, pEngineData, rect);
 		else
 		{
-			pEngineData->pStatusLineCtrl->SetTransferStatus(0);
+			pEngineData->pStatusLineCtrl->ClearTransferStatus();
 			pEngineData->pStatusLineCtrl->SetSize(rect);
 			pEngineData->pStatusLineCtrl->Show();
 		}
@@ -983,7 +982,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	case t_EngineData::disconnect:
 		if (pEngineData->active) {
 			pEngineData->state = t_EngineData::connect;
-			pEngineData->pStatusLineCtrl->SetTransferStatus(0);
+			pEngineData->pStatusLineCtrl->ClearTransferStatus();
 		}
 		else
 			pEngineData->state = t_EngineData::none;
@@ -999,7 +998,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 			else
 				pEngineData->state = t_EngineData::mkdir;
 			if (pEngineData->active && pEngineData->pStatusLineCtrl)
-				pEngineData->pStatusLineCtrl->SetTransferStatus(0);
+				pEngineData->pStatusLineCtrl->ClearTransferStatus();
 		}
 		else {
 			if (replyCode & FZ_REPLY_PASSWORDFAILED)
@@ -1373,7 +1372,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 				engineData.state = t_EngineData::connect;
 
 			if (engineData.active && engineData.pStatusLineCtrl)
-				engineData.pStatusLineCtrl->SetTransferStatus(0);
+				engineData.pStatusLineCtrl->ClearTransferStatus();
 		}
 
 		if (engineData.state == t_EngineData::askpassword) {
@@ -1405,7 +1404,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 				if (engineData.pItem->GetType() == QueueItemType::File) {
 					engineData.state = t_EngineData::transfer;
 					if (engineData.active)
-						engineData.pStatusLineCtrl->SetTransferStatus(0);
+						engineData.pStatusLineCtrl->ClearTransferStatus();
 				}
 				else
 					engineData.state = t_EngineData::mkdir;
@@ -3235,7 +3234,7 @@ bool CQueueView::SwitchEngine(t_EngineData** ppEngineData)
 		else
 			pNewEngineData->state = t_EngineData::mkdir;
 		if (pNewEngineData->pStatusLineCtrl)
-			pNewEngineData->pStatusLineCtrl->SetTransferStatus(0);
+			pNewEngineData->pStatusLineCtrl->ClearTransferStatus();
 
 		pEngineData->state = t_EngineData::none;
 

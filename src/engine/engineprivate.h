@@ -44,7 +44,7 @@ public:
 protected:
 	wxCriticalSection mutex_;
 
-	std::unique_ptr<CTransferStatus> status_;
+	CTransferStatus status_;
 	int send_state_{};
 
 	CFileZillaEnginePrivate& engine_;

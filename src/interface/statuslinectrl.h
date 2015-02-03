@@ -12,9 +12,11 @@ public:
 
 	void SetEngineData(const t_EngineData* const pEngineData);
 
-	void SetTransferStatus(const CTransferStatus* pStatus);
-	wxLongLong GetLastOffset() const { return status_valid_ ? status_.currentOffset : m_lastOffset; }
-	wxLongLong GetTotalSize() const { return status_valid_ ? status_.totalSize : -1; }
+	void SetTransferStatus(CTransferStatus const& status);
+	void ClearTransferStatus();
+
+	wxLongLong GetLastOffset() const { return status_.empty() ? m_lastOffset : status_.currentOffset; }
+	wxLongLong GetTotalSize() const { return status_.empty() ? -1 : status_.totalSize; }
 	wxFileOffset GetSpeed(int elapsed_milli_seconds);
 	wxFileOffset GetCurrentSpeed();
 
@@ -29,7 +31,6 @@ protected:
 	CQueueView* m_pParent;
 	const t_EngineData* m_pEngineData;
 	CTransferStatus status_;
-	bool status_valid_{};
 
 	wxString m_statusText;
 	wxTimer m_transferStatusTimer;
