@@ -1434,7 +1434,7 @@ int xfer_upload_gotpkt(struct fxp_xfer *xfer, struct sftp_packet *pktin)
     xfer->sent_interval += rr->len;
     if (fz_timer_check(&xfer->send_timer)) {
 	/* The data we sent is the data we earlier read from file */
-	fzprintf(sftpRead, "%d", xfer->sent_interval);
+	fzprintf(sftpTransfer, "%d", xfer->sent_interval);
 	xfer->sent_interval = 0;
     }
     sfree(rr);
@@ -1447,6 +1447,9 @@ int xfer_upload_gotpkt(struct fxp_xfer *xfer, struct sftp_packet *pktin)
 
 void xfer_cleanup(struct fxp_xfer *xfer)
 {
+    if (xfer->sent_interval > 0) {
+	fzprintf(sftpTransfer, "%d", xfer->sent_interval);
+    }
     struct req *rr;
     while (xfer->head) {
 	rr = xfer->head;

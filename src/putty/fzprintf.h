@@ -6,13 +6,12 @@ typedef enum
     sftpError,
     sftpVerbose,
     sftpStatus,
-    sftpRecv,
-    sftpSend,
+    sftpRecv, /* socket */
+    sftpSend, /* socket */
     sftpClose,
     sftpRequest,
     sftpListentry,
-    sftpRead,
-    sftpWrite,
+    sftpTransfer, /* payload: when written to local file (download) or acknowledged by server (upload) */
     sftpRequestPreamble,
     sftpRequestInstruction,
     sftpUsedQuotaRecv,
