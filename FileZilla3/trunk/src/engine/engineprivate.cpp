@@ -829,8 +829,10 @@ int CFileZillaEnginePrivate::Cancel()
 
 void CFileZillaEnginePrivate::OnOptionChanged(int)
 {
+	bool queue_logs = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+
 	wxCriticalSectionLocker lock(notification_mutex_);
-	queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+	queue_logs_ = queue_logs;
 	if (!queue_logs_) {
 		SendQueuedLogs();
 	}
