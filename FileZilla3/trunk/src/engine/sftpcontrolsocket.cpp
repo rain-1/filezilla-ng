@@ -248,8 +248,7 @@ protected:
 					SendMessage(message);
 				}
 				break;
-			case sftpEvent::Read:
-			case sftpEvent::Write:
+			case sftpEvent::Transfer:
 				{
 					sftp_message* message = new sftp_message;
 					message->type = eventType;
@@ -662,8 +661,7 @@ void CSftpControlSocket::OnSftpEvent()
 		case sftpEvent::Listentry:
 			ListParseEntry(message->text);
 			break;
-		case sftpEvent::Read:
-		case sftpEvent::Write:
+		case sftpEvent::Transfer:
 			{
 				CTransferStatus status;
 				bool tmp;

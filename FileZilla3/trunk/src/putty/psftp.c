@@ -556,7 +556,7 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
 	}
 
 	if (fz_timer_check(&timer)) {
-	    fzprintf(sftpWrite, "%d", winterval);
+	    fzprintf(sftpTransfer, "%d", winterval);
 	    winterval = 0;
 	}
 
