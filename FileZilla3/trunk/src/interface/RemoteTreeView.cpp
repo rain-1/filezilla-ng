@@ -283,19 +283,7 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 {
 	m_busy = true;
 
-	switch (COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT))
-	{
-	case 0:
-	default:
-		m_nameSortMode = CFileListCtrlSortBase::namesort_caseinsensitive;
-		break;
-	case 1:
-		m_nameSortMode = CFileListCtrlSortBase::namesort_casesensitive;
-		break;
-	case 2:
-		m_nameSortMode = CFileListCtrlSortBase::namesort_natural;
-		break;
-	}
+	UpdateSortMode();
 
 	if (!pListing) {
 		m_ExpandAfterList = wxTreeItemId();
@@ -700,25 +688,6 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	if (inserted)
 		SortChildren(parent);
-}
-
-int CRemoteTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2)
-{
-	wxString label1 = GetItemText(item1);
-	wxString label2 = GetItemText(item2);
-
-	switch (m_nameSortMode)
-	{
-	case CFileListCtrlSortBase::namesort_casesensitive:
-		return CFileListCtrlSortBase::CmpCase(label1, label2);
-
-	default:
-	case CFileListCtrlSortBase::namesort_caseinsensitive:
-		return CFileListCtrlSortBase::CmpNoCase(label1, label2);
-
-	case CFileListCtrlSortBase::namesort_natural:
-		return CFileListCtrlSortBase::CmpNatural(label1, label2);
-	}
 }
 
 void CRemoteTreeView::OnItemExpanding(wxTreeEvent& event)
@@ -1475,4 +1444,21 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
 
 	wxTheClipboard->Flush();
 	wxTheClipboard->Close();
+}
+
+void CRemoteTreeView::UpdateSortMode()
+{
+	switch (COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT))
+	{
+	case 0:
+	default:
+		m_nameSortMode = CFileListCtrlSortBase::namesort_caseinsensitive;
+		break;
+	case 1:
+		m_nameSortMode = CFileListCtrlSortBase::namesort_casesensitive;
+		break;
+	case 2:
+		m_nameSortMode = CFileListCtrlSortBase::namesort_natural;
+		break;
+	}
 }

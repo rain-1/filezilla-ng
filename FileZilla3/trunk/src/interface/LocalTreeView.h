@@ -4,7 +4,6 @@
 #include "systemimagelist.h"
 #include "state.h"
 #include "treectrlex.h"
-#include "filelistctrl.h"
 
 class CQueueView;
 
@@ -44,7 +43,6 @@ protected:
 #endif
 
 	void UpdateSortMode();
-	virtual int OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2);
 
 	wxTreeItemId GetNearestParent(wxString& localDir);
 	wxTreeItemId GetSubdir(wxTreeItemId parent, const wxString& subDir);
@@ -91,7 +89,6 @@ protected:
 
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;
-	enum CFileListCtrlSortBase::NameSortMode m_nameSortMode;
 };
 
 #endif
