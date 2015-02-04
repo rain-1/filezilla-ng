@@ -250,6 +250,8 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, 
 	SetImageList(GetSystemImageList());
 
 	UpdateSortMode();
+	RegisterOption(OPTION_FILELIST_NAMESORT);
+
 #ifdef __WXMSW__
 	m_pVolumeEnumeratorThread = 0;
 
@@ -691,8 +693,6 @@ void CLocalTreeView::RefreshListing()
 	const wxString separator = wxFileName::GetPathSeparator();
 
 	std::list<t_dir> dirsToCheck;
-
-	UpdateSortMode();
 
 #ifdef __WXMSW__
 	int prevErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
@@ -1576,4 +1576,12 @@ void CLocalTreeView::OnMenuOpen(wxCommandEvent&)
 		return;
 
 	OpenInFileManager(path);
+}
+
+void CLocalTreeView::OnOptionChanged(int option)
+{
+	if (option == OPTION_FILELIST_NAMESORT) {
+		UpdateSortMode();
+		RefreshListing();
+	}
 }

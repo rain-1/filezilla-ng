@@ -1,13 +1,14 @@
 #ifndef __REMOTETREEVIEW_H__
 #define __REMOTETREEVIEW_H__
 
+#include <option_change_event_handler.h>
 #include "systemimagelist.h"
 #include "state.h"
 #include "filter.h"
 #include "treectrlex.h"
 
 class CQueueView;
-class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
+class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
 {
 	DECLARE_CLASS(CRemoteTreeView)
 
@@ -33,7 +34,7 @@ protected:
 
 	bool ListExpand(wxTreeItemId item);
 
-	void ApplyFilters();
+	void ApplyFilters(bool resort);
 
 	CQueueView* m_pQueue;
 
@@ -52,6 +53,8 @@ protected:
 	CServerPath MenuMkdir();
 
 	void UpdateSortMode();
+
+	virtual void OnOptionChanged(int option);
 
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
