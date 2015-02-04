@@ -883,25 +883,6 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 }
 
-int CLocalTreeView::OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2)
-{
-	wxString label1 = GetItemText(item1);
-	wxString label2 = GetItemText(item2);
-
-	switch (m_nameSortMode)
-	{
-	case CFileListCtrlSortBase::namesort_casesensitive:
-		return CFileListCtrlSortBase::CmpCase(label1, label2);
-
-	default:
-	case CFileListCtrlSortBase::namesort_caseinsensitive:
-		return CFileListCtrlSortBase::CmpNoCase(label1, label2);
-
-	case CFileListCtrlSortBase::namesort_natural:
-		return CFileListCtrlSortBase::CmpNatural(label1, label2);
-	}
-}
-
 void CLocalTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)

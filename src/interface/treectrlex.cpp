@@ -10,6 +10,13 @@ END_EVENT_TABLE()
 #endif
 
 wxTreeCtrlEx::wxTreeCtrlEx()
+	: m_nameSortMode(
+#ifdef __WXMSW__
+		CFileListCtrlSortBase::namesort_caseinsensitive
+#else
+		CFileListCtrlSortBase::namesort_casesensitive
+#endif
+	)
 {
 }
 
@@ -17,6 +24,13 @@ wxTreeCtrlEx::wxTreeCtrlEx(wxWindow *parent, wxWindowID id /*=wxID_ANY*/,
 			   const wxPoint& pos /*=wxDefaultPosition*/,
 			   const wxSize& size /*=wxDefaultSize*/,
 			   long style /*=wxTR_HAS_BUTTONS|wxTR_LINES_AT_ROOT*/)
+	: m_nameSortMode(
+#ifdef __WXMSW__
+		CFileListCtrlSortBase::namesort_caseinsensitive
+#else
+		CFileListCtrlSortBase::namesort_casesensitive
+#endif
+	)
 {
 	Create(parent, id, pos, size, style);
 }
@@ -122,4 +136,23 @@ wxTreeItemId wxTreeCtrlEx::GetPrevItemSimple(wxTreeItemId const& item) const
 		}
 	}
 	return cur;
+}
+
+int wxTreeCtrlEx::OnCompareItems(wxTreeItemId const& item1, wxTreeItemId const& item2)
+{
+	wxString const& label1 = GetItemText(item1);
+	wxString const& label2 = GetItemText(item2);
+
+	switch (m_nameSortMode)
+	{
+	case CFileListCtrlSortBase::namesort_casesensitive:
+		return CFileListCtrlSortBase::CmpCase(label1, label2);
+
+	default:
+	case CFileListCtrlSortBase::namesort_caseinsensitive:
+		return CFileListCtrlSortBase::CmpNoCase(label1, label2);
+
+	case CFileListCtrlSortBase::namesort_natural:
+		return CFileListCtrlSortBase::CmpNatural(label1, label2);
+	}
 }

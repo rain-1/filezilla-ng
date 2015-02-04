@@ -2,6 +2,7 @@
 #define __TREECTRLEX_H__
 
 #include <wx/dnd.h>
+#include "filelistctrl.h"
 
 class wxTreeCtrlEx : public wxNavigationEnabled<wxTreeCtrl>
 {
@@ -44,6 +45,10 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnChar(wxKeyEvent& event);
 #endif
+
+	virtual int OnCompareItems(wxTreeItemId const& item1, wxTreeItemId const& item2);
+
+	CFileListCtrlSortBase::NameSortMode m_nameSortMode;
 };
 
 #endif //__TREECTRLEX_H__

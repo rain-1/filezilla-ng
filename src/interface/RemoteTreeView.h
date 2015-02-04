@@ -5,7 +5,6 @@
 #include "state.h"
 #include "filter.h"
 #include "treectrlex.h"
-#include "filelistctrl.h"
 
 class CQueueView;
 class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
@@ -30,8 +29,6 @@ protected:
 
 	bool HasSubdirs(const CDirectoryListing& listing, const CFilterManager& filter);
 
-	virtual int OnCompareItems(const wxTreeItemId& item1, const wxTreeItemId& item2);
-
 	CServerPath GetPathFromItem(const wxTreeItemId& item) const;
 
 	bool ListExpand(wxTreeItemId item);
@@ -54,6 +51,8 @@ protected:
 
 	CServerPath MenuMkdir();
 
+	void UpdateSortMode();
+
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
 	void OnSelectionChanged(wxTreeEvent& event);
@@ -72,8 +71,6 @@ protected:
 	void OnMenuGeturl(wxCommandEvent&);
 
 	wxTreeItemId m_contextMenuItem;
-	enum CFileListCtrlSortBase::NameSortMode m_nameSortMode;
-
 };
 
 #endif
