@@ -7,6 +7,7 @@
 #include <option_change_event_handler.h>
 #include "sizeformatting.h"
 
+#include <algorithm>
 #include <string>
 
 #ifdef __WXMSW__
@@ -243,10 +244,10 @@ COptions::COptions()
 	LoadOptions(nameOptionMap);
 }
 
-std::map<std::string, int> COptions::GetNameOptionMap() const
+std::map<std::string, unsigned int> COptions::GetNameOptionMap() const
 {
-	std::map<std::string, int> ret;
-	for (int i = 0; i < OPTIONS_NUM; ++i) {
+	std::map<std::string, unsigned int> ret;
+	for (unsigned int i = 0; i < OPTIONS_NUM; ++i) {
 		if (options[i].flags != internal)
 			ret.insert(std::make_pair(std::string(options[i].name), i));
 	}
@@ -333,7 +334,19 @@ void COptions::ContinueSetOption(unsigned int nID, T const& value)
 			m_save_timer.Start(15000, true);
 	}
 
-	COptionChangeEventHandler::DoNotify(nID);
+	if (changedOptions_.empty()) {
+		CallAfter(&COptions::NotifyChangedOptions);
+	}
+	auto it = std::lower_bound(changedOptions_.begin(), changedOptions_.end(), nID);
+	if (it == changedOptions_.end() || *it != nID) {
+		changedOptions_.insert(it, nID);
+	}
+}
+
+void COptions::NotifyChangedOptions()
+{
+	COptionChangeEventHandler::DoNotify(std::move(changedOptions_));
+	changedOptions_.clear();
 }
 
 bool COptions::OptionFromFzDefaultsXml(unsigned int nID)
@@ -627,7 +640,7 @@ void COptions::Import(TiXmlElement* pElement)
 		m_save_timer.Start(15000, true);
 }
 
-void COptions::LoadOptions(std::map<std::string, int> const& nameOptionMap, TiXmlElement* settings)
+void COptions::LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, TiXmlElement* settings)
 {
 	if (!settings) {
 		settings = CreateSettingsXmlElement();
@@ -645,7 +658,7 @@ void COptions::LoadOptions(std::map<std::string, int> const& nameOptionMap, TiXm
 	}
 }
 
-void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, int> const& nameOptionMap, bool allowDefault)
+void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault)
 {
 	const char* name = pOption->Attribute("name");
 	if (!name)
@@ -692,7 +705,7 @@ void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string
 	}
 }
 
-void COptions::LoadGlobalDefaultOptions(std::map<std::string, int> const& nameOptionMap)
+void COptions::LoadGlobalDefaultOptions(std::map<std::string, unsigned int> const& nameOptionMap)
 {
 	CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 	if (defaultsDir.empty())

@@ -23,7 +23,7 @@ protected:
 private:
 	std::set<int> m_handled_options;
 
-	static void DoNotify(int option);
+	static void DoNotify(std::vector<unsigned int> && options);
 	static void UnregisterAll();
 
 	static std::vector<std::vector<COptionChangeEventHandler*> > m_handlers;

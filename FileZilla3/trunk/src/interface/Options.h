@@ -150,14 +150,16 @@ protected:
 
 	TiXmlElement* CreateSettingsXmlElement();
 
-	std::map<std::string, int> GetNameOptionMap() const;
-	void LoadOptions(std::map<std::string, int> const& nameOptionMap, TiXmlElement* settings = 0);
-	void LoadGlobalDefaultOptions(std::map<std::string, int> const& nameOptionMap);
-	void LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, int> const& nameOptionMap, bool allowDefault);
+	std::map<std::string, unsigned int> GetNameOptionMap() const;
+	void LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, TiXmlElement* settings = 0);
+	void LoadGlobalDefaultOptions(std::map<std::string, unsigned int> const& nameOptionMap);
+	void LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault);
 	CLocalPath InitSettingsDir();
 	void SetDefaultValues();
 
 	void Save();
+
+	void NotifyChangedOptions();
 
 	CXmlFile* m_pXmlFile;
 
@@ -173,6 +175,8 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 
 	wxCriticalSection m_sync_;
+
+	std::vector<unsigned int> changedOptions_;
 };
 
 #endif //__OPTIONS_H__
