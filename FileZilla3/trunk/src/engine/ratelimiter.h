@@ -44,6 +44,8 @@ protected:
 	void operator()(CEventBase const& ev);
 	void OnTimer(timer_id id);
 	void OnRateChanged();
+
+	wxCriticalSection sync_;
 };
 
 struct ratelimit_changed_event_type{};
