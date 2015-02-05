@@ -23,8 +23,6 @@
 	#endif
 #endif
 
-#include <errno.h>
-
 struct obtain_lock_event_type;
 typedef CEvent<obtain_lock_event_type> CObtainLockEvent;
 

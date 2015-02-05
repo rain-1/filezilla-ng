@@ -2,7 +2,6 @@
 #include "externalipresolver.h"
 #include "wx/regex.h"
 #include "socket.h"
-#include <errno.h>
 #include "misc.h"
 
 namespace {

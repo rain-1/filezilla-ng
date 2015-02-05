@@ -3,9 +3,7 @@
 #include "tlssocket.h"
 #include "ControlSocket.h"
 
-#include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
-#include <errno.h>
 
 char const ciphers[] = "SECURE256:+SECURE128:-ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP:-VERS-SSL3.0";
 

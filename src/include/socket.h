@@ -3,6 +3,8 @@
 
 #include "event_handler.h"
 
+#include <errno.h>
+
 // IPv6 capable, non-blocking socket class for use with wxWidgets.
 // Error codes are the same as used by the POSIX socket functions,
 // see 'man 2 socket', 'man 2 connect', ...

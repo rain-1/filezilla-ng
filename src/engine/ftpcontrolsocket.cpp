@@ -20,7 +20,6 @@
 #include <wx/tokenzr.h>
 
 #include <algorithm>
-#include <errno.h>
 
 #define LOGON_WELCOME	0
 #define LOGON_AUTH_TLS	1
