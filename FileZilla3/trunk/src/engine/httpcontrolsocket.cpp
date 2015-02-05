@@ -8,8 +8,6 @@
 
 #include <wx/file.h>
 
-#include <errno.h>
-
 #define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
 
 // Connect is special for HTTP: It is done on a per-command basis, so we need

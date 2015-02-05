@@ -1,7 +1,6 @@
 #include <filezilla.h>
 #include "engineprivate.h"
 #include "proxy.h"
-#include <errno.h>
 #include "ControlSocket.h"
 #include <wx/sckaddr.h>
 

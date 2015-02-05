@@ -6,7 +6,6 @@
 #include "optionsbase.h"
 #include "tlssocket.h"
 #include "transfersocket.h"
-#include <errno.h>
 #include "proxy.h"
 #include "servercapabilities.h"
 

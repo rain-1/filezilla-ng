@@ -17,7 +17,6 @@
 #endif
 #include <filezilla.h>
 #include "socket.h"
-#include <errno.h>
 #ifndef __WXMSW__
   #include <sys/types.h>
   #include <sys/socket.h>
