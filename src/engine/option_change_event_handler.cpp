@@ -53,12 +53,14 @@ void COptionChangeEventHandler::UnregisterAll()
 	}
 }
 
-void COptionChangeEventHandler::DoNotify(int option)
+void COptionChangeEventHandler::DoNotify(std::vector<unsigned int> && options)
 {
-	if (option < 0 || static_cast<size_t>(option) >= m_handlers.size())
-		return;
+	for (unsigned int option : options) {
+		if (option < 0 || static_cast<size_t>(option) >= m_handlers.size())
+			return;
 
-	for (auto & handler : m_handlers[option]) {
-		handler->OnOptionChanged(option);
+		for (auto & handler : m_handlers[option]) {
+			handler->OnOptionChanged(option);
+		}
 	}
 }
