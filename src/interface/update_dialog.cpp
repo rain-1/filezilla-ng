@@ -251,7 +251,7 @@ void CUpdateDialog::OnTimer(wxTimerEvent&)
 		percent = ((downloaded * 100) / size).GetLo();
 	}
 
-	XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->SetLabel(wxString::Format(_T("(%u%% downloaded)"), percent));
+	XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->SetLabel(wxString::Format(_("(%u%% downloaded)"), percent));
 }
 
 void CUpdateDialog::ShowDetails(wxHyperlinkEvent&)
