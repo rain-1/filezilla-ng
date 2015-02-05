@@ -9,7 +9,6 @@ CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)
 	: CEventHandler(loop)
 	, options_(options)
 {
-	wxASSERT(wxIsMainThread());
 	RegisterOption(OPTION_SPEEDLIMIT_ENABLE);
 	RegisterOption(OPTION_SPEEDLIMIT_INBOUND);
 	RegisterOption(OPTION_SPEEDLIMIT_OUTBOUND);
@@ -20,7 +19,6 @@ CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)
 
 CRateLimiter::~CRateLimiter()
 {
-	wxASSERT(wxIsMainThread());
 	RemoveHandler();
 }
 
@@ -36,6 +34,8 @@ wxLongLong CRateLimiter::GetLimit(rate_direction direction) const
 
 void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 {
+	wxCriticalSectionLocker lock(sync_);
+
 	m_objectList.push_back(pObject);
 
 	for (int i = 0; i < 2; ++i) {
@@ -68,6 +68,8 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 {
+	wxCriticalSectionLocker lock(sync_);
+
 	for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 		if (*iter == pObject) {
 			for (int i = 0; i < 2; ++i) {
@@ -97,6 +99,8 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::OnTimer(timer_id)
 {
+	wxCriticalSectionLocker lock(sync_);
+
 	wxLongLong const limits[2] = { GetLimit(inbound), GetLimit(outbound) };
 
 	for (int i = 0; i < 2; ++i) {
@@ -170,6 +174,7 @@ void CRateLimiter::OnTimer(timer_id)
 			}
 		}
 	}
+
 	WakeupWaitingObjects();
 
 	if (m_objectList.empty() || (limits[inbound] == 0 && limits[outbound] == 0)) {
@@ -192,7 +197,9 @@ void CRateLimiter::WakeupWaitingObjects()
 			wxASSERT(pObject->m_bytesAvailable != 0);
 			pObject->m_waiting[i] = false;
 
+			sync_.Leave(); // Do not hold while executing callback
 			pObject->OnRateAvailable((rate_direction)i);
+			sync_.Enter();
 		}
 	}
 }
@@ -227,6 +234,7 @@ void CRateLimiter::operator()(CEventBase const& ev)
 
 void CRateLimiter::OnRateChanged()
 {
+	wxCriticalSectionLocker lock(sync_);
 	if (GetLimit(inbound) > 0 || GetLimit(outbound) > 0) {
 		if (!m_timer)
 			m_timer = AddTimer(tickDelay, false);
