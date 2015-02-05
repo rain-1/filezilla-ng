@@ -1,12 +1,14 @@
 #ifndef __RATELIMITER_H__
 #define __RATELIMITER_H__
 
+#include <option_change_event_handler.h>
+
 class COptionsBase;
 
 class CRateLimiterObject;
 
 // This class implements a simple rate limiter based on the Token Bucket algorithm.
-class CRateLimiter final : protected CEventHandler
+class CRateLimiter final : protected CEventHandler, COptionChangeEventHandler
 {
 public:
 	CRateLimiter(CEventLoop& loop, COptionsBase& options);
@@ -22,7 +24,7 @@ public:
 	void RemoveObject(CRateLimiterObject* pObject);
 
 protected:
-	wxLongLong GetLimit(enum rate_direction direction) const;
+	wxLongLong GetLimit(rate_direction direction) const;
 
 	int GetBucketSize() const;
 
@@ -37,9 +39,15 @@ protected:
 
 	void WakeupWaitingObjects();
 
+	void OnOptionChanged(int option);
+
 	void operator()(CEventBase const& ev);
 	void OnTimer(timer_id id);
+	void OnRateChanged();
 };
+
+struct ratelimit_changed_event_type{};
+typedef CEvent<ratelimit_changed_event_type> CRateLimitChangedEvent;
 
 class CRateLimiterObject
 {
@@ -48,15 +56,15 @@ class CRateLimiterObject
 public:
 	CRateLimiterObject();
 	virtual ~CRateLimiterObject() {}
-	wxLongLong GetAvailableBytes(enum CRateLimiter::rate_direction direction) const { return m_bytesAvailable[direction]; }
+	wxLongLong GetAvailableBytes(CRateLimiter::rate_direction direction) const { return m_bytesAvailable[direction]; }
 
-	bool IsWaiting(enum CRateLimiter::rate_direction direction) const;
+	bool IsWaiting(CRateLimiter::rate_direction direction) const;
 
 protected:
-	void UpdateUsage(enum CRateLimiter::rate_direction direction, int usedBytes);
-	void Wait(enum CRateLimiter::rate_direction direction);
+	void UpdateUsage(CRateLimiter::rate_direction direction, int usedBytes);
+	void Wait(CRateLimiter::rate_direction direction);
 
-	virtual void OnRateAvailable(enum CRateLimiter::rate_direction) {}
+	virtual void OnRateAvailable(CRateLimiter::rate_direction) {}
 
 private:
 	bool m_waiting[2];

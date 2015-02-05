@@ -9,16 +9,22 @@ CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)
 	: CEventHandler(loop)
 	, options_(options)
 {
+	wxASSERT(wxIsMainThread());
+	RegisterOption(OPTION_SPEEDLIMIT_ENABLE);
+	RegisterOption(OPTION_SPEEDLIMIT_INBOUND);
+	RegisterOption(OPTION_SPEEDLIMIT_OUTBOUND);
+
 	m_tokenDebt[0] = 0;
 	m_tokenDebt[1] = 0;
 }
 
 CRateLimiter::~CRateLimiter()
 {
+	wxASSERT(wxIsMainThread());
 	RemoveHandler();
 }
 
-wxLongLong CRateLimiter::GetLimit(enum rate_direction direction) const
+wxLongLong CRateLimiter::GetLimit(rate_direction direction) const
 {
 	wxLongLong ret;
 	if (options_.GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0) {
@@ -33,7 +39,7 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 	m_objectList.push_back(pObject);
 
 	for (int i = 0; i < 2; ++i) {
-		wxLongLong limit = GetLimit((enum rate_direction)i);
+		wxLongLong limit = GetLimit((rate_direction)i);
 		if (limit > 0) {
 			wxLongLong tokens = limit / (1000 / tickDelay);
 
@@ -50,13 +56,13 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 			}
 
 			pObject->m_bytesAvailable[i] = tokens;
+
+			if (!m_timer)
+				m_timer = AddTimer(tickDelay, false);
 		}
-		else
+		else {
 			pObject->m_bytesAvailable[i] = -1;
-
-
-		if (!m_timer)
-			m_timer = AddTimer(tickDelay, false);
+		}
 	}
 }
 
@@ -68,7 +74,7 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 				// If an object already used up some of its assigned tokens, add them to m_tokenDebt,
 				// so that newly created objects get less initial tokens.
 				// That ensures that rapidly adding and removing objects does not exceed the rate
-				wxLongLong limit = GetLimit((enum rate_direction)i);
+				wxLongLong limit = GetLimit((rate_direction)i);
 				wxLongLong tokens = limit / (1000 / tickDelay);
 				tokens /= m_objectList.size();
 				if ((*iter)->m_bytesAvailable[i] < tokens)
@@ -91,14 +97,15 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::OnTimer(timer_id)
 {
+	wxLongLong const limits[2] = { GetLimit(inbound), GetLimit(outbound) };
+
 	for (int i = 0; i < 2; ++i) {
 		m_tokenDebt[i] = 0;
 
 		if (m_objectList.empty())
 			continue;
 
-		wxLongLong limit = GetLimit((enum rate_direction)i);
-		if (limit == 0) {
+		if (limits[i] == 0) {
 			for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 				(*iter)->m_bytesAvailable[i] = -1;
 				if ((*iter)->m_waiting[i])
@@ -107,7 +114,7 @@ void CRateLimiter::OnTimer(timer_id)
 			continue;
 		}
 
-		wxLongLong tokens = (limit * tickDelay) / 1000;
+		wxLongLong tokens = (limits[i] * tickDelay) / 1000;
 		wxLongLong maxTokens = tokens * GetBucketSize();
 
 		// Get amount of tokens for each object
@@ -165,9 +172,11 @@ void CRateLimiter::OnTimer(timer_id)
 	}
 	WakeupWaitingObjects();
 
-	if (m_objectList.empty()) {
-		StopTimer(m_timer);
-		m_timer = 0;
+	if (m_objectList.empty() || (limits[inbound] == 0 && limits[outbound] == 0)) {
+		if (m_timer) {
+			StopTimer(m_timer);
+			m_timer = 0;
+		}
 	}
 }
 
@@ -210,7 +219,23 @@ int CRateLimiter::GetBucketSize() const
 
 void CRateLimiter::operator()(CEventBase const& ev)
 {
-	Dispatch<CTimerEvent>(ev, this, &CRateLimiter::OnTimer);
+	if (Dispatch<CTimerEvent>(ev, this, &CRateLimiter::OnTimer)) {
+		return;
+	}
+	Dispatch<CRateLimitChangedEvent>(ev, this, &CRateLimiter::OnRateChanged);
+}
+
+void CRateLimiter::OnRateChanged()
+{
+	if (GetLimit(inbound) > 0 || GetLimit(outbound) > 0) {
+		if (!m_timer)
+			m_timer = AddTimer(tickDelay, false);
+	}
+}
+
+void CRateLimiter::OnOptionChanged(int)
+{
+	SendEvent<CRateLimitChangedEvent>();
 }
 
 CRateLimiterObject::CRateLimiterObject()
@@ -221,7 +246,7 @@ CRateLimiterObject::CRateLimiterObject()
 	}
 }
 
-void CRateLimiterObject::UpdateUsage(enum CRateLimiter::rate_direction direction, int usedBytes)
+void CRateLimiterObject::UpdateUsage(CRateLimiter::rate_direction direction, int usedBytes)
 {
 	wxASSERT(usedBytes <= m_bytesAvailable[direction]);
 	if (usedBytes > m_bytesAvailable[direction])
@@ -230,13 +255,13 @@ void CRateLimiterObject::UpdateUsage(enum CRateLimiter::rate_direction direction
 		m_bytesAvailable[direction] -= usedBytes;
 }
 
-void CRateLimiterObject::Wait(enum CRateLimiter::rate_direction direction)
+void CRateLimiterObject::Wait(CRateLimiter::rate_direction direction)
 {
 	wxASSERT(m_bytesAvailable[direction] == 0);
 	m_waiting[direction] = true;
 }
 
-bool CRateLimiterObject::IsWaiting(enum CRateLimiter::rate_direction direction) const
+bool CRateLimiterObject::IsWaiting(CRateLimiter::rate_direction direction) const
 {
 	return m_waiting[direction];
 }
