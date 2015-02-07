@@ -28,7 +28,7 @@ protected:
 	wxLongLong m_summed_latency;
 	int m_measurements;
 
-	mutable wxCriticalSection m_sync;
+	mutable mutex m_sync;
 };
 
 #endif

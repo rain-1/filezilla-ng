@@ -14,6 +14,8 @@ but for some operations the engine/interface prefers to retrieve a clean
 version.
 */
 
+#include <mutex.h>
+
 const int CACHE_TIMEOUT = 1800; // In seconds
 
 class CDirectoryCache final
@@ -85,7 +87,7 @@ protected:
 
 	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 
-	wxCriticalSection mutex_;
+	mutex mutex_;
 
 	std::list<CServerEntry> m_serverList;
 

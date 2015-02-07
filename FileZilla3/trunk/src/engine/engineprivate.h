@@ -7,6 +7,7 @@
 #include "event.h"
 #include "event_handler.h"
 #include "FileZillaEngine.h"
+#include "mutex.h"
 #include "option_change_event_handler.h"
 
 class CControlSocket;
@@ -31,7 +32,7 @@ public:
 	CTransferStatusManager(CTransferStatusManager const&) = delete;
 	CTransferStatusManager& operator=(CTransferStatusManager const&) = delete;
 
-	bool Empty();
+	bool empty();
 
 	void Init(wxFileOffset totalSize, wxFileOffset startOffset, bool list);
 	void Reset();
@@ -42,7 +43,7 @@ public:
 	CTransferStatus Get(bool &changed);
 
 protected:
-	wxCriticalSection mutex_;
+	mutex mutex_;
 
 	CTransferStatus status_;
 	int send_state_{};
@@ -140,10 +141,10 @@ protected:
 
 	// General mutex for operations on the engine
 	// Todo: More fine-grained locking, a global mutex isn't nice
-	static wxCriticalSection mutex_;
+	static mutex mutex_;
 
 	// Used to synchronize access to the notification list
-	wxCriticalSection notification_mutex_;
+	mutex notification_mutex_;
 
 	wxEvtHandler *m_pEventHandler{};
 

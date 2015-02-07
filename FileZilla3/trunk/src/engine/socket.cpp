@@ -16,6 +16,7 @@
   #include <ws2tcpip.h>
 #endif
 #include <filezilla.h>
+#include "mutex.h"
 #include "socket.h"
 #ifndef __WXMSW__
   #include <sys/types.h>
@@ -137,6 +138,7 @@ public:
 
 CSocketEventDispatcher::CSocketEventDispatcher(CEventLoop & event_loop)
 	: CEventHandler(event_loop)
+	, m_sync(false)
 {
 }
 
@@ -152,7 +154,7 @@ void CSocketEventDispatcher::SendEvent(CSocketEvent* evt)
 {
 	wxASSERT(evt->GetSocketEventHandler());
 	{
-		wxCriticalSectionLocker lock(m_sync);
+		scoped_lock lock(m_sync);
 		m_pending_events.push_back(evt);
 	}
 
@@ -161,7 +163,7 @@ void CSocketEventDispatcher::SendEvent(CSocketEvent* evt)
 
 void CSocketEventDispatcher::RemovePending(const CSocketEventHandler* pHandler)
 {
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 
 	auto remaining = m_pending_events.begin();
 	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter) {
@@ -178,7 +180,7 @@ void CSocketEventDispatcher::RemovePending(const CSocketEventHandler* pHandler)
 
 void CSocketEventDispatcher::RemovePending(const CSocketEventSource* pSource)
 {
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 
 	auto remaining = m_pending_events.begin();
 	for (auto iter = m_pending_events.begin(); iter != m_pending_events.end(); ++iter) {
@@ -196,7 +198,7 @@ void CSocketEventDispatcher::RemovePending(const CSocketEventSource* pSource)
 void CSocketEventDispatcher::UpdatePending(const CSocketEventHandler* pOldHandler, const CSocketEventSource* pOldSource, CSocketEventHandler* pNewHandler, CSocketEventSource* pNewSource)
 {
 	wxASSERT(pNewHandler);
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 
 	for (auto const& evt : m_pending_events ) {
 		if (evt->GetSocketEventSource() != pOldSource || evt->GetSocketEventHandler() != pOldHandler)
@@ -209,16 +211,15 @@ void CSocketEventDispatcher::UpdatePending(const CSocketEventHandler* pOldHandle
 
 void CSocketEventDispatcher::operator()(CEventBase const&)
 {
-	m_sync.Enter();
+	scoped_lock l(m_sync);
 	if (m_pending_events.empty()) {
-		m_sync.Leave();
 		return;
 	}
 
 	CSocketEvent *evt = m_pending_events.front();
 	m_pending_events.pop_front();
 
-	m_sync.Leave();
+	l.unlock();
 
 	CSocketEventHandler* pHandler = evt->GetSocketEventHandler();
 	wxASSERT(pHandler);
@@ -271,7 +272,7 @@ class CSocketThread final : protected wxThread
 	friend class CSocket;
 public:
 	CSocketThread()
-		: wxThread(wxTHREAD_JOINABLE), m_condition(m_sync)
+		: wxThread(wxTHREAD_JOINABLE), m_sync(false)
 	{
 		m_pSocket = 0;
 		m_pHost = 0;
@@ -308,10 +309,14 @@ public:
 #endif
 	}
 
-	void SetSocket(CSocket* pSocket, bool already_locked = false)
+	void SetSocket(CSocket* pSocket)
 	{
-		if (!already_locked)
-			m_sync.Lock();
+		scoped_lock l(m_sync);
+		SetSocket(pSocket, l);
+	}
+
+	void SetSocket(CSocket* pSocket, scoped_lock const&)
+	{
 		m_pSocket = pSocket;
 
 		delete [] m_pHost;
@@ -321,8 +326,6 @@ public:
 		m_pPort = 0;
 
 		m_waiting = 0;
-		if (!already_locked)
-			m_sync.Unlock();
 	}
 
 	int Connect()
@@ -332,8 +335,7 @@ public:
 		delete [] m_pPort;
 
 		const wxWX2MBbuf buf = m_pSocket->m_host.mb_str();
-		if (!buf)
-		{
+		if (!buf) {
 			m_pHost = 0;
 			m_pPort = 0;
 			return EINVAL;
@@ -354,11 +356,10 @@ public:
 	int Start()
 	{
 		if (m_started) {
-			m_sync.Lock();
+			scoped_lock l(m_sync);
 			wxASSERT(m_threadwait);
 			m_waiting = 0;
-			WakeupThread(true);
-			m_sync.Unlock();
+			WakeupThread(l);
 			return 0;
 		}
 		m_started = true;
@@ -384,22 +385,21 @@ public:
 	}
 
 	// Cancels select or idle wait
-	void WakeupThread(bool already_locked)
+	void WakeupThread()
 	{
-		if (!already_locked)
-			m_sync.Lock();
+		scoped_lock l(m_sync);
+		WakeupThread(l);
+	}
 
+	void WakeupThread(scoped_lock & l)
+	{
 		if (!m_started || m_finished) {
-			if (!already_locked)
-				m_sync.Unlock();
 			return;
 		}
 
 		if (m_threadwait) {
 			m_threadwait = false;
-			m_condition.Signal();
-			if (!already_locked)
-				m_sync.Unlock();
+			m_condition.signal(l);
 			return;
 		}
 
@@ -413,8 +413,6 @@ public:
 			ret = write(m_pipe[1], &tmp, 1);
 		} while (ret == -1 && errno == EINTR);
 #endif
-		if (!already_locked)
-			m_sync.Unlock();
 	}
 
 protected:
@@ -453,7 +451,7 @@ protected:
 		}
 	}
 
-	int TryConnectHost(struct addrinfo *addr)
+	int TryConnectHost(struct addrinfo *addr, scoped_lock & l)
 	{
 		if (m_pSocket->m_pEvtHandler) {
 			CSocketEvent *evt = new CSocketEvent(m_pSocket->m_pEvtHandler, m_pSocket, CSocketEvent::hostaddress, CSocket::AddressToString(addr->ai_addr, addr->ai_addrlen).c_str());
@@ -494,7 +492,7 @@ protected:
 
 			bool wait_successful;
 			do {
-				wait_successful = DoWait(WAIT_CONNECT);
+				wait_successful = DoWait(WAIT_CONNECT, l);
 				if ((m_triggered & WAIT_CONNECT))
 					break;
 			} while (wait_successful);
@@ -538,7 +536,7 @@ protected:
 	}
 
 	// Only call while locked
-	bool DoConnect()
+	bool DoConnect(scoped_lock & l)
 	{
 		char* pHost;
 		char* pPort;
@@ -553,7 +551,7 @@ protected:
 		pPort = m_pPort;
 		m_pPort = 0;
 
-		m_sync.Unlock();
+		l.unlock();
 
 		struct addrinfo *addressList = 0;
 		struct addrinfo hints = {0};
@@ -568,7 +566,9 @@ protected:
 		delete [] pHost;
 		delete [] pPort;
 
-		if (!Lock()) {
+		l.lock();
+
+		if (ShouldQuit()) {
 			if (!res && addressList)
 				freeaddrinfo(addressList);
 			if (m_pSocket)
@@ -601,7 +601,7 @@ protected:
 		}
 
 		for (struct addrinfo *addr = addressList; addr; addr = addr->ai_next) {
-			res = TryConnectHost(addr);
+			res = TryConnectHost(addr, l);
 			if (res == -1) {
 				freeaddrinfo(addressList);
 				if (m_pSocket)
@@ -624,19 +624,13 @@ protected:
 		return false;
 	}
 
-	// Obtains lock in all cases.
-	// Returns false if thread should quit
-	bool Lock()
+	bool ShouldQuit() const
 	{
-		m_sync.Lock();
-		if (m_quit || !m_pSocket)
-			return false;
-
-		return true;
+		return m_quit || !m_pSocket;
 	}
 
 	// Call only while locked
-	bool DoWait(int wait)
+	bool DoWait(int wait, scoped_lock & l)
 	{
 		m_waiting |= wait;
 
@@ -654,11 +648,11 @@ protected:
 			if (m_waiting & WAIT_CLOSE)
 				wait_events |= FD_CLOSE;
 			WSAEventSelect(m_pSocket->m_fd, m_sync_event, wait_events);
-			m_sync.Unlock();
+			l.unlock();
 			WSAWaitForMultipleEvents(1, &m_sync_event, false, WSA_INFINITE, false);
 
-			m_sync.Lock();
-			if (m_quit || !m_pSocket) {
+			l.lock();;
+			if (ShouldQuit()) {
 				return false;
 			}
 
@@ -722,11 +716,11 @@ protected:
 
 			int max = wxMax(m_pipe[0], m_pSocket->m_fd) + 1;
 
-			m_sync.Unlock();
+			l.unlock();
 
 			int res = select(max, &readfds, &writefds, 0, 0);
 
-			m_sync.Lock();
+			l.lock();
 
 			if (res > 0 && FD_ISSET(m_pipe[0], &readfds)) {
 				char buffer[100];
@@ -844,13 +838,13 @@ protected:
 	}
 
 	// Call only while locked
-	bool IdleLoop()
+	bool IdleLoop(scoped_lock & l)
 	{
 		if (m_quit)
 			return false;
 		while (!m_pSocket || (!m_waiting && !m_pHost)) {
 			m_threadwait = true;
-			m_condition.Wait();
+			m_condition.wait(l);
 
 			if (m_quit)
 				return false;
@@ -861,28 +855,27 @@ protected:
 
 	virtual ExitCode Entry()
 	{
-		m_sync.Lock();
+		scoped_lock l(m_sync);
 		for (;;) {
-			if (!IdleLoop()) {
+			if (!IdleLoop(l)) {
 				m_finished = true;
-				m_sync.Unlock();
 				return 0;
 			}
 
 			if (m_pSocket->m_state == CSocket::listening) {
-				while (IdleLoop()) {
+				while (IdleLoop(l)) {
 					if (m_pSocket->m_fd == -1) {
 						m_waiting = 0;
 						break;
 					}
-					if (!DoWait(0))
+					if (!DoWait(0, l))
 						break;
 					SendEvents();
 				}
 			}
 			else {
 				if (m_pSocket->m_state == CSocket::connecting) {
-					if (!DoConnect())
+					if (!DoConnect(l))
 						continue;
 				}
 
@@ -890,12 +883,12 @@ protected:
 				m_waiting |= WAIT_CLOSE;
 				int wait_close = WAIT_CLOSE;
 #endif
-				while (IdleLoop()) {
+				while (IdleLoop(l)) {
 					if (m_pSocket->m_fd == -1) {
 						m_waiting = 0;
 						break;
 					}
-					bool res = DoWait(0);
+					bool res = DoWait(0, l);
 
 					if (m_triggered & WAIT_CLOSE && m_pSocket) {
 						m_pSocket->m_state = CSocket::closing;
@@ -932,8 +925,8 @@ protected:
 	int m_pipe[2];
 #endif
 
-	wxMutex m_sync;
-	wxCondition m_condition;
+	mutex m_sync;
+	condition m_condition;
 
 	bool m_started;
 	bool m_quit;
@@ -984,27 +977,24 @@ void CSocket::DetachThread()
 	if (!m_pSocketThread)
 		return;
 
-	m_pSocketThread->m_sync.Lock();
-	m_pSocketThread->SetSocket(0, true);
-	if (m_pSocketThread->m_finished)
-	{
-		m_pSocketThread->WakeupThread(true);
-		m_pSocketThread->m_sync.Unlock();
+	scoped_lock l(m_pSocketThread->m_sync);
+	m_pSocketThread->SetSocket(0, l);
+	if (m_pSocketThread->m_finished) {
+		m_pSocketThread->WakeupThread(l);
+		l.unlock();
 		m_pSocketThread->Wait();
 		delete m_pSocketThread;
 	}
-	else
-	{
-		if (!m_pSocketThread->m_started)
-		{
-			m_pSocketThread->m_sync.Unlock();
+	else {
+		if (!m_pSocketThread->m_started) {
+			l.unlock();
 			delete m_pSocketThread;
 		}
 		else
 		{
 			m_pSocketThread->m_quit = true;
-			m_pSocketThread->WakeupThread(true);
-			m_pSocketThread->m_sync.Unlock();
+			m_pSocketThread->WakeupThread(l);
+			l.unlock();
 			waiting_socket_threads.push_back(m_pSocketThread);
 		}
 	}
@@ -1037,24 +1027,20 @@ int CSocket::Connect(wxString host, unsigned int port, address_family family /*=
 	}
 
 	if (m_pSocketThread && m_pSocketThread->m_started) {
-		m_pSocketThread->m_sync.Lock();
+		scoped_lock l(m_pSocketThread->m_sync);
 		if (!m_pSocketThread->m_threadwait) {
-			m_pSocketThread->WakeupThread(true);
-			m_pSocketThread->m_sync.Unlock();
+			m_pSocketThread->WakeupThread(l);
+			l.unlock();
 			// Wait a small amount of time
 			wxMilliSleep(100);
 
-			m_pSocketThread->m_sync.Lock();
+			l.lock();
 			if (!m_pSocketThread->m_threadwait) {
 				// Inside a blocking call, e.g. getaddrinfo
-				m_pSocketThread->m_sync.Unlock();
+				l.unlock();
 				DetachThread();
 			}
-			else
-				m_pSocketThread->m_sync.Unlock();
 		}
-		else
-			m_pSocketThread->m_sync.Unlock();
 	}
 	if (!m_pSocketThread) {
 		m_pSocketThread = new CSocketThread();
@@ -1078,20 +1064,19 @@ int CSocket::Connect(wxString host, unsigned int port, address_family family /*=
 
 void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 {
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Lock();
-
-	if (!pEvtHandler) {
-		dispatcher_.RemovePending(m_pEvtHandler);
-	}
-	else {
-		if (m_pEvtHandler)
-			dispatcher_.UpdatePending(m_pEvtHandler, this, pEvtHandler, this);
-	}
-
-	m_pEvtHandler = pEvtHandler;
-
 	if (m_pSocketThread) {
+		scoped_lock l(m_pSocketThread->m_sync);
+
+		if (!pEvtHandler) {
+			dispatcher_.RemovePending(m_pEvtHandler);
+		}
+		else {
+			if (m_pEvtHandler)
+				dispatcher_.UpdatePending(m_pEvtHandler, this, pEvtHandler, this);
+		}
+
+		m_pEvtHandler = pEvtHandler;
+
 		if (pEvtHandler && m_state == connected) {
 #ifdef __WXMSW__
 			// If a graceful shutdown is going on in background already,
@@ -1107,17 +1092,27 @@ void CSocket::SetEventHandler(CSocketEventHandler* pEvtHandler)
 			dispatcher_.SendEvent(evt);
 			if (m_pSocketThread->m_waiting & WAIT_WRITE) {
 				m_pSocketThread->m_waiting &= ~WAIT_READ;
-				m_pSocketThread->WakeupThread(true);
+				m_pSocketThread->WakeupThread(l);
 			}
 #else
 			m_pSocketThread->m_waiting |= WAIT_READ | WAIT_WRITE;
-			m_pSocketThread->WakeupThread(true);
+			m_pSocketThread->WakeupThread(l);
 #endif
 		}
 		else if (pEvtHandler && m_state == closing) {
 			m_pSocketThread->SendEvents();
 		}
-		m_pSocketThread->m_sync.Unlock();
+	}
+	else {
+		if (!pEvtHandler) {
+			dispatcher_.RemovePending(m_pEvtHandler);
+		}
+		else {
+			if (m_pEvtHandler)
+				dispatcher_.UpdatePending(m_pEvtHandler, this, pEvtHandler, this);
+		}
+
+		m_pEvtHandler = pEvtHandler;
 	}
 }
 
@@ -1231,35 +1226,31 @@ wxString CSocket::GetErrorDescription(int error)
 
 int CSocket::Close()
 {
-	int fd;
-	if (m_pSocketThread)
-	{
-		m_pSocketThread->m_sync.Lock();
-		fd = m_fd;
+	if (m_pSocketThread) {
+		scoped_lock l(m_pSocketThread->m_sync);
+		int fd = m_fd;
 		m_fd = -1;
+
 		delete [] m_pSocketThread->m_pHost;
 		m_pSocketThread->m_pHost = 0;
 		delete [] m_pSocketThread->m_pPort;
 		m_pSocketThread->m_pPort = 0;
 		if (!m_pSocketThread->m_threadwait)
-			m_pSocketThread->WakeupThread(true);
-	}
-	else
-	{
-		fd = m_fd;
-		m_fd = -1;
-	}
+			m_pSocketThread->WakeupThread(l);
 
-	CSocketThread::CloseSocketFd(fd);
+		CSocketThread::CloseSocketFd(fd);
+		m_state = none;
 
-	m_state = none;
-
-	if (m_pSocketThread) {
 		m_pSocketThread->m_triggered = 0;
 		for (int i = 0; i < WAIT_EVENTCOUNT; ++i) {
 			m_pSocketThread->m_triggered_errors[i] = 0;
 		}
-		m_pSocketThread->m_sync.Unlock();
+	}
+	else {
+		int fd = m_fd;
+		m_fd = -1;
+		CSocketThread::CloseSocketFd(fd);
+		m_state = none;
 	}
 
 	if (m_pEvtHandler)
@@ -1272,10 +1263,10 @@ CSocket::SocketState CSocket::GetState()
 {
 	SocketState state;
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Lock();
+		m_pSocketThread->m_sync.lock();
 	state = m_state;
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Unlock();
+		m_pSocketThread->m_sync.unlock();
 
 	return state;
 }
@@ -1286,12 +1277,13 @@ bool CSocket::Cleanup(bool force)
 	while (iter != waiting_socket_threads.end()) {
 		auto current = iter++;
 		CSocketThread* pThread = *current;
-		pThread->m_sync.Lock();
-		if (!force && !pThread->m_finished) {
-			pThread->m_sync.Unlock();
-			continue;
+
+		{
+			scoped_lock l(pThread->m_sync);
+			if (!force && !pThread->m_finished) {
+				continue;
+			}
 		}
-		pThread->m_sync.Unlock();
 
 		pThread->Wait(wxTHREAD_WAIT_BLOCK);
 		delete pThread;
@@ -1309,12 +1301,11 @@ int CSocket::Read(void* buffer, unsigned int size, int& error)
 		error = GetLastSocketError();
 		if (error == EAGAIN) {
 			if (m_pSocketThread) {
-				m_pSocketThread->m_sync.Lock();
+				scoped_lock l(m_pSocketThread->m_sync);
 				if (!(m_pSocketThread->m_waiting & WAIT_READ)) {
 					m_pSocketThread->m_waiting |= WAIT_READ;
-					m_pSocketThread->WakeupThread(true);
+					m_pSocketThread->WakeupThread(l);
 				}
-				m_pSocketThread->m_sync.Unlock();
 			}
 		}
 	}
@@ -1366,12 +1357,11 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 		error = GetLastSocketError();
 		if (error == EAGAIN) {
 			if (m_pSocketThread) {
-				m_pSocketThread->m_sync.Lock();
+				scoped_lock l (m_pSocketThread->m_sync);
 				if (!(m_pSocketThread->m_waiting & WAIT_WRITE)) {
 					m_pSocketThread->m_waiting |= WAIT_WRITE;
-					m_pSocketThread->WakeupThread(true);
+					m_pSocketThread->WakeupThread(l);
 				}
-				m_pSocketThread->m_sync.Unlock();
 			}
 		}
 	}
@@ -1603,12 +1593,10 @@ int CSocket::GetRemotePort(int& error)
 
 CSocket* CSocket::Accept(int &error)
 {
-	if (m_pSocketThread)
-	{
-		m_pSocketThread->m_sync.Lock();
+	if (m_pSocketThread) {
+		scoped_lock l(m_pSocketThread->m_sync);
 		m_pSocketThread->m_waiting |= WAIT_ACCEPT;
-		m_pSocketThread->WakeupThread(true);
-		m_pSocketThread->m_sync.Unlock();
+		m_pSocketThread->WakeupThread(l);
 	}
 	int fd = accept(m_fd, 0, 0);
 	if (fd == -1) {
@@ -1661,14 +1649,14 @@ int CSocket::SetNonblocking(int fd)
 void CSocket::SetFlags(int flags)
 {
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Lock();
+		m_pSocketThread->m_sync.lock();
 
 	if (m_fd != -1)
 		DoSetFlags(m_fd, flags, flags ^ m_flags);
 	m_flags = flags;
 
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Unlock();
+		m_pSocketThread->m_sync.unlock();
 }
 
 int CSocket::DoSetFlags(int fd, int flags, int flags_mask)
@@ -1696,7 +1684,7 @@ int CSocket::SetBufferSizes(int size_read, int size_write)
 	int ret = 0;
 
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Lock();
+		m_pSocketThread->m_sync.lock();
 
 	m_buffer_sizes[0] = size_read;
 	m_buffer_sizes[1] = size_write;
@@ -1705,7 +1693,7 @@ int CSocket::SetBufferSizes(int size_read, int size_write)
 		ret = DoSetBufferSizes(m_fd, size_read, size_write);
 
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Unlock();
+		m_pSocketThread->m_sync.unlock();
 
 	return ret;
 }
@@ -1734,12 +1722,12 @@ int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 void CSocket::SetSynchronousReadCallback(CCallback* cb)
 {
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Lock();
+		m_pSocketThread->m_sync.lock();
 
 	m_synchronous_read_cb = cb;
 
 	if (m_pSocketThread)
-		m_pSocketThread->m_sync.Unlock();
+		m_pSocketThread->m_sync.unlock();
 }
 
 wxString CSocket::GetPeerHost() const

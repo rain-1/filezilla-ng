@@ -1,6 +1,8 @@
 #ifndef __PATHCACHE_H__
 #define __PATHCACHE_H__
 
+#include <mutex.h>
+
 class CPathCache final
 {
 public:
@@ -33,7 +35,7 @@ protected:
 		}
 	};
 
-	wxCriticalSection mutex_;
+	mutex mutex_;
 
 	typedef std::map<CSourcePath, CServerPath> tServerCache;
 	typedef tServerCache::iterator tServerCacheIterator;

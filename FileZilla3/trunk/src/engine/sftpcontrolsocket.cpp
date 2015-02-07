@@ -57,10 +57,9 @@ public:
 
 	virtual ~CSftpInputThread()
 	{
-		m_criticalSection.Enter();
+		scoped_lock l(m_sync);
 		for (auto iter = m_sftpMessages.begin(); iter != m_sftpMessages.end(); ++iter)
 			delete *iter;
-		m_criticalSection.Leave();
 	}
 
 	bool Init()
@@ -75,9 +74,8 @@ public:
 
 	void GetMessages(std::list<sftp_message*>& messages)
 	{
-		m_criticalSection.Enter();
+		scoped_lock l(m_sync);
 		messages.swap(m_sftpMessages);
-		m_criticalSection.Leave();
 	}
 
 protected:
@@ -86,10 +84,11 @@ protected:
 	{
 		bool sendEvent;
 
-		m_criticalSection.Enter();
-		sendEvent = m_sftpMessages.empty();
-		m_sftpMessages.push_back(message);
-		m_criticalSection.Leave();
+		{
+			scoped_lock l(m_sync);
+			sendEvent = m_sftpMessages.empty();
+			m_sftpMessages.push_back(message);
+		}
 
 		if (sendEvent)
 			m_pOwner->SendEvent<CSftpEvent>();
@@ -142,8 +141,7 @@ protected:
 			if (c == '\n')
 				break;
 
-			if (len == buffersize - 1)
-			{
+			if (len == buffersize - 1) {
 				// Cap string length
 				continue;
 			}
@@ -288,7 +286,7 @@ loopexit:
 	CSftpControlSocket* m_pOwner;
 
 	std::list<sftp_message*> m_sftpMessages;
-	wxCriticalSection m_criticalSection;
+	mutex m_sync;
 };
 
 class CSftpDeleteOpData : public COpData

@@ -37,7 +37,7 @@ protected:
 
 	COptionsBase& options_;
 
-	void WakeupWaitingObjects();
+	void WakeupWaitingObjects(scoped_lock & l);
 
 	void OnOptionChanged(int option);
 
@@ -45,7 +45,7 @@ protected:
 	void OnTimer(timer_id id);
 	void OnRateChanged();
 
-	wxCriticalSection sync_;
+	mutex sync_;
 };
 
 struct ratelimit_changed_event_type{};
