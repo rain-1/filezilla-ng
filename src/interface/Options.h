@@ -3,6 +3,8 @@
 
 #include "local_path.h"
 
+#include <mutex.h>
+
 enum interfaceOptions
 {
 	OPTION_NUMTRANSFERS = OPTIONS_ENGINE_NUM,
@@ -174,7 +176,7 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
 
-	wxCriticalSection m_sync_;
+	mutex m_sync_;
 
 	std::vector<unsigned int> changedOptions_;
 };

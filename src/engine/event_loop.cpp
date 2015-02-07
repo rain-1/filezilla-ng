@@ -6,7 +6,7 @@
 
 CEventLoop::CEventLoop()
 	: wxThread(wxTHREAD_JOINABLE)
-	, cond_(sync_)
+	, sync_(false)
 {
 	Create();
 	Run();
@@ -15,15 +15,15 @@ CEventLoop::CEventLoop()
 CEventLoop::~CEventLoop()
 {
 	{
-		wxMutexLocker lock(sync_);
+		scoped_lock lock(sync_);
 		quit_ = true;
 		signalled_ = true;
-		cond_.Signal();
+		cond_.signal(lock);
 	}
 
 	Wait(wxTHREAD_WAIT_BLOCK);
 
-	wxMutexLocker lock(sync_);
+	scoped_lock lock(sync_);
 	for (auto & v : pending_events_) {
 		delete v.second;
 	}
@@ -32,11 +32,11 @@ CEventLoop::~CEventLoop()
 void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 {
 	{
-		wxMutexLocker lock(sync_);
+		scoped_lock lock(sync_);
 		if (!handler->removing_) {
 			pending_events_.emplace_back(handler, evt);
 			signalled_ = true;
-			cond_.Signal();
+			cond_.signal(lock);
 		}
 		else {
 			delete evt;
@@ -46,7 +46,7 @@ void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 
 void CEventLoop::RemoveHandler(CEventHandler* handler)
 {
-	sync_.Lock();
+	scoped_lock l(sync_);
 
 	handler->removing_ = true;
 
@@ -72,12 +72,10 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 	);
 
 	while (active_handler_ == handler) {
-		sync_.Unlock();
+		l.unlock();
 		wxMilliSleep(1);
-		sync_.Lock();
+		l.lock();
 	}
-
-	sync_.Unlock();
 }
 
 timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_shot)
@@ -89,14 +87,14 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 	d.deadline_ = CDateTime::Now() + wxTimeSpan::Milliseconds(ms_interval);
 
 
-	wxMutexLocker lock(sync_);
+	scoped_lock lock(sync_);
 	static timer_id id{};
 	if (!handler->removing_) {
 		d.id_ = ++id; // 64bit, can this really ever overflow?
 
 		timers_.emplace_back(d);
 		signalled_ = true;
-		cond_.Signal();
+		cond_.signal(lock);
 	}
 	return d.id_;
 }
@@ -104,7 +102,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 void CEventLoop::StopTimer(timer_id id)
 {
 	if (id) {
-		wxMutexLocker lock(sync_);
+		scoped_lock lock(sync_);
 		for (auto it = timers_.begin(); it != timers_.end(); ++it) {
 			if (it->id_ == id) {
 				timers_.erase(it);
@@ -114,7 +112,7 @@ void CEventLoop::StopTimer(timer_id id)
 	}
 }
 
-bool CEventLoop::ProcessEvent()
+bool CEventLoop::ProcessEvent(scoped_lock & l)
 {
 	Events::value_type ev{};
 	bool requestMore = false;
@@ -128,12 +126,12 @@ bool CEventLoop::ProcessEvent()
 
 	if (ev.first && !ev.first->removing_) {
 		active_handler_ = ev.first;
-		sync_.Unlock();
+		l.unlock();
 		if (ev.second) {
 			(*ev.first)(*ev.second);
 		}
 		delete ev.second;
-		sync_.Lock();
+		l.lock();
 		active_handler_ = 0;
 	}
 	else {
@@ -145,32 +143,31 @@ bool CEventLoop::ProcessEvent()
 
 wxThread::ExitCode CEventLoop::Entry()
 {
-	sync_.Lock();
+	scoped_lock l(sync_);
 	while (!quit_) {
 		if (!signalled_) {
 			int wait = GetNextWaitInterval();
 			if (wait == std::numeric_limits<int>::max()) {
-				cond_.Wait();
+				cond_.wait(l);
 			}
 			else if (wait) {
-				cond_.WaitTimeout(wait);
+				cond_.wait(l, wait);
 			}
 		}
 
 		signalled_ = false;
 
-		if (!ProcessTimers()) {
-			if (ProcessEvent()) {
+		if (!ProcessTimers(l)) {
+			if (ProcessEvent(l)) {
 				signalled_ = true;
 			}
 		}
 	}
-	sync_.Unlock();
 
 	return 0;
 }
 
-bool CEventLoop::ProcessTimers()
+bool CEventLoop::ProcessTimers(scoped_lock & l)
 {
 	CDateTime const now(CDateTime::Now());
 	for (auto it = timers_.begin(); it != timers_.end(); ++it) {
@@ -194,9 +191,9 @@ bool CEventLoop::ProcessTimers()
 
 			if (!handler->removing_) {
 				active_handler_ = handler;
-				sync_.Unlock();
+				l.unlock();
 				(*handler)(CTimerEvent(id));
-				sync_.Lock();
+				l.lock();
 				active_handler_ = 0;
 			}
 

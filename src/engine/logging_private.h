@@ -2,6 +2,7 @@
 #define __LOGGING_PRIVATE_H__
 
 #include "engineprivate.h"
+#include <mutex.h>
 #include <utility>
 
 class CLogging
@@ -84,7 +85,7 @@ private:
 
 	static int m_refcount;
 
-	static wxCriticalSection mutex_;
+	static mutex mutex_;
 };
 
 #endif

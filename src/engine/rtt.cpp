@@ -8,7 +8,7 @@ CLatencyMeasurement::CLatencyMeasurement()
 
 int CLatencyMeasurement::GetLatency() const
 {
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 	if (!m_measurements)
 		return -1;
 
@@ -17,7 +17,7 @@ int CLatencyMeasurement::GetLatency() const
 
 bool CLatencyMeasurement::Start()
 {
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 	if (m_start.IsValid())
 		return false;
 
@@ -28,7 +28,7 @@ bool CLatencyMeasurement::Start()
 
 bool CLatencyMeasurement::Stop()
 {
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 	if (!m_start.IsValid())
 		return false;
 
@@ -46,7 +46,7 @@ bool CLatencyMeasurement::Stop()
 
 void CLatencyMeasurement::Reset()
 {
-	wxCriticalSectionLocker lock(m_sync);
+	scoped_lock lock(m_sync);
 	m_summed_latency = 0;
 	m_measurements = 0;
 	m_start = wxDateTime();

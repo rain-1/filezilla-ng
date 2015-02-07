@@ -34,7 +34,7 @@ wxLongLong CRateLimiter::GetLimit(rate_direction direction) const
 
 void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 {
-	wxCriticalSectionLocker lock(sync_);
+	scoped_lock lock(sync_);
 
 	m_objectList.push_back(pObject);
 
@@ -68,7 +68,7 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 {
-	wxCriticalSectionLocker lock(sync_);
+	scoped_lock lock(sync_);
 
 	for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 		if (*iter == pObject) {
@@ -99,7 +99,7 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::OnTimer(timer_id)
 {
-	wxCriticalSectionLocker lock(sync_);
+	scoped_lock lock(sync_);
 
 	wxLongLong const limits[2] = { GetLimit(inbound), GetLimit(outbound) };
 
@@ -175,7 +175,7 @@ void CRateLimiter::OnTimer(timer_id)
 		}
 	}
 
-	WakeupWaitingObjects();
+	WakeupWaitingObjects(lock);
 
 	if (m_objectList.empty() || (limits[inbound] == 0 && limits[outbound] == 0)) {
 		if (m_timer) {
@@ -185,7 +185,7 @@ void CRateLimiter::OnTimer(timer_id)
 	}
 }
 
-void CRateLimiter::WakeupWaitingObjects()
+void CRateLimiter::WakeupWaitingObjects(scoped_lock & l)
 {
 	for (int i = 0; i < 2; ++i) {
 		while (!m_wakeupList[i].empty()) {
@@ -197,9 +197,9 @@ void CRateLimiter::WakeupWaitingObjects()
 			wxASSERT(pObject->m_bytesAvailable != 0);
 			pObject->m_waiting[i] = false;
 
-			sync_.Leave(); // Do not hold while executing callback
+			l.unlock(); // Do not hold while executing callback
 			pObject->OnRateAvailable((rate_direction)i);
-			sync_.Enter();
+			l.lock();
 		}
 	}
 }
@@ -234,7 +234,7 @@ void CRateLimiter::operator()(CEventBase const& ev)
 
 void CRateLimiter::OnRateChanged()
 {
-	wxCriticalSectionLocker lock(sync_);
+	scoped_lock lock(sync_);
 	if (GetLimit(inbound) > 0 || GetLimit(outbound) > 0) {
 		if (!m_timer)
 			m_timer = AddTimer(tickDelay, false);

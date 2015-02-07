@@ -514,23 +514,20 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		return FZ_REPLY_OK;
 	}
 
-	if (m_pEngine->transfer_status_.Empty()) {
+	if (m_pEngine->transfer_status_.empty()) {
 		m_pEngine->transfer_status_.Init(pData->m_totalSize.GetValue(), 0, false);
 		m_pEngine->transfer_status_.SetStartTime();
 	}
 
-	if (pData->localFile.empty())
-	{
+	if (pData->localFile.empty()) {
 		char* q = new char[len];
 		memcpy(q, p, len);
 		m_pEngine->AddNotification(new CDataNotification(q, len));
 	}
-	else
-	{
+	else {
 		wxASSERT(pData->pFile);
 
-		if (pData->pFile->Write(p, len) != len)
-		{
+		if (pData->pFile->Write(p, len) != len) {
 			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile);
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;

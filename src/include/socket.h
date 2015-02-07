@@ -64,7 +64,7 @@ private:
 
 	std::deque<CSocketEvent*> m_pending_events;
 
-	wxCriticalSection m_sync;
+	mutex m_sync;
 };
 
 class CSocketEventHandler

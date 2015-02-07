@@ -9,7 +9,6 @@ CIOThread::CIOThread()
 	: wxThread(wxTHREAD_JOINABLE), m_evtHandler(0)
 	, m_read()
 	, m_binary()
-	, m_condition(m_mutex)
 	, m_curAppBuf()
 	, m_curThreadBuf()
 	, m_error()
@@ -81,7 +80,7 @@ wxThread::ExitCode CIOThread::Entry()
 		while (m_running) {
 			int len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 
-			wxMutexLocker locker(m_mutex);
+			scoped_lock l(m_mutex);
 
 			if (m_appWaiting) {
 				if (!m_evtHandler) {
@@ -92,8 +91,7 @@ wxThread::ExitCode CIOThread::Entry()
 				m_evtHandler->SendEvent<CIOThreadEvent>();
 			}
 
-			if (len == wxInvalidOffset)
-			{
+			if (len == wxInvalidOffset) {
 				m_error = true;
 				m_running = false;
 				break;
@@ -101,63 +99,48 @@ wxThread::ExitCode CIOThread::Entry()
 
 			m_bufferLens[m_curThreadBuf] = len;
 
-			if (!len)
-			{
+			if (!len) {
 				m_running = false;
 				break;
 			}
 
 			++m_curThreadBuf %= BUFFERCOUNT;
-			if (m_curThreadBuf == m_curAppBuf)
-			{
+			if (m_curThreadBuf == m_curAppBuf) {
 				if (!m_running)
 					break;
 
 				m_threadWaiting = true;
 				if (m_running)
-					m_condition.Wait();
+					m_condition.wait(l);
 			}
 		}
 	}
-	else
-	{
-		m_mutex.Lock();
-		while (m_curAppBuf == -1)
-		{
-			if (!m_running)
-			{
-				m_mutex.Unlock();
+	else {
+		scoped_lock l(m_mutex);
+		while (m_curAppBuf == -1) {
+			if (!m_running) {
 				return 0;
 			}
-			else
-			{
+			else {
 				m_threadWaiting = true;
-				m_condition.Wait();
+				m_condition.wait(l);
 			}
 		}
-		m_mutex.Unlock();
 
-		for (;;)
-		{
-			m_mutex.Lock();
-			while (m_curThreadBuf == m_curAppBuf)
-			{
-				if (!m_running)
-				{
-					m_mutex.Unlock();
+		for (;;) {
+			while (m_curThreadBuf == m_curAppBuf) {
+				if (!m_running) {
 					return 0;
 				}
 				m_threadWaiting = true;
-				m_condition.Wait();
+				m_condition.wait(l);
 			}
-			m_mutex.Unlock();
 
+			l.unlock();
 			bool writeSuccessful = WriteToFile(m_buffers[m_curThreadBuf], m_bufferLens[m_curThreadBuf]);
+			l.lock();
 
-			wxMutexLocker locker(m_mutex);
-
-			if (!writeSuccessful)
-			{
+			if (!writeSuccessful) {
 				m_error = true;
 				m_running = false;
 			}
@@ -185,7 +168,7 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer, int len /*=BUFFERSIZE*/)
 {
 	wxASSERT(!m_destroyed);
 
-	wxMutexLocker locker(m_mutex);
+	scoped_lock l(m_mutex);
 
 	if (m_error)
 		return IO_Error;
@@ -199,15 +182,13 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer, int len /*=BUFFERSIZE*/)
 	m_bufferLens[m_curAppBuf] = len;
 
 	int newBuf = (m_curAppBuf + 1) % BUFFERCOUNT;
-	if (newBuf == m_curThreadBuf)
-	{
+	if (newBuf == m_curThreadBuf) {
 		m_appWaiting = true;
 		return IO_Again;
 	}
 
-	if (m_threadWaiting)
-	{
-		m_condition.Signal();
+	if (m_threadWaiting) {
+		m_condition.signal(l);
 		m_threadWaiting = false;
 	}
 
@@ -239,8 +220,7 @@ bool CIOThread::Finalize(int len)
 		return false;
 
 #ifndef __WXMSW__
-	if (!m_binary && m_wasCarriageReturn)
-	{
+	if (!m_binary && m_wasCarriageReturn) {
 		const char CR = '\r';
 		if (m_pFile->Write(&CR, 1) != 1)
 			return false;
@@ -256,24 +236,21 @@ int CIOThread::GetNextReadBuffer(char** pBuffer)
 
 	int newBuf = (m_curAppBuf + 1) % BUFFERCOUNT;
 
-	wxMutexLocker locker(m_mutex);
+	scoped_lock l(m_mutex);
 
-	if (newBuf == m_curThreadBuf)
-	{
+	if (newBuf == m_curThreadBuf) {
 		if (m_error)
 			return IO_Error;
 		else if (!m_running)
 			return IO_Success;
-		else
-		{
+		else {
 			m_appWaiting = true;
 			return IO_Again;
 		}
 	}
 
-	if (m_threadWaiting)
-	{
-		m_condition.Signal();
+	if (m_threadWaiting) {
+		m_condition.signal(l);
 		m_threadWaiting = false;
 	}
 
@@ -289,14 +266,14 @@ void CIOThread::Destroy()
 		return;
 	m_destroyed = true;
 
-	m_mutex.Lock();
+	scoped_lock l(m_mutex);
 
 	m_running = false;
 	if (m_threadWaiting) {
 		m_threadWaiting = false;
-		m_condition.Signal();
+		m_condition.signal(l);
 	}
-	m_mutex.Unlock();
+	l.unlock();
 
 	Wait(wxTHREAD_WAIT_BLOCK);
 }
@@ -334,11 +311,9 @@ int CIOThread::ReadFromFile(char* pBuffer, int maxLen)
 	char* w = pBuffer;
 
 	// Convert all stand-alone LFs into CRLF pairs.
-	while (r != end)
-	{
+	while (r != end) {
 		char c = *r++;
-		if (c == '\n')
-		{
+		if (c == '\n') {
 			if (!m_wasCarriageReturn)
 				*w++ = '\r';
 			m_wasCarriageReturn = false;
@@ -364,14 +339,12 @@ bool CIOThread::WriteToFile(char* pBuffer, int len)
 	// Also, under Windows the native newline format is already identical
 	// to the newline format of the FTP protocol
 #ifndef __WXMSW__
-	if (m_binary)
-	{
+	if (m_binary) {
 #endif
 		return DoWrite(pBuffer, len);
 #ifndef __WXMSW__
 	}
-	else
-	{
+	else {
 		// On all CRLF pairs, omit the CR. Don't harm stand-alone CRs
 		// I assume disk access is buffered, otherwise the 1 byte writes are
 		// going to hurt performance.
@@ -417,7 +390,7 @@ bool CIOThread::DoWrite(const char* pBuffer, int len)
 
 	const wxString error = wxSysErrorMsg(code);
 
-	wxMutexLocker locker(m_mutex);
+	scoped_lock locker(m_mutex);
 	m_error_description = error;
 
 	return false;
@@ -425,6 +398,6 @@ bool CIOThread::DoWrite(const char* pBuffer, int len)
 
 wxString CIOThread::GetError()
 {
-	wxMutexLocker locker(m_mutex);
+	scoped_lock locker(m_mutex);
 	return m_error_description;
 }
