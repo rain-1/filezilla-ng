@@ -74,7 +74,7 @@ void scoped_lock::lock()
 {
 	locked_ = true;
 #ifdef __WXMSW__
-	EnterCriticalSection(m);
+	EnterCriticalSection(m_);
 #else
 	pthread_mutex_lock(m_);
 #endif
@@ -85,7 +85,7 @@ void scoped_lock::unlock()
 {
 	locked_ = false;
 #ifdef __WXMSW__
-	LeaveCriticalSection(m);
+	LeaveCriticalSection(m_);
 #else
 	pthread_mutex_unlock(m_);
 #endif
@@ -117,7 +117,7 @@ void condition::wait(scoped_lock& l)
 		return;
 	}
 #ifdef __WXMSW__
-	SleepConditionVariableCS(&cond_, m_, INFINITE);
+	SleepConditionVariableCS(&cond_, l.m_, INFINITE);
 #else
 	int res;
 	do {
@@ -135,7 +135,7 @@ void condition::wait(scoped_lock& l, int timeout_ms)
 		return;
 	}
 #ifdef __WXMSW__
-	SleepConditionVariableCS(&cond_, m_, timeout_ms);
+	SleepConditionVariableCS(&cond_, l.m_, timeout_ms);
 #else
 	int res;
 	do {
