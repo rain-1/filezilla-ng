@@ -53,7 +53,7 @@ public:
 			m_dateTimeFormat += _T("%X");
 	}
 
-	virtual void OnOptionChanged(int /*option*/)
+	virtual void OnOptionsChanged(changed_options_t const&)
 	{
 		InitFormat();
 	}

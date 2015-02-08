@@ -177,7 +177,7 @@ protected:
 	WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 #endif
 
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	void AdvanceQueue(bool refresh = true);
 	bool TryStartNextTransfer();

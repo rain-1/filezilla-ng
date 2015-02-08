@@ -107,10 +107,11 @@ public:
 
 	CTransferStatusManager transfer_status_;
 protected:
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	void SendQueuedLogs(bool reset_flag = false);
 	void ClearQueuedLogs(bool reset_flag);
+	bool ShouldQueueLogsFromOptions() const;
 
 	int CheckCommandPreconditions(CCommand const& command, bool checkBusy);
 
@@ -199,7 +200,7 @@ protected:
 
 	CFileZillaEngine& parent_;
 
-	bool queue_logs_;
+	bool queue_logs_{true};
 	std::deque<CLogmsgNotification*> queued_logs_;
 };
 

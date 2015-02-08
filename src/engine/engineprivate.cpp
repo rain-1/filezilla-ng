@@ -36,11 +36,22 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	m_pLogging = new CLogging(this);
 
 	{
+		bool queue_logs = ShouldQueueLogsFromOptions();
 		scoped_lock lock(notification_mutex_);
-		queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+		queue_logs_ = queue_logs;
 	}
 
 	RegisterOption(OPTION_LOGGING_SHOW_DETAILED_LOGS);
+	RegisterOption(OPTION_LOGGING_DEBUGLEVEL);
+	RegisterOption(OPTION_LOGGING_RAWLISTING);
+}
+
+bool CFileZillaEnginePrivate::ShouldQueueLogsFromOptions() const
+{
+	return
+		m_options.GetOptionVal(OPTION_LOGGING_RAWLISTING) == 0 &&
+		m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 &&
+		m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
 }
 
 CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
@@ -159,7 +170,7 @@ void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
 		queued_logs_.clear();
 
 		if (reset_flag) {
-			queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+			queue_logs_ = ShouldQueueLogsFromOptions();
 		}
 
 		if (!m_maySendNotificationEvent || !m_pEventHandler || m_NotificationList.empty()) {
@@ -181,7 +192,7 @@ void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
 	queued_logs_.clear();
 
 	if (reset_flag) {
-		queue_logs_ = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
+		queue_logs_ = ShouldQueueLogsFromOptions();
 	}
 }
 
@@ -823,12 +834,12 @@ int CFileZillaEnginePrivate::Cancel()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-void CFileZillaEnginePrivate::OnOptionChanged(int)
+void CFileZillaEnginePrivate::OnOptionsChanged(changed_options_t const&)
 {
-	bool queue_logs = m_options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 0 && m_options.GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) == 0;
-
+	bool queue_logs = ShouldQueueLogsFromOptions();
 	scoped_lock lock(notification_mutex_);
 	queue_logs_ = queue_logs;
+
 	if (!queue_logs_) {
 		SendQueuedLogs();
 	}

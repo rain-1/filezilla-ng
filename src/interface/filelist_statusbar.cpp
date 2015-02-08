@@ -254,7 +254,7 @@ void CFilelistStatusBar::SetConnected(bool connected)
 	TriggerUpdateText();
 }
 
-void CFilelistStatusBar::OnOptionChanged(int option)
+void CFilelistStatusBar::OnOptionsChanged(changed_options_t const& options)
 {
 	TriggerUpdateText();
 }

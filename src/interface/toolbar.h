@@ -21,7 +21,7 @@ public:
 
 protected:
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	CMainFrame* m_pMainFrame;
 

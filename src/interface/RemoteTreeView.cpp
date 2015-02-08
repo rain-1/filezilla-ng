@@ -1457,9 +1457,9 @@ void CRemoteTreeView::UpdateSortMode()
 	}
 }
 
-void CRemoteTreeView::OnOptionChanged(int option)
+void CRemoteTreeView::OnOptionsChanged(changed_options_t const& options)
 {
-	if (option == OPTION_FILELIST_NAMESORT) {
+	if (options.test(OPTION_FILELIST_NAMESORT)) {
 		UpdateSortMode();
 		ApplyFilters(true);
 	}

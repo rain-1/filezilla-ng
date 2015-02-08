@@ -3,6 +3,8 @@
 
 #include "local_path.h"
 
+#include <option_change_event_handler.h>
+
 #include <mutex.h>
 
 enum interfaceOptions
@@ -178,7 +180,7 @@ protected:
 
 	mutex m_sync_;
 
-	std::vector<unsigned int> changedOptions_;
+	changed_options_t changedOptions_;
 };
 
 #endif //__OPTIONS_H__

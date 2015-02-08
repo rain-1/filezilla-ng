@@ -3459,7 +3459,7 @@ WXLRESULT CQueueView::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 }
 #endif
 
-void CQueueView::OnOptionChanged(int)
+void CQueueView::OnOptionsChanged(changed_options_t const&)
 {
 	if (m_activeMode)
 		AdvanceQueue();

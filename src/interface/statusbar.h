@@ -106,7 +106,7 @@ protected:
 
 	void ShowDataTypeMenu();
 
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	CSizeFormat::_format m_sizeFormat;

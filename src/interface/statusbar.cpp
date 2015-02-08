@@ -595,30 +595,21 @@ void CStatusBar::UpdateSpeedLimitsIcon()
 	m_pSpeedLimitsIndicator->SetToolTip(tooltip);
 }
 
-void CStatusBar::OnOptionChanged(int option)
+void CStatusBar::OnOptionsChanged(changed_options_t const& options)
 {
-	switch (option)
-	{
-	case OPTION_SPEEDLIMIT_ENABLE:
-	case OPTION_SPEEDLIMIT_INBOUND:
-	case OPTION_SPEEDLIMIT_OUTBOUND:
+	if (options.test(OPTION_SPEEDLIMIT_ENABLE) || options.test(OPTION_SPEEDLIMIT_INBOUND) || options.test(OPTION_SPEEDLIMIT_OUTBOUND)) {
 		UpdateSpeedLimitsIcon();
-		break;
-	case OPTION_SIZE_FORMAT:
-	case OPTION_SIZE_USETHOUSANDSEP:
-	case OPTION_SIZE_DECIMALPLACES:
+	}
+	if (options.test(OPTION_SIZE_FORMAT) || options.test(OPTION_SIZE_USETHOUSANDSEP) || options.test(OPTION_SIZE_DECIMALPLACES)) {
 		UpdateSizeFormat();
-		break;
-	case OPTION_ASCIIBINARY:
+	}
+	if (options.test(OPTION_ASCIIBINARY)) {
 		DisplayDataType();
-		break;
-	case OPTION_THEME:
+	}
+	if (options.test(OPTION_THEME)) {
 		DisplayDataType();
 		UpdateSpeedLimitsIcon();
 		DisplayEncrypted();
-		break;
-	default:
-		break;
 	}
 }
 

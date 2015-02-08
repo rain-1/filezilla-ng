@@ -241,7 +241,7 @@ void CRateLimiter::OnRateChanged()
 	}
 }
 
-void CRateLimiter::OnOptionChanged(int)
+void CRateLimiter::OnOptionsChanged(changed_options_t const&)
 {
 	SendEvent<CRateLimitChangedEvent>();
 }

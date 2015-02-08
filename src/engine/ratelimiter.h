@@ -39,7 +39,7 @@ protected:
 
 	void WakeupWaitingObjects(scoped_lock & l);
 
-	void OnOptionChanged(int option);
+	void OnOptionsChanged(changed_options_t const& options);
 
 	void operator()(CEventBase const& ev);
 	void OnTimer(timer_id id);
