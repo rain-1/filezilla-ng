@@ -54,7 +54,7 @@ protected:
 
 	void UpdateSortMode();
 
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);

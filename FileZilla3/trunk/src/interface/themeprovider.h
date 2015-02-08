@@ -38,7 +38,7 @@ protected:
 
 	std::list<wxString> GetSearchDirs(const wxSize& size);
 
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	wxString m_themePath;
 };

@@ -51,6 +51,10 @@ struct t_Option
 #define DEFAULT_FILENAME_SORT   _T("1")
 #endif
 
+// In C++14 we should be able to use this instead:
+//   static_assert(OPTIONS_NUM <= changed_options_t().size());
+static_assert(OPTIONS_NUM <= changed_options_size, "OPTIONS_NUM too big for changed_options_t");
+
 static const t_Option options[OPTIONS_NUM] =
 {
 	// Note: A few options are versioned due to a changed
@@ -334,19 +338,18 @@ void COptions::ContinueSetOption(unsigned int nID, T const& value)
 			m_save_timer.Start(15000, true);
 	}
 
-	if (changedOptions_.empty()) {
+	if (changedOptions_.none()) {
 		CallAfter(&COptions::NotifyChangedOptions);
 	}
-	auto it = std::lower_bound(changedOptions_.begin(), changedOptions_.end(), nID);
-	if (it == changedOptions_.end() || *it != nID) {
-		changedOptions_.insert(it, nID);
-	}
+	changedOptions_.set(nID);
 }
 
 void COptions::NotifyChangedOptions()
 {
-	COptionChangeEventHandler::DoNotify(std::move(changedOptions_));
-	changedOptions_.clear();
+	// Reset prior to notifying to correctly handle the case of an option being set while notifying
+	auto changedOptions = changedOptions_;
+	changedOptions_.reset();
+	COptionChangeEventHandler::DoNotify(changedOptions);
 }
 
 bool COptions::OptionFromFzDefaultsXml(unsigned int nID)

@@ -31,7 +31,7 @@ public:
 	void SetConnected(bool connected);
 protected:
 
-	virtual void OnOptionChanged(int option);
+	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	bool m_connected;
 	int m_count_files;

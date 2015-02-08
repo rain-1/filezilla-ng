@@ -1578,9 +1578,9 @@ void CLocalTreeView::OnMenuOpen(wxCommandEvent&)
 	OpenInFileManager(path);
 }
 
-void CLocalTreeView::OnOptionChanged(int option)
+void CLocalTreeView::OnOptionsChanged(changed_options_t const& options)
 {
-	if (option == OPTION_FILELIST_NAMESORT) {
+	if (options.test(OPTION_FILELIST_NAMESORT)) {
 		UpdateSortMode();
 		RefreshListing();
 	}

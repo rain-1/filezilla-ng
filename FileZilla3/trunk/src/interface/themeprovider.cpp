@@ -305,10 +305,8 @@ wxString CThemeProvider::GetThemePath()
 	return resourceDir.GetPath();
 }
 
-void CThemeProvider::OnOptionChanged(int option)
+void CThemeProvider::OnOptionsChanged(changed_options_t const& options)
 {
-	wxASSERT(option == OPTION_THEME);
-
 	m_themePath = GetThemePath();
 
 	wxArtProvider::Remove(this);
