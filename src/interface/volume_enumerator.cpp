@@ -73,14 +73,12 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
 	// Check if it is a network share
 	wxChar *share_name = new wxChar[512];
 	DWORD dwSize = 511;
-	if (!WNetGetConnection(pVolume, share_name, &dwSize))
-	{
-		m_crit_section.Enter();
+	if (!WNetGetConnection(pVolume, share_name, &dwSize)) {
+		scoped_lock l(sync_);
 		t_VolumeInfoInternal volumeInfo;
 		volumeInfo.pVolume = pVolume;
 		volumeInfo.pVolumeName = share_name;
 		m_volumeInfo.push_back(volumeInfo);
-		m_crit_section.Leave();
 		return true;
 	}
 	else
@@ -91,14 +89,12 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 	BOOL res = GetVolumeInformation(drive, pVolumeName, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
-	if (res && pVolumeName[0])
-	{
-		m_crit_section.Enter();
+	if (res && pVolumeName[0]) {
+		scoped_lock l(sync_);
 		t_VolumeInfoInternal volumeInfo;
 		volumeInfo.pVolume = pVolume;
 		volumeInfo.pVolumeName = pVolumeName;
 		m_volumeInfo.push_back(volumeInfo);
-		m_crit_section.Leave();
 		return true;
 	}
 
@@ -199,20 +195,17 @@ std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> CVolumeDescriptionEn
 {
 	std::list<t_VolumeInfo> volumeInfo;
 
-	m_crit_section.Enter();
+	scoped_lock l(sync_);
 
-	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); ++iter)
-	{
+	for (auto const& internal_info : m_volumeInfo) {
 		t_VolumeInfo info;
-		info.volume = iter->pVolume;
-		delete [] iter->pVolume;
-		info.volumeName = iter->pVolumeName;
-		delete [] iter->pVolumeName;
+		info.volume = internal_info.pVolume;
+		delete[] internal_info.pVolume;
+		info.volumeName = internal_info.pVolumeName;
+		delete[] internal_info.pVolumeName;
 		volumeInfo.push_back(info);
 	}
 	m_volumeInfo.clear();
-
-	m_crit_section.Leave();
 
 	return volumeInfo;
 }

@@ -218,7 +218,7 @@ class CFolderProcessingThread final : public wxThread
 	};
 public:
 	CFolderProcessingThread(CQueueView* pOwner, CFolderScanItem* pFolderItem)
-		: wxThread(wxTHREAD_JOINABLE), m_condition(m_sync) {
+		: wxThread(wxTHREAD_JOINABLE) {
 		m_pOwner = pOwner;
 		m_pFolderItem = pFolderItem;
 
@@ -244,7 +244,7 @@ public:
 	void GetFiles(std::list<CFolderProcessingEntry*> &entryList)
 	{
 		wxASSERT(entryList.empty());
-		wxMutexLocker locker(m_sync);
+		scoped_lock locker(m_sync);
 		entryList.swap(m_entryList);
 
 		m_didSendEvent = false;
@@ -252,7 +252,7 @@ public:
 
 		if (m_throttleWait) {
 			m_throttleWait = false;
-			m_condition.Signal();
+			m_condition.signal(locker);
 		}
 	}
 
@@ -266,7 +266,7 @@ public:
 
 	void ProcessDirectory(const CLocalPath& localPath, CServerPath const& remotePath, const wxString& name)
 	{
-		wxMutexLocker locker(m_sync);
+		scoped_lock locker(m_sync);
 
 		t_internalDirPair* pair = new t_internalDirPair;
 
@@ -282,23 +282,21 @@ public:
 
 		if (m_threadWaiting) {
 			m_threadWaiting = false;
-			m_condition.Signal();
+			m_condition.signal(locker);
 		}
 	}
 
 	void CheckFinished()
 	{
-		m_sync.Lock();
+		scoped_lock locker(m_sync);
 		wxASSERT(m_processing_entries);
 
 		m_processing_entries = false;
 
 		if (m_threadWaiting && (!m_dirsToCheck.empty() || m_entryList.empty())) {
 			m_threadWaiting = false;
-			m_condition.Signal();
+			m_condition.signal(locker);
 		}
-
-		m_sync.Unlock();
 	}
 
 	CFolderScanItem* GetFolderScanItem()
@@ -310,7 +308,7 @@ protected:
 
 	void AddEntry(CFolderProcessingEntry* entry)
 	{
-		m_sync.Lock();
+		scoped_lock l(m_sync);
 		m_entryList.push_back(entry);
 
 		// Wait if there are more than 100 items to queue,
@@ -322,7 +320,7 @@ protected:
 			send = false;
 			if (m_entryList.size() >= 100) {
 				m_throttleWait = true;
-				m_condition.Wait();
+				m_condition.wait(l);
 			}
 		}
 		else if (m_entryList.size() < 20)
@@ -333,7 +331,7 @@ protected:
 		if (send)
 			m_didSendEvent = true;
 
-		m_sync.Unlock();
+		l.unlock();
 
 		if (send) {
 			// We send the notification after leaving the critical section, else we
@@ -356,33 +354,30 @@ protected:
 		CLocalFileSystem localFileSystem;
 
 		while (!TestDestroy() && !m_pFolderItem->m_remove) {
-			m_sync.Lock();
+			scoped_lock l(m_sync);
 			if (m_dirsToCheck.empty()) {
 				if (!m_didSendEvent && !m_entryList.empty()) {
 					m_didSendEvent = true;
-					m_sync.Unlock();
+					l.unlock();
 					m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
 					continue;
 				}
 
 				if (!m_didSendEvent && !m_processing_entries) {
-					m_sync.Unlock();
 					break;
 				}
 				m_threadWaiting = true;
-				m_condition.Wait();
+				m_condition.wait(l);
 				if (m_dirsToCheck.empty()) {
-					m_sync.Unlock();
 					break;
 				}
-				m_sync.Unlock();
 				continue;
 			}
 
 			const t_internalDirPair *pair = m_dirsToCheck.front();
 			m_dirsToCheck.pop_front();
 
-			m_sync.Unlock();
+			l.unlock();
 
 			if (!localFileSystem.BeginFindFiles(pair->localPath.GetPath(), false)) {
 				delete pair;
@@ -427,8 +422,8 @@ protected:
 	CQueueView* m_pOwner;
 	CFolderScanItem* m_pFolderItem;
 
-	wxMutex m_sync;
-	wxCondition m_condition;
+	mutex m_sync;
+	condition m_condition;
 	bool m_threadWaiting;
 	bool m_throttleWait;
 	bool m_didSendEvent;

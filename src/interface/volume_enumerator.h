@@ -64,7 +64,7 @@ protected:
 
 	std::list<t_VolumeInfoInternal> m_volumeInfo;
 
-	wxCriticalSection m_crit_section;
+	mutex sync_;
 };
 
 #endif //__WXMSW__
