@@ -6,20 +6,11 @@
 #include <wx/log.h>
 
 CIOThread::CIOThread()
-	: wxThread(wxTHREAD_JOINABLE), m_evtHandler(0)
-	, m_read()
-	, m_binary()
-	, m_curAppBuf()
-	, m_curThreadBuf()
-	, m_error()
-	, m_running()
-	, m_threadWaiting()
-	, m_appWaiting()
-	, m_destroyed()
-	, m_wasCarriageReturn()
+	: wxThread(wxTHREAD_JOINABLE)
 {
+	m_buffers[0] = new char[BUFFERSIZE*BUFFERCOUNT];
 	for (unsigned int i = 0; i < BUFFERCOUNT; ++i) {
-		m_buffers[i] = new char[BUFFERSIZE];
+		m_buffers[i] = m_buffers[0] + BUFFERSIZE * i;
 		m_bufferLens[i] = 0;
 	}
 }
@@ -28,8 +19,7 @@ CIOThread::~CIOThread()
 {
 	Close();
 
-	for (unsigned int i = 0; i < BUFFERCOUNT; i++)
-		delete [] m_buffers[i];
+	delete [] m_buffers[0];
 }
 
 void CIOThread::Close()
@@ -137,7 +127,7 @@ wxThread::ExitCode CIOThread::Entry()
 			}
 
 			l.unlock();
-			bool writeSuccessful = WriteToFile(m_buffers[m_curThreadBuf], m_bufferLens[m_curThreadBuf]);
+			bool writeSuccessful = WriteToFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 			l.lock();
 
 			if (!writeSuccessful) {
@@ -164,7 +154,7 @@ wxThread::ExitCode CIOThread::Entry()
 	return 0;
 }
 
-int CIOThread::GetNextWriteBuffer(char** pBuffer, int len /*=BUFFERSIZE*/)
+int CIOThread::GetNextWriteBuffer(char** pBuffer)
 {
 	wxASSERT(!m_destroyed);
 
@@ -178,8 +168,6 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer, int len /*=BUFFERSIZE*/)
 		*pBuffer = m_buffers[0];
 		return IO_Success;
 	}
-
-	m_bufferLens[m_curAppBuf] = len;
 
 	int newBuf = (m_curAppBuf + 1) % BUFFERCOUNT;
 	if (newBuf == m_curThreadBuf) {
@@ -350,21 +338,17 @@ bool CIOThread::WriteToFile(char* pBuffer, int len)
 		// going to hurt performance.
 		const char CR = '\r';
 		const char* const end = pBuffer + len;
-		for (char* r = pBuffer; r != end; r++)
-		{
+		for (char* r = pBuffer; r != end; ++r) {
 			char c = *r;
 			if (c == '\r')
 				m_wasCarriageReturn = true;
-			else if (c == '\n')
-			{
+			else if (c == '\n') {
 				m_wasCarriageReturn = false;
 				if (!DoWrite(&c, 1))
 					return false;
 			}
-			else
-			{
-				if (m_wasCarriageReturn)
-				{
+			else {
+				if (m_wasCarriageReturn) {
 					m_wasCarriageReturn = false;
 					if (!DoWrite(&CR, 1))
 						return false;
@@ -400,4 +384,10 @@ wxString CIOThread::GetError()
 {
 	scoped_lock locker(m_mutex);
 	return m_error_description;
+}
+
+void CIOThread::SetEventHandler(CEventHandler* handler)
+{
+	scoped_lock locker(m_mutex);
+	m_evtHandler = handler;
 }

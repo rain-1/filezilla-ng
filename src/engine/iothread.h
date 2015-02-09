@@ -23,7 +23,7 @@ enum IORet
 };
 
 class CFile;
-class CIOThread final : public wxThread
+class CIOThread final : protected wxThread
 {
 public:
 	CIOThread();
@@ -36,7 +36,7 @@ public:
 	// This handler will receive the CIOThreadEvent events. The events
 	// get triggerd iff a buffer is available after a call to the
 	// GetNext*Buffer functions returned IO_Again
-	void SetEventHandler(CEventHandler* handler){ m_evtHandler = handler; }
+	void SetEventHandler(CEventHandler* handler);
 
 	// Gets next buffer
 	// Return value:  IO_Success on EOF
@@ -49,7 +49,7 @@ public:
 	// Return value: IO_Again if it would block
 	//               IO_Error on error
 	//               IO_Success else
-	int GetNextWriteBuffer(char** pBuffer, int len = BUFFERSIZE);
+	int GetNextWriteBuffer(char** pBuffer);
 
 	bool Finalize(int len);
 
@@ -64,10 +64,10 @@ protected:
 	bool WriteToFile(char* pBuffer, int len);
 	bool DoWrite(const char* pBuffer, int len);
 
-	CEventHandler* m_evtHandler;
+	CEventHandler* m_evtHandler{};
 
-	bool m_read;
-	bool m_binary;
+	bool m_read{};
+	bool m_binary{};
 	std::unique_ptr<CFile> m_pFile;
 
 	char* m_buffers[BUFFERCOUNT];
@@ -76,22 +76,22 @@ protected:
 	mutex m_mutex;
 	condition m_condition;
 
-	int m_curAppBuf;
-	int m_curThreadBuf;
+	int m_curAppBuf{};
+	int m_curThreadBuf{};
 
-	bool m_error;
-	bool m_running;
-	bool m_threadWaiting;
-	bool m_appWaiting;
+	bool m_error{};
+	bool m_running{};
+	bool m_threadWaiting{};
+	bool m_appWaiting{};
 
-	bool m_destroyed;
+	bool m_destroyed{};
 
-	bool m_wasCarriageReturn;
+	bool m_wasCarriageReturn{};
 
 	wxString m_error_description;
 
 #ifdef SIMULATE_IO
-	wxFileOffset size_;
+	wxFileOffset size_{};
 #endif
 };
 
