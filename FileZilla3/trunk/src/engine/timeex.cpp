@@ -423,3 +423,15 @@ bool CMonotonicTime::operator == (const CMonotonicTime& op) const
 
 	return m_offset == op.m_offset;
 }
+
+#if defined(_MSC_VER) && _MSC_VER < 1900
+namespace {
+int64_t GetFreq() {
+	LARGE_INTEGER f;
+	(void)QueryPerformanceFrequency(&f); // Cannot fail on XP or later according to MSDN
+	return f.QuadPart;
+}
+}
+
+int64_t const CMonotonicClock::freq_ = GetFreq();
+#endif
