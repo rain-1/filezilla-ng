@@ -125,7 +125,7 @@ private:
 public:
 	CMonotonicClock() = default;
 
-	static CMonotonicClock CMonotonicClock::now() {
+	static CMonotonicClock now() {
 		return CMonotonicClock(clock_type::now());
 	}
 
