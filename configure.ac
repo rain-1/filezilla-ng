@@ -58,6 +58,9 @@ if ! test "$localesonly" = "yes"; then
   # libstdc++ as shipped with GCC 4.7 lacks std::map::emplace
   FZ_CHECK_MAP_EMPLACE
 
+  # libstdc++ as shipped with GCC 4.7 has a steady clock that isn't steady (who implements such crap?)
+  CHECK_STEADY_CLOCK
+
   # Add build information to config.h
   # ---------------------------------
 
