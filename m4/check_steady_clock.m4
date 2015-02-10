@@ -15,10 +15,10 @@ AC_DEFUN([CHECK_STEADY_CLOCK], [
       return std::chrono::steady_clock::is_steady ? 0 : 1;
     ]])
   ], [
-    AC_MSG_RESULT([no])
-    AC_DEFINE([HAVE_UNSTEADY_STEADY_CLOCK], [1], [Define if steady_clock isn't steady])
-  ], [
     AC_MSG_RESULT([yes])
+  ], [
+    AC_DEFINE([HAVE_UNSTEADY_STEADY_CLOCK], [1], [Define if steady_clock isn't steady])
+    AC_MSG_RESULT([no])
   ])
 
   AC_LANG_POP(C++)
