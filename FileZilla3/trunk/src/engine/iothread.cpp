@@ -54,7 +54,7 @@ bool CIOThread::Create(std::unique_ptr<CFile> && pFile, bool read, bool binary)
 	}
 
 #ifdef SIMULATE_IO
-	size_ = pFile->Length();
+	size_ = m_pFile->Length();
 #endif
 
 	m_running = true;
