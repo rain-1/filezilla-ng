@@ -5,6 +5,10 @@
 
 #include <chrono>
 
+#if HAVE_UNSTEADY_STEADY_CLOCK
+#include <sys/time.h>
+#endif
+
 class CDateTime final
 {
 public:
@@ -95,14 +99,13 @@ protected:
 
 class CMonotonicClock final
 {
+public:
+	CMonotonicClock() = default;
+
 #if defined(_MSC_VER) && _MSC_VER < 1900
 	// Most unfortunate: steady_clock is implemented in terms
 	// of system_clock which is not monotonic prior to Visual Studio
 	// 2015 which is unreleased as of writing this.
-
-public:
-	CMonotonicClock() = default;
-
 	static CMonotonicClock CMonotonicClock::now() {
 		LARGE_INTEGER i;
 		(void)QueryPerformanceCounter(&i); // Cannot fail on XP or later according to MSDN
@@ -118,13 +121,30 @@ private:
 
 	static int64_t const freq_;
 
+#elif HAVE_UNSTEADY_STEADY_CLOCK
+	static CMonotonicClock now() {
+		timespec t;
+		if (clock_gettime(CLOCK_MONOTONIC, &t) != -1) {
+			return CMonotonicClock(t.tv_sec * 1000 + t.tv_nsec / 1000000);
+		}
+
+		timeval tv;
+		(void)gettimeofday(&tv, 0);
+		return CMonotonicClock(tv.tv_sec * 1000 + tv.tv_usec / 1000);
+	}
+
+private:
+	CMonotonicClock(int64_t  t)
+		: t_(t)
+	{}
+
+	int64_t t_;
 #else
+private:
 	typedef std::chrono::steady_clock clock_type;
 	static_assert(std::chrono::steady_clock::is_steady, "Nonconforming stdlib, your steady_clock isn't steady");
 
 public:
-	CMonotonicClock() = default;
-
 	static CMonotonicClock now() {
 		return CMonotonicClock(clock_type::now());
 	}
@@ -144,6 +164,8 @@ inline int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b)
 {
 #if defined(_MSC_VER) && _MSC_VER < 1900
 	return (a.t_ - b.t_) * 1000 / CMonotonicClock::freq_;
+#elif HAVE_UNSTEADY_STEADY_CLOCK
+	return a.t_ - b.t_;
 #else
 	return std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count();
 #endif
