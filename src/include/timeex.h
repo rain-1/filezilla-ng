@@ -106,6 +106,7 @@ public:
 	// Most unfortunate: steady_clock is implemented in terms
 	// of system_clock which is not monotonic prior to Visual Studio
 	// 2015 which is unreleased as of writing this.
+	// FIXME: Remove once Visual Studio 2015 is released
 	static CMonotonicClock CMonotonicClock::now() {
 		LARGE_INTEGER i;
 		(void)QueryPerformanceCounter(&i); // Cannot fail on XP or later according to MSDN
@@ -122,6 +123,7 @@ private:
 	static int64_t const freq_;
 
 #elif HAVE_UNSTEADY_STEADY_CLOCK
+	// FIXME: Remove once Debian Jessie is stable
 	static CMonotonicClock now() {
 		timespec t;
 		if (clock_gettime(CLOCK_MONOTONIC, &t) != -1) {
