@@ -3,6 +3,8 @@
 
 #include <wx/timer.h>
 
+#include <chrono>
+
 class CDateTime final
 {
 public:
@@ -89,5 +91,62 @@ protected:
 	CDateTime m_time;
 	int m_offset{};
 };
+
+
+class CMonotonicClock final
+{
+#if defined(_MSC_VER) && _MSC_VER < 1900
+	// Most unfortunate: steady_clock is implemented in terms
+	// of system_clock which is not monotonic prior to Visual Studio
+	// 2015 which is unreleased as of writing this.
+
+public:
+	CMonotonicClock() = default;
+
+	static CMonotonicClock CMonotonicClock::now() {
+		LARGE_INTEGER i;
+		(void)QueryPerformanceCounter(&i); // Cannot fail on XP or later according to MSDN
+		return CMonotonicClock(i.QuadPart);
+	}
+
+private:
+	CMonotonicClock(int64_t t)
+		: t_(t)
+	{}
+
+	int64_t t_;
+
+	static int64_t const freq_;
+
+#else
+	typedef std::chrono::steady_clock clock_type;
+	static_assert(std::chrono::steady_clock::is_steady, "Nonconforming stdlib, your steady_clock isn't steady");
+
+public:
+	CMonotonicClock() = default;
+
+	static CMonotonicClock CMonotonicClock::now() {
+		return CMonotonicClock(clock_type::now());
+	}
+
+private:
+	CMonotonicClock(clock_type::time_point const& t)
+		: t_(t)
+	{}
+
+	clock_type::time_point t_;
+#endif
+
+	friend int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b);
+};
+
+inline int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b)
+{
+#if defined(_MSC_VER) && _MSC_VER < 1900
+	return (a.t_ - b.t_) * 1000 / CMonotonicClock::freq_;
+#else
+	return std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count();
+#endif
+}
 
 #endif //__TIMEEX_H__

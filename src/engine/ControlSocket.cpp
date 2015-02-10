@@ -547,25 +547,27 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 
 void CControlSocket::OnTimer(timer_id)
 {
-	int timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT);
-	if (!timeout)
-		return;
+	m_timer = 0; // It's a one-shot timer, no need to stop it
 
-	if (m_pCurOpData && m_pCurOpData->waitForAsyncRequest)
-		return;
+	int const timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT) * 1000;
+	if (timeout) {
+		int64_t const elapsed = CMonotonicClock::now() - m_lastActivity;
 
-	if (IsWaitingForLock())
-		return;
+		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
+			if (elapsed > timeout) {
+				LogMessage(MessageType::Error, _("Connection timed out"));
+				DoClose(FZ_REPLY_TIMEOUT);
+				return;
+			}
+		}
 
-	if (m_stopWatch.Time() > (timeout * 1000)) {
-		LogMessage(MessageType::Error, _("Connection timed out"));
-		DoClose(FZ_REPLY_TIMEOUT);
+		m_timer = AddTimer(timeout - elapsed, true);
 	}
 }
 
 void CControlSocket::SetAlive()
 {
-	m_stopWatch.Start();
+	m_lastActivity = CMonotonicClock::now();
 }
 
 void CControlSocket::SetWait(bool wait)
@@ -574,8 +576,13 @@ void CControlSocket::SetWait(bool wait)
 		if (m_timer)
 			return;
 
-		m_stopWatch.Start();
-		m_timer = AddTimer(1000, false);
+		m_lastActivity = CMonotonicClock::now();
+
+		int timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT);
+		if (!timeout)
+			return;
+
+		m_timer = AddTimer(timeout * 1000 + 100, true); // Add a bit of slack
 	}
 	else {
 		StopTimer(m_timer);

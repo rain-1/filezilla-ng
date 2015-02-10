@@ -203,7 +203,7 @@ protected:
 
 	// Timeout data
 	timer_id m_timer{};
-	wxStopWatch m_stopWatch;
+	CMonotonicClock m_lastActivity;
 
 	// -------------------------
 	// Begin cache locking stuff
