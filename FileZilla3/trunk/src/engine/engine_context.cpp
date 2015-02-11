@@ -3,21 +3,57 @@
 
 #include "directorycache.h"
 #include "event_loop.h"
+#include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"
 #include "socket.h"
 
-class CFileZillaEngineContext::Impl
+namespace {
+struct logging_options_changed_event_type;
+typedef CEvent<logging_options_changed_event_type> CLoggingOptionsChangedEvent;
+
+class CLoggingOptionsChanged final : public CEventHandler, COptionChangeEventHandler
+{
+public:
+	CLoggingOptionsChanged(COptionsBase& options, CEventLoop & loop)
+		: CEventHandler(loop)
+		, options_(options)
+	{
+		RegisterOption(OPTION_LOGGING_DEBUGLEVEL);
+		RegisterOption(OPTION_LOGGING_RAWLISTING);
+		SendEvent<CLoggingOptionsChangedEvent>();
+	}
+
+	virtual void OnOptionsChanged(changed_options_t const& options)
+	{
+		if (options.test(OPTION_LOGGING_DEBUGLEVEL) || options.test(OPTION_LOGGING_RAWLISTING)) {
+			SendEvent<CLoggingOptionsChangedEvent>();
+		}
+	}
+
+	virtual void operator()(const CEventBase& ev)
+	{
+		CLogging::UpdateLogLevel(options_);
+	}
+
+	COptionsBase& options_;
+};
+}
+
+class CFileZillaEngineContext::Impl final
 {
 public:
 	Impl(COptionsBase& options)
 		: dispatcher_(loop_)
 		, limiter_(loop_, options)
+		, optionChangeHandler_(options, loop_)
 	{
+		CLogging::UpdateLogLevel(options);
 	}
 
 	~Impl()
 	{
+		loop_.RemoveHandler(&optionChangeHandler_);
 	}
 
 	CEventLoop loop_;
@@ -25,6 +61,7 @@ public:
 	CRateLimiter limiter_;
 	CDirectoryCache directory_cache_;
 	CPathCache path_cache_;
+	CLoggingOptionsChanged optionChangeHandler_;
 };
 
 CFileZillaEngineContext::CFileZillaEngineContext(COptionsBase & options)
