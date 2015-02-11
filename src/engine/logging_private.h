@@ -66,6 +66,9 @@ public:
 
 	bool ShouldLog(MessageType nMessageType) const;
 
+	// Only affects calling thread
+	static void UpdateLogLevel(COptionsBase & options);
+
 private:
 	CFileZillaEnginePrivate *m_pEngine;
 
@@ -86,6 +89,9 @@ private:
 	static int m_refcount;
 
 	static mutex mutex_;
+
+	static thread_local int debug_level_;
+	static thread_local int raw_listing_;
 };
 
 #endif

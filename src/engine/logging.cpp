@@ -23,6 +23,9 @@ wxString CLogging::m_file;
 int CLogging::m_refcount = 0;
 mutex CLogging::mutex_(false);
 
+thread_local int CLogging::debug_level_{0};
+thread_local int CLogging::raw_listing_{0};
+
 CLogging::CLogging(CFileZillaEnginePrivate *pEngine)
 {
 	m_pEngine = pEngine;
@@ -54,26 +57,25 @@ CLogging::~CLogging()
 
 bool CLogging::ShouldLog(MessageType nMessageType) const
 {
-	const int debugLevel = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
 	switch (nMessageType) {
 	case MessageType::Debug_Warning:
-		if (!debugLevel)
+		if (!debug_level_)
 			return false;
 		break;
 	case MessageType::Debug_Info:
-		if (debugLevel < 2)
+		if (debug_level_ < 2)
 			return false;
 		break;
 	case MessageType::Debug_Verbose:
-		if (debugLevel < 3)
+		if (debug_level_ < 3)
 			return false;
 		break;
 	case MessageType::Debug_Debug:
-		if (debugLevel != 4)
+		if (debug_level_ != 4)
 			return false;
 		break;
 	case MessageType::RawList:
-		if (!m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_RAWLISTING))
+		if (!raw_listing_)
 			return false;
 		break;
 	default:
@@ -277,4 +279,10 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		}
 #endif
 	}
+}
+
+void CLogging::UpdateLogLevel(COptionsBase & options)
+{
+	debug_level_ = options.GetOptionVal(OPTION_LOGGING_DEBUGLEVEL);
+	raw_listing_ = options.GetOptionVal(OPTION_LOGGING_RAWLISTING);
 }
