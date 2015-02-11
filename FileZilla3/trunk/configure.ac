@@ -61,6 +61,9 @@ if ! test "$localesonly" = "yes"; then
   # libstdc++ as shipped with GCC 4.7 has a steady clock that isn't steady (who implements such crap?)
   CHECK_STEADY_CLOCK
 
+  # No thread_local in GCC 4.7 and it for some reason isn't supported on OS X either
+  CHECK_THREAD_LOCAL
+
   # Add build information to config.h
   # ---------------------------------
 
