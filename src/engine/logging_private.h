@@ -93,6 +93,9 @@ private:
 #if defined(_MSC_VER) && _MSC_VER < 1900
 	// Fixme: Get rid of this once VS2015 comes out
 	#define thread_local __declspec(thread)
+#elif HAVE_NO_THREAD_LOCAL
+	// Fixme: Get rid of this once a) Debian Jessie is stable and b) OS X' clang supports it.
+	#define thread_local __thread
 #endif
 	static thread_local int debug_level_;
 	static thread_local int raw_listing_;
