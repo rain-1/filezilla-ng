@@ -59,21 +59,23 @@ protected:
 template<typename T, typename H, typename F>
 bool Dispatch(CEventBase const& ev, F&& f)
 {
-	T const* e = dynamic_cast<T const*>(&ev);
-	if (e) {
+	bool const same = same_type<T>(ev);
+	if (same) {
+		T const* e = reinterpret_cast<T const*>(&ev);
 		apply(std::forward<F>(f), e->v_);
 	}
-	return e != 0;
+	return same;
 }
 
 template<typename T, typename H, typename F>
 bool Dispatch(CEventBase const& ev, H* h, F&& f)
 {
-	T const* e = dynamic_cast<T const*>(&ev);
-	if (e) {
+	bool const same = same_type<T>(ev);
+	if (same) {
+		T const* e = reinterpret_cast<T const*>(&ev);
 		apply(h, std::forward<F>(f), e->v_);
 	}
-	return e != 0;
+	return same;
 }
 
 #endif

@@ -589,13 +589,17 @@ void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
 {
 	scoped_lock lock(mutex_);
 
-	if (Dispatch<CTimerEvent>(ev, this, &CFileZillaEnginePrivate::OnTimer))
+	if (Dispatch<CFileZillaEngineEvent>(ev, this, &CFileZillaEnginePrivate::OnEngineEvent))
 		return;
 
-	Dispatch<CFileZillaEngineEvent>(ev, this, &CFileZillaEnginePrivate::OnEngineEvent);
-	Dispatch<CCommandEvent>(ev, this, &CFileZillaEnginePrivate::OnCommandEvent);
+	if (Dispatch<CCommandEvent>(ev, this, &CFileZillaEnginePrivate::OnCommandEvent))
+		return;
 
-	Dispatch<CAsyncRequestReplyEvent>(ev, this, &CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent);
+	if (Dispatch<CAsyncRequestReplyEvent>(ev, this, &CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent))
+		return;
+
+	if (Dispatch<CTimerEvent>(ev, this, &CFileZillaEnginePrivate::OnTimer))
+		return;
 }
 
 int CFileZillaEnginePrivate::CheckCommandPreconditions(CCommand const& command, bool checkBusy)

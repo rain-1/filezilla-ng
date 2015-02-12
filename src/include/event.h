@@ -9,6 +9,8 @@ public:
 
 	CEventBase(CEventBase const&) = delete;
 	CEventBase& operator=(CEventBase const&) = delete;
+
+	virtual void const* derived_type() const = 0;
 };
 
 template<typename UniqueType, typename...Values>
@@ -40,8 +42,23 @@ public:
 		return *this;
 	}
 
+	static void const* type() {
+		static const char* f = 0;
+		return &f;
+	}
+
+	virtual void const* derived_type() const {
+		return type();
+	};
+
 	tuple_type v_;
 };
+
+template<typename T>
+bool same_type(CEventBase const& ev)
+{
+	return ev.derived_type() == T::type();
+}
 
 typedef unsigned long long timer_id;
 struct timer_event_type{};
