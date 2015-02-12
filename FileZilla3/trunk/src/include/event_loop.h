@@ -67,6 +67,7 @@ bool Dispatch(CEventBase const& ev, F&& f)
 	return same;
 }
 
+
 template<typename T, typename H, typename F>
 bool Dispatch(CEventBase const& ev, H* h, F&& f)
 {
@@ -76,6 +77,16 @@ bool Dispatch(CEventBase const& ev, H* h, F&& f)
 		apply(h, std::forward<F>(f), e->v_);
 	}
 	return same;
+}
+
+template<typename T, typename ... Ts, typename H, typename F, typename ... Fs>
+bool Dispatch(CEventBase const& ev, H* h, F&& f, Fs&& ... fs)
+{
+	if (Dispatch<T>(ev, h, std::forward<F>(f))) {
+		return true;
+	}
+
+	return Dispatch<Ts...>(ev, h, std::forward<Fs>(fs)...);
 }
 
 #endif
