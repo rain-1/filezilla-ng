@@ -868,6 +868,7 @@ void CTransferStatusManager::Init(wxFileOffset totalSize, wxFileOffset startOffs
 		startOffset = 0;
 
 	status_ = CTransferStatus(totalSize, startOffset, list);
+	currentOffset_ = 0;
 }
 
 void CTransferStatusManager::SetStartTime()
@@ -893,15 +894,19 @@ void CTransferStatusManager::Update(wxFileOffset transferredBytes)
 	CNotification* notification = 0;
 
 	{
-		scoped_lock lock(mutex_);
-		if (!status_)
-			return;
+		int64_t oldOffset = currentOffset_.fetch_add(transferredBytes);
+		if (!oldOffset) {
+			scoped_lock lock(mutex_);
+			if (!status_) {
+				return;
+			}
 
-		status_.currentOffset += transferredBytes;
-
-		if (!send_state_)
-			notification = new CTransferStatusNotification(status_);
-		send_state_ = 2;
+			if (!send_state_) {
+				status_.currentOffset += currentOffset_.exchange(0);
+				notification = new CTransferStatusNotification(status_);
+			}
+			send_state_ = 2;
+		}
 	}
 
 	if (notification) {
@@ -916,13 +921,16 @@ CTransferStatus CTransferStatusManager::Get(bool &changed)
 		changed = false;
 		send_state_ = 0;
 	}
-	else if (send_state_ == 2) {
-		changed = true;
-		send_state_ = 1;
-	}
 	else {
-		changed = false;
-		send_state_ = 0;
+		status_.currentOffset += currentOffset_.exchange(0);
+		if (send_state_ == 2) {
+			changed = true;
+			send_state_ = 1;
+		}
+		else {
+			changed = false;
+			send_state_ = 0;
+		}
 	}
 	return status_;
 }
