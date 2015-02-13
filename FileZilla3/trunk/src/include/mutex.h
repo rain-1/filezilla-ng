@@ -45,14 +45,50 @@ private:
 class scoped_lock final
 {
 public:
-	explicit scoped_lock( mutex& m );
-	~scoped_lock();
+	explicit scoped_lock(mutex& m)
+		: m_(&m.m_)
+	{
+#ifdef __WXMSW__
+		EnterCriticalSection(m_);
+#else
+		pthread_mutex_lock(m_);
+#endif
+	}
+
+	~scoped_lock()
+	{
+		if (locked_) {
+	#ifdef __WXMSW__
+			LeaveCriticalSection(m_);
+	#else
+			pthread_mutex_unlock(m_);
+	#endif
+		}
+
+	}
 
 	scoped_lock( scoped_lock const& ) = delete;
 	scoped_lock& operator=( scoped_lock const& ) = delete;
 
-	void lock();
-	void unlock();
+	void lock()
+	{
+		locked_ = true;
+#ifdef __WXMSW__
+		EnterCriticalSection(m_);
+#else
+		pthread_mutex_lock(m_);
+#endif
+	}
+
+	void unlock()
+	{
+		locked_ = false;
+#ifdef __WXMSW__
+		LeaveCriticalSection(m_);
+#else
+		pthread_mutex_unlock(m_);
+#endif
+	}
 
 private:
 	friend class condition;
@@ -62,7 +98,7 @@ private:
 #else
 	pthread_mutex_t * const m_;
 #endif
-	bool locked_;
+	bool locked_{true};
 };
 
 class condition final

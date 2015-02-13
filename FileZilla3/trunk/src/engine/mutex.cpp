@@ -46,50 +46,6 @@ void mutex::unlock()
 #endif
 }
 
-scoped_lock::scoped_lock(mutex& m)
-	: m_(&m.m_)
-{
-	locked_ = true;
-#ifdef __WXMSW__
-	EnterCriticalSection(m_);
-#else
-	pthread_mutex_lock(m_);
-#endif
-}
-
-
-scoped_lock::~scoped_lock()
-{
-	if (locked_) {
-#ifdef __WXMSW__
-		LeaveCriticalSection(m_);
-#else
-		pthread_mutex_unlock(m_);
-#endif
-	}
-}
-
-
-void scoped_lock::lock()
-{
-	locked_ = true;
-#ifdef __WXMSW__
-	EnterCriticalSection(m_);
-#else
-	pthread_mutex_lock(m_);
-#endif
-}
-
-
-void scoped_lock::unlock()
-{
-	locked_ = false;
-#ifdef __WXMSW__
-	LeaveCriticalSection(m_);
-#else
-	pthread_mutex_unlock(m_);
-#endif
-}
 
 condition::condition()
 	: signalled_()
