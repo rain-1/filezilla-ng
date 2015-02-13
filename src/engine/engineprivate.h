@@ -10,6 +10,8 @@
 #include "mutex.h"
 #include "option_change_event_handler.h"
 
+#include <atomic>
+
 class CControlSocket;
 class CLogging;
 class CRateLimiter;
@@ -46,6 +48,7 @@ protected:
 	mutex mutex_;
 
 	CTransferStatus status_;
+	std::atomic<int64_t> currentOffset_{};
 	int send_state_{};
 
 	CFileZillaEnginePrivate& engine_;
