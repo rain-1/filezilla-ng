@@ -27,13 +27,14 @@ public:
 	virtual void OnOptionsChanged(changed_options_t const& options)
 	{
 		if (options.test(OPTION_LOGGING_DEBUGLEVEL) || options.test(OPTION_LOGGING_RAWLISTING)) {
+			CLogging::UpdateLogLevel(options_); // In main thread
 			SendEvent<CLoggingOptionsChangedEvent>();
 		}
 	}
 
 	virtual void operator()(const CEventBase& ev)
 	{
-		CLogging::UpdateLogLevel(options_);
+		CLogging::UpdateLogLevel(options_); // In worker thread
 	}
 
 	COptionsBase& options_;
