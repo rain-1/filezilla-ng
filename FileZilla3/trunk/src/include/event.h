@@ -49,7 +49,7 @@ public:
 
 	virtual void const* derived_type() const {
 		return type();
-	};
+	}
 
 	tuple_type v_;
 };
