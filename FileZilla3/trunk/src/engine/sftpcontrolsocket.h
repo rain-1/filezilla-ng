@@ -52,7 +52,7 @@ typedef CEvent<terminate_event_type> CTerminateEvent;
 class CSftpControlSocket : public CControlSocket, public CRateLimiterObject
 {
 public:
-	CSftpControlSocket(CFileZillaEnginePrivate* pEngine);
+	CSftpControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CSftpControlSocket();
 
 	virtual int Connect(const CServer &server);

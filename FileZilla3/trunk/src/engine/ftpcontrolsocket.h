@@ -18,7 +18,7 @@ class CFtpControlSocket : public CRealControlSocket
 {
 	friend class CTransferSocket;
 public:
-	CFtpControlSocket(CFileZillaEnginePrivate *pEngine);
+	CFtpControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CFtpControlSocket();
 	virtual void TransferEnd();
 
@@ -171,7 +171,7 @@ public:
 	bool binary;
 };
 
-class CFtpFileTransferOpData : public CFileTransferOpData, public CFtpTransferOpData
+class CFtpFileTransferOpData final : public CFileTransferOpData, public CFtpTransferOpData
 {
 public:
 	CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
@@ -181,7 +181,7 @@ public:
 	bool fileDidExist;
 };
 
-class CRawTransferOpData : public COpData
+class CRawTransferOpData final : public COpData
 {
 public:
 	CRawTransferOpData();

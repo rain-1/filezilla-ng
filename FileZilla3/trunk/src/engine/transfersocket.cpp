@@ -9,39 +9,13 @@
 #include "proxy.h"
 #include "servercapabilities.h"
 
-CTransferSocket::CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, TransferMode transferMode)
-: CEventHandler(pEngine->socket_event_dispatcher_.event_loop_)
-, CSocketEventHandler(pEngine->socket_event_dispatcher_)
+CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode)
+: CEventHandler(engine.socket_event_dispatcher_.event_loop_)
+, CSocketEventHandler(engine.socket_event_dispatcher_)
+, engine_(engine)
+, controlSocket_(controlSocket)
+, m_transferMode(transferMode)
 {
-	m_pEngine = pEngine;
-	m_pControlSocket = pControlSocket;
-
-	m_pSocketServer = 0;
-	m_pSocket = 0;
-	m_pBackend = 0;
-	m_pProxyBackend = 0;
-	m_pTlsSocket = 0;
-
-	m_pDirectoryListingParser = 0;
-
-	m_bActive = false;
-
-	m_transferMode = transferMode;
-
-	m_pTransferBuffer = 0;
-	m_transferBufferLen = 0;
-
-	m_transferEndReason = TransferEndReason::none;
-	m_binaryMode = true;
-
-	m_onCloseCalled = false;
-
-	m_postponedReceive = false;
-	m_postponedSend = false;
-
-	m_shutdown = false;
-
-	m_madeProgress = 0;
 }
 
 CTransferSocket::~CTransferSocket()
@@ -51,14 +25,11 @@ CTransferSocket::~CTransferSocket()
 		m_transferEndReason = TransferEndReason::successful;
 	ResetSocket();
 
-	if (m_pControlSocket) {
-		if (m_transferMode == TransferMode::upload || m_transferMode == TransferMode::download) {
-			CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
-			if (pData && pData->pIOThread) {
-				if (m_transferMode == TransferMode::download)
-					FinalizeWrite();
-				pData->pIOThread->SetEventHandler(0);
-			}
+	if (m_transferMode == TransferMode::upload || m_transferMode == TransferMode::download) {
+		if (ioThread_) {
+			if (m_transferMode == TransferMode::download)
+				FinalizeWrite();
+			ioThread_->SetEventHandler(0);
 		}
 	}
 }
@@ -87,7 +58,7 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	m_pSocketServer = CreateSocketServer();
 
 	if (!m_pSocketServer) {
-		m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("CreateSocketServer failed"));
+		controlSocket_.LogMessage(MessageType::Debug_Warning, _T("CreateSocketServer failed"));
 		return wxString();
 	}
 
@@ -96,7 +67,7 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	if (port == -1)	{
 		ResetSocket();
 
-		m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("GetLocalPort failed: %s"), CSocket::GetErrorDescription(error));
+		controlSocket_.LogMessage(MessageType::Debug_Warning, _T("GetLocalPort failed: %s"), CSocket::GetErrorDescription(error));
 		return wxString();
 	}
 
@@ -123,7 +94,7 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 			{
 				const int error = event.GetError();
 				if (error) {
-					m_pControlSocket->LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
+					controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::failure);
 				}
 				else {
@@ -136,7 +107,7 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 		case CSocketEvent::close:
 			{
 				const int error = event.GetError();
-				m_pControlSocket->LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
+				controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::failure);
 			}
 			return;
@@ -151,7 +122,7 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 		if (event.GetType() == CSocketEvent::connection)
 			OnAccept(event.GetError());
 		else
-			m_pControlSocket->LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d from listening socket"), event.GetType());
+			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d from listening socket"), event.GetType());
 		return;
 	}
 
@@ -160,7 +131,7 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 	case CSocketEvent::connection:
 		if (event.GetError()) {
 			if (m_transferEndReason == TransferEndReason::none) {
-				m_pControlSocket->LogMessage(MessageType::Error, _("The data connection could not be established: %s"), CSocket::GetErrorDescription(event.GetError()));
+				controlSocket_.LogMessage(MessageType::Error, _("The data connection could not be established: %s"), CSocket::GetErrorDescription(event.GetError()));
 				TransferEnd(TransferEndReason::transfer_failure);
 			}
 		}
@@ -180,19 +151,19 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 		// Booooring. No seriously, we connect by IP already, nothing to resolve
 		break;
 	default:
-		m_pControlSocket->LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d"), event.GetType());
+		controlSocket_.LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d"), event.GetType());
 		break;
 	}
 }
 
 void CTransferSocket::OnAccept(int error)
 {
-	m_pControlSocket->SetAlive();
-	m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnAccept(%d)"), error);
+	controlSocket_.SetAlive();
+	controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnAccept(%d)"), error);
 
 	if (!m_pSocketServer)
 	{
-		m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("No socket server in OnAccept"), error);
+		controlSocket_.LogMessage(MessageType::Debug_Warning, _T("No socket server in OnAccept"), error);
 		return;
 	}
 
@@ -200,9 +171,9 @@ void CTransferSocket::OnAccept(int error)
 	if (!m_pSocket)
 	{
 		if (error == EAGAIN)
-			m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("No pending connection"));
+			controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("No pending connection"));
 		else {
-			m_pControlSocket->LogMessage(MessageType::Status, _("Could not accept connection: %s"), CSocket::GetErrorDescription(error));
+			controlSocket_.LogMessage(MessageType::Status, _("Could not accept connection: %s"), CSocket::GetErrorDescription(error));
 			TransferEnd(TransferEndReason::transfer_failure);
 		}
 		return;
@@ -215,12 +186,12 @@ void CTransferSocket::OnAccept(int error)
 
 void CTransferSocket::OnConnect()
 {
-	m_pControlSocket->SetAlive();
-	m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnConnect"));
+	controlSocket_.SetAlive();
+	controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnConnect"));
 
 	if (!m_pSocket)
 	{
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnConnect called without socket"));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnConnect called without socket"));
 		return;
 	}
 
@@ -235,8 +206,8 @@ void CTransferSocket::OnConnect()
 	else if (m_pTlsSocket) {
 		// Re-enable Nagle algorithm
 		m_pSocket->SetFlags(m_pSocket->GetFlags() & (~CSocket::flag_nodelay));
-		if (CServerCapabilities::GetCapability(*m_pControlSocket->m_pCurrentServer, tls_resume) == unknown)	{
-			CServerCapabilities::SetCapability(*m_pControlSocket->m_pCurrentServer, tls_resume, m_pTlsSocket->ResumedSession() ? yes : no);
+		if (CServerCapabilities::GetCapability(*controlSocket_.m_pCurrentServer, tls_resume) == unknown)	{
+			CServerCapabilities::SetCapability(*controlSocket_.m_pCurrentServer, tls_resume, m_pTlsSocket->ResumedSession() ? yes : no);
 		}
 	}
 
@@ -246,77 +217,29 @@ void CTransferSocket::OnConnect()
 
 void CTransferSocket::OnReceive()
 {
-	m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("CTransferSocket::OnReceive(), m_transferMode=%d"), m_transferMode);
+	controlSocket_.LogMessage(MessageType::Debug_Debug, _T("CTransferSocket::OnReceive(), m_transferMode=%d"), m_transferMode);
 
-	if (!m_pBackend)
-	{
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Postponing receive, m_pBackend was false."));
+	if (!m_pBackend) {
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Postponing receive, m_pBackend was false."));
 		m_postponedReceive = true;
 		return;
 	}
 
-	if (!m_bActive)
-	{
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Postponing receive, m_bActive was false."));
+	if (!m_bActive) {
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Postponing receive, m_bActive was false."));
 		m_postponedReceive = true;
 		return;
 	}
 
-	if (m_transferMode == TransferMode::list)
-	{
-		for (;;)
-		{
+	if (m_transferMode == TransferMode::list) {
+		for (;;) {
 			char *pBuffer = new char[4096];
 			int error;
 			int numread = m_pBackend->Read(pBuffer, 4096, error);
-			if (numread < 0)
-			{
+			if (numread < 0) {
 				delete [] pBuffer;
 				if (error != EAGAIN) {
-					m_pControlSocket->LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
-					TransferEnd(TransferEndReason::transfer_failure);
-				}
-				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
-					TransferEnd(TransferEndReason::successful);
-				return;
-			}
-
-			if (numread > 0)
-			{
-				if (!m_pDirectoryListingParser->AddData(pBuffer, numread))
-				{
-					TransferEnd(TransferEndReason::transfer_failure);
-					return;
-				}
-
-				m_pControlSocket->SetActive(CFileZillaEngine::recv);
-				if (!m_madeProgress) {
-					m_madeProgress = 2;
-					m_pEngine->transfer_status_.SetMadeProgress();
-				}
-				m_pEngine->transfer_status_.Update(numread);
-			}
-			else
-			{
-				delete [] pBuffer;
-				TransferEnd(TransferEndReason::successful);
-				return;
-			}
-		}
-	}
-	else if (m_transferMode == TransferMode::download)
-	{
-		for (;;)
-		{
-			if (!CheckGetNextWriteBuffer())
-				return;
-
-			int error;
-			int numread = m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen, error);
-			if (numread < 0)
-			{
-				if (error != EAGAIN) {
-					m_pControlSocket->LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
+					controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::transfer_failure);
 				}
 				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
@@ -325,12 +248,50 @@ void CTransferSocket::OnReceive()
 			}
 
 			if (numread > 0) {
-				m_pControlSocket->SetActive(CFileZillaEngine::recv);
+				if (!m_pDirectoryListingParser->AddData(pBuffer, numread))
+				{
+					TransferEnd(TransferEndReason::transfer_failure);
+					return;
+				}
+
+				controlSocket_.SetActive(CFileZillaEngine::recv);
 				if (!m_madeProgress) {
 					m_madeProgress = 2;
-					m_pEngine->transfer_status_.SetMadeProgress();
+					engine_.transfer_status_.SetMadeProgress();
 				}
-				m_pEngine->transfer_status_.Update(numread);
+				engine_.transfer_status_.Update(numread);
+			}
+			else {
+				delete [] pBuffer;
+				TransferEnd(TransferEndReason::successful);
+				return;
+			}
+		}
+	}
+	else if (m_transferMode == TransferMode::download) {
+		for (;;) {
+			if (!CheckGetNextWriteBuffer())
+				return;
+
+			int error;
+			int numread = m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen, error);
+			if (numread < 0) {
+				if (error != EAGAIN) {
+					controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
+					TransferEnd(TransferEndReason::transfer_failure);
+				}
+				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
+					TransferEnd(TransferEndReason::successful);
+				return;
+			}
+
+			if (numread > 0) {
+				controlSocket_.SetActive(CFileZillaEngine::recv);
+				if (!m_madeProgress) {
+					m_madeProgress = 2;
+					engine_.transfer_status_.SetMadeProgress();
+				}
+				engine_.transfer_status_.Update(numread);
 
 				m_pTransferBuffer += numread;
 				m_transferBufferLen -= numread;
@@ -338,55 +299,47 @@ void CTransferSocket::OnReceive()
 				if (!CheckGetNextWriteBuffer())
 					return;
 			}
-			else //!numread
-			{
+			else { //!numread
 				FinalizeWrite();
 				break;
 			}
 		}
 	}
-	else if (m_transferMode == TransferMode::resumetest)
-	{
-		for (;;)
-		{
+	else if (m_transferMode == TransferMode::resumetest) {
+		for (;;) {
 			char buffer[2];
 			int error;
 			int numread = m_pBackend->Read(buffer, 2, error);
-			if (numread < 0)
-			{
+			if (numread < 0) {
 				if (error != EAGAIN) {
-					m_pControlSocket->LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
+					controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::transfer_failure);
 				}
-				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
-				{
+				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
 					if (m_transferBufferLen == 1)
 						TransferEnd(TransferEndReason::successful);
 					else
 					{
-						m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
+						controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
 						TransferEnd(TransferEndReason::failed_resumetest);
 					}
 				}
 				return;
 			}
 
-			if (!numread)
-			{
+			if (!numread) {
 				if (m_transferBufferLen == 1)
 					TransferEnd(TransferEndReason::successful);
-				else
-				{
-					m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
+				else {
+					controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
 					TransferEnd(TransferEndReason::failed_resumetest);
 				}
 				return;
 			}
 			m_transferBufferLen += numread;
 
-			if (m_transferBufferLen > 1)
-			{
-				m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
+			if (m_transferBufferLen > 1) {
+				controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Server incorrectly sent %d bytes"), m_transferBufferLen);
 				TransferEnd(TransferEndReason::failed_resumetest);
 				return;
 			}
@@ -397,12 +350,12 @@ void CTransferSocket::OnReceive()
 void CTransferSocket::OnSend()
 {
 	if (!m_pBackend) {
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("OnSend called without backend. Ignoring event."));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("OnSend called without backend. Ignoring event."));
 		return;
 	}
 
 	if (!m_bActive) {
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Postponing send"));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Postponing send"));
 		m_postponedSend = true;
 		return;
 	}
@@ -424,13 +377,13 @@ void CTransferSocket::OnSend()
 		if (written <= 0)
 			break;
 
-		m_pControlSocket->SetActive(CFileZillaEngine::send);
+		controlSocket_.SetActive(CFileZillaEngine::send);
 		if (m_madeProgress == 1) {
-			m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("Made progress in CTransferSocket::OnSend()"));
+			controlSocket_.LogMessage(MessageType::Debug_Debug, _T("Made progress in CTransferSocket::OnSend()"));
 			m_madeProgress = 2;
-			m_pEngine->transfer_status_.SetMadeProgress();
+			engine_.transfer_status_.SetMadeProgress();
 		}
-		m_pEngine->transfer_status_.Update(written);
+		engine_.transfer_status_.Update(written);
 
 		m_pTransferBuffer += written;
 		m_transferBufferLen -= written;
@@ -439,13 +392,13 @@ void CTransferSocket::OnSend()
 	if (written < 0) {
 		if (error == EAGAIN) {
 			if (!m_madeProgress) {
-				m_pControlSocket->LogMessage(MessageType::Debug_Debug, _T("First EAGAIN in CTransferSocket::OnSend()"));
+				controlSocket_.LogMessage(MessageType::Debug_Debug, _T("First EAGAIN in CTransferSocket::OnSend()"));
 				m_madeProgress = 1;
-				m_pEngine->transfer_status_.SetMadeProgress();
+				engine_.transfer_status_.SetMadeProgress();
 			}
 		}
 		else {
-			m_pControlSocket->LogMessage(MessageType::Error, _T("Could not write to transfer socket: %s"), CSocket::GetErrorDescription(error));
+			controlSocket_.LogMessage(MessageType::Error, _T("Could not write to transfer socket: %s"), CSocket::GetErrorDescription(error));
 			TransferEnd(TransferEndReason::transfer_failure);
 		}
 	}
@@ -457,7 +410,7 @@ void CTransferSocket::OnSend()
 
 void CTransferSocket::OnClose(int error)
 {
-	m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnClose(%d)"), error);
+	controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnClose(%d)"), error);
 	m_onCloseCalled = true;
 
 	if (m_transferEndReason != TransferEndReason::none)
@@ -485,7 +438,7 @@ void CTransferSocket::OnClose(int error)
 	}
 
 	if (error) {
-		m_pControlSocket->LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), CSocket::GetErrorDescription(error));
+		controlSocket_.LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), CSocket::GetErrorDescription(error));
 		TransferEnd(TransferEndReason::transfer_failure);
 		return;
 	}
@@ -507,7 +460,7 @@ void CTransferSocket::OnClose(int error)
 		return;
 	}
 	else if (numread < 0 && error != EAGAIN) {
-		m_pControlSocket->LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), CSocket::GetErrorDescription(error));
+		controlSocket_.LogMessage(MessageType::Error, _("Transfer connection interrupted: %s"), CSocket::GetErrorDescription(error));
 		TransferEnd(TransferEndReason::transfer_failure);
 		return;
 	}
@@ -527,12 +480,12 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 	m_pSocket = new CSocket(this, dispatcher_);
 
-	if (m_pControlSocket->m_pProxyBackend) {
-		m_pProxyBackend = new CProxySocket(this, m_pSocket, m_pControlSocket);
+	if (controlSocket_.m_pProxyBackend) {
+		m_pProxyBackend = new CProxySocket(this, m_pSocket, &controlSocket_);
 
-		int res = m_pProxyBackend->Handshake(m_pControlSocket->m_pProxyBackend->GetProxyType(),
+		int res = m_pProxyBackend->Handshake(controlSocket_.m_pProxyBackend->GetProxyType(),
 											 host, port,
-											 m_pControlSocket->m_pProxyBackend->GetUser(), m_pControlSocket->m_pProxyBackend->GetPass());
+											 controlSocket_.m_pProxyBackend->GetUser(), controlSocket_.m_pProxyBackend->GetPass());
 
 		if (res != EINPROGRESS)
 		{
@@ -540,10 +493,10 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 			return false;
 		}
 		int error;
-		host = m_pControlSocket->m_pSocket->GetPeerIP();
-		port = m_pControlSocket->m_pSocket->GetRemotePort(error);
+		host = controlSocket_.m_pSocket->GetPeerIP();
+		port = controlSocket_.m_pSocket->GetRemotePort(error);
 		if( host.empty() || port < 1 ) {
-			m_pControlSocket->LogMessage(MessageType::Debug_Warning, _T("Could not get peer address of control connection."));
+			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Could not get peer address of control connection."));
 			ResetSocket();
 			return false;
 		}
@@ -564,11 +517,10 @@ void CTransferSocket::SetActive()
 {
 	if (m_transferEndReason != TransferEndReason::none)
 		return;
-	if (m_transferMode == TransferMode::download || m_transferMode == TransferMode::upload)
-	{
-		CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
-		if (pData && pData->pIOThread)
-			pData->pIOThread->SetEventHandler(this);
+	if (m_transferMode == TransferMode::download || m_transferMode == TransferMode::upload) {
+		if (ioThread_) {
+			ioThread_->SetEventHandler(this);
+		}
 	}
 
 	m_bActive = true;
@@ -581,7 +533,7 @@ void CTransferSocket::SetActive()
 
 void CTransferSocket::TransferEnd(TransferEndReason reason)
 {
-	m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::TransferEnd(%d)"), reason);
+	controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::TransferEnd(%d)"), reason);
 
 	if (m_transferEndReason != TransferEndReason::none)
 		return;
@@ -589,15 +541,15 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 	ResetSocket();
 
-	m_pEngine->SendEvent<CFileZillaEngineEvent>(engineTransferEnd);
+	engine_.SendEvent<CFileZillaEngineEvent>(engineTransferEnd);
 }
 
 CSocket* CTransferSocket::CreateSocketServer(int port)
 {
 	CSocket* pServer = new CSocket(this, dispatcher_);
-	int res = pServer->Listen(m_pControlSocket->m_pSocket->GetAddressFamily(), port);
+	int res = pServer->Listen(controlSocket_.m_pSocket->GetAddressFamily(), port);
 	if (res) {
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Could not listen on port %d: %s"), port, CSocket::GetErrorDescription(res));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Could not listen on port %d: %s"), port, CSocket::GetErrorDescription(res));
 		delete pServer;
 		return 0;
 	}
@@ -609,7 +561,7 @@ CSocket* CTransferSocket::CreateSocketServer(int port)
 
 CSocket* CTransferSocket::CreateSocketServer()
 {
-	if (!m_pEngine->GetOptions().GetOptionVal(OPTION_LIMITPORTS))
+	if (!engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS))
 	{
 		// Ask the systen for a port
 		CSocket* pServer = CreateSocketServer(0);
@@ -628,13 +580,12 @@ CSocket* CTransferSocket::CreateSocketServer()
 
 	static int start = 0;
 
-	int low = m_pEngine->GetOptions().GetOptionVal(OPTION_LIMITPORTS_LOW);
-	int high = m_pEngine->GetOptions().GetOptionVal(OPTION_LIMITPORTS_HIGH);
+	int low = engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS_LOW);
+	int high = engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS_HIGH);
 	if (low > high)
 		low = high;
 
-	if (start < low || start > high)
-	{
+	if (start < low || start > high) {
 		start = GetRandomNumber(low, high);
 		wxASSERT(start >= low && start <= high);
 	}
@@ -642,8 +593,7 @@ CSocket* CTransferSocket::CreateSocketServer()
 	CSocket* pServer = 0;
 
 	int count = high - low + 1;
-	while (count--)
-	{
+	while (count--) {
 		pServer = CreateSocketServer(start++);
 		if (pServer)
 			break;
@@ -656,18 +606,17 @@ CSocket* CTransferSocket::CreateSocketServer()
 
 bool CTransferSocket::CheckGetNextWriteBuffer()
 {
-	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
 	if (!m_transferBufferLen) {
-		int res = pData->pIOThread->GetNextWriteBuffer(&m_pTransferBuffer);
+		int res = ioThread_->GetNextWriteBuffer(&m_pTransferBuffer);
 
 		if (res == IO_Again)
 			return false;
 		else if (res == IO_Error) {
-			wxString error = pData->pIOThread->GetError();
+			wxString error = ioThread_->GetError();
 			if (error.empty() )
-				m_pControlSocket->LogMessage(MessageType::Error, _("Can't write data to file."));
+				controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file."));
 			else
-				m_pControlSocket->LogMessage(MessageType::Error, _("Can't write data to file: %s"), error);
+				controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file: %s"), error);
 			TransferEnd(TransferEndReason::transfer_failure_critical);
 			return false;
 		}
@@ -680,26 +629,21 @@ bool CTransferSocket::CheckGetNextWriteBuffer()
 
 bool CTransferSocket::CheckGetNextReadBuffer()
 {
-	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
 	if (!m_transferBufferLen) {
-		int res = pData->pIOThread->GetNextReadBuffer(&m_pTransferBuffer);
+		int res = ioThread_->GetNextReadBuffer(&m_pTransferBuffer);
 		if (res == IO_Again)
 			return false;
-		else if (res == IO_Error)
-		{
-			m_pControlSocket->LogMessage(MessageType::Error, _("Can't read from file"));
+		else if (res == IO_Error) {
+			controlSocket_.LogMessage(MessageType::Error, _("Can't read from file"));
 			TransferEnd(TransferEndReason::transfer_failure);
 			return false;
 		}
-		else if (res == IO_Success)
-		{
-			if (m_pTlsSocket)
-			{
+		else if (res == IO_Success) {
+			if (m_pTlsSocket) {
 				m_shutdown = true;
 
 				int error = m_pTlsSocket->Shutdown();
-				if (error != 0)
-				{
+				if (error != 0) {
 					if (error != EAGAIN)
 						TransferEnd(TransferEndReason::transfer_failure);
 					return false;
@@ -727,20 +671,18 @@ void CTransferSocket::OnIOThreadEvent()
 
 void CTransferSocket::FinalizeWrite()
 {
-	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(static_cast<CRawTransferOpData *>(m_pControlSocket->m_pCurOpData)->pOldData);
-	bool res = pData->pIOThread->Finalize(BUFFERSIZE - m_transferBufferLen);
+	bool res = ioThread_->Finalize(BUFFERSIZE - m_transferBufferLen);
 	if (m_transferEndReason != TransferEndReason::none)
 		return;
 
 	if (res)
 		TransferEnd(TransferEndReason::successful);
-	else
-	{
-		wxString error = pData->pIOThread->GetError();
+	else {
+		wxString error = ioThread_->GetError();
 		if (error.empty())
-			m_pControlSocket->LogMessage(MessageType::Error, _("Can't write data to file."));
+			controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file."));
 		else
-			m_pControlSocket->LogMessage(MessageType::Error, _("Can't write data to file: %s"), error);
+			controlSocket_.LogMessage(MessageType::Error, _("Can't write data to file: %s"), error);
 		TransferEnd(TransferEndReason::transfer_failure_critical);
 	}
 }
@@ -751,7 +693,7 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 	m_pSocket->SetFlags(m_pSocket->GetFlags() | CSocket::flag_nodelay);
 
 	wxASSERT(!m_pBackend);
-	m_pTlsSocket = new CTlsSocket(this, m_pSocket, m_pControlSocket);
+	m_pTlsSocket = new CTlsSocket(this, m_pSocket, &controlSocket_);
 
 	if (!m_pTlsSocket->Init()) {
 		delete m_pTlsSocket;
@@ -759,7 +701,7 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 		return false;
 	}
 
-	bool try_resume = CServerCapabilities::GetCapability(*m_pControlSocket->m_pCurrentServer, tls_resume) != no;
+	bool try_resume = CServerCapabilities::GetCapability(*controlSocket_.m_pCurrentServer, tls_resume) != no;
 
 	int res = m_pTlsSocket->Handshake(pPrimaryTlsSocket, try_resume);
 	if (res && res != FZ_REPLY_WOULDBLOCK)
@@ -779,14 +721,14 @@ void CTransferSocket::TriggerPostponedEvents()
 	wxASSERT(m_bActive);
 
 	if (m_postponedReceive) {
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Executing postponed receive"));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Executing postponed receive"));
 		m_postponedReceive = false;
 		OnReceive();
 		if (m_transferEndReason != TransferEndReason::none)
 			return;
 	}
 	if (m_postponedSend) {
-		m_pControlSocket->LogMessage(MessageType::Debug_Verbose, _T("Executing postponed send"));
+		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Executing postponed send"));
 		m_postponedSend = false;
 		OnSend();
 		if (m_transferEndReason != TransferEndReason::none)
@@ -801,12 +743,12 @@ bool CTransferSocket::InitBackend()
 	if (m_pBackend)
 		return true;
 
-	if (m_pControlSocket->m_protectDataChannel) {
-		if (!InitTls(m_pControlSocket->m_pTlsSocket))
+	if (controlSocket_.m_protectDataChannel) {
+		if (!InitTls(controlSocket_.m_pTlsSocket))
 			return false;
 	}
 	else
-		m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
+		m_pBackend = new CSocketBackend(this, m_pSocket, engine_.GetRateLimiter());
 
 	return true;
 }
@@ -815,8 +757,8 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 {
 	wxCHECK_RET(pSocket, _("SetSocketBufferSize called without socket"));
 
-	const int size_read = m_pEngine->GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
-	const int size_write = m_pEngine->GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
+	const int size_read = engine_.GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
+	const int size_write = engine_.GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
 	pSocket->SetBufferSizes(size_read, size_write);
 }
 

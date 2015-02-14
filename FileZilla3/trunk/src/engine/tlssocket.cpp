@@ -22,14 +22,14 @@ void log_func(int level, const char* msg)
 #endif
 
 CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CSocketEventHandler(pOwner->GetEngine()->socket_event_dispatcher_)
+	: CSocketEventHandler(pOwner->GetEngine().socket_event_dispatcher_)
 	, CBackend(pEvtHandler)
-	, CSocketEventSource(pOwner->GetEngine()->socket_event_dispatcher_)
+	, CSocketEventSource(pOwner->GetEngine().socket_event_dispatcher_)
 	, m_pOwner(pOwner)
 	, m_pSocket(pSocket)
 {
 	wxASSERT(pSocket);
-	m_pSocketBackend = new CSocketBackend(this, m_pSocket, m_pOwner->GetEngine()->GetRateLimiter());
+	m_pSocketBackend = new CSocketBackend(this, m_pSocket, m_pOwner->GetEngine().GetRateLimiter());
 
 	m_implicitTrustedCert.data = 0;
 	m_implicitTrustedCert.size = 0;

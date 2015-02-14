@@ -8,7 +8,7 @@
 class CLogging
 {
 public:
-	CLogging(CFileZillaEnginePrivate *pEngine);
+	CLogging(CFileZillaEnginePrivate & engine);
 	virtual ~CLogging();
 
 	template<typename String, typename...Args>
@@ -22,7 +22,7 @@ public:
 		notification->msg.Printf(std::forward<String>(msgFormat), std::forward<Args>(args)...);
 
 		LogToFile(nMessageType, notification->msg);
-		m_pEngine->AddLogNotification(notification);
+		engine_.AddLogNotification(notification);
 	}
 
 	template<typename String>
@@ -35,7 +35,7 @@ public:
 		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType, std::forward<String>(msg));
 
 		LogToFile(nMessageType, notification->msg);
-		m_pEngine->AddLogNotification(notification);
+		engine_.AddLogNotification(notification);
 	}
 
 	template<typename String, typename String2, typename...Args>
@@ -61,7 +61,7 @@ public:
 		notification->msg.Printf(_T("%s(%d): %s   caller=%p"), source, nSourceLine, text, pInstance);
 
 		LogToFile(nMessageType, notification->msg);
-		m_pEngine->AddLogNotification(notification);
+		engine_.AddLogNotification(notification);
 	}
 
 	bool ShouldLog(MessageType nMessageType) const;
@@ -70,7 +70,7 @@ public:
 	static void UpdateLogLevel(COptionsBase & options);
 
 private:
-	CFileZillaEnginePrivate *m_pEngine;
+	CFileZillaEnginePrivate & engine_;
 
 	void InitLogFile() const;
 	void LogToFile(MessageType nMessageType, const wxString& msg) const;

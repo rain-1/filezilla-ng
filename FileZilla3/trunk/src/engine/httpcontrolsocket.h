@@ -9,7 +9,7 @@ class CHttpFileTransferOpData;
 class CHttpControlSocket : public CRealControlSocket
 {
 public:
-	CHttpControlSocket(CFileZillaEnginePrivate *pEngine);
+	CHttpControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CHttpControlSocket();
 
 protected:
