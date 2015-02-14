@@ -157,7 +157,7 @@ protected:
 	static std::list<CFileZillaEnginePrivate*> m_engineList;
 
 	// Indicicates if data has been received/sent and whether to send any notifications
-	static int m_activeStatus[2];
+	static std::atomic_int m_activeStatus[2];
 
 	// Remember last path used in a dirlisting.
 	CServerPath m_lastListDir;
