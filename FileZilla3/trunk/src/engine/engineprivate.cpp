@@ -12,7 +12,7 @@
 
 mutex CFileZillaEnginePrivate::mutex_;
 std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
-std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {0, 0};
+std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {{0}, {0}};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
 CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent)
