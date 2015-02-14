@@ -311,7 +311,7 @@ if test "$buildmain" = "yes"; then
   # -------------
 
   IDN_LIB=
-  if ! echo $WX_CPPFLAGS | grep __WXMSW__; then
+  if ! echo $WX_CPPFLAGS | grep __WXMSW__ > /dev/null 2>&1; then
     AC_LANG_PUSH(C++)
     AX_CHECK_DEFINE([netdb.h], [AI_IDN],
       [],
