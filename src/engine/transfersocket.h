@@ -19,10 +19,10 @@ enum class TransferMode
 
 class CIOThread;
 class CTlsSocket;
-class CTransferSocket : public CEventHandler, public CSocketEventHandler
+class CTransferSocket final : public CEventHandler, public CSocketEventHandler
 {
 public:
-	CTransferSocket(CFileZillaEnginePrivate *pEngine, CFtpControlSocket *pControlSocket, TransferMode transferMode);
+	CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode);
 	virtual ~CTransferSocket();
 
 	wxString SetupActiveTransfer(const wxString& ip);
@@ -30,11 +30,13 @@ public:
 
 	void SetActive();
 
-	CDirectoryListingParser *m_pDirectoryListingParser;
+	CDirectoryListingParser *m_pDirectoryListingParser{};
 
-	bool m_binaryMode;
+	bool m_binaryMode{true};
 
 	TransferEndReason GetTransferEndreason() const { return m_transferEndReason; }
+
+	void SetIOThread(CIOThread* ioThread) { ioThread_ = ioThread; }
 
 protected:
 	bool CheckGetNextWriteBuffer();
@@ -64,42 +66,44 @@ protected:
 	virtual void operator()(CEventBase const& ev);
 	void OnIOThreadEvent();
 
-	CSocket *m_pSocket;
+	CSocket *m_pSocket{};
 
 	// Will be set only while creating active mode connections
-	CSocket* m_pSocketServer;
+	CSocket* m_pSocketServer{};
 
-	CFileZillaEnginePrivate *m_pEngine;
-	CFtpControlSocket *m_pControlSocket;
+	CFileZillaEnginePrivate & engine_;
+	CFtpControlSocket & controlSocket_;
 
-	bool m_bActive;
-	TransferEndReason m_transferEndReason;
+	bool m_bActive{};
+	TransferEndReason m_transferEndReason{TransferEndReason::none};
 
-	TransferMode m_transferMode;
+	TransferMode const m_transferMode;
 
-	char *m_pTransferBuffer;
-	int m_transferBufferLen;
+	char *m_pTransferBuffer{};
+	int m_transferBufferLen{};
 
 	// Set to true if OnClose got called
 	// We now have to read all available data in the socket, ignoring any
 	// speed limits
-	bool m_onCloseCalled;
+	bool m_onCloseCalled{};
 
-	bool m_postponedReceive;
-	bool m_postponedSend;
+	bool m_postponedReceive{};
+	bool m_postponedSend{};
 	void TriggerPostponedEvents();
 
-	CBackend* m_pBackend;
+	CBackend* m_pBackend{};
 
-	CProxySocket* m_pProxyBackend;
+	CProxySocket* m_pProxyBackend{};
 
-	CTlsSocket* m_pTlsSocket;
-	bool m_shutdown;
+	CTlsSocket* m_pTlsSocket{};
+	bool m_shutdown{};
 
 	// Needed for the madeProgress field in CTransferStatus
 	// Initially 0, 2 if made progress
 	// On uploads, 1 after first WSAE_WOULDBLOCK
-	int m_madeProgress;
+	int m_madeProgress{};
+
+	CIOThread* ioThread_{};
 };
 
 #endif

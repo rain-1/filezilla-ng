@@ -92,8 +92,8 @@ public:
 	wxFile* pFile;
 };
 
-CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate *pEngine)
-	: CRealControlSocket(pEngine)
+CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate & engine)
+	: CRealControlSocket(engine)
 {
 	m_pRecvBuffer = 0;
 	m_recvBufferPos = 0;
@@ -140,7 +140,7 @@ int CHttpControlSocket::SendNextCommand()
 
 int CHttpControlSocket::ContinueConnect()
 {
-	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("CHttpControlSocket::ContinueConnect() m_pEngine=%p"), m_pEngine);
+	LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Verbose, _T("CHttpControlSocket::ContinueConnect() &engine_=%p"), &engine_);
 	if (GetCurrentCommandId() != Command::connect ||
 		!m_pCurrentServer)
 	{
@@ -485,7 +485,7 @@ int CHttpControlSocket::DoInternalConnect()
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
 	delete m_pBackend;
-	m_pBackend = new CSocketBackend(this, m_pSocket, m_pEngine->GetRateLimiter());
+	m_pBackend = new CSocketBackend(this, m_pSocket, engine_.GetRateLimiter());
 
 	int res = m_pSocket->Connect(pData->host, pData->port);
 	if (!res)
@@ -514,15 +514,15 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		return FZ_REPLY_OK;
 	}
 
-	if (m_pEngine->transfer_status_.empty()) {
-		m_pEngine->transfer_status_.Init(pData->m_totalSize.GetValue(), 0, false);
-		m_pEngine->transfer_status_.SetStartTime();
+	if (engine_.transfer_status_.empty()) {
+		engine_.transfer_status_.Init(pData->m_totalSize.GetValue(), 0, false);
+		engine_.transfer_status_.SetStartTime();
 	}
 
 	if (pData->localFile.empty()) {
 		char* q = new char[len];
 		memcpy(q, p, len);
-		m_pEngine->AddNotification(new CDataNotification(q, len));
+		engine_.AddNotification(new CDataNotification(q, len));
 	}
 	else {
 		wxASSERT(pData->pFile);
@@ -534,7 +534,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		}
 	}
 
-	m_pEngine->transfer_status_.Update(len);
+	engine_.transfer_status_.Update(len);
 
 	return FZ_REPLY_WOULDBLOCK;
 }

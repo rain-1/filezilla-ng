@@ -26,10 +26,9 @@ mutex CLogging::mutex_(false);
 thread_local int CLogging::debug_level_{0};
 thread_local int CLogging::raw_listing_{0};
 
-CLogging::CLogging(CFileZillaEnginePrivate *pEngine)
+CLogging::CLogging(CFileZillaEnginePrivate & engine)
+	: engine_(engine)
 {
-	m_pEngine = pEngine;
-
 	scoped_lock l(mutex_);
 	m_refcount++;
 }
@@ -91,7 +90,7 @@ void CLogging::InitLogFile() const
 
 	m_logfile_initialized = true;
 
-	m_file = m_pEngine->GetOptions().GetOption(OPTION_LOGGING_FILE);
+	m_file = engine_.GetOptions().GetOption(OPTION_LOGGING_FILE);
 	if (m_file.empty())
 		return;
 
@@ -119,7 +118,7 @@ void CLogging::InitLogFile() const
 
 	m_pid = wxGetProcessId();
 
-	m_max_size = m_pEngine->GetOptions().GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
+	m_max_size = engine_.GetOptions().GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
 	if (m_max_size < 0)
 		m_max_size = 0;
 	else if (m_max_size > 2000)
@@ -147,7 +146,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 #else
 		_T("\n"),
 #endif
-		now.Format(_T("%Y-%m-%d %H:%M:%S")), m_pid, m_pEngine->GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
+		now.Format(_T("%Y-%m-%d %H:%M:%S")), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
 
 	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
 	if (utf8) {

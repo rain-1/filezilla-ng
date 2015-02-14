@@ -115,7 +115,7 @@ class CTransferStatus;
 class CControlSocket: public CLogging, public CEventHandler
 {
 public:
-	CControlSocket(CFileZillaEnginePrivate *pEngine);
+	CControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CControlSocket();
 
 	virtual int Connect(const CServer &server) = 0;
@@ -163,7 +163,7 @@ public:
 	// Set to true if waiting for data
 	void SetWait(bool waiting);
 
-	CFileZillaEnginePrivate* GetEngine() { return m_pEngine; }
+	CFileZillaEnginePrivate& GetEngine() { return engine_; }
 
 	// Only called from the engine, see there for description
 	void InvalidateCurrentWorkingDir(const CServerPath& path);
@@ -193,7 +193,7 @@ protected:
 
 	COpData *m_pCurOpData;
 	int m_nOpState;
-	CFileZillaEnginePrivate *m_pEngine;
+	CFileZillaEnginePrivate & engine_;
 	CServer *m_pCurrentServer;
 
 	CServerPath m_CurrentPath;
@@ -264,7 +264,7 @@ class CProxySocket;
 class CRealControlSocket : public CControlSocket, public CSocketEventHandler
 {
 public:
-	CRealControlSocket(CFileZillaEnginePrivate *pEngine);
+	CRealControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CRealControlSocket();
 
 	virtual int Connect(const CServer &server);
