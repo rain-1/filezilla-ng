@@ -549,13 +549,13 @@ void CControlSocket::OnTimer(timer_id)
 {
 	m_timer = 0; // It's a one-shot timer, no need to stop it
 
-	int const timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT) * 1000;
-	if (timeout) {
+	int const timeout = m_pEngine->GetOptions().GetOptionVal(OPTION_TIMEOUT);
+	if (timeout > 0) {
 		int64_t const elapsed = CMonotonicClock::now() - m_lastActivity;
 
 		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
-			if (elapsed > timeout) {
-				LogMessage(MessageType::Error, _("Connection timed out"));
+			if (elapsed > timeout * 1000) {
+				LogMessage(MessageType::Error, wxPLURAL("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
 				DoClose(FZ_REPLY_TIMEOUT);
 				return;
 			}
