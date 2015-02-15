@@ -561,7 +561,7 @@ void CControlSocket::OnTimer(timer_id)
 			}
 		}
 
-		m_timer = AddTimer(timeout - elapsed, true);
+		m_timer = AddTimer(timeout * 1000 - elapsed, true);
 	}
 }
 
