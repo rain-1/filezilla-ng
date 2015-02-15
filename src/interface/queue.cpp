@@ -872,7 +872,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 				{
 					const wxLongLong& size = pFileItem->GetSize();
 					if (size >= 0)
-						return CSizeFormat::Format(size);
+						return CSizeFormat::Format(size.GetValue());
 					else
 						return _T("?");
 				}

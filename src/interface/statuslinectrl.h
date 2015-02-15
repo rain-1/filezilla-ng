@@ -15,8 +15,8 @@ public:
 	void SetTransferStatus(CTransferStatus const& status);
 	void ClearTransferStatus();
 
-	wxLongLong GetLastOffset() const { return status_.empty() ? m_lastOffset : status_.currentOffset; }
-	wxLongLong GetTotalSize() const { return status_.empty() ? -1 : status_.totalSize; }
+	int64_t GetLastOffset() const { return status_.empty() ? m_lastOffset : status_.currentOffset; }
+	int64_t GetTotalSize() const { return status_.empty() ? -1 : status_.totalSize; }
 	wxFileOffset GetSpeed(int elapsed_milli_seconds);
 	wxFileOffset GetCurrentSpeed();
 
@@ -41,7 +41,7 @@ protected:
 
 	bool m_madeProgress;
 
-	wxLongLong m_lastOffset{-1}; // Stores the last transfer offset so that the total queue size can be accurately calculated.
+	int64_t m_lastOffset{-1}; // Stores the last transfer offset so that the total queue size can be accurately calculated.
 
 	// This is used by GetSpeed to forget about the first 10 seconds on longer transfers
 	// since at the very start the speed is hardly accurate (e.g. due to TCP slow start)

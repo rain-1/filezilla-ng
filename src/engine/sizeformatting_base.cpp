@@ -5,12 +5,50 @@
 #include <langinfo.h>
 #endif
 
-namespace
+namespace {
+const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
+
+wxString ToString(int64_t n, wxChar const* const sepBegin = 0, wxChar const* const sepEnd = 0)
 {
-	const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
+	wxString ret;
+	if (!n) {
+		ret = _T("0");
+	}
+	else {
+		bool neg = false;
+		if (n < 0) {
+			n *= -1;
+		}
+
+		wxChar buf[60];
+		wxChar * const end = &buf[sizeof(buf) / sizeof(wxChar) - 1];
+		wxChar * p = end;
+
+		int d = 0;
+		while (n != 0) {
+			*--p = '0' + n % 10;
+			n /= 10;
+
+			if (sepBegin && !(++d % 3) && n != 0) {
+				wxChar *q = p - (sepEnd - sepBegin);
+				for (wxChar const* s = sepBegin; s != sepEnd; ++s) {
+					*q++ = *s;
+				}
+				p -= sepEnd - sepBegin;
+			}
+		}
+
+		if (neg) {
+			*--p = '-';
+		}
+
+		ret.assign(p, end - p);
+	}
+	return ret;
+}
 }
 
-wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool add_bytes_suffix, CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
+wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix, CSizeFormatBase::_format format, bool thousands_separator, int num_decimal_places)
 {
 	wxASSERT(format != formats_count);
 	wxASSERT(size >= 0);
@@ -23,14 +61,13 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool a
 
 		if (!add_bytes_suffix)
 			return result;
-		else
-		{
+		else {
 			// wxPLURAL has no support for wxLongLong
 			int last;
 			if (size > 1000000000)
-				last = (1000000000 + (size % 1000000000)).GetLo();
+				last = 1000000000 + (size % 1000000000);
 			else
-				last = size.GetLo();
+				last = size;
 			return wxString::Format(wxPLURAL("%s byte", "%s bytes", last), result);
 		}
 	}
@@ -103,13 +140,12 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool a
 			remainder = 0;
 		}
 
-		places.Printf(_T("%d"), remainder);
-		const size_t len = places.Len();
-		for (size_t i = len; i < static_cast<size_t>(num_decimal_places); ++i)
-			places = _T("0") + places;
+		wxChar fmt[] = _T("%00d");
+		fmt[2] = '0' + num_decimal_places;
+		places.Printf(fmt, remainder);
 	}
 
-	wxString result = r.ToString();
+	wxString result = ToString(r.GetValue(), 0, 0);
 	if (!places.empty()) {
 		const wxString& sep = GetRadixSeparator();
 
@@ -119,8 +155,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool a
 	result += ' ';
 
 	static wxChar byte_unit = 0;
-	if (!byte_unit)
-	{
+	if (!byte_unit) {
 		wxString t = _("B <Unit symbol for bytes. Only translate first letter>");
 		byte_unit = t[0];
 	}
@@ -137,7 +172,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, wxLongLong size, bool a
 	return result;
 }
 
-wxString CSizeFormatBase::Format(COptionsBase* pOptions, const wxLongLong& size, bool add_bytes_suffix /*=false*/)
+wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix /*=false*/)
 {
 	const _format format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
 	const bool thousands_separator = pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
@@ -146,7 +181,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, const wxLongLong& size,
 	return Format(pOptions, size, add_bytes_suffix, format, thousands_separator, num_decimal_places);
 }
 
-wxString CSizeFormatBase::FormatUnit(COptionsBase* pOptions, const wxLongLong& size, CSizeFormatBase::_unit unit, int base /*=1024*/)
+wxString CSizeFormatBase::FormatUnit(COptionsBase* pOptions, int64_t size, CSizeFormatBase::_unit unit, int base /*=1024*/)
 {
 	_format format = _format(pOptions->GetOptionVal(OPTION_SIZE_FORMAT));
 	if (base == 1000)
@@ -208,6 +243,9 @@ const wxString& CSizeFormatBase::GetThousandsSeparator()
 			sep = wxString(chr, wxConvLibc);
 		}
 #endif
+		if (sep.size() > 5) {
+			sep = sep.Left(5);
+		}
 	}
 
 	return sep;
@@ -245,28 +283,19 @@ const wxString& CSizeFormatBase::GetRadixSeparator()
 	return sep;
 }
 
-wxString CSizeFormatBase::FormatNumber(COptionsBase* pOptions, const wxLongLong& size, bool* thousands_separator /*=0*/)
+wxString CSizeFormatBase::FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator /*=0*/)
 {
-	if ((thousands_separator && !*thousands_separator) || pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) == 0)
-		return size.ToString();
+	wxString sep;
+	wxChar const* sepBegin = 0;
+	wxChar const* sepEnd = 0;
 
-	const wxString& sep = GetThousandsSeparator();
-	if (sep.empty())
-		return size.ToString();
-
-	wxString tmp = size.ToString();
-	const int len = tmp.Len();
-	if (len <= 3)
-		return tmp;
-
-	wxString result;
-	int i = (len - 1) % 3 + 1;
-	result = tmp.Left(i);
-	while (i < len)
-	{
-		result += sep + tmp.Mid(i, 3);
-		i += 3;
+	if ((!thousands_separator || *thousands_separator) && pOptions->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0) {
+		sep = GetThousandsSeparator();
+		if (!sep.empty()) {
+			sepBegin = sep.c_str();
+			sepEnd = sepBegin + sep.size();
+		}
 	}
 
-	return result;
+	return ToString(size, sepBegin, sepEnd);
 }

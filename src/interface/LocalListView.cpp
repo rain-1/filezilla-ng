@@ -1572,7 +1572,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 		if (data->size < 0)
 			return wxString();
 		else
-			return CSizeFormat::Format(data->size);
+			return CSizeFormat::Format(data->size.GetValue());
 	}
 	else if (column == 2) {
 		if (!item && m_hasParent)

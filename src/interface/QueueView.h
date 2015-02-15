@@ -285,7 +285,7 @@ protected:
 	int m_actionAfterTimerId;
 #endif
 
-	wxLongLong m_totalQueueSize;
+	int64_t m_totalQueueSize;
 	int m_filesWithUnknownSize;
 
 	CMainFrame* m_pMainFrame;

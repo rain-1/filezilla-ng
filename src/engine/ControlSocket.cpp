@@ -101,7 +101,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 			wxPLURAL("%d second", "%d seconds", elapsed),
 			elapsed);
 
-		wxLongLong transferred = status.currentOffset - status.startOffset;
+		int64_t transferred = status.currentOffset - status.startOffset;
 		wxString size = CSizeFormatBase::Format(&engine_.GetOptions(), transferred, true);
 
 		MessageType msgType = MessageType::Error;
