@@ -2489,7 +2489,7 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		if (entry.is_dir() || entry.size < 0)
 			return wxString();
 		else
-			return CSizeFormat::Format(entry.size);
+			return CSizeFormat::Format(entry.size.GetValue());
 	}
 	else if (column == 2)
 	{

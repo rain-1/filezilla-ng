@@ -169,14 +169,14 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		}
 
 		if (status_.totalSize > 0) {
-			bar_split = wxLongLong(status_.currentOffset * (PROGRESSBAR_WIDTH - 2) / status_.totalSize).GetLo();
+			bar_split = static_cast<int>(status_.currentOffset * (PROGRESSBAR_WIDTH - 2) / status_.totalSize);
 			if (bar_split > (PROGRESSBAR_WIDTH - 2))
 				bar_split = PROGRESSBAR_WIDTH - 2;
 
 			if (status_.currentOffset > status_.totalSize)
 				permill = 1001;
 			else
-				permill = wxLongLong(status_.currentOffset * 1000 / status_.totalSize).GetLo();
+				permill = static_cast<int>(status_.currentOffset * 1000 / status_.totalSize);
 		}
 
 		if (m_last_bar_split != bar_split || m_last_permill != permill) {

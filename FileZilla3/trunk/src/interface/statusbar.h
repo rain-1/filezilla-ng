@@ -91,7 +91,7 @@ public:
 	CStatusBar(wxTopLevelWindow* parent);
 	virtual ~CStatusBar();
 
-	void DisplayQueueSize(wxLongLong totalSize, bool hasUnknown);
+	void DisplayQueueSize(int64_t totalSize, bool hasUnknown);
 
 	void OnHandleLeftClick(wxWindow* wnd);
 	void OnHandleRightClick(wxWindow* wnd);
@@ -112,7 +112,7 @@ protected:
 	CSizeFormat::_format m_sizeFormat;
 	bool m_sizeFormatThousandsSep;
 	int m_sizeFormatDecimalPlaces;
-	wxLongLong m_size;
+	int64_t m_size;
 	bool m_hasUnknownFiles;
 
 	wxStaticBitmap* m_pDataTypeIndicator;

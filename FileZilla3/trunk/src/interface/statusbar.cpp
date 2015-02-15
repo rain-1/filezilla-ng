@@ -343,7 +343,7 @@ CStatusBar::~CStatusBar()
 {
 }
 
-void CStatusBar::DisplayQueueSize(wxLongLong totalSize, bool hasUnknown)
+void CStatusBar::DisplayQueueSize(int64_t totalSize, bool hasUnknown)
 {
 	m_size = totalSize;
 	m_hasUnknownFiles = hasUnknown;

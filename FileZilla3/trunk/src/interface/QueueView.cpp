@@ -1301,16 +1301,14 @@ bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount
 	{
 		// Update size information
 		const CFileItem* const pFileItem = (const CFileItem* const)item;
-		const wxLongLong& size = pFileItem->GetSize();
-		if (size < 0)
-		{
+		int64_t size = pFileItem->GetSize().GetValue();
+		if (size < 0) {
 			m_filesWithUnknownSize--;
 			wxASSERT(m_filesWithUnknownSize >= 0);
 			if (!m_filesWithUnknownSize && updateItemCount)
 				DisplayQueueSize();
 		}
-		else if (size > 0)
-		{
+		else if (size > 0) {
 			m_totalQueueSize -= size;
 			if (updateItemCount)
 				DisplayQueueSize();
@@ -1683,7 +1681,7 @@ void CQueueView::CalculateQueueSize()
 
 	m_filesWithUnknownSize = 0;
 	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount, m_folderScanCount);
+		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount, m_folderScanCount).GetValue();
 
 	DisplayQueueSize();
 	DisplayNumberQueuedFiles();
@@ -2719,17 +2717,15 @@ void CQueueView::UpdateItemSize(CFileItem* pItem, wxLongLong size)
 	if (size == oldSize)
 		return;
 
-	if (oldSize == -1)
-	{
+	if (oldSize == -1) {
 		wxASSERT(m_filesWithUnknownSize);
 		if (m_filesWithUnknownSize)
 			m_filesWithUnknownSize--;
 	}
-	else
-	{
+	else {
 		wxASSERT(m_totalQueueSize >= oldSize);
 		if (m_totalQueueSize > oldSize)
-			m_totalQueueSize -= oldSize;
+			m_totalQueueSize -= oldSize.GetValue();
 		else
 			m_totalQueueSize = 0;
 	}
@@ -2737,7 +2733,7 @@ void CQueueView::UpdateItemSize(CFileItem* pItem, wxLongLong size)
 	if (size == -1)
 		m_filesWithUnknownSize++;
 	else
-		m_totalQueueSize += size;
+		m_totalQueueSize += size.GetValue();
 
 	pItem->SetSize(size);
 
@@ -2791,15 +2787,14 @@ void CQueueView::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 {
 	CQueueViewBase::InsertItem(pServerItem, pItem);
 
-	if (pItem->GetType() == QueueItemType::File)
-	{
+	if (pItem->GetType() == QueueItemType::File) {
 		CFileItem* pFileItem = (CFileItem*)pItem;
 
 		const wxLongLong& size = pFileItem->GetSize();
 		if (size < 0)
 			m_filesWithUnknownSize++;
 		else if (size > 0)
-			m_totalQueueSize += size;
+			m_totalQueueSize += size.GetValue();
 	}
 }
 

@@ -36,13 +36,13 @@ protected:
 	bool m_connected;
 	int m_count_files;
 	int m_count_dirs;
-	wxLongLong m_total_size;
+	int64_t m_total_size;
 	int m_unknown_size; // Set to true if there are files with unknown size
 	int m_hidden;
 
 	int m_count_selected_files;
 	int m_count_selected_dirs;
-	wxLongLong m_total_selected_size;
+	int64_t m_total_selected_size;
 	int m_unknown_selected_size; // Set to true if there are files with unknown size
 
 	wxTimer m_updateTimer;

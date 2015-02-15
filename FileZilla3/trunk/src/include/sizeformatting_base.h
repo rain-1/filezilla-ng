@@ -28,14 +28,14 @@ public:
 		exa
 	};
 
-	static wxString FormatNumber(COptionsBase* pOptions, const wxLongLong& size, bool* thousands_separator = 0);
+	static wxString FormatNumber(COptionsBase* pOptions, int64_t size, bool* thousands_separator = 0);
 
 	static wxString GetUnitWithBase(COptionsBase* pOptions, _unit unit, int base);
 	static wxString GetUnit(COptionsBase* pOptions, _unit unit, _format = formats_count);
-	static wxString FormatUnit(COptionsBase* pOptions, const wxLongLong& size, _unit unit, int base = 1024);
+	static wxString FormatUnit(COptionsBase* pOptions, int64_t size, _unit unit, int base = 1024);
 
-	static wxString Format(COptionsBase* pOptions, wxLongLong size, bool add_bytes_suffix, _format format, bool thousands_separator, int num_decimal_places);
-	static wxString Format(COptionsBase* pOptions, const wxLongLong& size, bool add_bytes_suffix = false);
+	static wxString Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix, _format format, bool thousands_separator, int num_decimal_places);
+	static wxString Format(COptionsBase* pOptions, int64_t size, bool add_bytes_suffix = false);
 
 	static const wxString& GetThousandsSeparator();
 	static const wxString& GetRadixSeparator();

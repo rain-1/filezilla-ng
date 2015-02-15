@@ -35,7 +35,7 @@ bool CFileExistsDlg::Create(wxWindow* parent)
 	return true;
 }
 
-void CFileExistsDlg::DisplayFile(bool left, wxString name, wxLongLong const& size, CDateTime const& time, wxString const& iconFile)
+void CFileExistsDlg::DisplayFile(bool left, wxString name, int64_t size, CDateTime const& time, wxString const& iconFile)
 {
 	name = GetPathEllipsis(name, FindWindow(left ? XRCID("ID_FILE1_NAME") : XRCID("ID_FILE2_NAME")));
 	name.Replace(_T("&"), _T("&&"));
@@ -66,8 +66,8 @@ bool CFileExistsDlg::CreateControls()
 	wxString localFile = m_pNotification->localFile;
 	wxString remoteFile = m_pNotification->remotePath.FormatFilename(m_pNotification->remoteFile);
 
-	DisplayFile(m_pNotification->download, localFile, m_pNotification->localSize, m_pNotification->localTime, m_pNotification->localFile);
-	DisplayFile(!m_pNotification->download, remoteFile, m_pNotification->remoteSize, m_pNotification->remoteTime, m_pNotification->remoteFile);
+	DisplayFile(m_pNotification->download, localFile, m_pNotification->localSize.GetValue(), m_pNotification->localTime, m_pNotification->localFile);
+	DisplayFile(!m_pNotification->download, remoteFile, m_pNotification->remoteSize.GetValue(), m_pNotification->remoteTime, m_pNotification->remoteFile);
 
 	xrc_call(*this, "ID_UPDOWNONLY", &wxCheckBox::SetLabel, m_pNotification->download ? _("A&pply only to downloads") : _("A&pply only to uploads"));
 

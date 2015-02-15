@@ -98,7 +98,7 @@ wxString COptionsPageSizeFormatting::FormatSize(const wxLongLong& size)
 	const bool thousands_separator = GetCheck(XRCID("ID_SIZEFORMAT_SEPARATE_THOUTHANDS"));
 	const int num_decimal_places = XRCCTRL(*this, "ID_SIZEFORMAT_DECIMALPLACES", wxSpinCtrl)->GetValue();
 
-	return CSizeFormat::Format(size, false, format, thousands_separator, num_decimal_places);
+	return CSizeFormat::Format(size.GetValue(), false, format, thousands_separator, num_decimal_places);
 }
 
 void COptionsPageSizeFormatting::UpdateExamples()
