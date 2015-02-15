@@ -328,8 +328,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 		int greenmax = 255;
 		int colourCount = ((height + 1) / 2);
 
-		for (int i = 0; i < colourCount; i++)
-		{
+		for (int i = 0; i < colourCount; ++i) {
 			int curGreen = greenmax - ((greenmax - greenmin) * i / (colourCount - 1));
 			dc.SetPen(wxPen(wxColour(0, curGreen, 0)));
 			dc.DrawLine(x + 1, y + colourCount - i, x + 1 + bar_split, y + colourCount - i);
@@ -342,13 +341,13 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 	dc.DrawRectangle(x, y, PROGRESSBAR_WIDTH, height);
 
 	// Draw percentage-done text
-	wxString prefix;
+	wxString text;
 	if (permill > 1000) {
-		prefix = _T("> ");
-		permill = 1000;
+		text = _T("> 100.0%%");
 	}
-
-	wxString text = wxString::Format(_T("%s%d.%d%%"), prefix, permill / 10, permill % 10);
+	else {
+		text = wxString::Format(_T("%d.%d%%"), permill / 10, permill % 10);
+	}
 
 	wxCoord w, h;
 	dc.GetTextExtent(text, &w, &h);
