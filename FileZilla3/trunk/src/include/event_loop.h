@@ -6,6 +6,8 @@
 #include "mutex.h"
 #include "timeex.h"
 
+#include <functional>
+
 class CEventHandler;
 struct timer_data final
 {
@@ -19,6 +21,8 @@ struct timer_data final
 class CEventLoop final : private wxThread
 {
 public:
+	typedef std::deque<std::pair<CEventHandler*, CEventBase*>> Events;
+
 	CEventLoop();
 	virtual ~CEventLoop();
 
@@ -30,10 +34,7 @@ public:
 	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
 	void StopTimer(timer_id id);
 
-	// Removes all pending events of the given derived type from the passed handler
-	void RemoveEvents(CEventHandler* handler, void const* derived_type);
-
-	void ChangeHandler(CEventHandler* oldHandler, CEventHandler* newHandler, void const* derived_type);
+	void FilterEvents(std::function<bool (Events::value_type&)> filter);
 
 protected:
 	friend class CEventHandler;
@@ -44,7 +45,6 @@ protected:
 
 	virtual wxThread::ExitCode Entry();
 
-	typedef std::deque<std::pair<CEventHandler*, CEventBase*>> Events;
 	typedef std::vector<timer_data> Timers;
 
 	Events pending_events_;

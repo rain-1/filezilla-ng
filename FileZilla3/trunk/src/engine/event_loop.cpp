@@ -78,14 +78,14 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 	}
 }
 
-void CEventLoop::RemoveEvents(CEventHandler* handler, void const* derived_type)
+void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> filter)
 {
 	scoped_lock l(sync_);
 
 	pending_events_.erase(
 		std::remove_if(pending_events_.begin(), pending_events_.end(),
-			[&](Events::value_type const& v) {
-				bool const remove = v.first == handler && v.second->derived_type() == derived_type;
+			[&](Events::value_type & v) {
+				bool const remove = filter(v);
 				if (remove) {
 					delete v.second;
 				}
@@ -94,16 +94,6 @@ void CEventLoop::RemoveEvents(CEventHandler* handler, void const* derived_type)
 		),
 		pending_events_.end()
 	);
-}
-
-void CEventLoop::ChangeHandler(CEventHandler* oldHandler, CEventHandler* newHandler, void const* derived_type)
-{
-	scoped_lock l(sync_);
-	for (auto& it : pending_events_) {
-		if (it.first == oldHandler && it.second->derived_type() == derived_type) {
-			it.first = newHandler;
-		}
-	}
 }
 
 timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_shot)

@@ -14,9 +14,6 @@ public:
 
 	void RemoveHandler();
 
-	void RemoveEvents(void const* derived_type);
-	void ChangeHandler(CEventHandler* newHandler, void const* derived_type);
-
 	virtual void operator()(CEventBase const&) = 0;
 
 	template<typename T, typename... Args>
