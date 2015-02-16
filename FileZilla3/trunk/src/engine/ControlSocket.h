@@ -283,7 +283,7 @@ protected:
 	virtual void OnConnect();
 	virtual void OnReceive();
 	void OnSend();
-	void OnClose(int error);
+	virtual void OnClose(int error);
 
 	bool Send(const char *buffer, int len);
 
