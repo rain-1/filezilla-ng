@@ -191,7 +191,9 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 
 void CProxySocket::operator()(CEventBase const& ev)
 {
-	Dispatch<CSocketEvent>(ev, this, &CProxySocket::OnSocketEvent);
+	Dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
+		&CProxySocket::OnSocketEvent,
+		&CProxySocket::OnHostAddress);
 }
 
 void CProxySocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
