@@ -133,9 +133,11 @@ if test "$buildmain" = "yes"; then
 
   AC_LANG_PUSH(C++)
   CPPFLAGS_OLD="$CPPFLAGS"
+  CXXFLAGS_OLD="$CXXFLAGS"
   CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
+  CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
   AC_MSG_CHECKING([positional printf argument support in wxWidgets])
-  AC_PREPROC_IFELSE(
+  AC_COMPILE_IFELSE(
     [AC_LANG_PROGRAM([[
           #include <wx/wx.h>
           #if !wxUSE_PRINTF_POS_PARAMS
@@ -149,6 +151,7 @@ if test "$buildmain" = "yes"; then
       ]
     )
   CPPFLAGS="$CPPFLAGS_OLD"
+  CXXFLAGS="$CXXFLAGS_OLD"
   AC_LANG_POP
 
   AC_SUBST(WX_CONFIG_WITH_ARGS)
