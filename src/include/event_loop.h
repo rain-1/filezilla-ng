@@ -33,6 +33,8 @@ public:
 	// Removes all pending events of the given derived type from the passed handler
 	void RemoveEvents(CEventHandler* handler, void const* derived_type);
 
+	void ChangeHandler(CEventHandler* oldHandler, CEventHandler* newHandler, void const* derived_type);
+
 protected:
 	friend class CEventHandler;
 	void SendEvent(CEventHandler* handler, CEventBase* evt);

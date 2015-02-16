@@ -6,10 +6,10 @@
 struct external_ip_resolve_event_type;
 typedef CEvent<external_ip_resolve_event_type> CExternalIPResolveEvent;
 
-class CExternalIPResolver final : public CSocketEventHandler
+class CExternalIPResolver final : public CEventHandler
 {
 public:
-	CExternalIPResolver(CSocketEventDispatcher& dispatcher, CEventHandler & handler);
+	CExternalIPResolver(CEventHandler & handler);
 	virtual ~CExternalIPResolver();
 
 	bool Done() const { return m_done; }
@@ -33,7 +33,8 @@ protected:
 
 	CSocket *m_pSocket{};
 
-	void OnSocketEvent(CSocketEvent& event);
+	virtual void operator()(CEventBase const& ev);
+	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 
 	void OnConnect(int error);
 	void OnClose();

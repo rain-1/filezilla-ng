@@ -8,7 +8,6 @@ class CEventLoop;
 class COptionsBase;
 class CPathCache;
 class CRateLimiter;
-class CSocketEventDispatcher;
 
 // There can be multiple engines, but there can be at most one context
 class CFileZillaEngineContext
@@ -19,7 +18,6 @@ public:
 
 	COptionsBase& GetOptions();
 	CEventLoop& GetEventLoop();
-	CSocketEventDispatcher& GetSocketEventDispatcher();
 	CRateLimiter& GetRateLimiter();
 	CDirectoryCache& GetDirectoryCache();
 	CPathCache& GetPathCache();

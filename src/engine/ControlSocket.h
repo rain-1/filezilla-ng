@@ -261,7 +261,7 @@ protected:
 };
 
 class CProxySocket;
-class CRealControlSocket : public CControlSocket, public CSocketEventHandler
+class CRealControlSocket : public CControlSocket
 {
 public:
 	CRealControlSocket(CFileZillaEnginePrivate & engine);
@@ -276,11 +276,14 @@ protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 	void ResetSocket();
 
-	virtual void OnSocketEvent(CSocketEvent &event);
+	virtual void operator()(CEventBase const& ev);
+	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
+	void OnHostAddress(CSocketEventSource* source, wxString const& address);
+
 	virtual void OnConnect();
 	virtual void OnReceive();
-	virtual void OnSend();
-	virtual void OnClose(int error);
+	void OnSend();
+	void OnClose(int error);
 
 	bool Send(const char *buffer, int len);
 

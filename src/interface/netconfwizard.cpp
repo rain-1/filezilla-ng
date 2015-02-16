@@ -30,7 +30,6 @@ TRANSLATE_T("< &Back");
 CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & engine_context)
 	: CEventHandler(engine_context.GetEventLoop())
 	, m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
-	, dispatcher_(engine_context.GetSocketEventDispatcher())
 {
 	m_socket = 0;
 	m_pIPResolver = 0;
@@ -719,7 +718,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
-			m_pIPResolver = new CExternalIPResolver(dispatcher_, *this);
+			m_pIPResolver = new CExternalIPResolver(*this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
 			if (!m_pIPResolver->Done())
 				return wxString();

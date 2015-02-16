@@ -4,11 +4,11 @@
 #include "ratelimiter.h"
 #include "socket.h"
 
-class CBackend : public CRateLimiterObject
+class CBackend : public CRateLimiterObject, public CSocketEventSource
 {
 public:
-	CBackend(CSocketEventHandler* pEvtHandler);
-	virtual ~CBackend() {}
+	CBackend(CEventHandler* pEvtHandler);
+	virtual ~CBackend();
 
 	virtual int Read(void *buffer, unsigned int size, int& error) = 0;
 	virtual int Peek(void *buffer, unsigned int size, int& error) = 0;
@@ -17,14 +17,14 @@ public:
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction) = 0;
 
 protected:
-	CSocketEventHandler* const m_pEvtHandler;
+	CEventHandler* const m_pEvtHandler;
 };
 
 class CSocket;
-class CSocketBackend final : public CBackend, public CSocketEventSource
+class CSocketBackend final : public CBackend
 {
 public:
-	CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CRateLimiter& rateLimiter);
+	CSocketBackend(CEventHandler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter);
 	virtual ~CSocketBackend();
 	// Backend definitions
 	virtual int Read(void *buffer, unsigned int size, int& error);
@@ -34,7 +34,7 @@ public:
 protected:
 	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);
 
-	CSocket* m_pSocket;
+	CSocket &socket_;
 	CRateLimiter& m_rateLimiter;
 };
 

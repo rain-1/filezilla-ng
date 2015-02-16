@@ -10,8 +10,8 @@ wxString ip;
 bool checked = false;
 }
 
-CExternalIPResolver::CExternalIPResolver(CSocketEventDispatcher& dispatcher, CEventHandler & handler)
-	: CSocketEventHandler(dispatcher)
+CExternalIPResolver::CExternalIPResolver(CEventHandler & handler)
+	: CEventHandler(handler.event_loop_)
 	, m_handler(&handler)
 {
 	ResetHttpData(true);
@@ -71,7 +71,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 		return;
 	}
 
-	m_pSocket = new CSocket(this, dispatcher_);
+	m_pSocket = new CSocket(this);
 
 	int res = m_pSocket->Connect(host, m_port, protocol);
 	if (res && res != EINPROGRESS) {
@@ -84,23 +84,28 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 	strcpy(m_pSendBuffer, buffer.mb_str());
 }
 
-void CExternalIPResolver::OnSocketEvent(CSocketEvent& event)
+void CExternalIPResolver::operator()(CEventBase const& ev)
+{
+	Dispatch<CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
+}
+
+void CExternalIPResolver::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
 {
 	if (!m_pSocket)
 		return;
 
-	switch (event.GetType())
+	switch (t)
 	{
-	case CSocketEvent::read:
+	case SocketEventType::read:
 		OnReceive();
 		break;
-	case CSocketEvent::connection:
-		OnConnect(event.GetError());
+	case SocketEventType::connection:
+		OnConnect(error);
 		break;
-	case CSocketEvent::close:
+	case SocketEventType::close:
 		OnClose();
 		break;
-	case CSocketEvent::write:
+	case SocketEventType::write:
 		OnSend();
 		break;
 	default:

@@ -4,31 +4,35 @@
 #include "socket.h"
 #include <errno.h>
 
-CBackend::CBackend(CSocketEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler)
+CBackend::CBackend(CEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler)
 {
 }
 
-CSocketBackend::CSocketBackend(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CRateLimiter& rateLimiter)
+CBackend::~CBackend()
+{
+	m_pEvtHandler->RemoveEvents(CSocketEvent::type());
+	m_pEvtHandler->RemoveEvents(CHostAddressEvent::type());
+}
+
+CSocketBackend::CSocketBackend(CEventHandler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter)
 	: CBackend(pEvtHandler)
-	, CSocketEventSource(pEvtHandler->dispatcher_)
-	, m_pSocket(pSocket)
+	, socket_(socket)
 	, m_rateLimiter(rateLimiter)
 {
-	m_pSocket->SetEventHandler(pEvtHandler);
+	socket_.SetEventHandler(pEvtHandler);
 	m_rateLimiter.AddObject(this);
 }
 
 CSocketBackend::~CSocketBackend()
 {
-	m_pSocket->SetEventHandler(0);
+	socket_.SetEventHandler(0);
 	m_rateLimiter.RemoveObject(this);
 }
 
 int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 {
 	wxLongLong max = GetAvailableBytes(CRateLimiter::outbound);
-	if (max == 0)
-	{
+	if (max == 0) {
 		Wait(CRateLimiter::outbound);
 		error = EAGAIN;
 		return -1;
@@ -36,7 +40,7 @@ int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 	else if (max > 0 && max < len)
 		len = max.GetLo();
 
-	int written = m_pSocket->Write(buffer, len, error);
+	int written = socket_.Write(buffer, len, error);
 
 	if (written > 0 && max != -1)
 		UpdateUsage(CRateLimiter::outbound, written);
@@ -47,8 +51,7 @@ int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 {
 	wxLongLong max = GetAvailableBytes(CRateLimiter::inbound);
-	if (max == 0)
-	{
+	if (max == 0) {
 		Wait(CRateLimiter::inbound);
 		error = EAGAIN;
 		return -1;
@@ -56,7 +59,7 @@ int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 	else if (max > 0 && max < len)
 		len = max.GetLo();
 
-	int read = m_pSocket->Read(buffer, len, error);
+	int read = socket_.Read(buffer, len, error);
 
 	if (read > 0 && max != -1)
 		UpdateUsage(CRateLimiter::inbound, read);
@@ -66,16 +69,13 @@ int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 
 int CSocketBackend::Peek(void *buffer, unsigned int len, int& error)
 {
-	return m_pSocket->Peek(buffer, len, error);
+	return socket_.Peek(buffer, len, error);
 }
 
 void CSocketBackend::OnRateAvailable(enum CRateLimiter::rate_direction direction)
 {
-	CSocketEvent *evt;
 	if (direction == CRateLimiter::outbound)
-		evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::write);
+		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::write, 0);
 	else
-		evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::read);
-
-	dispatcher_.SendEvent(evt);
+		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::read, 0);
 }

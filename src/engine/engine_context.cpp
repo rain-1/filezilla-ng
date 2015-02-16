@@ -45,8 +45,7 @@ class CFileZillaEngineContext::Impl final
 {
 public:
 	Impl(COptionsBase& options)
-		: dispatcher_(loop_)
-		, limiter_(loop_, options)
+		: limiter_(loop_, options)
 		, optionChangeHandler_(options, loop_)
 	{
 		CLogging::UpdateLogLevel(options);
@@ -58,7 +57,6 @@ public:
 	}
 
 	CEventLoop loop_;
-	CSocketEventDispatcher dispatcher_;
 	CRateLimiter limiter_;
 	CDirectoryCache directory_cache_;
 	CPathCache path_cache_;
@@ -83,11 +81,6 @@ COptionsBase& CFileZillaEngineContext::GetOptions()
 CEventLoop& CFileZillaEngineContext::GetEventLoop()
 {
 	return impl_->loop_;
-}
-
-CSocketEventDispatcher& CFileZillaEngineContext::GetSocketEventDispatcher()
-{
-	return impl_->dispatcher_;
 }
 
 CRateLimiter& CFileZillaEngineContext::GetRateLimiter()
