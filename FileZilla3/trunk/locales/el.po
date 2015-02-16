@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: FileZilla Client 3.10.1\n"
+"Project-Id-Version: FileZilla Client 3.10.1.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-01-25 22:31+0200\n"
+"PO-Revision-Date: 2015-02-07 17:47+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -3489,10 +3489,10 @@ msgstr ""
 ".Μπορείτε επίσης να εισάγετε πλήρη διευθύνση με τη μορφή: //user: pass@host:"
 "port, οι τιμές στους άλλους τομείς θα αντικατασταθούν στη συνέχεια.\n"
 ".\n"
-"Υποστηριζόμενα πρωτόκολλα είναι:\n"
-"- ftp: // για την κανονική FTP με προαιρετική κρυπτογράφηση\n"
+"Υποστηριζόμενα πρωτόκολλα είναι: \n"
+"- ftp: // για την κανονική FTP με προαιρετική κρυπτογράφηση \n"
 "- sftp: // για SSH πρωτόκολλο μεταφοράς αρχείων\n"
-"- ftps: // για FTP μέσω TLS (σιωπηρά)\n"
+"- ftps: // για FTP μέσω TLS (σιωπηρά) \n"
 "- ftpes: // για FTP μέσω TLS (σαφή)"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
@@ -8766,6 +8766,9 @@ msgstr "δημόσια εγγράψιμο"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(%u%% λήφθηκαν)"
 
 #~ msgid ""
 #~ "A file with that name is already being edited. Do you want to reopen '%s'?"
