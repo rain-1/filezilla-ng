@@ -18,6 +18,16 @@ void CEventHandler::RemoveHandler()
 	event_loop_.RemoveHandler(this);
 }
 
+void CEventHandler::ChangeHandler(CEventHandler* newHandler, void const* derived_type)
+{
+	if (newHandler) {
+		event_loop_.ChangeHandler(this, newHandler, derived_type);
+	}
+	else {
+		event_loop_.RemoveEvents(this, derived_type);
+	}
+}
+
 void CEventHandler::RemoveEvents(void const* derived_type)
 {
 	event_loop_.RemoveEvents(this, derived_type);

@@ -838,11 +838,10 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate & engine)
 	: CControlSocket(engine)
-	, CSocketEventHandler(engine.socket_event_dispatcher_)
 {
-	m_pSocket = new CSocket(this, dispatcher_);
+	m_pSocket = new CSocket(this);
 
-	m_pBackend = new CSocketBackend(this, m_pSocket, engine_.GetRateLimiter());
+	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 	m_pProxyBackend = 0;
 
 	m_pSendBuffer = 0;
@@ -897,49 +896,61 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 	return true;
 }
 
-void CRealControlSocket::OnSocketEvent(CSocketEvent &event)
+void CRealControlSocket::operator()(CEventBase const& ev)
+{
+	if (!Dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
+		&CRealControlSocket::OnSocketEvent,
+		&CRealControlSocket::OnHostAddress))
+	{
+		CControlSocket::operator()(ev);
+	}
+}
+
+void CRealControlSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
 {
 	if (!m_pBackend)
 		return;
 
-	switch (event.GetType())
+	switch (t)
 	{
-	case CSocketEvent::hostaddress:
-		{
-			const wxString& address = event.GetData();
-			LogMessage(MessageType::Status, _("Connecting to %s..."), address);
-		}
+	case SocketEventType::connection_next:
+		if (error)
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(error));
 		break;
-	case CSocketEvent::connection_next:
-		if (event.GetError())
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(event.GetError()));
-		break;
-	case CSocketEvent::connection:
-		if (event.GetError()) {
-			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(event.GetError()));
-			OnClose(event.GetError());
+	case SocketEventType::connection:
+		if (error) {
+			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\"."), CSocket::GetErrorDescription(error));
+			OnClose(error);
 		}
 		else {
 			if (m_pProxyBackend && !m_pProxyBackend->Detached()) {
 				m_pProxyBackend->Detach();
-				m_pBackend = new CSocketBackend(this, m_pSocket, engine_.GetRateLimiter());
+				m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 			}
 			OnConnect();
 		}
 		break;
-	case CSocketEvent::read:
+	case SocketEventType::read:
 		OnReceive();
 		break;
-	case CSocketEvent::write:
+	case SocketEventType::write:
 		OnSend();
 		break;
-	case CSocketEvent::close:
-		OnClose(event.GetError());
+	case SocketEventType::close:
+		OnClose(error);
 		break;
 	default:
-		LogMessage(MessageType::Debug_Warning, _T("Unhandled socket event %d"), event.GetType());
+		LogMessage(MessageType::Debug_Warning, _T("Unhandled socket event %d"), t);
 		break;
 	}
+}
+
+void CRealControlSocket::OnHostAddress(CSocketEventSource* source, wxString const& address)
+{
+	if (!m_pBackend)
+		return;
+
+	LogMessage(MessageType::Status, _("Connecting to %s..."), address);
 }
 
 void CRealControlSocket::OnConnect()

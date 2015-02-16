@@ -10,8 +10,7 @@
 #include "servercapabilities.h"
 
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode)
-: CEventHandler(engine.socket_event_dispatcher_.event_loop_)
-, CSocketEventHandler(engine.socket_event_dispatcher_)
+: CEventHandler(controlSocket.event_loop_)
 , engine_(engine)
 , controlSocket_(controlSocket)
 , m_transferMode(transferMode)
@@ -84,15 +83,14 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	return portArguments;
 }
 
-void CTransferSocket::OnSocketEvent(CSocketEvent &event)
+void CTransferSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
 {
 	if (m_pProxyBackend)
 	{
-		switch (event.GetType())
+		switch (t)
 		{
-		case CSocketEvent::connection:
+		case SocketEventType::connection:
 			{
-				const int error = event.GetError();
 				if (error) {
 					controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
 					TransferEnd(TransferEndReason::failure);
@@ -104,9 +102,8 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 				}
 			}
 			return;
-		case CSocketEvent::close:
+		case SocketEventType::close:
 			{
-				const int error = event.GetError();
 				controlSocket_.LogMessage(MessageType::Error, _("Proxy handshake failed: %s"), CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::failure);
 			}
@@ -119,39 +116,33 @@ void CTransferSocket::OnSocketEvent(CSocketEvent &event)
 	}
 
 	if (m_pSocketServer) {
-		if (event.GetType() == CSocketEvent::connection)
-			OnAccept(event.GetError());
+		if (t == SocketEventType::connection)
+			OnAccept(error);
 		else
-			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d from listening socket"), event.GetType());
+			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d from listening socket"), t);
 		return;
 	}
 
-	switch (event.GetType())
+	switch (t)
 	{
-	case CSocketEvent::connection:
-		if (event.GetError()) {
+	case SocketEventType::connection:
+		if (error) {
 			if (m_transferEndReason == TransferEndReason::none) {
-				controlSocket_.LogMessage(MessageType::Error, _("The data connection could not be established: %s"), CSocket::GetErrorDescription(event.GetError()));
+				controlSocket_.LogMessage(MessageType::Error, _("The data connection could not be established: %s"), CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::transfer_failure);
 			}
 		}
 		else
 			OnConnect();
 		break;
-	case CSocketEvent::read:
+	case SocketEventType::read:
 		OnReceive();
 		break;
-	case CSocketEvent::write:
+	case SocketEventType::write:
 		OnSend();
 		break;
-	case CSocketEvent::close:
-		OnClose(event.GetError());
-		break;
-	case CSocketEvent::hostaddress:
-		// Booooring. No seriously, we connect by IP already, nothing to resolve
-		break;
-	default:
-		controlSocket_.LogMessage(MessageType::Debug_Info, _T("Unhandled socket event %d"), event.GetType());
+	case SocketEventType::close:
+		OnClose(error);
 		break;
 	}
 }
@@ -269,40 +260,45 @@ void CTransferSocket::OnReceive()
 		}
 	}
 	else if (m_transferMode == TransferMode::download) {
-		for (;;) {
+		int error;
+		int numread;
+
+		// Only do a certain number of iterations in one go to keep the event loop going.
+		// Otherwise this behaves like a livelock on very large files written to a very fast
+		// SSD downloaded from a very fast server.
+		for (int i = 0; i < 100; ++i) {
 			if (!CheckGetNextWriteBuffer())
 				return;
 
-			int error;
-			int numread = m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen, error);
-			if (numread < 0) {
-				if (error != EAGAIN) {
-					controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
-					TransferEnd(TransferEndReason::transfer_failure);
-				}
-				else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
-					TransferEnd(TransferEndReason::successful);
-				return;
-			}
-
-			if (numread > 0) {
-				controlSocket_.SetActive(CFileZillaEngine::recv);
-				if (!m_madeProgress) {
-					m_madeProgress = 2;
-					engine_.transfer_status_.SetMadeProgress();
-				}
-				engine_.transfer_status_.Update(numread);
-
-				m_pTransferBuffer += numread;
-				m_transferBufferLen -= numread;
-
-				if (!CheckGetNextWriteBuffer())
-					return;
-			}
-			else { //!numread
-				FinalizeWrite();
+			numread = m_pBackend->Read(m_pTransferBuffer, m_transferBufferLen, error);
+			if (numread <= 0) {
 				break;
 			}
+
+			controlSocket_.SetActive(CFileZillaEngine::recv);
+			if (!m_madeProgress) {
+				m_madeProgress = 2;
+				engine_.transfer_status_.SetMadeProgress();
+			}
+			engine_.transfer_status_.Update(numread);
+
+			m_pTransferBuffer += numread;
+			m_transferBufferLen -= numread;
+		}
+
+		if (numread < 0) {
+			if (error != EAGAIN) {
+				controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
+				TransferEnd(TransferEndReason::transfer_failure);
+			}
+			else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
+				TransferEnd(TransferEndReason::successful);
+		}
+		else if (!numread) {
+			FinalizeWrite();
+		}
+		else {
+			SendEvent<CSocketEvent>(m_pBackend, SocketEventType::read, 0);
 		}
 	}
 	else if (m_transferMode == TransferMode::resumetest) {
@@ -366,7 +362,7 @@ void CTransferSocket::OnSend()
 	int error;
 	int written;
 
-	// Only doe a certain number of iterations in one go to keep the event loop going.
+	// Only do a certain number of iterations in one go to keep the event loop going.
 	// Otherwise this behaves like a livelock on very large files read from a very fast
 	// SSD uploaded to a very fast server.
 	for (int i = 0; i < 100; ++i) {
@@ -403,8 +399,7 @@ void CTransferSocket::OnSend()
 		}
 	}
 	else if (written > 0) {
-		CSocketEvent *evt = new CSocketEvent(this, m_pSocket, CSocketEvent::write);
-		dispatcher_.SendEvent(evt);
+		SendEvent<CSocketEvent>(m_pBackend, SocketEventType::write, 0);
 	}
 }
 
@@ -478,7 +473,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 {
 	ResetSocket();
 
-	m_pSocket = new CSocket(this, dispatcher_);
+	m_pSocket = new CSocket(this);
 
 	if (controlSocket_.m_pProxyBackend) {
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, &controlSocket_);
@@ -546,7 +541,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 CSocket* CTransferSocket::CreateSocketServer(int port)
 {
-	CSocket* pServer = new CSocket(this, dispatcher_);
+	CSocket* pServer = new CSocket(this);
 	int res = pServer->Listen(controlSocket_.m_pSocket->GetAddressFamily(), port);
 	if (res) {
 		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Could not listen on port %d: %s"), port, CSocket::GetErrorDescription(res));
@@ -748,7 +743,7 @@ bool CTransferSocket::InitBackend()
 			return false;
 	}
 	else
-		m_pBackend = new CSocketBackend(this, m_pSocket, engine_.GetRateLimiter());
+		m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 
 	return true;
 }
@@ -764,5 +759,7 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 
 void CTransferSocket::operator()(CEventBase const& ev)
 {
-	Dispatch<CIOThreadEvent>(ev, this, &CTransferSocket::OnIOThreadEvent);
+	Dispatch<CSocketEvent, CIOThreadEvent>(ev, this,
+		&CTransferSocket::OnSocketEvent,
+		&CTransferSocket::OnIOThreadEvent);
 }

@@ -6,7 +6,7 @@
 #include "socket.h"
 
 class CControlSocket;
-class CTlsSocket : protected CSocketEventHandler, public CBackend, public CSocketEventSource
+class CTlsSocket : protected CEventHandler, public CBackend
 {
 public:
 	enum class TlsState
@@ -19,7 +19,7 @@ public:
 		closed
 	};
 
-	CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner);
+	CTlsSocket(CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner);
 	virtual ~CTlsSocket();
 
 	bool Init();
@@ -83,7 +83,9 @@ protected:
 
 	void TriggerEvents();
 
-	void OnSocketEvent(CSocketEvent& event);
+	virtual void operator()(CEventBase const& ev);
+	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
+
 	void OnRead();
 	void OnSend();
 

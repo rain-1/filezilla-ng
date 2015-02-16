@@ -96,8 +96,6 @@ protected:
 	char* m_pSendBuffer;
 
 	wxTimer m_timer;
-
-	CSocketEventDispatcher & dispatcher_;
 };
 
 #endif //__NETCONFWIZARD_H__

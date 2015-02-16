@@ -9,90 +9,29 @@
 // Error codes are the same as used by the POSIX socket functions,
 // see 'man 2 socket', 'man 2 connect', ...
 
-class CSocketEventHandler;
-class CSocketEventSource;
-class CSocketEvent final
+enum class SocketEventType
 {
-public:
-	enum EventType
-	{
-		hostaddress,
+	// This is a nonfatal condition. It
+	// means there are additional addresses to try.
+	connection_next,
 
-		// This is a nonfatal condition. It
-		// means there are additional addresses to try.
-		connection_next,
-		connection,
-		read,
-		write,
-		close
-	};
-
-	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, const wxChar* data);
-	CSocketEvent(CSocketEventHandler* pSocketEventHandler, CSocketEventSource* pSource, EventType type, int error = 0);
-	~CSocketEvent();
-
-	CSocketEventSource* GetSocketEventSource() const { return m_pSource; }
-	EventType GetType() const { return m_type; }
-	CSocketEventHandler* GetSocketEventHandler() const { return m_pSocketEventHandler; }
-
-	wxString GetData() const;
-	int GetError() const { return m_error; }
-
-protected:
-	CSocketEventHandler* m_pSocketEventHandler;
-	CSocketEventSource* m_pSource;
-	wxChar *m_data;
-	const EventType m_type;
-	int m_error;
-
-	friend class CSocketEventDispatcher;
-};
-
-class CSocketEventDispatcher final : public CEventHandler
-{
-public:
-	CSocketEventDispatcher(CEventLoop & event_loop);
-	~CSocketEventDispatcher();
-
-	void SendEvent(CSocketEvent* evt);
-	void RemovePending(const CSocketEventHandler* pHandler);
-	void RemovePending(const CSocketEventSource* pSource);
-	void UpdatePending(const CSocketEventHandler* pOldHandler, const CSocketEventSource* pOldSource, CSocketEventHandler* pNewHandler, CSocketEventSource* pNewSource);
-
-private:
-	virtual void operator()(CEventBase const& ev);
-
-	std::deque<CSocketEvent*> m_pending_events;
-
-	mutex m_sync;
-};
-
-class CSocketEventHandler
-{
-public:
-	CSocketEventHandler(CSocketEventDispatcher& dispatcher)
-		: dispatcher_(dispatcher)
-	{};
-
-	virtual ~CSocketEventHandler();
-
-	virtual void OnSocketEvent(CSocketEvent& event) = 0;
-
-	CSocketEventDispatcher& dispatcher_;
+	connection,
+	read,
+	write,
+	close
 };
 
 class CSocketEventSource
 {
 public:
-	CSocketEventSource(CSocketEventDispatcher& dispatcher)
-		: dispatcher_(dispatcher)
-	{
-	}
-
-	virtual ~CSocketEventSource();
-
-	CSocketEventDispatcher& dispatcher_;
+	virtual ~CSocketEventSource() {}
 };
+
+struct socket_event_type;
+typedef CEvent<socket_event_type, CSocketEventSource*, SocketEventType, int> CSocketEvent;
+
+struct hostaddress_event_type;
+typedef CEvent<hostaddress_event_type, CSocketEventSource*, wxString> CHostAddressEvent;
 
 class CCallback
 {
@@ -101,11 +40,11 @@ public:
 };
 
 class CSocketThread;
-class CSocket : public CSocketEventSource
+class CSocket final : public CSocketEventSource
 {
 	friend class CSocketThread;
 public:
-	CSocket(CSocketEventHandler* pEvtHandler, CSocketEventDispatcher& dispatcher);
+	CSocket(CEventHandler* pEvtHandler);
 	virtual ~CSocket();
 
 	CSocket(CSocket const&) = delete;
@@ -172,8 +111,8 @@ public:
 	static wxString GetErrorDescription(int error);
 
 	// Can only be called if the state is none
-	void SetEventHandler(CSocketEventHandler* pEvtHandler);
-	CSocketEventHandler* GetEventHandler() { return m_pEvtHandler; }
+	void SetEventHandler(CEventHandler* pEvtHandler);
+	CEventHandler* GetEventHandler() { return m_pEvtHandler; }
 
 	static bool Cleanup(bool force);
 
@@ -205,7 +144,7 @@ protected:
 
 	void DetachThread();
 
-	CSocketEventHandler* m_pEvtHandler;
+	CEventHandler* m_pEvtHandler;
 
 	int m_fd;
 

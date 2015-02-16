@@ -21,15 +21,14 @@ void log_func(int level, const char* msg)
 }
 #endif
 
-CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CSocketEventHandler(pOwner->GetEngine().socket_event_dispatcher_)
+CTlsSocket::CTlsSocket(CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
+	: CEventHandler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
-	, CSocketEventSource(pOwner->GetEngine().socket_event_dispatcher_)
 	, m_pOwner(pOwner)
 	, m_pSocket(pSocket)
 {
 	wxASSERT(pSocket);
-	m_pSocketBackend = new CSocketBackend(this, m_pSocket, m_pOwner->GetEngine().GetRateLimiter());
+	m_pSocketBackend = new CSocketBackend(this, *m_pSocket, m_pOwner->GetEngine().GetRateLimiter());
 
 	m_implicitTrustedCert.data = 0;
 	m_implicitTrustedCert.size = 0;
@@ -37,6 +36,8 @@ CTlsSocket::CTlsSocket(CSocketEventHandler* pEvtHandler, CSocket* pSocket, CCont
 
 CTlsSocket::~CTlsSocket()
 {
+	RemoveHandler();
+
 	Uninit();
 	delete m_pSocketBackend;
 }
@@ -271,8 +272,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 		m_canReadFromSocket = false;
 		if (error == EAGAIN) {
 			if (m_canCheckCloseSocket && !m_pSocketBackend->IsWaiting(CRateLimiter::inbound)) {
-				CSocketEvent *evt = new CSocketEvent(this, m_pSocketBackend, CSocketEvent::close);
-				CSocketEventSource::dispatcher_.SendEvent(evt);
+				SendEvent<CSocketEvent>(m_pSocketBackend, SocketEventType::close, 0);
 			}
 		}
 		else {
@@ -286,8 +286,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	}
 
 	if (m_canCheckCloseSocket) {
-		CSocketEvent *evt = new CSocketEvent(this, m_pSocketBackend, CSocketEvent::close);
-		CSocketEventSource::dispatcher_.SendEvent(evt);
+		SendEvent<CSocketEvent>(m_pSocketBackend, SocketEventType::close, 0);
 	}
 
 	if (!read) {
@@ -301,28 +300,31 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	return read;
 }
 
-void CTlsSocket::OnSocketEvent(CSocketEvent& event)
+void CTlsSocket::operator()(CEventBase const& ev)
+{
+	Dispatch<CSocketEvent>(ev, this, &CTlsSocket::OnSocketEvent);
+}
+
+void CTlsSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
 {
 	wxASSERT(m_pSocket);
 	if (!m_session)
 		return;
 
-	switch (event.GetType())
+	switch (t)
 	{
-	case CSocketEvent::read:
+	case SocketEventType::read:
 		OnRead();
 		break;
-	case CSocketEvent::write:
+	case SocketEventType::write:
 		OnSend();
 		break;
-	case CSocketEvent::close:
+	case SocketEventType::close:
 		{
 			m_canCheckCloseSocket = true;
 			char tmp[100];
-			int error;
 			int peeked = m_pSocketBackend->Peek(&tmp, 100, error);
-			if (peeked >= 0)
-			{
+			if (peeked >= 0) {
 				if (peeked > 0)
 					m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::OnSocketEvent(): pending data, postponing close event"));
 				else
@@ -339,8 +341,7 @@ void CTlsSocket::OnSocketEvent(CSocketEvent& event)
 			m_pOwner->LogMessage(MessageType::Debug_Info, _T("CTlsSocket::OnSocketEvent(): close event received"));
 
 			//Uninit();
-			CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
-			CSocketEventSource::dispatcher_.SendEvent(evt);
+			m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, 0);
 		}
 		break;
 	default:
@@ -506,8 +507,7 @@ int CTlsSocket::ContinueHandshake()
 		if (m_shutdown_requested) {
 			int error = Shutdown();
 			if (!error || error != EAGAIN) {
-				CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
-				CSocketEventSource::dispatcher_.SendEvent(evt);
+				m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, 0);
 			}
 		}
 
@@ -649,14 +649,12 @@ void CTlsSocket::TriggerEvents()
 		return;
 
 	if (m_canTriggerRead) {
-		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::read);
-		CSocketEventSource::dispatcher_.SendEvent(evt);
+		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::read, 0);
 		m_canTriggerRead = false;
 	}
 
 	if (m_canTriggerWrite) {
-		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::write);
-		CSocketEventSource::dispatcher_.SendEvent(evt);
+		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::write, 0);
 		m_canTriggerWrite = false;
 	}
 }
@@ -728,8 +726,7 @@ void CTlsSocket::Failure(int code, bool send_close, const wxString& function)
 	Uninit();
 
 	if (send_close) {
-		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close, m_socket_error);
-		CSocketEventSource::dispatcher_.SendEvent(evt);
+		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, m_socket_error);
 	}
 }
 
@@ -801,8 +798,7 @@ void CTlsSocket::ContinueShutdown()
 	if (!res) {
 		m_tlsState = TlsState::closed;
 
-		CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::close);
-		CSocketEventSource::dispatcher_.SendEvent(evt);
+		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, 0);
 
 		return;
 	}
@@ -826,8 +822,7 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 		CheckResumeFailedReadWrite();
 
 		if (m_tlsState == TlsState::conn) {
-			CSocketEvent *evt = new CSocketEvent(m_pEvtHandler, this, CSocketEvent::connection);
-			CSocketEventSource::dispatcher_.SendEvent(evt);
+			m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::connection, 0);
 		}
 
 		TriggerEvents();

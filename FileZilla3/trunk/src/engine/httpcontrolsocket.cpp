@@ -485,7 +485,7 @@ int CHttpControlSocket::DoInternalConnect()
 	CHttpConnectOpData *pData = static_cast<CHttpConnectOpData *>(m_pCurOpData);
 
 	delete m_pBackend;
-	m_pBackend = new CSocketBackend(this, m_pSocket, engine_.GetRateLimiter());
+	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 
 	int res = m_pSocket->Connect(pData->host, pData->port);
 	if (!res)

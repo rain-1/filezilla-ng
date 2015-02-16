@@ -30,17 +30,8 @@ public:
 	{
 	}
 
-	CEvent(CEvent const& op)
-		: v_(op.v_)
-	{
-	}
-
-	CEvent& operator=(CEvent const& op) {
-		if (this != &op) {
-			v_ = op.v_;
-		}
-		return *this;
-	}
+	CEvent(CEvent const& op) = default;
+	CEvent& operator=(CEvent const& op) = default;
 
 	static void const* type() {
 		static const char* f = 0;

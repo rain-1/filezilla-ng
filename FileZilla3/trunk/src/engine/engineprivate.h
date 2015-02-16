@@ -15,7 +15,6 @@
 class CControlSocket;
 class CLogging;
 class CRateLimiter;
-class CSocketEventDispatcher;
 
 enum EngineNotificationType
 {
@@ -105,8 +104,6 @@ public:
 	void InvalidateCurrentWorkingDirs(const CServerPath& path);
 
 	int GetEngineId() const {return m_engine_id; }
-
-	CSocketEventDispatcher& socket_event_dispatcher_;
 
 	CTransferStatusManager transfer_status_;
 protected:
