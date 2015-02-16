@@ -78,6 +78,23 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 	}
 }
 
+void CEventLoop::RemoveEvents(CEventHandler* handler, void const* derived_type)
+{
+	scoped_lock l(sync_);
+
+	pending_events_.erase(
+		std::remove_if(pending_events_.begin(), pending_events_.end(),
+			[&](Events::value_type const& v) {
+				if (v.first == handler && v.second->derived_type() == derived_type) {
+					delete v.second;
+				}
+				return v.first == handler && v.second->derived_type() == derived_type;
+			}
+		),
+		pending_events_.end()
+	);
+}
+
 timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_shot)
 {
 	timer_data d;

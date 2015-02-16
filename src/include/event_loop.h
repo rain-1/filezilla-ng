@@ -30,6 +30,9 @@ public:
 	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
 	void StopTimer(timer_id id);
 
+	// Removes all pending events of the given derived type from the passed handler
+	void RemoveEvents(CEventHandler* handler, void const* derived_type);
+
 protected:
 	friend class CEventHandler;
 	void SendEvent(CEventHandler* handler, CEventBase* evt);

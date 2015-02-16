@@ -18,6 +18,11 @@ void CEventHandler::RemoveHandler()
 	event_loop_.RemoveHandler(this);
 }
 
+void CEventHandler::RemoveEvents(void const* derived_type)
+{
+	event_loop_.RemoveEvents(this, derived_type);
+}
+
 timer_id CEventHandler::AddTimer(int ms_interval, bool one_shot)
 {
 	return event_loop_.AddTimer(this, ms_interval, one_shot);
