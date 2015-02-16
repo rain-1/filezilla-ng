@@ -1,13 +1,13 @@
 # This file is distributed under the same license as the filezilla package.
 # Michał Trzebiatowski <hippie_1968@hotmail.com>, 2008, 2009, 2010, 2011
 # Krystian Biesaga <krystian.biesaga@gmail.com>, 2013
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3.7.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-24 16:46+0100\n"
-"PO-Revision-Date: 2015-01-16 20:34+0100\n"
+"POT-Creation-Date: 2015-01-31 14:43+0100\n"
+"PO-Revision-Date: 2015-02-01 14:34+0100\n"
 "Last-Translator: Maciej Gryniuk <maciejka45@gmail.com>\n"
 "Language-Team: translationproject.org/team/pl.html <translation-team-"
 "pl@lists.sourceforge.net>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.7.4\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
@@ -1252,11 +1252,11 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Wcześniej otworzony plik został zmieniony."
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "A file with that name is already being transferred."
 msgstr "Plik o tej nazwie jest już przesyłany."
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr ""
@@ -1492,12 +1492,11 @@ msgid "Already connected"
 msgstr "Już połączono"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:76
-#, fuzzy
 msgid "Alternative name:"
 msgid_plural "Alternative names:"
-msgstr[0] "&Nazwa filtra:"
-msgstr[1] "&Nazwa filtra:"
-msgstr[2] "&Nazwa filtra:"
+msgstr[0] "Nazwa alternatywna:"
+msgstr[1] "Nazwy alternatywne:"
+msgstr[2] "Nazwy alternatywne:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:660
 msgid ""
@@ -1693,8 +1692,8 @@ msgstr "Podstawowe instrukcje użytkowania"
 msgid "Behaviour"
 msgstr "Zachowanie"
 
-#: ../../locales/../src/interface/edithandler.cpp:1152
-#: ../../locales/../src/interface/edithandler.cpp:1180
+#: ../../locales/../src/interface/edithandler.cpp:1131
+#: ../../locales/../src/interface/edithandler.cpp:1159
 msgid "Being edited"
 msgstr "W edycji"
 
@@ -1857,8 +1856,8 @@ msgstr "Nie można porównać katalogów, nie podłączono do serwera."
 msgid "Cannot create new filter"
 msgstr "Nie można utworzyć nowego filtra."
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
-#: ../../locales/../src/interface/edithandler.cpp:1686
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1665
 #: ../../locales/../src/interface/LocalListView.cpp:1720
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Cannot edit file"
@@ -1919,17 +1918,17 @@ msgstr "Nie można zapisać zbioru filtrów"
 msgid "Cannot select filter"
 msgstr "Nie można wybrać filtra"
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1509
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "Cannot set file association"
 msgstr "Nie można ustawić skojarzenia pliku"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "Cannot show dialog"
 msgstr "Nie można wyświetlić okna"
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "Cannot view/edit selected file"
 msgstr "Nie można wyświetlić/edytować zaznaczonego pliku"
 
@@ -2263,7 +2262,7 @@ msgid "Confirm deletion"
 msgstr "Potwierdź usunięcie"
 
 #: ../../locales/../src/engine/local_filesys.cpp:134
-#: ../../locales/../src/interface/edithandler.cpp:1650
+#: ../../locales/../src/interface/edithandler.cpp:1629
 #: ../../locales/../src/interface/LocalListView.cpp:1684
 #: ../../locales/../src/interface/RemoteListView.cpp:1421
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1120
@@ -2543,7 +2542,7 @@ msgstr "Nie można uzyskać pełnej ścieżki zdalnej."
 msgid "Could not get reply from fzputtygen."
 msgstr "Nie można pobrać odpowiedzi z fzputtygen."
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
+#: ../../locales/../src/interface/edithandler.cpp:1617
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Could not get temporary directory to download file into."
 msgstr "Nie można znaleźć katalogu tymczasowego do zapisania w nim pliku."
@@ -2884,7 +2883,7 @@ msgstr "&Duplikuj"
 msgid "DOS-like with virtual paths"
 msgstr "Wirtualne ścieżki w stylu DOS"
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid "Dangerous filetype"
 msgstr "Niebezpieczny typ pliku"
 
@@ -3157,9 +3156,8 @@ msgstr "Brak &akcji"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1801
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1856
-#, fuzzy
 msgid "Do the same with &all selected files already being edited"
-msgstr "Zaznaczony plik jest już edytowany:"
+msgstr "Zrób to samo dla &każdego edytowanego pliku z wybranych"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1179
 #: ../../locales/../src/interface/Mainfrm.cpp:1201
@@ -3191,9 +3189,8 @@ msgid "Do you really want to send '%s' to the server?"
 msgstr "Czy na pewno chcesz wysłać '%s' do serwera?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1849
-#, fuzzy
 msgid "Do you want to reopen this file?"
-msgstr "Czy na pewno chcesz zamknąć FileZilla?"
+msgstr "Chcesz ponownie otworzyć ten plik?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "Documentation"
@@ -3252,7 +3249,7 @@ msgstr ""
 "Prędkość pobierania: %s/s\n"
 "Prędkość wysyłania: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1116
 msgid "Downloading"
 msgstr "Pobieranie"
 
@@ -3453,7 +3450,6 @@ msgid "Enter selected directory"
 msgstr "Podaj zaznaczony katalog"
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:34
-#, fuzzy
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3475,10 +3471,10 @@ msgstr ""
 "hasło@host:port, wartości innych pół zostaną wtedy zamienione.\n"
 "\n"
 "Wspierane protokoły:\n"
-"- ftp:// dla zwykłego FTP\n"
-"- sftp:// dla protokołu transferu plików SSH\n"
-"- ftps:// dla FTP przez domniemany TLS\n"
-"- ftpes:// dla FTP przez bezpośredni TLS"
+"ftp:// dla zwykłego FTP z opcjonalnym szyfrowaniem,\n"
+"sftp:// dla protokołu transferu plików SSH,\n"
+"ftps:// dla FTP przez TLS (domniemany) i\n"
+"ftpes:// dla FTP przez TLS (bezpośredni)."
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
 #, c-format
@@ -3891,7 +3887,7 @@ msgstr "Plik został zmieniony"
 msgid "File lists"
 msgstr "Listy plików"
 
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/FileZilla.cpp:675
 #: ../../locales/../src/interface/FileZilla.cpp:760
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
@@ -3974,7 +3970,7 @@ msgstr "Aktualizacje FileZilla"
 msgid "Filelist status &bars"
 msgstr "Paski &statusu listy plików"
 
-#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1101
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:274
 #: ../../locales/../src/interface/RemoteListView.cpp:374
@@ -4102,9 +4098,8 @@ msgstr "Hash (SHA-1):"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:89
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:354
-#, fuzzy
 msgid "Fingerprint (SHA-256):"
-msgstr "Hash (SHA-1):"
+msgstr "Odcisk palca (SHA-256):"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:852
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:963
@@ -4202,22 +4197,22 @@ msgstr "Globalne zakładki"
 #: ../../locales/../src/engine/tlssocket.cpp:186
 #, c-format
 msgid "GnuTLS error %d"
-msgstr ""
+msgstr "Błąd GnuTLS %d"
 
 #: ../../locales/../src/engine/tlssocket.cpp:188
 #, c-format
 msgid "GnuTLS error %d in %s"
-msgstr ""
+msgstr "Błąd GnuTLS %d w %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:182
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
-msgstr ""
+msgstr "Błąd GnuTLS %d w %s: %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:180
 #, c-format
 msgid "GnuTLS error %d: %s"
-msgstr ""
+msgstr "Błąd GnuTLS %d: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:716
 msgid "GnuTLS:"
@@ -4649,7 +4644,6 @@ msgstr "Nieprawidłowy port. Numer portu musi być liczbą od 1 do 65535."
 
 #: ../../locales/../src/engine/server.cpp:91
 #: ../../locales/../src/interface/quickconnectbar.cpp:122
-#, fuzzy
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP with optional encryption,\n"
@@ -4658,10 +4652,10 @@ msgid ""
 "ftpes:// for FTP over TLS (explicit)."
 msgstr ""
 "Podano nieprawidłowy protokół. Poprawne protokoły to:\n"
-"ftp:// dla zwykłego FTP,\n"
+"ftp:// dla zwykłego FTP z opcjonalnym szyfrowaniem,\n"
 "sftp:// dla protokołu transferu plików SSH,\n"
-"ftps:// dla FTP przez domniemany TLS i\n"
-"ftpes:// dla FTP przez bezpośredni TLS."
+"ftps:// dla FTP przez TLS (domniemany) i\n"
+"ftpes:// dla FTP przez TLS (bezpośredni)."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4304
 msgid ""
@@ -4814,8 +4808,8 @@ msgstr "Lista:"
 msgid "Lo&west available port:"
 msgstr "&Najniższy dostępny port:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1170
-#: ../../locales/../src/interface/edithandler.cpp:1424
+#: ../../locales/../src/interface/edithandler.cpp:1149
+#: ../../locales/../src/interface/edithandler.cpp:1403
 msgid "Local"
 msgstr "Lokalny"
 
@@ -5165,7 +5159,7 @@ msgstr "Nie podano polecenia, przerywanie."
 msgid "No external IP address set, trying default."
 msgstr "Brak ustawionego zewnętrznego adresu IP, próbowanie domyślnego."
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "No files are currently being edited."
 msgstr "Żadne pliki nie są obecnie edytowane."
 
@@ -5384,8 +5378,8 @@ msgstr "Otwarcie okna ustawień FileZilla"
 msgid "Opened as:"
 msgstr "Otwarty jako:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1659
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 msgid "Opening failed"
@@ -5575,10 +5569,10 @@ msgstr "Nie znaleziono ścieżki:"
 msgid "Paths"
 msgstr "Ścieżki"
 
-#: ../../locales/../src/interface/edithandler.cpp:1149
-#: ../../locales/../src/interface/edithandler.cpp:1292
-#: ../../locales/../src/interface/edithandler.cpp:1391
-#: ../../locales/../src/interface/edithandler.cpp:1404
+#: ../../locales/../src/interface/edithandler.cpp:1128
+#: ../../locales/../src/interface/edithandler.cpp:1271
+#: ../../locales/../src/interface/edithandler.cpp:1370
+#: ../../locales/../src/interface/edithandler.cpp:1383
 msgid "Pending removal"
 msgstr "W trakcie usuwania"
 
@@ -6156,7 +6150,7 @@ msgstr "Przechodź do podkatalogów"
 #: ../../locales/../src/engine/tlssocket.cpp:199
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
-msgstr ""
+msgstr "Otrzymano z serwera sygnał TLS: %s (%d)"
 
 #: ../../locales/../src/engine/directorylistingparser.cpp:3070
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
@@ -6178,9 +6172,9 @@ msgid "Received invalid character in version information"
 msgstr "Otrzymano nieprawidłowe znaki w informacji o wersji"
 
 #: ../../locales/../src/engine/tlssocket.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Received unknown TLS alert %d from the server"
-msgstr "Czy na pewno usunąć %d plik z serwera?"
+msgstr "Otrzymano z serwera nieznany sygnał TLS %d"
 
 #: ../../locales/../src/interface/updater.cpp:509
 msgid "Received version information is too large"
@@ -6224,7 +6218,7 @@ msgstr "Odśwież plik i listę katalogów"
 msgid "Remember passwords?"
 msgstr "Zapamiętać hasła?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1112
 msgid "Remote"
 msgstr "Zdalny"
 
@@ -6249,7 +6243,7 @@ msgstr "Zdalne wyszukiwanie plików"
 msgid "Remote filters:"
 msgstr "Zdalne filtry:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1124
+#: ../../locales/../src/interface/edithandler.cpp:1103
 msgid "Remote path"
 msgstr "Zdalna ścieżka"
 
@@ -6528,7 +6522,7 @@ msgstr ""
 "Wybierz domyślną akcję do wykonania, jeśli plik docelowy transferu już "
 "istnieje."
 
-#: ../../locales/../src/interface/edithandler.cpp:1594
+#: ../../locales/../src/interface/edithandler.cpp:1573
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Wybierz domyślny edytor"
@@ -6657,8 +6651,8 @@ msgstr "Zaznaczono %s i %s. Całkowity rozmiar: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Zaznaczono %s i %s. Całkowity rozmiar: Co najmniej %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Wybrany edytor nie istnieje."
@@ -6672,11 +6666,11 @@ msgstr "Zaznaczony plik jest już edytowany"
 msgid "Selected file is already loaded"
 msgstr "Zaznaczony plik jest już załadowany"
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid "Selected file is already opened"
 msgstr "Zaznaczony plik jest już otwarty"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid "Selected file is still being edited"
 msgstr "Zaznaczony plik wciąż jest edytowany"
 
@@ -7115,7 +7109,7 @@ msgstr "Rozpoczyna lokalną stronę w danej ścieżce"
 msgid "State or province:"
 msgstr "Państwo lub prowincja:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1125
+#: ../../locales/../src/interface/edithandler.cpp:1104
 #: ../../locales/../src/interface/queue.cpp:1191
 msgid "Status"
 msgstr "Status"
@@ -7327,7 +7321,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Połączenie danych nie mogło zostać nawiązane: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2895
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "The default editor for text files could not be found."
 msgstr "Nie można znaleźć domyślnego edytora dla plików tekstowych."
 
@@ -7357,7 +7351,7 @@ msgstr ""
 "Plik %s już istnieje.\n"
 "Wprowadź nową nazwę:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1685
+#: ../../locales/../src/interface/edithandler.cpp:1664
 #: ../../locales/../src/interface/LocalListView.cpp:1719
 #, c-format
 msgid ""
@@ -7380,7 +7374,7 @@ msgstr ""
 msgid "The file '%s' could not be loaded."
 msgstr "Plik '%s' nie mógł zostać załadowany."
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
+#: ../../locales/../src/interface/edithandler.cpp:1659
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #, c-format
 msgid ""
@@ -7390,7 +7384,7 @@ msgstr ""
 "Plik '%s' nie mógł być otwarty:\n"
 "Żaden program nie został skojarzony w twoim systemie z tym typem pliku."
 
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 #, c-format
 msgid ""
@@ -7551,14 +7545,13 @@ msgstr ""
 msgid "The selected file is already being edited:"
 msgstr "Zaznaczony plik jest już edytowany:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr ""
 "Zaznaczony plik wciąż jest otwarty w jakimś innym programie, zamknij go."
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
-#, fuzzy
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
@@ -7883,7 +7876,7 @@ msgid "Try again"
 msgstr "Spróbuj ponownie"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2568
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1102
 msgid "Type"
 msgstr "Typ"
 
@@ -7926,8 +7919,8 @@ msgstr "Nieprzypisany kod błędu %d"
 msgid "Unit:"
 msgstr "Jednostka:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1155
-#: ../../locales/../src/interface/edithandler.cpp:1183
+#: ../../locales/../src/interface/edithandler.cpp:1134
+#: ../../locales/../src/interface/edithandler.cpp:1162
 msgid "Unknown"
 msgstr "Nieznany"
 
@@ -8011,7 +8004,7 @@ msgstr "Aktualizacje"
 msgid "Upload"
 msgstr "Wyślij"
 
-#: ../../locales/../src/interface/edithandler.cpp:1146
+#: ../../locales/../src/interface/edithandler.cpp:1125
 msgid "Upload failed"
 msgstr "Wysyłanie nie powiodło się"
 
@@ -8040,19 +8033,19 @@ msgstr "Wysłać z powrotem ten plik na serwer?"
 msgid "Upload this file to the server?"
 msgstr "Wysłać ten plik na serwer?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1140
-#: ../../locales/../src/interface/edithandler.cpp:1174
-#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1119
+#: ../../locales/../src/interface/edithandler.cpp:1153
+#: ../../locales/../src/interface/edithandler.cpp:1318
 msgid "Uploading"
 msgstr "Wysyłanie"
 
-#: ../../locales/../src/interface/edithandler.cpp:1143
-#: ../../locales/../src/interface/edithandler.cpp:1341
+#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1320
 msgid "Uploading and pending removal"
 msgstr "Wysyłanie oraz usuwanie w toku"
 
-#: ../../locales/../src/interface/edithandler.cpp:1177
-#: ../../locales/../src/interface/edithandler.cpp:1343
+#: ../../locales/../src/interface/edithandler.cpp:1156
+#: ../../locales/../src/interface/edithandler.cpp:1322
 msgid "Uploading and unediting"
 msgstr "Wysyłanie i kończenie edycji"
 
@@ -8378,7 +8371,7 @@ msgstr "Nie wprowadzono nowej nazwy pliku. Zastąpić plik?"
 msgid "You have selected at least one symbolic link."
 msgstr "Wybrano przynajmniej jeden link symboliczny."
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
+#: ../../locales/../src/interface/edithandler.cpp:1630
 #: ../../locales/../src/interface/search.cpp:739
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -8438,7 +8431,7 @@ msgstr "Musisz podać nazwę zakładki."
 msgid "You need to enter a name for the log file."
 msgstr "Musisz podać nazwę pliku dziennika."
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
+#: ../../locales/../src/interface/edithandler.cpp:1509
 msgid "You need to enter a properly quoted command."
 msgstr "Musisz podać wprowadzić prawidłowo cytowane polecenie."
 
@@ -8554,7 +8547,7 @@ msgstr "równa się"
 msgid "file"
 msgstr "plik"
 
-#: ../../locales/../src/interface/edithandler.cpp:91
+#: ../../locales/../src/interface/edithandler.cpp:97
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-lockfile"
 

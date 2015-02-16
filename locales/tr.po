@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-01-24 20:42+0000\n"
+"PO-Revision-Date: 2015-02-08 08:56+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/projects/p/"
 "filezilla/language/tr_TR/)\n"
@@ -258,7 +258,7 @@ msgstr "Otom&atik"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:461
 msgid "&Autodetect"
-msgstr "Kendiliğinden &algılanan"
+msgstr "Otomatik &algılanan"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:148
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:590
@@ -268,7 +268,7 @@ msgstr "İk&ili"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1602
 msgid "&Binary prefixes using SI symbols. (e.g. 1 KB = 1024 bytes)"
-msgstr "SI sem&bollerini kullanan ikili önekler. (e.g. 1 KB = 1024 bytes)"
+msgstr "SI sem&bollerini kullanan ikili önekler. (örnek: 1 KB = 1024 bytes)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:204
 msgid "&Bookmarks"
@@ -340,15 +340,15 @@ msgstr "Çö&küş"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:494
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:558
 msgid "&Create directory"
-msgstr "Yeni &klasör"
+msgstr "&Klasör oluşturun"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:607
 msgid "&Create new tab"
-msgstr "Yeni &sekme açın"
+msgstr "&Sekme ekleyin"
 
 #: ../../locales/../src/interface/menu_bar.cpp:72
 msgid "&Debug"
-msgstr "&Hata ayıklama"
+msgstr "&Hata Ayıklama"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2215
 msgid "&Debug information in message log:"
@@ -436,7 +436,7 @@ msgstr "İn&dirin..."
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1382
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1160
 msgid "&Downloads:"
-msgstr "Karşıdan İn&dirme:"
+msgstr "Karşıdan in&dirme:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:45
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:259
@@ -477,7 +477,7 @@ msgstr "Bağlantı y&eni sekmede açılsın"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:421
 msgid "&Execute"
-msgstr "Ç&alıştırma"
+msgstr "Çalış&tırma"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1556
 msgid "&Export Site Manager entries"
@@ -577,11 +577,11 @@ msgstr "&Sunucu:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1597
 msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
-msgstr "&IEC ikili önekleri (örneğin 1KiB = 1024 bayt)"
+msgstr "&IEC ikili önekleri (örnek 1KiB = 1024 bayt)"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1483
 msgid "&ISO 8601 (example: 2007-09-15)"
-msgstr "&ISO 8601 (örneğin: 2007-09-15)"
+msgstr "&ISO 8601 (örnek: 2007-09-15)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:30
 msgid "&Import..."
@@ -962,7 +962,7 @@ msgstr "Ak&tarım kuyruğu"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1122
 msgid "&Treat dotfiles as ASCII files"
-msgstr "Noktadosyaları ASCII dosyalar olarak kabul e&dilsin"
+msgstr "Noktalı dosyalar ASCII olarak kabul e&dilsin"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1909
 msgid "&Unedit"
@@ -1028,13 +1028,13 @@ msgstr "&Görünüm"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:300
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:599
 msgid "&View/Edit"
-msgstr "&Göster/Düzenle"
+msgstr "&Görün/Düzenleyin"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1949
 msgid "&Watch locally edited files and prompt to upload modifications"
 msgstr ""
-"&Yerel olarak düzenlenen dosyalar izlenerek değişikliklerin yüklenmesi "
-"sorulsun"
+"&Yerel olarak düzenlenen dosyalar izlenerek değişikliklerin kayıt durumu "
+"sorulsun."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2041
 msgid "&When checking for updates, check for:"
@@ -1129,11 +1129,11 @@ msgstr "(app-compat %d.%d olarak ayarlandı)"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1550
 msgid "(example: %H:%M)"
-msgstr "(örneğin: %H:%M)"
+msgstr "(örnek: %H:%M)"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1501
 msgid "(example: %Y-%m-%d)"
-msgstr "(örneğin: %Y-%m-%d)"
+msgstr "(örnek: %Y-%m-%d)"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3537
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3554
@@ -1423,10 +1423,10 @@ msgid ""
 "builds at your own risk."
 msgstr ""
 "Öneri: Yeni özellikleri sınamak istediğiniz durumların dışında, kararlı "
-"sürümleri kullanın. Beta sürümleri ve gecelik yapımlar, sınama amacıyla "
-"kullanılabilecek geliştirme sürümleridir. Gecelik FileZilla yapımları "
-"beklendiği gibi çalışmayarak sisteminize zarar verebilir. Beta sürümleri ve "
-"gecelik yapımları kullanmaktan doğabilecek zararların riski size aittir."
+"sürümleri kullanın. Beta ve gecelik yapımlar, sınama amacıyla "
+"kullanılabilecek geliştirme sürümleridir. Gecelik yapımlar beklendiği gibi "
+"çalışmayarak sisteminize zarar verebilir. Beta sürümleri ve gecelik "
+"yapımları kullanmaktan doğabilecek zararların riski size aittir."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3470
 msgid "Al&ways perform this action"
@@ -1630,15 +1630,15 @@ msgstr "Yazar:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2492
 msgid "Auto"
-msgstr "Kendiliğinden"
+msgstr "Otomatik"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1061
 msgid "Automatic file type classification"
-msgstr "Kendiliğinden dosya tipi sınıflandırması"
+msgstr "Otomatik dosya tipi sınıflandırması"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1452
 msgid "Available sizes"
-msgstr "Geçerli boyutlar"
+msgstr "Kullanılabilecek boyutlar"
 
 #: ../../locales/../src/engine/sizeformatting_base.cpp:124
 #: ../../locales/../src/engine/sizeformatting_base.cpp:183
@@ -1725,11 +1725,11 @@ msgstr "Hepsini temiz&leyin"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:328
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:511
 msgid "C&opy URL(s) to clipboard"
-msgstr "İnternet adresi pan&oya kopyalansın"
+msgstr "İnternet adresini pan&oya kopyalayın"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1488
 msgid "C&ustom"
-msgstr "İsteğe &Bağlı"
+msgstr "İsteğe &Göre Uyarlanmış"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1977
 msgid "C&ustom filetype associations:"
@@ -1962,7 +1962,7 @@ msgstr "Karakter kodlaması sorunu"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:448
 msgid "Charset"
-msgstr "Karakter seti"
+msgstr "Karakter Seti"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:218
 msgid "Check for &updates..."
@@ -2103,7 +2103,7 @@ msgstr "Diğer tüm sekmeleri k&apatın"
 #: ../../locales/../src/interface/Mainfrm.cpp:1176
 #: ../../locales/../src/interface/Mainfrm.cpp:1197
 msgid "Close FileZilla"
-msgstr "FileZilla programını kapatın"
+msgstr "FileZilla yazılımını kapatın"
 
 #: ../../locales/../src/interface/cmdline.cpp:15
 msgid "Close all running instances of FileZilla"
@@ -2405,7 +2405,7 @@ msgstr "%s kopyası"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:329
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:512
 msgid "Copy the URLs of the selected items to clipboard."
-msgstr "Seçili ögelerin İnternet adresleri panoya kopyalansın."
+msgstr "Seçili ögelerin İnternet adreslerini panoya kopyalar."
 
 #: ../../locales/../src/engine/transfersocket.cpp:206
 #, c-format
@@ -2437,7 +2437,7 @@ msgstr "Komut, sunucu kodlamasına dönüştürülemedi"
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:315
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:325
 msgid "Could not convert private key"
-msgstr "Özel anahtar dönüştürülemedi"
+msgstr "Kişisel anahtar dönüştürülemedi"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2625
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1464
@@ -2540,7 +2540,7 @@ msgstr "Anahtar dosya yüklenemedi"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:300
 msgid "Could not load private key"
-msgstr "Özel anahtar yüklenemedi"
+msgstr "Kişisel anahtar yüklenemedi"
 
 #: ../../locales/../src/interface/state.cpp:1002
 #, c-format
@@ -2702,7 +2702,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:312
 msgid "Crea&te new file"
-msgstr "&Yeni bir dosya oluşturun"
+msgstr "&Dosya oluşturun"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:265
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:305
@@ -2782,7 +2782,7 @@ msgstr "Geçerli aktarım tipi ASCII olarak ayarlandı."
 
 #: ../../locales/../src/interface/statusbar.cpp:398
 msgid "Current transfer type is set to automatic detection."
-msgstr "Geçerli aktarım tipi kendiliğinden algılanacak şekilde ayarlandı."
+msgstr "Geçerli aktarım tipi otomatik algılanacak şekilde ayarlandı."
 
 #: ../../locales/../src/interface/statusbar.cpp:393
 msgid "Current transfer type is set to binary."
@@ -2791,7 +2791,7 @@ msgstr "Geçerli aktarım tipi ikili olarak ayarlandı."
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:478
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1537
 msgid "Cus&tom"
-msgstr "Ö&zel"
+msgstr "İsteğe Gö&re Uyarlanmış"
 
 #: ../../locales/../src/interface/filter.cpp:100
 msgid "Custom filter set"
@@ -2808,7 +2808,7 @@ msgstr "V&eri tipi"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1607
 msgid "D&ecimal prefixes using SI symbols (e.g. 1 KB = 1000 bytes)"
-msgstr "Ondalık ön&ekleri kullanan SI sembolleri (e.g. 1 KB = 1.000 bayt)"
+msgstr "Ondalık ön&ekleri kullanan SI sembolleri (örnek: 1 KB = 1000 bayt)"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:392
 msgid "D&efault"
@@ -2864,11 +2864,11 @@ msgstr "Tarih biçimi"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:104
 msgid "Date/time format"
-msgstr "Tarih/zaman biçimi"
+msgstr "Tarih/Saat Biçimi"
 
 #: ../../locales/../src/interface/fileexistsdlg.cpp:49
 msgid "Date/time unknown"
-msgstr "Tarih/zaman bilinmiyor"
+msgstr "Tarih/Saat bilinmiyor"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:116
 msgid "Debug"
@@ -2884,7 +2884,7 @@ msgstr "Varsayılan yere&l klasör:"
 
 #: ../../locales/../src/engine/server.cpp:26
 msgid "Default (Autodetect)"
-msgstr "Varsayılan (Kendiliğinden algılansın)"
+msgstr "Varsayılan (otomatik algılansın)"
 
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:81
 msgid "Default editor not properly quoted."
@@ -3104,9 +3104,8 @@ msgstr "&Hiç bir şey yapılmasın"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1801
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1856
-#, fuzzy
 msgid "Do the same with &all selected files already being edited"
-msgstr "Seçilen dosya zaten düzenleniyor:"
+msgstr "Düzenlenen &tüm dosyalar için aynı işlem uygulansın"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1179
 #: ../../locales/../src/interface/Mainfrm.cpp:1201
@@ -3138,9 +3137,8 @@ msgid "Do you really want to send '%s' to the server?"
 msgstr "'%s' sunucuya gönderilsin mi?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1849
-#, fuzzy
 msgid "Do you want to reopen this file?"
-msgstr "FileZilla kapatılsın mı?"
+msgstr "Bu dosyayı yeniden açmak ister misiniz?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "Documentation"
@@ -3152,7 +3150,7 @@ msgstr "Yere&l bağlantılar için dış IP adresi kullanılmasın."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1128
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
-msgstr "Noktadosyalar .htaccess gibi adı nokta ile başlayan dosyalardır"
+msgstr "Noktalı dosyalar, .htaccess gibi adı nokta ile başlayan dosyalardır"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1789
 msgid "Double-click action"
@@ -3254,11 +3252,11 @@ msgstr "K&lasöre geçin"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:455
 msgid "E&xecute"
-msgstr "Ç&alıştırın"
+msgstr "Ça&lıştırma"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:39
 msgid "E&xit"
-msgstr "FileZilla programını &kapatın"
+msgstr "FileZilla yazılımını &kapatın"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:196
 msgid "E-Mail:"
@@ -3492,7 +3490,7 @@ msgstr "Kuyruk kaydedilirken hata oluştu"
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:94
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:116
 msgid "Error starting program"
-msgstr "Program başlatılırken hata oluştu"
+msgstr "Yazılım başlatılırken hata oluştu"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:324
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:842
@@ -3825,7 +3823,7 @@ msgstr "Dosya değiştirildi"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:106
 msgid "File lists"
-msgstr "Dosya listeleri"
+msgstr "Dosya Listeleri"
 
 #: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/FileZilla.cpp:675
@@ -3966,7 +3964,7 @@ msgstr "Boyut"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:105
 msgid "Filesize format"
-msgstr "Dosya boyutu biçimi"
+msgstr "Dosya Boyutu Biçimi"
 
 #: ../../locales/../src/interface/LocalListView.cpp:276
 #: ../../locales/../src/interface/RemoteListView.cpp:376
@@ -4087,8 +4085,7 @@ msgstr "Biçim özellikleri:"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1989
 msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr ""
-"Yazım biçimi: Dosya tipini izleyecek şekilde tırnak içine alınmış komut ve "
-"ardından parametreler."
+"Biçim: Dosya tipini izleyerek tırnak içinde komut ardından parametreler."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
 #: ../../locales/../src/interface/updater.cpp:641
@@ -4230,7 +4227,7 @@ msgstr "Saat,"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1532
 msgid "I&SO 8601 (example: 15:47)"
-msgstr "I&SO 8601 (örneğin: 15:47)"
+msgstr "I&SO 8601 (örnek: 15:47)"
 
 #: ../../locales/../src/engine/proxy.cpp:128
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
@@ -4275,7 +4272,7 @@ msgid ""
 "If the host key change was not expected, please contact the server "
 "administrator."
 msgstr ""
-"Sunucu anahtarının değişmesini beklemiyorduysanız, sistem yöneticisi ile "
+"Sunucu anahtarının değişmesini beklemiyorsanız, sistem yöneticisi ile "
 "görüşün."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:570
@@ -4359,13 +4356,13 @@ msgstr ""
 #: ../../locales/../src/interface/Mainfrm.cpp:1200
 msgid "If you close FileZilla, your changes will be lost."
 msgstr ""
-"FileZilla programını şimdi kapatırsanız, yaptığınız değişiklikler kaybolacak."
+"FileZilla yazılımını şimdi kapatırsanız, yaptığınız değişiklikler kaybolacak."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1108
 msgid ""
 "If you enter the wrong filetypes, those files may get corrupted when "
 "transferred."
-msgstr "Tipi yanlış yazılan dosyalar aktarım sırasında bozulabilir."
+msgstr "Hatalı yazılan tipler aktarım sırasında bozulabilir."
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:365
 msgid "If you get any errors, your configuration is not correct."
@@ -5020,7 +5017,7 @@ msgstr "K&lasör Ekleyin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:16
 msgid "New &tab"
-msgstr "Yeni &sekme"
+msgstr "&Sekme ekleyin"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2788
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:47
@@ -5050,7 +5047,7 @@ msgstr "Yeni yer imi"
 #: ../../locales/../src/interface/RemoteListView.cpp:1337
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1318
 msgid "New directory"
-msgstr "Yeni klasör"
+msgstr "Klasör oluşturun"
 
 #: ../../locales/../src/interface/welcome_dialog.cpp:53
 #, c-format
@@ -5063,7 +5060,7 @@ msgstr "Yeni süzgeç"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:914
 msgid "New folder"
-msgstr "Yeni klasör"
+msgstr "Klasör oluşturun"
 
 #: ../../locales/../src/interface/sitemanager.cpp:625
 #: ../../locales/../src/interface/sitemanager.cpp:639
@@ -5217,8 +5214,8 @@ msgstr ""
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:775
 msgid "Note: Using a generic proxy forces passive mode on FTP connections."
 msgstr ""
-"Not: Soysal bir vekil sunucu kullanmak, FTP bağlantılarının pasif kip ile "
-"yapılmasını zorunlu kılar."
+"Not: Soysal bir vekil sunucu kullanıldığında, FTP bağlantılarının pasif kip "
+"ile yapılması gerekir."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1619
 msgid "Number of decimal places:"
@@ -5322,7 +5319,7 @@ msgstr "Açılamadı"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:18
 msgid "Opens a new tab"
-msgstr "Yeni bir sekme açar"
+msgstr "Yeni bir sekme ekler"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:9
 msgid "Opens the Site Manager"
@@ -5563,7 +5560,7 @@ msgstr "Lütfen özel bir tarih biçimi yazın."
 
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:82
 msgid "Please enter a custom time format."
-msgstr "Lütfen özel bir zaman biçimi yazın."
+msgstr "Lütfen özel bir saat biçimi yazın."
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:737
 msgid ""
@@ -5779,12 +5776,12 @@ msgstr "Lütfen varsayılan aktarım kipini seçin."
 #: ../../locales/../src/interface/chmoddialog.cpp:46
 #, c-format
 msgid "Please select the new attributes for the directory \"%s\"."
-msgstr "Lütfen \"%s\" klasörü için yeni izinleri belirleyin."
+msgstr "\"%s\" klasörü için yeni izinleri belirleyin."
 
 #: ../../locales/../src/interface/chmoddialog.cpp:38
 #, c-format
 msgid "Please select the new attributes for the file \"%s\"."
-msgstr "Lütfen \"%s\" dosyası için yeni izinleri belirleyin."
+msgstr "\"%s\" dosyası için yeni izinleri belirleyin."
 
 #: ../../locales/../src/interface/chmoddialog.cpp:49
 msgid "Please select the new attributes for the selected directories."
@@ -5869,12 +5866,12 @@ msgid ""
 "Privacy policy: Only your version of FileZilla, your used operating system "
 "and your CPU architecture will be submitted to the server."
 msgstr ""
-"Gizlilik ilkesi: Sunucuya yalnızca FileZilla sürümü, işletim sistemi ve "
-"işlemci mimarinizin bilgileri iletilir."
+"Gizlilik ilkesi: Sunucuya yalnızca FileZilla sürümünüz, işletim sisteminiz "
+"ve işlemci mimarinizin bilgileri iletilir."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:629
 msgid "Private &keys:"
-msgstr "Özel &anahtarlar:"
+msgstr "Kişisel &anahtarlar:"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:127
 msgid "Pro&tocol:"
@@ -6009,7 +6006,7 @@ msgstr "Standart FTP komutu"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:443
 msgid "Re&ad"
-msgstr "Ok&uyun"
+msgstr "O&kuma"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:272
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:316
@@ -6327,8 +6324,7 @@ msgid ""
 "Resuming ASCII files can cause problems if server uses a different line "
 "ending format than the client."
 msgstr ""
-"Sunucu ile istemcinin satır sonu karakteri farklı ise, ASCII dosyalarını "
-"sürdürmek sorunlara yol açabilir."
+"Sunucu ile istemcinin satır sonu karakteri farklı ise sorunlara yol açabilir."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1278
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:902
@@ -6478,11 +6474,11 @@ msgstr ""
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:360
 msgid "Select file containing private key"
-msgstr "Seçilen dosya özel anahtar içeriyor"
+msgstr "Seçilen dosya kişisel anahtar içeriyor"
 
 #: ../../locales/../src/interface/export.cpp:38
 msgid "Select file for exported data"
-msgstr "Veirlecek veriler için bir dosya seçin"
+msgstr "Verilecek veriler için bir dosya seçin"
 
 #: ../../locales/../src/interface/export.cpp:34
 msgid "Select file for exported queue"
@@ -6773,7 +6769,7 @@ msgstr "Ham klasö&r listesini görüntülensin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:223
 msgid "Show &welcome dialog..."
-msgstr "&Hoşgeldiniz penceresini görüntüleyin..."
+msgstr "&Hoş geldiniz penceresini görüntüleyin..."
 
 #: ../../locales/../src/interface/Mainfrm.cpp:2245
 msgid "Show both directory trees and continue comparing?"
@@ -7135,7 +7131,7 @@ msgstr "TLS bağlantısı kuruldu, HTTP isteği gönderiliyor"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:389
 msgid "TLS connection established, waiting for welcome message..."
-msgstr "TSL bağlantısı kuruldu, hoşgeldin iletisi bekleniyor..."
+msgstr "TSL bağlantısı kuruldu, hoş geldin iletisi bekleniyor..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:392
 msgid "TLS connection established."
@@ -7291,7 +7287,7 @@ msgstr ""
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:222
 #, c-format
 msgid "The file '%s' could not be loaded or does not contain a private key."
-msgstr "'%s' dosyası yüklenemedi ya da özel bir anahtar içermiyor."
+msgstr "'%s' dosyası yüklenemedi ya da kişisel bir anahtar içermiyor."
 
 #: ../../locales/../src/interface/xmlfunctions.cpp:40
 #, c-format
@@ -7434,7 +7430,7 @@ msgstr "Yeni sürüm indirilemedi, lütfen daha sonra yeniden deneyin."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:104
 msgid "The new version has been saved in your Downloads directory."
-msgstr "Yeni sürüm İndirmeler klasörüne kaydedildi."
+msgstr "Yeni sürüm İndirmeler klasörünüze kaydedilecek."
 
 #: ../../locales/../src/interface/QueueView.cpp:1878
 msgid "The queue will not be saved."
@@ -7471,14 +7467,13 @@ msgstr ""
 "kapatın."
 
 #: ../../locales/../src/interface/edithandler.cpp:1669
-#, fuzzy
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
 "Do you really want to continue?"
 msgstr ""
-"Seçilmiş dosya doğrudan açılır.\n"
-"Bu tehlikeli olabilir ve sisteminize zarar verebilir.\n"
+"Seçilmiş dosya doğrudan yürütülür.\n"
+"Bu işlem tehlikeli olabilir ve sisteminize zarar verebilir.\n"
 "Devam etmek istediğinize gerçekten emin misiniz?"
 
 #: ../../locales/../src/interface/sitemanager.cpp:605
@@ -7507,9 +7502,9 @@ msgid ""
 "means that either the administrator has changed the host key, or you are "
 "actually trying to connect to another computer pretending to be the server."
 msgstr ""
-"Sunucunun ana makina anahtarı bellekteki anahtarla uyuşmuyor. Ya yönetici "
-"anahtarı değiştirdi ya da siz kendisini bağlanmak istediğiniz sunucu gibi "
-"gösteren başka bir bilgisayara bağlanmaya çalışıyorsunuz."
+"Sunucunun anahtarı bellekteki anahtarla uyuşmuyor. Ya yönetici anahtarı "
+"değiştirdi ya da siz kendisini bağlanmak istediğiniz sunucu gibi gösteren "
+"başka bir bilgisayara bağlanmaya çalışıyorsunuz."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:828
 msgid ""
@@ -7644,8 +7639,8 @@ msgid ""
 "To support public key authentication, FileZilla needs to know the private "
 "keys to use."
 msgstr ""
-"Açık anahtar yetkilendirmesini kullanabilmek için FileZilla kullandığınız "
-"özel anahtarı bilmek zorundadır."
+"FileZilla açık anahtar yetkilendirmesini kullanabilmek için kişisel "
+"anahtarınızı bilmek zorundadır."
 
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:75
 msgid ""
@@ -7755,7 +7750,7 @@ msgstr "Aktarılıyor"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:99
 msgid "Transfers"
-msgstr "Aktarımlar"
+msgstr "Aktarım"
 
 #: ../../locales/../src/interface/QueueView.cpp:3020
 #: ../../locales/../src/interface/QueueView.cpp:3023
@@ -7780,7 +7775,7 @@ msgstr "Yeni sunucu anahtarına güvenilsin:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:983
 msgid "Trust the new key and carry on connecting?"
-msgstr "Yeni anahtara güvenilip bağlantı kurulsun mu?"
+msgstr "Yeni anahtara güvenilerek bağlantı kurulsun mu?"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:232
 msgid "Trust this certificate and carry on connecting?"
@@ -7917,7 +7912,7 @@ msgstr "Karşıya yük&leyin ve kapatın"
 #: ../../locales/../src/interface/settings/optionspage_updatecheck.cpp:45
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:112
 msgid "Updates"
-msgstr "Güncellemeler"
+msgstr "Güncelleme"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2202
 msgid "Upload"
@@ -8009,7 +8004,7 @@ msgstr "Site yöneticisindeki sunucu kullanılsın"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1477
 msgid "Use system &defaults"
-msgstr "&Varsayılanlar kullanılsın"
+msgstr "Sistem &varsayılanları kullanılsın"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:194
 msgid "Use the following IP address:"
@@ -8102,7 +8097,7 @@ msgstr "Görüntülenecek sütunlar"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:449
 msgid "W&rite"
-msgstr "Y&azın"
+msgstr "Y&azma"
 
 #: ../../locales/../src/interface/QueueView.cpp:1713
 msgid "Waiting"
@@ -8179,7 +8174,7 @@ msgstr "Dikkat: Olası güvenlik ihlali!"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3427
 msgid "Welcome to FileZilla"
-msgstr "FileZilla'ya Hoş Geldiniz"
+msgstr "FileZilla Yazılımına Hoş Geldiniz"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3293
 msgid "What's new"
@@ -8263,7 +8258,7 @@ msgstr "Varsayılan kapıyı kullanmak için Kapı alanını boş bırakın."
 msgid ""
 "You can use an x at any position to keep the permission the original files "
 "have."
-msgstr "Orijinal izinleri korumak için istediğiniz konuma x yazabilirsiniz."
+msgstr "Özgün izinleri korumak istediğiniz konuma X yazabilirsiniz."
 
 #: ../../locales/../src/interface/import.cpp:28
 msgid "You cannot import settings from FileZilla's own settings directory."
@@ -8561,7 +8556,5 @@ msgstr "Herkes yazabilir"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
-#~ msgid ""
-#~ "A file with that name is already being edited. Do you want to reopen '%s'?"
-#~ msgstr ""
-#~ "'%s' adında bir dosya zaten düzenleniyor. Yeniden açmak ister misiniz?"
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(%u%% indirildi)"
