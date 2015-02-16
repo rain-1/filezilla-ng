@@ -59,6 +59,57 @@ static std::list<CSocketThread*> waiting_socket_threads;
 struct socket_event_type;
 typedef CEvent<socket_event_type> CInternalSocketEvent;
 
+void RemoveSocketEvents(CEventHandler * handler, CSocketEventSource const* const source)
+{
+	auto socketEventFilter = [&](CEventLoop::Events::value_type const& ev) -> bool {
+		if (ev.first != handler) {
+			return false;
+		}
+		else if (ev.second->derived_type() == CSocketEvent::type()) {
+			return std::get<0>(reinterpret_cast<CSocketEvent const&>(ev).v_) == source;
+		}
+		else if (ev.second->derived_type() == CHostAddressEvent::type()) {
+			return std::get<0>(reinterpret_cast<CHostAddressEvent const&>(ev).v_) == source;
+		}
+		else {
+			return false;
+		}
+	};
+
+	handler->event_loop_.FilterEvents(socketEventFilter);
+}
+
+void ChangeSocketEventHandler(CEventHandler * oldHandler, CEventHandler * newHandler, CSocketEventSource const* const source)
+{
+	if (!oldHandler)
+		return;
+	if (oldHandler == newHandler) {
+		return;
+	}
+
+	if (!newHandler) {
+		RemoveSocketEvents(oldHandler, source);
+	}
+
+	auto socketEventFilter = [&](CEventLoop::Events::value_type & ev) -> bool {
+		if (ev.first == oldHandler) {
+			if (ev.second->derived_type() == CSocketEvent::type()) {
+				if (std::get<0>(reinterpret_cast<CSocketEvent const&>(ev).v_) == source) {
+					ev.first = newHandler;
+				}
+			}
+			else if (ev.second->derived_type() == CHostAddressEvent::type()) {
+				if (std::get<0>(reinterpret_cast<CHostAddressEvent const&>(ev).v_) == source) {
+					ev.first = newHandler;
+				}
+			}
+		}
+		return false;
+	};
+
+	oldHandler->event_loop_.FilterEvents(socketEventFilter);
+}
+
 namespace {
 #ifdef __WXMSW__
 static int ConvertMSWErrorCode(int error)
@@ -927,11 +978,8 @@ void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
 			return;
 		}
 
-		if (m_pEvtHandler) {
-			m_pEvtHandler->ChangeHandler(pEvtHandler, CSocketEvent::type());
-			m_pEvtHandler->ChangeHandler(pEvtHandler, CHostAddressEvent::type());
-		}
-
+		ChangeSocketEventHandler(m_pEvtHandler, pEvtHandler, this);
+		
 		m_pEvtHandler = pEvtHandler;
 
 		if (pEvtHandler && m_state == connected) {
@@ -959,11 +1007,7 @@ void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
 		}
 	}
 	else {
-		if (m_pEvtHandler && m_pEvtHandler != pEvtHandler) {
-			m_pEvtHandler->ChangeHandler(pEvtHandler, CSocketEvent::type());
-			m_pEvtHandler->ChangeHandler(pEvtHandler, CHostAddressEvent::type());
-		}
-		
+		ChangeSocketEventHandler(m_pEvtHandler, pEvtHandler, this);
 		m_pEvtHandler = pEvtHandler;
 	}
 }
@@ -1099,8 +1143,7 @@ int CSocket::Close()
 		}
 
 		if (m_pEvtHandler) {
-			m_pEvtHandler->RemoveEvents(CSocketEvent::type());
-			m_pEvtHandler->RemoveEvents(CHostAddressEvent::type());
+			RemoveSocketEvents(m_pEvtHandler, this);
 			m_pEvtHandler = 0;
 		}
 	}
@@ -1111,8 +1154,7 @@ int CSocket::Close()
 		m_state = none;
 
 		if (m_pEvtHandler) {
-			m_pEvtHandler->RemoveEvents(CSocketEvent::type());
-			m_pEvtHandler->RemoveEvents(CHostAddressEvent::type());
+			RemoveSocketEvents(m_pEvtHandler, this);
 			m_pEvtHandler = 0;
 		}
 	}

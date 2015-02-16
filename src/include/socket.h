@@ -39,6 +39,8 @@ public:
 	virtual void cb() {}
 };
 
+void RemoveSocketEvents(CEventHandler * handler, CSocketEventSource const* const source);
+
 class CSocketThread;
 class CSocket final : public CSocketEventSource
 {

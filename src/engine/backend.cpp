@@ -10,8 +10,7 @@ CBackend::CBackend(CEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler)
 
 CBackend::~CBackend()
 {
-	m_pEvtHandler->RemoveEvents(CSocketEvent::type());
-	m_pEvtHandler->RemoveEvents(CHostAddressEvent::type());
+	RemoveSocketEvents(m_pEvtHandler, this);
 }
 
 CSocketBackend::CSocketBackend(CEventHandler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter)
