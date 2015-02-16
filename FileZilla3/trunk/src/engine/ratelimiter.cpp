@@ -22,9 +22,9 @@ CRateLimiter::~CRateLimiter()
 	RemoveHandler();
 }
 
-wxLongLong CRateLimiter::GetLimit(rate_direction direction) const
+int64_t CRateLimiter::GetLimit(rate_direction direction) const
 {
-	wxLongLong ret;
+	int64_t ret;
 	if (options_.GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0) {
 		ret = options_.GetOptionVal(OPTION_SPEEDLIMIT_INBOUND + direction) * 1024;
 	}
@@ -39,9 +39,9 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 	m_objectList.push_back(pObject);
 
 	for (int i = 0; i < 2; ++i) {
-		wxLongLong limit = GetLimit((rate_direction)i);
+		int64_t limit = GetLimit(static_cast<rate_direction>(i));
 		if (limit > 0) {
-			wxLongLong tokens = limit / (1000 / tickDelay);
+			int64_t tokens = limit / (1000 / tickDelay);
 
 			tokens /= m_objectList.size();
 			if (m_tokenDebt[i] > 0) {
@@ -76,8 +76,8 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 				// If an object already used up some of its assigned tokens, add them to m_tokenDebt,
 				// so that newly created objects get less initial tokens.
 				// That ensures that rapidly adding and removing objects does not exceed the rate
-				wxLongLong limit = GetLimit((rate_direction)i);
-				wxLongLong tokens = limit / (1000 / tickDelay);
+				int64_t limit = GetLimit(static_cast<rate_direction>(i));
+				int64_t tokens = limit / (1000 / tickDelay);
 				tokens /= m_objectList.size();
 				if ((*iter)->m_bytesAvailable[i] < tokens)
 					m_tokenDebt[i] += tokens - (*iter)->m_bytesAvailable[i];
@@ -101,7 +101,7 @@ void CRateLimiter::OnTimer(timer_id)
 {
 	scoped_lock lock(sync_);
 
-	wxLongLong const limits[2] = { GetLimit(inbound), GetLimit(outbound) };
+	int64_t const limits[2] = { GetLimit(inbound), GetLimit(outbound) };
 
 	for (int i = 0; i < 2; ++i) {
 		m_tokenDebt[i] = 0;
@@ -118,11 +118,11 @@ void CRateLimiter::OnTimer(timer_id)
 			continue;
 		}
 
-		wxLongLong tokens = (limits[i] * tickDelay) / 1000;
-		wxLongLong maxTokens = tokens * GetBucketSize();
+		int64_t tokens = (limits[i] * tickDelay) / 1000;
+		int64_t maxTokens = tokens * GetBucketSize();
 
 		// Get amount of tokens for each object
-		wxLongLong tokensPerObject = tokens / m_objectList.size();
+		int64_t tokensPerObject = tokens / m_objectList.size();
 
 		if (tokensPerObject == 0)
 			tokensPerObject = 1;

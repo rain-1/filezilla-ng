@@ -30,14 +30,14 @@ CSocketBackend::~CSocketBackend()
 
 int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 {
-	wxLongLong max = GetAvailableBytes(CRateLimiter::outbound);
+	int64_t max = GetAvailableBytes(CRateLimiter::outbound);
 	if (max == 0) {
 		Wait(CRateLimiter::outbound);
 		error = EAGAIN;
 		return -1;
 	}
 	else if (max > 0 && max < len)
-		len = max.GetLo();
+		len = max;
 
 	int written = socket_.Write(buffer, len, error);
 
@@ -49,14 +49,14 @@ int CSocketBackend::Write(const void *buffer, unsigned int len, int& error)
 
 int CSocketBackend::Read(void *buffer, unsigned int len, int& error)
 {
-	wxLongLong max = GetAvailableBytes(CRateLimiter::inbound);
+	int64_t max = GetAvailableBytes(CRateLimiter::inbound);
 	if (max == 0) {
 		Wait(CRateLimiter::inbound);
 		error = EAGAIN;
 		return -1;
 	}
 	else if (max > 0 && max < len)
-		len = max.GetLo();
+		len = max;
 
 	int read = socket_.Read(buffer, len, error);
 
