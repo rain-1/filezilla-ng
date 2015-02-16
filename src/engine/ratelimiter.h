@@ -24,7 +24,7 @@ public:
 	void RemoveObject(CRateLimiterObject* pObject);
 
 protected:
-	wxLongLong GetLimit(rate_direction direction) const;
+	int64_t GetLimit(rate_direction direction) const;
 
 	int GetBucketSize() const;
 
@@ -33,7 +33,7 @@ protected:
 
 	timer_id m_timer{};
 
-	wxLongLong m_tokenDebt[2];
+	int64_t m_tokenDebt[2];
 
 	COptionsBase& options_;
 
@@ -58,7 +58,7 @@ class CRateLimiterObject
 public:
 	CRateLimiterObject();
 	virtual ~CRateLimiterObject() {}
-	wxLongLong GetAvailableBytes(CRateLimiter::rate_direction direction) const { return m_bytesAvailable[direction]; }
+	int64_t GetAvailableBytes(CRateLimiter::rate_direction direction) const { return m_bytesAvailable[direction]; }
 
 	bool IsWaiting(CRateLimiter::rate_direction direction) const;
 
@@ -70,7 +70,7 @@ protected:
 
 private:
 	bool m_waiting[2];
-	wxLongLong m_bytesAvailable[2];
+	int64_t m_bytesAvailable[2];
 };
 
 #endif //__RATELIMITER_H__

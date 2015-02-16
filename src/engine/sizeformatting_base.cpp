@@ -83,14 +83,14 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_
 	// Exponent (2^(10p) or 10^(3p) depending on option
 	int p = 0;
 
-	wxLongLong r = size;
+	int64_t r = size;
 	int remainder = 0;
 	bool clipped = false;
 	while (r > divider && p < 6) {
-		const wxLongLong rr = r / divider;
+		int64_t const rr = r / divider;
 		if (remainder != 0)
 			clipped = true;
-		remainder = (r - rr * divider).GetLo();
+		remainder = static_cast<int>(r - rr * divider);
 		r = rr;
 		++p;
 	}
@@ -145,7 +145,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_
 		places.Printf(fmt, remainder);
 	}
 
-	wxString result = ToString(r.GetValue(), 0, 0);
+	wxString result = ToString(r, 0, 0);
 	if (!places.empty()) {
 		const wxString& sep = GetRadixSeparator();
 
