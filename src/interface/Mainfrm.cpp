@@ -2570,7 +2570,7 @@ void CMainFrame::OnSearch(wxCommandEvent& event)
 
 void CMainFrame::PostInitialize()
 {
-#ifndef __WXGTK__
+#ifdef __WXMAC__
 	// Focus first control
 	NavigateIn(wxNavigationKeyEvent::IsForward);
 #endif
