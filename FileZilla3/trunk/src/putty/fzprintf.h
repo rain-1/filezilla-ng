@@ -1,3 +1,5 @@
+#define FZSFTP_PROTOCOL_VERSION 2
+
 typedef enum
 {
     sftpUnknown = -1,

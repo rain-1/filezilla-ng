@@ -43,12 +43,6 @@ enum sftpRequestTypes
 class CProcess;
 class CSftpInputThread;
 
-struct sftp_event_type;
-typedef CEvent<sftp_event_type> CSftpEvent;
-
-struct terminate_event_type;
-typedef CEvent<terminate_event_type> CTerminateEvent;
-
 class CSftpControlSocket : public CControlSocket, public CRateLimiterObject
 {
 public:
@@ -122,14 +116,14 @@ protected:
 	bool SendCommand(wxString const& cmd, const wxString& show = wxString());
 	bool AddToStream(const wxString& cmd, bool force_utf8 = false);
 
-	virtual void OnRateAvailable(enum CRateLimiter::rate_direction direction);
-	void OnQuotaRequest(enum CRateLimiter::rate_direction direction);
+	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
+	void OnQuotaRequest(CRateLimiter::rate_direction direction);
 
 	// see src/putty/wildcard.c
 	wxString WildcardEscape(const wxString& file);
 
-	CProcess* m_pProcess;
-	CSftpInputThread* m_pInputThread;
+	CProcess* m_pProcess{};
+	CSftpInputThread* m_pInputThread{};
 
 	virtual void operator()(CEventBase const& ev);
 	void OnSftpEvent();
