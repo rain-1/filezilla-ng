@@ -10,6 +10,8 @@ int has_input_pushback(void);
 char* read_input_line(int force, int* error);
 #endif
 
+int CurrentSpeedLimit(int direction);
+
 #ifdef _WINDOWS
 #include <windows.h>
 typedef FILETIME _fztimer;
