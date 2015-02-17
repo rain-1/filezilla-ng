@@ -16,6 +16,14 @@
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
 
+#define FZSFTP_PROTOCOL_VERSION 2
+
+struct sftp_event_type;
+typedef CEvent<sftp_event_type> CSftpEvent;
+
+struct terminate_event_type;
+typedef CEvent<terminate_event_type> CTerminateEvent;
+
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
 public:
@@ -318,8 +326,6 @@ CSftpControlSocket::CSftpControlSocket(CFileZillaEnginePrivate & engine)
 	: CControlSocket(engine)
 {
 	m_useUTF8 = true;
-	m_pProcess = 0;
-	m_pInputThread = 0;
 }
 
 CSftpControlSocket::~CSftpControlSocket()
@@ -448,6 +454,11 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 	switch (pData->opState)
 	{
 	case connect_init:
+		if (reply != wxString::Format(_T("fzSftp started, protocol_version=%d"), FZSFTP_PROTOCOL_VERSION)) {
+			LogMessage(MessageType::Error, _("fzsftp belongs to a different version of FileZilla"));
+			DoClose(FZ_REPLY_INTERNALERROR);
+			return FZ_REPLY_ERROR;
+		}
 		if (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy())
 			pData->opState = connect_proxy;
 		else if (pData->pKeyFiles)
@@ -779,7 +790,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		m_pCurOpData->waitForAsyncRequest = false;
 	}
 
-	const enum RequestId requestId = pNotification->GetRequestID();
+	RequestId const requestId = pNotification->GetRequestID();
 	switch(requestId)
 	{
 	case reqId_fileexists:
@@ -1219,7 +1230,7 @@ enum cwdStates
 
 int CSftpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString subDir /*=_T("")*/, bool link_discovery /*=false*/)
 {
-	enum cwdStates state = cwd_init;
+	cwdStates state = cwd_init;
 
 	if (path.GetType() == DEFAULT)
 		path.SetType(m_pCurrentServer->GetType());
@@ -2585,22 +2596,21 @@ wxString CSftpControlSocket::WildcardEscape(const wxString& file)
 	return escapedFile;
 }
 
-void CSftpControlSocket::OnRateAvailable(enum CRateLimiter::rate_direction direction)
+void CSftpControlSocket::OnRateAvailable(CRateLimiter::rate_direction direction)
 {
 	OnQuotaRequest(direction);
 }
 
-void CSftpControlSocket::OnQuotaRequest(enum CRateLimiter::rate_direction direction)
+void CSftpControlSocket::OnQuotaRequest(CRateLimiter::rate_direction direction)
 {
-	wxLongLong bytes = GetAvailableBytes(direction);
-	if (bytes > 0)
-	{
+	int64_t bytes = GetAvailableBytes(direction);
+	if (bytes > 0) {
 		int b;
 		if (bytes > INT_MAX)
 			b = INT_MAX;
 		else
-			b = bytes.GetLo();
-		AddToStream(wxString::Format(_T("-%d%d\n"), (int)direction, b));
+			b = bytes;
+		AddToStream(wxString::Format(_T("-%d%d,%d\n"), (int)direction, b, engine_.GetOptions().GetOptionVal(OPTION_SPEEDLIMIT_INBOUND + static_cast<int>(direction))));
 		UpdateUsage(direction, b);
 	}
 	else if (bytes == 0)
@@ -2667,10 +2677,9 @@ int CSftpControlSocket::ListCheckTimezoneDetection()
 
 void CSftpControlSocket::operator()(CEventBase const& ev)
 {
-	if (Dispatch<CTerminateEvent>(ev, this, &CSftpControlSocket::OnTerminate)) {
-		return;
-	}
-	if (Dispatch<CSftpEvent>(ev, this, &CSftpControlSocket::OnSftpEvent)) {
+	if (Dispatch<CSftpEvent, CTerminateEvent>(ev, this,
+		&CSftpControlSocket::OnSftpEvent,
+		&CSftpControlSocket::OnTerminate)) {
 		return;
 	}
 

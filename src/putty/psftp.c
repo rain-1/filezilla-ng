@@ -3336,7 +3336,7 @@ int psftp_main(int argc, char *argv[])
     int modeflags = 0;
     char *batchfile = NULL;
 
-    fzprintf(sftpReply, "fzSftp started");
+    fzprintf(sftpReply, "fzSftp started, protocol_version=%d", FZSFTP_PROTOCOL_VERSION);
 
 #ifndef _WINDOWS
     if (psftp_init_utf8_locale())
