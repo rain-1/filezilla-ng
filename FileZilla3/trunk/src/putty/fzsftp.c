@@ -7,6 +7,7 @@
 #endif
 
 int bytesAvailable[2] = { 0, 0 };
+int limit[2] = { 0, 0 };
 
 char* input_pushback = 0;
 
@@ -130,16 +131,15 @@ int ProcessQuotaCmd(const char* line)
     else
 	fatalbox("Invalid data received in ReadQuotas: Unknown direction");
 
-    if (line[2] == '-')
-    {
+    if (line[2] == '-') {
 	bytesAvailable[direction] = -1;
+	limit[direction] = -1;
 	return 0;
     }
 
     number = 0;
-    for (pos = 2;; pos++)
-    {
-	if (line[pos] == 0 || line[pos] == '\r' || line[pos] == '\n')
+    for (pos = 2;; ++pos) {
+	if (line[pos] == ',')
 	    break;
 	if (line[pos] < '0' || line[pos] > '9')
 	    fatalbox("Invalid data received in ReadQuotas: Bytecount not a number");
@@ -147,6 +147,19 @@ int ProcessQuotaCmd(const char* line)
 	number *= 10;
 	number += line[pos] - '0';
     }
+
+    ++pos;
+    limit[direction] = 0;
+    for (;; ++pos) {
+	if (line[pos] == 0 || line[pos] == '\r' || line[pos] == '\n')
+	    break;
+	if (line[pos] < '0' || line[pos] > '9')
+	    fatalbox("Invalid data received in ReadQuotas: Limit not a number");
+
+	limit[direction] *= 10;
+	limit[direction] += line[pos] - '0';
+    }
+
     if (bytesAvailable[direction] == -1)
 	bytesAvailable[direction] = number;
     else
@@ -306,4 +319,9 @@ int fz_timer_check(_fztimer *timer)
 #endif
 #endif
     return 1;
+}
+
+int CurrentSpeedLimit(int direction)
+{
+    return limit[direction];
 }
