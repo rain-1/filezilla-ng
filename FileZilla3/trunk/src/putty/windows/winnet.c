@@ -1870,7 +1870,7 @@ SockAddr platform_get_x11_unix_address(const char *display, int displaynum,
     return ret;
 }
 
-int recv_peek(SOCKET sk, char* buf, int len)
+int recv_peek(Socket sk, char* buf, int len)
 {
     Actual_Socket a = (Actual_Socket) sk;
     return p_recv(a->s, buf, len, MSG_PEEK);
