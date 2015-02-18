@@ -1464,5 +1464,8 @@ void xfer_cleanup(struct fxp_xfer *xfer)
 int pending_receive()
 {
     char tmp[5];
+    if (!ssh_socket) {
+	return -1;
+    }
     return recv_peek(ssh_socket, tmp, 5);
 }
