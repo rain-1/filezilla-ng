@@ -18,6 +18,7 @@ wxString ToString(int64_t n, wxChar const* const sepBegin = 0, wxChar const* con
 		bool neg = false;
 		if (n < 0) {
 			n *= -1;
+			neg = true;
 		}
 
 		wxChar buf[60];

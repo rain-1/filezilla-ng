@@ -613,12 +613,12 @@ static int try_connect(Actual_Socket sock)
      /* Enable window scaling */
     {
 	int size_read = 4194304;
-	setsockopt(s, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
+	(void)setsockopt(s, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
     }
 
     {
 	int size_write = 262144;
-	setsockopt(s, SOL_SOCKET, SO_SNDBUF, (const char*)&size_write, sizeof(size_write));
+	(void)setsockopt(s, SOL_SOCKET, SO_SNDBUF, (const char*)&size_write, sizeof(size_write));
     }
 
     /*

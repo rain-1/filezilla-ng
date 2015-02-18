@@ -279,10 +279,10 @@ protected:
 	enum ActionAfterState m_actionAfterState;
 	wxString m_actionAfterRunCommand;
 #if defined(__WXMSW__) || defined(__WXMAC__)
-	wxTimer* m_actionAfterTimer;
-	wxProgressDialog* m_actionAfterWarnDialog;
-	int m_actionAfterTimerCount;
-	int m_actionAfterTimerId;
+	wxTimer* m_actionAfterTimer{};
+	wxProgressDialog* m_actionAfterWarnDialog{};
+	int m_actionAfterTimerCount{};
+	int m_actionAfterTimerId{-1};
 #endif
 
 	int64_t m_totalQueueSize;

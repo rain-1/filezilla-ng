@@ -554,7 +554,7 @@ void CControlSocket::OnTimer(timer_id)
 		int64_t const elapsed = CMonotonicClock::now() - m_lastActivity;
 
 		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
-			if (elapsed > timeout * 1000) {
+			if (elapsed > static_cast<int64_t>(timeout) * 1000) {
 				LogMessage(MessageType::Error, wxPLURAL("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
 				DoClose(FZ_REPLY_TIMEOUT);
 				return;

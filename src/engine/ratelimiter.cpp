@@ -26,7 +26,7 @@ int64_t CRateLimiter::GetLimit(rate_direction direction) const
 {
 	int64_t ret{};
 	if (options_.GetOptionVal(OPTION_SPEEDLIMIT_ENABLE) != 0) {
-		ret = options_.GetOptionVal(OPTION_SPEEDLIMIT_INBOUND + direction) * 1024;
+		ret = static_cast<int64_t>(options_.GetOptionVal(OPTION_SPEEDLIMIT_INBOUND + direction)) * 1024;
 	}
 
 	return ret;

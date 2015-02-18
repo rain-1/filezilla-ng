@@ -451,11 +451,6 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	m_filesWithUnknownSize = 0;
 
 	m_actionAfterState = ActionAfterState_Disabled;
-#if defined(__WXMSW__) || defined(__WXMAC__)
-	m_actionAfterWarnDialog = 0;
-	m_actionAfterTimer = 0;
-	m_actionAfterTimerId = -1;
-#endif
 
 	std::list<ColumnId> extraCols;
 	extraCols.push_back(colTransferStatus);
@@ -3135,7 +3130,6 @@ void CQueueView::ActionAfterWarnUser(ActionAfterState s)
 	wxASSERT(!m_actionAfterTimer);
 	m_actionAfterTimer = new wxTimer(this, m_actionAfterTimerId);
 	m_actionAfterTimerId = m_actionAfterTimer->GetId();
-	m_actionAfterTimerCount = 0;
 	m_actionAfterTimer->Start(100, wxTIMER_CONTINUOUS);
 }
 

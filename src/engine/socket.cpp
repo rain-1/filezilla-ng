@@ -466,16 +466,17 @@ protected:
 		pPort = m_pPort;
 		m_pPort = 0;
 
-		l.unlock();
-
-		struct addrinfo *addressList = 0;
 		struct addrinfo hints = {0};
 		hints.ai_family = m_pSocket->m_family;
+
+		l.unlock();
+
 		hints.ai_socktype = SOCK_STREAM;
 #ifdef AI_IDN
 		hints.ai_flags |= AI_IDN;
 #endif
 
+		struct addrinfo *addressList = 0;
 		int res = getaddrinfo(pHost, pPort, &hints, &addressList);
 
 		delete [] pHost;
