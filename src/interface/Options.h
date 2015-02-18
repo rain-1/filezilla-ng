@@ -89,6 +89,7 @@ enum interfaceOptions
 	OPTION_STRIP_VMS_REVISION,
 	OPTION_INTERFACE_SITEMANAGER_ON_STARTUP,
 	OPTION_PROMPTPASSWORDSAVE,
+	OPTION_PERSISTENT_CHOICES,
 
 	// Default/internal options
 	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated

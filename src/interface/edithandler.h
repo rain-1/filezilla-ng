@@ -5,6 +5,14 @@
 
 // Handles all aspects about remote file viewing/editing
 
+namespace edit_choices {
+enum type
+{
+	edit_existing_action = 0x1,
+	edit_existing_always = 0x2
+};
+}
+
 class CQueueView;
 class CEditHandler : protected wxEvtHandler
 {
