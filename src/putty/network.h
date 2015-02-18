@@ -238,4 +238,6 @@ SSL_Client_Socket sk_ssl_client_over(Socket s,	/* pre-existing (tcp) connection 
 
 #define sk_renegotiate(s) (((*s)->renegotiate) (s))
 
+int recv_peek(Socket sk, char* buf, int len);
+
 #endif

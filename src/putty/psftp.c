@@ -573,6 +573,8 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
     return ret;
 }
 
+int pending_receive();
+
 int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
 {
     struct fxp_handle *fh;
@@ -779,6 +781,8 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
 		eof = 1;
 	    } else {
 		xfer_upload_data(xfer, buffer, len);
+		if (pending_receive() >= 5)
+		    break;
 	    }
 	}
 

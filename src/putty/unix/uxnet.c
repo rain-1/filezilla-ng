@@ -1632,3 +1632,9 @@ Socket new_unix_listener(SockAddr listenaddr, Plug plug)
 
     return (Socket) ret;
 }
+
+int recv_peek(SOCKET sk, char* buf, int len)
+{
+    Actual_Socket a = (Actual_Socket) sk;
+    return recv(a->s, buf, len, MSG_PEEK);
+}

@@ -11,6 +11,7 @@
 #include "misc.h"
 #include "int64.h"
 #include "tree234.h"
+#include "ssh.h"
 #include "sftp.h"
 
 #include "fzprintf.h"
@@ -1458,4 +1459,10 @@ void xfer_cleanup(struct fxp_xfer *xfer)
 	sfree(rr);
     }
     sfree(xfer);
+}
+
+int pending_receive()
+{
+    char tmp[5];
+    return recv_peek(ssh_socket, tmp, 5);
 }
