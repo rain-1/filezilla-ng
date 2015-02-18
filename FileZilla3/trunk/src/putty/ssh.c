@@ -24,7 +24,7 @@
 #define TRUE 1
 #endif
 
-Socket ssh_socket;
+Socket ssh_socket = 0;
 
 /*
  * Packet type contexts, so that ssh2_pkt_type can correctly decode
@@ -11095,9 +11095,9 @@ static const char *ssh_init(void *frontend_handle, void **backend_handle,
     random_ref(); /* do this now - may be needed by sharing setup code */
 
     p = connect_to_host(ssh, host, port, realhost, nodelay, keepalive);
+    ssh_socket = ssh->s;
     if (p != NULL) {
         random_unref();
-	ssh_socket = ssh->s;
 	return p;
     }
 
