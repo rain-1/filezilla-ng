@@ -24,6 +24,8 @@
 #define TRUE 1
 #endif
 
+Socket ssh_socket;
+
 /*
  * Packet type contexts, so that ssh2_pkt_type can correctly decode
  * the ambiguous type numbers back into the correct type strings.
@@ -11095,6 +11097,7 @@ static const char *ssh_init(void *frontend_handle, void **backend_handle,
     p = connect_to_host(ssh, host, port, realhost, nodelay, keepalive);
     if (p != NULL) {
         random_unref();
+	ssh_socket = ssh->s;
 	return p;
     }
 

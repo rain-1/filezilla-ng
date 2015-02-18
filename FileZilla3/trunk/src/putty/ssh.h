@@ -880,3 +880,5 @@ void platform_ssh_share_cleanup(const char *name);
  * format.
  */
 void old_keyfile_warning(void);
+
+extern Socket ssh_socket;
