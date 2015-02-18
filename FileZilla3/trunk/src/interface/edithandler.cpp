@@ -1702,9 +1702,22 @@ bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CSe
 					return false;
 				}
 				dlg.SetChildLabel(XRCID("ID_FILENAME"), file.name);
+
+				int choices = COptions::Get()->GetOptionVal(OPTION_PERSISTENT_CHOICES);
+
 				if (fileCount < 2) {
 					xrc_call(dlg, "ID_ALWAYS", &wxCheckBox::Hide);
 				}
+				else {
+					if (choices & edit_choices::edit_existing_always) {
+						xrc_call(dlg, "ID_ALWAYS", &wxCheckBox::SetValue, true);
+					}
+				}
+
+				if (type == CEditHandler::remote && (choices & edit_choices::edit_existing_action)) {
+					xrc_call(dlg, "ID_RETRANSFER", &wxRadioButton::SetValue, true);
+				}
+
 				dlg.GetSizer()->Fit(&dlg);
 				int res = dlg.ShowModal();
 				if (res != wxID_OK && res != wxID_YES) {
@@ -1713,14 +1726,24 @@ bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CSe
 				}
 				else if (type == CEditHandler::local || xrc_call(dlg, "ID_REOPEN", &wxRadioButton::GetValue)) {
 					action = 1;
+					if (type == CEditHandler::remote) {
+						choices &= ~edit_choices::edit_existing_action;
+					}
 				}
 				else {
 					action = 2;
+					choices |= edit_choices::edit_existing_action;
 				}
 
-				if (xrc_call(dlg, "ID_ALWAYS", &wxCheckBox::GetValue)) {
+				bool always = xrc_call(dlg, "ID_ALWAYS", &wxCheckBox::GetValue);
+				if (always) {
 					already_editing_action = action;
+					choices |= edit_choices::edit_existing_always;
 				}
+				else {
+					choices &= ~edit_choices::edit_existing_always;
+				}
+				COptions::Get()->SetOption(OPTION_PERSISTENT_CHOICES, choices);
 			}
 
 			if (action == -1) {
