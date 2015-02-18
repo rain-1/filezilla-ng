@@ -551,7 +551,7 @@ void CControlSocket::OnTimer(timer_id)
 
 	int const timeout = engine_.GetOptions().GetOptionVal(OPTION_TIMEOUT);
 	if (timeout > 0) {
-		int64_t const elapsed = CMonotonicClock::now() - m_lastActivity;
+		int64_t elapsed = CMonotonicClock::now() - m_lastActivity;
 
 		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
 			if (elapsed > static_cast<int64_t>(timeout) * 1000) {
@@ -559,6 +559,9 @@ void CControlSocket::OnTimer(timer_id)
 				DoClose(FZ_REPLY_TIMEOUT);
 				return;
 			}
+		}
+		else {
+			elapsed = 0;
 		}
 
 		m_timer = AddTimer(timeout * 1000 - elapsed, true);
