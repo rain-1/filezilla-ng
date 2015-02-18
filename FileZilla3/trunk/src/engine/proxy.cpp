@@ -310,8 +310,7 @@ void CProxySocket::OnReceive()
 			if (!end)
 				continue;
 
-			end = strchr(m_pRecvBuffer, '\r');
-			wxASSERT(end);
+			end = strchr(m_pRecvBuffer, '\r'); // Never fails as old value of end exists and starts with CR, we just look for an earlier case.
 			*end = 0;
 			wxString reply(m_pRecvBuffer, wxConvUTF8);
 			m_pOwner->LogMessage(MessageType::Response, _("Proxy reply: %s"), reply);
