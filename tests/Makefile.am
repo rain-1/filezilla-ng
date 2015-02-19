@@ -7,6 +7,7 @@ test_SOURCES =  test.cpp \
 		cmpnatural.cpp \
 		dirparsertest.cpp \
 		dispatch.cpp \
+		eventloop.cpp \
 		ipaddress.cpp \
 		localpathtest.cpp \
 		serverpathtest.cpp
