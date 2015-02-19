@@ -91,7 +91,7 @@ bool condition::wait(scoped_lock& l, int timeout_ms)
 		return true;
 	}
 #ifdef __WXMSW__
-	return SleepConditionVariableCS(&cond_, l.m_, timeout_ms) != 0;
+	bool const success = SleepConditionVariableCS(&cond_, l.m_, timeout_ms) != 0;
 #else
 	int res;
 	do {
@@ -108,10 +108,13 @@ bool condition::wait(scoped_lock& l, int timeout_ms)
 		res = pthread_cond_timedwait(&cond_, l.m_, &ts);
 	}
 	while (res == EINTR);
+	bool const success = res == 0;
 #endif
-	signalled_ = false;
+	if (success) {
+		signalled_ = false;
+	}
 
-	return res == 0;
+	return success;
 }
 
 
