@@ -66,14 +66,12 @@ void RemoveSocketEvents(CEventHandler * handler, CSocketEventSource const* const
 			return false;
 		}
 		else if (ev.second->derived_type() == CSocketEvent::type()) {
-			return std::get<0>(reinterpret_cast<CSocketEvent const&>(ev).v_) == source;
+			return std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source;
 		}
 		else if (ev.second->derived_type() == CHostAddressEvent::type()) {
-			return std::get<0>(reinterpret_cast<CHostAddressEvent const&>(ev).v_) == source;
+			return std::get<0>(static_cast<CHostAddressEvent const&>(*ev.second).v_) == source;
 		}
-		else {
-			return false;
-		}
+		return false;
 	};
 
 	handler->event_loop_.FilterEvents(socketEventFilter);
@@ -94,12 +92,12 @@ void ChangeSocketEventHandler(CEventHandler * oldHandler, CEventHandler * newHan
 	auto socketEventFilter = [&](CEventLoop::Events::value_type & ev) -> bool {
 		if (ev.first == oldHandler) {
 			if (ev.second->derived_type() == CSocketEvent::type()) {
-				if (std::get<0>(reinterpret_cast<CSocketEvent const&>(ev).v_) == source) {
+				if (std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source) {
 					ev.first = newHandler;
 				}
 			}
 			else if (ev.second->derived_type() == CHostAddressEvent::type()) {
-				if (std::get<0>(reinterpret_cast<CHostAddressEvent const&>(ev).v_) == source) {
+				if (std::get<0>(static_cast<CHostAddressEvent const&>(*ev.second).v_) == source) {
 					ev.first = newHandler;
 				}
 			}
