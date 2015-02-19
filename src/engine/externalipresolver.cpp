@@ -89,7 +89,7 @@ void CExternalIPResolver::operator()(CEventBase const& ev)
 	Dispatch<CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
 }
 
-void CExternalIPResolver::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
+void CExternalIPResolver::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
 	if (!m_pSocket)
 		return;

@@ -32,7 +32,7 @@ public:
 		}
 	}
 
-	virtual void operator()(const CEventBase& ev)
+	virtual void operator()(const CEventBase&)
 	{
 		CLogging::UpdateLogLevel(options_); // In worker thread
 	}

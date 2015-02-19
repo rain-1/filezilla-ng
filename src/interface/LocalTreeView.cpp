@@ -883,12 +883,11 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 }
 
-void CLocalTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalTreeView::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
 		SetDir(m_pState->GetLocalDir().GetPath());
-	else
-	{
+	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
 		RefreshListing();
 	}
@@ -1106,7 +1105,7 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 }
 
 // Create a new Directory
-void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
+void CLocalTreeView::OnMenuMkdir(wxCommandEvent&)
 {
 	wxString newdir = MenuMkdir();
 	if (!newdir.empty()) {
@@ -1116,7 +1115,7 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent& event)
 }
 
 // Create a new Directory and enter the new Directory
-void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent& event)
+void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	wxString newdir = MenuMkdir();
 	if (newdir.empty()) {
@@ -1183,22 +1182,20 @@ wxString CLocalTreeView::MenuMkdir()
 	return fn.GetPath();
 }
 
-void CLocalTreeView::OnMenuRename(wxCommandEvent& event)
+void CLocalTreeView::OnMenuRename(wxCommandEvent&)
 {
 	if (!m_contextMenuItem.IsOk())
 		return;
 
 #ifdef __WXMSW__
-	if (m_contextMenuItem == m_desktop || m_contextMenuItem == m_documents)
-	{
+	if (m_contextMenuItem == m_desktop || m_contextMenuItem == m_documents) {
 		wxBell();
 		return;
 	}
 #endif
 
 	CLocalPath path(GetDirFromItem(m_contextMenuItem));
-	if (!path.HasParent() || !path.IsWriteable())
-	{
+	if (!path.HasParent() || !path.IsWriteable()) {
 		wxBell();
 		return;
 	}
@@ -1206,7 +1203,7 @@ void CLocalTreeView::OnMenuRename(wxCommandEvent& event)
 	EditLabel(m_contextMenuItem);
 }
 
-void CLocalTreeView::OnMenuDelete(wxCommandEvent& event)
+void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 {
 	if (!m_contextMenuItem.IsOk())
 		return;
@@ -1224,8 +1221,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent& event)
 	while (item && item != m_contextMenuItem)
 		item = GetItemParent(item);
 
-	if (!item)
-	{
+	if (!item) {
 		if (GetItemParent(m_contextMenuItem) == GetSelection())
 			m_pState->RefreshLocal();
 		else

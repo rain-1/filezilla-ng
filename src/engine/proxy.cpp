@@ -196,7 +196,7 @@ void CProxySocket::operator()(CEventBase const& ev)
 		&CProxySocket::OnHostAddress);
 }
 
-void CProxySocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
+void CProxySocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
 	switch (t) {
 	case SocketEventType::connection_next:
@@ -225,7 +225,7 @@ void CProxySocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, 
 	}
 }
 
-void CProxySocket::OnHostAddress(CSocketEventSource* source, wxString const& address)
+void CProxySocket::OnHostAddress(CSocketEventSource*, wxString const& address)
 {
 	m_pOwner->LogMessage(MessageType::Status, _("Connecting to %s..."), address);
 }

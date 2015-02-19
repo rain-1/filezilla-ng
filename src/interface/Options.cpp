@@ -732,7 +732,7 @@ void COptions::LoadGlobalDefaultOptions(std::map<std::string, unsigned int> cons
 	}
 }
 
-void COptions::OnTimer(wxTimerEvent& event)
+void COptions::OnTimer(wxTimerEvent&)
 {
 	Save();
 }
