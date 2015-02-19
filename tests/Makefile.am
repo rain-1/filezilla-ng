@@ -4,11 +4,12 @@ TESTS = test
 check_PROGRAMS = $(TESTS)
 
 test_SOURCES =  test.cpp \
-		ipaddress.cpp \
+		cmpnatural.cpp \
 		dirparsertest.cpp \
+		dispatch.cpp \
+		ipaddress.cpp \
 		localpathtest.cpp \
-		serverpathtest.cpp \
-		cmpnatural.cpp
+		serverpathtest.cpp
 
 test_CPPFLAGS = -I$(top_srcdir)/src/include
 test_CPPFLAGS += -I$(top_srcdir)/src/engine

@@ -6,7 +6,9 @@
 #include "mutex.h"
 #include "timeex.h"
 
+#include <deque>
 #include <functional>
+#include <vector>
 
 class CEventHandler;
 struct timer_data final
