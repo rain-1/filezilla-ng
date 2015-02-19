@@ -113,7 +113,7 @@ public:
 	void wait(scoped_lock& l);
 
 	// Milliseconds
-	void wait(scoped_lock& l, int timeout_ms);
+	bool wait(scoped_lock& l, int timeout_ms);
 
 	void signal(scoped_lock& l);
 private:

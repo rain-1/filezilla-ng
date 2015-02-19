@@ -84,14 +84,14 @@ void condition::wait(scoped_lock& l)
 	signalled_ = false;
 }
 
-void condition::wait(scoped_lock& l, int timeout_ms)
+bool condition::wait(scoped_lock& l, int timeout_ms)
 {
 	if (signalled_) {
 		signalled_ = false;
-		return;
+		return true;
 	}
 #ifdef __WXMSW__
-	SleepConditionVariableCS(&cond_, l.m_, timeout_ms);
+	return SleepConditionVariableCS(&cond_, l.m_, timeout_ms) != 0;
 #else
 	int res;
 	do {
@@ -110,6 +110,8 @@ void condition::wait(scoped_lock& l, int timeout_ms)
 	while (res == EINTR);
 #endif
 	signalled_ = false;
+
+	return res == 0;
 }
 
 
