@@ -102,7 +102,9 @@ wxString GetSystemOpenCommand(wxString file, bool &program_exists)
 	if (ext.empty())
 		return wxString();
 
+#ifdef __WXGTK__
 	for (;;)
+#endif
 	{
 		wxFileType* pType = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
 		if (!pType)

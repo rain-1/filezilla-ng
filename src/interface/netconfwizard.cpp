@@ -695,8 +695,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 	wxASSERT(m_socket);
 
 	int mode = XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue() ? 0 : (XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2);
-	if (!mode)
-	{
+	if (!mode) {
 		wxIPV4address addr;
 		if (!m_socket->GetLocal(addr))
 		{
@@ -741,8 +740,6 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 		return ip;
 	}
-
-	return wxString();
 }
 
 void CNetConfWizard::OnExternalIPAddress2(wxCommandEvent&)

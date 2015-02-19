@@ -768,7 +768,10 @@ void wxListCtrlEx::ShowColumnEditor()
 {
 	CColumnEditDialog dlg;
 
-	dlg.Load(this, _T("ID_COLUMN_SETUP"));
+	if (!dlg.Load(this, _T("ID_COLUMN_SETUP"))) {
+		wxBell();
+		return;
+	}
 
 	wxCheckListBox* pListBox = XRCCTRL(dlg, "ID_ACTIVE", wxCheckListBox);
 
