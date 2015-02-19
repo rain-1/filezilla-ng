@@ -692,23 +692,24 @@ bool CNetConfWizard::Send(wxString cmd)
 
 wxString CNetConfWizard::GetExternalIPAddress()
 {
+	wxString ret;
+
 	wxASSERT(m_socket);
 
 	int mode = XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue() ? 0 : (XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2);
 	if (!mode) {
 		wxIPV4address addr;
-		if (!m_socket->GetLocal(addr))
-		{
+		if (m_socket->GetLocal(addr)) {
+			ret = addr.IPAddress();
+		}
+		else {
 			PrintMessage(_("Failed to retrieve local ip address. Aborting"), 1);
 			CloseSocket();
-			return wxString();
 		}
-
-		return addr.IPAddress();
 	}
 	else if (mode == 1) {
 		wxTextCtrl* control = XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl);
-		return control->GetValue();
+		ret = control->GetValue();
 	}
 	else if (mode == 2) {
 		if (!m_pIPResolver) {
@@ -722,24 +723,20 @@ wxString CNetConfWizard::GetExternalIPAddress()
 			if (!m_pIPResolver->Done())
 				return wxString();
 		}
-		if (!m_pIPResolver->Successful()) {
-			delete m_pIPResolver;
-			m_pIPResolver = 0;
-
+		if (m_pIPResolver->Successful()) {
+			ret = m_pIPResolver->GetIP();
+		}
+		else {
 			PrintMessage(_("Failed to retrieve external ip address, aborting"), 1);
 
 			m_testResult = externalfailed;
 			CloseSocket();
-			return wxString();
 		}
-
-		wxString ip = m_pIPResolver->GetIP();
-
 		delete m_pIPResolver;
 		m_pIPResolver = 0;
-
-		return ip;
 	}
+
+	return ret;
 }
 
 void CNetConfWizard::OnExternalIPAddress2(wxCommandEvent&)
