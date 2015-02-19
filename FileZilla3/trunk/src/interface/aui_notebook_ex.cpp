@@ -143,7 +143,7 @@ bool wxAuiNotebookEx::Highlighted(size_t page) const
 	return m_highlighted[page];
 }
 
-void wxAuiNotebookEx::OnPageChanged(wxAuiNotebookEvent& event)
+void wxAuiNotebookEx::OnPageChanged(wxAuiNotebookEvent&)
 {
 	size_t page = (size_t)GetSelection();
 	if (page >= m_highlighted.size())

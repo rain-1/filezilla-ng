@@ -576,31 +576,27 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 	m_pQueue->QueueFile_Finish(true);
 }
 
-void CLocalListView::OnMenuEnter(wxCommandEvent &event)
+void CLocalListView::OnMenuEnter(wxCommandEvent &)
 {
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (item == -1)
-	{
+	if (item == -1) {
 		wxBell();
 		return;
 	}
 
-	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1)
-	{
+	if (GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) != -1) {
 		wxBell();
 		return;
 	}
 
 	CLocalFileData *data = GetData(item);
-	if (!data || !data->dir)
-	{
+	if (!data || !data->dir) {
 		wxBell();
 		return;
 	}
 
 	wxString error;
-	if (!m_pState->SetLocalDir(data->name, &error))
-	{
+	if (!m_pState->SetLocalDir(data->name, &error)) {
 		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
@@ -866,7 +862,7 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 }
 
 // Create a new Directory
-void CLocalListView::OnMenuMkdir(wxCommandEvent& event)
+void CLocalListView::OnMenuMkdir(wxCommandEvent&)
 {
 	wxString newdir = MenuMkdir();
 	if (!newdir.empty()) {
@@ -931,7 +927,7 @@ wxString CLocalListView::MenuMkdir()
 	return fn.GetPath();
 }
 
-void CLocalListView::OnMenuDelete(wxCommandEvent& event)
+void CLocalListView::OnMenuDelete(wxCommandEvent&)
 {
 	std::list<wxString> pathsToDelete;
 	long item = -1;
@@ -954,7 +950,7 @@ void CLocalListView::OnMenuDelete(wxCommandEvent& event)
 	m_pState->SetLocalDir(m_dir);
 }
 
-void CLocalListView::OnMenuRename(wxCommandEvent& event)
+void CLocalListView::OnMenuRename(wxCommandEvent&)
 {
 	if (GetEditControl()) {
 		GetEditControl()->SetFocus();
@@ -1248,7 +1244,7 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	}
 }
 
-void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void*)
+void CLocalListView::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString& data, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
 		DisplayDir(m_pState->GetLocalDir());
@@ -1261,11 +1257,10 @@ void CLocalListView::OnStateChange(CState* pState, enum t_statechange_notificati
 	}
 }
 
-void CLocalListView::OnBeginDrag(wxListEvent& event)
+void CLocalListView::OnBeginDrag(wxListEvent&)
 {
 	long item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -1313,8 +1308,7 @@ void CLocalListView::OnBeginDrag(wxListEvent& event)
 
 	pDragDropManager->Release();
 
-	if (!handled_internally && (res == wxDragCopy || res == wxDragMove))
-	{
+	if (!handled_internally && (res == wxDragCopy || res == wxDragMove)) {
 		// We only need to refresh local side if the operation got handled
 		// externally, the internal handlers do this for us already
 		m_pState->RefreshLocal();
@@ -1550,7 +1544,7 @@ void CLocalListView::FinishComparison()
 	pOther->ScrollTopItem(GetTopItem());
 }
 
-bool CLocalListView::CanStartComparison(wxString* pError)
+bool CLocalListView::CanStartComparison(wxString*)
 {
 	return true;
 }
@@ -1592,7 +1586,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 	return wxString();
 }
 
-void CLocalListView::OnMenuEdit(wxCommandEvent& event)
+void CLocalListView::OnMenuEdit(wxCommandEvent&)
 {
 	CServer server;
 	CServerPath path;
@@ -1641,7 +1635,7 @@ void CLocalListView::OnMenuEdit(wxCommandEvent& event)
 	pEditHandler->Edit(CEditHandler::local, selected_item, path, server, this);
 }
 
-void CLocalListView::OnMenuOpen(wxCommandEvent& event)
+void CLocalListView::OnMenuOpen(wxCommandEvent&)
 {
 	long item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	if (item == -1) {
@@ -1748,8 +1742,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 	std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> volumeInfo;
 	volumeInfo = m_pVolumeEnumeratorThread->GetVolumes();
 
-	if (event.GetEventType() == fzEVT_VOLUMESENUMERATED)
-	{
+	if (event.GetEventType() == fzEVT_VOLUMESENUMERATED) {
 		delete m_pVolumeEnumeratorThread;
 		m_pVolumeEnumeratorThread = 0;
 	}
@@ -1761,8 +1754,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		wxString drive = iter->volume;
 
 		unsigned int item, index;
-		for (item = 1; item < m_indexMapping.size(); ++item)
-		{
+		for (item = 1; item < m_indexMapping.size(); ++item) {
 			index = m_indexMapping[item];
 			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" "))
 				break;
@@ -1778,7 +1770,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 
 #endif
 
-void CLocalListView::OnMenuRefresh(wxCommandEvent& event)
+void CLocalListView::OnMenuRefresh(wxCommandEvent&)
 {
 	m_pState->RefreshLocal();
 }

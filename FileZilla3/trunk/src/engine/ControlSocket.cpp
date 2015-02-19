@@ -909,7 +909,7 @@ void CRealControlSocket::operator()(CEventBase const& ev)
 	}
 }
 
-void CRealControlSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
+void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
 	if (!m_pBackend)
 		return;
@@ -948,7 +948,7 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource* source, SocketEventTy
 	}
 }
 
-void CRealControlSocket::OnHostAddress(CSocketEventSource* source, wxString const& address)
+void CRealControlSocket::OnHostAddress(CSocketEventSource*, wxString const& address)
 {
 	if (!m_pBackend)
 		return;

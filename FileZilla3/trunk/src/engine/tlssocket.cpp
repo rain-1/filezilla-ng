@@ -305,7 +305,7 @@ void CTlsSocket::operator()(CEventBase const& ev)
 	Dispatch<CSocketEvent>(ev, this, &CTlsSocket::OnSocketEvent);
 }
 
-void CTlsSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
+void CTlsSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
 	wxASSERT(m_pSocket);
 	if (!m_session)

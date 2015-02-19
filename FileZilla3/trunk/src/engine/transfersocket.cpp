@@ -110,7 +110,7 @@ void CTransferSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType 
 			return;
 		default:
 			// Uninteresting
-			return;
+			break;
 		}
 		return;
 	}
@@ -143,6 +143,9 @@ void CTransferSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType 
 		break;
 	case SocketEventType::close:
 		OnClose(error);
+		break;
+	default:
+		// Uninteresting
 		break;
 	}
 }
