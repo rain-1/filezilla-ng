@@ -4,29 +4,30 @@
 
 void CSftpEncryptioInfoDialog::ShowDialog(CSftpEncryptionNotification* pNotification)
 {
-	wxDialogEx* pDlg = new wxDialogEx;
-	pDlg->Load(0, _T("ID_SFTP_ENCRYPTION"));
+	wxDialogEx dlg;
+	if (!dlg.Load(0, _T("ID_SFTP_ENCRYPTION"))) {
+		wxBell();
+		return;
+	}
 
-	SetLabel(pDlg, XRCID("ID_KEXALGO"), pNotification->kexAlgorithm);
-	SetLabel(pDlg, XRCID("ID_KEXHASH"), pNotification->kexHash);
-	SetLabel(pDlg, XRCID("ID_FINGERPRINT"), pNotification->hostKey);
-	SetLabel(pDlg, XRCID("ID_C2S_CIPHER"), pNotification->cipherClientToServer);
-	SetLabel(pDlg, XRCID("ID_C2S_MAC"), pNotification->macClientToServer);
-	SetLabel(pDlg, XRCID("ID_S2C_CIPHER"), pNotification->cipherServerToClient);
-	SetLabel(pDlg, XRCID("ID_S2C_MAC"), pNotification->macServerToClient);
+	SetLabel(dlg, XRCID("ID_KEXALGO"), pNotification->kexAlgorithm);
+	SetLabel(dlg, XRCID("ID_KEXHASH"), pNotification->kexHash);
+	SetLabel(dlg, XRCID("ID_FINGERPRINT"), pNotification->hostKey);
+	SetLabel(dlg, XRCID("ID_C2S_CIPHER"), pNotification->cipherClientToServer);
+	SetLabel(dlg, XRCID("ID_C2S_MAC"), pNotification->macClientToServer);
+	SetLabel(dlg, XRCID("ID_S2C_CIPHER"), pNotification->cipherServerToClient);
+	SetLabel(dlg, XRCID("ID_S2C_MAC"), pNotification->macServerToClient);
 
-	pDlg->GetSizer()->Fit(pDlg);
-	pDlg->GetSizer()->SetSizeHints(pDlg);
+	dlg.GetSizer()->Fit(&dlg);
+	dlg.GetSizer()->SetSizeHints(&dlg);
 
-	pDlg->ShowModal();
-
-	delete pDlg;
+	dlg.ShowModal();
 }
 
-void CSftpEncryptioInfoDialog::SetLabel(wxDialogEx* pDlg, int id, const wxString& text)
+void CSftpEncryptioInfoDialog::SetLabel(wxDialogEx & dlg, int id, const wxString& text)
 {
 	if (text.empty())
-		pDlg->SetChildLabel(id, _("unknown"));
+		dlg.SetChildLabel(id, _("unknown"));
 	else
-		pDlg->SetChildLabel(id, text);
+		dlg.SetChildLabel(id, text);
 }

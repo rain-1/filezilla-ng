@@ -85,11 +85,14 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 	LoadTrustedCerts();
 
 	m_pDlg = new wxDialogEx;
-	if (displayOnly)
-		m_pDlg->Load(0, _T("ID_DISPLAYCERT"));
-	else {
-		m_pDlg->Load(0, _T("ID_VERIFYCERT"));
-
+	if (!m_pDlg->Load(0, displayOnly ? _T("ID_DISPLAYCERT") : _T("ID_VERIFYCERT"))) {
+		wxBell();
+		delete m_pDlg;
+		m_pDlg = 0;
+		return;
+	}
+	
+	if (!displayOnly) {
 		m_pDlg->WrapText(m_pDlg, XRCID("ID_DESC"), 400);
 
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)

@@ -820,7 +820,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		int res;
 		if (event.GetId() == XRCID("ID_BOOKMARK_ADD")) {
 			CNewBookmarkDialog dlg(this, controls->site_bookmarks->path, pServer);
-			res = dlg.Run(pState ? pState->GetLocalDir().GetPath() : wxString(), pState ? pState->GetRemotePath() : CServerPath());
+			res = dlg.Run(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
 		}
 		else {
 			CBookmarksDialog dlg(this, controls->site_bookmarks->path, pServer);

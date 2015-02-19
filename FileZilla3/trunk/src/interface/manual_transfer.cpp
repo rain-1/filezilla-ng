@@ -7,6 +7,7 @@
 #include "sitemanager.h"
 #include "queue.h"
 #include "QueueView.h"
+#include "xrc_helper.h"
 
 BEGIN_EVENT_TABLE(CManualTransfer, wxDialogEx)
 EVT_TEXT(XRCID("ID_LOCALFILE"), CManualTransfer::OnLocalChanged)
@@ -46,25 +47,25 @@ void CManualTransfer::Run(wxWindow* pParent, CState* pState)
 	m_pState = pState;
 
 	wxChoice *pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
-	pProtocol->Append(CServer::GetProtocolName(FTP));
-	pProtocol->Append(CServer::GetProtocolName(SFTP));
-	pProtocol->Append(CServer::GetProtocolName(FTPS));
-	pProtocol->Append(CServer::GetProtocolName(FTPES));
-	pProtocol->Append(CServer::GetProtocolName(INSECURE_FTP));
+	if (pProtocol) {
+		pProtocol->Append(CServer::GetProtocolName(FTP));
+		pProtocol->Append(CServer::GetProtocolName(SFTP));
+		pProtocol->Append(CServer::GetProtocolName(FTPS));
+		pProtocol->Append(CServer::GetProtocolName(FTPES));
+		pProtocol->Append(CServer::GetProtocolName(INSECURE_FTP));
+	}
 
 	wxChoice* pChoice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 	wxASSERT(pChoice);
 	for (int i = 0; i < LOGONTYPE_MAX; ++i)
 		pChoice->Append(CServer::GetNameFromLogonType((enum LogonType)i));
 
-	if (m_pState->GetServer())
-	{
+	if (m_pState->GetServer()) {
 		m_pServer = new CServer(*m_pState->GetServer());
 		XRCCTRL(*this, "ID_SERVER_CURRENT", wxRadioButton)->SetValue(true);
 		DisplayServer();
 	}
-	else
-	{
+	else {
 		XRCCTRL(*this, "ID_SERVER_CUSTOM", wxRadioButton)->SetValue(true);
 		XRCCTRL(*this, "ID_SERVER_CURRENT", wxRadioButton)->Disable();
 		DisplayServer();
@@ -106,40 +107,32 @@ void CManualTransfer::SetControlState()
 
 void CManualTransfer::SetAutoAsciiState()
 {
-	if (XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue())
-	{
+	if (XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue()) {
 		wxString remote_file = XRCCTRL(*this, "ID_REMOTEFILE", wxTextCtrl)->GetValue();
-		if (remote_file.empty())
-		{
+		if (remote_file.empty()) {
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Hide();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Hide();
 		}
-		else if (CAutoAsciiFiles::TransferLocalAsAscii(remote_file, m_pServer ? m_pServer->GetType() : UNIX))
-		{
+		else if (CAutoAsciiFiles::TransferLocalAsAscii(remote_file, m_pServer ? m_pServer->GetType() : UNIX)) {
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Show();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Hide();
 		}
-		else
-		{
+		else {
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Hide();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Show();
 		}
 	}
-	else
-	{
+	else {
 		wxString local_file = XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->GetValue();
-		if (!m_local_file_exists)
-		{
+		if (!m_local_file_exists) {
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Hide();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Hide();
 		}
-		else if (CAutoAsciiFiles::TransferLocalAsAscii(local_file, m_pServer ? m_pServer->GetType() : UNIX))
-		{
+		else if (CAutoAsciiFiles::TransferLocalAsAscii(local_file, m_pServer ? m_pServer->GetType() : UNIX)) {
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Show();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Hide();
 		}
-		else
-		{
+		else {
 			XRCCTRL(*this, "ID_TYPE_AUTO_ASCII", wxStaticText)->Hide();
 			XRCCTRL(*this, "ID_TYPE_AUTO_BINARY", wxStaticText)->Show();
 		}
@@ -239,13 +232,11 @@ void CManualTransfer::OnLocalBrowse(wxCommandEvent& event)
 {
 	int flags;
 	wxString title;
-	if (XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue())
-	{
+	if (xrc_call(*this, "ID_DOWNLOAD", &wxRadioButton::GetValue)) {
 		flags = wxFD_SAVE | wxFD_OVERWRITE_PROMPT;
 		title = _("Select target filename");
 	}
-	else
-	{
+	else {
 		flags = wxFD_OPEN | wxFD_FILE_MUST_EXIST;
 		title = _("Select file to upload");
 	}
@@ -257,15 +248,14 @@ void CManualTransfer::OnLocalBrowse(wxCommandEvent& event)
 		return;
 
 	// SetValue on purpose
-	XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->SetValue(dlg.GetPath());
+	xrc_call(*this, "ID_LOCALFILE", &wxTextCtrl::SetValue, dlg.GetPath());
 }
 
 void CManualTransfer::OnDirection(wxCommandEvent& event)
 {
-	if (XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue())
+	if (xrc_call(*this, "ID_DOWNLOAD", &wxRadioButton::GetValue))
 		SetAutoAsciiState();
-	else
-	{
+	else {
 		// Need to check for file existence
 		OnLocalChanged(event);
 	}
@@ -273,16 +263,14 @@ void CManualTransfer::OnDirection(wxCommandEvent& event)
 
 void CManualTransfer::OnServerTypeChanged(wxCommandEvent& event)
 {
-	if (event.GetId() == XRCID("ID_SERVER_CURRENT"))
-	{
+	if (event.GetId() == XRCID("ID_SERVER_CURRENT")) {
 		delete m_pServer;
 		if (m_pState->GetServer())
 			m_pServer = new CServer(*m_pState->GetServer());
 		else
 			m_pServer = 0;
 	}
-	else if (event.GetId() == XRCID("ID_SERVER_SITE"))
-	{
+	else if (event.GetId() == XRCID("ID_SERVER_SITE")) {
 		delete m_pServer;
 		if (m_pLastSite)
 			m_pServer = new CServer(*m_pLastSite);
@@ -290,7 +278,7 @@ void CManualTransfer::OnServerTypeChanged(wxCommandEvent& event)
 			m_pServer = 0;
 
 	}
-	XRCCTRL(*this, "ID_SERVER_SITE_SELECT", wxButton)->Enable(event.GetId() == XRCID("ID_SERVER_SITE"));
+	xrc_call(*this, "ID_SERVER_SITE_SELECT", &wxButton::Enable, event.GetId() == XRCID("ID_SERVER_SITE"));
 	DisplayServer();
 	SetServerState();
 }
@@ -300,53 +288,46 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	if (!UpdateServer())
 		return;
 
-	bool download = XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue();
+	bool download = xrc_call(*this, "ID_DOWNLOAD", &wxRadioButton::GetValue);
 
-	bool start = XRCCTRL(*this, "ID_START", wxCheckBox)->GetValue();
+	bool start = xrc_call(*this, "ID_START", &wxCheckBox::GetValue);
 
-	if (!m_pServer)
-	{
+	if (!m_pServer) {
 		wxMessageBoxEx(_("You need to specify a server."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
-	wxString local_file = XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->GetValue();
-	if (local_file.empty())
-	{
+	wxString local_file = xrc_call(*this, "ID_LOCALFILE", &wxTextCtrl::GetValue);
+	if (local_file.empty()) {
 		wxMessageBoxEx(_("You need to specify a local file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileType(local_file);
-	if (type == CLocalFileSystem::dir)
-	{
+	if (type == CLocalFileSystem::dir) {
 		wxMessageBoxEx(_("Local file is a directory instead of a regular file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
-	if (!download && type != CLocalFileSystem::file && start)
-	{
+	if (!download && type != CLocalFileSystem::file && start) {
 		wxMessageBoxEx(_("Local file does not exist."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
-	wxString remote_file = XRCCTRL(*this, "ID_REMOTEFILE", wxTextCtrl)->GetValue();
+	wxString remote_file = xrc_call(*this, "ID_REMOTEFILE", &wxTextCtrl::GetValue);
 
-	if (remote_file.empty())
-	{
+	if (remote_file.empty()) {
 		wxMessageBoxEx(_("You need to specify a remote file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
-	wxString remote_path_str = XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->GetValue();
-	if (remote_path_str.empty())
-	{
+	wxString remote_path_str = xrc_call(*this, "ID_REMOTEPATH", &wxTextCtrl::GetValue);
+	if (remote_path_str.empty()) {
 		wxMessageBoxEx(_("You need to specify a remote path."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	CServerPath path(remote_path_str, m_pServer->GetType());
-	if (path.empty())
-	{
+	if (path.empty()) {
 		wxMessageBoxEx(_("Remote path could not be parsed."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -354,9 +335,9 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	int old_data_type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
 
 	// Set data type for the file to add
-	if (XRCCTRL(*this, "ID_TYPE_ASCII", wxRadioButton)->GetValue())
+	if (xrc_call(*this, "ID_TYPE_ASCII", &wxRadioButton::GetValue))
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 1);
-	else if (XRCCTRL(*this, "ID_TYPE_BINARY", wxRadioButton)->GetValue())
+	else if (xrc_call(*this, "ID_TYPE_BINARY", &wxRadioButton::GetValue))
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 2);
 	else
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 0);
@@ -364,8 +345,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 	wxString name;
 	CLocalPath localPath(local_file, &name);
 
-	if (name.empty())
-	{
+	if (name.empty()) {
 		wxMessageBoxEx(_("Local file is not a valid filename."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -385,7 +365,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 
 bool CManualTransfer::UpdateServer()
 {
-	if (!XRCCTRL(*this, "ID_SERVER_CUSTOM", wxRadioButton)->GetValue())
+	if (!xrc_call(*this, "ID_SERVER_CUSTOM", &wxRadioButton::GetValue))
 		return true;
 
 	if (!VerifyServer())
@@ -394,29 +374,31 @@ bool CManualTransfer::UpdateServer()
 	CServer server;
 
 	unsigned long port;
-	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port);
-	wxString host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
+	if (!xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToULong(&port)) {
+		return false;
+	}
+
+	wxString host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue);
 	// SetHost does not accept URL syntax
-	if (!host.empty() && host[0] == '[')
-	{
+	if (!host.empty() && host[0] == '[') {
 		host.RemoveLast();
 		host = host.Mid(1);
 	}
 	server.SetHost(host, port);
 
-	const wxString& protocolName = XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->GetStringSelection();
+	const wxString& protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
 	const enum ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
 	if (protocol != UNKNOWN)
 		server.SetProtocol(protocol);
 	else
 		server.SetProtocol(FTP);
 
-	enum LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
+	enum LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
 	server.SetLogonType(logon_type);
 
-	server.SetUser(XRCCTRL(*this, "ID_USER", wxTextCtrl)->GetValue(),
-						   XRCCTRL(*this, "ID_PASS", wxTextCtrl)->GetValue());
-	server.SetAccount(XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue());
+	server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue));
+	server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue));
 
 	delete m_pServer;
 	m_pServer = new CServer(server);
@@ -426,22 +408,21 @@ bool CManualTransfer::UpdateServer()
 
 bool CManualTransfer::VerifyServer()
 {
-	const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
-	if (host.empty())
-	{
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
+	const wxString& host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue);
+	if (host.empty()) {
+		xrc_call(*this, "ID_HOST", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(_("You have to enter a hostname."));
 		return false;
 	}
 
-	enum LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
+	enum LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
 
-	wxString protocolName = XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->GetStringSelection();
+	wxString protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
 	enum ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
 	if (protocol == SFTP &&
 		logon_type == ACCOUNT)
 	{
-		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetFocus);
 		wxMessageBoxEx(_("'Account' logontype not supported by selected protocol"));
 		return false;
 	}
@@ -449,7 +430,7 @@ bool CManualTransfer::VerifyServer()
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0 &&
 		(logon_type == ACCOUNT || logon_type == NORMAL))
 	{
-		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetFocus();
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetFocus);
 		wxString msg;
 		if (COptions::Get()->OptionFromFzDefaultsXml(OPTION_DEFAULT_KIOSKMODE))
 			msg = _("Saving of password has been disabled by your system administrator.");
@@ -457,8 +438,8 @@ bool CManualTransfer::VerifyServer()
 			msg = _("Saving of passwords has been disabled by you.");
 		msg += _T("\n");
 		msg += _("'Normal' and 'Account' logontypes are not available, using 'Ask for password' instead.");
-		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(ASK));
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->SetValue(_T(""));
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, CServer::GetNameFromLogonType(ASK));
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, _T(""));
 		logon_type = ASK;
 		wxMessageBoxEx(msg, _("Cannot remember password"), wxICON_INFORMATION, this);
 	}
@@ -473,48 +454,43 @@ bool CManualTransfer::VerifyServer()
 
 	CServerPath path;
 	wxString error;
-	if (!server.ParseUrl(host, XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue(), _T(""), _T(""), error, path))
-	{
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
+	if (!server.ParseUrl(host, xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue), wxString(), wxString(), error, path)) {
+		xrc_call(*this, "ID_HOST", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(error);
 		return false;
 	}
 
-	XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(server.FormatHost(true));
-	XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString::Format(_T("%d"), server.GetPort()));
+	xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, server.FormatHost(true));
+	xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), server.GetPort()));
 
 	protocolName = CServer::GetProtocolName(server.GetProtocol());
 	if (protocolName.empty())
 		CServer::GetProtocolName(FTP);
-	XRCCTRL(*this, "ID_PROTOCOL", wxChoice)->SetStringSelection(protocolName);
+	xrc_call(*this, "ID_PROTOCOL", &wxChoice::SetStringSelection, protocolName);
 
 	// Require username for non-anonymous, non-ask logon type
-	const wxString user = XRCCTRL(*this, "ID_USER", wxTextCtrl)->GetValue();
+	const wxString user = xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue);
 	if (logon_type != ANONYMOUS &&
 		logon_type != ASK &&
 		logon_type != INTERACTIVE &&
 		user.empty())
 	{
-		XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
+		xrc_call(*this, "ID_USER", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(_("You have to specify a user name"));
 		return false;
 	}
 
 	// The way TinyXML handles blanks, we can't use username of only spaces
-	if (!user.empty())
-	{
+	if (!user.empty()) {
 		bool space_only = true;
-		for (unsigned int i = 0; i < user.Len(); ++i)
-		{
-			if (user[i] != ' ')
-			{
+		for (unsigned int i = 0; i < user.Len(); ++i) {
+			if (user[i] != ' ') {
 				space_only = false;
 				break;
 			}
 		}
-		if (space_only)
-		{
-			XRCCTRL(*this, "ID_USER", wxTextCtrl)->SetFocus();
+		if (space_only) {
+			xrc_call(*this, "ID_USER", &wxTextCtrl::SetFocus);
 			wxMessageBoxEx(_("Username cannot be a series of spaces"));
 			return false;
 		}
@@ -523,9 +499,9 @@ bool CManualTransfer::VerifyServer()
 
 	// Require account for account logon type
 	if (logon_type == ACCOUNT &&
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue().empty())
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue).empty())
 	{
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->SetFocus();
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::SetFocus);
 		wxMessageBoxEx(_("You have to enter an account name"));
 		return false;
 	}
@@ -552,14 +528,14 @@ void CManualTransfer::OnSelectedSite(wxCommandEvent& event)
 	delete m_pLastSite;
 	m_pLastSite = new CServer(pData->m_server);
 
-	XRCCTRL(*this, "ID_SERVER_SITE_SERVER", wxStaticText)->SetLabel(m_pServer->GetName());
+	xrc_call(*this, "ID_SERVER_SITE_SERVER", &wxStaticText::SetLabel, m_pServer->GetName());
 
 	DisplayServer();
 }
 
 void CManualTransfer::OnLogontypeSelChanged(wxCommandEvent& event)
 {
-	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(event.GetString() != _("Anonymous"));
-	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
-	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
+	xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, event.GetString() != _("Anonymous"));
+	xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, event.GetString() == _("Normal") || event.GetString() == _("Account"));
+	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, event.GetString() == _("Account"));
 }

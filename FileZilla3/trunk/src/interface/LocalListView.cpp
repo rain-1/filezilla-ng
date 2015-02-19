@@ -813,8 +813,7 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 {
 	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxBell();
 		return;
 	}
@@ -824,8 +823,7 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 	bool queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
 
 	long item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (!item && m_hasParent)
 			continue;
@@ -846,7 +844,9 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		}
 
 		if (data->dir) {
-			path.ChangePath(data->name);
+			if (!path.ChangePath(data->name)) {
+				continue;
+			}
 
 			CLocalPath localPath(m_dir);
 			localPath.AddSegment(data->name);

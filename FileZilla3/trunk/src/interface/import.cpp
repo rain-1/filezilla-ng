@@ -37,7 +37,10 @@ void CImportDialog::Run()
 		bool sites = fz3Root->FirstChildElement("Servers") != 0;
 
 		if (settings || queue || sites) {
-			Load(m_parent, _T("ID_IMPORT"));
+			if (!Load(m_parent, _T("ID_IMPORT"))) {
+				wxBell();
+				return;
+			}
 			if (!queue)
 				XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->Hide();
 			if (!sites)

@@ -136,7 +136,7 @@ bool CFile::Open(wxString const& f, mode m, disposition d)
 
 #if HAVE_POSIX_FADVISE
 	if (fd_ != -1) {
-		posix_fadvise(fd_, 0, 0, POSIX_FADV_SEQUENTIAL | POSIX_FADV_NOREUSE);
+		(void)posix_fadvise(fd_, 0, 0, POSIX_FADV_SEQUENTIAL | POSIX_FADV_NOREUSE);
 	}
 #endif
 
