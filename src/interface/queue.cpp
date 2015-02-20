@@ -298,7 +298,7 @@ void CFileItem::SetPriority(QueuePriority priority)
 
 	if (m_parent)
 	{
-		CServerItem* parent = reinterpret_cast<CServerItem*>(m_parent);
+		CServerItem* parent = static_cast<CServerItem*>(m_parent);
 		parent->SetChildPriority(this, m_priority, priority);
 	}
 	m_priority = priority;
@@ -538,7 +538,7 @@ bool CServerItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
 
 	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder)
 	{
-		CFileItem* pFileItem = reinterpret_cast<CFileItem*>(pItem);
+		CFileItem* pFileItem = static_cast<CFileItem*>(pItem);
 		RemoveFileItemFromList(pFileItem);
 	}
 
@@ -633,20 +633,16 @@ bool CServerItem::TryRemoveAll()
 	std::vector<CQueueItem*>::iterator iter;
 	std::vector<CQueueItem*> keepChildren;
 	m_visibleOffspring = 0;
-	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
-	{
+	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter) {
 		CQueueItem* pItem = *iter;
-		if (pItem->TryRemoveAll())
-		{
-			if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder)
-			{
-				CFileItem* pFileItem = reinterpret_cast<CFileItem*>(pItem);
+		if (pItem->TryRemoveAll()) {
+			if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
+				CFileItem* pFileItem = static_cast<CFileItem*>(pItem);
 				RemoveFileItemFromList(pFileItem);
 			}
 			delete pItem;
 		}
-		else
-		{
+		else {
 			keepChildren.push_back(pItem);
 			m_visibleOffspring++;
 			m_visibleOffspring += pItem->GetChildrenCount(true);
@@ -656,8 +652,7 @@ bool CServerItem::TryRemoveAll()
 	m_removed_at_front = 0;
 
 	CQueueItem* parent = GetParent();
-	while (parent)
-	{
+	while (parent) {
 		parent->m_visibleOffspring -= oldVisibleOffspring - m_visibleOffspring;
 		parent = parent->GetParent();
 	}
@@ -842,14 +837,14 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 	{
 	case QueueItemType::Server:
 		{
-			CServerItem* pServerItem = reinterpret_cast<CServerItem*>(pItem);
+			CServerItem* pServerItem = static_cast<CServerItem*>(pItem);
 			if (!column)
 				return pServerItem->GetName();
 		}
 		break;
 	case QueueItemType::File:
 		{
-			CFileItem* pFileItem = reinterpret_cast<CFileItem*>(pItem);
+			CFileItem* pFileItem = static_cast<CFileItem*>(pItem);
 			switch (column)
 			{
 			case colLocalName:
@@ -904,7 +899,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 		break;
 	case QueueItemType::FolderScan:
 		{
-			CFolderScanItem* pFolderItem = reinterpret_cast<CFolderScanItem*>(pItem);
+			CFolderScanItem* pFolderItem = static_cast<CFolderScanItem*>(pItem);
 			switch (column)
 			{
 			case colLocalName:
@@ -935,7 +930,7 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 		break;
 	case QueueItemType::Folder:
 		{
-			CFileItem* pFolderItem = reinterpret_cast<CFolderItem*>(pItem);
+			CFileItem* pFolderItem = static_cast<CFolderItem*>(pItem);
 			switch (column)
 			{
 			case colLocalName:

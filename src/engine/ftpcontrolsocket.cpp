@@ -276,7 +276,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 	SetAlive();
 
 	if (m_pCurOpData && m_pCurOpData->opId == Command::connect) {
-		CFtpLogonOpData* pData = reinterpret_cast<CFtpLogonOpData *>(m_pCurOpData);
+		CFtpLogonOpData* pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 		if (pData->waitChallenge) {
 			wxString& challenge = pData->challenge;
 			if (!challenge.empty())
@@ -481,7 +481,7 @@ void CFtpControlSocket::ParseResponse()
 
 bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 {
-	CFtpLogonOpData *pData = reinterpret_cast<CFtpLogonOpData *>(m_pCurOpData);
+	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 	pData->loginSequence.clear();
 
 	if (!pData->ftp_proxy_type)
@@ -709,7 +709,7 @@ int CFtpControlSocket::LogonParseResponse()
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	CFtpLogonOpData *pData = reinterpret_cast<CFtpLogonOpData *>(m_pCurOpData);
+	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 
 	int code = GetReplyCode();
 
@@ -1044,7 +1044,7 @@ int CFtpControlSocket::LogonSend()
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	CFtpLogonOpData *pData = reinterpret_cast<CFtpLogonOpData *>(m_pCurOpData);
+	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 
 	bool res;
 	switch (pData->opState)
@@ -2797,7 +2797,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 			CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 
-			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification);
+			CFileExistsNotification *pFileExistsNotification = static_cast<CFileExistsNotification *>(pNotification);
 			switch (pFileExistsNotification->overwriteAction)
 			{
 			case CFileExistsNotification::rename:
@@ -2869,7 +2869,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 			CFtpLogonOpData* pData = static_cast<CFtpLogonOpData*>(m_pCurOpData);
 
-			CInteractiveLoginNotification *pInteractiveLoginNotification = reinterpret_cast<CInteractiveLoginNotification *>(pNotification);
+			CInteractiveLoginNotification *pInteractiveLoginNotification = static_cast<CInteractiveLoginNotification *>(pNotification);
 			if (!pInteractiveLoginNotification->passwordSet)
 			{
 				ResetOperation(FZ_REPLY_CANCELED);
@@ -2887,7 +2887,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				return false;
 			}
 
-			CCertificateNotification* pCertificateNotification = reinterpret_cast<CCertificateNotification *>(pNotification);
+			CCertificateNotification* pCertificateNotification = static_cast<CCertificateNotification *>(pNotification);
 			m_pTlsSocket->TrustCurrentCert(pCertificateNotification->m_trusted);
 
 			if (!pCertificateNotification->m_trusted) {

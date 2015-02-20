@@ -279,7 +279,7 @@ const CServerPath& CQueueStorage::Impl::GetRemotePath(wxLongLong_t id) const
 
 static int int_callback(void* p, int n, char** v, char**)
 {
-	int* i = reinterpret_cast<int*>(p);
+	int* i = static_cast<int*>(p);
 	if (!i || !n || !v || !*v)
 		return -1;
 
@@ -548,7 +548,7 @@ bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, wxLongLong_t 
 extern "C" {
 static void custom_free(void* v)
 {
-	char* s = reinterpret_cast<char*>(v);
+	char* s = static_cast<char*>(v);
 	delete [] s;
 }
 }
@@ -698,9 +698,9 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 		{
 			CQueueItem* item = *it;
 			if (item->GetType() == QueueItemType::File)
-				ret &= SaveFile(serverId, *reinterpret_cast<CFileItem*>(item));
+				ret &= SaveFile(serverId, *static_cast<CFileItem*>(item));
 			else if (item->GetType() == QueueItemType::Folder)
-				ret &= SaveDirectory(serverId, *reinterpret_cast<CFolderItem*>(item));
+				ret &= SaveDirectory(serverId, *static_cast<CFolderItem*>(item));
 		}
 	}
 	return ret;
@@ -799,11 +799,11 @@ wxString CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int index, 
 
 #ifdef __WXMSW__
 	(void)shrink;
-	const wxChar* text = reinterpret_cast<const wxChar*>(sqlite3_column_text16(statement, index));
+	const wxChar* text = static_cast<const wxChar*>(sqlite3_column_text16(statement, index));
 	if (text)
 		ret = text;
 #else
-	const char* text = reinterpret_cast<const char*>(sqlite3_column_text16(statement, index));
+	const char* text = static_cast<const char*>(sqlite3_column_text16(statement, index));
 	int len = sqlite3_column_bytes16(statement, index);
 	if (text)
 	{

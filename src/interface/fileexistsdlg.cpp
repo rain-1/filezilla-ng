@@ -76,7 +76,7 @@ bool CFileExistsDlg::CreateControls()
 
 void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 {
-	wxStaticBitmap *pStatBmp = reinterpret_cast<wxStaticBitmap *>(FindWindow(id));
+	wxStaticBitmap *pStatBmp = static_cast<wxStaticBitmap *>(FindWindow(id));
 	if (!pStatBmp)
 		return;
 

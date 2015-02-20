@@ -515,7 +515,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 {
 	scoped_lock lock(mutex_);
 
-	const CConnectCommand *pConnectCommand = reinterpret_cast<CConnectCommand *>(m_pCurrentCommand.get());
+	const CConnectCommand *pConnectCommand = static_cast<CConnectCommand *>(m_pCurrentCommand.get());
 	const CServer& server = pConnectCommand->GetServer();
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay) {

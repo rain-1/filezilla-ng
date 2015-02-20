@@ -226,7 +226,7 @@ public:
 		}
 
 		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
-		CSiteManagerItemData *pData = reinterpret_cast<CSiteManagerItemData *>(pTree->GetItemData(hit));
+		CSiteManagerItemData *pData = static_cast<CSiteManagerItemData *>(pTree->GetItemData(hit));
 		CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(m_pSiteManager->m_dropSource);
 		if (pData)
 		{
@@ -432,7 +432,7 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 		CSiteManagerItemData* data = 0;
 		wxTreeItemId item = pTree->GetSelection();
 		if (item.IsOk())
-			data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+			data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 		if (!data)
 			XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
 	}
@@ -494,11 +494,11 @@ void CSiteManagerDialog::MarkConnectedSite(int connected_site)
 		current = child;
 	}
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(current));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(current));
 	if (!data || data->m_type != CSiteManagerItemData::SITE)
 		return;
 
-	CSiteManagerItemData_Site *site_data = reinterpret_cast<CSiteManagerItemData_Site* >(data);
+	CSiteManagerItemData_Site *site_data = static_cast<CSiteManagerItemData_Site* >(data);
 	wxASSERT(site_data->connected_item == -1);
 	site_data->connected_item = connected_site;
 }
@@ -560,7 +560,7 @@ void CSiteManagerDialog::OnConnect(wxCommandEvent&)
 	if (!item.IsOk())
 		return;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data)
 	{
 		wxBell();
@@ -839,7 +839,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 	wxString name = pTree->GetItemText(child);
 	wxScopedCharBuffer utf8 = name.utf8_str();
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
 	if (!data)
 	{
 		TiXmlNode* pNode = pElement->LinkEndChild(new TiXmlElement("Folder"));
@@ -852,7 +852,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 	}
 	else if (data->m_type == CSiteManagerItemData::SITE)
 	{
-		CSiteManagerItemData_Site *site_data = reinterpret_cast<CSiteManagerItemData_Site* >(data);
+		CSiteManagerItemData_Site *site_data = static_cast<CSiteManagerItemData_Site* >(data);
 		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
 		SetServer(pNode, site_data->m_server);
 
@@ -1069,7 +1069,7 @@ bool CSiteManagerDialog::Verify()
 	}
 	else {
 		wxTreeItemId parent = pTree->GetItemParent(item);
-		CSiteManagerItemData_Site* pServer = reinterpret_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
+		CSiteManagerItemData_Site* pServer = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
 		if (!pServer)
 			return false;
 
@@ -1268,7 +1268,7 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 	if (!item.IsOk())
 		return;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data)
 		return;
 
@@ -1290,7 +1290,7 @@ bool CSiteManagerDialog::UpdateItem()
 	if (IsPredefinedItem(item))
 		return true;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data)
 		return false;
 
@@ -1299,7 +1299,7 @@ bool CSiteManagerDialog::UpdateItem()
 	else
 	{
 		wxTreeItemId parent = pTree->GetItemParent(item);
-		CSiteManagerItemData_Site* pServer = reinterpret_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
+		CSiteManagerItemData_Site* pServer = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
 		if (!pServer)
 			return false;
 		return UpdateBookmark(*data, pServer->m_server);
@@ -1403,14 +1403,14 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 	if (!item.IsOk())
 		return false;
 
-	CSiteManagerItemData* pData = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* pData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!pData)
 		return false;
 
 	if (pData->m_type == CSiteManagerItemData::BOOKMARK)
 	{
 		item = pTree->GetItemParent(item);
-		CSiteManagerItemData_Site* pSiteData = reinterpret_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(item));
+		CSiteManagerItemData_Site* pSiteData = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(item));
 
 		data = *pSiteData;
 		if (!pData->m_localDir.empty())
@@ -1440,7 +1440,7 @@ void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
 	if (!item.IsOk())
 		return;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data)
 		return;
 
@@ -1461,7 +1461,7 @@ void CSiteManagerDialog::OnItemActivated(wxTreeEvent& event)
 	if (!item.IsOk())
 		return;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data)
 		return;
 
@@ -1490,7 +1490,7 @@ void CSiteManagerDialog::SetCtrlState()
 
 	CSiteManagerItemData* data = 0;
 	if (item.IsOk())
-		data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+		data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data) {
 		m_pNotebook_Site->Show();
 		m_pNotebook_Bookmark->Hide();
@@ -1705,7 +1705,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 	if (!item.IsOk())
 		return;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data)
 		return;
 
@@ -1952,7 +1952,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 		wxString name = pTree->GetItemText(pair.source);
 
-		CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(pair.source));
+		CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(pair.source));
 
 		wxTreeItemId newItem = pTree->AppendItem(pair.target, name, data ? 2 : 0);
 		if (!data)
@@ -2153,7 +2153,7 @@ void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent&)
 	if (!item.IsOk())
 		return;
 
-	CSiteManagerItemData* data = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!data || data->m_type != CSiteManagerItemData::BOOKMARK)
 		return;
 
@@ -2192,7 +2192,7 @@ wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item, bool stripBookmark)
 	if (!pTree)
 		return wxString();
 
-	CSiteManagerItemData* pData = reinterpret_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	CSiteManagerItemData* pData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!pData)
 		return wxString();
 
