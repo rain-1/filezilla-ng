@@ -174,7 +174,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				return false;
 			}
 
-			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification);
+			CFileExistsNotification *pFileExistsNotification = static_cast<CFileExistsNotification *>(pNotification);
 			return SetFileExistsAction(pFileExistsNotification);
 		}
 		break;
@@ -186,7 +186,7 @@ bool CHttpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				return false;
 			}
 
-			CCertificateNotification* pCertificateNotification = reinterpret_cast<CCertificateNotification *>(pNotification);
+			CCertificateNotification* pCertificateNotification = static_cast<CCertificateNotification *>(pNotification);
 			m_pTlsSocket->TrustCurrentCert(pCertificateNotification->m_trusted);
 		}
 		break;
@@ -602,7 +602,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 			pData->m_responseCode = (m_pRecvBuffer[9] - '0') * 100 + (m_pRecvBuffer[10] - '0') * 10 + m_pRecvBuffer[11] - '0';
 
 			if( pData->m_responseCode == 416 ) {
-				CHttpFileTransferOpData* pTransfer = reinterpret_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
+				CHttpFileTransferOpData* pTransfer = static_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
 				if( pTransfer->resume ) {
 					// Sad, the server does not like our attempt to resume.
 					// Get full file instead.
@@ -681,7 +681,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 				}
 
 				if( pData->m_pOpData && pData->m_pOpData->opId == Command::transfer) {
-					CHttpFileTransferOpData* pTransfer = reinterpret_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
+					CHttpFileTransferOpData* pTransfer = static_cast<CHttpFileTransferOpData*>(pData->m_pOpData);
 					if( pTransfer->resume && pData->m_responseCode != 206 ) {
 						pTransfer->resume = false;
 						int res = OpenFile(pTransfer);

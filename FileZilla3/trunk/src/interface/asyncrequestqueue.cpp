@@ -39,7 +39,7 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 	{
 	case reqId_fileexists:
 		{
-			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification.get());
+			CFileExistsNotification *pFileExistsNotification = static_cast<CFileExistsNotification *>(pNotification.get());
 
 			// Get the action, go up the hierarchy till one is found
 			enum CFileExistsNotification::OverwriteAction action = pFileExistsNotification->overwriteAction;

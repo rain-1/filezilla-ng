@@ -637,7 +637,7 @@ void CSftpControlSocket::OnSftpEvent()
 				}
 				else
 				{
-					CSftpConnectOpData *pData = reinterpret_cast<CSftpConnectOpData*>(m_pCurOpData);
+					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData*>(m_pCurOpData);
 
 					const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message->text;
 
@@ -795,7 +795,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 	{
 	case reqId_fileexists:
 		{
-			CFileExistsNotification *pFileExistsNotification = reinterpret_cast<CFileExistsNotification *>(pNotification);
+			CFileExistsNotification *pFileExistsNotification = static_cast<CFileExistsNotification *>(pNotification);
 			return SetFileExistsAction(pFileExistsNotification);
 		}
 	case reqId_hostkey:
@@ -808,7 +808,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				return false;
 			}
 
-			CHostKeyNotification *pHostKeyNotification = reinterpret_cast<CHostKeyNotification *>(pNotification);
+			CHostKeyNotification *pHostKeyNotification = static_cast<CHostKeyNotification *>(pNotification);
 			wxString show;
 			if (requestId == reqId_hostkey)
 				show = _("Trust new Hostkey:");
@@ -832,7 +832,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		break;
 	case reqId_interactiveLogin:
 		{
-			CInteractiveLoginNotification *pInteractiveLoginNotification = reinterpret_cast<CInteractiveLoginNotification *>(pNotification);
+			CInteractiveLoginNotification *pInteractiveLoginNotification = static_cast<CInteractiveLoginNotification *>(pNotification);
 
 			if (!pInteractiveLoginNotification->passwordSet)
 			{

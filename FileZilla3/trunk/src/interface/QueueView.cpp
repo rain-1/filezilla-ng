@@ -1131,23 +1131,18 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 
 	m_waitStatusLineUpdate = true;
 
-	if (data.pItem)
-	{
+	if (data.pItem) {
 		CServerItem* pServerItem = (CServerItem*)data.pItem->GetTopLevelItem();
-		if (pServerItem)
-		{
+		if (pServerItem) {
 			wxASSERT(pServerItem->m_activeCount > 0);
 			if (pServerItem->m_activeCount > 0)
 				pServerItem->m_activeCount--;
 		}
 
-		if (data.pItem->GetType() == QueueItemType::File)
-		{
+		if (data.pItem->GetType() == QueueItemType::File) {
 			wxASSERT(data.pStatusLineCtrl);
-			for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
-			{
-				if (*iter == data.pStatusLineCtrl)
-				{
+			for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter) {
+				if (*iter == data.pStatusLineCtrl) {
 					m_statusLineList.erase(iter);
 					break;
 				}
@@ -1162,19 +1157,16 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 			SaveSetItemCount(m_itemCount);
 
 			CFileItem* const pFileItem = (CFileItem*)data.pItem;
-			if (pFileItem->Download())
-			{
+			if (pFileItem->Download()) {
 				const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 				for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
 					(*iter)->RefreshLocalFile(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile());
 			}
 
-			if (pFileItem->m_edit != CEditHandler::none && reason != retry && reason != reset)
-			{
+			if (pFileItem->m_edit != CEditHandler::none && reason != retry && reason != reset) {
 				CEditHandler* pEditHandler = CEditHandler::Get();
 				wxASSERT(pEditHandler);
-				if (pFileItem->m_edit == CEditHandler::remote)
-				{
+				if (pFileItem->m_edit == CEditHandler::remote) {
 					const CServerItem* pServerItem = (const CServerItem*)pFileItem->GetTopLevelItem();
 					pEditHandler->FinishTransfer(reason == success, pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
 				}
@@ -1184,8 +1176,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 					pFileItem->m_edit = CEditHandler::none;
 			}
 
-			if (reason == failure)
-			{
+			if (reason == failure) {
 				pFileItem->m_onetime_action = CFileExistsNotification::unknown;
 				pFileItem->set_made_progress(false);
 			}
@@ -1195,28 +1186,23 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 		wxASSERT(data.pItem->m_pEngineData == &data);
 		if (data.pItem->IsActive())
 			data.pItem->SetActive(false);
-		if (data.pItem->Download())
-		{
+		if (data.pItem->Download()) {
 			wxASSERT(m_activeCountDown > 0);
 			if (m_activeCountDown > 0)
 				m_activeCountDown--;
 		}
-		else
-		{
+		else {
 			wxASSERT(m_activeCountUp > 0);
 			if (m_activeCountUp > 0)
 				m_activeCountUp--;
 		}
 
-		if (reason == reset)
-		{
+		if (reason == reset) {
 			if (!data.pItem->queued())
-				reinterpret_cast<CServerItem*>(data.pItem->GetTopLevelItem())->QueueImmediateFile(data.pItem);
+				static_cast<CServerItem*>(data.pItem->GetTopLevelItem())->QueueImmediateFile(data.pItem);
 		}
-		else if (reason == failure)
-		{
-			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder)
-			{
+		else if (reason == failure) {
+			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder) {
 				const CServer server = ((CServerItem*)data.pItem->GetTopLevelItem())->GetServer();
 
 				RemoveItem(data.pItem, false);
@@ -1229,15 +1215,12 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 				pQueueViewFailed->CommitChanges();
 			}
 		}
-		else if (reason == success)
-		{
-			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder)
-			{
+		else if (reason == success) {
+			if (data.pItem->GetType() == QueueItemType::File || data.pItem->GetType() == QueueItemType::Folder) {
 				CQueueViewSuccessful* pQueueViewSuccessful = m_pQueue->GetQueueView_Successful();
 				if (pQueueViewSuccessful->AutoClear())
 					RemoveItem(data.pItem, true);
-				else
-				{
+				else {
 					const CServer server = ((CServerItem*)data.pItem->GetTopLevelItem())->GetServer();
 
 					RemoveItem(data.pItem, false);
@@ -1253,8 +1236,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 			else
 				RemoveItem(data.pItem, true);
 		}
-		else if (reason == retry)
-		{
+		else if (reason == retry) {
 		}
 		else
 			RemoveItem(data.pItem, true);
@@ -1265,11 +1247,9 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 		m_activeCount--;
 	data.active = false;
 
-	if (data.state == t_EngineData::waitprimary && data.pEngine)
-	{
+	if (data.state == t_EngineData::waitprimary && data.pEngine) {
 		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-		{
+		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 			CState* pState = *iter;
 			if (pState->m_pEngine != data.pEngine)
 				continue;

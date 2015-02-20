@@ -68,7 +68,7 @@ bool Dispatch(CEventBase const& ev, F&& f)
 {
 	bool const same = same_type<T>(ev);
 	if (same) {
-		T const* e = reinterpret_cast<T const*>(&ev);
+		T const* e = static_cast<T const*>(&ev);
 		apply(std::forward<F>(f), e->v_);
 	}
 	return same;
@@ -80,7 +80,7 @@ bool Dispatch(CEventBase const& ev, H* h, F&& f)
 {
 	bool const same = same_type<T>(ev);
 	if (same) {
-		T const* e = reinterpret_cast<T const*>(&ev);
+		T const* e = static_cast<T const*>(&ev);
 		apply(h, std::forward<F>(f), e->v_);
 	}
 	return same;

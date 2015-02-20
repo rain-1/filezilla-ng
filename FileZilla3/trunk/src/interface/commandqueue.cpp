@@ -165,7 +165,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 		{
 			// Symbolic link does not point to a directory. Either points to file
 			// or is completely invalid
-			CListCommand* pListCommand = reinterpret_cast<CListCommand*>(pCommand.get());
+			CListCommand* pListCommand = static_cast<CListCommand*>(pCommand.get());
 			wxASSERT(pListCommand->GetFlags() & LIST_FLAG_LINK);
 
 			m_pState->LinkIsNotDir(pListCommand->GetPath(), pListCommand->GetSubDir());

@@ -68,7 +68,7 @@ wxWindow* wxListCtrlEx::GetMainWindow()
 #ifdef __WXMSW__
 	return this;
 #else
-	return reinterpret_cast<wxWindow*>(m_mainWin);
+	return static_cast<wxWindow*>(m_mainWin);
 #endif
 }
 
@@ -77,7 +77,7 @@ wxWindow const* wxListCtrlEx::GetMainWindow() const
 #ifdef __WXMSW__
 	return this;
 #else
-	return reinterpret_cast<wxWindow const*>(m_mainWin);
+	return static_cast<wxWindow const*>(m_mainWin);
 #endif
 }
 

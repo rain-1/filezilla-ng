@@ -609,7 +609,7 @@ void CBookmarksDialog::OnCopy(wxCommandEvent&)
 	if (!Verify())
 		return;
 
-	CBookmarkItemData* data = reinterpret_cast<CBookmarkItemData *>(m_pTree->GetItemData(item));
+	CBookmarkItemData* data = static_cast<CBookmarkItemData *>(m_pTree->GetItemData(item));
 	if (!data)
 		return;
 
@@ -620,18 +620,15 @@ void CBookmarksDialog::OnCopy(wxCommandEvent&)
 	const wxString name = m_pTree->GetItemText(item);
 	wxString newName = wxString::Format(_("Copy of %s"), name);
 	int index = 2;
-	for (;;)
-	{
+	for (;;) {
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;
 		child = m_pTree->GetFirstChild(parent, cookie);
 		bool found = false;
-		while (child.IsOk())
-		{
+		while (child.IsOk()) {
 			wxString name = m_pTree->GetItemText(child);
 			int cmp = name.CmpNoCase(newName);
-			if (!cmp)
-			{
+			if (!cmp) {
 				found = true;
 				break;
 			}
@@ -655,17 +652,14 @@ void CBookmarksDialog::OnCopy(wxCommandEvent&)
 void CBookmarksDialog::OnBeginLabelEdit(wxTreeEvent& event)
 {
 	wxTreeItemId item = event.GetItem();
-	if (item != m_pTree->GetSelection())
-	{
-		if (!Verify())
-		{
+	if (item != m_pTree->GetSelection()) {
+		if (!Verify()) {
 			event.Veto();
 			return;
 		}
 	}
 
-	if (!item || item == m_bookmarks_global || item == m_bookmarks_site)
-	{
+	if (!item || item == m_bookmarks_global || item == m_bookmarks_site) {
 		event.Veto();
 		return;
 	}
