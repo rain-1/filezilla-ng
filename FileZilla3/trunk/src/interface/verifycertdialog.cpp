@@ -81,6 +81,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 		m_pSubjectSizer->Add(new wxStaticText(subjectPanel, wxID_ANY, wxPLURAL("Alternative name:", "Alternative names:", altNames.size())));
 		m_pSubjectSizer->Add(new wxStaticText(subjectPanel, wxID_ANY, str));
 	}
+	m_pSubjectSizer->Fit(subjectPanel);
 
 	wxSize min = m_pSubjectSizer->CalcMin();
 	int const maxHeight = (line_height_ + m_pDlg->ConvertDialogToPixels(wxPoint(0, 1)).y) * 15;
