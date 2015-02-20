@@ -53,7 +53,7 @@ void CContextControl::Create(wxWindow *parent)
 void CContextControl::CreateTab()
 {
 	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateTab"));
-#ifndef __WXMAC__
+#ifdef __WXMSW__
 	// Some reparenting is being done when creating tabs. Reparenting of frozen windows isn't working
 	// on OS X.
 	wxWindowUpdateLocker lock(this);
