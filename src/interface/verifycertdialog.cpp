@@ -1,12 +1,14 @@
 #include <filezilla.h>
 #include "filezillaapp.h"
 #include "verifycertdialog.h"
-#include <wx/statbox.h>
-#include <wx/tokenzr.h>
 #include "dialogex.h"
 #include "ipcmutex.h"
 #include "Options.h"
 #include "xrc_helper.h"
+
+#include <wx/scrolwin.h>
+#include <wx/statbox.h>
+#include <wx/tokenzr.h>
 
 CVerifyCertDialog::CVerifyCertDialog()
 	: m_xmlFile(wxGetApp().GetSettingsFile(_T("trustedcerts")))
@@ -64,8 +66,10 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 
 	ParseDN(XRCCTRL(*pDlg, "ID_ISSUER_BOX", wxStaticBox), cert.GetIssuer(), m_pIssuerSizer);
 
-	auto subjectBox = XRCCTRL(*pDlg, "ID_SUBJECT_BOX", wxStaticBox);
-	ParseDN(subjectBox, cert.GetSubject(), m_pSubjectSizer);
+	auto subjectPanel = XRCCTRL(*pDlg, "ID_SUBJECT_PANEL", wxScrolledWindow);
+	subjectPanel->Freeze();
+
+	ParseDN(subjectPanel, cert.GetSubject(), m_pSubjectSizer);
 
 	auto const& altNames = cert.GetAltSubjectNames();
 	if (!altNames.empty()) {
@@ -74,12 +78,23 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 			str += altName + _T("\n");
 		}
 		str.RemoveLast();
-		m_pSubjectSizer->Add(new wxStaticText(subjectBox, wxID_ANY, wxPLURAL("Alternative name:", "Alternative names:", altNames.size())));
-		m_pSubjectSizer->Add(new wxStaticText(subjectBox, wxID_ANY, str));
+		m_pSubjectSizer->Add(new wxStaticText(subjectPanel, wxID_ANY, wxPLURAL("Alternative name:", "Alternative names:", altNames.size())));
+		m_pSubjectSizer->Add(new wxStaticText(subjectPanel, wxID_ANY, str));
 	}
+
+	wxSize min = m_pSubjectSizer->CalcMin();
+	int const maxHeight = (line_height_ + m_pDlg->ConvertDialogToPixels(wxPoint(0, 1)).y) * 15;
+	if (min.y >= maxHeight) {
+		min.y = maxHeight;
+		min.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+	}
+	subjectPanel->SetMinSize(min);
+	subjectPanel->Thaw();
 
 	return warning;
 }
+
+#include <wx/scrolwin.h>
 
 void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly /*=false*/)
 {
@@ -92,7 +107,7 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 		m_pDlg = 0;
 		return;
 	}
-	
+
 	if (displayOnly) {
 		xrc_call(*m_pDlg, "ID_DESC", &wxWindow::Hide);
 		xrc_call(*m_pDlg, "ID_ALWAYS_DESC", &wxWindow::Hide);
@@ -123,6 +138,8 @@ void CVerifyCertDialog::ShowVerificationDialog(CCertificateNotification& notific
 	}
 
 	m_pDlg->SetChildLabel(XRCID("ID_HOST"), wxString::Format(_T("%s:%d"), notification.GetHost(), notification.GetPort()));
+
+	line_height_ = XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->GetSize().y;
 
 	m_pSubjectSizer = XRCCTRL(*m_pDlg, "ID_SUBJECT_DUMMY", wxStaticText)->GetContainingSizer();
 	m_pSubjectSizer->Clear(true);
