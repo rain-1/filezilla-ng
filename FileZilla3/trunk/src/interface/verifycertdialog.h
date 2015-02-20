@@ -47,6 +47,7 @@ protected:
 	wxDialogEx* m_pDlg{};
 	wxSizer* m_pSubjectSizer{};
 	wxSizer* m_pIssuerSizer{};
+	int line_height_{};
 
 	void OnCertificateChoice(wxCommandEvent& event);
 };

@@ -112,20 +112,25 @@
               <object class="sizeritem">
                 <object class="wxBoxSizer">
                   <object class="sizeritem">
-                    <object class="wxStaticBoxSizer" name="ID_SUBJECT_BOX">
+                    <object class="wxStaticBoxSizer">
                       <label>Subject of certificate</label>
                       <orient>wxVERTICAL</orient>
                       <object class="sizeritem">
-                        <object class="wxFlexGridSizer">
-                          <object class="sizeritem">
-                            <object class="wxStaticText" name="ID_SUBJECT_DUMMY">
-                              <label>&lt;Dummy&gt;</label>
+                        <object class="wxScrolledWindow" name="ID_SUBJECT_PANEL">
+                          <style>wxVSCROLL</style>
+                          <scrollrate>1,8d</scrollrate>
+                          <object class="wxFlexGridSizer">
+                            <object class="sizeritem">
+                              <object class="wxStaticText" name="ID_SUBJECT_DUMMY">
+                                <label>&lt;Dummy&gt;</label>
+                              </object>
                             </object>
+                            <cols>2</cols>
+                            <vgap>1d</vgap>
+                            <hgap>3d</hgap>
                           </object>
-                          <cols>2</cols>
-                          <vgap>1d</vgap>
-                          <hgap>3d</hgap>
                         </object>
+                        <option>1</option>
                         <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxGROW</flag>
                         <border>4</border>
                       </object>
