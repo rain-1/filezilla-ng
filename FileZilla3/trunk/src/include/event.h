@@ -4,7 +4,7 @@
 class CEventBase
 {
 public:
-	CEventBase() {}
+	CEventBase() = default;
 	virtual ~CEventBase() {}
 
 	CEventBase(CEventBase const&) = delete;
@@ -20,9 +20,7 @@ public:
 	typedef UniqueType unique_type;
 	typedef std::tuple<Values...> tuple_type;
 
-	CEvent()
-	{
-	}
+	CEvent() = default;
 
 	template<typename First_Value, typename...Remaining_Values>
 	explicit CEvent(First_Value&& value, Remaining_Values&& ...values)
