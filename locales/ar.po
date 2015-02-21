@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-02-06 04:05+0300\n"
+"PO-Revision-Date: 2015-02-19 14:43+0300\n"
 "Last-Translator: awadh alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language: ar\n"
@@ -3133,7 +3133,7 @@ msgstr "بدون إ&جراء"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1801
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1856
 msgid "Do the same with &all selected files already being edited"
-msgstr "القيام بالشيء نفسه مع &كافة الملفات المحددة التي تم تحريرها مسبقا"
+msgstr "عمل نفس الاجراء مع &كافة الملفات المحددة التي تم تحريرها حاليا"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1179
 #: ../../locales/../src/interface/Mainfrm.cpp:1201
@@ -3164,7 +3164,7 @@ msgstr "هل تريد فعلا إرسال '%s' إلى الخادم ؟"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1849
 msgid "Do you want to reopen this file?"
-msgstr "هل تريد فعلا إعادة فتح هذا الملف؟"
+msgstr "هل تريد فعلا إعادة هذا الملف؟"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "Documentation"
@@ -3440,10 +3440,10 @@ msgstr ""
 "علما إن القيم في الحقول الأخرى سيتم الكتابة عليها بعد ذلك\n"
 "\n"
 "البروتوكولات المعتمدة هي :\n"
-"- ftp:// لـ FTP العادي\n"
+"- ftp:// لـ FTP العادي مع تشفير اختياري\n"
 "- sftp:// لـ SSH بروتوكول إرسال الملفات\n"
-"- ftps:// لـ FTP فوق TLS (ضمني)\n"
-"- ftpes:// لـ FTP فوق TLS (واضح)"
+"- ftps:// لـ FTP عبر TLS (ضمني)\n"
+"- ftpes:// لـ FTP عبر TLS (صريح)"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:279
 #, c-format
@@ -4587,10 +4587,10 @@ msgid ""
 "ftpes:// for FTP over TLS (explicit)."
 msgstr ""
 "تم تعيين بروتوكول غير صالح . البروتوكولات الصالحة هي :\n"
-"ftp:// لـ FTP العادي\n"
+"ftp:// لـ FTP العادي مع تشفير اختياري\n"
 "sftp:// لـ SSH بروتوكول إرسال الملفات\n"
-"ftps:// لـ FTP فوق TLS (ضمني)\n"
-"ftpes:// لـ FTP فوق TLS (واضح)"
+"ftps:// لـ FTP عبر TLS (ضمني)\n"
+"ftpes:// لـ FTP عبر TLS (صريح)"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4304
 msgid ""
@@ -8526,6 +8526,21 @@ msgstr "ملف قابل للكتابة للعام"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(%u%% المحمل)"
+
+#~ msgid "Connection timed out after %d second of inactivity"
+#~ msgid_plural "Connection timed out after %d seconds of inactivity"
+#~ msgstr[0] "انتهت مهلة الاتصال بعد %d ثانية من الخمول"
+#~ msgstr[1] "انتهت مهلة الاتصال بعد %d ثانية من الخمول"
+#~ msgstr[2] "انتهت مهلة الاتصال بعد %d ثانية من الخمول"
+#~ msgstr[3] "انتهت مهلة الاتصال بعد %d ثواني من الخمول"
+#~ msgstr[4] "انتهت مهلة الاتصال بعد %d ثانية من الخمول"
+#~ msgstr[5] "انتهت مهلة الاتصال بعد %d ثانية من الخمول"
+
+#~ msgid "fzsftp belongs to a different version of FileZilla"
+#~ msgstr "fzsftp ينتمي إلى إصدار مختلف من FileZilla"
 
 #~ msgid ""
 #~ "A file with that name is already being edited. Do you want to reopen '%s'?"
