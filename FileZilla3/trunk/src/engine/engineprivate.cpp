@@ -401,8 +401,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 	m_lastListDir = path;
 
 	if (failed) {
-		CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, false, true);
-		AddNotification(pNotification);
+		AddNotification(new CDirectoryListingNotification(path, false, true));
 		m_lastListTime = CMonotonicTime::Now();
 
 		// On failed messages, we don't notify other engines
@@ -413,8 +412,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 	if (!directory_cache_.GetChangeTime(changeTime, *pOwnServer, path))
 		return;
 
-	CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, !onList);
-	AddNotification(pNotification);
+	AddNotification(new CDirectoryListingNotification(path, !onList));
 	m_lastListTime = changeTime;
 
 	if (!modified)
@@ -438,8 +436,7 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 			continue;
 
 		pEngine->m_lastListTime = changeTime;
-		CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(path, true);
-		pEngine->AddNotification(pNotification);
+		pEngine->AddNotification(new CDirectoryListingNotification(path, true));
 	}
 }
 

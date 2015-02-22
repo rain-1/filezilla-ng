@@ -69,33 +69,33 @@ protected:
 
 	bool ParseData(bool partial);
 
-	bool ParseLine(CLine *pLine, const enum ServerType serverType, bool concatenated);
+	bool ParseLine(CLine &line, const enum ServerType serverType, bool concatenated);
 
-	bool ParseAsUnix(CLine *pLine, CDirentry &entry, bool expect_date);
-	bool ParseAsDos(CLine *pLine, CDirentry &entry);
-	bool ParseAsEplf(CLine *pLine, CDirentry &entry);
-	bool ParseAsVms(CLine *pLine, CDirentry &entry);
-	bool ParseAsIbm(CLine *pLine, CDirentry &entry);
-	bool ParseOther(CLine *pLine, CDirentry &entry);
-	bool ParseAsWfFtp(CLine *pLine, CDirentry &entry);
-	bool ParseAsIBM_MVS(CLine *pLine, CDirentry &entry);
-	bool ParseAsIBM_MVS_PDS(CLine *pLine, CDirentry &entry);
-	bool ParseAsIBM_MVS_PDS2(CLine *pLine, CDirentry &entry);
-	bool ParseAsIBM_MVS_Migrated(CLine *pLine, CDirentry &entry);
-	bool ParseAsIBM_MVS_Tape(CLine *pLine, CDirentry &entry);
-	int ParseAsMlsd(CLine *pLine, CDirentry &entry);
-	bool ParseAsOS9(CLine *pLine, CDirentry &entry);
+	bool ParseAsUnix(CLine &line, CDirentry &entry, bool expect_date);
+	bool ParseAsDos(CLine &line, CDirentry &entry);
+	bool ParseAsEplf(CLine &line, CDirentry &entry);
+	bool ParseAsVms(CLine &line, CDirentry &entry);
+	bool ParseAsIbm(CLine &line, CDirentry &entry);
+	bool ParseOther(CLine &line, CDirentry &entry);
+	bool ParseAsWfFtp(CLine &line, CDirentry &entry);
+	bool ParseAsIBM_MVS(CLine &line, CDirentry &entry);
+	bool ParseAsIBM_MVS_PDS(CLine &line, CDirentry &entry);
+	bool ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry);
+	bool ParseAsIBM_MVS_Migrated(CLine &line, CDirentry &entry);
+	bool ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry);
+	int ParseAsMlsd(CLine &line, CDirentry &entry);
+	bool ParseAsOS9(CLine &line, CDirentry &entry);
 
 	// Only call this if servertype set to ZVM since it conflicts
 	// with other formats.
-	bool ParseAsZVM(CLine *pLine, CDirentry &entry);
+	bool ParseAsZVM(CLine &line, CDirentry &entry);
 
 	// Only call this if servertype set to HPNONSTOP since it conflicts
 	// with other formats.
-	bool ParseAsHPNonstop(CLine *pLine, CDirentry &entry);
+	bool ParseAsHPNonstop(CLine &line, CDirentry &entry);
 
 	// Date / time parsers
-	bool ParseUnixDateTime(CLine *pLine, int &index, CDirentry &entry);
+	bool ParseUnixDateTime(CLine &line, int &index, CDirentry &entry);
 	bool ParseShortDate(CToken &token, CDirentry &entry, bool saneFieldOrder = false);
 	bool ParseTime(CToken &token, CDirentry &entry);
 

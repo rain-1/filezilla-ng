@@ -463,41 +463,40 @@ void CProxySocket::OnReceive()
 				m_handshakeState = socks5_request;
 				break;
 			case socks5_request:
-				if (m_pRecvBuffer[1])
-				{
-					wxString error;
+				if (m_pRecvBuffer[1]) {
+					wxString errorMsg;
 					switch (m_pRecvBuffer[1])
 					{
 					case 1:
-						error = _("General SOCKS server failure");
+						errorMsg = _("General SOCKS server failure");
 						break;
 					case 2:
-						error = _("Connection not allowed by ruleset");
+						errorMsg = _("Connection not allowed by ruleset");
 						break;
 					case 3:
-						error = _("Network unreachable");
+						errorMsg = _("Network unreachable");
 						break;
 					case 4:
-						error = _("Host unreachable");
+						errorMsg = _("Host unreachable");
 						break;
 					case 5:
-						error = _("Connection refused");
+						errorMsg = _("Connection refused");
 						break;
 					case 6:
-						error = _("TTL expired");
+						errorMsg = _("TTL expired");
 						break;
 					case 7:
-						error = _("Command not supported");
+						errorMsg = _("Command not supported");
 						break;
 					case 8:
-						error = _("Address type not supported");
+						errorMsg = _("Address type not supported");
 						break;
 					default:
-						error.Printf(_("Unassigned error code %d"), (int)(unsigned char)m_pRecvBuffer[1]);
+						errorMsg.Printf(_("Unassigned error code %d"), (int)(unsigned char)m_pRecvBuffer[1]);
 						break;
 					}
 
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: %s"), error);
+					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: %s"), errorMsg);
 					m_proxyState = noconn;
 					m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
