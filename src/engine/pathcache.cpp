@@ -106,7 +106,7 @@ void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& p
 
 	if (!target.empty()) {
 		// Unfortunately O(n), don't know of a faster way.
-		for (auto serverIter = serverCache.begin(); serverIter != serverCache.end(); ) {
+		for (serverIter = serverCache.begin(); serverIter != serverCache.end(); ) {
 			if (serverIter->second == target || target.IsParentOf(serverIter->second, false))
 				serverCache.erase(serverIter++);
 			else if (serverIter->first.source == target || target.IsParentOf(serverIter->first.source, false))

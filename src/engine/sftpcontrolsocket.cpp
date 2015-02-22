@@ -2247,12 +2247,10 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	pData->subDir = subDir;
 
 	CServerPath fullPath = engine_.GetPathCache().Lookup(*m_pCurrentServer, pData->path, pData->subDir);
-	if (fullPath.empty())
-	{
-		CServerPath fullPath = pData->path;
+	if (fullPath.empty()) {
+		fullPath = pData->path;
 
-		if (!fullPath.AddSegment(subDir))
-		{
+		if (!fullPath.AddSegment(subDir)) {
 			LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath(), subDir);
 			return FZ_REPLY_ERROR;
 		}

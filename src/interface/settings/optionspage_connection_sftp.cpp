@@ -260,8 +260,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		wxASSERT(!silent);
 
 		wxString msg;
-		if (needs_conversion)
-		{
+		if (needs_conversion) {
 			if (!encrypted)
 				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
 			else
@@ -274,9 +273,8 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		if (res != wxYES)
 			return false;
 
-		if (encrypted)
-		{
-			wxString msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile);
+		if (encrypted) {
+			msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile);
 			CInputDialog dlg;
 			if (!dlg.Create(this, _("Password required"), msg))
 				return false;
@@ -294,9 +292,8 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		code = GetReply(reply);
 		if (code == failure)
 			return false;
-		if (code != success)
-		{
-			wxString msg = wxString::Format(_("Failed to load private key: %s"), reply);
+		if (code != success) {
+			msg = wxString::Format(_("Failed to load private key: %s"), reply);
 			wxMessageBoxEx(msg, _("Could not load private key"), wxICON_EXCLAMATION);
 			return false;
 		}
@@ -309,8 +306,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		if (newName .empty())
 			return false;
 
-		if (newName == keyFile)
-		{
+		if (newName == keyFile) {
 			// Not actually a requirement by fzputtygen, but be on the safe side. We don't want the user to lose his keys.
 			wxMessageBoxEx(_("Source and target file may not be the same"), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
@@ -320,8 +316,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		code = GetReply(reply);
 		if (code == failure)
 			return false;
-		if (code != success)
-		{
+		if (code != success) {
 			wxMessageBoxEx(wxString::Format(_("Could not write keyfile: %s"), reply), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
 		}
