@@ -35,6 +35,8 @@
 
   RequestExecutionLevel user
 
+  !define DUMP_KEY "SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\filezilla.exe"
+
 ;--------------------------------
 ; Libtool executable target path
 ;--------------------------------
@@ -955,6 +957,18 @@ Section "FileZilla Client" SecMain
   ${endif}
   Pop $R0
 
+  ${If} $ALL_USERS == 1
+    ; Enable mini dumps
+    ${If} ${RunningX64}
+      SetRegView 64
+    ${EndIf}
+    WriteRegStr   HKLM "${DUMP_KEY}" "DumpFolder" %APPDATA%\FileZilla"
+    WriteRegDWORD HKLM "${DUMP_KEY}" "DumpType"   "1"
+    ${If} ${RunningX64}
+      SetRegView lastused
+    ${EndIf}
+  ${EndIf}
+
 SectionEnd
 
 !macro INSTALLICONSET SET
@@ -1348,6 +1362,18 @@ Section "Uninstall"
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client"
 
     Delete "$DESKTOP\FileZilla Client.lnk"
+
+    ; Remove dump key
+    ${If} ${RunningX64}
+      SetRegView 64
+    ${EndIf}
+    DeleteRegValue HKLM "${DUMP_KEY}" "DumpFolder"
+    DeleteRegValue HKLM "${DUMP_KEY}" "DumpType"
+    DeleteRegKey /ifempty HKLM "${DUMP_KEY}"
+    ${If} ${RunningX64}
+      SetRegView lastused
+    ${EndIf}
+
   ${EndIf}
   ${If} $un.REMOVE_CURRENT_USER == 1
     SetShellVarContext current
