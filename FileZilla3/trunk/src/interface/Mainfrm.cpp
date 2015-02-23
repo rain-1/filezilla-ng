@@ -605,13 +605,13 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		const wxString &command = dlg.GetValue();
 
 		if (!command.Left(5).CmpNoCase(_T("quote")) || !command.Left(6).CmpNoCase(_T("quote "))) {
-			CConditionalDialog dlg(this, CConditionalDialog::rawcommand_quote, CConditionalDialog::yesno);
-			dlg.SetTitle(_("Raw FTP command"));
+			CConditionalDialog condDlg(this, CConditionalDialog::rawcommand_quote, CConditionalDialog::yesno);
+			condDlg.SetTitle(_("Raw FTP command"));
 
-			dlg.AddText(_("'quote' is usually a local command used by commandline clients to send the arguments following 'quote' to the server. You might want to enter the raw command without the leading 'quote'."));
-			dlg.AddText(wxString::Format(_("Do you really want to send '%s' to the server?"), command));
+			condDlg.AddText(_("'quote' is usually a local command used by commandline clients to send the arguments following 'quote' to the server. You might want to enter the raw command without the leading 'quote'."));
+			condDlg.AddText(wxString::Format(_("Do you really want to send '%s' to the server?"), command));
 
-			if (!dlg.Run())
+			if (!condDlg.Run())
 				return;
 		}
 
