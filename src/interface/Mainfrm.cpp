@@ -1669,15 +1669,21 @@ void CMainFrame::OnMenuHelpAbout(wxCommandEvent&)
 
 void CMainFrame::OnFilter(wxCommandEvent& event)
 {
-	if (wxGetKeyState(WXK_SHIFT))
-	{
+	if (wxGetKeyState(WXK_SHIFT)) {
 		OnFilterRightclicked(event);
 		return;
 	}
 
+	bool const oldActive = CFilterManager::HasActiveFilters();
+
 	CFilterDialog dlg;
 	dlg.Create(this);
 	dlg.ShowModal();
+
+	if (oldActive == CFilterManager::HasActiveFilters() && m_pToolBar) {
+		// Restore state
+		m_pToolBar->ToggleTool(XRCID("ID_TOOLBAR_FILTER"), oldActive);
+	}
 }
 
 #if FZ_MANUALUPDATECHECK
