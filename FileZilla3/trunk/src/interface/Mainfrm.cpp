@@ -631,9 +631,6 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		wizard.Run();
 	}
 	// Debug menu
-	else if (event.GetId() == XRCID("ID_CRASH")) {
-		abort();
-	}
 	else if (event.GetId() == XRCID("ID_CIPHERS")) {
 		CInputDialog dlg;
 		dlg.Create(this, _T("Ciphers"), _T("Priority string:"));
