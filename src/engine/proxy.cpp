@@ -92,21 +92,20 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 	if (type == HTTP) {
 		m_handshakeState = http_wait;
 
-		wxWX2MBbuf challenge;
+		wxWX2MBbuf challenge{};
 		int challenge_len;
 		if (!user.empty()) {
 			challenge = base64encode(user + _T(":") + pass).mb_str(wxConvUTF8);
 			challenge_len = strlen(challenge);
 		}
 		else {
-			challenge = (size_t)0;
 			challenge_len = 0;
 		}
 
 		// Bit oversized, but be on the safe side
 		m_pSendBuffer = new char[70 + strlen(host_raw) * 2 + 2*5 + challenge_len + 23];
 
-		if (!challenge) {
+		if (!challenge || !challenge_len) {
 			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nUser-Agent: FileZilla\r\n\r\n",
 				(const char*)host_raw, port,
 				(const char*)host_raw, port);
