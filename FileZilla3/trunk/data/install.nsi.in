@@ -962,7 +962,6 @@ Section "FileZilla Client" SecMain
     ${If} ${RunningX64}
       SetRegView 64
     ${EndIf}
-    WriteRegStr   HKLM "${DUMP_KEY}" "DumpFolder" %APPDATA%\FileZilla"
     WriteRegDWORD HKLM "${DUMP_KEY}" "DumpType"   "1"
     ${If} ${RunningX64}
       SetRegView lastused
@@ -1367,7 +1366,6 @@ Section "Uninstall"
     ${If} ${RunningX64}
       SetRegView 64
     ${EndIf}
-    DeleteRegValue HKLM "${DUMP_KEY}" "DumpFolder"
     DeleteRegValue HKLM "${DUMP_KEY}" "DumpType"
     DeleteRegKey /ifempty HKLM "${DUMP_KEY}"
     ${If} ${RunningX64}
