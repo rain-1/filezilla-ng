@@ -113,6 +113,12 @@ ssize_t CFile::Write(void const* buf, size_t count)
 
 	return ret;
 }
+
+bool CFile::Opened() const
+{
+	return hFile_ != INVALID_HANDLE_VALUE;
+}
+
 #else
 
 #include <errno.h>
@@ -216,4 +222,10 @@ ssize_t CFile::Write(void const* buf, size_t count)
 
 	return ret;
 }
+
+bool CFile::Opened() const
+{
+	return fd_ != -1;
+}
+
 #endif
