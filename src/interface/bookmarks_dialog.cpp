@@ -296,11 +296,12 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		return;
 	}
 
-	TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark");
-	while (pBookmark)
 	{
-		pDocument->RemoveChild(pBookmark);
-		pBookmark = pDocument->FirstChildElement("Bookmark");
+		TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark");
+		while (pBookmark) {
+			pDocument->RemoveChild(pBookmark);
+			pBookmark = pDocument->FirstChildElement("Bookmark");
+		}
 	}
 
 	wxTreeItemIdValue cookie;
@@ -617,8 +618,8 @@ void CBookmarksDialog::OnCopy(wxCommandEvent&)
 
 	wxTreeItemId parent = m_pTree->GetItemParent(item);
 
-	const wxString name = m_pTree->GetItemText(item);
-	wxString newName = wxString::Format(_("Copy of %s"), name);
+	const wxString oldName = m_pTree->GetItemText(item);
+	wxString newName = wxString::Format(_("Copy of %s"), oldName);
 	int index = 2;
 	for (;;) {
 		wxTreeItemId child;
@@ -638,7 +639,7 @@ void CBookmarksDialog::OnCopy(wxCommandEvent&)
 		if (!found)
 			break;
 
-		newName = wxString::Format(_("Copy (%d) of %s"), index++, name);
+		newName = wxString::Format(_("Copy (%d) of %s"), index++, oldName);
 	}
 
 	CBookmarkItemData* newData = new CBookmarkItemData(*data);

@@ -77,13 +77,13 @@ bool CAboutDialog::Create(wxWindow* parent)
 
 	int major, minor;
 	if (GetRealOsVersion(major, minor)) {
-		wxString version = wxString::Format(_T("%d.%d"), major, minor);
+		wxString osVersion = wxString::Format(_T("%d.%d"), major, minor);
 		int fakeMajor, fakeMinor;
 		if (wxGetOsVersion(&fakeMajor, &fakeMinor) != wxOS_UNKNOWN && (fakeMajor != major || fakeMinor != minor)) {
-			version += _T(" ");
-			version += wxString::Format(_("(app-compat is set to %d.%d)"), fakeMajor, fakeMinor);
+			osVersion += _T(" ");
+			osVersion += wxString::Format(_("(app-compat is set to %d.%d)"), fakeMajor, fakeMinor);
 		}
-		xrc_call(*this, "ID_SYSTEM_VER", &wxStaticText::SetLabel, version);
+		xrc_call(*this, "ID_SYSTEM_VER", &wxStaticText::SetLabel, osVersion);
 	}
 	else {
 		xrc_call(*this, "ID_SYSTEM_VER", &wxStaticText::Hide);
