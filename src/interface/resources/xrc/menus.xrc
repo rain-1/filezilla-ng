@@ -433,11 +433,6 @@
       <label>Clear &amp;layout cache</label>
     </object>
     <object class="separator"/>
-    <object class="wxMenuItem" name="ID_CRASH">
-      <label>&amp;Crash</label>
-      <help>Crashes FileZilla instantly. Only used to debug the exception handler</help>
-    </object>
-    <object class="separator"/>
     <object class="wxMenuItem" name="ID_CIPHERS">
       <label>&amp;TLS Ciphers</label>
       <help>Shows available TLS ciphers</help>
