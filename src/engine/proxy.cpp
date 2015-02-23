@@ -93,13 +93,10 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 		m_handshakeState = http_wait;
 
 		wxWX2MBbuf challenge{};
-		int challenge_len;
+		int challenge_len{};
 		if (!user.empty()) {
 			challenge = base64encode(user + _T(":") + pass).mb_str(wxConvUTF8);
 			challenge_len = strlen(challenge);
-		}
-		else {
-			challenge_len = 0;
 		}
 
 		// Bit oversized, but be on the safe side
