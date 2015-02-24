@@ -80,9 +80,9 @@ TiXmlElement* FindElementWithAttribute(TiXmlElement* node, const char* element, 
 TiXmlElement* FindElementWithAttribute(TiXmlElement* node, const char* element, const char* attribute, int value);
 
 // Add a new child element with the specified name and value to the xml document
-void AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite = false);
+TiXmlElement* AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite = false);
 void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwrite = false);
-void AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite = false);
+TiXmlElement* AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite = false);
 
 // Set the current element's text value
 void AddTextElement(TiXmlElement* node, const wxString& value);
