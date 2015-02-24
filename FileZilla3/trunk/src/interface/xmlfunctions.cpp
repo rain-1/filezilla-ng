@@ -3,6 +3,7 @@
 #include "Options.h"
 #include <wx/ffile.h>
 #include <wx/log.h>
+#include <wx/base64.h>
 
 #include <local_filesys.h>
 
@@ -156,15 +157,15 @@ void RemoveTextElement(TiXmlElement* node)
 	}
 }
 
-void AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite)
+TiXmlElement* AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite)
 {
 	wxASSERT(node);
 
-	wxScopedCharBuffer  utf8 = value.utf8_str();
+	wxScopedCharBuffer utf8 = value.utf8_str();
 	if (!utf8)
-		return;
+		return 0;
 
-	AddTextElementRaw(node, name, utf8, overwrite);
+	return AddTextElementRaw(node, name, utf8, overwrite);
 }
 
 void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwrite)
@@ -174,7 +175,7 @@ void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwr
 	AddTextElementRaw(node, name, buffer, overwrite);
 }
 
-void AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite)
+TiXmlElement* AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite)
 {
 	wxASSERT(node);
 	wxASSERT(value);
@@ -193,6 +194,8 @@ void AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, 
 
 	if (*value)
 		element->LinkEndChild(new TiXmlText(value));
+
+	return element;
 }
 
 void AddTextElement(TiXmlElement* node, const wxString& value)
@@ -524,8 +527,27 @@ bool GetServer(TiXmlElement *node, CServer& server)
 		wxString user = GetTextElement(node, "User");
 
 		wxString pass;
-		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType)
-			pass = GetTextElement(node, "Pass");
+		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
+			TiXmlElement* passElement = node->FirstChildElement("Pass");
+			pass = GetTextElement(passElement);
+
+			wxString encoding = GetTextAttribute(passElement, "encoding");
+
+			bool resetPass = false;
+			if (encoding == _T("base64")) {
+				wxMemoryBuffer buf = wxBase64Decode(pass);
+				if (!buf.IsEmpty()) {
+					pass = wxString::FromUTF8(static_cast<const char*>(buf.GetData()), buf.GetDataLen());
+				}
+				else {
+					pass.clear();
+				}
+			}
+			else if (!encoding.empty()) {
+				pass.clear();
+				server.SetLogonType(ASK);
+			}
+		}
 
 		if (!server.SetUser(user, pass))
 			return false;
@@ -614,17 +636,19 @@ void SetServer(TiXmlElement *node, const CServer& server)
 
 	enum LogonType logonType = server.GetLogonType();
 
-	if (server.GetLogonType() != ANONYMOUS)
-	{
+	if (server.GetLogonType() != ANONYMOUS) {
 		AddTextElement(node, "User", server.GetUser());
 
-		if (server.GetLogonType() == NORMAL || server.GetLogonType() == ACCOUNT)
-		{
+		if (server.GetLogonType() == NORMAL || server.GetLogonType() == ACCOUNT) {
 			if (kiosk_mode)
 				logonType = ASK;
-			else
-			{
-				AddTextElement(node, "Pass", server.GetPass());
+			else {
+				std::string utf8 = server.GetPass().ToUTF8();
+				wxString base64 = wxBase64Encode(utf8.c_str(), utf8.size());
+				TiXmlElement* passElement = AddTextElement(node, "Pass", base64);
+				if (passElement) {
+					SetTextAttribute(passElement, "encoding", _T("base64"));
+				}
 
 				if (server.GetLogonType() == ACCOUNT)
 					AddTextElement(node, "Account", server.GetAccount());
