@@ -10,6 +10,7 @@ noinst_HEADERS = \
 	event_loop.h \
 	externalipresolver.h \
 	FileZillaEngine.h \
+	file.h \
 	libfilezilla.h \
 	local_filesys.h \
 	local_path.h \
