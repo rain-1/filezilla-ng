@@ -50,7 +50,6 @@ noinst_HEADERS = backend.h \
 		directorylistingparser.h \
 		engineprivate.h \
 		filezilla.h \
-		file.h \
 		ftpcontrolsocket.h \
 		httpcontrolsocket.h iothread.h \
 		logging_private.h \

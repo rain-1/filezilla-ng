@@ -119,6 +119,7 @@
     <ClInclude Include="..\include\event.h" />
     <ClInclude Include="..\include\event_handler.h" />
     <ClInclude Include="..\include\event_loop.h" />
+    <ClInclude Include="..\include\file.h" />
     <ClInclude Include="..\include\mutex.h" />
     <ClInclude Include="backend.h" />
     <ClInclude Include="..\include\commands.h" />
@@ -128,7 +129,6 @@
     <ClInclude Include="directorylistingparser.h" />
     <ClInclude Include="..\include\externalipresolver.h" />
     <ClInclude Include="engineprivate.h" />
-    <ClInclude Include="file.h" />
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />
     <ClInclude Include="FtpControlSocket.h" />
