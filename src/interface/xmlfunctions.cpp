@@ -533,7 +533,6 @@ bool GetServer(TiXmlElement *node, CServer& server)
 
 			wxString encoding = GetTextAttribute(passElement, "encoding");
 
-			bool resetPass = false;
 			if (encoding == _T("base64")) {
 				wxMemoryBuffer buf = wxBase64Decode(pass);
 				if (!buf.IsEmpty()) {
@@ -643,7 +642,10 @@ void SetServer(TiXmlElement *node, const CServer& server)
 			if (kiosk_mode)
 				logonType = ASK;
 			else {
-				std::string utf8 = server.GetPass().ToUTF8();
+				wxString pass = server.GetPass();
+				auto const& buf = pass.utf8_str(); // wxWidgets has such an ugly string API....
+				std::string utf8(buf.data(), buf.length());
+
 				wxString base64 = wxBase64Encode(utf8.c_str(), utf8.size());
 				TiXmlElement* passElement = AddTextElement(node, "Pass", base64);
 				if (passElement) {
