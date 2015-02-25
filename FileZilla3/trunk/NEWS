@@ -10,6 +10,16 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.2-rc2 (2015-02-25)
+
++ OS X binaries are now 64bit
++ MSW: The installer configures Windows Error Reporting to save minidumps in %LOCALAPPDATA%\CrashDumps if filezilla.exe crashes
++ The updater now submits CPU capabilities when checking for updates. In a future version support for CPUs without SSE2 support will be dropped
++ In the XMl files, passwords are now base64 encoded
+- Fix HTTP proxy handshake if no proxy username is set
+- Fix state of filter toolbar button if dismissing filter dialog
+- At the end of transfers errors writing all downloaded data to disk were not always detected
+
 3.10.2-rc1 (2015-02-21)
 
 + When reopening files already being edited, preselect the previously used selection
