@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.7.4\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
@@ -1974,8 +1974,9 @@ msgstr ""
 "Le certificat et les données de session ne sont pas encore disponibles."
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:274
+#, fuzzy
 msgid "Certificate details"
-msgstr "Détails du certificat"
+msgstr "Émetteur du certificat"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:29
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:294
@@ -2414,8 +2415,9 @@ msgid "Connection reset by peer"
 msgstr "Connexion réinitialisée par un pair"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:564
+#, fuzzy
 msgid "Connection timed out"
-msgstr "Délai d'attente expiré"
+msgstr "Délai d'attente expiré."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:1083
 msgid "Connection timed out."
@@ -8784,3 +8786,14 @@ msgstr "écriture par tous"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets :"
+
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(%u%% téléchargé)"
+
+#~ msgid "Connection timed out after %d second of inactivity"
+#~ msgid_plural "Connection timed out after %d seconds of inactivity"
+#~ msgstr[0] "Connection interrompue après %d seconde d'inactivité"
+#~ msgstr[1] "Connection interrompue après %d secondes d'inactivité"
+
+#~ msgid "fzsftp belongs to a different version of FileZilla"
+#~ msgstr "fzsftp appartient à une autre version de FileZilla"

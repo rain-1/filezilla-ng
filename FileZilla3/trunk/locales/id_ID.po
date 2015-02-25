@@ -1,11 +1,11 @@
 # translation of id_ID.po to Bahasa Indonesia
-# Willy Sudiarto Raharjo <willysr@gmail.com>, 2008-2014.
+# Willy Sudiarto Raharjo <willysr@gmail.com>, 2008-2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-01-25 09:54+0700\n"
+"PO-Revision-Date: 2015-02-23 21:58+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "Language: id\n"
@@ -1492,7 +1492,7 @@ msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
 msgstr ""
-"Alternativenya, Anda bisa mendownload versi terbaru dari website FileZilla:"
+"Alternatifnya, Anda bisa mendownload versi terbaru dari website FileZilla:"
 
 #: ../../locales/../src/interface/QueueView.cpp:1962
 #, c-format
@@ -8578,6 +8578,16 @@ msgstr "dapat ditulisi oleh semua"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(%u%% terdownload)"
+
+#~ msgid "Connection timed out after %d second of inactivity"
+#~ msgid_plural "Connection timed out after %d seconds of inactivity"
+#~ msgstr[0] "Koneksi time out setelah %d detik tidak aktif"
+
+#~ msgid "fzsftp belongs to a different version of FileZilla"
+#~ msgstr "fzsftp bagian dari versi terbaru dari FileZilla."
 
 #~ msgid ""
 #~ "A file with that name is already being edited. Do you want to reopen '%s'?"
