@@ -294,8 +294,9 @@ void CTransferSocket::OnReceive()
 				controlSocket_.LogMessage(MessageType::Error, _T("Could not read from transfer socket: %s"), CSocket::GetErrorDescription(error));
 				TransferEnd(TransferEndReason::transfer_failure);
 			}
-			else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound))
-				TransferEnd(TransferEndReason::successful);
+			else if (m_onCloseCalled && !m_pBackend->IsWaiting(CRateLimiter::inbound)) {
+				FinalizeWrite();
+			}
 		}
 		else if (!numread) {
 			FinalizeWrite();
@@ -421,10 +422,8 @@ void CTransferSocket::OnClose(int error)
 		}
 	}
 
-	if (m_transferMode == TransferMode::upload)
-	{
-		if (m_shutdown && m_pTlsSocket)
-		{
+	if (m_transferMode == TransferMode::upload) {
+		if (m_shutdown && m_pTlsSocket) {
 			if (m_pTlsSocket->Shutdown() != 0)
 				TransferEnd(TransferEndReason::transfer_failure);
 			else
@@ -469,7 +468,12 @@ void CTransferSocket::OnClose(int error)
 			return;
 		}
 	}
-	TransferEnd(TransferEndReason::successful);
+	if (m_transferMode == TransferMode::download) {
+		FinalizeWrite();
+	}
+	else {
+		TransferEnd(TransferEndReason::successful);
+	}
 }
 
 bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
