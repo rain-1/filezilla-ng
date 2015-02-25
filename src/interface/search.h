@@ -28,16 +28,16 @@ protected:
 	void LoadConditions();
 
 	wxWindow* m_parent;
-	CSearchDialogFileList *m_results;
+	CSearchDialogFileList *m_results{};
 	CQueueView* m_pQueue;
 
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 
-	CWindowStateManager* m_pWindowStateManager;
+	CWindowStateManager* m_pWindowStateManager{};
 
 	CFilter m_search_filter;
 
-	bool m_searching;
+	bool m_searching{};
 
 	CServerPath m_original_dir;
 	CLocalPath m_local_target;

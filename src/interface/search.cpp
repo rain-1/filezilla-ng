@@ -102,8 +102,7 @@ CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::Get
 	CFileListCtrlSortBase::DirSortMode dirSortMode = GetDirSortMode();
 	CFileListCtrlSortBase::NameSortMode nameSortMode = GetNameSortMode();
 
-	if (!m_sortDirection)
-	{
+	if (!m_sortDirection) {
 		if (m_sortColumn == 1)
 			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
@@ -119,8 +118,7 @@ CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::Get
 		else
 			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortName<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 	}
-	else
-	{
+	else {
 		if (m_sortColumn == 1)
 			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
@@ -149,18 +147,15 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return entry.name;
 	else if (column == 1)
 		return m_fileData[index].path.GetPath();
-	else if (column == 2)
-	{
+	else if (column == 2) {
 		if (entry.is_dir() || entry.size < 0)
 			return wxString();
 		else
 			return CSizeFormat::Format(entry.size.GetValue());
 	}
-	else if (column == 3)
-	{
+	else if (column == 3) {
 		CSearchFileData& data = m_fileData[index];
-		if (data.fileType.empty())
-		{
+		if (data.fileType.empty()) {
 			if (data.path.GetType() == VMS)
 				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
 			else
@@ -210,17 +205,13 @@ END_EVENT_TABLE()
 CSearchDialog::CSearchDialog(wxWindow* parent, CState* pState, CQueueView* pQueue)
 	: CStateEventHandler(pState)
 	, m_parent(parent)
-	, m_results(0)
 	, m_pQueue(pQueue)
-	, m_pWindowStateManager(0)
-	, m_searching(false)
 {
 }
 
 CSearchDialog::~CSearchDialog()
 {
-	if (m_pWindowStateManager)
-	{
+	if (m_pWindowStateManager) {
 		m_pWindowStateManager->Remember(OPTION_SEARCH_SIZE);
 		delete m_pWindowStateManager;
 	}
@@ -303,8 +294,7 @@ void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notificatio
 {
 	if (notification == STATECHANGE_REMOTE_DIR)
 		ProcessDirectoryListing();
-	else if (notification == STATECHANGE_REMOTE_IDLE)
-	{
+	else if (notification == STATECHANGE_REMOTE_IDLE) {
 		if (pState->IsRemoteIdle())
 			m_searching = false;
 		SetCtrlState();
@@ -356,8 +346,7 @@ void CSearchDialog::ProcessDirectoryListing()
 
 void CSearchDialog::OnSearch(wxCommandEvent& event)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -365,14 +354,12 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 	CServerPath path;
 
 	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxMessageBoxEx(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
 	path.SetType(pServer->GetType());
-	if (!path.SetPath(XRCCTRL(*this, "ID_PATH", wxTextCtrl)->GetValue()) || path.empty())
-	{
+	if (!path.SetPath(XRCCTRL(*this, "ID_PATH", wxTextCtrl)->GetValue()) || path.empty()) {
 		wxMessageBoxEx(_("Need to enter valid remote path"), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -386,8 +373,7 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 		return;
 	}
 	m_search_filter = GetFilter();
-	if (!CFilterManager::CompileRegexes(m_search_filter))
-	{
+	if (!CFilterManager::CompileRegexes(m_search_filter)) {
 		wxMessageBoxEx(_("Invalid regular expression in search conditions."), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -414,8 +400,7 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 
 void CSearchDialog::OnStop(wxCommandEvent& event)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		m_pState->m_pCommandQueue->Cancel();
 		m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	}
@@ -463,8 +448,7 @@ public:
 			desc.Printf(wxPLURAL("Selected %d file for transfer.", "Selected %d files for transfer.", count_files), count_files);
 		else if (!count_files)
 			desc.Printf(wxPLURAL("Selected %d directory with its contents for transfer.", "Selected %d directories with their contents for transfer.", count_dirs), count_dirs);
-		else
-		{
+		else {
 			wxString files = wxString::Format(wxPLURAL("%d file", "%d files", count_files), count_files);
 			wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", count_dirs), count_dirs);
 			desc.Printf(_("Selected %s and %s for transfer."), files, dirs);
@@ -505,14 +489,12 @@ void CSearchDownloadDialog::OnOK(wxCommandEvent& event)
 	wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
 
 	CLocalPath path(pText->GetValue());
-	if (path.empty())
-	{
+	if (path.empty()) {
 		wxMessageBoxEx(_("You have to enter a local directory."), _("Download search results"), wxICON_EXCLAMATION);
 		return;
 	}
 
-	if (!path.IsWriteable())
-	{
+	if (!path.IsWriteable()) {
 		wxMessageBoxEx(_("You have to enter a writable local directory."), _("Download search results"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -523,14 +505,12 @@ void CSearchDownloadDialog::OnOK(wxCommandEvent& event)
 void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<CServerPath> &selected_dirs)
 {
 	int sel = -1;
-	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
+	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		if (sel > (int)m_results->m_indexMapping.size())
 			continue;
 		int index = m_results->m_indexMapping[sel];
 
-		if (m_results->m_fileData[index].is_dir())
-		{
+		if (m_results->m_fileData[index].is_dir()) {
 			CServerPath path = m_results->m_fileData[index].path;
 			path.ChangePath(m_results->m_fileData[index].name);
 			if (path.empty())
@@ -543,29 +523,23 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 			// Make sure that selected_dirs does not contain
 			// any directories that are in a parent-child relationship
 			// Resolve by only keeping topmost parents
-			while (iter != selected_dirs.end())
-			{
-				if (*iter == path)
-				{
+			while (iter != selected_dirs.end()) {
+				if (*iter == path) {
 					replaced = true;
 					break;
 				}
 
-				if (iter->IsParentOf(path, false))
-				{
+				if (iter->IsParentOf(path, false)) {
 					replaced = true;
 					break;
 				}
 
-				if (iter->IsSubdirOf(path, false))
-				{
-					if (!replaced)
-					{
+				if (iter->IsSubdirOf(path, false)) {
+					if (!replaced) {
 						*iter = path;
 						replaced = true;
 					}
-					else
-					{
+					else {
 						prev = iter++;
 						selected_dirs.erase(prev);
 						continue;
@@ -582,17 +556,15 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 
 	// Now in a second phase filter out all files that are also in a directory
 	std::list<int> selected_files_new;
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
-	{
-		CServerPath path = m_results->m_fileData[*iter].path;
+	for (auto const& sel : selected_files) {
+		CServerPath path = m_results->m_fileData[sel].path;
 		std::list<CServerPath>::const_iterator path_iter;
-		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter)
-		{
+		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter) {
 			if (*path_iter == path || path_iter->IsParentOf(path, false))
 				break;
 		}
 		if (path_iter == selected_dirs.end())
-			selected_files_new.push_back(*iter);
+			selected_files_new.push_back(sel);
 	}
 	selected_files.swap(selected_files_new);
 
@@ -614,8 +586,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
 
-	if (selected_dirs.size() > 1)
-	{
+	if (selected_dirs.size() > 1) {
 		wxMessageBoxEx(_("Downloading multiple unrelated directories is not yet supported"), _("Downloading search results"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -627,16 +598,14 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	wxTextCtrl *pText = XRCCTRL(dlg, "ID_LOCALPATH", wxTextCtrl);
 
 	CLocalPath path(pText->GetValue());
-	if (path.empty() || !path.IsWriteable())
-	{
+	if (path.empty() || !path.IsWriteable()) {
 		wxBell();
 		return;
 	}
 	m_local_target = path;
 
-	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	CServer const* pServer = m_pState->GetServer();
+	if (!pServer) {
 		wxBell();
 		return;
 	}
@@ -644,26 +613,24 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	bool start = XRCCTRL(dlg, "ID_QUEUE_START", wxRadioButton)->GetValue();
 	bool flatten = XRCCTRL(dlg, "ID_PATHS_FLATTEN", wxRadioButton)->GetValue();
 
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
-	{
-		const CDirentry& entry = m_results->m_fileData[*iter];
+	for (auto const& sel : selected_files) {
+		const CDirentry& entry = m_results->m_fileData[sel];
 
 		CLocalPath target_path = path;
-		if (!flatten)
-		{
+		if (!flatten) {
 			// Append relative path to search root to local target path
-			CServerPath remote_path = m_results->m_fileData[*iter].path;
+			CServerPath remote_path = m_results->m_fileData[sel].path;
 			std::list<wxString> segments;
-			while (m_search_root.IsParentOf(remote_path, false) && remote_path.HasParent())
-			{
+			while (m_search_root.IsParentOf(remote_path, false) && remote_path.HasParent()) {
 				segments.push_front(remote_path.GetLastSegment());
 				remote_path = remote_path.GetParent();
 			}
-			for (std::list<wxString>::const_iterator segment_iter = segments.begin(); segment_iter != segments.end(); ++segment_iter)
-				target_path.AddSegment(*segment_iter);
+			for (auto const& segment : segments) {
+				target_path.AddSegment(segment);
+			}
 		}
 
-		CServerPath remote_path = m_results->m_fileData[*iter].path;
+		CServerPath remote_path = m_results->m_fileData[sel].path;
 		wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
 		if (!entry.is_dir() && remote_path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localName = StripVMSRevision(localName);
@@ -680,15 +647,14 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	else
 		mode = start ? CRecursiveOperation::recursive_download : CRecursiveOperation::recursive_addtoqueue;
 
-	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); ++iter)
-	{
+	for (auto const& dir : selected_dirs) {
 		CLocalPath target_path = path;
-		if (!flatten && iter->HasParent())
-			target_path.AddSegment(iter->GetLastSegment());
+		if (!flatten && dir.HasParent())
+			target_path.AddSegment(dir.GetLastSegment());
 
-		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(*iter, _T(""), target_path, false);
+		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(dir, _T(""), target_path, false);
 		std::list<CFilter> filters; // Empty, recurse into everything
-		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, *iter, filters, true, m_original_dir);
+		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, dir, filters, true, m_original_dir);
 	}
 }
 
@@ -705,35 +671,30 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
 
-	if (!selected_dirs.empty())
-	{
+	if (!selected_dirs.empty()) {
 		wxMessageBoxEx(_("Editing directories is not supported"), _("Editing search results"), wxICON_EXCLAMATION);
 		return;
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
-	if (!pEditHandler)
-	{
+	if (!pEditHandler) {
 		wxBell();
 		return;
 	}
 
 	const wxString& localDir = pEditHandler->GetLocalDirectory();
-	if (localDir.empty())
-	{
+	if (localDir.empty()) {
 		wxMessageBoxEx(_("Could not get temporary directory to download file into."), _("Cannot edit file"), wxICON_STOP);
 		return;
 	}
 
 	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxBell();
 		return;
 	}
 
-	if (selected_files.size() > 10)
-	{
+	if (selected_files.size() > 10) {
 		CConditionalDialog dlg(this, CConditionalDialog::many_selected_for_edit, CConditionalDialog::yesno);
 		dlg.SetTitle(_("Confirmation needed"));
 		dlg.AddText(_("You have selected more than 10 files for editing, do you really want to continue?"));
@@ -763,8 +724,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
 
-	if (selected_dirs.size() > 1)
-	{
+	if (selected_dirs.size() > 1) {
 		wxMessageBoxEx(_("Deleting multiple unrelated directories is not yet supported"), _("Deleting directories"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -774,8 +734,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", selected_files.size()), selected_files.size());
 	else if (selected_files.empty())
 		question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", selected_dirs.size()), selected_dirs.size());
-	else
-	{
+	else {
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", selected_files.size()), selected_files.size());
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", selected_dirs.size()), selected_dirs.size());
 		question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
@@ -784,21 +743,18 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
 		return;
 
-	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter)
-	{
+	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter) {
 		const CDirentry& entry = m_results->m_fileData[*iter];
 		std::list<wxString> files_to_delete;
 		files_to_delete.push_back(entry.name);
 		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[*iter].path, files_to_delete));
 	}
 
-	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); ++iter)
-	{
+	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); ++iter) {
 		CServerPath path = *iter;
 		if (!path.HasParent())
 			m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(path, _T(""));
-		else
-		{
+		else {
 			m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(path.GetParent(), path.GetLastSegment());
 			path = path.GetParent();
 		}
@@ -810,8 +766,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)
 {
-	if (IsEscapeKey(event))
-	{
+	if (IsEscapeKey(event)) {
 		EndDialog(wxID_CANCEL);
 		return;
 	}
