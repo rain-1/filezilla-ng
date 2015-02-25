@@ -167,6 +167,70 @@ bool CUpdater::LongTimeSinceLastCheck() const
 	return span.GetDays() >= days;
 }
 
+#if defined(__i386__) || defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86)
+#define HAVE_CPUID
+#endif
+
+#ifdef HAVE_CPUID
+
+#ifdef _MSC_VER
+namespace {
+void cpuid(int f, int reg[4])
+{
+	__cpuid(reg, f);
+}
+}
+#else
+#include <cpuid.h>
+namespace {
+void cpuid(int f, int reg[4])
+{
+	__cpuid(f, reg[0], reg[1], reg[2], reg[3]);
+}
+}
+#endif
+
+namespace {
+wxString GetCPUCaps()
+{
+	wxString ret;
+
+	int reg[4];
+	cpuid(0, reg);
+
+	int const max = reg[0];
+
+	// function, register, bit, description
+	std::tuple<int, int, int, wxString> const caps[] = {
+		std::make_tuple(1, 3, 25, _T("sse")),
+		std::make_tuple(1, 3, 26, _T("sse2")),
+		std::make_tuple(1, 2, 0, _T("sse3")),
+		std::make_tuple(1, 2, 9, _T("ssse3")),
+		std::make_tuple(1, 2, 19, _T("sse4.1")),
+		std::make_tuple(1, 2, 20, _T("sse4.2")),
+		std::make_tuple(1, 2, 28, _T("avx")),
+		std::make_tuple(1, 2, 25, _T("aes")),
+		std::make_tuple(1, 2, 1, _T("pclmulqdq")),
+		std::make_tuple(1, 2, 30, _T("rdrnd"))
+	};
+
+	for (auto const& cap : caps) {
+		if (max >= std::get<0>(cap)) {
+			cpuid(std::get<0>(cap), reg);
+			if (reg[std::get<1>(cap)] & (1 << std::get<2>(cap))) {
+				if (!ret.empty()) {
+					ret += ',';
+				}
+				ret += std::get<3>(cap);
+			}
+		}
+	}
+
+	return ret;
+}
+}
+#endif
+
 wxString CUpdater::GetUrl()
 {
 	wxString host = CBuildInfo::GetHostname();
@@ -189,6 +253,11 @@ wxString CUpdater::GetUrl()
 	else
 		url += _T("&osarch=32");
 #endif
+
+#ifdef HAVE_CPUID
+	url += _T("&cpuid=") + GetCPUCaps();
+#endif
+
 	return url;
 }
 
