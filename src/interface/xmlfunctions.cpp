@@ -529,22 +529,24 @@ bool GetServer(TiXmlElement *node, CServer& server)
 		wxString pass;
 		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
 			TiXmlElement* passElement = node->FirstChildElement("Pass");
-			pass = GetTextElement(passElement);
+			if (passElement) {
+				pass = GetTextElement(passElement);
 
-			wxString encoding = GetTextAttribute(passElement, "encoding");
+				wxString encoding = GetTextAttribute(passElement, "encoding");
 
-			if (encoding == _T("base64")) {
-				wxMemoryBuffer buf = wxBase64Decode(pass);
-				if (!buf.IsEmpty()) {
-					pass = wxString::FromUTF8(static_cast<const char*>(buf.GetData()), buf.GetDataLen());
+				if (encoding == _T("base64")) {
+					wxMemoryBuffer buf = wxBase64Decode(pass);
+					if (!buf.IsEmpty()) {
+						pass = wxString::FromUTF8(static_cast<const char*>(buf.GetData()), buf.GetDataLen());
+					}
+					else {
+						pass.clear();
+					}
 				}
-				else {
+				else if (!encoding.empty()) {
 					pass.clear();
+					server.SetLogonType(ASK);
 				}
-			}
-			else if (!encoding.empty()) {
-				pass.clear();
-				server.SetLogonType(ASK);
 			}
 		}
 
