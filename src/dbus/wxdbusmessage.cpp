@@ -27,10 +27,8 @@ DEALINGS IN THE SOFTWARE.
 #include <string.h>
 
 wxDBusMessage::wxDBusMessage(DBusMessage * message)
+	: m_message(message)
 {
-	m_message = message;
-	m_get_iter_initialized = false;
-	m_add_iter_initialized = false;
 }
 
 wxDBusMessage::~wxDBusMessage()

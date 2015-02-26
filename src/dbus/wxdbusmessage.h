@@ -32,6 +32,10 @@ class wxDBusMessage : public wxObject
 public:
 	wxDBusMessage(DBusMessage * message);
 	virtual ~wxDBusMessage();
+
+	wxDBusMessage(wxDBusMessage const&) = delete;
+	wxDBusMessage& operator=(wxDBusMessage const&) = delete;
+
 	static wxDBusMessage * ExtractFromEvent(wxDBusConnectionEvent * event);
 	unsigned int GetSerial();
 	unsigned int GetReplySerial();
@@ -62,10 +66,10 @@ public:
 	bool Send(wxDBusConnection * connection, unsigned int * serial);
 
 private:
-	DBusMessage * m_message;
-	DBusMessageIter m_iter;
-	bool m_get_iter_initialized;
-	bool m_add_iter_initialized;
+	DBusMessage * m_message{};
+	DBusMessageIter m_iter{};
+	bool m_get_iter_initialized{};
+	bool m_add_iter_initialized{};
 	void init_add_iter();
 };
 
