@@ -370,7 +370,7 @@ bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIM
 
 	// Interestingly wxDateTime has this constructor which
 	// even more interestingly isn't even marked explicit.
-	time = CDateTime(wxDateTime(t), CDateTime::milliseconds);
+	time = CDateTime(wxDateTime(wxLongLong(t)), CDateTime::milliseconds);
 	return time.IsValid();
 }
 
