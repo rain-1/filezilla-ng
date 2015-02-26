@@ -563,7 +563,7 @@ protected:
 			l.unlock();
 			WSAWaitForMultipleEvents(1, &m_sync_event, false, WSA_INFINITE, false);
 
-			l.lock();;
+			l.lock();
 			if (ShouldQuit()) {
 				return false;
 			}
