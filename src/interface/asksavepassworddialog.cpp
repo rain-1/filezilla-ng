@@ -10,14 +10,19 @@ EVT_RADIOBUTTON(XRCID("ID_REMEMBER_YES"), CAskSavePasswordDialog::OnRadioButtonC
 EVT_RADIOBUTTON(XRCID("ID_REMEMBER_NO"), CAskSavePasswordDialog::OnRadioButtonChanged)
 END_EVENT_TABLE()
 
-CAskSavePasswordDialog::CAskSavePasswordDialog(wxWindow*)
+bool CAskSavePasswordDialog::Create(wxWindow*)
 {
-	Load(0, _T("ID_ASK_SAVE_PASSWORD"));
+	if (!Load(0, _T("ID_ASK_SAVE_PASSWORD"))) {
+		return false;
+	}
+
 	wxButton* ok = XRCCTRL(*this, "wxID_OK", wxButton);
 	if (ok)
 		ok->Enable(false);
 
 	wxGetApp().GetWrapEngine()->WrapRecursive(this, 2, "");
+
+	return true;
 }
 
 
@@ -26,14 +31,15 @@ bool CAskSavePasswordDialog::Run(wxWindow* parent)
 	bool ret = true;
 
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 0 && COptions::Get()->GetOptionVal(OPTION_PROMPTPASSWORDSAVE) != 0 && !CSiteManager::HasSites()) {
-		CAskSavePasswordDialog dlg(parent);
-
-		ret = dlg.ShowModal() == wxID_OK;
-		if (ret) {
-			if (xrc_call(dlg, "ID_REMEMBER_NO", &wxRadioButton::GetValue)) {
-				COptions::Get()->SetOption(OPTION_DEFAULT_KIOSKMODE, 1);
+		CAskSavePasswordDialog dlg;
+		if (dlg.Create(parent)) {
+			ret = dlg.ShowModal() == wxID_OK;
+			if (ret) {
+				if (xrc_call(dlg, "ID_REMEMBER_NO", &wxRadioButton::GetValue)) {
+					COptions::Get()->SetOption(OPTION_DEFAULT_KIOSKMODE, 1);
+				}
+				COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 0);
 			}
-			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 0);
 		}
 	}
 	else
