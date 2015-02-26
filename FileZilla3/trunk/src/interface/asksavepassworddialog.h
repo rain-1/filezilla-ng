@@ -8,7 +8,7 @@ class CAskSavePasswordDialog : public wxDialogEx
 public:
 	static bool Run(wxWindow* parent);
 private:
-	CAskSavePasswordDialog(wxWindow* parent);
+	bool Create(wxWindow* parent);
 
 	DECLARE_EVENT_TABLE()
 	void OnRadioButtonChanged(wxCommandEvent& event);
