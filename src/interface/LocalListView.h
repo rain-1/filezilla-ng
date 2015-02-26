@@ -18,7 +18,7 @@ public:
 	CSparseOptional<wxString> label;
 #endif
 	CDateTime time;
-	wxLongLong size;
+	int64_t size;
 	int attributes;
 	bool dir;
 	bool is_dir() const { return dir; }

@@ -765,7 +765,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 
 	iter->state = unedit ? upload_and_remove : upload;
 
-	wxLongLong size;
+	int64_t size;
 	CDateTime mtime;
 
 	bool is_link;

@@ -715,7 +715,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 	for (unsigned int i = 0; i < files.Count(); i++)
 	{
-		wxLongLong size;
+		int64_t size;
 		bool is_link;
 		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(files[i], is_link, &size, 0, 0);
 		if (type == CLocalFileSystem::file)

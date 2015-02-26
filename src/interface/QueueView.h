@@ -31,15 +31,13 @@ class t_newEntry : public CFolderProcessingEntry
 public:
 	t_newEntry()
 		: CFolderProcessingEntry(CFolderProcessingEntry::file)
-		, attributes()
-		, dir()
 	{}
 
 	wxString name;
-	wxLongLong size;
+	int64_t size{};
 	CDateTime time;
-	int attributes;
-	bool dir;
+	int attributes{};
+	bool dir{};
 };
 
 enum ActionAfterState

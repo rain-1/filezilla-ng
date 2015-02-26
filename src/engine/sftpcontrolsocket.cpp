@@ -1564,10 +1564,10 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	pData->transferSettings = transferSettings;
 
-	wxLongLong size;
+	int64_t size;
 	bool isLink;
 	if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
-		pData->localFileSize = size.GetValue();
+		pData->localFileSize = size;
 
 	pData->opState = filetransfer_waitcwd;
 

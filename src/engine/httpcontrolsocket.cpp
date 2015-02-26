@@ -355,7 +355,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 	m_current_uri = wxURI(m_pCurrentServer->FormatServer() + pData->remotePath.FormatFilename(pData->remoteFile));
 
 	if (!localFile.empty()) {
-		pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile).GetValue();
+		pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile);
 
 		pData->opState = filetransfer_waitfileexists;
 		int res = CheckOverwriteFile();
@@ -1023,6 +1023,6 @@ int CHttpControlSocket::OpenFile( CHttpFileTransferOpData* pData)
 	if( !end ) {
 		pData->resume = false;
 	}
-	pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile).GetValue();
+	pData->localFileSize = CLocalFileSystem::GetSize(pData->localFile);
 	return FZ_REPLY_OK;
 }
