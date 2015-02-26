@@ -1210,10 +1210,10 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			fn.SetFullName(pFileExistsNotification->newName);
 			pData->localFile = fn.GetFullPath();
 
-			wxLongLong size;
+			int64_t size;
 			bool isLink;
 			if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
-				pData->localFileSize = size.GetValue();
+				pData->localFileSize = size;
 			else
 				pData->localFileSize = -1;
 

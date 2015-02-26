@@ -1747,10 +1747,9 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 		if (nErrorCode != FZ_REPLY_OK && pData->download && !pData->fileDidExist) {
 			delete pData->pIOThread;
 			pData->pIOThread = 0;
-			wxLongLong size;
+			int64_t size;
 			bool isLink;
-			if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file && size == 0)
-			{
+			if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file && size == 0) {
 				// Download failed and a new local file was created before, but
 				// nothing has been written to it. Remove it again, so we don't
 				// leave a bunch of empty files all over the place.
@@ -2207,10 +2206,10 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 	pData->transferSettings = transferSettings;
 	pData->binary = transferSettings.binary;
 
-	wxLongLong size;
+	int64_t size;
 	bool isLink;
 	if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
-		pData->localFileSize = size.GetValue();
+		pData->localFileSize = size;
 
 	pData->opState = filetransfer_waitcwd;
 
@@ -2806,10 +2805,10 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 					fn.SetFullName(pFileExistsNotification->newName);
 					pData->localFile = fn.GetFullPath();
 
-					wxLongLong size;
+					int64_t size;
 					bool isLink;
 					if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
-						pData->localFileSize = size.GetValue();
+						pData->localFileSize = size;
 					else
 						pData->localFileSize = -1;
 

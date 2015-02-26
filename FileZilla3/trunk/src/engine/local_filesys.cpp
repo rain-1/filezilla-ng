@@ -13,18 +13,12 @@ const wxChar CLocalFileSystem::path_separator = '\\';
 const wxChar CLocalFileSystem::path_separator = '/';
 #endif
 
-CLocalFileSystem::CLocalFileSystem()
-	: m_dirs_only()
-#ifdef __WXMSW__
-	, m_hFind(INVALID_HANDLE_VALUE)
-	, m_found()
-#else
-	, m_raw_path()
-	, m_file_part()
-	, m_buffer_length()
-	, m_dir()
-#endif
+namespace {
+template<typename T>
+int64_t make_int64_t(T hi, T lo)
 {
+	return (static_cast<int64_t>(hi) << 32) + static_cast<int64_t>(lo);
+}
 }
 
 CLocalFileSystem::~CLocalFileSystem()
@@ -32,7 +26,7 @@ CLocalFileSystem::~CLocalFileSystem()
 	EndFindFiles();
 }
 
-enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileType(const wxString& path)
+CLocalFileSystem::local_fileType CLocalFileSystem::GetFileType(const wxString& path)
 {
 #ifdef __WXMSW__
 	DWORD result = GetFileAttributes(path);
@@ -201,7 +195,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 #endif
 }
 
-enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int *mode)
+CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, CDateTime* modificationTime, int *mode)
 {
 #ifdef __WXMSW__
 	if (path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
@@ -251,7 +245,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 				}
 
 				if (size)
-					*size = wxLongLong(info.nFileSizeHigh, info.nFileSizeLow);
+					*size = make_int64_t(info.nFileSizeHigh, info.nFileSizeLow);
 
 				return file;
 			}
@@ -281,7 +275,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 	}
 	else {
 		if (size)
-			*size = wxLongLong(attributes.nFileSizeHigh, attributes.nFileSizeLow);
+			*size = make_int64_t(attributes.nFileSizeHigh, attributes.nFileSizeLow);
 		return file;
 	}
 #else
@@ -298,7 +292,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxStri
 }
 
 #ifndef __WXMSW__
-enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, wxLongLong* size, CDateTime* modificationTime, int *mode)
+CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, int64_t* size, CDateTime* modificationTime, int *mode)
 {
 	struct stat buf;
 	int result = lstat(path, &buf);
@@ -357,7 +351,7 @@ enum CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* 
 #ifdef __WXMSW__
 
 // This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
-static wxInt64 EPOCH_OFFSET_IN_MSEC = wxLL(11644473600000);
+static wxInt64 EPOCH_OFFSET_IN_MSEC = 11644473600000ll;
 
 bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIME &ft)
 {
@@ -367,7 +361,7 @@ bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIM
 	// See http://trac.wxwidgets.org/changeset/74423 and http://trac.wxwidgets.org/ticket/13098
 	// Directly converting to time_t
 
-	wxLongLong t(ft.dwHighDateTime, ft.dwLowDateTime);
+	int64_t t = make_int64_t(ft.dwHighDateTime, ft.dwLowDateTime);
 	t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
 	t -= EPOCH_OFFSET_IN_MSEC;
 	if (t < 0) {
@@ -380,18 +374,18 @@ bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIM
 	return time.IsValid();
 }
 
-bool CLocalFileSystem::ConvertCDateTimeToFileTime(FILETIME &ft, const CDateTime& time)
+bool CLocalFileSystem::ConvertCDateTimeToFileTime(FILETIME &ft, CDateTime const& time)
 {
 	if (!time.IsValid())
 		return false;
 
-	wxLongLong t = time.Degenerate().GetValue();
+	int64_t t = time.Degenerate().GetValue().GetValue();
 
 	t += EPOCH_OFFSET_IN_MSEC;
 	t *= 10000;
 
-	ft.dwHighDateTime = t.GetHi();
-	ft.dwLowDateTime = t.GetLo();
+	ft.dwHighDateTime = t >> 32;
+	ft.dwLowDateTime = t & 0xffffffffll;
 
 	return true;
 }
@@ -532,7 +526,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 #endif
 }
 
-bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, wxLongLong* size, CDateTime* modificationTime, int* mode)
+bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, CDateTime* modificationTime, int* mode)
 {
 #ifdef __WXMSW__
 	if (!m_found)
@@ -575,7 +569,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 							*size = -1;
 						}
 						else {
-							*size = wxLongLong(info.nFileSizeHigh, info.nFileSizeLow);
+							*size = make_int64_t(info.nFileSizeHigh, info.nFileSizeLow);
 						}
 					}
 
@@ -607,7 +601,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 					*size = -1;
 				}
 				else {
-					*size = wxLongLong(m_find_data.nFileSizeHigh, m_find_data.nFileSizeLow);
+					*size = make_int64_t(m_find_data.nFileSizeLow, m_find_data.nFileSizeLow);
 				}
 			}
 		}
@@ -635,7 +629,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 			{
 				AllocPathBuffer(entry->d_name);
 				strcpy(m_file_part, entry->d_name);
-				enum local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
+				local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
 				if (type != dir)
 					continue;
 
@@ -650,7 +644,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, w
 
 		AllocPathBuffer(entry->d_name);
 		strcpy(m_file_part, entry->d_name);
-		enum local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
+		local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
 
 		if (type == unknown) // Happens for example in case of permission denied
 		{
@@ -734,9 +728,9 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 #endif
 }
 
-wxLongLong CLocalFileSystem::GetSize(wxString const& path, bool* isLink)
+int64_t CLocalFileSystem::GetSize(wxString const& path, bool* isLink)
 {
-	wxLongLong ret = -1;
+	int64_t ret = -1;
 	bool tmp{};
 	local_fileType t = GetFileInfo(path, isLink ? *isLink : tmp, &ret, 0, 0);
 	if( t != file ) {
