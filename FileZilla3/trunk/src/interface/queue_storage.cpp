@@ -156,27 +156,27 @@ public:
 	bool SaveFile(wxLongLong server, const CFileItem& item);
 	bool SaveDirectory(wxLongLong server, const CFolderItem& item);
 
-	wxLongLong_t SaveLocalPath(const CLocalPath& path);
-	wxLongLong_t SaveRemotePath(const CServerPath& path);
+	int64_t SaveLocalPath(const CLocalPath& path);
+	int64_t SaveRemotePath(const CServerPath& path);
 
 	void ReadLocalPaths();
 	void ReadRemotePaths();
 
-	const CLocalPath& GetLocalPath(wxLongLong_t id) const;
-	const CServerPath& GetRemotePath(wxLongLong_t id) const;
+	const CLocalPath& GetLocalPath(int64_t id) const;
+	const CServerPath& GetRemotePath(int64_t id) const;
 
 	bool Bind(sqlite3_stmt* statement, int index, int value);
-	bool Bind(sqlite3_stmt* statement, int index, wxLongLong_t value);
+	bool Bind(sqlite3_stmt* statement, int index, int64_t value);
 	bool Bind(sqlite3_stmt* statement, int index, const wxString& value);
 	bool Bind(sqlite3_stmt* statement, int index, const char* const value);
 	bool BindNull(sqlite3_stmt* statement, int index);
 
 	wxString GetColumnText(sqlite3_stmt* statement, int index, bool shrink = true);
-	wxLongLong_t GetColumnInt64(sqlite3_stmt* statement, int index, wxLongLong_t def = 0);
+	int64_t GetColumnInt64(sqlite3_stmt* statement, int index, int64_t def = 0);
 	int GetColumnInt(sqlite3_stmt* statement, int index, int def = 0);
 
-	wxLongLong_t ParseServerFromRow(CServer& server);
-	wxLongLong_t ParseFileFromRow(CFileItem** pItem);
+	int64_t ParseServerFromRow(CServer& server);
+	int64_t ParseFileFromRow(CFileItem** pItem);
 
 	bool MigrateSchema();
 
@@ -199,11 +199,11 @@ public:
 	// Caches to speed up saving and loading
 	void ClearCaches();
 
-	std::unordered_map<wxString, wxLongLong_t, wxStringHash, fast_equal> localPaths_;
-	std::unordered_map<wxString, wxLongLong_t, wxStringHash> remotePaths_; // No need for fast_equal as GetSafePath returns unshared string anyhow
+	std::unordered_map<wxString, int64_t, wxStringHash, fast_equal> localPaths_;
+	std::unordered_map<wxString, int64_t, wxStringHash> remotePaths_; // No need for fast_equal as GetSafePath returns unshared string anyhow
 
-	std::map<wxLongLong_t, CLocalPath> reverseLocalPaths_;
-	std::map<wxLongLong_t, CServerPath> reverseRemotePaths_;
+	std::map<int64_t, CLocalPath> reverseLocalPaths_;
+	std::map<int64_t, CServerPath> reverseRemotePaths_;
 };
 
 
@@ -218,7 +218,7 @@ void CQueueStorage::Impl::ReadLocalPaths()
 		res = sqlite3_step(selectLocalPathQuery_);
 		if (res == SQLITE_ROW)
 		{
-			wxLongLong_t id = GetColumnInt64(selectLocalPathQuery_, path_table_column_names::id);
+			int64_t id = GetColumnInt64(selectLocalPathQuery_, path_table_column_names::id);
 			wxString localPathRaw = GetColumnText(selectLocalPathQuery_, path_table_column_names::path);
 			CLocalPath localPath;
 			if (id > 0 && !localPathRaw.empty() && localPath.SetPath(localPathRaw))
@@ -242,7 +242,7 @@ void CQueueStorage::Impl::ReadRemotePaths()
 		res = sqlite3_step(selectRemotePathQuery_);
 		if (res == SQLITE_ROW)
 		{
-			wxLongLong_t id = GetColumnInt64(selectRemotePathQuery_, path_table_column_names::id);
+			int64_t id = GetColumnInt64(selectRemotePathQuery_, path_table_column_names::id);
 			wxString remotePathRaw = GetColumnText(selectRemotePathQuery_, path_table_column_names::path);
 			CServerPath remotePath;
 			if (id > 0 && !remotePathRaw.empty() && remotePath.SetSafePath(remotePathRaw))
@@ -255,9 +255,9 @@ void CQueueStorage::Impl::ReadRemotePaths()
 }
 
 
-const CLocalPath& CQueueStorage::Impl::GetLocalPath(wxLongLong_t id) const
+const CLocalPath& CQueueStorage::Impl::GetLocalPath(int64_t id) const
 {
-	std::map<wxLongLong_t, CLocalPath>::const_iterator it = reverseLocalPaths_.find(id);
+	std::map<int64_t, CLocalPath>::const_iterator it = reverseLocalPaths_.find(id);
 	if (it != reverseLocalPaths_.end())
 		return it->second;
 
@@ -266,9 +266,9 @@ const CLocalPath& CQueueStorage::Impl::GetLocalPath(wxLongLong_t id) const
 }
 
 
-const CServerPath& CQueueStorage::Impl::GetRemotePath(wxLongLong_t id) const
+const CServerPath& CQueueStorage::Impl::GetRemotePath(int64_t id) const
 {
-	std::map<wxLongLong_t, CServerPath>::const_iterator it = reverseRemotePaths_.find(id);
+	std::map<int64_t, CServerPath>::const_iterator it = reverseRemotePaths_.find(id);
 	if (it != reverseRemotePaths_.end())
 		return it->second;
 
@@ -311,9 +311,9 @@ void CQueueStorage::Impl::ClearCaches()
 }
 
 
-wxLongLong_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
+int64_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 {
-	std::unordered_map<wxString, wxLongLong_t, wxStringHash, fast_equal>::const_iterator it = localPaths_.find(path.GetPath());
+	std::unordered_map<wxString, int64_t, wxStringHash, fast_equal>::const_iterator it = localPaths_.find(path.GetPath());
 	if (it != localPaths_.end())
 		return it->second;
 
@@ -328,7 +328,7 @@ wxLongLong_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 
 	if (res == SQLITE_DONE)
 	{
-		wxLongLong_t id = sqlite3_last_insert_rowid(db_);
+		int64_t id = sqlite3_last_insert_rowid(db_);
 		localPaths_[path.GetPath()] = id;
 		return id;
 	}
@@ -337,10 +337,10 @@ wxLongLong_t CQueueStorage::Impl::SaveLocalPath(const CLocalPath& path)
 }
 
 
-wxLongLong_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
+int64_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
 {
 	wxString const& safePath = path.GetSafePath();
-	std::unordered_map<wxString, wxLongLong_t, wxStringHash>::const_iterator it = remotePaths_.find(safePath);
+	std::unordered_map<wxString, int64_t, wxStringHash>::const_iterator it = remotePaths_.find(safePath);
 	if (it != remotePaths_.end())
 		return it->second;
 
@@ -354,7 +354,7 @@ wxLongLong_t CQueueStorage::Impl::SaveRemotePath(const CServerPath& path)
 	sqlite3_reset(insertRemotePathQuery_);
 
 	if (res == SQLITE_DONE) {
-		wxLongLong_t id = sqlite3_last_insert_rowid(db_);
+		int64_t id = sqlite3_last_insert_rowid(db_);
 		remotePaths_[safePath] = id;
 		return id;
 	}
@@ -537,7 +537,7 @@ bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, int value)
 }
 
 
-bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, wxLongLong_t value)
+bool CQueueStorage::Impl::Bind(sqlite3_stmt* statement, int index, int64_t value)
 {
 	int res = sqlite3_bind_int64(statement, index, value);
 	return res == SQLITE_OK;
@@ -719,8 +719,8 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 	else
 		BindNull(insertFileQuery_, file_table_column_names::target_file);
 
-	wxLongLong_t localPathId = SaveLocalPath(file.GetLocalPath());
-	wxLongLong_t remotePathId = SaveRemotePath(file.GetRemotePath());
+	int64_t localPathId = SaveLocalPath(file.GetLocalPath());
+	int64_t remotePathId = SaveRemotePath(file.GetRemotePath());
 	if (localPathId == -1 || remotePathId == -1)
 		return false;
 
@@ -763,8 +763,8 @@ bool CQueueStorage::Impl::SaveDirectory(wxLongLong server, const CFolderItem& di
 		Bind(insertFileQuery_, file_table_column_names::source_file, directory.GetSourceFile());
 	BindNull(insertFileQuery_, file_table_column_names::target_file);
 
-	wxLongLong_t localPathId = directory.Download() ? SaveLocalPath(directory.GetLocalPath()) : -1;
-	wxLongLong_t remotePathId = directory.Download() ? -1 : SaveRemotePath(directory.GetRemotePath());
+	int64_t localPathId = directory.Download() ? SaveLocalPath(directory.GetLocalPath()) : -1;
+	int64_t remotePathId = directory.Download() ? -1 : SaveRemotePath(directory.GetRemotePath());
 	if (localPathId == -1 && remotePathId == -1)
 		return false;
 
@@ -820,7 +820,7 @@ wxString CQueueStorage::Impl::GetColumnText(sqlite3_stmt* statement, int index, 
 	return ret;
 }
 
-wxLongLong_t CQueueStorage::Impl::GetColumnInt64(sqlite3_stmt* statement, int index, wxLongLong_t def)
+int64_t CQueueStorage::Impl::GetColumnInt64(sqlite3_stmt* statement, int index, int64_t def)
 {
 	if (sqlite3_column_type(statement, index) == SQLITE_NULL)
 		return def;
@@ -836,7 +836,7 @@ int CQueueStorage::Impl::GetColumnInt(sqlite3_stmt* statement, int index, int de
 		return sqlite3_column_int(statement, index);
 }
 
-wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
+int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 {
 	server = CServer();
 
@@ -949,13 +949,13 @@ wxLongLong_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 }
 
 
-wxLongLong_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
+int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 {
 	wxString sourceFile = GetColumnText(selectFilesQuery_, file_table_column_names::source_file);
 	wxString targetFile = GetColumnText(selectFilesQuery_, file_table_column_names::target_file);
 
-	wxLongLong_t localPathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::local_path, false);
-	wxLongLong_t remotePathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::remote_path, false);
+	int64_t localPathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::local_path, false);
+	int64_t remotePathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::remote_path, false);
 
 	const CLocalPath& localPath(GetLocalPath(localPathId));
 	const CServerPath& remotePath(GetRemotePath(remotePathId));
@@ -1055,9 +1055,9 @@ bool CQueueStorage::SaveQueue(std::vector<CServerItem*> const& queue)
 	return ret;
 }
 
-wxLongLong_t CQueueStorage::GetServer(CServer& server, bool fromBeginning)
+int64_t CQueueStorage::GetServer(CServer& server, bool fromBeginning)
 {
-	wxLongLong_t ret = -1;
+	int64_t ret = -1;
 
 	if (d_->selectServersQuery_)
 	{
@@ -1105,9 +1105,9 @@ wxLongLong_t CQueueStorage::GetServer(CServer& server, bool fromBeginning)
 }
 
 
-wxLongLong_t CQueueStorage::GetFile(CFileItem** pItem, wxLongLong_t server)
+int64_t CQueueStorage::GetFile(CFileItem** pItem, int64_t server)
 {
-	wxLongLong_t ret = -1;
+	int64_t ret = -1;
 	*pItem = 0;
 
 	if (d_->selectFilesQuery_)

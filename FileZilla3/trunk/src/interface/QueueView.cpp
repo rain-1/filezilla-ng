@@ -1880,7 +1880,7 @@ void CQueueView::LoadQueue()
 	else
 	{
 		CServer server;
-		wxLongLong_t id;
+		int64_t id;
 		for (id = m_queue_storage.GetServer(server, true); id > 0; id = m_queue_storage.GetServer(server, false))
 		{
 			m_insertionStart = -1;
@@ -1888,7 +1888,7 @@ void CQueueView::LoadQueue()
 			CServerItem *pServerItem = CreateServerItem(server);
 
 			CFileItem* fileItem = 0;
-			wxLongLong_t fileId;
+			int64_t fileId;
 			for (fileId = m_queue_storage.GetFile(&fileItem, id); fileItem; fileId = m_queue_storage.GetFile(&fileItem, 0))
 			{
 				fileItem->SetParent(pServerItem);

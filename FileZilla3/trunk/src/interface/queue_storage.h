@@ -33,10 +33,10 @@ public:
 	// > 0 = server id
 	//   0 = No server
 	// < 0 = failure.
-	wxLongLong_t GetServer(CServer& server, bool fromBeginning);
+	int64_t GetServer(CServer& server, bool fromBeginning);
 	CServer GetNextServer();
 
-	wxLongLong_t GetFile(CFileItem** pItem, wxLongLong_t server);
+	int64_t GetFile(CFileItem** pItem, int64_t server);
 
 	static wxString GetDatabaseFilename();
 
