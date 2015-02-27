@@ -780,7 +780,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	{
 		const wxString& file(files[i]);
 
-		wxLongLong size;
+		int64_t size;
 		bool is_link;
 		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(file, is_link, &size, 0, 0);
 		if (type == CLocalFileSystem::file)
