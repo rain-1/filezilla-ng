@@ -1029,20 +1029,19 @@ wxString CEditHandler::TruncateFilename(const wxString path, const wxString& nam
 
 bool CEditHandler::FilenameExists(const wxString& file)
 {
-	for (std::list<t_fileData>::const_iterator iter = m_fileDataList[remote].begin(); iter != m_fileDataList[remote].end(); ++iter)
-	{
-#ifdef __WXMSW__
-		if (!iter->file.CmpNoCase(file))
-#else
-		if (iter->file == file)
-#endif
+	for (auto const& fileData : m_fileDataList[remote]) {
+		// Always ignore case, we don't know which type of filesystem the user profile
+		// is installed upon.
+		if (!fileData.file.CmpNoCase(file))
 			return true;
 	}
 
-	if (wxFileName::FileExists(file))
-	{
+	if (wxFileName::FileExists(file)) {
 		// Save to remove, it's not marked as edited anymore.
-		wxRemoveFile(file);
+		{
+			wxLogNull log;
+			wxRemoveFile(file);
+		}
 
 		if (wxFileName::FileExists(file))
 			return true;
