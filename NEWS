@@ -15,7 +15,7 @@ Legend:
 + OS X binaries are now 64bit
 + MSW: The installer configures Windows Error Reporting to save minidumps in %LOCALAPPDATA%\CrashDumps if filezilla.exe crashes
 + The updater now submits CPU capabilities when checking for updates. In a future version support for CPUs without SSE2 support will be dropped
-+ In the XMl files, passwords are now base64 encoded
++ In the XML files, passwords are now base64 encoded
 - Fix HTTP proxy handshake if no proxy username is set
 - Fix state of filter toolbar button if dismissing filter dialog
 - At the end of transfers errors writing all downloaded data to disk were not always detected
