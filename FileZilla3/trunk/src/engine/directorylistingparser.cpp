@@ -1845,12 +1845,10 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		// Get date
 		wxString dateMonth = token.GetString();
 		int month = 0;
-		if (!GetMonthFromName(dateMonth, month))
-		{
+		if (!GetMonthFromName(dateMonth, month)) {
 			// OS/2 or nortel.VxWorks
 			int skippedCount = 0;
-			do
-			{
+			do {
 				if (token.GetString() == _T("DIR"))
 					entry.flags |= CDirentry::flag_dir;
 				else if (token.Find(_T("-/.")) != -1)
@@ -1879,16 +1877,14 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			entry.name = token.GetString();
 			wxString type = entry.name.Right(5);
 			MakeLowerAscii(type);
-			if (!skippedCount && type == _T("<dir>"))
-			{
+			if (!skippedCount && type == _T("<dir>")) {
 				entry.flags |= CDirentry::flag_dir;
 				entry.name = entry.name.Left(entry.name.Length() - 5);
-				while (entry.name.Last() == ' ')
+				while (!entry.name.empty() && entry.name.Last() == ' ')
 					entry.name.RemoveLast();
 			}
 		}
-		else
-		{
+		else {
 			// Get day
 			if (!line.GetToken(++index, token))
 				return false;

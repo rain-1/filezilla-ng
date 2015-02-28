@@ -650,7 +650,7 @@ void CLocalListView::DisplayShares(wxString computer)
 	DWORD read, total;
 	DWORD resume_handle = 0;
 
-	if (computer.Last() == '\\')
+	if (!computer.empty() && computer.Last() == '\\')
 		computer.RemoveLast();
 
 	int j = m_fileData.size();
@@ -922,8 +922,6 @@ wxString CLocalListView::MenuMkdir()
 	}
 
 	// Return name of the New Directory
-	// return dlg.GetValue();
-	// return fn.GetDirs().Last();
 	return fn.GetPath();
 }
 

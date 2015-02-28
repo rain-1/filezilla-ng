@@ -784,8 +784,8 @@ wxString CUpdater::GetTempFile() const
 {
 	wxASSERT( !version_information_.available_.hash_.empty() );
 	wxString ret = wxFileName::GetTempDir();
-	if( !ret.empty() ) {
-		if( ret.Last() != wxFileName::GetPathSeparator() ) {
+	if (!ret.empty()) {
+		if (ret.Last() != wxFileName::GetPathSeparator()) {
 			ret += wxFileName::GetPathSeparator();
 		}
 

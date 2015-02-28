@@ -53,8 +53,8 @@ bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned lon
 	WRAPASSERT(text.Find(_T("  ")) == -1);
 	WRAPASSERT(text.Find(_T(" \n")) == -1);
 	WRAPASSERT(text.Find(_T("\n ")) == -1);
-	WRAPASSERT(text.Last() != ' ');
-	WRAPASSERT(text.Last() != '\n');
+	WRAPASSERT(text.empty() || text.Last() != ' ');
+	WRAPASSERT(text.empty() || text.Last() != '\n');
 
 	// See comment at start of WrapText function what this function does
 	wxString wrappedText;
@@ -127,7 +127,7 @@ bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned lon
 			if (lineLength > maxLength && wrappable)
 			{
 				wxString tmp = wxString(str, wrappable - str);
-				if (tmp.Last() == ' ')
+				if (!tmp.empty() && tmp.Last() == ' ')
 					tmp.RemoveLast();
 				wrappedText += tmp + _T("\n");
 				if (*wrappable != ' ')
@@ -163,8 +163,8 @@ bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned lon
 	wxASSERT(temp.Find(_T("  ")) == -1);
 	wxASSERT(temp.Find(_T(" \n")) == -1);
 	wxASSERT(temp.Find(_T("\n ")) == -1);
-	wxASSERT(temp.Last() != ' ');
-	wxASSERT(temp.Last() != '\n');
+	wxASSERT(temp.empty() || temp.Last() != ' ');
+	wxASSERT(temp.empty() || temp.Last() != '\n');
 	temp.Replace(_T("&"), _T(""));
 	while (!temp.empty())
 	{

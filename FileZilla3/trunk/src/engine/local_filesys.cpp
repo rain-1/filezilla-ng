@@ -41,8 +41,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileType(const wxString& p
 
 	return file;
 #else
-	if (path.Last() == '/' && path != _T("/"))
-	{
+	if (!path.empty() && path.Last() == '/' && path != _T("/")) {
 		wxString tmp = path;
 		tmp.RemoveLast();
 		return GetFileType(tmp);
@@ -93,7 +92,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	wxChar* p = pBuffer;
 
 	for (auto& dir : dirsToVisit) {
-		if (dir.Last() == wxFileName::GetPathSeparator())
+		if (!dir.empty() && dir.Last() == wxFileName::GetPathSeparator())
 			dir.RemoveLast();
 		if (GetFileType(dir) == unknown)
 			continue;
@@ -130,7 +129,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	}
 
 	for (auto& dir : dirsToVisit) {
-		if (dir.Last() == '/' && dir != _T("/"))
+		if (!dir.empty() && dir.Last() == '/' && dir != _T("/"))
 			dir.RemoveLast();
 	}
 
@@ -198,7 +197,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, CDateTime* modificationTime, int *mode)
 {
 #ifdef __WXMSW__
-	if (path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
+	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
 		wxString tmp = path;
 		tmp.RemoveLast();
 		return GetFileInfo(tmp, isLink, size, modificationTime, mode);
@@ -279,8 +278,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 		return file;
 	}
 #else
-	if (path.Last() == '/' && path != _T("/"))
-	{
+	if (!path.empty() && path.Last() == '/' && path != _T("/")) {
 		wxString tmp = path;
 		tmp.RemoveLast();
 		return GetFileInfo(tmp, isLink, size, modificationTime, mode);
@@ -393,6 +391,10 @@ bool CLocalFileSystem::ConvertCDateTimeToFileTime(FILETIME &ft, CDateTime const&
 
 bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
 {
+	if (path.empty()) {
+		return false;
+	}
+
 	EndFindFiles();
 
 	m_dirs_only = dirs_only;

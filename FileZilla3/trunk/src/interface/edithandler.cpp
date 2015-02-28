@@ -1498,28 +1498,24 @@ void CNewAssociationDialog::OnOK(wxCommandEvent& event)
 	const bool custom = XRCCTRL(*this, "ID_USE_CUSTOM", wxRadioButton)->GetValue();
 	const bool always = XRCCTRL(*this, "ID_ALWAYS", wxCheckBox)->GetValue();
 
-	if (custom)
-	{
+	if (custom) {
 		wxString cmd = XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->GetValue();
 		wxString editor = cmd;
 		wxString args;
-		if (!UnquoteCommand(editor, args) || editor.empty())
-		{
+		if (!UnquoteCommand(editor, args) || editor.empty()) {
 			wxMessageBoxEx(_("You need to enter a properly quoted command."), _("Cannot set file association"), wxICON_EXCLAMATION);
 			return;
 		}
-		if (!ProgramExists(editor))
-		{
+		if (!ProgramExists(editor)) {
 			wxMessageBoxEx(_("Selected editor does not exist."), _("Cannot set file association"), wxICON_EXCLAMATION, this);
 			return;
 		}
 
 		if (always)
 			COptions::Get()->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + cmd);
-		else
-		{
+		else {
 			wxString associations = COptions::Get()->GetOption(OPTION_EDIT_CUSTOMASSOCIATIONS);
-			if (associations.Last() != '\n')
+			if (!associations.empty() && associations.Last() != '\n')
 				associations += '\n';
 			if (m_ext.empty())
 				m_ext = _T("/");
@@ -1527,18 +1523,15 @@ void CNewAssociationDialog::OnOK(wxCommandEvent& event)
 			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations);
 		}
 	}
-	else
-	{
+	else {
 		if (always)
 			COptions::Get()->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("1"));
-		else
-		{
+		else {
 			bool program_exists = false;
 			wxString cmd = GetSystemOpenCommand(_T("foo.txt"), program_exists);
 			if (!program_exists)
 				cmd.clear();
-			if (!cmd.empty())
-			{
+			if (!cmd.empty()) {
 				wxString args;
 				if (!UnquoteCommand(cmd, args))
 					cmd.clear();
