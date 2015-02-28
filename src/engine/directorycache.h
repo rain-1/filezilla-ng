@@ -99,7 +99,7 @@ protected:
 	typedef std::list<tFullEntryPosition> tLruList;
 	tLruList m_leastRecentlyUsedList;
 
-	wxLongLong_t m_totalFileCount{};
+	int64_t m_totalFileCount{};
 };
 
 #endif

@@ -217,8 +217,17 @@ void CFileZillaApp::InitLocale()
 	}
 }
 
+struct r
+{
+	std::tuple<> foo;
+	std::tuple<> bar;
+	std::tuple<> baz;
+};
+
 bool CFileZillaApp::OnInit()
 {
+	std::tuple<> foo;
+	r g;
 	AddStartupProfileRecord(_T("CFileZillaApp::OnInit()"));
 
 	srand( (unsigned)time( NULL ) );

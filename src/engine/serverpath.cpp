@@ -601,7 +601,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 		else if (was_empty)
 			return false;
 
-		if (dir.Last() == ')') {
+		if (!dir.empty() && dir.Last() == ')') {
 			// Partitioned dataset member
 			if (!isFile)
 				return false;
@@ -630,7 +630,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 					return false;
 				data.m_prefix = CSparseOptional<wxString>(_T("."));
 			}
-			else if (dir.Last() == '.')
+			else if (!dir.empty() && dir.Last() == '.')
 				data.m_prefix = CSparseOptional<wxString>(_T("."));
 			else
 				data.m_prefix.clear();
@@ -804,14 +804,14 @@ wxString CServerPath::FormatFilename(const wxString &filename, bool omitPath /*=
 	switch (m_type)
 	{
 		case VXWORKS:
-			if (!wxString(traits[m_type].separators).Contains(result.Last()) && !m_data->m_segments.empty())
+			if (!result.empty() && !wxString(traits[m_type].separators).Contains(result.Last()) && !m_data->m_segments.empty())
 				result += traits[m_type].separators[0];
 			break;
 		case VMS:
 		case MVS:
 			break;
 		default:
-			if (!wxString(traits[m_type].separators).Contains(result.Last()))
+			if (!result.empty() && !wxString(traits[m_type].separators).Contains(result.Last()))
 				result += traits[m_type].separators[0];
 			break;
 	}
@@ -942,36 +942,29 @@ wxString CServerPath::FormatSubdir(const wxString &subdir) const
 bool CServerPath::Segmentize(wxString str, tSegmentList& segments)
 {
 	bool append = false;
-	while (!str.empty())
-	{
+	while (!str.empty()) {
 		wxString segment;
 		int pos = str.find_first_of(traits[m_type].separators);
-		if (pos == -1)
-		{
+		if (pos == -1) {
 			segment = str,
 			str.clear();
 		}
-		else if (!pos)
-		{
+		else if (!pos) {
 			str = str.Mid(1);
 			continue;
 		}
-		else
-		{
+		else {
 			segment = str.Left(pos);
 			str = str.Mid(pos + 1);
 		}
 
-		if (traits[m_type].has_dots)
-		{
+		if (traits[m_type].has_dots) {
 			if (segment == _T("."))
 				continue;
-			else if (segment == _T(".."))
-			{
+			else if (segment == _T("..")) {
 				if (segments.empty())
 					return false;
-				else
-				{
+				else {
 					segments.pop_back();
 					continue;
 				}
@@ -979,8 +972,7 @@ bool CServerPath::Segmentize(wxString str, tSegmentList& segments)
 		}
 
 		bool append_next = false;
-		if (traits[m_type].separatorEscape && segment.Last() == traits[m_type].separatorEscape)
-		{
+		if (!segment.empty() && traits[m_type].separatorEscape && segment.Last() == traits[m_type].separatorEscape) {
 			append_next = true;
 			segment.RemoveLast();
 			segment += traits[m_type].separators[0];

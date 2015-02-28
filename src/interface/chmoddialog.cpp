@@ -324,8 +324,7 @@ bool CChmodDialog::ConvertPermissions(wxString rwx, char* permissions)
 		return false;
 
 	int pos = rwx.Find('(');
-	if (pos != -1 && rwx.Last() == ')')
-	{
+	if (pos != -1 && rwx.Last() == ')') {
 		// MLSD permissions:
 		//   foo (0644)
 		rwx.RemoveLast();

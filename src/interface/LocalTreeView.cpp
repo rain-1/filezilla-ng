@@ -610,39 +610,33 @@ wxString CLocalTreeView::GetDirFromItem(wxTreeItemId item)
 	while (item)
 	{
 #ifdef __WXMSW__
-		if (item == m_desktop)
-		{
+		if (item == m_desktop) {
 			wxChar path[MAX_PATH + 1];
-			if (SHGetFolderPath(0, CSIDL_DESKTOPDIRECTORY, 0, SHGFP_TYPE_CURRENT, path) != S_OK)
-			{
-				if (SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, path) != S_OK)
-				{
+			if (SHGetFolderPath(0, CSIDL_DESKTOPDIRECTORY, 0, SHGFP_TYPE_CURRENT, path) != S_OK) {
+				if (SHGetFolderPath(0, CSIDL_DESKTOP, 0, SHGFP_TYPE_CURRENT, path) != S_OK) {
 					wxMessageBoxEx(_("Failed to get desktop path"));
 					return _T("/");
 				}
 			}
 			dir = path;
-			if (dir.Last() != separator)
+			if (dir.empty() || dir.Last() != separator)
 				dir += separator;
 			return dir;
 		}
-		else if (item == m_documents)
-		{
+		else if (item == m_documents) {
 			wxChar path[MAX_PATH + 1];
-			if (SHGetFolderPath(0, CSIDL_PERSONAL, 0, SHGFP_TYPE_CURRENT, path) != S_OK)
-			{
+			if (SHGetFolderPath(0, CSIDL_PERSONAL, 0, SHGFP_TYPE_CURRENT, path) != S_OK) {
 				wxMessageBoxEx(_("Failed to get 'My Documents' path"));
 				return _T("/");
 			}
 			dir = path;
-			if (dir.Last() != separator)
+			if (dir.empty() || dir.Last() != separator)
 				dir += separator;
 			return dir;
 		}
 		else if (item == m_drives)
 			return _T("/");
-		else if (GetItemParent(item) == m_drives)
-		{
+		else if (GetItemParent(item) == m_drives) {
 			wxString text = GetItemText(item);
 			int pos = text.Find(_T(" "));
 			if (pos == -1)
@@ -909,14 +903,14 @@ void CLocalTreeView::OnBeginDrag(wxTreeEvent& event)
 		return;
 
 #ifdef __WXMSW__
-	if (dir.Last() == '\\')
+	if (!dir.empty() && dir.Last() == '\\')
 		dir.RemoveLast();
 #endif
-	if (dir.Last() == '/')
+	if (!dir.empty() && dir.Last() == '/')
 		dir.RemoveLast();
 
 #ifdef __WXMSW__
-	if (dir.Last() == ':')
+	if (!dir.empty() && dir.Last() == ':')
 		return;
 #endif
 
@@ -1229,7 +1223,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 		return;
 	}
 
-	if (path.Last() == wxFileName::GetPathSeparator())
+	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator())
 		path.RemoveLast();
 	int pos = path.Find(wxFileName::GetPathSeparator(), true);
 	if (pos < 1)
@@ -1266,8 +1260,7 @@ void CLocalTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 
 void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 {
-	if (event.IsEditCancelled())
-	{
+	if (event.IsEditCancelled()) {
 		event.Veto();
 		return;
 	}
@@ -1275,8 +1268,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	wxTreeItemId item = event.GetItem();
 
 #ifdef __WXMSW__
-	if (item == m_desktop || item == m_documents)
-	{
+	if (item == m_desktop || item == m_documents) {
 		wxBell();
 		event.Veto();
 		return;
@@ -1286,14 +1278,13 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	wxString path = GetDirFromItem(item);
 
 	CLocalPath local_path(path);
-	if (!local_path.HasParent() || !local_path.IsWriteable())
-	{
+	if (!local_path.HasParent() || !local_path.IsWriteable()) {
 		wxBell();
 		event.Veto();
 		return;
 	}
 
-	if (path.Last() == wxFileName::GetPathSeparator())
+	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator())
 		path.RemoveLast();
 
 	int pos = path.Find(wxFileName::GetPathSeparator(), true);
@@ -1303,8 +1294,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 	const wxString& oldName = GetItemText(item);
 	const wxString& newName = event.GetLabel();
-	if (newName.empty())
-	{
+	if (newName.empty()) {
 		wxBell();
 		event.Veto();
 		return;
@@ -1332,8 +1322,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		return;
 	}
 
-	if (item == currentSel)
-	{
+	if (item == currentSel) {
 		m_pState->SetLocalDir(parent + newName);
 		return;
 	}
@@ -1341,14 +1330,12 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	wxString sub;
 
 	wxTreeItemId tmp = currentSel;
-	while (tmp != GetRootItem() && tmp != item)
-	{
+	while (tmp != GetRootItem() && tmp != item) {
 		sub = wxFileName::GetPathSeparator() + GetItemText(tmp) + sub;
 		tmp = GetItemParent(tmp);
 	}
 
-	if (tmp == GetRootItem())
-	{
+	if (tmp == GetRootItem()) {
 		// Rename unrelated to current selection
 		return;
 	}
@@ -1394,24 +1381,21 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 	}
 #endif
 
-	if (child)
-	{
+	if (child) {
 		if (!GetItemText(child).empty())
 			return false;
 
 		CTreeItemData* pData = (CTreeItemData*)GetItemData(child);
-		if (pData)
-		{
+		if (pData) {
 			bool wasLink;
 			int attributes;
 			enum CLocalFileSystem::local_fileType type;
 			CDateTime date;
-			if (path.Last() == CLocalFileSystem::path_separator)
+			if (!path.empty() && path.Last() == CLocalFileSystem::path_separator)
 				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
 			else
 				type = CLocalFileSystem::GetFileInfo(path + CLocalFileSystem::path_separator + pData->m_known_subdir, wasLink, 0, &date, &attributes);
-			if (type == CLocalFileSystem::dir)
-			{
+			if (type == CLocalFileSystem::dir) {
 				CFilterManager filter;
 				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes, date))
 					return true;
@@ -1420,8 +1404,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 	}
 
 	wxString sub = HasSubdir(path);
-	if (!sub.empty())
-	{
+	if (!sub.empty()) {
 		wxTreeItemId subItem = AppendItem(item, _T(""));
 		SetItemData(subItem, new CTreeItemData(sub));
 	}
@@ -1437,8 +1420,7 @@ void CLocalTreeView::OnDevicechange(WPARAM wParam, LPARAM lParam)
 	if (!m_drives)
 		return;
 
-	if (wParam == DBT_DEVICEARRIVAL || wParam == DBT_DEVICEREMOVECOMPLETE)
-	{
+	if (wParam == DBT_DEVICEARRIVAL || wParam == DBT_DEVICEREMOVECOMPLETE) {
 		DEV_BROADCAST_HDR* pHdr = (DEV_BROADCAST_HDR*)lParam;
 		if (pHdr->dbch_devicetype != DBT_DEVTYP_VOLUME)
 			return;
@@ -1448,18 +1430,14 @@ void CLocalTreeView::OnDevicechange(WPARAM wParam, LPARAM lParam)
 
 		wxChar drive = 'A';
 		int mask = 1;
-		while (drive <= 'Z')
-		{
-			if (pVolume->dbcv_unitmask & mask)
-			{
+		while (drive <= 'Z') {
+			if (pVolume->dbcv_unitmask & mask) {
 				if (wParam == DBT_DEVICEARRIVAL)
 					AddDrive(drive);
-				else
-				{
+				else {
 					RemoveDrive(drive);
 
-					if (pVolume->dbcv_flags & DBTF_MEDIA)
-					{
+					if (pVolume->dbcv_flags & DBTF_MEDIA) {
 						// E.g. disk removed from CD-ROM drive, need to keep the drive letter
 						AddDrive(drive);
 					}
