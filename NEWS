@@ -18,12 +18,12 @@ Legend:
 + In the XML files, passwords are now base64 encoded
 - Fix HTTP proxy handshake if no proxy username is set
 - Fix state of filter toolbar button if dismissing filter dialog
-- At the end of transfers errors writing all downloaded data to disk were not always detected
+- At the end of transfers, errors writing all downloaded data to disk were not always detected
 
 3.10.2-rc1 (2015-02-21)
 
 + When reopening files already being edited, preselect the previously used selection
-+ The suject area in the certificate verification can now be scrolled if the certificate contains many alternative names
++ The subject area in the certificate verification can now be scrolled if the certificate contains many alternative names
 + Many performance improvements
 - Fixed display of total transfer size in message log for SFTP transfers
 - MSW: Fixed sorting of sites in Site Manager
@@ -31,7 +31,7 @@ Legend:
 - Fixed bug in GnuTLS where the AES-NI instruction set wasn't always used when available
 - Refresh directory trees if sort mode changes
 - Fix potential crash if disconnecting during ongoing transfers
-- Fix updating the transfer progress bar When uploading files via SFTP with a low speed limit set
+- Fix updating the transfer progress bar when uploading files via SFTP with a low speed limit set
 
 3.10.1.1 (2015-02-01)
 
