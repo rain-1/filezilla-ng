@@ -2385,24 +2385,29 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 		return false;
 
 	int start = ++index;
-	while (line.GetToken(index, token))
-	{
+	while (line.GetToken(index, token)) {
 		++index;
 	}
 	if ((index - start < 2))
 		return false;
 	--index;
 
-	line.GetToken(index, token);
+	if (!line.GetToken(index, token)) {
+		return false;
+	}
 	if (!token.IsNumeric() && (token.GetString() != _T("ANY")))
 		return false;
 
-	line.GetToken(index - 1, token);
+	if (!line.GetToken(index - 1, token)) {
+		return false;
+	}
 	if (!token.IsNumeric() && (token.GetString() != _T("ANY")))
 		return false;
 
 	for (int i = start; i < index - 1; ++i) {
-		line.GetToken(i, token);
+		if (!line.GetToken(i, token)) {
+			return false;
+		}
 		int len = token.GetLength();
 		for (int j = 0; j < len; ++j)
 			if (token[j] < 'A' || token[j] > 'Z')
