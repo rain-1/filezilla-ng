@@ -1,3 +1,5 @@
+#include <libfilezilla.h>
+
 #include <event_loop.h>
 
 #include <cppunit/extensions/HelperMacros.h>
