@@ -1,7 +1,7 @@
 #ifndef __TIMEEX_H__
 #define __TIMEEX_H__
 
-#include <wx/timer.h>
+#include <wx/time.h>
 
 #include <chrono>
 
