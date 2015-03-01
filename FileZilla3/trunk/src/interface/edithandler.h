@@ -62,7 +62,7 @@ public:
 		wxLongLong size;
 	};
 	bool Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, CServer const& server, wxWindow* parent);
-	
+
 	// Adds the file that doesn't exist yet. (Has to be in unknown state)
 	// The initial state will be download
 	bool AddFile(enum fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server);

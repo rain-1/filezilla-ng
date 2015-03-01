@@ -978,7 +978,7 @@ void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
 		}
 
 		ChangeSocketEventHandler(m_pEvtHandler, pEvtHandler, this);
-		
+
 		m_pEvtHandler = pEvtHandler;
 
 		if (pEvtHandler && m_state == connected) {
@@ -1318,8 +1318,8 @@ wxString CSocket::AddressToString(char const* buf, int buf_len)
 		memcpy(&addr.in4.sin_addr, buf, buf_len);
 		addr.in4.sin_family = AF_INET;
 	}
-	
-	
+
+
 	return AddressToString(&addr.sockaddr, sizeof(addr), false, true);
 }
 
