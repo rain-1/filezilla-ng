@@ -160,7 +160,7 @@ void CToolBar::OnOptionsChanged(changed_options_t const& options)
 			ShowTool(XRCID("ID_TOOLBAR_LOGVIEW"));
 			ToggleTool(XRCID("ID_TOOLBAR_LOGVIEW"), COptions::Get()->GetOptionVal(OPTION_SHOW_MESSAGELOG) != 0);
 		}
-	}	
+	}
 }
 
 bool CToolBar::ShowTool(int id)

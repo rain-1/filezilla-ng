@@ -320,7 +320,7 @@ public:
 		wxString const& issuer,
 		wxString const& subject,
 		std::vector<wxString> const& altSubjectNames);
-	
+
 	CCertificate(CCertificate const& op);
 	~CCertificate();
 
