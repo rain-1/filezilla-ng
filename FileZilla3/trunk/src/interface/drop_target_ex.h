@@ -2,6 +2,7 @@
 #define FILEZILLA_DROP_TARGET_EX_HEADER
 
 #include <wx/dnd.h>
+#include <wx/timer.h>
 
 template<class Control>
 class CScrollableDropTarget : public wxEvtHandler, public wxDropTarget

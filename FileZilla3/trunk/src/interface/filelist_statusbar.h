@@ -3,6 +3,8 @@
 
 #include <option_change_event_handler.h>
 
+#include <wx/timer.h>
+
 class CFilelistStatusBar : public wxStatusBar, protected COptionChangeEventHandler
 {
 public:
