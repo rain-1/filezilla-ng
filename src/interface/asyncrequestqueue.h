@@ -1,6 +1,8 @@
 #ifndef __ASYNCREQUESTQUEUE_H__
 #define __ASYNCREQUESTQUEUE_H__
 
+#include <wx/timer.h>
+
 class CMainFrame;
 class CQueueView;
 class CVerifyCertDialog;

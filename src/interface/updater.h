@@ -3,6 +3,8 @@
 
 #if FZ_MANUALUPDATECHECK
 
+#include <wx/timer.h>
+
 struct build
 {
 	wxString url_;

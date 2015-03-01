@@ -3,6 +3,8 @@
 
 #include "dialogex.h"
 
+#include <wx/timer.h>
+
 // Handles all aspects about remote file viewing/editing
 
 namespace edit_choices {

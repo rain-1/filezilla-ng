@@ -1,7 +1,8 @@
 #ifndef __LED_H__
 #define __LED_H__
 
-#include "wx/event.h"
+#include <wx/event.h>
+#include <wx/timer.h>
 
 DECLARE_EVENT_TYPE(fzEVT_UPDATE_LED_TOOLTIP, -1)
 

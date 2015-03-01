@@ -5,6 +5,8 @@
 #include "richedit.h"
 #endif
 
+#include <wx/timer.h>
+
 class CFastTextCtrl;
 class CStatusView : public wxNavigationEnabled<wxWindow>
 {

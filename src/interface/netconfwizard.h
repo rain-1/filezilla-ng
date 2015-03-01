@@ -5,6 +5,7 @@
 #include "wrapengine.h"
 #include "externalipresolver.h"
 #include <wx/socket.h>
+#include <wx/timer.h>
 
 #define NETCONFBUFFERSIZE 100
 
