@@ -7,6 +7,8 @@
 
 #include <mutex.h>
 
+#include <wx/timer.h>
+
 enum interfaceOptions
 {
 	OPTION_NUMTRANSFERS = OPTIONS_ENGINE_NUM,
