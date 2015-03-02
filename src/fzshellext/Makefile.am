@@ -3,6 +3,7 @@ CLEANFILES = fzshellext.o
 lib_LTLIBRARIES = libfzshellext.la
 
 libfzshellext_la_SOURCES = shellext.cpp
+libfzshellext_la_CXXFLAGS = $(AM_CXXFLAGS) -fno-exceptions -fno-rtti
 
 if USE_RESOURCEFILE
 RESOURCEFILE = -Wl,fzshellext.o

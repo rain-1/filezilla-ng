@@ -49,16 +49,19 @@
 #include <time.h>
 #include "shellext.h"
 #include <tchar.h>
+#include <cstdint>
 
 //---------------------------------------------------------------------------
 #ifdef DEBUG
 #define DEBUG_MSG(MSG) Debug(MSG)
 #define DEBUG_MSG_W(MSG) DebugW(MSG)
 #define DEBUG_LOG_VERSION(MSG) LogVersion(MSG)
+#define DEBUG_INIT(KEY) DebugInit(KEY)
 #else
 #define DEBUG_MSG(MSG)
 #define DEBUG_MSG_W(MSG)
 #define DEBUG_LOG_VERSION(MSG)
+#define DEBUG_INIT(KEY)
 #endif
 
 //---------------------------------------------------------------------------
@@ -67,6 +70,30 @@
 #define DRAG_EXT_NAME   _T("FileZilla 3 Shell Extension")
 #define THREADING_MODEL _T("Apartment")
 #define CLSID_SIZE 39
+
+void* operator new(std::size_t count)
+{
+	return malloc(count);
+}
+
+void* operator new[](std::size_t count)
+{
+	return malloc(count);
+}
+
+void operator delete(void* ptr)
+{
+	if (ptr) {
+		free(ptr);
+	}
+}
+
+void operator delete[](void* ptr)
+{
+	if (ptr) {
+		free(ptr);
+	}
+}
 
 //---------------------------------------------------------------------------
 class CShellExtClassFactory : public IClassFactory
@@ -89,7 +116,7 @@ protected:
 };
 
 //---------------------------------------------------------------------------
-class CShellExt : public IShellExtInit, ICopyHookW
+class CShellExt final : public IShellExtInit, ICopyHookW
 {
 public:
 	CShellExt();
@@ -118,13 +145,15 @@ protected:
 namespace {
 unsigned int GRefThisDll = 0;
 bool GEnabled = false;
-char GLogFile[MAX_PATH] = "";
-bool GLogOn = false;
-FILE* GLogHandle = NULL;
-HANDLE GLogMutex = 0;
 HINSTANCE GInstance;
 
 //---------------------------------------------------------------------------
+#ifdef DEBUG
+bool GLogOn = false;
+FILE* GLogHandle = NULL;
+char GLogFile[MAX_PATH] = "";
+HANDLE GLogMutex = 0;
+
 void Debug(const char* Message)
 {
 	if (!GLogOn)
@@ -171,18 +200,20 @@ void DebugW(const wchar_t* Message)
 
 	int bytes = WideCharToMultiByte(CP_UTF8, 0, Message, -1, 0, 0, 0, 0);
 	if (bytes <= 0) {
-		Debug("WideCharToMultiByte failed");
+		DEBUG_MSG("WideCharToMultiByte failed");
 		return;
 	}
 	char *buffer = new char[bytes + 1];
-	int written = WideCharToMultiByte(CP_UTF8, 0, Message, -1, buffer, bytes, 0, 0);
-	if (!written)
-		Debug("WideCharToMultiByte failed");
-	else {
-		buffer[written] = 0;
-		Debug(buffer);
+	if (buffer) {
+		int written = WideCharToMultiByte(CP_UTF8, 0, Message, -1, buffer, bytes, 0, 0);
+		if (!written)
+			DEBUG_MSG("WideCharToMultiByte failed");
+		else {
+			buffer[written] = 0;
+			Debug(buffer);
+		}
+		delete[] buffer;
 	}
-	delete [] buffer;
 }
 
 //---------------------------------------------------------------------------
@@ -205,8 +236,11 @@ void LogVersion(HINSTANCE HInstance)
 		return;
 	}
 
-	char* Info;
-	Info = new char[Size];
+	char* Info = new char[Size];
+	if (!Info) {
+		return;
+	}
+
 	if (!GetFileVersionInfoA(FileName, InfoHandle, Size, Info)) {
 		Debug("LogVersion return: cannot read version info");
 		delete [] Info;
@@ -231,17 +265,35 @@ void LogVersion(HINSTANCE HInstance)
 
 	delete [] Info;
 }
+
+void DebugInit(HKEY Key)
+{
+	unsigned long Type;
+	unsigned long Size;
+
+	Size = sizeof(GLogFile);
+	if ((RegQueryValueExA(Key, "LogFile", NULL, &Type,
+		reinterpret_cast<LPBYTE>(&GLogFile), &Size) == ERROR_SUCCESS) &&
+		(Type == REG_SZ))
+	{
+		GLogFile[sizeof(GLogFile) - 1] = '\0';
+		GLogOn = true;
+	}
+}
+#endif
 }
 
 //---------------------------------------------------------------------------
 extern "C" int APIENTRY
 DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 {
-	if (Reason == DLL_PROCESS_ATTACH) {
+	/*if (Reason == DLL_PROCESS_ATTACH) {
 		GInstance = HInstance;
 
+#ifdef DEBUG
 		if (!GLogMutex)
 			GLogMutex = CreateMutex(NULL, false, _T("FileZilla3DragDropExtLogMutex"));
+#endif
 
 		if (GRefThisDll != 0) {
 			DEBUG_MSG("DllMain return: settings already loaded");
@@ -258,7 +310,6 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 				unsigned long Type;
 				unsigned long Value;
 				unsigned long Size;
-				char Buf[MAX_PATH];
 
 				Size = sizeof(Value);
 				if ((RegQueryValueEx(Key, _T("Enable"), NULL, &Type,
@@ -268,15 +319,7 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 					GEnabled = (Value != 0);
 				}
 
-				Size = sizeof(Buf);
-				if ((RegQueryValueExA(Key, "LogFile", NULL, &Type,
-					reinterpret_cast<LPBYTE>(&Buf), &Size) == ERROR_SUCCESS) &&
-					(Type == REG_SZ))
-				{
-					strncpy(GLogFile, Buf, sizeof(GLogFile));
-					GLogFile[sizeof(GLogFile) - 1] = '\0';
-					GLogOn = true;
-				}
+				DEBUG_INIT(Key);
 
 				RegCloseKey(Key);
 			}
@@ -293,12 +336,14 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 	}
 	else if (Reason == DLL_PROCESS_DETACH) {
 		DEBUG_MSG("DllMain detaching process");
+#ifdef DEBUG
 		if (GLogMutex) {
 			CloseHandle(GLogMutex);
 			GLogMutex = 0;
 		}
+#endif
 	}
-
+	*/
 	return 1;   // ok
 }
 
@@ -321,9 +366,10 @@ STDEXPORTAPI DllGetClassObject(REFCLSID Rclsid, REFIID Riid, LPVOID* PpvOut)
 	{
 		DEBUG_MSG("DllGetClassObject is ShellExtension");
 
-		CShellExtClassFactory* Pcf = new CShellExtClassFactory;
-
-		return Pcf->QueryInterface(Riid, PpvOut);
+		CShellExtClassFactory* pcf = new CShellExtClassFactory;
+		if (pcf) {
+			return pcf->QueryInterface(Riid, PpvOut);
+		}
 	}
 
 	return CLASS_E_CLASSNOTAVAILABLE;
