@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.2 (2015-03-02)
+
+- When finding the local name of a remote file to be edited, use case-insensitive comparison
+- Updated SFTP components from PuTTY
+- MSW: Cleaned up runtime dependencies
+- Fix crash introduced in rc2 when there is no password element for a saved item
+
 3.10.2-rc2 (2015-02-25)
 
 + OS X binaries are now 64bit
