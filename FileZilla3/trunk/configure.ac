@@ -46,8 +46,8 @@ fi
 if ! test "$localesonly" = "yes"; then
 
   if test "X$GCC" = Xyes; then
-    CFLAGS="$CFLAGS -Wall -g -fexceptions"
-    CXXFLAGS="$CXXFLAGS -Wall -g -fexceptions"
+    CFLAGS="$CFLAGS -Wall -g"
+    CXXFLAGS="$CXXFLAGS -Wall -g"
   fi
 
   # Check for C++11 support
