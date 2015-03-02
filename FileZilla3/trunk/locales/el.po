@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: FileZilla Client 3.10.1.1\n"
+"Project-Id-Version: FileZilla Client 3.10.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-02-07 17:47+0200\n"
+"PO-Revision-Date: 2015-02-26 13:57+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -8769,6 +8769,14 @@ msgstr "wxWidgets:"
 
 #~ msgid "(%u%% downloaded)"
 #~ msgstr "(%u%% λήφθηκαν)"
+
+#~ msgid "Connection timed out after %d second of inactivity"
+#~ msgid_plural "Connection timed out after %d seconds of inactivity"
+#~ msgstr[0] "Το χρονικό όριο της σύνδεσης έληξε %d δευτερόλεπτο αδράνειας"
+#~ msgstr[1] "Το χρονικό όριο της σύνδεσης έληξε %d δευτερόλεπτα αδράνειας"
+
+#~ msgid "fzsftp belongs to a different version of FileZilla"
+#~ msgstr "fzsftp ανήκει σε μια διαφορετική έκδοση του FileZilla"
 
 #~ msgid ""
 #~ "A file with that name is already being edited. Do you want to reopen '%s'?"

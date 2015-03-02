@@ -6,10 +6,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: filezilla 3.10.0.2\n"
+"Project-Id-Version: filezilla 3.10.2-rc2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-01-24 16:46+0100\n"
-"PO-Revision-Date: 2015-01-17 14:26+0700\n"
+"POT-Creation-Date: 2015-01-31 14:43+0100\n"
+"PO-Revision-Date: 2015-02-26 15:06+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi_VN\n"
@@ -1238,11 +1238,11 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Tập tin mở trước đó đã bị thay đổi."
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "A file with that name is already being transferred."
 msgstr "Tập tin với tên đó đang truyền đi."
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "Tập tin đó vẫn đang bị biên tập. Làm ơn đóng nó lại và thử lại."
@@ -1473,10 +1473,9 @@ msgid "Already connected"
 msgstr "Đã có kết nối sẵn dùng"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:76
-#, fuzzy
 msgid "Alternative name:"
 msgid_plural "Alternative names:"
-msgstr[0] "Tên bộ &lọc:"
+msgstr[0] "Tên thay thế:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:660
 msgid ""
@@ -1580,7 +1579,7 @@ msgstr "Chỉ áp dụng cho các tập &tin"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:105
 msgid "Archive"
-msgstr "Lưu trữ"
+msgstr "Kho lưu"
 
 #: ../../locales/../src/engine/socket.cpp:1184
 msgid "Argument buffer overflow"
@@ -1673,8 +1672,8 @@ msgstr "Cách dùng cơ bản"
 msgid "Behaviour"
 msgstr "Cách xử lý"
 
-#: ../../locales/../src/interface/edithandler.cpp:1152
-#: ../../locales/../src/interface/edithandler.cpp:1180
+#: ../../locales/../src/interface/edithandler.cpp:1131
+#: ../../locales/../src/interface/edithandler.cpp:1159
 msgid "Being edited"
 msgstr "Đang được sửa chữa"
 
@@ -1835,8 +1834,8 @@ msgstr "Không thể so sánh thư mục, không có kết nối tới máy ch�
 msgid "Cannot create new filter"
 msgstr "Không thể tạo bộ lọc mới"
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
-#: ../../locales/../src/interface/edithandler.cpp:1686
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1665
 #: ../../locales/../src/interface/LocalListView.cpp:1720
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Cannot edit file"
@@ -1844,7 +1843,7 @@ msgstr "Không thể sửa tập tin"
 
 #: ../../locales/../src/interface/LocalListView.cpp:1602
 msgid "Cannot edit file, not connected to any server."
-msgstr "Không thể sửa t��p tin, không kết nối tới máy chủ nào."
+msgstr "Không thể sửa tập tin, không kết nối tới máy chủ nào."
 
 #: ../../locales/../src/interface/LocalListView.cpp:1611
 msgid "Cannot edit file, remote path unknown."
@@ -1899,17 +1898,17 @@ msgstr "Không thể ghi lại bộ lọc"
 msgid "Cannot select filter"
 msgstr "Không thể chọn bộ lọc"
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1509
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "Cannot set file association"
 msgstr "Không thể đặt ứng dụng ràng buộc xử lý tập tin"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "Cannot show dialog"
 msgstr "Không thể hiển thị hộp thoại"
 
-#: ../../locales/../src/interface/edithandler.cpp:1708
+#: ../../locales/../src/interface/edithandler.cpp:1687
 msgid "Cannot view/edit selected file"
 msgstr "Không thể xem/sửa tập tin đã chọn"
 
@@ -2242,7 +2241,7 @@ msgid "Confirm deletion"
 msgstr "Xác nhận khi xóa"
 
 #: ../../locales/../src/engine/local_filesys.cpp:134
-#: ../../locales/../src/interface/edithandler.cpp:1650
+#: ../../locales/../src/interface/edithandler.cpp:1629
 #: ../../locales/../src/interface/LocalListView.cpp:1684
 #: ../../locales/../src/interface/RemoteListView.cpp:1421
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1120
@@ -2521,7 +2520,7 @@ msgstr "Không thể lấy đường dẫn đầy đủ."
 msgid "Could not get reply from fzputtygen."
 msgstr "Không thể nhận trả lời từ fzputtygen."
 
-#: ../../locales/../src/interface/edithandler.cpp:1638
+#: ../../locales/../src/interface/edithandler.cpp:1617
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Could not get temporary directory to download file into."
 msgstr "Không thể nhận thư mục tạm thời từ tập tin tải về vào."
@@ -2856,7 +2855,7 @@ msgstr "&Nhân bản"
 msgid "DOS-like with virtual paths"
 msgstr "Tương tự DOS với kiểu đường dẫn ảo"
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid "Dangerous filetype"
 msgstr "Kiểu tập tin nguy hiểm"
 
@@ -3116,9 +3115,8 @@ msgstr "Khô&ng làm gì cả"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1801
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1856
-#, fuzzy
 msgid "Do the same with &all selected files already being edited"
-msgstr "Tập tin đã chọn đang sửa:"
+msgstr "Thực hiện như vậy với tất &cả các tập tin đã chọn đang được sửa"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1179
 #: ../../locales/../src/interface/Mainfrm.cpp:1201
@@ -3150,9 +3148,8 @@ msgid "Do you really want to send '%s' to the server?"
 msgstr "Bạn có thật sự muốn gửi “%s” lên máy chủ không?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1849
-#, fuzzy
 msgid "Do you want to reopen this file?"
-msgstr "Bạn có thật sự muốn thoát khỏi FileZilla không?"
+msgstr "Bạn có thật sự muốn mở lại tập tin này không?"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3324
 msgid "Documentation"
@@ -3211,7 +3208,7 @@ msgstr ""
 "Tốc độ tải xuống: %s/s\n"
 "Tốc độ tải lên: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1116
 msgid "Downloading"
 msgstr "Đang tải về"
 
@@ -3409,7 +3406,6 @@ msgid "Enter selected directory"
 msgstr "Vào thư mục đã chọn"
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:34
-#, fuzzy
 msgid ""
 "Enter the address of the server.\n"
 "To specify the server protocol, prepend the host with the protocol "
@@ -3427,8 +3423,9 @@ msgstr ""
 "Nhập địa chỉ của máy chủ.\n"
 "Ghi rõ giao thức máy chủ, phần đầu tên máy chủ định nghĩa giao thức. Nếu "
 "không ghi rõ, giao thức mặc định(ftp://) sẽ được dùng.\n"
-"Bạn cũng có thể nhập định dạng đầy đủ URLs theo dạng: //user:pass@host:port "
-"tại đây giá trị trong các trường khác sẽ bị viết đè lên sau đó.\n"
+"Bạn cũng có thể nhập định dạng đầy đủ URLs theo dạng giao_thức: //user:"
+"pass@host:port tại đây giá trị trong các trường khác sẽ bị viết đè lên sau "
+"đó.\n"
 "\n"
 "Các giao thức được hỗ trợ là:\n"
 "- ftp:// cho giao thức FTP thông thường\n"
@@ -3837,7 +3834,7 @@ msgstr "Tập tin đã thay đổi"
 msgid "File lists"
 msgstr "Danh sách các tập tin"
 
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/FileZilla.cpp:675
 #: ../../locales/../src/interface/FileZilla.cpp:760
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
@@ -3920,7 +3917,7 @@ msgstr "Cập nhật FileZilla"
 msgid "Filelist status &bars"
 msgstr "Danh sách tập tin trên t&hanh trạng thái"
 
-#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1101
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:274
 #: ../../locales/../src/interface/RemoteListView.cpp:374
@@ -4045,9 +4042,8 @@ msgstr "Dấu vân tay (SHA-1):"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:89
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:354
-#, fuzzy
 msgid "Fingerprint (SHA-256):"
-msgstr "Dấu vân tay (SHA-1):"
+msgstr "Dấu vân tay (SHA-256):"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:852
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:963
@@ -4145,22 +4141,22 @@ msgstr "Dấu trang toàn cục"
 #: ../../locales/../src/engine/tlssocket.cpp:186
 #, c-format
 msgid "GnuTLS error %d"
-msgstr ""
+msgstr "Lỗi GnuTLS %d"
 
 #: ../../locales/../src/engine/tlssocket.cpp:188
 #, c-format
 msgid "GnuTLS error %d in %s"
-msgstr ""
+msgstr "Lỗi GnuTLS %d trong %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:182
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
-msgstr ""
+msgstr "Lỗi GnuTLS %d trong %s: %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:180
 #, c-format
 msgid "GnuTLS error %d: %s"
-msgstr ""
+msgstr "Lỗi GnuTLS %d : %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:716
 msgid "GnuTLS:"
@@ -4595,7 +4591,6 @@ msgstr "Giá trị cổng sai. Cổng phải có giá trị từ 1 đến 65535.
 
 #: ../../locales/../src/engine/server.cpp:91
 #: ../../locales/../src/interface/quickconnectbar.cpp:122
-#, fuzzy
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
 "ftp:// for normal FTP with optional encryption,\n"
@@ -4606,8 +4601,8 @@ msgstr ""
 "Giao thức đã cho không hợp lệ. Giao thức đúng là:\n"
 "ftp:// cho giao thức FTP thông thường,\n"
 "sftp:// cho giao thức truyền tập tin thông qua SSH,\n"
-"ftps:// cho giao thức FTP thông qua SSL (ẩn) và\n"
-"ftpes://cho giao thức FTP thông qua SSL (rõ ràng)."
+"ftps:// cho giao thức FTP thông qua TLS (ngầm) và\n"
+"ftpes://cho giao thức FTP thông qua TLS (rõ ràng)."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4304
 msgid ""
@@ -4761,8 +4756,8 @@ msgstr "Danh sách:"
 msgid "Lo&west available port:"
 msgstr "Cổn&g thấp nhất có thể:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1170
-#: ../../locales/../src/interface/edithandler.cpp:1424
+#: ../../locales/../src/interface/edithandler.cpp:1149
+#: ../../locales/../src/interface/edithandler.cpp:1403
 msgid "Local"
 msgstr "Máy nội bộ"
 
@@ -5111,7 +5106,7 @@ msgstr "Không có lệnh nào được đưa ra nên bãi bỏ."
 msgid "No external IP address set, trying default."
 msgstr "Không có địa chỉ IP trên Internet được đặt, đang thử mặc định."
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1090
 msgid "No files are currently being edited."
 msgstr "Không có tập tin nào hiện thời đang được biên tập."
 
@@ -5328,8 +5323,8 @@ msgstr "Mở hộp thoại cài đặt của FileZilla"
 msgid "Opened as:"
 msgstr "Mở như là:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1659
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 msgid "Opening failed"
@@ -5519,10 +5514,10 @@ msgstr "Không tìm thấy đường dẫn:"
 msgid "Paths"
 msgstr "Đường dẫn"
 
-#: ../../locales/../src/interface/edithandler.cpp:1149
-#: ../../locales/../src/interface/edithandler.cpp:1292
-#: ../../locales/../src/interface/edithandler.cpp:1391
-#: ../../locales/../src/interface/edithandler.cpp:1404
+#: ../../locales/../src/interface/edithandler.cpp:1128
+#: ../../locales/../src/interface/edithandler.cpp:1271
+#: ../../locales/../src/interface/edithandler.cpp:1370
+#: ../../locales/../src/interface/edithandler.cpp:1383
 msgid "Pending removal"
 msgstr "Loại bỏ lệnh còn chờ"
 
@@ -6108,7 +6103,7 @@ msgstr "Rec&urse vào thư mục con"
 #: ../../locales/../src/engine/tlssocket.cpp:199
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
-msgstr ""
+msgstr "Nhận được cảnh báo TLS từ máy phục vụ: %s (%d)"
 
 #: ../../locales/../src/engine/directorylistingparser.cpp:3070
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
@@ -6130,9 +6125,9 @@ msgid "Received invalid character in version information"
 msgstr "Có ký tự không hợp lệ trong thông tin về phiên bản"
 
 #: ../../locales/../src/engine/tlssocket.cpp:202
-#, fuzzy, c-format
+#, c-format
 msgid "Received unknown TLS alert %d from the server"
-msgstr "Bạn có thực sự muốn xóa %d tập tin từ máy chủ không?"
+msgstr "Nhận được cảnh báo TLS chưa biết %d từ máy chủ"
 
 #: ../../locales/../src/interface/updater.cpp:509
 msgid "Received version information is too large"
@@ -6175,7 +6170,7 @@ msgstr "Làm mới lại danh sách tập tin và thư mục"
 msgid "Remember passwords?"
 msgstr "Nhớ mật khẩu?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1112
 msgid "Remote"
 msgstr "Máy trên mạng"
 
@@ -6200,7 +6195,7 @@ msgstr "Tìm kiếm tập tin máy mạng"
 msgid "Remote filters:"
 msgstr "Bộ lọc máy mạng:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1124
+#: ../../locales/../src/interface/edithandler.cpp:1103
 msgid "Remote path"
 msgstr "Đường dẫn máy mạng"
 
@@ -6475,7 +6470,7 @@ msgstr ""
 "Chọn hành động thực thi mặc định nếu tập tin đích của việc truyền tập tin đã "
 "sẵn có từ trước."
 
-#: ../../locales/../src/interface/edithandler.cpp:1594
+#: ../../locales/../src/interface/edithandler.cpp:1573
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Chọn trình soạn thảo mặc định"
@@ -6594,8 +6589,8 @@ msgstr "Chọn %s và %s. Kích thước tổng cộng: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Đã chọn %s và %s. Kích thước tổng cộng ít nhất là: %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1535
-#: ../../locales/../src/interface/edithandler.cpp:1614
+#: ../../locales/../src/interface/edithandler.cpp:1514
+#: ../../locales/../src/interface/edithandler.cpp:1593
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Trình soạn thảo bạn chọn không sẵn có."
@@ -6609,11 +6604,11 @@ msgstr "Tập tin bạn chọn đang bị biên tập"
 msgid "Selected file is already loaded"
 msgstr "Tập tin đã chọn đã được tải"
 
-#: ../../locales/../src/interface/edithandler.cpp:1712
+#: ../../locales/../src/interface/edithandler.cpp:1691
 msgid "Selected file is already opened"
 msgstr "Tập tin đã chọn đã được mở"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid "Selected file is still being edited"
 msgstr "Tập tin đã chọn vẫn còn bị chỉnh sửa"
 
@@ -7050,7 +7045,7 @@ msgstr "Bắt đầu địa chỉ trong đường dẫn đã cho"
 msgid "State or province:"
 msgstr "Bang hoặc tỉnh:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1125
+#: ../../locales/../src/interface/edithandler.cpp:1104
 #: ../../locales/../src/interface/queue.cpp:1191
 msgid "Status"
 msgstr "Tình trạng"
@@ -7262,7 +7257,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Không thể thiết lập kết nối dữ liệu: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2895
-#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1553
 msgid "The default editor for text files could not be found."
 msgstr "Không tìm thấy trình soạn thảo mặc định cho tập tin văn bản."
 
@@ -7293,7 +7288,7 @@ msgstr ""
 "Tập tin %s sẵn có trước rồi.\n"
 "Xin hãy nhập một cái tên mới:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1685
+#: ../../locales/../src/interface/edithandler.cpp:1664
 #: ../../locales/../src/interface/LocalListView.cpp:1719
 #, c-format
 msgid ""
@@ -7315,7 +7310,7 @@ msgstr "Tập tin “%s” không thể tải được hoặc không chứa khó
 msgid "The file '%s' could not be loaded."
 msgstr "Tập tin “%s” không thể tải lên được."
 
-#: ../../locales/../src/interface/edithandler.cpp:1680
+#: ../../locales/../src/interface/edithandler.cpp:1659
 #: ../../locales/../src/interface/LocalListView.cpp:1715
 #, c-format
 msgid ""
@@ -7325,7 +7320,7 @@ msgstr ""
 "Tập tin “%s” không thể mở được:\n"
 "Không có chương trình ràng xử lý kiểu tập tin này trong hệ điều hành của bạn."
 
-#: ../../locales/../src/interface/edithandler.cpp:1774
+#: ../../locales/../src/interface/edithandler.cpp:1753
 #: ../../locales/../src/interface/LocalListView.cpp:1727
 #, c-format
 msgid ""
@@ -7481,14 +7476,13 @@ msgstr "Tập tin đã chọn chứa dữ liệu có thể nhập vào cho thể
 msgid "The selected file is already being edited:"
 msgstr "Tập tin đã chọn đang sửa:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1761
+#: ../../locales/../src/interface/edithandler.cpp:1740
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr ""
 "Tập tin đã chọn vẫn đang mở ở chương trình khác, xin hãy đóng chúng lại."
 
-#: ../../locales/../src/interface/edithandler.cpp:1690
-#, fuzzy
+#: ../../locales/../src/interface/edithandler.cpp:1669
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
@@ -7812,7 +7806,7 @@ msgid "Try again"
 msgstr "Thử lại"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2568
-#: ../../locales/../src/interface/edithandler.cpp:1123
+#: ../../locales/../src/interface/edithandler.cpp:1102
 msgid "Type"
 msgstr "Kiểu"
 
@@ -7855,8 +7849,8 @@ msgstr "Mã lỗi sai không xác định %d"
 msgid "Unit:"
 msgstr "Đơn vị:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1155
-#: ../../locales/../src/interface/edithandler.cpp:1183
+#: ../../locales/../src/interface/edithandler.cpp:1134
+#: ../../locales/../src/interface/edithandler.cpp:1162
 msgid "Unknown"
 msgstr "Không rõ"
 
@@ -7940,7 +7934,7 @@ msgstr "Cập nhật"
 msgid "Upload"
 msgstr "Tải lên"
 
-#: ../../locales/../src/interface/edithandler.cpp:1146
+#: ../../locales/../src/interface/edithandler.cpp:1125
 msgid "Upload failed"
 msgstr "Tải lên gặp lỗi"
 
@@ -7969,19 +7963,19 @@ msgstr "Tải lên tập tin này lại cho máy chủ không?"
 msgid "Upload this file to the server?"
 msgstr "Bạn muốn tải tập tin lên máy chủ phải không?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1140
-#: ../../locales/../src/interface/edithandler.cpp:1174
-#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1119
+#: ../../locales/../src/interface/edithandler.cpp:1153
+#: ../../locales/../src/interface/edithandler.cpp:1318
 msgid "Uploading"
 msgstr "Đang tải lên"
 
-#: ../../locales/../src/interface/edithandler.cpp:1143
-#: ../../locales/../src/interface/edithandler.cpp:1341
+#: ../../locales/../src/interface/edithandler.cpp:1122
+#: ../../locales/../src/interface/edithandler.cpp:1320
 msgid "Uploading and pending removal"
 msgstr "Đang tải lên và đang chờ bị bỏ đi"
 
-#: ../../locales/../src/interface/edithandler.cpp:1177
-#: ../../locales/../src/interface/edithandler.cpp:1343
+#: ../../locales/../src/interface/edithandler.cpp:1156
+#: ../../locales/../src/interface/edithandler.cpp:1322
 msgid "Uploading and unediting"
 msgstr "Đang tải lên và không biên tập"
 
@@ -8302,7 +8296,7 @@ msgstr "Bạn đã không nhập tên mới cho tập tin. Ghi đè lên tập t
 msgid "You have selected at least one symbolic link."
 msgstr "Bạn phải chọn ít nhất một liên kết mềm."
 
-#: ../../locales/../src/interface/edithandler.cpp:1651
+#: ../../locales/../src/interface/edithandler.cpp:1630
 #: ../../locales/../src/interface/search.cpp:739
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -8361,7 +8355,7 @@ msgstr "Bạn cần nhập tên dấu trang."
 msgid "You need to enter a name for the log file."
 msgstr "Bạn cần nhập tên tập tin nhật ký."
 
-#: ../../locales/../src/interface/edithandler.cpp:1530
+#: ../../locales/../src/interface/edithandler.cpp:1509
 msgid "You need to enter a properly quoted command."
 msgstr "Bạn cần nhập lệnh được đóng mở ngoặc chính xác."
 
@@ -8477,7 +8471,7 @@ msgstr "bằng nhau"
 msgid "file"
 msgstr "tập tin"
 
-#: ../../locales/../src/interface/edithandler.cpp:91
+#: ../../locales/../src/interface/edithandler.cpp:97
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-lockfile"
 
@@ -8574,6 +8568,16 @@ msgstr "ai cũng được phép ghi"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(đã tải về %u%%)"
+
+#~ msgid "Connection timed out after %d second of inactivity"
+#~ msgid_plural "Connection timed out after %d seconds of inactivity"
+#~ msgstr[0] "Kết nối sẽ chấm dứt nếu sau %d giây không có hoạt động gì"
+
+#~ msgid "fzsftp belongs to a different version of FileZilla"
+#~ msgstr "fzsftp thuộc về một phiên bản khác của FileZilla"
 
 #~ msgid ""
 #~ "A file with that name is already being edited. Do you want to reopen '%s'?"
