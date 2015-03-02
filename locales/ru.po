@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Русский перевод\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-02-03 18:07+0600\n"
+"PO-Revision-Date: 2015-03-01 01:52+0600\n"
 "Last-Translator: Pavel Starosek <starosekpd@gmail.com>\n"
 "Language-Team: Oleg Koptev\n"
 "Language: ru\n"
@@ -8596,6 +8596,18 @@ msgstr "чтение и запись (для всех)"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "(%u%% downloaded)"
+#~ msgstr "(%u%% скачано)"
+
+#~ msgid "Connection timed out after %d second of inactivity"
+#~ msgid_plural "Connection timed out after %d seconds of inactivity"
+#~ msgstr[0] "Соединение прервано после %d секунды неактивности"
+#~ msgstr[1] "Соединение прервано после %d секунд неактивности"
+#~ msgstr[2] "Соединение прервано после %d секунд неактивности"
+
+#~ msgid "fzsftp belongs to a different version of FileZilla"
+#~ msgstr "fzsftp принадлежит другой версии FileZilla"
 
 #~ msgid ""
 #~ "A file with that name is already being edited. Do you want to reopen '%s'?"
