@@ -603,7 +603,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 					*size = -1;
 				}
 				else {
-					*size = make_int64_t(m_find_data.nFileSizeLow, m_find_data.nFileSizeLow);
+					*size = make_int64_t(m_find_data.nFileSizeHigh, m_find_data.nFileSizeLow);
 				}
 			}
 		}
