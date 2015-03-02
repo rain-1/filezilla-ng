@@ -49,6 +49,7 @@
 #include <time.h>
 #include "shellext.h"
 #include <tchar.h>
+#include <cstddef>
 #include <cstdint>
 
 //---------------------------------------------------------------------------
@@ -287,7 +288,7 @@ void DebugInit(HKEY Key)
 extern "C" int APIENTRY
 DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 {
-	/*if (Reason == DLL_PROCESS_ATTACH) {
+	if (Reason == DLL_PROCESS_ATTACH) {
 		GInstance = HInstance;
 
 #ifdef DEBUG
@@ -343,7 +344,7 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 		}
 #endif
 	}
-	*/
+
 	return 1;   // ok
 }
 
