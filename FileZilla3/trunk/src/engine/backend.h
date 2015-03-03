@@ -10,6 +10,9 @@ public:
 	CBackend(CEventHandler* pEvtHandler);
 	virtual ~CBackend();
 
+	CBackend(CBackend const&) = delete;
+	CBackend& operator=(CBackend const&) = delete;
+
 	virtual int Read(void *buffer, unsigned int size, int& error) = 0;
 	virtual int Peek(void *buffer, unsigned int size, int& error) = 0;
 	virtual int Write(const void *buffer, unsigned int size, int& error) = 0;

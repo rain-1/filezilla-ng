@@ -9,6 +9,9 @@ public:
 	CPathCache();
 	~CPathCache();
 
+	CPathCache(CPathCache const&) = delete;
+	CPathCache& operator=(CPathCache const&) = delete;
+
 	// The source argument should be a canonicalized path already if subdir is non-empty
 	void Store(CServer const& server, CServerPath const& target, CServerPath const& source, wxString const& subdir = wxString());
 

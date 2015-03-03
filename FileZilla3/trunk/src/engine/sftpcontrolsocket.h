@@ -43,7 +43,7 @@ enum sftpRequestTypes
 class CProcess;
 class CSftpInputThread;
 
-class CSftpControlSocket : public CControlSocket, public CRateLimiterObject
+class CSftpControlSocket final : public CControlSocket, public CRateLimiterObject
 {
 public:
 	CSftpControlSocket(CFileZillaEnginePrivate & engine);

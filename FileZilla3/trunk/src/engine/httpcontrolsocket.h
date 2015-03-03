@@ -6,7 +6,7 @@
 class CHttpOpData;
 class CTlsSocket;
 class CHttpFileTransferOpData;
-class CHttpControlSocket : public CRealControlSocket
+class CHttpControlSocket final : public CRealControlSocket
 {
 public:
 	CHttpControlSocket(CFileZillaEnginePrivate & engine);

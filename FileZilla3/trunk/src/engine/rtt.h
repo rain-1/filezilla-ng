@@ -3,7 +3,7 @@
 
 #include "socket.h"
 
-class CLatencyMeasurement : public CCallback
+class CLatencyMeasurement final : public CCallback
 {
 public:
 	CLatencyMeasurement();

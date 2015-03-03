@@ -47,11 +47,14 @@ namespace listingEncoding
 }
 
 
-class CDirectoryListingParser
+class CDirectoryListingParser final
 {
 public:
 	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding = listingEncoding::unknown, bool sftp_mode = false);
 	~CDirectoryListingParser();
+
+	CDirectoryListingParser(CDirectoryListingParser const&) = delete;
+	CDirectoryListingParser& operator=(CDirectoryListingParser const&) = delete;
 
 	CDirectoryListing Parse(const CServerPath &path);
 

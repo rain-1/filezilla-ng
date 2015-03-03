@@ -8,8 +8,11 @@
 class CLogging
 {
 public:
-	CLogging(CFileZillaEnginePrivate & engine);
+	explicit CLogging(CFileZillaEnginePrivate & engine);
 	virtual ~CLogging();
+
+	CLogging(CLogging const&) = delete;
+	CLogging& operator=(CLogging const&) = delete;
 
 	template<typename String, typename...Args>
 	void LogMessage(MessageType nMessageType, String&& msgFormat, Args&& ...args) const

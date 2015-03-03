@@ -45,7 +45,7 @@ enum capabilityNames
 	auth_ssl_command
 };
 
-class CCapabilities
+class CCapabilities final
 {
 public:
 	enum capabilities GetCapability(enum capabilityNames name, wxString* pOption = 0) const;
@@ -63,7 +63,7 @@ protected:
 	std::map<enum capabilityNames, struct t_cap> m_capabilityMap;
 };
 
-class CServerCapabilities
+class CServerCapabilities final
 {
 public:
 	// If return value isn't 'yes', pOptions remains unchanged
