@@ -4,7 +4,7 @@
 #include "statusbar.h"
 #include "engine_context.h"
 
-#include "wx/timer.h"
+#include <wx/timer.h>
 
 #ifndef __WXMAC__
 #include <wx/taskbar.h>

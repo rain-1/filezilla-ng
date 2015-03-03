@@ -1,8 +1,9 @@
 #include <filezilla.h>
 #include "externalipresolver.h"
-#include "wx/regex.h"
 #include "socket.h"
 #include "misc.h"
+
+#include <wx/regex.h>
 
 namespace {
 mutex s_sync;

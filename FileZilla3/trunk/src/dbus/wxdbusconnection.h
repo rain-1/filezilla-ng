@@ -25,7 +25,7 @@ DEALINGS IN THE SOFTWARE.
 #ifndef WX_DBUSCONNECTION
 #define WX_DBUSCONNECTION
 
-#include "wx/wx.h"
+#include <wx/wx.h>
 #include <dbus/dbus.h>
 
 class DBusThread;

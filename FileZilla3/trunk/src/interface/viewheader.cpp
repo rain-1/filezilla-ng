@@ -3,7 +3,7 @@
 #include "commandqueue.h"
 
 #ifdef __WXMSW__
-#include "wx/msw/uxtheme.h"
+#include <wx/msw/uxtheme.h>
 #endif //__WXMSW__
 #ifdef __WXMAC__
 #include "textctrlex.h"
