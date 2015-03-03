@@ -12,6 +12,9 @@ public:
 	CExternalIPResolver(CEventHandler & handler);
 	virtual ~CExternalIPResolver();
 
+	CExternalIPResolver(CExternalIPResolver const&) = delete;
+	CExternalIPResolver& operator=(CExternalIPResolver const&) = delete;
+
 	bool Done() const { return m_done; }
 	bool Successful() const;
 	wxString GetIP() const;

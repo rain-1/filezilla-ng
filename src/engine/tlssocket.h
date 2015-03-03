@@ -6,7 +6,7 @@
 #include "socket.h"
 
 class CControlSocket;
-class CTlsSocket : protected CEventHandler, public CBackend
+class CTlsSocket final : protected CEventHandler, public CBackend
 {
 public:
 	enum class TlsState

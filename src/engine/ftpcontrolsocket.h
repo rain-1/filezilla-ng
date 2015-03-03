@@ -14,7 +14,7 @@ class CFtpTransferOpData;
 class CRawTransferOpData;
 class CTlsSocket;
 
-class CFtpControlSocket : public CRealControlSocket
+class CFtpControlSocket final : public CRealControlSocket
 {
 	friend class CTransferSocket;
 public:

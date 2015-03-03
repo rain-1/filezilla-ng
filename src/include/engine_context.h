@@ -10,7 +10,7 @@ class CPathCache;
 class CRateLimiter;
 
 // There can be multiple engines, but there can be at most one context
-class CFileZillaEngineContext
+class CFileZillaEngineContext final
 {
 public:
 	CFileZillaEngineContext(COptionsBase & options);

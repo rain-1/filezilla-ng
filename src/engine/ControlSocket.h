@@ -11,6 +11,9 @@ public:
 	COpData(Command op_Id);
 	virtual ~COpData();
 
+	COpData(COpData const&) = delete;
+	COpData& operator=(COpData const&) = delete;
+
 	int opState;
 	Command const opId;
 
@@ -24,8 +27,8 @@ class CConnectOpData : public COpData
 {
 public:
 	CConnectOpData()
-		: COpData(Command::connect),
-		port(0)
+		: COpData(Command::connect)
+		, port(0)
 	{
 	}
 
@@ -117,6 +120,9 @@ class CControlSocket: public CLogging, public CEventHandler
 public:
 	CControlSocket(CFileZillaEnginePrivate & engine);
 	virtual ~CControlSocket();
+
+	CControlSocket(CControlSocket const&) = delete;
+	CControlSocket& operator=(CControlSocket const&) = delete;
 
 	virtual int Connect(const CServer &server) = 0;
 	virtual int Disconnect();

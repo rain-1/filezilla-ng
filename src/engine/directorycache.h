@@ -31,6 +31,9 @@ public:
 	CDirectoryCache();
 	~CDirectoryCache();
 
+	CDirectoryCache(CDirectoryCache const&) = delete;
+	CDirectoryCache& operator=(CDirectoryCache const&) = delete;
+
 	void Store(const CDirectoryListing &listing, const CServer &server);
 	bool GetChangeTime(CMonotonicTime& time, const CServer &server, const CServerPath &path);
 	bool Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
