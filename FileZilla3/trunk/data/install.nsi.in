@@ -1003,7 +1003,14 @@ ${MementoSection} "Shell Extension" SecShellExt
   !define LIBRARY_SHELL_EXTENSION
   !define LIBRARY_COM
   !define LIBRARY_IGNORE_VERSION
+
+  ${If} ${RunningX64}
+    SetRegView 32
+  ${EndIf}
   !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED ../src/fzshellext/.libs\libfzshellext-0.dll $INSTDIR\fzshellext.dll "$INSTDIR"
+  ${If} ${RunningX64}
+    SetRegView lastused
+  ${EndIf}
 
   !define LIBRARY_X64
   ${If} ${RunningX64}
@@ -1273,7 +1280,13 @@ FunctionEnd
 
 Section "Uninstall"
 
+  ${If} ${RunningX64}
+    SetRegView 32
+  ${EndIf}
   !insertmacro UnInstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "$INSTDIR\fzshellext.dll"
+  ${If} ${RunningX64}
+    SetRegView lastused
+  ${EndIf}
 
   !define LIBRARY_X64
   ${If} ${RunningX64}
