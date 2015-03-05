@@ -1007,7 +1007,7 @@ ${MementoSection} "Shell Extension" SecShellExt
   ${If} ${RunningX64}
     SetRegView 32
   ${EndIf}
-  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED ../src/fzshellext/.libs\libfzshellext-0.dll $INSTDIR\fzshellext.dll "$INSTDIR"
+  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "${top_srcdir}/src/fzshellext\fzshellext.dll" $INSTDIR\fzshellext.dll "$INSTDIR"
   ${If} ${RunningX64}
     SetRegView lastused
   ${EndIf}
