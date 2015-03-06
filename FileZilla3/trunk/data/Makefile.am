@@ -3,7 +3,8 @@ dist_noinst_DATA = install.nsi.in \
 		nsis_appid.dll \
 		nsis_appid.txt \
 		process_running.nsh \
-		UAC_unicode.dll \
+		UAC.nsh \
+		UAC.dll \
 		UAC_unicode.dll.txt \
 		uninstall.ico
 
