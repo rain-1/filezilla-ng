@@ -1,7 +1,10 @@
+ACLOCAL_AMFLAGS = -I ../../m4
+
 CLEANFILES = fzshellext.o
 
 lib_LTLIBRARIES = libfzshellext.la
 
+libfzshellext_la_CPPFLAGS = $(AM_CPPFLAGS) -I$(builddir)/..
 libfzshellext_la_SOURCES = shellext.cpp
 libfzshellext_la_CXXFLAGS = $(AM_CXXFLAGS) -fno-exceptions -fno-rtti
 
@@ -22,7 +25,7 @@ if USE_RESOURCEFILE
 
 fzshellext.o: $(srcdir)/fzshellext.rc
 	@if [ -f $@~ ]; then rm $@~; fi
-	@WINDRES@ --include-dir=. --include-dir=$(srcdir) $(WINDRESFLAGS) $(srcdir)/fzshellext.rc -D HAS_VERSIONRC $@~ || rm $@~
+	@WINDRES@ --include-dir=.. --include-dir=$(srcdir) $(WINDRESFLAGS) $(srcdir)/fzshellext.rc -D HAS_VERSIONRC $@~ || rm $@~
 	@if [ -f $@ ]; then rm $@; fi
 	mv $@~ $@
 

@@ -22,25 +22,14 @@ AC_ARG_ENABLE(locales, AS_HELP_STRING([--enable-locales],[Build message catalogs
 AC_ARG_ENABLE(localesonly, AS_HELP_STRING([--enable-localesonly],[Just build locales]), \
         [localesonly="$enableval"], [localesonly="no"])
 
-AC_ARG_ENABLE(shellextonly, AS_HELP_STRING([--enable-shellextonly],[Just build Explorer shell extension (MSW specific flag)]), \
-        [shellextonly="$enableval"], [shellextonly="no"])
-
 if test "$locales" != "yes" -a "$localesonly" = "yes"; then
   AC_MSG_ERROR([invalid flags: --disable-locales cannot be used together with --enable-localesonly])
 fi
 
-if test "$localesonly" = "yes" -a "$shellextonly" = "yes"; then
-  AC_MSG_ERROR([invalid flags: --enable-localesonly cannot be used together with --enable-shellextonly])
-fi
-
-if test "$localesonly" = "yes" -o "$shellextonly" = "yes"; then
+if test "$localesonly" = "yes"; then
   buildmain="no"
 else
   buildmain="yes"
-fi
-
-if test "$shellextonly" = "yes"; then
-  locales="no"
 fi
 
 if ! test "$localesonly" = "yes"; then
@@ -100,6 +89,31 @@ if ! test "$localesonly" = "yes"; then
     AC_DEFINE_UNQUOTED(BUILDTYPE, ["$buildtype"], [Buildtype, indicates official builds and nightly builds])
   fi
 fi
+
+# Shell extension
+# ---------------
+
+AC_MSG_NOTICE([Running sub-configure for shell extension])
+if false; then
+  # For autoreconf machinery
+  AC_CONFIG_SUBDIRS([src/fzshellext])
+fi
+
+OLD_DIR="`pwd`"
+mkdir -p "$OLD_DIR/src/fzshellext/32"
+mkdir -p "$OLD_DIR/src/fzshellext/64"
+if echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
+  cd "$OLD_DIR/src/fzshellext/32" || exit 1
+  "$ac_abs_confdir/src/fzshellext/configure" --prefix="$prefix" --exec-prefix="$exec_prefix" --host=i686-w64-mingw32 || exit 1
+  cd "$OLD_DIR/src/fzshellext/64" || exit 1
+  "$ac_abs_confdir/src/fzshellext/configure" --prefix="$prefix" --exec-prefix="$exec_prefix" --host=x86_64-w64-mingw32 || exit 1
+else
+  cd "$OLD_DIR/src/fzshellext/64" || exit 1
+  "$ac_abs_confdir/src/fzshellext/configure" --disable-shellext || exit 1
+fi
+cd "$OLD_DIR"
+
+
 
 if test "$buildmain" = "yes"; then
 
@@ -182,7 +196,7 @@ if test "$buildmain" = "yes"; then
   AC_CHECK_FUNCS([in6addr_loopback in6addr_any])
 fi
 
-if test "$buildmain" = "yes" -o "$shellextonly" = "yes"; then
+if test "$buildmain" = "yes"; then
 
   # Check for windres on MinGW builds
   # ---------------------------------
@@ -629,8 +643,11 @@ src/interface/resources/minimal/Makefile
 src/interface/resources/opencrystal/Makefile
 src/interface/resources/sun/Makefile
 src/interface/resources/tango/Makefile
-src/putty/Makefile src/putty/unix/Makefile src/putty/windows/Makefile
-tests/Makefile src/interface/resources/version.rc
+src/putty/Makefile
+src/putty/unix/Makefile
+src/putty/windows/Makefile
+tests/Makefile
+src/interface/resources/version.rc
 src/interface/resources/MacInfo.plist
-src/fzshellext/Makefile src/fzshellext/version.rc)
+src/fzshellext/version.rc)
 AC_OUTPUT
