@@ -1007,16 +1007,16 @@ ${MementoSection} "Shell Extension" SecShellExt
   ${If} ${RunningX64}
     SetRegView 32
   ${EndIf}
-  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "${top_srcdir}/src/fzshellext\fzshellext.dll" $INSTDIR\fzshellext.dll "$INSTDIR"
+  !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED ../src/fzshellext/32/.libs/libfzshellext-0.dll "$INSTDIR\fzshellext.dll" "$INSTDIR"
   ${If} ${RunningX64}
     SetRegView lastused
   ${EndIf}
 
   !define LIBRARY_X64
   ${If} ${RunningX64}
-    !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
+    !insertmacro InstallLib REGDLL NOTSHARED REBOOT_NOTPROTECTED ../src/fzshellext/64/.libs\fzshellext-0.dll" "$INSTDIR\fzshellext_64.dll" "$INSTDIR"
   ${Else}
-    !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED "${top_srcdir}/src/fzshellext\fzshellext_64.dll" $INSTDIR\fzshellext_64.dll "$INSTDIR"
+    !insertmacro InstallLib DLL NOTSHARED REBOOT_NOTPROTECTED ../src/fzshellext/64/.libs\fzshellext-0.dll" "$INSTDIR\fzshellext_64.dll" "$INSTDIR"
   ${Endif}
   !undef LIBRARY_X64
 

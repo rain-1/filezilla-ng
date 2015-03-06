@@ -51,9 +51,8 @@ copy_libtool()
 copy_libtool "src/interface" "filezilla.exe"
 copy_libtool "src/putty" "fzsftp.exe"
 copy_libtool "src/putty" "fzputtygen.exe"
-
-cp "$top_srcdir/src/fzshellext/fzshellext.dll" "$targetdir/fzshellext.dll" || exit 1
-cp "$top_srcdir/src/fzshellext/fzshellext_64.dll" "$targetdir/fzshellext_64.dll" || exit 1
+copy_libtool "src/fzshellext/32" "libgzshellext-0.dll" "fzshellext.dll"
+copy_libtool "src/fzshellext/64" "libfzshellext-0.dll" "fzshellext_64.dll"
 
 echo Copying locales
 

@@ -16,7 +16,7 @@
 #else
 	#define STDEXPORTAPI extern "C" __declspec(dllexport) HRESULT STDAPICALLTYPE
 
-	#include <config.h>
+	#include "config.h"
 #if !HAVE_ICOPYHOOKW
 	// Some versions of the MinGW w32api have no unicode version of ICopyHook. As such,
 	// declare ICopyHookW manually.
