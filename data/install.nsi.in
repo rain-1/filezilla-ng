@@ -57,7 +57,7 @@
   !include "FileFunc.nsh"
   !include "Memento.nsh"
   !include "@srcdir@\process_running.nsh"
-  !include "UAC.nsh"
+  !include "@srcdir@\UAC.nsh"
 
 ;--------------------------------
 ; Installer's VersionInfo
