@@ -57,6 +57,7 @@
   !include "FileFunc.nsh"
   !include "Memento.nsh"
   !include "@srcdir@\process_running.nsh"
+  !include "UAC.nsh"
 
 ;--------------------------------
 ; Installer's VersionInfo
@@ -165,19 +166,13 @@ Function GetUserInfo
     StrCpy $IS_ADMIN 1
     Return
   ${EndIf}
-
   Pop $USERNAME
-  UserInfo::GetAccountType
-  Pop $R0
-  ${Switch} $R0
-    ${Case} "Admin"
-    ${Case} "Power"
-      StrCpy $IS_ADMIN 1
-      ${Break}
-    ${Default}
-      StrCpy $IS_ADMIN 0
-      ${Break}
-  ${EndSwitch}
+
+  ${If} ${UAC_IsAdmin}
+    StrCpy $IS_ADMIN 1
+  ${Else}
+    StrCpy $IS_ADMIN 0
+  ${EndIf}
 
 FunctionEnd
 
@@ -335,7 +330,7 @@ Function .onInit
 installonoldwindows:
   ${EndUnless}
 
-  UAC_unicode::RunElevated
+  !insertmacro UAC_RunElevated
   StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
   StrCmp 0 $0 0 UAC_Err ; Error?
   StrCmp 1 $1 0 UAC_Success ; Are we the real deal or just the wrapper?
@@ -838,16 +833,11 @@ Function PageInstfilesShow
 FunctionEnd
 
 Function .OnInstFailed
-
-  UAC_unicode::Unload
-
 FunctionEnd
 
 Function .onInstSuccess
 
   ${MementoSectionSave}
-
-  UAC_unicode::Unload
 
 FunctionEnd
 
@@ -1050,14 +1040,14 @@ FunctionEnd
 
 Function PageFinishPre
   ${If} $PERFORM_UPDATE == 1
-    UAC_unicode::Exec '' '"$INSTDIR\filezilla.exe"' '' ''
+    !insertmacro UAC_AsUser_ExecShell '' '$INSTDIR\filezilla.exe' '' '' SW_SHOWNORMAL
     Quit
   ${EndIf}
 FunctionEnd
 
 Function CustomFinishRun
 
-  UAC_unicode::Exec '' '"$INSTDIR\filezilla.exe"' '' ''
+  !insertmacro UAC_AsUser_ExecShell '' '$INSTDIR\filezilla.exe' '' '' SW_SHOWNORMAL
 
 FunctionEnd
 
@@ -1119,19 +1109,13 @@ Function un.GetUserInfo
     StrCpy $IS_ADMIN 1
     Return
   ${EndIf}
-
   Pop $USERNAME
-  UserInfo::GetAccountType
-  Pop $R0
-  ${Switch} $R0
-    ${Case} "Admin"
-    ${Case} "Power"
-      StrCpy $IS_ADMIN 1
-      ${Break}
-    ${Default}
-      StrCpy $IS_ADMIN 0
-      ${Break}
-  ${EndSwitch}
+
+  ${If} ${UAC_IsAdmin}
+    StrCpy $IS_ADMIN 1
+  ${Else}
+    StrCpy $IS_ADMIN 0
+  ${EndIf}
 
 FunctionEnd
 
