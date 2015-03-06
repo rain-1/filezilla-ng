@@ -9,10 +9,6 @@ AC_ARG_ENABLE(shellext, AS_HELP_STRING([--disable-shellext],[Disable shellextens
 
 AC_CANONICAL_HOST
 
-AC_PROG_CXX
-AM_PROG_CC_C_O
-AC_PROG_INSTALL
-
 LT_INIT
 LT_LANG([C++])
 
