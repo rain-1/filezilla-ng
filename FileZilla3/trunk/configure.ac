@@ -102,7 +102,7 @@ fi
 OLD_DIR="`pwd`"
 mkdir -p "$OLD_DIR/src/fzshellext/32"
 mkdir -p "$OLD_DIR/src/fzshellext/64"
-if echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
+if test "$localesonly" != "yes" && echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
   cd "$OLD_DIR/src/fzshellext/32" || exit 1
   "$ac_abs_confdir/src/fzshellext/configure" --prefix="$prefix" --exec-prefix="$exec_prefix" --host=i686-w64-mingw32 || exit 1
   cd "$OLD_DIR/src/fzshellext/64" || exit 1
