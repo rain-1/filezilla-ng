@@ -315,6 +315,12 @@ if test "$buildmain" = "yes"; then
   # Create installer under Windows
   if echo $host_os | grep "mingw" > /dev/null 2>&1; then
     makensisscript="yes"
+    if echo $host_os | grep "x86_64" > /dev/null 2>&1; then
+      NSIS_64BIT=1
+    else
+      NSIS_64BIT=0
+    fi
+    AC_SUBST(NSIS_64BIT)
   else
     makensisscript="no"
   fi
