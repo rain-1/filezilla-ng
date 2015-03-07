@@ -28,7 +28,11 @@
   SetCompressor /SOLID LZMA
 
   ; Default installation folder
-  InstallDir "$PROGRAMFILES\FileZilla FTP Client"
+  !if "@NSIS_64BIT@" == "1"
+    InstallDir "$PROGRAMFILES64\FileZilla FTP Client"
+  !else
+    InstallDir "$PROGRAMFILES\FileZilla FTP Client"
+  !endif
 
   ; Get installation folder from registry if available
   InstallDirRegKey HKLM "Software\FileZilla Client" ""
