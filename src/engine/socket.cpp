@@ -88,24 +88,25 @@ void ChangeSocketEventHandler(CEventHandler * oldHandler, CEventHandler * newHan
 	if (!newHandler) {
 		RemoveSocketEvents(oldHandler, source);
 	}
-
-	auto socketEventFilter = [&](CEventLoop::Events::value_type & ev) -> bool {
-		if (ev.first == oldHandler) {
-			if (ev.second->derived_type() == CSocketEvent::type()) {
-				if (std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source) {
-					ev.first = newHandler;
+	else {
+		auto socketEventFilter = [&](CEventLoop::Events::value_type & ev) -> bool {
+			if (ev.first == oldHandler) {
+				if (ev.second->derived_type() == CSocketEvent::type()) {
+					if (std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source) {
+						ev.first = newHandler;
+					}
+				}
+				else if (ev.second->derived_type() == CHostAddressEvent::type()) {
+					if (std::get<0>(static_cast<CHostAddressEvent const&>(*ev.second).v_) == source) {
+						ev.first = newHandler;
+					}
 				}
 			}
-			else if (ev.second->derived_type() == CHostAddressEvent::type()) {
-				if (std::get<0>(static_cast<CHostAddressEvent const&>(*ev.second).v_) == source) {
-					ev.first = newHandler;
-				}
-			}
-		}
-		return false;
-	};
+			return false;
+		};
 
-	oldHandler->event_loop_.FilterEvents(socketEventFilter);
+		oldHandler->event_loop_.FilterEvents(socketEventFilter);
+	}
 }
 
 namespace {
