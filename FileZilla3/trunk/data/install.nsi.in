@@ -334,6 +334,14 @@ Function .onInit
 installonoldwindows:
   ${EndUnless}
 
+  !if "@NSIS_64BIT@" == "1"
+    ${Unless} ${RunningX64}
+      MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nThis is the installer for the 64bit version of FileZilla ${VERSION} and does not run on your operating system which is only 32bit.$\nPlease download the 32bit FileZilla installer instead.$\nDo you really want to continue with the installation?" /SD IDNO IDYES install64on32
+      Abort
+install64on32:
+    ${EndUnless}
+  !endif
+
   !insertmacro UAC_RunElevated
   StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
   StrCmp 0 $0 0 UAC_Err ; Error?
