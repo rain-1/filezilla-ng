@@ -1,10 +1,6 @@
 #ifndef __FILEZILLAAPP_H__
 #define __FILEZILLAAPP_H__
 
-#if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
-#include <wx/debugrpt.h>
-#endif
-
 #include <list>
 
 #include "local_path.h"
