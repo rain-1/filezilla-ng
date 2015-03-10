@@ -38,7 +38,7 @@ enum Flags
 struct t_Option
 {
 	const char name[30];
-	const enum Type type;
+	const Type type;
 	const wxString defaultValue; // Default values are stored as string even for numerical options
 	const Flags flags; // internal items won't get written to settings file nor loaded from there
 };
@@ -95,6 +95,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "FTP Proxy password", string, _T(""), normal },
 	{ "FTP Proxy login sequence", string, _T(""), normal },
 	{ "SFTP keyfiles", string, _T(""), normal },
+	{ "SFTP compression", number, _T(""), normal },
 	{ "Proxy type", number, _T("0"), normal },
 	{ "Proxy host", string, _T(""), normal },
 	{ "Proxy port", number, _T("0"), normal },

@@ -54,6 +54,8 @@ bool COptionsPageConnectionSFTP::LoadPage()
 
 	SetCtrlState();
 
+	SetCheckFromOption(XRCID("ID_SFTP_COMPRESSION"), OPTION_SFTP_COMPRESSION, failure);
+
 	return !failure;
 }
 
@@ -76,6 +78,8 @@ bool COptionsPageConnectionSFTP::SavePage()
 		m_pProcess->Detach();
 		m_pProcess = 0;
 	}
+
+	SetOptionFromCheck(XRCID("ID_SFTP_COMPRESSION"), OPTION_SFTP_COMPRESSION);
 
 	return true;
 }

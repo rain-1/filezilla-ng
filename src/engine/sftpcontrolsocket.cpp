@@ -410,7 +410,11 @@ int CSftpControlSocket::Connect(const CServer &server)
 		executable = _T("fzsftp");
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
 
-	if (!m_pProcess->Execute(executable, _T("-v"))) {
+	wxString args = _T("-v");
+	if (engine_.GetOptions().GetOptionVal(OPTION_SFTP_COMPRESSION)) {
+		args += _T(" -C");
+	}
+	if (!m_pProcess->Execute(executable, args)) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not create process: %s"), wxSysErrorMsg());
 		DoClose();
 		return FZ_REPLY_ERROR;

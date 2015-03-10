@@ -609,8 +609,8 @@
   </object>
   <object class="wxPanel" name="ID_SETTINGS_CONNECTION_SFTP">
     <object class="wxFlexGridSizer">
-      <cols>2</cols>
-      <vgap/>
+      <cols>1</cols>
+      <vgap>3d</vgap>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
           <label>Public Key Authentication</label>
@@ -673,6 +673,25 @@
           </object>
         </object>
         <option>1</option>
+        <flag>wxGROW</flag>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
+          <label>Other SFTP options</label>
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <cols>1</cols>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_SFTP_COMPRESSION">
+                  <label>&amp;Enable compression</label>
+                </object>
+              </object>
+            </object>
+            <flag>wxALL|wxGROW</flag>
+            <border>5</border>
+          </object>
+        </object>
         <flag>wxGROW</flag>
       </object>
       <growablecols>0</growablecols>
