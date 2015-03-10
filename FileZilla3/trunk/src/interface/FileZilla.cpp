@@ -223,10 +223,6 @@ bool CFileZillaApp::OnInit()
 
 	srand( (unsigned)time( NULL ) );
 
-#if wxUSE_DEBUGREPORT && wxUSE_ON_FATAL_EXCEPTION
-	//wxHandleFatalExceptions();
-#endif
-
 #ifdef __WXMSW__
 	// Need to call WSAStartup. Let wx do that for us
 	wxSocketBase::Initialize();
