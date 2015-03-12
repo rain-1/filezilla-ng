@@ -290,7 +290,7 @@ public:
 			}
 
 			// Execute process
-			execl(cmd, args, (char*)0); // noreturn on success
+			execl(cmd.mb_str(), args.mb_str(), (char*)0); // noreturn on success
 
 			_exit(-1);
 		}
