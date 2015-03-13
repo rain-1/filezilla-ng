@@ -97,7 +97,7 @@ public:
 			err_.Create(true);
 	}
 
-	bool Execute(wxString const& cmd, wxString const& args)
+	bool Execute(wxString const& cmd, std::vector<wxString> const& args)
 	{
 		DWORD flags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
 
@@ -169,9 +169,55 @@ public:
 	}
 
 private:
-	std::unique_ptr<wxChar[]> GetCmdLine(wxString const& cmd, wxString const& args)
+	wxString EscapeArgument(wxString const& arg)
 	{
-		wxString cmdline = _T("\"") + cmd + _T("\" ") + args;
+		wxString ret;
+
+		// Treat newlines are whitespace just to be sure, even if MSDN doesn't mention it
+		if (arg.find_first_of(_T(" \"\t\r\n\v")) != wxString::npos) {
+			// Quite horrible, as per MSDN: 
+			// Backslashes are interpreted literally, unless they immediately precede a double quotation mark.
+			// If an even number of backslashes is followed by a double quotation mark, one backslash is placed in the argv array for every pair of backslashes, and the double quotation mark is interpreted as a string delimiter.
+			// If an odd number of backslashes is followed by a double quotation mark, one backslash is placed in the argv array for every pair of backslashes, and the double quotation mark is "escaped" by the remaining backslash, causing a literal double quotation mark (") to be placed in argv.
+
+			ret = _T("\"");
+			int backslashCount = 0;
+			for (auto it = arg.begin(); it != arg.end(); ++it) {
+				if (*it == '\\') {
+					++backslashCount;
+				}
+				else {
+					if (*it == '"') {
+						// Escape all preceeding backslashes and escape the quote
+						ret += wxString(backslashCount + 1, '\\');
+					}
+					backslashCount = 0;
+				}
+				ret += *it;
+			}
+			if (backslashCount) {
+				// Escape all preceeding backslashes
+				ret += wxString(backslashCount, '\\');
+			}
+
+			ret += _T("\"");
+		}
+		else {
+			ret = arg;
+		}
+
+		return ret;
+	}
+
+	std::unique_ptr<wxChar[]> GetCmdLine(wxString const& cmd, std::vector<wxString> const& args)
+	{
+		wxString cmdline = EscapeArgument(cmd);
+		
+		for (auto const& arg : args) {
+			if (!arg.empty()) {
+				cmdline += _T(" ") + EscapeArgument(arg);
+			}
+		}
 		std::unique_ptr<wxChar[]> ret;
 		ret.reset(new wxChar[cmdline.size() + 1]);
 		wxStrcpy(ret.get(), cmdline);
@@ -263,7 +309,31 @@ public:
 			err_.Create();
 	}
 
-	bool Execute(wxString const& cmd, wxString const& args)
+	void MakeArg(wxString const& arg, std::vector<std::unique_ptr<char[]>> & argList)
+	{
+		wxCharBuffer buf = arg.mb_str();
+		std::unique_ptr<char[]> ret;
+		ret.reset(new char[buf.length() + 1]);
+		strcpy(ret.get(), buf);
+		argList.push_back(std::move(ret));
+	}
+
+	void GetArgv(wxString const& cmd, std::vector<wxString> const& args, std::vector<std::unique_ptr<char[]>> & argList, std::unique_ptr<char const*[]> & argV)
+	{
+		MakeArg(cmd, argList);
+		for (auto const& a : args) {
+			MakeArg(a, argList);
+		}
+
+		argV.reset(new char const*[argList.size() + 1]);
+		char const** v = argV.get();
+		for (auto const& a : argList) {
+			*(v++) = a.get();
+		}
+		*v = 0;
+	}
+
+	bool Execute(wxString const& cmd, std::vector<wxString> const& args)
 	{
 		if (!CreatePipes()) {
 			return false;
@@ -289,8 +359,12 @@ public:
 				_exit(-1);
 			}
 
+			std::vector<std::unique_ptr<char[]>> argList;
+			std::unique_ptr<char const*[]> argV;
+			GetArgv(cmd, args, argList, argV);
+
 			// Execute process
-			execl(cmd.mb_str(), args.mb_str(), (char*)0); // noreturn on success
+			execv(cmd.mb_str(), argV.get()); // noreturn on success
 
 			_exit(-1);
 		}
@@ -378,7 +452,7 @@ CProcess::~CProcess()
 	impl_.reset();
 }
 
-bool CProcess::Execute(wxString const& cmd, wxString const& args)
+bool CProcess::Execute(wxString const& cmd, std::vector<wxString> const& args)
 {
 	return impl_ ? impl_->Execute(cmd, args) : false;
 }
