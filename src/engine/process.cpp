@@ -318,15 +318,15 @@ public:
 		argList.push_back(std::move(ret));
 	}
 
-	void GetArgv(wxString const& cmd, std::vector<wxString> const& args, std::vector<std::unique_ptr<char[]>> & argList, std::unique_ptr<char const*[]> & argV)
+	void GetArgv(wxString const& cmd, std::vector<wxString> const& args, std::vector<std::unique_ptr<char[]>> & argList, std::unique_ptr<char *[]> & argV)
 	{
 		MakeArg(cmd, argList);
 		for (auto const& a : args) {
 			MakeArg(a, argList);
 		}
 
-		argV.reset(new char const*[argList.size() + 1]);
-		char const** v = argV.get();
+		argV.reset(new char *[argList.size() + 1]);
+		char ** v = argV.get();
 		for (auto const& a : argList) {
 			*(v++) = a.get();
 		}
@@ -360,11 +360,11 @@ public:
 			}
 
 			std::vector<std::unique_ptr<char[]>> argList;
-			std::unique_ptr<char const*[]> argV;
+			std::unique_ptr<char *[]> argV;
 			GetArgv(cmd, args, argList, argV);
 
 			// Execute process
-			execv(cmd.mb_str(), argV.get()); // noreturn on success
+			execv(cmd.mb_str(), argV.get());//argV.get()); // noreturn on success
 
 			_exit(-1);
 		}
