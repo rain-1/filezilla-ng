@@ -20,8 +20,7 @@ public:
 	CProcess(CProcess const&) = delete;
 	CProcess& operator=(CProcess const&) = delete;
 
-	// args must be properly quoted
-	bool Execute(wxString const& cmd, wxString const& args);
+	bool Execute(wxString const& cmd, std::vector<wxString> const& args);
 
 	void Kill();
 
