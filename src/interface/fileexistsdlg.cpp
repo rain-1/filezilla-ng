@@ -41,7 +41,7 @@ void CFileExistsDlg::DisplayFile(bool left, wxString name, int64_t size, CDateTi
 	name.Replace(_T("&"), _T("&&"));
 
 	wxString sizeStr = _("Size unknown");
-	if (size != -1) {
+	if (size >= 0) {
 		bool const thousands_separator = COptions::Get()->GetOptionVal(OPTION_SIZE_USETHOUSANDSEP) != 0;
 		sizeStr = CSizeFormat::Format(size, true, CSizeFormat::bytes, thousands_separator, 0);
 	}
