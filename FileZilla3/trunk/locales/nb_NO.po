@@ -1,9 +1,13 @@
+# Norwegian bokmål translation of FileZilla
+# Copyright (C) 2015 Tim Kosse
+# This file is distributed under the same license as the filezilla package.
+# Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>, 2015.
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-02-23 08:32+0100\n"
+"PO-Revision-Date: 2015-03-12 07:14+0100\n"
 "Last-Translator: Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -210,7 +214,7 @@ msgstr "&Legg til bokmerke …"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:245
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:291
 msgid "&Add files to queue"
-msgstr "&Legg filer i kø"
+msgstr "&Legg i kø"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:645
 msgid "&Add keyfile..."
@@ -1606,7 +1610,7 @@ msgstr "Spør operativsystemet etter ekstern IP-adresse"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3379
 msgid "Asking questions in the FileZilla forums"
-msgstr "Stille spørsmål på FileZilla forumet"
+msgstr "Stille spørsmål på FileZilla-forumet"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:63
 msgid "Associated program not found:"
@@ -1818,18 +1822,16 @@ msgid ""
 "Cannot compare directories, different filters for local and remote "
 "directories are enabled"
 msgstr ""
-"Klarte ikke å starte sammenlikning av mapper, fordi ulike lokale og eksterne "
-"filer filtreres ulikt"
+"Klarte ikke å starte sammenlikning av mapper, fordi lokale og eksterne filer "
+"filtreres ulikt"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2365
 msgid "Cannot compare directories, not connected to a server."
-msgstr ""
-"Klarte ikke å starte sammenlikning av mapper, fordi du ikke er tilkoblet en "
-"tjener."
+msgstr "Du må koble til en tjener før du kan sammenlikne mapper."
 
 #: ../../locales/../src/interface/filteredit.cpp:143
 msgid "Cannot create new filter"
-msgstr "Klarte ikke å legge til et nytt filter"
+msgstr "Klarte ikke å legge til nytt filter"
 
 #: ../../locales/../src/interface/edithandler.cpp:1617
 #: ../../locales/../src/interface/edithandler.cpp:1665
@@ -1962,9 +1964,7 @@ msgstr "Endre filtillatelser."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2176
 msgid "Changing logfile settings requires restart of FileZilla."
-msgstr ""
-"Du må starte FileZilla på nytt for at eventuelle endringer her skal tre i "
-"kraft."
+msgstr "Du må starte FileZilla på nytt for at endringer her skal tre i kraft."
 
 #: ../../locales/../src/interface/FileZilla.cpp:653
 msgid "Character encoding issue"
@@ -3432,7 +3432,7 @@ msgid ""
 "- ftpes:// for FTP over TLS (explicit)"
 msgstr ""
 "Skriv inn adresse til tjenermaskin.\n"
-"Eventuelt valg av protokoll må komme før tjeneradressen. Hvis du ikke velger "
+"Valg av protokoll må komme før tjeneradressen. Hvis du ikke velger "
 "protokoll, brukes standardprotokollen «ftp://».\n"
 "Du kan også bruke fullstendige nettadresser i form av protokoll://brukernavn:"
 "passord@tjeneradresse:port . Verdier i andre felt blir i så fall overstyrt.\n"
@@ -3449,7 +3449,7 @@ msgid ""
 "Enter the password for the file '%s'.\n"
 "Please note that the converted file will not be password protected."
 msgstr ""
-"Oppgi passordet til fila «%s».\n"
+"Skriv inn passordet til fila «%s».\n"
 "Merk at konvertert fil ikke blir passordbeskyttet."
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:82
@@ -4509,7 +4509,7 @@ msgstr "Laster inn TLS …"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:731
 msgid "Insecure server, it does not support FTP over TLS."
-msgstr "Tjeneren regnes som usikker, fordi den ikke støtter FTP via TLS."
+msgstr "Tjeneren støtter ikke FTP via TLS, og regnes derfor som usikker."
 
 #: ../../locales/../src/engine/server.cpp:834
 #: ../../locales/../src/engine/server.cpp:853
@@ -6269,7 +6269,7 @@ msgstr "Endrer navn fra «%s» til «%s»"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3385
 msgid "Reporting bugs and feature requests"
-msgstr "Rapportering av feil og ønsker om ny funksjonalitet"
+msgstr "Feilrapportering og ønsker om ny funksjonalitet"
 
 #: ../../locales/../src/engine/proxy.cpp:370
 msgid ""
@@ -7403,7 +7403,7 @@ msgstr "Følgende filer er for øyeblikket åpnet for redigering:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3263
 msgid "The free open source FTP solution"
-msgstr "Gratis FTP-løsning bygget på åpen kildekode"
+msgstr "Gratis FTP-løsning med åpen kildekode"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:293
 msgid "The global bookmarks could not be saved."
@@ -8254,7 +8254,7 @@ msgstr "Du bruker nyeste versjon av FileZilla."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3402
 msgid "You can always open this dialog again through the help menu."
-msgstr "Du kan alltids finne igjen denne dialogboksen via hjelpemenyen."
+msgstr "Du kan finne igjen denne dialogboksen via hjelpemenyen."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:139
 #: ../../locales/../src/interface/resources/xrc/update.xrc:217
@@ -8567,6 +8567,9 @@ msgstr "overskrivbar for alle"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
+#~ msgid "&Enable compression"
+#~ msgstr "&Slå på komprimering"
+
 #~ msgid "(%u%% downloaded)"
 #~ msgstr "(%u%% lastet ned)"
 
@@ -8574,6 +8577,9 @@ msgstr "wxWidgets:"
 #~ msgid_plural "Connection timed out after %d seconds of inactivity"
 #~ msgstr[0] "Tilkoblinga gikk ut på tid etter %d sekund uten aktivitet"
 #~ msgstr[1] "Tilkoblinga gikk ut på tid etter %d sekunder uten aktivitet"
+
+#~ msgid "Other SFTP options"
+#~ msgstr "Andre SFTP-valg"
 
 #~ msgid "fzsftp belongs to a different version of FileZilla"
 #~ msgstr "fzsftp hører til en annen versjon av FileZilla"

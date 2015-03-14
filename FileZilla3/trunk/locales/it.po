@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-02-23 15:22+0100\n"
+"PO-Revision-Date: 2015-03-11 10:27+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -8688,6 +8688,9 @@ msgstr "scrivibile per gli altri"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
+#~ msgid "&Enable compression"
+#~ msgstr "Abilita compr&essione"
+
 #~ msgid "(%u%% downloaded)"
 #~ msgstr "(%u%% scaricato)"
 
@@ -8695,6 +8698,9 @@ msgstr "wxWidgets:"
 #~ msgid_plural "Connection timed out after %d seconds of inactivity"
 #~ msgstr[0] "Timeout connessione dopo %d secondo di inattività"
 #~ msgstr[1] "Timeout connessione dopo %d secondi di inattività"
+
+#~ msgid "Other SFTP options"
+#~ msgstr "Altre opzioni SFTP"
 
 #~ msgid "fzsftp belongs to a different version of FileZilla"
 #~ msgstr "fzsftp appartiene ad una differente versione di FileZilla"

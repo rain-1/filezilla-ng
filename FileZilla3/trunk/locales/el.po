@@ -2,13 +2,13 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla Client 3.10.2\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-31 14:43+0100\n"
-"PO-Revision-Date: 2015-02-26 13:57+0200\n"
+"PO-Revision-Date: 2015-03-11 20:20+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.3\n"
+"X-Generator: Poedit 1.7.4\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
@@ -8767,6 +8767,9 @@ msgstr "δημόσια εγγράψιμο"
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
 
+#~ msgid "&Enable compression"
+#~ msgstr "&Ενεργοποίηση συμπίεσης"
+
 #~ msgid "(%u%% downloaded)"
 #~ msgstr "(%u%% λήφθηκαν)"
 
@@ -8774,6 +8777,9 @@ msgstr "wxWidgets:"
 #~ msgid_plural "Connection timed out after %d seconds of inactivity"
 #~ msgstr[0] "Το χρονικό όριο της σύνδεσης έληξε %d δευτερόλεπτο αδράνειας"
 #~ msgstr[1] "Το χρονικό όριο της σύνδεσης έληξε %d δευτερόλεπτα αδράνειας"
+
+#~ msgid "Other SFTP options"
+#~ msgstr "Άλλες επιλογές SFTP"
 
 #~ msgid "fzsftp belongs to a different version of FileZilla"
 #~ msgstr "fzsftp ανήκει σε μια διαφορετική έκδοση του FileZilla"
