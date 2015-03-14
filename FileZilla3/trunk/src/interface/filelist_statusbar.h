@@ -5,7 +5,7 @@
 
 #include <wx/timer.h>
 
-class CFilelistStatusBar : public wxStatusBar, protected COptionChangeEventHandler
+class CFilelistStatusBar final : public wxStatusBar, protected COptionChangeEventHandler
 {
 public:
 	CFilelistStatusBar(wxWindow* pParent);
@@ -35,17 +35,17 @@ protected:
 
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
-	bool m_connected;
-	int m_count_files;
-	int m_count_dirs;
-	int64_t m_total_size;
-	int m_unknown_size; // Set to true if there are files with unknown size
-	int m_hidden;
+	bool m_connected{};
+	int m_count_files{};
+	int m_count_dirs{};
+	int64_t m_total_size{};
+	int m_unknown_size{}; // Set to true if there are files with unknown size
+	int m_hidden{};
 
-	int m_count_selected_files;
-	int m_count_selected_dirs;
-	int64_t m_total_selected_size;
-	int m_unknown_selected_size; // Set to true if there are files with unknown size
+	int m_count_selected_files{};
+	int m_count_selected_dirs{};
+	int64_t m_total_selected_size{};
+	int m_unknown_selected_size{}; // Set to true if there are files with unknown size
 
 	wxTimer m_updateTimer;
 
