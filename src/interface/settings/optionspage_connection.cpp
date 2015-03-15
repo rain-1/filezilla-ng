@@ -42,8 +42,8 @@ bool COptionsPageConnection::Validate()
 
 	long timeout;
 	wxTextCtrl *pTimeout = XRCCTRL(*this, "ID_TIMEOUT", wxTextCtrl);
-	if (!pTimeout->GetValue().ToLong(&timeout) || ((timeout < 5 || timeout > 9999) && timeout != 0))
-		return DisplayError(pTimeout, _("Please enter a timeout between 5 and 9999 seconds or 0 to disable timeouts."));
+	if (!pTimeout->GetValue().ToLong(&timeout) || ((timeout < 10 || timeout > 9999) && timeout != 0))
+		return DisplayError(pTimeout, _("Please enter a timeout between 10 and 9999 seconds or 0 to disable timeouts."));
 
 	return true;
 }

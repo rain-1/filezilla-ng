@@ -106,7 +106,7 @@
                   <hgap>4</hgap>
                   <object class="sizeritem">
                     <object class="wxStaticText">
-                      <label>(5-9999, 0 to disable)</label>
+                      <label>(10-9999, 0 to disable)</label>
                     </object>
                     <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>

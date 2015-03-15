@@ -502,6 +502,17 @@ int COptions::Validate(unsigned int nID, int value)
 		if (value < 0 || value >= CSizeFormat::formats_count)
 			value = 0;
 		break;
+	case OPTION_TIMEOUT:
+		if (value < 0) {
+			value = 0;
+		}
+		else if (value < 10) {
+			value = 10;
+		}
+		else if (value > 9999) {
+			value = 9999;
+		}
+		break;
 	}
 	return value;
 }
