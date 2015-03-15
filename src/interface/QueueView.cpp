@@ -495,16 +495,14 @@ CQueueView::~CQueueView()
 bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 						   const wxString& sourceFile, const wxString& targetFile,
 						   const CLocalPath& localPath, const CServerPath& remotePath,
-						   const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit,
+						   const CServer& server, int64_t size, enum CEditHandler::fileType edit,
 						   QueuePriority priority)
 {
 	CServerItem* pServerItem = CreateServerItem(server);
 
 	CFileItem* fileItem;
-	if (sourceFile.empty())
-	{
-		if (download)
-		{
+	if (sourceFile.empty()) {
+		if (download) {
 			CLocalPath p(localPath);
 			p.AddSegment(targetFile);
 			fileItem = new CFolderItem(pServerItem, queueOnly, p);
@@ -513,8 +511,7 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 			fileItem = new CFolderItem(pServerItem, queueOnly, remotePath, targetFile);
 		wxASSERT(edit == CEditHandler::none);
 	}
-	else
-	{
+	else {
 		fileItem = new CFileItem(pServerItem, queueOnly, download, sourceFile, targetFile, localPath, remotePath, size);
 		if (download)
 			fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(sourceFile, remotePath.GetType()));
@@ -577,7 +574,7 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 
 		fileItem = new CFileItem(pServerItem, queueOnly, true,
 			fileInfo.name, (fileInfo.name != localFile) ? localFile : wxString(),
-			localPath, dataObject.GetServerPath(), fileInfo.size);
+			localPath, dataObject.GetServerPath(), fileInfo.size.GetValue());
 		fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(fileInfo.name, dataObject.GetServerPath().GetType()));
 
 		InsertItem(pServerItem, fileItem);
@@ -1276,7 +1273,7 @@ bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount
 	{
 		// Update size information
 		const CFileItem* const pFileItem = (const CFileItem* const)item;
-		int64_t size = pFileItem->GetSize().GetValue();
+		int64_t size = pFileItem->GetSize();
 		if (size < 0) {
 			m_filesWithUnknownSize--;
 			wxASSERT(m_filesWithUnknownSize >= 0);
@@ -1691,8 +1688,7 @@ bool CQueueView::QueueFolder(bool queueOnly, bool download, const CLocalPath& lo
 
 bool CQueueView::ProcessFolderItems(int type /*=-1*/)
 {
-	if (type == -1)
-	{
+	if (type == -1) {
 		while (ProcessFolderItems(0));
 		ProcessUploadFolderItems();
 
@@ -1982,7 +1978,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 					CFileItem* fileItem = new CFileItem(pServerItem, true, download,
 						download ? remoteFile : localFileName,
 						(remoteFile != localFileName) ? (download ? localFileName : remoteFile) : wxString(),
-						previousLocalPath, previousRemotePath, size);
+						previousLocalPath, previousRemotePath, size.GetValue());
 					fileItem->SetAscii(!binary);
 					fileItem->SetPriorityRaw(QueuePriority(priority));
 					fileItem->m_errorCount = errorCount;
@@ -2684,31 +2680,31 @@ void CQueueView::OnAskPassword(wxCommandEvent&)
 	}
 }
 
-void CQueueView::UpdateItemSize(CFileItem* pItem, wxLongLong size)
+void CQueueView::UpdateItemSize(CFileItem* pItem, int64_t size)
 {
 	wxASSERT(pItem);
 
-	const wxLongLong oldSize = pItem->GetSize();
+	int64_t const oldSize = pItem->GetSize();
 	if (size == oldSize)
 		return;
 
-	if (oldSize == -1) {
+	if (oldSize < 0) {
 		wxASSERT(m_filesWithUnknownSize);
 		if (m_filesWithUnknownSize)
-			m_filesWithUnknownSize--;
+			--m_filesWithUnknownSize;
 	}
 	else {
 		wxASSERT(m_totalQueueSize >= oldSize);
 		if (m_totalQueueSize > oldSize)
-			m_totalQueueSize -= oldSize.GetValue();
+			m_totalQueueSize -= oldSize;
 		else
 			m_totalQueueSize = 0;
 	}
 
-	if (size == -1)
-		m_filesWithUnknownSize++;
+	if (size < 0)
+		++m_filesWithUnknownSize;
 	else
-		m_totalQueueSize += size.GetValue();
+		m_totalQueueSize += size;
 
 	pItem->SetSize(size);
 
@@ -2722,26 +2718,22 @@ void CQueueView::AdvanceQueue(bool refresh /*=true*/)
 		return;
 
 	insideAdvanceQueue = true;
-	while (TryStartNextTransfer())
-	{
+	while (TryStartNextTransfer()) {
 	}
 
 	// Set timer for connected, idle engines
-	for (unsigned int i = 0; i < m_engineData.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_engineData.size(); ++i) {
 		if (m_engineData[i]->active || m_engineData[i]->transient)
 			continue;
 
-		if (m_engineData[i]->m_idleDisconnectTimer)
-		{
+		if (m_engineData[i]->m_idleDisconnectTimer) {
 			if (m_engineData[i]->pEngine->IsConnected())
 				continue;
 
 			delete m_engineData[i]->m_idleDisconnectTimer;
 			m_engineData[i]->m_idleDisconnectTimer = 0;
 		}
-		else
-		{
+		else {
 			if (!m_engineData[i]->pEngine->IsConnected())
 				continue;
 

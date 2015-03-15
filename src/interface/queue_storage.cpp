@@ -729,7 +729,7 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 
 	Bind(insertFileQuery_, file_table_column_names::download, file.Download() ? 1 : 0);
 	if (file.GetSize() != -1)
-		Bind(insertFileQuery_, file_table_column_names::size, static_cast<int64_t>(file.GetSize().GetValue()));
+		Bind(insertFileQuery_, file_table_column_names::size, file.GetSize());
 	else
 		BindNull(insertFileQuery_, file_table_column_names::size);
 	if (file.m_errorCount)
@@ -978,7 +978,7 @@ int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 	}
 	else
 	{
-		wxLongLong size = GetColumnInt64(selectFilesQuery_, file_table_column_names::size);
+		int64_t size = GetColumnInt64(selectFilesQuery_, file_table_column_names::size);
 		unsigned char errorCount = static_cast<unsigned char>(GetColumnInt(selectFilesQuery_, file_table_column_names::error_count));
 		int priority = GetColumnInt(selectFilesQuery_, file_table_column_names::priority, static_cast<int>(QueuePriority::normal));
 

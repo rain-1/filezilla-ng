@@ -124,7 +124,7 @@ public:
 	bool QueueFile(const bool queueOnly, const bool download,
 		const wxString& localFile, const wxString& remoteFile,
 		const CLocalPath& localPath, const CServerPath& remotePath,
-		const CServer& server, const wxLongLong size, enum CEditHandler::fileType edit = CEditHandler::none,
+		const CServer& server, int64_t size, enum CEditHandler::fileType edit = CEditHandler::none,
 		QueuePriority priority = QueuePriority::normal);
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
@@ -141,7 +141,7 @@ public:
 	// This includes queued folders which are yet to be processed
 	void SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction);
 
-	void UpdateItemSize(CFileItem* pItem, wxLongLong size);
+	void UpdateItemSize(CFileItem* pItem, int64_t size);
 
 	void RemoveAll();
 

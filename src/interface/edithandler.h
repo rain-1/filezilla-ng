@@ -55,11 +55,16 @@ public:
 
 	// Starts editing the given file, queues it if needed. For local files, fileName must include local path.
 	// Can be used to edit files already being added, user is prompted for action.
-	bool Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, wxLongLong size, wxWindow* parent);
+	bool Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow* parent);
 
-	struct FileData {
+	class FileData final {
+	public:
+		FileData() = default;
+		FileData(wxString const& n, int64_t s)
+			: name(n), size(s) {}
+
 		wxString name;
-		wxLongLong size;
+		int64_t size{};
 	};
 	bool Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, CServer const& server, wxWindow* parent);
 
