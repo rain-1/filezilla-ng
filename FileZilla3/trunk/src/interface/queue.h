@@ -142,7 +142,7 @@ class CFileItem : public CQueueItem
 public:
 	CFileItem(CServerItem* parent, bool queued, bool download,
 		const wxString& sourceFile, const wxString& targetFile,
-		const CLocalPath& localPath, const CServerPath& remotePath, wxLongLong size);
+		const CLocalPath& localPath, const CServerPath& remotePath, int64_t size);
 
 	virtual ~CFileItem();
 
@@ -156,8 +156,8 @@ public:
 	CSparseOptional<wxString> const& GetTargetFile() const { return m_targetFile; }
 	const CLocalPath& GetLocalPath() const { return m_localPath; }
 	const CServerPath& GetRemotePath() const { return m_remotePath; }
-	const wxLongLong& GetSize() const { return m_size; }
-	void SetSize(wxLongLong size) { m_size = size; }
+	int64_t GetSize() const { return m_size; }
+	void SetSize(int64_t size) { m_size = size; }
 	inline bool Download() const { return flags & flag_download; }
 
 	inline bool queued() const { return (flags & flag_queued) != 0; }
@@ -259,7 +259,7 @@ protected:
 	CSparseOptional<wxString> m_targetFile;
 	CLocalPath const m_localPath;
 	CServerPath const m_remotePath;
-	wxLongLong m_size;
+	int64_t m_size{};
 };
 
 class CFolderItem : public CFileItem

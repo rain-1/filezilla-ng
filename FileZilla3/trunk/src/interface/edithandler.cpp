@@ -1592,7 +1592,7 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
 	XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->ChangeValue(editor);
 }
 
-bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, wxLongLong size, wxWindow * parent)
+bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow * parent)
 {
 	std::vector<FileData> data;
 	FileData d{fileName, size};

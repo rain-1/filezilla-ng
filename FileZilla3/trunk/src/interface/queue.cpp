@@ -273,7 +273,7 @@ int CQueueItem::GetItemIndex() const
 
 CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 					 const wxString& sourceFile, const wxString& targetFile,
-					 const CLocalPath& localPath, const CServerPath& remotePath, wxLongLong size)
+					 const CLocalPath& localPath, const CServerPath& remotePath, int64_t size)
 	: CQueueItem(parent)
 	, m_sourceFile(sourceFile)
 	, m_targetFile(targetFile.empty() ? CSparseOptional<wxString>() : CSparseOptional<wxString>(targetFile))
@@ -341,7 +341,7 @@ void CFileItem::SaveItem(TiXmlElement* pElement) const
 	AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
 	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
 	if (m_size != -1)
-		AddTextElement(file, "Size", m_size.ToString());
+		AddTextElement(file, "Size", wxLongLong(m_size).ToString());
 	if (m_errorCount)
 		AddTextElement(file, "ErrorCount", m_errorCount);
 	if (m_priority != QueuePriority::normal)
@@ -865,9 +865,9 @@ wxString CQueueViewBase::OnGetItemText(CQueueItem* pItem, ColumnId column) const
 				return pFileItem->GetRemotePath().FormatFilename(pFileItem->GetRemoteFile());
 			case colSize:
 				{
-					const wxLongLong& size = pFileItem->GetSize();
+					auto const& size = pFileItem->GetSize();
 					if (size >= 0)
-						return CSizeFormat::Format(size.GetValue());
+						return CSizeFormat::Format(size);
 					else
 						return _T("?");
 				}

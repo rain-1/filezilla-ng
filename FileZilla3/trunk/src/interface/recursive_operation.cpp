@@ -286,7 +286,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 						localFile = StripVMSRevision(localFile);
 					m_pQueue->QueueFile(m_operationMode == recursive_addtoqueue, true,
 						entry.name, (entry.name == localFile) ? wxString() : localFile,
-						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
+						dir.localDir, pDirectoryListing->path, *pServer, entry.size.GetValue());
 					added = true;
 				}
 				break;
@@ -298,7 +298,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 						localFile = StripVMSRevision(localFile);
 					m_pQueue->QueueFile(true, true,
 						entry.name, (entry.name == localFile) ? wxString() : localFile,
-						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
+						dir.localDir, pDirectoryListing->path, *pServer, entry.size.GetValue());
 					added = true;
 				}
 				break;

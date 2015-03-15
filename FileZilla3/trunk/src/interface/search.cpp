@@ -637,7 +637,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 		m_pQueue->QueueFile(!start, true,
 			entry.name, (localName != entry.name) ? localName : wxString(),
-			target_path, remote_path, *pServer, entry.size);
+			target_path, remote_path, *pServer, entry.size.GetValue());
 	}
 	m_pQueue->QueueFile_Finish(start);
 
@@ -707,7 +707,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		const CDirentry& entry = m_results->m_fileData[item];
 		const CServerPath path = m_results->m_fileData[item].path;
 
-		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
+		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size.GetValue(), this);
 	}
 }
 

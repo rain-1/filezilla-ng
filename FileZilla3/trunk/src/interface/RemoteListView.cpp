@@ -1016,7 +1016,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 				localFile = StripVMSRevision(localFile);
 			m_pQueue->QueueFile(queue_only, true, name,
 				(name == localFile) ? wxString() : localFile,
-				local_path, m_pDirectoryListing->path, *pServer, entry.size);
+				local_path, m_pDirectoryListing->path, *pServer, entry.size.GetValue());
 			m_pQueue->QueueFile_Finish(true);
 		}
 	}
@@ -1280,7 +1280,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 				localFile = StripVMSRevision(localFile);
 			m_pQueue->QueueFile(queueOnly, true,
 				name, (name == localFile) ? wxString() : localFile,
-				local_parent, m_pDirectoryListing->path, *pServer, entry.size);
+				local_parent, m_pDirectoryListing->path, *pServer, entry.size.GetValue());
 			added = true;
 		}
 	}
@@ -2312,7 +2312,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 			return;
 		}
 
-		selected_items.push_back({entry.name, entry.size});
+		selected_items.push_back({entry.name, entry.size.GetValue()});
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
