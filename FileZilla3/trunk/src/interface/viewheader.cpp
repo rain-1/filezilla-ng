@@ -261,45 +261,50 @@ void CViewHeader::AddRecentDirectory(const wxString &directory)
 	const int len = directory.Len();
 
 	// Check if directory is already in the list
-	for (std::list<wxString>::const_iterator iter = m_recentDirectories.begin(); iter != m_recentDirectories.end(); ++iter)
-	{
-		if (*iter == directory)
-		{
+	for (auto iter = m_recentDirectories.begin(); iter != m_recentDirectories.end(); ++iter) {
+		if (*iter == directory) {
 			m_pComboBox->SetStringSelection(directory);
 			m_pComboBox->SetSelection(len, len);
 			return;
 		}
 	}
 
-	if (m_recentDirectories.size() == 20)
-	{
-		wxString dirToRemove = m_recentDirectories.front();
-		m_recentDirectories.pop_front();
-		if (dirToRemove == directory)
-		{
-			m_recentDirectories.push_back(directory);
-			m_pComboBox->SetStringSelection(directory);
-			m_pComboBox->SetSelection(len, len);
-			return;
-		}
+	if (m_recentDirectories.size() == 20) {
+		wxASSERT(m_recentDirectories.front() != directory);
 
-		int item = m_pComboBox->FindString(dirToRemove, true);
-		if (item != wxNOT_FOUND)
-			m_pComboBox->Delete(item);
+		int pos = 0;
+		for (auto it = m_sortedRecentDirectories.begin(); it != m_sortedRecentDirectories.end(); ++pos, ++it) {
+			if (*it == m_recentDirectories.front()) {
+				m_sortedRecentDirectories.erase(it);
+				break;
+			}
+		}
+		wxASSERT(pos != 20);
+
+		wxASSERT(m_pComboBox->FindString(m_recentDirectories.front(), true) == pos);
+		m_pComboBox->Delete(pos);
+		m_recentDirectories.pop_front();
 	}
 
 	m_recentDirectories.push_back(directory);
 
-	unsigned int pos = 0;
-	for( ; pos < m_pComboBox->GetCount(); ++pos ) {
-		if( m_pComboBox->GetString(pos).CmpNoCase(directory) > 0 ) {
+	// Find insertion position.
+	// Do a linear search, binary search not worth it for 20 items
+	int pos = 0;
+	auto it = m_sortedRecentDirectories.begin();
+	for (; it != m_sortedRecentDirectories.end(); ++pos, ++it) {
+		int cmp = directory.CmpNoCase(*it);
+		if (cmp < 0 || (!cmp && directory.Cmp(*it) < 0)) {
 			break;
 		}
 	}
+	m_sortedRecentDirectories.insert(it, directory);
+
 	int item = m_pComboBox->Insert(directory, pos);
 	m_pComboBox->SetSelection(item);
 	m_pComboBox->SetSelection(len, len);
-	return;
+
+	wxASSERT(m_sortedRecentDirectories.size() == m_recentDirectories.size());
 }
 
 void CViewHeader::SetFocus()
@@ -545,6 +550,7 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 		{
 			m_pComboBox->Clear();
 			m_recentDirectories.clear();
+			m_sortedRecentDirectories.clear();
 			m_lastServer = *pServer;
 		}
 		Enable();

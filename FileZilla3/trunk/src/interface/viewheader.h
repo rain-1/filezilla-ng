@@ -37,7 +37,8 @@ protected:
 #endif //__WXMSW__
 
 	void AddRecentDirectory(const wxString &directory);
-	std::list<wxString> m_recentDirectories;
+	std::deque<wxString> m_recentDirectories; // ordered by age
+	std::list<wxString> m_sortedRecentDirectories; // ordered by sort order
 
 	int m_cbOffset{};
 	int m_labelHeight{};
