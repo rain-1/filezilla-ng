@@ -291,6 +291,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(CStatusBar, CWidgetsStatusBar)
 EVT_MENU(XRCID("ID_SPEEDLIMITCONTEXT_ENABLE"), CStatusBar::OnSpeedLimitsEnable)
 EVT_MENU(XRCID("ID_SPEEDLIMITCONTEXT_CONFIGURE"), CStatusBar::OnSpeedLimitsConfigure)
+EVT_TIMER(wxID_ANY, CStatusBar::OnTimer)
 END_EVENT_TABLE()
 
 CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
@@ -315,13 +316,6 @@ CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_ENCRYPTION, true, false);
 
-	m_pDataTypeIndicator = 0;
-	m_pEncryptionIndicator = 0;
-	m_pSpeedLimitsIndicator = 0;
-
-	m_size = 0;
-	m_hasUnknownFiles = false;
-
 	const int count = 3;
 	SetFieldsCount(count);
 	int array[count];
@@ -337,6 +331,8 @@ CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
 	UpdateSpeedLimitsIcon();
 	DisplayDataType();
 	DisplayEncrypted();
+
+	m_queue_size_timer.SetOwner(this);
 }
 
 CStatusBar::~CStatusBar()
@@ -348,14 +344,25 @@ void CStatusBar::DisplayQueueSize(int64_t totalSize, bool hasUnknown)
 	m_size = totalSize;
 	m_hasUnknownFiles = hasUnknown;
 
-	if (totalSize == 0 && !hasUnknown)
-	{
+	if (m_queue_size_timer.IsRunning()) {
+		m_queue_size_changed = true;
+	}
+	else {
+		DoDisplayQueueSize();
+		m_queue_size_timer.Start(200, true);
+	}
+}
+
+void CStatusBar::DoDisplayQueueSize()
+{
+	m_queue_size_changed = false;
+	if (m_size == 0 && !m_hasUnknownFiles) {
 		SetStatusText(_("Queue: empty"), FIELD_QUEUESIZE);
 		return;
 	}
 
-	wxString queueSize = wxString::Format(_("Queue: %s%s"), hasUnknown ? _T(">") : _T(""),
-		CSizeFormat::Format(totalSize, true, m_sizeFormat, m_sizeFormatThousandsSep, m_sizeFormatDecimalPlaces));
+	wxString queueSize = wxString::Format(_("Queue: %s%s"), m_hasUnknownFiles ? _T(">") : _T(""),
+		CSizeFormat::Format(m_size, true, m_sizeFormat, m_sizeFormatThousandsSep, m_sizeFormatDecimalPlaces));
 
 	SetStatusText(queueSize, FIELD_QUEUESIZE);
 }
@@ -367,40 +374,33 @@ void CStatusBar::DisplayDataType()
 	if (pState)
 		pServer = pState->GetServer();
 
-	if (!pServer || !CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol()))
-	{
-		if (m_pDataTypeIndicator)
-		{
+	if (!pServer || !CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol())) {
+		if (m_pDataTypeIndicator) {
 			RemoveField(widget_datatype);
 			m_pDataTypeIndicator->Destroy();
 			m_pDataTypeIndicator = 0;
 		}
 	}
-	else
-	{
+	else {
 		wxString name;
 		wxString desc;
 
 		const int type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
-		if (type == 1)
-		{
+		if (type == 1) {
 			name = _T("ART_ASCII");
 			desc = _("Current transfer type is set to ASCII.");
 		}
-		else if (type == 2)
-		{
+		else if (type == 2) {
 			name = _T("ART_BINARY");
 			desc = _("Current transfer type is set to binary.");
 		}
-		else
-		{
+		else {
 			name = _T("ART_AUTO");
 			desc = _("Current transfer type is set to automatic detection.");
 		}
 
 		wxBitmap bmp = wxArtProvider::GetBitmap(name, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall));
-		if (!m_pDataTypeIndicator)
-		{
+		if (!m_pDataTypeIndicator) {
 			m_pDataTypeIndicator = new CIndicator(this, bmp);
 			AddField(0, widget_datatype, m_pDataTypeIndicator);
 		}
@@ -647,4 +647,12 @@ void CStatusBar::OnSpeedLimitsConfigure(wxCommandEvent&)
 {
 	CSpeedLimitsDialog dlg;
 	dlg.Run(m_pParent);
+}
+
+void CStatusBar::OnTimer(wxTimerEvent&)
+{
+	if (m_queue_size_changed && !m_queue_size_timer.IsRunning()) {
+		DoDisplayQueueSize();
+		m_queue_size_timer.Start(200, true);
+	}
 }
