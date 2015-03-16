@@ -5,6 +5,8 @@
 #include "sizeformatting.h"
 #include "state.h"
 
+#include <wx/timer.h>
+
 enum widgets
 {
 	widget_led_send,
@@ -109,19 +111,25 @@ protected:
 	virtual void OnOptionsChanged(changed_options_t const& options);
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 
+	void DoDisplayQueueSize();
+
 	CSizeFormat::_format m_sizeFormat;
 	bool m_sizeFormatThousandsSep;
 	int m_sizeFormatDecimalPlaces;
-	int64_t m_size;
-	bool m_hasUnknownFiles;
+	int64_t m_size{};
+	bool m_hasUnknownFiles{};
 
-	wxStaticBitmap* m_pDataTypeIndicator;
-	wxStaticBitmap* m_pEncryptionIndicator;
-	wxStaticBitmap* m_pSpeedLimitsIndicator;
+	wxStaticBitmap* m_pDataTypeIndicator{};
+	wxStaticBitmap* m_pEncryptionIndicator{};
+	wxStaticBitmap* m_pSpeedLimitsIndicator{};
+
+	wxTimer m_queue_size_timer;
+	bool m_queue_size_changed{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSpeedLimitsEnable(wxCommandEvent& event);
 	void OnSpeedLimitsConfigure(wxCommandEvent& event);
+	void OnTimer(wxTimerEvent& ev);
 };
 
 #endif //__STATUSBAR_H__
