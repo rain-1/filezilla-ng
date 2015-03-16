@@ -1017,3 +1017,8 @@ void CServerPath::EscapeSeparators(ServerType type, wxString& subdir)
 			subdir.Replace((wxString)*p, (wxString)traits[type].separatorEscape + traits[type].separators[0]);
 	}
 }
+
+size_t CServerPath::SegmentCount() const
+{
+	return empty() ? 0 : m_data->m_segments.size();
+}

@@ -65,6 +65,7 @@ public:
 
 	bool AddSegment(const wxString& segment);
 
+	size_t SegmentCount() const;
 protected:
 	bool DoSetSafePath(const wxString& path);
 	bool DoChangePath(wxString &subdir, bool isFile);

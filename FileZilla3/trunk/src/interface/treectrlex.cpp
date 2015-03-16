@@ -33,6 +33,7 @@ wxTreeCtrlEx::wxTreeCtrlEx(wxWindow *parent, wxWindowID id /*=wxID_ANY*/,
 	)
 {
 	Create(parent, id, pos, size, style);
+	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 }
 
 void wxTreeCtrlEx::SafeSelectItem(const wxTreeItemId& item)

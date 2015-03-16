@@ -269,6 +269,11 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 
 	m_genericTypes[genericTypes::file] = _("File");
 	m_genericTypes[genericTypes::directory] = _("Directory");
+
+	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+#ifndef __WXMSW__
+	GetMainWindow()->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+#endif
 }
 
 template<class CFileData> CFileListCtrl<CFileData>::~CFileListCtrl()
