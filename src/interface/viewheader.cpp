@@ -79,6 +79,10 @@ CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 	m_pComboBox->Connect(wxID_ANY, wxEVT_LEFT_UP, (wxObjectEventFunction)(wxEventFunction)(wxMouseEventFunction)&CViewHeader::OnComboMouseEvent, 0, this);
 	m_bLeftMousePressed = false;
 #endif //__WXMSW__
+
+	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+	m_pComboBox->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+	m_pLabel->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 }
 
 void CViewHeader::OnSize(wxSizeEvent&)

@@ -369,61 +369,54 @@ void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 
 wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 {
-	std::list<wxString> pieces;
-	while (path.HasParent())
-	{
-		pieces.push_front(path.GetLastSegment());
+	std::vector<wxString> pieces;
+	pieces.reserve(path.SegmentCount() + 1);
+	while (path.HasParent()) {
+		pieces.push_back(path.GetLastSegment());
 		path = path.GetParent();
 	}
 	wxASSERT(!path.GetPath().empty());
-	pieces.push_front(path.GetPath());
+	pieces.push_back(path.GetPath());
 
 	const wxTreeItemId root = GetRootItem();
 	wxTreeItemId parent = root;
 
-	for (std::list<wxString>::const_iterator iter = pieces.begin(); iter != pieces.end(); ++iter)
-	{
-		if (iter != pieces.begin())
+	for (std::vector<wxString>::const_reverse_iterator iter = pieces.rbegin(); iter != pieces.rend(); ++iter) {
+		if (iter != pieces.rbegin())
 			path.AddSegment(*iter);
 
 		wxTreeItemIdValue cookie;
 		wxTreeItemId child = GetFirstChild(parent, cookie);
-		if (child && GetItemText(child).empty())
-		{
+		if (child && GetItemText(child).empty()) {
 			Delete(child);
 			child = wxTreeItemId();
 			if (parent != root)
 				ListExpand(parent);
 		}
-		for (child = GetFirstChild(parent, cookie); child; child = GetNextSibling(child))
-		{
+		for (child = GetFirstChild(parent, cookie); child; child = GetNextSibling(child)) {
 			const wxString& text = GetItemText(child);
 			if (text == *iter)
 				break;
 		}
-		if (!child)
-		{
+		if (!child) {
 			CDirectoryListing listing;
 
-			if (m_pState->m_pEngine->CacheLookup(path, listing) == FZ_REPLY_OK)
-			{
+			if (m_pState->m_pEngine->CacheLookup(path, listing) == FZ_REPLY_OK) {
 				child = AppendItem(parent, *iter, 0, 2, path.HasParent() ? 0 : new CItemData(path));
 				SetItemImages(child, false);
 			}
-			else
-			{
+			else {
 				child = AppendItem(parent, *iter, 1, 3, path.HasParent() ? 0 : new CItemData(path));
 				SetItemImages(child, true);
 			}
 			SortChildren(parent);
 
-			std::list<wxString>::const_iterator nextIter = iter;
+			auto nextIter = iter;
 			++nextIter;
-			if (nextIter != pieces.end())
+			if (nextIter != pieces.rend())
 				DisplayItem(child, listing);
 		}
-		if (select && iter != pieces.begin())
-		{
+		if (select && iter != pieces.rbegin()) {
 #ifndef __WXMSW__
 			// Prevent CalculatePositions from being called
 			wxGenericTreeItem *anchor = m_anchor;

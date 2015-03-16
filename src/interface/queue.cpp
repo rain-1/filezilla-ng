@@ -1255,15 +1255,13 @@ void CQueueViewBase::CommitChanges()
 
 void CQueueViewBase::DisplayNumberQueuedFiles()
 {
-	if (m_filecount_delay_timer.IsRunning())
-	{
+	if (m_filecount_delay_timer.IsRunning()) {
 		m_fileCountChanged = true;
 		return;
 	}
 
 	wxString str;
-	if (m_fileCount > 0)
-	{
+	if (m_fileCount > 0) {
 		if (!m_folderScanCount)
 			str.Printf(m_title + _T(" (%d)"), m_fileCount);
 		else
@@ -1294,13 +1292,11 @@ void CQueueViewBase::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 		m_insertionStart = newIndex;
 	m_insertionCount++;
 
-	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder)
-	{
+	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		m_fileCount++;
 		m_fileCountChanged = true;
 	}
-	else if (pItem->GetType() == QueueItemType::FolderScan)
-	{
+	else if (pItem->GetType() == QueueItemType::FolderScan) {
 		m_folderScanCount++;
 		m_folderScanCountChanged = true;
 	}
@@ -1308,14 +1304,12 @@ void CQueueViewBase::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 
 bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount /*=true*/, bool updateSelections /*=true*/)
 {
-	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder)
-	{
+	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		wxASSERT(m_fileCount > 0);
 		m_fileCount--;
 		m_fileCountChanged = true;
 	}
-	else if (pItem->GetType() == QueueItemType::FolderScan)
-	{
+	else if (pItem->GetType() == QueueItemType::FolderScan) {
 		wxASSERT(m_folderScanCount > 0);
 		m_folderScanCount--;
 		m_folderScanCountChanged = true;
@@ -1334,11 +1328,9 @@ bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItem
 	bool didRemoveParent;
 
 	int oldCount = m_itemCount;
-	if (!topLevelItem->GetChild(0))
-	{
+	if (!topLevelItem->GetChild(0)) {
 		std::vector<CServerItem*>::iterator iter;
-		for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		{
+		for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
 			if (*iter == topLevelItem)
 				break;
 		}
@@ -1355,8 +1347,7 @@ bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItem
 
 		didRemoveParent = true;
 	}
-	else
-	{
+	else {
 		count -= topLevelItem->GetChildrenCount(true);
 
 		if (updateSelections)
@@ -1369,8 +1360,7 @@ bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItem
 		didRemoveParent = false;
 	}
 
-	if (updateItemCount)
-	{
+	if (updateItemCount) {
 		if (m_fileCountChanged || m_folderScanCountChanged)
 			DisplayNumberQueuedFiles();
 		if (oldCount > m_itemCount)
@@ -1447,8 +1437,9 @@ void CQueueViewBase::OnTimer(wxTimerEvent& event)
 		return;
 	}
 
-	if (m_fileCountChanged || m_folderScanCountChanged)
+	if (m_fileCountChanged || m_folderScanCountChanged) {
 		DisplayNumberQueuedFiles();
+	}
 }
 
 void CQueueViewBase::OnKeyDown(wxKeyEvent& event)
