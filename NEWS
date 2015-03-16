@@ -10,7 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
-3.10.3-beta1 (2015-03-14)
+3.10.3-beta2 (2015-03-16)
+
+- Minimum timeout value is now 10 seconds, up from 5 seconds to prevent timeouts uploading to servers with slow storage
+- Fixed an assert with invalid file sizes
+- Small performance improvements
+
+3.10.3-beta2 (2015-03-14)
 
 + FileZilla is now also available as 64bit Windows program. Users of 32bit FileZilla on 64bit Windows will get automatically migrated using the auto-updater
 + Added option to enable SFTP compression
