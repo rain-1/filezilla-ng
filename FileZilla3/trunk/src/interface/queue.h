@@ -217,7 +217,7 @@ public:
 	QueuePriority m_priority{QueuePriority::normal};
 
 protected:
-	enum : char
+	enum : unsigned char
 	{
 		flag_download = 0x01,
 		flag_active = 0x02,
@@ -226,7 +226,7 @@ protected:
 		flag_remove = 0x10,
 		flag_ascii = 0x20
 	};
-	char flags{};
+	unsigned char flags{};
 	Status m_status{};
 
 public:
