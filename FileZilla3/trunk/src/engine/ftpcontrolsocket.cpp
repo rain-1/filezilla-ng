@@ -46,19 +46,9 @@ CRawTransferOpData::CRawTransferOpData()
 {
 }
 
-CFtpTransferOpData::CFtpTransferOpData()
-{
-	transferEndReason = TransferEndReason::successful;
-	tranferCommandSent = false;
-	resumeOffset = 0;
-	binary = true;
-}
-
 CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
 	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
 {
-	pIOThread = 0;
-	fileDidExist = true;
 }
 
 CFtpFileTransferOpData::~CFtpFileTransferOpData()
@@ -2607,7 +2597,7 @@ int CFtpControlSocket::FileTransferSend()
 					if (sizeToPreallocate > 0) {
 						LogMessage(MessageType::Debug_Info, _T("Preallocating %") + wxString(wxFileOffsetFmtSpec) + _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
 						wxFileOffset oldPos = pFile->Seek(0, CFile::current);
-						if (oldPos != -1) {
+						if (oldPos >= 0) {
 							if (pFile->Seek(sizeToPreallocate, CFile::end) == pData->remoteFileSize) {
 								if (!pFile->Truncate())
 									LogMessage(MessageType::Debug_Warning, _T("Could not preallocate the file"));
@@ -2629,7 +2619,7 @@ int CFtpControlSocket::FileTransferSend()
 					if (pData->remoteFileSize > 0) {
 						startOffset = pData->remoteFileSize;
 
-						if (pData->localFileSize == -1)
+						if (pData->localFileSize < 0)
 							pData->localFileSize = pFile->Length();
 
 						if (startOffset == pData->localFileSize && pData->binary) {
