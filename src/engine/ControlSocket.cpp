@@ -383,9 +383,8 @@ int CControlSocket::CheckOverwriteFile()
 	if (found && !matchedCase)
 		found = false;
 
-	if (!pData->download)
-	{
-		if (!found && pData->remoteFileSize == -1 && !pData->fileTime.IsValid())
+	if (!pData->download) {
+		if (!found && pData->remoteFileSize < 0 && !pData->fileTime.IsValid())
 			return FZ_REPLY_OK;
 	}
 
@@ -399,9 +398,9 @@ int CControlSocket::CheckOverwriteFile()
 	pNotification->remoteSize = pData->remoteFileSize;
 	pNotification->ascii = !pData->transferSettings.binary;
 
-	if (pData->download && pNotification->localSize != -1)
+	if (pData->download && pNotification->localSize >= 0)
 		pNotification->canResume = true;
-	else if (!pData->download && pNotification->remoteSize != -1)
+	else if (!pData->download && pNotification->remoteSize >= 0)
 		pNotification->canResume = true;
 	else
 		pNotification->canResume = false;
@@ -1159,7 +1158,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 	case CFileExistsNotification::overwriteSize:
 		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
 		Second compare flags the remaining case in which we need to send command : both size unknown */
-		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize == -1))
+		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0))
 			SendNextCommand();
 		else {
 			if (pData->download) {
@@ -1177,7 +1176,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			SendNextCommand();
 		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
 		Second compare flags the remaining case in which we need to send command : both size unknown */
-		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize == -1))
+		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0))
 			SendNextCommand();
 		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
 			SendNextCommand();
@@ -1198,9 +1197,9 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::resume:
-		if (pData->download && pData->localFileSize != -1)
+		if (pData->download && pData->localFileSize >= 0)
 			pData->resume = true;
-		else if (!pData->download && pData->remoteFileSize != -1)
+		else if (!pData->download && pData->remoteFileSize >= 0)
 			pData->resume = true;
 		SendNextCommand();
 		break;

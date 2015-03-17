@@ -161,14 +161,14 @@ class CIOThread;
 class CFtpTransferOpData
 {
 public:
-	CFtpTransferOpData();
+	CFtpTransferOpData() = default;
 	virtual ~CFtpTransferOpData() {}
 
-	TransferEndReason transferEndReason;
-	bool tranferCommandSent;
+	TransferEndReason transferEndReason{TransferEndReason::successful};
+	bool tranferCommandSent{};
 
-	wxLongLong resumeOffset;
-	bool binary;
+	wxLongLong resumeOffset{};
+	bool binary{true};
 };
 
 class CFtpFileTransferOpData final : public CFileTransferOpData, public CFtpTransferOpData
@@ -177,8 +177,8 @@ public:
 	CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
 	virtual ~CFtpFileTransferOpData();
 
-	CIOThread *pIOThread;
-	bool fileDidExist;
+	CIOThread *pIOThread{};
+	bool fileDidExist{true};
 };
 
 class CRawTransferOpData final : public COpData
