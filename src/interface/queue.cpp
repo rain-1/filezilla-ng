@@ -316,13 +316,11 @@ QueuePriority CFileItem::GetPriority() const
 
 void CFileItem::SetActive(const bool active)
 {
-	if (active && !IsActive())
-	{
+	if (active && !IsActive()) {
 		AddChild(new CStatusItem);
 		flags |= flag_active;
 	}
-	else if (!active && IsActive())
-	{
+	else if (!active && IsActive()) {
 		CQueueItem* pItem = GetChild(0, false);
 		RemoveChild(pItem);
 		flags &= ~flag_active;
