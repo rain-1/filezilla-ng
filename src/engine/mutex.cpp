@@ -68,19 +68,13 @@ condition::~condition()
 
 void condition::wait(scoped_lock& l)
 {
-	if (signalled_) {
-		signalled_ = false;
-		return;
-	}
+	while (!signalled_) {
 #ifdef __WXMSW__
-	SleepConditionVariableCS(&cond_, l.m_, INFINITE);
+		SleepConditionVariableCS(&cond_, l.m_, INFINITE);
 #else
-	int res;
-	do {
-		res = pthread_cond_wait(&cond_, l.m_);
-	}
-	while (res == EINTR);
+		pthread_cond_wait(&cond_, l.m_);
 #endif
+	}
 	signalled_ = false;
 }
 
