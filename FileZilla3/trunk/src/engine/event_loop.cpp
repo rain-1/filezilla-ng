@@ -17,7 +17,6 @@ CEventLoop::~CEventLoop()
 	{
 		scoped_lock lock(sync_);
 		quit_ = true;
-		signalled_ = true;
 		cond_.signal(lock);
 	}
 
@@ -34,9 +33,10 @@ void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 	{
 		scoped_lock lock(sync_);
 		if (!handler->removing_) {
-			pending_events_.emplace_back(handler, evt);
-			signalled_ = true;
-			cond_.signal(lock);
+			if (pending_events_.empty()) {
+				cond_.signal(lock);
+			}
+			pending_events_.emplace_back(handler, evt);			
 		}
 		else {
 			delete evt;
@@ -111,7 +111,6 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 		d.id_ = ++id; // 64bit, can this really ever overflow?
 
 		timers_.emplace_back(d);
-		signalled_ = true;
 		cond_.signal(lock);
 	}
 	return d.id_;
@@ -133,14 +132,12 @@ void CEventLoop::StopTimer(timer_id id)
 bool CEventLoop::ProcessEvent(scoped_lock & l)
 {
 	Events::value_type ev{};
-	bool requestMore = false;
 
 	if (pending_events_.empty()) {
 		return false;
 	}
 	ev = pending_events_.front();
 	pending_events_.pop_front();
-	requestMore = !pending_events_.empty() || quit_;
 
 	if (ev.first && !ev.first->removing_) {
 		active_handler_ = ev.first;
@@ -156,29 +153,27 @@ bool CEventLoop::ProcessEvent(scoped_lock & l)
 		delete ev.second;
 	}
 
-	return requestMore;
+	return true;
 }
 
 wxThread::ExitCode CEventLoop::Entry()
 {
 	scoped_lock l(sync_);
 	while (!quit_) {
-		if (!signalled_) {
-			int wait = GetNextWaitInterval();
-			if (wait == std::numeric_limits<int>::max()) {
-				cond_.wait(l);
-			}
-			else if (wait) {
-				cond_.wait(l, wait);
-			}
+		if (ProcessTimers(l)) {
+			continue;
+		}
+		if (ProcessEvent(l)) {
+			continue;
 		}
 
-		signalled_ = false;
-
-		if (!ProcessTimers(l)) {
-			if (ProcessEvent(l)) {
-				signalled_ = true;
-			}
+		// Nothing to do, now we wait
+		int wait = GetNextWaitInterval();
+		if (wait == std::numeric_limits<int>::max()) {
+			cond_.wait(l);
+		}
+		else if (wait) {
+			cond_.wait(l, wait);
 		}
 	}
 
@@ -205,8 +200,6 @@ bool CEventLoop::ProcessTimers(scoped_lock & l)
 				it->deadline_ = now + wxTimeSpan::Milliseconds(it->ms_interval_);
 			}
 
-			bool const requestMore = !pending_events_.empty() || quit_;
-
 			if (!handler->removing_) {
 				active_handler_ = handler;
 				l.unlock();
@@ -214,8 +207,6 @@ bool CEventLoop::ProcessTimers(scoped_lock & l)
 				l.lock();
 				active_handler_ = 0;
 			}
-
-			signalled_ |= requestMore;
 
 			return true;
 		}
