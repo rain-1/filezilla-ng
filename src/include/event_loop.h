@@ -46,7 +46,6 @@ protected:
 
 	// Process timers. Returns true if a timer has been triggered
 	bool ProcessTimers(scoped_lock & l, wxDateTime const& now);
-	int GetNextWaitInterval();
 
 	virtual wxThread::ExitCode Entry();
 
