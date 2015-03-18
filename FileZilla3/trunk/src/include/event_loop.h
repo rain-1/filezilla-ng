@@ -15,11 +15,13 @@ struct timer_data final
 {
 	CEventHandler* handler_{};
 	timer_id id_{};
-	CDateTime deadline_;
+	wxDateTime deadline_;
 	int ms_interval_{};
 	bool one_shot_{true};
 };
 
+// Timers have precedence over queued events. Too many or too frequent timers can starve processing queued events.
+// If the deadline of multiple timers have expired, they get processed in an unspecified order
 class CEventLoop final : private wxThread
 {
 public:
@@ -43,7 +45,7 @@ protected:
 	void SendEvent(CEventHandler* handler, CEventBase* evt);
 
 	// Process timers. Returns true if a timer has been triggered
-	bool ProcessTimers(scoped_lock & l);
+	bool ProcessTimers(scoped_lock & l, wxDateTime const& now);
 	int GetNextWaitInterval();
 
 	virtual wxThread::ExitCode Entry();
@@ -62,6 +64,8 @@ protected:
 
 	// Process the next (if any) event. Returns true if an event has been processed
 	bool ProcessEvent(scoped_lock & l);
+
+	wxDateTime deadline_;
 };
 
 template<typename T, typename H, typename F>

@@ -70,6 +70,9 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 		),
 		timers_.end()
 	);
+	if (timers_.empty()) {
+		deadline_ = wxDateTime();
+	}
 
 	while (active_handler_ == handler) {
 		l.unlock();
@@ -102,7 +105,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 	d.handler_ = handler;
 	d.ms_interval_ = ms_interval;
 	d.one_shot_ = one_shot;
-	d.deadline_ = CDateTime::Now() + wxTimeSpan::Milliseconds(ms_interval);
+	d.deadline_ = wxDateTime::UNow() + wxTimeSpan::Milliseconds(ms_interval);
 
 
 	scoped_lock lock(sync_);
@@ -111,7 +114,11 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 		d.id_ = ++id; // 64bit, can this really ever overflow?
 
 		timers_.emplace_back(d);
-		cond_.signal(lock);
+		if (!deadline_.IsValid() || d.deadline_ < deadline_) {
+			// Our new time is the next timer to trigger
+			deadline_ = d.deadline_;
+			cond_.signal(lock);
+		}
 	}
 	return d.id_;
 }
@@ -123,6 +130,9 @@ void CEventLoop::StopTimer(timer_id id)
 		for (auto it = timers_.begin(); it != timers_.end(); ++it) {
 			if (it->id_ == id) {
 				timers_.erase(it);
+				if (timers_.empty()) {
+					deadline_ = wxDateTime();
+				}
 				break;
 			}
 		}
@@ -160,7 +170,8 @@ wxThread::ExitCode CEventLoop::Entry()
 {
 	scoped_lock l(sync_);
 	while (!quit_) {
-		if (ProcessTimers(l)) {
+		wxDateTime const now(wxDateTime::UNow());
+		if (ProcessTimers(l, now)) {
 			continue;
 		}
 		if (ProcessEvent(l)) {
@@ -168,74 +179,84 @@ wxThread::ExitCode CEventLoop::Entry()
 		}
 
 		// Nothing to do, now we wait
-		int wait = GetNextWaitInterval();
-		if (wait == std::numeric_limits<int>::max()) {
-			cond_.wait(l);
-		}
-		else if (wait) {
+		if (deadline_.IsValid()) {
+			int wait = static_cast<int>((deadline_ - now).GetMilliseconds().GetValue());
 			cond_.wait(l, wait);
+		}
+		else {
+			cond_.wait(l);
 		}
 	}
 
 	return 0;
 }
 
-bool CEventLoop::ProcessTimers(scoped_lock & l)
+bool CEventLoop::ProcessTimers(scoped_lock & l, wxDateTime const& now)
 {
-	CDateTime const now(CDateTime::Now());
-	for (auto it = timers_.begin(); it != timers_.end(); ++it) {
-		int diff = static_cast<int>((it->deadline_ - now).GetMilliseconds().GetValue());
-		if (diff <= -60000) {
-			// Did the system time change? Update deadline
-			it->deadline_ = now + it->ms_interval_;
-			continue;
-		}
-		else if (diff <= 0) {
-			CEventHandler *const handler = it->handler_;
-			auto const id = it->id_;
-			if (it->one_shot_) {
-				timers_.erase(it);
-			}
-			else {
-				it->deadline_ = now + wxTimeSpan::Milliseconds(it->ms_interval_);
-			}
+	if (!deadline_.IsValid() || now < deadline_) {
+		// There's no deadline or deadline has not yet expired
+		return false;
+	}
 
-			if (!handler->removing_) {
-				active_handler_ = handler;
-				l.unlock();
-				(*handler)(CTimerEvent(id));
-				l.lock();
-				active_handler_ = 0;
+	if (deadline_.IsValid() && (now - deadline_).GetMilliseconds() <= -60000) {
+		// Did the system time change? Update timers
+		deadline_ = wxDateTime();
+		for (auto & timer : timers_) {
+			timer.deadline_ = now + wxTimeSpan::Milliseconds(timer.ms_interval_);
+			if (!deadline_.IsValid() || timer.deadline_ < deadline_) {
+				deadline_ = timer.deadline_;
 			}
-
-			return true;
 		}
+		return false;
+	}
+
+	// Update deadline_, stop at first expired timer
+	deadline_ = wxDateTime();
+	auto it = timers_.begin();
+	for (; it != timers_.end(); ++it) {
+		if (!deadline_.IsValid() || it->deadline_ < deadline_) {
+			if (it->deadline_ <= now) {
+				break;
+			}
+			deadline_ = it->deadline_;
+		}
+	}
+
+	if (it != timers_.end()) {
+		// 'it' is now expired
+		// deadline_ has been updated with prior timers
+		// go through remaining elements to update deadline_
+		for (auto it2 = std::next(it); it2 != timers_.end(); ++it2) {
+			if (!deadline_.IsValid() || it2->deadline_ < deadline_) {
+				deadline_ = it2->deadline_;
+			}
+		}
+
+		CEventHandler *const handler = it->handler_;
+		auto const id = it->id_;
+			
+		// Update the expired timer
+		if (it->one_shot_) {
+			timers_.erase(it);
+		}
+		else {
+			it->deadline_ = now + wxTimeSpan::Milliseconds(it->ms_interval_);
+			if (!deadline_.IsValid() || it->deadline_ < deadline_) {
+				deadline_ = it->deadline_;
+			}
+		}
+
+		// Call event handler
+		if (!handler->removing_) {
+			active_handler_ = handler;
+			l.unlock();
+			(*handler)(CTimerEvent(id));
+			l.lock();
+			active_handler_ = 0;
+		}
+
+		return true;
 	}
 
 	return false;
-}
-
-int CEventLoop::GetNextWaitInterval()
-{
-	int wait = std::numeric_limits<int>::max();
-
-	CDateTime const now(CDateTime::Now());
-	for (auto & timer : timers_) {
-		int diff = static_cast<int>((timer.deadline_ - now).GetMilliseconds().GetValue());
-		if (diff <= -60000) {
-			// Did the system time change? Update deadline
-			timer.deadline_ = now + timer.ms_interval_;
-			diff = timer.ms_interval_;
-		}
-
-		if (diff < wait) {
-			wait = diff;
-		}
-	}
-
-	if (wait < 0) {
-		wait = 0;
-	}
-
-	return wait;
 }
