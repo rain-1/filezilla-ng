@@ -114,10 +114,12 @@ bool condition::wait(scoped_lock& l, int timeout_ms)
 
 void condition::signal(scoped_lock &)
 {
-	signalled_ = true;
+	if (!signalled_) {
+		signalled_ = true;
 #ifdef __WXMSW__
-	WakeConditionVariable(&cond_);
+		WakeConditionVariable(&cond_);
 #else
-	pthread_cond_signal(&cond_);
+		pthread_cond_signal(&cond_);
 #endif
+	}
 }

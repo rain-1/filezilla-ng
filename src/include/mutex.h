@@ -116,6 +116,8 @@ public:
 	bool wait(scoped_lock& l, int timeout_ms);
 
 	void signal(scoped_lock& l);
+
+	bool signalled(scoped_lock const&) const { return signalled_; }
 private:
 #ifdef __WXMSW__
 	CONDITION_VARIABLE cond_;
