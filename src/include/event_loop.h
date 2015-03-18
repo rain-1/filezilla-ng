@@ -42,6 +42,7 @@ protected:
 	friend class CEventHandler;
 	void SendEvent(CEventHandler* handler, CEventBase* evt);
 
+	// Process timers. Returns true if a timer has been triggered
 	bool ProcessTimers(scoped_lock & l);
 	int GetNextWaitInterval();
 
@@ -55,11 +56,11 @@ protected:
 	mutex sync_;
 	condition cond_;
 
-	bool signalled_{};
 	bool quit_{};
 
 	CEventHandler * active_handler_{};
 
+	// Process the next (if any) event. Returns true if an event has been processed
 	bool ProcessEvent(scoped_lock & l);
 };
 
