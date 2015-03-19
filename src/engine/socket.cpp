@@ -993,7 +993,7 @@ void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
 			}
 
 			pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::read, 0);
-			if (m_pSocketThread->m_waiting & WAIT_WRITE) {
+			if (m_pSocketThread->m_waiting & WAIT_READ) {
 				m_pSocketThread->m_waiting &= ~WAIT_READ;
 				m_pSocketThread->WakeupThread(l);
 			}
@@ -1003,6 +1003,9 @@ void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
 #endif
 		}
 		else if (pEvtHandler && m_state == closing) {
+			if (!(m_pSocketThread->m_triggered & WAIT_READ)) {
+				m_pSocketThread->m_waiting |= WAIT_READ;
+			}
 			m_pSocketThread->SendEvents();
 		}
 	}
