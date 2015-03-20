@@ -71,7 +71,7 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 		timers_.end()
 	);
 	if (timers_.empty()) {
-		deadline_ = wxDateTime();
+		deadline_ = CMonotonicClock();
 	}
 
 	while (active_handler_ == handler) {
@@ -105,8 +105,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 	d.handler_ = handler;
 	d.ms_interval_ = ms_interval;
 	d.one_shot_ = one_shot;
-	d.deadline_ = wxDateTime::UNow() + wxTimeSpan::Milliseconds(ms_interval);
-
+	d.deadline_ = CMonotonicClock::now() + ms_interval;
 
 	scoped_lock lock(sync_);
 	static timer_id id{};
@@ -114,7 +113,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 		d.id_ = ++id; // 64bit, can this really ever overflow?
 
 		timers_.emplace_back(d);
-		if (!deadline_.IsValid() || d.deadline_ < deadline_) {
+		if (!deadline_ || d.deadline_ < deadline_) {
 			// Our new time is the next timer to trigger
 			deadline_ = d.deadline_;
 			cond_.signal(lock);
@@ -131,7 +130,7 @@ void CEventLoop::StopTimer(timer_id id)
 			if (it->id_ == id) {
 				timers_.erase(it);
 				if (timers_.empty()) {
-					deadline_ = wxDateTime();
+					deadline_ = CMonotonicClock();
 				}
 				break;
 			}
@@ -170,7 +169,7 @@ wxThread::ExitCode CEventLoop::Entry()
 {
 	scoped_lock l(sync_);
 	while (!quit_) {
-		wxDateTime const now(wxDateTime::UNow());
+		CMonotonicClock const now(CMonotonicClock::now());
 		if (ProcessTimers(l, now)) {
 			continue;
 		}
@@ -179,8 +178,8 @@ wxThread::ExitCode CEventLoop::Entry()
 		}
 
 		// Nothing to do, now we wait
-		if (deadline_.IsValid()) {
-			int wait = static_cast<int>((deadline_ - now).GetMilliseconds().GetValue());
+		if (deadline_) {
+			int wait = static_cast<int>(deadline_ - now);
 			cond_.wait(l, wait);
 		}
 		else {
@@ -191,30 +190,18 @@ wxThread::ExitCode CEventLoop::Entry()
 	return 0;
 }
 
-bool CEventLoop::ProcessTimers(scoped_lock & l, wxDateTime const& now)
+bool CEventLoop::ProcessTimers(scoped_lock & l, CMonotonicClock const& now)
 {
-	if (!deadline_.IsValid() || now < deadline_) {
+	if (!deadline_ || now < deadline_) {
 		// There's no deadline or deadline has not yet expired
 		return false;
 	}
 
-	if (deadline_.IsValid() && (now - deadline_).GetMilliseconds() <= -60000) {
-		// Did the system time change? Update timers
-		deadline_ = wxDateTime();
-		for (auto & timer : timers_) {
-			timer.deadline_ = now + wxTimeSpan::Milliseconds(timer.ms_interval_);
-			if (!deadline_.IsValid() || timer.deadline_ < deadline_) {
-				deadline_ = timer.deadline_;
-			}
-		}
-		return false;
-	}
-
 	// Update deadline_, stop at first expired timer
-	deadline_ = wxDateTime();
+	deadline_ = CMonotonicClock();
 	auto it = timers_.begin();
 	for (; it != timers_.end(); ++it) {
-		if (!deadline_.IsValid() || it->deadline_ < deadline_) {
+		if (!deadline_ || it->deadline_ < deadline_) {
 			if (it->deadline_ <= now) {
 				break;
 			}
@@ -227,7 +214,7 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, wxDateTime const& now)
 		// deadline_ has been updated with prior timers
 		// go through remaining elements to update deadline_
 		for (auto it2 = std::next(it); it2 != timers_.end(); ++it2) {
-			if (!deadline_.IsValid() || it2->deadline_ < deadline_) {
+			if (!deadline_ || it2->deadline_ < deadline_) {
 				deadline_ = it2->deadline_;
 			}
 		}
@@ -240,8 +227,8 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, wxDateTime const& now)
 			timers_.erase(it);
 		}
 		else {
-			it->deadline_ = now + wxTimeSpan::Milliseconds(it->ms_interval_);
-			if (!deadline_.IsValid() || it->deadline_ < deadline_) {
+			it->deadline_ = std::move(now + it->ms_interval_);
+			if (!deadline_ || it->deadline_ < deadline_) {
 				deadline_ = it->deadline_;
 			}
 		}
