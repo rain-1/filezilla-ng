@@ -15,7 +15,7 @@ struct timer_data final
 {
 	CEventHandler* handler_{};
 	timer_id id_{};
-	wxDateTime deadline_;
+	CMonotonicClock deadline_;
 	int ms_interval_{};
 	bool one_shot_{true};
 };
@@ -45,7 +45,7 @@ protected:
 	void SendEvent(CEventHandler* handler, CEventBase* evt);
 
 	// Process timers. Returns true if a timer has been triggered
-	bool ProcessTimers(scoped_lock & l, wxDateTime const& now);
+	bool ProcessTimers(scoped_lock & l, CMonotonicClock const& now);
 
 	virtual wxThread::ExitCode Entry();
 
@@ -64,7 +64,7 @@ protected:
 	// Process the next (if any) event. Returns true if an event has been processed
 	bool ProcessEvent(scoped_lock & l);
 
-	wxDateTime deadline_;
+	CMonotonicClock deadline_;
 };
 
 template<typename T, typename H, typename F>
