@@ -4,7 +4,18 @@
 #include "dialogex.h"
 #include "filezillaapp.h"
 
+#include <algorithm>
+
 CLoginManager CLoginManager::m_theLoginManager;
+
+std::list<CLoginManager::t_passwordcache>::iterator CLoginManager::FindItem(CServer const& server)
+{
+	return std::find_if(m_passwordCache.begin(), m_passwordCache.end(), [&server](t_passwordcache const& item)
+		{
+			return item.host == server.GetHost() && item.port == server.GetPort() && item.user == server.GetUser();
+		}
+	);
+}
 
 bool CLoginManager::GetPassword(CServer &server, bool silent, wxString const& name, wxString const& challenge)
 {
@@ -12,15 +23,9 @@ bool CLoginManager::GetPassword(CServer &server, bool silent, wxString const& na
 	wxASSERT(challenge.empty() || server.GetLogonType() == INTERACTIVE);
 
 	if (server.GetLogonType() == ASK) {
-		for (auto const& it : m_passwordCache) {
-			if (it.host != server.GetHost())
-				continue;
-			if (it.port != server.GetPort())
-				continue;
-			if (it.user != server.GetUser())
-				continue;
-
-			server.SetUser(server.GetUser(), it.password);
+		auto it = FindItem(server);
+		if (it != m_passwordCache.end()) {
+			server.SetUser(server.GetUser(), it->password);
 			return true;
 		}
 	}
@@ -121,15 +126,28 @@ void CLoginManager::CachedPasswordFailed(const CServer& server)
 	if (server.GetLogonType() != ASK)
 		return;
 
-	for (auto iter = m_passwordCache.begin(); iter != m_passwordCache.end(); ++iter) {
-		if (iter->host != server.GetHost())
-			continue;
-		if (iter->port != server.GetPort())
-			continue;
-		if (iter->user != server.GetUser())
-			continue;
+	auto it = FindItem(server);
+	if (it != m_passwordCache.end()) {
+		m_passwordCache.erase(it);
+	}
+}
 
-		m_passwordCache.erase(iter);
+void CLoginManager::RememberPassword(CServer & server)
+{
+	if (server.GetLogonType() != ASK && server.GetLogonType() != NORMAL) {
 		return;
+	}
+
+	auto it = FindItem(server);
+	if (it != m_passwordCache.end()) {
+		it->password = server.GetPass();
+	}
+	else {
+		t_passwordcache entry;
+		entry.host = server.GetHost();
+		entry.port = server.GetPort();
+		entry.user = server.GetUser();
+		entry.password = server.GetPass();
+		m_passwordCache.push_back(entry);
 	}
 }
