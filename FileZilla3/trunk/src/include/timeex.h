@@ -101,6 +101,13 @@ class CMonotonicClock final
 {
 public:
 	CMonotonicClock() = default;
+	CMonotonicClock(CMonotonicClock const&) = default;
+	CMonotonicClock& operator=(CMonotonicClock const&) = default;
+
+	CMonotonicClock const operator+(int ms) const
+	{
+		return CMonotonicClock(*this) += ms;
+	}
 
 #if defined(_MSC_VER) && _MSC_VER < 1900
 	// Most unfortunate: steady_clock is implemented in terms
@@ -113,12 +120,22 @@ public:
 		return CMonotonicClock(i.QuadPart);
 	}
 
+	explicit operator bool() const {
+		return t_ != 0;
+	}
+
+	CMonotonicClock& operator+=(int64_t ms)
+	{
+		t_ += ms * freq_ / 1000;
+		return *this;
+	}
+
 private:
 	CMonotonicClock(int64_t t)
 		: t_(t)
 	{}
 
-	int64_t t_;
+	int64_t t_{};
 
 	static int64_t const freq_;
 
@@ -135,12 +152,22 @@ private:
 		return CMonotonicClock(tv.tv_sec * 1000 + tv.tv_usec / 1000);
 	}
 
+	explicit operator bool() const {
+		return t_ != 0;
+	}
+
+	CMonotonicClock& operator+=(int64_t ms)
+	{
+		t_ += ms;
+		return *this;
+	}
+
 private:
-	CMonotonicClock(int64_t  t)
+	CMonotonicClock(int64_t t)
 		: t_(t)
 	{}
 
-	int64_t t_;
+	int64_t t_{};
 #else
 private:
 	typedef std::chrono::steady_clock clock_type;
@@ -149,6 +176,16 @@ private:
 public:
 	static CMonotonicClock now() {
 		return CMonotonicClock(clock_type::now());
+	}
+
+	explicit operator bool() const {
+		return t_ != clock_type::time_point();
+	}
+
+	CMonotonicClock& operator+=(int64_t ms)
+	{
+		t_ += std::chrono::milliseconds(ms);
+		return *this;
 	}
 
 private:
@@ -160,6 +197,8 @@ private:
 #endif
 
 	friend int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend bool operator<(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b);
 };
 
 inline int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b)
@@ -171,6 +210,16 @@ inline int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b)
 #else
 	return std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count();
 #endif
+}
+
+inline bool operator<(CMonotonicClock const& a, CMonotonicClock const& b)
+{
+	return a.t_ < b.t_;
+}
+
+inline bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b)
+{
+	return a.t_ <= b.t_;
 }
 
 #endif //__TIMEEX_H__
