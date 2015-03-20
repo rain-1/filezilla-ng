@@ -117,10 +117,9 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	else
 		m_pPass->SetValue(_T(""));
 
-	if (protocol == HTTP || protocol == HTTPS)
-	{
-		wxString error = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
-		wxMessageBoxEx(error, _("Syntax error"), wxICON_EXCLAMATION);
+	if (protocol == HTTP || protocol == HTTPS) {
+		wxString protocolError = _("Invalid protocol specified. Valid protocols are:\nftp:// for normal FTP with optional encryption,\nsftp:// for SSH file transfer protocol,\nftps:// for FTP over TLS (implicit) and\nftpes:// for FTP over TLS (explicit).");
+		wxMessageBoxEx(protocolError, _("Syntax error"), wxICON_EXCLAMATION);
 		return;
 	}
 
@@ -130,6 +129,10 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	if (server.GetLogonType() != ANONYMOUS && !CAskSavePasswordDialog::Run(this))
 		return;
 
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) && server.GetLogonType() == NORMAL) {
+		server.SetLogonType(ASK);
+		CLoginManager::Get().RememberPassword(server);
+	}
 	if (!m_pMainFrame->ConnectToServer(server, path))
 		return;
 

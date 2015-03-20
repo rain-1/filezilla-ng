@@ -15,6 +15,8 @@ public:
 
 	void CachedPasswordFailed(const CServer& server);
 
+	void RememberPassword(CServer & server);
+
 protected:
 	bool DisplayDialog(CServer& server, wxString const& name, wxString challenge);
 
@@ -28,6 +30,9 @@ protected:
 		wxString user;
 		wxString password;
 	};
+	
+	std::list<t_passwordcache>::iterator FindItem(CServer const&);
+	
 	std::list<t_passwordcache> m_passwordCache;
 };
 
