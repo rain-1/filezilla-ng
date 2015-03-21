@@ -10,8 +10,10 @@
 #include "ratelimiter.h"
 #include "sftpcontrolsocket.h"
 
+#include <algorithm>
+
 mutex CFileZillaEnginePrivate::mutex_;
-std::list<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
+std::vector<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {{0}, {0}};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
@@ -67,6 +69,7 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 	}
 
 	// Remove ourself from the engine list
+	m_engineList.erase(std::remove(m_engineList.begin(), m_engineList.end(), this), m_engineList.end());
 	for (auto iter = m_engineList.begin(); iter != m_engineList.end(); ++iter) {
 		if (*iter == this) {
 			m_engineList.erase(iter);
@@ -420,23 +423,22 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 
 	// Iterate over the other engine, send notification if last listing
 	// directory is the same
-	for (std::list<CFileZillaEnginePrivate*>::iterator iter = m_engineList.begin(); iter != m_engineList.end(); ++iter) {
-		CFileZillaEnginePrivate* const pEngine = *iter;
-		if (!pEngine->m_pControlSocket || pEngine->m_pControlSocket == m_pControlSocket)
+	for (auto & engine : m_engineList) {
+		if (!engine->m_pControlSocket || engine->m_pControlSocket == m_pControlSocket)
 			continue;
 
-		const CServer* const pServer = pEngine->m_pControlSocket->GetCurrentServer();
+		const CServer* const pServer = engine->m_pControlSocket->GetCurrentServer();
 		if (!pServer || *pServer != *pOwnServer)
 			continue;
 
-		if (pEngine->m_lastListDir != path)
+		if (engine->m_lastListDir != path)
 			continue;
 
-		if (pEngine->m_lastListTime.GetTime().IsValid() && changeTime <= pEngine->m_lastListTime)
+		if (engine->m_lastListTime.GetTime().IsValid() && changeTime <= engine->m_lastListTime)
 			continue;
 
-		pEngine->m_lastListTime = changeTime;
-		pEngine->AddNotification(new CDirectoryListingNotification(path, true));
+		engine->m_lastListTime = changeTime;
+		engine->AddNotification(new CDirectoryListingNotification(path, true));
 	}
 }
 
@@ -557,20 +559,18 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 	const CServer* const pOwnServer = m_pControlSocket->GetCurrentServer();
 	wxASSERT(pOwnServer);
 
-	for (std::list<CFileZillaEnginePrivate*>::iterator iter = m_engineList.begin(); iter != m_engineList.end(); ++iter)
-	{
-		if (*iter == this)
+	for (auto & engine : m_engineList) {
+		if (engine == this)
 			continue;
 
-		CFileZillaEnginePrivate* pEngine = *iter;
-		if (!pEngine->m_pControlSocket)
+		if (!engine->m_pControlSocket)
 			continue;
 
-		const CServer* const pServer = pEngine->m_pControlSocket->GetCurrentServer();
+		const CServer* const pServer = engine->m_pControlSocket->GetCurrentServer();
 		if (!pServer || *pServer != *pOwnServer)
 			continue;
 
-		pEngine->m_pControlSocket->InvalidateCurrentWorkingDir(path);
+		engine->m_pControlSocket->InvalidateCurrentWorkingDir(path);
 	}
 }
 
