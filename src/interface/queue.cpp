@@ -1070,16 +1070,14 @@ void CQueueViewBase::UpdateSelections_ItemRangeAdded(int added, int count)
 		return;
 #endif
 
-	std::list<int> itemsToSelect;
+	std::deque<int> itemsToSelect;
 
 	// Go through all selected items
 	int item = GetNextItem(added - 1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
-	while (item != -1)
-	{
+	while (item != -1) {
 		// Select new items preceding to current one
-		while (!itemsToSelect.empty() && itemsToSelect.front() < item)
-		{
+		while (!itemsToSelect.empty() && itemsToSelect.front() < item) {
 			SetItemState(itemsToSelect.front(), wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 			itemsToSelect.pop_front();
 		}
@@ -1092,8 +1090,9 @@ void CQueueViewBase::UpdateSelections_ItemRangeAdded(int added, int count)
 
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	}
-	for (std::list<int>::const_iterator iter = itemsToSelect.begin(); iter != itemsToSelect.end(); ++iter)
-		SetItemState(*iter, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+	for (auto const& sel : itemsToSelect) {
+		SetItemState(sel, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
+	}
 }
 
 void CQueueViewBase::UpdateSelections_ItemRemoved(int removed)
@@ -1149,15 +1148,13 @@ void CQueueViewBase::UpdateSelections_ItemRangeRemoved(int removed, int count)
 
 	SetItemState(removed, 0, wxLIST_STATE_SELECTED);
 
-	std::list<int> itemsToUnselect;
+	std::deque<int> itemsToUnselect;
 
 	int item = GetNextItem(removed - 1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 
-	while (item != -1)
-	{
+	while (item != -1) {
 		// Unselect new items preceding to current one
-		while (!itemsToUnselect.empty() && itemsToUnselect.front() < item - count)
-		{
+		while (!itemsToUnselect.empty() && itemsToUnselect.front() < item - count) {
 			SetItemState(itemsToUnselect.front(), 0, wxLIST_STATE_SELECTED);
 			itemsToUnselect.pop_front();
 		}
@@ -1173,8 +1170,9 @@ void CQueueViewBase::UpdateSelections_ItemRangeRemoved(int removed, int count)
 
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	}
-	for (std::list<int>::const_iterator iter = itemsToUnselect.begin(); iter != itemsToUnselect.end(); ++iter)
-		SetItemState(*iter, 0, wxLIST_STATE_SELECTED);
+	for (auto const& unsel : itemsToUnselect) {
+		SetItemState(unsel, 0, wxLIST_STATE_SELECTED);
+	}
 }
 
 void CQueueViewBase::AddQueueColumn(ColumnId id)

@@ -127,7 +127,7 @@ protected:
 
 	int m_currentOffset;
 
-	std::list<t_list> m_DataList;
+	std::deque<t_list> m_DataList;
 	std::deque<CRefcountObject<CDirentry>> m_entryList;
 	wxLongLong m_totalData;
 
@@ -136,7 +136,7 @@ protected:
 	CServer m_server;
 
 	bool m_fileListOnly;
-	std::list<wxString> m_fileList;
+	std::vector<wxString> m_fileList;
 
 	bool m_maybeMultilineVms;
 

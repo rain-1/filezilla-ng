@@ -121,7 +121,7 @@ protected:
 
 	wxString m_Response;
 	wxString m_MultilineResponseCode;
-	std::list<wxString> m_MultilineResponseLines;
+	std::vector<wxString> m_MultilineResponseLines;
 
 	CTransferSocket *m_pTransferSocket;
 

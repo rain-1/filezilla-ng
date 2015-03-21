@@ -8,7 +8,7 @@
 class CChmodDialog;
 class CQueueView;
 
-class CRecursiveOperation : public CStateEventHandler
+class CRecursiveOperation final : public CStateEventHandler
 {
 public:
 	CRecursiveOperation(CState* pState);
@@ -26,13 +26,13 @@ public:
 		recursive_list
 	};
 
-	void StartRecursiveOperation(enum OperationMode mode, const CServerPath& startDir, const std::list<CFilter> &filters, bool allowParent = false, const CServerPath& finalDir = CServerPath());
+	void StartRecursiveOperation(OperationMode mode, const CServerPath& startDir, std::vector<CFilter> const& filters, bool allowParent = false, const CServerPath& finalDir = CServerPath());
 	void StopRecursiveOperation();
 
 	void AddDirectoryToVisit(const CServerPath& path, const wxString& subdir, const CLocalPath& localDir = CLocalPath(), bool is_link = false);
 	void AddDirectoryToVisitRestricted(const CServerPath& path, const wxString& restrict, bool recurse);
 
-	enum OperationMode GetOperationMode() const { return m_operationMode; }
+	OperationMode GetOperationMode() const { return m_operationMode; }
 
 	// Needed for recursive_chmod
 	void SetChmodDialog(CChmodDialog* pChmodDialog);
@@ -42,35 +42,34 @@ public:
 
 	void SetQueue(CQueueView* pQueue);
 
-	bool ChangeOperationMode(enum OperationMode mode);
+	bool ChangeOperationMode(OperationMode mode);
 
 protected:
 	// Processes the directory listing in case of a recursive operation
 	void ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing);
 	bool NextOperation();
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2);
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
 
-	enum OperationMode m_operationMode;
+	OperationMode m_operationMode;
 
-	class CNewDir
+	class CNewDir final
 	{
 	public:
-		CNewDir();
 		CServerPath parent;
 		wxString subdir;
 		CLocalPath localDir;
-		bool doVisit;
+		bool doVisit{true};
 
-		bool recurse;
+		bool recurse{true};
 		wxString restrict;
 
-		bool second_try;
+		bool second_try{};
 
 		// 0 = not a link
 		// 1 = link, added by class during the operation
 		// 2 = link, added by user of class
-		int link;
+		int link{};
 
 		// Symlink target might be outside actual start dir. Yet
 		// sometimes user wants to download symlink target contents
@@ -91,7 +90,7 @@ protected:
 
 	CQueueView* m_pQueue{};
 
-	std::list<CFilter> m_filters;
+	std::vector<CFilter> m_filters;
 
 	friend class CCommandQueue;
 };

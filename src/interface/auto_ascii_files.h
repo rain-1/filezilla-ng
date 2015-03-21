@@ -9,7 +9,7 @@ public:
 
 	static void SettingsChanged();
 protected:
-	static std::list<wxString> m_ascii_extensions;
+	static std::vector<wxString> m_ascii_extensions;
 };
 
 #endif //__AUTO_ASCII_FILES_H__

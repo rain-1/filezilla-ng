@@ -594,9 +594,9 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 	return false;
 }
 
-bool CFilterManager::FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const
+bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const
 {
-	for( auto const& filter : filters ) {
+	for (auto const& filter : filters) {
 		if (FilenameFilteredByFilter(filter, name, path, dir, size, attributes, date))
 			return true;
 	}
@@ -1038,9 +1038,9 @@ void CFilterManager::ToggleFilters()
 		m_filters_disabled = true;
 }
 
-std::list<CFilter> CFilterManager::GetActiveFilters(bool local)
+std::vector<CFilter> CFilterManager::GetActiveFilters(bool local)
 {
-	std::list<CFilter> filters;
+	std::vector<CFilter> filters;
 
 	if (m_filters_disabled)
 		return filters;

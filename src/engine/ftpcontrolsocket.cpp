@@ -136,7 +136,7 @@ public:
 
 	int neededCommands[LOGON_DONE];
 
-	std::list<t_loginCommand> loginSequence;
+	std::deque<t_loginCommand> loginSequence;
 
 	int ftp_proxy_type;
 };
@@ -146,9 +146,6 @@ class CFtpDeleteOpData : public COpData
 public:
 	CFtpDeleteOpData()
 		: COpData(Command::del)
-		, omitPath()
-		, m_needSendListing()
-		, m_deleteFailed()
 	{
 	}
 
@@ -156,16 +153,16 @@ public:
 
 	CServerPath path;
 	std::deque<wxString> files;
-	bool omitPath;
+	bool omitPath{};
 
 	// Set to wxDateTime::UNow initially and after
 	// sending an updated listing to the UI.
 	wxDateTime m_time;
 
-	bool m_needSendListing;
+	bool m_needSendListing{};
 
 	// Set to true if deletion of at least one file failed
-	bool m_deleteFailed;
+	bool m_deleteFailed{};
 };
 
 CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
@@ -850,8 +847,7 @@ int CFtpControlSocket::LogonParseResponse()
 			else if (m_Response.Len() > 12 && m_Response.Mid(3, 9).Upper() == _T(" NONSTOP "))
 				m_pCurrentServer->SetType(HPNONSTOP);
 
-			if (!m_MultilineResponseLines.empty() && m_MultilineResponseLines.front().Mid(4, 4).Upper() == _T("Z/VM"))
-			{
+			if (!m_MultilineResponseLines.empty() && m_MultilineResponseLines.front().Mid(4, 4).Upper() == _T("Z/VM")) {
 				CServerCapabilities::SetCapability(*GetCurrentServer(), syst_command, yes, m_MultilineResponseLines.front().Mid(4) + _T(" ") + m_Response.Mid(4));
 				m_pCurrentServer->SetType(ZVM);
 			}
@@ -3226,11 +3222,9 @@ int CFtpControlSocket::Mkdir(const CServerPath& path)
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
 
-	if (!m_CurrentPath.empty())
-	{
+	if (!m_CurrentPath.empty()) {
 		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
-		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false))
-		{
+		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false)) {
 			delete pData;
 			return FZ_REPLY_OK;
 		}
@@ -3243,8 +3237,7 @@ int CFtpControlSocket::Mkdir(const CServerPath& path)
 
 	if (!path.HasParent())
 		pData->opState = mkd_tryfull;
-	else
-	{
+	else {
 		pData->currentPath = path.GetParent();
 		pData->segments.push_back(path.GetLastSegment());
 
@@ -3264,8 +3257,7 @@ int CFtpControlSocket::MkdirParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::MkdirParseResonse"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3276,20 +3268,17 @@ int CFtpControlSocket::MkdirParseResponse()
 
 	int code = GetReplyCode();
 	bool error = false;
-	switch (pData->opState)
-	{
+	switch (pData->opState) {
 	case mkd_findparent:
-		if (code == 2 || code == 3)
-		{
+		if (code == 2 || code == 3) {
 			m_CurrentPath = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
 		else if (pData->currentPath == pData->commonParent)
 			pData->opState = mkd_tryfull;
-		else if (pData->currentPath.HasParent())
-		{
+		else if (pData->currentPath.HasParent()) {
 			const CServerPath& parent = pData->currentPath.GetParent();
-			pData->segments.push_front(pData->currentPath.GetLastSegment());
+			pData->segments.push_back(pData->currentPath.GetLastSegment());
 			pData->currentPath = parent;
 		}
 		else
@@ -3330,16 +3319,16 @@ int CFtpControlSocket::MkdirParseResponse()
 			if (code != 2 && code != 3) {
 				CDirentry entry;
 				bool tmp;
-				if (engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->currentPath, pData->segments.front(), tmp, tmp) && !entry.is_dir()) {
+				if (engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->currentPath, pData->segments.back(), tmp, tmp) && !entry.is_dir()) {
 					result = FZ_REPLY_ERROR;
 				}
 			}
 
-			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
+			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
 			engine_.SendDirectoryListingNotification(pData->currentPath, false, true, false);
 
-			pData->currentPath.AddSegment(pData->segments.front());
-			pData->segments.pop_front();
+			pData->currentPath.AddSegment(pData->segments.back());
+			pData->segments.pop_back();
 
 			if (pData->segments.empty() || result != FZ_REPLY_OK) {
 				ResetOperation(result);
@@ -3360,8 +3349,7 @@ int CFtpControlSocket::MkdirParseResponse()
 	case mkd_tryfull:
 		if (code != 2 && code != 3)
 			error = true;
-		else
-		{
+		else {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
@@ -3372,8 +3360,7 @@ int CFtpControlSocket::MkdirParseResponse()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (error)
-	{
+	if (error) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -3385,8 +3372,7 @@ int CFtpControlSocket::MkdirSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::MkdirSend"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3395,8 +3381,7 @@ int CFtpControlSocket::MkdirSend()
 	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (!pData->holdsLock)
-	{
+	if (!pData->holdsLock) {
 		if (!TryLockCache(lock_mkdir, pData->path))
 			return FZ_REPLY_WOULDBLOCK;
 	}
@@ -3410,7 +3395,7 @@ int CFtpControlSocket::MkdirSend()
 		res = SendCommand(_T("CWD ") + pData->currentPath.GetPath());
 		break;
 	case mkd_mkdsub:
-		res = SendCommand(_T("MKD ") + pData->segments.front());
+		res = SendCommand(_T("MKD ") + pData->segments.back());
 		break;
 	case mkd_tryfull:
 		res = SendCommand(_T("MKD ") + pData->path.GetPath());
