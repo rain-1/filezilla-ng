@@ -190,15 +190,16 @@ protected:
 class CDeleteCommand final : public CCommandHelper<CDeleteCommand, Command::del>
 {
 public:
-	CDeleteCommand(CServerPath const& path, std::list<wxString> const& files);
+	CDeleteCommand(CServerPath const& path, std::deque<wxString> && files);
 
 	CServerPath GetPath() const { return m_path; }
-	const std::list<wxString>& GetFiles() const { return m_files; }
+	const std::deque<wxString>& GetFiles() const { return m_files; }
+	std::deque<wxString>&& ExtractFiles() { return std::move(m_files); }
 
 	bool valid() const { return !GetPath().empty() && !GetFiles().empty(); }
 protected:
 	CServerPath const m_path;
-	std::list<wxString> const m_files;
+	std::deque<wxString> m_files;
 };
 
 class CRemoveDirCommand final : public CCommandHelper<CRemoveDirCommand, Command::removedir>

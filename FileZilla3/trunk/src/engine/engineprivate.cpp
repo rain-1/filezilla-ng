@@ -361,7 +361,7 @@ int CFileZillaEnginePrivate::RawCommand(const CRawCommand& command)
 	return m_pControlSocket->RawCommand(command.GetCommand());
 }
 
-int CFileZillaEnginePrivate::Delete(const CDeleteCommand& command)
+int CFileZillaEnginePrivate::Delete(CDeleteCommand& command)
 {
 	if (command.GetFiles().size() == 1) {
 		m_pLogging->LogMessage(MessageType::Status, _("Deleting \"%s\""), command.GetPath().FormatFilename(command.GetFiles().front()));
@@ -369,7 +369,7 @@ int CFileZillaEnginePrivate::Delete(const CDeleteCommand& command)
 	else {
 		m_pLogging->LogMessage(MessageType::Status, _("Deleting %u files from \"%s\""), static_cast<unsigned int>(command.GetFiles().size()), command.GetPath().GetPath());
 	}
-	return m_pControlSocket->Delete(command.GetPath(), command.GetFiles());
+	return m_pControlSocket->Delete(command.GetPath(), command.ExtractFiles());
 }
 
 int CFileZillaEnginePrivate::RemoveDir(const CRemoveDirCommand& command)
@@ -605,7 +605,7 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 	scoped_lock lock(mutex_);
 
 	if (m_pCurrentCommand) {
-		CCommand const& command = *m_pCurrentCommand;
+		CCommand & command = *m_pCurrentCommand;
 		Command id = command.GetId();
 
 		int res = CheckCommandPreconditions(command, false);
@@ -628,7 +628,7 @@ void CFileZillaEnginePrivate::OnCommandEvent()
 				res = RawCommand(static_cast<CRawCommand const&>(command));
 				break;
 			case Command::del:
-				res = Delete(static_cast<CDeleteCommand const&>(command));
+				res = Delete(static_cast<CDeleteCommand &>(command));
 				break;
 			case Command::removedir:
 				res = RemoveDir(static_cast<CRemoveDirCommand const&>(command));

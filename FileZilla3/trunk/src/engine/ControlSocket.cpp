@@ -1327,7 +1327,7 @@ int CControlSocket::RawCommand(const wxString&)
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-int CControlSocket::Delete(const CServerPath&, const std::list<wxString>&)
+int CControlSocket::Delete(const CServerPath&, std::deque<wxString>&&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }

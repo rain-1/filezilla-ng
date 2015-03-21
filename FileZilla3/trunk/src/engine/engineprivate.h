@@ -125,7 +125,7 @@ protected:
 	int List(const CListCommand &command);
 	int FileTransfer(const CFileTransferCommand &command);
 	int RawCommand(const CRawCommand& command);
-	int Delete(const CDeleteCommand& command);
+	int Delete(CDeleteCommand& command);
 	int RemoveDir(const CRemoveDirCommand& command);
 	int Mkdir(const CMkdirCommand& command);
 	int Rename(const CRenameCommand& command);

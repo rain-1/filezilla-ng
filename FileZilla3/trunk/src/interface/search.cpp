@@ -745,9 +745,9 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 
 	for (std::list<int>::const_iterator iter = selected_files.begin(); iter != selected_files.end(); ++iter) {
 		const CDirentry& entry = m_results->m_fileData[*iter];
-		std::list<wxString> files_to_delete;
+		std::deque<wxString> files_to_delete;
 		files_to_delete.push_back(entry.name);
-		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[*iter].path, files_to_delete));
+		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[*iter].path, std::move(files_to_delete)));
 	}
 
 	for (std::list<CServerPath>::const_iterator iter = selected_dirs.begin(); iter != selected_dirs.end(); ++iter) {
