@@ -3,7 +3,7 @@
 #include "Options.h"
 #include "local_filesys.h"
 
-std::list<wxString> CAutoAsciiFiles::m_ascii_extensions;
+std::vector<wxString> CAutoAsciiFiles::m_ascii_extensions;
 
 void CAutoAsciiFiles::SettingsChanged()
 {
@@ -76,9 +76,11 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString remote_file, enum ServerTyp
 	if (remote_file.empty())
 		return false;
 
-	for (std::list<wxString>::const_iterator iter = m_ascii_extensions.begin(); iter != m_ascii_extensions.end(); ++iter)
-		if (!remote_file.CmpNoCase(*iter))
+	for (auto const& ascii_ext : m_ascii_extensions) {
+		if (!remote_file.CmpNoCase(ascii_ext)) {
 			return true;
+		}
+	}
 
 	return false;
 }

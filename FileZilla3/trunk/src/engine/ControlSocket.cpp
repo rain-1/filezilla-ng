@@ -1274,17 +1274,15 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 
 	// Only go back as far as needed. On comparison, wxWidgets'
 	// wxFileName::Mkdir always starts at the root.
-	std::list<wxString> segments;
-	while (!local_path.Exists() && local_path.HasParent())
-	{
+	std::vector<wxString> segments;
+	while (!local_path.Exists() && local_path.HasParent()) {
 		wxString segment;
 		local_path.MakeParent(&segment);
-		segments.push_front(segment);
+		segments.push_back(segment);
 	}
 
 	CLocalPath last_successful;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
-	{
+	for (auto iter = segments.rbegin(); iter != segments.rend(); ++iter) {
 		local_path.AddSegment(*iter);
 
 #ifdef __WXMSW__

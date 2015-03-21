@@ -58,16 +58,18 @@ class CSftpInputThread final : public wxThread
 {
 public:
 	CSftpInputThread(CSftpControlSocket* pOwner, CProcess& process)
-		: wxThread(wxTHREAD_JOINABLE), process_(process),
-		  m_pOwner(pOwner)
+		: wxThread(wxTHREAD_JOINABLE)
+		, process_(process)
+		, m_pOwner(pOwner)
 	{
 	}
 
 	virtual ~CSftpInputThread()
 	{
 		scoped_lock l(m_sync);
-		for (auto iter = m_sftpMessages.begin(); iter != m_sftpMessages.end(); ++iter)
-			delete *iter;
+		for (auto & msg : m_sftpMessages) {
+			delete msg;
+		}
 	}
 
 	bool Init()
@@ -80,7 +82,7 @@ public:
 		return true;
 	}
 
-	void GetMessages(std::list<sftp_message*>& messages)
+	void GetMessages(std::vector<sftp_message*>& messages)
 	{
 		scoped_lock l(m_sync);
 		messages.swap(m_sftpMessages);
@@ -293,7 +295,7 @@ loopexit:
 	CProcess& process_;
 	CSftpControlSocket* m_pOwner;
 
-	std::list<sftp_message*> m_sftpMessages;
+	std::vector<sftp_message*> m_sftpMessages;
 	mutex m_sync;
 };
 
@@ -579,7 +581,7 @@ void CSftpControlSocket::OnSftpEvent()
 	if (!m_pInputThread)
 		return;
 
-	std::list<sftp_message*> messages;
+	std::vector<sftp_message*> messages;
 	m_pInputThread->GetMessages(messages);
 	for (auto iter = messages.begin(); iter != messages.end(); ++iter) {
 		if (!m_pInputThread) {
@@ -1957,11 +1959,9 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 	CMkdirOpData *pData = new CMkdirOpData;
 	pData->path = path;
 
-	if (!m_CurrentPath.empty())
-	{
+	if (!m_CurrentPath.empty()) {
 		// Unless the server is broken, a directory already exists if current directory is a subdir of it.
-		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false))
-		{
+		if (m_CurrentPath == path || m_CurrentPath.IsSubdirOf(path, false)) {
 			delete pData;
 			return FZ_REPLY_OK;
 		}
@@ -1974,8 +1974,7 @@ int CSftpControlSocket::Mkdir(const CServerPath& path)
 
 	if (!path.HasParent())
 		pData->opState = mkd_tryfull;
-	else
-	{
+	else {
 		pData->currentPath = path.GetParent();
 		pData->segments.push_back(path.GetLastSegment());
 
@@ -2009,38 +2008,33 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 	switch (pData->opState)
 	{
 	case mkd_findparent:
-		if (successful)
-		{
+		if (successful) {
 			m_CurrentPath = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
 		else if (pData->currentPath == pData->commonParent)
 			pData->opState = mkd_tryfull;
-		else if (pData->currentPath.HasParent())
-		{
-			pData->segments.push_front(pData->currentPath.GetLastSegment());
+		else if (pData->currentPath.HasParent()) {
+			pData->segments.push_back(pData->currentPath.GetLastSegment());
 			pData->currentPath = pData->currentPath.GetParent();
 		}
 		else
 			pData->opState = mkd_tryfull;
 		break;
 	case mkd_mkdsub:
-		if (successful)
-		{
-			if (pData->segments.empty())
-			{
+		if (successful) {
+			if (pData->segments.empty()) {
 				LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("  pData->segments is empty"));
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.front(), true, CDirectoryCache::dir);
+			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->currentPath, pData->segments.back(), true, CDirectoryCache::dir);
 			engine_.SendDirectoryListingNotification(pData->currentPath, false, true, false);
 
-			pData->currentPath.AddSegment(pData->segments.front());
-			pData->segments.pop_front();
+			pData->currentPath.AddSegment(pData->segments.back());
+			pData->segments.pop_back();
 
-			if (pData->segments.empty())
-			{
+			if (pData->segments.empty()) {
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
@@ -2051,8 +2045,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 			pData->opState = mkd_tryfull;
 		break;
 	case mkd_cwdsub:
-		if (successful)
-		{
+		if (successful) {
 			m_CurrentPath = pData->currentPath;
 			pData->opState = mkd_mkdsub;
 		}
@@ -2062,8 +2055,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 	case mkd_tryfull:
 		if (!successful)
 			error = true;
-		else
-		{
+		else {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
@@ -2074,8 +2066,7 @@ int CSftpControlSocket::MkdirParseResponse(bool successful, const wxString&)
 		return FZ_REPLY_ERROR;
 	}
 
-	if (error)
-	{
+	if (error) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -2087,8 +2078,7 @@ int CSftpControlSocket::MkdirSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::MkdirSend"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -2097,8 +2087,7 @@ int CSftpControlSocket::MkdirSend()
 	CMkdirOpData *pData = static_cast<CMkdirOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (!pData->holdsLock)
-	{
+	if (!pData->holdsLock) {
 		if (!TryLockCache(lock_mkdir, pData->path))
 			return FZ_REPLY_WOULDBLOCK;
 	}
@@ -2112,7 +2101,7 @@ int CSftpControlSocket::MkdirSend()
 		res = SendCommand(_T("cd ") + QuoteFilename(pData->currentPath.GetPath()));
 		break;
 	case mkd_mkdsub:
-		res = SendCommand(_T("mkdir ") + QuoteFilename(pData->segments.front()));
+		res = SendCommand(_T("mkdir ") + QuoteFilename(pData->segments.back()));
 		break;
 	case mkd_tryfull:
 		res = SendCommand(_T("mkdir ") + QuoteFilename(pData->path.GetPath()));

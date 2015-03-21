@@ -75,7 +75,7 @@ public:
 	CServerPath path;
 	CServerPath currentPath;
 	CServerPath commonParent;
-	std::list<wxString> segments;
+	std::vector<wxString> segments;
 };
 
 class CChangeDirOpData : public COpData

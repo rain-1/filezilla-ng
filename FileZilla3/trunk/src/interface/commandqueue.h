@@ -43,7 +43,7 @@ protected:
 	// Used to make this class reentrance-safe
 	int m_inside_commandqueue{};
 
-	std::list<std::unique_ptr<CCommand>> m_CommandList;
+	std::deque<std::unique_ptr<CCommand>> m_CommandList;
 
 	bool m_quit{};
 };

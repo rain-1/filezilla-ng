@@ -77,10 +77,11 @@ class CFilterManager
 {
 public:
 	CFilterManager();
+	virtual ~CFilterManager() {}
 
 	// Note: Under non-windows, attributes are permissions
 	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const;
-	bool FilenameFiltered(const std::list<CFilter> &filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const;
+	bool FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, wxLongLong size, bool local, int attributes, CDateTime const& date) const;
 	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, wxLongLong size, int attributes, CDateTime const& date);
 	static bool HasActiveFilters(bool ignore_disabled = false);
 
@@ -88,7 +89,7 @@ public:
 
 	static void ToggleFilters();
 
-	std::list<CFilter> GetActiveFilters(bool local);
+	std::vector<CFilter> GetActiveFilters(bool local);
 
 	static bool CompileRegexes(CFilter& filter);
 

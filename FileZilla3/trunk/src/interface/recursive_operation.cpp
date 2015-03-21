@@ -7,14 +7,6 @@
 #include "queue.h"
 #include "local_filesys.h"
 
-CRecursiveOperation::CNewDir::CNewDir()
-{
-	recurse = true;
-	second_try = false;
-	link = 0;
-	doVisit = true;
-}
-
 CRecursiveOperation::CRecursiveOperation(CState* pState)
 	: CStateEventHandler(pState),
 	  m_operationMode(recursive_none)
@@ -47,7 +39,7 @@ void CRecursiveOperation::OnStateChange(CState* pState, enum t_statechange_notif
 	}
 }
 
-void CRecursiveOperation::StartRecursiveOperation(enum OperationMode mode, const CServerPath& startDir, const std::list<CFilter>& filters, bool allowParent /*=false*/, const CServerPath& finalDir /*=CServerPath()*/)
+void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, const CServerPath& startDir, std::vector<CFilter> const& filters, bool allowParent /*=false*/, const CServerPath& finalDir /*=CServerPath()*/)
 {
 	wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
 	wxCHECK_RET(m_pState->IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));

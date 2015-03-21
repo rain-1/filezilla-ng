@@ -729,13 +729,12 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 
 		listing.SetCount(m_fileList.size());
 		unsigned int i = 0;
-		for (std::list<wxString>::const_iterator iter = m_fileList.begin(); iter != m_fileList.end(); ++iter, ++i)
-		{
+		for (auto const& file : m_fileList) {
 			CDirentry entry;
-			entry.name = *iter;
+			entry.name = file;
 			entry.flags = 0;
 			entry.size = -1;
-			listing[i] = entry;
+			listing[i++] = entry;
 		}
 	}
 	else {
@@ -2975,10 +2974,9 @@ void CDirectoryListingParser::DeduceEncoding()
 
 	memset(&count, 0, sizeof(int)*256);
 
-	for (std::list<t_list>::const_iterator it = m_DataList.begin(); it != m_DataList.end(); ++it)
-	{
-		for (int i = 0; i < it->len; ++i)
-			++count[static_cast<unsigned char>(it->p[i])];
+	for (auto const& data : m_DataList) {
+		for (int i = 0; i < data.len; ++i)
+			++count[static_cast<unsigned char>(data.p[i])];
 	}
 
 	int count_normal = 0;

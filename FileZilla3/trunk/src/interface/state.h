@@ -84,7 +84,7 @@ protected:
 		bool blockable;
 		bool current_only;
 	};
-	std::list<t_handler> m_handlers[STATECHANGE_MAX];
+	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
 
 	void NotifyHandlers(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2, bool blocked);
 
@@ -199,7 +199,7 @@ protected:
 		CStateEventHandler* pHandler;
 		bool blockable;
 	};
-	std::list<t_handler> m_handlers[STATECHANGE_MAX];
+	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
 	bool m_blocked[STATECHANGE_MAX];
 
 	CLocalPath GetSynchronizedDirectory(CServerPath remote_path);

@@ -95,12 +95,11 @@ void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_state
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 
-	std::list<t_handler> &handlers = m_handlers[notification];
-	std::list<t_handler>::const_iterator iter;
-	for (iter = handlers.begin(); iter != handlers.end(); ++iter)
-	{
-		if (iter->pHandler == pHandler)
+	auto &handlers = m_handlers[notification];
+	for (auto const& it : handlers) {
+		if (it.pHandler == pHandler) {
 			return;
+		}
 	}
 
 	t_handler handler;
@@ -115,28 +114,21 @@ void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_sta
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX);
 
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-		{
-			std::list<t_handler> &handlers = m_handlers[i];
-			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
-			{
-				if (iter->pHandler == pHandler)
-				{
+	if (notification == STATECHANGE_NONE) {
+		for (int i = 0; i < STATECHANGE_MAX; ++i) {
+			auto &handlers = m_handlers[i];
+			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter) {
+				if (iter->pHandler == pHandler) {
 					handlers.erase(iter);
 					break;
 				}
 			}
 		}
 	}
-	else
-	{
-		std::list<t_handler> &handlers = m_handlers[notification];
-		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
-		{
-			if (iter->pHandler == pHandler)
-			{
+	else {
+		auto &handlers = m_handlers[notification];
+		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter) {
+			if (iter->pHandler == pHandler) {
 				handlers.erase(iter);
 				return;
 			}
@@ -154,16 +146,15 @@ void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
-	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
-	{
-		if (blocked && iter->blockable)
+	auto const& handlers = m_handlers[notification];
+	for (auto const& handler : handlers) {
+		if (blocked && handler.blockable)
 			continue;
 
-		if (iter->current_only && pState != GetCurrentContext())
+		if (handler.current_only && pState != GetCurrentContext())
 			continue;
 
-		iter->pHandler->OnStateChange(pState, notification, data, data2);
+		handler.pHandler->OnStateChange(pState, notification, data, data2);
 	}
 }
 
@@ -183,9 +174,10 @@ void CContextManager::NotifyAllHandlers(enum t_statechange_notifications notific
 
 void CContextManager::NotifyGlobalHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
 {
-	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
-		iter->pHandler->OnStateChange(0, notification, data, data2);
+	auto const& handlers = m_handlers[notification];
+	for (auto const& handler : handlers) {
+		handler.pHandler->OnStateChange(0, notification, data, data2);
+	}
 }
 
 CState::CState(CMainFrame* pMainFrame)
@@ -587,12 +579,11 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_no
 		return;
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 
-	std::list<t_handler> &handlers = m_handlers[notification];
-	std::list<t_handler>::const_iterator iter;
-	for (iter = handlers.begin(); iter != handlers.end(); ++iter)
-	{
-		if (iter->pHandler == pHandler)
+	auto &handlers = m_handlers[notification];
+	for (auto const& it : handlers) {
+		if (it.pHandler == pHandler) {
 			return;
+		}
 	}
 
 	t_handler handler;
@@ -606,28 +597,21 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX);
 
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-		{
-			std::list<t_handler> &handlers = m_handlers[i];
-			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
-			{
-				if (iter->pHandler == pHandler)
-				{
+	if (notification == STATECHANGE_NONE) {
+		for (int i = 0; i < STATECHANGE_MAX; ++i) {
+			auto &handlers = m_handlers[i];
+			for (auto iter = handlers.begin(); iter != handlers.end(); ++iter) {
+				if (iter->pHandler == pHandler) {
 					handlers.erase(iter);
 					break;
 				}
 			}
 		}
 	}
-	else
-	{
-		std::list<t_handler> &handlers = m_handlers[notification];
-		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter)
-		{
-			if (iter->pHandler == pHandler)
-			{
+	else {
+		auto &handlers = m_handlers[notification];
+		for (auto iter = handlers.begin(); iter != handlers.end(); ++iter) {
+			if (iter->pHandler == pHandler) {
 				handlers.erase(iter);
 				return;
 			}
@@ -666,13 +650,12 @@ void CState::NotifyHandlers(enum t_statechange_notifications notification, const
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
-	const std::list<t_handler> &handlers = m_handlers[notification];
-	for (std::list<t_handler>::const_iterator iter = handlers.begin(); iter != handlers.end(); ++iter)
-	{
-		if (m_blocked[notification] && iter->blockable)
+	auto const& handlers = m_handlers[notification];
+	for (auto const& handler : handlers) {
+		if (m_blocked[notification] && handler.blockable)
 			continue;
 
-		iter->pHandler->OnStateChange(this, notification, data, data2);
+		handler.pHandler->OnStateChange(this, notification, data, data2);
 	}
 
 	CContextManager::Get()->NotifyHandlers(this, notification, data, data2, m_blocked[notification]);
