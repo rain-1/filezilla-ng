@@ -37,7 +37,7 @@ public:
 	void CheckLanguage();
 
 protected:
-	void UnwrapRecursive_Wrapped(const std::list<int> &wrapped, std::vector<wxWindow*> &windows, bool remove_fitting = false);
+	void UnwrapRecursive_Wrapped(std::vector<int> const& wrapped, std::vector<wxWindow*> &windows, bool remove_fitting = false);
 
 	void SetWidthToCache(const char* name, int width);
 

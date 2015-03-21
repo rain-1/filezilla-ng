@@ -504,7 +504,7 @@ protected:
 	// Exploit fact that sort order doesn't change -> O(n)
 	void ComparisonRememberSelections();
 	void ComparisonRestoreSelections();
-	std::list<int> m_comparisonSelections;
+	std::deque<int> m_comparisonSelections;
 
 	CFilelistStatusBar* m_pFilelistStatusBar;
 

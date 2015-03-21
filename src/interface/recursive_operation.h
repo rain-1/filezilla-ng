@@ -82,7 +82,7 @@ protected:
 	CServerPath m_startDir;
 	CServerPath m_finalDir;
 	std::set<CServerPath> m_visitedDirs;
-	std::list<CNewDir> m_dirsToVisit;
+	std::deque<CNewDir> m_dirsToVisit;
 
 	bool m_allowParent{};
 
