@@ -529,7 +529,7 @@ bool CWrapEngine::WrapRecursive(wxWindow* wnd, double ratio, const char* name /*
 	return (WrapRecursive(windows, ratio, name, canvas, minRequestedSize) & wrap_failed) == 0;
 }
 
-void CWrapEngine::UnwrapRecursive_Wrapped(const std::list<int> &wrapped, std::vector<wxWindow*> &windows, bool remove_fitting /*=false*/)
+void CWrapEngine::UnwrapRecursive_Wrapped(std::vector<int> const& wrapped, std::vector<wxWindow*> &windows, bool remove_fitting /*=false*/)
 {
 	unsigned int i = 0;
 	for (std::list<int>::const_iterator iter = wrapped.begin();
@@ -626,7 +626,7 @@ bool CWrapEngine::WrapRecursive(std::vector<wxWindow*>& windows, double ratio, c
 #endif
 
 	for (;;) {
-		std::list<int> didwrap;
+		std::vector<int> didwrap;
 
 		size = minRequestedSize;
 		int res = 0;
