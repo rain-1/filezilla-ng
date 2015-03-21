@@ -159,8 +159,7 @@ extern wxString StripVMSRevision(const wxString& name);
 
 void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing)
 {
-	if (!pDirectoryListing)
-	{
+	if (!pDirectoryListing) {
 		StopRecursiveOperation();
 		return;
 	}
@@ -168,8 +167,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	if (m_operationMode == recursive_none)
 		return;
 
-	if (pDirectoryListing->failed())
-	{
+	if (pDirectoryListing->failed()) {
 		// Ignore this.
 		// It will get handled by the failed command in ListingFailed
 		return;
@@ -177,8 +175,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 
 	wxASSERT(!m_dirsToVisit.empty());
 
-	if (!m_pState->IsRemoteConnected() || m_dirsToVisit.empty())
-	{
+	if (!m_pState->IsRemoteConnected() || m_dirsToVisit.empty()) {
 		StopRecursiveOperation();
 		return;
 	}
@@ -186,14 +183,12 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	CNewDir dir = m_dirsToVisit.front();
 	m_dirsToVisit.pop_front();
 
-	if (!BelowRecursionRoot(pDirectoryListing->path, dir))
-	{
+	if (!BelowRecursionRoot(pDirectoryListing->path, dir)) {
 		NextOperation();
 		return;
 	}
 
-	if (m_operationMode == recursive_delete && dir.doVisit && !dir.subdir.empty())
-	{
+	if (m_operationMode == recursive_delete && dir.doVisit && !dir.subdir.empty()) {
 		// After recursing into directory to delete its contents, delete directory itself
 		// Gets handled in NextOperation
 		CNewDir dir2 = dir;
@@ -201,8 +196,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 		m_dirsToVisit.push_front(dir2);
 	}
 
-	if (dir.link && !dir.recurse)
-	{
+	if (dir.link && !dir.recurse) {
 		NextOperation();
 		return;
 	}
@@ -217,15 +211,12 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	const CServer* pServer = m_pState->GetServer();
 	wxASSERT(pServer);
 
-	if (!pDirectoryListing->GetCount())
-	{
-		if (m_operationMode == recursive_download)
-		{
+	if (!pDirectoryListing->GetCount()) {
+		if (m_operationMode == recursive_download) {
 			wxFileName::Mkdir(dir.localDir.GetPath(), 0777, wxPATH_MKDIR_FULL);
 			m_pState->RefreshLocalFile(dir.localDir.GetPath());
 		}
-		else if (m_operationMode == recursive_addtoqueue)
-		{
+		else if (m_operationMode == recursive_addtoqueue) {
 			m_pQueue->QueueFile(true, true, _T(""), _T(""), dir.localDir, CServerPath(), *pServer, -1);
 			m_pQueue->QueueFile_Finish(false);
 		}
@@ -236,28 +227,24 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	// Is operation restricted to a single child?
 	bool restrict = !dir.restrict.empty();
 
-	std::list<wxString> filesToDelete;
+	std::deque<wxString> filesToDelete;
 
 	const wxString path = pDirectoryListing->path.GetPath();
 
 	bool added = false;
 
-	for (int i = pDirectoryListing->GetCount() - 1; i >= 0; --i)
-	{
+	for (int i = pDirectoryListing->GetCount() - 1; i >= 0; --i) {
 		const CDirentry& entry = (*pDirectoryListing)[i];
 
-		if (restrict)
-		{
+		if (restrict) {
 			if (entry.name != dir.restrict)
 				continue;
 		}
 		else if (filter.FilenameFiltered(m_filters, entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
 			continue;
 
-		if (entry.is_dir() && (!entry.is_link() || m_operationMode != recursive_delete))
-		{
-			if (dir.recurse)
-			{
+		if (entry.is_dir() && (!entry.is_link() || m_operationMode != recursive_delete)) {
+			if (dir.recurse) {
 				CNewDir dirToVisit;
 				dirToVisit.parent = pDirectoryListing->path;
 				dirToVisit.subdir = entry.name;
@@ -266,16 +253,14 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 
 				if (m_operationMode == recursive_download || m_operationMode == recursive_addtoqueue)
 					dirToVisit.localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(entry.name));
-				if (entry.is_link())
-				{
+				if (entry.is_link()) {
 					dirToVisit.link = 1;
 					dirToVisit.recurse = false;
 				}
 				m_dirsToVisit.push_front(dirToVisit);
 			}
 		}
-		else
-		{
+		else {
 			switch (m_operationMode)
 			{
 			case recursive_download:
@@ -310,8 +295,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 			}
 		}
 
-		if (m_operationMode == recursive_chmod && m_pChmodDlg)
-		{
+		if (m_operationMode == recursive_chmod && m_pChmodDlg) {
 			const int applyType = m_pChmodDlg->GetApplyType();
 			if (!applyType ||
 				(!entry.is_dir() && applyType == 1) ||
@@ -328,7 +312,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 		m_pQueue->QueueFile_Finish(m_operationMode != recursive_addtoqueue && m_operationMode != recursive_addtoqueue_flatten);
 
 	if (m_operationMode == recursive_delete && !filesToDelete.empty())
-		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, filesToDelete));
+		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, std::move(filesToDelete)));
 
 	NextOperation();
 }
@@ -416,25 +400,21 @@ void CRecursiveOperation::LinkIsNotDir()
 	m_dirsToVisit.pop_front();
 
 	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		NextOperation();
 		return;
 	}
 
-	if (m_operationMode == recursive_delete)
-	{
-		if (!dir.subdir.empty())
-		{
-			std::list<wxString> files;
+	if (m_operationMode == recursive_delete) {
+		if (!dir.subdir.empty()) {
+			std::deque<wxString> files;
 			files.push_back(dir.subdir);
-			m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(dir.parent, files));
+			m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(dir.parent, std::move(files)));
 		}
 		NextOperation();
 		return;
 	}
-	else if (m_operationMode != recursive_list )
-	{
+	else if (m_operationMode != recursive_list) {
 		CLocalPath localPath = dir.localDir;
 		wxString localFile = dir.subdir;
 		if (m_operationMode != recursive_addtoqueue_flatten && m_operationMode != recursive_download_flatten)

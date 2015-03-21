@@ -86,7 +86,7 @@ wxString CRawCommand::GetCommand() const
 	return m_command;
 }
 
-CDeleteCommand::CDeleteCommand(const CServerPath& path, const std::list<wxString>& files)
+CDeleteCommand::CDeleteCommand(const CServerPath& path, std::deque<wxString>&& files)
 	: m_path(path), m_files(files)
 {
 }

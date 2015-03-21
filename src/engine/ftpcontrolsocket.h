@@ -52,7 +52,7 @@ protected:
 	int RawCommandSend();
 	int RawCommandParseResponse();
 
-	virtual int Delete(const CServerPath& path, const std::list<wxString>& files);
+	virtual int Delete(const CServerPath& path, std::deque<wxString>&& files);
 	int DeleteSubcommandResult(int prevResult);
 	int DeleteSend();
 	int DeleteParseResponse();

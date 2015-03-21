@@ -155,7 +155,7 @@ public:
 	virtual ~CFtpDeleteOpData() {}
 
 	CServerPath path;
-	std::list<wxString> files;
+	std::deque<wxString> files;
 	bool omitPath;
 
 	// Set to wxDateTime::UNow initially and after
@@ -2963,7 +2963,7 @@ int CFtpControlSocket::RawCommandParseResponse()
 	}
 }
 
-int CFtpControlSocket::Delete(const CServerPath& path, const std::list<wxString>& files)
+int CFtpControlSocket::Delete(const CServerPath& path, std::deque<wxString>&& files)
 {
 	wxASSERT(!m_pCurOpData);
 	CFtpDeleteOpData *pData = new CFtpDeleteOpData();
