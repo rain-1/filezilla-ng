@@ -532,17 +532,12 @@ bool CWrapEngine::WrapRecursive(wxWindow* wnd, double ratio, const char* name /*
 void CWrapEngine::UnwrapRecursive_Wrapped(std::vector<int> const& wrapped, std::vector<wxWindow*> &windows, bool remove_fitting /*=false*/)
 {
 	unsigned int i = 0;
-	for (std::list<int>::const_iterator iter = wrapped.begin();
-		iter != wrapped.end();
-		++iter)
-	{
+	for (auto const& wrap : wrapped) {
 		UnwrapRecursive(windows[i], windows[i]->GetSizer());
 		windows[i]->GetSizer()->Layout();
 
-		if (!(*iter & wrap_didwrap) && !(*iter & wrap_failed))
-		{
-			if (!(*iter) && remove_fitting)
-			{
+		if (!(wrap & wrap_didwrap) && !(wrap & wrap_failed)) {
+			if (!wrap && remove_fitting) {
 				// Page didn't need to be wrapped with current wrap offset,
 				// remove it since desired width will only be larger in further wrappings.
 				windows.erase(windows.begin() + i);
