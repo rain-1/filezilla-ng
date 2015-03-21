@@ -151,7 +151,7 @@ protected:
 
 	int m_engine_id;
 
-	static std::list<CFileZillaEnginePrivate*> m_engineList;
+	static std::vector<CFileZillaEnginePrivate*> m_engineList;
 
 	// Indicicates if data has been received/sent and whether to send any notifications
 	static std::atomic_int m_activeStatus[2];
