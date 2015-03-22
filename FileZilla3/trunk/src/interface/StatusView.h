@@ -8,7 +8,7 @@
 #include <wx/timer.h>
 
 class CFastTextCtrl;
-class CStatusView : public wxNavigationEnabled<wxWindow>
+class CStatusView final : public wxNavigationEnabled<wxWindow>
 {
 public:
 	CStatusView(wxWindow* parent, wxWindowID id);

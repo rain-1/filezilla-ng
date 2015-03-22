@@ -24,6 +24,8 @@ wxStatusBarEx::wxStatusBarEx(wxTopLevelWindow* pParent)
 	m_columnWidths = 0;
 	Create(pParent, wxID_ANY);
 
+	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+
 #ifdef __WXMSW__
 	m_parentWasMaximized = false;
 
