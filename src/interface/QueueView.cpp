@@ -812,10 +812,10 @@ bool CQueueView::TryStartNextTransfer()
 			localPath.AddSegment(newFileItem->GetLocalFile());
 			wxFileName::Mkdir(localPath.GetPath(), 0777, wxPATH_MKDIR_FULL);
 			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-				(*iter)->RefreshLocalFile(localPath.GetPath());
-			if (RemoveItem(newFileItem, true))
-			{
+			for (auto & state : *pStates) {
+				state->RefreshLocalFile(localPath.GetPath());
+			}
+			if (RemoveItem(newFileItem, true)) {
 				// Server got deleted. Unfortunately we have to start over now
 				if (m_serverList.empty())
 					return false;
@@ -2989,12 +2989,10 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		}
 		case ActionAfterState_Disconnect:
 		{
-			const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-			for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter)
-			{
-				CState* pState = *iter;
-				if (pState->IsRemoteConnected() && pState->IsRemoteIdle())
-					pState->Disconnect();
+			for (auto & state : *pStates) {
+				if (state->IsRemoteConnected() && state->IsRemoteIdle()) {
+					state->Disconnect();
+				}
 			}
 			break;
 		}

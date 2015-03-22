@@ -13,7 +13,7 @@ EVT_MENU(XRCID("ID_CLEARALL"), CStatusView::OnClear)
 EVT_MENU(XRCID("ID_COPYTOCLIPBOARD"), CStatusView::OnCopy)
 END_EVENT_TABLE()
 
-class CFastTextCtrl : public wxNavigationEnabled<wxTextCtrl>
+class CFastTextCtrl final : public wxNavigationEnabled<wxTextCtrl>
 {
 public:
 	CFastTextCtrl(wxWindow* parent)
@@ -22,6 +22,8 @@ public:
 			wxNO_BORDER | wxVSCROLL | wxTE_MULTILINE |
 			wxTE_READONLY | wxTE_RICH | wxTE_RICH2 | wxTE_NOHIDESEL |
 			wxTAB_TRAVERSAL);
+
+		SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 	}
 #ifdef __WXMSW__
 	// wxTextCtrl::Remove is somewhat slow, this is a faster version
@@ -104,6 +106,8 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 	InitDefAttr();
 
 	m_shown = IsShown();
+
+	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 }
 
 CStatusView::~CStatusView()
