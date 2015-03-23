@@ -17,7 +17,6 @@ struct timer_data final
 	timer_id id_{};
 	CMonotonicClock deadline_;
 	int ms_interval_{};
-	bool one_shot_{true};
 };
 
 // Timers have precedence over queued events. Too many or too frequent timers can starve processing queued events.

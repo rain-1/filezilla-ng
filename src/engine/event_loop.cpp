@@ -103,8 +103,9 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_
 {
 	timer_data d;
 	d.handler_ = handler;
-	d.ms_interval_ = ms_interval;
-	d.one_shot_ = one_shot;
+	if (!one_shot) {
+		d.ms_interval_ = ms_interval;
+	}
 	d.deadline_ = CMonotonicClock::now() + ms_interval;
 
 	scoped_lock lock(sync_);
@@ -223,7 +224,7 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, CMonotonicClock const& now)
 		auto const id = it->id_;
 			
 		// Update the expired timer
-		if (it->one_shot_) {
+		if (!it->ms_interval_) {
 			timers_.erase(it);
 		}
 		else {
