@@ -32,15 +32,16 @@ public:
 	CEventLoop(CEventLoop const&) = delete;
 	CEventLoop& operator=(CEventLoop const&) = delete;
 
+	void FilterEvents(std::function<bool (Events::value_type&)> filter);
+
+protected:
+	friend class CEventHandler;
+
 	void RemoveHandler(CEventHandler* handler);
 
 	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
 	void StopTimer(timer_id id);
 
-	void FilterEvents(std::function<bool (Events::value_type&)> filter);
-
-protected:
-	friend class CEventHandler;
 	void SendEvent(CEventHandler* handler, CEventBase* evt);
 
 	// Process timers. Returns true if a timer has been triggered
