@@ -53,7 +53,7 @@ public:
 
 	~Impl()
 	{
-		loop_.RemoveHandler(&optionChangeHandler_);
+		optionChangeHandler_.RemoveHandler();
 	}
 
 	CEventLoop loop_;
