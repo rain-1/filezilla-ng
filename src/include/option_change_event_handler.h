@@ -30,7 +30,10 @@ protected:
 private:
 	changed_options_t m_handled_options;
 
+	// Very important: Never ever call this if there's OnOptionsChanged on the stack.
 	static void DoNotify(changed_options_t const& options);
+	static std::size_t notify_index_;
+
 	static void UnregisterAll();
 
 	static std::vector<COptionChangeEventHandler*> m_handlers;
