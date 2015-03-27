@@ -30,7 +30,7 @@ public:
 protected:
 	virtual bool ItemIsDir(int index) const;
 
-	virtual wxLongLong ItemGetSize(int index) const;
+	virtual int64_t ItemGetSize(int index) const;
 
 	CFileListCtrl<CSearchFileData>::CSortComparisonObject GetSortComparisonObject();
 
@@ -92,9 +92,9 @@ bool CSearchDialogFileList::ItemIsDir(int index) const
 	return m_fileData[index].is_dir();
 }
 
-wxLongLong CSearchDialogFileList::ItemGetSize(int index) const
+int64_t CSearchDialogFileList::ItemGetSize(int index) const
 {
-	return m_fileData[index].size;
+	return m_fileData[index].size.GetValue();
 }
 
 CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
@@ -334,7 +334,7 @@ void CSearchDialog::ProcessDirectoryListing()
 		if (entry.is_dir())
 			m_results->GetFilelistStatusBar()->AddDirectory();
 		else
-			m_results->GetFilelistStatusBar()->AddFile(entry.size);
+			m_results->GetFilelistStatusBar()->AddFile(entry.size.GetValue());
 	}
 
 	if (added) {

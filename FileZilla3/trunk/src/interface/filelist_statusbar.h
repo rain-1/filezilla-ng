@@ -10,21 +10,21 @@ class CFilelistStatusBar final : public wxStatusBar, protected COptionChangeEven
 public:
 	CFilelistStatusBar(wxWindow* pParent);
 
-	void SetDirectoryContents(int count_files, int count_dirs, const wxLongLong &total_size, int unknown_size, int hidden);
+	void SetDirectoryContents(int count_files, int count_dirs, int64_t total_size, int unknown_size, int hidden);
 	void Clear();
 	void SetHidden(int hidden);
 	void TriggerUpdateText();
 	void UpdateText();
 
-	void AddFile(const wxLongLong& size);
-	void RemoveFile(const wxLongLong& size);
+	void AddFile(int64_t size);
+	void RemoveFile(int64_t size);
 	void AddDirectory();
 	void RemoveDirectory();
 
 	void SelectAll();
 	void UnselectAll();
-	void SelectFile(const wxLongLong &size);
-	void UnselectFile(const wxLongLong &size);
+	void SelectFile(int64_t size);
+	void UnselectFile(int64_t size);
 	void SelectDirectory();
 	void UnselectDirectory();
 
