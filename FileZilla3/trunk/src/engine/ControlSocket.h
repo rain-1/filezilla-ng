@@ -47,17 +47,17 @@ public:
 	const bool download;
 
 	CDateTime fileTime;
-	wxFileOffset localFileSize;
-	wxFileOffset remoteFileSize;
+	wxFileOffset localFileSize{-1};
+	wxFileOffset remoteFileSize{-1};
 
-	bool tryAbsolutePath;
-	bool resume;
+	bool tryAbsolutePath{};
+	bool resume{};
 
 	CFileTransferCommand::t_transferSettings transferSettings;
 
 	// Set to true when sending the command which
 	// starts the actual transfer
-	bool transferInitiated;
+	bool transferInitiated{};
 };
 
 class CMkdirOpData : public COpData
