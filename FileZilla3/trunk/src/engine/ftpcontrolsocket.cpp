@@ -3999,9 +3999,9 @@ int CFtpControlSocket::TransferParseResponse()
 			pData->opState = rawtransfer_transfer;
 		break;
 	case rawtransfer_rest:
-		if (pData->pOldData->resumeOffset == 0)
+		if (pData->pOldData->resumeOffset <= 0)
 			m_sentRestartOffset = false;
-		if (pData->pOldData->resumeOffset != 0 && code != 2 && code != 3)
+		if (pData->pOldData->resumeOffset > 0 && code != 2 && code != 3)
 			error = true;
 		else
 			pData->opState = rawtransfer_transfer;
