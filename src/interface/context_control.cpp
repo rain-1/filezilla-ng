@@ -186,13 +186,13 @@ void CContextControl::CreateContextControls(CState* pState)
 		pLocalFilelistStatusBar->Hide();
 	context_controls.pLocalListViewPanel->SetStatusBar(pLocalFilelistStatusBar);
 	context_controls.pLocalListView->SetFilelistStatusBar(pLocalFilelistStatusBar);
+	pLocalFilelistStatusBar->SetConnected(true);
 
 	CFilelistStatusBar* pRemoteFilelistStatusBar = new CFilelistStatusBar(context_controls.pRemoteListViewPanel);
 	if (!show_filelist_statusbars)
 		pRemoteFilelistStatusBar->Hide();
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
-	pRemoteFilelistStatusBar->SetConnected(false);
 
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
