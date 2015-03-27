@@ -65,7 +65,7 @@ public:
 	virtual void FinishComparison();
 
 	virtual bool ItemIsDir(int index) const;
-	virtual wxLongLong ItemGetSize(int index) const;
+	virtual int64_t ItemGetSize(int index) const;
 
 protected:
 	virtual wxString GetItemText(int item, unsigned int column);

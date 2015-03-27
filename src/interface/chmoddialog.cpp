@@ -9,13 +9,8 @@ EVT_CHECKBOX(XRCID("ID_RECURSE"), CChmodDialog::OnRecurseChanged)
 END_EVENT_TABLE()
 
 CChmodDialog::CChmodDialog()
-	: m_noUserTextChange()
-	, lastChangedNumeric()
-	, m_recursive()
-	, m_applyType()
 {
-	for (int i = 0; i < 9; ++i)
-	{
+	for (int i = 0; i < 9; ++i) {
 		m_checkBoxes[i] = 0;
 		m_permissions[i] = 0;
 	}
@@ -152,8 +147,7 @@ void CChmodDialog::OnCancel(wxCommandEvent&)
 void CChmodDialog::OnCheckboxClick(wxCommandEvent&)
 {
 	lastChangedNumeric = false;
-	for (int i = 0; i < 9; i++)
-	{
+	for (int i = 0; i < 9; ++i) {
 		wxCheckBoxState state = m_checkBoxes[i]->Get3StateValue();
 		switch (state)
 		{
@@ -171,10 +165,8 @@ void CChmodDialog::OnCheckboxClick(wxCommandEvent&)
 	}
 
 	wxString numericValue;
-	for (int i = 0; i < 3; i++)
-	{
-		if (!m_permissions[i * 3] || !m_permissions[i * 3 + 1] || !m_permissions[i * 3 + 2])
-		{
+	for (int i = 0; i < 3; ++i) {
+		if (!m_permissions[i * 3] || !m_permissions[i * 3 + 1] || !m_permissions[i * 3 + 2]) {
 			numericValue += 'x';
 			continue;
 		}
@@ -204,23 +196,19 @@ void CChmodDialog::OnNumericChanged(wxCommandEvent&)
 		return;
 
 	numeric = numeric.Right(3);
-	for (int i = 0; i < 3; i++)
-	{
+	for (int i = 0; i < 3; ++i) {
 		if ((numeric[i] < '0' || numeric[i] > '9') && numeric[i] != 'x')
 			return;
 	}
-	for (int i = 0; i < 3; i++)
-	{
+	for (int i = 0; i < 3; ++i) {
 		if (!oldNumeric.empty() && numeric[i] == oldNumeric[i])
 			continue;
-		if (numeric[i] == 'x')
-		{
+		if (numeric[i] == 'x') {
 			m_permissions[i * 3] = 0;
 			m_permissions[i * 3 + 1] = 0;
 			m_permissions[i * 3 + 2] = 0;
 		}
-		else
-		{
+		else {
 			int value = numeric[i] - '0';
 			m_permissions[i * 3] = (value & 4) ? 2 : 1;
 			m_permissions[i * 3 + 1] = (value & 2) ? 2 : 1;
@@ -230,8 +218,7 @@ void CChmodDialog::OnNumericChanged(wxCommandEvent&)
 
 	oldNumeric = numeric;
 
-	for (int i = 0; i < 9; i++)
-	{
+	for (int i = 0; i < 9; ++i) {
 		switch (m_permissions[i])
 		{
 		default:
@@ -257,13 +244,11 @@ wxString CChmodDialog::GetPermissions(const char* previousPermissions, bool dir)
 	if (numeric.Length() < 3)
 		return numeric;
 
-	for (unsigned int i = numeric.Length() - 3; i < numeric.Length(); i++)
-	{
+	for (unsigned int i = numeric.Length() - 3; i < numeric.Length(); ++i) {
 		if ((numeric[i] < '0' || numeric[i] > '9') && numeric[i] != 'x')
 			return numeric;
 	}
-	if (!previousPermissions)
-	{
+	if (!previousPermissions) {
 		// Use default of  (0...0)755 for dirs and
 		// 644 for files
 		if (numeric[numeric.Length() - 1] == 'x')
@@ -284,12 +269,9 @@ wxString CChmodDialog::GetPermissions(const char* previousPermissions, bool dir)
 
 	wxString permission = numeric.Left(numeric.Length() - 3);
 	unsigned int k = 0;
-	for (unsigned int i = numeric.Length() - 3; i < numeric.Length(); i++, k++)
-	{
-		for (unsigned int j = k * 3; j < k * 3 + 3; j++)
-		{
-			if (!perms[j])
-			{
+	for (unsigned int i = numeric.Length() - 3; i < numeric.Length(); ++i, ++k) {
+		for (unsigned int j = k * 3; j < k * 3 + 3; ++j) {
+			if (!perms[j]) {
 				if (previousPermissions[j])
 					perms[j] = previousPermissions[j];
 				else
@@ -337,11 +319,9 @@ bool CChmodDialog::ConvertPermissions(wxString rwx, char* permissions)
 	for (i = 0; i < rwx.Len(); i++)
 		if (rwx[i] < '0' || rwx[i] > '9')
 			break;
-	if (i == rwx.Len())
-	{
+	if (i == rwx.Len()) {
 		// Mode, e.g. 0723
-		for (i = 0; i < 3; i++)
-		{
+		for (i = 0; i < 3; ++i) {
 			int m = rwx[rwx.Len() - 3 + i] - '0';
 
 			for (int j = 0; j < 3; j++)

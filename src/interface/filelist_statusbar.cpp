@@ -87,11 +87,11 @@ void CFilelistStatusBar::UpdateText()
 	SetStatusText(text);
 }
 
-void CFilelistStatusBar::SetDirectoryContents(int count_files, int count_dirs, const wxLongLong &total_size, int unknown_size, int hidden)
+void CFilelistStatusBar::SetDirectoryContents(int count_files, int count_dirs, int64_t total_size, int unknown_size, int hidden)
 {
 	m_count_files = count_files;
 	m_count_dirs = count_dirs;
-	m_total_size = total_size.GetValue();
+	m_total_size = total_size;
 	m_unknown_size = unknown_size;
 	m_hidden = hidden;
 
@@ -129,23 +129,23 @@ void CFilelistStatusBar::UnselectAll()
 	TriggerUpdateText();
 }
 
-void CFilelistStatusBar::SelectFile(const wxLongLong &size)
+void CFilelistStatusBar::SelectFile(int64_t size)
 {
 	++m_count_selected_files;
 	if (size < 0)
 		++m_unknown_selected_size;
 	else
-		m_total_selected_size += size.GetValue();
+		m_total_selected_size += size;
 	TriggerUpdateText();
 }
 
-void CFilelistStatusBar::UnselectFile(const wxLongLong &size)
+void CFilelistStatusBar::UnselectFile(int64_t size)
 {
 	--m_count_selected_files;
 	if (size < 0)
 		--m_unknown_selected_size;
 	else
-		m_total_selected_size -= size.GetValue();
+		m_total_selected_size -= size;
 	TriggerUpdateText();
 }
 
@@ -174,23 +174,23 @@ void CFilelistStatusBar::TriggerUpdateText()
 	m_updateTimer.Start(1, true);
 }
 
-void CFilelistStatusBar::AddFile(const wxLongLong& size)
+void CFilelistStatusBar::AddFile(int64_t size)
 {
 	++m_count_files;
 	if (size < 0)
 		++m_unknown_size;
 	else
-		m_total_size += size.GetValue();
+		m_total_size += size;
 	TriggerUpdateText();
 }
 
-void CFilelistStatusBar::RemoveFile(const wxLongLong& size)
+void CFilelistStatusBar::RemoveFile(int64_t size)
 {
 	--m_count_files;
 	if (size < 0)
 		--m_unknown_size;
 	else
-		m_total_size -= size.GetValue();
+		m_total_size -= size;
 	TriggerUpdateText();
 }
 

@@ -473,7 +473,7 @@ protected:
 	std::vector<unsigned int> m_originalIndexMapping; // m_originalIndexMapping will only be set on comparisons
 
 	virtual bool ItemIsDir(int index) const = 0;
-	virtual wxLongLong ItemGetSize(int index) const = 0;
+	virtual int64_t ItemGetSize(int index) const = 0;
 
 	std::map<wxString, wxString> m_fileTypeMap;
 

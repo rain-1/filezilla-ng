@@ -3,11 +3,10 @@
 
 #include "dialogex.h"
 
-class CChmodDialog : public wxDialogEx
+class CChmodDialog final : public wxDialogEx
 {
 public:
 	CChmodDialog();
-	virtual ~CChmodDialog() {}
 
 	bool Create(wxWindow* parent, int fileCount, int dirCount,
 				const wxString& name, const char permissions[9]);
@@ -39,12 +38,12 @@ protected:
 	wxCheckBox* m_checkBoxes[9];
 	char m_permissions[9];
 
-	bool m_noUserTextChange;
+	bool m_noUserTextChange{};
 	wxString oldNumeric;
-	bool lastChangedNumeric;
+	bool lastChangedNumeric{};
 
-	bool m_recursive;
-	int m_applyType;
+	bool m_recursive{};
+	int m_applyType{};
 };
 
 #endif //__CHMODDIALOG_H__

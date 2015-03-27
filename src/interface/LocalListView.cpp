@@ -1082,7 +1082,7 @@ void CLocalListView::ApplyCurrentFilter()
 	if (m_pFilelistStatusBar)
 		m_pFilelistStatusBar->UnselectAll();
 
-	wxLongLong totalSize;
+	int64_t totalSize{};
 	int unknown_sizes = 0;
 	int totalFileCount = 0;
 	int totalDirCount = 0;
@@ -1091,25 +1091,23 @@ void CLocalListView::ApplyCurrentFilter()
 	m_indexMapping.clear();
 	if (m_hasParent)
 		m_indexMapping.push_back(0);
-	for (unsigned int i = min; i < m_fileData.size(); i++)
-	{
+	for (unsigned int i = min; i < m_fileData.size(); ++i) {
 		const CLocalFileData& data = m_fileData[i];
 		if (data.comparison_flags == fill)
 			continue;
 		if (filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
-			hidden++;
+			++hidden;
 			continue;
 		}
 
 		if (data.dir)
-			totalDirCount++;
-		else
-		{
+			++totalDirCount;
+		else {
 			if (data.size != -1)
 				totalSize += data.size;
 			else
-				unknown_sizes++;
-			totalFileCount++;
+				++unknown_sizes;
+			++totalFileCount;
 		}
 
 		m_indexMapping.push_back(i);
@@ -1121,8 +1119,7 @@ void CLocalListView::ApplyCurrentFilter()
 
 	SortList(-1, -1, false);
 
-	if (IsComparing())
-	{
+	if (IsComparing()) {
 		m_originalIndexMapping.clear();
 		RefreshComparison();
 	}
@@ -1333,23 +1330,20 @@ void CLocalListView::RefreshFile(const wxString& file)
 
 	// Look if file data already exists
 	unsigned int i = 0;
-	for (auto iter = m_fileData.begin(); iter != m_fileData.end(); ++iter, ++i)
-	{
+	for (auto iter = m_fileData.begin(); iter != m_fileData.end(); ++iter, ++i) {
 		const CLocalFileData& oldData = *iter;
 		if (oldData.name != file)
 			continue;
 
 		// Update file list status bar
-		if (m_pFilelistStatusBar)
-		{
+		if (m_pFilelistStatusBar) {
 #ifndef __WXMSW__
 			// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
 			if (GetSelectedItemCount())
 #endif
 			{
 				int item = -1;
-				for (;;)
-				{
+				for (;;) {
 					item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 					if (item == -1)
 						break;
@@ -1382,13 +1376,11 @@ void CLocalListView::RefreshFile(const wxString& file)
 		data.fileType = oldData.fileType;
 
 		*iter = data;
-		if (IsComparing())
-		{
+		if (IsComparing()) {
 			// Sort order doesn't change
 			RefreshComparison();
 		}
-		else
-		{
+		else {
 			if (m_sortColumn)
 				SortList();
 			RefreshListOnly(false);
@@ -1403,8 +1395,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 
 	wxString focused;
 	std::list<wxString> selectedNames;
-	if (IsComparing())
-	{
+	if (IsComparing()) {
 		wxASSERT(!m_originalIndexMapping.empty());
 		selectedNames = RememberSelectedItems(focused);
 		m_indexMapping.clear();
@@ -1426,26 +1417,22 @@ void CLocalListView::RefreshFile(const wxString& file)
 	const int item = insertPos - m_indexMapping.begin();
 	m_indexMapping.insert(insertPos, index);
 
-	if (!IsComparing())
-	{
+	if (!IsComparing()) {
 		SetItemCount(m_indexMapping.size());
 
 		// Move selections
 		int prevState = 0;
-		for (unsigned int i = item; i < m_indexMapping.size(); i++)
-		{
-			int state = GetItemState(i, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED);
-			if (state != prevState)
-			{
-				SetItemState(i, prevState, wxLIST_STATE_FOCUSED);
-				SetSelection(i, (prevState & wxLIST_STATE_SELECTED) != 0);
+		for (unsigned int j = item; j < m_indexMapping.size(); ++j) {
+			int state = GetItemState(j, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED);
+			if (state != prevState) {
+				SetItemState(j, prevState, wxLIST_STATE_FOCUSED);
+				SetSelection(j, (prevState & wxLIST_STATE_SELECTED) != 0);
 				prevState = state;
 			}
 		}
 		RefreshListOnly();
 	}
-	else
-	{
+	else {
 		RefreshComparison();
 		if (m_pFilelistStatusBar)
 			m_pFilelistStatusBar->UnselectAll();
@@ -1725,7 +1712,7 @@ bool CLocalListView::ItemIsDir(int index) const
 	return m_fileData[index].dir;
 }
 
-wxLongLong CLocalListView::ItemGetSize(int index) const
+int64_t CLocalListView::ItemGetSize(int index) const
 {
 	return m_fileData[index].size;
 }
