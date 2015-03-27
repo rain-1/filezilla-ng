@@ -427,9 +427,7 @@ int CControlSocket::CheckOverwriteFile()
 CFileTransferOpData::CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path) :
 	COpData(Command::transfer),
 	localFile(local_file), remoteFile(remote_file), remotePath(remote_path),
-	download(is_download),
-	localFileSize(-1), remoteFileSize(-1),
-	tryAbsolutePath(false), resume(false), transferInitiated(false)
+	download(is_download)
 {
 }
 
