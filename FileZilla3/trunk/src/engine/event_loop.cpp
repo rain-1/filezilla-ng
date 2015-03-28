@@ -149,20 +149,19 @@ bool CEventLoop::ProcessEvent(scoped_lock & l)
 	ev = pending_events_.front();
 	pending_events_.pop_front();
 
-	if (ev.first && !ev.first->removing_) {
-		active_handler_ = ev.first;
-		l.unlock();
-		if (ev.second) {
-			(*ev.first)(*ev.second);
-		}
-		delete ev.second;
-		l.lock();
-		active_handler_ = 0;
-	}
-	else {
-		delete ev.second;
-	}
+	wxASSERT(ev.first);
+	wxASSERT(ev.second);
+	wxASSERT(!ev.first->removing_);
 
+	active_handler_ = ev.first;
+
+	l.unlock();
+	(*ev.first)(*ev.second);
+	delete ev.second;
+	l.lock();
+
+	active_handler_ = 0;
+	
 	return true;
 }
 
@@ -235,13 +234,15 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, CMonotonicClock const& now)
 		}
 
 		// Call event handler
-		if (!handler->removing_) {
-			active_handler_ = handler;
-			l.unlock();
-			(*handler)(CTimerEvent(id));
-			l.lock();
-			active_handler_ = 0;
-		}
+		wxASSERT(!handler->removing_);
+		
+		active_handler_ = handler;
+		
+		l.unlock();
+		(*handler)(CTimerEvent(id));
+		l.lock();
+		
+		active_handler_ = 0;
 
 		return true;
 	}
