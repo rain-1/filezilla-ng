@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.10.3 (2015-03-29)
+
+- Fixed crash if changing number of simultaneous transfers while transferring files
+- Fixed local filelist statusbar regression introduced in 3.10.3-beta2
+
 3.10.3-rc1 (2015-03-21)
 
 - If saving passwords is disabled, don't ask for the password again after connecting via the quickconnect bar and then starting a download via drag&drop.
