@@ -969,7 +969,9 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	case t_EngineData::disconnect:
 		if (pEngineData->active) {
 			pEngineData->state = t_EngineData::connect;
-			pEngineData->pStatusLineCtrl->ClearTransferStatus();
+			if (pEngineData->pStatusLineCtrl) {
+				pEngineData->pStatusLineCtrl->ClearTransferStatus();
+			}
 		}
 		else
 			pEngineData->state = t_EngineData::none;
@@ -1368,7 +1370,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			if (res == FZ_REPLY_OK) {
 				if (engineData.pItem->GetType() == QueueItemType::File) {
 					engineData.state = t_EngineData::transfer;
-					if (engineData.active)
+					if (engineData.active && engineData.pStatusLineCtrl)
 						engineData.pStatusLineCtrl->ClearTransferStatus();
 				}
 				else
