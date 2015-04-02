@@ -2,11 +2,11 @@
 #define __QUICKCONNECTBAR_H__
 
 class CMainFrame;
-class CQuickconnectBar : public wxPanel
+class CQuickconnectBar final : public wxPanel
 {
 public:
 	CQuickconnectBar();
-	virtual~CQuickconnectBar();
+	virtual ~CQuickconnectBar();
 
 	bool Create(CMainFrame* pParent);
 
