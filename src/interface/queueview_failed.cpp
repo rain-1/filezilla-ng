@@ -162,34 +162,28 @@ bool CQueueViewFailed::RequeueFileItem(CFileItem* pFileItem, CServerItem* pServe
 	pFileItem->m_errorCount = 0;
 	pFileItem->SetStatusMessage(CFileItem::none);
 
-	if (!pFileItem->Download() && !wxFileName::FileExists(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile()))
-	{
+	if (!pFileItem->Download() && pFileItem->GetType() != QueueItemType::Folder && !wxFileName::FileExists(pFileItem->GetLocalPath().GetPath() + pFileItem->GetLocalFile())) {
 		delete pFileItem;
 		return false;
 	}
 
-	if (pFileItem->m_edit == CEditHandler::remote)
-	{
+	if (pFileItem->m_edit == CEditHandler::remote) {
 		CEditHandler* pEditHandler = CEditHandler::Get();
-		if (!pEditHandler)
-		{
+		if (!pEditHandler) {
 			delete pFileItem;
 			return false;
 		}
 		enum CEditHandler::fileState state = pEditHandler->GetFileState(pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
-		if (state == CEditHandler::unknown)
-		{
+		if (state == CEditHandler::unknown) {
 			wxASSERT(pFileItem->Download());
 			wxString file = pFileItem->GetRemoteFile();
-			if (!pEditHandler->AddFile(CEditHandler::remote, file, pFileItem->GetRemotePath(), pServerItem->GetServer()))
-			{
+			if (!pEditHandler->AddFile(CEditHandler::remote, file, pFileItem->GetRemotePath(), pServerItem->GetServer())) {
 				delete pFileItem;
 				return false;
 			}
 			pFileItem->SetTargetFile(file);
 		}
-		else if (state == CEditHandler::upload_and_remove_failed)
-		{
+		else if (state == CEditHandler::upload_and_remove_failed) {
 			wxASSERT(!pFileItem->Download());
 			bool ret = true;
 			if (!pEditHandler->UploadFile(pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer(), true))
@@ -197,8 +191,7 @@ bool CQueueViewFailed::RequeueFileItem(CFileItem* pFileItem, CServerItem* pServe
 			delete pFileItem;
 			return ret;
 		}
-		else
-		{
+		else {
 			delete pFileItem;
 			return false;
 		}
@@ -219,8 +212,7 @@ bool CQueueViewFailed::RequeueServerItem(CServerItem* pServerItem)
 	CServerItem* pTargetServerItem = pQueueView->CreateServerItem(pServerItem->GetServer());
 
 	unsigned int childrenCount = pServerItem->GetChildrenCount(false);
-	for (unsigned int i = 0; i < childrenCount; i++)
-	{
+	for (unsigned int i = 0; i < childrenCount; ++i) {
 		CFileItem* pFileItem = (CFileItem*)pServerItem->GetChild(i, false);
 
 		ret &= RequeueFileItem(pFileItem, pTargetServerItem);
@@ -260,8 +252,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 	std::list<CQueueItem*> selectedItems;
 	long item = -1;
 	long skipTo = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -280,18 +271,15 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 
 	CQueueView* pQueueView = m_pQueue->GetQueueView();
 
-	while (!selectedItems.empty())
-	{
+	while (!selectedItems.empty()) {
 		CQueueItem* pItem = selectedItems.front();
 		selectedItems.pop_front();
 
-		if (pItem->GetType() == QueueItemType::Server)
-		{
+		if (pItem->GetType() == QueueItemType::Server) {
 			CServerItem* pServerItem = (CServerItem*)pItem;
 			failedToRequeueAll |= !RequeueServerItem(pServerItem);
 		}
-		else
-		{
+		else {
 			CFileItem* pFileItem = (CFileItem*)pItem;
 
 			CServerItem* pOldServerItem = (CServerItem*)pItem->GetTopLevelItem();
@@ -300,8 +288,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 
 			failedToRequeueAll |= !RequeueFileItem(pFileItem, pServerItem);
 
-			if (!pServerItem->GetChildrenCount(false))
-			{
+			if (!pServerItem->GetChildrenCount(false)) {
 				pQueueView->CommitChanges();
 				pQueueView->RemoveItem(pServerItem, true, true, true);
 			}
