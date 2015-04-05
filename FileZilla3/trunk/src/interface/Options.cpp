@@ -503,7 +503,7 @@ int COptions::Validate(unsigned int nID, int value)
 			value = 0;
 		break;
 	case OPTION_TIMEOUT:
-		if (value < 0) {
+		if (value <= 0) {
 			value = 0;
 		}
 		else if (value < 10) {
