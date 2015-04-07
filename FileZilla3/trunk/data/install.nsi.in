@@ -343,14 +343,23 @@ install64on32:
   !endif
 
   !insertmacro UAC_RunElevated
-  StrCmp 1223 $0 UAC_ElevationAborted ; UAC dialog aborted by user?
-  StrCmp 0 $0 0 UAC_Err ; Error?
-  StrCmp 1 $1 0 UAC_Success ; Are we the real deal or just the wrapper?
-  Quit
-UAC_Err:
-  MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
-UAC_ElevationAborted:
-UAC_Success:
+
+  ${Switch} $0
+  ${Case} 0
+    ${IfThen} $1 = 1 ${|} Quit ${|} ;we are the outer process, the inner process has done its work, we are done.
+
+    ; Ignore success or failure here. Correct privileges are checked later on.
+    ${Break}
+  ${Case} 1223
+    ; User aborted elevation, continue regardless
+    ${Break}
+  ${Default}
+    MessageBox mb_iconstop "Could not elevate process (errorcode $0), continuing with normal user privileges." /SD IDOK
+    ${Break}
+  ${EndSwitch}
+
+  ; The UAC plugin changes the error level even in the inner process, reset it.
+  SetErrorLevel -1
 
   ; /update argument
   Call ReadUpdateCommandline
