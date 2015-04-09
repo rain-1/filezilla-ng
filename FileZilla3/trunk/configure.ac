@@ -532,6 +532,13 @@ if test "$buildmain" = "yes"; then
   # Some platforms, e.g. OS X, lack posix_fadvise
   AC_CHECK_FUNCS(posix_fadvise)
 
+  # We need an inverse for gmtime, either timegm or _mkgmtime
+  AC_CHECK_FUNCS(timegm, [], [
+    AC_CHECK_FUNCS(_mkgmtime, [], [
+      AC_MSG_ERROR([No inverse function for gmtime was found])
+    ])    
+  ])
+
   # Some platforms have no d_type entry in their dirent structure
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
 
