@@ -23,7 +23,7 @@ CDateTime::CDateTime(Zone z, int year, int month, int day, int hour, int minute,
 }
 
 CDateTime::CDateTime(time_t t, Accuracy a)
-	: t_(t)
+	: t_(static_cast<int64_t>(t) * 1000)
 	, a_(a)
 {
 	TIME_ASSERT(IsClamped());
