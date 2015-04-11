@@ -87,6 +87,9 @@ public:
 #ifdef __WXMSW__
 	bool Set(FILETIME const& ft, Accuracy a);
 	bool Set(SYSTEMTIME const& ft, Accuracy a, Zone z);
+#else
+	// Careful: modifies passed structure
+	bool Set(tm & t, Accuracy a, Zone z);
 #endif
 
 	bool ImbueTime(int hour, int minute, int second = -1, int millisecond = -1);

@@ -11,6 +11,8 @@
 const wxChar CLocalFileSystem::path_separator = '\\';
 #else
 const wxChar CLocalFileSystem::path_separator = '/';
+
+#include <utime.h>
 #endif
 
 namespace {
@@ -330,7 +332,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path,
 		isLink = false;
 
 	if (modificationTime)
-		*modificationTime = CDateTime(wxDateTime(buf.st_mtime), CDateTime::seconds);
+		*modificationTime = CDateTime(buf.st_mtime, CDateTime::seconds);
 
 	if (mode)
 		*mode = buf.st_mode & 0x777;
@@ -693,8 +695,8 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 #else
 	utimbuf utm{};
 	utm.actime = t.GetTimeT();
-	utm.modtime = utc.actime;
-	return utime(path.fn_str(), &utm) == 0);
+	utm.modtime = utm.actime;
+	return utime(path.fn_str(), &utm) == 0;
 #endif
 }
 
