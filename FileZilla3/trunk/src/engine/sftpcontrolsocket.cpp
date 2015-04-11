@@ -1007,31 +1007,23 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 				seconds += c - '0';
 			}
 			if (parsed) {
-				wxDateTime date = wxDateTime(seconds);
+				CDateTime date(seconds, CDateTime::seconds);
 				if (date.IsValid()) {
-					date.MakeTimezone(wxDateTime::GMT0);
 					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
-					wxDateTime listTime = pData->directoryListing[pData->mtime_index].time.Degenerate();
+					CDateTime listTime = pData->directoryListing[pData->mtime_index].time;
 					listTime += wxTimeSpan(0, -m_pCurrentServer->GetTimezoneOffset(), 0);
 
-					int serveroffset = (date - listTime).GetSeconds().GetLo();
-					if (!pData->directoryListing[pData->mtime_index].has_seconds())
-					{
+					int serveroffset = static_cast<int>((date - listTime).GetSeconds());
+					if (!pData->directoryListing[pData->mtime_index].has_seconds()) {
 						// Round offset to full minutes
 						if (serveroffset < 0)
 							serveroffset -= 59;
 						serveroffset -= serveroffset % 60;
 					}
 
-					wxDateTime now = wxDateTime::Now();
-					wxDateTime now_utc = now.ToTimezone(wxDateTime::GMT0);
+					LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
 
-					int localoffset = (now - now_utc).GetSeconds().GetLo();
-					int offset = serveroffset + localoffset;
-
-					LogMessage(MessageType::Status, _("Timezone offsets: Server: %d seconds. Local: %d seconds. Difference: %d seconds."), -serveroffset, localoffset, offset);
-
-					wxTimeSpan span(0, 0, offset);
+					wxTimeSpan span(0, 0, serveroffset);
 					const int count = pData->directoryListing.GetCount();
 					for (int i = 0; i < count; ++i) {
 						CDirentry& entry = pData->directoryListing[i];
@@ -1040,7 +1032,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 
 					// TODO: Correct cached listings
 
-					CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, offset);
+					CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, serveroffset);
 				}
 			}
 		}
@@ -1803,7 +1795,7 @@ int CSftpControlSocket::FileTransferSend()
 
 		wxString quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 		// Y2K38
-		time_t ticks = pData->fileTime.Degenerate().GetTicks(); // Already in UTC
+		time_t ticks = pData->fileTime.GetTimeT();
 		wxString seconds = wxString::Format(_T("%d"), (int)ticks);
 		if (!SendCommand(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),
 			_T("chmtime ") + seconds + _T(" ") + quotedFilename))
@@ -1874,7 +1866,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 			}
 			if (parsed)
 			{
-				CDateTime fileTime = CDateTime(wxDateTime(seconds), CDateTime::seconds);
+				CDateTime fileTime = CDateTime(seconds, CDateTime::seconds);
 				if (fileTime.IsValid())
 					pData->fileTime = fileTime;
 			}

@@ -38,8 +38,7 @@ CState* CContextManager::CreateState(CMainFrame* pMainFrame)
 
 void CContextManager::DestroyState(CState* pState)
 {
-	for (unsigned int i = 0; i < m_contexts.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_contexts.size(); ++i) {
 		if (m_contexts[i] != pState)
 			continue;
 

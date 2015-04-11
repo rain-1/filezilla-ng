@@ -867,7 +867,7 @@ done:
 		if (line.GetToken(0, t)) {
 			wxLongLong seconds = t.GetNumber();
 			if (seconds > 0 && seconds.GetValue() <= 0xffffffffll) {
-				CDateTime time(wxDateTime(static_cast<time_t>(seconds.GetValue())), CDateTime::seconds);
+				CDateTime time(static_cast<time_t>(seconds.GetValue()), CDateTime::seconds);
 				if (time.IsValid()) {
 					entry.time = time;
 				}
@@ -1065,10 +1065,10 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			if (token[pos] == '.')
 				return true;
 
-			wxDateTime::Tm t = entry.time.Degenerate().GetTm();
-			year = t.year;
-			month = t.mon + 1;
-			day = t.mday;
+			tm t = entry.time.GetTm(CDateTime::utc);
+			year = t.tm_year + 1900;
+			month = t.tm_mon + 1;
+			day = t.tm_mday;
 		}
 	}
 	else if (token.IsNumeric()) {
@@ -1232,7 +1232,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	else
 		--index;
 
-	if (!entry.time.Set(year, month, day, hour, minute)) {
+	if (!entry.time.Set(CDateTime::utc, year, month, day, hour, minute)) {
 		return false;
 	}
 
@@ -1376,7 +1376,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	wxASSERT(gotMonth);
 	wxASSERT(gotDay);
 
-	if (!entry.time.Set( year, month, day )) {
+	if (!entry.time.Set(CDateTime::utc, year, month, day)) {
 		return false;
 	}
 
@@ -1547,7 +1547,7 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 			wxLongLong number = token.GetNumber(fact + 1, len - 1);
 			if (number < 0)
 				return false;
-			entry.time = CDateTime(wxDateTime((time_t)number.GetValue()), CDateTime::seconds);
+			entry.time = CDateTime(static_cast<time_t>(number.GetValue()), CDateTime::seconds);
 		}
 		else if (type == 'u' && len > 2 && token[fact + 1] == 'p')
 			entry.permissions = objcache.get(token.GetString().Mid(fact + 2, len - 2));
@@ -1824,7 +1824,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		wxLongLong number = token.GetNumber();
 		if (number < 0)
 			return false;
-		entry.time = CDateTime(wxDateTime((time_t)number.GetValue()), CDateTime::seconds);
+		entry.time = CDateTime(static_cast<time_t>(number.GetValue()), CDateTime::seconds);
 
 		// Get filename
 		if (!line.GetToken(++index, token, true))
@@ -1908,7 +1908,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			else if (year < 1000)
 				year += 1900;
 
-			if( !entry.time.Set( year.GetLo(), month, day.GetLo() ) ) {
+			if( !entry.time.Set(CDateTime::utc, year.GetLo(), month, day.GetLo()) ) {
 				return false;
 			}
 
@@ -2612,34 +2612,9 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		else if (factname == _T("modify") ||
 			(!entry.has_date() && factname == _T("create")))
 		{
-			wxChar const* fmt;
-			CDateTime::Accuracy accuracy;
-			if (value.size() >= 14) {
-				fmt = _T("%Y%m%d%H%M%S");
-				accuracy = CDateTime::seconds;
-			}
-			else if (value.size() >= 12) {
-				fmt = _T("%Y%m%d%H%M");
-				accuracy = CDateTime::minutes;
-			}
-			else if (value.size() >= 10) {
-				fmt = _T("%Y%m%d%H");
-				accuracy = CDateTime::hours;
-			}
-			else {
-				fmt = _T("%Y%m%d");
-				accuracy = CDateTime::days;
-			}
-
-			wxDateTime dateTime(today_);
-			if (!dateTime.ParseFormat(value, fmt))
+			entry.time = CDateTime(value, CDateTime::utc);
+			if (!entry.time.IsValid()) {
 				return 0;
-
-			if (accuracy != CDateTime::days) {
-				entry.time = CDateTime(dateTime.FromTimezone(wxDateTime::UTC), accuracy);
-			}
-			else {
-				entry.time = CDateTime(dateTime, accuracy);
 			}
 		}
 		else if (factname == _T("perm")) {

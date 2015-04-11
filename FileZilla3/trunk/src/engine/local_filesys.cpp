@@ -230,8 +230,9 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 			if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 				if (modificationTime) {
-					if (!ConvertFileTimeToCDateTime(*modificationTime, info.ftLastWriteTime))
-						ConvertFileTimeToCDateTime(*modificationTime, info.ftCreationTime);
+					if (!modificationTime->Set(info.ftLastWriteTime, CDateTime::milliseconds)) {
+						modificationTime->Set(info.ftCreationTime, CDateTime::milliseconds);
+					}
 				}
 
 				if (mode)
@@ -260,8 +261,10 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 	}
 
 	if (modificationTime) {
-		if (!ConvertFileTimeToCDateTime(*modificationTime, attributes.ftLastWriteTime))
-			ConvertFileTimeToCDateTime(*modificationTime, attributes.ftCreationTime);
+		*modificationTime = CDateTime(attributes.ftLastWriteTime, CDateTime::milliseconds);
+		if (!modificationTime->IsValid()) {
+			*modificationTime = CDateTime(attributes.ftCreationTime, CDateTime::milliseconds);
+		}
 	}
 
 	if (mode)
@@ -343,49 +346,6 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path,
 		*size = buf.st_size;
 
 	return file;
-}
-#endif
-
-#ifdef __WXMSW__
-
-// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
-static wxInt64 EPOCH_OFFSET_IN_MSEC = 11644473600000ll;
-
-bool CLocalFileSystem::ConvertFileTimeToCDateTime(CDateTime& time, const FILETIME &ft)
-{
-	if (!ft.dwHighDateTime && !ft.dwLowDateTime)
-		return false;
-
-	// See http://trac.wxwidgets.org/changeset/74423 and http://trac.wxwidgets.org/ticket/13098
-	// Directly converting to time_t
-
-	int64_t t = make_int64_t(ft.dwHighDateTime, ft.dwLowDateTime);
-	t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
-	t -= EPOCH_OFFSET_IN_MSEC;
-	if (t < 0) {
-		return false;
-	}
-
-	// Interestingly wxDateTime has this constructor which
-	// even more interestingly isn't even marked explicit.
-	time = CDateTime(wxDateTime(wxLongLong(t)), CDateTime::milliseconds);
-	return time.IsValid();
-}
-
-bool CLocalFileSystem::ConvertCDateTimeToFileTime(FILETIME &ft, CDateTime const& time)
-{
-	if (!time.IsValid())
-		return false;
-
-	int64_t t = time.Degenerate().GetValue().GetValue();
-
-	t += EPOCH_OFFSET_IN_MSEC;
-	t *= 10000;
-
-	ft.dwHighDateTime = t >> 32;
-	ft.dwLowDateTime = t & 0xffffffffll;
-
-	return true;
 }
 #endif
 
@@ -558,8 +518,10 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 				if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 					if (modificationTime) {
-						if (!ConvertFileTimeToCDateTime(*modificationTime, info.ftLastWriteTime))
-							ConvertFileTimeToCDateTime(*modificationTime, info.ftCreationTime);
+						*modificationTime = CDateTime(info.ftLastWriteTime, CDateTime::milliseconds);
+						if (!modificationTime->IsValid()) {
+							*modificationTime = CDateTime(info.ftCreationTime, CDateTime::milliseconds);
+						}
 					}
 
 					if (mode)
@@ -592,8 +554,12 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 				*modificationTime = CDateTime();
 		}
 		else {
-			if (modificationTime)
-				ConvertFileTimeToCDateTime(*modificationTime, m_find_data.ftLastWriteTime);
+			if (modificationTime) {
+				*modificationTime = CDateTime(m_find_data.ftLastWriteTime, CDateTime::milliseconds);
+				if (!modificationTime->IsValid()) {
+					*modificationTime = CDateTime(m_find_data.ftLastWriteTime, CDateTime::milliseconds);
+				}
+			}
 
 			if (mode)
 				*mode = (int)m_find_data.dwFileAttributes;
@@ -712,9 +678,10 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 		return false;
 
 #ifdef __WXMSW__
-	FILETIME ft;
-	if (!ConvertCDateTimeToFileTime(ft, t))
+	FILETIME ft = t.GetFileTime();
+	if (!ft.dwHighDateTime) {
 		return false;
+	}
 
 	HANDLE h = CreateFile(path, GENERIC_WRITE, FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_EXISTING, 0, 0);
 	if (h == INVALID_HANDLE_VALUE)
@@ -724,9 +691,10 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime
 	CloseHandle(h);
 	return ret;
 #else
-	wxFileName fn(path);
-	wxDateTime d = t.Degenerate();
-	return fn.SetTimes( &d, &d, 0 );
+	utimbuf utm{};
+	utm.actime = t.GetTimeT();
+	utm.modtime = utc.actime;
+	return utime(path.fn_str(), &utm) == 0);
 #endif
 }
 

@@ -72,27 +72,27 @@ Impl& GetImpl()
 wxString CTimeFormat::Format(CDateTime const& time)
 {
 	wxString ret;
-	if( time.IsValid() ) {
+	if (time.IsValid()) {
 		if( time.GetAccuracy() > CDateTime::days ) {
-			ret = FormatDateTime(time.Degenerate());
+			ret = FormatDateTime(time);
 		}
 		else {
-			ret = FormatDate(time.Degenerate());
+			ret = FormatDate(time);
 		}
 	}
 	return ret;
 }
 
-wxString CTimeFormat::FormatDateTime(const wxDateTime &time)
+wxString CTimeFormat::FormatDateTime(CDateTime const& time)
 {
 	Impl& impl = GetImpl();
 
-	return time.Format(impl.m_dateTimeFormat);
+	return time.Format(impl.m_dateTimeFormat, CDateTime::local);
 }
 
-wxString CTimeFormat::FormatDate(const wxDateTime &time)
+wxString CTimeFormat::FormatDate(CDateTime const& time)
 {
 	Impl& impl = GetImpl();
 
-	return time.Format(impl.m_dateFormat);
+	return time.Format(impl.m_dateFormat, CDateTime::local);
 }

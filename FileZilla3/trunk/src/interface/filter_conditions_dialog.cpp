@@ -520,8 +520,7 @@ void CFilterConditionsDialog::UpdateConditionsClientSize()
 	m_lastListSize = newSize;
 
 	// Resize text fields
-	for (unsigned int i = 0; i < m_filterControls.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_filterControls.size(); ++i) {
 		CFilterControls& controls = m_filterControls[i];
 		if (!controls.pValue)
 			continue;
@@ -534,17 +533,15 @@ void CFilterConditionsDialog::UpdateConditionsClientSize()
 		pos.x += deltaX;
 		controls.pRemove->SetPosition(pos);
 
-		if (controls.pLabel)
-		{
-			wxPoint pos = controls.pLabel->GetPosition();
-			pos.x += deltaX;
-			controls.pLabel->SetPosition(pos);
+		if (controls.pLabel) {
+			wxPoint labelPos = controls.pLabel->GetPosition();
+			labelPos.x += deltaX;
+			controls.pLabel->SetPosition(labelPos);
 		}
 	}
 
 	// Move add button
-	if (m_pAdd)
-	{
+	if (m_pAdd) {
 		wxPoint pos = m_pAdd->GetPosition();
 		pos.x += deltaX;
 		m_pAdd->SetPosition(pos);
@@ -619,13 +616,11 @@ CFilter CFilterConditionsDialog::GetFilter()
 			break;
 		case filter_attributes:
 		case filter_permissions:
-			if (controls.pSet->GetSelection())
-			{
+			if (controls.pSet->GetSelection()) {
 				condition.strValue = _T("0");
 				condition.value = 0;
 			}
-			else
-			{
+			else {
 				condition.strValue = _T("1");
 				condition.value = 1;
 			}
@@ -635,10 +630,10 @@ CFilter CFilterConditionsDialog::GetFilter()
 				continue;
 			else {
 				condition.strValue = controls.pValue->GetValue();
-				wxDateTime t;
-				if (!t.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !t.IsValid())
+				condition.date = CDateTime(condition.strValue, CDateTime::local);
+				if (!condition.date.IsValid()) {
 					continue;
-				condition.date = CDateTime(t, CDateTime::days);
+				}
 			}
 			break;
 		default:

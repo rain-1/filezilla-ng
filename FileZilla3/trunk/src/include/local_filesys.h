@@ -55,11 +55,6 @@ public:
 	static wxString GetSymbolicLinkTarget(wxString const& path);
 
 protected:
-#ifdef __WXMSW__
-	static bool ConvertFileTimeToCDateTime(CDateTime& time, FILETIME const& ft);
-	static bool ConvertCDateTimeToFileTime(FILETIME &ft, CDateTime const& time);
-#endif
-
 #ifndef __WXMSW__
 	static local_fileType GetFileInfo(const char* path, bool &isLink, int64_t* size, CDateTime* modificationTime, int* mode);
 	void AllocPathBuffer(const char* file);  // Ensures m_raw_path is large enough to hold path and filename
