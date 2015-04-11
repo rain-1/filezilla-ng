@@ -562,7 +562,9 @@ wxString CDateTime::Format(wxString const& fmt, Zone z) const
 	int const count = 1000;
 	wxChar buf[count];
 
+#ifdef __VISUALC__
 	CrtAssertSuppressor suppressor;
+#endif
 	wcsftime(buf, count - 1, fmt, &t);
 	buf[count - 1] = 0;
 	return buf;
