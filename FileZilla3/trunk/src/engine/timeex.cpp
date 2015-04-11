@@ -1,6 +1,10 @@
 #include <filezilla.h>
 #include "timeex.h"
 
+#ifndef __WXMSW__
+#include <sys/time.h>
+#endif
+
 #define TIME_ASSERT(x) //wxASSERT(x)
 
 CDateTime::CDateTime()
@@ -15,11 +19,8 @@ CDateTime::CDateTime(CDateTime const& op)
 }
 
 CDateTime::CDateTime(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
-	: a_()
 {
-	if( !Set(z, year, month, day, hour, minute, second, millisecond) ) {
-		t_ = -1;
-	}
+	Set(z, year, month, day, hour, minute, second, millisecond);
 }
 
 CDateTime::CDateTime(time_t t, Accuracy a)
@@ -88,7 +89,7 @@ CDateTime CDateTime::Now()
 	CDateTime ret;
 	timeval tv = { 0, 0 };
 	if (gettimeofday(&tv, 0) == 0) {
-		ret.t_ = tv.tv_sec * 1000 + tv.tv_nsec / 1000;
+		ret.t_ = tv.tv_sec * 1000 + tv.tv_usec / 1000;
 		ret.a_ = milliseconds;
 	}
 	return ret;
@@ -315,33 +316,23 @@ bool CDateTime::Set(Zone z, int year, int month, int day, int hour, int minute, 
 
 	return Set(st, a, z);
 #else
-	// fixme
-	if (year < 1970 || year > 3000)
-		return false;
 
-	if (month < 1 || month > 12)
-		return false;
+	tm t{};
+	t.tm_isdst = -1;
+	t.tm_year = year - 1900;
+	t.tm_mon = month - 1;
+	t.tm_mday = day;
+	t.tm_hour = hour;
+	t.tm_min = minute;
+	t.tm_sec = second;
 
-	int maxDays = wxDateTime::GetNumberOfDays(static_cast<wxDateTime::Month>(month - 1), year);
-	if (day < 1 || day > maxDays)
-		return false;
+	bool set = Set(t, a, z);
 
-	if( hour < 0 || hour >= 24 ) {
-		return false;
-	}
-	if( minute < 0 || minute >= 60 ) {
-		return false;
-	}
-	if( second < 0 || second >= 60 ) {
-		return false;
-	}
-	if( millisecond < 0 || millisecond >= 1000 ) {
-		return false;
+	if (set) {
+		t_ += millisecond;
 	}
 
-	//fixme
-	//t_.Set( day, static_cast<wxDateTime::Month>(month - 1), year, hour, minute, second, millisecond );
-	return IsValid();
+	return set;
 #endif
 }
 
@@ -376,7 +367,33 @@ bool CDateTime::Set(wxString const& str, Zone z)
 	}
 	return Set(st, a, z);
 #else
-	// fixme
+	tm t{};
+	if (!parse(it, end, 4, t.tm_year, -1900) ||
+		!parse(it, end, 2, t.tm_mon, -1) ||
+		!parse(it, end, 2, t.tm_mday, 0))
+	{
+		return false;
+	}
+
+	Accuracy a = days;
+	int64_t ms{};
+	if (parse(it, end, 2, t.tm_hour, 0)) {
+		a = hours;
+		if (parse(it, end, 2, t.tm_min, 0)) {
+			a = minutes;
+			if (parse(it, end, 2, t.tm_sec, 0)) {
+				a = seconds;
+				if (parse(it, end, 3, ms, 0)) {
+					a = milliseconds;
+				}
+			}
+		}
+	}
+	bool set = Set(t, a, z);
+	if (set) {
+		t_ += ms;
+	}
+	return set;
 #endif
 }
 
@@ -431,6 +448,32 @@ bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 	}
 	return false;
 }
+
+#else
+
+bool CDateTime::Set(tm& t, Accuracy a, Zone z)
+{
+	clear();
+
+	time_t tt;
+	if (a >= hours && z == local) {
+		 tt = mktime(&t);
+	}
+	else {
+		tt = timegm(&t);
+	}
+
+	if (tt != time_t(-1)) {
+		t_ = static_cast<int64_t>(tt) * 1000;
+		a_ = a;
+
+		TIME_ASSERT(IsClamped());
+
+		return true;
+	}
+	return false;
+}
+
 #endif
 
 bool CDateTime::ImbueTime(int hour, int minute, int second, int millisecond)
@@ -569,8 +612,18 @@ wxString CDateTime::Format(wxString const& fmt, Zone z) const
 	buf[count - 1] = 0;
 	return buf;
 #else
-	// fixme
-	return wxString();
+
+	auto fbuf = fmt.mb_str();
+	if (!fbuf || !*fbuf) {
+		return wxString();
+	}
+
+	int const count = 1000;
+	char buf[count];
+	strftime(buf, count -1, fbuf, &t);
+	buf[count - 1] = 0;
+
+	return buf;
 #endif
 }
 
@@ -593,10 +646,10 @@ tm CDateTime::GetTm(Zone z) const
 	}
 #else
 	if (z == utc || a_ == days) {
-		gmtime_r(&ret, &t);
+		gmtime_r(&t, &ret);
 	}
 	else {
-		localtime_r(&ret, &t);
+		localtime_r(&t, &ret);
 	}
 #endif
 	return ret;
