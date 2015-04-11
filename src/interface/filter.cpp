@@ -939,10 +939,10 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 				condition.value = 1;
 		}
 		else if (condition.type == filter_date) {
-			wxDateTime t;
-			if (!t.ParseFormat(condition.strValue, _T("%Y-%m-%d")) || !t.IsValid())
+			condition.date = CDateTime(condition.strValue, CDateTime::local);
+			if (!condition.date.IsValid()) {
 				continue;
-			condition.date = CDateTime(t, CDateTime::days);
+			}
 		}
 
 		filter.filters.push_back(condition);

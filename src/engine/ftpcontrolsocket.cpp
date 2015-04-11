@@ -1614,8 +1614,7 @@ int CFtpControlSocket::ListParseResponse()
 
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
 
-	if (pData->opState != list_mdtm)
-	{
+	if (pData->opState != list_mdtm) {
 		LogMessage(MessageType::Debug_Warning, _T("ListParseResponse should never be called if opState != list_mdtm"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1626,32 +1625,23 @@ int CFtpControlSocket::ListParseResponse()
 	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown &&
 		m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16)
 	{
-		wxDateTime date;
-		const wxChar *res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M%S"));
-		if (res && date.IsValid())
-		{
+		CDateTime date(m_Response.Mid(4), CDateTime::utc);
+		if (date.IsValid()) {
 			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
-			wxDateTime listTime = pData->directoryListing[pData->mdtm_index].time.Degenerate();
+			CDateTime listTime = pData->directoryListing[pData->mdtm_index].time;
 			listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 
-			int serveroffset = (date - listTime).GetSeconds().GetLo();
-			if (!pData->directoryListing[pData->mdtm_index].has_seconds())
-			{
+			int serveroffset = static_cast<int>((date - listTime).GetSeconds());
+			if (!pData->directoryListing[pData->mdtm_index].has_seconds()) {
 				// Round offset to full minutes
 				if (serveroffset < 0)
 					serveroffset -= 59;
 				serveroffset -= serveroffset % 60;
 			}
 
-			wxDateTime now = wxDateTime::Now();
-			wxDateTime now_utc = now.ToTimezone(wxDateTime::GMT0);
+			LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
 
-			int localoffset = (now - now_utc).GetSeconds().GetLo();
-			int offset = serveroffset + localoffset;
-
-			LogMessage(MessageType::Status, _("Timezone offsets: Server: %d seconds. Local: %d seconds. Difference: %d seconds."), -serveroffset, localoffset, offset);
-
-			wxTimeSpan span(0, 0, offset);
+			wxTimeSpan span(0, 0, serveroffset);
 			const int count = pData->directoryListing.GetCount();
 			for (int i = 0; i < count; ++i) {
 				CDirentry& entry = pData->directoryListing[i];
@@ -1660,10 +1650,9 @@ int CFtpControlSocket::ListParseResponse()
 
 			// TODO: Correct cached listings
 
-			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, offset);
+			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, yes, serveroffset);
 		}
-		else
-		{
+		else {
 			CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, no);
 			CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 		}
@@ -2276,15 +2265,8 @@ int CFtpControlSocket::FileTransferParseResponse()
 		pData->opState = filetransfer_resumetest;
 		if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16)
 		{
-			wxDateTime date;
-			const wxChar *res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M%S"));
-			CDateTime::Accuracy a = CDateTime::seconds;
-			if (!res || !date.IsValid()) {
-				res = date.ParseFormat(m_Response.Mid(4), _T("%Y%m%d%H%M"));
-				a = CDateTime::minutes;
-			}
-			if (res && date.IsValid()) {
-				pData->fileTime = CDateTime( date.FromTimezone(wxDateTime::UTC), a );
+			pData->fileTime = CDateTime(m_Response.Mid(4), CDateTime::utc);
+			if (pData->fileTime.IsValid()) {
 				pData->fileTime += wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
 			}
 		}
@@ -2694,7 +2676,7 @@ int CFtpControlSocket::FileTransferSend()
 	case filetransfer_mfmt:
 		{
 			cmd = _T("MFMT ");
-			cmd += pData->fileTime.Degenerate().ToTimezone(wxDateTime::UTC).Format(_T("%Y%m%d%H%M%S "));
+			cmd += pData->fileTime.Format(_T("%Y%m%d%H%M%S "), CDateTime::utc);
 			cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 			break;

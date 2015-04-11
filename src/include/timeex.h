@@ -4,11 +4,24 @@
 #include <wx/time.h>
 
 #include <chrono>
+#include <ctime>
 
 #if HAVE_UNSTEADY_STEADY_CLOCK
 #include <sys/time.h>
 #endif
 
+class duration;
+
+// Represents a point of time in wallclock.
+// Internal representation is in millsieconds since 1970-01-01 00:00:00.000 UTC [*]
+//
+// As time may come from different sources that have different accuracy/precision,
+// this class keeps track of accuracy information.
+//
+// The Compare function can be used for accuracy-aware comparisons. Conceptually it works
+// as if naively comparing both timestamps after truncating them to the most common accuracy.
+//
+// [*] underlying type may be TAI on some *nix, we pretend there is no difference
 class CDateTime final
 {
 public:
@@ -20,56 +33,108 @@ public:
 		milliseconds
 	};
 
+	enum Zone {
+		utc,
+		local
+	};
+
 	CDateTime();
-	CDateTime( int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1 );
-	CDateTime( wxDateTime const& t, Accuracy a );
 
-	CDateTime( CDateTime const& op );
-	CDateTime& operator=( CDateTime const& op );
+	CDateTime(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
 
-	wxDateTime Degenerate() const { return t_; }
+	explicit CDateTime(time_t, Accuracy a);
 
-	bool IsValid() const { return t_.IsValid(); }
+	// Parses string, looks for YYYYmmDDHHMMSSsss
+	// Ignores all non-digit characters between fields.
+	explicit CDateTime(wxString const& s, Zone z);
+
+#ifdef __WXMSW__
+	explicit CDateTime(FILETIME const& ft, Accuracy a);
+#endif
+
+	CDateTime(CDateTime const& op);
+	CDateTime& operator=(CDateTime const& op);
+
+	bool IsValid() const;
 	void clear();
 
 	Accuracy GetAccuracy() const { return a_; }
 
 	static CDateTime Now();
 
-	bool operator==( CDateTime const& op ) const;
-	bool operator!=( CDateTime const& op ) const { return !(*this == op); }
-	bool operator<( CDateTime const& op ) const;
-	bool operator>( CDateTime const& op ) const { return op < *this; }
+	bool operator==(CDateTime const& op) const;
+	bool operator!=(CDateTime const& op) const { return !(*this == op); }
+	bool operator<(CDateTime const& op) const;
+	bool operator>(CDateTime const& op) const { return op < *this; }
 
-	wxTimeSpan operator-( CDateTime const& op ) const;
+	int Compare(CDateTime const& op) const;
+	bool IsEarlierThan(CDateTime const& op) const { return Compare(op) < 0; };
+	bool IsLaterThan(CDateTime const& op) const { return Compare(op) > 0; };
 
-	int Compare( CDateTime const& op ) const;
-	bool IsEarlierThan( CDateTime const& op ) const { return Compare(op) < 0; };
-	bool IsLaterThan( CDateTime const& op ) const { return Compare(op) > 0; };
+	CDateTime& operator+=(wxTimeSpan const& op);
+	CDateTime operator+(wxTimeSpan const& op) const { CDateTime t(*this); t += op; return t; }
 
-	CDateTime& operator+=( wxTimeSpan const& op );
-	CDateTime operator+( wxTimeSpan const& op ) const { CDateTime t(*this); t += op; return t; }
+	CDateTime& operator-=(wxTimeSpan const& op);
+	CDateTime operator-(wxTimeSpan const& op) const { CDateTime t(*this); t += op; return t; }
+
+	friend duration operator-(CDateTime const& a, CDateTime const& b);
 
 	// Beware: month and day are 1-indexed!
-	bool Set( int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1 );
-	bool ImbueTime( int hour, int minute, int second = -1, int millisecond = -1 );
+	bool Set(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
+
+	bool Set(wxString const& str, Zone z);
+
+#ifdef __WXMSW__
+	bool Set(FILETIME const& ft, Accuracy a);
+	bool Set(SYSTEMTIME const& ft, Accuracy a, Zone z);
+#endif
+
+	bool ImbueTime(int hour, int minute, int second = -1, int millisecond = -1);
 
 	static bool VerifyFormat(wxString const& fmt);
+
+	wxString Format(wxString const& format, Zone z) const;
+
+	int GetMilliseconds() const { return t_ % 1000; }
+
+	time_t GetTimeT() const;
+
+	tm GetTm(Zone z) const;
+
+#ifdef __WXMSW__
+	FILETIME GetFileTime() const;
+#endif
 
 private:
 	int CompareSlow( CDateTime const& op ) const;
 
 	bool IsClamped();
 
-	wxDateTime t_;
+	int64_t t_{-1};
 	Accuracy a_;
 };
+
+class duration final
+{
+public:
+	duration() = default;
+	explicit duration(int64_t ms) : ms_(ms) {}
+
+	int64_t GetSeconds() const { return ms_ / 1000; }
+	int64_t GetMilliseconds() const { return ms_; }
+private:
+	int64_t ms_{};
+};
+
+duration operator-(CDateTime const& a, CDateTime const& b);
+
+
+
 
 /* If called multiple times in a row, wxDateTime::Now may return the same
  * time. This causes problems with the cache logic. This class implements
  * an extended time class in wich Now() never returns the same value.
  */
-
 class CMonotonicTime final
 {
 public:

@@ -534,9 +534,9 @@ if test "$buildmain" = "yes"; then
 
   # We need an inverse for gmtime, either timegm or _mkgmtime
   AC_CHECK_FUNCS(timegm, [], [
-    AC_CHECK_FUNCS(_mkgmtime, [], [
+    if ! echo "${WX_CPPFLAGS}" | grep __WXMSW__ > /dev/null 2>&1; then
       AC_MSG_ERROR([No inverse function for gmtime was found])
-    ])    
+    fi
   ])
 
   # Some platforms have no d_type entry in their dirent structure

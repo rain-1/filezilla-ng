@@ -55,8 +55,8 @@ public:
 
 	virtual QueueItemType GetType() const = 0;
 
-	wxDateTime GetTime() const { return m_time; }
-	void UpdateTime() { m_time = wxDateTime::UNow(); }
+	CDateTime GetTime() const { return m_time; }
+	void UpdateTime() { m_time = CDateTime::Now(); }
 
 	const std::vector<CQueueItem*>& GetChildren() const { return m_children; }
 	int GetRemovedAtFront() const { return m_removed_at_front; }
@@ -78,7 +78,7 @@ protected:
 
 	friend class CServerItem;
 
-	wxDateTime m_time;
+	CDateTime m_time;
 
 private:
 	std::vector<CQueueItem*> m_children;
