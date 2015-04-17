@@ -532,6 +532,18 @@ if test "$buildmain" = "yes"; then
   # Some platforms, e.g. OS X, lack posix_fadvise
   AC_CHECK_FUNCS(posix_fadvise)
 
+  # We need the threadsafe variants of localtime and gmtime
+  AC_CHECK_FUNCS(localtime_r, [], [
+    AC_CHECK_FUNCS(localtime_s, [], [
+      AC_MSG_ERROR([No threadsafe variant of localtime found])
+    ])
+  ])
+  AC_CHECK_FUNCS(gmtime_r, [], [
+    AC_CHECK_FUNCS(gmtime_s, [], [
+      AC_MSG_ERROR([No threadsafe variant of gmtime found])
+    ])
+  ])
+
   # We need an inverse for gmtime, either timegm or _mkgmtime
   AC_CHECK_FUNCS(timegm, [], [
     if ! echo "${WX_CPPFLAGS}" | grep __WXMSW__ > /dev/null 2>&1; then
