@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-16 16:47+0100\n"
-"PO-Revision-Date: 2015-03-24 08:48+0100\n"
+"PO-Revision-Date: 2015-04-13 20:22+0100\n"
 "Last-Translator: Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -2863,7 +2863,7 @@ msgstr "Data"
 #: ../../locales/../src/interface/netconfwizard.cpp:993
 #: ../../locales/../src/interface/netconfwizard.cpp:1057
 msgid "Data socket closed too early."
-msgstr "Datasokkelen ble lukket for tidlig."
+msgstr "Datasokkel ble lukket for tidlig."
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:155
 msgid "Date"
@@ -6892,7 +6892,7 @@ msgstr "Hopp over fil"
 #: ../../locales/../src/engine/ControlSocket.cpp:1252
 #, c-format
 msgid "Skipping download of %s"
-msgstr "Hopper over nedlastingen av %s"
+msgstr "Hopper over nedlasting av %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1154
 #: ../../locales/../src/engine/ControlSocket.cpp:1170
@@ -6900,11 +6900,11 @@ msgstr "Hopper over nedlastingen av %s"
 #: ../../locales/../src/engine/ControlSocket.cpp:1256
 #, c-format
 msgid "Skipping upload of %s"
-msgstr "Hopper over opplastingen av %s"
+msgstr "Hopper over opplasting av %s"
 
 #: ../../locales/../src/engine/socket.cpp:1041
 msgid "Socket address outside address space"
-msgstr "Sokkeladressen er utenfor adresseområdet"
+msgstr "Sokkeladresse er utenfor adresseområdet"
 
 #: ../../locales/../src/engine/socket.cpp:1043
 msgid "Socket already connected"
@@ -6912,7 +6912,7 @@ msgstr "Sokkel allerede tilkoblet"
 
 #: ../../locales/../src/engine/socket.cpp:1051
 msgid "Socket has been shut down"
-msgstr "Sokkelen er avsluttet"
+msgstr "Sokkel er avsluttet"
 
 #: ../../locales/../src/engine/socket.cpp:1048
 msgid "Socket not connected"
@@ -6953,15 +6953,15 @@ msgstr "Sorterings&modus:"
 
 #: ../../locales/../src/interface/RemoteTreeView.cpp:100
 msgid "Source and path of the drop operation are identical"
-msgstr "Kilde og sti for dra-operasjonen er identisk"
+msgstr "Kilde og sti for dra-operasjonen er identiske"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:315
 msgid "Source and target file may not be the same"
-msgstr "Kilde- og målfil kan ikke være den samme"
+msgstr "Kildefil kan ikke være målfil"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:141
 msgid "Source and target of the drop operation are identical"
-msgstr "Kilde og mål for dra-operasjonen er identisk"
+msgstr "Kilde og mål for slipp-handling er identiske"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:24
 msgid "Source file:"
@@ -7014,13 +7014,13 @@ msgstr "Begynte å se etter oppdateringer %s\n"
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1556
 #, c-format
 msgid "Starting download of %s"
-msgstr "Starter nedlastingen av %s"
+msgstr "Starter nedlasting av %s"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2195
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1559
 #, c-format
 msgid "Starting upload of %s"
-msgstr "Starter opplastingen av %s"
+msgstr "Starter opplasting av %s"
 
 #: ../../locales/../src/interface/cmdline.cpp:9
 msgid "Starts the local site in the given path"
@@ -8554,6 +8554,9 @@ msgstr "overskrivbar for alle"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Timezone offset of server is %d seconds."
+#~ msgstr "Tidssone-forskyvning av tjenertid er %d sekunder."
 
 #~ msgid "&Crash"
 #~ msgstr "&Kræsj"
