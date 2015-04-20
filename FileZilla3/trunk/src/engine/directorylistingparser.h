@@ -63,7 +63,7 @@ public:
 
 	void Reset();
 
-	void SetTimezoneOffset(const wxTimeSpan& span) { m_timezoneOffset = span; }
+	void SetTimezoneOffset(duration const& span) { m_timezoneOffset = span; }
 
 	void SetServer(const CServer& server) { m_server = server; };
 
@@ -140,15 +140,11 @@ protected:
 
 	bool m_maybeMultilineVms;
 
-	wxTimeSpan m_timezoneOffset;
+	duration m_timezoneOffset;
 
 	listingEncoding::type m_listingEncoding;
 
 	bool sftp_mode_{};
-
-	// If not passing a default date/time to wxDateTime::ParseFormat, it internaly uses today as reference.
-	// Getting today is slow, so cache it.
-	wxDateTime const today_;
 };
 
 #endif

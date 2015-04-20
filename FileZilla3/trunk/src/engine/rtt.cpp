@@ -21,7 +21,7 @@ bool CLatencyMeasurement::Start()
 	if (m_start.IsValid())
 		return false;
 
-	m_start = wxDateTime::UNow();
+	m_start = CDateTime::Now();
 
 	return true;
 }
@@ -32,13 +32,13 @@ bool CLatencyMeasurement::Stop()
 	if (!m_start.IsValid())
 		return false;
 
-	wxTimeSpan diff = wxDateTime::UNow() - m_start;
-	m_start = wxDateTime();
+	duration diff = CDateTime::Now() - m_start;
+	m_start.clear();
 
-	if (diff.GetMilliseconds() < 0)
+	if (diff.get_milliseconds() < 0)
 		return false;
 
-	m_summed_latency += diff.GetMilliseconds();
+	m_summed_latency += diff.get_milliseconds();
 	++m_measurements;
 
 	return true;
@@ -49,7 +49,7 @@ void CLatencyMeasurement::Reset()
 	scoped_lock lock(m_sync);
 	m_summed_latency = 0;
 	m_measurements = 0;
-	m_start = wxDateTime();
+	m_start.clear();
 }
 
 void CLatencyMeasurement::cb()

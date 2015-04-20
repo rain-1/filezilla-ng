@@ -71,11 +71,11 @@ public:
 	bool IsEarlierThan(CDateTime const& op) const { return Compare(op) < 0; };
 	bool IsLaterThan(CDateTime const& op) const { return Compare(op) > 0; };
 
-	CDateTime& operator+=(wxTimeSpan const& op);
-	CDateTime operator+(wxTimeSpan const& op) const { CDateTime t(*this); t += op; return t; }
+	CDateTime& operator+=(duration const& op);
+	CDateTime operator+(duration const& op) const { CDateTime t(*this); t += op; return t; }
 
-	CDateTime& operator-=(wxTimeSpan const& op);
-	CDateTime operator-(wxTimeSpan const& op) const { CDateTime t(*this); t += op; return t; }
+	CDateTime& operator-=(duration const& op);
+	CDateTime operator-(duration const& op) const { CDateTime t(*this); t -= op; return t; }
 
 	friend duration operator-(CDateTime const& a, CDateTime const& b);
 
@@ -123,11 +123,27 @@ public:
 	duration() = default;
 	explicit duration(int64_t ms) : ms_(ms) {}
 
-	int64_t GetSeconds() const { return ms_ / 1000; }
-	int64_t GetMilliseconds() const { return ms_; }
+	int64_t get_days() const { return ms_ / 1000 / 3600 / 24; }
+	int64_t get_hours() const { return ms_ / 1000 / 3600; }
+	int64_t get_minutes() const { return ms_ / 1000 / 60; }
+	int64_t get_seconds() const { return ms_ / 1000; }
+	int64_t get_milliseconds() const { return ms_; }
+
+	static duration from_minutes(int64_t m) {
+		return duration(m * 1000 * 60);
+	}
+	static duration from_seconds(int64_t m) {
+		return duration(m * 1000);
+	}
+
+	duration operator-() const {
+		return duration(-ms_);
+	}
+
 private:
 	int64_t ms_{};
 };
+
 
 duration operator-(CDateTime const& a, CDateTime const& b);
 

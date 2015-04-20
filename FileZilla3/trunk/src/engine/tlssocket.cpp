@@ -862,8 +862,8 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		return false;
 	}
 
-	wxDateTime expirationTime = gnutls_x509_crt_get_expiration_time(cert);
-	wxDateTime activationTime = gnutls_x509_crt_get_activation_time(cert);
+	CDateTime expirationTime(gnutls_x509_crt_get_expiration_time(cert), CDateTime::seconds);
+	CDateTime activationTime(gnutls_x509_crt_get_activation_time(cert), CDateTime::seconds);
 
 	// Get the serial number of the certificate
 	unsigned char buffer[40];

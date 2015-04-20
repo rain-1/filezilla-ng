@@ -1629,9 +1629,9 @@ int CFtpControlSocket::ListParseResponse()
 		if (date.IsValid()) {
 			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
 			CDateTime listTime = pData->directoryListing[pData->mdtm_index].time;
-			listTime -= wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
+			listTime -= duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 
-			int serveroffset = static_cast<int>((date - listTime).GetSeconds());
+			int serveroffset = static_cast<int>((date - listTime).get_seconds());
 			if (!pData->directoryListing[pData->mdtm_index].has_seconds()) {
 				// Round offset to full minutes
 				if (serveroffset < 0)
@@ -1641,7 +1641,7 @@ int CFtpControlSocket::ListParseResponse()
 
 			LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
 
-			wxTimeSpan span(0, 0, serveroffset);
+			duration span = duration::from_seconds(serveroffset);
 			const int count = pData->directoryListing.GetCount();
 			for (int i = 0; i < count; ++i) {
 				CDirentry& entry = pData->directoryListing[i];
@@ -2263,11 +2263,10 @@ int CFtpControlSocket::FileTransferParseResponse()
 		break;
 	case filetransfer_mdtm:
 		pData->opState = filetransfer_resumetest;
-		if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16)
-		{
+		if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16) {
 			pData->fileTime = CDateTime(m_Response.Mid(4), CDateTime::utc);
 			if (pData->fileTime.IsValid()) {
-				pData->fileTime += wxTimeSpan(0, m_pCurrentServer->GetTimezoneOffset(), 0);
+				pData->fileTime += duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 			}
 		}
 

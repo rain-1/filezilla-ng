@@ -446,10 +446,9 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 {
 	scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
-	while (iter != m_failedLogins.end())
-	{
-		const wxTimeSpan span = wxDateTime::UNow() - iter->time;
-		if (span.GetSeconds() >= m_options.GetOptionVal(OPTION_RECONNECTDELAY) ||
+	while (iter != m_failedLogins.end()) {
+		duration const span = CDateTime::Now() - iter->time;
+		if (span.get_seconds() >= m_options.GetOptionVal(OPTION_RECONNECTDELAY) ||
 			iter->server == server || (!critical && (iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())))
 		{
 			std::list<t_failedLogins>::iterator prev = iter;
@@ -462,7 +461,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 
 	t_failedLogins failure;
 	failure.server = server;
-	failure.time = wxDateTime::UNow();
+	failure.time = CDateTime::Now();
 	failure.critical = critical;
 	m_failedLogins.push_back(failure);
 }
@@ -471,20 +470,18 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 {
 	scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
-	while (iter != m_failedLogins.end())
-	{
-		const wxTimeSpan span = wxDateTime::UNow() - iter->time;
+	while (iter != m_failedLogins.end()) {
+		duration const span = CDateTime::Now() - iter->time;
 		const int delay = m_options.GetOptionVal(OPTION_RECONNECTDELAY);
-		if (span.GetSeconds() >= delay)
-		{
+		if (span.get_seconds() >= delay) {
 			std::list<t_failedLogins>::iterator prev = iter;
 			++iter;
 			m_failedLogins.erase(prev);
 		}
 		else if (!iter->critical && iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())
-			return delay * 1000 - span.GetMilliseconds().GetLo();
+			return delay * 1000 - span.get_milliseconds();
 		else if (iter->server == server)
-			return delay * 1000 - span.GetMilliseconds().GetLo();
+			return delay * 1000 - span.get_milliseconds();
 		else
 			++iter;
 	}
@@ -873,7 +870,7 @@ void CTransferStatusManager::SetStartTime()
 	if (!status_)
 		return;
 
-	status_.started = wxDateTime::UNow();
+	status_.started = CDateTime::Now();
 }
 
 void CTransferStatusManager::SetMadeProgress()

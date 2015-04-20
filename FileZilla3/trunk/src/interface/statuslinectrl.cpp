@@ -91,7 +91,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		refresh = 31;
 	}
 
-	wxTimeSpan elapsed;
+	duration elapsed;
 	int left = -1;
 	wxFileOffset rate;
 	wxString bytes_and_rate;
@@ -120,8 +120,8 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 
 		int elapsed_milli_seconds = 0;
 		if (status_.started.IsValid()) {
-			elapsed = wxDateTime::UNow().Subtract(status_.started);
-			elapsed_milli_seconds = elapsed.GetMilliseconds().GetLo(); // Assume GetHi is always 0
+			elapsed = CDateTime::Now() - status_.started;
+			elapsed_milli_seconds = static_cast<int>(elapsed.get_milliseconds()); // Assume it doesn't overflow
 		}
 
 		if (elapsed_milli_seconds / 1000 != m_last_elapsed_seconds) {
@@ -197,7 +197,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 
 		if (refresh & 1) {
 			m_mdc->DrawRectangle(0, 0, m_fieldOffsets[0], rect.GetHeight());
-			DrawRightAlignedText(*m_mdc, elapsed.Format(_("%H:%M:%S elapsed")), m_fieldOffsets[0], h);
+			DrawRightAlignedText(*m_mdc, wxTimeSpan::Milliseconds(elapsed.get_milliseconds()).Format(_("%H:%M:%S elapsed")), m_fieldOffsets[0], h);
 		}
 		if (refresh & 2) {
 			m_mdc->DrawRectangle(m_fieldOffsets[0], 0, m_fieldOffsets[1] - m_fieldOffsets[0], rect.GetHeight());

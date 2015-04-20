@@ -435,7 +435,6 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 	, m_maybeMultilineVms(false)
 	, m_listingEncoding(encoding)
 	, sftp_mode_(sftp_mode)
-	, today_(wxDateTime::Today())
 {
 	if (m_MonthNamesMap.empty()) {
 		//Fill the month names map
@@ -878,7 +877,7 @@ done:
 	{
 		auto const timezoneOffset = m_server.GetTimezoneOffset();
 		if (timezoneOffset) {
-			entry.time += wxTimeSpan(0, timezoneOffset, 0, 0);
+			entry.time += duration::from_minutes(timezoneOffset);
 		}
 	}
 
@@ -921,8 +920,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 	// Check for netware servers, which split the permissions into two parts
 	bool netware = false;
-	if (token.GetLength() == 1)
-	{
+	if (token.GetLength() == 1) {
 		if (!line.GetToken(++index, token))
 			return false;
 		permissions += _T(" ") + token.GetString();
@@ -931,8 +929,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 	entry.permissions = objcache.get(permissions);
 
 	int numOwnerGroup = 3;
-	if (!netware)
-	{
+	if (!netware) {
 		// Filter out link count, we don't need it
 		if (!line.GetToken(++index, token))
 			return false;
@@ -943,14 +940,12 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 	// Repeat until numOwnerGroup is 0 since not all servers send every possible field
 	int startindex = index;
-	do
-	{
+	do {
 		// Reset index
 		index = startindex;
 
 		wxString ownerGroup;
-		for (int i = 0; i < numOwnerGroup; ++i)
-		{
+		for (int i = 0; i < numOwnerGroup; ++i) {
 			if (!line.GetToken(++index, token))
 				return false;
 			if (i)
@@ -962,16 +957,14 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 			return false;
 
 		// Check for concatenated groupname and size fields
-		if (!ParseComplexFileSize(token, entry.size))
-		{
+		if (!ParseComplexFileSize(token, entry.size)) {
 			if (!token.IsRightNumeric())
 				continue;
 			entry.size = token.GetNumber();
 		}
 
 		// Append missing group to ownerGroup
-		if (!token.IsNumeric() && token.IsRightNumeric())
-		{
+		if (!token.IsNumeric() && token.IsRightNumeric()) {
 			if (!ownerGroup.empty())
 				ownerGroup += _T(" ");
 

@@ -23,7 +23,7 @@ public:
 	virtual void cb();
 
 protected:
-	wxDateTime m_start;
+	CDateTime m_start;
 
 	wxLongLong m_summed_latency;
 	int m_measurements;
