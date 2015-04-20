@@ -175,7 +175,7 @@ public:
 	void InvalidateCurrentWorkingDir(const CServerPath& path);
 
 protected:
-	wxTimeSpan GetTimezoneOffset();
+	duration GetTimezoneOffset() const;
 
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 	bool m_closed;

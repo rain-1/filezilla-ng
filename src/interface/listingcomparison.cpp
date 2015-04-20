@@ -68,29 +68,26 @@ bool CComparisonManager::CompareListings()
 		return false;
 
 	CFilterManager filters;
-	if (filters.HasActiveFilters() && !filters.HasSameLocalAndRemoteFilters())
-	{
+	if (filters.HasActiveFilters() && !filters.HasSameLocalAndRemoteFilters()) {
 		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
 		wxMessageBoxEx(_("Cannot compare directories, different filters for local and remote directories are enabled"), _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 
 	wxString error;
-	if (!m_pLeft->CanStartComparison(&error))
-	{
+	if (!m_pLeft->CanStartComparison(&error)) {
 		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
 		wxMessageBoxEx(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
-	if (!m_pRight->CanStartComparison(&error))
-	{
+	if (!m_pRight->CanStartComparison(&error)) {
 		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
 		wxMessageBoxEx(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 
 	const int mode = COptions::Get()->GetOptionVal(OPTION_COMPARISONMODE);
-	const wxTimeSpan threshold = wxTimeSpan::Minutes( COptions::Get()->GetOptionVal(OPTION_COMPARISON_THRESHOLD) );
+	duration const threshold = duration::from_minutes( COptions::Get()->GetOptionVal(OPTION_COMPARISON_THRESHOLD) );
 
 	m_pLeft->m_pComparisonManager = this;
 	m_pRight->m_pComparisonManager = this;
@@ -115,57 +112,49 @@ bool CComparisonManager::CompareListings()
 	bool gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate);
 	bool gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate);
 
-	while (gotLocal && gotRemote)
-	{
+	while (gotLocal && gotRemote) {
 		int cmp = CompareFiles(dirSortMode, localFile, remoteFile, localDir, remoteDir);
-		if (!cmp)
-		{
-			if (!mode)
-			{
+		if (!cmp) {
+			if (!mode) {
 				const CComparableListing::t_fileEntryFlags flag = (localDir || localSize == remoteSize) ? CComparableListing::normal : CComparableListing::different;
 
-				if (!hide_identical || flag != CComparableListing::normal || localFile == _T(".."))
-				{
+				if (!hide_identical || flag != CComparableListing::normal || localFile == _T("..")) {
 					m_pLeft->CompareAddFile(flag);
 					m_pRight->CompareAddFile(flag);
 				}
 			}
-			else
-			{
-				if (!localDate.IsValid() || !remoteDate.IsValid())
-				{
-					if (!hide_identical || localDate.IsValid() || remoteDate.IsValid() || localFile == _T(".."))
-					{
+			else {
+				if (!localDate.IsValid() || !remoteDate.IsValid()) {
+					if (!hide_identical || localDate.IsValid() || remoteDate.IsValid() || localFile == _T("..")) {
 						const CComparableListing::t_fileEntryFlags flag = CComparableListing::normal;
 						m_pLeft->CompareAddFile(flag);
 						m_pRight->CompareAddFile(flag);
 					}
 				}
-				else
-				{
+				else {
 					CComparableListing::t_fileEntryFlags localFlag, remoteFlag;
 
-					int cmp = localDate.Compare(remoteDate);
-					if( cmp < 0 )
+					int dateCmp = localDate.Compare(remoteDate);
+					if (dateCmp < 0) {
 						localDate += threshold;
-					else if( cmp > 0 ) {
+					}
+					else if (dateCmp > 0 ) {
 						remoteDate += threshold;
 					}
-					int cmp2 = localDate.Compare(remoteDate);
-					if( cmp && cmp == -cmp2) {
-						cmp = 0;
+					int adjustedDateCmp = localDate.Compare(remoteDate);
+					if (dateCmp && dateCmp == -adjustedDateCmp) {
+						dateCmp = 0;
 					}
 
 					localFlag = CComparableListing::normal;
 					remoteFlag = CComparableListing::normal;
-					if( cmp < 0 ) {
+					if (dateCmp < 0 ) {
 						remoteFlag = CComparableListing::newer;
 					}
-					else if( cmp > 0 ) {
+					else if (dateCmp > 0) {
 						localFlag = CComparableListing::newer;
 					}
-					if (!hide_identical || localFlag != CComparableListing::normal || remoteFlag != CComparableListing::normal || localFile == _T(".."))
-					{
+					if (!hide_identical || localFlag != CComparableListing::normal || remoteFlag != CComparableListing::normal || localFile == _T("..")) {
 						m_pLeft->CompareAddFile(localFlag);
 						m_pRight->CompareAddFile(remoteFlag);
 					}

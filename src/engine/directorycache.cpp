@@ -82,7 +82,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 			return false;
 
 		cacheIter = iter;
-		is_outdated = (CDateTime::Now() - entry.listing.m_firstListTime.GetTime()).GetSeconds() > CACHE_TIMEOUT;
+		is_outdated = (CDateTime::Now() - entry.listing.m_firstListTime.GetTime()).get_seconds() > CACHE_TIMEOUT;
 		return true;
 	}
 

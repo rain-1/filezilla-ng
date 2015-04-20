@@ -27,12 +27,12 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 {
 	bool warning = false;
 	if (cert.GetActivationTime().IsValid()) {
-		if (cert.GetActivationTime() > wxDateTime::Now()) {
-			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().FormatDate()));
+		if (cert.GetActivationTime() > CDateTime::Now()) {
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().Format(_T("%x"), CDateTime::local)));
 			warning = true;
 		}
 		else
-			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), cert.GetActivationTime().FormatDate());
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), cert.GetActivationTime().Format(_T("%x"), CDateTime::local));
 	}
 	else {
 		warning = true;
@@ -40,12 +40,12 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	}
 
 	if (cert.GetExpirationTime().IsValid()) {
-		if (cert.GetExpirationTime() < wxDateTime::Now()) {
-			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().FormatDate()));
+		if (cert.GetExpirationTime() < CDateTime::Now()) {
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().Format(_T("%x"), CDateTime::local)));
 			warning = true;
 		}
 		else
-			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), cert.GetExpirationTime().FormatDate());
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), cert.GetExpirationTime().Format(_T("%x"), CDateTime::local));
 	}
 	else {
 		warning = true;
@@ -501,10 +501,10 @@ void CVerifyCertDialog::SetPermanentlyTrusted(CCertificateNotification const& no
 
 	AddTextElement(pCert, "Data", ConvertHexToString(data, len));
 
-	wxLongLong time = certificate.GetActivationTime().GetTicks();
+	wxLongLong time = certificate.GetActivationTime().GetTimeT();
 	AddTextElement(pCert, "ActivationTime", time.ToString());
 
-	time = certificate.GetExpirationTime().GetTicks();
+	time = certificate.GetExpirationTime().GetTimeT();
 	AddTextElement(pCert, "ExpirationTime", time.ToString());
 
 	AddTextElement(pCert, "Host", notification.GetHost());

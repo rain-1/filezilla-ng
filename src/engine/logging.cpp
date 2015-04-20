@@ -139,14 +139,14 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		return;
 #endif
 
-	wxDateTime now = wxDateTime::Now();
+	CDateTime now = CDateTime::Now();
 	wxString out(wxString::Format(_T("%s %u %d %s %s")
 #ifdef __WXMSW__
 		_T("\r\n"),
 #else
 		_T("\n"),
 #endif
-		now.Format(_T("%Y-%m-%d %H:%M:%S")), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
+		now.Format(_T("%Y-%m-%d %H:%M:%S"), CDateTime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
 
 	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
 	if (utf8) {

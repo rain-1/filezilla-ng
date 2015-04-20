@@ -187,7 +187,7 @@ protected:
 	struct t_failedLogins final
 	{
 		CServer server;
-		wxDateTime time;
+		CDateTime time;
 		bool critical{};
 	};
 	static std::list<t_failedLogins> m_failedLogins;

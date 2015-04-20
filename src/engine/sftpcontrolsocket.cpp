@@ -1011,9 +1011,9 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 				if (date.IsValid()) {
 					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
 					CDateTime listTime = pData->directoryListing[pData->mtime_index].time;
-					listTime += wxTimeSpan(0, -m_pCurrentServer->GetTimezoneOffset(), 0);
+					listTime -= duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 
-					int serveroffset = static_cast<int>((date - listTime).GetSeconds());
+					int serveroffset = static_cast<int>((date - listTime).get_seconds());
 					if (!pData->directoryListing[pData->mtime_index].has_seconds()) {
 						// Round offset to full minutes
 						if (serveroffset < 0)
@@ -1023,7 +1023,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 
 					LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
 
-					wxTimeSpan span(0, 0, serveroffset);
+					duration span = duration::from_seconds(serveroffset);
 					const int count = pData->directoryListing.GetCount();
 					for (int i = 0; i < count; ++i) {
 						CDirentry& entry = pData->directoryListing[i];
@@ -1818,57 +1818,47 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 
 	CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
 
-	if (pData->opState == filetransfer_transfer)
-	{
-		if (!successful)
-		{
+	if (pData->opState == filetransfer_transfer) {
+		if (!successful) {
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
 		}
 
-		if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
-		{
-			if (pData->download)
-			{
-				if (pData->fileTime.IsValid())
-				{
+		if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
+			if (pData->download) {
+				if (pData->fileTime.IsValid()) {
 					if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
 						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
 				}
 			}
-			else
-			{
+			else {
 				pData->fileTime = CLocalFileSystem::GetModificationTime(pData->localFile);
-				if (pData->fileTime.IsValid())
-				{
+				if (pData->fileTime.IsValid()) {
 					pData->opState = filetransfer_chmtime;
 					return SendNextCommand();
 				}
 			}
 		}
 	}
-	else if (pData->opState == filetransfer_mtime)
-	{
-		if (successful && !reply.empty())
-		{
+	else if (pData->opState == filetransfer_mtime) {
+		if (successful && !reply.empty()) {
 			time_t seconds = 0;
 			bool parsed = true;
-			for (unsigned int i = 0; i < reply.Len(); ++i)
-			{
+			for (unsigned int i = 0; i < reply.Len(); ++i) {
 				wxChar c = reply[i];
-				if (c < '0' || c > '9')
-				{
+				if (c < '0' || c > '9') {
 					parsed = false;
 					break;
 				}
 				seconds *= 10;
 				seconds += c - '0';
 			}
-			if (parsed)
-			{
+			if (parsed) {
 				CDateTime fileTime = CDateTime(seconds, CDateTime::seconds);
-				if (fileTime.IsValid())
+				if (fileTime.IsValid()) {
 					pData->fileTime = fileTime;
+					pData->fileTime += duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+				}
 			}
 		}
 		pData->opState = filetransfer_transfer;
@@ -1878,17 +1868,14 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 
 		return SendNextCommand();
 	}
-	else if (pData->opState == filetransfer_chmtime)
-	{
-		if (pData->download)
-		{
+	else if (pData->opState == filetransfer_chmtime) {
+		if (pData->download) {
 			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("  filetransfer_chmtime during download"));
 			ResetOperation(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
 		}
 	}
-	else
-	{
+	else {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("  Called at improper time: opState == %d"), pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;

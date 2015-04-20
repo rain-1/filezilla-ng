@@ -175,7 +175,7 @@ int CDateTime::Compare( CDateTime const& op ) const
 	return CompareSlow(op);
 }
 
-int CDateTime::CompareSlow( CDateTime const& op ) const
+int CDateTime::CompareSlow(CDateTime const& op) const
 {
 	tm t1 = GetTm(utc);
 	tm t2 = op.GetTm(utc);
@@ -226,7 +226,7 @@ int CDateTime::CompareSlow( CDateTime const& op ) const
 	if (t1.tm_sec < t2.tm_sec) {
 		return -1;
 	}
-	else if(t1.tm_sec > t2.tm_sec) {
+	else if (t1.tm_sec > t2.tm_sec) {
 		return 1;
 	}
 
@@ -245,38 +245,36 @@ int CDateTime::CompareSlow( CDateTime const& op ) const
 	return 0;
 }
 
-CDateTime& CDateTime::operator+=(wxTimeSpan const& op)
+CDateTime& CDateTime::operator+=(duration const& op)
 {
 	if (IsValid()) {
-		if( a_ < hours ) {
-			t_ += static_cast<int64_t>(op.GetDays()) * 24 * 3600 * 1000;
+		if (a_ < hours) {
+			t_ += op.get_days() * 24 * 3600 * 1000;
 		}
-		else if( a_ < minutes ) {
-			t_ += static_cast<int64_t>(op.GetHours()) * 3600 * 1000;
+		else if (a_ < minutes) {
+			t_ += op.get_hours() * 3600 * 1000;
 		}
-		else if( a_ < seconds ) {
-			t_ += static_cast<int64_t>(op.GetMinutes()) * 60 * 1000;
+		else if (a_ < seconds) {
+			t_ += op.get_minutes() * 60 * 1000;
 		}
-		else if( a_ < milliseconds ) {
-			t_ += static_cast<int64_t>(op.GetSeconds().GetValue()) * 1000;
+		else if (a_ < milliseconds) {
+			t_ += op.get_seconds() * 1000;
 		}
 		else {
-			t_ += op.GetMilliseconds().GetValue();
+			t_ += op.get_milliseconds();
 		}
 	}
 	return *this;
 }
 
-CDateTime& CDateTime::operator-=(wxTimeSpan const& op)
+CDateTime& CDateTime::operator-=(duration const& op)
 {
-	*this += op.Negate();
+	*this += -op;
 	return *this;
 }
 
 bool CDateTime::Set(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
 {
-	clear();
-
 	Accuracy a;
 	if (hour == -1) {
 		a = days;
@@ -338,8 +336,6 @@ bool CDateTime::Set(Zone z, int year, int month, int day, int hour, int minute, 
 
 bool CDateTime::Set(wxString const& str, Zone z)
 {
-	clear();
-
 	wxChar const* it = str;
 	wxChar const* end = it + str.size();
 
@@ -349,6 +345,7 @@ bool CDateTime::Set(wxString const& str, Zone z)
 		!parse(it, end, 2, st.wMonth, 0) ||
 		!parse(it, end, 2, st.wDay, 0))
 	{
+		clear();
 		return false;
 	}
 
@@ -372,6 +369,7 @@ bool CDateTime::Set(wxString const& str, Zone z)
 		!parse(it, end, 2, t.tm_mon, -1) ||
 		!parse(it, end, 2, t.tm_mday, 0))
 	{
+		clear();
 		return false;
 	}
 
@@ -432,7 +430,6 @@ int64_t const EPOCH_OFFSET_IN_MSEC = 11644473600000ll;
 
 bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 {
-	clear();
 	if (ft.dwHighDateTime || ft.dwLowDateTime) {
 		// See http://trac.wxwidgets.org/changeset/74423 and http://trac.wxwidgets.org/ticket/13098
 		// Directly converting to time_t
@@ -443,9 +440,11 @@ bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 		if (t >= 0) {
 			t_ = t;
 			a_ = a;
+			TIME_ASSERT(IsClamped());
 			return true;
 		}
 	}
+	clear();
 	return false;
 }
 
@@ -453,8 +452,6 @@ bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 
 bool CDateTime::Set(tm& t, Accuracy a, Zone z)
 {
-	clear();
-
 	time_t tt;
 	if (a >= hours && z == local) {
 		 tt = mktime(&t);
@@ -471,6 +468,8 @@ bool CDateTime::Set(tm& t, Accuracy a, Zone z)
 
 		return true;
 	}
+
+	clear();
 	return false;
 }
 
@@ -660,7 +659,6 @@ tm CDateTime::GetTm(Zone z) const
 CDateTime::CDateTime(FILETIME const& ft, Accuracy a)
 {
 	Set(ft, a);
-	TIME_ASSERT(IsClamped());
 }
 
 FILETIME CDateTime::GetFileTime() const

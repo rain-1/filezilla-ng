@@ -94,7 +94,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 
 	CTransferStatus const status = engine_.transfer_status_.Get(tmp);
 	if (!status.empty() && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
-		int elapsed = wxTimeSpan(wxDateTime::UNow() - status.started).GetSeconds().GetLo();
+		int elapsed = static_cast<int>((CDateTime::Now() - status.started).get_seconds());
 		if (elapsed <= 0)
 			elapsed = 1;
 		wxString time = wxString::Format(
@@ -809,16 +809,16 @@ void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 	}
 }
 
-wxTimeSpan CControlSocket::GetTimezoneOffset()
+duration CControlSocket::GetTimezoneOffset() const
 {
-	if (!m_pCurrentServer)
-		return wxTimeSpan();
-
-	int seconds = 0;
-	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset, &seconds) != yes)
-		return wxTimeSpan();
-
-	return wxTimeSpan(0, 0, seconds);
+	duration ret;
+	if (m_pCurrentServer) {
+		int seconds = 0;
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset, &seconds) == yes) {
+			ret = duration::from_seconds(seconds);
+		}
+	}
+	return ret;
 }
 
 void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)

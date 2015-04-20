@@ -234,7 +234,7 @@ public:
 		, list(l)
 	{}
 
-	wxDateTime started;
+	CDateTime started;
 	wxFileOffset totalSize{-1};		// Total size of the file to transfer, -1 if unknown
 	wxFileOffset startOffset{-1};
 	wxFileOffset currentOffset{-1};
@@ -311,7 +311,7 @@ public:
 	CCertificate() = default;
 	CCertificate(
 		unsigned char const* rawData, unsigned int len,
-		wxDateTime const& activationTime, wxDateTime const& expirationTime,
+		CDateTime const& activationTime, CDateTime const& expirationTime,
 		wxString const& serial,
 		wxString const& pkalgoname, unsigned int bits,
 		wxString const& signalgoname,
@@ -325,8 +325,8 @@ public:
 	~CCertificate();
 
 	const unsigned char* GetRawData(unsigned int& len) const { len = m_len; return m_rawData; }
-	wxDateTime GetActivationTime() const { return m_activationTime; }
-	wxDateTime GetExpirationTime() const { return m_expirationTime; }
+	CDateTime GetActivationTime() const { return m_activationTime; }
+	CDateTime GetExpirationTime() const { return m_expirationTime; }
 
 	const wxString& GetSerial() const { return m_serial; }
 	const wxString& GetPkAlgoName() const { return m_pkalgoname; }
@@ -345,8 +345,8 @@ public:
 	std::vector<wxString> const& GetAltSubjectNames() const { return m_altSubjectNames; }
 
 private:
-	wxDateTime m_activationTime;
-	wxDateTime m_expirationTime;
+	CDateTime m_activationTime;
+	CDateTime m_expirationTime;
 
 	unsigned char* m_rawData{};
 	unsigned int m_len{};
