@@ -228,7 +228,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 							delay = 1;
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
 						StopTimer(m_retryTimer);
-						m_retryTimer = AddTimer(delay, true);
+						m_retryTimer = AddTimer(duration::from_milliseconds(delay), true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
 				}
@@ -517,7 +517,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	if (delay) {
 		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
 		StopTimer(m_retryTimer);
-		m_retryTimer = AddTimer(delay, true);
+		m_retryTimer = AddTimer(duration::from_milliseconds(delay), true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
 

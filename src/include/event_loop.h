@@ -16,7 +16,7 @@ struct timer_data final
 	CEventHandler* handler_{};
 	timer_id id_{};
 	CMonotonicClock deadline_;
-	int ms_interval_{};
+	duration interval_{};
 };
 
 // Timers have precedence over queued events. Too many or too frequent timers can starve processing queued events.
@@ -39,7 +39,7 @@ protected:
 
 	void RemoveHandler(CEventHandler* handler);
 
-	timer_id AddTimer(CEventHandler* handler, int ms_interval, bool one_shot);
+	timer_id AddTimer(CEventHandler* handler, duration const& interval, bool one_shot);
 	void StopTimer(timer_id id);
 
 	void SendEvent(CEventHandler* handler, CEventBase* evt);

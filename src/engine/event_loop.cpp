@@ -99,14 +99,14 @@ void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> filter)
 	);
 }
 
-timer_id CEventLoop::AddTimer(CEventHandler* handler, int ms_interval, bool one_shot)
+timer_id CEventLoop::AddTimer(CEventHandler* handler, duration const& interval, bool one_shot)
 {
 	timer_data d;
 	d.handler_ = handler;
 	if (!one_shot) {
-		d.ms_interval_ = ms_interval;
+		d.interval_ = interval;
 	}
-	d.deadline_ = CMonotonicClock::now() + ms_interval;
+	d.deadline_ = CMonotonicClock::now() + interval;
 
 	scoped_lock lock(sync_);
 	static timer_id id{};
@@ -179,7 +179,7 @@ wxThread::ExitCode CEventLoop::Entry()
 
 		// Nothing to do, now we wait
 		if (deadline_) {
-			int wait = static_cast<int>(deadline_ - now);
+			int wait = static_cast<int>((deadline_ - now).get_milliseconds());
 			cond_.wait(l, wait);
 		}
 		else {
@@ -223,11 +223,11 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, CMonotonicClock const& now)
 		auto const id = it->id_;
 			
 		// Update the expired timer
-		if (!it->ms_interval_) {
+		if (!it->interval_) {
 			timers_.erase(it);
 		}
 		else {
-			it->deadline_ = std::move(now + it->ms_interval_);
+			it->deadline_ = std::move(now + it->interval_);
 			if (!deadline_ || it->deadline_ < deadline_) {
 				deadline_ = it->deadline_;
 			}

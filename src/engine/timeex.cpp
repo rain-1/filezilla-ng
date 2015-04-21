@@ -593,7 +593,7 @@ duration operator-(CDateTime const& a, CDateTime const& b)
 	TIME_ASSERT(a.IsValid());
 	TIME_ASSERT(b.IsValid());
 
-	return duration(a.t_ - b.t_);
+	return duration::from_milliseconds(a.t_ - b.t_);
 }
 
 wxString CDateTime::Format(wxString const& fmt, Zone z) const

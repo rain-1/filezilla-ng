@@ -58,7 +58,7 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 			pObject->m_bytesAvailable[i] = tokens;
 
 			if (!m_timer)
-				m_timer = AddTimer(tickDelay, false);
+				m_timer = AddTimer(duration::from_milliseconds(tickDelay), false);
 		}
 		else {
 			pObject->m_bytesAvailable[i] = -1;
@@ -237,7 +237,7 @@ void CRateLimiter::OnRateChanged()
 	scoped_lock lock(sync_);
 	if (GetLimit(inbound) > 0 || GetLimit(outbound) > 0) {
 		if (!m_timer)
-			m_timer = AddTimer(tickDelay, false);
+			m_timer = AddTimer(duration::from_milliseconds(tickDelay), false);
 	}
 }
 

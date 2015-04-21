@@ -95,7 +95,7 @@ public:
 	// there is no fairness guarantee.
 	// Timers take precedence over queued events.
 	// High-frequency timers doing heavy processing can starve other timers and queued events.
-	timer_id AddTimer(int ms_interval, bool one_shot);
+	timer_id AddTimer(duration const& interval, bool one_shot);
 
 	// Stops the given timer.
 	// One-shot timers that have fired do not need to be stopped.
