@@ -144,7 +144,7 @@ protected:
 
 	// Used by keepalive code so that we're not using keep alive
 	// till the end of time. Stop after a couple of minutes.
-	wxDateTime m_lastCommandCompletionTime;
+	CMonotonicClock m_lastCommandCompletionTime;
 
 	timer_id m_idleTimer{};
 

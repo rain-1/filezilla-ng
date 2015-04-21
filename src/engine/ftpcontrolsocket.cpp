@@ -155,7 +155,7 @@ public:
 	std::deque<wxString> files;
 	bool omitPath{};
 
-	// Set to wxDateTime::UNow initially and after
+	// Set to CDateTime::Now initially and after
 	// sending an updated listing to the UI.
 	CDateTime m_time;
 
@@ -1754,7 +1754,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 		}
 	}
 
-	m_lastCommandCompletionTime = wxDateTime::Now();
+	m_lastCommandCompletionTime = CMonotonicClock::now();
 	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 		StartKeepaliveTimer();
 	else {
@@ -4376,12 +4376,13 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	if (m_repliesToSkip || m_pendingReplies)
 		return;
 
-	if (!m_lastCommandCompletionTime.IsValid())
+	if (!m_lastCommandCompletionTime)
 		return;
 
-	wxTimeSpan span = wxDateTime::Now() - m_lastCommandCompletionTime;
-	if (span.GetSeconds() >= (60 * 30))
+	duration const span = CMonotonicClock::now() - m_lastCommandCompletionTime;
+	if (span.get_minutes() >= 30) {
 		return;
+	}
 
 	StopTimer(m_idleTimer);
 	m_idleTimer = AddTimer(duration::from_seconds(30), true);

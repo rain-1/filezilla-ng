@@ -1170,9 +1170,10 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		// Some servers use times only for files newer than 6 months
 		if( year <= 0 ) {
 			wxASSERT( month != -1 && day != -1 );
-			year = wxDateTime::Now().GetYear();
-			int currentDayOfYear = wxDateTime::Now().GetDay() + 31 * (wxDateTime::Now().GetMonth() - wxDateTime::Jan);
-			int fileDayOfYear = (month - 1) * 31 + day;
+			tm const t = CDateTime::Now().GetTm(CDateTime::utc);
+			year = t.tm_year + 1900;
+			int const currentDayOfYear = t.tm_mday + 31 * t.tm_mon;
+			int const fileDayOfYear = day + 31 * (month - 1);
 
 			// We have to compare with an offset of one. In the worst case,
 			// the server's timezone might be up to 24 hours ahead of the
