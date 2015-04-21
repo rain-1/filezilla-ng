@@ -4389,7 +4389,7 @@ void CFtpControlSocket::StartKeepaliveTimer()
 		return;
 
 	StopTimer(m_idleTimer);
-	m_idleTimer = AddTimer(30000, true);
+	m_idleTimer = AddTimer(duration::from_seconds(30), true);
 }
 
 int CFtpControlSocket::ParseSubcommandResult(int prevResult)

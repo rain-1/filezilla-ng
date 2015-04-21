@@ -324,8 +324,7 @@ bool CChmodDialog::ConvertPermissions(wxString rwx, char* permissions)
 		for (i = 0; i < 3; ++i) {
 			int m = rwx[rwx.Len() - 3 + i] - '0';
 
-			for (int j = 0; j < 3; j++)
-			{
+			for (int j = 0; j < 3; ++j) {
 				if (m & (4 >> j))
 					permissions[i * 3 + j] = 2;
 				else
@@ -341,10 +340,9 @@ bool CChmodDialog::ConvertPermissions(wxString rwx, char* permissions)
 	if (rwx.Length() != 10)
 		return false;
 
-	for (int i = 0; i < 9; i++)
-	{
-		bool set = rwx[i + 1] == permchars[i % 3];
-		permissions[i] = set ? 2 : 1;
+	for (int j = 0; j < 9; ++j) {
+		bool set = rwx[j + 1] == permchars[j % 3];
+		permissions[j] = set ? 2 : 1;
 	}
 	if (rwx[3] == 's')
 		permissions[2] = 2;

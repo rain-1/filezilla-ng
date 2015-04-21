@@ -121,7 +121,6 @@ class duration final
 {
 public:
 	duration() = default;
-	explicit duration(int64_t ms) : ms_(ms) {}
 
 	int64_t get_days() const { return ms_ / 1000 / 3600 / 24; }
 	int64_t get_hours() const { return ms_ / 1000 / 3600; }
@@ -135,18 +134,42 @@ public:
 	static duration from_seconds(int64_t m) {
 		return duration(m * 1000);
 	}
+	static duration from_milliseconds(int64_t m) {
+		return duration(m);
+	}
+
+	duration& operator-=(duration const& op) {
+		ms_ -= op.ms_;
+		return *this;
+	}
 
 	duration operator-() const {
 		return duration(-ms_);
 	}
 
+	explicit operator bool() const {
+		return ms_ != 0;
+	}
+
+	bool operator<(duration const& op) const { return ms_ < op.ms_; }
+	bool operator<=(duration const& op) const { return ms_ <= op.ms_; }
+	bool operator>(duration const& op) const { return ms_ > op.ms_; }
+	bool operator>=(duration const& op) const { return ms_ >= op.ms_; }
+
+	friend duration operator-(duration const& a, duration const& b);
 private:
+	explicit duration(int64_t ms) : ms_(ms) {}
+
 	int64_t ms_{};
 };
 
+inline duration operator-(duration const& a, duration const& b)
+{
+	return duration(a) -= b;
+}
+
 
 duration operator-(CDateTime const& a, CDateTime const& b);
-
 
 
 
@@ -188,9 +211,9 @@ public:
 	CMonotonicClock(CMonotonicClock const&) = default;
 	CMonotonicClock& operator=(CMonotonicClock const&) = default;
 
-	CMonotonicClock const operator+(int ms) const
+	CMonotonicClock const operator+(duration const& d) const
 	{
-		return CMonotonicClock(*this) += ms;
+		return CMonotonicClock(*this) += d;
 	}
 
 #if defined(_MSC_VER) && _MSC_VER < 1900
@@ -208,9 +231,9 @@ public:
 		return t_ != 0;
 	}
 
-	CMonotonicClock& operator+=(int64_t ms)
+	CMonotonicClock& operator+=(duration const& d)
 	{
-		t_ += ms * freq_ / 1000;
+		t_ += d.get_milliseconds() * freq_ / 1000;
 		return *this;
 	}
 
@@ -240,9 +263,9 @@ private:
 		return t_ != 0;
 	}
 
-	CMonotonicClock& operator+=(int64_t ms)
+	CMonotonicClock& operator+=(duration const& d)
 	{
-		t_ += ms;
+		t_ += d.get_milliseconds();
 		return *this;
 	}
 
@@ -266,9 +289,9 @@ public:
 		return t_ != clock_type::time_point();
 	}
 
-	CMonotonicClock& operator+=(int64_t ms)
+	CMonotonicClock& operator+=(duration const& d)
 	{
-		t_ += std::chrono::milliseconds(ms);
+		t_ += std::chrono::milliseconds(d.get_milliseconds());
 		return *this;
 	}
 
@@ -280,19 +303,19 @@ private:
 	clock_type::time_point t_;
 #endif
 
-	friend int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend duration operator-(CMonotonicClock const& a, CMonotonicClock const& b);
 	friend bool operator<(CMonotonicClock const& a, CMonotonicClock const& b);
 	friend bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b);
 };
 
-inline int64_t operator-(CMonotonicClock const& a, CMonotonicClock const& b)
+inline duration operator-(CMonotonicClock const& a, CMonotonicClock const& b)
 {
 #if defined(_MSC_VER) && _MSC_VER < 1900
-	return (a.t_ - b.t_) * 1000 / CMonotonicClock::freq_;
+	return duration::from_milliseconds((a.t_ - b.t_) * 1000 / CMonotonicClock::freq_);
 #elif HAVE_UNSTEADY_STEADY_CLOCK
-	return a.t_ - b.t_;
+	return duration::from_milliseconds(a.t_ - b.t_);
 #else
-	return std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count();
+	return duration::from_milliseconds(std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count());
 #endif
 }
 
