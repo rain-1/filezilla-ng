@@ -329,7 +329,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 					else {
 						if (!avoid) {
 							m_lastListDir = pListing->path;
-							m_lastListTime = CDateTime::Now();
+							m_lastListTime = CMonotonicTime::Now();
 							CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(pListing->path);
 							AddNotification(pNotification);
 						}

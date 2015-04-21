@@ -424,7 +424,7 @@ int64_t make_int64_t(T hi, T lo)
 	return (static_cast<int64_t>(hi) << 32) + static_cast<int64_t>(lo);
 }
 
-// This is the offset between FILETIME epoch and the Unix/wxDateTime Epoch.
+// This is the offset between FILETIME epoch in 100ns and the Unix epoch in ms.
 int64_t const EPOCH_OFFSET_IN_MSEC = 11644473600000ll;
 }
 
