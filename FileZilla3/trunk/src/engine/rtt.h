@@ -23,10 +23,10 @@ public:
 	virtual void cb();
 
 protected:
-	CDateTime m_start;
+	CMonotonicClock m_start;
 
-	wxLongLong m_summed_latency;
-	int m_measurements;
+	int64_t m_summed_latency{};
+	int m_measurements{};
 
 	mutable mutex m_sync;
 };

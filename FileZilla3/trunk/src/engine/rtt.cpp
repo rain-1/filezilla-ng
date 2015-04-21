@@ -2,7 +2,6 @@
 #include "rtt.h"
 
 CLatencyMeasurement::CLatencyMeasurement()
-	: m_measurements()
 {
 }
 
@@ -12,16 +11,16 @@ int CLatencyMeasurement::GetLatency() const
 	if (!m_measurements)
 		return -1;
 
-	return static_cast<int>(m_summed_latency.GetValue() / m_measurements);
+	return static_cast<int>(m_summed_latency / m_measurements);
 }
 
 bool CLatencyMeasurement::Start()
 {
 	scoped_lock lock(m_sync);
-	if (m_start.IsValid())
+	if (m_start)
 		return false;
 
-	m_start = CDateTime::Now();
+	m_start = CMonotonicClock::now();
 
 	return true;
 }
@@ -29,11 +28,11 @@ bool CLatencyMeasurement::Start()
 bool CLatencyMeasurement::Stop()
 {
 	scoped_lock lock(m_sync);
-	if (!m_start.IsValid())
+	if (!m_start)
 		return false;
 
-	duration diff = CDateTime::Now() - m_start;
-	m_start.clear();
+	duration const diff = CMonotonicClock::now() - m_start;
+	m_start = CMonotonicClock();
 
 	if (diff.get_milliseconds() < 0)
 		return false;
@@ -49,7 +48,7 @@ void CLatencyMeasurement::Reset()
 	scoped_lock lock(m_sync);
 	m_summed_latency = 0;
 	m_measurements = 0;
-	m_start.clear();
+	m_start = CMonotonicClock();
 }
 
 void CLatencyMeasurement::cb()
