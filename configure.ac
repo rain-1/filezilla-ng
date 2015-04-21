@@ -532,27 +532,13 @@ if test "$buildmain" = "yes"; then
   # Some platforms, e.g. OS X, lack posix_fadvise
   AC_CHECK_FUNCS(posix_fadvise)
 
-  # We need the threadsafe variants of localtime and gmtime
-  AC_CHECK_FUNCS(localtime_r, [], [
-    AC_CHECK_FUNCS(localtime_s, [], [
-      AC_MSG_ERROR([No threadsafe variant of localtime found])
-    ])
-  ])
-  AC_CHECK_FUNCS(gmtime_r, [], [
-    AC_CHECK_FUNCS(gmtime_s, [], [
-      AC_MSG_ERROR([No threadsafe variant of gmtime found])
-    ])
-  ])
-
-  # We need an inverse for gmtime, either timegm or _mkgmtime
-  AC_CHECK_FUNCS(timegm, [], [
-    if ! echo "${WX_CPPFLAGS}" | grep __WXMSW__ > /dev/null 2>&1; then
-      AC_MSG_ERROR([No inverse function for gmtime was found])
-    fi
-  ])
-
   # Some platforms have no d_type entry in their dirent structure
   gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE
+
+  CHECK_THREADSAFE_LOCALTIME
+  CHECK_THREADSAFE_GMTIME
+  CHECK_INVERSE_GMTIME
+
 
   # SQLite3
   # -------
