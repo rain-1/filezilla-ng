@@ -4,7 +4,8 @@
 
 #include <wx/stdpaths.h>
 #ifdef __WXMSW__
-#include <wx/dynlib.h> // Used by GetDownloadDir
+#include <shlobj.h>
+#include <knownfolders.h>
 #else
 #include <wx/textfile.h>
 #include <wordexp.h>
@@ -323,12 +324,6 @@ bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 }
 
 
-#ifdef __WXMSW__
-// See comment a few lines below
-GUID VISTASHIT_FOLDERID_Downloads = { 0x374de290, 0x123f, 0x4565, { 0x91, 0x64, 0x39, 0xc4, 0x92, 0x5e, 0x46, 0x7b } };
-extern "C" typedef HRESULT (WINAPI *tSHGetKnownFolderPath)(const GUID& rfid, DWORD dwFlags, HANDLE hToken, PWSTR *ppszPath);
-#endif
-
 #ifndef __WXMSW__
 wxString ShellUnescape( wxString const& path )
 {
@@ -350,21 +345,12 @@ wxString ShellUnescape( wxString const& path )
 CLocalPath GetDownloadDir()
 {
 #ifdef __WXMSW__
-	// Old Vista has a profile directory for downloaded files,
-	// need to get it using SHGetKnownFolderPath which we need to
-	// load dynamically to preserve forward compatibility with the
-	// upgrade to Windows XP.
-	wxDynamicLibrary lib(_T("shell32.dll"));
-	if (lib.IsLoaded() && lib.HasSymbol(_T("SHGetKnownFolderPath"))) {
-		tSHGetKnownFolderPath pSHGetKnownFolderPath = (tSHGetKnownFolderPath)lib.GetSymbol(_T("SHGetKnownFolderPath"));
-
-		PWSTR path;
-		HRESULT result = pSHGetKnownFolderPath(VISTASHIT_FOLDERID_Downloads, 0, 0, &path);
-		if(result == S_OK) {
-			wxString dir = path;
-			CoTaskMemFree(path);
-			return CLocalPath(dir);
-		}
+	PWSTR path;
+	HRESULT result = SHGetKnownFolderPath(FOLDERID_Downloads, 0, 0, &path);
+	if(result == S_OK) {
+		wxString dir = path;
+		CoTaskMemFree(path);
+		return CLocalPath(dir);
 	}
 #elif !defined(__WXMAC__)
 	// Code copied from wx, but for downloads directory.
