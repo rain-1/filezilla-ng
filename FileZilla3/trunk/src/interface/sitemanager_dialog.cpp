@@ -1721,7 +1721,7 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 	else
 		parent = pTree->GetItemParent(item);
 
-	const wxString name = pTree->GetItemText(item);
+	wxString const name = pTree->GetItemText(item);
 	wxString newName = wxString::Format(_("Copy of %s"), name);
 	int index = 2;
 	for (;;) {
@@ -1730,8 +1730,8 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
 		child = pTree->GetFirstChild(parent, cookie);
 		bool found = false;
 		while (child.IsOk()) {
-			wxString name = pTree->GetItemText(child);
-			int cmp = name.CmpNoCase(newName);
+			wxString const child_name = pTree->GetItemText(child);
+			int cmp = child_name.CmpNoCase(newName);
 			if (!cmp) {
 				found = true;
 				break;
@@ -1897,8 +1897,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 	CSiteManagerItemData *pTargetData = (CSiteManagerItemData *)pTree->GetItemData(target);
 	CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(source);
-	if (pTargetData)
-	{
+	if (pTargetData) {
 		if (pTargetData->m_type == CSiteManagerItemData::BOOKMARK)
 			return false;
 		if (!pSourceData || pSourceData->m_type != CSiteManagerItemData::BOOKMARK)
@@ -1908,8 +1907,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 		return false;
 
 	wxTreeItemId item = target;
-	while (item != pTree->GetRootItem())
-	{
+	while (item != pTree->GetRootItem()) {
 		if (item == source)
 			return false;
 		item = pTree->GetItemParent(item);
@@ -1920,16 +1918,11 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 
 	wxString sourceName = pTree->GetItemText(source);
 
-	wxTreeItemId child;
+	
 	wxTreeItemIdValue cookie;
-	child = pTree->GetFirstChild(target, cookie);
-
-	while (child.IsOk())
-	{
-		wxString childName = pTree->GetItemText(child);
-
-		if (!sourceName.CmpNoCase(childName))
-		{
+	for (auto child = pTree->GetFirstChild(target, cookie); child.IsOk(); child = pTree->GetNextChild(target, cookie)) {
+		wxString const childName = pTree->GetItemText(child);
+		if (!sourceName.CmpNoCase(childName)) {
 			wxMessageBoxEx(_("An item with the same name as the dragged item already exists at the target location."), _("Failed to copy or move sites"), wxICON_INFORMATION);
 			return false;
 		}
@@ -1938,15 +1931,14 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 	}
 
 	std::list<itempair> work;
-	itempair pair;
-	pair.source = source;
-	pair.target = target;
-	work.push_back(pair);
+	itempair initial;
+	initial.source = source;
+	initial.target = target;
+	work.push_back(initial);
 
 	std::list<wxTreeItemId> expand;
 
-	while (!work.empty())
-	{
+	while (!work.empty()) {
 		itempair pair = work.front();
 		work.pop_front();
 
@@ -1955,22 +1947,19 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 		CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(pair.source));
 
 		wxTreeItemId newItem = pTree->AppendItem(pair.target, name, data ? 2 : 0);
-		if (!data)
-		{
+		if (!data) {
 			pTree->SetItemImage(newItem, 1, wxTreeItemIcon_Expanded);
 			pTree->SetItemImage(newItem, 1, wxTreeItemIcon_SelectedExpanded);
 
 			if (pTree->IsExpanded(pair.source))
 				expand.push_back(newItem);
 		}
-		else if (data->m_type == CSiteManagerItemData::SITE)
-		{
+		else if (data->m_type == CSiteManagerItemData::SITE) {
 			CSiteManagerItemData_Site* newData = new CSiteManagerItemData_Site(*(CSiteManagerItemData_Site *)data);
 			newData->connected_item = -1;
 			pTree->SetItemData(newItem, newData);
 		}
-		else
-		{
+		else {
 			pTree->SetItemImage(newItem, 3, wxTreeItemIcon_Normal);
 			pTree->SetItemImage(newItem, 3, wxTreeItemIcon_Selected);
 
@@ -1978,11 +1967,8 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 			pTree->SetItemData(newItem, newData);
 		}
 
-		wxTreeItemId child;
-		wxTreeItemIdValue cookie;
-		child = pTree->GetFirstChild(pair.source, cookie);
-		while (child.IsOk())
-		{
+		wxTreeItemIdValue cookie2;
+		for (auto child = pTree->GetFirstChild(pair.source, cookie2); child.IsOk(); child = pTree->GetNextChild(pair.source, cookie2)) {
 			itempair newPair;
 			newPair.source = child;
 			newPair.target = newItem;
@@ -1994,8 +1980,7 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 		pTree->SortChildren(pair.target);
 	}
 
-	if (!copy)
-	{
+	if (!copy) {
 		wxTreeItemId parent = pTree->GetItemParent(source);
 		if (pTree->GetChildrenCount(parent) == 1)
 			pTree->Collapse(parent);
@@ -2038,18 +2023,15 @@ wxString CSiteManagerDialog::FindFirstFreeName(const wxTreeItemId &parent, const
 
 	wxString newName = name;
 	int index = 2;
-	for (;;)
-	{
+	for (;;) {
 		wxTreeItemId child;
 		wxTreeItemIdValue cookie;
 		child = pTree->GetFirstChild(parent, cookie);
 		bool found = false;
-		while (child.IsOk())
-		{
-			wxString name = pTree->GetItemText(child);
-			int cmp = name.CmpNoCase(newName);
-			if (!cmp)
-			{
+		while (child.IsOk()) {
+			wxString child_name = pTree->GetItemText(child);
+			int cmp = child_name.CmpNoCase(newName);
+			if (!cmp) {
 				found = true;
 				break;
 			}
