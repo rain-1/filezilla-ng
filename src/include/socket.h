@@ -224,6 +224,9 @@ protected:
 #ifndef ECONNRESET
 #define ECONNRESET WSAECONNRESET
 #endif
+#ifndef EHOSTDOWN
+#define EHOSTDOWN WSAEHOSTDOWN
+#endif
 
 // For the future:
 // Handle ERROR_NETNAME_DELETED=64

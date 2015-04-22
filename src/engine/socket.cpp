@@ -149,6 +149,8 @@ static int ConvertMSWErrorCode(int error)
 		return ETIMEDOUT;
 	case WSAECONNRESET:
 		return ECONNRESET;
+	case WSAEHOSTDOWN:
+		return EHOSTDOWN;
 	default:
 		return error;
 	}
@@ -1056,9 +1058,10 @@ static struct Error_table error_table[] =
 	ERRORDECL(ECONNABORTED, TRANSLATE_T("Connection aborted"))
 	ERRORDECL(ECONNRESET, TRANSLATE_T("Connection reset by peer"))
 	ERRORDECL(EPIPE, TRANSLATE_T("Local endpoint has been closed"))
+	ERRORDECL(EHOSTDOWN, TRANSLATE_T("Host is down"))
 
 	// Getaddrinfo related
-#ifndef __WXMSW__
+#ifdef EAI_ADDRFAMILY
 	ERRORDECL(EAI_ADDRFAMILY, TRANSLATE_T("Network host does not have any network addresses in the requested address family"))
 #endif
 	ERRORDECL(EAI_AGAIN, TRANSLATE_T("Temporary failure in name resolution"))
@@ -1081,7 +1084,7 @@ static struct Error_table error_table[] =
 #endif
 	ERRORDECL(EAI_SERVICE, TRANSLATE_T("The servname parameter is not supported for ai_socktype"))
 	ERRORDECL(EAI_SOCKTYPE, TRANSLATE_T("The ai_socktype member is not supported"))
-#ifndef __WXMSW__
+#ifdef EAI_SYSTEM
 	ERRORDECL(EAI_SYSTEM, TRANSLATE_T("Other system error"))
 #endif
 
@@ -1640,4 +1643,3 @@ wxString CSocket::GetPeerHost() const
 {
 	return m_host;
 }
-
