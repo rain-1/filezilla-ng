@@ -168,24 +168,33 @@ std::list<wxString> CVolumeDescriptionEnumeratorThread::GetDrives()
 
 	long drivesToHide = GetDrivesToHide();
 
-	int len = GetLogicalDriveStrings(0, 0);
-	if (len) {
-		wxChar* drives = new wxChar[len + 1];
-		if (GetLogicalDriveStrings(len, drives)) {
-			const wxChar* pDrive = drives;
-			while (*pDrive) {
-				const int len = wxStrlen(pDrive);
+	DWORD bufferLen{};
+	wxChar* drives{};
 
-				if( !IsHidden(pDrive, drivesToHide) ) {
-					ret.push_back(pDrive);
-				}
+	DWORD neededLen = 1000;
 
-				pDrive += len + 1;
-			}
+	do {
+		delete[] drives;
+
+		bufferLen = neededLen * 2;
+		drives = new wxChar[bufferLen + 1];
+		neededLen = GetLogicalDriveStrings(bufferLen, drives);
+	} while (neededLen >= bufferLen);
+	drives[neededLen] = 0;
+
+
+	const wxChar* pDrive = drives;
+	while (*pDrive) {
+		const int drivelen = wxStrlen(pDrive);
+
+		if (!IsHidden(pDrive, drivesToHide)) {
+			ret.push_back(pDrive);
 		}
 
-		delete [] drives;
+		pDrive += drivelen + 1;
 	}
+	
+	delete [] drives;
 
 	return ret;
 }
