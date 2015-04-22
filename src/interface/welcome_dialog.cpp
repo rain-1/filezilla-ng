@@ -3,6 +3,7 @@
 #include "buildinfo.h"
 #include <wx/hyperlink.h>
 #include "Options.h"
+#include "xrc_helper.h"
 
 BEGIN_EVENT_TABLE(CWelcomeDialog, wxDialogEx)
 EVT_TIMER(wxID_ANY, CWelcomeDialog::OnTimer)
@@ -35,39 +36,35 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	}
 
 	if (!Load(parent, _T("ID_WELCOME"))) {
-		if( delay ) {
+		if (delay) {
 			delete this;
 		}
 		return false;
 	}
 
-	XRCCTRL(*this, "ID_FZVERSION", wxStaticText)->SetLabel(_T("FileZilla ") + CBuildInfo::GetVersion());
+	xrc_call(*this, "ID_FZVERSION", &wxStaticText::SetLabel, _T("FileZilla ") + CBuildInfo::GetVersion());
 
-	const wxString url = _T("http://welcome.filezilla-project.org/welcome?type=client&category=%s&version=") + ownVersion;
-
-	wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
-	pNews->SetURL(wxString::Format(url, _T("news")) + _T("&oldversion=") + greetingVersion);
+	wxString const url = _T("http://welcome.filezilla-project.org/welcome?type=client&category=%s&version=") + ownVersion;
 
 	if (!greetingVersion.empty()) {
-		wxHyperlinkCtrl* pNews = XRCCTRL(*this, "ID_LINK_NEWS", wxHyperlinkCtrl);
-		pNews->SetLabel(wxString::Format(_("New features and improvements in %s"), CBuildInfo::GetVersion()));
+		xrc_call(*this, "ID_LINK_NEWS", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("news")) + _T("&oldversion=") + greetingVersion);
+		xrc_call(*this, "ID_LINK_NEWS", &wxHyperlinkCtrl::SetLabel, wxString::Format(_("New features and improvements in %s"), CBuildInfo::GetVersion()));
 	}
 	else {
-		XRCCTRL(*this, "ID_HEADING_NEWS", wxStaticText)->Hide();
-		pNews->Hide();
+		xrc_call(*this, "ID_LINK_NEWS", &wxHyperlinkCtrl::Hide);
+		xrc_call(*this, "ID_HEADING_NEWS", &wxStaticText::Hide);
 	}
 
-	XRCCTRL(*this, "ID_DOCUMENTATION_BASIC", wxHyperlinkCtrl)->SetURL(wxString::Format(url, _T("documentation_basic")));
-	XRCCTRL(*this, "ID_DOCUMENTATION_NETWORK", wxHyperlinkCtrl)->SetURL(wxString::Format(url, _T("documentation_network")));
-	XRCCTRL(*this, "ID_DOCUMENTATION_MORE", wxHyperlinkCtrl)->SetURL(wxString::Format(url, _T("documentation_more")));
-	XRCCTRL(*this, "ID_SUPPORT_FORUM", wxHyperlinkCtrl)->SetURL(wxString::Format(url, _T("support_forum")));
-	XRCCTRL(*this, "ID_SUPPORT_MORE", wxHyperlinkCtrl)->SetURL(wxString::Format(url, _T("support_more")));
+	xrc_call(*this, "ID_DOCUMENTATION_BASIC", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("documentation_basic")));
+	xrc_call(*this, "ID_DOCUMENTATION_NETWORK", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("documentation_network")));
+	xrc_call(*this, "ID_DOCUMENTATION_MORE", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("documentation_more")));
+	xrc_call(*this, "ID_SUPPORT_FORUM", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("support_forum")));
+	xrc_call(*this, "ID_SUPPORT_MORE", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("support_more")));
 	Layout();
 
 	GetSizer()->Fit(this);
 
-	if (delay)
-	{
+	if (delay) {
 		m_delayedShowTimer.SetOwner(this);
 		m_delayedShowTimer.Start(10, true);
 	}
