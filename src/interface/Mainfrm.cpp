@@ -297,11 +297,10 @@ CMainFrame::CMainFrame()
 
 	// It's important that the context control gets created before our own state handler
 	// so that contextchange events can be processed in the right order.
-	m_pContextControl = new CContextControl(this);
+	m_pContextControl = new CContextControl(*this);
 
 	m_pStatusBar = new CStatusBar(this);
-	if (m_pStatusBar)
-	{
+	if (m_pStatusBar) {
 		m_pActivityLed[0] = new CLed(m_pStatusBar, 0);
 		m_pActivityLed[1] = new CLed(m_pStatusBar, 1);
 
@@ -313,8 +312,7 @@ CMainFrame::CMainFrame()
 
 	m_closeEventTimer.SetOwner(this);
 
-	if (CFilterManager::HasActiveFilters(true))
-	{
+	if (CFilterManager::HasActiveFilters(true)) {
 		if (COptions::Get()->GetOptionVal(OPTION_FILTERTOGGLESTATE))
 			CFilterManager::ToggleFilters();
 	}
@@ -362,29 +360,23 @@ CMainFrame::CMainFrame()
 
 	m_pContextControl->CreateTab();
 
-	switch (message_log_position)
-	{
+	switch (message_log_position) {
 	case 1:
 		m_pTopSplitter->Initialize(m_pBottomSplitter);
-		if (COptions::Get()->GetOptionVal(OPTION_SHOW_MESSAGELOG))
-		{
+		if (COptions::Get()->GetOptionVal(OPTION_SHOW_MESSAGELOG)) {
 			if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUEUE))
 				m_pQueueLogSplitter->SplitVertically(m_pQueuePane, m_pStatusView);
-			else
-			{
+			else {
 				m_pQueueLogSplitter->Initialize(m_pStatusView);
 				m_pQueuePane->Hide();
 			}
 		}
-		else
-		{
-			if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUEUE))
-			{
+		else {
+			if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUEUE)) {
 				m_pStatusView->Hide();
 				m_pQueueLogSplitter->Initialize(m_pQueuePane);
 			}
-			else
-			{
+			else {
 				m_pQueuePane->Hide();
 				m_pStatusView->Hide();
 				m_pQueueLogSplitter->Hide();
@@ -395,8 +387,7 @@ CMainFrame::CMainFrame()
 		m_pTopSplitter->Initialize(m_pBottomSplitter);
 		if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUEUE))
 			m_pQueueLogSplitter->Initialize(m_pQueuePane);
-		else
-		{
+		else {
 			m_pQueueLogSplitter->Hide();
 			m_pQueuePane->Hide();
 		}
@@ -405,15 +396,13 @@ CMainFrame::CMainFrame()
 	default:
 		if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUEUE))
 			m_pQueueLogSplitter->Initialize(m_pQueuePane);
-		else
-		{
+		else {
 			m_pQueuePane->Hide();
 			m_pQueueLogSplitter->Hide();
 		}
 		if (COptions::Get()->GetOptionVal(OPTION_SHOW_MESSAGELOG))
 			m_pTopSplitter->SplitHorizontally(m_pStatusView, m_pBottomSplitter);
-		else
-		{
+		else {
 			m_pStatusView->Hide();
 			m_pTopSplitter->Initialize(m_pBottomSplitter);
 		}
@@ -422,8 +411,7 @@ CMainFrame::CMainFrame()
 
 	if (m_pQueueLogSplitter->IsShown())
 		m_pBottomSplitter->SplitHorizontally(m_pContextControl, m_pQueueLogSplitter);
-	else
-	{
+	else {
 		m_pQueueLogSplitter->Hide();
 		m_pBottomSplitter->Initialize(m_pContextControl);
 	}
@@ -475,8 +463,7 @@ CMainFrame::~CMainFrame()
 #endif
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
-	if (pEditHandler)
-	{
+	if (pEditHandler) {
 		// This might leave temporary files behind,
 		// edit handler should clean them on next startup
 		pEditHandler->Release();
