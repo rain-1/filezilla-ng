@@ -7,9 +7,6 @@
 #include "Options.h"
 #include "wrapengine.h"
 #include "buildinfo.h"
-#ifdef __WXMSW__
-#include <wx/msw/registry.h> // Needed by CheckForWin2003FirewallBug
-#endif
 #include <wx/tokenzr.h>
 #include "cmdline.h"
 #include "welcome_dialog.h"
@@ -78,64 +75,6 @@ CFileZillaApp::~CFileZillaApp()
 }
 
 #ifdef __WXMSW__
-bool IsServiceRunning(const wxString& serviceName)
-{
-	SC_HANDLE hScm = OpenSCManager(0, 0, GENERIC_READ);
-	if (!hScm) {
-		//wxMessageBoxEx(_T("OpenSCManager failed"));
-		return false;
-	}
-
-	SC_HANDLE hService = OpenService(hScm, serviceName, GENERIC_READ);
-	if (!hService) {
-		CloseServiceHandle(hScm);
-		//wxMessageBoxEx(_T("OpenService failed"));
-		return false;
-	}
-
-	SERVICE_STATUS status;
-	if (!ControlService(hService, SERVICE_CONTROL_INTERROGATE, &status)) {
-		CloseServiceHandle(hService);
-		CloseServiceHandle(hScm);
-		//wxMessageBoxEx(_T("ControlService failed"));
-		return false;
-	}
-
-	CloseServiceHandle(hService);
-	CloseServiceHandle(hScm);
-
-	if (status.dwCurrentState == 0x07 || status.dwCurrentState == 0x01)
-		return false;
-
-	return true;
-}
-
-bool CheckForWin2003FirewallBug()
-{
-	const wxString os = ::wxGetOsDescription();
-	if (os.Find(_T("Windows Server 2003")) == -1)
-		return false;
-
-	if (!IsServiceRunning(_T("SharedAccess")))
-		return false;
-
-	if (!IsServiceRunning(_T("ALG")))
-		return false;
-
-	wxRegKey key(_T("HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\SharedAccess\\Parameters\\FirewallPolicy\\StandardProfile"));
-	if (!key.Exists() || !key.Open(wxRegKey::Read))
-		return false;
-
-	long value = 0;
-	if (!key.HasValue(_T("EnableFirewall")) || !key.QueryValue(_T("EnableFirewall"), &value))
-		return false;
-
-	if (!value)
-		return false;
-
-	return true;
-}
-
 extern "C"
 {
 	typedef HRESULT (WINAPI *t_SetCurrentProcessExplicitAppUserModelID)(PCWSTR AppID);
@@ -165,8 +104,7 @@ void CFileZillaApp::InitLocale()
 {
 	wxString language = COptions::Get()->GetOption(OPTION_LANGUAGE);
 	const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(language);
-	if (!language.empty())
-	{
+	if (!language.empty()) {
 #ifdef __WXGTK__
 		if (CInitializer::error) {
 			wxString error;
@@ -291,21 +229,6 @@ USE AT OWN RISK"), _T("Important Information"));
 	}
 
 	CheckExistsFzsftp();
-
-#ifdef __WXMSW__
-	if (CheckForWin2003FirewallBug()) {
-		const wxString& error = _("Warning!\n\nA bug in Windows causes problems with FileZilla\n\n\
-The bug occurs if you have\n\
-- Windows Server 2003 or XP 64\n\
-- Windows Firewall enabled\n\
-- Application Layer Gateway service enabled\n\
-See http://support.microsoft.com/kb/931130 for background information.\n\n\
-Unless you either disable Windows Firewall or the Application Layer Gateway service,\n\
-FileZilla will timeout on big transfers.\
-");
-		wxMessageBoxEx(error, _("Operating system problem detected"), wxICON_EXCLAMATION);
-	}
-#endif
 
 	// Turn off idle events, we don't need them
 	wxIdleEvent::SetMode(wxIDLE_PROCESS_SPECIFIED);
