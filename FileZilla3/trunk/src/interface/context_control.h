@@ -17,7 +17,7 @@ class CViewHeader;
 class CSplitterWindowEx;
 class CState;
 
-class CContextControl : public wxSplitterWindow, public CStateEventHandler
+class CContextControl final : public wxSplitterWindow, public CStateEventHandler
 {
 public:
 	struct _context_controls
@@ -50,7 +50,7 @@ public:
 		std::shared_ptr<_site_bookmarks> site_bookmarks;
 	};
 
-	CContextControl(CMainFrame* pMainFrame);
+	CContextControl(CMainFrame& mainFrame);
 	virtual ~CContextControl();
 
 	void Create(wxWindow* parent);
@@ -73,11 +73,11 @@ protected:
 	void CreateContextControls(CState* pState);
 
 	std::vector<struct _context_controls> m_context_controls;
-	int m_current_context_controls;
+	int m_current_context_controls{-1};
 
-	wxAuiNotebookEx* m_tabs;
-	int m_right_clicked_tab;
-	CMainFrame* m_pMainFrame;
+	wxAuiNotebookEx* m_tabs{};
+	int m_right_clicked_tab{-1};
+	CMainFrame& m_mainFrame;
 
 protected:
 	DECLARE_EVENT_TABLE()

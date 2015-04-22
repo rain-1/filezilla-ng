@@ -47,7 +47,7 @@ class CRecursiveOperation;
 class CComparisonManager;
 
 class CState;
-class CContextManager
+class CContextManager final
 {
 	friend class CState;
 public:
@@ -58,7 +58,7 @@ public:
 
 	size_t HandlerCount(enum t_statechange_notifications notification) const;
 
-	CState* CreateState(CMainFrame* pMainFrame);
+	CState* CreateState(CMainFrame &mainFrame);
 	void DestroyState(CState* pState);
 	void DestroyAllStates();
 
@@ -91,11 +91,11 @@ protected:
 	static CContextManager m_the_context_manager;
 };
 
-class CState
+class CState final
 {
 	friend class CCommandQueue;
 public:
-	CState(CMainFrame* pMainFrame);
+	CState(CMainFrame& mainFrame);
 	~CState();
 
 	CState(CState const&) = delete;
@@ -131,8 +131,8 @@ public:
 	void BlockHandlers(enum t_statechange_notifications notification);
 	void UnblockHandlers(enum t_statechange_notifications notification);
 
-	CFileZillaEngine* m_pEngine;
-	CCommandQueue* m_pCommandQueue;
+	CFileZillaEngine* m_pEngine{};
+	CCommandQueue* m_pCommandQueue{};
 	CComparisonManager* GetComparisonManager() { return m_pComparisonManager; }
 
 	void UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const wxString& subdir, bool queueOnly);
@@ -181,14 +181,14 @@ protected:
 	CLocalPath m_localDir;
 	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
-	CServer* m_pServer;
+	CServer* m_pServer{};
 	wxString m_title;
-	bool m_successful_connect;
+	bool m_successful_connect{};
 
 	CServer m_last_server;
 	CServerPath m_last_path;
 
-	CMainFrame* m_pMainFrame;
+	CMainFrame& m_mainFrame;
 
 	CRecursiveOperation* m_pRecursiveOperation;
 

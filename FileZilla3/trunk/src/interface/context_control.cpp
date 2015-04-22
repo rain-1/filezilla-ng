@@ -29,13 +29,10 @@ EVT_MENU(XRCID("ID_TABCONTEXT_CLOSEOTHERS"), CContextControl::OnTabContextCloseO
 EVT_MENU(XRCID("ID_TABCONTEXT_NEW"), CContextControl::OnTabContextNew)
 END_EVENT_TABLE()
 
-CContextControl::CContextControl(CMainFrame* pMainFrame)
-	: CStateEventHandler(0),
-	m_tabs(0), m_right_clicked_tab(-1), m_pMainFrame(pMainFrame)
+CContextControl::CContextControl(CMainFrame& mainFrame)
+	: CStateEventHandler(0)
+	, m_mainFrame(mainFrame)
 {
-	m_current_context_controls = -1;
-	m_tabs = 0;
-
 	wxASSERT(!CContextManager::Get()->HandlerCount(STATECHANGE_CHANGEDCONTEXT));
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, false, false);
@@ -77,7 +74,7 @@ void CContextControl::CreateTab()
 		break;
 	}
 	if (!pState) {
-		pState = CContextManager::Get()->CreateState(m_pMainFrame);
+		pState = CContextManager::Get()->CreateState(m_mainFrame);
 		if (!pState->CreateEngine()) {
 			wxMessageBoxEx(_("Failed to initialize FTP engine"));
 		}
@@ -91,7 +88,7 @@ void CContextControl::CreateTab()
 
 	CreateContextControls(pState);
 
-	pState->GetRecursiveOperationHandler()->SetQueue(m_pMainFrame->GetQueue());
+	pState->GetRecursiveOperationHandler()->SetQueue(m_mainFrame.GetQueue());
 
 	wxString localDir = COptions::Get()->GetOption(OPTION_LASTLOCALDIR);
 	if (!pState->SetLocalDir(localDir))
@@ -99,8 +96,8 @@ void CContextControl::CreateTab()
 
 	CContextManager::Get()->SetCurrentContext(pState);
 
-	if (!m_pMainFrame->RestoreSplitterPositions())
-		m_pMainFrame->SetDefaultSplitterPositions();
+	if (!m_mainFrame.RestoreSplitterPositions())
+		m_mainFrame.SetDefaultSplitterPositions();
 
 	if (m_tabs)
 		m_tabs->SetSelection(m_tabs->GetPageCount() - 1);
@@ -145,7 +142,7 @@ void CContextControl::CreateContextControls(CState* pState)
 #endif
 		}
 
-		m_pMainFrame->RememberSplitterPositions();
+		m_mainFrame.RememberSplitterPositions();
 		m_context_controls[m_current_context_controls].pLocalListView->SaveColumnSettings(OPTION_LOCALFILELIST_COLUMN_WIDTHS, OPTION_LOCALFILELIST_COLUMN_SHOWN, OPTION_LOCALFILELIST_COLUMN_ORDER);
 		m_context_controls[m_current_context_controls].pRemoteListView->SaveColumnSettings(OPTION_REMOTEFILELIST_COLUMN_WIDTHS, OPTION_REMOTEFILELIST_COLUMN_SHOWN, OPTION_REMOTEFILELIST_COLUMN_ORDER);
 
@@ -167,15 +164,15 @@ void CContextControl::CreateContextControls(CState* pState)
 
 	context_controls.pLocalTreeViewPanel = new CView(context_controls.pLocalSplitter);
 	context_controls.pLocalListViewPanel = new CView(context_controls.pLocalSplitter);
-	context_controls.pLocalTreeView = new CLocalTreeView(context_controls.pLocalTreeViewPanel, -1, pState, m_pMainFrame->GetQueue());
-	context_controls.pLocalListView = new CLocalListView(context_controls.pLocalListViewPanel, pState, m_pMainFrame->GetQueue());
+	context_controls.pLocalTreeView = new CLocalTreeView(context_controls.pLocalTreeViewPanel, -1, pState, m_mainFrame.GetQueue());
+	context_controls.pLocalListView = new CLocalListView(context_controls.pLocalListViewPanel, pState, m_mainFrame.GetQueue());
 	context_controls.pLocalTreeViewPanel->SetWindow(context_controls.pLocalTreeView);
 	context_controls.pLocalListViewPanel->SetWindow(context_controls.pLocalListView);
 
 	context_controls.pRemoteTreeViewPanel = new CView(context_controls.pRemoteSplitter);
 	context_controls.pRemoteListViewPanel = new CView(context_controls.pRemoteSplitter);
-	context_controls.pRemoteTreeView = new CRemoteTreeView(context_controls.pRemoteTreeViewPanel, -1, pState, m_pMainFrame->GetQueue());
-	context_controls.pRemoteListView = new CRemoteListView(context_controls.pRemoteListViewPanel, pState, m_pMainFrame->GetQueue());
+	context_controls.pRemoteTreeView = new CRemoteTreeView(context_controls.pRemoteTreeViewPanel, -1, pState, m_mainFrame.GetQueue());
+	context_controls.pRemoteListView = new CRemoteListView(context_controls.pRemoteListViewPanel, pState, m_mainFrame.GetQueue());
 	context_controls.pRemoteTreeViewPanel->SetWindow(context_controls.pRemoteTreeView);
 	context_controls.pRemoteListViewPanel->SetWindow(context_controls.pRemoteListView);
 
@@ -252,12 +249,12 @@ void CContextControl::CreateContextControls(CState* pState)
 			context_controls.pLocalSplitter->SetSashGravity(1.0);
 	}
 
-	m_pMainFrame->ConnectNavigationHandler(context_controls.pLocalListView);
-	m_pMainFrame->ConnectNavigationHandler(context_controls.pRemoteListView);
-	m_pMainFrame->ConnectNavigationHandler(context_controls.pLocalTreeView);
-	m_pMainFrame->ConnectNavigationHandler(context_controls.pRemoteTreeView);
-	m_pMainFrame->ConnectNavigationHandler(context_controls.pLocalViewHeader);
-	m_pMainFrame->ConnectNavigationHandler(context_controls.pRemoteViewHeader);
+	m_mainFrame.ConnectNavigationHandler(context_controls.pLocalListView);
+	m_mainFrame.ConnectNavigationHandler(context_controls.pRemoteListView);
+	m_mainFrame.ConnectNavigationHandler(context_controls.pLocalTreeView);
+	m_mainFrame.ConnectNavigationHandler(context_controls.pRemoteTreeView);
+	m_mainFrame.ConnectNavigationHandler(context_controls.pLocalViewHeader);
+	m_mainFrame.ConnectNavigationHandler(context_controls.pRemoteViewHeader);
 
 	pState->GetComparisonManager()->SetListings(context_controls.pLocalListView, context_controls.pRemoteListView);
 

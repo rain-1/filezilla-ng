@@ -23,11 +23,9 @@ CContextManager* CContextManager::Get()
 	return &m_the_context_manager;
 }
 
-CState* CContextManager::CreateState(CMainFrame* pMainFrame)
+CState* CContextManager::CreateState(CMainFrame &mainFrame)
 {
-	wxASSERT(pMainFrame);
-
-	CState* pState = new CState(pMainFrame);
+	CState* pState = new CState(mainFrame);
 
 	m_contexts.push_back(pState);
 
@@ -179,19 +177,13 @@ void CContextManager::NotifyGlobalHandlers(enum t_statechange_notifications noti
 	}
 }
 
-CState::CState(CMainFrame* pMainFrame)
+CState::CState(CMainFrame &mainFrame)
+	: m_mainFrame(mainFrame)
 {
 	memset(m_blocked, 0, sizeof(m_blocked));
 
-	m_pMainFrame = pMainFrame;
-
-	m_pDirectoryListing = 0;
-	m_pServer = 0;
 	m_title = _("Not connected");
-	m_successful_connect = 0;
 
-	m_pEngine = 0;
-	m_pCommandQueue = 0;
 	m_pComparisonManager = new CComparisonManager(this);
 
 	m_pRecursiveOperation = new CRecursiveOperation(this);
@@ -200,9 +192,6 @@ CState::CState(CMainFrame* pMainFrame)
 	m_sync_browse.compare = false;
 
 	m_localDir.SetPath(CLocalPath::path_separator);
-
-	m_pCertificate = 0;
-	m_pSftpEncryptionInfo = 0;
 }
 
 CState::~CState()
@@ -554,10 +543,10 @@ bool CState::CreateEngine()
 	if (m_pEngine)
 		return true;
 
-	m_pEngine = new CFileZillaEngine(m_pMainFrame->GetEngineContext());
-	m_pEngine->Init(m_pMainFrame);
+	m_pEngine = new CFileZillaEngine(m_mainFrame.GetEngineContext());
+	m_pEngine->Init(&m_mainFrame);
 
-	m_pCommandQueue = new CCommandQueue(m_pEngine, m_pMainFrame, this);
+	m_pCommandQueue = new CCommandQueue(m_pEngine, &m_mainFrame, this);
 
 	return true;
 }
@@ -704,8 +693,8 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		{
 			wxString localFile;
 			const CLocalPath localPath(files[i], &localFile);
-			m_pMainFrame->GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, *m_pServer, size);
-			m_pMainFrame->GetQueue()->QueueFile_Finish(!queueOnly);
+			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, *m_pServer, size);
+			m_mainFrame.GetQueue()->QueueFile_Finish(!queueOnly);
 		}
 		else if (type == CLocalFileSystem::dir)
 		{
@@ -714,7 +703,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 			{
 				CServerPath target = path;
 				target.AddSegment(localPath.GetLastSegment());
-				m_pMainFrame->GetQueue()->QueueFolder(queueOnly, false, localPath, target, *m_pServer);
+				m_mainFrame.GetQueue()->QueueFolder(queueOnly, false, localPath, target, *m_pServer);
 			}
 		}
 	}
@@ -751,7 +740,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	op.pFrom = from;
 	op.pTo = to;
 	op.wFunc = copy ? FO_COPY : FO_MOVE;
-	op.hwnd = (HWND)m_pMainFrame->GetHandle();
+	op.hwnd = (HWND)m_mainFrame.GetHandle();
 	SHFileOperation(&op);
 
 	delete [] to;
@@ -886,7 +875,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	}
 
 	if (hasFiles)
-		m_pMainFrame->GetQueue()->QueueFiles(queueOnly, path, *pRemoteDataObject);
+		m_mainFrame.GetQueue()->QueueFiles(queueOnly, path, *pRemoteDataObject);
 
 	if (!hasDirs)
 		return true;
