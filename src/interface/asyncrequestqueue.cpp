@@ -295,11 +295,11 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 					if (dlg.GetValue() == defaultName) {
 						wxMessageDialog dlg2(m_pMainFrame, _("You did not enter a new name for the file. Overwrite the file instead?"), _("Filename unchanged"),
 							wxYES_NO | wxNO_DEFAULT | wxICON_QUESTION | wxCANCEL);
-						int res = dlg2.ShowModal();
+						int res2 = dlg2.ShowModal();
 
-						if (res == wxID_CANCEL)
+						if (res2 == wxID_CANCEL)
 							notification.overwriteAction = CFileExistsNotification::skip;
-						else if (res == wxID_NO)
+						else if (res2 == wxID_NO)
 							continue;
 						else
 							notification.overwriteAction = CFileExistsNotification::skip;

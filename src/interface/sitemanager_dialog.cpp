@@ -1926,8 +1926,6 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 			wxMessageBoxEx(_("An item with the same name as the dragged item already exists at the target location."), _("Failed to copy or move sites"), wxICON_INFORMATION);
 			return false;
 		}
-
-		child = pTree->GetNextChild(target, cookie);
 	}
 
 	std::list<itempair> work;
@@ -1973,8 +1971,6 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 			newPair.source = child;
 			newPair.target = newItem;
 			work.push_back(newPair);
-
-			child = pTree->GetNextChild(pair.source, cookie);
 		}
 
 		pTree->SortChildren(pair.target);

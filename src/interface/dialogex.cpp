@@ -37,10 +37,9 @@ bool wxDialogEx::ProcessEvent(wxEvent& event)
 
 void wxDialogEx::OnChar(wxKeyEvent& event)
 {
-	if (event.GetKeyCode() == WXK_ESCAPE)
-	{
-		wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
-		ProcessEvent(event);
+	if (event.GetKeyCode() == WXK_ESCAPE) {
+		wxCommandEvent cmdEvent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
+		ProcessEvent(cmdEvent);
 	}
 	else
 		event.Skip();

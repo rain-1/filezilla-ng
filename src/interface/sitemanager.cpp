@@ -56,24 +56,24 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler& handler)
 					if (name.empty())
 						continue;
 
-					auto data = make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
+					auto bookmarkData = make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
 
 					TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
 					if (localDir)
-						data->m_localDir = GetTextElement(pBookmark, "LocalDir");
+						bookmarkData->m_localDir = GetTextElement(pBookmark, "LocalDir");
 
 					TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
 					if (remoteDir)
-						data->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
+						bookmarkData->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
 
-					if (data->m_localDir.empty() && data->m_remoteDir.empty()) {
+					if (bookmarkData->m_localDir.empty() && bookmarkData->m_remoteDir.empty()) {
 						continue;
 					}
 
-					if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
-						data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
+					if (!bookmarkData->m_localDir.empty() && !bookmarkData->m_remoteDir.empty())
+						bookmarkData->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 
-					handler.AddBookmark(name, std::move(data));
+					handler.AddBookmark(name, std::move(bookmarkData));
 				}
 
 				if (!handler.LevelUp())
