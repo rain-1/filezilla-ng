@@ -1345,16 +1345,16 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		gotDay = true;
 	}
 
-	auto value = token.GetNumber(pos2 + 1, token.GetLength() - pos2 - 1).GetLo();
+	int64_t value = token.GetNumber(pos2 + 1, token.GetLength() - pos2 - 1).GetValue();
 	if (gotYear) {
 		// Day field in yyy-mm-dd
-		if (!value || value > 31)
+		if (value <= 0 || value > 31)
 			return false;
 		day = value;
 		gotDay = true;
 	}
 	else {
-		if (value < 0)
+		if (value < 0 || value > 9999)
 			return false;
 
 		if (value < 50)
