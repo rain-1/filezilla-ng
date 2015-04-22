@@ -848,33 +848,30 @@ wxString CEditHandler::CanOpen(enum CEditHandler::fileType type, const wxString&
 
 wxString CEditHandler::GetOpenCommand(const wxString& file, bool& program_exists)
 {
-	if (!COptions::Get()->GetOptionVal(OPTION_EDIT_ALWAYSDEFAULT))
-	{
+	if (!COptions::Get()->GetOptionVal(OPTION_EDIT_ALWAYSDEFAULT)) {
 		const wxString command = GetCustomOpenCommand(file, program_exists);
 		if (!command.empty())
 			return command;
 
-		if (COptions::Get()->GetOptionVal(OPTION_EDIT_INHERITASSOCIATIONS))
-		{
-			const wxString command = GetSystemOpenCommand(file, program_exists);
-			if (!command.empty())
-				return command;
+		if (COptions::Get()->GetOptionVal(OPTION_EDIT_INHERITASSOCIATIONS)) {
+			const wxString sysCommand = GetSystemOpenCommand(file, program_exists);
+			if (!sysCommand.empty())
+				return sysCommand;
 		}
 	}
 
 	wxString command = COptions::Get()->GetOption(OPTION_EDIT_DEFAULTEDITOR);
 	if (command.empty() || command[0] == '0')
 		return wxString(); // None set
-	else if (command[0] == '1')
-	{
+	else if (command[0] == '1') {
 		// Text editor
 		const wxString random = _T("5AC2EE515D18406 space aB77C2C60F1F88952.txt"); // Chosen by fair dice roll. Guaranteed to be random.
-		wxString command = GetSystemOpenCommand(random, program_exists);
-		if (command.empty() || !program_exists)
-			return command;
+		wxString sysCommand = GetSystemOpenCommand(random, program_exists);
+		if (sysCommand.empty() || !program_exists)
+			return sysCommand;
 
-		command.Replace(random, file);
-		return command;
+		sysCommand.Replace(random, file);
+		return sysCommand;
 	}
 	else if (command[0] == '2')
 		command = command.Mid(1);

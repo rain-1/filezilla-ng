@@ -334,15 +334,13 @@ wxTreeItemId CLocalTreeView::GetNearestParent(wxString& localDir)
 
 	wxTreeItemIdValue value;
 	wxTreeItemId root = GetFirstChild(m_drives, value);
-	while (root)
-	{
+	while (root) {
 		if (!GetItemText(root).Left(drive.Length()).CmpNoCase(drive))
 			break;
 
 		root = GetNextSibling(root);
 	}
-	if (!root)
-	{
+	if (!root) {
 		if (drive[1] == ':')
 			return AddDrive(drive[0]);
 		return wxTreeItemId();
@@ -353,24 +351,23 @@ wxTreeItemId CLocalTreeView::GetNearestParent(wxString& localDir)
 		wxTreeItemId root = GetRootItem();
 #endif
 
-	while (!localDir.empty())
-	{
+	while (!localDir.empty()) {
 		wxString subDir;
-		int pos = localDir.Find(separator);
-		if (pos == -1)
+		int pos2 = localDir.Find(separator);
+		if (pos2 == -1)
 			subDir = localDir;
 		else
-			subDir = localDir.Left(pos);
+			subDir = localDir.Left(pos2);
 
 		wxTreeItemId child = GetSubdir(root, subDir);
 		if (!child)
 			return root;
 
-		if (!pos)
+		if (!pos2)
 			return child;
 
 		root = child;
-		localDir = localDir.Mid(pos + 1);
+		localDir = localDir.Mid(pos2 + 1);
 	}
 
 	return root;
@@ -692,11 +689,8 @@ void CLocalTreeView::RefreshListing()
 	int prevErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
 	wxTreeItemIdValue tmp;
-	wxTreeItemId child = GetFirstChild(m_drives, tmp);
-	while (child)
-	{
-		if (IsExpanded(child))
-		{
+	for (auto child = GetFirstChild(m_drives, tmp); child; child = GetNextSibling(child)) {
+		if (IsExpanded(child)) {
 			wxString drive = GetItemText(child);
 			int pos = drive.Find(_T(" "));
 			if (pos != -1)
@@ -707,8 +701,6 @@ void CLocalTreeView::RefreshListing()
 			dir.item = child;
 			dirsToCheck.push_back(dir);
 		}
-
-		child = GetNextSibling(child);
 	}
 #else
 	t_dir dir;
@@ -719,27 +711,21 @@ void CLocalTreeView::RefreshListing()
 
 	CFilterManager filter;
 
-	while (!dirsToCheck.empty())
-	{
+	while (!dirsToCheck.empty()) {
 		t_dir dir = dirsToCheck.front();
 		dirsToCheck.pop_front();
 
 		// Step 1: Check if directory exists
 		CLocalFileSystem local_filesystem;
-		if (!local_filesystem.BeginFindFiles(dir.dir, true))
-		{
+		if (!local_filesystem.BeginFindFiles(dir.dir, true)) {
 			// Dir does exist (listed in parent) but may not be accessible.
 			// Recurse into children anyhow, they might be accessible again.
 			wxTreeItemIdValue value;
-			wxTreeItemId child = GetFirstChild(dir.item, value);
-			while (child)
-			{
+			for (auto child = GetFirstChild(dir.item, value); child; child = GetNextSibling(child)) {
 				t_dir subdir;
 				subdir.dir = dir.dir + GetItemText(child) + separator;
 				subdir.item = child;
 				dirsToCheck.push_back(subdir);
-
-				child = GetNextSibling(child);
 			}
 			continue;
 		}
@@ -753,10 +739,8 @@ void CLocalTreeView::RefreshListing()
 		bool is_dir;
 		int attributes;
 		CDateTime date;
-		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes))
-		{
-			if (file.empty())
-			{
+		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes)) {
+			if (file.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
@@ -773,8 +757,7 @@ void CLocalTreeView::RefreshListing()
 		// Step 3: Merge list of subdirectories with subtree.
 		wxTreeItemId child = GetLastChild(dir.item);
 		wxArrayString::reverse_iterator iter = dirs.rbegin();
-		while (child || iter != dirs.rend())
-		{
+		while (child || iter != dirs.rend()) {
 			int cmp;
 			if (child && iter != dirs.rend())
 #ifdef __WXMSW__
@@ -787,22 +770,18 @@ void CLocalTreeView::RefreshListing()
 			else
 				cmp = -1;
 
-			if (!cmp)
-			{
+			if (!cmp) {
 				// Found item with same name. Mark it for further processing
-				if (!IsExpanded(child))
-				{
+				if (!IsExpanded(child)) {
 					wxString path = dir.dir + *iter + separator;
-					if (!CheckSubdirStatus(child, path))
-					{
+					if (!CheckSubdirStatus(child, path)) {
 						t_dir subdir;
 						subdir.dir = path;
 						subdir.item = child;
 						dirsToCheck.push_front(subdir);
 					}
 				}
-				else
-				{
+				else {
 					t_dir subdir;
 					subdir.dir = dir.dir + *iter + separator;
 					subdir.item = child;
@@ -811,8 +790,7 @@ void CLocalTreeView::RefreshListing()
 				child = GetPrevSibling(child);
 				++iter;
 			}
-			else if (cmp > 0)
-			{
+			else if (cmp > 0) {
 				// Subdirectory currently in tree no longer exists.
 				// Delete child from tree, unless current selection
 				// is in the subtree.
@@ -824,8 +802,7 @@ void CLocalTreeView::RefreshListing()
 					Delete(child);
 				child = prev;
 			}
-			else if (cmp < 0)
-			{
+			else if (cmp < 0) {
 				// New subdirectory, add treeitem
 				wxString fullname = dir.dir + *iter + separator;
 				wxTreeItemId newItem = AppendItem(dir.item, *iter, GetIconIndex(iconType::dir, fullname),
@@ -852,8 +829,7 @@ void CLocalTreeView::RefreshListing()
 
 void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 {
-	if (m_setSelection)
-	{
+	if (m_setSelection) {
 		event.Skip();
 		return;
 	}
@@ -865,8 +841,7 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	wxString dir = GetDirFromItem(item);
 
 	wxString error;
-	if (!m_pState->SetLocalDir(dir, &error))
-	{
+	if (!m_pState->SetLocalDir(dir, &error)) {
 		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
