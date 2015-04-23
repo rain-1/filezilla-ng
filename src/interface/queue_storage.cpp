@@ -591,20 +591,16 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 	Bind(insertServerQuery_, server_table_column_names::type, static_cast<int>(server.GetType()));
 
 	enum LogonType logonType = server.GetLogonType();
-	if (server.GetLogonType() != ANONYMOUS)
-	{
+	if (server.GetLogonType() != ANONYMOUS) {
 		Bind(insertServerQuery_, server_table_column_names::user, server.GetUser());
 
-		if (server.GetLogonType() == NORMAL || server.GetLogonType() == ACCOUNT)
-		{
-			if (kiosk_mode)
-			{
+		if (server.GetLogonType() == NORMAL || server.GetLogonType() == ACCOUNT) {
+			if (kiosk_mode) {
 				logonType = ASK;
 				BindNull(insertServerQuery_, server_table_column_names::password);
 				BindNull(insertServerQuery_, server_table_column_names::account);
 			}
-			else
-			{
+			else {
 				Bind(insertServerQuery_, server_table_column_names::password, server.GetPass());
 
 				if (server.GetLogonType() == ACCOUNT)
@@ -613,14 +609,12 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 					BindNull(insertServerQuery_, server_table_column_names::account);
 			}
 		}
-		else
-		{
+		else {
 			BindNull(insertServerQuery_, server_table_column_names::password);
 			BindNull(insertServerQuery_, server_table_column_names::account);
 		}
 	}
-	else
-	{
+	else {
 			BindNull(insertServerQuery_, server_table_column_names::user);
 			BindNull(insertServerQuery_, server_table_column_names::password);
 			BindNull(insertServerQuery_, server_table_column_names::account);
@@ -688,19 +682,17 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 	sqlite3_reset(insertServerQuery_);
 
 	bool ret = res == SQLITE_DONE;
-	if (ret)
-	{
+	if (ret) {
 		sqlite3_int64 serverId = sqlite3_last_insert_rowid(db_);
 		Bind(insertFileQuery_, file_table_column_names::server, static_cast<int64_t>(serverId));
 
 		const std::vector<CQueueItem*>& children = item.GetChildren();
-		for (std::vector<CQueueItem*>::const_iterator it = children.begin() + item.GetRemovedAtFront(); it != children.end(); ++it)
-		{
-			CQueueItem* item = *it;
-			if (item->GetType() == QueueItemType::File)
-				ret &= SaveFile(serverId, *static_cast<CFileItem*>(item));
-			else if (item->GetType() == QueueItemType::Folder)
-				ret &= SaveDirectory(serverId, *static_cast<CFolderItem*>(item));
+		for (std::vector<CQueueItem*>::const_iterator it = children.begin() + item.GetRemovedAtFront(); it != children.end(); ++it) {
+			CQueueItem & childItem = **it;
+			if (childItem.GetType() == QueueItemType::File)
+				ret &= SaveFile(serverId, static_cast<CFileItem&>(childItem));
+			else if (childItem.GetType() == QueueItemType::Folder)
+				ret &= SaveDirectory(serverId, static_cast<CFolderItem&>(childItem));
 		}
 	}
 	return ret;
