@@ -23,8 +23,8 @@ void CImportDialog::Run()
 
 	wxFileName fn(dlg.GetPath());
 	wxString const path = fn.GetPath();
-	wxString const settings(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
-	if (path == settings) {
+	wxString const settingsDir(COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
+	if (path == settingsDir) {
 		wxMessageBoxEx(_("You cannot import settings from FileZilla's own settings directory."), _("Error importing"), wxICON_ERROR, m_parent);
 		return;
 	}

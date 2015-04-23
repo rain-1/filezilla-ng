@@ -877,10 +877,10 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 	filter.filterFiles = GetTextElement(pElement, "ApplyToFiles") == _T("1");
 	filter.filterDirs = GetTextElement(pElement, "ApplyToDirs") == _T("1");
 
-	wxString type = GetTextElement(pElement, "MatchType");
-	if (type == _T("Any"))
+	wxString const matchType = GetTextElement(pElement, "MatchType");
+	if (matchType == _T("Any"))
 		filter.matchType = CFilter::any;
-	else if (type == _T("None"))
+	else if (matchType == _T("None"))
 		filter.matchType = CFilter::none;
 	else
 		filter.matchType = CFilter::all;
@@ -892,7 +892,7 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 
 	for (TiXmlElement *pCondition = pConditions->FirstChildElement("Condition"); pCondition; pCondition = pCondition->NextSiblingElement("Condition")) {
 		CFilterCondition condition;
-		int type = GetTextElementInt(pCondition, "Type", 0);
+		int const type = GetTextElementInt(pCondition, "Type", 0);
 		switch (type) {
 		case 0:
 			condition.type = filter_name;

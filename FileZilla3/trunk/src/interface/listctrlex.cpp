@@ -426,34 +426,28 @@ void wxListCtrlEx::LoadColumnSettings(int widthsOptionId, int visibilityOptionId
 	delete [] m_pVisibleColumnMapping;
 	m_pVisibleColumnMapping = new unsigned int[m_columnInfo.size()];
 
-	if (visibilityOptionId != -1)
-	{
+	if (visibilityOptionId != -1) {
 		wxString visibleColumns = COptions::Get()->GetOption(visibilityOptionId);
-		if (visibleColumns.Len() >= m_columnInfo.size())
-		{
-			for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-			{
+		if (visibleColumns.Len() >= m_columnInfo.size()) {
+			for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
 				if (!m_columnInfo[i].fixed)
 					m_columnInfo[i].shown = visibleColumns[i] == '1';
 			}
 		}
 	}
 
-	if (sortOptionId != -1)
-	{
+	if (sortOptionId != -1) {
 		wxString strorder = COptions::Get()->GetOption(sortOptionId);
 		wxStringTokenizer tokens(strorder, _T(","));
 
 		unsigned int count = tokens.CountTokens();
-		if (count == m_columnInfo.size())
-		{
+		if (count == m_columnInfo.size()) {
 			unsigned long *order = new unsigned long[count];
 			bool *order_set = new bool[count];
 			memset(order_set, 0, sizeof(bool) * count);
 
 			unsigned int i = 0;
-			while (tokens.HasMoreTokens())
-			{
+			while (tokens.HasMoreTokens()) {
 				if (!tokens.GetNextToken().ToULong(&order[i]))
 					break;
 				if (order[i] >= count || order_set[order[i]])
@@ -461,24 +455,23 @@ void wxListCtrlEx::LoadColumnSettings(int widthsOptionId, int visibilityOptionId
 				order_set[order[i]] = true;
 				i++;
 			}
-			if (i == count)
-			{
+			if (i == count) {
 				bool valid = true;
-				for (unsigned int j = 0; j < m_columnInfo.size(); j++)
-				{
+				for (size_t j = 0; j < m_columnInfo.size(); ++j) {
 					if (!m_columnInfo[j].fixed)
 						continue;
 
-					if (j != order[j])
-					{
+					if (j != order[j]) {
 						valid = false;
 						break;
 					}
 				}
 
-				if (valid)
-					for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-						m_columnInfo[i].order = order[i];
+				if (valid) {
+					for (size_t j = 0; j < m_columnInfo.size(); ++j) {
+						m_columnInfo[j].order = order[j];
+					}
+				}
 			}
 
 			delete [] order;
@@ -608,30 +601,27 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 	if (m_columnInfo[col].order == before)
 		return;
 
-	for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
 		if (i == col)
 			continue;
 
 		t_columnInfo& info = m_columnInfo[i];
 		if (info.order > col)
-			info.order--;
+			--info.order;
 		if (info.order >= before)
-			info.order++;
+			++info.order;
 	}
 
 	t_columnInfo& info = m_columnInfo[col];
 
-	if (info.shown)
-	{
+	if (info.shown) {
 		int icon = -1;
 		// Remove old column
-		for (unsigned int i = 0; i < (unsigned int)GetColumnCount(); i++)
-		{
+		for (unsigned int i = 0; i < (unsigned int)GetColumnCount(); ++i) {
 			if (m_pVisibleColumnMapping[i] != col)
 				continue;
 
-			for (unsigned int j = i + 1; j < (unsigned int)GetColumnCount(); j++)
+			for (unsigned int j = i + 1; j < (unsigned int)GetColumnCount(); ++j)
 				m_pVisibleColumnMapping[j - 1] = m_pVisibleColumnMapping[j];
 			info.width = GetColumnWidth(i);
 
@@ -643,15 +633,15 @@ void wxListCtrlEx::MoveColumn(unsigned int col, unsigned int before)
 
 		// Insert new column
 		unsigned int pos = 0;
-		for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-		{
+		for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
 			if (i == col)
 				continue;
-			t_columnInfo& info = m_columnInfo[i];
-			if (info.shown && info.order < before)
-				pos++;
+			t_columnInfo& info2 = m_columnInfo[i];
+			if (info2.shown && info2.order < before) {
+				++pos;
+			}
 		}
-		for (unsigned int i = (int)GetColumnCount(); i > pos; i--)
+		for (unsigned int i = (int)GetColumnCount(); i > pos; --i)
 			m_pVisibleColumnMapping[i] = m_pVisibleColumnMapping[i - 1];
 		m_pVisibleColumnMapping[pos] = col;
 

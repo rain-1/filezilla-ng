@@ -556,15 +556,15 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 
 	// Now in a second phase filter out all files that are also in a directory
 	std::list<int> selected_files_new;
-	for (auto const& sel : selected_files) {
-		CServerPath path = m_results->m_fileData[sel].path;
+	for (auto const& sel_file : selected_files) {
+		CServerPath path = m_results->m_fileData[sel_file].path;
 		std::list<CServerPath>::const_iterator path_iter;
 		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter) {
 			if (*path_iter == path || path_iter->IsParentOf(path, false))
 				break;
 		}
 		if (path_iter == selected_dirs.end())
-			selected_files_new.push_back(sel);
+			selected_files_new.push_back(sel_file);
 	}
 	selected_files.swap(selected_files_new);
 
