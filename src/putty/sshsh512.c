@@ -202,6 +202,7 @@ void SHA512_Init(SHA512_State *s) {
 	s->len[i] = 0;
 }
 
+#ifndef SHA512_STANDALONE
 void SHA384_Init(SHA512_State *s) {
     int i;
     SHA384_Core_Init(s);
@@ -209,6 +210,7 @@ void SHA384_Init(SHA512_State *s) {
     for (i = 0; i < 4; i++)
         s->len[i] = 0;
 }
+#endif
 
 void SHA512_Bytes(SHA512_State *s, const void *p, int len) {
     unsigned char *q = (unsigned char *)p;
@@ -303,13 +305,13 @@ void SHA512_Final(SHA512_State *s, unsigned char *digest) {
     }
 }
 
+#ifndef SHA512_STANDALONE
 void SHA384_Final(SHA512_State *s, unsigned char *digest) {
     unsigned char biggerDigest[512 / 8];
     SHA512_Final(s, biggerDigest);
     memcpy(digest, biggerDigest, 384 / 8);
 }
 
-#ifndef SHA512_STANDALONE
 void SHA512_Simple(const void *p, int len, unsigned char *output) {
     SHA512_State s;
 

@@ -358,11 +358,11 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	HWND hWnd = (HWND)m_pNotebook_Site->GetHandle();
 
 	int width = 4;
-	for (unsigned int i = 0; i < m_pNotebook_Site->GetPageCount(); ++i)
-	{
-		RECT tab_rect;
-		TabCtrl_GetItemRect(hWnd, i, &tab_rect);
-		width += tab_rect.right - tab_rect.left;
+	for (unsigned int i = 0; i < m_pNotebook_Site->GetPageCount(); ++i) {
+		RECT tab_rect{};
+		if (TabCtrl_GetItemRect(hWnd, i, &tab_rect)) {
+			width += tab_rect.right - tab_rect.left;
+		}
 	}
 	int margin = m_pNotebook_Site->GetSize().x - m_pNotebook_Site->GetPage(0)->GetSize().x;
 	m_pNotebook_Site->GetPage(0)->GetSizer()->SetMinSize(wxSize(width - margin, 0));

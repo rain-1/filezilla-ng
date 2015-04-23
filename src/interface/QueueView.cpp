@@ -1131,7 +1131,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 	m_waitStatusLineUpdate = true;
 
 	if (data.pItem) {
-		CServerItem* pServerItem = (CServerItem*)data.pItem->GetTopLevelItem();
+		CServerItem* pServerItem = static_cast<CServerItem*>(data.pItem->GetTopLevelItem());
 		if (pServerItem) {
 			wxASSERT(pServerItem->m_activeCount > 0);
 			if (pServerItem->m_activeCount > 0)
@@ -1166,7 +1166,6 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 				CEditHandler* pEditHandler = CEditHandler::Get();
 				wxASSERT(pEditHandler);
 				if (pFileItem->m_edit == CEditHandler::remote) {
-					const CServerItem* pServerItem = (const CServerItem*)pFileItem->GetTopLevelItem();
 					pEditHandler->FinishTransfer(reason == success, pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
 				}
 				else
@@ -1207,10 +1206,10 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 				RemoveItem(data.pItem, false);
 
 				CQueueViewFailed* pQueueViewFailed = m_pQueue->GetQueueView_Failed();
-				CServerItem* pServerItem = pQueueViewFailed->CreateServerItem(server);
-				data.pItem->SetParent(pServerItem);
+				CServerItem* pNewServerItem = pQueueViewFailed->CreateServerItem(server);
+				data.pItem->SetParent(pNewServerItem);
 				data.pItem->UpdateTime();
-				pQueueViewFailed->InsertItem(pServerItem, data.pItem);
+				pQueueViewFailed->InsertItem(pNewServerItem, data.pItem);
 				pQueueViewFailed->CommitChanges();
 			}
 		}
@@ -1224,11 +1223,11 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 
 					RemoveItem(data.pItem, false);
 
-					CServerItem* pServerItem = pQueueViewSuccessful->CreateServerItem(server);
+					CServerItem* pNewServerItem = pQueueViewSuccessful->CreateServerItem(server);
 					data.pItem->UpdateTime();
-					data.pItem->SetParent(pServerItem);
+					data.pItem->SetParent(pNewServerItem);
 					data.pItem->SetStatusMessage(CFileItem::none);
-					pQueueViewSuccessful->InsertItem(pServerItem, data.pItem);
+					pQueueViewSuccessful->InsertItem(pNewServerItem, data.pItem);
 					pQueueViewSuccessful->CommitChanges();
 				}
 			}
@@ -1764,10 +1763,8 @@ int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, 
 	int added = 0;
 
 	CFilterManager filters;
-	for (std::list<CFolderProcessingEntry*>::const_iterator iter = entryList.begin(); iter != entryList.end(); ++iter)
-	{
-		const CFolderProcessingEntry* entry = *iter;
-		if (entry->m_type == CFolderProcessingEntry::dir) {
+	for (std::list<CFolderProcessingEntry*>::const_iterator iter = entryList.begin(); iter != entryList.end(); ++iter) {
+		if ((*iter)->m_type == CFolderProcessingEntry::dir) {
 			if (m_pFolderProcessingThread->GetFolderScanItem()->m_dir_is_empty) {
 				CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, pFolderScanItem->m_current_remote_path, _T(""));
 				InsertItem(pServerItem, fileItem);

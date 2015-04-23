@@ -527,39 +527,40 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 
 void CRemoteListView::UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryListing> const& pDirectoryListing)
 {
-	const unsigned int removed = m_pDirectoryListing->GetCount() - pDirectoryListing->GetCount();
-	if (!removed) {
+	unsigned int const countRemoved = m_pDirectoryListing->GetCount() - pDirectoryListing->GetCount();
+	if (!countRemoved) {
 		m_pDirectoryListing = pDirectoryListing;
 		return;
 	}
 	wxASSERT(!IsComparing());
 
 	std::list<unsigned int> removedItems;
+	{
+		// Get indexes of the removed items in the listing
+		unsigned int j = 0;
+		unsigned int i = 0;
+		while (i < pDirectoryListing->GetCount() && j < m_pDirectoryListing->GetCount()) {
+			const CDirentry& oldEntry = (*m_pDirectoryListing)[j];
+			const wxString& oldName = oldEntry.name;
+			const wxString& newName = (*pDirectoryListing)[i].name;
+			if (oldName == newName) {
+				++i;
+				++j;
+				continue;
+			}
 
-	// Get indexes of the removed items in the listing
-	unsigned int j = 0;
-	unsigned int i = 0;
-	while (i < pDirectoryListing->GetCount() && j < m_pDirectoryListing->GetCount()) {
-		const CDirentry& oldEntry = (*m_pDirectoryListing)[j];
-		const wxString& oldName = oldEntry.name;
-		const wxString& newName = (*pDirectoryListing)[i].name;
-		if (oldName == newName) {
-			++i;
-			++j;
-			continue;
+			removedItems.push_back(j++);
 		}
+		for (; j < m_pDirectoryListing->GetCount(); ++j)
+			removedItems.push_back(j);
 
-		removedItems.push_back(j++);
+		wxASSERT(removedItems.size() == countRemoved);
 	}
-	for (; j < m_pDirectoryListing->GetCount(); ++j)
-		removedItems.push_back(j);
-
-	wxASSERT(removedItems.size() == removed);
 
 	std::list<int> selectedItems;
 
 	// Number of items left to remove
-	unsigned int toRemove = removed;
+	unsigned int toRemove = countRemoved;
 
 	std::list<int> removedIndexes;
 
@@ -633,7 +634,7 @@ void CRemoteListView::UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryL
 
 	// Erase indexes
 	wxASSERT(!toRemove);
-	wxASSERT(removedIndexes.size() == removed);
+	wxASSERT(removedIndexes.size() == countRemoved);
 	for (auto const& removedIndex : removedIndexes) {
 		m_indexMapping.erase(m_indexMapping.begin() + removedIndex);
 	}
@@ -1610,8 +1611,7 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 
 void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -1620,11 +1620,10 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 	int dirCount = 0;
 	wxString name;
 
-	char permissions[9] = {0};
+	char permissions[9] = {};
 
 	long item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -1647,10 +1646,8 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		name = entry.name;
 
 		char file_perms[9];
-		if (CChmodDialog::ConvertPermissions(*entry.permissions, file_perms))
-		{
-			for (int i = 0; i < 9; i++)
-			{
+		if (CChmodDialog::ConvertPermissions(*entry.permissions, file_perms)) {
+			for (int i = 0; i < 9; i++) {
 				if (!permissions[i] || permissions[i] == file_perms[i])
 					permissions[i] = file_perms[i];
 				else
@@ -1658,8 +1655,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			}
 		}
 	}
-	if (!dirCount && !fileCount)
-	{
+	if (!dirCount && !fileCount) {
 		wxBell();
 		return;
 	}
@@ -1669,25 +1665,19 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			permissions[i] = 0;
 
 	CChmodDialog* pChmodDlg = new CChmodDialog;
-	if (!pChmodDlg->Create(this, fileCount, dirCount, name, permissions))
-	{
+	if (!pChmodDlg->Create(this, fileCount, dirCount, name, permissions)) {
 		pChmodDlg->Destroy();
-		pChmodDlg = 0;
 		return;
 	}
 
-	if (pChmodDlg->ShowModal() != wxID_OK)
-	{
+	if (pChmodDlg->ShowModal() != wxID_OK) {
 		pChmodDlg->Destroy();
-		pChmodDlg = 0;
 		return;
 	}
 
 	// State may have changed while chmod dialog was shown
-	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle()) {
 		pChmodDlg->Destroy();
-		pChmodDlg = 0;
 		wxBell();
 		return;
 	}
@@ -1698,22 +1688,19 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 	wxASSERT(pRecursiveOperation);
 
 	item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
 
-		if (!item)
-		{
+		if (!item) {
 			pChmodDlg->Destroy();
 			pChmodDlg = 0;
 			return;
 		}
 
 		int index = GetItemIndex(item);
-		if (index == -1)
-		{
+		if (index == -1) {
 			pChmodDlg->Destroy();
 			pChmodDlg = 0;
 			return;
@@ -1727,9 +1714,9 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			(!entry.is_dir() && applyType == 1) ||
 			(entry.is_dir() && applyType == 2))
 		{
-			char permissions[9];
-			bool res = pChmodDlg->ConvertPermissions(*entry.permissions, permissions);
-			wxString newPerms = pChmodDlg->GetPermissions(res ? permissions : 0, entry.is_dir());
+			char newPermissions[9]{};
+			bool res = pChmodDlg->ConvertPermissions(*entry.permissions, newPermissions);
+			wxString newPerms = pChmodDlg->GetPermissions(res ? newPermissions : 0, entry.is_dir());
 
 			m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(m_pDirectoryListing->path, entry.name, newPerms));
 		}
@@ -1738,8 +1725,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			pRecursiveOperation->AddDirectoryToVisit(m_pDirectoryListing->path, entry.name);
 	}
 
-	if (pChmodDlg->Recursive())
-	{
+	if (pChmodDlg->Recursive()) {
 		if (IsComparing())
 			ExitComparisonMode();
 
@@ -1752,8 +1738,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		if (pRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_chmod)
 			m_pState->ChangeRemoteDir(m_pDirectoryListing->path);
 	}
-	else
-	{
+	else {
 		pChmodDlg->Destroy();
 		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, _T(""), 0, true);
 	}
@@ -2066,14 +2051,12 @@ void CRemoteListView::SetInfoText()
 
 void CRemoteListView::OnBeginDrag(wxListEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
 
-	if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
-	{
+	if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1) {
 		// Nothing selected
 		return;
 	}
@@ -2082,14 +2065,12 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 
 	long item = -1;
 	int count = 0;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
 
-		if (!item)
-		{
+		if (!item) {
 			// Can't drag ".."
 			wxBell();
 			return;
@@ -2098,27 +2079,25 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 		int index = GetItemIndex(item);
 		if (index == -1 || m_fileData[index].comparison_flags == fill)
 			continue;
-		if ((*m_pDirectoryListing)[index].is_dir() && !idle)
-		{
+		if ((*m_pDirectoryListing)[index].is_dir() && !idle) {
 			// Drag could result in recursive operation, don't allow at this point
 			wxBell();
 			return;
 		}
-		count++;
+		++count;
 	}
-	if (!count)
-	{
+	if (!count) {
 		wxBell();
 		return;
 	}
 
 	wxDataObjectComposite object;
 
-	const CServer* const pServer = m_pState->GetServer();
+	CServer const* pServer = m_pState->GetServer();
 	if (!pServer)
 		return;
-	const CServer server = *pServer;
-	const CServerPath path = m_pDirectoryListing->path;
+	CServer const server = *pServer;
+	CServerPath const path = m_pDirectoryListing->path;
 
 	CRemoteDataObject *pRemoteDataObject = new CRemoteDataObject(*pServer, m_pDirectoryListing->path);
 
@@ -2129,8 +2108,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 
 	// Add files to remote data object
 	item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -2148,9 +2126,8 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 	object.Add(pRemoteDataObject, true);
 
 #if FZ3_USESHELLEXT
-	CShellExtensionInterface* ext = CShellExtensionInterface::CreateInitialized();
-	if (ext)
-	{
+	std::unique_ptr<CShellExtensionInterface> ext = CShellExtensionInterface::CreateInitialized();
+	if (ext) {
 		const wxString& file = ext->GetDragDirectory();
 
 		wxASSERT(!file.empty());
@@ -2171,81 +2148,57 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 
 	pDragDropManager->Release();
 
-	if (res != wxDragCopy)
-	{
-#if FZ3_USESHELLEXT
-		delete ext;
-		ext = 0;
-#endif
+	if (res != wxDragCopy) {
 		return;
 	}
 
 #if FZ3_USESHELLEXT
-	if (ext)
-	{
-		if (!pRemoteDataObject->DidSendData())
-		{
-			const CServer* pServer = m_pState->GetServer();
+	if (ext) {
+		if (!pRemoteDataObject->DidSendData()) {
+			pServer = m_pState->GetServer();
 			if (!m_pState->IsRemoteIdle() ||
 				!pServer || *pServer != server ||
 				!m_pDirectoryListing || m_pDirectoryListing->path != path)
 			{
 				// Remote listing has changed since drag started
 				wxBell();
-				delete ext;
-				ext = 0;
 				return;
 			}
 
 			// Same checks as before
-			bool idle = m_pState->m_pCommandQueue->Idle();
+			idle = m_pState->m_pCommandQueue->Idle();
 
-			long item = -1;
-			for (;;)
-			{
+			item = -1;
+			for (;;) {
 				item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 				if (item == -1)
 					break;
 
-				if (!item)
-				{
+				if (!item) {
 					// Can't drag ".."
 					wxBell();
-					delete ext;
-					ext = 0;
 					return;
 				}
 
 				int index = GetItemIndex(item);
 				if (index == -1 || m_fileData[index].comparison_flags == fill)
 					continue;
-				if ((*m_pDirectoryListing)[index].is_dir() && !idle)
-				{
+				if ((*m_pDirectoryListing)[index].is_dir() && !idle) {
 					// Drag could result in recursive operation, don't allow at this point
 					wxBell();
-					delete ext;
-					ext = 0;
 					return;
 				}
 			}
 
 			CLocalPath target(ext->GetTarget());
-			if (target.empty())
-			{
-				delete ext;
-				ext = 0;
+			if (target.empty()) {
+				ext.reset(); // Release extension before the modal message box
 				wxMessageBoxEx(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
 				return;
 			}
 
 			TransferSelectedFiles(target, false);
-
-			delete ext;
-			ext = 0;
-			return;
 		}
-		delete ext;
-		ext = 0;
 	}
 #endif
 }

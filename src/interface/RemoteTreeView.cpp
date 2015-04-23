@@ -522,8 +522,7 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 	const wxString path = listing.path.GetPath();
 
 	CFilterDialog filter;
-	for (unsigned int i = 0; i < listing.GetCount(); i++)
-	{
+	for (unsigned int i = 0; i < listing.GetCount(); ++i) {
 		if (!listing[i].is_dir())
 			continue;
 
@@ -536,16 +535,14 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 
 		CDirectoryListing subListing;
 
-		if (m_pState->m_pEngine->CacheLookup(subdir, subListing) == FZ_REPLY_OK)
-		{
+		if (m_pState->m_pEngine->CacheLookup(subdir, subListing) == FZ_REPLY_OK) {
 			wxTreeItemId child = AppendItem(parent, name, 0, 2, 0);
 			SetItemImages(child, false);
 
 			if (HasSubdirs(subListing, filter))
 				AppendItem(child, _T(""), -1, -1);
 		}
-		else
-		{
+		else {
 			wxTreeItemId child = AppendItem(parent, name, 1, 3, 0);
 			SetItemImages(child, true);
 		}
@@ -559,19 +556,17 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	wxTreeItemIdValue cookie;
 	wxTreeItemId child = GetFirstChild(parent, cookie);
-	if (!child || GetItemText(child).empty())
-	{
+	if (!child || GetItemText(child).empty()) {
 		DisplayItem(parent, listing);
 		return;
 	}
 
 	CFilterManager filter;
 
-	const wxString path = listing.path.GetPath();
+	wxString const path = listing.path.GetPath();
 
 	wxArrayString dirs;
-	for (unsigned int i = 0; i < listing.GetCount(); i++)
-	{
+	for (unsigned int i = 0; i < listing.GetCount(); ++i) {
 		if (!listing[i].is_dir())
 			continue;
 
@@ -589,12 +584,11 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		int cmp = sortFunc(GetItemText(child), *iter);
 
 		if (!cmp) {
-			CServerPath path = listing.path;
-			path.AddSegment(*iter);
+			CServerPath childPath = listing.path;
+			childPath.AddSegment(*iter);
 
 			CDirectoryListing subListing;
-			if (m_pState->m_pEngine->CacheLookup(path, subListing) == FZ_REPLY_OK)
-			{
+			if (m_pState->m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
 				if (!GetLastChild(child) && HasSubdirs(subListing, filter))
 					AppendItem(child, _T(""), -1, -1);
 				SetItemImages(child, false);
@@ -617,21 +611,25 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		}
 		else if (cmp < 0) {
 			// New directory
-			CServerPath path = listing.path;
-			path.AddSegment(*iter);
+			CServerPath childPath = listing.path;
+			childPath.AddSegment(*iter);
 
 			CDirectoryListing subListing;
-			if (m_pState->m_pEngine->CacheLookup(path, subListing) == FZ_REPLY_OK) {
-				wxTreeItemId child = AppendItem(parent, *iter, 0, 2, 0);
-				SetItemImages(child, false);
+			if (m_pState->m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
+				wxTreeItemId childItem = AppendItem(parent, *iter, 0, 2, 0);
+				if (childItem) {
+					SetItemImages(childItem, false);
 
-				if (HasSubdirs(subListing, filter))
-					AppendItem(child, _T(""), -1, -1);
+					if (HasSubdirs(subListing, filter)) {
+						AppendItem(childItem, _T(""), -1, -1);
+					}
+				}
 			}
 			else {
-				wxTreeItemId child = AppendItem(parent, *iter, 1, 3, 0);
-				if (child)
-					SetItemImages(child, true);
+				wxTreeItemId childItem = AppendItem(parent, *iter, 1, 3, 0);
+				if (childItem) {
+					SetItemImages(childItem, true);
+				}
 			}
 
 			++iter;
@@ -649,20 +647,25 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		child = prev;
 	}
 	while (iter != dirs.rend()) {
-		CServerPath path = listing.path;
-		path.AddSegment(*iter);
+		CServerPath childPath = listing.path;
+		childPath.AddSegment(*iter);
 
 		CDirectoryListing subListing;
-		if (m_pState->m_pEngine->CacheLookup(path, subListing) == FZ_REPLY_OK) {
-			wxTreeItemId child = AppendItem(parent, *iter, 0, 2, 0);
-			SetItemImages(child, false);
+		if (m_pState->m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
+			wxTreeItemId childItem = AppendItem(parent, *iter, 0, 2, 0);
+			if (childItem) {
+				SetItemImages(childItem, false);
 
-			if (HasSubdirs(subListing, filter))
-				AppendItem(child, _T(""), -1, -1);
+				if (HasSubdirs(subListing, filter)) {
+					AppendItem(childItem, _T(""), -1, -1);
+				}
+			}
 		}
 		else {
-			wxTreeItemId child = AppendItem(parent, *iter, 1, 3, 0);
-			SetItemImages(child, true);
+			wxTreeItemId childItem = AppendItem(parent, *iter, 1, 3, 0);
+			if (childItem) {
+				SetItemImages(childItem, true);
+			}
 		}
 
 		++iter;
@@ -774,8 +777,7 @@ CServerPath CRemoteTreeView::GetPathFromItem(const wxTreeItemId& item) const
 void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 {
 	// Drag could result in recursive operation, don't allow at this point
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -784,7 +786,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 	if (!item)
 		return;
 
-	const CServerPath& path = GetPathFromItem(item);
+	CServerPath path = GetPathFromItem(item);
 	if (path.empty() || !path.HasParent())
 		return;
 
@@ -795,9 +797,11 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 
 	wxDataObjectComposite object;
 
-	const CServer* const pServer = m_pState->GetServer();
+	CServer const* pServer = m_pState->GetServer();
 	if (!pServer)
 		return;
+	CServer const server = *pServer;
+
 
 	CRemoteDataObject *pRemoteDataObject = new CRemoteDataObject(*pServer, parent);
 	pRemoteDataObject->AddFile(lastSegment, true, -1, false);
@@ -807,9 +811,8 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 	object.Add(pRemoteDataObject, true);
 
 #if FZ3_USESHELLEXT
-	CShellExtensionInterface* ext = CShellExtensionInterface::CreateInitialized();
-	if (ext)
-	{
+	std::unique_ptr<CShellExtensionInterface> ext = CShellExtensionInterface::CreateInitialized();
+	if (ext) {
 		const wxString& file = ext->GetDragDirectory();
 
 		wxASSERT(!file.empty());
@@ -833,46 +836,28 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 
 	pDragDropManager->Release();
 
-	if (res != wxDragCopy)
-	{
-#if FZ3_USESHELLEXT
-		delete ext;
-		ext = 0;
-#endif
+	if (res != wxDragCopy) {
 		return;
 	}
 
 #if FZ3_USESHELLEXT
-	if (ext)
-	{
-		if (!pRemoteDataObject->DidSendData())
-		{
-			const CServer* const pServer = m_pState->GetServer();
-			if (!pServer || !m_pState->IsRemoteIdle())
-			{
+	if (ext) {
+		if (!pRemoteDataObject->DidSendData()) {
+			pServer = m_pState->GetServer();
+			if (!pServer || !m_pState->IsRemoteIdle() || *pServer != server) {
 				wxBell();
-				delete ext;
-				ext = 0;
 				return;
 			}
 
 			CLocalPath target(ext->GetTarget());
-			if (target.empty())
-			{
-				delete ext;
-				ext = 0;
+			if (target.empty()) {
+				ext.reset(); // Release extension before the modal message box
 				wxMessageBoxEx(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
 				return;
 			}
 
 			m_pState->DownloadDroppedFiles(pRemoteDataObject, target);
-
-			delete ext;
-			ext = 0;
-			return;
 		}
-		delete ext;
-		ext = 0;
 	}
 #endif
 }
