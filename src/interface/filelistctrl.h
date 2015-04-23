@@ -423,6 +423,34 @@ public:
 	std::vector<DataEntry>& m_fileData;
 };
 
+template<typename Listing, typename DataEntry>
+class CFileListCtrlSortNamePath : public CFileListCtrlSort<Listing>
+{
+public:
+	CFileListCtrlSortNamePath(Listing const& listing, std::vector<DataEntry>& fileData, CFileListCtrlSortBase::DirSortMode dirSortMode, CFileListCtrlSortBase::NameSortMode nameSortMode, CFileListCtrl<DataEntry>* const)
+		: CFileListCtrlSort<Listing>(listing, dirSortMode, nameSortMode)
+		, m_fileData(fileData)
+	{
+	}
+
+	bool operator()(int a, int b) const
+	{
+		typename Listing::value_type const& data1 = this->m_listing[a];
+		typename Listing::value_type const& data2 = this->m_listing[b];
+
+		CMP(CmpDir, data1, data2);
+		CMP(CmpName, data1, data2);
+
+		if (this->m_listing[a].path < m_fileData[b].path)
+			return true;
+		if (this->m_listing[a].path != m_fileData[b].path)
+			return false;
+
+		CMP_LESS(CmpName, data1, data2);
+	}
+	std::vector<DataEntry>& m_fileData;
+};
+
 namespace genericTypes {
 	enum type {
 		file,

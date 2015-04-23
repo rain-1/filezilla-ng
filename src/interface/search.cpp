@@ -116,7 +116,7 @@ CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::Get
 		else if (m_sortColumn == 6)
 			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortOwnerGroup<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortName<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 	}
 	else {
 		if (m_sortColumn == 1)
@@ -132,7 +132,7 @@ CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::Get
 		else if (m_sortColumn == 6)
 			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortOwnerGroup<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortName<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
+			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 	}
 }
 
