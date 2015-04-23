@@ -9,6 +9,8 @@
 
 #include "xmlfunctions.h"
 
+#include <memory>
+
 class wxRemoteDataFormat : public wxDataFormat
 {
 public:
@@ -81,7 +83,7 @@ public:
 
 	wxString GetDragDirectory() const { return m_dragDirectory; }
 
-	static CShellExtensionInterface* CreateInitialized();
+	static std::unique_ptr<CShellExtensionInterface> CreateInitialized();
 
 protected:
 	bool CreateDragDirectory();

@@ -162,22 +162,14 @@ bool CShellExtensionInterface::CreateDragDirectory()
 	return true;
 }
 
-CShellExtensionInterface* CShellExtensionInterface::CreateInitialized()
+std::unique_ptr<CShellExtensionInterface> CShellExtensionInterface::CreateInitialized()
 {
-	CShellExtensionInterface* ext = new CShellExtensionInterface;
-	if (!ext->IsLoaded())
-	{
-		delete ext;
-		return 0;
+	auto ret = make_unique<CShellExtensionInterface>();
+	if (!ret->IsLoaded() || ret->InitDrag().empty()) {
+		ret.reset();
 	}
 
-	if (ext->InitDrag().empty())
-	{
-		delete ext;
-		return 0;
-	}
-
-	return ext;
+	return ret;
 }
 
 //{7BB79969-2C7E-4107-996C-36DB90890AB2}
