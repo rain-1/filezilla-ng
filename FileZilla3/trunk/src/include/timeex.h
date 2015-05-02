@@ -245,36 +245,6 @@ private:
 	int64_t t_{};
 
 	static int64_t const freq_;
-
-#elif HAVE_UNSTEADY_STEADY_CLOCK
-	// FIXME: Remove once Debian Jessie is stable
-	static CMonotonicClock now() {
-		timespec t;
-		if (clock_gettime(CLOCK_MONOTONIC, &t) != -1) {
-			return CMonotonicClock(t.tv_sec * 1000 + t.tv_nsec / 1000000);
-		}
-
-		timeval tv;
-		(void)gettimeofday(&tv, 0);
-		return CMonotonicClock(tv.tv_sec * 1000 + tv.tv_usec / 1000);
-	}
-
-	explicit operator bool() const {
-		return t_ != 0;
-	}
-
-	CMonotonicClock& operator+=(duration const& d)
-	{
-		t_ += d.get_milliseconds();
-		return *this;
-	}
-
-private:
-	CMonotonicClock(int64_t t)
-		: t_(t)
-	{}
-
-	int64_t t_{};
 #else
 private:
 	typedef std::chrono::steady_clock clock_type;
