@@ -272,10 +272,8 @@ int GetRandomNumber(int min, int max)
 	if (min >= max)
 		return min;
 
-	static std::mt19937_64 gen = std::mt19937_64(std::random_device()());
 	std::uniform_int_distribution<int> dist(min, max);
-
-	return dist(gen);
+	return dist(std::random_device());
 }
 
 void MakeLowerAscii(wxString& str)
