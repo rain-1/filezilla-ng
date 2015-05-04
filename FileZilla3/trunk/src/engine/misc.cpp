@@ -273,7 +273,8 @@ int GetRandomNumber(int min, int max)
 		return min;
 
 	std::uniform_int_distribution<int> dist(min, max);
-	return dist(std::random_device());
+	std::random_device rd;
+	return dist(rd);
 }
 
 void MakeLowerAscii(wxString& str)
