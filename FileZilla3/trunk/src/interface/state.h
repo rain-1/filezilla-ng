@@ -176,7 +176,7 @@ public:
 	void ClearPreviouslyVisitedRemoteSubdir() { m_previouslyVisitedRemoteSubdir = _T(""); }
 
 protected:
-	void SetServer(const CServer* server);
+	void SetServer(const CServer* server, CServerPath const& path = CServerPath());
 
 	CLocalPath m_localDir;
 	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
