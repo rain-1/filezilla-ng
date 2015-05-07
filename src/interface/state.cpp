@@ -454,7 +454,7 @@ void CState::LocalDirCreated(const CLocalPath& path)
 	NotifyHandlers(STATECHANGE_LOCAL_REFRESH_FILE, next_segment);
 }
 
-void CState::SetServer(const CServer* server)
+void CState::SetServer(const CServer* server, CServerPath const& path)
 {
 	if (m_pServer) {
 		if (server && *server == *m_pServer &&
@@ -471,8 +471,12 @@ void CState::SetServer(const CServer* server)
 		m_pSftpEncryptionInfo.reset();
 	}
 	if (server) {
-		if (m_last_server != *server)
+		if (!path.empty()) {
+			m_last_path = path;
+		}
+		else if (m_last_server != *server) {
 			m_last_path.clear();
+		}
 		m_last_server = *server;
 
 		m_pServer = new CServer(*server);
@@ -515,7 +519,7 @@ bool CState::Connect(const CServer& server, const CServerPath& path /*=CServerPa
 	m_pCommandQueue->ProcessCommand(new CConnectCommand(server));
 	m_pCommandQueue->ProcessCommand(new CListCommand(path, _T(""), LIST_FLAG_FALLBACK_CURRENT));
 
-	SetServer(&server);
+	SetServer(&server, path);
 
 	return true;
 }
