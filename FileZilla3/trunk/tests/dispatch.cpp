@@ -63,11 +63,11 @@ void DispatchTest::testSingle()
 {
 	target t;
 
-	T1 const t1;
+	T1 const t1{};
 	CPPUNIT_ASSERT(Dispatch<T1>(t1, &t, &target::a));
 	CPPUNIT_ASSERT(Dispatch<T1>(t1, &t, &target::b));
 
-	T2 const t2;
+	T2 const t2{};
 	CPPUNIT_ASSERT(!Dispatch<T1>(t2, &t, &target::b));
 
 	CPPUNIT_ASSERT_EQUAL(t.a_, 1);
@@ -81,7 +81,7 @@ void DispatchTest::testArgs()
 	T4 const t4(1, 5);
 	CPPUNIT_ASSERT(Dispatch<T4>(t4, &t, &target::two));
 
-	T3 const t3;
+	T3 const t3{};
 	CPPUNIT_ASSERT(!Dispatch<T4>(t3, &t, &target::two));
 
 	CPPUNIT_ASSERT_EQUAL(t.a_, 1);
@@ -92,9 +92,9 @@ void DispatchTest::testMultiple()
 {
 	target t;
 
-	T1 const t1;
-	T2 const t2;
-	T3 const t3;
+	T1 const t1{};
+	T2 const t2{};
+	T3 const t3{};
 	T4 const t4(3, 8);
 
 	CPPUNIT_ASSERT((Dispatch<T1, T2, T3>(t1, &t, &target::a, &target::b, &target::c)));
