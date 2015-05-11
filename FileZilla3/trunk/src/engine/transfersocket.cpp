@@ -506,7 +506,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 	SetSocketBufferSizes(m_pSocket);
 
-	int res = m_pSocket->Connect(host, port);
+	int res = m_pSocket->Connect(host, port, CSocket::unspec, controlSocket_.m_pSocket->GetLocalIP());
 	if (res && res != EINPROGRESS) {
 		ResetSocket();
 		return false;

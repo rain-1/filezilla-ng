@@ -85,7 +85,7 @@ public:
 	// If host is a name that can be resolved, a hostaddress socket event gets sent.
 	// Once connections got established, a connection event gets sent. If
 	// connection could not be established, a close event gets sent.
-	int Connect(wxString host, unsigned int port, address_family family = unspec);
+	int Connect(wxString const& host, unsigned int port, address_family family = unspec, wxString const& bind = wxString());
 
 	// After receiving a send or receive event, you can call these functions
 	// as long as their return value is positive.
