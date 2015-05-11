@@ -36,6 +36,10 @@
   #define EAI_ADDRFAMILY EAI_FAMILY
 #endif
 
+#ifndef AI_NUMERICSERV
+#define AI_NUMERICSERV 0
+#endif
+
 // Union for strict aliasing-safe casting between
 // the different address types
 union sockaddr_u
