@@ -4,6 +4,7 @@
 #include "dialogex.h"
 #include "ipcmutex.h"
 #include "Options.h"
+#include "timeformatting.h"
 #include "xrc_helper.h"
 
 #include <wx/scrolwin.h>
@@ -28,11 +29,11 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	bool warning = false;
 	if (cert.GetActivationTime().IsValid()) {
 		if (cert.GetActivationTime() > CDateTime::Now()) {
-			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), cert.GetActivationTime().Format(_T("%x"), CDateTime::local)));
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), CTimeFormat::Format(cert.GetActivationTime())));
 			warning = true;
 		}
 		else
-			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), cert.GetActivationTime().Format(_T("%x"), CDateTime::local));
+			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), CTimeFormat::Format(cert.GetActivationTime()));
 	}
 	else {
 		warning = true;
@@ -41,11 +42,11 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 
 	if (cert.GetExpirationTime().IsValid()) {
 		if (cert.GetExpirationTime() < CDateTime::Now()) {
-			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), cert.GetExpirationTime().Format(_T("%x"), CDateTime::local)));
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), CTimeFormat::Format(cert.GetExpirationTime())));
 			warning = true;
 		}
 		else
-			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), cert.GetExpirationTime().Format(_T("%x"), CDateTime::local));
+			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), CTimeFormat::Format(cert.GetExpirationTime()));
 	}
 	else {
 		warning = true;
