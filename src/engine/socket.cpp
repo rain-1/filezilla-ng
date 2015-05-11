@@ -235,17 +235,20 @@ public:
 		m_waiting = 0;
 	}
 
-	int Connect()
+	int Connect(wxString const& bind)
 	{
 		wxASSERT(m_pSocket);
 
-		const wxWX2MBbuf buf = m_pSocket->m_host.mb_str();
-		if (!buf) {
+		auto const hostBuf = m_pSocket->m_host.mb_str();
+		auto const bindBuf = bind.mb_str();
+		if (!hostBuf || !bindBuf) {
+			m_bind.clear();
 			m_host.clear();
 			m_port.clear();
 			return EINVAL;
 		}
-		m_host = buf;
+		m_host = hostBuf;
+		m_bind = bindBuf;
 
 		// Connect method of CSocket ensures port is in range
 		char tmp[7];
@@ -321,15 +324,15 @@ public:
 	}
 
 protected:
-	static int CreateSocketFd(addrinfo const* addr)
+	static int CreateSocketFd(addrinfo const& addr)
 	{
 		int fd;
 #if defined(SOCK_CLOEXEC) && !defined(__WXMSW__)
-		fd = socket(addr->ai_family, addr->ai_socktype | SOCK_CLOEXEC, addr->ai_protocol);
+		fd = socket(addr.ai_family, addr.ai_socktype | SOCK_CLOEXEC, addr.ai_protocol);
 		if (fd == -1 && errno == EINVAL)
 #endif
 		{
-			fd = socket(addr->ai_family, addr->ai_socktype, addr->ai_protocol);
+			fd = socket(addr.ai_family, addr.ai_socktype, addr.ai_protocol);
 		}
 
 		if (fd != -1) {
@@ -356,25 +359,29 @@ protected:
 		}
 	}
 
-	int TryConnectHost(struct addrinfo *addr, scoped_lock & l)
+	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, scoped_lock & l)
 	{
 		if (m_pSocket->m_pEvtHandler) {
-			m_pSocket->m_pEvtHandler->SendEvent<CHostAddressEvent>(m_pSocket, CSocket::AddressToString(addr->ai_addr, addr->ai_addrlen));
+			m_pSocket->m_pEvtHandler->SendEvent<CHostAddressEvent>(m_pSocket, CSocket::AddressToString(addr.ai_addr, addr.ai_addrlen));
 		}
 
 		int fd = CreateSocketFd(addr);
 		if (fd == -1) {
 			if (m_pSocket->m_pEvtHandler) {
-				m_pSocket->m_pEvtHandler->SendEvent<CSocketEvent>(m_pSocket, addr->ai_next ? SocketEventType::connection_next : SocketEventType::connection, GetLastSocketError());
+				m_pSocket->m_pEvtHandler->SendEvent<CSocketEvent>(m_pSocket, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, GetLastSocketError());
 			}
 
 			return 0;
 		}
 
+		if (bindAddr.sockaddr.sa_family != AF_UNSPEC && bindAddr.sockaddr.sa_family == addr.ai_family) {
+			bind(fd, &bindAddr.sockaddr, sizeof(bindAddr));
+		}
+
 		CSocket::DoSetFlags(fd, m_pSocket->m_flags, m_pSocket->m_flags);
 		CSocket::DoSetBufferSizes(fd, m_pSocket->m_buffer_sizes[0], m_pSocket->m_buffer_sizes[1]);
 
-		int res = connect(fd, addr->ai_addr, addr->ai_addrlen);
+		int res = connect(fd, addr.ai_addr, addr.ai_addrlen);
 		if (res == -1) {
 #ifdef __WXMSW__
 			// Map to POSIX error codes
@@ -412,7 +419,7 @@ protected:
 
 		if (res) {
 			if (m_pSocket->m_pEvtHandler) {
-				m_pSocket->m_pEvtHandler->SendEvent<CSocketEvent>(m_pSocket, addr->ai_next ? SocketEventType::connection_next : SocketEventType::connection, res);
+				m_pSocket->m_pEvtHandler->SendEvent<CSocketEvent>(m_pSocket, addr.ai_next ? SocketEventType::connection_next : SocketEventType::connection, res);
 			}
 
 			CloseSocketFd(fd);
@@ -443,11 +450,28 @@ protected:
 			return false;
 		}
 
-		std::string host, port;
+		std::string host, port, bind;
 		std::swap(host, m_host);
 		std::swap(port, m_port);
+		std::swap(bind, m_bind);
 
-		struct addrinfo hints = {0};
+		sockaddr_u bindAddr{};
+
+		if (!bind.empty()) {
+			// Convert bind address
+			addrinfo bind_hints{};
+			bind_hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV | AI_PASSIVE;
+			addrinfo *bindAddressList{};
+			int res = getaddrinfo(bind.empty() ? 0 : bind.c_str(), "0", &bind_hints, &bindAddressList);
+			if (!res && bindAddressList && bindAddressList->ai_addr) {
+				memcpy(&bindAddr.storage, bindAddressList->ai_addr, bindAddressList->ai_addrlen);
+			}
+			if (!res && bindAddressList) {
+				freeaddrinfo(bindAddressList);
+			}
+		}
+
+		addrinfo hints{};
 		hints.ai_family = m_pSocket->m_family;
 
 		l.unlock();
@@ -457,7 +481,7 @@ protected:
 		hints.ai_flags |= AI_IDN;
 #endif
 
-		struct addrinfo *addressList = 0;
+		addrinfo *addressList{};
 		int res = getaddrinfo(host.c_str(), port.c_str(), &hints, &addressList);
 
 		l.lock();
@@ -493,8 +517,8 @@ protected:
 			return false;
 		}
 
-		for (struct addrinfo *addr = addressList; addr; addr = addr->ai_next) {
-			res = TryConnectHost(addr, l);
+		for (addrinfo *addr = addressList; addr; addr = addr->ai_next) {
+			res = TryConnectHost(*addr, bindAddr, l);
 			if (res == -1) {
 				freeaddrinfo(addressList);
 				if (m_pSocket)
@@ -803,6 +827,7 @@ protected:
 
 	std::string m_host;
 	std::string m_port;
+	std::string m_bind;
 
 #ifdef __WXMSW__
 	// We wait on this using WSAWaitForMultipleEvents
@@ -887,7 +912,7 @@ void CSocket::DetachThread()
 	Cleanup(false);
 }
 
-int CSocket::Connect(wxString host, unsigned int port, address_family family /*=unspec*/)
+int CSocket::Connect(wxString const& host, unsigned int port, address_family family, wxString const& bind)
 {
 	if (m_state != none)
 		return EISCONN;
@@ -935,7 +960,7 @@ int CSocket::Connect(wxString host, unsigned int port, address_family family /*=
 
 	m_host = host;
 	m_port = port;
-	int res = m_pSocketThread->Connect();
+	int res = m_pSocketThread->Connect(bind);
 	if (res) {
 		m_state = none;
 		delete m_pSocketThread;
@@ -1392,7 +1417,7 @@ int CSocket::Listen(address_family family, int port)
 		}
 
 		for (struct addrinfo* addr = addressList; addr; addr = addr->ai_next) {
-			m_fd = CSocketThread::CreateSocketFd(addr);
+			m_fd = CSocketThread::CreateSocketFd(*addr);
 			res = GetLastSocketError();
 
 			if (m_fd == -1)
