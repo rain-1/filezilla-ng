@@ -4,11 +4,6 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-/*
- * This testsuite asserts the correctness of the
- * functions handling natural sort
- */
-
 class DispatchTest : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(DispatchTest);
