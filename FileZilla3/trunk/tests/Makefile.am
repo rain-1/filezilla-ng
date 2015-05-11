@@ -10,7 +10,8 @@ test_SOURCES =  test.cpp \
 		eventloop.cpp \
 		ipaddress.cpp \
 		localpathtest.cpp \
-		serverpathtest.cpp
+		serverpathtest.cpp \
+		time.cpp
 
 test_CPPFLAGS = -I$(top_srcdir)/src/include
 test_CPPFLAGS += -I$(top_srcdir)/src/engine
