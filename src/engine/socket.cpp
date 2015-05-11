@@ -195,23 +195,12 @@ public:
 	CSocketThread()
 		: wxThread(wxTHREAD_JOINABLE), m_sync(false)
 	{
-		m_pSocket = 0;
-		m_pHost = 0;
-		m_pPort = 0;
 #ifdef __WXMSW__
 		m_sync_event = WSA_INVALID_EVENT;
 #else
 		m_pipe[0] = -1;
 		m_pipe[1] = -1;
 #endif
-		m_started = false;
-		m_quit = false;
-		m_finished = false;
-
-		m_waiting = 0;
-		m_triggered = 0;
-		m_threadwait = false;
-
 		for (int i = 0; i < WAIT_EVENTCOUNT; ++i) {
 			m_triggered_errors[i] = 0;
 		}
@@ -240,11 +229,8 @@ public:
 	{
 		m_pSocket = pSocket;
 
-		delete [] m_pHost;
-		m_pHost = 0;
-
-		delete [] m_pPort;
-		m_pPort = 0;
+		m_host.clear();
+		m_port.clear();
 
 		m_waiting = 0;
 	}
@@ -252,22 +238,20 @@ public:
 	int Connect()
 	{
 		wxASSERT(m_pSocket);
-		delete [] m_pHost;
-		delete [] m_pPort;
 
 		const wxWX2MBbuf buf = m_pSocket->m_host.mb_str();
 		if (!buf) {
-			m_pHost = 0;
-			m_pPort = 0;
+			m_host.clear();
+			m_port.clear();
 			return EINVAL;
 		}
-		m_pHost = new char[strlen(buf) + 1];
-		strcpy(m_pHost, buf);
+		m_host = buf;
 
 		// Connect method of CSocket ensures port is in range
-		m_pPort = new char[6];
-		sprintf(m_pPort, "%u", m_pSocket->m_port);
-		m_pPort[5] = 0;
+		char tmp[7];
+		snprintf(tmp, 6, "%u", m_pSocket->m_port);
+		tmp[5] = 0;
+		m_port = tmp;
 
 		Start();
 
@@ -454,18 +438,14 @@ protected:
 	// Only call while locked
 	bool DoConnect(scoped_lock & l)
 	{
-		char* pHost;
-		char* pPort;
-
-		if (!m_pHost || !m_pPort) {
+		if (m_host.empty() || m_port.empty()) {
 			m_pSocket->m_state = CSocket::closed;
 			return false;
 		}
 
-		pHost = m_pHost;
-		m_pHost = 0;
-		pPort = m_pPort;
-		m_pPort = 0;
+		std::string host, port;
+		std::swap(host, m_host);
+		std::swap(port, m_port);
 
 		struct addrinfo hints = {0};
 		hints.ai_family = m_pSocket->m_family;
@@ -478,10 +458,7 @@ protected:
 #endif
 
 		struct addrinfo *addressList = 0;
-		int res = getaddrinfo(pHost, pPort, &hints, &addressList);
-
-		delete [] pHost;
-		delete [] pPort;
+		int res = getaddrinfo(host.c_str(), port.c_str(), &hints, &addressList);
 
 		l.lock();
 
@@ -497,7 +474,7 @@ protected:
 		// If m_pHost is set, Close() was called and Connect()
 		// afterwards, state is back at connecting.
 		// In either case, we need to abort this connection attempt.
-		if (m_pSocket->m_state != CSocket::connecting || m_pHost) {
+		if (m_pSocket->m_state != CSocket::connecting || !m_host.empty()) {
 			if (!res && addressList)
 				freeaddrinfo(addressList);
 			return false;
@@ -752,7 +729,7 @@ protected:
 	{
 		if (m_quit)
 			return false;
-		while (!m_pSocket || (!m_waiting && !m_pHost)) {
+		while (!m_pSocket || (!m_waiting && m_host.empty())) {
 			m_threadwait = true;
 			m_condition.wait(l);
 
@@ -822,10 +799,10 @@ protected:
 		return 0;
 	}
 
-	CSocket* m_pSocket;
+	CSocket* m_pSocket{};
 
-	char* m_pHost;
-	char* m_pPort;
+	std::string m_host;
+	std::string m_port;
 
 #ifdef __WXMSW__
 	// We wait on this using WSAWaitForMultipleEvents
@@ -838,21 +815,19 @@ protected:
 	mutex m_sync;
 	condition m_condition;
 
-	bool m_started;
-	bool m_quit;
-	bool m_finished;
+	bool m_started{};
+	bool m_quit{};
+	bool m_finished{};
 
 	// The socket events we are waiting for
-	int m_waiting;
+	int m_waiting{};
 
 	// The triggered socket events
-	int m_triggered;
+	int m_triggered{};
 	int m_triggered_errors[WAIT_EVENTCOUNT];
 
 	// Thread waits for instructions
-	bool m_threadwait;
-
-	CCallback* m_synchronous_read_cb;
+	bool m_threadwait{};
 };
 
 CSocket::CSocket(CEventHandler* pEvtHandler)
@@ -1133,11 +1108,9 @@ int CSocket::Close()
 		int fd = m_fd;
 		m_fd = -1;
 
-		delete [] m_pSocketThread->m_pHost;
-		m_pSocketThread->m_pHost = 0;
-		delete [] m_pSocketThread->m_pPort;
-		m_pSocketThread->m_pPort = 0;
-		if (!m_pSocketThread->m_threadwait)
+		m_pSocketThread->m_host.clear();
+		m_pSocketThread->m_port.clear();
+
 			m_pSocketThread->WakeupThread(l);
 
 		CSocketThread::CloseSocketFd(fd);
