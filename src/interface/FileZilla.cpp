@@ -143,6 +143,7 @@ void CFileZillaApp::InitLocale()
 			for( language = GetFallbackLocale(language); !language.empty(); language = GetFallbackLocale(language) ) {
 				const wxLanguageInfo* fallbackInfo = wxLocale::FindLanguageInfo(language);
 				if( fallbackInfo && SetLocale(fallbackInfo->Language )) {
+					COptions::Get()->SetOption(OPTION_LANGUAGE, language);
 					return;
 				}
 			}
