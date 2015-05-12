@@ -379,7 +379,7 @@ protected:
 		}
 
 		if (bindAddr.sockaddr.sa_family != AF_UNSPEC && bindAddr.sockaddr.sa_family == addr.ai_family) {
-			bind(fd, &bindAddr.sockaddr, sizeof(bindAddr));
+			(void)bind(fd, &bindAddr.sockaddr, sizeof(bindAddr));
 		}
 
 		CSocket::DoSetFlags(fd, m_pSocket->m_flags, m_pSocket->m_flags);
