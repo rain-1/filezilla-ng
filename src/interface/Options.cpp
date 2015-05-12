@@ -65,6 +65,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Limit local ports", number, _T("0"), normal },
 	{ "Limit ports low", number, _T("6000"), normal },
 	{ "Limit ports high", number, _T("7000"), normal },
+	{ "Limit ports offset", number, _T("0"), normal },
 	{ "External IP mode", number, _T("0"), normal },
 	{ "External IP", string, _T(""), normal },
 	{ "External address resolver", string, _T("http://ip.filezilla-project.org/ip.php"), normal },

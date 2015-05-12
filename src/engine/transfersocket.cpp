@@ -70,6 +70,14 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 		return wxString();
 	}
 
+	if (engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS)) {
+		port += static_cast<int>(engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS_OFFSET));
+		if (port <= 0 || port >= 65536) {
+			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Port outside valid range"));
+			return wxString();
+		}
+	}
+
 	wxString portArguments;
 	if (m_pSocketServer->GetAddressFamily() == CSocket::ipv6) {
 		portArguments = wxString::Format(_T("|2|%s|%d|"), ip, port);
@@ -563,8 +571,7 @@ CSocket* CTransferSocket::CreateSocketServer(int port)
 
 CSocket* CTransferSocket::CreateSocketServer()
 {
-	if (!engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS))
-	{
+	if (!engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS)) {
 		// Ask the systen for a port
 		CSocket* pServer = CreateSocketServer(0);
 		return pServer;
