@@ -14,6 +14,7 @@ enum engineOptions
 	OPTION_LIMITPORTS,
 	OPTION_LIMITPORTS_LOW,
 	OPTION_LIMITPORTS_HIGH,
+	OPTION_LIMITPORTS_OFFSET,
 	OPTION_EXTERNALIPMODE,		/* External IP Address mode for use in active mode
 								   Values: 0: ask operating system
 										   1: use provided IP
