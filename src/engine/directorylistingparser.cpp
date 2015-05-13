@@ -716,7 +716,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 {
 	CDirectoryListing listing;
 	listing.path = path;
-	listing.m_firstListTime = CMonotonicTime::Now();
+	listing.m_firstListTime = CMonotonicClock::now();
 
 	if (!ParseData(false)){
 		listing.m_flags |= CDirectoryListing::listing_failed;

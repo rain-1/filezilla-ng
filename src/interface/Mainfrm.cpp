@@ -924,7 +924,7 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 						pListing = std::make_shared<CDirectoryListing>();
 						pListing->path = listingNotification.GetPath();
 						pListing->m_flags |= CDirectoryListing::listing_failed;
-						pListing->m_firstListTime = CMonotonicTime::Now();
+						pListing->m_firstListTime = CMonotonicClock::now();
 					}
 
 					pState->SetRemoteDir(pListing, listingNotification.Modified());

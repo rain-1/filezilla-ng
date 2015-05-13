@@ -158,7 +158,7 @@ protected:
 
 	// Remember last path used in a dirlisting.
 	CServerPath m_lastListDir;
-	CMonotonicTime m_lastListTime;
+	CMonotonicClock m_lastListTime;
 
 	std::unique_ptr<CControlSocket> m_pControlSocket;
 

@@ -84,7 +84,7 @@ public:
 
 	void ClearFindMap();
 
-	CMonotonicTime m_firstListTime;
+	CMonotonicClock m_firstListTime;
 
 	enum
 	{

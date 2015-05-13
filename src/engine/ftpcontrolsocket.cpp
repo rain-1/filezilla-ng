@@ -1234,7 +1234,7 @@ public:
 	// Listing index for list_mdtm
 	int mdtm_index;
 
-	CMonotonicTime m_time_before_locking;
+	CMonotonicClock m_time_before_locking;
 };
 
 enum listStates
@@ -1290,8 +1290,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ListSubcommandResult()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1300,18 +1299,14 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (pData->opState == list_waitcwd)
-	{
-		if (prevResult != FZ_REPLY_OK)
-		{
-			if (prevResult & FZ_REPLY_LINKNOTDIR)
-			{
+	if (pData->opState == list_waitcwd) {
+		if (prevResult != FZ_REPLY_OK) {
+			if (prevResult & FZ_REPLY_LINKNOTDIR) {
 				ResetOperation(prevResult);
 				return FZ_REPLY_ERROR;
 			}
 
-			if (pData->fallback_to_current)
-			{
+			if (pData->fallback_to_current) {
 				// List current directory instead
 				pData->fallback_to_current = false;
 				pData->path.clear();
@@ -1320,14 +1315,12 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				if (res != FZ_REPLY_OK)
 					return res;
 			}
-			else
-			{
+			else {
 				ResetOperation(prevResult);
 				return FZ_REPLY_ERROR;
 			}
 		}
-		if (pData->path.empty())
-		{
+		if (pData->path.empty()) {
 			pData->path = m_CurrentPath;
 			wxASSERT(pData->subDir.empty());
 			wxASSERT(!pData->path.empty());
@@ -1355,7 +1348,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		if (!pData->holdsLock) {
 			if (!TryLockCache(lock_list, m_CurrentPath)) {
 				pData->opState = list_waitlock;
-				pData->m_time_before_locking = CMonotonicTime::Now();
+				pData->m_time_before_locking = CMonotonicClock::now();
 				return FZ_REPLY_WOULDBLOCK;
 			}
 		}
@@ -1378,10 +1371,8 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		pData->opState = list_waittransfer;
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command) == yes)
 			return Transfer(_T("MLSD"), pData);
-		else
-		{
-			if (engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES))
-			{
+		else {
+			if (engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
 				enum capabilities cap = CServerCapabilities::GetCapability(*m_pCurrentServer, list_hidden_support);
 				if (cap == unknown)
 					pData->viewHiddenCheck = true;
@@ -1397,16 +1388,12 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				return Transfer(_T("LIST"), pData);
 		}
 	}
-	else if (pData->opState == list_waittransfer)
-	{
-		if (prevResult == FZ_REPLY_OK)
-		{
+	else if (pData->opState == list_waittransfer) {
+		if (prevResult == FZ_REPLY_OK) {
 			CDirectoryListing listing = pData->m_pDirectoryListingParser->Parse(m_CurrentPath);
 
-			if (pData->viewHiddenCheck)
-			{
-				if (!pData->viewHidden)
-				{
+			if (pData->viewHiddenCheck) {
+				if (!pData->viewHidden) {
 					// Repeat with LIST -a
 					pData->viewHidden = true;
 					pData->directoryListing = listing;
@@ -1421,15 +1408,12 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 
 					return Transfer(_T("LIST -a"), pData);
 				}
-				else
-				{
-					if (CheckInclusion(listing, pData->directoryListing))
-					{
+				else {
+					if (CheckInclusion(listing, pData->directoryListing)) {
 						LogMessage(MessageType::Debug_Info, _T("Server seems to support LIST -a"));
 						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, yes);
 					}
-					else
-					{
+					else {
 						LogMessage(MessageType::Debug_Info, _T("Server does not seem to support LIST -a"));
 						CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
 						listing = pData->directoryListing;
@@ -1450,34 +1434,27 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
-		else
-		{
-			if (pData->tranferCommandSent && IsMisleadingListResponse())
-			{
+		else {
+			if (pData->tranferCommandSent && IsMisleadingListResponse()) {
 				CDirectoryListing listing;
 				listing.path = m_CurrentPath;
-				listing.m_firstListTime = CMonotonicTime::Now();
+				listing.m_firstListTime = CMonotonicClock::now();
 
-				if (pData->viewHiddenCheck)
-				{
-					if (pData->viewHidden)
-					{
-						if (pData->directoryListing.GetCount())
-						{
+				if (pData->viewHiddenCheck) {
+					if (pData->viewHidden) {
+						if (pData->directoryListing.GetCount()) {
 							// Less files with LIST -a
 							// Not supported
 							LogMessage(MessageType::Debug_Info, _T("Server does not seem to support LIST -a"));
 							CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, no);
 							listing = pData->directoryListing;
 						}
-						else
-						{
+						else {
 							LogMessage(MessageType::Debug_Info, _T("Server seems to support LIST -a"));
 							CServerCapabilities::SetCapability(*m_pCurrentServer, list_hidden_support, yes);
 						}
 					}
-					else
-					{
+					else {
 						// Reset status
 						pData->transferEndReason = TransferEndReason::successful;
 						pData->tranferCommandSent = false;
@@ -1504,10 +1481,8 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
-			else
-			{
-				if (pData->viewHiddenCheck)
-				{
+			else {
+				if (pData->viewHiddenCheck) {
 					// If server does not support LIST -a, the server might reject this command
 					// straight away. In this case, back to the previously retrieved listing.
 					// On other failures like timeouts and such, return an error
@@ -1537,8 +1512,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			return FZ_REPLY_ERROR;
 		}
 	}
-	else
-	{
+	else {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Wrong opState: %d"), pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1549,8 +1523,7 @@ int CFtpControlSocket::ListSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::ListSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1559,10 +1532,8 @@ int CFtpControlSocket::ListSend()
 	CFtpListOpData *pData = static_cast<CFtpListOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (pData->opState == list_waitlock)
-	{
-		if (!pData->holdsLock)
-		{
+	if (pData->opState == list_waitlock) {
+		if (!pData->holdsLock) {
 			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Not holding the lock as expected"));
 			ResetOperation(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
@@ -1574,7 +1545,7 @@ int CFtpControlSocket::ListSend()
 		wxASSERT(pData->subDir.empty()); // Did do ChangeDir before trying to lock
 		bool found = engine_.GetDirectoryCache().Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
 		if (found && !is_outdated && !listing.get_unsure_flags() &&
-			listing.m_firstListTime > pData->m_time_before_locking)
+			listing.m_firstListTime >= pData->m_time_before_locking)
 		{
 			engine_.SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false, false);
 
@@ -1586,8 +1557,7 @@ int CFtpControlSocket::ListSend()
 
 		return ListSubcommandResult(FZ_REPLY_OK);
 	}
-	if (pData->opState == list_mdtm)
-	{
+	if (pData->opState == list_mdtm) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
 		wxString cmd = _T("MDTM ") + m_CurrentPath.FormatFilename(pData->directoryListing[pData->mdtm_index].name, true);
 		if (!SendCommand(cmd))
