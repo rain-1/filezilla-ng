@@ -10,7 +10,7 @@ std::map<wxString, int> CDirectoryListingParser::m_MonthNamesMap;
 //#define LISTDEBUG_MVS
 //#define LISTDEBUG
 #ifdef LISTDEBUG
-static char data[][150]={
+static char const data[][150]={
 	"" // Has to be terminated with empty string
 };
 

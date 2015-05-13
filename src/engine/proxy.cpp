@@ -36,7 +36,8 @@ CProxySocket::~CProxySocket()
 	delete [] m_pRecvBuffer;
 }
 
-static wxString base64encode(const wxString& str)
+namespace {
+wxString base64encode(const wxString& str)
 {
 	// Code shamelessly taken from wxWidgets and adopted to encode UTF-8 strings.
 	// wxWidget's http class encodes string from arbitrary encoding into base64,
@@ -59,13 +60,15 @@ static wxString base64encode(const wxString& str)
 		buf << wxString::Format(wxT("%c"), base64[(from[0] >> 2) & 0x3f]);
 		if (len == 1) {
 			buf << wxString::Format(wxT("%c="), base64[(from[0] << 4) & 0x30]);
-		} else {
+		}
+		else {
 			buf << wxString::Format(wxT("%c%c"), base64[((from[0] << 4) & 0x30) | ((from[1] >> 4) & 0xf)], base64[(from[1] << 2) & 0x3c]);
 		}
 		buf << wxString::Format(wxT("="));
 	}
 
 	return buf;
+}
 }
 
 int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass)
