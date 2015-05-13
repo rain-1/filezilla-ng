@@ -329,7 +329,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 					else {
 						if (!avoid) {
 							m_lastListDir = pListing->path;
-							m_lastListTime = CMonotonicTime::Now();
+							m_lastListTime = CMonotonicClock::now();
 							CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(pListing->path);
 							AddNotification(pNotification);
 						}
@@ -405,13 +405,13 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 
 	if (failed) {
 		AddNotification(new CDirectoryListingNotification(path, false, true));
-		m_lastListTime = CMonotonicTime::Now();
+		m_lastListTime = CMonotonicClock::now();
 
 		// On failed messages, we don't notify other engines
 		return;
 	}
 
-	CMonotonicTime changeTime;
+	CMonotonicClock changeTime;
 	if (!directory_cache_.GetChangeTime(changeTime, *pOwnServer, path))
 		return;
 
@@ -424,17 +424,18 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 	// Iterate over the other engine, send notification if last listing
 	// directory is the same
 	for (auto & engine : m_engineList) {
-		if (!engine->m_pControlSocket || engine->m_pControlSocket == m_pControlSocket)
+		if (!engine->m_pControlSocket || engine->m_pControlSocket == m_pControlSocket) {
 			continue;
+		}
 
-		const CServer* const pServer = engine->m_pControlSocket->GetCurrentServer();
+		CServer const* const pServer = engine->m_pControlSocket->GetCurrentServer();
 		if (!pServer || *pServer != *pOwnServer)
 			continue;
 
 		if (engine->m_lastListDir != path)
 			continue;
 
-		if (engine->m_lastListTime.GetTime().IsValid() && changeTime <= engine->m_lastListTime)
+		if (engine->m_lastListTime && changeTime <= engine->m_lastListTime)
 			continue;
 
 		engine->m_lastListTime = changeTime;

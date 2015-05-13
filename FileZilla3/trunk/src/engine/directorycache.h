@@ -35,7 +35,7 @@ public:
 	CDirectoryCache& operator=(CDirectoryCache const&) = delete;
 
 	void Store(const CDirectoryListing &listing, const CServer &server);
-	bool GetChangeTime(CMonotonicTime& time, const CServer &server, const CServerPath &path);
+	bool GetChangeTime(CMonotonicClock& time, const CServer &server, const CServerPath &path);
 	bool Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 	bool DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated);
 	bool LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase);
@@ -55,17 +55,16 @@ protected:
 		CCacheEntry(const CCacheEntry &entry);
 		explicit CCacheEntry(CDirectoryListing const& l)
 			: listing(l)
-			, modificationTime(CMonotonicTime::Now())
-			, lruIt()
+			, modificationTime(CMonotonicClock::now())
 		{}
 		~CCacheEntry() { };
 
 		CDirectoryListing listing;
-		CMonotonicTime modificationTime;
+		CMonotonicClock modificationTime;
 
 		CCacheEntry& operator=(const CCacheEntry &a);
 
-		void* lruIt; // void* to break cyclic declaration dependency
+		void* lruIt{}; // void* to break cyclic declaration dependency
 	};
 
 	class CServerEntry final

@@ -171,39 +171,6 @@ inline duration operator-(duration const& a, duration const& b)
 
 duration operator-(CDateTime const& a, CDateTime const& b);
 
-
-
-/* If called multiple times in a row, CDateTime::Now may return the same
- * time. This causes problems with the cache logic. This class implements
- * an extended time class in wich Now() never returns the same value.
- */
-class CMonotonicTime final
-{
-public:
-	CMonotonicTime(const CDateTime& time);
-	CMonotonicTime() = default;
-
-	static CMonotonicTime Now();
-
-	CDateTime GetTime() const { return m_time; }
-
-	bool IsValid() const { return m_time.IsValid(); }
-
-	bool operator < (const CMonotonicTime& op) const;
-	bool operator <= (const CMonotonicTime& op) const;
-	bool operator > (const CMonotonicTime& op) const;
-	bool operator >= (const CMonotonicTime& op) const;
-	bool operator == (const CMonotonicTime& op) const;
-
-protected:
-	static CDateTime m_lastTime;
-	static int m_lastOffset;
-
-	CDateTime m_time;
-	int m_offset{};
-};
-
-
 class CMonotonicClock final
 {
 public:
@@ -274,8 +241,11 @@ private:
 #endif
 
 	friend duration operator-(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend bool operator==(CMonotonicClock const& a, CMonotonicClock const& b);
 	friend bool operator<(CMonotonicClock const& a, CMonotonicClock const& b);
 	friend bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend bool operator>(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend bool operator>=(CMonotonicClock const& a, CMonotonicClock const& b);
 };
 
 inline duration operator-(CMonotonicClock const& a, CMonotonicClock const& b)
@@ -289,6 +259,11 @@ inline duration operator-(CMonotonicClock const& a, CMonotonicClock const& b)
 #endif
 }
 
+inline bool operator==(CMonotonicClock const& a, CMonotonicClock const& b)
+{
+	return a.t_ == b.t_;
+}
+
 inline bool operator<(CMonotonicClock const& a, CMonotonicClock const& b)
 {
 	return a.t_ < b.t_;
@@ -297,6 +272,16 @@ inline bool operator<(CMonotonicClock const& a, CMonotonicClock const& b)
 inline bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b)
 {
 	return a.t_ <= b.t_;
+}
+
+inline bool operator>(CMonotonicClock const& a, CMonotonicClock const& b)
+{
+	return a.t_ > b.t_;
+}
+
+inline bool operator>=(CMonotonicClock const& a, CMonotonicClock const& b)
+{
+	return a.t_ >= b.t_;
 }
 
 #endif //__TIMEEX_H__

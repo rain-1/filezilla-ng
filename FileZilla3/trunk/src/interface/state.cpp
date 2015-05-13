@@ -323,7 +323,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 		return true;
 	}
 
-	wxASSERT(pDirectoryListing->m_firstListTime.IsValid());
+	wxASSERT(pDirectoryListing->m_firstListTime);
 
 	if (pDirectoryListing && m_pDirectoryListing &&
 		pDirectoryListing->path == m_pDirectoryListing->path.GetParent())
