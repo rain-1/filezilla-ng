@@ -109,9 +109,8 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, duration const& interval, 
 	d.deadline_ = CMonotonicClock::now() + interval;
 
 	scoped_lock lock(sync_);
-	static timer_id id{};
 	if (!handler->removing_) {
-		d.id_ = ++id; // 64bit, can this really ever overflow?
+		d.id_ = ++next_timer_id_; // 64bit, can this really ever overflow?
 
 		timers_.emplace_back(d);
 		if (!deadline_ || d.deadline_ < deadline_) {

@@ -65,6 +65,8 @@ protected:
 	bool ProcessEvent(scoped_lock & l);
 
 	CMonotonicClock deadline_;
+
+	timer_id next_timer_id_{};
 };
 
 template<typename T, typename H, typename F>

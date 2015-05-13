@@ -1032,7 +1032,7 @@ struct Error_table
 	const wxChar* const description;
 };
 
-static struct Error_table error_table[] =
+static Error_table const error_table[] =
 {
 	ERRORDECL(EACCES, TRANSLATE_T("Permission denied"))
 	ERRORDECL(EADDRINUSE, TRANSLATE_T("Local address in use"))
