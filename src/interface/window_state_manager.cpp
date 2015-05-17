@@ -74,15 +74,20 @@ bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximi
 
 	const wxRect screen_size = GetScreenDimensions();
 
-	// Make sure position is (somewhat) sane
-	position.x = wxMin(screen_size.GetRight() - 30, values[1]);
-	position.y = wxMin(screen_size.GetBottom() - 30, values[2]);
 	size.x = values[3];
 	size.y = values[4];
 
+	// Make sure position is (somewhat) sane.
+	// We allow the window to be partially out of sight, as long as the title bar is at least partially visible.
+
+	// Deal with the horizontal
+	position.x = wxMin(screen_size.GetRight() - 30, values[1]);
 	if (position.x + size.x - 30 < screen_size.GetLeft())
-		position.x = screen_size.GetLeft();
-	if (position.y + size.y - 30 < screen_size.GetTop())
+		position.x = screen_size.GetLeft() + 30 - size.x;
+
+	// Deal with the vertical
+	position.y = wxMin(screen_size.GetBottom() - 30, values[2]);
+	if (position.y < screen_size.GetTop())
 		position.y = screen_size.GetTop();
 
 	maximized = values[0] != 0;
