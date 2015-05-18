@@ -16,7 +16,7 @@ version.
 
 #include <mutex.h>
 
-const int CACHE_TIMEOUT = 1800; // In seconds
+const int CACHE_TIMEOUT = 900; // In seconds
 
 class CDirectoryCache final
 {
