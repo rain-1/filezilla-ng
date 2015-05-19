@@ -34,18 +34,12 @@ bool CWrapEngine::CanWrapBefore(const wxChar& c)
 {
 	// Check if this is a punctuation character, we're not allowed
 	// to wrap before such a character
-	const wxChar* p = m_noWrapChars;
-	while (*p)
-	{
-		if (*p == c)
-			break;
-
-		p++;
+	for (auto p = m_noWrapChars; p && *p; ++p) {
+		if (*p == c) {
+			return false;
+		}
 	}
-	if (!*p)
-		return true;
-
-	return false;
+	return true;
 }
 
 bool CWrapEngine::WrapTextChinese(wxWindow* parent, wxString &text, unsigned long maxLength)
@@ -1123,8 +1117,7 @@ void CWrapEngine::CheckLanguage()
 		m_wrapOnEveryChar = true;
 		m_noWrapChars = noWrapChars_Chinese;
 	}
-	else
-	{
+	else {
 		m_wrapOnEveryChar = false;
 		m_noWrapChars = 0;
 	}
