@@ -87,6 +87,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ftpcontrolsocket.cpp" />
+    <ClCompile Include="fzprocess.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="local_filesys.cpp" />
@@ -98,7 +99,6 @@
     <ClCompile Include="notification.cpp" />
     <ClCompile Include="option_change_event_handler.cpp" />
     <ClCompile Include="pathcache.cpp" />
-    <ClCompile Include="process.cpp" />
     <ClCompile Include="proxy.cpp" />
     <ClCompile Include="ratelimiter.cpp" />
     <ClCompile Include="rtt.cpp" />
@@ -132,6 +132,7 @@
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />
     <ClInclude Include="FtpControlSocket.h" />
+    <ClInclude Include="fzprocess.h" />
     <ClInclude Include="httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla.h" />
@@ -144,7 +145,6 @@
     <ClInclude Include="..\include\option_change_event_handler.h" />
     <ClInclude Include="..\include\optionsbase.h" />
     <ClInclude Include="pathcache.h" />
-    <ClInclude Include="process.h" />
     <ClInclude Include="proxy.h" />
     <ClInclude Include="ratelimiter.h" />
     <ClInclude Include="..\include\Server.h" />

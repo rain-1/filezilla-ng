@@ -2,7 +2,6 @@
 #define __SFTPCONTROLSOCKET_H__
 
 #include "ControlSocket.h"
-#include <wx/process.h>
 
 enum class sftpEvent {
 	Unknown = -1,
