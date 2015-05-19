@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.11.0 (2015-05-19)
+
+- Ensure the title bar is at least partially inside the screen boundary when restoring a saved window position
+- Fixed crash if opening a wrapped dialog without having restarted FileZilla after having change language to Chinese or Japanese
+
 3.11.0-rc1 (2015-05-12)
 
 + Implemented new date/time handling to solve issues with DST conversion
