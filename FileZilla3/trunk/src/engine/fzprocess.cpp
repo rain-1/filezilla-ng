@@ -1,5 +1,5 @@
 #include <filezilla.h>
-#include "process.h"
+#include "fzprocess.h"
 
 #ifdef __WXMSW__
 

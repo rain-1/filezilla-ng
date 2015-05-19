@@ -6,7 +6,7 @@
 #include "event_loop.h"
 #include "pathcache.h"
 #include "local_filesys.h"
-#include "process.h"
+#include "fzprocess.h"
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
