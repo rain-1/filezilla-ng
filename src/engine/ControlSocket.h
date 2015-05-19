@@ -60,15 +60,11 @@ public:
 	bool transferInitiated{};
 };
 
-class CMkdirOpData : public COpData
+class CMkdirOpData final : public COpData
 {
 public:
 	CMkdirOpData()
 		: COpData(Command::mkdir)
-	{
-	}
-
-	virtual ~CMkdirOpData()
 	{
 	}
 
