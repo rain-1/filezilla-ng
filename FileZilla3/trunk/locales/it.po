@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-12 15:30+0200\n"
-"PO-Revision-Date: 2015-04-11 15:45+0100\n"
+"PO-Revision-Date: 2015-05-13 09:22+0100\n"
 "Last-Translator: bovirus <bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
@@ -767,9 +767,8 @@ msgid "&Quickconnect bar"
 msgstr "Barra &connessione rapida"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1489
-#, fuzzy
 msgid "&Quickconnect history"
-msgstr "Cronologia di &Connessione rapida"
+msgstr "Cronologia &connessione rapida"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:409
 msgid "&Read"
@@ -780,9 +779,8 @@ msgid "&Reconnect"
 msgstr "&Riconnetti"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1496
-#, fuzzy
 msgid "&Reconnect information"
-msgstr "Informazioni di &riconnessione"
+msgstr "Informazioni &riconnessione"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:61
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:613
@@ -930,9 +928,8 @@ msgid "&Show timestamps in message log"
 msgstr "Vi&sualizza data e ora nel log messaggi"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1502
-#, fuzzy
 msgid "&Site Manager entries"
-msgstr "Voci del &Gestore siti"
+msgstr "Elementi &Gestore siti"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:7
 msgid "&Site Manager..."
@@ -1969,9 +1966,8 @@ msgid "Case sensitive (default)"
 msgstr "Controllo maiuscolo/minuscolo (predefinito)"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1482
-#, fuzzy
 msgid "Categories to clear"
-msgstr "Categorie"
+msgstr "Categorie da azzerare"
 
 #: ../../locales/../src/interface/statusbar.cpp:502
 msgid "Certificate and session data are not available yet."
@@ -4275,7 +4271,7 @@ msgstr "Sito web:"
 
 #: ../../locales/../src/engine/socket.cpp:1067
 msgid "Host is down"
-msgstr ""
+msgstr "Host non attivo"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2001
 msgid "Host key fingerprint:"
