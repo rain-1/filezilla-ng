@@ -7,7 +7,7 @@
 class CInterProcessMutex;
 class CWindowStateManager;
 class CSiteManagerDropTarget;
-class CSiteManagerDialog: public wxDialogEx
+class CSiteManagerDialog final : public wxDialogEx
 {
 	friend class CSiteManagerDropTarget;
 
@@ -89,7 +89,7 @@ protected:
 	void OnNewBookmark(wxCommandEvent&);
 	void OnBookmarkBrowse(wxCommandEvent&);
 
-	CInterProcessMutex* m_pSiteManagerMutex;
+	CInterProcessMutex* m_pSiteManagerMutex{};
 
 	wxTreeItemId m_predefinedSites;
 	wxTreeItemId m_ownSites;
@@ -101,14 +101,14 @@ protected:
 	bool MoveItems(wxTreeItemId source, wxTreeItemId target, bool copy);
 
 protected:
-	CWindowStateManager* m_pWindowStateManager;
+	CWindowStateManager* m_pWindowStateManager{};
 
-	wxNotebook *m_pNotebook_Site;
-	wxNotebook *m_pNotebook_Bookmark;
+	wxNotebook *m_pNotebook_Site{};
+	wxNotebook *m_pNotebook_Bookmark{};
 
-	std::vector<_connected_site> *m_connected_sites;
+	std::vector<_connected_site> *m_connected_sites{};
 
-	bool m_is_deleting;
+	bool m_is_deleting{};
 };
 
 #endif //__SITEMANAGER_DIALOG_H__

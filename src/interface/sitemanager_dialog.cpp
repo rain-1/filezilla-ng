@@ -299,15 +299,7 @@ protected:
 };
 
 CSiteManagerDialog::CSiteManagerDialog()
-	: m_connected_sites()
 {
-	m_pSiteManagerMutex = 0;
-	m_pWindowStateManager = 0;
-
-	m_pNotebook_Site = 0;
-	m_pNotebook_Bookmark = 0;
-
-	m_is_deleting = false;
 }
 
 CSiteManagerDialog::~CSiteManagerDialog()
