@@ -378,8 +378,10 @@ void CBookmarksDialog::OnBrowse(wxCommandEvent&)
 
 void CBookmarksDialog::OnSelChanging(wxTreeEvent& event)
 {
-	if (!Verify())
-	{
+	if (m_is_deleting)
+		return;
+
+	if (!Verify()) {
 		event.Veto();
 		return;
 	}
@@ -597,8 +599,10 @@ void CBookmarksDialog::OnDelete(wxCommandEvent&)
 
 	wxTreeItemId parent = m_pTree->GetItemParent(item);
 
+	m_is_deleting = true;
 	m_pTree->Delete(item);
 	m_pTree->SelectItem(parent);
+	m_is_deleting = false;
 }
 
 void CBookmarksDialog::OnCopy(wxCommandEvent&)

@@ -21,7 +21,7 @@ protected:
 	void OnBrowse(wxCommandEvent&);
 };
 
-class CBookmarksDialog : public wxDialogEx
+class CBookmarksDialog final : public wxDialogEx
 {
 public:
 	CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server);
@@ -46,11 +46,13 @@ protected:
 
 	wxWindow* m_parent;
 	wxString &m_site_path;
-	const CServer* m_server;
+	CServer const* m_server;
 
-	wxTreeCtrl *m_pTree;
+	wxTreeCtrl *m_pTree{};
 	wxTreeItemId m_bookmarks_global;
 	wxTreeItemId m_bookmarks_site;
+
+	bool m_is_deleting{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSelChanging(wxTreeEvent& event);
