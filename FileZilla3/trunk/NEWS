@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.11.0.1 (2015-05-22)
+
+! Reject Diffie-Hellman Groups smaller than 1024 bits when using FTP over TLS to protect against the Logjam attack
+- Do not bind the source IP address of the data connection if the server is not configured properly
+- Deleting bookmarks from the bookmarks dialog no longer deletes the wrong bookmark
+- Fixed CPU compatibility issues on 64bit binaries
+
 3.11.0 (2015-05-19)
 
 - Ensure the title bar is at least partially inside the screen boundary when restoring a saved window position
