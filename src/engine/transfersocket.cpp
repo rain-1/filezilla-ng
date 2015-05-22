@@ -497,15 +497,14 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 											 host, port,
 											 controlSocket_.m_pProxyBackend->GetUser(), controlSocket_.m_pProxyBackend->GetPass());
 
-		if (res != EINPROGRESS)
-		{
+		if (res != EINPROGRESS) {
 			ResetSocket();
 			return false;
 		}
 		int error;
 		host = controlSocket_.m_pSocket->GetPeerIP();
 		port = controlSocket_.m_pSocket->GetRemotePort(error);
-		if( host.empty() || port < 1 ) {
+		if (host.empty() || port < 1) {
 			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Could not get peer address of control connection."));
 			ResetSocket();
 			return false;
@@ -514,7 +513,29 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 
 	SetSocketBufferSizes(m_pSocket);
 
-	int res = m_pSocket->Connect(host, port, CSocket::unspec, controlSocket_.m_pSocket->GetLocalIP());
+	// Try to bind the source IP of the data connection to the same IP as the control connection.
+	// We can do so either if 
+	// 1) the destination IP of the data connection matches peer IP of the control connection or
+	// 2) we are using a proxy.
+	//
+	// In case destination IPs of control and data connection are different, do not bind to the
+	// same source.
+
+	wxString bindAddress;
+	if (m_pProxyBackend) {
+		bindAddress = controlSocket_.m_pSocket->GetLocalIP();
+	}
+	else {
+		wxString peerControlIP = controlSocket_.m_pSocket->GetPeerIP(true);
+		if (peerControlIP == host) {
+			bindAddress = controlSocket_.m_pSocket->GetLocalIP();
+		}
+		else {
+			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Destination IP of data connection does not match peer IP of control connection. Not binding source address of data connection."));
+		}
+	}
+
+	int res = m_pSocket->Connect(host, port, CSocket::unspec, bindAddress);
 	if (res && res != EINPROGRESS) {
 		ResetSocket();
 		return false;

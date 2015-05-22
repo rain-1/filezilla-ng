@@ -3698,30 +3698,25 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	pData->host = pData-> host.Left(i);
 	pData->host.Replace(_T(","), _T("."));
 
-	if (m_pProxyBackend)
-	{
+	if (m_pProxyBackend) {
 		// We do not have any information about the proxy's inner workings
 		return true;
 	}
 
 	const wxString peerIP = m_pSocket->GetPeerIP();
-	if (!IsRoutableAddress(pData->host, m_pSocket->GetAddressFamily()) && IsRoutableAddress(peerIP, m_pSocket->GetAddressFamily()))
-	{
-		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive)
-		{
+	if (!IsRoutableAddress(pData->host, m_pSocket->GetAddressFamily()) && IsRoutableAddress(peerIP, m_pSocket->GetAddressFamily())) {
+		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
 			pData->host = peerIP;
 		}
-		else
-		{
+		else {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Passive mode failed."));
 			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
 			return false;
 		}
 	}
-	else if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2)
-	{
+	else if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) == 2) {
 		// Always use server address
 		pData->host = peerIP;
 	}
