@@ -1004,6 +1004,11 @@ std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
 	return ret;
 }
 
+bool CTlsSocket::CertificateIsBlacklisted(std::vector<CCertificate> const& certificates)
+{
+	return false;
+}
+
 int CTlsSocket::VerifyCertificate()
 {
 	if (m_tlsState != TlsState::handshake) {
@@ -1011,6 +1016,7 @@ int CTlsSocket::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
+	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 	m_tlsState = TlsState::verifycert;
 
 	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509) {
@@ -1075,6 +1081,11 @@ int CTlsSocket::VerifyCertificate()
 		++cert_list;
 	}
 
+	if (CertificateIsBlacklisted(certificates)) {
+		Failure(0, true);
+		return FZ_REPLY_ERROR;
+	}
+
 	CCertificateNotification *pNotification = new CCertificateNotification(
 		m_pOwner->GetCurrentServer()->GetHost(),
 		m_pOwner->GetCurrentServer()->GetPort(),
@@ -1085,8 +1096,6 @@ int CTlsSocket::VerifyCertificate()
 		certificates);
 
 	m_pOwner->SendAsyncRequest(pNotification);
-
-	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 
 	return FZ_REPLY_WOULDBLOCK;
 }
