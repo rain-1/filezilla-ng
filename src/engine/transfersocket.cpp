@@ -526,8 +526,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 		bindAddress = controlSocket_.m_pSocket->GetLocalIP();
 	}
 	else {
-		wxString peerControlIP = controlSocket_.m_pSocket->GetPeerIP(true);
-		if (peerControlIP == host) {
+		if (controlSocket_.m_pSocket->GetPeerIP(true) == host || controlSocket_.m_pSocket->GetPeerIP(false) == host) {
 			bindAddress = controlSocket_.m_pSocket->GetLocalIP();
 		}
 		else {
