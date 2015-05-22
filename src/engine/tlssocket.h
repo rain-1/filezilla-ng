@@ -58,6 +58,7 @@ protected:
 	void ContinueShutdown();
 
 	int VerifyCertificate();
+	bool CertificateIsBlacklisted(std::vector<CCertificate> const& certificates);
 
 	TlsState m_tlsState{TlsState::noconn};
 
