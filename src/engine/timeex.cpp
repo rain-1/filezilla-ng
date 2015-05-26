@@ -98,10 +98,10 @@ CDateTime CDateTime::Now()
 
 bool CDateTime::operator<(CDateTime const& op) const
 {
-	if (t_ < 0) {
-		return op.t_ >= 0;
+	if (t_ == invalid) {
+		return op.t_ != invalid;
 	}
-	else if (op.t_ < 0) {
+	else if (op.invalid) {
 		return false;
 	}
 
@@ -139,12 +139,12 @@ bool CDateTime::IsClamped()
 	return ret;
 }
 
-int CDateTime::Compare( CDateTime const& op ) const
+int CDateTime::Compare(CDateTime const& op) const
 {
-	if (t_ < 0) {
-		return (op.t_ < 0) ? 0 : -1;
+	if (t_ == invalid) {
+		return (op.t_ == invalid) ? 0 : -1;
 	}
-	else if (op.t_ < 0) {
+	else if (op.t_ == invalid) {
 		return 1;
 	}
 
@@ -437,7 +437,7 @@ bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 		int64_t t = make_int64_t(ft.dwHighDateTime, ft.dwLowDateTime);
 		t /= 10000; // Convert hundreds of nanoseconds to milliseconds.
 		t -= EPOCH_OFFSET_IN_MSEC;
-		if (t >= 0) {
+		if (t != invalid) {
 			t_ = t;
 			a_ = a;
 			TIME_ASSERT(IsClamped());
@@ -513,13 +513,13 @@ bool CDateTime::ImbueTime(int hour, int minute, int second, int millisecond)
 
 bool CDateTime::IsValid() const
 {
-	return t_ >= 0;
+	return t_ != invalid;
 }
 
 void CDateTime::clear()
 {
 	a_ = days;
-	t_ = -1;
+	t_ = invalid;
 }
 
 #ifdef __VISUALC__

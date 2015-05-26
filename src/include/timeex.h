@@ -6,6 +6,8 @@
 #include <chrono>
 #include <ctime>
 
+#include <limits>
+
 #if HAVE_UNSTEADY_STEADY_CLOCK
 #include <sys/time.h>
 #endif
@@ -13,7 +15,7 @@
 class duration;
 
 // Represents a point of time in wallclock.
-// Internal representation is in millsieconds since 1970-01-01 00:00:00.000 UTC [*]
+// Internal representation is in milliseconds since 1970-01-01 00:00:00.000 UTC [*]
 //
 // As time may come from different sources that have different accuracy/precision,
 // this class keeps track of accuracy information.
@@ -113,7 +115,9 @@ private:
 
 	bool IsClamped();
 
-	int64_t t_{-1};
+	int64_t const invalid = std::numeric_limits<int64_t>::min();
+
+	int64_t t_{invalid};
 	Accuracy a_;
 };
 
