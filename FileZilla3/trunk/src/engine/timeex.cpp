@@ -101,7 +101,7 @@ bool CDateTime::operator<(CDateTime const& op) const
 	if (t_ == invalid) {
 		return op.t_ != invalid;
 	}
-	else if (op.invalid) {
+	else if (op.t_ == invalid) {
 		return false;
 	}
 
