@@ -512,6 +512,11 @@ int CFileZillaEnginePrivate::ContinueConnect()
 {
 	scoped_lock lock(mutex_);
 
+	if (!m_pCurrentCommand || m_pCurrentCommand->GetId() != Command::connect) {
+		m_pLogging->LogMessage(MessageType::Debug_Warning, _T("CFileZillaEnginePrivate::ContinueConnect called without pending Command::connect"));
+		return ResetOperation(FZ_REPLY_INTERNALERROR);
+	}
+
 	const CConnectCommand *pConnectCommand = static_cast<CConnectCommand *>(m_pCurrentCommand.get());
 	const CServer& server = pConnectCommand->GetServer();
 	unsigned int delay = GetRemainingReconnectDelay(server);
