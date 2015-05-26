@@ -598,6 +598,9 @@ int CFileZillaEnginePrivate::CheckCommandPreconditions(CCommand const& command, 
 	else if (command.GetId() != Command::connect && command.GetId() != Command::disconnect && !IsConnected()) {
 		return FZ_REPLY_NOTCONNECTED;
 	}
+	else if (command.GetId() == Command::connect && m_pControlSocket) {
+		return FZ_REPLY_ALREADYCONNECTED;
+	}
 	return FZ_REPLY_OK;
 }
 
