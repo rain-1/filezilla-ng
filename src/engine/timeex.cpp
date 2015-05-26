@@ -453,6 +453,9 @@ bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 bool CDateTime::Set(tm& t, Accuracy a, Zone z)
 {
 	time_t tt;
+
+	errno = 0;
+
 	if (a >= hours && z == local) {
 		 tt = mktime(&t);
 	}
@@ -460,7 +463,7 @@ bool CDateTime::Set(tm& t, Accuracy a, Zone z)
 		tt = timegm(&t);
 	}
 
-	if (tt != time_t(-1)) {
+	if (tt != time_t(-1) || !errno) {
 		t_ = static_cast<int64_t>(tt) * 1000;
 		a_ = a;
 
