@@ -296,11 +296,9 @@ int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
 
 int CFileZillaEnginePrivate::Disconnect(CDisconnectCommand const&)
 {
-	if (!IsConnected())
-		return FZ_REPLY_OK;
-
-	int res = m_pControlSocket->Disconnect();
-	if (res == FZ_REPLY_OK) {
+	int res = FZ_REPLY_OK;
+	if (m_pControlSocket) {
+		res = m_pControlSocket->Disconnect();
 		m_pControlSocket.reset();
 	}
 
