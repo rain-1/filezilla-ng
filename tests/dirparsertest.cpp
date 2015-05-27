@@ -1323,32 +1323,32 @@ void CDirectoryListingParserTest::InitEntries()
 			DEFAULT
 		});
 
-		m_entries.push_back((t_entry){
-			"size=1365694195;type=file;modify=20090722092510;\tadsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file",
-			{
-				_T("adsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file"),
-				1365694195,
-				R(),
-				R(),
-				0,
-				O(),
-				CDateTime(CDateTime::utc, 2009, 7, 22, 9, 25, 10)
-			},
-			DEFAULT
-		});
+	m_entries.push_back((t_entry){
+		"size=1365694195;type=file;modify=20090722092510;\tadsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file",
+		{
+			_T("adsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file"),
+			1365694195,
+			R(),
+			R(),
+			0,
+			O(),
+			CDateTime(CDateTime::utc, 2009, 7, 22, 9, 25, 10)
+		},
+		DEFAULT
+	});
 
 	// MVS entry with a large number of used blocks:
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
 	m_entries.push_back((t_entry){
-			"WYOSPT 3420   2003/05/21  1 ????  FB      80  8053  PS  79-MVS.FILE",
-			{
-				_T("79-MVS.FILE"),
-				100,
-				R(),
-				R(),
-				0,
-				O(),
-				CDateTime(CDateTime::utc, 2003, 5, 21)
+		"WYOSPT 3420   2003/05/21  1 ????  FB      80  8053  PS  79-MVS.FILE",
+		{
+			_T("79-MVS.FILE"),
+			100,
+			R(),
+			R(),
+			0,
+			O(),
+			CDateTime(CDateTime::utc, 2003, 5, 21)
 		},
 		DEFAULT
 	});
@@ -1357,15 +1357,15 @@ void CDirectoryListingParserTest::InitEntries()
 	// https://forum.filezilla-project.org/viewtopic.php?t=21667
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
 	m_entries.push_back((t_entry){
-			"GISBWI 3390   2011/08/25  2 ++++  FB     904 18080  PS  80-MVS.FILE",
-			{
-				_T("80-MVS.FILE"),
-				100,
-				R(),
-				R(),
-				0,
-				O(),
-				CDateTime(CDateTime::utc, 2011, 8, 25)
+		"GISBWI 3390   2011/08/25  2 ++++  FB     904 18080  PS  80-MVS.FILE",
+		{
+			_T("80-MVS.FILE"),
+			100,
+			R(),
+			R(),
+			0,
+			O(),
+			CDateTime(CDateTime::utc, 2011, 8, 25)
 		},
 		DEFAULT
 	});
@@ -1374,29 +1374,44 @@ void CDirectoryListingParserTest::InitEntries()
 	// https://forum.filezilla-project.org/viewtopic.php?t=19374 for reference.
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
 	m_entries.push_back((t_entry){
-			"WYOSPT 3420   2003/05/21  1 3 U 6447    6447  PO-E 81-MVS.DIR",
-			{
-				_T("81-MVS.DIR"),
-				-1,
-				R(),
-				R(),
-				CDirentry::flag_dir,
-				O(),
-				CDateTime(CDateTime::utc, 2003, 5, 21)
+		"WYOSPT 3420   2003/05/21  1 3 U 6447    6447  PO-E 81-MVS.DIR",
+		{
+			_T("81-MVS.DIR"),
+			-1,
+			R(),
+			R(),
+			CDirentry::flag_dir,
+			O(),
+			CDateTime(CDateTime::utc, 2003, 5, 21)
 		},
 		DEFAULT
 	});
 
 	m_entries.push_back((t_entry){
-			"drwxrwxrwx   1 0        0               0 29 Jul 02:27 2014 Invoices",
-			{
-				_T("2014 Invoices"),
-				0,
-				R(_T("drwxrwxrwx")),
-				R(_T("0 0")),
-				CDirentry::flag_dir,
-				O(),
-				CDateTime(CDateTime::utc, calcYear(7, 29), 7, 29, 2, 27)
+		"drwxrwxrwx   1 0        0               0 29 Jul 02:27 2014 Invoices",
+		{
+			_T("2014 Invoices"),
+			0,
+			R(_T("drwxrwxrwx")),
+			R(_T("0 0")),
+			CDirentry::flag_dir,
+			O(),
+			CDateTime(CDateTime::utc, calcYear(7, 29), 7, 29, 2, 27)
+		},
+		DEFAULT
+	});
+
+
+	m_entries.push_back((t_entry){
+		"Type=file;mOdIfY=19681105165215;size=1234; MLSD pre-epoch",
+		{
+			_T("MLSD pre-epoch"),
+			1234,
+			R(),
+			R(),
+			0,
+			O(),
+			CDateTime(CDateTime::utc, 1968, 11, 5, 16, 52, 15)
 		},
 		DEFAULT
 	});
