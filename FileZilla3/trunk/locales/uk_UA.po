@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-12 15:30+0200\n"
-"PO-Revision-Date: 2015-04-29 18:21+0200\n"
+"PO-Revision-Date: 2015-05-28 15:37+0200\n"
 "Last-Translator: Igor Chomko <igorchomko@gmail.com>\n"
 "Language-Team: Igor Chomko <igorchomko@gmail.com>\n"
 "Language: uk_UA\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.7.6\n"
+"X-Generator: Poedit 1.8.1\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 948,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -778,9 +778,8 @@ msgid "&Quickconnect bar"
 msgstr "&Панель швидкого з'єднання"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1489
-#, fuzzy
 msgid "&Quickconnect history"
-msgstr "Очистити &історію Швидкого з'єднання"
+msgstr "&Історія Швидкого з'єднання"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:409
 msgid "&Read"
@@ -791,9 +790,8 @@ msgid "&Reconnect"
 msgstr "&Відновити з'єднання"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1496
-#, fuzzy
 msgid "&Reconnect information"
-msgstr "Очистити &інформацію повторних з'єднань"
+msgstr "&Інформація повторного з'єднання"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:61
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:613
@@ -941,9 +939,8 @@ msgid "&Show timestamps in message log"
 msgstr "&Показати часові позначки в журналі повідомлень"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1502
-#, fuzzy
 msgid "&Site Manager entries"
-msgstr "Введені дані &в Сайт Менеджер"
+msgstr "&Записи в Сайт Менеджері"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:7
 msgid "&Site Manager..."
@@ -1969,9 +1966,8 @@ msgid "Case sensitive (default)"
 msgstr "Чутливий до регістру (типово)"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1482
-#, fuzzy
 msgid "Categories to clear"
-msgstr "Категорії"
+msgstr "Категорії, щоб очистити"
 
 #: ../../locales/../src/interface/statusbar.cpp:502
 msgid "Certificate and session data are not available yet."
