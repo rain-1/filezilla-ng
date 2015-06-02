@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.11.0.2 (2015-06-02)
+
+- Fixed a potential crash if a connection gets remotely closed in the same moment a new connection is to be opened
+- Improved compatibility with servers sending pre-epoch timestamps
+- Fixed pt_BR translation
+
 3.11.0.1 (2015-05-22)
 
 ! Reject Diffie-Hellman Groups smaller than 1024 bits when using FTP over TLS to protect against the Logjam attack
