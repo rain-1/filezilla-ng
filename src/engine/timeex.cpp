@@ -336,7 +336,7 @@ bool CDateTime::Set(Zone z, int year, int month, int day, int hour, int minute, 
 
 bool CDateTime::Set(wxString const& str, Zone z)
 {
-	wxChar const* it = str;
+	wxChar const* it = str.c_str();
 	wxChar const* end = it + str.size();
 
 #ifdef __WXMSW__
