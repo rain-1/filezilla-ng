@@ -16,33 +16,46 @@ void CView::SetStatusBar(wxStatusBar* pStatusBar)
 	m_pStatusBar = pStatusBar;
 }
 
+void CView::SetFooter(wxWindow* footer)
+{
+	m_pFooter = footer;
+}
+
+void CView::Arrange(wxWindow* child, wxRect& clientRect, bool top)
+{
+	if (child && child->IsShown()) {
+		int const childHeight = child->GetSize().GetHeight();
+
+		wxRect childRect = clientRect;
+		childRect.SetHeight(childHeight);
+
+		if (!top) {
+			childRect.SetTop(clientRect.GetBottom() - childHeight);
+		}
+		else {
+			clientRect.SetTop(childHeight);
+		}
+		clientRect.SetHeight(clientRect.GetHeight() - childHeight);
+
+		child->SetSize(childRect);
+#ifdef __WXMSW__
+		child->Refresh();
+#endif
+	}
+}
+
 void CView::OnSize(wxSizeEvent&)
 {
 	wxSize size = GetClientSize();
 	wxRect rect(size);
-	if (m_pHeader) {
-		wxRect headerRect = rect;
-		headerRect.SetHeight(m_pHeader->GetSize().GetHeight());
-		m_pHeader->SetSize(headerRect);
-		rect.SetHeight(rect.GetHeight() - headerRect.GetHeight());
-		rect.SetY(headerRect.GetHeight());
-	}
-	if (m_pStatusBar && m_pStatusBar->IsShown()) {
-		const int status_height = m_pStatusBar->GetSize().GetHeight();
-		rect.height -= status_height;
 
-		wxRect status_rect = rect;
-		status_rect.y += rect.height;
-		status_rect.height = status_height;
-		m_pStatusBar->SetSize(status_rect);
-#ifdef __WXMSW__
-		m_pStatusBar->Update();
-#endif
-	}
-	if (!m_pWnd)
-		return;
+	Arrange(m_pHeader, rect, true);
+	Arrange(m_pFooter, rect, false);
+	Arrange(m_pStatusBar, rect, false);
 
-	m_pWnd->SetSize(rect);
+	if (m_pWnd) {
+		m_pWnd->SetSize(rect);
+	}
 }
 
 void CView::SetHeader(CViewHeader* pWnd)

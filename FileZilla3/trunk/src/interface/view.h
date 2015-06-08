@@ -14,12 +14,18 @@ public:
 	void SetStatusBar(wxStatusBar* pStatusBar);
 	wxStatusBar* GetStatusBar() { return m_pStatusBar; }
 
+	void SetFooter(wxWindow* footer);
+
 protected:
+	void Arrange(wxWindow* child, wxRect& clientRect, bool top);
+
 	void FixTabOrder();
 
 	wxWindow* m_pWnd{};
 	CViewHeader* m_pHeader{};
 	wxStatusBar* m_pStatusBar{};
+
+	wxWindow* m_pFooter{};
 
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent&);
