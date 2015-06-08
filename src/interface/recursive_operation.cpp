@@ -51,11 +51,13 @@ void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, const CSer
 	if ((mode == recursive_download || mode == recursive_addtoqueue || mode == recursive_download_flatten || mode == recursive_addtoqueue_flatten) && !m_pQueue)
 		return;
 
-	if (m_dirsToVisit.empty())
-	{
+	if (m_dirsToVisit.empty()) {
 		// Nothing to do in this case
 		return;
 	}
+
+	m_processedFiles = 0;
+	m_processedDirectories = 0;
 
 	m_operationMode = mode;
 	m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
@@ -99,11 +101,9 @@ bool CRecursiveOperation::NextOperation()
 	if (m_operationMode == recursive_none)
 		return false;
 
-	while (!m_dirsToVisit.empty())
-	{
+	while (!m_dirsToVisit.empty()) {
 		const CNewDir& dirToVisit = m_dirsToVisit.front();
-		if (m_operationMode == recursive_delete && !dirToVisit.doVisit)
-		{
+		if (m_operationMode == recursive_delete && !dirToVisit.doVisit) {
 			m_pState->m_pCommandQueue->ProcessCommand(new CRemoveDirCommand(dirToVisit.parent, dirToVisit.subdir));
 			m_dirsToVisit.pop_front();
 			continue;
@@ -121,8 +121,7 @@ bool CRecursiveOperation::NextOperation()
 
 bool CRecursiveOperation::BelowRecursionRoot(const CServerPath& path, CNewDir &dir)
 {
-	if (!dir.start_dir.empty())
-	{
+	if (!dir.start_dir.empty()) {
 		if (path.IsSubdirOf(dir.start_dir, false))
 			return true;
 		else
@@ -137,8 +136,7 @@ bool CRecursiveOperation::BelowRecursionRoot(const CServerPath& path, CNewDir &d
 	if (path == m_startDir && m_allowParent)
 		return true;
 
-	if (dir.link == 2)
-	{
+	if (dir.link == 2) {
 		dir.start_dir = path;
 		return true;
 	}
@@ -194,11 +192,12 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	}
 
 	// Check if we have already visited the directory
-	if (!m_visitedDirs.insert(pDirectoryListing->path).second)
-	{
+	if (!m_visitedDirs.insert(pDirectoryListing->path).second) {
 		NextOperation();
 		return;
 	}
+
+	++m_processedDirectories;
 
 	const CServer* pServer = m_pState->GetServer();
 	wxASSERT(pServer);
@@ -234,6 +233,10 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 		}
 		else if (filter.FilenameFiltered(m_filters, entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
 			continue;
+
+		if (!entry.is_dir()) {
+			++m_processedFiles;
+		}
 
 		if (entry.is_dir() && (!entry.is_link() || m_operationMode != recursive_delete)) {
 			if (dir.recurse) {
