@@ -33,6 +33,8 @@ public:
 	void AddDirectoryToVisitRestricted(const CServerPath& path, const wxString& restrict, bool recurse);
 
 	OperationMode GetOperationMode() const { return m_operationMode; }
+	int64_t GetProcessedFiles() const { return m_processedFiles; }
+	int64_t GetProcessedDirectories() const { return m_processedDirectories; }
 
 	// Needed for recursive_chmod
 	void SetChmodDialog(CChmodDialog* pChmodDialog);
@@ -93,6 +95,9 @@ protected:
 	std::vector<CFilter> m_filters;
 
 	friend class CCommandQueue;
+
+	uint64_t m_processedFiles{};
+	uint64_t m_processedDirectories{};
 };
 
 #endif //__RECURSIVE_OPERATION_H__
