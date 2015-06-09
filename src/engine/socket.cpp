@@ -58,7 +58,10 @@ union sockaddr_u
 #define WAIT_EVENTCOUNT 5
 
 class CSocketThread;
-static std::list<CSocketThread*> waiting_socket_threads;
+namespace {
+static std::vector<CSocketThread*> waiting_socket_threads;
+static mutex waiting_socket_threads_mutex{false};
+};
 
 struct socket_event_type;
 typedef CEvent<socket_event_type> CInternalSocketEvent;
@@ -905,11 +908,12 @@ void CSocket::DetachThread()
 			l.unlock();
 			delete m_pSocketThread;
 		}
-		else
-		{
+		else {
 			m_pSocketThread->m_quit = true;
 			m_pSocketThread->WakeupThread(l);
 			l.unlock();
+
+			scoped_lock wl(waiting_socket_threads_mutex);
 			waiting_socket_threads.push_back(m_pSocketThread);
 		}
 	}
@@ -1184,26 +1188,24 @@ CSocket::SocketState CSocket::GetState()
 	return state;
 }
 
-bool CSocket::Cleanup(bool force)
+void CSocket::Cleanup(bool force)
 {
+	scoped_lock wl(waiting_socket_threads_mutex);
 	auto iter = waiting_socket_threads.begin();
-	while (iter != waiting_socket_threads.end()) {
-		auto current = iter++;
-		CSocketThread* pThread = *current;
+	for (; iter != waiting_socket_threads.end(); ++iter) {
+		CSocketThread *const pThread = *iter;
 
-		{
+		if (!force) {
 			scoped_lock l(pThread->m_sync);
-			if (!force && !pThread->m_finished) {
-				continue;
+			if (!pThread->m_finished) {
+				break;
 			}
 		}
 
 		pThread->Wait(wxTHREAD_WAIT_BLOCK);
 		delete pThread;
-		waiting_socket_threads.erase(current);
 	}
-
-	return false;
+	waiting_socket_threads.erase(waiting_socket_threads.begin(), iter);
 }
 
 int CSocket::Read(void* buffer, unsigned int size, int& error)
