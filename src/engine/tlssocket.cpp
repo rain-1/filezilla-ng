@@ -1016,7 +1016,6 @@ int CTlsSocket::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
-	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 	m_tlsState = TlsState::verifycert;
 
 	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509) {
@@ -1067,6 +1066,8 @@ int CTlsSocket::VerifyCertificate()
 			return FZ_REPLY_ERROR;
 		return FZ_REPLY_OK;
 	}
+
+	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 
 	std::vector<CCertificate> certificates;
 	for (unsigned int i = 0; i < cert_list_size; ++i) {
