@@ -116,7 +116,7 @@ public:
 	void SetEventHandler(CEventHandler* pEvtHandler);
 	CEventHandler* GetEventHandler() { return m_pEvtHandler; }
 
-	static bool Cleanup(bool force);
+	static void Cleanup(bool force);
 
 	static wxString AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
 	static wxString AddressToString(char const* buf, int buf_len);
