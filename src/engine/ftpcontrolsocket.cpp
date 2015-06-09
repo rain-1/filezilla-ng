@@ -16,7 +16,6 @@
 
 #include <wx/filename.h>
 #include <wx/log.h>
-#include <wx/regex.h>
 #include <wx/tokenzr.h>
 
 #include <algorithm>
@@ -3672,16 +3671,17 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 {
 	// Validate ip address
-	wxString digit = _T("0*[0-9]{1,3}");
-	const wxChar* dot = _T(",");
-	wxString exp = _T("( |\\()(") + digit + dot + digit + dot + digit + dot + digit + dot + digit + dot + digit + _T(")( |\\)|$)");
-	wxRegEx regex;
-	regex.Compile(exp);
+	if (!m_pasvReplyRegex.IsValid()) {
+		wxString digit = _T("0*[0-9]{1,3}");
+		const wxChar* dot = _T(",");
+		wxString exp = _T("( |\\()(") + digit + dot + digit + dot + digit + dot + digit + dot + digit + dot + digit + _T(")( |\\)|$)");
+		m_pasvReplyRegex.Compile(exp);
+	}
 
-	if (!regex.Matches(m_Response))
+	if (!m_pasvReplyRegex.Matches(m_Response))
 		return false;
 
-	pData->host = regex.GetMatch(m_Response, 2);
+	pData->host = m_pasvReplyRegex.GetMatch(m_Response, 2);
 
 	int i = pData->host.Find(',', true);
 	long number = 0;
@@ -3720,7 +3720,6 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 		// Always use server address
 		pData->host = peerIP;
 	}
-
 
 	return true;
 }
