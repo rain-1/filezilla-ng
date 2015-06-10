@@ -61,6 +61,7 @@ void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, const CSer
 
 	m_operationMode = mode;
 	m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+	m_pState->NotifyHandlers(STATECHANGE_RECURSION_STATUS);
 
 	m_startDir = startDir;
 
@@ -309,6 +310,8 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	if (m_operationMode == recursive_delete && !filesToDelete.empty())
 		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, std::move(filesToDelete)));
 
+	m_pState->NotifyHandlers(STATECHANGE_RECURSION_STATUS);
+
 	NextOperation();
 }
 
@@ -324,16 +327,15 @@ void CRecursiveOperation::SetChmodDialog(CChmodDialog* pChmodDialog)
 
 void CRecursiveOperation::StopRecursiveOperation()
 {
-	if (m_operationMode != recursive_none)
-	{
+	if (m_operationMode != recursive_none) {
 		m_operationMode = recursive_none;
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+		m_pState->NotifyHandlers(STATECHANGE_RECURSION_STATUS);
 	}
 	m_dirsToVisit.clear();
 	m_visitedDirs.clear();
 
-	if (m_pChmodDlg)
-	{
+	if (m_pChmodDlg) {
 		m_pChmodDlg->Destroy();
 		m_pChmodDlg = 0;
 	}
