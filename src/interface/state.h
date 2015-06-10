@@ -28,6 +28,8 @@ enum t_statechange_notifications
 	STATECHANGE_SYNC_BROWSE,
 	STATECHANGE_COMPARISON,
 
+	STATECHANGE_RECURSION_STATUS,
+
 	/* Global notifications */
 	STATECHANGE_QUEUEPROCESSING,
 	STATECHANGE_NEWCONTEXT, /* New context created */
@@ -147,7 +149,7 @@ public:
 
 	CRecursiveOperation* GetRecursiveOperationHandler() { return m_pRecursiveOperation; }
 
-	void NotifyHandlers(enum t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
+	void NotifyHandlers(enum t_statechange_notifications notification, wxString const& data = wxString(), const void* data2 = 0);
 
 	bool SuccessfulConnect() const { return m_successful_connect; }
 	void SetSuccessfulConnect() { m_successful_connect = true; }

@@ -2001,13 +2001,11 @@ void CRemoteListView::OnStateChange(CState* pState, enum t_statechange_notificat
 		SetDirectoryListing(pState->GetRemoteDir());
 	else if (notification == STATECHANGE_REMOTE_DIR_MODIFIED)
 		SetDirectoryListing(pState->GetRemoteDir());
-	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR)
-	{
+	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR) {
 		wxASSERT(data2);
 		LinkIsNotDir(*(CServerPath*)data2, data);
 	}
-	else
-	{
+	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
 		ApplyCurrentFilter();
 	}
@@ -2016,8 +2014,7 @@ void CRemoteListView::OnStateChange(CState* pState, enum t_statechange_notificat
 void CRemoteListView::SetInfoText()
 {
 	wxString text;
-	if (!IsComparing())
-	{
+	if (!IsComparing()) {
 		if (!m_pDirectoryListing)
 			text = _("Not connected to any server");
 		else if (m_pDirectoryListing->failed())
@@ -2026,15 +2023,13 @@ void CRemoteListView::SetInfoText()
 			text = _("Empty directory listing");
 	}
 
-	if (text.empty())
-	{
+	if (text.empty()) {
 		delete m_pInfoText;
 		m_pInfoText = 0;
 		return;
 	}
 
-	if (!m_pInfoText)
-	{
+	if (!m_pInfoText) {
 		m_pInfoText = new CInfoText(this, text);
 #ifdef __WXMSW__
 		if (GetLayoutDirection() != wxLayout_RightToLeft)

@@ -195,6 +195,7 @@
     <ClCompile Include="menu_bar.cpp" />
     <ClCompile Include="netconfwizard.cpp" />
     <ClCompile Include="Options.cpp" />
+    <ClCompile Include="recursive_operation_status.cpp" />
     <ClCompile Include="settings\optionspage.cpp" />
     <ClCompile Include="settings\optionspage_connection.cpp" />
     <ClCompile Include="settings\optionspage_connection_active.cpp" />
@@ -305,6 +306,7 @@
     <ClInclude Include="menu_bar.h" />
     <ClInclude Include="netconfwizard.h" />
     <ClInclude Include="Options.h" />
+    <ClInclude Include="recursive_operation_status.h" />
     <ClInclude Include="settings\optionspage.h" />
     <ClInclude Include="settings\optionspage_connection.h" />
     <ClInclude Include="settings\optionspage_connection_active.h" />

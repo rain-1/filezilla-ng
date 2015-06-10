@@ -7,7 +7,6 @@
 #include "queue.h"
 #include "filezillaapp.h"
 #include "recursive_operation.h"
-#include "statusbar.h"
 #include "local_filesys.h"
 #include "listingcomparison.h"
 
@@ -314,8 +313,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 		if (modified)
 			return false;
 
-		if (m_pDirectoryListing)
-		{
+		if (m_pDirectoryListing) {
 			m_pDirectoryListing = 0;
 			NotifyHandlers(STATECHANGE_REMOTE_DIR);
 		}
@@ -356,8 +354,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 
 	if (m_sync_browse.is_changing && !modified) {
 		m_sync_browse.is_changing = false;
-		if (m_pDirectoryListing->path != m_sync_browse.remote_root && !m_pDirectoryListing->path.IsSubdirOf(m_sync_browse.remote_root, false))
-		{
+		if (m_pDirectoryListing->path != m_sync_browse.remote_root && !m_pDirectoryListing->path.IsSubdirOf(m_sync_browse.remote_root, false)) {
 			SetSyncBrowse(false);
 			wxString msg = wxString::Format(_("Current remote directory (%s) is not below the synchronization root (%s).\nSynchronized browsing has been disabled."),
 					m_pDirectoryListing->path.GetPath(),
@@ -638,7 +635,7 @@ void CState::UnblockHandlers(enum t_statechange_notifications notification)
 
 }
 
-void CState::NotifyHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
+void CState::NotifyHandlers(enum t_statechange_notifications notification, const wxString& data, const void* data2)
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 

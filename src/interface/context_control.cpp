@@ -9,6 +9,7 @@
 #include "Options.h"
 #include "queue.h"
 #include "recursive_operation.h"
+#include "recursive_operation_status.h"
 #include "RemoteListView.h"
 #include "RemoteTreeView.h"
 #include "sitemanager.h"
@@ -191,6 +192,8 @@ void CContextControl::CreateContextControls(CState* pState)
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
 
+	auto recursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState);
+	context_controls.pRemoteListViewPanel->SetFooter(recursiveStatus);
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);

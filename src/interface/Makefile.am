@@ -63,6 +63,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		quickconnectbar.cpp \
 		recentserverlist.cpp \
 		recursive_operation.cpp \
+		recursive_operation_status.cpp \
 		RemoteListView.cpp \
 		RemoteTreeView.cpp \
 		search.cpp \
@@ -178,6 +179,7 @@ noinst_HEADERS = aboutdialog.h \
 		 quickconnectbar.h \
 		 recentserverlist.h \
 		 recursive_operation.h \
+		 recursive_operation_status.h \
 		 RemoteListView.h \
 		 RemoteTreeView.h \
 		 search.h \
