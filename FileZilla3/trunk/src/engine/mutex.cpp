@@ -5,17 +5,47 @@
 #include <sys/time.h>
 #endif
 
+#ifndef __WXMSW__
+namespace {
+// Static initializers for mutex and condition attributes
+template<int type>
+pthread_mutexattr_t* init_mutexattr()
+{
+	static pthread_mutexattr_t attr;
+	pthread_mutexattr_init(&attr);
+	pthread_mutexattr_settype(&attr, type);
+	return &attr;
+}
+
+pthread_mutexattr_t* get_mutex_attributes(bool recursive)
+{
+	if (recursive) {
+		static pthread_mutexattr_t *attr = init_mutexattr<PTHREAD_MUTEX_RECURSIVE>();
+		return attr;
+	}
+	else {
+		static pthread_mutexattr_t *attr = init_mutexattr<PTHREAD_MUTEX_NORMAL>();
+		return attr;
+	}
+}
+
+pthread_condattr_t* init_condattr()
+{
+	static pthread_condattr_t attr;
+	pthread_condattr_init(&attr);
+	pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
+	return &attr;
+}
+}
+#endif
+
 mutex::mutex(bool recursive)
 {
 #ifdef __WXMSW__
 	(void)recursive; // Critical sections are always recursive
 	InitializeCriticalSection(&m_);
 #else
-	pthread_mutexattr_t attr;
-
-	pthread_mutexattr_init(&attr);
-	pthread_mutexattr_settype(&attr, recursive ? PTHREAD_MUTEX_RECURSIVE : PTHREAD_MUTEX_NORMAL);
-	pthread_mutex_init(&m_, &attr);
+	pthread_mutex_init(&m_, get_mutex_attributes(recursive));
 #endif
 }
 
@@ -53,7 +83,9 @@ condition::condition()
 #ifdef __WXMSW__
 	InitializeConditionVariable(&cond_);
 #else
-	pthread_cond_init(&cond_, 0);
+
+	static pthread_condattr_t *attr = init_condattr();
+	pthread_cond_init(&cond_, attr);
 #endif
 }
 
@@ -89,12 +121,10 @@ bool condition::wait(scoped_lock& l, int timeout_ms)
 #else
 	int res;
 	do {
-		timeval tv = {0, 0};
-		gettimeofday(&tv, 0);
-
 		timespec ts;
-		ts.tv_sec = tv.tv_sec + timeout_ms / 1000;
-		ts.tv_nsec = tv.tv_usec * 1000 + (timeout_ms % 1000) * 1000 * 1000;
+		clock_gettime(CLOCK_MONOTONIC, &ts);
+		ts.tv_sec += timeout_ms / 1000;
+		ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
 		if (ts.tv_nsec > 1000000000ll) {
 			++ts.tv_sec;
 			ts.tv_nsec -= 1000000000ll;
