@@ -10,6 +10,7 @@ class EventloopTest : public CppUnit::TestFixture
 	CPPUNIT_TEST_SUITE(EventloopTest);
 	CPPUNIT_TEST(testSimple);
 	CPPUNIT_TEST(testFilter);
+	CPPUNIT_TEST(testCondition);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -18,6 +19,7 @@ public:
 
 	void testSimple();
 	void testFilter();
+	void testCondition();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EventloopTest);
@@ -189,4 +191,20 @@ void EventloopTest::testFilter()
 	CPPUNIT_ASSERT_EQUAL(t.b_, 16);
 	CPPUNIT_ASSERT_EQUAL(t.c_, 9);
 	CPPUNIT_ASSERT_EQUAL(t.d_, 2);
+}
+
+void EventloopTest::testCondition()
+{
+	// Make sure condition::wait works correctly.
+
+	auto const t1 = CMonotonicClock::now();
+
+	mutex m;
+	condition c;
+
+	scoped_lock l(m);
+	CPPUNIT_ASSERT(!c.wait(l, 200));
+
+	auto const t2 = CMonotonicClock::now();
+	CPPUNIT_ASSERT((t2 - t1) >= duration::from_milliseconds(200));
 }
