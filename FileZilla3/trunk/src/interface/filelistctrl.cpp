@@ -367,7 +367,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	if (m_hasParent)
 		++start;
 	CSortComparisonObject object = GetSortComparisonObject();
-	std::stable_sort(start, m_indexMapping.end(), object);
+	std::sort(start, m_indexMapping.end(), object);
 	object.Destroy();
 
 	if (updateSelections)

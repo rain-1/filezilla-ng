@@ -141,6 +141,8 @@ public:
 // Helper classes for fast sorting using std::sort
 // -----------------------------------------------
 
+class CSearchFileData;
+
 template<typename Listing>
 class CFileListCtrlSort : public CFileListCtrlSortBase
 {
@@ -189,7 +191,8 @@ public:
 		}
 	}
 
-	inline int CmpName(const value_type &data1, const value_type &data2) const
+	template<typename value_type>
+	inline int CmpName(value_type const& data1, value_type const& data2) const
 	{
 		switch (m_nameSortMode)
 		{
@@ -203,6 +206,33 @@ public:
 		case namesort_natural:
 			return CmpNatural(data1.name, data2.name);
 		}
+	}
+
+	template<>
+	inline int CmpName(CSearchFileData const& data1, CSearchFileData const& data2) const
+	{
+		int res;
+		switch (m_nameSortMode)
+		{
+		case namesort_casesensitive:
+			res = CmpCase(data1.name, data2.name);
+
+		default:
+		case namesort_caseinsensitive:
+			res = CmpNoCase(data1.name, data2.name);
+
+		case namesort_natural:
+			res = CmpNatural(data1.name, data2.name);
+		}
+
+		if (!res) {
+			if (data1.path < data2.path)
+				res = -1;
+			else if (data2.path < data1.path)
+				res = 1;
+		}
+
+		return res;
 	}
 
 	inline int CmpSize(const value_type &data1, const value_type &data2) const
@@ -418,7 +448,7 @@ public:
 		if (this->m_listing[a].path != m_fileData[b].path)
 			return false;
 
-		CMP_LESS(CmpName, data1, data2);
+		CMP_LESS(CmpName, static_cast<CDirentry const&>(data1), static_cast<CDirentry const&>(data2));
 	}
 	std::vector<DataEntry>& m_fileData;
 };
