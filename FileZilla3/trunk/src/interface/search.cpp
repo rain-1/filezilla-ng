@@ -225,6 +225,7 @@ bool CSearchDialog::Load()
 	/* XRCed complains if adding a status bar to a dialog, so do it here instead */
 	CFilelistStatusBar* pStatusBar = new CFilelistStatusBar(this);
 	pStatusBar->SetEmptyString(_("No search results"));
+	pStatusBar->SetConnected(true);
 
 	GetSizer()->Add(pStatusBar, 0, wxGROW);
 
