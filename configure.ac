@@ -539,6 +539,8 @@ if test "$buildmain" = "yes"; then
   CHECK_THREADSAFE_GMTIME
   CHECK_INVERSE_GMTIME
 
+  AC_CHECK_FUNCS([clock_gettime])
+  AC_CHECK_DECLS([pthread_condattr_setclock], [], [], [[#include <pthread.h>]])
 
   # SQLite3
   # -------
