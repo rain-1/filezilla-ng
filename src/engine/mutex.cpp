@@ -31,10 +31,14 @@ pthread_mutexattr_t* get_mutex_attributes(bool recursive)
 
 pthread_condattr_t* init_condattr()
 {
+#if HAVE_CLOCK_GETTIME && HAVE_DECL_PTHREAD_CONDATTR_SETCLOCK
 	static pthread_condattr_t attr;
 	pthread_condattr_init(&attr);
 	pthread_condattr_setclock(&attr, CLOCK_MONOTONIC);
 	return &attr;
+#else
+	return 0;
+#endif
 }
 }
 #endif
@@ -120,15 +124,24 @@ bool condition::wait(scoped_lock& l, int timeout_ms)
 	bool const success = SleepConditionVariableCS(&cond_, l.m_, timeout_ms) != 0;
 #else
 	int res;
+	timespec ts;
+#if HAVE_CLOCK_GETTIME && HAVE_DECL_PTHREAD_CONDATTR_SETCLOCK
+	clock_gettime(CLOCK_MONOTONIC, &ts);
+#else
+	timeval tv{};
+	gettimeofday(&tv, 0);
+	ts.tv_sec = tv.tv_sec;
+	ts.tv_nsec = tv.tv_usec * 1000;
+#endif
+
+	ts.tv_sec += timeout_ms / 1000;
+	ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
+	if (ts.tv_nsec > 1000000000ll) {
+		++ts.tv_sec;
+		ts.tv_nsec -= 1000000000ll;
+	}
+
 	do {
-		timespec ts;
-		clock_gettime(CLOCK_MONOTONIC, &ts);
-		ts.tv_sec += timeout_ms / 1000;
-		ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
-		if (ts.tv_nsec > 1000000000ll) {
-			++ts.tv_sec;
-			ts.tv_nsec -= 1000000000ll;
-		}
 		res = pthread_cond_timedwait(&cond_, l.m_, &ts);
 	}
 	while (res == EINTR);
