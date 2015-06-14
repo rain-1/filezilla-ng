@@ -141,7 +141,22 @@ public:
 // Helper classes for fast sorting using std::sort
 // -----------------------------------------------
 
-class CSearchFileData;
+template<typename value_type>
+inline int DoCmpName(value_type const& data1, value_type const& data2, CFileListCtrlSortBase::NameSortMode const nameSortMode)
+{
+	switch (nameSortMode)
+	{
+	case CFileListCtrlSortBase::namesort_casesensitive:
+		return CFileListCtrlSortBase::CmpCase(data1.name, data2.name);
+
+	default:
+	case CFileListCtrlSortBase::namesort_caseinsensitive:
+		return CFileListCtrlSortBase::CmpNoCase(data1.name, data2.name);
+
+	case CFileListCtrlSortBase::namesort_natural:
+		return CFileListCtrlSortBase::CmpNatural(data1.name, data2.name);
+	}
+}
 
 template<typename Listing>
 class CFileListCtrlSort : public CFileListCtrlSortBase
@@ -194,45 +209,7 @@ public:
 	template<typename value_type>
 	inline int CmpName(value_type const& data1, value_type const& data2) const
 	{
-		switch (m_nameSortMode)
-		{
-		case namesort_casesensitive:
-			return CmpCase(data1.name, data2.name);
-
-		default:
-		case namesort_caseinsensitive:
-			return CmpNoCase(data1.name, data2.name);
-
-		case namesort_natural:
-			return CmpNatural(data1.name, data2.name);
-		}
-	}
-
-	template<>
-	inline int CmpName(CSearchFileData const& data1, CSearchFileData const& data2) const
-	{
-		int res;
-		switch (m_nameSortMode)
-		{
-		case namesort_casesensitive:
-			res = CmpCase(data1.name, data2.name);
-
-		default:
-		case namesort_caseinsensitive:
-			res = CmpNoCase(data1.name, data2.name);
-
-		case namesort_natural:
-			res = CmpNatural(data1.name, data2.name);
-		}
-
-		if (!res) {
-			if (data1.path < data2.path)
-				res = -1;
-			else if (data2.path < data1.path)
-				res = 1;
-		}
-
-		return res;
+		return DoCmpName(data1, data2, m_nameSortMode);
 	}
 
 	inline int CmpSize(const value_type &data1, const value_type &data2) const
@@ -267,8 +244,8 @@ public:
 protected:
 	Listing const& m_listing;
 
-	const enum DirSortMode m_dirSortMode;
-	const enum NameSortMode m_nameSortMode;
+	DirSortMode const m_dirSortMode;
+	NameSortMode const m_nameSortMode;
 };
 
 template<class CFileData> class CFileListCtrl;
