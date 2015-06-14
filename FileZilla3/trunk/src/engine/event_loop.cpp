@@ -37,11 +37,11 @@ void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 				cond_.signal(lock);
 			}
 			pending_events_.emplace_back(handler, evt);			
-		}
-		else {
-			delete evt;
+			return;
 		}
 	}
+
+	delete evt;
 }
 
 void CEventLoop::RemoveHandler(CEventHandler* handler)
