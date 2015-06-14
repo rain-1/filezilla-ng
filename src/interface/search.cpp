@@ -20,6 +20,32 @@ public:
 	CServerPath path;
 };
 
+template<>
+inline int DoCmpName(CSearchFileData const& data1, CSearchFileData const& data2, CFileListCtrlSortBase::NameSortMode const nameSortMode)
+{
+	int res;
+	switch (nameSortMode)
+	{
+	case CFileListCtrlSortBase::namesort_casesensitive:
+		res = CFileListCtrlSortBase::CmpCase(data1.name, data2.name);
+	default:
+	case CFileListCtrlSortBase::namesort_caseinsensitive:
+		res = CFileListCtrlSortBase::CmpNoCase(data1.name, data2.name);
+
+	case CFileListCtrlSortBase::namesort_natural:
+		res = CFileListCtrlSortBase::CmpNatural(data1.name, data2.name);
+	}
+
+	if (!res) {
+		if (data1.path < data2.path)
+			res = -1;
+		else if (data2.path < data1.path)
+			res = 1;
+	}
+
+	return res;
+}
+
 class CSearchDialogFileList : public CFileListCtrl<CSearchFileData>
 {
 	friend class CSearchDialog;
