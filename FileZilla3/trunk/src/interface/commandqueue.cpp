@@ -30,13 +30,13 @@ bool CCommandQueue::Idle() const
 	return m_CommandList.empty() && !m_exclusiveEngineLock;
 }
 
-void CCommandQueue::ProcessCommand(CCommand *pCommand)
+void CCommandQueue::ProcessCommand(CCommand *pCommand, CCommandQueue::command_origin origin)
 {
 	if (m_quit) {
 		delete pCommand;
 	}
 
-	m_CommandList.emplace_back(pCommand);
+	m_CommandList.emplace_back(CommandInfo{origin, std::unique_ptr<CCommand>(pCommand)});
 	if (m_CommandList.size() == 1) {
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		ProcessNextCommand();
@@ -67,10 +67,10 @@ void CCommandQueue::ProcessNextCommand()
 	}
 
 	while (!m_CommandList.empty()) {
-		std::unique_ptr<CCommand> const& pCommand = m_CommandList.front();
+		auto const& commandInfo = m_CommandList.front();
 
-		int res = m_pEngine->Execute(*pCommand);
-		ProcessReply(res, pCommand->GetId());
+		int res = m_pEngine->Execute(*commandInfo.command);
+		ProcessReply(res, commandInfo.command->GetId());
 		if (res == FZ_REPLY_WOULDBLOCK) {
 			break;
 		}
@@ -150,7 +150,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 			// Try automatic reconnect
 			const CServer* pServer = m_pState->GetServer();
 			if (pServer) {
-				m_CommandList.emplace_front(make_unique<CConnectCommand>(*pServer));
+				m_CommandList.emplace_front(CommandInfo{normal, make_unique<CConnectCommand>(*pServer)});
 				return;
 			}
 		}
@@ -158,14 +158,13 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 
 	++m_inside_commandqueue;
 
-	auto const& pCommand = m_CommandList.front();
+	auto const& commandInfo = m_CommandList.front();
 
-	if (pCommand->GetId() == Command::list && nReplyCode != FZ_REPLY_OK) {
-		if (nReplyCode & FZ_REPLY_LINKNOTDIR)
-		{
+	if (commandInfo.command->GetId() == Command::list && nReplyCode != FZ_REPLY_OK) {
+		if (nReplyCode & FZ_REPLY_LINKNOTDIR) {
 			// Symbolic link does not point to a directory. Either points to file
 			// or is completely invalid
-			CListCommand* pListCommand = static_cast<CListCommand*>(pCommand.get());
+			CListCommand* pListCommand = static_cast<CListCommand*>(commandInfo.command.get());
 			wxASSERT(pListCommand->GetFlags() & LIST_FLAG_LINK);
 
 			m_pState->LinkIsNotDir(pListCommand->GetPath(), pListCommand->GetSubDir());
@@ -174,13 +173,13 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 			m_pState->ListingFailed(nReplyCode);
 		m_CommandList.pop_front();
 	}
-	else if (nReplyCode == FZ_REPLY_ALREADYCONNECTED && pCommand->GetId() == Command::connect) {
-		m_CommandList.emplace_front(make_unique<CDisconnectCommand>());
+	else if (nReplyCode == FZ_REPLY_ALREADYCONNECTED && commandInfo.command->GetId() == Command::connect) {
+		m_CommandList.emplace_front(CommandInfo{normal, make_unique<CDisconnectCommand>()});
 	}
-	else if (pCommand->GetId() == Command::connect && nReplyCode != FZ_REPLY_OK) {
+	else if (commandInfo.command->GetId() == Command::connect && nReplyCode != FZ_REPLY_OK) {
 		// Remove pending events
 		auto it = ++m_CommandList.begin();
-		while (it != m_CommandList.end() && (*it)->GetId() != Command::connect) {
+		while (it != m_CommandList.end() && it->command->GetId() != Command::connect) {
 			++it;
 		}
 		m_CommandList.erase(m_CommandList.begin(), it);
@@ -189,7 +188,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 		// operation, stop the recursive operation
 		m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	}
-	else if (pCommand->GetId() == Command::connect && nReplyCode == FZ_REPLY_OK) {
+	else if (commandInfo.command->GetId() == Command::connect && nReplyCode == FZ_REPLY_OK) {
 		m_pState->SetSuccessfulConnect();
 		m_CommandList.pop_front();
 	}
