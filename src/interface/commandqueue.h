@@ -11,10 +11,16 @@ DECLARE_EVENT_TYPE(fzEVT_GRANTEXCLUSIVEENGINEACCESS, -1)
 class CCommandQueue
 {
 public:
+	enum command_origin
+	{
+		normal, // Most user actions 
+		recursiveOperation
+	};
+
 	CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState* pState);
 	~CCommandQueue();
 
-	void ProcessCommand(CCommand *pCommand);
+	void ProcessCommand(CCommand *pCommand, command_origin origin = normal);
 	void ProcessNextCommand();
 	bool Idle() const;
 	bool Cancel();
@@ -43,7 +49,11 @@ protected:
 	// Used to make this class reentrance-safe
 	int m_inside_commandqueue{};
 
-	std::deque<std::unique_ptr<CCommand>> m_CommandList;
+	struct CommandInfo {
+		command_origin origin;
+		std::unique_ptr<CCommand> command;
+	};
+	std::deque<CommandInfo> m_CommandList;
 
 	bool m_quit{};
 };
