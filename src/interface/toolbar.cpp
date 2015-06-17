@@ -36,14 +36,14 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 
 	toolbar->m_pMainFrame = pMainFrame;
 
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true, true);
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SERVER, true, true);
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SYNC_BROWSE, true, true);
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_COMPARISON, true, true);
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_APPLYFILTER, true, false);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_REMOTE_IDLE, true);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SERVER, true);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_SYNC_BROWSE, true);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_COMPARISON, true);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_APPLYFILTER, true);
 
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_QUEUEPROCESSING, false, false);
-	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_CHANGEDCONTEXT, false, false);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_QUEUEPROCESSING, false);
+	CContextManager::Get()->RegisterHandler(toolbar, STATECHANGE_CHANGEDCONTEXT, false);
 
 	toolbar->RegisterOption(OPTION_SHOW_MESSAGELOG);
 	toolbar->RegisterOption(OPTION_SHOW_QUEUE);

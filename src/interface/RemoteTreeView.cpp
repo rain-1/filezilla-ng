@@ -248,7 +248,6 @@ CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState* pState
 #endif
 
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_MODIFIED);
 	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
 
 	CreateImageList();
@@ -272,12 +271,10 @@ CRemoteTreeView::~CRemoteTreeView()
 	delete m_pImageList;
 }
 
-void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* v)
 {
 	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(pState->GetRemoteDir(), false);
-	else if (notification == STATECHANGE_REMOTE_DIR_MODIFIED)
-		SetDirectoryListing(pState->GetRemoteDir(), true);
+		SetDirectoryListing(pState->GetRemoteDir(), v ? *reinterpret_cast<bool const*>(v) : false);
 	else if (notification == STATECHANGE_APPLYFILTER)
 		ApplyFilters(false);
 }

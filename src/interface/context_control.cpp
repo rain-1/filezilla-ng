@@ -35,8 +35,8 @@ CContextControl::CContextControl(CMainFrame& mainFrame)
 	, m_mainFrame(mainFrame)
 {
 	wxASSERT(!CContextManager::Get()->HandlerCount(STATECHANGE_CHANGEDCONTEXT));
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, false, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, false);
 }
 
 CContextControl::~CContextControl()

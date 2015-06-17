@@ -11,8 +11,8 @@ CRecursiveOperation::CRecursiveOperation(CState* pState)
 	: CStateEventHandler(pState),
 	  m_operationMode(recursive_none)
 {
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR, false);
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR, false);
+	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
+	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
 }
 
 CRecursiveOperation::~CRecursiveOperation()
@@ -26,16 +26,13 @@ CRecursiveOperation::~CRecursiveOperation()
 
 void CRecursiveOperation::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2)
 {
-	if (notification == STATECHANGE_REMOTE_LINKNOTDIR)
-	{
+	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
+		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
+		ProcessDirectoryListing(listing.get());
+	}
+	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR) {
 		wxASSERT(data2);
 		LinkIsNotDir();
-	}
-	else
-	{
-		wxASSERT(pState);
-		wxASSERT(notification == STATECHANGE_REMOTE_DIR);
-		ProcessDirectoryListing(pState->GetRemoteDir().get());
 	}
 }
 

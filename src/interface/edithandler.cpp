@@ -1431,7 +1431,9 @@ bool CNewAssociationDialog::Run(const wxString &file)
 		m_ext.clear();
 
 	wxStaticText *pDesc = XRCCTRL(*this, "ID_DESC", wxStaticText);
-	pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), m_ext));
+	if (pDesc) {
+		pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), m_ext));
+	}
 
 	bool program_exists = false;
 	wxString cmd = GetSystemOpenCommand(_T("foo.txt"), program_exists);
@@ -1447,17 +1449,14 @@ bool CNewAssociationDialog::Run(const wxString &file)
 	if (!PathExpand(cmd))
 		cmd.clear();
 
-	pDesc = XRCCTRL(*this, "ID_EDITOR_DESC", wxStaticText);
-	if (cmd.empty())
-	{
-		XRCCTRL(*this, "ID_USE_CUSTOM", wxRadioButton)->SetValue(true);
-		XRCCTRL(*this, "ID_USE_EDITOR", wxRadioButton)->Enable(false);
-		pDesc->Hide();
+	if (cmd.empty()) {
+		xrc_call(*this, "ID_USE_CUSTOM", &wxRadioButton::SetValue, true);
+		xrc_call(*this, "ID_USE_EDITOR", &wxRadioButton::Enable, false);
+		xrc_call(*this, "ID_EDITOR_DESC", &wxStaticText::Hide);
 	}
-	else
-	{
-		XRCCTRL(*this, "ID_EDITOR_DESC_NONE", wxStaticText)->Hide();
-		pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), cmd));
+	else {
+		xrc_call(*this, "ID_EDITOR_DESC_NONE", &wxStaticText::Hide);
+		xrc_call(*this, "ID_EDITOR_DESC", &wxStaticText::SetLabel, wxString::Format(pDesc->GetLabel(), cmd));
 	}
 
 	SetCtrlState();
@@ -1473,16 +1472,15 @@ bool CNewAssociationDialog::Run(const wxString &file)
 void CNewAssociationDialog::SetCtrlState()
 {
 	wxRadioButton* pCustom = wxDynamicCast(FindWindow(XRCID("ID_USE_CUSTOM")), wxRadioButton);
-	if (!pCustom)
-	{
+	if (!pCustom) {
 		// Return since it can get called before dialog got fully loaded
 		return;
 	}
 
-	const bool custom = pCustom->GetValue();
+	bool const custom = pCustom->GetValue();
 
-	XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->Enable(custom);
-	XRCCTRL(*this, "ID_BROWSE", wxButton)->Enable(custom);
+	xrc_call(*this, "ID_CUSTOM", &wxTextCtrl::Enable, custom);
+	xrc_call(*this, "ID_BROWSE", &wxButton::Enable, custom);
 }
 
 void CNewAssociationDialog::OnRadioButton(wxCommandEvent& event)

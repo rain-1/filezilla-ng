@@ -397,13 +397,11 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 	const wxString path = fn.GetPath();
 
 	wxDir dir;
-	if (name.empty() || path.empty())
-	{
+	if (name.empty() || path.empty()) {
 		m_oldValue = str;
 		return;
 	}
-	else
-	{
+	else {
 		wxLogNull log;
 		if (!dir.Open(path) || !dir.IsOpened())
 		{
@@ -415,8 +413,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 
 	{
 		wxLogNull noLog;
-		if (!dir.GetFirst(&found, name + _T("*"), wxDIR_DIRS))
-		{
+		if (!dir.GetFirst(&found, name + _T("*"), wxDIR_DIRS)) {
 			m_oldValue = str;
 			return;
 		}
@@ -542,16 +539,13 @@ void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notific
 	(void)notification;
 
 	m_path = pState->GetRemotePath();
-	if (m_path.empty())
-	{
+	if (m_path.empty()) {
 		m_pComboBox->SetValue(_T(""));
 		Disable();
 	}
-	else
-	{
+	else {
 		const CServer* const pServer = pState->GetServer();
-		if (pServer && *pServer != m_lastServer)
-		{
+		if (pServer && *pServer != m_lastServer) {
 			m_pComboBox->Clear();
 			m_recentDirectories.clear();
 			m_sortedRecentDirectories.clear();

@@ -32,6 +32,7 @@ public:
 	void AddDirectoryToVisit(const CServerPath& path, const wxString& subdir, const CLocalPath& localDir = CLocalPath(), bool is_link = false);
 	void AddDirectoryToVisitRestricted(const CServerPath& path, const wxString& restrict, bool recurse);
 
+	bool IsActive() const { return GetOperationMode() != recursive_none; }
 	OperationMode GetOperationMode() const { return m_operationMode; }
 	int64_t GetProcessedFiles() const { return m_processedFiles; }
 	int64_t GetProcessedDirectories() const { return m_processedDirectories; }
@@ -49,6 +50,7 @@ public:
 protected:
 	// Processes the directory listing in case of a recursive operation
 	void ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing);
+
 	bool NextOperation();
 
 	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
