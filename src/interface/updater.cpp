@@ -167,74 +167,6 @@ bool CUpdater::LongTimeSinceLastCheck() const
 	return span.GetDays() >= days;
 }
 
-#if defined(__i386__) || defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86)
-#define HAVE_CPUID
-#endif
-
-#ifdef HAVE_CPUID
-
-#ifdef _MSC_VER
-namespace {
-void cpuid(int f, int sub, int reg[4])
-{
-	__cpuidex(reg, f, sub);
-}
-}
-#else
-#include <cpuid.h>
-namespace {
-void cpuid(int f, int sub, int reg[4])
-{
-	__cpuid_count(f, sub, reg[0], reg[1], reg[2], reg[3]);
-}
-}
-#endif
-
-namespace {
-wxString GetCPUCaps()
-{
-	wxString ret;
-
-	int reg[4];
-	cpuid(0, 0, reg);
-
-	int const max = reg[0];
-
-	// function (aka leave), subfunction (subleave), register, bit, description
-	std::tuple<int, int, int, int, wxString> const caps[] = {
-		std::make_tuple(1, 0, 3, 25, _T("sse")),
-		std::make_tuple(1, 0, 3, 26, _T("sse2")),
-		std::make_tuple(1, 0, 2, 0,  _T("sse3")),
-		std::make_tuple(1, 0, 2, 9,  _T("ssse3")),
-		std::make_tuple(1, 0, 2, 19, _T("sse4.1")),
-		std::make_tuple(1, 0, 2, 20, _T("sse4.2")),
-		std::make_tuple(1, 0, 2, 28, _T("avx")),
-		std::make_tuple(7, 0, 1, 5,  _T("avx2")),
-		std::make_tuple(1, 0, 2, 25, _T("aes")),
-		std::make_tuple(1, 0, 2, 1,  _T("pclmulqdq")),
-		std::make_tuple(1, 0, 2, 30, _T("rdrnd")),
-		std::make_tuple(7, 0, 1, 3,  _T("bmi2")),
-		std::make_tuple(7, 0, 1, 8,  _T("bmi2")),
-		std::make_tuple(7, 0, 1, 19, _T("adx"))
-	};
-
-	for (auto const& cap : caps) {
-		if (max >= std::get<0>(cap)) {
-			cpuid(std::get<0>(cap), std::get<1>(cap), reg);
-			if (reg[std::get<2>(cap)] & (1 << std::get<3>(cap))) {
-				if (!ret.empty()) {
-					ret += ',';
-				}
-				ret += std::get<4>(cap);
-			}
-		}
-	}
-
-	return ret;
-}
-}
-#endif
-
 wxString CUpdater::GetUrl()
 {
 	wxString host = CBuildInfo::GetHostname();
@@ -258,9 +190,10 @@ wxString CUpdater::GetUrl()
 		url += _T("&osarch=32");
 #endif
 
-#ifdef HAVE_CPUID
-	url += _T("&cpuid=") + GetCPUCaps();
-#endif
+	wxString const cpuCaps = CBuildInfo::GetCPUCaps(',');
+	if (!cpuCaps.empty()) {
+		url += _T("&cpuid=") + cpuCaps;
+	}
 
 	return url;
 }

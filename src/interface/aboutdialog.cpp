@@ -3,6 +3,7 @@
 #include "aboutdialog.h"
 #include "buildinfo.h"
 #include "xrc_helper.h"
+#include "Options.h"
 
 #include <misc.h>
 
@@ -58,7 +59,7 @@ bool CAboutDialog::Create(wxWindow* parent)
 		xrc_call(*this, "ID_CFLAGS_DESC", &wxStaticText::Hide);
 	}
 	else {
-		WrapText(this, compilerFlags, 200);
+		WrapText(this, compilerFlags, 250);
 		xrc_call(*this, "ID_CFLAGS", &wxStaticText::SetLabel, compilerFlags);
 	}
 
@@ -99,6 +100,18 @@ bool CAboutDialog::Create(wxWindow* parent)
 	xrc_call(*this, "ID_SYSTEM_PLATFORM", &wxStaticText::Hide);
 	xrc_call(*this, "ID_SYSTEM_PLATFORM_DESC", &wxStaticText::Hide);
 #endif
+
+	wxString cpuCaps = CBuildInfo::GetCPUCaps(' ');
+	if (!cpuCaps.empty()) {
+		WrapText(this, cpuCaps, 250);
+		xrc_call(*this, "ID_SYSTEM_CPU", &wxStaticText::SetLabel, cpuCaps);
+	}
+	else {
+		xrc_call(*this, "ID_SYSTEM_CPU_DESC", &wxStaticText::Hide);
+		xrc_call(*this, "ID_SYSTEM_CPU", &wxStaticText::Hide);
+	}
+
+	xrc_call(*this, "ID_SYSTEM_SETTINGS_DIR", &wxStaticText::SetLabel, COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR));
 
 	GetSizer()->Fit(this);
 	GetSizer()->SetSizeHints(this);
@@ -168,6 +181,16 @@ void CAboutDialog::OnCopy(wxCommandEvent&)
 		text += _T("  Platform:       64-bit system\n");
 	else
 		text += _T("  Platform:       32-bit system\n");
+#endif
+
+	wxString cpuCaps = CBuildInfo::GetCPUCaps(' ');
+	if (!cpuCaps.empty()) {
+		text += _T("  CPU features:   ") + cpuCaps + _T("\n");
+	}
+
+	text += _T("  Settings dir:   ") + COptions::Get()->GetOption(OPTION_DEFAULT_SETTINGSDIR) + _T("\n");
+
+#ifdef __WXMSW__
 	text.Replace(_T("\n"), _T("\r\n"));
 #endif
 
