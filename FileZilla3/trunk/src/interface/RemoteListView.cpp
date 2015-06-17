@@ -360,7 +360,6 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState *pState, CQueueView* 
 	CStateEventHandler(pState)
 {
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_MODIFIED);
 	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
 
@@ -1998,8 +1997,6 @@ void CRemoteListView::OnStateChange(CState* pState, enum t_statechange_notificat
 {
 	wxASSERT(pState);
 	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(pState->GetRemoteDir());
-	else if (notification == STATECHANGE_REMOTE_DIR_MODIFIED)
 		SetDirectoryListing(pState->GetRemoteDir());
 	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR) {
 		wxASSERT(data2);

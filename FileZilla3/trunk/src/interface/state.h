@@ -10,7 +10,7 @@ enum t_statechange_notifications
 	STATECHANGE_NONE, // Used to unregister all notifications
 
 	STATECHANGE_REMOTE_DIR,
-	STATECHANGE_REMOTE_DIR_MODIFIED,
+	STATECHANGE_REMOTE_DIR_OTHER,
 	STATECHANGE_REMOTE_RECV,
 	STATECHANGE_REMOTE_SEND,
 	STATECHANGE_REMOTE_LINKNOTDIR,
@@ -55,7 +55,7 @@ class CContextManager final
 public:
 	// If current_only is set, only notifications from the current (at the time
 	// of notification emission) context is dispatched to the handler.
-	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only, bool blockable);
+	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
 
 	size_t HandlerCount(enum t_statechange_notifications notification) const;
@@ -83,12 +83,11 @@ protected:
 	struct t_handler
 	{
 		CStateEventHandler* pHandler;
-		bool blockable;
 		bool current_only;
 	};
 	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
 
-	void NotifyHandlers(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2, bool blocked);
+	void NotifyHandlers(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	static CContextManager m_the_context_manager;
 };
@@ -127,11 +126,8 @@ public:
 
 	bool RefreshRemote();
 
-	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool blockable = true);
+	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
-
-	void BlockHandlers(enum t_statechange_notifications notification);
-	void UnblockHandlers(enum t_statechange_notifications notification);
 
 	CFileZillaEngine* m_pEngine{};
 	CCommandQueue* m_pCommandQueue{};
@@ -199,10 +195,8 @@ protected:
 	struct t_handler
 	{
 		CStateEventHandler* pHandler;
-		bool blockable;
 	};
 	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
-	bool m_blocked[STATECHANGE_MAX];
 
 	CLocalPath GetSynchronizedDirectory(CServerPath remote_path);
 	CServerPath GetSynchronizedDirectory(CLocalPath local_path);

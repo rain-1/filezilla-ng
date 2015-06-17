@@ -188,10 +188,10 @@ public:
 	{
 		m_pMainFrame = pMainFrame;
 
-		CContextManager::Get()->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false, true);
-		CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, false, true);
+		CContextManager::Get()->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false);
+		CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, false);
 
-		CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
+		CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false);
 	}
 
 protected:
@@ -913,22 +913,7 @@ void CMainFrame::OnEngineEvent(wxFzEvent &event)
 		case nId_listing:
 			{
 				auto const& listingNotification = static_cast<CDirectoryListingNotification const&>(*pNotification.get());
-
-				if (listingNotification.GetPath().empty())
-					pState->SetRemoteDir(0, false);
-				else {
-					std::shared_ptr<CDirectoryListing> pListing = std::make_shared<CDirectoryListing>();
-					if (listingNotification.Failed() ||
-						pState->m_pEngine->CacheLookup(listingNotification.GetPath(), *pListing) != FZ_REPLY_OK)
-					{
-						pListing = std::make_shared<CDirectoryListing>();
-						pListing->path = listingNotification.GetPath();
-						pListing->m_flags |= CDirectoryListing::listing_failed;
-						pListing->m_firstListTime = CMonotonicClock::now();
-					}
-
-					pState->SetRemoteDir(pListing, listingNotification.Modified());
-				}
+				pState->m_pCommandQueue->ProcessDirectoryListing(listingNotification);
 			}
 			break;
 		case nId_asyncrequest:

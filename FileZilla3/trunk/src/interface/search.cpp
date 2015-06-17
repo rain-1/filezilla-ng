@@ -289,19 +289,15 @@ void CSearchDialog::Run()
 	m_original_dir = m_pState->GetRemotePath();
 	m_local_target = m_pState->GetLocalDir();
 
-	m_pState->BlockHandlers(STATECHANGE_REMOTE_DIR);
-	m_pState->BlockHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR, false);
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false);
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE);
 
 	ShowModal();
 
 	SaveConditions();
 
 	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
-	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_DIR);
-	m_pState->UnblockHandlers(STATECHANGE_REMOTE_DIR);
-	m_pState->UnblockHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
+	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
 
 	if (m_searching) {
 		if (!m_pState->IsRemoteIdle()) {
@@ -319,8 +315,10 @@ void CSearchDialog::Run()
 
 void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
 {
-	if (notification == STATECHANGE_REMOTE_DIR)
-		ProcessDirectoryListing();
+	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
+		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
+		ProcessDirectoryListing(listing);
+	}
 	else if (notification == STATECHANGE_REMOTE_IDLE) {
 		if (pState->IsRemoteIdle())
 			m_searching = false;
@@ -328,10 +326,8 @@ void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notificatio
 	}
 }
 
-void CSearchDialog::ProcessDirectoryListing()
+void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> const& listing)
 {
-	std::shared_ptr<CDirectoryListing> listing = m_pState->GetRemoteDir();
-
 	if (!listing || listing->failed())
 		return;
 

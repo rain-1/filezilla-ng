@@ -314,9 +314,9 @@ CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
 	// Reload icons
 	RegisterOption(OPTION_THEME);
 
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, true, false);
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false, false);
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_ENCRYPTION, true, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_SERVER, true);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_ENCRYPTION, true);
 
 	const int count = 3;
 	SetFieldsCount(count);

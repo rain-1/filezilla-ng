@@ -32,8 +32,8 @@ CPowerManagement::CPowerManagement(CMainFrame* pMainFrame)
 {
 	m_pMainFrame = pMainFrame;
 
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_QUEUEPROCESSING, false, false);
-	CContextManager::Get()->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_QUEUEPROCESSING, false);
+	CContextManager::Get()->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, false);
 
 	m_busy = false;
 

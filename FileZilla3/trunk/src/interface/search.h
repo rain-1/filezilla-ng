@@ -20,7 +20,7 @@ public:
 	void Run();
 
 protected:
-	void ProcessDirectoryListing();
+	void ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> const& listing);
 
 	void SetCtrlState();
 

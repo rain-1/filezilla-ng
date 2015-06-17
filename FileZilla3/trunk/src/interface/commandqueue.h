@@ -33,6 +33,8 @@ public:
 	void ReleaseEngine();
 	bool EngineLocked() const { return m_exclusiveEngineLock; }
 
+	void ProcessDirectoryListing(CDirectoryListingNotification const& listingNotification);
+
 protected:
 	void ProcessReply(int nReplyCode, Command commandId);
 

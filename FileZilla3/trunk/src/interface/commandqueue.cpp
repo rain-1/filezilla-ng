@@ -7,6 +7,8 @@
 #include "queue.h"
 #include "RemoteListView.h"
 
+#include <algorithm>
+
 DEFINE_EVENT_TYPE(fzEVT_GRANTEXCLUSIVEENGINEACCESS)
 
 int CCommandQueue::m_requestIdCounter = 0;
@@ -169,8 +171,16 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 
 			m_pState->LinkIsNotDir(pListCommand->GetPath(), pListCommand->GetSubDir());
 		}
-		else
-			m_pState->ListingFailed(nReplyCode);
+		else {
+			if (commandInfo.origin == recursiveOperation) {
+				// Let the recursive operation handler know if a LIST command failed,
+				// so that it may issue the next command in recursive operations.
+				m_pState->GetRecursiveOperationHandler()->ListingFailed(nReplyCode);
+			}
+			else {
+				m_pState->ListingFailed(nReplyCode);
+			}
+		}
 		m_CommandList.pop_front();
 	}
 	else if (nReplyCode == FZ_REPLY_ALREADYCONNECTED && commandInfo.command->GetId() == Command::connect) {
@@ -259,4 +269,32 @@ bool CCommandQueue::Quit()
 {
 	m_quit = true;
 	return Cancel();
+}
+
+void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const& listingNotification)
+{
+	auto const firstListing = std::find_if(m_CommandList.begin(), m_CommandList.end(), [](auto const& v) { return v.command->GetId() == Command::list; });
+	bool const listingIsRecursive = firstListing != m_CommandList.end() && firstListing->origin == recursiveOperation && m_pState->GetRecursiveOperationHandler()->IsActive();
+
+	std::shared_ptr<CDirectoryListing> pListing;
+	if (!listingNotification.GetPath().empty()) {
+		pListing = std::make_shared<CDirectoryListing>();
+		if (listingNotification.Failed() ||
+			m_pState->m_pEngine->CacheLookup(listingNotification.GetPath(), *pListing) != FZ_REPLY_OK)
+		{
+			pListing = std::make_shared<CDirectoryListing>();
+			pListing->path = listingNotification.GetPath();
+			pListing->m_flags |= CDirectoryListing::listing_failed;
+			pListing->m_firstListTime = CMonotonicClock::now();
+		}
+	}
+
+	if (listingIsRecursive) {
+		if (!listingNotification.Modified()) {
+			m_pState->NotifyHandlers(STATECHANGE_REMOTE_DIR_OTHER, wxString(), &pListing);
+		}
+	}
+	else {
+		m_pState->SetRemoteDir(pListing, listingNotification.Modified());
+	}
 }

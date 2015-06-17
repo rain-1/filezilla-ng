@@ -28,7 +28,7 @@ CState* CContextManager::CreateState(CMainFrame &mainFrame)
 
 	m_contexts.push_back(pState);
 
-	NotifyHandlers(pState, STATECHANGE_NEWCONTEXT, _T(""), 0, false);
+	NotifyHandlers(pState, STATECHANGE_NEWCONTEXT, _T(""), 0);
 
 	return pState;
 }
@@ -46,13 +46,13 @@ void CContextManager::DestroyState(CState* pState)
 		{
 			if (i >= m_contexts.size())
 				m_current_context--;
-			NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0, false);
+			NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0);
 		}
 
 		break;
 	}
 
-	NotifyHandlers(pState, STATECHANGE_REMOVECONTEXT, _T(""), 0, false);
+	NotifyHandlers(pState, STATECHANGE_REMOVECONTEXT, _T(""), 0);
 	delete pState;
 }
 
@@ -67,26 +67,26 @@ void CContextManager::SetCurrentContext(CState* pState)
 			continue;
 
 		m_current_context = i;
-		NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0, false);
+		NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0);
 	}
 }
 
 void CContextManager::DestroyAllStates()
 {
 	m_current_context = -1;
-	NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0, false);
+	NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0);
 
 	while (!m_contexts.empty())
 	{
 		CState* pState = m_contexts.back();
 		m_contexts.pop_back();
 
-		NotifyHandlers(pState, STATECHANGE_REMOVECONTEXT, _T(""), 0, false);
+		NotifyHandlers(pState, STATECHANGE_REMOVECONTEXT, _T(""), 0);
 		delete pState;
 	}
 }
 
-void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only, bool blockable)
+void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only)
 {
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
@@ -100,7 +100,6 @@ void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_state
 
 	t_handler handler;
 	handler.pHandler = pHandler;
-	handler.blockable = blockable;
 	handler.current_only = current_only;
 	handlers.push_back(handler);
 }
@@ -138,15 +137,12 @@ size_t CContextManager::HandlerCount(t_statechange_notifications notification) c
 	return m_handlers[notification].size();
 }
 
-void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2, bool blocked)
+void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2)
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
 	auto const& handlers = m_handlers[notification];
 	for (auto const& handler : handlers) {
-		if (blocked && handler.blockable)
-			continue;
-
 		if (handler.current_only && pState != GetCurrentContext())
 			continue;
 
@@ -179,8 +175,6 @@ void CContextManager::NotifyGlobalHandlers(enum t_statechange_notifications noti
 CState::CState(CMainFrame &mainFrame)
 	: m_mainFrame(mainFrame)
 {
-	memset(m_blocked, 0, sizeof(m_blocked));
-
 	m_title = _("Not connected");
 
 	m_pComparisonManager = new CComparisonManager(this);
@@ -315,7 +309,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 
 		if (m_pDirectoryListing) {
 			m_pDirectoryListing = 0;
-			NotifyHandlers(STATECHANGE_REMOTE_DIR);
+			NotifyHandlers(STATECHANGE_REMOTE_DIR, wxString(), &modified);
 		}
 		m_previouslyVisitedRemoteSubdir = _T("");
 		return true;
@@ -347,10 +341,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 
 	m_pDirectoryListing = pDirectoryListing;
 
-	if (!modified)
-		NotifyHandlers(STATECHANGE_REMOTE_DIR);
-	else
-		NotifyHandlers(STATECHANGE_REMOTE_DIR_MODIFIED);
+	NotifyHandlers(STATECHANGE_REMOTE_DIR, wxString(), &modified);
 
 	if (m_sync_browse.is_changing && !modified) {
 		m_sync_browse.is_changing = false;
@@ -560,7 +551,7 @@ void CState::DestroyEngine()
 	m_pEngine = 0;
 }
 
-void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool blockable /*=true*/)
+void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification)
 {
 	wxASSERT(pHandler);
 	wxASSERT(pHandler->m_pState == this);
@@ -577,7 +568,6 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_no
 
 	t_handler handler;
 	handler.pHandler = pHandler;
-	handler.blockable = blockable;
 	handlers.push_back(handler);
 }
 
@@ -608,46 +598,16 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	}
 }
 
-void CState::BlockHandlers(enum t_statechange_notifications notification)
-{
-	wxASSERT(notification != STATECHANGE_MAX);
-
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-			m_blocked[i] = true;
-	}
-	else
-		m_blocked[notification] = true;
-}
-
-void CState::UnblockHandlers(enum t_statechange_notifications notification)
-{
-	wxASSERT(notification != STATECHANGE_MAX);
-
-	if (notification == STATECHANGE_NONE)
-	{
-		for (int i = 0; i < STATECHANGE_MAX; i++)
-			m_blocked[i] = false;
-	}
-	else
-		m_blocked[notification] = false;
-
-}
-
 void CState::NotifyHandlers(enum t_statechange_notifications notification, const wxString& data, const void* data2)
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
 	auto const& handlers = m_handlers[notification];
 	for (auto const& handler : handlers) {
-		if (m_blocked[notification] && handler.blockable)
-			continue;
-
 		handler.pHandler->OnStateChange(this, notification, data, data2);
 	}
 
-	CContextManager::Get()->NotifyHandlers(this, notification, data, data2, m_blocked[notification]);
+	CContextManager::Get()->NotifyHandlers(this, notification, data, data2);
 }
 
 CStateEventHandler::CStateEventHandler(CState* pState)
@@ -922,10 +882,6 @@ bool CState::IsRemoteIdle() const
 void CState::ListingFailed(int error)
 {
 	m_sync_browse.is_changing = false;
-
-	// Let the recursive operation handler know if a LIST command failed,
-	// so that it may issue the next command in recursive operations.
-	m_pRecursiveOperation->ListingFailed(error);
 }
 
 void CState::LinkIsNotDir(const CServerPath& path, const wxString& subdir)

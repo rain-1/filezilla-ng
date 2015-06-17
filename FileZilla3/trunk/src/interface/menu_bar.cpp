@@ -114,13 +114,13 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 
 	pMainFrame->Connect(wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(CMenuBar::OnMenuEvent), 0, menubar);
 
-	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_REMOTE_IDLE, true, true);
-	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_SERVER, true, true);
-	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_SYNC_BROWSE, true, true);
-	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_COMPARISON, true, true);
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_REMOTE_IDLE, true);
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_SERVER, true);
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_SYNC_BROWSE, true);
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_COMPARISON, true);
 
-	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_QUEUEPROCESSING, false, false);
-	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_CHANGEDCONTEXT, false, false);
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_QUEUEPROCESSING, false);
+	CContextManager::Get()->RegisterHandler(menubar, STATECHANGE_CHANGEDCONTEXT, false);
 
 	menubar->RegisterOption(OPTION_ASCIIBINARY);
 	menubar->RegisterOption(OPTION_PRESERVE_TIMESTAMPS);
