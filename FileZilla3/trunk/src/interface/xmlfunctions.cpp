@@ -849,3 +849,12 @@ bool CXmlFile::ParseData(char* data)
 
 	return true;
 }
+
+bool CXmlFile::IsFromFutureVersion() const
+{
+	if (!m_pElement) {
+		return false;
+	}
+	wxString const version = GetTextAttribute(m_pElement, "version");
+	return CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion().c_str()) < CBuildInfo::ConvertToVersionNumber(version.c_str());
+}

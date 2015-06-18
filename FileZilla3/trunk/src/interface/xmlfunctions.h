@@ -44,6 +44,8 @@ public:
 	bool Modified();
 
 	bool Save(bool printError);
+
+	bool IsFromFutureVersion() const;
 protected:
 	wxString GetRedirectedName() const;
 

@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "sitemanager_dialog.h"
 
+#include "buildinfo.h"
 #include "conditionaldialog.h"
 #include "drop_target_ex.h"
 #include "filezillaapp.h"
@@ -316,8 +317,7 @@ CSiteManagerDialog::~CSiteManagerDialog()
 bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *connected_sites, const CServer* pServer /*=0*/)
 {
 	m_pSiteManagerMutex = new CInterProcessMutex(MUTEX_SITEMANAGERGLOBAL, false);
-	if (m_pSiteManagerMutex->TryLock() == 0)
-	{
+	if (m_pSiteManagerMutex->TryLock() == 0) {
 		int answer = wxMessageBoxEx(_("The Site Manager is opened in another instance of FileZilla 3.\nDo you want to continue? Any changes made in the Site Manager won't be saved then."),
 								  _("Site Manager already open"), wxYES_NO | wxICON_QUESTION);
 		if (answer != wxYES)
@@ -403,7 +403,9 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	pSizer->Add(m_pNotebook_Bookmark, 1, wxGROW);
 	pSizer->SetItemMinSize(1, pSizer->GetItem((size_t)0)->GetMinSize().GetWidth(), -1);
 
-	Load();
+	if (!Load()) {
+		return false;
+	}
 
 	XRCCTRL(*this, "ID_TRANSFERMODE_DEFAULT", wxRadioButton)->Update();
 	XRCCTRL(*this, "ID_TRANSFERMODE_ACTIVE", wxRadioButton)->Update();
@@ -727,12 +729,18 @@ bool CSiteManagerDialog::Load()
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
 	TiXmlElement* pDocument = file.Load();
-	if (!pDocument)
-	{
-		wxString msg = file.GetError() + _T("\n") + _("Any changes made in the Site Manager will not be saved unless you repair the file.");
+	if (!pDocument) {
+		wxString msg = file.GetError() + _T("\n") + _("The Site Manager cannot be used unless the file gets repaired.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
+	}
+
+	if (file.IsFromFutureVersion()) {
+		wxString msg = wxString::Format(_("The file '%s' has been created by a more recent version of FileZilla.\nLoading files created by newer versions can result in loss of data.\nDo you want to continue?"), file.GetFileName());
+		if (wxMessageBoxEx(msg, _("Detected newer version of FileZilla"), wxICON_QUESTION | wxYES_NO) != wxYES) {
+			return false;
+		}
 	}
 
 	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
