@@ -9,7 +9,7 @@ protected:
 public:
 
 	static wxString GetVersion();
-	static wxLongLong ConvertToVersionNumber(const wxChar* version);
+	static int64_t ConvertToVersionNumber(const wxChar* version);
 	static wxString GetBuildDateString();
 	static wxString GetBuildTimeString();
 	static wxDateTime GetBuildDate();

@@ -535,7 +535,7 @@ void CUpdater::ProcessData(CDataNotification& dataNotification)
 
 void CUpdater::ParseData()
 {
-	const wxLongLong ownVersionNumber = CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion().c_str());
+	int64_t const ownVersionNumber = CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion().c_str());
 	version_information_ = version_information();
 
 	wxString raw_version_information = raw_version_information_;
@@ -595,7 +595,7 @@ void CUpdater::ParseData()
 			}
 		}
 		else {
-			wxLongLong v = CBuildInfo::ConvertToVersionNumber(versionOrDate.c_str());
+			int64_t v = CBuildInfo::ConvertToVersionNumber(versionOrDate.c_str());
 			if (v <= ownVersionNumber)
 				continue;
 		}
