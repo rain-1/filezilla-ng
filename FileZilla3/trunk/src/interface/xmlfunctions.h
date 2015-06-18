@@ -53,6 +53,9 @@ protected:
 
 	bool LoadXmlDocument(wxString const& file);
 
+	// Sets version and platform in root element
+	void UpdateMetadata();
+
 	// Save the XML document to the given file
 	bool SaveXmlFile();
 
