@@ -1025,7 +1025,9 @@ int CTlsSocket::VerifyCertificate()
 	}
 
 	unsigned int status = 0;
-	if (gnutls_certificate_verify_peers2(m_session, &status) < 0) {
+	int const verifyResult = gnutls_certificate_verify_peers2(m_session, &status);
+	if (verifyResult < 0) {
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("gnutls_certificate_verify_peers2 returned %d with status %u"), verifyResult, status);
 		m_pOwner->LogMessage(MessageType::Error, _("Failed to verify peer certificate"));
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
