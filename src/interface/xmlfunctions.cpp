@@ -1,4 +1,5 @@
 #include <filezilla.h>
+#include "buildinfo.h"
 #include "xmlfunctions.h"
 #include "Options.h"
 #include <wx/ffile.h>
@@ -109,12 +110,33 @@ void CXmlFile::Close()
 	m_pElement = 0;
 }
 
+void CXmlFile::UpdateMetadata()
+{
+	if (!m_pElement || m_pElement->ValueStr() != "FileZilla3") {
+		return;
+	}
+
+	SetTextAttribute(m_pElement, "version", CBuildInfo::GetVersion());
+
+	wxString const platform =
+#ifdef __WXMSW__
+		_T("windows");
+#elif defined(__WXMAX__)
+		_T("mac");
+#else
+		_T("*nix");
+#endif
+	SetTextAttribute(m_pElement, "platform", platform);
+}
+
 bool CXmlFile::Save(bool printError)
 {
 	m_error.clear();
 
 	wxCHECK(!m_fileName.empty(), false);
 	wxCHECK(m_pDocument, false);
+
+	UpdateMetadata();
 
 	bool res = SaveXmlFile();
 	m_modificationTime = CLocalFileSystem::GetModificationTime(m_fileName);
