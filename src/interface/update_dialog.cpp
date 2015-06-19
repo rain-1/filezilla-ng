@@ -269,7 +269,7 @@ void CUpdateDialog::Retry(wxHyperlinkEvent&)
 
 void CUpdateDialog::OnDebugLog(wxCommandEvent&)
 {
-	wxMessageBox(updater_.GetLog());
+	wxMessageBoxEx(updater_.GetLog());
 }
 
 #endif
