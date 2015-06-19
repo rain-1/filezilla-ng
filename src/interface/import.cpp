@@ -53,6 +53,13 @@ void CImportDialog::Run()
 				return;
 			}
 
+			if (fz3.IsFromFutureVersion()) {
+				wxString msg = wxString::Format(_("The file '%s' has been created by a more recent version of FileZilla.\nLoading files created by newer versions can result in loss of data.\nDo you want to continue?"), fz3.GetFileName());
+				if (wxMessageBoxEx(msg, _("Detected newer version of FileZilla"), wxICON_QUESTION | wxYES_NO) != wxYES) {
+					return;
+				}
+			}
+
 			if (queue && XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->IsChecked()) {
 				m_pQueueView->ImportQueue(fz3Root->FirstChildElement("Queue"), true);
 			}
