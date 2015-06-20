@@ -1095,7 +1095,7 @@ int CSftpControlSocket::ListParseEntry(const wxString& entry)
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	pData->pParser->AddLine(entry.wx_str());
+	pData->pParser->AddLine(entry.c_str());
 
 	return FZ_REPLY_WOULDBLOCK;
 }
