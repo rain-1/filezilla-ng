@@ -91,7 +91,7 @@ private:
 
 	static int m_refcount;
 
-	static mutex mutex_;
+	static smutex mutex_;
 
 #if defined(_MSC_VER) && _MSC_VER < 1900
 	// Fixme: Get rid of this once VS2015 comes out

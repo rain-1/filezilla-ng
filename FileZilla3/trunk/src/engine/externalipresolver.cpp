@@ -32,7 +32,7 @@ CExternalIPResolver::~CExternalIPResolver()
 void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force /*=false*/)
 {
 	{
-		scoped_lock l(s_sync);
+		scoped_lock<mutex> l(s_sync);
 		if (checked) {
 			if (force)
 				checked = false;
@@ -218,7 +218,7 @@ void CExternalIPResolver::Close(bool successful)
 	m_done = true;
 
 	{
-		scoped_lock l(s_sync);
+		scoped_lock<mutex> l(s_sync);
 		if (!successful) {
 			ip.clear();
 		}
@@ -379,7 +379,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			return;
 		}
 
-		scoped_lock l(s_sync);
+		scoped_lock<mutex> l(s_sync);
 		ip = m_data;
 	}
 	else {
@@ -396,7 +396,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			return;
 		}
 
-		scoped_lock l(s_sync);
+		scoped_lock<mutex> l(s_sync);
 		ip = regex.GetMatch(m_data, 2);
 	}
 
@@ -529,12 +529,12 @@ void CExternalIPResolver::OnChunkedData()
 
 bool CExternalIPResolver::Successful() const
 {
-	scoped_lock l(s_sync);
+	scoped_lock<mutex> l(s_sync);
 	return !ip.empty();
 }
 
 wxString CExternalIPResolver::GetIP() const
 {
-	scoped_lock l(s_sync);
+	scoped_lock<mutex> l(s_sync);
 	return ip;
 }

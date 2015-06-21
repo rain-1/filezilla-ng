@@ -26,7 +26,7 @@ CDirectoryCache::~CDirectoryCache()
 
 void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &server)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = CreateServerEntry(server);
 	wxASSERT(sit != m_serverList.end());
@@ -53,7 +53,7 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 
 bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
@@ -91,7 +91,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 
 bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
@@ -108,7 +108,7 @@ bool CDirectoryCache::DoesExist(const CServer &server, const CServerPath &path, 
 
 bool CDirectoryCache::LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end()) {
@@ -161,7 +161,7 @@ CDirectoryCache::CCacheEntry::CCacheEntry(const CDirectoryCache::CCacheEntry &en
 
 bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool *wasDir /*=false*/)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
@@ -190,7 +190,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 
 bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, enum Filetype type /*=file*/, wxLongLong size /*=-1*/)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
@@ -270,7 +270,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 
 bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path, const wxString& filename)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
@@ -320,7 +320,7 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 
 void CDirectoryCache::InvalidateServer(const CServer& server)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 	{
@@ -346,7 +346,7 @@ void CDirectoryCache::InvalidateServer(const CServer& server)
 
 bool CDirectoryCache::GetChangeTime(CMonotonicClock& time, const CServer &server, const CServerPath &path)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())
@@ -364,7 +364,7 @@ bool CDirectoryCache::GetChangeTime(CMonotonicClock& time, const CServer &server
 
 void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, const wxString& filename, const CServerPath&)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	// TODO: This is not 100% foolproof and may not work properly
 	// Perhaps just throw away the complete cache?
@@ -399,7 +399,7 @@ void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, 
 
 void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom, const wxString& fileFrom, const CServerPath& pathTo, const wxString& fileTo)
 {
-	scoped_lock lock(mutex_);
+	scoped_lock<mutex> lock(mutex_);
 
 	tServerIter sit = GetServerEntry(server);
 	if (sit == m_serverList.end())

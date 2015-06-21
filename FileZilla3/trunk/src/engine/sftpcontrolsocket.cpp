@@ -66,7 +66,7 @@ public:
 
 	virtual ~CSftpInputThread()
 	{
-		scoped_lock l(m_sync);
+		scoped_lock<mutex> l(m_sync);
 		for (auto & msg : m_sftpMessages) {
 			delete msg;
 		}
@@ -84,7 +84,7 @@ public:
 
 	void GetMessages(std::vector<sftp_message*>& messages)
 	{
-		scoped_lock l(m_sync);
+		scoped_lock<mutex> l(m_sync);
 		messages.swap(m_sftpMessages);
 	}
 
@@ -95,7 +95,7 @@ protected:
 		bool sendEvent;
 
 		{
-			scoped_lock l(m_sync);
+			scoped_lock<mutex> l(m_sync);
 			sendEvent = m_sftpMessages.empty();
 			m_sftpMessages.push_back(message);
 		}
