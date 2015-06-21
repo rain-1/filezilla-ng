@@ -21,7 +21,7 @@ int CLogging::m_max_size;
 wxString CLogging::m_file;
 
 int CLogging::m_refcount = 0;
-smutex CLogging::mutex_;
+mutex CLogging::mutex_(false);
 
 thread_local int CLogging::debug_level_{0};
 thread_local int CLogging::raw_listing_{0};
@@ -29,13 +29,13 @@ thread_local int CLogging::raw_listing_{0};
 CLogging::CLogging(CFileZillaEnginePrivate & engine)
 	: engine_(engine)
 {
-	scoped_lock<smutex> l(mutex_);
+	scoped_lock l(mutex_);
 	m_refcount++;
 }
 
 CLogging::~CLogging()
 {
-	scoped_lock<smutex> l(mutex_);
+	scoped_lock l(mutex_);
 	m_refcount--;
 
 	if (!m_refcount) {
@@ -128,7 +128,7 @@ void CLogging::InitLogFile() const
 
 void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 {
-	scoped_lock<smutex> l(mutex_);
+	scoped_lock l(mutex_);
 
 	InitLogFile();
 #ifdef __WXMSW__

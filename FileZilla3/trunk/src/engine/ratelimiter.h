@@ -37,7 +37,7 @@ protected:
 
 	COptionsBase& options_;
 
-	void WakeupWaitingObjects(scoped_lock<mutex> & l);
+	void WakeupWaitingObjects(scoped_lock & l);
 
 	void OnOptionsChanged(changed_options_t const& options);
 
