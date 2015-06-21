@@ -261,7 +261,7 @@ public:
 
 		// Connect method of CSocket ensures port is in range
 		char tmp[7];
-		snprintf(tmp, 6, "%u", m_pSocket->m_port);
+		sprintf(tmp, "%u", m_pSocket->m_port);
 		tmp[5] = 0;
 		m_port = tmp;
 

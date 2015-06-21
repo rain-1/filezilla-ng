@@ -1,6 +1,13 @@
 #ifndef FILEZILLA_ENGINE_EVENT_HEADER
 #define FILEZILLA_ENGINE_EVENT_HEADER
 
+/*
+Common base class for all events.
+
+If possible, use CEvent<> below instead of deriving from CEventBase directly.
+
+Keep events as simple as possible. Avoid mutexes in your events.
+*/
 class CEventBase
 {
 public:
@@ -10,9 +17,28 @@ public:
 	CEventBase(CEventBase const&) = delete;
 	CEventBase& operator=(CEventBase const&) = delete;
 
+	/*
+	The returned pointer must be unique for the derived type such that:
+		CEventBase& a = ...
+		CEventBase& b = ...
+		assert((a.derived_type() == b.derived_type()) == (typeid(a) == typeid(b)));
+
+	Beware: Using &typeid is tempting, but unspecifined (sic)
+
+	Best solution is to have your derived type return the address of a static data member of it
+	*/
 	virtual void const* derived_type() const = 0;
 };
 
+/*
+This is the recommended event class.
+
+Instanciate the template with a unique type to identify the type of the event and a number of types for the values.
+
+Keep the values simple, in particular avoid mutexes in your values.
+
+See event_handler.h for usage example.
+*/
 template<typename UniqueType, typename...Values>
 class CEvent final : public CEventBase
 {
@@ -31,6 +57,7 @@ public:
 	CEvent(CEvent const& op) = default;
 	CEvent& operator=(CEvent const& op) = default;
 
+	// Returns a unique pointer for the type such that can be used directly in derived_type. 
 	static void const* type() {
 		static const char* f = 0;
 		return &f;
@@ -43,6 +70,7 @@ public:
 	tuple_type v_;
 };
 
+// Returns true iff T& t = ...; t.derived_type() == ev.derived_type()
 template<typename T>
 bool same_type(CEventBase const& ev)
 {

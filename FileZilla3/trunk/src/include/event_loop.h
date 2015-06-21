@@ -26,13 +26,18 @@ class CEventLoop final : private wxThread
 public:
 	typedef std::deque<std::pair<CEventHandler*, CEventBase*>> Events;
 
+	// Spawns a thread
 	CEventLoop();
 	virtual ~CEventLoop();
 
 	CEventLoop(CEventLoop const&) = delete;
 	CEventLoop& operator=(CEventLoop const&) = delete;
 
-	void FilterEvents(std::function<bool (Events::value_type&)> filter);
+	// Puts all queued events through the filter function.
+	// The filter function can freely change the passed events.
+	// If the filter function returns true, the corresponding event
+	// gets removed.
+	void FilterEvents(std::function<bool (Events::value_type&)> const& filter);
 
 protected:
 	friend class CEventHandler;
@@ -69,6 +74,8 @@ protected:
 	timer_id next_timer_id_{};
 };
 
+
+// Dispatch for CEvent<> based events. See event_handler.h for usage example
 template<typename T, typename H, typename F>
 bool Dispatch(CEventBase const& ev, F&& f)
 {
