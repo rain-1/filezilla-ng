@@ -81,7 +81,7 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 	}
 }
 
-void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> filter)
+void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> const& filter)
 {
 	scoped_lock l(sync_);
 
