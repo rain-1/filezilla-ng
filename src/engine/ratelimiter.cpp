@@ -34,7 +34,7 @@ int64_t CRateLimiter::GetLimit(rate_direction direction) const
 
 void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 {
-	scoped_lock<mutex> lock(sync_);
+	scoped_lock lock(sync_);
 
 	m_objectList.push_back(pObject);
 
@@ -68,7 +68,7 @@ void CRateLimiter::AddObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 {
-	scoped_lock<mutex> lock(sync_);
+	scoped_lock lock(sync_);
 
 	for (auto iter = m_objectList.begin(); iter != m_objectList.end(); ++iter) {
 		if (*iter == pObject) {
@@ -99,7 +99,7 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 
 void CRateLimiter::OnTimer(timer_id)
 {
-	scoped_lock<mutex> lock(sync_);
+	scoped_lock lock(sync_);
 
 	int64_t const limits[2] = { GetLimit(inbound), GetLimit(outbound) };
 
@@ -185,7 +185,7 @@ void CRateLimiter::OnTimer(timer_id)
 	}
 }
 
-void CRateLimiter::WakeupWaitingObjects(scoped_lock<mutex> & l)
+void CRateLimiter::WakeupWaitingObjects(scoped_lock & l)
 {
 	for (int i = 0; i < 2; ++i) {
 		while (!m_wakeupList[i].empty()) {
@@ -234,7 +234,7 @@ void CRateLimiter::operator()(CEventBase const& ev)
 
 void CRateLimiter::OnRateChanged()
 {
-	scoped_lock<mutex> lock(sync_);
+	scoped_lock lock(sync_);
 	if (GetLimit(inbound) > 0 || GetLimit(outbound) > 0) {
 		if (!m_timer)
 			m_timer = AddTimer(duration::from_milliseconds(tickDelay), false);

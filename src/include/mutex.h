@@ -18,16 +18,10 @@
 #include <pthread.h>
 #endif
 
-template<typename Mutex>
-class scoped_lock;
-
-template<typename Mutex>
-class condition;
-
 class mutex final
 {
 public:
-	explicit mutex();
+	explicit mutex(bool recursive = true);
 	~mutex();
 
 	mutex( mutex const& ) = delete;
@@ -38,8 +32,8 @@ public:
 	void unlock();
 
 private:
-	friend class scoped_lock<mutex>;
-	friend class condition<mutex>;
+	friend class condition;
+	friend class scoped_lock;
 
 #ifdef __WXMSW__
 	CRITICAL_SECTION m_;
@@ -48,32 +42,7 @@ private:
 #endif
 };
 
-class smutex final
-{
-public:
-	explicit smutex();
-	~smutex();
-
-	smutex(smutex const&) = delete;
-	smutex& operator=(smutex const&) = delete;
-
-	// Beware, manual locking isn't exception safe
-	void lock();
-	void unlock();
-
-private:
-	friend class scoped_lock<smutex>;
-	friend class condition<smutex>;
-
-#ifdef __WXMSW__
-	SRWLOCK m_{SRWLOCK_INIT};
-#else
-	pthread_mutex_t m_;
-#endif
-};
-
-template<>
-class scoped_lock<mutex> final
+class scoped_lock final
 {
 public:
 	explicit scoped_lock(mutex& m)
@@ -122,7 +91,7 @@ public:
 	}
 
 private:
-	friend class condition<mutex>;
+	friend class condition;
 
 #ifdef __WXMSW__
 	CRITICAL_SECTION * const m_;
@@ -132,68 +101,6 @@ private:
 	bool locked_{true};
 };
 
-template<>
-class scoped_lock<smutex> final
-{
-public:
-	explicit scoped_lock(smutex& m)
-		: m_(&m.m_)
-	{
-#ifdef __WXMSW__
-		AcquireSRWLockExclusive(m_);
-#else
-		pthread_mutex_lock(m_);
-#endif
-	}
-
-	~scoped_lock()
-	{
-		if (locked_) {
-#ifdef __WXMSW__
-			ReleaseSRWLockExclusive(m_);
-#else
-			pthread_mutex_unlock(m_);
-#endif
-		}
-
-	}
-
-	scoped_lock(scoped_lock const&) = delete;
-	scoped_lock& operator=(scoped_lock const&) = delete;
-
-	void lock()
-	{
-		locked_ = true;
-#ifdef __WXMSW__
-		AcquireSRWLockExclusive(m_);
-#else
-		pthread_mutex_lock(m_);
-#endif
-	}
-
-	void unlock()
-	{
-		locked_ = false;
-#ifdef __WXMSW__
-		ReleaseSRWLockExclusive(m_);
-#else
-		pthread_mutex_unlock(m_);
-#endif
-	}
-
-private:
-	friend class condition<smutex>;
-
-#ifdef __WXMSW__
-	SRWLOCK * const m_;
-#else
-	pthread_mutex_t * const m_;
-#endif
-	bool locked_{ true };
-};
-
-
-template<typename Mutex>
 class condition final
 {
 public:
@@ -203,18 +110,18 @@ public:
 	condition(condition const&) = delete;
 	condition& operator=(condition const&) = delete;
 
-	void wait(scoped_lock<Mutex>& l);
+	void wait(scoped_lock& l);
 
 	// Milliseconds
 	// Returns false on timeout
-	bool wait(scoped_lock<Mutex>& l, int timeout_ms);
+	bool wait(scoped_lock& l, int timeout_ms);
 
-	void signal(scoped_lock<Mutex>& l);
+	void signal(scoped_lock& l);
 
-	bool signalled(scoped_lock<Mutex> const&) const { return signalled_; }
+	bool signalled(scoped_lock const&) const { return signalled_; }
 private:
 #ifdef __WXMSW__
-	CONDITION_VARIABLE cond_{CONDITION_VARIABLE_INIT};
+	CONDITION_VARIABLE cond_;
 #else
 	pthread_cond_t cond_;
 #endif

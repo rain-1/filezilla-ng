@@ -74,7 +74,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
 	wxChar *share_name = new wxChar[512];
 	DWORD dwSize = 511;
 	if (!WNetGetConnection(pVolume, share_name, &dwSize)) {
-		scoped_lock<mutex> l(sync_);
+		scoped_lock l(sync_);
 		t_VolumeInfoInternal volumeInfo;
 		volumeInfo.pVolume = pVolume;
 		volumeInfo.pVolumeName = share_name;
@@ -90,7 +90,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
 	BOOL res = GetVolumeInformation(drive, pVolumeName, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
 	if (res && pVolumeName[0]) {
-		scoped_lock<mutex> l(sync_);
+		scoped_lock l(sync_);
 		t_VolumeInfoInternal volumeInfo;
 		volumeInfo.pVolume = pVolume;
 		volumeInfo.pVolumeName = pVolumeName;
@@ -204,7 +204,7 @@ std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> CVolumeDescriptionEn
 {
 	std::list<t_VolumeInfo> volumeInfo;
 
-	scoped_lock<mutex> l(sync_);
+	scoped_lock l(sync_);
 
 	for (auto const& internal_info : m_volumeInfo) {
 		t_VolumeInfo info;

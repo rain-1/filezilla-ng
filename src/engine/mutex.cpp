@@ -43,12 +43,13 @@ pthread_condattr_t* init_condattr()
 }
 #endif
 
-mutex::mutex()
+mutex::mutex(bool recursive)
 {
 #ifdef __WXMSW__
+	(void)recursive; // Critical sections are always recursive
 	InitializeCriticalSection(&m_);
 #else
-	pthread_mutex_init(&m_, get_mutex_attributes(true));
+	pthread_mutex_init(&m_, get_mutex_attributes(recursive));
 #endif
 }
 
@@ -79,51 +80,21 @@ void mutex::unlock()
 #endif
 }
 
-smutex::smutex()
-{
-#ifndef __WXMSW__
-	pthread_mutex_init(&m_, get_mutex_attributes(true));
-#endif
-}
 
-smutex::~smutex()
-{
-#ifndef __WXMSW__
-	pthread_mutex_destroy(&m_);
-#endif
-}
-
-void smutex::lock()
-{
-#ifdef __WXMSW__
-	AcquireSRWLockExclusive(&m_);
-#else
-	pthread_mutex_lock(&m_);
-#endif
-}
-
-void smutex::unlock()
-{
-#ifdef __WXMSW__
-	ReleaseSRWLockExclusive(&m_);
-#else
-	pthread_mutex_unlock(&m_);
-#endif
-}
-
-template<typename Mutex>
-condition<Mutex>::condition()
+condition::condition()
 	: signalled_()
 {
-#ifndef __WXMSW__
+#ifdef __WXMSW__
+	InitializeConditionVariable(&cond_);
+#else
+
 	static pthread_condattr_t *attr = init_condattr();
 	pthread_cond_init(&cond_, attr);
 #endif
 }
 
 
-template<typename Mutex>
-condition<Mutex>::~condition()
+condition::~condition()
 {
 #ifdef __WXMSW__
 #else
@@ -131,7 +102,7 @@ condition<Mutex>::~condition()
 #endif
 }
 
-void condition<mutex>::wait(scoped_lock<mutex>& l)
+void condition::wait(scoped_lock& l)
 {
 	while (!signalled_) {
 #ifdef __WXMSW__
@@ -143,19 +114,7 @@ void condition<mutex>::wait(scoped_lock<mutex>& l)
 	signalled_ = false;
 }
 
-void condition<smutex>::wait(scoped_lock<smutex>& l)
-{
-	while (!signalled_) {
-#ifdef __WXMSW__
-		SleepConditionVariableSRW(&cond_, l.m_, INFINITE, 0);
-#else
-		pthread_cond_wait(&cond_, l.m_);
-#endif
-	}
-	signalled_ = false;
-}
-
-bool condition<mutex>::wait(scoped_lock<mutex>& l, int timeout_ms)
+bool condition::wait(scoped_lock& l, int timeout_ms)
 {
 	if (signalled_) {
 		signalled_ = false;
@@ -184,7 +143,8 @@ bool condition<mutex>::wait(scoped_lock<mutex>& l, int timeout_ms)
 
 	do {
 		res = pthread_cond_timedwait(&cond_, l.m_, &ts);
-	} while (res == EINTR);
+	}
+	while (res == EINTR);
 	bool const success = res == 0;
 #endif
 	if (success) {
@@ -195,48 +155,7 @@ bool condition<mutex>::wait(scoped_lock<mutex>& l, int timeout_ms)
 }
 
 
-bool condition<smutex>::wait(scoped_lock<smutex>& l, int timeout_ms)
-{
-	if (signalled_) {
-		signalled_ = false;
-		return true;
-	}
-#ifdef __WXMSW__
-	bool const success = SleepConditionVariableSRW(&cond_, l.m_, timeout_ms, 0) != 0;
-#else
-	int res;
-	timespec ts;
-#if HAVE_CLOCK_GETTIME && HAVE_DECL_PTHREAD_CONDATTR_SETCLOCK
-	clock_gettime(CLOCK_MONOTONIC, &ts);
-#else
-	timeval tv{};
-	gettimeofday(&tv, 0);
-	ts.tv_sec = tv.tv_sec;
-	ts.tv_nsec = tv.tv_usec * 1000;
-#endif
-
-	ts.tv_sec += timeout_ms / 1000;
-	ts.tv_nsec += (timeout_ms % 1000) * 1000 * 1000;
-	if (ts.tv_nsec > 1000000000ll) {
-		++ts.tv_sec;
-		ts.tv_nsec -= 1000000000ll;
-	}
-
-	do {
-		res = pthread_cond_timedwait(&cond_, l.m_, &ts);
-	} while (res == EINTR);
-	bool const success = res == 0;
-#endif
-	if (success) {
-		signalled_ = false;
-	}
-
-	return success;
-}
-
-
-template<typename Mutex>
-void condition<Mutex>::signal(scoped_lock<Mutex> &)
+void condition::signal(scoped_lock &)
 {
 	if (!signalled_) {
 		signalled_ = true;
@@ -247,6 +166,3 @@ void condition<Mutex>::signal(scoped_lock<Mutex> &)
 #endif
 	}
 }
-
-template condition<mutex>;
-template condition<smutex>;

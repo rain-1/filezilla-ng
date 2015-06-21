@@ -11,7 +11,7 @@ CPathCache::~CPathCache()
 
 void CPathCache::Store(CServer const& server, CServerPath const& target, CServerPath const& source, wxString const& subdir)
 {
-	scoped_lock<mutex> lock(mutex_);
+	scoped_lock lock(mutex_);
 
 	wxASSERT(!target.empty() && !source.empty());
 
@@ -34,7 +34,7 @@ void CPathCache::Store(CServer const& server, CServerPath const& target, CServer
 
 CServerPath CPathCache::Lookup(CServer const& server, CServerPath const& source, wxString const& subdir)
 {
-	scoped_lock<mutex> lock(mutex_);
+	scoped_lock lock(mutex_);
 
 	const tCacheConstIterator iter = m_cache.find(server);
 	if (iter == m_cache.end())
@@ -65,7 +65,7 @@ CServerPath CPathCache::Lookup(tServerCache const& serverCache, CServerPath cons
 
 void CPathCache::InvalidateServer(CServer const& server)
 {
-	scoped_lock<mutex> lock(mutex_);
+	scoped_lock lock(mutex_);
 
 	tCacheIterator iter = m_cache.find(server);
 	if (iter == m_cache.end())
@@ -76,7 +76,7 @@ void CPathCache::InvalidateServer(CServer const& server)
 
 void CPathCache::InvalidatePath(CServer const& server, CServerPath const& path, wxString const& subdir)
 {
-	scoped_lock<mutex> lock(mutex_);
+	scoped_lock lock(mutex_);
 
 	tCacheIterator iter = m_cache.find(server);
 	if (iter != m_cache.end()) {
@@ -119,6 +119,6 @@ void CPathCache::InvalidatePath(tServerCache & serverCache, CServerPath const& p
 
 void CPathCache::Clear()
 {
-	scoped_lock<mutex> lock(mutex_);
+	scoped_lock lock(mutex_);
 	m_cache.clear();
 }

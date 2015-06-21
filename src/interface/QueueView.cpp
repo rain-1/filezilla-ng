@@ -244,7 +244,7 @@ public:
 	void GetFiles(std::list<CFolderProcessingEntry*> &entryList)
 	{
 		wxASSERT(entryList.empty());
-		scoped_lock<mutex> locker(m_sync);
+		scoped_lock locker(m_sync);
 		entryList.swap(m_entryList);
 
 		m_didSendEvent = false;
@@ -266,7 +266,7 @@ public:
 
 	void ProcessDirectory(const CLocalPath& localPath, CServerPath const& remotePath, const wxString& name)
 	{
-		scoped_lock<mutex> locker(m_sync);
+		scoped_lock locker(m_sync);
 
 		t_internalDirPair* pair = new t_internalDirPair;
 
@@ -288,7 +288,7 @@ public:
 
 	void CheckFinished()
 	{
-		scoped_lock<mutex> locker(m_sync);
+		scoped_lock locker(m_sync);
 		wxASSERT(m_processing_entries);
 
 		m_processing_entries = false;
@@ -308,7 +308,7 @@ protected:
 
 	void AddEntry(CFolderProcessingEntry* entry)
 	{
-		scoped_lock<mutex> l(m_sync);
+		scoped_lock l(m_sync);
 		m_entryList.push_back(entry);
 
 		// Wait if there are more than 100 items to queue,
@@ -354,7 +354,7 @@ protected:
 		CLocalFileSystem localFileSystem;
 
 		while (!TestDestroy() && !m_pFolderItem->m_remove) {
-			scoped_lock<mutex> l(m_sync);
+			scoped_lock l(m_sync);
 			if (m_dirsToCheck.empty()) {
 				if (!m_didSendEvent && !m_entryList.empty()) {
 					m_didSendEvent = true;
@@ -423,7 +423,7 @@ protected:
 	CFolderScanItem* m_pFolderItem;
 
 	mutex m_sync;
-	condition<mutex> m_condition;
+	condition m_condition;
 	bool m_threadWaiting;
 	bool m_throttleWait;
 	bool m_didSendEvent;

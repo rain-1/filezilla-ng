@@ -60,7 +60,7 @@ union sockaddr_u
 class CSocketThread;
 namespace {
 static std::vector<CSocketThread*> waiting_socket_threads;
-static smutex waiting_socket_threads_mutex;
+static mutex waiting_socket_threads_mutex{false};
 };
 
 struct socket_event_type;
@@ -202,7 +202,7 @@ class CSocketThread final : protected wxThread
 	friend class CSocket;
 public:
 	CSocketThread()
-		: wxThread(wxTHREAD_JOINABLE)
+		: wxThread(wxTHREAD_JOINABLE), m_sync(false)
 	{
 #ifdef __WXMSW__
 		m_sync_event = WSA_INVALID_EVENT;
@@ -230,11 +230,11 @@ public:
 
 	void SetSocket(CSocket* pSocket)
 	{
-		scoped_lock<smutex> l(m_sync);
+		scoped_lock l(m_sync);
 		SetSocket(pSocket, l);
 	}
 
-	void SetSocket(CSocket* pSocket, scoped_lock<smutex> const&)
+	void SetSocket(CSocket* pSocket, scoped_lock const&)
 	{
 		m_pSocket = pSocket;
 
@@ -273,7 +273,7 @@ public:
 	int Start()
 	{
 		if (m_started) {
-			scoped_lock<smutex> l(m_sync);
+			scoped_lock l(m_sync);
 			wxASSERT(m_threadwait);
 			m_waiting = 0;
 			WakeupThread(l);
@@ -304,11 +304,11 @@ public:
 	// Cancels select or idle wait
 	void WakeupThread()
 	{
-		scoped_lock<smutex> l(m_sync);
+		scoped_lock l(m_sync);
 		WakeupThread(l);
 	}
 
-	void WakeupThread(scoped_lock<smutex> & l)
+	void WakeupThread(scoped_lock & l)
 	{
 		if (!m_started || m_finished) {
 			return;
@@ -368,7 +368,7 @@ protected:
 		}
 	}
 
-	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, scoped_lock<smutex> & l)
+	int TryConnectHost(addrinfo & addr, sockaddr_u const& bindAddr, scoped_lock & l)
 	{
 		if (m_pSocket->m_pEvtHandler) {
 			m_pSocket->m_pEvtHandler->SendEvent<CHostAddressEvent>(m_pSocket, CSocket::AddressToString(addr.ai_addr, addr.ai_addrlen));
@@ -452,7 +452,7 @@ protected:
 	}
 
 	// Only call while locked
-	bool DoConnect(scoped_lock<smutex> & l)
+	bool DoConnect(scoped_lock & l)
 	{
 		if (m_host.empty() || m_port.empty()) {
 			m_pSocket->m_state = CSocket::closed;
@@ -555,7 +555,7 @@ protected:
 	}
 
 	// Call only while locked
-	bool DoWait(int wait, scoped_lock<smutex> & l)
+	bool DoWait(int wait, scoped_lock & l)
 	{
 		m_waiting |= wait;
 
@@ -758,7 +758,7 @@ protected:
 	}
 
 	// Call only while locked
-	bool IdleLoop(scoped_lock<smutex> & l)
+	bool IdleLoop(scoped_lock & l)
 	{
 		if (m_quit)
 			return false;
@@ -775,7 +775,7 @@ protected:
 
 	virtual ExitCode Entry()
 	{
-		scoped_lock<smutex> l(m_sync);
+		scoped_lock l(m_sync);
 		for (;;) {
 			if (!IdleLoop(l)) {
 				m_finished = true;
@@ -846,8 +846,8 @@ protected:
 	int m_pipe[2];
 #endif
 
-	smutex m_sync;
-	condition<smutex> m_condition;
+	mutex m_sync;
+	condition m_condition;
 
 	bool m_started{};
 	bool m_quit{};
@@ -895,7 +895,7 @@ void CSocket::DetachThread()
 	if (!m_pSocketThread)
 		return;
 
-	scoped_lock<smutex> l(m_pSocketThread->m_sync);
+	scoped_lock l(m_pSocketThread->m_sync);
 	m_pSocketThread->SetSocket(0, l);
 	if (m_pSocketThread->m_finished) {
 		m_pSocketThread->WakeupThread(l);
@@ -913,7 +913,7 @@ void CSocket::DetachThread()
 			m_pSocketThread->WakeupThread(l);
 			l.unlock();
 
-			scoped_lock<smutex> wl(waiting_socket_threads_mutex);
+			scoped_lock wl(waiting_socket_threads_mutex);
 			waiting_socket_threads.push_back(m_pSocketThread);
 		}
 	}
@@ -946,7 +946,7 @@ int CSocket::Connect(wxString const& host, unsigned int port, address_family fam
 	}
 
 	if (m_pSocketThread && m_pSocketThread->m_started) {
-		scoped_lock<smutex> l(m_pSocketThread->m_sync);
+		scoped_lock l(m_pSocketThread->m_sync);
 		if (!m_pSocketThread->m_threadwait) {
 			m_pSocketThread->WakeupThread(l);
 			l.unlock();
@@ -984,7 +984,7 @@ int CSocket::Connect(wxString const& host, unsigned int port, address_family fam
 void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
 {
 	if (m_pSocketThread) {
-		scoped_lock<smutex> l(m_pSocketThread->m_sync);
+		scoped_lock l(m_pSocketThread->m_sync);
 
 		if (m_pEvtHandler == pEvtHandler) {
 			return;
@@ -1139,7 +1139,7 @@ wxString CSocket::GetErrorDescription(int error)
 int CSocket::Close()
 {
 	if (m_pSocketThread) {
-		scoped_lock<smutex> l(m_pSocketThread->m_sync);
+		scoped_lock l(m_pSocketThread->m_sync);
 		int fd = m_fd;
 		m_fd = -1;
 
@@ -1190,13 +1190,13 @@ CSocket::SocketState CSocket::GetState()
 
 void CSocket::Cleanup(bool force)
 {
-	scoped_lock<smutex> wl(waiting_socket_threads_mutex);
+	scoped_lock wl(waiting_socket_threads_mutex);
 	auto iter = waiting_socket_threads.begin();
 	for (; iter != waiting_socket_threads.end(); ++iter) {
 		CSocketThread *const pThread = *iter;
 
 		if (!force) {
-			scoped_lock<smutex> l(pThread->m_sync);
+			scoped_lock l(pThread->m_sync);
 			if (!pThread->m_finished) {
 				break;
 			}
@@ -1210,13 +1210,13 @@ void CSocket::Cleanup(bool force)
 
 int CSocket::Read(void* buffer, unsigned int size, int& error)
 {
-	int res = recv(m_fd, (char*)buffer, 1, 0);
+	int res = recv(m_fd, (char*)buffer, size, 0);
 
 	if (res == -1) {
 		error = GetLastSocketError();
 		if (error == EAGAIN) {
 			if (m_pSocketThread) {
-				scoped_lock<smutex> l(m_pSocketThread->m_sync);
+				scoped_lock l(m_pSocketThread->m_sync);
 				if (!(m_pSocketThread->m_waiting & WAIT_READ)) {
 					m_pSocketThread->m_waiting |= WAIT_READ;
 					m_pSocketThread->WakeupThread(l);
@@ -1224,18 +1224,8 @@ int CSocket::Read(void* buffer, unsigned int size, int& error)
 			}
 		}
 	}
-	else {
+	else
 		error = 0;
-		if (res == 1) {
-			if (m_pSocketThread) {
-				scoped_lock<smutex> l(m_pSocketThread->m_sync);
-				if (!(m_pSocketThread->m_waiting & WAIT_READ)) {
-					m_pSocketThread->m_waiting |= WAIT_READ;
-					m_pSocketThread->WakeupThread(l);
-				}
-			}
-		}
-	}
 
 	return res;
 }
@@ -1282,7 +1272,7 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 		error = GetLastSocketError();
 		if (error == EAGAIN) {
 			if (m_pSocketThread) {
-				scoped_lock<smutex> l (m_pSocketThread->m_sync);
+				scoped_lock l (m_pSocketThread->m_sync);
 				if (!(m_pSocketThread->m_waiting & WAIT_WRITE)) {
 					m_pSocketThread->m_waiting |= WAIT_WRITE;
 					m_pSocketThread->WakeupThread(l);
@@ -1519,7 +1509,7 @@ int CSocket::GetRemotePort(int& error)
 CSocket* CSocket::Accept(int &error)
 {
 	if (m_pSocketThread) {
-		scoped_lock<smutex> l(m_pSocketThread->m_sync);
+		scoped_lock l(m_pSocketThread->m_sync);
 		m_pSocketThread->m_waiting |= WAIT_ACCEPT;
 		m_pSocketThread->WakeupThread(l);
 	}
