@@ -7,7 +7,7 @@ CLatencyMeasurement::CLatencyMeasurement()
 
 int CLatencyMeasurement::GetLatency() const
 {
-	scoped_lock lock(m_sync);
+	scoped_lock<mutex> lock(m_sync);
 	if (!m_measurements)
 		return -1;
 
@@ -16,7 +16,7 @@ int CLatencyMeasurement::GetLatency() const
 
 bool CLatencyMeasurement::Start()
 {
-	scoped_lock lock(m_sync);
+	scoped_lock<mutex> lock(m_sync);
 	if (m_start)
 		return false;
 
@@ -27,7 +27,7 @@ bool CLatencyMeasurement::Start()
 
 bool CLatencyMeasurement::Stop()
 {
-	scoped_lock lock(m_sync);
+	scoped_lock<mutex> lock(m_sync);
 	if (!m_start)
 		return false;
 
@@ -45,7 +45,7 @@ bool CLatencyMeasurement::Stop()
 
 void CLatencyMeasurement::Reset()
 {
-	scoped_lock lock(m_sync);
+	scoped_lock<mutex> lock(m_sync);
 	m_summed_latency = 0;
 	m_measurements = 0;
 	m_start = CMonotonicClock();

@@ -295,6 +295,7 @@ void CTransferSocket::OnReceive()
 
 			m_pTransferBuffer += numread;
 			m_transferBufferLen -= numread;
+			break;
 		}
 
 		if (numread < 0) {
@@ -310,7 +311,7 @@ void CTransferSocket::OnReceive()
 			FinalizeWrite();
 		}
 		else {
-			SendEvent<CSocketEvent>(m_pBackend, SocketEventType::read, 0);
+		//	SendEvent<CSocketEvent>(m_pBackend, SocketEventType::read, 0);
 		}
 	}
 	else if (m_transferMode == TransferMode::resumetest) {

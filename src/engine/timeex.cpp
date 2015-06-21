@@ -541,7 +541,7 @@ struct CrtAssertSuppressor
 {
 	CrtAssertSuppressor()
 	{
-		scoped_lock l(m_);
+		scoped_lock<smutex> l(m_);
 
 		if (!refs_++) {
 			oldError = _CrtSetReportMode(_CRT_ERROR, 0);
@@ -552,7 +552,7 @@ struct CrtAssertSuppressor
 
 	~CrtAssertSuppressor()
 	{
-		scoped_lock l(m_);
+		scoped_lock<smutex> l(m_);
 
 		if (!--refs_) {
 			_set_invalid_parameter_handler(oldHandler);
@@ -565,7 +565,7 @@ struct CrtAssertSuppressor
 	static int oldAssert;
 	static _invalid_parameter_handler oldHandler;
 
-	static mutex m_;
+	static smutex m_;
 	static int refs_;
 };
 
@@ -573,7 +573,7 @@ int CrtAssertSuppressor::oldError{};
 int CrtAssertSuppressor::oldAssert{};
 _invalid_parameter_handler CrtAssertSuppressor::oldHandler{};
 
-mutex CrtAssertSuppressor::m_{};
+smutex CrtAssertSuppressor::m_{};
 int CrtAssertSuppressor::refs_{};
 
 }
