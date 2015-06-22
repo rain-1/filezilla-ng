@@ -63,13 +63,7 @@ wxString CSizeFormatBase::Format(COptionsBase* pOptions, int64_t size, bool add_
 		if (!add_bytes_suffix)
 			return result;
 		else {
-			// wxPLURAL has no support for wxLongLong
-			int last;
-			if (size > 1000000000)
-				last = 1000000000 + (size % 1000000000);
-			else
-				last = size;
-			return wxString::Format(wxPLURAL("%s byte", "%s bytes", last), result);
+			return wxString::Format(wxPLURAL_LL("%s byte", "%s bytes", size), result);
 		}
 	}
 

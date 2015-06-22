@@ -63,4 +63,8 @@ unique_static_cast(std::unique_ptr<Base>&& p)
 	return std::unique_ptr<Derived>(d);
 }
 
+// wxGetTranslation does not support 64bit ints on 32bit systems.
+#define wxPLURAL_LL(sing, plur, n) \
+	wxGetTranslation((sing), (plur), (sizeof(unsigned int) < 8 && (n) > 1000000000) ? (1000000000 + (n) % 1000000000) : (n))
+
 #endif //__MISC_H__
