@@ -12,6 +12,12 @@ protected:
 	virtual bool Show(bool show);
 
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
+
+	wxStaticText* m_pTextCtrl[2];
+
+	wxDECLARE_EVENT_TABLE();
+	void OnPaint(wxPaintEvent& ev);
+	void OnCancel(wxCommandEvent& ev);
 };
 
 #endif
