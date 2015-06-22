@@ -274,7 +274,7 @@ bool CCommandQueue::Quit()
 void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const& listingNotification)
 {
 	auto const firstListing = std::find_if(m_CommandList.begin(), m_CommandList.end(), [](CommandInfo const& v) { return v.command->GetId() == Command::list; });
-	bool const listingIsRecursive = firstListing != m_CommandList.end() && firstListing->origin == recursiveOperation && m_pState->GetRecursiveOperationHandler()->IsActive();
+	bool const listingIsRecursive = firstListing != m_CommandList.end() && firstListing->origin == recursiveOperation;
 
 	std::shared_ptr<CDirectoryListing> pListing;
 	if (!listingNotification.GetPath().empty()) {
@@ -290,7 +290,7 @@ void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const&
 	}
 
 	if (listingIsRecursive) {
-		if (!listingNotification.Modified()) {
+		if (!listingNotification.Modified() && m_pState->GetRecursiveOperationHandler()->IsActive()) {
 			m_pState->NotifyHandlers(STATECHANGE_REMOTE_DIR_OTHER, wxString(), &pListing);
 		}
 	}
