@@ -141,7 +141,7 @@ public:
 	static bool RecursiveCopy(CLocalPath source, const CLocalPath& targte);
 
 	bool IsRemoteConnected() const;
-	bool IsRemoteIdle() const;
+	bool IsRemoteIdle(bool ignore_recursive = false) const;
 
 	CRecursiveOperation* GetRecursiveOperationHandler() { return m_pRecursiveOperation; }
 

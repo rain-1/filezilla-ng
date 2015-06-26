@@ -877,7 +877,8 @@ wxString StripVMSRevision(const wxString& name)
 
 void CRemoteListView::OnItemActivated(wxListEvent &event)
 {
-	if (!m_pState->IsRemoteIdle()) {
+	int const action = COptions::Get()->GetOptionVal(OPTION_DOUBLECLICK_ACTION_DIRECTORY);
+	if (!m_pState->IsRemoteIdle(action ? false : true)) {
 		wxBell();
 		return;
 	}
@@ -934,7 +935,6 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 		}
 
 		if (entry.is_dir()) {
-			const int action = COptions::Get()->GetOptionVal(OPTION_DOUBLECLICK_ACTION_DIRECTORY);
 			if (action == 3) {
 				// No action
 				wxBell();
@@ -995,7 +995,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 
 void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 {
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_pState->IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
@@ -1048,8 +1048,7 @@ void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 
 void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 {
-	if (GetEditControl())
-	{
+	if (GetEditControl()) {
 		event.Skip();
 		return;
 	}
@@ -1058,9 +1057,28 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 	if (!pMenu)
 		return;
 
-	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle())
-	{
-		pMenu->Delete(XRCID("ID_ENTER"));
+	bool const idle = m_pState->IsRemoteIdle();
+	bool const userIdle = m_pState->IsRemoteIdle(true);
+	if (!m_pState->IsRemoteConnected() || !idle) {
+		bool canEnter = false;
+		if (userIdle) {
+			int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+			if (item > 0 && GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1) {
+				int index = GetItemIndex(item);
+				if (index != -1 && m_fileData[index].comparison_flags != fill) {
+					if ((*m_pDirectoryListing)[index].is_dir()) {
+						canEnter = true;
+					}
+				}
+				canEnter = true;
+			}
+		}
+		else {
+			pMenu->Enable(XRCID("ID_ENTER"), false);
+		}
+		if (!canEnter) {
+			pMenu->Delete(XRCID("ID_ENTER"));
+		}
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 		pMenu->Enable(XRCID("ID_MKDIR"), false);
@@ -1073,8 +1091,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_CONTEXT_REFRESH"), false);
 		pMenu->Enable(XRCID("ID_NEW_FILE"), false);
 	}
-	else if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1)
-	{
+	else if (GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED) == -1) {
 		pMenu->Delete(XRCID("ID_ENTER"));
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
@@ -1084,10 +1101,8 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_EDIT"), false);
 		pMenu->Enable(XRCID("ID_GETURL"), false);
 	}
-	else
-	{
-		if ((GetItemCount() && GetItemState(0, wxLIST_STATE_SELECTED)))
-		{
+	else {
+		if ((GetItemCount() && GetItemState(0, wxLIST_STATE_SELECTED))) {
 			pMenu->Enable(XRCID("ID_RENAME"), false);
 			pMenu->Enable(XRCID("ID_CHMOD"), false);
 			pMenu->Enable(XRCID("ID_EDIT"), false);
@@ -1098,10 +1113,8 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 		int fillCount = 0;
 		bool selectedDir = false;
 		int item = -1;
-		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-		{
-			if (!item)
-			{
+		while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
+			if (!item) {
 				++count;
 				++fillCount;
 				continue;
@@ -1111,16 +1124,14 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 			if (index == -1)
 				continue;
 			count++;
-			if (m_fileData[index].comparison_flags == fill)
-			{
+			if (m_fileData[index].comparison_flags == fill) {
 				fillCount++;
 				continue;
 			}
 			if ((*m_pDirectoryListing)[index].is_dir())
 				selectedDir = true;
 		}
-		if (!count || fillCount == count)
-		{
+		if (!count || fillCount == count) {
 			pMenu->Delete(XRCID("ID_ENTER"));
 			pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 			pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
@@ -1130,21 +1141,18 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 			pMenu->Enable(XRCID("ID_EDIT"), false);
 			pMenu->Enable(XRCID("ID_GETURL"), false);
 		}
-		else
-		{
+		else {
 			if (selectedDir)
 				pMenu->Enable(XRCID("ID_EDIT"), false);
 			else
 				pMenu->Delete(XRCID("ID_ENTER"));
-			if (count > 1)
-			{
+			if (count > 1) {
 				if (selectedDir)
 					pMenu->Delete(XRCID("ID_ENTER"));
 				pMenu->Enable(XRCID("ID_RENAME"), false);
 			}
 
-			if (!m_pState->GetLocalDir().IsWriteable())
-			{
+			if (!m_pState->GetLocalDir().IsWriteable()) {
 				pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 				pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 			}
@@ -1161,15 +1169,13 @@ void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 	bool idle = m_pState->IsRemoteIdle();
 
 	const CLocalPath localDir = m_pState->GetLocalDir();
-	if (!localDir.IsWriteable())
-	{
+	if (!localDir.IsWriteable()) {
 		wxBell();
 		return;
 	}
 
 	long item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -1182,8 +1188,7 @@ void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 			continue;
 		if (m_fileData[index].comparison_flags == fill)
 			continue;
-		if ((*m_pDirectoryListing)[index].is_dir() && !idle)
-		{
+		if ((*m_pDirectoryListing)[index].is_dir() && !idle) {
 			wxBell();
 			return;
 		}
@@ -2596,7 +2601,7 @@ void CRemoteListView::OnMenuRefresh(wxCommandEvent&)
 void CRemoteListView::OnNavigationEvent(bool forward)
 {
 	if (!forward) {
-		if (!m_pState->IsRemoteIdle()) {
+		if (!m_pState->IsRemoteIdle(true)) {
 			wxBell();
 			return;
 		}
