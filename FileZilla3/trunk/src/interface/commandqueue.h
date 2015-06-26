@@ -13,6 +13,7 @@ class CCommandQueue
 public:
 	enum command_origin
 	{
+		any = -1,
 		normal, // Most user actions 
 		recursiveOperation
 	};
@@ -22,7 +23,7 @@ public:
 
 	void ProcessCommand(CCommand *pCommand, command_origin origin = normal);
 	void ProcessNextCommand();
-	bool Idle() const;
+	bool Idle(command_origin origin = any) const;
 	bool Cancel();
 	bool Quit();
 	void Finish(std::unique_ptr<COperationNotification> && pNotification);
