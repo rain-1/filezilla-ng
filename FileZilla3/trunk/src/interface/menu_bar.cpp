@@ -264,7 +264,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			return;
 
 		pState->SetSyncBrowse(false);
-		if (!pData->m_remoteDir.empty() && pState->IsRemoteIdle()) {
+		if (!pData->m_remoteDir.empty() && pState->IsRemoteIdle(true)) {
 			const CServer* pServer = pState->GetServer();
 			if (!pServer || *pServer != pData->m_server) {
 				m_pMainFrame->ConnectToSite(*pData);
@@ -296,7 +296,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			return;
 
 		pState->SetSyncBrowse(false);
-		if (!remote_dir.empty() && pState->IsRemoteIdle())
+		if (!remote_dir.empty() && pState->IsRemoteIdle(true))
 		{
 			const CServer* pServer = pState->GetServer();
 			if (pServer)
@@ -457,16 +457,14 @@ void CMenuBar::UpdateMenubarState()
 	bool canReconnect;
 	if (pServer || !idle)
 		canReconnect = false;
-	else
-	{
+	else {
 		CServer tmp;
 		canReconnect = !pState->GetLastServer().GetHost().empty();
 	}
 	Enable(XRCID("ID_MENU_SERVER_RECONNECT"), canReconnect);
 
 	wxMenuItem* pItem = FindItem(XRCID("ID_MENU_TRANSFER_TYPE"));
-	if (!pServer || CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol()))
-	{
+	if (!pServer || CServer::ProtocolHasDataTypeConcept(pServer->GetProtocol())) {
 		pItem->Enable(true);
 	}
 	else

@@ -252,7 +252,7 @@ bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPr
 				return false;
 			SetSyncBrowse(false);
 		}
-		else if (!IsRemoteIdle()) {
+		else if (!IsRemoteIdle(true)) {
 			wxString msg(_("A remote operation is in progress and synchronized browsing is enabled.\nDisable synchronized browsing and continue changing the local directory?"));
 			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 				return false;
@@ -829,8 +829,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 			hasFiles = true;
 	}
 
-	if (hasDirs)
-	{
+	if (hasDirs) {
 		if (!IsRemoteConnected() || !IsRemoteIdle())
 			return false;
 	}
@@ -841,8 +840,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	if (!hasDirs)
 		return true;
 
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-	{
+	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		if (!iter->dir)
 			continue;
 
@@ -868,15 +866,15 @@ bool CState::IsRemoteConnected() const
 	return m_pServer != 0;
 }
 
-bool CState::IsRemoteIdle() const
+bool CState::IsRemoteIdle(bool ignore_recursive) const
 {
-	if (m_pRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_none)
+	if (!ignore_recursive && m_pRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_none)
 		return false;
 
 	if (!m_pCommandQueue)
 		return true;
 
-	return m_pCommandQueue->Idle();
+	return m_pCommandQueue->Idle(ignore_recursive ? CCommandQueue::normal : CCommandQueue::any);
 }
 
 void CState::ListingFailed(int error)
@@ -896,18 +894,15 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 	if (!m_pServer || !m_pCommandQueue)
 		return false;
 
-	if (!m_sync_browse.local_root.empty())
-	{
+	if (!m_sync_browse.local_root.empty()) {
 		CServerPath p(path);
-		if (!subdir.empty() && !p.ChangePath(subdir))
-		{
+		if (!subdir.empty() && !p.ChangePath(subdir)) {
 			wxString msg = wxString::Format(_("Could not get full remote path."));
 			wxMessageBoxEx(msg, _("Synchronized browsing"));
 			return false;
 		}
 
-		if (p != m_sync_browse.remote_root && !p.IsSubdirOf(m_sync_browse.remote_root, false))
-		{
+		if (p != m_sync_browse.remote_root && !p.IsSubdirOf(m_sync_browse.remote_root, false)) {
 			wxString msg = wxString::Format(_("The remote directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the remote directory?"),
 					p.GetPath(),
 					m_sync_browse.remote_root.GetPath());
@@ -915,33 +910,28 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 				return false;
 			SetSyncBrowse(false);
 		}
-		else if (!IsRemoteIdle() && !ignore_busy)
-		{
+		else if (!IsRemoteIdle(true) && !ignore_busy) {
 			wxString msg(_("Another remote operation is already in progress, cannot change directory now."));
 			wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_EXCLAMATION);
 			return false;
 		}
-		else
-		{
+		else {
 			wxString error;
 			CLocalPath local_path = GetSynchronizedDirectory(p);
-			if (local_path.empty())
-			{
+			if (local_path.empty()) {
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nDisable synchronized browsing and continue changing the remote directory?"),
 					p.GetPath());
 				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 					return false;
 				SetSyncBrowse(false);
 			}
-			else if (!local_path.Exists(&error))
-			{
+			else if (!local_path.Exists(&error)) {
 				wxString msg = error + _T("\n") + _("Disable synchronized browsing and continue changing the remote directory?");
 				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
 					return false;
 				SetSyncBrowse(false);
 			}
-			else
-			{
+			else {
 				m_sync_browse.is_changing = true;
 				m_sync_browse.compare = m_pComparisonManager->IsComparing();
 			}
@@ -1042,7 +1032,7 @@ bool CState::RefreshRemote()
 	if (!m_pCommandQueue)
 		return false;
 
-	if (!IsRemoteConnected() || !IsRemoteIdle())
+	if (!IsRemoteConnected() || !IsRemoteIdle(true))
 		return false;
 
 	return ChangeRemoteDir(GetRemotePath(), _T(""), LIST_FLAG_REFRESH);

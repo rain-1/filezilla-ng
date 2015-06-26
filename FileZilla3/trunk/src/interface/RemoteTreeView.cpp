@@ -721,8 +721,7 @@ void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 	if (m_busy)
 		return;
 
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
@@ -867,8 +866,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 		return;
 
 	const CServerPath& path = m_contextMenuItem ? GetPathFromItem(m_contextMenuItem) : CServerPath();
-	if (!m_pState->IsRemoteIdle() || path.empty())
-	{
+	if (!m_pState->IsRemoteIdle() || path.empty()) {
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 		pMenu->Enable(XRCID("ID_MKDIR"), false);
@@ -881,8 +879,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 	else if (!path.HasParent())
 		pMenu->Enable(XRCID("ID_RENAME"), false);
 
-	if (!m_pState->GetLocalDir().IsWriteable())
-	{
+	if (!m_pState->GetLocalDir().IsWriteable()) {
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 	}
@@ -913,17 +910,14 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 	bool cached = false;
 
 	// Obviously item needs to have a parent directory...
-	if (hasParent)
-	{
+	if (hasParent) {
 		const CServerPath& parentPath = path.GetParent();
 		CDirectoryListing listing;
 
 		// ... and it needs to be cached
 		cached = m_pState->m_pEngine->CacheLookup(parentPath, listing) == FZ_REPLY_OK;
-		if (cached)
-		{
-			for (unsigned int i = 0; i < listing.GetCount(); i++)
-			{
+		if (cached) {
+			for (unsigned int i = 0; i < listing.GetCount(); ++i) {
 				if (listing[i].name != name)
 					continue;
 
@@ -932,23 +926,20 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		}
 	}
 
-	if (!pChmodDlg->Create(this, 0, 1, name, permissions))
-	{
+	if (!pChmodDlg->Create(this, 0, 1, name, permissions)) {
 		pChmodDlg->Destroy();
 		pChmodDlg = 0;
 		return;
 	}
 
-	if (pChmodDlg->ShowModal() != wxID_OK)
-	{
+	if (pChmodDlg->ShowModal() != wxID_OK) {
 		pChmodDlg->Destroy();
 		pChmodDlg = 0;
 		return;
 	}
 
 	// State may have changed while chmod dialog was shown
-	if (!m_contextMenuItem || !m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle())
-	{
+	if (!m_contextMenuItem || !m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle()) {
 		pChmodDlg->Destroy();
 		pChmodDlg = 0;
 		return;
@@ -958,11 +949,9 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
 
-	if (cached) // Implies hasParent
-	{
+	if (cached) { // Implies hasParent
 		// Change directory permissions
-		if (!applyType || applyType == 2)
-		{
+		if (!applyType || applyType == 2) {
 			wxString newPerms = pChmodDlg->GetPermissions(permissions, true);
 
 			m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(path.GetParent(), name, newPerms));
@@ -972,16 +961,14 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 			// Start recursion
 			pRecursiveOperation->AddDirectoryToVisit(path, _T(""), CLocalPath());
 	}
-	else
-	{
+	else {
 		if (hasParent)
 			pRecursiveOperation->AddDirectoryToVisitRestricted(path.GetParent(), name, pChmodDlg->Recursive());
 		else
 			pRecursiveOperation->AddDirectoryToVisitRestricted(path, _T(""), pChmodDlg->Recursive());
 	}
 
-	if (!cached || pChmodDlg->Recursive())
-	{
+	if (!cached || pChmodDlg->Recursive()) {
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 
 		CServerPath currentPath;
@@ -991,12 +978,10 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod, hasParent ? path.GetParent() : path, filter.GetActiveFilters(false), !cached, currentPath);
 	}
-	else
-	{
+	else {
 		pChmodDlg->Destroy();
 		const wxTreeItemId selected = GetSelection();
-		if (selected)
-		{
+		if (selected) {
 			CServerPath currentPath = GetPathFromItem(selected);
 			m_pState->ChangeRemoteDir(currentPath);
 		}
@@ -1006,8 +991,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 {
 	CLocalPath localDir = m_pState->GetLocalDir();
-	if (!localDir.IsWriteable())
-	{
+	if (!localDir.IsWriteable()) {
 		wxBell();
 		return;
 	}
@@ -1102,21 +1086,18 @@ void CRemoteTreeView::OnMenuRename(wxCommandEvent&)
 
 void CRemoteTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 {
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		event.Veto();
 		return;
 	}
 
 	const CServerPath& path = GetPathFromItem(event.GetItem());
-	if (path.empty())
-	{
+	if (path.empty()) {
 		event.Veto();
 		return;
 	}
 
-	if (!path.HasParent())
-	{
+	if (!path.HasParent()) {
 		event.Veto();
 		return;
 	}
@@ -1124,21 +1105,18 @@ void CRemoteTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 
 void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 {
-	if (event.IsEditCancelled())
-	{
+	if (event.IsEditCancelled()) {
 		event.Veto();
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle()) {
 		event.Veto();
 		return;
 	}
 
 	CItemData* const pData = (CItemData*)GetItemData(event.GetItem());
-	if (pData)
-	{
+	if (pData) {
 		event.Veto();
 		return;
 	}
@@ -1148,8 +1126,7 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 	const wxString& oldName = GetItemText(event.GetItem());
 	const wxString& newName = event.GetLabel();
-	if (oldName == newName)
-	{
+	if (oldName == newName) {
 		event.Veto();
 		return;
 	}
@@ -1164,15 +1141,12 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	if (currentPath.empty())
 		return;
 
-	if (currentPath == old_path || currentPath.IsSubdirOf(old_path, false))
-	{
+	if (currentPath == old_path || currentPath.IsSubdirOf(old_path, false)) {
 		// Previously selected path was below renamed one, list the new one
 
 		std::list<wxString> subdirs;
-		while (currentPath != old_path)
-		{
-			if (!currentPath.HasParent())
-			{
+		while (currentPath != old_path) {
+			if (!currentPath.HasParent()) {
 				// Abort just in case
 				return;
 			}
@@ -1244,8 +1218,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 	// replace it with "New directory" later. This way we get the exact position of
 	// "New directory" and can preselect it in the dialog.
 	wxString tmpName = _T("25CF809E56B343b5A12D1F0466E3B37A49A9087FDCF8412AA9AF8D1E849D01CF");
-	if (newPath.AddSegment(tmpName))
-	{
+	if (newPath.AddSegment(tmpName)) {
 		wxString pathName = newPath.GetPath();
 		int pos = pathName.Find(tmpName);
 		wxASSERT(pos != -1);
@@ -1259,8 +1232,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 		return CServerPath();
 
 	newPath = path;
-	if (!newPath.ChangePath(dlg.GetValue()))
-	{
+	if (!newPath.ChangePath(dlg.GetValue())) {
 		wxBell();
 		return CServerPath();
 	}

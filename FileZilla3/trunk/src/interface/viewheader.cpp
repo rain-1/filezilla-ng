@@ -563,14 +563,12 @@ void CRemoteViewHeader::OnTextEnter(wxCommandEvent&)
 {
 	CServerPath path = m_path;
 	wxString value = m_pComboBox->GetValue();
-	if (value.empty() || !path.ChangePath(value))
-	{
+	if (value.empty() || !path.ChangePath(value)) {
 		wxBell();
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
@@ -585,14 +583,12 @@ void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
 		return;
 
 	CServerPath path = m_path;
-	if (!path.SetPath(dir))
-	{
+	if (!path.SetPath(dir)) {
 		wxBell();
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle())
-	{
+	if (!m_pState->IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
