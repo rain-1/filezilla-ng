@@ -27,13 +27,22 @@ CCommandQueue::~CCommandQueue()
 {
 }
 
-bool CCommandQueue::Idle() const
+bool CCommandQueue::Idle(command_origin origin) const
 {
-	return m_CommandList.empty() && !m_exclusiveEngineLock;
+	if (m_exclusiveEngineLock) {
+		return false;
+	}
+
+	if (origin == any) {
+		return m_CommandList.empty();
+	}
+	
+	return std::find_if(m_CommandList.begin(), m_CommandList.end(), [origin](CommandInfo const& c) { return c.origin == origin; }) == m_CommandList.end();
 }
 
 void CCommandQueue::ProcessCommand(CCommand *pCommand, CCommandQueue::command_origin origin)
 {
+	wxASSERT(origin != any);
 	if (m_quit) {
 		delete pCommand;
 	}
