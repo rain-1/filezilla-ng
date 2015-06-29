@@ -10,6 +10,19 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.12.0-rc1 (2015-06-29)
+
++ FileZilla no longer visually enters each visited directory during recursive operations, e.g. when downloading or deleting remote directories. During recursive operations the server's directory structure can now be navigated as if idle
++ Ask for confirmation if trying to load Site Manager data originating from a future version of FileZilla
++ Display location of settings directory on the About dialog
++ Display detected CPU features (on x86) on the About dialog
+- Remove certificate verification messages in the message log for data connections
+- Speed up parsing of the PASV reply
+- The status bar of the search dialog now shows the number of found matches again
+- OS X: Configuring SFTP keys no longer fails if the full path of FileZilla's application bundle contains spaces
+- *nix: Make waitable conditions immune to wallclock changes if the system supports both clock_gettime and pthread_condattr_setclock
+- Fixed a rare crash when queuing many socket threads for deletion at the same time
+
 3.11.0.2 (2015-06-02)
 
 - Fixed a potential crash if a connection gets remotely closed in the same moment a new connection is to be opened
