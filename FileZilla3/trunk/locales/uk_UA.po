@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-12 15:30+0200\n"
-"PO-Revision-Date: 2015-05-28 15:37+0200\n"
+"PO-Revision-Date: 2015-06-20 14:56+0200\n"
 "Last-Translator: Igor Chomko <igorchomko@gmail.com>\n"
 "Language-Team: Igor Chomko <igorchomko@gmail.com>\n"
 "Language: uk_UA\n"
@@ -5394,8 +5394,9 @@ msgstr ""
 "фільтри."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:777
+#, fuzzy
 msgid "Operating system"
-msgstr "Операційна система"
+msgstr "Операційна система:"
 
 #: ../../locales/../src/engine/socket.cpp:1049
 msgid "Operation already in progress"
@@ -8153,8 +8154,9 @@ msgid "Verifying certificate..."
 msgstr "Перевірка сертифікату..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:757
+#, fuzzy
 msgid "Version:"
-msgstr "Версія:"
+msgstr "&Версія %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:964
 msgid "Very high"
@@ -8607,6 +8609,33 @@ msgstr "глобальний запис"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxВіджети:"
+
+#~ msgid "CPU features:"
+#~ msgstr "Характеристики ЦП"
+
+#~ msgid "Detected newer version of FileZilla"
+#~ msgstr "Виявлено наявність новішої версії FileZilla"
+
+#~ msgid "OS version:"
+#~ msgstr "Версія ОС:"
+
+#~ msgid "Settings directory:"
+#~ msgstr "Каталог налаштувань:"
+
+#~ msgid "System details"
+#~ msgstr "Подробиці системи"
+
+#~ msgid "The Site Manager cannot be used unless the file gets repaired."
+#~ msgstr "Перед використанням Сайт Менеджера відновіть ЦП."
+
+#~ msgid ""
+#~ "The file '%s' has been created by a more recent version of FileZilla.\n"
+#~ "Loading files created by newer versions can result in loss of data.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Файл '%s' було створено в набагато ранішній версії FileZilla.\n"
+#~ "Завантаження файлів новіших версій може спричинити втрату даних.\n"
+#~ "Бажаєте продовжити?"
 
 #~ msgid "Clear &Site Manager entries"
 #~ msgstr "Очистити &вміст Сайт Менеджера"
