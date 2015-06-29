@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-12 15:30+0200\n"
-"PO-Revision-Date: 2015-05-13 09:22+0100\n"
-"Last-Translator: bovirus <bovirus@gmail.com>\n"
+"PO-Revision-Date: 2015-06-23 16:33+0100\n"
+"Last-Translator: bovirus <@bovirus@gmail.com>\n"
 "Language-Team: Andrea Sanavia - Roberto Boriotti - Vincenzo Reale - Riccardo "
 "Vianello <www.filezilla-project.it>\n"
 "Language: it\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8beta1\n"
+"X-Generator: Poedit 1.8.1\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
@@ -5415,8 +5415,9 @@ msgstr ""
 "abilitazione/disabilitazione filtri."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:777
+#, fuzzy
 msgid "Operating system"
-msgstr "Sistema operativo"
+msgstr "Sistema operativo:"
 
 #: ../../locales/../src/engine/socket.cpp:1049
 msgid "Operation already in progress"
@@ -8181,8 +8182,9 @@ msgid "Verifying certificate..."
 msgstr "Verifica del certificato in corso..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:757
+#, fuzzy
 msgid "Version:"
-msgstr "Versione:"
+msgstr "&Versione %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:964
 msgid "Very high"
@@ -8636,6 +8638,60 @@ msgstr "scrivibile per gli altri"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "%llu directory"
+#~ msgid_plural "%llu directories"
+#~ msgstr[0] "%llu cartella"
+#~ msgstr[1] "%llu cartelle"
+
+#~ msgid "%llu file"
+#~ msgid_plural "%llu files"
+#~ msgstr[0] "%llu file"
+#~ msgstr[1] "%llu file"
+
+#~ msgid "CPU features:"
+#~ msgstr "Funzioni CPU:"
+
+#~ msgid "Detected newer version of FileZilla"
+#~ msgstr "Rilevata una nuova versione di Filezilla"
+
+#~ msgid "OS version:"
+#~ msgstr "Versione SO:"
+
+#~ msgid "Processed %s in %s."
+#~ msgstr "Elaborato %s iin %s."
+
+#~ msgid "Recursively adding files to queue."
+#~ msgstr "Aggiunta ricorsiva file alla coda"
+
+#~ msgid "Recursively changing permissions."
+#~ msgstr "Modifica ricorsiva permessi."
+
+#~ msgid "Recursively deleting files and directories."
+#~ msgstr "Eliminazione ricorsiva di file e cartelle."
+
+#~ msgid "Settings directory:"
+#~ msgstr "Cartella impostazioni:"
+
+#~ msgid "Stop recursive operation"
+#~ msgstr "Ferma operazioni ricorsive"
+
+#~ msgid "System details"
+#~ msgstr "Dettagli sistema"
+
+#~ msgid "The Site Manager cannot be used unless the file gets repaired."
+#~ msgstr ""
+#~ "Il Gestore siti non può essere usato a meno che il file venga sistemato."
+
+#~ msgid ""
+#~ "The file '%s' has been created by a more recent version of FileZilla.\n"
+#~ "Loading files created by newer versions can result in loss of data.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Il file '%s' è stato creato da una versione più recente di Filezilla.\n"
+#~ "Caricare un file creato da una versione più recente di Filezilla può "
+#~ "comportare una perdita dati.\n"
+#~ "Vuoi continuare?"
 
 #~ msgid "Clear &Site Manager entries"
 #~ msgstr "Voci del &Gestore siti"

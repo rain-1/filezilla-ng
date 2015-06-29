@@ -1,14 +1,15 @@
 # Norwegian bokmål translation of FileZilla
 # Copyright (C) 2015 Tim Kosse
 # This file is distributed under the same license as the filezilla package.
-# Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>, 2015.
+# Åka Sikrom <a4@hushNOSPAMPLEASETHANKYOU.com>, 2015.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-12 15:30+0200\n"
-"PO-Revision-Date: 2015-05-13 07:28+0100\n"
-"Last-Translator: Åka Sikrom <a4NOSPAMPLEASETHANKYOU@hush.com>\n"
+"PO-Revision-Date: 2015-06-19 09:55+0200\n"
+"Last-Translator: Åka Sikrom <a4@hushNOSPAMPLEASETHANKYOU.com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -397,7 +398,7 @@ msgstr "&Koble fra tjener"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1404
 msgid "&Display momentary transfer speed instead of average speed"
-msgstr "&Vis gjeldende - i stedet for gjennomsnittlig - hastighet"
+msgstr "&Vis gjeldende (i stedet for gjennomsnittlig) hastighet"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1608
 msgid "&Display size in bytes"
@@ -722,7 +723,7 @@ msgstr "&ÅPNE"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:255
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:548
 msgid "&Open"
-msgstr "&Åpne"
+msgstr "&Åpne med filutforsker"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:134
 msgid "&Overwrite"
@@ -880,7 +881,7 @@ msgstr "&Søk"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:190
 msgid "&Search remote files..."
-msgstr "&Søk gjennom eksterne filer …"
+msgstr "&Søk etter eksterne filer …"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:18
 msgid "&Select Entry:"
@@ -949,7 +950,7 @@ msgstr "&Start overføring umiddelbart"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1299
 msgid "&Swap local and remote panes"
-msgstr "&Bytt lokal- og tjenervindu"
+msgstr "&Omvendt plassering av lokal- og tjenervindu"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:437
 msgid "&TLS Ciphers"
@@ -1053,7 +1054,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2060
 msgid "&When checking for updates, check for:"
-msgstr "&Se etter dette ved søk etter oppdateringer:"
+msgstr "&Se etter denne typen oppdateringer:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:415
 msgid "&Write"
@@ -3161,7 +3162,8 @@ msgstr "Ikke bruk ekstern IP-adresse på &lokale tilkoblinger."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1147
 msgid "Dotfiles are filenames starting with a dot, e.g. .htaccess"
-msgstr "Punktumfiler har filnavn som starter med punktum, som f.eks. .htaccess"
+msgstr ""
+"Punktum-filer har filnavn som starter med punktum, som f.eks. .htaccess"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1808
 msgid "Double-click action"
@@ -3261,7 +3263,7 @@ msgstr "&Slå på alle"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:250
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:296
 msgid "E&nter directory"
-msgstr "&Skriv inn mappe"
+msgstr "&Gå inn i mappe"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:455
 msgid "E&xecute"
@@ -5188,11 +5190,11 @@ msgstr "Ikke tilkoblet"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2022
 msgid "Not connected to any server"
-msgstr "Er ikke tilkoblet noen tjener"
+msgstr "Ikke tilkoblet"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:571
 msgid "Not connected to any server."
-msgstr "Er ikke tilkoblet noen tjener."
+msgstr "Ikke tilkoblet."
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:15
 msgid "Not connected."
@@ -5289,7 +5291,7 @@ msgstr "Åpne tjeneroppsett"
 
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:9
 msgid "Open the Site Manager."
-msgstr "Åpne Tjeneroppsett."
+msgstr "Åpne tjeneroppsett."
 
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:10
 msgid "Open the Site Manager. Right-click for a list of sites."
@@ -5329,8 +5331,9 @@ msgstr ""
 "Åpne filterdialog for mappeliste. Høyreklikk for å bytte mellom filtre."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:777
+#, fuzzy
 msgid "Operating system"
-msgstr "Operativsystem"
+msgstr "Operativsystem:"
 
 #: ../../locales/../src/engine/socket.cpp:1049
 msgid "Operation already in progress"
@@ -5747,7 +5750,7 @@ msgid ""
 "often or in too short intervals."
 msgstr ""
 "Vær obs på at noen tjenere kan blokkere deg hvis du prøver å koble til for "
-"ofte, eller i for korte intervaller."
+"ofte."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:585
 msgid ""
@@ -7636,8 +7639,8 @@ msgid ""
 "To support public key authentication, FileZilla needs to know the private "
 "keys to use."
 msgstr ""
-"For å støtte offentlig nøkkelautentisering, må FileZilla vite hvilke private "
-"nøkler som skal brukes."
+"FileZilla må vite hvilke privatnøkler som skal brukes for å kunne "
+"autentisere mot offentlige nøkler."
 
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:75
 msgid ""
@@ -8064,8 +8067,9 @@ msgid "Verifying certificate..."
 msgstr "Bekrefter sertifikat …"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:757
+#, fuzzy
 msgid "Version:"
-msgstr "Versjon:"
+msgstr "&Versjon %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:964
 msgid "Very high"
@@ -8517,6 +8521,33 @@ msgstr "overskrivbar for alle"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "CPU features:"
+#~ msgstr "CPU-funksjoner:"
+
+#~ msgid "Detected newer version of FileZilla"
+#~ msgstr "Fant nyere versjon av FileZilla"
+
+#~ msgid "OS version:"
+#~ msgstr "OS-versjon:"
+
+#~ msgid "Settings directory:"
+#~ msgstr "Oppsettsmappe:"
+
+#~ msgid "System details"
+#~ msgstr "Systemdetaljer"
+
+#~ msgid "The Site Manager cannot be used unless the file gets repaired."
+#~ msgstr "Du må reparere fila før Tjeneroppsett kan brukes."
+
+#~ msgid ""
+#~ "The file '%s' has been created by a more recent version of FileZilla.\n"
+#~ "Loading files created by newer versions can result in loss of data.\n"
+#~ "Do you want to continue?"
+#~ msgstr ""
+#~ "Fila «%s» kommer fra en nyere versjon av FileZilla.\n"
+#~ "Du risikerer datatap ved å laste inn filer fra nyere versjoner.\n"
+#~ "Er du sikker på at du vil fortsette?"
 
 #~ msgid "Clear &Site Manager entries"
 #~ msgstr "Tøm oppføringer i Tjeneropp&sett"
