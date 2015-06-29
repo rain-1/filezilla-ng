@@ -23,8 +23,7 @@ COptionsPageConnectionSFTP::COptionsPageConnectionSFTP()
 
 COptionsPageConnectionSFTP::~COptionsPageConnectionSFTP()
 {
-	if (m_pProcess)
-	{
+	if (m_pProcess) {
 		m_pProcess->CloseOutput();
 		m_pProcess->Detach();
 		m_pProcess = 0;
@@ -93,13 +92,11 @@ bool COptionsPageConnectionSFTP::LoadProcess()
 
 	wxString executable = m_pOptions->GetOption(OPTION_FZSFTP_EXECUTABLE);
 	int pos = executable.Find(wxFileName::GetPathSeparator(), true);
-	if (pos == -1)
-	{
+	if (pos == -1) {
 		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
 		return false;
 	}
-	else
-	{
+	else {
 		executable = executable.Left(pos + 1) + _T("fzputtygen");
 #ifdef __WXMSW__
 		executable += _T(".exe");
@@ -107,13 +104,16 @@ bool COptionsPageConnectionSFTP::LoadProcess()
 		// Restore quotes
 		if (!executable.empty() && executable[0] == '"')
 			executable += '"';
+
+		if (executable.Find(' ') != -1 && executable[0] != '"') {
+			executable = '"' + executable + '"';
+		}
 	}
 
 	m_pProcess = new wxProcess(this);
 	m_pProcess->Redirect();
 
-	if (!wxExecute(executable, wxEXEC_ASYNC, m_pProcess))
-	{
+	if (!wxExecute(executable, wxEXEC_ASYNC, m_pProcess)) {
 		delete m_pProcess;
 		m_pProcess = 0;
 
@@ -149,8 +149,7 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 	if (!m_pProcess)
 		return failure;
 	wxInputStream *pStream = m_pProcess->GetInputStream();
-	if (!pStream)
-	{
+	if (!pStream) {
 		wxMessageBoxEx(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 		return failure;
 	}
@@ -159,15 +158,12 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 
 	wxString input;
 
-	for (;;)
-	{
+	for (;;) {
 		int pos = input.Find('\n');
-		if (pos == wxNOT_FOUND)
-		{
+		if (pos == wxNOT_FOUND) {
 			pStream->Read(buffer, 99);
 			int read;
-			if (pStream->Eof() || !(read = pStream->LastRead()))
-			{
+			if (pStream->Eof() || !(read = pStream->LastRead())) {
 				wxMessageBoxEx(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 				return failure;
 			}
@@ -186,8 +182,7 @@ enum COptionsPageConnectionSFTP::ReplyCode COptionsPageConnectionSFTP::GetReply(
 			pos2 = pos - 1;
 		else
 			pos2 = pos;
-		if (!pos2)
-		{
+		if (!pos2) {
 			input = input.Mid(pos + 1);
 			continue;
 		}
@@ -219,10 +214,8 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 	enum ReplyCode code = GetReply(reply);
 	if (code == failure)
 		return false;
-	if (code == error || (reply != _T("0") && reply != _T("1")))
-	{
-		if (!silent)
-		{
+	if (code == error || (reply != _T("0") && reply != _T("1"))) {
+		if (!silent) {
 			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile);
 			wxMessageBoxEx(msg, _("Could not load keyfile"), wxICON_EXCLAMATION);
 		}
@@ -230,8 +223,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 	}
 
 	bool needs_conversion;
-	if (reply == _T("1"))
-	{
+	if (reply == _T("1")) {
 		if (silent)
 			return false;
 
@@ -244,14 +236,12 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 	if (!Send(_T("encrypted")))
 		return false;
 	code = GetReply(reply);
-	if (code != success)
-	{
+	if (code != success) {
 		wxASSERT(code != error);
 		return false;
 	}
 	bool encrypted;
-	if (reply == _T("1"))
-	{
+	if (reply == _T("1")) {
 		if (silent)
 			return false;
 		encrypted = true;
@@ -259,8 +249,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 	else
 		encrypted = false;
 
-	if (encrypted || needs_conversion)
-	{
+	if (encrypted || needs_conversion) {
 		wxASSERT(!silent);
 
 		wxString msg;
@@ -326,8 +315,7 @@ bool COptionsPageConnectionSFTP::LoadKeyFile(wxString& keyFile, bool silent, wxS
 		}
 		keyFile = newName;
 	}
-	else
-	{
+	else {
 		if (!Send(_T("load")))
 			return false;
 		code = GetReply(reply);
@@ -382,8 +370,7 @@ bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
 	if (!LoadKeyFile(keyFile, silent, comment, data))
 		return false;
 
-	if (KeyFileExists(keyFile))
-	{
+	if (KeyFileExists(keyFile)) {
 		if (!silent)
 			wxMessageBoxEx(_("Selected file is already loaded"), _("Cannot load keyfile"), wxICON_INFORMATION);
 		return false;
@@ -400,8 +387,7 @@ bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
 bool COptionsPageConnectionSFTP::KeyFileExists(const wxString& keyFile)
 {
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
-	for (int i = 0; i < pKeys->GetItemCount(); i++)
-	{
+	for (int i = 0; i < pKeys->GetItemCount(); ++i) {
 		if (pKeys->GetItemText(i) == keyFile)
 			return true;
 	}
