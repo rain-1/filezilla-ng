@@ -454,8 +454,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnClicked(wxListE
 	if (col == -1)
 		return;
 
-	if (IsComparing())
-	{
+	if (IsComparing()) {
 #ifdef __WXMSW__
 		ReleaseCapture();
 		Refresh();
@@ -614,9 +613,12 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnPostScroll()
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnExitComparisonMode()
 {
+	if (m_originalIndexMapping.empty()) {
+		return;
+	}
+
 	ComparisonRememberSelections();
 
-	wxASSERT(!m_originalIndexMapping.empty());
 	m_indexMapping.clear();
 	m_indexMapping.swap(m_originalIndexMapping);
 
@@ -632,8 +634,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnExitComparisonMode()
 
 template<class CFileData> void CFileListCtrl<CFileData>::CompareAddFile(t_fileEntryFlags flags)
 {
-	if (flags == fill)
-	{
+	if (flags == fill) {
 		m_indexMapping.push_back(m_fileData.size() - 1);
 		return;
 	}
@@ -652,8 +653,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::ComparisonRememberSelec
 		return;
 
 	int focus = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-	if (focus != -1)
-	{
+	if (focus != -1) {
 		SetItemState(focus, 0, wxLIST_STATE_FOCUSED);
 		int index = m_indexMapping[focus];
 		if (m_fileData[index].comparison_flags == fill)
