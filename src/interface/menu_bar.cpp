@@ -286,39 +286,38 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 	}
 
 	std::map<int, wxString>::const_iterator iter2 = m_bookmark_menu_id_map_global.find(event.GetId());
-	if (iter2 != m_bookmark_menu_id_map_global.end())
-	{
+	if (iter2 != m_bookmark_menu_id_map_global.end()) {
 		// We hit a global bookmark
 		wxString local_dir;
 		CServerPath remote_dir;
 		bool sync;
-		if (!CBookmarksDialog::GetBookmark(iter2->second, local_dir, remote_dir, sync))
+		bool comparison;
+		if (!CBookmarksDialog::GetBookmark(iter2->second, local_dir, remote_dir, sync, comparison))
 			return;
 
 		pState->SetSyncBrowse(false);
-		if (!remote_dir.empty() && pState->IsRemoteIdle(true))
-		{
+		if (!remote_dir.empty() && pState->IsRemoteIdle(true)) {
 			const CServer* pServer = pState->GetServer();
-			if (pServer)
-			{
+			if (pServer) {
 				CServerPath current_remote_path = pState->GetRemotePath();
-				if (!current_remote_path.empty() && current_remote_path.GetType() != remote_dir.GetType())
-				{
+				if (!current_remote_path.empty() && current_remote_path.GetType() != remote_dir.GetType()) {
 					wxMessageBoxEx(_("Selected global bookmark and current server use a different server type.\nUse site-specific bookmarks for this server."), _("Bookmark"), wxICON_EXCLAMATION, this);
 					return;
 				}
 				pState->ChangeRemoteDir(remote_dir);
 			}
 		}
-		if (!local_dir.empty())
-		{
+		if (!local_dir.empty()) {
 			bool set = pState->SetLocalDir(local_dir);
 
-			if (set && sync)
-			{
+			if (set && sync) {
 				wxASSERT(!remote_dir.empty());
 				pState->SetSyncBrowse(true, remote_dir);
 			}
+		}
+
+		if (comparison) {
+			pState->GetComparisonManager()->CompareListings();
 		}
 
 		return;

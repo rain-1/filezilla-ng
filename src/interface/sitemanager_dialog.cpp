@@ -12,6 +12,7 @@
 #include "window_state_manager.h"
 #include "wrapengine.h"
 #include "xmlfunctions.h"
+#include "xrc_helper.h"
 
 #include <wx/dcclient.h>
 #include <wx/dnd.h>
@@ -840,8 +841,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 	wxScopedCharBuffer utf8 = name.utf8_str();
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
-	if (!data)
-	{
+	if (!data) {
 		TiXmlNode* pNode = pElement->LinkEndChild(new TiXmlElement("Folder"));
 		const bool expanded = pTree->IsExpanded(child);
 		SetTextAttribute(pNode->ToElement(), "expanded", expanded ? _T("1") : _T("0"));
@@ -850,8 +850,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 
 		Save(pNode->ToElement(), child);
 	}
-	else if (data->m_type == CSiteManagerItemData::SITE)
-	{
+	else if (data->m_type == CSiteManagerItemData::SITE) {
 		CSiteManagerItemData_Site *site_data = static_cast<CSiteManagerItemData_Site* >(data);
 		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
 		SetServer(pNode, site_data->m_server);
@@ -866,6 +865,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
 
 		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
+		AddTextElementRaw(pNode, "DirectoryComparison", data->m_comparison ? "1" : "0");
 
 		pNode->LinkEndChild(new TiXmlText(utf8));
 
@@ -890,6 +890,7 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
 
 		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
+		AddTextElementRaw(pNode, "DirectoryComparison", data->m_comparison ? "1" : "0");
 	}
 
 	return true;
@@ -1308,11 +1309,12 @@ bool CSiteManagerDialog::UpdateItem()
 
 bool CSiteManagerDialog::UpdateBookmark(CSiteManagerItemData &bookmark, const CServer& server)
 {
-	bookmark.m_localDir = XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->GetValue();
+	bookmark.m_localDir = xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::GetValue);
 	bookmark.m_remoteDir = CServerPath();
 	bookmark.m_remoteDir.SetType(server.GetType());
-	bookmark.m_remoteDir.SetPath(XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue());
-	bookmark.m_sync = XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->GetValue();
+	bookmark.m_remoteDir.SetPath(xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::GetValue));
+	bookmark.m_sync = xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::GetValue);
+	bookmark.m_comparison = xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::GetValue);
 
 	return true;
 }
@@ -1324,10 +1326,10 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	server.m_server.SetProtocol(protocol);
 
 	unsigned long port;
-	if (!XRCCTRL(*this, "ID_PORT", wxTextCtrl)->GetValue().ToULong(&port) || !port || port > 65535) {
+	if (!xrc_call(*this, "ID_PORT", &wxTextCtrl::GetValue).ToULong(&port) || !port || port > 65535) {
 		port = CServer::GetDefaultPort(protocol);
 	}
-	wxString host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
+	wxString host = xrc_call(*this, "ID_HOST", &wxTextCtrl::GetValue);
 	// SetHost does not accept URL syntax
 	if (!host.empty() && host[0] == '[') {
 		host.RemoveLast();
@@ -1335,55 +1337,53 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	}
 	server.m_server.SetHost(host, port);
 
-	enum LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
+	enum LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
 	server.m_server.SetLogonType(logon_type);
 
-	server.m_server.SetUser(XRCCTRL(*this, "ID_USER", wxTextCtrl)->GetValue(),
-						   XRCCTRL(*this, "ID_PASS", wxTextCtrl)->GetValue());
-	server.m_server.SetAccount(XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->GetValue());
+	server.m_server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
+							xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue));
+	server.m_server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue));
 
-	server.m_comments = XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->GetValue();
+	server.m_comments = xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::GetValue);
 
-	const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
+	const wxString serverType = xrc_call(*this, "ID_SERVERTYPE", &wxChoice::GetStringSelection);
 	server.m_server.SetType(CServer::GetServerTypeFromName(serverType));
 
-	server.m_localDir = XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue();
+	server.m_localDir = xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::GetValue);
 	server.m_remoteDir = CServerPath();
 	server.m_remoteDir.SetType(server.m_server.GetType());
-	server.m_remoteDir.SetPath(XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue());
-	server.m_sync = XRCCTRL(*this, "ID_SYNC", wxCheckBox)->GetValue();
+	server.m_remoteDir.SetPath(xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::GetValue));
+	server.m_sync = xrc_call(*this, "ID_SYNC", &wxCheckBox::GetValue);
+	server.m_comparison = xrc_call(*this, "ID_COMPARISON", &wxCheckBox::GetValue);
 
-	int hours, minutes;
-	hours = XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->GetValue();
-	minutes = XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->GetValue();
+	int hours = xrc_call(*this, "ID_TIMEZONE_HOURS", &wxSpinCtrl::GetValue);
+	int minutes = xrc_call(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::GetValue);
 
 	server.m_server.SetTimezoneOffset(hours * 60 + minutes);
 
-	if (XRCCTRL(*this, "ID_TRANSFERMODE_ACTIVE", wxRadioButton)->GetValue())
+	if (xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxRadioButton::GetValue))
 		server.m_server.SetPasvMode(MODE_ACTIVE);
-	else if (XRCCTRL(*this, "ID_TRANSFERMODE_PASSIVE", wxRadioButton)->GetValue())
+	else if (xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxRadioButton::GetValue))
 		server.m_server.SetPasvMode(MODE_PASSIVE);
 	else
 		server.m_server.SetPasvMode(MODE_DEFAULT);
 
-	if (XRCCTRL(*this, "ID_LIMITMULTIPLE", wxCheckBox)->GetValue())
-	{
-		server.m_server.MaximumMultipleConnections(XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->GetValue());
+	if (xrc_call(*this, "ID_LIMITMULTIPLE", &wxCheckBox::GetValue)) {
+		server.m_server.MaximumMultipleConnections(xrc_call(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::GetValue));
 	}
 	else
 		server.m_server.MaximumMultipleConnections(0);
 
-	if (XRCCTRL(*this, "ID_CHARSET_UTF8", wxRadioButton)->GetValue())
+	if (xrc_call(*this, "ID_CHARSET_UTF8", &wxRadioButton::GetValue))
 		server.m_server.SetEncodingType(ENCODING_UTF8);
-	else if (XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxRadioButton)->GetValue())
-	{
-		wxString encoding = XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->GetValue();
+	else if (xrc_call(*this, "ID_CHARSET_CUSTOM", &wxRadioButton::GetValue)) {
+		wxString encoding = xrc_call(*this, "ID_ENCODING", &wxTextCtrl::GetValue);
 		server.m_server.SetEncodingType(ENCODING_CUSTOM, encoding);
 	}
 	else
 		server.m_server.SetEncodingType(ENCODING_AUTO);
 
-	if (XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->GetValue())
+	if (xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::GetValue))
 		server.m_server.SetBypassProxy(true);
 	else
 		server.m_server.SetBypassProxy(false);
@@ -1407,8 +1407,7 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 	if (!pData)
 		return false;
 
-	if (pData->m_type == CSiteManagerItemData::BOOKMARK)
-	{
+	if (pData->m_type == CSiteManagerItemData::BOOKMARK) {
 		item = pTree->GetItemParent(item);
 		CSiteManagerItemData_Site* pSiteData = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(item));
 
@@ -1589,6 +1588,8 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_REMOTEDIR", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->Enable(!predefined);
 		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(site_data->m_sync);
+		XRCCTRL(*this, "ID_COMPARISON", wxCheckBox)->Enable(!predefined);
+		XRCCTRL(*this, "ID_COMPARISON", wxCheckBox)->SetValue(site_data->m_comparison);
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(site_data->m_server.GetTimezoneOffset() / 60);
 		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->SetValue(site_data->m_server.GetTimezoneOffset() % 60);
@@ -1661,16 +1662,15 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->ChangeValue(data->m_remoteDir.GetPath());
 		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxWindow)->Enable(!predefined);
 
-		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->Enable(true);
+		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->Enable(!predefined);
 		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetValue(data->m_sync);
+		XRCCTRL(*this, "ID_BOOKMARK_COMPARISON", wxCheckBox)->Enable(!predefined);
+		XRCCTRL(*this, "ID_BOOKMARK_COMPARISON", wxCheckBox)->SetValue(data->m_comparison);
 	}
 #ifdef __WXGTK__
-	if (pFocus && !pFocus->IsEnabled())
-	{
-		for (wxWindow* pParent = pFocus->GetParent(); pParent; pParent = pParent->GetParent())
-		{
-			if (pParent == this)
-			{
+	if (pFocus && !pFocus->IsEnabled()) {
+		for (wxWindow* pParent = pFocus->GetParent(); pParent; pParent = pParent->GetParent()) {
+			if (pParent == this) {
 				XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
 				break;
 			}

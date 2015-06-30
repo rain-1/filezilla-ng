@@ -15,7 +15,6 @@ public:
 	CSiteManagerItemData(enum type item_type)
 		: m_type(item_type)
 	{
-		m_sync = false;
 	}
 
 	virtual ~CSiteManagerItemData()
@@ -27,7 +26,8 @@ public:
 
 	enum type m_type;
 
-	bool m_sync;
+	bool m_sync{};
+	bool m_comparison{};
 
 	wxString m_path;
 };
@@ -78,7 +78,7 @@ public:
 	static bool GetBookmarks(wxString sitePath, std::list<wxString> &bookmarks);
 
 	static wxString AddServer(CServer server);
-	static bool AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync);
+	static bool AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
 	static bool ClearBookmarks(wxString sitePath);
 
 	static std::unique_ptr<wxMenu> GetSitesMenu();

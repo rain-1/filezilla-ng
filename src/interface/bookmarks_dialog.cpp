@@ -82,6 +82,8 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 		return;
 	}
 
+	bool const comparison = xrc_call(*this, "ID_COMPARISON", &wxCheckBox::GetValue);
+
 	if (!global && m_server) {
 		std::list<wxString> bookmarks;
 
@@ -103,12 +105,12 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 			}
 		}
 
-		CSiteManager::AddBookmark(m_site_path, name, local_path, remote_path, sync);
+		CSiteManager::AddBookmark(m_site_path, name, local_path, remote_path, sync, comparison);
 
 		EndModal(wxID_OK);
 	}
 	else {
-		if (!CBookmarksDialog::AddBookmark(name, local_path, remote_path, sync))
+		if (!CBookmarksDialog::AddBookmark(name, local_path, remote_path, sync, comparison))
 			return;
 
 		EndModal(wxID_OK);
@@ -129,18 +131,19 @@ class CBookmarkItemData : public wxTreeItemData
 {
 public:
 	CBookmarkItemData()
-		: m_sync(false)
 	{
 	}
 
-	CBookmarkItemData(const wxString& local_dir, const CServerPath& remote_dir, bool sync)
+	CBookmarkItemData(const wxString& local_dir, const CServerPath& remote_dir, bool sync, bool comparison)
 		: m_local_dir(local_dir), m_remote_dir(remote_dir), m_sync(sync)
+		, m_comparison(comparison)
 	{
 	}
 
 	wxString m_local_dir;
 	CServerPath m_remote_dir;
-	bool m_sync;
+	bool m_sync{};
+	bool m_comparison{};
 };
 
 CBookmarksDialog::CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server)
@@ -188,7 +191,9 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 		else
 			sync = GetTextElementBool(pBookmark, "SyncBrowsing");
 
-		CBookmarkItemData *data = new CBookmarkItemData(local_dir, remote_dir, sync);
+		bool const comparison = GetTextElementBool(pBookmark, "DirectoryComparison");
+
+		CBookmarkItemData *data = new CBookmarkItemData(local_dir, remote_dir, sync, comparison);
 		m_pTree->AppendItem(m_bookmarks_global, name, 1, 1, data);
 	}
 
@@ -213,7 +218,7 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 
 		std::unique_ptr<CSiteManagerItemData_Site> data = CSiteManager::GetSiteByPath(path);
 		if (data) {
-			CBookmarkItemData* new_data = new CBookmarkItemData(data->m_localDir, data->m_remoteDir, data->m_sync);
+			CBookmarkItemData* new_data = new CBookmarkItemData(data->m_localDir, data->m_remoteDir, data->m_sync, data->m_comparison);
 			m_pTree->AppendItem(m_bookmarks_site, *iter, 1, 1, new_data);
 		}
 	}
@@ -304,6 +309,8 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 			AddTextElement(pBookmark, "RemoteDir", data->m_remote_dir.GetSafePath());
 		if (data->m_sync)
 			AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
+		if (data->m_comparison)
+			AddTextElementRaw(pBookmark, "DirectoryComparison", "1");
 	}
 
 	if (!file.Save(false)) {
@@ -325,7 +332,7 @@ void CBookmarksDialog::SaveSiteSpecificBookmarks()
 		CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(child);
 		wxASSERT(data);
 
-		if (!CSiteManager::AddBookmark(m_site_path, m_pTree->GetItemText(child), data->m_local_dir, data->m_remote_dir, data->m_sync))
+		if (!CSiteManager::AddBookmark(m_site_path, m_pTree->GetItemText(child), data->m_local_dir, data->m_remote_dir, data->m_sync, data->m_comparison))
 			return;
 	}
 }
@@ -458,6 +465,7 @@ void CBookmarksDialog::UpdateBookmark()
 	data->m_local_dir = xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::GetValue);
 
 	data->m_sync = xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::GetValue);
+	data->m_comparison = xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::GetValue);
 }
 
 void CBookmarksDialog::DisplayBookmark()
@@ -493,6 +501,7 @@ void CBookmarksDialog::DisplayBookmark()
 	xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::ChangeValue, data->m_local_dir);
 
 	xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::SetValue, data->m_sync);
+	xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::SetValue, data->m_comparison);
 }
 
 void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
@@ -713,7 +722,7 @@ bool CBookmarksDialog::GetBookmarks(std::list<wxString> &bookmarks)
 	return true;
 }
 
-bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CServerPath &remote_dir, bool &sync)
+bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CServerPath &remote_dir, bool &sync, bool &comparison)
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
@@ -745,6 +754,7 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 		else
 			sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
 
+		comparison = GetTextElementBool(pBookmark, "DirectoryComparison", false);
 		return true;
 	}
 
@@ -752,7 +762,7 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 }
 
 
-bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_dir, const CServerPath &remote_dir, bool sync)
+bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
 {
 	if (local_dir.empty() && remote_dir.empty())
 		return false;
@@ -796,6 +806,8 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
 	if (sync)
 		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
+	if (comparison)
+		AddTextElementRaw(pBookmark, "DirectoryComparison", "1");
 
 	if (!file.Save(false)) {
 		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName(), file.GetError());

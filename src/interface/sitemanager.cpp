@@ -112,6 +112,8 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(TiXml
 	if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
 		data->m_sync = GetTextElementBool(pElement, "SyncBrowsing", false);
 
+	data->m_comparison = GetTextElementBool(pElement, "DirectoryComparison", false);
+
 	return data;
 }
 
@@ -505,6 +507,7 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteByPath(wxString 
 		}
 		else
 			data->m_sync = false;
+		data->m_comparison = GetTextElementBool(pElement, "DirectoryComparison", false);
 
 		data->m_localDir = localPath;
 		data->m_remoteDir = remotePath;
@@ -693,7 +696,7 @@ TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxSt
 	return pNode;
 }
 
-bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync)
+bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
 {
 	if (local_dir.empty() && remote_dir.empty())
 		return false;
@@ -722,15 +725,13 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 		return false;
 
 	std::list<wxString> segments;
-	if (!UnescapeSitePath(sitePath, segments))
-	{
+	if (!UnescapeSitePath(sitePath, segments)) {
 		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
 	TiXmlElement* pChild = GetElementByPath(pElement, segments);
-	if (!pChild || strcmp(pChild->Value(), "Server"))
-	{
+	if (!pChild || strcmp(pChild->Value(), "Server")) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
@@ -738,16 +739,14 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	// Bookmarks
 	TiXmlElement *pInsertBefore = 0;
 	TiXmlElement* pBookmark;
-	for (pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
-	{
+	for (pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
 		TiXmlHandle handle(pBookmark);
 
 		wxString old_name = GetTextElement_Trimmed(pBookmark, "Name");
 		if (old_name.empty())
 			continue;
 
-		if (name == old_name)
-		{
+		if (name == old_name) {
 			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
@@ -766,6 +765,8 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
 	if (sync)
 		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
+	if (comparison)
+		AddTextElementRaw(pBookmark, "DirectoryComparison", "1");
 
 	if (!file.Save(false)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
