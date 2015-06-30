@@ -53,9 +53,7 @@ void CComparableListing::RefreshComparison()
 	if (!IsComparing())
 		return;
 
-	if (!CanStartComparison(0) || !GetOther() || !GetOther()->CanStartComparison(0))
-	{
-		ExitComparisonMode();
+	if (!CanStartComparison() || !GetOther() || !GetOther()->CanStartComparison()) {
 		return;
 	}
 
@@ -74,27 +72,19 @@ bool CComparisonManager::CompareListings()
 		return false;
 	}
 
+	m_isComparing = true;
+	m_pLeft->m_pComparisonManager = this;
+	m_pRight->m_pComparisonManager = this;
+
+	m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+
 	wxString error;
-	if (!m_pLeft->CanStartComparison(&error)) {
-		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
-		wxMessageBoxEx(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
-		return false;
-	}
-	if (!m_pRight->CanStartComparison(&error)) {
-		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
-		wxMessageBoxEx(error, _("Directory comparison failed"), wxICON_EXCLAMATION);
-		return false;
+	if (!m_pLeft->CanStartComparison() || !m_pRight->CanStartComparison()) {
+		return true;
 	}
 
 	const int mode = COptions::Get()->GetOptionVal(OPTION_COMPARISONMODE);
 	duration const threshold = duration::from_minutes( COptions::Get()->GetOptionVal(OPTION_COMPARISON_THRESHOLD) );
-
-	m_pLeft->m_pComparisonManager = this;
-	m_pRight->m_pComparisonManager = this;
-
-	m_isComparing = true;
-
-	m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
 
 	m_pLeft->StartComparison();
 	m_pRight->StartComparison();
@@ -222,9 +212,8 @@ int CComparisonManager::CompareFiles(const int dirSortMode, const wxString& loca
 }
 
 CComparisonManager::CComparisonManager(CState* pState)
-	: m_pState(pState), m_pLeft(0), m_pRight(0)
+	: m_pState(pState)
 {
-	m_isComparing = false;
 }
 
 void CComparisonManager::SetListings(CComparableListing* pLeft, CComparableListing* pRight)

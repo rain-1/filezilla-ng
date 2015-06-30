@@ -70,7 +70,7 @@ protected:
 #endif
 
 private:
-	virtual bool CanStartComparison(wxString*) { return false; }
+	virtual bool CanStartComparison() { return false; }
 	virtual void StartComparison() {}
 	virtual bool GetNextFile(wxString&, bool &, wxLongLong &, CDateTime&) { return false; }
 	virtual void CompareAddFile(CComparableListing::t_fileEntryFlags) {}

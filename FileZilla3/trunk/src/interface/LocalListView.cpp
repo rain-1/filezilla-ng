@@ -1396,10 +1396,11 @@ void CLocalListView::RefreshFile(const wxString& file)
 	wxString focused;
 	std::list<wxString> selectedNames;
 	if (IsComparing()) {
-		wxASSERT(!m_originalIndexMapping.empty());
 		selectedNames = RememberSelectedItems(focused);
-		m_indexMapping.clear();
-		m_originalIndexMapping.swap(m_indexMapping);
+		if (!m_originalIndexMapping.empty()) {
+			m_indexMapping.clear();
+			m_originalIndexMapping.swap(m_indexMapping);
+		}
 	}
 
 	// Insert new entry
@@ -1529,7 +1530,7 @@ void CLocalListView::FinishComparison()
 	pOther->ScrollTopItem(GetTopItem());
 }
 
-bool CLocalListView::CanStartComparison(wxString*)
+bool CLocalListView::CanStartComparison()
 {
 	return true;
 }

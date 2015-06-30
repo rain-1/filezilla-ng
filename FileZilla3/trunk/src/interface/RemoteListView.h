@@ -17,7 +17,7 @@ public:
 	CRemoteListView(wxWindow* pParent, CState* pState, CQueueView* pQueue);
 	virtual ~CRemoteListView();
 
-	virtual bool CanStartComparison(wxString* pError);
+	virtual bool CanStartComparison();
 	virtual void StartComparison();
 	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date);
 	virtual void FinishComparison();
