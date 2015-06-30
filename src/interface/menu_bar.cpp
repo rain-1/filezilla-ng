@@ -447,7 +447,6 @@ void CMenuBar::UpdateMenubarState()
 	Enable(XRCID("ID_CANCEL"), pServer && !idle);
 	Enable(XRCID("ID_MENU_SERVER_CMD"), pServer && idle);
 	Enable(XRCID("ID_MENU_FILE_COPYSITEMANAGER"), pServer != 0);
-	Enable(XRCID("ID_TOOLBAR_COMPARISON"), pServer != 0);
 	Enable(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pServer != 0);
 	Enable(XRCID("ID_MENU_SERVER_SEARCH"), pServer && idle);
 

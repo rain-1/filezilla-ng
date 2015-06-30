@@ -729,7 +729,7 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 	if (reset) {
 		ResetSearchPrefix();
 
-		if (IsComparing())
+		if (IsComparing() && m_pDirectoryListing)
 			ExitComparisonMode();
 
 		ClearSelection();
@@ -2272,15 +2272,9 @@ void CRemoteListView::ValidateIndexMapping()
 }
 #endif
 
-bool CRemoteListView::CanStartComparison(wxString* pError)
+bool CRemoteListView::CanStartComparison()
 {
-	if (!m_pDirectoryListing) {
-		if (pError)
-			*pError = _("Cannot compare directories, not connected to a server.");
-		return false;
-	}
-
-	return true;
+	return m_pDirectoryListing != 0;
 }
 
 void CRemoteListView::StartComparison()

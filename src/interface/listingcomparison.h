@@ -18,7 +18,7 @@ public:
 		lonely
 	};
 
-	virtual bool CanStartComparison(wxString* pError) = 0;
+	virtual bool CanStartComparison() = 0;
 	virtual void StartComparison() = 0;
 	virtual bool GetNextFile(wxString& name, bool &dir, wxLongLong &size, CDateTime& date) = 0;
 	virtual void CompareAddFile(t_fileEntryFlags flags) = 0;
@@ -64,10 +64,10 @@ protected:
 	CState* m_pState;
 
 	// Left/right, first/second, a/b, doesn't matter
-	CComparableListing* m_pLeft;
-	CComparableListing* m_pRight;
+	CComparableListing* m_pLeft{};
+	CComparableListing* m_pRight{};
 
-	bool m_isComparing;
+	bool m_isComparing{};
 };
 
 #endif //__LISTINGCOMPARISON_H__
