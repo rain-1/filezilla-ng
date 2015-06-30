@@ -1950,15 +1950,19 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site & data, bool newTab)
 	if (!ConnectToServer(data.m_server, data.m_remoteDir))
 		return false;
 
-	if (!data.m_localDir.empty()) {
-		CState *pState = CContextManager::Get()->GetCurrentContext();
-		if( pState ) {
+	CState *pState = CContextManager::Get()->GetCurrentContext();
+	if (pState) {
+		if (!data.m_localDir.empty()) {
 			bool set = pState->SetLocalDir(data.m_localDir, 0, false);
 
 			if (set && data.m_sync) {
 				wxASSERT(!data.m_remoteDir.empty());
 				pState->SetSyncBrowse(true, data.m_remoteDir);
 			}
+		}
+
+		if (data.m_comparison && pState->GetComparisonManager()) {
+			pState->GetComparisonManager()->CompareListings();
 		}
 	}
 
