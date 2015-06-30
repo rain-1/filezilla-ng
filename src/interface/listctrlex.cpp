@@ -120,9 +120,21 @@ void wxListCtrlEx::OnSelectionChanged(wxListEvent& event)
 
 void wxListCtrlEx::ScrollTopItem(int item)
 {
+	if (!GetItemCount()) {
+		return;
+	}
+
+	if (item < 0) {
+		item = 0;
+	}
+	else if (item >= GetItemCount()) {
+		item = GetItemCount() - 1);
+	}
+	
 	const int current = GetTopItem();
 
 	int delta = item - current;
+
 	if (!delta)
 		return;
 
