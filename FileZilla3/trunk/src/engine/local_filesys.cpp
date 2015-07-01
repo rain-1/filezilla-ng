@@ -161,7 +161,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 
 		// Depending on underlying platform, wxDir does not handle
 		// changes to the directory contents very well.
-		// See http://trac.filezilla-project.org/ticket/3482
+		// See https://trac.filezilla-project.org/ticket/3482
 		// To work around this, delete files after enumerating everything in current directory
 		std::list<wxString> filesToDelete;
 
