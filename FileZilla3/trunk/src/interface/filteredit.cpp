@@ -277,8 +277,7 @@ void CFilterEditDialog::OnCopy(wxCommandEvent& event)
 void CFilterEditDialog::OnFilterSelect(wxCommandEvent& event)
 {
 	int item = m_pFilterListCtrl->GetSelection();
-	if (item == -1)
-	{
+	if (item == -1) {
 		m_currentSelection = -1;
 		SetCtrlState(false);
 		return;
@@ -289,8 +288,7 @@ void CFilterEditDialog::OnFilterSelect(wxCommandEvent& event)
 	if (item == m_currentSelection)
 		return;
 
-	if (m_currentSelection != -1)
-	{
+	if (m_currentSelection != -1) {
 		wxASSERT((unsigned int)m_currentSelection < m_filters.size());
 
 		if (!Validate())

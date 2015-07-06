@@ -428,14 +428,12 @@ void CContextControl::OnTabBgDoubleclick(wxAuiNotebookEvent&)
 void CContextControl::OnTabRightclick(wxAuiNotebookEvent& event)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_TABCONTEXT"));
-	if (!pMenu)
-	{
+	if (!pMenu) {
 		wxBell();
 		return;
 	}
 
-	if (!m_tabs || m_tabs->GetPageCount() < 2)
-	{
+	if (!m_tabs || m_tabs->GetPageCount() < 2) {
 		pMenu->Enable(XRCID("ID_TABCONTEXT_CLOSE"), false);
 		pMenu->Enable(XRCID("ID_TABCONTEXT_CLOSEOTHERS"), false);
 	}
