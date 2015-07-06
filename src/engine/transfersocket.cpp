@@ -91,7 +91,7 @@ wxString CTransferSocket::SetupActiveTransfer(const wxString& ip)
 	return portArguments;
 }
 
-void CTransferSocket::OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error)
+void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
 	if (m_pProxyBackend)
 	{

@@ -22,12 +22,12 @@ EVT_BUTTON(wxID_YES, CChangedFileDialog::OnYes)
 EVT_BUTTON(wxID_NO, CChangedFileDialog::OnNo)
 END_EVENT_TABLE()
 
-void CChangedFileDialog::OnYes(wxCommandEvent& event)
+void CChangedFileDialog::OnYes(wxCommandEvent&)
 {
 	EndDialog(wxID_YES);
 }
 
-void CChangedFileDialog::OnNo(wxCommandEvent& event)
+void CChangedFileDialog::OnNo(wxCommandEvent&)
 {
 	EndDialog(wxID_NO);
 }
@@ -524,15 +524,13 @@ void CEditHandler::FinishTransfer(bool successful, const wxString& fileName, con
 	switch (iter->state)
 	{
 	case upload_and_remove:
-		if (successful)
-		{
+		if (successful) {
 			if (wxFileName::FileExists(iter->file) && !wxRemoveFile(iter->file))
 				iter->state = removing;
 			else
 				m_fileDataList[remote].erase(iter);
 		}
-		else
-		{
+		else {
 			if (!wxFileName::FileExists(iter->file))
 				m_fileDataList[remote].erase(iter);
 			else
@@ -546,8 +544,7 @@ void CEditHandler::FinishTransfer(bool successful, const wxString& fileName, con
 			m_fileDataList[remote].erase(iter);
 		break;
 	case download:
-		if (wxFileName::FileExists(iter->file))
-		{
+		if (wxFileName::FileExists(iter->file)) {
 			iter->state = edit;
 			if (StartEditing(remote, *iter))
 				break;
@@ -615,11 +612,9 @@ void CEditHandler::CheckForModifications(bool emitEvent)
 
 	insideCheckForModifications = true;
 
-	for (int i = 0; i < 2; i++)
-	{
+	for (int i = 0; i < 2; ++i) {
 checkmodifications_loopbegin:
-		for (auto iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); ++iter)
-		{
+		for (auto iter = m_fileDataList[i].begin(); iter != m_fileDataList[i].end(); ++iter) {
 			if (iter->state != edit)
 				continue;
 
@@ -641,14 +636,13 @@ checkmodifications_loopbegin:
 			// File has changed, ask user what to do
 
 			m_busyTimer.Stop();
-			if( !wxDialogEx::CanShowPopupDialog() ) {
+			if (!wxDialogEx::CanShowPopupDialog() ) {
 				m_busyTimer.Start(1000, true);
 				insideCheckForModifications = false;
 				return;
 			}
 			wxTopLevelWindow* pTopWindow = (wxTopLevelWindow*)wxTheApp->GetTopWindow();
-			if (pTopWindow && pTopWindow->IsIconized())
-			{
+			if (pTopWindow && pTopWindow->IsIconized()) {
 				pTopWindow->RequestUserAttention(wxUSER_ATTENTION_INFO);
 				insideCheckForModifications = false;
 				return;
@@ -659,30 +653,24 @@ checkmodifications_loopbegin:
 			if (res == -1)
 				continue;
 
-			if (res == wxID_YES)
-			{
+			if (res == wxID_YES) {
 				UploadFile(CEditHandler::fileType(i), iter, remove);
 				goto checkmodifications_loopbegin;
 			}
-			else if (remove)
-			{
-				if (i == static_cast<int>(remote))
-				{
-					if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file || wxRemoveFile(iter->file))
-					{
+			else if (remove) {
+				if (i == static_cast<int>(remote)) {
+					if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file || wxRemoveFile(iter->file)) {
 						m_fileDataList[i].erase(iter);
 						goto checkmodifications_loopbegin;
 					}
 					iter->state = removing;
 				}
-				else
-				{
+				else {
 					m_fileDataList[i].erase(iter);
 					goto checkmodifications_loopbegin;
 				}
 			}
-			else if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file)
-			{
+			else if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file) {
 				m_fileDataList[i].erase(iter);
 				goto checkmodifications_loopbegin;
 			}
@@ -796,7 +784,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 	return true;
 }
 
-void CEditHandler::OnTimerEvent(wxTimerEvent& event)
+void CEditHandler::OnTimerEvent(wxTimerEvent&)
 {
 #ifdef __WXMSW__
 	// Don't check for changes if mouse is captured,
@@ -947,7 +935,7 @@ wxString CEditHandler::GetCustomOpenCommand(const wxString& file, bool& program_
 	return wxString();
 }
 
-void CEditHandler::OnChangedFileEvent(wxCommandEvent& event)
+void CEditHandler::OnChangedFileEvent(wxCommandEvent&)
 {
 	CheckForModifications();
 }
@@ -1214,12 +1202,12 @@ void CEditHandlerStatusDialog::SetCtrlState()
 	XRCCTRL(*this, "ID_EDIT", wxWindow)->Enable(select);
 }
 
-void CEditHandlerStatusDialog::OnSelectionChanged(wxListEvent& event)
+void CEditHandlerStatusDialog::OnSelectionChanged(wxListEvent&)
 {
 	SetCtrlState();
 }
 
-void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent& event)
+void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent&)
 {
 	CEditHandler* const pEditHandler = CEditHandler::Get();
 	if (!pEditHandler)
@@ -1229,13 +1217,11 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent& event)
 
 	std::list<int> files;
 	int item = -1;
-	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
+	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
-		if (pData->state != CEditHandler::edit && pData->state != CEditHandler::upload_and_remove_failed)
-		{
+		if (pData->state != CEditHandler::edit && pData->state != CEditHandler::upload_and_remove_failed) {
 			wxBell();
 			return;
 		}
@@ -1243,23 +1229,19 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent& event)
 		files.push_front(item);
 	}
 
-	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-	{
+	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		const int i = *iter;
 
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(i, type);
 
-		if (type == CEditHandler::local)
-		{
+		if (type == CEditHandler::local) {
 			pEditHandler->Remove(pData->file);
 			delete pData;
 			pListCtrl->DeleteItem(i);
 		}
-		else
-		{
-			if (pEditHandler->Remove(pData->name, pData->remotePath, pData->server))
-			{
+		else {
+			if (pEditHandler->Remove(pData->name, pData->remotePath, pData->server)) {
 				delete pData;
 				pListCtrl->DeleteItem(i);
 			}
@@ -1281,23 +1263,20 @@ void CEditHandlerStatusDialog::OnUpload(wxCommandEvent& event)
 
 	std::list<int> files;
 	int item = -1;
-	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
+	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
 
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 
-		if (pData->state != CEditHandler::edit && pData->state != CEditHandler::upload_and_remove_failed)
-		{
+		if (pData->state != CEditHandler::edit && pData->state != CEditHandler::upload_and_remove_failed) {
 			wxBell();
 			return;
 		}
 		files.push_front(item);
 	}
 
-	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-	{
+	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		const int i = *iter;
 
 		enum CEditHandler::fileType type;
@@ -1321,7 +1300,7 @@ void CEditHandlerStatusDialog::OnUpload(wxCommandEvent& event)
 	SetCtrlState();
 }
 
-void CEditHandlerStatusDialog::OnEdit(wxCommandEvent& event)
+void CEditHandlerStatusDialog::OnEdit(wxCommandEvent&)
 {
 	CEditHandler* const pEditHandler = CEditHandler::Get();
 	if (!pEditHandler)
@@ -1331,34 +1310,28 @@ void CEditHandlerStatusDialog::OnEdit(wxCommandEvent& event)
 
 	std::list<int> files;
 	int item = -1;
-	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
+	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
 
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 
-		if (pData->state != CEditHandler::edit)
-		{
+		if (pData->state != CEditHandler::edit) {
 			wxBell();
 			return;
 		}
 		files.push_front(item);
 	}
 
-	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-	{
+	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		const int i = *iter;
 
 		enum CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(i, type);
 
-		if (type == CEditHandler::local)
-		{
-			if (!pEditHandler->StartEditing(pData->file))
-			{
-				if (pEditHandler->Remove(pData->file))
-				{
+		if (type == CEditHandler::local) {
+			if (!pEditHandler->StartEditing(pData->file)) {
+				if (pEditHandler->Remove(pData->file)) {
 					delete pData;
 					pListCtrl->DeleteItem(i);
 				}
@@ -1366,12 +1339,9 @@ void CEditHandlerStatusDialog::OnEdit(wxCommandEvent& event)
 					pListCtrl->SetItem(i, COLUMN_STATUS, _("Pending removal"));
 			}
 		}
-		else
-		{
-			if (!pEditHandler->StartEditing(pData->name, pData->remotePath, pData->server))
-			{
-				if (pEditHandler->Remove(pData->name, pData->remotePath, pData->server))
-				{
+		else {
+			if (!pEditHandler->StartEditing(pData->name, pData->remotePath, pData->server)) {
+				if (pEditHandler->Remove(pData->name, pData->remotePath, pData->server)) {
 					delete pData;
 					pListCtrl->DeleteItem(i);
 				}
@@ -1483,12 +1453,12 @@ void CNewAssociationDialog::SetCtrlState()
 	xrc_call(*this, "ID_BROWSE", &wxButton::Enable, custom);
 }
 
-void CNewAssociationDialog::OnRadioButton(wxCommandEvent& event)
+void CNewAssociationDialog::OnRadioButton(wxCommandEvent&)
 {
 	SetCtrlState();
 }
 
-void CNewAssociationDialog::OnOK(wxCommandEvent& event)
+void CNewAssociationDialog::OnOK(wxCommandEvent&)
 {
 	const bool custom = XRCCTRL(*this, "ID_USE_CUSTOM", wxRadioButton)->GetValue();
 	const bool always = XRCCTRL(*this, "ID_ALWAYS", wxCheckBox)->GetValue();
@@ -1555,7 +1525,7 @@ void CNewAssociationDialog::OnOK(wxCommandEvent& event)
 	EndModal(wxID_OK);
 }
 
-void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
+void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent&)
 {
 	wxFileDialog dlg(this, _("Select default editor"), _T(""), _T(""),
 #ifdef __WXMSW__
@@ -1574,8 +1544,7 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent& event)
 	if (editor.empty())
 		return;
 
-	if (!ProgramExists(editor))
-	{
+	if (!ProgramExists(editor)) {
 		XRCCTRL(*this, "ID_EDITOR", wxWindow)->SetFocus();
 		wxMessageBoxEx(_("Selected editor does not exist."), _("File not found"), wxICON_EXCLAMATION, this);
 		return;

@@ -27,7 +27,7 @@ public:
 	CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server);
 	virtual ~CBookmarksDialog() {}
 
-	int Run(const wxString &local_path, const CServerPath &remote_path);
+	int Run();
 
 	static bool GetBookmarks(std::list<wxString> &bookmarks);
 	static bool GetBookmark(const wxString& name, wxString &local_dir, CServerPath &remote_dir, bool &sync, bool &comparison);

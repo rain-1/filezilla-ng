@@ -447,7 +447,7 @@ void CContextControl::OnTabRightclick(wxAuiNotebookEvent& event)
 	delete pMenu;
 }
 
-void CContextControl::OnTabContextClose(wxCommandEvent& event)
+void CContextControl::OnTabContextClose(wxCommandEvent&)
 {
 	if (m_right_clicked_tab == -1)
 		return;
@@ -457,7 +457,7 @@ void CContextControl::OnTabContextClose(wxCommandEvent& event)
 	QueueEvent(new wxCommandEvent(fzEVT_TAB_CLOSING_DEFERRED, m_right_clicked_tab));
 }
 
-void CContextControl::OnTabContextCloseOthers(wxCommandEvent& event)
+void CContextControl::OnTabContextCloseOthers(wxCommandEvent&)
 {
 	QueueEvent(new wxCommandEvent (fzEVT_TAB_CLOSING_DEFERRED, -m_right_clicked_tab - 1));
 }
