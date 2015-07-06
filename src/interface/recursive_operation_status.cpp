@@ -68,6 +68,7 @@ void CRecursiveOperationStatus::OnStateChange(CState* pState, enum t_statechange
 		case CRecursiveOperation::recursive_addtoqueue:
 		case CRecursiveOperation::recursive_addtoqueue_flatten:
 		case CRecursiveOperation::recursive_download:
+		case CRecursiveOperation::recursive_download_flatten:
 			text = _("Recursively adding files to queue.");
 			break;
 		case CRecursiveOperation::recursive_delete:
@@ -75,6 +76,8 @@ void CRecursiveOperationStatus::OnStateChange(CState* pState, enum t_statechange
 			break;
 		case CRecursiveOperation::recursive_chmod:
 			text = _("Recursively changing permissions.");
+			break;
+		default:
 			break;
 		}
 		m_pTextCtrl[0]->SetLabel(text);
