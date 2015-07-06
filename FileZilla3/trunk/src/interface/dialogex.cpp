@@ -125,17 +125,18 @@ bool wxDialogEx::ReplaceControl(wxWindow* old, wxWindow* wnd)
 
 bool wxDialogEx::CanShowPopupDialog()
 {
-	if( ShownDialogs() || IsShowingMessageBox() ) {
+	if (m_shown_dialogs != 0 || IsShowingMessageBox()) {
+		// There already is a dialog or message box showing
 		return false;
 	}
 
 	wxMouseState mouseState = wxGetMouseState();
-	if( mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown() ) {
+	if (mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown()) {
+		// Displaying a dialog while the user is clicking is extremely confusing, don't do it.
 		return false;
 	}
 #ifdef __WXMSW__
-	// Don't check for changes if mouse is captured,
-	// e.g. if user is dragging a file
+	// During a drag & drop we cannot show a dialog. Doing so can render the program unresponsive
 	if (GetCapture()) {
 		return false;
 	}
