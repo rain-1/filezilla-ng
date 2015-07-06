@@ -809,7 +809,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		else {
 			CBookmarksDialog dlg(this, controls->site_bookmarks->path, pServer);
 
-			res = dlg.Run(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
+			res = dlg.Run();
 		}
 		if (res == wxID_OK) {
 			controls->site_bookmarks->bookmarks.clear();

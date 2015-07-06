@@ -226,7 +226,7 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 	m_pTree->SortChildren(m_bookmarks_site);
 }
 
-int CBookmarksDialog::Run(const wxString &local_path, const CServerPath &remote_path)
+int CBookmarksDialog::Run()
 {
 	if (!Load(m_parent, _T("ID_BOOKMARKS")))
 		return wxID_CANCEL;
