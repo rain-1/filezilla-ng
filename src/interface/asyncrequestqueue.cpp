@@ -394,8 +394,7 @@ void CAsyncRequestQueue::TriggerProcessing()
 bool CAsyncRequestQueue::CheckWindowState()
 {
 	m_timer.Stop();
-	wxMouseState mouseState = wxGetMouseState();
-	if (mouseState.LeftIsDown() || mouseState.MiddleIsDown() || mouseState.RightIsDown()) {
+	if (!wxDialogEx::CanShowPopupDialog()) {
 		m_timer.Start(100, true);
 		return false;
 	}

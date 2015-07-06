@@ -15,8 +15,6 @@ public:
 
 	bool ReplaceControl(wxWindow* old, wxWindow* wnd);
 
-	static int ShownDialogs() { return m_shown_dialogs; }
-
 	static bool CanShowPopupDialog();
 protected:
 	virtual void InitDialog();
