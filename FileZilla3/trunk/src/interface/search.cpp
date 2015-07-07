@@ -28,12 +28,14 @@ inline int DoCmpName(CSearchFileData const& data1, CSearchFileData const& data2,
 	{
 	case CFileListCtrlSortBase::namesort_casesensitive:
 		res = CFileListCtrlSortBase::CmpCase(data1.name, data2.name);
+		break;
 	default:
 	case CFileListCtrlSortBase::namesort_caseinsensitive:
 		res = CFileListCtrlSortBase::CmpNoCase(data1.name, data2.name);
-
+		break;
 	case CFileListCtrlSortBase::namesort_natural:
 		res = CFileListCtrlSortBase::CmpNatural(data1.name, data2.name);
+		break;
 	}
 
 	if (!res) {
