@@ -45,6 +45,7 @@ void CCommandQueue::ProcessCommand(CCommand *pCommand, CCommandQueue::command_or
 	wxASSERT(origin != any);
 	if (m_quit) {
 		delete pCommand;
+		return;
 	}
 
 	m_CommandList.emplace_back(CommandInfo{origin, std::unique_ptr<CCommand>(pCommand)});
