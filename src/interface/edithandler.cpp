@@ -1400,7 +1400,7 @@ bool CNewAssociationDialog::Run(const wxString &file)
 	else
 		m_ext.clear();
 
-	wxStaticText *pDesc = XRCCTRL(*this, "ID_DESC", wxStaticText);
+	wxStaticText *const pDesc = XRCCTRL(*this, "ID_DESC", wxStaticText);
 	if (pDesc) {
 		pDesc->SetLabel(wxString::Format(pDesc->GetLabel(), m_ext));
 	}
@@ -1409,8 +1409,7 @@ bool CNewAssociationDialog::Run(const wxString &file)
 	wxString cmd = GetSystemOpenCommand(_T("foo.txt"), program_exists);
 	if (!program_exists)
 		cmd.clear();
-	if (!cmd.empty())
-	{
+	if (!cmd.empty()) {
 		wxString args;
 		if (!UnquoteCommand(cmd, args))
 			cmd.clear();
@@ -1426,7 +1425,10 @@ bool CNewAssociationDialog::Run(const wxString &file)
 	}
 	else {
 		xrc_call(*this, "ID_EDITOR_DESC_NONE", &wxStaticText::Hide);
-		xrc_call(*this, "ID_EDITOR_DESC", &wxStaticText::SetLabel, wxString::Format(pDesc->GetLabel(), cmd));
+		wxStaticText* const pEditorDesc = XRCCTRL(*this, "ID_EDITOR_DESC", wxStaticText);
+		if (pEditorDesc) {
+			pEditorDesc->SetLabel(wxString::Format(pEditorDesc->GetLabel(), cmd));
+		}
 	}
 
 	SetCtrlState();
