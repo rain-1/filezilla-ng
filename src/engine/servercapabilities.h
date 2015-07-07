@@ -21,7 +21,6 @@ enum capabilityNames
 	mlsd_command,
 	opst_mlst_command, // Arguments for OPTS MLST command
 	mfmt_command,
-	pret_command,
 	mdtm_command,
 	size_command,
 	mode_z_support,
