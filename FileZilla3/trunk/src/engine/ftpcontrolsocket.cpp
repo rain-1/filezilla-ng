@@ -255,6 +255,45 @@ void CFtpControlSocket::OnReceive()
 	}
 }
 
+namespace {
+bool HasFeature(wxString const& line, wxString const& feature)
+{
+	return line == feature || line.StartsWith(feature + _T(" "));
+}
+}
+
+void CFtpControlSocket::ParseFeat(wxString const& line)
+{
+	wxString up = line.Upper();
+	up.Trim(false);
+	if (HasFeature(up,_T("CLNT")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
+	else if (HasFeature(up, _T("CLNT")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
+	else if (HasFeature(up, _T("MLSD")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes);
+	else if (HasFeature(up, _T("MLST"))) {
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, line.Mid(5));
+
+		// MSLT/MLSD specs require use of UTC
+		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
+	}
+	else if (HasFeature(up, _T("MODE Z")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
+	else if (HasFeature(up, _T("MFMT")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
+	else if (HasFeature(up, _T("MDTM")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, yes);
+	else if (HasFeature(up, _T("SIZE")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
+	else if (HasFeature(up, _T("TVFS")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
+	else if (HasFeature(up, _T("REST STREAM")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
+	else if (HasFeature(up, _T("EPSV")))
+		CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
+}
+
 void CFtpControlSocket::ParseLine(wxString line)
 {
 	m_rtt.Stop();
@@ -274,35 +313,7 @@ void CFtpControlSocket::ParseLine(wxString line)
 			challenge += line;
 		}
 		else if (pData->opState == LOGON_FEAT) {
-			wxString up = line.Upper();
-			if (up == _T(" UTF8"))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
-			else if (up == _T(" CLNT") || up.Left(6) == _T(" CLNT "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
-			else if (up == _T(" MLSD") || up.Left(6) == _T(" MLSD "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes);
-			else if (up == _T(" MLST") || up.Left(6) == _T(" MLST ")) {
-				CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, line.Mid(6));
-
-				// MSLT/MLSD specs require use of UTC
-				CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
-			}
-			else if (up == _T(" MODE Z") || up.Left(8) == _T(" MODE Z "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, mode_z_support, yes);
-			else if (up == _T(" MFMT") || up.Left(6) == _T(" MFMT "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, mfmt_command, yes);
-			else if (up == _T(" PRET") || up.Left(6) == _T(" PRET "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, pret_command, yes);
-			else if (up == _T(" MDTM") || up.Left(6) == _T(" MDTM "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, mdtm_command, yes);
-			else if (up == _T(" SIZE") || up.Left(6) == _T(" SIZE "))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
-			else if (up == _T(" TVFS"))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, yes);
-			else if (up == _T(" REST STREAM"))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, rest_stream, yes);
-			else if (up == _T(" EPSV"))
-				CServerCapabilities::SetCapability(*m_pCurrentServer, epsv_command, yes);
+			ParseFeat(line);
 		}
 		else if (pData->opState == LOGON_WELCOME) {
 			if (!pData->gotFirstWelcomeLine) {

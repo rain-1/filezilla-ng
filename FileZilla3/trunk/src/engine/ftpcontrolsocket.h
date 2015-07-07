@@ -94,6 +94,8 @@ protected:
 	// It's the last line in a multi-line response.
 	void ParseResponse();
 
+	void ParseFeat(wxString const& line);
+
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult);
 
