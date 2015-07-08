@@ -12,7 +12,7 @@ Legend:
 
 3.12.0 (2015-07-08)
 
-+ Directory comparison can be configured for Site Manager entires and bookmarks
++ Directory comparison can be configured for Site Manager entries and bookmarks
 - Instead of skipping commands due to spontaneous connection failures while executing a command, reconnect and retry
 - FileZilla no longer shows popup dialogs such as the file exists dialog if another dialog or message box is already shown
 - Improved compatibility with servers sending malformed FEAT replies
