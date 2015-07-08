@@ -14,7 +14,9 @@
 #include <wx/filename.h>
 
 #ifndef __WXMSW__
+	#define mutex mutex_override // Sadly on some platforms system headers include conflicting names
 	#include <netdb.h>
+	#undef mutex
 	#ifndef AI_IDN
 		#include <idna.h>
 		extern "C" {

@@ -19,6 +19,7 @@
 #include "mutex.h"
 #include "socket.h"
 #ifndef __WXMSW__
+  #define mutex mutex_override // Sadly on some platforms system headers include conflicting names
   #include <sys/types.h>
   #include <sys/socket.h>
   #include <netdb.h>
@@ -29,6 +30,7 @@
   #if !defined(MSG_NOSIGNAL) && !defined(SO_NOSIGPIPE)
     #include <signal.h>
   #endif
+  #undef mutex
 #endif
 
 // Fixups needed on FreeBSD
