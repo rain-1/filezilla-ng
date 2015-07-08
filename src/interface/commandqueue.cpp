@@ -48,7 +48,7 @@ void CCommandQueue::ProcessCommand(CCommand *pCommand, CCommandQueue::command_or
 		return;
 	}
 
-	m_CommandList.emplace_back(CommandInfo{origin, std::unique_ptr<CCommand>(pCommand)});
+	m_CommandList.emplace_back(origin, std::unique_ptr<CCommand>(pCommand));
 	if (m_CommandList.size() == 1) {
 		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		ProcessNextCommand();
@@ -156,13 +156,27 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 	}
 
 	if (commandId != Command::connect &&
-		commandId != Command::disconnect)
+		commandId != Command::disconnect &&
+		(nReplyCode & FZ_REPLY_CANCELED) != FZ_REPLY_CANCELED)
 	{
+		bool reconnect = false;
 		if (nReplyCode == FZ_REPLY_NOTCONNECTED) {
+			reconnect = true;
+		}
+		else if (nReplyCode & FZ_REPLY_DISCONNECTED) {
+			auto & info = m_CommandList.front();
+			if (!info.didReconnect) {
+				info.didReconnect = true;
+				reconnect = true;
+			}
+		}
+
+		if (reconnect) {
 			// Try automatic reconnect
 			const CServer* pServer = m_pState->GetServer();
 			if (pServer) {
-				m_CommandList.emplace_front(CommandInfo{normal, make_unique<CConnectCommand>(*pServer)});
+				m_CommandList.emplace_front(normal, make_unique<CConnectCommand>(*pServer));
+				ProcessNextCommand();
 				return;
 			}
 		}
@@ -194,7 +208,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 		m_CommandList.pop_front();
 	}
 	else if (nReplyCode == FZ_REPLY_ALREADYCONNECTED && commandInfo.command->GetId() == Command::connect) {
-		m_CommandList.emplace_front(CommandInfo{normal, make_unique<CDisconnectCommand>()});
+		m_CommandList.emplace_front(normal, make_unique<CDisconnectCommand>());
 	}
 	else if (commandInfo.command->GetId() == Command::connect && nReplyCode != FZ_REPLY_OK) {
 		// Remove pending events

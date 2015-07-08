@@ -53,8 +53,15 @@ protected:
 	int m_inside_commandqueue{};
 
 	struct CommandInfo {
+		CommandInfo() = default;
+		CommandInfo(command_origin o, std::unique_ptr<CCommand> && c)
+			: origin(o)
+			, command(std::move(c))
+		{}
+
 		command_origin origin;
 		std::unique_ptr<CCommand> command;
+		bool didReconnect{};
 	};
 	std::deque<CommandInfo> m_CommandList;
 
