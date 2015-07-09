@@ -115,7 +115,6 @@ int64_t CBuildInfo::ConvertToVersionNumber(const wxChar* version)
 	// which in turn corresponds to the simple 64-bit number 2254026754228227
 	// And these can be compared easily
 
-	wxASSERT(*version >= '0' && *version <= '9');
 	if (*version < '0' || *version > '9')
 		return -1;
 
