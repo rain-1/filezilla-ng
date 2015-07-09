@@ -262,20 +262,37 @@ bool HasFeature(wxString const& line, wxString const& feature)
 }
 }
 
-void CFtpControlSocket::ParseFeat(wxString const& line)
+void CFtpControlSocket::ParseFeat(wxString line)
 {
+	line.Trim(false);
 	wxString up = line.Upper();
-	up.Trim(false);
-	if (HasFeature(up,_T("UTF8")))
+
+	if (HasFeature(up, _T("UTF8")))
 		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
 	else if (HasFeature(up, _T("CLNT")))
 		CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
-	else if (HasFeature(up, _T("MLSD")))
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes);
-	else if (HasFeature(up, _T("MLST"))) {
-		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, line.Mid(5));
+	else if (HasFeature(up, _T("MLSD"))) {
+		wxString facts;
+		// FEAT output for MLST overrides MLSD
+		if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes || facts.empty()) {
+			facts = line.Mid(5);
+		}
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, facts);
 
-		// MSLT/MLSD specs require use of UTC
+		// MLST/MLSD specs require use of UTC
+		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
+	}
+	else if (HasFeature(up, _T("MLST"))) {
+		wxString facts = line.Mid(5);
+		// FEAT output for MLST overrides MLSD
+		if (facts.empty()) {
+			if (CServerCapabilities::GetCapability(*m_pCurrentServer, mlsd_command, &facts) != yes) {
+				facts.clear();
+			}
+		}
+		CServerCapabilities::SetCapability(*m_pCurrentServer, mlsd_command, yes, facts);
+
+		// MLST/MLSD specs require use of UTC
 		CServerCapabilities::SetCapability(*m_pCurrentServer, timezone_offset, no);
 	}
 	else if (HasFeature(up, _T("MODE Z")))
