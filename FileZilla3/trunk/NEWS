@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.12.0.2 (2015-07-09)
+
+- Fix regression on servers that have MLSD facts disabled by default
+
 3.12.0.1 (2015-07-09)
 
 - Fix detection of UTF-8 support
