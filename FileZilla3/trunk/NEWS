@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.12.0.1 (2015-07-09)
+
+- Fix detection of UTF-8 support
+- Fix location of file list status bar, it was shifted by one pixel
+
 3.12.0 (2015-07-08)
 
 + Directory comparison can be configured for Site Manager entries and bookmarks
