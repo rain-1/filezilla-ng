@@ -266,7 +266,7 @@ void CFtpControlSocket::ParseFeat(wxString const& line)
 {
 	wxString up = line.Upper();
 	up.Trim(false);
-	if (HasFeature(up,_T("CLNT")))
+	if (HasFeature(up,_T("UTF8")))
 		CServerCapabilities::SetCapability(*m_pCurrentServer, utf8_command, yes);
 	else if (HasFeature(up, _T("CLNT")))
 		CServerCapabilities::SetCapability(*m_pCurrentServer, clnt_command, yes);
