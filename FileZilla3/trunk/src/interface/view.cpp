@@ -30,7 +30,7 @@ void CView::Arrange(wxWindow* child, wxRect& clientRect, bool top)
 		childRect.SetHeight(childHeight);
 
 		if (!top) {
-			childRect.SetTop(clientRect.GetBottom() - childHeight);
+			childRect.SetTop(clientRect.GetBottom() - childHeight + 1);
 		}
 		else {
 			clientRect.SetTop(childHeight);
