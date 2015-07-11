@@ -383,7 +383,7 @@ void CFtpControlSocket::OnConnect()
 
 			wxASSERT(!m_pTlsSocket);
 			delete m_pBackend;
-			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
+			m_pTlsSocket = new CTlsSocket(this, *m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
 
 			if (!m_pTlsSocket->Init()) {
@@ -762,7 +762,7 @@ int CFtpControlSocket::LogonParseResponse()
 			wxASSERT(!m_pTlsSocket);
 			delete m_pBackend;
 
-			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
+			m_pTlsSocket = new CTlsSocket(this, *m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
 
 			if (!m_pTlsSocket->Init()) {
