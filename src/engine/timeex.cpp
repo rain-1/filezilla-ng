@@ -115,6 +115,25 @@ bool CDateTime::operator<(CDateTime const& op) const
 	return a_ < op.a_;
 }
 
+bool CDateTime::operator<=(CDateTime const& op) const
+{
+	if (t_ == invalid) {
+		return true;
+	}
+	else if (op.t_ == invalid) {
+		return false;
+	}
+
+	if (t_ < op.t_) {
+		return true;
+	}
+	if (t_ > op.t_) {
+		return false;
+	}
+
+	return a_ <= op.a_;
+}
+
 bool CDateTime::operator==(CDateTime const& op) const
 {
 	return t_ == op.t_ && a_ == op.a_;

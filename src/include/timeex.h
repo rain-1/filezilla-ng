@@ -67,6 +67,7 @@ public:
 	bool operator==(CDateTime const& op) const;
 	bool operator!=(CDateTime const& op) const { return !(*this == op); }
 	bool operator<(CDateTime const& op) const;
+	bool operator<=(CDateTime const& op) const;
 	bool operator>(CDateTime const& op) const { return op < *this; }
 
 	int Compare(CDateTime const& op) const;
