@@ -129,7 +129,7 @@ private:
 	void OnColumnDragging(wxListEvent& event);
 
 	bool m_prefixSearch_enabled{};
-	wxDateTime m_prefixSearch_lastKeyPress;
+	CDateTime m_prefixSearch_lastKeyPress;
 	wxString m_prefixSearch_prefix;
 
 	bool ReadColumnWidths(unsigned int optionId);

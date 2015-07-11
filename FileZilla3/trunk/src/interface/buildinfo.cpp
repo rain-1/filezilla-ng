@@ -24,8 +24,7 @@ wxString CBuildInfo::GetBuildDateString()
 
 	wxString month = date.Left(pos);
 	int i = 0;
-	for (i = 0; i < 12; i++)
-	{
+	for (i = 0; i < 12; ++i) {
 		if (months[i] == month)
 			break;
 	}
@@ -53,10 +52,9 @@ wxString CBuildInfo::GetBuildTimeString()
 	return wxString(__TIME__, wxConvLocal);
 }
 
-wxDateTime CBuildInfo::GetBuildDate()
+CDateTime CBuildInfo::GetBuildDate()
 {
-	wxDateTime date;
-	date.ParseDate(GetBuildDateString());
+	CDateTime date(GetBuildDateString(), CDateTime::utc);
 	return date;
 }
 

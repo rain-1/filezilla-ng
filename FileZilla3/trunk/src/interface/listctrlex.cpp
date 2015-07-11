@@ -151,12 +151,12 @@ void wxListCtrlEx::HandlePrefixSearch(wxChar character)
 	wxASSERT(character);
 
 	// Keyboard navigation within items
-	wxDateTime now = wxDateTime::UNow();
-	if (m_prefixSearch_lastKeyPress.IsValid())
-	{
-		wxTimeSpan span = now - m_prefixSearch_lastKeyPress;
-		if (span.GetSeconds() >= 1)
+	CDateTime now = CDateTime::Now();
+	if (m_prefixSearch_lastKeyPress.IsValid()) {
+		duration span = now - m_prefixSearch_lastKeyPress;
+		if (span.get_seconds() >= 1) {
 			m_prefixSearch_prefix = _T("");
+		}
 	}
 	m_prefixSearch_lastKeyPress = now;
 
@@ -174,8 +174,7 @@ void wxListCtrlEx::HandlePrefixSearch(wxChar character)
 	}
 
 	bool beep = false;
-	if (item != -1)
-	{
+	if (item != -1) {
 		wxString text = GetItemText(item, 0);
 		if (text.Length() >= m_prefixSearch_prefix.Length() && !m_prefixSearch_prefix.CmpNoCase(text.Left(m_prefixSearch_prefix.Length())))
 			beep = true;

@@ -12,7 +12,7 @@ public:
 	static int64_t ConvertToVersionNumber(const wxChar* version);
 	static wxString GetBuildDateString();
 	static wxString GetBuildTimeString();
-	static wxDateTime GetBuildDate();
+	static CDateTime GetBuildDate();
 	static wxString GetBuildType();
 	static wxString GetCompiler();
 	static wxString GetCompilerFlags();
