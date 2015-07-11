@@ -294,7 +294,7 @@ void CHttpControlSocket::OnConnect()
 			LogMessage(MessageType::Status, _("Connection established, initializing TLS..."));
 
 			delete m_pBackend;
-			m_pTlsSocket = new CTlsSocket(this, m_pSocket, this);
+			m_pTlsSocket = new CTlsSocket(this, *m_pSocket, this);
 			m_pBackend = m_pTlsSocket;
 
 			if (!m_pTlsSocket->Init()) {

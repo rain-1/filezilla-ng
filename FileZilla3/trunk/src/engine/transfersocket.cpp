@@ -722,7 +722,7 @@ bool CTransferSocket::InitTls(const CTlsSocket* pPrimaryTlsSocket)
 	m_pSocket->SetFlags(m_pSocket->GetFlags() | CSocket::flag_nodelay);
 
 	wxASSERT(!m_pBackend);
-	m_pTlsSocket = new CTlsSocket(this, m_pSocket, &controlSocket_);
+	m_pTlsSocket = new CTlsSocket(this, *m_pSocket, &controlSocket_);
 
 	if (!m_pTlsSocket->Init()) {
 		delete m_pTlsSocket;

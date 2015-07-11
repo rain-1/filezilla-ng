@@ -21,14 +21,13 @@ void log_func(int level, const char* msg)
 }
 #endif
 
-CTlsSocket::CTlsSocket(CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
+CTlsSocket::CTlsSocket(CEventHandler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
 	: CEventHandler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
 	, m_pOwner(pOwner)
-	, m_pSocket(pSocket)
+	, m_socket(socket)
 {
-	wxASSERT(pSocket);
-	m_pSocketBackend = new CSocketBackend(this, *m_pSocket, m_pOwner->GetEngine().GetRateLimiter());
+	m_pSocketBackend = new CSocketBackend(this, m_socket, m_pOwner->GetEngine().GetRateLimiter());
 
 	m_implicitTrustedCert.data = 0;
 	m_implicitTrustedCert.size = 0;
@@ -307,7 +306,6 @@ void CTlsSocket::operator()(CEventBase const& ev)
 
 void CTlsSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
-	wxASSERT(m_pSocket);
 	if (!m_session)
 		return;
 
@@ -327,8 +325,7 @@ void CTlsSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error
 			if (peeked >= 0) {
 				if (peeked > 0)
 					m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::OnSocketEvent(): pending data, postponing close event"));
-				else
-				{
+				else {
 					m_socket_eof = true;
 					m_socketClosed = true;
 				}
@@ -368,8 +365,7 @@ void CTlsSocket::OnRead()
 		ContinueHandshake();
 	if (m_tlsState == TlsState::closing)
 		ContinueShutdown();
-	else if (m_tlsState == TlsState::conn)
-	{
+	else if (m_tlsState == TlsState::conn) {
 		CheckResumeFailedReadWrite();
 		TriggerEvents();
 	}
@@ -392,8 +388,7 @@ void CTlsSocket::OnSend()
 		ContinueHandshake();
 	else if (m_tlsState == TlsState::closing)
 		ContinueShutdown();
-	else if (m_tlsState == TlsState::conn)
-	{
+	else if (m_tlsState == TlsState::conn) {
 		CheckResumeFailedReadWrite();
 		TriggerEvents();
 	}
@@ -441,24 +436,22 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 		// Implicitly trust certificate of primary socket
 		unsigned int cert_list_size;
 		const gnutls_datum_t* const cert_list = gnutls_certificate_get_peers(pPrimarySocket->m_session, &cert_list_size);
-		if (cert_list && cert_list_size)
-		{
+		if (cert_list && cert_list_size) {
 			delete [] m_implicitTrustedCert.data;
 			m_implicitTrustedCert.data = new unsigned char[cert_list[0].size];
 			memcpy(m_implicitTrustedCert.data, cert_list[0].data, cert_list[0].size);
 			m_implicitTrustedCert.size = cert_list[0].size;
 		}
 
-		if (try_resume)
-		{
+		if (try_resume) {
 			if (!CopySessionData(pPrimarySocket))
 				return FZ_REPLY_ERROR;
 		}
 
-		hostname = pPrimarySocket->m_pSocket->GetPeerHost();
+		hostname = pPrimarySocket->m_socket.GetPeerHost();
 	}
 	else {
-		hostname = m_pSocket->GetPeerHost();
+		hostname = m_socket.GetPeerHost();
 	}
 
 	if( !hostname.empty() && !IsIpAddress(hostname) ) {

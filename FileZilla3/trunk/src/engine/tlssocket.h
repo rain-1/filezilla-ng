@@ -19,7 +19,7 @@ public:
 		closed
 	};
 
-	CTlsSocket(CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner);
+	CTlsSocket(CEventHandler* pEvtHandler, CSocket& pSocket, CControlSocket* pOwner);
 	virtual ~CTlsSocket();
 
 	bool Init();
@@ -103,7 +103,7 @@ protected:
 	bool m_socketClosed{};
 
 	CSocketBackend* m_pSocketBackend{};
-	CSocket* m_pSocket{};
+	CSocket& m_socket;
 
 	bool m_shutdown_requested{};
 
