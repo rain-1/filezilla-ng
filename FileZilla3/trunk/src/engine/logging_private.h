@@ -93,10 +93,7 @@ private:
 
 	static mutex mutex_;
 
-#if defined(_MSC_VER) && _MSC_VER < 1900
-	// Fixme: Get rid of this once VS2015 comes out
-	#define thread_local __declspec(thread)
-#elif HAVE_NO_THREAD_LOCAL
+#if HAVE_NO_THREAD_LOCAL
 	// Fixme: Get rid of this once OS X's clang supports it.
 	#define thread_local __thread
 #endif
