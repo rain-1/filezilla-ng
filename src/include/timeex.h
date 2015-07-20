@@ -8,10 +8,6 @@
 
 #include <limits>
 
-#if HAVE_UNSTEADY_STEADY_CLOCK
-#include <sys/time.h>
-#endif
-
 class duration;
 
 // Represents a point of time in wallclock.
@@ -188,36 +184,6 @@ public:
 		return CMonotonicClock(*this) += d;
 	}
 
-#if defined(_MSC_VER) && _MSC_VER < 1900
-	// Most unfortunate: steady_clock is implemented in terms
-	// of system_clock which is not monotonic prior to Visual Studio
-	// 2015 which is unreleased as of writing this.
-	// FIXME: Remove once Visual Studio 2015 is released
-	static CMonotonicClock CMonotonicClock::now() {
-		LARGE_INTEGER i;
-		(void)QueryPerformanceCounter(&i); // Cannot fail on XP or later according to MSDN
-		return CMonotonicClock(i.QuadPart);
-	}
-
-	explicit operator bool() const {
-		return t_ != 0;
-	}
-
-	CMonotonicClock& operator+=(duration const& d)
-	{
-		t_ += d.get_milliseconds() * freq_ / 1000;
-		return *this;
-	}
-
-private:
-	CMonotonicClock(int64_t t)
-		: t_(t)
-	{}
-
-	int64_t t_{};
-
-	static int64_t const freq_;
-#else
 private:
 	typedef std::chrono::steady_clock clock_type;
 	static_assert(std::chrono::steady_clock::is_steady, "Nonconforming stdlib, your steady_clock isn't steady");
@@ -243,7 +209,6 @@ private:
 	{}
 
 	clock_type::time_point t_;
-#endif
 
 	friend duration operator-(CMonotonicClock const& a, CMonotonicClock const& b);
 	friend bool operator==(CMonotonicClock const& a, CMonotonicClock const& b);
@@ -255,13 +220,7 @@ private:
 
 inline duration operator-(CMonotonicClock const& a, CMonotonicClock const& b)
 {
-#if defined(_MSC_VER) && _MSC_VER < 1900
-	return duration::from_milliseconds((a.t_ - b.t_) * 1000 / CMonotonicClock::freq_);
-#elif HAVE_UNSTEADY_STEADY_CLOCK
-	return duration::from_milliseconds(a.t_ - b.t_);
-#else
 	return duration::from_milliseconds(std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count());
-#endif
 }
 
 inline bool operator==(CMonotonicClock const& a, CMonotonicClock const& b)
