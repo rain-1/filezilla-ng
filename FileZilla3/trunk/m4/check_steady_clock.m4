@@ -17,7 +17,6 @@ AC_DEFUN([CHECK_STEADY_CLOCK], [
   ], [
     AC_MSG_RESULT([yes])
   ], [
-    AC_DEFINE([HAVE_UNSTEADY_STEADY_CLOCK], [1], [Define if steady_clock isn't steady])
     AC_MSG_RESULT([no])
     AC_MSG_ERROR([a steady std::chrono::steady_clock is required])
   ])
