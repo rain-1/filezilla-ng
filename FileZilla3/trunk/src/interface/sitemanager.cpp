@@ -56,7 +56,7 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler& handler)
 					if (name.empty())
 						continue;
 
-					auto bookmarkData = make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
+					auto bookmarkData = std::make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
 
 					TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
 					if (localDir)
@@ -93,7 +93,7 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(TiXml
 	if (server.GetName().empty())
 		return 0;
 
-	auto data = make_unique<CSiteManagerItemData_Site>(server);
+	auto data = std::make_unique<CSiteManagerItemData_Site>(server);
 
 	TiXmlHandle handle(pElement);
 
@@ -269,9 +269,9 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 	// to the same file or one is reading while the other one writes.
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
-	std::unique_ptr<wxMenu> predefinedSites = GetSitesMenu_Predefined(m_idMap);
+	auto predefinedSites = GetSitesMenu_Predefined(m_idMap);
 
-	auto pMenu = make_unique<wxMenu>();
+	auto pMenu = std::make_unique<wxMenu>();
 	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &m_idMap, false);
 
 	bool res = Load(handler);
@@ -283,7 +283,7 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 		if (!predefinedSites)
 			return pMenu;
 
-		auto pRootMenu = make_unique<wxMenu>();
+		auto pRootMenu = std::make_unique<wxMenu>();
 		pRootMenu->AppendSubMenu(predefinedSites.release(), _("Predefined Sites"));
 		pRootMenu->AppendSubMenu(pMenu.release(), _("My Sites"));
 
@@ -293,7 +293,7 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu()
 	if (predefinedSites)
 		return predefinedSites;
 
-	pMenu = make_unique<wxMenu>();
+	pMenu = std::make_unique<wxMenu>();
 	wxMenuItem* pItem = pMenu->Append(wxID_ANY, _("No sites available"));
 	pItem->Enable(false);
 	return pMenu;
@@ -330,7 +330,7 @@ bool CSiteManager::LoadPredefined(CSiteManagerXmlHandler& handler)
 
 std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap)
 {
-	auto pMenu = make_unique<wxMenu>();
+	auto pMenu = std::make_unique<wxMenu>();
 	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &idMap, true);
 
 	if (!LoadPredefined(handler)) {

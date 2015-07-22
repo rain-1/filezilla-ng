@@ -443,7 +443,7 @@ public:
 
 
 CProcess::CProcess()
-	: impl_(make_unique<Impl>())
+	: impl_(std::make_unique<Impl>())
 {
 }
 

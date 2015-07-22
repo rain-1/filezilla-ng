@@ -531,14 +531,14 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	case FTPS:
 	case FTPES:
 	case INSECURE_FTP:
-		m_pControlSocket = make_unique<CFtpControlSocket>(*this);
+		m_pControlSocket = std::make_unique<CFtpControlSocket>(*this);
 		break;
 	case SFTP:
-		m_pControlSocket = make_unique<CSftpControlSocket>(*this);
+		m_pControlSocket = std::make_unique<CSftpControlSocket>(*this);
 		break;
 	case HTTP:
 	case HTTPS:
-		m_pControlSocket = make_unique<CHttpControlSocket>(*this);
+		m_pControlSocket = std::make_unique<CHttpControlSocket>(*this);
 		break;
 	default:
 		m_pLogging->LogMessage(MessageType::Debug_Warning, _T("Not a valid protocol: %d"), server.GetProtocol());

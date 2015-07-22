@@ -175,7 +175,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 			// Try automatic reconnect
 			const CServer* pServer = m_pState->GetServer();
 			if (pServer) {
-				m_CommandList.emplace_front(normal, make_unique<CConnectCommand>(*pServer));
+				m_CommandList.emplace_front(normal, std::make_unique<CConnectCommand>(*pServer));
 				ProcessNextCommand();
 				return;
 			}
@@ -208,7 +208,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 		m_CommandList.pop_front();
 	}
 	else if (nReplyCode == FZ_REPLY_ALREADYCONNECTED && commandInfo.command->GetId() == Command::connect) {
-		m_CommandList.emplace_front(normal, make_unique<CDisconnectCommand>());
+		m_CommandList.emplace_front(normal, std::make_unique<CDisconnectCommand>());
 	}
 	else if (commandInfo.command->GetId() == Command::connect && nReplyCode != FZ_REPLY_OK) {
 		// Remove pending events

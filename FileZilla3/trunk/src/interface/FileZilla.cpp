@@ -242,7 +242,7 @@ USE AT OWN RISK"), _T("Important Information"));
 #endif
 
 	// Load the text wrapping engine
-	m_pWrapEngine = make_unique<CWrapEngine>();
+	m_pWrapEngine = std::make_unique<CWrapEngine>();
 	m_pWrapEngine->LoadCache();
 
 	CMainFrame *frame = new CMainFrame();
@@ -518,7 +518,7 @@ bool CFileZillaApp::LoadLocales()
 bool CFileZillaApp::SetLocale(int language)
 {
 	// First check if we can load the new locale
-	auto pLocale = make_unique<wxLocale>();
+	auto pLocale = std::make_unique<wxLocale>();
 	wxLogNull log;
 	pLocale->Init(language);
 	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla"))) {
@@ -531,7 +531,7 @@ bool CFileZillaApp::SetLocale(int language)
 	m_pLocale.reset();
 
 	// Finally load new one
-	pLocale = make_unique<wxLocale>();
+	pLocale = std::make_unique<wxLocale>();
 	pLocale->Init(language);
 	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla"))) {
 		return false;
@@ -701,7 +701,7 @@ extern "C" BOOL CALLBACK EnumWindowCallback(HWND hwnd, LPARAM)
 int CFileZillaApp::ProcessCommandLine()
 {
 	AddStartupProfileRecord(_T("CFileZillaApp::ProcessCommandLine"));
-	m_pCommandLine = make_unique<CCommandLine>(argc, argv);
+	m_pCommandLine = std::make_unique<CCommandLine>(argc, argv);
 	int res = m_pCommandLine->Parse() ? 1 : -1;
 
 	if (res > 0) {

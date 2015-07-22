@@ -164,7 +164,7 @@ bool CShellExtensionInterface::CreateDragDirectory()
 
 std::unique_ptr<CShellExtensionInterface> CShellExtensionInterface::CreateInitialized()
 {
-	auto ret = make_unique<CShellExtensionInterface>();
+	auto ret = std::make_unique<CShellExtensionInterface>();
 	if (!ret->IsLoaded() || ret->InitDrag().empty()) {
 		ret.reset();
 	}
