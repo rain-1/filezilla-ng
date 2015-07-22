@@ -1193,7 +1193,6 @@
                     <flag>wxGROW</flag>
                   </object>
                 </object>
-                <flag>wxALIGN_RIGHT</flag>
               </object>
             </object>
             <flag>wxGROW|wxTOP</flag>
@@ -2623,7 +2622,7 @@
                   <object class="sizeritem">
                     <object class="wxTextCtrl" name="ID_NAME"/>
                     <option>1</option>
-                    <flag>wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
                 </object>
                 <option>1</option>

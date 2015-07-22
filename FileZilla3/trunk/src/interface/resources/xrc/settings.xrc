@@ -2248,7 +2248,7 @@
                         <item>4 - Debug</item>
                       </content>
                     </object>
-                    <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
                   </object>
                 </object>
               </object>
