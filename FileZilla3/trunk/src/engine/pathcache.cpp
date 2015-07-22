@@ -17,11 +17,7 @@ void CPathCache::Store(CServer const& server, CServerPath const& target, CServer
 
 	tCacheIterator iter = m_cache.find(server);
 	if (iter == m_cache.cend())
-#if HAVE_MAP_EMPLACE
 		iter = m_cache.emplace(std::make_pair(server, tServerCache())).first;
-#else
-		iter = m_cache.insert(std::make_pair(server, tServerCache())).first;
-#endif
 	tServerCache &serverCache = iter->second;
 
 	CSourcePath sourcePath;

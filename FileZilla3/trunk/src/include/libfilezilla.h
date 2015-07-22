@@ -3,8 +3,6 @@
 
 #ifdef HAVE_CONFIG_H
   #include <config.h>
-#else
-#define HAVE_MAP_EMPLACE 1
 #endif
 
 #ifndef PACKAGE_STRING

@@ -39,10 +39,9 @@ else
   AC_MSG_ERROR([Compiler does not seem to target MinGW.])
 fi
 
-# Check for C++11 support
-AX_CXX_COMPILE_STDCXX_11([],[mandatory])
+# Check for C++14 support
+CXX_COMPILE_STDCXX_14([],[mandatory])
 CHECK_LIBCXX
-CHECK_CXX11
 AC_CACHE_SAVE
 
 AC_CHECK_HEADER(shlobj.h,, [
