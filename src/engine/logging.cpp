@@ -155,10 +155,16 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 			LARGE_INTEGER size;
 			if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size) {
 				CloseHandle(m_log_fd);
+				m_log_fd = INVALID_HANDLE_VALUE;
 
 				// m_log_fd might no longer be the original file.
 				// Recheck on a new handle. Proteced with a mutex against other processes
 				HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
+				if (!hMutex) {
+					wxString error = wxSysErrorMsg();
+					LogMessage(MessageType::Error, _("Could not create logging mutex: %s"), error);
+					return;
+				}
 
 				HANDLE hFile = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 				if (hFile == INVALID_HANDLE_VALUE) {
@@ -168,7 +174,6 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					ReleaseMutex(hMutex);
 					CloseHandle(hMutex);
 
-					m_log_fd = INVALID_HANDLE_VALUE;
 					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
 					return;
 				}
@@ -186,8 +191,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					DeleteFile(tmp);
 					MoveFileEx(m_file, m_file + _T(".1"), MOVEFILE_REPLACE_EXISTING);
 					m_log_fd = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-					if (m_log_fd == INVALID_HANDLE_VALUE)
-					{
+					if (m_log_fd == INVALID_HANDLE_VALUE) {
 						// If this function would return bool, I'd return FILE_NOT_FOUND here.
 						error = wxSysErrorMsg();
 					}
@@ -207,8 +211,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		DWORD len = (DWORD)strlen((const char*)utf8);
 		DWORD written;
 		BOOL res = WriteFile(m_log_fd, (const char*)utf8, len, &written, 0);
-		if (!res || written != len)
-		{
+		if (!res || written != len) {
 			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
 			CloseHandle(m_log_fd);
 			m_log_fd = INVALID_HANDLE_VALUE;
