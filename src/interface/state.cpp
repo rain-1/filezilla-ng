@@ -1053,13 +1053,13 @@ bool CState::GetSecurityInfo(CSftpEncryptionNotification *& pInfo)
 void CState::SetSecurityInfo(CCertificateNotification const& info)
 {
 	m_pSftpEncryptionInfo.reset();
-	m_pCertificate = make_unique<CCertificateNotification>(info);
+	m_pCertificate = std::make_unique<CCertificateNotification>(info);
 	NotifyHandlers(STATECHANGE_ENCRYPTION);
 }
 
 void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
 {
 	m_pCertificate.reset();
-	m_pSftpEncryptionInfo = make_unique<CSftpEncryptionNotification>(info);
+	m_pSftpEncryptionInfo = std::make_unique<CSftpEncryptionNotification>(info);
 	NotifyHandlers(STATECHANGE_ENCRYPTION);
 }

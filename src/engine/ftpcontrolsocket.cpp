@@ -2505,7 +2505,7 @@ int CFtpControlSocket::FileTransferSend()
 		}
 
 		{
-			std::unique_ptr<CFile> pFile = make_unique<CFile>();
+			auto pFile = std::make_unique<CFile>();
 			if (pData->download) {
 				// Be quiet
 				wxLogNull nullLog;
