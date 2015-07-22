@@ -98,7 +98,7 @@ The default for FTP is 21, the default for SFTP is 22.</tooltip>
                 </object>
               </object>
               <object class="sizeritem">
-                <flag>wxLEFT|wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
+                <flag>wxLEFT|wxGROW</flag>
                 <border platform="mac">6</border>
                 <object class="wxBitmapButton" name="ID_QUICKCONNECT_DROPDOWN">
                   <size platform="mac">20,-1</size>

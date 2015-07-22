@@ -240,7 +240,7 @@
             <object class="wxStaticText">
               <label>You are using the latest version of FileZilla.</label>
             </object>
-            <flag>wxALIGN_CENTRE_VERTICAL|wxALIGN_CENTRE_HORIZONTAL</flag>
+            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
           </object>
           <orient>wxVERTICAL</orient>
           <object class="spacer">
@@ -248,7 +248,7 @@
           </object>
         </object>
         <option>1</option>
-        <flag>wxALIGN_CENTRE_VERTICAL|wxALIGN_CENTRE_HORIZONTAL|wxGROW</flag>
+        <flag>wxGROW</flag>
       </object>
       <cols>1</cols>
       <vgap>5</vgap>
