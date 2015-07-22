@@ -15,11 +15,10 @@ AC_DEFUN([FZ_CHECK_MAP_EMPLACE], [
       ]])
     ], [
       AC_MSG_RESULT([yes])
-      AC_DEFINE([HAVE_MAP_EMPLACE], [1], [std::map has emplace])
     ], [
       AC_MSG_RESULT([no])
+      AC_MSG_ERROR([std::map lacks emplace])
     ])
-
 
   AC_LANG_POP(C++)
 ])

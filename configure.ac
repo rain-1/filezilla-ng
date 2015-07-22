@@ -39,10 +39,9 @@ if ! test "$localesonly" = "yes"; then
     CXXFLAGS="$CXXFLAGS -Wall -g"
   fi
 
-  # Check for C++11 support
-  AX_CXX_COMPILE_STDCXX_11([],[mandatory])
+  # Check for C++14 support
+  CXX_COMPILE_STDCXX_14([],[mandatory])
   CHECK_LIBCXX
-  CHECK_CXX11
 
   # libstdc++ as shipped with GCC 4.7 lacks std::map::emplace
   FZ_CHECK_MAP_EMPLACE
