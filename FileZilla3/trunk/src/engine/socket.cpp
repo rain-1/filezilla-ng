@@ -162,6 +162,8 @@ static int ConvertMSWErrorCode(int error)
 		return EHOSTDOWN;
 	case WSAENETUNREACH:
 		return ENETUNREACH;
+	case WSAEADDRINUSE:
+		return EADDRINUSE;
 	default:
 		return error;
 	}
