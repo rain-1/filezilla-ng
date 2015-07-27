@@ -61,27 +61,27 @@
 -->
 
 <FileZilla3>
-    <Settings>
-      <Setting name="Config Location">$SOMEDIR/filezilla/</Setting>
-      <Setting name="Kiosk mode">0</Setting>
-      <Setting name="Disable update check">0</Setting>
-    </Settings>
-    <Servers>
-        <Server>
-            <Host>ftp.gnu.org</Host>
-            <Port>21</Port>
-            <Protocol>0</Protocol>
-            <Type>0</Type>
-            <Logontype>0</Logontype>
-            <User>anonymous</User>
-            <Pass>someone@example.com</Pass>
-            <TimezoneOffset>0</TimezoneOffset>
-            <PasvMode>MODE_DEFAULT</PasvMode>
-            <MaximumMultipleConnections>0</MaximumMultipleConnections>
-            <EncodingType>Auto</EncodingType>
-            <Comments></Comments>
-            <LocalDir></LocalDir>
-            <RemoteDir></RemoteDir>Primary GNU download server
-        </Server>
-    </Servers>
+  <Settings>
+    <Setting name="Config Location">$SOMEDIR/filezilla/</Setting>
+    <Setting name="Kiosk mode">0</Setting>
+    <Setting name="Disable update check">0</Setting>
+  </Settings>
+  <Servers>
+    <Server>
+      <Host>ftp.gnu.org</Host>
+      <Port>21</Port>
+      <Protocol>0</Protocol>
+      <Type>0</Type>
+      <Logontype>0</Logontype>
+      <User>anonymous</User>
+      <Pass>someone@example.com</Pass>
+      <TimezoneOffset>0</TimezoneOffset>
+      <PasvMode>MODE_DEFAULT</PasvMode>
+      <MaximumMultipleConnections>0</MaximumMultipleConnections>
+      <EncodingType>Auto</EncodingType>
+      <Comments></Comments>
+      <LocalDir></LocalDir>
+      <RemoteDir></RemoteDir>Primary GNU download server
+    </Server>
+  </Servers>
 </FileZilla3>
