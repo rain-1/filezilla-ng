@@ -2310,8 +2310,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			bool dirDidExist;
 			bool matchedCase;
 			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
-			if (!found)
-			{
+			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
 				else if (pData->download &&
@@ -2323,15 +2322,12 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				else
 					pData->opState = filetransfer_resumetest;
 			}
-			else
-			{
+			else {
 				if (entry.is_unsure())
 					pData->opState = filetransfer_waitlist;
-				else
-				{
-					if (matchedCase)
-					{
-						pData->remoteFileSize = entry.size.GetValue();
+				else {
+					if (matchedCase) {
+						pData->remoteFileSize = entry.size;
 						if (entry.has_date())
 							pData->fileTime = entry.time;
 
@@ -2349,23 +2345,20 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 						pData->opState = filetransfer_size;
 				}
 			}
-			if (pData->opState == filetransfer_waitlist)
-			{
+			if (pData->opState == filetransfer_waitlist) {
 				int res = List(CServerPath(), _T(""), LIST_FLAG_REFRESH);
 				if (res != FZ_REPLY_OK)
 					return res;
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			else if (pData->opState == filetransfer_resumetest)
-			{
+			else if (pData->opState == filetransfer_resumetest) {
 				int res = CheckOverwriteFile();
 				if (res != FZ_REPLY_OK)
 					return res;
 			}
 		}
-		else
-		{
+		else {
 			pData->tryAbsolutePath = true;
 			pData->opState = filetransfer_size;
 		}
@@ -2390,7 +2383,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			}
 			else {
 				if (matchedCase && !entry.is_unsure()) {
-					pData->remoteFileSize = entry.size.GetValue();
+					pData->remoteFileSize = entry.size;
 					if (entry.has_date())
 						pData->fileTime = entry.time;
 
@@ -2417,10 +2410,8 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 		else
 			pData->opState = filetransfer_size;
 	}
-	else if (pData->opState == filetransfer_waittransfer)
-	{
-		if (prevResult == FZ_REPLY_OK && engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS))
-		{
+	else if (pData->opState == filetransfer_waittransfer) {
+		if (prevResult == FZ_REPLY_OK && engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
@@ -2431,8 +2422,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 					return SendNextCommand();
 				}
 			}
-			else if (pData->download && pData->fileTime.IsValid())
-			{
+			else if (pData->download && pData->fileTime.IsValid()) {
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
 				if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
@@ -2798,7 +2788,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 					}
 					else // found and matched case
 					{
-						pData->remoteFileSize = entry.size.GetValue();
+						pData->remoteFileSize = entry.size;
 						if (entry.has_date())
 							pData->fileTime = entry.time;
 

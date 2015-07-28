@@ -90,7 +90,7 @@ public:
 		if (!m_pToken)
 			return wxString();
 
-		if( m_str.empty() ) {
+		if (m_str.empty()) {
 			m_str.assign(m_pToken, m_len);
 		}
 
@@ -135,8 +135,7 @@ public:
 
 	bool IsLeftNumeric()
 	{
-		if (m_leftNumeric == Unknown)
-		{
+		if (m_leftNumeric == Unknown) {
 			if (m_len < 2)
 				m_leftNumeric = No;
 			else if (m_pToken[0] < '0' || m_pToken[0] > '9')
@@ -149,8 +148,7 @@ public:
 
 	bool IsRightNumeric()
 	{
-		if (m_rightNumeric == Unknown)
-		{
+		if (m_rightNumeric == Unknown) {
 			if (m_len < 2)
 				m_rightNumeric = No;
 			else if (m_pToken[m_len - 1] < '0' || m_pToken[m_len - 1] > '9')
@@ -166,10 +164,8 @@ public:
 		if (!chr)
 			return -1;
 
-		for (unsigned int i = start; i < m_len; ++i)
-		{
-			for (int c = 0; chr[c]; ++c)
-			{
+		for (unsigned int i = start; i < m_len; ++i) {
+			for (int c = 0; chr[c]; ++c) {
 				if (m_pToken[i] == chr[c])
 					return i;
 			}
@@ -189,7 +185,7 @@ public:
 		return -1;
 	}
 
-	wxLongLong GetNumber(unsigned int start, int len)
+	int64_t GetNumber(unsigned int start, int len)
 	{
 		if (len == -1)
 			len = m_len - start;
@@ -202,7 +198,7 @@ public:
 		if (m_pToken[start] < '0' || m_pToken[start] > '9')
 			return -1;
 
-		wxLongLong number = 0;
+		int64_t number = 0;
 		for (unsigned int i = start; i < (start + len); ++i)
 		{
 			if (m_pToken[i] < '0' || m_pToken[i] > '9')
@@ -213,27 +209,22 @@ public:
 		return number;
 	}
 
-	wxLongLong GetNumber(t_numberBase base = decimal)
+	int64_t GetNumber(t_numberBase base = decimal)
 	{
-		switch (base)
-		{
+		switch (base) {
 		default:
 		case decimal:
-			if (m_number == -1)
-			{
-				if (IsNumeric() || IsLeftNumeric())
-				{
+			if (m_number == -1) {
+				if (IsNumeric() || IsLeftNumeric()) {
 					m_number = 0;
-					for (unsigned int i = 0; i < m_len; ++i)
-					{
+					for (unsigned int i = 0; i < m_len; ++i) {
 						if (m_pToken[i] < '0' || m_pToken[i] > '9')
 							break;
 						m_number *= 10;
 						m_number += m_pToken[i] - '0';
 					}
 				}
-				else if (IsRightNumeric())
-				{
+				else if (IsRightNumeric()) {
 					m_number = 0;
 					int start = m_len - 1;
 					while (m_pToken[start - 1] >= '0' && m_pToken[start - 1] <= '9')
@@ -248,22 +239,18 @@ public:
 			return m_number;
 		case hex:
 			{
-				wxLongLong number = 0;
-				for (unsigned int i = 0; i < m_len; ++i)
-				{
+				int64_t number = 0;
+				for (unsigned int i = 0; i < m_len; ++i) {
 					const wxChar& c = m_pToken[i];
-					if (c >= '0' && c <= '9')
-					{
+					if (c >= '0' && c <= '9') {
 						number *= 16;
 						number += c - '0';
 					}
-					else if (c >= 'a' && c <= 'f')
-					{
+					else if (c >= 'a' && c <= 'f') {
 						number *= 16;
 						number += c - '0' + 10;
 					}
-					else if (c >= 'A' && c <= 'F')
-					{
+					else if (c >= 'A' && c <= 'F') {
 						number *= 16;
 						number += c - 'A' + 10;
 					}
@@ -290,7 +277,7 @@ protected:
 	TokenInformation m_numeric;
 	TokenInformation m_leftNumeric;
 	TokenInformation m_rightNumeric;
-	wxLongLong m_number;
+	int64_t m_number;
 	wxString m_str;
 };
 
@@ -864,9 +851,9 @@ done:
 
 		CToken t;
 		if (line.GetToken(0, t)) {
-			wxLongLong seconds = t.GetNumber();
-			if (seconds > 0 && seconds.GetValue() <= 0xffffffffll) {
-				CDateTime time(static_cast<time_t>(seconds.GetValue()), CDateTime::seconds);
+			int64_t seconds = t.GetNumber();
+			if (seconds > 0 && seconds <= 0xffffffffll) {
+				CDateTime time(static_cast<time_t>(seconds), CDateTime::seconds);
 				if (time.IsValid()) {
 					entry.time = time;
 				}
@@ -1041,7 +1028,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		if (pos2 == -1) {
 			if (token[pos] != '.') {
 				// something like 26-05 2002
-				day = token.GetNumber(pos + 1, token.GetLength() - pos - 1).GetLo();
+				day = token.GetNumber(pos + 1, token.GetLength() - pos - 1);
 				if (day < 1 || day > 31)
 					return false;
 				dateMonth = CToken(token.GetToken(), pos);
@@ -1070,7 +1057,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			// 1) 2005 3 13
 			// 2) 2005 13 3
 			// assume first one.
-			year = token.GetNumber().GetLo();
+			year = token.GetNumber();
 			if (!line.GetToken(++index, dateMonth))
 				return false;
 			mayHaveTime = false;
@@ -1086,7 +1073,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 				return false;
 
 			// Asian date format: 2005xxx 5xx 20xxx with some non-ascii characters following
-			year = token.GetNumber().GetLo();
+			year = token.GetNumber();
 			if (!line.GetToken(++index, dateMonth))
 				return false;
 			mayHaveTime = false;
@@ -1109,7 +1096,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 				++offset;
 			if (!dateMonth.IsNumeric(0, dateMonth.GetLength() - offset))
 				return false;
-			dateDay = dateMonth.GetNumber(0, dateMonth.GetLength() - offset).GetLo();
+			dateDay = dateMonth.GetNumber(0, dateMonth.GetLength() - offset);
 			dateMonth = token;
 		}
 		else if( token.GetLength() == 5 && token[2] == ':' && token.IsRightNumeric() ) {
@@ -1117,7 +1104,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			return false;
 		}
 		else {
-			dateDay = token.GetNumber().GetLo();
+			dateDay = token.GetNumber();
 			if (token[token.GetLength() - 1] == ',')
 				bHasYearAndTime = true;
 		}
@@ -1190,7 +1177,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		if (!token.IsNumeric() && !token.IsLeftNumeric())
 			return false;
 
-		year = token.GetNumber().GetLo();
+		year = token.GetNumber();
 
 		if (year > 3000)
 			return false;
@@ -1263,23 +1250,23 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	}
 	else if (pos == 4) {
 		// Seems to be yyyy-mm-dd
-		year = token.GetNumber(0, pos).GetLo();
+		year = token.GetNumber(0, pos);
 		if (year < 1900 || year > 3000)
 			return false;
 		gotYear = true;
 	}
 	else if (pos <= 2) {
-		wxLongLong value = token.GetNumber(0, pos);
+		int64_t value = token.GetNumber(0, pos);
 		if (token[pos] == '.') {
 			// Maybe dd.mm.yyyy
 			if (value < 1 || value > 31)
 				return false;
-			day = value.GetLo();
+			day = value;
 			gotDay = true;
 		}
 		else {
 			if (saneFieldOrder) {
-				year = value.GetLo();
+				year = value;
 				if (year < 50)
 					year += 2000;
 				else
@@ -1295,11 +1282,11 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 					if (value > 31)
 						return false;
 
-					day = value.GetLo();
+					day = value;
 					gotDay = true;
 				}
 				else {
-					month = value.GetLo();
+					month = value;
 					gotMonth = true;
 				}
 			}
@@ -1345,7 +1332,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		gotDay = true;
 	}
 
-	int64_t value = token.GetNumber(pos2 + 1, token.GetLength() - pos2 - 1).GetValue();
+	int64_t value = token.GetNumber(pos2 + 1, token.GetLength() - pos2 - 1);
 	if (gotYear) {
 		// Day field in yyy-mm-dd
 		if (value <= 0 || value > 31)
@@ -1403,18 +1390,15 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 	if (!line.GetToken(++index, token))
 		return false;
 
-	if (token.GetString() == _T("<DIR>"))
-	{
+	if (token.GetString() == _T("<DIR>")) {
 		entry.flags |= CDirentry::flag_dir;
 		entry.size = -1;
 	}
-	else if (token.IsNumeric() || token.IsLeftNumeric())
-	{
+	else if (token.IsNumeric() || token.IsLeftNumeric()) {
 		// Convert size, filter out separators
-		wxLongLong size = 0;
+		int64_t size = 0;
 		int len = token.GetLength();
-		for (int i = 0; i < len; ++i)
-		{
+		for (int i = 0; i < len; ++i) {
 			char chr = token[i];
 			if (chr == ',' || chr == '.')
 				continue;
@@ -1515,8 +1499,7 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 	entry.size = -1;
 
 	int fact = 1;
-	while (fact < pos)
-	{
+	while (fact < pos) {
 		int separator = token.Find(',', fact);
 		int len;
 		if (separator == -1)
@@ -1524,8 +1507,7 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 		else
 			len = separator - fact;
 
-		if (!len)
-		{
+		if (!len) {
 			++fact;
 			continue;
 		}
@@ -1536,12 +1518,11 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 			entry.flags |= CDirentry::flag_dir;
 		else if (type == 's')
 			entry.size = token.GetNumber(fact + 1, len - 1);
-		else if (type == 'm')
-		{
-			wxLongLong number = token.GetNumber(fact + 1, len - 1);
+		else if (type == 'm') {
+			int64_t number = token.GetNumber(fact + 1, len - 1);
 			if (number < 0)
 				return false;
-			entry.time = CDateTime(static_cast<time_t>(number.GetValue()), CDateTime::seconds);
+			entry.time = CDateTime(static_cast<time_t>(number), CDateTime::seconds);
 		}
 		else if (type == 'u' && len > 2 && token[fact + 1] == 'p')
 			entry.permissions = objcache.get(token.GetString().Mid(fact + 2, len - 2));
@@ -1555,11 +1536,9 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 wxString Unescape(const wxString& str, wxChar escape)
 {
 	wxString res;
-	for (unsigned int i = 0; i < str.Len(); ++i)
-	{
+	for (unsigned int i = 0; i < str.Len(); ++i) {
 		wxChar c = str[i];
-		if (c == escape)
-		{
+		if (c == escape) {
 			c = str[++i];
 			if (!c)
 				break;
@@ -2442,10 +2421,9 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 	return true;
 }
 
-bool CDirectoryListingParser::ParseComplexFileSize(CToken& token, wxLongLong& size, int blocksize /*=-1*/)
+bool CDirectoryListingParser::ParseComplexFileSize(CToken& token, int64_t& size, int blocksize /*=-1*/)
 {
-	if (token.IsNumeric())
-	{
+	if (token.IsNumeric()) {
 		size = token.GetNumber();
 		if (blocksize != -1)
 			size *= blocksize;

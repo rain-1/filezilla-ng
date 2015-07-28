@@ -825,9 +825,9 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
-	TiXmlElement* root = xml.Load();
-	TiXmlElement* pElement = root ? root->FirstChildElement("Layout") : 0;
-	if (!pElement) {
+	auto root = xml.Load();
+	auto  element = root.child("Layout");
+	if (!element) {
 		return 0;
 	}
 
@@ -835,17 +835,17 @@ int CWrapEngine::GetWidthFromCache(const char* name)
 	if (language.empty())
 		language = _T("default");
 
-	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
-	if (!pLanguage) {
+	auto xLanguage = FindElementWithAttribute(element, "Language", "id", language.mb_str());
+	if (!xLanguage) {
 		return 0;
 	}
 
-	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
-	if (!pDialog) {
+	auto dialog = FindElementWithAttribute(xLanguage, "Dialog", "name", name);
+	if (!dialog) {
 		return 0;
 	}
 
-	int value = GetAttributeInt(pDialog, "width");
+	int value = GetAttributeInt(dialog, "width");
 
 	return value;
 }
@@ -863,9 +863,9 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
-	TiXmlElement* root = xml.Load();
-	TiXmlElement* pElement = root ? root->FirstChildElement("Layout") : 0;
-	if (!pElement) {
+	auto root = xml.Load();
+	auto element = root.child("Layout");
+	if (!element) {
 		return;
 	}
 
@@ -873,18 +873,18 @@ void CWrapEngine::SetWidthToCache(const char* name, int width)
 	if (language.empty())
 		language = _T("default");
 
-	TiXmlElement* pLanguage = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
-	if (!pLanguage) {
+	auto xLanguage = FindElementWithAttribute(element, "Language", "id", language.mb_str());
+	if (!xLanguage) {
 		return;
 	}
 
-	TiXmlElement* pDialog = FindElementWithAttribute(pLanguage, "Dialog", "name", name);
-	if (!pDialog) {
-		pDialog = pLanguage->LinkEndChild(new TiXmlElement("Dialog"))->ToElement();
-		pDialog->SetAttribute("name", name);
+	auto dialog = FindElementWithAttribute(xLanguage, "Dialog", "name", name);
+	if (!dialog) {
+		dialog = xLanguage.append_child("Dialog");
+		SetTextAttribute(dialog, "name", name);
 	}
 
-	pDialog->SetAttribute("width", width);
+	SetAttributeInt(dialog, "width", width);
 	xml.Save(false);
 }
 
@@ -930,10 +930,9 @@ bool CWrapEngine::LoadCache()
 	CInterProcessMutex mutex(MUTEX_LAYOUT);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("layout")));
-	TiXmlElement* pDocument = xml.Load();
+	auto document = xml.Load();
 
-	if (!pDocument)
-	{
+	if (!document) {
 		m_use_cache = false;
 		wxMessageBoxEx(xml.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
@@ -942,30 +941,28 @@ bool CWrapEngine::LoadCache()
 
 	bool cacheValid = true;
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Layout");
-	if (!pElement)
-		pElement = pDocument->LinkEndChild(new TiXmlElement("Layout"))->ToElement();
+	auto layoutElement = document.child("Layout");
+	if (!layoutElement)
+		layoutElement = document.append_child("Layout");
 
 	const wxString buildDate = CBuildInfo::GetBuildDateString();
-	if (GetTextAttribute(pElement, "Builddate") != buildDate)
-	{
+	if (GetTextAttribute(layoutElement, "Builddate") != buildDate) {
 		cacheValid = false;
-		SetTextAttribute(pElement, "Builddate", buildDate);
+		SetTextAttribute(layoutElement, "Builddate", buildDate);
 	}
 
 	const wxString buildTime = CBuildInfo::GetBuildTimeString();
-	if (GetTextAttribute(pElement, "Buildtime") != buildTime)
-	{
+	if (GetTextAttribute(layoutElement, "Buildtime") != buildTime) {
 		cacheValid = false;
-		SetTextAttribute(pElement, "Buildtime", buildTime);
+		SetTextAttribute(layoutElement, "Buildtime", buildTime);
 	}
 
 	// Enumerate resource file names
 	// -----------------------------
 
-	TiXmlElement* pResources = pElement->FirstChildElement("Resources");
-	if (!pResources)
-		pResources = pElement->LinkEndChild(new TiXmlElement("Resources"))->ToElement();
+	auto resources = layoutElement.child("Resources");
+	if (!resources)
+		resources = layoutElement.append_child("Resources");
 
 	CLocalPath resourceDir = wxGetApp().GetResourceDir();
 	resourceDir.AddSegment(_T("xrc"));
@@ -974,8 +971,7 @@ bool CWrapEngine::LoadCache()
 	wxLogNull log;
 
 	wxString xrc;
-	for (bool found = dir.GetFirst(&xrc, _T("*.xrc")); found; found = dir.GetNext(&xrc))
-	{
+	for (bool found = dir.GetFirst(&xrc, _T("*.xrc")); found; found = dir.GetNext(&xrc)) {
 		if (!wxFileName::FileExists(resourceDir.GetPath() + xrc))
 			continue;
 
@@ -983,34 +979,28 @@ bool CWrapEngine::LoadCache()
 		wxDateTime date = fn.GetModificationTime();
 		wxLongLong ticks = date.GetTicks();
 
-		TiXmlElement* resourceElement = FindElementWithAttribute(pResources, "xrc", "file", xrc.mb_str());
-		if (!resourceElement)
-		{
-			resourceElement = pResources->LinkEndChild(new TiXmlElement("xrc"))->ToElement();
-			resourceElement->SetAttribute("file", xrc.mb_str());
-			resourceElement->SetAttribute("date", ticks.ToString().mb_str());
+		auto resourceElement = FindElementWithAttribute(resources, "xrc", "file", xrc.mb_str());
+		if (!resourceElement) {
+			resourceElement = resources.append_child("xrc");
+			SetTextAttribute(resourceElement, "file", xrc);
+			SetTextAttribute(resourceElement, "date", ticks.ToString());
 			cacheValid = false;
 		}
-		else
-		{
-			const char* xrcNodeDate = resourceElement->Attribute("date");
-			if (!xrcNodeDate || strcmp(xrcNodeDate, ticks.ToString().mb_str()))
-			{
+		else {
+			wxString xrcNodeDate = GetTextAttribute(resourceElement, "date");
+			if (xrcNodeDate.empty() || xrcNodeDate != ticks.ToString()) {
 				cacheValid = false;
-
-				resourceElement->SetAttribute("date", ticks.ToString().mb_str());
+				SetTextAttribute(resourceElement, "date", ticks.ToString());
 			}
 		}
 	}
 
-	if (!cacheValid)
-	{
+	if (!cacheValid) {
 		// Clear all languages
-		TiXmlElement* pLanguage = pElement->FirstChildElement("Language");
-		while (pLanguage)
-		{
-			pElement->RemoveChild(pLanguage);
-			pLanguage = pElement->FirstChildElement("Language");
+		auto language = layoutElement.child("Language");
+		while (language) {
+			layoutElement.remove_child(language);
+			language = layoutElement.child("Language");
 		}
 	}
 
@@ -1019,11 +1009,10 @@ bool CWrapEngine::LoadCache()
 	if (language.empty())
 		language = _T("default");
 
-	TiXmlElement* languageElement = FindElementWithAttribute(pElement, "Language", "id", language.mb_str());
-	if (!languageElement)
-	{
-		languageElement = pElement->LinkEndChild(new TiXmlElement("Language"))->ToElement();
-		languageElement->SetAttribute("id", language.mb_str());
+	auto languageElement = FindElementWithAttribute(layoutElement, "Language", "id", language.mb_str());
+	if (!languageElement) {
+		languageElement = layoutElement.append_child("Language");
+		SetTextAttribute(languageElement, "id", language.mb_str());
 	}
 
 	// Get static text font and measure sample text
@@ -1034,25 +1023,24 @@ bool CWrapEngine::LoadCache()
 	wxFont font = pText->GetFont();
 	wxString fontDesc = font.GetNativeFontInfoDesc();
 
-	TiXmlElement* pFontElement = languageElement->FirstChildElement("Font");
-	if (!pFontElement)
-		pFontElement = languageElement->LinkEndChild(new TiXmlElement("Font"))->ToElement();
+	auto fontElement = languageElement.child("Font");
+	if (!fontElement)
+		fontElement = languageElement.append_child("Font");
 
-	if (GetTextAttribute(pFontElement, "font") != fontDesc)
-	{
-		SetTextAttribute(pFontElement, "font", fontDesc);
+	if (GetTextAttribute(fontElement, "font") != fontDesc) {
+		SetTextAttribute(fontElement, "font", fontDesc);
 		cacheValid = false;
 	}
 
 	int width, height;
 	pText->GetTextExtent(_T("Just some test string we are measuring. If width or heigh differ from the recorded values, invalidate cache. 1234567890MMWWII"), &width, &height);
 
-	if (GetAttributeInt(pFontElement, "width") != width ||
-		GetAttributeInt(pFontElement, "height") != height)
+	if (GetAttributeInt(fontElement, "width") != width ||
+		GetAttributeInt(fontElement, "height") != height)
 	{
 		cacheValid = false;
-		SetAttributeInt(pFontElement, "width", width);
-		SetAttributeInt(pFontElement, "height", height);
+		SetAttributeInt(fontElement, "width", width);
+		SetAttributeInt(fontElement, "height", height);
 	}
 
 	pFrame->Destroy();
@@ -1061,30 +1049,26 @@ bool CWrapEngine::LoadCache()
 	CLocalPath const localesDir = wxGetApp().GetLocalesDir();
 	wxString name = GetLocaleFile(localesDir.GetPath(), language);
 
-	if (!name.empty())
-	{
+	if (!name.empty()) {
 		wxFileName fn(localesDir.GetPath() + name + _T("/filezilla.mo"));
 		wxDateTime date = fn.GetModificationTime();
 		wxLongLong ticks = date.GetTicks();
 
-		const char* languageNodeDate = languageElement->Attribute("date");
-		if (!languageNodeDate || strcmp(languageNodeDate, ticks.ToString().mb_str()))
-		{
-			languageElement->SetAttribute("date", ticks.ToString().mb_str());
+		wxString languageNodeDate = GetTextAttribute(languageElement, "date");
+		if (languageNodeDate.empty() || languageNodeDate != ticks.ToString()) {
+			SetTextAttribute(languageElement, "date", ticks.ToString().mb_str());
 			cacheValid = false;
 		}
 	}
 	else
-		languageElement->SetAttribute("date", "");
-	if (!cacheValid)
-	{
-		TiXmlElement* dialog;
-		while ((dialog = languageElement->FirstChildElement("Dialog")))
-			languageElement->RemoveChild(dialog);
+		SetTextAttribute(languageElement, "date", "");
+	if (!cacheValid) {
+		pugi::xml_node dialog;
+		while ((dialog = languageElement.child("Dialog")))
+			languageElement.remove_child(dialog);
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		m_use_cache = cacheValid;
 		return true;
 	}

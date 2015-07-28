@@ -147,13 +147,13 @@ public:
 
 	void LoadQueue();
 	void LoadQueueFromXML();
-	void ImportQueue(TiXmlElement* pElement, bool updateSelections);
+	void ImportQueue(pugi::xml_node element, bool updateSelections);
 
 	virtual void InsertItem(CServerItem* pServerItem, CQueueItem* pItem);
 
 	virtual void CommitChanges();
 
-	void WriteToFile(TiXmlElement* pElement) const;
+	void WriteToFile(pugi::xml_node element) const;
 
 	void ProcessNotification(CFileZillaEngine* pEngine, std::unique_ptr<CNotification>&& pNotification);
 

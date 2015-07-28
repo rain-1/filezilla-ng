@@ -30,11 +30,11 @@ void CImportDialog::Run()
 	}
 
 	CXmlFile fz3(dlg.GetPath());
-	TiXmlElement* fz3Root = fz3.Load();
+	auto fz3Root = fz3.Load();
 	if (fz3Root) {
-		bool settings = fz3Root->FirstChildElement("Settings") != 0;
-		bool queue = fz3Root->FirstChildElement("Queue") != 0;
-		bool sites = fz3Root->FirstChildElement("Servers") != 0;
+		bool settings = fz3Root.child("Settings") != 0;
+		bool queue = fz3Root.child("Queue") != 0;
+		bool sites = fz3Root.child("Servers") != 0;
 
 		if (settings || queue || sites) {
 			if (!Load(m_parent, _T("ID_IMPORT"))) {
@@ -61,15 +61,15 @@ void CImportDialog::Run()
 			}
 
 			if (queue && XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->IsChecked()) {
-				m_pQueueView->ImportQueue(fz3Root->FirstChildElement("Queue"), true);
+				m_pQueueView->ImportQueue(fz3Root.child("Queue"), true);
 			}
 
 			if (sites && XRCCTRL(*this, "ID_SITEMANAGER", wxCheckBox)->IsChecked()) {
-				ImportSites(fz3Root->FirstChildElement("Servers"));
+				ImportSites(fz3Root.child("Servers"));
 			}
 
 			if (settings && XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->IsChecked()) {
-				COptions::Get()->Import(fz3Root->FirstChildElement("Settings"));
+				COptions::Get()->Import(fz3Root.child("Settings"));
 				wxMessageBoxEx(_("The settings have been imported. You have to restart FileZilla for all settings to have effect."), _("Import successful"), wxOK, this);
 			}
 
@@ -79,9 +79,9 @@ void CImportDialog::Run()
 	}
 
 	CXmlFile fz2(dlg.GetPath(), _T("FileZilla"));
-	TiXmlElement* fz2Root = fz2.Load();
+	auto fz2Root = fz2.Load();
 	if (fz2Root) {
-		TiXmlElement* sites_fz2 = fz2Root->FirstChildElement("Sites");
+		auto sites_fz2 = fz2Root.child("Sites");
 		if (sites_fz2) {
 			int res = wxMessageBoxEx(_("The file you have selected contains site manager data from a previous version of FileZilla.\nDue to differences in the storage format, only host, port, username and password will be imported.\nContinue with the import?"),
 				_("Import data from older version"), wxICON_QUESTION | wxYES_NO);
@@ -95,24 +95,24 @@ void CImportDialog::Run()
 	wxMessageBoxEx(_("File does not contain any importable data."), _("Error importing"), wxICON_ERROR, m_parent);
 }
 
-bool CImportDialog::ImportLegacySites(TiXmlElement* pSites)
+bool CImportDialog::ImportLegacySites(pugi::xml_node sites)
 {
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName());
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	TiXmlElement* pCurrentSites = pDocument->FirstChildElement("Servers");
-	if (!pCurrentSites)
-		pCurrentSites = pDocument->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+	auto currentSites = element.child("Servers");
+	if (!currentSites)
+		currentSites = element.append_child("Servers");
 
-	if (!ImportLegacySites(pSites, pCurrentSites))
+	if (!ImportLegacySites(sites, currentSites))
 		return false;
 
 	return file.Save(true);
@@ -128,8 +128,7 @@ wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 	const char* key = "FILEZILLA1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	int pos = (pass.Length() / 3) % strlen(key);
-	for (unsigned int i = 0; i < pass.Length(); i += 3)
-	{
+	for (unsigned int i = 0; i < pass.Length(); i += 3) {
 		if (pass[i] < '0' || pass[i] > '9' ||
 			pass[i + 1] < '0' || pass[i + 1] > '9' ||
 			pass[i + 2] < '0' || pass[i + 2] > '9')
@@ -144,37 +143,37 @@ wxString CImportDialog::DecodeLegacyPassword(wxString pass)
 	return output;
 }
 
-bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement* pExistingSites)
+bool CImportDialog::ImportLegacySites(pugi::xml_node sitesToImport, pugi::xml_node existingSites)
 {
-	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder")) {
-		wxString name = GetTextAttribute(pImportFolder, "Name");
+	for (auto importFolder = sitesToImport.child("Folder"); importFolder; importFolder = importFolder.next_sibling("Folder")) {
+		wxString name = GetTextAttribute(importFolder, "Name");
 		if (name.empty())
 			continue;
 
 		wxString newName = name;
 		int i = 2;
-		TiXmlElement* pFolder;
-		while (!(pFolder = GetFolderWithName(pExistingSites, newName))) {
+		pugi::xml_node folder;
+		while (!(folder = GetFolderWithName(existingSites, newName))) {
 			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
-		ImportLegacySites(pImportFolder, pFolder);
+		ImportLegacySites(importFolder, folder);
 	}
 
-	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Site"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Site")) {
-		wxString name = GetTextAttribute(pImportSite, "Name");
+	for (auto importSite = sitesToImport.child("Site"); importSite; importSite = importSite.next_sibling("Site")) {
+		wxString name = GetTextAttribute(importSite, "Name");
 		if (name.empty())
 			continue;
 
-		wxString host = GetTextAttribute(pImportSite, "Host");
+		wxString host = GetTextAttribute(importSite, "Host");
 		if (host.empty())
 			continue;
 
-		int port = GetAttributeInt(pImportSite, "Port");
+		int port = GetAttributeInt(importSite, "Port");
 		if (port < 1 || port > 65535)
 			continue;
 
-		int serverType = GetAttributeInt(pImportSite, "ServerType");
+		int serverType = GetAttributeInt(importSite, "ServerType");
 		if (serverType < 0 || serverType > 4)
 			continue;
 
@@ -197,9 +196,9 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement
 			break;
 		}
 
-		bool dontSavePass = GetAttributeInt(pImportSite, "DontSavePass") == 1;
+		bool dontSavePass = GetAttributeInt(importSite, "DontSavePass") == 1;
 
-		int logontype = GetAttributeInt(pImportSite, "Logontype");
+		int logontype = GetAttributeInt(importSite, "Logontype");
 		if (logontype < 0 || logontype > 2)
 			continue;
 		if (logontype == 2)
@@ -207,46 +206,46 @@ bool CImportDialog::ImportLegacySites(TiXmlElement* pSitesToImport, TiXmlElement
 		if (logontype == 1 && dontSavePass)
 			logontype = 2;
 
-		wxString user = GetTextAttribute(pImportSite, "User");
-		wxString pass = DecodeLegacyPassword(GetTextAttribute(pImportSite, "Pass"));
-		wxString account = GetTextAttribute(pImportSite, "Account");
+		wxString user = GetTextAttribute(importSite, "User");
+		wxString pass = DecodeLegacyPassword(GetTextAttribute(importSite, "Pass"));
+		wxString account = GetTextAttribute(importSite, "Account");
 		if (logontype && user.empty())
 			continue;
 
 		// Find free name
 		wxString newName = name;
 		int i = 2;
-		while (HasEntryWithName(pExistingSites, newName)) {
+		while (HasEntryWithName(existingSites, newName)) {
 			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
-		TiXmlElement* pServer = pExistingSites->LinkEndChild(new TiXmlElement("Server"))->ToElement();
-		AddTextElement(pServer, newName);
+		auto server = existingSites.append_child("Server");
+		AddTextElement(server, newName);
 
-		AddTextElement(pServer, "Host", host);
-		AddTextElement(pServer, "Port", port);
-		AddTextElement(pServer, "Protocol", protocol);
-		AddTextElement(pServer, "Logontype", logontype);
-		AddTextElement(pServer, "User", user);
-		AddTextElement(pServer, "Pass", pass);
-		AddTextElement(pServer, "Account", account);
+		AddTextElement(server, "Host", host);
+		AddTextElement(server, "Port", port);
+		AddTextElement(server, "Protocol", protocol);
+		AddTextElement(server, "Logontype", logontype);
+		AddTextElement(server, "User", user);
+		AddTextElement(server, "Pass", pass);
+		AddTextElement(server, "Account", account);
 	}
 
 	return true;
 }
 
-bool CImportDialog::HasEntryWithName(TiXmlElement* pElement, const wxString& name)
+bool CImportDialog::HasEntryWithName(pugi::xml_node element, const wxString& name)
 {
-	TiXmlElement* pChild;
-	for (pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server")) {
-		wxString childName = GetTextElement(pChild);
+	pugi::xml_node child;
+	for (child = element.child("Server"); child; child = child.next_sibling("Server")) {
+		wxString childName = GetTextElement(child);
 		childName.Trim(true);
 		childName.Trim(false);
 		if (!name.CmpNoCase(childName))
 			return true;
 	}
-	for (pChild = pElement->FirstChildElement("Folder"); pChild; pChild = pChild->NextSiblingElement("Folder")) {
-		wxString childName = GetTextElement(pChild);
+	for (child = element.child("Folder"); child; child = child.next_sibling("Folder")) {
+		wxString childName = GetTextElement(child);
 		childName.Trim(true);
 		childName.Trim(false);
 		if (!name.CmpNoCase(childName))
@@ -256,91 +255,92 @@ bool CImportDialog::HasEntryWithName(TiXmlElement* pElement, const wxString& nam
 	return false;
 }
 
-TiXmlElement* CImportDialog::GetFolderWithName(TiXmlElement* pElement, const wxString& name)
+pugi::xml_node CImportDialog::GetFolderWithName(pugi::xml_node element, const wxString& name)
 {
-	TiXmlElement* pChild;
-	for (pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server")) {
-		wxString childName = GetTextElement(pChild);
+	pugi::xml_node child;
+	for (child = element.child("Server"); child; child = child.next_sibling("Server")) {
+		wxString childName = GetTextElement(child);
+		childName.Trim(true);
+		childName.Trim(false);
+		if (!name.CmpNoCase(childName)) {
+			// We do not allow servers and directories to share the same name
+			return pugi::xml_node();
+		}
+	}
+
+	for (child = element.child("Folder"); child; child = child.next_sibling("Folder")) {
+		wxString childName = GetTextElement(child);
 		childName.Trim(true);
 		childName.Trim(false);
 		if (!name.CmpNoCase(childName))
-			return 0;
+			return child;
 	}
 
-	for (pChild = pElement->FirstChildElement("Folder"); pChild; pChild = pChild->NextSiblingElement("Folder")) {
-		wxString childName = GetTextElement(pChild);
-		childName.Trim(true);
-		childName.Trim(false);
-		if (!name.CmpNoCase(childName))
-			return pChild;
-	}
+	child = element.append_child("Folder");
+	AddTextElement(child, name);
 
-	pChild = pElement->LinkEndChild(new TiXmlElement("Folder"))->ToElement();
-	AddTextElement(pChild, name);
-
-	return pChild;
+	return child;
 }
 
-bool CImportDialog::ImportSites(TiXmlElement* pSites)
+bool CImportDialog::ImportSites(pugi::xml_node sites)
 {
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxString msg = wxString::Format(_("Could not load \"%s\", please make sure the file is valid and can be accessed.\nAny changes made in the Site Manager will not be saved."), file.GetFileName());
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	TiXmlElement* pCurrentSites = pDocument->FirstChildElement("Servers");
-	if (!pCurrentSites)
-		pCurrentSites = pDocument->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+	auto currentSites = element.child("Servers");
+	if (!currentSites)
+		currentSites = element.append_child("Servers");
 
-	if (!ImportSites(pSites, pCurrentSites))
+	if (!ImportSites(sites, currentSites))
 		return false;
 
 	return file.Save(true);
 }
 
-bool CImportDialog::ImportSites(TiXmlElement* pSitesToImport, TiXmlElement* pExistingSites)
+bool CImportDialog::ImportSites(pugi::xml_node sitesToImport, pugi::xml_node existingSites)
 {
-	for (TiXmlElement* pImportFolder = pSitesToImport->FirstChildElement("Folder"); pImportFolder; pImportFolder = pImportFolder->NextSiblingElement("Folder")) {
-		wxString name = GetTextElement_Trimmed(pImportFolder, "Name");
+	for (auto importFolder = sitesToImport.child("Folder"); importFolder; importFolder = importFolder.next_sibling("Folder")) {
+		wxString name = GetTextElement_Trimmed(importFolder, "Name");
 		if (name.empty())
-			name = GetTextElement_Trimmed(pImportFolder);
+			name = GetTextElement_Trimmed(importFolder);
 		if (name.empty())
 			continue;
 
 		wxString newName = name;
 		int i = 2;
-		TiXmlElement* pFolder;
-		while (!(pFolder = GetFolderWithName(pExistingSites, newName)))
-		{
+		pugi::xml_node folder;
+		while (!(folder = GetFolderWithName(existingSites, newName))) {
 			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
-		ImportSites(pImportFolder, pFolder);
+		ImportSites(importFolder, folder);
 	}
 
-	for (TiXmlElement* pImportSite = pSitesToImport->FirstChildElement("Server"); pImportSite; pImportSite = pImportSite->NextSiblingElement("Server")) {
-		wxString name = GetTextElement_Trimmed(pImportSite, "Name");
+	for (auto importSite = sitesToImport.child("Server"); importSite; importSite = importSite.next_sibling("Server")) {
+		wxString name = GetTextElement_Trimmed(importSite, "Name");
 		if (name.empty())
-			name = GetTextElement_Trimmed(pImportSite);
+			name = GetTextElement_Trimmed(importSite);
 		if (name.empty())
 			continue;
 
 		// Find free name
 		wxString newName = name;
 		int i = 2;
-		while (HasEntryWithName(pExistingSites, newName)) {
+		while (HasEntryWithName(existingSites, newName)) {
 			newName = wxString::Format(_T("%s %d"), name, i++);
 		}
 
-		TiXmlElement* pServer = pExistingSites->InsertEndChild(*pImportSite)->ToElement();
-		AddTextElement(pServer, "Name", newName, true);
-		AddTextElement(pServer, newName);
+		auto server = existingSites.append_copy(importSite);
+		AddTextElement(server, "Name", newName, true);
+		AddTextElement(server, newName);
 	}
 
 	return true;

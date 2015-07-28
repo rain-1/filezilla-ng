@@ -103,7 +103,7 @@ protected:
 	bool ParseTime(CToken &token, CDirentry &entry);
 
 	// Parse file sizes given like this: 123.4M
-	bool ParseComplexFileSize(CToken& token, wxLongLong& size, int blocksize = -1);
+	bool ParseComplexFileSize(CToken& token, int64_t& size, int blocksize = -1);
 
 	bool GetMonthFromName(const wxString& name, int &month);
 
@@ -129,7 +129,7 @@ protected:
 
 	std::deque<t_list> m_DataList;
 	std::deque<CRefcountObject<CDirentry>> m_entryList;
-	wxLongLong m_totalData;
+	int64_t m_totalData;
 
 	CLine *m_prevLine;
 

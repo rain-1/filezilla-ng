@@ -455,10 +455,10 @@ if test "$buildmain" = "yes"; then
   AC_SUBST(LIBGNUTLS_LIBS)
   AC_SUBST(LIBGNUTLS_CFLAGS)
 
-  # TinyXML
+  # pugixml
   # ------
 
-  FZ_CHECK_TINYXML()
+  FZ_CHECK_PUGIXML()
 
   # Libdbus
   # -------
@@ -642,10 +642,10 @@ AM_CONDITIONAL(MAKENSISSCRIPT, [test "$makensisscript" = "yes"])
 AM_CONDITIONAL(USE_BINRELOC, test "$use_binreloc" = "yes")
 AM_CONDITIONAL(ENABLE_PRECOMP, test "x$use_precomp" = "xyes")
 AM_CONDITIONAL(HAS_CPPUNIT, [test "$has_cppunit" = "yes"])
-AM_CONDITIONAL(HAVE_LIBTINYXML, [test "x$with_tinyxml" = "xsystem"])
+AM_CONDITIONAL(HAVE_LIBPUGIXML, [test "x$with_pugixml" = "xsystem"])
 AM_CONDITIONAL(HAVE_DBUS, [test "x$with_dbus" = "xyes"])
 
-AC_CONFIG_FILES(Makefile src/Makefile src/engine/Makefile src/tinyxml/Makefile
+AC_CONFIG_FILES(Makefile src/Makefile src/engine/Makefile src/pugixml/Makefile
 src/dbus/Makefile
 src/interface/Makefile src/interface/resources/Makefile src/include/Makefile
 locales/Makefile src/interface/resources/16x16/Makefile

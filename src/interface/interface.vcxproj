@@ -15,6 +15,7 @@
     <ProjectGuid>{760BA430-BB7F-44AB-9542-F8705CAFF92B}</ProjectGuid>
     <RootNamespace>FileZilla</RootNamespace>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -22,6 +23,7 @@
     <PlatformToolset>v140</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -62,7 +64,7 @@
       <HeaderFileName />
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/MP -Zm200 %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>.;../include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;PACKAGE_VERSION="3.8.0-rc3";USED_HOST="i686-w64-mingw32";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -384,7 +386,7 @@
       <Project>{aad2642d-d07a-4415-bb32-d678d89d546f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="..\tinyxml\tinyxml.vcxproj">
+    <ProjectReference Include="..\pugixml\pugixml.vcxproj">
       <Project>{593a4fb1-1787-4192-bf73-9c43bf8fc142}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>

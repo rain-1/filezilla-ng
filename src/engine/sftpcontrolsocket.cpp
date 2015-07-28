@@ -1581,8 +1581,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::FileTransferSubcommandResult()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1590,16 +1589,13 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 
 	CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
 
-	if (pData->opState == filetransfer_waitcwd)
-	{
-		if (prevResult == FZ_REPLY_OK)
-		{
+	if (pData->opState == filetransfer_waitcwd) {
+		if (prevResult == FZ_REPLY_OK) {
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
 			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
-			if (!found)
-			{
+			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_waitlist;
 				else if (pData->download &&
@@ -1610,15 +1606,12 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				else
 					pData->opState = filetransfer_transfer;
 			}
-			else
-			{
+			else {
 				if (entry.is_unsure())
 					pData->opState = filetransfer_waitlist;
-				else
-				{
-					if (matchedCase)
-					{
-						pData->remoteFileSize = entry.size.GetValue();
+				else {
+					if (matchedCase) {
+						pData->remoteFileSize = entry.size;
 						if (entry.has_date())
 							pData->fileTime = entry.time;
 
@@ -1634,37 +1627,31 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 						pData->opState = filetransfer_mtime;
 				}
 			}
-			if (pData->opState == filetransfer_waitlist)
-			{
+			if (pData->opState == filetransfer_waitlist) {
 				int res = List(CServerPath(), _T(""), LIST_FLAG_REFRESH);
 				if (res != FZ_REPLY_OK)
 					return res;
 				ResetOperation(FZ_REPLY_INTERNALERROR);
 				return FZ_REPLY_ERROR;
 			}
-			else if (pData->opState == filetransfer_transfer)
-			{
+			else if (pData->opState == filetransfer_transfer) {
 				int res = CheckOverwriteFile();
 				if (res != FZ_REPLY_OK)
 					return res;
 			}
 		}
-		else
-		{
+		else {
 			pData->tryAbsolutePath = true;
 			pData->opState = filetransfer_mtime;
 		}
 	}
-	else if (pData->opState == filetransfer_waitlist)
-	{
-		if (prevResult == FZ_REPLY_OK)
-		{
+	else if (pData->opState == filetransfer_waitlist) {
+		if (prevResult == FZ_REPLY_OK) {
 			CDirentry entry;
 			bool dirDidExist;
 			bool matchedCase;
 			bool found = engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dirDidExist, matchedCase);
-			if (!found)
-			{
+			if (!found) {
 				if (!dirDidExist)
 					pData->opState = filetransfer_mtime;
 				else if (pData->download &&
@@ -1675,11 +1662,9 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				else
 					pData->opState = filetransfer_transfer;
 			}
-			else
-			{
-				if (matchedCase && !entry.is_unsure())
-				{
-					pData->remoteFileSize = entry.size.GetValue();
+			else {
+				if (matchedCase && !entry.is_unsure()) {
+					pData->remoteFileSize = entry.size;
 					if (!entry.has_date())
 						pData->fileTime = entry.time;
 
@@ -1694,8 +1679,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 				else
 					pData->opState = filetransfer_mtime;
 			}
-			if (pData->opState == filetransfer_transfer)
-			{
+			if (pData->opState == filetransfer_transfer) {
 				int res = CheckOverwriteFile();
 				if (res != FZ_REPLY_OK)
 					return res;
@@ -1704,8 +1688,7 @@ int CSftpControlSocket::FileTransferSubcommandResult(int prevResult)
 		else
 			pData->opState = filetransfer_mtime;
 	}
-	else
-	{
+	else {
 		LogMessage(MessageType::Debug_Warning, _T("  Unknown opState (%d)"), pData->opState);
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;

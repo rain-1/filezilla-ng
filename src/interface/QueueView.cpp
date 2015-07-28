@@ -574,7 +574,7 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 
 		fileItem = new CFileItem(pServerItem, queueOnly, true,
 			fileInfo.name, (fileInfo.name != localFile) ? localFile : wxString(),
-			localPath, dataObject.GetServerPath(), fileInfo.size.GetValue());
+			localPath, dataObject.GetServerPath(), fileInfo.size);
 		fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(fileInfo.name, dataObject.GetServerPath().GetType()));
 
 		InsertItem(pServerItem, fileItem);
@@ -1834,8 +1834,8 @@ void CQueueView::SaveQueue()
 void CQueueView::LoadQueueFromXML()
 {
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("queue")));
-	TiXmlElement* pDocument = xml.Load();
-	if (!pDocument) {
+	auto document = xml.Load();
+	if (!document) {
 		if (!xml.GetError().empty()) {
 			wxString msg = xml.GetError() + _T("\n\n") + _("The queue will not be saved.");
 			wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
@@ -1843,13 +1843,13 @@ void CQueueView::LoadQueueFromXML()
 		return;
 	}
 
-	TiXmlElement* pQueue = pDocument->FirstChildElement("Queue");
-	if (!pQueue)
+	auto queue = document.child("Queue");
+	if (!queue)
 		return;
 
-	ImportQueue(pQueue, false);
+	ImportQueue(queue, false);
 
-	pDocument->RemoveChild(pQueue);
+	document.remove_child(queue);
 
 	if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
 		return;
@@ -1872,20 +1872,17 @@ void CQueueView::LoadQueue()
 
 	if (!m_queue_storage.BeginTransaction())
 		error = true;
-	else
-	{
+	else {
 		CServer server;
 		int64_t id;
-		for (id = m_queue_storage.GetServer(server, true); id > 0; id = m_queue_storage.GetServer(server, false))
-		{
+		for (id = m_queue_storage.GetServer(server, true); id > 0; id = m_queue_storage.GetServer(server, false)) {
 			m_insertionStart = -1;
 			m_insertionCount = 0;
 			CServerItem *pServerItem = CreateServerItem(server);
 
 			CFileItem* fileItem = 0;
 			int64_t fileId;
-			for (fileId = m_queue_storage.GetFile(&fileItem, id); fileItem; fileId = m_queue_storage.GetFile(&fileItem, 0))
-			{
+			for (fileId = m_queue_storage.GetFile(&fileItem, id); fileItem; fileId = m_queue_storage.GetFile(&fileItem, 0)) {
 				fileItem->SetParent(pServerItem);
 				fileItem->SetPriority(fileItem->GetPriority());
 				InsertItem(pServerItem, fileItem);
@@ -1893,8 +1890,7 @@ void CQueueView::LoadQueue()
 			if (fileId < 0)
 				error = true;
 
-			if (!pServerItem->GetChild(0))
-			{
+			if (!pServerItem->GetChild(0)) {
 				m_itemCount--;
 				m_serverList.pop_back();
 				delete pServerItem;
@@ -1918,22 +1914,19 @@ void CQueueView::LoadQueue()
 	m_insertionCount = 0;
 	CommitChanges();
 
-	if (error)
-	{
+	if (error) {
 		wxString file = CQueueStorage::GetDatabaseFilename();
 		wxString msg = wxString::Format(_("An error occurred loading the transfer queue from \"%s\".\nSome queue items might not have been restored."), file);
 		wxMessageBoxEx(msg, _("Error loading queue"), wxICON_ERROR);
 	}
 }
 
-void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
+void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 {
-	TiXmlElement* pServer = pElement->FirstChildElement("Server");
-	while (pServer)
-	{
+	auto xServer = element.child("Server");
+	while (xServer) {
 		CServer server;
-		if (GetServer(pServer, server))
-		{
+		if (GetServer(xServer, server)) {
 			m_insertionStart = -1;
 			m_insertionCount = 0;
 			CServerItem *pServerItem = CreateServerItem(server);
@@ -1941,21 +1934,20 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 			CLocalPath previousLocalPath;
 			CServerPath previousRemotePath;
 
-			for (TiXmlElement* pFile = pServer->FirstChildElement("File"); pFile; pFile = pFile->NextSiblingElement("File"))
-			{
-				wxString localFile = GetTextElement(pFile, "LocalFile");
-				wxString remoteFile = GetTextElement(pFile, "RemoteFile");
-				wxString safeRemotePath = GetTextElement(pFile, "RemotePath");
-				bool download = GetTextElementInt(pFile, "Download") != 0;
-				wxLongLong size = GetTextElementLongLong(pFile, "Size", -1);
-				unsigned char errorCount = static_cast<unsigned char>(GetTextElementInt(pFile, "ErrorCount"));
-				unsigned int priority = GetTextElementInt(pFile, "Priority", static_cast<unsigned int>(QueuePriority::normal));
+			for (auto file = xServer.child("File"); file; file = file.next_sibling("File")) {
+				wxString localFile = GetTextElement(file, "LocalFile");
+				wxString remoteFile = GetTextElement(file, "RemoteFile");
+				wxString safeRemotePath = GetTextElement(file, "RemotePath");
+				bool download = GetTextElementInt(file, "Download") != 0;
+				int64_t size = GetTextElementInt(file, "Size", -1);
+				unsigned char errorCount = static_cast<unsigned char>(GetTextElementInt(file, "ErrorCount"));
+				unsigned int priority = GetTextElementInt(file, "Priority", static_cast<unsigned int>(QueuePriority::normal));
 
-				int dataType = GetTextElementInt(pFile, "DataType", -1);
+				int dataType = GetTextElementInt(file, "DataType", -1);
 				if (dataType == -1)
-					dataType = GetTextElementInt(pFile, "TransferMode", 1);
+					dataType = GetTextElementInt(file, "TransferMode", 1);
 				bool binary = dataType != 0;
-				int overwrite_action = GetTextElementInt(pFile, "OverwriteAction", CFileExistsNotification::unknown);
+				int overwrite_action = GetTextElementInt(file, "OverwriteAction", CFileExistsNotification::unknown);
 
 				CServerPath remotePath;
 				if (!localFile.empty() && !remoteFile.empty() && remotePath.SetSafePath(safeRemotePath) &&
@@ -1977,7 +1969,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 					CFileItem* fileItem = new CFileItem(pServerItem, true, download,
 						download ? remoteFile : localFileName,
 						(remoteFile != localFileName) ? (download ? localFileName : remoteFile) : wxString(),
-						previousLocalPath, previousRemotePath, size.GetValue());
+						previousLocalPath, previousRemotePath, size);
 					fileItem->SetAscii(!binary);
 					fileItem->SetPriorityRaw(QueuePriority(priority));
 					fileItem->m_errorCount = errorCount;
@@ -1987,22 +1979,20 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 						fileItem->m_defaultFileExistsAction = (CFileExistsNotification::OverwriteAction)overwrite_action;
 				}
 			}
-			for (TiXmlElement* pFolder = pServer->FirstChildElement("Folder"); pFolder; pFolder = pFolder->NextSiblingElement("Folder"))
-			{
+			for (auto folder = xServer.child("Folder"); folder; folder = folder.next_sibling("Folder")) {
 				CFolderItem* folderItem;
 
-				bool download = GetTextElementInt(pFolder, "Download") != 0;
-				if (download)
-				{
-					wxString localFile = GetTextElement(pFolder, "LocalFile");
+				bool download = GetTextElementInt(folder, "Download") != 0;
+				if (download) {
+					wxString localFile = GetTextElement(folder, "LocalFile");
 					if (localFile.empty())
 						continue;
 					folderItem = new CFolderItem(pServerItem, true, CLocalPath(localFile));
 				}
 				else
 				{
-					wxString remoteFile = GetTextElement(pFolder, "RemoteFile");
-					wxString safeRemotePath = GetTextElement(pFolder, "RemotePath");
+					wxString remoteFile = GetTextElement(folder, "RemoteFile");
+					wxString safeRemotePath = GetTextElement(folder, "RemotePath");
 					if (safeRemotePath.empty())
 						continue;
 
@@ -2012,7 +2002,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 					folderItem = new CFolderItem(pServerItem, true, remotePath, remoteFile);
 				}
 
-				unsigned int priority = GetTextElementInt(pFolder, "Priority", static_cast<int>(QueuePriority::normal));
+				unsigned int priority = GetTextElementInt(folder, "Priority", static_cast<int>(QueuePriority::normal));
 				if (priority >= static_cast<int>(QueuePriority::count)) {
 					delete folderItem;
 					continue;
@@ -2022,8 +2012,7 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				InsertItem(pServerItem, folderItem);
 			}
 
-			if (!pServerItem->GetChild(0))
-			{
+			if (!pServerItem->GetChild(0)) {
 				m_itemCount--;
 				m_serverList.pop_back();
 				delete pServerItem;
@@ -2032,11 +2021,10 @@ void CQueueView::ImportQueue(TiXmlElement* pElement, bool updateSelections)
 				CommitChanges();
 		}
 
-		pServer = pServer->NextSiblingElement("Server");
+		xServer = xServer.next_sibling("Server");
 	}
 
-	if (!updateSelections)
-	{
+	if (!updateSelections) {
 		m_insertionStart = -1;
 		m_insertionCount = 0;
 		CommitChanges();
@@ -2819,17 +2807,15 @@ void CQueueView::DeleteEngines()
 	m_engineData.clear();
 }
 
-void CQueueView::WriteToFile(TiXmlElement* pElement) const
+void CQueueView::WriteToFile(pugi::xml_node element) const
 {
-	TiXmlElement* pQueue = pElement->FirstChildElement("Queue");
-	if (!pQueue) {
-		pQueue = pElement->LinkEndChild(new TiXmlElement("Queue"))->ToElement();
+	auto queue = element.child("Queue");
+	if (!queue) {
+		queue = element.append_child("Queue");
 	}
 
-	wxASSERT(pQueue);
-
 	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		(*iter)->SaveItem(pQueue);
+		(*iter)->SaveItem(queue);
 }
 
 void CQueueView::OnSetPriority(wxCommandEvent& event)

@@ -146,17 +146,16 @@ void CFilterDialog::OnEdit(wxCommandEvent& event)
 	DisplayFilters();
 }
 
-void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
+void CFilterDialog::SaveFilter(pugi::xml_node& element, const CFilter& filter)
 {
-	AddTextElement(pElement, "Name", filter.name);
-	AddTextElement(pElement, "ApplyToFiles", filter.filterFiles ? _T("1") : _T("0"));
-	AddTextElement(pElement, "ApplyToDirs", filter.filterDirs ? _T("1") : _T("0"));
-	AddTextElement(pElement, "MatchType", (filter.matchType == CFilter::any) ? _T("Any") : ((filter.matchType == CFilter::none) ? _T("None") : _T("All")));
-	AddTextElement(pElement, "MatchCase", filter.matchCase ? _T("1") : _T("0"));
+	AddTextElement(element, "Name", filter.name);
+	AddTextElement(element, "ApplyToFiles", filter.filterFiles ? _T("1") : _T("0"));
+	AddTextElement(element, "ApplyToDirs", filter.filterDirs ? _T("1") : _T("0"));
+	AddTextElement(element, "MatchType", (filter.matchType == CFilter::any) ? _T("Any") : ((filter.matchType == CFilter::none) ? _T("None") : _T("All")));
+	AddTextElement(element, "MatchCase", filter.matchCase ? _T("1") : _T("0"));
 
-	TiXmlElement* pConditions = pElement->LinkEndChild(new TiXmlElement("Conditions"))->ToElement();
-	for (std::vector<CFilterCondition>::const_iterator conditionIter = filter.filters.begin(); conditionIter != filter.filters.end(); ++conditionIter)
-	{
+	auto xConditions = element.append_child("Conditions");
+	for (std::vector<CFilterCondition>::const_iterator conditionIter = filter.filters.begin(); conditionIter != filter.filters.end(); ++conditionIter) {
 		const CFilterCondition& condition = *conditionIter;
 
 		int type;
@@ -185,8 +184,8 @@ void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
 			continue;
 		}
 
-		TiXmlElement* pCondition = pConditions->LinkEndChild(new TiXmlElement("Condition"))->ToElement();
-		AddTextElement(pCondition, "Type", type);
+		auto xCondition = xConditions.append_child("Condition");
+		AddTextElement(xCondition, "Type", type);
 
 		if (condition.type == filter_size) {
 			// Backwards compatibility sucks
@@ -195,11 +194,11 @@ void CFilterDialog::SaveFilter(TiXmlElement* pElement, const CFilter& filter)
 				v = 3;
 			else if (v > 2)
 				--v;
-			AddTextElement(pCondition, "Condition", v);
+			AddTextElement(xCondition, "Condition", v);
 		}
 		else
-			AddTextElement(pCondition, "Condition", condition.condition);
-		AddTextElement(pCondition, "Value", condition.strValue);
+			AddTextElement(xCondition, "Condition", condition.condition);
+		AddTextElement(xCondition, "Value", condition.strValue);
 	}
 }
 
@@ -208,48 +207,47 @@ void CFilterDialog::SaveFilters()
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
 	CXmlFile xml(wxGetApp().GetSettingsFile(_T("filters")));
-	TiXmlElement* pDocument = xml.Load();
-	if (!pDocument) {
+	auto element = xml.Load();
+	if (!element) {
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters could not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
 
-	TiXmlElement *pFilters = pDocument->FirstChildElement("Filters");
-	while (pFilters) {
-		pDocument->RemoveChild(pFilters);
-		pFilters = pDocument->FirstChildElement("Filters");
+	auto xFilters = element.child("Filters");
+	while (xFilters) {
+		element.remove_child(xFilters);
+		xFilters = element.child("Filters");
 	}
 
-	pFilters = pDocument->LinkEndChild(new TiXmlElement("Filters"))->ToElement();
+	xFilters = element.append_child("Filters");
 
 	for (auto const& filter : m_globalFilters) {
-		TiXmlElement* pElement = new TiXmlElement("Filter");
-		SaveFilter(pElement, filter);
-		pFilters->LinkEndChild(pElement);
+		auto xFilter = xFilters.append_child("Filter");
+		SaveFilter(xFilter, filter);
 	}
 
-	TiXmlElement *pSets = pDocument->FirstChildElement("Sets");
-	while (pSets) {
-		pDocument->RemoveChild(pSets);
-		pSets = pDocument->FirstChildElement("Sets");
+	auto xSets = element.child("Sets");
+	while (xSets) {
+		element.remove_child(xFilters);
+		xSets = element.child("Sets");
 	}
 
-	pSets = pDocument->LinkEndChild(new TiXmlElement("Sets"))->ToElement();
-	SetTextAttribute(pSets, "Current", wxString::Format(_T("%d"), m_currentFilterSet));
+	xSets = element.append_child("Sets");
+	SetAttributeInt(xSets, "Current", m_currentFilterSet);
 
 	for (auto const& set : m_globalFilterSets) {
-		TiXmlElement* pSet = pSets->LinkEndChild(new TiXmlElement("Set"))->ToElement();
+		auto xSet = xSets.append_child("Set");
 
 		if (!set.name.empty()) {
-			AddTextElement(pSet, "Name", set.name);
+			AddTextElement(xSet, "Name", set.name);
 		}
 
 		for (unsigned int i = 0; i < set.local.size(); ++i) {
-			TiXmlElement* pItem = pSet->LinkEndChild(new TiXmlElement("Item"))->ToElement();
-			AddTextElement(pItem, "Local", set.local[i] ? _T("1") : _T("0"));
-			AddTextElement(pItem, "Remote", set.remote[i] ? _T("1") : _T("0"));
+			auto xItem = xSet.append_child("Item");
+			AddTextElement(xItem, "Local", set.local[i] ? _T("1") : _T("0"));
+			AddTextElement(xItem, "Remote", set.remote[i] ? _T("1") : _T("0"));
 		}
 	}
 
@@ -871,28 +869,28 @@ bool CFilterManager::CompileRegexes()
 	return true;
 }
 
-bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
+bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 {
-	filter.name = GetTextElement(pElement, "Name");
-	filter.filterFiles = GetTextElement(pElement, "ApplyToFiles") == _T("1");
-	filter.filterDirs = GetTextElement(pElement, "ApplyToDirs") == _T("1");
+	filter.name = GetTextElement(element, "Name");
+	filter.filterFiles = GetTextElement(element, "ApplyToFiles") == _T("1");
+	filter.filterDirs = GetTextElement(element, "ApplyToDirs") == _T("1");
 
-	wxString const matchType = GetTextElement(pElement, "MatchType");
+	wxString const matchType = GetTextElement(element, "MatchType");
 	if (matchType == _T("Any"))
 		filter.matchType = CFilter::any;
 	else if (matchType == _T("None"))
 		filter.matchType = CFilter::none;
 	else
 		filter.matchType = CFilter::all;
-	filter.matchCase = GetTextElement(pElement, "MatchCase") == _T("1");
+	filter.matchCase = GetTextElement(element, "MatchCase") == _T("1");
 
-	TiXmlElement *pConditions = pElement->FirstChildElement("Conditions");
-	if (!pConditions)
+	auto xConditions = element.child("Conditions");
+	if (!xConditions)
 		return false;
 
-	for (TiXmlElement *pCondition = pConditions->FirstChildElement("Condition"); pCondition; pCondition = pCondition->NextSiblingElement("Condition")) {
+	for (auto xCondition = xConditions.child("Condition"); xCondition; xCondition = xCondition.next_sibling("Condition")) {
 		CFilterCondition condition;
-		int const type = GetTextElementInt(pCondition, "Type", 0);
+		int const type = GetTextElementInt(xCondition, "Type", 0);
 		switch (type) {
 		case 0:
 			condition.type = filter_name;
@@ -915,14 +913,14 @@ bool CFilterManager::LoadFilter(TiXmlElement* pElement, CFilter& filter)
 		default:
 			continue;
 		}
-		condition.condition = GetTextElementInt(pCondition, "Condition", 0);
+		condition.condition = GetTextElementInt(xCondition, "Condition", 0);
 		if (condition.type == filter_size) {
 			if (condition.value == 3)
 				condition.value = 2;
 			else if (condition.value >= 2)
 				++condition.value;
 		}
-		condition.strValue = GetTextElement(pCondition, "Value");
+		condition.strValue = GetTextElement(xCondition, "Value");
 		condition.matchCase = filter.matchCase;
 		if (condition.strValue.empty())
 			continue;
@@ -966,51 +964,50 @@ void CFilterManager::LoadFilters()
 	}
 
 	CXmlFile xml(file);
-	TiXmlElement* pDocument = xml.Load();
-	if (!pDocument) {
+	auto element = xml.Load();
+	if (!element) {
 		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters will not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
 
-	TiXmlElement *pFilters = pDocument->FirstChildElement("Filters");
-
-	if (!pFilters)
+	auto xFilters = element.child("Filters");
+	if (!xFilters)
 		return;
 
-	TiXmlElement *pFilter = pFilters->FirstChildElement("Filter");
-	while (pFilter) {
+	auto xFilter = xFilters.child("Filter");
+	while (xFilter) {
 		CFilter filter;
 
-		bool loaded = LoadFilter(pFilter, filter);
+		bool loaded = LoadFilter(xFilter, filter);
 
 		if (loaded && !filter.name.empty() && !filter.filters.empty())
 			m_globalFilters.push_back(filter);
 
-		pFilter = pFilter->NextSiblingElement("Filter");
+		xFilter = xFilter.next_sibling("Filter");
 	}
 
 	CompileRegexes();
 
-	TiXmlElement* pSets = pDocument->FirstChildElement("Sets");
-	if (!pSets)
+	auto xSets = element.child("Sets");
+	if (!xSets)
 		return;
 
-	for (TiXmlElement* pSet = pSets->FirstChildElement("Set"); pSet; pSet = pSet->NextSiblingElement("Set")) {
+	for (auto xSet = xSets.child("Set"); xSet; xSet = xSet.next_sibling("Set")) {
 		CFilterSet set;
-		TiXmlElement* pItem = pSet->FirstChildElement("Item");
-		while (pItem) {
-			wxString local = GetTextElement(pItem, "Local");
-			wxString remote = GetTextElement(pItem, "Remote");
+		auto xItem = xSet.child("Item");
+		while (xItem) {
+			wxString local = GetTextElement(xItem, "Local");
+			wxString remote = GetTextElement(xItem, "Remote");
 			set.local.push_back(local == _T("1") ? true : false);
 			set.remote.push_back(remote == _T("1") ? true : false);
 
-			pItem = pItem->NextSiblingElement("Item");
+			xItem = xItem.next_sibling("Item");
 		}
 
 		if (!m_globalFilterSets.empty()) {
-			set.name = GetTextElement(pSet, "Name");
+			set.name = GetTextElement(xSet, "Name");
 			if (set.name.empty())
 				continue;
 		}
@@ -1019,11 +1016,9 @@ void CFilterManager::LoadFilters()
 			m_globalFilterSets.push_back(set);
 	}
 
-	wxString attribute = GetTextAttribute(pSets, "Current");
-	unsigned long value;
-	if (attribute.ToULong(&value)) {
-		if (value < m_globalFilterSets.size())
-			m_globalCurrentFilterSet = value;
+	int value = GetAttributeInt(xSets, "Current");
+	if (value >= 0 && static_cast<size_t>(value) < m_globalFilterSets.size()) {
+		m_globalCurrentFilterSet = value;
 	}
 }
 

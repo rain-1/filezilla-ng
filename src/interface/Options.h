@@ -9,6 +9,8 @@
 
 #include <wx/timer.h>
 
+#include "xmlfunctions.h"
+
 enum interfaceOptions
 {
 	OPTION_NUMTRANSFERS = OPTIONS_ENGINE_NUM,
@@ -115,7 +117,6 @@ struct t_OptionsCache
 };
 
 class CXmlFile;
-class TiXmlElement;
 class COptions : public wxEvtHandler, public COptionsBase
 {
 public:
@@ -134,7 +135,7 @@ public:
 	static void Init();
 	static void Destroy();
 
-	void Import(TiXmlElement* pElement);
+	void Import(pugi::xml_node element);
 
 	void SaveIfNeeded();
 
@@ -155,12 +156,12 @@ protected:
 	void SetServer(wxString path, const CServer& server);
 	bool GetServer(wxString path, CServer& server);
 
-	TiXmlElement* CreateSettingsXmlElement();
+	pugi::xml_node CreateSettingsXmlElement();
 
 	std::map<std::string, unsigned int> GetNameOptionMap() const;
-	void LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, TiXmlElement* settings = 0);
+	void LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, pugi::xml_node settings = pugi::xml_node());
 	void LoadGlobalDefaultOptions(std::map<std::string, unsigned int> const& nameOptionMap);
-	void LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault);
+	void LoadOptionFromElement(pugi::xml_node option, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault);
 	CLocalPath InitSettingsDir();
 	void SetDefaultValues();
 

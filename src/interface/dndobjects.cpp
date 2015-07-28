@@ -198,7 +198,9 @@ size_t CRemoteDataObject::GetDataSize() const
 
 	wxCHECK(m_xmlFile.GetElement(), 0);
 
-	return const_cast<CRemoteDataObject*>(this)->m_xmlFile.GetRawDataLength() + 1;
+	m_expectedSize = m_xmlFile.GetRawDataLength() + 1;
+
+	return m_expectedSize;
 }
 
 bool CRemoteDataObject::GetDataHere(void *buf) const
@@ -207,8 +209,10 @@ bool CRemoteDataObject::GetDataHere(void *buf) const
 
 	wxCHECK(m_xmlFile.GetElement(), false);
 
-	const_cast<CRemoteDataObject*>(this)->m_xmlFile.GetRawDataHere((char*)buf);
-	((char*)buf)[const_cast<CRemoteDataObject*>(this)->m_xmlFile.GetRawDataLength()] = 0;
+	m_xmlFile.GetRawDataHere((char*)buf, m_expectedSize);
+	if (m_expectedSize > 0) {
+		static_cast<char*>(buf)[m_expectedSize - 1] = 0;
+	}
 
 	const_cast<CRemoteDataObject*>(this)->m_didSendData = true;
 	return true;
@@ -217,74 +221,72 @@ bool CRemoteDataObject::GetDataHere(void *buf) const
 void CRemoteDataObject::Finalize()
 {
 	// Convert data into XML
-	TiXmlElement* pElement = m_xmlFile.CreateEmpty();
-	pElement = pElement->LinkEndChild(new TiXmlElement("RemoteDataObject"))->ToElement();
+	auto element = m_xmlFile.CreateEmpty();
+	element = element.append_child("RemoteDataObject");
 
-	AddTextElement(pElement, "ProcessId", m_processId);
+	AddTextElement(element, "ProcessId", m_processId);
 
-	TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
-	SetServer(pServer, m_server);
+	auto xServer = element.append_child("Server");
+	SetServer(xServer, m_server);
 
-	AddTextElement(pElement, "Path", m_path.GetSafePath());
+	AddTextElement(element, "Path", m_path.GetSafePath());
 
-	TiXmlElement* pFiles = pElement->LinkEndChild(new TiXmlElement("Files"))->ToElement();
-	for (std::list<t_fileInfo>::const_iterator iter = m_fileList.begin(); iter != m_fileList.end(); ++iter)
-	{
-		TiXmlElement* pFile = pFiles->LinkEndChild(new TiXmlElement("File"))->ToElement();
-		AddTextElement(pFile, "Name", iter->name);
-		AddTextElement(pFile, "Dir", iter->dir ? 1 : 0);
-		AddTextElement(pFile, "Size", iter->size.ToString());
-		AddTextElement(pFile, "Link", iter->link ? 1 : 0);
+	auto files = element.append_child("Files");
+	for (std::list<t_fileInfo>::const_iterator iter = m_fileList.begin(); iter != m_fileList.end(); ++iter) {
+		auto file = files.append_child("File");
+		AddTextElement(file, "Name", iter->name);
+		AddTextElement(file, "Dir", iter->dir ? 1 : 0);
+		AddTextElement(file, "Size", iter->size);
+		AddTextElement(file, "Link", iter->link ? 1 : 0);
 	}
 }
 
 bool CRemoteDataObject::SetData(size_t len, const void* buf)
 {
 	char* data = (char*)buf;
-	if (data[len - 1] != 0)
+	if (!len || data[len - 1] != 0)
 		return false;
 
 	if (!m_xmlFile.ParseData(data))
 		return false;
 
-	TiXmlElement* pElement = m_xmlFile.GetElement();
-	if (!pElement || !(pElement = pElement->FirstChildElement("RemoteDataObject")))
+	auto element = m_xmlFile.GetElement();
+	if (!element || !(element = element.child("RemoteDataObject")))
 		return false;
 
-	m_processId = GetTextElementInt(pElement, "ProcessId", -1);
+	m_processId = GetTextElementInt(element, "ProcessId", -1);
 	if (m_processId == -1)
 		return false;
 
-	TiXmlElement* pServer = pElement->FirstChildElement("Server");
-	if (!pServer || !::GetServer(pServer, m_server))
+	auto server = element.child("Server");
+	if (!server || !::GetServer(server, m_server))
 		return false;
 
-	wxString path = GetTextElement(pElement, "Path");
+	wxString path = GetTextElement(element, "Path");
 	if (path.empty() || !m_path.SetSafePath(path))
 		return false;
 
 	m_fileList.clear();
-	TiXmlElement* pFiles = pElement->FirstChildElement("Files");
-	if (!pFiles)
+	auto files = element.child("Files");
+	if (!files)
 		return false;
 
-	for (TiXmlElement* pFile = pFiles->FirstChildElement("File"); pFile; pFile = pFile->NextSiblingElement("File"))
-	{
+	for (auto file = files.child("File"); file; file = file.next_sibling("File")) {
 		t_fileInfo info;
-		info.name = GetTextElement(pFile, "Name");
+		info.name = GetTextElement(file, "Name");
 		if (info.name.empty())
 			return false;
 
-		const int dir = GetTextElementInt(pFile, "Dir", -1);
+		const int dir = GetTextElementInt(file, "Dir", -1);
 		if (dir == -1)
 			return false;
 		info.dir = dir == 1;
 
-		info.size = GetTextElementLongLong(pFile, "Size", -2);
+		info.size = GetTextElementInt(file, "Size", -2);
 		if (info.size <= -2)
 			return false;
 
-		info.link = GetTextElementBool(pFile, "Link", false);
+		info.link = GetTextElementBool(file, "Link", false);
 
 		m_fileList.push_back(info);
 	}
@@ -292,7 +294,7 @@ bool CRemoteDataObject::SetData(size_t len, const void* buf)
 	return true;
 }
 
-void CRemoteDataObject::AddFile(const wxString& name, bool dir, const wxLongLong& size, bool link)
+void CRemoteDataObject::AddFile(const wxString& name, bool dir, int64_t size, bool link)
 {
 	t_fileInfo info;
 	info.name = name;

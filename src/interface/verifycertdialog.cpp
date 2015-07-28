@@ -408,55 +408,54 @@ void CVerifyCertDialog::LoadTrustedCerts()
 		return;
 	}
 
-	TiXmlElement* pElement = m_xmlFile.Load();
-	if (!pElement) {
+	auto element = m_xmlFile.Load();
+	if (!element) {
 		return;
 	}
 
 	m_trustedCerts.clear();
 
-	if (!(pElement = pElement->FirstChildElement("TrustedCerts")))
+	if (!(element = element.child("TrustedCerts")))
 		return;
 
 	bool modified = false;
 
-	TiXmlElement* pCert = pElement->FirstChildElement("Certificate");
-	while (pCert) {
-		wxString value = GetTextElement(pCert, "Data");
+	auto cert = element.child("Certificate");
+	while (cert) {
+		wxString value = GetTextElement(cert, "Data");
 
-		TiXmlElement* pRemove = 0;
+		pugi::xml_node remove;
 
 		t_certData data;
 		if (value.empty() || !(data.data = ConvertStringToHex(value, data.len)))
-			pRemove = pCert;
+			remove = cert;
 
-		data.host = GetTextElement(pCert, "Host");
-		data.port = GetTextElementInt(pCert, "Port");
+		data.host = GetTextElement(cert, "Host");
+		data.port = GetTextElementInt(cert, "Port");
 		if (data.host.empty() || data.port < 1 || data.port > 65535)
-			pRemove = pCert;
+			remove = cert;
 
-		wxLongLong activationTime = GetTextElementLongLong(pCert, "ActivationTime", 0);
+		int64_t activationTime = GetTextElementInt(cert, "ActivationTime", 0);
 		if (activationTime == 0 || activationTime > wxDateTime::GetTimeNow())
-			pRemove = pCert;
+			remove = cert;
 
-		wxLongLong expirationTime = GetTextElementLongLong(pCert, "ExpirationTime", 0);
+		int64_t expirationTime = GetTextElementInt(cert, "ExpirationTime", 0);
 		if (expirationTime == 0 || expirationTime < wxDateTime::GetTimeNow())
-			pRemove = pCert;
+			remove = cert;
 
 		if (IsTrusted(data.host, data.port, data.data, data.len, true)) // Weed out duplicates
-			pRemove = pCert;
+			remove = cert;
 
-		if (!pRemove)
+		if (!remove)
 			m_trustedCerts.push_back(data);
 		else
 			delete [] data.data;
 
-		pCert = pCert->NextSiblingElement("Certificate");
+		cert = cert.next_sibling("Certificate");
 
-		if (pRemove)
-		{
+		if (remove) {
 			modified = true;
-			pElement->RemoveChild(pRemove);
+			element.remove_child(remove);
 		}
 	}
 
@@ -489,27 +488,21 @@ void CVerifyCertDialog::SetPermanentlyTrusted(CCertificateNotification const& no
 		return;
 	}
 
-	TiXmlElement* pElement = m_xmlFile.GetElement();
-	if (!pElement) {
+	auto element = m_xmlFile.GetElement();
+	if (!element) {
 		return;
 	}
 
-	TiXmlElement* pCerts = pElement->FirstChildElement("TrustedCerts");
-	if (!pCerts)
-		pCerts = pElement->LinkEndChild(new TiXmlElement("TrustedCerts"))->ToElement();
+	auto certs = element.child("TrustedCerts");
+	if (!certs)
+		certs = element.append_child("TrustedCerts");
 
-	TiXmlElement* pCert = pCerts->LinkEndChild(new TiXmlElement("Certificate"))->ToElement();
-
-	AddTextElement(pCert, "Data", ConvertHexToString(data, len));
-
-	wxLongLong time = certificate.GetActivationTime().GetTimeT();
-	AddTextElement(pCert, "ActivationTime", time.ToString());
-
-	time = certificate.GetExpirationTime().GetTimeT();
-	AddTextElement(pCert, "ExpirationTime", time.ToString());
-
-	AddTextElement(pCert, "Host", notification.GetHost());
-	AddTextElement(pCert, "Port", notification.GetPort());
+	auto xCert = certs.append_child("Certificate");
+	AddTextElement(xCert, "Data", ConvertHexToString(data, len));
+	AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().GetTimeT()));
+	AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().GetTimeT()));
+	AddTextElement(xCert, "Host", notification.GetHost());
+	AddTextElement(xCert, "Port", notification.GetPort());
 
 	m_xmlFile.Save(true);
 }

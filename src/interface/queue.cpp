@@ -327,12 +327,12 @@ void CFileItem::SetActive(const bool active)
 	}
 }
 
-void CFileItem::SaveItem(TiXmlElement* pElement) const
+void CFileItem::SaveItem(pugi::xml_node& element) const
 {
-	if (m_edit != CEditHandler::none)
+	if (m_edit != CEditHandler::none || !element)
 		return;
 
-	TiXmlElement *file = pElement->LinkEndChild(new TiXmlElement("File"))->ToElement();
+	auto file = element.append_child("File");
 
 	AddTextElement(file, "LocalFile", m_localPath.GetPath() + GetLocalFile());
 	AddTextElement(file, "RemoteFile", GetRemoteFile());
@@ -403,20 +403,17 @@ CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CServerPath& re
 {
 }
 
-void CFolderItem::SaveItem(TiXmlElement* pElement) const
+void CFolderItem::SaveItem(pugi::xml_node& element) const
 {
-	TiXmlElement *file = new TiXmlElement("Folder");
+	auto file = element.append_child("Folder");
 
 	if (Download())
 		AddTextElement(file, "LocalFile", GetLocalPath().GetPath() + GetLocalFile());
-	else
-	{
+	else {
 		AddTextElement(file, "RemoteFile", GetRemoteFile());
 		AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
 	}
 	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
-
-	pElement->LinkEndChild(file);
 }
 
 void CFolderItem::SetActive(const bool active)
@@ -569,8 +566,7 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 		return;
 
 	std::list<CFileItem*>& fileList = m_fileList[1][static_cast<int>(pItem->GetPriority())];
-	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter)
-	{
+	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter) {
 		if (*iter != pItem)
 			continue;
 
@@ -582,27 +578,22 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 	wxASSERT(false);
 }
 
-void CServerItem::SaveItem(TiXmlElement* pElement) const
+void CServerItem::SaveItem(pugi::xml_node& element) const
 {
-	TiXmlElement *server = new TiXmlElement("Server");
+	auto server = element.append_child("Server");
 	SetServer(server, m_server);
 
 	for (std::vector<CQueueItem*>::const_iterator iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
 		(*iter)->SaveItem(server);
-
-	pElement->LinkEndChild(server);
 }
 
 wxLongLong CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const
 {
 	wxLongLong totalSize = 0;
-	for (int i = 0; i < static_cast<int>(QueuePriority::count); ++i)
-	{
-		for (int j = 0; j < 2; j++)
-		{
+	for (int i = 0; i < static_cast<int>(QueuePriority::count); ++i) {
+		for (int j = 0; j < 2; ++j) {
 			const std::list<CFileItem*>& fileList = m_fileList[j][i];
-			for (std::list<CFileItem*>::const_iterator iter = fileList.begin(); iter != fileList.end(); ++iter)
-			{
+			for (std::list<CFileItem*>::const_iterator iter = fileList.begin(); iter != fileList.end(); ++iter) {
 				const CFileItem* item = *iter;
 				wxLongLong size = item->GetSize();
 				if (size >= 0)
@@ -613,8 +604,7 @@ wxLongLong CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles
 		}
 	}
 
-	for (std::vector<CQueueItem*>::const_iterator iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
-	{
+	for (std::vector<CQueueItem*>::const_iterator iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter) {
 		if ((*iter)->GetType() == QueueItemType::File ||
 			(*iter)->GetType() == QueueItemType::Folder)
 			queuedFiles++;
@@ -667,7 +657,7 @@ void CServerItem::DetachChildren()
 	m_maxCachedIndex = -1;
 	m_removed_at_front = 0;
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 2; ++i)
 		for (int j = 0; j < static_cast<int>(QueuePriority::count); j++)
 			m_fileList[i][j].clear();
 }
@@ -675,8 +665,7 @@ void CServerItem::DetachChildren()
 void CServerItem::SetPriority(QueuePriority priority)
 {
 	std::vector<CQueueItem*>::iterator iter;
-	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
-	{
+	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter) {
 		if ((*iter)->GetType() == QueueItemType::File)
 			((CFileItem*)(*iter))->SetPriorityRaw(priority);
 		else

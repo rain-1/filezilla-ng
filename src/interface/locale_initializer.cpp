@@ -282,11 +282,11 @@ std::string CInitializer::GetSettingFromFile(std::string file, const std::string
 	if (!main)
 		return "";
 
-	TiXmlElement* settings = main->FirstChildElement("Settings");
+	TiXmlElement* settings = main.child("Settings");
 	if (!settings)
 		return "";
 
-	for (TiXmlElement* setting = settings->FirstChildElement("Setting"); setting; setting = setting->NextSiblingElement("Setting"))
+	for (TiXmlElement* setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting"))
 	{
 		const char* nodeVal = setting->Attribute("name");
 		if (!nodeVal || strcmp(nodeVal, name.c_str()))

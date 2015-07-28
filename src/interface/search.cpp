@@ -122,7 +122,7 @@ bool CSearchDialogFileList::ItemIsDir(int index) const
 
 int64_t CSearchDialogFileList::ItemGetSize(int index) const
 {
-	return m_fileData[index].size.GetValue();
+	return m_fileData[index].size;
 }
 
 CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
@@ -179,7 +179,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		if (entry.is_dir() || entry.size < 0)
 			return wxString();
 		else
-			return CSizeFormat::Format(entry.size.GetValue());
+			return CSizeFormat::Format(entry.size);
 	}
 	else if (column == 3) {
 		CSearchFileData& data = m_fileData[index];
@@ -359,7 +359,7 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 		if (entry.is_dir())
 			m_results->GetFilelistStatusBar()->AddDirectory();
 		else
-			m_results->GetFilelistStatusBar()->AddFile(entry.size.GetValue());
+			m_results->GetFilelistStatusBar()->AddFile(entry.size);
 	}
 
 	if (added) {
@@ -662,7 +662,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 		m_pQueue->QueueFile(!start, true,
 			entry.name, (localName != entry.name) ? localName : wxString(),
-			target_path, remote_path, *pServer, entry.size.GetValue());
+			target_path, remote_path, *pServer, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
 
@@ -732,7 +732,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		const CDirentry& entry = m_results->m_fileData[item];
 		const CServerPath path = m_results->m_fileData[item].path;
 
-		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size.GetValue(), this);
+		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
 	}
 }
 
@@ -817,17 +817,17 @@ void CSearchDialog::LoadConditions()
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
 	}
 
-	TiXmlElement* pFilter = pDocument->FirstChildElement("Filter");
-	if (!pFilter)
+	auto filter = document.child("Filter");
+	if (!filter)
 		return;
 
-	if (!CFilterManager::LoadFilter(pFilter, m_search_filter))
+	if (!CFilterManager::LoadFilter(filter, m_search_filter))
 		m_search_filter = CFilter();
 }
 
@@ -836,18 +836,18 @@ void CSearchDialog::SaveConditions()
 	CInterProcessMutex mutex(MUTEX_SEARCHCONDITIONS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("search")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return;
 	}
 
-	TiXmlElement* pFilter;
-	while ((pFilter = pDocument->FirstChildElement("Filter")))
-		pDocument->RemoveChild(pFilter);
-	pFilter = pDocument->LinkEndChild(new TiXmlElement("Filter"))->ToElement();
+	pugi::xml_node filter;
+	while ((filter = document.child("Filter")))
+		document.remove_child(filter);
+	filter = document.append_child("Filter");
 
-	CFilterDialog::SaveFilter(pFilter, m_search_filter);
+	CFilterDialog::SaveFilter(filter, m_search_filter);
 
 	file.Save(true);
 }

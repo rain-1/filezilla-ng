@@ -10,7 +10,7 @@ class CDirentry
 {
 public:
 	wxString name;
-	wxLongLong size;
+	int64_t size;
 	CRefcountObject<wxString> permissions;
 	CRefcountObject<wxString> ownerGroup;
 
@@ -26,6 +26,7 @@ public:
 	{
 		return (flags & flag_dir) != 0;
 	}
+
 	inline bool is_link() const
 	{
 		return (flags & flag_link) != 0;
@@ -40,10 +41,12 @@ public:
 	{
 		return time.IsValid();;
 	}
+
 	inline bool has_time() const
 	{
 		return time.IsValid() && time.GetAccuracy() >= CDateTime::hours;
 	}
+
 	inline bool has_seconds() const
 	{
 		return time.IsValid() && time.GetAccuracy() >= CDateTime::seconds;

@@ -205,8 +205,7 @@ bool CThemeProvider::GetThemeData(const wxString& themePath, wxString& name, wxS
 {
 	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
 	CXmlFile xml(file);
-	TiXmlElement* root = xml.Load();
-	TiXmlElement* theme = root ? root->FirstChildElement("Theme") : 0;
+	auto theme = xml.Load().child("Theme");
 	if (!theme)
 		return false;
 
@@ -222,20 +221,14 @@ std::vector<wxString> CThemeProvider::GetThemeSizes(const wxString& themePath)
 
 	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
 	CXmlFile xml(file);
-	TiXmlElement* root = xml.Load();
-	TiXmlElement* theme = root ? root->FirstChildElement("Theme") : 0;
+	auto theme = xml.Load().child("Theme");
 	if (!theme)
 		return sizes;
 
-	for (TiXmlElement* pSize = theme->FirstChildElement("size"); pSize; pSize = pSize->NextSiblingElement("size")) {
-		const char* txt = pSize->GetText();
-		if (!txt)
-			continue;
-
-		wxString size = ConvLocal(txt);
+	for (auto xSize = theme.child("size"); xSize; xSize = xSize.next_sibling("size")) {
+		wxString size = GetTextElement(xSize);
 		if (size.empty())
 			continue;
-
 		sizes.push_back(size);
 	}
 
@@ -271,18 +264,14 @@ bool CThemeProvider::ThemeHasSize(const wxString& themePath, const wxString& siz
 {
 	wxString const file(wxGetApp().GetResourceDir().GetPath() + themePath + _T("theme.xml"));
 	CXmlFile xml(file);
-	TiXmlElement* root = xml.Load();
-	TiXmlElement* theme = root ? root->FirstChildElement("Theme") : 0;
+	auto theme = xml.Load().child("Theme");
 	if (!theme) {
 		return false;
 	}
 
-	for (TiXmlElement* pSize = theme->FirstChildElement("size"); pSize; pSize = pSize->NextSiblingElement("size")) {
-		const char* txt = pSize->GetText();
-		if (!txt)
-			continue;
-
-		if (size == ConvLocal(txt)) {
+	for (auto xSize = theme.child("size"); xSize; xSize = xSize.next_sibling("size")) {
+		wxString s = GetTextElement(xSize);
+		if (size == s) {
 			return true;
 		}
 	}

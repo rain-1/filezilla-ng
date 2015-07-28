@@ -46,27 +46,27 @@ void CExportDialog::Run()
 
 	CXmlFile xml(dlg.GetPath());
 
-	TiXmlElement* exportRoot = xml.CreateEmpty();
+	auto exportRoot = xml.CreateEmpty();
 
 	if (sitemanager) {
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 		CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-		TiXmlElement* pDocument = file.Load();
-		if (pDocument) {
-			TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-			if (pElement)
-				exportRoot->InsertEndChild(*pElement);
+		auto document = file.Load();
+		if (document) {
+			auto element = document.child("Servers");
+			if (element)
+				exportRoot.append_copy(element);
 		}
 	}
 	if (settings) {
 		CInterProcessMutex mutex(MUTEX_OPTIONS);
 		CXmlFile file(wxGetApp().GetSettingsFile(_T("filezilla")));
-		TiXmlElement* pDocument = file.Load();
-		if (pDocument) {
-			TiXmlElement* pElement = pDocument->FirstChildElement("Settings");
-			if (pElement)
-				exportRoot->InsertEndChild(*pElement);
+		auto document = file.Load();
+		if (document) {
+			auto element = document.child("Settings");
+			if (element)
+				exportRoot.append_copy(element);
 		}
 	}
 
