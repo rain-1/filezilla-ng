@@ -1324,11 +1324,11 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		gotMonth = true;
 	}
 	else {
-		wxLongLong value = token.GetNumber(pos + 1, pos2 - pos - 1);
+		int64_t value = token.GetNumber(pos + 1, pos2 - pos - 1);
 		// Day field in mm-dd-yyyy
 		if (value < 1 || value > 31)
 			return false;
-		day = value.GetLo();
+		day = value;
 		gotDay = true;
 	}
 
@@ -1435,7 +1435,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 	if (pos < 1 || static_cast<unsigned int>(pos) >= (token.GetLength() - 1))
 		return false;
 
-	wxLongLong hour = token.GetNumber(0, pos);
+	int64_t hour = token.GetNumber(0, pos);
 	if (hour < 0 || hour > 23)
 		return false;
 
@@ -1450,11 +1450,11 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 	if (!len)
 		return false;
 
-	wxLongLong minute = token.GetNumber(pos + 1, len);
+	int64_t minute = token.GetNumber(pos + 1, len);
 	if (minute < 0 || minute > 59)
 		return false;
 
-	wxLongLong seconds = -1;
+	int64_t seconds = -1;
 	if (pos2 != -1) {
 		// Parse seconds
 		seconds = token.GetNumber(pos2 + 1, -1);
@@ -1463,10 +1463,8 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 	}
 
 	// Convert to 24h format
-	if (!token.IsRightNumeric())
-	{
-		if (token[token.GetLength() - 2] == 'P')
-		{
+	if (!token.IsRightNumeric()) {
+		if (token[token.GetLength() - 2] == 'P') {
 			if (hour < 12)
 				hour += 12;
 		}
@@ -1475,7 +1473,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 				hour = 0;
 	}
 
-	return entry.time.ImbueTime( hour.GetLo(), minute.GetLo(), seconds.GetLo() );
+	return entry.time.ImbueTime(hour, minute, seconds);
 }
 
 bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
@@ -1794,10 +1792,10 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		if (!line.GetToken(++index, token))
 			return false;
 
-		wxLongLong number = token.GetNumber();
+		int64_t number = token.GetNumber();
 		if (number < 0)
 			return false;
-		entry.time = CDateTime(static_cast<time_t>(number.GetValue()), CDateTime::seconds);
+		entry.time = CDateTime(static_cast<time_t>(number), CDateTime::seconds);
 
 		// Get filename
 		if (!line.GetToken(++index, token, true))
@@ -1864,7 +1862,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			if (!token.IsNumeric() && !token.IsLeftNumeric())
 				return false;
 
-			wxLongLong day = token.GetNumber();
+			int64_t day = token.GetNumber();
 			if (day < 0 || day > 31)
 				return false;
 
@@ -1875,13 +1873,13 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			if (!token.IsNumeric())
 				return false;
 
-			wxLongLong year = token.GetNumber();
+			int64_t year = token.GetNumber();
 			if (year < 50)
 				year += 2000;
 			else if (year < 1000)
 				year += 1900;
 
-			if( !entry.time.Set(CDateTime::utc, year.GetLo(), month, day.GetLo()) ) {
+			if( !entry.time.Set(CDateTime::utc, year, month, day) ) {
 				return false;
 			}
 

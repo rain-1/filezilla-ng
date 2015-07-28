@@ -74,7 +74,7 @@ protected:
 private:
 	virtual bool CanStartComparison() { return false; }
 	virtual void StartComparison() {}
-	virtual bool GetNextFile(wxString&, bool &, wxLongLong &, CDateTime&) { return false; }
+	virtual bool GetNextFile(wxString&, bool &, int64_t&, CDateTime&) { return false; }
 	virtual void CompareAddFile(CComparableListing::t_fileEntryFlags) {}
 	virtual void FinishComparison() {}
 	virtual void ScrollTopItem(int) {}

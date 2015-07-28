@@ -339,7 +339,7 @@ void CFileItem::SaveItem(pugi::xml_node& element) const
 	AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
 	AddTextElementRaw(file, "Download", Download() ? "1" : "0");
 	if (m_size != -1)
-		AddTextElement(file, "Size", wxLongLong(m_size).ToString());
+		AddTextElement(file, "Size", m_size);
 	if (m_errorCount)
 		AddTextElement(file, "ErrorCount", m_errorCount);
 	if (m_priority != QueuePriority::normal)
@@ -587,15 +587,15 @@ void CServerItem::SaveItem(pugi::xml_node& element) const
 		(*iter)->SaveItem(server);
 }
 
-wxLongLong CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const
+int64_t CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const
 {
-	wxLongLong totalSize = 0;
+	int64_t totalSize = 0;
 	for (int i = 0; i < static_cast<int>(QueuePriority::count); ++i) {
 		for (int j = 0; j < 2; ++j) {
 			const std::list<CFileItem*>& fileList = m_fileList[j][i];
 			for (std::list<CFileItem*>::const_iterator iter = fileList.begin(); iter != fileList.end(); ++iter) {
 				const CFileItem* item = *iter;
-				wxLongLong size = item->GetSize();
+				int64_t size = item->GetSize();
 				if (size >= 0)
 					totalSize += size;
 				else

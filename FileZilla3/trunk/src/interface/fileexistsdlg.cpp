@@ -66,8 +66,8 @@ bool CFileExistsDlg::CreateControls()
 	wxString localFile = m_pNotification->localFile;
 	wxString remoteFile = m_pNotification->remotePath.FormatFilename(m_pNotification->remoteFile);
 
-	DisplayFile(m_pNotification->download, localFile, m_pNotification->localSize.GetValue(), m_pNotification->localTime, m_pNotification->localFile);
-	DisplayFile(!m_pNotification->download, remoteFile, m_pNotification->remoteSize.GetValue(), m_pNotification->remoteTime, m_pNotification->remoteFile);
+	DisplayFile(m_pNotification->download, localFile, m_pNotification->localSize, m_pNotification->localTime, m_pNotification->localFile);
+	DisplayFile(!m_pNotification->download, remoteFile, m_pNotification->remoteSize, m_pNotification->remoteTime, m_pNotification->remoteFile);
 
 	xrc_call(*this, "ID_UPDOWNONLY", &wxCheckBox::SetLabel, m_pNotification->download ? _("A&pply only to downloads") : _("A&pply only to uploads"));
 

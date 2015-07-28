@@ -104,7 +104,7 @@ public:
 
 	CFileItem* GetIdleChild(bool immadiateOnly, TransferDirection direction);
 	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true); // Removes a child item with is somewhere in the tree of children
-	wxLongLong GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const;
+	int64_t GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const;
 
 	void QueueImmediateFiles();
 	void QueueImmediateFile(CFileItem* pItem);

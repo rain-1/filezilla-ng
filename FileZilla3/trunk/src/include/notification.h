@@ -157,12 +157,12 @@ public:
 	bool download{};
 
 	wxString localFile;
-	wxLongLong localSize{-1};
+	int64_t localSize{-1};
 	CDateTime localTime;
 
 	wxString remoteFile;
 	CServerPath remotePath;
-	wxLongLong remoteSize{-1};
+	int64_t remoteSize{-1};
 	CDateTime remoteTime;
 
 	bool ascii{};

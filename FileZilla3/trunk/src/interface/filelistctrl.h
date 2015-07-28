@@ -214,7 +214,7 @@ public:
 
 	inline int CmpSize(const value_type &data1, const value_type &data2) const
 	{
-		const wxLongLong diff = data1.size - data2.size;
+		int64_t const diff = data1.size - data2.size;
 		if (diff < 0)
 			return -1;
 		else if (diff > 0)
