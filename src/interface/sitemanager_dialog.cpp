@@ -1014,7 +1014,7 @@ bool CSiteManagerDialog::Verify()
 			return false;
 		}
 
-		// The way TinyXML handles blanks, we can't use username of only spaces
+		// We don't allow username of only spaces, confuses both users and XML libraries
 		if (!user.empty()) {
 			bool space_only = true;
 			for (unsigned int i = 0; i < user.Len(); ++i) {
