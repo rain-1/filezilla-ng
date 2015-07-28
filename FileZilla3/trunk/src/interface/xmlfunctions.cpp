@@ -153,10 +153,6 @@ pugi::xml_node CXmlFile::CreateEmpty()
 {
 	Close();
 
-	/*m_pDocument = new TiXmlDocument();
-	m_pDocument->SetCondenseWhiteSpace(false);
-	m_pDocument->LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", "yes"));*/
-
 	pugi::xml_node decl = m_document.append_child(pugi::node_declaration);
 	decl.append_attribute("version") = "1.0";
 	decl.append_attribute("encoding") = "UTF-8";
@@ -694,7 +690,7 @@ bool CXmlFile::ParseData(char* data)
 	if (!m_element) {
 		Close();
 	}
-	return m_element != false;
+	return !!m_element;
 }
 
 bool CXmlFile::IsFromFutureVersion() const
