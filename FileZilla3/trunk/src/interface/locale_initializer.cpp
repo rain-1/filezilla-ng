@@ -1,9 +1,9 @@
 #include <filezilla.h>
 #include "locale_initializer.h"
-#ifdef HAVE_LIBTINYXML
-#include <tinyxml.h>
+#ifdef HAVE_LIBPUGIXML
+#include <pugixml.hpp>
 #else
-#include "../tinyxml/tinyxml.h"
+#include "../pugixml/pugixml.hpp"
 #endif
 #include <string>
 #include <locale.h>
@@ -274,29 +274,25 @@ std::string CInitializer::ReadSettingsFromDefaults(std::string file)
 
 std::string CInitializer::GetSettingFromFile(std::string file, const std::string& name)
 {
-	TiXmlDocument xmldoc;
-	if (!xmldoc.LoadFile(file.c_str()))
+	pugi::xml_document xmldoc;
+	if (!xmldoc.load_file(file.c_str()))
 		return "";
 
-	TiXmlElement* main = xmldoc.FirstChildElement("FileZilla3");
+	auto main = xmldoc.child("FileZilla3");
 	if (!main)
 		return "";
 
-	TiXmlElement* settings = main.child("Settings");
+	auto settings = main.child("Settings");
 	if (!settings)
 		return "";
 
-	for (TiXmlElement* setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting"))
-	{
-		const char* nodeVal = setting->Attribute("name");
+	for (auto setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
+		const char* nodeVal = setting.attribute("name").value();
 		if (!nodeVal || strcmp(nodeVal, name.c_str()))
 			continue;
 
-		TiXmlNode* textNode = setting->FirstChild();
-		if (!textNode || !textNode->ToText())
-			continue;
-
-		return mkstr(textNode->Value());
+		const char* text = setting.child_value();
+		return mkstr(text);
 	}
 
 	return "";
