@@ -53,8 +53,6 @@ protected:
 	// Returns 0 on error.
 	bool GetXmlFile(wxString const& file);
 
-	bool LoadXmlDocument(wxString const& file);
-
 	// Sets version and platform in root element
 	void UpdateMetadata();
 

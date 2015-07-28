@@ -279,19 +279,6 @@ bool GetTextElementBool(pugi::xml_node node, const char* name, bool defValue /*=
 	return node.child(name).text().as_bool(defValue);
 }
 
-bool CXmlFile::LoadXmlDocument(wxString const& file)
-{
-	Close();
-
-	auto result = m_document.load_file(static_cast<wchar_t const*>(file.c_str()));
-	if (!result) {
-		// FIXME: Empty file detection
-		m_error = result.description();
-		return false;
-	}
-	return true;
-}
-
 // Opens the specified XML file if it exists or creates a new one otherwise.
 // Returns 0 on error.
 bool CXmlFile::GetXmlFile(wxString const& file)
@@ -303,7 +290,9 @@ bool CXmlFile::GetXmlFile(wxString const& file)
 	}
 
 	// File exists, open it
-	if (!LoadXmlDocument(file)) {
+	auto result = m_document.load_file(static_cast<wchar_t const*>(file.c_str()));
+	if (!result) {
+		m_error += wxString::Format(_T("%s at offset %lld."), wxString(result.description()), static_cast<long long>(result.offset));
 		return false;
 	}
 
