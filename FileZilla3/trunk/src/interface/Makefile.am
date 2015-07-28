@@ -249,7 +249,7 @@ filezilla_CXXFLAGS = $(WX_CXXFLAGS_ONLY)
 filezilla_CFLAGS = $(WX_CFLAGS_ONLY)
 
 filezilla_LDFLAGS = ../engine/libengine.a
-filezilla_LDFLAGS += $(TINYXML_LIBS)
+filezilla_LDFLAGS += $(PUGIXML_LIBS)
 filezilla_LDFLAGS += $(LIBGNUTLS_LIBS)
 
 if HAVE_DBUS
@@ -276,9 +276,9 @@ if MINGW
 filezilla_DEPENDENCIES += resources/filezilla.o
 endif
 
-if HAVE_LIBTINYXML
+if HAVE_LIBPUGIXML
 else
-filezilla_DEPENDENCIES += $(TINYXML_LIBS)
+filezilla_DEPENDENCIES += $(PUGIXML_LIBS)
 endif
 
 dist_noinst_DATA = interface.vcxproj

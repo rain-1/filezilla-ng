@@ -40,8 +40,8 @@ protected:
 	bool UpdateServer(CSiteManagerItemData_Site &server, const wxString& name);
 	bool UpdateBookmark(CSiteManagerItemData &bookmark, const CServer& server);
 	bool Load();
-	bool Save(TiXmlElement *pElement = 0, wxTreeItemId treeId = wxTreeItemId());
-	bool SaveChild(TiXmlElement *pElement, wxTreeItemId child);
+	bool Save(pugi::xml_node element = pugi::xml_node(), wxTreeItemId treeId = wxTreeItemId());
+	bool SaveChild(pugi::xml_node element, wxTreeItemId child);
 	void SetCtrlState();
 	bool LoadDefaultSites();
 

@@ -14,18 +14,18 @@ const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex 
 		mutex.Lock();
 
 	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
-	TiXmlElement* pElement = xmlFile.Load();
-	if (!pElement || !(pElement = pElement->FirstChildElement("RecentServers")))
+	auto element = xmlFile.Load();
+	if (!element || !(element = element.child("RecentServers")))
 		return mostRecentServers;
 
 	bool modified = false;
-	TiXmlElement* pServer = pElement->FirstChildElement("Server");
-	while (pServer) {
+	auto xServer = element.child("Server");
+	while (xServer) {
 		CServer server;
-		if (!GetServer(pServer, server) || mostRecentServers.size() >= 10) {
-			TiXmlElement* pRemove = pServer;
-			pServer = pServer->NextSiblingElement("Server");
-			pElement->RemoveChild(pRemove);
+		if (!GetServer(xServer, server) || mostRecentServers.size() >= 10) {
+			auto xRemove = xServer;
+			xServer = xServer.next_sibling("Server");
+			element.remove_child(xRemove);
 			modified = true;
 		}
 		else {
@@ -36,7 +36,7 @@ const std::list<CServer> CRecentServerList::GetMostRecentServers(bool lockMutex 
 			}
 			if (iter == mostRecentServers.end())
 				mostRecentServers.push_back(server);
-			pServer = pServer->NextSiblingElement("Server");
+			xServer = xServer.next_sibling("Server");
 		}
 	}
 
@@ -73,17 +73,18 @@ void CRecentServerList::SetMostRecentServer(const CServer& server)
 		return;
 
 	CXmlFile xmlFile(wxGetApp().GetSettingsFile(_T("recentservers")));
-	TiXmlElement* pDocument = xmlFile.CreateEmpty();
-	if (!pDocument)
+	auto element = xmlFile.CreateEmpty();
+	if (!element)
 		return;
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("RecentServers");
-	if (!pElement)
-		pElement = pDocument->LinkEndChild(new TiXmlElement("RecentServers"))->ToElement();
+	auto servers = element.child("RecentServers");
+	if (!servers) {
+		servers = element.append_child("RecentServers");
+	}
 
 	for (std::list<CServer>::const_iterator iter = mostRecentServers.begin(); iter != mostRecentServers.end(); ++iter) {
-		TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
-		SetServer(pServer, *iter);
+		auto server = servers.append_child("Server");
+		SetServer(server, *iter);
 	}
 
 	xmlFile.Save(true);

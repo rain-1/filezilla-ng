@@ -2,17 +2,17 @@ if MINGW
   MAYBE_FZSHELLEXT = fzshellext/32 fzshellext/64
 endif
 
-if HAVE_LIBTINYXML
+if HAVE_LIBPUGIXML
 else
-  MAYBE_TINYXML = tinyxml
+  MAYBE_PUGIXML = pugixml
 endif
 
 if HAVE_DBUS
   MAYBE_DBUS = dbus
 endif
 
-SUBDIRS = include engine $(MAYBE_TINYXML) $(MAYBE_DBUS) interface putty $(MAYBE_FZSHELLEXT) .
-DIST_SUBDIRS = include engine tinyxml dbus interface putty fzshellext/64 .
+SUBDIRS = include engine $(MAYBE_PUGIXML) $(MAYBE_DBUS) interface putty $(MAYBE_FZSHELLEXT) .
+DIST_SUBDIRS = include engine pugixml dbus interface putty fzshellext/64 .
 
 dist_noinst_DATA = FileZilla.sln Dependencies.props.example
 

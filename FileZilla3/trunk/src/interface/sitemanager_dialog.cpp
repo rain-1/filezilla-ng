@@ -729,8 +729,8 @@ bool CSiteManagerDialog::Load()
 	pTree->SetItemImage(treeId, 1, wxTreeItemIcon_SelectedExpanded);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxString msg = file.GetError() + _T("\n") + _("The Site Manager cannot be used unless the file gets repaired.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -744,8 +744,8 @@ bool CSiteManagerDialog::Load()
 		}
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return true;
 
 	wxString lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
@@ -759,7 +759,7 @@ bool CSiteManagerDialog::Load()
 		lastSelection.clear();
 	CSiteManagerXmlHandler_Tree handler(pTree, treeId, lastSelection, false);
 
-	bool res = CSiteManager::Load(pElement, handler);
+	bool res = CSiteManager::Load(element, handler);
 
 	pTree->SortChildren(treeId);
 	pTree->Expand(treeId);
@@ -771,7 +771,7 @@ bool CSiteManagerDialog::Load()
 	return res;
 }
 
-bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId /*=wxTreeItemId()*/)
+bool CSiteManagerDialog::Save(pugi::xml_node element /*=0*/, wxTreeItemId treeId /*=wxTreeItemId()*/)
 {
 	if (!m_pSiteManagerMutex)
 		return false;
@@ -780,33 +780,32 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 	if (!pTree)
 		return false;
 
-	if (!pElement || !treeId)
-	{
+	if (!element || !treeId) {
 		// We have to synchronize access to sitemanager.xml so that multiple processed don't write
 		// to the same file or one is reading while the other one writes.
 		CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 		CXmlFile xml(wxGetApp().GetSettingsFile(_T("sitemanager")));
 
-		TiXmlElement* pDocument = xml.Load();
-		if (!pDocument) {
+		auto document = xml.Load();
+		if (!document) {
 			wxString msg = xml.GetError() + _T("\n") + _("Any changes made in the Site Manager could not be saved.");
 			wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 			return false;
 		}
 
-		TiXmlElement *pServers = pDocument->FirstChildElement("Servers");
-		while (pServers) {
-			pDocument->RemoveChild(pServers);
-			pServers = pDocument->FirstChildElement("Servers");
+		auto servers = document.child("Servers");
+		while (servers) {
+			document.remove_child(servers);
+			servers = document.child("Servers");
 		}
-		pElement = pDocument->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
+		element = document.append_child("Servers");
 
-		if (!pElement)
+		if (!element)
 			return true;
 
-		bool res = Save(pElement, m_ownSites);
+		bool res = Save(element, m_ownSites);
 
 		if (!xml.Save(false)) {
 			if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
@@ -821,9 +820,8 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 	wxTreeItemId child;
 	wxTreeItemIdValue cookie;
 	child = pTree->GetFirstChild(treeId, cookie);
-	while (child.IsOk())
-	{
-		SaveChild(pElement, child);
+	while (child.IsOk()) {
+		SaveChild(element, child);
 
 		child = pTree->GetNextChild(treeId, cookie);
 	}
@@ -831,45 +829,41 @@ bool CSiteManagerDialog::Save(TiXmlElement *pElement /*=0*/, wxTreeItemId treeId
 	return false;
 }
 
-bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
+bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
 		return false;
 
-	wxString name = pTree->GetItemText(child);
-	wxScopedCharBuffer utf8 = name.utf8_str();
+	wxString const name = pTree->GetItemText(child);
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(child));
 	if (!data) {
-		TiXmlNode* pNode = pElement->LinkEndChild(new TiXmlElement("Folder"));
+		auto node = element.append_child("Folder");
 		const bool expanded = pTree->IsExpanded(child);
-		SetTextAttribute(pNode->ToElement(), "expanded", expanded ? _T("1") : _T("0"));
-
-		pNode->LinkEndChild(new TiXmlText(utf8));
-
-		Save(pNode->ToElement(), child);
+		SetTextAttribute(node, "expanded", expanded ? _T("1") : _T("0"));
+		AddTextElement(node, name);
+		Save(node, child);
 	}
 	else if (data->m_type == CSiteManagerItemData::SITE) {
 		CSiteManagerItemData_Site *site_data = static_cast<CSiteManagerItemData_Site* >(data);
-		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
-		SetServer(pNode, site_data->m_server);
+		auto node = element.append_child("Server");
+		SetServer(node, site_data->m_server);
 
 		// Save comments
-		AddTextElement(pNode, "Comments", site_data->m_comments);
+		AddTextElement(node, "Comments", site_data->m_comments);
 
 		// Save local dir
-		AddTextElement(pNode, "LocalDir", data->m_localDir);
+		AddTextElement(node, "LocalDir", data->m_localDir);
 
 		// Save remote dir
-		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
+		AddTextElement(node, "RemoteDir", data->m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
-		AddTextElementRaw(pNode, "DirectoryComparison", data->m_comparison ? "1" : "0");
+		AddTextElementRaw(node, "SyncBrowsing", data->m_sync ? "1" : "0");
+		AddTextElementRaw(node, "DirectoryComparison", data->m_comparison ? "1" : "0");
+		AddTextElement(node, name);
 
-		pNode->LinkEndChild(new TiXmlText(utf8));
-
-		Save(pNode, child);
+		Save(node, child);
 
 		if (site_data->connected_item != -1) {
 			if ((*m_connected_sites)[site_data->connected_item].server == site_data->m_server) {
@@ -879,18 +873,18 @@ bool CSiteManagerDialog::SaveChild(TiXmlElement *pElement, wxTreeItemId child)
 		}
 	}
 	else {
-		TiXmlElement* pNode = pElement->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
+		auto node = element.append_child("Bookmark");
 
-		AddTextElement(pNode, "Name", name);
+		AddTextElement(node, "Name", name);
 
 		// Save local dir
-		AddTextElement(pNode, "LocalDir", data->m_localDir);
+		AddTextElement(node, "LocalDir", data->m_localDir);
 
 		// Save remote dir
-		AddTextElement(pNode, "RemoteDir", data->m_remoteDir.GetSafePath());
+		AddTextElement(node, "RemoteDir", data->m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(pNode, "SyncBrowsing", data->m_sync ? "1" : "0");
-		AddTextElementRaw(pNode, "DirectoryComparison", data->m_comparison ? "1" : "0");
+		AddTextElementRaw(node, "SyncBrowsing", data->m_sync ? "1" : "0");
+		AddTextElementRaw(node, "DirectoryComparison", data->m_comparison ? "1" : "0");
 	}
 
 	return true;
@@ -1778,12 +1772,12 @@ bool CSiteManagerDialog::LoadDefaultSites()
 
 	CXmlFile file(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument)
+	auto document = file.Load();
+	if (!document)
 		return false;
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return false;
 
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
@@ -1809,7 +1803,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 		lastSelection.clear();
 	CSiteManagerXmlHandler_Tree handler(pTree, m_predefinedSites, lastSelection, true);
 
-	CSiteManager::Load(pElement, handler);
+	CSiteManager::Load(element, handler);
 
 	return true;
 }
@@ -2110,10 +2104,10 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent&)
 
 	CXmlFile xml(dlg.GetPath());
 
-	TiXmlElement* exportRoot = xml.CreateEmpty();
+	auto exportRoot = xml.CreateEmpty();
 
-	TiXmlElement* pServers = exportRoot->LinkEndChild(new TiXmlElement("Servers"))->ToElement();
-	SaveChild(pServers, m_contextMenuItem);
+	auto servers = exportRoot.append_child("Servers");
+	SaveChild(servers, m_contextMenuItem);
 
 	if (!xml.Save(false)) {
 		wxString msg = wxString::Format(_("Could not write \"%s\", the selected sites could not be exported: %s"), xml.GetFileName(), xml.GetError());

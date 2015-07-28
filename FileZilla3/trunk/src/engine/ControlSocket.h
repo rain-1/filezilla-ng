@@ -47,8 +47,8 @@ public:
 	const bool download;
 
 	CDateTime fileTime;
-	wxFileOffset localFileSize{-1};
-	wxFileOffset remoteFileSize{-1};
+	int64_t localFileSize{-1};
+	int64_t remoteFileSize{-1};
 
 	bool tryAbsolutePath{};
 	bool resume{};

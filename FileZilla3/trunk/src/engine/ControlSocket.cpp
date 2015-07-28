@@ -1228,8 +1228,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 			if (engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) &&
 				matched_case)
 			{
-				wxLongLong size = entry.size;
-				pData->remoteFileSize = size.GetValue();
+				pData->remoteFileSize = entry.size;
 				if (entry.has_date())
 					pData->fileTime = entry.time;
 

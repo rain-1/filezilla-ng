@@ -159,25 +159,25 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return;
 	}
 
-	for (TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
+	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
 		wxString name;
 		wxString local_dir;
 		wxString remote_dir_raw;
 		CServerPath remote_dir;
 
-		name = GetTextElement(pBookmark, "Name");
+		name = GetTextElement(bookmark, "Name");
 		if (name.empty())
 			continue;
 
-		local_dir = GetTextElement(pBookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(pBookmark, "RemoteDir");
+		local_dir = GetTextElement(bookmark, "LocalDir");
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
 		if (!remote_dir_raw.empty()) {
 			if (!remote_dir.SetSafePath(remote_dir_raw))
 				continue;
@@ -189,9 +189,9 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 		if (local_dir.empty() || remote_dir.empty())
 			sync = false;
 		else
-			sync = GetTextElementBool(pBookmark, "SyncBrowsing");
+			sync = GetTextElementBool(bookmark, "SyncBrowsing");
 
-		bool const comparison = GetTextElementBool(pBookmark, "DirectoryComparison");
+		bool const comparison = GetTextElementBool(bookmark, "DirectoryComparison");
 
 		CBookmarkItemData *data = new CBookmarkItemData(local_dir, remote_dir, sync, comparison);
 		m_pTree->AppendItem(m_bookmarks_global, name, 1, 1, data);
@@ -280,8 +280,8 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxString msg = file.GetError() + _T("\n\n") + _("The global bookmarks could not be saved.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
@@ -289,10 +289,10 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 	}
 
 	{
-		TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark");
-		while (pBookmark) {
-			pDocument->RemoveChild(pBookmark);
-			pBookmark = pDocument->FirstChildElement("Bookmark");
+		auto bookmark = element.child("Bookmark");
+		while (bookmark) {
+			element.remove_child(bookmark);
+			bookmark = element.child("Bookmark");
 		}
 	}
 
@@ -301,16 +301,16 @@ void CBookmarksDialog::SaveGlobalBookmarks()
 		CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(child);
 		wxASSERT(data);
 
-		TiXmlElement *pBookmark = pDocument->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
-		AddTextElement(pBookmark, "Name", m_pTree->GetItemText(child));
+		auto bookmark = element.append_child("Bookmark");
+		AddTextElement(bookmark, "Name", m_pTree->GetItemText(child));
 		if (!data->m_local_dir.empty())
-			AddTextElement(pBookmark, "LocalDir", data->m_local_dir);
+			AddTextElement(bookmark, "LocalDir", data->m_local_dir);
 		if (!data->m_remote_dir.empty())
-			AddTextElement(pBookmark, "RemoteDir", data->m_remote_dir.GetSafePath());
+			AddTextElement(bookmark, "RemoteDir", data->m_remote_dir.GetSafePath());
 		if (data->m_sync)
-			AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
+			AddTextElementRaw(bookmark, "SyncBrowsing", "1");
 		if (data->m_comparison)
-			AddTextElementRaw(pBookmark, "DirectoryComparison", "1");
+			AddTextElementRaw(bookmark, "DirectoryComparison", "1");
 	}
 
 	if (!file.Save(false)) {
@@ -690,25 +690,25 @@ bool CBookmarksDialog::GetBookmarks(std::list<wxString> &bookmarks)
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	for (TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
+	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
 		wxString name;
 		wxString local_dir;
 		wxString remote_dir_raw;
 		CServerPath remote_dir;
 
-		name = GetTextElement(pBookmark, "Name");
+		name = GetTextElement(bookmark, "Name");
 		if (name.empty())
 			continue;
 
-		local_dir = GetTextElement(pBookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(pBookmark, "RemoteDir");
+		local_dir = GetTextElement(bookmark, "LocalDir");
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
 		if (!remote_dir_raw.empty()) {
 			if (!remote_dir.SetSafePath(remote_dir_raw))
 				continue;
@@ -727,21 +727,21 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	for (TiXmlElement *pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
+	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
 		wxString remote_dir_raw;
 
-		if (name != GetTextElement(pBookmark, "Name"))
+		if (name != GetTextElement(bookmark, "Name"))
 			continue;
 
-		local_dir = GetTextElement(pBookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(pBookmark, "RemoteDir");
+		local_dir = GetTextElement(bookmark, "LocalDir");
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
 		if (!remote_dir_raw.empty()) {
 			if (!remote_dir.SetSafePath(remote_dir_raw))
 				return false;
@@ -752,9 +752,9 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 		if (local_dir.empty() || remote_dir_raw.empty())
 			sync = false;
 		else
-			sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
+			sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
 
-		comparison = GetTextElementBool(pBookmark, "DirectoryComparison", false);
+		comparison = GetTextElementBool(bookmark, "DirectoryComparison", false);
 		return true;
 	}
 
@@ -772,42 +772,41 @@ bool CBookmarksDialog::AddBookmark(const wxString &name, const wxString &local_d
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("bookmarks")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto element = file.Load();
+	if (!element) {
 		wxString msg = file.GetError() + _T("\n\n") + _("The bookmark could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	TiXmlElement *pInsertBefore = 0;
-	TiXmlElement *pBookmark;
-	for (pBookmark = pDocument->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
+	pugi::xml_node bookmark, insertBefore;
+	for (bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
 		wxString remote_dir_raw;
 
-		wxString old_name = GetTextElement(pBookmark, "Name");
+		wxString old_name = GetTextElement(bookmark, "Name");
 
 		if (!name.CmpNoCase(old_name)) {
 			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !pInsertBefore)
-			pInsertBefore = pBookmark;
+		if (name < old_name && !insertBefore)
+			insertBefore = bookmark;
 	}
 
-	if (pInsertBefore)
-		pBookmark = pDocument->InsertBeforeChild(pInsertBefore, TiXmlElement("Bookmark"))->ToElement();
+	if (insertBefore)
+		bookmark = element.insert_child_before("Bookmark", insertBefore);
 	else
-		pBookmark = pDocument->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
-	AddTextElement(pBookmark, "Name", name);
+		bookmark = element.append_child("Bookmark");
+	AddTextElement(bookmark, "Name", name);
 	if (!local_dir.empty())
-		AddTextElement(pBookmark, "LocalDir", local_dir);
+		AddTextElement(bookmark, "LocalDir", local_dir);
 	if (!remote_dir.empty())
-		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
+		AddTextElement(bookmark, "RemoteDir", remote_dir.GetSafePath());
 	if (sync)
-		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
+		AddTextElementRaw(bookmark, "SyncBrowsing", "1");
 	if (comparison)
-		AddTextElementRaw(pBookmark, "DirectoryComparison", "1");
+		AddTextElementRaw(bookmark, "DirectoryComparison", "1");
 
 	if (!file.Save(false)) {
 		wxString msg = wxString::Format(_("Could not write \"%s\", the bookmark could not be added: %s"), file.GetFileName(), file.GetError());

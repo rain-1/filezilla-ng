@@ -188,7 +188,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 	return true;
 }
 
-bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, enum Filetype type /*=file*/, wxLongLong size /*=-1*/)
+bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, enum Filetype type /*=file*/, int64_t size /*=-1*/)
 {
 	scoped_lock lock(mutex_);
 
@@ -198,8 +198,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 
 	bool updated = false;
 
-	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter)
-	{
+	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
 		CCacheEntry &entry = *iter;
 		const CCacheEntry &cEntry = *iter;
 		if (path.CmpNoCase(entry.listing.path))
@@ -209,21 +208,17 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 
 		bool matchCase = false;
 		unsigned int i;
-		for (i = 0; i < entry.listing.GetCount(); i++)
-		{
-			if (!filename.CmpNoCase(cEntry.listing[i].name))
-			{
+		for (i = 0; i < entry.listing.GetCount(); ++i) {
+			if (!filename.CmpNoCase(cEntry.listing[i].name)) {
 				entry.listing[i].flags |= CDirentry::flag_unsure;
-				if (cEntry.listing[i].name == filename)
-				{
+				if (cEntry.listing[i].name == filename) {
 					matchCase = true;
 					break;
 				}
 			}
 		}
 
-		if (matchCase)
-		{
+		if (matchCase) {
 			enum Filetype old_type = entry.listing[i].is_dir() ? dir : file;
 			if (type != old_type)
 				entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
@@ -232,8 +227,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 			else
 				entry.listing.m_flags |= CDirectoryListing::unsure_file_changed;
 		}
-		else if (type != unknown && mayCreate)
-		{
+		else if (type != unknown && mayCreate) {
 			const unsigned int count = entry.listing.GetCount();
 			entry.listing.SetCount(count + 1);
 			CDirentry& direntry = entry.listing[count];
@@ -243,8 +237,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 			else
 				direntry.flags = CDirentry::flag_unsure;
 			direntry.size = size;
-			switch (type)
-			{
+			switch (type) {
 			case dir:
 				entry.listing.m_flags |= CDirectoryListing::unsure_dir_added;
 				break;

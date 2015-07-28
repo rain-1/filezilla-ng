@@ -44,25 +44,27 @@ public:
 	{
 		wxString name;
 		bool dir;
-		wxLongLong size;
+		int64_t size;
 		bool link;
 	};
 
 	const std::list<t_fileInfo>& GetFiles() const { return m_fileList; }
 
-	void AddFile(const wxString& name, bool dir, const wxLongLong& size, bool link);
+	void AddFile(const wxString& name, bool dir, int64_t size, bool link);
 
 protected:
 	CServer m_server;
 	CServerPath m_path;
 
-	CXmlFile m_xmlFile;
+	mutable CXmlFile m_xmlFile;
 
 	bool m_didSendData;
 
 	int m_processId;
 
 	std::list<t_fileInfo> m_fileList;
+
+	mutable size_t m_expectedSize{};
 };
 
 #if FZ3_USESHELLEXT

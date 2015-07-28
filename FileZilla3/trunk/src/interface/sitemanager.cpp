@@ -11,67 +11,59 @@ std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> CSiteManager::m_idMap;
 bool CSiteManager::Load(CSiteManagerXmlHandler& handler)
 {
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return false;
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement) {
+	auto element = document.child("Servers");
+	if (!element) {
 		return false;
 	}
 
-	return Load(pElement, handler);
+	return Load(element, handler);
 }
 
-bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler& handler)
+bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 {
-	wxASSERT(pElement);
+	wxASSERT(element);
 
-	for (TiXmlElement* pChild = pElement->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement()) {
-		if (!strcmp(pChild->Value(), "Folder")) {
-			wxString name = GetTextElement_Trimmed(pChild);
+	for (auto child = element.first_child(); child; child = child.next_sibling()) {
+		if (!strcmp(child.name(), "Folder")) {
+			wxString name = GetTextElement_Trimmed(child);
 			if (name.empty())
 				continue;
 
-			const bool expand = GetTextAttribute(pChild, "expanded") != _T("0");
+			const bool expand = GetTextAttribute(child, "expanded") != _T("0");
 			if (!handler.AddFolder(name, expand))
 				return false;
-			Load(pChild, handler);
+			Load(child, handler);
 			if (!handler.LevelUp())
 				return false;
 		}
-		else if (!strcmp(pChild->Value(), "Server")) {
-			std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(pChild);
+		else if (!strcmp(child.name(), "Server")) {
+			std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(child);
 
 			if (data) {
 				handler.AddSite(std::move(data));
 
 				// Bookmarks
-				for (TiXmlElement* pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
-					TiXmlHandle handle(pBookmark);
-
-					wxString name = GetTextElement_Trimmed(pBookmark, "Name");
+				for (auto bookmark = child.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
+					wxString name = GetTextElement_Trimmed(bookmark, "Name");
 					if (name.empty())
 						continue;
 
 					auto bookmarkData = std::make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
 
-					TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
-					if (localDir)
-						bookmarkData->m_localDir = GetTextElement(pBookmark, "LocalDir");
-
-					TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
-					if (remoteDir)
-						bookmarkData->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
-
+					bookmarkData->m_localDir = GetTextElement(bookmark, "LocalDir");
+					bookmarkData->m_remoteDir.SetSafePath(GetTextElement(bookmark, "RemoteDir"));
 					if (bookmarkData->m_localDir.empty() && bookmarkData->m_remoteDir.empty()) {
 						continue;
 					}
 
 					if (!bookmarkData->m_localDir.empty() && !bookmarkData->m_remoteDir.empty())
-						bookmarkData->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
+						bookmarkData->m_sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
 
 					handler.AddBookmark(name, std::move(bookmarkData));
 				}
@@ -85,34 +77,23 @@ bool CSiteManager::Load(TiXmlElement *pElement, CSiteManagerXmlHandler& handler)
 	return true;
 }
 
-std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(TiXmlElement *pElement)
+std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(pugi::xml_node element)
 {
 	CServer server;
-	if (!::GetServer(pElement, server))
+	if (!::GetServer(element, server))
 		return 0;
 	if (server.GetName().empty())
 		return 0;
 
 	auto data = std::make_unique<CSiteManagerItemData_Site>(server);
-
-	TiXmlHandle handle(pElement);
-
-	TiXmlText* comments = handle.FirstChildElement("Comments").FirstChild().Text();
-	if (comments)
-		data->m_comments = ConvLocal(comments->Value());
-
-	TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
-	if (localDir)
-		data->m_localDir = ConvLocal(localDir->Value());
-
-	TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
-	if (remoteDir)
-		data->m_remoteDir.SetSafePath(ConvLocal(remoteDir->Value()));
+	data->m_comments = GetTextElement(element, "Comments");
+	data->m_localDir = GetTextElement(element, "LocalDir");
+	data->m_remoteDir.SetSafePath(GetTextElement(element, "RemoteDir"));
 
 	if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
-		data->m_sync = GetTextElementBool(pElement, "SyncBrowsing", false);
+		data->m_sync = GetTextElementBool(element, "SyncBrowsing", false);
 
-	data->m_comparison = GetTextElementBool(pElement, "DirectoryComparison", false);
+	data->m_comparison = GetTextElementBool(element, "DirectoryComparison", false);
 
 	return data;
 }
@@ -313,15 +294,15 @@ bool CSiteManager::LoadPredefined(CSiteManagerXmlHandler& handler)
 	wxString const name(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	CXmlFile file(name);
 
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument)
+	auto document = file.Load();
+	if (!document)
 		return false;
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return false;
 
-	if (!Load(pElement, handler)) {
+	if (!Load(element, handler)) {
 		return false;
 	}
 
@@ -448,69 +429,53 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteByPath(wxString 
 		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	}
 
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return 0;
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement) {
+	auto element = document.child("Servers");
+	if (!element) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
 	std::list<wxString> segments;
-	if (!UnescapeSitePath(sitePath, segments) || segments.empty())
-	{
+	if (!UnescapeSitePath(sitePath, segments) || segments.empty()) {
 		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
 	}
 
-	TiXmlElement* pChild = GetElementByPath(pElement, segments);
-	if (!pChild)
-	{
+	auto child = GetElementByPath(element, segments);
+	if (!child) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
-	TiXmlElement* pBookmark;
-	if (!strcmp(pChild->Value(), "Bookmark"))
-	{
-		pBookmark = pChild;
-		pChild = pChild->Parent()->ToElement();
+	pugi::xml_node bookmark;
+	if (!strcmp(child.name(), "Bookmark")) {
+		bookmark = child;
+		child = child.parent();
 		segments.pop_back();
 	}
-	else
-		pBookmark = 0;
 
-	std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(pChild);
+	std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(child);
 
 	if (!data) {
 		wxMessageBoxEx(_("Could not read server item."), _("Invalid site path"));
 		return 0;
 	}
 
-	if (pBookmark) {
-		TiXmlHandle handle(pBookmark);
-
-		wxString localPath;
-		CServerPath remotePath;
-		TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
-		if (localDir)
-			localPath = ConvLocal(localDir->Value());
-		TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
-		if (remoteDir)
-			remotePath.SetSafePath(ConvLocal(remoteDir->Value()));
-		if (!localPath.empty() && !remotePath.empty()) {
-			data->m_sync = GetTextElementBool(pBookmark, "SyncBrowsing", false);
+	if (bookmark) {
+		data->m_localDir = GetTextElement(bookmark, "LocalDir");
+		data->m_remoteDir.SetSafePath(GetTextElement(bookmark, "RemoteDir"));
+		if (!data->m_localDir.empty() && !data->m_remoteDir.empty()) {
+			data->m_sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
 		}
 		else
 			data->m_sync = false;
-		data->m_comparison = GetTextElementBool(pElement, "DirectoryComparison", false);
-
-		data->m_localDir = localPath;
-		data->m_remoteDir = remotePath;
+		data->m_comparison = GetTextElementBool(bookmark, "DirectoryComparison", false);
 	}
 
 	data->m_path = BuildPath( c, segments );
@@ -545,14 +510,14 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	}
 
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
 		return false;
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return false;
 
 	std::list<wxString> segments;
@@ -561,32 +526,23 @@ bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmark
 		return 0;
 	}
 
-	TiXmlElement* pChild = GetElementByPath(pElement, segments);
+	auto child = GetElementByPath(element, segments);
 
-	if (pChild && !strcmp(pChild->Value(), "Bookmark"))
-		pChild = pChild->Parent()->ToElement();
+	if (child && !strcmp(child.name(), "Bookmark"))
+		child = child.parent();
 
-	if (!pChild || strcmp(pChild->Value(), "Server"))
+	if (!child || strcmp(child.name(), "Server"))
 		return 0;
 
 	// Bookmarks
-	for (TiXmlElement* pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark"))
-	{
-		TiXmlHandle handle(pBookmark);
-
-		wxString name = GetTextElement_Trimmed(pBookmark, "Name");
+	for (auto bookmark = child.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
+		wxString name = GetTextElement_Trimmed(bookmark, "Name");
 		if (name.empty())
 			continue;
 
-		wxString localPath;
+		wxString localPath = GetTextElement(bookmark, "LocalDir");
 		CServerPath remotePath;
-		TiXmlText* localDir = handle.FirstChildElement("LocalDir").FirstChild().Text();
-		if (localDir)
-			localPath = ConvLocal(localDir->Value());
-		TiXmlText* remoteDir = handle.FirstChildElement("RemoteDir").FirstChild().Text();
-		if (remoteDir)
-			remotePath.SetSafePath(ConvLocal(remoteDir->Value()));
-
+		remotePath.SetSafePath(GetTextElement(bookmark, "RemoteDir"));
 		if (localPath.empty() && remotePath.empty())
 			continue;
 
@@ -603,22 +559,21 @@ wxString CSiteManager::AddServer(CServer server)
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxString msg = file.GetError() + _T("\n") + _("The server could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return wxString();
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return wxString();
 
 	std::list<wxString> names;
-	for (TiXmlElement* pChild = pElement->FirstChildElement("Server"); pChild; pChild = pChild->NextSiblingElement("Server"))
-	{
-		wxString name = GetTextElement(pChild, "Name");
+	for (auto child = element.child("Server"); child; child = child.next_sibling("Server")) {
+		wxString name = GetTextElement(child, "Name");
 		if (name.empty())
 			continue;
 
@@ -628,11 +583,9 @@ wxString CSiteManager::AddServer(CServer server)
 	wxString name = _("New site");
 	int i = 1;
 
-	for (;;)
-	{
+	for (;;) {
 		std::list<wxString>::const_iterator iter;
-		for (iter = names.begin(); iter != names.end(); ++iter)
-		{
+		for (iter = names.begin(); iter != names.end(); ++iter) {
 			if (*iter == name)
 				break;
 		}
@@ -644,13 +597,9 @@ wxString CSiteManager::AddServer(CServer server)
 
 	server.SetName(name);
 
-	TiXmlElement* pServer = pElement->LinkEndChild(new TiXmlElement("Server"))->ToElement();
-	SetServer(pServer, server);
-
-	wxScopedCharBuffer utf8 = name.utf8_str();
-	if (utf8) {
-		pServer->LinkEndChild(new TiXmlText(utf8));
-	}
+	auto xServer = element.append_child("Server");
+	SetServer(xServer, server);
+	AddTextElement(xServer, name);
 
 	if (!file.Save(false)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
@@ -664,36 +613,33 @@ wxString CSiteManager::AddServer(CServer server)
 	return _T("0/") + EscapeSegment(name);
 }
 
-TiXmlElement* CSiteManager::GetElementByPath(TiXmlElement* pNode, std::list<wxString> const& segments)
+pugi::xml_node CSiteManager::GetElementByPath(pugi::xml_node node, std::list<wxString> const& segments)
 {
-	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it)
-	{
+	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it) {
 		const wxString & segment = *it;
 
-		TiXmlElement* pChild;
-		for (pChild = pNode->FirstChildElement(); pChild; pChild = pChild->NextSiblingElement())
-		{
-			const char* value = pChild->Value();
-			if (strcmp(value, "Server") && strcmp(value, "Folder") && strcmp(value, "Bookmark"))
+		pugi::xml_node child;
+		for (child = node.first_child(); child; child = child.next_sibling()) {
+			if (strcmp(child.name(), "Server") && strcmp(child.name(), "Folder") && strcmp(child.name(), "Bookmark"))
 				continue;
 
-			wxString name = GetTextElement_Trimmed(pChild, "Name");
+			wxString name = GetTextElement_Trimmed(child, "Name");
 			if (name.empty())
-				name = GetTextElement_Trimmed(pChild);
+				name = GetTextElement_Trimmed(child);
 			if (name.empty())
 				continue;
 
 			if (name == segment)
 				break;
 		}
-		if (!pChild)
-			return 0;
+		if (!child)
+			return pugi::xml_node();
 
-		pNode = pChild;
+		node = child;
 		continue;
 	}
 
-	return pNode;
+	return node;
 }
 
 bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
@@ -712,16 +658,16 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement* pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxString msg = file.GetError() + _T("\n") + _("The bookmark could not be added.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return false;
 
 	std::list<wxString> segments;
@@ -730,19 +676,16 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 		return 0;
 	}
 
-	TiXmlElement* pChild = GetElementByPath(pElement, segments);
-	if (!pChild || strcmp(pChild->Value(), "Server")) {
+	auto child = GetElementByPath(element, segments);
+	if (!child || strcmp(child.name(), "Server")) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
 	// Bookmarks
-	TiXmlElement *pInsertBefore = 0;
-	TiXmlElement* pBookmark;
-	for (pBookmark = pChild->FirstChildElement("Bookmark"); pBookmark; pBookmark = pBookmark->NextSiblingElement("Bookmark")) {
-		TiXmlHandle handle(pBookmark);
-
-		wxString old_name = GetTextElement_Trimmed(pBookmark, "Name");
+	pugi::xml_node insertBefore, bookmark;
+	for (bookmark = child.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
+		wxString old_name = GetTextElement_Trimmed(bookmark, "Name");
 		if (old_name.empty())
 			continue;
 
@@ -750,23 +693,23 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 			wxMessageBoxEx(_("Name of bookmark already exists."), _("New bookmark"), wxICON_EXCLAMATION);
 			return false;
 		}
-		if (name < old_name && !pInsertBefore)
-			pInsertBefore = pBookmark;
+		if (name < old_name && !insertBefore)
+			insertBefore = bookmark;
 	}
 
-	if (pInsertBefore)
-		pBookmark = pChild->InsertBeforeChild(pInsertBefore, TiXmlElement("Bookmark"))->ToElement();
+	if (insertBefore)
+		bookmark = child.insert_child_before("Bookmark", insertBefore);
 	else
-		pBookmark = pChild->LinkEndChild(new TiXmlElement("Bookmark"))->ToElement();
-	AddTextElement(pBookmark, "Name", name);
+		bookmark = child.append_child("Bookmark");
+	AddTextElement(bookmark, "Name", name);
 	if (!local_dir.empty())
-		AddTextElement(pBookmark, "LocalDir", local_dir);
+		AddTextElement(bookmark, "LocalDir", local_dir);
 	if (!remote_dir.empty())
-		AddTextElement(pBookmark, "RemoteDir", remote_dir.GetSafePath());
+		AddTextElement(bookmark, "RemoteDir", remote_dir.GetSafePath());
 	if (sync)
-		AddTextElementRaw(pBookmark, "SyncBrowsing", "1");
+		AddTextElementRaw(bookmark, "SyncBrowsing", "1");
 	if (comparison)
-		AddTextElementRaw(pBookmark, "DirectoryComparison", "1");
+		AddTextElementRaw(bookmark, "DirectoryComparison", "1");
 
 	if (!file.Save(false)) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
@@ -792,16 +735,16 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
 
 	CXmlFile file(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	TiXmlElement *pDocument = file.Load();
-	if (!pDocument) {
+	auto document = file.Load();
+	if (!document) {
 		wxString msg = file.GetError() + _T("\n") + _("The bookmarks could not be cleared.");
 		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
 
 		return false;
 	}
 
-	TiXmlElement* pElement = pDocument->FirstChildElement("Servers");
-	if (!pElement)
+	auto element = document.child("Servers");
+	if (!element)
 		return false;
 
 	std::list<wxString> segments;
@@ -810,16 +753,16 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 		return 0;
 	}
 
-	TiXmlElement* pChild = GetElementByPath(pElement, segments);
-	if (!pChild || strcmp(pChild->Value(), "Server")) {
+	auto child = GetElementByPath(element, segments);
+	if (!child || strcmp(child.name(), "Server")) {
 		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
 		return 0;
 	}
 
-	TiXmlElement *pBookmark = pChild->FirstChildElement("Bookmark");
-	while (pBookmark) {
-		pChild->RemoveChild(pBookmark);
-		pBookmark = pChild->FirstChildElement("Bookmark");
+	auto bookmark = child.child("Bookmark");
+	while (bookmark) {
+		child.remove_child(bookmark);
+		bookmark = child.child("Bookmark");
 	}
 
 	if (!file.Save(false)) {

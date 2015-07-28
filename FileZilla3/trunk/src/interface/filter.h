@@ -72,7 +72,7 @@ public:
 	std::vector<bool> remote;
 };
 
-class TiXmlElement;
+namespace pugi { class xml_node; }
 class CFilterManager
 {
 public:
@@ -93,7 +93,7 @@ public:
 
 	static bool CompileRegexes(CFilter& filter);
 
-	static bool LoadFilter(TiXmlElement* pElement, CFilter& filter);
+	static bool LoadFilter(pugi::xml_node& element, CFilter& filter);
 
 protected:
 	static bool CompileRegexes();
@@ -118,7 +118,7 @@ public:
 
 	bool Create(CMainFrame* parent);
 
-	static void SaveFilter(TiXmlElement* pElement, const CFilter& filter);
+	static void SaveFilter(pugi::xml_node& element, const CFilter& filter);
 
 protected:
 

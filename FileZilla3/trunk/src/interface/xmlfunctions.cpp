@@ -28,17 +28,17 @@ CXmlFile::~CXmlFile()
 	Close();
 }
 
-TiXmlElement* CXmlFile::Load()
+pugi::xml_node CXmlFile::Load()
 {
 	Close();
 	m_error.clear();
 
-	wxCHECK(!m_fileName.empty(), 0);
+	wxCHECK(!m_fileName.empty(), m_element);
 
 	wxString redirectedName = GetRedirectedName();
 
 	GetXmlFile(redirectedName);
-	if (!m_pElement) {
+	if (!m_element) {
 		wxString err = wxString::Format(_("The file '%s' could not be loaded."), m_fileName);
 		if (m_error.empty()) {
 			err += wxString(_T("\n")) + _("Make sure the file can be accessed and is a well-formed XML document.");
@@ -49,19 +49,19 @@ TiXmlElement* CXmlFile::Load()
 
 		// Try the backup file
 		GetXmlFile(redirectedName + _T("~"));
-		if (!m_pElement) {
+		if (!m_element) {
 			// Loading backup failed. If both original and backup file are empty, create new file.
 			if (CLocalFileSystem::GetSize(redirectedName) <= 0 && CLocalFileSystem::GetSize(redirectedName + _T("~")) <= 0) {
 				m_error.clear();
 				CreateEmpty();
 				m_modificationTime = CLocalFileSystem::GetModificationTime(redirectedName);
-				return m_pElement;
+				return m_element;
 			}
 
 			// File corrupt and no functional backup, give up.
 			m_error = err;
 			m_modificationTime.clear();
-			return 0;
+			return m_element;
 		}
 
 
@@ -77,7 +77,7 @@ TiXmlElement* CXmlFile::Load()
 			m_error = err;
 			m_error += _T("\n") + wxString::Format(_("The valid backup file %s could not be restored"), redirectedName + _T("~"));
 			m_modificationTime.clear();
-			return 0;
+			return m_element;
 		}
 
 		// We no longer need the backup
@@ -86,7 +86,7 @@ TiXmlElement* CXmlFile::Load()
 	}
 
 	m_modificationTime = CLocalFileSystem::GetModificationTime(redirectedName);
-	return m_pElement;
+	return m_element;
 }
 
 bool CXmlFile::Modified()
@@ -105,18 +105,17 @@ bool CXmlFile::Modified()
 
 void CXmlFile::Close()
 {
-	delete m_pDocument;
-	m_pDocument = 0;
-	m_pElement = 0;
+	m_element = pugi::xml_node();
+	m_document.reset();
 }
 
 void CXmlFile::UpdateMetadata()
 {
-	if (!m_pElement || m_pElement->ValueStr() != "FileZilla3") {
+	if (!m_element || std::string(m_element.name()) != "FileZilla3") {
 		return;
 	}
 
-	SetTextAttribute(m_pElement, "version", CBuildInfo::GetVersion());
+	SetTextAttribute(m_element, "version", CBuildInfo::GetVersion());
 
 	wxString const platform =
 #ifdef __WXMSW__
@@ -126,7 +125,7 @@ void CXmlFile::UpdateMetadata()
 #else
 		_T("*nix");
 #endif
-	SetTextAttribute(m_pElement, "platform", platform);
+	SetTextAttribute(m_element, "platform", platform);
 }
 
 bool CXmlFile::Save(bool printError)
@@ -134,7 +133,7 @@ bool CXmlFile::Save(bool printError)
 	m_error.clear();
 
 	wxCHECK(!m_fileName.empty(), false);
-	wxCHECK(m_pDocument, false);
+	wxCHECK(m_document, false);
 
 	UpdateMetadata();
 
@@ -150,18 +149,20 @@ bool CXmlFile::Save(bool printError)
 	return res;
 }
 
-TiXmlElement* CXmlFile::CreateEmpty()
+pugi::xml_node CXmlFile::CreateEmpty()
 {
 	Close();
 
-	m_pDocument = new TiXmlDocument();
+	/*m_pDocument = new TiXmlDocument();
 	m_pDocument->SetCondenseWhiteSpace(false);
-	m_pDocument->LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", "yes"));
+	m_pDocument->LinkEndChild(new TiXmlDeclaration("1.0", "UTF-8", "yes"));*/
 
-	m_pElement = new TiXmlElement(m_rootName);
-	m_pDocument->LinkEndChild(m_pElement);
+	pugi::xml_node decl = m_document.append_child(pugi::node_declaration);
+	decl.append_attribute("version") = "1.0";
+	decl.append_attribute("encoding") = "UTF-8";
 
-	return m_pElement;
+	m_element = m_document.append_child(m_rootName.utf8_str());
+	return m_element;
 }
 
 wxString ConvLocal(const char *value)
@@ -169,58 +170,46 @@ wxString ConvLocal(const char *value)
 	return wxString(wxConvUTF8.cMB2WC(value), *wxConvCurrent);
 }
 
-void RemoveTextElement(TiXmlElement* node)
+pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, const wxString& value, bool overwrite)
 {
-	for (TiXmlNode* pChild = node->FirstChild(); pChild; pChild = pChild->NextSibling()) {
-		if (pChild->ToText()) {
-			node->RemoveChild(pChild);
-			break;
-		}
-	}
-}
+	pugi::xml_node ret;
 
-TiXmlElement* AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite)
-{
 	wxASSERT(node);
 
 	wxScopedCharBuffer utf8 = value.utf8_str();
-	if (!utf8)
-		return 0;
+	if (utf8) {
+		ret = AddTextElementRaw(node, name, utf8, overwrite);
+	}
 
-	return AddTextElementRaw(node, name, utf8, overwrite);
+	return ret;
 }
 
-void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwrite)
+void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool overwrite)
 {
-	char buffer[sizeof(int) * 8]; // Always big enough
-	sprintf(buffer, "%d", value);
-	AddTextElementRaw(node, name, buffer, overwrite);
+	if (overwrite) {
+		node.remove_child(name);
+	}
+	auto child = node.append_child(name);
+	child.text().set(static_cast<long long>(value));
 }
 
-TiXmlElement* AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite)
+pugi::xml_node AddTextElementRaw(pugi::xml_node node, const char* name, const char* value, bool overwrite)
 {
 	wxASSERT(node);
 	wxASSERT(value);
 
-	TiXmlElement *element = 0;
 	if (overwrite) {
-		element = node->FirstChildElement(name);
-		if (element)
-			RemoveTextElement(element);
+		node.remove_child(name);
 	}
 
-	if (!element) {
-		element = new TiXmlElement(name);
-		node->LinkEndChild(element);
-	}
-
+	auto element = node.append_child(name);
 	if (*value)
-		element->LinkEndChild(new TiXmlText(value));
+		element.text().set(value);
 
 	return element;
 }
 
-void AddTextElement(TiXmlElement* node, const wxString& value)
+void AddTextElement(pugi::xml_node node, const wxString& value)
 {
 	wxASSERT(node);
 	wxASSERT(value);
@@ -232,25 +221,25 @@ void AddTextElement(TiXmlElement* node, const wxString& value)
 	AddTextElementRaw(node, utf8);
 }
 
-void AddTextElement(TiXmlElement* node, int value)
+void AddTextElement(pugi::xml_node node, int64_t value)
 {
-	char buffer[sizeof(int)]; // Always big enough
-	sprintf(buffer, "%d", value);
-	AddTextElementRaw(node, buffer);
+	wxASSERT(node);
+	node.text().set(static_cast<long long>(value));
 }
 
-void AddTextElementRaw(TiXmlElement* node, const char* value)
+void AddTextElementRaw(pugi::xml_node node, const char* value)
 {
 	wxASSERT(node);
 	wxASSERT(value);
 
-	RemoveTextElement(node);
-
 	if (*value)
-		node->LinkEndChild(new TiXmlText(value));
+		node.text().set(value);
+	else {
+		node.text().set("");
+	}
 }
 
-wxString GetTextElement_Trimmed(TiXmlElement* node, const char* name)
+wxString GetTextElement_Trimmed(pugi::xml_node node, const char* name)
 {
 	wxString t = GetTextElement(node, name);
 	t.Trim(true);
@@ -259,22 +248,14 @@ wxString GetTextElement_Trimmed(TiXmlElement* node, const char* name)
 	return t;
 }
 
-wxString GetTextElement(TiXmlElement* node, const char* name)
+wxString GetTextElement(pugi::xml_node node, const char* name)
 {
 	wxASSERT(node);
 
-	TiXmlElement* element = node->FirstChildElement(name);
-	if (!element)
-		return wxString();
-
-	TiXmlNode* textNode = element->FirstChild();
-	if (!textNode || !textNode->ToText())
-		return wxString();
-
-	return ConvLocal(textNode->Value());
+	return ConvLocal(node.child_value(name));
 }
 
-wxString GetTextElement_Trimmed(TiXmlElement* node)
+wxString GetTextElement_Trimmed(pugi::xml_node node)
 {
 	wxString t = GetTextElement(node);
 	t.Trim(true);
@@ -283,137 +264,33 @@ wxString GetTextElement_Trimmed(TiXmlElement* node)
 	return t;
 }
 
-wxString GetTextElement(TiXmlElement* node)
+wxString GetTextElement(pugi::xml_node node)
 {
 	wxASSERT(node);
 
-	for (TiXmlNode* pChild = node->FirstChild(); pChild; pChild = pChild->NextSibling()) {
-		if (pChild->ToText()) {
-			return ConvLocal(pChild->Value());
-		}
-	}
-
-	return wxString();
+	return ConvLocal(node.child_value());
 }
 
-int GetTextElementInt(TiXmlElement* node, const char* name, int defValue /*=0*/)
+int64_t GetTextElementInt(pugi::xml_node node, const char* name, int defValue /*=0*/)
 {
 	wxASSERT(node);
-
-	TiXmlElement* element = node->FirstChildElement(name);
-	if (!element)
-		return defValue;
-
-	TiXmlNode* textNode = element->FirstChild();
-	if (!textNode || !textNode->ToText())
-		return defValue;
-
-	const char* str = textNode->Value();
-	const char* p = str;
-
-	int value = 0;
-	bool negative = false;
-	if (*p == '-') {
-		negative = true;
-		p++;
-	}
-	while (*p) {
-		if (*p < '0' || *p > '9')
-			return defValue;
-
-		value *= 10;
-		value += *p - '0';
-
-		p++;
-	}
-
-	return negative ? -value : value;
+	return static_cast<int64_t>(node.child(name).text().as_llong(defValue));
 }
 
-wxLongLong GetTextElementLongLong(TiXmlElement* node, const char* name, int defValue /*=0*/)
+bool GetTextElementBool(pugi::xml_node node, const char* name, bool defValue /*=false*/)
 {
 	wxASSERT(node);
-
-	TiXmlElement* element = node->FirstChildElement(name);
-	if (!element)
-		return defValue;
-
-	TiXmlNode* textNode = element->FirstChild();
-	if (!textNode || !textNode->ToText())
-		return defValue;
-
-	const char* str = textNode->Value();
-	const char* p = str;
-
-	wxLongLong value = 0;
-	bool negative = false;
-	if (*p == '-') {
-		negative = true;
-		p++;
-	}
-	while (*p) {
-		if (*p < '0' || *p > '9')
-			return defValue;
-
-		value *= 10;
-		value += *p - '0';
-
-		p++;
-	}
-
-	return negative ? -value : value;
-}
-
-bool GetTextElementBool(TiXmlElement* node, const char* name, bool defValue /*=false*/)
-{
-	wxASSERT(node);
-
-	TiXmlElement* element = node->FirstChildElement(name);
-	if (!element)
-		return defValue;
-
-	TiXmlNode* textNode = element->FirstChild();
-	if (!textNode || !textNode->ToText())
-		return defValue;
-
-	const char* str = textNode->Value();
-	if (!str)
-		return defValue;
-
-	switch (str[0])
-	{
-	case '0':
-		return false;
-	case '1':
-		return true;
-	default:
-		return defValue;
-	}
+	return node.child(name).text().as_bool(defValue);
 }
 
 bool CXmlFile::LoadXmlDocument(wxString const& file)
 {
-	wxFFile f(file, _T("rb"));
-	if (!f.IsOpened()) {
-		const wxChar* s = wxSysErrorMsg();
-		if (s && *s)
-			m_error = s;
-		else
-			m_error = _("Unknown error opening the file. Make sure the file can be accessed and is a well-formed XML document.");
-		return false;
-	}
+	Close();
 
-	m_pDocument = new TiXmlDocument;
-	m_pDocument->SetCondenseWhiteSpace(false);
-	if (!m_pDocument->LoadFile(f.fp()) && m_pDocument->ErrorId() != TiXmlBase::TIXML_ERROR_DOCUMENT_EMPTY) {
-		const char* s = m_pDocument->ErrorDesc();
-		if (s && *s) {
-			m_error.Printf(_("The XML document is not well-formed: %s"), wxString(s, wxConvLibc));
-		}
-		else
-			m_error = _("Unknown error opening the file. Make sure the file can be accessed and is a well-formed XML document.");
-		delete m_pDocument;
-		m_pDocument = 0;
+	auto result = m_document.load_file(static_cast<wchar_t const*>(file.c_str()));
+	if (!result) {
+		// FIXME: Empty file detection
+		m_error = result.description();
 		return false;
 	}
 	return true;
@@ -434,15 +311,15 @@ bool CXmlFile::GetXmlFile(wxString const& file)
 		return false;
 	}
 
-	m_pElement = m_pDocument->FirstChildElement(m_rootName);
-	if (!m_pElement) {
-		if (m_pDocument->FirstChildElement()) {
+	m_element = m_document.child(m_rootName.utf8_str());
+	if (!m_element) {
+		if (m_document.first_child()) { // Beware: parse_declaration and parse_doctype can break this
 			// Not created by FileZilla3
 			Close();
 			m_error = _("Unknown root element, the file does not appear to be generated by FileZilla.");
 			return false;
 		}
-		m_pElement = m_pDocument->LinkEndChild(new TiXmlElement(m_rootName))->ToElement();
+		m_element = m_document.append_child(m_rootName.utf8_str());
 	}
 
 	return true;
@@ -490,11 +367,7 @@ bool CXmlFile::SaveXmlFile()
 		}
 	}
 
-	bool success = false;
-	{
-		wxFFile f(redirectedName, _T("w"));
-		success = f.IsOpened() && m_pDocument->SaveFile(f.fp());
-	}
+	bool success = m_document.save_file(static_cast<wchar_t const*>(redirectedName.c_str()));
 
 	if (!success) {
 		wxRemoveFile(redirectedName);
@@ -512,7 +385,7 @@ bool CXmlFile::SaveXmlFile()
 	return true;
 }
 
-bool GetServer(TiXmlElement *node, CServer& server)
+bool GetServer(pugi::xml_node node, CServer& server)
 {
 	wxASSERT(node);
 
@@ -550,7 +423,7 @@ bool GetServer(TiXmlElement *node, CServer& server)
 
 		wxString pass;
 		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
-			TiXmlElement* passElement = node->FirstChildElement("Pass");
+			auto  passElement = node.child("Pass");
 			if (passElement) {
 				pass = GetTextElement(passElement);
 
@@ -616,18 +489,13 @@ bool GetServer(TiXmlElement *node, CServer& server)
 
 	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
 		std::vector<wxString> postLoginCommands;
-		TiXmlElement* pElement = node->FirstChildElement("PostLoginCommands");
-		if (pElement) {
-			TiXmlElement* pCommandElement = pElement->FirstChildElement("Command");
-			while (pCommandElement) {
-				TiXmlNode* textNode = pCommandElement->FirstChild();
-				if (textNode && textNode->ToText()) {
-					wxString command = ConvLocal(textNode->Value());
-					if (!command.empty())
-						postLoginCommands.push_back(command);
+		auto element = node.child("PostLoginCommands");
+		if (element) {
+			for (auto commandElement = element.child("Command"); commandElement; commandElement = commandElement.next_sibling("Command")) {
+				wxString command = ConvLocal(commandElement.child_value());
+				if (!command.empty()) {
+					postLoginCommands.push_back(command);
 				}
-
-				pCommandElement = pCommandElement->NextSiblingElement("Command");
 			}
 		}
 		if (!server.SetPostLoginCommands(postLoginCommands))
@@ -643,14 +511,16 @@ bool GetServer(TiXmlElement *node, CServer& server)
 	return true;
 }
 
-void SetServer(TiXmlElement *node, const CServer& server)
+void SetServer(pugi::xml_node node, const CServer& server)
 {
 	if (!node)
 		return;
 
 	bool kiosk_mode = COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 0;
 
-	node->Clear();
+	for (auto child = node.first_child(); child; child = node.first_child()) {
+		node.remove_child(child);
+	}
 
 	AddTextElement(node, "Host", server.GetHost());
 	AddTextElement(node, "Port", server.GetPort());
@@ -671,7 +541,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 				std::string utf8(buf.data(), buf.length());
 
 				wxString base64 = wxBase64Encode(utf8.c_str(), utf8.size());
-				TiXmlElement* passElement = AddTextElement(node, "Pass", base64);
+				pugi::xml_node passElement = AddTextElement(node, "Pass", base64);
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
 				}
@@ -715,9 +585,10 @@ void SetServer(TiXmlElement *node, const CServer& server)
 	if (CServer::SupportsPostLoginCommands(server.GetProtocol())) {
 		std::vector<wxString> const& postLoginCommands = server.GetPostLoginCommands();
 		if (!postLoginCommands.empty()) {
-			TiXmlElement* pElement = node->LinkEndChild(new TiXmlElement("PostLoginCommands"))->ToElement();
-			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter)
-				AddTextElement(pElement, "Command", *iter);
+			auto element = node.append_child("PostLoginCommands");
+			for (std::vector<wxString>::const_iterator iter = postLoginCommands.begin(); iter != postLoginCommands.end(); ++iter) {
+				AddTextElement(element, "Command", *iter);
+			}				
 		}
 	}
 
@@ -727,7 +598,7 @@ void SetServer(TiXmlElement *node, const CServer& server)
 		AddTextElement(node, "Name", name);
 }
 
-void SetTextAttribute(TiXmlElement* node, const char* name, const wxString& value)
+void SetTextAttribute(pugi::xml_node node, const char* name, const wxString& value)
 {
 	wxASSERT(node);
 
@@ -735,126 +606,102 @@ void SetTextAttribute(TiXmlElement* node, const char* name, const wxString& valu
 	if (!utf8)
 		return;
 
-	node->SetAttribute(name, utf8);
+	auto attribute = node.attribute(name);
+	if (!attribute) {
+		attribute = node.append_attribute(name);
+	}
+	attribute.set_value(utf8);
 }
 
-wxString GetTextAttribute(TiXmlElement* node, const char* name)
+wxString GetTextAttribute(pugi::xml_node node, const char* name)
 {
 	wxASSERT(node);
 
-	const char* value = node->Attribute(name);
-	if (!value)
-		return wxString();
-
+	const char* value = node.attribute(name).value();
 	return ConvLocal(value);
 }
 
-TiXmlElement* FindElementWithAttribute(TiXmlElement* node, const char* element, const char* attribute, const char* value)
+pugi::xml_node FindElementWithAttribute(pugi::xml_node node, const char* element, const char* attribute, const char* value)
 {
-	TiXmlElement* child;
-	if (element)
-		child = node->FirstChildElement(element);
-	else
-		child = node->FirstChildElement();
-
-	while (child)
-	{
-		const char* nodeVal = child->Attribute(attribute);
+	pugi::xml_node child = element ? node.child(element) : node.first_child();
+	while (child) {
+		const char* nodeVal = child.attribute(attribute).value();
 		if (nodeVal && !strcmp(value, nodeVal))
 			return child;
 
-		if (element)
-			child = child->NextSiblingElement(element);
-		else
-			child = child->NextSiblingElement();
+		child = element ? child.next_sibling(element) : child.next_sibling();
 	}
 
-	return 0;
+	return child;
 }
 
-TiXmlElement* FindElementWithAttribute(TiXmlElement* node, const char* element, const char* attribute, int value)
+int GetAttributeInt(pugi::xml_node node, const char* name)
 {
-	TiXmlElement* child;
-	if (element)
-		child = node->FirstChildElement(element);
-	else
-		child = node->FirstChildElement();
+	return node.attribute(name).as_int();
+}
 
-	while (child)
+void SetAttributeInt(pugi::xml_node node, const char* name, int value)
+{
+	auto attribute = node.attribute(name);
+	if (!attribute) {
+		attribute = node.append_attribute(name);
+	}
+	attribute.set_value(value);
+}
+
+namespace {
+struct xml_memory_writer : pugi::xml_writer
+{
+	size_t written{};
+	char* buffer{};
+	size_t remaining{};
+
+	virtual void write(const void* data, size_t size)
 	{
-		int nodeValue;
-		const char* nodeVal = child->Attribute(attribute, &nodeValue);
-		if (nodeVal && nodeValue == value)
-			return child;
-
-		if (element)
-			child = child->NextSiblingElement(element);
-		else
-			child = child->NextSiblingElement();
+		if (buffer && size >= remaining) {
+			memcpy(buffer, data, size);
+			buffer += size;
+			remaining -= size;
+		}
+		written += size;
 	}
-
-	return 0;
+};
 }
 
-int GetAttributeInt(TiXmlElement* node, const char* name)
+size_t CXmlFile::GetRawDataLength()
 {
-	int value;
-	if (!node->Attribute(name, &value))
+	if (!m_document)
 		return 0;
 
-	return value;
+	xml_memory_writer writer;
+	m_document.save(writer);
+	return writer.written;
 }
 
-void SetAttributeInt(TiXmlElement* node, const char* name, int value)
+void CXmlFile::GetRawDataHere(char* p, size_t size) // p has to big enough to hold at least GetRawDataLength() bytes
 {
-	node->SetAttribute(name, value);
-}
-
-int CXmlFile::GetRawDataLength()
-{
-	if (!m_pDocument)
-		return 0;
-
-	delete m_pPrinter;
-	m_pPrinter = new TiXmlPrinter;
-	m_pPrinter->SetStreamPrinting();
-
-	m_pDocument->Accept(m_pPrinter);
-	return m_pPrinter->Size();
-}
-
-void CXmlFile::GetRawDataHere(char* p) // p has to big enough to hold at least GetRawDataLength() bytes
-{
-	if (!m_pPrinter)
-	{
-		wxFAIL;
-		return;
-	}
-
-	memcpy(p, m_pPrinter->CStr(), m_pPrinter->Size());
+	xml_memory_writer writer;
+	writer.buffer = p;
+	writer.remaining = size;
+	m_document.save(writer);
 }
 
 bool CXmlFile::ParseData(char* data)
 {
 	Close();
-	m_pDocument = new TiXmlDocument;
-	m_pDocument->SetCondenseWhiteSpace(false);
-	m_pDocument->Parse(data);
-
-	m_pElement = m_pDocument->FirstChildElement(m_rootName);
-	if (!m_pElement) {
+	m_document.load_string(data);
+	m_element = m_document.child(m_rootName);
+	if (!m_element) {
 		Close();
-		return false;
 	}
-
-	return true;
+	return m_element != false;
 }
 
 bool CXmlFile::IsFromFutureVersion() const
 {
-	if (!m_pElement) {
+	if (!m_element) {
 		return false;
 	}
-	wxString const version = GetTextAttribute(m_pElement, "version");
+	wxString const version = GetTextAttribute(m_element, "version");
 	return CBuildInfo::ConvertToVersionNumber(CBuildInfo::GetVersion().c_str()) < CBuildInfo::ConvertToVersionNumber(version.c_str());
 }

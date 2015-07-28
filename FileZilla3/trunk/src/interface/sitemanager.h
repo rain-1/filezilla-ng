@@ -3,6 +3,8 @@
 
 #include <wx/treectrl.h>
 
+#include "xmlfunctions.h"
+
 class CSiteManagerItemData : public wxTreeItemData
 {
 public:
@@ -64,7 +66,6 @@ public:
 	virtual bool LevelUp() { return true; } // *Ding*
 };
 
-class TiXmlElement;
 class CSiteManagerXmlHandler;
 class CSiteManagerDialog;
 class CSiteManager
@@ -91,10 +92,10 @@ public:
 
 protected:
 	static bool Load(CSiteManagerXmlHandler& pHandler);
-	static bool Load(TiXmlElement *pElement, CSiteManagerXmlHandler& pHandler);
-	static std::unique_ptr<CSiteManagerItemData_Site> ReadServerElement(TiXmlElement *pElement);
+	static bool Load(pugi::xml_node element, CSiteManagerXmlHandler& pHandler);
+	static std::unique_ptr<CSiteManagerItemData_Site> ReadServerElement(pugi::xml_node element);
 
-	static TiXmlElement* GetElementByPath(TiXmlElement* pNode, std::list<wxString> const& segments);
+	static pugi::xml_node GetElementByPath(pugi::xml_node node, std::list<wxString> const& segments);
 	static wxString BuildPath(wxChar root, std::list<wxString> const& segments);
 
 	static std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> m_idMap;

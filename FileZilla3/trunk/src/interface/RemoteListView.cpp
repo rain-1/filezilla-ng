@@ -473,7 +473,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 			if (entry.is_dir())
 				m_pFilelistStatusBar->AddDirectory();
 			else
-				m_pFilelistStatusBar->AddFile(entry.size.GetValue());
+				m_pFilelistStatusBar->AddFile(entry.size);
 		}
 
 		// Find correct position in index mapping
@@ -593,12 +593,12 @@ void CRemoteListView::UpdateDirectoryListing_Removed(std::shared_ptr<CDirectoryL
 				if (oldEntry.is_dir())
 					m_pFilelistStatusBar->UnselectDirectory();
 				else
-					m_pFilelistStatusBar->UnselectFile(oldEntry.size.GetValue());
+					m_pFilelistStatusBar->UnselectFile(oldEntry.size);
 			}
 			if (oldEntry.is_dir())
 				m_pFilelistStatusBar->RemoveDirectory();
 			else
-				m_pFilelistStatusBar->RemoveFile(oldEntry.size.GetValue());
+				m_pFilelistStatusBar->RemoveFile(oldEntry.size);
 		}
 
 		// Update index
@@ -790,7 +790,7 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 				if (entry.size == -1)
 					++unknown_sizes;
 				else
-					totalSize += entry.size.GetValue();
+					totalSize += entry.size;
 				++totalFileCount;
 			}
 
@@ -984,7 +984,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 				localFile = StripVMSRevision(localFile);
 			m_pQueue->QueueFile(queue_only, true, name,
 				(name == localFile) ? wxString() : localFile,
-				local_path, m_pDirectoryListing->path, *pServer, entry.size.GetValue());
+				local_path, m_pDirectoryListing->path, *pServer, entry.size);
 			m_pQueue->QueueFile_Finish(true);
 		}
 	}
@@ -1253,7 +1253,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 				localFile = StripVMSRevision(localFile);
 			m_pQueue->QueueFile(queueOnly, true,
 				name, (name == localFile) ? wxString() : localFile,
-				local_parent, m_pDirectoryListing->path, *pServer, entry.size.GetValue());
+				local_parent, m_pDirectoryListing->path, *pServer, entry.size);
 			added = true;
 		}
 	}
@@ -1789,7 +1789,7 @@ void CRemoteListView::ApplyCurrentFilter()
 			if (entry.size == -1)
 				++unknown_sizes;
 			else
-				totalSize += entry.size.GetValue();
+				totalSize += entry.size;
 			++totalFileCount;
 		}
 
@@ -1941,7 +1941,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 				if (firstSelected == -1)
 					firstSelected = i;
 				if (m_pFilelistStatusBar)
-					m_pFilelistStatusBar->SelectFile(entry.size.GetValue());
+					m_pFilelistStatusBar->SelectFile(entry.size);
 				SetSelection(i, true);
 				break;
 			}
@@ -2226,7 +2226,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 			return;
 		}
 
-		selected_items.push_back({entry.name, entry.size.GetValue()});
+		selected_items.push_back({entry.name, entry.size});
 	}
 
 	CEditHandler* pEditHandler = CEditHandler::Get();
@@ -2397,7 +2397,7 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		if (entry.is_dir() || entry.size < 0)
 			return wxString();
 		else
-			return CSizeFormat::Format(entry.size.GetValue());
+			return CSizeFormat::Format(entry.size);
 	}
 	else if (column == 2)
 	{
@@ -2476,7 +2476,7 @@ bool CRemoteListView::ItemIsDir(int index) const
 
 int64_t CRemoteListView::ItemGetSize(int index) const
 {
-	return (*m_pDirectoryListing)[index].size.GetValue();
+	return (*m_pDirectoryListing)[index].size;
 }
 
 void CRemoteListView::LinkIsNotDir(const CServerPath& path, const wxString& link)

@@ -31,7 +31,7 @@ enum class TransferDirection
 	upload
 };
 
-class TiXmlElement;
+namespace pugi { class xml_node; }
 class CQueueItem
 {
 public:
@@ -51,7 +51,7 @@ public:
 	CQueueItem* GetTopLevelItem();
 	const CQueueItem* GetTopLevelItem() const;
 	int GetItemIndex() const; // Return the visible item index relative to the topmost parent item.
-	virtual void SaveItem(TiXmlElement*) const {}
+	virtual void SaveItem(pugi::xml_node&) const {}
 
 	virtual QueueItemType GetType() const = 0;
 
@@ -109,7 +109,7 @@ public:
 	void QueueImmediateFiles();
 	void QueueImmediateFile(CFileItem* pItem);
 
-	virtual void SaveItem(TiXmlElement* pElement) const;
+	virtual void SaveItem(pugi::xml_node& element) const;
 
 	void SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction);
 
@@ -183,7 +183,7 @@ public:
 	bool IsActive() const { return (flags & flag_active) != 0; }
 	virtual void SetActive(bool active);
 
-	virtual void SaveItem(TiXmlElement* pElement) const;
+	virtual void SaveItem(pugi::xml_node& element) const;
 
 	virtual bool TryRemoveAll(); // Removes a inactive childrens, queues active children for removal.
 								 // Returns true if item can be removed itself
@@ -270,7 +270,7 @@ public:
 
 	virtual QueueItemType GetType() const { return QueueItemType::Folder; }
 
-	virtual void SaveItem(TiXmlElement* pElement) const;
+	virtual void SaveItem(pugi::xml_node& element) const;
 
 	virtual void SetActive(bool active);
 };

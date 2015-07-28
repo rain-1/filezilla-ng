@@ -6,10 +6,10 @@
 #ifndef __XMLFUNCTIONS_H__
 #define __XMLFUNCTIONS_H__
 
-#ifdef HAVE_LIBTINYXML
-#include <tinyxml.h>
+#ifdef HAVE_LIBPUGIXML
+#include <pugixml.h>
 #else
-#include "../tinyxml/tinyxml.h"
+#include "../pugixml/pugixml.hpp"
 #endif
 
 class CXmlFile
@@ -20,7 +20,7 @@ public:
 
 	virtual ~CXmlFile();
 
-	TiXmlElement* CreateEmpty();
+	pugi::xml_node CreateEmpty();
 
 	wxString GetFileName() const { return m_fileName; }
 	void SetFileName(const wxString& name);
@@ -28,18 +28,18 @@ public:
 	bool HasFileName() const { return !m_fileName.empty(); }
 
 	// Sets error description on failure
-	TiXmlElement* Load();
+	pugi::xml_node Load();
 
 	wxString GetError() const { return m_error; }
-	int GetRawDataLength();
-	void GetRawDataHere(char* p); // p has to big enough to hold at least GetRawDataLength() bytes
+	size_t GetRawDataLength();
+	void GetRawDataHere(char* p, size_t size); // p has to big enough to hold at least GetRawDataLength() bytes
 
 	bool ParseData(char* data); // data has to be 0-terminated
 
 	void Close();
 
-	TiXmlElement* GetElement() { return m_pElement; }
-	TiXmlElement const* GetElement() const { return m_pElement; }
+	pugi::xml_node GetElement() { return m_element; }
+	pugi::xml_node const GetElement() const { return m_element; }
 
 	bool Modified();
 
@@ -63,9 +63,8 @@ protected:
 
 	CDateTime m_modificationTime;
 	wxString m_fileName;
-	TiXmlDocument* m_pDocument{};
-	TiXmlElement* m_pElement{};
-	TiXmlPrinter *m_pPrinter{};
+	pugi::xml_document m_document;
+	pugi::xml_node m_element;
 
 	wxString m_error;
 
@@ -75,41 +74,39 @@ protected:
 // Convert the given utf-8 string into wxString
 wxString ConvLocal(const char *value);
 
-void SetTextAttribute(TiXmlElement* node, const char* name, const wxString& value);
-wxString GetTextAttribute(TiXmlElement* node, const char* name);
+void SetTextAttribute(pugi::xml_node node, const char* name, const wxString& value);
+wxString GetTextAttribute(pugi::xml_node node, const char* name);
 
-int GetAttributeInt(TiXmlElement* node, const char* name);
-void SetAttributeInt(TiXmlElement* node, const char* name, int value);
+int GetAttributeInt(pugi::xml_node node, const char* name);
+void SetAttributeInt(pugi::xml_node node, const char* name, int value);
 
-TiXmlElement* FindElementWithAttribute(TiXmlElement* node, const char* element, const char* attribute, const char* value);
-TiXmlElement* FindElementWithAttribute(TiXmlElement* node, const char* element, const char* attribute, int value);
+pugi::xml_node FindElementWithAttribute(pugi::xml_node node, const char* element, const char* attribute, const char* value);
 
 // Add a new child element with the specified name and value to the xml document
-TiXmlElement* AddTextElement(TiXmlElement* node, const char* name, const wxString& value, bool overwrite = false);
-void AddTextElement(TiXmlElement* node, const char* name, int value, bool overwrite = false);
-TiXmlElement* AddTextElementRaw(TiXmlElement* node, const char* name, const char* value, bool overwrite = false);
+pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, const wxString& value, bool overwrite = false);
+void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool overwrite = false);
+pugi::xml_node AddTextElementRaw(pugi::xml_node node, const char* name, const char* value, bool overwrite = false);
 
 // Set the current element's text value
-void AddTextElement(TiXmlElement* node, const wxString& value);
-void AddTextElement(TiXmlElement* node, int value);
-void AddTextElementRaw(TiXmlElement* node, const char* value);
+void AddTextElement(pugi::xml_node node, const wxString& value);
+void AddTextElement(pugi::xml_node node, int64_t value);
+void AddTextElementRaw(pugi::xml_node node, const char* value);
 
 // Get string from named child element
-wxString GetTextElement(TiXmlElement* node, const char* name);
-wxString GetTextElement_Trimmed(TiXmlElement* node, const char* name);
+wxString GetTextElement(pugi::xml_node node, const char* name);
+wxString GetTextElement_Trimmed(pugi::xml_node node, const char* name);
 
 // Get string from current element
-wxString GetTextElement(TiXmlElement* node);
-wxString GetTextElement_Trimmed(TiXmlElement* node);
+wxString GetTextElement(pugi::xml_node node);
+wxString GetTextElement_Trimmed(pugi::xml_node node);
 
 // Get (64-bit) integer from named element
-int GetTextElementInt(TiXmlElement* node, const char* name, int defValue = 0);
-wxLongLong GetTextElementLongLong(TiXmlElement* node, const char* name, int defValue = 0);
+int64_t GetTextElementInt(pugi::xml_node node, const char* name, int defValue = 0);
 
-bool GetTextElementBool(TiXmlElement* node, const char* name, bool defValue = false);
+bool GetTextElementBool(pugi::xml_node node, const char* name, bool defValue = false);
 
 // Functions to save and retrieve CServer objects to the XML file
-void SetServer(TiXmlElement *node, const CServer& server);
-bool GetServer(TiXmlElement *node, CServer& server);
+void SetServer(pugi::xml_node node, const CServer& server);
+bool GetServer(pugi::xml_node node, CServer& server);
 
 #endif //__XMLFUNCTIONS_H__

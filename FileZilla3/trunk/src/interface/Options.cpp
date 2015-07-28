@@ -1,6 +1,5 @@
 #include <filezilla.h>
 #include "Options.h"
-#include "xmlfunctions.h"
 #include "filezillaapp.h"
 #include <wx/tokenzr.h>
 #include "ipcmutex.h"
@@ -364,24 +363,22 @@ bool COptions::OptionFromFzDefaultsXml(unsigned int nID)
 	return m_optionsCache[nID].from_default;
 }
 
-TiXmlElement* COptions::CreateSettingsXmlElement()
+pugi::xml_node COptions::CreateSettingsXmlElement()
 {
 	if (!m_pXmlFile)
-		return 0;
+		return pugi::xml_node();
 
-	TiXmlElement* element = m_pXmlFile->GetElement();
+	auto element = m_pXmlFile->GetElement();
 	if (!element) {
-		return 0;
+		return element;
 	}
 
-	TiXmlElement* settings = element->FirstChildElement("Settings");
+	auto settings = element.child("Settings");
 	if (settings) {
 		return settings;
 	}
 
-	settings = new TiXmlElement("Settings");
-	element->LinkEndChild(settings);
-
+	settings = element.append_child("Settings");
 	for (int i = 0; i < OPTIONS_NUM; ++i) {
 		if (options[i].type == string) {
 			SetXmlValue(i, GetOption(i));
@@ -410,25 +407,21 @@ void COptions::SetXmlValue(unsigned int nID, wxString const& value)
 	if (!utf8)
 		return;
 
-	TiXmlElement *settings = CreateSettingsXmlElement();
+	auto settings = CreateSettingsXmlElement();
 	if (settings) {
-		TiXmlElement *setting = 0;
-		for (setting = settings->FirstChildElement("Setting"); setting; setting = setting->NextSiblingElement("Setting")) {
-			const char *attribute = setting->Attribute("name");
+		pugi::xml_node setting;
+		for (setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
+			const char *attribute = setting.attribute("name").value();
 			if (!attribute)
 				continue;
 			if (!strcmp(attribute, options[nID].name))
 				break;
 		}
-		if (setting) {
-			setting->Clear();
+		if (!setting) {
+			setting = settings.append_child("Setting");
+			SetTextAttribute(setting, "name", options[nID].name);
 		}
-		else {
-			setting = new TiXmlElement("Setting");
-			setting->SetAttribute("name", options[nID].name);
-			settings->LinkEndChild(setting);
-		}
-		setting->LinkEndChild(new TiXmlText(utf8));
+		setting.text() = utf8;
 	}
 }
 
@@ -535,7 +528,7 @@ void COptions::SetServer(wxString path, const CServer& server)
 	if (path.empty())
 		return;
 
-	TiXmlElement *element = m_pXmlFile->GetElement();
+	auto element = m_pXmlFile->GetElement();
 
 	while (!path.empty()) {
 		wxString sub;
@@ -551,14 +544,11 @@ void COptions::SetServer(wxString path, const CServer& server)
 		wxScopedCharBuffer utf8 = sub.utf8_str();
 		if (!utf8)
 			return;
-		TiXmlElement *newElement = element->FirstChildElement(utf8);
+		auto newElement = element.child(utf8);
 		if (newElement)
 			element = newElement;
 		else {
-			TiXmlNode *node = element->LinkEndChild(new TiXmlElement(utf8));
-			if (!node || !node->ToElement())
-				return;
-			element = node->ToElement();
+			element = element.append_child(utf8);
 		}
 	}
 
@@ -578,7 +568,7 @@ bool COptions::GetServer(wxString path, CServer& server)
 
 	if (!m_pXmlFile)
 		return false;
-	TiXmlElement *element = m_pXmlFile->GetElement();
+	auto element = m_pXmlFile->GetElement();
 
 	while (!path.empty()) {
 		wxString sub;
@@ -594,7 +584,7 @@ bool COptions::GetServer(wxString path, CServer& server)
 		wxScopedCharBuffer utf8 = sub.utf8_str();
 		if (!utf8)
 			return false;
-		element = element->FirstChildElement(utf8);
+		element = element.child(utf8);
 		if (!element)
 			return false;
 	}
@@ -650,14 +640,14 @@ COptions* COptions::Get()
 	return m_theOptions;
 }
 
-void COptions::Import(TiXmlElement* pElement)
+void COptions::Import(pugi::xml_node element)
 {
-	LoadOptions(GetNameOptionMap(), pElement);
+	LoadOptions(GetNameOptionMap(), element);
 	if (!m_save_timer.IsRunning())
 		m_save_timer.Start(15000, true);
 }
 
-void COptions::LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, TiXmlElement* settings)
+void COptions::LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, pugi::xml_node settings)
 {
 	if (!settings) {
 		settings = CreateSettingsXmlElement();
@@ -666,18 +656,14 @@ void COptions::LoadOptions(std::map<std::string, unsigned int> const& nameOption
 		}
 	}
 
-	TiXmlNode *node = 0;
-	while ((node = settings->IterateChildren("Setting", node))) {
-		TiXmlElement *setting = node->ToElement();
-		if (!setting)
-			continue;
+	for (auto setting = settings.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
 		LoadOptionFromElement(setting, nameOptionMap, false);
 	}
 }
 
-void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault)
+void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string, unsigned int> const& nameOptionMap, bool allowDefault)
 {
-	const char* name = pOption->Attribute("name");
+	const char* name = option.attribute("name").value();
 	if (!name)
 		return;
 
@@ -685,16 +671,7 @@ void COptions::LoadOptionFromElement(TiXmlElement* pOption, std::map<std::string
 	if (iter != nameOptionMap.end()) {
 		if (!allowDefault && options[iter->second].flags == default_only)
 			return;
-		wxString value;
-
-		TiXmlNode *text = pOption->FirstChild();
-		if (text) {
-			if (!text->ToText())
-				return;
-
-			value = ConvLocal(text->Value());
-		}
-
+		wxString value = GetTextElement(option);
 		if (options[iter->second].flags == default_priority) {
 			if (allowDefault) {
 				scoped_lock l(m_sync_);
@@ -732,16 +709,16 @@ void COptions::LoadGlobalDefaultOptions(std::map<std::string, unsigned int> cons
 	if (!file.Load())
 		return;
 
-	TiXmlElement* pElement = file.GetElement();
-	if (!pElement)
+	auto element = file.GetElement();
+	if (!element)
 		return;
 
-	pElement = pElement->FirstChildElement("Settings");
-	if (!pElement)
+	element = element.child("Settings");
+	if (!element)
 		return;
 
-	for (TiXmlElement* pSetting = pElement->FirstChildElement("Setting"); pSetting; pSetting = pSetting->NextSiblingElement("Setting")) {
-		LoadOptionFromElement(pSetting, nameOptionMap, true);
+	for (auto setting = element.child("Setting"); setting; setting = setting.next_sibling("Setting")) {
+		LoadOptionFromElement(setting, nameOptionMap, true);
 	}
 }
 
