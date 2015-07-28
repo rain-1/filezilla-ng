@@ -2372,14 +2372,17 @@ void CMainFrame::ProcessCommandLine()
 			server.SetLogonType(INTERACTIVE);
 
 		CServerPath path;
-		if (!server.ParseUrl(param, 0, _T(""), _T(""), error, path))
-		{
+		if (!server.ParseUrl(param, 0, _T(""), _T(""), error, path)) {
 			wxString str = _("Parameter not a valid URL");
 			str += _T("\n") + error;
 			wxMessageBoxEx(error, _("Syntax error in command line"));
 		}
 
-		if (server.GetLogonType() == ASK ||
+		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) && server.GetLogonType() == NORMAL) {
+			server.SetLogonType(ASK);
+			CLoginManager::Get().RememberPassword(server);
+		}
+		else if (server.GetLogonType() == ASK ||
 			(server.GetLogonType() == INTERACTIVE && server.GetUser().empty()))
 		{
 			if (!CLoginManager::Get().GetPassword(server, false))
