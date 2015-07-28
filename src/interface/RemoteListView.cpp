@@ -2304,7 +2304,7 @@ void CRemoteListView::StartComparison()
 	}
 }
 
-bool CRemoteListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, CDateTime& date)
+bool CRemoteListView::GetNextFile(wxString& name, bool& dir, int64_t& size, CDateTime& date)
 {
 	if (++m_comparisonIndex >= (int)m_originalIndexMapping.size())
 		return false;
@@ -2313,8 +2313,7 @@ bool CRemoteListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, C
 	if (index >= m_fileData.size())
 		return false;
 
-	if (index == m_pDirectoryListing->GetCount())
-	{
+	if (index == m_pDirectoryListing->GetCount()) {
 		name = _T("..");
 		dir = true;
 		size = -1;

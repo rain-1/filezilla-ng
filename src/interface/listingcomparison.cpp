@@ -92,7 +92,7 @@ bool CComparisonManager::CompareListings()
 	wxString localFile, remoteFile;
 	bool localDir = false;
 	bool remoteDir = false;
-	wxLongLong localSize, remoteSize;
+	int64_t localSize, remoteSize;
 	CDateTime localDate, remoteDate;
 
 	const int dirSortMode = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);

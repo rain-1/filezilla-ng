@@ -1496,7 +1496,7 @@ void CLocalListView::StartComparison()
 	}
 }
 
-bool CLocalListView::GetNextFile(wxString& name, bool& dir, wxLongLong& size, CDateTime& date)
+bool CLocalListView::GetNextFile(wxString& name, bool& dir, int64_t& size, CDateTime& date)
 {
 	if (++m_comparisonIndex >= (int)m_originalIndexMapping.size())
 		return false;

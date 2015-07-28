@@ -470,13 +470,11 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	bool wasLink;
 	int attributes;
 	bool is_dir;
-	const wxLongLong size(-1);
+	static int64_t const size(-1);
 	CDateTime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
-	{
+	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
-		if (file.empty())
-		{
+		if (file.empty()) {
 			wxGetApp().DisplayEncodingWarning();
 			continue;
 		}
@@ -505,8 +503,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 		CheckSubdirStatus(item, fullName);
 	}
 
-	if (!matchedKnown && !knownSubdir.empty())
-	{
+	if (!matchedKnown && !knownSubdir.empty()) {
 		const wxString fullName = dirname + knownSubdir;
 		wxTreeItemId item = AppendItem(parent, knownSubdir, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
@@ -536,7 +533,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	bool wasLink;
 	int attributes;
 	bool is_dir;
-	const wxLongLong size(-1);
+	static int64_t const size(-1);
 	CDateTime date;
 	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
 	{
@@ -734,7 +731,7 @@ void CLocalTreeView::RefreshListing()
 		wxArrayString dirs;
 
 		wxString file;
-		const wxLongLong size(-1);
+		static int64_t const size(-1);
 		bool was_link;
 		bool is_dir;
 		int attributes;
@@ -1337,7 +1334,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 	wxTreeItemIdValue value;
 	wxTreeItemId child = GetFirstChild(item, value);
 
-	static const wxLongLong size(-1);
+	static int64_t const size(-1);
 
 #ifdef __WXMAC__
 	// By default, OS X has a list of servers mounted into /net,

@@ -1654,7 +1654,7 @@ void CQueueView::CalculateQueueSize()
 
 	m_filesWithUnknownSize = 0;
 	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount, m_folderScanCount).GetValue();
+		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount, m_folderScanCount);
 
 	DisplayQueueSize();
 	DisplayNumberQueuedFiles();
@@ -2744,11 +2744,11 @@ void CQueueView::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 	if (pItem->GetType() == QueueItemType::File) {
 		CFileItem* pFileItem = (CFileItem*)pItem;
 
-		const wxLongLong& size = pFileItem->GetSize();
+		int64_t const size = pFileItem->GetSize();
 		if (size < 0)
 			m_filesWithUnknownSize++;
 		else if (size > 0)
-			m_totalQueueSize += size.GetValue();
+			m_totalQueueSize += size;
 	}
 }
 

@@ -153,8 +153,8 @@ public:
 	sqlite3_stmt* PrepareInsertStatement(const wxString& name, const _column*, unsigned int count);
 
 	bool SaveServer(const CServerItem& item);
-	bool SaveFile(wxLongLong server, const CFileItem& item);
-	bool SaveDirectory(wxLongLong server, const CFolderItem& item);
+	bool SaveFile(const CFileItem& item);
+	bool SaveDirectory(const CFolderItem& item);
 
 	int64_t SaveLocalPath(const CLocalPath& path);
 	int64_t SaveRemotePath(const CServerPath& path);
@@ -690,16 +690,16 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 		for (std::vector<CQueueItem*>::const_iterator it = children.begin() + item.GetRemovedAtFront(); it != children.end(); ++it) {
 			CQueueItem & childItem = **it;
 			if (childItem.GetType() == QueueItemType::File)
-				ret &= SaveFile(serverId, static_cast<CFileItem&>(childItem));
+				ret &= SaveFile(static_cast<CFileItem&>(childItem));
 			else if (childItem.GetType() == QueueItemType::Folder)
-				ret &= SaveDirectory(serverId, static_cast<CFolderItem&>(childItem));
+				ret &= SaveDirectory(static_cast<CFolderItem&>(childItem));
 		}
 	}
 	return ret;
 }
 
 
-bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
+bool CQueueStorage::Impl::SaveFile(const CFileItem& file)
 {
 	if (file.m_edit != CEditHandler::none)
 		return true;
@@ -747,7 +747,7 @@ bool CQueueStorage::Impl::SaveFile(wxLongLong server, const CFileItem& file)
 }
 
 
-bool CQueueStorage::Impl::SaveDirectory(wxLongLong server, const CFolderItem& directory)
+bool CQueueStorage::Impl::SaveDirectory(const CFolderItem& directory)
 {
 	if (directory.Download())
 		BindNull(insertFileQuery_, file_table_column_names::source_file);
