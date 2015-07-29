@@ -1044,7 +1044,7 @@ int CRealControlSocket::ContinueConnect()
 
 	const int proxy_type = engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE);
 	if (proxy_type > CProxySocket::unknown && proxy_type < CProxySocket::proxytype_count && !m_pCurrentServer->GetBypassProxy()) {
-		LogMessage(MessageType::Status, _("Connecting to %s through proxy"), m_pCurrentServer->FormatHost());
+		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), m_pCurrentServer->FormatHost(), CProxySocket::Name(static_cast<CProxySocket::ProxyType>(proxy_type)));
 
 		host = engine_.GetOptions().GetOption(OPTION_PROXY_HOST);
 		port = engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT);
