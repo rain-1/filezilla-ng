@@ -25,6 +25,7 @@ public:
 
 		proxytype_count
 	};
+	static wxString Name(ProxyType t);
 
 	int Handshake(ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass);
 

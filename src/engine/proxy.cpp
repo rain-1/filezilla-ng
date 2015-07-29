@@ -71,6 +71,20 @@ wxString base64encode(const wxString& str)
 }
 }
 
+wxString CProxySocket::Name(ProxyType t)
+{
+	switch (t) {
+	case HTTP:
+		return _T("HTTP");
+	case SOCKS4:
+		return _T("SOCKS4");
+	case SOCKS5:
+		return _T("SOCKS5");
+	default:
+		return _("unknown");
+	}
+}
+
 int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass)
 {
 	if (type == CProxySocket::unknown || host.empty() || port < 1 || port > 65535)

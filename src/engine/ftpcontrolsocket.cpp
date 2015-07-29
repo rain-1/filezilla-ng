@@ -498,8 +498,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	CFtpLogonOpData *pData = static_cast<CFtpLogonOpData *>(m_pCurOpData);
 	pData->loginSequence.clear();
 
-	if (!pData->ftp_proxy_type)
-	{
+	if (!pData->ftp_proxy_type) {
 		// User
 		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
 		pData->loginSequence.push_back(cmd);
@@ -511,18 +510,15 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
-		if (!server.GetAccount().empty())
-		{
+		if (!server.GetAccount().empty()) {
 			cmd.hide_arguments = false;
 			cmd.type = loginCommandType::account;
 			pData->loginSequence.push_back(cmd);
 		}
 	}
-	else if (pData->ftp_proxy_type == 1)
-	{
+	else if (pData->ftp_proxy_type == 1) {
 		const wxString& proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
-		if (!proxyUser.empty())
-		{
+		if (!proxyUser.empty()) {
 			// Proxy logon (if credendials are set)
 			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
 			pData->loginSequence.push_back(cmd);
@@ -543,18 +539,15 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
-		if (!server.GetAccount().empty())
-		{
+		if (!server.GetAccount().empty()) {
 			cmd.hide_arguments = false;
 			cmd.type = loginCommandType::account;
 			pData->loginSequence.push_back(cmd);
 		}
 	}
-	else if (pData->ftp_proxy_type == 2 || pData->ftp_proxy_type == 3)
-	{
+	else if (pData->ftp_proxy_type == 2 || pData->ftp_proxy_type == 3) {
 		const wxString& proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
-		if (!proxyUser.empty())
-		{
+		if (!proxyUser.empty()) {
 			// Proxy logon (if credendials are set)
 			t_loginCommand cmd = {false, false, loginCommandType::other, _T("USER ") + proxyUser};
 			pData->loginSequence.push_back(cmd);
@@ -584,15 +577,13 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		pData->loginSequence.push_back(cmd);
 
 		// Optional account
-		if (!server.GetAccount().empty())
-		{
+		if (!server.GetAccount().empty()) {
 			cmd.hide_arguments = false;
 			cmd.type = loginCommandType::account;
 			pData->loginSequence.push_back(cmd);
 		}
 	}
-	else if (pData->ftp_proxy_type == 4)
-	{
+	else if (pData->ftp_proxy_type == 4) {
 		wxString proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		wxString proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 		wxString host = server.FormatHost();
@@ -607,8 +598,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		wxString loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE);
 		wxStringTokenizer tokens(loginSequence, _T("\n"), wxTOKEN_STRTOK);
 
-		while (tokens.HasMoreTokens())
-		{
+		while (tokens.HasMoreTokens()) {
 			wxString token = tokens.GetNextToken();
 			token.Trim(true);
 			token.Trim(false);
@@ -634,8 +624,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 
 			// Skip account if empty
 			bool isAccount = false;
-			if (token.Find(_T("%a")) != -1)
-			{
+			if (token.Find(_T("%a")) != -1) {
 				if (account.empty())
 					continue;
 				else
@@ -663,23 +652,19 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			else
 				cmd.hide_arguments = false;
 
-			if (isUser && !password && !isAccount)
-			{
+			if (isUser && !password && !isAccount) {
 				cmd.optional = false;
 				cmd.type = loginCommandType::user;
 			}
-			else if (password && !isUser && !isAccount)
-			{
+			else if (password && !isUser && !isAccount) {
 				cmd.optional = true;
 				cmd.type = loginCommandType::pass;
 			}
-			else if (isAccount && !isUser && !password)
-			{
+			else if (isAccount && !isUser && !password) {
 				cmd.optional = true;
 				cmd.type = loginCommandType::account;
 			}
-			else
-			{
+			else {
 				cmd.optional = false;
 				cmd.type = loginCommandType::other;
 			}
@@ -689,14 +674,12 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			pData->loginSequence.push_back(cmd);
 		}
 
-		if (pData->loginSequence.empty())
-		{
+		if (pData->loginSequence.empty()) {
 			LogMessage(MessageType::Error, _("Could not generate custom login sequence."));
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		LogMessage(MessageType::Error, _("Unknown FTP proxy type, cannot generate login sequence."));
 		return false;
 	}
@@ -4256,7 +4239,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 			return FZ_REPLY_ERROR;
 		}
 
-		LogMessage(MessageType::Status, _("Using proxy %s"), engine_.GetOptions().GetOption(OPTION_FTP_PROXY_HOST));
+		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server.FormatHost(), _T("FTP"));
 	}
 	else {
 		pData->ftp_proxy_type = 0;
