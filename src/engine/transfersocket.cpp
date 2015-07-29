@@ -524,10 +524,12 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 	wxString bindAddress;
 	if (m_pProxyBackend) {
 		bindAddress = controlSocket_.m_pSocket->GetLocalIP();
+		controlSocket_.LogMessage(MessageType::Debug_Info, _T("Binding data connection source IP to control connection source IP %s"), bindAddress);
 	}
 	else {
 		if (controlSocket_.m_pSocket->GetPeerIP(true) == host || controlSocket_.m_pSocket->GetPeerIP(false) == host) {
 			bindAddress = controlSocket_.m_pSocket->GetLocalIP();
+			controlSocket_.LogMessage(MessageType::Debug_Info, _T("Binding data connection source IP to control connection source IP %s"), bindAddress);
 		}
 		else {
 			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Destination IP of data connection does not match peer IP of control connection. Not binding source address of data connection."));
