@@ -11,8 +11,11 @@
 class CLocalPath final
 {
 public:
-	CLocalPath() {}
-	CLocalPath(const CLocalPath &path);
+	CLocalPath() = default;
+	CLocalPath(CLocalPath const& path) = default;
+	CLocalPath(CLocalPath && path) noexcept = default;
+	CLocalPath& operator=(CLocalPath const& path) = default;
+	CLocalPath& operator=(CLocalPath && path) noexcept = default;
 
 	// Creates path. If the path is not syntactically
 	// correct, empty() will return true.
