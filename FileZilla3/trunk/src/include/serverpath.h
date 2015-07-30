@@ -66,7 +66,7 @@ public:
 	bool AddSegment(const wxString& segment);
 
 	size_t SegmentCount() const;
-protected:
+private:
 	bool DoSetSafePath(const wxString& path);
 	bool DoChangePath(wxString &subdir, bool isFile);
 
@@ -76,7 +76,8 @@ protected:
 	typedef tSegmentList::iterator tSegmentIter;
 	typedef tSegmentList::const_iterator tConstSegmentIter;
 
-	bool Segmentize(wxString str, tSegmentList& segments);
+	bool Segmentize(wxString const& str, tSegmentList& segments);
+	bool SegmentizeAddSegment(wxString & segment, tSegmentList& segments, bool& append);
 	bool ExtractFile(wxString& dir, wxString& file);
 
 	static void EscapeSeparators(ServerType type, wxString& subdir);
