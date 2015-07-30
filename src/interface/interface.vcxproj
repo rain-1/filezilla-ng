@@ -183,6 +183,7 @@
     <ClCompile Include="filter.cpp" />
     <ClCompile Include="filter_conditions_dialog.cpp" />
     <ClCompile Include="filteredit.cpp" />
+    <ClCompile Include="fzputtygen_interface.cpp" />
     <ClCompile Include="import.cpp" />
     <ClCompile Include="inputdialog.cpp" />
     <ClCompile Include="ipcmutex.cpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="filter.h" />
     <ClInclude Include="filter_conditions_dialog.h" />
     <ClInclude Include="filteredit.h" />
+    <ClInclude Include="fzputtygen_interface.h" />
     <ClInclude Include="import.h" />
     <ClInclude Include="inputdialog.h" />
     <ClInclude Include="ipcmutex.h" />

@@ -273,6 +273,14 @@ wxString CServer::GetAccount() const
 	return m_account;
 }
 
+wxString CServer::GetKeyFile() const
+{
+	if (m_logonType != KEY)
+		return wxString();
+
+	return m_keyFile;
+}
+
 CServer& CServer::operator=(const CServer &op)
 {
 	m_protocol = op.m_protocol;
@@ -283,6 +291,7 @@ CServer& CServer::operator=(const CServer &op)
 	m_user = op.m_user;
 	m_pass = op.m_pass;
 	m_account = op.m_account;
+	m_keyFile = op.m_keyFile;
 	m_timezoneOffset = op.m_timezoneOffset;
 	m_pasvMode = op.m_pasvMode;
 	m_maximumMultipleConnections = op.m_maximumMultipleConnections;
@@ -322,6 +331,11 @@ bool CServer::operator==(const CServer &op) const
 			if (m_pass != op.m_pass)
 				return false;
 			if (m_account != op.m_account)
+				return false;
+		}
+		else if (m_logonType == KEY)
+		{
+			if (m_keyFile != op.m_keyFile)
 				return false;
 		}
 	}
@@ -573,6 +587,16 @@ bool CServer::SetAccount(const wxString& account)
 		return false;
 
 	m_account = account;
+
+	return true;
+}
+
+bool CServer::SetKeyFile(const wxString& keyFile)
+{
+	if (m_logonType != KEY)
+		return false;
+
+	m_keyFile = keyFile;
 
 	return true;
 }
@@ -831,6 +855,8 @@ LogonType CServer::GetLogonTypeFromName(const wxString& name)
 		return NORMAL;
 	else if (name == _("Ask for password"))
 		return ASK;
+	else if (name == _("Key file"))
+		return KEY;
 	else if (name == _("Interactive"))
 		return INTERACTIVE;
 	else if (name == _("Account"))
@@ -849,6 +875,8 @@ wxString CServer::GetNameFromLogonType(LogonType type)
 		return _("Normal");
 	case ASK:
 		return _("Ask for password");
+	case KEY:
+		return _("Key file");
 	case INTERACTIVE:
 		return _("Interactive");
 	case ACCOUNT:

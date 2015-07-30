@@ -207,12 +207,39 @@
                               <object class="wxStaticText">
                                 <label>&amp;Account:</label>
                               </object>
+                              <flag>wxALIGN_CENTRE_VERTICAL</flag>
                               <cellpos>7,0</cellpos>
                             </object>
                             <object class="sizeritem">
                               <object class="wxTextCtrl" name="ID_ACCOUNT"/>
                               <flag>wxGROW</flag>
                               <cellpos>7,1</cellpos>
+                            </object>
+                            <object class="sizeritem">
+                              <object class="wxStaticText">
+                                <label>&amp;Key file:</label>
+                              </object>
+                              <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                              <cellpos>8,0</cellpos>
+                            </object>
+                            <object class="sizeritem">
+                              <flag>wxGROW</flag>
+                              <object class="wxBoxSizer">
+                                <orient>wxHORIZONTAL</orient>
+                                <object class="sizeritem">
+                                  <object class="wxTextCtrl" name="ID_KEYFILE"/>
+                                  <option>1</option>
+                                  <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                                </object>
+                                <object class="sizeritem">
+                                  <object class="wxButton" name="ID_KEYFILE_BROWSE">
+                                    <label>Browse...</label>
+                                  </object>
+                                  <border>5</border>
+                                  <flag>wxALIGN_CENTRE_VERTICAL|wxLEFT</flag>
+                                </object>
+                              </object>
+                              <cellpos>8,1</cellpos>
                             </object>
                           </object>
                           <flag>wxALL|wxGROW</flag>

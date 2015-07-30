@@ -406,7 +406,7 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	if (server.GetLogonType() != ANONYMOUS) {
 		wxString user = GetTextElement(node, "User");
 
-		wxString pass;
+		wxString pass, key;
 		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
 			auto  passElement = node.child("Pass");
 			if (passElement) {
@@ -428,6 +428,13 @@ bool GetServer(pugi::xml_node node, CServer& server)
 					server.SetLogonType(ASK);
 				}
 			}
+		} else if ((long)KEY == logonType) {
+			key = GetTextElement(node, "Keyfile");
+
+			// password should be empty if we're using a key file
+			pass = wxString();
+
+			server.SetKeyFile(key);
 		}
 
 		if (!server.SetUser(user, pass))
@@ -534,6 +541,10 @@ void SetServer(pugi::xml_node node, const CServer& server)
 				if (server.GetLogonType() == ACCOUNT)
 					AddTextElement(node, "Account", server.GetAccount());
 			}
+		}
+		else if (server.GetLogonType() == KEY)
+		{
+			AddTextElement(node, "Keyfile", server.GetKeyFile());
 		}
 	}
 	AddTextElement(node, "Logontype", logonType);
