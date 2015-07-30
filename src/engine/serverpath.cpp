@@ -939,52 +939,68 @@ wxString CServerPath::FormatSubdir(const wxString &subdir) const
 	return res;
 }
 
-bool CServerPath::Segmentize(wxString str, tSegmentList& segments)
+bool CServerPath::SegmentizeAddSegment(wxString & segment, tSegmentList& segments, bool& append)
 {
-	bool append = false;
-	while (!str.empty()) {
-		wxString segment;
-		int pos = str.find_first_of(traits[m_type].separators);
-		if (pos == -1) {
-			segment = str,
-			str.clear();
-		}
-		else if (!pos) {
-			str = str.Mid(1);
-			continue;
-		}
-		else {
-			segment = str.Left(pos);
-			str = str.Mid(pos + 1);
-		}
-
-		if (traits[m_type].has_dots) {
-			if (segment == _T("."))
-				continue;
-			else if (segment == _T("..")) {
-				if (segments.empty())
-					return false;
-				else {
-					segments.pop_back();
-					continue;
-				}
+	if (traits[m_type].has_dots) {
+		if (segment == _T("."))
+			return true;
+		else if (segment == _T("..")) {
+			if (segments.empty())
+				return false;
+			else {
+				segments.pop_back();
+				return true;
 			}
 		}
+	}
 
-		bool append_next = false;
-		if (!segment.empty() && traits[m_type].separatorEscape && segment.Last() == traits[m_type].separatorEscape) {
-			append_next = true;
-			segment.RemoveLast();
-			segment += traits[m_type].separators[0];
+	bool append_next = false;
+	if (!segment.empty() && traits[m_type].separatorEscape && segment.Last() == traits[m_type].separatorEscape) {
+		append_next = true;
+		segment[segment.size() - 1] = traits[m_type].separators[0];
+	}
+
+	if (append)
+		segments.back() += segment;
+	else
+		segments.push_back(std::move(segment));
+
+	append = append_next;
+
+	return true;
+}
+
+bool CServerPath::Segmentize(wxString const& str, tSegmentList& segments)
+{
+	bool append = false;
+	size_t start = 0;
+
+	int pos;
+	while (true) {
+		pos = str.find_first_of(traits[m_type].separators, start);
+		if (pos == std::string::npos) {
+			break;
+		}
+		if (start == pos) {
+			++start;
+			continue;
 		}
 
-		if (append)
-			segments.back() += segment;
-		else
-			segments.push_back(segment);
+		wxString segment = str.substr(start, pos - start);
+		start = pos + 1;
 
-		append = append_next;
+		if (!SegmentizeAddSegment(segment, segments, append)) {
+			return false;
+		}
 	}
+
+	if (start < str.size()) {
+		wxString segment = str.substr(start);
+		if (!SegmentizeAddSegment(segment, segments, append)) {
+			return false;
+		}
+	}
+
 	if (append)
 		return false;
 
@@ -997,8 +1013,7 @@ bool CServerPath::ExtractFile(wxString& dir, wxString& file)
 	if (pos == (int)dir.Length() - 1)
 		return false;
 
-	if (pos == -1)
-	{
+	if (pos == -1) {
 		file = dir;
 		dir.clear();
 		return true;
