@@ -12,10 +12,12 @@
 #include "window_state_manager.h"
 #include "wrapengine.h"
 #include "xmlfunctions.h"
+#include "fzputtygen_interface.h"
 #include "xrc_helper.h"
 
 #include <wx/dcclient.h>
 #include <wx/dnd.h>
+#include <wx/file.h>
 
 #ifdef __WXMSW__
 #include "commctrl.h"
@@ -35,6 +37,7 @@ EVT_TREE_SEL_CHANGING(XRCID("ID_SITETREE"), CSiteManagerDialog::OnSelChanging)
 EVT_TREE_SEL_CHANGED(XRCID("ID_SITETREE"), CSiteManagerDialog::OnSelChanged)
 EVT_CHOICE(XRCID("ID_LOGONTYPE"), CSiteManagerDialog::OnLogontypeSelChanged)
 EVT_BUTTON(XRCID("ID_BROWSE"), CSiteManagerDialog::OnRemoteDirBrowse)
+EVT_BUTTON(XRCID("ID_KEYFILE_BROWSE"), CSiteManagerDialog::OnKeyFileBrowse)
 EVT_TREE_ITEM_ACTIVATED(XRCID("ID_SITETREE"), CSiteManagerDialog::OnItemActivated)
 EVT_CHECKBOX(XRCID("ID_LIMITMULTIPLE"), CSiteManagerDialog::OnLimitMultipleConnectionsChanged)
 EVT_RADIOBUTTON(XRCID("ID_CHARSET_AUTO"), CSiteManagerDialog::OnCharsetChange)
@@ -1039,6 +1042,41 @@ bool CSiteManagerDialog::Verify()
 			return false;
 		}
 
+		// In key file logon type, check that the provided key file exists
+		wxString keyFile, keyFileComment, keyFileData;
+		if (logon_type == KEY)
+		{
+			keyFile = XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue();
+			if (keyFile.empty())
+			{
+				wxMessageBox(_("You have to enter a key file path"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+			if (!wxFile::Exists(keyFile))
+			{
+				wxMessageBox(_("The specified key file does not exist"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+			if (!wxFile::Access(keyFile, wxFile::read))
+			{
+				wxMessageBox(_("The specified key file is not readable"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				return false;
+			}
+
+			// Check (again) that the key file is in the correct format since it might have been introduced manually
+			CFZPuttyGenInterface cfzg(COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE), this);
+			if (!cfzg.IsKeyFileValid(keyFile, false))
+			{
+				if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
+					XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
+				else
+				{
+					wxMessageBoxEx(_("Could not load key file"), _("Error"), wxICON_EXCLAMATION);
+					return false;
+				}
+			}
+		}
+
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
 		if (!remotePathRaw.empty()) {
 			const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
@@ -1270,6 +1308,8 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(event.GetString() != _("Anonymous"));
 	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
 	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
+	XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(event.GetString() == _("Key file"));
+	XRCCTRL(*this, "ID_KEYFILE_BROWSE", wxButton)->Enable(event.GetString() == _("Key file"));
 }
 
 bool CSiteManagerDialog::UpdateItem()
@@ -1337,6 +1377,8 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	server.m_server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
 							xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue));
 	server.m_server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue));
+
+	server.m_server.SetKeyFile(XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue());
 
 	server.m_comments = xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::GetValue);
 
@@ -1423,6 +1465,44 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 	return true;
 }
 
+void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
+{
+	CFZPuttyGenInterface* fzpg;
+	wxString executable;
+	wxString keyFilePath, keyFileComment, keyFileData;
+	wxString wildcards("PPK files|*.ppk|PEM files|*.pem|All files|*.*");
+
+	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
+	if (!pTree)
+		return;
+
+	wxTreeItemId item = pTree->GetSelection();
+	if (!item.IsOk())
+		return;
+
+	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
+	if (!data)
+		return;
+
+	wxFileDialog dlg(this, _("Choose a key file"), "", "", wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+	if (dlg.ShowModal() == wxID_OK)
+	{
+		keyFilePath = dlg.GetPath();
+		executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
+		fzpg = new CFZPuttyGenInterface(executable, this);
+		// If the selected file was a PEM file, LoadKeyFile() will automatically convert it to PPK
+		// and tell us the new location.
+		if (fzpg->LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData))
+		{
+			XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFilePath);
+		}
+		else
+		{
+			wxMessageBoxEx(_("Could not load key file"), _("Error"), wxICON_EXCLAMATION);
+		}
+		delete fzpg;
+	}
+}
 void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
@@ -1499,7 +1579,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(false);
-		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(false);
+		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(false);
 
 		// Empty all site information
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(wxString());
@@ -1510,6 +1590,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(wxString());
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(wxString());
 
 		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
@@ -1544,7 +1625,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(true);
+		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(true);
 
 		XRCCTRL(*this, "ID_HOST", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(site_data->m_server.FormatHost(true));
@@ -1564,6 +1645,8 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() != ANONYMOUS);
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(!predefined && (site_data->m_server.GetLogonType() == NORMAL || site_data->m_server.GetLogonType() == ACCOUNT));
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == ACCOUNT);
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
+		XRCCTRL(*this, "ID_KEYFILE_BROWSE", wxButton)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
 
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
 		XRCCTRL(*this, "ID_LOGONTYPE", wxWindow)->Enable(!predefined);
@@ -1571,6 +1654,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(site_data->m_server.GetUser());
 		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(site_data->m_server.GetAccount());
 		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(site_data->m_server.GetPass());
+		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(site_data->m_server.GetKeyFile());
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(site_data->m_comments);
 		XRCCTRL(*this, "ID_COMMENTS", wxWindow)->Enable(!predefined);
 
@@ -1649,7 +1733,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
 		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CONNECT", wxWindow)->Enable(true);
+		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(true);
 
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(data->m_localDir);
 		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxWindow)->Enable(!predefined);

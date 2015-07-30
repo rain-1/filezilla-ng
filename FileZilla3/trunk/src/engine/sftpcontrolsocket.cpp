@@ -395,7 +395,12 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	pData->opState = connect_init;
 
-	wxStringTokenizer* pTokenizer = new wxStringTokenizer(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
+	wxStringTokenizer* pTokenizer;
+	if (m_pCurrentServer->GetLogonType() == KEY)
+		pTokenizer = new wxStringTokenizer(m_pCurrentServer->GetKeyFile() + _T("\n"), _T("\n"), wxTOKEN_DEFAULT);
+	else
+		pTokenizer = new wxStringTokenizer(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
+
 	if (!pTokenizer->HasMoreTokens())
 		delete pTokenizer;
 	else

@@ -40,6 +40,7 @@ enum LogonType
 	ASK, // ASK should not be sent to the engine, it's intended to be used by the interface
 	INTERACTIVE,
 	ACCOUNT,
+	KEY,
 
 	LOGONTYPE_MAX
 };
@@ -80,6 +81,7 @@ public:
 	wxString GetUser() const;
 	wxString GetPass() const;
 	wxString GetAccount() const;
+	wxString GetKeyFile() const;
 	int GetTimezoneOffset() const;
 	PasvMode GetPasvMode() const;
 	int MaximumMultipleConnections() const;
@@ -96,6 +98,7 @@ public:
 	void SetLogonType(LogonType logonType);
 	bool SetUser(const wxString& user, const wxString& pass = wxString());
 	bool SetAccount(const wxString& account);
+	bool SetKeyFile(const wxString& keyFile);
 
 	CServer& operator=(const CServer &op);
 	bool operator==(const CServer &op) const;
@@ -157,6 +160,7 @@ protected:
 	wxString m_user;
 	wxString m_pass;
 	wxString m_account;
+	wxString m_keyFile;
 	int m_timezoneOffset;
 	PasvMode m_pasvMode;
 	int m_maximumMultipleConnections;

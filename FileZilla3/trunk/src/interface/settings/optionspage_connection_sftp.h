@@ -2,6 +2,7 @@
 #define __OPTIONSPAGE_CONNECTION_SFTP_H__
 
 #include <wx/process.h>
+#include "../fzputtygen_interface.h"
 
 class COptionsPageConnectionSFTP : public COptionsPage
 {
@@ -13,24 +14,12 @@ public:
 	virtual bool SavePage();
 
 protected:
-	enum ReplyCode
-	{
-		success,
-		error,
-		failure // Like program terminated
-	};
+	CFZPuttyGenInterface* m_pFzpg;
 
 	bool AddKey(wxString keyFile, bool silent);
-	bool LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data);
-	bool LoadProcess();
-	bool Send(const wxString& cmd);
-	enum ReplyCode GetReply(wxString& reply);
 	bool KeyFileExists(const wxString& keyFile);
 
 	void SetCtrlState();
-
-	wxProcess* m_pProcess;
-	bool m_initialized;
 
 	DECLARE_EVENT_TABLE()
 	void OnEndProcess(wxProcessEvent& event);
