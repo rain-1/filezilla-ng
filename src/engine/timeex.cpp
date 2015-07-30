@@ -7,17 +7,6 @@
 
 #define TIME_ASSERT(x) //wxASSERT(x)
 
-CDateTime::CDateTime()
-: a_(days)
-{
-}
-
-CDateTime::CDateTime(CDateTime const& op)
-: t_(op.t_)
-, a_(op.a_)
-{
-}
-
 CDateTime::CDateTime(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
 {
 	Set(z, year, month, day, hour, minute, second, millisecond);
@@ -70,13 +59,6 @@ bool parse(wxChar const*& it, wxChar const* end, int count, T & v, int offset)
 CDateTime::CDateTime(wxString const& str, Zone z)
 {
 	Set(str, z);
-}
-
-CDateTime& CDateTime::operator=(CDateTime const& op)
-{
-	a_ = op.a_;
-	t_ = op.t_;
-	return *this;
 }
 
 CDateTime CDateTime::Now()
@@ -700,3 +682,25 @@ FILETIME CDateTime::GetFileTime() const
 }
 
 #endif
+
+struct foo final
+{
+	foo() noexcept = default;
+	explicit foo(int, float) {}
+	foo(foo const&) noexcept = default;
+	foo(foo &&) noexcept = default;
+
+	foo& operator=(foo const&) noexcept = default;
+	foo& operator=(foo &&) noexcept = default;
+};
+
+foo n() {
+	return foo();
+}
+
+void m()
+{
+	foo r, r2;
+	r = r2;
+	r = n();
+}

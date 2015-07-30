@@ -36,7 +36,7 @@ public:
 		local
 	};
 
-	CDateTime();
+	CDateTime() = default;
 
 	CDateTime(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
 
@@ -50,8 +50,10 @@ public:
 	explicit CDateTime(FILETIME const& ft, Accuracy a);
 #endif
 
-	CDateTime(CDateTime const& op);
-	CDateTime& operator=(CDateTime const& op);
+	CDateTime(CDateTime const& op) = default;
+	CDateTime(CDateTime && op) noexcept = default;
+	CDateTime& operator=(CDateTime const& op) = default;
+	CDateTime& operator=(CDateTime && op) noexcept = default;
 
 	bool IsValid() const;
 	void clear();
@@ -112,10 +114,12 @@ private:
 
 	bool IsClamped();
 
-	int64_t const invalid = std::numeric_limits<int64_t>::min();
+	enum invalid_t : int64_t {
+		invalid = std::numeric_limits<int64_t>::min()
+	};
 
 	int64_t t_{invalid};
-	Accuracy a_;
+	Accuracy a_{days};
 };
 
 class duration final
@@ -177,7 +181,9 @@ class CMonotonicClock final
 public:
 	CMonotonicClock() = default;
 	CMonotonicClock(CMonotonicClock const&) = default;
+	CMonotonicClock(CMonotonicClock &&) noexcept = default;
 	CMonotonicClock& operator=(CMonotonicClock const&) = default;
+	CMonotonicClock& operator=(CMonotonicClock &&) noexcept = default;
 
 	CMonotonicClock const operator+(duration const& d) const
 	{
@@ -204,7 +210,7 @@ public:
 	}
 
 private:
-	CMonotonicClock(clock_type::time_point const& t)
+	explicit CMonotonicClock(clock_type::time_point const& t)
 		: t_(t)
 	{}
 
