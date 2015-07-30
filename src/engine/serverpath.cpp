@@ -45,7 +45,7 @@ CServerPath::CServerPath()
 {
 }
 
-CServerPath::CServerPath(const CServerPath &path, wxString subdir)
+CServerPath::CServerPath(CServerPath const& path, wxString subdir)
 	: m_type(path.m_type)
 	, m_data(path.m_data)
 {
@@ -54,12 +54,6 @@ CServerPath::CServerPath(const CServerPath &path, wxString subdir)
 
 	if (!ChangePath(subdir))
 		clear();
-}
-
-CServerPath::CServerPath(const CServerPath &path)
-	: m_type(path.m_type)
-	, m_data(path.m_data)
-{
 }
 
 CServerPath::CServerPath(wxString const& path, ServerType type /*=DEFAULT*/)

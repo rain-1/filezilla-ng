@@ -13,8 +13,8 @@ template<class T> class CRefcountObject final
 {
 public:
 	CRefcountObject();
-	CRefcountObject(CRefcountObject<T> const& v);
-	CRefcountObject(CRefcountObject<T> && v);
+	CRefcountObject(CRefcountObject<T> const& v) = default;
+	CRefcountObject(CRefcountObject<T> && v) noexcept = default;
 	explicit CRefcountObject(const T& v);
 
 	void clear();
@@ -33,8 +33,8 @@ public:
 
 	inline bool operator!=(const CRefcountObject<T>& cmp) const { return !(*this == cmp); }
 
-	CRefcountObject<T>& operator=(CRefcountObject<T> const& v);
-	CRefcountObject<T>& operator=(CRefcountObject<T> && v);
+	CRefcountObject<T>& operator=(CRefcountObject<T> const& v) = default;
+	CRefcountObject<T>& operator=(CRefcountObject<T> && v) noexcept = default;
 protected:
 	std::shared_ptr<T> data_;
 };
@@ -47,9 +47,10 @@ template<class T> class CRefcountObject_Uninitialized final
 	   operator* or ->, otherwise you'll dereference the null-pointer.
 	 */
 public:
-	CRefcountObject_Uninitialized();
-	CRefcountObject_Uninitialized(const CRefcountObject_Uninitialized<T>& v);
-	explicit CRefcountObject_Uninitialized(const T& v);
+	CRefcountObject_Uninitialized() = default;
+	CRefcountObject_Uninitialized(CRefcountObject_Uninitialized<T> const& v) = default;
+	CRefcountObject_Uninitialized(CRefcountObject_Uninitialized<T> && v) noexcept = default;
+	explicit CRefcountObject_Uninitialized(T const& v);
 
 	void clear();
 
@@ -62,7 +63,8 @@ public:
 	inline bool operator!=(const CRefcountObject_Uninitialized<T>& cmp) const { return !(*this == cmp); }
 	bool operator<(const CRefcountObject_Uninitialized<T>& cmp) const;
 
-	CRefcountObject_Uninitialized<T>& operator=(const CRefcountObject_Uninitialized<T>& v);
+	CRefcountObject_Uninitialized<T>& operator=(CRefcountObject_Uninitialized<T> const& v) = default;
+	CRefcountObject_Uninitialized<T>& operator=(CRefcountObject_Uninitialized<T> && v) noexcept = default;
 
 	bool operator!() const { return !data_; }
 	explicit operator bool() const { return data_; }
@@ -90,16 +92,6 @@ template<class T> CRefcountObject<T>::CRefcountObject()
 {
 }
 
-template<class T> CRefcountObject<T>::CRefcountObject(CRefcountObject<T> const& v)
-	: data_(v.data_)
-{
-}
-
-template<class T> CRefcountObject<T>::CRefcountObject(CRefcountObject<T> && v)
-	: data_(std::move(v.data_))
-{
-}
-
 template<class T> CRefcountObject<T>::CRefcountObject(const T& v)
 	: data_(std::make_shared<T>(v))
 {
@@ -112,18 +104,6 @@ template<class T> T& CRefcountObject<T>::Get()
 	}
 
 	return *data_.get();
-}
-
-template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(CRefcountObject<T> const& v)
-{
-	data_ = v.data_;
-	return *this;
-}
-
-template<class T> CRefcountObject<T>& CRefcountObject<T>::operator=(CRefcountObject<T> && v)
-{
-	data_ = std::move(v.data_);
-	return *this;
 }
 
 template<class T> bool CRefcountObject<T>::operator<(CRefcountObject<T> const& cmp) const
@@ -177,16 +157,7 @@ template<class T> bool CRefcountObject_Uninitialized<T>::operator==(const CRefco
 	return *data_.get() == *cmp.data_.get();
 }
 
-template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized()
-{
-}
-
-template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized(const CRefcountObject_Uninitialized<T>& v)
-	: data_(v.data_)
-{
-}
-
-template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized(const T& v)
+template<class T> CRefcountObject_Uninitialized<T>::CRefcountObject_Uninitialized(T const& v)
 	: data_(std::make_shared<T>(v))
 {
 }
@@ -201,12 +172,6 @@ template<class T> T& CRefcountObject_Uninitialized<T>::Get()
 	}
 
 	return *data_.get();
-}
-
-template<class T> CRefcountObject_Uninitialized<T>& CRefcountObject_Uninitialized<T>::operator=(const CRefcountObject_Uninitialized<T>& v)
-{
-	data_ = v.data_;
-	return *this;
 }
 
 template<class T> bool CRefcountObject_Uninitialized<T>::operator<(const CRefcountObject_Uninitialized<T>& cmp) const

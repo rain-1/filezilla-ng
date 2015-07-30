@@ -17,11 +17,6 @@ CLocalPath::CLocalPath(const wxString& path, wxString* file /*=0*/)
 	SetPath(path, file);
 }
 
-CLocalPath::CLocalPath(const CLocalPath &path)
-	: m_path(path.m_path)
-{
-}
-
 bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 {
 	// This function ensures that the path is in canonical form on success.

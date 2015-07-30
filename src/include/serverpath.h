@@ -20,8 +20,12 @@ class CServerPath final
 public:
 	CServerPath();
 	explicit CServerPath(wxString const& path, ServerType type = DEFAULT);
-	CServerPath(const CServerPath &path, wxString subdir); // Ignores parent on absolute subdir
-	CServerPath(const CServerPath &path);
+	CServerPath(CServerPath const& path, wxString subdir); // Ignores parent on absolute subdir
+	CServerPath(CServerPath const& path) = default;
+	CServerPath(CServerPath && path) noexcept = default;
+
+	CServerPath& operator=(CServerPath const& op) = default;
+	CServerPath& operator=(CServerPath && op) noexcept = default;
 
 	bool empty() const { return !m_data; }
 	void clear();
