@@ -37,7 +37,7 @@ enum LogonType
 {
 	ANONYMOUS,
 	NORMAL,
-	ASK, // ASK should not be sent to the engine, it's intendet to be used by the interface
+	ASK, // ASK should not be sent to the engine, it's intended to be used by the interface
 	INTERACTIVE,
 	ACCOUNT,
 
