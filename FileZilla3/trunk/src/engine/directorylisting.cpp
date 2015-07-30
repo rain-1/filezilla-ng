@@ -1,41 +1,5 @@
 #include <filezilla.h>
 
-CDirectoryListing::CDirectoryListing()
-	: m_flags()
-	, m_entryCount()
-{
-}
-
-CDirectoryListing::CDirectoryListing(const CDirectoryListing& listing)
-	: path(listing.path)
-	, m_firstListTime(listing.m_firstListTime)
-	, m_flags(listing.m_flags)
-	, m_entries(listing.m_entries), m_searchmap_case(listing.m_searchmap_case), m_searchmap_nocase(listing.m_searchmap_nocase)
-	, m_entryCount(listing.m_entryCount)
-{
-}
-
-CDirectoryListing& CDirectoryListing::operator=(const CDirectoryListing &a)
-{
-	if (&a == this)
-		return *this;
-
-	m_entries = a.m_entries;
-
-	path = a.path;
-
-	m_flags = a.m_flags;
-
-	m_entryCount = a.m_entryCount;
-
-	m_firstListTime = a.m_firstListTime;
-
-	m_searchmap_case = a.m_searchmap_case;
-	m_searchmap_nocase = a.m_searchmap_nocase;
-
-	return *this;
-}
-
 wxString CDirentry::dump() const
 {
 	wxString str = wxString::Format(_T("name=%s\nsize=%lld\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n"),

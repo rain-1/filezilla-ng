@@ -67,11 +67,12 @@ class CDirectoryListing final
 public:
 	typedef CDirentry value_type;
 
-	CDirectoryListing();
-	CDirectoryListing(const CDirectoryListing& listing);
+	CDirectoryListing() = default;
+	CDirectoryListing(CDirectoryListing const& listing) = default;
+	CDirectoryListing(CDirectoryListing && listing) noexcept = default;
 
-	CServerPath path;
-	CDirectoryListing& operator=(const CDirectoryListing &a);
+	CDirectoryListing& operator=(CDirectoryListing const&) = default;
+	CDirectoryListing& operator=(CDirectoryListing &&) noexcept = default;
 
 	const CDirentry& operator[](unsigned int index) const;
 
@@ -87,6 +88,7 @@ public:
 
 	void ClearFindMap();
 
+	CServerPath path;
 	CMonotonicClock m_firstListTime;
 
 	enum
@@ -116,7 +118,7 @@ public:
 	//
 	// These bits should help the user interface to choose an appropriate sorting
 	// algorithm for modified listings
-	int m_flags;
+	int m_flags{};
 
 	int get_unsure_flags() const { return m_flags & unsure_mask; }
 	bool failed() const { return (m_flags & listing_failed) != 0; }
@@ -137,7 +139,7 @@ protected:
 	mutable CRefcountObject_Uninitialized<std::multimap<wxString, unsigned int> > m_searchmap_case;
 	mutable CRefcountObject_Uninitialized<std::multimap<wxString, unsigned int> > m_searchmap_nocase;
 
-	unsigned int m_entryCount;
+	unsigned int m_entryCount{};
 };
 
 #endif

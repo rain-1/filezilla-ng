@@ -12,7 +12,7 @@ public:
 	CSparseOptional();
 	explicit CSparseOptional(T const& v);
 	CSparseOptional(CSparseOptional<T> const& v);
-	CSparseOptional(CSparseOptional<T> && v);
+	CSparseOptional(CSparseOptional<T> && v) noexcept;
 	~CSparseOptional();
 
 	void clear();
@@ -30,7 +30,7 @@ public:
 	bool operator<(CSparseOptional<T> const& cmp) const;
 
 	CSparseOptional<T>& operator=(CSparseOptional<T> const& v);
-	CSparseOptional<T>& operator=(CSparseOptional<T> && v);
+	CSparseOptional<T>& operator=(CSparseOptional<T> && v) noexcept;
 protected:
 	T* v_;
 };
@@ -55,7 +55,7 @@ template<class T> CSparseOptional<T>::CSparseOptional(CSparseOptional<T> const& 
 	}
 }
 
-template<class T> CSparseOptional<T>::CSparseOptional(CSparseOptional<T> && v)
+template<class T> CSparseOptional<T>::CSparseOptional(CSparseOptional<T> && v) noexcept
 {
 	v_ = v.v_;
 	v.v_ = 0;
@@ -87,7 +87,7 @@ template<class T> CSparseOptional<T>& CSparseOptional<T>::operator=(CSparseOptio
 	return *this;
 }
 
-template<class T> CSparseOptional<T>& CSparseOptional<T>::operator=(CSparseOptional<T> && v)
+template<class T> CSparseOptional<T>& CSparseOptional<T>::operator=(CSparseOptional<T> && v) noexcept
 {
 	if( this != &v ) {
 		delete v_;
