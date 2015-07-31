@@ -969,7 +969,7 @@ bool CServerPath::Segmentize(wxString const& str, tSegmentList& segments)
 	bool append = false;
 	size_t start = 0;
 
-	int pos;
+	size_t pos;
 	while (true) {
 		pos = str.find_first_of(traits[m_type].separators, start);
 		if (pos == std::string::npos) {
