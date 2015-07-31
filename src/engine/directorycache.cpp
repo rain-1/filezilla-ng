@@ -36,17 +36,18 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 	tCacheIter cit;
 	bool unused;
 	if (Lookup(cit, sit, listing.path, true, unused)) {
-		cit->modificationTime = CMonotonicClock::now();
+		auto & entry = const_cast<CCacheEntry&>(*cit);
+		entry.modificationTime = CMonotonicClock::now();
 
 		m_totalFileCount -= cit->listing.GetCount();
-		cit->listing = listing;
+		entry.listing = listing;
 
 		return;
 	}
 
-	sit->cacheList.emplace_front(listing);
+	cit = sit->cacheList.emplace_hint(cit, listing);
 
-	UpdateLru(sit, sit->cacheList.begin());
+	UpdateLru(sit, cit);
 
 	Prune();
 }
@@ -70,20 +71,22 @@ bool CDirectoryCache::Lookup(CDirectoryListing &listing, const CServer &server, 
 
 bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated)
 {
-	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
-		const CCacheEntry &entry = *iter;
+	static CCacheEntry dummy;
+	dummy.listing.path = path;
+	cacheIter = sit->cacheList.lower_bound(dummy);
 
-		if (entry.listing.path != path)
-			continue;
+	if (cacheIter != sit->cacheList.end()) {
+		CCacheEntry const& entry = *cacheIter;
 
-		UpdateLru(sit, iter);
+		if (entry.listing.path == path) {
+			UpdateLru(sit, cacheIter);
 
-		if (!allowUnsureEntries && entry.listing.get_unsure_flags())
-			return false;
+			if (!allowUnsureEntries && entry.listing.get_unsure_flags())
+				return false;
 
-		cacheIter = iter;
-		is_outdated = (CMonotonicClock::now() - entry.listing.m_firstListTime).get_seconds() > CACHE_TIMEOUT;
-		return true;
+			is_outdated = (CMonotonicClock::now() - entry.listing.m_firstListTime).get_seconds() > CACHE_TIMEOUT;
+			return true;
+		}
 	}
 
 	return false;
@@ -143,22 +146,6 @@ bool CDirectoryCache::LookupFile(CDirentry &entry, const CServer &server, const 
 	return false;
 }
 
-CDirectoryCache::CCacheEntry& CDirectoryCache::CCacheEntry::operator=(const CDirectoryCache::CCacheEntry &a)
-{
-	lruIt = a.lruIt;
-	listing = a.listing;
-	modificationTime = a.modificationTime;
-
-	return *this;
-}
-
-CDirectoryCache::CCacheEntry::CCacheEntry(const CDirectoryCache::CCacheEntry &entry)
-	: lruIt()
-{
-	listing = entry.listing;
-	modificationTime = entry.modificationTime;
-}
-
 bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool *wasDir /*=false*/)
 {
 	scoped_lock lock(mutex_);
@@ -168,7 +155,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 		return false;
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
-		CCacheEntry &entry = *iter;
+		auto & entry = const_cast<CCacheEntry&>(*iter);
 		if (path.CmpNoCase(entry.listing.path))
 			continue;
 
@@ -199,8 +186,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 	bool updated = false;
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
-		CCacheEntry &entry = *iter;
-		const CCacheEntry &cEntry = *iter;
+		auto & entry = const_cast<CCacheEntry&>(*iter);
 		if (path.CmpNoCase(entry.listing.path))
 			continue;
 
@@ -209,9 +195,9 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 		bool matchCase = false;
 		unsigned int i;
 		for (i = 0; i < entry.listing.GetCount(); ++i) {
-			if (!filename.CmpNoCase(cEntry.listing[i].name)) {
+			if (!filename.CmpNoCase(entry.listing[i].name)) {
 				entry.listing[i].flags |= CDirentry::flag_unsure;
-				if (cEntry.listing[i].name == filename) {
+				if (entry.listing[i].name == filename) {
 					matchCase = true;
 					break;
 				}
@@ -269,43 +255,37 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 	if (sit == m_serverList.end())
 		return false;
 
-	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter)
-	{
-		const CCacheEntry &entry = *iter;
+	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ++iter) {
+		auto & entry = const_cast<CCacheEntry&>(*iter);
 		if (path.CmpNoCase(entry.listing.path))
 			continue;
 
 		UpdateLru(sit, iter);
 
 		bool matchCase = false;
-		for (unsigned int i = 0; i < entry.listing.GetCount(); i++)
-		{
+		for (unsigned int i = 0; i < entry.listing.GetCount(); ++i) {
 			if (entry.listing[i].name == filename)
 				matchCase = true;
 		}
 
-		if (matchCase)
-		{
+		if (matchCase) {
 			unsigned int i;
 			for (i = 0; i < entry.listing.GetCount(); i++)
 				if (entry.listing[i].name == filename)
 					break;
 			wxASSERT(i != entry.listing.GetCount());
 
-			CDirectoryListing& listing = iter->listing;
-			listing.RemoveEntry(i); // This does set m_hasUnsureEntries
+			entry.listing.RemoveEntry(i); // This does set m_hasUnsureEntries
 			--m_totalFileCount;
 		}
-		else
-		{
-			for (unsigned int i = 0; i < entry.listing.GetCount(); i++)
-			{
+		else {
+			for (unsigned int i = 0; i < entry.listing.GetCount(); ++i) {
 				if (!filename.CmpNoCase(entry.listing[i].name))
-					iter->listing[i].flags |= CDirentry::flag_unsure;
+					entry.listing[i].flags |= CDirentry::flag_unsure;
 			}
-			iter->listing.m_flags |= CDirectoryListing::unsure_invalid;
+			entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 		}
-		iter->modificationTime = CMonotonicClock::now();
+		entry.modificationTime = CMonotonicClock::now();
 	}
 
 	return true;
@@ -371,7 +351,7 @@ void CDirectoryCache::RemoveDir(const CServer& server, const CServerPath& path, 
 		absolutePath.clear();
 
 	for (tCacheIter iter = sit->cacheList.begin(); iter != sit->cacheList.end(); ) {
-		CCacheEntry &entry = *iter;
+		auto & entry = const_cast<CCacheEntry&>(*iter);
 		// Delete exact matches and subdirs
 		if (!absolutePath.empty() && (entry.listing.path == absolutePath || absolutePath.IsParentOf(entry.listing.path, true))) {
 			m_totalFileCount -= entry.listing.GetCount();
@@ -401,9 +381,8 @@ void CDirectoryCache::Rename(const CServer& server, const CServerPath& pathFrom,
 	tCacheIter iter;
 	bool is_outdated = false;
 	bool found = Lookup(iter, sit, pathFrom, true, is_outdated);
-	if (found)
-	{
-		CDirectoryListing& listing = iter->listing;
+	if (found) {
+		auto & listing = const_cast<CDirectoryListing&>(iter->listing);
 		if (pathFrom == pathTo)
 		{
 			RemoveFile(server, pathFrom, fileTo);
@@ -484,8 +463,10 @@ void CDirectoryCache::UpdateLru(tServerIter const& sit, tCacheIter const& cit)
 		m_leastRecentlyUsedList.splice(m_leastRecentlyUsedList.end(), m_leastRecentlyUsedList, *lruIt);
 		**lruIt = std::make_pair(sit, cit);
 	}
-	else
-		cit->lruIt = (void*)new tLruList::iterator(m_leastRecentlyUsedList.emplace(m_leastRecentlyUsedList.end(), sit, cit));
+	else {
+		auto & entry = const_cast<CCacheEntry&>(*cit);
+		entry.lruIt = (void*)new tLruList::iterator(m_leastRecentlyUsedList.emplace(m_leastRecentlyUsedList.end(), sit, cit));
+	}
 }
 
 void CDirectoryCache::Prune()
