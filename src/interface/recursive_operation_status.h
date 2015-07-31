@@ -3,6 +3,8 @@
 
 #include "state.h"
 
+#include <wx/timer.h>
+
 class CRecursiveOperationStatus : public wxWindow, public CStateEventHandler
 {
 public:
@@ -13,11 +15,17 @@ protected:
 
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
 
+	void UpdateText();
+
 	wxStaticText* m_pTextCtrl[2];
+
+	wxTimer m_timer;
+	bool m_changed{};
 
 	wxDECLARE_EVENT_TABLE();
 	void OnPaint(wxPaintEvent& ev);
 	void OnCancel(wxCommandEvent& ev);
+	void OnTimer(wxTimerEvent&);
 };
 
 #endif
