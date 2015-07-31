@@ -230,7 +230,7 @@ void CFilterDialog::SaveFilters()
 
 	auto xSets = element.child("Sets");
 	while (xSets) {
-		element.remove_child(xFilters);
+		element.remove_child(xSets);
 		xSets = element.child("Sets");
 	}
 
