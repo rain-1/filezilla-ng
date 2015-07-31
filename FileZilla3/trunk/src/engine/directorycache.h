@@ -15,6 +15,7 @@ version.
 */
 
 #include <mutex.h>
+#include <set>
 
 const int CACHE_TIMEOUT = 900; // In seconds
 
@@ -51,20 +52,26 @@ protected:
 	class CCacheEntry final
 	{
 	public:
-		CCacheEntry() : lruIt() { };
-		CCacheEntry(const CCacheEntry &entry);
+		CCacheEntry() = default;
+		CCacheEntry(CCacheEntry const& entry) = default;
+		CCacheEntry(CCacheEntry && entry) noexcept = default;
+
 		explicit CCacheEntry(CDirectoryListing const& l)
 			: listing(l)
 			, modificationTime(CMonotonicClock::now())
 		{}
-		~CCacheEntry() { };
 
 		CDirectoryListing listing;
 		CMonotonicClock modificationTime;
 
-		CCacheEntry& operator=(const CCacheEntry &a);
+		CCacheEntry& operator=(CCacheEntry const& a) = default;
+		CCacheEntry& operator=(CCacheEntry && a) noexcept = default;
 
 		void* lruIt{}; // void* to break cyclic declaration dependency
+
+		bool operator<(CCacheEntry const& op) const noexcept {
+			return listing.path < op.listing.path;
+		}
 	};
 
 	class CServerEntry final
@@ -76,7 +83,7 @@ protected:
 		{}
 
 		CServer server;
-		std::list<CCacheEntry> cacheList;
+		std::set<CCacheEntry> cacheList;
 	};
 
 	typedef std::list<CServerEntry>::iterator tServerIter;
@@ -84,8 +91,8 @@ protected:
 	tServerIter CreateServerEntry(const CServer& server);
 	tServerIter GetServerEntry(const CServer& server);
 
-	typedef std::list<CCacheEntry>::iterator tCacheIter;
-	typedef std::list<CCacheEntry>::const_iterator tCacheConstIter;
+	typedef std::set<CCacheEntry>::iterator tCacheIter;
+	typedef std::set<CCacheEntry>::const_iterator tCacheConstIter;
 
 	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 
