@@ -10,6 +10,7 @@
 BEGIN_EVENT_TABLE(CRecursiveOperationStatus, wxWindow)
 EVT_PAINT(CRecursiveOperationStatus::OnPaint)
 EVT_BUTTON(wxID_ANY, CRecursiveOperationStatus::OnCancel)
+EVT_TIMER(wxID_ANY, CRecursiveOperationStatus::OnTimer)
 END_EVENT_TABLE()
 
 CRecursiveOperationStatus::CRecursiveOperationStatus(wxWindow* parent, CState* pState)
@@ -41,6 +42,8 @@ CRecursiveOperationStatus::CRecursiveOperationStatus(wxWindow* parent, CState* p
 	// Position labels
 	m_pTextCtrl[0]->SetPosition(wxPoint(20 + s.GetWidth(), textHeight /2));
 	m_pTextCtrl[1]->SetPosition(wxPoint(20 + s.GetWidth(), textHeight * 2));
+
+	m_timer.SetOwner(this);
 }
 
 
@@ -62,7 +65,24 @@ void CRecursiveOperationStatus::OnStateChange(CState* pState, enum t_statechange
 		Show(show);
 	}
 
+	if (show) {
+		if (!m_timer.IsRunning()) {
+			UpdateText();
+			m_timer.Start(200, true);
+		}
+		else {
+			m_changed = true;
+		}
+	}
+}
+
+void CRecursiveOperationStatus::UpdateText()
+{
+	m_changed = false;
 	wxString text;
+
+	auto const mode = m_pState->GetRecursiveOperationHandler()->GetOperationMode();
+	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
 	if (show) {
 		switch (mode) {
 		case CRecursiveOperation::recursive_addtoqueue:
@@ -88,8 +108,6 @@ void CRecursiveOperationStatus::OnStateChange(CState* pState, enum t_statechange
 		const wxString dirs = wxString::Format(wxPLURAL_LL("%llu directory", "%llu directories", countDirs), countDirs);
 		// @translator: Example: Processed 5 files in 1 directory
 		m_pTextCtrl[1]->SetLabel(wxString::Format(_("Processed %s in %s."), files, dirs));
-
-
 	}
 }
 
@@ -106,4 +124,12 @@ void CRecursiveOperationStatus::OnCancel(wxCommandEvent& ev)
 {
 	m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	m_pState->RefreshRemote();
+}
+
+void CRecursiveOperationStatus::OnTimer(wxTimerEvent&)
+{
+	if (m_changed) {
+		UpdateText();
+		m_timer.Start(200, true);
+	}
 }
