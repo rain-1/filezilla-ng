@@ -261,7 +261,7 @@ const CLocalPath& CQueueStorage::Impl::GetLocalPath(int64_t id) const
 	if (it != reverseLocalPaths_.end())
 		return it->second;
 
-	static const CLocalPath empty;
+	static CLocalPath const empty{};
 	return empty;
 }
 
@@ -272,7 +272,7 @@ const CServerPath& CQueueStorage::Impl::GetRemotePath(int64_t id) const
 	if (it != reverseRemotePaths_.end())
 		return it->second;
 
-	static const CServerPath empty;
+	static CServerPath const empty{};
 	return empty;
 }
 
