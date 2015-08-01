@@ -1419,6 +1419,6 @@ Section "Uninstall"
     Delete "$DESKTOP\FileZilla Client.lnk"
   ${EndIf}
 
-  DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\App Paths\filezilla.exe
+  DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\App Paths\filezilla.exe"
 
 SectionEnd
