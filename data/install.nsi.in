@@ -972,6 +972,10 @@ Section "FileZilla Client" SecMain
     ${EndIf}
   ${EndIf}
 
+  ; Register App Path so that typing filezilla in Win+R dialog starts FileZilla
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\App Paths\filezilla.exe" "" "$INSTDIR\filezilla.exe"
+  WriteRegStr SHCTX "Software\Microsoft\Windows\CurrentVersion\App Paths\filezilla.exe" "Path" "$INSTDIR"
+
 SectionEnd
 
 !macro INSTALLICONSET SET
@@ -1403,8 +1407,8 @@ Section "Uninstall"
     ${If} ${RunningX64}
       SetRegView lastused
     ${EndIf}
-
   ${EndIf}
+
   ${If} $un.REMOVE_CURRENT_USER == 1
     SetShellVarContext current
     Call un.RemoveStartmenu
@@ -1414,5 +1418,7 @@ Section "Uninstall"
 
     Delete "$DESKTOP\FileZilla Client.lnk"
   ${EndIf}
+
+  DeleteRegKey SHCTX "Software\Microsoft\Windows\CurrentVersion\App Paths\filezilla.exe
 
 SectionEnd
