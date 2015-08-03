@@ -225,7 +225,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 			direntry.size = size;
 			switch (type) {
 			case dir:
-				entry.listing.m_flags |= CDirectoryListing::unsure_dir_added;
+				entry.listing.m_flags |= CDirectoryListing::unsure_dir_added | CDirectoryListing::listing_has_dirs;
 				break;
 			case file:
 				entry.listing.m_flags |= CDirectoryListing::unsure_file_added;
