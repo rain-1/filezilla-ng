@@ -1031,27 +1031,25 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 	if (!m_contextMenuItem)
 		return;
 
-	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.empty())
+	CServerPath const& pathToDelete = GetPathFromItem(m_contextMenuItem);
+	if (pathToDelete.empty())
 		return;
 
 	if (wxMessageBoxEx(_("Really delete all selected files and/or directories from the server?"), _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
 		return;
 
-	const bool hasParent = path.HasParent();
+	const bool hasParent = pathToDelete.HasParent();
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
 
 	CServerPath startDir;
-	if (hasParent)
-	{
+	if (hasParent) {
 		const wxString& name = GetItemText(m_contextMenuItem);
-		startDir = path.GetParent();
+		startDir = pathToDelete.GetParent();
 		pRecursiveOperation->AddDirectoryToVisit(startDir, name);
 	}
-	else
-	{
-		startDir = path;
+	else {
+		startDir = pathToDelete;
 		pRecursiveOperation->AddDirectoryToVisit(startDir, _T(""));
 	}
 
@@ -1059,8 +1057,10 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 	const wxTreeItemId selected = GetSelection();
 	if (selected)
 		currentPath = GetPathFromItem(selected);
-	if (!currentPath.empty() && (path == currentPath || path.IsParentOf(currentPath, false)))
+	if (!currentPath.empty() && (pathToDelete == currentPath || pathToDelete.IsParentOf(currentPath, false))) {
 		currentPath = startDir;
+		m_pState->ChangeRemoteDir(startDir);
+	}
 
 	CFilterManager filter;
 	pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete, startDir, filter.GetActiveFilters(false), !hasParent, currentPath);

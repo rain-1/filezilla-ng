@@ -112,6 +112,16 @@ bool CRecursiveOperation::NextOperation()
 		return true;
 	}
 
+	if (m_operationMode == recursive_delete && !m_finalDir.empty()) {
+		// After a deletion we cannot refresh if inside the deleted directories. Navigate user out if it
+		auto curPath = m_pState->GetRemotePath();
+		if (!curPath.empty() && (curPath == m_finalDir || m_finalDir.IsParentOf(curPath, false))) {
+			StopRecursiveOperation();
+			m_pState->ChangeRemoteDir(m_finalDir, wxString(), LIST_FLAG_REFRESH);
+			return false;
+		}
+	}
+
 	StopRecursiveOperation();
 	m_pState->RefreshRemote();
 	return false;
