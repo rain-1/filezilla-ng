@@ -16,7 +16,7 @@ Usage:
 */
 
 template<typename F, typename Control, typename ...Args, typename ...Args2>
-F xrc_call(wxWindow& parent, char const* name, F(Control::* ptr)(Args...), Args2&& ... args)
+F xrc_call(wxWindow const& parent, char const* name, F(Control::* ptr)(Args...), Args2&& ... args)
 {
 	F ret{};
 	Control* c = dynamic_cast<Control*>(parent.FindWindow(XRCID(name)));
@@ -29,7 +29,7 @@ F xrc_call(wxWindow& parent, char const* name, F(Control::* ptr)(Args...), Args2
 }
 
 template<typename Control, typename ...Args, typename ...Args2>
-void xrc_call(wxWindow& parent, char const* name, void (Control::* ptr)(Args...), Args2&& ... args)
+void xrc_call(wxWindow const& parent, char const* name, void (Control::* ptr)(Args...), Args2&& ... args)
 {
 	Control* c = dynamic_cast<Control*>(parent.FindWindow(XRCID(name)));
 	wxASSERT(c);
@@ -39,7 +39,7 @@ void xrc_call(wxWindow& parent, char const* name, void (Control::* ptr)(Args...)
 }
 
 template<typename S, typename F, typename Control, typename ...Args, typename ...Args2>
-F xrc_call(wxWindow& parent, S&& name, F(Control::* ptr)(Args...) const, Args2&& ... args)
+F xrc_call(wxWindow const& parent, S&& name, F(Control::* ptr)(Args...) const, Args2&& ... args)
 {
 	F ret{};
 	Control* c = dynamic_cast<Control*>(parent.FindWindow(XRCID(name)));
@@ -52,7 +52,7 @@ F xrc_call(wxWindow& parent, S&& name, F(Control::* ptr)(Args...) const, Args2&&
 }
 
 template<typename S, typename Control, typename ...Args, typename ...Args2>
-void xrc_call(wxWindow& parent, S&& name, void (Control::* ptr)(Args...) const, Args2&& ... args)
+void xrc_call(wxWindow const& parent, S&& name, void (Control::* ptr)(Args...) const, Args2&& ... args)
 {
 	Control* c = dynamic_cast<Control*>(parent.FindWindow(XRCID(name)));
 	wxASSERT(c);
