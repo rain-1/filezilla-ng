@@ -1075,7 +1075,7 @@ bool CSiteManagerDialog::Verify()
 			}
 
 			// Check (again) that the key file is in the correct format since it might have been introduced manually
-			CFZPuttyGenInterface cfzg(COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE), this);
+			CFZPuttyGenInterface cfzg(this);
 			if (!cfzg.IsKeyFileValid(keyFile, false))
 			{
 				if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))

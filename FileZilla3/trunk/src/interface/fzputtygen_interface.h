@@ -6,7 +6,7 @@
 class CFZPuttyGenInterface
 {
 public:
-	CFZPuttyGenInterface(const wxString& executable, wxWindow* parent);
+	CFZPuttyGenInterface(wxWindow* parent);
 	virtual ~CFZPuttyGenInterface();
 	bool LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data);
 	bool IsKeyFileValid(wxString keyFile, bool silent);
@@ -17,13 +17,11 @@ public:
 	bool IsProcessStarted();
 
 protected:
-	wxProcess* m_pProcess;
-	bool m_initialized;
-	wxString m_executable;
+	wxProcess* m_pProcess{};
+	bool m_initialized{};
 	wxWindow* m_parent;
-
-	enum ReplyCode
-	{
+	
+	enum ReplyCode {
 		success,
 		error,
 		failure
