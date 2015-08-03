@@ -47,6 +47,7 @@ protected:
 
 	void SetProtocol(ServerProtocol protocol);
 	ServerProtocol GetProtocol() const;
+	LogonType GetLogonType() const;
 
 	bool IsPredefinedItem(wxTreeItemId item);
 
@@ -89,6 +90,8 @@ protected:
 	void OnNewBookmark(wxCommandEvent&);
 	void OnBookmarkBrowse(wxCommandEvent&);
 	void OnKeyFileBrowse(wxCommandEvent&);
+
+	void SetControlVisibility(ServerProtocol protocol, LogonType type);
 
 	CInterProcessMutex* m_pSiteManagerMutex{};
 

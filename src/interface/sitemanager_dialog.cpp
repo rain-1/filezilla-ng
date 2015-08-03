@@ -18,6 +18,7 @@
 #include <wx/dcclient.h>
 #include <wx/dnd.h>
 #include <wx/file.h>
+#include <wx/gbsizer.h>
 
 #ifdef __WXMSW__
 #include "commctrl.h"
@@ -396,6 +397,16 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	wxSize clientSize = GetClientSize();
 	SetMinSize(GetSizer()->GetMinSize() + size - clientSize);
 	SetClientSize(minSize);
+
+	// Set min height of general page sizer
+	auto generalSizer = static_cast<wxGridBagSizer*>(xrc_call(*this, "ID_PROTOCOL", &wxWindow::GetContainingSizer));
+	generalSizer->SetMinSize(generalSizer->GetMinSize());
+	generalSizer->SetEmptyCellSize(wxSize(-5, -5));
+
+	// Set min height of encryption row
+	wxSize descSize = XRCCTRL(*this, "ID_ENCRYPTION_DESC", wxWindow)->GetSize();
+	wxSize encSize = XRCCTRL(*this, "ID_ENCRYPTION", wxWindow)->GetSize();
+	xrc_call(*this, "ID_ENCRYPTION", &wxWindow::GetContainingSizer)->GetItem(1)->SetMinSize(0, std::max(descSize.GetHeight(), encSize.GetHeight()));
 
 	// Load bookmark notebook
 	m_pNotebook_Bookmark = new wxNotebook(m_pNotebook_Site->GetParent(), -1);
@@ -942,7 +953,7 @@ bool CSiteManagerDialog::Verify()
 			return false;
 		}
 
-		LogonType logon_type = CServer::GetLogonTypeFromName(XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->GetStringSelection());
+		auto logon_type = GetLogonType();
 
 		ServerProtocol protocol = GetProtocol();
 		wxASSERT(protocol != UNKNOWN);
@@ -1305,6 +1316,8 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 	if (!data)
 		return;
 
+	SetControlVisibility(GetProtocol(), GetLogonType());
+
 	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(event.GetString() != _("Anonymous"));
 	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
 	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
@@ -1371,7 +1384,7 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	}
 	server.m_server.SetHost(host, port);
 
-	enum LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
+	auto logon_type = GetLogonType();
 	server.m_server.SetLogonType(logon_type);
 
 	server.m_server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
@@ -1485,8 +1498,7 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 		return;
 
 	wxFileDialog dlg(this, _("Choose a key file"), "", "", wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
-	if (dlg.ShowModal() == wxID_OK)
-	{
+	if (dlg.ShowModal() == wxID_OK) {
 		keyFilePath = dlg.GetPath();
 		executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
 		fzpg = new CFZPuttyGenInterface(executable, this);
@@ -1518,8 +1530,7 @@ void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
 		return;
 
 	wxDirDialog dlg(this, _("Choose the default local directory"), XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->GetValue(), wxDD_NEW_DIR_BUTTON);
-	if (dlg.ShowModal() == wxID_OK)
-	{
+	if (dlg.ShowModal() == wxID_OK) {
 		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(dlg.GetPath());
 	}
 }
@@ -1593,6 +1604,8 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(wxString());
 
+		SetControlVisibility(FTP, ANONYMOUS);
+
 		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
 		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(wxString());
 		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->ChangeValue(wxString());
@@ -1648,6 +1661,8 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
 		XRCCTRL(*this, "ID_KEYFILE_BROWSE", wxButton)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
 
+		SetControlVisibility(site_data->m_server.GetProtocol(), site_data->m_server.GetLogonType());
+
 		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
 		XRCCTRL(*this, "ID_LOGONTYPE", wxWindow)->Enable(!predefined);
 
@@ -1687,19 +1702,16 @@ void CSiteManagerDialog::SetCtrlState()
 		int maxMultiple = site_data->m_server.MaximumMultipleConnections();
 		XRCCTRL(*this, "ID_LIMITMULTIPLE", wxCheckBox)->SetValue(maxMultiple != 0);
 		XRCCTRL(*this, "ID_LIMITMULTIPLE", wxWindow)->Enable(!predefined);
-		if (maxMultiple != 0)
-		{
+		if (maxMultiple != 0) {
 			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->Enable(!predefined);
 			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->SetValue(maxMultiple);
 		}
-		else
-		{
+		else {
 			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->Enable(false);
 			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->SetValue(1);
 		}
 
-		switch (site_data->m_server.GetEncodingType())
-		{
+		switch (site_data->m_server.GetEncodingType()) {
 		default:
 		case ENCODING_AUTO:
 			XRCCTRL(*this, "ID_CHARSET_AUTO", wxRadioButton)->SetValue(true);
@@ -1720,8 +1732,7 @@ void CSiteManagerDialog::SetCtrlState()
 		XRCCTRL(*this, "ID_CONNECT", wxButton)->SetDefault();
 #endif
 	}
-	else
-	{
+	else {
 		m_pNotebook_Site->Hide();
 		m_pNotebook_Bookmark->Show();
 		m_pNotebook_Site->GetContainingSizer()->Layout();
@@ -1765,12 +1776,45 @@ void CSiteManagerDialog::OnCharsetChange(wxCommandEvent& event)
 
 void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent& event)
 {
-	wxChoice* pProtocol = XRCCTRL(*this, "ID_PROTOCOL", wxChoice);
-	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
-	wxStaticText* pEncryptionDesc = XRCCTRL(*this, "ID_ENCRYPTION_DESC", wxStaticText);
+	SetControlVisibility(GetProtocol(), GetLogonType());
+}
 
-	pEncryption->Show(pProtocol->GetSelection() != 1);
-	pEncryptionDesc->Show(pProtocol->GetSelection() != 1);
+void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType type)
+{
+	xrc_call(*this, "ID_ENCRYPTION_DESC", &wxStaticText::Show, protocol != SFTP);
+	xrc_call(*this, "ID_ENCRYPTION", &wxChoice::Show, protocol != SFTP);
+
+	auto choice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
+
+	// Disallow invalid combinations
+	if (protocol == SFTP && type == ACCOUNT) {
+		type = NORMAL;
+		choice->Select(choice->FindString(CServer::GetNameFromLogonType(type)));
+	}
+	else if (protocol != SFTP && type == KEY) {
+		type = NORMAL;
+		choice->Select(choice->FindString(CServer::GetNameFromLogonType(type)));
+	}
+
+	int toDelete = choice->FindString(CServer::GetNameFromLogonType(protocol == SFTP ? ACCOUNT : KEY));
+	int toAdd    = choice->FindString(CServer::GetNameFromLogonType(protocol != SFTP ? ACCOUNT : KEY));
+	if (toDelete != -1) {
+		choice->Delete(toDelete);
+	}
+	if (toAdd == -1) {
+		choice->Append(CServer::GetNameFromLogonType(protocol != SFTP ? ACCOUNT : KEY));
+	}
+
+	xrc_call(*this, "ID_ACCOUNT_DESC", &wxStaticText::Show, protocol != SFTP && type == ACCOUNT);
+	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Show, protocol != SFTP && type == ACCOUNT);
+	xrc_call(*this, "ID_PASS_DESC", &wxStaticText::Show, protocol != SFTP || type != KEY);
+	xrc_call(*this, "ID_PASS", &wxTextCtrl::Show, protocol != SFTP || type != KEY);
+	xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::Show, protocol == SFTP && type == KEY);
+	xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Show, protocol == SFTP && type == KEY);
+	xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Show, protocol == SFTP && type == KEY);
+
+	xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::GetContainingSizer)->CalcMin();
+	xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::GetContainingSizer)->Layout();
 }
 
 void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
@@ -2337,4 +2381,9 @@ ServerProtocol CSiteManagerDialog::GetProtocol() const
 	case 3:
 		return INSECURE_FTP;
 	}
+}
+
+LogonType CSiteManagerDialog::GetLogonType() const
+{
+	return CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
 }
