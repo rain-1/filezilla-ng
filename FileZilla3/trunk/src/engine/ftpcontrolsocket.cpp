@@ -4239,7 +4239,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 			return FZ_REPLY_ERROR;
 		}
 
-		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server.FormatHost(), _T("FTP"));
+		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server.FormatHost(), _T("FTP")); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
 	}
 	else {
 		pData->ftp_proxy_type = 0;
