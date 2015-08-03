@@ -17,8 +17,7 @@ END_EVENT_TABLE()
 
 COptionsPageConnectionSFTP::COptionsPageConnectionSFTP()
 {
-	wxString executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
-	m_pFzpg = new CFZPuttyGenInterface(executable, this);
+	m_pFzpg = new CFZPuttyGenInterface(this);
 }
 
 COptionsPageConnectionSFTP::~COptionsPageConnectionSFTP()

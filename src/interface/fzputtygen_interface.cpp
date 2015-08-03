@@ -4,12 +4,9 @@
 #include "filezillaapp.h"
 #include "inputdialog.h"
 
-CFZPuttyGenInterface::CFZPuttyGenInterface(const wxString& executable, wxWindow* parent)
+CFZPuttyGenInterface::CFZPuttyGenInterface(wxWindow* parent)
+	: m_parent(parent)
 {
-	m_pProcess = 0;
-	m_initialized = false;
-	m_executable = executable;
-	m_parent = parent;
 }
 
 CFZPuttyGenInterface::~CFZPuttyGenInterface()
@@ -123,12 +120,10 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 	needs_conversion = !IsKeyFileValid(keyFile, silent);
 	encrypted = IsKeyFileEncrypted(keyFile, silent);
 
-	if (encrypted || needs_conversion)
-	{
+	if (encrypted || needs_conversion) {
 		wxASSERT(!silent);
 
-		if (needs_conversion)
-		{
+		if (needs_conversion) {
 			if (!encrypted)
 				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
 			else
@@ -141,8 +136,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		if (res != wxYES)
 			return false;
 
-		if (encrypted)
-		{
+		if (encrypted) {
 			msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile);
 
 			if (!dlg.Create(m_parent, _("Password required"), msg))
@@ -163,8 +157,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		code = GetReply(reply);
 		if (code == failure)
 			return false;
-		if (code != success)
-		{
+		if (code != success) {
 			msg = wxString::Format(_("Failed to load private key: %s"), reply);
 			wxMessageBoxEx(msg, _("Could not load private key"), wxICON_EXCLAMATION);
 			return false;
@@ -178,8 +171,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		if (newName.empty())
 			return false;
 
-		if (newName == keyFile)
-		{
+		if (newName == keyFile) {
 			// Not actually a requirement by fzputtygen, but be on the safe side. We don't want the user to lose his keys.
 			wxMessageBoxEx(_("Source and target file may not be the same"), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
@@ -189,15 +181,13 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		code = GetReply(reply);
 		if (code == failure)
 			return false;
-		if (code != success)
-		{
+		if (code != success) {
 			wxMessageBoxEx(wxString::Format(_("Could not write keyfile: %s"), reply), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 		keyFile = newName;
 	}
-	else
-	{
+	else {
 		if (!Send(_T("load")))
 			return false;
 		code = GetReply(reply);
@@ -223,35 +213,33 @@ bool CFZPuttyGenInterface::LoadProcess()
 	if (m_initialized)
 		return m_pProcess != 0;
 
-	wxString executable = m_executable;
+	wxString executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
 	int pos = executable.Find(wxFileName::GetPathSeparator(), true);
-	if (pos == -1)
-	{
-		wxMessageBoxEx(_(m_executable + " could not be started"),
-				_("Error starting program"),
-				wxICON_EXCLAMATION);
+	if (pos == -1) {
+		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
 		return false;
 	}
-	else
-	{
+	else {
 		executable = executable.Left(pos + 1) + _T("fzputtygen");
 #ifdef __WXMSW__
 		executable += _T(".exe");
 #endif
 		if (!executable.empty() && executable[0] == '"')
 			executable += '"';
+
+		if (executable.Find(' ') != -1 && executable[0] != '"') {
+			executable = '"' + executable + '"';
+		}
 	}
 
 	m_pProcess = new wxProcess(m_parent);
 	m_pProcess->Redirect();
 
-	if (!wxExecute(executable, wxEXEC_ASYNC, m_pProcess))
-	{
+	if (!wxExecute(executable, wxEXEC_ASYNC, m_pProcess)) {
 		delete m_pProcess;
 		m_pProcess = 0;
 
-		wxMessageBoxEx(_(executable + " could not be started"), _("Error starting program"),
-				wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -270,11 +258,8 @@ bool CFZPuttyGenInterface::Send(const wxString& cmd)
 	wxOutputStream* stream = m_pProcess->GetOutputStream();
 	stream->Write((const char *) buf, len);
 
-	if (stream->GetLastError() != wxSTREAM_NO_ERROR || stream->LastWrite() != len)
-	{
-		wxMessageBoxEx(_("Could not send command to " + m_executable),
-				_("Command failed"),
-				wxICON_EXCLAMATION);
+	if (stream->GetLastError() != wxSTREAM_NO_ERROR || stream->LastWrite() != len) {
+		wxMessageBoxEx(_("Could not send command to fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 		return false;
 	}
 
@@ -286,9 +271,8 @@ CFZPuttyGenInterface::ReplyCode CFZPuttyGenInterface::GetReply(wxString& reply)
 	if (!m_pProcess)
 		return failure;
 	wxInputStream *pStream = m_pProcess->GetInputStream();
-	if (!pStream)
-	{
-		wxMessageBoxEx(_("Could not get reply from " + m_executable), _("Command failed"), wxICON_EXCLAMATION);
+	if (!pStream) {
+		wxMessageBoxEx(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 		return failure;
 	}
 
@@ -296,15 +280,12 @@ CFZPuttyGenInterface::ReplyCode CFZPuttyGenInterface::GetReply(wxString& reply)
 
 	wxString input;
 
-	for (;;)
-	{
+	for (;;) {
 		int pos = input.Find('\n');
-		if (pos == wxNOT_FOUND)
-		{
+		if (pos == wxNOT_FOUND) {
 			pStream->Read(buffer, 99);
 			int read;
-			if (pStream->Eof() || !(read = pStream->LastRead()))
-			{
+			if (pStream->Eof() || !(read = pStream->LastRead())) {
 				wxMessageBoxEx(_("Could not get reply from fzputtygen."), _("Command failed"), wxICON_EXCLAMATION);
 				return failure;
 			}
@@ -323,12 +304,11 @@ CFZPuttyGenInterface::ReplyCode CFZPuttyGenInterface::GetReply(wxString& reply)
 			pos2 = pos - 1;
 		else
 			pos2 = pos;
-		if (!pos2)
-		{
+		if (!pos2) {
 			input = input.Mid(pos + 1);
 			continue;
 		}
-		if(input.empty()) {
+		if (input.empty()) {
 			continue;
 		}
 		wxChar c = input[0];
