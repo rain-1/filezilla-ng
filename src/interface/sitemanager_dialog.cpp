@@ -1500,8 +1500,7 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 	wxFileDialog dlg(this, _("Choose a key file"), "", "", wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 	if (dlg.ShowModal() == wxID_OK) {
 		keyFilePath = dlg.GetPath();
-		executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
-		fzpg = new CFZPuttyGenInterface(executable, this);
+		fzpg = new CFZPuttyGenInterface(this);
 		// If the selected file was a PEM file, LoadKeyFile() will automatically convert it to PPK
 		// and tell us the new location.
 		if (fzpg->LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData))
