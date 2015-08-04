@@ -354,6 +354,8 @@ public:
 
 	int GetFileCount() const { return m_fileCount; }
 
+	void WriteToFile(pugi::xml_node element) const;
+
 protected:
 
 	void CreateColumns(std::list<ColumnId> const& extraColumns = std::list<ColumnId>());
@@ -363,7 +365,7 @@ protected:
 	CServerItem* GetServerItem(const CServer& server);
 
 	// Gets item with given index
-	CQueueItem* GetQueueItem(unsigned int item);
+	CQueueItem* GetQueueItem(unsigned int item) const;
 
 	// Get index for given queue item
 	int GetItemIndex(const CQueueItem* item);
@@ -412,6 +414,7 @@ protected:
 	void OnEndColumnDrag(wxListEvent& event);
 	void OnTimer(wxTimerEvent& event);
 	void OnKeyDown(wxKeyEvent& event);
+	void OnExport(wxCommandEvent&);
 };
 
 class CQueueView;

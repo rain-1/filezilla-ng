@@ -153,8 +153,6 @@ public:
 
 	virtual void CommitChanges();
 
-	void WriteToFile(pugi::xml_node element) const;
-
 	void ProcessNotification(CFileZillaEngine* pEngine, std::unique_ptr<CNotification>&& pNotification);
 
 	void RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString& newName, bool local);

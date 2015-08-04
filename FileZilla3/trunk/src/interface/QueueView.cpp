@@ -2807,17 +2807,6 @@ void CQueueView::DeleteEngines()
 	m_engineData.clear();
 }
 
-void CQueueView::WriteToFile(pugi::xml_node element) const
-{
-	auto queue = element.child("Queue");
-	if (!queue) {
-		queue = element.append_child("Queue");
-	}
-
-	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		(*iter)->SaveItem(queue);
-}
-
 void CQueueView::OnSetPriority(wxCommandEvent& event)
 {
 #ifndef __WXMSW__
