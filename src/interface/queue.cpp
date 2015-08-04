@@ -583,7 +583,7 @@ void CServerItem::SaveItem(pugi::xml_node& element) const
 	auto server = element.append_child("Server");
 	SetServer(server, m_server);
 
-	for (std::vector<CQueueItem*>::const_iterator iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
+	for (auto iter = m_children.cbegin() + m_removed_at_front; iter != m_children.cend(); ++iter)
 		(*iter)->SaveItem(server);
 }
 
@@ -724,6 +724,7 @@ EVT_CHAR(CQueueViewBase::OnChar)
 EVT_LIST_COL_END_DRAG(wxID_ANY, CQueueViewBase::OnEndColumnDrag)
 EVT_TIMER(wxID_ANY, CQueueViewBase::OnTimer)
 EVT_KEY_DOWN(CQueueViewBase::OnKeyDown)
+EVT_MENU(XRCID("ID_EXPORT"), CQueueViewBase::OnExport)
 END_EVENT_TABLE()
 
 CQueueViewBase::CQueueViewBase(CQueue* parent, int index, const wxString& title)
@@ -762,17 +763,14 @@ CQueueViewBase::~CQueueViewBase()
 		delete *iter;
 }
 
-CQueueItem* CQueueViewBase::GetQueueItem(unsigned int item)
+CQueueItem* CQueueViewBase::GetQueueItem(unsigned int item) const
 {
-	std::vector<CServerItem*>::iterator iter;
-	for (iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-	{
+	for (auto iter = m_serverList.cbegin(); iter != m_serverList.cend(); ++iter) {
 		if (!item)
 			return *iter;
 
 		unsigned int count = (*iter)->GetChildrenCount(true);
-		if (item > count)
-		{
+		if (item > count) {
 			item -= count + 1;
 			continue;
 		}
@@ -1438,6 +1436,35 @@ void CQueueViewBase::OnKeyDown(wxKeyEvent& event)
 	}
 	else
 		event.Skip();
+}
+
+void CQueueViewBase::WriteToFile(pugi::xml_node element) const
+{
+	auto queue = element.child("Queue");
+	if (!queue) {
+		queue = element.append_child("Queue");
+	}
+
+	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+		(*iter)->SaveItem(queue);
+}
+
+void CQueueViewBase::OnExport(wxCommandEvent&)
+{
+	wxFileDialog dlg(m_parent, _("Select file for exported queue"), wxString(),
+		_T("FileZilla.xml"), _T("XML files (*.xml)|*.xml"),
+		wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+
+	if (dlg.ShowModal() != wxID_OK)
+		return;
+
+	CXmlFile xml(dlg.GetPath());
+
+	auto exportRoot = xml.CreateEmpty();
+
+	WriteToFile(exportRoot);
+
+	xml.Save(true);
 }
 
 // ------

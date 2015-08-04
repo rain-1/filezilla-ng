@@ -411,6 +411,9 @@
         <checkable>1</checkable>
       </object>
     </object>
+    <object class="wxMenuItem" name="ID_EXPORT">
+      <label>E&amp;xport...</label>
+    </object>
   </object>
   <object class="wxMenu" name="ID_MENU_LOG">
     <object class="wxMenuItem" name="ID_MENU_SERVER_CMD">
@@ -452,6 +455,9 @@
     <object class="wxMenuItem" name="ID_REQUEUE">
       <label>R&amp;eset and requeue selected files</label>
     </object>
+    <object class="wxMenuItem" name="ID_EXPORT">
+      <label>E&amp;xport...</label>
+    </object>
   </object>
   <object class="wxMenu" name="ID_MENU_QUEUE_SUCCESSFUL">
     <object class="wxMenuItem" name="ID_REMOVEALL">
@@ -471,6 +477,9 @@
     <object class="wxMenuItem" name="ID_AUTOCLEAR">
       <label>A&amp;utomatically remove successful transfers</label>
       <checkable>1</checkable>
+    </object>
+    <object class="wxMenuItem" name="ID_EXPORT">
+      <label>E&amp;xport...</label>
     </object>
   </object>
   <object class="wxMenu" name="ID_MENU_REMOTETREE">
