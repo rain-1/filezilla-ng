@@ -38,91 +38,65 @@ bool CFZPuttyGenInterface::IsProcessStarted()
 	return m_initialized;
 }
 
-bool CFZPuttyGenInterface::IsKeyFileValid(wxString keyFile, bool silent)
+int CFZPuttyGenInterface::NeedsConversion(wxString keyFile, bool silent)
 {
-	bool result = false;
-	wxString reply;
-	ReplyCode code;
-
-	if (!LoadProcess())
-		return false;
-
 	if (!Send(_T("file " + keyFile)))
-		return false;
+		return -1;
 
-	code = GetReply(reply);
+	wxString reply;
+	ReplyCode code = GetReply(reply);
 	if (code == failure)
-		return false;
-	if (code == error || (reply != _T("0") && reply != _T("1")))
-	{
-		if (!silent)
-		{
+		return -1;
+	if (code == error || (reply != _T("0") && reply != _T("1"))) {
+		if (!silent) {
 			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile);
 			wxMessageBoxEx(msg, _("Could not load key file"), wxICON_EXCLAMATION);
 		}
-		return false;
+		return -1;
 	}
 
-	if (reply == _T("1"))
-	{
-		if (silent)
-			return false;
-
-		// This is a PPK key
-		result = false;
-	}
-	else
-		result = true;
-
-	return result;
+	return reply == _T("1") ? 1 : 0;
 }
 
-bool CFZPuttyGenInterface::IsKeyFileEncrypted(wxString keyFile, bool silent)
+int CFZPuttyGenInterface::IsKeyFileEncrypted(wxString keyFile, bool silent)
 {
-	bool result = false;
-	wxString reply;
-	ReplyCode code;
-
-	if (!LoadProcess())
-		return false;
-
 	if (!Send(_T("encrypted")))
-		return false;
-	code = GetReply(reply);
-	if (code != success)
-	{
+		return -1;
+
+	wxString reply;
+	ReplyCode code = GetReply(reply);
+	if (code != success) {
 		wxASSERT(code != error);
-		return false;
+		return -1;
 	}
 
-	if (reply == _T("1"))
-	{
-		if (silent)
-			return false;
-
-		result = true;
-	}
-	else
-		result = false;
-
-	return result;
+	return reply == _T("1") ? 1 : 0;
 }
 
 bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data)
 {
-	wxString msg, reply;
+	if (!LoadProcess(silent)) {
+		return false;
+	}
+
+	int needs_conversion = NeedsConversion(keyFile, silent);
+	if (needs_conversion < 0) {
+		return false;
+	}
+	
+	int encrypted = IsKeyFileEncrypted(keyFile, silent);
+	if (encrypted < 0) {
+		return false;
+	}
+
+	wxString reply;
 	ReplyCode code;
-	bool encrypted = false, needs_conversion = false;
-	int res = 0;
-	CInputDialog dlg;
-
-	// If the key file is not valid, then it needs conversion
-	needs_conversion = !IsKeyFileValid(keyFile, silent);
-	encrypted = IsKeyFileEncrypted(keyFile, silent);
-
 	if (encrypted || needs_conversion) {
-		wxASSERT(!silent);
+		if (silent) {
+			return false;
+		}
 
+		wxString msg;
 		if (needs_conversion) {
 			if (!encrypted)
 				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
@@ -132,13 +106,14 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		else if (encrypted)
 			msg = wxString::Format(_("The file '%s' is password protected. Password protected key files are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile);
 
-		res = wxMessageBoxEx(msg, _("Convert key file"), wxICON_QUESTION | wxYES_NO);
+		int res = wxMessageBoxEx(msg, _("Convert key file"), wxICON_QUESTION | wxYES_NO);
 		if (res != wxYES)
 			return false;
 
 		if (encrypted) {
 			msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile);
 
+			CInputDialog dlg;
 			if (!dlg.Create(m_parent, _("Password required"), msg))
 				return false;
 
@@ -148,12 +123,14 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 				return false;
 			if (!Send(_T("password " + dlg.GetValue())))
 				return false;
+			wxString reply;
 			if (GetReply(reply) != success)
 				return false;
 		}
 
 		if (!Send(_T("load")))
 			return false;
+		wxString reply;
 		code = GetReply(reply);
 		if (code == failure)
 			return false;
@@ -208,7 +185,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 	return true;
 }
 
-bool CFZPuttyGenInterface::LoadProcess()
+bool CFZPuttyGenInterface::LoadProcess(bool silent)
 {
 	if (m_initialized)
 		return m_pProcess != 0;
@@ -216,7 +193,9 @@ bool CFZPuttyGenInterface::LoadProcess()
 	wxString executable = COptions::Get()->GetOption(OPTION_FZSFTP_EXECUTABLE);
 	int pos = executable.Find(wxFileName::GetPathSeparator(), true);
 	if (pos == -1) {
-		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
+		if (!silent) {
+			wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
+		}
 		return false;
 	}
 	else {
@@ -235,11 +214,14 @@ bool CFZPuttyGenInterface::LoadProcess()
 	m_pProcess = new wxProcess(m_parent);
 	m_pProcess->Redirect();
 
+	wxLogNull log;
 	if (!wxExecute(executable, wxEXEC_ASYNC, m_pProcess)) {
 		delete m_pProcess;
 		m_pProcess = 0;
 
-		wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
+		if (!silent) {
+			wxMessageBoxEx(_("fzputtygen could not be started.\nPlease make sure this executable exists in the same directory as the main FileZilla executable."), _("Error starting program"), wxICON_EXCLAMATION);
+		}
 		return false;
 	}
 
