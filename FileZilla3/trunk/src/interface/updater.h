@@ -10,7 +10,7 @@ struct build
 	wxString url_;
 	wxString version_;
 	wxString hash_;
-	wxULongLong size_;
+	int64_t size_{-1};
 };
 
 struct version_information
@@ -65,7 +65,7 @@ public:
 
 	wxString DownloadedFile() const;
 
-	wxULongLong BytesDownloaded() const;
+	int64_t BytesDownloaded() const; // Returns -1 on error
 
 	wxString GetLog() const { return log_; }
 
@@ -95,11 +95,11 @@ protected:
 	UpdaterState ProcessFinishedDownload();
 	UpdaterState ProcessFinishedData(bool can_download);
 
-	bool VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum );
+	bool VerifyChecksum(wxString const& file, int64_t size, wxString const& checksum);
 
 	wxString GetTempFile() const;
-	wxString GetFilename( wxString const& url) const;
-	wxString GetLocalFile( build const& b, bool allow_existing );
+	wxString GetFilename(wxString const& url) const;
+	wxString GetLocalFile(build const& b, bool allow_existing);
 
 	void SetState( UpdaterState s );
 

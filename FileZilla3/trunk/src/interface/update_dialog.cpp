@@ -243,12 +243,12 @@ void CUpdateDialog::OnInstall(wxCommandEvent&)
 
 void CUpdateDialog::OnTimer(wxTimerEvent&)
 {
-	wxULongLong size = updater_.AvailableBuild().size_;
-	wxULongLong downloaded = updater_.BytesDownloaded();
+	int64_t size = updater_.AvailableBuild().size_;
+	int64_t downloaded = updater_.BytesDownloaded();
 
 	unsigned int percent = 0;
-	if( size > 0 ) {
-		percent = ((downloaded * 100) / size).GetLo();
+	if (size > 0 && downloaded >= 0) {
+		percent = static_cast<unsigned int>((downloaded * 100) / size);
 	}
 
 	XRCCTRL(*this, "ID_DOWNLOAD_PROGRESS", wxStaticText)->SetLabel(wxString::Format(_("(%u%% downloaded)"), percent));

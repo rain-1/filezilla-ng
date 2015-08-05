@@ -33,29 +33,18 @@ public:
 	CHttpOpData(COpData* pOpData)
 		: m_pOpData(pOpData)
 	{
-		m_gotHeader = false;
-		m_responseCode = -1;
-		m_redirectionCount = 0;
-		m_transferEncoding = unknown;
-
-		m_chunkData.getTrailer = false;
-		m_chunkData.size = 0;
-		m_chunkData.terminateChunk = false;
-
-		m_totalSize = -1;
-		m_receivedData = 0;
 	}
 
-	virtual ~CHttpOpData() {}
+	virtual ~CHttpOpData() = default;
 
-	bool m_gotHeader;
-	int m_responseCode;
+	bool m_gotHeader{};
+	int m_responseCode{-1};
 	wxString m_responseString;
 	wxURI m_newLocation;
-	int m_redirectionCount;
+	int m_redirectionCount{};
 
-	wxLongLong m_totalSize;
-	wxLongLong m_receivedData;
+	int64_t m_totalSize{-1};
+	int64_t m_receivedData{};
 
 	COpData* m_pOpData;
 
@@ -65,13 +54,13 @@ public:
 		chunked,
 		unknown
 	};
-	enum transferEncodings m_transferEncoding;
+	transferEncodings m_transferEncoding{unknown};
 
 	struct t_chunkData
 	{
-		bool getTrailer;
-		bool terminateChunk;
-		wxLongLong size;
+		bool getTrailer{};
+		bool terminateChunk{};
+		int64_t size{};
 	} m_chunkData;
 };
 
@@ -515,7 +504,7 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 	}
 
 	if (engine_.transfer_status_.empty()) {
-		engine_.transfer_status_.Init(pData->m_totalSize.GetValue(), 0, false);
+		engine_.transfer_status_.Init(pData->m_totalSize, 0, false);
 		engine_.transfer_status_.SetStartTime();
 	}
 
@@ -764,7 +753,7 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 		{
 			unsigned int dataLen = len;
 			if (pData->m_chunkData.size < len)
-				dataLen = pData->m_chunkData.size.GetLo();
+				dataLen = static_cast<unsigned int>(pData->m_chunkData.size);
 			pData->m_receivedData += dataLen;
 			int res = ProcessData(p, dataLen);
 			if (res != FZ_REPLY_WOULDBLOCK)

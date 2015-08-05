@@ -2588,7 +2588,8 @@ int CFtpControlSocket::FileTransferSend()
 
 						// Assume native 64 bit type exists
 						if (pFile->Seek(startOffset, CFile::begin) == wxInvalidOffset) {
-							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), wxLongLong(startOffset).ToString());
+							wxString const s = std::to_wstring(startOffset);
+							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), s);
 							ResetOperation(FZ_REPLY_ERROR);
 							return FZ_REPLY_ERROR;
 						}
@@ -4078,7 +4079,7 @@ int CFtpControlSocket::TransferSend()
 		}
 		break;
 	case rawtransfer_rest:
-		cmd = _T("REST ") + pData->pOldData->resumeOffset.ToString();
+		cmd = _T("REST ") + std::to_wstring(pData->pOldData->resumeOffset);
 		if (pData->pOldData->resumeOffset > 0)
 			m_sentRestartOffset = true;
 		measureRTT = true;

@@ -173,7 +173,7 @@ public:
 	TransferEndReason transferEndReason{TransferEndReason::successful};
 	bool tranferCommandSent{};
 
-	wxLongLong resumeOffset{};
+	int64_t resumeOffset{};
 	bool binary{true};
 };
 
