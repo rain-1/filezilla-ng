@@ -642,7 +642,7 @@
                 <object class="wxGridSizer">
                   <object class="sizeritem">
                     <object class="wxButton" name="ID_ADDKEY">
-                      <label>&amp;Add keyfile...</label>
+                      <label>&amp;Add key file...</label>
                     </object>
                   </object>
                   <object class="sizeritem">
