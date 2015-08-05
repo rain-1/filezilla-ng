@@ -14,6 +14,8 @@
 #include "themeprovider.h"
 #include "Options.h"
 
+#include <algorithm>
+
 class CItemData : public wxTreeItemData
 {
 public:
