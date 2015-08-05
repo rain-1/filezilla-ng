@@ -10,6 +10,18 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.13.0-rc1 (2015-08-05)
+
++ For SFTP servers the private key file to use can now be specified in the Site Manager
++ The contents of each queue tab can now be exported through the context menu
++ MSW: The installer now registers the App Path so that FileZilla is recognized in the Win+R dialog
++ FileZilla now uses pugixml instead of TinyXML to parse and create XML files
++ Several performance improvements
++ Code cleanup and modernization, building FileZilla now requires a C++14 compiler
+- Fixed an assert loading sitemanager.xml created by an old version
+- If password saving is disabled, specifying a password on the command-line no longer leads to extraneous password prompts when transferring files
+- If deleting remote directories via the directory tree, navigate out of the directory tree that is to be deleted
+
 3.12.0.2 (2015-07-09)
 
 - Fix regression on servers that have MLSD facts disabled by default
