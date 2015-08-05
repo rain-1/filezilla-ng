@@ -1055,36 +1055,21 @@ bool CSiteManagerDialog::Verify()
 
 		// In key file logon type, check that the provided key file exists
 		wxString keyFile, keyFileComment, keyFileData;
-		if (logon_type == KEY)
-		{
+		if (logon_type == KEY) {
 			keyFile = XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue();
-			if (keyFile.empty())
-			{
+			if (keyFile.empty()) {
 				wxMessageBox(_("You have to enter a key file path"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
-				return false;
-			}
-			if (!wxFile::Exists(keyFile))
-			{
-				wxMessageBox(_("The specified key file does not exist"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
-				return false;
-			}
-			if (!wxFile::Access(keyFile, wxFile::read))
-			{
-				wxMessageBox(_("The specified key file is not readable"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
+				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
 				return false;
 			}
 
 			// Check (again) that the key file is in the correct format since it might have been introduced manually
 			CFZPuttyGenInterface cfzg(this);
-			if (!cfzg.IsKeyFileValid(keyFile, false))
-			{
-				if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
-					XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
-				else
-				{
-					wxMessageBoxEx(_("Could not load key file"), _("Error"), wxICON_EXCLAMATION);
-					return false;
-				}
+			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
+				XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
+			else {
+				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
+				return false;
 			}
 		}
 
@@ -1480,11 +1465,6 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 
 void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 {
-	CFZPuttyGenInterface* fzpg;
-	wxString executable;
-	wxString keyFilePath, keyFileComment, keyFileData;
-	wxString wildcards("PPK files|*.ppk|PEM files|*.pem|All files|*.*");
-
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
 		return;
@@ -1497,21 +1477,22 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 	if (!data)
 		return;
 
-	wxFileDialog dlg(this, _("Choose a key file"), "", "", wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+	wxString wildcards(_T("PPK files|*.ppk|PEM files|*.pem|All files|*.*"));
+	wxFileDialog dlg(this, _("Choose a key file"), wxString(), wxString(), wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
+
 	if (dlg.ShowModal() == wxID_OK) {
-		keyFilePath = dlg.GetPath();
-		fzpg = new CFZPuttyGenInterface(this);
+		wxString keyFilePath = dlg.GetPath();
 		// If the selected file was a PEM file, LoadKeyFile() will automatically convert it to PPK
 		// and tell us the new location.
-		if (fzpg->LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData))
-		{
+		CFZPuttyGenInterface fzpg(this);
+
+		wxString keyFileComment, keyFileData;
+		if (fzpg.LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData)) {
 			XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFilePath);
 		}
-		else
-		{
-			wxMessageBoxEx(_("Could not load key file"), _("Error"), wxICON_EXCLAMATION);
+		else {
+			xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
 		}
-		delete fzpg;
 	}
 }
 void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)

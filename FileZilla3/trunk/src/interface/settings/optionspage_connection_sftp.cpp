@@ -120,8 +120,7 @@ bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
 bool COptionsPageConnectionSFTP::KeyFileExists(const wxString& keyFile)
 {
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
-	for (int i = 0; i < pKeys->GetItemCount(); ++i)
-	{
+	for (int i = 0; i < pKeys->GetItemCount(); ++i) {
 		if (pKeys->GetItemText(i) == keyFile)
 			return true;
 	}
