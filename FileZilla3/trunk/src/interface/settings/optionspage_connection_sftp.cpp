@@ -103,10 +103,9 @@ bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
 	if (!m_pFzpg->LoadKeyFile(keyFile, silent, comment, data))
 		return false;
 
-	if (KeyFileExists(keyFile))
-	{
+	if (KeyFileExists(keyFile)) {
 		if (!silent)
-			wxMessageBoxEx(_("Selected file is already loaded"), _("Cannot load keyfile"), wxICON_INFORMATION);
+			wxMessageBoxEx(_("Selected file is already loaded"), _("Cannot load key file"), wxICON_INFORMATION);
 		return false;
 	}
 

@@ -58,7 +58,7 @@ bool CFZPuttyGenInterface::IsKeyFileValid(wxString keyFile, bool silent)
 		if (!silent)
 		{
 			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile);
-			wxMessageBoxEx(msg, _("Could not load keyfile"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(msg, _("Could not load key file"), wxICON_EXCLAMATION);
 		}
 		return false;
 	}
@@ -127,12 +127,12 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 			if (!encrypted)
 				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
 			else
-				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nThe file is also password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into a supported, unprotected format?"), keyFile);
+				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nThe file is also password protected. Password protected key files are not supported by FileZilla yet.\nWould you like to convert it into a supported, unprotected format?"), keyFile);
 		}
 		else if (encrypted)
-			msg = wxString::Format(_("The file '%s' is password protected. Password protected keyfiles are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile);
+			msg = wxString::Format(_("The file '%s' is password protected. Password protected key files are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile);
 
-		res = wxMessageBoxEx(msg, _("Convert keyfile"), wxICON_QUESTION | wxYES_NO);
+		res = wxMessageBoxEx(msg, _("Convert key file"), wxICON_QUESTION | wxYES_NO);
 		if (res != wxYES)
 			return false;
 
@@ -163,7 +163,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 			return false;
 		}
 
-		wxFileDialog dlg(m_parent, _("Select filename for converted keyfile"), wxString(), wxString(), _T("PuTTY private key files (*.ppk)|*.ppk"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		wxFileDialog dlg(m_parent, _("Select filename for converted key file"), wxString(), wxString(), _T("PuTTY private key files (*.ppk)|*.ppk"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 		if (dlg.ShowModal() != wxID_OK)
 			return false;
 
@@ -182,7 +182,7 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		if (code == failure)
 			return false;
 		if (code != success) {
-			wxMessageBoxEx(wxString::Format(_("Could not write keyfile: %s"), reply), _("Could not convert private key"), wxICON_EXCLAMATION);
+			wxMessageBoxEx(wxString::Format(_("Could not write key file: %s"), reply), _("Could not convert private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 		keyFile = newName;

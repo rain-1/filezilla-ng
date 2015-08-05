@@ -147,7 +147,7 @@ int main(int argc, char **argv)
 	{
 	    if (intype == SSH_KEYTYPE_UNOPENABLE)
 	    {
-		fzprintf(sftpError, "No keyfile opened");
+		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
 	    
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 	{
 	    if (intype == SSH_KEYTYPE_UNOPENABLE)
 	    {
-		fzprintf(sftpError, "No keyfile opened");
+		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
 	    if (origcomment)
@@ -181,7 +181,7 @@ int main(int argc, char **argv)
 
 	    if (intype == SSH_KEYTYPE_UNOPENABLE)
 	    {
-		fzprintf(sftpError, "No keyfile opened");
+		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
 
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 
 	    if (intype == SSH_KEYTYPE_UNOPENABLE)
 	    {
-		fzprintf(sftpError, "No keyfile opened");
+		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
 
