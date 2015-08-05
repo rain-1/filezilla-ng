@@ -19,6 +19,8 @@
 #include "volume_enumerator.h"
 #endif
 
+#include <algorithm>
+
 class CTreeItemData : public wxTreeItemData
 {
 public:
