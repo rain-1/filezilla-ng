@@ -728,7 +728,7 @@ void CLocalTreeView::RefreshListing()
 		}
 
 		// Step 2: Enumerate subdirectories on disk and sort them
-		wxArrayString dirs;
+		std::vector<wxString> dirs;
 
 		wxString file;
 		static int64_t const size(-1);
@@ -747,13 +747,14 @@ void CLocalTreeView::RefreshListing()
 
 			dirs.push_back(file);
 		}
-		dirs.Sort(CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode));
+		auto const& sortFunc = CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode);
+		std::sort(dirs.begin(), dirs.end(), [&](auto const& lhs, auto const& rhs) { return sortFunc(lhs, rhs) < 0; });
 
 		bool inserted = false;
 
 		// Step 3: Merge list of subdirectories with subtree.
 		wxTreeItemId child = GetLastChild(dir.item);
-		wxArrayString::reverse_iterator iter = dirs.rbegin();
+		auto iter = dirs.rbegin();
 		while (child || iter != dirs.rend()) {
 			int cmp;
 			if (child && iter != dirs.rend())

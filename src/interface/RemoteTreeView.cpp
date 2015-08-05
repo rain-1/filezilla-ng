@@ -452,13 +452,11 @@ wxBitmap CRemoteTreeView::CreateIcon(int index, const wxString& overlay /*=_T(""
 	GetSystemImageList()->Draw(index, dc, 0, 0, wxIMAGELIST_DRAW_TRANSPARENT);
 
 	// Load overlay
-	if (!overlay.empty())
-	{
+	if (!overlay.empty()) {
 		wxImage unknownIcon = wxArtProvider::GetBitmap(overlay, wxART_OTHER, CThemeProvider::GetIconSize(iconSizeSmall)).ConvertToImage();
 
 		// Convert mask into alpha channel
-		if (unknownIcon.IsOk() && !unknownIcon.HasAlpha())
-		{
+		if (unknownIcon.IsOk() && !unknownIcon.HasAlpha()) {
 			wxASSERT(unknownIcon.HasMask());
 			unknownIcon.InitAlpha();
 		}
@@ -562,7 +560,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 	wxString const path = listing.path.GetPath();
 
-	wxArrayString dirs;
+	std::vector<wxString> dirs;
 	for (unsigned int i = 0; i < listing.GetCount(); ++i) {
 		if (!listing[i].is_dir())
 			continue;
@@ -572,11 +570,11 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 	}
 
 	auto const& sortFunc = CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode);
-	dirs.Sort(sortFunc);
+	std::sort(dirs.begin(), dirs.end(), [&](auto const& lhs, auto const& rhs) { return sortFunc(lhs, rhs) < 0; });
 
 	bool inserted = false;
 	child = GetLastChild(parent);
-	wxArrayString::reverse_iterator iter = dirs.rbegin();
+	auto iter = dirs.rbegin();
 	while (child && iter != dirs.rend()) {
 		int cmp = sortFunc(GetItemText(child), *iter);
 
