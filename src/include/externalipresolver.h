@@ -57,11 +57,11 @@ protected:
 
 	// HTTP data
 	void ResetHttpData(bool resetRedirectCount);
-	bool m_gotHeader;
-	int m_responseCode;
+	bool m_gotHeader{};
+	int m_responseCode{};
 	wxString m_responseString;
 	wxString m_location;
-	int m_redirectCount;
+	int m_redirectCount{};
 
 	enum transferEncodings
 	{
@@ -74,12 +74,12 @@ protected:
 
 	struct t_chunkData
 	{
-		bool getTrailer;
-		bool terminateChunk;
-		wxLongLong size;
+		bool getTrailer{};
+		bool terminateChunk{};
+		int64_t size{};
 	} m_chunkData;
 
-	bool m_finished;
+	bool m_finished{};
 };
 
 #endif //__EXTERNALIPRESOLVER_H__

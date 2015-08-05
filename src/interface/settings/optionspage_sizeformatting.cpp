@@ -92,13 +92,13 @@ void COptionsPageSizeFormatting::UpdateControls()
 	XRCCTRL(*this, "ID_SIZEFORMAT_DECIMALPLACES", wxSpinCtrl)->Enable(format != 0);
 }
 
-wxString COptionsPageSizeFormatting::FormatSize(const wxLongLong& size)
+wxString COptionsPageSizeFormatting::FormatSize(int64_t size)
 {
 	const CSizeFormat::_format format = GetFormat();
 	const bool thousands_separator = GetCheck(XRCID("ID_SIZEFORMAT_SEPARATE_THOUTHANDS"));
 	const int num_decimal_places = XRCCTRL(*this, "ID_SIZEFORMAT_DECIMALPLACES", wxSpinCtrl)->GetValue();
 
-	return CSizeFormat::Format(size.GetValue(), false, format, thousands_separator, num_decimal_places);
+	return CSizeFormat::Format(size, false, format, thousands_separator, num_decimal_places);
 }
 
 void COptionsPageSizeFormatting::UpdateExamples()
@@ -108,7 +108,7 @@ void COptionsPageSizeFormatting::UpdateExamples()
 	XRCCTRL(*this, "ID_EXAMPLE3", wxStaticText)->SetLabel(FormatSize(1234));
 	XRCCTRL(*this, "ID_EXAMPLE4", wxStaticText)->SetLabel(FormatSize(1058817));
 	XRCCTRL(*this, "ID_EXAMPLE5", wxStaticText)->SetLabel(FormatSize(123456789));
-	XRCCTRL(*this, "ID_EXAMPLE6", wxStaticText)->SetLabel(FormatSize(wxLongLong(0x39E9, 0x4F995A72)));
+	XRCCTRL(*this, "ID_EXAMPLE6", wxStaticText)->SetLabel(FormatSize(0x39E94F995A72ll));
 
 	GetSizer()->Layout();
 }

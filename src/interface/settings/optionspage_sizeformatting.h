@@ -21,7 +21,7 @@ public:
 	void OnCheck(wxCommandEvent& event);
 	void OnSpin(wxSpinEvent& event);
 
-	wxString FormatSize(const wxLongLong& size);
+	wxString FormatSize(int64_t size);
 };
 
 #endif //__OPTIONSPAGE_SIZEFORMATTING_H__

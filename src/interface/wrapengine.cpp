@@ -977,20 +977,20 @@ bool CWrapEngine::LoadCache()
 
 		wxFileName fn(resourceDir.GetPath() + xrc);
 		wxDateTime date = fn.GetModificationTime();
-		wxLongLong ticks = date.GetTicks();
+		wxString ticks = std::to_wstring(date.GetTicks());
 
 		auto resourceElement = FindElementWithAttribute(resources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement) {
 			resourceElement = resources.append_child("xrc");
 			SetTextAttribute(resourceElement, "file", xrc);
-			SetTextAttribute(resourceElement, "date", ticks.ToString());
+			SetTextAttribute(resourceElement, "date", ticks);
 			cacheValid = false;
 		}
 		else {
 			wxString xrcNodeDate = GetTextAttribute(resourceElement, "date");
-			if (xrcNodeDate.empty() || xrcNodeDate != ticks.ToString()) {
+			if (xrcNodeDate.empty() || xrcNodeDate != ticks) {
 				cacheValid = false;
-				SetTextAttribute(resourceElement, "date", ticks.ToString());
+				SetTextAttribute(resourceElement, "date", ticks);
 			}
 		}
 	}
@@ -1052,11 +1052,11 @@ bool CWrapEngine::LoadCache()
 	if (!name.empty()) {
 		wxFileName fn(localesDir.GetPath() + name + _T("/filezilla.mo"));
 		wxDateTime date = fn.GetModificationTime();
-		wxLongLong ticks = date.GetTicks();
+		wxString ticks = std::to_wstring(date.GetTicks());
 
 		wxString languageNodeDate = GetTextAttribute(languageElement, "date");
-		if (languageNodeDate.empty() || languageNodeDate != ticks.ToString()) {
-			SetTextAttribute(languageElement, "date", ticks.ToString().mb_str());
+		if (languageNodeDate.empty() || languageNodeDate != ticks) {
+			SetTextAttribute(languageElement, "date", ticks);
 			cacheValid = false;
 		}
 	}

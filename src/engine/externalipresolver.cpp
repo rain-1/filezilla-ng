@@ -414,9 +414,7 @@ void CExternalIPResolver::ResetHttpData(bool resetRedirectCount)
 
 	m_transferEncoding = unknown;
 
-	m_chunkData.getTrailer = false;
-	m_chunkData.size = 0;
-	m_chunkData.terminateChunk = false;
+	m_chunkData = t_chunkData();
 
 	m_finished = false;
 }
@@ -430,7 +428,7 @@ void CExternalIPResolver::OnChunkedData()
 		if (m_chunkData.size != 0) {
 			unsigned int dataLen = len;
 			if (m_chunkData.size < len)
-				dataLen = m_chunkData.size.GetLo();
+				dataLen = static_cast<unsigned int>(m_chunkData.size);
 			OnData(p, dataLen);
 			if (!m_pRecvBuffer)
 				return;

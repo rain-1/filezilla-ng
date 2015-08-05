@@ -379,8 +379,8 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 			}
 			else {
 				s = UpdaterState::newversion_downloading;
-				wxLongLong size = CLocalFileSystem::GetSize(temp);
-				if( size >= 0 && static_cast<unsigned long long>(size.GetValue()) >= version_information_.available_.size_ ) {
+				auto size = CLocalFileSystem::GetSize(temp);
+				if (size >= 0 && size >= version_information_.available_.size_) {
 					s = ProcessFinishedDownload();
 				}
 				else if( !can_download || Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
@@ -465,7 +465,7 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 	return s;
 }
 
-wxString CUpdater::GetLocalFile( build const& b, bool allow_existing )
+wxString CUpdater::GetLocalFile(build const& b, bool allow_existing)
 {
 	wxString const fn = GetFilename( b.url_ );
 	wxString const dl = GetDownloadDir().GetPath();
@@ -658,14 +658,14 @@ void CUpdater::OnTimer(wxTimerEvent&)
 	AutoRunIfNeeded();
 }
 
-bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString const& checksum )
+bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const& checksum)
 {
-	if( file.empty() || checksum.empty() ) {
+	if (file.empty() || checksum.empty()) {
 		return false;
 	}
 
-	wxLongLong filesize = CLocalFileSystem::GetSize(file);
-	if( filesize < 0 || static_cast<unsigned long long>(filesize.GetValue()) != size ) {
+	auto filesize = CLocalFileSystem::GetSize(file);
+	if (filesize < 0 || filesize != size) {
 		return false;
 	}
 
@@ -692,7 +692,7 @@ bool CUpdater::VerifyChecksum( wxString const& file, wxULongLong size, wxString 
 	SHA512_Final(&state, raw_digest);
 
 	wxString digest;
-	for( unsigned int i = 0; i < sizeof(raw_digest); i++ ) {
+	for (unsigned int i = 0; i < sizeof(raw_digest); ++i) {
 		unsigned char l = raw_digest[i] >> 4;
 		unsigned char r = raw_digest[i] & 0x0F;
 
@@ -735,7 +735,7 @@ wxString CUpdater::GetFilename( wxString const& url) const
 {
 	wxString ret;
 	int pos = url.Find('/', true);
-	if( pos != -1 ) {
+	if (pos != -1) {
 		ret = url.Mid(pos + 1);
 	}
 	size_t p = ret.find_first_of(_T("?#"));
@@ -802,11 +802,11 @@ void CUpdater::RemoveHandler( CUpdateHandler& handler )
 	}
 }
 
-wxULongLong CUpdater::BytesDownloaded() const
+int64_t CUpdater::BytesDownloaded() const
 {
-	wxLongLong ret;
-	if( state_ == UpdaterState::newversion_ready ) {
-		if( !local_file_.empty() ) {
+	int64_t ret{-1};
+	if (state_ == UpdaterState::newversion_ready) {
+		if (!local_file_.empty()) {
 			ret = CLocalFileSystem::GetSize(local_file_);
 		}
 	}
@@ -816,10 +816,7 @@ wxULongLong CUpdater::BytesDownloaded() const
 			ret = CLocalFileSystem::GetSize(temp);
 		}
 	}
-	if( ret < 0 ) {
-		ret = 0;
-	}
-	return static_cast<unsigned long long>(ret.GetValue());
+	return ret;
 }
 
 bool CUpdater::UpdatableBuild() const

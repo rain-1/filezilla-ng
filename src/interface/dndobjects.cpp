@@ -136,24 +136,22 @@ wxString CShellExtensionInterface::GetTarget()
 
 bool CShellExtensionInterface::CreateDragDirectory()
 {
-	for (int i = 0; i < 10; i++)
-	{
-		wxDateTime now = wxDateTime::UNow();
-		wxLongLong value = now.GetTicks();
+	for (int i = 0; i < 10; ++i) {
+		auto const now = CDateTime::Now();
+		int64_t value = now.GetTimeT();
 		value *= 1000;
-		value += now.GetMillisecond();
+		value += now.GetMilliseconds();
 		value *= 10;
 		value += i;
 
-		wxFileName dirname(wxStandardPaths::Get().GetTempDir(), DRAG_EXT_DUMMY_DIR_PREFIX + value.ToString());
+		wxFileName dirname(wxStandardPaths::Get().GetTempDir(), DRAG_EXT_DUMMY_DIR_PREFIX + std::to_wstring(value));
 		dirname.Normalize();
 		wxString dir = dirname.GetFullPath();
 
 		if (dir.Len() > MAX_PATH)
 			return false;
 
-		if (CreateDirectory(dir, 0))
-		{
+		if (CreateDirectory(dir, 0)) {
 			m_dragDirectory = dir;
 			return true;
 		}
