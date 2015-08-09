@@ -6,11 +6,10 @@
 
 DECLARE_EVENT_TYPE(fzEVT_UPDATE_LED_TOOLTIP, -1)
 
-class CLed : public wxWindow
+class CLed final : public wxWindow
 {
 public:
 	CLed(wxWindow *parent, unsigned int index);
-	virtual ~CLed();
 
 	void Ping();
 
@@ -18,11 +17,11 @@ protected:
 	void Set();
 	void Unset();
 
-	int m_index;
+	int const m_index;
 	int m_ledState;
 
 	wxBitmap m_leds[2];
-	bool m_loaded;
+	bool m_loaded{};
 
 	wxTimer m_timer;
 

@@ -16,6 +16,7 @@ END_EVENT_TABLE()
 #define LED_ON 0
 
 CLed::CLed(wxWindow *parent, unsigned int index)
+	: m_index(index ? 1 : 0)
 {
 #ifdef __WXGTK__
 	SetBackgroundStyle(wxBG_STYLE_TRANSPARENT);
@@ -23,16 +24,9 @@ CLed::CLed(wxWindow *parent, unsigned int index)
 
 	Create(parent, -1, wxDefaultPosition, wxSize(11, 11));
 
-	if (index == 1)
-		m_index = 1;
-	else
-		m_index = 0;
-
 	m_ledState = LED_OFF;
 
 	m_timer.SetOwner(this);
-
-	m_loaded = false;
 
 	wxImage image;
 	if (!image.LoadFile(wxGetApp().GetResourceDir().GetPath() + _T("leds.png"), wxBITMAP_TYPE_PNG))
@@ -42,11 +36,6 @@ CLed::CLed(wxWindow *parent, unsigned int index)
 	m_leds[1] = wxBitmap(image.GetSubImage(wxRect(11, index * 11, 11, 11)));
 
 	m_loaded = true;
-}
-
-CLed::~CLed()
-{
-	m_timer.Stop();
 }
 
 void CLed::OnPaint(wxPaintEvent&)
@@ -61,8 +50,7 @@ void CLed::OnPaint(wxPaintEvent&)
 
 void CLed::Set()
 {
-	if (m_ledState != LED_ON)
-	{
+	if (m_ledState != LED_ON) {
 		m_ledState = LED_ON;
 		Refresh();
 	}
@@ -70,8 +58,7 @@ void CLed::Set()
 
 void CLed::Unset()
 {
-	if (m_ledState != LED_OFF)
-	{
+	if (m_ledState != LED_OFF) {
 		m_ledState = LED_OFF;
 		Refresh();
 	}
@@ -82,14 +69,11 @@ void CLed::OnTimer(wxTimerEvent& event)
 	if (!m_timer.IsRunning())
 		return;
 
-	if (event.GetId() != m_timer.GetId())
-	{
-		event.Skip();
+	if (event.GetId() != m_timer.GetId()) {
 		return;
 	}
 
-	if (!CFileZillaEngine::IsActive((enum CFileZillaEngine::_direction)m_index))
-	{
+	if (!CFileZillaEngine::IsActive((enum CFileZillaEngine::_direction)m_index)) {
 		Unset();
 		m_timer.Stop();
 	}
