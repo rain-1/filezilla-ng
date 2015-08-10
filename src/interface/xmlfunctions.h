@@ -7,7 +7,7 @@
 #define __XMLFUNCTIONS_H__
 
 #ifdef HAVE_LIBPUGIXML
-#include <pugixml.h>
+#include <pugixml.hpp>
 #else
 #include "../pugixml/pugixml.hpp"
 #endif
