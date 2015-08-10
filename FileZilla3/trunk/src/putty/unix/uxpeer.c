@@ -3,15 +3,18 @@
  * appropriate autoconfery.
  */
 
-#include "putty.h"
-
-#include <sys/socket.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #ifdef HAVE_SO_PEERCRED
 #define _GNU_SOURCE
 #include <features.h>
 #endif
 
+#include <sys/socket.h>
+
+#include "putty.h"
 
 int so_peercred(int fd, int *pid, int *uid, int *gid)
 {
