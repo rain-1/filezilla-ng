@@ -21,14 +21,14 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
 
   AC_LANG_PUSH(C++)
 
-  dnl Check pugixml.h header
+  dnl Check pugixml.hpp header
   if test "x$with_pugixml" != "xbuiltin"; then
     AC_CHECK_HEADER(
-      [pugixml.h],
+      [pugixml.hpp],
       [],
       [
         if test "x$with_pugixml" = "xsystem"; then
-          AC_MSG_ERROR([pugixml.h not found. If you do not have pugixml installed as system library, you can use the copy of pugixml distributed with FileZilla by passing --with-pugixml=builtin as argument to configure.])
+          AC_MSG_ERROR([pugixml.hpp not found. If you do not have pugixml installed as system library, you can use the copy of pugixml distributed with FileZilla by passing --with-pugixml=builtin as argument to configure.])
         else
           with_pugixml=builtin
         fi
