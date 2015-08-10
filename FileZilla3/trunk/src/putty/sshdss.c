@@ -37,7 +37,8 @@ static void sha512_mpint(SHA512_State * s, Bignum b)
     smemclr(lenbuf, sizeof(lenbuf));
 }
 
-static void getstring(char **data, int *datalen, char **p, int *length)
+static void getstring(const char **data, int *datalen,
+                      const char **p, int *length)
 {
     *p = NULL;
     if (*datalen < 4)
@@ -53,9 +54,9 @@ static void getstring(char **data, int *datalen, char **p, int *length)
     *data += *length;
     *datalen -= *length;
 }
-static Bignum getmp(char **data, int *datalen)
+static Bignum getmp(const char **data, int *datalen)
 {
-    char *p;
+    const char *p;
     int length;
     Bignum b;
 
@@ -64,18 +65,18 @@ static Bignum getmp(char **data, int *datalen)
 	return NULL;
     if (p[0] & 0x80)
 	return NULL;		       /* negative mp */
-    b = bignum_from_bytes((unsigned char *)p, length);
+    b = bignum_from_bytes((const unsigned char *)p, length);
     return b;
 }
 
-static Bignum get160(char **data, int *datalen)
+static Bignum get160(const char **data, int *datalen)
 {
     Bignum b;
 
     if (*datalen < 20)
         return NULL;
 
-    b = bignum_from_bytes((unsigned char *)*data, 20);
+    b = bignum_from_bytes((const unsigned char *)*data, 20);
     *data += 20;
     *datalen -= 20;
 
@@ -84,9 +85,10 @@ static Bignum get160(char **data, int *datalen)
 
 static void dss_freekey(void *key);    /* forward reference */
 
-static void *dss_newkey(char *data, int len)
+static void *dss_newkey(const struct ssh_signkey *self,
+                        const char *data, int len)
 {
-    char *p;
+    const char *p;
     int slen;
     struct dss_key *dss;
 
@@ -189,48 +191,11 @@ static char *dss_fmtkey(void *key)
     return p;
 }
 
-static char *dss_fingerprint(void *key)
+static int dss_verifysig(void *key, const char *sig, int siglen,
+			 const char *data, int datalen)
 {
     struct dss_key *dss = (struct dss_key *) key;
-    struct MD5Context md5c;
-    unsigned char digest[16], lenbuf[4];
-    char buffer[16 * 3 + 40];
-    char *ret;
-    int numlen, i;
-
-    MD5Init(&md5c);
-    MD5Update(&md5c, (unsigned char *)"\0\0\0\7ssh-dss", 11);
-
-#define ADD_BIGNUM(bignum) \
-    numlen = (bignum_bitcount(bignum)+8)/8; \
-    PUT_32BIT(lenbuf, numlen); MD5Update(&md5c, lenbuf, 4); \
-    for (i = numlen; i-- ;) { \
-        unsigned char c = bignum_byte(bignum, i); \
-        MD5Update(&md5c, &c, 1); \
-    }
-    ADD_BIGNUM(dss->p);
-    ADD_BIGNUM(dss->q);
-    ADD_BIGNUM(dss->g);
-    ADD_BIGNUM(dss->y);
-#undef ADD_BIGNUM
-
-    MD5Final(digest, &md5c);
-
-    sprintf(buffer, "ssh-dss %d ", bignum_bitcount(dss->p));
-    for (i = 0; i < 16; i++)
-	sprintf(buffer + strlen(buffer), "%s%02x", i ? ":" : "",
-		digest[i]);
-    ret = snewn(strlen(buffer) + 1, char);
-    if (ret)
-	strcpy(ret, buffer);
-    return ret;
-}
-
-static int dss_verifysig(void *key, char *sig, int siglen,
-			 char *data, int datalen)
-{
-    struct dss_key *dss = (struct dss_key *) key;
-    char *p;
+    const char *p;
     int slen;
     char hash[20];
     Bignum r, s, w, gu1p, yu2p, gu1yu2p, u1, u2, sha, v;
@@ -402,18 +367,19 @@ static unsigned char *dss_private_blob(void *key, int *len)
     return blob;
 }
 
-static void *dss_createkey(unsigned char *pub_blob, int pub_len,
-			   unsigned char *priv_blob, int priv_len)
+static void *dss_createkey(const struct ssh_signkey *self,
+                           const unsigned char *pub_blob, int pub_len,
+			   const unsigned char *priv_blob, int priv_len)
 {
     struct dss_key *dss;
-    char *pb = (char *) priv_blob;
-    char *hash;
+    const char *pb = (const char *) priv_blob;
+    const char *hash;
     int hashlen;
     SHA_State s;
     unsigned char digest[20];
     Bignum ytest;
 
-    dss = dss_newkey((char *) pub_blob, pub_len);
+    dss = dss_newkey(self, (char *) pub_blob, pub_len);
     if (!dss)
         return NULL;
     dss->x = getmp(&pb, &priv_len);
@@ -453,9 +419,10 @@ static void *dss_createkey(unsigned char *pub_blob, int pub_len,
     return dss;
 }
 
-static void *dss_openssh_createkey(unsigned char **blob, int *len)
+static void *dss_openssh_createkey(const struct ssh_signkey *self,
+                                   const unsigned char **blob, int *len)
 {
-    char **b = (char **) blob;
+    const char **b = (const char **) blob;
     struct dss_key *dss;
 
     dss = snew(struct dss_key);
@@ -504,12 +471,13 @@ static int dss_openssh_fmtkey(void *key, unsigned char *blob, int len)
     return bloblen;
 }
 
-static int dss_pubkey_bits(void *blob, int len)
+static int dss_pubkey_bits(const struct ssh_signkey *self,
+                           const void *blob, int len)
 {
     struct dss_key *dss;
     int ret;
 
-    dss = dss_newkey((char *) blob, len);
+    dss = dss_newkey(self, (const char *) blob, len);
     if (!dss)
         return -1;
     ret = bignum_bitcount(dss->p);
@@ -638,7 +606,8 @@ Bignum *dss_gen_k(const char *id_string, Bignum modulus, Bignum private_key,
     }
 }
 
-static unsigned char *dss_sign(void *key, char *data, int datalen, int *siglen)
+static unsigned char *dss_sign(void *key, const char *data, int datalen,
+                               int *siglen)
 {
     struct dss_key *dss = (struct dss_key *) key;
     Bignum k, gkp, hash, kinv, hxr, r, s;
@@ -701,10 +670,11 @@ const struct ssh_signkey ssh_dss = {
     dss_createkey,
     dss_openssh_createkey,
     dss_openssh_fmtkey,
+    5 /* p,q,g,y,x */,
     dss_pubkey_bits,
-    dss_fingerprint,
     dss_verifysig,
     dss_sign,
     "ssh-dss",
-    "dss"
+    "dss",
+    NULL,
 };

@@ -318,6 +318,7 @@ void SHA512_Simple(const void *p, int len, unsigned char *output) {
     SHA512_Init(&s);
     SHA512_Bytes(&s, p, len);
     SHA512_Final(&s, output);
+    smemclr(&s, sizeof(s));
 }
 
 void SHA384_Simple(const void *p, int len, unsigned char *output) {
@@ -326,6 +327,7 @@ void SHA384_Simple(const void *p, int len, unsigned char *output) {
     SHA384_Init(&s);
     SHA512_Bytes(&s, p, len);
     SHA384_Final(&s, output);
+    smemclr(&s, sizeof(s));
 }
 
 /*
@@ -341,7 +343,7 @@ static void *sha512_init(void)
     return s;
 }
 
-static void sha512_bytes(void *handle, void *p, int len)
+static void sha512_bytes(void *handle, const void *p, int len)
 {
     SHA512_State *s = handle;
 
@@ -353,6 +355,7 @@ static void sha512_final(void *handle, unsigned char *output)
     SHA512_State *s = handle;
 
     SHA512_Final(s, output);
+    smemclr(s, sizeof(*s));
     sfree(s);
 }
 
@@ -374,6 +377,7 @@ static void sha384_final(void *handle, unsigned char *output)
     SHA512_State *s = handle;
 
     SHA384_Final(s, output);
+    smemclr(s, sizeof(*s));
     sfree(s);
 }
 

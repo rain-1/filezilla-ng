@@ -14,7 +14,7 @@
 #include "putty.h"
 #include "ssh.h"
 
-void modalfatalbox(char *fmt, ...)
+void modalfatalbox(const char *fmt, ...)
 {
     va_list ap;
     char* str;
@@ -28,7 +28,7 @@ void modalfatalbox(char *fmt, ...)
     cleanup_exit(1);
 }
 
-void nonfatal(char *fmt, ...)
+void nonfatal(const char *fmt, ...)
 {
 	va_list ap;
 	char* str;
@@ -137,7 +137,8 @@ int main(int argc, char **argv)
 		fzprintf(sftpReply, "2");
 		intype = SSH_KEYTYPE_UNOPENABLE;
 		break;
-	    case SSH_KEYTYPE_OPENSSH:
+	    case SSH_KEYTYPE_OPENSSH_PEM:
+	    case SSH_KEYTYPE_OPENSSH_NEW:
 	    case SSH_KEYTYPE_SSHCOM:
 		fzprintf(sftpReply, "1");
 		break;
@@ -244,7 +245,8 @@ int main(int argc, char **argv)
 		    error = "unknown error";
 		break;
 
-	    case SSH_KEYTYPE_OPENSSH:
+	    case SSH_KEYTYPE_OPENSSH_PEM:
+	    case SSH_KEYTYPE_OPENSSH_NEW:
 	    case SSH_KEYTYPE_SSHCOM:
 		ssh2key = import_ssh2(infilename, intype, passphrase, &error);
 		if (ssh2key) {

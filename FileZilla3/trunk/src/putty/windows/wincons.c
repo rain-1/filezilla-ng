@@ -45,8 +45,8 @@ void timer_change_notify(unsigned long next)
 {
 }
 
-int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
-                        char *keystr, char *fingerprint,
+int verify_ssh_host_key(void *frontend, char *host, int port,
+                        const char *keytype, char *keystr, char *fingerprint,
                         void (*callback)(void *ctx, int result), void *ctx)
 {
     int ret;
@@ -298,7 +298,8 @@ void logevent(void *frontend, const char *string)
     WriteFile(hout, data, len, &dummy, NULL);
 }*/
 
-int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
+int console_get_userpass_input(prompts_t *p,
+                               const unsigned char *in, int inlen)
 {
     HANDLE hin, hout;
     size_t curr_prompt;

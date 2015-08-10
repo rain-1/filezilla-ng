@@ -408,6 +408,7 @@ public:
 	wxString hostKey;
 	wxString kexAlgorithm;
 	wxString kexHash;
+	wxString kexCurve;
 	wxString cipherClientToServer;
 	wxString cipherServerToClient;
 	wxString macClientToServer;
