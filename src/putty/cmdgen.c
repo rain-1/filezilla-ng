@@ -287,11 +287,9 @@ int main(int argc, char **argv)
 		continue;
 	    }
 
-	    if (ssh2key)
-	    {
-		char* fingerprint = ssh2key->alg->fingerprint(ssh2key->data);
-		if (fingerprint)
-		{
+	    if (ssh2key) {
+		char* fingerprint = ssh2_fingerprint(ssh2key->alg, ssh2key->data);
+		if (fingerprint) {
 		    fzprintf(sftpReply, "%s", fingerprint);
 		    continue;
 		}
