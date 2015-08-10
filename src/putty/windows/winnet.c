@@ -141,7 +141,7 @@ static int cmpfortree(void *av, void *bv)
 static int cmpforsearch(void *av, void *bv)
 {
     Actual_Socket b = (Actual_Socket) bv;
-    unsigned long as = (unsigned long) av, bs = (unsigned long) b->s;
+    intptr_t as = (intptr_t) av, bs = (intptr_t) b->s;
     if (as < bs)
 	return -1;
     if (as > bs)
@@ -481,8 +481,8 @@ const char *winsock_error_string(int error)
                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                            es->text + bufused, bufsize - bufused, NULL)) {
             sprintf(es->text + bufused,
-                    "Windows error code %d (and FormatMessage returned %d)", 
-                    error, GetLastError());
+                    "Windows error code %d (and FormatMessage returned %u)", 
+                    error, (unsigned int)GetLastError());
         } else {
             int len = strlen(es->text);
             if (len > 0 && es->text[len-1] == '\n')
@@ -1689,7 +1689,7 @@ int select_result(WPARAM wParam, LPARAM lParam)
 	ret = p_recv(s->s, buf, toRecv, MSG_OOB);
 	noise_ultralight(ret);
 	if (ret <= 0) {
-	    char *str = (ret == 0 ? "Internal networking trouble" :
+	    const char *str = (ret == 0 ? "Internal networking trouble" :
 			 winsock_error_string(p_WSAGetLastError()));
 	    /* We're inside the Windows frontend here, so we know
 	     * that the frontend handle is unnecessary. */
