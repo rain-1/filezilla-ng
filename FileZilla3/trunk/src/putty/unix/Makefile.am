@@ -15,6 +15,7 @@ libfzsftp_ux_a_SOURCES = \
 			uxagentc.c \
 			uxsel.c \
 			uxnet.c \
+			uxpeer.c \
 			uxproxy.c \
 			uxshare.c
 
