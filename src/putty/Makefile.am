@@ -13,6 +13,8 @@ libfzputtycommon_a_SOURCES = \
 			conf.c \
 			misc.c \
 			sshaes.c \
+			sshbcrypt.c \
+			sshblowf.c \
 			sshbn.c \
 			sshdes.c \
 			sshdss.c \
@@ -38,8 +40,6 @@ fzsftp_SOURCES = \
 		portfwd.c \
 		proxy.c \
 		ssh.c \
-		sshbcrypt.c \
-		sshblowf.c \
 		sshccp.c \
 		sshcrc.c \
 		sshsha.c \
