@@ -348,9 +348,9 @@ void logevent(void *frontend, const char *string)
 
 static void console_open(FILE **outfp, int *infd)
 {
-    int fd;
+    /*int fd;
 
-    /*if ((fd = open("/dev/tty", O_RDWR)) >= 0) {
+    if ((fd = open("/dev/tty", O_RDWR)) >= 0) {
         *infd = fd;
         *outfp = fdopen(*infd, "w");
     } else*/ {
