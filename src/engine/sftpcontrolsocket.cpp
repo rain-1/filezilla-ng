@@ -16,7 +16,7 @@
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
 
-#define FZSFTP_PROTOCOL_VERSION 2
+#define FZSFTP_PROTOCOL_VERSION 3
 
 struct sftp_event_type;
 typedef CEvent<sftp_event_type> CSftpEvent;
@@ -201,6 +201,7 @@ protected:
 			case sftpEvent::Status:
 			case sftpEvent::KexAlgorithm:
 			case sftpEvent::KexHash:
+			case sftpEvent::KexCurve:
 			case sftpEvent::CipherClientToServer:
 			case sftpEvent::CipherServerToClient:
 			case sftpEvent::MacClientToServer:
@@ -719,6 +720,9 @@ void CSftpControlSocket::OnSftpEvent()
 			break;
 		case sftpEvent::KexHash:
 			m_sftpEncryptionDetails.kexHash = message->text;
+			break;
+		case sftpEvent::KexCurve:
+			m_sftpEncryptionDetails.kexCurve = message->text;
 			break;
 		case sftpEvent::CipherClientToServer:
 			m_sftpEncryptionDetails.cipherClientToServer = message->text;

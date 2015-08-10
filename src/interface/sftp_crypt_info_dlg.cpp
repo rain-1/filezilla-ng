@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "sftp_crypt_info_dlg.h"
 #include "dialogex.h"
+#include "xrc_helper.h"
 
 void CSftpEncryptioInfoDialog::ShowDialog(CSftpEncryptionNotification* pNotification)
 {
@@ -12,6 +13,13 @@ void CSftpEncryptioInfoDialog::ShowDialog(CSftpEncryptionNotification* pNotifica
 
 	SetLabel(dlg, XRCID("ID_KEXALGO"), pNotification->kexAlgorithm);
 	SetLabel(dlg, XRCID("ID_KEXHASH"), pNotification->kexHash);
+	if (!pNotification->kexCurve.empty()) {
+		SetLabel(dlg, XRCID("ID_KEXCURVE"), pNotification->kexCurve);
+	}
+	else {
+		xrc_call(dlg, "ID_KEXCURVE_LABEL", &wxWindow::Show, false);
+		xrc_call(dlg, "ID_KEXCURVE", &wxWindow::Show, false);
+	}
 	SetLabel(dlg, XRCID("ID_FINGERPRINT"), pNotification->hostKey);
 	SetLabel(dlg, XRCID("ID_C2S_CIPHER"), pNotification->cipherClientToServer);
 	SetLabel(dlg, XRCID("ID_C2S_MAC"), pNotification->macClientToServer);

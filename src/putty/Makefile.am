@@ -38,7 +38,9 @@ fzsftp_SOURCES = \
 		portfwd.c \
 		proxy.c \
 		ssh.c \
+		sshbcrypt.c \
 		sshblowf.c \
+		sshccp.c \
 		sshcrc.c \
 		sshsha.c \
 		sshshare.c \
@@ -60,7 +62,10 @@ noinst_HEADERS = fzprintf.h \
 		 fzsftp.h \
 		 int64.h misc.h network.h proxy.h psftp.h putty.h \
 		 puttymem.h puttyps.h sftp.h ssh.h \
-		 storage.h tree234.h
+		 sshblowf.h \
+		 sshbn.h \
+		 storage.h \
+		 tree234.h
 
 if USE_RESOURCEFILE
   RESOURCEFILE = windows/psftp.o

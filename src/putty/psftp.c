@@ -78,7 +78,7 @@ struct sftp_packet *sftp_wait_for_reply(struct sftp_request *req)
  * links as FXP_REALPATH would resolve the link if called with the
  * full path.
  */
-char *canonify(char *name, int parent_only)
+char *canonify(const char *name, int parent_only)
 {
     char *fullname, *canonname;
     struct sftp_packet *pktin;
@@ -88,7 +88,7 @@ char *canonify(char *name, int parent_only)
     if (name[0] == '/') {
 	fullname = dupstr(name);
     } else {
-	char *slash;
+	const char *slash;
 	if (pwd[strlen(pwd) - 1] == '/')
 	    slash = "";
 	else
@@ -227,8 +227,13 @@ char *canonify(char *name, int parent_only)
 /*
  * Return a pointer to the portion of str that comes after the last
  * slash (or backslash or colon, if `local' is TRUE).
+ *
+ * This function has the annoying strstr() property of taking a const
+ * char * and returning a char *. You should treat it as if it was a
+ * pair of overloaded functions, one mapping mutable->mutable and the
+ * other const->const :-(
  */
-static char *stripslashes(char *str, int local)
+static char *stripslashes(const char *str, int local)
 {
     char *p;
 
@@ -245,7 +250,7 @@ static char *stripslashes(char *str, int local)
 	if (p) str = p+1;
     }
 
-    return str;
+    return (char *)str;
 }
 
 /*
@@ -1152,7 +1157,8 @@ int sftp_cmd_ls(struct sftp_command *cmd)
     struct fxp_names *names;
     struct fxp_name **ournames;
     int nnames, namesize;
-    char *dir, *cdir, *unwcdir, *wildcard;
+    const char *dir;
+    char *cdir, *unwcdir, *wildcard;
     struct sftp_packet *pktin;
     struct sftp_request *req;
     int i;
@@ -2226,7 +2232,7 @@ static int sftp_cmd_pling(struct sftp_command *cmd)
 // static int sftp_cmd_help(struct sftp_command *cmd);
 
 static struct sftp_cmd_lookup {
-    char *name;
+    const char *name;
     /*
      * For help purposes, there are two kinds of command:
      * 
@@ -2240,8 +2246,8 @@ static struct sftp_cmd_lookup {
      *    contains the help that should double up for this command.
      */
     int listed;			       /* do we list this in primary help? */
-    char *shorthelp;
-    char *longhelp;
+    const char *shorthelp;
+    const char *longhelp;
     int (*obey) (struct sftp_command *);
 } sftp_lookup[] = {
     /*
@@ -2492,7 +2498,7 @@ END FZ UNUSED */
     }
 };
 
-const struct sftp_cmd_lookup *lookup_command(char *name)
+const struct sftp_cmd_lookup *lookup_command(const char *name)
 {
     int i, j, k, cmp;
 
@@ -2742,7 +2748,7 @@ void do_sftp_cleanup()
     }
 }
 
-void do_sftp(int mode, int modeflags, char *batchfile)
+int do_sftp(int mode, int modeflags, char *batchfile)
 {
     FILE *fp;
     int ret;
@@ -2777,8 +2783,9 @@ void do_sftp(int mode, int modeflags, char *batchfile)
         fp = fopen(batchfile, "r");
         if (!fp) {
 	    printf("Fatal: unable to open %s\n", batchfile);
-	    return;
+	    return 1;
         }
+	ret = 0;
         while (1) {
 	    struct sftp_command *cmd;
 	    cmd = sftp_getcmd(fp, mode, modeflags);
@@ -2793,8 +2800,13 @@ void do_sftp(int mode, int modeflags, char *batchfile)
 	    }
         }
 	fclose(fp);
-
+	/*
+	 * In batch mode, and if exit on command failure is enabled,
+	 * any command failure causes the whole of PSFTP to fail.
+	 */
+	if (ret == 0 && !(modeflags & 2)) return 2;
     }
+    return 0;
 }
 
 /* ----------------------------------------------------------------------
@@ -2806,7 +2818,7 @@ static int verbose = 0;
 /*
  *  Print an error message and perform a fatal exit.
  */
-void fatalbox(char *fmt, ...)
+void fatalbox(const char *fmt, ...)
 {
     va_list ap;
     char* str;
@@ -2819,7 +2831,7 @@ void fatalbox(char *fmt, ...)
 
     cleanup_exit(1);
 }
-void modalfatalbox(char *fmt, ...)
+void modalfatalbox(const char *fmt, ...)
 {
     va_list ap;
     char* str;
@@ -2832,7 +2844,7 @@ void modalfatalbox(char *fmt, ...)
 
     cleanup_exit(1);
 }
-void nonfatal(char *fmt, ...)
+void nonfatal(const char *fmt, ...)
 {
     va_list ap;
     char* str;
@@ -2843,7 +2855,7 @@ void nonfatal(char *fmt, ...)
     fzprintf(sftpError, str);
     sfree(str);
 }
-void connection_fatal(void *frontend, char *fmt, ...)
+void connection_fatal(void *frontend, const char *fmt, ...)
 {
     va_list ap;
     char* str;
@@ -3225,7 +3237,7 @@ static int psftp_connect(char *userhost, char *user, int portnumber)
     return 0;
 }
 
-void cmdline_error(char *p, ...)
+void cmdline_error(const char *p, ...)
 {
     char *str;
     va_list ap;
@@ -3333,7 +3345,7 @@ const int share_can_be_upstream = FALSE;
  */
 int psftp_main(int argc, char *argv[])
 {
-    int i;
+    int i, ret;
     int portnumber = 0;
     char *userhost, *user;
     int mode = 0;
@@ -3444,7 +3456,7 @@ int psftp_main(int argc, char *argv[])
 //	       " to connect\n");
     }
 
-    do_sftp(mode, modeflags, batchfile);
+    ret = do_sftp(mode, modeflags, batchfile);
 
     if (back != NULL && back->connected(backhandle)) {
 	char ch;
@@ -3458,23 +3470,5 @@ int psftp_main(int argc, char *argv[])
     console_provide_logctx(NULL);
     sk_cleanup();
 
-/*    {
-	Keyfile_list *list = cfg.keyfile_list;
-	while (list)
-	{
-	    Keyfile_list *next = list->next;
-	    sfree(list);
-	    list = next;
-	}
-    }*/
-
-    return 0;
+    return ret;
 }
-
-/*void notify_remote_exit(void *frontend)
-{
-    int exitcode = back->exitcode(backhandle);
-
-    if (exitcode > 0 && exitcode != INT_MAX)
-	connection_fatal(frontend, "Connection closed by server with exitcode %d", exitcode);
-}*/

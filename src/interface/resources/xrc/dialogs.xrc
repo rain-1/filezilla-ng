@@ -2002,6 +2002,16 @@
                     </object>
                   </object>
                   <object class="sizeritem">
+                    <object class="wxStaticText" name="ID_KEXCURVE_LABEL">
+                      <label>Curve:</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="ID_KEXCURVE">
+                      <label>&lt;kexcurve&gt;</label>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
                     <object class="wxStaticText">
                       <label>Hash:</label>
                     </object>

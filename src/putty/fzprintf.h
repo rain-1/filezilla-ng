@@ -1,4 +1,4 @@
-#define FZSFTP_PROTOCOL_VERSION 2
+#define FZSFTP_PROTOCOL_VERSION 3
 
 typedef enum
 {
@@ -20,6 +20,7 @@ typedef enum
     sftpUsedQuotaSend,
     sftpKexAlgorithm,
     sftpKexHash,
+	sftpKexCurve,
     sftpCipherClientToServer,
     sftpCipherServerToClient,
     sftpMacClientToServer,

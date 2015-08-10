@@ -22,6 +22,7 @@ enum class sftpEvent {
 	UsedQuotaSend,
 	KexAlgorithm,
 	KexHash,
+	KexCurve,
 	CipherClientToServer,
 	CipherServerToClient,
 	MacClientToServer,
