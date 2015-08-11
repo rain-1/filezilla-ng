@@ -1418,7 +1418,7 @@ void CDirectoryListingParserTest::InitEntries()
 
 /*
 	wxString name;
-	wxLongLong size;
+	int64_t size;
 	wxString permissions;
 	wxString ownerGroup;
 	int flags;

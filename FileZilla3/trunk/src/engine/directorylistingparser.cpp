@@ -87,7 +87,7 @@ public:
 
 	wxString GetString()
 	{
-		if (!m_pToken)
+		if (!m_pToken || !m_len)
 			return wxString();
 
 		if (m_str.empty()) {
@@ -287,7 +287,7 @@ public:
 	CLine(wxChar* p, int len = -1, int trailing_whitespace = 0)
 	{
 		m_pLine = p;
-		if (len != -1)
+		if (len >= 0)
 			m_len = len;
 		else
 			m_len = wxStrlen(p);
@@ -351,8 +351,6 @@ public:
 		}
 		else {
 			if (include_whitespace) {
-				const wxChar* p;
-
 				int prev = n - offset_;
 				if (prev)
 					--prev;
@@ -360,9 +358,13 @@ public:
 				CToken ref;
 				if (!GetToken(prev, ref))
 					return false;
-				p = ref.GetToken() + ref.GetLength() + 1;
+				wxChar const* p = ref.GetToken() + ref.GetLength() + 1;
 
-				token = CToken(p, m_len - (p - m_pLine));
+				auto const newLen = m_len - (p - m_pLine);
+				if (newLen <= 0) {
+					return false;
+				}
+				token = CToken(p, newLen);
 				return true;
 			}
 
@@ -375,10 +377,15 @@ public:
 				if (!GetToken(n - offset_, token))
 					return false;
 
+			auto const newLen = m_len - (p - m_pLine) - m_trailing_whitespace;
+			if (newLen <= 0) {
+				return false;
+			}
+
 			for (unsigned int i = static_cast<unsigned int>(m_LineEndTokens.size()); i <= n; ++i) {
 				const CToken *refToken = m_Tokens[i];
 				const wxChar* p = refToken->GetToken();
-				CToken *pToken = new CToken(p, m_len - (p - m_pLine) - m_trailing_whitespace);
+				CToken *pToken = new CToken(p, newLen);
 				m_LineEndTokens.push_back(pToken);
 			}
 			token = *(m_LineEndTokens[n]);
