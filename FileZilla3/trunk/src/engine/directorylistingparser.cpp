@@ -1537,20 +1537,24 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 	return true;
 }
 
+namespace {
 wxString Unescape(const wxString& str, wxChar escape)
 {
 	wxString res;
-	for (unsigned int i = 0; i < str.Len(); ++i) {
+	for (unsigned int i = 0; i < str.size(); ++i) {
 		wxChar c = str[i];
 		if (c == escape) {
-			c = str[++i];
-			if (!c)
+			++i;
+			if (i == str.size() || !str[i]) {
 				break;
+			}
+			c = str[i];
 		}
 		res += c;
 	}
 
 	return res;
+}
 }
 
 bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
