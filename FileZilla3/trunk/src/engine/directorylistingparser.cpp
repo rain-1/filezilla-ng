@@ -377,14 +377,13 @@ public:
 				if (!GetToken(n - offset_, token))
 					return false;
 
-			auto const newLen = m_len - (p - m_pLine) - m_trailing_whitespace;
-			if (newLen <= 0) {
-				return false;
-			}
-
 			for (unsigned int i = static_cast<unsigned int>(m_LineEndTokens.size()); i <= n; ++i) {
 				const CToken *refToken = m_Tokens[i];
 				const wxChar* p = refToken->GetToken();
+				auto const newLen = m_len - (p - m_pLine) - m_trailing_whitespace;
+				if (newLen <= 0) {
+					return false;
+				}
 				CToken *pToken = new CToken(p, newLen);
 				m_LineEndTokens.push_back(pToken);
 			}
