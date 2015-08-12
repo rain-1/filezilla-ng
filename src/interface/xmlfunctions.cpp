@@ -654,7 +654,7 @@ struct xml_memory_writer : pugi::xml_writer
 
 	virtual void write(const void* data, size_t size)
 	{
-		if (buffer && size >= remaining) {
+		if (buffer && size <= remaining) {
 			memcpy(buffer, data, size);
 			buffer += size;
 			remaining -= size;
@@ -676,6 +676,9 @@ size_t CXmlFile::GetRawDataLength()
 
 void CXmlFile::GetRawDataHere(char* p, size_t size) // p has to big enough to hold at least GetRawDataLength() bytes
 {
+	if (size) {
+		memset(p, 0, size);
+	}
 	xml_memory_writer writer;
 	writer.buffer = p;
 	writer.remaining = size;
