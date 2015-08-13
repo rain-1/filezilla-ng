@@ -39,7 +39,7 @@ struct ObjectCache
 ObjectCache objcache;
 }
 
-class CToken
+class CToken final
 {
 protected:
 	enum TokenInformation
@@ -50,15 +50,7 @@ protected:
 	};
 
 public:
-	CToken()
-		: m_pToken()
-		, m_len()
-		, m_numeric(Unknown)
-		, m_leftNumeric(Unknown)
-		, m_rightNumeric(Unknown)
-		, m_number(-1)
-	{
-	}
+	CToken() = default;
 
 	enum t_numberBase
 	{
@@ -66,16 +58,12 @@ public:
 		hex
 	};
 
-	CToken(const wxChar* p, unsigned int len)
+	CToken(wxChar const* p, unsigned int len)
 		: m_pToken(p)
 		, m_len(len)
-		, m_numeric(Unknown)
-		, m_leftNumeric(Unknown)
-		, m_rightNumeric(Unknown)
-		, m_number(-1)
 	{}
 
-	const wxChar* GetToken() const
+	wxChar const* GetToken() const
 	{
 		return m_pToken;
 	}
@@ -85,16 +73,14 @@ public:
 		return m_len;
 	}
 
-	wxString GetString()
+	wxString GetString() const
 	{
-		if (!m_pToken || !m_len)
+		if (!m_pToken || !m_len) {
 			return wxString();
-
-		if (m_str.empty()) {
-			m_str.assign(m_pToken, m_len);
 		}
-
-		return m_str;
+		else {
+			return wxString(m_pToken, m_len);
+		}
 	}
 
 	bool IsNumeric(t_numberBase base = decimal)
@@ -271,14 +257,13 @@ public:
 	}
 
 protected:
-	const wxChar* m_pToken;
-	unsigned int m_len;
+	wxChar const* m_pToken{};
+	unsigned int m_len{};
 
-	TokenInformation m_numeric;
-	TokenInformation m_leftNumeric;
-	TokenInformation m_rightNumeric;
-	int64_t m_number;
-	wxString m_str;
+	TokenInformation m_numeric{Unknown};
+	TokenInformation m_leftNumeric{Unknown};
+	TokenInformation m_rightNumeric{Unknown};
+	int64_t m_number{-1};
 };
 
 class CLine
@@ -919,7 +904,6 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		permissions += _T(" ") + token.GetString();
 		netware = true;
 	}
-	entry.permissions = objcache.get(permissions);
 
 	int numOwnerGroup = 3;
 	if (!netware) {
@@ -999,6 +983,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 		entry.time += m_timezoneOffset;
 
+		entry.permissions = objcache.get(permissions);
 		entry.ownerGroup = objcache.get(ownerGroup);
 		return true;
 	}
@@ -1426,7 +1411,7 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 
 	entry.target.clear();
 	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = entry.ownerGroup;
 	entry.time += m_timezoneOffset;
 
 	return true;
@@ -1498,9 +1483,9 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 	entry.name = token.GetString().Mid(pos + 1);
 
 	entry.flags = 0;
-	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
 	entry.size = -1;
+
+	wxString permissions;
 
 	int fact = 1;
 	while (fact < pos) {
@@ -1529,11 +1514,13 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 			entry.time = CDateTime(static_cast<time_t>(number), CDateTime::seconds);
 		}
 		else if (type == 'u' && len > 2 && token[fact + 1] == 'p')
-			entry.permissions = objcache.get(token.GetString().Mid(fact + 2, len - 2));
+			permissions = token.GetString().Mid(fact + 2, len - 2);
 
 		fact += len + 1;
 	}
 
+	entry.permissions = objcache.get(permissions);
+	entry.ownerGroup = objcache.get(wxString());
 	return true;
 }
 
@@ -1707,15 +1694,14 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 bool CDirectoryListingParser::ParseAsIbm(CLine &line, CDirentry &entry)
 {
 	int index = 0;
-	CToken token;
 
 	// Get owner
-	if (!line.GetToken(index, token))
+	CToken ownerGroupToken;
+	if (!line.GetToken(index, ownerGroupToken))
 		return false;
 
-	entry.ownerGroup = objcache.get(token.GetString());
-
 	// Get size
+	CToken token;
 	if (!line.GetToken(++index, token))
 		return false;
 
@@ -1750,6 +1736,9 @@ bool CDirectoryListingParser::ParseAsIbm(CLine &line, CDirentry &entry)
 		entry.flags |= CDirentry::flag_dir;
 	}
 
+	entry.ownerGroup = objcache.get(ownerGroupToken.GetString());
+	entry.permissions = objcache.get(wxString());
+
 	entry.time += m_timezoneOffset;
 
 	return true;
@@ -1777,7 +1766,6 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 	// If token is a number, than it's the numerical Unix style format,
 	// else it's the VShell, OS/2 or nortel.VxWorks format
 	if (token.IsNumeric()) {
-		entry.permissions = objcache.get(firstToken.GetString());
 		if (firstToken.GetLength() >= 2 && firstToken[1] == '4')
 			entry.flags |= CDirentry::flag_dir;
 
@@ -1787,7 +1775,6 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			return false;
 
 		ownerGroup += _T(" ") + token.GetString();
-		entry.ownerGroup = objcache.get(ownerGroup);
 
 		// Get size
 		if (!line.GetToken(++index, token))
@@ -1813,6 +1800,9 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 
 		entry.name = token.GetString();
 		entry.target.clear();
+
+		entry.permissions = objcache.get(firstToken.GetString());
+		entry.ownerGroup = objcache.get(ownerGroup);
 	}
 	else {
 		// Possible conflict with multiline VMS listings
@@ -1914,7 +1904,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		}
 		entry.target.clear();
 		entry.ownerGroup = objcache.get(wxString());
-		entry.permissions = objcache.get(wxString());
+		entry.permissions = entry.ownerGroup;
 		entry.time += m_timezoneOffset;
 	}
 
@@ -1964,7 +1954,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		// Trim empty lines and spaces
 		auto iter = m_DataList.begin();
 		int len = iter->len;
-		while (iter->p[m_currentOffset] == '\r' || iter->p[m_currentOffset] == '\n' || iter->p[m_currentOffset] == ' ' || iter->p[m_currentOffset] == '\t') {
+		while (iter->p[m_currentOffset] == '\r' || iter->p[m_currentOffset] == '\n' || iter->p[m_currentOffset] == ' ' || iter->p[m_currentOffset] == '\t' || !iter->p[m_currentOffset]) {
 			++m_currentOffset;
 			if (m_currentOffset >= len) {
 				delete [] iter->p;
@@ -1987,7 +1977,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		int emptylen = 0;
 
 		int currentOffset = m_currentOffset;
-		while ((iter->p[currentOffset] != '\n') && (iter->p[currentOffset] != '\r')) {
+		while (iter->p[currentOffset] != '\n' && iter->p[currentOffset] != '\r' && iter->p[currentOffset]) {
 			if (iter->p[currentOffset] == ' ' || iter->p[currentOffset] == '\t')
 				++emptylen;
 			else
@@ -2040,7 +2030,7 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 			delete [] i->p;
 			++i;
 		}
-
+		;
 		// Copy last chunk
 		if (iter != m_DataList.end() && reslen) {
 			int copylen = m_currentOffset-startpos;
@@ -2132,7 +2122,7 @@ bool CDirectoryListingParser::ParseAsWfFtp(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = entry.ownerGroup;
 	entry.time += m_timezoneOffset;
 
 	return true;
@@ -2172,7 +2162,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 
 		entry.size = -1;
 		entry.ownerGroup = objcache.get(wxString());
-		entry.permissions = objcache.get(wxString());
+		entry.permissions = entry.ownerGroup;
 
 		return true;
 	}
@@ -2233,7 +2223,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 	entry.name = token.GetString();
 
 	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = entry.ownerGroup;
 
 	return true;
 }
@@ -2296,7 +2286,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = entry.ownerGroup;
 	entry.time += m_timezoneOffset;
 
 	return true;
@@ -2320,13 +2310,13 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Migrated(CLine &line, CDirentry &en
 
 	entry.name = token.GetString();
 
-	entry.flags = 0;
-	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
-	entry.size = -1;
-
 	if (line.GetToken(++index, token))
 		return false;
+
+	entry.flags = 0;
+	entry.size = -1;
+	entry.ownerGroup = objcache.get(wxString());
+	entry.permissions = entry.ownerGroup;
 
 	return true;
 }
@@ -2342,7 +2332,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 
 	entry.flags = 0;
 	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = entry.ownerGroup;
 	entry.size = -1;
 
 	if (!line.GetToken(++index, token))
@@ -2635,13 +2625,12 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 	else if (!gid.empty())
 		ownerGroup += _T(" ") + gid;
 
-	entry.ownerGroup = objcache.get(ownerGroup);
-	entry.permissions = objcache.get(permissions);
-
 	if (!line.GetToken(1, token, true, true))
 		return 0;
 
 	entry.name = token.GetString();
+	entry.ownerGroup = objcache.get(ownerGroup);
+	entry.permissions = objcache.get(permissions);
 
 	return 1;
 }
@@ -2649,28 +2638,27 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 bool CDirectoryListingParser::ParseAsOS9(CLine &line, CDirentry &entry)
 {
 	int index = 0;
-	CToken token;
 
 	// Get owner
-	if (!line.GetToken(index++, token))
+	CToken ownerGroupToken;
+	if (!line.GetToken(index++, ownerGroupToken))
 		return false;
 
 	// Make sure it's number.number
-	int pos = token.Find('.');
-	if (pos == -1 || !pos || pos == ((int)token.GetLength() - 1))
+	int pos = ownerGroupToken.Find('.');
+	if (pos == -1 || !pos || pos == ((int)ownerGroupToken.GetLength() - 1))
 		return false;
 
-	if (!token.IsNumeric(0, pos))
+	if (!ownerGroupToken.IsNumeric(0, pos))
 		return false;
 
-	if (!token.IsNumeric(pos + 1, token.GetLength() - pos - 1))
+	if (!ownerGroupToken.IsNumeric(pos + 1, ownerGroupToken.GetLength() - pos - 1))
 		return false;
-
-	entry.ownerGroup = objcache.get(token.GetString());
 
 	entry.flags = 0;
 
 	// Get date
+	CToken token;
 	if (!line.GetToken(index++, token))
 		return false;
 
@@ -2682,12 +2670,11 @@ bool CDirectoryListingParser::ParseAsOS9(CLine &line, CDirentry &entry)
 		return false;
 
 	// Get perms
-	if (!line.GetToken(index++, token))
+	CToken permToken;
+	if (!line.GetToken(index++, permToken))
 		return false;
 
-	entry.permissions = objcache.get(token.GetString());
-
-	if (token[0] == 'd')
+	if (permToken[0] == 'd')
 		entry.flags |= CDirentry::flag_dir;
 
 	// Unused token
@@ -2708,6 +2695,8 @@ bool CDirectoryListingParser::ParseAsOS9(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.name = token.GetString();
+	entry.ownerGroup = objcache.get(ownerGroupToken.GetString());
+	entry.permissions = objcache.get(permToken.GetString());
 
 	return true;
 }
@@ -2793,15 +2782,15 @@ bool CDirectoryListingParser::ParseAsZVM(CLine &line, CDirentry &entry)
 		return false;
 
 	// Owner
-	if (!line.GetToken(++index, token))
+	CToken ownerGroupToken;
+	if (!line.GetToken(++index, ownerGroupToken))
 		return false;
-
-	entry.ownerGroup = objcache.get(token.GetString());
 
 	// No further token!
 	if (line.GetToken(++index, token))
 		return false;
 
+	entry.ownerGroup = objcache.get(ownerGroupToken.GetString());
 	entry.permissions = objcache.get(wxString());
 	entry.target.clear();
 	entry.time += m_timezoneOffset;
@@ -2860,16 +2849,18 @@ bool CDirectoryListingParser::ParseAsHPNonstop(CLine &line, CDirentry &entry)
 			return false;
 		ownerGroup += _T(" ") + token.GetString();
 	}
-	entry.ownerGroup = objcache.get(ownerGroup);
 
 	// Permissions
-	if (!line.GetToken(++index, token))
+	CToken permToken;
+	if (!line.GetToken(++index, permToken))
 		return false;
-	entry.permissions = objcache.get(token.GetString());
 
 	// Nothing
 	if (line.GetToken(++index, token))
 		return false;
+
+	entry.permissions = objcache.get(permToken.GetString());
+	entry.ownerGroup = objcache.get(ownerGroup);
 
 	return true;
 }
