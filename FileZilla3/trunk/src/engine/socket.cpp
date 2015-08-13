@@ -474,12 +474,13 @@ protected:
 			// Convert bind address
 			addrinfo bind_hints{};
 			bind_hints.ai_flags = AI_NUMERICHOST | AI_NUMERICSERV | AI_PASSIVE;
+			bind_hints.ai_socktype = SOCK_STREAM;
 			addrinfo *bindAddressList{};
 			int res = getaddrinfo(bind.empty() ? 0 : bind.c_str(), "0", &bind_hints, &bindAddressList);
-			if (!res && bindAddressList && bindAddressList->ai_addr) {
-				memcpy(&bindAddr.storage, bindAddressList->ai_addr, bindAddressList->ai_addrlen);
-			}
 			if (!res && bindAddressList) {
+				if (bindAddressList->ai_addr) {
+					memcpy(&bindAddr.storage, bindAddressList->ai_addr, bindAddressList->ai_addrlen);
+				}
 				freeaddrinfo(bindAddressList);
 			}
 		}
