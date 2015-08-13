@@ -269,8 +269,8 @@ CMainFrame::CMainFrame()
 	wxRect screen_size = CWindowStateManager::GetScreenDimensions();
 
 	wxSize initial_size;
-	initial_size.x = wxMin(900, screen_size.GetWidth() - 10);
-	initial_size.y = wxMin(750, screen_size.GetHeight() - 50);
+	initial_size.x = wxMin(1200, screen_size.GetWidth() - 10);
+	initial_size.y = wxMin(950, screen_size.GetHeight() - 50);
 
 	Create(NULL, -1, _T("FileZilla"), wxDefaultPosition, initial_size);
 	SetSizeHints(250, 250);
