@@ -5,6 +5,7 @@
 #include "xmlfunctions.h"
 #include "buildinfo.h"
 #include "Options.h"
+#include "local_filesys.h"
 
 #include <wx/statbox.h>
 #include <wx/wizard.h>
@@ -975,9 +976,8 @@ bool CWrapEngine::LoadCache()
 		if (!wxFileName::FileExists(resourceDir.GetPath() + xrc))
 			continue;
 
-		wxFileName fn(resourceDir.GetPath() + xrc);
-		wxDateTime date = fn.GetModificationTime();
-		wxString ticks = std::to_wstring(date.GetTicks());
+		CDateTime const date = CLocalFileSystem::GetModificationTime(resourceDir.GetPath() + xrc);
+		wxString const ticks = std::to_wstring(date.GetTimeT());
 
 		auto resourceElement = FindElementWithAttribute(resources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement) {
@@ -1050,9 +1050,8 @@ bool CWrapEngine::LoadCache()
 	wxString name = GetLocaleFile(localesDir.GetPath(), language);
 
 	if (!name.empty()) {
-		wxFileName fn(localesDir.GetPath() + name + _T("/filezilla.mo"));
-		wxDateTime date = fn.GetModificationTime();
-		wxString ticks = std::to_wstring(date.GetTicks());
+		CDateTime const date = CLocalFileSystem::GetModificationTime(localesDir.GetPath() + name + _T("/filezilla.mo"));
+		wxString const ticks = std::to_wstring(date.GetTimeT());
 
 		wxString languageNodeDate = GetTextAttribute(languageElement, "date");
 		if (languageNodeDate.empty() || languageNodeDate != ticks) {
