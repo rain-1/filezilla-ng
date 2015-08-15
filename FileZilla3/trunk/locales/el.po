@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: FileZilla Client 3.12.0.2\n"
+"Project-Id-Version: FileZilla Client 3.13.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-05 22:40+0200\n"
-"PO-Revision-Date: 2015-08-04 19:29+0300\n"
+"POT-Creation-Date: 2015-08-15 14:21+0200\n"
+"PO-Revision-Date: 2015-08-12 15:51+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.7.3\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
@@ -205,7 +205,7 @@ msgstr "%u - Όνομα χρήστη"
 msgid "%w - Proxy password"
 msgstr "%w - Κωδικός πρόσβασης διαμεσολαβητή"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3480
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
 msgid "&Abort previous connection and connect in current tab"
 msgstr "&Διακοπή της προηγούμενης σύνδεσης και συνδέση στην τρέχουσα καρτέλα"
 
@@ -213,7 +213,7 @@ msgstr "&Διακοπή της προηγούμενης σύνδεσης και 
 msgid "&About..."
 msgstr "&Μνεία..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2477
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2487
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:218
 msgid "&Account:"
 msgstr "&Λογαριασμός:"
@@ -234,9 +234,8 @@ msgid "&Add files to queue"
 msgstr "&Προσθήκη αρχείων στη λίστα αναμονής"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:645
-#, fuzzy
 msgid "&Add key file..."
-msgstr "&Προσθήκη του αρχείου-κλειδιού..."
+msgstr "&Προσθήκη Αρχείου Κλειδιού..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:492
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:551
@@ -260,7 +259,7 @@ msgstr ""
 msgid "&Always use default editor"
 msgstr "&Χρήση πάντα του προκαθορισμένου επεξεργαστή"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2947
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2957
 msgid "&Always use selection for unassociated files"
 msgstr "&Πάντα κατόπιν επιλογής για όλα τα μη συσχετιζόμενα αρχεία"
 
@@ -296,11 +295,11 @@ msgstr "&Σύμβολα SI στα δυαδικά προθέματα. (π.χ. 1 K
 msgid "&Bookmarks"
 msgstr "&Σελιδοδείκτες"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2250
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2659
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2739
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2934
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3119
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2260
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2669
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2749
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2944
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3129
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1930
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2145
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:337
@@ -313,8 +312,8 @@ msgstr "Ανοχή &φορτίου:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:379
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1025
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3610
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3666
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3620
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3676
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:40
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:34
 msgid "&Cancel"
@@ -387,14 +386,14 @@ msgstr "&Καθυστέρηση μεταξύ αποτυχημένων προσπ
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1069
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1238
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2819
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2829
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:276
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:571
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:59
 msgid "&Delete"
 msgstr "&Διαγραφή"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3216
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3226
 msgid "&Delete symlink"
 msgstr "&Διαγραφή συμβολικής σύνδεσης"
 
@@ -424,7 +423,7 @@ msgstr ""
 msgid "&Display size in bytes"
 msgstr "&Εμφάνιση του μεγέθους σε bytes"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3649
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3659
 msgid "&Do not remember passwords (recommended)"
 msgstr "&Να μην απομνημονεύει κωδικούς (συνιστάται)"
 
@@ -445,7 +444,7 @@ msgstr "&Διπλό-κλικ ως ενέργεια στα αρχεία:"
 msgid "&Download"
 msgstr "&Λήψη"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3105
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3115
 msgid "&Download to:"
 msgstr "&Λήψη στο:"
 
@@ -478,7 +477,7 @@ msgstr "&Ενεργοποίηση"
 msgid "&Enable compression"
 msgstr "&Ενεργοποίηση συμπίεσης"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3538
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3548
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:896
 msgid "&Enable speed limits"
 msgstr "&Ενεργοποίηση ορίων ταχύτητας"
@@ -495,7 +494,7 @@ msgstr "&Κρυπτογράφηση:"
 msgid "&Enter custom command..."
 msgstr "&Εισαγωγή προσαρμοσμένης εντολής..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3473
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3483
 msgid "&Establish connection in a new tab"
 msgstr "Ε&δραίωση σύνδεσης σε νέα καρτέλα"
 
@@ -528,7 +527,7 @@ msgstr "&Ιδιότητες αρχείου..."
 msgid "&File permissions..."
 msgstr "&Δικαιώματα αρχείου..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2238
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2248
 msgid "&File:"
 msgstr "&Αρχείο:"
 
@@ -548,14 +547,14 @@ msgstr "&Φίλτρα:"
 msgid "&Finish editing and delete local file"
 msgstr "&Ολοκλήρωση επεξεργασίας και διαγραφή τοπικού αρχείου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3141
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
 msgid ""
 "&Flatten remote paths, download all contained files directly into target "
 "directory"
 msgstr ""
 "&Ισοπέδωση των απομακρυσμένων διαδρομών, λήψη απευθείας στο φάκελο προορισμού"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3223
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3233
 msgid "&Follow symlink, delete target directory contents"
 msgstr ""
 "&Η ακόλουθη συμβολική σύνδεση, διαγράφει τα περιεχόμενα του φακέλου "
@@ -569,7 +568,7 @@ msgstr "&Λήψη εξωτερικής διεύθυνσης IP από την α�
 msgid "&Getting help..."
 msgstr "&Λήψη βοήθειας..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2590
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2600
 msgid "&Global bookmark"
 msgstr "&Καθολικός σελιδοδείκτης"
 
@@ -594,7 +593,7 @@ msgstr "&Μέγιστη"
 msgid "&Highest available port:"
 msgstr "&Μέγιστη διαθέσιμη θύρα:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2385
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2395
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:26
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:94
 msgid "&Host:"
@@ -620,7 +619,7 @@ msgstr "&Οικειοποίηση των συσχετίσεων από το σύ
 msgid "&Install new version"
 msgstr "&Εγκαταστήστε νέα έκδοση"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3134
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3144
 msgid "&Keep remote path structure relative to search root"
 msgstr "&Διατήρηση δομής της απομακρυσμένης διαδρομής"
 
@@ -644,8 +643,8 @@ msgstr "&Όριο στον αριθμό των συνεχόμενων συνδέ
 msgid "&Local directory tree"
 msgstr "&Δομή τοπικών φακέλων"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2644
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2727
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2654
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2737
 msgid "&Local directory:"
 msgstr "&Τοπικός φάκελος:"
 
@@ -657,7 +656,7 @@ msgstr "&Συμβάντα στο αρχείο"
 msgid "&Logon Type:"
 msgstr "&Τύπος σύνδεσης:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2440
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2450
 msgid "&Logontype:"
 msgstr "&Τύπος σύνδεσης:"
 
@@ -693,7 +692,7 @@ msgstr "&Ελαχιστοποίηση στην περιοχή ειδοποιήσ
 msgid "&Name sorting mode:"
 msgstr "&Όνομα λειτουργίας ταξινόμησης:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2617
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2627
 msgid "&Name:"
 msgstr "&Όνομα:"
 
@@ -736,7 +735,7 @@ msgid "&Numeric value:"
 msgstr "&Αριθμητική τιμή:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:371
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2868
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2878
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:597
 msgid "&OK"
 msgstr "&OK"
@@ -766,7 +765,7 @@ msgstr "&Κωδικός πρόσβασης:"
 msgid "&Play sound"
 msgstr "&Αναπαραγωγή ήχου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2398
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2408
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:74
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:107
 msgid "&Port:"
@@ -814,16 +813,16 @@ msgid "&Remember password until FileZilla is closed"
 msgstr ""
 "&Απομνημόνευση κωδικού μέχρι το FileZilla να τερματίσει την λειτουργία του"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3643
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3653
 msgid "&Remember passwords"
 msgstr "&Απομνημόνευση κωδικών πρόσβασης"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2671
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2751
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2681
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2761
 msgid "&Remote directory:"
 msgstr "&Απομακρυσμένος φάκελος:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2274
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2284
 msgid "&Remote path:"
 msgstr "&Απομακρυσμένη διαδρομή:"
 
@@ -840,7 +839,7 @@ msgid "&Remove selected"
 msgstr "&Διαγραφή επιλεγμένου"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1244
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2813
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2823
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:280
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:324
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:511
@@ -901,7 +900,7 @@ msgstr "&SOCKS 5"
 msgid "&Save as..."
 msgstr "&Αποθήκευση ως..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2996
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3006
 msgid "&Search"
 msgstr "&Αναζήτηση"
 
@@ -917,11 +916,11 @@ msgstr "&Επιλογή εγγραφής:"
 msgid "&Select language:"
 msgstr "&Επιλογή γλώσσας:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2126
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2136
 msgid "&Select the columns that should be displayed:"
 msgstr "&Επιλέξτε τις στήλες που θα εμφανίζονται:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2313
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2323
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:174
 msgid "&Server"
 msgstr "&Εξυπηρετητής"
@@ -958,7 +957,7 @@ msgstr "Εγγραφές &Διαχειριστή Τοποθεσιών"
 msgid "&Site Manager..."
 msgstr "&Διαχειριστής τοποθεσιών..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2598
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2608
 msgid "&Site-specific bookmark"
 msgstr "&Ειδικός σελιδοδείκτης"
 
@@ -970,7 +969,7 @@ msgstr "&Παράκαμψη"
 msgid "&Speed limits"
 msgstr "&Όρια ταχυτήτων"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3152
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3162
 msgid "&Start transfer immediately"
 msgstr "Επείγουσα &έναρξη μεταφοράς"
 
@@ -1025,7 +1024,7 @@ msgstr "&Αποστολή"
 msgid "&Uploads:"
 msgstr "&Απεσταλμένα:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2922
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2932
 msgid "&Use custom program"
 msgstr "&Χρήση προσαρμοσμένης εφαρμογής"
 
@@ -1051,7 +1050,7 @@ msgid "&Use thousands separator"
 msgstr "&Χρήση διαχωριστικού χιλιάδων"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:329
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2452
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2462
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:189
 msgid "&User:"
 msgstr "&Χρήστης:"
@@ -1187,8 +1186,8 @@ msgstr "(παράδειγμα: %H:%M)"
 msgid "(example: %Y-%m-%d)"
 msgstr "(παράδειγμα: %Y-%m-%d)"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3557
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3574
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3567
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3584
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:919
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:944
 #, c-format
@@ -1266,7 +1265,7 @@ msgid "A default editor needs to be set."
 msgstr "Πρέπει να οριστεί ένας προκαθοριμένος επεξεργαστής."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
-#: ../../locales/../src/interface/RemoteTreeView.cpp:116
+#: ../../locales/../src/interface/RemoteTreeView.cpp:118
 #: ../../locales/../src/interface/state.cpp:740
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Ο φάκελος δε μπορεί να συρθεί μέσα σε έναν από τους υποφακέλους του."
@@ -1373,7 +1372,7 @@ msgstr "Ε&φαρμογή σε όλα τα αρχεία και τους φακέ
 msgid "A&utomatically remove successful transfers"
 msgstr "Α&υτόματη απομάκρυνση των επιτυχημένων μεταφορών"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2529
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2539
 msgid "ASCII"
 msgstr "ASCII"
 
@@ -1448,7 +1447,7 @@ msgstr ""
 msgid "Active mode IP"
 msgstr "IP ενεργητικής κατάστασης"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3159
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
 msgid "Add files to &queue only"
 msgstr "Προσθήκη αρχείων στη &λίστα αναμονής"
 
@@ -1490,7 +1489,7 @@ msgstr ""
 "αναμένεται και μπορεί να βλάψουν το σύστημά σας. Χρησιμοποιείτε τις "
 "δοκιμαστικές εκδόσεις με δική σας ευθύνη."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3500
 msgid "Al&ways perform this action"
 msgstr "Να &εκτελείται πάντα αυτή η ενέργεια"
 
@@ -1521,7 +1520,7 @@ msgstr "Επιτρέπεται η &επιστροφή σε άλλη μέθοδο
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "Επιτρεπτή η επιστροφή σε άλλες καταστάσεις μεταφοράς κατά την αποτυχία"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3450
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3460
 msgid "Already connected"
 msgstr "Συνδέθηκε ήδη"
 
@@ -1630,7 +1629,7 @@ msgstr "Εφαρμογή στα &αρχεία μόνο"
 msgid "Archive"
 msgstr "Αρχείο"
 
-#: ../../locales/../src/engine/socket.cpp:1094
+#: ../../locales/../src/engine/socket.cpp:1095
 msgid "Argument buffer overflow"
 msgstr "Υπερχείλιση μνήμης"
 
@@ -1660,7 +1659,7 @@ msgstr "Ερώτηση στο λειτουργικό σύστημα για μί�
 msgid "Ask your operating system for the external IP address"
 msgstr "Ερώτηση στο λειτουργικό σας σύστημα για την εξωτερική διεύθυνση IP"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3399
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3409
 msgid "Asking questions in the FileZilla forums"
 msgstr "Απαντήσεις ερωτημάτων στα FileZilla forums"
 
@@ -1680,7 +1679,7 @@ msgstr "Σε αυτό το σημείο, όλες οι απαραίτητες π
 msgid "Attribute"
 msgstr "Ιδιότητα"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:657
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:658
 msgid "Authentication failed."
 msgstr "Αποτυχία πιστοποίησης."
 
@@ -1688,7 +1687,7 @@ msgstr "Αποτυχία πιστοποίησης."
 msgid "Author:"
 msgstr "Συγγραφέας:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2507
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2517
 msgid "Auto"
 msgstr "Αυτόματος"
 
@@ -1709,11 +1708,11 @@ msgstr "B"
 msgid "B&ypass proxy"
 msgstr "&Παράκαμψη διαμεσολαβητή"
 
-#: ../../locales/../src/engine/socket.cpp:1058
+#: ../../locales/../src/engine/socket.cpp:1059
 msgid "Bad file descriptor"
 msgstr "Κακός περιγραφέας αρχείου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3356
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3366
 msgid "Basic usage instructions"
 msgstr "Βασικές οδηγίες χρήσης"
 
@@ -1730,7 +1729,7 @@ msgstr "Επεξεργάστηκε"
 msgid "Beware! Certificate has been revoked"
 msgstr "Προσοχή! Το πιστοποιητικό έχει ανακληθεί"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2534
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2544
 msgid "Binary"
 msgstr "Δυαδικός"
 
@@ -1744,11 +1743,11 @@ msgstr "Μαυροπίνακα"
 msgid "Bookmark"
 msgstr "Σελιδοδείκτης"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2790
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2800
 msgid "Bookmark:"
 msgstr "Σελιδοδείκτης:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2779
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2789
 msgid "Bookmarks"
 msgstr "Σελιδοδείκτες"
 
@@ -1805,7 +1804,7 @@ msgid "CPU features:"
 msgstr "Χαρακτηριστικά ΚΜΕ:"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1571
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1206
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1210
 msgid "Calculating timezone offset of server..."
 msgstr "Υπολογισμός απόκλισης χρονικής ζώνης από τον εξυπηρετητή..."
 
@@ -1835,14 +1834,14 @@ msgstr "Αδύνατη η εγγραφή δεδομένων στο αρχείο:
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1596
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1655
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1829
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2178
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2560
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2706
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2874
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2964
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3176
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3246
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3508
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2188
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2570
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2716
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2884
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2974
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3186
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3256
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3518
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:604
 msgid "Cancel"
 msgstr "Άκυρο"
@@ -1865,11 +1864,11 @@ msgstr ""
 msgid "Cannot add server to Site Manager"
 msgstr "Αδυναμία προσθήκης του εξυπηρετητή στο διαχειριστή τοποθεσιών"
 
-#: ../../locales/../src/engine/socket.cpp:1111
+#: ../../locales/../src/engine/socket.cpp:1112
 msgid "Cannot assign requested address"
 msgstr "Αδυναμία αντιστοίχισης αιτούμενης διεύθυνσης"
 
-#: ../../locales/../src/interface/context_control.cpp:345
+#: ../../locales/../src/interface/context_control.cpp:349
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -1919,9 +1918,8 @@ msgid "Cannot load Quickconnect bar from resource file"
 msgstr "Αδυναμία φόρτωσης γραμμής γρήγορης σύνδεσης από το αρχείο resource"
 
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:108
-#, fuzzy
 msgid "Cannot load key file"
-msgstr "Αδυναμία φόρτωσης του αρχείου-κλειδιού"
+msgstr "Αδυναμία φόρτωσης του Αρχείου Κλειδιού"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:1004
 msgid "Cannot load toolbar from resource file"
@@ -2138,11 +2136,11 @@ msgstr "Καθαρισμός της γραμμής γρήγορης σύνδεσ
 msgid "Click on Finish to save your configuration."
 msgstr "Κάντε κλικ στο τέλος για να αποθηκεύσετε τις ρυθμίσεις σας."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2052
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2062
 msgid "Client to server MAC:"
 msgstr "Πελάτης πρός Φυσική Διεύθυνση (MAC) εξυπηρετητή:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2042
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2052
 msgid "Client to server cipher:"
 msgstr "Πελάτης προς αποτύπωμα εξυπηρετητή:"
 
@@ -2172,7 +2170,7 @@ msgstr "Σχ&όλια:"
 msgid "Column properties"
 msgstr "Ιδιότητες στήλης"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2111
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2121
 msgid "Column setup"
 msgstr "Ρύθμιση στήλης"
 
@@ -2258,7 +2256,7 @@ msgid "Concurrent transfers"
 msgstr "Σύγχρονες μεταφορές"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1315
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3046
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3056
 msgid "Conditions are c&ase sensitive"
 msgstr "Διάκριση πεζών και κεφαλαίων χαρακτήρων"
 
@@ -2274,7 +2272,7 @@ msgstr "Ρύθμιση παθητικής κατάστασης"
 msgid "Configure port range"
 msgstr "Ρύθμιση εύρους θύρας"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3362
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3372
 msgid "Configuring FileZilla and your network"
 msgstr "Ρύθμιση του FileZilla και του δικτύου σας"
 
@@ -2286,7 +2284,7 @@ msgstr "Επιβεβαίωση διαγραφής"
 #: ../../locales/../src/interface/edithandler.cpp:1587
 #: ../../locales/../src/interface/LocalListView.cpp:1664
 #: ../../locales/../src/interface/RemoteListView.cpp:1394
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1036
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1038
 #: ../../locales/../src/interface/search.cpp:724
 msgid "Confirmation needed"
 msgstr "Χρειάζεται επιβεβαίωση"
@@ -2333,7 +2331,7 @@ msgstr "Σύνδεση στο %s μέσω διακομιστή μεσολάβη�
 
 #: ../../locales/../src/engine/ControlSocket.cpp:955
 #: ../../locales/../src/engine/proxy.cpp:243
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:370
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:371
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Σύνδεση στο %s..."
@@ -2342,7 +2340,7 @@ msgstr "Σύνδεση στο %s..."
 msgid "Connection"
 msgstr "Σύνδεση"
 
-#: ../../locales/../src/engine/socket.cpp:1072
+#: ../../locales/../src/engine/socket.cpp:1073
 msgid "Connection aborted"
 msgstr "Η σύνδεση ματαιώθηκε"
 
@@ -2367,7 +2365,7 @@ msgstr "Απέτυχε η προσπάθεια σύνδεσης με \"%s\"."
 msgid "Connection attempt interrupted by user"
 msgstr "Προσπάθεια σύνδεσης διακόπηκε από το χρήστη"
 
-#: ../../locales/../src/engine/socket.cpp:1065
+#: ../../locales/../src/engine/socket.cpp:1066
 msgid "Connection attempt timed out"
 msgstr "Εξαντλήθηκε το χρονικό όριο σύνδεσης"
 
@@ -2405,15 +2403,15 @@ msgstr "Μη επιτρεπτή σύνδεση σύμφωνα με τα καθο
 msgid "Connection refused"
 msgstr "Η σύνδεση απορρίφθηκε"
 
-#: ../../locales/../src/engine/socket.cpp:1059
+#: ../../locales/../src/engine/socket.cpp:1060
 msgid "Connection refused by server"
 msgstr "Η σύνδεση απορρίφθηκε από το διακομιστή"
 
-#: ../../locales/../src/engine/socket.cpp:1068
+#: ../../locales/../src/engine/socket.cpp:1069
 msgid "Connection reset by network"
 msgstr "Επαναφορά σύνδεσης από το δίκτυο"
 
-#: ../../locales/../src/engine/socket.cpp:1073
+#: ../../locales/../src/engine/socket.cpp:1074
 msgid "Connection reset by peer"
 msgstr "Σύνδεση τερματίστηκε από ομότιμο εξυπηρετητή"
 
@@ -2445,9 +2443,8 @@ msgid "Connection with the test server failed."
 msgstr "Η σύνδεση με το δοκιμαστικό εξυπηρετητή απέτυχε."
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:109
-#, fuzzy
 msgid "Convert key file"
-msgstr "Μετατροπή του αρχείου-κλειδιού"
+msgstr "Μετατροπή του Αρχείου Κλειδιού"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:625
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1847
@@ -2489,7 +2486,7 @@ msgstr "Αδύνατη η σύνδεση στον εξυπηρετητή"
 msgid "Could not connect to server: %s"
 msgstr "Αδύνατη η σύνδεση στον εξυπηρετητή: %s"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:782
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:786
 msgid "Could not convert command to server encoding"
 msgstr "Αδυναμία μετατροπής εντολής στην κωδικοποίηση του εξυπηρετητή"
 
@@ -2499,7 +2496,7 @@ msgid "Could not convert private key"
 msgstr "Αδυναμία μετατροπής ιδιωτικού κλειδιού"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2532
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1372
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1374
 msgid "Could not copy URLs"
 msgstr "Αδυναμία αντιγραφής των URLs"
 
@@ -2518,7 +2515,7 @@ msgid "Could not create logging mutex: %s"
 msgstr "Δεν είναι δυνατή η δημιουργία mutex: %s"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2193
-#: ../../locales/../src/interface/RemoteTreeView.cpp:849
+#: ../../locales/../src/interface/RemoteTreeView.cpp:851
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2649,7 +2646,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/aboutdialog.cpp:198
 #: ../../locales/../src/interface/RemoteListView.cpp:2532
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1372
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1374
 msgid "Could not open clipboard"
 msgstr "Αδυναμία ανοίγματος του προχείρου"
 
@@ -2749,9 +2746,9 @@ msgid "Could not write \"%s\":"
 msgstr "Δεν ήταν δυνατή η εγγραφή \"%s\":"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:162
-#, fuzzy, c-format
+#, c-format
 msgid "Could not write key file: %s"
-msgstr "Αδυναμία εγγραφής του αρχείου-κλειδιού: %s"
+msgstr "Αδυναμία εγγραφής του Αρχείου Κλειδιού: %s"
 
 #: ../../locales/../src/interface/queue.cpp:387
 msgid "Could not write to local file"
@@ -2805,9 +2802,9 @@ msgid "Create director&y and enter it"
 msgstr "Δημιουργήστε κατά&λογο και εισέλθετε σε αυτόν"
 
 #: ../../locales/../src/interface/LocalListView.cpp:897
-#: ../../locales/../src/interface/LocalTreeView.cpp:1121
+#: ../../locales/../src/interface/LocalTreeView.cpp:1123
 #: ../../locales/../src/interface/RemoteListView.cpp:1297
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1210
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1212
 msgid "Create directory"
 msgstr "Δημιουργία φακέλου"
 
@@ -2820,7 +2817,7 @@ msgid "Creating directory"
 msgstr "Δημιουργία φακέλου"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3167
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1922
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1926
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "Δημιουργία φακέλου '%s'..."
@@ -2865,6 +2862,10 @@ msgstr "Ο τρέχον τύπος μεταφοράς έχει ορισθεί ω
 msgid "Current transfer type is set to binary."
 msgstr "Ο τρέχον τύπος μεταφοράς έχει ορισθεί ως δυαδικός."
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2006
+msgid "Curve:"
+msgstr "Καμπύλη:"
+
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:478
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1556
 msgid "Cus&tom"
@@ -2874,12 +2875,12 @@ msgstr "Προσ&αρμογή"
 msgid "Custom filter set"
 msgstr "Προσαρμοσμένα ορίσματα φίλτρου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2364
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2378
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2374
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2388
 msgid "Custom server"
 msgstr "Προσαρμοσμένος εξυπηρετητής"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2498
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2508
 msgid "D&ata type"
 msgstr "Τύπος δ&εδομένων"
 
@@ -2910,7 +2911,7 @@ msgid "D&ouble-click action on directories:"
 msgstr "Ενέργεια δι&πλό-κλικ στους φακέλους:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1250
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2825
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2835
 msgid "D&uplicate"
 msgstr "Δι&πλότυπο"
 
@@ -3057,11 +3058,11 @@ msgid "Deleting multiple unrelated directories is not yet supported"
 msgstr ""
 "Δεν υποστηρίζεται προς το παρόν η διαγραφή πολλαπλών ανεξάρτητων φακέλων."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3194
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3204
 msgid "Deleting symbolic link"
 msgstr "Διαγραφή συμβολικής σύνδεσης"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:956
+#: ../../locales/../src/interface/LocalTreeView.cpp:958
 msgid "Desktop"
 msgstr "Επιφάνεια Εργασίας"
 
@@ -3091,7 +3092,7 @@ msgstr "Κατεύθυνση"
 msgid "Directory"
 msgstr "Φάκελος"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2766
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2776
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:524
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1770
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
@@ -3231,7 +3232,7 @@ msgstr "Θέλετε πραγματικά να στείλετε το '%s' στο
 msgid "Do you want to reopen this file?"
 msgstr "Θέλετε να ανοίξει εκ νέου αυτό το αρχείο;"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3344
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3354
 msgid "Documentation"
 msgstr "Τεκμηρίωση"
 
@@ -3248,11 +3249,11 @@ msgstr "Τα αρχεία που ξεκινούν με τελεία, π.χ. .hta
 msgid "Double-click action"
 msgstr "Ενέργεια διπλό-κλικ"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2207
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2217
 msgid "Download"
 msgstr "Λήψη"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3546
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3556
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:905
 msgid "Download &limit:"
 msgstr "&Όριο λήψης:"
@@ -3266,7 +3267,7 @@ msgstr "Όριο λήψης: %s/s"
 msgid "Download limit: none"
 msgstr "Όριο λήψης: όχι"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3093
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3103
 #: ../../locales/../src/interface/search.cpp:518
 #: ../../locales/../src/interface/search.cpp:523
 msgid "Download search results"
@@ -3311,10 +3312,10 @@ msgid "Downloading update..."
 msgstr "Λήψη ενημέρωσης..."
 
 #: ../../locales/../src/interface/LocalListView.cpp:103
-#: ../../locales/../src/interface/LocalTreeView.cpp:107
+#: ../../locales/../src/interface/LocalTreeView.cpp:109
 #: ../../locales/../src/interface/QueueView.cpp:87
 #: ../../locales/../src/interface/RemoteListView.cpp:102
-#: ../../locales/../src/interface/RemoteTreeView.cpp:87
+#: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
 "Drag&drop between different instances of FileZilla has not been implemented "
 "yet."
@@ -3323,10 +3324,10 @@ msgstr ""
 "υλοποιηθεί."
 
 #: ../../locales/../src/interface/LocalListView.cpp:109
-#: ../../locales/../src/interface/LocalTreeView.cpp:113
+#: ../../locales/../src/interface/LocalTreeView.cpp:115
 #: ../../locales/../src/interface/QueueView.cpp:100
 #: ../../locales/../src/interface/RemoteListView.cpp:108
-#: ../../locales/../src/interface/RemoteTreeView.cpp:93
+#: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
 msgstr ""
 "Το Drag&Drop ανάμεσα σε διαφορετικούς εξυπηρετητές δεν έχει υλοποιηθεί."
@@ -3440,7 +3441,7 @@ msgstr "Ενεργοποίηση &φιλτραρίσματος μη έγκυρω
 msgid "Encrypted"
 msgstr "Κρυπτογραφημένο"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2035
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2045
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
 
@@ -3456,7 +3457,7 @@ msgstr "Να ολοκληρωθεί σύγκριση και η αλλαγή τω
 msgid "Enter &custom command..."
 msgstr "Εισαγωγή &προσαρμοσμένης εντολής..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3587
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3597
 msgid "Enter 0 for unlimited speed."
 msgstr "Επιλέξτε 0 για απεριόριστη ταχύτητα."
 
@@ -3579,7 +3580,7 @@ msgstr "Σφάλμα κατά τη φόρτωση της Λίστας αναμο
 #: ../../locales/../src/interface/sitemanager.cpp:741
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:749
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:807
-#: ../../locales/../src/interface/wrapengine.cpp:937
+#: ../../locales/../src/interface/wrapengine.cpp:938
 msgid "Error loading xml file"
 msgstr "Σφάλμα φόρτωσης xml αρχείου"
 
@@ -3703,8 +3704,8 @@ msgstr "FTPS - FTP μέσω σιωπηρής TLS"
 #: ../../locales/../src/interface/LocalListView.cpp:601
 #: ../../locales/../src/interface/LocalListView.cpp:886
 #: ../../locales/../src/interface/LocalListView.cpp:1778
-#: ../../locales/../src/interface/LocalTreeView.cpp:844
-#: ../../locales/../src/interface/LocalTreeView.cpp:1097
+#: ../../locales/../src/interface/LocalTreeView.cpp:846
+#: ../../locales/../src/interface/LocalTreeView.cpp:1099
 #: ../../locales/../src/interface/viewheader.cpp:504
 msgid "Failed to change directory"
 msgstr "Απέτυχε η αλλαγή φακέλου"
@@ -3734,11 +3735,11 @@ msgid "Failed to create listening socket for active mode transfer"
 msgstr ""
 "Αποτυχία δημιουργίας listen socket για μεταφορά σε ενεργητική κατάσταση"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:623
+#: ../../locales/../src/interface/LocalTreeView.cpp:625
 msgid "Failed to get 'My Documents' path"
 msgstr "Αποτυχία πρόσβασης στην διαδρομή 'Τα Εγγραφά Μου'"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:611
+#: ../../locales/../src/interface/LocalTreeView.cpp:613
 msgid "Failed to get desktop path"
 msgstr "Αποτυχία πρόσβασης στην διαδρομή της επιφάνειας εργασίας"
 
@@ -3892,7 +3893,7 @@ msgstr "Αποτυχημένες μεταφορές"
 msgid "Fall back to active mode"
 msgstr "Επιστροφή σε ενεργητική κατάσταση"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2286
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2296
 msgid "Fil&e:"
 msgstr "Αρχ&είο:"
 
@@ -3908,7 +3909,7 @@ msgstr "Αρχείο"
 msgid "File Types"
 msgstr "Τύποι αρχείων"
 
-#: ../../locales/../src/engine/socket.cpp:1064
+#: ../../locales/../src/engine/socket.cpp:1065
 msgid "File descriptor not a socket"
 msgstr "O περιγραφέας αρχείου δεν είναι υποδοχέας"
 
@@ -3982,11 +3983,11 @@ msgstr "Επιτυχής μεταφορά αρχείου, μεταφέρθηκε
 msgid "File transfers still in progress."
 msgstr "Μεταφορά αρχείων σε πρόοδο."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2517
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2527
 msgid "File would transfer with ASCII data type."
 msgstr "Το αρχείο θα μεταφερθεί ως ASCII τύπος δεδομένων."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2522
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2532
 msgid "File would transfer with binary data type."
 msgstr "Το αρχείο θα μεταφερθεί ως δυαδικός τύπος δεδομένων."
 
@@ -4004,7 +4005,7 @@ msgstr ""
 "Το FileZilla θα δοκιμάσει τώρα τις ρυθμίσεις σας για να εξασφαλίσει ότι "
 "είναι όλα σωστά ρυθμισμένα."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3468
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3478
 msgid "FileZilla is already connected to a server."
 msgstr "Το FileZilla συνδέθηκε ήδη με τον εξυπηρετητή."
 
@@ -4035,7 +4036,7 @@ msgid "Filename &filters..."
 msgstr "Όνομα αρχείου &φίλτρων..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2971
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2164
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2168
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr ""
@@ -4136,11 +4137,11 @@ msgstr "Φιλτράρισμα λιστών φακέλων"
 msgid "Filter validation failed"
 msgstr "Αποτυχία πιστοποίησης φίλτρου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3051
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3061
 msgid "Find &files"
 msgstr "Αναζήτηση &αρχείων"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3056
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3066
 msgid "Find d&irectories"
 msgstr "Αναζήτηση &φακέλων"
 
@@ -4209,7 +4210,7 @@ msgstr ""
 msgid "Found new %s %s\n"
 msgstr "Βρέθηκε νέα %s %s\n"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3368
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3378
 msgid "Further documentation"
 msgstr "Περαιτέρω τεκμηρίωση"
 
@@ -4230,7 +4231,7 @@ msgstr "Γενικός διαμεσολαβητής"
 msgid "Get external IP address from the following URL:"
 msgstr "Λήψη εξωτερικής διεύθυνσης IP από την ακόλουθη URL:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3387
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3397
 msgid "Getting help"
 msgstr "Λήψη βοήθειας"
 
@@ -4279,7 +4280,7 @@ msgstr "Υ&ψηλή"
 msgid "HTTPS - HTTP over TLS"
 msgstr "HTTPS - HTTP over TLS"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2006
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2016
 msgid "Hash:"
 msgstr "Δίεση:"
 
@@ -4313,11 +4314,11 @@ msgstr ""
 msgid "Homepage:"
 msgstr "Προσωπική Σελίδα:"
 
-#: ../../locales/../src/engine/socket.cpp:1075
+#: ../../locales/../src/engine/socket.cpp:1076
 msgid "Host is down"
 msgstr "Ο κόμβος είναι εκτός λειτουργίας"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2016
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2026
 msgid "Host key fingerprint:"
 msgstr "Αποτύπωμα κλειδιών κόμβου:"
 
@@ -4425,7 +4426,7 @@ msgstr ""
 "επικαλύπτοντας παλαιότερα αρχεία συμβάντων), με αποτέλεσμα την δημιουργία "
 "νέου αρχείου."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3206
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3216
 msgid ""
 "If the symlink points to a directory, FileZilla can either delete the "
 "symbolic link or remove the contents of the linked directory."
@@ -4641,7 +4642,7 @@ msgstr "Διαδραστικός"
 msgid "Interface"
 msgstr "Διεπαφή"
 
-#: ../../locales/../src/engine/socket.cpp:1061
+#: ../../locales/../src/engine/socket.cpp:1062
 msgid "Interrupted by signal"
 msgstr "Διακόπηκε με σύνθημα"
 
@@ -4658,7 +4659,7 @@ msgstr "Μη έγκυρο μέγεθος περιεχομένων"
 msgid "Invalid HTTP Response"
 msgstr "Μη έγκυρη απάντηση HTTP"
 
-#: ../../locales/../src/engine/socket.cpp:1049
+#: ../../locales/../src/engine/socket.cpp:1050
 msgid "Invalid argument passed"
 msgstr "Μη έγκυρο όρισμα"
 
@@ -4766,11 +4767,11 @@ msgstr "Μη έγκυρο μέγεθος στην συνθήκη"
 msgid "Invalid username given."
 msgstr "Δόθηκε μη έγκυρο όνομα χρήστη."
 
-#: ../../locales/../src/engine/socket.cpp:1082
+#: ../../locales/../src/engine/socket.cpp:1083
 msgid "Invalid value for ai_flags"
 msgstr "Μη έγκυρη τιμή για ai_flags"
 
-#: ../../locales/../src/engine/socket.cpp:1084
+#: ../../locales/../src/engine/socket.cpp:1085
 msgid "Invalid value for hints"
 msgstr "Μη έγκυρη τιμή για περιηγήσεις"
 
@@ -4886,15 +4887,15 @@ msgstr "Χα&μηλότερη διαθέσιμη θύρα:"
 msgid "Local"
 msgstr "Τοπικά"
 
-#: ../../locales/../src/engine/socket.cpp:1046
+#: ../../locales/../src/engine/socket.cpp:1047
 msgid "Local address in use"
 msgstr "Τοπική διεύθυνση σε χρήση"
 
-#: ../../locales/../src/engine/socket.cpp:1074
+#: ../../locales/../src/engine/socket.cpp:1075
 msgid "Local endpoint has been closed"
 msgstr "Το τοπικό καταληκτικό σημείο έχει κλείσει"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2230
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2240
 msgid "Local file"
 msgstr "Τοπικό αρχείο"
 
@@ -5020,7 +5021,7 @@ msgstr ""
 "Κατεστραμένη απάντηση, ο εξυπηρετητής δε στέλνει τις κατάλληλες γραμμές "
 "τερματισμού"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2572
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2582
 #: ../../locales/../src/interface/manual_transfer.cpp:296
 #: ../../locales/../src/interface/manual_transfer.cpp:302
 #: ../../locales/../src/interface/manual_transfer.cpp:308
@@ -5032,15 +5033,15 @@ msgstr ""
 msgid "Manual transfer"
 msgstr "Χειροκίνητη μεταφορά"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3010
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
 msgid "Match all of the following"
 msgstr "Με όλα τα ακόλουθα"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3011
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3021
 msgid "Match any of the following"
 msgstr "Να ταιριάζει με οτιδήποτε από τα ακόλουθα"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3012
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3022
 msgid "Match none of the following"
 msgstr "Να μην ταιριάζει με οτιδήποτε από τα ακόλουθα"
 
@@ -5048,7 +5049,7 @@ msgstr "Να μην ταιριάζει με οτιδήποτε από τα ακ�
 msgid "Maximum simultaneous &transfers:"
 msgstr "Μέγιστος αριθμός ταυτόχρονων &μεταφορών:"
 
-#: ../../locales/../src/engine/socket.cpp:1088
+#: ../../locales/../src/engine/socket.cpp:1089
 msgid "Memory allocation failure"
 msgstr "Αποτυχία εκχώρησης μνήμης"
 
@@ -5061,7 +5062,7 @@ msgstr "Αρχείο συμβάντων"
 msgid "Message log position"
 msgstr "Θέση αρχείου συμβάντων"
 
-#: ../../locales/../src/engine/socket.cpp:1071
+#: ../../locales/../src/engine/socket.cpp:1072
 msgid "Message too large"
 msgstr "Πολύ μεγάλο μήνυμα"
 
@@ -5073,19 +5074,19 @@ msgstr "MiB"
 msgid "Minutes"
 msgstr "Λεπτά"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2145
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2155
 msgid "Move &down"
 msgstr "Μετακίνηση &κάτω"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2139
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2149
 msgid "Move &up"
 msgstr "Μετακίνηση &πάνω"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:975
+#: ../../locales/../src/interface/LocalTreeView.cpp:977
 msgid "My Computer"
 msgstr "Ο Υπολογιστής Μου"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:965
+#: ../../locales/../src/interface/LocalTreeView.cpp:967
 msgid "My Documents"
 msgstr "Τα Εγγραφά Μου"
 
@@ -5100,7 +5101,7 @@ msgstr "Οι Τοποθεσίες μου"
 msgid "N/a"
 msgstr "N/a"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2610
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2620
 msgid "Name"
 msgstr "Όνομα"
 
@@ -5134,11 +5135,11 @@ msgstr "Πρέπει να καταχωρίσετε έγκυρη απομακρυ
 msgid "Need to specify a character encoding"
 msgstr "Πρέπει να ορίσετε μία κωδικοποίηση χαρακτήρων"
 
-#: ../../locales/../src/engine/socket.cpp:1092
+#: ../../locales/../src/engine/socket.cpp:1093
 msgid "Neither nodename nor servname provided, or not known"
 msgstr "Δεν είναι γνωστό το όνομα του κόμβου ούτε το όνομα του εξυπηρετητή"
 
-#: ../../locales/../src/engine/socket.cpp:1079
+#: ../../locales/../src/engine/socket.cpp:1080
 msgid ""
 "Network host does not have any network addresses in the requested address "
 "family"
@@ -5147,7 +5148,7 @@ msgstr ""
 "οικογένεια διευθύνσεων"
 
 #: ../../locales/../src/engine/proxy.cpp:490
-#: ../../locales/../src/engine/socket.cpp:1063
+#: ../../locales/../src/engine/socket.cpp:1064
 msgid "Network unreachable"
 msgstr "Μη προσπελάσιμο δίκτυο"
 
@@ -5163,12 +5164,12 @@ msgstr "Νέος &φάκελος"
 msgid "New &tab"
 msgstr "Νέα &καρτέλα"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2808
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2818
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:47
 msgid "New Book&mark"
 msgstr "Νέος σελιδο&δείκτης"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2575
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2585
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:56
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:69
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:75
@@ -5187,9 +5188,9 @@ msgstr "Νέος σελιδο&δείκτης"
 msgid "New bookmark"
 msgstr "Νέος σελιδοδείκτης"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1124
+#: ../../locales/../src/interface/LocalTreeView.cpp:1126
 #: ../../locales/../src/interface/RemoteListView.cpp:1310
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1223
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1225
 msgid "New directory"
 msgstr "Νέος φάκελος"
 
@@ -5216,11 +5217,11 @@ msgstr "Νέα τοποθεσία"
 msgid "Next to the transfer queue"
 msgstr "Επόμενο στη λίστα αναμονής μεταφορών"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:833
 msgid "No"
 msgstr "Όχι"
 
-#: ../../locales/../src/engine/socket.cpp:1090
+#: ../../locales/../src/engine/socket.cpp:1091
 msgid "No address associated with nodename"
 msgstr "Καμία διεύθυνση που να σχετίζεται με το όνομα του κόμβου"
 
@@ -5264,18 +5265,18 @@ msgstr "Δεν υπάρχουν άλλα αρχεία στη λίστα αναμ
 msgid "No name for the filterset given."
 msgstr "Δεν έχει δοθεί όνομα για τα ορίσματα φίλτρου."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2975
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2985
 msgid "No program associated with filetype"
 msgstr "Καμία εφαρμογή δε συσχετίζεται μ' αυτόν το τύπο αρχείου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2892
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2902
 #, c-format
 msgid "No program has been associated to edit files with the extension '%s'."
 msgstr ""
 "Καμία εφαρμογή δεν έχει συσχετιστεί για να επεξεργαστεί αρχεία με επέκταση "
 "'%s'."
 
-#: ../../locales/../src/engine/socket.cpp:1066
+#: ../../locales/../src/engine/socket.cpp:1067
 msgid "No route to host"
 msgstr "Δεν υπάρχει δρομολογητής να φιλοξενηθεί"
 
@@ -5301,11 +5302,11 @@ msgstr "Δεν έχει οριστεί όνομα χρήστη."
 msgid "None"
 msgstr "Κανένα"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2346
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2356
 msgid "None selected yet"
 msgstr "Τίποτε δεν έχει επιλεχθεί ακόμα"
 
-#: ../../locales/../src/engine/socket.cpp:1086
+#: ../../locales/../src/engine/socket.cpp:1087
 msgid "Nonrecoverable failure in name resolution"
 msgstr "Μη ανακτήσιμο σφάλμα κατά την ανάλυση ονόματος"
 
@@ -5343,7 +5344,7 @@ msgstr "Δεν έχει συνδεθεί με κανέναν εξυπηρετη�
 msgid "Not connected."
 msgstr "Δεν έχει συνδεθεί."
 
-#: ../../locales/../src/engine/socket.cpp:1107
+#: ../../locales/../src/engine/socket.cpp:1108
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Δεν έγινε προετοιμασία, πρέπει να επικαλεστείτε WSAStartup"
 
@@ -5388,16 +5389,16 @@ msgstr "Ά&νοιγμα αρχείου"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1649
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1823
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1960
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2096
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2171
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2554
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2700
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2958
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3170
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3239
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3435
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3604
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3660
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2106
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2181
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2564
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2710
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2968
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3180
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3249
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3445
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3614
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3670
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:34
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:27
 msgid "OK"
@@ -5415,7 +5416,7 @@ msgstr ""
 "Στις επόμενες σελίδες, θα ρυθμιστεί η κατάσταση μεταφοράς, καθώς και η "
 "κατάσταση επιστροφής αν είναι ενεργοποιημένη."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:839
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:843
 msgid "Once"
 msgstr "Μία"
 
@@ -5487,15 +5488,15 @@ msgstr ""
 msgid "Operating System:"
 msgstr "Λειτουργικό Σύστημα:"
 
-#: ../../locales/../src/engine/socket.cpp:1057
+#: ../../locales/../src/engine/socket.cpp:1058
 msgid "Operation already in progress"
 msgstr "Η λειτουργία είναι ήδη σε εξέλιξη"
 
-#: ../../locales/../src/engine/socket.cpp:1048
+#: ../../locales/../src/engine/socket.cpp:1049
 msgid "Operation in progress"
 msgstr "Λειτουργία σε εξέλιξη"
 
-#: ../../locales/../src/engine/socket.cpp:1069
+#: ../../locales/../src/engine/socket.cpp:1070
 msgid "Operation not supported"
 msgstr "Η λειτουργία δεν υποστηρίζεται"
 
@@ -5507,7 +5508,7 @@ msgstr "Οργανισμός:"
 msgid "Other SFTP options"
 msgstr "Άλλες SFTP επιλογές"
 
-#: ../../locales/../src/engine/socket.cpp:1102
+#: ../../locales/../src/engine/socket.cpp:1103
 msgid "Other system error"
 msgstr "Άλλο σφάλμα συστήματος"
 
@@ -5515,8 +5516,8 @@ msgstr "Άλλο σφάλμα συστήματος"
 msgid "Other:"
 msgstr "Άλλα:"
 
-#: ../../locales/../src/engine/socket.cpp:1052
 #: ../../locales/../src/engine/socket.cpp:1053
+#: ../../locales/../src/engine/socket.cpp:1054
 msgid "Out of memory"
 msgstr "Εξαντλήθηκε η μνήμη"
 
@@ -5611,7 +5612,7 @@ msgstr "Η παράμετρος δεν είναι έγκυρη URL"
 msgid "Parsing %d bytes of version information.\n"
 msgstr "Αναλύθηκαν τα %d bytes των πληροφοριών της έκδοσης.\n"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2462
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2472
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:59
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:201
 msgid "Pass&word:"
@@ -5642,7 +5643,7 @@ msgid "Path"
 msgstr "Διαδρομή"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3054
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2210
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2214
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Αδυναμία δημιουργίας διαδρομής για τον φάκελο %s και τον υποφάκελο %s"
@@ -5651,7 +5652,7 @@ msgstr "Αδυναμία δημιουργίας διαδρομής για τον
 msgid "Path not found:"
 msgstr "Η διαδρομή δεν βρέθηκε:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2637
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2647
 msgid "Paths"
 msgstr "Διαδρομές"
 
@@ -5666,8 +5667,8 @@ msgstr "Αναμονή διαγραφής"
 msgid "Permission"
 msgstr "Άδεια"
 
-#: ../../locales/../src/engine/socket.cpp:1045
-#: ../../locales/../src/engine/socket.cpp:1054
+#: ../../locales/../src/engine/socket.cpp:1046
+#: ../../locales/../src/engine/socket.cpp:1055
 msgid "Permission denied"
 msgstr "Άρνηση πρόσβασης"
 
@@ -5829,9 +5830,9 @@ msgstr ""
 "Η χρήση ακατέργαστων εντολών FTP θα καθαρίσουν την προσωρινή μνήμη φακέλων."
 
 #: ../../locales/../src/interface/LocalListView.cpp:897
-#: ../../locales/../src/interface/LocalTreeView.cpp:1121
+#: ../../locales/../src/interface/LocalTreeView.cpp:1123
 #: ../../locales/../src/interface/RemoteListView.cpp:1297
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1210
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1212
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Παρακαλώ, καταχωρίστε το όνομα του φακέλου που πρέπει να δημιουργηθεί:"
 
@@ -5937,7 +5938,7 @@ msgstr ""
 "περίπτωση που ξαφνικά υπάρχουν προβλήματα με εξυπηρετητές που λειτουργούσαν "
 "παλαιότερα."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3221
 msgid "Please select an action:"
 msgstr "Παρακαλώ, επιλέξτε ενέργεια:"
 
@@ -6066,7 +6067,7 @@ msgstr "Κωδικός πρόσβασης διαμεσολαβητή:"
 msgid "Process &Queue"
 msgstr "Επεξεργασία &λίστας αναμονής"
 
-#: ../../locales/../src/engine/socket.cpp:1050
+#: ../../locales/../src/engine/socket.cpp:1051
 msgid "Process file table overflow"
 msgstr "Διαδικασία υπερχείλισης πίνακα αρχείων"
 
@@ -6076,11 +6077,11 @@ msgstr "Διαδικασία υπερχείλισης πίνακα αρχείω�
 msgid "Processed %s in %s."
 msgstr "Επεξεργασμένα %s από %s."
 
-#: ../../locales/../src/engine/socket.cpp:1055
+#: ../../locales/../src/engine/socket.cpp:1056
 msgid "Protocol not supported"
 msgstr "Το πρωτόκολλο δεν υποστηρίζεται"
 
-#: ../../locales/../src/engine/socket.cpp:1109
+#: ../../locales/../src/engine/socket.cpp:1110
 msgid "Protocol not supported on given socket type"
 msgstr "Το πρωτόκολλο δεν υποστηρίζεται από το συγκεκριμένο τύπο υποδοχέα"
 
@@ -6167,7 +6168,7 @@ msgstr "Λίστα αναμονής: κενή"
 msgid "Queued files"
 msgstr "Αρχεία σε λίστα αναμονής"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3147
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3157
 msgid "Queueing:"
 msgstr "Λίστα αναμονής:"
 
@@ -6246,7 +6247,7 @@ msgstr[1] "Να διαγραφούν τα αρχεία %d από το διακο
 msgid "Really delete %s and %s from the server?"
 msgstr "Να διαγραφεί το %s και το %s από το διακομιστή;"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1036
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1038
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
 "Να διαγραφούν όλα τα επιλεγμένα αρχεία και/ή οι φάκελοι από το διακομιστή;"
@@ -6274,7 +6275,7 @@ msgstr "Επα&ναληπτικά στους υποφακέλους"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Ελήφθη προειδοποίηση TLS από το διακομιστή: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2964
+#: ../../locales/../src/engine/directorylistingparser.cpp:2965
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr ""
 "Ελήφθησαν περιεχόμενα καταλόγου τα οποία πυθανόν να έχουν κωδικοποιηθεί σε "
@@ -6350,7 +6351,7 @@ msgstr "Σφάλμα κατά την αναδρομολόγηση ή λάθος 
 msgid "Refresh the file and folder lists"
 msgstr "Ανανέωση των λιστών αρχείων και φακέλων"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3680
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3690
 msgid "Remember passwords?"
 msgstr "Απομνημόνευση κωδικών πρόσβασης;"
 
@@ -6362,12 +6363,12 @@ msgstr "Αφαίρεση"
 msgid "Remote certificate not trusted."
 msgstr "Απομακρυσμένο πιστοποιητικό μη εμπιστεύσιμο."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2265
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2275
 #: ../../locales/../src/interface/queue.cpp:1169
 msgid "Remote file"
 msgstr "Απομακρυσμένο αρχείο"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3089
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3099
 #: ../../locales/../src/interface/search.cpp:383
 #: ../../locales/../src/interface/search.cpp:388
 #: ../../locales/../src/interface/search.cpp:397
@@ -6415,7 +6416,7 @@ msgstr ""
 msgid "Remote path could not be parsed."
 msgstr "Η απομακρυσμένη διαδρομή ήταν αδύνατο να αναλυθεί."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3129
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3139
 msgid "Remote path handling:"
 msgstr "Διαχείριση απομακρυσμένης διαδρομής:"
 
@@ -6456,12 +6457,12 @@ msgid "Rename selected files and directories"
 msgstr "Μετονομασία επιλεγμένων αρχείων και φακέλων"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3393
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2409
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2413
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "Μετονομασία του '%s' σε '%s'"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3405
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3415
 msgid "Reporting bugs and feature requests"
 msgstr "Αναφορά δυσλειτουργιών και αιτήματα για νέες δυνατότητες"
 
@@ -6494,7 +6495,7 @@ msgstr "Σιωπηρή απαίτηση FTP με TLS"
 msgid "Reset and requeue &all"
 msgstr "Επαναφορά και επανατοποθέτηση &όλων"
 
-#: ../../locales/../src/engine/socket.cpp:1097
+#: ../../locales/../src/engine/socket.cpp:1098
 msgid "Resolved protocol is unknown"
 msgstr "Το πρωτόκολλο είναι αγνωστό"
 
@@ -6504,7 +6505,7 @@ msgstr "Το πρωτόκολλο είναι αγνωστό"
 msgid "Resolving address of %s"
 msgstr "Ανάλυση διεύθυνσης για %s"
 
-#: ../../locales/../src/engine/socket.cpp:1056
+#: ../../locales/../src/engine/socket.cpp:1057
 msgid "Resource temporarily unavailable"
 msgstr "Ο πόρος είναι προσωρινά μη διαθέσιμος"
 
@@ -6515,7 +6516,7 @@ msgstr "Ο πόρος είναι προσωρινά μη διαθέσιμος"
 msgid "Response:"
 msgstr "Απάντηση:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3075
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3085
 msgid "Results:"
 msgstr "Αποτελέσματα:"
 
@@ -6536,13 +6537,13 @@ msgstr ""
 "πελάτη."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1273
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:919
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:923
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
 msgstr "Ανάκτηση περιεχόμενων καταλόγου \"%s\"..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1270
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:916
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:920
 msgid "Retrieving directory listing..."
 msgstr "Ανάκτηση λίστας φακέλου..."
 
@@ -6564,7 +6565,7 @@ msgstr "Ε&μφάνιση του Διαχειριστή τοποθεσιών κ�
 msgid "S&hutdown system"
 msgstr "Τ&ερματισμός συστήματος"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3030
 msgid "S&top"
 msgstr "&Διακοπή"
 
@@ -6617,11 +6618,11 @@ msgstr "Ανίχνευση αρχείων για πρόσθεση στην ου�
 msgid "Scanning for files to upload"
 msgstr "Ανίχνευση αρχείων προς αποστολή"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3003
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3013
 msgid "Search &conditions:"
 msgstr "Όροι &αναζήτησης:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2984
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2994
 msgid "Search &directory:"
 msgstr "Aναζήτηση &φακέλου:"
 
@@ -6642,7 +6643,7 @@ msgstr "Πληροφορίες ασφαλείας"
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr "Δείτε επίσης: https://wiki.filezilla-project.org/Network_Configuration"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2353
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2363
 msgid "Sele&ct server"
 msgstr "Επιλο&γή εξυπηρετητή"
 
@@ -6713,11 +6714,10 @@ msgid "Select file to upload"
 msgstr "Επιλογή αρχείου για αποστολή"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:143
-#, fuzzy
 msgid "Select filename for converted key file"
-msgstr "Επιλογή ονόματος αρχείου για το αρχείο-κλειδιού"
+msgstr "Επιλογή ονόματος για το Αρχείο Κλειδί"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2897
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2907
 msgid "Select how these files should be opened."
 msgstr "Επιλέξτε τον τρόπο με τον οποίο αυτά τα αρχεία θα ανοιχτούν."
 
@@ -6903,7 +6903,7 @@ msgstr ""
 msgid "Server returned empty path."
 msgstr "Ο εξυπηρετητής επέστρεψε κενή διαδρομή."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:659
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:660
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
@@ -6937,15 +6937,15 @@ msgstr ""
 msgid "Server sent unexpected reply."
 msgstr "Ο εξυπηρετητής έστειλε μία αναπάντεχη απάντηση."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2072
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2082
 msgid "Server to client MAC:"
 msgstr "Εξυπηρετητής προς Φυσική διεύθυνση (MAC) πελάτη:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2062
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2072
 msgid "Server to client cipher:"
 msgstr "Εξυπηρετητής προς αποτύπωμα πελάτη:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2416
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2426
 msgid "Server&type:"
 msgstr "&Τύπος εξυπηρετητή:"
 
@@ -6954,7 +6954,7 @@ msgid "Server/Local file"
 msgstr "Εξυπηρετητής/Τοπικό αρχείο"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1706
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2339
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2349
 msgid "Server:"
 msgstr "Εξυπηρετητής:"
 
@@ -6967,7 +6967,7 @@ msgid "Set &Priority"
 msgstr "Ορισμός &Προτεραιότητας"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3541
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2288
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2292
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Ορισμός δικαιωμάτων του '%s' στο '%s'"
@@ -7125,23 +7125,23 @@ msgstr "Παράκαμψη λήψης του %s"
 msgid "Skipping upload of %s"
 msgstr "Παράκαμψη αποστολής του %s"
 
-#: ../../locales/../src/engine/socket.cpp:1060
+#: ../../locales/../src/engine/socket.cpp:1061
 msgid "Socket address outside address space"
 msgstr "Υπερχείλιση διεύθυνσης υποδοχέα (Socket)"
 
-#: ../../locales/../src/engine/socket.cpp:1062
+#: ../../locales/../src/engine/socket.cpp:1063
 msgid "Socket already connected"
 msgstr "Ο υποδοχέας (Socket) είναι ήδη συνδεδεμένος"
 
-#: ../../locales/../src/engine/socket.cpp:1070
+#: ../../locales/../src/engine/socket.cpp:1071
 msgid "Socket has been shut down"
 msgstr "Τερματίστηκε η λειτουργία υποδοχέα"
 
-#: ../../locales/../src/engine/socket.cpp:1067
+#: ../../locales/../src/engine/socket.cpp:1068
 msgid "Socket not connected"
 msgstr "Ο υποδοχέας (Socket) δεν είναι συνδεδεμένος"
 
-#: ../../locales/../src/engine/socket.cpp:1110
+#: ../../locales/../src/engine/socket.cpp:1111
 msgid "Socket type not supported for address family"
 msgstr "Ο τύπος υποδοχέα δεν υποστηρίζεται την οικογένεια διευθύνσεων"
 
@@ -7176,7 +7176,7 @@ msgstr "Ταξινόμηση"
 msgid "Sorting &mode:"
 msgstr "&Κατάσταση ταξινόμησης:"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:100
+#: ../../locales/../src/interface/RemoteTreeView.cpp:102
 msgid "Source and path of the drop operation are identical"
 msgstr "Η προέλευση και η διαδρομή της ενέργειας Drop είναι ταυτόσημη"
 
@@ -7192,7 +7192,7 @@ msgstr "Ο προορισμός και ο στόχος της λειτουργί
 msgid "Source file:"
 msgstr "Πηγαίο αρχείο:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3622
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3632
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 msgid "Speed Limits"
@@ -7222,7 +7222,7 @@ msgstr "Σταθερές εκδόσεις μόνο"
 msgid "Stable, beta and nightly versions"
 msgstr "Σταθερές και δοκιμαστικές εκδόσεις"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2547
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2557
 msgid "Start transfer &immediately"
 msgstr "&Επείγουσα έναρξη μεταφοράς"
 
@@ -7236,13 +7236,13 @@ msgid "Started update check on %s\n"
 msgstr "Εκκίνηση έλεγχου ενημέρωσης %s\n"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2147
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1553
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1557
 #, c-format
 msgid "Starting download of %s"
 msgstr "Εκκίνηση λήψης του %s"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2150
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1556
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1560
 #, c-format
 msgid "Starting upload of %s"
 msgstr "Εκκίνηση αποστολής του %s"
@@ -7294,7 +7294,7 @@ msgstr "Σύνοψη αποτελεσμάτων δοκιμής:"
 msgid "Suspend now"
 msgstr "Αναστέλλεται η λειτουργία"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3228
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3238
 msgid ""
 "Symlinks to files are not affected by this choice, such symlinks are always "
 "deleted."
@@ -7345,11 +7345,11 @@ msgstr "Σύστημα"
 msgid "System details"
 msgstr "Λεπτομέρειες Συστήματος"
 
-#: ../../locales/../src/engine/socket.cpp:1051
+#: ../../locales/../src/engine/socket.cpp:1052
 msgid "System limit of open files exceeded"
 msgstr "Υπέρβαση ορίου ανοιχτών αρχείων συστήματος"
 
-#: ../../locales/../src/engine/socket.cpp:1108
+#: ../../locales/../src/engine/socket.cpp:1109
 msgid "System's network subsystem has failed"
 msgstr "Αποτυχία λειτουργίας υποσυστήματος δικτύου"
 
@@ -7389,7 +7389,7 @@ msgstr "Το αρχείο προορισμού υπάρχει ήδη!"
 msgid "Target filename already exists, really continue?"
 msgstr "Το όνομα του αρχείου υπάρχει ήδη, θέλετε να συνεχίσετε;"
 
-#: ../../locales/../src/engine/socket.cpp:1081
+#: ../../locales/../src/engine/socket.cpp:1082
 msgid "Temporary failure in name resolution"
 msgstr "Προσωρινή αποτυχία κατά την ανάλυση ονόματος"
 
@@ -7430,11 +7430,11 @@ msgstr ""
 msgid "The address you entered was: %s"
 msgstr "Η διεύθυνση που εισάγατε ήταν: %s"
 
-#: ../../locales/../src/engine/socket.cpp:1087
+#: ../../locales/../src/engine/socket.cpp:1088
 msgid "The ai_family member is not supported"
 msgstr "Το μέλος ai_family δεν υποστηρίζεται"
 
-#: ../../locales/../src/engine/socket.cpp:1100
+#: ../../locales/../src/engine/socket.cpp:1101
 msgid "The ai_socktype member is not supported"
 msgstr "Το στοιχείο ai_socktype δεν υποστηρίζεται"
 
@@ -7474,12 +7474,12 @@ msgstr ""
 msgid "The data connection could not be established: %s"
 msgstr "Η σύνδεση δεδομένων δεν εδραιώθηκε: %s"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2915
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2925
 #: ../../locales/../src/interface/edithandler.cpp:1512
 msgid "The default editor for text files could not be found."
 msgstr "Ο προκαθορισμένος επεξεργαστής αρχείων κειμένου δεν εντοπίσθηκε."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2908
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2918
 #, c-format
 msgid "The default editor for text files is '%s'."
 msgstr "Ο προκαθορισμένος επεξεργαστής αρχείων κειμένου είναι '%s'."
@@ -7562,7 +7562,7 @@ msgstr ""
 "Θέλετε να συνεχίσετε;"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' is not in a format supported by FileZilla.\n"
 "The file is also password protected. Password protected key files are not "
@@ -7571,8 +7571,7 @@ msgid ""
 msgstr ""
 "Η διαμόρφωση του αρχείου '%s' δεν υποστηρίζεται από το FileZilla.\n"
 "Επιπλέον, το αρχείο είναι προστατευμένο με κωδικό πρόσβασης. Ο κωδικός "
-"πρόσβασης που προστατεύει το αρχείο-κλειδιού δεν υποστηρίζεται από "
-"FileZilla.\n"
+"πρόσβασης που προστατεύει το Αρχείο Κλειδί δεν υποστηρίζεται από FileZilla.\n"
 "Επιθυμείτε να μετατραπεί σε ένα υποστηριζόμενο και μη προστατευμένο αρχείο;"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:102
@@ -7585,14 +7584,14 @@ msgstr ""
 "Να τροποποιηθεί σε μία υποστηριζόμενη από την εφαρμογή διαμόρφωση;"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:107
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The file '%s' is password protected. Password protected key files are not "
 "supported by FileZilla yet.\n"
 "Would you like to convert it into an unprotected file?"
 msgstr ""
 "Το αρχείο '%s' είναι προστατευμένο με κωδικό πρόσβασης. Ο κωδικός πρόσβασης "
-"που προστατεύει το αρχείο-κλειδιού δεν υποστηρίζεται από FileZilla.\n"
+"που προστατεύει το Αρχείο Κλειδί δεν υποστηρίζεται από FileZilla.\n"
 "Επιθυμείτε να μετατραπεί σε ένα μη προστατευμένο αρχείο;"
 
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:87
@@ -7635,7 +7634,7 @@ msgstr "Οι ακόλουθοι χαρακτήρες θα αντικαταστα
 msgid "The following files are currently being edited:"
 msgstr "Τα ακόλουθα αρχεία επεξεργάζονται τώρα:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3283
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3293
 msgid "The free open source FTP solution"
 msgstr ""
 "Το ελεύθερο λογισμικό ανοιχτού κώδικα (Πρωτόκολλο Μεταφοράς Αρχείων FTP)"
@@ -7772,7 +7771,7 @@ msgstr ""
 "Το κλειδί του κόμβου εξυπηρετητή είναι άγνωστο. Δεν υπάρχει εγγύηση ότι "
 "αυτός ο εξυπηρετητής είναι ο υπολογιστής που πιστεύετε ότι είναι."
 
-#: ../../locales/../src/engine/socket.cpp:1099
+#: ../../locales/../src/engine/socket.cpp:1100
 msgid "The servname parameter is not supported for ai_socktype"
 msgstr "Η παράμετρος servname δεν υποστηρίζεται από ai_socktype"
 
@@ -7784,11 +7783,11 @@ msgstr ""
 "Οι ρυθμίσεις έχουν εισαχθεί. Επανεκκινήστε το FileZilla για να εκτελεστούν "
 "οι ρυθμίσεις."
 
-#: ../../locales/../src/engine/socket.cpp:1047
+#: ../../locales/../src/engine/socket.cpp:1048
 msgid "The specified address family is not supported"
 msgstr "Η συγκεκριμένη οικογένεια διευθύνσεων δεν υποστηρίζεται"
 
-#: ../../locales/../src/engine/socket.cpp:1112
+#: ../../locales/../src/engine/socket.cpp:1113
 msgid "The specified network name is no longer available"
 msgstr "Το καθορισμένο όνομα δικτύου δεν είναι πλέον διαθέσιμο"
 
@@ -7875,7 +7874,7 @@ msgid "Timeout"
 msgstr "Διακοπή"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1622
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1027
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1031
 #, c-format
 msgid "Timezone offset of server is %d seconds."
 msgstr "Η απόκλιση της ζώνης ώρας του διακομιστή είναι %d δευτερόλεπτα."
@@ -7977,7 +7976,7 @@ msgstr "Εντοπισμός:"
 msgid "Transfer"
 msgstr "Μεταφορά"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2203
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2213
 msgid "Transfer &direction"
 msgstr "&Κατεύθυνση μεταφοράς"
 
@@ -8029,11 +8028,11 @@ msgstr "Χειρισμός των αρχείων &χωρίς επέκταση ω
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Χειρισμός των &ακόλουθων τύπων αρχείων ως ASCII αρχεία:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:825
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
 msgid "Trust changed Hostkey:"
 msgstr "Έμπιστο αλλαγμένο κλειδί κόμβου:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:823
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:827
 msgid "Trust new Hostkey:"
 msgstr "Νέο έμπιστο κλειδί κόμβου:"
 
@@ -8054,7 +8053,7 @@ msgstr "Να θεωρηθεί έμπιστος αυτός ο κόμβος και
 msgid "Try again"
 msgstr "Δοκιμάστε ξανά"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2583
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2593
 #: ../../locales/../src/interface/edithandler.cpp:1086
 msgid "Type"
 msgstr "Τύπος"
@@ -8071,7 +8070,7 @@ msgstr "Τύπος του γενικού διαμεσολαβητή:"
 msgid "U&pload"
 msgstr "Α&ποστολή"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3563
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3573
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:930
 msgid "U&pload limit:"
 msgstr "Όριο α&ποστολής:"
@@ -8171,7 +8170,7 @@ msgstr "Απ&οστολή και αναίρεση επεξεργασίας"
 msgid "Updates"
 msgstr "Ενημερώσεις"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2217
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2227
 msgid "Upload"
 msgstr "Αποστολή"
 
@@ -8228,12 +8227,12 @@ msgstr "Χρήση &προσαρμοσμένης κωδικοποίησης χα
 msgid "Use &custom editor:"
 msgstr "Χρήση &προκαθορισμένου επεξεργαστή:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2902
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2912
 msgid "Use &default editor for text files"
 msgstr "Χρήση &προκαθορισμένου επεξεργαστή για τα αρχεία κειμένου"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2687
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2761
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2697
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2771
 msgid "Use &synchronized browsing"
 msgstr "Χρήση &συγχρονισμού περιήγησης"
 
@@ -8252,11 +8251,11 @@ msgstr "&Χρήση προκαθορισμένης ενέργειας"
 msgid "Use explicit FTP over TLS if available"
 msgstr "Χρήση ρητής απαίτησης FTP με TLS, εάν είναι διαθέσιμη"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2322
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2332
 msgid "Use server currently connected to"
 msgstr "Ο τρέχον εξυπηρετητής είναι συνδεμένος στο"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2328
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2338
 msgid "Use server from site manager"
 msgstr "Χρήση εξυπηρετητή από το διαχειριστή τοποθεσιών"
 
@@ -8344,7 +8343,7 @@ msgstr ""
 msgid "View/Edit"
 msgstr "Προβολή/Επεξεργασία"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2119
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2129
 msgid "Visible columns"
 msgstr "Ορατές στήλες"
 
@@ -8396,11 +8395,11 @@ msgstr ""
 msgid "Warning: Potential security breach!"
 msgstr "Προειδοποίηση: Πιθανή παραβίαση της ασφαλείας!"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3447
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3457
 msgid "Welcome to FileZilla"
 msgstr "Καλωσορίσατε στο FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3313
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3323
 msgid "What's new"
 msgstr "Τι νέο υπάρχει"
 
@@ -8408,7 +8407,7 @@ msgstr "Τι νέο υπάρχει"
 msgid "What's new:"
 msgstr "Ενημερώσεις:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3637
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3647
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
@@ -8434,7 +8433,7 @@ msgstr "Κατά την ε&κκίνηση μια νέα σύνδεση, ενώ �
 msgid "Widescreen"
 msgstr "Ευρεία οθόνη"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3632
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3642
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "Επιθυμείτε το FileZilla να απομνημονεύσει τον κωδικό πρόσβασης;"
 
@@ -8451,7 +8450,7 @@ msgstr "Εσφαλμένη εξωτερική διεύθυνση IP"
 msgid "Wrong line endings"
 msgstr "Εσφαλμένοι τερματισμοί γραμμών"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:837
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:841
 msgid "Yes"
 msgstr "Ναι"
 
@@ -8467,7 +8466,7 @@ msgstr ""
 msgid "You are using the latest version of FileZilla."
 msgstr "Χρησιμοποιείτε την τελευταία έκδοση του FileZilla."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3422
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3432
 msgid "You can always open this dialog again through the help menu."
 msgstr ""
 "Μπορείτε να ανοίξετε τον εν λόγω διάλογο επιλογών και μέσα από τη βοήθεια."
@@ -8508,7 +8507,7 @@ msgstr ""
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
 msgstr "Δεν έχετε εισάγει νέο όνομα για το αρχείο. Αντικατάσταση του αρχείου;"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3201
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
 msgid "You have selected at least one symbolic link."
 msgstr "Έχετε επιλέξει μία τουλάχιστον συμβολική σύνδεση."
 
@@ -8710,11 +8709,11 @@ msgstr ""
 "Σιγουρευτείτε ότι το εκτελέσιμο αρχείο συνυπάρχει στον ίδιο φάκελο με το "
 "κύριο εκτελέσιμο αρχείο του FileZilla."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:467
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:468
 msgid "fzsftp belongs to a different version of FileZilla"
 msgstr "fzsftp ανήκει σε μια διαφορετική έκδοση του FileZilla"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1480
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1484
 msgid "fzsftp could not be started"
 msgstr "το fzsftp δε μπόρεσε να εκκινήθει"
 
@@ -8778,7 +8777,7 @@ msgstr "ιδιωτικά εγγράψιμο"
 #: ../../locales/../src/engine/tlssocket.cpp:1105
 #: ../../locales/../src/engine/tlssocket.cpp:1116
 #: ../../locales/../src/engine/tlssocket.cpp:1131
-#: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:30
+#: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:38
 msgid "unknown"
 msgstr "άγνωστο"
 
