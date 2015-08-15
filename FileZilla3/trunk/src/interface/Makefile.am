@@ -155,7 +155,7 @@ noinst_HEADERS = aboutdialog.h \
 		 filter_conditions_dialog.h \
 		 filteredit.h \
 		 file_utils.h \
-		 fzputtygen_interface.cpp \
+		 fzputtygen_interface.h \
 		 import.h \
 		 inputdialog.h \
 		 ipcmutex.h \
