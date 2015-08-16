@@ -266,7 +266,7 @@ bool IsIpAddress(const wxString& address)
 }
 
 namespace {
-#if defined(__WXMSW__) //&& !defined(_MSC_VER)
+#if defined(__WXMSW__) && !defined(_MSC_VER)
 // Unfortunately MiNGW does not have a working random_device
 // Implement our own in terms of CryptGenRandom.
 // Fall back to time-seeded mersenne twister on error
