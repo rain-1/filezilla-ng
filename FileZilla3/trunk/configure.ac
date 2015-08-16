@@ -52,6 +52,9 @@ if ! test "$localesonly" = "yes"; then
   # No thread_local in GCC 4.7 and it for some reason isn't supported on OS X either
   CHECK_THREAD_LOCAL
 
+  # std::atomic on PPC seems to require -latomic
+  CHECK_ATOMIC
+
   # Add build information to config.h
   # ---------------------------------
 
