@@ -136,8 +136,8 @@ protected:
 
 	CRefcountObject_Uninitialized<std::vector<CRefcountObject<CDirentry> > > m_entries;
 
-	mutable CRefcountObject_Uninitialized<std::multimap<wxString, unsigned int> > m_searchmap_case;
-	mutable CRefcountObject_Uninitialized<std::multimap<wxString, unsigned int> > m_searchmap_nocase;
+	mutable CRefcountObject_Uninitialized<std::multimap<fzstring, unsigned int> > m_searchmap_case;
+	mutable CRefcountObject_Uninitialized<std::multimap<fzstring, unsigned int> > m_searchmap_nocase;
 
 	unsigned int m_entryCount{};
 };
