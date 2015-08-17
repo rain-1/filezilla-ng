@@ -4273,22 +4273,20 @@ bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const 
 	if (listing2.GetCount() > listing1.GetCount())
 		return false;
 
-	std::vector<wxString> names1, names2;
+	std::vector<fzstring> names1, names2;
 	listing1.GetFilenames(names1);
 	listing2.GetFilenames(names2);
 	std::sort(names1.begin(), names1.end());
 	std::sort(names2.begin(), names2.end());
 
-	std::vector<wxString>::const_iterator iter1, iter2;
-	iter1 = names1.begin();
-	iter2 = names2.begin();
-	while (iter2 != names2.begin())
-	{
-		if (iter1 == names1.end())
+	std::vector<fzstring>::const_iterator iter1, iter2;
+	iter1 = names1.cbegin();
+	iter2 = names2.cbegin();
+	while (iter2 != names2.cbegin()) {
+		if (iter1 == names1.cend())
 			return false;
 
-		if (*iter1 != *iter2)
-		{
+		if (*iter1 != *iter2) {
 			++iter1;
 			continue;
 		}

@@ -123,7 +123,7 @@ bool CDirectoryListing::RemoveEntry(unsigned int index)
 	return true;
 }
 
-void CDirectoryListing::GetFilenames(std::vector<wxString> &names) const
+void CDirectoryListing::GetFilenames(std::vector<fzstring> &names) const
 {
 	names.reserve(GetCount());
 	for (unsigned int i = 0; i < GetCount(); ++i)

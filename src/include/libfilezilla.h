@@ -33,6 +33,7 @@
 #include <vector>
 #include <map>
 
+#include "fzstring.h"
 #include "optionsbase.h"
 #include "logging.h"
 #include "server.h"
