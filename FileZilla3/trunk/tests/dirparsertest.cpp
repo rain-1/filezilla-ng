@@ -50,8 +50,8 @@ std::vector<t_entry> CDirectoryListingParserTest::m_entries;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CDirectoryListingParserTest);
 
-typedef CRefcountObject<wxString> R;
-typedef CSparseOptional<wxString> O;
+typedef CRefcountObject<fzstring> R;
+typedef CSparseOptional<fzstring> O;
 
 static int calcYear(int month, int day)
 {
@@ -1417,12 +1417,12 @@ void CDirectoryListingParserTest::InitEntries()
 	});
 
 /*
-	wxString name;
+	fzstring name;
 	int64_t size;
-	wxString permissions;
-	wxString ownerGroup;
+	fzstring permissions;
+	fzstring ownerGroup;
 	int flags;
-	wxString target; // Set to linktarget it link is true
+	fzstring target; // Set to linktarget it link is true
 
 	wxDateTime time;
 */
