@@ -5,6 +5,7 @@
 #include "systemimagelist.h"
 #include "listingcomparison.h"
 
+#include <cstring>
 #include <memory>
 
 class CQueueView;
@@ -63,12 +64,25 @@ public:
 				return false;\
 		}
 
-	static int CmpCase(const wxString& str1, const wxString& str2)
+	static int CmpCase(fzstring const& str1, fzstring const& str2)
+	{
+		return str1.compare(str2);
+	}
+
+	static int CmpCase(wxString const& str1, wxString const& str2)
 	{
 		return str1.Cmp(str2);
 	}
 
-	static int CmpNoCase(const wxString& str1, const wxString& str2)
+	static int CmpNoCase(fzstring const& str1, fzstring const& str2)
+	{
+		int cmp = collate_fzstring(str1, str2);
+		if (cmp)
+			return cmp;
+		return str1.compare(str2);
+	}
+
+	static int CmpNoCase(wxString const& str1, wxString const& str2)
 	{
 		int cmp = str1.CmpNoCase(str2);
 		if (cmp)
@@ -76,10 +90,11 @@ public:
 		return str1.Cmp(str2);
 	}
 
-	static int CmpNatural(const wxString& str1, const wxString& str2)
+	template<typename String>
+	static int CmpNatural(String const& str1, String const& str2)
 	{
-		wxString::const_iterator p1 = str1.begin();
-		wxString::const_iterator p2 = str2.begin();
+		auto p1 = str1.begin();
+		auto p2 = str2.begin();
 
 		int res = 0;
 		int zeroCount = 0;

@@ -150,12 +150,12 @@ public:
 	void SetPriorityRaw(QueuePriority priority);
 	QueuePriority GetPriority() const;
 
-	const wxString& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
-	const wxString& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
-	const wxString& GetSourceFile() const { return m_sourceFile; }
-	CSparseOptional<wxString> const& GetTargetFile() const { return m_targetFile; }
-	const CLocalPath& GetLocalPath() const { return m_localPath; }
-	const CServerPath& GetRemotePath() const { return m_remotePath; }
+	fzstring const& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
+	fzstring const& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
+	fzstring const& GetSourceFile() const { return m_sourceFile; }
+	CSparseOptional<fzstring> const& GetTargetFile() const { return m_targetFile; }
+	CLocalPath const& GetLocalPath() const { return m_localPath; }
+	CServerPath const& GetRemotePath() const { return m_remotePath; }
 	int64_t GetSize() const { return m_size; }
 	void SetSize(int64_t size) { m_size = size; }
 	inline bool Download() const { return flags & flag_download; }
@@ -255,8 +255,8 @@ public:
 	}
 
 protected:
-	wxString const m_sourceFile;
-	CSparseOptional<wxString> m_targetFile;
+	fzstring const m_sourceFile;
+	CSparseOptional<fzstring> m_targetFile;
 	CLocalPath const m_localPath;
 	CServerPath const m_remotePath;
 	int64_t m_size{};

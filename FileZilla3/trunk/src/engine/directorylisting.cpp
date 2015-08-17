@@ -139,7 +139,7 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 		m_searchmap_case.Get();
 
 	// Search map
-	std::multimap<wxString, unsigned int>::const_iterator iter = m_searchmap_case->find(name);
+	auto iter = m_searchmap_case->find(to_fzstring(name));
 	if (iter != m_searchmap_case->end())
 		return iter->second;
 
@@ -147,14 +147,13 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 	if (i == m_entryCount)
 		return -1;
 
-	std::multimap<wxString, unsigned int>& searchmap_case = m_searchmap_case.Get();
+	auto & searchmap_case = m_searchmap_case.Get();
 
 	// Build map if not yet complete
 	std::vector<CRefcountObject<CDirentry> >::const_iterator entry_iter = m_entries->begin() + i;
-	for (; entry_iter != m_entries->end(); ++entry_iter, ++i)
-	{
-		const wxString& entry_name = (*entry_iter)->name;
-		searchmap_case.insert(std::pair<const wxString, unsigned int>(entry_name, i));
+	for (; entry_iter != m_entries->end(); ++entry_iter, ++i) {
+		fzstring const& entry_name = (*entry_iter)->name;
+		searchmap_case.insert(std::pair<fzstring const, unsigned int>(entry_name, i));
 
 		if (entry_name == name)
 			return i;
@@ -175,7 +174,7 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 	name.MakeLower();
 
 	// Search map
-	std::multimap<wxString, unsigned int>::const_iterator iter = m_searchmap_nocase->find(name);
+	auto iter = m_searchmap_nocase->find(to_fzstring(name));
 	if (iter != m_searchmap_nocase->end())
 		return iter->second;
 
@@ -183,15 +182,14 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 	if (i == m_entryCount)
 		return -1;
 
-	std::multimap<wxString, unsigned int>& searchmap_nocase = m_searchmap_nocase.Get();
+	auto& searchmap_nocase = m_searchmap_nocase.Get();
 
 	// Build map if not yet complete
 	std::vector<CRefcountObject<CDirentry> >::const_iterator entry_iter = m_entries->begin() + i;
-	for (; entry_iter != m_entries->end(); ++entry_iter, ++i)
-	{
+	for (; entry_iter != m_entries->end(); ++entry_iter, ++i) {
 		wxString entry_name = (*entry_iter)->name;
 		entry_name.MakeLower();
-		searchmap_nocase.insert(std::pair<const wxString, unsigned int>(entry_name, i));
+		searchmap_nocase.insert(std::pair<fzstring const, unsigned int>(to_fzstring(entry_name), i));
 
 		if (entry_name == name)
 			return i;
