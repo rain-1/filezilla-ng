@@ -19,11 +19,11 @@ static char const data[][150]={
 namespace {
 struct ObjectCache
 {
-	CRefcountObject<wxString> const& get(wxString const& v)
+	CRefcountObject<fzstring> const& get(fzstring const& v)
 	{
-		auto it = std::lower_bound( cache.begin(), cache.end(), v );
+		auto it = std::lower_bound(cache.begin(), cache.end(), v);
 
-		if( it == cache.end() || !(*it == v) ) {
+		if (it == cache.end() || !(*it == v)) {
 			it = cache.emplace(it, v);
 		}
 		return *it;
@@ -32,7 +32,7 @@ struct ObjectCache
 	// Vector coupled with binary search and sorted insertion is fastest
 	// alternative as we expect a relatively low amount of inserts.
 	// Note that we cannot use set, as it it cannot search based on a different type.
-	std::vector<CRefcountObject<wxString>> cache;
+	std::vector<CRefcountObject<fzstring>> cache;
 };
 
 
@@ -73,13 +73,13 @@ public:
 		return m_len;
 	}
 
-	wxString GetString() const
+	fzstring GetString() const
 	{
 		if (!m_pToken || !m_len) {
-			return wxString();
+			return fzstring();
 		}
 		else {
-			return wxString(m_pToken, m_len);
+			return fzstring(m_pToken, m_len);
 		}
 	}
 
@@ -832,9 +832,9 @@ done:
 
 	if (serverType == VMS && entry.is_dir()) {
 		// Trim version information from directories
-		int pos = entry.name.Find(';', true);
-		if (pos > 0)
-			entry.name = entry.name.Left(pos);
+		auto pos = entry.name.rfind(';');
+		if (pos != fzstring::npos && pos > 0)
+			entry.name = entry.name.substr(0, pos);
 	}
 
 	if (sftp_mode_) {
@@ -886,7 +886,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		chr != '-')
 		return false;
 
-	wxString permissions = token.GetString();
+	fzstring permissions = token.GetString();
 
 	entry.flags = 0;
 
@@ -921,7 +921,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		// Reset index
 		index = startindex;
 
-		wxString ownerGroup;
+		fzstring ownerGroup;
 		for (int i = 0; i < numOwnerGroup; ++i) {
 			if (!line.GetToken(++index, token))
 				return false;
@@ -966,18 +966,18 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 
 		entry.name = token.GetString();
 
-		// Filter out cpecial chars at the end of the filenames
+		// Filter out special chars at the end of the filenames
 		chr = token[token.GetLength() - 1];
 		if (chr == '/' ||
 			chr == '|' ||
 			chr == '*')
-			entry.name.RemoveLast();
+			entry.name.pop_back();
 
 		if (entry.is_link()) {
-			int pos;
-			if ((pos = entry.name.Find(_T(" -> "))) != -1) {
-				entry.target = CSparseOptional<wxString>(entry.name.Mid(pos + 4));
-				entry.name = entry.name.Left(pos);
+			size_t pos;
+			if ((pos = entry.name.find(_T(" -> "))) != fzstring::npos) {
+				entry.target = CSparseOptional<fzstring>(entry.name.substr(pos + 4));
+				entry.name = entry.name.substr(0, pos);
 			}
 		}
 
@@ -1083,7 +1083,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		// Check for non-numeric day
 		if (!token.IsNumeric() && !token.IsLeftNumeric()) {
 			int offset = 0;
-			if (dateMonth.GetString().Right(1) == _T("."))
+			if (dateMonth.GetString().back() == '.')
 				++offset;
 			if (!dateMonth.IsNumeric(0, dateMonth.GetLength() - offset))
 				return false;
@@ -1233,7 +1233,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		// Seems to be monthname-dd-yy
 
 		// Check month name
-		wxString dateMonth = token.GetString().Mid(0, pos);
+		wxString dateMonth = token.GetString().substr(0, pos);
 		if (!GetMonthFromName(dateMonth, month))
 			return false;
 		gotMonth = true;
@@ -1309,7 +1309,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	if (gotYear || gotDay) {
 		// Month field in yyyy-mm-dd or dd-mm-yyyy
 		// Check month name
-		wxString dateMonth = token.GetString().Mid(pos + 1, pos2 - pos - 1);
+		wxString dateMonth = token.GetString().substr(pos + 1, pos2 - pos - 1);
 		if (!GetMonthFromName(dateMonth, month))
 			return false;
 		gotMonth = true;
@@ -1410,7 +1410,7 @@ bool CDirectoryListingParser::ParseAsDos(CLine &line, CDirentry &entry)
 	entry.name = token.GetString();
 
 	entry.target.clear();
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	entry.permissions = entry.ownerGroup;
 	entry.time += m_timezoneOffset;
 
@@ -1480,12 +1480,12 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 	if (pos == -1 || static_cast<size_t>(pos) == (token.GetLength() - 1))
 		return false;
 
-	entry.name = token.GetString().Mid(pos + 1);
+	entry.name = token.GetString().substr(pos + 1);
 
 	entry.flags = 0;
 	entry.size = -1;
 
-	wxString permissions;
+	fzstring permissions;
 
 	int fact = 1;
 	while (fact < pos) {
@@ -1514,13 +1514,13 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 			entry.time = CDateTime(static_cast<time_t>(number), CDateTime::seconds);
 		}
 		else if (type == 'u' && len > 2 && token[fact + 1] == 'p')
-			permissions = token.GetString().Mid(fact + 2, len - 2);
+			permissions = token.GetString().substr(fact + 2, len - 2);
 
 		fact += len + 1;
 	}
 
 	entry.permissions = objcache.get(permissions);
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	return true;
 }
 
@@ -1558,12 +1558,12 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 
 	entry.flags = 0;
 
-	if (pos > 4 && token.GetString().Mid(pos - 4, 4) == _T(".DIR")) {
+	if (pos > 4 && token.GetString().substr(pos - 4, 4) == _T(".DIR")) {
 		entry.flags |= CDirentry::flag_dir;
-		if (token.GetString().Mid(pos) == _T(";1"))
-			entry.name = token.GetString().Left(pos - 4);
+		if (token.GetString().substr(pos) == _T(";1"))
+			entry.name = token.GetString().substr(0, pos - 4);
 		else
-			entry.name = token.GetString().Left(pos - 4) + token.GetString().Mid(pos);
+			entry.name = token.GetString().substr(0, pos - 4) + token.GetString().substr(pos);
 	}
 	else
 		entry.name = token.GetString();
@@ -1574,8 +1574,8 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 	if (!line.GetToken(++index, token))
 		return false;
 
-	wxString ownerGroup;
-	wxString permissions;
+	fzstring ownerGroup;
+	fzstring permissions;
 
 	// This field can either be the filesize, a username (at least that's what I think) enclosed in [] or a date.
 	if (!token.IsNumeric() && !token.IsLeftNumeric()) {
@@ -1583,7 +1583,7 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 		const int len = token.GetLength();
 		if (len < 3 || token[0] != '[' || token[len - 1] != ']')
 			return false;
-		ownerGroup = token.GetString().Mid(1, len - 2);
+		ownerGroup = token.GetString().substr(1, len - 2);
 
 		if (!line.GetToken(++index, token))
 			return false;
@@ -1670,12 +1670,12 @@ bool CDirectoryListingParser::ParseAsVms(CLine &line, CDirentry &entry)
 		if (len > 2 && token[0] == '(' && token[len - 1] == ')') {
 			if (!permissions.empty())
 				permissions += _T(" ");
-			permissions += token.GetString().Mid(1, len - 2);
+			permissions += token.GetString().substr(1, len - 2);
 		}
 		else if (len > 2 && token[0] == '[' && token[len - 1] == ']') {
 			if (!ownerGroup.empty())
 				ownerGroup += _T(" ");
-			ownerGroup += token.GetString().Mid(1, len - 2);
+			ownerGroup += token.GetString().substr(1, len - 2);
 		}
 		else {
 			if (!ownerGroup.empty())
@@ -1732,12 +1732,12 @@ bool CDirectoryListingParser::ParseAsIbm(CLine &line, CDirentry &entry)
 
 	entry.name = token.GetString();
 	if (token[token.GetLength() - 1] == '/') {
-		entry.name.RemoveLast();
+		entry.name.pop_back();
 		entry.flags |= CDirentry::flag_dir;
 	}
 
 	entry.ownerGroup = objcache.get(ownerGroupToken.GetString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = objcache.get(fzstring());
 
 	entry.time += m_timezoneOffset;
 
@@ -1769,7 +1769,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		if (firstToken.GetLength() >= 2 && firstToken[1] == '4')
 			entry.flags |= CDirentry::flag_dir;
 
-		wxString ownerGroup = token.GetString();
+		fzstring ownerGroup = token.GetString();
 
 		if (!line.GetToken(++index, token))
 			return false;
@@ -1845,13 +1845,15 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 				return false;
 
 			entry.name = token.GetString();
-			wxString type = entry.name.Right(5);
-			MakeLowerAscii(type);
-			if (!skippedCount && type == _T("<dir>")) {
-				entry.flags |= CDirentry::flag_dir;
-				entry.name = entry.name.Left(entry.name.Length() - 5);
-				while (!entry.name.empty() && entry.name.Last() == ' ')
-					entry.name.RemoveLast();
+			if (entry.name.size() >= 5) {
+				wxString type = entry.name.substr(entry.name.size() - 5);
+				MakeLowerAscii(type);
+				if (!skippedCount && type == _T("<dir>")) {
+					entry.flags |= CDirentry::flag_dir;
+					entry.name = entry.name.substr(0, entry.name.size() - 5);
+					while (!entry.name.empty() && entry.name.back() == ' ')
+						entry.name.pop_back();
+				}
 			}
 		}
 		else {
@@ -1896,14 +1898,13 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 
 			entry.name = token.GetString();
 			char chr = token[token.GetLength() - 1];
-			if (chr == '/' || chr == '\\')
-			{
+			if (chr == '/' || chr == '\\') {
 				entry.flags |= CDirentry::flag_dir;
-				entry.name.RemoveLast();
+				entry.name.pop_back();
 			}
 		}
 		entry.target.clear();
-		entry.ownerGroup = objcache.get(wxString());
+		entry.ownerGroup = objcache.get(fzstring());
 		entry.permissions = entry.ownerGroup;
 		entry.time += m_timezoneOffset;
 	}
@@ -2111,7 +2112,7 @@ bool CDirectoryListingParser::ParseAsWfFtp(CLine &line, CDirentry &entry)
 	if (!line.GetToken(index++, token))
 		return false;
 
-	if (token.GetString().Right(1) != _T("."))
+	if (token.GetString().back() != '.')
 		return false;
 
 	// Parse time
@@ -2121,7 +2122,7 @@ bool CDirectoryListingParser::ParseAsWfFtp(CLine &line, CDirentry &entry)
 	if (!ParseTime(token, entry))
 		return false;
 
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	entry.permissions = entry.ownerGroup;
 	entry.time += m_timezoneOffset;
 
@@ -2146,8 +2147,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.flags = 0;
-	if (token.GetString() != _T("**NONE**") && !ParseShortDate(token, entry))
-	{
+	if (token.GetString() != _T("**NONE**") && !ParseShortDate(token, entry)) {
 		// Perhaps of the following type:
 		// TSO004 3390 VSAM FOO.BAR
 		if (token.GetString() != _T("VSAM"))
@@ -2157,11 +2157,11 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 			return false;
 
 		entry.name = token.GetString();
-		if (entry.name.Find(' ') != -1)
+		if (entry.name.find(' ') != fzstring::npos)
 			return false;
 
 		entry.size = -1;
-		entry.ownerGroup = objcache.get(wxString());
+		entry.ownerGroup = objcache.get(fzstring());
 		entry.permissions = entry.ownerGroup;
 
 		return true;
@@ -2178,16 +2178,14 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 	// used
 	if (!line.GetToken(index++, token))
 		return false;
-	if (token.IsNumeric() || token.GetString() == _T("????") || token.GetString() == _T("++++") )
-	{
+	if (token.IsNumeric() || token.GetString() == _T("????") || token.GetString() == _T("++++") ) {
 		// recfm
 		if (!line.GetToken(index++, token))
 			return false;
 		if (token.IsNumeric())
 			return false;
 	}
-	else
-	{
+	else {
 		if (prevLen < 6)
 			return false;
 	}
@@ -2222,7 +2220,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS(CLine &line, CDirentry &entry)
 
 	entry.name = token.GetString();
 
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	entry.permissions = entry.ownerGroup;
 
 	return true;
@@ -2285,7 +2283,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS(CLine &line, CDirentry &entry)
 	if (!line.GetToken(index++, token, true))
 		return false;
 
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	entry.permissions = entry.ownerGroup;
 	entry.time += m_timezoneOffset;
 
@@ -2302,7 +2300,9 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Migrated(CLine &line, CDirentry &en
 	if (!line.GetToken(index, token))
 		return false;
 
-	if (token.GetString().CmpNoCase(_T("Migrated")))
+	wxString s = token.GetString();
+	MakeLowerAscii(s);
+	if (s != _T("migrated"))
 		return false;
 
 	if (!line.GetToken(++index, token))
@@ -2315,7 +2315,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Migrated(CLine &line, CDirentry &en
 
 	entry.flags = 0;
 	entry.size = -1;
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	entry.permissions = entry.ownerGroup;
 
 	return true;
@@ -2331,7 +2331,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_PDS2(CLine &line, CDirentry &entry)
 	entry.name = token.GetString();
 
 	entry.flags = 0;
-	entry.ownerGroup = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
 	entry.permissions = entry.ownerGroup;
 	entry.size = -1;
 
@@ -2400,7 +2400,9 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 	if (!line.GetToken(index++, token))
 		return false;
 
-	if (token.GetString().CmpNoCase(_T("Tape")))
+	wxString s = token.GetString();
+	MakeLowerAscii(s);
+	if (s != _T("tape"))
 		return false;
 
 	// dsname
@@ -2409,8 +2411,8 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 
 	entry.name = token.GetString();
 	entry.flags = 0;
-	entry.ownerGroup = objcache.get(wxString());
-	entry.permissions = objcache.get(wxString());
+	entry.ownerGroup = objcache.get(fzstring());
+	entry.permissions = objcache.get(fzstring());
 	entry.size = -1;
 
 	if (line.GetToken(index++, token))
@@ -2520,50 +2522,50 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 	if (!line.GetToken(0, token))
 		return 0;
 
-	wxString facts = token.GetString();
+	fzstring facts = token.GetString();
 	if (facts.empty())
 		return 0;
 
 	entry.flags = 0;
 	entry.size = -1;
 
-	wxString owner, group, uid, gid;
-	wxString ownerGroup;
-	wxString permissions;
+	fzstring owner, group, uid, gid;
+	fzstring ownerGroup;
+	fzstring permissions;
 
 	while (!facts.empty()) {
-		int delim = facts.Find(';');
-		if (delim < 3) {
-			if (delim != -1)
-				return 0;
-			else
-				delim = facts.Len();
+		auto delim = facts.find(';');
+		if (delim == fzstring::npos) {
+			delim = facts.size();
+		}
+		else if (delim < 3) {
+			return 0;
 		}
 
-		int const pos = facts.Find('=');
-		if (pos < 1 || pos > delim)
+		auto const pos = facts.find('=');
+		if (pos == fzstring::npos || pos < 1 || pos > delim)
 			return 0;
 
-		wxString factname = facts.Left(pos);
+		wxString factname = facts.substr(0, pos);
 		MakeLowerAscii(factname);
-		wxString value = facts.Mid(pos + 1, delim - pos - 1);
+		fzstring value = facts.substr(pos + 1, delim - pos - 1);
 		if (factname == _T("type")) {
-			int colonPos = value.Find(':');
+			auto colonPos = value.find(':');
 			wxString valuePrefix;
-			if (colonPos == -1)
+			if (colonPos == fzstring::npos)
 				valuePrefix = value;
 			else
-				valuePrefix = value.Left(colonPos);
+				valuePrefix = value.substr(0, colonPos);
 			MakeLowerAscii(valuePrefix);
 
-			if (valuePrefix == _T("dir") && colonPos == -1)
+			if (valuePrefix == _T("dir") && colonPos == fzstring::npos)
 				entry.flags |= CDirentry::flag_dir;
 			else if (valuePrefix == _T("os.unix=slink") || valuePrefix == _T("os.unix=symlink")) {
 				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
-				if (colonPos != -1)
-					entry.target = CSparseOptional<wxString>(value.Mid(colonPos));
+				if (colonPos != fzstring::npos)
+					entry.target = CSparseOptional<fzstring>(value.substr(colonPos));
 			}
-			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && colonPos == -1) {
+			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && colonPos == fzstring::npos) {
 				// Current and parent directory, don't parse it
 				return 2;
 			}
@@ -2571,8 +2573,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		else if (factname == _T("size")) {
 			entry.size = 0;
 
-			for (unsigned int i = 0; i < value.Len(); ++i)
-			{
+			for (unsigned int i = 0; i < value.size(); ++i) {
 				if (value[i] < '0' || value[i] > '9')
 					return 0;
 				entry.size *= 10;
@@ -2595,8 +2596,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 					permissions = value;
 			}
 		}
-		else if (factname == _T("unix.mode"))
-		{
+		else if (factname == _T("unix.mode")) {
 			if (!permissions.empty())
 				permissions = permissions + _T(" (") + value + _T(")");
 			else
@@ -2611,7 +2611,12 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		else if (factname == _T("unix.gid"))
 			gid = value;
 
-		facts = facts.Mid(delim + 1);
+		if (delim >= facts.size()) {
+			facts.clear();
+		}
+		else {
+			facts = facts.substr(delim + 1);
+		}
 	}
 
 	// The order of the facts is undefined, so assemble ownerGroup in correct
@@ -2791,7 +2796,7 @@ bool CDirectoryListingParser::ParseAsZVM(CLine &line, CDirentry &entry)
 		return false;
 
 	entry.ownerGroup = objcache.get(ownerGroupToken.GetString());
-	entry.permissions = objcache.get(wxString());
+	entry.permissions = objcache.get(fzstring());
 	entry.target.clear();
 	entry.time += m_timezoneOffset;
 
@@ -2840,10 +2845,9 @@ bool CDirectoryListingParser::ParseAsHPNonstop(CLine &line, CDirentry &entry)
 	// Owner
 	if (!line.GetToken(++index, token))
 		return false;
-	wxString ownerGroup = token.GetString();
+	fzstring ownerGroup = token.GetString();
 
-	if (token[token.GetLength() - 1] == ',')
-	{
+	if (token[token.GetLength() - 1] == ',') {
 		// Owner, part 2
 		if (!line.GetToken(++index, token))
 			return false;

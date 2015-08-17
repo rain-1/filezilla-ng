@@ -9,10 +9,10 @@
 class CDirentry
 {
 public:
-	wxString name;
+	fzstring name;
 	int64_t size;
-	CRefcountObject<wxString> permissions;
-	CRefcountObject<wxString> ownerGroup;
+	CRefcountObject<fzstring> permissions;
+	CRefcountObject<fzstring> ownerGroup;
 
 	enum _flags
 	{
@@ -52,7 +52,7 @@ public:
 		return time.IsValid() && time.GetAccuracy() >= CDateTime::seconds;
 	}
 
-	CSparseOptional<wxString> target; // Set to linktarget it link is true
+	CSparseOptional<fzstring> target; // Set to linktarget it link is true
 
 	CDateTime time;
 
@@ -130,7 +130,7 @@ public:
 
 	bool RemoveEntry(unsigned int index);
 
-	void GetFilenames(std::vector<wxString> &names) const;
+	void GetFilenames(std::vector<fzstring> &names) const;
 
 protected:
 
