@@ -90,16 +90,22 @@ public:
 		return str1.Cmp(str2);
 	}
 
-	template<typename String>
-	static int CmpNatural(String const& str1, String const& str2)
+	static int CmpNatural(wxString const& str1, wxString const& str2)
 	{
-		auto p1 = str1.begin();
-		auto p2 = str2.begin();
+		return CmpNatural(static_cast<wxChar const*>(str1.c_str()), static_cast<wxChar const*>(str2.c_str()));
+	}
 
+	static int CmpNatural(fzstring const& str1, fzstring const& str2)
+	{
+		return CmpNatural(str1.c_str(), str2.c_str());
+	}
+
+	static int CmpNatural(wxChar const* p1, wxChar const* p2)
+	{
 		int res = 0;
 		int zeroCount = 0;
 		bool isNumber = false;
-		for (; p1 != str1.end() && p2 != str2.end(); ++p1, ++p2) {
+		for (; *p1 && *p2; ++p1, ++p2) {
 			int diff = static_cast<int>(wxTolower(*p1)) - static_cast<int>(wxTolower(*p2));
 			if (isNumber) {
 				if (res == 0)
@@ -113,9 +119,9 @@ public:
 					break;
 			} else if (wxIsdigit(*p1) && wxIsdigit(*p2)) {
 				zeroCount = 0;
-				for(; *p1 == '0' && p1+1 != str1.end() && wxIsdigit(*(p1+1)); ++p1)
+				for(; *p1 == '0' && *(p1+1) && wxIsdigit(*(p1+1)); ++p1)
 					zeroCount++;
-				for(; *p2 == '0' && p2+1 != str2.end() && wxIsdigit(*(p2+1)); ++p2)
+				for(; *p2 == '0' && *(p2+1) && wxIsdigit(*(p2+1)); ++p2)
 					zeroCount--;
 				res = *p1 - *p2;
 				isNumber = true;
@@ -126,13 +132,13 @@ public:
 		if (res == 0 && isNumber)
 			res = zeroCount;
 
-		if (p1 == str1.end() && p2 == str2.end())
+		if (!*p1 && !*p2)
 			return res;
 		if (!isNumber || res == 0)
-			 return p1 == str1.end() ? -1 : 1;
-		if (p1 != str1.end() && wxIsdigit(*p1))
+			 return !*p1 ? -1 : 1;
+		if (*p1 && wxIsdigit(*p1))
 			return 1;       //more digits
-		if (p2 != str2.end() && wxIsdigit(*p2))
+		if (*p2 && wxIsdigit(*p2))
 			return -1;      //fewer digits
 		return res;         //same length, compare first different digit in the sequence
 	}
