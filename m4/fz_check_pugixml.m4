@@ -1,4 +1,4 @@
-dnl Checks whether system's pugixml library exists
+dnl Checks whether system's pugixml library exists and is usable.
 
 AC_DEFUN([FZ_CHECK_PUGIXML], [
   AC_ARG_WITH(pugixml, AC_HELP_STRING([--with-pugixml=type], [Selects which version of pugixml to use. Type has to be either system or builtin]),
@@ -61,6 +61,27 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
       AC_MSG_RESULT([no])
       AC_MSG_ERROR([pugixml system library is too old, you need at least version 1.5])
     ])
+
+    AC_MSG_CHECKING([whether pugixml has been compiled with long long support])
+    old_libs="$LIBS"
+    LIBS="$LIBS -lpugixml"
+    AC_LINK_IFELSE([
+      AC_LANG_PROGRAM([
+        #include <pugixml.hpp>
+      ],[
+        long long v{};
+        pugi::xml_text t;
+        t.set(v);
+        v = t.as_llong();
+        return v;
+      ])
+    ],[
+      AC_MSG_RESULT([yes])
+    ],[
+      AC_MSG_RESULT([no])
+      AC_MSG_ERROR([pugixml system library has been compiled without long long support])
+    ])
+    LIBS="$old_libs"
 
     AC_LANG_POP
   
