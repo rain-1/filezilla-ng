@@ -20,6 +20,8 @@
 #include <wx/file.h>
 #include <wx/gbsizer.h>
 
+#include <algorithm>
+
 #ifdef __WXMSW__
 #include "commctrl.h"
 #endif
