@@ -6375,15 +6375,37 @@ static void ssh2_pkt_addstring_commasep(struct Packet *pkt, const char *data)
 
 /*
  * SSH-2 key creation method.
- * (Currently assumes 2 lots of any hash are sufficient to generate
+ * (Currently assumes 4 lots of any hash are sufficient to generate
  * keys/IVs for any cipher/MAC. SSH2_MKKEY_ITERS documents this assumption.)
+ *
+ * Example: chacha20-poly1305@openssh.com with diffie-hellman-group-exchange-sha1 requires ceil(512/160)==4 lots
  */
-#define SSH2_MKKEY_ITERS (2)
-static void ssh2_mkkey(Ssh ssh, Bignum K, unsigned char *H, char chr,
-		       unsigned char *keyspace)
+#define SSH2_MKKEY_ITERS (4)
+
+static void ssh2_mkkey_iteration(Ssh ssh, Bignum K, unsigned char *H,
+                                 unsigned char *keyspace, int iteration)
 {
     const struct ssh_hash *h = ssh->kex->hash;
     void *s;
+    int i;
+    s = h->init();
+    if (!(ssh->remote_bugs & BUG_SSH2_DERIVEKEY))
+	hash_mpint(h, s, K);
+    h->bytes(s, H, h->hlen);
+    for (i = 0; i < iteration; ++i) {
+	h->bytes(s, keyspace + i * h->hlen, h->hlen);
+    }
+    h->final(s, keyspace + i * h->hlen);
+}
+
+static void ssh2_mkkey(Ssh ssh, Bignum K, unsigned char *H, char chr,
+		       unsigned char *keyspace)
+{
+    /* See RFC 4253 section 7.2 for key computation. */
+    const struct ssh_hash *h = ssh->kex->hash;
+    void *s;
+    int i;
+
     /* First hlen bytes. */
     s = h->init();
     if (!(ssh->remote_bugs & BUG_SSH2_DERIVEKEY))
@@ -6392,13 +6414,11 @@ static void ssh2_mkkey(Ssh ssh, Bignum K, unsigned char *H, char chr,
     h->bytes(s, &chr, 1);
     h->bytes(s, ssh->v2_session_id, ssh->v2_session_id_len);
     h->final(s, keyspace);
-    /* Next hlen bytes. */
-    s = h->init();
-    if (!(ssh->remote_bugs & BUG_SSH2_DERIVEKEY))
-	hash_mpint(h, s, K);
-    h->bytes(s, H, h->hlen);
-    h->bytes(s, keyspace, h->hlen);
-    h->final(s, keyspace + h->hlen);
+
+    /* The remaining iterations */
+    for (i = 1; i <= SSH2_MKKEY_ITERS; ++i) {
+	ssh2_mkkey_iteration(ssh, K, H, keyspace, i);
+    }
 }
 
 /*
