@@ -39,7 +39,7 @@
 
   RequestExecutionLevel user
 
-  !define DUMP_KEY "SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps\filezilla.exe"
+  !define DUMP_KEY "SOFTWARE\Microsoft\Windows\Windows Error Reporting\LocalDumps"
 
 ;--------------------------------
 ; Libtool executable target path
@@ -966,7 +966,9 @@ Section "FileZilla Client" SecMain
     ${If} ${RunningX64}
       SetRegView 64
     ${EndIf}
-    WriteRegDWORD HKLM "${DUMP_KEY}" "DumpType"   "1"
+    WriteRegDWORD HKLM "${DUMP_KEY}\filezilla.exe"  "DumpType" "1"
+    WriteRegDWORD HKLM "${DUMP_KEY}\fzsftp.exe"     "DumpType" "1"
+    WriteRegDWORD HKLM "${DUMP_KEY}\fzputtygen.exe" "DumpType" "1"
     ${If} ${RunningX64}
       SetRegView lastused
     ${EndIf}
@@ -1402,8 +1404,12 @@ Section "Uninstall"
     ${If} ${RunningX64}
       SetRegView 64
     ${EndIf}
-    DeleteRegValue HKLM "${DUMP_KEY}" "DumpType"
-    DeleteRegKey /ifempty HKLM "${DUMP_KEY}"
+    DeleteRegValue HKLM "${DUMP_KEY}\filezilla.exe"  "DumpType"
+    DeleteRegValue HKLM "${DUMP_KEY}\fzsftp.exe"     "DumpType"
+    DeleteRegValue HKLM "${DUMP_KEY}\fzputtygen.exe" "DumpType"
+    DeleteRegKey /ifempty HKLM "${DUMP_KEY}\filezilla.exe"
+    DeleteRegKey /ifempty HKLM "${DUMP_KEY}\fzsftp.exe"
+    DeleteRegKey /ifempty HKLM "${DUMP_KEY}\fzputtygen.exe"
     ${If} ${RunningX64}
       SetRegView lastused
     ${EndIf}
