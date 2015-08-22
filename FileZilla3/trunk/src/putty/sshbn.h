@@ -20,16 +20,14 @@
  *    The C variant won't give the right answer, either.
  */
 
-#include <stdint.h>
-
 #if defined __SIZEOF_INT128__
 /* gcc and clang both provide a __uint128_t type on 64-bit targets
  * (and, when they do, indicate its presence by the above macro),
  * using the same 'two machine registers' kind of code generation that
  * 32-bit targets use for 64-bit ints. If we have one of these, we can
  * use a 64-bit BignumInt and a 128-bit BignumDblInt. */
+typedef unsigned long long BignumInt;
 typedef __uint128_t BignumDblInt;
-typedef uint64_t BignumInt;
 #define BIGNUM_INT_MASK  0xFFFFFFFFFFFFFFFFULL
 #define BIGNUM_TOP_BIT   0x8000000000000000ULL
 #define BIGNUM_INT_BITS  64

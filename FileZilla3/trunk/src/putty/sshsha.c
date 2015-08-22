@@ -230,6 +230,24 @@ static void *sha1_init(void)
     return s;
 }
 
+static void *sha1_copy(const void *vold)
+{
+    const SHA_State *old = (const SHA_State *)vold;
+    SHA_State *s;
+
+    s = snew(SHA_State);
+    *s = *old;
+    return s;
+}
+
+static void sha1_free(void *handle)
+{
+    SHA_State *s = handle;
+
+    smemclr(s, sizeof(*s));
+    sfree(s);
+}
+
 static void sha1_bytes(void *handle, const void *p, int len)
 {
     SHA_State *s = handle;
@@ -242,12 +260,11 @@ static void sha1_final(void *handle, unsigned char *output)
     SHA_State *s = handle;
 
     SHA_Final(s, output);
-    smemclr(s, sizeof(*s));
-    sfree(s);
+    sha1_free(s);
 }
 
 const struct ssh_hash ssh_sha1 = {
-    sha1_init, sha1_bytes, sha1_final, 20, "SHA-1"
+    sha1_init, sha1_copy, sha1_bytes, sha1_final, sha1_free, 20, "SHA-1"
 };
 
 /* ----------------------------------------------------------------------
@@ -404,7 +421,7 @@ const struct ssh_mac ssh_hmac_sha1 = {
     sha1_generate, sha1_verify,
     hmacsha1_start, hmacsha1_bytes, hmacsha1_genresult, hmacsha1_verresult,
     "hmac-sha1", "hmac-sha1-etm@openssh.com",
-    20,
+    20, 20,
     "HMAC-SHA1"
 };
 
@@ -414,7 +431,7 @@ const struct ssh_mac ssh_hmac_sha1_96 = {
     hmacsha1_start, hmacsha1_bytes,
     hmacsha1_96_genresult, hmacsha1_96_verresult,
     "hmac-sha1-96", "hmac-sha1-96-etm@openssh.com",
-    12,
+    12, 20,
     "HMAC-SHA1-96"
 };
 
@@ -423,7 +440,7 @@ const struct ssh_mac ssh_hmac_sha1_buggy = {
     sha1_generate, sha1_verify,
     hmacsha1_start, hmacsha1_bytes, hmacsha1_genresult, hmacsha1_verresult,
     "hmac-sha1", NULL,
-    20,
+    20, 16,
     "bug-compatible HMAC-SHA1"
 };
 
@@ -433,6 +450,6 @@ const struct ssh_mac ssh_hmac_sha1_96_buggy = {
     hmacsha1_start, hmacsha1_bytes,
     hmacsha1_96_genresult, hmacsha1_96_verresult,
     "hmac-sha1-96", NULL,
-    12,
+    12, 16,
     "bug-compatible HMAC-SHA1-96"
 };

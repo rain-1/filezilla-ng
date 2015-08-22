@@ -141,7 +141,7 @@ static int cmpfortree(void *av, void *bv)
 static int cmpforsearch(void *av, void *bv)
 {
     Actual_Socket b = (Actual_Socket) bv;
-    intptr_t as = (intptr_t) av, bs = (intptr_t) b->s;
+    uintptr_t as = (uintptr_t) av, bs = (uintptr_t) b->s;
     if (as < bs)
 	return -1;
     if (as > bs)
@@ -481,7 +481,7 @@ const char *winsock_error_string(int error)
                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                            es->text + bufused, bufsize - bufused, NULL)) {
             sprintf(es->text + bufused,
-                    "Windows error code %d (and FormatMessage returned %u)", 
+                    "Windows error code %d (and FormatMessage returned %u)",
                     error, (unsigned int)GetLastError());
         } else {
             int len = strlen(es->text);
