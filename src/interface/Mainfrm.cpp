@@ -256,13 +256,6 @@ CMainFrame::CMainFrame()
 	: m_engineContext(*COptions::Get())
 	, m_comparisonToggleAcceleratorId(wxNewId())
 {
-#ifdef __WXMAC__
-	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Cut(); }, 'X');
-	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Copy(); }, 'C');
-	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->Paste(); }, 'V');
-	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e){ e->SelectAll(); }, 'A');
-#endif
-
 	m_pActivityLed[0] = m_pActivityLed[1] = 0;
 
 	wxGetApp().AddStartupProfileRecord(_T("CMainFrame::CMainFrame"));
@@ -425,20 +418,7 @@ CMainFrame::CMainFrame()
 	if (!RestoreSplitterPositions())
 		SetDefaultSplitterPositions();
 
-	std::vector<wxAcceleratorEntry> entries;
-	//entries[0].Set(wxACCEL_CMD | wxACCEL_SHIFT, 'I', XRCID("ID_MENU_VIEW_FILTERS"));
-	for (int i = 0; i < 10; i++) {
-		tab_hotkey_ids[i] = wxNewId();
-		entries.push_back(wxAcceleratorEntry(wxACCEL_CMD, (int)'0' + i, tab_hotkey_ids[i]));
-	}
-	entries.push_back(wxAcceleratorEntry(wxACCEL_CMD | wxACCEL_SHIFT, 'O', m_comparisonToggleAcceleratorId));
-#ifdef __WXMAC__
-	for (auto it = keyboardCommands.begin(); it != keyboardCommands.end(); ++it) {
-		entries.push_back(wxAcceleratorEntry(wxACCEL_CMD, it->second.second, it->first));
-	}
-#endif
-	wxAcceleratorTable accel(entries.size(), &entries[0]);
-	SetAcceleratorTable(accel);
+	SetupKeyboardAccelerators();
 
 	ConnectNavigationHandler(m_pStatusView);
 	ConnectNavigationHandler(m_pQueuePane);
@@ -2692,3 +2672,28 @@ void CMainFrame::OnChildFocused(wxChildFocusEvent& event)
 	m_lastFocusedChild = event.GetWindow()->GetId();
 }
 #endif
+
+void CMainFrame::SetupKeyboardAccelerators()
+{
+	std::vector<wxAcceleratorEntry> entries;
+	for (int i = 0; i < 10; i++) {
+		tab_hotkey_ids[i] = wxNewId();
+		entries.emplace_back(wxACCEL_CMD, (int)'0' + i, tab_hotkey_ids[i]);
+	}
+	entries.emplace_back(wxACCEL_CMD | wxACCEL_SHIFT, 'O', m_comparisonToggleAcceleratorId);
+	entries.emplace_back(wxACCEL_CMD | wxACCEL_SHIFT, 'I', XRCID("ID_MENU_VIEW_FILTERS"));
+#ifdef __WXMAC__
+	entries.emplace_back(wxACCEL_CMD, ',', XRCID("wxID_PREFERENCES"));
+
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e) { e->Cut(); }, 'X');
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e) { e->Copy(); }, 'C');
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e) { e->Paste(); }, 'V');
+	keyboardCommands[wxNewId()] = std::make_pair([](wxTextEntry* e) { e->SelectAll(); }, 'A');
+
+	for (auto const& command : keyboardCommands) {
+		entries.emplace_back(wxACCEL_CMD, command.second.second, command.first);
+	}
+#endif
+	wxAcceleratorTable accel(entries.size(), &entries[0]);
+	SetAcceleratorTable(accel);
+}
