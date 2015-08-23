@@ -116,6 +116,8 @@ protected:
 
 	void HandleResize();
 
+	void SetupKeyboardAccelerators();
+
 	// Event handlers
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
