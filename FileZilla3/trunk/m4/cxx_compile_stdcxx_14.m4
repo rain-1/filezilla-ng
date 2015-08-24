@@ -122,7 +122,7 @@ AC_DEFUN([CXX_COMPILE_STDCXX_14], [dnl
 
   m4_if([$1], [noext], [], [dnl
   if test x$ac_success = xno; then
-    for switch in -std=gnu++14 -std=gnu++0x; do
+    for switch in -std=gnu++14 -std=gnu++1y; do
       cachevar=AS_TR_SH([_cv_cxx_compile_cxx14_$switch])
       AC_CACHE_CHECK(whether $CXX supports C++14 features with $switch,
                      $cachevar,
@@ -142,7 +142,7 @@ AC_DEFUN([CXX_COMPILE_STDCXX_14], [dnl
 
   m4_if([$1], [ext], [], [dnl
   if test x$ac_success = xno; then
-    for switch in -std=c++14 -std=c++0x; do
+    for switch in -std=c++14 -std=c++1y; do
       cachevar=AS_TR_SH([_cv_cxx_compile_cxx14_$switch])
       AC_CACHE_CHECK(whether $CXX supports C++14 features with $switch,
                      $cachevar,
