@@ -271,6 +271,7 @@ bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPr
 
 			m_sync_browse.is_changing = true;
 			m_sync_browse.compare = m_pComparisonManager->IsComparing();
+			m_sync_browse.target_path = remote_path;
 			CListCommand *pCommand = new CListCommand(remote_path);
 			m_pCommandQueue->ProcessCommand(pCommand);
 
@@ -880,6 +881,29 @@ bool CState::IsRemoteIdle(bool ignore_recursive) const
 
 void CState::ListingFailed(int error)
 {
+	if (m_sync_browse.is_changing && !m_sync_browse.target_path.empty()) {
+		wxDialogEx dlg;
+		dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"));
+		xrc_call(dlg, "ID_SYNCBROWSE_NONEXISTING_LABEL", &wxStaticText::SetLabel, wxString::Format(_("The remote directory '%s' does not exist."), m_sync_browse.target_path.GetPath()));
+		xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::SetLabel, _("Create &missing remote directory and enter it"));
+		xrc_call(dlg, "ID_SYNCBROWSE_DISABLE", &wxRadioButton::SetLabel, _("&Disable synchronized browsing and continue changing the local directory"));
+		dlg.GetSizer()->Fit(&dlg);
+		if (dlg.ShowModal() == wxID_OK) {
+
+			if (xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::GetValue)) {
+				m_pCommandQueue->ProcessCommand(new CMkdirCommand(m_sync_browse.target_path));
+				m_pCommandQueue->ProcessCommand(new CListCommand(m_sync_browse.target_path));
+				m_sync_browse.target_path.clear();
+				return;
+			}
+			else {
+				CLocalPath local = GetSynchronizedDirectory(m_sync_browse.target_path);
+				SetSyncBrowse(false);
+				SetLocalDir(local);
+			}
+		}
+	}
+
 	m_sync_browse.is_changing = false;
 }
 
@@ -951,6 +975,7 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 					}
 					m_sync_browse.is_changing = true;
 					m_sync_browse.compare = m_pComparisonManager->IsComparing();
+					m_sync_browse.target_path.clear();
 				}
 				else {
 					SetSyncBrowse(false);
@@ -959,6 +984,7 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 			else {
 				m_sync_browse.is_changing = true;
 				m_sync_browse.compare = m_pComparisonManager->IsComparing();
+				m_sync_browse.target_path.clear();
 			}
 		}
 	}
