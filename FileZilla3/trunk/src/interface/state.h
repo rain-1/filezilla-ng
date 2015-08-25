@@ -207,6 +207,9 @@ protected:
 		CServerPath remote_root;
 		bool is_changing;
 		bool compare;
+
+		// The target path when changing remote directory
+		CServerPath target_path;
 	} m_sync_browse;
 
 	std::unique_ptr<CCertificateNotification> m_pCertificate;
