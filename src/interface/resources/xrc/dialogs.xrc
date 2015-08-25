@@ -3631,62 +3631,117 @@
     </object>
     <title>Speed Limits</title>
   </object>
-<object class="wxDialog" name="ID_ASK_SAVE_PASSWORD">
-  <object class="wxBoxSizer">
-    <object class="sizeritem">
-      <object class="wxFlexGridSizer">
-        <cols>1</cols>
-        <vgap>7</vgap>
-        <object class="sizeritem">
-          <object class="wxStaticText">
-            <label>Would you like FileZilla to remember passwords?</label>
-          </object>
-        </object>
-        <object class="sizeritem">
-          <object class="wxStaticText">
-            <label>When allowing FileZilla to remember passwords, you can reconnnect without having to re-enter a password after restarting FileZilla.</label>
-          </object>
-        </object>
-        <object class="spacer"/>
-        <object class="sizeritem">
-          <object class="wxRadioButton" name="ID_REMEMBER_YES">
-            <label>&amp;Remember passwords</label>
-            <style>wxRB_GROUP</style>
-          </object>
-        </object>
-        <object class="sizeritem">
-          <object class="wxRadioButton" name="ID_REMEMBER_NO">
-            <label>&amp;Do not remember passwords (recommended)</label>
-          </object>
-        </object>
-        <object class="sizeritem">
-          <object class="wxStaticLine"/>
-          <flag>wxGROW</flag>
-        </object>
-        <object class="sizeritem">
-          <object class="wxFlexGridSizer">
-            <object class="sizeritem">
-              <object class="wxButton" name="wxID_OK">
-                <label>OK</label>
-                <default>1</default>
-              </object>
+  <object class="wxDialog" name="ID_ASK_SAVE_PASSWORD">
+    <object class="wxBoxSizer">
+      <object class="sizeritem">
+        <object class="wxFlexGridSizer">
+          <cols>1</cols>
+          <vgap>7</vgap>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>Would you like FileZilla to remember passwords?</label>
             </object>
-            <object class="sizeritem">
-              <object class="wxButton" name="wxID_CANCEL">
-                <label>&amp;Cancel</label>
-              </object>
-            </object>
-            <cols>2</cols>
-            <hgap>5</hgap>
           </object>
-          <flag>wxALIGN_RIGHT</flag>
+          <object class="sizeritem">
+            <object class="wxStaticText">
+              <label>When allowing FileZilla to remember passwords, you can reconnnect without having to re-enter a password after restarting FileZilla.</label>
+            </object>
+          </object>
+          <object class="spacer"/>
+          <object class="sizeritem">
+            <object class="wxRadioButton" name="ID_REMEMBER_YES">
+              <label>&amp;Remember passwords</label>
+              <style>wxRB_GROUP</style>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxRadioButton" name="ID_REMEMBER_NO">
+              <label>&amp;Do not remember passwords (recommended)</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticLine"/>
+            <flag>wxGROW</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <object class="sizeritem">
+                <object class="wxButton" name="wxID_OK">
+                  <label>OK</label>
+                  <default>1</default>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxButton" name="wxID_CANCEL">
+                  <label>&amp;Cancel</label>
+                </object>
+              </object>
+              <cols>2</cols>
+              <hgap>5</hgap>
+            </object>
+            <flag>wxALIGN_RIGHT</flag>
+          </object>
+        </object>
+        <flag>wxALL</flag>
+        <border>7</border>
+      </object>
+      <orient>wxVERTICAL</orient>
+    </object>
+    <title>Remember passwords?</title>
+  </object>
+  <object class="wxDialog" name="ID_SYNCBROWSE_NONEXISTING">
+    <title>Synchronized browsing</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxBoxSizer">
+          <orient>wxHORIZONTAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticBitmap">
+              <size>32,32</size>
+              <bitmap stock_id="wxART_QUESTION"/>
+            </object>
+            <flag>wxALL</flag>
+            <border>10</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <object class="sizeritem">
+                <object class="wxStaticText" name="ID_SYNCBROWSE_NONEXISTING_LABEL" />
+              </object>
+              <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_SYNCBROWSE_CREATE">
+                  <focused>1</focused>
+                  <style>wxRB_GROUP</style>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_SYNCBROWSE_DISABLE" />
+              </object>
+              <cols>1</cols>
+              <vgap>5</vgap>
+            </object>
+            <flag>wxALL</flag>
+            <border>5</border>
+          </object>
         </object>
       </object>
-      <flag>wxALL</flag>
-      <border>7</border>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK">
+              <default>1</default>
+            </object>
+          </object>
+          <object class="button">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label>Cancel</label>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL|wxGROW</flag>
+        <border>5</border>
+      </object>
     </object>
-    <orient>wxVERTICAL</orient>
   </object>
-  <title>Remember passwords?</title>
-</object>
 </resource>

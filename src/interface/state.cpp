@@ -9,6 +9,7 @@
 #include "recursive_operation.h"
 #include "local_filesys.h"
 #include "listingcomparison.h"
+#include "xrc_helper.h"
 
 CContextManager CContextManager::m_the_context_manager;
 
@@ -927,9 +928,33 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 			}
 			else if (!local_path.Exists(&error)) {
 				wxString msg = error + _T("\n") + _("Disable synchronized browsing and continue changing the remote directory?");
-				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+
+				wxDialogEx dlg;
+				dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"));
+				xrc_call(dlg, "ID_SYNCBROWSE_NONEXISTING_LABEL", &wxStaticText::SetLabel, wxString::Format(_("The local directory '%s' does not exist."), local_path.GetPath()));
+				xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::SetLabel, _("Create &missing local directory and enter it"));
+				xrc_call(dlg, "ID_SYNCBROWSE_DISABLE", &wxRadioButton::SetLabel, _("&Disable synchronized browsing and continue changing the remote directory"));
+				dlg.GetSizer()->Fit(&dlg);
+				if (dlg.ShowModal() != wxID_OK) {
 					return false;
-				SetSyncBrowse(false);
+				}
+
+				if (xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::GetValue)) {
+					{
+						wxLogNull log;
+						wxMkdir(local_path.GetPath());
+					}
+
+					if (!local_path.Exists(&error)) {
+						wxMessageBox(wxString::Format(_("The local directory '%s' could not be created."), local_path.GetPath()), _("Synchronized browsing"), wxICON_EXCLAMATION);
+						return false;
+					}
+					m_sync_browse.is_changing = true;
+					m_sync_browse.compare = m_pComparisonManager->IsComparing();
+				}
+				else {
+					SetSyncBrowse(false);
+				}
 			}
 			else {
 				m_sync_browse.is_changing = true;
@@ -949,8 +974,7 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 	if (enable != m_sync_browse.local_root.empty())
 		return enable;
 
-	if (!enable)
-	{
+	if (!enable) {
 		wxASSERT(assumed_remote_root.empty());
 		m_sync_browse.local_root.clear();
 		m_sync_browse.remote_root.clear();
@@ -960,8 +984,7 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 		return false;
 	}
 
-	if (!m_pDirectoryListing && assumed_remote_root.empty())
-	{
+	if (!m_pDirectoryListing && assumed_remote_root.empty()) {
 		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
 		return false;
 	}
@@ -971,8 +994,7 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 
 	if (assumed_remote_root.empty())
 		m_sync_browse.remote_root = m_pDirectoryListing->path;
-	else
-	{
+	else {
 		m_sync_browse.remote_root = assumed_remote_root;
 		m_sync_browse.is_changing = true;
 		m_sync_browse.compare = false;
@@ -992,8 +1014,7 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 CLocalPath CState::GetSynchronizedDirectory(CServerPath remote_path)
 {
 	std::list<wxString> segments;
-	while (remote_path.HasParent() && remote_path != m_sync_browse.remote_root)
-	{
+	while (remote_path.HasParent() && remote_path != m_sync_browse.remote_root) {
 		segments.push_front(remote_path.GetLastSegment());
 		remote_path = remote_path.GetParent();
 	}
@@ -1011,8 +1032,7 @@ CLocalPath CState::GetSynchronizedDirectory(CServerPath remote_path)
 CServerPath CState::GetSynchronizedDirectory(CLocalPath local_path)
 {
 	std::list<wxString> segments;
-	while (local_path.HasParent() && local_path != m_sync_browse.local_root)
-	{
+	while (local_path.HasParent() && local_path != m_sync_browse.local_root) {
 		wxString last;
 		local_path.MakeParent(&last);
 		segments.push_front(last);
