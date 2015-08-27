@@ -9,6 +9,7 @@ public:
 	bool Load(wxWindow *pParent, const wxString& name);
 
 	bool SetChildLabel(int id, const wxString& label, unsigned long maxLength = 0);
+	bool SetChildLabel(char const* id, const wxString& label, unsigned long maxLength = 0);
 	wxString GetChildLabel(int id);
 
 	virtual int ShowModal();

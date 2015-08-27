@@ -696,20 +696,19 @@ int CEditHandler::DisplayChangeNotification(CEditHandler::fileType type, std::li
 
 	dlg.SetChildLabel(XRCID("ID_FILENAME"), iter->name);
 
-	if (type == local)
-	{
+	if (type == local) {
 		XRCCTRL(dlg, "ID_DESC_OPENEDAS", wxStaticText)->Hide();
 		XRCCTRL(dlg, "ID_OPENEDAS", wxStaticText)->Hide();
+
+		dlg.SetChildLabel("ID_DELETE", _T("&Finish editing"));
 	}
-	else
-	{
+	else {
 		wxString file = iter->file;
 		int pos = file.Find(wxFileName::GetPathSeparator(), true);
 		wxASSERT(pos != -1);
 		file = file.Mid(pos + 1);
 
-		if (file == iter->name)
-		{
+		if (file == iter->name) {
 			XRCCTRL(dlg, "ID_DESC_OPENEDAS", wxStaticText)->Hide();
 			XRCCTRL(dlg, "ID_OPENEDAS", wxStaticText)->Hide();
 		}
