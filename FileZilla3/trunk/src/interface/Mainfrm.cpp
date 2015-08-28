@@ -2523,6 +2523,11 @@ void CMainFrame::OnSearch(wxCommandEvent& event)
 	if (!pState)
 		return;
 
+	if (!pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
+		wxBell();
+		return;
+	}
+
 	CSearchDialog dlg(this, pState, m_pQueueView);
 	if (!dlg.Load())
 		return;
