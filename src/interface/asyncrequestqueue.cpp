@@ -141,6 +141,9 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 	else if (entry.pNotification->GetRequestID() == reqId_interactiveLogin) {
 		auto & notification = static_cast<CInteractiveLoginNotification&>(*entry.pNotification.get());
 
+		if (notification.IsRepeated()) {
+			CLoginManager::Get().CachedPasswordFailed(notification.server);
+		}
 		if (CLoginManager::Get().GetPassword(notification.server, true, wxString(), notification.GetChallenge()))
 			notification.passwordSet = true;
 		else {

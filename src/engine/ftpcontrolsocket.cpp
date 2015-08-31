@@ -1078,7 +1078,7 @@ int CFtpControlSocket::LogonSend()
 			case loginCommandType::pass:
 				if (!pData->challenge.empty())
 				{
-					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(pData->challenge);
+					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, pData->challenge, false);
 					pNotification->server = *m_pCurrentServer;
 					pData->challenge = _T("");
 

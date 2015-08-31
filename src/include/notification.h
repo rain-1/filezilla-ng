@@ -196,7 +196,12 @@ public:
 class CInteractiveLoginNotification final : public CAsyncRequestNotification
 {
 public:
-	CInteractiveLoginNotification(const wxString& challenge);
+	enum type {
+		interactive,
+		keyfile
+	};
+
+	CInteractiveLoginNotification(type t, const wxString& challenge, bool repeated);
 	virtual enum RequestId GetRequestID() const;
 
 	// Set to true if you have set a password
@@ -207,9 +212,17 @@ public:
 
 	const wxString& GetChallenge() const { return m_challenge; }
 
+	type GetType() const { return m_type; }
+
+	bool IsRepeated() const { return m_repeated; }
+
 protected:
 	// Password prompt string as given by the server
-	const wxString m_challenge;
+	wxString const m_challenge;
+
+	type const m_type;
+
+	bool const m_repeated;
 };
 
 // Indicate network action.

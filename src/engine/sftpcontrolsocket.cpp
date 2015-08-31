@@ -349,7 +349,6 @@ public:
 	CSftpConnectOpData()
 		: COpData(Command::connect)
 	{
-		pLastChallenge = 0;
 		criticalFailure = false;
 		pKeyFiles = 0;
 	}
@@ -357,10 +356,9 @@ public:
 	virtual ~CSftpConnectOpData()
 	{
 		delete pKeyFiles;
-		delete pLastChallenge;
 	}
 
-	wxString *pLastChallenge;
+	wxString lastChallenge;
 	bool criticalFailure;
 
 	wxStringTokenizer* pKeyFiles;
@@ -625,50 +623,60 @@ void CSftpControlSocket::OnSftpEvent()
 			switch(message->reqType)
 			{
 			case sftpReqPassword:
-				if (!m_pCurOpData || m_pCurOpData->opId != Command::connect)
-				{
+				if (!m_pCurOpData || m_pCurOpData->opId != Command::connect) {
 					LogMessage(MessageType::Debug_Warning, _T("sftpReqPassword outside connect operation, ignoring."));
 					break;
-				}
-
-				if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
-					wxString challenge;
-					if (!m_requestPreamble.empty())
-						challenge += m_requestPreamble + _T("\n");
-					if (!m_requestInstruction.empty())
-						challenge += m_requestInstruction + _T("\n");
-					if (message->text != _T("Password:"))
-						challenge += message->text;
-					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(challenge);
-					pNotification->server = *m_pCurrentServer;
-
-					SendAsyncRequest(pNotification);
 				}
 				else {
 					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData*>(m_pCurOpData);
 
-					const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message->text;
+					wxString const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message->text;
 
-					if (pData->pLastChallenge)
-					{
-						// Check for same challenge. Will most likely fail as well, so abort early.
-						if (*pData->pLastChallenge == newChallenge)
-							LogMessage(MessageType::Error, _("Authentication failed."));
-						else
-							LogMessage(MessageType::Error, _("Server sent an additional login prompt. You need to use the interactive login type."));
-						DoClose(FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED);
+					if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
+						CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
+						if (m_requestPreamble == _T("SSH key passphrase")) {
+							t = CInteractiveLoginNotification::keyfile;
+						}
 
-						for (;iter != messages.end(); ++iter)
-							delete *iter;
-						return;
+						wxString challenge;
+						if (!m_requestPreamble.empty() && t != CInteractiveLoginNotification::keyfile)
+							challenge += m_requestPreamble + _T("\n");
+						if (!m_requestInstruction.empty())
+							challenge += m_requestInstruction + _T("\n");
+						if (message->text != _T("Password:"))
+							challenge += message->text;
+						CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(t, challenge, pData->lastChallenge == challengeIdentifier);
+						pNotification->server = *m_pCurrentServer;
+
+						pData->lastChallenge = challengeIdentifier;
+
+						SendAsyncRequest(pNotification);
 					}
+					else {
+						const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message->text;
 
-					pData->pLastChallenge = new wxString(newChallenge);
+						if (!pData->lastChallenge.empty()) {
+							// Check for same challenge. Will most likely fail as well, so abort early.
+							if (pData->lastChallenge == challengeIdentifier) {
+								LogMessage(MessageType::Error, _("Authentication failed."));
+							}
+							else {
+								LogMessage(MessageType::Error, _("Server sent an additional login prompt. You need to use the interactive login type."));
+							}
+							DoClose(FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED);
 
-					const wxString pass = m_pCurrentServer->GetPass();
-					wxString show = _T("Pass: ");
-					show.Append('*', pass.Length());
-					SendCommand(pass, show);
+							for (;iter != messages.end(); ++iter)
+								delete *iter;
+							return;
+						}
+
+						pData->lastChallenge = challengeIdentifier;
+
+						const wxString pass = m_pCurrentServer->GetPass();
+						wxString show = _T("Pass: ");
+						show.Append('*', pass.Length());
+						SendCommand(pass, show);
+					}
 				}
 				break;
 			default:
