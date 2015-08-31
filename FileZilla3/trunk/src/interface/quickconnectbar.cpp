@@ -193,8 +193,7 @@ void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 	std::advance(iter, index);
 
 	CServer server = *iter;
-	if (server.GetLogonType() == ASK)
-	{
+	if (server.GetLogonType() == ASK) {
 		if (!CLoginManager::Get().GetPassword(server, false))
 			return;
 	}

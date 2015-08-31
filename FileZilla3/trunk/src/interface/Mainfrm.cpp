@@ -1260,8 +1260,7 @@ void CMainFrame::OnReconnect(wxCommandEvent &)
 
 	CServer server = pState->GetLastServer();
 
-	if (server.GetLogonType() == ASK)
-	{
+	if (server.GetLogonType() == ASK) {
 		if (!CLoginManager::Get().GetPassword(server, false))
 			return;
 	}

@@ -8,22 +8,21 @@
 
 CLoginManager CLoginManager::m_theLoginManager;
 
-std::list<CLoginManager::t_passwordcache>::iterator CLoginManager::FindItem(CServer const& server)
+std::list<CLoginManager::t_passwordcache>::iterator CLoginManager::FindItem(CServer const& server, wxString const& challenge)
 {
-	return std::find_if(m_passwordCache.begin(), m_passwordCache.end(), [&server](t_passwordcache const& item)
+	return std::find_if(m_passwordCache.begin(), m_passwordCache.end(), [&](t_passwordcache const& item)
 		{
-			return item.host == server.GetHost() && item.port == server.GetPort() && item.user == server.GetUser();
+			return item.host == server.GetHost() && item.port == server.GetPort() && item.user == server.GetUser() && item.challenge == challenge;
 		}
 	);
 }
 
-bool CLoginManager::GetPassword(CServer &server, bool silent, wxString const& name, wxString const& challenge)
+bool CLoginManager::GetPassword(CServer &server, bool silent, wxString const& name, wxString const& challenge, bool canRemember)
 {
-	wxASSERT(!silent || server.GetLogonType() == ASK || server.GetLogonType() == INTERACTIVE || server.GetLogonType() == KEY);
-	wxASSERT(challenge.empty() || server.GetLogonType() == INTERACTIVE || server.GetLogonType() == KEY);
+	wxASSERT(server.GetLogonType() != ANONYMOUS);
 
-	if (server.GetLogonType() != INTERACTIVE) {
-		auto it = FindItem(server);
+	if (canRemember) {
+		auto it = FindItem(server, challenge);
 		if (it != m_passwordCache.end()) {
 			server.SetUser(server.GetUser(), it->password);
 			return true;
@@ -32,10 +31,10 @@ bool CLoginManager::GetPassword(CServer &server, bool silent, wxString const& na
 	if (silent)
 		return false;
 
-	return DisplayDialog(server, name, challenge);
+	return DisplayDialog(server, name, challenge, canRemember);
 }
 
-bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxString challenge)
+bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxString challenge, bool canRemember)
 {
 	wxDialogEx pwdDlg;
 	if (!pwdDlg.Load(wxGetApp().GetTopWindow(), _T("ID_ENTERPASSWORD"))) {
@@ -57,9 +56,7 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 		challenge.Replace(_T("\n"), _T("\r\n"));
 #endif
 		XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl)->ChangeValue(challenge);
-		if (server.GetLogonType() != KEY) {
-			pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox), false, true);
-		}
+		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox), canRemember, true);
 		XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl)->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 	}
 	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.FormatHost());
@@ -111,34 +108,28 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 
 	server.SetUser(user, XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->GetValue());
 
-	if (server.GetLogonType() != INTERACTIVE && XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox)->GetValue()) {
-		t_passwordcache entry;
-		entry.host = server.GetHost();
-		entry.port = server.GetPort();
-		entry.user = server.GetUser();
-		entry.password = server.GetPass();
-		entry.challenge = challenge;
-		m_passwordCache.push_back(entry);
+	if (canRemember) {
+		RememberPassword(server, challenge);
 	}
 
 	return true;
 }
 
-void CLoginManager::CachedPasswordFailed(const CServer& server)
+void CLoginManager::CachedPasswordFailed(const CServer& server, wxString const& challenge)
 {
-	auto it = FindItem(server);
+	auto it = FindItem(server, challenge);
 	if (it != m_passwordCache.end()) {
 		m_passwordCache.erase(it);
 	}
 }
 
-void CLoginManager::RememberPassword(CServer & server)
+void CLoginManager::RememberPassword(CServer & server, wxString const& challenge)
 {
-	if (server.GetLogonType() != ASK && server.GetLogonType() != NORMAL && server.GetLogonType() != KEY) {
+	if (server.GetLogonType() == ANONYMOUS) {
 		return;
 	}
 
-	auto it = FindItem(server);
+	auto it = FindItem(server, challenge);
 	if (it != m_passwordCache.end()) {
 		it->password = server.GetPass();
 	}
@@ -148,6 +139,7 @@ void CLoginManager::RememberPassword(CServer & server)
 		entry.port = server.GetPort();
 		entry.user = server.GetUser();
 		entry.password = server.GetPass();
+		entry.challenge = challenge;
 		m_passwordCache.push_back(entry);
 	}
 }

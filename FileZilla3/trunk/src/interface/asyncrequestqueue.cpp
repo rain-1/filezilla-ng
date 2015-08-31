@@ -142,9 +142,11 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 		auto & notification = static_cast<CInteractiveLoginNotification&>(*entry.pNotification.get());
 
 		if (notification.IsRepeated()) {
-			CLoginManager::Get().CachedPasswordFailed(notification.server);
+			CLoginManager::Get().CachedPasswordFailed(notification.server, notification.GetChallenge());
 		}
-		if (CLoginManager::Get().GetPassword(notification.server, true, wxString(), notification.GetChallenge()))
+		bool canRemember = notification.GetType() == CInteractiveLoginNotification::keyfile;
+
+		if (CLoginManager::Get().GetPassword(notification.server, true, wxString(), notification.GetChallenge(), canRemember))
 			notification.passwordSet = true;
 		else {
 			// Retry with prompt
@@ -152,7 +154,7 @@ bool CAsyncRequestQueue::ProcessNextRequest()
 			if (!CheckWindowState())
 				return false;
 
-			if (CLoginManager::Get().GetPassword(notification.server, false, wxString(), notification.GetChallenge()))
+			if (CLoginManager::Get().GetPassword(notification.server, false, wxString(), notification.GetChallenge(), canRemember))
 				notification.passwordSet = true;
 		}
 

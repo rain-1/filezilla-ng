@@ -1064,8 +1064,7 @@ int CFtpControlSocket::LogonSend()
 			switch (cmd.type)
 			{
 			case loginCommandType::user:
-				if (m_pCurrentServer->GetLogonType() == INTERACTIVE)
-				{
+				if (m_pCurrentServer->GetLogonType() == INTERACTIVE) {
 					pData->waitChallenge = true;
 					pData->challenge = _T("");
 				}
@@ -1076,8 +1075,7 @@ int CFtpControlSocket::LogonSend()
 					res = SendCommand(cmd.command);
 				break;
 			case loginCommandType::pass:
-				if (!pData->challenge.empty())
-				{
+				if (!pData->challenge.empty()) {
 					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(CInteractiveLoginNotification::interactive, pData->challenge, false);
 					pNotification->server = *m_pCurrentServer;
 					pData->challenge = _T("");
@@ -1089,8 +1087,7 @@ int CFtpControlSocket::LogonSend()
 
 				if (cmd.command.empty())
 					res = SendCommand(_T("PASS ") + m_pCurrentServer->GetPass(), true);
-				else
-				{
+				else {
 					wxString c = cmd.command;
 					wxString pass = m_pCurrentServer->GetPass();
 					pass.Replace(_T("%"), _T("%%"));

@@ -11,14 +11,14 @@ class CLoginManager
 public:
 	static CLoginManager& Get() { return m_theLoginManager; }
 
-	bool GetPassword(CServer& server, bool silent, wxString const& name = wxString(), wxString const& challenge = wxString());
+	bool GetPassword(CServer& server, bool silent, wxString const& name = wxString(), wxString const& challenge = wxString(), bool canRemember = true);
 
-	void CachedPasswordFailed(const CServer& server);
+	void CachedPasswordFailed(const CServer& server, wxString const& challenge = wxString());
 
-	void RememberPassword(CServer & server);
+	void RememberPassword(CServer & server, wxString const& challenge = wxString());
 
 protected:
-	bool DisplayDialog(CServer& server, wxString const& name, wxString challenge);
+	bool DisplayDialog(CServer& server, wxString const& name, wxString challenge, bool canRemember);
 
 	static CLoginManager m_theLoginManager;
 
@@ -32,7 +32,7 @@ protected:
 		wxString challenge;
 	};
 	
-	std::list<t_passwordcache>::iterator FindItem(CServer const&);
+	std::list<t_passwordcache>::iterator FindItem(CServer const& server, wxString const& challenge);
 	
 	std::list<t_passwordcache> m_passwordCache;
 };
