@@ -989,6 +989,8 @@ struct Loaded_keyfile_list
     void* publickey_blob;
     int publickey_bloblen;
     Filename* file;
+    char* publickey_comment;
+    char* publickey_algorithm;
     
     Loaded_keyfile_list* next;
 };
@@ -1002,6 +1004,8 @@ static Loaded_keyfile_list* new_loaded_keyfile(char* file)
     item->ssh2key = NULL;
     item->publickey_blob = NULL;
     item->publickey_bloblen = 0;
+    item->publickey_comment = NULL;
+    item->publickey_algorithm = NULL;
 
     return item;
 }
@@ -1022,6 +1026,9 @@ static void free_loaded_keyfile(Loaded_keyfile_list* item)
 	sfree(item->ssh1key);
     }
     filename_free(item->file);
+    sfree(item->publickey_comment);
+    sfree(item->publickey_algorithm);
+
     sfree(item);
 }
 
@@ -1080,7 +1087,7 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
 		if (!error) {
 		    error = "unknown";
 		}
-		logeventf(ssh, "Failed to load private key '%s': %s", loaded->file, error);
+		logeventf(ssh, "Failed to load private key '%s': %s", filename_to_str(loaded->file), error);
 		free_loaded_keyfile(loaded);
 		continue;
 	    }
@@ -1094,16 +1101,34 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh, int req_type)
 	}
 	else if (type == SSH_KEYTYPE_SSH2) {
 	    const char* error = NULL;
-	    loaded->ssh2key = ssh2_load_userkey(loaded->file, 0, &error);
-	    if (loaded->ssh2key == SSH2_WRONG_PASSPHRASE || !loaded->ssh2key) {
+
+	    loaded->publickey_blob =
+		ssh2_userkey_loadpub(loaded->file,
+				     &loaded->publickey_algorithm,
+				     &loaded->publickey_bloblen, 
+				     &loaded->publickey_comment, &error);
+	    if (!loaded->publickey_blob) {
 		if (!error) {
 		    error = "unknown";
 		}
-		logeventf(ssh, "Failed to load private key '%s': %s", loaded->file, error);
+		logeventf(ssh, "Failed to load private key '%s': %s", filename_to_str(loaded->file), error);
 		free_loaded_keyfile(loaded);
 		continue;
 	    }
-	    loaded->publickey_blob = loaded->ssh2key->alg->public_blob(loaded->ssh2key->data, &loaded->publickey_bloblen);
+
+	    loaded->ssh2key = ssh2_load_userkey(loaded->file, 0, &error);
+	    if (loaded->ssh2key == SSH2_WRONG_PASSPHRASE) {
+		loaded->ssh2key = NULL;
+		logeventf(ssh, "Private key in '%s' is encrypted, defer loading until use.", filename_to_str(loaded->file));
+	    }
+	    else if (!loaded->ssh2key) {
+		if (!error) {
+		    error = "unknown";
+		}
+		logeventf(ssh, "Failed to load private key '%s': %s", filename_to_str(loaded->file), error);
+		free_loaded_keyfile(loaded);
+		continue;
+	    }
 	}
 
 	loaded->next = loaded_list;
@@ -9888,8 +9913,8 @@ static void do_ssh2_authconn(Ssh ssh, const unsigned char *in, int inlen,
 			s->cur_prompt->to_server = FALSE;
 			s->cur_prompt->name = dupstr("SSH key passphrase");
 			add_prompt(s->cur_prompt,
-				   dupprintf("Passphrase for key \"%.100s\": ",
-					     s->publickey_comment),
+				   dupprintf("Passphrase for key \"%.100s\" in key file \"%s\"",
+					     s->publickey_comment, filename_to_str(s->keyfile)),
 				   FALSE);
 			ret = get_userpass_input(s->cur_prompt, NULL, 0);
 			while (ret < 0) {
@@ -10011,6 +10036,7 @@ static void do_ssh2_authconn(Ssh ssh, const unsigned char *in, int inlen,
 
 		Loaded_keyfile_list *next_keyfile;
 		struct ssh2_userkey *key;   /* not live over crReturn */
+		char *passphrase;
 
 		ssh->pkt_actx = SSH2_PKTCTX_PUBLICKEY;
 
@@ -10027,7 +10053,7 @@ static void do_ssh2_authconn(Ssh ssh, const unsigned char *in, int inlen,
 		ssh2_pkt_addstring(s->pktout, "publickey");	/* method */
 		ssh2_pkt_addbool(s->pktout, FALSE);
 						/* no signature included */
-		ssh2_pkt_addstring(s->pktout, s->loaded_keyfile_list->ssh2key->alg->name);
+		ssh2_pkt_addstring(s->pktout, s->loaded_keyfile_list->publickey_algorithm);
 		ssh2_pkt_addstring_start(s->pktout);
 		ssh2_pkt_addstring_data(s->pktout,
 					(char *)s->loaded_keyfile_list->publickey_blob,
@@ -10058,6 +10084,70 @@ static void do_ssh2_authconn(Ssh ssh, const unsigned char *in, int inlen,
 		}*/
 		
 		key = s->loaded_keyfile_list->ssh2key;
+
+		while (!key) {
+		    const char *error;  /* not live over crReturn */
+		    if (!key) {
+			/*
+			 * Get a passphrase from the user.
+			 */
+			int ret; /* need not be kept over crReturn */
+			s->cur_prompt = new_prompts(ssh->frontend);
+			s->cur_prompt->to_server = FALSE;
+			s->cur_prompt->name = dupstr("SSH key passphrase");
+			add_prompt(s->cur_prompt,
+				   dupprintf("Passphrase for key \"%.100s\" in key file \"%s\"",
+					     s->loaded_keyfile_list->publickey_comment, filename_to_str(s->loaded_keyfile_list->file)),
+				   FALSE);
+			ret = get_userpass_input(s->cur_prompt, NULL, 0);
+			while (ret < 0) {
+			    ssh->send_ok = 1;
+			    crWaitUntilV(!pktin);
+			    ret = get_userpass_input(s->cur_prompt,
+						     in, inlen);
+			    ssh->send_ok = 0;
+			}
+			if (!ret) {
+			    /* Failed to get a passphrase. Terminate. */
+			    free_prompts(s->cur_prompt);
+			    ssh_disconnect(ssh, NULL,
+					   "Unable to authenticate",
+					   SSH2_DISCONNECT_AUTH_CANCELLED_BY_USER,
+					   TRUE);
+			    crStopV;
+			}
+			passphrase =
+			    dupstr(s->cur_prompt->prompts[0]->result);
+			free_prompts(s->cur_prompt);
+		    } else {
+			passphrase = NULL; /* no passphrase needed */
+		    }
+
+		    /*
+		     * Try decrypting the key.
+		     */
+		    key = ssh2_load_userkey(s->loaded_keyfile_list->file, passphrase, &error);
+		    if (passphrase) {
+			/* burn the evidence */
+			smemclr(passphrase, strlen(passphrase));
+			sfree(passphrase);
+		    }
+		    if (key == SSH2_WRONG_PASSPHRASE || key == NULL) {
+			if (passphrase &&
+			    (key == SSH2_WRONG_PASSPHRASE)) {
+			    c_write_str(ssh, "Wrong passphrase\r\n");
+			    key = NULL;
+			    /* and loop again */
+			} else {
+			    c_write_str(ssh, "Unable to load private key (");
+			    c_write_str(ssh, error);
+			    c_write_str(ssh, ")\r\n");
+			    key = NULL;
+			    break; /* try something else */
+			}
+		    }
+		}
+
 		if (key) {
 		    unsigned char *sigblob, *sigdata;
 		    int sigblob_len, sigdata_len;
