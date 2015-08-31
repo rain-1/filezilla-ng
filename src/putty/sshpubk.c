@@ -751,8 +751,11 @@ struct ssh2_userkey *ssh2_load_userkey(const Filename *filename,
 	unsigned char key[40];
 	SHA_State s;
 
-	if (!passphrase)
+	if (!passphrase) {
+	    error = "wrong passphrase";
+	    ret = SSH2_WRONG_PASSPHRASE;
 	    goto error;
+	}
 	if (private_blob_len % cipherblk)
 	    goto error;
 

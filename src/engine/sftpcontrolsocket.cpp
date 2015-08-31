@@ -631,8 +631,7 @@ void CSftpControlSocket::OnSftpEvent()
 					break;
 				}
 
-				if (m_pCurrentServer->GetLogonType() == INTERACTIVE)
-				{
+				if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_pCurrentServer->GetLogonType() == KEY) {
 					wxString challenge;
 					if (!m_requestPreamble.empty())
 						challenge += m_requestPreamble + _T("\n");
@@ -645,8 +644,7 @@ void CSftpControlSocket::OnSftpEvent()
 
 					SendAsyncRequest(pNotification);
 				}
-				else
-				{
+				else {
 					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData*>(m_pCurOpData);
 
 					const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message->text;

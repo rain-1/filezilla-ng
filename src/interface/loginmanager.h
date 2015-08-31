@@ -29,6 +29,7 @@ protected:
 		unsigned int port;
 		wxString user;
 		wxString password;
+		wxString challenge;
 	};
 	
 	std::list<t_passwordcache>::iterator FindItem(CServer const&);

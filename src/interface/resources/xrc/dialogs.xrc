@@ -316,7 +316,7 @@
       </object>
       <object class="sizeritem">
         <object class="wxTextCtrl" name="ID_CHALLENGE">
-          <size>-1,50</size>
+          <size>160,50d</size>
           <style>wxTE_MULTILINE|wxTE_READONLY</style>
         </object>
         <flag>wxALL|wxGROW</flag>
