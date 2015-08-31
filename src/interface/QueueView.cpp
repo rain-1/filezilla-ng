@@ -871,12 +871,9 @@ bool CQueueView::TryStartNextTransfer()
 	const CServer oldServer = pEngineData->lastServer;
 	pEngineData->lastServer = bestMatch.serverItem->GetServer();
 
-	if (pEngineData->state != t_EngineData::waitprimary)
-	{
-		if (!pEngineData->pEngine->IsConnected())
-		{
-			if (pEngineData->lastServer.GetLogonType() == ASK)
-			{
+	if (pEngineData->state != t_EngineData::waitprimary) {
+		if (!pEngineData->pEngine->IsConnected()) {
+			if (pEngineData->lastServer.GetLogonType() == ASK) {
 				if (CLoginManager::Get().GetPassword(pEngineData->lastServer, true))
 					pEngineData->state = t_EngineData::connect;
 				else
@@ -893,8 +890,7 @@ bool CQueueView::TryStartNextTransfer()
 			pEngineData->state = t_EngineData::mkdir;
 	}
 
-	if (bestMatch.fileItem->GetType() == QueueItemType::File)
-	{
+	if (bestMatch.fileItem->GetType() == QueueItemType::File) {
 		// Create status line
 
 		m_itemCount++;
@@ -1103,14 +1099,12 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 		return;
 	}
 
-	if (pEngineData->state == t_EngineData::connect && pEngineData->lastServer.GetLogonType() == ASK)
-	{
+	if (pEngineData->state == t_EngineData::connect && pEngineData->lastServer.GetLogonType() == ASK) {
 		if (!CLoginManager::Get().GetPassword(pEngineData->lastServer, true))
 			pEngineData->state = t_EngineData::askpassword;
 	}
 
-	if (!m_activeMode)
-	{
+	if (!m_activeMode) {
 		enum ResetReason reason;
 		if (pEngineData->pItem && pEngineData->pItem->pending_remove())
 			reason = remove;
@@ -2638,25 +2632,21 @@ void CQueueView::TryRefreshListings()
 
 void CQueueView::OnAskPassword(wxCommandEvent&)
 {
-	while (!m_waitingForPassword.empty())
-	{
+	while (!m_waitingForPassword.empty()) {
 		const CFileZillaEngine* const pEngine = m_waitingForPassword.front();
 
 		t_EngineData* pEngineData = GetEngineData(pEngine);
-		if (!pEngineData)
-		{
+		if (!pEngineData) {
 			m_waitingForPassword.pop_front();
 			continue;
 		}
 
-		if (pEngineData->state != t_EngineData::askpassword)
-		{
+		if (pEngineData->state != t_EngineData::askpassword) {
 			m_waitingForPassword.pop_front();
 			continue;
 		}
 
-		if (CLoginManager::Get().GetPassword(pEngineData->lastServer, false))
-		{
+		if (CLoginManager::Get().GetPassword(pEngineData->lastServer, false)) {
 			pEngineData->state = t_EngineData::connect;
 			SendNextCommand(*pEngineData);
 		}

@@ -853,8 +853,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 		{
 			CInteractiveLoginNotification *pInteractiveLoginNotification = static_cast<CInteractiveLoginNotification *>(pNotification);
 
-			if (!pInteractiveLoginNotification->passwordSet)
-			{
+			if (!pInteractiveLoginNotification->passwordSet) {
 				DoClose(FZ_REPLY_CANCELED);
 				return false;
 			}
