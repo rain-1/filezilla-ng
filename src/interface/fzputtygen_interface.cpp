@@ -91,27 +91,22 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 
 	wxString reply;
 	ReplyCode code;
-	if (encrypted || needs_conversion) {
+	if (needs_conversion) {
 		if (silent) {
 			return false;
 		}
 
 		wxString msg;
 		if (needs_conversion) {
-			if (!encrypted)
-				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
-			else
-				msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nThe file is also password protected. Password protected key files are not supported by FileZilla yet.\nWould you like to convert it into a supported, unprotected format?"), keyFile);
+			msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
 		}
-		else if (encrypted)
-			msg = wxString::Format(_("The file '%s' is password protected. Password protected key files are not supported by FileZilla yet.\nWould you like to convert it into an unprotected file?"), keyFile);
 
 		int res = wxMessageBoxEx(msg, _("Convert key file"), wxICON_QUESTION | wxYES_NO);
 		if (res != wxYES)
 			return false;
 
 		if (encrypted) {
-			msg = wxString::Format(_("Enter the password for the file '%s'.\nPlease note that the converted file will not be password protected."), keyFile);
+			msg = wxString::Format(_("Enter the password for the file '%s'.\nThe converted file will be protected with the same password."), keyFile);
 
 			CInputDialog dlg;
 			if (!dlg.Create(m_parent, _("Password required"), msg))
@@ -164,13 +159,12 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		}
 		keyFile = newName;
 	}
-	else {
-		if (!Send(_T("load")))
-			return false;
-		code = GetReply(reply);
-		if (code != success)
-			return false;
-	}
+	
+	if (!Send(_T("loadpub")))
+		return false;
+	code = GetReply(reply);
+	if (code != success)
+		return false;
 
 	Send(_T("comment"));
 	code = GetReply(comment);

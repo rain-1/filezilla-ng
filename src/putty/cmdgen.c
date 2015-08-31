@@ -64,6 +64,7 @@ int main(int argc, char **argv)
     char* passphrase = 0;
     struct ssh2_userkey *ssh2key = NULL;
     struct RSAKey *ssh1key = NULL;
+    char* fingerprint = 0;
 
     printf("fzputtygen\n");
     printf("Copyright (C) 2008-2015  Tim Kosse\n");
@@ -225,6 +226,7 @@ int main(int argc, char **argv)
 
 	    case SSH_KEYTYPE_SSH1:
 		ssh1key = snew(struct RSAKey);
+		memset(ssh1key, 0, sizeof(struct RSAKey));
 		ret = loadrsakey(infilename, ssh1key, passphrase, &error);
 		if (ret > 0)
 		    error = NULL;
@@ -268,36 +270,96 @@ int main(int argc, char **argv)
 	    else
 		fzprintf(sftpReply, "");
 	}
-	else if (!strcmp(cmd, "data"))
-	{
-	    if (!ssh1key && !ssh2key) {
+	else if (!strcmp(cmd, "loadpub")) {
+	    const char* error = 0;
+	    int ret;
+	    void* blob = NULL;
+	    int bloblen = 0;
+	    if (origcomment) {
+		sfree(origcomment);
+		origcomment = 0;
+	    }
+
+	    switch (intype)
+	    {
+	    case SSH_KEYTYPE_SSH1:
+	    {
+		void *vblob;
+		unsigned char *blob;
+		int n, l, bloblen;
+
+		ssh1key = snew(struct RSAKey);
+		memset(ssh1key, 0, sizeof(struct RSAKey));
+		ret = rsakey_pubblob(infilename, &vblob, &bloblen,
+				     &origcomment, &error);
+		blob = (unsigned char *)vblob;
+
+		n = 4;		       /* skip modulus bits */
+		
+		l = ssh1_read_bignum(blob + n, bloblen - n,
+				     &ssh1key->exponent);
+		if (l < 0) {
+		    error = "SSH-1 public key blob was too short";
+		} else {
+		    n += l;
+		    l = ssh1_read_bignum(blob + n, bloblen - n,
+					 &ssh1key->modulus);
+		    if (l < 0) {
+			error = "SSH-1 public key blob was too short";
+		    } else
+			n += l;
+		}
+		ssh1key->comment = dupstr(origcomment);
+		ssh1key->private_exponent = NULL;
+		ssh1key->p = NULL;
+		ssh1key->q = NULL;
+		ssh1key->iqmp = NULL;
+
+		if (!error) {
+		    char* p;
+
+		    fingerprint = snewn(512, char);
+		    strcpy(fingerprint, "ssh1 ");
+		    p = fingerprint + strlen(fingerprint);
+		    rsa_fingerprint(p, 512 - (p - fingerprint), ssh1key);
+		}
+	    }
+	    break;
+
+	    case SSH_KEYTYPE_SSH2:
+		{
+		    void* ssh2blob;
+		    int bloblen = 0;
+
+		    ssh2blob = ssh2_userkey_loadpub(infilename, 0, &bloblen, &origcomment, &error);
+		    if (ssh2blob) {
+			fingerprint = ssh2_fingerprint_blob(ssh2blob, bloblen);
+			sfree(ssh2blob);
+		    }
+		    else if (!error) {
+			error = "unknown error";
+		    }
+		}
+		break;
+
+	    default:
+		assert(0);
+	    }
+
+	    if (error)
+		fzprintf(sftpError, "Error loading file: %s", error);
+	    else
+		fzprintf(sftpReply, "");
+	}
+	else if (!strcmp(cmd, "data")) {
+	    if (!fingerprint) {
 		fzprintf(sftpError, "No key loaded");
 		continue;
 	    }
 
-	    if (ssh1key)
-	    {
-		char data[512];
-		char* p;
-		
-		strcpy(data, "ssh1 ");
-		p = data + strlen(data);
-		rsa_fingerprint(p, sizeof(data) - (p - data), ssh1key);
-		fzprintf(sftpReply, "%s", data);
-		continue;
-	    }
-
-	    if (ssh2key) {
-		char* fingerprint = ssh2_fingerprint(ssh2key->alg, ssh2key->data);
-		if (fingerprint) {
-		    fzprintf(sftpReply, "%s", fingerprint);
-		    continue;
-		}
-	    }
-	    fzprintf(sftpReply, "");
+	    fzprintf(sftpReply, "%s", fingerprint);
 	}
-	else if (!strcmp(cmd, "write"))
-	{
+	else if (!strcmp(cmd, "write")) {
 	    int ret;
 	    if (!args) {
 		fzprintf(sftpError, "No argument given");
@@ -311,9 +373,8 @@ int main(int argc, char **argv)
 
 	    outfilename = filename_from_str(args);
 
-	    if (ssh1key)
-	    {
-	        ret = saversakey(outfilename, ssh1key, 0);
+	    if (ssh1key) {
+	        ret = saversakey(outfilename, ssh1key, passphrase);
 		if (!ret) {
 		    fzprintf(sftpError, "Unable to save SSH-1 private key");
 		    continue;
@@ -321,7 +382,7 @@ int main(int argc, char **argv)
 	    }
 	    else if (ssh2key)
 	    {
-		ret = ssh2_save_userkey(outfilename, ssh2key, 0);
+		ret = ssh2_save_userkey(outfilename, ssh2key, passphrase);
  		if (!ret) {
 		    fzprintf(sftpError, "Unable to save SSH-2 private key");
 		    continue;
@@ -344,6 +405,8 @@ int main(int argc, char **argv)
 	ssh2key->alg->freekey(ssh2key->data);
 	sfree(ssh2key);
     }
+    if (fingerprint)
+	sfree(fingerprint);
 
     return 0;
 }
