@@ -126,9 +126,6 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 
 void CLoginManager::CachedPasswordFailed(const CServer& server)
 {
-	if (server.GetLogonType() != ASK)
-		return;
-
 	auto it = FindItem(server);
 	if (it != m_passwordCache.end()) {
 		m_passwordCache.erase(it);

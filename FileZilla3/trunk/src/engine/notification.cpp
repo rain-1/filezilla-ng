@@ -35,8 +35,10 @@ enum RequestId CFileExistsNotification::GetRequestID() const
 	return reqId_fileexists;
 }
 
-CInteractiveLoginNotification::CInteractiveLoginNotification(const wxString& challenge)
+CInteractiveLoginNotification::CInteractiveLoginNotification(type t, const wxString& challenge, bool repeated)
 	: m_challenge(challenge)
+	, m_type(t)
+	, m_repeated(repeated)
 {
 }
 
