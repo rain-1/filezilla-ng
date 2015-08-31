@@ -399,7 +399,7 @@ int console_get_userpass_input(prompts_t *p, const unsigned char *in,
      * Preamble.
      */
     /* We only print the `name' caption if we have to... */
-    if (p->name_reqd && p->name)
+    if (p->name)
 	fzprintf_raw_untrusted(sftpRequestPreamble, p->name);
     else
 	fzprintf_raw_untrusted(sftpRequestPreamble, "");

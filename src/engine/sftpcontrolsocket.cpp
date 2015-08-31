@@ -631,7 +631,7 @@ void CSftpControlSocket::OnSftpEvent()
 					break;
 				}
 
-				if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_pCurrentServer->GetLogonType() == KEY) {
+				if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
 					wxString challenge;
 					if (!m_requestPreamble.empty())
 						challenge += m_requestPreamble + _T("\n");
