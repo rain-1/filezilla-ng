@@ -63,7 +63,6 @@ int main(int argc, char **argv)
     char* line = 0;
     char* passphrase = 0;
     struct ssh2_userkey *ssh2key = NULL;
-    struct RSAKey *ssh1key = NULL;
     char* fingerprint = 0;
 
     printf("fzputtygen\n");
@@ -76,8 +75,7 @@ int main(int argc, char **argv)
     printf("\n");
     fflush(stdout);
 
-    while (1)
-    {
+    while (1) {
 	if (line)
 	    sfree(line);
 
@@ -88,8 +86,7 @@ int main(int argc, char **argv)
 	line[strlen(line) - 1] = 0;
 	char* cmd = line, *args = line;
 	
-	while (*args)
-	{
+	while (*args) {
 	    if (*args == ' ') {
 		*(args++) = 0;
 		break;
@@ -99,21 +96,13 @@ int main(int argc, char **argv)
 	if (!*args)
 	    args = 0;
 
-	if (!strcmp(cmd, "file"))
-	{
-	    if (ssh1key)
-	    {
-		freersakey(ssh1key);
-		ssh1key = 0;
-	    }
-	    if (ssh2key)
-	    {
+	if (!strcmp(cmd, "file")) {
+	    if (ssh2key) {
 		ssh2key->alg->freekey(ssh2key->data);
 		sfree(ssh2key);
 		ssh2key = 0;
 	    }
-	    if (passphrase)
-	    {
+	    if (passphrase) {
 		sfree(passphrase);
 		passphrase = 0;
 	    }
@@ -129,6 +118,9 @@ int main(int argc, char **argv)
 	    switch (intype)
 	    {
 	    case SSH_KEYTYPE_SSH1:
+		fzprintf(sftpReply, "3");
+		intype = SSH_KEYTYPE_UNOPENABLE;
+		break;
 	    case SSH_KEYTYPE_SSH2:
 		fzprintf(sftpReply, "0");
 		break;
@@ -145,27 +137,21 @@ int main(int argc, char **argv)
 		break;
 	    }
 	}
-	else if (!strcmp(cmd, "encrypted"))
-	{
-	    if (intype == SSH_KEYTYPE_UNOPENABLE)
-	    {
+	else if (!strcmp(cmd, "encrypted")) {
+	    if (intype == SSH_KEYTYPE_UNOPENABLE) {
 		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
 	    
-	    if (intype == SSH_KEYTYPE_SSH1)
-		encrypted = rsakey_encrypted(infilename, &origcomment);
-	    else if (intype == SSH_KEYTYPE_SSH2)
+	    if (intype == SSH_KEYTYPE_SSH2)
 		encrypted = ssh2_userkey_encrypted(infilename, &origcomment);
 	    else
 		encrypted = import_encrypted(infilename, intype, &origcomment);
 
 	    fzprintf(sftpReply, "%d", encrypted ? 1 : 0);
 	}
-	else if (!strcmp(cmd, "comment"))
-	{
-	    if (intype == SSH_KEYTYPE_UNOPENABLE)
-	    {
+	else if (!strcmp(cmd, "comment")) {
+	    if (intype == SSH_KEYTYPE_UNOPENABLE) {
 		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
@@ -174,15 +160,13 @@ int main(int argc, char **argv)
 	    else
 		fzprintf(sftpReply, "");
 	}
-	else if (!strcmp(cmd, "password"))
-	{
+	else if (!strcmp(cmd, "password")) {
 	    if (!args) {
 		fzprintf(sftpError, "No argument given");
 		continue;
 	    }
 
-	    if (intype == SSH_KEYTYPE_UNOPENABLE)
-	    {
+	    if (intype == SSH_KEYTYPE_UNOPENABLE) {
 		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
@@ -192,48 +176,27 @@ int main(int argc, char **argv)
 	    passphrase = strdup(args);
 	    fzprintf(sftpReply, "");
 	}
-	else if (!strcmp(cmd, "load"))
-	{
+	else if (!strcmp(cmd, "load")) {
 	    const char* error = 0;
 
-	    if (ssh1key)
-	    {
-		freersakey(ssh1key);
-		ssh1key = 0;
-	    }
-	    if (ssh2key)
-	    {
+	    if (ssh2key) {
 		ssh2key->alg->freekey(ssh2key->data);
 		sfree(ssh2key);
 		ssh2key = 0;
 	    }
 
-	    if (intype == SSH_KEYTYPE_UNOPENABLE)
-	    {
+	    if (intype == SSH_KEYTYPE_UNOPENABLE) {
 		fzprintf(sftpError, "No key file opened");
 		continue;
 	    }
 
-	    if (encrypted && !passphrase)
-	    {
+	    if (encrypted && !passphrase) {
 		fzprintf(sftpError, "No password given");
 		continue;
 	    }
 
 	    switch (intype)
 	    {
-		int ret;
-
-	    case SSH_KEYTYPE_SSH1:
-		ssh1key = snew(struct RSAKey);
-		memset(ssh1key, 0, sizeof(struct RSAKey));
-		ret = loadrsakey(infilename, ssh1key, passphrase, &error);
-		if (ret > 0)
-		    error = NULL;
-		else if (!error)
-		    error = "unknown error";
-		break;
-
 	    case SSH_KEYTYPE_SSH2:
 		ssh2key = ssh2_load_userkey(infilename, passphrase, &error);
 		if (ssh2key == SSH2_WRONG_PASSPHRASE)
@@ -280,52 +243,7 @@ int main(int argc, char **argv)
 		origcomment = 0;
 	    }
 
-	    switch (intype)
-	    {
-	    case SSH_KEYTYPE_SSH1:
-	    {
-		void *vblob;
-		unsigned char *blob;
-		int n, l, bloblen;
-
-		ssh1key = snew(struct RSAKey);
-		memset(ssh1key, 0, sizeof(struct RSAKey));
-		ret = rsakey_pubblob(infilename, &vblob, &bloblen,
-				     &origcomment, &error);
-		blob = (unsigned char *)vblob;
-
-		n = 4;		       /* skip modulus bits */
-		
-		l = ssh1_read_bignum(blob + n, bloblen - n,
-				     &ssh1key->exponent);
-		if (l < 0) {
-		    error = "SSH-1 public key blob was too short";
-		} else {
-		    n += l;
-		    l = ssh1_read_bignum(blob + n, bloblen - n,
-					 &ssh1key->modulus);
-		    if (l < 0) {
-			error = "SSH-1 public key blob was too short";
-		    } else
-			n += l;
-		}
-		ssh1key->comment = dupstr(origcomment);
-		ssh1key->private_exponent = NULL;
-		ssh1key->p = NULL;
-		ssh1key->q = NULL;
-		ssh1key->iqmp = NULL;
-
-		if (!error) {
-		    char* p;
-
-		    fingerprint = snewn(512, char);
-		    strcpy(fingerprint, "ssh1 ");
-		    p = fingerprint + strlen(fingerprint);
-		    rsa_fingerprint(p, 512 - (p - fingerprint), ssh1key);
-		}
-	    }
-	    break;
-
+	    switch (intype) {
 	    case SSH_KEYTYPE_SSH2:
 		{
 		    void* ssh2blob;
@@ -366,27 +284,17 @@ int main(int argc, char **argv)
 		continue;
 	    }
 
-	    if (!ssh1key && !ssh2key) {
+	    if (!ssh2key) {
 		fzprintf(sftpError, "No key loaded");
 		continue;
 	    }
 
 	    outfilename = filename_from_str(args);
 
-	    if (ssh1key) {
-	        ret = saversakey(outfilename, ssh1key, passphrase);
-		if (!ret) {
-		    fzprintf(sftpError, "Unable to save SSH-1 private key");
-		    continue;
-		}
-	    }
-	    else if (ssh2key)
-	    {
-		ret = ssh2_save_userkey(outfilename, ssh2key, passphrase);
- 		if (!ret) {
-		    fzprintf(sftpError, "Unable to save SSH-2 private key");
-		    continue;
-		}
+	    ret = ssh2_save_userkey(outfilename, ssh2key, passphrase);
+ 	    if (!ret) {
+		fzprintf(sftpError, "Unable to save SSH-2 private key");
+		continue;
 	    }
 
 	    fzprintf(sftpReply, "");
@@ -399,8 +307,6 @@ int main(int argc, char **argv)
 	sfree(line);
     if (passphrase)
 	sfree(passphrase);
-    if (ssh1key)
-	freersakey(ssh1key);
     if (ssh2key) {
 	ssh2key->alg->freekey(ssh2key->data);
 	sfree(ssh2key);
