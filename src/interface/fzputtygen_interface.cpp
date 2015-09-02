@@ -49,7 +49,13 @@ int CFZPuttyGenInterface::NeedsConversion(wxString keyFile, bool silent)
 		return -1;
 	if (code == error || (reply != _T("0") && reply != _T("1"))) {
 		if (!silent) {
-			const wxString msg = wxString::Format(_("The file '%s' could not be loaded or does not contain a private key."), keyFile);
+			wxString msg;
+			if (reply == _T("3")) {
+				msg.Printf(_("The file '%s' contains an SSH1 key. The SSH1 protocol has been deprecated, FileZilla only supports SSH2 keys."), keyFile);
+			}
+			else {
+				msg.Printf(_("The file '%s' could not be loaded or does not contain a private key."), keyFile);
+			}
 			wxMessageBoxEx(msg, _("Could not load key file"), wxICON_EXCLAMATION);
 		}
 		return -1;
