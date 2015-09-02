@@ -1065,23 +1065,18 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh)
 	 val != NULL;
 	 val = conf_get_str_strs(ssh->conf, CONF_fz_keyfiles, file, &file))
     {
+	const char* error = NULL;
 	++num_tried;
 
 	Loaded_keyfile_list* loaded = new_loaded_keyfile(file);
 
 	type = key_type(loaded->file);
-	if (type != SSH_KEYTYPE_SSH2) {
-	    free_loaded_keyfile(loaded);
-	    continue;
-	}
 
 	if (type == SSH_KEYTYPE_SSH2) {
-	    const char* error = NULL;
-
 	    loaded->publickey_blob =
 		ssh2_userkey_loadpub(loaded->file,
 				     &loaded->publickey_algorithm,
-				     &loaded->publickey_bloblen, 
+				     &loaded->publickey_bloblen,
 				     &loaded->publickey_comment, &error);
 	    if (!loaded->publickey_blob) {
 		if (!error) {
@@ -1105,6 +1100,37 @@ static Loaded_keyfile_list* load_keyfiles(Ssh ssh)
 		free_loaded_keyfile(loaded);
 		continue;
 	    }
+	}
+	else if (type == SSH_KEYTYPE_OPENSSH_PEM || type == SSH_KEYTYPE_OPENSSH_NEW || type == SSH_KEYTYPE_SSHCOM) {
+	    loaded->ssh2key = import_ssh2(loaded->file, type, "", &error);
+	    if (loaded->ssh2key == SSH2_WRONG_PASSPHRASE) {
+		loaded->ssh2key = NULL;
+		logeventf(ssh, "Failed to load private key '%s': Key is encrypted and not in PuTTY format.", filename_to_str(loaded->file));
+		free_loaded_keyfile(loaded);
+		continue;
+	    }
+	    else if (!loaded->ssh2key) {
+		if (!error) {
+		    error = "unknown";
+		}
+		logeventf(ssh, "Failed to load private key '%s': %s", filename_to_str(loaded->file), error);
+		free_loaded_keyfile(loaded);
+		continue;
+	    }
+	    else {
+		loaded->publickey_comment = strdup(loaded->ssh2key->comment);
+		loaded->publickey_algorithm = strdup(loaded->ssh2key->alg->name);
+		loaded->publickey_blob = loaded->ssh2key->alg->public_blob(loaded->ssh2key->data, &loaded->publickey_bloblen);
+		if (!loaded->publickey_blob) {
+		    logeventf(ssh, "Failed to load private key '%s': %s", filename_to_str(loaded->file), error);
+		    free_loaded_keyfile(loaded);
+		    continue;
+		}
+	    }
+	}
+	else {
+	    free_loaded_keyfile(loaded);
+	    continue;
 	}
 
 	loaded->next = loaded_list;
