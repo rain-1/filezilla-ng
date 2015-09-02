@@ -3095,6 +3095,7 @@ static int psftp_connect(char *userhost, char *user, int portnumber)
         conf_set_int(conf, CONF_port, 22);
     }
 
+#if 0
     /*
      * If saved session / Default Settings says SSH-1 (`1 only' or `1'),
      * then change it to SSH-2, on the grounds that that's more likely to
@@ -3103,6 +3104,10 @@ static int psftp_connect(char *userhost, char *user, int portnumber)
      */
     if ((conf_get_int(conf, CONF_sshprot) & ~1) != 2)   /* is it 2 or 3? */
 	conf_set_int(conf, CONF_sshprot, 2);
+#else
+    /* FZ: Require SSH2 */
+    conf_set_int(conf, CONF_sshprot, 3);
+#endif
 
     /*
      * Enact command-line overrides.
