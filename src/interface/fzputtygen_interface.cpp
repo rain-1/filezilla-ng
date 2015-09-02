@@ -47,10 +47,10 @@ int CFZPuttyGenInterface::NeedsConversion(wxString keyFile, bool silent)
 	ReplyCode code = GetReply(reply);
 	if (code == failure)
 		return -1;
-	if (code == error || (reply != _T("0") && reply != _T("1"))) {
+	if (code == error || (reply != _T("ok") && reply != _T("convertible"))) {
 		if (!silent) {
 			wxString msg;
-			if (reply == _T("3")) {
+			if (reply == _T("incompatible")) {
 				msg.Printf(_("The file '%s' contains an SSH1 key. The SSH1 protocol has been deprecated, FileZilla only supports SSH2 keys."), keyFile);
 			}
 			else {
@@ -61,7 +61,7 @@ int CFZPuttyGenInterface::NeedsConversion(wxString keyFile, bool silent)
 		return -1;
 	}
 
-	return reply == _T("1") ? 1 : 0;
+	return reply == _T("convertible") ? 1 : 0;
 }
 
 int CFZPuttyGenInterface::IsKeyFileEncrypted(wxString keyFile, bool silent)
@@ -90,11 +90,6 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		return false;
 	}
 	
-	int encrypted = IsKeyFileEncrypted(keyFile, silent);
-	if (encrypted < 0) {
-		return false;
-	}
-
 	wxString reply;
 	ReplyCode code;
 	if (needs_conversion) {
@@ -102,50 +97,40 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 			return false;
 		}
 
-		wxString msg;
-		if (needs_conversion) {
-			msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
+		int encrypted = IsKeyFileEncrypted(keyFile, silent);
+		if (encrypted < 0) {
+			return false;
 		}
 
+		wxString msg = wxString::Format(_("The file '%s' is not in a format supported by FileZilla.\nWould you like to convert it into a supported format?"), keyFile);
 		int res = wxMessageBoxEx(msg, _("Convert key file"), wxICON_QUESTION | wxYES_NO);
 		if (res != wxYES)
 			return false;
 
-		if (encrypted) {
-			msg = wxString::Format(_("Enter the password for the file '%s'.\nThe converted file will be protected with the same password."), keyFile);
+		msg = wxString::Format(_("Enter the password for the file '%s'.\nThe converted file will be protected with the same password."), keyFile);
+		CInputDialog dlg;
+		if (!dlg.Create(m_parent, _("Password required"), msg))
+			return false;
 
-			CInputDialog dlg;
-			if (!dlg.Create(m_parent, _("Password required"), msg))
-				return false;
+		dlg.SetPasswordMode(true);
 
-			dlg.SetPasswordMode(true);
-
-			if (dlg.ShowModal() != wxID_OK)
-				return false;
-			if (!Send(_T("password " + dlg.GetValue())))
-				return false;
-			wxString reply;
-			if (GetReply(reply) != success)
-				return false;
-		}
-
-		if (!Send(_T("load")))
+		if (dlg.ShowModal() != wxID_OK)
+			return false;
+		if (!Send(_T("password " + dlg.GetValue())))
 			return false;
 		wxString reply;
 		code = GetReply(reply);
-		if (code == failure)
-			return false;
 		if (code != success) {
 			msg = wxString::Format(_("Failed to load private key: %s"), reply);
 			wxMessageBoxEx(msg, _("Could not load private key"), wxICON_EXCLAMATION);
 			return false;
 		}
 
-		wxFileDialog dlg(m_parent, _("Select filename for converted key file"), wxString(), wxString(), _T("PuTTY private key files (*.ppk)|*.ppk"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
-		if (dlg.ShowModal() != wxID_OK)
+		wxFileDialog fileDlg(m_parent, _("Select filename for converted key file"), wxString(), wxString(), _T("PuTTY private key files (*.ppk)|*.ppk"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		if (fileDlg.ShowModal() != wxID_OK)
 			return false;
 
-		wxString newName = dlg.GetPath();
+		wxString newName = fileDlg.GetPath();
 		if (newName.empty())
 			return false;
 
@@ -166,19 +151,14 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 		keyFile = newName;
 	}
 	
-	if (!Send(_T("loadpub")))
+	if (!Send(_T("fingerprint")))
 		return false;
-	code = GetReply(reply);
+	code = GetReply(data);
 	if (code != success)
 		return false;
 
 	Send(_T("comment"));
 	code = GetReply(comment);
-	if (code != success)
-		return false;
-
-	Send(_T("data"));
-	code = GetReply(data);
 	if (code != success)
 		return false;
 
