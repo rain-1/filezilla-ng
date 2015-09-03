@@ -11,6 +11,7 @@ noinst_LIBRARIES = libfzputtycommon.a
 
 libfzputtycommon_a_SOURCES = \
 			conf.c \
+			import.c \
 			misc.c \
 			sshaes.c \
 			sshbcrypt.c \
@@ -55,7 +56,6 @@ fzsftp_SOURCES = \
 		settings.c
 
 fzputtygen_SOURCES = cmdgen.c \
-		     import.c \
 		     notiming.c
 
 noinst_HEADERS = fzprintf.h \
