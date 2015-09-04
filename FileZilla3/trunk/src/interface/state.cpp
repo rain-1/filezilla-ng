@@ -883,7 +883,11 @@ void CState::ListingFailed(int error)
 {
 	if (m_sync_browse.is_changing && !m_sync_browse.target_path.empty()) {
 		wxDialogEx dlg;
-		dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"));
+		if (!dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"))) {
+			SetSyncBrowse(false);
+			return;
+		}
+
 		xrc_call(dlg, "ID_SYNCBROWSE_NONEXISTING_LABEL", &wxStaticText::SetLabel, wxString::Format(_("The remote directory '%s' does not exist."), m_sync_browse.target_path.GetPath()));
 		xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::SetLabel, _("Create &missing remote directory and enter it"));
 		xrc_call(dlg, "ID_SYNCBROWSE_DISABLE", &wxRadioButton::SetLabel, _("&Disable synchronized browsing and continue changing the local directory"));
@@ -954,7 +958,9 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 				wxString msg = error + _T("\n") + _("Disable synchronized browsing and continue changing the remote directory?");
 
 				wxDialogEx dlg;
-				dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"));
+				if (!dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"))) {
+					return false;
+				}
 				xrc_call(dlg, "ID_SYNCBROWSE_NONEXISTING_LABEL", &wxStaticText::SetLabel, wxString::Format(_("The local directory '%s' does not exist."), local_path.GetPath()));
 				xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::SetLabel, _("Create &missing local directory and enter it"));
 				xrc_call(dlg, "ID_SYNCBROWSE_DISABLE", &wxRadioButton::SetLabel, _("&Disable synchronized browsing and continue changing the remote directory"));
