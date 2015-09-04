@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 			    int bloblen = 0;
 			    char* comment = NULL;
 
-			    ssh2blob = ssh2_userkey_loadpub(infilename, 0, &bloblen, &origcomment, &error);
+			    ssh2blob = ssh2_userkey_loadpub(infilename, 0, &bloblen, &comment, &error);
 			    if (ssh2blob) {
 				fingerprint = ssh2_fingerprint_blob(ssh2blob, bloblen);
 				sfree(ssh2blob);
