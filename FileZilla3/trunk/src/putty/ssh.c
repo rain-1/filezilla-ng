@@ -10114,6 +10114,7 @@ static void do_ssh2_authconn(Ssh ssh, const unsigned char *in, int inlen,
 
 		    ssh2_pkt_send(ssh, s->pktout);
 		    s->type = AUTH_TYPE_PUBLICKEY;
+		    s->loaded_keyfile_list->ssh2key = key;
 		}
 		next_keyfile = s->loaded_keyfile_list->next;
 		free_loaded_keyfile(s->loaded_keyfile_list);
