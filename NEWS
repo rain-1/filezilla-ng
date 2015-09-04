@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.14.0-rc1 (2015-09-04)
+
++ Add support for password-protected SSH private keys
++ SSH private keys not in PuTTY's native format no longer need to be converted if they aren't password-protected
++ When using synchronized browsing, changing to a directory that does not exist on both sides now asks whether the missing directory should be created
+- SSH1 support for SFTP has been disabled
+
 3.13.1 (2015-08-24)
 
 - Fix SFTP component crashing on some combinations of encryption and key exchange algorithm
