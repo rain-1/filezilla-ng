@@ -6,9 +6,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-10 20:40+0200\n"
-"PO-Revision-Date: 2015-08-06 15:16+0200\n"
-"Last-Translator: Igor Chomko <igorchomko@gmail.com>\n"
+"POT-Creation-Date: 2015-09-04 13:26+0200\n"
+"PO-Revision-Date: 2015-08-27 11:01+0300\n"
+"Last-Translator: Igor Chomko <igor.chomko@gmail.com>\n"
 "Language-Team: Igor Chomko <igorchomko@gmail.com>\n"
 "Language: uk_UA\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.1\n"
+"X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-Bookmarks: 948,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
@@ -89,7 +89,7 @@ msgstr[0] "%d файл. Загальний розмір: Принаймні %s"
 msgstr[1] "%d файли. Загальний розмір: Принаймні %s"
 msgstr[2] "%d файлів. Загальний розмір: Принаймні %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2784
+#: ../../locales/../src/interface/QueueView.cpp:2774
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d файлів додано до черги"
@@ -411,6 +411,20 @@ msgstr "&Видалити символічне посилання"
 msgid "&Directory comparison"
 msgstr "&Порівняння каталогів"
 
+#: ../../locales/../src/interface/state.cpp:893
+msgid ""
+"&Disable synchronized browsing and continue changing the local directory"
+msgstr ""
+"&Вимкнути синхронізований перегляд і продовжити змінювання локального "
+"каталогу"
+
+#: ../../locales/../src/interface/state.cpp:966
+msgid ""
+"&Disable synchronized browsing and continue changing the remote directory"
+msgstr ""
+"&Вимкнути синхронізований перегляд і продовжити змінювання віддаленого "
+"каталогу"
+
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1809
 msgid "&Discard local file then download and edit file anew"
 msgstr ""
@@ -718,7 +732,7 @@ msgstr "&Новий"
 msgid "&New Site"
 msgstr "&Новий сайт"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1708
+#: ../../locales/../src/interface/Mainfrm.cpp:1687
 msgid "&New version available!"
 msgstr "&Доступна нова версія!"
 
@@ -1067,7 +1081,7 @@ msgstr "&Користувач:"
 msgid "&Username:"
 msgstr "&Ім'я користувача:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1702
+#: ../../locales/../src/interface/Mainfrm.cpp:1681
 #, c-format
 msgid "&Version %s"
 msgstr "&Версія %s"
@@ -1114,7 +1128,7 @@ msgid "'%s' is not a directory."
 msgstr "'%s' не є каталогом."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:426
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:965
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:967
 msgid "'Account' logontype not supported by selected protocol"
 msgstr ""
 "'Обліковий запис' за типом входження не підтримується вибраним протоколом"
@@ -1127,7 +1141,7 @@ msgstr ""
 "Типи входу 'Звичайний' і 'Обліковий запис' відсутні; використовуйте 'Запит "
 "паролю', натомість."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:980
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:982
 msgid ""
 "'Normal' and 'Account' logontypes are not available. Your entry has been "
 "changed to 'Ask for password'."
@@ -1135,7 +1149,7 @@ msgstr ""
 "Типи входу 'Нормальний' і 'Обліковий запис' відсутні. Ваш вхід було змінено "
 "на 'Запит паролю'."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:598
+#: ../../locales/../src/interface/Mainfrm.cpp:578
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1273,7 +1287,7 @@ msgstr "Потрібно встановити типовий редактор."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:118
-#: ../../locales/../src/interface/state.cpp:740
+#: ../../locales/../src/interface/state.cpp:742
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Каталог неможливо перетягнути до одного з його підкаталогів."
 
@@ -1291,11 +1305,11 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Попередньо відкритий файл було змінено."
 
-#: ../../locales/../src/interface/edithandler.cpp:1645
+#: ../../locales/../src/interface/edithandler.cpp:1644
 msgid "A file with that name is already being transferred."
 msgstr "Файл з таким іменем знаходиться в процесі передачі."
 
-#: ../../locales/../src/interface/edithandler.cpp:1649
+#: ../../locales/../src/interface/edithandler.cpp:1648
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "Файл з цим іменем знаходиться в процесі редагування"
@@ -1318,7 +1332,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Доступна нова версія FileZilla:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:658
+#: ../../locales/../src/interface/Mainfrm.cpp:638
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1335,7 +1349,7 @@ msgstr ""
 "Правильно налаштований сервер цього не вимагає. Якщо у вас виникла така "
 "потреба, контактуйте з адміністратором сервера."
 
-#: ../../locales/../src/interface/state.cpp:256
+#: ../../locales/../src/interface/state.cpp:257
 msgid ""
 "A remote operation is in progress and synchronized browsing is enabled.\n"
 "Disable synchronized browsing and continue changing the local directory?"
@@ -1392,8 +1406,8 @@ msgstr "Над списками файлу"
 #: ../../locales/../src/interface/manual_transfer.cpp:187
 #: ../../locales/../src/interface/manual_transfer.cpp:539
 #: ../../locales/../src/interface/manual_transfer.cpp:540
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1307
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1308
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1310
 msgid "Account"
 msgstr "Обліковий запис"
 
@@ -1496,7 +1510,7 @@ msgstr "Зав&жди виконувати цю дію"
 msgid "Algorithm:"
 msgstr "Алгоритм:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2953
+#: ../../locales/../src/interface/QueueView.cpp:2943
 msgid "All files have been successfully transferred"
 msgstr "Усі файли були успішно передані"
 
@@ -1505,7 +1519,7 @@ msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr ""
 "Усі порти в заданому діапазоні повинні знаходитись в межах від 1024 до 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2949
+#: ../../locales/../src/interface/QueueView.cpp:2939
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1556,7 +1570,7 @@ msgstr ""
 "В якості альтернативи, ви, також, можете завантажити останню версію "
 "FileZilla з веб сайту:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1919
+#: ../../locales/../src/interface/QueueView.cpp:1913
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1565,7 +1579,7 @@ msgstr ""
 "Помилка при завантаженні черги передачі з \"%s\".\n"
 "Деякі елементи черги неможливо відновити."
 
-#: ../../locales/../src/interface/QueueView.cpp:1829
+#: ../../locales/../src/interface/QueueView.cpp:1823
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1574,7 +1588,7 @@ msgstr ""
 "Помилка збереження черги передачі до \"%s\".\n"
 "Деякі елементи черги неможливо зберегти."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2028
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2030
 msgid ""
 "An item with the same name as the dragged item already exists at the target "
 "location."
@@ -1587,18 +1601,18 @@ msgstr ""
 #: ../../locales/../src/interface/manual_transfer.cpp:190
 #: ../../locales/../src/interface/manual_transfer.cpp:206
 #: ../../locales/../src/interface/manual_transfer.cpp:538
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1306
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1580
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1308
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1582
 msgid "Anonymous"
 msgstr "Анонімний"
 
-#: ../../locales/../src/interface/state.cpp:914
+#: ../../locales/../src/interface/state.cpp:943
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
 "Виконується ще один віддалений процес, зараз зміна директорії неможлива."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:806
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:808
 msgid "Any changes made in the Site Manager could not be saved."
 msgstr "Внесення будь-яких змін в Сайт Менеджері не може бути збереженим."
 
@@ -1630,7 +1644,7 @@ msgstr "Застосувати лише до &файлів"
 msgid "Archive"
 msgstr "Архів"
 
-#: ../../locales/../src/engine/socket.cpp:1094
+#: ../../locales/../src/engine/socket.cpp:1095
 msgid "Argument buffer overflow"
 msgstr "Аргумент переповнення буфера"
 
@@ -1680,7 +1694,7 @@ msgstr "На цьому етапі усю необхідну інформаці�
 msgid "Attribute"
 msgstr "Атрибут"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:658
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:661
 msgid "Authentication failed."
 msgstr "Невдала автентифікація."
 
@@ -1709,7 +1723,7 @@ msgstr "B <Символ елементу для байтів.Переклада�
 msgid "B&ypass proxy"
 msgstr "Про&міжний проксі"
 
-#: ../../locales/../src/engine/socket.cpp:1058
+#: ../../locales/../src/engine/socket.cpp:1059
 msgid "Bad file descriptor"
 msgstr "Неправильний дескриптор файлу"
 
@@ -1721,8 +1735,8 @@ msgstr "Базові інструкції користування"
 msgid "Behaviour"
 msgstr "Поведінка"
 
-#: ../../locales/../src/interface/edithandler.cpp:1115
-#: ../../locales/../src/interface/edithandler.cpp:1143
+#: ../../locales/../src/interface/edithandler.cpp:1114
+#: ../../locales/../src/interface/edithandler.cpp:1142
 msgid "Being edited"
 msgstr "В процесі редагування"
 
@@ -1740,7 +1754,7 @@ msgstr "Панель оголошень"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:261
 #: ../../locales/../src/interface/menu_bar.cpp:304
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:416
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:418
 msgid "Bookmark"
 msgstr "Закладка"
 
@@ -1804,8 +1818,8 @@ msgstr "На&строювані асоціації типів файлів:"
 msgid "CPU features:"
 msgstr "Характеристики ЦП"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1571
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1210
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1568
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1215
 msgid "Calculating timezone offset of server..."
 msgstr "Обчислення зсуву часового поясу відносно сервера..."
 
@@ -1843,6 +1857,7 @@ msgstr "Не можу записати дані в файл: %s"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3186
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3256
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3518
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3738
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:604
 msgid "Cancel"
 msgstr "Скасувати"
@@ -1860,15 +1875,15 @@ msgstr "Скасовує поточну операцію"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "Нема доступу '%s', не встановлені носії або диск не готовий."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:571
+#: ../../locales/../src/interface/Mainfrm.cpp:551
 msgid "Cannot add server to Site Manager"
 msgstr "Неможливо додати сервер до Сайт Менеджера"
 
-#: ../../locales/../src/engine/socket.cpp:1111
+#: ../../locales/../src/engine/socket.cpp:1112
 msgid "Cannot assign requested address"
 msgstr "Неможливо призначити запитану адресу"
 
-#: ../../locales/../src/interface/context_control.cpp:345
+#: ../../locales/../src/interface/context_control.cpp:349
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -1887,8 +1902,8 @@ msgstr ""
 msgid "Cannot create new filter"
 msgstr "Неможливо створити новий фільтр"
 
-#: ../../locales/../src/interface/edithandler.cpp:1575
-#: ../../locales/../src/interface/edithandler.cpp:1623
+#: ../../locales/../src/interface/edithandler.cpp:1574
+#: ../../locales/../src/interface/edithandler.cpp:1622
 #: ../../locales/../src/interface/LocalListView.cpp:1700
 #: ../../locales/../src/interface/search.cpp:712
 msgid "Cannot edit file"
@@ -1919,7 +1934,7 @@ msgstr "Неможливо завантажити панель Швидкого 
 msgid "Cannot load key file"
 msgstr "Неможливо завантажити файл ключа"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1004
+#: ../../locales/../src/interface/Mainfrm.cpp:984
 msgid "Cannot load toolbar from resource file"
 msgstr "Неможливо завантажити панель інструментів з вихідного файлу"
 
@@ -1928,7 +1943,7 @@ msgid "Cannot remember password"
 msgstr "Неможливо запам'ятати пароль"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:679
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1196
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1198
 msgid "Cannot rename entry"
 msgstr "Неможливо перейменувати компонент"
 
@@ -1951,17 +1966,17 @@ msgstr "Неможливо зберегти налаштування фільт�
 msgid "Cannot select filter"
 msgstr "Неможливо вибрати фільтр"
 
-#: ../../locales/../src/interface/edithandler.cpp:1473
-#: ../../locales/../src/interface/edithandler.cpp:1477
-#: ../../locales/../src/interface/edithandler.cpp:1512
+#: ../../locales/../src/interface/edithandler.cpp:1472
+#: ../../locales/../src/interface/edithandler.cpp:1476
+#: ../../locales/../src/interface/edithandler.cpp:1511
 msgid "Cannot set file association"
 msgstr "Неможливо встановити асоціацію типу файлу"
 
-#: ../../locales/../src/interface/edithandler.cpp:1074
+#: ../../locales/../src/interface/edithandler.cpp:1073
 msgid "Cannot show dialog"
 msgstr "Неможливо показати діалог"
 
-#: ../../locales/../src/interface/edithandler.cpp:1645
+#: ../../locales/../src/interface/edithandler.cpp:1644
 msgid "Cannot view/edit selected file"
 msgstr "Перегляд / редагування обраного файлу неможливе"
 
@@ -2076,17 +2091,17 @@ msgstr "Контрольна сума співпадає у файлі %s\n"
 msgid "Checksum mismatch on file %s\n"
 msgstr "Контрольна сума не співпадає у файлі %s\n"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1481
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1483
 msgid "Choose a key file"
 msgstr "Вибрати файл ключа"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1512
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1514
 msgid "Choose the default local directory"
 msgstr "Виберіть типовий локальний каталог"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:124
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:364
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2240
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2242
 msgid "Choose the local directory"
 msgstr "Вибрати локальний каталог"
 
@@ -2145,8 +2160,8 @@ msgid "Close &all other tabs"
 msgstr "Закрити &усі інші вкладки"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1145
-#: ../../locales/../src/interface/Mainfrm.cpp:1166
+#: ../../locales/../src/interface/Mainfrm.cpp:1125
+#: ../../locales/../src/interface/Mainfrm.cpp:1146
 msgid "Close FileZilla"
 msgstr "Закрити FileZilla"
 
@@ -2174,9 +2189,9 @@ msgstr "Встановлення стовпців"
 msgid "Command and its arguments should be properly quoted."
 msgstr "Команда та її параметри мають бути правильно залапковані."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:244
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:257
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:271
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:224
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:237
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:251
 msgid "Command failed"
 msgstr "Невдала команда"
 
@@ -2276,7 +2291,7 @@ msgid "Confirm deletion"
 msgstr "Підтвердити видалення"
 
 #: ../../locales/../src/engine/local_filesys.cpp:129
-#: ../../locales/../src/interface/edithandler.cpp:1587
+#: ../../locales/../src/interface/edithandler.cpp:1586
 #: ../../locales/../src/interface/LocalListView.cpp:1664
 #: ../../locales/../src/interface/RemoteListView.cpp:1394
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1038
@@ -2319,14 +2334,14 @@ msgid "Connecting to %s"
 msgstr "Під'єднання до %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:1047
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4243
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4240
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Під'єднання до %s через проксі %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:955
 #: ../../locales/../src/engine/proxy.cpp:243
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:371
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:369
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Під'єднання до %s..."
@@ -2335,7 +2350,7 @@ msgstr "Під'єднання до %s..."
 msgid "Connection"
 msgstr "Під'єднання"
 
-#: ../../locales/../src/engine/socket.cpp:1072
+#: ../../locales/../src/engine/socket.cpp:1073
 msgid "Connection aborted"
 msgstr "З'єднання перервано"
 
@@ -2360,7 +2375,7 @@ msgstr "Невдала спроба під'єднання з \"%s\"."
 msgid "Connection attempt interrupted by user"
 msgstr "Спробу під'єднання перервано користувачем"
 
-#: ../../locales/../src/engine/socket.cpp:1065
+#: ../../locales/../src/engine/socket.cpp:1066
 msgid "Connection attempt timed out"
 msgstr "Час спроби з'єднання вичерпано"
 
@@ -2398,15 +2413,15 @@ msgstr "З'єднання не дозволено встановленими п�
 msgid "Connection refused"
 msgstr "У з'єднанні відмовлено"
 
-#: ../../locales/../src/engine/socket.cpp:1059
+#: ../../locales/../src/engine/socket.cpp:1060
 msgid "Connection refused by server"
 msgstr "У з'єднанні відмовлено сервером"
 
-#: ../../locales/../src/engine/socket.cpp:1068
+#: ../../locales/../src/engine/socket.cpp:1069
 msgid "Connection reset by network"
 msgstr "З'єднання скинуте сервером"
 
-#: ../../locales/../src/engine/socket.cpp:1073
+#: ../../locales/../src/engine/socket.cpp:1074
 msgid "Connection reset by peer"
 msgstr "З'єднання скинуто вузлом кешування"
 
@@ -2438,18 +2453,18 @@ msgstr "З'єднання з сервером закрилось дочасно.
 msgid "Connection with the test server failed."
 msgstr "З'єднання з тестовим сервером невдале."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:109
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:106
 msgid "Convert key file"
 msgstr "Конвертувати файл ключа"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:625
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1847
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1849
 #, c-format
 msgid "Copy (%d) of %s"
 msgstr "Копія (%d) з %s"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:605
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1827
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1829
 #, c-format
 msgid "Copy of %s"
 msgstr "Копія з %s"
@@ -2469,7 +2484,7 @@ msgstr "Неможливо прийняти з'єднання: %s"
 msgid "Could not add connection to Site Manager"
 msgstr "Неможливо додати з'єднання до Сайт Менеджера"
 
-#: ../../locales/../src/interface/state.cpp:755
+#: ../../locales/../src/interface/state.cpp:757
 msgid "Could not complete operation"
 msgstr "Неможливо завершити операцію"
 
@@ -2482,12 +2497,12 @@ msgstr "Неможливо під'єднатися до серверу"
 msgid "Could not connect to server: %s"
 msgstr "Неможливо під'єднатися до сервера: %s"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:786
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:792
 msgid "Could not convert command to server encoding"
 msgstr "Неможливо сконвертувати команду до серверного кодування"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:153
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:162
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:139
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:148
 msgid "Could not convert private key"
 msgstr "Неможливо сконвертувати приватний ключ"
 
@@ -2521,7 +2536,7 @@ msgstr ""
 "Або неправильно встановлено розширення оболонки, або ви не помістили файли у "
 "вікно Провідника."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4092
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4089
 msgid "Could not establish connection to server"
 msgstr "Неможливо встановити з'єднання з сервером"
 
@@ -2557,16 +2572,16 @@ msgstr ""
 "Неможливо отримати виразне ім'я предмету сертифіката, невдала функція "
 "gnutls_x509_get_dn"
 
-#: ../../locales/../src/interface/state.cpp:900
+#: ../../locales/../src/interface/state.cpp:929
 msgid "Could not get full remote path."
 msgstr "Неможливо отримати повний віддалений шлях."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:257
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:271
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:237
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:251
 msgid "Could not get reply from fzputtygen."
 msgstr "Неможливо отримати відповідь від fzputtygen."
 
-#: ../../locales/../src/interface/edithandler.cpp:1575
+#: ../../locales/../src/interface/edithandler.cpp:1574
 #: ../../locales/../src/interface/search.cpp:712
 msgid "Could not get temporary directory to download file into."
 msgstr "Неможливо отримати тимчасовий каталог для завантаження файлів."
@@ -2597,15 +2612,15 @@ msgstr ""
 "доступ.\n"
 "Будь-які зміни, зроблені в Сайт Менеджері, не будуть збережені."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:53
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:59
 msgid "Could not load key file"
 msgstr "Неможливо завантажити файл ключа"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:139
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:125
 msgid "Could not load private key"
 msgstr "Неможливо завантажити приватний ключ"
 
-#: ../../locales/../src/interface/state.cpp:922
+#: ../../locales/../src/interface/state.cpp:951
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2616,7 +2631,7 @@ msgstr ""
 "'%s'.\n"
 "Вимкнути синхронізований перегляд та продовжити змінювати віддалений каталог?"
 
-#: ../../locales/../src/interface/state.cpp:359
+#: ../../locales/../src/interface/state.cpp:361
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2627,7 +2642,7 @@ msgstr ""
 "'%s'.\n"
 "Синхронізований перегляд вимкнуто."
 
-#: ../../locales/../src/interface/state.cpp:265
+#: ../../locales/../src/interface/state.cpp:266
 #, c-format
 msgid ""
 "Could not obtain corresponding remote directory for the local directory "
@@ -2668,20 +2683,20 @@ msgstr "Неможливо читати з гнізда проксі: %s"
 msgid "Could not read server item."
 msgstr "Читання елементу сервера неможливе."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2592
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2589
 #, c-format
 msgid "Could not seek to offset %s within file"
 msgstr "Неможливо знайти початковий номер %s у файлі"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2503
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2500
 msgid "Could not seek to the end of the file"
 msgstr "Неможливо знайти кінець файлу"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:244
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:224
 msgid "Could not send command to fzputtygen."
 msgstr "Неможливо надіслати команду до fzputtygen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2620
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2617
 msgid "Could not spawn IO thread"
 msgstr "Неможливо створити процес IO"
 
@@ -2695,7 +2710,7 @@ msgid "Could not start transfer"
 msgstr "Неможливо розпочати передачу"
 
 #: ../../locales/../src/interface/sitemanager.cpp:608
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:827
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:829
 #, c-format
 msgid ""
 "Could not write \"%s\", any changes to the Site Manager could not be saved: "
@@ -2714,7 +2729,7 @@ msgstr "Неможливо записати \"%s\", дану закладку д
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Неможливо записати \"%s\"; глобальні закладки зберегти неможливо: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1858
+#: ../../locales/../src/interface/QueueView.cpp:1852
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2725,7 +2740,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/sitemanager.cpp:718
 #: ../../locales/../src/interface/sitemanager.cpp:772
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2221
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2223
 #, c-format
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "Неможливо записати \"%s\"; обрані сайти експортувати неможливо : %s"
@@ -2735,7 +2750,7 @@ msgstr "Неможливо записати \"%s\"; обрані сайти ек
 msgid "Could not write \"%s\":"
 msgstr "Неможливо писати \"%s\":"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:162
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:148
 #, c-format
 msgid "Could not write key file: %s"
 msgstr "Неможливо записати файл ключа: %s"
@@ -2763,6 +2778,14 @@ msgstr "Країна:"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:312
 msgid "Crea&te new file"
 msgstr "Створи&ти новий файл"
+
+#: ../../locales/../src/interface/state.cpp:965
+msgid "Create &missing local directory and enter it"
+msgstr "Створити &відсутній локальний каталог і увійти до нього"
+
+#: ../../locales/../src/interface/state.cpp:892
+msgid "Create &missing remote directory and enter it"
+msgstr "Створити &відсутній віддалений каталог і увійти до нього"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:265
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:305
@@ -2804,8 +2827,8 @@ msgstr "Створити порожній файл"
 msgid "Creating directory"
 msgstr "Створення каталогу"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3167
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1926
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3164
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1931
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "Створення каталогу '%s'..."
@@ -2827,7 +2850,7 @@ msgstr "Критична помилка передачі файлу"
 msgid "Critical file transfer error after transferring %s in %s"
 msgstr "Критична помилка передачі файлу після передачі %s до %s"
 
-#: ../../locales/../src/interface/state.cpp:350
+#: ../../locales/../src/interface/state.cpp:352
 #, c-format
 msgid ""
 "Current remote directory (%s) is not below the synchronization root (%s).\n"
@@ -2850,7 +2873,7 @@ msgstr "Тип поточної передачі встановлено за б�
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2006
 msgid "Curve:"
-msgstr ""
+msgstr "Крива:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:478
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1556
@@ -2907,7 +2930,7 @@ msgstr "Д&ублювати"
 msgid "DOS-like with virtual paths"
 msgstr "DOS- подібний з віртуальними шляхами"
 
-#: ../../locales/../src/interface/edithandler.cpp:1627
+#: ../../locales/../src/interface/edithandler.cpp:1626
 msgid "Dangerous filetype"
 msgstr "Небезпечний тип файлу"
 
@@ -2966,7 +2989,7 @@ msgstr "Типова дія щодо існуючого файлу"
 msgid "Default r&emote directory:"
 msgstr "Типовий віддалений ка&талог:"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1085
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1087
 msgid ""
 "Default remote path cannot be parsed. Make sure it is a valid absolute path "
 "for the selected server type."
@@ -3016,7 +3039,7 @@ msgstr[2] ""
 "Затримка з'єднання на %d секунд пов'язана з попередньо невдалою спробою "
 "з'єднання..."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1229
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1231
 msgid "Delete Site Manager entry"
 msgstr "Видалити введені дані з Сайт Менеджера"
 
@@ -3066,7 +3089,7 @@ msgid "Details for new key:"
 msgstr "Подробиці стосовно нового ключа:"
 
 #: ../../locales/../src/interface/import.cpp:58
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:756
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:758
 msgid "Detected newer version of FileZilla"
 msgstr "Виявлено наявність новішої версії FileZilla"
 
@@ -3088,7 +3111,7 @@ msgstr "Каталог"
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
 #: ../../locales/../src/interface/filelistctrl.cpp:463
-#: ../../locales/../src/interface/Mainfrm.cpp:2221
+#: ../../locales/../src/interface/Mainfrm.cpp:2200
 msgid "Directory comparison"
 msgstr "Порівняння каталогів"
 
@@ -3125,13 +3148,13 @@ msgstr "Вдалий список каталогів"
 msgid "Disa&ble all"
 msgstr "Вимк&нути все"
 
-#: ../../locales/../src/interface/state.cpp:929
+#: ../../locales/../src/interface/state.cpp:958
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
 "Вимкнути синхронізований перегляд і продовжити зміни у віддаленому каталозі?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:660
+#: ../../locales/../src/interface/Mainfrm.cpp:640
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3184,8 +3207,8 @@ msgstr "Нічого &не робити"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Повторіть дію з &усіма обраними файлами, що уже редагуються"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1148
-#: ../../locales/../src/interface/Mainfrm.cpp:1170
+#: ../../locales/../src/interface/Mainfrm.cpp:1128
+#: ../../locales/../src/interface/Mainfrm.cpp:1150
 msgid "Do you really want to close FileZilla?"
 msgstr "Ви дійсно бажаєте закрити FileZilla?"
 
@@ -3199,7 +3222,7 @@ msgstr ""
 msgid "Do you really want to delete all Site Manager entries?"
 msgstr "Ви дійсно бажаєте видалити усі записи в Сайт Менеджері?"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1231
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1233
 msgid "Do you really want to delete selected entry?"
 msgstr "Ви дійсно бажаєте видалити вибраний запис?"
 
@@ -3207,7 +3230,7 @@ msgstr "Ви дійсно бажаєте видалити вибраний за�
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Ви дійсно бажаєте видалити чергу передач?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:599
+#: ../../locales/../src/interface/Mainfrm.cpp:579
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Ви дійсно бажаєте надіслати '%s' до сервера?"
@@ -3266,7 +3289,7 @@ msgstr "Завантажити обраний каталог"
 msgid "Download selected files and directories"
 msgstr "Завантажити обрані файли і каталоги"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:976
+#: ../../locales/../src/interface/Mainfrm.cpp:956
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3275,7 +3298,7 @@ msgstr ""
 "Швидкість завантаження: %s/s\n"
 "Швидкість відвантаження: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1100
+#: ../../locales/../src/interface/edithandler.cpp:1099
 msgid "Downloading"
 msgstr "Завантаження"
 
@@ -3381,7 +3404,7 @@ msgstr "Редагування результатів пошуку"
 msgid "Email:"
 msgstr "Ел. пошта:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2131
+#: ../../locales/../src/interface/QueueView.cpp:2125
 msgid "Empty command"
 msgstr "Порожня команда"
 
@@ -3447,11 +3470,11 @@ msgstr "Ввести &настроювану команду ..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Введіть 0 для необмеженої швидкості."
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "Enter command"
 msgstr "Ввести команду"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:582
+#: ../../locales/../src/interface/Mainfrm.cpp:562
 msgid "Enter custom command"
 msgstr "Ввести настроювану команду"
 
@@ -3510,11 +3533,11 @@ msgstr ""
 "- ftps:// для FTP через TLS (неявні)\n"
 "- ftpes:// для FTP через TLS (явні)"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:114
-#, c-format
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:110
+#, fuzzy, c-format
 msgid ""
 "Enter the password for the file '%s'.\n"
-"Please note that the converted file will not be password protected."
+"The converted file will be protected with the same password."
 msgstr ""
 "Введіть пароль для файлу '%s'.\n"
 "Майте на увазі, що конвертований файл не буде захищений паролем."
@@ -3527,7 +3550,7 @@ msgstr ""
 "Введіть порт через який сервер слухає.\n"
 "Типовим для FTP є 21, типовим для SFTP є 22."
 
-#: ../../locales/../src/interface/loginmanager.cpp:66
+#: ../../locales/../src/interface/loginmanager.cpp:65
 msgid "Enter username and password"
 msgstr "Ввести ім'я користувача і пароль"
 
@@ -3540,7 +3563,7 @@ msgstr "Помилка експорту налаштувань"
 msgid "Error importing"
 msgstr "Помилка імпорту"
 
-#: ../../locales/../src/interface/QueueView.cpp:1920
+#: ../../locales/../src/interface/QueueView.cpp:1914
 msgid "Error loading queue"
 msgstr "Помилка завантаження черги"
 
@@ -3554,7 +3577,7 @@ msgstr "Помилка завантаження черги"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1841
+#: ../../locales/../src/interface/QueueView.cpp:1835
 #: ../../locales/../src/interface/search.cpp:822
 #: ../../locales/../src/interface/search.cpp:841
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3563,29 +3586,29 @@ msgstr "Помилка завантаження черги"
 #: ../../locales/../src/interface/sitemanager.cpp:565
 #: ../../locales/../src/interface/sitemanager.cpp:664
 #: ../../locales/../src/interface/sitemanager.cpp:741
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:749
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:807
-#: ../../locales/../src/interface/wrapengine.cpp:937
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:751
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:809
+#: ../../locales/../src/interface/wrapengine.cpp:938
 msgid "Error loading xml file"
 msgstr "Помилка завантаження файлу xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1830
+#: ../../locales/../src/interface/QueueView.cpp:1824
 msgid "Error saving queue"
 msgstr "Помилка збереження черги"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:197
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:223
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:177
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:203
 msgid "Error starting program"
 msgstr "Помилка запуску програми"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1859
+#: ../../locales/../src/interface/QueueView.cpp:1853
 #: ../../locales/../src/interface/sitemanager.cpp:609
 #: ../../locales/../src/interface/sitemanager.cpp:719
 #: ../../locales/../src/interface/sitemanager.cpp:773
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:828
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2222
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:830
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2224
 #: ../../locales/../src/interface/xmlfunctions.cpp:147
 msgid "Error writing xml file"
 msgstr "Помилка запису файлу xml"
@@ -3638,7 +3661,7 @@ msgstr "І&м'я фільтру:"
 msgid "FTP"
 msgstr "FTP"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:522
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:524
 msgid "FTP - File Transfer Protocol"
 msgstr "FTP - Протокол Передачі Файлів"
 
@@ -3651,7 +3674,7 @@ msgid "FTP - Insecure File Transfer Protocol"
 msgstr "FTP - Протокол Незахищеної Передачі Файлів"
 
 #: ../../locales/../src/interface/quickconnectbar.cpp:66
-#: ../../locales/../src/interface/quickconnectbar.cpp:205
+#: ../../locales/../src/interface/quickconnectbar.cpp:204
 msgid "FTP Engine not initialized, can't connect"
 msgstr "Двигун FTP не ініціалізується, неможливо з'єднатись"
 
@@ -3701,7 +3724,7 @@ msgstr "Невдала зміна каталогу"
 msgid "Failed to change language"
 msgstr "Невдала зміна мови"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2028
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2030
 msgid "Failed to copy or move sites"
 msgstr "Невдале копіювання або переміщення сайтів"
 
@@ -3713,8 +3736,8 @@ msgstr "Невдале створення резервної копії файл
 msgid "Failed to create listen socket, aborting"
 msgstr "Невдале створення сокету слухання, аварійне завершення"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4071
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4075
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4068
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4072
 msgid "Failed to create listening socket for active mode transfer"
 msgstr "Невдале створення сокету слухання для передачі в активному режимі"
 
@@ -3752,22 +3775,22 @@ msgstr "Невдала ініціалізація TLS."
 msgid "Failed to load panels, invalid resource files?"
 msgstr "Невдале завантаження панелей, недійсні файли ресурсів?"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:138
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:124
 #, c-format
 msgid "Failed to load private key: %s"
 msgstr "Невдале завантаження приватного ключа: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2493
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2490
 #, c-format
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "Невдале відкривання \"%s\" для додавання/запису"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2559
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2556
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "Невдале відкриття \"%s\" для читання"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2525
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2522
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:1007
 #, c-format
 msgid "Failed to open \"%s\" for writing"
@@ -3789,11 +3812,11 @@ msgstr "Невдалий видобуток списку каталогу"
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "Невдале отримання зовнішньої ІР адреси, аварійне завершення"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3782
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3779
 msgid "Failed to retrieve external ip address, using local address"
 msgstr "Невдале отримання зовнішньої ІР адреси, використовуючи локальну адресу"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3803
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3800
 msgid "Failed to retrieve local ip address."
 msgstr "Невдале отримання локальної ІР адреси."
 
@@ -3888,7 +3911,7 @@ msgstr "Файл"
 msgid "File Types"
 msgstr "Типи файлів"
 
-#: ../../locales/../src/engine/socket.cpp:1064
+#: ../../locales/../src/engine/socket.cpp:1065
 msgid "File descriptor not a socket"
 msgstr "Дескриптор файлу не сокет"
 
@@ -3916,7 +3939,7 @@ msgstr "Файл змінився"
 msgid "File lists"
 msgstr "Списки файлів"
 
-#: ../../locales/../src/interface/edithandler.cpp:1551
+#: ../../locales/../src/interface/edithandler.cpp:1550
 #: ../../locales/../src/interface/FileZilla.cpp:596
 #: ../../locales/../src/interface/FileZilla.cpp:681
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
@@ -3958,7 +3981,7 @@ msgstr "Файл передано успішно"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Файл передано успішно, передано %s до %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1147
+#: ../../locales/../src/interface/Mainfrm.cpp:1127
 msgid "File transfers still in progress."
 msgstr "Передачі файлів усе ще виконуються."
 
@@ -3972,7 +3995,7 @@ msgstr "Файл пропонує свою передачу через біна�
 
 #: ../../locales/../src/interface/FileZilla.cpp:407
 #: ../../locales/../src/interface/quickconnectbar.cpp:66
-#: ../../locales/../src/interface/quickconnectbar.cpp:205
+#: ../../locales/../src/interface/quickconnectbar.cpp:204
 msgid "FileZilla Error"
 msgstr "Помилка FilеZilla"
 
@@ -3988,7 +4011,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla уже підключено до сервера."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1477
+#: ../../locales/../src/interface/Mainfrm.cpp:1456
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla потребує перезавантаження для того, щоб зміни у виборі мови набули "
@@ -4002,7 +4025,7 @@ msgstr "Оновлення FilеZilla"
 msgid "Filelist status &bars"
 msgstr "Секції статусу списку &файлів"
 
-#: ../../locales/../src/interface/edithandler.cpp:1085
+#: ../../locales/../src/interface/edithandler.cpp:1084
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:274
 #: ../../locales/../src/interface/RemoteListView.cpp:373
@@ -4015,8 +4038,8 @@ msgstr "Ім'я файлу"
 msgid "Filename &filters..."
 msgstr "Фільтри &імені файлу..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2971
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2168
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2968
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2173
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "Для каталогу %s та імені файлу %s неможливо створити ім'я файлу"
@@ -4025,7 +4048,7 @@ msgstr "Для каталогу %s та імені файлу %s неможли�
 msgid "Filename invalid"
 msgstr "Ім'я файлу не дійсне"
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:296
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:301
 msgid "Filename unchanged"
 msgstr "Ім'я файлу не змінено"
 
@@ -4168,7 +4191,7 @@ msgstr "Примусове &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "Примусити показ &прихованих файлів"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:655
+#: ../../locales/../src/interface/Mainfrm.cpp:635
 msgid "Force showing hidden files"
 msgstr "Примусити показ прихованих файлів"
 
@@ -4291,7 +4314,7 @@ msgstr ""
 msgid "Homepage:"
 msgstr "Домашня сторінка:"
 
-#: ../../locales/../src/engine/socket.cpp:1075
+#: ../../locales/../src/engine/socket.cpp:1076
 msgid "Host is down"
 msgstr "Хост недосяжний"
 
@@ -4455,7 +4478,7 @@ msgstr ""
 "Якщо ви натисните кнопку тест, FileZilla з'єднається з probe.filezilla-"
 "project.org і виконає кілька простих тестів."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1169
+#: ../../locales/../src/interface/Mainfrm.cpp:1149
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Якщо ви закриєте FileZilla,ваші зміни будуть втрачені."
 
@@ -4614,7 +4637,7 @@ msgstr "Інтерактивний"
 msgid "Interface"
 msgstr "Інтерфейс"
 
-#: ../../locales/../src/engine/socket.cpp:1061
+#: ../../locales/../src/engine/socket.cpp:1062
 msgid "Interrupted by signal"
 msgstr "Перервано сигналом"
 
@@ -4631,7 +4654,7 @@ msgstr "Недійсна довжина вмісту"
 msgid "Invalid HTTP Response"
 msgstr "Недійсний відгук HTTP"
 
-#: ../../locales/../src/engine/socket.cpp:1049
+#: ../../locales/../src/engine/socket.cpp:1050
 msgid "Invalid argument passed"
 msgstr "Пройшов недійсний аргумент"
 
@@ -4669,7 +4692,7 @@ msgid "Invalid host, after closing bracket only colon and port may follow."
 msgstr ""
 "Недійсний хост. Після закриваючої дужки може слідувати лише кома і порт."
 
-#: ../../locales/../src/interface/loginmanager.cpp:102
+#: ../../locales/../src/interface/loginmanager.cpp:101
 msgid "Invalid input"
 msgstr "Недійсне введення"
 
@@ -4695,7 +4718,7 @@ msgstr ""
 "ftps:// для FTP через TLS (неявний) і\n"
 "ftpes://для FTP через TLS (явний)."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4215
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4212
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4737,11 +4760,11 @@ msgstr "Недійсний розмір в умовах"
 msgid "Invalid username given."
 msgstr "Подано недійсне ім'я користувача."
 
-#: ../../locales/../src/engine/socket.cpp:1082
+#: ../../locales/../src/engine/socket.cpp:1083
 msgid "Invalid value for ai_flags"
 msgstr "Неправильне значення ai_flags"
 
-#: ../../locales/../src/engine/socket.cpp:1084
+#: ../../locales/../src/engine/socket.cpp:1085
 msgid "Invalid value for hints"
 msgstr "Недійсне значення підказки"
 
@@ -4761,7 +4784,7 @@ msgstr "Штат або провінція юрисдикції:"
 msgid "Keep directories on top"
 msgstr "Каталоги тримати зверху"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:659
+#: ../../locales/../src/interface/Mainfrm.cpp:639
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4782,8 +4805,8 @@ msgstr "Обмін ключами:"
 
 #: ../../locales/../src/engine/server.cpp:858
 #: ../../locales/../src/engine/server.cpp:879
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1310
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1311
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1312
 msgid "Key file"
 msgstr "Файл ключа"
 
@@ -4796,7 +4819,7 @@ msgstr "Най&нижчий"
 msgid "Language"
 msgstr "Мова"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1477
+#: ../../locales/../src/interface/Mainfrm.cpp:1456
 msgid "Language changed"
 msgstr "Зміна мови"
 
@@ -4852,16 +4875,16 @@ msgstr "Список:"
 msgid "Lo&west available port:"
 msgstr "Най&нижчий доступний порт:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1133
-#: ../../locales/../src/interface/edithandler.cpp:1369
+#: ../../locales/../src/interface/edithandler.cpp:1132
+#: ../../locales/../src/interface/edithandler.cpp:1368
 msgid "Local"
 msgstr "Локальний"
 
-#: ../../locales/../src/engine/socket.cpp:1046
+#: ../../locales/../src/engine/socket.cpp:1047
 msgid "Local address in use"
 msgstr "Використовується локальна адреса"
 
-#: ../../locales/../src/engine/socket.cpp:1074
+#: ../../locales/../src/engine/socket.cpp:1075
 msgid "Local endpoint has been closed"
 msgstr "Локальну кінцеву точку закрито"
 
@@ -5013,12 +5036,12 @@ msgstr "Не зіставляти все з наступного"
 msgid "Maximum simultaneous &transfers:"
 msgstr "Максимум одночасних &передач:"
 
-#: ../../locales/../src/engine/socket.cpp:1088
+#: ../../locales/../src/engine/socket.cpp:1089
 msgid "Memory allocation failure"
 msgstr "Помилка виділення пам'яті"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:394
-#: ../../locales/../src/interface/Mainfrm.cpp:1804
+#: ../../locales/../src/interface/Mainfrm.cpp:387
+#: ../../locales/../src/interface/Mainfrm.cpp:1783
 msgid "Message log"
 msgstr "Журнал повідомлень"
 
@@ -5026,7 +5049,7 @@ msgstr "Журнал повідомлень"
 msgid "Message log position"
 msgstr "Розташування журналу повідомлень"
 
-#: ../../locales/../src/engine/socket.cpp:1071
+#: ../../locales/../src/engine/socket.cpp:1072
 msgid "Message too large"
 msgstr "Повідомлення занадто велике"
 
@@ -5055,8 +5078,8 @@ msgid "My Documents"
 msgstr "Мої Документи"
 
 #: ../../locales/../src/interface/sitemanager.cpp:269
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:737
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:739
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:741
 msgid "My Sites"
 msgstr "Мої Сайти"
 
@@ -5070,7 +5093,7 @@ msgid "Name"
 msgstr "Ім'я"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:679
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1196
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1198
 msgid "Name already exists"
 msgstr "Ім'я вже існує"
 
@@ -5095,22 +5118,22 @@ msgstr "Потрібно ввести ім'я фільтру"
 msgid "Need to enter valid remote path"
 msgstr "Потрібно ввести дійсний віддалений шлях"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1014
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1016
 msgid "Need to specify a character encoding"
 msgstr "Потрібно вказати спосіб кодування знаків"
 
-#: ../../locales/../src/engine/socket.cpp:1092
+#: ../../locales/../src/engine/socket.cpp:1093
 msgid "Neither nodename nor servname provided, or not known"
 msgstr "Не вказано параметрів, ані nodename, ані servname, або невідомі"
 
-#: ../../locales/../src/engine/socket.cpp:1079
+#: ../../locales/../src/engine/socket.cpp:1080
 msgid ""
 "Network host does not have any network addresses in the requested address "
 "family"
 msgstr "Хост мережі немає адреси мережі у запитуваній родині адрес"
 
 #: ../../locales/../src/engine/proxy.cpp:490
-#: ../../locales/../src/engine/socket.cpp:1063
+#: ../../locales/../src/engine/socket.cpp:1064
 msgid "Network unreachable"
 msgstr "Мережа недосяжна"
 
@@ -5146,7 +5169,7 @@ msgstr "Нова Заклад&ка"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:555
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:790
 #: ../../locales/../src/interface/sitemanager.cpp:693
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2178
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2180
 msgid "New bookmark"
 msgstr "Нова закладка"
 
@@ -5165,13 +5188,13 @@ msgstr "Нові функції та вдосконалення в %s"
 msgid "New filter"
 msgstr "Новий фільтр"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:923
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:925
 msgid "New folder"
 msgstr "Нова папка"
 
 #: ../../locales/../src/interface/sitemanager.cpp:583
 #: ../../locales/../src/interface/sitemanager.cpp:595
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2154
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2156
 msgid "New site"
 msgstr "Новий сайт"
 
@@ -5179,11 +5202,11 @@ msgstr "Новий сайт"
 msgid "Next to the transfer queue"
 msgstr "Наступне за чергою передачі"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:833
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:839
 msgid "No"
 msgstr "Ні"
 
-#: ../../locales/../src/engine/socket.cpp:1090
+#: ../../locales/../src/engine/socket.cpp:1091
 msgid "No address associated with nodename"
 msgstr "Відсутня адреса асоційована з nodename"
 
@@ -5191,16 +5214,16 @@ msgstr "Відсутня адреса асоційована з nodename"
 msgid "No category to export selected"
 msgstr "Не обрано категорії для експортування"
 
-#: ../../locales/../src/interface/QueueView.cpp:2131
+#: ../../locales/../src/interface/QueueView.cpp:2125
 msgid "No command given, aborting."
 msgstr "Відсутня команда, аварійне завершення."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3754
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3751
 msgid "No external IP address set, trying default."
 msgstr ""
 "Не встановлено зовнішньої IP адреси, робиться спроба за типовою адресою."
 
-#: ../../locales/../src/interface/edithandler.cpp:1074
+#: ../../locales/../src/interface/edithandler.cpp:1073
 msgid "No files are currently being edited."
 msgstr "Ніякі файли зараз не редагуються."
 
@@ -5218,7 +5241,7 @@ msgstr "Не вказаний хост, введіть ім'я хоста."
 msgid "No images available"
 msgstr "Відсутні зображення"
 
-#: ../../locales/../src/interface/QueueView.cpp:2980
+#: ../../locales/../src/interface/QueueView.cpp:2970
 msgid "No more files in the queue!"
 msgstr "Чергу файлів вичерпано повністю!"
 
@@ -5237,7 +5260,7 @@ msgid "No program has been associated to edit files with the extension '%s'."
 msgstr ""
 "Жодна програма не асоціюється з редагуванням файлів з розширенням '%s'."
 
-#: ../../locales/../src/engine/socket.cpp:1066
+#: ../../locales/../src/engine/socket.cpp:1067
 msgid "No route to host"
 msgstr "Нема шляху до хоста"
 
@@ -5253,7 +5276,7 @@ msgstr "Сайти відсутні"
 msgid "No supported SOCKS5 auth method"
 msgstr "Непідтримуваний метод автентифікації для SOCKS5"
 
-#: ../../locales/../src/interface/loginmanager.cpp:102
+#: ../../locales/../src/interface/loginmanager.cpp:101
 msgid "No username given."
 msgstr "Не задано імені користувача."
 
@@ -5267,7 +5290,7 @@ msgstr "Жодного"
 msgid "None selected yet"
 msgstr "Нічого не вибрано"
 
-#: ../../locales/../src/engine/socket.cpp:1086
+#: ../../locales/../src/engine/socket.cpp:1087
 msgid "Nonrecoverable failure in name resolution"
 msgstr "Невиправна помилка в визначенні імен"
 
@@ -5279,7 +5302,7 @@ msgstr "Невиправна помилка в визначенні імен"
 #: ../../locales/../src/interface/manual_transfer.cpp:539
 #: ../../locales/../src/interface/queue.cpp:868
 #: ../../locales/../src/interface/queue.cpp:955
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1307
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 msgid "Normal"
 msgstr "Звичайний"
 
@@ -5288,8 +5311,8 @@ msgstr "Звичайний"
 msgid "Not all items could be requeued for transfer."
 msgstr "Не всі елементи можна повторно поставити в чергу для передачі."
 
-#: ../../locales/../src/interface/state.cpp:178
-#: ../../locales/../src/interface/state.cpp:480
+#: ../../locales/../src/interface/state.cpp:179
+#: ../../locales/../src/interface/state.cpp:482
 msgid "Not connected"
 msgstr "Не з'єднано"
 
@@ -5297,7 +5320,7 @@ msgstr "Не з'єднано"
 msgid "Not connected to any server"
 msgstr "Нема під'єднання до жодного серверу"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:571
+#: ../../locales/../src/interface/Mainfrm.cpp:551
 msgid "Not connected to any server."
 msgstr "Нема під'єднання до жодного серверу."
 
@@ -5305,11 +5328,11 @@ msgstr "Нема під'єднання до жодного серверу."
 msgid "Not connected."
 msgstr "Не з'єднано."
 
-#: ../../locales/../src/engine/socket.cpp:1107
+#: ../../locales/../src/engine/socket.cpp:1108
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Не ініціалізовано, потрібно викликати WSAStartup"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:657
+#: ../../locales/../src/interface/Mainfrm.cpp:637
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr ""
 "Зауважте, що даний елемент підтримується лише при використанні протоколу FTP."
@@ -5377,7 +5400,7 @@ msgstr ""
 "На наступних сторінках буде сконфігуровано обраний режим передач і режим "
 "нейтралізації неполадок, у випадку його увімкнення."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:843
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:849
 msgid "Once"
 msgstr "Один раз"
 
@@ -5389,7 +5412,7 @@ msgstr "Раз в день"
 msgid "Once a week"
 msgstr "Раз в тиждень"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:539
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:541
 msgid "Only use plain FTP (insecure)"
 msgstr "Використовувати лише простий FTP (незахищений)"
 
@@ -5422,8 +5445,8 @@ msgstr "Відкрити діалог налаштувань FileZilla"
 msgid "Opened as:"
 msgstr "Відкрито як:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1617
-#: ../../locales/../src/interface/edithandler.cpp:1734
+#: ../../locales/../src/interface/edithandler.cpp:1616
+#: ../../locales/../src/interface/edithandler.cpp:1733
 #: ../../locales/../src/interface/LocalListView.cpp:1695
 #: ../../locales/../src/interface/LocalListView.cpp:1707
 msgid "Opening failed"
@@ -5448,15 +5471,15 @@ msgstr ""
 msgid "Operating System:"
 msgstr "Операційна система:"
 
-#: ../../locales/../src/engine/socket.cpp:1057
+#: ../../locales/../src/engine/socket.cpp:1058
 msgid "Operation already in progress"
 msgstr "Дія вже виконується"
 
-#: ../../locales/../src/engine/socket.cpp:1048
+#: ../../locales/../src/engine/socket.cpp:1049
 msgid "Operation in progress"
 msgstr "Дія виконується"
 
-#: ../../locales/../src/engine/socket.cpp:1069
+#: ../../locales/../src/engine/socket.cpp:1070
 msgid "Operation not supported"
 msgstr "Дія не підтримується"
 
@@ -5468,7 +5491,7 @@ msgstr "Організація:"
 msgid "Other SFTP options"
 msgstr "Інші налаштування SFTP"
 
-#: ../../locales/../src/engine/socket.cpp:1102
+#: ../../locales/../src/engine/socket.cpp:1103
 msgid "Other system error"
 msgstr "Помилка іншої системи"
 
@@ -5476,8 +5499,8 @@ msgstr "Помилка іншої системи"
 msgid "Other:"
 msgstr "Інше:"
 
-#: ../../locales/../src/engine/socket.cpp:1052
 #: ../../locales/../src/engine/socket.cpp:1053
+#: ../../locales/../src/engine/socket.cpp:1054
 msgid "Out of memory"
 msgstr "Пам'ять вичерпано"
 
@@ -5560,7 +5583,7 @@ msgstr "Команда ПОРТА заблокована маршрутизат�
 msgid "Pa&ssive (recommended)"
 msgstr "Па&сивний (рекомендовано)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2376
+#: ../../locales/../src/interface/Mainfrm.cpp:2355
 msgid "Parameter not a valid URL"
 msgstr "Значення параметру - це недійсна URL адреса"
 
@@ -5590,7 +5613,7 @@ msgstr "Пасивний режим"
 msgid "Passive mode has been set as default transfer mode."
 msgstr "Пасивний режим було встановлено як типовий режим передачі."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:117
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:112
 msgid "Password required"
 msgstr "Вимагається пароль"
 
@@ -5599,13 +5622,13 @@ msgstr "Вимагається пароль"
 msgid "Path"
 msgstr "Шлях"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3054
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2214
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3051
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2219
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Для каталогу %s та підкаталогу %s шлях створити неможливо"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2334
+#: ../../locales/../src/interface/Mainfrm.cpp:2313
 msgid "Path not found:"
 msgstr "Шляху не знайдено:"
 
@@ -5613,10 +5636,10 @@ msgstr "Шляху не знайдено:"
 msgid "Paths"
 msgstr "Шляхи"
 
-#: ../../locales/../src/interface/edithandler.cpp:1112
-#: ../../locales/../src/interface/edithandler.cpp:1249
-#: ../../locales/../src/interface/edithandler.cpp:1339
-#: ../../locales/../src/interface/edithandler.cpp:1349
+#: ../../locales/../src/interface/edithandler.cpp:1111
+#: ../../locales/../src/interface/edithandler.cpp:1248
+#: ../../locales/../src/interface/edithandler.cpp:1338
+#: ../../locales/../src/interface/edithandler.cpp:1348
 msgid "Pending removal"
 msgstr "Вилучення очікування"
 
@@ -5624,8 +5647,8 @@ msgstr "Вилучення очікування"
 msgid "Permission"
 msgstr "Дозвіл"
 
-#: ../../locales/../src/engine/socket.cpp:1045
-#: ../../locales/../src/engine/socket.cpp:1054
+#: ../../locales/../src/engine/socket.cpp:1046
+#: ../../locales/../src/engine/socket.cpp:1055
 msgid "Permission denied"
 msgstr "Не дозволено"
 
@@ -5728,7 +5751,7 @@ msgstr "Введіть число між 0 і 10 для позначення к�
 msgid "Please enter a password for this server:"
 msgstr "Введіть пароль для даного серверу:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5770,7 +5793,7 @@ msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr ""
 "Введіть значення обмеження швидкості відвантаження більшим або рівним 0 %s/s."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:582
+#: ../../locales/../src/interface/Mainfrm.cpp:562
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5856,7 +5879,7 @@ msgstr ""
 "що використовується троянами або іншими шкідливими програмами. Це може "
 "викликати хибну тривогу, яку ви можете безпечно скасувати."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:697
+#: ../../locales/../src/interface/Mainfrm.cpp:677
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5951,11 +5974,11 @@ msgid "Preallocation"
 msgstr "Попереднє виділення"
 
 #: ../../locales/../src/interface/sitemanager.cpp:268
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1899
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1901
 msgid "Predefined Sites"
 msgstr "Попередньо вказані Сайти"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:696
+#: ../../locales/../src/interface/Mainfrm.cpp:676
 msgid "Preserving file timestamps"
 msgstr "Збереження файлу часових позначок"
 
@@ -6009,7 +6032,7 @@ msgstr "Пароль про&ксі:"
 msgid "Process &Queue"
 msgstr "Опрацювати &Чергу"
 
-#: ../../locales/../src/engine/socket.cpp:1050
+#: ../../locales/../src/engine/socket.cpp:1051
 msgid "Process file table overflow"
 msgstr "Переповнення таблиці обробки файлу"
 
@@ -6019,11 +6042,11 @@ msgstr "Переповнення таблиці обробки файлу"
 msgid "Processed %s in %s."
 msgstr "Опрацьовано %s в %s."
 
-#: ../../locales/../src/engine/socket.cpp:1055
+#: ../../locales/../src/engine/socket.cpp:1056
 msgid "Protocol not supported"
 msgstr "Протокол не підтримується"
 
-#: ../../locales/../src/engine/socket.cpp:1109
+#: ../../locales/../src/engine/socket.cpp:1110
 msgid "Protocol not supported on given socket type"
 msgstr "На даному типові сокету протокол не підтримується"
 
@@ -6050,7 +6073,7 @@ msgstr "Невдала автентифікація проксі"
 msgid "Proxy handshake failed: %s"
 msgstr "Невдалий обмін вітаннями з проксі: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4209
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4206
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "Хост проксі стартує з дужки '[', однак закриваючої дужки не знайдено."
 
@@ -6069,7 +6092,7 @@ msgstr "Невдалий запит проксі: %s"
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr "Невдалий запит проксі: Невідомий тип адреси у відповіді CONNECT"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4238
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4235
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Проксі встановлено, однак хост проксі або порт не дійсні."
 
@@ -6085,7 +6108,7 @@ msgstr "Алгоритм публічного ключа:"
 msgid "Public permissions"
 msgstr "Публічні дозволи"
 
-#: ../../locales/../src/interface/QueueView.cpp:3060
+#: ../../locales/../src/interface/QueueView.cpp:3050
 msgid "Queue has been fully processed"
 msgstr "Черга опрацьована не повністю"
 
@@ -6125,7 +6148,7 @@ msgstr "Від&далене дерево каталогів"
 msgid "R&eset and requeue selected files"
 msgstr "С&кинути і поновити чергу обраних файлів"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:596
+#: ../../locales/../src/interface/Mainfrm.cpp:576
 msgid "Raw FTP command"
 msgstr "Проста команда FTP"
 
@@ -6158,7 +6181,7 @@ msgstr "Чи&тати"
 msgid "Read-only"
 msgstr "Лише читати"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1033
+#: ../../locales/../src/interface/Mainfrm.cpp:1013
 msgid "Really cancel current operation?"
 msgstr "Дійсно скасувати дану операцію?"
 
@@ -6199,7 +6222,7 @@ msgstr "Дійсно видалити усі вибрані файли та/аб
 msgid "Reason"
 msgstr "Причина"
 
-#: ../../locales/../src/interface/QueueView.cpp:3053
+#: ../../locales/../src/interface/QueueView.cpp:3043
 msgid "Reboot now"
 msgstr "Перезавантажити зараз"
 
@@ -6212,12 +6235,12 @@ msgstr "Про&ектувати в підкаталоги"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Отримано оповіщення TLS з сервера: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2964
+#: ../../locales/../src/engine/directorylistingparser.cpp:2969
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Отримано перелік файлів каталогу і схоже він закодований EBCDIC."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:1992
-#: ../../locales/../src/engine/directorylistingparser.cpp:2006
+#: ../../locales/../src/engine/directorylistingparser.cpp:1993
+#: ../../locales/../src/engine/directorylistingparser.cpp:2007
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Отримано рядок, що перевищує 10000 символів, аварійне завершення."
 
@@ -6289,7 +6312,7 @@ msgstr "Оновити списки файлу та папки"
 msgid "Remember passwords?"
 msgstr "Пам'ятати паролі?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1096
+#: ../../locales/../src/interface/edithandler.cpp:1095
 msgid "Remote"
 msgstr "Віддалений"
 
@@ -6314,7 +6337,7 @@ msgstr "Пошук віддаленого файлу"
 msgid "Remote filters:"
 msgstr "Віддалені фільтри:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1087
+#: ../../locales/../src/interface/edithandler.cpp:1086
 msgid "Remote path"
 msgstr "Віддалений шлях"
 
@@ -6327,7 +6350,7 @@ msgstr ""
 "Віддалений шлях не піддається аналізу. Переконайтесь, що це дійсний "
 "абсолютний шлях і він підтримується поточним типом серверу сайту (%s)."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1113
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1115
 #, c-format
 msgid ""
 "Remote path cannot be parsed. Make sure it is a valid absolute path and is "
@@ -6339,7 +6362,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:416
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:420
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1115
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1117
 msgid "Remote path cannot be parsed. Make sure it is a valid absolute path."
 msgstr ""
 "Віддалений шлях не піддається аналізу. Переконайтесь, що це дійсний "
@@ -6375,7 +6398,7 @@ msgstr "Видалити &обране"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1434
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1192
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1213
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:287
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:292
 msgid "Rename file"
 msgstr "Перейменувати файл"
 
@@ -6389,8 +6412,8 @@ msgstr "Перейменувати обраний каталог"
 msgid "Rename selected files and directories"
 msgstr "Перейменувати обрані файли і каталоги"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3393
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2413
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3390
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2418
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "Перейменування '%s' в '%s'"
@@ -6415,11 +6438,11 @@ msgstr ""
 msgid "Request rejected or failed"
 msgstr "Запит відхилено або невдалий"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:537
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:539
 msgid "Require explicit FTP over TLS"
 msgstr "Потрібне явне FTP через TLS"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:538
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:540
 msgid "Require implicit FTP over TLS"
 msgstr "Потрібне неявне FTP через TLS"
 
@@ -6427,7 +6450,7 @@ msgstr "Потрібне неявне FTP через TLS"
 msgid "Reset and requeue &all"
 msgstr "Скинути і поновити чергу &всіх"
 
-#: ../../locales/../src/engine/socket.cpp:1097
+#: ../../locales/../src/engine/socket.cpp:1098
 msgid "Resolved protocol is unknown"
 msgstr "Закритий протокол невідомий"
 
@@ -6437,7 +6460,7 @@ msgstr "Закритий протокол невідомий"
 msgid "Resolving address of %s"
 msgstr "Приймається рішення стосовно адреси для %s"
 
-#: ../../locales/../src/engine/socket.cpp:1056
+#: ../../locales/../src/engine/socket.cpp:1057
 msgid "Resource temporarily unavailable"
 msgstr "Ресурс тимчасово недоступний"
 
@@ -6467,18 +6490,18 @@ msgstr ""
 "Поновлення файлів ASCII може створити проблеми, якщо сервер використовує "
 "інший формат завершення лінійки, ніж клієнт."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1273
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:923
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1270
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:928
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
 msgstr "Видобування списку каталогів з \"%s\"..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1270
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:920
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1267
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:925
 msgid "Retrieving directory listing..."
 msgstr "Видобування списку каталогів..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3769
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3766
 #: ../../locales/../src/interface/netconfwizard.cpp:719
 #, c-format
 msgid "Retrieving external IP address from %s"
@@ -6530,20 +6553,20 @@ msgid "Save settings?"
 msgstr "Зберегти налаштування?"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:436
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:976
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:978
 msgid "Saving of password has been disabled by your system administrator."
 msgstr "Збереження паролів вимкнуто вашим системним адміністратором."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:438
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:978
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:980
 msgid "Saving of passwords has been disabled by you."
 msgstr "Збереження паролів вимкнуто вами."
 
-#: ../../locales/../src/interface/QueueView.cpp:1718
+#: ../../locales/../src/interface/QueueView.cpp:1712
 msgid "Scanning for files to add to queue"
 msgstr "Сканування файлів, що додаються до черги"
 
-#: ../../locales/../src/interface/QueueView.cpp:1720
+#: ../../locales/../src/interface/QueueView.cpp:1714
 msgid "Scanning for files to upload"
 msgstr "Сканування файлів до відвантаження"
 
@@ -6591,7 +6614,7 @@ msgid ""
 msgstr ""
 "Обрати типову дію для випадку, якщо пошукуваний файл передачі вже існує."
 
-#: ../../locales/../src/interface/edithandler.cpp:1532
+#: ../../locales/../src/interface/edithandler.cpp:1531
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Обрати типовий редактор"
@@ -6630,7 +6653,7 @@ msgid "Select file for exported settings"
 msgstr "Обрати файл для експортованих налаштувань"
 
 #: ../../locales/../src/interface/export.cpp:32
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2206
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2208
 msgid "Select file for exported sites"
 msgstr "Обрати файл для експортованих сайтів"
 
@@ -6642,7 +6665,7 @@ msgstr "Обрати файл для імпорту налаштувань з"
 msgid "Select file to upload"
 msgstr "Обрати файл для відвантаження"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:143
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:129
 msgid "Select filename for converted key file"
 msgstr "Обрати ім'я файлу для конвертованого файлу ключа"
 
@@ -6721,8 +6744,8 @@ msgstr "Обраний %s і %s. Загальний розмір: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Обраний %s і %s. Загальний розмір: Принаймні %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1477
-#: ../../locales/../src/interface/edithandler.cpp:1551
+#: ../../locales/../src/interface/edithandler.cpp:1476
+#: ../../locales/../src/interface/edithandler.cpp:1550
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Обраного редактора не існує."
@@ -6736,11 +6759,11 @@ msgstr "Обраний файл уже редагується"
 msgid "Selected file is already loaded"
 msgstr "Обраний файл уже завантажений"
 
-#: ../../locales/../src/interface/edithandler.cpp:1649
+#: ../../locales/../src/interface/edithandler.cpp:1648
 msgid "Selected file is already opened"
 msgstr "Обраний файл уже відкрито"
 
-#: ../../locales/../src/interface/edithandler.cpp:1721
+#: ../../locales/../src/interface/edithandler.cpp:1720
 msgid "Selected file is still being edited"
 msgstr "Обраний файл усе ще редагується"
 
@@ -6770,7 +6793,7 @@ msgstr ""
 msgid "Send custom command to the server otherwise not available"
 msgstr "Надіслати настроювану команду на сервер"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4316
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4311
 msgid "Sending keep-alive command"
 msgstr "Надсилання команди keep-alive"
 
@@ -6792,12 +6815,12 @@ msgstr "Сервер неправильно завершив з'єднання T
 msgid "Server does not support non-ASCII characters."
 msgstr "Сервер не підтримує символи, які не належать до набору ASCII."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4150
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4147
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr "Сервер не підтримує відновлення файлів > %d GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4146
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4143
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -6806,15 +6829,15 @@ msgstr ""
 "Сервер не підтримує відновлення файлів > %d Гб. Завершення передачі, "
 "оскільки розміри файлів співпадають."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2427
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2424
 msgid "Server does not support resume of files > 2GB."
 msgstr "Сервер не підтримує відновлення файлів > 2GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2423
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2420
 msgid "Server does not support resume of files > 4GB."
 msgstr "Сервер не підтримує відновлення файлів > 4GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4161
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4158
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -6835,7 +6858,7 @@ msgstr ""
 msgid "Server returned empty path."
 msgstr "Сервер повернув порожній шлях."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:660
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:664
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
@@ -6843,13 +6866,13 @@ msgstr ""
 "Сервер надіслав додаткову підказку входу. Вам потрібно скористатися "
 "інтерактивним типом входу."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3716
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3713
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr ""
 "Сервер надіслав пасивну відповідь з ІP-адресою без підтримки маршрутизації. "
 "Невдалий пасивний режим."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3711
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3708
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
@@ -6898,8 +6921,8 @@ msgstr "Подробиці з'єднання"
 msgid "Set &Priority"
 msgstr "Встановити &пріоритет"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3541
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2292
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3538
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2297
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Встановити дозволи '%s' до '%s'"
@@ -6924,7 +6947,7 @@ msgstr "Показати список &простих каталогів"
 msgid "Show &welcome dialog..."
 msgstr "Показати діалог &привітання..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2224
+#: ../../locales/../src/interface/Mainfrm.cpp:2203
 msgid "Show both directory trees and continue comparing?"
 msgstr "Показати обидва дерева каталогів і продовжити порівняння?"
 
@@ -6944,7 +6967,7 @@ msgstr "Показати наявні шифри TLS"
 msgid "Shows this help dialog"
 msgstr "Показує цей діалог допомоги"
 
-#: ../../locales/../src/interface/QueueView.cpp:3049
+#: ../../locales/../src/interface/QueueView.cpp:3039
 msgid "Shutdown now"
 msgstr "Вимкнути негайно"
 
@@ -6960,27 +6983,27 @@ msgstr "Введені дані &в Сайт Менеджер"
 msgid "Site Manager"
 msgstr "Сайт Менеджер"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:984
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:986
 msgid "Site Manager - Cannot remember password"
 msgstr "Сайт Менеджер - Неможливо запам'ятати пароль"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:952
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:965
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:997
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1014
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1027
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1042
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1052
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1061
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1085
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1094
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1116
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1125
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1132
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:954
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:967
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:999
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1016
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1029
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1044
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1054
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1063
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1087
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1096
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1118
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1127
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1134
 msgid "Site Manager - Invalid data"
 msgstr "Сайт Менеджер - Недійсні дані"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:327
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:329
 msgid "Site Manager already open"
 msgstr "Сайт Менеджер вже відкрито"
 
@@ -7053,27 +7076,27 @@ msgstr "Оминаємо завантаження %s"
 msgid "Skipping upload of %s"
 msgstr "Оминаємо відвантаження %s"
 
-#: ../../locales/../src/engine/socket.cpp:1060
+#: ../../locales/../src/engine/socket.cpp:1061
 msgid "Socket address outside address space"
 msgstr "Адреса сокету поза адресним простором"
 
-#: ../../locales/../src/engine/socket.cpp:1062
+#: ../../locales/../src/engine/socket.cpp:1063
 msgid "Socket already connected"
 msgstr "Сокет уже з'єднано"
 
-#: ../../locales/../src/engine/socket.cpp:1070
+#: ../../locales/../src/engine/socket.cpp:1071
 msgid "Socket has been shut down"
 msgstr "Сокет було вимкнуто"
 
-#: ../../locales/../src/engine/socket.cpp:1067
+#: ../../locales/../src/engine/socket.cpp:1068
 msgid "Socket not connected"
 msgstr "Сокет не з'єднано"
 
-#: ../../locales/../src/engine/socket.cpp:1110
+#: ../../locales/../src/engine/socket.cpp:1111
 msgid "Socket type not supported for address family"
 msgstr "Тип сокету не підтримується родиною адрес"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1168
+#: ../../locales/../src/interface/Mainfrm.cpp:1148
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Деякі файли усе ще редагуються або потребують оновлення."
 
@@ -7106,7 +7129,7 @@ msgstr "Спосіб &сортування:"
 msgid "Source and path of the drop operation are identical"
 msgstr "Джерело і шлях операції drop ідентичні"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:153
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:139
 msgid "Source and target file may not be the same"
 msgstr "Вихідний і кінцевий файл не можуть бути одинаковими"
 
@@ -7161,14 +7184,14 @@ msgstr "Розпочати з відкритим Сайт Менеджером"
 msgid "Started update check on %s\n"
 msgstr "Розпочато перевірку оновлення на %s\n"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2147
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1557
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2144
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1562
 #, c-format
 msgid "Starting download of %s"
 msgstr "Розпочинаємо завантаження %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2150
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1560
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2147
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1565
 #, c-format
 msgid "Starting upload of %s"
 msgstr "Розпочинаємо відвантаження %s"
@@ -7181,7 +7204,7 @@ msgstr "Запускає локальний сайт за вказаним шл�
 msgid "State or province:"
 msgstr "Штат, або провінція:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1088
+#: ../../locales/../src/interface/edithandler.cpp:1087
 #: ../../locales/../src/interface/queue.cpp:1169
 msgid "Status"
 msgstr "Статус"
@@ -7216,7 +7239,7 @@ msgstr "Успішні передачі"
 msgid "Summary of test results:"
 msgstr "Підсумок результатів тесту:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3057
+#: ../../locales/../src/interface/QueueView.cpp:3047
 msgid "Suspend now"
 msgstr "Призупинити зараз"
 
@@ -7228,23 +7251,24 @@ msgstr ""
 "Даний вибір не зачіпає символічне посилання на файли, такі символічні "
 "посилання завжди видаляються."
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3693
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
-#: ../../locales/../src/interface/state.cpp:237
-#: ../../locales/../src/interface/state.cpp:251
-#: ../../locales/../src/interface/state.cpp:257
-#: ../../locales/../src/interface/state.cpp:267
-#: ../../locales/../src/interface/state.cpp:353
-#: ../../locales/../src/interface/state.cpp:361
-#: ../../locales/../src/interface/state.cpp:369
-#: ../../locales/../src/interface/state.cpp:901
-#: ../../locales/../src/interface/state.cpp:909
-#: ../../locales/../src/interface/state.cpp:915
-#: ../../locales/../src/interface/state.cpp:924
+#: ../../locales/../src/interface/state.cpp:238
+#: ../../locales/../src/interface/state.cpp:252
+#: ../../locales/../src/interface/state.cpp:258
+#: ../../locales/../src/interface/state.cpp:268
+#: ../../locales/../src/interface/state.cpp:355
+#: ../../locales/../src/interface/state.cpp:363
+#: ../../locales/../src/interface/state.cpp:371
 #: ../../locales/../src/interface/state.cpp:930
+#: ../../locales/../src/interface/state.cpp:938
+#: ../../locales/../src/interface/state.cpp:944
+#: ../../locales/../src/interface/state.cpp:953
+#: ../../locales/../src/interface/state.cpp:979
 msgid "Synchronized browsing"
 msgstr "Синхронізована навігація"
 
-#: ../../locales/../src/interface/state.cpp:368
+#: ../../locales/../src/interface/state.cpp:370
 msgid "Synchronized browsing has been disabled."
 msgstr "Синхронізовану навігацію вимкнуто."
 
@@ -7258,8 +7282,8 @@ msgstr "Помилка синтаксису"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2336
-#: ../../locales/../src/interface/Mainfrm.cpp:2378
+#: ../../locales/../src/interface/Mainfrm.cpp:2315
+#: ../../locales/../src/interface/Mainfrm.cpp:2357
 msgid "Syntax error in command line"
 msgstr "Помилка синтаксису у командній лінійці"
 
@@ -7271,11 +7295,11 @@ msgstr "Система"
 msgid "System details"
 msgstr "Подробиці системи"
 
-#: ../../locales/../src/engine/socket.cpp:1051
+#: ../../locales/../src/engine/socket.cpp:1052
 msgid "System limit of open files exceeded"
 msgstr "Перевищено обмеження для відкритих файлів"
 
-#: ../../locales/../src/engine/socket.cpp:1108
+#: ../../locales/../src/engine/socket.cpp:1109
 msgid "System's network subsystem has failed"
 msgstr "Невдала підсистема мережі системи"
 
@@ -7315,7 +7339,7 @@ msgstr "Ім'я кінцевого файлу вже існує!"
 msgid "Target filename already exists, really continue?"
 msgstr "Ім'я кінцевого файлу вже існує, продовжувати далі?"
 
-#: ../../locales/../src/engine/socket.cpp:1081
+#: ../../locales/../src/engine/socket.cpp:1082
 msgid "Temporary failure in name resolution"
 msgstr "Тимчасова помилка у визначенні імені"
 
@@ -7323,15 +7347,15 @@ msgstr "Тимчасова помилка у визначенні імені"
 msgid "Test results"
 msgstr "Результати тестування"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4167
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4164
 msgid "Testing resume capabilities of server"
 msgstr "Спроможність сервера до відновлення тестування."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:748
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:750
 msgid "The Site Manager cannot be used unless the file gets repaired."
 msgstr "Перед використанням Сайт Менеджера відновіть ЦП."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:326
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:328
 msgid ""
 "The Site Manager is opened in another instance of FileZilla 3.\n"
 "Do you want to continue? Any changes made in the Site Manager won't be saved "
@@ -7354,11 +7378,11 @@ msgstr ""
 msgid "The address you entered was: %s"
 msgstr "Введена вами адреса була: %s"
 
-#: ../../locales/../src/engine/socket.cpp:1087
+#: ../../locales/../src/engine/socket.cpp:1088
 msgid "The ai_family member is not supported"
 msgstr "Член параметру ai_family не підтримується"
 
-#: ../../locales/../src/engine/socket.cpp:1100
+#: ../../locales/../src/engine/socket.cpp:1101
 msgid "The ai_socktype member is not supported"
 msgstr "Член параметру ai_socktype не підтримується"
 
@@ -7399,7 +7423,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Передачу даних не вдається установити: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2925
-#: ../../locales/../src/interface/edithandler.cpp:1512
+#: ../../locales/../src/interface/edithandler.cpp:1511
 msgid "The default editor for text files could not be found."
 msgstr "Неможливо знайти типового редактора текстових файлів."
 
@@ -7419,8 +7443,8 @@ msgstr "Введене ім'я фільтру вже існує, оберіть 
 msgid "The extension '%s' does already exist in the list"
 msgstr "Розширення '%s' таки існує в цьому списку"
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:278
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:284
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:283
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:289
 #, c-format
 msgid ""
 "The file %s already exists.\n"
@@ -7429,7 +7453,7 @@ msgstr ""
 "Файл %s вже існує.\n"
 "Введіть нове ім'я:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1622
+#: ../../locales/../src/interface/edithandler.cpp:1621
 #: ../../locales/../src/interface/LocalListView.cpp:1699
 #, c-format
 msgid ""
@@ -7441,7 +7465,14 @@ msgstr ""
 "Неможливо знайти асоційовану програму (%s).\n"
 "Перевірте тип файлу асоціації."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:52
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:54
+#, c-format
+msgid ""
+"The file '%s' contains an SSH1 key. The SSH1 protocol has been deprecated, "
+"FileZilla only supports SSH2 keys."
+msgstr ""
+
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:57
 #, c-format
 msgid "The file '%s' could not be loaded or does not contain a private key."
 msgstr "Файл '%s' неможливо завантажити, або він не містить приватного ключа."
@@ -7451,7 +7482,7 @@ msgstr "Файл '%s' неможливо завантажити, або він �
 msgid "The file '%s' could not be loaded."
 msgstr "Файл '%s' неможливо завантажити."
 
-#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1616
 #: ../../locales/../src/interface/LocalListView.cpp:1695
 #, c-format
 msgid ""
@@ -7461,7 +7492,7 @@ msgstr ""
 "Файл '%s' неможливо відкрити:\n"
 "У вашій системі жодна програма не асоціюється з даним типом файлів."
 
-#: ../../locales/../src/interface/edithandler.cpp:1734
+#: ../../locales/../src/interface/edithandler.cpp:1733
 #: ../../locales/../src/interface/LocalListView.cpp:1707
 #, c-format
 msgid ""
@@ -7472,7 +7503,7 @@ msgstr ""
 "Помилкова асоційована команда"
 
 #: ../../locales/../src/interface/import.cpp:57
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:755
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:757
 #, c-format
 msgid ""
 "The file '%s' has been created by a more recent version of FileZilla.\n"
@@ -7483,20 +7514,7 @@ msgstr ""
 "Завантаження файлів новіших версій може спричинити втрату даних.\n"
 "Бажаєте продовжити?"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:104
-#, c-format
-msgid ""
-"The file '%s' is not in a format supported by FileZilla.\n"
-"The file is also password protected. Password protected key files are not "
-"supported by FileZilla yet.\n"
-"Would you like to convert it into a supported, unprotected format?"
-msgstr ""
-"Файл '%s' не того формату, що підтримується клієнтом FileZilla.\n"
-"Крім того даний файл захищений паролем. FileZilla наразі не підтримує "
-"захищені паролем файли ключів .\n"
-"Бажаєте конвертувати його у підтримуваний, незахищений формат?"
-
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:102
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:105
 #, c-format
 msgid ""
 "The file '%s' is not in a format supported by FileZilla.\n"
@@ -7504,17 +7522,6 @@ msgid ""
 msgstr ""
 "Файл '%s' не у тому форматі, що підтримується FileZilla.\n"
 "Бажаєте переконвертувати його у підтримуваний формат?"
-
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:107
-#, c-format
-msgid ""
-"The file '%s' is password protected. Password protected key files are not "
-"supported by FileZilla yet.\n"
-"Would you like to convert it into an unprotected file?"
-msgstr ""
-"Файл '%s' захищений паролем. Наразі FileZilla не підтримує захищені паролем "
-"файли ключів.\n"
-"Бажаєте конвертувати його у незахищений файл?"
 
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:87
 msgid "The file selected as default editor does not exist."
@@ -7578,7 +7585,17 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Обмеження повинно бути у проміжку поміж 1 та 2000 MiB"
 
-#: ../../locales/../src/interface/state.cpp:248
+#: ../../locales/../src/interface/state.cpp:979
+#, c-format
+msgid "The local directory '%s' could not be created."
+msgstr "Неможливо створити локальний каталог '%s'."
+
+#: ../../locales/../src/interface/state.cpp:964
+#, c-format
+msgid "The local directory '%s' does not exist."
+msgstr "Локального каталогу '%s' не існує."
+
+#: ../../locales/../src/interface/state.cpp:249
 #, c-format
 msgid ""
 "The local directory '%s' is not below the synchronization root (%s).\n"
@@ -7603,11 +7620,16 @@ msgstr "Нову версію завантажити було неможливо
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Нову версію було збережено у вашому каталозі завантажень."
 
-#: ../../locales/../src/interface/QueueView.cpp:1840
+#: ../../locales/../src/interface/QueueView.cpp:1834
 msgid "The queue will not be saved."
 msgstr "Чергу не буде збережено."
 
-#: ../../locales/../src/interface/state.cpp:906
+#: ../../locales/../src/interface/state.cpp:891
+#, c-format
+msgid "The remote directory '%s' does not exist."
+msgstr "Віддаленого каталогу '%s' не існує."
+
+#: ../../locales/../src/interface/state.cpp:935
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7631,12 +7653,12 @@ msgstr ""
 msgid "The selected file is already being edited:"
 msgstr "Обраний файл уже знаходиться в процесі редагування:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1721
+#: ../../locales/../src/interface/edithandler.cpp:1720
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr "Обраний файл усе ще відкритий у сторонній програмі. Закрийте її."
 
-#: ../../locales/../src/interface/edithandler.cpp:1627
+#: ../../locales/../src/interface/edithandler.cpp:1626
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
@@ -7685,7 +7707,7 @@ msgstr ""
 "Ключ хоста сервера невідомий. У вас немає гарантії того, що даний сервер "
 "являє собою той комп'ютер, який ви мали на увазі."
 
-#: ../../locales/../src/engine/socket.cpp:1099
+#: ../../locales/../src/engine/socket.cpp:1100
 msgid "The servname parameter is not supported for ai_socktype"
 msgstr "Параметр servname не підтримується для ai_socktype"
 
@@ -7697,20 +7719,20 @@ msgstr ""
 "Налаштування імпортовано. Для того щоб усі налаштування вступили в дію, "
 "необхідно перезавантажити FileZilla."
 
-#: ../../locales/../src/engine/socket.cpp:1047
+#: ../../locales/../src/engine/socket.cpp:1048
 msgid "The specified address family is not supported"
 msgstr "Вказана родина адрес не підтримується"
 
-#: ../../locales/../src/engine/socket.cpp:1112
+#: ../../locales/../src/engine/socket.cpp:1113
 msgid "The specified network name is no longer available"
 msgstr "Вказана мережа більше недоступна"
 
-#: ../../locales/../src/interface/QueueView.cpp:3052
+#: ../../locales/../src/interface/QueueView.cpp:3042
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
 "Система незабаром перезавантажиться; для відміни натисніть кнопку Скасувати."
 
-#: ../../locales/../src/interface/QueueView.cpp:3048
+#: ../../locales/../src/interface/QueueView.cpp:3038
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Система незабаром вимкнеться; для відміни натисніть кнопку Скасувати."
 
@@ -7784,8 +7806,8 @@ msgstr "Час &очікування в секундах:"
 msgid "Timeout"
 msgstr "Час вичерпано"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1622
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1031
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1619
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1036
 #, c-format
 msgid "Timezone offset of server is %d seconds."
 msgstr "Зсув часового поясу за сервером становить %d секунд."
@@ -7794,12 +7816,12 @@ msgstr "Зсув часового поясу за сервером станов�
 msgid "Title:"
 msgstr "Назва:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2222
+#: ../../locales/../src/interface/Mainfrm.cpp:2201
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Для того, щоб порівняти каталоги, обидва списки файлів необхідно вирівняти."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2223
+#: ../../locales/../src/interface/Mainfrm.cpp:2202
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Для того, щоб це зробити, необхідно, щоб обидва дерева каталогів були або "
@@ -7923,8 +7945,8 @@ msgstr "Передача"
 msgid "Transfers"
 msgstr "Передачі"
 
-#: ../../locales/../src/interface/QueueView.cpp:2950
-#: ../../locales/../src/interface/QueueView.cpp:2953
+#: ../../locales/../src/interface/QueueView.cpp:2940
+#: ../../locales/../src/interface/QueueView.cpp:2943
 msgid "Transfers finished"
 msgstr "Передачі завершено"
 
@@ -7936,11 +7958,11 @@ msgstr "Трактувати файли &без розширення як фай
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Трактувати &наступні типи файлів, як файли ASCII:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:835
 msgid "Trust changed Hostkey:"
 msgstr "Довіряти зміненому ключеві хоста:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:827
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:833
 msgid "Trust new Hostkey:"
 msgstr "Довіряти новому ключеві хоста:"
 
@@ -7962,7 +7984,7 @@ msgid "Try again"
 msgstr "Повторити спробу"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2593
-#: ../../locales/../src/interface/edithandler.cpp:1086
+#: ../../locales/../src/interface/edithandler.cpp:1085
 msgid "Type"
 msgstr "Тип"
 
@@ -8005,8 +8027,8 @@ msgstr "Неініціалізоаний код помилки %d"
 msgid "Unit:"
 msgstr "Модуль:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1118
-#: ../../locales/../src/interface/edithandler.cpp:1146
+#: ../../locales/../src/interface/edithandler.cpp:1117
+#: ../../locales/../src/interface/edithandler.cpp:1145
 msgid "Unknown"
 msgstr "Невідомо"
 
@@ -8080,7 +8102,7 @@ msgstr "Оновлення"
 msgid "Upload"
 msgstr "Відвантаження"
 
-#: ../../locales/../src/interface/edithandler.cpp:1109
+#: ../../locales/../src/interface/edithandler.cpp:1108
 msgid "Upload failed"
 msgstr "Невдале відвантаження"
 
@@ -8109,19 +8131,19 @@ msgstr "Відвантажити даний файл назад на серве�
 msgid "Upload this file to the server?"
 msgstr "Відвантажити даний файл на сервер?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1103
-#: ../../locales/../src/interface/edithandler.cpp:1137
-#: ../../locales/../src/interface/edithandler.cpp:1293
+#: ../../locales/../src/interface/edithandler.cpp:1102
+#: ../../locales/../src/interface/edithandler.cpp:1136
+#: ../../locales/../src/interface/edithandler.cpp:1292
 msgid "Uploading"
 msgstr "Відвантаження"
 
-#: ../../locales/../src/interface/edithandler.cpp:1106
-#: ../../locales/../src/interface/edithandler.cpp:1295
+#: ../../locales/../src/interface/edithandler.cpp:1105
+#: ../../locales/../src/interface/edithandler.cpp:1294
 msgid "Uploading and pending removal"
 msgstr "Відвантаження та очікування видалення"
 
-#: ../../locales/../src/interface/edithandler.cpp:1140
-#: ../../locales/../src/interface/edithandler.cpp:1297
+#: ../../locales/../src/interface/edithandler.cpp:1139
+#: ../../locales/../src/interface/edithandler.cpp:1296
 msgid "Uploading and unediting"
 msgstr "Відвантаження і відсутність редагування"
 
@@ -8153,7 +8175,7 @@ msgstr ""
 msgid "Use default action"
 msgstr "Використати типову дію"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:536
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:538
 msgid "Use explicit FTP over TLS if available"
 msgstr "Використовувати явне FTP через TLS, якщо доступно"
 
@@ -8205,7 +8227,7 @@ msgid "User:"
 msgstr "Користувач:"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:494
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1042
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1044
 msgid "Username cannot be a series of spaces"
 msgstr "Ім'я користувача не може складатися з серії пробілів"
 
@@ -8236,7 +8258,7 @@ msgstr "Перевірка сертифікату..."
 msgid "Very high"
 msgstr "Дуже високий"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1392
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1389
 msgid "View hidden option set, but unsupported by server"
 msgstr "Переглянути прихований набір опцій,проте не підтримуваних сервером"
 
@@ -8252,7 +8274,7 @@ msgstr "Видимі стовпці"
 msgid "W&rite"
 msgstr "Пи&сати"
 
-#: ../../locales/../src/interface/QueueView.cpp:1678
+#: ../../locales/../src/interface/QueueView.cpp:1672
 msgid "Waiting"
 msgstr "Очікування"
 
@@ -8349,7 +8371,7 @@ msgstr "Неправильна зовнішня ІР адреса"
 msgid "Wrong line endings"
 msgstr "Неправильні закінчення лінійки"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:841
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:847
 msgid "Yes"
 msgstr "Так"
 
@@ -8399,7 +8421,7 @@ msgstr ""
 "Не можна замінювати недійсний символ недійсним символом. Вставте дозволений "
 "символ в іменах файлів."
 
-#: ../../locales/../src/interface/asyncrequestqueue.cpp:296
+#: ../../locales/../src/interface/asyncrequestqueue.cpp:301
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
 msgstr ""
 "Ви не ввели нове ім'я для цього файлу.Чи переписати цей файл натомість?"
@@ -8408,7 +8430,7 @@ msgstr ""
 msgid "You have selected at least one symbolic link."
 msgstr "Ви обрали принаймні одне символічне посилання."
 
-#: ../../locales/../src/interface/edithandler.cpp:1588
+#: ../../locales/../src/interface/edithandler.cpp:1587
 #: ../../locales/../src/interface/search.cpp:725
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
@@ -8425,11 +8447,11 @@ msgstr ""
 "продовжити?"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:414
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:952
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:954
 msgid "You have to enter a hostname."
 msgstr "Необхідно ввести ім'я хосту."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1061
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1063
 msgid "You have to enter a key file path"
 msgstr "Необхідно ввести шлях файла ключа"
 
@@ -8447,12 +8469,12 @@ msgid "You have to enter a writable local directory."
 msgstr "Необхідно ввести локальний каталог, придатний для запису."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:505
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1052
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1054
 msgid "You have to enter an account name"
 msgstr "Необхідно ввести ім'я облікового запису"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:479
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1027
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1029
 msgid "You have to specify a user name"
 msgstr "Необхідно вказати ім'я користувача"
 
@@ -8470,7 +8492,7 @@ msgstr "Потрібно ввести ім'я для закладки."
 msgid "You need to enter a name for the log file."
 msgstr "Потрібно ввести ім'я для файлу журналу."
 
-#: ../../locales/../src/interface/edithandler.cpp:1473
+#: ../../locales/../src/interface/edithandler.cpp:1472
 msgid "You need to enter a properly quoted command."
 msgstr "Потрібно ввести правильно залапковану команду."
 
@@ -8485,14 +8507,14 @@ msgstr "Потрібно ввести порт проксі в межах від
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:75
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:429
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1125
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1127
 msgid "You need to enter at least one path, empty bookmarks are not supported."
 msgstr ""
 "Потрібно ввести принаймні один шлях; порожні закладки не підтримуються."
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:81
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:435
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1132
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1134
 msgid ""
 "You need to enter both a local and a remote path to enable synchronized "
 "browsing for this bookmark."
@@ -8500,7 +8522,7 @@ msgstr ""
 "Щоб увімкнути синхронізовану навігацію для цієї закладки, необхідно ввести "
 "як локальний, так і віддалений шляхи."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1094
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1096
 msgid ""
 "You need to enter both a local and a remote path to enable synchronized "
 "browsing for this site."
@@ -8532,7 +8554,7 @@ msgstr ""
 "У вас не повинно виникнути проблем у з'єднанні з іншими серверами. Передачі "
 "файлів повинні працювати правильно."
 
-#: ../../locales/../src/interface/QueueView.cpp:3056
+#: ../../locales/../src/interface/QueueView.cpp:3046
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Ваш комп'ютер призупиниться, якщо не натиснути Скасувати."
 
@@ -8590,8 +8612,8 @@ msgstr "файл"
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-файл блокування"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:197
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:223
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:177
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:203
 msgid ""
 "fzputtygen could not be started.\n"
 "Please make sure this executable exists in the same directory as the main "
@@ -8601,11 +8623,11 @@ msgstr ""
 "Переконайтесь, що він знаходиться у тому ж каталозі, що і головний "
 "виконуючий файл FileZilla."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:468
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:466
 msgid "fzsftp belongs to a different version of FileZilla"
 msgstr "fzsftp належить до іншої версії FileZilla."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1484
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1489
 msgid "fzsftp could not be started"
 msgstr "функцію fzsftp неможливо запустити"
 
@@ -8688,6 +8710,26 @@ msgstr "глобальний запис"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxВіджети:"
+
+#~ msgid ""
+#~ "The file '%s' is not in a format supported by FileZilla.\n"
+#~ "The file is also password protected. Password protected key files are not "
+#~ "supported by FileZilla yet.\n"
+#~ "Would you like to convert it into a supported, unprotected format?"
+#~ msgstr ""
+#~ "Файл '%s' не того формату, що підтримується клієнтом FileZilla.\n"
+#~ "Крім того даний файл захищений паролем. FileZilla наразі не підтримує "
+#~ "захищені паролем файли ключів .\n"
+#~ "Бажаєте конвертувати його у підтримуваний, незахищений формат?"
+
+#~ msgid ""
+#~ "The file '%s' is password protected. Password protected key files are not "
+#~ "supported by FileZilla yet.\n"
+#~ "Would you like to convert it into an unprotected file?"
+#~ msgstr ""
+#~ "Файл '%s' захищений паролем. Наразі FileZilla не підтримує захищені "
+#~ "паролем файли ключів.\n"
+#~ "Бажаєте конвертувати його у незахищений файл?"
 
 #~ msgid "The XML document is not well-formed: %s"
 #~ msgstr "Документ XML оформлено неправильно: %s"
