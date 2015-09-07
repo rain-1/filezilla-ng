@@ -918,6 +918,7 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 	case SocketEventType::connection_next:
 		if (error)
 			LogMessage(MessageType::Status, _("Connection attempt failed with \"%s\", trying next address."), CSocket::GetErrorDescription(error));
+		SetAlive();
 		break;
 	case SocketEventType::connection:
 		if (error) {
