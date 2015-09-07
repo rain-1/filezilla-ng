@@ -132,7 +132,7 @@ protected:
 	// array of item lists, sorted by priority. Used by scheduler to find
 	// next file to transfer
 	// First index specifies whether the item is queued (0) or immediate (1)
-	std::list<CFileItem*> m_fileList[2][static_cast<int>(QueuePriority::count)];
+	std::deque<CFileItem*> m_fileList[2][static_cast<int>(QueuePriority::count)];
 };
 
 struct t_EngineData;
