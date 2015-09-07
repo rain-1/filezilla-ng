@@ -462,7 +462,7 @@ void CServerItem::AddFileItemToList(CFileItem* pItem)
 
 void CServerItem::RemoveFileItemFromList(CFileItem* pItem)
 {
-	std::list<CFileItem*>& fileList = m_fileList[pItem->queued() ? 0 : 1][static_cast<int>(pItem->GetPriority())];
+	std::deque<CFileItem*>& fileList = m_fileList[pItem->queued() ? 0 : 1][static_cast<int>(pItem->GetPriority())];
 	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter) {
 		if (*iter == pItem) {
 			fileList.erase(iter);
@@ -493,7 +493,7 @@ void CServerItem::SetDefaultFileExistsAction(CFileExistsNotification::OverwriteA
 }
 
 namespace {
-CFileItem* DoGetIdleChild(std::list<CFileItem*> const* fileList, TransferDirection direction)
+CFileItem* DoGetIdleChild(std::deque<CFileItem*> const* fileList, TransferDirection direction)
 {
 	int i = 0;
 	for (i = static_cast<int>(QueuePriority::count) - 1; i >= 0; --i) {
@@ -543,20 +543,19 @@ bool CServerItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
 void CServerItem::QueueImmediateFiles()
 {
 	for (int i = 0; i < static_cast<int>(QueuePriority::count); ++i) {
-		std::list<CFileItem*> activeList;
-		std::list<CFileItem*>& fileList = m_fileList[1][i];
-		for (std::list<CFileItem*>::reverse_iterator iter = fileList.rbegin(); iter != fileList.rend(); ++iter) {
+		std::deque<CFileItem*> activeList;
+		std::deque<CFileItem*>& fileList = m_fileList[1][i];
+		for (auto iter = fileList.rbegin(); iter != fileList.rend(); ++iter) {
 			CFileItem* item = *iter;
 			wxASSERT(!item->queued());
 			if (item->IsActive())
 				activeList.push_front(item);
-			else
-			{
+			else {
 				item->set_queued(true);
 				m_fileList[0][i].push_front(item);
 			}
 		}
-		fileList = activeList;
+		std::swap(fileList, activeList);
 	}
 }
 
@@ -565,7 +564,7 @@ void CServerItem::QueueImmediateFile(CFileItem* pItem)
 	if (pItem->queued())
 		return;
 
-	std::list<CFileItem*>& fileList = m_fileList[1][static_cast<int>(pItem->GetPriority())];
+	std::deque<CFileItem*>& fileList = m_fileList[1][static_cast<int>(pItem->GetPriority())];
 	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter) {
 		if (*iter != pItem)
 			continue;
@@ -592,9 +591,8 @@ int64_t CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, i
 	int64_t totalSize = 0;
 	for (int i = 0; i < static_cast<int>(QueuePriority::count); ++i) {
 		for (int j = 0; j < 2; ++j) {
-			const std::list<CFileItem*>& fileList = m_fileList[j][i];
-			for (std::list<CFileItem*>::const_iterator iter = fileList.begin(); iter != fileList.end(); ++iter) {
-				const CFileItem* item = *iter;
+			const std::deque<CFileItem*>& fileList = m_fileList[j][i];
+			for (auto const& item : fileList) {
 				int64_t size = item->GetSize();
 				if (size >= 0)
 					totalSize += size;
@@ -674,8 +672,10 @@ void CServerItem::SetPriority(QueuePriority priority)
 
 	for (int i = 0; i < 2; ++i)
 		for (int j = 0; j < static_cast<int>(QueuePriority::count); ++j) {
-			if (j != static_cast<int>(priority))
-				m_fileList[i][static_cast<int>(priority)].splice(m_fileList[i][static_cast<int>(priority)].end(), m_fileList[i][j]);
+			if (j != static_cast<int>(priority)) {
+				std::move(m_fileList[i][j].begin(), m_fileList[i][j].end(), std::back_inserter(m_fileList[i][static_cast<int>(priority)]));
+				m_fileList[i][j].clear();
+			}
 		}
 }
 
@@ -683,8 +683,7 @@ void CServerItem::SetChildPriority(CFileItem* pItem, QueuePriority oldPriority, 
 {
 	int i = pItem->queued() ? 0 : 1;
 
-	for (auto iter = m_fileList[i][static_cast<int>(oldPriority)].begin(); iter != m_fileList[i][static_cast<int>(oldPriority)].end(); ++iter)
-	{
+	for (auto iter = m_fileList[i][static_cast<int>(oldPriority)].begin(); iter != m_fileList[i][static_cast<int>(oldPriority)].end(); ++iter) {
 		if (*iter != pItem)
 			continue;
 
