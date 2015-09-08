@@ -40,14 +40,14 @@ public:
 	virtual void SetPriority(QueuePriority priority);
 
 	virtual void AddChild(CQueueItem* pItem);
-	unsigned int GetChildrenCount(bool recursive);
-	CQueueItem* GetChild(unsigned int item, bool recursive = true);
+	virtual unsigned int GetChildrenCount(bool recursive) const;
+	virtual CQueueItem* GetChild(unsigned int item, bool recursive = true);
 	CQueueItem* GetParent() { return m_parent; }
 	const CQueueItem* GetParent() const { return m_parent; }
 	void SetParent(CQueueItem* parent) { m_parent = parent; }
+
 	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true); // Removes a child item with is somewhere in the tree of children.
-	virtual bool TryRemoveAll(); // Removes a inactive childrens, queues active children for removal.
-								 // Returns true if item can be removed itself
+	virtual bool TryRemoveAll() = 0; // Removes a inactive childrens, queues active children for removal. Returns true if item itself can be removed
 	CQueueItem* GetTopLevelItem();
 	const CQueueItem* GetTopLevelItem() const;
 	int GetItemIndex() const; // Return the visible item index relative to the topmost parent item.
@@ -65,16 +65,6 @@ protected:
 	CQueueItem(CQueueItem* parent = 0);
 
 	CQueueItem* m_parent;
-
-	int m_visibleOffspring{}; // Visible offspring over all sublevels
-	int m_maxCachedIndex{-1};
-
-	struct t_cacheItem
-	{
-		int index;
-		int child;
-	};
-	std::vector<t_cacheItem> m_lookupCache;
 
 	friend class CServerItem;
 
@@ -101,9 +91,14 @@ public:
 	wxString GetName() const;
 
 	virtual void AddChild(CQueueItem* pItem);
+	virtual unsigned int GetChildrenCount(bool recursive) const;
+	virtual CQueueItem* GetChild(unsigned int item, bool recursive = true);
 
 	CFileItem* GetIdleChild(bool immadiateOnly, TransferDirection direction);
+
 	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true); // Removes a child item with is somewhere in the tree of children
+	virtual bool TryRemoveAll();
+
 	int64_t GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const;
 
 	void QueueImmediateFiles();
@@ -112,8 +107,6 @@ public:
 	virtual void SaveItem(pugi::xml_node& element) const;
 
 	void SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction);
-
-	virtual bool TryRemoveAll();
 
 	void DetachChildren();
 
@@ -133,6 +126,18 @@ protected:
 	// next file to transfer
 	// First index specifies whether the item is queued (0) or immediate (1)
 	std::deque<CFileItem*> m_fileList[2][static_cast<int>(QueuePriority::count)];
+
+	friend class CQueueItem;
+
+	int m_visibleOffspring{}; // Visible offspring over all sublevels
+	int m_maxCachedIndex{-1};
+
+	struct t_cacheItem
+	{
+		int index;
+		int child;
+	};
+	std::vector<t_cacheItem> m_lookupCache;
 };
 
 struct t_EngineData;
@@ -273,6 +278,8 @@ public:
 	virtual void SaveItem(pugi::xml_node& element) const;
 
 	virtual void SetActive(bool active);
+
+	virtual bool TryRemoveAll() { return true; }
 };
 
 class CFolderScanItem : public CQueueItem
@@ -318,6 +325,8 @@ public:
 	virtual ~CStatusItem() {}
 
 	virtual QueueItemType GetType() const { return QueueItemType::Status; }
+
+	virtual bool TryRemoveAll() { return true; }
 };
 
 class CQueue;
