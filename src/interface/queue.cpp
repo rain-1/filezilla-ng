@@ -26,82 +26,42 @@ void CQueueItem::SetPriority(QueuePriority priority)
 
 void CQueueItem::AddChild(CQueueItem* item)
 {
+	wxASSERT(GetType() != QueueItemType::Folder);
+	wxASSERT(GetType() != QueueItemType::Status);
+
 	if (m_removed_at_front) {
 		m_children.erase(m_children.begin(), m_children.begin() + m_removed_at_front);
 		m_removed_at_front = 0;
 	}
 	m_children.push_back(item);
 
-	m_visibleOffspring += 1 + item->m_visibleOffspring;
-	m_maxCachedIndex = -1;
 	CQueueItem* parent = GetParent();
-	while (parent)
-	{
-		parent->m_visibleOffspring += 1 + item->m_visibleOffspring;
-		parent->m_maxCachedIndex = -1;
+	while (parent) {
+		if (parent->GetType() == QueueItemType::Server) {
+			static_cast<CServerItem*>(parent)->m_visibleOffspring += 1 + item->GetChildrenCount(true);
+			static_cast<CServerItem*>(parent)->m_maxCachedIndex = -1;
+		}
 		parent = parent->GetParent();
 	}
 }
 
-CQueueItem* CQueueItem::GetChild(unsigned int item, bool recursive /*=true*/)
+
+CQueueItem* CQueueItem::GetChild(unsigned int item, bool recursive)
 {
-	std::vector<CQueueItem*>::iterator iter;
-	if (!recursive)
-	{
+	if (!recursive) {
 		if (item + m_removed_at_front >= m_children.size())
 			return 0;
-		iter = m_children.begin();
-		iter += item + m_removed_at_front;
-		return *iter;
+		return *(m_children.begin() + item + m_removed_at_front);
 	}
 
-	if ((int)item <= m_maxCachedIndex)
-	{
-		// Index is cached
-		iter = m_children.begin() + m_removed_at_front;
-		iter += m_lookupCache[item].child;
-		item -= m_lookupCache[item].index;
-		if (!item)
-			return *iter;
-		else
-			return (*iter)->GetChild(item - 1);
-	}
-
-	int index;
-	int child;
-	iter = m_children.begin() + m_removed_at_front;
-	if (m_maxCachedIndex == -1)
-	{
-		child = 0;
-		index = 0;
-	}
-	else
-	{
-		// Start with loop with the last cached item index
-		iter += m_lookupCache[m_maxCachedIndex].child + 1;
-		item -= m_maxCachedIndex + 1;
-		index = m_maxCachedIndex + 1;
-		child = m_lookupCache[m_maxCachedIndex].child + 1;
-	}
-
-	for (; iter != m_children.end(); ++iter, ++child)
-	{
+	std::vector<CQueueItem*>::iterator iter = m_children.begin() + m_removed_at_front;
+	for (; iter != m_children.end(); ++iter) {
 		if (!item)
 			return *iter;
 
 		unsigned int count = (*iter)->GetChildrenCount(true);
-		if (item > count)
-		{
-			if (m_maxCachedIndex == -1 && m_lookupCache.size() < (unsigned int)m_visibleOffspring)
-				m_lookupCache.resize(m_visibleOffspring);
-			for (unsigned int k = index; k <= index + count; k++)
-			{
-				m_lookupCache[k].child = child;
-				m_lookupCache[k].index = index;
-			}
-			m_maxCachedIndex = index + count;
+		if (item > count) {
 			item -= count + 1;
-			index += count + 1;
 			continue;
 		}
 
@@ -110,29 +70,35 @@ CQueueItem* CQueueItem::GetChild(unsigned int item, bool recursive /*=true*/)
 	return 0;
 }
 
-unsigned int CQueueItem::GetChildrenCount(bool recursive)
+unsigned int CQueueItem::GetChildrenCount(bool recursive) const
 {
-	if (!recursive)
-		return m_children.size() - m_removed_at_front;
+	unsigned int count{};
+	if (!recursive) {
+		count = m_children.size() - m_removed_at_front;
+	}
+	else {
+		for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter) {
+			count += 1 + (*iter)->GetChildrenCount(true);
+		}
+	}
 
-	return m_visibleOffspring;
+	return count;
 }
 
-bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
+bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy)
 {
-	int oldVisibleOffspring = m_visibleOffspring;
+	int const oldVisibleOffspring = GetChildrenCount(true);
+	int visibleOffspring = oldVisibleOffspring;
+
 	bool deleted = false;
-	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
-	{
-		if (*iter == pItem)
-		{
-			m_visibleOffspring -= 1;
-			m_visibleOffspring -= pItem->m_visibleOffspring;
+	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter) {
+		if (*iter == pItem) {
+			visibleOffspring -= 1;
+			visibleOffspring -= pItem->GetChildrenCount(true);
 			if (destroy)
 				delete pItem;
 
-			if (iter - m_children.begin() - m_removed_at_front <= 10)
-			{
+			if (iter - m_children.begin() - m_removed_at_front <= 10) {
 				m_removed_at_front++;
 				unsigned int end = iter - m_children.begin();
 				int c = 0;
@@ -146,17 +112,14 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
 			break;
 		}
 
-		int visibleOffspring = (*iter)->m_visibleOffspring;
-		if ((*iter)->RemoveChild(pItem, destroy))
-		{
-			m_visibleOffspring -= visibleOffspring - (*iter)->m_visibleOffspring;
-			if (!((*iter)->m_children.size() - (*iter)->m_removed_at_front))
-			{
-				m_visibleOffspring -= 1;
+		int childVisibleOffspring = (*iter)->GetChildrenCount(true);
+		if ((*iter)->RemoveChild(pItem, destroy)) {
+			visibleOffspring -= childVisibleOffspring - (*iter)->GetChildrenCount(true);
+			if (!((*iter)->m_children.size() - (*iter)->m_removed_at_front)) {
+				visibleOffspring -= 1;
 				delete *iter;
 
-				if (iter - m_children.begin() - m_removed_at_front <= 10)
-				{
+				if (iter - m_children.begin() - m_removed_at_front <= 10) {
 					m_removed_at_front++;
 					unsigned int end = iter - m_children.begin();
 					for (int i = end; i >= m_removed_at_front; i--)
@@ -174,51 +137,21 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
 	if (!deleted)
 		return false;
 
-	m_maxCachedIndex = -1;
+	if (GetType() == QueueItemType::Server) {
+		static_cast<CServerItem*>(this)->m_visibleOffspring = visibleOffspring;
+	}
 
 	// Propagate new children count to parent
 	CQueueItem* parent = GetParent();
-	while (parent)
-	{
-		parent->m_maxCachedIndex = -1;
-		parent->m_visibleOffspring -= oldVisibleOffspring - m_visibleOffspring;
+	while (parent) {
+		if (parent->GetType() == QueueItemType::Server) {
+			static_cast<CServerItem*>(parent)->m_maxCachedIndex = -1;
+			static_cast<CServerItem*>(parent)->m_visibleOffspring -= oldVisibleOffspring - visibleOffspring;
+		}
 		parent = parent->GetParent();
 	}
 
 	return true;
-}
-
-bool CQueueItem::TryRemoveAll()
-{
-	const int oldVisibleOffspring = m_visibleOffspring;
-	std::vector<CQueueItem*>::iterator iter;
-	std::vector<CQueueItem*> keepChildren;
-	m_visibleOffspring = 0;
-	for (iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter)
-	{
-		CQueueItem* pItem = *iter;
-		if (pItem->TryRemoveAll())
-			delete pItem;
-		else
-		{
-			keepChildren.push_back(pItem);
-			m_visibleOffspring++;
-			m_visibleOffspring += pItem->GetChildrenCount(true);
-		}
-	}
-	m_children = keepChildren;
-	m_maxCachedIndex = -1;
-	m_removed_at_front = 0;
-
-	CQueueItem* parent = GetParent();
-	while (parent)
-	{
-		parent->m_maxCachedIndex = -1;
-		parent->m_visibleOffspring -= oldVisibleOffspring - m_visibleOffspring;
-		parent = parent->GetParent();
-	}
-
-	return m_children.empty();
 }
 
 CQueueItem* CQueueItem::GetTopLevelItem()
@@ -228,8 +161,7 @@ CQueueItem* CQueueItem::GetTopLevelItem()
 
 	CQueueItem* newParent = m_parent;
 	CQueueItem* parent = 0;
-	while (newParent)
-	{
+	while (newParent) {
 		parent = newParent;
 		newParent = newParent->GetParent();
 	}
@@ -317,6 +249,7 @@ QueuePriority CFileItem::GetPriority() const
 void CFileItem::SetActive(const bool active)
 {
 	if (active && !IsActive()) {
+		wxASSERT(!GetChildrenCount(false));
 		AddChild(new CStatusItem);
 		flags |= flag_active;
 	}
@@ -447,9 +380,22 @@ wxString CServerItem::GetName() const
 void CServerItem::AddChild(CQueueItem* pItem)
 {
 	CQueueItem::AddChild(pItem);
+	m_maxCachedIndex = -1;
+	m_visibleOffspring += 1 + pItem->GetChildrenCount(true);
 	if (pItem->GetType() == QueueItemType::File ||
 		pItem->GetType() == QueueItemType::Folder)
 		AddFileItemToList((CFileItem*)pItem);
+
+	wxASSERT(m_visibleOffspring >= static_cast<int>(m_children.size()) - m_removed_at_front);
+	wxASSERT(((m_children.size() - m_removed_at_front) != 0) == (m_visibleOffspring != 0));
+}
+
+unsigned int CServerItem::GetChildrenCount(bool recursive) const
+{
+	if (!recursive)
+		return m_children.size() - m_removed_at_front;
+
+	return m_visibleOffspring;
 }
 
 void CServerItem::AddFileItemToList(CFileItem* pItem)
@@ -492,6 +438,66 @@ void CServerItem::SetDefaultFileExistsAction(CFileExistsNotification::OverwriteA
 	}
 }
 
+CQueueItem* CServerItem::GetChild(unsigned int item, bool recursive)
+{
+	std::vector<CQueueItem*>::iterator iter;
+	if (!recursive) {
+		if (item + m_removed_at_front >= m_children.size())
+			return 0;
+		iter = m_children.begin();
+		iter += item + m_removed_at_front;
+		return *iter;
+	}
+
+	if ((int)item <= m_maxCachedIndex) {
+		// Index is cached
+		iter = m_children.begin() + m_removed_at_front;
+		iter += m_lookupCache[item].child;
+		item -= m_lookupCache[item].index;
+		if (!item)
+			return *iter;
+		else
+			return (*iter)->GetChild(item - 1);
+	}
+
+	int index;
+	int child;
+	iter = m_children.begin() + m_removed_at_front;
+	if (m_maxCachedIndex == -1) {
+		child = 0;
+		index = 0;
+	}
+	else {
+		// Start with loop with the last cached item index
+		iter += m_lookupCache[m_maxCachedIndex].child + 1;
+		item -= m_maxCachedIndex + 1;
+		index = m_maxCachedIndex + 1;
+		child = m_lookupCache[m_maxCachedIndex].child + 1;
+	}
+
+	for (; iter != m_children.end(); ++iter, ++child) {
+		if (!item)
+			return *iter;
+
+		unsigned int count = (*iter)->GetChildrenCount(true);
+		if (item > count) {
+			if (m_maxCachedIndex == -1 && m_lookupCache.size() < (unsigned int)m_visibleOffspring)
+				m_lookupCache.resize(m_visibleOffspring);
+			for (unsigned int k = index; k <= index + count; ++k) {
+				m_lookupCache[k].child = child;
+				m_lookupCache[k].index = index;
+			}
+			m_maxCachedIndex = index + count;
+			item -= count + 1;
+			index += count + 1;
+			continue;
+		}
+
+		return (*iter)->GetChild(item - 1);
+	}
+	return 0;
+}
+
 namespace {
 CFileItem* DoGetIdleChild(std::deque<CFileItem*> const* fileList, TransferDirection direction)
 {
@@ -531,13 +537,20 @@ bool CServerItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
 	if (!pItem)
 		return false;
 
-	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder)
-	{
+	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		CFileItem* pFileItem = static_cast<CFileItem*>(pItem);
 		RemoveFileItemFromList(pFileItem);
 	}
 
-	return CQueueItem::RemoveChild(pItem, destroy);
+	bool removed = CQueueItem::RemoveChild(pItem, destroy);
+	if (removed) {
+		m_maxCachedIndex = -1;
+	}
+	
+	wxASSERT(m_visibleOffspring >= static_cast<int>(m_children.size()) - m_removed_at_front);
+	wxASSERT(((m_children.size() - m_removed_at_front) != 0) == (m_visibleOffspring != 0));
+
+	return removed;
 }
 
 void CServerItem::QueueImmediateFiles()
@@ -615,6 +628,8 @@ int64_t CServerItem::GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, i
 
 bool CServerItem::TryRemoveAll()
 {
+	wxASSERT(!GetParent());
+
 	const int oldVisibleOffspring = m_visibleOffspring;
 	std::vector<CQueueItem*>::iterator iter;
 	std::vector<CQueueItem*> keepChildren;
@@ -634,14 +649,13 @@ bool CServerItem::TryRemoveAll()
 			m_visibleOffspring += pItem->GetChildrenCount(true);
 		}
 	}
-	m_children = keepChildren;
+	std::swap(m_children, keepChildren);
 	m_removed_at_front = 0;
 
-	CQueueItem* parent = GetParent();
-	while (parent) {
-		parent->m_visibleOffspring -= oldVisibleOffspring - m_visibleOffspring;
-		parent = parent->GetParent();
-	}
+	m_maxCachedIndex = -1;
+
+	wxASSERT(oldVisibleOffspring >= m_visibleOffspring);
+	wxASSERT(m_visibleOffspring >= static_cast<int>(m_children.size()));
 
 	return m_children.empty();
 }
@@ -1284,7 +1298,7 @@ void CQueueViewBase::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 	}
 }
 
-bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount /*=true*/, bool updateSelections /*=true*/)
+bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount, bool updateSelections)
 {
 	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		wxASSERT(m_fileCount > 0);
