@@ -85,13 +85,14 @@ unsigned int CQueueItem::GetChildrenCount(bool recursive) const
 	return count;
 }
 
-bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy)
+bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 {
 	int const oldVisibleOffspring = GetChildrenCount(true);
 	int visibleOffspring = oldVisibleOffspring;
 
 	bool deleted = false;
-	for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter) {
+
+	auto doRemove = [&](std::vector<CQueueItem*>::iterator& iter) {
 		if (*iter == pItem) {
 			visibleOffspring -= 1;
 			visibleOffspring -= pItem->GetChildrenCount(true);
@@ -109,7 +110,7 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy)
 				m_children.erase(iter);
 
 			deleted = true;
-			break;
+			return;
 		}
 
 		int childVisibleOffspring = (*iter)->GetChildrenCount(true);
@@ -130,7 +131,17 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy)
 			}
 
 			deleted = true;
-			break;
+		}
+	};
+
+	if (forward) {
+		for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end() && !deleted; ++iter) {
+			doRemove(iter);
+		}
+	}
+	else {
+		for (auto iter = m_children.rbegin(); iter != m_children.rend() - m_removed_at_front && !deleted; ++iter) {
+			doRemove(iter.base() - 1);
 		}
 	}
 
@@ -406,13 +417,23 @@ void CServerItem::AddFileItemToList(CFileItem* pItem)
 	m_fileList[pItem->queued() ? 0 : 1][static_cast<int>(pItem->GetPriority())].push_back(pItem);
 }
 
-void CServerItem::RemoveFileItemFromList(CFileItem* pItem)
+void CServerItem::RemoveFileItemFromList(CFileItem* pItem, bool forward)
 {
 	std::deque<CFileItem*>& fileList = m_fileList[pItem->queued() ? 0 : 1][static_cast<int>(pItem->GetPriority())];
-	for (auto iter = fileList.begin(); iter != fileList.end(); ++iter) {
-		if (*iter == pItem) {
-			fileList.erase(iter);
-			return;
+	if (forward) {
+		for (auto iter = fileList.begin(); iter != fileList.end(); ++iter) {
+			if (*iter == pItem) {
+				fileList.erase(iter);
+				return;
+			}
+		}
+	}
+	else {
+		for (auto iter = fileList.rbegin(); iter != fileList.rend(); ++iter) {
+			if (*iter == pItem) {
+				fileList.erase(iter.base() - 1);
+				return;
+			}
 		}
 	}
 	wxFAIL_MSG(_T("File item not deleted from m_fileList"));
@@ -532,17 +553,17 @@ CFileItem* CServerItem::GetIdleChild(bool immediateOnly, TransferDirection direc
 	return item;
 }
 
-bool CServerItem::RemoveChild(CQueueItem* pItem, bool destroy /*=true*/)
+bool CServerItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 {
 	if (!pItem)
 		return false;
 
 	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		CFileItem* pFileItem = static_cast<CFileItem*>(pItem);
-		RemoveFileItemFromList(pFileItem);
+		RemoveFileItemFromList(pFileItem, forward);
 	}
 
-	bool removed = CQueueItem::RemoveChild(pItem, destroy);
+	bool removed = CQueueItem::RemoveChild(pItem, destroy, forward);
 	if (removed) {
 		m_maxCachedIndex = -1;
 	}
@@ -639,7 +660,7 @@ bool CServerItem::TryRemoveAll()
 		if (pItem->TryRemoveAll()) {
 			if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 				CFileItem* pFileItem = static_cast<CFileItem*>(pItem);
-				RemoveFileItemFromList(pFileItem);
+				RemoveFileItemFromList(pFileItem, true);
 			}
 			delete pItem;
 		}
@@ -1298,7 +1319,7 @@ void CQueueViewBase::InsertItem(CServerItem* pServerItem, CQueueItem* pItem)
 	}
 }
 
-bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount, bool updateSelections)
+bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount, bool updateSelections, bool forward)
 {
 	if (pItem->GetType() == QueueItemType::File || pItem->GetType() == QueueItemType::Folder) {
 		wxASSERT(m_fileCount > 0);
@@ -1319,7 +1340,7 @@ bool CQueueViewBase::RemoveItem(CQueueItem* pItem, bool destroy, bool updateItem
 	CQueueItem* topLevelItem = pItem->GetTopLevelItem();
 
 	int count = topLevelItem->GetChildrenCount(true);
-	topLevelItem->RemoveChild(pItem, destroy);
+	topLevelItem->RemoveChild(pItem, destroy, forward);
 
 	bool didRemoveParent;
 
