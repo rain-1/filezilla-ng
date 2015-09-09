@@ -46,7 +46,7 @@ public:
 	const CQueueItem* GetParent() const { return m_parent; }
 	void SetParent(CQueueItem* parent) { m_parent = parent; }
 
-	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true); // Removes a child item with is somewhere in the tree of children.
+	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true, bool forward = true); // Removes a child item with is somewhere in the tree of children.
 	virtual bool TryRemoveAll() = 0; // Removes a inactive childrens, queues active children for removal. Returns true if item itself can be removed
 	CQueueItem* GetTopLevelItem();
 	const CQueueItem* GetTopLevelItem() const;
@@ -58,7 +58,6 @@ public:
 	CDateTime GetTime() const { return m_time; }
 	void UpdateTime() { m_time = CDateTime::Now(); }
 
-	const std::vector<CQueueItem*>& GetChildren() const { return m_children; }
 	int GetRemovedAtFront() const { return m_removed_at_front; }
 
 protected:
@@ -96,7 +95,7 @@ public:
 
 	CFileItem* GetIdleChild(bool immadiateOnly, TransferDirection direction);
 
-	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true); // Removes a child item with is somewhere in the tree of children
+	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true, bool forward = true); // Removes a child item with is somewhere in the tree of children
 	virtual bool TryRemoveAll();
 
 	int64_t GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const;
@@ -116,9 +115,11 @@ public:
 
 	int m_activeCount;
 
+	const std::vector<CQueueItem*>& GetChildren() const { return m_children; }
+
 protected:
 	void AddFileItemToList(CFileItem* pItem);
-	void RemoveFileItemFromList(CFileItem* pItem);
+	void RemoveFileItemFromList(CFileItem* pItem, bool forward);
 
 	CServer m_server;
 
@@ -353,7 +354,7 @@ public:
 	CServerItem* CreateServerItem(const CServer& server);
 
 	virtual void InsertItem(CServerItem* pServerItem, CQueueItem* pItem);
-	virtual bool RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount = true, bool updateSelections = true);
+	virtual bool RemoveItem(CQueueItem* pItem, bool destroy, bool updateItemCount = true, bool updateSelections = true, bool forward = true);
 
 	// Has to be called after adding or removing items. Also updates
 	// item count and selections.

@@ -1260,7 +1260,7 @@ void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
 	UpdateStatusLinePositions();
 }
 
-bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount /*=true*/, bool updateSelections /*=true*/)
+bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount, bool updateSelections, bool forward)
 {
 	// RemoveItem assumes that the item has already been removed from all engines
 
@@ -1283,7 +1283,7 @@ bool CQueueView::RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount
 		}
 	}
 
-	bool didRemoveParent = CQueueViewBase::RemoveItem(item, destroy, updateItemCount, updateSelections);
+	bool didRemoveParent = CQueueViewBase::RemoveItem(item, destroy, updateItemCount, updateSelections, forward);
 
 	UpdateStatusLinePositions();
 
@@ -1614,12 +1614,10 @@ void CQueueView::UpdateStatusLinePositions()
 	m_lastTopItem = GetTopItem();
 	int bottomItem = m_lastTopItem + GetCountPerPage();
 
-	for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
-	{
+	for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter) {
 		CStatusLineCtrl *pCtrl = *iter;
 		int index = GetItemIndex(pCtrl->GetItem()) + 1;
-		if (index < m_lastTopItem || index > bottomItem)
-		{
+		if (index < m_lastTopItem || index > bottomItem) {
 			pCtrl->Show(false);
 			continue;
 		}
@@ -2214,42 +2212,53 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 		return;
 #endif
 
-	std::list<CQueueItem*> selectedItems;
+	std::list<std::pair<long, CQueueItem*>> selectedItems;
 	long item = -1;
-	for (;;)
-	{
+	long skipTo = -1;
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
-
-		selectedItems.push_front(GetQueueItem(item));
 		SetItemState(item, 0, wxLIST_STATE_SELECTED);
+
+		if (item <= skipTo) {
+			continue;
+		}
+
+		CQueueItem* pItem = GetQueueItem(item);
+		if (!pItem) {
+			continue;
+		}
+
+		selectedItems.push_front(std::make_pair(item, pItem));
+
+		if (pItem->GetType() == QueueItemType::Server) {
+			// Server selected. Don't process individual files, continue with the next server
+			skipTo = item + pItem->GetChildrenCount(true);
+		}
 	}
 
 	m_waitStatusLineUpdate = true;
 
-	while (!selectedItems.empty())
-	{
-		CQueueItem* pItem = selectedItems.front();
+	while (!selectedItems.empty()) {
+		auto selectedItem = selectedItems.front();
+		CQueueItem* pItem = selectedItem.second;
 		selectedItems.pop_front();
 
 		if (pItem->GetType() == QueueItemType::Status)
 			continue;
-		else if (pItem->GetType() == QueueItemType::FolderScan)
-		{
+		else if (pItem->GetType() == QueueItemType::FolderScan) {
 			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
-			if (pFolder->m_active)
-			{
+			if (pFolder->m_active) {
 				pFolder->m_remove = true;
 				continue;
 			}
 			else
 				RemoveQueuedFolderItem(pFolder);
 		}
-		else if (pItem->GetType() == QueueItemType::Server)
-		{
+		else if (pItem->GetType() == QueueItemType::Server) {
 			CServerItem* pServer = (CServerItem*)pItem;
-			StopItem(pServer);
+			StopItem(pServer, false);
 
 			// Server items get deleted automatically if all children are gone
 			continue;
@@ -2258,8 +2267,7 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 				 pItem->GetType() == QueueItemType::Folder)
 		{
 			CFileItem* pFile = (CFileItem*)pItem;
-			if (pFile->IsActive())
-			{
+			if (pFile->IsActive()) {
 				pFile->set_pending_remove(true);
 				StopItem(pFile);
 				continue;
@@ -2267,14 +2275,19 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 		}
 
 		CQueueItem* pTopLevelItem = pItem->GetTopLevelItem();
-		if (!pTopLevelItem->GetChild(1))
-		{
+		if (!pTopLevelItem->GetChild(1)) {
 			// Parent will get deleted
 			// If next selected item is parent, remove it from list
-			if (!selectedItems.empty() && selectedItems.front() == pTopLevelItem)
+			if (!selectedItems.empty() && selectedItems.front().second == pTopLevelItem)
 				selectedItems.pop_front();
 		}
-		RemoveItem(pItem, true, false, false);
+
+		int topItemIndex = GetItemIndex(pTopLevelItem);
+
+		// Finding the child position is O(n) in the worst case, making deletion quadratic. However we already know item's displayed position, use it as guide.
+		// Remark: I suppose this could be further improved by using the displayed position directly, but probably isn't worth the effort.
+		bool forward = selectedItem.first < (topItemIndex + pTopLevelItem->GetChildrenCount(false) / 2);
+		RemoveItem(pItem, true, false, false, forward);
 	}
 	DisplayNumberQueuedFiles();
 	DisplayQueueSize();
@@ -2312,20 +2325,16 @@ bool CQueueView::StopItem(CFileItem* item)
 	}
 }
 
-bool CQueueView::StopItem(CServerItem* pServerItem)
+bool CQueueView::StopItem(CServerItem* pServerItem, bool updateSelections)
 {
-	std::list<CQueueItem*> items;
-	for (unsigned int i = 0; i < pServerItem->GetChildrenCount(false); i++)
-		items.push_back(pServerItem->GetChild(i, false));
+	std::vector<CQueueItem*> const items = pServerItem->GetChildren();
+	int const removedAtFront = pServerItem->GetRemovedAtFront();
 
-	for (std::list<CQueueItem*>::reverse_iterator iter = items.rbegin(); iter != items.rend(); ++iter)
-	{
-		CQueueItem* pItem = *iter;
-		if (pItem->GetType() == QueueItemType::FolderScan)
-		{
+	for (int i = static_cast<int>(items.size()) - 1; i >= removedAtFront; --i) {
+		CQueueItem* pItem = items[i];
+		if (pItem->GetType() == QueueItemType::FolderScan) {
 			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
-			if (pFolder->m_active)
-			{
+			if (pFolder->m_active) {
 				pFolder->m_remove = true;
 				continue;
 			}
@@ -2334,8 +2343,7 @@ bool CQueueView::StopItem(CServerItem* pServerItem)
 				 pItem->GetType() == QueueItemType::Folder)
 		{
 			CFileItem* pFile = (CFileItem*)pItem;
-			if (pFile->IsActive())
-			{
+			if (pFile->IsActive()) {
 				pFile->set_pending_remove(true);
 				StopItem(pFile);
 				continue;
@@ -2346,8 +2354,7 @@ bool CQueueView::StopItem(CServerItem* pServerItem)
 			wxASSERT(false);
 		}
 
-		if (RemoveItem(pItem, true, false))
-		{
+		if (RemoveItem(pItem, true, false, updateSelections, false)) {
 			DisplayNumberQueuedFiles();
 			SaveSetItemCount(m_itemCount);
 			return true;

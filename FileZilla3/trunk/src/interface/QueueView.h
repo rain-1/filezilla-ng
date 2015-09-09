@@ -202,12 +202,12 @@ protected:
 	void ResetEngine(t_EngineData& data, const enum ResetReason reason);
 	void DeleteEngines();
 
-	virtual bool RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount = true, bool updateSelections = true);
+	virtual bool RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount = true, bool updateSelections = true, bool forward = true);
 
 	// Stops processing of given item
 	// Returns true on success, false if it would block
 	bool StopItem(CFileItem* item);
-	bool StopItem(CServerItem* pServerItem);
+	bool StopItem(CServerItem* pServerItem, bool updateSelections);
 
 	void CheckQueueState();
 	bool IncreaseErrorCount(t_EngineData& engineData);
