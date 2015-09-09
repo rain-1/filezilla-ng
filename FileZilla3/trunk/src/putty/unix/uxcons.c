@@ -190,53 +190,8 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 int askalg(void *frontend, const char *algtype, const char *algname,
 	   void (*callback)(void *ctx, int result), void *ctx)
 {
-    static const char msg[] =
-	"The first %s supported by the server is\n"
-	"%s, which is below the configured warning threshold.\n"
-	"Continue with connection? (y/n) ";
-    static const char msg_batch[] =
-	"The first %s supported by the server is\n"
-	"%s, which is below the configured warning threshold.\n"
-	"Connection abandoned.\n";
-    static const char abandoned[] = "Connection abandoned.\n";
-
-    char line[32];
-//FZ struct termios cf;
-
-//FZ premsg(&cf);
-
-    if (console_batch_mode) {
-	fprintf(stderr, msg_batch, algtype, algname);
-	return 0;
-    }
-
-    fprintf(stderr, msg, algtype, algname);
-    fflush(stderr);
-
-    {
-	struct termios oldmode, newmode;
-	tcgetattr(0, &oldmode);
-	newmode = oldmode;
-	newmode.c_lflag |= ECHO | ISIG | ICANON;
-	tcsetattr(0, TCSANOW, &newmode);
-	line[0] = '\0';
-	int ret;
-	do
-	{
-	    ret = read(0, line, sizeof(line) - 1);
-	} while (ret == -1 && errno == EINTR);
-
-	tcsetattr(0, TCSANOW, &oldmode);
-    }
-
-    if (line[0] == 'y' || line[0] == 'Y') {
-//FZ	postmsg(&cf);
-	return 1;
-    } else {
-	fprintf(stderr, abandoned);
-//FZ	postmsg(&cf);
-	return 0;
-    }
+    fzprintf(sftpError, "The first %s supported by the server is %s, which is no longer secure. Aborting connection.", algtype, algname);
+    return 0;
 }
 
 /*

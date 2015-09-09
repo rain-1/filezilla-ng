@@ -153,42 +153,8 @@ void update_specials_menu(void *frontend)
 int askalg(void *frontend, const char *algtype, const char *algname,
 	   void (*callback)(void *ctx, int result), void *ctx)
 {
-    HANDLE hin;
-    DWORD savemode, i;
-
-    static const char msg[] =
-	"The first %s supported by the server is\n"
-	"%s, which is below the configured warning threshold.\n"
-	"Continue with connection? (y/n) ";
-    static const char msg_batch[] =
-	"The first %s supported by the server is\n"
-	"%s, which is below the configured warning threshold.\n"
-	"Connection abandoned.\n";
-    static const char abandoned[] = "Connection abandoned.\n";
-
-    char line[32];
-
-    if (console_batch_mode) {
-	fprintf(stderr, msg_batch, algtype, algname);
-	return 0;
-    }
-
-    fprintf(stderr, msg, algtype, algname);
-    fflush(stderr);
-
-    hin = GetStdHandle(STD_INPUT_HANDLE);
-    GetConsoleMode(hin, &savemode);
-    SetConsoleMode(hin, (savemode | ENABLE_ECHO_INPUT |
-			 ENABLE_PROCESSED_INPUT | ENABLE_LINE_INPUT));
-    ReadFile(hin, line, sizeof(line) - 1, &i, NULL);
-    SetConsoleMode(hin, savemode);
-
-    if (line[0] == 'y' || line[0] == 'Y') {
-	return 1;
-    } else {
-	fprintf(stderr, abandoned);
-	return 0;
-    }
+    fzprintf(sftpError, "The first %s supported by the server is %s, which is no longer secure. Aborting connection.", algtype, algname);
+    return 0;
 }
 
 /*
