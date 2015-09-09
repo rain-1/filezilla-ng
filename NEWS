@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.14.0-rc2 (2015-09-09
+
+- Removing selected queue items is now faster
+- Reduced memory usage of queue
+- When connecting to hostnames with multiple IPs, reset timeout if trying the next address
+
 3.14.0-rc1 (2015-09-04)
 
 + Add support for password-protected SSH private keys
