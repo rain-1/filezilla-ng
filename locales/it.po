@@ -1,11 +1,11 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 2015.08.30\n"
+"Project-Id-Version: Filezilla italian translation 2015.09.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 13:26+0200\n"
-"PO-Revision-Date: 2015-08-31 17:28+0200\n"
-"Last-Translator: bovirus <bovirus@gmail.com>\n"
-"Language-Team: Andrea Sanavia - bovirus - Vincenzo Reale - Riccardo Vianello "
+"POT-Creation-Date: 2015-09-09 15:59+0200\n"
+"PO-Revision-Date: 2015-09-05 08:41+0200\n"
+"Last-Translator: bovirus <@bovirus@gmail.com>\n"
+"Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
 "<www.filezilla-project.it>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -79,7 +79,7 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d file. Dimensione totale: almeno %s"
 msgstr[1] "%d file. Dimensione totale: almeno %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2774
+#: ../../locales/../src/interface/QueueView.cpp:2781
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d file aggiunti alla coda"
@@ -1143,8 +1143,8 @@ msgid ""
 "command without the leading 'quote'."
 msgstr ""
 "'quote' è un comando locale usato di solito da client a riga di comando per "
-"inviare al server i parametri che seguono 'quote'. Potete inserire il "
-"comando senza farlo precedere da 'quote'."
+"inviare al server i parametri che seguono 'quote'. Puoi inserire il comando "
+"senza farlo precedere da 'quote'."
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:76
 #: ../../locales/../src/interface/filelist_statusbar.cpp:83
@@ -1499,7 +1499,7 @@ msgstr "&Esegui sempre questa azione"
 msgid "Algorithm:"
 msgstr "Algoritmo:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "All files have been successfully transferred"
 msgstr "Tutti i file sono stati trasferiti correttamente"
 
@@ -1509,7 +1509,7 @@ msgstr ""
 "Tutte le porte nell'intervallo specificato devono essere comprese tra 1024 e "
 "65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2939
+#: ../../locales/../src/interface/QueueView.cpp:2946
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1564,7 +1564,7 @@ msgstr ""
 "Alternativamente, puoi anche scaricare la versione aggiornata dal sito web "
 "FileZilla:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1913
+#: ../../locales/../src/interface/QueueView.cpp:1911
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1574,7 +1574,7 @@ msgstr ""
 "\".\n"
 "Alcuni elementi della coda potrebebro non essere stati ripristinati."
 
-#: ../../locales/../src/interface/QueueView.cpp:1823
+#: ../../locales/../src/interface/QueueView.cpp:1821
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1786,7 +1786,7 @@ msgid ""
 msgstr ""
 "Per impostazione predefinita, FileZilla usa qualunque porta locale "
 "disponibile per stabilire un trasferimento in modalità attiva. Per limitare "
-"FileZilla ad usare uno specifico intervallo di porte, inserire i valori nei "
+"FileZilla ad usare uno specifico intervallo di porte, inserisci valori nei "
 "campi sottostanti."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:176
@@ -2321,7 +2321,7 @@ msgstr "Connetti al sito specificato nel Gestore siti"
 msgid "Connected"
 msgstr "Connesso"
 
-#: ../../locales/../src/interface/queue.cpp:382
+#: ../../locales/../src/interface/queue.cpp:326
 msgid "Connecting"
 msgstr "Connessione"
 
@@ -2331,13 +2331,13 @@ msgstr "Connessione"
 msgid "Connecting to %s"
 msgstr "Connessione a %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1047
+#: ../../locales/../src/engine/ControlSocket.cpp:1048
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4240
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Connessione a %s attraverso proxy %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:955
+#: ../../locales/../src/engine/ControlSocket.cpp:956
 #: ../../locales/../src/engine/proxy.cpp:243
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:369
 #, c-format
@@ -2352,7 +2352,7 @@ msgstr "Connessione"
 msgid "Connection aborted"
 msgstr "Connessione interrotta"
 
-#: ../../locales/../src/interface/queue.cpp:383
+#: ../../locales/../src/interface/queue.cpp:327
 msgid "Connection attempt failed"
 msgstr "Tentativo di connessione non riuscito"
 
@@ -2364,7 +2364,7 @@ msgstr ""
 "Tentativo di connessione non riuscito con \"%s\", provare l'indirizzo "
 "successivo."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:924
+#: ../../locales/../src/engine/ControlSocket.cpp:925
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Tentativo di connessione non riuscito con \"%s\"."
@@ -2382,7 +2382,7 @@ msgstr "Scaduto tentativo connessione"
 msgid "Connection closed"
 msgstr "Connessione chiusa"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/ControlSocket.cpp:1015
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:217
 msgid "Connection closed by server"
 msgstr "Connessione chiusa dal server"
@@ -2491,7 +2491,7 @@ msgstr "Impossibile completare l'operazione."
 msgid "Could not connect to server"
 msgstr "Impossibile collegarsi al server"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1084
+#: ../../locales/../src/engine/ControlSocket.cpp:1085
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Impossibile collegarsi al server: %s"
@@ -2701,12 +2701,12 @@ msgstr "Impossibile inviare comando a fzputtygen."
 msgid "Could not spawn IO thread"
 msgstr "Impossibile lanciare thread di IO"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:1062
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Impossibile avviare handshake proxy: %s"
 
-#: ../../locales/../src/interface/queue.cpp:388
+#: ../../locales/../src/interface/queue.cpp:332
 msgid "Could not start transfer"
 msgstr "Impossibile avviare il trasferimento"
 
@@ -2731,7 +2731,7 @@ msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr ""
 "Impossibile scrivere \"%s\", i segnalibri globali non saranno salvati: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1852
+#: ../../locales/../src/interface/QueueView.cpp:1850
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2759,7 +2759,7 @@ msgstr "Impossibile scrivere su \"%s\""
 msgid "Could not write key file: %s"
 msgstr "Impossibile scrivere il file della chiave: %s"
 
-#: ../../locales/../src/interface/queue.cpp:387
+#: ../../locales/../src/interface/queue.cpp:331
 msgid "Could not write to local file"
 msgstr "Impossibile scrivere nel file locale"
 
@@ -2770,7 +2770,7 @@ msgid "Could not write to log file: %s"
 msgstr "Impossibile scrivere nel file log: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:880
-#: ../../locales/../src/engine/ControlSocket.cpp:983
+#: ../../locales/../src/engine/ControlSocket.cpp:984
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Impossibile scrivere nel socket: %s"
@@ -2829,7 +2829,7 @@ msgstr "Nuova cartella"
 msgid "Create empty file"
 msgstr "Crea un file vuoto"
 
-#: ../../locales/../src/interface/queue.cpp:390
+#: ../../locales/../src/interface/queue.cpp:334
 msgid "Creating directory"
 msgstr "Creazione della cartella in corso"
 
@@ -3099,7 +3099,7 @@ msgstr "Rilevata una nuova versione di Filezilla"
 msgid "Dire&ctories"
 msgstr "&Cartelle"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Direction"
 msgstr "Direzione"
 
@@ -3173,21 +3173,21 @@ msgstr "Disconnetti dal server"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:79
 #: ../../locales/../src/engine/ControlSocket.cpp:881
-#: ../../locales/../src/engine/ControlSocket.cpp:985
+#: ../../locales/../src/engine/ControlSocket.cpp:986
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:210
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:879
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:881
-#: ../../locales/../src/interface/queue.cpp:381
+#: ../../locales/../src/interface/queue.cpp:325
 msgid "Disconnected from server"
 msgstr "Disconnesso dal server"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1016
+#: ../../locales/../src/engine/ControlSocket.cpp:1017
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:895
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Disconnesso dal server: %s"
 
-#: ../../locales/../src/interface/queue.cpp:380
+#: ../../locales/../src/interface/queue.cpp:324
 #: ../../locales/../src/interface/statuslinectrl.cpp:237
 msgid "Disconnecting from previous server"
 msgstr "Disconnessione dal server precedente"
@@ -3407,7 +3407,7 @@ msgstr "Modifica risultati ricerca"
 msgid "Email:"
 msgstr "Email:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2125
+#: ../../locales/../src/interface/QueueView.cpp:2123
 msgid "Empty command"
 msgstr "Comando vuoto"
 
@@ -3471,9 +3471,9 @@ msgstr "&Esegui comando personalizzato..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3597
 msgid "Enter 0 for unlimited speed."
-msgstr "Inserire 0 per velocità illimitata."
+msgstr "Inserisci 0 per velocità illimitata."
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:2112
 msgid "Enter command"
 msgstr "Inserisci comando"
 
@@ -3483,13 +3483,13 @@ msgstr "Inserisci comando personalizzato"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1841
 msgid "Enter directory"
-msgstr "Inserire cartella"
+msgstr "digita nome cartella"
 
 #: ../../locales/../src/interface/filteredit.cpp:136
 #: ../../locales/../src/interface/filteredit.cpp:196
 #: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Enter filter name"
-msgstr "Inserire il nome filtro"
+msgstr "Inserisci il nome filtro"
 
 #: ../../locales/../src/interface/filter.cpp:333
 msgid "Enter name for filterset"
@@ -3506,7 +3506,7 @@ msgstr "Inserisci password"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:251
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:297
 msgid "Enter selected directory"
-msgstr "Inserire la cartella selezionata"
+msgstr "Inserisci la cartella selezionata"
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:34
 msgid ""
@@ -3537,25 +3537,25 @@ msgstr ""
 "- ftpes:// per FTP su TLS (esplicito)."
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter the password for the file '%s'.\n"
 "The converted file will be protected with the same password."
 msgstr ""
-"Inserire la password per il file '%s'.\n"
-"I file convertiti non saranno protetti da password."
+"Inserisci la password per il file %s.\n"
+"Il file convertito verrà protetto con la stessa password."
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:82
 msgid ""
 "Enter the port on which the server listens.\n"
 "The default for FTP is 21, the default for SFTP is 22."
 msgstr ""
-"Inserire la porta di ascolto del server.\n"
+"Inserisci la porta di ascolto del server.\n"
 "Il valore predefinito per FTP è 21, per SFTP è 22."
 
 #: ../../locales/../src/interface/loginmanager.cpp:65
 msgid "Enter username and password"
-msgstr "Inserire nome utente e password"
+msgstr "Inserisci nome utente e password"
 
 #: ../../locales/../src/interface/export.cpp:26
 msgid "Error exporting settings"
@@ -3566,7 +3566,7 @@ msgstr "Errore di esportazione impostazioni"
 msgid "Error importing"
 msgstr "Errore di importazione"
 
-#: ../../locales/../src/interface/QueueView.cpp:1914
+#: ../../locales/../src/interface/QueueView.cpp:1912
 msgid "Error loading queue"
 msgstr "Errore nel caricamento della coda"
 
@@ -3580,7 +3580,7 @@ msgstr "Errore nel caricamento della coda"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1835
+#: ../../locales/../src/interface/QueueView.cpp:1833
 #: ../../locales/../src/interface/search.cpp:822
 #: ../../locales/../src/interface/search.cpp:841
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3595,7 +3595,7 @@ msgstr "Errore nel caricamento della coda"
 msgid "Error loading xml file"
 msgstr "Errore di caricamento file xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1824
+#: ../../locales/../src/interface/QueueView.cpp:1822
 msgid "Error saving queue"
 msgstr "Errore nel salvataggio della coda"
 
@@ -3606,7 +3606,7 @@ msgstr "Errore nell'avvio del programma"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1853
+#: ../../locales/../src/interface/QueueView.cpp:1851
 #: ../../locales/../src/interface/sitemanager.cpp:609
 #: ../../locales/../src/interface/sitemanager.cpp:719
 #: ../../locales/../src/interface/sitemanager.cpp:773
@@ -4306,13 +4306,13 @@ msgid "Hidden"
 msgstr "Nascosto"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/interface/queue.cpp:870
-#: ../../locales/../src/interface/queue.cpp:957
+#: ../../locales/../src/interface/queue.cpp:904
+#: ../../locales/../src/interface/queue.cpp:991
 msgid "High"
 msgstr "Alto"
 
-#: ../../locales/../src/interface/queue.cpp:872
-#: ../../locales/../src/interface/queue.cpp:959
+#: ../../locales/../src/interface/queue.cpp:906
+#: ../../locales/../src/interface/queue.cpp:993
 msgid "Highest"
 msgstr "Superiore"
 
@@ -4621,7 +4621,7 @@ msgstr ""
 "Segmento incompleto, il certificato principale non è un certificato auto "
 "firmato da una autorità di certificazione"
 
-#: ../../locales/../src/interface/queue.cpp:378
+#: ../../locales/../src/interface/queue.cpp:322
 msgid "Incorrect password"
 msgstr "Password non corretta"
 
@@ -4656,7 +4656,7 @@ msgid "Interrupted by signal"
 msgstr "Interrotto dal segnale"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:218
-#: ../../locales/../src/interface/queue.cpp:384
+#: ../../locales/../src/interface/queue.cpp:328
 msgid "Interrupted by user"
 msgstr "Interrotto dall'utente"
 
@@ -4984,13 +4984,13 @@ msgstr ""
 "Logontype può essere usato insieme ad una URL FTP. L'argomento deve essere o "
 "'%s' o '%s'"
 
-#: ../../locales/../src/interface/queue.cpp:865
-#: ../../locales/../src/interface/queue.cpp:952
+#: ../../locales/../src/interface/queue.cpp:899
+#: ../../locales/../src/interface/queue.cpp:986
 msgid "Low"
 msgstr "Basso"
 
-#: ../../locales/../src/interface/queue.cpp:863
-#: ../../locales/../src/interface/queue.cpp:950
+#: ../../locales/../src/interface/queue.cpp:897
+#: ../../locales/../src/interface/queue.cpp:984
 msgid "Lowest"
 msgstr "Minimo"
 
@@ -5234,7 +5234,7 @@ msgstr "Nessun indirizzo associato con il nome nodo"
 msgid "No category to export selected"
 msgstr "Nessuna categoria da esportare selezionata"
 
-#: ../../locales/../src/interface/QueueView.cpp:2125
+#: ../../locales/../src/interface/QueueView.cpp:2123
 msgid "No command given, aborting."
 msgstr "Nessun comando ottenuto, annullamento in corso."
 
@@ -5254,13 +5254,13 @@ msgstr "Nessun nome filtro fornito"
 #: ../../locales/../src/engine/server.cpp:174
 #: ../../locales/../src/engine/server.cpp:199
 msgid "No host given, please enter a host."
-msgstr "Nessun host fornito, inserire un host."
+msgstr "Nessun host fornito, inserisci un host."
 
 #: ../../locales/../src/interface/settings/optionspage_themes.cpp:87
 msgid "No images available"
 msgstr "Nessuna immagine disponibile"
 
-#: ../../locales/../src/interface/QueueView.cpp:2970
+#: ../../locales/../src/interface/QueueView.cpp:2977
 msgid "No more files in the queue!"
 msgstr "Nessun file nella coda!"
 
@@ -5320,8 +5320,8 @@ msgstr "Errore non recuperabile nella risoluzione nomi"
 #: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:178
 #: ../../locales/../src/interface/manual_transfer.cpp:539
-#: ../../locales/../src/interface/queue.cpp:868
-#: ../../locales/../src/interface/queue.cpp:955
+#: ../../locales/../src/interface/queue.cpp:902
+#: ../../locales/../src/interface/queue.cpp:989
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 msgid "Normal"
 msgstr "Normale"
@@ -5715,70 +5715,70 @@ msgstr ""
 
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:72
 msgid "Please enter a custom date format."
-msgstr "Inserire un formato data personalizzato."
+msgstr "Inserisci un formato data personalizzato."
 
 #: ../../locales/../src/interface/settings/optionspage_dateformatting.cpp:82
 msgid "Please enter a custom time format."
-msgstr "Inserire un formato ora personalizzato."
+msgstr "Inserisci un formato ora personalizzato."
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:713
 msgid ""
 "Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18."
-msgstr "Inserire una data nella forma AAAA-MM-GG come ade sempio 2010-07-18."
+msgstr "Inserisci una data nella forma AAAA-MM-GG come ade sempio 2010-07-18."
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:123
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #, c-format
 msgid "Please enter a download speed limit greater or equal to 0 %s/s."
 msgstr ""
-"Inserire un limite di velocità per il download superiore o pari a 0 %s/s."
+"Inserisci un limite di velocità per il download superiore o pari a 0 %s/s."
 
 #: ../../locales/../src/interface/filteredit.cpp:136
 msgid "Please enter a name for the new filter."
-msgstr "Inserire un nome per il nuovo filtro."
+msgstr "Inserisci un nome per il nuovo filtro."
 
 #: ../../locales/../src/interface/filteredit.cpp:243
 msgid "Please enter a new name for the copied filter."
-msgstr "Inserire un nuovo nome per il filtro copiato."
+msgstr "Inserisci un nuovo nome per il filtro copiato."
 
 #: ../../locales/../src/interface/filter.cpp:389
 #, c-format
 msgid "Please enter a new name for the filter set \"%s\""
-msgstr "Inserire un nuovo nome per il gruppo di filtri \"%s\""
+msgstr "Inserisci un nuovo nome per il gruppo di filtri \"%s\""
 
 #: ../../locales/../src/interface/filteredit.cpp:196
 msgid "Please enter a new name for the filter."
-msgstr "Inserire un nuovo nome per il filtro."
+msgstr "Inserisci un nuovo nome per il filtro."
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:112
 msgid ""
 "Please enter a number between 0 and 10 for the number of concurrent "
 "downloads."
-msgstr "Inserire un numero tra 0 e 10 per il numero di download concorrenti."
+msgstr "Inserisci un numero tra 0 e 10 per il numero di download concorrenti."
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:117
 msgid ""
 "Please enter a number between 0 and 10 for the number of concurrent uploads."
-msgstr "Inserire un numero tra 0 e 10 per il numero di upload concorrenti."
+msgstr "Inserisci un numero tra 0 e 10 per il numero di upload concorrenti."
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:107
 msgid ""
 "Please enter a number between 1 and 10 for the number of concurrent "
 "transfers."
 msgstr ""
-"Inserire un numero tra 1 e 10 per il numero di trasferimenti concorrenti."
+"Inserisci un numero tra 1 e 10 per il numero di trasferimenti concorrenti."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:258
 msgid "Please enter a password for this server:"
-msgstr "Inserire una password per questo server:"
+msgstr "Inserisci una password per questo server:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:2112
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
 "You can also optionally specify program arguments."
 msgstr ""
-"Inserire il percorso del programma da eseguire.\n"
+"Inserisci il percorso del programma da eseguire.\n"
 "Es. c:\\somePath\\file.exe sotto MS Windows o /somePath/file sotto Unix.\n"
 "È possibile anche specificare i parametri del programma."
 
@@ -5790,32 +5790,33 @@ msgstr ""
 
 #: ../../locales/../src/interface/filter.cpp:333
 msgid "Please enter a unique name for this filter set"
-msgstr "Inserire un nome univoco per questo set di filtri"
+msgstr "Inserisci un nome univoco per questo set di filtri"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:265
 msgid "Please enter a username for this server:"
-msgstr "Inserire un nome utente per questo server:"
+msgstr "Inserisci un nome utente per questo server:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:197
 msgid "Please enter a valid portrange."
-msgstr "Inserire un intervallo di porte valido."
+msgstr "Inserisci un intervallo di porte valido."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:176
 msgid "Please enter an URL where to get your external address from"
-msgstr "Inserire l'URL da cui ricavare l'indirizzo IP esterno"
+msgstr "Inserisci l'URL da cui ricavare l'indirizzo IP esterno"
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:130
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 #, c-format
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
-msgstr "Inserire un limite di velocità per l'upload superiore o pari a 0 %s/s."
+msgstr ""
+"Inserisci un limite di velocità per l'upload superiore o pari a 0 %s/s."
 
 #: ../../locales/../src/interface/Mainfrm.cpp:562
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
 msgstr ""
-"Inserire un comando FTP.\n"
+"Inserisci un comando FTP.\n"
 "L'utilizzo di comandi ftp personalizzati svuoterà la cache delle cartelle."
 
 #: ../../locales/../src/interface/LocalListView.cpp:897
@@ -5823,7 +5824,7 @@ msgstr ""
 #: ../../locales/../src/interface/RemoteListView.cpp:1297
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1212
 msgid "Please enter the name of the directory which should be created:"
-msgstr "Inserire il nome della cartella che deve essere creata:"
+msgstr "Inserisci il nome della cartella che deve essere creata:"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:2619
 msgid "Please enter the name of the file which should be created:"
@@ -5831,11 +5832,11 @@ msgstr "Insersci il nome del file che deve essere creato:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:272
 msgid "Please enter username and password for this server:"
-msgstr "Inserire nome utente e password per questo server:"
+msgstr "Inserisci nome utente e password per questo server:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:157
 msgid "Please enter your external IP address"
-msgstr "Inserire l'indirizzo IP esterno"
+msgstr "Inserisci l'indirizzo IP esterno"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:608
 #: ../../locales/../src/interface/netconfwizard.cpp:621
@@ -5844,7 +5845,7 @@ msgid ""
 "wizard. In case you have a dynamic address or don't know your external "
 "address, use the external resolver option."
 msgstr ""
-"Inserire l'indirizzo IP esterno nella pagina relativa alla modalità attiva "
+"Inserisci l'indirizzo IP esterno nella pagina relativa alla modalità attiva "
 "di questa procedura guidata. Se l'indirizzo è dinamico o non lo conosci, usa "
 "l'opzione del risolutore esterno."
 
@@ -6017,7 +6018,7 @@ msgstr "Invia informazioni versione a stdout e esci"
 msgid "Prioritize directories (default)"
 msgstr "Cartelle prioritizzate (predefinito)"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Priority"
 msgstr "Priorità"
 
@@ -6127,7 +6128,7 @@ msgstr "Algoritmo chiave pubblica:"
 msgid "Public permissions"
 msgstr "Permessi pubblici"
 
-#: ../../locales/../src/interface/QueueView.cpp:3050
+#: ../../locales/../src/interface/QueueView.cpp:3057
 msgid "Queue has been fully processed"
 msgstr "Coda elaborata completamente"
 
@@ -6235,11 +6236,11 @@ msgstr "Eliminare tutti i file e/o cartelle selezionati nel server?"
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr "Eliminare tutti i file e/o cartelle selezionati nel computer?"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Reason"
 msgstr "Motivo"
 
-#: ../../locales/../src/interface/QueueView.cpp:3043
+#: ../../locales/../src/interface/QueueView.cpp:3050
 msgid "Reboot now"
 msgstr "Riavvia adesso"
 
@@ -6252,7 +6253,7 @@ msgstr "&Includi sottocartelle"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Ricevuto avviso TLS dal server: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2969
+#: ../../locales/../src/engine/directorylistingparser.cpp:2965
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Ricevuto un elenco di cartella che appare codificato in EBCDIC."
 
@@ -6339,7 +6340,7 @@ msgid "Remote certificate not trusted."
 msgstr "Certificato remoto non sicuro."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2275
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Remote file"
 msgstr "File remoto"
 
@@ -6473,7 +6474,7 @@ msgstr "Ripristina e rimetti in cod&a tutti i file"
 msgid "Resolved protocol is unknown"
 msgstr "Il protocollo risoluzione è sconosciuto"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1078
+#: ../../locales/../src/engine/ControlSocket.cpp:1079
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:457
 #, c-format
 msgid "Resolving address of %s"
@@ -6582,11 +6583,11 @@ msgstr ""
 msgid "Saving of passwords has been disabled by you."
 msgstr "Il salvataggio password è stato disabilitato dall'utente."
 
-#: ../../locales/../src/interface/QueueView.cpp:1712
+#: ../../locales/../src/interface/QueueView.cpp:1710
 msgid "Scanning for files to add to queue"
 msgstr "Cerca file da aggiungere alla coda"
 
-#: ../../locales/../src/interface/QueueView.cpp:1714
+#: ../../locales/../src/interface/QueueView.cpp:1712
 msgid "Scanning for files to upload"
 msgstr "Ricerca dei file da inviare in corso"
 
@@ -6662,7 +6663,7 @@ msgid "Select file for exported data"
 msgstr "Selezionare il file per l'esportazione dei dati"
 
 #: ../../locales/../src/interface/export.cpp:34
-#: ../../locales/../src/interface/queue.cpp:1454
+#: ../../locales/../src/interface/queue.cpp:1488
 msgid "Select file for exported queue"
 msgstr "Selezionare il file per l'esportazione delle code"
 
@@ -6917,7 +6918,7 @@ msgstr "Server a client cipher:"
 msgid "Server&type:"
 msgstr "&Tipo di server:"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Server/Local file"
 msgstr "File server/locale"
 
@@ -6981,7 +6982,7 @@ msgstr "Visualizza crittografie TLS disponibili"
 msgid "Shows this help dialog"
 msgstr "Visualizza questa finestra di aiuto"
 
-#: ../../locales/../src/interface/QueueView.cpp:3039
+#: ../../locales/../src/interface/QueueView.cpp:3046
 msgid "Shutdown now"
 msgstr "Arresta il sistema"
 
@@ -7056,7 +7057,7 @@ msgstr ""
 "Gestore siti.\n"
 "Aggiungere la connessione corrente al gestore siti?"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Size"
 msgstr "Dimensione"
 
@@ -7075,18 +7076,18 @@ msgstr "Dimensione sconosciuta"
 msgid "Skip file"
 msgstr "Ignora file"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1149
-#: ../../locales/../src/engine/ControlSocket.cpp:1166
-#: ../../locales/../src/engine/ControlSocket.cpp:1190
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
+#: ../../locales/../src/engine/ControlSocket.cpp:1150
+#: ../../locales/../src/engine/ControlSocket.cpp:1167
+#: ../../locales/../src/engine/ControlSocket.cpp:1191
+#: ../../locales/../src/engine/ControlSocket.cpp:1251
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Salta il download di %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1153
-#: ../../locales/../src/engine/ControlSocket.cpp:1169
-#: ../../locales/../src/engine/ControlSocket.cpp:1194
-#: ../../locales/../src/engine/ControlSocket.cpp:1254
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1170
+#: ../../locales/../src/engine/ControlSocket.cpp:1195
+#: ../../locales/../src/engine/ControlSocket.cpp:1255
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Salta l'invio di %s"
@@ -7224,7 +7225,7 @@ msgid "State or province:"
 msgstr "Provincia:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1087
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Status"
 msgstr "Stato"
 
@@ -7258,7 +7259,7 @@ msgstr "Trasferimenti riusciti"
 msgid "Summary of test results:"
 msgstr "Riepilogo dei risultati del test:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3047
+#: ../../locales/../src/interface/QueueView.cpp:3054
 msgid "Suspend now"
 msgstr "Sospendi ora"
 
@@ -7470,7 +7471,7 @@ msgid ""
 "Please enter a new name:"
 msgstr ""
 "Il file %s esiste già.\n"
-"Inserire un nuovo nome:"
+"Inserisci un nuovo nome:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1621
 #: ../../locales/../src/interface/LocalListView.cpp:1699
@@ -7490,6 +7491,8 @@ msgid ""
 "The file '%s' contains an SSH1 key. The SSH1 protocol has been deprecated, "
 "FileZilla only supports SSH2 keys."
 msgstr ""
+"Il file '%s' contiene una chiave SSH1. Il protocollo SSH1 è stato "
+"abbandonato. Filezilla supporta solo chiavi SSH2."
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:57
 #, c-format
@@ -7644,7 +7647,7 @@ msgstr "La nuova versione non può essere scaricata. Riprova più tardi."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "La nuova versione è stata salvata nella cartella dei download."
 
-#: ../../locales/../src/interface/QueueView.cpp:1834
+#: ../../locales/../src/interface/QueueView.cpp:1832
 msgid "The queue will not be saved."
 msgstr "La coda non verrà salvata."
 
@@ -7752,11 +7755,11 @@ msgstr "La famiglia di indirizzi specificata non è supportata"
 msgid "The specified network name is no longer available"
 msgstr "Il nome rete specificato non è più disponibile"
 
-#: ../../locales/../src/interface/QueueView.cpp:3042
+#: ../../locales/../src/interface/QueueView.cpp:3049
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Il sistema sarà riavviato a meno che non fate clic su [Annulla]."
 
-#: ../../locales/../src/interface/QueueView.cpp:3038
+#: ../../locales/../src/interface/QueueView.cpp:3045
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Il sistema si chiuderà a meno che non fate clic su [Annulla]."
 
@@ -7814,7 +7817,7 @@ msgstr ""
 "Questa procedura guidata vi aiuterà a configurare correttamente router e "
 "firewall e a testare le nuove impostazioni di connessione."
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Time"
 msgstr "Ora"
 
@@ -7827,7 +7830,7 @@ msgid "Time&out in seconds:"
 msgstr "Timeout in sec&ondi:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:125
-#: ../../locales/../src/interface/queue.cpp:379
+#: ../../locales/../src/interface/queue.cpp:323
 msgid "Timeout"
 msgstr "Timeout"
 
@@ -7962,7 +7965,7 @@ msgstr "Connessione interrotta: %s"
 msgid "Transferred data got tainted."
 msgstr "I dati trasferiti sono stati alterati."
 
-#: ../../locales/../src/interface/queue.cpp:389
+#: ../../locales/../src/interface/queue.cpp:333
 #: ../../locales/../src/interface/statuslinectrl.cpp:246
 msgid "Transferring"
 msgstr "Trasferimento in corso"
@@ -7971,8 +7974,8 @@ msgstr "Trasferimento in corso"
 msgid "Transfers"
 msgstr "Trasferimenti"
 
-#: ../../locales/../src/interface/QueueView.cpp:2940
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "Transfers finished"
 msgstr "Trasferimenti completati"
 
@@ -8303,15 +8306,15 @@ msgstr "Colonne visibili"
 msgid "W&rite"
 msgstr "S&crittura"
 
-#: ../../locales/../src/interface/QueueView.cpp:1672
+#: ../../locales/../src/interface/QueueView.cpp:1670
 msgid "Waiting"
 msgstr "In attesa"
 
-#: ../../locales/../src/interface/queue.cpp:385
+#: ../../locales/../src/interface/queue.cpp:329
 msgid "Waiting for browsing connection"
 msgstr "In attesa di connessione"
 
-#: ../../locales/../src/interface/queue.cpp:386
+#: ../../locales/../src/interface/queue.cpp:330
 msgid "Waiting for password"
 msgstr "In attesa della password"
 
@@ -8449,7 +8452,7 @@ msgid ""
 "Please enter a character that is allowed in filenames."
 msgstr ""
 "Non è possibile sostituire un carattere non valido con un altro carattere "
-"non valido. Inserire un carattere valido per il nome file."
+"non valido. Inserisci un carattere valido per il nome file."
 
 #: ../../locales/../src/interface/asyncrequestqueue.cpp:301
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
@@ -8477,7 +8480,7 @@ msgstr ""
 #: ../../locales/../src/interface/manual_transfer.cpp:414
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:954
 msgid "You have to enter a hostname."
-msgstr "Inserire un nome host."
+msgstr "Inserisci un nome host."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1063
 msgid "You have to enter a key file path"
@@ -8485,21 +8488,21 @@ msgstr "Devi inserire il percorso del file chiave"
 
 #: ../../locales/../src/interface/search.cpp:518
 msgid "You have to enter a local directory."
-msgstr "Inserire il nome di una cartella locale."
+msgstr "Inserisci il nome di una cartella locale."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:164
 #: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:89
 msgid "You have to enter a valid IP address."
-msgstr "Inserire un indirizzo IP valido."
+msgstr "Inserisci un indirizzo IP valido."
 
 #: ../../locales/../src/interface/search.cpp:523
 msgid "You have to enter a writable local directory."
-msgstr "Inserire il nome di una cartella locale scrivibile."
+msgstr "Inserisci il nome di una cartella locale scrivibile."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:505
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1054
 msgid "You have to enter an account name"
-msgstr "Inserire un nome account"
+msgstr "Inserisci un nome account"
 
 #: ../../locales/../src/interface/manual_transfer.cpp:479
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1029
@@ -8515,24 +8518,24 @@ msgstr ""
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:56
 msgid "You need to enter a name for the bookmark."
-msgstr "Inserire il nome per il preferito."
+msgstr "Inserisci il nome per il preferito."
 
 #: ../../locales/../src/interface/settings/optionspage_logging.cpp:67
 msgid "You need to enter a name for the log file."
-msgstr "Inserire un nome per il nuovo file del log."
+msgstr "Inserisci un nome per il nuovo file del log."
 
 #: ../../locales/../src/interface/edithandler.cpp:1472
 msgid "You need to enter a properly quoted command."
-msgstr "Inserire un appropriato comando quotato."
+msgstr "Inserisci un appropriato comando quotato."
 
 #: ../../locales/../src/interface/settings/optionspage_ftpproxy.cpp:82
 #: ../../locales/../src/interface/settings/optionspage_proxy.cpp:79
 msgid "You need to enter a proxy host."
-msgstr "Inserire il nome di un host proxy."
+msgstr "Inserisci il nome di un host proxy."
 
 #: ../../locales/../src/interface/settings/optionspage_proxy.cpp:88
 msgid "You need to enter a proxy port in the range from 1 to 65535"
-msgstr "Inserire un valore nell'intervallo 1-65535 per la porta proxy"
+msgstr "Inserisci un valore nell'intervallo 1-65535 per la porta proxy"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:75
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:429
@@ -8549,7 +8552,7 @@ msgid ""
 "You need to enter both a local and a remote path to enable synchronized "
 "browsing for this bookmark."
 msgstr ""
-"Inserire sia il percorso locale che quello remoto per abilitare la "
+"Inserisci sia il percorso locale che quello remoto per abilitare la "
 "navigazione sincronizzata per questo preferito."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1096
@@ -8584,7 +8587,7 @@ msgstr ""
 "Non si dovrebbero avere problemi di connessione ad altri server, i "
 "trasferimenti dei file dovrebbero funzionare correttamente."
 
-#: ../../locales/../src/interface/QueueView.cpp:3046
+#: ../../locales/../src/interface/QueueView.cpp:3053
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Il sistema sarà messo in sospensone a meno fai clic su [Annulla]."
 
@@ -8740,6 +8743,13 @@ msgstr "scrivibile per gli altri"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid ""
+#~ "Enter the password for the file '%s'.\n"
+#~ "Please note that the converted file will not be password protected."
+#~ msgstr ""
+#~ "Inserisci la password per il file '%s'.\n"
+#~ "I file convertiti non saranno protetti da password."
 
 #~ msgid ""
 #~ "The file '%s' is not in a format supported by FileZilla.\n"
@@ -9113,7 +9123,7 @@ msgstr "wxWidgets:"
 #~ msgstr "Cop&ia"
 
 #~ msgid "Please enter an update interval of at least 7 days"
-#~ msgstr "Inserire un intervallo di aggiornamento di almeno 7 giorni"
+#~ msgstr "Inserisci un intervallo di aggiornamento di almeno 7 giorni"
 
 #~ msgid "Privacy policy:"
 #~ msgstr "Normative relative alla privacy:"

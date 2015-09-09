@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 13:26+0200\n"
-"PO-Revision-Date: 2015-08-28 10:28+0100\n"
-"Last-Translator: Åka Sikrom <a4@NOSPAMPLEASETHANKYOUhush.com>\n"
+"POT-Creation-Date: 2015-09-09 15:59+0200\n"
+"PO-Revision-Date: 2015-09-06 22:23+0100\n"
+"Last-Translator: Åka Sikrom <a4@NOTRASHMAILPLEASETHANKYOUhush.com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
 "MIME-Version: 1.0\n"
@@ -82,7 +82,7 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d fil. Total størrelse: Minst %s"
 msgstr[1] "%d filer. Total størrelse: Minst %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2774
+#: ../../locales/../src/interface/QueueView.cpp:2781
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d filer lagt i kø"
@@ -1492,7 +1492,7 @@ msgstr "&Bruk alltid denne handlinga"
 msgid "Algorithm:"
 msgstr "Algoritme:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "All files have been successfully transferred"
 msgstr "Alle filer ble overført uten problemer"
 
@@ -1500,7 +1500,7 @@ msgstr "Alle filer ble overført uten problemer"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Alle porter i rekken må være mellom 1024 og 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2939
+#: ../../locales/../src/interface/QueueView.cpp:2946
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1547,7 +1547,7 @@ msgid ""
 "website:"
 msgstr "Du kan også laste ned siste versjon fra FileZilla-nettstedet:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1913
+#: ../../locales/../src/interface/QueueView.cpp:1911
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1556,7 +1556,7 @@ msgstr ""
 "Det oppstod en feil under innlasting av overføringskø fra «%s».\n"
 "Enkelte oppføringer ble kanskje ikke gjenopprettet."
 
-#: ../../locales/../src/interface/QueueView.cpp:1823
+#: ../../locales/../src/interface/QueueView.cpp:1821
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -2300,7 +2300,7 @@ msgstr "Koble til valgt tjener fra Tjeneroppsett"
 msgid "Connected"
 msgstr "Tilkoblet"
 
-#: ../../locales/../src/interface/queue.cpp:382
+#: ../../locales/../src/interface/queue.cpp:326
 msgid "Connecting"
 msgstr "Kobler til"
 
@@ -2310,13 +2310,13 @@ msgstr "Kobler til"
 msgid "Connecting to %s"
 msgstr "Kobler til %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1047
+#: ../../locales/../src/engine/ControlSocket.cpp:1048
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4240
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Kobler til %s via %s-mellomtjener"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:955
+#: ../../locales/../src/engine/ControlSocket.cpp:956
 #: ../../locales/../src/engine/proxy.cpp:243
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:369
 #, c-format
@@ -2331,7 +2331,7 @@ msgstr "Tilkobling"
 msgid "Connection aborted"
 msgstr "Tilkobling avbrutt"
 
-#: ../../locales/../src/interface/queue.cpp:383
+#: ../../locales/../src/interface/queue.cpp:327
 msgid "Connection attempt failed"
 msgstr "Tilkoblingsforsøk mislyktes"
 
@@ -2341,7 +2341,7 @@ msgstr "Tilkoblingsforsøk mislyktes"
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "Tilkoblingsforsøk mislyktes med «%s». Prøver neste adresse."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:924
+#: ../../locales/../src/engine/ControlSocket.cpp:925
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Tilkoblingsforsøk mislyktes med «%s»."
@@ -2359,7 +2359,7 @@ msgstr "Tilkoblingsforsøk gikk ut på tid"
 msgid "Connection closed"
 msgstr "Tilkobling lukket"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/ControlSocket.cpp:1015
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:217
 msgid "Connection closed by server"
 msgstr "Tilkobling ble lukket lukket av tjener"
@@ -2467,7 +2467,7 @@ msgstr "Klarte ikke å fullføre handlinga"
 msgid "Could not connect to server"
 msgstr "Klarte ikke å koble til tjeneren"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1084
+#: ../../locales/../src/engine/ControlSocket.cpp:1085
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Klarte ikke å koble til tjeneren: %s"
@@ -2671,12 +2671,12 @@ msgstr "Klarte ikke å sende kommando til fzputtygen."
 msgid "Could not spawn IO thread"
 msgstr "Klarte ikke å frembringe IO-tråd"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:1062
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Klarte ikke å starte hilseprosess med mellomtjener: %s"
 
-#: ../../locales/../src/interface/queue.cpp:388
+#: ../../locales/../src/interface/queue.cpp:332
 msgid "Could not start transfer"
 msgstr "Klarte ikke å starte overføring"
 
@@ -2700,7 +2700,7 @@ msgstr "Klarte ikke å lagre «%s». Bokmerket er ikke lagt til: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Klarte ikke å lagre «%s». Globale bokmerker ble ikke lagret: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1852
+#: ../../locales/../src/interface/QueueView.cpp:1850
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2726,7 +2726,7 @@ msgstr "Klarte ikke å lagre «%s»."
 msgid "Could not write key file: %s"
 msgstr "Klarte ikke å lagre nøkkelfil. %s"
 
-#: ../../locales/../src/interface/queue.cpp:387
+#: ../../locales/../src/interface/queue.cpp:331
 msgid "Could not write to local file"
 msgstr "Klarte ikke å skrive til lokal fil"
 
@@ -2737,7 +2737,7 @@ msgid "Could not write to log file: %s"
 msgstr "Klarte ikke å skrive til loggfil: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:880
-#: ../../locales/../src/engine/ControlSocket.cpp:983
+#: ../../locales/../src/engine/ControlSocket.cpp:984
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Klarte ikke å skrive til sokkel: %s"
@@ -2794,7 +2794,7 @@ msgstr "Ny mappe"
 msgid "Create empty file"
 msgstr "Lag tom fil"
 
-#: ../../locales/../src/interface/queue.cpp:390
+#: ../../locales/../src/interface/queue.cpp:334
 msgid "Creating directory"
 msgstr "Oppretter mappe"
 
@@ -3064,7 +3064,7 @@ msgstr "Fant nyere versjon av FileZilla"
 msgid "Dire&ctories"
 msgstr "&Mapper"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Direction"
 msgstr "Retning"
 
@@ -3134,21 +3134,21 @@ msgstr "Koble fra tjener"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:79
 #: ../../locales/../src/engine/ControlSocket.cpp:881
-#: ../../locales/../src/engine/ControlSocket.cpp:985
+#: ../../locales/../src/engine/ControlSocket.cpp:986
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:210
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:879
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:881
-#: ../../locales/../src/interface/queue.cpp:381
+#: ../../locales/../src/interface/queue.cpp:325
 msgid "Disconnected from server"
 msgstr "Koblet fra tjener"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1016
+#: ../../locales/../src/engine/ControlSocket.cpp:1017
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:895
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Koblet fra tjener: %s"
 
-#: ../../locales/../src/interface/queue.cpp:380
+#: ../../locales/../src/interface/queue.cpp:324
 #: ../../locales/../src/interface/statuslinectrl.cpp:237
 msgid "Disconnecting from previous server"
 msgstr "Kobler fra forrige tjener"
@@ -3369,7 +3369,7 @@ msgstr "Redigerer søkeresultater"
 msgid "Email:"
 msgstr "Epost:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2125
+#: ../../locales/../src/interface/QueueView.cpp:2123
 msgid "Empty command"
 msgstr "Tom kommando"
 
@@ -3435,7 +3435,7 @@ msgstr "&Skriv inn kommando …"
 msgid "Enter 0 for unlimited speed."
 msgstr "Skriv inn 0 for ubegrenset hastighet."
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:2112
 msgid "Enter command"
 msgstr "Angi kommando"
 
@@ -3498,13 +3498,13 @@ msgstr ""
 "- ftpes:// for FTP via TLS (eksplisitt)"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter the password for the file '%s'.\n"
 "The converted file will be protected with the same password."
 msgstr ""
 "Skriv inn passordet til fila «%s».\n"
-"Merk at konvertert fil ikke blir passordbeskyttet."
+"Konvertert fil blir kryptert med dette passordet."
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:82
 msgid ""
@@ -3527,7 +3527,7 @@ msgstr "Feil ved eksportering av innstillinger"
 msgid "Error importing"
 msgstr "Feil ved importering"
 
-#: ../../locales/../src/interface/QueueView.cpp:1914
+#: ../../locales/../src/interface/QueueView.cpp:1912
 msgid "Error loading queue"
 msgstr "Feil ved lasting av kø"
 
@@ -3541,7 +3541,7 @@ msgstr "Feil ved lasting av kø"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1835
+#: ../../locales/../src/interface/QueueView.cpp:1833
 #: ../../locales/../src/interface/search.cpp:822
 #: ../../locales/../src/interface/search.cpp:841
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3556,7 +3556,7 @@ msgstr "Feil ved lasting av kø"
 msgid "Error loading xml file"
 msgstr "Feil ved innlasting av xml-fil"
 
-#: ../../locales/../src/interface/QueueView.cpp:1824
+#: ../../locales/../src/interface/QueueView.cpp:1822
 msgid "Error saving queue"
 msgstr "Feil ved lagring av kø"
 
@@ -3567,7 +3567,7 @@ msgstr "Feil ved oppstart av program"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1853
+#: ../../locales/../src/interface/QueueView.cpp:1851
 #: ../../locales/../src/interface/sitemanager.cpp:609
 #: ../../locales/../src/interface/sitemanager.cpp:719
 #: ../../locales/../src/interface/sitemanager.cpp:773
@@ -4238,13 +4238,13 @@ msgid "Hidden"
 msgstr "Skjult"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/interface/queue.cpp:870
-#: ../../locales/../src/interface/queue.cpp:957
+#: ../../locales/../src/interface/queue.cpp:904
+#: ../../locales/../src/interface/queue.cpp:991
 msgid "High"
 msgstr "Høy"
 
-#: ../../locales/../src/interface/queue.cpp:872
-#: ../../locales/../src/interface/queue.cpp:959
+#: ../../locales/../src/interface/queue.cpp:906
+#: ../../locales/../src/interface/queue.cpp:993
 msgid "Highest"
 msgstr "Høyeste"
 
@@ -4547,7 +4547,7 @@ msgstr ""
 "Ufullstendig kjede, toppsertifikatet er ikke en selvsignerbar "
 "sertifikatsutsteders sertifikat"
 
-#: ../../locales/../src/interface/queue.cpp:378
+#: ../../locales/../src/interface/queue.cpp:322
 msgid "Incorrect password"
 msgstr "Feil passord"
 
@@ -4582,7 +4582,7 @@ msgid "Interrupted by signal"
 msgstr "Avbrutt av signal"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:218
-#: ../../locales/../src/interface/queue.cpp:384
+#: ../../locales/../src/interface/queue.cpp:328
 msgid "Interrupted by user"
 msgstr "Avbrutt av bruker"
 
@@ -4908,13 +4908,13 @@ msgstr ""
 "Innloggingstype kan bare brukes sammen med FTP-nettadresser. Verdien må være "
 "enten «%s» eller «%s»"
 
-#: ../../locales/../src/interface/queue.cpp:865
-#: ../../locales/../src/interface/queue.cpp:952
+#: ../../locales/../src/interface/queue.cpp:899
+#: ../../locales/../src/interface/queue.cpp:986
 msgid "Low"
 msgstr "Lav"
 
-#: ../../locales/../src/interface/queue.cpp:863
-#: ../../locales/../src/interface/queue.cpp:950
+#: ../../locales/../src/interface/queue.cpp:897
+#: ../../locales/../src/interface/queue.cpp:984
 msgid "Lowest"
 msgstr "Laveste"
 
@@ -5155,7 +5155,7 @@ msgstr "Ingen adresse er tildelt nodenavnet"
 msgid "No category to export selected"
 msgstr "Ingen eksporteringskategori er valgt"
 
-#: ../../locales/../src/interface/QueueView.cpp:2125
+#: ../../locales/../src/interface/QueueView.cpp:2123
 msgid "No command given, aborting."
 msgstr "Ingen kommando gitt, avslutter."
 
@@ -5181,7 +5181,7 @@ msgstr "Ingen vert valgt. Skriv inn et vertsnavn."
 msgid "No images available"
 msgstr "Ingen bilder tilgjengelig"
 
-#: ../../locales/../src/interface/QueueView.cpp:2970
+#: ../../locales/../src/interface/QueueView.cpp:2977
 msgid "No more files in the queue!"
 msgstr "Ingen flere filer i kø!"
 
@@ -5239,8 +5239,8 @@ msgstr "Ikke-korrigerbar feil i navneoppslag"
 #: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:178
 #: ../../locales/../src/interface/manual_transfer.cpp:539
-#: ../../locales/../src/interface/queue.cpp:868
-#: ../../locales/../src/interface/queue.cpp:955
+#: ../../locales/../src/interface/queue.cpp:902
+#: ../../locales/../src/interface/queue.cpp:989
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 msgid "Normal"
 msgstr "Normal"
@@ -5686,7 +5686,7 @@ msgstr ""
 msgid "Please enter a password for this server:"
 msgstr "Skriv inn et passord for denne tjeneren:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:2112
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5926,7 +5926,7 @@ msgstr "Skriv versjonsinformasjon til stdout og avslutt"
 msgid "Prioritize directories (default)"
 msgstr "Prioriter mapper (standard)"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Priority"
 msgstr "Prioritet"
 
@@ -6034,7 +6034,7 @@ msgstr "Algoritme for offentlig nøkkel:"
 msgid "Public permissions"
 msgstr "Allmenne tillatelser"
 
-#: ../../locales/../src/interface/QueueView.cpp:3050
+#: ../../locales/../src/interface/QueueView.cpp:3057
 msgid "Queue has been fully processed"
 msgstr "Overføringskø er ferdigbehandlet."
 
@@ -6146,11 +6146,11 @@ msgstr ""
 "Er du sikker på at du vil slette alle markerte filer og/eller mapper fra "
 "lokal maskin?"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Reason"
 msgstr "Årsak"
 
-#: ../../locales/../src/interface/QueueView.cpp:3043
+#: ../../locales/../src/interface/QueueView.cpp:3050
 msgid "Reboot now"
 msgstr "Start maskinen på nytt nå"
 
@@ -6163,7 +6163,7 @@ msgstr "Også i subfiler og -mapper"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Mottok TLS-varsel fra tjeneren: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2969
+#: ../../locales/../src/engine/directorylistingparser.cpp:2965
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Mottok en mappeoppføring som ser ut til å være kodet i EBCDIC."
 
@@ -6249,7 +6249,7 @@ msgid "Remote certificate not trusted."
 msgstr "Tjenerens sertifikat regnes ikke som sikkert."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2275
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Remote file"
 msgstr "Fil på tjenermaskin"
 
@@ -6383,7 +6383,7 @@ msgstr "Nullstill og legg &alle tilbake i kø"
 msgid "Resolved protocol is unknown"
 msgstr "Protokollen er ukjent"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1078
+#: ../../locales/../src/engine/ControlSocket.cpp:1079
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:457
 #, c-format
 msgid "Resolving address of %s"
@@ -6491,11 +6491,11 @@ msgstr "Systemadministratoren har slått av passordlagring."
 msgid "Saving of passwords has been disabled by you."
 msgstr "Du har slått av passordlagring."
 
-#: ../../locales/../src/interface/QueueView.cpp:1712
+#: ../../locales/../src/interface/QueueView.cpp:1710
 msgid "Scanning for files to add to queue"
 msgstr "Søker etter filer som skal legges i kø"
 
-#: ../../locales/../src/interface/QueueView.cpp:1714
+#: ../../locales/../src/interface/QueueView.cpp:1712
 msgid "Scanning for files to upload"
 msgstr "Søker etter filer å laste opp"
 
@@ -6571,7 +6571,7 @@ msgid "Select file for exported data"
 msgstr "Velg fil for eksporterte data"
 
 #: ../../locales/../src/interface/export.cpp:34
-#: ../../locales/../src/interface/queue.cpp:1454
+#: ../../locales/../src/interface/queue.cpp:1488
 msgid "Select file for exported queue"
 msgstr "Velg fil for eksportert kø"
 
@@ -6824,7 +6824,7 @@ msgstr "Krypteringsmetode (tjener til klient):"
 msgid "Server&type:"
 msgstr "Tjener&type:"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Server/Local file"
 msgstr "Tjener-/lokal fil"
 
@@ -6887,7 +6887,7 @@ msgstr "Viser tilgjengelige TLS-krypteringsmetoder"
 msgid "Shows this help dialog"
 msgstr "Viser denne hjelpdialogen"
 
-#: ../../locales/../src/interface/QueueView.cpp:3039
+#: ../../locales/../src/interface/QueueView.cpp:3046
 msgid "Shutdown now"
 msgstr "Slå av maskinen nå"
 
@@ -6962,7 +6962,7 @@ msgstr ""
 "tjeneroppsettet.\n"
 "Vil du legge til gjeldende tilkobling i tjeneroppsettet?"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Size"
 msgstr "Størrelse"
 
@@ -6981,18 +6981,18 @@ msgstr "Ukjent størrelse"
 msgid "Skip file"
 msgstr "Hopp over fil"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1149
-#: ../../locales/../src/engine/ControlSocket.cpp:1166
-#: ../../locales/../src/engine/ControlSocket.cpp:1190
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
+#: ../../locales/../src/engine/ControlSocket.cpp:1150
+#: ../../locales/../src/engine/ControlSocket.cpp:1167
+#: ../../locales/../src/engine/ControlSocket.cpp:1191
+#: ../../locales/../src/engine/ControlSocket.cpp:1251
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Hopper over nedlasting av %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1153
-#: ../../locales/../src/engine/ControlSocket.cpp:1169
-#: ../../locales/../src/engine/ControlSocket.cpp:1194
-#: ../../locales/../src/engine/ControlSocket.cpp:1254
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1170
+#: ../../locales/../src/engine/ControlSocket.cpp:1195
+#: ../../locales/../src/engine/ControlSocket.cpp:1255
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Hopper over opplasting av %s"
@@ -7126,7 +7126,7 @@ msgid "State or province:"
 msgstr "Stat eller provins:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1087
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Status"
 msgstr "Status"
 
@@ -7160,7 +7160,7 @@ msgstr "Vellykkede overføringer"
 msgid "Summary of test results:"
 msgstr "Oppsummering av testresultater:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3047
+#: ../../locales/../src/interface/QueueView.cpp:3054
 msgid "Suspend now"
 msgstr "Sett i hvilemodus nå"
 
@@ -7391,6 +7391,8 @@ msgid ""
 "The file '%s' contains an SSH1 key. The SSH1 protocol has been deprecated, "
 "FileZilla only supports SSH2 keys."
 msgstr ""
+"Fila «%s» inneholder en SSH1-nøkkel. SSH1-protokollen er utdatert, og "
+"FileZilla støtter bare nøkler av typen SSH2."
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:57
 #, c-format
@@ -7542,7 +7544,7 @@ msgstr "Klarte ikke å laste ned ny versjon. Prøv igjen senere."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Ny versjon er lagret i gjeldende brukers nedlastingsmappe."
 
-#: ../../locales/../src/interface/QueueView.cpp:1834
+#: ../../locales/../src/interface/QueueView.cpp:1832
 msgid "The queue will not be saved."
 msgstr "Køen blir ikke lagret."
 
@@ -7649,11 +7651,11 @@ msgstr "Valgt adressefamilie støttes ikke"
 msgid "The specified network name is no longer available"
 msgstr "Valgt nettverksnavn er ikke lenger tilgjengelig"
 
-#: ../../locales/../src/interface/QueueView.cpp:3042
+#: ../../locales/../src/interface/QueueView.cpp:3049
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Datamaskinen startes på nytt om kort tid, med mindre du avbryter."
 
-#: ../../locales/../src/interface/QueueView.cpp:3038
+#: ../../locales/../src/interface/QueueView.cpp:3045
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Datamaskinen slår seg av om kort tid, med mindre du avbryter."
 
@@ -7709,7 +7711,7 @@ msgstr ""
 "Denne veiviseren hjelper deg med å sette opp eventuelle rutere og/eller "
 "brannmurer du har, og tester deretter oppsettet."
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1203
 msgid "Time"
 msgstr "Tid"
 
@@ -7722,7 +7724,7 @@ msgid "Time&out in seconds:"
 msgstr "Tids&avbrudd i sekunder:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:125
-#: ../../locales/../src/interface/queue.cpp:379
+#: ../../locales/../src/interface/queue.cpp:323
 msgid "Timeout"
 msgstr "Tidsavbrudd"
 
@@ -7853,7 +7855,7 @@ msgstr "Tilkoblingsforsøket avbrutt: %s"
 msgid "Transferred data got tainted."
 msgstr "Overført data ble ødelagt."
 
-#: ../../locales/../src/interface/queue.cpp:389
+#: ../../locales/../src/interface/queue.cpp:333
 #: ../../locales/../src/interface/statuslinectrl.cpp:246
 msgid "Transferring"
 msgstr "Overfører"
@@ -7862,8 +7864,8 @@ msgstr "Overfører"
 msgid "Transfers"
 msgstr "Overføringer"
 
-#: ../../locales/../src/interface/QueueView.cpp:2940
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "Transfers finished"
 msgstr "Overføringer er ferdige"
 
@@ -8183,15 +8185,15 @@ msgstr "Synlige kolonner"
 msgid "W&rite"
 msgstr "&Skriv"
 
-#: ../../locales/../src/interface/QueueView.cpp:1672
+#: ../../locales/../src/interface/QueueView.cpp:1670
 msgid "Waiting"
 msgstr "Venter"
 
-#: ../../locales/../src/interface/queue.cpp:385
+#: ../../locales/../src/interface/queue.cpp:329
 msgid "Waiting for browsing connection"
 msgstr "Venter på filutforskertilkobling"
 
-#: ../../locales/../src/interface/queue.cpp:386
+#: ../../locales/../src/interface/queue.cpp:330
 msgid "Waiting for password"
 msgstr "Venter på passord"
 
@@ -8463,7 +8465,7 @@ msgstr ""
 "Du skal ikke ha problemer med å koble til andre tjenere. Filoverføring burde "
 "fungere."
 
-#: ../../locales/../src/interface/QueueView.cpp:3046
+#: ../../locales/../src/interface/QueueView.cpp:3053
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Datamaskinen går i hvilemodus med mindre du avbryter."
 
