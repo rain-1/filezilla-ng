@@ -2286,7 +2286,7 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 
 		// Finding the child position is O(n) in the worst case, making deletion quadratic. However we already know item's displayed position, use it as guide.
 		// Remark: I suppose this could be further improved by using the displayed position directly, but probably isn't worth the effort.
-		bool forward = selectedItem.first < (topItemIndex + pTopLevelItem->GetChildrenCount(false) / 2);
+		bool forward = selectedItem.first < (topItemIndex + static_cast<int>(pTopLevelItem->GetChildrenCount(false)) / 2);
 		RemoveItem(pItem, true, false, false, forward);
 	}
 	DisplayNumberQueuedFiles();

@@ -92,7 +92,7 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 
 	bool deleted = false;
 
-	auto doRemove = [&](std::vector<CQueueItem*>::iterator& iter) {
+	auto doRemove = [&](std::vector<CQueueItem*>::iterator iter) {
 		if (*iter == pItem) {
 			visibleOffspring -= 1;
 			visibleOffspring -= pItem->GetChildrenCount(true);
@@ -677,6 +677,7 @@ bool CServerItem::TryRemoveAll()
 
 	wxASSERT(oldVisibleOffspring >= m_visibleOffspring);
 	wxASSERT(m_visibleOffspring >= static_cast<int>(m_children.size()));
+	(void)oldVisibleOffspring;
 
 	return m_children.empty();
 }
