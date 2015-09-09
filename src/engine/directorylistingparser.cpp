@@ -2522,7 +2522,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 	if (!line.GetToken(0, token))
 		return 0;
 
-	fzstring facts = token.GetString();
+	fzstring const facts = token.GetString();
 	if (facts.empty())
 		return 0;
 
@@ -2533,25 +2533,26 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 	fzstring ownerGroup;
 	fzstring permissions;
 
-	while (!facts.empty()) {
-		auto delim = facts.find(';');
+	size_t start = 0;
+	while (start < facts.size()) {
+		auto delim = facts.find(';', start);
 		if (delim == fzstring::npos) {
 			delim = facts.size();
 		}
-		else if (delim < 3) {
+		else if (delim < start + 3) {
 			return 0;
 		}
 
-		auto const pos = facts.find('=');
-		if (pos == fzstring::npos || pos < 1 || pos > delim)
+		auto const pos = facts.find('=', start);
+		if (pos == fzstring::npos || pos < start + 1 || pos > delim)
 			return 0;
 
-		wxString factname = facts.substr(0, pos);
+		fzstring factname = facts.substr(start, pos - start);
 		MakeLowerAscii(factname);
 		fzstring value = facts.substr(pos + 1, delim - pos - 1);
 		if (factname == _T("type")) {
 			auto colonPos = value.find(':');
-			wxString valuePrefix;
+			fzstring valuePrefix;
 			if (colonPos == fzstring::npos)
 				valuePrefix = value;
 			else
@@ -2611,12 +2612,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 		else if (factname == _T("unix.gid"))
 			gid = value;
 
-		if (delim >= facts.size()) {
-			facts.clear();
-		}
-		else {
-			facts = facts.substr(delim + 1);
-		}
+		start = delim + 1;
 	}
 
 	// The order of the facts is undefined, so assemble ownerGroup in correct

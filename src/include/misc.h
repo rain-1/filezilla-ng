@@ -25,6 +25,7 @@ int GetRandomNumber(int low, int high);
 // In addition to the usual A-Z to a-z, the other two i's are
 // transformed to lowercase dotted i as well.
 void MakeLowerAscii(wxString& str);
+void MakeLowerAscii(fzstring& str);
 
 // Strongly typed enum would be nice, but we need to support older compilers still.
 namespace dependency {
