@@ -31,6 +31,8 @@ typedef struct terminal_tag Terminal;
  * Fingerprints of the PGP master keys that can be used to establish a trust
  * path between an executable and other files.
  */
+#define PGP_MASTER_KEY_FP \
+    "440D E3B5 B7A1 CA85 B3CC  1718 AB58 5DC6 0467 6F7C"
 #define PGP_RSA_MASTER_KEY_FP \
     "8F 15 97 DA 25 30 AB 0D  88 D1 92 54 11 CF 0C 4C"
 #define PGP_DSA_MASTER_KEY_FP \
@@ -752,6 +754,8 @@ void cleanup_exit(int);
     X(INT, NONE, erase_to_scrollback) \
     X(INT, NONE, compose_key) \
     X(INT, NONE, ctrlaltkeys) \
+    X(INT, NONE, osx_option_meta) \
+    X(INT, NONE, osx_command_meta) \
     X(STR, NONE, wintitle) /* initial window title */ \
     /* Terminal options */ \
     X(INT, NONE, savelines) \

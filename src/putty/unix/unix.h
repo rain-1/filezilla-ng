@@ -30,6 +30,25 @@
 #include <dlfcn.h>		       /* Dynamic library loading */
 #endif /*  NO_LIBDL */
 
+#ifdef OSX_GTK
+/*
+ * Assorted tweaks to various parts of the GTK front end which all
+ * need to be enabled when compiling on OS X. Because I might need the
+ * same tweaks on other systems in future, I don't want to
+ * conditionalise all of them on OSX_GTK directly, so instead, each
+ * one has its own name and we enable them all centrally here if
+ * OSX_GTK is defined at configure time.
+ */
+#define NOT_X_WINDOWS /* of course, all the X11 stuff should be disabled */
+#define NO_PTY_PRE_INIT /* OS X gets very huffy if we try to set[ug]id */
+#define SET_NONBLOCK_VIA_OPENPT /* work around missing fcntl functionality */
+#define OSX_META_KEY_CONFIG /* two possible Meta keys to choose from */
+/* this potential one of the Meta keys needs manual handling */
+#define META_MANUAL_MASK (GDK_MOD1_MASK)
+#define JUST_USE_GTK_CLIPBOARD_UTF8 /* low-level gdk_selection_* fails */
+#define DEFAULT_CLIPBOARD GDK_SELECTION_CLIPBOARD /* OS X has no PRIMARY */
+#endif
+
 struct Filename {
     char *path;
 };
@@ -92,9 +111,10 @@ unsigned long getticks(void);	       /* based on gettimeofday(2) */
 #define FLAG_STDERR_TTY 0x1000
 
 /* Things pty.c needs from pterm.c */
-char *get_x_display(void *frontend);
+const char *get_x_display(void *frontend);
 int font_dimension(void *frontend, int which);/* 0 for width, 1 for height */
 long get_windowid(void *frontend);
+int frontend_is_utf8(void *frontend);
 
 /* Things gtkdlg.c needs from pterm.c */
 void *get_window(void *frontend);      /* void * to avoid depending on gtk.h */
@@ -113,7 +133,6 @@ int reallyclose(void *frontend);
 #ifdef MAY_REFER_TO_GTK_IN_HEADERS
 int messagebox(GtkWidget *parentwin, const char *title,
                const char *msg, int minwid, ...);
-int string_width(const char *text);
 #endif
 
 /* Things pterm.c needs from {ptermm,uxputty}.c */
@@ -210,5 +229,14 @@ extern Backend serial_backend;
  * uxpeer.c, wrapping getsockopt(SO_PEERCRED).
  */
 int so_peercred(int fd, int *pid, int *uid, int *gid);
+
+/*
+ * Default font setting, which can vary depending on NOT_X_WINDOWS.
+ */
+#ifdef NOT_X_WINDOWS
+#define DEFAULT_GTK_FONT "client:Monospace 12"
+#else
+#define DEFAULT_GTK_FONT "server:fixed"
+#endif
 
 #endif
