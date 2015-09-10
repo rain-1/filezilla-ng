@@ -3383,6 +3383,33 @@ int psftp_main(int argc, char *argv[])
     // FZ: Set proxy to none
     conf_set_int(conf, CONF_proxy_type, PROXY_NONE);
 
+    // FZ: Re-order ciphers so that old and insecure algorithms are always below the warning level
+    {
+	// Find position of warning level
+	int warn = -1;
+	for (i = 0; i < CIPHER_MAX && warn == -1; ++i) {
+	    int cipher = conf_get_int_int(conf, CONF_ssh_cipherlist, i);
+	    if (cipher == CIPHER_WARN) {
+		warn = i;
+	    }
+	}
+
+	if (warn != -1 && warn < CIPHER_MAX) {
+	    for (i = warn - 1; i >= 0; --i) {
+		int const cipher = conf_get_int_int(conf, CONF_ssh_cipherlist, i);
+		if (cipher == CIPHER_ARCFOUR || cipher == CIPHER_DES) {
+		    // Bubble it down
+		    for (int j = i; j < warn; ++j) {
+			int swap = conf_get_int_int(conf, CONF_ssh_cipherlist, j + 1);
+			conf_set_int_int(conf, CONF_ssh_cipherlist, j, swap);
+		    }
+		    conf_set_int_int(conf, CONF_ssh_cipherlist, warn, cipher);
+		    --warn;
+		}
+	    }
+	}
+    }
+
     for (i = 1; i < argc; i++) {
 	int ret;
 	if (argv[i][0] != '-') {
