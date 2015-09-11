@@ -96,6 +96,20 @@ void operator delete[](void* ptr)
 	}
 }
 
+void operator delete(void* ptr, std::size_t)
+{
+	if (ptr) {
+		free(ptr);
+	}
+}
+
+void operator delete[](void* ptr, std::size_t)
+{
+	if (ptr) {
+		free(ptr);
+	}
+}
+
 //---------------------------------------------------------------------------
 class CShellExtClassFactory : public IClassFactory
 {
