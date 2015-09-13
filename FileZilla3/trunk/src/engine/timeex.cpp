@@ -640,12 +640,37 @@ tm CDateTime::GetTm(Zone z) const
 	tm ret{};
 	time_t t = GetTimeT();
 #ifdef __WXMSW__
-	// Special case: If having only days, don't perform conversion
-	if (z == utc || a_ == days) {
-		gmtime_s(&ret, &t);
+	// gmtime_s/localtime_s don't work with negative times
+	if (t < 86400) {
+		FILETIME ft = GetFileTime();
+		SYSTEMTIME st;
+		if (FileTimeToSystemTime(&ft, &st)) {
+
+			if (a_ >= hours && z == local) {
+				SYSTEMTIME st2;
+				if (SystemTimeToTzSpecificLocalTime(0, &st, &st2)) {
+					st = st2;
+				}
+			}
+
+			ret.tm_year = st.wYear - 1900;
+			ret.tm_mon = st.wMonth - 1;
+			ret.tm_mday = st.wDay;
+			ret.tm_wday = st.wDayOfWeek;
+			ret.tm_hour = st.wHour;
+			ret.tm_min = st.wMinute;
+			ret.tm_sec = st.wSecond;
+			ret.tm_yday = -1;
+		}
 	}
 	else {
-		localtime_s(&ret, &t);
+		// Special case: If having only days, don't perform conversion
+		if (z == utc || a_ == days) {
+			gmtime_s(&ret, &t);
+		}
+		else {
+			localtime_s(&ret, &t);
+		}
 	}
 #else
 	if (z == utc || a_ == days) {
