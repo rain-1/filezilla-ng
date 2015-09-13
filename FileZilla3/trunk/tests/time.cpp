@@ -27,7 +27,14 @@ void TimeTest::testNow()
 {
 	CDateTime const t1 = CDateTime::Now();
 
+#ifdef __WXMSW__
+	Sleep(2000);
+#else
+	timespec ts{};
+	ts.tv_sec = 2;
+	nanosleep(&ts, 0);
 	usleep(2000000);
+#endif
 
 	CDateTime const t2 = CDateTime::Now();
 
