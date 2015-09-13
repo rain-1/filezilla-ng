@@ -62,12 +62,12 @@ void TimeTest::testPreEpoch()
 	CPPUNIT_ASSERT(t1.GetTimeT() < -1);
 
 	auto const tm1 = t1.GetTm(CDateTime::utc);
-	CPPUNIT_ASSERT_EQUAL(tm1.tm_year, 57);
-	CPPUNIT_ASSERT_EQUAL(tm1.tm_mon, 9);
-	CPPUNIT_ASSERT_EQUAL(tm1.tm_mday, 4);
-	CPPUNIT_ASSERT_EQUAL(tm1.tm_hour, 19);
-	CPPUNIT_ASSERT_EQUAL(tm1.tm_min, 28);
-	CPPUNIT_ASSERT_EQUAL(tm1.tm_sec, 34);
+	CPPUNIT_ASSERT_EQUAL(57, tm1.tm_year);
+	CPPUNIT_ASSERT_EQUAL(9,  tm1.tm_mon);
+	CPPUNIT_ASSERT_EQUAL(4,  tm1.tm_mday);
+	CPPUNIT_ASSERT_EQUAL(19, tm1.tm_hour);
+	CPPUNIT_ASSERT_EQUAL(28, tm1.tm_min);
+	CPPUNIT_ASSERT_EQUAL(34, tm1.tm_sec);
 
 
 	CDateTime const t2(CDateTime::utc, 1969, 12, 31, 23, 59, 59);
@@ -77,10 +77,10 @@ void TimeTest::testPreEpoch()
 	CPPUNIT_ASSERT(t2 < now);
 
 	auto const tm2 = t2.GetTm(CDateTime::utc);
-	CPPUNIT_ASSERT_EQUAL(tm2.tm_year, 69);
-	CPPUNIT_ASSERT_EQUAL(tm2.tm_mon, 11);
-	CPPUNIT_ASSERT_EQUAL(tm2.tm_mday, 31);
-	CPPUNIT_ASSERT_EQUAL(tm2.tm_hour, 23);
-	CPPUNIT_ASSERT_EQUAL(tm2.tm_min, 59);
-	CPPUNIT_ASSERT_EQUAL(tm2.tm_sec, 59);
+	CPPUNIT_ASSERT_EQUAL(69, tm2.tm_year);
+	CPPUNIT_ASSERT_EQUAL(11, tm2.tm_mon);
+	CPPUNIT_ASSERT_EQUAL(31, tm2.tm_mday);
+	CPPUNIT_ASSERT_EQUAL(32, tm2.tm_hour);
+	CPPUNIT_ASSERT_EQUAL(59, tm2.tm_min);
+	CPPUNIT_ASSERT_EQUAL(59, tm2.tm_sec);
 }
