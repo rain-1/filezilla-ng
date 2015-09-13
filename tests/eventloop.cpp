@@ -206,5 +206,7 @@ void EventloopTest::testCondition()
 	CPPUNIT_ASSERT(!c.wait(l, 200));
 
 	auto const t2 = CMonotonicClock::now();
-	CPPUNIT_ASSERT((t2 - t1) >= duration::from_milliseconds(200));
+
+	// Due to rounding errors things can be off for one millisecond, allow it.
+	CPPUNIT_ASSERT((t2 - t1) >= duration::from_milliseconds(199));
 }
