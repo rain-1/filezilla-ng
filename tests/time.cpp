@@ -80,7 +80,7 @@ void TimeTest::testPreEpoch()
 	CPPUNIT_ASSERT_EQUAL(69, tm2.tm_year);
 	CPPUNIT_ASSERT_EQUAL(11, tm2.tm_mon);
 	CPPUNIT_ASSERT_EQUAL(31, tm2.tm_mday);
-	CPPUNIT_ASSERT_EQUAL(32, tm2.tm_hour);
+	CPPUNIT_ASSERT_EQUAL(23, tm2.tm_hour);
 	CPPUNIT_ASSERT_EQUAL(59, tm2.tm_min);
 	CPPUNIT_ASSERT_EQUAL(59, tm2.tm_sec);
 }
