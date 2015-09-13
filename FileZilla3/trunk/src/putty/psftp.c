@@ -3398,8 +3398,9 @@ int psftp_main(int argc, char *argv[])
 	    for (i = warn - 1; i >= 0; --i) {
 		int const cipher = conf_get_int_int(conf, CONF_ssh_cipherlist, i);
 		if (cipher == CIPHER_ARCFOUR || cipher == CIPHER_DES) {
+		    int j;
 		    // Bubble it down
-		    for (int j = i; j < warn; ++j) {
+		    for (j = i; j < warn; ++j) {
 			int swap = conf_get_int_int(conf, CONF_ssh_cipherlist, j + 1);
 			conf_set_int_int(conf, CONF_ssh_cipherlist, j, swap);
 		    }
