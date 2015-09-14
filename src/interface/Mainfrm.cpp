@@ -266,7 +266,7 @@ CMainFrame::CMainFrame()
 	initial_size.y = wxMin(950, screen_size.GetHeight() - 50);
 
 	Create(NULL, -1, _T("FileZilla"), wxDefaultPosition, initial_size);
-	SetSizeHints(250, 250);
+	SetSizeHints(350, 300);
 
 #ifdef __WXMSW__
 	// In order for the --close commandline argument to work,
@@ -331,7 +331,7 @@ CMainFrame::CMainFrame()
 	m_pTopSplitter->SetMinimumPaneSize(50);
 
 	m_pBottomSplitter = new CSplitterWindowEx(m_pTopSplitter, -1, wxDefaultPosition, wxDefaultSize, wxSP_NOBORDER | wxSP_LIVE_UPDATE);
-	m_pBottomSplitter->SetMinimumPaneSize(10, 60);
+	m_pBottomSplitter->SetMinimumPaneSize(20, 70);
 	m_pBottomSplitter->SetSashGravity(1.0);
 
 	const int message_log_position = COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION);
