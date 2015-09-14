@@ -33,7 +33,6 @@ void TimeTest::testNow()
 	timespec ts{};
 	ts.tv_sec = 2;
 	nanosleep(&ts, 0);
-	usleep(2000000);
 #endif
 
 	CDateTime const t2 = CDateTime::Now();
