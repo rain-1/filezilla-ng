@@ -19,3 +19,5 @@ dist_noinst_DATA = FileZilla.sln Dependencies.props.example
 dist-hook:
 	mkdir -p $(distdir)/fzshellext/32
 	mv -f $(distdir)/fzshellext/64/* $(distdir)/fzshellext
+	rm -rf $(distdir)/config
+	rm -rf $(distdir)/m4
