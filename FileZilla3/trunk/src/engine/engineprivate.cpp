@@ -208,7 +208,6 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 
 	if (m_pCurrentCommand) {
 		if ((nErrorCode & FZ_REPLY_NOTSUPPORTED) == FZ_REPLY_NOTSUPPORTED) {
-			wxASSERT(m_bIsInCommand);
 			m_pLogging->LogMessage(MessageType::Error, _("Command not supported by this protocol"));
 		}
 
