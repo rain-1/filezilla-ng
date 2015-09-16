@@ -10,7 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
-3.14.0-rc2 (2015-09-09
+3.14.0 (2015-09-16)
+
+- When connecting using SFTP, show an error message instead of silently failing when encountering an insecure cipher
+
+3.14.0-rc2 (2015-09-09)
 
 - Removing selected queue items is now faster
 - Reduced memory usage of queue
