@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-04 13:26+0200\n"
-"PO-Revision-Date: 2015-08-27 11:01+0300\n"
+"POT-Creation-Date: 2015-09-16 10:03+0200\n"
+"PO-Revision-Date: 2015-09-12 01:44+0300\n"
 "Last-Translator: Igor Chomko <igor.chomko@gmail.com>\n"
 "Language-Team: Igor Chomko <igorchomko@gmail.com>\n"
 "Language: uk_UA\n"
@@ -89,7 +89,7 @@ msgstr[0] "%d файл. Загальний розмір: Принаймні %s"
 msgstr[1] "%d файли. Загальний розмір: Принаймні %s"
 msgstr[2] "%d файлів. Загальний розмір: Принаймні %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2774
+#: ../../locales/../src/interface/QueueView.cpp:2781
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d файлів додано до черги"
@@ -1510,7 +1510,7 @@ msgstr "Зав&жди виконувати цю дію"
 msgid "Algorithm:"
 msgstr "Алгоритм:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "All files have been successfully transferred"
 msgstr "Усі файли були успішно передані"
 
@@ -1519,7 +1519,7 @@ msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr ""
 "Усі порти в заданому діапазоні повинні знаходитись в межах від 1024 до 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2939
+#: ../../locales/../src/interface/QueueView.cpp:2946
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1570,7 +1570,7 @@ msgstr ""
 "В якості альтернативи, ви, також, можете завантажити останню версію "
 "FileZilla з веб сайту:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1913
+#: ../../locales/../src/interface/QueueView.cpp:1911
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1579,7 +1579,7 @@ msgstr ""
 "Помилка при завантаженні черги передачі з \"%s\".\n"
 "Деякі елементи черги неможливо відновити."
 
-#: ../../locales/../src/interface/QueueView.cpp:1823
+#: ../../locales/../src/interface/QueueView.cpp:1821
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -2323,7 +2323,7 @@ msgstr "Під'єднати до сайту вказаного Сайт Мене
 msgid "Connected"
 msgstr "З'єднано"
 
-#: ../../locales/../src/interface/queue.cpp:382
+#: ../../locales/../src/interface/queue.cpp:326
 msgid "Connecting"
 msgstr "Під'єднання"
 
@@ -2333,13 +2333,13 @@ msgstr "Під'єднання"
 msgid "Connecting to %s"
 msgstr "Під'єднання до %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1047
+#: ../../locales/../src/engine/ControlSocket.cpp:1048
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:4240
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Під'єднання до %s через проксі %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:955
+#: ../../locales/../src/engine/ControlSocket.cpp:956
 #: ../../locales/../src/engine/proxy.cpp:243
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:369
 #, c-format
@@ -2354,7 +2354,7 @@ msgstr "Під'єднання"
 msgid "Connection aborted"
 msgstr "З'єднання перервано"
 
-#: ../../locales/../src/interface/queue.cpp:383
+#: ../../locales/../src/interface/queue.cpp:327
 msgid "Connection attempt failed"
 msgstr "Невдала спроба під'єднання"
 
@@ -2365,7 +2365,7 @@ msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr ""
 "Невдала спроба під'єднання з \"%s\", роблю спробу за наступною адресою."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:924
+#: ../../locales/../src/engine/ControlSocket.cpp:925
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Невдала спроба під'єднання з \"%s\"."
@@ -2383,7 +2383,7 @@ msgstr "Час спроби з'єднання вичерпано"
 msgid "Connection closed"
 msgstr "З'єднання завершено"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/ControlSocket.cpp:1015
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:217
 msgid "Connection closed by server"
 msgstr "З'єднання завершено сервером"
@@ -2492,7 +2492,7 @@ msgstr "Неможливо завершити операцію"
 msgid "Could not connect to server"
 msgstr "Неможливо під'єднатися до серверу"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1084
+#: ../../locales/../src/engine/ControlSocket.cpp:1085
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Неможливо під'єднатися до сервера: %s"
@@ -2700,12 +2700,12 @@ msgstr "Неможливо надіслати команду до fzputtygen."
 msgid "Could not spawn IO thread"
 msgstr "Неможливо створити процес IO"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1061
+#: ../../locales/../src/engine/ControlSocket.cpp:1062
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Неможливо розпочати обмін вітаннями з проксі: %s"
 
-#: ../../locales/../src/interface/queue.cpp:388
+#: ../../locales/../src/interface/queue.cpp:332
 msgid "Could not start transfer"
 msgstr "Неможливо розпочати передачу"
 
@@ -2729,7 +2729,7 @@ msgstr "Неможливо записати \"%s\", дану закладку д
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Неможливо записати \"%s\"; глобальні закладки зберегти неможливо: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1852
+#: ../../locales/../src/interface/QueueView.cpp:1850
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2755,7 +2755,7 @@ msgstr "Неможливо писати \"%s\":"
 msgid "Could not write key file: %s"
 msgstr "Неможливо записати файл ключа: %s"
 
-#: ../../locales/../src/interface/queue.cpp:387
+#: ../../locales/../src/interface/queue.cpp:331
 msgid "Could not write to local file"
 msgstr "Неможливо записати в локальний файл"
 
@@ -2766,7 +2766,7 @@ msgid "Could not write to log file: %s"
 msgstr "Неможливо записати у файл журналу: %s"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:880
-#: ../../locales/../src/engine/ControlSocket.cpp:983
+#: ../../locales/../src/engine/ControlSocket.cpp:984
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Неможливо записати в сокет: %s"
@@ -2823,7 +2823,7 @@ msgstr "Створити каталог"
 msgid "Create empty file"
 msgstr "Створити порожній файл"
 
-#: ../../locales/../src/interface/queue.cpp:390
+#: ../../locales/../src/interface/queue.cpp:334
 msgid "Creating directory"
 msgstr "Створення каталогу"
 
@@ -3097,7 +3097,7 @@ msgstr "Виявлено наявність новішої версії FileZill
 msgid "Dire&ctories"
 msgstr "Ка&талоги"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Direction"
 msgstr "Напрямок"
 
@@ -3167,21 +3167,21 @@ msgstr "Від'єднати від сервера"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:79
 #: ../../locales/../src/engine/ControlSocket.cpp:881
-#: ../../locales/../src/engine/ControlSocket.cpp:985
+#: ../../locales/../src/engine/ControlSocket.cpp:986
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:210
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:879
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:881
-#: ../../locales/../src/interface/queue.cpp:381
+#: ../../locales/../src/interface/queue.cpp:325
 msgid "Disconnected from server"
 msgstr "Від'єднано від сервера"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1016
+#: ../../locales/../src/engine/ControlSocket.cpp:1017
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:895
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Від'єднано від сервера: %s"
 
-#: ../../locales/../src/interface/queue.cpp:380
+#: ../../locales/../src/interface/queue.cpp:324
 #: ../../locales/../src/interface/statuslinectrl.cpp:237
 msgid "Disconnecting from previous server"
 msgstr "Від'єднати від попереднього сервера"
@@ -3404,7 +3404,7 @@ msgstr "Редагування результатів пошуку"
 msgid "Email:"
 msgstr "Ел. пошта:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2125
+#: ../../locales/../src/interface/QueueView.cpp:2123
 msgid "Empty command"
 msgstr "Порожня команда"
 
@@ -3470,7 +3470,7 @@ msgstr "Ввести &настроювану команду ..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Введіть 0 для необмеженої швидкості."
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:2112
 msgid "Enter command"
 msgstr "Ввести команду"
 
@@ -3534,13 +3534,13 @@ msgstr ""
 "- ftpes:// для FTP через TLS (явні)"
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:110
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Enter the password for the file '%s'.\n"
 "The converted file will be protected with the same password."
 msgstr ""
 "Введіть пароль для файлу '%s'.\n"
-"Майте на увазі, що конвертований файл не буде захищений паролем."
+"Конвертований файл буде захищений тим самим паролем."
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:82
 msgid ""
@@ -3563,7 +3563,7 @@ msgstr "Помилка експорту налаштувань"
 msgid "Error importing"
 msgstr "Помилка імпорту"
 
-#: ../../locales/../src/interface/QueueView.cpp:1914
+#: ../../locales/../src/interface/QueueView.cpp:1912
 msgid "Error loading queue"
 msgstr "Помилка завантаження черги"
 
@@ -3577,7 +3577,7 @@ msgstr "Помилка завантаження черги"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1835
+#: ../../locales/../src/interface/QueueView.cpp:1833
 #: ../../locales/../src/interface/search.cpp:822
 #: ../../locales/../src/interface/search.cpp:841
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3592,7 +3592,7 @@ msgstr "Помилка завантаження черги"
 msgid "Error loading xml file"
 msgstr "Помилка завантаження файлу xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1824
+#: ../../locales/../src/interface/QueueView.cpp:1822
 msgid "Error saving queue"
 msgstr "Помилка збереження черги"
 
@@ -3603,7 +3603,7 @@ msgstr "Помилка запуску програми"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1853
+#: ../../locales/../src/interface/QueueView.cpp:1851
 #: ../../locales/../src/interface/sitemanager.cpp:609
 #: ../../locales/../src/interface/sitemanager.cpp:719
 #: ../../locales/../src/interface/sitemanager.cpp:773
@@ -4290,13 +4290,13 @@ msgid "Hidden"
 msgstr "Прихований"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/interface/queue.cpp:870
-#: ../../locales/../src/interface/queue.cpp:957
+#: ../../locales/../src/interface/queue.cpp:905
+#: ../../locales/../src/interface/queue.cpp:992
 msgid "High"
 msgstr "Високий"
 
-#: ../../locales/../src/interface/queue.cpp:872
-#: ../../locales/../src/interface/queue.cpp:959
+#: ../../locales/../src/interface/queue.cpp:907
+#: ../../locales/../src/interface/queue.cpp:994
 msgid "Highest"
 msgstr "Найвищий"
 
@@ -4607,7 +4607,7 @@ msgid ""
 msgstr ""
 "Неповний ланцюг, топ сертифікат не є самопідписаним сертифікатом авторизації"
 
-#: ../../locales/../src/interface/queue.cpp:378
+#: ../../locales/../src/interface/queue.cpp:322
 msgid "Incorrect password"
 msgstr "Неправильний пароль"
 
@@ -4642,7 +4642,7 @@ msgid "Interrupted by signal"
 msgstr "Перервано сигналом"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:218
-#: ../../locales/../src/interface/queue.cpp:384
+#: ../../locales/../src/interface/queue.cpp:328
 msgid "Interrupted by user"
 msgstr "Перервано користувачем"
 
@@ -4968,13 +4968,13 @@ msgstr ""
 "Тип входу може бути використаним лише через адресу FTP. Аргумент повинен "
 "бути, або '%s', або '%s"
 
-#: ../../locales/../src/interface/queue.cpp:865
-#: ../../locales/../src/interface/queue.cpp:952
+#: ../../locales/../src/interface/queue.cpp:900
+#: ../../locales/../src/interface/queue.cpp:987
 msgid "Low"
 msgstr "Низький"
 
-#: ../../locales/../src/interface/queue.cpp:863
-#: ../../locales/../src/interface/queue.cpp:950
+#: ../../locales/../src/interface/queue.cpp:898
+#: ../../locales/../src/interface/queue.cpp:985
 msgid "Lowest"
 msgstr "Найнижчий"
 
@@ -5214,7 +5214,7 @@ msgstr "Відсутня адреса асоційована з nodename"
 msgid "No category to export selected"
 msgstr "Не обрано категорії для експортування"
 
-#: ../../locales/../src/interface/QueueView.cpp:2125
+#: ../../locales/../src/interface/QueueView.cpp:2123
 msgid "No command given, aborting."
 msgstr "Відсутня команда, аварійне завершення."
 
@@ -5241,7 +5241,7 @@ msgstr "Не вказаний хост, введіть ім'я хоста."
 msgid "No images available"
 msgstr "Відсутні зображення"
 
-#: ../../locales/../src/interface/QueueView.cpp:2970
+#: ../../locales/../src/interface/QueueView.cpp:2977
 msgid "No more files in the queue!"
 msgstr "Чергу файлів вичерпано повністю!"
 
@@ -5300,8 +5300,8 @@ msgstr "Невиправна помилка в визначенні імен"
 #: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:178
 #: ../../locales/../src/interface/manual_transfer.cpp:539
-#: ../../locales/../src/interface/queue.cpp:868
-#: ../../locales/../src/interface/queue.cpp:955
+#: ../../locales/../src/interface/queue.cpp:903
+#: ../../locales/../src/interface/queue.cpp:990
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 msgid "Normal"
 msgstr "Звичайний"
@@ -5751,7 +5751,7 @@ msgstr "Введіть число між 0 і 10 для позначення к�
 msgid "Please enter a password for this server:"
 msgstr "Введіть пароль для даного серверу:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:2112
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -6002,7 +6002,7 @@ msgstr "Надрукувати інформацію версії на обран
 msgid "Prioritize directories (default)"
 msgstr "Визначення пріоритетних каталогів (типових)"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Priority"
 msgstr "Пріоритет"
 
@@ -6108,7 +6108,7 @@ msgstr "Алгоритм публічного ключа:"
 msgid "Public permissions"
 msgstr "Публічні дозволи"
 
-#: ../../locales/../src/interface/QueueView.cpp:3050
+#: ../../locales/../src/interface/QueueView.cpp:3057
 msgid "Queue has been fully processed"
 msgstr "Черга опрацьована не повністю"
 
@@ -6218,11 +6218,11 @@ msgstr "Дійсно видалити усі вибрані файли та/аб
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr "Дійсно видалити усі вибрані файли та/або каталоги з вашого комп'ютера?"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Reason"
 msgstr "Причина"
 
-#: ../../locales/../src/interface/QueueView.cpp:3043
+#: ../../locales/../src/interface/QueueView.cpp:3050
 msgid "Reboot now"
 msgstr "Перезавантажити зараз"
 
@@ -6235,7 +6235,7 @@ msgstr "Про&ектувати в підкаталоги"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Отримано оповіщення TLS з сервера: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2969
+#: ../../locales/../src/engine/directorylistingparser.cpp:2965
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Отримано перелік файлів каталогу і схоже він закодований EBCDIC."
 
@@ -6321,7 +6321,7 @@ msgid "Remote certificate not trusted."
 msgstr "Не довіряти віддаленому сертифікату."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2275
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Remote file"
 msgstr "Віддалений файл"
 
@@ -6454,7 +6454,7 @@ msgstr "Скинути і поновити чергу &всіх"
 msgid "Resolved protocol is unknown"
 msgstr "Закритий протокол невідомий"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1078
+#: ../../locales/../src/engine/ControlSocket.cpp:1079
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:457
 #, c-format
 msgid "Resolving address of %s"
@@ -6562,11 +6562,11 @@ msgstr "Збереження паролів вимкнуто вашим сист
 msgid "Saving of passwords has been disabled by you."
 msgstr "Збереження паролів вимкнуто вами."
 
-#: ../../locales/../src/interface/QueueView.cpp:1712
+#: ../../locales/../src/interface/QueueView.cpp:1710
 msgid "Scanning for files to add to queue"
 msgstr "Сканування файлів, що додаються до черги"
 
-#: ../../locales/../src/interface/QueueView.cpp:1714
+#: ../../locales/../src/interface/QueueView.cpp:1712
 msgid "Scanning for files to upload"
 msgstr "Сканування файлів до відвантаження"
 
@@ -6644,7 +6644,7 @@ msgid "Select file for exported data"
 msgstr "Обрати файл для експортованих даних"
 
 #: ../../locales/../src/interface/export.cpp:34
-#: ../../locales/../src/interface/queue.cpp:1454
+#: ../../locales/../src/interface/queue.cpp:1489
 msgid "Select file for exported queue"
 msgstr "Обрати файл для експортованої черги"
 
@@ -6904,7 +6904,7 @@ msgstr "Сервер до клієнтських символів:"
 msgid "Server&type:"
 msgstr "Тип &сервера:"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Server/Local file"
 msgstr "Сервер/Локальний файл"
 
@@ -6967,7 +6967,7 @@ msgstr "Показати наявні шифри TLS"
 msgid "Shows this help dialog"
 msgstr "Показує цей діалог допомоги"
 
-#: ../../locales/../src/interface/QueueView.cpp:3039
+#: ../../locales/../src/interface/QueueView.cpp:3046
 msgid "Shutdown now"
 msgstr "Вимкнути негайно"
 
@@ -7041,7 +7041,7 @@ msgstr ""
 "Для збереження типових закладок використовуйте Сайт Менеджер.\n"
 "Додати поточне з'єднання до Сайт Менеджера?"
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Size"
 msgstr "Розмір"
 
@@ -7060,18 +7060,18 @@ msgstr "Розмір невідомий"
 msgid "Skip file"
 msgstr "Пропустити файл"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1149
-#: ../../locales/../src/engine/ControlSocket.cpp:1166
-#: ../../locales/../src/engine/ControlSocket.cpp:1190
-#: ../../locales/../src/engine/ControlSocket.cpp:1250
+#: ../../locales/../src/engine/ControlSocket.cpp:1150
+#: ../../locales/../src/engine/ControlSocket.cpp:1167
+#: ../../locales/../src/engine/ControlSocket.cpp:1191
+#: ../../locales/../src/engine/ControlSocket.cpp:1251
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Оминаємо завантаження %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1153
-#: ../../locales/../src/engine/ControlSocket.cpp:1169
-#: ../../locales/../src/engine/ControlSocket.cpp:1194
-#: ../../locales/../src/engine/ControlSocket.cpp:1254
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1170
+#: ../../locales/../src/engine/ControlSocket.cpp:1195
+#: ../../locales/../src/engine/ControlSocket.cpp:1255
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Оминаємо відвантаження %s"
@@ -7205,7 +7205,7 @@ msgid "State or province:"
 msgstr "Штат, або провінція:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1087
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Status"
 msgstr "Статус"
 
@@ -7239,7 +7239,7 @@ msgstr "Успішні передачі"
 msgid "Summary of test results:"
 msgstr "Підсумок результатів тесту:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3047
+#: ../../locales/../src/interface/QueueView.cpp:3054
 msgid "Suspend now"
 msgstr "Призупинити зараз"
 
@@ -7471,6 +7471,8 @@ msgid ""
 "The file '%s' contains an SSH1 key. The SSH1 protocol has been deprecated, "
 "FileZilla only supports SSH2 keys."
 msgstr ""
+"Файл '%s' містить ключ SSH1. Протокол SSH1 був вилучений. FileZilla "
+"підтримує лише ключі SSH2."
 
 #: ../../locales/../src/interface/fzputtygen_interface.cpp:57
 #, c-format
@@ -7620,7 +7622,7 @@ msgstr "Нову версію завантажити було неможливо
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Нову версію було збережено у вашому каталозі завантажень."
 
-#: ../../locales/../src/interface/QueueView.cpp:1834
+#: ../../locales/../src/interface/QueueView.cpp:1832
 msgid "The queue will not be saved."
 msgstr "Чергу не буде збережено."
 
@@ -7727,12 +7729,12 @@ msgstr "Вказана родина адрес не підтримується"
 msgid "The specified network name is no longer available"
 msgstr "Вказана мережа більше недоступна"
 
-#: ../../locales/../src/interface/QueueView.cpp:3042
+#: ../../locales/../src/interface/QueueView.cpp:3049
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
 "Система незабаром перезавантажиться; для відміни натисніть кнопку Скасувати."
 
-#: ../../locales/../src/interface/QueueView.cpp:3038
+#: ../../locales/../src/interface/QueueView.cpp:3045
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Система незабаром вимкнеться; для відміни натисніть кнопку Скасувати."
 
@@ -7789,7 +7791,7 @@ msgstr ""
 "Цей майстер допоможе вам правильно сконфігурувати будь-який ваш "
 "маршрутизатор чи файєрвол та перевірити їхню конфігурацію."
 
-#: ../../locales/../src/interface/queue.cpp:1169
+#: ../../locales/../src/interface/queue.cpp:1204
 msgid "Time"
 msgstr "Час"
 
@@ -7802,7 +7804,7 @@ msgid "Time&out in seconds:"
 msgstr "Час &очікування в секундах:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:125
-#: ../../locales/../src/interface/queue.cpp:379
+#: ../../locales/../src/interface/queue.cpp:323
 msgid "Timeout"
 msgstr "Час вичерпано"
 
@@ -7936,7 +7938,7 @@ msgstr "Під'єднання перервано: %s"
 msgid "Transferred data got tainted."
 msgstr "Передані дані пошкоджено."
 
-#: ../../locales/../src/interface/queue.cpp:389
+#: ../../locales/../src/interface/queue.cpp:333
 #: ../../locales/../src/interface/statuslinectrl.cpp:246
 msgid "Transferring"
 msgstr "Передача"
@@ -7945,8 +7947,8 @@ msgstr "Передача"
 msgid "Transfers"
 msgstr "Передачі"
 
-#: ../../locales/../src/interface/QueueView.cpp:2940
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "Transfers finished"
 msgstr "Передачі завершено"
 
@@ -8274,15 +8276,15 @@ msgstr "Видимі стовпці"
 msgid "W&rite"
 msgstr "Пи&сати"
 
-#: ../../locales/../src/interface/QueueView.cpp:1672
+#: ../../locales/../src/interface/QueueView.cpp:1670
 msgid "Waiting"
 msgstr "Очікування"
 
-#: ../../locales/../src/interface/queue.cpp:385
+#: ../../locales/../src/interface/queue.cpp:329
 msgid "Waiting for browsing connection"
 msgstr "Очікування на перегляд зв'язку"
 
-#: ../../locales/../src/interface/queue.cpp:386
+#: ../../locales/../src/interface/queue.cpp:330
 msgid "Waiting for password"
 msgstr "Очікування на пароль"
 
@@ -8554,7 +8556,7 @@ msgstr ""
 "У вас не повинно виникнути проблем у з'єднанні з іншими серверами. Передачі "
 "файлів повинні працювати правильно."
 
-#: ../../locales/../src/interface/QueueView.cpp:3046
+#: ../../locales/../src/interface/QueueView.cpp:3053
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Ваш комп'ютер призупиниться, якщо не натиснути Скасувати."
 
