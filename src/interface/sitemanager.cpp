@@ -65,6 +65,8 @@ bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 					if (!bookmarkData->m_localDir.empty() && !bookmarkData->m_remoteDir.empty())
 						bookmarkData->m_sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
 
+					bookmarkData->m_comparison = GetTextElementBool(bookmark, "DirectoryComparison", false);
+
 					handler.AddBookmark(name, std::move(bookmarkData));
 				}
 
