@@ -1760,7 +1760,7 @@ int CFtpControlSocket::SendNextCommand()
 
 	if (m_repliesToSkip)
 	{
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Status, _T("Waiting for replies to skip before sending next command..."));
+		LogMessage(MessageType::Status, _T("Waiting for replies to skip before sending next command..."));
 		SetWait(true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
