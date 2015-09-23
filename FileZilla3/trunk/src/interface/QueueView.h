@@ -4,7 +4,7 @@
 #include "dndobjects.h"
 #include "queue.h"
 
-#include <libfilezilla.h>
+#include <libfilezilla_engine.h>
 #include <option_change_event_handler.h>
 
 #include <set>

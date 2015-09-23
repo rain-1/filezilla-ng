@@ -1,5 +1,5 @@
-#ifndef __LIBFILEZILLA_H__
-#define __LIBFILEZILLA_H__
+#ifndef LIBFILEZILLA_ENGINE_HEADER
+#define LIBFILEZILLA_ENGINE_HEADER
 
 #ifdef HAVE_CONFIG_H
   #include <config.h>
@@ -47,4 +47,4 @@
 
 #define TRANSLATE_T(str) _T(str)
 
-#endif //__LIBFILEZILLA_H__
+#endif

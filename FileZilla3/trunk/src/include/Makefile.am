@@ -12,7 +12,7 @@ noinst_HEADERS = \
 	FileZillaEngine.h \
 	file.h \
 	fzstring.h \
-	libfilezilla.h \
+	libfilezilla_engine.h \
 	local_filesys.h \
 	local_path.h \
 	logging.h \

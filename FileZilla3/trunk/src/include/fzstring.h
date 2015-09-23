@@ -1,7 +1,7 @@
 #ifndef FILEZILLA_ENGINE_FZSTRING_HEADER
 #define FILEZILLA_ENGINE_FZSTRING_HEADER
 
-#include "libfilezilla.h"
+#include "libfilezilla_engine.h"
 
 #include <string>
 

@@ -1,4 +1,4 @@
-#include <libfilezilla.h>
+#include <libfilezilla_engine.h>
 #include <directorylistingparser.h>
 
 #include <cppunit/extensions/HelperMacros.h>
