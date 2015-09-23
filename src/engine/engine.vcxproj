@@ -138,7 +138,7 @@
     <ClInclude Include="fzprocess.h" />
     <ClInclude Include="httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
-    <ClInclude Include="..\include\libfilezilla.h" />
+    <ClInclude Include="..\include\libfilezilla_engine.h" />
     <ClInclude Include="..\include\local_filesys.h" />
     <ClInclude Include="..\include\local_path.h" />
     <ClInclude Include="..\include\logging.h" />
