@@ -243,14 +243,14 @@ if USE_RESOURCEFILE
 RESOURCEFILE = resources/filezilla.o
 endif
 
-filezilla_DEPENDENCIES = ../engine/libengine.a
+filezilla_DEPENDENCIES = ../engine/libengine.a ../../src/libfilezilla.a
 
 filezilla_CPPFLAGS = -I$(srcdir)/../include
 filezilla_CPPFLAGS += $(WX_CPPFLAGS)
 filezilla_CXXFLAGS = $(WX_CXXFLAGS_ONLY)
 filezilla_CFLAGS = $(WX_CFLAGS_ONLY)
 
-filezilla_LDFLAGS = ../engine/libengine.a
+filezilla_LDFLAGS = ../engine/libengine.a ../../src/libfilezilla.a
 filezilla_LDFLAGS += $(PUGIXML_LIBS)
 filezilla_LDFLAGS += $(LIBGNUTLS_LIBS)
 

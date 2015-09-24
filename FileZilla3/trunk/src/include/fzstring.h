@@ -3,15 +3,18 @@
 
 #include "libfilezilla_engine.h"
 
-#include <string>
+inline std::wstring to_wstring(wxString const& s) { return s.ToStdWstring(); }
 
-typedef std::wstring fzstring;
-
-inline fzstring to_fzstring(wxString const& s) { return s.ToStdWstring(); }
-#ifdef __WXMSW__
-inline int collate_fzstring(fzstring const& a, fzstring const& b) { return _wcsicmp(a.c_str(), b.c_str()); } // note: does not handle embedded null
-#else
-inline int collate_fzstring(fzstring const& a, fzstring const& b) { return wcscasecmp(a.c_str(), b.c_str()); } // note: does not handle embedded null
-#endif
+namespace fz {
+template<>
+inline wxString str_tolower_ascii(wxString const& s)
+{
+	wxString ret = s;
+	for (auto& c : ret) {
+		c = tolower_ascii(static_cast<wxChar>(c));
+	}
+	return ret;
+}
+}
 
 #endif

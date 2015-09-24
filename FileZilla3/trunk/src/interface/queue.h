@@ -156,10 +156,10 @@ public:
 	void SetPriorityRaw(QueuePriority priority);
 	QueuePriority GetPriority() const;
 
-	fzstring const& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
-	fzstring const& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
-	fzstring const& GetSourceFile() const { return m_sourceFile; }
-	CSparseOptional<fzstring> const& GetTargetFile() const { return m_targetFile; }
+	std::wstring const& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
+	std::wstring const& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
+	std::wstring const& GetSourceFile() const { return m_sourceFile; }
+	CSparseOptional<std::wstring> const& GetTargetFile() const { return m_targetFile; }
 	CLocalPath const& GetLocalPath() const { return m_localPath; }
 	CServerPath const& GetRemotePath() const { return m_remotePath; }
 	int64_t GetSize() const { return m_size; }
@@ -261,8 +261,8 @@ public:
 	}
 
 protected:
-	fzstring const m_sourceFile;
-	CSparseOptional<fzstring> m_targetFile;
+	std::wstring const m_sourceFile;
+	CSparseOptional<std::wstring> m_targetFile;
 	CLocalPath const m_localPath;
 	CServerPath const m_remotePath;
 	int64_t m_size{};

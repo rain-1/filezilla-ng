@@ -328,34 +328,6 @@ int GetRandomNumber(int min, int max)
 	return dist(rd);
 }
 
-void MakeLowerAscii(wxString& str)
-{
-	for (size_t i = 0; i < str.size(); i++) {
-		wxChar c = str.GetChar(i);
-		if (c >= 'A' && c <= 'Z') {
-			c += 32;
-			str.SetChar(i, wxUniChar(c));
-		}
-		else if (c == 0x130 || c == 0x131) {
-			c = 'i';
-			str.SetChar(i, wxUniChar(c));
-		}
-	}
-}
-
-void MakeLowerAscii(fzstring& str)
-{
-	for (size_t i = 0; i < str.size(); i++) {
-		auto & c = str[i];
-		if (c >= 'A' && c <= 'Z') {
-			c += 32;
-		}
-		else if (c == 0x130 || c == 0x131) {
-			c = 'i';
-		}
-	}
-}
-
 wxString GetDependencyVersion(dependency::type d)
 {
 	switch (d) {
