@@ -10,8 +10,9 @@ template<>
 inline wxString str_tolower_ascii(wxString const& s)
 {
 	wxString ret = s;
-	for (auto& c : ret) {
-		c = tolower_ascii(static_cast<wxChar>(c));
+	// wxString is just broken, can't even use range-based for loops with it.
+	for (auto it = ret.begin(); it != ret.end(); ++it) {
+		*it = tolower_ascii(static_cast<wxChar>(*it));
 	}
 	return ret;
 }
