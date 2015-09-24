@@ -1,5 +1,9 @@
 #include "fz_string.hpp"
 
+#ifdef FZ_WINDOWS
+#include <string.h>
+#endif
+
 static_assert('a' + 25 == 'z', "We only support systems running with an ASCII-based character set. Sorry, no EBCDIC.");
 
 // char may be unsigned, yielding stange results if subtracting characters. To work around it, expect a particular order of characters.
