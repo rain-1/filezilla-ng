@@ -64,7 +64,7 @@ public:
 				return false;\
 		}
 
-	static int CmpCase(fzstring const& str1, fzstring const& str2)
+	static int CmpCase(std::wstring const& str1, std::wstring const& str2)
 	{
 		return str1.compare(str2);
 	}
@@ -74,9 +74,9 @@ public:
 		return str1.Cmp(str2);
 	}
 
-	static int CmpNoCase(fzstring const& str1, fzstring const& str2)
+	static int CmpNoCase(std::wstring const& str1, std::wstring const& str2)
 	{
-		int cmp = collate_fzstring(str1, str2);
+		int cmp = fz::stricmp(str1, str2);
 		if (cmp)
 			return cmp;
 		return str1.compare(str2);
@@ -95,7 +95,7 @@ public:
 		return CmpNatural(static_cast<wxChar const*>(str1.c_str()), static_cast<wxChar const*>(str2.c_str()));
 	}
 
-	static int CmpNatural(fzstring const& str1, fzstring const& str2)
+	static int CmpNatural(std::wstring const& str1, std::wstring const& str2)
 	{
 		return CmpNatural(str1.c_str(), str2.c_str());
 	}

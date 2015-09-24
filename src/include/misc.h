@@ -15,18 +15,6 @@ bool IsIpAddress(const wxString& address);
 // Get a random number uniformly distributed in the closed interval [min, max]
 int GetRandomNumber(int low, int high);
 
-// Under some locales (e.g. Turkish), there is a different
-// relationship between the letters a-z and A-Z.
-// In Turkish for example there are different types of i
-// (dotted and dotless), with i lowercase dotted and I
-// uppercase dotless.
-// If needed, use this function to transform the case manually
-// and locale-independently
-// In addition to the usual A-Z to a-z, the other two i's are
-// transformed to lowercase dotted i as well.
-void MakeLowerAscii(wxString& str);
-void MakeLowerAscii(fzstring& str);
-
 // Strongly typed enum would be nice, but we need to support older compilers still.
 namespace dependency {
 enum type {

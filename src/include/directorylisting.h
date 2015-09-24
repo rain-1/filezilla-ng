@@ -9,10 +9,10 @@
 class CDirentry
 {
 public:
-	fzstring name;
+	std::wstring name;
 	int64_t size;
-	CRefcountObject<fzstring> permissions;
-	CRefcountObject<fzstring> ownerGroup;
+	CRefcountObject<std::wstring> permissions;
+	CRefcountObject<std::wstring> ownerGroup;
 
 	enum _flags
 	{
@@ -52,7 +52,7 @@ public:
 		return time.IsValid() && time.GetAccuracy() >= CDateTime::seconds;
 	}
 
-	CSparseOptional<fzstring> target; // Set to linktarget it link is true
+	CSparseOptional<std::wstring> target; // Set to linktarget it link is true
 
 	CDateTime time;
 
@@ -130,14 +130,14 @@ public:
 
 	bool RemoveEntry(unsigned int index);
 
-	void GetFilenames(std::vector<fzstring> &names) const;
+	void GetFilenames(std::vector<std::wstring> &names) const;
 
 protected:
 
 	CRefcountObject_Uninitialized<std::vector<CRefcountObject<CDirentry> > > m_entries;
 
-	mutable CRefcountObject_Uninitialized<std::multimap<fzstring, unsigned int> > m_searchmap_case;
-	mutable CRefcountObject_Uninitialized<std::multimap<fzstring, unsigned int> > m_searchmap_nocase;
+	mutable CRefcountObject_Uninitialized<std::multimap<std::wstring, unsigned int> > m_searchmap_case;
+	mutable CRefcountObject_Uninitialized<std::multimap<std::wstring, unsigned int> > m_searchmap_nocase;
 
 	unsigned int m_entryCount{};
 };

@@ -962,7 +962,7 @@ int CFtpControlSocket::LogonParseResponse()
 				continue;
 			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), opst_mlst_command);
 			if (cap == unknown) {
-				MakeLowerAscii(facts);
+				facts = fz::str_tolower_ascii(facts);
 
 				bool had_unset = false;
 				wxString opts_facts;
@@ -4270,13 +4270,13 @@ bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const 
 	if (listing2.GetCount() > listing1.GetCount())
 		return false;
 
-	std::vector<fzstring> names1, names2;
+	std::vector<std::wstring> names1, names2;
 	listing1.GetFilenames(names1);
 	listing2.GetFilenames(names2);
 	std::sort(names1.begin(), names1.end());
 	std::sort(names2.begin(), names2.end());
 
-	std::vector<fzstring>::const_iterator iter1, iter2;
+	std::vector<std::wstring>::const_iterator iter1, iter2;
 	iter1 = names1.cbegin();
 	iter2 = names2.cbegin();
 	while (iter2 != names2.cbegin()) {
@@ -4415,6 +4415,5 @@ wxString CFtpControlSocket::GetPassiveCommand(CRawTransferOpData& data)
 		// EPSV is mandatory for IPv6, don't check capabilities
 		ret = _T("EPSV");
 	}
-
 	return ret;
 }

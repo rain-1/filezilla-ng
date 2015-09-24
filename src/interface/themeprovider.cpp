@@ -81,14 +81,12 @@ wxBitmap CThemeProvider::CreateBitmap(const wxArtID& id, const wxArtClient& /*cl
 
 	std::list<wxString> dirs = GetSearchDirs(size);
 
-	wxString name = id.Mid(4);
-
 	// The ART_* IDs are always given in uppercase ASCII,
 	// all filenames used by FileZilla for the resources
 	// are lowercase ASCII. Locale-independent transformation
 	// needed e.g. if using Turkish locale.
-	MakeLowerAscii(name);
-
+	wxString name = fz::str_tolower_ascii(id.Mid(4));
+	
 	wxLogNull logNull;
 
 	for (auto const& dir : dirs) {
@@ -118,13 +116,11 @@ wxAnimation CThemeProvider::CreateAnimation(const wxArtID& id, const wxSize& siz
 
 	std::list<wxString> dirs = GetSearchDirs(size);
 
-	wxString name = id.Mid(4);
-
 	// The ART_* IDs are always given in uppercase ASCII,
 	// all filenames used by FileZilla for the resources
 	// are lowercase ASCII. Locale-independent transformation
 	// needed e.g. if using Turkish locale.
-	MakeLowerAscii(name);
+	wxString name = fz::str_tolower_ascii(id.Mid(4));
 
 	wxLogNull logNull;
 
@@ -242,8 +238,7 @@ wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&
 	if (id.Left(4) != _T("ART_"))
 		return iconBundle;
 
-	wxString name = id.Mid(4);
-	MakeLowerAscii(name);
+	wxString name = fz::str_tolower_ascii(id.Mid(4));
 
 	const wxChar* dirs[] = { _T("16x16/"), _T("32x32/"), _T("48x48/") };
 
