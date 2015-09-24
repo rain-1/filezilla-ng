@@ -245,7 +245,7 @@ endif
 
 filezilla_DEPENDENCIES = ../engine/libengine.a ../../src/libfilezilla.a
 
-filezilla_CPPFLAGS = -I$(srcdir)/../include
+filezilla_CPPFLAGS = -I$(srcdir)/../include -I$(srcdir)/../../lib
 filezilla_CPPFLAGS += $(WX_CPPFLAGS)
 filezilla_CXXFLAGS = $(WX_CXXFLAGS_ONLY)
 filezilla_CFLAGS = $(WX_CFLAGS_ONLY)
