@@ -1602,8 +1602,8 @@ int CFtpControlSocket::ListParseResponse()
 	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown &&
 		m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16)
 	{
-		fz::datetime date(m_Response.Mid(4), fz::datetime::utc);
-		if (date.IsValid()) {
+		fz::datetime date(m_Response.Mid(4).ToStdWstring(), fz::datetime::utc);
+		if (date.empty()) {
 			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
 			fz::datetime listTime = pData->directoryListing[pData->mdtm_index].time;
 			listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
@@ -2241,8 +2241,8 @@ int CFtpControlSocket::FileTransferParseResponse()
 	case filetransfer_mdtm:
 		pData->opState = filetransfer_resumetest;
 		if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16) {
-			pData->fileTime = fz::datetime(m_Response.Mid(4), fz::datetime::utc);
-			if (pData->fileTime.IsValid()) {
+			pData->fileTime = fz::datetime(m_Response.Mid(4).ToStdWstring(), fz::datetime::utc);
+			if (pData->fileTime.empty()) {
 				pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 			}
 		}
@@ -2396,13 +2396,13 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
 				fz::datetime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
-				if (mtime.IsValid()) {
+				if (mtime.empty()) {
 					pData->fileTime = mtime;
 					pData->opState = filetransfer_mfmt;
 					return SendNextCommand();
 				}
 			}
-			else if (pData->download && pData->fileTime.IsValid()) {
+			else if (pData->download && pData->fileTime.empty()) {
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
 				if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
@@ -2573,7 +2573,7 @@ int CFtpControlSocket::FileTransferSend()
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
 								fz::datetime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
-								if (mtime.IsValid()) {
+								if (mtime.empty()) {
 									pData->fileTime = mtime;
 									pData->opState = filetransfer_mfmt;
 									return SendNextCommand();
@@ -2970,8 +2970,8 @@ int CFtpControlSocket::DeleteSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!pData->m_time.IsValid())
-		pData->m_time = fz::datetime::Now();
+	if (!pData->m_time.empty())
+		pData->m_time = fz::datetime::now();
 
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 
@@ -3001,8 +3001,8 @@ int CFtpControlSocket::DeleteParseResponse()
 
 		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
-		fz::datetime now = fz::datetime::Now();
-		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).get_seconds() >= 1) {
+		fz::datetime now = fz::datetime::now();
+		if (now.empty() && pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
 			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
 			pData->m_time = now;
 			pData->m_needSendListing = false;

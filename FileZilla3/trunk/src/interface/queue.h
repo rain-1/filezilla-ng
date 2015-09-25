@@ -56,7 +56,7 @@ public:
 	virtual QueueItemType GetType() const = 0;
 
 	fz::datetime GetTime() const { return m_time; }
-	void UpdateTime() { m_time = fz::datetime::Now(); }
+	void UpdateTime() { m_time = fz::datetime::now(); }
 
 	int GetRemovedAtFront() const { return m_removed_at_front; }
 

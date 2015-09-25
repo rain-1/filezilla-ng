@@ -150,11 +150,11 @@ bool CUpdater::LongTimeSinceLastCheck() const
 	if (lastCheckStr.empty())
 		return true;
 
-	fz::datetime lastCheck(lastCheckStr, fz::datetime::utc);
-	if (!lastCheck.IsValid())
+	fz::datetime lastCheck(lastCheckStr.ToStdWstring(), fz::datetime::utc);
+	if (!lastCheck.empty())
 		return true;
 
-	auto const span = fz::datetime::Now() - lastCheck;
+	auto const span = fz::datetime::now() - lastCheck;
 
 	if (span.get_seconds() < 0)
 		// Last check in future
@@ -205,7 +205,7 @@ bool CUpdater::Run()
 		return false;
 	}
 
-	auto  const t = fz::datetime::Now();
+	auto  const t = fz::datetime::now();
 	COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTDATE, t.Format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::utc));
 
 	local_file_.clear();
@@ -577,8 +577,8 @@ void CUpdater::ParseData()
 		wxString versionOrDate = tokens.GetNextToken();
 
 		if (type == _T("nightly")) {
-			fz::datetime nightlyDate(versionOrDate, fz::datetime::utc);
-			if (!nightlyDate.IsValid()) {
+			fz::datetime nightlyDate(versionOrDate.ToStdWstring(), fz::datetime::utc);
+			if (!nightlyDate.empty()) {
 				if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
 					log_ += _T("Could not parse nightly date\n");
 				}
@@ -586,7 +586,7 @@ void CUpdater::ParseData()
 			}
 
 			fz::datetime buildDate = CBuildInfo::GetBuildDate();
-			if (!buildDate.IsValid() || !nightlyDate.IsValid() || nightlyDate <= buildDate) {
+			if (!buildDate.empty() || !nightlyDate.empty() || nightlyDate <= buildDate) {
 				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
 					log_ += _T("Nightly isn't newer\n");
 				}

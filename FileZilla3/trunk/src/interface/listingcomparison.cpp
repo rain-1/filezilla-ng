@@ -114,8 +114,8 @@ bool CComparisonManager::CompareListings()
 				}
 			}
 			else {
-				if (!localDate.IsValid() || !remoteDate.IsValid()) {
-					if (!hide_identical || localDate.IsValid() || remoteDate.IsValid() || localFile == _T("..")) {
+				if (!localDate.empty() || !remoteDate.empty()) {
+					if (!hide_identical || localDate.empty() || remoteDate.empty() || localFile == _T("..")) {
 						const CComparableListing::t_fileEntryFlags flag = CComparableListing::normal;
 						m_pLeft->CompareAddFile(flag);
 						m_pRight->CompareAddFile(flag);

@@ -1,37 +1,38 @@
 #include <filezilla.h>
 #include "timeex.h"
 
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 #include <sys/time.h>
 #endif
 
-#define TIME_ASSERT(x) //wxASSERT(x)
+#define TIME_ASSERT(x) //assert(x)
 
 namespace fz {
 
-datetime::datetime(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
+datetime::datetime(zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
 {
-	Set(z, year, month, day, hour, minute, second, millisecond);
+	set(z, year, month, day, hour, minute, second, millisecond);
 }
 
-datetime::datetime(time_t t, Accuracy a)
+datetime::datetime(time_t t, accuracy a)
 	: t_(static_cast<int64_t>(t) * 1000)
 	, a_(a)
 {
-	TIME_ASSERT(IsClamped());
+	TIME_ASSERT(clamped());
 	TIME_ASSERT(a != milliseconds);
 }
 
 namespace {
-void skip(wxChar const*& it, const wxChar* const end)
+template<typename C>
+void skip(C const*& it, C const* const end)
 {
 	while (it != end && (*it < '0' || *it > '9')) {
 		++it;
 	}
 }
 
-template<typename T>
-bool parse(wxChar const*& it, wxChar const* end, int count, T & v, int offset)
+template<typename T, typename C>
+bool parse(C const*& it, C const* end, int count, T & v, int offset)
 {
 	skip(it, end);
 
@@ -41,7 +42,7 @@ bool parse(wxChar const*& it, wxChar const* end, int count, T & v, int offset)
 
 	T w = 0;
 
-	wxChar const* const stop = it + count;
+	C const* const stop = it + count;
 	while (it != stop) {
 		if (*it < '0' || *it > '9') {
 			return false;
@@ -56,16 +57,83 @@ bool parse(wxChar const*& it, wxChar const* end, int count, T & v, int offset)
 	v = w;
 	return true;
 }
+
+template<typename String>
+bool do_set(datetime& t, String const& str, datetime::zone z)
+{
+	auto const* it = str.c_str();
+	auto const* end = it + str.size();
+
+#ifdef FZ_WINDOWS
+	SYSTEMTIME st{};
+	if (!parse(it, end, 4, st.wYear, 0) ||
+		!parse(it, end, 2, st.wMonth, 0) ||
+		!parse(it, end, 2, st.wDay, 0))
+	{
+		t.clear();
+		return false;
+	}
+
+	datetime::accuracy a = datetime::days;
+	if (parse(it, end, 2, st.wHour, 0)) {
+		a = datetime::hours;
+		if (parse(it, end, 2, st.wMinute, 0)) {
+			a = datetime::minutes;
+			if (parse(it, end, 2, st.wSecond, 0)) {
+				a = datetime::seconds;
+				if (parse(it, end, 3, st.wMilliseconds, 0)) {
+					a = datetime::milliseconds;
+				}
+			}
+		}
+	}
+	return t.set(st, a, z);
+#else
+	tm t{};
+	if (!parse(it, end, 4, t.tm_year, -1900) ||
+		!parse(it, end, 2, t.tm_mon, -1) ||
+		!parse(it, end, 2, t.tm_mday, 0))
+	{
+		t.clear();
+		return false;
+	}
+
+	accuracy a = datetime::days;
+	int64_t ms{};
+	if (parse(it, end, 2, t.tm_hour, 0)) {
+		a = datetime::hours;
+		if (parse(it, end, 2, t.tm_min, 0)) {
+			a = datetime::minutes;
+			if (parse(it, end, 2, t.tm_sec, 0)) {
+				a = datetime::seconds;
+				if (parse(it, end, 3, ms, 0)) {
+					a = datetime::milliseconds;
+				}
+			}
+		}
+	}
+	bool success = t.set(t, a, z);
+	if (success) {
+		t_ += ms;
+	}
+	return success;
+#endif
+}
 }
 
-datetime::datetime(wxString const& str, Zone z)
+datetime::datetime(std::string const& str, zone z)
 {
-	Set(str, z);
+	do_set(*this, str, z);
 }
 
-datetime datetime::Now()
+datetime::datetime(std::wstring const& str, zone z)
 {
-#ifdef __WXMSW__
+	do_set(*this, str, z);
+}
+
+datetime datetime::now()
+{
+#ifdef FZ_WINDOWS
 	FILETIME ft{};
 	GetSystemTimeAsFileTime(&ft);
 	return datetime(ft, milliseconds);
@@ -123,11 +191,11 @@ bool datetime::operator==(datetime const& op) const
 	return t_ == op.t_ && a_ == op.a_;
 }
 
-bool datetime::IsClamped()
+bool datetime::clamped()
 {
 	bool ret = true;
 	tm t = GetTm(utc);
-	if (a_ < milliseconds && GetMilliseconds() != 0) {
+	if (a_ < milliseconds && get_milliseconds() != 0) {
 		ret = false;
 	}
 	else if (a_ < seconds && t.tm_sec) {
@@ -160,25 +228,25 @@ int datetime::Compare(datetime const& op) const
 		else if (t_ > op.t_) {
 			ret = 1;
 		}
-		TIME_ASSERT(CompareSlow(op) == ret);
+		TIME_ASSERT(compare_slow(op) == ret);
 		return ret;
 	}
 
 	// Second fast path: Lots of difference, at least 2 days
 	int64_t diff = t_ - op.t_;
 	if (diff > 60 * 60 * 24 * 1000 * 2) {
-		TIME_ASSERT(CompareSlow(op) == 1);
+		TIME_ASSERT(compare_slow(op) == 1);
 		return 1;
 	}
 	else if (diff < -60 * 60 * 24 * 1000 * 2) {
-		TIME_ASSERT(CompareSlow(op) == -1);
+		TIME_ASSERT(compare_slow(op) == -1);
 		return -1;
 	}
 
-	return CompareSlow(op);
+	return compare_slow(op);
 }
 
-int datetime::CompareSlow(datetime const& op) const
+int datetime::compare_slow(datetime const& op) const
 {
 	tm t1 = GetTm(utc);
 	tm t2 = op.GetTm(utc);
@@ -201,7 +269,7 @@ int datetime::CompareSlow(datetime const& op) const
 		return 1;
 	}
 
-	Accuracy a = (a_ < op.a_) ? a_ : op.a_;
+	accuracy a = (a_ < op.a_) ? a_ : op.a_;
 
 	if (a < hours) {
 		return 0;
@@ -236,8 +304,8 @@ int datetime::CompareSlow(datetime const& op) const
 	if (a < milliseconds) {
 		return 0;
 	}
-	auto ms1 = GetMilliseconds();
-	auto ms2 = op.GetMilliseconds();
+	auto ms1 = get_milliseconds();
+	auto ms2 = op.get_milliseconds();
 	if (ms1 < ms2) {
 		return -1;
 	}
@@ -250,7 +318,7 @@ int datetime::CompareSlow(datetime const& op) const
 
 datetime& datetime::operator+=(duration const& op)
 {
-	if (IsValid()) {
+	if (empty()) {
 		if (a_ < hours) {
 			t_ += op.get_days() * 24 * 3600 * 1000;
 		}
@@ -276,9 +344,9 @@ datetime& datetime::operator-=(duration const& op)
 	return *this;
 }
 
-bool datetime::Set(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
+bool datetime::set(zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
 {
-	Accuracy a;
+	accuracy a;
 	if (hour == -1) {
 		a = days;
 		TIME_ASSERT(minute == -1);
@@ -305,7 +373,7 @@ bool datetime::Set(Zone z, int year, int month, int day, int hour, int minute, i
 		a = milliseconds;
 	}
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	SYSTEMTIME st{};
 	st.wYear = year;
 	st.wMonth = month;
@@ -315,7 +383,7 @@ bool datetime::Set(Zone z, int year, int month, int day, int hour, int minute, i
 	st.wSecond = second;
 	st.wMilliseconds = millisecond;
 
-	return Set(st, a, z);
+	return set(st, a, z);
 #else
 
 	tm t{};
@@ -327,80 +395,29 @@ bool datetime::Set(Zone z, int year, int month, int day, int hour, int minute, i
 	t.tm_min = minute;
 	t.tm_sec = second;
 
-	bool set = Set(t, a, z);
+	bool const success = set(t, a, z);
 
-	if (set) {
+	if (success) {
 		t_ += millisecond;
 	}
 
-	return set;
+	return success;
 #endif
 }
 
-bool datetime::Set(wxString const& str, Zone z)
+bool datetime::set(std::string const& str, zone z)
 {
-	wxChar const* it = str.c_str();
-	wxChar const* end = it + str.size();
-
-#ifdef __WXMSW__
-	SYSTEMTIME st{};
-	if (!parse(it, end, 4, st.wYear, 0) ||
-		!parse(it, end, 2, st.wMonth, 0) ||
-		!parse(it, end, 2, st.wDay, 0))
-	{
-		clear();
-		return false;
-	}
-
-	Accuracy a = days;
-	if (parse(it, end, 2, st.wHour, 0)) {
-		a = hours;
-		if (parse(it, end, 2, st.wMinute, 0)) {
-			a = minutes;
-			if (parse(it, end, 2, st.wSecond, 0)) {
-				a = seconds;
-				if (parse(it, end, 3, st.wMilliseconds, 0)) {
-					a = milliseconds;
-				}
-			}
-		}
-	}
-	return Set(st, a, z);
-#else
-	tm t{};
-	if (!parse(it, end, 4, t.tm_year, -1900) ||
-		!parse(it, end, 2, t.tm_mon, -1) ||
-		!parse(it, end, 2, t.tm_mday, 0))
-	{
-		clear();
-		return false;
-	}
-
-	Accuracy a = days;
-	int64_t ms{};
-	if (parse(it, end, 2, t.tm_hour, 0)) {
-		a = hours;
-		if (parse(it, end, 2, t.tm_min, 0)) {
-			a = minutes;
-			if (parse(it, end, 2, t.tm_sec, 0)) {
-				a = seconds;
-				if (parse(it, end, 3, ms, 0)) {
-					a = milliseconds;
-				}
-			}
-		}
-	}
-	bool set = Set(t, a, z);
-	if (set) {
-		t_ += ms;
-	}
-	return set;
-#endif
+	return do_set(*this, str, z);
 }
 
-#ifdef __WXMSW__
+bool datetime::set(std::wstring const& str, zone z)
+{
+	return do_set(*this, str, z);
+}
 
-bool datetime::Set(SYSTEMTIME const& st, Accuracy a, Zone z)
+#ifdef FZ_WINDOWS
+
+bool datetime::set(SYSTEMTIME const& st, accuracy a, zone z)
 {
 	clear();
 
@@ -417,7 +434,7 @@ bool datetime::Set(SYSTEMTIME const& st, Accuracy a, Zone z)
 	else if (!SystemTimeToFileTime(&st, &ft)) {
 		return false;
 	}
-	return Set(ft, a);
+	return set(ft, a);
 }
 
 namespace {
@@ -431,7 +448,7 @@ int64_t make_int64_t(T hi, T lo)
 int64_t const EPOCH_OFFSET_IN_MSEC = 11644473600000ll;
 }
 
-bool datetime::Set(FILETIME const& ft, Accuracy a)
+bool datetime::set(FILETIME const& ft, accuracy a)
 {
 	if (ft.dwHighDateTime || ft.dwLowDateTime) {
 		// See http://trac.wxwidgets.org/changeset/74423 and http://trac.wxwidgets.org/ticket/13098
@@ -443,7 +460,7 @@ bool datetime::Set(FILETIME const& ft, Accuracy a)
 		if (t != invalid) {
 			t_ = t;
 			a_ = a;
-			TIME_ASSERT(IsClamped());
+			TIME_ASSERT(clamped());
 			return true;
 		}
 	}
@@ -453,7 +470,7 @@ bool datetime::Set(FILETIME const& ft, Accuracy a)
 
 #else
 
-bool datetime::Set(tm& t, Accuracy a, Zone z)
+bool datetime::set(tm& t, accuracy a, zone z)
 {
 	time_t tt;
 
@@ -470,7 +487,7 @@ bool datetime::Set(tm& t, Accuracy a, Zone z)
 		t_ = static_cast<int64_t>(tt) * 1000;
 		a_ = a;
 
-		TIME_ASSERT(IsClamped());
+		TIME_ASSERT(clamped());
 
 		return true;
 	}
@@ -481,9 +498,9 @@ bool datetime::Set(tm& t, Accuracy a, Zone z)
 
 #endif
 
-bool datetime::ImbueTime(int hour, int minute, int second, int millisecond)
+bool datetime::imbue_time(int hour, int minute, int second, int millisecond)
 {
-	if (!IsValid() || a_ > days) {
+	if (!empty() || a_ > days) {
 		return false;
 	}
 
@@ -517,7 +534,7 @@ bool datetime::ImbueTime(int hour, int minute, int second, int millisecond)
 	return true;
 }
 
-bool datetime::IsValid() const
+bool datetime::empty() const
 {
 	return t_ != invalid;
 }
@@ -585,7 +602,7 @@ int CrtAssertSuppressor::refs_{};
 bool datetime::VerifyFormat(wxString const& fmt)
 {
 	wxChar buf[4096];
-	tm t = datetime::Now().GetTm(utc);
+	tm t = datetime::now().GetTm(utc);
 
 #ifdef __VISUALC__
 	CrtAssertSuppressor suppressor;
@@ -602,11 +619,11 @@ duration operator-(datetime const& a, datetime const& b)
 	return duration::from_milliseconds(a.t_ - b.t_);
 }
 
-wxString datetime::Format(wxString const& fmt, Zone z) const
+wxString datetime::Format(wxString const& fmt, zone z) const
 {
 	tm t = GetTm(z);
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	int const count = 1000;
 	wxChar buf[count];
 
@@ -637,11 +654,11 @@ time_t datetime::GetTimeT() const
 	return t_ / 1000;
 }
 
-tm datetime::GetTm(Zone z) const
+tm datetime::GetTm(zone z) const
 {
 	tm ret{};
 	time_t t = GetTimeT();
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	// gmtime_s/localtime_s don't work with negative times
 	if (t < 86400) {
 		FILETIME ft = GetFileTime();
@@ -685,17 +702,17 @@ tm datetime::GetTm(Zone z) const
 	return ret;
 }
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 
-datetime::datetime(FILETIME const& ft, Accuracy a)
+datetime::datetime(FILETIME const& ft, accuracy a)
 {
-	Set(ft, a);
+	set(ft, a);
 }
 
 FILETIME datetime::GetFileTime() const
 {
 	FILETIME ret{};
-	if (IsValid()) {
+	if (empty()) {
 		int64_t t = t_;
 
 		t += EPOCH_OFFSET_IN_MSEC;

@@ -54,7 +54,7 @@ wxString CBuildInfo::GetBuildTimeString()
 
 fz::datetime CBuildInfo::GetBuildDate()
 {
-	fz::datetime date(GetBuildDateString(), fz::datetime::utc);
+	fz::datetime date(GetBuildDateString().ToStdWstring(), fz::datetime::utc);
 	return date;
 }
 

@@ -845,7 +845,7 @@ done:
 			int64_t seconds = t.GetNumber();
 			if (seconds > 0 && seconds <= 0xffffffffll) {
 				fz::datetime time(static_cast<time_t>(seconds), fz::datetime::seconds);
-				if (time.IsValid()) {
+				if (time.empty()) {
 					entry.time = time;
 				}
 			}
@@ -1148,7 +1148,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		// Some servers use times only for files newer than 6 months
 		if( year <= 0 ) {
 			wxASSERT( month != -1 && day != -1 );
-			tm const t = fz::datetime::Now().GetTm(fz::datetime::utc);
+			tm const t = fz::datetime::now().GetTm(fz::datetime::utc);
 			year = t.tm_year + 1900;
 			int const currentDayOfYear = t.tm_mday + 31 * t.tm_mon;
 			int const fileDayOfYear = day + 31 * (month - 1);
@@ -1204,7 +1204,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	else
 		--index;
 
-	if (!entry.time.Set(fz::datetime::utc, year, month, day, hour, minute)) {
+	if (!entry.time.set(fz::datetime::utc, year, month, day, hour, minute)) {
 		return false;
 	}
 
@@ -1348,7 +1348,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	wxASSERT(gotMonth);
 	wxASSERT(gotDay);
 
-	if (!entry.time.Set(fz::datetime::utc, year, month, day)) {
+	if (!entry.time.set(fz::datetime::utc, year, month, day)) {
 		return false;
 	}
 
@@ -1464,7 +1464,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 				hour = 0;
 	}
 
-	return entry.time.ImbueTime(hour, minute, seconds);
+	return entry.time.imbue_time(hour, minute, seconds);
 }
 
 bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
@@ -1880,7 +1880,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 			else if (year < 1000)
 				year += 1900;
 
-			if( !entry.time.Set(fz::datetime::utc, year, month, day) ) {
+			if (!entry.time.set(fz::datetime::utc, year, month, day)) {
 				return false;
 			}
 
@@ -2580,7 +2580,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 			(!entry.has_date() && factname == _T("create")))
 		{
 			entry.time = fz::datetime(value, fz::datetime::utc);
-			if (!entry.time.IsValid()) {
+			if (!entry.time.empty()) {
 				return 0;
 			}
 		}

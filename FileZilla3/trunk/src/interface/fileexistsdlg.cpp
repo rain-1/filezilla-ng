@@ -47,7 +47,7 @@ void CFileExistsDlg::DisplayFile(bool left, wxString name, int64_t size, fz::dat
 	}
 
 	wxString timeStr = _("Date/time unknown");
-	if (time.IsValid())
+	if (time.empty())
 		timeStr = CTimeFormat::Format(time);
 
 	xrc_call(*this, left ? "ID_FILE1_NAME" : "ID_FILE2_NAME", &wxStaticText::SetLabel, name);

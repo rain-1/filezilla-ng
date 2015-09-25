@@ -25,7 +25,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TimeTest);
 
 void TimeTest::testNow()
 {
-	fz::datetime const t1 = fz::datetime::Now();
+	fz::datetime const t1 = fz::datetime::now();
 
 #ifdef __WXMSW__
 	Sleep(2000);
@@ -35,7 +35,7 @@ void TimeTest::testNow()
 	nanosleep(&ts, 0);
 #endif
 
-	fz::datetime const t2 = fz::datetime::Now();
+	fz::datetime const t2 = fz::datetime::now();
 
 	CPPUNIT_ASSERT(t1.IsValid());
 	CPPUNIT_ASSERT(t2.IsValid());
@@ -51,7 +51,7 @@ void TimeTest::testNow()
 
 void TimeTest::testPreEpoch()
 {
-	fz::datetime const now = fz::datetime::Now();
+	fz::datetime const now = fz::datetime::now();
 
 	fz::datetime const t1(fz::datetime::utc, 1957, 10, 4, 19, 28, 34);
 

@@ -1020,7 +1020,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 			}
 			if (parsed) {
 				fz::datetime date(seconds, fz::datetime::seconds);
-				if (date.IsValid()) {
+				if (date.empty()) {
 					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
 					fz::datetime listTime = pData->directoryListing[pData->mtime_index].time;
 					listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
@@ -1780,7 +1780,7 @@ int CSftpControlSocket::FileTransferSend()
 	}
 	else if (pData->opState == filetransfer_chmtime)
 	{
-		wxASSERT(pData->fileTime.IsValid());
+		wxASSERT(pData->fileTime.empty());
 		if (pData->download)
 		{
 			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("  filetransfer_chmtime during download"));
@@ -1821,14 +1821,14 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 
 		if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
 			if (pData->download) {
-				if (pData->fileTime.IsValid()) {
+				if (pData->fileTime.empty()) {
 					if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
 						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
 				}
 			}
 			else {
 				pData->fileTime = CLocalFileSystem::GetModificationTime(pData->localFile);
-				if (pData->fileTime.IsValid()) {
+				if (pData->fileTime.empty()) {
 					pData->opState = filetransfer_chmtime;
 					return SendNextCommand();
 				}
@@ -1850,7 +1850,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 			}
 			if (parsed) {
 				fz::datetime fileTime = fz::datetime(seconds, fz::datetime::seconds);
-				if (fileTime.IsValid()) {
+				if (fileTime.empty()) {
 					pData->fileTime = fileTime;
 					pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 				}
@@ -2132,8 +2132,8 @@ int CSftpControlSocket::DeleteParseResponse(bool successful, const wxString&)
 
 		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
-		auto const now = fz::datetime::Now();
-		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).get_seconds() >= 1) {
+		auto const now = fz::datetime::now();
+		if (now.empty() && pData->m_time.empty() && (now - pData->m_time).get_seconds() >= 1) {
 			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
 			pData->m_time = now;
 			pData->m_needSendListing = false;
@@ -2175,8 +2175,8 @@ int CSftpControlSocket::DeleteSend()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!pData->m_time.IsValid())
-		pData->m_time = fz::datetime::Now();
+	if (!pData->m_time.empty())
+		pData->m_time = fz::datetime::now();
 
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 
