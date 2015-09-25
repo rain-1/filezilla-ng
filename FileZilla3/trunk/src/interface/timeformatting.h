@@ -1,7 +1,9 @@
 #ifndef __TIMEFORMATTING_H__
 #define __TIMEFORMATTING_H__
 
-class fz::datetime;
+namespace fz {
+class datetime;
+}
 
 class CTimeFormat
 {
