@@ -194,7 +194,7 @@ void CRateLimiter::WakeupWaitingObjects(scoped_lock & l)
 			if (!pObject->m_waiting[i])
 				continue;
 
-			wxASSERT(pObject->m_bytesAvailable != 0);
+			wxASSERT(pObject->m_bytesAvailable[i] != 0);
 			pObject->m_waiting[i] = false;
 
 			l.unlock(); // Do not hold while executing callback
