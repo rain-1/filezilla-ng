@@ -313,9 +313,9 @@ public:
 	CServerPath path;
 	std::deque<wxString> files;
 
-	// Set to CDateTime::Now initially and after
+	// Set to fz::datetime::Now initially and after
 	// sending an updated listing to the UI.
-	CDateTime m_time;
+	fz::datetime m_time;
 
 	bool m_needSendListing{};
 
@@ -1019,11 +1019,11 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 				seconds += c - '0';
 			}
 			if (parsed) {
-				CDateTime date(seconds, CDateTime::seconds);
+				fz::datetime date(seconds, fz::datetime::seconds);
 				if (date.IsValid()) {
 					wxASSERT(pData->directoryListing[pData->mtime_index].has_date());
-					CDateTime listTime = pData->directoryListing[pData->mtime_index].time;
-					listTime -= duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+					fz::datetime listTime = pData->directoryListing[pData->mtime_index].time;
+					listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 
 					int serveroffset = static_cast<int>((date - listTime).get_seconds());
 					if (!pData->directoryListing[pData->mtime_index].has_seconds()) {
@@ -1035,7 +1035,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 
 					LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
 
-					duration span = duration::from_seconds(serveroffset);
+					fz::duration span = fz::duration::from_seconds(serveroffset);
 					const int count = pData->directoryListing.GetCount();
 					for (int i = 0; i < count; ++i) {
 						CDirentry& entry = pData->directoryListing[i];
@@ -1849,10 +1849,10 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 				seconds += c - '0';
 			}
 			if (parsed) {
-				CDateTime fileTime = CDateTime(seconds, CDateTime::seconds);
+				fz::datetime fileTime = fz::datetime(seconds, fz::datetime::seconds);
 				if (fileTime.IsValid()) {
 					pData->fileTime = fileTime;
-					pData->fileTime += duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+					pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 				}
 			}
 		}
@@ -2132,7 +2132,7 @@ int CSftpControlSocket::DeleteParseResponse(bool successful, const wxString&)
 
 		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
-		auto const now = CDateTime::Now();
+		auto const now = fz::datetime::Now();
 		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).get_seconds() >= 1) {
 			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
 			pData->m_time = now;
@@ -2176,7 +2176,7 @@ int CSftpControlSocket::DeleteSend()
 	}
 
 	if (!pData->m_time.IsValid())
-		pData->m_time = CDateTime::Now();
+		pData->m_time = fz::datetime::Now();
 
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 

@@ -91,7 +91,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		refresh = 31;
 	}
 
-	duration elapsed;
+	fz::duration elapsed;
 	int left = -1;
 	wxFileOffset rate;
 	wxString bytes_and_rate;
@@ -120,7 +120,7 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 
 		int elapsed_milli_seconds = 0;
 		if (status_.started.IsValid()) {
-			elapsed = CDateTime::Now() - status_.started;
+			elapsed = fz::datetime::Now() - status_.started;
 			elapsed_milli_seconds = static_cast<int>(elapsed.get_milliseconds()); // Assume it doesn't overflow
 		}
 

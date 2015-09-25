@@ -25,7 +25,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TimeTest);
 
 void TimeTest::testNow()
 {
-	CDateTime const t1 = CDateTime::Now();
+	fz::datetime const t1 = fz::datetime::Now();
 
 #ifdef __WXMSW__
 	Sleep(2000);
@@ -35,7 +35,7 @@ void TimeTest::testNow()
 	nanosleep(&ts, 0);
 #endif
 
-	CDateTime const t2 = CDateTime::Now();
+	fz::datetime const t2 = fz::datetime::Now();
 
 	CPPUNIT_ASSERT(t1.IsValid());
 	CPPUNIT_ASSERT(t2.IsValid());
@@ -51,16 +51,16 @@ void TimeTest::testNow()
 
 void TimeTest::testPreEpoch()
 {
-	CDateTime const now = CDateTime::Now();
+	fz::datetime const now = fz::datetime::Now();
 
-	CDateTime const t1(CDateTime::utc, 1957, 10, 4, 19, 28, 34);
+	fz::datetime const t1(fz::datetime::utc, 1957, 10, 4, 19, 28, 34);
 
 	CPPUNIT_ASSERT(t1.IsValid());
 	CPPUNIT_ASSERT(t1 < now);
 
 	CPPUNIT_ASSERT(t1.GetTimeT() < -1);
 
-	auto const tm1 = t1.GetTm(CDateTime::utc);
+	auto const tm1 = t1.GetTm(fz::datetime::utc);
 	CPPUNIT_ASSERT_EQUAL(57, tm1.tm_year);
 	CPPUNIT_ASSERT_EQUAL(9,  tm1.tm_mon);
 	CPPUNIT_ASSERT_EQUAL(4,  tm1.tm_mday);
@@ -69,13 +69,13 @@ void TimeTest::testPreEpoch()
 	CPPUNIT_ASSERT_EQUAL(34, tm1.tm_sec);
 
 
-	CDateTime const t2(CDateTime::utc, 1969, 12, 31, 23, 59, 59);
+	fz::datetime const t2(fz::datetime::utc, 1969, 12, 31, 23, 59, 59);
 
 	CPPUNIT_ASSERT(t2.IsValid());
 	CPPUNIT_ASSERT(t2 > t1);
 	CPPUNIT_ASSERT(t2 < now);
 
-	auto const tm2 = t2.GetTm(CDateTime::utc);
+	auto const tm2 = t2.GetTm(fz::datetime::utc);
 	CPPUNIT_ASSERT_EQUAL(69, tm2.tm_year);
 	CPPUNIT_ASSERT_EQUAL(11, tm2.tm_mon);
 	CPPUNIT_ASSERT_EQUAL(31, tm2.tm_mday);

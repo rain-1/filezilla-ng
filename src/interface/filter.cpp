@@ -566,7 +566,7 @@ bool CFilterManager::HasSameLocalAndRemoteFilters() const
 	return true;
 }
 
-bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, CDateTime const& date) const
+bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const
 {
 	if (m_filters_disabled)
 		return false;
@@ -592,7 +592,7 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 	return false;
 }
 
-bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, CDateTime const& date) const
+bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const
 {
 	for (auto const& filter : filters) {
 		if (FilenameFilteredByFilter(filter, name, path, dir, size, attributes, date))
@@ -674,7 +674,7 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	return match;
 }
 
-bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, CDateTime const& date)
+bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date)
 {
 	if (dir && !filter.filterDirs)
 		return false;
@@ -937,7 +937,7 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 				condition.value = 1;
 		}
 		else if (condition.type == filter_date) {
-			condition.date = CDateTime(condition.strValue, CDateTime::local);
+			condition.date = fz::datetime(condition.strValue, fz::datetime::local);
 			if (!condition.date.IsValid()) {
 				continue;
 			}

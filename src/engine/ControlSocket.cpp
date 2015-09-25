@@ -96,7 +96,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 
 	CTransferStatus const status = engine_.transfer_status_.Get(tmp);
 	if (!status.empty() && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
-		int elapsed = static_cast<int>((CDateTime::Now() - status.started).get_seconds());
+		int elapsed = static_cast<int>((fz::datetime::Now() - status.started).get_seconds());
 		if (elapsed <= 0)
 			elapsed = 1;
 		wxString time = wxString::Format(
@@ -550,26 +550,26 @@ void CControlSocket::OnTimer(timer_id)
 
 	int const timeout = engine_.GetOptions().GetOptionVal(OPTION_TIMEOUT);
 	if (timeout > 0) {
-		duration elapsed = CMonotonicClock::now() - m_lastActivity;
+		fz::duration elapsed = fz::monotonic_clock::now() - m_lastActivity;
 
 		if ((!m_pCurOpData || !m_pCurOpData->waitForAsyncRequest) && !IsWaitingForLock()) {
-			if (elapsed > duration::from_seconds(timeout)) {
+			if (elapsed > fz::duration::from_seconds(timeout)) {
 				LogMessage(MessageType::Error, wxPLURAL("Connection timed out after %d second of inactivity", "Connection timed out after %d seconds of inactivity", timeout), timeout);
 				DoClose(FZ_REPLY_TIMEOUT);
 				return;
 			}
 		}
 		else {
-			elapsed = duration();
+			elapsed = fz::duration();
 		}
 
-		m_timer = AddTimer(duration::from_milliseconds(timeout * 1000) - elapsed, true);
+		m_timer = AddTimer(fz::duration::from_milliseconds(timeout * 1000) - elapsed, true);
 	}
 }
 
 void CControlSocket::SetAlive()
 {
-	m_lastActivity = CMonotonicClock::now();
+	m_lastActivity = fz::monotonic_clock::now();
 }
 
 void CControlSocket::SetWait(bool wait)
@@ -578,13 +578,13 @@ void CControlSocket::SetWait(bool wait)
 		if (m_timer)
 			return;
 
-		m_lastActivity = CMonotonicClock::now();
+		m_lastActivity = fz::monotonic_clock::now();
 
 		int timeout = engine_.GetOptions().GetOptionVal(OPTION_TIMEOUT);
 		if (!timeout)
 			return;
 
-		m_timer = AddTimer(duration::from_milliseconds(timeout * 1000 + 100), true); // Add a bit of slack
+		m_timer = AddTimer(fz::duration::from_milliseconds(timeout * 1000 + 100), true); // Add a bit of slack
 	}
 	else {
 		StopTimer(m_timer);
@@ -811,13 +811,13 @@ void CControlSocket::InvalidateCurrentWorkingDir(const CServerPath& path)
 	}
 }
 
-duration CControlSocket::GetTimezoneOffset() const
+fz::duration CControlSocket::GetTimezoneOffset() const
 {
-	duration ret;
+	fz::duration ret;
 	if (m_pCurrentServer) {
 		int seconds = 0;
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset, &seconds) == yes) {
-			ret = duration::from_seconds(seconds);
+			ret = fz::duration::from_seconds(seconds);
 		}
 	}
 	return ret;
@@ -1237,7 +1237,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 					break;
 			}
 			else {
-				pData->fileTime = CDateTime();
+				pData->fileTime = fz::datetime();
 				pData->remoteFileSize = -1;
 			}
 

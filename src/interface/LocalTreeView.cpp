@@ -473,7 +473,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	int attributes;
 	bool is_dir;
 	static int64_t const size(-1);
-	CDateTime date;
+	fz::datetime date;
 	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
 		if (file.empty()) {
@@ -536,7 +536,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	int attributes;
 	bool is_dir;
 	static int64_t const size(-1);
-	CDateTime date;
+	fz::datetime date;
 	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
 	{
 		wxASSERT(is_dir);
@@ -737,7 +737,7 @@ void CLocalTreeView::RefreshListing()
 		bool was_link;
 		bool is_dir;
 		int attributes;
-		CDateTime date;
+		fz::datetime date;
 		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes)) {
 			if (file.empty()) {
 				wxGetApp().DisplayEncodingWarning();
@@ -1347,7 +1347,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 		CFilterManager filter;
 
 		const int attributes = S_IRUSR | S_IXUSR | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH;
-		if (!filter.FilenameFiltered(_T("localhost"), path, true, size, true, attributes, CDateTime()))
+		if (!filter.FilenameFiltered(_T("localhost"), path, true, size, true, attributes, fz::datetime()))
 		{
 			if (!child)
 				AppendItem(item, _T(""));
@@ -1365,7 +1365,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			bool wasLink;
 			int attributes;
 			enum CLocalFileSystem::local_fileType type;
-			CDateTime date;
+			fz::datetime date;
 			if (!path.empty() && path.Last() == CLocalFileSystem::path_separator)
 				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
 			else

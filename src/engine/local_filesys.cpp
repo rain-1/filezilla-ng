@@ -196,7 +196,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 #endif
 }
 
-CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, CDateTime* modificationTime, int *mode)
+CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
 {
 #ifdef __WXMSW__
 	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
@@ -215,7 +215,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 		if (mode)
 			*mode = 0;
 		if (modificationTime)
-			*modificationTime = CDateTime();
+			*modificationTime = fz::datetime();
 		return unknown;
 	}
 
@@ -232,8 +232,8 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 			if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 				if (modificationTime) {
-					if (!modificationTime->Set(info.ftLastWriteTime, CDateTime::milliseconds)) {
-						modificationTime->Set(info.ftCreationTime, CDateTime::milliseconds);
+					if (!modificationTime->Set(info.ftLastWriteTime, fz::datetime::milliseconds)) {
+						modificationTime->Set(info.ftCreationTime, fz::datetime::milliseconds);
 					}
 				}
 
@@ -258,14 +258,14 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 		if (mode)
 			*mode = 0;
 		if (modificationTime)
-			*modificationTime = CDateTime();
+			*modificationTime = fz::datetime();
 		return is_dir ? dir : unknown;
 	}
 
 	if (modificationTime) {
-		*modificationTime = CDateTime(attributes.ftLastWriteTime, CDateTime::milliseconds);
+		*modificationTime = fz::datetime(attributes.ftLastWriteTime, fz::datetime::milliseconds);
 		if (!modificationTime->IsValid()) {
-			*modificationTime = CDateTime(attributes.ftCreationTime, CDateTime::milliseconds);
+			*modificationTime = fz::datetime(attributes.ftCreationTime, fz::datetime::milliseconds);
 		}
 	}
 
@@ -295,7 +295,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 }
 
 #ifndef __WXMSW__
-CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, int64_t* size, CDateTime* modificationTime, int *mode)
+CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
 {
 	struct stat buf;
 	int result = lstat(path, &buf);
@@ -307,7 +307,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path,
 		if (mode)
 			*mode = -1;
 		if (modificationTime)
-			*modificationTime = CDateTime();
+			*modificationTime = fz::datetime();
 		return unknown;
 	}
 
@@ -323,7 +323,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path,
 			if (mode)
 				*mode = -1;
 			if (modificationTime)
-				*modificationTime = CDateTime();
+				*modificationTime = fz::datetime();
 			return unknown;
 		}
 	}
@@ -332,7 +332,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path,
 		isLink = false;
 
 	if (modificationTime)
-		*modificationTime = CDateTime(buf.st_mtime, CDateTime::seconds);
+		*modificationTime = fz::datetime(buf.st_mtime, fz::datetime::seconds);
 
 	if (mode)
 		*mode = buf.st_mode & 0x777;
@@ -490,7 +490,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 #endif
 }
 
-bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, CDateTime* modificationTime, int* mode)
+bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, fz::datetime* modificationTime, int* mode)
 {
 #ifdef __WXMSW__
 	if (!m_found)
@@ -520,9 +520,9 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 				if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 					if (modificationTime) {
-						*modificationTime = CDateTime(info.ftLastWriteTime, CDateTime::milliseconds);
+						*modificationTime = fz::datetime(info.ftLastWriteTime, fz::datetime::milliseconds);
 						if (!modificationTime->IsValid()) {
-							*modificationTime = CDateTime(info.ftCreationTime, CDateTime::milliseconds);
+							*modificationTime = fz::datetime(info.ftCreationTime, fz::datetime::milliseconds);
 						}
 					}
 
@@ -553,13 +553,13 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 			if (mode)
 				*mode = 0;
 			if (modificationTime)
-				*modificationTime = CDateTime();
+				*modificationTime = fz::datetime();
 		}
 		else {
 			if (modificationTime) {
-				*modificationTime = CDateTime(m_find_data.ftLastWriteTime, CDateTime::milliseconds);
+				*modificationTime = fz::datetime(m_find_data.ftLastWriteTime, fz::datetime::milliseconds);
 				if (!modificationTime->IsValid()) {
-					*modificationTime = CDateTime(m_find_data.ftLastWriteTime, CDateTime::milliseconds);
+					*modificationTime = fz::datetime(m_find_data.ftLastWriteTime, fz::datetime::milliseconds);
 				}
 			}
 
@@ -627,7 +627,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 			if (size)
 				*size = -1;
 			if (modificationTime)
-				*modificationTime = CDateTime();
+				*modificationTime = fz::datetime();
 			if (mode)
 				*mode = 0;
 		}
@@ -663,18 +663,18 @@ void CLocalFileSystem::AllocPathBuffer(const char* file)
 }
 #endif
 
-CDateTime CLocalFileSystem::GetModificationTime( const wxString& path)
+fz::datetime CLocalFileSystem::GetModificationTime( const wxString& path)
 {
-	CDateTime mtime;
+	fz::datetime mtime;
 
 	bool tmp;
 	if (GetFileInfo(path, tmp, 0, &mtime, 0) == unknown)
-		mtime = CDateTime();
+		mtime = fz::datetime();
 
 	return mtime;
 }
 
-bool CLocalFileSystem::SetModificationTime(const wxString& path, const CDateTime& t)
+bool CLocalFileSystem::SetModificationTime(const wxString& path, const fz::datetime& t)
 {
 	if (!t.IsValid())
 		return false;

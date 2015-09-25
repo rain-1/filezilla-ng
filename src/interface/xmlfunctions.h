@@ -59,7 +59,7 @@ protected:
 	// Save the XML document to the given file
 	bool SaveXmlFile();
 
-	CDateTime m_modificationTime;
+	fz::datetime m_modificationTime;
 	wxString m_fileName;
 	pugi::xml_document m_document;
 	pugi::xml_node m_element;

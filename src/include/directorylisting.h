@@ -44,17 +44,17 @@ public:
 
 	inline bool has_time() const
 	{
-		return time.IsValid() && time.GetAccuracy() >= CDateTime::hours;
+		return time.IsValid() && time.GetAccuracy() >= fz::datetime::hours;
 	}
 
 	inline bool has_seconds() const
 	{
-		return time.IsValid() && time.GetAccuracy() >= CDateTime::seconds;
+		return time.IsValid() && time.GetAccuracy() >= fz::datetime::seconds;
 	}
 
 	CSparseOptional<std::wstring> target; // Set to linktarget it link is true
 
-	CDateTime time;
+	fz::datetime time;
 
 	wxString dump() const;
 	bool operator==(const CDirentry &op) const;
@@ -89,7 +89,7 @@ public:
 	void ClearFindMap();
 
 	CServerPath path;
-	CMonotonicClock m_firstListTime;
+	fz::monotonic_clock m_firstListTime;
 
 	enum
 	{

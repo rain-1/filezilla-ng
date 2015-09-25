@@ -154,9 +154,9 @@ public:
 	std::deque<wxString> files;
 	bool omitPath{};
 
-	// Set to CDateTime::Now initially and after
+	// Set to fz::datetime::Now initially and after
 	// sending an updated listing to the UI.
-	CDateTime m_time;
+	fz::datetime m_time;
 
 	bool m_needSendListing{};
 
@@ -1241,7 +1241,7 @@ public:
 	// Listing index for list_mdtm
 	int mdtm_index;
 
-	CMonotonicClock m_time_before_locking;
+	fz::monotonic_clock m_time_before_locking;
 };
 
 enum listStates
@@ -1355,7 +1355,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 		if (!pData->holdsLock) {
 			if (!TryLockCache(lock_list, m_CurrentPath)) {
 				pData->opState = list_waitlock;
-				pData->m_time_before_locking = CMonotonicClock::now();
+				pData->m_time_before_locking = fz::monotonic_clock::now();
 				return FZ_REPLY_WOULDBLOCK;
 			}
 		}
@@ -1445,7 +1445,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			if (pData->tranferCommandSent && IsMisleadingListResponse()) {
 				CDirectoryListing listing;
 				listing.path = m_CurrentPath;
-				listing.m_firstListTime = CMonotonicClock::now();
+				listing.m_firstListTime = fz::monotonic_clock::now();
 
 				if (pData->viewHiddenCheck) {
 					if (pData->viewHidden) {
@@ -1602,11 +1602,11 @@ int CFtpControlSocket::ListParseResponse()
 	if (CServerCapabilities::GetCapability(*m_pCurrentServer, timezone_offset) == unknown &&
 		m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16)
 	{
-		CDateTime date(m_Response.Mid(4), CDateTime::utc);
+		fz::datetime date(m_Response.Mid(4), fz::datetime::utc);
 		if (date.IsValid()) {
 			wxASSERT(pData->directoryListing[pData->mdtm_index].has_date());
-			CDateTime listTime = pData->directoryListing[pData->mdtm_index].time;
-			listTime -= duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+			fz::datetime listTime = pData->directoryListing[pData->mdtm_index].time;
+			listTime -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 
 			int serveroffset = static_cast<int>((date - listTime).get_seconds());
 			if (!pData->directoryListing[pData->mdtm_index].has_seconds()) {
@@ -1618,7 +1618,7 @@ int CFtpControlSocket::ListParseResponse()
 
 			LogMessage(MessageType::Status, _("Timezone offset of server is %d seconds."), -serveroffset);
 
-			duration span = duration::from_seconds(serveroffset);
+			fz::duration span = fz::duration::from_seconds(serveroffset);
 			const int count = pData->directoryListing.GetCount();
 			for (int i = 0; i < count; ++i) {
 				CDirentry& entry = pData->directoryListing[i];
@@ -1731,7 +1731,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 		}
 	}
 
-	m_lastCommandCompletionTime = CMonotonicClock::now();
+	m_lastCommandCompletionTime = fz::monotonic_clock::now();
 	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 		StartKeepaliveTimer();
 	else {
@@ -2241,9 +2241,9 @@ int CFtpControlSocket::FileTransferParseResponse()
 	case filetransfer_mdtm:
 		pData->opState = filetransfer_resumetest;
 		if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 16) {
-			pData->fileTime = CDateTime(m_Response.Mid(4), CDateTime::utc);
+			pData->fileTime = fz::datetime(m_Response.Mid(4), fz::datetime::utc);
 			if (pData->fileTime.IsValid()) {
-				pData->fileTime += duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+				pData->fileTime += fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
 			}
 		}
 
@@ -2395,7 +2395,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
-				CDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
+				fz::datetime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
 				if (mtime.IsValid()) {
 					pData->fileTime = mtime;
 					pData->opState = filetransfer_mfmt;
@@ -2572,7 +2572,7 @@ int CFtpControlSocket::FileTransferSend()
 							if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
-								CDateTime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
+								fz::datetime mtime = CLocalFileSystem::GetModificationTime(pData->localFile);
 								if (mtime.IsValid()) {
 									pData->fileTime = mtime;
 									pData->opState = filetransfer_mfmt;
@@ -2643,7 +2643,7 @@ int CFtpControlSocket::FileTransferSend()
 	case filetransfer_mfmt:
 		{
 			cmd = _T("MFMT ");
-			cmd += pData->fileTime.Format(_T("%Y%m%d%H%M%S "), CDateTime::utc);
+			cmd += pData->fileTime.Format(_T("%Y%m%d%H%M%S "), fz::datetime::utc);
 			cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 			break;
@@ -2753,7 +2753,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 				else {
 					pData->remoteFile = pFileExistsNotification->newName;
 					pData->remoteFileSize = -1;
-					pData->fileTime = CDateTime();
+					pData->fileTime = fz::datetime();
 
 					CDirentry entry;
 					bool dir_did_exist;
@@ -2971,7 +2971,7 @@ int CFtpControlSocket::DeleteSend()
 	}
 
 	if (!pData->m_time.IsValid())
-		pData->m_time = CDateTime::Now();
+		pData->m_time = fz::datetime::Now();
 
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 
@@ -3001,7 +3001,7 @@ int CFtpControlSocket::DeleteParseResponse()
 
 		engine_.GetDirectoryCache().RemoveFile(*m_pCurrentServer, pData->path, file);
 
-		CDateTime now = CDateTime::Now();
+		fz::datetime now = fz::datetime::Now();
 		if (now.IsValid() && pData->m_time.IsValid() && (now - pData->m_time).get_seconds() >= 1) {
 			engine_.SendDirectoryListingNotification(pData->path, false, true, false);
 			pData->m_time = now;
@@ -4340,13 +4340,13 @@ void CFtpControlSocket::StartKeepaliveTimer()
 	if (!m_lastCommandCompletionTime)
 		return;
 
-	duration const span = CMonotonicClock::now() - m_lastCommandCompletionTime;
+	fz::duration const span = fz::monotonic_clock::now() - m_lastCommandCompletionTime;
 	if (span.get_minutes() >= 30) {
 		return;
 	}
 
 	StopTimer(m_idleTimer);
-	m_idleTimer = AddTimer(duration::from_seconds(30), true);
+	m_idleTimer = AddTimer(fz::duration::from_seconds(30), true);
 }
 
 int CFtpControlSocket::ParseSubcommandResult(int prevResult)

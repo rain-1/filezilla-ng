@@ -84,7 +84,7 @@ bool CComparisonManager::CompareListings()
 	}
 
 	const int mode = COptions::Get()->GetOptionVal(OPTION_COMPARISONMODE);
-	duration const threshold = duration::from_minutes( COptions::Get()->GetOptionVal(OPTION_COMPARISON_THRESHOLD) );
+	fz::duration const threshold = fz::duration::from_minutes( COptions::Get()->GetOptionVal(OPTION_COMPARISON_THRESHOLD) );
 
 	m_pLeft->StartComparison();
 	m_pRight->StartComparison();
@@ -93,7 +93,7 @@ bool CComparisonManager::CompareListings()
 	bool localDir = false;
 	bool remoteDir = false;
 	int64_t localSize, remoteSize;
-	CDateTime localDate, remoteDate;
+	fz::datetime localDate, remoteDate;
 
 	const int dirSortMode = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
 

@@ -1,14 +1,14 @@
 #ifndef __TIMEFORMATTING_H__
 #define __TIMEFORMATTING_H__
 
-class CDateTime;
+class fz::datetime;
 
 class CTimeFormat
 {
 public:
-	static wxString Format(CDateTime const& time);
-	static wxString FormatDateTime(CDateTime const& time);
-	static wxString FormatDate(CDateTime const& time);
+	static wxString Format(fz::datetime const& time);
+	static wxString FormatDateTime(fz::datetime const& time);
+	static wxString FormatDate(fz::datetime const& time);
 };
 
 #endif //__TIMEFORMATTING_H__

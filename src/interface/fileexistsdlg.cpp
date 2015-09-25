@@ -35,7 +35,7 @@ bool CFileExistsDlg::Create(wxWindow* parent)
 	return true;
 }
 
-void CFileExistsDlg::DisplayFile(bool left, wxString name, int64_t size, CDateTime const& time, wxString const& iconFile)
+void CFileExistsDlg::DisplayFile(bool left, wxString name, int64_t size, fz::datetime const& time, wxString const& iconFile)
 {
 	name = GetPathEllipsis(name, FindWindow(left ? XRCID("ID_FILE1_NAME") : XRCID("ID_FILE2_NAME")));
 	name.Replace(_T("&"), _T("&&"));

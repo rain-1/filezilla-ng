@@ -20,7 +20,7 @@ bool CLatencyMeasurement::Start()
 	if (m_start)
 		return false;
 
-	m_start = CMonotonicClock::now();
+	m_start = fz::monotonic_clock::now();
 
 	return true;
 }
@@ -31,8 +31,8 @@ bool CLatencyMeasurement::Stop()
 	if (!m_start)
 		return false;
 
-	duration const diff = CMonotonicClock::now() - m_start;
-	m_start = CMonotonicClock();
+	fz::duration const diff = fz::monotonic_clock::now() - m_start;
+	m_start = fz::monotonic_clock();
 
 	if (diff.get_milliseconds() < 0)
 		return false;
@@ -48,7 +48,7 @@ void CLatencyMeasurement::Reset()
 	scoped_lock lock(m_sync);
 	m_summed_latency = 0;
 	m_measurements = 0;
-	m_start = CMonotonicClock();
+	m_start = fz::monotonic_clock();
 }
 
 void CLatencyMeasurement::cb()
