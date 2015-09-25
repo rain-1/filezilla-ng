@@ -28,7 +28,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 {
 	bool warning = false;
 	if (cert.GetActivationTime().IsValid()) {
-		if (cert.GetActivationTime() > CDateTime::Now()) {
+		if (cert.GetActivationTime() > fz::datetime::Now()) {
 			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), CTimeFormat::Format(cert.GetActivationTime())));
 			warning = true;
 		}
@@ -41,7 +41,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 	}
 
 	if (cert.GetExpirationTime().IsValid()) {
-		if (cert.GetExpirationTime() < CDateTime::Now()) {
+		if (cert.GetExpirationTime() < fz::datetime::Now()) {
 			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), CTimeFormat::Format(cert.GetExpirationTime())));
 			warning = true;
 		}

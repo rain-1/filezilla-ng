@@ -7,10 +7,10 @@ wxString CDirentry::dump() const
 				target ? *target : wxString(), flags & flag_unsure);
 
 	if( has_date() ) {
-		str += _T("date=") + time.Format(_T("%Y-%m-%d"), CDateTime::local) + _T("\n");
+		str += _T("date=") + time.Format(_T("%Y-%m-%d"), fz::datetime::local) + _T("\n");
 	}
 	if( has_time() ) {
-		str += _T("time=") + time.Format(_T("%H-%M-%S"), CDateTime::local) + _T("\n");
+		str += _T("time=") + time.Format(_T("%H-%M-%S"), fz::datetime::local) + _T("\n");
 	}
 	return str;
 }

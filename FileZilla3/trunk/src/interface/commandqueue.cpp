@@ -309,7 +309,7 @@ void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const&
 			pListing = std::make_shared<CDirectoryListing>();
 			pListing->path = listingNotification.GetPath();
 			pListing->m_flags |= CDirectoryListing::listing_failed;
-			pListing->m_firstListTime = CMonotonicClock::now();
+			pListing->m_firstListTime = fz::monotonic_clock::now();
 		}
 	}
 

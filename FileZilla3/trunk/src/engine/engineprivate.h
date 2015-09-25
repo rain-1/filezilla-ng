@@ -158,7 +158,7 @@ protected:
 
 	// Remember last path used in a dirlisting.
 	CServerPath m_lastListDir;
-	CMonotonicClock m_lastListTime;
+	fz::monotonic_clock m_lastListTime;
 
 	std::unique_ptr<CControlSocket> m_pControlSocket;
 
@@ -187,7 +187,7 @@ protected:
 	struct t_failedLogins final
 	{
 		CServer server;
-		CDateTime time;
+		fz::datetime time;
 		bool critical{};
 	};
 	static std::list<t_failedLogins> m_failedLogins;

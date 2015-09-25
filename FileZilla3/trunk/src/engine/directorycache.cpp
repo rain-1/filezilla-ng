@@ -37,7 +37,7 @@ void CDirectoryCache::Store(const CDirectoryListing &listing, const CServer &ser
 	bool unused;
 	if (Lookup(cit, sit, listing.path, true, unused)) {
 		auto & entry = const_cast<CCacheEntry&>(*cit);
-		entry.modificationTime = CMonotonicClock::now();
+		entry.modificationTime = fz::monotonic_clock::now();
 
 		m_totalFileCount -= cit->listing.GetCount();
 		entry.listing = listing;
@@ -84,7 +84,7 @@ bool CDirectoryCache::Lookup(tCacheIter &cacheIter, tServerIter &sit, const CSer
 			if (!allowUnsureEntries && entry.listing.get_unsure_flags())
 				return false;
 
-			is_outdated = (CMonotonicClock::now() - entry.listing.m_firstListTime).get_seconds() > CACHE_TIMEOUT;
+			is_outdated = (fz::monotonic_clock::now() - entry.listing.m_firstListTime).get_seconds() > CACHE_TIMEOUT;
 			return true;
 		}
 	}
@@ -169,7 +169,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 			}
 		}
 		entry.listing.m_flags |= CDirectoryListing::unsure_unknown;
-		entry.modificationTime = CMonotonicClock::now();
+		entry.modificationTime = fz::monotonic_clock::now();
 	}
 
 	return true;
@@ -239,7 +239,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 		}
 		else
 			entry.listing.m_flags |= CDirectoryListing::unsure_unknown;
-		entry.modificationTime = CMonotonicClock::now();
+		entry.modificationTime = fz::monotonic_clock::now();
 
 		updated = true;
 	}
@@ -285,7 +285,7 @@ bool CDirectoryCache::RemoveFile(const CServer &server, const CServerPath &path,
 			}
 			entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 		}
-		entry.modificationTime = CMonotonicClock::now();
+		entry.modificationTime = fz::monotonic_clock::now();
 	}
 
 	return true;
@@ -317,7 +317,7 @@ void CDirectoryCache::InvalidateServer(const CServer& server)
 	}
 }
 
-bool CDirectoryCache::GetChangeTime(CMonotonicClock& time, const CServer &server, const CServerPath &path)
+bool CDirectoryCache::GetChangeTime(fz::monotonic_clock& time, const CServer &server, const CServerPath &path)
 {
 	scoped_lock lock(mutex_);
 

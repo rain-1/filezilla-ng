@@ -46,7 +46,7 @@ public:
 	CServerPath remotePath;
 	const bool download;
 
-	CDateTime fileTime;
+	fz::datetime fileTime;
 	int64_t localFileSize{-1};
 	int64_t remoteFileSize{-1};
 
@@ -171,7 +171,7 @@ public:
 	void InvalidateCurrentWorkingDir(const CServerPath& path);
 
 protected:
-	duration GetTimezoneOffset() const;
+	fz::duration GetTimezoneOffset() const;
 
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 	bool m_closed;
@@ -205,7 +205,7 @@ protected:
 
 	// Timeout data
 	timer_id m_timer{};
-	CMonotonicClock m_lastActivity;
+	fz::monotonic_clock m_lastActivity;
 
 	// -------------------------
 	// Begin cache locking stuff

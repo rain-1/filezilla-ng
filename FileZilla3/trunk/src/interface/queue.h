@@ -55,8 +55,8 @@ public:
 
 	virtual QueueItemType GetType() const = 0;
 
-	CDateTime GetTime() const { return m_time; }
-	void UpdateTime() { m_time = CDateTime::Now(); }
+	fz::datetime GetTime() const { return m_time; }
+	void UpdateTime() { m_time = fz::datetime::Now(); }
 
 	int GetRemovedAtFront() const { return m_removed_at_front; }
 
@@ -67,7 +67,7 @@ protected:
 
 	friend class CServerItem;
 
-	CDateTime m_time;
+	fz::datetime m_time;
 
 private:
 	std::vector<CQueueItem*> m_children;

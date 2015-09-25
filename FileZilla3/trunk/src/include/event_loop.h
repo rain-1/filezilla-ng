@@ -15,8 +15,8 @@ struct timer_data final
 {
 	CEventHandler* handler_{};
 	timer_id id_{};
-	CMonotonicClock deadline_;
-	duration interval_{};
+	fz::monotonic_clock deadline_;
+	fz::duration interval_{};
 };
 
 // Timers have precedence over queued events. Too many or too frequent timers can starve processing queued events.
@@ -44,13 +44,13 @@ protected:
 
 	void RemoveHandler(CEventHandler* handler);
 
-	timer_id AddTimer(CEventHandler* handler, duration const& interval, bool one_shot);
+	timer_id AddTimer(CEventHandler* handler, fz::duration const& interval, bool one_shot);
 	void StopTimer(timer_id id);
 
 	void SendEvent(CEventHandler* handler, CEventBase* evt);
 
 	// Process timers. Returns true if a timer has been triggered
-	bool ProcessTimers(scoped_lock & l, CMonotonicClock const& now);
+	bool ProcessTimers(scoped_lock & l, fz::monotonic_clock const& now);
 
 	virtual wxThread::ExitCode Entry();
 
@@ -69,7 +69,7 @@ protected:
 	// Process the next (if any) event. Returns true if an event has been processed
 	bool ProcessEvent(scoped_lock & l);
 
-	CMonotonicClock deadline_;
+	fz::monotonic_clock deadline_;
 
 	timer_id next_timer_id_{};
 };

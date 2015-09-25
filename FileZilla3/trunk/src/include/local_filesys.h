@@ -33,7 +33,7 @@ public:
 
 	// Follows symlinks and stats the target, sets isLink to true if path was
 	// a link.
-	static local_fileType GetFileInfo(wxString const& path, bool &isLink, int64_t* size, CDateTime* modificationTime, int* mode);
+	static local_fileType GetFileInfo(wxString const& path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int* mode);
 
 	// Shortcut, returns -1 on error.
 	static int64_t GetSize(wxString const& path, bool *isLink = 0);
@@ -46,17 +46,17 @@ public:
 
 	bool BeginFindFiles(wxString path, bool dirs_only);
 	bool GetNextFile(wxString& name);
-	bool GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, CDateTime* modificationTime, int* mode);
+	bool GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, fz::datetime* modificationTime, int* mode);
 	void EndFindFiles();
 
-	static CDateTime GetModificationTime(wxString const& path);
-	static bool SetModificationTime(wxString const& path, const CDateTime& t);
+	static fz::datetime GetModificationTime(wxString const& path);
+	static bool SetModificationTime(wxString const& path, const fz::datetime& t);
 
 	static wxString GetSymbolicLinkTarget(wxString const& path);
 
 protected:
 #ifndef __WXMSW__
-	static local_fileType GetFileInfo(const char* path, bool &isLink, int64_t* size, CDateTime* modificationTime, int* mode);
+	static local_fileType GetFileInfo(const char* path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int* mode);
 	void AllocPathBuffer(const char* file);  // Ensures m_raw_path is large enough to hold path and filename
 #endif
 

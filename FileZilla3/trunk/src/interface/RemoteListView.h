@@ -19,7 +19,7 @@ public:
 
 	virtual bool CanStartComparison();
 	virtual void StartComparison();
-	virtual bool GetNextFile(wxString& name, bool &dir, int64_t &size, CDateTime& date);
+	virtual bool GetNextFile(wxString& name, bool &dir, int64_t &size, fz::datetime& date);
 	virtual void FinishComparison();
 	virtual void OnExitComparisonMode();
 

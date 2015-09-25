@@ -21,7 +21,7 @@ protected:
 	/// Creates the controls and sizers
 	bool CreateControls();
 
-	void DisplayFile(bool left, wxString name, int64_t size, CDateTime const& time, wxString const& iconFile);
+	void DisplayFile(bool left, wxString name, int64_t size, fz::datetime const& time, wxString const& iconFile);
 
 	void OnOK(wxCommandEvent& event);
 	void OnCancel(wxCommandEvent& event);

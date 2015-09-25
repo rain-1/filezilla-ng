@@ -197,7 +197,7 @@ void EventloopTest::testCondition()
 {
 	// Make sure condition::wait works correctly.
 
-	auto const t1 = CMonotonicClock::now();
+	auto const t1 = fz::monotonic_clock::now();
 
 	mutex m;
 	condition c;
@@ -205,8 +205,8 @@ void EventloopTest::testCondition()
 	scoped_lock l(m);
 	CPPUNIT_ASSERT(!c.wait(l, 200));
 
-	auto const t2 = CMonotonicClock::now();
+	auto const t2 = fz::monotonic_clock::now();
 
 	// Due to rounding errors things can be off for one millisecond, allow it.
-	CPPUNIT_ASSERT((t2 - t1) >= duration::from_milliseconds(199));
+	CPPUNIT_ASSERT((t2 - t1) >= fz::duration::from_milliseconds(199));
 }

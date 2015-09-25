@@ -23,7 +23,7 @@ public:
 	virtual void cb();
 
 protected:
-	CMonotonicClock m_start;
+	fz::monotonic_clock m_start;
 
 	int64_t m_summed_latency{};
 	int m_measurements{};

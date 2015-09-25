@@ -36,7 +36,7 @@ public:
 	CDirectoryCache& operator=(CDirectoryCache const&) = delete;
 
 	void Store(const CDirectoryListing &listing, const CServer &server);
-	bool GetChangeTime(CMonotonicClock& time, const CServer &server, const CServerPath &path);
+	bool GetChangeTime(fz::monotonic_clock& time, const CServer &server, const CServerPath &path);
 	bool Lookup(CDirectoryListing &listing, const CServer &server, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 	bool DoesExist(const CServer &server, const CServerPath &path, int &hasUnsureEntries, bool &is_outdated);
 	bool LookupFile(CDirentry &entry, const CServer &server, const CServerPath &path, const wxString& file, bool &dirDidExist, bool &matchedCase);
@@ -58,11 +58,11 @@ protected:
 
 		explicit CCacheEntry(CDirectoryListing const& l)
 			: listing(l)
-			, modificationTime(CMonotonicClock::now())
+			, modificationTime(fz::monotonic_clock::now())
 		{}
 
 		CDirectoryListing listing;
-		CMonotonicClock modificationTime;
+		fz::monotonic_clock modificationTime;
 
 		CCacheEntry& operator=(CCacheEntry const& a) = default;
 		CCacheEntry& operator=(CCacheEntry && a) noexcept = default;

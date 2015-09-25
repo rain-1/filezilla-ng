@@ -148,7 +148,7 @@ protected:
 
 	// Used by keepalive code so that we're not using keep alive
 	// till the end of time. Stop after a couple of minutes.
-	CMonotonicClock m_lastCommandCompletionTime;
+	fz::monotonic_clock m_lastCommandCompletionTime;
 
 	timer_id m_idleTimer{};
 

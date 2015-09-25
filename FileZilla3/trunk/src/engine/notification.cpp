@@ -107,7 +107,7 @@ char* CDataNotification::Detach(int& len)
 
 CCertificate::CCertificate(
 		unsigned char const* rawData, unsigned int len,
-		CDateTime const& activationTime, CDateTime const& expirationTime,
+		fz::datetime const& activationTime, fz::datetime const& expirationTime,
 		wxString const& serial,
 		wxString const& pkalgoname, unsigned int bits,
 		wxString const& signalgoname,

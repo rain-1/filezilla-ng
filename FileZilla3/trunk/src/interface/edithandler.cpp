@@ -618,7 +618,7 @@ checkmodifications_loopbegin:
 			if (iter->state != edit)
 				continue;
 
-			CDateTime mtime;
+			fz::datetime mtime;
 			bool is_link;
 			if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file) {
 				m_fileDataList[i].erase(iter);
@@ -753,7 +753,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 	iter->state = unedit ? upload_and_remove : upload;
 
 	int64_t size;
-	CDateTime mtime;
+	fz::datetime mtime;
 
 	bool is_link;
 	if (CLocalFileSystem::GetFileInfo(iter->file, is_link, &size, &mtime, 0) != CLocalFileSystem::file)
@@ -763,7 +763,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 	}
 
 	if (!mtime.IsValid())
-		mtime = CDateTime::Now();
+		mtime = fz::datetime::Now();
 
 	iter->modificationTime = mtime;
 

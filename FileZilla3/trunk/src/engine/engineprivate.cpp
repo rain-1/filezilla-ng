@@ -227,7 +227,7 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 							delay = 1;
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
 						StopTimer(m_retryTimer);
-						m_retryTimer = AddTimer(duration::from_milliseconds(delay), true);
+						m_retryTimer = AddTimer(fz::duration::from_milliseconds(delay), true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
 				}
@@ -326,7 +326,7 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 					else {
 						if (!avoid) {
 							m_lastListDir = pListing->path;
-							m_lastListTime = CMonotonicClock::now();
+							m_lastListTime = fz::monotonic_clock::now();
 							CDirectoryListingNotification *pNotification = new CDirectoryListingNotification(pListing->path);
 							AddNotification(pNotification);
 						}
@@ -402,13 +402,13 @@ void CFileZillaEnginePrivate::SendDirectoryListingNotification(const CServerPath
 
 	if (failed) {
 		AddNotification(new CDirectoryListingNotification(path, false, true));
-		m_lastListTime = CMonotonicClock::now();
+		m_lastListTime = fz::monotonic_clock::now();
 
 		// On failed messages, we don't notify other engines
 		return;
 	}
 
-	CMonotonicClock changeTime;
+	fz::monotonic_clock changeTime;
 	if (!directory_cache_.GetChangeTime(changeTime, *pOwnServer, path))
 		return;
 
@@ -445,7 +445,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 	scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
-		duration const span = CDateTime::Now() - iter->time;
+		fz::duration const span = fz::datetime::Now() - iter->time;
 		if (span.get_seconds() >= m_options.GetOptionVal(OPTION_RECONNECTDELAY) ||
 			iter->server == server || (!critical && (iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())))
 		{
@@ -459,7 +459,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 
 	t_failedLogins failure;
 	failure.server = server;
-	failure.time = CDateTime::Now();
+	failure.time = fz::datetime::Now();
 	failure.critical = critical;
 	m_failedLogins.push_back(failure);
 }
@@ -469,7 +469,7 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 	scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
-		duration const span = CDateTime::Now() - iter->time;
+		fz::duration const span = fz::datetime::Now() - iter->time;
 		const int delay = m_options.GetOptionVal(OPTION_RECONNECTDELAY);
 		if (span.get_seconds() >= delay) {
 			std::list<t_failedLogins>::iterator prev = iter;
@@ -520,7 +520,7 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	if (delay) {
 		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
 		StopTimer(m_retryTimer);
-		m_retryTimer = AddTimer(duration::from_milliseconds(delay), true);
+		m_retryTimer = AddTimer(fz::duration::from_milliseconds(delay), true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
@@ -876,7 +876,7 @@ void CTransferStatusManager::SetStartTime()
 	if (!status_)
 		return;
 
-	status_.started = CDateTime::Now();
+	status_.started = fz::datetime::Now();
 }
 
 void CTransferStatusManager::SetMadeProgress()

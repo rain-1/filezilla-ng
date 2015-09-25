@@ -35,7 +35,7 @@ public:
 
 	wxString name;
 	int64_t size{};
-	CDateTime time;
+	fz::datetime time;
 	int attributes{};
 	bool dir{};
 };
@@ -230,7 +230,7 @@ protected:
 	void TryRefreshListings();
 	CServer m_last_refresh_server;
 	CServerPath m_last_refresh_path;
-	CMonotonicClock m_last_refresh_listing_time;
+	fz::monotonic_clock m_last_refresh_listing_time;
 
 	// Called from Process Reply.
 	// After a disconnect, check if there's another idle engine that

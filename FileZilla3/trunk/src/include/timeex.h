@@ -8,6 +8,8 @@
 
 #include <limits>
 
+namespace fz {
+
 class duration;
 
 // Represents a point of time in wallclock.
@@ -20,7 +22,7 @@ class duration;
 // as if naively comparing both timestamps after truncating them to the most common accuracy.
 //
 // [*] underlying type may be TAI on some *nix, we pretend there is no difference
-class CDateTime final
+class datetime final
 {
 public:
 	enum Accuracy : char {
@@ -36,49 +38,49 @@ public:
 		local
 	};
 
-	CDateTime() = default;
+	datetime() = default;
 
-	CDateTime(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
+	datetime(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
 
-	explicit CDateTime(time_t, Accuracy a);
+	explicit datetime(time_t, Accuracy a);
 
 	// Parses string, looks for YYYYmmDDHHMMSSsss
 	// Ignores all non-digit characters between fields.
-	explicit CDateTime(wxString const& s, Zone z);
+	explicit datetime(wxString const& s, Zone z);
 
 #ifdef __WXMSW__
-	explicit CDateTime(FILETIME const& ft, Accuracy a);
+	explicit datetime(FILETIME const& ft, Accuracy a);
 #endif
 
-	CDateTime(CDateTime const& op) = default;
-	CDateTime(CDateTime && op) noexcept = default;
-	CDateTime& operator=(CDateTime const& op) = default;
-	CDateTime& operator=(CDateTime && op) noexcept = default;
+	datetime(datetime const& op) = default;
+	datetime(datetime && op) noexcept = default;
+	datetime& operator=(datetime const& op) = default;
+	datetime& operator=(datetime && op) noexcept = default;
 
 	bool IsValid() const;
 	void clear();
 
 	Accuracy GetAccuracy() const { return a_; }
 
-	static CDateTime Now();
+	static datetime Now();
 
-	bool operator==(CDateTime const& op) const;
-	bool operator!=(CDateTime const& op) const { return !(*this == op); }
-	bool operator<(CDateTime const& op) const;
-	bool operator<=(CDateTime const& op) const;
-	bool operator>(CDateTime const& op) const { return op < *this; }
+	bool operator==(datetime const& op) const;
+	bool operator!=(datetime const& op) const { return !(*this == op); }
+	bool operator<(datetime const& op) const;
+	bool operator<=(datetime const& op) const;
+	bool operator>(datetime const& op) const { return op < *this; }
 
-	int Compare(CDateTime const& op) const;
-	bool IsEarlierThan(CDateTime const& op) const { return Compare(op) < 0; };
-	bool IsLaterThan(CDateTime const& op) const { return Compare(op) > 0; };
+	int Compare(datetime const& op) const;
+	bool IsEarlierThan(datetime const& op) const { return Compare(op) < 0; };
+	bool IsLaterThan(datetime const& op) const { return Compare(op) > 0; };
 
-	CDateTime& operator+=(duration const& op);
-	CDateTime operator+(duration const& op) const { CDateTime t(*this); t += op; return t; }
+	datetime& operator+=(duration const& op);
+	datetime operator+(duration const& op) const { datetime t(*this); t += op; return t; }
 
-	CDateTime& operator-=(duration const& op);
-	CDateTime operator-(duration const& op) const { CDateTime t(*this); t -= op; return t; }
+	datetime& operator-=(duration const& op);
+	datetime operator-(duration const& op) const { datetime t(*this); t -= op; return t; }
 
-	friend duration operator-(CDateTime const& a, CDateTime const& b);
+	friend duration operator-(datetime const& a, datetime const& b);
 
 	// Beware: month and day are 1-indexed!
 	bool Set(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
@@ -110,7 +112,7 @@ public:
 #endif
 
 private:
-	int CompareSlow( CDateTime const& op ) const;
+	int CompareSlow( datetime const& op ) const;
 
 	bool IsClamped();
 
@@ -174,20 +176,20 @@ inline duration operator-(duration const& a, duration const& b)
 }
 
 
-duration operator-(CDateTime const& a, CDateTime const& b);
+duration operator-(datetime const& a, datetime const& b);
 
-class CMonotonicClock final
+class monotonic_clock final
 {
 public:
-	CMonotonicClock() = default;
-	CMonotonicClock(CMonotonicClock const&) = default;
-	CMonotonicClock(CMonotonicClock &&) noexcept = default;
-	CMonotonicClock& operator=(CMonotonicClock const&) = default;
-	CMonotonicClock& operator=(CMonotonicClock &&) noexcept = default;
+	monotonic_clock() = default;
+	monotonic_clock(monotonic_clock const&) = default;
+	monotonic_clock(monotonic_clock &&) noexcept = default;
+	monotonic_clock& operator=(monotonic_clock const&) = default;
+	monotonic_clock& operator=(monotonic_clock &&) noexcept = default;
 
-	CMonotonicClock const operator+(duration const& d) const
+	monotonic_clock const operator+(duration const& d) const
 	{
-		return CMonotonicClock(*this) += d;
+		return monotonic_clock(*this) += d;
 	}
 
 private:
@@ -195,63 +197,65 @@ private:
 	static_assert(std::chrono::steady_clock::is_steady, "Nonconforming stdlib, your steady_clock isn't steady");
 
 public:
-	static CMonotonicClock now() {
-		return CMonotonicClock(clock_type::now());
+	static monotonic_clock now() {
+		return monotonic_clock(clock_type::now());
 	}
 
 	explicit operator bool() const {
 		return t_ != clock_type::time_point();
 	}
 
-	CMonotonicClock& operator+=(duration const& d)
+	monotonic_clock& operator+=(duration const& d)
 	{
 		t_ += std::chrono::milliseconds(d.get_milliseconds());
 		return *this;
 	}
 
 private:
-	explicit CMonotonicClock(clock_type::time_point const& t)
+	explicit monotonic_clock(clock_type::time_point const& t)
 		: t_(t)
 	{}
 
 	clock_type::time_point t_;
 
-	friend duration operator-(CMonotonicClock const& a, CMonotonicClock const& b);
-	friend bool operator==(CMonotonicClock const& a, CMonotonicClock const& b);
-	friend bool operator<(CMonotonicClock const& a, CMonotonicClock const& b);
-	friend bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b);
-	friend bool operator>(CMonotonicClock const& a, CMonotonicClock const& b);
-	friend bool operator>=(CMonotonicClock const& a, CMonotonicClock const& b);
+	friend duration operator-(monotonic_clock const& a, monotonic_clock const& b);
+	friend bool operator==(monotonic_clock const& a, monotonic_clock const& b);
+	friend bool operator<(monotonic_clock const& a, monotonic_clock const& b);
+	friend bool operator<=(monotonic_clock const& a, monotonic_clock const& b);
+	friend bool operator>(monotonic_clock const& a, monotonic_clock const& b);
+	friend bool operator>=(monotonic_clock const& a, monotonic_clock const& b);
 };
 
-inline duration operator-(CMonotonicClock const& a, CMonotonicClock const& b)
+inline duration operator-(monotonic_clock const& a, monotonic_clock const& b)
 {
 	return duration::from_milliseconds(std::chrono::duration_cast<std::chrono::milliseconds>(a.t_ - b.t_).count());
 }
 
-inline bool operator==(CMonotonicClock const& a, CMonotonicClock const& b)
+inline bool operator==(monotonic_clock const& a, monotonic_clock const& b)
 {
 	return a.t_ == b.t_;
 }
 
-inline bool operator<(CMonotonicClock const& a, CMonotonicClock const& b)
+inline bool operator<(monotonic_clock const& a, monotonic_clock const& b)
 {
 	return a.t_ < b.t_;
 }
 
-inline bool operator<=(CMonotonicClock const& a, CMonotonicClock const& b)
+inline bool operator<=(monotonic_clock const& a, monotonic_clock const& b)
 {
 	return a.t_ <= b.t_;
 }
 
-inline bool operator>(CMonotonicClock const& a, CMonotonicClock const& b)
+inline bool operator>(monotonic_clock const& a, monotonic_clock const& b)
 {
 	return a.t_ > b.t_;
 }
 
-inline bool operator>=(CMonotonicClock const& a, CMonotonicClock const& b)
+inline bool operator>=(monotonic_clock const& a, monotonic_clock const& b)
 {
 	return a.t_ >= b.t_;
+}
+
 }
 
 #endif //__TIMEEX_H__

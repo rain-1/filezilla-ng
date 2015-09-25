@@ -7,12 +7,14 @@
 
 #define TIME_ASSERT(x) //wxASSERT(x)
 
-CDateTime::CDateTime(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
+namespace fz {
+
+datetime::datetime(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
 {
 	Set(z, year, month, day, hour, minute, second, millisecond);
 }
 
-CDateTime::CDateTime(time_t t, Accuracy a)
+datetime::datetime(time_t t, Accuracy a)
 	: t_(static_cast<int64_t>(t) * 1000)
 	, a_(a)
 {
@@ -56,19 +58,19 @@ bool parse(wxChar const*& it, wxChar const* end, int count, T & v, int offset)
 }
 }
 
-CDateTime::CDateTime(wxString const& str, Zone z)
+datetime::datetime(wxString const& str, Zone z)
 {
 	Set(str, z);
 }
 
-CDateTime CDateTime::Now()
+datetime datetime::Now()
 {
 #ifdef __WXMSW__
 	FILETIME ft{};
 	GetSystemTimeAsFileTime(&ft);
-	return CDateTime(ft, milliseconds);
+	return datetime(ft, milliseconds);
 #else
-	CDateTime ret;
+	datetime ret;
 	timeval tv = { 0, 0 };
 	if (gettimeofday(&tv, 0) == 0) {
 		ret.t_ = static_cast<int64_t>(tv.tv_sec) * 1000 + tv.tv_usec / 1000;
@@ -78,7 +80,7 @@ CDateTime CDateTime::Now()
 #endif
 }
 
-bool CDateTime::operator<(CDateTime const& op) const
+bool datetime::operator<(datetime const& op) const
 {
 	if (t_ == invalid) {
 		return op.t_ != invalid;
@@ -97,7 +99,7 @@ bool CDateTime::operator<(CDateTime const& op) const
 	return a_ < op.a_;
 }
 
-bool CDateTime::operator<=(CDateTime const& op) const
+bool datetime::operator<=(datetime const& op) const
 {
 	if (t_ == invalid) {
 		return true;
@@ -116,12 +118,12 @@ bool CDateTime::operator<=(CDateTime const& op) const
 	return a_ <= op.a_;
 }
 
-bool CDateTime::operator==(CDateTime const& op) const
+bool datetime::operator==(datetime const& op) const
 {
 	return t_ == op.t_ && a_ == op.a_;
 }
 
-bool CDateTime::IsClamped()
+bool datetime::IsClamped()
 {
 	bool ret = true;
 	tm t = GetTm(utc);
@@ -140,7 +142,7 @@ bool CDateTime::IsClamped()
 	return ret;
 }
 
-int CDateTime::Compare(CDateTime const& op) const
+int datetime::Compare(datetime const& op) const
 {
 	if (t_ == invalid) {
 		return (op.t_ == invalid) ? 0 : -1;
@@ -176,7 +178,7 @@ int CDateTime::Compare(CDateTime const& op) const
 	return CompareSlow(op);
 }
 
-int CDateTime::CompareSlow(CDateTime const& op) const
+int datetime::CompareSlow(datetime const& op) const
 {
 	tm t1 = GetTm(utc);
 	tm t2 = op.GetTm(utc);
@@ -199,7 +201,7 @@ int CDateTime::CompareSlow(CDateTime const& op) const
 		return 1;
 	}
 
-	Accuracy a = (a_ < op.a_ ) ? a_ : op.a_;
+	Accuracy a = (a_ < op.a_) ? a_ : op.a_;
 
 	if (a < hours) {
 		return 0;
@@ -246,7 +248,7 @@ int CDateTime::CompareSlow(CDateTime const& op) const
 	return 0;
 }
 
-CDateTime& CDateTime::operator+=(duration const& op)
+datetime& datetime::operator+=(duration const& op)
 {
 	if (IsValid()) {
 		if (a_ < hours) {
@@ -268,13 +270,13 @@ CDateTime& CDateTime::operator+=(duration const& op)
 	return *this;
 }
 
-CDateTime& CDateTime::operator-=(duration const& op)
+datetime& datetime::operator-=(duration const& op)
 {
 	*this += -op;
 	return *this;
 }
 
-bool CDateTime::Set(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
+bool datetime::Set(Zone z, int year, int month, int day, int hour, int minute, int second, int millisecond)
 {
 	Accuracy a;
 	if (hour == -1) {
@@ -335,7 +337,7 @@ bool CDateTime::Set(Zone z, int year, int month, int day, int hour, int minute, 
 #endif
 }
 
-bool CDateTime::Set(wxString const& str, Zone z)
+bool datetime::Set(wxString const& str, Zone z)
 {
 	wxChar const* it = str.c_str();
 	wxChar const* end = it + str.size();
@@ -398,7 +400,7 @@ bool CDateTime::Set(wxString const& str, Zone z)
 
 #ifdef __WXMSW__
 
-bool CDateTime::Set(SYSTEMTIME const& st, Accuracy a, Zone z)
+bool datetime::Set(SYSTEMTIME const& st, Accuracy a, Zone z)
 {
 	clear();
 
@@ -429,7 +431,7 @@ int64_t make_int64_t(T hi, T lo)
 int64_t const EPOCH_OFFSET_IN_MSEC = 11644473600000ll;
 }
 
-bool CDateTime::Set(FILETIME const& ft, Accuracy a)
+bool datetime::Set(FILETIME const& ft, Accuracy a)
 {
 	if (ft.dwHighDateTime || ft.dwLowDateTime) {
 		// See http://trac.wxwidgets.org/changeset/74423 and http://trac.wxwidgets.org/ticket/13098
@@ -451,14 +453,14 @@ bool CDateTime::Set(FILETIME const& ft, Accuracy a)
 
 #else
 
-bool CDateTime::Set(tm& t, Accuracy a, Zone z)
+bool datetime::Set(tm& t, Accuracy a, Zone z)
 {
 	time_t tt;
 
 	errno = 0;
 
 	if (a >= hours && z == local) {
-		 tt = mktime(&t);
+		tt = mktime(&t);
 	}
 	else {
 		tt = timegm(&t);
@@ -479,7 +481,7 @@ bool CDateTime::Set(tm& t, Accuracy a, Zone z)
 
 #endif
 
-bool CDateTime::ImbueTime(int hour, int minute, int second, int millisecond)
+bool datetime::ImbueTime(int hour, int minute, int second, int millisecond)
 {
 	if (!IsValid() || a_ > days) {
 		return false;
@@ -515,12 +517,12 @@ bool CDateTime::ImbueTime(int hour, int minute, int second, int millisecond)
 	return true;
 }
 
-bool CDateTime::IsValid() const
+bool datetime::IsValid() const
 {
 	return t_ != invalid;
 }
 
-void CDateTime::clear()
+void datetime::clear()
 {
 	a_ = days;
 	t_ = invalid;
@@ -580,19 +582,19 @@ int CrtAssertSuppressor::refs_{};
 }
 #endif
 
-bool CDateTime::VerifyFormat(wxString const& fmt)
+bool datetime::VerifyFormat(wxString const& fmt)
 {
 	wxChar buf[4096];
-	tm t = CDateTime::Now().GetTm(utc);
+	tm t = datetime::Now().GetTm(utc);
 
 #ifdef __VISUALC__
 	CrtAssertSuppressor suppressor;
 #endif
 
-	return wxStrftime(buf, sizeof(buf)/sizeof(wxChar), fmt, &t) != 0;
+	return wxStrftime(buf, sizeof(buf) / sizeof(wxChar), fmt, &t) != 0;
 }
 
-duration operator-(CDateTime const& a, CDateTime const& b)
+duration operator-(datetime const& a, datetime const& b)
 {
 	TIME_ASSERT(a.IsValid());
 	TIME_ASSERT(b.IsValid());
@@ -600,7 +602,7 @@ duration operator-(CDateTime const& a, CDateTime const& b)
 	return duration::from_milliseconds(a.t_ - b.t_);
 }
 
-wxString CDateTime::Format(wxString const& fmt, Zone z) const
+wxString datetime::Format(wxString const& fmt, Zone z) const
 {
 	tm t = GetTm(z);
 
@@ -623,19 +625,19 @@ wxString CDateTime::Format(wxString const& fmt, Zone z) const
 
 	int const count = 1000;
 	char buf[count];
-	strftime(buf, count -1, fbuf, &t);
+	strftime(buf, count - 1, fbuf, &t);
 	buf[count - 1] = 0;
 
 	return buf;
 #endif
 }
 
-time_t CDateTime::GetTimeT() const
+time_t datetime::GetTimeT() const
 {
 	return t_ / 1000;
 }
 
-tm CDateTime::GetTm(Zone z) const
+tm datetime::GetTm(Zone z) const
 {
 	tm ret{};
 	time_t t = GetTimeT();
@@ -685,12 +687,12 @@ tm CDateTime::GetTm(Zone z) const
 
 #ifdef __WXMSW__
 
-CDateTime::CDateTime(FILETIME const& ft, Accuracy a)
+datetime::datetime(FILETIME const& ft, Accuracy a)
 {
 	Set(ft, a);
 }
 
-FILETIME CDateTime::GetFileTime() const
+FILETIME datetime::GetFileTime() const
 {
 	FILETIME ret{};
 	if (IsValid()) {
@@ -708,24 +710,4 @@ FILETIME CDateTime::GetFileTime() const
 
 #endif
 
-struct foo final
-{
-	foo() noexcept = default;
-	explicit foo(int, float) {}
-	foo(foo const&) noexcept = default;
-	foo(foo &&) noexcept = default;
-
-	foo& operator=(foo const&) noexcept = default;
-	foo& operator=(foo &&) noexcept = default;
-};
-
-foo n() {
-	return foo();
-}
-
-void m()
-{
-	foo r, r2;
-	r = r2;
-	r = n();
 }

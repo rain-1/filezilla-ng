@@ -1318,7 +1318,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 				if (path.empty())
 					continue;
 
-				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, CDateTime())) {
+				if (filter.FilenameFiltered(GetItemText(child), path.GetPath(), true, -1, false, 0, fz::datetime())) {
 					wxTreeItemId sel = GetSelection();
 					while (sel && sel != child)
 						sel = GetItemParent(sel);
