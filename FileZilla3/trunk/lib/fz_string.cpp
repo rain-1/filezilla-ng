@@ -2,6 +2,8 @@
 
 #ifdef FZ_WINDOWS
 #include <string.h>
+#else
+#include <strings.h>
 #endif
 
 static_assert('a' + 25 == 'z', "We only support systems running with an ASCII-based character set. Sorry, no EBCDIC.");
