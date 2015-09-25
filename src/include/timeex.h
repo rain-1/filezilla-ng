@@ -1,8 +1,6 @@
 #ifndef __TIMEEX_H__
 #define __TIMEEX_H__
 
-#include <wx/time.h>
-
 #include <chrono>
 #include <ctime>
 
@@ -25,7 +23,7 @@ class duration;
 class datetime final
 {
 public:
-	enum Accuracy : char {
+	enum accuracy : char {
 		days,
 		hours,
 		minutes,
@@ -33,23 +31,24 @@ public:
 		milliseconds
 	};
 
-	enum Zone {
+	enum zone {
 		utc,
 		local
 	};
 
 	datetime() = default;
 
-	datetime(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
+	datetime(zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
 
-	explicit datetime(time_t, Accuracy a);
+	explicit datetime(time_t, accuracy a);
 
 	// Parses string, looks for YYYYmmDDHHMMSSsss
 	// Ignores all non-digit characters between fields.
-	explicit datetime(wxString const& s, Zone z);
+	explicit datetime(std::string const& s, zone z);
+	explicit datetime(std::wstring const& s, zone z);
 
-#ifdef __WXMSW__
-	explicit datetime(FILETIME const& ft, Accuracy a);
+#ifdef FZ_WINDOWS
+	explicit datetime(FILETIME const& ft, accuracy a);
 #endif
 
 	datetime(datetime const& op) = default;
@@ -57,12 +56,12 @@ public:
 	datetime& operator=(datetime const& op) = default;
 	datetime& operator=(datetime && op) noexcept = default;
 
-	bool IsValid() const;
+	bool empty() const;
 	void clear();
 
-	Accuracy GetAccuracy() const { return a_; }
+	accuracy get_accuracy() const { return a_; }
 
-	static datetime Now();
+	static datetime now();
 
 	bool operator==(datetime const& op) const;
 	bool operator!=(datetime const& op) const { return !(*this == op); }
@@ -83,45 +82,46 @@ public:
 	friend duration operator-(datetime const& a, datetime const& b);
 
 	// Beware: month and day are 1-indexed!
-	bool Set(Zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
+	bool set(zone z, int year, int month, int day, int hour = -1, int minute = -1, int second = -1, int millisecond = -1);
 
-	bool Set(wxString const& str, Zone z);
+	bool set(std::string const& str, zone z);
+	bool set(std::wstring const& str, zone z);
 
-#ifdef __WXMSW__
-	bool Set(FILETIME const& ft, Accuracy a);
-	bool Set(SYSTEMTIME const& ft, Accuracy a, Zone z);
+#ifdef FZ_WINDOWS
+	bool set(FILETIME const& ft, accuracy a);
+	bool set(SYSTEMTIME const& ft, accuracy a, zone z);
 #else
 	// Careful: modifies passed structure
-	bool Set(tm & t, Accuracy a, Zone z);
+	bool set(tm & t, accuracy a, zone z);
 #endif
 
-	bool ImbueTime(int hour, int minute, int second = -1, int millisecond = -1);
+	bool imbue_time(int hour, int minute, int second = -1, int millisecond = -1);
 
 	static bool VerifyFormat(wxString const& fmt);
 
-	wxString Format(wxString const& format, Zone z) const;
+	wxString Format(wxString const& format, zone z) const;
 
-	int GetMilliseconds() const { return t_ % 1000; }
+	int get_milliseconds() const { return t_ % 1000; }
 
 	time_t GetTimeT() const;
 
-	tm GetTm(Zone z) const;
+	tm GetTm(zone z) const;
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	FILETIME GetFileTime() const;
 #endif
 
 private:
-	int CompareSlow( datetime const& op ) const;
+	int compare_slow( datetime const& op ) const;
 
-	bool IsClamped();
+	bool clamped();
 
 	enum invalid_t : int64_t {
 		invalid = std::numeric_limits<int64_t>::min()
 	};
 
 	int64_t t_{invalid};
-	Accuracy a_{days};
+	accuracy a_{days};
 };
 
 class duration final

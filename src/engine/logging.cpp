@@ -139,7 +139,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		return;
 #endif
 
-	fz::datetime now = fz::datetime::Now();
+	fz::datetime now = fz::datetime::now();
 	wxString out(wxString::Format(_T("%s %u %d %s %s")
 #ifdef __WXMSW__
 		_T("\r\n"),

@@ -137,10 +137,10 @@ wxString CShellExtensionInterface::GetTarget()
 bool CShellExtensionInterface::CreateDragDirectory()
 {
 	for (int i = 0; i < 10; ++i) {
-		auto const now = fz::datetime::Now();
+		auto const now = fz::datetime::now();
 		int64_t value = now.GetTimeT();
 		value *= 1000;
-		value += now.GetMilliseconds();
+		value += now.get_milliseconds();
 		value *= 10;
 		value += i;
 

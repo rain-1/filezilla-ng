@@ -39,17 +39,17 @@ public:
 
 	inline bool has_date() const
 	{
-		return time.IsValid();;
+		return time.empty();;
 	}
 
 	inline bool has_time() const
 	{
-		return time.IsValid() && time.GetAccuracy() >= fz::datetime::hours;
+		return time.empty() && time.get_accuracy() >= fz::datetime::hours;
 	}
 
 	inline bool has_seconds() const
 	{
-		return time.IsValid() && time.GetAccuracy() >= fz::datetime::seconds;
+		return time.empty() && time.get_accuracy() >= fz::datetime::seconds;
 	}
 
 	CSparseOptional<std::wstring> target; // Set to linktarget it link is true

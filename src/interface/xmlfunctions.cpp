@@ -93,11 +93,11 @@ bool CXmlFile::Modified()
 {
 	wxCHECK(!m_fileName.empty(), false);
 
-	if (!m_modificationTime.IsValid())
+	if (!m_modificationTime.empty())
 		return true;
 
 	fz::datetime const modificationTime = CLocalFileSystem::GetModificationTime(m_fileName);
-	if (modificationTime.IsValid() && modificationTime == m_modificationTime)
+	if (modificationTime.empty() && modificationTime == m_modificationTime)
 		return false;
 
 	return true;

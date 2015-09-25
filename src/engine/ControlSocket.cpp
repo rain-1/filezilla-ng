@@ -96,7 +96,7 @@ void CControlSocket::LogTransferResultMessage(int nErrorCode, CFileTransferOpDat
 
 	CTransferStatus const status = engine_.transfer_status_.Get(tmp);
 	if (!status.empty() && (nErrorCode == FZ_REPLY_OK || status.madeProgress)) {
-		int elapsed = static_cast<int>((fz::datetime::Now() - status.started).get_seconds());
+		int elapsed = static_cast<int>((fz::datetime::now() - status.started).get_seconds());
 		if (elapsed <= 0)
 			elapsed = 1;
 		wxString time = wxString::Format(
@@ -386,7 +386,7 @@ int CControlSocket::CheckOverwriteFile()
 		found = false;
 
 	if (!pData->download) {
-		if (!found && pData->remoteFileSize < 0 && !pData->fileTime.IsValid())
+		if (!found && pData->remoteFileSize < 0 && !pData->fileTime.empty())
 			return FZ_REPLY_OK;
 	}
 
@@ -409,11 +409,11 @@ int CControlSocket::CheckOverwriteFile()
 
 	pNotification->localTime = CLocalFileSystem::GetModificationTime(pData->localFile);
 
-	if (pData->fileTime.IsValid())
+	if (pData->fileTime.empty())
 		pNotification->remoteTime = pData->fileTime;
 
 	if (found) {
-		if (!pData->fileTime.IsValid()) {
+		if (!pData->fileTime.empty()) {
 			if (entry.has_date()) {
 				pNotification->remoteTime = entry.time;
 				pData->fileTime = entry.time;
@@ -1136,7 +1136,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::overwriteNewer:
-		if (!pFileExistsNotification->localTime.IsValid() || !pFileExistsNotification->remoteTime.IsValid())
+		if (!pFileExistsNotification->localTime.empty() || !pFileExistsNotification->remoteTime.empty())
 			SendNextCommand();
 		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
 			SendNextCommand();
@@ -1173,7 +1173,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::overwriteSizeOrNewer:
-		if (!pFileExistsNotification->localTime.IsValid() || !pFileExistsNotification->remoteTime.IsValid())
+		if (!pFileExistsNotification->localTime.empty() || !pFileExistsNotification->remoteTime.empty())
 			SendNextCommand();
 		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
 		Second compare flags the remaining case in which we need to send command : both size unknown */

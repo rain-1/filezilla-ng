@@ -232,8 +232,8 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 			if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 				if (modificationTime) {
-					if (!modificationTime->Set(info.ftLastWriteTime, fz::datetime::milliseconds)) {
-						modificationTime->Set(info.ftCreationTime, fz::datetime::milliseconds);
+					if (!modificationTime->set(info.ftLastWriteTime, fz::datetime::milliseconds)) {
+						modificationTime->set(info.ftCreationTime, fz::datetime::milliseconds);
 					}
 				}
 
@@ -264,7 +264,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 
 	if (modificationTime) {
 		*modificationTime = fz::datetime(attributes.ftLastWriteTime, fz::datetime::milliseconds);
-		if (!modificationTime->IsValid()) {
+		if (!modificationTime->empty()) {
 			*modificationTime = fz::datetime(attributes.ftCreationTime, fz::datetime::milliseconds);
 		}
 	}
@@ -521,7 +521,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 
 					if (modificationTime) {
 						*modificationTime = fz::datetime(info.ftLastWriteTime, fz::datetime::milliseconds);
-						if (!modificationTime->IsValid()) {
+						if (!modificationTime->empty()) {
 							*modificationTime = fz::datetime(info.ftCreationTime, fz::datetime::milliseconds);
 						}
 					}
@@ -558,7 +558,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 		else {
 			if (modificationTime) {
 				*modificationTime = fz::datetime(m_find_data.ftLastWriteTime, fz::datetime::milliseconds);
-				if (!modificationTime->IsValid()) {
+				if (!modificationTime->empty()) {
 					*modificationTime = fz::datetime(m_find_data.ftLastWriteTime, fz::datetime::milliseconds);
 				}
 			}
@@ -676,7 +676,7 @@ fz::datetime CLocalFileSystem::GetModificationTime( const wxString& path)
 
 bool CLocalFileSystem::SetModificationTime(const wxString& path, const fz::datetime& t)
 {
-	if (!t.IsValid())
+	if (!t.empty())
 		return false;
 
 #ifdef __WXMSW__

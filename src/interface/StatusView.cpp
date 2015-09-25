@@ -124,7 +124,7 @@ void CStatusView::OnSize(wxSizeEvent &)
 
 void CStatusView::AddToLog(CLogmsgNotification const& notification)
 {
-	AddToLog(notification.msgType, notification.msg, fz::datetime::Now());
+	AddToLog(notification.msgType, notification.msg, fz::datetime::now());
 }
 
 void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz::datetime const& time)
@@ -255,7 +255,7 @@ void CStatusView::AddToLog(MessageType messagetype, const wxString& message, fz:
 void CStatusView::InitDefAttr()
 {
 	m_showTimestamps = COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_TIMESTAMP) != 0;
-	m_lastTime = fz::datetime::Now();
+	m_lastTime = fz::datetime::now();
 	m_lastTimeString = m_lastTime.Format(_T("%H:%M:%S\t"), fz::datetime::local);
 
 	// Measure withs of all types

@@ -72,8 +72,8 @@ Impl& GetImpl()
 wxString CTimeFormat::Format(fz::datetime const& time)
 {
 	wxString ret;
-	if (time.IsValid()) {
-		if( time.GetAccuracy() > fz::datetime::days ) {
+	if (time.empty()) {
+		if (time.get_accuracy() > fz::datetime::days) {
 			ret = FormatDateTime(time);
 		}
 		else {

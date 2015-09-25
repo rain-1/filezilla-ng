@@ -119,8 +119,8 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		}
 
 		int elapsed_milli_seconds = 0;
-		if (status_.started.IsValid()) {
-			elapsed = fz::datetime::Now() - status_.started;
+		if (status_.started.empty()) {
+			elapsed = fz::datetime::now() - status_.started;
 			elapsed_milli_seconds = static_cast<int>(elapsed.get_milliseconds()); // Assume it doesn't overflow
 		}
 

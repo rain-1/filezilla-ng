@@ -445,7 +445,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 	scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
-		fz::duration const span = fz::datetime::Now() - iter->time;
+		fz::duration const span = fz::datetime::now() - iter->time;
 		if (span.get_seconds() >= m_options.GetOptionVal(OPTION_RECONNECTDELAY) ||
 			iter->server == server || (!critical && (iter->server.GetHost() == server.GetHost() && iter->server.GetPort() == server.GetPort())))
 		{
@@ -459,7 +459,7 @@ void CFileZillaEnginePrivate::RegisterFailedLoginAttempt(const CServer& server, 
 
 	t_failedLogins failure;
 	failure.server = server;
-	failure.time = fz::datetime::Now();
+	failure.time = fz::datetime::now();
 	failure.critical = critical;
 	m_failedLogins.push_back(failure);
 }
@@ -469,7 +469,7 @@ unsigned int CFileZillaEnginePrivate::GetRemainingReconnectDelay(const CServer& 
 	scoped_lock lock(mutex_);
 	std::list<t_failedLogins>::iterator iter = m_failedLogins.begin();
 	while (iter != m_failedLogins.end()) {
-		fz::duration const span = fz::datetime::Now() - iter->time;
+		fz::duration const span = fz::datetime::now() - iter->time;
 		const int delay = m_options.GetOptionVal(OPTION_RECONNECTDELAY);
 		if (span.get_seconds() >= delay) {
 			std::list<t_failedLogins>::iterator prev = iter;
@@ -876,7 +876,7 @@ void CTransferStatusManager::SetStartTime()
 	if (!status_)
 		return;
 
-	status_.started = fz::datetime::Now();
+	status_.started = fz::datetime::now();
 }
 
 void CTransferStatusManager::SetMadeProgress()
