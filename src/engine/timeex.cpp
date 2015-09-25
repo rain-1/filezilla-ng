@@ -59,7 +59,7 @@ bool parse(C const*& it, C const* end, int count, T & v, int offset)
 }
 
 template<typename String>
-bool do_set(datetime& t, String const& str, datetime::zone z)
+bool do_set(datetime& dt, String const& str, datetime::zone z)
 {
 	auto const* it = str.c_str();
 	auto const* end = it + str.size();
@@ -70,7 +70,7 @@ bool do_set(datetime& t, String const& str, datetime::zone z)
 		!parse(it, end, 2, st.wMonth, 0) ||
 		!parse(it, end, 2, st.wDay, 0))
 	{
-		t.clear();
+		dt.clear();
 		return false;
 	}
 
@@ -87,18 +87,18 @@ bool do_set(datetime& t, String const& str, datetime::zone z)
 			}
 		}
 	}
-	return t.set(st, a, z);
+	return dt.set(st, a, z);
 #else
 	tm t{};
 	if (!parse(it, end, 4, t.tm_year, -1900) ||
 		!parse(it, end, 2, t.tm_mon, -1) ||
 		!parse(it, end, 2, t.tm_mday, 0))
 	{
-		t.clear();
+		dt.clear();
 		return false;
 	}
 
-	accuracy a = datetime::days;
+	datetime::accuracy a = datetime::days;
 	int64_t ms{};
 	if (parse(it, end, 2, t.tm_hour, 0)) {
 		a = datetime::hours;
@@ -112,9 +112,9 @@ bool do_set(datetime& t, String const& str, datetime::zone z)
 			}
 		}
 	}
-	bool success = t.set(t, a, z);
+	bool success = dt.set(t, a, z);
 	if (success) {
-		t_ += ms;
+		dt += duration::from_milliseconds(ms);
 	}
 	return success;
 #endif
