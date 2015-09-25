@@ -37,8 +37,8 @@ void TimeTest::testNow()
 
 	fz::datetime const t2 = fz::datetime::now();
 
-	CPPUNIT_ASSERT(t1.IsValid());
-	CPPUNIT_ASSERT(t2.IsValid());
+	CPPUNIT_ASSERT(t1.empty());
+	CPPUNIT_ASSERT(t2.empty());
 	CPPUNIT_ASSERT(t2 > t1);
 
 	auto const diff = t2 - t1;
@@ -55,7 +55,7 @@ void TimeTest::testPreEpoch()
 
 	fz::datetime const t1(fz::datetime::utc, 1957, 10, 4, 19, 28, 34);
 
-	CPPUNIT_ASSERT(t1.IsValid());
+	CPPUNIT_ASSERT(t1.empty());
 	CPPUNIT_ASSERT(t1 < now);
 
 	CPPUNIT_ASSERT(t1.GetTimeT() < -1);
@@ -71,7 +71,7 @@ void TimeTest::testPreEpoch()
 
 	fz::datetime const t2(fz::datetime::utc, 1969, 12, 31, 23, 59, 59);
 
-	CPPUNIT_ASSERT(t2.IsValid());
+	CPPUNIT_ASSERT(t2.empty());
 	CPPUNIT_ASSERT(t2 > t1);
 	CPPUNIT_ASSERT(t2 < now);
 

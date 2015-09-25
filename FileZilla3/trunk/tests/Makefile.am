@@ -15,11 +15,12 @@ test_SOURCES =  test.cpp \
 
 test_CPPFLAGS = -I$(top_srcdir)/src/include
 test_CPPFLAGS += -I$(top_srcdir)/src/engine
+test_CPPFLAGS += -I$(top_srcdir)/lib
 test_CPPFLAGS += $(WX_CPPFLAGS)
 test_CXXFLAGS = $(WX_CXXFLAGS_ONLY) $(CPPUNIT_CFLAGS)
 
 test_LDFLAGS = $(CPPUNIT_LIBS)
-test_LDFLAGS += ../src/engine/libengine.a
+test_LDFLAGS += ../src/engine/libengine.a ../lib/libfilezilla.a
 test_LDFLAGS += $(LIBGNUTLS_LIBS)
 test_LDFLAGS += $(WX_LIBS)
 test_LDFLAGS += $(IDN_LIB)
