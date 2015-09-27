@@ -28,7 +28,6 @@ libengine_a_SOURCES = \
 		logging.cpp \
 		misc.cpp \
 		msgbox.cpp \
-		mutex.cpp \
 		notification.cpp \
 		option_change_event_handler.cpp \
 		pathcache.cpp \
