@@ -1,6 +1,6 @@
 #include <libfilezilla_engine.h>
 
-#include <timeex.h>
+#include <fz_time.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -46,7 +46,7 @@ void TimeTest::testNow()
 	CPPUNIT_ASSERT(diff.get_seconds() >= 2);
 	CPPUNIT_ASSERT(diff.get_seconds() < 4); // May fail if running on a computer for ants
 
-	CPPUNIT_ASSERT(t1.GetTimeT() > 1431333788); // The time this test was written
+	CPPUNIT_ASSERT(t1.get_time_t() > 1431333788); // The time this test was written
 }
 
 void TimeTest::testPreEpoch()
@@ -58,9 +58,9 @@ void TimeTest::testPreEpoch()
 	CPPUNIT_ASSERT(t1.empty());
 	CPPUNIT_ASSERT(t1 < now);
 
-	CPPUNIT_ASSERT(t1.GetTimeT() < -1);
+	CPPUNIT_ASSERT(t1.get_time_t() < -1);
 
-	auto const tm1 = t1.GetTm(fz::datetime::utc);
+	auto const tm1 = t1.get_tm(fz::datetime::utc);
 	CPPUNIT_ASSERT_EQUAL(57, tm1.tm_year);
 	CPPUNIT_ASSERT_EQUAL(9,  tm1.tm_mon);
 	CPPUNIT_ASSERT_EQUAL(4,  tm1.tm_mday);
@@ -75,7 +75,7 @@ void TimeTest::testPreEpoch()
 	CPPUNIT_ASSERT(t2 > t1);
 	CPPUNIT_ASSERT(t2 < now);
 
-	auto const tm2 = t2.GetTm(fz::datetime::utc);
+	auto const tm2 = t2.get_tm(fz::datetime::utc);
 	CPPUNIT_ASSERT_EQUAL(69, tm2.tm_year);
 	CPPUNIT_ASSERT_EQUAL(11, tm2.tm_mon);
 	CPPUNIT_ASSERT_EQUAL(31, tm2.tm_mday);

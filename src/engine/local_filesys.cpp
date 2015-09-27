@@ -694,7 +694,7 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const fz::datet
 	return ret;
 #else
 	utimbuf utm{};
-	utm.actime = t.GetTimeT();
+	utm.actime = t.get_time_t();
 	utm.modtime = utm.actime;
 	return utime(path.fn_str(), &utm) == 0;
 #endif
