@@ -37,7 +37,7 @@ protected:
 
 	COptionsBase& options_;
 
-	void WakeupWaitingObjects(scoped_lock & l);
+	void WakeupWaitingObjects(fz::scoped_lock & l);
 
 	void OnOptionsChanged(changed_options_t const& options);
 
@@ -45,7 +45,7 @@ protected:
 	void OnTimer(timer_id id);
 	void OnRateChanged();
 
-	mutex sync_;
+	fz::mutex sync_;
 };
 
 struct ratelimit_changed_event_type{};

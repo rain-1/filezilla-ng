@@ -273,7 +273,7 @@ int COptions::GetOptionVal(unsigned int nID)
 	if (nID >= OPTIONS_NUM)
 		return 0;
 
-	scoped_lock l(m_sync_);
+	fz::scoped_lock l(m_sync_);
 	return m_optionsCache[nID].numValue;
 }
 
@@ -282,7 +282,7 @@ wxString COptions::GetOption(unsigned int nID)
 	if (nID >= OPTIONS_NUM)
 		return wxString();
 
-	scoped_lock l(m_sync_);
+	fz::scoped_lock l(m_sync_);
 	return m_optionsCache[nID].strValue;
 }
 
@@ -321,7 +321,7 @@ void COptions::ContinueSetOption(unsigned int nID, T const& value)
 	T validated = Validate(nID, value);
 
 	{
-		scoped_lock l(m_sync_);
+		fz::scoped_lock l(m_sync_);
 		if (m_optionsCache[nID] == validated) {
 			// Nothing to do
 			return;
@@ -359,7 +359,7 @@ bool COptions::OptionFromFzDefaultsXml(unsigned int nID)
 	if (nID >= OPTIONS_NUM)
 		return false;
 
-	scoped_lock l(m_sync_);
+	fz::scoped_lock l(m_sync_);
 	return m_optionsCache[nID].from_default;
 }
 
@@ -674,11 +674,11 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 		wxString value = GetTextElement(option);
 		if (options[iter->second].flags == default_priority) {
 			if (allowDefault) {
-				scoped_lock l(m_sync_);
+				fz::scoped_lock l(m_sync_);
 				m_optionsCache[iter->second].from_default = true;
 			}
 			else {
-				scoped_lock l(m_sync_);
+				fz::scoped_lock l(m_sync_);
 				if (m_optionsCache[iter->second].from_default)
 					return;
 			}
@@ -688,12 +688,12 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 			long numValue = 0;
 			value.ToLong(&numValue);
 			numValue = Validate(iter->second, numValue);
-			scoped_lock l(m_sync_);
+			fz::scoped_lock l(m_sync_);
 			m_optionsCache[iter->second] = numValue;
 		}
 		else {
 			value = Validate(iter->second, value);
-			scoped_lock l(m_sync_);
+			fz::scoped_lock l(m_sync_);
 			m_optionsCache[iter->second] = value;
 		}
 	}
@@ -859,7 +859,7 @@ CLocalPath COptions::InitSettingsDir()
 
 void COptions::SetDefaultValues()
 {
-	scoped_lock l(m_sync_);
+	fz::scoped_lock l(m_sync_);
 	for (int i = 0; i < OPTIONS_NUM; ++i) {
 		m_optionsCache[i] = options[i].defaultValue;
 		m_optionsCache[i].from_default = false;

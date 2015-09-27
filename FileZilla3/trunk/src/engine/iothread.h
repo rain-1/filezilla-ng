@@ -73,8 +73,8 @@ protected:
 	char* m_buffers[BUFFERCOUNT];
 	unsigned int m_bufferLens[BUFFERCOUNT];
 
-	mutex m_mutex;
-	condition m_condition;
+	fz::mutex m_mutex;
+	fz::condition m_condition;
 
 	int m_curAppBuf{};
 	int m_curThreadBuf{};

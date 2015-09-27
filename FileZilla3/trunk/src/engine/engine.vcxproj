@@ -96,7 +96,6 @@
     <ClCompile Include="logging.cpp" />
     <ClCompile Include="misc.cpp" />
     <ClCompile Include="msgbox.cpp" />
-    <ClCompile Include="mutex.cpp" />
     <ClCompile Include="notification.cpp" />
     <ClCompile Include="option_change_event_handler.cpp" />
     <ClCompile Include="pathcache.cpp" />
@@ -120,7 +119,6 @@
     <ClInclude Include="..\include\event_handler.h" />
     <ClInclude Include="..\include\event_loop.h" />
     <ClInclude Include="..\include\file.h" />
-    <ClInclude Include="..\include\mutex.h" />
     <ClInclude Include="..\include\refcount.h" />
     <ClInclude Include="..\include\fzstring.h" />
     <ClInclude Include="backend.h" />

@@ -18,7 +18,6 @@ noinst_HEADERS = \
 	logging.h \
 	misc.h \
 	msgbox.h \
-	mutex.h \
 	notification.h \
 	optional.h \
 	optionsbase.h \

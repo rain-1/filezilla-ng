@@ -15,14 +15,14 @@ CEventLoop::CEventLoop()
 CEventLoop::~CEventLoop()
 {
 	{
-		scoped_lock lock(sync_);
+		fz::scoped_lock lock(sync_);
 		quit_ = true;
 		cond_.signal(lock);
 	}
 
 	Wait(wxTHREAD_WAIT_BLOCK);
 
-	scoped_lock lock(sync_);
+	fz::scoped_lock lock(sync_);
 	for (auto & v : pending_events_) {
 		delete v.second;
 	}
@@ -31,7 +31,7 @@ CEventLoop::~CEventLoop()
 void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 {
 	{
-		scoped_lock lock(sync_);
+		fz::scoped_lock lock(sync_);
 		if (!handler->removing_) {
 			if (pending_events_.empty()) {
 				cond_.signal(lock);
@@ -46,7 +46,7 @@ void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 
 void CEventLoop::RemoveHandler(CEventHandler* handler)
 {
-	scoped_lock l(sync_);
+	fz::scoped_lock l(sync_);
 
 	handler->removing_ = true;
 
@@ -83,7 +83,7 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 
 void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> const& filter)
 {
-	scoped_lock l(sync_);
+	fz::scoped_lock l(sync_);
 
 	pending_events_.erase(
 		std::remove_if(pending_events_.begin(), pending_events_.end(),
@@ -108,7 +108,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, fz::duration const& interv
 	}
 	d.deadline_ = fz::monotonic_clock::now() + interval;
 
-	scoped_lock lock(sync_);
+	fz::scoped_lock lock(sync_);
 	if (!handler->removing_) {
 		d.id_ = ++next_timer_id_; // 64bit, can this really ever overflow?
 
@@ -125,7 +125,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, fz::duration const& interv
 void CEventLoop::StopTimer(timer_id id)
 {
 	if (id) {
-		scoped_lock lock(sync_);
+		fz::scoped_lock lock(sync_);
 		for (auto it = timers_.begin(); it != timers_.end(); ++it) {
 			if (it->id_ == id) {
 				timers_.erase(it);
@@ -138,7 +138,7 @@ void CEventLoop::StopTimer(timer_id id)
 	}
 }
 
-bool CEventLoop::ProcessEvent(scoped_lock & l)
+bool CEventLoop::ProcessEvent(fz::scoped_lock & l)
 {
 	Events::value_type ev{};
 
@@ -166,7 +166,7 @@ bool CEventLoop::ProcessEvent(scoped_lock & l)
 
 wxThread::ExitCode CEventLoop::Entry()
 {
-	scoped_lock l(sync_);
+	fz::scoped_lock l(sync_);
 	while (!quit_) {
 		fz::monotonic_clock const now(fz::monotonic_clock::now());
 		if (ProcessTimers(l, now)) {
@@ -189,7 +189,7 @@ wxThread::ExitCode CEventLoop::Entry()
 	return 0;
 }
 
-bool CEventLoop::ProcessTimers(scoped_lock & l, fz::monotonic_clock const& now)
+bool CEventLoop::ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& now)
 {
 	if (!deadline_ || now < deadline_) {
 		// There's no deadline or deadline has not yet expired

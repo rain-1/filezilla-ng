@@ -14,7 +14,8 @@ but for some operations the engine/interface prefers to retrieve a clean
 version.
 */
 
-#include <mutex.h>
+#include "fz_mutex.hpp"
+
 #include <set>
 
 const int CACHE_TIMEOUT = 900; // In seconds
@@ -96,7 +97,7 @@ protected:
 
 	bool Lookup(tCacheIter &cacheIter, tServerIter &sit, const CServerPath &path, bool allowUnsureEntries, bool& is_outdated);
 
-	mutex mutex_;
+	fz::mutex mutex_;
 
 	std::list<CServerEntry> m_serverList;
 

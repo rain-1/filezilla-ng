@@ -2,7 +2,7 @@
 #define __LOGGING_PRIVATE_H__
 
 #include "engineprivate.h"
-#include <mutex.h>
+#include "fz_mutex.hpp"
 #include <utility>
 
 class CLogging
@@ -91,7 +91,7 @@ private:
 
 	static int m_refcount;
 
-	static mutex mutex_;
+	static fz::mutex mutex_;
 
 #if HAVE_NO_THREAD_LOCAL
 	// Fixme: Get rid of this once OS X's clang supports it.

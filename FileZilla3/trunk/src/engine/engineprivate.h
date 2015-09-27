@@ -7,7 +7,7 @@
 #include "event.h"
 #include "event_handler.h"
 #include "FileZillaEngine.h"
-#include "mutex.h"
+#include "fz_mutex.hpp"
 #include "option_change_event_handler.h"
 
 #include <atomic>
@@ -44,7 +44,7 @@ public:
 	CTransferStatus Get(bool &changed);
 
 protected:
-	mutex mutex_;
+	fz::mutex mutex_;
 
 	CTransferStatus status_;
 	std::atomic<int64_t> currentOffset_{};
@@ -142,10 +142,10 @@ protected:
 
 	// General mutex for operations on the engine
 	// Todo: More fine-grained locking, a global mutex isn't nice
-	static mutex mutex_;
+	static fz::mutex mutex_;
 
 	// Used to synchronize access to the notification list
-	mutex notification_mutex_;
+	fz::mutex notification_mutex_;
 
 	wxEvtHandler *m_pEventHandler{};
 
