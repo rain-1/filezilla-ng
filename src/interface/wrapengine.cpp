@@ -977,7 +977,7 @@ bool CWrapEngine::LoadCache()
 			continue;
 
 		fz::datetime const date = CLocalFileSystem::GetModificationTime(resourceDir.GetPath() + xrc);
-		wxString const ticks = std::to_wstring(date.GetTimeT());
+		wxString const ticks = std::to_wstring(date.get_time_t());
 
 		auto resourceElement = FindElementWithAttribute(resources, "xrc", "file", xrc.mb_str());
 		if (!resourceElement) {
@@ -1051,7 +1051,7 @@ bool CWrapEngine::LoadCache()
 
 	if (!name.empty()) {
 		fz::datetime const date = CLocalFileSystem::GetModificationTime(localesDir.GetPath() + name + _T("/filezilla.mo"));
-		wxString const ticks = std::to_wstring(date.GetTimeT());
+		wxString const ticks = std::to_wstring(date.get_time_t());
 
 		wxString languageNodeDate = GetTextAttribute(languageElement, "date");
 		if (languageNodeDate.empty() || languageNodeDate != ticks) {

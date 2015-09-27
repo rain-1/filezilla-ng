@@ -1790,7 +1790,7 @@ int CSftpControlSocket::FileTransferSend()
 
 		wxString quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 		// Y2K38
-		time_t ticks = pData->fileTime.GetTimeT();
+		time_t ticks = pData->fileTime.get_time_t();
 		wxString seconds = wxString::Format(_T("%d"), (int)ticks);
 		if (!SendCommand(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),
 			_T("chmtime ") + seconds + _T(" ") + quotedFilename))

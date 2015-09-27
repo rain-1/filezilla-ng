@@ -499,8 +499,8 @@ void CVerifyCertDialog::SetPermanentlyTrusted(CCertificateNotification const& no
 
 	auto xCert = certs.append_child("Certificate");
 	AddTextElement(xCert, "Data", ConvertHexToString(data, len));
-	AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().GetTimeT()));
-	AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().GetTimeT()));
+	AddTextElement(xCert, "ActivationTime", static_cast<int64_t>(certificate.GetActivationTime().get_time_t()));
+	AddTextElement(xCert, "ExpirationTime", static_cast<int64_t>(certificate.GetExpirationTime().get_time_t()));
 	AddTextElement(xCert, "Host", notification.GetHost());
 	AddTextElement(xCert, "Port", notification.GetPort());
 

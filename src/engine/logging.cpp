@@ -146,7 +146,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 #else
 		_T("\n"),
 #endif
-		now.Format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
+		now.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
 
 	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
 	if (utf8) {

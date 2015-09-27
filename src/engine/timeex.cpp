@@ -194,7 +194,7 @@ bool datetime::operator==(datetime const& op) const
 bool datetime::clamped()
 {
 	bool ret = true;
-	tm t = GetTm(utc);
+	tm t = get_tm(utc);
 	if (a_ < milliseconds && get_milliseconds() != 0) {
 		ret = false;
 	}
@@ -248,8 +248,8 @@ int datetime::Compare(datetime const& op) const
 
 int datetime::compare_slow(datetime const& op) const
 {
-	tm t1 = GetTm(utc);
-	tm t2 = op.GetTm(utc);
+	tm const t1 = get_tm(utc);
+	tm const t2 = op.get_tm(utc);
 	if (t1.tm_year < t2.tm_year) {
 		return -1;
 	}
@@ -599,10 +599,10 @@ int CrtAssertSuppressor::refs_{};
 }
 #endif
 
-bool datetime::VerifyFormat(wxString const& fmt)
+bool datetime::verify_format(wxString const& fmt)
 {
 	wxChar buf[4096];
-	tm t = datetime::now().GetTm(utc);
+	tm t = datetime::now().get_tm(utc);
 
 #ifdef __VISUALC__
 	CrtAssertSuppressor suppressor;
@@ -619,9 +619,9 @@ duration operator-(datetime const& a, datetime const& b)
 	return duration::from_milliseconds(a.t_ - b.t_);
 }
 
-wxString datetime::Format(wxString const& fmt, zone z) const
+wxString datetime::format(wxString const& fmt, zone z) const
 {
-	tm t = GetTm(z);
+	tm t = get_tm(z);
 
 #ifdef FZ_WINDOWS
 	int const count = 1000;
@@ -649,19 +649,19 @@ wxString datetime::Format(wxString const& fmt, zone z) const
 #endif
 }
 
-time_t datetime::GetTimeT() const
+time_t datetime::get_time_t() const
 {
 	return t_ / 1000;
 }
 
-tm datetime::GetTm(zone z) const
+tm datetime::get_tm(zone z) const
 {
 	tm ret{};
-	time_t t = GetTimeT();
+	time_t t = get_time_t();
 #ifdef FZ_WINDOWS
 	// gmtime_s/localtime_s don't work with negative times
 	if (t < 86400) {
-		FILETIME ft = GetFileTime();
+		FILETIME ft = get_filetime();
 		SYSTEMTIME st;
 		if (FileTimeToSystemTime(&ft, &st)) {
 
@@ -709,7 +709,7 @@ datetime::datetime(FILETIME const& ft, accuracy a)
 	set(ft, a);
 }
 
-FILETIME datetime::GetFileTime() const
+FILETIME datetime::get_filetime() const
 {
 	FILETIME ret{};
 	if (empty()) {
