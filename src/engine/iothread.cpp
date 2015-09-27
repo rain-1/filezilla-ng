@@ -70,7 +70,7 @@ wxThread::ExitCode CIOThread::Entry()
 		while (m_running) {
 			int len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 
-			scoped_lock l(m_mutex);
+			fz::scoped_lock l(m_mutex);
 
 			if (m_appWaiting) {
 				if (!m_evtHandler) {
@@ -106,7 +106,7 @@ wxThread::ExitCode CIOThread::Entry()
 		}
 	}
 	else {
-		scoped_lock l(m_mutex);
+		fz::scoped_lock l(m_mutex);
 		while (m_curAppBuf == -1) {
 			if (!m_running) {
 				return 0;
@@ -158,7 +158,7 @@ int CIOThread::GetNextWriteBuffer(char** pBuffer)
 {
 	wxASSERT(!m_destroyed);
 
-	scoped_lock l(m_mutex);
+	fz::scoped_lock l(m_mutex);
 
 	if (m_error)
 		return IO_Error;
@@ -224,7 +224,7 @@ int CIOThread::GetNextReadBuffer(char** pBuffer)
 
 	int newBuf = (m_curAppBuf + 1) % BUFFERCOUNT;
 
-	scoped_lock l(m_mutex);
+	fz::scoped_lock l(m_mutex);
 
 	if (newBuf == m_curThreadBuf) {
 		if (m_error)
@@ -254,7 +254,7 @@ void CIOThread::Destroy()
 		return;
 	m_destroyed = true;
 
-	scoped_lock l(m_mutex);
+	fz::scoped_lock l(m_mutex);
 
 	m_running = false;
 	if (m_threadWaiting) {
@@ -374,7 +374,7 @@ bool CIOThread::DoWrite(const char* pBuffer, int len)
 
 	const wxString error = wxSysErrorMsg(code);
 
-	scoped_lock locker(m_mutex);
+	fz::scoped_lock locker(m_mutex);
 	m_error_description = error;
 
 	return false;
@@ -382,12 +382,12 @@ bool CIOThread::DoWrite(const char* pBuffer, int len)
 
 wxString CIOThread::GetError()
 {
-	scoped_lock locker(m_mutex);
+	fz::scoped_lock locker(m_mutex);
 	return m_error_description;
 }
 
 void CIOThread::SetEventHandler(CEventHandler* handler)
 {
-	scoped_lock locker(m_mutex);
+	fz::scoped_lock locker(m_mutex);
 	m_evtHandler = handler;
 }

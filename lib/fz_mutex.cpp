@@ -1,11 +1,10 @@
-#include <filezilla.h>
-#include "mutex.h"
+#include "fz_mutex.hpp"
 
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 #include <sys/time.h>
 #endif
 
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 namespace {
 // Static initializers for mutex and condition attributes
 template<int type>
@@ -43,9 +42,11 @@ pthread_condattr_t* init_condattr()
 }
 #endif
 
+namespace fz {
+
 mutex::mutex(bool recursive)
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	(void)recursive; // Critical sections are always recursive
 	InitializeCriticalSection(&m_);
 #else
@@ -55,7 +56,7 @@ mutex::mutex(bool recursive)
 
 mutex::~mutex()
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	DeleteCriticalSection(&m_);
 #else
 	pthread_mutex_destroy(&m_);
@@ -64,7 +65,7 @@ mutex::~mutex()
 
 void mutex::lock()
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	EnterCriticalSection(&m_);
 #else
 	pthread_mutex_lock(&m_);
@@ -73,7 +74,7 @@ void mutex::lock()
 
 void mutex::unlock()
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	LeaveCriticalSection(&m_);
 #else
 	pthread_mutex_unlock(&m_);
@@ -82,9 +83,8 @@ void mutex::unlock()
 
 
 condition::condition()
-	: signalled_()
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	InitializeConditionVariable(&cond_);
 #else
 
@@ -96,7 +96,7 @@ condition::condition()
 
 condition::~condition()
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 #else
 	pthread_cond_destroy(&cond_);
 #endif
@@ -105,7 +105,7 @@ condition::~condition()
 void condition::wait(scoped_lock& l)
 {
 	while (!signalled_) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		SleepConditionVariableCS(&cond_, l.m_, INFINITE);
 #else
 		pthread_cond_wait(&cond_, l.m_);
@@ -120,7 +120,7 @@ bool condition::wait(scoped_lock& l, int timeout_ms)
 		signalled_ = false;
 		return true;
 	}
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	bool const success = SleepConditionVariableCS(&cond_, l.m_, timeout_ms) != 0;
 #else
 	int res;
@@ -159,10 +159,12 @@ void condition::signal(scoped_lock &)
 {
 	if (!signalled_) {
 		signalled_ = true;
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		WakeConditionVariable(&cond_);
 #else
 		pthread_cond_signal(&cond_);
 #endif
 	}
+}
+
 }
