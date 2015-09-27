@@ -1,7 +1,7 @@
 #ifndef __FILEZILLAENGINEPRIVATE_H__
 #define __FILEZILLAENGINEPRIVATE_H__
 
-#include "timeex.h"
+#include "fz_time.hpp"
 
 #include "engine_context.h"
 #include "event.h"
