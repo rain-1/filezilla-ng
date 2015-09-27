@@ -138,7 +138,7 @@ bool CShellExtensionInterface::CreateDragDirectory()
 {
 	for (int i = 0; i < 10; ++i) {
 		auto const now = fz::datetime::now();
-		int64_t value = now.GetTimeT();
+		int64_t value = now.get_time_t();
 		value *= 1000;
 		value += now.get_milliseconds();
 		value *= 10;

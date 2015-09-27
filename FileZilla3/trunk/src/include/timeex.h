@@ -97,18 +97,18 @@ public:
 
 	bool imbue_time(int hour, int minute, int second = -1, int millisecond = -1);
 
-	static bool VerifyFormat(wxString const& fmt);
+	static bool verify_format(wxString const& fmt);
 
-	wxString Format(wxString const& format, zone z) const;
+	wxString format(wxString const& format, zone z) const;
 
 	int get_milliseconds() const { return t_ % 1000; }
 
-	time_t GetTimeT() const;
+	time_t get_time_t() const;
 
-	tm GetTm(zone z) const;
+	tm get_tm(zone z) const;
 
 #ifdef FZ_WINDOWS
-	FILETIME GetFileTime() const;
+	FILETIME get_filetime() const;
 #endif
 
 private:

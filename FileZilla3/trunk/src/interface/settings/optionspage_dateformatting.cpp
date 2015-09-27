@@ -71,7 +71,7 @@ bool COptionsPageDateFormatting::Validate()
 		if (dateformat.empty()) {
 			return DisplayError(_T("ID_CUSTOM_DATEFORMAT"), _("Please enter a custom date format."));
 		}
-		if (!fz::datetime::VerifyFormat(dateformat)) {
+		if (!fz::datetime::verify_format(dateformat)) {
 			return DisplayError(_T("ID_CUSTOM_DATEFORMAT"), _("The custom date format is invalid or contains unsupported format specifiers."));
 		}
 	}
@@ -81,7 +81,7 @@ bool COptionsPageDateFormatting::Validate()
 		if (timeformat.empty()) {
 			return DisplayError(_T("ID_CUSTOM_TIMEFORMAT"), _("Please enter a custom time format."));
 		}
-		if (!fz::datetime::VerifyFormat(timeformat)) {
+		if (!fz::datetime::verify_format(timeformat)) {
 			return DisplayError(_T("ID_CUSTOM_TIMEFORMAT"), _("The custom time format is invalid or contains unsupported format specifiers."));
 		}
 	}

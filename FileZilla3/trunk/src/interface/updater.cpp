@@ -206,10 +206,10 @@ bool CUpdater::Run()
 	}
 
 	auto  const t = fz::datetime::now();
-	COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTDATE, t.Format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::utc));
+	COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTDATE, t.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::utc));
 
 	local_file_.clear();
-	log_ = wxString::Format(_("Started update check on %s\n"), t.Format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local));
+	log_ = wxString::Format(_("Started update check on %s\n"), t.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local));
 
 	wxString build = CBuildInfo::GetBuildType();
 	if( build.empty() ) {

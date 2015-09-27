@@ -1036,7 +1036,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 			if (token[pos] == '.')
 				return true;
 
-			tm t = entry.time.GetTm(fz::datetime::utc);
+			tm t = entry.time.get_tm(fz::datetime::utc);
 			year = t.tm_year + 1900;
 			month = t.tm_mon + 1;
 			day = t.tm_mday;
@@ -1148,7 +1148,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		// Some servers use times only for files newer than 6 months
 		if( year <= 0 ) {
 			wxASSERT( month != -1 && day != -1 );
-			tm const t = fz::datetime::now().GetTm(fz::datetime::utc);
+			tm const t = fz::datetime::now().get_tm(fz::datetime::utc);
 			year = t.tm_year + 1900;
 			int const currentDayOfYear = t.tm_mday + 31 * t.tm_mon;
 			int const fileDayOfYear = day + 31 * (month - 1);

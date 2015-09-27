@@ -680,7 +680,7 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const fz::datet
 		return false;
 
 #ifdef __WXMSW__
-	FILETIME ft = t.GetFileTime();
+	FILETIME ft = t.get_filetime();
 	if (!ft.dwHighDateTime) {
 		return false;
 	}
