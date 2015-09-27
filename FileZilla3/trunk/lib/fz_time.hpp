@@ -1,10 +1,16 @@
-#ifndef __TIMEEX_H__
-#define __TIMEEX_H__
+#ifndef LIBFILEZILLA_TIME_HEADER
+#define LIBFILEZILLA_TIME_HEADER
+
+#include "libfilezilla.hpp"
 
 #include <chrono>
 #include <ctime>
 
 #include <limits>
+
+#ifdef FZ_WINDOWS
+#include "private/windows.hpp"
+#endif
 
 namespace fz {
 
@@ -97,9 +103,11 @@ public:
 
 	bool imbue_time(int hour, int minute, int second = -1, int millisecond = -1);
 
-	static bool verify_format(wxString const& fmt);
+	static bool verify_format(std::string const& fmt);
+	static bool verify_format(std::wstring const& fmt);
 
-	wxString format(wxString const& format, zone z) const;
+	std::string format(std::string const& format, zone z) const;
+	std::wstring format(std::wstring const& format, zone z) const;
 
 	int get_milliseconds() const { return t_ % 1000; }
 
@@ -112,7 +120,7 @@ public:
 #endif
 
 private:
-	int compare_slow( datetime const& op ) const;
+	int compare_slow(datetime const& op) const;
 
 	bool clamped();
 
@@ -258,4 +266,4 @@ inline bool operator>=(monotonic_clock const& a, monotonic_clock const& b)
 
 }
 
-#endif //__TIMEEX_H__
+#endif

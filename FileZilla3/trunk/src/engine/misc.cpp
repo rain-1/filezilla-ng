@@ -4,7 +4,7 @@
 #include <random>
 #include <cstdint>
 
-#include "timeex.h"
+#include "fz_time.hpp"
 #include "tlssocket.h"
 
 wxString GetIPV6LongForm(wxString short_address)

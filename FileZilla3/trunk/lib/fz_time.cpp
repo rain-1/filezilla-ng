@@ -1,9 +1,15 @@
-#include <filezilla.h>
-#include "timeex.h"
+#include "fz_time.hpp"
 
 #ifndef FZ_WINDOWS
 #include <sys/time.h>
+
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
 #endif
+#include "windows.hpp"
+#endif
+
+#include <wchar.h>
 
 #define TIME_ASSERT(x) //assert(x)
 
@@ -599,16 +605,28 @@ int CrtAssertSuppressor::refs_{};
 }
 #endif
 
-bool datetime::verify_format(wxString const& fmt)
+bool datetime::verify_format(std::string const& fmt)
 {
-	wxChar buf[4096];
-	tm t = datetime::now().get_tm(utc);
+	tm const t = datetime::now().get_tm(utc);
+	char buf[4096];
 
 #ifdef __VISUALC__
 	CrtAssertSuppressor suppressor;
 #endif
 
-	return wxStrftime(buf, sizeof(buf) / sizeof(wxChar), fmt, &t) != 0;
+	return strftime(buf, sizeof(buf) / sizeof(char), fmt.c_str(), &t) != 0;
+}
+
+bool datetime::verify_format(std::wstring const& fmt)
+{
+	tm const t = datetime::now().get_tm(utc);
+	wchar_t buf[4096];
+
+#ifdef __VISUALC__
+	CrtAssertSuppressor suppressor;
+#endif
+
+	return wcsftime(buf, sizeof(buf) / sizeof(wchar_t), fmt.c_str(), &t) != 0;
 }
 
 duration operator-(datetime const& a, datetime const& b)
@@ -619,34 +637,36 @@ duration operator-(datetime const& a, datetime const& b)
 	return duration::from_milliseconds(a.t_ - b.t_);
 }
 
-wxString datetime::format(wxString const& fmt, zone z) const
+std::string datetime::format(std::string const& fmt, zone z) const
 {
 	tm t = get_tm(z);
 
-#ifdef FZ_WINDOWS
 	int const count = 1000;
-	wxChar buf[count];
+	char buf[count];
 
 #ifdef __VISUALC__
 	CrtAssertSuppressor suppressor;
 #endif
-	wcsftime(buf, count - 1, fmt, &t);
+	strftime(buf, count - 1, fmt.c_str(), &t);
 	buf[count - 1] = 0;
-	return buf;
-#else
 
-	auto fbuf = fmt.mb_str();
-	if (!fbuf || !*fbuf) {
-		return wxString();
-	}
+	return buf;
+}
+
+std::wstring datetime::format(std::wstring const& fmt, zone z) const
+{
+	tm t = get_tm(z);
 
 	int const count = 1000;
-	char buf[count];
-	strftime(buf, count - 1, fbuf, &t);
+	wchar_t buf[count];
+
+#ifdef __VISUALC__
+	CrtAssertSuppressor suppressor;
+#endif
+	wcsftime(buf, count - 1, fmt.c_str(), &t);
 	buf[count - 1] = 0;
 
 	return buf;
-#endif
 }
 
 time_t datetime::get_time_t() const

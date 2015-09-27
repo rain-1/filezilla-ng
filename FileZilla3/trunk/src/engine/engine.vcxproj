@@ -111,7 +111,6 @@
     <ClCompile Include="socket.cpp">
       <PrecompiledHeader />
     </ClCompile>
-    <ClCompile Include="timeex.cpp" />
     <ClCompile Include="tlssocket.cpp" />
     <ClCompile Include="transfersocket.cpp" />
   </ItemGroup>
@@ -157,7 +156,6 @@
     <ClInclude Include="sftpcontrolsocket.h" />
     <ClInclude Include="..\include\sizeformatting_base.h" />
     <ClInclude Include="..\include\socket.h" />
-    <ClInclude Include="..\include\timeex.h" />
     <ClInclude Include="tlssocket.h" />
     <ClInclude Include="transfersocket.h" />
   </ItemGroup>

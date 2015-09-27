@@ -22,7 +22,7 @@
 // CFileZillaEngine::SetAsyncRequestReply to continue the current operation.
 
 #include "local_path.h"
-#include "timeex.h"
+#include "fz_time.hpp"
 
 class CFileZillaEngine;
 class wxFzEvent final : public wxEvent
