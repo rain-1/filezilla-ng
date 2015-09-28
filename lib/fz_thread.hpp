@@ -17,8 +17,8 @@ Constructing the thread object creates the thread but does not yet start it
 so that you can finish initialization. Call the run method.
 
 [1] Detached threads, that's a race condition by design. You cannot use a
-    detached thread and shutdown your program cleanly. It just isn't
-    possible.
+    detached thread and shutdown your program cleanly. Clean shutdown is hard
+	enough with joinable threads already.
 */
 
 namespace fz {
@@ -33,9 +33,11 @@ public:
 
 	void join();
 
+	// Must not be called from the spawned thread.
 	bool joinable() const;
 
 protected:
+	// The thread's entry point
 	virtual void entry() = 0;
 
 private:
