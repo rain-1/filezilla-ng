@@ -5,11 +5,9 @@
 #include <algorithm>
 
 CEventLoop::CEventLoop()
-	: wxThread(wxTHREAD_JOINABLE)
-	, sync_(false)
+	: sync_(false)
 {
-	Create();
-	Run();
+	run();
 }
 
 CEventLoop::~CEventLoop()
@@ -20,7 +18,7 @@ CEventLoop::~CEventLoop()
 		cond_.signal(lock);
 	}
 
-	Wait(wxTHREAD_WAIT_BLOCK);
+	join();
 
 	fz::scoped_lock lock(sync_);
 	for (auto & v : pending_events_) {
@@ -164,7 +162,7 @@ bool CEventLoop::ProcessEvent(fz::scoped_lock & l)
 	return true;
 }
 
-wxThread::ExitCode CEventLoop::Entry()
+void CEventLoop::entry()
 {
 	fz::scoped_lock l(sync_);
 	while (!quit_) {
@@ -185,8 +183,6 @@ wxThread::ExitCode CEventLoop::Entry()
 			cond_.wait(l);
 		}
 	}
-
-	return 0;
 }
 
 bool CEventLoop::ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& now)
