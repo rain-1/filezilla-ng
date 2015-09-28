@@ -5,6 +5,7 @@
 #include "event.h"
 #include "fz_mutex.hpp"
 #include "fz_time.hpp"
+#include "fz_thread.hpp"
 
 #include <deque>
 #include <functional>
@@ -21,7 +22,7 @@ struct timer_data final
 
 // Timers have precedence over queued events. Too many or too frequent timers can starve processing queued events.
 // If the deadline of multiple timers have expired, they get processed in an unspecified order
-class CEventLoop final : private wxThread
+class CEventLoop final : private fz::thread
 {
 public:
 	typedef std::deque<std::pair<CEventHandler*, CEventBase*>> Events;
@@ -52,7 +53,7 @@ protected:
 	// Process timers. Returns true if a timer has been triggered
 	bool ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& now);
 
-	virtual wxThread::ExitCode Entry();
+	virtual void entry();
 
 	typedef std::vector<timer_data> Timers;
 

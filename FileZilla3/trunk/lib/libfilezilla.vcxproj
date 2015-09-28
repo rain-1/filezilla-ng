@@ -61,12 +61,14 @@
   <ItemGroup>
     <ClCompile Include="fz_mutex.cpp" />
     <ClCompile Include="fz_string.cpp" />
+    <ClCompile Include="fz_thread.cpp" />
     <ClCompile Include="fz_time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fz_config.hpp" />
     <ClInclude Include="fz_mutex.hpp" />
     <ClInclude Include="fz_string.hpp" />
+    <ClInclude Include="fz_thread.hpp" />
     <ClInclude Include="fz_time.hpp" />
     <ClInclude Include="libfilezilla.hpp" />
   </ItemGroup>
