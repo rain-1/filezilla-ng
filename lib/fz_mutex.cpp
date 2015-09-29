@@ -1,6 +1,7 @@
 #include "fz_mutex.hpp"
 
 #ifndef FZ_WINDOWS
+#include <errno.h>
 #include <sys/time.h>
 #endif
 
