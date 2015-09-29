@@ -6661,7 +6661,7 @@ msgid ""
 msgstr ""
 "Mae'r safle presennol yn defnyddio math gweinydd gwahanol i'r hyn yn y nodau "
 "cysylltiadau byd-eang.\n"
-"\vDefnyddiwch nodau cysylltiadau penodol ar gyfer y gweinydd hwn."
+"Defnyddiwch nodau cysylltiadau penodol ar gyfer y gweinydd hwn."
 
 #: ../../locales/../src/engine/engineprivate.cpp:285
 msgid "Selected port usually in use by a different protocol."
