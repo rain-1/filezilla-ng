@@ -5,6 +5,7 @@
 
 #include "private/windows.hpp"
 #else
+#include <iconv.h>
 #include <strings.h>
 #endif
 
@@ -66,22 +67,43 @@ std::wstring to_wstring(std::string const& in)
 
 // Converts from UTF-8 into wstring
 // Undefined behavior if input string is not valid UTF-8.
-// Does not handle embedded nulls
 std::wstring to_wstring_from_utf8(std::string const& in)
 {
 	std::wstring ret;
 
+	if (!in.empty()) {
 #if FZ_WINDOWS
-	char const* const in_p = in.c_str();
-	int len = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, in_p, in.size(), 0, 0);
-	if (len > 0) {
-		ret.resize(len);
-		wchar_t* out_p = &ret[0];
-		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, in_p, len, out_p, len);
-	}
+		char const* const in_p = in.c_str();
+		int len = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, in_p, in.size(), 0, 0);
+		if (len > 0) {
+			ret.resize(len);
+			wchar_t* out_p = &ret[0];
+			MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, in_p, len, out_p, len);
+		}
 #else
-#error "Not implemented"
+		iconv_t cd = iconv_open("WCHAR_T", "UTF-8");
+		if (cd != reinterpret_cast<iconv_t>(-1)) {
+			char * in_p = const_cast<char*>(in.c_str());
+			size_t in_len = in.size();
+
+			size_t out_len = in_len * sizeof(wchar_t) * 2;
+			char* out_buf = new char[out_len];
+			char* out_p = out_buf;
+
+			size_t r = iconv(cd, &in_p, &in_len, &out_p, &out_len);
+
+			if (r != static_cast<size_t>(-1)) {
+				ret.assign(reinterpret_cast<wchar_t*>(out_buf), reinterpret_cast<wchar_t*>(out_p));
+			}
+
+			// Our buffer should big enough as well, so we can ignore errors such as E2BIG.
+
+			delete [] out_buf;
+
+			iconv_close(cd);
+		}
 #endif
+	}
 
 	return ret;
 }
