@@ -36,7 +36,7 @@ public:
 	virtual void entry() = 0;
 };
 
-extern "C" static unsigned __stdcall thread_proc(void* arg)
+static unsigned __stdcall thread_proc(void* arg)
 {
 	entry_dispatch* e = static_cast<entry_dispatch*>(arg);
 	if (e) {
