@@ -1,6 +1,7 @@
 #include "fz_thread.hpp"
 #include "fz_mutex.hpp"
 
+#include <cstdlib>
 #include <thread>
 
 #if defined(FZ_WINDOWS) && (defined(__MINGW32__) || defined(__MINGW64__))
