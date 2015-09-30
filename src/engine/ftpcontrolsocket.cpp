@@ -4295,7 +4295,7 @@ bool CFtpControlSocket::CheckInclusion(const CDirectoryListing& listing1, const 
 	return true;
 }
 
-void CFtpControlSocket::OnTimer(timer_id id)
+void CFtpControlSocket::OnTimer(fz::timer_id id)
 {
 	if (id != m_idleTimer) {
 		CControlSocket::OnTimer(id);
@@ -4384,13 +4384,13 @@ int CFtpControlSocket::ParseSubcommandResult(int prevResult)
 	return FZ_REPLY_ERROR;
 }
 
-void CFtpControlSocket::operator()(CEventBase const& ev)
+void CFtpControlSocket::operator()(fz::CEventBase const& ev)
 {
-	if (Dispatch<CTimerEvent>(ev, this, &CFtpControlSocket::OnTimer)) {
+	if (fz::dispatch<fz::CTimerEvent>(ev, this, &CFtpControlSocket::OnTimer)) {
 		return;
 	}
 
-	if (Dispatch<CExternalIPResolveEvent>(ev, this, &CFtpControlSocket::OnExternalIPAddress)) {
+	if (fz::dispatch<CExternalIPResolveEvent>(ev, this, &CFtpControlSocket::OnExternalIPAddress)) {
 		return;
 	}
 

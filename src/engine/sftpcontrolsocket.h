@@ -125,7 +125,7 @@ protected:
 	CProcess* m_pProcess{};
 	CSftpInputThread* m_pInputThread{};
 
-	virtual void operator()(CEventBase const& ev);
+	virtual void operator()(fz::CEventBase const& ev);
 	void OnSftpEvent();
 	void OnTerminate();
 

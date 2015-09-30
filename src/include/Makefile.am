@@ -1,7 +1,6 @@
 # these are the headers for your project
 
 noinst_HEADERS = \
-	apply.h \
 	commands.h \
 	directorylisting.h \
 	engine_context.h \

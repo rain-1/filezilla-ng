@@ -299,9 +299,9 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	return read;
 }
 
-void CTlsSocket::operator()(CEventBase const& ev)
+void CTlsSocket::operator()(fz::CEventBase const& ev)
 {
-	Dispatch<CSocketEvent>(ev, this, &CTlsSocket::OnSocketEvent);
+	fz::dispatch<CSocketEvent>(ev, this, &CTlsSocket::OnSocketEvent);
 }
 
 void CTlsSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
@@ -1096,7 +1096,7 @@ int CTlsSocket::VerifyCertificate()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-void CTlsSocket::OnRateAvailable(enum CRateLimiter::rate_direction)
+void CTlsSocket::OnRateAvailable(CRateLimiter::rate_direction)
 {
 }
 

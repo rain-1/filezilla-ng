@@ -8,10 +8,10 @@ class COptionsBase;
 class CRateLimiterObject;
 
 // This class implements a simple rate limiter based on the Token Bucket algorithm.
-class CRateLimiter final : protected CEventHandler, COptionChangeEventHandler
+class CRateLimiter final : protected fz::CEventHandler, COptionChangeEventHandler
 {
 public:
-	CRateLimiter(CEventLoop& loop, COptionsBase& options);
+	CRateLimiter(fz::CEventLoop& loop, COptionsBase& options);
 	~CRateLimiter();
 
 	enum rate_direction
@@ -31,7 +31,7 @@ protected:
 	std::list<CRateLimiterObject*> m_objectList;
 	std::list<CRateLimiterObject*> m_wakeupList[2];
 
-	timer_id m_timer{};
+	fz::timer_id m_timer{};
 
 	int64_t m_tokenDebt[2];
 
@@ -41,15 +41,15 @@ protected:
 
 	void OnOptionsChanged(changed_options_t const& options);
 
-	void operator()(CEventBase const& ev);
-	void OnTimer(timer_id id);
+	void operator()(fz::CEventBase const& ev);
+	void OnTimer(fz::timer_id id);
 	void OnRateChanged();
 
 	fz::mutex sync_;
 };
 
 struct ratelimit_changed_event_type{};
-typedef CEvent<ratelimit_changed_event_type> CRateLimitChangedEvent;
+typedef fz::CEvent<ratelimit_changed_event_type> CRateLimitChangedEvent;
 
 class CRateLimiterObject
 {

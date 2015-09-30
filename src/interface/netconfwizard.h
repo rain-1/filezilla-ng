@@ -11,7 +11,7 @@
 
 class COptions;
 
-class CNetConfWizard final : public wxWizard, protected CWrapEngine, protected CEventHandler
+class CNetConfWizard final : public wxWizard, protected CWrapEngine, protected fz::CEventHandler
 {
 public:
 	CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & context);
@@ -40,7 +40,7 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 	void OnExternalIPAddress2(wxCommandEvent&);
 
-	virtual void operator()(CEventBase const& ev);
+	virtual void operator()(fz::CEventBase const& ev);
 	void OnExternalIPAddress();
 
 	void OnReceive();

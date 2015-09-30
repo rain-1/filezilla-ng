@@ -26,22 +26,22 @@ CPPUNIT_TEST_SUITE_REGISTRATION(EventloopTest);
 
 namespace {
 struct type1;
-typedef CEvent<type1> T1;
+typedef fz::CEvent<type1> T1;
 
 struct type2;
-typedef CEvent<type2, int> T2;
+typedef fz::CEvent<type2, int> T2;
 
 struct type3;
-typedef CEvent<type3> T3;
+typedef fz::CEvent<type3> T3;
 
 struct type4;
-typedef CEvent<type4> T4;
+typedef fz::CEvent<type4> T4;
 
-class target : public CEventHandler
+class target : public fz::CEventHandler
 {
 public:
-	target(CEventLoop & l)
-	: CEventHandler(l)
+	target(fz::CEventLoop & l)
+	: fz::CEventHandler(l)
 	{}
 
 	virtual ~target()
@@ -73,8 +73,8 @@ public:
 		cond_.signal(l);
 	}
 
-	virtual void operator()(CEventBase const& ev) override {
-		CPPUNIT_ASSERT((Dispatch<T1, T2, T3, T4>(ev, this, &target::a, &target::b, &target::c, &target::d)));
+	virtual void operator()(fz::CEventBase const& ev) override {
+		CPPUNIT_ASSERT((fz::dispatch<T1, T2, T3, T4>(ev, this, &target::a, &target::b, &target::c, &target::d)));
 	}
 
 	int a_{};
@@ -88,7 +88,7 @@ public:
 
 void EventloopTest::testSimple()
 {
-	CEventLoop loop;
+	fz::CEventLoop loop;
 
 	target t(loop);
 
@@ -106,11 +106,11 @@ void EventloopTest::testSimple()
 }
 
 namespace {
-class target2 : public CEventHandler
+class target2 : public fz::CEventHandler
 {
 public:
-	target2(CEventLoop & l)
-	: CEventHandler(l)
+	target2(fz::CEventLoop & l)
+	: fz::CEventHandler(l)
 	{}
 
 	virtual ~target2()
@@ -125,7 +125,7 @@ public:
 			CPPUNIT_ASSERT(cond2_.wait(l, 1000));
 		}
 
-		auto f = [&](CEventLoop::Events::value_type& ev) -> bool {
+		auto f = [&](fz::CEventLoop::Events::value_type& ev) -> bool {
 			if (ev.second->derived_type() == T1::type()) {
 				++c_;
 				return true;
@@ -153,8 +153,8 @@ public:
 		cond_.signal(l);
 	}
 
-	virtual void operator()(CEventBase const& ev) override {
-		CPPUNIT_ASSERT((Dispatch<T1, T2, T3>(ev, this, &target2::a, &target2::b, &target2::c)));
+	virtual void operator()(fz::CEventBase const& ev) override {
+		CPPUNIT_ASSERT((fz::dispatch<T1, T2, T3>(ev, this, &target2::a, &target2::b, &target2::c)));
 	}
 
 	int a_{};
@@ -170,7 +170,7 @@ public:
 
 void EventloopTest::testFilter()
 {
-	CEventLoop loop;
+	fz::CEventLoop loop;
 
 	target2 t(loop);
 

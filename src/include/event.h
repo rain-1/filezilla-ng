@@ -1,5 +1,9 @@
-#ifndef FILEZILLA_ENGINE_EVENT_HEADER
-#define FILEZILLA_ENGINE_EVENT_HEADER
+#ifndef LIBFILEZILLA_EVENT_HEADER
+#define LIBFILEZILLA_EVENT_HEADER
+
+#include "libfilezilla.hpp"
+
+namespace fz {
 
 /*
 Common base class for all events.
@@ -80,5 +84,7 @@ bool same_type(CEventBase const& ev)
 typedef unsigned long long timer_id;
 struct timer_event_type{};
 typedef CEvent<timer_event_type, timer_id> CTimerEvent;
+
+}
 
 #endif

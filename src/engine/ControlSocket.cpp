@@ -26,7 +26,7 @@
 #endif
 
 struct obtain_lock_event_type;
-typedef CEvent<obtain_lock_event_type> CObtainLockEvent;
+typedef fz::CEvent<obtain_lock_event_type> CObtainLockEvent;
 
 std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 
@@ -544,7 +544,7 @@ wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /
 	return buffer;
 }
 
-void CControlSocket::OnTimer(timer_id)
+void CControlSocket::OnTimer(fz::timer_id)
 {
 	m_timer = 0; // It's a one-shot timer, no need to stop it
 
@@ -898,9 +898,9 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 	return true;
 }
 
-void CRealControlSocket::operator()(CEventBase const& ev)
+void CRealControlSocket::operator()(fz::CEventBase const& ev)
 {
-	if (!Dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
+	if (!fz::dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
 		&CRealControlSocket::OnSocketEvent,
 		&CRealControlSocket::OnHostAddress))
 	{
@@ -1350,12 +1350,11 @@ int CControlSocket::Chmod(const CChmodCommand&)
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-void CControlSocket::operator()(CEventBase const& ev)
+void CControlSocket::operator()(fz::CEventBase const& ev)
 {
-	if (Dispatch<CTimerEvent>(ev, this, &CControlSocket::OnTimer)) {
-		return;
-	}
-	Dispatch<CObtainLockEvent>(ev, this, &CControlSocket::OnObtainLock);
+	fz::dispatch<fz::CTimerEvent, CObtainLockEvent>(ev, this,
+		&CControlSocket::OnTimer,
+		&CControlSocket::OnObtainLock);
 }
 
 void CControlSocket::SetActive(CFileZillaEngine::_direction direction)

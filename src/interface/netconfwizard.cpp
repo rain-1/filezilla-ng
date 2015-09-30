@@ -28,7 +28,7 @@ TRANSLATE_T("< &Back");
 #endif
 
 CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & engine_context)
-	: CEventHandler(engine_context.GetEventLoop())
+	: fz::CEventHandler(engine_context.GetEventLoop())
 	, m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
 {
 	m_socket = 0;
@@ -1077,9 +1077,9 @@ void CNetConfWizard::OnTimer(wxTimerEvent& event)
 	CloseSocket();
 }
 
-void CNetConfWizard::operator()(CEventBase const& ev)
+void CNetConfWizard::operator()(fz::CEventBase const& ev)
 {
-	if (Dispatch<CExternalIPResolveEvent>(ev, this, &CNetConfWizard::OnExternalIPAddress))
+	if (fz::dispatch<CExternalIPResolveEvent>(ev, this, &CNetConfWizard::OnExternalIPAddress))
 		return;
 }
 

@@ -5,7 +5,7 @@
 
 static int const tickDelay = 250;
 
-CRateLimiter::CRateLimiter(CEventLoop& loop, COptionsBase& options)
+CRateLimiter::CRateLimiter(fz::CEventLoop& loop, COptionsBase& options)
 	: CEventHandler(loop)
 	, options_(options)
 {
@@ -97,7 +97,7 @@ void CRateLimiter::RemoveObject(CRateLimiterObject* pObject)
 	}
 }
 
-void CRateLimiter::OnTimer(timer_id)
+void CRateLimiter::OnTimer(fz::timer_id)
 {
 	fz::scoped_lock lock(sync_);
 
@@ -224,12 +224,11 @@ int CRateLimiter::GetBucketSize() const
 	return bucket_size;
 }
 
-void CRateLimiter::operator()(CEventBase const& ev)
+void CRateLimiter::operator()(fz::CEventBase const& ev)
 {
-	if (Dispatch<CTimerEvent>(ev, this, &CRateLimiter::OnTimer)) {
-		return;
-	}
-	Dispatch<CRateLimitChangedEvent>(ev, this, &CRateLimiter::OnRateChanged);
+	fz::dispatch<fz::CTimerEvent, CRateLimitChangedEvent>(ev, this,
+		&CRateLimiter::OnTimer,
+		&CRateLimiter::OnRateChanged);
 }
 
 void CRateLimiter::OnRateChanged()

@@ -23,7 +23,7 @@ enum EngineNotificationType
 };
 
 struct filezilla_engine_event_type;
-typedef CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
+typedef fz::CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
 
 class CTransferStatusManager final
 {
@@ -53,7 +53,7 @@ protected:
 	CFileZillaEnginePrivate& engine_;
 };
 
-class CFileZillaEnginePrivate final : public CEventHandler, COptionChangeEventHandler
+class CFileZillaEnginePrivate final : public fz::CEventHandler, COptionChangeEventHandler
 {
 public:
 	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context, CFileZillaEngine& parent);
@@ -135,7 +135,7 @@ protected:
 
 	int ContinueConnect();
 
-	void operator()(CEventBase const& ev);
+	void operator()(fz::CEventBase const& ev);
 	void OnEngineEvent(EngineNotificationType type);
 	void OnTimer(int timer_id);
 	void OnCommandEvent();
@@ -192,7 +192,7 @@ protected:
 	};
 	static std::list<t_failedLogins> m_failedLogins;
 	int m_retryCount{};
-	timer_id m_retryTimer{};
+	fz::timer_id m_retryTimer{};
 
 	CRateLimiter& m_rateLimiter;
 	CDirectoryCache& directory_cache_;
@@ -205,9 +205,9 @@ protected:
 };
 
 struct command_event_type{};
-typedef CEvent<command_event_type> CCommandEvent;
+typedef fz::CEvent<command_event_type> CCommandEvent;
 
 struct async_request_reply_event_type{};
-typedef CEvent<async_request_reply_event_type, std::unique_ptr<CAsyncRequestNotification>> CAsyncRequestReplyEvent;
+typedef fz::CEvent<async_request_reply_event_type, std::unique_ptr<CAsyncRequestNotification>> CAsyncRequestReplyEvent;
 
 #endif //__FILEZILLAENGINEPRIVATE_H__
