@@ -3,6 +3,8 @@
 #include "event_handler.h"
 #include "event_loop.h"
 
+#include <cassert>
+
 namespace fz {
 
 event_handler::event_handler(event_loop& loop)
