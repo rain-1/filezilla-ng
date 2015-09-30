@@ -3,7 +3,7 @@
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
-#include "event_loop.h"
+#include "fz_event_loop.hpp"
 #include "pathcache.h"
 #include "local_filesys.h"
 #include "fzprocess.h"

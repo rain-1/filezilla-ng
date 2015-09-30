@@ -14,8 +14,6 @@ libengine_a_SOURCES = \
 		directorylistingparser.cpp \
 		engine_context.cpp \
 		engineprivate.cpp \
-		event_handler.cpp \
-		event_loop.cpp \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
 		file.cpp \

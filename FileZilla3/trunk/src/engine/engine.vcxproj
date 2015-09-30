@@ -80,8 +80,6 @@
     <ClCompile Include="directorylistingparser.cpp" />
     <ClCompile Include="engineprivate.cpp" />
     <ClCompile Include="engine_context.cpp" />
-    <ClCompile Include="event_handler.cpp" />
-    <ClCompile Include="event_loop.cpp" />
     <ClCompile Include="externalipresolver.cpp" />
     <ClCompile Include="file.cpp" />
     <ClCompile Include="FileZillaEngine.cpp">
@@ -115,8 +113,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\engine_context.h" />
-    <ClInclude Include="..\include\event_handler.h" />
-    <ClInclude Include="..\include\event_loop.h" />
     <ClInclude Include="..\include\file.h" />
     <ClInclude Include="..\include\refcount.h" />
     <ClInclude Include="..\include\fzstring.h" />
