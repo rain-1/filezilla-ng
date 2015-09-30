@@ -8,10 +8,10 @@ class COptionsBase;
 class CRateLimiterObject;
 
 // This class implements a simple rate limiter based on the Token Bucket algorithm.
-class CRateLimiter final : protected fz::CEventHandler, COptionChangeEventHandler
+class CRateLimiter final : protected fz::event_handler, COptionChangeEventHandler
 {
 public:
-	CRateLimiter(fz::CEventLoop& loop, COptionsBase& options);
+	CRateLimiter(fz::event_loop& loop, COptionsBase& options);
 	~CRateLimiter();
 
 	enum rate_direction

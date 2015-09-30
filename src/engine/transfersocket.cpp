@@ -10,7 +10,7 @@
 #include "servercapabilities.h"
 
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode)
-: fz::CEventHandler(controlSocket.event_loop_)
+: fz::event_handler(controlSocket.event_loop_)
 , engine_(engine)
 , controlSocket_(controlSocket)
 , m_transferMode(transferMode)
@@ -19,7 +19,7 @@ CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSo
 
 CTransferSocket::~CTransferSocket()
 {
-	RemoveHandler();
+	remove_handler();
 	if (m_transferEndReason == TransferEndReason::none)
 		m_transferEndReason = TransferEndReason::successful;
 	ResetSocket();
@@ -310,7 +310,7 @@ void CTransferSocket::OnReceive()
 			FinalizeWrite();
 		}
 		else {
-			SendEvent<CSocketEvent>(m_pBackend, SocketEventType::read, 0);
+			send_event<CSocketEvent>(m_pBackend, SocketEventType::read, 0);
 		}
 	}
 	else if (m_transferMode == TransferMode::resumetest) {
@@ -411,7 +411,7 @@ void CTransferSocket::OnSend()
 		}
 	}
 	else if (written > 0) {
-		SendEvent<CSocketEvent>(m_pBackend, SocketEventType::write, 0);
+		send_event<CSocketEvent>(m_pBackend, SocketEventType::write, 0);
 	}
 }
 
@@ -573,7 +573,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 	ResetSocket();
 
-	engine_.SendEvent<CFileZillaEngineEvent>(engineTransferEnd);
+	engine_.send_event<CFileZillaEngineEvent>(engineTransferEnd);
 }
 
 CSocket* CTransferSocket::CreateSocketServer(int port)

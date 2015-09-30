@@ -101,7 +101,7 @@ protected:
 		}
 
 		if (sendEvent)
-			m_pOwner->SendEvent<CSftpEvent>();
+			m_pOwner->send_event<CSftpEvent>();
 	}
 
 	int ReadNumber(bool &error)
@@ -284,7 +284,7 @@ protected:
 		}
 loopexit:
 
-		m_pOwner->SendEvent<CTerminateEvent>();
+		m_pOwner->send_event<CTerminateEvent>();
 		return reinterpret_cast<ExitCode>(Close());
 	}
 
@@ -331,7 +331,7 @@ CSftpControlSocket::CSftpControlSocket(CFileZillaEnginePrivate & engine)
 
 CSftpControlSocket::~CSftpControlSocket()
 {
-	RemoveHandler();
+	remove_handler();
 	DoClose();
 }
 

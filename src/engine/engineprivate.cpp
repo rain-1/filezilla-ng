@@ -18,7 +18,7 @@ std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {{0}, {0}};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
 CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent)
-	: CEventHandler(context.GetEventLoop())
+	: event_handler(context.GetEventLoop())
 	, transfer_status_(*this)
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
@@ -57,7 +57,7 @@ bool CFileZillaEnginePrivate::ShouldQueueLogsFromOptions() const
 
 CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 {
-	RemoveHandler();
+	remove_handler();
 	m_maySendNotificationEvent = false;
 
 	m_pControlSocket.reset();
@@ -226,8 +226,8 @@ int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)
 						if (!delay)
 							delay = 1;
 						m_pLogging->LogMessage(MessageType::Status, _("Waiting to retry..."));
-						StopTimer(m_retryTimer);
-						m_retryTimer = AddTimer(fz::duration::from_milliseconds(delay), true);
+						stop_timer(m_retryTimer);
+						m_retryTimer = add_timer(fz::duration::from_milliseconds(delay), true);
 						return FZ_REPLY_WOULDBLOCK;
 					}
 				}
@@ -519,8 +519,8 @@ int CFileZillaEnginePrivate::ContinueConnect()
 	unsigned int delay = GetRemainingReconnectDelay(server);
 	if (delay) {
 		m_pLogging->LogMessage(MessageType::Status, wxPLURAL("Delaying connection for %d second due to previously failed connection attempt...", "Delaying connection for %d seconds due to previously failed connection attempt...", (delay + 999) / 1000), (delay + 999) / 1000);
-		StopTimer(m_retryTimer);
-		m_retryTimer = AddTimer(fz::duration::from_milliseconds(delay), true);
+		stop_timer(m_retryTimer);
+		m_retryTimer = add_timer(fz::duration::from_milliseconds(delay), true);
 		return FZ_REPLY_WOULDBLOCK;
 	}
 
@@ -674,7 +674,7 @@ void CFileZillaEnginePrivate::DoCancel()
 
 		m_pCurrentCommand.reset();
 
-		StopTimer(m_retryTimer);
+		stop_timer(m_retryTimer);
 		m_retryTimer = 0;
 
 		m_pLogging->LogMessage(MessageType::Error, _("Connection attempt interrupted by user"));
@@ -737,7 +737,7 @@ int CFileZillaEnginePrivate::Execute(const CCommand &command)
 	}
 
 	m_pCurrentCommand.reset(command.Clone());
-	SendEvent<CCommandEvent>();
+	send_event<CCommandEvent>();
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -763,7 +763,7 @@ bool CFileZillaEnginePrivate::SetAsyncRequestReply(std::unique_ptr<CAsyncRequest
 		return false;
 	}
 
-	SendEvent<CAsyncRequestReplyEvent>(std::move(pNotification));
+	send_event<CAsyncRequestReplyEvent>(std::move(pNotification));
 
 	return true;
 }
@@ -828,7 +828,7 @@ int CFileZillaEnginePrivate::Cancel()
 	if (!IsBusy())
 		return FZ_REPLY_OK;
 
-	SendEvent<CFileZillaEngineEvent>(engineCancel);
+	send_event<CFileZillaEngineEvent>(engineCancel);
 	return FZ_REPLY_WOULDBLOCK;
 }
 

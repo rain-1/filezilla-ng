@@ -1,5 +1,5 @@
-#ifndef FILEZILLA_ENGINE_EVENT_HANDLER
-#define FILEZILLA_ENGINE_EVENT_HANDLER
+#ifndef LIBFILEZILLA_EVENT_HANDLER
+#define LIBFILEZILLA_EVENT_HANDLER
 
 #include "event_loop.h"
 
@@ -8,21 +8,21 @@ Simple handler for asynchronous event processing.
 
 Usage example:
 	struct foo_event_type{}; // Any uniquely named type that's not implicitly convertible
-	typedef simple_event<foo_event_type, int, std::string> CFooEvent;
+	typedef fz::simple_event<foo_event_type, int, std::string> foo_event;
 
 	struct bar_event_type{};
-	typedef simple_event<bar_event_type> CBarEvent;
+	typedef fz::simple_event<bar_event_type> bar_event;
 
-	class MyHandler final : public CEventHandler
+	class my_handler final : public fz::event_handler
 	{
 	public:
-		MyHandler(CEventLoop& loop)
-			: CEventHandler(loop)
+		my_handler(fz::event_loop& loop)
+			: fz::event_handler(loop)
 		{}
 
-		virtual ~MyHandler()
+		virtual ~my_handler()
 		{
-			RemoveHandler();
+			remove_handler();
 		}
 
 		void foo(int v, std::string const& s) {
@@ -35,39 +35,39 @@ Usage example:
 
 		virtual void operator()(event_base const& ev) {
 			// Tip: Put in order of decreasing frequency
-			Dispatch<CFooEvent, CBarEvent>(ev, this, &MyHandler::foo, &MyHandler::bar);
+			fz::dispatch<foo_event, bar_event>(ev, this, &my_handler::foo, &my_handler::bar);
 		}
 	};
 
-	CEventLoop loop;
-	MyHandler h(loop);
-	h.SendEvent<CFooEvent>(42, "Don't Panic");
+	fz::event_loop loop;
+	my_handler h(loop);
+	h.SendEvent<foo_event>(42, "Don't Panic");
 */
 
 namespace fz {
-class CEventHandler
+class event_handler
 {
 public:
-	CEventHandler() = delete;
+	event_handler() = delete;
 
-	explicit CEventHandler(CEventLoop& loop);
-	virtual ~CEventHandler();
+	explicit event_handler(event_loop& loop);
+	virtual ~event_handler();
 
-	CEventHandler(CEventHandler const&) = delete;
-	CEventHandler& operator=(CEventHandler const&) = delete;
+	event_handler(event_handler const&) = delete;
+	event_handler& operator=(event_handler const&) = delete;
 
 	// Deactivates handler, removes all pending events and stops all timers for this handler.
 	// When function returns, handler is not in its callback anymore.
 	//
-	// You _MUST_ call RemoveHandler no later than inside the destructor of the most derived class.
+	// You _MUST_ call remove_handler no later than inside the destructor of the most derived class.
 	//
 	// This may deadlock if a handler removes itself inside its own callback
-	void RemoveHandler();
+	void remove_handler();
 
 	// Called by the event loop in the worker thread with the event to process
 	//
 	// Override in your derived class.
-	// Consider using the Dispatch function inside.
+	// Consider using the dispatch function inside.
 	virtual void operator()(event_base const&) = 0;
 
 	// Sends the passed event asynchronously to the handler.
@@ -76,8 +76,8 @@ public:
 	//
 	// See also operator()(event_base const&)
 	template<typename T, typename... Args>
-	void SendEvent(Args&&... args) {
-		event_loop_.SendEvent(this, new T(std::forward<Args>(args)...));
+	void send_event(Args&&... args) {
+		event_loop_.send_event(this, new T(std::forward<Args>(args)...));
 	};
 
 	// Adds a timer, returns the timer id.
@@ -93,15 +93,15 @@ public:
 	// there is no fairness guarantee.
 	// Timers take precedence over queued events.
 	// High-frequency timers doing heavy processing can starve other timers and queued events.
-	timer_id AddTimer(fz::duration const& interval, bool one_shot);
+	timer_id add_timer(fz::duration const& interval, bool one_shot);
 
 	// Stops the given timer.
 	// One-shot timers that have fired do not need to be stopped.
-	void StopTimer(timer_id id);
+	void stop_timer(timer_id id);
 
-	CEventLoop & event_loop_;
+	event_loop & event_loop_;
 private:
-	friend class CEventLoop;
+	friend class event_loop;
 	bool removing_{};
 };
 }

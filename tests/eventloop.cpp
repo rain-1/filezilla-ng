@@ -37,22 +37,22 @@ typedef fz::simple_event<type3> T3;
 struct type4;
 typedef fz::simple_event<type4> T4;
 
-class target : public fz::CEventHandler
+class target : public fz::event_handler
 {
 public:
-	target(fz::CEventLoop & l)
-	: fz::CEventHandler(l)
+	target(fz::event_loop & l)
+	: fz::event_handler(l)
 	{}
 
 	virtual ~target()
 	{
-		RemoveHandler();
+		remove_handler();
 	}
 
 	void a()
 	{
 		++a_;
-		SendEvent<T2>(5);
+		send_event<T2>(5);
 	}
 
 	void b(int v)
@@ -64,7 +64,7 @@ public:
 
 	void c()
 	{
-		SendEvent<T4>();
+		send_event<T4>();
 	}
 
 	void d()
@@ -88,15 +88,15 @@ public:
 
 void EventloopTest::testSimple()
 {
-	fz::CEventLoop loop;
+	fz::event_loop loop;
 
 	target t(loop);
 
 	for (int i = 0; i < 1000; ++i) {
-		t.SendEvent<T1>();
+		t.send_event<T1>();
 	}
 
-	t.SendEvent<T3>();
+	t.send_event<T3>();
 
 	fz::scoped_lock l(t.m_);
 	CPPUNIT_ASSERT(t.cond_.wait(l, 1000));
@@ -106,16 +106,16 @@ void EventloopTest::testSimple()
 }
 
 namespace {
-class target2 : public fz::CEventHandler
+class target2 : public fz::event_handler
 {
 public:
-	target2(fz::CEventLoop & l)
-	: fz::CEventHandler(l)
+	target2(fz::event_loop & l)
+	: fz::event_handler(l)
 	{}
 
 	virtual ~target2()
 	{
-		RemoveHandler();
+		remove_handler();
 	}
 
 	void a()
@@ -125,7 +125,7 @@ public:
 			CPPUNIT_ASSERT(cond2_.wait(l, 1000));
 		}
 
-		auto f = [&](fz::CEventLoop::Events::value_type& ev) -> bool {
+		auto f = [&](fz::event_loop::Events::value_type& ev) -> bool {
 			if (ev.second->derived_type() == T1::type()) {
 				++c_;
 				return true;
@@ -138,7 +138,7 @@ public:
 			return false;
 
 		};
-		event_loop_.FilterEvents(f);
+		event_loop_.filter_events(f);
 		++a_;
 	}
 
@@ -170,17 +170,17 @@ public:
 
 void EventloopTest::testFilter()
 {
-	fz::CEventLoop loop;
+	fz::event_loop loop;
 
 	target2 t(loop);
 
 	for (int i = 0; i < 10; ++i) {
-		t.SendEvent<T1>();
+		t.send_event<T1>();
 	}
-	t.SendEvent<T2>(3);
-	t.SendEvent<T2>(5);
+	t.send_event<T2>(3);
+	t.send_event<T2>(5);
 
-	t.SendEvent<T3>();
+	t.send_event<T3>();
 
 	fz::scoped_lock l(t.m_);
 	t.cond2_.signal(l);

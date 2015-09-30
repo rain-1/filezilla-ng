@@ -11,8 +11,8 @@ wxString ip;
 bool checked = false;
 }
 
-CExternalIPResolver::CExternalIPResolver(CEventHandler & handler)
-	: CEventHandler(handler.event_loop_)
+CExternalIPResolver::CExternalIPResolver(event_handler & handler)
+	: event_handler(handler.event_loop_)
 	, m_handler(&handler)
 {
 	ResetHttpData(true);
@@ -226,7 +226,7 @@ void CExternalIPResolver::Close(bool successful)
 	}
 
 	if (m_handler) {
-		m_handler->SendEvent<CExternalIPResolveEvent>();
+		m_handler->send_event<CExternalIPResolveEvent>();
 		m_handler = 0;
 	}
 }

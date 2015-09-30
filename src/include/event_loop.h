@@ -13,10 +13,10 @@
 
 namespace fz {
 
-class CEventHandler;
+class event_handler;
 struct timer_data final
 {
-	CEventHandler* handler_{};
+	event_handler* handler_{};
 	timer_id id_{};
 	monotonic_clock deadline_;
 	duration interval_{};
@@ -24,36 +24,36 @@ struct timer_data final
 
 // Timers have precedence over queued events. Too many or too frequent timers can starve processing queued events.
 // If the deadline of multiple timers have expired, they get processed in an unspecified order
-class CEventLoop final : private thread
+class event_loop final : private thread
 {
 public:
-	typedef std::deque<std::pair<CEventHandler*, event_base*>> Events;
+	typedef std::deque<std::pair<event_handler*, event_base*>> Events;
 
 	// Spawns a thread
-	CEventLoop();
-	virtual ~CEventLoop();
+	event_loop();
+	virtual ~event_loop();
 
-	CEventLoop(CEventLoop const&) = delete;
-	CEventLoop& operator=(CEventLoop const&) = delete;
+	event_loop(event_loop const&) = delete;
+	event_loop& operator=(event_loop const&) = delete;
 
 	// Puts all queued events through the filter function.
 	// The filter function can freely change the passed events.
 	// If the filter function returns true, the corresponding event
 	// gets removed.
-	void FilterEvents(std::function<bool (Events::value_type&)> const& filter);
+	void filter_events(std::function<bool (Events::value_type&)> const& filter);
 
 protected:
-	friend class CEventHandler;
+	friend class event_handler;
 
-	void RemoveHandler(CEventHandler* handler);
+	void remove_handler(event_handler* handler);
 
-	timer_id AddTimer(CEventHandler* handler, duration const& interval, bool one_shot);
-	void StopTimer(timer_id id);
+	timer_id add_timer(event_handler* handler, duration const& interval, bool one_shot);
+	void stop_timer(timer_id id);
 
-	void SendEvent(CEventHandler* handler, event_base* evt);
+	void send_event(event_handler* handler, event_base* evt);
 
 	// Process timers. Returns true if a timer has been triggered
-	bool ProcessTimers(scoped_lock & l, monotonic_clock const& now);
+	bool process_timers(scoped_lock & l, monotonic_clock const& now);
 
 	virtual void entry();
 
@@ -67,10 +67,10 @@ protected:
 
 	bool quit_{};
 
-	CEventHandler * active_handler_{};
+	event_handler * active_handler_{};
 
 	// Process the next (if any) event. Returns true if an event has been processed
-	bool ProcessEvent(scoped_lock & l);
+	bool process_event(scoped_lock & l);
 
 	monotonic_clock deadline_;
 

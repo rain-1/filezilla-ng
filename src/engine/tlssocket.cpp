@@ -21,8 +21,8 @@ void log_func(int level, const char* msg)
 }
 #endif
 
-CTlsSocket::CTlsSocket(CEventHandler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
-	: CEventHandler(pOwner->event_loop_)
+CTlsSocket::CTlsSocket(event_handler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
+	: event_handler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
 	, m_pOwner(pOwner)
 	, m_socket(socket)
@@ -35,7 +35,7 @@ CTlsSocket::CTlsSocket(CEventHandler* pEvtHandler, CSocket& socket, CControlSock
 
 CTlsSocket::~CTlsSocket()
 {
-	RemoveHandler();
+	remove_handler();
 
 	Uninit();
 	delete m_pSocketBackend;
@@ -271,7 +271,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 		m_canReadFromSocket = false;
 		if (error == EAGAIN) {
 			if (m_canCheckCloseSocket && !m_pSocketBackend->IsWaiting(CRateLimiter::inbound)) {
-				SendEvent<CSocketEvent>(m_pSocketBackend, SocketEventType::close, 0);
+				send_event<CSocketEvent>(m_pSocketBackend, SocketEventType::close, 0);
 			}
 		}
 		else {
@@ -285,7 +285,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	}
 
 	if (m_canCheckCloseSocket) {
-		SendEvent<CSocketEvent>(m_pSocketBackend, SocketEventType::close, 0);
+		send_event<CSocketEvent>(m_pSocketBackend, SocketEventType::close, 0);
 	}
 
 	if (!read) {
@@ -338,7 +338,7 @@ void CTlsSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error
 			m_pOwner->LogMessage(MessageType::Debug_Info, _T("CTlsSocket::OnSocketEvent(): close event received"));
 
 			//Uninit();
-			m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, 0);
+			m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, 0);
 		}
 		break;
 	default:
@@ -500,7 +500,7 @@ int CTlsSocket::ContinueHandshake()
 		if (m_shutdown_requested) {
 			int error = Shutdown();
 			if (!error || error != EAGAIN) {
-				m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, 0);
+				m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, 0);
 			}
 		}
 
@@ -642,12 +642,12 @@ void CTlsSocket::TriggerEvents()
 		return;
 
 	if (m_canTriggerRead) {
-		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::read, 0);
+		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::read, 0);
 		m_canTriggerRead = false;
 	}
 
 	if (m_canTriggerWrite) {
-		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::write, 0);
+		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::write, 0);
 		m_canTriggerWrite = false;
 	}
 }
@@ -719,7 +719,7 @@ void CTlsSocket::Failure(int code, bool send_close, const wxString& function)
 	Uninit();
 
 	if (send_close) {
-		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, m_socket_error);
+		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, m_socket_error);
 	}
 }
 
@@ -791,7 +791,7 @@ void CTlsSocket::ContinueShutdown()
 	if (!res) {
 		m_tlsState = TlsState::closed;
 
-		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::close, 0);
+		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, 0);
 
 		return;
 	}
@@ -815,7 +815,7 @@ void CTlsSocket::TrustCurrentCert(bool trusted)
 		CheckResumeFailedReadWrite();
 
 		if (m_tlsState == TlsState::conn) {
-			m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::connection, 0);
+			m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::connection, 0);
 		}
 
 		TriggerEvents();

@@ -111,7 +111,7 @@ enum class TransferEndReason
 };
 
 class CTransferStatus;
-class CControlSocket: public CLogging, public fz::CEventHandler
+class CControlSocket: public CLogging, public fz::event_handler
 {
 public:
 	CControlSocket(CFileZillaEnginePrivate & engine);

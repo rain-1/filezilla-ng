@@ -36,7 +36,7 @@ public:
 	// This handler will receive the CIOThreadEvent events. The events
 	// get triggerd iff a buffer is available after a call to the
 	// GetNext*Buffer functions returned IO_Again
-	void SetEventHandler(fz::CEventHandler* handler);
+	void SetEventHandler(fz::event_handler* handler);
 
 	// Gets next buffer
 	// Return value:  IO_Success on EOF
@@ -64,7 +64,7 @@ protected:
 	bool WriteToFile(char* pBuffer, int len);
 	bool DoWrite(const char* pBuffer, int len);
 
-	fz::CEventHandler* m_evtHandler{};
+	fz::event_handler* m_evtHandler{};
 
 	bool m_read{};
 	bool m_binary{};

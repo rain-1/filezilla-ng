@@ -11,7 +11,7 @@
 
 class COptions;
 
-class CNetConfWizard final : public wxWizard, protected CWrapEngine, protected fz::CEventHandler
+class CNetConfWizard final : public wxWizard, protected CWrapEngine, protected fz::event_handler
 {
 public:
 	CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & context);

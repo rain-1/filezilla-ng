@@ -39,14 +39,14 @@ public:
 	virtual void cb() {}
 };
 
-void RemoveSocketEvents(fz::CEventHandler * handler, CSocketEventSource const* const source);
+void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source);
 
 class CSocketThread;
 class CSocket final : public CSocketEventSource
 {
 	friend class CSocketThread;
 public:
-	CSocket(fz::CEventHandler* pEvtHandler);
+	CSocket(fz::event_handler* pEvtHandler);
 	virtual ~CSocket();
 
 	CSocket(CSocket const&) = delete;
@@ -113,8 +113,8 @@ public:
 	static wxString GetErrorDescription(int error);
 
 	// Can only be called if the state is none
-	void SetEventHandler(fz::CEventHandler* pEvtHandler);
-	fz::CEventHandler* GetEventHandler() { return m_pEvtHandler; }
+	void SetEventHandler(fz::event_handler* pEvtHandler);
+	fz::event_handler* GetEventHandler() { return m_pEvtHandler; }
 
 	static void Cleanup(bool force);
 
@@ -146,7 +146,7 @@ protected:
 
 	void DetachThread();
 
-	fz::CEventHandler* m_pEvtHandler;
+	fz::event_handler* m_pEvtHandler;
 
 	int m_fd;
 
