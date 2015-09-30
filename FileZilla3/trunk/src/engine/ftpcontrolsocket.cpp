@@ -189,7 +189,7 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 
 CFtpControlSocket::~CFtpControlSocket()
 {
-	RemoveHandler();
+	remove_handler();
 	m_pSocket->SetSynchronousReadCallback(0);
 
 	DoClose();
@@ -1735,7 +1735,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 	if (m_pCurOpData && !(nErrorCode & FZ_REPLY_DISCONNECTED))
 		StartKeepaliveTimer();
 	else {
-		StopTimer(m_idleTimer);
+		stop_timer(m_idleTimer);
 		m_idleTimer = 0;
 	}
 
@@ -4345,8 +4345,8 @@ void CFtpControlSocket::StartKeepaliveTimer()
 		return;
 	}
 
-	StopTimer(m_idleTimer);
-	m_idleTimer = AddTimer(fz::duration::from_seconds(30), true);
+	stop_timer(m_idleTimer);
+	m_idleTimer = add_timer(fz::duration::from_seconds(30), true);
 }
 
 int CFtpControlSocket::ParseSubcommandResult(int prevResult)

@@ -6,13 +6,13 @@
 
 namespace fz {
 
-CEventLoop::CEventLoop()
+event_loop::event_loop()
 	: sync_(false)
 {
 	run();
 }
 
-CEventLoop::~CEventLoop()
+event_loop::~event_loop()
 {
 	{
 		scoped_lock lock(sync_);
@@ -28,7 +28,7 @@ CEventLoop::~CEventLoop()
 	}
 }
 
-void CEventLoop::SendEvent(CEventHandler* handler, event_base* evt)
+void event_loop::send_event(event_handler* handler, event_base* evt)
 {
 	{
 		scoped_lock lock(sync_);
@@ -44,7 +44,7 @@ void CEventLoop::SendEvent(CEventHandler* handler, event_base* evt)
 	delete evt;
 }
 
-void CEventLoop::RemoveHandler(CEventHandler* handler)
+void event_loop::remove_handler(event_handler* handler)
 {
 	scoped_lock l(sync_);
 
@@ -81,7 +81,7 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 	}
 }
 
-void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> const& filter)
+void event_loop::filter_events(std::function<bool(Events::value_type &)> const& filter)
 {
 	scoped_lock l(sync_);
 
@@ -99,7 +99,7 @@ void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> const& f
 	);
 }
 
-timer_id CEventLoop::AddTimer(CEventHandler* handler, duration const& interval, bool one_shot)
+timer_id event_loop::add_timer(event_handler* handler, duration const& interval, bool one_shot)
 {
 	timer_data d;
 	d.handler_ = handler;
@@ -122,7 +122,7 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, duration const& interval, 
 	return d.id_;
 }
 
-void CEventLoop::StopTimer(timer_id id)
+void event_loop::stop_timer(timer_id id)
 {
 	if (id) {
 		scoped_lock lock(sync_);
@@ -138,7 +138,7 @@ void CEventLoop::StopTimer(timer_id id)
 	}
 }
 
-bool CEventLoop::ProcessEvent(scoped_lock & l)
+bool event_loop::process_event(scoped_lock & l)
 {
 	Events::value_type ev{};
 
@@ -164,15 +164,15 @@ bool CEventLoop::ProcessEvent(scoped_lock & l)
 	return true;
 }
 
-void CEventLoop::entry()
+void event_loop::entry()
 {
 	scoped_lock l(sync_);
 	while (!quit_) {
 		monotonic_clock const now(monotonic_clock::now());
-		if (ProcessTimers(l, now)) {
+		if (process_timers(l, now)) {
 			continue;
 		}
-		if (ProcessEvent(l)) {
+		if (process_event(l)) {
 			continue;
 		}
 
@@ -187,7 +187,7 @@ void CEventLoop::entry()
 	}
 }
 
-bool CEventLoop::ProcessTimers(scoped_lock & l, monotonic_clock const& now)
+bool event_loop::process_timers(scoped_lock & l, monotonic_clock const& now)
 {
 	if (!deadline_ || now < deadline_) {
 		// There's no deadline or deadline has not yet expired
@@ -216,7 +216,7 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, monotonic_clock const& now)
 			}
 		}
 
-		CEventHandler *const handler = it->handler_;
+		event_handler *const handler = it->handler_;
 		auto const id = it->id_;
 
 		// Update the expired timer

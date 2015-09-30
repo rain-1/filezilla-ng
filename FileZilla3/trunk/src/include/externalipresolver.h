@@ -6,10 +6,10 @@
 struct external_ip_resolve_event_type;
 typedef fz::simple_event<external_ip_resolve_event_type> CExternalIPResolveEvent;
 
-class CExternalIPResolver final : public fz::CEventHandler
+class CExternalIPResolver final : public fz::event_handler
 {
 public:
-	CExternalIPResolver(fz::CEventHandler & handler);
+	CExternalIPResolver(fz::event_handler & handler);
 	virtual ~CExternalIPResolver();
 
 	CExternalIPResolver(CExternalIPResolver const&) = delete;
@@ -28,7 +28,7 @@ protected:
 	wxString m_address;
 	CSocket::address_family m_protocol{};
 	unsigned long m_port{80};
-	fz::CEventHandler * m_handler{};
+	fz::event_handler * m_handler{};
 
 	bool m_done{};
 

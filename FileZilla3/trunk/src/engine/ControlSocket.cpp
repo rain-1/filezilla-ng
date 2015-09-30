@@ -49,7 +49,7 @@ COpData::~COpData()
 
 CControlSocket::CControlSocket(CFileZillaEnginePrivate & engine)
 	: CLogging(engine)
-	, CEventHandler(engine.event_loop_)
+	, event_handler(engine.event_loop_)
 	, engine_(engine)
 {
 	m_pCurOpData = 0;
@@ -66,7 +66,7 @@ CControlSocket::CControlSocket(CFileZillaEnginePrivate & engine)
 
 CControlSocket::~CControlSocket()
 {
-	RemoveHandler();
+	remove_handler();
 
 	DoClose();
 
@@ -563,7 +563,7 @@ void CControlSocket::OnTimer(fz::timer_id)
 			elapsed = fz::duration();
 		}
 
-		m_timer = AddTimer(fz::duration::from_milliseconds(timeout * 1000) - elapsed, true);
+		m_timer = add_timer(fz::duration::from_milliseconds(timeout * 1000) - elapsed, true);
 	}
 }
 
@@ -584,10 +584,10 @@ void CControlSocket::SetWait(bool wait)
 		if (!timeout)
 			return;
 
-		m_timer = AddTimer(fz::duration::from_milliseconds(timeout * 1000 + 100), true); // Add a bit of slack
+		m_timer = add_timer(fz::duration::from_milliseconds(timeout * 1000 + 100), true); // Add a bit of slack
 	}
 	else {
-		StopTimer(m_timer);
+		stop_timer(m_timer);
 		m_timer = 0;
 	}
 }
@@ -739,7 +739,7 @@ void CControlSocket::UnlockCache()
 			continue;
 
 		// Send notification
-		lockInfo.pControlSocket->SendEvent<CObtainLockEvent>();
+		lockInfo.pControlSocket->send_event<CObtainLockEvent>();
 		break;
 	}
 }

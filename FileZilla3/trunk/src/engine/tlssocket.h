@@ -6,7 +6,7 @@
 #include "socket.h"
 
 class CControlSocket;
-class CTlsSocket final : protected fz::CEventHandler, public CBackend
+class CTlsSocket final : protected fz::event_handler, public CBackend
 {
 public:
 	enum class TlsState
@@ -19,7 +19,7 @@ public:
 		closed
 	};
 
-	CTlsSocket(fz::CEventHandler* pEvtHandler, CSocket& pSocket, CControlSocket* pOwner);
+	CTlsSocket(fz::event_handler* pEvtHandler, CSocket& pSocket, CControlSocket* pOwner);
 	virtual ~CTlsSocket();
 
 	bool Init();

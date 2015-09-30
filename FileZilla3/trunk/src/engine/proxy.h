@@ -5,10 +5,10 @@
 #include "socket.h"
 
 class CControlSocket;
-class CProxySocket final : protected fz::CEventHandler, public CBackend
+class CProxySocket final : protected fz::event_handler, public CBackend
 {
 public:
-	CProxySocket(CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner);
+	CProxySocket(event_handler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner);
 	virtual ~CProxySocket();
 
 	enum ProxyState {

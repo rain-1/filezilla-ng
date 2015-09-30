@@ -7,7 +7,7 @@
 class CBackend : public CRateLimiterObject, public CSocketEventSource
 {
 public:
-	CBackend(fz::CEventHandler* pEvtHandler);
+	CBackend(fz::event_handler* pEvtHandler);
 	virtual ~CBackend();
 
 	CBackend(CBackend const&) = delete;
@@ -20,14 +20,14 @@ public:
 	virtual void OnRateAvailable(CRateLimiter::rate_direction direction) = 0;
 
 protected:
-	fz::CEventHandler* const m_pEvtHandler;
+	fz::event_handler* const m_pEvtHandler;
 };
 
 class CSocket;
 class CSocketBackend final : public CBackend
 {
 public:
-	CSocketBackend(fz::CEventHandler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter);
+	CSocketBackend(fz::event_handler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter);
 	virtual ~CSocketBackend();
 	// Backend definitions
 	virtual int Read(void *buffer, unsigned int size, int& error);

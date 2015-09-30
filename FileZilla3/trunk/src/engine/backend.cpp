@@ -4,7 +4,7 @@
 #include "socket.h"
 #include <errno.h>
 
-CBackend::CBackend(fz::CEventHandler* pEvtHandler) : m_pEvtHandler(pEvtHandler)
+CBackend::CBackend(fz::event_handler* pEvtHandler) : m_pEvtHandler(pEvtHandler)
 {
 }
 
@@ -13,7 +13,7 @@ CBackend::~CBackend()
 	RemoveSocketEvents(m_pEvtHandler, this);
 }
 
-CSocketBackend::CSocketBackend(fz::CEventHandler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter)
+CSocketBackend::CSocketBackend(fz::event_handler* pEvtHandler, CSocket & socket, CRateLimiter& rateLimiter)
 	: CBackend(pEvtHandler)
 	, socket_(socket)
 	, m_rateLimiter(rateLimiter)
@@ -74,7 +74,7 @@ int CSocketBackend::Peek(void *buffer, unsigned int len, int& error)
 void CSocketBackend::OnRateAvailable(CRateLimiter::rate_direction direction)
 {
 	if (direction == CRateLimiter::outbound)
-		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::write, 0);
+		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::write, 0);
 	else
-		m_pEvtHandler->SendEvent<CSocketEvent>(this, SocketEventType::read, 0);
+		m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::read, 0);
 }

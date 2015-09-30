@@ -5,29 +5,29 @@
 
 namespace fz {
 
-CEventHandler::CEventHandler(CEventLoop& loop)
+event_handler::event_handler(event_loop& loop)
 	: event_loop_(loop)
 {
 }
 
-CEventHandler::~CEventHandler()
+event_handler::~event_handler()
 {
-	wxASSERT(removing_); // To avoid races, the base class must have removed us already
+	assert(removing_); // To avoid races, the base class must have removed us already
 }
 
-void CEventHandler::RemoveHandler()
+void event_handler::remove_handler()
 {
-	event_loop_.RemoveHandler(this);
+	event_loop_.remove_handler(this);
 }
 
-timer_id CEventHandler::AddTimer(duration const& interval, bool one_shot)
+timer_id event_handler::add_timer(duration const& interval, bool one_shot)
 {
-	return event_loop_.AddTimer(this, interval, one_shot);
+	return event_loop_.add_timer(this, interval, one_shot);
 }
 
-void CEventHandler::StopTimer(timer_id id)
+void event_handler::stop_timer(timer_id id)
 {
-	event_loop_.StopTimer(id);
+	event_loop_.stop_timer(id);
 }
 
 }

@@ -12,23 +12,23 @@ namespace {
 struct logging_options_changed_event_type;
 typedef fz::simple_event<logging_options_changed_event_type> CLoggingOptionsChangedEvent;
 
-class CLoggingOptionsChanged final : public fz::CEventHandler, COptionChangeEventHandler
+class CLoggingOptionsChanged final : public fz::event_handler, COptionChangeEventHandler
 {
 public:
-	CLoggingOptionsChanged(COptionsBase& options, fz::CEventLoop & loop)
-		: fz::CEventHandler(loop)
+	CLoggingOptionsChanged(COptionsBase& options, fz::event_loop & loop)
+		: fz::event_handler(loop)
 		, options_(options)
 	{
 		RegisterOption(OPTION_LOGGING_DEBUGLEVEL);
 		RegisterOption(OPTION_LOGGING_RAWLISTING);
-		SendEvent<CLoggingOptionsChangedEvent>();
+		send_event<CLoggingOptionsChangedEvent>();
 	}
 
 	virtual void OnOptionsChanged(changed_options_t const& options)
 	{
 		if (options.test(OPTION_LOGGING_DEBUGLEVEL) || options.test(OPTION_LOGGING_RAWLISTING)) {
 			CLogging::UpdateLogLevel(options_); // In main thread
-			SendEvent<CLoggingOptionsChangedEvent>();
+			send_event<CLoggingOptionsChangedEvent>();
 		}
 	}
 
@@ -53,10 +53,10 @@ public:
 
 	~Impl()
 	{
-		optionChangeHandler_.RemoveHandler();
+		optionChangeHandler_.remove_handler();
 	}
 
-	fz::CEventLoop loop_;
+	fz::event_loop loop_;
 	CRateLimiter limiter_;
 	CDirectoryCache directory_cache_;
 	CPathCache path_cache_;
@@ -78,7 +78,7 @@ COptionsBase& CFileZillaEngineContext::GetOptions()
 	return options_;
 }
 
-fz::CEventLoop& CFileZillaEngineContext::GetEventLoop()
+fz::event_loop& CFileZillaEngineContext::GetEventLoop()
 {
 	return impl_->loop_;
 }

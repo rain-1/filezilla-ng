@@ -78,7 +78,7 @@ wxThread::ExitCode CIOThread::Entry()
 					break;
 				}
 				m_appWaiting = false;
-				m_evtHandler->SendEvent<CIOThreadEvent>();
+				m_evtHandler->send_event<CIOThreadEvent>();
 			}
 
 			if (len == wxInvalidOffset) {
@@ -141,7 +141,7 @@ wxThread::ExitCode CIOThread::Entry()
 					break;
 				}
 				m_appWaiting = false;
-				m_evtHandler->SendEvent<CIOThreadEvent>();
+				m_evtHandler->send_event<CIOThreadEvent>();
 			}
 
 			if (m_error)
@@ -386,7 +386,7 @@ wxString CIOThread::GetError()
 	return m_error_description;
 }
 
-void CIOThread::SetEventHandler(fz::CEventHandler* handler)
+void CIOThread::SetEventHandler(fz::event_handler* handler)
 {
 	fz::scoped_lock locker(m_mutex);
 	m_evtHandler = handler;

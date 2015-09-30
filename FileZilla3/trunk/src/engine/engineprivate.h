@@ -53,7 +53,7 @@ protected:
 	CFileZillaEnginePrivate& engine_;
 };
 
-class CFileZillaEnginePrivate final : public fz::CEventHandler, COptionChangeEventHandler
+class CFileZillaEnginePrivate final : public fz::event_handler, COptionChangeEventHandler
 {
 public:
 	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context, CFileZillaEngine& parent);

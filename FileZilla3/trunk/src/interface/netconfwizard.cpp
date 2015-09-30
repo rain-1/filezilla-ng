@@ -28,7 +28,7 @@ TRANSLATE_T("< &Back");
 #endif
 
 CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & engine_context)
-	: fz::CEventHandler(engine_context.GetEventLoop())
+	: fz::event_handler(engine_context.GetEventLoop())
 	, m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
 {
 	m_socket = 0;
@@ -44,7 +44,7 @@ CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaE
 
 CNetConfWizard::~CNetConfWizard()
 {
-	RemoveHandler();
+	remove_handler();
 
 	delete m_socket;
 	delete m_pIPResolver;
