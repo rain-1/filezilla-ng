@@ -63,6 +63,7 @@
     <ClCompile Include="fz_string.cpp" />
     <ClCompile Include="fz_thread.cpp" />
     <ClCompile Include="fz_time.cpp" />
+    <ClCompile Include="fz_util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fz_apply.hpp" />
@@ -72,6 +73,7 @@
     <ClInclude Include="fz_string.hpp" />
     <ClInclude Include="fz_thread.hpp" />
     <ClInclude Include="fz_time.hpp" />
+    <ClInclude Include="fz_util.hpp" />
     <ClInclude Include="libfilezilla.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,7 @@
 #include <libfilezilla_engine.h>
 
 #include <fz_time.hpp>
+#include <fz_util.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -27,13 +28,7 @@ void TimeTest::testNow()
 {
 	fz::datetime const t1 = fz::datetime::now();
 
-#ifdef __WXMSW__
-	Sleep(2000);
-#else
-	timespec ts{};
-	ts.tv_sec = 2;
-	nanosleep(&ts, 0);
-#endif
+	fz::sleep(duration::from_seconds(2));
 
 	fz::datetime const t2 = fz::datetime::now();
 

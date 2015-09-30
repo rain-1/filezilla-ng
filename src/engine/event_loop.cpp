@@ -2,7 +2,10 @@
 
 #include "event_loop.h"
 
+#include "fz_util.hpp"
+
 #include <algorithm>
+#include <cassert>
 
 namespace fz {
 
@@ -76,7 +79,7 @@ void event_loop::remove_handler(event_handler* handler)
 
 	while (active_handler_ == handler) {
 		l.unlock();
-		wxMilliSleep(1);
+		fz::sleep(duration::from_milliseconds(1));
 		l.lock();
 	}
 }

@@ -7,6 +7,7 @@
 
 #include <wchar.h>
 
+//#include <cassert>
 #define TIME_ASSERT(x) //assert(x)
 
 namespace fz {

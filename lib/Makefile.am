@@ -6,7 +6,8 @@ libfilezilla_a_SOURCES = \
 	fz_mutex.cpp \
 	fz_string.cpp \
 	fz_thread.cpp \
-	fz_time.cpp
+	fz_time.cpp \
+	fz_util.cpp
 
 noinst_HEADERS = \
 	fz_apply.hpp \
@@ -16,6 +17,7 @@ noinst_HEADERS = \
 	fz_string.hpp \
 	fz_thread.hpp \
 	fz_time.hpp \
+	fz_util.hpp \
 	libfilezilla.hpp \
 	private/windows.hpp
 
