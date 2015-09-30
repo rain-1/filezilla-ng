@@ -28,7 +28,7 @@ void TimeTest::testNow()
 {
 	fz::datetime const t1 = fz::datetime::now();
 
-	fz::sleep(duration::from_seconds(2));
+	fz::sleep(fz::duration::from_seconds(2));
 
 	fz::datetime const t2 = fz::datetime::now();
 
