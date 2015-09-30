@@ -12,9 +12,6 @@ bool IsRoutableAddress(const wxString& address, CSocket::address_family family);
 
 bool IsIpAddress(const wxString& address);
 
-// Get a random number uniformly distributed in the closed interval [min, max]
-int GetRandomNumber(int low, int high);
-
 // Strongly typed enum would be nice, but we need to support older compilers still.
 namespace dependency {
 enum type {
