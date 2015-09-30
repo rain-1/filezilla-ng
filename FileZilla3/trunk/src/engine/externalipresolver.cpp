@@ -85,9 +85,9 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 	strcpy(m_pSendBuffer, buffer.mb_str());
 }
 
-void CExternalIPResolver::operator()(CEventBase const& ev)
+void CExternalIPResolver::operator()(fz::CEventBase const& ev)
 {
-	Dispatch<CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
+	fz::dispatch<CSocketEvent>(ev, this, &CExternalIPResolver::OnSocketEvent);
 }
 
 void CExternalIPResolver::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)

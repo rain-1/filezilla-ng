@@ -150,14 +150,14 @@ protected:
 	// till the end of time. Stop after a couple of minutes.
 	fz::monotonic_clock m_lastCommandCompletionTime;
 
-	timer_id m_idleTimer{};
+	fz::timer_id m_idleTimer{};
 
 	CLatencyMeasurement m_rtt;
 
-	virtual void operator()(CEventBase const& ev);
+	virtual void operator()(fz::CEventBase const& ev);
 
 	void OnExternalIPAddress();
-	void OnTimer(timer_id id);
+	void OnTimer(fz::timer_id id);
 
 	wxRegEx m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 };

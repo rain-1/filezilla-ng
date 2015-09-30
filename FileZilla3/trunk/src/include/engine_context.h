@@ -4,10 +4,13 @@
 #include <memory>
 
 class CDirectoryCache;
-class CEventLoop;
 class COptionsBase;
 class CPathCache;
 class CRateLimiter;
+
+namespace fz {
+class CEventLoop;
+}
 
 // There can be multiple engines, but there can be at most one context
 class CFileZillaEngineContext final
@@ -17,7 +20,7 @@ public:
 	~CFileZillaEngineContext();
 
 	COptionsBase& GetOptions();
-	CEventLoop& GetEventLoop();
+	fz::CEventLoop& GetEventLoop();
 	CRateLimiter& GetRateLimiter();
 	CDirectoryCache& GetDirectoryCache();
 	CPathCache& GetPathCache();

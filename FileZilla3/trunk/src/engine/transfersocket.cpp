@@ -10,7 +10,7 @@
 #include "servercapabilities.h"
 
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode)
-: CEventHandler(controlSocket.event_loop_)
+: fz::CEventHandler(controlSocket.event_loop_)
 , engine_(engine)
 , controlSocket_(controlSocket)
 , m_transferMode(transferMode)
@@ -793,9 +793,9 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 	pSocket->SetBufferSizes(size_read, size_write);
 }
 
-void CTransferSocket::operator()(CEventBase const& ev)
+void CTransferSocket::operator()(fz::CEventBase const& ev)
 {
-	Dispatch<CSocketEvent, CIOThreadEvent>(ev, this,
+	fz::dispatch<CSocketEvent, CIOThreadEvent>(ev, this,
 		&CTransferSocket::OnSocketEvent,
 		&CTransferSocket::OnIOThreadEvent);
 }

@@ -4,6 +4,8 @@
 
 #include <algorithm>
 
+namespace fz {
+
 CEventLoop::CEventLoop()
 	: sync_(false)
 {
@@ -13,14 +15,14 @@ CEventLoop::CEventLoop()
 CEventLoop::~CEventLoop()
 {
 	{
-		fz::scoped_lock lock(sync_);
+		scoped_lock lock(sync_);
 		quit_ = true;
 		cond_.signal(lock);
 	}
 
 	join();
 
-	fz::scoped_lock lock(sync_);
+	scoped_lock lock(sync_);
 	for (auto & v : pending_events_) {
 		delete v.second;
 	}
@@ -29,12 +31,12 @@ CEventLoop::~CEventLoop()
 void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 {
 	{
-		fz::scoped_lock lock(sync_);
+		scoped_lock lock(sync_);
 		if (!handler->removing_) {
 			if (pending_events_.empty()) {
 				cond_.signal(lock);
 			}
-			pending_events_.emplace_back(handler, evt);			
+			pending_events_.emplace_back(handler, evt);
 			return;
 		}
 	}
@@ -44,7 +46,7 @@ void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
 
 void CEventLoop::RemoveHandler(CEventHandler* handler)
 {
-	fz::scoped_lock l(sync_);
+	scoped_lock l(sync_);
 
 	handler->removing_ = true;
 
@@ -69,7 +71,7 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 		timers_.end()
 	);
 	if (timers_.empty()) {
-		deadline_ = fz::monotonic_clock();
+		deadline_ = monotonic_clock();
 	}
 
 	while (active_handler_ == handler) {
@@ -81,7 +83,7 @@ void CEventLoop::RemoveHandler(CEventHandler* handler)
 
 void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> const& filter)
 {
-	fz::scoped_lock l(sync_);
+	scoped_lock l(sync_);
 
 	pending_events_.erase(
 		std::remove_if(pending_events_.begin(), pending_events_.end(),
@@ -97,16 +99,16 @@ void CEventLoop::FilterEvents(std::function<bool(Events::value_type &)> const& f
 	);
 }
 
-timer_id CEventLoop::AddTimer(CEventHandler* handler, fz::duration const& interval, bool one_shot)
+timer_id CEventLoop::AddTimer(CEventHandler* handler, duration const& interval, bool one_shot)
 {
 	timer_data d;
 	d.handler_ = handler;
 	if (!one_shot) {
 		d.interval_ = interval;
 	}
-	d.deadline_ = fz::monotonic_clock::now() + interval;
+	d.deadline_ = monotonic_clock::now() + interval;
 
-	fz::scoped_lock lock(sync_);
+	scoped_lock lock(sync_);
 	if (!handler->removing_) {
 		d.id_ = ++next_timer_id_; // 64bit, can this really ever overflow?
 
@@ -123,12 +125,12 @@ timer_id CEventLoop::AddTimer(CEventHandler* handler, fz::duration const& interv
 void CEventLoop::StopTimer(timer_id id)
 {
 	if (id) {
-		fz::scoped_lock lock(sync_);
+		scoped_lock lock(sync_);
 		for (auto it = timers_.begin(); it != timers_.end(); ++it) {
 			if (it->id_ == id) {
 				timers_.erase(it);
 				if (timers_.empty()) {
-					deadline_ = fz::monotonic_clock();
+					deadline_ = monotonic_clock();
 				}
 				break;
 			}
@@ -136,7 +138,7 @@ void CEventLoop::StopTimer(timer_id id)
 	}
 }
 
-bool CEventLoop::ProcessEvent(fz::scoped_lock & l)
+bool CEventLoop::ProcessEvent(scoped_lock & l)
 {
 	Events::value_type ev{};
 
@@ -146,9 +148,9 @@ bool CEventLoop::ProcessEvent(fz::scoped_lock & l)
 	ev = pending_events_.front();
 	pending_events_.pop_front();
 
-	wxASSERT(ev.first);
-	wxASSERT(ev.second);
-	wxASSERT(!ev.first->removing_);
+	assert(ev.first);
+	assert(ev.second);
+	assert(!ev.first->removing_);
 
 	active_handler_ = ev.first;
 
@@ -158,15 +160,15 @@ bool CEventLoop::ProcessEvent(fz::scoped_lock & l)
 	l.lock();
 
 	active_handler_ = 0;
-	
+
 	return true;
 }
 
 void CEventLoop::entry()
 {
-	fz::scoped_lock l(sync_);
+	scoped_lock l(sync_);
 	while (!quit_) {
-		fz::monotonic_clock const now(fz::monotonic_clock::now());
+		monotonic_clock const now(monotonic_clock::now());
 		if (ProcessTimers(l, now)) {
 			continue;
 		}
@@ -185,7 +187,7 @@ void CEventLoop::entry()
 	}
 }
 
-bool CEventLoop::ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& now)
+bool CEventLoop::ProcessTimers(scoped_lock & l, monotonic_clock const& now)
 {
 	if (!deadline_ || now < deadline_) {
 		// There's no deadline or deadline has not yet expired
@@ -193,7 +195,7 @@ bool CEventLoop::ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& n
 	}
 
 	// Update deadline_, stop at first expired timer
-	deadline_ = fz::monotonic_clock();
+	deadline_ = monotonic_clock();
 	auto it = timers_.begin();
 	for (; it != timers_.end(); ++it) {
 		if (!deadline_ || it->deadline_ < deadline_) {
@@ -216,7 +218,7 @@ bool CEventLoop::ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& n
 
 		CEventHandler *const handler = it->handler_;
 		auto const id = it->id_;
-			
+
 		// Update the expired timer
 		if (!it->interval_) {
 			timers_.erase(it);
@@ -229,18 +231,20 @@ bool CEventLoop::ProcessTimers(fz::scoped_lock & l, fz::monotonic_clock const& n
 		}
 
 		// Call event handler
-		wxASSERT(!handler->removing_);
-		
+		assert(!handler->removing_);
+
 		active_handler_ = handler;
-		
+
 		l.unlock();
 		(*handler)(CTimerEvent(id));
 		l.lock();
-		
+
 		active_handler_ = 0;
 
 		return true;
 	}
 
 	return false;
+}
+
 }

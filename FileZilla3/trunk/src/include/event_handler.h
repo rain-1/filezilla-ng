@@ -1,9 +1,6 @@
 #ifndef FILEZILLA_ENGINE_EVENT_HANDLER
 #define FILEZILLA_ENGINE_EVENT_HANDLER
 
-class CEventBase;
-class CEventLoop;
-
 #include "event_loop.h"
 
 /*
@@ -47,6 +44,7 @@ Usage example:
 	h.SendEvent<CFooEvent>(42, "Don't Panic");
 */
 
+namespace fz {
 class CEventHandler
 {
 public:
@@ -106,5 +104,6 @@ private:
 	friend class CEventLoop;
 	bool removing_{};
 };
+}
 
 #endif

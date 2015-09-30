@@ -111,7 +111,7 @@ enum class TransferEndReason
 };
 
 class CTransferStatus;
-class CControlSocket: public CLogging, public CEventHandler
+class CControlSocket: public CLogging, public fz::CEventHandler
 {
 public:
 	CControlSocket(CFileZillaEnginePrivate & engine);
@@ -204,7 +204,7 @@ protected:
 	bool m_useUTF8;
 
 	// Timeout data
-	timer_id m_timer{};
+	fz::timer_id m_timer{};
 	fz::monotonic_clock m_lastActivity;
 
 	// -------------------------
@@ -256,9 +256,9 @@ protected:
 
 	bool m_invalidateCurrentPath;
 
-	virtual void operator()(CEventBase const& ev);
+	virtual void operator()(fz::CEventBase const& ev);
 
-	void OnTimer(timer_id id);
+	void OnTimer(fz::timer_id id);
 	void OnObtainLock();
 };
 
@@ -278,7 +278,7 @@ protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 	void ResetSocket();
 
-	virtual void operator()(CEventBase const& ev);
+	virtual void operator()(fz::CEventBase const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 	void OnHostAddress(CSocketEventSource* source, wxString const& address);
 

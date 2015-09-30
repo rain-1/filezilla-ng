@@ -9,6 +9,7 @@ libfilezilla_a_SOURCES = \
 	fz_time.cpp
 
 noinst_HEADERS = \
+	fz_apply.hpp \
 	fz_config.hpp \
 	fz_mutex.hpp \
 	fz_string.hpp \

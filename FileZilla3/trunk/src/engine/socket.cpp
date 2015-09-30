@@ -66,11 +66,11 @@ static fz::mutex waiting_socket_threads_mutex{false};
 };
 
 struct socket_event_type;
-typedef CEvent<socket_event_type> CInternalSocketEvent;
+typedef fz::CEvent<socket_event_type> CInternalSocketEvent;
 
-void RemoveSocketEvents(CEventHandler * handler, CSocketEventSource const* const source)
+void RemoveSocketEvents(fz::CEventHandler * handler, CSocketEventSource const* const source)
 {
-	auto socketEventFilter = [&](CEventLoop::Events::value_type const& ev) -> bool {
+	auto socketEventFilter = [&](fz::CEventLoop::Events::value_type const& ev) -> bool {
 		if (ev.first != handler) {
 			return false;
 		}
@@ -86,7 +86,7 @@ void RemoveSocketEvents(CEventHandler * handler, CSocketEventSource const* const
 	handler->event_loop_.FilterEvents(socketEventFilter);
 }
 
-void ChangeSocketEventHandler(CEventHandler * oldHandler, CEventHandler * newHandler, CSocketEventSource const* const source)
+void ChangeSocketEventHandler(fz::CEventHandler * oldHandler, fz::CEventHandler * newHandler, CSocketEventSource const* const source)
 {
 	if (!oldHandler)
 		return;
@@ -98,7 +98,7 @@ void ChangeSocketEventHandler(CEventHandler * oldHandler, CEventHandler * newHan
 		RemoveSocketEvents(oldHandler, source);
 	}
 	else {
-		auto socketEventFilter = [&](CEventLoop::Events::value_type & ev) -> bool {
+		auto socketEventFilter = [&](fz::CEventLoop::Events::value_type & ev) -> bool {
 			if (ev.first == oldHandler) {
 				if (ev.second->derived_type() == CSocketEvent::type()) {
 					if (std::get<0>(static_cast<CSocketEvent const&>(*ev.second).v_) == source) {
@@ -869,7 +869,7 @@ protected:
 	bool m_threadwait{};
 };
 
-CSocket::CSocket(CEventHandler* pEvtHandler)
+CSocket::CSocket(fz::CEventHandler* pEvtHandler)
 	: m_pEvtHandler(pEvtHandler)
 {
 #ifdef ERRORCODETEST
@@ -986,7 +986,7 @@ int CSocket::Connect(wxString const& host, unsigned int port, address_family fam
 	return EINPROGRESS;
 }
 
-void CSocket::SetEventHandler(CEventHandler* pEvtHandler)
+void CSocket::SetEventHandler(fz::CEventHandler* pEvtHandler)
 {
 	if (m_pSocketThread) {
 		fz::scoped_lock l(m_pSocketThread->m_sync);

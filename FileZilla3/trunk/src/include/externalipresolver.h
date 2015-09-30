@@ -4,12 +4,12 @@
 #include "socket.h"
 
 struct external_ip_resolve_event_type;
-typedef CEvent<external_ip_resolve_event_type> CExternalIPResolveEvent;
+typedef fz::CEvent<external_ip_resolve_event_type> CExternalIPResolveEvent;
 
-class CExternalIPResolver final : public CEventHandler
+class CExternalIPResolver final : public fz::CEventHandler
 {
 public:
-	CExternalIPResolver(CEventHandler & handler);
+	CExternalIPResolver(fz::CEventHandler & handler);
 	virtual ~CExternalIPResolver();
 
 	CExternalIPResolver(CExternalIPResolver const&) = delete;
@@ -28,7 +28,7 @@ protected:
 	wxString m_address;
 	CSocket::address_family m_protocol{};
 	unsigned long m_port{80};
-	CEventHandler * m_handler{};
+	fz::CEventHandler * m_handler{};
 
 	bool m_done{};
 
@@ -36,7 +36,7 @@ protected:
 
 	CSocket *m_pSocket{};
 
-	virtual void operator()(CEventBase const& ev);
+	virtual void operator()(fz::CEventBase const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 
 	void OnConnect(int error);

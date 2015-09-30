@@ -574,11 +574,11 @@ void CFileZillaEnginePrivate::InvalidateCurrentWorkingDirs(const CServerPath& pa
 	}
 }
 
-void CFileZillaEnginePrivate::operator()(CEventBase const& ev)
+void CFileZillaEnginePrivate::operator()(fz::CEventBase const& ev)
 {
 	fz::scoped_lock lock(mutex_);
 
-	Dispatch<CFileZillaEngineEvent, CCommandEvent, CAsyncRequestReplyEvent, CTimerEvent>(ev, this,
+	fz::dispatch<CFileZillaEngineEvent, CCommandEvent, CAsyncRequestReplyEvent, fz::CTimerEvent>(ev, this,
 		&CFileZillaEnginePrivate::OnEngineEvent,
 		&CFileZillaEnginePrivate::OnCommandEvent,
 		&CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent,

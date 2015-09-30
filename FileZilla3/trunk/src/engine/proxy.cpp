@@ -17,8 +17,8 @@ enum handshake_state
 	socks4_handshake
 };
 
-CProxySocket::CProxySocket(CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
-	: CEventHandler(pOwner->event_loop_)
+CProxySocket::CProxySocket(fz::CEventHandler* pEvtHandler, CSocket* pSocket, CControlSocket* pOwner)
+	: fz::CEventHandler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
 	, m_pSocket(pSocket)
 	, m_pOwner(pOwner)
@@ -202,9 +202,9 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 	return EINPROGRESS;
 }
 
-void CProxySocket::operator()(CEventBase const& ev)
+void CProxySocket::operator()(fz::CEventBase const& ev)
 {
-	Dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
+	fz::dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
 		&CProxySocket::OnSocketEvent,
 		&CProxySocket::OnHostAddress);
 }
