@@ -19,10 +19,10 @@
 #define FZSFTP_PROTOCOL_VERSION 3
 
 struct sftp_event_type;
-typedef fz::CEvent<sftp_event_type> CSftpEvent;
+typedef fz::simple_event<sftp_event_type> CSftpEvent;
 
 struct terminate_event_type;
-typedef fz::CEvent<terminate_event_type> CTerminateEvent;
+typedef fz::simple_event<terminate_event_type> CTerminateEvent;
 
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
@@ -2638,7 +2638,7 @@ int CSftpControlSocket::ListCheckTimezoneDetection()
 	return FZ_REPLY_OK;
 }
 
-void CSftpControlSocket::operator()(fz::CEventBase const& ev)
+void CSftpControlSocket::operator()(fz::event_base const& ev)
 {
 	if (fz::dispatch<CSftpEvent, CTerminateEvent>(ev, this,
 		&CSftpControlSocket::OnSftpEvent,

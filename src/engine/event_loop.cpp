@@ -28,7 +28,7 @@ CEventLoop::~CEventLoop()
 	}
 }
 
-void CEventLoop::SendEvent(CEventHandler* handler, CEventBase* evt)
+void CEventLoop::SendEvent(CEventHandler* handler, event_base* evt)
 {
 	{
 		scoped_lock lock(sync_);
@@ -236,7 +236,7 @@ bool CEventLoop::ProcessTimers(scoped_lock & l, monotonic_clock const& now)
 		active_handler_ = handler;
 
 		l.unlock();
-		(*handler)(CTimerEvent(id));
+		(*handler)(timer_event(id));
 		l.lock();
 
 		active_handler_ = 0;

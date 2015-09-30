@@ -793,7 +793,7 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 	pSocket->SetBufferSizes(size_read, size_write);
 }
 
-void CTransferSocket::operator()(fz::CEventBase const& ev)
+void CTransferSocket::operator()(fz::event_base const& ev)
 {
 	fz::dispatch<CSocketEvent, CIOThreadEvent>(ev, this,
 		&CTransferSocket::OnSocketEvent,

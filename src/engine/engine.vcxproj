@@ -115,7 +115,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\engine_context.h" />
-    <ClInclude Include="..\include\event.h" />
     <ClInclude Include="..\include\event_handler.h" />
     <ClInclude Include="..\include\event_loop.h" />
     <ClInclude Include="..\include\file.h" />

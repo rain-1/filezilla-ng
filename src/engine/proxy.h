@@ -66,7 +66,7 @@ protected:
 	int m_recvBufferPos{};
 	int m_recvBufferLen{};
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 	void OnHostAddress(CSocketEventSource* source, wxString const& address);
 

@@ -202,7 +202,7 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 	return EINPROGRESS;
 }
 
-void CProxySocket::operator()(fz::CEventBase const& ev)
+void CProxySocket::operator()(fz::event_base const& ev)
 {
 	fz::dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
 		&CProxySocket::OnSocketEvent,

@@ -26,16 +26,16 @@ CPPUNIT_TEST_SUITE_REGISTRATION(EventloopTest);
 
 namespace {
 struct type1;
-typedef fz::CEvent<type1> T1;
+typedef fz::simple_event<type1> T1;
 
 struct type2;
-typedef fz::CEvent<type2, int> T2;
+typedef fz::simple_event<type2, int> T2;
 
 struct type3;
-typedef fz::CEvent<type3> T3;
+typedef fz::simple_event<type3> T3;
 
 struct type4;
-typedef fz::CEvent<type4> T4;
+typedef fz::simple_event<type4> T4;
 
 class target : public fz::CEventHandler
 {
@@ -73,7 +73,7 @@ public:
 		cond_.signal(l);
 	}
 
-	virtual void operator()(fz::CEventBase const& ev) override {
+	virtual void operator()(fz::event_base const& ev) override {
 		CPPUNIT_ASSERT((fz::dispatch<T1, T2, T3, T4>(ev, this, &target::a, &target::b, &target::c, &target::d)));
 	}
 
@@ -153,7 +153,7 @@ public:
 		cond_.signal(l);
 	}
 
-	virtual void operator()(fz::CEventBase const& ev) override {
+	virtual void operator()(fz::event_base const& ev) override {
 		CPPUNIT_ASSERT((fz::dispatch<T1, T2, T3>(ev, this, &target2::a, &target2::b, &target2::c)));
 	}
 

@@ -256,7 +256,7 @@ protected:
 
 	bool m_invalidateCurrentPath;
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 
 	void OnTimer(fz::timer_id id);
 	void OnObtainLock();
@@ -278,7 +278,7 @@ protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 	void ResetSocket();
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 	void OnHostAddress(CSocketEventSource* source, wxString const& address);
 

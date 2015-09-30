@@ -13,7 +13,7 @@
 //#define SIMULATE_IO
 
 struct io_thread_event_type{};
-typedef fz::CEvent<io_thread_event_type> CIOThreadEvent;
+typedef fz::simple_event<io_thread_event_type> CIOThreadEvent;
 
 enum IORet
 {

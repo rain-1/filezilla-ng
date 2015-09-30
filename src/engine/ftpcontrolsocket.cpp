@@ -4384,9 +4384,9 @@ int CFtpControlSocket::ParseSubcommandResult(int prevResult)
 	return FZ_REPLY_ERROR;
 }
 
-void CFtpControlSocket::operator()(fz::CEventBase const& ev)
+void CFtpControlSocket::operator()(fz::event_base const& ev)
 {
-	if (fz::dispatch<fz::CTimerEvent>(ev, this, &CFtpControlSocket::OnTimer)) {
+	if (fz::dispatch<fz::timer_event>(ev, this, &CFtpControlSocket::OnTimer)) {
 		return;
 	}
 

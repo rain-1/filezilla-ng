@@ -67,6 +67,7 @@
   <ItemGroup>
     <ClInclude Include="fz_apply.hpp" />
     <ClInclude Include="fz_config.hpp" />
+    <ClInclude Include="fz_event.hpp" />
     <ClInclude Include="fz_mutex.hpp" />
     <ClInclude Include="fz_string.hpp" />
     <ClInclude Include="fz_thread.hpp" />

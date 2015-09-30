@@ -40,7 +40,7 @@ protected:
 	void OnTimer(wxTimerEvent& event);
 	void OnExternalIPAddress2(wxCommandEvent&);
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 	void OnExternalIPAddress();
 
 	void OnReceive();

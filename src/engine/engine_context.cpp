@@ -10,7 +10,7 @@
 
 namespace {
 struct logging_options_changed_event_type;
-typedef fz::CEvent<logging_options_changed_event_type> CLoggingOptionsChangedEvent;
+typedef fz::simple_event<logging_options_changed_event_type> CLoggingOptionsChangedEvent;
 
 class CLoggingOptionsChanged final : public fz::CEventHandler, COptionChangeEventHandler
 {
@@ -32,7 +32,7 @@ public:
 		}
 	}
 
-	virtual void operator()(const fz::CEventBase&)
+	virtual void operator()(const fz::event_base&)
 	{
 		CLogging::UpdateLogLevel(options_); // In worker thread
 	}

@@ -224,9 +224,9 @@ int CRateLimiter::GetBucketSize() const
 	return bucket_size;
 }
 
-void CRateLimiter::operator()(fz::CEventBase const& ev)
+void CRateLimiter::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<fz::CTimerEvent, CRateLimitChangedEvent>(ev, this,
+	fz::dispatch<fz::timer_event, CRateLimitChangedEvent>(ev, this,
 		&CRateLimiter::OnTimer,
 		&CRateLimiter::OnRateChanged);
 }

@@ -4,7 +4,7 @@
 #include "fz_time.hpp"
 
 #include "engine_context.h"
-#include "event.h"
+#include "fz_event.hpp"
 #include "event_handler.h"
 #include "FileZillaEngine.h"
 #include "fz_mutex.hpp"
@@ -23,7 +23,7 @@ enum EngineNotificationType
 };
 
 struct filezilla_engine_event_type;
-typedef fz::CEvent<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
+typedef fz::simple_event<filezilla_engine_event_type, EngineNotificationType> CFileZillaEngineEvent;
 
 class CTransferStatusManager final
 {
@@ -135,7 +135,7 @@ protected:
 
 	int ContinueConnect();
 
-	void operator()(fz::CEventBase const& ev);
+	void operator()(fz::event_base const& ev);
 	void OnEngineEvent(EngineNotificationType type);
 	void OnTimer(int timer_id);
 	void OnCommandEvent();
@@ -205,9 +205,9 @@ protected:
 };
 
 struct command_event_type{};
-typedef fz::CEvent<command_event_type> CCommandEvent;
+typedef fz::simple_event<command_event_type> CCommandEvent;
 
 struct async_request_reply_event_type{};
-typedef fz::CEvent<async_request_reply_event_type, std::unique_ptr<CAsyncRequestNotification>> CAsyncRequestReplyEvent;
+typedef fz::simple_event<async_request_reply_event_type, std::unique_ptr<CAsyncRequestNotification>> CAsyncRequestReplyEvent;
 
 #endif //__FILEZILLAENGINEPRIVATE_H__
