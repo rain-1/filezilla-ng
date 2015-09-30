@@ -2,7 +2,7 @@
 #include "ControlSocket.h"
 #include "directorycache.h"
 #include "engineprivate.h"
-#include "event_loop.h"
+#include "fz_event_loop.hpp"
 #include "ftpcontrolsocket.h"
 #include "httpcontrolsocket.h"
 #include "logging_private.h"

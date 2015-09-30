@@ -1,7 +1,4 @@
-#include <filezilla.h>
-
-#include "event_handler.h"
-#include "event_loop.h"
+#include "fz_event_handler.hpp"
 
 #include <cassert>
 

@@ -1,7 +1,7 @@
 #ifndef LIBFILEZILLA_EVENT_HANDLER
 #define LIBFILEZILLA_EVENT_HANDLER
 
-#include "event_loop.h"
+#include "fz_event_loop.hpp"
 
 /*
 Simple handler for asynchronous event processing.

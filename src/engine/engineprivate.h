@@ -5,7 +5,7 @@
 
 #include "engine_context.h"
 #include "fz_event.hpp"
-#include "event_handler.h"
+#include "fz_event_handler.hpp"
 #include "FileZillaEngine.h"
 #include "fz_mutex.hpp"
 #include "option_change_event_handler.h"

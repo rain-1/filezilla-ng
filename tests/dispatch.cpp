@@ -1,6 +1,6 @@
 #include <libfilezilla_engine.h>
 
-#include <event_loop.h>
+#include <fz_event_loop.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
 

@@ -2,7 +2,7 @@
 #include "engine_context.h"
 
 #include "directorycache.h"
-#include "event_loop.h"
+#include "fz_event_loop.hpp"
 #include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"

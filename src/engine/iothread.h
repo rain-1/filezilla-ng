@@ -2,7 +2,7 @@
 #define __IOTHREAD_H__
 
 #include <wx/file.h>
-#include "event_loop.h"
+#include "fz_event.hpp"
 
 #define BUFFERCOUNT 5
 #define BUFFERSIZE 128*1024
