@@ -84,7 +84,7 @@ protected:
 
 	void TriggerEvents();
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 
 	void OnRead();

@@ -4,7 +4,7 @@
 #include "socket.h"
 
 struct external_ip_resolve_event_type;
-typedef fz::CEvent<external_ip_resolve_event_type> CExternalIPResolveEvent;
+typedef fz::simple_event<external_ip_resolve_event_type> CExternalIPResolveEvent;
 
 class CExternalIPResolver final : public fz::CEventHandler
 {
@@ -36,7 +36,7 @@ protected:
 
 	CSocket *m_pSocket{};
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
 
 	void OnConnect(int error);

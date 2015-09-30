@@ -66,7 +66,7 @@ static fz::mutex waiting_socket_threads_mutex{false};
 };
 
 struct socket_event_type;
-typedef fz::CEvent<socket_event_type> CInternalSocketEvent;
+typedef fz::simple_event<socket_event_type> CInternalSocketEvent;
 
 void RemoveSocketEvents(fz::CEventHandler * handler, CSocketEventSource const* const source)
 {

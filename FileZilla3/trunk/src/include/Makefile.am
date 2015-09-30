@@ -4,7 +4,6 @@ noinst_HEADERS = \
 	commands.h \
 	directorylisting.h \
 	engine_context.h \
-	event.h \
 	event_handler.h \
 	event_loop.h \
 	externalipresolver.h \

@@ -2,7 +2,7 @@
 #define LIBFILEZILLA_EVENT_LOOP_HEADER
 
 #include "fz_apply.hpp"
-#include "event.h"
+#include "fz_event.hpp"
 #include "fz_mutex.hpp"
 #include "fz_time.hpp"
 #include "fz_thread.hpp"
@@ -27,7 +27,7 @@ struct timer_data final
 class CEventLoop final : private thread
 {
 public:
-	typedef std::deque<std::pair<CEventHandler*, CEventBase*>> Events;
+	typedef std::deque<std::pair<CEventHandler*, event_base*>> Events;
 
 	// Spawns a thread
 	CEventLoop();
@@ -50,7 +50,7 @@ protected:
 	timer_id AddTimer(CEventHandler* handler, duration const& interval, bool one_shot);
 	void StopTimer(timer_id id);
 
-	void SendEvent(CEventHandler* handler, CEventBase* evt);
+	void SendEvent(CEventHandler* handler, event_base* evt);
 
 	// Process timers. Returns true if a timer has been triggered
 	bool ProcessTimers(scoped_lock & l, monotonic_clock const& now);
@@ -78,9 +78,9 @@ protected:
 };
 
 
-// Dispatch for CEvent<> based events. See event_handler.h for usage example
+// Dispatch for simple_event<> based events. See event_handler.h for usage example
 template<typename T, typename H, typename F>
-bool dispatch(CEventBase const& ev, F&& f)
+bool dispatch(event_base const& ev, F&& f)
 {
 	bool const same = same_type<T>(ev);
 	if (same) {
@@ -92,7 +92,7 @@ bool dispatch(CEventBase const& ev, F&& f)
 
 
 template<typename T, typename H, typename F>
-bool dispatch(CEventBase const& ev, H* h, F&& f)
+bool dispatch(event_base const& ev, H* h, F&& f)
 {
 	bool const same = same_type<T>(ev);
 	if (same) {
@@ -103,7 +103,7 @@ bool dispatch(CEventBase const& ev, H* h, F&& f)
 }
 
 template<typename T, typename ... Ts, typename H, typename F, typename ... Fs>
-bool dispatch(CEventBase const& ev, H* h, F&& f, Fs&& ... fs)
+bool dispatch(event_base const& ev, H* h, F&& f, Fs&& ... fs)
 {
 	if (dispatch<T>(ev, h, std::forward<F>(f))) {
 		return true;

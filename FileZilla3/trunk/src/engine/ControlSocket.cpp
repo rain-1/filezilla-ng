@@ -26,7 +26,7 @@
 #endif
 
 struct obtain_lock_event_type;
-typedef fz::CEvent<obtain_lock_event_type> CObtainLockEvent;
+typedef fz::simple_event<obtain_lock_event_type> CObtainLockEvent;
 
 std::list<CControlSocket::t_lockInfo> CControlSocket::m_lockInfoList;
 
@@ -898,7 +898,7 @@ bool CRealControlSocket::Send(const char *buffer, int len)
 	return true;
 }
 
-void CRealControlSocket::operator()(fz::CEventBase const& ev)
+void CRealControlSocket::operator()(fz::event_base const& ev)
 {
 	if (!fz::dispatch<CSocketEvent, CHostAddressEvent>(ev, this,
 		&CRealControlSocket::OnSocketEvent,
@@ -1350,9 +1350,9 @@ int CControlSocket::Chmod(const CChmodCommand&)
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-void CControlSocket::operator()(fz::CEventBase const& ev)
+void CControlSocket::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<fz::CTimerEvent, CObtainLockEvent>(ev, this,
+	fz::dispatch<fz::timer_event, CObtainLockEvent>(ev, this,
 		&CControlSocket::OnTimer,
 		&CControlSocket::OnObtainLock);
 }

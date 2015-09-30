@@ -8,10 +8,10 @@ Simple handler for asynchronous event processing.
 
 Usage example:
 	struct foo_event_type{}; // Any uniquely named type that's not implicitly convertible
-	typedef CEvent<foo_event_type, int, std::string> CFooEvent;
+	typedef simple_event<foo_event_type, int, std::string> CFooEvent;
 
 	struct bar_event_type{};
-	typedef CEvent<bar_event_type> CBarEvent;
+	typedef simple_event<bar_event_type> CBarEvent;
 
 	class MyHandler final : public CEventHandler
 	{
@@ -33,7 +33,7 @@ Usage example:
 			std::cout << "bar called";
 		}
 
-		virtual void operator()(CEventBase const& ev) {
+		virtual void operator()(event_base const& ev) {
 			// Tip: Put in order of decreasing frequency
 			Dispatch<CFooEvent, CBarEvent>(ev, this, &MyHandler::foo, &MyHandler::bar);
 		}
@@ -68,13 +68,13 @@ public:
 	//
 	// Override in your derived class.
 	// Consider using the Dispatch function inside.
-	virtual void operator()(CEventBase const&) = 0;
+	virtual void operator()(event_base const&) = 0;
 
 	// Sends the passed event asynchronously to the handler.
 	// Can be called from any thread.
 	// All events are processed in-order.
 	//
-	// See also operator()(CEventBase const&)
+	// See also operator()(event_base const&)
 	template<typename T, typename... Args>
 	void SendEvent(Args&&... args) {
 		event_loop_.SendEvent(this, new T(std::forward<Args>(args)...));

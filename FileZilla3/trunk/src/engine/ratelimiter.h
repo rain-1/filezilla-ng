@@ -41,7 +41,7 @@ protected:
 
 	void OnOptionsChanged(changed_options_t const& options);
 
-	void operator()(fz::CEventBase const& ev);
+	void operator()(fz::event_base const& ev);
 	void OnTimer(fz::timer_id id);
 	void OnRateChanged();
 
@@ -49,7 +49,7 @@ protected:
 };
 
 struct ratelimit_changed_event_type{};
-typedef fz::CEvent<ratelimit_changed_event_type> CRateLimitChangedEvent;
+typedef fz::simple_event<ratelimit_changed_event_type> CRateLimitChangedEvent;
 
 class CRateLimiterObject
 {

@@ -299,7 +299,7 @@ ssize_t CTlsSocket::PullFunction(void* data, size_t len)
 	return read;
 }
 
-void CTlsSocket::operator()(fz::CEventBase const& ev)
+void CTlsSocket::operator()(fz::event_base const& ev)
 {
 	fz::dispatch<CSocketEvent>(ev, this, &CTlsSocket::OnSocketEvent);
 }

@@ -11,6 +11,7 @@ libfilezilla_a_SOURCES = \
 noinst_HEADERS = \
 	fz_apply.hpp \
 	fz_config.hpp \
+	fz_event.hpp \
 	fz_mutex.hpp \
 	fz_string.hpp \
 	fz_thread.hpp \

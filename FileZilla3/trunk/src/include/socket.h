@@ -28,10 +28,10 @@ public:
 };
 
 struct socket_event_type;
-typedef fz::CEvent<socket_event_type, CSocketEventSource*, SocketEventType, int> CSocketEvent;
+typedef fz::simple_event<socket_event_type, CSocketEventSource*, SocketEventType, int> CSocketEvent;
 
 struct hostaddress_event_type;
-typedef fz::CEvent<hostaddress_event_type, CSocketEventSource*, wxString> CHostAddressEvent;
+typedef fz::simple_event<hostaddress_event_type, CSocketEventSource*, wxString> CHostAddressEvent;
 
 class CCallback
 {

@@ -63,7 +63,7 @@ protected:
 
 	void SetSocketBufferSizes(CSocket* pSocket);
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 	void OnIOThreadEvent();
 
 	CSocket *m_pSocket{};

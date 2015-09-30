@@ -1077,7 +1077,7 @@ void CNetConfWizard::OnTimer(wxTimerEvent& event)
 	CloseSocket();
 }
 
-void CNetConfWizard::operator()(fz::CEventBase const& ev)
+void CNetConfWizard::operator()(fz::event_base const& ev)
 {
 	if (fz::dispatch<CExternalIPResolveEvent>(ev, this, &CNetConfWizard::OnExternalIPAddress))
 		return;

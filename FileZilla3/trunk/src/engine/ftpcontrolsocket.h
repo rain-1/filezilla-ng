@@ -154,7 +154,7 @@ protected:
 
 	CLatencyMeasurement m_rtt;
 
-	virtual void operator()(fz::CEventBase const& ev);
+	virtual void operator()(fz::event_base const& ev);
 
 	void OnExternalIPAddress();
 	void OnTimer(fz::timer_id id);

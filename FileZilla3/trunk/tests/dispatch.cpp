@@ -42,16 +42,16 @@ struct target {
 };
 
 struct type1;
-typedef fz::CEvent<type1> T1;
+typedef fz::simple_event<type1> T1;
 
 struct type2;
-typedef fz::CEvent<type2> T2;
+typedef fz::simple_event<type2> T2;
 
 struct type3;
-typedef fz::CEvent<type3> T3;
+typedef fz::simple_event<type3> T3;
 
 struct type4;
-typedef fz::CEvent<type4, int, int> T4;
+typedef fz::simple_event<type4, int, int> T4;
 }
 
 void DispatchTest::testSingle()
