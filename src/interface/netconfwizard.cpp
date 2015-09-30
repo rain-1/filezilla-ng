@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include "fz_event_loop.hpp"
+#include "fz_util.hpp"
 #include "engine_context.h"
 #include "netconfwizard.h"
 #include "Options.h"
@@ -895,7 +896,7 @@ int CNetConfWizard::CreateListenSocket()
 		XRCCTRL(*this, "ID_ACTIVE_PORTMIN", wxTextCtrl)->GetValue().ToLong(&low);
 		XRCCTRL(*this, "ID_ACTIVE_PORTMAX", wxTextCtrl)->GetValue().ToLong(&high);
 
-		int mid = GetRandomNumber(low, high);
+		int mid = fz::random_number(low, high);
 		wxASSERT(mid >= low && mid <= high);
 
 		for (int port = mid; port <= high; port++)

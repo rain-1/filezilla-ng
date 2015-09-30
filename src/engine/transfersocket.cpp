@@ -9,6 +9,8 @@
 #include "proxy.h"
 #include "servercapabilities.h"
 
+#include "fz_util.hpp"
+
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode)
 : fz::event_handler(controlSocket.event_loop_)
 , engine_(engine)
@@ -617,7 +619,7 @@ CSocket* CTransferSocket::CreateSocketServer()
 		low = high;
 
 	if (start < low || start > high) {
-		start = GetRandomNumber(low, high);
+		start = fz::random_number(low, high);
 		wxASSERT(start >= low && start <= high);
 	}
 

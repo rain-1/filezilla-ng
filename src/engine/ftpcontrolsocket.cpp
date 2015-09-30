@@ -14,6 +14,8 @@
 #include "local_filesys.h"
 #include "proxy.h"
 
+#include "fz_util.hpp"
+
 #include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
@@ -4311,7 +4313,7 @@ void CFtpControlSocket::OnTimer(fz::timer_id id)
 	LogMessage(MessageType::Status, _("Sending keep-alive command"));
 
 	wxString cmd;
-	int i = GetRandomNumber(0, 2);
+	int i = fz::random_number(0, 2);
 	if (!i)
 		cmd = _T("NOOP");
 	else if (i == 1)
