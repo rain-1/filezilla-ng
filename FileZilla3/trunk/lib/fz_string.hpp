@@ -16,6 +16,9 @@ namespace fz {
 	typedef std::string native_string;
 #endif
 
+native_string to_native(std::string const& in);
+native_string to_native(std::wstring const& in);
+
 // Locale-sensitive stricmp
 // Note: does not handle embedded null
 int stricmp(std::string const& a, std::string const& b);
@@ -59,17 +62,26 @@ String str_tolower_ascii(String const& s)
 // Does not handle embedded nulls
 std::wstring to_wstring(std::string const& in);
 
+// Intentional NOP, that way to_wstring can be called with native_string.
+inline std::wstring to_wstring(std::wstring const& in) { return in; }
+
 // Converts from UTF-8 into wstring
 // Undefined behavior if input string is not valid UTF-8.
 std::wstring to_wstring_from_utf8(std::string const& in);
 
+// Converts from wstring into system encoding
+// Does not handle embedded nulls
+std::string to_string(std::wstring const& in);
+
+// Intentional NOP, that way to_string can be called with native_string.
+inline std::string to_string(std::string const& in) { return in; }
 }
 
 #ifndef fzT
 #ifdef FZ_WINDOWS
 #define fzT(x) L ## x
 #else
-#define fzT(X) x
+#define fzT(x) x
 #endif
 #endif
 

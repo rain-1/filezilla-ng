@@ -18,6 +18,28 @@ static_assert('A' < 'a', "We only support systems running with an ASCII-based ch
 
 namespace fz {
 
+#ifdef FZ_WINDOWS
+native_string to_native(std::string const& in)
+{
+	return to_wstring(in);
+}
+
+native_string to_native(std::wstring const& in)
+{
+	return in;
+}
+#else
+native_string to_native(std::string const& in)
+{
+	return in;
+}
+
+native_string to_native(std::wstring const& in)
+{
+	return to_string(in);
+}
+#endif
+
 int stricmp(std::string const& a, std::string const& b)
 {
 #ifdef FZ_WINDOWS
@@ -103,6 +125,23 @@ std::wstring to_wstring_from_utf8(std::string const& in)
 			iconv_close(cd);
 		}
 #endif
+	}
+
+	return ret;
+}
+
+std::string to_string(std::wstring const& in)
+{
+	std::mbstate_t ps{};
+	std::string ret;
+
+	wchar_t const* in_p = in.c_str();
+	size_t len = std::wcsrtombs(0, &in_p, 0, &ps);
+	if (len != static_cast<size_t>(-1)) {
+		ret.resize(len);
+		char* out_p = &ret[0];
+
+		std::wcsrtombs(out_p, &in_p, len + 1, &ps);
 	}
 
 	return ret;
