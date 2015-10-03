@@ -65,4 +65,12 @@ std::wstring to_wstring_from_utf8(std::string const& in);
 
 }
 
+#ifndef fzT
+#ifdef FZ_WINDOWS
+#define fzT(x) L ## x
+#else
+#define fzT(X) x
+#endif
+#endif
+
 #endif

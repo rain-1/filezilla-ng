@@ -6,6 +6,7 @@ libfilezilla_a_SOURCES = \
 	fz_event_handler.cpp \
 	fz_event_loop.cpp \
 	fz_mutex.cpp \
+	fz_process.cpp \
 	fz_string.cpp \
 	fz_thread.cpp \
 	fz_time.cpp \
@@ -18,6 +19,7 @@ noinst_HEADERS = \
 	fz_event_handler.hpp \
 	fz_event_loop.hpp \
 	fz_mutex.hpp \
+	fz_process.hpp \
 	fz_string.hpp \
 	fz_thread.hpp \
 	fz_time.hpp \

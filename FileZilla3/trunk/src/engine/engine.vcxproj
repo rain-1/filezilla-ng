@@ -86,7 +86,6 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="ftpcontrolsocket.cpp" />
-    <ClCompile Include="fzprocess.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="local_filesys.cpp" />
@@ -127,7 +126,6 @@
     <ClInclude Include="filezilla.h" />
     <ClInclude Include="..\include\FileZillaEngine.h" />
     <ClInclude Include="FtpControlSocket.h" />
-    <ClInclude Include="fzprocess.h" />
     <ClInclude Include="httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla_engine.h" />

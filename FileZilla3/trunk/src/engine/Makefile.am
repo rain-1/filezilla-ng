@@ -18,7 +18,6 @@ libengine_a_SOURCES = \
 		FileZillaEngine.cpp \
 		file.cpp \
 		ftpcontrolsocket.cpp \
-		fzprocess.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \
 		local_filesys.cpp \
@@ -47,7 +46,6 @@ noinst_HEADERS = backend.h \
 		engineprivate.h \
 		filezilla.h \
 		ftpcontrolsocket.h \
-		fzprocess.h \
 		httpcontrolsocket.h \
 		iothread.h \
 		logging_private.h \

@@ -6,7 +6,7 @@
 #include "fz_event_loop.hpp"
 #include "pathcache.h"
 #include "local_filesys.h"
-#include "fzprocess.h"
+#include "fz_process.hpp"
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
@@ -57,9 +57,9 @@ struct sftp_message
 class CSftpInputThread final : public wxThread
 {
 public:
-	CSftpInputThread(CSftpControlSocket* pOwner, CProcess& process)
+	CSftpInputThread(CSftpControlSocket* pOwner, fz::process& proc)
 		: wxThread(wxTHREAD_JOINABLE)
-		, process_(process)
+		, process_(proc)
 		, m_pOwner(pOwner)
 	{
 	}
@@ -110,7 +110,7 @@ protected:
 
 		while(true) {
 			char c;
-			int read = process_.Read(&c, 1);
+			int read = process_.read(&c, 1);
 			if (read != 1) {
 				if (!read)
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
@@ -138,7 +138,7 @@ protected:
 
 		while(true) {
 			char c;
-			int read = process_.Read(&c, 1);
+			int read = process_.read(&c, 1);
 			if (read != 1) {
 				if (!read)
 					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
@@ -178,7 +178,7 @@ protected:
 		bool error = false;
 		while (!error) {
 			char readType = 0;
-			int read = process_.Read(&readType, 1);
+			int read = process_.read(&readType, 1);
 			if (read != 1)
 				break;
 
@@ -293,7 +293,7 @@ loopexit:
 		return 0;
 	}
 
-	CProcess& process_;
+	fz::process& process_;
 	CSftpControlSocket* m_pOwner;
 
 	std::vector<sftp_message*> m_sftpMessages;
@@ -405,20 +405,20 @@ int CSftpControlSocket::Connect(const CServer &server)
 	else
 		pData->pKeyFiles = pTokenizer;
 
-	m_pProcess = new CProcess();
+	m_pProcess = new fz::process();
 
 	engine_.GetRateLimiter().AddObject(this);
 
-	wxString executable = engine_.GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE);
+	fz::native_string executable = engine_.GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE).fn_str();
 	if (executable.empty())
-		executable = _T("fzsftp");
+		executable = fzT("fzsftp");
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
 
-	std::vector<wxString> args = {_T("-v")};
+	std::vector<fz::native_string> args = {fzT("-v")};
 	if (engine_.GetOptions().GetOptionVal(OPTION_SFTP_COMPRESSION)) {
-		args.push_back(_T("-C"));
+		args.push_back(fzT("-C"));
 	}
-	if (!m_pProcess->Execute(executable, args)) {
+	if (!m_pProcess->spawn(executable, args)) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not create process: %s"), wxSysErrorMsg());
 		DoClose();
 		return FZ_REPLY_ERROR;
@@ -794,7 +794,7 @@ bool CSftpControlSocket::AddToStream(const wxString& cmd, bool force_utf8 /*=fal
 	}
 
 	unsigned int len = strlen(str);
-	return m_pProcess->Write(str, len);
+	return m_pProcess->write(str, len);
 }
 
 bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotification)
@@ -1885,7 +1885,7 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 	engine_.GetRateLimiter().RemoveObject(this);
 
 	if (m_pProcess) {
-		m_pProcess->Kill();
+		m_pProcess->kill();
 	}
 
 	if (m_pInputThread) {
