@@ -16,6 +16,11 @@ inline wxString str_tolower_ascii(wxString const& s)
 	}
 	return ret;
 }
+
+inline native_string to_native(wxString const& in)
+{
+	return to_native(in.ToStdWstring());
+}
 }
 
 #endif

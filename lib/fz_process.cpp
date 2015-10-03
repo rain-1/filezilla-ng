@@ -240,6 +240,10 @@ private:
 #include <errno.h>
 #include <signal.h>
 #include <sys/wait.h>
+#include <string.h>
+#include <unistd.h>
+
+namespace fz {
 
 namespace {
 void reset_fd(int& fd)
@@ -268,7 +272,7 @@ public:
 		reset();
 
 		int fds[2];
-		if (pipe(fds) != 0) {
+		if (::pipe(fds) != 0) {
 			return false;
 		}
 
@@ -315,11 +319,9 @@ public:
 
 	void make_arg(native_string const& arg, std::vector<std::unique_ptr<native_string::value_type[]>> & argList)
 	{
-		// FIXME
-		wxCharBuffer buf = arg.mb_str();
 		std::unique_ptr<char[]> ret;
-		ret.reset(new char[buf.length() + 1]);
-		strcpy(ret.get(), buf);
+		ret.reset(new char[arg.size() + 1]);
+		strcpy(ret.get(), arg.c_str());
 		argList.push_back(std::move(ret));
 	}
 
@@ -327,7 +329,7 @@ public:
 	{
 		make_arg(cmd, argList);
 		for (auto const& a : args) {
-			MakeArg(a, argList);
+			make_arg(a, argList);
 		}
 
 		argV.reset(new char *[argList.size() + 1]);
@@ -369,7 +371,7 @@ public:
 			get_argv(cmd, args, argList, argV);
 
 			// Execute process
-			execv(cmd.mb_str(), argV.get()); // noreturn on success
+			execv(cmd.c_str(), argV.get()); // noreturn on success
 
 			_exit(-1);
 		}
@@ -391,7 +393,7 @@ public:
 		in_.reset();
 
 		if (pid_ != -1) {
-			kill(pid_, SIGTERM);
+			::kill(pid_, SIGTERM);
 
 			int ret;
 			do {
@@ -410,7 +412,7 @@ public:
 	{
 		int r;
 		do {
-			r = read(out_.read_, buffer, len);
+			r = ::read(out_.read_, buffer, len);
 		} while (r == -1 && (errno == EAGAIN || errno == EINTR));
 
 		return r;
@@ -421,7 +423,7 @@ public:
 		while (len) {
 			int written;
 			do {
-				written = write(in_.write_, buffer, len);
+				written = ::write(in_.write_, buffer, len);
 			} while (written == -1 && (errno == EAGAIN || errno == EINTR));
 
 			if (written <= 0) {

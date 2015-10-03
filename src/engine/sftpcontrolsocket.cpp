@@ -409,7 +409,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	engine_.GetRateLimiter().AddObject(this);
 
-	fz::native_string executable = engine_.GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE).fn_str();
+	auto executable = fz::to_native(engine_.GetOptions().GetOption(OPTION_FZSFTP_EXECUTABLE));
 	if (executable.empty())
 		executable = fzT("fzsftp");
 	LogMessage(MessageType::Debug_Verbose, _T("Going to execute %s"), executable);
