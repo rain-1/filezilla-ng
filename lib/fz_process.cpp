@@ -1,10 +1,13 @@
-#include <filezilla.h>
-#include "fzprocess.h"
+#include "fz_process.hpp"
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
+
+#include "private/windows.hpp"
+
+namespace fz {
 
 namespace {
-void ResetHandle(HANDLE& handle)
+void reset_handle(HANDLE& handle)
 {
 	if (handle != INVALID_HANDLE_VALUE) {
 		CloseHandle(handle);
@@ -12,7 +15,7 @@ void ResetHandle(HANDLE& handle)
 	}
 };
 
-bool Uninherit(HANDLE& handle)
+bool uninherit(HANDLE& handle)
 {
 	if (handle != INVALID_HANDLE_VALUE) {
 		HANDLE newHandle = INVALID_HANDLE_VALUE;
@@ -27,20 +30,20 @@ bool Uninherit(HANDLE& handle)
 	return handle != INVALID_HANDLE_VALUE;
 }
 
-class Pipe final
+class pipe final
 {
 public:
-	Pipe() = default;
+	pipe() = default;
 
-	~Pipe()
+	~pipe()
 	{
 		reset();
 	}
 
-	Pipe(Pipe const&) = delete;
-	Pipe& operator=(Pipe const&) = delete;
+	pipe(pipe const&) = delete;
+	pipe& operator=(pipe const&) = delete;
 
-	bool Create(bool local_is_input)
+	bool create(bool local_is_input)
 	{
 		reset();
 
@@ -51,7 +54,7 @@ public:
 		BOOL res = CreatePipe(&read_, &write_, &sa, 0);
 		if (res) {
 			// We only want one side of the pipe to be inheritable
-			if (!Uninherit(local_is_input ? read_ : write_)) {
+			if (!uninherit(local_is_input ? read_ : write_)) {
 				reset();
 			}
 		}
@@ -68,8 +71,8 @@ public:
 
 	void reset()
 	{
-		ResetHandle(read_);
-		ResetHandle(write_);
+		reset_handle(read_);
+		reset_handle(write_);
 	}
 
 	HANDLE read_{INVALID_HANDLE_VALUE};
@@ -77,31 +80,31 @@ public:
 };
 }
 
-class CProcess::Impl
+class process::impl
 {
 public:
-	Impl() = default;
-	~Impl()
+	impl() = default;
+	~impl()
 	{
-		Kill();
+		kill();
 	}
 
-	Impl(Impl const&) = delete;
-	Impl& operator=(Impl const&) = delete;
+	impl(impl const&) = delete;
+	impl& operator=(impl const&) = delete;
 
-	bool CreatePipes()
+	bool create_pipes()
 	{
 		return
-			in_.Create(false) &&
-			out_.Create(true) &&
-			err_.Create(true);
+			in_.create(false) &&
+			out_.create(true) &&
+			err_.create(true);
 	}
 
-	bool Execute(wxString const& cmd, std::vector<wxString> const& args)
+	bool spawn(native_string const& cmd, std::vector<native_string> const& args)
 	{
 		DWORD flags = CREATE_UNICODE_ENVIRONMENT | CREATE_DEFAULT_ERROR_MODE | CREATE_NO_WINDOW;
 
-		if (!CreatePipes()) {
+		if (!create_pipes()) {
 			return false;
 		}
 
@@ -112,10 +115,13 @@ public:
 		si.hStdOutput = out_.write_;
 		si.hStdError = err_.write_;
 
-		auto cmdline = GetCmdLine(cmd, args);
+		auto cmdline = get_cmd_line(cmd, args);
 
 		PROCESS_INFORMATION pi{};
-		BOOL res = CreateProcess(cmd, cmdline.get(), 0, 0, TRUE, flags, 0, 0, &si, &pi);
+
+		auto cmdline_buf = &cmdline[0];
+
+		BOOL res = CreateProcess(cmd.c_str(), cmdline_buf, 0, 0, TRUE, flags, 0, 0, &si, &pi);
 		if (!res) {
 			return false;
 		}
@@ -123,28 +129,28 @@ public:
 		process_ = pi.hProcess;
 
 		// We don't need to use these
-		ResetHandle(pi.hThread);
-		ResetHandle(in_.read_);
-		ResetHandle(out_.write_);
-		ResetHandle(err_.write_);
+		reset_handle(pi.hThread);
+		reset_handle(in_.read_);
+		reset_handle(out_.write_);
+		reset_handle(err_.write_);
 
 		return true;
 	}
 
-	void Kill()
+	void kill()
 	{
 		if (process_ != INVALID_HANDLE_VALUE) {
 			in_.reset();
 			if (WaitForSingleObject(process_, 500) == WAIT_TIMEOUT) {
 				TerminateProcess(process_, 0);
 			}
-			ResetHandle(process_);
+			reset_handle(process_);
 			out_.reset();
 			err_.reset();
 		}
 	}
 
-	int Read(char* buffer, unsigned int len)
+	int read(char* buffer, unsigned int len)
 	{
 		DWORD read = 0;
 		BOOL res = ReadFile(out_.read_, buffer, len, &read, 0);
@@ -154,7 +160,7 @@ public:
 		return read;
 	}
 
-	bool Write(char const* buffer, unsigned int len)
+	bool write(char const* buffer, unsigned int len)
 	{
 		while (len > 0) {
 			DWORD written = 0;
@@ -169,18 +175,18 @@ public:
 	}
 
 private:
-	wxString EscapeArgument(wxString const& arg)
+	native_string escape_argument(native_string const& arg)
 	{
-		wxString ret;
+		native_string ret;
 
 		// Treat newlines are whitespace just to be sure, even if MSDN doesn't mention it
-		if (arg.find_first_of(_T(" \"\t\r\n\v")) != wxString::npos) {
+		if (arg.find_first_of(fzT(" \"\t\r\n\v")) != native_string::npos) {
 			// Quite horrible, as per MSDN: 
 			// Backslashes are interpreted literally, unless they immediately precede a double quotation mark.
 			// If an even number of backslashes is followed by a double quotation mark, one backslash is placed in the argv array for every pair of backslashes, and the double quotation mark is interpreted as a string delimiter.
 			// If an odd number of backslashes is followed by a double quotation mark, one backslash is placed in the argv array for every pair of backslashes, and the double quotation mark is "escaped" by the remaining backslash, causing a literal double quotation mark (") to be placed in argv.
 
-			ret = _T("\"");
+			ret = fzT("\"");
 			int backslashCount = 0;
 			for (auto it = arg.begin(); it != arg.end(); ++it) {
 				if (*it == '\\') {
@@ -189,7 +195,7 @@ private:
 				else {
 					if (*it == '"') {
 						// Escape all preceeding backslashes and escape the quote
-						ret += wxString(backslashCount + 1, '\\');
+						ret += native_string(backslashCount + 1, '\\');
 					}
 					backslashCount = 0;
 				}
@@ -197,10 +203,10 @@ private:
 			}
 			if (backslashCount) {
 				// Escape all preceeding backslashes
-				ret += wxString(backslashCount, '\\');
+				ret += native_string(backslashCount, '\\');
 			}
 
-			ret += _T("\"");
+			ret += fzT("\"");
 		}
 		else {
 			ret = arg;
@@ -209,26 +215,24 @@ private:
 		return ret;
 	}
 
-	std::unique_ptr<wxChar[]> GetCmdLine(wxString const& cmd, std::vector<wxString> const& args)
+	native_string get_cmd_line(native_string const& cmd, std::vector<native_string> const& args)
 	{
-		wxString cmdline = EscapeArgument(cmd);
-		
+		native_string cmdline = escape_argument(cmd);
+
 		for (auto const& arg : args) {
 			if (!arg.empty()) {
-				cmdline += _T(" ") + EscapeArgument(arg);
+				cmdline += fzT(" ") + escape_argument(arg);
 			}
 		}
-		std::unique_ptr<wxChar[]> ret;
-		ret.reset(new wxChar[cmdline.size() + 1]);
-		wxStrcpy(ret.get(), cmdline);
-		return ret;
+
+		return cmdline;
 	}
 
 	HANDLE process_{INVALID_HANDLE_VALUE};
 
-	Pipe in_;
-	Pipe out_;
-	Pipe err_;
+	pipe in_;
+	pipe out_;
+	pipe err_;
 };
 
 #else
@@ -238,7 +242,7 @@ private:
 #include <sys/wait.h>
 
 namespace {
-void ResetFd(int& fd)
+void reset_fd(int& fd)
 {
 	if (fd != -1) {
 		close(fd);
@@ -246,20 +250,20 @@ void ResetFd(int& fd)
 	}
 }
 
-class Pipe final
+class pipe final
 {
 public:
-	Pipe() = default;
+	pipe() = default;
 
-	~Pipe()
+	~pipe()
 	{
 		reset();
 	}
 
-	Pipe(Pipe const&) = delete;
-	Pipe& operator=(Pipe const&) = delete;
+	pipe(pipe const&) = delete;
+	pipe& operator=(pipe const&) = delete;
 
-	bool Create()
+	bool create()
 	{
 		reset();
 
@@ -280,8 +284,8 @@ public:
 
 	void reset()
 	{
-		ResetFd(read_);
-		ResetFd(write_);
+		reset_fd(read_);
+		reset_fd(write_);
 	}
 
 	int read_{-1};
@@ -289,28 +293,29 @@ public:
 };
 }
 
-class CProcess::Impl
+class process::impl
 {
 public:
-	Impl() = default;
-	~Impl()
+	impl() = default;
+	~impl()
 	{
-		Kill();
+		kill();
 	}
 
-	Impl(Impl const&) = delete;
-	Impl& operator=(Impl const&) = delete;
+	impl(impl const&) = delete;
+	impl& operator=(impl const&) = delete;
 
-	bool CreatePipes()
+	bool create_pipes()
 	{
 		return
-			in_.Create() &&
-			out_.Create() &&
-			err_.Create();
+			in_.create() &&
+			out_.create() &&
+			err_.create();
 	}
 
-	void MakeArg(wxString const& arg, std::vector<std::unique_ptr<char[]>> & argList)
+	void make_arg(native_string const& arg, std::vector<std::unique_ptr<native_string::value_type[]>> & argList)
 	{
+		// FIXME
 		wxCharBuffer buf = arg.mb_str();
 		std::unique_ptr<char[]> ret;
 		ret.reset(new char[buf.length() + 1]);
@@ -318,9 +323,9 @@ public:
 		argList.push_back(std::move(ret));
 	}
 
-	void GetArgv(wxString const& cmd, std::vector<wxString> const& args, std::vector<std::unique_ptr<char[]>> & argList, std::unique_ptr<char *[]> & argV)
+	void get_argv(native_string const& cmd, std::vector<native_string> const& args, std::vector<std::unique_ptr<char[]>> & argList, std::unique_ptr<char *[]> & argV)
 	{
-		MakeArg(cmd, argList);
+		make_arg(cmd, argList);
 		for (auto const& a : args) {
 			MakeArg(a, argList);
 		}
@@ -333,9 +338,9 @@ public:
 		*v = 0;
 	}
 
-	bool Execute(wxString const& cmd, std::vector<wxString> const& args)
+	bool spawn(native_string const& cmd, std::vector<native_string> const& args)
 	{
-		if (!CreatePipes()) {
+		if (!create_pipes()) {
 			return false;
 		}
 
@@ -347,9 +352,9 @@ public:
 			// We're the child.
 
 			// Close uneeded descriptors
-			ResetFd(in_.write_);
-			ResetFd(out_.read_);
-			ResetFd(err_.read_);
+			reset_fd(in_.write_);
+			reset_fd(out_.read_);
+			reset_fd(err_.read_);
 
 			// Redirect to pipe
 			if (dup2(in_.read_, STDIN_FILENO) == -1 ||
@@ -361,10 +366,10 @@ public:
 
 			std::vector<std::unique_ptr<char[]>> argList;
 			std::unique_ptr<char *[]> argV;
-			GetArgv(cmd, args, argList, argV);
+			get_argv(cmd, args, argList, argV);
 
 			// Execute process
-			execv(cmd.mb_str(), argV.get());//argV.get()); // noreturn on success
+			execv(cmd.mb_str(), argV.get()); // noreturn on success
 
 			_exit(-1);
 		}
@@ -373,15 +378,15 @@ public:
 			pid_ = pid;
 
 			// Close unneeded descriptors
-			ResetFd(in_.read_);
-			ResetFd(out_.write_);
-			ResetFd(err_.write_);
+			reset_fd(in_.read_);
+			reset_fd(out_.write_);
+			reset_fd(err_.write_);
 		}
 
 		return true;
 	}
 
-	void Kill()
+	void kill()
 	{
 		in_.reset();
 
@@ -390,8 +395,7 @@ public:
 
 			int ret;
 			do {
-			}
-			while((ret = waitpid(pid_, 0, 0)) == -1 && errno == EINTR);
+			} while ((ret = waitpid(pid_, 0, 0)) == -1 && errno == EINTR);
 
 			(void)ret;
 
@@ -402,25 +406,23 @@ public:
 		err_.reset();
 	}
 
-	int Read(char* buffer, unsigned int len)
+	int read(char* buffer, unsigned int len)
 	{
 		int r;
 		do {
 			r = read(out_.read_, buffer, len);
-		}
-		while (r == -1 && (errno == EAGAIN || errno == EINTR));
+		} while (r == -1 && (errno == EAGAIN || errno == EINTR));
 
 		return r;
 	}
 
-	bool Write(char const* buffer, unsigned int len)
+	bool write(char const* buffer, unsigned int len)
 	{
 		while (len) {
 			int written;
 			do {
 				written = write(in_.write_, buffer, len);
-			}
-			while (written == -1 && (errno == EAGAIN || errno == EINTR));
+			} while (written == -1 && (errno == EAGAIN || errno == EINTR));
 
 			if (written <= 0) {
 				return false;
@@ -432,9 +434,9 @@ public:
 		return true;
 	}
 
-	Pipe in_;
-	Pipe out_;
-	Pipe err_;
+	pipe in_;
+	pipe out_;
+	pipe err_;
 
 	int pid_{-1};
 };
@@ -442,34 +444,36 @@ public:
 #endif
 
 
-CProcess::CProcess()
-	: impl_(std::make_unique<Impl>())
+process::process()
+	: impl_(std::make_unique<impl>())
 {
 }
 
-CProcess::~CProcess()
+process::~process()
 {
 	impl_.reset();
 }
 
-bool CProcess::Execute(wxString const& cmd, std::vector<wxString> const& args)
+bool process::spawn(native_string const& cmd, std::vector<native_string> const& args)
 {
-	return impl_ ? impl_->Execute(cmd, args) : false;
+	return impl_ ? impl_->spawn(cmd, args) : false;
 }
 
-void CProcess::Kill()
+void process::kill()
 {
 	if (impl_) {
-		impl_->Kill();
+		impl_->kill();
 	}
 }
 
-int CProcess::Read(char* buffer, unsigned int len)
+int process::read(char* buffer, unsigned int len)
 {
-	return impl_ ? impl_->Read(buffer, len) : -1;
+	return impl_ ? impl_->read(buffer, len) : -1;
 }
 
-bool CProcess::Write(char const* buffer, unsigned int len)
+bool process::write(char const* buffer, unsigned int len)
 {
-	return impl_ ? impl_->Write(buffer, len) : false;
+	return impl_ ? impl_->write(buffer, len) : false;
+}
+
 }

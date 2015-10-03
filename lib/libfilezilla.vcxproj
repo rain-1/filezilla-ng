@@ -62,6 +62,7 @@
     <ClCompile Include="fz_event_handler.cpp" />
     <ClCompile Include="fz_event_loop.cpp" />
     <ClCompile Include="fz_mutex.cpp" />
+    <ClCompile Include="fz_process.cpp" />
     <ClCompile Include="fz_string.cpp" />
     <ClCompile Include="fz_thread.cpp" />
     <ClCompile Include="fz_time.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="fz_event_handler.hpp" />
     <ClInclude Include="fz_event_loop.hpp" />
     <ClInclude Include="fz_mutex.hpp" />
+    <ClInclude Include="fz_process.hpp" />
     <ClInclude Include="fz_string.hpp" />
     <ClInclude Include="fz_thread.hpp" />
     <ClInclude Include="fz_time.hpp" />
