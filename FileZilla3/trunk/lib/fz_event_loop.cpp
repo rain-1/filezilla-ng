@@ -78,7 +78,7 @@ void event_loop::remove_handler(event_handler* handler)
 
 	while (active_handler_ == handler) {
 		l.unlock();
-		fz::sleep(duration::from_milliseconds(1));
+		sleep(duration::from_milliseconds(1));
 		l.lock();
 	}
 }
