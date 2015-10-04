@@ -4,11 +4,15 @@
 #ifndef FZ_WINDOWS
 #include <errno.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <unistd.h>
 #endif
 
 namespace fz {
 
 static_assert(sizeof(file::ssize_t) >= 8, "Need 64bit support.");
+static_assert(sizeof(file::ssize_t) == sizeof(size_t), "Sizes of size_t and ssize_t should match.");
 
 file::file()
 {
@@ -143,7 +147,7 @@ bool file::open(native_string const& f, mode m, disposition d)
 			flags |= O_TRUNC;
 		}
 	}
-	fd_ = open(f.fn_str(), flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
+	fd_ = ::open(f.c_str(), flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 
 #if HAVE_POSIX_FADVISE
 	if (fd_ != -1) {
@@ -157,7 +161,7 @@ bool file::open(native_string const& f, mode m, disposition d)
 void file::close()
 {
 	if (fd_ != -1) {
-		close(fd_);
+		::close(fd_);
 		fd_ = -1;
 	}
 }
@@ -210,22 +214,22 @@ bool file::truncate()
 
 size_t file::read(void *buf, size_t count)
 {
-	size_t ret;
+	ssize_t ret;
 	do {
 		ret = ::read(fd_, buf, count);
 	} while (ret == -1 && (errno == EAGAIN || errno == EINTR));
 
-	return ret;
+	return static_cast<size_t>(ret);
 }
 
 size_t file::write(void const* buf, size_t count)
 {
-	size_t ret;
+	ssize_t ret;
 	do {
 		ret = ::write(fd_, buf, count);
 	} while (ret == -1 && (errno == EAGAIN || errno == EINTR));
 
-	return ret;
+	return static_cast<size_t>(ret);
 }
 
 bool file::opened() const

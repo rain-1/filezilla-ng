@@ -210,7 +210,7 @@ bool CIOThread::Finalize(int len)
 #ifndef __WXMSW__
 	if (!m_binary && m_wasCarriageReturn) {
 		const char CR = '\r';
-		if (m_pFile->Write(&CR, 1) != 1)
+		if (m_pFile->write(&CR, 1) != 1)
 			return false;
 	}
 #endif
@@ -291,8 +291,8 @@ size_t CIOThread::ReadFromFile(char* pBuffer, size_t maxLen)
 	const int readLen = maxLen / 2;
 
 	char* r = pBuffer + readLen;
-	int len = m_pFile->Read(r, readLen);
-	if (!len || len == wxInvalidOffset)
+	size_t len = m_pFile->read(r, readLen);
+	if (!len || len == fz::file::err)
 		return len;
 
 	const char* const end = r + len;
