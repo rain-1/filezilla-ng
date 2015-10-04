@@ -16,7 +16,6 @@ libengine_a_SOURCES = \
 		engineprivate.cpp \
 		externalipresolver.cpp \
 		FileZillaEngine.cpp \
-		file.cpp \
 		ftpcontrolsocket.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \

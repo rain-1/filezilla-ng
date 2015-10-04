@@ -1,29 +1,37 @@
-#include <filezilla.h>
+#include "libfilezilla.hpp"
+#include "fz_file.hpp"
 
-#include "file.h"
+#ifndef FZ_WINDOWS
+#include <errno.h>
+#include <sys/stat.h>
+#endif
 
-CFile::CFile()
+namespace fz {
+
+static_assert(sizeof(file::ssize_t) >= 8, "Need 64bit support.");
+
+file::file()
 {
 }
 
-CFile::CFile(wxString const& f, mode m, disposition d)
+file::file(native_string const& f, mode m, disposition d)
 {
-	Open(f, m, d);
+	open(f, m, d);
 }
 
-CFile::~CFile()
+file::~file()
 {
-	Close();
+	close();
 }
 
-#ifdef __WXMSW__
-bool CFile::Open(wxString const& f, mode m, disposition d)
+#ifdef FZ_WINDOWS
+bool file::open(native_string const& f, mode m, disposition d)
 {
-	Close();
+	close();
 
 	DWORD dispositionFlags;
-	if (m == write) {
-		if (d == truncate) {
+	if (m == writing) {
+		if (d == empty) {
 			dispositionFlags = CREATE_ALWAYS;
 		}
 		else {
@@ -35,16 +43,16 @@ bool CFile::Open(wxString const& f, mode m, disposition d)
 	}
 
 	DWORD shareMode = FILE_SHARE_READ;
-	if (m == read) {
+	if (m == reading) {
 		shareMode |= FILE_SHARE_WRITE;
 	}
 
-	hFile_ = CreateFile(f, (m == read) ? GENERIC_READ : GENERIC_WRITE, shareMode, 0, dispositionFlags, FILE_FLAG_SEQUENTIAL_SCAN, 0);
+	hFile_ = CreateFile(f.c_str(), (m == reading) ? GENERIC_READ : GENERIC_WRITE, shareMode, 0, dispositionFlags, FILE_FLAG_SEQUENTIAL_SCAN, 0);
 
 	return hFile_ != INVALID_HANDLE_VALUE;
 }
 
-void CFile::Close()
+void file::close()
 {
 	if (hFile_ != INVALID_HANDLE_VALUE) {
 		CloseHandle(hFile_);
@@ -52,20 +60,20 @@ void CFile::Close()
 	}
 }
 
-wxFileOffset CFile::Length() const
+size_t file::size() const
 {
-	wxFileOffset ret = -1;
+	size_t ret = err;
 
 	LARGE_INTEGER size{};
 	if (GetFileSizeEx(hFile_, &size)) {
-		ret = size.QuadPart;
+		ret = static_cast<size_t>(size.QuadPart);
 	}
 	return ret;
 }
 
-wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
+file::ssize_t file::seek(ssize_t offset, seek_mode m)
 {
-	wxFileOffset ret = -1;
+	file::ssize_t ret = -1;
 
 	LARGE_INTEGER dist{};
 	dist.QuadPart = offset;
@@ -85,60 +93,57 @@ wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
 	return ret;
 }
 
-bool CFile::Truncate()
+bool file::truncate()
 {
 	return !!SetEndOfFile(hFile_);
 }
 
-ssize_t CFile::Read(void *buf, size_t count)
+size_t file::read(void *buf, size_t count)
 {
-	ssize_t ret = -1;
+	size_t ret = -1;
 
 	DWORD read = 0;
 	if (ReadFile(hFile_, buf, count, &read, 0)) {
-		ret = static_cast<ssize_t>(read);
+		ret = static_cast<size_t>(read);
 	}
 
 	return ret;
 }
 
-ssize_t CFile::Write(void const* buf, size_t count)
+size_t file::write(void const* buf, size_t count)
 {
-	ssize_t ret = -1;
+	size_t ret = err;
 
 	DWORD written = 0;
 	if (WriteFile(hFile_, buf, count, &written, 0)) {
-		ret = static_cast<ssize_t>(written);
+		ret = static_cast<size_t>(written);
 	}
 
 	return ret;
 }
 
-bool CFile::Opened() const
+bool file::opened() const
 {
 	return hFile_ != INVALID_HANDLE_VALUE;
 }
 
 #else
 
-#include <errno.h>
-#include <sys/stat.h>
-
-bool CFile::Open(wxString const& f, mode m, disposition d)
+bool file::open(native_string const& f, mode m, disposition d)
 {
-	Close();
+	close();
 
 	int flags = O_CLOEXEC;
-	if (m == read) {
+	if (m == reading) {
 		flags |= O_RDONLY;
 	}
 	else {
 		flags |= O_WRONLY | O_CREAT;
-		if (d == truncate) {
+		if (d == empty) {
 			flags |= O_TRUNC;
 		}
 	}
-	fd_ = open(f.fn_str(), flags, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH|S_IWOTH);
+	fd_ = open(f.fn_str(), flags, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH);
 
 #if HAVE_POSIX_FADVISE
 	if (fd_ != -1) {
@@ -149,7 +154,7 @@ bool CFile::Open(wxString const& f, mode m, disposition d)
 	return fd_ != -1;
 }
 
-void CFile::Close()
+void file::close()
 {
 	if (fd_ != -1) {
 		close(fd_);
@@ -157,9 +162,9 @@ void CFile::Close()
 	}
 }
 
-wxFileOffset CFile::Length() const
+size_t file::size() const
 {
-	wxFileOffset ret = -1;
+	size_t ret = err;
 
 	struct stat buf;
 	if (!fstat(fd_, &buf)) {
@@ -169,9 +174,9 @@ wxFileOffset CFile::Length() const
 	return ret;
 }
 
-wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
+file::ssize_t file::seek(ssize_t offset, seek_mode m)
 {
-	wxFileOffset ret = -1;
+	ssize_t ret = -1;
 
 	int whence = SEEK_SET;
 	if (m == current) {
@@ -189,7 +194,7 @@ wxFileOffset CFile::Seek(wxFileOffset offset, seekMode m)
 	return ret;
 }
 
-bool CFile::Truncate()
+bool file::truncate()
 {
 	bool ret = false;
 
@@ -203,9 +208,9 @@ bool CFile::Truncate()
 	return ret;
 }
 
-ssize_t CFile::Read(void *buf, size_t count)
+size_t file::read(void *buf, size_t count)
 {
-	ssize_t ret;
+	size_t ret;
 	do {
 		ret = ::read(fd_, buf, count);
 	} while (ret == -1 && (errno == EAGAIN || errno == EINTR));
@@ -213,9 +218,9 @@ ssize_t CFile::Read(void *buf, size_t count)
 	return ret;
 }
 
-ssize_t CFile::Write(void const* buf, size_t count)
+size_t file::write(void const* buf, size_t count)
 {
-	ssize_t ret;
+	size_t ret;
 	do {
 		ret = ::write(fd_, buf, count);
 	} while (ret == -1 && (errno == EAGAIN || errno == EINTR));
@@ -223,9 +228,11 @@ ssize_t CFile::Write(void const* buf, size_t count)
 	return ret;
 }
 
-bool CFile::Opened() const
+bool file::opened() const
 {
 	return fd_ != -1;
 }
 
 #endif
+
+}

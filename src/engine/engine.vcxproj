@@ -81,7 +81,6 @@
     <ClCompile Include="engineprivate.cpp" />
     <ClCompile Include="engine_context.cpp" />
     <ClCompile Include="externalipresolver.cpp" />
-    <ClCompile Include="file.cpp" />
     <ClCompile Include="FileZillaEngine.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -112,7 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\engine_context.h" />
-    <ClInclude Include="..\include\file.h" />
     <ClInclude Include="..\include\refcount.h" />
     <ClInclude Include="..\include\fzstring.h" />
     <ClInclude Include="backend.h" />
