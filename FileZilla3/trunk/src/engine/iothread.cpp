@@ -1,6 +1,6 @@
 #include <filezilla.h>
 
-#include "file.h"
+#include "fz_file.hpp"
 #include "iothread.h"
 
 #include <wx/log.h>
@@ -28,13 +28,13 @@ void CIOThread::Close()
 		// The file might have been preallocated and the transfer stopped before being completed
 		// so always truncate the file to the actually written size before closing it.
 		if (!m_read)
-			m_pFile->Truncate();
+			m_pFile->truncate();
 
 		m_pFile.reset();
 	}
 }
 
-bool CIOThread::Create(std::unique_ptr<CFile> && pFile, bool read, bool binary)
+bool CIOThread::Create(std::unique_ptr<fz::file> && pFile, bool read, bool binary)
 {
 	wxASSERT(pFile);
 
@@ -68,7 +68,7 @@ wxThread::ExitCode CIOThread::Entry()
 {
 	if (m_read) {
 		while (m_running) {
-			int len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
+			size_t len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 
 			fz::scoped_lock l(m_mutex);
 
@@ -81,7 +81,7 @@ wxThread::ExitCode CIOThread::Entry()
 				m_evtHandler->send_event<CIOThreadEvent>();
 			}
 
-			if (len == wxInvalidOffset) {
+			if (len == fz::file::err) {
 				m_error = true;
 				m_running = false;
 				break;
@@ -266,7 +266,7 @@ void CIOThread::Destroy()
 	Wait(wxTHREAD_WAIT_BLOCK);
 }
 
-int CIOThread::ReadFromFile(char* pBuffer, int maxLen)
+size_t CIOThread::ReadFromFile(char* pBuffer, size_t maxLen)
 {
 #ifdef SIMULATE_IO
 	if (size_ < 0) {
@@ -282,7 +282,7 @@ int CIOThread::ReadFromFile(char* pBuffer, int maxLen)
 #ifndef __WXMSW__
 	if (m_binary)
 #endif
-		return m_pFile->Read(pBuffer, maxLen);
+		return m_pFile->read(pBuffer, maxLen);
 
 #ifndef __WXMSW__
 
@@ -365,7 +365,7 @@ bool CIOThread::WriteToFile(char* pBuffer, int len)
 
 bool CIOThread::DoWrite(const char* pBuffer, int len)
 {
-	int written = m_pFile->Write(pBuffer, len);
+	int written = m_pFile->write(pBuffer, len);
 	if (written == len) {
 		return true;
 	}

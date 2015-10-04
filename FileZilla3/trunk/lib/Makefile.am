@@ -5,6 +5,7 @@ libfilezilla_a_CPPFLAGS = -I$(srcdir)/../src/include
 libfilezilla_a_SOURCES = \
 	fz_event_handler.cpp \
 	fz_event_loop.cpp \
+	fz_file.cpp \
 	fz_mutex.cpp \
 	fz_process.cpp \
 	fz_string.cpp \
@@ -18,6 +19,7 @@ noinst_HEADERS = \
 	fz_event.hpp \
 	fz_event_handler.hpp \
 	fz_event_loop.hpp \
+	fz_file.hpp \
 	fz_mutex.hpp \
 	fz_process.hpp \
 	fz_string.hpp \

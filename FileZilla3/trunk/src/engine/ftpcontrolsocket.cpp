@@ -4,7 +4,7 @@
 #include "directorylistingparser.h"
 #include "engineprivate.h"
 #include "externalipresolver.h"
-#include "file.h"
+#include "fz_file.hpp"
 #include "ftpcontrolsocket.h"
 #include "iothread.h"
 #include "pathcache.h"
@@ -2477,7 +2477,7 @@ int CFtpControlSocket::FileTransferSend()
 		}
 
 		{
-			auto pFile = std::make_unique<CFile>();
+			auto pFile = std::make_unique<fz::file>();
 			if (pData->download) {
 				// Be quiet
 				wxLogNull nullLog;
@@ -2488,7 +2488,7 @@ int CFtpControlSocket::FileTransferSend()
 				bool didExist = wxFile::Exists(pData->localFile);
 
 				if (pData->resume) {
-					if (!pFile->Open(pData->localFile, CFile::write, CFile::existing)) {
+					if (!pFile->open(fz::to_native(pData->localFile), fz::file::writing, fz::file::existing)) {
 						LogMessage(MessageType::Error, _("Failed to open \"%s\" for appending/writing"), pData->localFile);
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -2496,7 +2496,7 @@ int CFtpControlSocket::FileTransferSend()
 
 					pData->fileDidExist = didExist;
 
-					startOffset = pFile->Seek(0, CFile::end);
+					startOffset = pFile->seek(0, fz::file::end);
 
 					if (startOffset == wxInvalidOffset) {
 						LogMessage(MessageType::Error, _("Could not seek to the end of the file"));
@@ -2520,7 +2520,7 @@ int CFtpControlSocket::FileTransferSend()
 				else {
 					CreateLocalDir(pData->localFile);
 
-					if (!pFile->Open(pData->localFile, CFile::write, CFile::truncate)) {
+					if (!pFile->open(fz::to_native(pData->localFile), fz::file::writing, fz::file::empty)) {
 						LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile);
 						ResetOperation(FZ_REPLY_ERROR);
 						return FZ_REPLY_ERROR;
@@ -2539,22 +2539,22 @@ int CFtpControlSocket::FileTransferSend()
 
 				if (engine_.GetOptions().GetOptionVal(OPTION_PREALLOCATE_SPACE)) {
 					// Try to preallocate the file in order to reduce fragmentation
-					wxFileOffset sizeToPreallocate = pData->remoteFileSize - startOffset;
+					fz::file::ssize_t sizeToPreallocate = pData->remoteFileSize - startOffset;
 					if (sizeToPreallocate > 0) {
 						LogMessage(MessageType::Debug_Info, _T("Preallocating %") + wxString(wxFileOffsetFmtSpec) + _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
-						wxFileOffset oldPos = pFile->Seek(0, CFile::current);
+						auto oldPos = pFile->seek(0, fz::file::current);
 						if (oldPos >= 0) {
-							if (pFile->Seek(sizeToPreallocate, CFile::end) == pData->remoteFileSize) {
-								if (!pFile->Truncate())
+							if (pFile->seek(sizeToPreallocate, fz::file::end) == pData->remoteFileSize) {
+								if (!pFile->truncate())
 									LogMessage(MessageType::Debug_Warning, _T("Could not preallocate the file"));
 							}
-							pFile->Seek(oldPos, CFile::begin);
+							pFile->seek(oldPos, fz::file::begin);
 						}
 					}
 				}
 			}
 			else {
-				if (!pFile->Open(pData->localFile, CFile::read)) {
+				if (!pFile->open(fz::to_native(pData->localFile), fz::file::reading)) {
 					LogMessage(MessageType::Error, _("Failed to open \"%s\" for reading"), pData->localFile);
 					ResetOperation(FZ_REPLY_ERROR);
 					return FZ_REPLY_ERROR;
@@ -2565,8 +2565,12 @@ int CFtpControlSocket::FileTransferSend()
 					if (pData->remoteFileSize > 0) {
 						startOffset = pData->remoteFileSize;
 
-						if (pData->localFileSize < 0)
-							pData->localFileSize = pFile->Length();
+						if (pData->localFileSize < 0) {
+							auto s = pFile->size();
+							if (s != fz::file::err) {
+								pData->localFileSize = static_cast<int64_t>(s);
+							}
+						}
 
 						if (startOffset == pData->localFileSize && pData->binary) {
 							LogMessage(MessageType::Debug_Info, _T("No need to resume, remote file size matches local file size."));
@@ -2586,7 +2590,7 @@ int CFtpControlSocket::FileTransferSend()
 						}
 
 						// Assume native 64 bit type exists
-						if (pFile->Seek(startOffset, CFile::begin) == wxInvalidOffset) {
+						if (pFile->seek(startOffset, fz::file::begin) == wxInvalidOffset) {
 							wxString const s = std::to_wstring(startOffset);
 							LogMessage(MessageType::Error, _("Could not seek to offset %s within file"), s);
 							ResetOperation(FZ_REPLY_ERROR);
@@ -2608,7 +2612,7 @@ int CFtpControlSocket::FileTransferSend()
 					pData->resumeOffset = 0;
 				}
 
-				wxFileOffset len = pFile->Length();
+				auto len = pFile->size();
 				engine_.transfer_status_.Init(len, startOffset, false);
 			}
 			pData->pIOThread = new CIOThread;

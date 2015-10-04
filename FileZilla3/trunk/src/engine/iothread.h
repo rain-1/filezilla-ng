@@ -1,7 +1,6 @@
 #ifndef __IOTHREAD_H__
 #define __IOTHREAD_H__
 
-#include <wx/file.h>
 #include "fz_event.hpp"
 
 #define BUFFERCOUNT 5
@@ -22,14 +21,17 @@ enum IORet
 	IO_Again = -1
 };
 
-class CFile;
+namespace fz {
+class file;
+}
+
 class CIOThread final : protected wxThread
 {
 public:
 	CIOThread();
 	virtual ~CIOThread();
 
-	bool Create(std::unique_ptr<CFile> && pFile, bool read, bool binary);
+	bool Create(std::unique_ptr<fz::file> && pFile, bool read, bool binary);
 	virtual void Destroy(); // Only call that might be blocking
 
 	// Call before first call to one of the GetNext*Buffer functions
@@ -60,7 +62,7 @@ protected:
 
 	virtual ExitCode Entry();
 
-	int ReadFromFile(char* pBuffer, int maxLen);
+	size_t ReadFromFile(char* pBuffer, size_t maxLen);
 	bool WriteToFile(char* pBuffer, int len);
 	bool DoWrite(const char* pBuffer, int len);
 
@@ -68,7 +70,7 @@ protected:
 
 	bool m_read{};
 	bool m_binary{};
-	std::unique_ptr<CFile> m_pFile;
+	std::unique_ptr<fz::file> m_pFile;
 
 	char* m_buffers[BUFFERCOUNT];
 	unsigned int m_bufferLens[BUFFERCOUNT];

@@ -61,6 +61,7 @@
   <ItemGroup>
     <ClCompile Include="fz_event_handler.cpp" />
     <ClCompile Include="fz_event_loop.cpp" />
+    <ClCompile Include="fz_file.cpp" />
     <ClCompile Include="fz_mutex.cpp" />
     <ClCompile Include="fz_process.cpp" />
     <ClCompile Include="fz_string.cpp" />
@@ -74,6 +75,7 @@
     <ClInclude Include="fz_event.hpp" />
     <ClInclude Include="fz_event_handler.hpp" />
     <ClInclude Include="fz_event_loop.hpp" />
+    <ClInclude Include="fz_file.hpp" />
     <ClInclude Include="fz_mutex.hpp" />
     <ClInclude Include="fz_process.hpp" />
     <ClInclude Include="fz_string.hpp" />
@@ -81,6 +83,7 @@
     <ClInclude Include="fz_time.hpp" />
     <ClInclude Include="fz_util.hpp" />
     <ClInclude Include="libfilezilla.hpp" />
+    <ClInclude Include="private\windows.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
