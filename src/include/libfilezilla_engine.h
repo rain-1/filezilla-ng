@@ -33,7 +33,7 @@
 #include <vector>
 #include <map>
 
-#include <libfilezilla.hpp>
+#include <libfilezilla/libfilezilla.hpp>
 
 #include "fzstring.h"
 #include "optionsbase.h"

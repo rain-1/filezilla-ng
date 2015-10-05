@@ -3,13 +3,14 @@
 #include "directorycache.h"
 #include "directorylistingparser.h"
 #include "engineprivate.h"
-#include "fz_event_loop.hpp"
 #include "pathcache.h"
 #include "local_filesys.h"
-#include "fz_process.hpp"
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
+
+#include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/process.hpp>
 
 #include <wx/filename.h>
 #include <wx/log.h>

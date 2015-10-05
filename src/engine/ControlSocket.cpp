@@ -2,13 +2,14 @@
 #include "ControlSocket.h"
 #include "directorycache.h"
 #include "engineprivate.h"
-#include "fz_event_loop.hpp"
 #include "local_filesys.h"
 #include "local_path.h"
 #include "logging_private.h"
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sizeformatting_base.h"
+
+#include <libfilezilla/event_loop.hpp>
 
 #include <wx/file.h>
 #include <wx/filename.h>

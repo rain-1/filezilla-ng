@@ -1,7 +1,7 @@
 #include <filezilla.h>
 
-#include "fz_event_loop.hpp"
-#include "fz_util.hpp"
+#include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/util.hpp>
 #include "engine_context.h"
 #include "netconfwizard.h"
 #include "Options.h"

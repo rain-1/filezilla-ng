@@ -9,7 +9,7 @@
 #include "proxy.h"
 #include "servercapabilities.h"
 
-#include "fz_util.hpp"
+#include <libfilezilla/util.hpp>
 
 CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode)
 : fz::event_handler(controlSocket.event_loop_)

@@ -14,7 +14,7 @@ but for some operations the engine/interface prefers to retrieve a clean
 version.
 */
 
-#include "fz_mutex.hpp"
+#include <libfilezilla/mutex.hpp>
 
 #include <set>
 

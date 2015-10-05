@@ -5,7 +5,7 @@
 
 #include <option_change_event_handler.h>
 
-#include "fz_mutex.hpp"
+#include <libfilezilla/mutex.hpp>
 
 #include <wx/timer.h>
 

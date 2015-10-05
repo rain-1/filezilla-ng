@@ -2,11 +2,12 @@
 #include "engine_context.h"
 
 #include "directorycache.h"
-#include "fz_event_loop.hpp"
 #include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"
 #include "socket.h"
+
+#include <libfilezilla/event_loop.hpp>
 
 namespace {
 struct logging_options_changed_event_type;
