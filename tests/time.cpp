@@ -1,7 +1,7 @@
 #include <libfilezilla_engine.h>
 
-#include <fz_time.hpp>
-#include <fz_util.hpp>
+#include <libfilezilla/time.hpp>
+#include <libfilezilla/util.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
 
