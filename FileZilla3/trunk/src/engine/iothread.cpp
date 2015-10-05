@@ -1,7 +1,8 @@
 #include <filezilla.h>
 
-#include "fz_file.hpp"
 #include "iothread.h"
+
+#include <libfilezilla/file.hpp>
 
 #include <wx/log.h>
 

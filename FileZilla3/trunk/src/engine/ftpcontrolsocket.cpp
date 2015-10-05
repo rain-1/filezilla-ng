@@ -4,7 +4,6 @@
 #include "directorylistingparser.h"
 #include "engineprivate.h"
 #include "externalipresolver.h"
-#include "fz_file.hpp"
 #include "ftpcontrolsocket.h"
 #include "iothread.h"
 #include "pathcache.h"
@@ -14,7 +13,8 @@
 #include "local_filesys.h"
 #include "proxy.h"
 
-#include "fz_util.hpp"
+#include <libfilezilla/file.hpp>
+#include <libfilezilla/util.hpp>
 
 #include <wx/filename.h>
 #include <wx/log.h>

@@ -2,7 +2,7 @@
 #define __LOGGING_PRIVATE_H__
 
 #include "engineprivate.h"
-#include "fz_mutex.hpp"
+#include <libfilezilla/mutex.hpp>
 #include <utility>
 
 class CLogging

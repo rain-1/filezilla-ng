@@ -1,7 +1,7 @@
 #ifndef __PATHCACHE_H__
 #define __PATHCACHE_H__
 
-#include "fz_mutex.hpp"
+#include <libfilezilla/mutex.hpp>
 
 class CPathCache final
 {

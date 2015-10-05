@@ -16,7 +16,7 @@
   #include <ws2tcpip.h>
 #endif
 #include <filezilla.h>
-#include "fz_mutex.hpp"
+#include <libfilezilla/mutex.hpp>
 #include "socket.h"
 #ifndef __WXMSW__
   #define mutex mutex_override // Sadly on some platforms system headers include conflicting names

@@ -1,7 +1,7 @@
 #ifndef __IOTHREAD_H__
 #define __IOTHREAD_H__
 
-#include "fz_event.hpp"
+#include <libfilezilla/event.hpp>
 
 #define BUFFERCOUNT 5
 #define BUFFERSIZE 128*1024

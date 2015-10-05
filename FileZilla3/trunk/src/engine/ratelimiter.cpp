@@ -1,7 +1,7 @@
 #include <filezilla.h>
 #include "ratelimiter.h"
 
-#include "fz_event_handler.hpp"
+#include <libfilezilla/event_handler.hpp>
 
 static int const tickDelay = 250;
 

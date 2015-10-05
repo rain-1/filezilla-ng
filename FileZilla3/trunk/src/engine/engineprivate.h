@@ -1,13 +1,13 @@
 #ifndef __FILEZILLAENGINEPRIVATE_H__
 #define __FILEZILLAENGINEPRIVATE_H__
 
-#include "fz_time.hpp"
+#include <libfilezilla/event.hpp>
+#include <libfilezilla/event_handler.hpp>
+#include <libfilezilla/mutex.hpp>
+#include <libfilezilla/time.hpp>
 
 #include "engine_context.h"
-#include "fz_event.hpp"
-#include "fz_event_handler.hpp"
 #include "FileZillaEngine.h"
-#include "fz_mutex.hpp"
 #include "option_change_event_handler.h"
 
 #include <atomic>

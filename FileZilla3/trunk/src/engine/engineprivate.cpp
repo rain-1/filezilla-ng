@@ -2,13 +2,14 @@
 #include "ControlSocket.h"
 #include "directorycache.h"
 #include "engineprivate.h"
-#include "fz_event_loop.hpp"
 #include "ftpcontrolsocket.h"
 #include "httpcontrolsocket.h"
 #include "logging_private.h"
 #include "pathcache.h"
 #include "ratelimiter.h"
 #include "sftpcontrolsocket.h"
+
+#include <libfilezilla/event_loop.hpp>
 
 #include <algorithm>
 

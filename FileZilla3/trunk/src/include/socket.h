@@ -1,7 +1,7 @@
 #ifndef __SOCKET_H__
 #define __SOCKET_H__
 
-#include "fz_event_handler.hpp"
+#include <libfilezilla/event_handler.hpp>
 
 #include <errno.h>
 
