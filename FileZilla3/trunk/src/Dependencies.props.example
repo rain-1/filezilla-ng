@@ -2,19 +2,33 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros">
+
+    <!-- EDIT THE LINES BELOW -->
+
+    <libfilezilla_include>x:\xample\libfilezilla\lib</libfilezilla_include>
+    <libfilezilla_lib>x:\xample\libfilezilla\lib</libfilezilla_lib>
     <wxwidgets_include>x:\xample\wxwidgets\include;x:\xample\wxwidgets\include\msvc</wxwidgets_include>
     <wxwidgets_lib>x:\xample\wxwidgets\lib\vc_lib</wxwidgets_lib>
     <gnutls_include>x:\xample\gnutls-3.1.10-win\include</gnutls_include>
     <gnutls_lib>x:\xample\gnutls-3.1.10-win\bin</gnutls_lib>
     <sqlite3_include>x:\xample\sqlite-amalgamation-3080200</sqlite3_include>
     <sqlite3_lib>x:\xample\sqlite-amalgamation-3080200</sqlite3_lib>
+
+    <!-- EDIT THE LINES ABOVE -->
+
   </PropertyGroup>
   <PropertyGroup>
-    <IncludePath>$(wxwidgets_include);$(gnutls_include);$(sqlite3_include);$(IncludePath)</IncludePath>
-    <LibraryPath>$(wxwidgets_lib);$(gnutls_lib);$(sqlite3_lib);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(libfilezilla_include);$(wxwidgets_include);$(gnutls_include);$(sqlite3_include);$(IncludePath)</IncludePath>
+    <LibraryPath>$(libfilezilla_lib);$(wxwidgets_lib);$(gnutls_lib);$(sqlite3_lib);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup />
   <ItemGroup>
+    <BuildMacro Include="libfilezilla_include">
+      <Value>$(libfilezilla_include)</Value>
+    </BuildMacro>
+    <BuildMacro Include="libfilezilla_lib">
+      <Value>$(libfilezilla_lib)</Value>
+    </BuildMacro>
     <BuildMacro Include="wxwidgets_include">
       <Value>$(wxwidgets_include)</Value>
     </BuildMacro>
