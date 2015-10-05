@@ -69,7 +69,7 @@ wxThread::ExitCode CIOThread::Entry()
 {
 	if (m_read) {
 		while (m_running) {
-			size_t len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
+			auto len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 
 			fz::scoped_lock l(m_mutex);
 
@@ -82,7 +82,7 @@ wxThread::ExitCode CIOThread::Entry()
 				m_evtHandler->send_event<CIOThreadEvent>();
 			}
 
-			if (len == fz::file::err) {
+			if (len == -1) {
 				m_error = true;
 				m_running = false;
 				break;
@@ -267,7 +267,7 @@ void CIOThread::Destroy()
 	Wait(wxTHREAD_WAIT_BLOCK);
 }
 
-size_t CIOThread::ReadFromFile(char* pBuffer, size_t maxLen)
+int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
 {
 #ifdef SIMULATE_IO
 	if (size_ < 0) {
@@ -292,8 +292,8 @@ size_t CIOThread::ReadFromFile(char* pBuffer, size_t maxLen)
 	const int readLen = maxLen / 2;
 
 	char* r = pBuffer + readLen;
-	size_t len = m_pFile->read(r, readLen);
-	if (!len || len == fz::file::err)
+	auto len = m_pFile->read(r, readLen);
+	if (!len || len <= -1)
 		return len;
 
 	const char* const end = r + len;
@@ -319,7 +319,7 @@ size_t CIOThread::ReadFromFile(char* pBuffer, size_t maxLen)
 #endif
 }
 
-bool CIOThread::WriteToFile(char* pBuffer, int len)
+bool CIOThread::WriteToFile(char* pBuffer, int64_t len)
 {
 #ifdef SIMULATE_IO
 	return true;
@@ -364,9 +364,9 @@ bool CIOThread::WriteToFile(char* pBuffer, int len)
 #endif
 }
 
-bool CIOThread::DoWrite(const char* pBuffer, int len)
+bool CIOThread::DoWrite(const char* pBuffer, int64_t len)
 {
-	int written = m_pFile->write(pBuffer, len);
+	auto written = m_pFile->write(pBuffer, len);
 	if (written == len) {
 		return true;
 	}
