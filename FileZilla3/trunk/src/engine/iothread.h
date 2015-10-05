@@ -57,14 +57,14 @@ public:
 
 	wxString GetError();
 
-protected:
+private:
 	void Close();
 
 	virtual ExitCode Entry();
 
-	size_t ReadFromFile(char* pBuffer, size_t maxLen);
-	bool WriteToFile(char* pBuffer, int len);
-	bool DoWrite(const char* pBuffer, int len);
+	int64_t ReadFromFile(char* pBuffer, int64_t maxLen);
+	bool WriteToFile(char* pBuffer, int64_t len);
+	bool DoWrite(const char* pBuffer, int64_t len);
 
 	fz::event_handler* m_evtHandler{};
 
@@ -93,7 +93,7 @@ protected:
 	wxString m_error_description;
 
 #ifdef SIMULATE_IO
-	wxFileOffset size_{};
+	int64_t size_{};
 #endif
 };
 

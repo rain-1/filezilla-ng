@@ -2539,7 +2539,7 @@ int CFtpControlSocket::FileTransferSend()
 
 				if (engine_.GetOptions().GetOptionVal(OPTION_PREALLOCATE_SPACE)) {
 					// Try to preallocate the file in order to reduce fragmentation
-					fz::file::ssize_t sizeToPreallocate = pData->remoteFileSize - startOffset;
+					int64_t sizeToPreallocate = pData->remoteFileSize - startOffset;
 					if (sizeToPreallocate > 0) {
 						LogMessage(MessageType::Debug_Info, _T("Preallocating %") + wxString(wxFileOffsetFmtSpec) + _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
 						auto oldPos = pFile->seek(0, fz::file::current);
@@ -2567,8 +2567,8 @@ int CFtpControlSocket::FileTransferSend()
 
 						if (pData->localFileSize < 0) {
 							auto s = pFile->size();
-							if (s != fz::file::err) {
-								pData->localFileSize = static_cast<int64_t>(s);
+							if (s >= 0) {
+								pData->localFileSize = s;
 							}
 						}
 
