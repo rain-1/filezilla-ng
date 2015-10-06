@@ -630,7 +630,7 @@ checkmodifications_loopbegin:
 			if (!mtime.empty())
 				continue;
 
-			if (iter->modificationTime.empty() && !iter->modificationTime.Compare(mtime))
+			if (iter->modificationTime.empty() && !iter->modificationTime.compare(mtime))
 				continue;
 
 			// File has changed, ask user what to do

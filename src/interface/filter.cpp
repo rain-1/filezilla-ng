@@ -802,7 +802,7 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 			break;
 		case filter_date:
 			if (date.empty()) {
-				int cmp = date.Compare( condition.date );
+				int cmp = date.compare( condition.date );
 				switch (condition.condition)
 				{
 				case 0: // Before
