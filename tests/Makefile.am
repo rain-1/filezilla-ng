@@ -6,12 +6,9 @@ check_PROGRAMS = $(TESTS)
 test_SOURCES =  test.cpp \
 		cmpnatural.cpp \
 		dirparsertest.cpp \
-		dispatch.cpp \
-		eventloop.cpp \
 		ipaddress.cpp \
 		localpathtest.cpp \
-		serverpathtest.cpp \
-		time.cpp
+		serverpathtest.cpp
 
 test_CPPFLAGS = -I$(top_srcdir)/src/include
 test_CPPFLAGS += -I$(top_srcdir)/src/engine
