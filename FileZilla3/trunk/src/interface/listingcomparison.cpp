@@ -124,14 +124,14 @@ bool CComparisonManager::CompareListings()
 				else {
 					CComparableListing::t_fileEntryFlags localFlag, remoteFlag;
 
-					int dateCmp = localDate.Compare(remoteDate);
+					int dateCmp = localDate.compare(remoteDate);
 					if (dateCmp < 0) {
 						localDate += threshold;
 					}
 					else if (dateCmp > 0 ) {
 						remoteDate += threshold;
 					}
-					int adjustedDateCmp = localDate.Compare(remoteDate);
+					int adjustedDateCmp = localDate.compare(remoteDate);
 					if (dateCmp && dateCmp == -adjustedDateCmp) {
 						dateCmp = 0;
 					}

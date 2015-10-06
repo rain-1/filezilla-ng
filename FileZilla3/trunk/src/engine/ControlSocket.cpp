@@ -1139,9 +1139,9 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 	case CFileExistsNotification::overwriteNewer:
 		if (!pFileExistsNotification->localTime.empty() || !pFileExistsNotification->remoteTime.empty())
 			SendNextCommand();
-		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
+		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime))
 			SendNextCommand();
-		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.IsLaterThan(pFileExistsNotification->remoteTime))
+		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.later_than(pFileExistsNotification->remoteTime))
 			SendNextCommand();
 		else
 		{
@@ -1180,9 +1180,9 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		Second compare flags the remaining case in which we need to send command : both size unknown */
 		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0))
 			SendNextCommand();
-		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.IsEarlierThan(pFileExistsNotification->remoteTime))
+		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime))
 			SendNextCommand();
-		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.IsLaterThan(pFileExistsNotification->remoteTime))
+		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.later_than(pFileExistsNotification->remoteTime))
 			SendNextCommand();
 		else
 		{
