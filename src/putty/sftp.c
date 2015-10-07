@@ -24,7 +24,7 @@ struct sftp_packet {
     int type;
 };
 
-static const char *fxp_error_message;
+static char *fxp_error_message = NULL;
 static int fxp_errtype;
 
 static void fxp_internal_error(const char *msg);
@@ -421,21 +421,45 @@ static int fxp_got_status(struct sftp_packet *pktin)
 	"operation unsupported",
     };
 
+    sfree(fxp_error_message);
     if (pktin->type != SSH_FXP_STATUS) {
-	fxp_error_message = "expected FXP_STATUS packet";
+	fxp_error_message = dupprintf("expected FXP_STATUS packet, got packet type %d instead", pktin->type);
 	fxp_errtype = -1;
     } else {
 	unsigned long ul;
 	if (!sftp_pkt_getuint32(pktin, &ul)) {
-	    fxp_error_message = "malformed FXP_STATUS packet";
+	    fxp_error_message = dupstr("received malformed FXP_STATUS packet");
 	    fxp_errtype = -1;
 	} else {
+	    char *error_desc;
+	    int error_desc_len;
+
+	    if (sftp_pkt_getstring(pktin, &error_desc, &error_desc_len)) {
+		if (!error_desc || error_desc_len <= 0 || !*error_desc) {
+		    error_desc = 0;
+		}
+		else {
+		    error_desc = mkstr(error_desc, error_desc_len);
+		}
+	    }
+
 	    fxp_errtype = ul;
-	    if (fxp_errtype < 0 ||
-		fxp_errtype >= sizeof(messages) / sizeof(*messages))
-		fxp_error_message = "unknown error code";
-	    else
-		fxp_error_message = messages[fxp_errtype];
+
+	    if (error_desc && fxp_errtype >= SSH_FX_FAILURE) {
+		if (fxp_errtype < 0 ||
+		    fxp_errtype >= sizeof(messages) / sizeof(*messages))
+		    fxp_error_message = dupprintf("received unknown error code %d with description '%s'", fxp_errtype, error_desc);
+		else
+		    fxp_error_message = dupprintf("received %s with description '%s'", messages[fxp_errtype], error_desc);
+	    }
+	    else {
+		if (fxp_errtype < 0 ||
+		    fxp_errtype >= sizeof(messages) / sizeof(*messages))
+		    fxp_error_message = dupprintf("received unknown error code %d", fxp_errtype);
+		else
+		    fxp_error_message = dupstr(messages[fxp_errtype]);
+            }
+	    sfree(error_desc);
 	}
     }
 
@@ -449,7 +473,8 @@ static int fxp_got_status(struct sftp_packet *pktin)
 
 static void fxp_internal_error(const char *msg)
 {
-    fxp_error_message = msg;
+    sfree(fxp_error_message);
+    fxp_error_message = dupstr(msg);
     fxp_errtype = -1;
 }
 
@@ -1286,8 +1311,9 @@ int xfer_download_gotpkt(struct fxp_xfer *xfer, struct sftp_packet *pktin)
     }
 
     if (uint64_compare(xfer->furthestdata, xfer->filesize) > 0) {
-	fxp_error_message = "received a short buffer from FXP_READ, but not"
-	    " at EOF";
+	sfree(fxp_error_message);
+	fxp_error_message = dupstr("received a short buffer from FXP_READ, but not"
+	    " at EOF");
 	fxp_errtype = -1;
 	xfer_set_error(xfer);
 	return -1;
