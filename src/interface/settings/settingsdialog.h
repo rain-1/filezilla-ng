@@ -19,6 +19,8 @@ public:
 
 	CFileZillaEngineContext& GetEngineContext() { return m_engine_context; }
 
+	void RememberOldValue(int option);
+
 protected:
 	bool LoadPages();
 
@@ -34,6 +36,8 @@ protected:
 		COptionsPage* page{};
 	};
 	std::vector<t_page> m_pages;
+
+	std::map<int, wxString> m_oldValues;
 
 	DECLARE_EVENT_TABLE()
 	void OnPageChanging(wxTreeEvent& event);
