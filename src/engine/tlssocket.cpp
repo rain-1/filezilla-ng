@@ -1002,6 +1002,61 @@ bool CTlsSocket::CertificateIsBlacklisted(std::vector<CCertificate> const& certi
 	return false;
 }
 
+
+int CTlsSocket::GetAlgorithmWarnings()
+{
+	int algorithmWarnings{};
+
+	switch (gnutls_protocol_get_version(m_session))
+	{
+		case GNUTLS_SSL3:
+		case GNUTLS_VERSION_UNKNOWN:
+			algorithmWarnings |= CCertificateNotification::tlsver;
+			break;
+		default:
+			break;
+	}
+
+	switch (gnutls_cipher_get(m_session)) {
+		case GNUTLS_CIPHER_UNKNOWN:
+		case GNUTLS_CIPHER_NULL:
+		case GNUTLS_CIPHER_ARCFOUR_128:
+		case GNUTLS_CIPHER_3DES_CBC:
+		case GNUTLS_CIPHER_ARCFOUR_40:
+		case GNUTLS_CIPHER_RC2_40_CBC:
+		case GNUTLS_CIPHER_DES_CBC:
+			algorithmWarnings |= CCertificateNotification::cipher;
+			break;
+		default:
+			break;
+	}
+
+	switch (gnutls_mac_get(m_session)) {
+		case GNUTLS_MAC_UNKNOWN:
+		case GNUTLS_MAC_NULL:
+		case GNUTLS_MAC_MD5:
+		case GNUTLS_MAC_MD2:
+		case GNUTLS_MAC_UMAC_96:
+			algorithmWarnings |= CCertificateNotification::mac;
+			break;
+		default:
+			break;
+	}
+
+	switch (gnutls_kx_get(m_session)) {
+		case GNUTLS_KX_UNKNOWN:
+		case GNUTLS_KX_ANON_DH:
+		case GNUTLS_KX_RSA_EXPORT:
+		case GNUTLS_KX_ANON_ECDH:
+			algorithmWarnings |= CCertificateNotification::kex;
+		default:
+			break;
+	}
+
+	return algorithmWarnings;
+}
+
+
 int CTlsSocket::VerifyCertificate()
 {
 	if (m_tlsState != TlsState::handshake) {
@@ -1082,6 +1137,8 @@ int CTlsSocket::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
+	int const algorithmWarnings = GetAlgorithmWarnings();
+
 	CCertificateNotification *pNotification = new CCertificateNotification(
 		m_pOwner->GetCurrentServer()->GetHost(),
 		m_pOwner->GetCurrentServer()->GetPort(),
@@ -1089,6 +1146,7 @@ int CTlsSocket::VerifyCertificate()
 		GetKeyExchange(),
 		GetCipherName(),
 		GetMacName(),
+		algorithmWarnings,
 		certificates);
 
 	m_pOwner->SendAsyncRequest(pNotification);

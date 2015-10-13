@@ -216,9 +216,11 @@ CCertificateNotification::CCertificateNotification(const wxString& host, unsigne
 		const wxString& keyExchange,
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
+		int algorithmWarnings,
 		const std::vector<CCertificate> &certificates)
-	: m_protocol( protocol )
-	, m_keyExchange( keyExchange )
+	: m_protocol(protocol)
+	, m_keyExchange(keyExchange)
+	, m_algorithmWarnings(algorithmWarnings)
 {
 	m_host = host;
 	m_port = port;

@@ -387,6 +387,7 @@ public:
 		const wxString& keyExchange,
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
+		int algorithmWarnings,
 		const std::vector<CCertificate> &certificates);
 	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
 
@@ -403,7 +404,17 @@ public:
 	const wxString& GetProtocol() const { return m_protocol; }
 	const wxString& GetKeyExchange() const { return m_keyExchange; }
 
-protected:
+	enum algorithm_warnings_t
+	{
+		tlsver = 1,
+		cipher = 2,
+		mac = 4,
+		kex = 8
+	};
+
+	int GetAlgorithMWarnings() const { return m_algorithmWarnings; }
+
+private:
 	wxString m_host;
 	unsigned int m_port{};
 
@@ -411,6 +422,7 @@ protected:
 	wxString m_keyExchange;
 	wxString m_sessionCipher;
 	wxString m_sessionMac;
+	int m_algorithmWarnings{};
 
 	std::vector<CCertificate> m_certificates;
 };
