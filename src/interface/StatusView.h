@@ -7,8 +7,10 @@
 
 #include <wx/timer.h>
 
+#include "option_change_event_handler.h"
+
 class CFastTextCtrl;
-class CStatusView final : public wxNavigationEnabled<wxWindow>
+class CStatusView final : public wxNavigationEnabled<wxWindow>, private COptionChangeEventHandler
 {
 public:
 	CStatusView(wxWindow* parent, wxWindowID id);
@@ -23,11 +25,13 @@ public:
 
 	virtual bool Show(bool show = true);
 
-protected:
+private:
 
 	int m_nLineCount{};
 	wxString m_Content;
 	CFastTextCtrl *m_pTextCtrl{};
+
+	void OnOptionsChanged(changed_options_t const& options);
 
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent &);

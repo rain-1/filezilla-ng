@@ -12,6 +12,11 @@ COptionChangeEventHandler::COptionChangeEventHandler()
 
 COptionChangeEventHandler::~COptionChangeEventHandler()
 {
+	UnregisterAllOptions();
+}
+
+void COptionChangeEventHandler::UnregisterAllOptions()
+{
 	if (m_handled_options.any()) {
 		auto it = std::find(m_handlers.begin(), m_handlers.end(), this);
 		if (it != m_handlers.end()) {
@@ -47,7 +52,7 @@ void COptionChangeEventHandler::UnregisterOption(int option)
 	}
 }
 
-void COptionChangeEventHandler::UnregisterAll()
+void COptionChangeEventHandler::UnregisterAllHandlers()
 {
 	for (auto & handler : m_handlers) {
 		handler->m_handled_options.reset();
