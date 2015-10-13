@@ -490,6 +490,13 @@ if test "$buildmain" = "yes"; then
   AC_SUBST(LIBGNUTLS_LIBS)
   AC_SUBST(LIBGNUTLS_CFLAGS)
 
+  AC_ARG_ENABLE(gnutlssystemciphers, AS_HELP_STRING([--enable-gnutlssystemciphers],[Enables the use of gnutls system ciphers.]),
+    [gnutlssystemciphers="$enableval"], [gnutlssystemciphers="no"])
+
+  if test "$gnutlssystemciphers" = "yes"; then
+    AC_DEFINE(FZ_USE_GNUTLS_SYSTEM_CIPHERS, 1, [Set to 1 to use ciphers defined in system policy.])
+  fi
+ 
   # pugixml
   # ------
 
