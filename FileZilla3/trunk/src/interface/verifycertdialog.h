@@ -4,7 +4,7 @@
 #include "xmlfunctions.h"
 
 class wxDialogEx;
-class CVerifyCertDialog : protected wxEvtHandler
+class CVerifyCertDialog final : protected wxEvtHandler
 {
 public:
 	CVerifyCertDialog();
@@ -13,7 +13,7 @@ public:
 	bool IsTrusted(CCertificateNotification const& notification);
 	void ShowVerificationDialog(CCertificateNotification& notification, bool displayOnly = false);
 
-protected:
+private:
 	struct t_certData {
 		wxString host;
 		int port{};
@@ -23,6 +23,8 @@ protected:
 
 	bool IsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, bool permanentOnly);
 	bool DoIsTrusted(const wxString& host, int port, const unsigned char* data, unsigned int len, std::list<t_certData> const& trustedCerts);
+
+	bool DisplayAlgorithm(int controlId, wxString name, bool insecure);
 
 	bool DisplayCert(wxDialogEx* pDlg, const CCertificate& cert);
 
