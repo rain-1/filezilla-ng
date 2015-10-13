@@ -108,6 +108,9 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 	m_shown = IsShown();
 
 	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+
+	RegisterOption(OPTION_LANGUAGE);
+	RegisterOption(OPTION_MESSAGELOG_TIMESTAMP);
 }
 
 CStatusView::~CStatusView()
@@ -452,4 +455,9 @@ bool CStatusView::Show(bool show /*=true*/)
 	}
 
 	return wxWindow::Show(show);
+}
+
+void CStatusView::OnOptionsChanged(changed_options_t const&)
+{
+	InitDefAttr();
 }

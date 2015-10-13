@@ -262,7 +262,7 @@ std::map<std::string, unsigned int> COptions::GetNameOptionMap() const
 
 COptions::~COptions()
 {
-	COptionChangeEventHandler::UnregisterAll();
+	COptionChangeEventHandler::UnregisterAllHandlers();
 
 	delete m_pLastServer;
 	delete m_pXmlFile;

@@ -428,10 +428,16 @@ CMainFrame::CMainFrame()
 	CAutoAsciiFiles::SettingsChanged();
 
 	FixTabOrder();
+
+	RegisterOption(OPTION_LANGUAGE);
+	RegisterOption(OPTION_THEME);
+	RegisterOption(OPTION_THEME_ICONSIZE);
 }
 
 CMainFrame::~CMainFrame()
 {
+	UnregisterAllOptions();
+
 	CPowerManagement::Destroy();
 
 	delete m_pStateEventHandler;
@@ -1411,41 +1417,17 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent&)
 
 	COptions* pOptions = COptions::Get();
 
-	wxString oldTheme = pOptions->GetOption(OPTION_THEME);
-	wxString oldThemeSize = pOptions->GetOption(OPTION_THEME_ICONSIZE);
 	wxString oldLang = pOptions->GetOption(OPTION_LANGUAGE);
 
 	int oldShowDebugMenu = pOptions->GetOptionVal(OPTION_DEBUG_MENU) != 0;
 
-	bool oldTimestamps = pOptions->GetOptionVal(OPTION_MESSAGELOG_TIMESTAMP) != 0;
-
 	int res = dlg.ShowModal();
-	if (res != wxID_OK)
-	{
+	if (res != wxID_OK) {
 		UpdateLayout();
 		return;
 	}
 
-	bool newTimestamps = pOptions->GetOptionVal(OPTION_MESSAGELOG_TIMESTAMP) != 0;
-
-	wxString newTheme = pOptions->GetOption(OPTION_THEME);
-	wxString newThemeSize = pOptions->GetOption(OPTION_THEME_ICONSIZE);
 	wxString newLang = pOptions->GetOption(OPTION_LANGUAGE);
-
-	if (oldTheme != newTheme ||
-		oldThemeSize != newThemeSize ||
-		oldLang != newLang)
-	{
-		CreateMainToolBar();
-		if (m_pToolBar)
-			m_pToolBar->UpdateToolbarState();
-	}
-
-	if (oldLang != newLang ||
-		oldTimestamps != newTimestamps)
-	{
-		m_pStatusView->InitDefAttr();
-	}
 
 	if (oldLang != newLang ||
 		oldShowDebugMenu != pOptions->GetOptionVal(OPTION_DEBUG_MENU))
@@ -1466,42 +1448,34 @@ void CMainFrame::OnToggleLogView(wxCommandEvent&)
 
 	bool shown;
 
-	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 1)
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION) == 1) {
 		if (!m_pQueueLogSplitter)
 			return;
-		if (m_pQueueLogSplitter->IsSplit())
-		{
+		if (m_pQueueLogSplitter->IsSplit()) {
 			m_pQueueLogSplitter->Unsplit(m_pStatusView);
 			shown = false;
 		}
-		else if (m_pStatusView->IsShown())
-		{
+		else if (m_pStatusView->IsShown()) {
 			m_pStatusView->Hide();
 			m_pBottomSplitter->Unsplit(m_pQueueLogSplitter);
 			shown = false;
 		}
-		else if (!m_pQueueLogSplitter->IsShown())
-		{
+		else if (!m_pQueueLogSplitter->IsShown()) {
 			m_pQueueLogSplitter->Initialize(m_pStatusView);
 			m_pBottomSplitter->SplitHorizontally(m_pContextControl, m_pQueueLogSplitter);
 			shown = true;
 		}
-		else
-		{
+		else {
 			m_pQueueLogSplitter->SplitVertically(m_pQueuePane, m_pStatusView);
 			shown = true;
 		}
 	}
-	else
-	{
-		if (m_pTopSplitter->IsSplit())
-		{
+	else {
+		if (m_pTopSplitter->IsSplit()) {
 			m_pTopSplitter->Unsplit(m_pStatusView);
 			shown = false;
 		}
-		else
-		{
+		else {
 			m_pTopSplitter->SplitHorizontally(m_pStatusView, m_pBottomSplitter);
 			shown = true;
 		}
@@ -1731,16 +1705,13 @@ void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagel
 		wxWindow* parent = m_pStatusView->GetParent();
 
 		bool changed;
-		if (parent == m_pTopSplitter && messagelog_position != 0)
-		{
+		if (parent == m_pTopSplitter && messagelog_position != 0) {
 			if (shown)
 				m_pTopSplitter->Unsplit(m_pStatusView);
 			changed = true;
 		}
-		else if (parent == m_pQueueLogSplitter && messagelog_position != 1)
-		{
-			if (shown)
-			{
+		else if (parent == m_pQueueLogSplitter && messagelog_position != 1) {
+			if (shown) {
 				if (m_pQueueLogSplitter->IsSplit())
 					m_pQueueLogSplitter->Unsplit(m_pStatusView);
 				else
@@ -1748,8 +1719,7 @@ void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagel
 			}
 			changed = true;
 		}
-		else if (parent != m_pTopSplitter && parent != m_pQueueLogSplitter && messagelog_position != 2)
-		{
+		else if (parent != m_pTopSplitter && parent != m_pQueueLogSplitter && messagelog_position != 2) {
 			m_pQueuePane->RemovePage(3);
 			changed = true;
 			shown = true;
@@ -1757,10 +1727,8 @@ void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagel
 		else
 			changed = false;
 
-		if (changed)
-		{
-			switch (messagelog_position)
-			{
+		if (changed) {
+			switch (messagelog_position) {
 			default:
 				m_pStatusView->Reparent(m_pTopSplitter);
 				if (shown)
@@ -2700,4 +2668,16 @@ void CMainFrame::SetupKeyboardAccelerators()
 #endif
 	wxAcceleratorTable accel(entries.size(), &entries[0]);
 	SetAcceleratorTable(accel);
+}
+
+void CMainFrame::OnOptionsChanged(changed_options_t const& options)
+{
+	bool const language_changed = options.test(OPTION_LANGUAGE);
+
+	if (options.test(OPTION_THEME) || options.test(OPTION_THEME_ICONSIZE) || language_changed) {
+		CreateMainToolBar();
+		if (m_pToolBar) {
+			m_pToolBar->UpdateToolbarState();
+		}
+	}
 }

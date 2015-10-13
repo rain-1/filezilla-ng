@@ -30,7 +30,7 @@ class CThemeProvider;
 class CToolBar;
 class CWindowStateManager;
 
-class CMainFrame final : public wxNavigationEnabled<wxFrame>
+class CMainFrame final : public wxNavigationEnabled<wxFrame>, private COptionChangeEventHandler
 #if FZ_MANUALUPDATECHECK
 	, protected CUpdateHandler
 #endif
@@ -117,6 +117,8 @@ protected:
 	void HandleResize();
 
 	void SetupKeyboardAccelerators();
+
+	void OnOptionsChanged(changed_options_t const& options);
 
 	// Event handlers
 	DECLARE_EVENT_TABLE()
