@@ -5,7 +5,11 @@
 
 #include <gnutls/x509.h>
 
+#if FZ_USE_GNUTLS_SYSTEM_CIPHERS
+char const ciphers[] = "@SYSTEM";
+#else
 char const ciphers[] = "SECURE256:+SECURE128:-ARCFOUR-128:-3DES-CBC:-MD5:+SIGN-ALL:-SIGN-RSA-MD5:+CTYPE-X509:-CTYPE-OPENPGP:-VERS-SSL3.0";
+#endif
 
 #define TLSDEBUG 0
 #if TLSDEBUG
