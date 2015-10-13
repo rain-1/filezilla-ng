@@ -412,7 +412,7 @@ public:
 		kex = 8
 	};
 
-	int GetAlgorithMWarnings() const { return m_algorithmWarnings; }
+	int GetAlgorithmWarnings() const { return m_algorithmWarnings; }
 
 private:
 	wxString m_host;
