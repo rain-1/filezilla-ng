@@ -432,6 +432,9 @@ CMainFrame::CMainFrame()
 	RegisterOption(OPTION_LANGUAGE);
 	RegisterOption(OPTION_THEME);
 	RegisterOption(OPTION_THEME_ICONSIZE);
+	RegisterOption(OPTION_MESSAGELOG_POSITION);
+	RegisterOption(OPTION_FILEPANE_LAYOUT);
+	RegisterOption(OPTION_FILEPANE_SWAP);
 }
 
 CMainFrame::~CMainFrame()
@@ -1423,7 +1426,6 @@ void CMainFrame::OnMenuEditSettings(wxCommandEvent&)
 
 	int res = dlg.ShowModal();
 	if (res != wxID_OK) {
-		UpdateLayout();
 		return;
 	}
 
@@ -1689,15 +1691,12 @@ void CMainFrame::TriggerUpdateDialog()
 }
 #endif
 
-void CMainFrame::UpdateLayout(int layout /*=-1*/, int swap /*=-1*/, int messagelog_position /*=-1*/)
+void CMainFrame::UpdateLayout()
 {
-	if (layout == -1)
-		layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
-	if (swap == -1)
-		swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
+	int const layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
+	int const swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);
 
-	if (messagelog_position == -1)
-		messagelog_position = COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION);
+	int const messagelog_position = COptions::Get()->GetOptionVal(OPTION_MESSAGELOG_POSITION);
 
 	// First handle changes in message log position as it can make size of the other panes change
 	{
@@ -1922,8 +1921,6 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site & data, bool newTab)
 
 void CMainFrame::CheckChangedSettings()
 {
-	UpdateLayout();
-
 	m_pAsyncRequestQueue->RecheckDefaults();
 
 	CAutoAsciiFiles::SettingsChanged();
@@ -2672,8 +2669,11 @@ void CMainFrame::SetupKeyboardAccelerators()
 
 void CMainFrame::OnOptionsChanged(changed_options_t const& options)
 {
-	bool const language_changed = options.test(OPTION_LANGUAGE);
+	if (options.test(OPTION_FILEPANE_LAYOUT) || options.test(OPTION_FILEPANE_SWAP) || options.test(OPTION_MESSAGELOG_POSITION)) {
+		UpdateLayout();
+	}
 
+	bool const language_changed = options.test(OPTION_LANGUAGE);
 	if (options.test(OPTION_THEME) || options.test(OPTION_THEME_ICONSIZE) || language_changed) {
 		CreateMainToolBar();
 		if (m_pToolBar) {

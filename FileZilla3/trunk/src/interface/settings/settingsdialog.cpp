@@ -250,6 +250,10 @@ void CSettingsDialog::OnOK(wxCommandEvent& event)
 void CSettingsDialog::OnCancel(wxCommandEvent& event)
 {
 	EndModal(wxID_CANCEL);
+
+	for (auto const& saved : m_oldValues) {
+		m_pOptions->SetOption(saved.first, saved.second);
+	}
 }
 
 void CSettingsDialog::OnPageChanging(wxTreeEvent& event)
@@ -259,4 +263,9 @@ void CSettingsDialog::OnPageChanging(wxTreeEvent& event)
 
 	if (!m_activePanel->Validate())
 		event.Veto();
+}
+
+void CSettingsDialog::RememberOldValue(int option)
+{
+	m_oldValues[option] = m_pOptions->GetOption(option);
 }

@@ -46,8 +46,6 @@ public:
 	CQueueView* GetQueue() { return m_pQueueView; }
 	CQuickconnectBar* GetQuickconnectBar() { return m_pQuickconnectBar; }
 
-	void UpdateLayout(int layout = -1, int swap = -1, int messagelog_position = -1);
-
 	// Window size and position as well as pane sizes
 	void RememberSplitterPositions();
 	bool RestoreSplitterPositions();
@@ -70,7 +68,8 @@ public:
 	bool ConnectToSite(CSiteManagerItemData_Site & data, bool newTab = false);
 
 	CFileZillaEngineContext& GetEngineContext() { return m_engineContext; }
-protected:
+private:
+	void UpdateLayout();
 	void FixTabOrder();
 
 	bool CloseDialogsAndQuit(wxCloseEvent &event);

@@ -50,6 +50,11 @@ bool COptionsPageInterface::LoadPage()
 		action = 0;
 	}
 	SetChoice(XRCID("ID_NEWCONN_ACTION"), action, failure);
+
+	m_pOwner->RememberOldValue(OPTION_MESSAGELOG_POSITION);
+	m_pOwner->RememberOldValue(OPTION_FILEPANE_LAYOUT);
+	m_pOwner->RememberOldValue(OPTION_FILEPANE_SWAP);
+
 	return !failure;
 }
 
@@ -92,8 +97,7 @@ bool COptionsPageInterface::Validate()
 
 void COptionsPageInterface::OnLayoutChange(wxCommandEvent& event)
 {
-	int layout = GetChoice(XRCID("ID_FILEPANELAYOUT"));
-	int swap = GetCheck(XRCID("ID_FILEPANESWAP")) ? 1 : 0;
-
-	m_pOwner->m_pMainFrame->UpdateLayout(layout, swap, GetChoice(XRCID("ID_MESSAGELOGPOS")));
+	m_pOptions->SetOption(OPTION_FILEPANE_LAYOUT, GetChoice(XRCID("ID_FILEPANELAYOUT")));
+	m_pOptions->SetOption(OPTION_FILEPANE_SWAP, GetCheck(XRCID("ID_FILEPANESWAP")) ? 1 : 0);
+	m_pOptions->SetOption(OPTION_MESSAGELOG_POSITION, GetChoice(XRCID("ID_MESSAGELOGPOS")));
 }
