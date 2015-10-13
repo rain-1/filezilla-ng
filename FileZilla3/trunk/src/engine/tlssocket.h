@@ -41,6 +41,7 @@ public:
 	wxString GetKeyExchange();
 	wxString GetCipherName();
 	wxString GetMacName();
+	int GetAlgorithmWarnings();
 
 	bool ResumedSession() const;
 
