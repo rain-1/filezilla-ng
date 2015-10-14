@@ -3730,6 +3730,56 @@ static void ssh_sent(Plug plug, int bufsize)
 	ssh_throttle_all(ssh, 0, bufsize);
 }
 
+static void ssh_hostport_setup(const char *host, int port, Conf *conf,
+                               char **savedhost, int *savedport,
+                               char **loghost_ret)
+{
+    char *loghost = conf_get_str(conf, CONF_loghost);
+    if (loghost_ret)
+        *loghost_ret = loghost;
+
+    if (*loghost) {
+	char *tmphost;
+        char *colon;
+
+        tmphost = dupstr(loghost);
+	*savedport = 22;	       /* default ssh port */
+
+	/*
+	 * A colon suffix on the hostname string also lets us affect
+	 * savedport. (Unless there are multiple colons, in which case
+	 * we assume this is an unbracketed IPv6 literal.)
+	 */
+	colon = host_strrchr(tmphost, ':');
+	if (colon && colon == host_strchr(tmphost, ':')) {
+	    *colon++ = '\0';
+	    if (*colon)
+		*savedport = atoi(colon);
+	}
+
+        *savedhost = host_strduptrim(tmphost);
+        sfree(tmphost);
+    } else {
+	*savedhost = host_strduptrim(host);
+	if (port < 0)
+	    port = 22;		       /* default ssh port */
+	*savedport = port;
+    }
+}
+
+static int ssh_test_for_upstream(const char *host, int port, Conf *conf)
+{
+    char *savedhost;
+    int savedport;
+    int ret;
+
+    ssh_hostport_setup(host, port, conf, &savedhost, &savedport, NULL);
+    ret = ssh_share_test_for_upstream(savedhost, savedport, conf);
+    sfree(savedhost);
+
+    return ret;
+}
+
 /*
  * Connect to specified host and port.
  * Returns an error message, or NULL on success.
@@ -3751,35 +3801,9 @@ static const char *connect_to_host(Ssh ssh, const char *host, int port,
     const char *err;
     char *loghost;
     int addressfamily, sshprot;
-    
-    loghost = conf_get_str(ssh->conf, CONF_loghost);
-    if (*loghost) {
-	char *tmphost;
-        char *colon;
 
-        tmphost = dupstr(loghost);
-	ssh->savedport = 22;	       /* default ssh port */
-
-	/*
-	 * A colon suffix on the hostname string also lets us affect
-	 * savedport. (Unless there are multiple colons, in which case
-	 * we assume this is an unbracketed IPv6 literal.)
-	 */
-	colon = host_strrchr(tmphost, ':');
-	if (colon && colon == host_strchr(tmphost, ':')) {
-	    *colon++ = '\0';
-	    if (*colon)
-		ssh->savedport = atoi(colon);
-	}
-
-        ssh->savedhost = host_strduptrim(tmphost);
-        sfree(tmphost);
-    } else {
-	ssh->savedhost = host_strduptrim(host);
-	if (port < 0)
-	    port = 22;		       /* default ssh port */
-	ssh->savedport = port;
-    }
+    ssh_hostport_setup(host, port, ssh->conf,
+                       &ssh->savedhost, &ssh->savedport, &loghost);
 
     ssh->fn = &fn_table;               /* make 'ssh' usable as a Plug */
 
@@ -6749,6 +6773,24 @@ static void do_ssh2_transport(Ssh ssh, const void *vin, int inlen,
 		bombout(("KEXINIT packet was incomplete"));
 		crStopV;
 	    }
+
+            /* If we've already selected a cipher which requires a
+             * particular MAC, then just select that, and don't even
+             * bother looking through the server's KEXINIT string for
+             * MACs. */
+            if (i == KEXLIST_CSMAC && s->cscipher_tobe &&
+                s->cscipher_tobe->required_mac) {
+                s->csmac_tobe = s->cscipher_tobe->required_mac;
+                s->csmac_etm_tobe = !!(s->csmac_tobe->etm_name);
+                goto matched;
+            }
+            if (i == KEXLIST_SCMAC && s->sccipher_tobe &&
+                s->sccipher_tobe->required_mac) {
+                s->scmac_tobe = s->sccipher_tobe->required_mac;
+                s->scmac_etm_tobe = !!(s->scmac_tobe->etm_name);
+                goto matched;
+            }
+
 	    for (j = 0; j < MAXKEXLIST; j++) {
 		struct kexinit_algorithm *alg = &s->kexlists[i][j];
 		if (alg->name == NULL) break;
@@ -6793,16 +6835,6 @@ static void do_ssh2_transport(Ssh ssh, const void *vin, int inlen,
 	    crStopV;
 	  matched:;
 	}
-
-        /* If the cipher over-rides the mac, then pick it */
-        if (s->cscipher_tobe && s->cscipher_tobe->required_mac) {
-            s->csmac_tobe = s->cscipher_tobe->required_mac;
-	    s->csmac_etm_tobe = !!(s->csmac_tobe->etm_name);
-        }
-        if (s->sccipher_tobe && s->sccipher_tobe->required_mac) {
-            s->scmac_tobe = s->sccipher_tobe->required_mac;
-	    s->scmac_etm_tobe = !!(s->scmac_tobe->etm_name);
-        }
 
 	if (s->pending_compression) {
 	    logevent("Server supports delayed compression; "
@@ -12008,6 +12040,7 @@ Backend ssh_backend = {
     ssh_provide_logctx,
     ssh_unthrottle,
     ssh_cfg_info,
+    ssh_test_for_upstream,
     "ssh",
     PROT_SSH,
     22
