@@ -3,11 +3,11 @@
  * Unix console PuTTY tools
  */
 
-#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
 #include <assert.h>
+#include <errno.h>
 
 #include <termios.h>
 #include <unistd.h>
@@ -73,6 +73,38 @@ void notify_remote_exit(void *frontend)
 
 void timer_change_notify(unsigned long next)
 {
+}
+
+/*
+ * Wrapper around Unix read(2), suitable for use on a file descriptor
+ * that's been set into nonblocking mode. Handles EAGAIN/EWOULDBLOCK
+ * by means of doing a one-fd select and then trying again; all other
+ * errors (including errors from select) are returned to the caller.
+ */
+static int block_and_read(int fd, void *buf, size_t len)
+{
+    int ret;
+
+    while ((ret = read(fd, buf, len)) < 0 && (
+#ifdef EAGAIN
+               (errno == EAGAIN) ||
+#endif
+#ifdef EWOULDBLOCK
+               (errno == EWOULDBLOCK) ||
+#endif
+               0)) {
+
+        fd_set rfds;
+        FD_ZERO(&rfds);
+        FD_SET(fd, &rfds);
+        ret = select(fd+1, &rfds, NULL, NULL, NULL);
+        assert(ret != 0);
+        if (ret < 0)
+            return ret;
+        assert(FD_ISSET(fd, &rfds));
+    }
+
+    return ret;
 }
 
 int verify_ssh_host_key(void *frontend, char *host, int port,
@@ -166,7 +198,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 	do
 	{
 	    ret = read(0, line, sizeof(line) - 1);
-	} while (ret == -1 && errno == EINTR);
+	} while (ret == -1 && (errno == EINTR || errno == EAGAIN));
 
 	tcsetattr(0, TCSANOW, &oldmode);
     }
@@ -233,11 +265,8 @@ int askappend(void *frontend, Filename *filename,
 	newmode.c_lflag |= ECHO | ISIG | ICANON;
 	tcsetattr(0, TCSANOW, &newmode);
 	line[0] = '\0';
-	int ret;
-	do
-	{
-	    ret = read(0, line, sizeof(line) - 1);
-	} while (ret == -1 && errno == EINTR);
+	if (block_and_read(0, line, sizeof(line) - 1) <= 0)
+	    /* handled below */;
 	tcsetattr(0, TCSANOW, &oldmode);
     }
 

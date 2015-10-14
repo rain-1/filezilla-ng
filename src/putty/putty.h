@@ -445,6 +445,9 @@ struct backend_tag {
      */
     void (*unthrottle) (void *handle, int);
     int (*cfg_info) (void *handle);
+    /* Only implemented in the SSH protocol: check whether a
+     * connection-sharing upstream exists for a given configuration. */
+    int (*test_for_upstream)(const char *host, int port, Conf *conf);
     const char *name;
     int protocol;
     int default_port;
@@ -1323,6 +1326,7 @@ int filename_serialise(const Filename *f, void *data);
 Filename *filename_deserialise(void *data, int maxsize, int *used);
 char *get_username(void);	       /* return value needs freeing */
 char *get_random_data(int bytes);      /* used in cmdgen.c */
+char filename_char_sanitise(char c);   /* rewrite special pathname chars */
 
 /*
  * Exports and imports from timing.c.
