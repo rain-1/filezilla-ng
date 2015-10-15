@@ -457,7 +457,7 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
         pktin = sftp_wait_for_reply(req);
 	fxp_close_recv(pktin, req);
 
-	return 0;
+	return 2;
     }
 
     if (restart) {
@@ -689,7 +689,7 @@ int sftp_put_file(char *fname, char *outfname, int recurse, int restart)
     file = open_existing_file(fname, NULL, NULL, NULL, &permissions);
     if (!file) {
 	fzprintf(sftpError, "local: unable to open %s", fname);
-	return 0;
+	return 2;
     }
     attrs.flags = 0;
     PUT_PERMISSIONS(attrs, permissions);
