@@ -77,7 +77,7 @@ protected:
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult);
 
-	int ProcessReply(bool successful, const wxString& reply = _T(""));
+	void ProcessReply(int result, const wxString& reply = _T(""));
 
 	int ConnectParseResponse(bool successful, const wxString& reply);
 	int ConnectSend();
@@ -87,7 +87,7 @@ protected:
 							 const CFileTransferCommand::t_transferSettings& transferSettings);
 	int FileTransferSubcommandResult(int prevResult);
 	int FileTransferSend();
-	int FileTransferParseResponse(bool successful, const wxString& reply);
+	int FileTransferParseResponse(int result, const wxString& reply);
 
 	int ListSubcommandResult(int prevResult);
 	int ListSend();

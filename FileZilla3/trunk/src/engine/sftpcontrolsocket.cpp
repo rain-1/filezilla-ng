@@ -17,7 +17,7 @@
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
 
-#define FZSFTP_PROTOCOL_VERSION 3
+#define FZSFTP_PROTOCOL_VERSION 4
 
 struct sftp_event_type;
 typedef fz::simple_event<sftp_event_type> CSftpEvent;
@@ -598,7 +598,7 @@ void CSftpControlSocket::OnSftpEvent()
 		{
 		case sftpEvent::Reply:
 			LogMessageRaw(MessageType::Response, message->text);
-			ProcessReply(true, message->text);
+			ProcessReply(FZ_REPLY_OK, message->text);
 			break;
 		case sftpEvent::Status:
 			LogMessageRaw(MessageType::Status, message->text);
@@ -611,7 +611,17 @@ void CSftpControlSocket::OnSftpEvent()
 			break;
 		case sftpEvent::Done:
 			{
-				ProcessReply(message->text == _T("1"));
+				int result;
+				if (message->text == _T("1")) {
+					result = FZ_REPLY_OK;
+				}
+				else if (message->text == _T("2")) {
+					result = FZ_REPLY_CRITICALERROR;
+				}
+				else {
+					result = FZ_REPLY_ERROR;
+				}
+				ProcessReply(result);
 				break;
 			}
 		case sftpEvent::RequestPreamble:
@@ -1450,32 +1460,42 @@ int CSftpControlSocket::ChangeDirSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CSftpControlSocket::ProcessReply(bool successful, const wxString& reply /*=_T("")*/)
+void CSftpControlSocket::ProcessReply(int result, const wxString& reply /*=_T("")*/)
 {
 	Command commandId = GetCurrentCommandId();
 	switch (commandId)
 	{
 	case Command::connect:
-		return ConnectParseResponse(successful, reply);
+		ConnectParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::list:
-		return ListParseResponse(successful, reply);
+		ListParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::transfer:
-		return FileTransferParseResponse(successful, reply);
+		FileTransferParseResponse(result, reply);
+		break;
 	case Command::cwd:
-		return ChangeDirParseResponse(successful, reply);
+		ChangeDirParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::mkdir:
-		return MkdirParseResponse(successful, reply);
+		MkdirParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::del:
-		return DeleteParseResponse(successful, reply);
+		DeleteParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::removedir:
-		return RemoveDirParseResponse(successful, reply);
+		RemoveDirParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::chmod:
-		return ChmodParseResponse(successful, reply);
+		ChmodParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	case Command::rename:
-		return RenameParseResponse(successful, reply);
+		RenameParseResponse(result == FZ_REPLY_OK, reply);
+		break;
 	default:
 		LogMessage(MessageType::Debug_Warning, _T("No action for parsing replies to command %d"), (int)commandId);
-		return ResetOperation(FZ_REPLY_INTERNALERROR);
+		ResetOperation(FZ_REPLY_INTERNALERROR);
+		break;
 	}
 }
 
@@ -1801,12 +1821,11 @@ int CSftpControlSocket::FileTransferSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxString& reply)
+int CSftpControlSocket::FileTransferParseResponse(int result, const wxString& reply)
 {
-	LogMessage(MessageType::Debug_Verbose, _T("FileTransferParseResponse()"));
+	LogMessage(MessageType::Debug_Verbose, _T("FileTransferParseResponse(%d)"), result);
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1815,8 +1834,8 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 	CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
 
 	if (pData->opState == filetransfer_transfer) {
-		if (!successful) {
-			ResetOperation(FZ_REPLY_ERROR);
+		if (result != FZ_REPLY_OK) {
+			ResetOperation(result);
 			return FZ_REPLY_ERROR;
 		}
 
@@ -1837,7 +1856,7 @@ int CSftpControlSocket::FileTransferParseResponse(bool successful, const wxStrin
 		}
 	}
 	else if (pData->opState == filetransfer_mtime) {
-		if (successful && !reply.empty()) {
+		if (result == FZ_REPLY_OK && !reply.empty()) {
 			time_t seconds = 0;
 			bool parsed = true;
 			for (unsigned int i = 0; i < reply.Len(); ++i) {
