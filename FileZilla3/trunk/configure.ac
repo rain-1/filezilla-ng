@@ -123,6 +123,13 @@ cd "$OLD_DIR"
 
 if test "$buildmain" = "yes"; then
 
+  # Require pkg-config
+  # ------------------
+  PKG_PROG_PKG_CONFIG
+  if test -z "$PKG_CONFIG"; then
+    AC_MSG_ERROR([pkg-config not found. pkg-config is required to check for some dependencies.])
+  fi
+  
   # Find libfilezilla
   # -----------------
   PKG_CHECK_MODULES(LIBFILEZILLA, libfilezilla,, [
