@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.14.1 (2015-10-16)
+
++ For third-party builds, add configure flag to allow using system ciphers for FTP over TLS. Display a warning if an insecure cipher is negotiated as result of using system ciphers.
+- Fixed loading of the directory comparison flag for bookmakrs in the Site Manager
+- Changing the interface layout and icon theme no longer results in an inconsistent UI state
+- Some SFTP servers send additional information on errors. This information is now shown in the message log
+- If the local file cannot be opened on SFTP transfers FileZilla no longer automatically retries
+- Updated SFTP components from PuTTY
+
 3.14.0 (2015-09-16)
 
 - When connecting using SFTP, show an error message instead of silently failing when encountering an insecure cipher
