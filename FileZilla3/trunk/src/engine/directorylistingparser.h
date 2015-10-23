@@ -59,7 +59,7 @@ public:
 	CDirectoryListing Parse(const CServerPath &path);
 
 	bool AddData(char *pData, int len);
-	bool AddLine(const wxChar* pLine);
+	bool AddLine(const wchar_t* pLine);
 
 	void Reset();
 
@@ -105,14 +105,14 @@ protected:
 	// Parse file sizes given like this: 123.4M
 	bool ParseComplexFileSize(CToken& token, int64_t& size, int blocksize = -1);
 
-	bool GetMonthFromName(const wxString& name, int &month);
+	bool GetMonthFromName(std::wstring const& name, int &month);
 
 	void DeduceEncoding();
 	void ConvertEncoding(char *pData, int len);
 
 	CControlSocket* m_pControlSocket;
 
-	static std::map<wxString, int> m_MonthNamesMap;
+	static std::map<std::wstring, int> m_MonthNamesMap;
 
 	struct t_list
 	{

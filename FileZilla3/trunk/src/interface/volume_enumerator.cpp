@@ -185,7 +185,7 @@ std::list<wxString> CVolumeDescriptionEnumeratorThread::GetDrives()
 
 	const wxChar* pDrive = drives;
 	while (*pDrive) {
-		const int drivelen = wxStrlen(pDrive);
+		const int drivelen = fz::strlen(pDrive);
 
 		if (!IsHidden(pDrive, drivesToHide)) {
 			ret.push_back(pDrive);

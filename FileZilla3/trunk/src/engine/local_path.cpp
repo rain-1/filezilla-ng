@@ -65,7 +65,7 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 					// It's \\?\c:\foo\bar
 					goto parse_regular;
 				}
-				if (wxStrlen(in) < 5 || wxStrnicmp(in, _T("UNC\\"), 4)) {
+				if (fz::strlen(in) < 5 || wxStrnicmp(in, _T("UNC\\"), 4)) {
 					return false;
 				}
 				in += 4;
