@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <vector>
 
-std::map<wxString, int> CDirectoryListingParser::m_MonthNamesMap;
+std::map<std::wstring, int> CDirectoryListingParser::m_MonthNamesMap;
 
 //#define LISTDEBUG_MVS
 //#define LISTDEBUG
@@ -58,12 +58,12 @@ public:
 		hex
 	};
 
-	CToken(wxChar const* p, unsigned int len)
+	CToken(wchar_t const* p, unsigned int len)
 		: m_pToken(p)
 		, m_len(len)
 	{}
 
-	wxChar const* GetToken() const
+	wchar_t const* GetToken() const
 	{
 		return m_pToken;
 	}
@@ -113,7 +113,7 @@ public:
 
 	bool IsNumeric(unsigned int start, unsigned int len)
 	{
-		for (unsigned int i = start; i < wxMin(start + len, m_len); ++i)
+		for (unsigned int i = start; i < std::min(start + len, m_len); ++i)
 			if (m_pToken[i] < '0' || m_pToken[i] > '9')
 				return false;
 		return true;
@@ -145,7 +145,7 @@ public:
 		return m_rightNumeric == Yes;
 	}
 
-	int Find(const wxChar* chr, int start = 0) const
+	int Find(const wchar_t* chr, int start = 0) const
 	{
 		if (!chr)
 			return -1;
@@ -159,7 +159,7 @@ public:
 		return -1;
 	}
 
-	int Find(wxChar chr, int start = 0) const
+	int Find(wchar_t chr, int start = 0) const
 	{
 		if (!m_pToken)
 			return -1;
@@ -227,7 +227,7 @@ public:
 			{
 				int64_t number = 0;
 				for (unsigned int i = 0; i < m_len; ++i) {
-					const wxChar& c = m_pToken[i];
+					const wchar_t& c = m_pToken[i];
 					if (c >= '0' && c <= '9') {
 						number *= 16;
 						number += c - '0';
@@ -248,7 +248,7 @@ public:
 		}
 	}
 
-	wxChar operator[](unsigned int n) const
+	wchar_t operator[](unsigned int n) const
 	{
 		if (n >= m_len)
 			return 0;
@@ -257,7 +257,7 @@ public:
 	}
 
 protected:
-	wxChar const* m_pToken{};
+	wchar_t const* m_pToken{};
 	unsigned int m_len{};
 
 	TokenInformation m_numeric{Unknown};
@@ -269,13 +269,13 @@ protected:
 class CLine
 {
 public:
-	CLine(wxChar* p, int len = -1, int trailing_whitespace = 0)
+	CLine(wchar_t* p, int len = -1, int trailing_whitespace = 0)
 	{
 		m_pLine = p;
 		if (len >= 0)
 			m_len = len;
 		else
-			m_len = wxStrlen(p);
+			m_len = fz::strlen(p);
 
 		m_parsePos = 0;
 
@@ -343,7 +343,7 @@ public:
 				CToken ref;
 				if (!GetToken(prev, ref))
 					return false;
-				wxChar const* p = ref.GetToken() + ref.GetLength() + 1;
+				wchar_t const* p = ref.GetToken() + ref.GetLength() + 1;
 
 				auto const newLen = m_len - (p - m_pLine);
 				if (newLen <= 0) {
@@ -364,7 +364,7 @@ public:
 
 			for (unsigned int i = static_cast<unsigned int>(m_LineEndTokens.size()); i <= n; ++i) {
 				const CToken *refToken = m_Tokens[i];
-				const wxChar* p = refToken->GetToken();
+				const wchar_t* p = refToken->GetToken();
 				auto const newLen = m_len - (p - m_pLine) - m_trailing_whitespace;
 				if (newLen <= 0) {
 					return false;
@@ -380,10 +380,10 @@ public:
 	CLine *Concat(const CLine *pLine) const
 	{
 		int newLen = m_len + pLine->m_len + 1;
-		wxChar* p = new wxChar[newLen];
-		memcpy(p, m_pLine, m_len * sizeof(wxChar));
+		wchar_t* p = new wchar_t[newLen];
+		memcpy(p, m_pLine, m_len * sizeof(wchar_t));
 		p[m_len] = ' ';
-		memcpy(p + m_len + 1, pLine->m_pLine, pLine->m_len * sizeof(wxChar));
+		memcpy(p + m_len + 1, pLine->m_pLine, pLine->m_len * sizeof(wchar_t));
 
 		return new CLine(p, m_len + pLine->m_len + 1, pLine->m_trailing_whitespace);
 	}
@@ -399,7 +399,7 @@ protected:
 	int m_parsePos;
 	int m_len;
 	int m_trailing_whitespace;
-	wxChar* m_pLine;
+	wchar_t* m_pLine;
 	unsigned int offset_{};
 };
 
@@ -599,20 +599,19 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 
 		// Some servers send a combination of month name and number,
 		// Add corresponding numbers to the month names.
-		std::map<wxString, int> combo;
-		for (auto iter = m_MonthNamesMap.begin(); iter != m_MonthNamesMap.end(); ++iter)
-		{
+		std::map<std::wstring, int> combo;
+		for (auto iter = m_MonthNamesMap.begin(); iter != m_MonthNamesMap.end(); ++iter) {
 			// January could be 1 or 0, depends how the server counts
-			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second)] = iter->second;
-			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second - 1)] = iter->second;
+			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second).ToStdWstring()] = iter->second;
+			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second - 1).ToStdWstring()] = iter->second;
 			if (iter->second < 10)
-				combo[wxString::Format(_T("%s%d"), iter->first, iter->second)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, iter->second).ToStdWstring()] = iter->second;
 			else
-				combo[wxString::Format(_T("%s%d"), iter->first, iter->second % 10)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, iter->second % 10).ToStdWstring()] = iter->second;
 			if (iter->second <= 10)
-				combo[wxString::Format(_T("%s%d"), iter->first, iter->second - 1)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, iter->second - 1).ToStdWstring()] = iter->second;
 			else
-				combo[wxString::Format(_T("%s%d"), iter->first, (iter->second - 1) % 10)] = iter->second;
+				combo[wxString::Format(_T("%s%d"), iter->first, (iter->second - 1) % 10).ToStdWstring()] = iter->second;
 		}
 		m_MonthNamesMap.insert(combo.begin(), combo.end());
 
@@ -876,7 +875,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 	if (!line.GetToken(index, token))
 		return false;
 
-	wxChar chr = token[0];
+	wchar_t chr = token[0];
 	if (chr != 'b' &&
 		chr != 'c' &&
 		chr != 'd' &&
@@ -945,13 +944,13 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 			if (!ownerGroup.empty())
 				ownerGroup += _T(" ");
 
-			wxString const group = token.GetString();
+			std::wstring const group = token.GetString();
 			int i;
-			for( i = group.size() - 1;
+			for (i = group.size() - 1;
 				 i >= 0 && group[i] >= '0' && group[i] <= '9';
-				 --i ) {}
+				 --i) {}
 
-			ownerGroup += group.Left(i + 1);
+			ownerGroup += group.substr(0, i + 1);
 		}
 
 		if (expect_date) {
@@ -1106,20 +1105,20 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	}
 
 	if (month < 1) {
-		wxString strMonth = dateMonth.GetString();
-		if (dateMonth.IsLeftNumeric() && (unsigned int)strMonth[strMonth.Length() - 1] > 127) {
+		std::wstring strMonth = dateMonth.GetString();
+		if (dateMonth.IsLeftNumeric() && (unsigned int)strMonth[strMonth.size() - 1] > 127) {
 			// Most likely an Asian server sending some unknown language specific
 			// suffix at the end of the monthname. Filter it out.
 			int i;
-			for (i = strMonth.Length() - 1; i > 0; --i) {
+			for (i = strMonth.size() - 1; i > 0; --i) {
 				if (strMonth[i] >= '0' && strMonth[i] <= '9')
 					break;
 			}
-			strMonth = strMonth.Left(i + 1);
+			strMonth = strMonth.substr(0, i + 1);
 		}
 		// Check month name
-		while (strMonth.Right(1) == _T(",") || strMonth.Right(1) == _T("."))
-			strMonth.RemoveLast();
+		while (!strMonth.empty() && (strMonth.back() == ',' || strMonth.back() == '.'))
+			strMonth.pop_back();
 		if (!GetMonthFromName(strMonth, month))
 			return false;
 	}
@@ -1233,7 +1232,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 		// Seems to be monthname-dd-yy
 
 		// Check month name
-		wxString dateMonth = token.GetString().substr(0, pos);
+		std::wstring const dateMonth = token.GetString().substr(0, pos);
 		if (!GetMonthFromName(dateMonth, month))
 			return false;
 		gotMonth = true;
@@ -1309,7 +1308,7 @@ bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bo
 	if (gotYear || gotDay) {
 		// Month field in yyyy-mm-dd or dd-mm-yyyy
 		// Check month name
-		wxString dateMonth = token.GetString().substr(pos + 1, pos2 - pos - 1);
+		std::wstring dateMonth = token.GetString().substr(pos + 1, pos2 - pos - 1);
 		if (!GetMonthFromName(dateMonth, month))
 			return false;
 		gotMonth = true;
@@ -1525,11 +1524,11 @@ bool CDirectoryListingParser::ParseAsEplf(CLine &line, CDirentry &entry)
 }
 
 namespace {
-wxString Unescape(const wxString& str, wxChar escape)
+std::wstring Unescape(const std::wstring& str, wchar_t escape)
 {
-	wxString res;
+	std::wstring res;
 	for (unsigned int i = 0; i < str.size(); ++i) {
-		wxChar c = str[i];
+		wchar_t c = str[i];
 		if (c == escape) {
 			++i;
 			if (i == str.size() || !str[i]) {
@@ -1813,7 +1812,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 		entry.size = firstToken.GetNumber();
 
 		// Get date
-		wxString dateMonth = token.GetString();
+		std::wstring dateMonth = token.GetString();
 		int month = 0;
 		if (!GetMonthFromName(dateMonth, month)) {
 			// OS/2 or nortel.VxWorks
@@ -1846,7 +1845,7 @@ bool CDirectoryListingParser::ParseOther(CLine &line, CDirentry &entry)
 
 			entry.name = token.GetString();
 			if (entry.name.size() >= 5) {
-				wxString type = fz::str_tolower_ascii(entry.name.substr(entry.name.size() - 5));
+				std::wstring type = fz::str_tolower_ascii(entry.name.substr(entry.name.size() - 5));
 				if (!skippedCount && type == _T("<dir>")) {
 					entry.flags |= CDirentry::flag_dir;
 					entry.name = entry.name.substr(0, entry.name.size() - 5);
@@ -1924,7 +1923,7 @@ bool CDirectoryListingParser::AddData(char *pData, int len)
 	return ParseData(true);
 }
 
-bool CDirectoryListingParser::AddLine(wxChar const* pLine)
+bool CDirectoryListingParser::AddLine(wchar_t const* pLine)
 {
 	if (m_pControlSocket)
 		m_pControlSocket->LogMessageRaw(MessageType::RawList, pLine);
@@ -1935,11 +1934,11 @@ bool CDirectoryListingParser::AddLine(wxChar const* pLine)
 	if (!*pLine)
 		return false;
 
-	const int len = wxStrlen(pLine);
+	const int len = fz::strlen(pLine);
 
-	wxChar* p = new wxChar[len + 1];
+	wchar_t* p = new wchar_t[len + 1];
 
-	wxStrcpy(p, pLine);
+	wcscpy(p, pLine);
 
 	CLine line(p, len);
 
@@ -2048,22 +2047,21 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 			m_DataList.erase(m_DataList.begin(), iter);
 
 		size_t lineLength{};
-		wxChar* buffer;
+		wchar_t* buffer;
 		if (m_pControlSocket) {
 			buffer = m_pControlSocket->ConvToLocalBuffer(res, buflen, lineLength);
 			m_pControlSocket->LogMessageRaw(MessageType::RawList, buffer);
 		}
 		else {
 			wxString str(res, wxConvUTF8);
-			if (str.empty())
-			{
+			if (str.empty()) {
 				str = wxString(res, wxConvLocal);
 				if (str.empty())
 					str = wxString(res, wxConvISO8859_1);
 			}
 			lineLength = str.Len() + 1;
-			buffer = new wxChar[str.Len() + 1];
-			wxStrcpy(buffer, str.c_str());
+			buffer = new wchar_t[str.Len() + 1];
+			wcscpy(buffer, str.c_str());
 		}
 		delete [] res;
 
@@ -2299,7 +2297,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Migrated(CLine &line, CDirentry &en
 	if (!line.GetToken(index, token))
 		return false;
 
-	wxString s = fz::str_tolower_ascii(token.GetString());
+	std::wstring s = fz::str_tolower_ascii(token.GetString());
 	if (s != _T("migrated"))
 		return false;
 
@@ -2398,7 +2396,7 @@ bool CDirectoryListingParser::ParseAsIBM_MVS_Tape(CLine &line, CDirentry &entry)
 	if (!line.GetToken(index++, token))
 		return false;
 
-	wxString s = fz::str_tolower_ascii(token.GetString());
+	std::wstring s = fz::str_tolower_ascii(token.GetString());
 	if (s != _T("tape"))
 		return false;
 
@@ -2732,7 +2730,7 @@ bool CDirectoryListingParser::ParseAsZVM(CLine &line, CDirentry &entry)
 	// File format. Unused
 	if (!line.GetToken(++index, token))
 		return false;
-	wxString format = token.GetString();
+	std::wstring format = token.GetString();
 	if (format != _T("V") && format != _T("F"))
 		return false;
 
@@ -2860,15 +2858,12 @@ bool CDirectoryListingParser::ParseAsHPNonstop(CLine &line, CDirentry &entry)
 	return true;
 }
 
-bool CDirectoryListingParser::GetMonthFromName(const wxString& name, int &month)
+bool CDirectoryListingParser::GetMonthFromName(const std::wstring& name, int &month)
 {
-	auto iter = m_MonthNamesMap.find(name.Lower());
-	if (iter == m_MonthNamesMap.end()) {
-		wxString lower = fz::str_tolower_ascii(name);
-		iter = m_MonthNamesMap.find(lower);
-		if (iter == m_MonthNamesMap.end())
-			return false;
-	}
+	std::wstring lower = fz::str_tolower_ascii(name);
+	auto iter = m_MonthNamesMap.find(lower);
+	if (iter == m_MonthNamesMap.end())
+		return false;
 
 	month = iter->second;
 
