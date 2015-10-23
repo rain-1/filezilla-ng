@@ -689,7 +689,7 @@ bool CXmlFile::ParseData(char* data)
 {
 	Close();
 	m_document.load_string(data);
-	m_element = m_document.child(m_rootName);
+	m_element = m_document.child(m_rootName.mb_str());
 	if (!m_element) {
 		Close();
 	}
