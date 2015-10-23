@@ -1988,7 +1988,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 				++iter;
 				if (iter == m_DataList.end()) {
 					if (reslen > 10000) {
-						m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
+						if (m_pControlSocket) {
+							m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
+						}
 						error = true;
 						return 0;
 					}
@@ -2002,7 +2004,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		}
 
 		if (reslen > 10000) {
-			m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
+			if (m_pControlSocket) {
+				m_pControlSocket->LogMessage(MessageType::Error, _("Received a line exceeding 10000 characters, aborting."));
+			}
 			error = true;
 			return 0;
 		}
@@ -2915,42 +2919,43 @@ void CDirectoryListingParser::DeduceEncoding()
 
 	int count_normal = 0;
 	int count_ebcdic = 0;
-	for (int i = '0'; i <= '9'; ++i ) {
+	for (int i = '0'; i <= '9'; ++i) {
 		count_normal += count[i];
 	}
-	for (int i = 'a'; i <= 'z'; ++i ) {
+	for (int i = 'a'; i <= 'z'; ++i) {
 		count_normal += count[i];
 	}
-	for (int i = 'A'; i <= 'Z'; ++i ) {
+	for (int i = 'A'; i <= 'Z'; ++i) {
 		count_normal += count[i];
 	}
 
-	for (int i = 0x81; i <= 0x89; ++i ) {
+	for (int i = 0x81; i <= 0x89; ++i) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0x91; i <= 0x99; ++i ) {
+	for (int i = 0x91; i <= 0x99; ++i) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xa2; i <= 0xa9; ++i ) {
+	for (int i = 0xa2; i <= 0xa9; ++i) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xc1; i <= 0xc9; ++i ) {
+	for (int i = 0xc1; i <= 0xc9; ++i) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xd1; i <= 0xd9; ++i ) {
+	for (int i = 0xd1; i <= 0xd9; ++i) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xe2; i <= 0xe9; ++i ) {
+	for (int i = 0xe2; i <= 0xe9; ++i) {
 		count_ebcdic += count[i];
 	}
-	for (int i = 0xf0; i <= 0xf9; ++i ) {
+	for (int i = 0xf0; i <= 0xf9; ++i) {
 		count_ebcdic += count[i];
 	}
 
 
-	if ((count[0x1f] || count[0x15] || count[0x25]) && !count[0x0a] && count[static_cast<unsigned char>('@')] && count[static_cast<unsigned char>('@')] > count[static_cast<unsigned char>(' ')] && count_ebcdic > count_normal)
-	{
-		m_pControlSocket->LogMessage(MessageType::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
+	if ((count[0x1f] || count[0x15] || count[0x25]) && !count[0x0a] && count[static_cast<unsigned char>('@')] && count[static_cast<unsigned char>('@')] > count[static_cast<unsigned char>(' ')] && count_ebcdic > count_normal) {
+		if (m_pControlSocket) {
+			m_pControlSocket->LogMessage(MessageType::Status, _("Received a directory listing which appears to be encoded in EBCDIC."));
+		}
 		m_listingEncoding = listingEncoding::ebcdic;
 		for (auto it = m_DataList.begin(); it != m_DataList.end(); ++it)
 			ConvertEncoding(it->p, it->len);
