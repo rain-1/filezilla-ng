@@ -1057,6 +1057,13 @@ ${MementoUnselectedSection} "Desktop Icon" SecDesktop
   SetOutPath "$INSTDIR"
   CreateShortCut "$DESKTOP\FileZilla Client.lnk" "$INSTDIR\filezilla.exe" "" "$INSTDIR\filezilla.exe" 0
 
+  ${If} ${AtLeastWin7}
+    ; Setting AppID
+    push "FileZilla.Client.AppID"
+    push "$DESKTOP\FileZilla Client.lnk"
+    nsis_appid::set_appid
+  ${EndIf}
+
 ${MementoSectionEnd}
 
 ${MementoSectionDone}
