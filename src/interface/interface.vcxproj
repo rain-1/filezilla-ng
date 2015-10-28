@@ -87,7 +87,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libgnutls-28.lib;normaliz.lib;odbc32.lib;odbccp32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;..\engine\Debug\engine.lib;Debug\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgnutls-28.lib;normaliz.lib;odbc32.lib;odbccp32.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;..\engine\Debug\engine.lib;win32_static_debug\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Debug/FileZilla_dbg.pdb</ProgramDatabaseFile>
       <OutputFile>..\bin\FileZilla_dbg.exe</OutputFile>
@@ -137,7 +137,7 @@
       <Culture>0x0407</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>libgnutls-28.lib;normaliz.lib;wsock32.lib;odbc32.lib;odbccp32.lib;comctl32.lib;..\engine\Release\engine.lib;Release\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libgnutls-28.lib;normaliz.lib;wsock32.lib;odbc32.lib;odbccp32.lib;comctl32.lib;..\engine\Release\engine.lib;Win32_static_release\libfilezilla.lib;Netapi32.lib;Winmm.lib;Ws2_32.lib;mpr.lib;sqlite3.lib;powrprof.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Release/FileZilla.pdb</ProgramDatabaseFile>
