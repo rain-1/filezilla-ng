@@ -2699,6 +2699,13 @@
                 <flag>wxLEFT|wxRIGHT|wxBOTTOM</flag>
                 <border>5</border>
               </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="ID_COMPARISON">
+                  <label>D&amp;irectory comparison</label>
+                </object>
+                <flag>wxLEFT|wxRIGHT|wxBOTTOM</flag>
+                <border>5</border>
+              </object>
             </object>
             <flag>wxGROW</flag>
           </object>
