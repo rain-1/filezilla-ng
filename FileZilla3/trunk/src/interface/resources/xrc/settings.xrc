@@ -1493,7 +1493,7 @@
             <object class="wxFlexGridSizer">
               <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_DATEFORMAT_DEFAULT">
-                  <label>Use system &amp;defaults</label>
+                  <label>Use system &amp;defaults for current language</label>
                   <style>wxRB_GROUP</style>
                 </object>
               </object>
@@ -1542,7 +1542,7 @@
             <object class="wxFlexGridSizer">
               <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_TIMEFORMAT_DEFAULT">
-                  <label>U&amp;se system defaults</label>
+                  <label>U&amp;se system defaults for current language</label>
                   <style>wxRB_GROUP</style>
                 </object>
               </object>
