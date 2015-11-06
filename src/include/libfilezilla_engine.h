@@ -35,7 +35,8 @@
 
 #include <libfilezilla/libfilezilla.hpp>
 
-#include "fzstring.h"
+#include <libfilezilla/glue/wx.hpp>
+
 #include "optionsbase.h"
 #include "logging.h"
 #include "server.h"
