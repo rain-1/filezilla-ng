@@ -6,7 +6,6 @@ noinst_HEADERS = \
 	engine_context.h \
 	externalipresolver.h \
 	FileZillaEngine.h \
-	fzstring.h \
 	libfilezilla_engine.h \
 	local_filesys.h \
 	local_path.h \
