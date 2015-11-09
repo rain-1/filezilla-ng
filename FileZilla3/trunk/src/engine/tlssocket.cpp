@@ -80,8 +80,30 @@ bool CTlsSocket::Init()
 	return true;
 }
 
+bool CTlsSocket::SetClientCertificate(fz::native_string const& keyfile, fz::native_string const& certs, fz::native_string const& password)
+{
+	if (!m_certCredentials) {
+		return false;
+	}
+
+	int res = gnutls_certificate_set_x509_key_file2(m_certCredentials, fz::to_string(certs).c_str(),
+		fz::to_string(keyfile).c_str(), GNUTLS_X509_FMT_PEM, password.empty() ? 0 : fz::to_utf8(password).c_str(), 0);
+	if (res < 0) {
+		LogError(res, _T("gnutls_certificate_set_x509_key_file2"));
+		Uninit();
+		return false;
+	}
+
+	return true;
+}
+
 bool CTlsSocket::InitSession()
 {
+	if (!m_certCredentials) {
+		Uninit();
+		return false;
+	}
+
 	int res = gnutls_init(&m_session, GNUTLS_CLIENT);
 	if (res) {
 		LogError(res, _T("gnutls_init"));

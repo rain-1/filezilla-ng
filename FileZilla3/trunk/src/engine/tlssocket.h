@@ -47,6 +47,7 @@ public:
 
 	static wxString ListTlsCiphers(wxString priority);
 
+	bool SetClientCertificate(fz::native_string const& keyfile, fz::native_string const& certs, fz::native_string const& password);
 protected:
 
 	bool InitSession();
