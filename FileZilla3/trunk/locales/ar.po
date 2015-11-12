@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-16 11:13+0200\n"
-"PO-Revision-Date: 2015-09-18 22:52+0300\n"
+"POT-Creation-Date: 2015-11-12 10:26+0100\n"
+"PO-Revision-Date: 2015-10-30 20:05+0300\n"
 "Last-Translator: Awadh Alghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language-Team: Awadh Al-Ghaamdi <awadh_al_ghaamdi@hotmail.com>\n"
 "Language: ar\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural= n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
-"X-Generator: Poedit 1.8.4\n"
+"X-Generator: Poedit 1.8.6\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
@@ -238,7 +238,7 @@ msgstr "%u - المستخدم"
 msgid "%w - Proxy password"
 msgstr "%w - كلمة مرور الملقم الوكيل"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3497
 msgid "&Abort previous connection and connect in current tab"
 msgstr "&قطع الإتصال السابق و الإتصال في تبويب جديد"
 
@@ -291,7 +291,7 @@ msgstr "دائما الوثوق بهذا ال&مضيف , إضافة هذا ال�
 msgid "&Always use default editor"
 msgstr "&دائما إستخدام المحرر الإفتراضي"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2957
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2964
 msgid "&Always use selection for unassociated files"
 msgstr "دائما أ&ستخدم التحديد للملفات الغير مشروكة"
 
@@ -329,9 +329,9 @@ msgstr "ال&عناوين المفضلة"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2260
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2669
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2749
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2944
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3129
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2756
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2951
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3136
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1930
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2145
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:337
@@ -344,8 +344,8 @@ msgstr "إ&قحام التجاوب :"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:379
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1025
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3620
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3676
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3627
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3683
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:40
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:34
 msgid "&Cancel"
@@ -418,14 +418,14 @@ msgstr "ال&تأخير بين المحاولات الفاشلة لتسجيل ا
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1069
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1238
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2829
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2836
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:276
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:571
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:59
 msgid "&Delete"
 msgstr "&حذف"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3226
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3233
 msgid "&Delete symlink"
 msgstr "&حذف الرابط الترميزي"
 
@@ -463,7 +463,7 @@ msgstr "عرض &سرعة النقل فورا بدلا من معدل السرعة
 msgid "&Display size in bytes"
 msgstr "عرض ال&حجم بالبايت"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3659
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3666
 msgid "&Do not remember passwords (recommended)"
 msgstr "&عدم تذكر كلمات المرور (مستحسن)"
 
@@ -484,7 +484,7 @@ msgstr "إجراء ال&نقرة المزدوجة على الملفات:"
 msgid "&Download"
 msgstr "ت&حميل"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3115
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3122
 msgid "&Download to:"
 msgstr "التحميل &إلى:"
 
@@ -517,7 +517,7 @@ msgstr "ت&مكين"
 msgid "&Enable compression"
 msgstr "تمكين &الضغط"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3548
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3555
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:896
 msgid "&Enable speed limits"
 msgstr "ت&مكين حدود السرعة"
@@ -534,7 +534,7 @@ msgstr "ال&تشفير :"
 msgid "&Enter custom command..."
 msgstr "إدخال &أمر مخصص..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3483
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
 msgid "&Establish connection in a new tab"
 msgstr "تأسيس الإتصال في تبويب &جديد"
 
@@ -587,14 +587,14 @@ msgstr "ال&مرشحات:"
 msgid "&Finish editing and delete local file"
 msgstr "إ&نتهاء تحرير و حذف الملف المحلي"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3158
 msgid ""
 "&Flatten remote paths, download all contained files directly into target "
 "directory"
 msgstr ""
 "ت&سطيح المسارات البعيدة ، تحميل كافة الملفات المحتوية مباشرة إلى المجلد الهدف"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3233
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3240
 msgid "&Follow symlink, delete target directory contents"
 msgstr "تتبع &الرابط الترميزي ، حذف محتويات المجلد الهدف"
 
@@ -657,7 +657,7 @@ msgstr "إ&شراكات متوارثة لأنواع ملفات النظام"
 msgid "&Install new version"
 msgstr "تثبيت &الإصدار الجديد"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3144
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
 msgid "&Keep remote path structure relative to search root"
 msgstr "إ&بقاء تركيبة المسار البعيد مقارب إلى جذر البحث"
 
@@ -682,7 +682,7 @@ msgid "&Local directory tree"
 msgstr "ت&فرع المجلد المحلى"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2654
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2737
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2744
 msgid "&Local directory:"
 msgstr "ال&مجلد المحلى:"
 
@@ -773,7 +773,7 @@ msgid "&Numeric value:"
 msgstr "ال&قيمة العددية:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:371
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2878
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2885
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:597
 msgid "&OK"
 msgstr "&حسنا"
@@ -850,12 +850,12 @@ msgstr "ت&حديث"
 msgid "&Remember password until FileZilla is closed"
 msgstr "تذكر &كلمة المرور إلى أن يتم إغلاق FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3653
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3660
 msgid "&Remember passwords"
 msgstr "تذكر &كلمات المرور"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2681
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2761
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2768
 msgid "&Remote directory:"
 msgstr "ال&مجلد البعيد:"
 
@@ -876,7 +876,7 @@ msgid "&Remove selected"
 msgstr "إزالة المحددة"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1244
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2823
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2830
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:280
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:324
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:511
@@ -937,7 +937,7 @@ msgstr "&SOCKS 5"
 msgid "&Save as..."
 msgstr "حفظ &باسم..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3006
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3013
 msgid "&Search"
 msgstr "&بحث"
 
@@ -1006,7 +1006,7 @@ msgstr "ت&جاوز"
 msgid "&Speed limits"
 msgstr "&حدود السرعة"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3162
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
 msgid "&Start transfer immediately"
 msgstr "&بدء الإرسال فورا"
 
@@ -1061,7 +1061,7 @@ msgstr "&رفع"
 msgid "&Uploads:"
 msgstr "عمليات ال&رفع:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2932
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2939
 msgid "&Use custom program"
 msgstr "إ&ستخدام برنامج مخصص"
 
@@ -1222,8 +1222,8 @@ msgstr "(مثال: %H:%M)"
 msgid "(example: %Y-%m-%d)"
 msgstr "(مثال: %Y-%m-%d)"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3567
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3584
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3574
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3591
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:919
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:944
 #, c-format
@@ -1469,7 +1469,7 @@ msgstr ""
 msgid "Active mode IP"
 msgstr "IP النمط النشط"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3176
 msgid "Add files to &queue only"
 msgstr "إ&ضافة الملفات فقط إلى قائمة الإنتظار"
 
@@ -1510,7 +1510,7 @@ msgstr ""
 "متوقع، وقد تؤدي حتى إلى تلف النظام الخاص بك. وبالتالي فإن استخدام هذه "
 "الإصدارات يكون على مسؤوليتك الخاصة"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3500
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3507
 msgid "Al&ways perform this action"
 msgstr "دائما تنفيذ هذا الإجراء:"
 
@@ -1545,7 +1545,7 @@ msgstr "السماح بالتراجع الكامل إلى نمط إرسال آخ
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "السماح بالتراجع الكامل إلى نمط آخر عند الفشل"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3460
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3467
 msgid "Already connected"
 msgstr "متصل مسبقا"
 
@@ -1683,7 +1683,7 @@ msgstr "سؤال نظام التشغيل من اجل منفذ"
 msgid "Ask your operating system for the external IP address"
 msgstr "سؤال نظام التشغيل الخاص بك عن عنوان IP خارجي"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3409
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3416
 msgid "Asking questions in the FileZilla forums"
 msgstr "طرح أسئلة في منتديات FileZilla"
 
@@ -1736,7 +1736,7 @@ msgstr "ت&جاوز الملقم الوكيل"
 msgid "Bad file descriptor"
 msgstr "واصف ملف غير صالح"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3366
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3373
 msgid "Basic usage instructions"
 msgstr "تعليمات الإستخدام الأساسية"
 
@@ -1749,7 +1749,7 @@ msgstr "السلوك"
 msgid "Being edited"
 msgstr "يتم التحرير"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1089
+#: ../../locales/../src/engine/tlssocket.cpp:1111
 msgid "Beware! Certificate has been revoked"
 msgstr "أنتبه! تم إبطال الشهادة"
 
@@ -1767,11 +1767,11 @@ msgstr "لوحة سوداء"
 msgid "Bookmark"
 msgstr "عنوان مفضل"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2800
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2807
 msgid "Bookmark:"
 msgstr "العنوان المفضل:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2789
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2796
 msgid "Bookmarks"
 msgstr "عناوين مفضلة"
 
@@ -1859,13 +1859,13 @@ msgstr "تعذرت كتابة البيانات إلى الملف : %s"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1829
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2188
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2570
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2716
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2884
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2974
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3186
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3256
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3518
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3738
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2723
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2891
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2981
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3193
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3263
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3525
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3745
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:604
 msgid "Cancel"
 msgstr "إلغاء الأمر"
@@ -2270,7 +2270,7 @@ msgid "Concurrent transfers"
 msgstr "عمليات الإرسال المتزامنة"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1315
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3056
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3063
 msgid "Conditions are c&ase sensitive"
 msgstr "حالة الشروط &حساسة"
 
@@ -2286,7 +2286,7 @@ msgstr "تكوين النمط السلبي"
 msgid "Configure port range"
 msgstr "تكوين نطاق المنفذ"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3372
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3379
 msgid "Configuring FileZilla and your network"
 msgstr "تكوين FileZilla و شبكتك"
 
@@ -2560,7 +2560,7 @@ msgstr ""
 msgid "Could not generate custom login sequence."
 msgstr "تعذر توليد سلسلة تسجيل الدخول المخصصة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:934
+#: ../../locales/../src/engine/tlssocket.cpp:956
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2568,7 +2568,7 @@ msgstr ""
 "لا يمكن الحصول على الإسم الفارق من ناشر الشهادة , فشل "
 "gnutls_x509_get_issuer_dn"
 
-#: ../../locales/../src/engine/tlssocket.cpp:911
+#: ../../locales/../src/engine/tlssocket.cpp:933
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2589,11 +2589,11 @@ msgstr "تعذر الحصول على الرد من fzputtygen"
 msgid "Could not get temporary directory to download file into."
 msgstr "تعذر الحصول على المجلد المؤقت لتحميل معلومات الملف"
 
-#: ../../locales/../src/engine/tlssocket.cpp:857
+#: ../../locales/../src/engine/tlssocket.cpp:879
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "لا يمكن إستيراد شهادات النظير , فشل gnutls_x509_crt_import"
 
-#: ../../locales/../src/engine/tlssocket.cpp:852
+#: ../../locales/../src/engine/tlssocket.cpp:874
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2900,6 +2900,10 @@ msgstr "الإ&فتراضى"
 msgid "D&elete"
 msgstr "&حذف"
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2704
+msgid "D&irectory comparison"
+msgstr "مقارنة &المجلدات"
+
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1100
 msgid "D&isable all"
 msgstr "ت&عطيل الكل"
@@ -2913,7 +2917,7 @@ msgid "D&ouble-click action on directories:"
 msgstr "إجراء ال&نقرة المزدوجة على المجلدات :"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1250
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2835
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2842
 msgid "D&uplicate"
 msgstr "ت&كرار"
 
@@ -3057,7 +3061,7 @@ msgstr "حذف المجلدات"
 msgid "Deleting multiple unrelated directories is not yet supported"
 msgstr "لم يتم بعد دعم الحذف للمجلدات المتعددة الغير مرتبطة"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3204
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
 msgid "Deleting symbolic link"
 msgstr "حذف الرابط الترميزي"
 
@@ -3091,7 +3095,7 @@ msgstr "الإتجاه"
 msgid "Directory"
 msgstr "المجلد"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2776
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2783
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:524
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1770
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
@@ -3224,7 +3228,7 @@ msgstr "هل تريد فعلا إرسال '%s' إلى الخادم ؟"
 msgid "Do you want to reopen this file?"
 msgstr "هل تريد فعلا إعادة فتح هذا الملف؟"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3354
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3361
 msgid "Documentation"
 msgstr "وثائق تعليمات"
 
@@ -3244,7 +3248,7 @@ msgstr "إجراء النقرة المزدوجة"
 msgid "Download"
 msgstr "تحميل"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3556
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3563
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:905
 msgid "Download &limit:"
 msgstr "حدود التحميل&:"
@@ -3258,7 +3262,7 @@ msgstr "حدود التحميل: %s/ث"
 msgid "Download limit: none"
 msgstr "حدود التحميل : بدون"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3103
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3110
 #: ../../locales/../src/interface/search.cpp:518
 #: ../../locales/../src/interface/search.cpp:523
 msgid "Download search results"
@@ -3443,7 +3447,7 @@ msgstr "إنهاء المقارنة و تغيير نظام الترتيب ؟"
 msgid "Enter &custom command..."
 msgstr "إدخال أمر &مخصص..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3597
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3604
 msgid "Enter 0 for unlimited speed."
 msgstr "أدخل 0 للسرعة الغير المحدودة"
 
@@ -3841,7 +3845,7 @@ msgstr "فشل في وضع اللغة على %s ، إستعمال لغة الن�
 msgid "Failed to validate settings"
 msgstr "فشل في التحقق من الإعدادات"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1083
+#: ../../locales/../src/engine/tlssocket.cpp:1105
 msgid "Failed to verify peer certificate"
 msgstr "فشل في التحقق من شهادة النظير"
 
@@ -3973,7 +3977,7 @@ msgid ""
 msgstr ""
 "يمكن الآن لـ FileZilla أن يفحص تكوينك للتأكد من أن كل شيء تم تكوينه بشكل صحيح"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3478
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3485
 msgid "FileZilla is already connected to a server."
 msgstr "متصل مسبقا إلى خادم ما FileZilla"
 
@@ -4100,11 +4104,11 @@ msgstr "فرز قوائم المجلد"
 msgid "Filter validation failed"
 msgstr "فشل التحقق من المرشح"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3061
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3068
 msgid "Find &files"
 msgstr "&بحث عن ملفات"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3066
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3073
 msgid "Find d&irectories"
 msgstr "بحث &عن مجلدات"
 
@@ -4171,7 +4175,7 @@ msgstr "التنسيق : الإمتداد متبوع بالأمر المقتبس
 msgid "Found new %s %s\n"
 msgstr "الجديد المكتشف %s %s\n"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3378
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3385
 msgid "Further documentation"
 msgstr "تعليمات موسعة"
 
@@ -4192,7 +4196,7 @@ msgstr "ملقم وكيل عام"
 msgid "Get external IP address from the following URL:"
 msgstr "الحصول على عنوان IP خارجي من الرابط التالي :"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3397
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3404
 msgid "Getting help"
 msgstr "الحصول على تعليمات"
 
@@ -4205,22 +4209,22 @@ msgstr "إسم مجموعة المرشحات المعطى موجود مسبقا 
 msgid "Global bookmarks"
 msgstr "عناوين مفضلة شاملة"
 
-#: ../../locales/../src/engine/tlssocket.cpp:188
+#: ../../locales/../src/engine/tlssocket.cpp:210
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "GnuTLS خطأ %d"
 
-#: ../../locales/../src/engine/tlssocket.cpp:190
+#: ../../locales/../src/engine/tlssocket.cpp:212
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "GnuTLS خطأ %d في %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:184
+#: ../../locales/../src/engine/tlssocket.cpp:206
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "GnuTLS خطأ %d في %s: %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:182
+#: ../../locales/../src/engine/tlssocket.cpp:204
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "GnuTLS خطأ %d: %s"
@@ -4377,7 +4381,7 @@ msgstr ""
 "عند وصول حجم ملف السجل إلى الحد ، يتم تسميته بإضافة \"1\" إلى نهاية إسم "
 "الملف (و قد يتم الكتابة على ملفات السجلات القديمة) و من ثم إنشاء ملف جديد"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3216
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3223
 msgid ""
 "If the symlink points to a directory, FileZilla can either delete the "
 "symbolic link or remove the contents of the linked directory."
@@ -4542,7 +4546,7 @@ msgstr ""
 "فى النمط السلبي الذى ينصح به لمعظم المستخدمين . البرنامج يسأل الخادم من أجل "
 "منفذ و يتصل بالمنفذ المعطى له , حيث لا يوجد الكثير من الضبط يجب عمله هنا"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1095
+#: ../../locales/../src/engine/tlssocket.cpp:1117
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4565,9 +4569,8 @@ msgid "Initializing TLS..."
 msgstr "جاري تهيئة TLS..."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:107
-#, fuzzy
 msgid "Insecure algorithm!"
-msgstr "خوارزمية التواقيع:"
+msgstr "خوارزمية غير آمنة"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:729
 msgid "Insecure server, it does not support FTP over TLS."
@@ -4958,15 +4961,15 @@ msgstr "إجابة محرفة ، الخادم لا يرسل نهايات صحي�
 msgid "Manual transfer"
 msgstr "إرسال يدوي"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3027
 msgid "Match all of the following"
 msgstr "مطابقة كل ما يأتي"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3021
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3028
 msgid "Match any of the following"
 msgstr "مطابقة أي مما يلي"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3022
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3029
 msgid "Match none of the following"
 msgstr "عدم مطابقة ما يلي"
 
@@ -5087,7 +5090,7 @@ msgstr "مجلد &جديد"
 msgid "New &tab"
 msgstr "&تبويب جديد"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2818
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2825
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:47
 msgid "New Book&mark"
 msgstr "&عنوان مفضل جديد"
@@ -5187,11 +5190,11 @@ msgstr "لا يوجد المزيد من الملفات في قائمة الإن�
 msgid "No name for the filterset given."
 msgstr "لم يتم وضع إسم لمجموعة المرشح"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2985
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2992
 msgid "No program associated with filetype"
 msgstr "لا يوجد برنامج مشروك مع نوع الملف"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2902
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2909
 #, c-format
 msgid "No program has been associated to edit files with the extension '%s'."
 msgstr "لا يوجد برنامج مشروك من أجل تحرير الملفات ذات الإمتداد '%s'"
@@ -5309,13 +5312,13 @@ msgstr "&فتح ملف"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2106
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2181
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2564
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2710
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2968
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3180
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3249
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3445
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3614
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3670
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2717
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2975
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3187
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3256
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3452
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3621
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3677
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:34
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:27
 msgid "OK"
@@ -5818,7 +5821,7 @@ msgstr ""
 "من فضلك قم بتشغيل المعالج مرة ثانية فى حالة تغيير فى بيئة الشبكة أو فى حالة "
 "حدوث مشاكل مع الخوادم التي كانت تعمل سابقا"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3221
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3228
 msgid "Please select an action:"
 msgstr "الرجاء تحديد إجراء :"
 
@@ -5897,7 +5900,7 @@ msgstr "إبقاء طوابع وقت الملف"
 msgid "Preview:"
 msgstr "معاينة:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1112
+#: ../../locales/../src/engine/tlssocket.cpp:1134
 msgid "Primary connection and data connection certificates don't match."
 msgstr "شهادة الإتصال الرئيسية و شهادة إتصال البيانات غير متطابقتين"
 
@@ -6042,7 +6045,7 @@ msgstr "قائمة الانتظار : فارغة"
 msgid "Queued files"
 msgstr "ملفات في الإنتظار"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3157
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3164
 msgid "Queueing:"
 msgstr "وضع بالإنتظار:"
 
@@ -6147,18 +6150,18 @@ msgstr "إعادة تشغيل الكمبيوتر الآن"
 msgid "Rec&urse into subdirectories"
 msgstr "التكرار &ضمن المجلدات الفرعية"
 
-#: ../../locales/../src/engine/tlssocket.cpp:201
+#: ../../locales/../src/engine/tlssocket.cpp:223
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "تلقي تنبيه TLS من الملقم: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2958
+#: ../../locales/../src/engine/directorylistingparser.cpp:2957
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr ""
 "تلقي مجلد قائمة مجلدات أرشفة المواقع الأجنبية و التي تكون مشفرة بطريقة EBCDIC"
 
 #: ../../locales/../src/engine/directorylistingparser.cpp:1992
-#: ../../locales/../src/engine/directorylistingparser.cpp:2006
+#: ../../locales/../src/engine/directorylistingparser.cpp:2008
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "تلقى خط تتجاوز 10000 حرف ، مقاطعة"
 
@@ -6172,7 +6175,7 @@ msgstr "تلف البيانات المستقبلة"
 msgid "Received invalid character in version information"
 msgstr "استقبال حرف غير صالح في معلومات الإصدار"
 
-#: ../../locales/../src/engine/tlssocket.cpp:204
+#: ../../locales/../src/engine/tlssocket.cpp:226
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "تلقي تنبيه TLS غير معروف %d من الملقم"
@@ -6226,7 +6229,7 @@ msgstr "إعادة توجيه إلى عنوان غير صالح أو غير مع
 msgid "Refresh the file and folder lists"
 msgstr "تحديث قوائم الملفات و المجلدات"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3690
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3697
 msgid "Remember passwords?"
 msgstr "تذكر كلمات المرور ؟"
 
@@ -6234,7 +6237,7 @@ msgstr "تذكر كلمات المرور ؟"
 msgid "Remote"
 msgstr "بعيد"
 
-#: ../../locales/../src/engine/tlssocket.cpp:830
+#: ../../locales/../src/engine/tlssocket.cpp:852
 msgid "Remote certificate not trusted."
 msgstr "الشهادة البعيدة غير موثوق بها"
 
@@ -6243,7 +6246,7 @@ msgstr "الشهادة البعيدة غير موثوق بها"
 msgid "Remote file"
 msgstr "الملف البعيد"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3099
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3106
 #: ../../locales/../src/interface/search.cpp:383
 #: ../../locales/../src/interface/search.cpp:388
 #: ../../locales/../src/interface/search.cpp:397
@@ -6287,7 +6290,7 @@ msgstr "تعذر تحليل المسار البعيد . تأكد من أنه م�
 msgid "Remote path could not be parsed."
 msgstr "لا يمكن تحليل المسار البعيد"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3139
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3146
 msgid "Remote path handling:"
 msgstr "معالجة المسار البعيد :"
 
@@ -6333,7 +6336,7 @@ msgstr "تسمية الملفات المحددة و المجلدات"
 msgid "Renaming '%s' to '%s'"
 msgstr "تسمية '%s' إلى '%s'"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3415
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3422
 msgid "Reporting bugs and feature requests"
 msgstr "التبليغ عن أخطاء و طلب إضافة وظيفة ما"
 
@@ -6384,7 +6387,7 @@ msgstr "المصدر غير متوفر مؤقتا"
 msgid "Response:"
 msgstr "الإستجابة:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3085
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3092
 msgid "Results:"
 msgstr "النتائج :"
 
@@ -6432,7 +6435,7 @@ msgstr "إ&ظهار مدير الموقع عند تشغيل"
 msgid "S&hutdown system"
 msgstr "إ&غلاق الكمبيوتر"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3030
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3037
 msgid "S&top"
 msgstr "إ&يقاف"
 
@@ -6483,11 +6486,11 @@ msgstr "البحث عن الملفات لاضافتها إلى قائمة الإ
 msgid "Scanning for files to upload"
 msgstr "البحث عن ملفات لرفعها"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3013
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
 msgid "Search &conditions:"
 msgstr "&شروط البحث:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2994
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3001
 msgid "Search &directory:"
 msgstr "&مجلد البحث :"
 
@@ -6582,7 +6585,7 @@ msgstr "تحديد ملف للرفع"
 msgid "Select filename for converted key file"
 msgstr "تحديد الإسم لملف المفتاح المحول"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2907
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2914
 msgid "Select how these files should be opened."
 msgstr "تحديد كيفية فتح هذه الملفات"
 
@@ -6732,7 +6735,7 @@ msgstr "رقم التسلسل:"
 msgid "Server &Type:"
 msgstr "نوع ال&خادم:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:719
+#: ../../locales/../src/engine/tlssocket.cpp:741
 msgid "Server did not properly shut down TLS connection"
 msgstr "الخادم ربما لم يغلق إتصال TLS بشكل صحيح"
 
@@ -7060,7 +7063,7 @@ msgstr "المصدر والهدف لعملية الإفلات غير متطاب�
 msgid "Source file:"
 msgstr "ملف المصدر :"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3632
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3639
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 msgid "Speed Limits"
@@ -7162,7 +7165,7 @@ msgstr "ملخص لنتائج الفحص"
 msgid "Suspend now"
 msgstr "الإستبعاد الآن"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3238
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3245
 msgid ""
 "Symlinks to files are not affected by this choice, such symlinks are always "
 "deleted."
@@ -7170,7 +7173,7 @@ msgstr ""
 "الروابط الترميزية إلى الملفات لا تتأثر بهذا الإختيار ، لأن الروابط الترميزية "
 "يتم حذفها دائما"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3693
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3700
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
 #: ../../locales/../src/interface/state.cpp:238
 #: ../../locales/../src/interface/state.cpp:252
@@ -7336,12 +7339,12 @@ msgstr "تنسيق الوقت المخصص غير صالح أو يحتوي عل�
 msgid "The data connection could not be established: %s"
 msgstr "تعذّر تأسيس إتّصال البيانات: %s"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2925
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2932
 #: ../../locales/../src/interface/edithandler.cpp:1511
 msgid "The default editor for text files could not be found."
 msgstr "تعذر العثور على المحرر الإفتراضي للملفات النصية"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2918
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2925
 #, c-format
 msgid "The default editor for text files is '%s'."
 msgstr "المحرر الإفتراضي للملفات النصية هو '%s'"
@@ -7480,7 +7483,7 @@ msgstr "الرموز التالية ستستبدل : %s"
 msgid "The following files are currently being edited:"
 msgstr "يتم حاليا تحرير الملفات التالية :"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3293
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3300
 msgid "The free open source FTP solution"
 msgstr "الحل مع FTP المصدر المجاني المفتوح"
 
@@ -7904,7 +7907,7 @@ msgstr "توع ملقم االعمومي :"
 msgid "U&pload"
 msgstr "&رفع"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3573
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3580
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:930
 msgid "U&pload limit:"
 msgstr "حدود الر&فع:"
@@ -7914,8 +7917,9 @@ msgid "U&se filetype associations if available"
 msgstr "إ&ستخدام إشراكات أنواع الملفات إذا توفرت"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1545
-msgid "U&se system defaults"
-msgstr "إستخدام إ&فتراضي النظام"
+#, fuzzy
+msgid "U&se system defaults for current language"
+msgstr "إ&ستخدم محرر النظام الإفتراضي للملفات النصية"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:463
 msgid "USER@&HOST"
@@ -7984,7 +7988,7 @@ msgstr ""
 "مالم يتم إصلاح هذه المشكلة , لن يعمل نمط FTP النشط و بالتالي سوف يستخدم "
 "النمط السلبي"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1074
+#: ../../locales/../src/engine/tlssocket.cpp:1096
 msgid "Unsupported certificate type"
 msgstr "نوع شهادة غير مدعومة"
 
@@ -8058,12 +8062,12 @@ msgstr "مجموعة &رموز مخصصة"
 msgid "Use &custom editor:"
 msgstr "إ&ستخدام محرر مخصص:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2912
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2919
 msgid "Use &default editor for text files"
 msgstr "إستخدام المحرر الإ&فتراضي للملفات النصية"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2697
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2771
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2778
 msgid "Use &synchronized browsing"
 msgstr "إستخدام ال&تصفح المتزامن"
 
@@ -8090,8 +8094,9 @@ msgid "Use server from site manager"
 msgstr "إستخدام الخادم من مدير الموقع"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1496
-msgid "Use system &defaults"
-msgstr "إستخدام إفتراضيات النظام"
+#, fuzzy
+msgid "Use system &defaults for current language"
+msgstr "إ&ستخدم محرر النظام الإفتراضي للملفات النصية"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:194
 msgid "Use the following IP address:"
@@ -8149,7 +8154,7 @@ msgstr "صالح إلى:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "رسائل سجل مطولة من wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1124
+#: ../../locales/../src/engine/tlssocket.cpp:1146
 msgid "Verifying certificate..."
 msgstr "جاري فحص الشهادة..."
 
@@ -8215,11 +8220,11 @@ msgstr ""
 msgid "Warning: Potential security breach!"
 msgstr "تحذير : إختراق أمني محتمل"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3457
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3464
 msgid "Welcome to FileZilla"
 msgstr "مرحبا بك FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3323
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3330
 msgid "What's new"
 msgstr "ما هو الجديد"
 
@@ -8227,7 +8232,7 @@ msgstr "ما هو الجديد"
 msgid "What's new:"
 msgstr "ما هو الجديد :"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3647
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3654
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
@@ -8252,7 +8257,7 @@ msgstr "&عند بدء أي إتصال جديد في الوقت الذي أنت 
 msgid "Widescreen"
 msgstr "شاشة عريضة"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3642
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3649
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "هل تريد أن يتذكر FileZilla كلمة المرور هذه ؟"
 
@@ -8283,7 +8288,7 @@ msgstr "يبدو أنك تستخدم مضيف IPv6 فقط. هذا المعالج
 msgid "You are using the latest version of FileZilla."
 msgstr "أنت تستخدم آخر إصدار من FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3432
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3439
 msgid "You can always open this dialog again through the help menu."
 msgstr "يمكنك فتح هذه اللائحة مرة ثانية خلال قائمة تعليمات"
 
@@ -8318,7 +8323,7 @@ msgstr ""
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
 msgstr "أنت لم تدخل اسم جديد للملف ، هل تكتب على الملف بدلا من ذلك ؟"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3218
 msgid "You have selected at least one symbolic link."
 msgstr "أنت قمت بتحديد رابط ترميزي واحد على الأقل"
 
@@ -8519,7 +8524,7 @@ msgstr "fzsftp ينتمي إلى إصدار مختلف من FileZilla"
 msgid "fzsftp could not be started"
 msgstr "fzsftp غير قادر على تشغيل"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1103
+#: ../../locales/../src/engine/tlssocket.cpp:1125
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers لم يرجع بشهادات"
 
@@ -8576,9 +8581,9 @@ msgid "owner writeable"
 msgstr "ملف قابل للكتابة للمالك"
 
 #: ../../locales/../src/engine/proxy.cpp:84
-#: ../../locales/../src/engine/tlssocket.cpp:1167
-#: ../../locales/../src/engine/tlssocket.cpp:1178
-#: ../../locales/../src/engine/tlssocket.cpp:1193
+#: ../../locales/../src/engine/tlssocket.cpp:1189
+#: ../../locales/../src/engine/tlssocket.cpp:1200
+#: ../../locales/../src/engine/tlssocket.cpp:1215
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:38
 msgid "unknown"
 msgstr "غير معروف"
@@ -8598,6 +8603,12 @@ msgstr "ملف قابل للكتابة للعام"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "U&se system defaults"
+#~ msgstr "إستخدام إ&فتراضي النظام"
+
+#~ msgid "Use system &defaults"
+#~ msgstr "إستخدام إفتراضيات النظام"
 
 #~ msgid ""
 #~ "Enter the password for the file '%s'.\n"
