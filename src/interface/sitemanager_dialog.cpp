@@ -1565,44 +1565,44 @@ void CSiteManagerDialog::SetCtrlState()
 		// Set the control states according if it's possible to use the control
 		const bool root_or_predefined = (item == pTree->GetRootItem() || item == m_ownSites || predefined);
 
-		XRCCTRL(*this, "ID_RENAME", wxWindow)->Enable(!root_or_predefined);
-		XRCCTRL(*this, "ID_DELETE", wxWindow)->Enable(!root_or_predefined);
-		XRCCTRL(*this, "ID_COPY", wxWindow)->Enable(false);
+		xrc_call(*this, "ID_RENAME", &wxWindow::Enable, !root_or_predefined);
+		xrc_call(*this, "ID_DELETE", &wxWindow::Enable, !root_or_predefined);
+		xrc_call(*this, "ID_COPY", &wxWindow::Enable, false);
 		m_pNotebook_Site->Enable(false);
-		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(false);
-		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(false);
+		xrc_call(*this, "ID_NEWFOLDER", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_NEWSITE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_NEWBOOKMARK", &wxWindow::Enable, false);
+		xrc_call(*this, "ID_CONNECT", &wxButton::Enable, false);
 
 		// Empty all site information
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString());
+		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString());
 		SetProtocol(FTP);
-		XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->SetValue(false);
-		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(_("Anonymous"));
-		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(wxString());
+		xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::SetValue, false);
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, _("Anonymous"));
+		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, wxString());
 
 		SetControlVisibility(FTP, ANONYMOUS);
 
-		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(0);
-		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(false);
-		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(0);
-		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->SetValue(0);
+		xrc_call(*this, "ID_SERVERTYPE", &wxChoice::SetSelection, 0);
+		xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_SYNC", &wxCheckBox::SetValue, false);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_HOURS", &wxSpinCtrl::SetValue, 0);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::SetValue, 0);
 
-		XRCCTRL(*this, "ID_TRANSFERMODE_DEFAULT", wxRadioButton)->SetValue(true);
-		XRCCTRL(*this, "ID_LIMITMULTIPLE", wxCheckBox)->SetValue(false);
-		XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->SetValue(1);
+		xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxRadioButton::SetValue, true);
+		xrc_call(*this, "ID_LIMITMULTIPLE", &wxCheckBox::SetValue, false);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::SetValue, 1);
 
-		XRCCTRL(*this, "ID_CHARSET_AUTO", wxRadioButton)->SetValue(true);
-		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->ChangeValue(wxString());
+		xrc_call(*this, "ID_CHARSET_AUTO", &wxRadioButton::SetValue, true);
+		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::ChangeValue, wxString());
 #ifdef __WXGTK__
-		XRCCTRL(*this, "wxID_OK", wxButton)->SetDefault();
+		xrc_call(*this, "wxID_OK", &wxButton::SetDefault);
 #endif
 	}
 	else if (data->m_type == CSiteManagerItemData::SITE) {
@@ -1613,105 +1613,105 @@ void CSiteManagerDialog::SetCtrlState()
 		CSiteManagerItemData_Site* site_data = (CSiteManagerItemData_Site *)data;
 
 		// Set the control states according if it's possible to use the control
-		XRCCTRL(*this, "ID_RENAME", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_DELETE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_COPY", wxWindow)->Enable(true);
+		xrc_call(*this, "ID_RENAME", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_DELETE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_COPY", &wxWindow::Enable, true);
 		m_pNotebook_Site->Enable(true);
-		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(true);
+		xrc_call(*this, "ID_NEWFOLDER", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_NEWSITE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_NEWBOOKMARK", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_CONNECT", &wxButton::Enable, true);
 
-		XRCCTRL(*this, "ID_HOST", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(site_data->m_server.FormatHost(true));
+		xrc_call(*this, "ID_HOST", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, site_data->m_server.FormatHost(true));
 		unsigned int port = site_data->m_server.GetPort();
 
 		if (port != CServer::GetDefaultPort(site_data->m_server.GetProtocol()))
-			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString::Format(_T("%d"), port));
+			xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), port));
 		else
-			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString());
-		XRCCTRL(*this, "ID_PORT", wxWindow)->Enable(!predefined);
+			xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_PORT", &wxWindow::Enable, !predefined);
 
 		SetProtocol(site_data->m_server.GetProtocol());
-		XRCCTRL(*this, "ID_PROTOCOL", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_ENCRYPTION", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_BYPASSPROXY", wxCheckBox)->SetValue(site_data->m_server.GetBypassProxy());
+		xrc_call(*this, "ID_PROTOCOL", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_ENCRYPTION", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::SetValue, site_data->m_server.GetBypassProxy());
 
-		XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() != ANONYMOUS);
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(!predefined && (site_data->m_server.GetLogonType() == NORMAL || site_data->m_server.GetLogonType() == ACCOUNT));
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == ACCOUNT);
-		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
-		XRCCTRL(*this, "ID_KEYFILE_BROWSE", wxButton)->Enable(!predefined && site_data->m_server.GetLogonType() == KEY);
+		xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetLogonType() != ANONYMOUS);
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, !predefined && (site_data->m_server.GetLogonType() == NORMAL || site_data->m_server.GetLogonType() == ACCOUNT));
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetLogonType() == ACCOUNT);
+		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetLogonType() == KEY);
+		xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, !predefined && site_data->m_server.GetLogonType() == KEY);
 
 		SetControlVisibility(site_data->m_server.GetProtocol(), site_data->m_server.GetLogonType());
 
-		XRCCTRL(*this, "ID_LOGONTYPE", wxChoice)->SetStringSelection(CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
-		XRCCTRL(*this, "ID_LOGONTYPE", wxWindow)->Enable(!predefined);
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
+		xrc_call(*this, "ID_LOGONTYPE", &wxWindow::Enable, !predefined);
 
-		XRCCTRL(*this, "ID_USER", wxTextCtrl)->ChangeValue(site_data->m_server.GetUser());
-		XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->ChangeValue(site_data->m_server.GetAccount());
-		XRCCTRL(*this, "ID_PASS", wxTextCtrl)->ChangeValue(site_data->m_server.GetPass());
-		XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(site_data->m_server.GetKeyFile());
-		XRCCTRL(*this, "ID_COMMENTS", wxTextCtrl)->ChangeValue(site_data->m_comments);
-		XRCCTRL(*this, "ID_COMMENTS", wxWindow)->Enable(!predefined);
+		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, site_data->m_server.GetUser());
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, site_data->m_server.GetAccount());
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, site_data->m_server.GetPass());
+		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, site_data->m_server.GetKeyFile());
+		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, site_data->m_comments);
+		xrc_call(*this, "ID_COMMENTS", &wxWindow::Enable, !predefined);
 
-		XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->SetSelection(site_data->m_server.GetType());
-		XRCCTRL(*this, "ID_SERVERTYPE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_LOCALDIR", wxTextCtrl)->ChangeValue(site_data->m_localDir);
-		XRCCTRL(*this, "ID_LOCALDIR", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->ChangeValue(site_data->m_remoteDir.GetPath());
-		XRCCTRL(*this, "ID_REMOTEDIR", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->Enable(!predefined);
-		XRCCTRL(*this, "ID_SYNC", wxCheckBox)->SetValue(site_data->m_sync);
-		XRCCTRL(*this, "ID_COMPARISON", wxCheckBox)->Enable(!predefined);
-		XRCCTRL(*this, "ID_COMPARISON", wxCheckBox)->SetValue(site_data->m_comparison);
-		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxSpinCtrl)->SetValue(site_data->m_server.GetTimezoneOffset() / 60);
-		XRCCTRL(*this, "ID_TIMEZONE_HOURS", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxSpinCtrl)->SetValue(site_data->m_server.GetTimezoneOffset() % 60);
-		XRCCTRL(*this, "ID_TIMEZONE_MINUTES", wxWindow)->Enable(!predefined);
+		xrc_call(*this, "ID_SERVERTYPE", &wxChoice::SetSelection, site_data->m_server.GetType());
+		xrc_call(*this, "ID_SERVERTYPE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::ChangeValue, site_data->m_localDir);
+		xrc_call(*this, "ID_LOCALDIR", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::ChangeValue, site_data->m_remoteDir.GetPath());
+		xrc_call(*this, "ID_REMOTEDIR", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_SYNC", &wxCheckBox::Enable, !predefined);
+		xrc_call(*this, "ID_SYNC", &wxCheckBox::SetValue, site_data->m_sync);
+		xrc_call(*this, "ID_COMPARISON", &wxCheckBox::Enable, !predefined);
+		xrc_call(*this, "ID_COMPARISON", &wxCheckBox::SetValue, site_data->m_comparison);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_HOURS", &wxSpinCtrl::SetValue, site_data->m_server.GetTimezoneOffset() / 60);
+		xrc_call(*this, "ID_TIMEZONE_HOURS", &wxWindow::Enable, !predefined);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::SetValue, site_data->m_server.GetTimezoneOffset() % 60);
+		xrc_call(*this, "ID_TIMEZONE_MINUTES", &wxWindow::Enable, !predefined);
 
 		enum PasvMode pasvMode = site_data->m_server.GetPasvMode();
 		if (pasvMode == MODE_ACTIVE)
-			XRCCTRL(*this, "ID_TRANSFERMODE_ACTIVE", wxRadioButton)->SetValue(true);
+			xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxRadioButton::SetValue, true);
 		else if (pasvMode == MODE_PASSIVE)
-			XRCCTRL(*this, "ID_TRANSFERMODE_PASSIVE", wxRadioButton)->SetValue(true);
+			xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxRadioButton::SetValue, true);
 		else
-			XRCCTRL(*this, "ID_TRANSFERMODE_DEFAULT", wxRadioButton)->SetValue(true);
-		XRCCTRL(*this, "ID_TRANSFERMODE_ACTIVE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_TRANSFERMODE_PASSIVE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_TRANSFERMODE_DEFAULT", wxWindow)->Enable(!predefined);
+			xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxRadioButton::SetValue, true);
+		xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxWindow::Enable, !predefined);
 
 		int maxMultiple = site_data->m_server.MaximumMultipleConnections();
-		XRCCTRL(*this, "ID_LIMITMULTIPLE", wxCheckBox)->SetValue(maxMultiple != 0);
-		XRCCTRL(*this, "ID_LIMITMULTIPLE", wxWindow)->Enable(!predefined);
+		xrc_call(*this, "ID_LIMITMULTIPLE", &wxCheckBox::SetValue, maxMultiple != 0);
+		xrc_call(*this, "ID_LIMITMULTIPLE", &wxWindow::Enable, !predefined);
 		if (maxMultiple != 0) {
-			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->Enable(!predefined);
-			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->SetValue(maxMultiple);
+			xrc_call(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::Enable, !predefined);
+			xrc_call<wxSpinCtrl, int>(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::SetValue, maxMultiple);
 		}
 		else {
-			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->Enable(false);
-			XRCCTRL(*this, "ID_MAXMULTIPLE", wxSpinCtrl)->SetValue(1);
+			xrc_call(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::Enable, false);
+			xrc_call<wxSpinCtrl, int>(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::SetValue, 1);
 		}
 
 		switch (site_data->m_server.GetEncodingType()) {
 		default:
 		case ENCODING_AUTO:
-			XRCCTRL(*this, "ID_CHARSET_AUTO", wxRadioButton)->SetValue(true);
+			xrc_call(*this, "ID_CHARSET_AUTO", &wxRadioButton::SetValue, true);
 			break;
 		case ENCODING_UTF8:
-			XRCCTRL(*this, "ID_CHARSET_UTF8", wxRadioButton)->SetValue(true);
+			xrc_call(*this, "ID_CHARSET_UTF8", &wxRadioButton::SetValue, true);
 			break;
 		case ENCODING_CUSTOM:
-			XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxRadioButton)->SetValue(true);
+			xrc_call(*this, "ID_CHARSET_CUSTOM", &wxRadioButton::SetValue, true);
 			break;
 		}
-		XRCCTRL(*this, "ID_CHARSET_AUTO", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CHARSET_UTF8", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->Enable(!predefined && site_data->m_server.GetEncodingType() == ENCODING_CUSTOM);
-		XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->ChangeValue(site_data->m_server.GetCustomEncoding());
+		xrc_call(*this, "ID_CHARSET_AUTO", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_CHARSET_UTF8", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_CHARSET_CUSTOM", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetEncodingType() == ENCODING_CUSTOM);
+		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::ChangeValue, site_data->m_server.GetCustomEncoding());
 #ifdef __WXGTK__
-		XRCCTRL(*this, "ID_CONNECT", wxButton)->SetDefault();
+		xrc_call(*this, "ID_CONNECT", &wxButton::SetDefault);
 #endif
 	}
 	else {
@@ -1720,29 +1720,29 @@ void CSiteManagerDialog::SetCtrlState()
 		m_pNotebook_Site->GetContainingSizer()->Layout();
 
 		// Set the control states according if it's possible to use the control
-		XRCCTRL(*this, "ID_RENAME", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_DELETE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_COPY", wxWindow)->Enable(true);
-		XRCCTRL(*this, "ID_NEWFOLDER", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_NEWSITE", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_NEWBOOKMARK", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_CONNECT", wxButton)->Enable(true);
+		xrc_call(*this, "ID_RENAME", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_DELETE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_COPY", &wxWindow::Enable, true);
+		xrc_call(*this, "ID_NEWFOLDER", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_NEWSITE", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_NEWBOOKMARK", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_CONNECT", &wxButton::Enable, true);
 
-		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(data->m_localDir);
-		XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxWindow)->Enable(!predefined);
-		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->ChangeValue(data->m_remoteDir.GetPath());
-		XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxWindow)->Enable(!predefined);
+		xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::ChangeValue, data->m_localDir);
+		xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::ChangeValue, data->m_remoteDir.GetPath());
+		xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxWindow::Enable, !predefined);
 
-		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->Enable(!predefined);
-		XRCCTRL(*this, "ID_BOOKMARK_SYNC", wxCheckBox)->SetValue(data->m_sync);
-		XRCCTRL(*this, "ID_BOOKMARK_COMPARISON", wxCheckBox)->Enable(!predefined);
-		XRCCTRL(*this, "ID_BOOKMARK_COMPARISON", wxCheckBox)->SetValue(data->m_comparison);
+		xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::Enable, !predefined);
+		xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::SetValue, data->m_sync);
+		xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::Enable, !predefined);
+		xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::SetValue, data->m_comparison);
 	}
 #ifdef __WXGTK__
 	if (pFocus && !pFocus->IsEnabled()) {
 		for (wxWindow* pParent = pFocus->GetParent(); pParent; pParent = pParent->GetParent()) {
 			if (pParent == this) {
-				XRCCTRL(*this, "wxID_OK", wxButton)->SetFocus();
+				xrc_call(*this, "wxID_OK", &wxButton::SetFocus);
 				break;
 			}
 		}
@@ -1752,8 +1752,8 @@ void CSiteManagerDialog::SetCtrlState()
 
 void CSiteManagerDialog::OnCharsetChange(wxCommandEvent& event)
 {
-	bool checked = XRCCTRL(*this, "ID_CHARSET_CUSTOM", wxRadioButton)->GetValue();
-	XRCCTRL(*this, "ID_ENCODING", wxTextCtrl)->Enable(checked);
+	bool checked = xrc_call(*this, "ID_CHARSET_CUSTOM", &wxRadioButton::GetValue);
+	xrc_call(*this, "ID_ENCODING", &wxTextCtrl::Enable, checked);
 }
 
 void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent& event)
