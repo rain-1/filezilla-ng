@@ -1058,7 +1058,7 @@ bool CSiteManagerDialog::Verify()
 		// In key file logon type, check that the provided key file exists
 		wxString keyFile, keyFileComment, keyFileData;
 		if (logon_type == KEY) {
-			keyFile = XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue();
+			keyFile = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue);
 			if (keyFile.empty()) {
 				wxMessageBox(_("You have to enter a key file path"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
@@ -1068,7 +1068,7 @@ bool CSiteManagerDialog::Verify()
 			// Check (again) that the key file is in the correct format since it might have been introduced manually
 			CFZPuttyGenInterface cfzg(this);
 			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
-				XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFile);
+				xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, keyFile);
 			else {
 				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
 				return false;
@@ -1305,11 +1305,11 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 
 	SetControlVisibility(GetProtocol(), GetLogonType());
 
-	XRCCTRL(*this, "ID_USER", wxTextCtrl)->Enable(event.GetString() != _("Anonymous"));
-	XRCCTRL(*this, "ID_PASS", wxTextCtrl)->Enable(event.GetString() == _("Normal") || event.GetString() == _("Account"));
-	XRCCTRL(*this, "ID_ACCOUNT", wxTextCtrl)->Enable(event.GetString() == _("Account"));
-	XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->Enable(event.GetString() == _("Key file"));
-	XRCCTRL(*this, "ID_KEYFILE_BROWSE", wxButton)->Enable(event.GetString() == _("Key file"));
+	xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, event.GetString() != _("Anonymous"));
+	xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, event.GetString() == _("Normal") || event.GetString() == _("Account"));
+	xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, event.GetString() == _("Account"));
+	xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, event.GetString() == _("Key file"));
+	xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, event.GetString() == _("Key file"));
 }
 
 bool CSiteManagerDialog::UpdateItem()
@@ -1378,7 +1378,7 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 							xrc_call(*this, "ID_PASS", &wxTextCtrl::GetValue));
 	server.m_server.SetAccount(xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::GetValue));
 
-	server.m_server.SetKeyFile(XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->GetValue());
+	server.m_server.SetKeyFile(xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue));
 
 	server.m_comments = xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::GetValue);
 
@@ -1795,8 +1795,11 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 	xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Show, protocol == SFTP && type == KEY);
 	xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Show, protocol == SFTP && type == KEY);
 
-	xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::GetContainingSizer)->CalcMin();
-	xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::GetContainingSizer)->Layout();
+	auto keyfileSizer = xrc_call(*this, "ID_KEYFILE_DESC", &wxStaticText::GetContainingSizer);
+	if (keyfileSizer) {
+		keyfileSizer->CalcMin();
+		keyfileSizer->Layout();
+	}
 }
 
 void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
