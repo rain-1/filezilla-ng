@@ -651,7 +651,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	{
 		int64_t size;
 		bool is_link;
-		fz::local_filesys::local_fileType type = fz::local_filesys::GetFileInfo(files[i], is_link, &size, 0, 0);
+		fz::local_filesys::type type = fz::local_filesys::GetFileInfo(files[i], is_link, &size, 0, 0);
 		if (type == fz::local_filesys::file)
 		{
 			wxString localFile;
@@ -716,7 +716,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 		int64_t size;
 		bool is_link;
-		fz::local_filesys::local_fileType type = fz::local_filesys::GetFileInfo(file, is_link, &size, 0, 0);
+		fz::local_filesys::type type = fz::local_filesys::GetFileInfo(file, is_link, &size, 0, 0);
 		if (type == fz::local_filesys::file)
 		{
 			wxString name;
@@ -789,12 +789,12 @@ bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 		wxMkdir(target.GetPath() + dirname);
 
 		fz::local_filesys fs;
-		if (!fs.BeginFindFiles(source.GetPath() + dirname, false))
+		if (!fs.begin_find_files(source.GetPath() + dirname, false))
 			continue;
 
 		bool is_dir, is_link;
 		wxString file;
-		while (fs.GetNextFile(file, is_link, is_dir, 0, 0, 0))
+		while (fs.get_next_file(file, is_link, is_dir, 0, 0, 0))
 		{
 			if (file.empty())
 			{

@@ -374,7 +374,7 @@ regular_dir:
 		CFilterManager filter;
 		fz::local_filesys local_filesys;
 
-		if (!local_filesys.BeginFindFiles(m_dir.GetPath(), false)) {
+		if (!local_filesys.begin_find_files(m_dir.GetPath(), false)) {
 			SetItemCount(1);
 			return false;
 		}
@@ -388,7 +388,7 @@ regular_dir:
 		int num = m_fileData.size();
 		CLocalFileData data;
 		bool wasLink;
-		while (local_filesys.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
+		while (local_filesys.get_next_file(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
 			if (data.name.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
@@ -1316,7 +1316,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	CLocalFileData data;
 
 	bool wasLink;
-	enum fz::local_filesys::local_fileType type = fz::local_filesys::GetFileInfo(m_dir.GetPath() + file, wasLink, &data.size, &data.time, &data.attributes);
+	enum fz::local_filesys::type type = fz::local_filesys::GetFileInfo(m_dir.GetPath() + file, wasLink, &data.size, &data.time, &data.attributes);
 	if (type == fz::local_filesys::unknown)
 		return;
 
@@ -1497,7 +1497,7 @@ void CLocalListView::StartComparison()
 	}
 }
 
-bool CLocalListView::GetNextFile(wxString& name, bool& dir, int64_t& size, fz::datetime& date)
+bool CLocalListView::get_next_file(wxString& name, bool& dir, int64_t& size, fz::datetime& date)
 {
 	if (++m_comparisonIndex >= (int)m_originalIndexMapping.size())
 		return false;

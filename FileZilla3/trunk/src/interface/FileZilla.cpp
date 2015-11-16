@@ -450,10 +450,10 @@ bool CFileZillaApp::LoadResourceFiles()
 	else {
 		fz::local_filesys fs;
 		wxString dir = m_resourceDir.GetPath() + _T("xrc/");
-		bool found = fs.BeginFindFiles(dir, false);
+		bool found = fs.begin_find_files(dir, false);
 		while (found) {
 			wxString name;
-			found = fs.GetNextFile(name);
+			found = fs.get_next_file(name);
 			if (name.Right(4) != _T(".xrc")) {
 				continue;
 			}

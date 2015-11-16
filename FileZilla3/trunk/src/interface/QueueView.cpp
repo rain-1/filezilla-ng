@@ -379,7 +379,7 @@ protected:
 
 			l.unlock();
 
-			if (!localFileSystem.BeginFindFiles(pair->localPath.GetPath(), false)) {
+			if (!localFileSystem.begin_find_files(pair->localPath.GetPath(), false)) {
 				delete pair;
 				continue;
 			}
@@ -394,7 +394,7 @@ protected:
 			wxString name;
 			bool is_link;
 			bool is_dir;
-			while (localFileSystem.GetNextFile(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes)) {
+			while (localFileSystem.get_next_file(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes)) {
 				if (is_link)
 					continue;
 

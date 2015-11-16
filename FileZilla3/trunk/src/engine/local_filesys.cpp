@@ -30,10 +30,10 @@ const wxChar local_filesys::path_separator = '/';
 
 local_filesys::~local_filesys()
 {
-	EndFindFiles();
+	end_find_files();
 }
 
-local_filesys::local_fileType local_filesys::GetFileType(const wxString& path)
+local_filesys::type local_filesys::GetFileType(const wxString& path)
 {
 #ifdef FZ_WINDOWS
 	DWORD result = GetFileAttributes(path);
@@ -160,7 +160,7 @@ bool local_filesys::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow* p
 
 		dirsToDelete.splice(dirsToDelete.begin(), dirsToVisit, iter);
 
-		if (!fs.BeginFindFiles(path, false)) {
+		if (!fs.begin_find_files(path, false)) {
 			continue;
 		}
 
@@ -171,7 +171,7 @@ bool local_filesys::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow* p
 		std::list<wxString> filesToDelete;
 
 		wxString file;
-		while (fs.GetNextFile(file)) {
+		while (fs.get_next_file(file)) {
 			if (file.empty()) {
 				encodingError = true;
 				continue;
@@ -201,7 +201,7 @@ bool local_filesys::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow* p
 #endif
 }
 
-local_filesys::local_fileType local_filesys::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
+local_filesys::type local_filesys::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, datetime* modificationTime, int *mode)
 {
 #ifdef FZ_WINDOWS
 	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
@@ -220,7 +220,7 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const wxString& path, b
 		if (mode)
 			*mode = 0;
 		if (modificationTime)
-			*modificationTime = fz::datetime();
+			*modificationTime = datetime();
 		return unknown;
 	}
 
@@ -237,8 +237,8 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const wxString& path, b
 			if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 				if (modificationTime) {
-					if (!modificationTime->set(info.ftLastWriteTime, fz::datetime::milliseconds)) {
-						modificationTime->set(info.ftCreationTime, fz::datetime::milliseconds);
+					if (!modificationTime->set(info.ftLastWriteTime, datetime::milliseconds)) {
+						modificationTime->set(info.ftCreationTime, datetime::milliseconds);
 					}
 				}
 
@@ -263,14 +263,14 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const wxString& path, b
 		if (mode)
 			*mode = 0;
 		if (modificationTime)
-			*modificationTime = fz::datetime();
+			*modificationTime = datetime();
 		return is_dir ? dir : unknown;
 	}
 
 	if (modificationTime) {
-		*modificationTime = fz::datetime(attributes.ftLastWriteTime, fz::datetime::milliseconds);
+		*modificationTime = datetime(attributes.ftLastWriteTime, datetime::milliseconds);
 		if (!modificationTime->empty()) {
-			*modificationTime = fz::datetime(attributes.ftCreationTime, fz::datetime::milliseconds);
+			*modificationTime = datetime(attributes.ftCreationTime, datetime::milliseconds);
 		}
 	}
 
@@ -300,25 +300,23 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const wxString& path, b
 }
 
 #ifndef FZ_WINDOWS
-local_filesys::local_fileType local_filesys::GetFileInfo(const char* path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
+local_filesys::type local_filesys::GetFileInfo(const char* path, bool &isLink, int64_t* size, datetime* modificationTime, int *mode)
 {
 	struct stat buf;
 	int result = lstat(path, &buf);
-	if (result)
-	{
+	if (result) {
 		isLink = false;
 		if (size)
 			*size = -1;
 		if (mode)
 			*mode = -1;
 		if (modificationTime)
-			*modificationTime = fz::datetime();
+			*modificationTime = datetime();
 		return unknown;
 	}
 
 #ifdef S_ISLNK
-	if (S_ISLNK(buf.st_mode))
-	{
+	if (S_ISLNK(buf.st_mode)) {
 		isLink = true;
 		int result = stat(path, &buf);
 		if (result)
@@ -328,7 +326,7 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const char* path, bool 
 			if (mode)
 				*mode = -1;
 			if (modificationTime)
-				*modificationTime = fz::datetime();
+				*modificationTime = datetime();
 			return unknown;
 		}
 	}
@@ -337,13 +335,12 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const char* path, bool 
 		isLink = false;
 
 	if (modificationTime)
-		*modificationTime = fz::datetime(buf.st_mtime, fz::datetime::seconds);
+		*modificationTime = datetime(buf.st_mtime, datetime::seconds);
 
 	if (mode)
 		*mode = buf.st_mode & 0x777;
 
-	if (S_ISDIR(buf.st_mode))
-	{
+	if (S_ISDIR(buf.st_mode)) {
 		if (size)
 			*size = -1;
 		return dir;
@@ -356,13 +353,13 @@ local_filesys::local_fileType local_filesys::GetFileInfo(const char* path, bool 
 }
 #endif
 
-bool local_filesys::BeginFindFiles(wxString path, bool dirs_only)
+bool local_filesys::begin_find_files(wxString path, bool dirs_only)
 {
 	if (path.empty()) {
 		return false;
 	}
 
-	EndFindFiles();
+	end_find_files();
 
 	m_dirs_only = dirs_only;
 #ifdef FZ_WINDOWS
@@ -398,8 +395,7 @@ bool local_filesys::BeginFindFiles(wxString path, bool dirs_only)
 	m_raw_path = new char[len + 2048 + 2];
 	m_buffer_length = len + 2048 + 2;
 	strcpy(m_raw_path, p);
-	if (len > 1)
-	{
+	if (len > 1) {
 		m_raw_path[len] = '/';
 		m_file_part = m_raw_path + len + 1;
 	}
@@ -410,7 +406,7 @@ bool local_filesys::BeginFindFiles(wxString path, bool dirs_only)
 #endif
 }
 
-void local_filesys::EndFindFiles()
+void local_filesys::end_find_files()
 {
 #ifdef FZ_WINDOWS
 	m_found = false;
@@ -429,7 +425,7 @@ void local_filesys::EndFindFiles()
 #endif
 }
 
-bool local_filesys::GetNextFile(wxString& name)
+bool local_filesys::get_next_file(wxString& name)
 {
 #ifdef FZ_WINDOWS
 	if (!m_found)
@@ -464,10 +460,9 @@ bool local_filesys::GetNextFile(wxString& name)
 
 		if (m_dirs_only) {
 #if HAVE_STRUCT_DIRENT_D_TYPE
-			if (entry->d_type == DT_LNK)
-			{
+			if (entry->d_type == DT_LNK) {
 				bool wasLink;
-				AllocPathBuffer(entry->d_name);
+				alloc_path_buffer(entry->d_name);
 				strcpy(m_file_part, entry->d_name);
 				if (GetFileInfo(m_raw_path, wasLink, 0, 0, 0) != dir)
 					continue;
@@ -477,7 +472,7 @@ bool local_filesys::GetNextFile(wxString& name)
 #else
 			// Solaris doesn't have d_type
 			bool wasLink;
-			AllocPathBuffer(entry->d_name);
+			alloc_path_buffer(entry->d_name);
 			strcpy(m_file_part, entry->d_name);
 			if (GetFileInfo(m_raw_path, wasLink, 0, 0, 0) != dir)
 				continue;
@@ -493,13 +488,12 @@ bool local_filesys::GetNextFile(wxString& name)
 #endif
 }
 
-bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, fz::datetime* modificationTime, int* mode)
+bool local_filesys::get_next_file(wxString& name, bool &isLink, bool &is_dir, int64_t* size, datetime* modificationTime, int* mode)
 {
 #ifdef FZ_WINDOWS
 	if (!m_found)
 		return false;
-	do
-	{
+	do {
 		if (!m_find_data.cFileName[0]) {
 			m_found = FindNextFile(m_hFind, &m_find_data) != 0;
 			return true;
@@ -524,9 +518,9 @@ bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int6
 				if (ret != 0 && !(info.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)) {
 
 					if (modificationTime) {
-						*modificationTime = fz::datetime(info.ftLastWriteTime, fz::datetime::milliseconds);
+						*modificationTime = datetime(info.ftLastWriteTime, datetime::milliseconds);
 						if (!modificationTime->empty()) {
-							*modificationTime = fz::datetime(info.ftCreationTime, fz::datetime::milliseconds);
+							*modificationTime = datetime(info.ftCreationTime, datetime::milliseconds);
 						}
 					}
 
@@ -557,13 +551,13 @@ bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int6
 			if (mode)
 				*mode = 0;
 			if (modificationTime)
-				*modificationTime = fz::datetime();
+				*modificationTime = datetime();
 		}
 		else {
 			if (modificationTime) {
-				*modificationTime = fz::datetime(m_find_data.ftLastWriteTime, fz::datetime::milliseconds);
+				*modificationTime = datetime(m_find_data.ftLastWriteTime, datetime::milliseconds);
 				if (!modificationTime->empty()) {
-					*modificationTime = fz::datetime(m_find_data.ftLastWriteTime, fz::datetime::milliseconds);
+					*modificationTime = datetime(m_find_data.ftLastWriteTime, datetime::milliseconds);
 				}
 			}
 
@@ -598,10 +592,10 @@ bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int6
 #if HAVE_STRUCT_DIRENT_D_TYPE
 		if (m_dirs_only) {
 			if (entry->d_type == DT_LNK) {
-				AllocPathBuffer(entry->d_name);
+				alloc_path_buffer(entry->d_name);
 				strcpy(m_file_part, entry->d_name);
-				local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
-				if (type != dir)
+				type t = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
+				if (t != dir)
 					continue;
 
 				name = wxString(entry->d_name, *wxConvFileName);
@@ -613,28 +607,28 @@ bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int6
 		}
 #endif
 
-		AllocPathBuffer(entry->d_name);
+		alloc_path_buffer(entry->d_name);
 		strcpy(m_file_part, entry->d_name);
-		local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
+		local_fileType t = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
 
-		if (type == unknown) { // Happens for example in case of permission denied
+		if (t == unknown) { // Happens for example in case of permission denied
 #if HAVE_STRUCT_DIRENT_D_TYPE
-			type = entry->d_type == DT_DIR ? dir : file;
+			t = entry->d_type == DT_DIR ? dir : file;
 #else
-			type = file;
+			t = file;
 #endif
 			isLink = 0;
 			if (size)
 				*size = -1;
 			if (modificationTime)
-				*modificationTime = fz::datetime();
+				*modificationTime = datetime();
 			if (mode)
 				*mode = 0;
 		}
-		if (m_dirs_only && type != dir)
+		if (m_dirs_only && t != dir)
 			continue;
 
-		is_dir = type == dir;
+		is_dir = t == dir;
 
 		name = wxString(entry->d_name, *wxConvFileName);
 
@@ -646,7 +640,7 @@ bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int6
 }
 
 #ifndef FZ_WINDOWS
-void local_filesys::AllocPathBuffer(const char* file)
+void local_filesys::alloc_path_buffer(const char* file)
 {
 	int len = strlen(file);
 	int pathlen = m_file_part - m_raw_path;
@@ -662,18 +656,18 @@ void local_filesys::AllocPathBuffer(const char* file)
 }
 #endif
 
-fz::datetime local_filesys::GetModificationTime(const wxString& path)
+datetime local_filesys::get_modification_time(const wxString& path)
 {
-	fz::datetime mtime;
+	datetime mtime;
 
 	bool tmp;
 	if (GetFileInfo(path, tmp, 0, &mtime, 0) == unknown)
-		mtime = fz::datetime();
+		mtime = datetime();
 
 	return mtime;
 }
 
-bool local_filesys::SetModificationTime(const wxString& path, const fz::datetime& t)
+bool local_filesys::set_modification_time(const wxString& path, const datetime& t)
 {
 	if (!t.empty())
 		return false;
@@ -703,7 +697,7 @@ int64_t local_filesys::GetSize(wxString const& path, bool* isLink)
 {
 	int64_t ret = -1;
 	bool tmp{};
-	local_fileType t = GetFileInfo(path, isLink ? *isLink : tmp, &ret, 0, 0);
+	type t = GetFileInfo(path, isLink ? *isLink : tmp, &ret, 0, 0);
 	if (t != file) {
 		ret = -1;
 	}
@@ -711,7 +705,7 @@ int64_t local_filesys::GetSize(wxString const& path, bool* isLink)
 	return ret;
 }
 
-wxString local_filesys::GetSymbolicLinkTarget(wxString const& path)
+wxString local_filesys::get_link_target(wxString const& path)
 {
 	wxString target;
 
