@@ -959,7 +959,7 @@ void CFilterManager::LoadFilters()
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
 	wxString file(wxGetApp().GetSettingsFile(_T("filters")));
-	if (CLocalFileSystem::GetSize(file) < 1) {
+	if (fz::local_filesys::GetSize(file) < 1) {
 		file = wxGetApp().GetResourceDir().GetPath() + _T("defaultfilters.xml");
 	}
 

@@ -585,7 +585,7 @@ bool CEditHandler::StartEditing(enum CEditHandler::fileType type, t_fileData& da
 	wxASSERT(data.state == edit);
 
 	bool is_link;
-	if (CLocalFileSystem::GetFileInfo(data.file, is_link, 0, &data.modificationTime, 0) != CLocalFileSystem::file)
+	if (fz::local_filesys::GetFileInfo(data.file, is_link, 0, &data.modificationTime, 0) != fz::local_filesys::file)
 		return false;
 
 	bool program_exists = false;
@@ -620,7 +620,7 @@ checkmodifications_loopbegin:
 
 			fz::datetime mtime;
 			bool is_link;
-			if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file) {
+			if (fz::local_filesys::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != fz::local_filesys::file) {
 				m_fileDataList[i].erase(iter);
 
 				// Evil goto. Imo the next C++ standard needs a comefrom keyword.
@@ -659,7 +659,7 @@ checkmodifications_loopbegin:
 			}
 			else if (remove) {
 				if (i == static_cast<int>(remote)) {
-					if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file || wxRemoveFile(iter->file)) {
+					if (fz::local_filesys::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != fz::local_filesys::file || wxRemoveFile(iter->file)) {
 						m_fileDataList[i].erase(iter);
 						goto checkmodifications_loopbegin;
 					}
@@ -670,7 +670,7 @@ checkmodifications_loopbegin:
 					goto checkmodifications_loopbegin;
 				}
 			}
-			else if (CLocalFileSystem::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != CLocalFileSystem::file) {
+			else if (fz::local_filesys::GetFileInfo(iter->file, is_link, 0, &mtime, 0) != fz::local_filesys::file) {
 				m_fileDataList[i].erase(iter);
 				goto checkmodifications_loopbegin;
 			}
@@ -756,7 +756,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 	fz::datetime mtime;
 
 	bool is_link;
-	if (CLocalFileSystem::GetFileInfo(iter->file, is_link, &size, &mtime, 0) != CLocalFileSystem::file)
+	if (fz::local_filesys::GetFileInfo(iter->file, is_link, &size, &mtime, 0) != fz::local_filesys::file)
 	{
 		m_fileDataList[type].erase(iter);
 		return false;

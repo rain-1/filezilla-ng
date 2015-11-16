@@ -7,13 +7,11 @@
 #include <wx/filename.h>
 #include <wx/msgdlg.h>
 
-#ifdef __WXMSW__
-const wxChar CLocalFileSystem::path_separator = '\\';
-#else
-const wxChar CLocalFileSystem::path_separator = '/';
-
+#ifndef FZ_WINDOWS
 #include <utime.h>
 #endif
+
+namespace fz {
 
 namespace {
 template<typename T>
@@ -23,14 +21,21 @@ int64_t make_int64_t(T hi, T lo)
 }
 }
 
-CLocalFileSystem::~CLocalFileSystem()
+#ifdef FZ_WINDOWS
+const wxChar local_filesys::path_separator = '\\';
+#else
+const wxChar local_filesys::path_separator = '/';
+#endif
+
+
+local_filesys::~local_filesys()
 {
 	EndFindFiles();
 }
 
-CLocalFileSystem::local_fileType CLocalFileSystem::GetFileType(const wxString& path)
+local_filesys::local_fileType local_filesys::GetFileType(const wxString& path)
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	DWORD result = GetFileAttributes(path);
 	if (result == INVALID_FILE_ATTRIBUTES)
 		return unknown;
@@ -66,20 +71,20 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileType(const wxString& p
 #endif
 }
 
-bool CLocalFileSystem::RecursiveDelete(const wxString& path, wxWindow* parent)
+bool local_filesys::RecursiveDelete(const wxString& path, wxWindow* parent)
 {
 	std::list<wxString> paths;
 	paths.push_back(path);
 	return RecursiveDelete(paths, parent);
 }
 
-bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow* parent)
+bool local_filesys::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow* parent)
 {
 	// Under Windows use SHFileOperation to delete files and directories.
 	// Under other systems, we have to recurse into subdirectories manually
 	// to delete all contents.
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	// SHFileOperation accepts a list of null-terminated strings. Go through all
 	// paths to get the required buffer length
 
@@ -121,7 +126,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 
 		SHFileOperation(&op);
 	}
-	delete [] pBuffer;
+	delete[] pBuffer;
 
 	return true;
 #else
@@ -140,7 +145,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 	// Remember the directories to delete after recursing into them
 	std::list<wxString> dirsToDelete;
 
-	CLocalFileSystem fs;
+	local_filesys fs;
 
 	// Process all dirctories that have to be visited
 	while (!dirsToVisit.empty()) {
@@ -174,7 +179,7 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 
 			const wxString& fullName = path + _T("/") + file;
 
-			if (CLocalFileSystem::GetFileType(fullName) == CLocalFileSystem::dir)
+			if (local_filesys::GetFileType(fullName) == local_filesys::dir)
 				dirsToVisit.push_back(fullName);
 			else
 				filesToDelete.push_back(fullName);
@@ -196,9 +201,9 @@ bool CLocalFileSystem::RecursiveDelete(std::list<wxString> dirsToVisit, wxWindow
 #endif
 }
 
-CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
+local_filesys::local_fileType local_filesys::GetFileInfo(const wxString& path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator() && path != wxFileName::GetPathSeparator()) {
 		wxString tmp = path;
 		tmp.RemoveLast();
@@ -294,8 +299,8 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const wxString& p
 #endif
 }
 
-#ifndef __WXMSW__
-CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
+#ifndef FZ_WINDOWS
+local_filesys::local_fileType local_filesys::GetFileInfo(const char* path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int *mode)
 {
 	struct stat buf;
 	int result = lstat(path, &buf);
@@ -351,7 +356,7 @@ CLocalFileSystem::local_fileType CLocalFileSystem::GetFileInfo(const char* path,
 }
 #endif
 
-bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
+bool local_filesys::BeginFindFiles(wxString path, bool dirs_only)
 {
 	if (path.empty()) {
 		return false;
@@ -360,7 +365,7 @@ bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
 	EndFindFiles();
 
 	m_dirs_only = dirs_only;
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	if (path.Last() != '/' && path.Last() != '\\') {
 		m_find_path = path + _T("\\");
 		path += _T("\\*");
@@ -405,18 +410,16 @@ bool CLocalFileSystem::BeginFindFiles(wxString path, bool dirs_only)
 #endif
 }
 
-void CLocalFileSystem::EndFindFiles()
+void local_filesys::EndFindFiles()
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	m_found = false;
-	if (m_hFind != INVALID_HANDLE_VALUE)
-	{
+	if (m_hFind != INVALID_HANDLE_VALUE) {
 		FindClose(m_hFind);
 		m_hFind = INVALID_HANDLE_VALUE;
 	}
 #else
-	if (m_dir)
-	{
+	if (m_dir) {
 		closedir(m_dir);
 		m_dir = 0;
 	}
@@ -426,9 +429,9 @@ void CLocalFileSystem::EndFindFiles()
 #endif
 }
 
-bool CLocalFileSystem::GetNextFile(wxString& name)
+bool local_filesys::GetNextFile(wxString& name)
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	if (!m_found)
 		return false;
 	do {
@@ -490,9 +493,9 @@ bool CLocalFileSystem::GetNextFile(wxString& name)
 #endif
 }
 
-bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, fz::datetime* modificationTime, int* mode)
+bool local_filesys::GetNextFile(wxString& name, bool &isLink, bool &is_dir, int64_t* size, fz::datetime* modificationTime, int* mode)
 {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	if (!m_found)
 		return false;
 	do
@@ -512,6 +515,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 
 		isLink = (m_find_data.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) != 0;
 		if (isLink) {
+			// Follow the reparse point
 			HANDLE hFile = is_dir ? INVALID_HANDLE_VALUE : CreateFile(m_find_path + name, FILE_READ_ATTRIBUTES | FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 			if (hFile != INVALID_HANDLE_VALUE) {
 				BY_HANDLE_FILE_INFORMATION info{};
@@ -585,18 +589,15 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 		return false;
 
 	struct dirent* entry;
-	while ((entry = readdir(m_dir)))
-	{
+	while ((entry = readdir(m_dir))) {
 		if (!entry->d_name[0] ||
 			!strcmp(entry->d_name, ".") ||
 			!strcmp(entry->d_name, ".."))
 			continue;
 
 #if HAVE_STRUCT_DIRENT_D_TYPE
-		if (m_dirs_only)
-		{
-			if (entry->d_type == DT_LNK)
-			{
+		if (m_dirs_only) {
+			if (entry->d_type == DT_LNK) {
 				AllocPathBuffer(entry->d_name);
 				strcpy(m_file_part, entry->d_name);
 				local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
@@ -616,8 +617,7 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 		strcpy(m_file_part, entry->d_name);
 		local_fileType type = GetFileInfo(m_raw_path, isLink, size, modificationTime, mode);
 
-		if (type == unknown) // Happens for example in case of permission denied
-		{
+		if (type == unknown) { // Happens for example in case of permission denied
 #if HAVE_STRUCT_DIRENT_D_TYPE
 			type = entry->d_type == DT_DIR ? dir : file;
 #else
@@ -645,25 +645,24 @@ bool CLocalFileSystem::GetNextFile(wxString& name, bool &isLink, bool &is_dir, i
 #endif
 }
 
-#ifndef __WXMSW__
-void CLocalFileSystem::AllocPathBuffer(const char* file)
+#ifndef FZ_WINDOWS
+void local_filesys::AllocPathBuffer(const char* file)
 {
 	int len = strlen(file);
 	int pathlen = m_file_part - m_raw_path;
 
-	if (len + pathlen >= m_buffer_length)
-	{
+	if (len + pathlen >= m_buffer_length) {
 		m_buffer_length = (len + pathlen) * 2;
 		char* tmp = new char[m_buffer_length];
 		memcpy(tmp, m_raw_path, pathlen);
-		delete [] m_raw_path;
+		delete[] m_raw_path;
 		m_raw_path = tmp;
 		m_file_part = m_raw_path + pathlen;
 	}
 }
 #endif
 
-fz::datetime CLocalFileSystem::GetModificationTime( const wxString& path)
+fz::datetime local_filesys::GetModificationTime(const wxString& path)
 {
 	fz::datetime mtime;
 
@@ -674,12 +673,12 @@ fz::datetime CLocalFileSystem::GetModificationTime( const wxString& path)
 	return mtime;
 }
 
-bool CLocalFileSystem::SetModificationTime(const wxString& path, const fz::datetime& t)
+bool local_filesys::SetModificationTime(const wxString& path, const fz::datetime& t)
 {
 	if (!t.empty())
 		return false;
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	FILETIME ft = t.get_filetime();
 	if (!ft.dwHighDateTime) {
 		return false;
@@ -700,23 +699,23 @@ bool CLocalFileSystem::SetModificationTime(const wxString& path, const fz::datet
 #endif
 }
 
-int64_t CLocalFileSystem::GetSize(wxString const& path, bool* isLink)
+int64_t local_filesys::GetSize(wxString const& path, bool* isLink)
 {
 	int64_t ret = -1;
 	bool tmp{};
 	local_fileType t = GetFileInfo(path, isLink ? *isLink : tmp, &ret, 0, 0);
-	if( t != file ) {
+	if (t != file) {
 		ret = -1;
 	}
 
 	return ret;
 }
 
-wxString CLocalFileSystem::GetSymbolicLinkTarget(wxString const& path)
+wxString local_filesys::GetSymbolicLinkTarget(wxString const& path)
 {
 	wxString target;
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	HANDLE hFile = CreateFile(path, FILE_READ_ATTRIBUTES | FILE_READ_EA, FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 	if (hFile != INVALID_HANDLE_VALUE) {
 		DWORD const size = 1024;
@@ -733,10 +732,12 @@ wxString CLocalFileSystem::GetSymbolicLinkTarget(wxString const& path)
 
 	const wxCharBuffer p = path.fn_str();
 	ssize_t res = readlink(static_cast<char const*>(p), out, size);
-	if( res > 0 && static_cast<size_t>(res) < size ) {
+	if (res > 0 && static_cast<size_t>(res) < size) {
 		out[res] = 0;
 		target = wxString(out, *wxConvFileName);
 	}
 #endif
 	return target;
+}
+
 }

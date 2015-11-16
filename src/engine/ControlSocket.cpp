@@ -409,7 +409,7 @@ int CControlSocket::CheckOverwriteFile()
 	else
 		pNotification->canResume = false;
 
-	pNotification->localTime = CLocalFileSystem::GetModificationTime(pData->localFile);
+	pNotification->localTime = fz::local_filesys::GetModificationTime(pData->localFile);
 
 	if (pData->fileTime.empty())
 		pNotification->remoteTime = pData->fileTime;
@@ -1214,7 +1214,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 
 			int64_t size;
 			bool isLink;
-			if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
+			if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file)
 				pData->localFileSize = size;
 			else
 				pData->localFileSize = -1;

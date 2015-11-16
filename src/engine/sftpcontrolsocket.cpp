@@ -1597,7 +1597,7 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	int64_t size;
 	bool isLink;
-	if (CLocalFileSystem::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == CLocalFileSystem::file)
+	if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file)
 		pData->localFileSize = size;
 
 	pData->opState = filetransfer_waitcwd;
@@ -1842,12 +1842,12 @@ int CSftpControlSocket::FileTransferParseResponse(int result, const wxString& re
 		if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
 			if (pData->download) {
 				if (pData->fileTime.empty()) {
-					if (!CLocalFileSystem::SetModificationTime(pData->localFile, pData->fileTime))
+					if (!fz::local_filesys::SetModificationTime(pData->localFile, pData->fileTime))
 						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
 				}
 			}
 			else {
-				pData->fileTime = CLocalFileSystem::GetModificationTime(pData->localFile);
+				pData->fileTime = fz::local_filesys::GetModificationTime(pData->localFile);
 				if (pData->fileTime.empty()) {
 					pData->opState = filetransfer_chmtime;
 					return SendNextCommand();

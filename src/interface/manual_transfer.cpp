@@ -218,7 +218,7 @@ void CManualTransfer::OnLocalChanged(wxCommandEvent& event)
 
 	wxString file = XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->GetValue();
 
-	m_local_file_exists = CLocalFileSystem::GetFileType(file) == CLocalFileSystem::file;
+	m_local_file_exists = fz::local_filesys::GetFileType(file) == fz::local_filesys::file;
 
 	SetAutoAsciiState();
 }
@@ -303,12 +303,12 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 		return;
 	}
 
-	CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileType(local_file);
-	if (type == CLocalFileSystem::dir) {
+	fz::local_filesys::local_fileType type = fz::local_filesys::GetFileType(local_file);
+	if (type == fz::local_filesys::dir) {
 		wxMessageBoxEx(_("Local file is a directory instead of a regular file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}
-	if (!download && type != CLocalFileSystem::file && start) {
+	if (!download && type != fz::local_filesys::file && start) {
 		wxMessageBoxEx(_("Local file does not exist."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
 	}

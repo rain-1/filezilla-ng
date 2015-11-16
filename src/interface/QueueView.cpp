@@ -351,7 +351,7 @@ protected:
 
 		wxASSERT(!m_pFolderItem->Download());
 
-		CLocalFileSystem localFileSystem;
+		fz::local_filesys localFileSystem;
 
 		while (!TestDestroy() && !m_pFolderItem->m_remove) {
 			fz::scoped_lock l(m_sync);

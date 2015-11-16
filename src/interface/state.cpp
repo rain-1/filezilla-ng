@@ -651,15 +651,15 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	{
 		int64_t size;
 		bool is_link;
-		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(files[i], is_link, &size, 0, 0);
-		if (type == CLocalFileSystem::file)
+		fz::local_filesys::local_fileType type = fz::local_filesys::GetFileInfo(files[i], is_link, &size, 0, 0);
+		if (type == fz::local_filesys::file)
 		{
 			wxString localFile;
 			const CLocalPath localPath(files[i], &localFile);
 			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, *m_pServer, size);
 			m_mainFrame.GetQueue()->QueueFile_Finish(!queueOnly);
 		}
-		else if (type == CLocalFileSystem::dir)
+		else if (type == fz::local_filesys::dir)
 		{
 			CLocalPath localPath(files[i]);
 			if (localPath.HasParent())
@@ -716,8 +716,8 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 		int64_t size;
 		bool is_link;
-		CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(file, is_link, &size, 0, 0);
-		if (type == CLocalFileSystem::file)
+		fz::local_filesys::local_fileType type = fz::local_filesys::GetFileInfo(file, is_link, &size, 0, 0);
+		if (type == fz::local_filesys::file)
 		{
 			wxString name;
 			CLocalPath sourcePath(file, &name);
@@ -732,7 +732,7 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 			else
 				wxRenameFile(file, target);
 		}
-		else if (type == CLocalFileSystem::dir)
+		else if (type == fz::local_filesys::dir)
 		{
 			CLocalPath sourcePath(file);
 			if (sourcePath == path || sourcePath.GetParent() == path)
@@ -788,7 +788,7 @@ bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 		dirsToVisit.pop_front();
 		wxMkdir(target.GetPath() + dirname);
 
-		CLocalFileSystem fs;
+		fz::local_filesys fs;
 		if (!fs.BeginFindFiles(source.GetPath() + dirname, false))
 			continue;
 

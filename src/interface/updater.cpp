@@ -365,7 +365,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 
 		wxString const temp = GetTempFile();
 		wxString const local_file = GetLocalFile(version_information_.available_, true);
-		if( !local_file.empty() && CLocalFileSystem::GetFileType(local_file) != CLocalFileSystem::unknown) {
+		if( !local_file.empty() && fz::local_filesys::GetFileType(local_file) != fz::local_filesys::unknown) {
 			local_file_ = local_file;
 			log_ += wxString::Format(_("Local file is %s\n"), local_file);
 			s = UpdaterState::newversion_ready;
@@ -379,7 +379,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 			}
 			else {
 				s = UpdaterState::newversion_downloading;
-				auto size = CLocalFileSystem::GetSize(temp);
+				auto size = fz::local_filesys::GetSize(temp);
 				if (size >= 0 && size >= version_information_.available_.size_) {
 					s = ProcessFinishedDownload();
 				}
@@ -473,7 +473,7 @@ wxString CUpdater::GetLocalFile(build const& b, bool allow_existing)
 	int i = 1;
 	wxString f = dl + fn;
 
-	while( CLocalFileSystem::GetFileType(f) != CLocalFileSystem::unknown && (!allow_existing || !VerifyChecksum(f, b.size_, b.hash_))) {
+	while( fz::local_filesys::GetFileType(f) != fz::local_filesys::unknown && (!allow_existing || !VerifyChecksum(f, b.size_, b.hash_))) {
 		if( ++i > 99 ) {
 			return wxString();
 		}
@@ -664,7 +664,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 		return false;
 	}
 
-	auto filesize = CLocalFileSystem::GetSize(file);
+	auto filesize = fz::local_filesys::GetSize(file);
 	if (filesize < 0 || filesize != size) {
 		return false;
 	}
@@ -807,13 +807,13 @@ int64_t CUpdater::BytesDownloaded() const
 	int64_t ret{-1};
 	if (state_ == UpdaterState::newversion_ready) {
 		if (!local_file_.empty()) {
-			ret = CLocalFileSystem::GetSize(local_file_);
+			ret = fz::local_filesys::GetSize(local_file_);
 		}
 	}
 	else if( state_ == UpdaterState::newversion_downloading ) {
 		wxString const temp = GetTempFile();
 		if( !temp.empty() ) {
-			ret = CLocalFileSystem::GetSize(temp);
+			ret = fz::local_filesys::GetSize(temp);
 		}
 	}
 	return ret;

@@ -51,10 +51,10 @@ pugi::xml_node CXmlFile::Load()
 		GetXmlFile(redirectedName + _T("~"));
 		if (!m_element) {
 			// Loading backup failed. If both original and backup file are empty, create new file.
-			if (CLocalFileSystem::GetSize(redirectedName) <= 0 && CLocalFileSystem::GetSize(redirectedName + _T("~")) <= 0) {
+			if (fz::local_filesys::GetSize(redirectedName) <= 0 && fz::local_filesys::GetSize(redirectedName + _T("~")) <= 0) {
 				m_error.clear();
 				CreateEmpty();
-				m_modificationTime = CLocalFileSystem::GetModificationTime(redirectedName);
+				m_modificationTime = fz::local_filesys::GetModificationTime(redirectedName);
 				return m_element;
 			}
 
@@ -85,7 +85,7 @@ pugi::xml_node CXmlFile::Load()
 		m_error.clear();
 	}
 
-	m_modificationTime = CLocalFileSystem::GetModificationTime(redirectedName);
+	m_modificationTime = fz::local_filesys::GetModificationTime(redirectedName);
 	return m_element;
 }
 
@@ -96,7 +96,7 @@ bool CXmlFile::Modified()
 	if (!m_modificationTime.empty())
 		return true;
 
-	fz::datetime const modificationTime = CLocalFileSystem::GetModificationTime(m_fileName);
+	fz::datetime const modificationTime = fz::local_filesys::GetModificationTime(m_fileName);
 	if (modificationTime.empty() && modificationTime == m_modificationTime)
 		return false;
 
@@ -138,7 +138,7 @@ bool CXmlFile::Save(bool printError)
 	UpdateMetadata();
 
 	bool res = SaveXmlFile();
-	m_modificationTime = CLocalFileSystem::GetModificationTime(m_fileName);
+	m_modificationTime = fz::local_filesys::GetModificationTime(m_fileName);
 
 	if (!res && printError) {
 		wxASSERT(!m_error.empty());
@@ -285,7 +285,7 @@ bool CXmlFile::GetXmlFile(wxString const& file)
 {
 	Close();
 
-	if (CLocalFileSystem::GetSize(file) <= 0) {
+	if (fz::local_filesys::GetSize(file) <= 0) {
 		return false;
 	}
 
@@ -314,9 +314,9 @@ wxString CXmlFile::GetRedirectedName() const
 {
 	wxString redirectedName = m_fileName;
 	bool isLink = false;
-	if (CLocalFileSystem::GetFileInfo(m_fileName, isLink, 0, 0, 0) == CLocalFileSystem::file) {
+	if (fz::local_filesys::GetFileInfo(m_fileName, isLink, 0, 0, 0) == fz::local_filesys::file) {
 		if (isLink) {
-			CLocalPath target(CLocalFileSystem::GetSymbolicLinkTarget(m_fileName));
+			CLocalPath target(fz::local_filesys::GetSymbolicLinkTarget(m_fileName));
 			if (!target.empty()) {
 				redirectedName = target.GetPath();
 				redirectedName.RemoveLast();
@@ -334,7 +334,7 @@ bool CXmlFile::SaveXmlFile()
 	int flags = 0;
 
 	wxString redirectedName = GetRedirectedName();
-	if (CLocalFileSystem::GetFileInfo(redirectedName, isLink, 0, 0, &flags) == CLocalFileSystem::file) {
+	if (fz::local_filesys::GetFileInfo(redirectedName, isLink, 0, 0, &flags) == fz::local_filesys::file) {
 #ifdef __WXMSW__
 		if (flags & FILE_ATTRIBUTE_HIDDEN)
 			SetFileAttributes(redirectedName, flags & ~FILE_ATTRIBUTE_HIDDEN);

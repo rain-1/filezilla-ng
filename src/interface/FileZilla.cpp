@@ -444,11 +444,11 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->AddHandler(new wxAnimationCtrlXmlHandler);
 	pResource->AddHandler(new wxStdDialogButtonSizerXmlHandler);
 
-	if (CLocalFileSystem::GetFileType(m_resourceDir.GetPath() + _T("xrc/resources.xrc")) == CLocalFileSystem::file) {
+	if (fz::local_filesys::GetFileType(m_resourceDir.GetPath() + _T("xrc/resources.xrc")) == fz::local_filesys::file) {
 		pResource->LoadFile(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
 	}
 	else {
-		CLocalFileSystem fs;
+		fz::local_filesys fs;
 		wxString dir = m_resourceDir.GetPath() + _T("xrc/");
 		bool found = fs.BeginFindFiles(dir, false);
 		while (found) {

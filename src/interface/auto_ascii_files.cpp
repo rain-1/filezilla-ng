@@ -46,7 +46,7 @@ wxString StripVMSRevision(const wxString& name);
 
 bool CAutoAsciiFiles::TransferLocalAsAscii(wxString local_file, enum ServerType server_type)
 {
-	int pos = local_file.Find(CLocalFileSystem::path_separator, true);
+	int pos = local_file.Find(fz::local_filesys::path_separator, true);
 	if (pos != -1)
 		local_file = local_file.Mid(pos + 1);
 
