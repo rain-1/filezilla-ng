@@ -2397,7 +2397,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
-				fz::datetime mtime = fz::local_filesys::GetModificationTime(pData->localFile);
+				fz::datetime mtime = fz::local_filesys::get_modification_time(pData->localFile);
 				if (mtime.empty()) {
 					pData->fileTime = mtime;
 					pData->opState = filetransfer_mfmt;
@@ -2407,7 +2407,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			else if (pData->download && pData->fileTime.empty()) {
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
-				if (!fz::local_filesys::SetModificationTime(pData->localFile, pData->fileTime))
+				if (!fz::local_filesys::set_modification_time(pData->localFile, pData->fileTime))
 					LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
 			}
 		}
@@ -2578,7 +2578,7 @@ int CFtpControlSocket::FileTransferSend()
 							if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
-								fz::datetime mtime = fz::local_filesys::GetModificationTime(pData->localFile);
+								fz::datetime mtime = fz::local_filesys::get_modification_time(pData->localFile);
 								if (mtime.empty()) {
 									pData->fileTime = mtime;
 									pData->opState = filetransfer_mfmt;

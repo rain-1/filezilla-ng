@@ -303,7 +303,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 		return;
 	}
 
-	fz::local_filesys::local_fileType type = fz::local_filesys::GetFileType(local_file);
+	fz::local_filesys::type type = fz::local_filesys::GetFileType(local_file);
 	if (type == fz::local_filesys::dir) {
 		wxMessageBoxEx(_("Local file is a directory instead of a regular file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;

@@ -409,7 +409,7 @@ int CControlSocket::CheckOverwriteFile()
 	else
 		pNotification->canResume = false;
 
-	pNotification->localTime = fz::local_filesys::GetModificationTime(pData->localFile);
+	pNotification->localTime = fz::local_filesys::get_modification_time(pData->localFile);
 
 	if (pData->fileTime.empty())
 		pNotification->remoteTime = pData->fileTime;

@@ -54,7 +54,7 @@ pugi::xml_node CXmlFile::Load()
 			if (fz::local_filesys::GetSize(redirectedName) <= 0 && fz::local_filesys::GetSize(redirectedName + _T("~")) <= 0) {
 				m_error.clear();
 				CreateEmpty();
-				m_modificationTime = fz::local_filesys::GetModificationTime(redirectedName);
+				m_modificationTime = fz::local_filesys::get_modification_time(redirectedName);
 				return m_element;
 			}
 
@@ -85,7 +85,7 @@ pugi::xml_node CXmlFile::Load()
 		m_error.clear();
 	}
 
-	m_modificationTime = fz::local_filesys::GetModificationTime(redirectedName);
+	m_modificationTime = fz::local_filesys::get_modification_time(redirectedName);
 	return m_element;
 }
 
@@ -96,7 +96,7 @@ bool CXmlFile::Modified()
 	if (!m_modificationTime.empty())
 		return true;
 
-	fz::datetime const modificationTime = fz::local_filesys::GetModificationTime(m_fileName);
+	fz::datetime const modificationTime = fz::local_filesys::get_modification_time(m_fileName);
 	if (modificationTime.empty() && modificationTime == m_modificationTime)
 		return false;
 
@@ -138,7 +138,7 @@ bool CXmlFile::Save(bool printError)
 	UpdateMetadata();
 
 	bool res = SaveXmlFile();
-	m_modificationTime = fz::local_filesys::GetModificationTime(m_fileName);
+	m_modificationTime = fz::local_filesys::get_modification_time(m_fileName);
 
 	if (!res && printError) {
 		wxASSERT(!m_error.empty());
@@ -316,7 +316,7 @@ wxString CXmlFile::GetRedirectedName() const
 	bool isLink = false;
 	if (fz::local_filesys::GetFileInfo(m_fileName, isLink, 0, 0, 0) == fz::local_filesys::file) {
 		if (isLink) {
-			CLocalPath target(fz::local_filesys::GetSymbolicLinkTarget(m_fileName));
+			CLocalPath target(fz::local_filesys::get_link_target(m_fileName));
 			if (!target.empty()) {
 				redirectedName = target.GetPath();
 				redirectedName.RemoveLast();

@@ -431,7 +431,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 
 	{
 		wxLogNull log;
-		if (!local_filesys.BeginFindFiles(dirname, true)) {
+		if (!local_filesys.begin_find_files(dirname, true)) {
 			if (!knownSubdir.empty()) {
 				wxTreeItemId item = GetSubdir(parent, knownSubdir);
 				if (item != wxTreeItemId())
@@ -472,7 +472,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	bool is_dir;
 	static int64_t const size(-1);
 	fz::datetime date;
-	while (local_filesys.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
+	while (local_filesys.get_next_file(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
 		if (file.empty()) {
 			wxGetApp().DisplayEncodingWarning();
@@ -526,7 +526,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	CFilterManager filter;
 
 	fz::local_filesys local_filesys;
-	if (!local_filesys.BeginFindFiles(dirname, true))
+	if (!local_filesys.begin_find_files(dirname, true))
 		return wxString();
 
 	wxString file;
@@ -535,7 +535,7 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	bool is_dir;
 	static int64_t const size(-1);
 	fz::datetime date;
-	while (local_filesys.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
+	while (local_filesys.get_next_file(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
 		if (file.empty()) {
 			wxGetApp().DisplayEncodingWarning();
@@ -712,7 +712,7 @@ void CLocalTreeView::RefreshListing()
 
 		// Step 1: Check if directory exists
 		fz::local_filesys local_filesys;
-		if (!local_filesys.BeginFindFiles(dir.dir, true)) {
+		if (!local_filesys.begin_find_files(dir.dir, true)) {
 			// Dir does exist (listed in parent) but may not be accessible.
 			// Recurse into children anyhow, they might be accessible again.
 			wxTreeItemIdValue value;
@@ -734,7 +734,7 @@ void CLocalTreeView::RefreshListing()
 		bool is_dir;
 		int attributes;
 		fz::datetime date;
-		while (local_filesys.GetNextFile(file, was_link, is_dir, 0, &date, &attributes)) {
+		while (local_filesys.get_next_file(file, was_link, is_dir, 0, &date, &attributes)) {
 			if (file.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
@@ -1360,7 +1360,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 		if (pData) {
 			bool wasLink;
 			int attributes;
-			enum fz::local_filesys::local_fileType type;
+			enum fz::local_filesys::type type;
 			fz::datetime date;
 			if (!path.empty() && path.Last() == fz::local_filesys::path_separator)
 				type = fz::local_filesys::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);

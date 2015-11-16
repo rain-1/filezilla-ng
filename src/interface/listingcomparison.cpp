@@ -99,8 +99,8 @@ bool CComparisonManager::CompareListings()
 
 	const bool hide_identical = COptions::Get()->GetOptionVal(OPTION_COMPARE_HIDEIDENTICAL) != 0;
 
-	bool gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate);
-	bool gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate);
+	bool gotLocal = m_pLeft->get_next_file(localFile, localDir, localSize, localDate);
+	bool gotRemote = m_pRight->get_next_file(remoteFile, remoteDir, remoteSize, remoteDate);
 
 	while (gotLocal && gotRemote) {
 		int cmp = CompareFiles(dirSortMode, localFile, remoteFile, localDir, remoteDir);
@@ -150,32 +150,32 @@ bool CComparisonManager::CompareListings()
 					}
 				}
 			}
-			gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate);
-			gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate);
+			gotLocal = m_pLeft->get_next_file(localFile, localDir, localSize, localDate);
+			gotRemote = m_pRight->get_next_file(remoteFile, remoteDir, remoteSize, remoteDate);
 			continue;
 		}
 
 		if (cmp < 0) {
 			m_pLeft->CompareAddFile(CComparableListing::lonely);
 			m_pRight->CompareAddFile(CComparableListing::fill);
-			gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate);
+			gotLocal = m_pLeft->get_next_file(localFile, localDir, localSize, localDate);
 		}
 		else {
 			m_pLeft->CompareAddFile(CComparableListing::fill);
 			m_pRight->CompareAddFile(CComparableListing::lonely);
-			gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate);
+			gotRemote = m_pRight->get_next_file(remoteFile, remoteDir, remoteSize, remoteDate);
 		}
 	}
 	while (gotLocal) {
 		m_pLeft->CompareAddFile(CComparableListing::lonely);
 		m_pRight->CompareAddFile(CComparableListing::fill);
-		gotLocal = m_pLeft->GetNextFile(localFile, localDir, localSize, localDate);
+		gotLocal = m_pLeft->get_next_file(localFile, localDir, localSize, localDate);
 	}
 	while (gotRemote)
 	{
 		m_pLeft->CompareAddFile(CComparableListing::fill);
 		m_pRight->CompareAddFile(CComparableListing::lonely);
-		gotRemote = m_pRight->GetNextFile(remoteFile, remoteDir, remoteSize, remoteDate);
+		gotRemote = m_pRight->get_next_file(remoteFile, remoteDir, remoteSize, remoteDate);
 	}
 
 	m_pRight->FinishComparison();
