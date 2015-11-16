@@ -301,18 +301,6 @@ CLocalListView::~CLocalListView()
 	delete m_pVolumeEnumeratorThread;
 #endif
 }
-namespace n {
-class c {
-};
-}
-
-void f() {
-	n::c n::c;
-}
-
-void g() {
-	n::c n::c;
-}
 
 bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 {
