@@ -301,9 +301,22 @@ CLocalListView::~CLocalListView()
 	delete m_pVolumeEnumeratorThread;
 #endif
 }
+namespace n {
+class c {
+};
+}
+
+void f() {
+	n::c n::c;
+}
+
+void g() {
+	n::c n::c;
+}
 
 bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 {
+	
 	CancelLabelEdit();
 
 	wxString focused;
@@ -371,9 +384,9 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 regular_dir:
 #endif
 		CFilterManager filter;
-		CLocalFileSystem local_filesystem;
+		fz::local_filesys local_filesys;
 
-		if (!local_filesystem.BeginFindFiles(m_dir.GetPath(), false)) {
+		if (!local_filesys.BeginFindFiles(m_dir.GetPath(), false)) {
 			SetItemCount(1);
 			return false;
 		}
@@ -387,7 +400,7 @@ regular_dir:
 		int num = m_fileData.size();
 		CLocalFileData data;
 		bool wasLink;
-		while (local_filesystem.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
+		while (local_filesys.GetNextFile(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
 			if (data.name.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
@@ -942,7 +955,7 @@ void CLocalListView::OnMenuDelete(wxCommandEvent&)
 
 		pathsToDelete.push_back(m_dir.GetPath() + data->name);
 	}
-	if (!CLocalFileSystem::RecursiveDelete(pathsToDelete, this))
+	if (!fz::local_filesys::RecursiveDelete(pathsToDelete, this))
 		wxGetApp().DisplayEncodingWarning();
 
 	m_pState->SetLocalDir(m_dir);
@@ -1315,12 +1328,12 @@ void CLocalListView::RefreshFile(const wxString& file)
 	CLocalFileData data;
 
 	bool wasLink;
-	enum CLocalFileSystem::local_fileType type = CLocalFileSystem::GetFileInfo(m_dir.GetPath() + file, wasLink, &data.size, &data.time, &data.attributes);
-	if (type == CLocalFileSystem::unknown)
+	enum fz::local_filesys::local_fileType type = fz::local_filesys::GetFileInfo(m_dir.GetPath() + file, wasLink, &data.size, &data.time, &data.attributes);
+	if (type == fz::local_filesys::unknown)
 		return;
 
 	data.name = file;
-	data.dir = type == CLocalFileSystem::dir;
+	data.dir = type == fz::local_filesys::dir;
 
 	CFilterManager filter;
 	if (filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time))

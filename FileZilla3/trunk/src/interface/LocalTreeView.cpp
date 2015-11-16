@@ -427,14 +427,12 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 
 void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, const wxString& knownSubdir /*=_T("")*/)
 {
-	CLocalFileSystem local_filesystem;
+	fz::local_filesys local_filesys;
 
 	{
 		wxLogNull log;
-		if (!local_filesystem.BeginFindFiles(dirname, true))
-		{
-			if (!knownSubdir.empty())
-			{
+		if (!local_filesys.BeginFindFiles(dirname, true)) {
+			if (!knownSubdir.empty()) {
 				wxTreeItemId item = GetSubdir(parent, knownSubdir);
 				if (item != wxTreeItemId())
 					return;
@@ -474,7 +472,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 	bool is_dir;
 	static int64_t const size(-1);
 	fz::datetime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
+	while (local_filesys.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
 		if (file.empty()) {
 			wxGetApp().DisplayEncodingWarning();
@@ -527,8 +525,8 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 
 	CFilterManager filter;
 
-	CLocalFileSystem local_filesystem;
-	if (!local_filesystem.BeginFindFiles(dirname, true))
+	fz::local_filesys local_filesys;
+	if (!local_filesys.BeginFindFiles(dirname, true))
 		return wxString();
 
 	wxString file;
@@ -537,11 +535,9 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	bool is_dir;
 	static int64_t const size(-1);
 	fz::datetime date;
-	while (local_filesystem.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes))
-	{
+	while (local_filesys.GetNextFile(file, wasLink, is_dir, 0, &date, &attributes)) {
 		wxASSERT(is_dir);
-		if (file.empty())
-		{
+		if (file.empty()) {
 			wxGetApp().DisplayEncodingWarning();
 			continue;
 		}
@@ -715,8 +711,8 @@ void CLocalTreeView::RefreshListing()
 		dirsToCheck.pop_front();
 
 		// Step 1: Check if directory exists
-		CLocalFileSystem local_filesystem;
-		if (!local_filesystem.BeginFindFiles(dir.dir, true)) {
+		fz::local_filesys local_filesys;
+		if (!local_filesys.BeginFindFiles(dir.dir, true)) {
 			// Dir does exist (listed in parent) but may not be accessible.
 			// Recurse into children anyhow, they might be accessible again.
 			wxTreeItemIdValue value;
@@ -738,7 +734,7 @@ void CLocalTreeView::RefreshListing()
 		bool is_dir;
 		int attributes;
 		fz::datetime date;
-		while (local_filesystem.GetNextFile(file, was_link, is_dir, 0, &date, &attributes)) {
+		while (local_filesys.GetNextFile(file, was_link, is_dir, 0, &date, &attributes)) {
 			if (file.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
@@ -1183,7 +1179,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 	if (!local_path.HasParent() || !local_path.IsWriteable())
 		return;
 
-	if (!CLocalFileSystem::RecursiveDelete(path, this))
+	if (!fz::local_filesys::RecursiveDelete(path, this))
 		wxGetApp().DisplayEncodingWarning();
 
 	wxTreeItemId item = GetSelection();
@@ -1364,13 +1360,13 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 		if (pData) {
 			bool wasLink;
 			int attributes;
-			enum CLocalFileSystem::local_fileType type;
+			enum fz::local_filesys::local_fileType type;
 			fz::datetime date;
-			if (!path.empty() && path.Last() == CLocalFileSystem::path_separator)
-				type = CLocalFileSystem::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+			if (!path.empty() && path.Last() == fz::local_filesys::path_separator)
+				type = fz::local_filesys::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
 			else
-				type = CLocalFileSystem::GetFileInfo(path + CLocalFileSystem::path_separator + pData->m_known_subdir, wasLink, 0, &date, &attributes);
-			if (type == CLocalFileSystem::dir) {
+				type = fz::local_filesys::GetFileInfo(path + fz::local_filesys::path_separator + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+			if (type == fz::local_filesys::dir) {
 				CFilterManager filter;
 				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes, date))
 					return true;

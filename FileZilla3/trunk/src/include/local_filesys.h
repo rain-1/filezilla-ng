@@ -1,37 +1,35 @@
 #ifndef __LOCAL_FILESYS_H__
 #define __LOCAL_FILESYS_H__
 
+namespace fz {
+
 // This class adds an abstraction layer for the local filesystem.
 // Although wxWidgets provides functions for this, they are in
 // general too slow.
 // This class offers exactly what's needed by FileZilla and
 // exploits some platform-specific features.
-class CLocalFileSystem final
+class local_filesys final
 {
 public:
-	CLocalFileSystem() = default;
-	~CLocalFileSystem();
+	local_filesys() = default;
+	~local_filesys();
 
-	CLocalFileSystem(CLocalFileSystem const&) = delete;
-	CLocalFileSystem& operator=(CLocalFileSystem const&) = delete;
+	local_filesys(local_filesys const&) = delete;
+	local_filesys& operator=(local_filesys const&) = delete;
 
-	enum local_fileType
-	{
+	enum local_fileType {
 		unknown = -1,
 		file,
 		dir,
-		link,
-		link_file = link,
-		link_dir
+		link
 	};
 
 	static const wxChar path_separator;
 
-	// If called with a symlink, GetFileType stats the link, not
-	// the target.
+	// GetFileType return the type of the passed path. Does not follow symbolic links
 	static local_fileType GetFileType(wxString const& path);
 
-	// Follows symlinks and stats the target, sets isLink to true if path was
+	// Gets the info for the passed arguments. Follows symbolic links and stats the target, sets isLink to true if path was
 	// a link.
 	static local_fileType GetFileInfo(wxString const& path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int* mode);
 
@@ -54,7 +52,7 @@ public:
 
 	static wxString GetSymbolicLinkTarget(wxString const& path);
 
-protected:
+private:
 #ifndef __WXMSW__
 	static local_fileType GetFileInfo(const char* path, bool &isLink, int64_t* size, fz::datetime* modificationTime, int* mode);
 	void AllocPathBuffer(const char* file);  // Ensures m_raw_path is large enough to hold path and filename
@@ -64,7 +62,7 @@ protected:
 	bool m_dirs_only{};
 #ifdef __WXMSW__
 	WIN32_FIND_DATA m_find_data;
-	HANDLE m_hFind{INVALID_HANDLE_VALUE};
+	HANDLE m_hFind{ INVALID_HANDLE_VALUE };
 	bool m_found{};
 	wxString m_find_path;
 #else
@@ -75,4 +73,6 @@ protected:
 #endif
 };
 
-#endif //__LOCAL_FILESYS_H__
+}
+
+#endif
