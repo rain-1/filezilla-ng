@@ -1,7 +1,8 @@
 #include <filezilla.h>
 #include "auto_ascii_files.h"
 #include "Options.h"
-#include "local_filesys.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 std::vector<wxString> CAutoAsciiFiles::m_ascii_extensions;
 
@@ -11,26 +12,21 @@ void CAutoAsciiFiles::SettingsChanged()
 	wxString extensions = COptions::Get()->GetOption(OPTION_ASCIIFILES);
 	wxString ext;
 	int pos = extensions.Find(_T("|"));
-	while (pos != -1)
-	{
-		if (!pos)
-		{
-			if (!ext.empty())
-			{
+	while (pos != -1) {
+		if (!pos) {
+			if (!ext.empty()) {
 				ext.Replace(_T("\\\\"), _T("\\"));
 				m_ascii_extensions.push_back(ext);
 				ext = _T("");
 			}
 		}
-		else if (extensions.c_str()[pos - 1] != '\\')
-		{
+		else if (extensions.c_str()[pos - 1] != '\\') {
 			ext += extensions.Left(pos);
 			ext.Replace(_T("\\\\"), _T("\\"));
 			m_ascii_extensions.push_back(ext);
 			ext = _T("");
 		}
-		else
-		{
+		else {
 			ext += extensions.Left(pos - 1) + _T("|");
 		}
 		extensions = extensions.Mid(pos + 1);

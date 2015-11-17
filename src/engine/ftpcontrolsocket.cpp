@@ -10,10 +10,10 @@
 #include "servercapabilities.h"
 #include "tlssocket.h"
 #include "transfersocket.h"
-#include "local_filesys.h"
 #include "proxy.h"
 
 #include <libfilezilla/file.hpp>
+#include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/util.hpp>
 
 #include <wx/filename.h>
@@ -1703,7 +1703,7 @@ int CFtpControlSocket::ResetOperation(int nErrorCode)
 			pData->pIOThread = 0;
 			int64_t size;
 			bool isLink;
-			if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file && size == 0) {
+			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file && size == 0) {
 				// Download failed and a new local file was created before, but
 				// nothing has been written to it. Remove it again, so we don't
 				// leave a bunch of empty files all over the place.
@@ -2162,7 +2162,7 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 
 	int64_t size;
 	bool isLink;
-	if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file)
+	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
 		pData->localFileSize = size;
 
 	pData->opState = filetransfer_waitcwd;
@@ -2397,7 +2397,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			if (!pData->download &&
 				CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 			{
-				fz::datetime mtime = fz::local_filesys::get_modification_time(pData->localFile);
+				fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 				if (mtime.empty()) {
 					pData->fileTime = mtime;
 					pData->opState = filetransfer_mfmt;
@@ -2407,7 +2407,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 			else if (pData->download && pData->fileTime.empty()) {
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
-				if (!fz::local_filesys::set_modification_time(pData->localFile, pData->fileTime))
+				if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile), pData->fileTime))
 					LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
 			}
 		}
@@ -2578,7 +2578,7 @@ int CFtpControlSocket::FileTransferSend()
 							if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
 								CServerCapabilities::GetCapability(*m_pCurrentServer, mfmt_command) == yes)
 							{
-								fz::datetime mtime = fz::local_filesys::get_modification_time(pData->localFile);
+								fz::datetime mtime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 								if (mtime.empty()) {
 									pData->fileTime = mtime;
 									pData->opState = filetransfer_mfmt;
@@ -2748,7 +2748,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 
 					int64_t size;
 					bool isLink;
-					if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file)
+					if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
 						pData->localFileSize = size;
 					else
 						pData->localFileSize = -1;

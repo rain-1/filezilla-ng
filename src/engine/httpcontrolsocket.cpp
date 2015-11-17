@@ -3,8 +3,9 @@
 #include "ControlSocket.h"
 #include "engineprivate.h"
 #include "httpcontrolsocket.h"
-#include "local_filesys.h"
 #include "tlssocket.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 #include <wx/file.h>
 
@@ -344,7 +345,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 	m_current_uri = wxURI(m_pCurrentServer->FormatServer() + pData->remotePath.FormatFilename(pData->remoteFile));
 
 	if (!localFile.empty()) {
-		pData->localFileSize = fz::local_filesys::GetSize(pData->localFile);
+		pData->localFileSize = fz::local_filesys::get_size(fz::to_native(pData->localFile));
 
 		pData->opState = filetransfer_waitfileexists;
 		int res = CheckOverwriteFile();
@@ -970,8 +971,7 @@ int CHttpControlSocket::ProcessData(char* p, int len)
 int CHttpControlSocket::ParseSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::SendNextCommand(%d)"), prevResult);
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("SendNextCommand called without active operation"));
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
@@ -996,22 +996,21 @@ int CHttpControlSocket::Disconnect()
 	return FZ_REPLY_OK;
 }
 
-int CHttpControlSocket::OpenFile( CHttpFileTransferOpData* pData)
+int CHttpControlSocket::OpenFile(CHttpFileTransferOpData* pData)
 {
 	delete pData->pFile;
 	pData->pFile = new wxFile();
 	CreateLocalDir(pData->localFile);
 
-	if (!pData->pFile->Open(pData->localFile, pData->resume ? wxFile::write_append : wxFile::write))
-	{
+	if (!pData->pFile->Open(pData->localFile, pData->resume ? wxFile::write_append : wxFile::write)) {
 		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile);
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 	wxFileOffset end = pData->pFile->SeekEnd();
-	if( !end ) {
+	if (!end) {
 		pData->resume = false;
 	}
-	pData->localFileSize = fz::local_filesys::GetSize(pData->localFile);
+	pData->localFileSize = fz::local_filesys::get_size(fz::to_native(pData->localFile));
 	return FZ_REPLY_OK;
 }

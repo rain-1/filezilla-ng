@@ -7,9 +7,10 @@
 #include "queue.h"
 #include "filezillaapp.h"
 #include "recursive_operation.h"
-#include "local_filesys.h"
 #include "listingcomparison.h"
 #include "xrc_helper.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 CContextManager CContextManager::m_the_context_manager;
 
@@ -647,20 +648,17 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 	const wxArrayString& files = pFileDataObject->GetFilenames();
 
-	for (unsigned int i = 0; i < files.Count(); i++)
-	{
+	for (unsigned int i = 0; i < files.Count(); ++i) {
 		int64_t size;
 		bool is_link;
-		fz::local_filesys::type type = fz::local_filesys::GetFileInfo(files[i], is_link, &size, 0, 0);
-		if (type == fz::local_filesys::file)
-		{
+		fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(files[i]), is_link, &size, 0, 0);
+		if (type == fz::local_filesys::file) {
 			wxString localFile;
 			const CLocalPath localPath(files[i], &localFile);
 			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, *m_pServer, size);
 			m_mainFrame.GetQueue()->QueueFile_Finish(!queueOnly);
 		}
-		else if (type == fz::local_filesys::dir)
-		{
+		else if (type == fz::local_filesys::dir) {
 			CLocalPath localPath(files[i]);
 			if (localPath.HasParent())
 			{
@@ -681,15 +679,15 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 #ifdef __WXMSW__
 	int len = 1;
 
-	for (unsigned int i = 0; i < files.Count(); i++)
+	for (unsigned int i = 0; i < files.Count(); ++i) {
 		len += files[i].Len() + 1;
+	}
 
 	// SHFILEOPSTRUCT's pTo and pFrom accept null-terminated lists
 	// of null-terminated filenames.
 	wxChar* from = new wxChar[len];
 	wxChar* p = from;
-	for (unsigned int i = 0; i < files.Count(); i++)
-	{
+	for (unsigned int i = 0; i < files.Count(); ++i) {
 		wxStrcpy(p, files[i]);
 		p += files[i].Len() + 1;
 	}
@@ -782,28 +780,24 @@ bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 	dirsToVisit.push_back(last_segment + CLocalPath::path_separator);
 
 	// Process any subdirs which still have to be visited
-	while (!dirsToVisit.empty())
-	{
+	while (!dirsToVisit.empty()) {
 		wxString dirname = dirsToVisit.front();
 		dirsToVisit.pop_front();
 		wxMkdir(target.GetPath() + dirname);
 
 		fz::local_filesys fs;
-		if (!fs.begin_find_files(source.GetPath() + dirname, false))
+		if (!fs.begin_find_files(fz::to_native(source.GetPath() + dirname), false))
 			continue;
 
 		bool is_dir, is_link;
-		wxString file;
-		while (fs.get_next_file(file, is_link, is_dir, 0, 0, 0))
-		{
-			if (file.empty())
-			{
+		fz::native_string file;
+		while (fs.get_next_file(file, is_link, is_dir, 0, 0, 0)) {
+			if (file.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
 
-			if (is_dir)
-			{
+			if (is_dir) {
 				if (is_link)
 					continue;
 

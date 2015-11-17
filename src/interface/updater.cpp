@@ -6,10 +6,11 @@
 #include "updater.h"
 #include "Options.h"
 #include "file_utils.h"
-#include <local_filesys.h>
 #include <wx/base64.h>
 #include <wx/tokenzr.h>
 #include <string>
+
+#include <libfilezilla/local_filesys.hpp>
 
 #include <string>
 
@@ -358,14 +359,14 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 
 	ParseData();
 
-	if( version_information_.available_.version_.empty() ) {
+	if (version_information_.available_.version_.empty()) {
 		s = UpdaterState::idle;
 	}
-	else if( !version_information_.available_.url_.empty() ) {
+	else if (!version_information_.available_.url_.empty()) {
 
 		wxString const temp = GetTempFile();
 		wxString const local_file = GetLocalFile(version_information_.available_, true);
-		if( !local_file.empty() && fz::local_filesys::GetFileType(local_file) != fz::local_filesys::unknown) {
+		if (!local_file.empty() && fz::local_filesys::get_file_type(fz::to_native(local_file)) != fz::local_filesys::unknown) {
 			local_file_ = local_file;
 			log_ += wxString::Format(_("Local file is %s\n"), local_file);
 			s = UpdaterState::newversion_ready;
@@ -374,12 +375,12 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 			// We got a checksum over a secure channel already.
 			m_use_internal_rootcert = false;
 
-			if( temp.empty() || local_file.empty() ) {
+			if (temp.empty() || local_file.empty()) {
 				s = UpdaterState::newversion;
 			}
 			else {
 				s = UpdaterState::newversion_downloading;
-				auto size = fz::local_filesys::GetSize(temp);
+				auto size = fz::local_filesys::get_size(fz::to_native(temp));
 				if (size >= 0 && size >= version_information_.available_.size_) {
 					s = ProcessFinishedDownload();
 				}
@@ -473,20 +474,20 @@ wxString CUpdater::GetLocalFile(build const& b, bool allow_existing)
 	int i = 1;
 	wxString f = dl + fn;
 
-	while( fz::local_filesys::GetFileType(f) != fz::local_filesys::unknown && (!allow_existing || !VerifyChecksum(f, b.size_, b.hash_))) {
-		if( ++i > 99 ) {
+	while (fz::local_filesys::get_file_type(fz::to_native(f)) != fz::local_filesys::unknown && (!allow_existing || !VerifyChecksum(f, b.size_, b.hash_))) {
+		if (++i > 99) {
 			return wxString();
 		}
 		wxString ext;
 		int pos;
-		if( !fn.Right(8).CmpNoCase(_T(".tar.bz2")) ) {
+		if (!fn.Right(8).CmpNoCase(_T(".tar.bz2"))) {
 			pos = fn.size() - 8;
 		}
 		else {
 			pos = fn.Find('.', true);
 		}
 
-		if( pos == -1 ) {
+		if (pos == -1) {
 			f = dl + fn + wxString::Format(_T(" (%d)"), i);
 		}
 		else {
@@ -664,7 +665,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 		return false;
 	}
 
-	auto filesize = fz::local_filesys::GetSize(file);
+	auto filesize = fz::local_filesys::get_size(fz::to_native(file));
 	if (filesize < 0 || filesize != size) {
 		return false;
 	}
@@ -807,13 +808,13 @@ int64_t CUpdater::BytesDownloaded() const
 	int64_t ret{-1};
 	if (state_ == UpdaterState::newversion_ready) {
 		if (!local_file_.empty()) {
-			ret = fz::local_filesys::GetSize(local_file_);
+			ret = fz::local_filesys::get_size(fz::to_native(local_file_));
 		}
 	}
 	else if( state_ == UpdaterState::newversion_downloading ) {
 		wxString const temp = GetTempFile();
 		if( !temp.empty() ) {
-			ret = fz::local_filesys::GetSize(temp);
+			ret = fz::local_filesys::get_size(fz::to_native(temp));
 		}
 	}
 	return ret;

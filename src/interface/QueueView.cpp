@@ -21,7 +21,6 @@
 #include <wx/utils.h>
 #include <wx/progdlg.h>
 #include <wx/sound.h>
-#include "local_filesys.h"
 #include "statusbar.h"
 #include "recursive_operation.h"
 #include "auto_ascii_files.h"
@@ -30,6 +29,8 @@
 #if WITH_LIBDBUS
 #include "../dbus/desktop_notification.h"
 #endif
+
+#include <libfilezilla/local_filesys.hpp>
 
 #ifdef __WXMSW__
 #include <powrprof.h>
@@ -379,7 +380,7 @@ protected:
 
 			l.unlock();
 
-			if (!localFileSystem.begin_find_files(pair->localPath.GetPath(), false)) {
+			if (!localFileSystem.begin_find_files(fz::to_native(pair->localPath.GetPath()), false)) {
 				delete pair;
 				continue;
 			}
@@ -391,7 +392,7 @@ protected:
 
 			t_newEntry* entry = new t_newEntry;
 
-			wxString name;
+			fz::native_string name;
 			bool is_link;
 			bool is_dir;
 			while (localFileSystem.get_next_file(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes)) {

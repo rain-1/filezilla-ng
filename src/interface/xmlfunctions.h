@@ -12,13 +12,16 @@
 #include "../pugixml/pugixml.hpp"
 #endif
 
-class CXmlFile
+class CXmlFile final
 {
 public:
-	CXmlFile() {};
+	CXmlFile() = default;
 	explicit CXmlFile(const wxString& fileName, wxString const& root = wxString());
 
-	virtual ~CXmlFile();
+	~CXmlFile();
+
+	CXmlFile(CXmlFile const&) = delete;
+	CXmlFile& operator=(CXmlFile const&) = delete;
 
 	pugi::xml_node CreateEmpty();
 

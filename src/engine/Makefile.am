@@ -20,7 +20,6 @@ libengine_a_SOURCES = \
 		ftpcontrolsocket.cpp \
 		httpcontrolsocket.cpp \
 		iothread.cpp \
-		local_filesys.cpp \
 		local_path.cpp \
 		logging.cpp \
 		misc.cpp \
