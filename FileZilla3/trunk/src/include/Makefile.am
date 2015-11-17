@@ -7,7 +7,6 @@ noinst_HEADERS = \
 	externalipresolver.h \
 	FileZillaEngine.h \
 	libfilezilla_engine.h \
-	local_filesys.h \
 	local_path.h \
 	logging.h \
 	misc.h \

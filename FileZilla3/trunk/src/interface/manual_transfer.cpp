@@ -1,6 +1,5 @@
 #include <filezilla.h>
 #include "manual_transfer.h"
-#include "local_filesys.h"
 #include "auto_ascii_files.h"
 #include "state.h"
 #include "Options.h"
@@ -8,6 +7,8 @@
 #include "queue.h"
 #include "QueueView.h"
 #include "xrc_helper.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 BEGIN_EVENT_TABLE(CManualTransfer, wxDialogEx)
 EVT_TEXT(XRCID("ID_LOCALFILE"), CManualTransfer::OnLocalChanged)
@@ -218,7 +219,7 @@ void CManualTransfer::OnLocalChanged(wxCommandEvent& event)
 
 	wxString file = XRCCTRL(*this, "ID_LOCALFILE", wxTextCtrl)->GetValue();
 
-	m_local_file_exists = fz::local_filesys::GetFileType(file) == fz::local_filesys::file;
+	m_local_file_exists = fz::local_filesys::get_file_type(fz::to_native(file)) == fz::local_filesys::file;
 
 	SetAutoAsciiState();
 }
@@ -303,7 +304,7 @@ void CManualTransfer::OnOK(wxCommandEvent& event)
 		return;
 	}
 
-	fz::local_filesys::type type = fz::local_filesys::GetFileType(local_file);
+	fz::local_filesys::type type = fz::local_filesys::get_file_type(fz::to_native(local_file));
 	if (type == fz::local_filesys::dir) {
 		wxMessageBoxEx(_("Local file is a directory instead of a regular file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;

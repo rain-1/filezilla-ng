@@ -11,7 +11,8 @@
 #include "cmdline.h"
 #include "welcome_dialog.h"
 #include <msgbox.h>
-#include "local_filesys.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 #include <wx/xrc/xh_animatctrl.h>
 #include <wx/xrc/xh_bmpbt.h>
@@ -444,17 +445,17 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->AddHandler(new wxAnimationCtrlXmlHandler);
 	pResource->AddHandler(new wxStdDialogButtonSizerXmlHandler);
 
-	if (fz::local_filesys::GetFileType(m_resourceDir.GetPath() + _T("xrc/resources.xrc")) == fz::local_filesys::file) {
+	if (fz::local_filesys::get_file_type(fz::to_native(m_resourceDir.GetPath() + _T("xrc/resources.xrc"))) == fz::local_filesys::file) {
 		pResource->LoadFile(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
 	}
 	else {
 		fz::local_filesys fs;
 		wxString dir = m_resourceDir.GetPath() + _T("xrc/");
-		bool found = fs.begin_find_files(dir, false);
+		bool found = fs.begin_find_files(fz::to_native(dir), false);
 		while (found) {
-			wxString name;
+			fz::native_string name;
 			found = fs.get_next_file(name);
-			if (name.Right(4) != _T(".xrc")) {
+			if (name.size() <= 4 || name.substr(name.size() - 4) != fzT(".xrc")) {
 				continue;
 			}
 			pResource->LoadFile(dir + name);

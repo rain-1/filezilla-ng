@@ -5,7 +5,6 @@
 #include "filter.h"
 #include "Options.h"
 #include "queue.h"
-#include "local_filesys.h"
 
 CRecursiveOperation::CRecursiveOperation(CState* pState)
 	: CStateEventHandler(pState),

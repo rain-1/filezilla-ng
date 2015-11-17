@@ -87,7 +87,6 @@
     <ClCompile Include="ftpcontrolsocket.cpp" />
     <ClCompile Include="httpcontrolsocket.cpp" />
     <ClCompile Include="iothread.cpp" />
-    <ClCompile Include="local_filesys.cpp" />
     <ClCompile Include="local_path.cpp" />
     <ClCompile Include="logging.cpp" />
     <ClCompile Include="misc.cpp" />
@@ -126,7 +125,6 @@
     <ClInclude Include="httpcontrolsocket.h" />
     <ClInclude Include="iothread.h" />
     <ClInclude Include="..\include\libfilezilla_engine.h" />
-    <ClInclude Include="..\include\local_filesys.h" />
     <ClInclude Include="..\include\local_path.h" />
     <ClInclude Include="..\include\logging.h" />
     <ClInclude Include="logging_private.h" />

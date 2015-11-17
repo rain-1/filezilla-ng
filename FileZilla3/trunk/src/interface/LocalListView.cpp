@@ -19,10 +19,12 @@
 #include "edithandler.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"
-#include "local_filesys.h"
 #include "filelist_statusbar.h"
 #include "sizeformatting.h"
 #include "timeformatting.h"
+
+#include <libfilezilla/local_filesys.hpp>
+#include <libfilezilla/recursive_remove.hpp>
 
 class CLocalListViewDropTarget : public CScrollableDropTarget<wxListCtrlEx>
 {
@@ -374,7 +376,7 @@ regular_dir:
 		CFilterManager filter;
 		fz::local_filesys local_filesys;
 
-		if (!local_filesys.begin_find_files(m_dir.GetPath(), false)) {
+		if (!local_filesys.begin_find_files(fz::to_native(m_dir.GetPath()), false)) {
 			SetItemCount(1);
 			return false;
 		}
@@ -388,12 +390,14 @@ regular_dir:
 		int num = m_fileData.size();
 		CLocalFileData data;
 		bool wasLink;
-		while (local_filesys.get_next_file(data.name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
-			if (data.name.empty()) {
+		fz::native_string name;
+		while (local_filesys.get_next_file(name, wasLink, data.dir, &data.size, &data.time, &data.attributes)) {
+			if (name.empty()) {
 				wxGetApp().DisplayEncodingWarning();
 				continue;
 			}
 
+			data.name = name;
 			m_fileData.push_back(data);
 			if (!filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
 				if (data.dir)
@@ -928,7 +932,7 @@ wxString CLocalListView::MenuMkdir()
 
 void CLocalListView::OnMenuDelete(wxCommandEvent&)
 {
-	std::list<wxString> pathsToDelete;
+	std::list<fz::native_string> pathsToDelete;
 	long item = -1;
 	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		if (!item && m_hasParent)
@@ -941,10 +945,12 @@ void CLocalListView::OnMenuDelete(wxCommandEvent&)
 		if (data->comparison_flags == fill)
 			continue;
 
-		pathsToDelete.push_back(m_dir.GetPath() + data->name);
+		pathsToDelete.push_back(fz::to_native(m_dir.GetPath() + data->name));
 	}
-	if (!fz::local_filesys::RecursiveDelete(pathsToDelete, this))
+	gui_recursive_remove rmd(this);
+	if (!rmd.remove(pathsToDelete)) {
 		wxGetApp().DisplayEncodingWarning();
+	}
 
 	m_pState->SetLocalDir(m_dir);
 }
@@ -1316,7 +1322,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	CLocalFileData data;
 
 	bool wasLink;
-	enum fz::local_filesys::type type = fz::local_filesys::GetFileInfo(m_dir.GetPath() + file, wasLink, &data.size, &data.time, &data.attributes);
+	enum fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(m_dir.GetPath() + file), wasLink, &data.size, &data.time, &data.attributes);
 	if (type == fz::local_filesys::unknown)
 		return;
 

@@ -4,12 +4,12 @@
 #include "directorylistingparser.h"
 #include "engineprivate.h"
 #include "pathcache.h"
-#include "local_filesys.h"
 #include "proxy.h"
 #include "servercapabilities.h"
 #include "sftpcontrolsocket.h"
 
 #include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/process.hpp>
 
 #include <wx/filename.h>
@@ -1597,7 +1597,7 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	int64_t size;
 	bool isLink;
-	if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file)
+	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
 		pData->localFileSize = size;
 
 	pData->opState = filetransfer_waitcwd;
@@ -1842,12 +1842,12 @@ int CSftpControlSocket::FileTransferParseResponse(int result, const wxString& re
 		if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS)) {
 			if (pData->download) {
 				if (pData->fileTime.empty()) {
-					if (!fz::local_filesys::set_modification_time(pData->localFile, pData->fileTime))
+					if (!fz::local_filesys::set_modification_time(fz::to_native(pData->localFile), pData->fileTime))
 						LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Could not set modification time"));
 				}
 			}
 			else {
-				pData->fileTime = fz::local_filesys::get_modification_time(pData->localFile);
+				pData->fileTime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 				if (pData->fileTime.empty()) {
 					pData->opState = filetransfer_chmtime;
 					return SendNextCommand();

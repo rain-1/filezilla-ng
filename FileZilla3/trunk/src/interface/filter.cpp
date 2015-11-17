@@ -4,11 +4,12 @@
 #include "filezillaapp.h"
 #include "inputdialog.h"
 #include "ipcmutex.h"
-#include "local_filesys.h"
 #include "Mainfrm.h"
 #include "Options.h"
 #include "state.h"
 #include "xmlfunctions.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 #include <wx/regex.h>
 
@@ -959,7 +960,7 @@ void CFilterManager::LoadFilters()
 	CInterProcessMutex mutex(MUTEX_FILTERS);
 
 	wxString file(wxGetApp().GetSettingsFile(_T("filters")));
-	if (fz::local_filesys::GetSize(file) < 1) {
+	if (fz::local_filesys::get_size(fz::to_native(file)) < 1) {
 		file = wxGetApp().GetResourceDir().GetPath() + _T("defaultfilters.xml");
 	}
 

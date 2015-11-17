@@ -7,10 +7,11 @@
 #include <wx/dnd.h>
 #include "dndobjects.h"
 #include "inputdialog.h"
-#include "local_filesys.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"
 #include "Options.h"
+
+#include <libfilezilla/local_filesys.hpp>
 
 #ifdef __WXMSW__
 #include <wx/msw/registry.h>
@@ -431,7 +432,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 
 	{
 		wxLogNull log;
-		if (!local_filesys.begin_find_files(dirname, true)) {
+		if (!local_filesys.begin_find_files(fz::to_native(dirname), true)) {
 			if (!knownSubdir.empty()) {
 				wxTreeItemId item = GetSubdir(parent, knownSubdir);
 				if (item != wxTreeItemId())
@@ -466,7 +467,7 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 
 	bool matchedKnown = false;
 
-	wxString file;
+	fz::native_string file;
 	bool wasLink;
 	int attributes;
 	bool is_dir;
@@ -478,21 +479,22 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 			wxGetApp().DisplayEncodingWarning();
 			continue;
 		}
+		wxString file_wx = file;
 
-		wxString fullName = dirname + file;
+		wxString fullName = dirname + file_wx;
 #ifdef __WXMSW__
-		if (file.CmpNoCase(knownSubdir))
+		if (file_wx.CmpNoCase(knownSubdir))
 #else
-		if (file != knownSubdir)
+		if (file_wx != knownSubdir)
 #endif
 		{
-			if (filter.FilenameFiltered(file, dirname, true, size, true, attributes, date))
+			if (filter.FilenameFiltered(file_wx, dirname, true, size, true, attributes, date))
 				continue;
 		}
 		else
 			matchedKnown = true;
 
-		wxTreeItemId item = AppendItem(parent, file, GetIconIndex(iconType::dir, fullName),
+		wxTreeItemId item = AppendItem(parent, file_wx, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
 				-1
 #else
@@ -526,10 +528,10 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	CFilterManager filter;
 
 	fz::local_filesys local_filesys;
-	if (!local_filesys.begin_find_files(dirname, true))
+	if (!local_filesys.begin_find_files(fz::to_native(dirname), true))
 		return wxString();
 
-	wxString file;
+	fz::native_string file;
 	bool wasLink;
 	int attributes;
 	bool is_dir;
@@ -542,10 +544,11 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 			continue;
 		}
 
-		if (filter.FilenameFiltered(file, dirname, true, size, true, attributes, date))
+		wxString file_wx = file;
+		if (filter.FilenameFiltered(file_wx, dirname, true, size, true, attributes, date))
 			continue;
 
-		return file;
+		return file_wx;
 	}
 
 	return wxString();
@@ -555,17 +558,14 @@ wxTreeItemId CLocalTreeView::MakeSubdirs(wxTreeItemId parent, wxString dirname, 
 {
 	const wxString& separator = wxFileName::GetPathSeparator();
 
-	while (!subDir.empty())
-	{
+	while (!subDir.empty()) {
 		int pos = subDir.Find(separator);
 		wxString segment;
-		if (pos == -1)
-		{
+		if (pos == -1) {
 			segment = subDir;
 			subDir = _T("");
 		}
-		else
-		{
+		else {
 			segment = subDir.Left(pos);
 			subDir = subDir.Mid(pos + 1);
 		}
@@ -712,7 +712,7 @@ void CLocalTreeView::RefreshListing()
 
 		// Step 1: Check if directory exists
 		fz::local_filesys local_filesys;
-		if (!local_filesys.begin_find_files(dir.dir, true)) {
+		if (!local_filesys.begin_find_files(fz::to_native(dir.dir), true)) {
 			// Dir does exist (listed in parent) but may not be accessible.
 			// Recurse into children anyhow, they might be accessible again.
 			wxTreeItemIdValue value;
@@ -728,7 +728,7 @@ void CLocalTreeView::RefreshListing()
 		// Step 2: Enumerate subdirectories on disk and sort them
 		std::vector<wxString> dirs;
 
-		wxString file;
+		fz::native_string file;
 		static int64_t const size(-1);
 		bool was_link;
 		bool is_dir;
@@ -740,10 +740,11 @@ void CLocalTreeView::RefreshListing()
 				continue;
 			}
 
-			if (filter.FilenameFiltered(file, dir.dir, true, size, true, attributes, date))
+			wxString file_wx = file;
+			if (filter.FilenameFiltered(file_wx, dir.dir, true, size, true, attributes, date))
 				continue;
 
-			dirs.push_back(file);
+			dirs.push_back(file_wx);
 		}
 		auto const& sortFunc = CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode);
 		std::sort(dirs.begin(), dirs.end(), [&](auto const& lhs, auto const& rhs) { return sortFunc(lhs, rhs) < 0; });
@@ -1179,8 +1180,10 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 	if (!local_path.HasParent() || !local_path.IsWriteable())
 		return;
 
-	if (!fz::local_filesys::RecursiveDelete(path, this))
+	gui_recursive_remove rmd(this);
+	if (!rmd.remove(fz::to_native(path))) {
 		wxGetApp().DisplayEncodingWarning();
+	}
 
 	wxTreeItemId item = GetSelection();
 	while (item && item != m_contextMenuItem)
@@ -1363,9 +1366,9 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 			enum fz::local_filesys::type type;
 			fz::datetime date;
 			if (!path.empty() && path.Last() == fz::local_filesys::path_separator)
-				type = fz::local_filesys::GetFileInfo(path + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+				type = fz::local_filesys::get_file_info(fz::to_native(path + pData->m_known_subdir), wasLink, 0, &date, &attributes);
 			else
-				type = fz::local_filesys::GetFileInfo(path + fz::local_filesys::path_separator + pData->m_known_subdir, wasLink, 0, &date, &attributes);
+				type = fz::local_filesys::get_file_info(fz::to_native(path + fz::local_filesys::path_separator + pData->m_known_subdir), wasLink, 0, &date, &attributes);
 			if (type == fz::local_filesys::dir) {
 				CFilterManager filter;
 				if (!filter.FilenameFiltered(pData->m_known_subdir, path, true, size, true, attributes, date))

@@ -2,7 +2,6 @@
 #include "ControlSocket.h"
 #include "directorycache.h"
 #include "engineprivate.h"
-#include "local_filesys.h"
 #include "local_path.h"
 #include "logging_private.h"
 #include "proxy.h"
@@ -10,6 +9,7 @@
 #include "sizeformatting_base.h"
 
 #include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/local_filesys.hpp>
 
 #include <wx/file.h>
 #include <wx/filename.h>
@@ -409,7 +409,7 @@ int CControlSocket::CheckOverwriteFile()
 	else
 		pNotification->canResume = false;
 
-	pNotification->localTime = fz::local_filesys::get_modification_time(pData->localFile);
+	pNotification->localTime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 
 	if (pData->fileTime.empty())
 		pNotification->remoteTime = pData->fileTime;
@@ -1214,7 +1214,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 
 			int64_t size;
 			bool isLink;
-			if (fz::local_filesys::GetFileInfo(pData->localFile, isLink, &size, 0, 0) == fz::local_filesys::file)
+			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
 				pData->localFileSize = size;
 			else
 				pData->localFileSize = -1;
