@@ -708,15 +708,13 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	delete [] from;
 #else
 	wxString error;
-	for (unsigned int i = 0; i < files.Count(); i++)
-	{
-		const wxString& file(files[i]);
+	for (unsigned int i = 0; i < files.Count(); ++i) {
+		wxString const& file(files[i]);
 
 		int64_t size;
 		bool is_link;
-		fz::local_filesys::type type = fz::local_filesys::GetFileInfo(file, is_link, &size, 0, 0);
-		if (type == fz::local_filesys::file)
-		{
+		fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(file), is_link, &size, 0, 0);
+		if (type == fz::local_filesys::file) {
 			wxString name;
 			CLocalPath sourcePath(file, &name);
 			if (name.empty())
@@ -730,21 +728,18 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 			else
 				wxRenameFile(file, target);
 		}
-		else if (type == fz::local_filesys::dir)
-		{
+		else if (type == fz::local_filesys::dir) {
 			CLocalPath sourcePath(file);
 			if (sourcePath == path || sourcePath.GetParent() == path)
 				continue;
-			if (sourcePath.IsParentOf(path))
-			{
+			if (sourcePath.IsParentOf(path)) {
 				error = _("A directory cannot be dragged into one of its subdirectories.");
 				continue;
 			}
 
 			if (copy)
 				RecursiveCopy(sourcePath, path);
-			else
-			{
+			else {
 				if (!sourcePath.HasParent())
 					continue;
 				wxRenameFile(file, path.GetPath() + sourcePath.GetLastSegment());
