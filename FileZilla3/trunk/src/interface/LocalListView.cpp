@@ -948,9 +948,7 @@ void CLocalListView::OnMenuDelete(wxCommandEvent&)
 		pathsToDelete.push_back(fz::to_native(m_dir.GetPath() + data->name));
 	}
 	gui_recursive_remove rmd(this);
-	if (!rmd.remove(pathsToDelete)) {
-		wxGetApp().DisplayEncodingWarning();
-	}
+	rmd.remove(pathsToDelete);
 
 	m_pState->SetLocalDir(m_dir);
 }

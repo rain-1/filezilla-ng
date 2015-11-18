@@ -1181,9 +1181,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 		return;
 
 	gui_recursive_remove rmd(this);
-	if (!rmd.remove(fz::to_native(path))) {
-		wxGetApp().DisplayEncodingWarning();
-	}
+	rmd.remove(fz::to_native(path));
 
 	wxTreeItemId item = GetSelection();
 	while (item && item != m_contextMenuItem)
