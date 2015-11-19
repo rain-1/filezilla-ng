@@ -73,7 +73,7 @@ public:
 
 protected:
 	DECLARE_EVENT_TABLE()
-	virtual void OnPaint(wxPaintEvent& event)
+	virtual void OnPaint(wxPaintEvent&)
 	{
 		CalcSize();
 
@@ -216,7 +216,7 @@ bool COptionsPageThemes::DisplayTheme(const wxString& theme)
 	return !failure;
 }
 
-void COptionsPageThemes::OnThemeChange(wxCommandEvent& event)
+void COptionsPageThemes::OnThemeChange(wxCommandEvent&)
 {
 	wxChoice* pTheme = XRCCTRL(*this, "ID_THEME", wxChoice);
 

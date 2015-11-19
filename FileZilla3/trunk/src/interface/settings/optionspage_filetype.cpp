@@ -119,7 +119,7 @@ void COptionsPageFiletype::SetCtrlState()
 	FindWindow(XRCID("ID_ADD"))->Enable( !GetText(XRCID("ID_EXTENSION")).empty() );
 }
 
-void COptionsPageFiletype::OnRemove(wxCommandEvent& event)
+void COptionsPageFiletype::OnRemove(wxCommandEvent&)
 {
 	wxListCtrl* pListCtrl = XRCCTRL(*this, "ID_EXTENSIONS", wxListCtrl);
 	wxASSERT(pListCtrl);
@@ -134,11 +134,10 @@ void COptionsPageFiletype::OnRemove(wxCommandEvent& event)
 	SetCtrlState();
 }
 
-void COptionsPageFiletype::OnAdd(wxCommandEvent& event)
+void COptionsPageFiletype::OnAdd(wxCommandEvent&)
 {
 	wxString ext = GetText(XRCID("ID_EXTENSION"));
-	if (ext.empty())
-	{
+	if (ext.empty()) {
 		wxBell();
 		return;
 	}
@@ -161,12 +160,12 @@ void COptionsPageFiletype::OnAdd(wxCommandEvent& event)
 	SetCtrlState();
 }
 
-void COptionsPageFiletype::OnTextChanged(wxCommandEvent& event)
+void COptionsPageFiletype::OnTextChanged(wxCommandEvent&)
 {
 	SetCtrlState();
 }
 
-void COptionsPageFiletype::OnSelChanged(wxListEvent& event)
+void COptionsPageFiletype::OnSelChanged(wxListEvent&)
 {
 	SetCtrlState();
 }

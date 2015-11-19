@@ -143,12 +143,12 @@ void COptionsPageFtpProxy::SetCtrlState()
 	pTextCtrl->ChangeValue(loginSequence);
 }
 
-void COptionsPageFtpProxy::OnProxyTypeChanged(wxCommandEvent& event)
+void COptionsPageFtpProxy::OnProxyTypeChanged(wxCommandEvent&)
 {
 	SetCtrlState();
 }
 
-void COptionsPageFtpProxy::OnLoginSequenceChanged(wxCommandEvent& event)
+void COptionsPageFtpProxy::OnLoginSequenceChanged(wxCommandEvent&)
 {
 	XRCCTRL(*this, "ID_PROXYTYPE_CUSTOM", wxRadioButton)->SetValue(true);
 }

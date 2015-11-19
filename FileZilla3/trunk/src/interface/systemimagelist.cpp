@@ -185,6 +185,8 @@ int CSystemImageList::GetIconIndex(iconType type, const wxString& fileName /*=_T
 		return icon;
 	}
 #else
+	(void)physical;
+
 	int icon;
 	switch (type)
 	{

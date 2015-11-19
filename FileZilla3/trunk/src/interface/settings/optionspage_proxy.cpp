@@ -101,7 +101,7 @@ void COptionsPageProxy::SetCtrlState()
 	XRCCTRL(*this, "ID_PROXY_PASS", wxTextCtrl)->Enable(enabled && enabled_auth);
 }
 
-void COptionsPageProxy::OnProxyTypeChanged(wxCommandEvent& event)
+void COptionsPageProxy::OnProxyTypeChanged(wxCommandEvent&)
 {
 	SetCtrlState();
 }

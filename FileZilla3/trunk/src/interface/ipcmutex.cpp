@@ -55,7 +55,7 @@ bool CInterProcessMutex::Lock()
 	if (m_fd >= 0)
 	{
 		// Lock 1 byte region in the lockfile. m_type specifies the byte to lock.
-		struct flock f = {0};
+		struct flock f = {};
 		f.l_type = F_WRLCK;
 		f.l_whence = SEEK_SET;
 		f.l_start = m_type;
@@ -99,7 +99,7 @@ int CInterProcessMutex::TryLock()
 	if (m_fd >= 0)
 	{
 		// Try to lock 1 byte region in the lockfile. m_type specifies the byte to lock.
-		struct flock f = {0};
+		struct flock f = {};
 		f.l_type = F_WRLCK;
 		f.l_whence = SEEK_SET;
 		f.l_start = m_type;
@@ -138,7 +138,7 @@ void CInterProcessMutex::Unlock()
 	if (m_fd >= 0)
 	{
 		// Unlock region specified by m_type.
-		struct flock f = {0};
+		struct flock f = {};
 		f.l_type = F_UNLCK;
 		f.l_whence = SEEK_SET;
 		f.l_start = m_type;

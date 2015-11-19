@@ -108,7 +108,7 @@ void COptionsPageConnectionActive::SetCtrlState()
 	FindWindow(XRCID("ID_NOEXTERNALONLOCAL"))->Enable(mode != 0);
 }
 
-void COptionsPageConnectionActive::OnRadioOrCheckEvent(wxCommandEvent& event)
+void COptionsPageConnectionActive::OnRadioOrCheckEvent(wxCommandEvent&)
 {
 	SetCtrlState();
 }

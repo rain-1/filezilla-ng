@@ -49,19 +49,16 @@ CPowerManagement::~CPowerManagement()
 #endif
 }
 
-void CPowerManagement::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CPowerManagement::OnStateChange(CState*, t_statechange_notifications, wxString const&, void const*)
 {
-	if (m_pMainFrame->GetQueue()->IsActive())
-	{
+	if (m_pMainFrame->GetQueue()->IsActive()) {
 		DoSetBusy();
 		return;
 	}
 
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
-	{
-		if (!(*iter)->IsRemoteIdle())
-		{
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter) {
+		if (!(*iter)->IsRemoteIdle()) {
 			DoSetBusy();
 			return;
 		}

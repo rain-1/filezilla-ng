@@ -23,7 +23,7 @@ CRecursiveOperation::~CRecursiveOperation()
 	}
 }
 
-void CRecursiveOperation::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2)
+void CRecursiveOperation::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
 		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
@@ -238,7 +238,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 			if (entry.name != dir.restrict)
 				continue;
 		}
-		else if (filter.FilenameFiltered(m_filters, entry.name, path, entry.is_dir(), entry.size, false, 0, entry.time))
+		else if (filter.FilenameFiltered(m_filters, entry.name, path, entry.is_dir(), entry.size, 0, entry.time))
 			continue;
 
 		if (!entry.is_dir()) {

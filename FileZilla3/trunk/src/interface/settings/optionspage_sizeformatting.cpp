@@ -70,18 +70,18 @@ bool COptionsPageSizeFormatting::Validate()
 	return true;
 }
 
-void COptionsPageSizeFormatting::OnRadio(wxCommandEvent& event)
+void COptionsPageSizeFormatting::OnRadio(wxCommandEvent&)
 {
 	UpdateControls();
 	UpdateExamples();
 }
 
-void COptionsPageSizeFormatting::OnCheck(wxCommandEvent& event)
+void COptionsPageSizeFormatting::OnCheck(wxCommandEvent&)
 {
 	UpdateExamples();
 }
 
-void COptionsPageSizeFormatting::OnSpin(wxSpinEvent& event)
+void COptionsPageSizeFormatting::OnSpin(wxSpinEvent&)
 {
 	UpdateExamples();
 }

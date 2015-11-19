@@ -906,7 +906,7 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 	return true;
 }
 
-void CSiteManagerDialog::OnNewFolder(wxCommandEvent&event)
+void CSiteManagerDialog::OnNewFolder(wxCommandEvent&)
 {
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
@@ -1204,7 +1204,7 @@ void CSiteManagerDialog::OnEndLabelEdit(wxTreeEvent& event)
 	pTree->SortChildren(parent);
 }
 
-void CSiteManagerDialog::OnRename(wxCommandEvent& event)
+void CSiteManagerDialog::OnRename(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -1217,7 +1217,7 @@ void CSiteManagerDialog::OnRename(wxCommandEvent& event)
 	pTree->EditLabel(item);
 }
 
-void CSiteManagerDialog::OnDelete(wxCommandEvent& event)
+void CSiteManagerDialog::OnDelete(wxCommandEvent&)
 {
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)
@@ -1264,12 +1264,12 @@ void CSiteManagerDialog::OnSelChanging(wxTreeEvent& event)
 	UpdateItem();
 }
 
-void CSiteManagerDialog::OnSelChanged(wxTreeEvent& event)
+void CSiteManagerDialog::OnSelChanged(wxTreeEvent&)
 {
 	SetCtrlState();
 }
 
-void CSiteManagerDialog::OnNewSite(wxCommandEvent& event)
+void CSiteManagerDialog::OnNewSite(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -1465,7 +1465,7 @@ bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
 	return true;
 }
 
-void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
+void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -1497,7 +1497,7 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent& event)
 		}
 	}
 }
-void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
+void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -1517,7 +1517,7 @@ void CSiteManagerDialog::OnRemoteDirBrowse(wxCommandEvent& event)
 	}
 }
 
-void CSiteManagerDialog::OnItemActivated(wxTreeEvent& event)
+void CSiteManagerDialog::OnItemActivated(wxTreeEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree)
@@ -1750,13 +1750,13 @@ void CSiteManagerDialog::SetCtrlState()
 #endif
 }
 
-void CSiteManagerDialog::OnCharsetChange(wxCommandEvent& event)
+void CSiteManagerDialog::OnCharsetChange(wxCommandEvent&)
 {
 	bool checked = xrc_call(*this, "ID_CHARSET_CUSTOM", &wxRadioButton::GetValue);
 	xrc_call(*this, "ID_ENCODING", &wxTextCtrl::Enable, checked);
 }
 
-void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent& event)
+void CSiteManagerDialog::OnProtocolSelChanged(wxCommandEvent&)
 {
 	SetControlVisibility(GetProtocol(), GetLogonType());
 }
@@ -1802,7 +1802,7 @@ void CSiteManagerDialog::SetControlVisibility(ServerProtocol protocol, LogonType
 	}
 }
 
-void CSiteManagerDialog::OnCopySite(wxCommandEvent& event)
+void CSiteManagerDialog::OnCopySite(wxCommandEvent&)
 {
 	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
 	if (!pTree)

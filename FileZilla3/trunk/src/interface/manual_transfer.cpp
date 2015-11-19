@@ -212,7 +212,7 @@ void CManualTransfer::DisplayServer()
 	}
 }
 
-void CManualTransfer::OnLocalChanged(wxCommandEvent& event)
+void CManualTransfer::OnLocalChanged(wxCommandEvent&)
 {
 	if (XRCCTRL(*this, "ID_DOWNLOAD", wxRadioButton)->GetValue())
 		return;
@@ -224,12 +224,12 @@ void CManualTransfer::OnLocalChanged(wxCommandEvent& event)
 	SetAutoAsciiState();
 }
 
-void CManualTransfer::OnRemoteChanged(wxCommandEvent& event)
+void CManualTransfer::OnRemoteChanged(wxCommandEvent&)
 {
 	SetAutoAsciiState();
 }
 
-void CManualTransfer::OnLocalBrowse(wxCommandEvent& event)
+void CManualTransfer::OnLocalBrowse(wxCommandEvent&)
 {
 	int flags;
 	wxString title;
@@ -284,7 +284,7 @@ void CManualTransfer::OnServerTypeChanged(wxCommandEvent& event)
 	SetServerState();
 }
 
-void CManualTransfer::OnOK(wxCommandEvent& event)
+void CManualTransfer::OnOK(wxCommandEvent&)
 {
 	if (!UpdateServer())
 		return;
@@ -510,7 +510,7 @@ bool CManualTransfer::VerifyServer()
 	return true;
 }
 
-void CManualTransfer::OnSelectSite(wxCommandEvent& event)
+void CManualTransfer::OnSelectSite(wxCommandEvent&)
 {
 	std::unique_ptr<wxMenu> pMenu = CSiteManager::GetSitesMenu();
 	if (pMenu) {

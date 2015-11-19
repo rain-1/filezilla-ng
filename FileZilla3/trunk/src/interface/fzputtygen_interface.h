@@ -3,7 +3,7 @@
 
 #include <wx/process.h>
 
-class CFZPuttyGenInterface
+class CFZPuttyGenInterface final
 {
 public:
 	CFZPuttyGenInterface(wxWindow* parent);
@@ -20,12 +20,12 @@ protected:
 	int NeedsConversion(wxString keyFile, bool silent);
 
 	// return -1 on error
-	int IsKeyFileEncrypted(wxString keyFile, bool silent);
+	int IsKeyFileEncrypted();
 
 	wxProcess* m_pProcess{};
 	bool m_initialized{};
 	wxWindow* m_parent;
-	
+
 	enum ReplyCode {
 		success,
 		error,

@@ -546,7 +546,7 @@ void CNetConfWizard::ParseResponse(const char* line)
 	SendNextCommand();
 }
 
-void CNetConfWizard::PrintMessage(const wxString& msg, int type)
+void CNetConfWizard::PrintMessage(const wxString& msg, int)
 {
 	XRCCTRL(*this, "ID_RESULTS", wxTextCtrl)->AppendText(msg + _T("\n"));
 }
@@ -828,7 +828,7 @@ void CNetConfWizard::SendNextCommand()
 	}
 }
 
-void CNetConfWizard::OnRestart(wxCommandEvent& event)
+void CNetConfWizard::OnRestart(wxCommandEvent&)
 {
 	ResetTest();
 	ShowPage(m_pages[0], false);
@@ -851,10 +851,9 @@ void CNetConfWizard::ResetTest()
 		XRCCTRL(*this, "ID_RESULTS", wxTextCtrl)->SetLabel(_T(""));
 }
 
-void CNetConfWizard::OnFinish(wxWizardEvent& event)
+void CNetConfWizard::OnFinish(wxWizardEvent&)
 {
-	if (m_testResult != successful)
-	{
+	if (m_testResult != successful) {
 		if (wxMessageBoxEx(_("The test did not succeed. Do you really want to save the settings?"), _("Save settings?"), wxYES_NO | wxICON_QUESTION) != wxYES)
 			return;
 	}

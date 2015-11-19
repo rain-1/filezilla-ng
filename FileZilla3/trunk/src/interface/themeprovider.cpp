@@ -231,7 +231,7 @@ std::vector<wxString> CThemeProvider::GetThemeSizes(const wxString& themePath)
 	return sizes;
 }
 
-wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient& client /*=wxART_OTHER*/)
+wxIconBundle CThemeProvider::GetIconBundle(const wxArtID& id, const wxArtClient&)
 {
 	wxIconBundle iconBundle;
 
@@ -289,7 +289,7 @@ wxString CThemeProvider::GetThemePath()
 	return resourceDir.GetPath();
 }
 
-void CThemeProvider::OnOptionsChanged(changed_options_t const& options)
+void CThemeProvider::OnOptionsChanged(changed_options_t const&)
 {
 	m_themePath = GetThemePath();
 

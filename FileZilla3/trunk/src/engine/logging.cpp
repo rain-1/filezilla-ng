@@ -23,8 +23,8 @@ wxString CLogging::m_file;
 int CLogging::m_refcount = 0;
 fz::mutex CLogging::mutex_(false);
 
-thread_local int CLogging::debug_level_{0};
-thread_local int CLogging::raw_listing_{0};
+thread_local int CLogging::debug_level_{};
+thread_local int CLogging::raw_listing_{};
 
 CLogging::CLogging(CFileZillaEnginePrivate & engine)
 	: engine_(engine)
@@ -221,7 +221,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 			struct stat buf;
 			int rc = fstat(m_log_fd, &buf);
 			while (!rc && buf.st_size > m_max_size) {
-				struct flock lock = {0};
+				struct flock lock = {};
 				lock.l_type = F_WRLCK;
 				lock.l_whence = SEEK_SET;
 				lock.l_start = 0;

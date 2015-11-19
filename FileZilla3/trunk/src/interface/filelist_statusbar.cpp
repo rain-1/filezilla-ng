@@ -161,7 +161,7 @@ void CFilelistStatusBar::UnselectDirectory()
 	TriggerUpdateText();
 }
 
-void CFilelistStatusBar::OnTimer(wxTimerEvent& event)
+void CFilelistStatusBar::OnTimer(wxTimerEvent&)
 {
 	UpdateText();
 }
@@ -224,7 +224,7 @@ void CFilelistStatusBar::SetConnected(bool connected)
 	TriggerUpdateText();
 }
 
-void CFilelistStatusBar::OnOptionsChanged(changed_options_t const& options)
+void CFilelistStatusBar::OnOptionsChanged(changed_options_t const&)
 {
 	TriggerUpdateText();
 }

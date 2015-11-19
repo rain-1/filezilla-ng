@@ -30,7 +30,7 @@ protected:
 
 	static CPowerManagement* m_pPowerManagement;
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, wxString const& data, void const* data2);
 
 	void DoSetBusy();
 	void DoSetIdle();

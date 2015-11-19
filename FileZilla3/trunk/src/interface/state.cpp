@@ -868,7 +868,7 @@ bool CState::IsRemoteIdle(bool ignore_recursive) const
 	return m_pCommandQueue->Idle(ignore_recursive ? CCommandQueue::normal : CCommandQueue::any);
 }
 
-void CState::ListingFailed(int error)
+void CState::ListingFailed(int)
 {
 	if (m_sync_browse.is_changing && !m_sync_browse.target_path.empty()) {
 		wxDialogEx dlg;

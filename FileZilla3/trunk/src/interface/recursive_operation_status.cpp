@@ -57,7 +57,7 @@ bool CRecursiveOperationStatus::Show(bool show)
 	return ret;
 }
 
-void CRecursiveOperationStatus::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifications, const wxString&, const void*)
 {
 	auto const mode = m_pState->GetRecursiveOperationHandler()->GetOperationMode();
 	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
@@ -120,7 +120,7 @@ void CRecursiveOperationStatus::OnPaint(wxPaintEvent&)
 	dc.DrawLine(wxPoint(0, 0), wxPoint(s.GetWidth(), 0));
 }
 
-void CRecursiveOperationStatus::OnCancel(wxCommandEvent& ev)
+void CRecursiveOperationStatus::OnCancel(wxCommandEvent&)
 {
 	m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
 	m_pState->RefreshRemote();

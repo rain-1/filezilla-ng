@@ -691,7 +691,7 @@ public:
 	DECLARE_EVENT_TABLE()
 
 protected:
-	void OnUp(wxCommandEvent& event)
+	void OnUp(wxCommandEvent&)
 	{
 		wxCheckListBox* pListBox = XRCCTRL(*this, "ID_ACTIVE", wxCheckListBox);
 		int sel = pListBox->GetSelection();
@@ -714,7 +714,7 @@ protected:
 		OnSelChanged(evt);
 	}
 
-	void OnDown(wxCommandEvent& event)
+	void OnDown(wxCommandEvent&)
 	{
 		wxCheckListBox* pListBox = XRCCTRL(*this, "ID_ACTIVE", wxCheckListBox);
 		int sel = pListBox->GetSelection();
@@ -739,7 +739,7 @@ protected:
 		OnSelChanged(evt);
 	}
 
-	void OnSelChanged(wxCommandEvent& event)
+	void OnSelChanged(wxCommandEvent&)
 	{
 		wxCheckListBox* pListBox = XRCCTRL(*this, "ID_ACTIVE", wxCheckListBox);
 		int sel = pListBox->GetSelection();
@@ -1056,12 +1056,12 @@ void wxListCtrlEx::OnEndLabelEdit(wxListEvent& event)
 		event.Veto();
 }
 
-bool wxListCtrlEx::OnBeginRename(const wxListEvent& event)
+bool wxListCtrlEx::OnBeginRename(const wxListEvent&)
 {
 	return false;
 }
 
-bool wxListCtrlEx::OnAcceptRename(const wxListEvent& event)
+bool wxListCtrlEx::OnAcceptRename(const wxListEvent&)
 {
 	return false;
 }

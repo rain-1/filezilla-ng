@@ -118,7 +118,7 @@ void CClearPrivateDataDialog::Run()
 	}
 }
 
-void CClearPrivateDataDialog::OnTimer(wxTimerEvent& event)
+void CClearPrivateDataDialog::OnTimer(wxTimerEvent&)
 {
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
 

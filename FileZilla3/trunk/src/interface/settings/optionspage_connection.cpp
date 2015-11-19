@@ -48,7 +48,7 @@ bool COptionsPageConnection::Validate()
 	return true;
 }
 
-void COptionsPageConnection::OnWizard(wxCommandEvent& event)
+void COptionsPageConnection::OnWizard(wxCommandEvent&)
 {
 	CNetConfWizard wizard(GetParent(), m_pOptions, m_pOwner->GetEngineContext());
 	if (!wizard.Load())

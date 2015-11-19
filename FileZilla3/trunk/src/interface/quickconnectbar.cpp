@@ -139,7 +139,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	CRecentServerList::SetMostRecentServer(server);
 }
 
-void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent& event)
+void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent&)
 {
 	wxMenu* pMenu = new wxMenu;
 

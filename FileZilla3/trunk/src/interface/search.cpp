@@ -315,7 +315,7 @@ void CSearchDialog::Run()
 	}
 }
 
-void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
 		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
@@ -369,7 +369,7 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 	}
 }
 
-void CSearchDialog::OnSearch(wxCommandEvent& event)
+void CSearchDialog::OnSearch(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle()) {
 		wxBell();
@@ -423,7 +423,7 @@ void CSearchDialog::OnSearch(wxCommandEvent& event)
 	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_list, path, filters, true);
 }
 
-void CSearchDialog::OnStop(wxCommandEvent& event)
+void CSearchDialog::OnStop(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle()) {
 		m_pState->m_pCommandQueue->Cancel();
@@ -500,7 +500,7 @@ EVT_BUTTON(XRCID("ID_BROWSE"), CSearchDownloadDialog::OnBrowse)
 EVT_BUTTON(XRCID("wxID_OK"), CSearchDownloadDialog::OnOK)
 END_EVENT_TABLE()
 
-void CSearchDownloadDialog::OnBrowse(wxCommandEvent& event)
+void CSearchDownloadDialog::OnBrowse(wxCommandEvent&)
 {
 	wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
 
@@ -509,7 +509,7 @@ void CSearchDownloadDialog::OnBrowse(wxCommandEvent& event)
 		pText->ChangeValue(dlg.GetPath());
 }
 
-void CSearchDownloadDialog::OnOK(wxCommandEvent& event)
+void CSearchDownloadDialog::OnOK(wxCommandEvent&)
 {
 	wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
 

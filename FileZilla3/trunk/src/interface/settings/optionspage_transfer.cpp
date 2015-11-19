@@ -9,7 +9,7 @@ BEGIN_EVENT_TABLE(COptionsPageTransfer, COptionsPage)
 EVT_CHECKBOX(XRCID("ID_ENABLE_SPEEDLIMITS"), COptionsPageTransfer::OnToggleSpeedLimitEnable)
 END_EVENT_TABLE()
 
-void COptionsPageTransfer::OnToggleSpeedLimitEnable(wxCommandEvent& event)
+void COptionsPageTransfer::OnToggleSpeedLimitEnable(wxCommandEvent&)
 {
 	bool enable_speedlimits = GetCheck(XRCID("ID_ENABLE_SPEEDLIMITS"));
 	XRCCTRL(*this, "ID_DOWNLOADLIMIT", wxTextCtrl)->Enable(enable_speedlimits);
