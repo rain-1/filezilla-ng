@@ -79,32 +79,33 @@ static int GetAvailableUpdateMenuId()
 
 std::map<int, std::pair<std::function<void(wxTextEntry*)>, wxChar>> keyboardCommands;
 
+#ifdef __WXMAC__
 wxTextEntry* GetSpecialTextEntry(wxWindow* w, wxChar cmd)
 {
-#ifdef __WXMAC__
-	if( cmd == 'A' || cmd == 'V' ) {
+	if (cmd == 'A' || cmd == 'V') {
 		wxTextCtrl* text = dynamic_cast<wxTextCtrl*>(w);
-		if( text && text->GetWindowStyle() & wxTE_PASSWORD ) {
+		if (text && text->GetWindowStyle() & wxTE_PASSWORD) {
 			return text;
 		}
 	}
-	wxComboBox* combo = dynamic_cast<wxComboBox*>(w);
-	if( combo ) {
-		return combo;
-	}
-#endif
+	return dynamic_cast<wxComboBox*>(w);
+}
+#else
+wxTextEntry* GetSpecialTextEntry(wxWindow*, wxChar)
+{
 	return 0;
 }
+#endif
 
 bool HandleKeyboardCommand(wxCommandEvent& event, wxWindow& parent)
 {
 	auto const& it = keyboardCommands.find(event.GetId());
-	if( it == keyboardCommands.end() ) {
+	if (it == keyboardCommands.end()) {
 		return false;
 	}
 
 	wxTextEntry* e = GetSpecialTextEntry(parent.FindFocus(), it->second.second);
-	if( e ) {
+	if (e) {
 		it->second.first(e);
 	}
 	else {
@@ -1397,6 +1398,7 @@ void CMainFrame::OnSiteManager(wxCommandEvent& e)
 		return;
 	}
 #endif
+	(void)e;
 	OpenSiteManager();
 }
 
@@ -1537,7 +1539,7 @@ void CMainFrame::ShowDirectoryTree(bool local, bool show)
 	COptions::Get()->SetOption(local ? OPTION_SHOW_TREE_LOCAL : OPTION_SHOW_TREE_REMOTE, show);
 }
 
-void CMainFrame::OnToggleQueueView(wxCommandEvent& event)
+void CMainFrame::OnToggleQueueView(wxCommandEvent&)
 {
 	if (!m_pBottomSplitter)
 		return;
@@ -1614,19 +1616,19 @@ void CMainFrame::OnFilter(wxCommandEvent& event)
 }
 
 #if FZ_MANUALUPDATECHECK
-void CMainFrame::OnCheckForUpdates(wxCommandEvent& event)
+void CMainFrame::OnCheckForUpdates(wxCommandEvent&)
 {
-	if( !m_pUpdater ) {
+	if (!m_pUpdater) {
 		return;
 	}
 
 	update_dialog_timer_.Stop();
-	CUpdateDialog dlg( this, *m_pUpdater );
+	CUpdateDialog dlg(this, *m_pUpdater);
 	dlg.ShowModal();
 	update_dialog_timer_.Stop();
 }
 
-void CMainFrame::UpdaterStateChanged( UpdaterState s, build const& v )
+void CMainFrame::UpdaterStateChanged(UpdaterState s, build const& v)
 {
 #if FZ_AUTOUPDATECHECK
 	if( !m_pMenuBar ) {
@@ -2140,7 +2142,7 @@ void CMainFrame::OnActivate(wxActivateEvent& event)
 		m_pAsyncRequestQueue->TriggerProcessing();
 }
 
-void CMainFrame::OnToolbarComparison(wxCommandEvent& event)
+void CMainFrame::OnToolbarComparison(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -2249,7 +2251,7 @@ void CMainFrame::OnDropdownComparisonMode(wxCommandEvent& event)
 		pComparisonManager->CompareListings();
 }
 
-void CMainFrame::OnDropdownComparisonHide(wxCommandEvent& event)
+void CMainFrame::OnDropdownComparisonHide(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -2341,7 +2343,7 @@ void CMainFrame::ProcessCommandLine()
 	}
 }
 
-void CMainFrame::OnFilterRightclicked(wxCommandEvent& event)
+void CMainFrame::OnFilterRightclicked(wxCommandEvent&)
 {
 	const bool active = CFilterManager::HasActiveFilters();
 
@@ -2399,7 +2401,7 @@ WXLRESULT CMainFrame::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 }
 #endif
 
-void CMainFrame::OnSyncBrowse(wxCommandEvent& event)
+void CMainFrame::OnSyncBrowse(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -2473,7 +2475,7 @@ void CMainFrame::OnTaskBarClick(wxTaskBarIconEvent&)
 }
 
 #ifdef __WXGTK__
-void CMainFrame::OnTaskBarClick_Delayed(wxCommandEvent& event)
+void CMainFrame::OnTaskBarClick_Delayed(wxCommandEvent&)
 {
 	m_taskbar_is_uniconizing = false;
 }
@@ -2481,7 +2483,7 @@ void CMainFrame::OnTaskBarClick_Delayed(wxCommandEvent& event)
 
 #endif
 
-void CMainFrame::OnSearch(wxCommandEvent& event)
+void CMainFrame::OnSearch(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -2522,7 +2524,7 @@ void CMainFrame::PostInitialize()
 	}
 }
 
-void CMainFrame::OnMenuNewTab(wxCommandEvent& event)
+void CMainFrame::OnMenuNewTab(wxCommandEvent&)
 {
 	if (m_pContextControl)
 		m_pContextControl->CreateTab();

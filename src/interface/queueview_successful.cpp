@@ -18,7 +18,7 @@ CQueueViewSuccessful::CQueueViewSuccessful(CQueue* parent, int index)
 	m_autoClear = COptions::Get()->GetOptionVal(OPTION_QUEUE_SUCCESSFUL_AUTOCLEAR) ? true : false;
 }
 
-void CQueueViewSuccessful::OnContextMenu(wxContextMenuEvent& event)
+void CQueueViewSuccessful::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_QUEUE_SUCCESSFUL"));
 	if (!pMenu)

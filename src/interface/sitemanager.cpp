@@ -164,7 +164,7 @@ public:
 		return true;
 	}
 
-	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data)
+	virtual bool AddBookmark(const wxString&, std::unique_ptr<CSiteManagerItemData>)
 	{
 		return true;
 	}
@@ -221,19 +221,19 @@ protected:
 class CSiteManagerXmlHandler_Stats : public CSiteManagerXmlHandler
 {
 public:
-	virtual bool AddFolder(const wxString& name, bool)
+	virtual bool AddFolder(const wxString&, bool)
 	{
 		++directories_;
 		return true;
 	}
 
-	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data)
+	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site>)
 	{
 		++sites_;
 		return true;
 	}
 
-	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data)
+	virtual bool AddBookmark(const wxString&, std::unique_ptr<CSiteManagerItemData>)
 	{
 		++bookmarks_;
 		return true;

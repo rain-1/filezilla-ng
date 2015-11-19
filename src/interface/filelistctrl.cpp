@@ -260,7 +260,7 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 	m_focusItem = -1;
 #endif
 
-#if defined __WXGTK__ && !defined(__WXGTK3__)
+#if defined(__WXGTK__) && !defined(__WXGTK3__)
 	m_gtkEventCallbackProxy.reset(new CGtkEventCallbackProxy<CFileData>(this));
 
 	GtkWidget* widget = GetMainWindow()->GetConnectWidget();

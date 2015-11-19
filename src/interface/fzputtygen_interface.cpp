@@ -64,7 +64,7 @@ int CFZPuttyGenInterface::NeedsConversion(wxString keyFile, bool silent)
 	return reply == _T("convertible") ? 1 : 0;
 }
 
-int CFZPuttyGenInterface::IsKeyFileEncrypted(wxString keyFile, bool silent)
+int CFZPuttyGenInterface::IsKeyFileEncrypted()
 {
 	if (!Send(_T("encrypted")))
 		return -1;
@@ -89,15 +89,14 @@ bool CFZPuttyGenInterface::LoadKeyFile(wxString& keyFile, bool silent, wxString&
 	if (needs_conversion < 0) {
 		return false;
 	}
-	
-	wxString reply;
+
 	ReplyCode code;
 	if (needs_conversion) {
 		if (silent) {
 			return false;
 		}
 
-		int encrypted = IsKeyFileEncrypted(keyFile, silent);
+		int encrypted = IsKeyFileEncrypted();
 		if (encrypted < 0) {
 			return false;
 		}

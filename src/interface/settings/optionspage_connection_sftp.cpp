@@ -75,7 +75,7 @@ bool COptionsPageConnectionSFTP::SavePage()
 	return true;
 }
 
-void COptionsPageConnectionSFTP::OnAdd(wxCommandEvent& event)
+void COptionsPageConnectionSFTP::OnAdd(wxCommandEvent&)
 {
 	wxFileDialog dlg(this, _("Select file containing private key"), wxString(), wxString(), wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (dlg.ShowModal() != wxID_OK)
@@ -86,7 +86,7 @@ void COptionsPageConnectionSFTP::OnAdd(wxCommandEvent& event)
 	AddKey(dlg.GetPath(), false);
 }
 
-void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent& event)
+void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent&)
 {
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
 
@@ -136,12 +136,12 @@ void COptionsPageConnectionSFTP::SetCtrlState()
 	return;
 }
 
-void COptionsPageConnectionSFTP::OnSelChanged(wxListEvent& event)
+void COptionsPageConnectionSFTP::OnSelChanged(wxListEvent&)
 {
 	SetCtrlState();
 }
 
-void COptionsPageConnectionSFTP::OnEndProcess(wxProcessEvent& event)
+void COptionsPageConnectionSFTP::OnEndProcess(wxProcessEvent&)
 {
 	m_pFzpg->DeleteProcess();
 }

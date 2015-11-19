@@ -228,7 +228,7 @@ void CSettingsDialog::OnPageChanged(wxTreeEvent& event)
 	}
 }
 
-void CSettingsDialog::OnOK(wxCommandEvent& event)
+void CSettingsDialog::OnOK(wxCommandEvent&)
 {
 	for( auto const& page : m_pages ) {
 		if (!page.page->Validate()) {
@@ -247,7 +247,7 @@ void CSettingsDialog::OnOK(wxCommandEvent& event)
 	EndModal(wxID_OK);
 }
 
-void CSettingsDialog::OnCancel(wxCommandEvent& event)
+void CSettingsDialog::OnCancel(wxCommandEvent&)
 {
 	EndModal(wxID_CANCEL);
 

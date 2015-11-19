@@ -99,7 +99,7 @@ bool COptionsPageEdit::Validate()
 	return true;
 }
 
-void COptionsPageEdit::OnBrowseEditor(wxCommandEvent& event)
+void COptionsPageEdit::OnBrowseEditor(wxCommandEvent&)
 {
 	wxFileDialog dlg(this, _("Select default editor"), wxString(), wxString(),
 #ifdef __WXMSW__
@@ -142,7 +142,7 @@ void COptionsPageEdit::SetCtrlState()
 	XRCCTRL(*this, "ID_USEDEFAULT", wxRadioButton)->Enable(!GetRCheck(XRCID("ID_DEFAULT_NONE")) || GetRCheck(XRCID("ID_USEDEFAULT")));
 }
 
-void COptionsPageEdit::OnRadioButton(wxCommandEvent& event)
+void COptionsPageEdit::OnRadioButton(wxCommandEvent&)
 {
 	SetCtrlState();
 }

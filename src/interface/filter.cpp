@@ -126,12 +126,12 @@ void CFilterDialog::OnOkOrApply(wxCommandEvent& event)
 	}
 }
 
-void CFilterDialog::OnCancel(wxCommandEvent& event)
+void CFilterDialog::OnCancel(wxCommandEvent&)
 {
 	EndModal(wxID_CANCEL);
 }
 
-void CFilterDialog::OnEdit(wxCommandEvent& event)
+void CFilterDialog::OnEdit(wxCommandEvent&)
 {
 	CFilterEditDialog dlg;
 	if (!dlg.Create(this, m_filters, m_filterSets))
@@ -328,7 +328,7 @@ void CFilterDialog::OnFilterSelect(wxCommandEvent& event)
 	m_filterSets[0].remote[item] = remoteChecked;
 }
 
-void CFilterDialog::OnSaveAs(wxCommandEvent& event)
+void CFilterDialog::OnSaveAs(wxCommandEvent&)
 {
 	CInputDialog dlg;
 	dlg.Create(this, _("Enter name for filterset"), _("Please enter a unique name for this filter set"));
@@ -373,7 +373,7 @@ void CFilterDialog::OnSaveAs(wxCommandEvent& event)
 	GetSizer()->Fit(this);
 }
 
-void CFilterDialog::OnRename(wxCommandEvent& event)
+void CFilterDialog::OnRename(wxCommandEvent&)
 {
 	wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
 	int old_pos = pChoice->GetSelection();
@@ -433,7 +433,7 @@ void CFilterDialog::OnRename(wxCommandEvent& event)
 	GetSizer()->Fit(this);
 }
 
-void CFilterDialog::OnDeleteSet(wxCommandEvent& event)
+void CFilterDialog::OnDeleteSet(wxCommandEvent&)
 {
 	wxChoice* pChoice = XRCCTRL(*this, "ID_SETS", wxChoice);
 	int pos = pChoice->GetSelection();
@@ -593,7 +593,7 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 	return false;
 }
 
-bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const
+bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date) const
 {
 	for (auto const& filter : filters) {
 		if (FilenameFilteredByFilter(filter, name, path, dir, size, attributes, date))

@@ -26,7 +26,7 @@ CQueueViewFailed::CQueueViewFailed(CQueue* parent, int index, const wxString& ti
 {
 }
 
-void CQueueViewFailed::OnContextMenu(wxContextMenuEvent& event)
+void CQueueViewFailed::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_QUEUE_FAILED"));
 	if (!pMenu)
@@ -47,7 +47,7 @@ void CQueueViewFailed::OnContextMenu(wxContextMenuEvent& event)
 	delete pMenu;
 }
 
-void CQueueViewFailed::OnRemoveAll(wxCommandEvent& event)
+void CQueueViewFailed::OnRemoveAll(wxCommandEvent&)
 {
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
@@ -81,7 +81,7 @@ void CQueueViewFailed::OnRemoveAll(wxCommandEvent& event)
 		m_pQueue->SetSelection(0);
 }
 
-void CQueueViewFailed::OnRemoveSelected(wxCommandEvent& event)
+void CQueueViewFailed::OnRemoveSelected(wxCommandEvent&)
 {
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
@@ -240,7 +240,7 @@ bool CQueueViewFailed::RequeueServerItem(CServerItem* pServerItem)
 	return ret;
 }
 
-void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
+void CQueueViewFailed::OnRequeueSelected(wxCommandEvent&)
 {
 #ifndef __WXMSW__
 	// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
@@ -312,7 +312,7 @@ void CQueueViewFailed::OnRequeueSelected(wxCommandEvent& event)
 		wxMessageBoxEx(_("Not all items could be requeued for transfer."));
 }
 
-void CQueueViewFailed::OnRequeueAll(wxCommandEvent& event)
+void CQueueViewFailed::OnRequeueAll(wxCommandEvent&)
 {
 	bool ret = true;
 	while (!m_serverList.empty())

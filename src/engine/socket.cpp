@@ -1258,7 +1258,7 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 #if !defined(SO_NOSIGPIPE) && !defined(__WXMSW__)
 	// Some systems have neither. Need to block signal
 	struct sigaction old_action;
-	struct sigaction action = {0};
+	struct sigaction action = {};
 	action.sa_handler = SIG_IGN;
 	int signal_set = sigaction(SIGPIPE, &action, &old_action);
 #endif
@@ -1406,7 +1406,7 @@ int CSocket::Listen(address_family family, int port)
 	}
 
 	{
-		struct addrinfo hints = {0};
+		struct addrinfo hints = {};
 		hints.ai_family = m_family;
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_flags = AI_PASSIVE;

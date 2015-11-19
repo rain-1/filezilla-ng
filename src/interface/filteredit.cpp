@@ -30,7 +30,7 @@ CFilterEditDialog::~CFilterEditDialog()
 	}
 }
 
-void CFilterEditDialog::OnOK(wxCommandEvent& event)
+void CFilterEditDialog::OnOK(wxCommandEvent&)
 {
 	if (!Validate())
 		return;
@@ -52,7 +52,7 @@ void CFilterEditDialog::OnOK(wxCommandEvent& event)
 	EndModal(wxID_OK);
 }
 
-void CFilterEditDialog::OnCancel(wxCommandEvent& event)
+void CFilterEditDialog::OnCancel(wxCommandEvent&)
 {
 	EndModal(wxID_CANCEL);
 }
@@ -168,7 +168,7 @@ void CFilterEditDialog::OnNew(wxCommandEvent&)
 	OnFilterSelect(evt);
 }
 
-void CFilterEditDialog::OnDelete(wxCommandEvent& event)
+void CFilterEditDialog::OnDelete(wxCommandEvent&)
 {
 	int item = m_pFilterListCtrl->GetSelection();
 	if (item == -1)
@@ -190,7 +190,7 @@ void CFilterEditDialog::OnDelete(wxCommandEvent& event)
 	SetCtrlState(false);
 }
 
-void CFilterEditDialog::OnRename(wxCommandEvent& event)
+void CFilterEditDialog::OnRename(wxCommandEvent&)
 {
 	const wxString& oldName = XRCCTRL(*this, "ID_NAME", wxTextCtrl)->GetValue();
 	wxTextEntryDialog *pDlg = new wxTextEntryDialog(this, _("Please enter a new name for the filter."), _("Enter filter name"), oldName);
@@ -223,7 +223,7 @@ void CFilterEditDialog::OnRename(wxCommandEvent& event)
 	m_pFilterListCtrl->Select(m_currentSelection);
 }
 
-void CFilterEditDialog::OnCopy(wxCommandEvent& event)
+void CFilterEditDialog::OnCopy(wxCommandEvent&)
 {
 	if (m_currentSelection == -1)
 		return;
@@ -274,7 +274,7 @@ void CFilterEditDialog::OnCopy(wxCommandEvent& event)
 	OnFilterSelect(evt);
 }
 
-void CFilterEditDialog::OnFilterSelect(wxCommandEvent& event)
+void CFilterEditDialog::OnFilterSelect(wxCommandEvent&)
 {
 	int item = m_pFilterListCtrl->GetSelection();
 	if (item == -1) {

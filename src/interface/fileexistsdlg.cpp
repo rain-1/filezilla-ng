@@ -163,7 +163,7 @@ void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 	}
 }
 
-void CFileExistsDlg::OnOK(wxCommandEvent& event)
+void CFileExistsDlg::OnOK(wxCommandEvent&)
 {
 	if (xrc_call(*this, "ID_ACTION1", &wxRadioButton::GetValue))
 		m_action = CFileExistsNotification::overwrite;
@@ -193,7 +193,7 @@ enum CFileExistsNotification::OverwriteAction CFileExistsDlg::GetAction() const
 	return m_action;
 }
 
-void CFileExistsDlg::OnCancel(wxCommandEvent& event)
+void CFileExistsDlg::OnCancel(wxCommandEvent&)
 {
 	m_action = CFileExistsNotification::skip;
 	EndModal(wxID_CANCEL);

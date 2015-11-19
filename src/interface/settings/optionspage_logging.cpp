@@ -92,7 +92,7 @@ void COptionsPageLogging::SetCtrlState()
 	XRCCTRL(*this, "ID_LIMIT", wxTextCtrl)->Enable(log_to_file && limit);
 }
 
-void COptionsPageLogging::OnBrowse(wxCommandEvent& event)
+void COptionsPageLogging::OnBrowse(wxCommandEvent&)
 {
 	wxFileDialog dlg(this, _("Log file"), wxString(), _T("filezilla.log"), _T("Log files (*.log)|*.log"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
@@ -102,7 +102,7 @@ void COptionsPageLogging::OnBrowse(wxCommandEvent& event)
 	XRCCTRL(*this, "ID_FILENAME", wxTextCtrl)->ChangeValue(dlg.GetPath());
 }
 
-void COptionsPageLogging::OnCheck(wxCommandEvent& event)
+void COptionsPageLogging::OnCheck(wxCommandEvent&)
 {
 	SetCtrlState();
 }

@@ -95,7 +95,7 @@ bool COptionsPageInterface::Validate()
 	return true;
 }
 
-void COptionsPageInterface::OnLayoutChange(wxCommandEvent& event)
+void COptionsPageInterface::OnLayoutChange(wxCommandEvent&)
 {
 	m_pOptions->SetOption(OPTION_FILEPANE_LAYOUT, GetChoice(XRCID("ID_FILEPANELAYOUT")));
 	m_pOptions->SetOption(OPTION_FILEPANE_SWAP, GetCheck(XRCID("ID_FILEPANESWAP")) ? 1 : 0);

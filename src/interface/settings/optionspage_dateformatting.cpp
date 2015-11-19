@@ -89,7 +89,7 @@ bool COptionsPageDateFormatting::Validate()
 	return true;
 }
 
-void COptionsPageDateFormatting::OnRadioChanged(wxCommandEvent& event)
+void COptionsPageDateFormatting::OnRadioChanged(wxCommandEvent&)
 {
 	SetCtrlState();
 }

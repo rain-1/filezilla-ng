@@ -61,7 +61,7 @@ void CInputDialog::AllowEmpty(bool allowEmpty)
 	XRCCTRL(*this, "wxID_OK", wxButton)->Enable(m_allowEmpty ? true : (m_pTextCtrl->GetValue() != _T("")));
 }
 
-void CInputDialog::OnValueChanged(wxCommandEvent& event)
+void CInputDialog::OnValueChanged(wxCommandEvent&)
 {
 	wxString value = m_pTextCtrl->GetValue();
 	XRCCTRL(*this, "wxID_OK", wxButton)->Enable(m_allowEmpty ? true : !value.empty());
@@ -87,12 +87,12 @@ bool CInputDialog::SelectText(int start, int end)
 	return true;
 }
 
-void CInputDialog::OnOK(wxCommandEvent& event)
+void CInputDialog::OnOK(wxCommandEvent&)
 {
 	EndModal(wxID_OK);
 }
 
-void CInputDialog::OnCancel(wxCommandEvent& event)
+void CInputDialog::OnCancel(wxCommandEvent&)
 {
 	EndModal(wxID_CANCEL);
 }

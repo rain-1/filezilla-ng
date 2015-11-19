@@ -72,6 +72,7 @@ static void SHA512_Core_Init(SHA512_State *s) {
 	s->h[i] = iv[i];
 }
 
+#ifndef SHA512_STANDALONE
 static void SHA384_Core_Init(SHA512_State *s) {
     static const uint64 iv[] = {
         INIT(0xcbbb9d5d, 0xc1059ed8),
@@ -87,6 +88,7 @@ static void SHA384_Core_Init(SHA512_State *s) {
     for (i = 0; i < 8; i++)
         s->h[i] = iv[i];
 }
+#endif
 
 static void SHA512_Block(SHA512_State *s, uint64 *block) {
     uint64 w[80];

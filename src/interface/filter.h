@@ -81,7 +81,7 @@ public:
 
 	// Note: Under non-windows, attributes are permissions
 	bool FilenameFiltered(const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const;
-	bool FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const;
+	bool FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date) const;
 	static bool FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date);
 	static bool HasActiveFilters(bool ignore_disabled = false);
 

@@ -1432,7 +1432,7 @@ void CQueueViewBase::OnChar(wxKeyEvent& event)
 	m_pQueue->SetSelection(selection);
 }
 
-void CQueueViewBase::OnEndColumnDrag(wxListEvent& event)
+void CQueueViewBase::OnEndColumnDrag(wxListEvent&)
 {
 	for (unsigned int i = 0; i < m_pQueue->GetPageCount(); i++)
 	{

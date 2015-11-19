@@ -44,7 +44,7 @@ void CSpeedLimitsDialog::Run(wxWindow* parent)
 	ShowModal();
 }
 
-void CSpeedLimitsDialog::OnOK(wxCommandEvent& event)
+void CSpeedLimitsDialog::OnOK(wxCommandEvent&)
 {
 	long download, upload;
 	wxTextCtrl* pCtrl = XRCCTRL(*this, "ID_DOWNLOADLIMIT", wxTextCtrl);

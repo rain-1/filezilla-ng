@@ -102,7 +102,7 @@ void CEditHandler::RemoveTemporaryFilesInSpecificDir(wxString const& temp)
 		if (fd >= 0)
 		{
 			// Try to lock 1 byte region in the lockfile. m_type specifies the byte to lock.
-			struct flock f = { 0 };
+			struct flock f = {};
 			f.l_type = F_WRLCK;
 			f.l_whence = SEEK_SET;
 			f.l_start = 0;
@@ -191,7 +191,7 @@ wxString CEditHandler::GetLocalDirectory()
 	if (m_lockfile_descriptor >= 0)
 	{
 		// Lock 1 byte region in the lockfile.
-		struct flock f = {0};
+		struct flock f = {};
 		f.l_type = F_WRLCK;
 		f.l_whence = SEEK_SET;
 		f.l_start = 0;
@@ -488,7 +488,7 @@ std::list<CEditHandler::t_fileData>::const_iterator CEditHandler::GetFile(const 
 	return iter;
 }
 
-void CEditHandler::FinishTransfer(bool successful, const wxString& fileName)
+void CEditHandler::FinishTransfer(bool, const wxString& fileName)
 {
 	auto iter = GetFile(fileName);
 	if (iter == m_fileDataList[local].end())
