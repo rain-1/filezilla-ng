@@ -75,7 +75,7 @@ public:
 private:
 	CFileZillaEnginePrivate & engine_;
 
-	void InitLogFile() const;
+	bool InitLogFile(fz::scoped_lock& l) const;
 	void LogToFile(MessageType nMessageType, const wxString& msg) const;
 
 	static bool m_logfile_initialized;
