@@ -30,7 +30,7 @@ const int platform_uses_x11_unix_by_default = TRUE;
  * File access abstraction.
  */
 
-static wchar_t* utf8_to_wide(const char* utf8)
+wchar_t* utf8_to_wide(const char* utf8)
 {
     wchar_t *w;
 
