@@ -30,7 +30,9 @@
 struct Filename {
     char *path;
 };
-#define f_open(filename, mode, isprivate) ( fopen((filename)->path, (mode)) )
+FILE *f_open(const struct Filename *filename, char const *mode, int is_private);
+
+wchar_t* utf8_to_wide(const char* utf8);
 
 struct FontSpec {
     char *name;

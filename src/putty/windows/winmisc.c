@@ -9,6 +9,7 @@
 #define SECURITY_WIN32
 #endif
 #include <security.h>
+#include <wchar.h>
 
 OSVERSIONINFO osVersion;
 
@@ -537,4 +538,33 @@ FontSpec *fontspec_deserialise(void *vdata, int maxsize, int *used)
                         GET_32BIT_MSB_FIRST(end),
                         GET_32BIT_MSB_FIRST(end + 4),
                         GET_32BIT_MSB_FIRST(end + 8));
+}
+
+
+FILE *f_open(const struct Filename *filename, char const *mode, int is_private)
+{
+	FILE* f;
+	wchar_t *wname, *wmode;
+
+	(void)is_private;
+	
+	if (!filename || !filename->path || !mode) {
+		return NULL;
+	}
+
+	// The filename is in UTF-8, not expressible in system char, need to use wchar_t. Thus we need to use CreateFileW and convert the HANDLE to a FILE*
+	wname = utf8_to_wide(filename->path);
+	wmode = utf8_to_wide(mode);
+	if (!wname || !wmode) {
+		sfree(wname);
+		sfree(wmode);
+		return NULL;
+	}
+
+	f = _wfopen(wname, wmode);
+
+	sfree(wname);
+	sfree(wmode);
+
+	return f;
 }
