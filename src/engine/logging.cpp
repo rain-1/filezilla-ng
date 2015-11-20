@@ -83,16 +83,16 @@ bool CLogging::ShouldLog(MessageType nMessageType) const
 	return true;
 }
 
-void CLogging::InitLogFile() const
+bool CLogging::InitLogFile(fz::scoped_lock& l) const
 {
 	if (m_logfile_initialized)
-		return;
+		return true;
 
 	m_logfile_initialized = true;
 
 	m_file = engine_.GetOptions().GetOption(OPTION_LOGGING_FILE);
 	if (m_file.empty())
-		return;
+		return false;
 
 #ifdef __WXMSW__
 	m_log_fd = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
@@ -102,8 +102,9 @@ void CLogging::InitLogFile() const
 	if (m_log_fd == -1)
 #endif
 	{
+		l.unlock(); //Avoid recursion
 		LogMessage(MessageType::Error, _("Could not open log file: %s"), wxSysErrorMsg());
-		return;
+		return false;
 	}
 
 	m_prefixes[static_cast<int>(MessageType::Status)] = _("Status:");
@@ -124,13 +125,19 @@ void CLogging::InitLogFile() const
 	else if (m_max_size > 2000)
 		m_max_size = 2000;
 	m_max_size *= 1024 * 1024;
+
+	return true;
 }
 
 void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 {
 	fz::scoped_lock l(mutex_);
 
-	InitLogFile();
+	if (!m_logfile_initialized) {
+		if (!InitLogFile(l)) {
+			return;
+		}
+	}
 #ifdef __WXMSW__
 	if (m_log_fd == INVALID_HANDLE_VALUE)
 		return;
@@ -162,6 +169,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
 				if (!hMutex) {
 					wxString error = wxSysErrorMsg();
+					l.unlock();
 					LogMessage(MessageType::Error, _("Could not create logging mutex: %s"), error);
 					return;
 				}
@@ -174,6 +182,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					ReleaseMutex(hMutex);
 					CloseHandle(hMutex);
 
+					l.unlock(); // Avoid recursion
 					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
 					return;
 				}
@@ -204,17 +213,21 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					CloseHandle(hMutex);
 				}
 
-				if (!error.empty())
+				if (!error.empty()) {
+					l.unlock(); // Avoid recursion
 					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
+					return;
+				}
 			}
 		}
 		DWORD len = (DWORD)strlen((const char*)utf8);
 		DWORD written;
 		BOOL res = WriteFile(m_log_fd, (const char*)utf8, len, &written, 0);
 		if (!res || written != len) {
-			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
 			CloseHandle(m_log_fd);
 			m_log_fd = INVALID_HANDLE_VALUE;
+			l.unlock(); // Avoid recursion
+			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
 		}
 #else
 		if (m_max_size) {
@@ -240,6 +253,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					close(m_log_fd);
 					m_log_fd = -1;
 
+					l.unlock(); // Avoid recursion
 					LogMessage(MessageType::Error, error);
 					return;
 				}
@@ -264,6 +278,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 				// Get the new file
 				m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 				if (m_log_fd == -1) {
+					l.unlock(); // Avoid recursion
 					LogMessage(MessageType::Error, wxSysErrorMsg());
 					return;
 				}
@@ -277,6 +292,8 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 		if (written != len) {
 			close(m_log_fd);
 			m_log_fd = -1;
+
+			l.unlock(); // Avoid recursion
 			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
 		}
 #endif
