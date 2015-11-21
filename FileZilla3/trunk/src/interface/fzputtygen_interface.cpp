@@ -213,7 +213,7 @@ bool CFZPuttyGenInterface::Send(const wxString& cmd)
 	if (!m_pProcess)
 		return false;
 
-	const wxWX2MBbuf buf = (cmd + _T("\n")).mb_str();
+	const wxWX2MBbuf buf = (cmd + _T("\n")).mb_str(wxConvUTF8);
 	const size_t len = strlen (buf);
 
 	wxOutputStream* stream = m_pProcess->GetOutputStream();
