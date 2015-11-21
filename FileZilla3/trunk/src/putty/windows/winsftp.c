@@ -30,50 +30,6 @@ const int platform_uses_x11_unix_by_default = TRUE;
  * File access abstraction.
  */
 
-wchar_t* utf8_to_wide(const char* utf8)
-{
-    wchar_t *w;
-
-    int len = MultiByteToWideChar(CP_UTF8, 0, utf8, -1, 0, 0);
-    if (len <= 0)
-	return NULL;
-
-    w = snewn(len, wchar_t);
-
-    if (!w)
-	return NULL;
-
-    if (MultiByteToWideChar(CP_UTF8, 0, utf8, -1, w, len) <= 0)
-    {
-	sfree(w);
-	return NULL;
-    }
-
-    return w;
-}
-
-static char* wide_to_utf8(const wchar_t* w)
-{
-    char* utf8;
-
-    int len = WideCharToMultiByte(CP_UTF8, 0, w, -1, 0, 0, 0, 0);
-    if (len <= 0)
-	return NULL;
-
-    utf8 = snewn(len, char);
-
-    if (!utf8)
-	return NULL;
-
-    if (WideCharToMultiByte(CP_UTF8, 0, w, -1, utf8, len, 0, 0) <= 0)
-    {
-	sfree(utf8);
-	return NULL;
-    }
-    
-    return utf8;
-}
-
 /*
  * Set local current directory. Returns NULL on success, or else an
  * error message which must be freed after printing.
