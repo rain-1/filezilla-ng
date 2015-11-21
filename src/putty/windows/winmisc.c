@@ -543,28 +543,72 @@ FontSpec *fontspec_deserialise(void *vdata, int maxsize, int *used)
 
 FILE *f_open(const struct Filename *filename, char const *mode, int is_private)
 {
-	FILE* f;
-	wchar_t *wname, *wmode;
+    FILE* f;
+    wchar_t *wname, *wmode;
 
-	(void)is_private;
-	
-	if (!filename || !filename->path || !mode) {
-		return NULL;
-	}
+    (void)is_private;
 
-	// The filename is in UTF-8, not expressible in system char, need to use wchar_t. Thus we need to use CreateFileW and convert the HANDLE to a FILE*
-	wname = utf8_to_wide(filename->path);
-	wmode = utf8_to_wide(mode);
-	if (!wname || !wmode) {
-		sfree(wname);
-		sfree(wmode);
-		return NULL;
-	}
+    if (!filename || !filename->path || !mode) {
+	return NULL;
+    }
 
-	f = _wfopen(wname, wmode);
-
+    // The filename is in UTF-8, not expressible in system char, need to use wchar_t. Thus we need to use CreateFileW and convert the HANDLE to a FILE*
+    wname = utf8_to_wide(filename->path);
+    wmode = utf8_to_wide(mode);
+    if (!wname || !wmode) {
 	sfree(wname);
 	sfree(wmode);
+	return NULL;
+    }
 
-	return f;
+    f = _wfopen(wname, wmode);
+
+    sfree(wname);
+    sfree(wmode);
+
+    return f;
+}
+
+wchar_t* utf8_to_wide(const char* utf8)
+{
+    wchar_t *w;
+
+    int len = MultiByteToWideChar(CP_UTF8, 0, utf8, -1, 0, 0);
+    if (len <= 0)
+	return NULL;
+
+    w = snewn(len, wchar_t);
+
+    if (!w)
+	return NULL;
+
+    if (MultiByteToWideChar(CP_UTF8, 0, utf8, -1, w, len) <= 0)
+    {
+	sfree(w);
+	return NULL;
+    }
+
+    return w;
+}
+
+char* wide_to_utf8(const wchar_t* w)
+{
+    char* utf8;
+
+    int len = WideCharToMultiByte(CP_UTF8, 0, w, -1, 0, 0, 0, 0);
+    if (len <= 0)
+	return NULL;
+
+    utf8 = snewn(len, char);
+
+    if (!utf8)
+	return NULL;
+
+    if (WideCharToMultiByte(CP_UTF8, 0, w, -1, utf8, len, 0, 0) <= 0)
+    {
+	sfree(utf8);
+	return NULL;
+    }
+    
+    return utf8;
 }
