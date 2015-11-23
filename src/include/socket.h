@@ -165,7 +165,7 @@ protected:
 	CCallback* m_synchronous_read_cb{};
 };
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 
 #ifndef EISCONN
 #define EISCONN WSAEISCONN
@@ -230,6 +230,6 @@ protected:
 
 // For the future:
 // Handle ERROR_NETNAME_DELETED=64
-#endif //__WXMSW__
+#endif //FZ_WINDOWS
 
 #endif //__SOCKET_H__
