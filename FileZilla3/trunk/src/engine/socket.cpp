@@ -1,24 +1,14 @@
 #include <wx/defs.h>
-#ifdef __WXMSW__
-  #ifndef NOMINMAX
-  #define NOMINMAX
-  #endif
-  // MinGW needs this for getaddrinfo
-  #if defined(_WIN32_WINNT)
-    #if _WIN32_WINNT < 0x0600
-      #undef _WIN32_WINNT
-      #define _WIN32_WINNT 0x0600
-    #endif
-  #else
-    #define _WIN32_WINNT 0x0600
-  #endif
+#include <libfilezilla/libfilezilla.hpp>
+#ifdef FZ_WINDOWS
+  #include <libfilezilla/private/windows.hpp>
   #include <winsock2.h>
   #include <ws2tcpip.h>
 #endif
 #include <filezilla.h>
 #include <libfilezilla/mutex.hpp>
 #include "socket.h"
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
   #define mutex mutex_override // Sadly on some platforms system headers include conflicting names
   #include <sys/types.h>
   #include <sys/socket.h>
@@ -119,7 +109,7 @@ void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler 
 }
 
 namespace {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 static int ConvertMSWErrorCode(int error)
 {
 	switch (error)
@@ -187,7 +177,7 @@ public:
 			0
 		};
 		for (int i = 0; errors[i]; ++i) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 			int code = ConvertMSWErrorCode(errors[i]);
 #else
 			int code = errors[i];
@@ -208,7 +198,7 @@ public:
 	CSocketThread()
 		: wxThread(wxTHREAD_JOINABLE), m_sync(false)
 	{
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		m_sync_event = WSA_INVALID_EVENT;
 #else
 		m_pipe[0] = -1;
@@ -221,7 +211,7 @@ public:
 
 	virtual ~CSocketThread()
 	{
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		if (m_sync_event != WSA_INVALID_EVENT)
 			WSACloseEvent(m_sync_event);
 #else
@@ -284,7 +274,7 @@ public:
 			return 0;
 		}
 		m_started = true;
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		if (m_sync_event == WSA_INVALID_EVENT)
 			m_sync_event = WSACreateEvent();
 		if (m_sync_event == WSA_INVALID_EVENT)
@@ -324,7 +314,7 @@ public:
 			return;
 		}
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		WSASetEvent(m_sync_event);
 #else
 		char tmp = 0;
@@ -340,7 +330,7 @@ protected:
 	static int CreateSocketFd(addrinfo const& addr)
 	{
 		int fd;
-#if defined(SOCK_CLOEXEC) && !defined(__WXMSW__)
+#if defined(SOCK_CLOEXEC) && !defined(FZ_WINDOWS)
 		fd = socket(addr.ai_family, addr.ai_socktype | SOCK_CLOEXEC, addr.ai_protocol);
 		if (fd == -1 && errno == EINVAL)
 #endif
@@ -363,7 +353,7 @@ protected:
 	static void CloseSocketFd(int& fd)
 	{
 		if (fd != -1) {
-	#ifdef __WXMSW__
+	#ifdef FZ_WINDOWS
 			closesocket(fd);
 	#else
 			close(fd);
@@ -396,13 +386,13 @@ protected:
 
 		int res = connect(fd, addr.ai_addr, addr.ai_addrlen);
 		if (res == -1) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 			// Map to POSIX error codes
 			int error = WSAGetLastError();
 			if (error == WSAEWOULDBLOCK)
 				res = EINPROGRESS;
 			else
-				res = ConvertMSWErrorCode(WSAGetLastError());
+				res = GetLastSocketError();
 #else
 			res = errno;
 #endif
@@ -519,7 +509,7 @@ protected:
 		}
 
 		if (res) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 			res = ConvertMSWErrorCode(res);
 #endif
 
@@ -565,7 +555,7 @@ protected:
 		m_waiting |= wait;
 
 		for (;;) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 			int wait_events = FD_CLOSE;
 			if (m_waiting & WAIT_CONNECT)
 				wait_events |= FD_CONNECT;
@@ -589,7 +579,7 @@ protected:
 			WSANETWORKEVENTS events;
 			int res = WSAEnumNetworkEvents(m_pSocket->m_fd, m_sync_event, &events);
 			if (res) {
-				res = ConvertMSWErrorCode(WSAGetLastError());
+				res = GetLastSocketError();
 				return false;
 			}
 
@@ -741,7 +731,7 @@ protected:
 			return;
 		}
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		// MSDN says this:
 		//   FD_CLOSE being posted after all data is read from a socket.
 		//   An application should check for remaining data upon receipt
@@ -804,7 +794,7 @@ protected:
 						continue;
 				}
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 				m_waiting |= WAIT_CLOSE;
 				int wait_close = WAIT_CLOSE;
 #endif
@@ -817,7 +807,7 @@ protected:
 
 					if (m_triggered & WAIT_CLOSE && m_pSocket) {
 						m_pSocket->m_state = CSocket::closing;
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 						wait_close = 0;
 #endif
 					}
@@ -826,7 +816,7 @@ protected:
 						break;
 
 					SendEvents();
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 					m_waiting |= wait_close;
 #endif
 				}
@@ -843,7 +833,7 @@ protected:
 	std::string m_port;
 	std::string m_bind;
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	// We wait on this using WSAWaitForMultipleEvents
 	WSAEVENT m_sync_event;
 #else
@@ -1000,7 +990,7 @@ void CSocket::SetEventHandler(fz::event_handler* pEvtHandler)
 		m_pEvtHandler = pEvtHandler;
 
 		if (pEvtHandler && m_state == connected) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 			// If a graceful shutdown is going on in background already,
 			// no further events are recorded. Send out events we're not
 			// waiting for (i.e. they got triggered already) manually.
@@ -1104,7 +1094,7 @@ static Error_table const error_table[] =
 #endif
 
 	// Codes that have no POSIX equivalence
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	ERRORDECL(WSANOTINITIALISED, TRANSLATE_T("Not initialized, need to call WSAStartup"))
 	ERRORDECL(WSAENETDOWN, TRANSLATE_T("System's network subsystem has failed"))
 	ERRORDECL(WSAEPROTOTYPE, TRANSLATE_T("Protocol not supported on given socket type"))
@@ -1255,7 +1245,7 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 #else
 	const int flags = 0;
 
-#if !defined(SO_NOSIGPIPE) && !defined(__WXMSW__)
+#if !defined(SO_NOSIGPIPE) && !defined(FZ_WINDOWS)
 	// Some systems have neither. Need to block signal
 	struct sigaction old_action;
 	struct sigaction action = {};
@@ -1267,7 +1257,7 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 
 	int res = send(m_fd, (const char*)buffer, size, flags);
 
-#if !defined(MSG_NOSIGNAL) && !defined(SO_NOSIGPIPE) && !defined(__WXMSW__)
+#if !defined(MSG_NOSIGNAL) && !defined(SO_NOSIGPIPE) && !defined(FZ_WINDOWS)
 	// Restore previous signal handler
 	if (!signal_set)
 		sigaction(SIGPIPE, &old_action, 0);
@@ -1422,7 +1412,7 @@ int CSocket::Listen(address_family family, int port)
 		int res = getaddrinfo(0, portstring, &hints, &addressList);
 
 		if (res) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 			return ConvertMSWErrorCode(res);
 #else
 			return res;
@@ -1474,7 +1464,7 @@ int CSocket::GetLocalPort(int& error)
 	socklen_t addr_len = sizeof(addr);
 	error = getsockname(m_fd, &addr.sockaddr, &addr_len);
 	if (error) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		error = ConvertMSWErrorCode(error);
 #endif
 		return -1;
@@ -1496,7 +1486,7 @@ int CSocket::GetRemotePort(int& error)
 	error = getpeername(m_fd, &addr.sockaddr, &addr_len);
 	if (error)
 	{
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		error = ConvertMSWErrorCode(error);
 #endif
 		return -1;
@@ -1548,7 +1538,7 @@ CSocket* CSocket::Accept(int &error)
 int CSocket::SetNonblocking(int fd)
 {
 	// Set socket to non-blocking.
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	unsigned long nonblock = 1;
 	int res = ioctlsocket(fd, FIONBIO, &nonblock);
 	if (!res)
