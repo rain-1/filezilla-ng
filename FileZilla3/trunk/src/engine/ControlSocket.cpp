@@ -9,6 +9,7 @@
 #include "sizeformatting_base.h"
 
 #include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
 #include <wx/file.h>
@@ -1077,8 +1078,9 @@ int CRealControlSocket::ContinueConnect()
 			port = m_pCurrentServer->GetPort();
 		}
 	}
-	if (!IsIpAddress(host))
+	if (fz::get_address_type(host.ToStdWstring()) == fz::address_type::unknown) {
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
+	}
 
 	int res = m_pSocket->Connect(host, port);
 

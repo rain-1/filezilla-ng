@@ -1,6 +1,7 @@
 #include <filezilla.h>
 
 #include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/iputils.hpp>
 #include <libfilezilla/util.hpp>
 #include "engine_context.h"
 #include "netconfwizard.h"
@@ -146,34 +147,28 @@ bool CNetConfWizard::Run()
 
 void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 {
-	if (event.GetPage() == m_pages[3])
-	{
+	if (event.GetPage() == m_pages[3]) {
 		int mode = XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue() ? 0 : (XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2);
-		if (mode == 1)
-		{
+		if (mode == 1) {
 			wxTextCtrl* control = XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl);
 			wxString ip = control->GetValue();
-			if (ip.empty())
-			{
+			if (ip.empty()) {
 				wxMessageBoxEx(_("Please enter your external IP address"));
 				control->SetFocus();
 				event.Veto();
 				return;
 			}
-			if (!IsIpAddress(ip))
-			{
-				wxMessageBoxEx(_("You have to enter a valid IP address."));
+			if (fz::get_address_type(ip.ToStdWstring()) != fz::address_type::ipv4) {
+				wxMessageBoxEx(_("You have to enter a valid IPv4 address."));
 				control->SetFocus();
 				event.Veto();
 				return;
 			}
 		}
-		else if (mode == 2)
-		{
+		else if (mode == 2) {
 			wxTextCtrl* pResolver = XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl);
 			wxString address = pResolver->GetValue();
-			if (address.empty())
-			{
+			if (address.empty()) {
 				wxMessageBoxEx(_("Please enter an URL where to get your external address from"));
 				pResolver->SetFocus();
 				event.Veto();
@@ -181,11 +176,9 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 			}
 		}
 	}
-	else if (event.GetPage() == m_pages[4])
-	{
+	else if (event.GetPage() == m_pages[4]) {
 		int mode = XRCCTRL(*this, "ID_ACTIVE_PORTMODE1", wxRadioButton)->GetValue() ? 0 : 1;
-		if (mode)
-		{
+		if (mode) {
 			wxTextCtrl* pPortMin = XRCCTRL(*this, "ID_ACTIVE_PORTMIN", wxTextCtrl);
 			wxTextCtrl* pPortMax = XRCCTRL(*this, "ID_ACTIVE_PORTMAX", wxTextCtrl);
 			wxString portMin = pPortMin->GetValue();
@@ -202,13 +195,11 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 			}
 		}
 	}
-	else if (event.GetPage() == m_pages[5] && !event.GetDirection())
-	{
+	else if (event.GetPage() == m_pages[5] && !event.GetDirection()) {
 		wxButton* pNext = wxDynamicCast(FindWindow(wxID_FORWARD), wxButton);
 		pNext->SetLabel(m_nextLabelText);
 	}
-	else if (event.GetPage() == m_pages[5] && event.GetDirection())
-	{
+	else if (event.GetPage() == m_pages[5] && event.GetDirection()) {
 		if (m_testDidRun)
 			return;
 
@@ -237,14 +228,12 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 
 void CNetConfWizard::OnPageChanged(wxWizardEvent& event)
 {
-	if (event.GetPage() == m_pages[5])
-	{
+	if (event.GetPage() == m_pages[5]) {
 		wxButton* pNext = wxDynamicCast(FindWindow(wxID_FORWARD), wxButton);
 		m_nextLabelText = pNext->GetLabel();
 		pNext->SetLabel(_("&Test"));
 	}
-	else if (event.GetPage() == m_pages[6])
-	{
+	else if (event.GetPage() == m_pages[6]) {
 		wxButton* pPrev = wxDynamicCast(FindWindow(wxID_BACKWARD), wxButton);
 		pPrev->Disable();
 		wxButton* pNext = wxDynamicCast(FindWindow(wxID_FORWARD), wxButton);
@@ -257,8 +246,7 @@ void CNetConfWizard::OnSocketEvent(wxSocketEvent& event)
 	if (!m_socket)
 		return;
 
-	if (event.GetSocket() == m_socket)
-	{
+	if (event.GetSocket() == m_socket) {
 		switch (event.GetSocketEvent())
 		{
 		case wxSOCKET_INPUT:
@@ -275,8 +263,7 @@ void CNetConfWizard::OnSocketEvent(wxSocketEvent& event)
 			break;
 		}
 	}
-	else if (event.GetSocket() == m_pSocketServer)
-	{
+	else if (event.GetSocket() == m_pSocketServer) {
 		switch (event.GetSocketEvent())
 		{
 		case wxSOCKET_LOST:
@@ -290,8 +277,7 @@ void CNetConfWizard::OnSocketEvent(wxSocketEvent& event)
 			break;
 		}
 	}
-	else if (event.GetSocket() == m_pDataSocket)
-	{
+	else if (event.GetSocket() == m_pDataSocket) {
 		switch (event.GetSocketEvent())
 		{
 		case wxSOCKET_LOST:
@@ -772,8 +758,7 @@ void CNetConfWizard::SendNextCommand()
 			wxString ip = GetExternalIPAddress();
 			if (ip.empty())
 				return;
-			if (!GetIPV6LongForm(ip).empty())
-			{
+			if (!fz::get_ipv6_long_form(ip.ToStdWstring()).empty()) {
 				PrintMessage(_("You appear to be using an IPv6-only host. This wizard does not support this environment."), 1);
 				CloseSocket();
 				return;

@@ -4,6 +4,8 @@
 #include "optionspage.h"
 #include "optionspage_connection_active.h"
 
+#include <libfilezilla/iputils.hpp>
+
 BEGIN_EVENT_TABLE(COptionsPageConnectionActive, COptionsPage)
 EVT_CHECKBOX(XRCID("ID_LIMITPORTS"), COptionsPageConnectionActive::OnRadioOrCheckEvent)
 EVT_RADIOBUTTON(XRCID("ID_ACTIVEMODE1"), COptionsPageConnectionActive::OnRadioOrCheckEvent)
@@ -82,11 +84,12 @@ bool COptionsPageConnectionActive::Validate()
 	else
 		mode = GetRCheck(XRCID("ID_ACTIVEMODE2")) ? 1 : 2;
 
-	if (mode == 1)
-	{
+	if (mode == 1) {
 		wxTextCtrl* pActiveIP = XRCCTRL(*this, "ID_ACTIVEIP", wxTextCtrl);
-		if (!IsIpAddress(pActiveIP->GetValue()))
-			return DisplayError(pActiveIP, _("You have to enter a valid IP address."));
+		wxString const ip = pActiveIP->GetValue();
+		if (fz::get_address_type(ip.ToStdWstring()) != fz::address_type::ipv4) {
+			return DisplayError(pActiveIP, _("You have to enter a valid IPv4 address."));
+		}
 	}
 
 	return true;

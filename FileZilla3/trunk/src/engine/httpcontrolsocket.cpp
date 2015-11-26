@@ -5,6 +5,7 @@
 #include "httpcontrolsocket.h"
 #include "tlssocket.h"
 
+#include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
 #include <wx/file.h>
@@ -454,8 +455,9 @@ int CHttpControlSocket::InternalConnect(wxString host, unsigned short port, bool
 	pData->port = port;
 	pData->tls = tls;
 
-	if (!IsIpAddress(host))
+	if (fz::get_address_type(host.ToStdWstring()) == fz::address_type::unknown) {
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
+	}
 
 	pData->host = host;
 	return DoInternalConnect();
