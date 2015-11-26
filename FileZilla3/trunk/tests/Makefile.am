@@ -6,7 +6,6 @@ check_PROGRAMS = $(TESTS)
 test_SOURCES =  test.cpp \
 		cmpnatural.cpp \
 		dirparsertest.cpp \
-		ipaddress.cpp \
 		localpathtest.cpp \
 		serverpathtest.cpp
 
