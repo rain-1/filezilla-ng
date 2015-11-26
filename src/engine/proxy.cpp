@@ -4,6 +4,8 @@
 #include "ControlSocket.h"
 #include <wx/sckaddr.h>
 
+#include <libfilezilla/iputils.hpp>
+
 enum handshake_state
 {
 	http_wait,
@@ -137,12 +139,12 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 	}
 	else if (type == SOCKS4) {
 		wxString ip = m_host;
-		if (!GetIPV6LongForm(m_host).empty()) {
+		if (!fz::get_ipv6_long_form(m_host.ToStdWstring()).empty()) {
 			m_pOwner->LogMessage(MessageType::Error, _("IPv6 addresses are not supported with SOCKS4 proxy"));
 			return EINVAL;
 		}
 
-		if (!IsIpAddress(m_host)) {
+		if (fz::get_address_type(m_host.ToStdWstring()) == fz::address_type::unknown) {
 			wxIPV4address address;
 			if (!address.Hostname(host)) {
 				m_pOwner->LogMessage(MessageType::Error, _("Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."));
@@ -426,7 +428,7 @@ void CProxySocket::OnReceive()
 			switch (m_handshakeState) {
 			default:
 				if (m_pRecvBuffer[0] != 5) {
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Unknown SOCKS protocol version: %d"), (int)m_pRecvBuffer[0]);
+					m_pOwner->LogMessage(MessageType::Error, _("Unknown SOCKS protocol version: %d"), (int)m_pRecvBuffer[0]);
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
@@ -434,7 +436,7 @@ void CProxySocket::OnReceive()
 				break;
 			case socks5_auth:
 				if (m_pRecvBuffer[0] != 1) {
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Unknown protocol version of SOCKS Username/Password Authentication subnegotiation: %d"), (int)m_pRecvBuffer[0]);
+					m_pOwner->LogMessage(MessageType::Error, _("Unknown protocol version of SOCKS Username/Password Authentication subnegotiation: %d"), (int)m_pRecvBuffer[0]);
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
@@ -458,7 +460,7 @@ void CProxySocket::OnReceive()
 						m_handshakeState = socks5_auth;
 						break;
 					default:
-						m_pOwner->LogMessage(MessageType::Debug_Warning, _("No supported SOCKS5 auth method"));
+						m_pOwner->LogMessage(MessageType::Error, _("No supported SOCKS5 auth method"));
 						m_proxyState = noconn;
 						m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 						return;
@@ -468,7 +470,7 @@ void CProxySocket::OnReceive()
 			case socks5_auth:
 				if (m_pRecvBuffer[1] != 0)
 				{
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy authentication failed"));
+					m_pOwner->LogMessage(MessageType::Error, _("Proxy authentication failed"));
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
@@ -509,7 +511,7 @@ void CProxySocket::OnReceive()
 						break;
 					}
 
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: %s"), errorMsg);
+					m_pOwner->LogMessage(MessageType::Error, _("Proxy request failed. Reply from proxy: %s"), errorMsg);
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
@@ -533,7 +535,7 @@ void CProxySocket::OnReceive()
 					m_recvBufferLen = 17;
 					break;
 				default:
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _("Proxy request failed: Unknown address type in CONNECT reply"));
+					m_pOwner->LogMessage(MessageType::Error, _("Proxy request failed: Unknown address type in CONNECT reply"));
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
 					return;
@@ -582,37 +584,34 @@ void CProxySocket::OnReceive()
 					m_pSendBuffer[1] = 1; // CONNECT
 					m_pSendBuffer[2] = 0; // Reserved
 
-					if (IsIpAddress(m_host)) {
-						// Quite ugly
-						wxString ipv6 = GetIPV6LongForm(m_host);
-						if (!ipv6.empty()) {
-							ipv6.Replace(_T(":"), _T(""));
-							addrlen = 16;
-							for (int i = 0; i < 16; i++)
-								m_pSendBuffer[4 + i] = (DigitHexToDecNum(ipv6[i * 2]) << 4) + DigitHexToDecNum(ipv6[i * 2 + 1]);
-
-							m_pSendBuffer[3] = 4; // IPv6
+					auto type = fz::get_address_type(m_host.ToStdWstring());
+					if (type == fz::address_type::ipv6) {
+						auto ipv6 = fz::get_ipv6_long_form(m_host.ToStdWstring());
+						addrlen = 16;
+						for (int i = 0; i < 16; ++i) {
+							m_pSendBuffer[4 + i] = (fz::hex_char_to_int(ipv6[i * 2 + i / 2]) << 4) + fz::hex_char_to_int(ipv6[i * 2 + 1 + i / 2]);
 						}
-						else {
-							unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
-							int i = 0;
-							memset(buf, 0, 4);
-							for (const wxChar* p = m_host.c_str(); *p && i < 4; p++)
+
+						m_pSendBuffer[3] = 4; // IPv6
+					}
+					else if (type == fz::address_type::ipv4) {
+						unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
+						int i = 0;
+						memset(buf, 0, 4);
+						for (const wxChar* p = m_host.c_str(); *p && i < 4; ++p) {
+							const wxChar& c = *p;
+							if (c == '.')
 							{
-								const wxChar& c = *p;
-								if (c == '.')
-								{
-									i++;
-									continue;
-								}
-								buf[i] *= 10;
-								buf[i] += c - '0';
+								i++;
+								continue;
 							}
-
-							addrlen = 4;
-
-							m_pSendBuffer[3] = 1; // IPv4
+							buf[i] *= 10;
+							buf[i] += c - '0';
 						}
+
+						addrlen = 4;
+
+						m_pSendBuffer[3] = 1; // IPv4
 					}
 					else {
 						m_pSendBuffer[3] = 3; // Domain name

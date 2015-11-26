@@ -13,6 +13,7 @@
 #include "proxy.h"
 
 #include <libfilezilla/file.hpp>
+#include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/util.hpp>
 
@@ -3709,7 +3710,7 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	}
 
 	const wxString peerIP = m_pSocket->GetPeerIP();
-	if (!IsRoutableAddress(pData->host, m_pSocket->GetAddressFamily()) && IsRoutableAddress(peerIP, m_pSocket->GetAddressFamily())) {
+	if (!fz::is_routable_address(pData->host.ToStdWstring()) && fz::is_routable_address(peerIP.ToStdWstring())) {
 		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
@@ -3740,7 +3741,7 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 		if (mode)
 		{
 			if (engine_.GetOptions().GetOptionVal(OPTION_NOEXTERNALONLOCAL) &&
-				!IsRoutableAddress(m_pSocket->GetPeerIP(), m_pSocket->GetAddressFamily()))
+				!fz::is_routable_address(m_pSocket->GetPeerIP().ToStdWstring()))
 				// Skip next block, use local address
 				goto getLocalIP;
 		}

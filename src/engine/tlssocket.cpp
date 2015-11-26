@@ -3,6 +3,8 @@
 #include "tlssocket.h"
 #include "ControlSocket.h"
 
+#include <libfilezilla/iputils.hpp>
+
 #include <gnutls/x509.h>
 
 #if FZ_USE_GNUTLS_SYSTEM_CIPHERS
@@ -480,11 +482,11 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 		hostname = m_socket.GetPeerHost();
 	}
 
-	if( !hostname.empty() && !IsIpAddress(hostname) ) {
+	if (!hostname.empty() && fz::get_address_type(hostname.ToStdWstring()) == fz::address_type::unknown) {
 		const wxWX2MBbuf utf8 = hostname.mb_str(wxConvUTF8);
-		if( utf8 ) {
+		if (utf8) {
 			int res = gnutls_server_name_set( m_session, GNUTLS_NAME_DNS, utf8, strlen(utf8) );
-			if( res ) {
+			if (res) {
 				LogError(res, _T("gnutls_server_name_set"), MessageType::Debug_Warning );
 			}
 		}

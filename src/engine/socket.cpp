@@ -50,13 +50,11 @@ union sockaddr_u
 #define WAIT_EVENTCOUNT 5
 
 class CSocketThread;
+
 namespace {
 static std::vector<CSocketThread*> waiting_socket_threads;
-static fz::mutex waiting_socket_threads_mutex{false};
-};
-
-struct socket_event_type;
-typedef fz::simple_event<socket_event_type> CInternalSocketEvent;
+static fz::mutex waiting_socket_threads_mutex{ false };
+}
 
 void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source)
 {

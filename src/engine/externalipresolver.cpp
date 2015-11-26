@@ -3,6 +3,8 @@
 #include "socket.h"
 #include "misc.h"
 
+#include <libfilezilla/iputils.hpp>
+
 #include <wx/regex.h>
 
 namespace {
@@ -374,7 +376,7 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			m_data = m_data.Mid(1);
 		}
 
-		if (GetIPV6LongForm(m_data).empty()) {
+		if (fz::get_ipv6_long_form(m_data.ToStdWstring()).empty()) {
 			Close(false);
 			return;
 		}

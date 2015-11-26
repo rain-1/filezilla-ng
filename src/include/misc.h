@@ -3,15 +3,6 @@
 
 #include "socket.h"
 
-// Also verifies that it is a correct IPv6 address
-wxString GetIPV6LongForm(wxString short_address);
-
-int DigitHexToDecNum(wxChar c);
-
-bool IsRoutableAddress(const wxString& address, CSocket::address_family family);
-
-bool IsIpAddress(const wxString& address);
-
 // Strongly typed enum would be nice, but we need to support older compilers still.
 namespace dependency {
 enum type {

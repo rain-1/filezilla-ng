@@ -40,6 +40,7 @@ public:
 };
 
 void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source);
+void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, CSocketEventSource const* const source);
 
 class CSocketThread;
 class CSocket final : public CSocketEventSource
