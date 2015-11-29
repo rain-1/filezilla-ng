@@ -343,7 +343,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 	// Draw percentage-done text
 	wxString text;
 	if (permill > 1000) {
-		text = _T("> 100.0%%");
+		text = _T("> 100.0%");
 	}
 	else {
 		text = wxString::Format(_T("%d.%d%%"), permill / 10, permill % 10);
