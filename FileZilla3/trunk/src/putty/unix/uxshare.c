@@ -23,6 +23,9 @@
 #define CONNSHARE_SOCKETDIR_PREFIX "/tmp/putty-connshare"
 #define SALT_FILENAME "salt"
 #define SALT_SIZE 64
+#ifndef PIPE_BUF
+#define PIPE_BUF _POSIX_PIPE_BUF
+#endif
 
 /*
  * Functions provided by uxnet.c to help connection sharing.
