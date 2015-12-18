@@ -334,32 +334,48 @@ bool CIOThread::WriteToFile(char* pBuffer, int64_t len)
 #ifndef __WXMSW__
 	}
 	else {
-		// On all CRLF pairs, omit the CR. Don't harm stand-alone CRs
-		// I assume disk access is buffered, otherwise the 1 byte writes are
-		// going to hurt performance.
-		const char CR = '\r';
-		const char* const end = pBuffer + len;
-		for (char* r = pBuffer; r != end; ++r) {
-			char c = *r;
-			if (c == '\r')
-				m_wasCarriageReturn = true;
-			else if (c == '\n') {
-				m_wasCarriageReturn = false;
-				if (!DoWrite(&c, 1))
-					return false;
-			}
-			else {
-				if (m_wasCarriageReturn) {
-					m_wasCarriageReturn = false;
-					if (!DoWrite(&CR, 1))
-						return false;
-				}
 
-				if (!DoWrite(&c, 1))
-					return false;
-			}
+		// On all CRLF pairs, omit the CR. Don't harm stand-alone CRs
+
+		// Handle trailing CR from last write
+		if (m_wasCarriageReturn && len && *pBuffer != '\n' && *pBuffer != '\r') {
+			m_wasCarriageReturn = false;
+			const char CR = '\r';
+			if (!DoWrite(&CR, 1))
+				return false;
 		}
-		return true;
+
+		// Skip forward to end of buffer or first CR
+		const char* r = pBuffer;
+		const char* const end = pBuffer + len;
+		while (r != end && *r != '\r') {
+			++r;
+		}
+
+		if (r != end) {
+			// Now we gotta move data and also handle additional CRs.
+			m_wasCarriageReturn = true;
+
+			char* w = const_cast<char*>(r++);
+			for (; r != end; ++r) {
+				if (*r == '\r') {
+					m_wasCarriageReturn = true;
+				}
+				else if (*r == '\n') {
+					m_wasCarriageReturn = false;
+					*(w++) = *r;
+				}
+				else {
+					if (m_wasCarriageReturn) {
+						m_wasCarriageReturn = false;
+						*(w++) = '\r';
+					}
+					*(w++) = *r;
+				}
+			}
+			len = w - pBuffer;
+		}
+		return DoWrite(pBuffer, len);
 	}
 #endif
 }
