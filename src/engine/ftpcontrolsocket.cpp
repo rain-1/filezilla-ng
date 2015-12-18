@@ -3953,22 +3953,38 @@ int CFtpControlSocket::TransferParseResponse()
 			pData->opState = rawtransfer_transfer;
 		break;
 	case rawtransfer_transfer:
-		if (code != 1) {
+		if (code == 1) {
+			pData->opState = rawtransfer_waitfinish;
+		}
+		else if (code == 2 || code == 3) {
+			// A few broken servers omit the 1yz reply.
+			pData->opState = rawtransfer_waitsocket;
+		}
+		else {
 			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
 			error = true;
 		}
-		else
-			pData->opState = rawtransfer_waitfinish;
 		break;
 	case rawtransfer_waittransferpre:
-		if (code != 1) {
+		if (code == 1) {
+			pData->opState = rawtransfer_waittransfer;
+		}
+		else if (code == 2 || code == 3) {
+			// A few broken servers omit the 1yz reply.
+			if (pData->pOldData->transferEndReason != TransferEndReason::successful) {
+				error = true;
+				break;
+			}
+
+			ResetOperation(FZ_REPLY_OK);
+			return FZ_REPLY_OK;
+		}
+		else {
 			if (pData->pOldData->transferEndReason == TransferEndReason::successful)
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure_immediate;
 			error = true;
 		}
-		else
-			pData->opState = rawtransfer_waittransfer;
 		break;
 	case rawtransfer_waitfinish:
 		if (code != 2 && code != 3) {
@@ -3985,10 +4001,8 @@ int CFtpControlSocket::TransferParseResponse()
 				pData->pOldData->transferEndReason = TransferEndReason::transfer_command_failure;
 			error = true;
 		}
-		else
-		{
-			if (pData->pOldData->transferEndReason != TransferEndReason::successful)
-			{
+		else {
+			if (pData->pOldData->transferEndReason != TransferEndReason::successful) {
 				error = true;
 				break;
 			}
