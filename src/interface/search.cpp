@@ -420,7 +420,8 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 	m_searching = true;
 	m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisitRestricted(path, _T(""), true);
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_list, path, filters, true);
+	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, true);
+	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
 }
 
 void CSearchDialog::OnStop(wxCommandEvent&)
@@ -679,7 +680,8 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(dir, _T(""), target_path, false);
 		std::vector<CFilter> const filters; // Empty, recurse into everything
-		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, dir, filters, true, m_original_dir);
+		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(dir, true);
+		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, filters, m_original_dir);
 	}
 }
 
@@ -784,7 +786,8 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		}
 
 		std::vector<CFilter> const filters; // Empty, recurse into everything
-		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, path, filters, !path.HasParent(), m_original_dir);
+		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, !path.HasParent());
+		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 	}
 }
 

@@ -1260,12 +1260,13 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	if (added)
 		m_pQueue->QueueFile_Finish(!queueOnly);
 
-	if (startRecursive)
-	{
+	if (startRecursive) {
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, m_pDirectoryListing->path, filter.GetActiveFilters(false));
+		pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
+													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
 }
 
@@ -1449,12 +1450,13 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 	if (!filesToDelete.empty())
 		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_pDirectoryListing->path, std::move(filesToDelete)));
 
-	if (startRecursive)
-	{
+	if (startRecursive) {
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete, m_pDirectoryListing->path, filter.GetActiveFilters(false));
+		pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete,
+													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
 }
 
@@ -1735,7 +1737,9 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod, m_pDirectoryListing->path, filter.GetActiveFilters(false));
+		pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod,
+													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 
 		// Refresh listing. This gets done implicitely by the recursive operation, so
 		// only it if not recursing.
@@ -1851,8 +1855,7 @@ std::list<wxString> CRemoteListView::RememberSelectedItems(wxString& focused)
 	}
 
 	int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-	if (item != -1)
-	{
+	if (item != -1) {
 		int index = GetItemIndex(item);
 		if (index != -1 && m_fileData[index].comparison_flags != fill)
 		{
@@ -1873,25 +1876,21 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 	if (!GetItemCount())
 		return;
 
-	if (focused == _T(".."))
-	{
+	if (focused == _T("..")) {
 		focused = _T("");
 		SetItemState(0, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 	}
 
-	if (selectedNames.empty())
-	{
+	if (selectedNames.empty()) {
 		if (focused.empty())
 			return;
 
-		for (unsigned int i = 1; i < m_indexMapping.size(); i++)
-		{
+		for (unsigned int i = 1; i < m_indexMapping.size(); ++i) {
 			const int index = m_indexMapping[i];
 			if (m_fileData[index].comparison_flags == fill)
 				continue;
 
-			if ((*m_pDirectoryListing)[index].name == focused)
-			{
+			if ((*m_pDirectoryListing)[index].name == focused) {
 				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
 				if (ensureVisible)
 					EnsureVisible(i);
@@ -1901,8 +1900,7 @@ void CRemoteListView::ReselectItems(std::list<wxString>& selectedNames, wxString
 		return;
 	}
 
-	if (selectedNames.front() == _T(".."))
-	{
+	if (selectedNames.front() == _T("..")) {
 		selectedNames.pop_front();
 		SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 	}

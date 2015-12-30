@@ -844,7 +844,9 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 		m_pComparisonManager->ExitComparisonMode();
 
 	CFilterManager filter;
-	m_pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, pRemoteDataObject->GetServerPath(), filter.GetActiveFilters(false));
+	m_pRecursiveOperation->AddRecursionRoot(pRemoteDataObject->GetServerPath(), false);
+	m_pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
+												   filter.GetActiveFilters(false), pRemoteDataObject->GetServerPath());
 
 	return true;
 }
