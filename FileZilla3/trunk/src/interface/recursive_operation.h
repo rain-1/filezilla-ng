@@ -4,6 +4,7 @@
 #include "state.h"
 #include <set>
 #include "filter.h"
+#include <optional.h>
 
 class CChmodDialog;
 class CQueueView;
@@ -26,7 +27,9 @@ public:
 		recursive_list
 	};
 
-	void StartRecursiveOperation(OperationMode mode, const CServerPath& startDir, std::vector<CFilter> const& filters, bool allowParent = false, const CServerPath& finalDir = CServerPath());
+	void AddRecursionRoot(CServerPath const& startDir, bool allowParent);
+	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir);
+
 	void StopRecursiveOperation();
 
 	void AddDirectoryToVisit(const CServerPath& path, const wxString& subdir, const CLocalPath& localDir = CLocalPath(), bool is_link = false);
@@ -40,14 +43,14 @@ public:
 	// Needed for recursive_chmod
 	void SetChmodDialog(CChmodDialog* pChmodDialog);
 
-	void ListingFailed(int error);
-	void LinkIsNotDir();
-
 	void SetQueue(CQueueView* pQueue);
 
 	bool ChangeOperationMode(OperationMode mode);
 
 protected:
+	void LinkIsNotDir();
+	void ListingFailed(int error);
+
 	// Processes the directory listing in case of a recursive operation
 	void ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing);
 
@@ -63,21 +66,20 @@ protected:
 		CServerPath parent;
 		wxString subdir;
 		CLocalPath localDir;
-		bool doVisit{true};
+		CSparseOptional<wxString> restrict;
 
-		bool recurse{true};
-		wxString restrict;
-
-		bool second_try{};
+		// Symlink target might be outside actual start dir. Yet
+		// sometimes user wants to download symlink target contents
+		CServerPath start_dir;
 
 		// 0 = not a link
 		// 1 = link, added by class during the operation
 		// 2 = link, added by user of class
 		int link{};
 
-		// Symlink target might be outside actual start dir. Yet
-		// sometimes user wants to download symlink target contents
-		CServerPath start_dir;
+		bool doVisit{true};
+		bool recurse{true};
+		bool second_try{};
 	};
 
 	bool BelowRecursionRoot(const CServerPath& path, CNewDir &dir);

@@ -35,11 +35,19 @@ void CRecursiveOperation::OnStateChange(CState*, enum t_statechange_notification
 	}
 }
 
-void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, const CServerPath& startDir, std::vector<CFilter> const& filters, bool allowParent /*=false*/, const CServerPath& finalDir /*=CServerPath()*/)
+void CRecursiveOperation::AddRecursionRoot(const CServerPath& startDir, bool allowParent)
+{
+	wxCHECK_RET(!startDir.empty(), _T("Empty startDir in StartRecursiveOperation"));
+
+	m_startDir = startDir;
+	m_allowParent = allowParent;
+}
+
+void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir)
 {
 	wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
 	wxCHECK_RET(m_pState->IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
-	wxCHECK_RET(!startDir.empty(), _T("Empty startDir in StartRecursiveOperation"));
+	wxCHECK_RET(!finalDir.empty(), _T("Empty final dir in recursive operation"));
 
 	if (mode == recursive_chmod && !m_pChmodDlg)
 		return;
@@ -58,15 +66,6 @@ void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, const CSer
 	m_operationMode = mode;
 	m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 	m_pState->NotifyHandlers(STATECHANGE_RECURSION_STATUS);
-
-	m_startDir = startDir;
-
-	if (finalDir.empty())
-		m_finalDir = startDir;
-	else
-		m_finalDir = finalDir;
-
-	m_allowParent = allowParent;
 
 	m_filters = filters;
 
@@ -89,7 +88,9 @@ void CRecursiveOperation::AddDirectoryToVisitRestricted(const CServerPath& path,
 	CNewDir dirToVisit;
 	dirToVisit.parent = path;
 	dirToVisit.recurse = recurse;
-	dirToVisit.restrict = restrict;
+	if (!restrict.empty()) {
+		dirToVisit.restrict = CSparseOptional<wxString>(restrict);
+	}
 	m_dirsToVisit.push_back(dirToVisit);
 }
 
@@ -223,7 +224,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	CFilterManager filter;
 
 	// Is operation restricted to a single child?
-	bool restrict = !dir.restrict.empty();
+	bool const restrict = static_cast<bool>(dir.restrict);
 
 	std::deque<wxString> filesToDelete;
 
@@ -235,7 +236,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 		const CDirentry& entry = (*pDirectoryListing)[i];
 
 		if (restrict) {
-			if (entry.name != dir.restrict)
+			if (entry.name != *dir.restrict)
 				continue;
 		}
 		else if (filter.FilenameFiltered(m_filters, entry.name, path, entry.is_dir(), entry.size, 0, entry.time))
@@ -364,8 +365,7 @@ void CRecursiveOperation::ListingFailed(int error)
 
 	CNewDir dir = m_dirsToVisit.front();
 	m_dirsToVisit.pop_front();
-	if ((error & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR && !dir.second_try)
-	{
+	if ((error & FZ_REPLY_CRITICALERROR) != FZ_REPLY_CRITICALERROR && !dir.second_try) {
 		// Retry, could have been a temporary socket creating failure
 		// (e.g. hitting a blocked port) or a disconnect (e.g. no-filetransfer-timeout)
 		dir.second_try = true;
