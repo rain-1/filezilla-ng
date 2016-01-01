@@ -42,7 +42,7 @@ protected:
 	CServerPath m_original_dir;
 	CLocalPath m_local_target;
 
-	void ProcessSelection(std::list<int> &selected_files, std::list<CServerPath> &selected_dirs);
+	void ProcessSelection(std::list<int> &selected_files, std::deque<CServerPath> &selected_dirs);
 
 	DECLARE_EVENT_TABLE()
 	void OnSearch(wxCommandEvent& event);

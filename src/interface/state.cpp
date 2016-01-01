@@ -812,8 +812,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	bool hasDirs = false;
 	bool hasFiles = false;
 	const std::list<CRemoteDataObject::t_fileInfo>& files = pRemoteDataObject->GetFiles();
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-	{
+	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		if (iter->dir)
 			hasDirs = true;
 		else
@@ -831,6 +830,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	if (!hasDirs)
 		return true;
 
+	m_pRecursiveOperation->AddRecursionRoot(pRemoteDataObject->GetServerPath(), false);
 	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		if (!iter->dir)
 			continue;
@@ -844,7 +844,6 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 		m_pComparisonManager->ExitComparisonMode();
 
 	CFilterManager filter;
-	m_pRecursiveOperation->AddRecursionRoot(pRemoteDataObject->GetServerPath(), false);
 	m_pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
 												   filter.GetActiveFilters(false), pRemoteDataObject->GetServerPath());
 
