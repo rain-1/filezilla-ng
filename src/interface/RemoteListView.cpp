@@ -1213,10 +1213,9 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	}
 
 	bool added = false;
-	bool startRecursive = false;
 	long item = -1;
 
-	pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+	recursion_root root(m_pDirectoryListing->path, false);
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
@@ -1240,8 +1239,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 			local_path.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
 			CServerPath remotePath = m_pDirectoryListing->path;
 			if (remotePath.AddSegment(name)) {
-				pRecursiveOperation->AddDirectoryToVisit(m_pDirectoryListing->path, name, local_path, entry.is_link());
-				startRecursive = true;
+				root.add_dir_to_visit(m_pDirectoryListing->path, name, local_path, entry.is_link());
 			}
 		}
 		else {
@@ -1257,7 +1255,8 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	if (added)
 		m_pQueue->QueueFile_Finish(!queueOnly);
 
-	if (startRecursive) {
+	if (!root.empty()) {
+		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
@@ -1411,11 +1410,8 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 
 	std::deque<wxString> filesToDelete;
 
-	bool startRecursive = false;
-	item = -1;
-
-	pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
-	for (;;) {
+	recursion_root root(m_pDirectoryListing->path, false);
+	for (item = -1; ;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (!item)
 			continue;
@@ -1433,10 +1429,8 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 
 		if (entry.is_dir() && (follow_symlink || !entry.is_link())) {
 			CServerPath remotePath = m_pDirectoryListing->path;
-			if (remotePath.AddSegment(name))
-			{
-				pRecursiveOperation->AddDirectoryToVisit(m_pDirectoryListing->path, name, CLocalPath(), true);
-				startRecursive = true;
+			if (remotePath.AddSegment(name)) {
+				root.add_dir_to_visit(m_pDirectoryListing->path, name, CLocalPath(), true);;
 			}
 		}
 		else
@@ -1446,9 +1440,11 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 	if (!filesToDelete.empty())
 		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_pDirectoryListing->path, std::move(filesToDelete)));
 
-	if (startRecursive) {
+	if (!root.empty()) {
 		if (IsComparing())
 			ExitComparisonMode();
+		pRecursiveOperation->AddRecursionRoot(std::move(root));
+		
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
@@ -1687,7 +1683,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
 	wxASSERT(pRecursiveOperation);
-	pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+	recursion_root root(m_pDirectoryListing->path, false);
 
 	item = -1;
 	for (;;) {
@@ -1724,7 +1720,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		}
 
 		if (pChmodDlg->Recursive() && entry.is_dir())
-			pRecursiveOperation->AddDirectoryToVisit(m_pDirectoryListing->path, entry.name);
+			root.add_dir_to_visit(m_pDirectoryListing->path, entry.name);
 	}
 
 	if (pChmodDlg->Recursive()) {
@@ -1732,6 +1728,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			ExitComparisonMode();
 
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
+		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);

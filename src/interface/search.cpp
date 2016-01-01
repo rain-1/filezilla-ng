@@ -418,8 +418,9 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 
 	// Start
 	m_searching = true;
-	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, true);
-	m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisitRestricted(path, _T(""), true);
+	recursion_root root(path, true);
+	root.add_dir_to_visit_restricted(path, _T(""), true);
+	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
 	std::vector<CFilter> const filters; // Empty, recurse into everything
 	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
 }
@@ -654,8 +655,9 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		if (!flatten && dir.HasParent())
 			target_path.AddSegment(dir.GetLastSegment());
 
-		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(dir, true);
-		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(dir, _T(""), target_path, false);
+		recursion_root root(dir, true);
+		root.add_dir_to_visit(dir, _T(""), target_path, false);
+		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
 	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, filters, m_original_dir);
@@ -749,13 +751,14 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	}
 
 	for (auto path : selected_dirs) {
-		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, !path.HasParent());
+		recursion_root root(path, !path.HasParent());
 		if (!path.HasParent())
-			m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(path, _T(""));
+			root.add_dir_to_visit(path, _T(""));
 		else {
-			m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(path.GetParent(), path.GetLastSegment());
+			root.add_dir_to_visit(path.GetParent(), path.GetLastSegment());
 			path = path.GetParent();
 		}
+		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
 	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);

@@ -830,22 +830,26 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	if (!hasDirs)
 		return true;
 
-	m_pRecursiveOperation->AddRecursionRoot(pRemoteDataObject->GetServerPath(), false);
+	recursion_root root(pRemoteDataObject->GetServerPath(), false);
 	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		if (!iter->dir)
 			continue;
 
 		CLocalPath newPath(path);
 		newPath.AddSegment(CQueueView::ReplaceInvalidCharacters(iter->name));
-		m_pRecursiveOperation->AddDirectoryToVisit(pRemoteDataObject->GetServerPath(), iter->name, newPath, iter->link);
+		root.add_dir_to_visit(pRemoteDataObject->GetServerPath(), iter->name, newPath, iter->link);
 	}
 
-	if (m_pComparisonManager->IsComparing())
-		m_pComparisonManager->ExitComparisonMode();
+	if (!root.empty()) {
+		if (m_pComparisonManager->IsComparing())
+			m_pComparisonManager->ExitComparisonMode();
 
-	CFilterManager filter;
-	m_pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
-												   filter.GetActiveFilters(false), pRemoteDataObject->GetServerPath());
+		m_pRecursiveOperation->AddRecursionRoot(std::move(root));
+
+		CFilterManager filter;
+		m_pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
+			filter.GetActiveFilters(false), pRemoteDataObject->GetServerPath());
+	}
 
 	return true;
 }
