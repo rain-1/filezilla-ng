@@ -418,9 +418,9 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 
 	// Start
 	m_searching = true;
+	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, true);
 	m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisitRestricted(path, _T(""), true);
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, true);
 	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
 }
 
@@ -528,8 +528,10 @@ void CSearchDownloadDialog::OnOK(wxCommandEvent&)
 	EndDialog(wxID_OK);
 }
 
-void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<CServerPath> &selected_dirs)
+void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<CServerPath> &selected_dirs)
 {
+	std::deque<CServerPath> dirs;
+
 	int sel = -1;
 	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		if (sel > (int)m_results->m_indexMapping.size())
@@ -542,49 +544,28 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::list<C
 			if (path.empty())
 				continue;
 
-			bool replaced = false;
-			std::list<CServerPath>::iterator iter = selected_dirs.begin();
-			std::list<CServerPath>::iterator prev;
-
-			// Make sure that selected_dirs does not contain
-			// any directories that are in a parent-child relationship
-			// Resolve by only keeping topmost parents
-			while (iter != selected_dirs.end()) {
-				if (*iter == path) {
-					replaced = true;
-					break;
-				}
-
-				if (iter->IsParentOf(path, false)) {
-					replaced = true;
-					break;
-				}
-
-				if (iter->IsSubdirOf(path, false)) {
-					if (!replaced) {
-						*iter = path;
-						replaced = true;
-					}
-					else {
-						prev = iter++;
-						selected_dirs.erase(prev);
-						continue;
-					}
-				}
-				++iter;
-			}
-			if (!replaced)
-				selected_dirs.push_back(path);
+			dirs.push_back(path);
 		}
 		else
 			selected_files.push_back(index);
 	}
 
+	// Make sure that selected_dirs does not contain
+	// any directories that are in a parent-child relationship
+	// Resolve by only keeping topmost parents
+	std::sort(dirs.begin(), dirs.end());
+	for (CServerPath const& path : dirs) {
+		if (!selected_dirs.empty() && (path.IsSubdirOf(selected_dirs.back(), false) || path == selected_dirs.back())) {
+			continue;
+		}
+		selected_dirs.push_back(path);
+	}
+
 	// Now in a second phase filter out all files that are also in a directory
 	std::list<int> selected_files_new;
 	for (auto const& sel_file : selected_files) {
-		CServerPath path = m_results->m_fileData[sel_file].path;
-		std::list<CServerPath>::const_iterator path_iter;
+		CServerPath const& path = m_results->m_fileData[sel_file].path;
+		std::deque<CServerPath>::iterator path_iter;
 		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter) {
 			if (*path_iter == path || path_iter->IsParentOf(path, false))
 				break;
@@ -605,17 +586,12 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		return;
 
 	// Find all selected files and directories
-	std::list<CServerPath> selected_dirs;
+	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
 	ProcessSelection(selected_files, selected_dirs);
 
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
-
-	if (selected_dirs.size() > 1) {
-		wxMessageBoxEx(_("Downloading multiple unrelated directories is not yet supported"), _("Downloading search results"), wxICON_EXCLAMATION);
-		return;
-	}
 
 	CSearchDownloadDialog dlg;
 	if (!dlg.Run(this, m_local_target.GetPath(), selected_files.size(), selected_dirs.size()))
@@ -678,11 +654,11 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		if (!flatten && dir.HasParent())
 			target_path.AddSegment(dir.GetLastSegment());
 
-		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(dir, _T(""), target_path, false);
-		std::vector<CFilter> const filters; // Empty, recurse into everything
 		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(dir, true);
-		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, filters, m_original_dir);
+		m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(dir, _T(""), target_path, false);
 	}
+	std::vector<CFilter> const filters; // Empty, recurse into everything
+	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, filters, m_original_dir);
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)
@@ -691,7 +667,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		return;
 
 	// Find all selected files and directories
-	std::list<CServerPath> selected_dirs;
+	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
 	ProcessSelection(selected_files, selected_dirs);
 
@@ -744,17 +720,12 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		return;
 
 	// Find all selected files and directories
-	std::list<CServerPath> selected_dirs;
+	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
 	ProcessSelection(selected_files, selected_dirs);
 
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
-
-	if (selected_dirs.size() > 1) {
-		wxMessageBoxEx(_("Deleting multiple unrelated directories is not yet supported"), _("Deleting directories"), wxICON_EXCLAMATION);
-		return;
-	}
 
 	wxString question;
 	if (selected_dirs.empty())
@@ -778,17 +749,16 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	}
 
 	for (auto path : selected_dirs) {
+		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, !path.HasParent());
 		if (!path.HasParent())
 			m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(path, _T(""));
 		else {
 			m_pState->GetRecursiveOperationHandler()->AddDirectoryToVisit(path.GetParent(), path.GetLastSegment());
 			path = path.GetParent();
 		}
-
-		std::vector<CFilter> const filters; // Empty, recurse into everything
-		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(path, !path.HasParent());
-		m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 	}
+	std::vector<CFilter> const filters; // Empty, recurse into everything
+	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)

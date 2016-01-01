@@ -1207,8 +1207,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	wxASSERT(local_parent.IsWriteable());
 
 	const CServer* pServer = m_pState->GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxBell();
 		return;
 	}
@@ -1216,8 +1215,9 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	bool added = false;
 	bool startRecursive = false;
 	long item = -1;
-	for (;;)
-	{
+
+	pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (item == -1)
 			break;
@@ -1233,21 +1233,18 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
 		const wxString& name = entry.name;
 
-		if (entry.is_dir())
-		{
+		if (entry.is_dir()) {
 			if (!idle)
 				continue;
 			CLocalPath local_path(local_parent);
 			local_path.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
 			CServerPath remotePath = m_pDirectoryListing->path;
-			if (remotePath.AddSegment(name))
-			{
+			if (remotePath.AddSegment(name)) {
 				pRecursiveOperation->AddDirectoryToVisit(m_pDirectoryListing->path, name, local_path, entry.is_link());
 				startRecursive = true;
 			}
 		}
-		else
-		{
+		else {
 			wxString localFile = CQueueView::ReplaceInvalidCharacters(name);
 			if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 				localFile = StripVMSRevision(localFile);
@@ -1264,7 +1261,6 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
 		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
@@ -1417,8 +1413,9 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 
 	bool startRecursive = false;
 	item = -1;
-	for (;;)
-	{
+
+	pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 		if (!item)
 			continue;
@@ -1434,8 +1431,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
 		const wxString& name = entry.name;
 
-		if (entry.is_dir() && (follow_symlink || !entry.is_link()))
-		{
+		if (entry.is_dir() && (follow_symlink || !entry.is_link())) {
 			CServerPath remotePath = m_pDirectoryListing->path;
 			if (remotePath.AddSegment(name))
 			{
@@ -1454,7 +1450,6 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
@@ -1692,6 +1687,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
 	wxASSERT(pRecursiveOperation);
+	pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
 
 	item = -1;
 	for (;;) {
@@ -1737,7 +1733,6 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 		CFilterManager filter;
-		pRecursiveOperation->AddRecursionRoot(m_pDirectoryListing->path, false);
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 

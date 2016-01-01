@@ -84,12 +84,20 @@ protected:
 
 	bool BelowRecursionRoot(const CServerPath& path, CNewDir &dir);
 
-	CServerPath m_startDir;
-	CServerPath m_finalDir;
-	std::set<CServerPath> m_visitedDirs;
-	std::deque<CNewDir> m_dirsToVisit;
+	struct RecursionRoot {
+		RecursionRoot(CServerPath const& start_dir, bool allow_parent)
+			: m_startDir(start_dir)
+			, m_allowParent(allow_parent)
+		{}
 
-	bool m_allowParent{};
+		CServerPath m_startDir;
+		std::set<CServerPath> m_visitedDirs;
+		std::deque<CNewDir> m_dirsToVisit;
+		bool m_allowParent{};
+	};
+	std::deque<RecursionRoot> recursion_roots_;
+
+	CServerPath m_finalDir;
 
 	// Needed for recursive_chmod
 	CChmodDialog* m_pChmodDlg{};
