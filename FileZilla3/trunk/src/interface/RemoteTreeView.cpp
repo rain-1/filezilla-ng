@@ -947,9 +947,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 
 	const int applyType = pChmodDlg->GetApplyType();
 
-	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
-	pRecursiveOperation->AddRecursionRoot(hasParent ? path.GetParent() : path, !cached);
-
+	recursion_root root(hasParent ? path.GetParent() : path, !cached);
 	if (cached) { // Implies hasParent
 		// Change directory permissions
 		if (!applyType || applyType == 2) {
@@ -960,16 +958,18 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 
 		if (pChmodDlg->Recursive())
 			// Start recursion
-			pRecursiveOperation->AddDirectoryToVisit(path, _T(""), CLocalPath());
+			root.add_dir_to_visit(path, _T(""), CLocalPath());
 	}
 	else {
 		if (hasParent)
-			pRecursiveOperation->AddDirectoryToVisitRestricted(path.GetParent(), name, pChmodDlg->Recursive());
+			root.add_dir_to_visit_restricted(path.GetParent(), name, pChmodDlg->Recursive());
 		else
-			pRecursiveOperation->AddDirectoryToVisitRestricted(path, _T(""), pChmodDlg->Recursive());
+			root.add_dir_to_visit_restricted(path, _T(""), pChmodDlg->Recursive());
 	}
 
 	if (!cached || pChmodDlg->Recursive()) {
+		CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 
 		CServerPath currentPath;
@@ -1011,9 +1011,10 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
 
+	recursion_root root(path, true);
+	root.add_dir_to_visit(path, _T(""), localDir);
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
-	pRecursiveOperation->AddRecursionRoot(path, true);
-	pRecursiveOperation->AddDirectoryToVisit(path, _T(""), localDir);
+	pRecursiveOperation->AddRecursionRoot(std::move(root));
 
 	CServerPath currentPath;
 	const wxTreeItemId selected = GetSelection();
@@ -1044,18 +1045,20 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 
 	CRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
 
+	recursion_root root;
 	CServerPath startDir;
 	if (hasParent) {
 		const wxString& name = GetItemText(m_contextMenuItem);
 		startDir = pathToDelete.GetParent();
-		pRecursiveOperation->AddRecursionRoot(startDir, !hasParent);
-		pRecursiveOperation->AddDirectoryToVisit(startDir, name);
+		root = recursion_root(startDir, !hasParent);
+		root.add_dir_to_visit(startDir, name);
 	}
 	else {
 		startDir = pathToDelete;
-		pRecursiveOperation->AddRecursionRoot(startDir, !hasParent);
-		pRecursiveOperation->AddDirectoryToVisit(startDir, _T(""));
+		root = recursion_root(startDir, !hasParent);
+		root.add_dir_to_visit(startDir, _T(""));
 	}
+	pRecursiveOperation->AddRecursionRoot(std::move(root));
 
 	CServerPath currentPath;
 	const wxTreeItemId selected = GetSelection();

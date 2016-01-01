@@ -9,6 +9,48 @@
 class CChmodDialog;
 class CQueueView;
 
+class recursion_root final
+{
+public:
+	recursion_root() = default;
+	recursion_root(CServerPath const& start_dir, bool allow_parent);
+
+	void add_dir_to_visit(CServerPath const& path, wxString const& subdir, CLocalPath const& localDir = CLocalPath(), bool is_link = false);
+	void add_dir_to_visit_restricted(CServerPath const& path, wxString const& restrict, bool recurse);
+
+	bool empty() const { return m_dirsToVisit.empty(); }
+
+private:
+	friend class CRecursiveOperation;
+
+	class new_dir final
+	{
+	public:
+		CServerPath parent;
+		wxString subdir;
+		CLocalPath localDir;
+		CSparseOptional<wxString> restrict;
+
+		// Symlink target might be outside actual start dir. Yet
+		// sometimes user wants to download symlink target contents
+		CServerPath start_dir;
+
+		// 0 = not a link
+		// 1 = link, added by class during the operation
+		// 2 = link, added by user of class
+		int link{};
+
+		bool doVisit{ true };
+		bool recurse{ true };
+		bool second_try{};
+	};
+
+	CServerPath m_startDir;
+	std::set<CServerPath> m_visitedDirs;
+	std::deque<new_dir> m_dirsToVisit;
+	bool m_allowParent{};
+};
+
 class CRecursiveOperation final : public CStateEventHandler
 {
 public:
@@ -27,13 +69,10 @@ public:
 		recursive_list
 	};
 
-	void AddRecursionRoot(CServerPath const& startDir, bool allowParent);
+	void AddRecursionRoot(recursion_root && root);
 	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir);
 
 	void StopRecursiveOperation();
-
-	void AddDirectoryToVisit(const CServerPath& path, const wxString& subdir, const CLocalPath& localDir = CLocalPath(), bool is_link = false);
-	void AddDirectoryToVisitRestricted(const CServerPath& path, const wxString& restrict, bool recurse);
 
 	bool IsActive() const { return GetOperationMode() != recursive_none; }
 	OperationMode GetOperationMode() const { return m_operationMode; }
@@ -60,42 +99,9 @@ protected:
 
 	OperationMode m_operationMode;
 
-	class CNewDir final
-	{
-	public:
-		CServerPath parent;
-		wxString subdir;
-		CLocalPath localDir;
-		CSparseOptional<wxString> restrict;
+	bool BelowRecursionRoot(const CServerPath& path, recursion_root::new_dir &dir);
 
-		// Symlink target might be outside actual start dir. Yet
-		// sometimes user wants to download symlink target contents
-		CServerPath start_dir;
-
-		// 0 = not a link
-		// 1 = link, added by class during the operation
-		// 2 = link, added by user of class
-		int link{};
-
-		bool doVisit{true};
-		bool recurse{true};
-		bool second_try{};
-	};
-
-	bool BelowRecursionRoot(const CServerPath& path, CNewDir &dir);
-
-	struct RecursionRoot {
-		RecursionRoot(CServerPath const& start_dir, bool allow_parent)
-			: m_startDir(start_dir)
-			, m_allowParent(allow_parent)
-		{}
-
-		CServerPath m_startDir;
-		std::set<CServerPath> m_visitedDirs;
-		std::deque<CNewDir> m_dirsToVisit;
-		bool m_allowParent{};
-	};
-	std::deque<RecursionRoot> recursion_roots_;
+	std::deque<recursion_root> recursion_roots_;
 
 	CServerPath m_finalDir;
 
