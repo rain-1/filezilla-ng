@@ -318,8 +318,11 @@ void CSearchDialog::Run()
 void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
-		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
-		ProcessDirectoryListing(listing);
+		auto recursiveOperation = m_pState->GetRecursiveOperationHandler();
+		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_list) {
+			std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
+			ProcessDirectoryListing(listing);
+		}
 	}
 	else if (notification == STATECHANGE_REMOTE_IDLE) {
 		if (pState->IsRemoteIdle())
@@ -454,6 +457,7 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 	if (!m_pState->IsRemoteIdle()) {
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DELETE"), false);
+		pMenu->Enable(XRCID("ID_MENU_SEARCH_EDIT"), false);
 	}
 
 	PopupMenu(pMenu);
@@ -751,13 +755,13 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	}
 
 	for (auto path : selected_dirs) {
-		recursion_root root(path, !path.HasParent());
-		if (!path.HasParent())
-			root.add_dir_to_visit(path, _T(""));
-		else {
-			root.add_dir_to_visit(path.GetParent(), path.GetLastSegment());
+		wxString segment;
+		if (path.HasParent()) {
+			segment = path.GetLastSegment();
 			path = path.GetParent();
 		}
+		recursion_root root(path, !path.HasParent());
+		root.add_dir_to_visit(path, segment);
 		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
