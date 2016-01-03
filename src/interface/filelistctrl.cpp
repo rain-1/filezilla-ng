@@ -284,8 +284,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 {
 	CancelLabelEdit();
 
-	if (column != -1)
-	{
+	if (column != -1) {
 		if (column != m_sortColumn)
 		{
 			const int oldVisibleColumn = GetColumnVisibleIndex(m_sortColumn);
@@ -300,8 +299,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 		direction = m_sortDirection;
 
 	int newVisibleColumn = GetColumnVisibleIndex(column);
-	if (newVisibleColumn == -1)
-	{
+	if (newVisibleColumn == -1) {
 		newVisibleColumn = 0;
 		column = 0;
 	}
@@ -310,24 +308,29 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 
 	// Remember which files are selected
 	bool *selected = 0;
-	int focused = -1;
-	if (updateSelections)
-	{
-		selected = new bool[m_fileData.size()];
-		memset(selected, 0, sizeof(bool) * m_fileData.size());
+	int focused_item = -1;
+	int focused_index = -1;
 
+	if (updateSelections) {
 #ifndef __WXMSW__
 		// GetNextItem is O(n) if nothing is selected, GetSelectedItemCount() is O(1)
 		if (GetSelectedItemCount())
 #endif
 		{
-			int item = -1;
-			while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-				selected[m_indexMapping[item]] = 1;
+			int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+			if (item != -1) {
+				selected = new bool[m_fileData.size()];
+				memset(selected, 0, sizeof(bool) * m_fileData.size());
+			
+				do {
+					selected[m_indexMapping[item]] = 1;
+					item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
+				} while (item != -1);
+			}
 		}
-		focused = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
-		if (focused != -1)
-			focused = m_indexMapping[focused];
+		focused_item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED);
+		if (focused_item != -1)
+			focused_index = m_indexMapping[focused_item];
 	}
 
 	const int dirSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
@@ -343,9 +346,8 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 			++start;
 		std::reverse(start, m_indexMapping.end());
 
-		if (updateSelections)
-		{
-			SortList_UpdateSelections(selected, focused);
+		if (updateSelections) {
+			SortList_UpdateSelections(selected, focused_item, focused_index);
 			delete [] selected;
 		}
 
@@ -356,10 +358,8 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	m_sortColumn = column;
 
 	const unsigned int minsize = m_hasParent ? 3 : 2;
-	if (m_indexMapping.size() < minsize)
-	{
-		if (updateSelections)
-			delete [] selected;
+	if (m_indexMapping.size() < minsize) {
+		delete [] selected;
 		return;
 	}
 
@@ -370,33 +370,35 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	std::sort(start, m_indexMapping.end(), object);
 	object.Destroy();
 
-	if (updateSelections)
-	{
-		SortList_UpdateSelections(selected, focused);
+	if (updateSelections) {
+		SortList_UpdateSelections(selected, focused_item, focused_index);
 		delete [] selected;
 	}
 }
 
-template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelections(bool* selections, int focus)
+template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelections(bool* selections, int focused_item, int focused_index)
 {
-	for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); i++)
-	{
-		const int state = GetItemState(i, wxLIST_STATE_SELECTED | wxLIST_STATE_FOCUSED);
-		const bool selected = (state & wxLIST_STATE_SELECTED) != 0;
-		const bool focused = (state & wxLIST_STATE_FOCUSED) != 0;
-
-		int item = m_indexMapping[i];
-		if (selections[item] != selected)
-			SetSelection(i, selections[item]);
-		if (focused)
-		{
-			if (item != focus)
-				SetItemState(i, 0, wxLIST_STATE_FOCUSED);
+	if (focused_item != -1) {
+		if (m_indexMapping[focused_item] != focused_index) {
+			SetItemState(focused_item, 0, wxLIST_STATE_FOCUSED);
 		}
-		else
-		{
-			if (item == focus)
-				SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+		else {
+			for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); ++i) {
+				if (m_indexMapping[i] == focused_index) {
+					SetItemState(i, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+				}
+			}
+		}
+	}
+	
+	if (selections) {
+		for (unsigned int i = m_hasParent ? 1 : 0; i < m_indexMapping.size(); ++i) {
+			const int state = GetItemState(i, wxLIST_STATE_SELECTED);
+			const bool selected = (state & wxLIST_STATE_SELECTED) != 0;
+
+			int item = m_indexMapping[i];
+			if (selections[item] != selected)
+				SetSelection(i, selections[item]);
 		}
 	}
 }
