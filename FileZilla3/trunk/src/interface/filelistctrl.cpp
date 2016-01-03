@@ -515,7 +515,7 @@ template<class CFileData> wxString CFileListCtrl<CFileData>::GetType(wxString na
 
 	SHFILEINFO shFinfo;
 	memset(&shFinfo, 0, sizeof(SHFILEINFO));
-	if (SHGetFileInfo(name,
+	if (SHGetFileInfo(name.wc_str(),
 		dir ? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL,
 		&shFinfo,
 		sizeof(shFinfo),

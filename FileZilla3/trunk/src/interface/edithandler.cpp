@@ -179,7 +179,7 @@ wxString CEditHandler::GetLocalDirectory()
 	RemoveTemporaryFiles(dir);
 
 #ifdef __WXMSW__
-	m_lockfile_handle = ::CreateFile(m_localDir + _T("fz3temp-lockfile"), GENERIC_WRITE, 0, 0, CREATE_NEW, FILE_ATTRIBUTE_TEMPORARY, 0);
+	m_lockfile_handle = ::CreateFile((m_localDir + _T("fz3temp-lockfile")).wc_str(), GENERIC_WRITE, 0, 0, CREATE_NEW, FILE_ATTRIBUTE_TEMPORARY, 0);
 	if (m_lockfile_handle == INVALID_HANDLE_VALUE)
 	{
 		wxRmdir(m_localDir);

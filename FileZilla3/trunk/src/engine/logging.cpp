@@ -95,7 +95,7 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 		return false;
 
 #ifdef __WXMSW__
-	m_log_fd = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+	m_log_fd = CreateFile(m_file.wc_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (m_log_fd == INVALID_HANDLE_VALUE)
 #else
 	m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
@@ -174,7 +174,7 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					return;
 				}
 
-				HANDLE hFile = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+				HANDLE hFile = CreateFile(m_file.wc_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 				if (hFile == INVALID_HANDLE_VALUE) {
 					wxString error = wxSysErrorMsg();
 
@@ -196,10 +196,10 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 					// Todo: Handle the case in which logdir and tmpdir are on different volumes.
 					// (Why is everthing so needlessly complex on MSW?)
 					wxString tmp = wxFileName::CreateTempFileName(_T("fz3"));
-					MoveFileEx(m_file + _T(".1"), tmp, MOVEFILE_REPLACE_EXISTING);
-					DeleteFile(tmp);
-					MoveFileEx(m_file, m_file + _T(".1"), MOVEFILE_REPLACE_EXISTING);
-					m_log_fd = CreateFile(m_file, FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+					MoveFileEx((m_file + _T(".1")).wc_str(), tmp.wc_str(), MOVEFILE_REPLACE_EXISTING);
+					DeleteFile(tmp.wc_str());
+					MoveFileEx(m_file.wc_str(), (m_file + _T(".1")).wc_str(), MOVEFILE_REPLACE_EXISTING);
+					m_log_fd = CreateFile(m_file.wc_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 					if (m_log_fd == INVALID_HANDLE_VALUE) {
 						// If this function would return bool, I'd return FILE_NOT_FOUND here.
 						error = wxSysErrorMsg();

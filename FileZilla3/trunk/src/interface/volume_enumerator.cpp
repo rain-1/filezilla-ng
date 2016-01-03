@@ -87,7 +87,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
 	// Get the label of the drive
 	wxChar* pVolumeName = new wxChar[501];
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-	BOOL res = GetVolumeInformation(drive, pVolumeName, 500, 0, 0, 0, 0, 0);
+	BOOL res = GetVolumeInformation(drive.wc_str(), pVolumeName, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
 	if (res && pVolumeName[0]) {
 		fz::scoped_lock l(sync_);

@@ -258,14 +258,14 @@ int CControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 wxString CControlSocket::ConvertDomainName(wxString const& domain)
 {
 #ifdef __WXMSW__
-	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain, domain.size() + 1, 0, 0);
+	int len = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.wc_str(), domain.size() + 1, 0, 0);
 	if (!len) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
 		return domain;
 	}
 
 	wchar_t* output = new wchar_t[len];
-	int res = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain, domain.size() + 1, output, len);
+	int res = IdnToAscii(IDN_ALLOW_UNASSIGNED, domain.wc_str(), domain.size() + 1, output, len);
 	if (!res) {
 		delete [] output;
 		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
@@ -1290,7 +1290,7 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 		local_path.AddSegment(*iter);
 
 #ifdef __WXMSW__
-		BOOL res = CreateDirectory(local_path.GetPath(), 0);
+		BOOL res = CreateDirectory(local_path.GetPath().wc_str(), 0);
 		if (!res && GetLastError() != ERROR_ALREADY_EXISTS)
 			break;
 #else

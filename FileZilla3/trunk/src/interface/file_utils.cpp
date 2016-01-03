@@ -299,10 +299,10 @@ bool RenameFile(wxWindow* parent, wxString dir, wxString from, wxString to)
 
 	from = dir + from + _T(" ");
 	from.SetChar(from.Length() - 1, '\0');
-	op.pFrom = from;
+	op.pFrom = from.wc_str();
 	to = dir + to + _T(" ");
 	to.SetChar(to.Length()-1, '\0');
-	op.pTo = to;
+	op.pTo = to.wc_str();
 	op.hwnd = (HWND)parent->GetHandle();
 	op.wFunc = FO_RENAME;
 	op.fFlags = FOF_ALLOWUNDO;
