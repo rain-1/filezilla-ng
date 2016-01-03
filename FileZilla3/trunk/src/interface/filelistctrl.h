@@ -580,7 +580,7 @@ protected:
 #endif
 
 private:
-	void SortList_UpdateSelections(bool* selections, int focus);
+	void SortList_UpdateSelections(bool* selections, int focused_item, int focused_index);
 
 	// If this is set to true, don't process selection changed events
 	bool m_insideSetSelection;
