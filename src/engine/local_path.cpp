@@ -436,7 +436,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 	wxString path = *m_path;
 	if (path.Len() > 3)
 		path.RemoveLast();
-	DWORD ret = ::GetFileAttributes(path);
+	DWORD ret = ::GetFileAttributes(path.wc_str());
 	if (ret == INVALID_FILE_ATTRIBUTES) {
 		if (!error)
 			return false;
@@ -449,7 +449,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 		// Check for removable drive, display a more specific error message in that case
 		if (::GetLastError() != ERROR_NOT_READY)
 			return false;
-		int type = GetDriveType(m_path->Left(3));
+		int type = GetDriveType(m_path->Left(3).wc_str());
 		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM)
 			error->Printf(_("Cannot access '%s', no media inserted or drive not ready."), path);
 		return false;

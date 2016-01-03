@@ -173,7 +173,7 @@ int CSystemImageList::GetIconIndex(iconType type, const wxString& fileName /*=_T
 
 	SHFILEINFO shFinfo;
 	memset(&shFinfo, 0, sizeof(SHFILEINFO));
-	if (SHGetFileInfo(!fileName.empty() ? fileName : _T("{B97D3074-1830-4b4a-9D8A-17A38B074052}"),
+	if (SHGetFileInfo(!fileName.empty() ? fileName.wc_str() : _T("{B97D3074-1830-4b4a-9D8A-17A38B074052}"),
 		(type != iconType::file) ? FILE_ATTRIBUTE_DIRECTORY : FILE_ATTRIBUTE_NORMAL,
 		&shFinfo,
 		sizeof(SHFILEINFO),

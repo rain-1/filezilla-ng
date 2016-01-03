@@ -15,7 +15,7 @@ CInterProcessMutex::CInterProcessMutex(enum t_ipcMutexType mutexType, bool initi
 	m_locked = false;
 #ifdef __WXMSW__
 	// Create mutex_
-	hMutex = ::CreateMutex(0, false, wxString::Format(_T("FileZilla 3 Mutex Type %d"), mutexType));
+	hMutex = ::CreateMutex(0, false, wxString::Format(_T("FileZilla 3 Mutex Type %d"), mutexType).wc_str());
 #else
 	if (!m_instanceCount) {
 		// Open file only if this is the first instance

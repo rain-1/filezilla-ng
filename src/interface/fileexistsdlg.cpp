@@ -88,7 +88,7 @@ void CFileExistsDlg::LoadIcon(int id, const wxString &file)
 #ifdef __WXMSW__
 	SHFILEINFO fileinfo;
 	memset(&fileinfo, 0, sizeof(fileinfo));
-	if (SHGetFileInfo(file, FILE_ATTRIBUTE_NORMAL, &fileinfo, sizeof(fileinfo), SHGFI_ICON | SHGFI_USEFILEATTRIBUTES)) {
+	if (SHGetFileInfo(file.wc_str(), FILE_ATTRIBUTE_NORMAL, &fileinfo, sizeof(fileinfo), SHGFI_ICON | SHGFI_USEFILEATTRIBUTES)) {
 		wxBitmap bmp;
 		bmp.Create(size.x, size.y);
 

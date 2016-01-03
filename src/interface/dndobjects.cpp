@@ -39,7 +39,7 @@ CShellExtensionInterface::~CShellExtensionInterface()
 		CloseHandle(m_hMutex);
 
 	if (!m_dragDirectory.empty())
-		RemoveDirectory(m_dragDirectory);
+		RemoveDirectory(m_dragDirectory.wc_str());
 }
 
 wxString CShellExtensionInterface::InitDrag()
@@ -151,7 +151,7 @@ bool CShellExtensionInterface::CreateDragDirectory()
 		if (dir.Len() > MAX_PATH)
 			return false;
 
-		if (CreateDirectory(dir, 0)) {
+		if (CreateDirectory(dir.wc_str(), 0)) {
 			m_dragDirectory = dir;
 			return true;
 		}

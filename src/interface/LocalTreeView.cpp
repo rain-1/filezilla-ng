@@ -1430,14 +1430,14 @@ wxTreeItemId CLocalTreeView::AddDrive(wxChar letter)
 	drive += _T(":");
 
 	long drivesToHide = CVolumeDescriptionEnumeratorThread::GetDrivesToHide();
-	if( CVolumeDescriptionEnumeratorThread::IsHidden(drive, drivesToHide) ) {
+	if( CVolumeDescriptionEnumeratorThread::IsHidden(drive.wc_str(), drivesToHide) ) {
 		return wxTreeItemId();
 	}
 
 	// Get the label of the drive
 	wxChar volumeName[501];
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-	BOOL res = GetVolumeInformation(drive + _T("\\"), volumeName, 500, 0, 0, 0, 0, 0);
+	BOOL res = GetVolumeInformation((drive + _T("\\")).wc_str(), volumeName, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
 
 	wxString itemLabel = drive;
