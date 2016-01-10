@@ -55,32 +55,23 @@ struct sftp_message
 	};
 };
 
-class CSftpInputThread final : public wxThread
+class CSftpInputThread final : public fz::thread
 {
 public:
 	CSftpInputThread(CSftpControlSocket* pOwner, fz::process& proc)
-		: wxThread(wxTHREAD_JOINABLE)
-		, process_(proc)
+		: process_(proc)
 		, m_pOwner(pOwner)
 	{
 	}
 
 	virtual ~CSftpInputThread()
 	{
+		join();
+
 		fz::scoped_lock l(m_sync);
 		for (auto & msg : m_sftpMessages) {
 			delete msg;
 		}
-	}
-
-	bool Init()
-	{
-		if (Create() != wxTHREAD_NO_ERROR)
-			return false;
-
-		Run();
-
-		return true;
 	}
 
 	void GetMessages(std::vector<sftp_message*>& messages)
@@ -174,7 +165,7 @@ protected:
 		return line;
 	}
 
-	virtual ExitCode Entry()
+	virtual void entry()
 	{
 		bool error = false;
 		while (!error) {
@@ -286,12 +277,6 @@ protected:
 loopexit:
 
 		m_pOwner->send_event<CTerminateEvent>();
-		return reinterpret_cast<ExitCode>(Close());
-	}
-
-	int Close()
-	{
-		return 0;
 	}
 
 	fz::process& process_;
@@ -426,7 +411,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	}
 
 	m_pInputThread = new CSftpInputThread(this, *m_pProcess);
-	if (!m_pInputThread->Init()) {
+	if (!m_pInputThread->run()) {
 		LogMessage(MessageType::Debug_Warning, _T("Thread creation failed"));
 		delete m_pInputThread;
 		m_pInputThread = 0;
@@ -1909,13 +1894,9 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 	}
 
 	if (m_pInputThread) {
-		wxThread* pThread = m_pInputThread;
+		auto thread = m_pInputThread;
 		m_pInputThread = 0;
-
-		if (pThread) {
-			pThread->Wait(wxTHREAD_WAIT_BLOCK);
-			delete pThread;
-		}
+		delete thread;
 	}
 	if (m_pProcess) {
 		delete m_pProcess;

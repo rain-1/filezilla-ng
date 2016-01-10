@@ -189,12 +189,12 @@ public:
 #endif
 }
 
-class CSocketThread final : protected wxThread
+class CSocketThread final : protected fz::thread
 {
 	friend class CSocket;
 public:
 	CSocketThread()
-		: wxThread(wxTHREAD_JOINABLE), m_sync(false)
+		: m_sync(false)
 	{
 #ifdef FZ_WINDOWS
 		m_sync_event = WSA_INVALID_EVENT;
@@ -209,6 +209,7 @@ public:
 
 	virtual ~CSocketThread()
 	{
+		join();
 #ifdef FZ_WINDOWS
 		if (m_sync_event != WSA_INVALID_EVENT)
 			WSACloseEvent(m_sync_event);
@@ -284,11 +285,9 @@ public:
 		}
 #endif
 
-		int res = Create();
-		if (res != wxTHREAD_NO_ERROR)
+		if (!run()) {
 			return 1;
-
-		Run();
+		}
 
 		return 0;
 	}
@@ -766,13 +765,13 @@ protected:
 		return true;
 	}
 
-	virtual ExitCode Entry()
+	virtual void entry()
 	{
 		fz::scoped_lock l(m_sync);
 		for (;;) {
 			if (!IdleLoop(l)) {
 				m_finished = true;
-				return 0;
+				return;
 			}
 
 			if (m_pSocket->m_state == CSocket::listening) {
@@ -822,7 +821,7 @@ protected:
 		}
 
 		m_finished = true;
-		return 0;
+		return;
 	}
 
 	CSocket* m_pSocket{};
@@ -893,7 +892,6 @@ void CSocket::DetachThread()
 	if (m_pSocketThread->m_finished) {
 		m_pSocketThread->WakeupThread(l);
 		l.unlock();
-		m_pSocketThread->Wait();
 		delete m_pSocketThread;
 	}
 	else {
@@ -1195,7 +1193,6 @@ void CSocket::Cleanup(bool force)
 			}
 		}
 
-		pThread->Wait(wxTHREAD_WAIT_BLOCK);
 		delete pThread;
 	}
 	waiting_socket_threads.erase(waiting_socket_threads.begin(), iter);
