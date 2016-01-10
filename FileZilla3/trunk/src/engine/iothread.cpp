@@ -7,7 +7,6 @@
 #include <wx/log.h>
 
 CIOThread::CIOThread()
-	: wxThread(wxTHREAD_JOINABLE)
 {
 	m_buffers[0] = new char[BUFFERSIZE*BUFFERCOUNT];
 	for (unsigned int i = 0; i < BUFFERCOUNT; ++i) {
@@ -57,15 +56,18 @@ bool CIOThread::Create(std::unique_ptr<fz::file> && pFile, bool read, bool binar
 #ifdef SIMULATE_IO
 	size_ = m_pFile->size();
 #endif
-
+	
 	m_running = true;
-	wxThread::Create();
-	wxThread::Run();
-
+	
+	if (!run()) {
+		m_running = false;
+		return false;
+	}
+	
 	return true;
 }
 
-wxThread::ExitCode CIOThread::Entry()
+void CIOThread::entry()
 {
 	if (m_read) {
 		while (m_running) {
@@ -110,7 +112,7 @@ wxThread::ExitCode CIOThread::Entry()
 		fz::scoped_lock l(m_mutex);
 		while (m_curAppBuf == -1) {
 			if (!m_running) {
-				return 0;
+				return;
 			}
 			else {
 				m_threadWaiting = true;
@@ -121,7 +123,7 @@ wxThread::ExitCode CIOThread::Entry()
 		for (;;) {
 			while (m_curThreadBuf == m_curAppBuf) {
 				if (!m_running) {
-					return 0;
+					return;
 				}
 				m_threadWaiting = true;
 				m_condition.wait(l);
@@ -151,14 +153,10 @@ wxThread::ExitCode CIOThread::Entry()
 			++m_curThreadBuf %= BUFFERCOUNT;
 		}
 	}
-
-	return 0;
 }
 
 int CIOThread::GetNextWriteBuffer(char** pBuffer)
 {
-	wxASSERT(!m_destroyed);
-
 	fz::scoped_lock l(m_mutex);
 
 	if (m_error)
@@ -191,9 +189,6 @@ bool CIOThread::Finalize(int len)
 {
 	wxASSERT(m_pFile);
 
-	if (m_destroyed)
-		return true;
-
 	Destroy();
 
 	if (m_curAppBuf == -1)
@@ -220,7 +215,6 @@ bool CIOThread::Finalize(int len)
 
 int CIOThread::GetNextReadBuffer(char** pBuffer)
 {
-	wxASSERT(!m_destroyed);
 	wxASSERT(m_read);
 
 	int newBuf = (m_curAppBuf + 1) % BUFFERCOUNT;
@@ -251,20 +245,18 @@ int CIOThread::GetNextReadBuffer(char** pBuffer)
 
 void CIOThread::Destroy()
 {
-	if (m_destroyed)
-		return;
-	m_destroyed = true;
-
-	fz::scoped_lock l(m_mutex);
-
-	m_running = false;
-	if (m_threadWaiting) {
-		m_threadWaiting = false;
-		m_condition.signal(l);
+	{
+		fz::scoped_lock l(m_mutex);
+		if (m_running) {
+			m_running = false;
+			if (m_threadWaiting) {
+				m_threadWaiting = false;
+				m_condition.signal(l);
+			}
+		}
 	}
-	l.unlock();
 
-	Wait(wxTHREAD_WAIT_BLOCK);
+	join();
 }
 
 int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
