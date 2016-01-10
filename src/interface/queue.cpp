@@ -135,13 +135,19 @@ bool CQueueItem::RemoveChild(CQueueItem* pItem, bool destroy, bool forward)
 	};
 
 	if (forward) {
-		for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end() && !deleted; ++iter) {
+		for (auto iter = m_children.begin() + m_removed_at_front; iter != m_children.end(); ++iter ) {
 			doRemove(iter);
+			if (deleted) {
+				break;
+			}
 		}
 	}
 	else {
-		for (auto iter = m_children.rbegin(); iter != m_children.rend() - m_removed_at_front && !deleted; ++iter) {
+		for (auto iter = m_children.rbegin(); iter != m_children.rend() - m_removed_at_front; ++iter ) {
 			doRemove(iter.base() - 1);
+			if (deleted) {
+				break;
+			}
 		}
 	}
 
