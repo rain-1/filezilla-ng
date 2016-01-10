@@ -254,7 +254,7 @@ protected:
 
 	void RemoveQueuedFolderItem(CFolderScanItem* pFolder);
 
-	CFolderProcessingThread *m_pFolderProcessingThread;
+	CFolderProcessingThread *m_pFolderProcessingThread{};
 
 	/*
 	 * Don't update status line positions if m_waitStatusLineUpdate is true.

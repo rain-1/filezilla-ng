@@ -191,7 +191,7 @@ public:
 
 	virtual void SaveItem(pugi::xml_node& element) const;
 
-	virtual bool TryRemoveAll(); // Removes a inactive childrens, queues active children for removal.
+	virtual bool TryRemoveAll(); // Removes inactive children, queues active children for removal.
 								 // Returns true if item can be removed itself
 
 	void SetTargetFile(wxString const& file);
