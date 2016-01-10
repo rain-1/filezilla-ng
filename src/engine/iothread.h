@@ -25,7 +25,7 @@ namespace fz {
 class file;
 }
 
-class CIOThread final : protected wxThread
+class CIOThread final : protected fz::thread
 {
 public:
 	CIOThread();
@@ -60,7 +60,7 @@ public:
 private:
 	void Close();
 
-	virtual ExitCode Entry();
+	virtual void entry();
 
 	int64_t ReadFromFile(char* pBuffer, int64_t maxLen);
 	bool WriteToFile(char* pBuffer, int64_t len);
@@ -85,8 +85,6 @@ private:
 	bool m_running{};
 	bool m_threadWaiting{};
 	bool m_appWaiting{};
-
-	bool m_destroyed{};
 
 	bool m_wasCarriageReturn{};
 
