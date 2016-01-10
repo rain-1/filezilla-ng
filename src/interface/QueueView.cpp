@@ -210,7 +210,7 @@ EVT_COMMAND(wxID_ANY, fzEVT_GRANTEXCLUSIVEENGINEACCESS, CQueueView::OnExclusiveE
 EVT_SIZE(CQueueView::OnSize)
 END_EVENT_TABLE()
 
-class CFolderProcessingThread final : public wxThread
+class CFolderProcessingThread final : public fz::thread
 {
 	struct t_internalDirPair
 	{
@@ -219,14 +219,9 @@ class CFolderProcessingThread final : public wxThread
 	};
 public:
 	CFolderProcessingThread(CQueueView* pOwner, CFolderScanItem* pFolderItem)
-		: wxThread(wxTHREAD_JOINABLE) {
+	{
 		m_pOwner = pOwner;
 		m_pFolderItem = pFolderItem;
-
-		m_didSendEvent = false;
-		m_threadWaiting = false;
-		m_throttleWait = false;
-		m_processing_entries = false;
 
 		t_internalDirPair* pair = new t_internalDirPair;
 		pair->localPath = pFolderItem->GetLocalPath();
@@ -236,6 +231,11 @@ public:
 
 	virtual ~CFolderProcessingThread()
 	{
+		{
+			fz::scoped_lock locker(m_sync);
+			m_quit = true;
+		}
+		join();
 		for (auto iter = m_entryList.begin(); iter != m_entryList.end(); ++iter)
 			delete *iter;
 		for (auto iter = m_dirsToCheck.begin(); iter != m_dirsToCheck.end(); ++iter)
@@ -342,7 +342,7 @@ protected:
 		}
 	}
 
-	ExitCode Entry()
+	void entry()
 	{
 #ifdef __WXDEBUG__
 		wxMutexGuiEnter();
@@ -354,8 +354,11 @@ protected:
 
 		fz::local_filesys localFileSystem;
 
-		while (!TestDestroy() && !m_pFolderItem->m_remove) {
+		while (!m_pFolderItem->m_remove) {
 			fz::scoped_lock l(m_sync);
+			if (m_quit) {
+				break;
+			}
 			if (m_dirsToCheck.empty()) {
 				if (!m_didSendEvent && !m_entryList.empty()) {
 					m_didSendEvent = true;
@@ -412,7 +415,6 @@ protected:
 		}
 
 		m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY));
-		return 0;
 	}
 
 	std::list<t_internalDirPair*> m_dirsToCheck;
@@ -425,10 +427,11 @@ protected:
 
 	fz::mutex m_sync;
 	fz::condition m_condition;
-	bool m_threadWaiting;
-	bool m_throttleWait;
-	bool m_didSendEvent;
-	bool m_processing_entries;
+	bool m_threadWaiting{};
+	bool m_throttleWait{};
+	bool m_didSendEvent{};
+	bool m_processing_entries{};
+	bool m_quit{};
 };
 
 CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsyncRequestQueue *pAsyncRequestQueue)
@@ -446,8 +449,7 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 	m_quit = 0;
 	m_waitStatusLineUpdate = false;
 	m_lastTopItem = -1;
-	m_pFolderProcessingThread = 0;
-
+	
 	m_totalQueueSize = 0;
 	m_filesWithUnknownSize = 0;
 
@@ -479,10 +481,8 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 
 CQueueView::~CQueueView()
 {
-	if (m_pFolderProcessingThread) {
-		m_pFolderProcessingThread->Delete(0, wxTHREAD_WAIT_BLOCK);
-		delete m_pFolderProcessingThread;
-	}
+	delete m_pFolderProcessingThread;
+	m_pFolderProcessingThread = 0;
 
 	DeleteEngines();
 
@@ -1694,8 +1694,7 @@ bool CQueueView::ProcessFolderItems(int type /*=-1*/)
 
 void CQueueView::ProcessUploadFolderItems()
 {
-	if (m_queuedFolders[1].empty())
-	{
+	if (m_queuedFolders[1].empty()) {
 		if (m_quit)
 			m_pMainFrame->Close();
 
@@ -1714,8 +1713,7 @@ void CQueueView::ProcessUploadFolderItems()
 	RefreshItem(pItem);
 	pItem->m_active = true;
 	m_pFolderProcessingThread = new CFolderProcessingThread(this, pItem);
-	m_pFolderProcessingThread->Create();
-	m_pFolderProcessingThread->Run();
+	m_pFolderProcessingThread->run();
 
 	RefreshListOnly(false);
 }
@@ -1729,8 +1727,7 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent&)
 
 	wxASSERT(!m_queuedFolders[1].empty());
 	CFolderScanItem* pItem = m_queuedFolders[1].front();
-	if (pItem->m_dir_is_empty)
-	{
+	if (pItem->m_dir_is_empty) {
 		CServerItem* pServerItem = (CServerItem*)pItem->GetTopLevelItem();
 		CFileItem* fileItem = new CFolderItem(pServerItem, pItem->queued(), pItem->m_current_remote_path, _T(""));
 		InsertItem(pServerItem, fileItem);
@@ -1740,7 +1737,6 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent&)
 
 	RemoveItem(pItem, true);
 
-	m_pFolderProcessingThread->Wait(wxTHREAD_WAIT_BLOCK);
 	delete m_pFolderProcessingThread;
 	m_pFolderProcessingThread = 0;
 

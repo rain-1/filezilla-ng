@@ -9,35 +9,31 @@ DEFINE_EVENT_TYPE(fzEVT_VOLUMEENUMERATED)
 DEFINE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED)
 
 CVolumeDescriptionEnumeratorThread::CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler)
-	: wxThread(wxTHREAD_JOINABLE),
-	  m_pEvtHandler(pEvtHandler)
+	: m_pEvtHandler(pEvtHandler)
 {
 	m_failure = false;
 	m_stop = false;
 	m_running = true;
 
-	if (Create() != wxTHREAD_NO_ERROR)
-	{
+	if (!run()) {
 		m_running = false;
 		m_failure = true;
 	}
-	Run();
 }
 
 CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
 {
 	m_stop = true;
-	Wait(wxTHREAD_WAIT_BLOCK);
+	join();
 
-	for (std::list<t_VolumeInfoInternal>::const_iterator iter = m_volumeInfo.begin(); iter != m_volumeInfo.end(); ++iter)
-	{
+	for (auto iter = m_volumeInfo.cbegin(); iter != m_volumeInfo.cend(); ++iter) {
 		delete [] iter->pVolume;
 		delete [] iter->pVolumeName;
 	}
 	m_volumeInfo.clear();
 }
 
-wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
+void CVolumeDescriptionEnumeratorThread::entry()
 {
 	if (!GetDriveLabels())
 		m_failure = true;
@@ -45,13 +41,11 @@ wxThread::ExitCode CVolumeDescriptionEnumeratorThread::Entry()
 	m_running = false;
 
 	m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMESENUMERATED));
-
-	return 0;
 }
 
 void CVolumeDescriptionEnumeratorThread::ProcessDrive(wxString const& drive)
 {
-	if( GetDriveLabel(drive) ) {
+	if ( GetDriveLabel(drive)) {
 		m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMEENUMERATED));
 	}
 }

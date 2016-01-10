@@ -23,7 +23,7 @@
 DECLARE_EVENT_TYPE(fzEVT_VOLUMEENUMERATED, -1)
 DECLARE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED, -1)
 
-class CVolumeDescriptionEnumeratorThread final : protected wxThread
+class CVolumeDescriptionEnumeratorThread final : protected fz::thread
 {
 public:
 	CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler);
@@ -48,7 +48,7 @@ protected:
 	bool GetDriveLabels();
 	void ProcessDrive(wxString const& drive);
 	bool GetDriveLabel(wxString const& drive);
-	virtual ExitCode Entry();
+	virtual void entry();
 
 	wxEvtHandler* m_pEvtHandler;
 
