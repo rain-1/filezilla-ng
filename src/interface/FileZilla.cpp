@@ -76,9 +76,10 @@ CFileZillaApp::~CFileZillaApp()
 }
 
 #ifdef __WXMSW__
+namespace {
 extern "C"
 {
-	typedef HRESULT (WINAPI *t_SetCurrentProcessExplicitAppUserModelID)(PCWSTR AppID);
+	typedef HRESULT(WINAPI *t_SetCurrentProcessExplicitAppUserModelID)(PCWSTR AppID);
 }
 
 static void SetAppId()
@@ -97,6 +98,26 @@ static void SetAppId()
 		return;
 
 	pSetCurrentProcessExplicitAppUserModelID(_T("FileZilla.Client.AppID"));
+}
+
+static bool InitWinsock()
+{
+	WSADATA d{};
+	int res = WSAStartup((2 << 8) | 8, &d);
+	if (res != 0) {
+		int err = WSAGetLastError();
+		wxString msg = wxString::Format(_("Could not initialize Winsock (%d): %s"), err, wxSysErrorMsg(err));
+		wxMessageBoxEx(msg, _("Failed to initialize networking"), wxICON_EXCLAMATION);
+		return false;
+	}
+
+	return true;
+}
+
+static void UninitWinsock()
+{
+	WSACleanup();
+}
 }
 
 #endif //__WXMSW__
@@ -165,8 +186,9 @@ bool CFileZillaApp::OnInit()
 	srand( (unsigned)time( NULL ) );
 
 #ifdef __WXMSW__
-	// Need to call WSAStartup. Let wx do that for us
-	wxSocketBase::Initialize();
+	if (!InitWinsock()) {
+		return false;
+	}
 
 	SetAppId();
 #endif
@@ -269,7 +291,7 @@ int CFileZillaApp::OnExit()
 	CSessionManager::Uninit();
 #endif
 #ifdef __WXMSW__
-	wxSocketBase::Shutdown();
+	UninitWinsock();
 #endif
 	return wxApp::OnExit();
 }
