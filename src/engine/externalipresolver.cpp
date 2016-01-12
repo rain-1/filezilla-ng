@@ -22,6 +22,8 @@ CExternalIPResolver::CExternalIPResolver(event_handler & handler)
 
 CExternalIPResolver::~CExternalIPResolver()
 {
+	remove_handler();
+
 	delete [] m_pSendBuffer;
 	m_pSendBuffer = 0;
 	delete [] m_pRecvBuffer;
