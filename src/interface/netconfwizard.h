@@ -4,8 +4,8 @@
 #include <wx/wizard.h>
 #include "wrapengine.h"
 #include "externalipresolver.h"
-#include <wx/socket.h>
 #include <wx/timer.h>
+#include "socket.h"
 
 #define NETCONFBUFFERSIZE 100
 
@@ -34,7 +34,6 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnPageChanging(wxWizardEvent& event);
 	void OnPageChanged(wxWizardEvent& event);
-	void OnSocketEvent(wxSocketEvent& event);
 	void OnRestart(wxCommandEvent& event);
 	void OnFinish(wxWizardEvent& event);
 	void OnTimer(wxTimerEvent& event);
@@ -42,6 +41,9 @@ protected:
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnExternalIPAddress();
+	void OnSocketEvent(CSocketEventSource*, SocketEventType t, int error);
+	
+	void DoOnSocketEvent(CSocketEventSource*, SocketEventType t, int error);
 
 	void OnReceive();
 	void ParseResponse(const char* line);
@@ -65,7 +67,7 @@ protected:
 	wxString m_nextLabelText;
 
 	// Test data
-	wxSocketClient* m_socket;
+	CSocket* m_socket{};
 	int m_state;
 
 	char m_recvBuffer[NETCONFBUFFERSIZE];
@@ -88,8 +90,8 @@ protected:
 	CExternalIPResolver* m_pIPResolver;
 	wxString m_externalIP;
 
-	wxSocketServer* m_pSocketServer;
-	wxSocketBase* m_pDataSocket;
+	CSocket* m_pSocketServer{};
+	CSocket* m_pDataSocket{};
 	int m_listenPort;
 	bool gotListReply;
 	int m_data;

@@ -16,7 +16,6 @@ DEFINE_EVENT_TYPE(fzEVT_ON_EXTERNAL_IP_ADDRESS)
 BEGIN_EVENT_TABLE(CNetConfWizard, wxWizard)
 EVT_WIZARD_PAGE_CHANGING(wxID_ANY, CNetConfWizard::OnPageChanging)
 EVT_WIZARD_PAGE_CHANGED(wxID_ANY, CNetConfWizard::OnPageChanged)
-EVT_SOCKET(wxID_ANY, CNetConfWizard::OnSocketEvent)
 EVT_BUTTON(XRCID("ID_RESTART"), CNetConfWizard::OnRestart)
 EVT_WIZARD_FINISHED(wxID_ANY, CNetConfWizard::OnFinish)
 EVT_TIMER(wxID_ANY, CNetConfWizard::OnTimer)
@@ -33,11 +32,8 @@ CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaE
 	: fz::event_handler(engine_context.GetEventLoop())
 	, m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
 {
-	m_socket = 0;
 	m_pIPResolver = 0;
 	m_pSendBuffer = 0;
-	m_pSocketServer = 0;
-	m_pDataSocket = 0;
 
 	m_timer.SetOwner(this);
 
@@ -212,17 +208,14 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		event.Veto();
 
 		PrintMessage(wxString::Format(_("Connecting to %s"), _T("probe.filezilla-project.org")), 0);
-		m_socket = new wxSocketClient(wxSOCKET_NOWAIT);
-		m_socket->SetEventHandler(*this, 0);
-		m_socket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_OUTPUT_FLAG | wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
-		m_socket->Notify(true);
+		m_socket = new CSocket(this);
 		m_recvBufferPos = 0;
 
-		wxIPV4address addr;
-		addr.Hostname(_T("probe.filezilla-project.org"));
-		addr.Service(21);
-
-		m_socket->Connect(addr, false);
+		int res = m_socket->Connect(_T("probe.filezilla-project.org"), 21);
+		if (res && res != EINPROGRESS) {
+			PrintMessage(wxString::Format(_("Connect failed: %s"), CSocket::GetErrorDescription(res)), 1);
+			CloseSocket();
+		}
 	}
 }
 
@@ -241,49 +234,60 @@ void CNetConfWizard::OnPageChanged(wxWizardEvent& event)
 	}
 }
 
-void CNetConfWizard::OnSocketEvent(wxSocketEvent& event)
+void CNetConfWizard::DoOnSocketEvent(CSocketEventSource* s, SocketEventType t, int error)
 {
-	if (!m_socket)
-		return;
-
-	if (event.GetSocket() == m_socket) {
-		switch (event.GetSocketEvent())
+	if (s == m_socket) {
+		if (error) {
+			OnClose();
+			return;
+		}
+		switch (t)
 		{
-		case wxSOCKET_INPUT:
+		case SocketEventType::read:
 			OnReceive();
 			break;
-		case wxSOCKET_OUTPUT:
+		case SocketEventType::write:
 			OnSend();
 			break;
-		case wxSOCKET_LOST:
+		case SocketEventType::close:
 			OnClose();
 			break;
-		case wxSOCKET_CONNECTION:
+		case SocketEventType::connection:
 			OnConnect();
+			break;
+		default:
 			break;
 		}
 	}
-	else if (event.GetSocket() == m_pSocketServer) {
-		switch (event.GetSocketEvent())
-		{
-		case wxSOCKET_LOST:
+	else if (s == m_pSocketServer) {
+		if (error) {
+			PrintMessage(_("Listen socket closed"), 1);
+			CloseSocket();
+			return;
+		}
+		switch (t) {
+		case SocketEventType::close:
 			PrintMessage(_("Listen socket closed"), 1);
 			CloseSocket();
 			break;
-		case wxSOCKET_CONNECTION:
+		case SocketEventType::connection:
 			OnAccept();
 			break;
 		default:
 			break;
 		}
 	}
-	else if (event.GetSocket() == m_pDataSocket) {
-		switch (event.GetSocketEvent())
+	else if (s == m_pDataSocket) {
+		if (error) {
+			OnDataClose();
+			return;
+		}
+		switch (t)
 		{
-		case wxSOCKET_LOST:
+		case SocketEventType::close:
 			OnDataClose();
 			break;
-		case wxSOCKET_INPUT:
+		case SocketEventType::read:
 			OnDataReceive();
 			break;
 		default:
@@ -291,6 +295,7 @@ void CNetConfWizard::OnSocketEvent(wxSocketEvent& event)
 		}
 	}
 }
+
 
 void CNetConfWizard::OnSend()
 {
@@ -300,20 +305,17 @@ void CNetConfWizard::OnSend()
 	if (!m_socket)
 		return;
 
-	int len = strlen(m_pSendBuffer);
-	m_socket->Write(m_pSendBuffer, len);
-	if (m_socket->Error())
-	{
-		if (m_socket->LastError() != wxSOCKET_WOULDBLOCK)
-		{
+	int error;
+	int const len = strlen(m_pSendBuffer);
+	int const written = m_socket->Write(m_pSendBuffer, len, error);
+	if (written < 0) {
+		if (error != EAGAIN) {
 			PrintMessage(_("Failed to send command."), 1);
 			CloseSocket();
 		}
 		return;
 	}
-	int written = m_socket->LastCount();
-	if (written == len)
-	{
+	if (written == len) {
 		delete [] m_pSendBuffer;
 		m_pSendBuffer = 0;
 	}
@@ -328,62 +330,74 @@ void CNetConfWizard::OnClose()
 
 void CNetConfWizard::OnConnect()
 {
+	PrintMessage(_("Connection established, waiting for welcome message."), 0);
 	m_connectSuccessful = true;
 }
 
 void CNetConfWizard::OnReceive()
 {
-	m_socket->Read(m_recvBuffer + m_recvBufferPos, NETCONFBUFFERSIZE - m_recvBufferPos);
-	unsigned int len;
-	if (m_socket->Error() || !(len = m_socket->LastCount()))
-	{
-		PrintMessage(_("Connection lost"), 1);
-		CloseSocket();
-		return;
-	}
+	while (true) {
+		int error;
+		int const read = m_socket->Read(m_recvBuffer + m_recvBufferPos, NETCONFBUFFERSIZE - m_recvBufferPos, error);
+		if (read < 0) {
+			if (error != EAGAIN) {
+				PrintMessage(_("Could not receive data from server."), 1);
+				CloseSocket();
+			}
+			return;
+		}
+		if (!read) {
+			PrintMessage(_("Connection lost"), 1);
+			CloseSocket();
+			return;
+		}
 
-	m_recvBufferPos += len;
+		m_recvBufferPos += read;
 
-	if (m_recvBufferPos < 3)
-		return;
+		if (m_recvBufferPos < 3)
+			return;
 
-	for (int i = 0; i < m_recvBufferPos - 1; i++)
-	{
-		if (m_recvBuffer[i] == '\n')
-		{
+		for (int i = 0; i < m_recvBufferPos - 1; ++i) {
+			if (m_recvBuffer[i] == '\n') {
+				m_testResult = servererror;
+				PrintMessage(_("Invalid data received"), 1);
+				CloseSocket();
+				return;
+			}
+			if (m_recvBuffer[i] != '\r')
+				continue;
+
+			if (m_recvBuffer[i + 1] != '\n') {
+				m_testResult = servererror;
+				PrintMessage(_("Invalid data received"), 1);
+				CloseSocket();
+				return;
+			}
+			m_recvBuffer[i] = 0;
+
+			if (!*m_recvBuffer) {
+				m_testResult = servererror;
+				PrintMessage(_("Invalid data received"), 1);
+				CloseSocket();
+				return;
+			}
+
+			ParseResponse(m_recvBuffer);
+
+			if (!m_socket)
+				return;
+
+			memmove(m_recvBuffer, m_recvBuffer + i + 2, m_recvBufferPos - i - 2);
+			m_recvBufferPos -= i + 2;
+			i = -1;
+		}
+
+		if (m_recvBufferPos == 100) {
 			m_testResult = servererror;
 			PrintMessage(_("Invalid data received"), 1);
 			CloseSocket();
 			return;
 		}
-		if (m_recvBuffer[i] != '\r')
-			continue;
-
-		if (m_recvBuffer[i + 1] != '\n')
-		{
-			m_testResult = servererror;
-			PrintMessage(_("Invalid data received"), 1);
-			CloseSocket();
-			return;
-		}
-		m_recvBuffer[i] = 0;
-
-		if (!*m_recvBuffer)
-		{
-			m_testResult = servererror;
-			PrintMessage(_("Invalid data received"), 1);
-			CloseSocket();
-			return;
-		}
-
-		ParseResponse(m_recvBuffer);
-
-		if (!m_socket)
-			return;
-
-		memmove(m_recvBuffer, m_recvBuffer + i + 2, m_recvBufferPos - i - 2);
-		m_recvBufferPos -= i + 2;
-		i = -1;
 	}
 }
 
@@ -399,15 +413,13 @@ void CNetConfWizard::ParseResponse(const char* line)
 	str += msg;
 	PrintMessage(str, 3);
 
-	if (len < 3)
-	{
+	if (len < 3) {
 		m_testResult = servererror;
 		PrintMessage(_("Server sent unexpected reply."), 1);
 		CloseSocket();
 		return;
 	}
-	if (line[3] && line[3] != ' ')
-	{
+	if (line[3] && line[3] != ' ') {
 		m_testResult = servererror;
 		PrintMessage(_("Server sent unexpected reply."), 1);
 		CloseSocket();
@@ -423,30 +435,26 @@ void CNetConfWizard::ParseResponse(const char* line)
 		if (line[0] == '2')
 			break;
 
-		if (line[1] == '0' && line[2] == '1')
-		{
+		if (line[1] == '0' && line[2] == '1') {
 			PrintMessage(_("Communication tainted by router or firewall"), 1);
 			m_testResult = tainted;
 			CloseSocket();
 			return;
 		}
-		else if (line[1] == '1' && line[2] == '0')
-		{
+		else if (line[1] == '1' && line[2] == '0') {
 			PrintMessage(_("Wrong external IP address"), 1);
 			m_testResult = mismatch;
 			CloseSocket();
 			return;
 		}
-		else if (line[1] == '1' && line[2] == '1')
-		{
+		else if (line[1] == '1' && line[2] == '1') {
 			PrintMessage(_("Wrong external IP address"), 1);
 			PrintMessage(_("Communication tainted by router or firewall"), 1);
 			m_testResult = mismatchandtainted;
 			CloseSocket();
 			return;
 		}
-		else
-		{
+		else {
 			m_testResult = servererror;
 			PrintMessage(_("Server sent unexpected reply."), 1);
 			CloseSocket();
@@ -484,8 +492,7 @@ void CNetConfWizard::ParseResponse(const char* line)
 			break;
 
 
-		if (line[0] == '5' && line[1] == '0' && (line[2] == '1' || line[2] == '2'))
-		{
+		if (line[0] == '5' && line[1] == '0' && (line[2] == '1' || line[2] == '2')) {
 			m_testResult = tainted;
 			PrintMessage(_("PORT command tainted by router or firewall."), 1);
 			CloseSocket();
@@ -685,11 +692,8 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 	int mode = XRCCTRL(*this, "ID_ACTIVEMODE1", wxRadioButton)->GetValue() ? 0 : (XRCCTRL(*this, "ID_ACTIVEMODE2", wxRadioButton)->GetValue() ? 1 : 2);
 	if (!mode) {
-		wxIPV4address addr;
-		if (m_socket->GetLocal(addr)) {
-			ret = addr.IPAddress();
-		}
-		else {
+		ret = m_socket->GetLocalIP();
+		if (ret.empty()) {
 			PrintMessage(_("Failed to retrieve local ip address. Aborting"), 1);
 			CloseSocket();
 		}
@@ -896,64 +900,59 @@ int CNetConfWizard::CreateListenSocket()
 
 int CNetConfWizard::CreateListenSocket(unsigned int port)
 {
-	wxIPV4address addr;
-	if (!addr.AnyAddress())
-		return 0;
+	m_pSocketServer = new CSocket(this);
+	int res = m_pSocketServer->Listen(CSocket::unspec, port);
 
-	if (!addr.Service(port))
-		return 0;
-
-	m_pSocketServer = new wxSocketServer(addr, wxSOCKET_NOWAIT);
-	if (!m_pSocketServer->Ok())
-	{
+	if (res < 0) {
 		delete m_pSocketServer;
 		m_pSocketServer = 0;
 		return 0;
 	}
-
-	m_pSocketServer->SetEventHandler(*this);
-	m_pSocketServer->SetFlags(wxSOCKET_NOWAIT);
-	m_pSocketServer->SetNotify(wxSOCKET_CONNECTION_FLAG | wxSOCKET_LOST_FLAG);
-	m_pSocketServer->Notify(true);
-
 
 	if (port)
 		return port;
 
 	// Get port number from socket
-	if (!m_pSocketServer->GetLocal(addr))
-	{
+	int error;
+	res = m_pSocketServer->GetLocalPort(error);
+	if (res <= 0) {
 		delete m_pSocketServer;
 		m_pSocketServer = 0;
 		return 0;
 	}
-	return addr.Service();
+	return static_cast<unsigned int>(port);
 }
 
 void CNetConfWizard::OnAccept()
 {
+	if (!m_socket || !m_pSocketServer) {
+		return;
+	}
 	if (m_pDataSocket)
 		return;
-	m_pDataSocket = m_pSocketServer->Accept(false);
+
+	int error;
+	m_pDataSocket = m_pSocketServer->Accept(error);
 	if (!m_pDataSocket)
 		return;
 
-	wxIPV4address peerAddr, dataPeerAddr;
-	if (!m_socket->GetPeer(peerAddr)) {
+	wxString peerAddr = m_socket->GetPeerHost();
+	wxString dataPeerAddr = m_pDataSocket->GetPeerHost();
+	if (peerAddr.empty()) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
 		PrintMessage(_("Failed to get peer address of control connection, connection closed."), 1);
 		CloseSocket();
 		return;
 	}
-	if (!m_pDataSocket->GetPeer(dataPeerAddr)) {
+	if (dataPeerAddr.empty()) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
 		PrintMessage(_("Failed to get peer address of data connection, connection closed."), 1);
 		CloseSocket();
 		return;
 	}
-	if (peerAddr.IPAddress() != dataPeerAddr.IPAddress()) {
+	if (peerAddr != dataPeerAddr) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
 		PrintMessage(_("Warning, ignoring data connection from wrong IP."), 0);
@@ -961,32 +960,31 @@ void CNetConfWizard::OnAccept()
 	}
 	delete m_pSocketServer;
 	m_pSocketServer = 0;
-
-	m_pDataSocket->SetEventHandler(*this);
-	m_pDataSocket->SetFlags(wxSOCKET_NOWAIT);
-	m_pDataSocket->SetNotify(wxSOCKET_INPUT_FLAG | wxSOCKET_LOST_FLAG);
-	m_pDataSocket->Notify(true);
 }
 
 void CNetConfWizard::OnDataReceive()
 {
 	char buffer[100];
-	m_pDataSocket->Read(buffer, 99);
-	unsigned int len;
-	if (m_pDataSocket->Error() || !(len = m_pDataSocket->LastCount()))
-	{
+	int error;
+	int const read = m_pDataSocket->Read(buffer, 99, error);
+	if (!read) {
 		PrintMessage(_("Data socket closed too early."), 1);
 		CloseSocket();
 		return;
 	}
-	buffer[len] = 0;
+	if (read < 0) {
+		if (error != EAGAIN) {
+			PrintMessage(_("Could not read from data socket."), 1);
+			CloseSocket();
+		}
+		return;
+	}
+	buffer[read] = 0;
 
 	int data = 0;
 	const char* p = buffer;
-	while (*p && *p != ' ')
-	{
-		if (*p < '0' || *p > '9')
-		{
+	while (*p && *p != ' ') {
+		if (*p < '0' || *p > '9') {
 			m_testResult = datatainted;
 			PrintMessage(_("Received data tainted"), 1);
 			CloseSocket();
@@ -994,24 +992,21 @@ void CNetConfWizard::OnDataReceive()
 		}
 		data = data * 10 + *p++ - '0';
 	}
-	if (data != m_data)
-	{
+	if (data != m_data) {
 		m_testResult = datatainted;
 		PrintMessage(_("Received data tainted"), 1);
 		CloseSocket();
 		return;
 	}
 	p++;
-	if (p - buffer != (int)len - 4)
-	{
+	if (p - buffer != read - 4) {
 		PrintMessage(_("Failed to receive data"), 1);
 		CloseSocket();
 		return;
 	}
 
 	wxUint32 ip = 0;
-	for (const wxChar* q = m_externalIP.c_str(); *q; q++)
-	{
+	for (const wxChar* q = m_externalIP.c_str(); *q; ++q) {
 		if (*q == '.')
 			ip *= 256;
 		else
@@ -1037,8 +1032,7 @@ void CNetConfWizard::OnDataReceive()
 void CNetConfWizard::OnDataClose()
 {
 	OnDataReceive();
-	if (m_pDataSocket)
-	{
+	if (m_pDataSocket) {
 		PrintMessage(_("Data socket closed too early."), 0);
 		CloseSocket();
 		return;
@@ -1046,8 +1040,7 @@ void CNetConfWizard::OnDataClose()
 	delete m_pDataSocket;
 	m_pDataSocket = 0;
 
-	if (gotListReply)
-	{
+	if (gotListReply) {
 		m_state++;
 		SendNextCommand();
 	}
@@ -1064,11 +1057,21 @@ void CNetConfWizard::OnTimer(wxTimerEvent& event)
 
 void CNetConfWizard::operator()(fz::event_base const& ev)
 {
-	if (fz::dispatch<CExternalIPResolveEvent>(ev, this, &CNetConfWizard::OnExternalIPAddress))
-		return;
+	fz::dispatch<CSocketEvent, CExternalIPResolveEvent>(ev, this
+		, &CNetConfWizard::OnSocketEvent
+		, &CNetConfWizard::OnExternalIPAddress);
 }
 
 void CNetConfWizard::OnExternalIPAddress()
 {
 	QueueEvent(new wxCommandEvent(fzEVT_ON_EXTERNAL_IP_ADDRESS));
+}
+
+void CNetConfWizard::OnSocketEvent(CSocketEventSource* s, SocketEventType t, int error)
+{
+	if (!s) {
+		return;
+	}
+
+	CallAfter([=]{DoOnSocketEvent(s, t, error);});
 }
