@@ -12,6 +12,10 @@
 
 #include <libfilezilla/iputils.hpp>
 
+#ifndef FZ_WINDOWS
+#include <netdb.h>
+#endif
+
 enum handshake_state
 {
 	http_wait,
