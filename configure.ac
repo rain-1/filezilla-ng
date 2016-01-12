@@ -145,7 +145,7 @@ if test "$buildmain" = "yes"; then
   AM_OPTIONS_WXCONFIG
 
   MIN_WX_VERSION="3.0.2"
-  AM_PATH_WXCONFIG([$MIN_WX_VERSION], [wxWin=1], , [aui,xrc,adv,core,xml,net,base], [--unicode=yes --universal=no])
+  AM_PATH_WXCONFIG([$MIN_WX_VERSION], [wxWin=1], , [aui,xrc,adv,core,xml,base], [--unicode=yes --universal=no])
   if test "$wxWin" != 1; then
     AC_MSG_ERROR([
         wxWidgets must be installed on your system
