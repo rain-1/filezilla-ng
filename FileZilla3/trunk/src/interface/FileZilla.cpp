@@ -40,7 +40,6 @@
 #include <wx/xrc/xh_hyperlink.h>
 #include "xh_toolb_ex.h"
 #ifdef __WXMSW__
-#include <wx/socket.h>
 #include <wx/dynlib.h>
 #endif
 #ifdef WITH_LIBDBUS
