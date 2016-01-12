@@ -94,7 +94,9 @@
     <ClCompile Include="notification.cpp" />
     <ClCompile Include="option_change_event_handler.cpp" />
     <ClCompile Include="pathcache.cpp" />
-    <ClCompile Include="proxy.cpp" />
+    <ClCompile Include="proxy.cpp">
+      <PrecompiledHeader />
+    </ClCompile>
     <ClCompile Include="ratelimiter.cpp" />
     <ClCompile Include="rtt.cpp" />
     <ClCompile Include="server.cpp" />

@@ -1,8 +1,14 @@
+#include <wx/defs.h>
+#include <libfilezilla/libfilezilla.hpp>
+#ifdef FZ_WINDOWS
+  #include <libfilezilla/private/windows.hpp>
+  #include <winsock2.h>
+  #include <ws2tcpip.h>
+#endif
 #include <filezilla.h>
 #include "engineprivate.h"
 #include "proxy.h"
 #include "ControlSocket.h"
-#include <wx/sckaddr.h>
 
 #include <libfilezilla/iputils.hpp>
 
@@ -145,12 +151,23 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 		}
 
 		if (fz::get_address_type(m_host.ToStdWstring()) == fz::address_type::unknown) {
-			wxIPV4address address;
-			if (!address.Hostname(host)) {
+			addrinfo hints{};
+			hints.ai_family = AF_INET;
+			hints.ai_socktype = SOCK_STREAM;
+
+			addrinfo * result{};
+			int res = getaddrinfo(host.ToStdString().c_str(), 0, &hints, &result);
+			if (!res && result) {
+				if (result->ai_family == AF_INET) {
+					ip = CSocket::AddressToString(result->ai_addr, result->ai_addrlen, false);
+					freeaddrinfo(result);
+				}
+			}
+
+			if (ip.empty()) {
 				m_pOwner->LogMessage(MessageType::Error, _("Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."));
 				return EINVAL;
 			}
-			ip = address.IPAddress();
 		}
 
 		m_pOwner->LogMessage(MessageType::Status, _("SOCKS4 proxy will connect to: %s"), ip);
