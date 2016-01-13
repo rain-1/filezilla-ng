@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: filezilla 3.14.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-12 10:26+0100\n"
-"PO-Revision-Date: 2015-10-31 14:48+0700\n"
+"POT-Creation-Date: 2016-01-13 13:13+0100\n"
+"PO-Revision-Date: 2015-12-31 07:19+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <translation-team-vi@lists.sourceforge.net>\n"
 "Language: vi_VN\n"
@@ -50,9 +50,9 @@ msgid "%d directory"
 msgid_plural "%d directories"
 msgstr[0] "%d thư mục"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1390
-#: ../../locales/../src/interface/search.cpp:478
-#: ../../locales/../src/interface/search.cpp:764
+#: ../../locales/../src/interface/RemoteListView.cpp:1386
+#: ../../locales/../src/interface/search.cpp:484
+#: ../../locales/../src/interface/search.cpp:743
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -60,9 +60,9 @@ msgstr[0] "%d thư mục cùng với nội dung của chúng"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:46
 #: ../../locales/../src/interface/filelist_statusbar.cpp:66
-#: ../../locales/../src/interface/RemoteListView.cpp:1389
-#: ../../locales/../src/interface/search.cpp:477
-#: ../../locales/../src/interface/search.cpp:763
+#: ../../locales/../src/interface/RemoteListView.cpp:1385
+#: ../../locales/../src/interface/search.cpp:483
+#: ../../locales/../src/interface/search.cpp:742
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -80,12 +80,12 @@ msgid "%d file. Total size: At least %s"
 msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d tập tin. Tổng kích thước: Ít nhất %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2781
+#: ../../locales/../src/interface/QueueView.cpp:2778
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d tập tin được thêm vào hàng đợi"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:104
+#: ../../locales/../src/engine/ControlSocket.cpp:105
 #, c-format
 msgid "%d second"
 msgid_plural "%d seconds"
@@ -153,7 +153,7 @@ msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s byte"
 
-#: ../../locales/../src/interface/FileZilla.cpp:595
+#: ../../locales/../src/interface/FileZilla.cpp:617
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -168,7 +168,7 @@ msgstr ""
 "Làm ơn tải lại FileZilla. Nếu vấn đề không được giải quyết, hãy báo lỗi tới "
 "chúng tôi."
 
-#: ../../locales/../src/interface/FileZilla.cpp:680
+#: ../../locales/../src/interface/FileZilla.cpp:702
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -396,12 +396,12 @@ msgstr "&Xóa liên kết mềm"
 msgid "&Directory comparison"
 msgstr "So sánh &thư mục"
 
-#: ../../locales/../src/interface/state.cpp:893
+#: ../../locales/../src/interface/state.cpp:887
 msgid ""
 "&Disable synchronized browsing and continue changing the local directory"
 msgstr "Tắt &duyệt đồng bộ và tiếp tục thay đổi thư mục nội bộ"
 
-#: ../../locales/../src/interface/state.cpp:966
+#: ../../locales/../src/interface/state.cpp:960
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr "Tắt &duyệt đồng bộ và tiếp tục thay đổi thư mục máy chủ"
@@ -712,7 +712,7 @@ msgstr "Tạo &mới"
 msgid "&New Site"
 msgstr "Địa chỉ &mới"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1663
+#: ../../locales/../src/interface/Mainfrm.cpp:1665
 msgid "&New version available!"
 msgstr "Đã có bả&n mới!"
 
@@ -984,7 +984,7 @@ msgstr "&Hoán đổi cửa sổ điều khiển máy trên máy nội bộ và 
 msgid "&TLS Ciphers"
 msgstr "Kiểu mã hóa &TLS"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:244
+#: ../../locales/../src/interface/netconfwizard.cpp:227
 msgid "&Test"
 msgstr "Kiểm &tra"
 
@@ -1062,7 +1062,7 @@ msgstr "&Tài khoản:"
 msgid "&Username:"
 msgstr "Tên tài kh&oản:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1657
+#: ../../locales/../src/interface/Mainfrm.cpp:1659
 #, c-format
 msgid "&Version %s"
 msgstr "&Phiên bản %s"
@@ -1106,12 +1106,12 @@ msgstr "“%s” chưa tạo ra hoặc không thể truy nhập."
 msgid "'%s' is not a directory."
 msgstr "“%s” không phải một thư mục."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:426
+#: ../../locales/../src/interface/manual_transfer.cpp:427
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:967
 msgid "'Account' logontype not supported by selected protocol"
 msgstr "Kiểu “tài khoản” đăng nhập không được hỗ trợ bởi giao thức đã chọn"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:440
+#: ../../locales/../src/interface/manual_transfer.cpp:441
 msgid ""
 "'Normal' and 'Account' logontypes are not available, using 'Ask for "
 "password' instead."
@@ -1127,7 +1127,7 @@ msgstr ""
 "Kiểu đăng nhập “Thông thường” và “ Tài khoản” không sẵn sàng. Mục này được "
 "thay đổi thành “Hỏi mật khẩu”."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:587
+#: ../../locales/../src/interface/Mainfrm.cpp:588
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1264,7 +1264,7 @@ msgstr "Một trình soạn thảo mặc định phải được đặt."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:118
-#: ../../locales/../src/interface/state.cpp:742
+#: ../../locales/../src/interface/state.cpp:736
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Một thư mục không thể kéo thả vào trong thư mục con của chính nó."
 
@@ -1291,7 +1291,7 @@ msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr "Tập tin đó vẫn đang bị biên tập. Làm ơn đóng nó lại và thử lại."
 
-#: ../../locales/../src/interface/FileZilla.cpp:574
+#: ../../locales/../src/interface/FileZilla.cpp:596
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1310,7 +1310,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Đã có phiên bản FileZilla mới hơn:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:647
+#: ../../locales/../src/interface/Mainfrm.cpp:648
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1327,7 +1327,7 @@ msgstr ""
 "Một máy chủ đúng qui cách không yêu cầu điều này. Hỏi người quản trị máy chủ "
 "này nếu bạn cần điều đó."
 
-#: ../../locales/../src/interface/state.cpp:257
+#: ../../locales/../src/interface/state.cpp:258
 msgid ""
 "A remote operation is in progress and synchronized browsing is enabled.\n"
 "Disable synchronized browsing and continue changing the local directory?"
@@ -1379,11 +1379,11 @@ msgstr "Trên danh sách tập tin"
 
 #: ../../locales/../src/engine/server.cpp:862
 #: ../../locales/../src/engine/server.cpp:883
-#: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:154
-#: ../../locales/../src/interface/manual_transfer.cpp:187
-#: ../../locales/../src/interface/manual_transfer.cpp:539
+#: ../../locales/../src/interface/manual_transfer.cpp:155
+#: ../../locales/../src/interface/manual_transfer.cpp:188
 #: ../../locales/../src/interface/manual_transfer.cpp:540
+#: ../../locales/../src/interface/manual_transfer.cpp:541
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1310
 msgid "Account"
@@ -1409,7 +1409,7 @@ msgstr "Thực hiện:"
 msgid "Active mode"
 msgstr "Chế độ tích cực"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:621
+#: ../../locales/../src/interface/netconfwizard.cpp:614
 msgid ""
 "Active mode FTP test failed. FileZilla does not know the correct external IP "
 "address."
@@ -1417,7 +1417,7 @@ msgstr ""
 "Kiểm tra chế độ FTP tích cực gặp lỗi. FileZilla không biết địa chỉ IP chính "
 "xác."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:608
+#: ../../locales/../src/interface/netconfwizard.cpp:601
 msgid ""
 "Active mode FTP test failed. FileZilla does not know the correct external IP "
 "address. In addition to that, your router has modified the sent address."
@@ -1426,7 +1426,7 @@ msgstr ""
 "xác. Thêm vào đó, bộ định tuyến router của bạn đã chỉnh sửa địa chỉ truyền "
 "đi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:596
+#: ../../locales/../src/interface/netconfwizard.cpp:589
 msgid ""
 "Active mode FTP test failed. FileZilla knows the correct external IP "
 "address, but your router or firewall has misleadingly modified the sent "
@@ -1459,7 +1459,7 @@ msgstr "Đặt tập tin và thư mục đã chọn vào hàng đợi truyền"
 msgid "Add to queue"
 msgstr "Thêm vào hàng đợi"
 
-#: ../../locales/../src/engine/proxy.cpp:505
+#: ../../locales/../src/engine/proxy.cpp:528
 msgid "Address type not supported"
 msgstr "Kiểu địa chỉ không được hỗ trợ"
 
@@ -1489,7 +1489,7 @@ msgstr "&Luôn dùng hành động này"
 msgid "Algorithm:"
 msgstr "Thuật toán:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2950
+#: ../../locales/../src/interface/QueueView.cpp:2947
 msgid "All files have been successfully transferred"
 msgstr "Tất cả các tập tin được truyền đi thành công"
 
@@ -1497,7 +1497,7 @@ msgstr "Tất cả các tập tin được truyền đi thành công"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Tất cả các cổng phải nằm giữa 1024 và 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2946
+#: ../../locales/../src/interface/QueueView.cpp:2943
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1545,7 +1545,7 @@ msgstr ""
 "Thay vì thế, bạn cũng có thể tải phiên bản mới nhất về từ trang thông tin "
 "điện tử của FileZilla:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1911
+#: ../../locales/../src/interface/QueueView.cpp:1908
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1554,7 +1554,7 @@ msgstr ""
 "Đã xảy ra lỗi khi tải lên hàng đợi từ \"%s\".\n"
 "Một số phần tử hàng đợi có lẽ không phục hồi được."
 
-#: ../../locales/../src/interface/QueueView.cpp:1821
+#: ../../locales/../src/interface/QueueView.cpp:1818
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1563,23 +1563,23 @@ msgstr ""
 "Đã xảy ra lỗi khi ghi lại hàng đợi thành \"%s\".\n"
 "Một số phần tử hàng đợi có lẽ không được ghi lại."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2030
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2033
 msgid ""
 "An item with the same name as the dragged item already exists at the target "
 "location."
 msgstr "Một mục cùng tên với mục kéo thả đã sẵn có trong vị trí đích."
 
 #: ../../locales/../src/engine/server.cpp:885
-#: ../../locales/../src/interface/manual_transfer.cpp:152
-#: ../../locales/../src/interface/manual_transfer.cpp:190
-#: ../../locales/../src/interface/manual_transfer.cpp:206
-#: ../../locales/../src/interface/manual_transfer.cpp:538
+#: ../../locales/../src/interface/manual_transfer.cpp:153
+#: ../../locales/../src/interface/manual_transfer.cpp:191
+#: ../../locales/../src/interface/manual_transfer.cpp:207
+#: ../../locales/../src/interface/manual_transfer.cpp:539
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1308
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1582
 msgid "Anonymous"
 msgstr "Nặc danh"
 
-#: ../../locales/../src/interface/state.cpp:943
+#: ../../locales/../src/interface/state.cpp:937
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr "Thao tác khác đang tiến hành, không thể thay đổi thư mục vào lúc này."
@@ -1589,11 +1589,11 @@ msgid "Any changes made in the Site Manager could not be saved."
 msgstr ""
 "Bất kỳ thay đổi nào tạo tại Quản Lý Địa Chỉ cũng không thể được ghi lại."
 
-#: ../../locales/../src/interface/filter.cpp:212
+#: ../../locales/../src/interface/filter.cpp:213
 msgid "Any changes made to the filters could not be saved."
 msgstr "Bất kỳ thay đổi nào tới bộ lọc cũng không thể được ghi lại."
 
-#: ../../locales/../src/interface/filter.cpp:969
+#: ../../locales/../src/interface/filter.cpp:970
 msgid "Any changes made to the filters will not be saved."
 msgstr "Bất kỳ thay đổi nào tới các bộ lọc sẽ không được ghi lại."
 
@@ -1617,7 +1617,7 @@ msgstr "Chỉ áp dụng cho các tập &tin"
 msgid "Archive"
 msgstr "Kho lưu"
 
-#: ../../locales/../src/engine/socket.cpp:1095
+#: ../../locales/../src/engine/socket.cpp:1081
 msgid "Argument buffer overflow"
 msgstr "Bộ đệm tham số bị tràn"
 
@@ -1635,7 +1635,7 @@ msgstr "Hỏi thao tác"
 
 #: ../../locales/../src/engine/server.cpp:856
 #: ../../locales/../src/engine/server.cpp:877
-#: ../../locales/../src/interface/manual_transfer.cpp:181
+#: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Ask for password"
 msgstr "Hỏi mật khẩu"
 
@@ -1667,7 +1667,7 @@ msgstr "Tại điểm này, tất cả các thông tin yêu cầu đã được 
 msgid "Attribute"
 msgstr "Thuộc tính"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:672
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:657
 msgid "Authentication failed."
 msgstr "Không đúng thẩm quyền."
 
@@ -1696,7 +1696,7 @@ msgstr "B <Ký hiệu đơn vị cho byte. Chỉ dịch chữ đầu>"
 msgid "B&ypass proxy"
 msgstr "Bằng cách dùng chủ ủ&y nhiệm"
 
-#: ../../locales/../src/engine/socket.cpp:1059
+#: ../../locales/../src/engine/socket.cpp:1045
 msgid "Bad file descriptor"
 msgstr "Bộ mô tả tập tin sai"
 
@@ -1713,7 +1713,7 @@ msgstr "Cách xử lý"
 msgid "Being edited"
 msgstr "Đang được sửa chữa"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1111
+#: ../../locales/../src/engine/tlssocket.cpp:1113
 msgid "Beware! Certificate has been revoked"
 msgstr "Cẩn thận! Giấy chứng nhận đã bị thu hồi"
 
@@ -1790,8 +1790,8 @@ msgstr "Ràng buộc xử lý kiể&u tập tin với ứng dụng cụ thể:"
 msgid "CPU features:"
 msgstr "Tính năng CPU:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1570
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1226
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1571
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1211
 msgid "Calculating timezone offset of server..."
 msgstr "Đang tính toán múi giờ của máy chủ dịch vụ…"
 
@@ -1847,11 +1847,11 @@ msgstr "Hủy công việc hiện hành"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "Không thể truy cập “%s”,không có đĩa hay ổ đĩa không sẵn sàng."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:560
+#: ../../locales/../src/interface/Mainfrm.cpp:561
 msgid "Cannot add server to Site Manager"
 msgstr "Không thể thêm địa chỉ máy chủ vào Danh bạ"
 
-#: ../../locales/../src/engine/socket.cpp:1112
+#: ../../locales/../src/engine/socket.cpp:1098
 msgid "Cannot assign requested address"
 msgstr "Không thể gán địa chỉ đã yêu cầu"
 
@@ -1877,20 +1877,20 @@ msgstr "Không thể tạo bộ lọc mới"
 
 #: ../../locales/../src/interface/edithandler.cpp:1574
 #: ../../locales/../src/interface/edithandler.cpp:1622
-#: ../../locales/../src/interface/LocalListView.cpp:1700
-#: ../../locales/../src/interface/search.cpp:712
+#: ../../locales/../src/interface/LocalListView.cpp:1705
+#: ../../locales/../src/interface/search.cpp:696
 msgid "Cannot edit file"
 msgstr "Không thể sửa tập tin"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1582
+#: ../../locales/../src/interface/LocalListView.cpp:1587
 msgid "Cannot edit file, not connected to any server."
 msgstr "Không thể sửa tập tin, không kết nối tới máy chủ nào."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1591
+#: ../../locales/../src/interface/LocalListView.cpp:1596
 msgid "Cannot edit file, remote path unknown."
 msgstr "Không sửa tập tin được vì không tìm thấy địa chỉ máy chủ."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:340
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:341
 msgid ""
 "Cannot establish FTP connection to an SFTP server. Please select proper "
 "protocol."
@@ -1907,11 +1907,11 @@ msgstr "Không thể tải thanh công cụ Kết Nối Nhanh từ tập tin ngu
 msgid "Cannot load key file"
 msgstr "Không thể tải tập tin khóa"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:993
+#: ../../locales/../src/interface/Mainfrm.cpp:994
 msgid "Cannot load toolbar from resource file"
 msgstr "Không thể tải thanh công cụ từ tập tin nguồn"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:444
+#: ../../locales/../src/interface/manual_transfer.cpp:445
 msgid "Cannot remember password"
 msgstr "Không thể lưu mật khẩu"
 
@@ -1920,22 +1920,22 @@ msgstr "Không thể lưu mật khẩu"
 msgid "Cannot rename entry"
 msgstr "Không thể đổi tên đề mục"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1589
+#: ../../locales/../src/interface/RemoteListView.cpp:1582
 msgid "Cannot rename file"
 msgstr "Không thể đổi tên tập tin"
 
-#: ../../locales/../src/engine/proxy.cpp:148
+#: ../../locales/../src/engine/proxy.cpp:172
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr ""
 "Không thể phân giải tên máy chủ sang địa chỉ IPv4 để dùng cho máy chủ ủy "
 "nhiệm SOCKS4."
 
-#: ../../locales/../src/interface/filter.cpp:339
-#: ../../locales/../src/interface/filter.cpp:403
+#: ../../locales/../src/interface/filter.cpp:340
+#: ../../locales/../src/interface/filter.cpp:404
 msgid "Cannot save filterset"
 msgstr "Không thể ghi lại bộ lọc"
 
-#: ../../locales/../src/interface/filter.cpp:303
+#: ../../locales/../src/interface/filter.cpp:304
 msgid "Cannot select filter"
 msgstr "Không thể chọn bộ lọc"
 
@@ -2002,7 +2002,7 @@ msgstr "Thay đổi quyền truy cập tập tin."
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "Sửa tập tin nhật ký cần phải khởi động lại FileZilla"
 
-#: ../../locales/../src/interface/FileZilla.cpp:574
+#: ../../locales/../src/interface/FileZilla.cpp:596
 msgid "Character encoding issue"
 msgstr "Dạng ký tự mã hóa"
 
@@ -2030,7 +2030,7 @@ msgstr "Kiểm tra phiên bản mới hơn của FileZilla"
 msgid "Check for updates failed"
 msgstr "Kiểm tra phiên bản mới gặp lỗi"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:783
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:784
 msgid ""
 "Check your login credentials. The entered password starts or ends with a "
 "space character."
@@ -2038,7 +2038,7 @@ msgstr ""
 "Kiểm tra các giấy ủy nhiệm đăng nhập của bạn. Mật khẩu đã nhập vào bắt đầu "
 "hoặc kết thúc bằng ký tự khoảng trắng."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:779
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:780
 msgid ""
 "Check your login credentials. The entered username starts or ends with a "
 "space character."
@@ -2046,7 +2046,7 @@ msgstr ""
 "Kiểm tra các giấy ủy nhiệm đăng nhập của bạn. Tài khoản đã nhập vào bắt đầu "
 "hoặc kết thúc bằng ký tự khoảng trắng."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:771
+#: ../../locales/../src/interface/netconfwizard.cpp:761
 msgid "Checking for correct external IP address"
 msgstr "Kiểm tra địa chỉ IP"
 
@@ -2054,12 +2054,12 @@ msgstr "Kiểm tra địa chỉ IP"
 msgid "Checking for updates..."
 msgstr "Đang kiểm tra phiên bản mới…"
 
-#: ../../locales/../src/interface/updater.cpp:715
+#: ../../locales/../src/interface/updater.cpp:716
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Tổng kiểm trên tập tin %s khớp\n"
 
-#: ../../locales/../src/interface/updater.cpp:711
+#: ../../locales/../src/interface/updater.cpp:712
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Tổng kiểm trên tập tin %s không khớp\n"
@@ -2074,11 +2074,11 @@ msgstr "Chọn thư mục nội bộ mặc định"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:124
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:364
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2242
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2245
 msgid "Choose the local directory"
 msgstr "Chọn thư mục nội bộ"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:808
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:811
 msgid "Chunk data improperly terminated"
 msgstr "Tổng kiểm tra dữ liệu tận cùng không đúng"
 
@@ -2116,7 +2116,7 @@ msgstr "Xóa dữ liệu lưu trong máy"
 msgid "Clear quickconnect bar"
 msgstr "Xóa thanh công cụ kết nối nhanh"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:587
+#: ../../locales/../src/interface/netconfwizard.cpp:580
 msgid "Click on Finish to save your configuration."
 msgstr "Bấm vào nút Hoàn tất để ghi lại thông tin cấu hình."
 
@@ -2133,8 +2133,8 @@ msgid "Close &all other tabs"
 msgstr "Đóng tất cả các t&ab khác"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1134
-#: ../../locales/../src/interface/Mainfrm.cpp:1155
+#: ../../locales/../src/interface/Mainfrm.cpp:1135
+#: ../../locales/../src/interface/Mainfrm.cpp:1156
 msgid "Close FileZilla"
 msgstr "Đóng FileZilla"
 
@@ -2162,13 +2162,13 @@ msgstr "Cài đặt cột"
 msgid "Command and its arguments should be properly quoted."
 msgstr "Lệnh và tham số phải được trích dẫn đúng."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:224
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:237
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:251
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:223
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:236
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:250
 msgid "Command failed"
 msgstr "Lệnh gặp lỗi"
 
-#: ../../locales/../src/engine/proxy.cpp:502
+#: ../../locales/../src/engine/proxy.cpp:525
 msgid "Command not supported"
 msgstr "Lệnh không được hỗ trợ"
 
@@ -2176,7 +2176,7 @@ msgstr "Lệnh không được hỗ trợ"
 msgid "Command not supported by this protocol"
 msgstr "Lệnh không được hỗ trợ bởi giao thức này"
 
-#: ../../locales/../src/engine/logging.cpp:111
+#: ../../locales/../src/engine/logging.cpp:112
 #: ../../locales/../src/interface/StatusView.cpp:283
 #: ../../locales/../src/interface/StatusView.cpp:339
 msgid "Command:"
@@ -2190,8 +2190,8 @@ msgstr "Chú thích"
 msgid "Common name:"
 msgstr "Tên thông thường:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:442
-#: ../../locales/../src/interface/netconfwizard.cpp:457
+#: ../../locales/../src/interface/netconfwizard.cpp:439
+#: ../../locales/../src/interface/netconfwizard.cpp:452
 msgid "Communication tainted by router or firewall"
 msgstr "Kết nối hỏng vì bộ định tuyến router hay tường lửa firewall"
 
@@ -2258,26 +2258,31 @@ msgstr "Cấu hình vùng cổng"
 msgid "Configuring FileZilla and your network"
 msgstr "Cấu hình FileZilla và mạng của bạn"
 
-#: ../../locales/../src/interface/search.cpp:768
+#: ../../locales/../src/interface/search.cpp:747
 msgid "Confirm deletion"
 msgstr "Xác nhận khi xóa"
 
-#: ../../locales/../src/engine/local_filesys.cpp:129
 #: ../../locales/../src/interface/edithandler.cpp:1586
-#: ../../locales/../src/interface/LocalListView.cpp:1664
-#: ../../locales/../src/interface/RemoteListView.cpp:1394
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1038
-#: ../../locales/../src/interface/search.cpp:724
+#: ../../locales/../src/interface/file_utils.h:45
+#: ../../locales/../src/interface/LocalListView.cpp:1669
+#: ../../locales/../src/interface/RemoteListView.cpp:1390
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1041
+#: ../../locales/../src/interface/search.cpp:708
 msgid "Confirmation needed"
 msgstr "Xác nhận cần thiết"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:583
+#: ../../locales/../src/interface/netconfwizard.cpp:576
 msgid "Congratulations, your configuration seems to be working."
 msgstr "Xin chúc mừng, việc cấu hình của bạn có vẻ hoạt động tốt."
 
 #: ../../locales/../src/interface/quickconnectbar.cpp:148
 msgid "Connect bypassing proxy settings"
 msgstr "Kết nối thông qua cài đặt chủ ủy nhiệm"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:216
+#, fuzzy, c-format
+msgid "Connect failed: %s"
+msgstr "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm: %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1383
 msgid "Connect in current tab"
@@ -2291,29 +2296,29 @@ msgstr "Kết nối vào tab mới"
 msgid "Connect to specified Site Manager site"
 msgstr "Kết nối tới địa chỉ danh nghĩa trong Danh bạ"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:908
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
 msgid "Connected"
 msgstr "Đã kết nối"
 
-#: ../../locales/../src/interface/queue.cpp:326
+#: ../../locales/../src/interface/queue.cpp:332
 msgid "Connecting"
 msgstr "Đang kết nối"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:223
+#: ../../locales/../src/interface/netconfwizard.cpp:210
 #: ../../locales/../src/interface/statuslinectrl.cpp:243
 #, c-format
 msgid "Connecting to %s"
 msgstr "Đang kết nối tới %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1050
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4246
+#: ../../locales/../src/engine/ControlSocket.cpp:1051
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4261
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Đang kết nối tới %s thông qua máy chủ ủy nhiệm %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:958
-#: ../../locales/../src/engine/proxy.cpp:243
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:370
+#: ../../locales/../src/engine/ControlSocket.cpp:959
+#: ../../locales/../src/engine/proxy.cpp:266
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:355
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Đang kết nối tới %s…"
@@ -2322,119 +2327,124 @@ msgstr "Đang kết nối tới %s…"
 msgid "Connection"
 msgstr "Kết nối"
 
-#: ../../locales/../src/engine/socket.cpp:1073
+#: ../../locales/../src/engine/socket.cpp:1059
 msgid "Connection aborted"
 msgstr "Kết nối bị bãi bỏ"
 
-#: ../../locales/../src/interface/queue.cpp:327
+#: ../../locales/../src/interface/queue.cpp:333
 msgid "Connection attempt failed"
 msgstr "Cố gắng kết nối gặp lỗi"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:922
-#: ../../locales/../src/engine/proxy.cpp:217
+#: ../../locales/../src/engine/ControlSocket.cpp:923
+#: ../../locales/../src/engine/proxy.cpp:240
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr "Cố gắng kết nối với \"%s\" gặp lỗi, đang thử địa chỉ tiếp theo."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:927
+#: ../../locales/../src/engine/ControlSocket.cpp:928
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Cố gắng kết nối với \"%s\" gặp lỗi."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:184
+#: ../../locales/../src/engine/ControlSocket.cpp:185
 #: ../../locales/../src/engine/engineprivate.cpp:681
 msgid "Connection attempt interrupted by user"
 msgstr "Cố gắng kết nối bị ngắt bởi người dùng"
 
-#: ../../locales/../src/engine/socket.cpp:1066
+#: ../../locales/../src/engine/socket.cpp:1052
 msgid "Connection attempt timed out"
 msgstr "Kết nối bị lỗi quá thời gian"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:559
+#: ../../locales/../src/interface/netconfwizard.cpp:552
 msgid "Connection closed"
 msgstr "Kết nối đã đóng"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1017
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:219
+#: ../../locales/../src/engine/ControlSocket.cpp:1018
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:220
 msgid "Connection closed by server"
 msgstr "Kết nối đã đóng bởi máy chủ"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:384
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:283
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:385
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:285
 msgid "Connection established, initializing TLS..."
 msgstr "Kết nối đã thiết lập, đang khởi tạo TLS…"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:308
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:310
 msgid "Connection established, sending HTTP request"
 msgstr "Kết nối đã thiết lập, đang gửi yêu cầu HTTP"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:412
+#: ../../locales/../src/interface/netconfwizard.cpp:333
+#, fuzzy
+msgid "Connection established, waiting for welcome message."
+msgstr "Kết nối đã thiết lập, đang đợi thông điệp từ máy chủ…"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
 msgid "Connection established, waiting for welcome message..."
 msgstr "Kết nối đã thiết lập, đang đợi thông điệp từ máy chủ…"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:354
+#: ../../locales/../src/interface/netconfwizard.cpp:350
 msgid "Connection lost"
 msgstr "Mất kết nối"
 
-#: ../../locales/../src/engine/proxy.cpp:487
+#: ../../locales/../src/engine/proxy.cpp:510
 msgid "Connection not allowed by ruleset"
 msgstr "Kết nối không cho phép bởi qui tắc đã đặt"
 
-#: ../../locales/../src/engine/proxy.cpp:496
+#: ../../locales/../src/engine/proxy.cpp:519
 msgid "Connection refused"
 msgstr "Kết nối đã bị từ chối"
 
-#: ../../locales/../src/engine/socket.cpp:1060
+#: ../../locales/../src/engine/socket.cpp:1046
 msgid "Connection refused by server"
 msgstr "Kết nối đã bị từ chối bởi máy chủ"
 
-#: ../../locales/../src/engine/socket.cpp:1069
+#: ../../locales/../src/engine/socket.cpp:1055
 msgid "Connection reset by network"
 msgstr "Kết nối đã bị đặt lại bởi mạng"
 
-#: ../../locales/../src/engine/socket.cpp:1074
+#: ../../locales/../src/engine/socket.cpp:1060
 msgid "Connection reset by peer"
 msgstr "Kết nối đã bị đặt lại bởi máy ngang hàng"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:559
+#: ../../locales/../src/engine/ControlSocket.cpp:560
 #, c-format
 msgid "Connection timed out after %d second of inactivity"
 msgid_plural "Connection timed out after %d seconds of inactivity"
 msgstr[0] "Kết nối sẽ chấm dứt nếu sau %d giây không có hoạt động gì"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1077
+#: ../../locales/../src/interface/netconfwizard.cpp:1054
 msgid "Connection timed out."
 msgstr "Kết nối bị lỗi quá thời gian."
 
-#: ../../locales/../src/interface/search.cpp:383
+#: ../../locales/../src/interface/search.cpp:386
 msgid "Connection to server lost."
 msgstr "Mất kết nối tới máy chủ dịch vụ."
 
-#: ../../locales/../src/engine/proxy.cpp:226
+#: ../../locales/../src/engine/proxy.cpp:249
 msgid "Connection with proxy established, performing handshake..."
 msgstr ""
 "Kết nối với máy chủ ủy nhiệm đã thiết lập, đang thi hành kết nối bắt tay…"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:577
+#: ../../locales/../src/interface/netconfwizard.cpp:570
 msgid "Connection with server got closed prematurely."
 msgstr "Kết nối tới máy chủ bị đóng lại nhanh chóng."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:568
+#: ../../locales/../src/interface/netconfwizard.cpp:561
 msgid "Connection with the test server failed."
 msgstr "Kết nối với máy chủ thử nghiệm gặp lỗi."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:106
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:105
 msgid "Convert key file"
 msgstr "Chuyển đổi tập tin khóa"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:625
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1849
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1852
 #, c-format
 msgid "Copy (%d) of %s"
 msgstr "Sao chép (%d) trên %s"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:605
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1829
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1832
 #, c-format
 msgid "Copy of %s"
 msgstr "Bản sao của %s"
@@ -2454,30 +2464,30 @@ msgstr "Không thể chấp nhận kết nối: %s"
 msgid "Could not add connection to Site Manager"
 msgstr "Không thể thêm kết nối này vào danh bạ."
 
-#: ../../locales/../src/interface/state.cpp:757
+#: ../../locales/../src/interface/state.cpp:750
 msgid "Could not complete operation"
 msgstr "Không thể hoàn tất thao tác"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:186
+#: ../../locales/../src/engine/ControlSocket.cpp:187
 msgid "Could not connect to server"
 msgstr "Không thể kết nối tới máy chủ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1087
+#: ../../locales/../src/engine/ControlSocket.cpp:1089
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Không thể kết nối tới máy chủ: %s"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:803
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:788
 msgid "Could not convert command to server encoding"
 msgstr "Không thể chuyển đổi lệnh tới máy chủ mã hóa"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:139
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:148
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:138
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:147
 msgid "Could not convert private key"
 msgstr "Không thể chuyển đổi khóa riêng"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2532
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1374
+#: ../../locales/../src/interface/RemoteListView.cpp:2522
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1381
 msgid "Could not copy URLs"
 msgstr "Không thể sao chép URL"
 
@@ -2485,17 +2495,17 @@ msgstr "Không thể sao chép URL"
 msgid "Could not copy data"
 msgstr "Không thể sao chép dữ liệu"
 
-#: ../../locales/../src/interface/updater.cpp:458
+#: ../../locales/../src/interface/updater.cpp:459
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Không thể tạo tập tin nội bộ %s\n"
 
-#: ../../locales/../src/engine/logging.cpp:165
+#: ../../locales/../src/engine/logging.cpp:173
 #, c-format
 msgid "Could not create logging mutex: %s"
 msgstr "Không thể tạo mutex nhật ký: %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2193
+#: ../../locales/../src/interface/RemoteListView.cpp:2183
 #: ../../locales/../src/interface/RemoteTreeView.cpp:851
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
@@ -2506,11 +2516,11 @@ msgstr ""
 "Có thể là phần mở rộng không được đặt đúng đắn hay là bạn đã không thả các "
 "tập tin vào trong cửa sổ chương trình Explorer."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4095
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4110
 msgid "Could not establish connection to server"
 msgstr "Không thể thiết lập kết nối tới máy chủ"
 
-#: ../../locales/../src/interface/FileZilla.cpp:406
+#: ../../locales/../src/interface/FileZilla.cpp:428
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2521,11 +2531,11 @@ msgstr ""
 "Bạn có thể đặt thư mục chứa dữ liệu cho FileZilla dùng dòng lệnh tùy chọn “--"
 "datadir <custompath>” hay bằng cách đặt biến môi trường FZ_DATADIR."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:680
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:681
 msgid "Could not generate custom login sequence."
 msgstr "Không thể tạo ra đăng nhập liên tiếp."
 
-#: ../../locales/../src/engine/tlssocket.cpp:956
+#: ../../locales/../src/engine/tlssocket.cpp:958
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2533,7 +2543,7 @@ msgstr ""
 "Không thể lấy tên được ghi trong giấy phép đã xuất ra, "
 "gnutls_x509_get_issuer_dn gặp lỗi"
 
-#: ../../locales/../src/engine/tlssocket.cpp:933
+#: ../../locales/../src/engine/tlssocket.cpp:935
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2541,26 +2551,31 @@ msgstr ""
 "Không thể lấy tên được ghi trong nội dung giấy phép, gnutls_x509_get_dn gặp "
 "lỗi"
 
-#: ../../locales/../src/interface/state.cpp:929
+#: ../../locales/../src/interface/state.cpp:923
 msgid "Could not get full remote path."
 msgstr "Không thể lấy đường dẫn đầy đủ."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:237
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:251
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:236
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:250
 msgid "Could not get reply from fzputtygen."
 msgstr "Không thể nhận trả lời từ fzputtygen."
 
 #: ../../locales/../src/interface/edithandler.cpp:1574
-#: ../../locales/../src/interface/search.cpp:712
+#: ../../locales/../src/interface/search.cpp:696
 msgid "Could not get temporary directory to download file into."
 msgstr "Không thể nhận thư mục tạm thời từ tập tin tải về vào."
 
-#: ../../locales/../src/engine/tlssocket.cpp:879
+#: ../../locales/../src/engine/tlssocket.cpp:881
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Không thể nhập giấy chứng nhận ngang hàng, gnutls_x509_crt_import gặp lỗi"
 
-#: ../../locales/../src/engine/tlssocket.cpp:874
+#: ../../locales/../src/interface/FileZilla.cpp:108
+#, fuzzy, c-format
+msgid "Could not initialize Winsock (%d): %s"
+msgstr "Không thể ghi vào gói mạng: %s"
+
+#: ../../locales/../src/engine/tlssocket.cpp:876
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2583,11 +2598,11 @@ msgstr ""
 msgid "Could not load key file"
 msgstr "Không thể tải tập tin khóa"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:125
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:124
 msgid "Could not load private key"
 msgstr "Không thể tải khóa riêng tập tin"
 
-#: ../../locales/../src/interface/state.cpp:951
+#: ../../locales/../src/interface/state.cpp:945
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2597,7 +2612,7 @@ msgstr ""
 "Không có thư mục nội bộ tương đương với thư mục máy chủ “%s”.\n"
 "Bạn có muốn tắt chức năng duyệt đồng bộ và tiếp tục chuyển sang thư mục khác?"
 
-#: ../../locales/../src/interface/state.cpp:361
+#: ../../locales/../src/interface/state.cpp:362
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2607,7 +2622,7 @@ msgstr ""
 "Không có thư mục nội bộ tương đương với thư mục máy chủ “%s”.\n"
 "Chức năng duyệt đồng bộ đã bị tắt."
 
-#: ../../locales/../src/interface/state.cpp:266
+#: ../../locales/../src/interface/state.cpp:267
 #, c-format
 msgid ""
 "Could not obtain corresponding remote directory for the local directory "
@@ -2618,14 +2633,14 @@ msgstr ""
 "Chức năng duyệt đồng bộ đã bị tắt."
 
 #: ../../locales/../src/interface/aboutdialog.cpp:198
-#: ../../locales/../src/interface/RemoteListView.cpp:2532
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1374
+#: ../../locales/../src/interface/RemoteListView.cpp:2522
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1381
 msgid "Could not open clipboard"
 msgstr "Không mở được clipboard"
 
-#: ../../locales/../src/engine/logging.cpp:105
-#: ../../locales/../src/engine/logging.cpp:177
-#: ../../locales/../src/engine/logging.cpp:208
+#: ../../locales/../src/engine/logging.cpp:106
+#: ../../locales/../src/engine/logging.cpp:186
+#: ../../locales/../src/engine/logging.cpp:218
 #, c-format
 msgid "Could not open log file: %s"
 msgstr "Không mở được tập tin nhật ký: %s"
@@ -2638,7 +2653,12 @@ msgstr "Không thể phân tích cú pháp đường dẫn máy chủ."
 msgid "Could not parse server address:"
 msgstr "Không rõ cú pháp địa chỉ máy chủ:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:210
+#: ../../locales/../src/interface/netconfwizard.cpp:977
+#, fuzzy
+msgid "Could not read from data socket."
+msgstr "Không thể đọc gói mạng: %s"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "Không thể đọc gói mạng: %s"
@@ -2647,29 +2667,34 @@ msgstr "Không thể đọc gói mạng: %s"
 msgid "Could not read server item."
 msgstr "Không đọc mục tin máy chủ."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2595
+#: ../../locales/../src/interface/netconfwizard.cpp:344
+#, fuzzy
+msgid "Could not receive data from server."
+msgstr "Không thể kết nối tới máy chủ"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
 #, c-format
 msgid "Could not seek to offset %s within file"
 msgstr "Không thể tìm được vị trí %s trong tập tin"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2502
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2503
 msgid "Could not seek to the end of the file"
 msgstr "Không thể chuyển đến cuối tập tin"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:224
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:223
 msgid "Could not send command to fzputtygen."
 msgstr "Không thể gửi lệnh tới fzputtygen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2623
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2624
 msgid "Could not spawn IO thread"
 msgstr "Không thể sản sinh tuyến trình vào ra (IO)"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1064
+#: ../../locales/../src/engine/ControlSocket.cpp:1065
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Không thể bắt đầu truyền bắt tay tới máy chủ ủy nhiệm: %s"
 
-#: ../../locales/../src/interface/queue.cpp:332
+#: ../../locales/../src/interface/queue.cpp:338
 msgid "Could not start transfer"
 msgstr "Không thể bắt đầu truyền"
 
@@ -2692,7 +2717,7 @@ msgstr "Không thể ghi \"%s\", dấu trang không thể ghi thêm: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Không thể ghi \"%s\", dấu sách toàn cục sẽ không được ghi lại: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1850
+#: ../../locales/../src/interface/QueueView.cpp:1847
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2703,7 +2728,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/sitemanager.cpp:720
 #: ../../locales/../src/interface/sitemanager.cpp:774
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2223
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2226
 #, c-format
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "Không thể ghi \"%s\", các địa chỉ đã chọn không thể xuất ra: %s"
@@ -2713,23 +2738,23 @@ msgstr "Không thể ghi \"%s\", các địa chỉ đã chọn không thể xu�
 msgid "Could not write \"%s\":"
 msgstr "Không thể ghi \"%s\":"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:148
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:147
 #, c-format
 msgid "Could not write key file: %s"
 msgstr "Không thể ghi tập tin khóa: %s"
 
-#: ../../locales/../src/interface/queue.cpp:331
+#: ../../locales/../src/interface/queue.cpp:337
 msgid "Could not write to local file"
 msgstr "Không thể ghi vào tập tin nội bộ"
 
-#: ../../locales/../src/engine/logging.cpp:215
-#: ../../locales/../src/engine/logging.cpp:280
+#: ../../locales/../src/engine/logging.cpp:230
+#: ../../locales/../src/engine/logging.cpp:297
 #, c-format
 msgid "Could not write to log file: %s"
 msgstr "Không thể ghi vào tập tin nhật ký: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:882
-#: ../../locales/../src/engine/ControlSocket.cpp:986
+#: ../../locales/../src/engine/ControlSocket.cpp:883
+#: ../../locales/../src/engine/ControlSocket.cpp:987
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Không thể ghi vào gói mạng: %s"
@@ -2742,11 +2767,11 @@ msgstr "Quốc gia:"
 msgid "Crea&te new file"
 msgstr "&Tạo tập tin mới"
 
-#: ../../locales/../src/interface/state.cpp:965
+#: ../../locales/../src/interface/state.cpp:959
 msgid "Create &missing local directory and enter it"
 msgstr "Tạo thư &mục nội bộ còn thiếu và vào nó"
 
-#: ../../locales/../src/interface/state.cpp:892
+#: ../../locales/../src/interface/state.cpp:886
 msgid "Create &missing remote directory and enter it"
 msgstr "Tạo thư &mục trên máy phục vụ còn thiếu và vào nó"
 
@@ -2775,45 +2800,45 @@ msgstr "Tạo tập tin mới, trống rỗng trong thư mục hiện hành"
 msgid "Create director&y and enter it"
 msgstr "Tạo thư &mục mới và vào nó"
 
-#: ../../locales/../src/interface/LocalListView.cpp:897
-#: ../../locales/../src/interface/LocalTreeView.cpp:1123
-#: ../../locales/../src/interface/RemoteListView.cpp:1297
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1212
+#: ../../locales/../src/interface/LocalListView.cpp:902
+#: ../../locales/../src/interface/LocalTreeView.cpp:1120
+#: ../../locales/../src/interface/RemoteListView.cpp:1293
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1219
 msgid "Create directory"
 msgstr "Tạo thư mục mới"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2619
+#: ../../locales/../src/interface/RemoteListView.cpp:2609
 msgid "Create empty file"
 msgstr "Tạo tập tin trống rỗng"
 
-#: ../../locales/../src/interface/queue.cpp:334
+#: ../../locales/../src/interface/queue.cpp:340
 msgid "Creating directory"
 msgstr "Đang tạo thư mục mới"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3170
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1951
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3171
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1932
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "Đang tạo thư mục “%s”…"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:179
+#: ../../locales/../src/engine/ControlSocket.cpp:180
 msgid "Critical error"
 msgstr "Giới hạn sai"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:170
+#: ../../locales/../src/engine/ControlSocket.cpp:171
 msgid "Critical error:"
 msgstr "Giới hạn sai:"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:134
+#: ../../locales/../src/engine/ControlSocket.cpp:135
 msgid "Critical file transfer error"
 msgstr "Lỗi đạt tới tới hạn tập tin"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:119
+#: ../../locales/../src/engine/ControlSocket.cpp:120
 #, c-format
 msgid "Critical file transfer error after transferring %s in %s"
 msgstr "Lỗi tới hạn tập tin sau khi truyền đi %s trong %s"
 
-#: ../../locales/../src/interface/state.cpp:352
+#: ../../locales/../src/interface/state.cpp:353
 #, c-format
 msgid ""
 "Current remote directory (%s) is not below the synchronization root (%s).\n"
@@ -2843,7 +2868,7 @@ msgstr "Đường cong:"
 msgid "Cus&tom"
 msgstr "T&ùy chọn của bạn"
 
-#: ../../locales/../src/interface/filter.cpp:100
+#: ../../locales/../src/interface/filter.cpp:101
 msgid "Custom filter set"
 msgstr "Đặt bộ lọc của bạn"
 
@@ -2903,8 +2928,8 @@ msgstr "Kiểu tập tin nguy hiểm"
 msgid "Data"
 msgstr "Dữ liệu"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:994
-#: ../../locales/../src/interface/netconfwizard.cpp:1058
+#: ../../locales/../src/interface/netconfwizard.cpp:971
+#: ../../locales/../src/interface/netconfwizard.cpp:1036
 msgid "Data socket closed too early."
 msgstr "Gói tin truyền đi bị đóng quá sớm."
 
@@ -3018,19 +3043,11 @@ msgstr "Đang xóa \"%s\""
 msgid "Deleting %u files from \"%s\""
 msgstr "Đang xóa bỏ %u tập tin từ “%s”"
 
-#: ../../locales/../src/interface/search.cpp:753
-msgid "Deleting directories"
-msgstr "Đang xóa các thư mục"
-
-#: ../../locales/../src/interface/search.cpp:753
-msgid "Deleting multiple unrelated directories is not yet supported"
-msgstr "Việc bội xóa không liên quan đến thư mục vẫn chưa được hỗ trợ"
-
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
 msgid "Deleting symbolic link"
 msgstr "Xóa liên kết mềm"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:958
+#: ../../locales/../src/interface/LocalTreeView.cpp:955
 msgid "Desktop"
 msgstr "Thư mục Desktop"
 
@@ -3052,7 +3069,7 @@ msgstr "Tìm thấy phiên bản mới hơn của FileZilla"
 msgid "Dire&ctories"
 msgstr "Các &thư mục"
 
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Direction"
 msgstr "Hướng"
 
@@ -3065,8 +3082,8 @@ msgstr "Thư mục"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1770
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
-#: ../../locales/../src/interface/filelistctrl.cpp:463
-#: ../../locales/../src/interface/Mainfrm.cpp:2165
+#: ../../locales/../src/interface/filelistctrl.cpp:465
+#: ../../locales/../src/interface/Mainfrm.cpp:2167
 msgid "Directory comparison"
 msgstr "So sánh thư mục"
 
@@ -3079,11 +3096,11 @@ msgid "Directory containing the logfile does not exist or filename is invalid."
 msgstr ""
 "Thư mục chứ tập tin nhật ký không sẵn có hoặc tên tập tin không hợp lệ."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:190
+#: ../../locales/../src/engine/ControlSocket.cpp:191
 msgid "Directory listing aborted by user"
 msgstr "Liệt kê thư mục được bãi bỏ bởi người dùng"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2023
+#: ../../locales/../src/interface/RemoteListView.cpp:2013
 msgid "Directory listing failed"
 msgstr "Liệt kê thư mục gặp lỗi"
 
@@ -3091,12 +3108,12 @@ msgstr "Liệt kê thư mục gặp lỗi"
 msgid "Directory listing filters"
 msgstr "Bộ lọc danh sách thư mục"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:198
+#: ../../locales/../src/engine/ControlSocket.cpp:199
 #, c-format
 msgid "Directory listing of \"%s\" successful"
 msgstr "Lấy danh sách thư mục \"%s\" thành công"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:195
+#: ../../locales/../src/engine/ControlSocket.cpp:196
 msgid "Directory listing successful"
 msgstr "Lấy danh sách thư mục thành công"
 
@@ -3104,12 +3121,12 @@ msgstr "Lấy danh sách thư mục thành công"
 msgid "Disa&ble all"
 msgstr "&Tắt tất cả"
 
-#: ../../locales/../src/interface/state.cpp:958
+#: ../../locales/../src/interface/state.cpp:952
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr "Bạn có muốn tắt chức năng duyệt đồng bộ và tiếp tục thay đổi thư mục?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:649
+#: ../../locales/../src/interface/Mainfrm.cpp:650
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3120,23 +3137,23 @@ msgstr ""
 msgid "Disconnect from server"
 msgstr "Ngắt kết nối khỏi máy chủ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:80
-#: ../../locales/../src/engine/ControlSocket.cpp:883
-#: ../../locales/../src/engine/ControlSocket.cpp:988
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:212
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:879
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:881
-#: ../../locales/../src/interface/queue.cpp:325
+#: ../../locales/../src/engine/ControlSocket.cpp:81
+#: ../../locales/../src/engine/ControlSocket.cpp:884
+#: ../../locales/../src/engine/ControlSocket.cpp:989
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:213
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:882
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:884
+#: ../../locales/../src/interface/queue.cpp:331
 msgid "Disconnected from server"
 msgstr "Đã ngắt kết nối khỏi máy chủ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1019
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:895
+#: ../../locales/../src/engine/ControlSocket.cpp:1020
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:898
 #, c-format
 msgid "Disconnected from server: %s"
 msgstr "Ngắt kết nối từ máy chủ: %s"
 
-#: ../../locales/../src/interface/queue.cpp:324
+#: ../../locales/../src/interface/queue.cpp:330
 #: ../../locales/../src/interface/statuslinectrl.cpp:237
 msgid "Disconnecting from previous server"
 msgstr "Đã ngắt kết nối từ máy chủ dịch vụ trước đó"
@@ -3162,8 +3179,8 @@ msgstr "Khô&ng làm gì cả"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Thực hiện như vậy với tất &cả các tập tin đã chọn đang được sửa"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1137
-#: ../../locales/../src/interface/Mainfrm.cpp:1159
+#: ../../locales/../src/interface/Mainfrm.cpp:1138
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "Do you really want to close FileZilla?"
 msgstr "Bạn có thật sự muốn thoát khỏi FileZilla không?"
 
@@ -3186,7 +3203,7 @@ msgstr "Bạn có thật sự muốn xóa tất cả các đề mục đã chọ
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Bạn có thật sự muốn xóa tất cả hàng đợi truyền đã chọn không?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:588
+#: ../../locales/../src/interface/Mainfrm.cpp:589
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Bạn có thật sự muốn gửi “%s” lên máy chủ không?"
@@ -3230,8 +3247,8 @@ msgid "Download limit: none"
 msgstr "Giới hạn tải xuống: không"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3110
-#: ../../locales/../src/interface/search.cpp:518
-#: ../../locales/../src/interface/search.cpp:523
+#: ../../locales/../src/interface/search.cpp:524
+#: ../../locales/../src/interface/search.cpp:529
 msgid "Download search results"
 msgstr "Tải về kết quả tìm kiếm"
 
@@ -3243,7 +3260,7 @@ msgstr "Tải về thư mục đã chọn"
 msgid "Download selected files and directories"
 msgstr "Tải về các tập tin và thư mục đã chọn"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:965
+#: ../../locales/../src/interface/Mainfrm.cpp:966
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3256,26 +3273,18 @@ msgstr ""
 msgid "Downloading"
 msgstr "Đang tải về"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:326
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:328
 #, c-format
 msgid "Downloading %s"
 msgstr "Đang tải về %s"
-
-#: ../../locales/../src/interface/search.cpp:615
-msgid "Downloading multiple unrelated directories is not yet supported"
-msgstr "Việc bội tải xuống không liên quan đến thư mục vẫn chưa được hỗ trợ"
-
-#: ../../locales/../src/interface/search.cpp:615
-msgid "Downloading search results"
-msgstr "Đang tải về kết quả tìm kiếm"
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:81
 msgid "Downloading update..."
 msgstr "Đang tải bản cập nhật về…"
 
-#: ../../locales/../src/interface/LocalListView.cpp:103
-#: ../../locales/../src/interface/LocalTreeView.cpp:109
-#: ../../locales/../src/interface/QueueView.cpp:87
+#: ../../locales/../src/interface/LocalListView.cpp:105
+#: ../../locales/../src/interface/LocalTreeView.cpp:110
+#: ../../locales/../src/interface/QueueView.cpp:88
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
@@ -3284,9 +3293,9 @@ msgid ""
 msgstr ""
 "&Kéo thả giữa các cửa sổ của FileZilla hiện tại chưa thể thực hiện được."
 
-#: ../../locales/../src/interface/LocalListView.cpp:109
-#: ../../locales/../src/interface/LocalTreeView.cpp:115
-#: ../../locales/../src/interface/QueueView.cpp:100
+#: ../../locales/../src/interface/LocalListView.cpp:111
+#: ../../locales/../src/interface/LocalTreeView.cpp:116
+#: ../../locales/../src/interface/QueueView.cpp:101
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
@@ -3337,16 +3346,16 @@ msgid ""
 "Edit the file with the configured editor and upload changes to the server."
 msgstr "Biên tập tập tin với bộ biên tập cấu hình và tải thay đổi lên máy chủ."
 
-#: ../../locales/../src/interface/search.cpp:700
+#: ../../locales/../src/interface/search.cpp:684
 msgid "Editing directories is not supported"
 msgstr "Chưa hỗ trợ các thư mục sửa"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1582
-#: ../../locales/../src/interface/LocalListView.cpp:1591
+#: ../../locales/../src/interface/LocalListView.cpp:1587
+#: ../../locales/../src/interface/LocalListView.cpp:1596
 msgid "Editing failed"
 msgstr "Việc sửa gặp lỗi"
 
-#: ../../locales/../src/interface/search.cpp:700
+#: ../../locales/../src/interface/search.cpp:684
 msgid "Editing search results"
 msgstr "Kết quả tìm kiếm những thứ sửa"
 
@@ -3354,7 +3363,7 @@ msgstr "Kết quả tìm kiếm những thứ sửa"
 msgid "Email:"
 msgstr "Thư điện tử:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2123
+#: ../../locales/../src/interface/QueueView.cpp:2120
 msgid "Empty command"
 msgstr "Lệnh rỗng"
 
@@ -3362,13 +3371,19 @@ msgstr "Lệnh rỗng"
 msgid "Empty command."
 msgstr "Lệnh rỗng."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2025
+#: ../../locales/../src/interface/RemoteListView.cpp:2015
 msgid "Empty directory listing"
 msgstr "Danh sách thư mục rỗng"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:14
 msgid "Empty directory."
 msgstr "Thư mục rỗng."
+
+#: ../../locales/../src/interface/recursive_operation.cpp:377
+#: ../../locales/../src/interface/recursive_operation.cpp:412
+#, fuzzy
+msgid "Empty dirs to visit"
+msgstr "Danh sách thư mục rỗng"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:52
 msgid "Empty file extension."
@@ -3408,7 +3423,7 @@ msgstr "Mã hóa"
 msgid "Encryption details"
 msgstr "Thông tin chi tiết mã hóa"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:465
+#: ../../locales/../src/interface/filelistctrl.cpp:467
 msgid "End comparison and change sorting order?"
 msgstr "Kết thúc so sánh và thay đổi thứ tự sắp xếp?"
 
@@ -3420,11 +3435,11 @@ msgstr "Nhập vào &lệnh tùy ý…"
 msgid "Enter 0 for unlimited speed."
 msgstr "Nhập 0 để không giới hạn tốc độ"
 
-#: ../../locales/../src/interface/QueueView.cpp:2112
+#: ../../locales/../src/interface/QueueView.cpp:2109
 msgid "Enter command"
 msgstr "Nhập lệnh vào"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:571
+#: ../../locales/../src/interface/Mainfrm.cpp:572
 msgid "Enter custom command"
 msgstr "Nhập vào lệnh của bạn"
 
@@ -3438,11 +3453,11 @@ msgstr "Mở thư mục"
 msgid "Enter filter name"
 msgstr "Nhập tên bộ lọc"
 
-#: ../../locales/../src/interface/filter.cpp:333
+#: ../../locales/../src/interface/filter.cpp:334
 msgid "Enter name for filterset"
 msgstr "Nhập tên bộ lọc muốn đặt"
 
-#: ../../locales/../src/interface/filter.cpp:391
+#: ../../locales/../src/interface/filter.cpp:392
 msgid "Enter new name for filterset"
 msgstr "Nhập tên mới bộ lọc muốn đặt"
 
@@ -3483,7 +3498,7 @@ msgstr ""
 "- ftps:// cho giao thức FTP thông qua TLS (ngầm)\n"
 "- ftpes://cho giao thức FTP thông qua TLS (tường minh)."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:110
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:109
 #, c-format
 msgid ""
 "Enter the password for the file '%s'.\n"
@@ -3513,7 +3528,7 @@ msgstr "Lỗi xuất cài đặt"
 msgid "Error importing"
 msgstr "Lỗi nhập vào"
 
-#: ../../locales/../src/interface/QueueView.cpp:1912
+#: ../../locales/../src/interface/QueueView.cpp:1909
 msgid "Error loading queue"
 msgstr "Lỗi khi tải hàng đợi"
 
@@ -3522,14 +3537,14 @@ msgstr "Lỗi khi tải hàng đợi"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:695
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:732
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:778
-#: ../../locales/../src/interface/filter.cpp:213
-#: ../../locales/../src/interface/filter.cpp:970
+#: ../../locales/../src/interface/filter.cpp:214
+#: ../../locales/../src/interface/filter.cpp:971
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1833
-#: ../../locales/../src/interface/search.cpp:822
-#: ../../locales/../src/interface/search.cpp:841
+#: ../../locales/../src/interface/QueueView.cpp:1830
+#: ../../locales/../src/interface/search.cpp:802
+#: ../../locales/../src/interface/search.cpp:821
 #: ../../locales/../src/interface/sitemanager.cpp:16
 #: ../../locales/../src/interface/sitemanager.cpp:436
 #: ../../locales/../src/interface/sitemanager.cpp:517
@@ -3538,32 +3553,32 @@ msgstr "Lỗi khi tải hàng đợi"
 #: ../../locales/../src/interface/sitemanager.cpp:743
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:751
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:809
-#: ../../locales/../src/interface/wrapengine.cpp:938
+#: ../../locales/../src/interface/wrapengine.cpp:939
 msgid "Error loading xml file"
 msgstr "Lỗi tải tập tin xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1822
+#: ../../locales/../src/interface/QueueView.cpp:1819
 msgid "Error saving queue"
 msgstr "Lỗi ghi lại hàng đợi"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:177
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:203
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:176
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:202
 msgid "Error starting program"
 msgstr "Lỗi khởi động chương trình"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1851
+#: ../../locales/../src/interface/QueueView.cpp:1848
 #: ../../locales/../src/interface/sitemanager.cpp:611
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:830
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2224
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2227
 #: ../../locales/../src/interface/xmlfunctions.cpp:147
 msgid "Error writing xml file"
 msgstr "Lỗi ghi tập tin xml"
 
-#: ../../locales/../src/engine/logging.cpp:110
+#: ../../locales/../src/engine/logging.cpp:111
 #: ../../locales/../src/interface/StatusView.cpp:281
 #: ../../locales/../src/interface/StatusView.cpp:335
 msgid "Error:"
@@ -3657,24 +3672,24 @@ msgstr "Giao thức FTPES - FTP thông qua TLS"
 msgid "FTPS - FTP over implicit TLS"
 msgstr "Giao thức FTPES - FTP ngầm thông qua TLS"
 
-#: ../../locales/../src/interface/LocalListView.cpp:525
-#: ../../locales/../src/interface/LocalListView.cpp:601
-#: ../../locales/../src/interface/LocalListView.cpp:886
-#: ../../locales/../src/interface/LocalListView.cpp:1778
-#: ../../locales/../src/interface/LocalTreeView.cpp:846
-#: ../../locales/../src/interface/LocalTreeView.cpp:1099
+#: ../../locales/../src/interface/LocalListView.cpp:530
+#: ../../locales/../src/interface/LocalListView.cpp:606
+#: ../../locales/../src/interface/LocalListView.cpp:891
+#: ../../locales/../src/interface/LocalListView.cpp:1783
+#: ../../locales/../src/interface/LocalTreeView.cpp:843
+#: ../../locales/../src/interface/LocalTreeView.cpp:1096
 #: ../../locales/../src/interface/viewheader.cpp:504
 msgid "Failed to change directory"
 msgstr "Đổi thư mục gặp lỗi"
 
-#: ../../locales/../src/interface/FileZilla.cpp:137
-#: ../../locales/../src/interface/FileZilla.cpp:152
-#: ../../locales/../src/interface/FileZilla.cpp:154
+#: ../../locales/../src/interface/FileZilla.cpp:158
+#: ../../locales/../src/interface/FileZilla.cpp:173
+#: ../../locales/../src/interface/FileZilla.cpp:175
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 msgid "Failed to change language"
 msgstr "Đổi ngôn ngữ gặp lỗi"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2030
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2033
 msgid "Failed to copy or move sites"
 msgstr "Sao chép hay di chuyển địa chỉ gặp lỗi"
 
@@ -3682,29 +3697,29 @@ msgstr "Sao chép hay di chuyển địa chỉ gặp lỗi"
 msgid "Failed to create backup copy of xml file"
 msgstr "Tạo bản sao lưu dự phòng tập tin xml gặp lỗi"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:803
+#: ../../locales/../src/interface/netconfwizard.cpp:792
 msgid "Failed to create listen socket, aborting"
 msgstr "Gặp lỗi khi tạo socket để lắng nghe, đang bỏ qua"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4074
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4078
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4089
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4093
 msgid "Failed to create listening socket for active mode transfer"
 msgstr "Tạo socket để nghe cho chế độ truyền tích cực gặp lỗi"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:625
+#: ../../locales/../src/interface/LocalTreeView.cpp:621
 msgid "Failed to get 'My Documents' path"
 msgstr "Lấy đường dẫn thư mục “My Documents” gặp lỗi"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:613
+#: ../../locales/../src/interface/LocalTreeView.cpp:609
 msgid "Failed to get desktop path"
 msgstr "Gặp lỗi khi lấy đường dẫn desktop"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:961
+#: ../../locales/../src/interface/netconfwizard.cpp:944
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr ""
 "Lấy địa chỉ tương ứng của kết nối điều khiển gặp lỗi, kết nối đã đóng lại."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:968
+#: ../../locales/../src/interface/netconfwizard.cpp:951
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "Gặp lỗi khi lấy địa chỉ của kết nối dữ liệu, kết nối đã đóng lại."
 
@@ -3712,79 +3727,84 @@ msgstr "Gặp lỗi khi lấy địa chỉ của kết nối dữ liệu, kết 
 msgid "Failed to initialize FTP engine"
 msgstr "Khởi tạo bộ máy FTP gặp lỗi."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:392
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:754
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:290
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:393
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:755
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:292
 msgid "Failed to initialize TLS."
 msgstr "Gặp lỗi khi khởi tạo TLS."
+
+#: ../../locales/../src/interface/FileZilla.cpp:109
+#, fuzzy
+msgid "Failed to initialize networking"
+msgstr "Khởi tạo bộ máy FTP gặp lỗi."
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:146
 msgid "Failed to load panels, invalid resource files?"
 msgstr "Tải bảng điều khiển gặp lỗi, tập tin tài nguyên không hợp lệ?"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:124
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:123
 #, c-format
 msgid "Failed to load private key: %s"
 msgstr "Lỗi tải khóa riêng: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2492
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2493
 #, c-format
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "Mở \"%s\" để nối / ghi gặp lỗi"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2558
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2559
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "Mở \"%s\" để đọc tập tin gặp lỗi"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2524
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:1007
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2525
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:1008
 #, c-format
 msgid "Failed to open \"%s\" for writing"
 msgstr "Mở \"%s\" để ghi tập tin gặp lỗi"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:346
+#: ../../locales/../src/engine/ControlSocket.cpp:347
 msgid "Failed to parse returned path."
 msgstr "Phân tích đường dẫn trả về gặp lỗi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1023
+#: ../../locales/../src/interface/netconfwizard.cpp:1003
 msgid "Failed to receive data"
 msgstr "Nhận dữ liệu dữ liệu gặp lỗi"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:192
+#: ../../locales/../src/engine/ControlSocket.cpp:193
 msgid "Failed to retrieve directory listing"
 msgstr "Phục hồi danh sách thư mục gặp lỗi"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:731
+#: ../../locales/../src/interface/netconfwizard.cpp:721
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "Phục hồi địa chỉ IP gặp lỗi, đang bỏ qua"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3785
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3786
 msgid "Failed to retrieve external ip address, using local address"
 msgstr "Phục hồi địa chỉ IP gặp lỗi, dùng địa chỉ nội bộ"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3806
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3807
 msgid "Failed to retrieve local ip address."
 msgstr "Phục hồi địa chỉ IP nội bộ gặp lỗi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:707
+#: ../../locales/../src/interface/netconfwizard.cpp:697
 msgid "Failed to retrieve local ip address. Aborting"
 msgstr "Phục hồi địa chỉ IP nội bộ gặp lỗi. Bãi bỏ."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:632
+#: ../../locales/../src/interface/netconfwizard.cpp:625
 msgid "Failed to retrieve the external IP address."
 msgstr "Phục hồi địa chỉ IP trên mạng gặp lỗi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:323
+#: ../../locales/../src/interface/netconfwizard.cpp:313
 msgid "Failed to send command."
 msgstr "Gửi lệnh đi gặp lỗi."
 
-#: ../../locales/../src/interface/FileZilla.cpp:152
+#: ../../locales/../src/interface/FileZilla.cpp:173
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr "Gặp lỗi khi đặt ngôn ngữ thành %s(%s), dùng ngôn ngữ hệ thống mặc định"
 
-#: ../../locales/../src/interface/FileZilla.cpp:130
+#: ../../locales/../src/interface/FileZilla.cpp:151
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
@@ -3792,25 +3812,25 @@ msgstr ""
 "Gặp lỗi khi đặt ngôn ngữ thành %s(%s), dùng ngôn ngữ hệ thống (%s, %s) mặc "
 "định."
 
-#: ../../locales/../src/interface/FileZilla.cpp:119
+#: ../../locales/../src/interface/FileZilla.cpp:140
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr ""
 "Gặp lỗi khi đặt ngôn ngữ thành %s(%s), dùng ngôn ngữ hệ thống mặc định."
 
-#: ../../locales/../src/interface/FileZilla.cpp:154
+#: ../../locales/../src/interface/FileZilla.cpp:175
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 #, c-format
 msgid "Failed to set language to %s, using default system language"
 msgstr "Gặp lỗi khi đặt ngôn ngữ thành %s, dùng ngôn ngữ hệ thống mặc định"
 
-#: ../../locales/../src/interface/FileZilla.cpp:126
+#: ../../locales/../src/interface/FileZilla.cpp:147
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Gặp lỗi khi đặt ngôn ngữ thành %s, dùng ngôn ngữ hệ thống (%s, %s) mặc định."
 
-#: ../../locales/../src/interface/FileZilla.cpp:116
+#: ../../locales/../src/interface/FileZilla.cpp:137
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr "Gặp lỗi khi đặt ngôn ngữ thành %s, dùng ngôn ngữ hệ thống mặc định."
@@ -3819,11 +3839,11 @@ msgstr "Gặp lỗi khi đặt ngôn ngữ thành %s, dùng ngôn ngữ hệ th�
 msgid "Failed to validate settings"
 msgstr "Gặp lỗi khi cài đặt xác nhận"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1105
+#: ../../locales/../src/engine/tlssocket.cpp:1107
 msgid "Failed to verify peer certificate"
 msgstr "Xác nhận dữ liệu giấy phép ngang hàng gặp lỗi"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:520
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:523
 #, c-format
 msgid "Failed to write to file %s"
 msgstr "Ghi tập tin %s gặp lỗi"
@@ -3856,7 +3876,7 @@ msgstr "Tập tin"
 msgid "File Types"
 msgstr "Kiểu tập tin"
 
-#: ../../locales/../src/engine/socket.cpp:1065
+#: ../../locales/../src/engine/socket.cpp:1051
 msgid "File descriptor not a socket"
 msgstr "Bộ mô tả tập tin không phải là một ổ cắm"
 
@@ -3868,7 +3888,7 @@ msgstr "Tập tin không chứa bất kỳ một dữ liệu có thể nhập v�
 msgid "File editing"
 msgstr "Chỉnh sửa tập tin"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1603
+#: ../../locales/../src/interface/RemoteListView.cpp:1596
 msgid "File exists"
 msgstr "Tập tin đã có sẵn"
 
@@ -3885,8 +3905,8 @@ msgid "File lists"
 msgstr "Danh sách các tập tin"
 
 #: ../../locales/../src/interface/edithandler.cpp:1550
-#: ../../locales/../src/interface/FileZilla.cpp:596
-#: ../../locales/../src/interface/FileZilla.cpp:681
+#: ../../locales/../src/interface/FileZilla.cpp:618
+#: ../../locales/../src/interface/FileZilla.cpp:703
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Tập tin không tìm thấy"
@@ -3895,38 +3915,38 @@ msgstr "Tập tin không tìm thấy"
 msgid "File search"
 msgstr "Tìm kiếm tập tin"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:126
+#: ../../locales/../src/engine/ControlSocket.cpp:127
 msgid "File transfer aborted by user"
 msgstr "Việc truyền bị hủy bởi người dùng"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:117
+#: ../../locales/../src/engine/ControlSocket.cpp:118
 #, c-format
 msgid "File transfer aborted by user after transferring %s in %s"
 msgstr "Tập tin truyền đi bị bãi bỏ bởi người dùng sau khi truyền %s trong %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:136
+#: ../../locales/../src/engine/ControlSocket.cpp:137
 msgid "File transfer failed"
 msgstr "Tập tin được truyền đi không thành công"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:121
+#: ../../locales/../src/engine/ControlSocket.cpp:122
 #, c-format
 msgid "File transfer failed after transferring %s in %s"
 msgstr "Tập tin truyền đi gặp lỗi sau khi truyền %s trong %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:131
+#: ../../locales/../src/engine/ControlSocket.cpp:132
 msgid "File transfer skipped"
 msgstr "Các lần truyền bị bỏ qua"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:129
+#: ../../locales/../src/engine/ControlSocket.cpp:130
 msgid "File transfer successful"
 msgstr "Tập tin được truyền đi thành công"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:114
+#: ../../locales/../src/engine/ControlSocket.cpp:115
 #, c-format
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Tập tin được truyền đi thành công, đã truyền %s trong %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1136
+#: ../../locales/../src/interface/Mainfrm.cpp:1137
 msgid "File transfers still in progress."
 msgstr "Tập tin truyền đi vẫn đang trong tiến trình."
 
@@ -3938,7 +3958,7 @@ msgstr "Tập tin được truyền với dạng dữ liệu kiểu ASCII."
 msgid "File would transfer with binary data type."
 msgstr "Tập tin được truyền với dạng dữ liệu kiểu nhị phân."
 
-#: ../../locales/../src/interface/FileZilla.cpp:407
+#: ../../locales/../src/interface/FileZilla.cpp:429
 #: ../../locales/../src/interface/quickconnectbar.cpp:66
 #: ../../locales/../src/interface/quickconnectbar.cpp:204
 msgid "FileZilla Error"
@@ -3955,7 +3975,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla đã sẵn sàng kết nối tới máy chủ."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1440
+#: ../../locales/../src/interface/Mainfrm.cpp:1442
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla cần phải khởi động lại để thay đổi ngôn ngữ có tác dụng."
 
@@ -3969,7 +3989,7 @@ msgstr "Danh sách tập tin trên t&hanh trạng thái"
 
 #: ../../locales/../src/interface/edithandler.cpp:1084
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
-#: ../../locales/../src/interface/LocalListView.cpp:274
+#: ../../locales/../src/interface/LocalListView.cpp:276
 #: ../../locales/../src/interface/RemoteListView.cpp:373
 #: ../../locales/../src/interface/search.cpp:108
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:33
@@ -3980,13 +4000,13 @@ msgstr "Tên tập tin"
 msgid "Filename &filters..."
 msgstr "Tên tệ&p tin của bộ lọc…"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2974
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2193
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2975
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2174
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "Tên tập tin không thể xây dựng từ thư mục %s và tên tập tin %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1589
+#: ../../locales/../src/interface/RemoteListView.cpp:1582
 msgid "Filename invalid"
 msgstr "Tên tập tin không hợp lệ"
 
@@ -4014,7 +4034,7 @@ msgid "Files currently being edited"
 msgstr "Tập tin hiện tại đang được chỉnh sửa"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:135
-#: ../../locales/../src/interface/LocalListView.cpp:275
+#: ../../locales/../src/interface/LocalListView.cpp:277
 #: ../../locales/../src/interface/RemoteListView.cpp:374
 #: ../../locales/../src/interface/search.cpp:110
 msgid "Filesize"
@@ -4024,7 +4044,7 @@ msgstr "Kích thước tập tin"
 msgid "Filesize format"
 msgstr "Định dạng kích thước tập tin"
 
-#: ../../locales/../src/interface/LocalListView.cpp:276
+#: ../../locales/../src/interface/LocalListView.cpp:278
 #: ../../locales/../src/interface/RemoteListView.cpp:375
 #: ../../locales/../src/interface/search.cpp:111
 msgid "Filetype"
@@ -4062,8 +4082,8 @@ msgstr "Lọc ra những ký tự tương ứng với bất kỳ những ký t�
 msgid "Filter out items matching none of the following"
 msgstr "Lọc ra những ký tự không khớp với những cái như sau đây"
 
-#: ../../locales/../src/interface/filter.cpp:353
-#: ../../locales/../src/interface/filter.cpp:409
+#: ../../locales/../src/interface/filter.cpp:354
+#: ../../locales/../src/interface/filter.cpp:410
 msgid "Filter set already exists"
 msgstr "Bộ lọc này đã có rồi"
 
@@ -4098,7 +4118,7 @@ msgstr "Dấu vân tay (SHA-256):"
 msgid "Fingerprint:"
 msgstr "Dấu vân tay:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:58
+#: ../../locales/../src/interface/netconfwizard.cpp:55
 msgid "Firewall and router configuration wizard"
 msgstr "Cấu hình tường lửa firewall và bộ định tuyến router trực quan"
 
@@ -4130,7 +4150,7 @@ msgstr "Buộc dùng bộ mã &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "&Hiển thị tập tin ẩn"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:644
+#: ../../locales/../src/interface/Mainfrm.cpp:645
 msgid "Force showing hidden files"
 msgstr "Hiển thị các tập tin ẩn"
 
@@ -4145,7 +4165,7 @@ msgstr ""
 "một cách đúng đắn."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:646
+#: ../../locales/../src/interface/updater.cpp:647
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Tìm thấy %s %s mới\n"
@@ -4158,7 +4178,7 @@ msgstr "Nhiều tài liệu khác"
 msgid "General"
 msgstr "Chung"
 
-#: ../../locales/../src/engine/proxy.cpp:484
+#: ../../locales/../src/engine/proxy.cpp:507
 msgid "General SOCKS server failure"
 msgstr "GÓI MẠNG máy chủ chung gặp lỗi"
 
@@ -4175,8 +4195,8 @@ msgstr "Lấy địa chỉ IP từ URL sau đây:"
 msgid "Getting help"
 msgstr "Tìm trợ giúp"
 
-#: ../../locales/../src/interface/filter.cpp:353
-#: ../../locales/../src/interface/filter.cpp:409
+#: ../../locales/../src/interface/filter.cpp:354
+#: ../../locales/../src/interface/filter.cpp:410
 msgid "Given filterset name already exists, overwrite filter set?"
 msgstr ""
 "Đặt tên bộ lọc trùng với bộ lọc đã tạo ra từ trước, bạn có muốn ghi đè lên "
@@ -4186,22 +4206,22 @@ msgstr ""
 msgid "Global bookmarks"
 msgstr "Dấu trang toàn cục"
 
-#: ../../locales/../src/engine/tlssocket.cpp:210
+#: ../../locales/../src/engine/tlssocket.cpp:212
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "Lỗi GnuTLS %d"
 
-#: ../../locales/../src/engine/tlssocket.cpp:212
+#: ../../locales/../src/engine/tlssocket.cpp:214
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "Lỗi GnuTLS %d trong %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:206
+#: ../../locales/../src/engine/tlssocket.cpp:208
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "Lỗi GnuTLS %d trong %s: %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:204
+#: ../../locales/../src/engine/tlssocket.cpp:206
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "Lỗi GnuTLS %d : %s"
@@ -4231,17 +4251,17 @@ msgid "Hidden"
 msgstr "Ẩn"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/interface/queue.cpp:905
-#: ../../locales/../src/interface/queue.cpp:992
+#: ../../locales/../src/interface/queue.cpp:911
+#: ../../locales/../src/interface/queue.cpp:998
 msgid "High"
 msgstr "Cao"
 
-#: ../../locales/../src/interface/queue.cpp:907
-#: ../../locales/../src/interface/queue.cpp:994
+#: ../../locales/../src/interface/queue.cpp:913
+#: ../../locales/../src/interface/queue.cpp:1000
 msgid "Highest"
 msgstr "Cao nhất"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:73
+#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:75
 msgid "Highest available port has to be a number between 1024 and 65535."
 msgstr "Địa chỉ cổng cao nhất có thể phải là số từ 1024 đến 65535."
 
@@ -4255,7 +4275,7 @@ msgstr ""
 msgid "Homepage:"
 msgstr "Trang chủ:"
 
-#: ../../locales/../src/engine/socket.cpp:1076
+#: ../../locales/../src/engine/socket.cpp:1062
 msgid "Host is down"
 msgstr "Máy chủ bị ngừng hoạt động"
 
@@ -4271,7 +4291,7 @@ msgstr "Khóa máy chủ không khớp"
 msgid "Host starts with '[' but no closing bracket found."
 msgstr "Máy chủ bắt đầu với “[” nhưng không đóng bằng dấu ngoặc."
 
-#: ../../locales/../src/engine/proxy.cpp:493
+#: ../../locales/../src/engine/proxy.cpp:516
 msgid "Host unreachable"
 msgstr "Máy không thể tiếp cận"
 
@@ -4290,7 +4310,7 @@ msgstr "Giờ,"
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "I&SO 8601 (ví dụ: 15:47)"
 
-#: ../../locales/../src/engine/proxy.cpp:141
+#: ../../locales/../src/engine/proxy.cpp:153
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "Địa chỉ IPv6 không hỗ trợ với máy chủ ủy nhiệm SOCKS4"
 
@@ -4338,7 +4358,7 @@ msgstr ""
 "Nếu khóa trao đổi không đúng như bạn mong đợi, xin hãy liên hệ với người "
 "quản trị máy chủ."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:570
+#: ../../locales/../src/interface/netconfwizard.cpp:563
 msgid ""
 "If the problem persists, some router and/or firewall keeps blocking "
 "FileZilla."
@@ -4346,7 +4366,7 @@ msgstr ""
 "Nếu vẫn đề này vẫn tiếp tục, một vài bộ định tuyến router (và)hay tường lửa "
 "firewall đã khóa FileZilla."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:579
+#: ../../locales/../src/interface/netconfwizard.cpp:572
 msgid ""
 "If the problem persists, some router and/or firewall keeps interrupting the "
 "connection."
@@ -4372,7 +4392,7 @@ msgstr ""
 "Nếu liên kết mềm trỏ đến một thư mục, FileZilla có thể hoặc xóa liên kết mềm "
 "hoặc gỡ bỏ nội dung của thư mục được liên kết tới."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:640
+#: ../../locales/../src/interface/netconfwizard.cpp:633
 msgid ""
 "If this problem persists, please contact your router or firewall "
 "manufacturer for a solution."
@@ -4380,7 +4400,7 @@ msgstr ""
 "Nếu vẫn đề này vẫn gặp trở ngại, xin hãy liên hệ với nhà sản xuất bộ định "
 "tuyến router hay tường lửa firewall để có cách giải quyết."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:598
+#: ../../locales/../src/interface/netconfwizard.cpp:591
 msgid "If this problem stays, please contact your router manufacturer."
 msgstr ""
 "Nếu vấn đề này vẫn tiếp tục xảy ra, xin hãy hỏi nhà sản xuất bộ định tuyến "
@@ -4417,7 +4437,7 @@ msgstr ""
 "Nếu bạn chon thử kiểm tra, FileZilla sẽ kết nối tới probe.filezilla-project."
 "org và sẽ thi hành vài kiểm tra đơn giản."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1158
+#: ../../locales/../src/interface/Mainfrm.cpp:1159
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Nếu bạn đóng FileZilla, những thay đổi của bạn sẽ mất."
 
@@ -4441,7 +4461,7 @@ msgstr ""
 "Nếu bạn có vấn đề về lấy danh sách thư mục hoặc truyền các tập tin, hãy thử "
 "chuyển chế độ truyền mặc định."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:585
+#: ../../locales/../src/interface/netconfwizard.cpp:578
 msgid ""
 "If you keep having problems with a specific server, the server itself or a "
 "remote router or firewall might be misconfigured. In this case try to toggle "
@@ -4477,7 +4497,7 @@ msgstr ""
 "Nếu bạn có dùng bộ định tuyến router, hãy chắc chắn rằng tất cả các cổng "
 "chuyển đến máy đang dùng FileZilla được bật."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:611
+#: ../../locales/../src/interface/netconfwizard.cpp:604
 msgid ""
 "If your router keeps changing the IP address, please contact your router "
 "manufacturer."
@@ -4538,7 +4558,7 @@ msgstr ""
 "hỏi máy chủ cổng kết nối và kết nối tới cổng đó. Không nhiều cấu hình phải "
 "làm việc cho điều này."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1117
+#: ../../locales/../src/engine/tlssocket.cpp:1119
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4546,7 +4566,7 @@ msgstr ""
 "Móc xích không hoàn thành được, phàn đầu giấy chứng nhận không tự định nghĩa "
 "quyền chứng nhận quyền"
 
-#: ../../locales/../src/interface/queue.cpp:322
+#: ../../locales/../src/interface/queue.cpp:328
 msgid "Incorrect password"
 msgstr "Mật khẩu sai"
 
@@ -4557,7 +4577,7 @@ msgid ""
 msgstr ""
 "Không thể lấy về thông tin về phiên bản FileZilla mới nhất. Hãy thử lại sau."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:745
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:746
 msgid "Initializing TLS..."
 msgstr "Đang khởi tạo TLS…"
 
@@ -4565,13 +4585,13 @@ msgstr "Đang khởi tạo TLS…"
 msgid "Insecure algorithm!"
 msgstr "Thuật không an toàn!"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:729
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:730
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Máy chủ không an toàn, không hỗ trợ FTP thông qua TLS."
 
 #: ../../locales/../src/engine/server.cpp:860
 #: ../../locales/../src/engine/server.cpp:881
-#: ../../locales/../src/interface/manual_transfer.cpp:184
+#: ../../locales/../src/interface/manual_transfer.cpp:185
 msgid "Interactive"
 msgstr "Tính tương tác"
 
@@ -4579,29 +4599,29 @@ msgstr "Tính tương tác"
 msgid "Interface"
 msgstr "Giao diện"
 
-#: ../../locales/../src/engine/socket.cpp:1062
+#: ../../locales/../src/engine/socket.cpp:1048
 msgid "Interrupted by signal"
 msgstr "Bị ngắt bởi tín hiệu"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:219
-#: ../../locales/../src/interface/queue.cpp:328
+#: ../../locales/../src/engine/ControlSocket.cpp:220
+#: ../../locales/../src/interface/queue.cpp:334
 msgid "Interrupted by user"
 msgstr "Bị ngắt bởi người dùng"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:726
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:729
 msgid "Invalid Content-Length"
 msgstr "Độ dài của nội dung không hợp lệ"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:576
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:579
 msgid "Invalid HTTP Response"
 msgstr "Trả lời HTTP không hợp lệ"
 
-#: ../../locales/../src/engine/socket.cpp:1050
+#: ../../locales/../src/engine/socket.cpp:1036
 msgid "Invalid argument passed"
 msgstr "Đối số đã chuyển qua không hợp lệ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:455
-#: ../../locales/../src/engine/ControlSocket.cpp:511
+#: ../../locales/../src/engine/ControlSocket.cpp:456
+#: ../../locales/../src/engine/ControlSocket.cpp:512
 msgid ""
 "Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
 "site manager to force UTF-8."
@@ -4609,13 +4629,14 @@ msgstr ""
 "Chuỗi ký tự liên tiếp nhận được không hợp lệ, UTF-8 bị đình chỉ. Chọn tùy "
 "chọn UTF-8 trong Danh bạ để bắt buộc UTF-8."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:840
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:843
 msgid "Invalid chunk size"
 msgstr "Tổng kiểm tra kích thước không đúng"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:369
-#: ../../locales/../src/interface/netconfwizard.cpp:379
-#: ../../locales/../src/interface/netconfwizard.cpp:388
+#: ../../locales/../src/interface/netconfwizard.cpp:363
+#: ../../locales/../src/interface/netconfwizard.cpp:372
+#: ../../locales/../src/interface/netconfwizard.cpp:380
+#: ../../locales/../src/interface/netconfwizard.cpp:397
 msgid "Invalid data received"
 msgstr "Dữ liệu nhận về không hợp lệ"
 
@@ -4660,22 +4681,22 @@ msgstr ""
 "ftps:// cho giao thức FTP thông qua TLS (ngầm) và\n"
 "ftpes://cho giao thức FTP thông qua TLS (rõ ràng)."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4218
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4233
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
 "Máy chủ không hợp lệ, sau khi đóng dấu ngoặc đơn chỉ có một dấu hai chấm và "
 "số hiệu cổng theo sau."
 
-#: ../../locales/../src/interface/search.cpp:402
+#: ../../locales/../src/interface/search.cpp:405
 msgid "Invalid regular expression in search conditions."
 msgstr "Biểu thức chính quy trong điều kiện tìm kiếm không hợp lệ."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:586
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:589
 msgid "Invalid response code"
 msgstr "Mã đáp ứng sai"
 
-#: ../../locales/../src/interface/search.cpp:397
+#: ../../locales/../src/interface/search.cpp:400
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Điều kiện tìm kiếm không hợp lệ: %s"
@@ -4703,11 +4724,11 @@ msgstr "Kích thước không hợp lệ trong điều kiện"
 msgid "Invalid username given."
 msgstr "Tên người dùng đã cho không hợp lệ."
 
-#: ../../locales/../src/engine/socket.cpp:1083
+#: ../../locales/../src/engine/socket.cpp:1069
 msgid "Invalid value for ai_flags"
 msgstr "Giá trị không hợp lệ cho ai_flags"
 
-#: ../../locales/../src/engine/socket.cpp:1085
+#: ../../locales/../src/engine/socket.cpp:1071
 msgid "Invalid value for hints"
 msgstr "Giá trị cần gợi ý không hợp lệ"
 
@@ -4727,7 +4748,7 @@ msgstr "Khu vực của bang hay tỉnh:"
 msgid "Keep directories on top"
 msgstr "Giữ thư mục ở trên cao nhất"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:648
+#: ../../locales/../src/interface/Mainfrm.cpp:649
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4762,11 +4783,11 @@ msgstr "Thấp &nhất"
 msgid "Language"
 msgstr "Ngôn ngữ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1440
+#: ../../locales/../src/interface/Mainfrm.cpp:1442
 msgid "Language changed"
 msgstr "Ngôn ngữ đã thay đổi"
 
-#: ../../locales/../src/interface/LocalListView.cpp:277
+#: ../../locales/../src/interface/LocalListView.cpp:279
 #: ../../locales/../src/interface/RemoteListView.cpp:376
 #: ../../locales/../src/interface/search.cpp:112
 msgid "Last modified"
@@ -4796,7 +4817,7 @@ msgstr "Giới hạn kích thước của tập tin nhật ký"
 msgid "Limit:"
 msgstr "Giới hạn:"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:793
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:796
 msgid "Line length exceeded"
 msgstr "Vượt quá độ dài dòng"
 
@@ -4804,11 +4825,12 @@ msgstr "Vượt quá độ dài dòng"
 msgid "Linked against"
 msgstr "Dùng các thư viện:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:283
+#: ../../locales/../src/interface/netconfwizard.cpp:264
+#: ../../locales/../src/interface/netconfwizard.cpp:270
 msgid "Listen socket closed"
 msgstr "Gói mạng để nghe bị đóng lại"
 
-#: ../../locales/../src/engine/logging.cpp:117
+#: ../../locales/../src/engine/logging.cpp:118
 #: ../../locales/../src/interface/StatusView.cpp:292
 #: ../../locales/../src/interface/StatusView.cpp:363
 msgid "Listing:"
@@ -4823,11 +4845,11 @@ msgstr "Cổn&g thấp nhất có thể:"
 msgid "Local"
 msgstr "Máy nội bộ"
 
-#: ../../locales/../src/engine/socket.cpp:1047
+#: ../../locales/../src/engine/socket.cpp:1033
 msgid "Local address in use"
 msgstr "Địa chỉ cục bộ được dùng"
 
-#: ../../locales/../src/engine/socket.cpp:1075
+#: ../../locales/../src/engine/socket.cpp:1061
 msgid "Local endpoint has been closed"
 msgstr "Điểm cuối nội bộ đã bị đóng lại"
 
@@ -4835,21 +4857,21 @@ msgstr "Điểm cuối nội bộ đã bị đóng lại"
 msgid "Local file"
 msgstr "Tập tin nội bộ"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:312
+#: ../../locales/../src/interface/manual_transfer.cpp:313
 msgid "Local file does not exist."
 msgstr "Tập tin nội bộ không tồn tại."
 
-#: ../../locales/../src/interface/updater.cpp:370
-#: ../../locales/../src/interface/updater.cpp:462
+#: ../../locales/../src/interface/updater.cpp:371
+#: ../../locales/../src/interface/updater.cpp:463
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Tập tin nội bộ là %s\n"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:308
+#: ../../locales/../src/interface/manual_transfer.cpp:309
 msgid "Local file is a directory instead of a regular file."
 msgstr "Tập tin nội bộ là một thư mục thay thế của một tập tin thông thường."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:349
+#: ../../locales/../src/interface/manual_transfer.cpp:350
 msgid "Local file is not a valid filename."
 msgstr "Tên tập tin nội bộ không hợp lệ."
 
@@ -4874,7 +4896,7 @@ msgstr "Tập tin nhật ký"
 msgid "Logging"
 msgstr "Đăng nhập"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:803
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:804
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Cannot fall back to local charset since using proxy."
@@ -4883,7 +4905,7 @@ msgstr ""
 "thể không nhận dạng được bộ mã UTF-8. Không thể quay lại dùng bộ ký tự nội "
 "bộ từ khi dùng máy chủ ủy nhiệm."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:810
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:811
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Trying local charset."
@@ -4891,7 +4913,7 @@ msgstr ""
 "Dữ liệu đăng nhập chứa các ký tự không nằm trong bộ mã ASCII và máy chủ có "
 "thể không nhận dạng được bộ mã UTF-8. Thử dùng bộ ký tự nội bộ."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:837
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:838
 msgid "Login sequence fully executed yet not logged in. Aborting."
 msgstr ""
 "Chuỗi đăng nhập thực hiện đầy đủ tuy thế vẫn chưa đăng nhập được. Bãi bỏ."
@@ -4911,17 +4933,17 @@ msgstr ""
 "Kiểu đăng nhập, có thể chỉ dùng cùng với địa chỉ FTP. Tham số phải là “%s” "
 "hay “%s”"
 
-#: ../../locales/../src/interface/queue.cpp:900
-#: ../../locales/../src/interface/queue.cpp:987
+#: ../../locales/../src/interface/queue.cpp:906
+#: ../../locales/../src/interface/queue.cpp:993
 msgid "Low"
 msgstr "Thấp"
 
-#: ../../locales/../src/interface/queue.cpp:898
-#: ../../locales/../src/interface/queue.cpp:985
+#: ../../locales/../src/interface/queue.cpp:904
+#: ../../locales/../src/interface/queue.cpp:991
 msgid "Lowest"
 msgstr "Thấp nhất"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:67
+#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:69
 msgid "Lowest available port has to be a number between 1024 and 65535."
 msgstr "Giá trị cổng thấp nhất phải là số nằm giữa 1024 và 65535."
 
@@ -4935,32 +4957,32 @@ msgstr ""
 "Hãy chắc chắn rằng tập tin có thể được phép truy cập và hợp chuẩn tài liệu "
 "dạng XML."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:781
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:793
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:808
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:840
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:784
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:796
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:811
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:843
 #, c-format
 msgid "Malformed chunk data: %s"
 msgstr "Mẩu dữ liệu sai lệch: %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:726
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:729
 #, c-format
 msgid "Malformed header: %s"
 msgstr "Phần đầu sai lệch: %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:546
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:549
 msgid "Malformed reply, server not sending proper line endings"
 msgstr "Phần trả lời sai dạng, máy chủ không gửi ký tự xuống dòng thích hợp"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2582
-#: ../../locales/../src/interface/manual_transfer.cpp:296
-#: ../../locales/../src/interface/manual_transfer.cpp:302
-#: ../../locales/../src/interface/manual_transfer.cpp:308
-#: ../../locales/../src/interface/manual_transfer.cpp:312
-#: ../../locales/../src/interface/manual_transfer.cpp:319
-#: ../../locales/../src/interface/manual_transfer.cpp:325
-#: ../../locales/../src/interface/manual_transfer.cpp:331
-#: ../../locales/../src/interface/manual_transfer.cpp:349
+#: ../../locales/../src/interface/manual_transfer.cpp:297
+#: ../../locales/../src/interface/manual_transfer.cpp:303
+#: ../../locales/../src/interface/manual_transfer.cpp:309
+#: ../../locales/../src/interface/manual_transfer.cpp:313
+#: ../../locales/../src/interface/manual_transfer.cpp:320
+#: ../../locales/../src/interface/manual_transfer.cpp:326
+#: ../../locales/../src/interface/manual_transfer.cpp:332
+#: ../../locales/../src/interface/manual_transfer.cpp:350
 msgid "Manual transfer"
 msgstr "Truyền thủ công"
 
@@ -4980,12 +5002,12 @@ msgstr "Không tương ứng với tất cả cái như sau"
 msgid "Maximum simultaneous &transfers:"
 msgstr "Tối đa số truyền đi đồng &thời:"
 
-#: ../../locales/../src/engine/socket.cpp:1089
+#: ../../locales/../src/engine/socket.cpp:1075
 msgid "Memory allocation failure"
 msgstr "Gặp lỗi nghiêm trọng khi phân bổ bộ nhớ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1750
+#: ../../locales/../src/interface/Mainfrm.cpp:388
+#: ../../locales/../src/interface/Mainfrm.cpp:1752
 msgid "Message log"
 msgstr "Nhật ký thông tin"
 
@@ -4993,7 +5015,7 @@ msgstr "Nhật ký thông tin"
 msgid "Message log position"
 msgstr "Vị trí của nhật ký thông báo"
 
-#: ../../locales/../src/engine/socket.cpp:1072
+#: ../../locales/../src/engine/socket.cpp:1058
 msgid "Message too large"
 msgstr "Thông điệp quá lớn"
 
@@ -5013,11 +5035,11 @@ msgstr "Di chuyển x&uống"
 msgid "Move &up"
 msgstr "Di chuyển &lên"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:977
+#: ../../locales/../src/interface/LocalTreeView.cpp:974
 msgid "My Computer"
 msgstr "Thư mục My Computer"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:967
+#: ../../locales/../src/interface/LocalTreeView.cpp:964
 msgid "My Documents"
 msgstr "Thư mục My Documents"
 
@@ -5058,7 +5080,7 @@ msgstr "Xếp tự nhiên"
 msgid "Need to enter filter name"
 msgstr "Phải nhập tên bộ lọc"
 
-#: ../../locales/../src/interface/search.cpp:388
+#: ../../locales/../src/interface/search.cpp:391
 msgid "Need to enter valid remote path"
 msgstr "Phải nhập đường dẫn máy mạng hợp lệ"
 
@@ -5066,18 +5088,18 @@ msgstr "Phải nhập đường dẫn máy mạng hợp lệ"
 msgid "Need to specify a character encoding"
 msgstr "Cần chỉ rõ bộ mã ký tự"
 
-#: ../../locales/../src/engine/socket.cpp:1093
+#: ../../locales/../src/engine/socket.cpp:1079
 msgid "Neither nodename nor servname provided, or not known"
 msgstr "Không có tên nút, cũng không cung cấp tên máy chủ, hoặc không biết"
 
-#: ../../locales/../src/engine/socket.cpp:1080
+#: ../../locales/../src/engine/socket.cpp:1066
 msgid ""
 "Network host does not have any network addresses in the requested address "
 "family"
 msgstr "Mạng máy chủ không có địa chỉ mạng nào trong họ địa chỉ đã yêu cầu"
 
-#: ../../locales/../src/engine/proxy.cpp:490
-#: ../../locales/../src/engine/socket.cpp:1064
+#: ../../locales/../src/engine/proxy.cpp:513
+#: ../../locales/../src/engine/socket.cpp:1050
 msgid "Network unreachable"
 msgstr "Mạng máy tính không kết nối tới"
 
@@ -5113,13 +5135,13 @@ msgstr "Tạo &mới"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:555
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:790
 #: ../../locales/../src/interface/sitemanager.cpp:695
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2180
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2183
 msgid "New bookmark"
 msgstr "Tạo dấu trang mới"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1126
-#: ../../locales/../src/interface/RemoteListView.cpp:1310
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1225
+#: ../../locales/../src/interface/LocalTreeView.cpp:1123
+#: ../../locales/../src/interface/RemoteListView.cpp:1306
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1232
 msgid "New directory"
 msgstr "Thư &mục mới"
 
@@ -5138,7 +5160,7 @@ msgstr "Thư mục mới"
 
 #: ../../locales/../src/interface/sitemanager.cpp:585
 #: ../../locales/../src/interface/sitemanager.cpp:597
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2156
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2159
 msgid "New site"
 msgstr "Tạo địa chỉ mới"
 
@@ -5146,11 +5168,11 @@ msgstr "Tạo địa chỉ mới"
 msgid "Next to the transfer queue"
 msgstr "Hàng đợi truyền tiếp theo"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:850
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:835
 msgid "No"
 msgstr "Không"
 
-#: ../../locales/../src/engine/socket.cpp:1091
+#: ../../locales/../src/engine/socket.cpp:1077
 msgid "No address associated with nodename"
 msgstr "Chưa có địa chỉ tổ hợp với tên nốt này"
 
@@ -5158,11 +5180,11 @@ msgstr "Chưa có địa chỉ tổ hợp với tên nốt này"
 msgid "No category to export selected"
 msgstr "Không có category để xuất ra được chọn"
 
-#: ../../locales/../src/interface/QueueView.cpp:2123
+#: ../../locales/../src/interface/QueueView.cpp:2120
 msgid "No command given, aborting."
 msgstr "Không có lệnh nào được đưa ra nên bãi bỏ."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3757
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3758
 msgid "No external IP address set, trying default."
 msgstr "Không có địa chỉ IP trên Internet được đặt, đang thử mặc định."
 
@@ -5184,12 +5206,12 @@ msgstr "Không có máy chủ được chỉ rõ, hãy nhập tên máy chủ."
 msgid "No images available"
 msgstr "Không có ảnh nào có thể dùng được"
 
-#: ../../locales/../src/interface/QueueView.cpp:2977
+#: ../../locales/../src/interface/QueueView.cpp:2974
 msgid "No more files in the queue!"
 msgstr "Không thể thêm tập tin vào hàng đợi nữa!"
 
-#: ../../locales/../src/interface/filter.cpp:339
-#: ../../locales/../src/interface/filter.cpp:403
+#: ../../locales/../src/interface/filter.cpp:340
+#: ../../locales/../src/interface/filter.cpp:404
 msgid "No name for the filterset given."
 msgstr "Không có tên cho bộ lọc nhận được."
 
@@ -5204,7 +5226,7 @@ msgstr ""
 "Chưa có chương trình nào được ràng buộc chỉnh sửa tập tin với phần mở rộng "
 "“%s”."
 
-#: ../../locales/../src/engine/socket.cpp:1067
+#: ../../locales/../src/engine/socket.cpp:1053
 msgid "No route to host"
 msgstr "Không có bộ định tuyến đến máy"
 
@@ -5216,7 +5238,7 @@ msgstr "Không tìm thấy"
 msgid "No sites available"
 msgstr "Chưa có địa chỉ nào có thể dùng"
 
-#: ../../locales/../src/engine/proxy.cpp:461
+#: ../../locales/../src/engine/proxy.cpp:484
 msgid "No supported SOCKS5 auth method"
 msgstr "Không hỗ trợ phương thức xác minh SOCKS5"
 
@@ -5234,18 +5256,18 @@ msgstr "Không"
 msgid "None selected yet"
 msgstr "Chưa có gì được chọn"
 
-#: ../../locales/../src/engine/socket.cpp:1087
+#: ../../locales/../src/engine/socket.cpp:1073
 msgid "Nonrecoverable failure in name resolution"
 msgstr "Gặp lỗi nghiêm trọng không thể phục hồi trong phân giải tên"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:962
 #: ../../locales/../src/engine/server.cpp:854
 #: ../../locales/../src/engine/server.cpp:875
-#: ../../locales/../src/interface/manual_transfer.cpp:153
-#: ../../locales/../src/interface/manual_transfer.cpp:178
-#: ../../locales/../src/interface/manual_transfer.cpp:539
-#: ../../locales/../src/interface/queue.cpp:903
-#: ../../locales/../src/interface/queue.cpp:990
+#: ../../locales/../src/interface/manual_transfer.cpp:154
+#: ../../locales/../src/interface/manual_transfer.cpp:179
+#: ../../locales/../src/interface/manual_transfer.cpp:540
+#: ../../locales/../src/interface/queue.cpp:909
+#: ../../locales/../src/interface/queue.cpp:996
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 msgid "Normal"
 msgstr "Bình thường"
@@ -5255,16 +5277,16 @@ msgstr "Bình thường"
 msgid "Not all items could be requeued for transfer."
 msgstr "Không phải tất cả các mục tin đều có thể yêu cầu truyền."
 
-#: ../../locales/../src/interface/state.cpp:179
-#: ../../locales/../src/interface/state.cpp:482
+#: ../../locales/../src/interface/state.cpp:180
+#: ../../locales/../src/interface/state.cpp:483
 msgid "Not connected"
 msgstr "Chưa được kết nối"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2021
+#: ../../locales/../src/interface/RemoteListView.cpp:2011
 msgid "Not connected to any server"
 msgstr "Không kết nối tới bất kỳ máy chủ nào"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:560
+#: ../../locales/../src/interface/Mainfrm.cpp:561
 msgid "Not connected to any server."
 msgstr "Không có bất kỳ kết nối tới máy chủ."
 
@@ -5272,11 +5294,11 @@ msgstr "Không có bất kỳ kết nối tới máy chủ."
 msgid "Not connected."
 msgstr "Chưa được kết nối."
 
-#: ../../locales/../src/engine/socket.cpp:1108
+#: ../../locales/../src/engine/socket.cpp:1094
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Chưa được khởi tạo, cần gọi WSAStartup"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:646
+#: ../../locales/../src/interface/Mainfrm.cpp:647
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "Chú ý rằng đặc tính này chỉ hỗ trợ dùng giao thức FTP."
 
@@ -5342,7 +5364,7 @@ msgstr ""
 "Trong trang tiếp theo đây, chế độ truyền được chọn sẽ được cấu hình, cũng "
 "tốt cho việc quay lại chế độ dự phòng nếu nó được bật."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:860
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:845
 msgid "Once"
 msgstr "Một lần"
 
@@ -5388,8 +5410,8 @@ msgstr "Mở như là:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1616
 #: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1695
-#: ../../locales/../src/interface/LocalListView.cpp:1707
+#: ../../locales/../src/interface/LocalListView.cpp:1700
+#: ../../locales/../src/interface/LocalListView.cpp:1712
 msgid "Opening failed"
 msgstr "Mở bị lỗi"
 
@@ -5412,15 +5434,15 @@ msgstr ""
 msgid "Operating System:"
 msgstr "Hệ điều hành:"
 
-#: ../../locales/../src/engine/socket.cpp:1058
+#: ../../locales/../src/engine/socket.cpp:1044
 msgid "Operation already in progress"
 msgstr "Thao tác đã có sẵn trong tiến trình xử lý"
 
-#: ../../locales/../src/engine/socket.cpp:1049
+#: ../../locales/../src/engine/socket.cpp:1035
 msgid "Operation in progress"
 msgstr "Thao tác đang được xử lý"
 
-#: ../../locales/../src/engine/socket.cpp:1070
+#: ../../locales/../src/engine/socket.cpp:1056
 msgid "Operation not supported"
 msgstr "Thao tác không được hỗ trợ"
 
@@ -5432,7 +5454,7 @@ msgstr "Tổ chức:"
 msgid "Other SFTP options"
 msgstr "Các tùy chọn SFTP khác"
 
-#: ../../locales/../src/engine/socket.cpp:1103
+#: ../../locales/../src/engine/socket.cpp:1089
 msgid "Other system error"
 msgstr "Lỗi hệ thống khác"
 
@@ -5440,8 +5462,8 @@ msgstr "Lỗi hệ thống khác"
 msgid "Other:"
 msgstr "Cái khác:"
 
-#: ../../locales/../src/engine/socket.cpp:1053
-#: ../../locales/../src/engine/socket.cpp:1054
+#: ../../locales/../src/engine/socket.cpp:1039
+#: ../../locales/../src/engine/socket.cpp:1040
 msgid "Out of memory"
 msgstr "Hết bộ nhớ"
 
@@ -5489,7 +5511,7 @@ msgstr "Ghi đè nếu kích thước &khác biệt"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Ghi đè nếu nguồn mới hơn hay &kích thước khác biệt"
 
-#: ../../locales/../src/interface/updater.cpp:218
+#: ../../locales/../src/interface/updater.cpp:219
 #, c-format
 msgid "Own build type: %s\n"
 msgstr "Kiểu biên dịch chủ thể: %s\n"
@@ -5516,7 +5538,7 @@ msgstr ""
 msgid "P&roxy host:"
 msgstr "Máy chủ ủy thá&c proxy:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:504
+#: ../../locales/../src/interface/netconfwizard.cpp:497
 msgid "PORT command tainted by router or firewall."
 msgstr "Lệnh PORT hỏng bởi bộ định tuyến router hoặc tường lửa firewall."
 
@@ -5524,11 +5546,11 @@ msgstr "Lệnh PORT hỏng bởi bộ định tuyến router hoặc tường l�
 msgid "Pa&ssive (recommended)"
 msgstr "Thụ độn&g (nên dùng)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2320
+#: ../../locales/../src/interface/Mainfrm.cpp:2322
 msgid "Parameter not a valid URL"
 msgstr "Tham số không hợp chuẩn URL"
 
-#: ../../locales/../src/interface/updater.cpp:542
+#: ../../locales/../src/interface/updater.cpp:543
 #, c-format
 msgid "Parsing %d bytes of version information.\n"
 msgstr "Đang phân tích %d byte của thông tin phiên bản.\n"
@@ -5548,13 +5570,13 @@ msgstr "Thụ động (nên dùng)"
 msgid "Passive mode"
 msgstr "Chế độ thụ động"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:604
-#: ../../locales/../src/interface/netconfwizard.cpp:617
-#: ../../locales/../src/interface/netconfwizard.cpp:628
+#: ../../locales/../src/interface/netconfwizard.cpp:597
+#: ../../locales/../src/interface/netconfwizard.cpp:610
+#: ../../locales/../src/interface/netconfwizard.cpp:621
 msgid "Passive mode has been set as default transfer mode."
 msgstr "Chế độ thụ động được đặt là chế độ truyền mặc định."
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:112
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:111
 msgid "Password required"
 msgstr "Yêu cầu mật khẩu"
 
@@ -5563,13 +5585,13 @@ msgstr "Yêu cầu mật khẩu"
 msgid "Path"
 msgstr "Đường dẫn"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3057
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2239
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3058
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2220
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Đường dẫn không thể xây dựng từ thư mục %s và thư mục con %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2278
+#: ../../locales/../src/interface/Mainfrm.cpp:2280
 msgid "Path not found:"
 msgstr "Không tìm thấy đường dẫn:"
 
@@ -5588,8 +5610,8 @@ msgstr "Loại bỏ lệnh còn chờ"
 msgid "Permission"
 msgstr "Quyền"
 
-#: ../../locales/../src/engine/socket.cpp:1046
-#: ../../locales/../src/engine/socket.cpp:1055
+#: ../../locales/../src/engine/socket.cpp:1032
+#: ../../locales/../src/engine/socket.cpp:1041
 msgid "Permission denied"
 msgstr "Không đủ thẩm quyền"
 
@@ -5602,7 +5624,7 @@ msgstr "Các quyền"
 msgid "Platform:"
 msgstr "Nền tảng:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:569
+#: ../../locales/../src/interface/netconfwizard.cpp:562
 msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
@@ -5618,13 +5640,13 @@ msgstr ""
 "Xin hãy cấu hình tường lửa firewall và bộ định tuyến router để FileZilla có "
 "thể thiết lập kết nối ra ngoài tới các cổng chuyên dùng."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:639
+#: ../../locales/../src/interface/netconfwizard.cpp:632
 msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
 msgstr ""
 "Xin hãy tắt các cài đặt giống như là như chế độ “DMZ” hay “Game” trong bộ "
 "định tuyến router của bạn."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:578
+#: ../../locales/../src/interface/netconfwizard.cpp:571
 msgid ""
 "Please ensure you have a stable internet connection and carefully check your "
 "settings again."
@@ -5659,7 +5681,7 @@ msgstr "Đề nghị nhập tên cho bộ lọc mới."
 msgid "Please enter a new name for the copied filter."
 msgstr "Đề nghị nhập tên mới cho bộ lọc sao chép."
 
-#: ../../locales/../src/interface/filter.cpp:389
+#: ../../locales/../src/interface/filter.cpp:390
 #, c-format
 msgid "Please enter a new name for the filter set \"%s\""
 msgstr "Đề nghị nhập tên mới cho bộ lọc \"%s\"."
@@ -5689,7 +5711,7 @@ msgstr "Hãy nhập một số từ 0 đến 10 cho số kết nối truyền hi
 msgid "Please enter a password for this server:"
 msgstr "Nhập mật khẩu cho máy chủ này:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2112
+#: ../../locales/../src/interface/QueueView.cpp:2109
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5707,7 +5729,7 @@ msgstr ""
 "Hãy nhập thời gian chờ tối đa từ 10 đến 9999 giây hoặc giá trị 0 để bỏ chức "
 "năng này."
 
-#: ../../locales/../src/interface/filter.cpp:333
+#: ../../locales/../src/interface/filter.cpp:334
 msgid "Please enter a unique name for this filter set"
 msgstr "Hãy đặt tên duy nhất cho bộ lọc này"
 
@@ -5715,11 +5737,11 @@ msgstr "Hãy đặt tên duy nhất cho bộ lọc này"
 msgid "Please enter a username for this server:"
 msgstr "Xin nhập tên người dùng cho máy chủ này:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:198
+#: ../../locales/../src/interface/netconfwizard.cpp:187
 msgid "Please enter a valid portrange."
 msgstr "Hãy nhập vùng giá trị cổng hợp lệ."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:177
+#: ../../locales/../src/interface/netconfwizard.cpp:168
 msgid "Please enter an URL where to get your external address from"
 msgstr ""
 "Xin hãy nhập địa chỉ URL nơi mà nhận được địa chỉ Internet của bạn từ đó"
@@ -5730,7 +5752,7 @@ msgstr ""
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr "Hãy nhập giới hạn tốc độ tải lên có giá trị lớn hơn hoặc bằng 0 %s/s."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:571
+#: ../../locales/../src/interface/Mainfrm.cpp:572
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5738,14 +5760,14 @@ msgstr ""
 "Xin nhập dòng lệnh thô của giao thức FTP.\n"
 "Dùng dòng lệnh thô sẽ xóa bộ đệm dữ liệu thư mục."
 
-#: ../../locales/../src/interface/LocalListView.cpp:897
-#: ../../locales/../src/interface/LocalTreeView.cpp:1123
-#: ../../locales/../src/interface/RemoteListView.cpp:1297
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1212
+#: ../../locales/../src/interface/LocalListView.cpp:902
+#: ../../locales/../src/interface/LocalTreeView.cpp:1120
+#: ../../locales/../src/interface/RemoteListView.cpp:1293
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1219
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Xin hãy nhập tên của thư mục sẽ được tạo ra:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2619
+#: ../../locales/../src/interface/RemoteListView.cpp:2609
 msgid "Please enter the name of the file which should be created:"
 msgstr "Xin hãy nhập tên của tập tin mà bạn muốn tạo:"
 
@@ -5753,12 +5775,12 @@ msgstr "Xin hãy nhập tên của tập tin mà bạn muốn tạo:"
 msgid "Please enter username and password for this server:"
 msgstr "Nhập tên mật khẩu cho máy chủ này:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:158
+#: ../../locales/../src/interface/netconfwizard.cpp:152
 msgid "Please enter your external IP address"
 msgstr "Nhập địa chỉ IP trên Internet của bạn"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:609
-#: ../../locales/../src/interface/netconfwizard.cpp:622
+#: ../../locales/../src/interface/netconfwizard.cpp:602
+#: ../../locales/../src/interface/netconfwizard.cpp:615
 msgid ""
 "Please enter your external IP address on the active mode page of this "
 "wizard. In case you have a dynamic address or don't know your external "
@@ -5776,7 +5798,7 @@ msgstr ""
 "Xin hãy đặt các chỉ lệnh một cách cẩn thận, sự cấu hình sai sẽ ngăn cản kết "
 "nối FTP thành công."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:633
+#: ../../locales/../src/interface/netconfwizard.cpp:626
 msgid ""
 "Please make sure FileZilla is allowed to establish outgoing connections and "
 "make sure you typed the address of the address resolver correctly."
@@ -5784,13 +5806,13 @@ msgstr ""
 "Xin chắc chắn là FileZilla cho phép thiết lập kết nối ra ngoài và cũng chắn "
 "chắn là bạn gõ địa chỉ chính xác."
 
-#: ../../locales/../src/interface/FileZilla.cpp:136
+#: ../../locales/../src/interface/FileZilla.cpp:157
 msgid "Please make sure the requested locale is installed on your system."
 msgstr ""
 "Xin chắc chắn là miền địa phương đã yêu cầu đã được cài đặt trong hệ thống "
 "của bạn."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:610
+#: ../../locales/../src/interface/netconfwizard.cpp:603
 msgid ""
 "Please make sure your router is using the latest available firmware. "
 "Furthermore, your router has to be configured properly. You will have to use "
@@ -5814,7 +5836,7 @@ msgstr ""
 "cho rằng nó chỉ dùng bởi trojans hay malware. Điều này có thể kích hoạt một "
 "cảnh báo sai bạn có thể loại bỏ một cách an toàn."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:686
+#: ../../locales/../src/interface/Mainfrm.cpp:687
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5830,7 +5852,7 @@ msgstr ""
 "Xin chú ý là một số máy chủ có thể cấm bạn nếu bạn thử kết nối đi kết nối "
 "lại quá nhiều lần hay trong khoảng thời gian quá ngắn."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:586
+#: ../../locales/../src/interface/netconfwizard.cpp:579
 msgid ""
 "Please run this wizard again should you change your network environment or "
 "in case you suddenly encounter problems with servers that did work "
@@ -5875,7 +5897,7 @@ msgstr "Đề nghị chọn thuộc tính mới cho thư mục và tập tin đ�
 msgid "Please select the new attributes for the selected files."
 msgstr "Xin hãy chọn các thuộc tính mới cho tập tin đã chọn."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:597
+#: ../../locales/../src/interface/netconfwizard.cpp:590
 msgid ""
 "Please update your firewall and make sure your router is using the latest "
 "available firmware. Furthermore, your router has to be configured properly. "
@@ -5907,11 +5929,11 @@ msgid "Preallocation"
 msgstr "Cấp phát trước"
 
 #: ../../locales/../src/interface/sitemanager.cpp:270
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:1901
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:1904
 msgid "Predefined Sites"
 msgstr "Giới hạn trước các địa chỉ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:685
+#: ../../locales/../src/interface/Mainfrm.cpp:686
 msgid "Preserving file timestamps"
 msgstr "Lưu giữ dấu thời gian của tập tin"
 
@@ -5919,7 +5941,7 @@ msgstr "Lưu giữ dấu thời gian của tập tin"
 msgid "Preview:"
 msgstr "Xem trước:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1134
+#: ../../locales/../src/engine/tlssocket.cpp:1136
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Kết nối gốc và xác nhận dữ liệu kết nối không khớp nhau."
 
@@ -5936,7 +5958,7 @@ msgstr "In thông tin về phiên bản ra stdout rồi thoát"
 msgid "Prioritize directories (default)"
 msgstr "Thư mục ưu tiên (mặc định)"
 
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Priority"
 msgstr "Quyền ưu tiên"
 
@@ -5966,7 +5988,7 @@ msgstr "Mật &khẩu máy chủ ủy nhiệm:"
 msgid "Process &Queue"
 msgstr "Xử lý &hàng đợi"
 
-#: ../../locales/../src/engine/socket.cpp:1051
+#: ../../locales/../src/engine/socket.cpp:1037
 msgid "Process file table overflow"
 msgstr "Bản tập tin xử lý bị tràn"
 
@@ -5976,11 +5998,11 @@ msgstr "Bản tập tin xử lý bị tràn"
 msgid "Processed %s in %s."
 msgstr "Đã xử lý %s trong %s."
 
-#: ../../locales/../src/engine/socket.cpp:1056
+#: ../../locales/../src/engine/socket.cpp:1042
 msgid "Protocol not supported"
 msgstr "Giao thức không được hỗ trợ"
 
-#: ../../locales/../src/engine/socket.cpp:1110
+#: ../../locales/../src/engine/socket.cpp:1096
 msgid "Protocol not supported on given socket type"
 msgstr "Giao thức không hỗ trợ trên kiểu ổ cắm đã cho"
 
@@ -5997,7 +6019,7 @@ msgstr "Cổng máy chủ ủ&y nhiệm:"
 msgid "Proxy &user:"
 msgstr "Tài khoả&n máy chủ ủy nhiệm:"
 
-#: ../../locales/../src/engine/proxy.cpp:471
+#: ../../locales/../src/engine/proxy.cpp:494
 msgid "Proxy authentication failed"
 msgstr "Sự xác thực máy chủ ủy nhiệm bị lỗi."
 
@@ -6007,28 +6029,32 @@ msgstr "Sự xác thực máy chủ ủy nhiệm bị lỗi."
 msgid "Proxy handshake failed: %s"
 msgstr "Kết nối bắt tay với máy chủ ủy nhiệm bị lỗi: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4212
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4227
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr "Máy chủ bắt đầu với “[” nhưng không tìm thấy dấu ngoặc đóng."
 
-#: ../../locales/../src/engine/proxy.cpp:329
+#: ../../locales/../src/engine/proxy.cpp:352
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "Máy chủ ủy nhiệm trả lời: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:384
-#: ../../locales/../src/engine/proxy.cpp:512
+#: ../../locales/../src/engine/proxy.cpp:535
+#, c-format
+msgid "Proxy request failed. Reply from proxy: %s"
+msgstr "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm. Trả lời từ máy ủy nhiệm: %s"
+
+#: ../../locales/../src/engine/proxy.cpp:407
 #, c-format
 msgid "Proxy request failed: %s"
-msgstr "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm lỗi: %s"
+msgstr "Gặp lỗi khi yêu cầu máy chủ ủy nhiệm: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:536
+#: ../../locales/../src/engine/proxy.cpp:559
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr ""
-"Gặp lỗi khi yêu cầu máy chủ ủy nhiệm lỗi: Không rõ kiểu địa chỉ trong trả "
-"lời CONNECT"
+"Gặp lỗi khi yêu cầu máy chủ ủy nhiệm: Không rõ kiểu địa chỉ trong trả lời "
+"CONNECT"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4241
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4256
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Máy chủ ủy nhiệm được đặt nhưng máy chủ hay cổng hợp lệ"
 
@@ -6044,7 +6070,7 @@ msgstr "Thuật toán Khóa Công:"
 msgid "Public permissions"
 msgstr "Cho phép tất cả mọi người"
 
-#: ../../locales/../src/interface/QueueView.cpp:3057
+#: ../../locales/../src/interface/QueueView.cpp:3054
 msgid "Queue has been fully processed"
 msgstr "Hàng đợi đã đầy"
 
@@ -6063,7 +6089,7 @@ msgstr "Hàng đợi: %s%s"
 msgid "Queue: empty"
 msgstr "Hàng đợi: rỗng"
 
-#: ../../locales/../src/interface/QueueView.cpp:434
+#: ../../locales/../src/interface/QueueView.cpp:438
 msgid "Queued files"
 msgstr "Hàng đợi các tập tin"
 
@@ -6084,7 +6110,7 @@ msgstr "Cây thư mụ&c máy mạng"
 msgid "R&eset and requeue selected files"
 msgstr "Đặt và xếp &lại hàng đợi với các tập tin đã chọn"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:585
+#: ../../locales/../src/interface/Mainfrm.cpp:586
 msgid "Raw FTP command"
 msgstr "Lệnh FTP thô"
 
@@ -6101,7 +6127,7 @@ msgstr "Làm &tươi"
 msgid "Re&name"
 msgstr "Đổi tê&n"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:592
+#: ../../locales/../src/interface/netconfwizard.cpp:585
 msgid ""
 "Re-run the wizard and carefully check your settings and configure all "
 "routers and firewalls accordingly."
@@ -6117,12 +6143,12 @@ msgstr "Đọ&c"
 msgid "Read-only"
 msgstr "Chỉ đọc"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1022
+#: ../../locales/../src/interface/Mainfrm.cpp:1023
 msgid "Really cancel current operation?"
 msgstr "Bạn có thực sự muốn hủy hoạt động hiện hành không?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1386
-#: ../../locales/../src/interface/search.cpp:761
+#: ../../locales/../src/interface/RemoteListView.cpp:1382
+#: ../../locales/../src/interface/search.cpp:740
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
@@ -6130,36 +6156,36 @@ msgid_plural ""
 msgstr[0] ""
 "Bạn có thực sự muốn xóa %d thư mục và nội dung của nó từ máy chủ không?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1384
-#: ../../locales/../src/interface/search.cpp:759
+#: ../../locales/../src/interface/RemoteListView.cpp:1380
+#: ../../locales/../src/interface/search.cpp:738
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
 msgstr[0] "Bạn có thực sự muốn xóa %d tập tin từ máy chủ không?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1391
-#: ../../locales/../src/interface/search.cpp:765
+#: ../../locales/../src/interface/RemoteListView.cpp:1387
+#: ../../locales/../src/interface/search.cpp:744
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "Bạn có thực sự muốn xóa %s và %s từ máy chủ không?"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1038
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1041
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
 "Bạn có thực sự muốn xóa tất cả tập tin và/hoặc thư mục đã chọn từ máy chủ "
 "không?"
 
-#: ../../locales/../src/engine/local_filesys.cpp:129
+#: ../../locales/../src/interface/file_utils.h:45
 msgid "Really delete all selected files and/or directories from your computer?"
 msgstr ""
 "Bạn có thực sự muốn xóa tất cả tập tin và/hoặc thư mục đã chọn từ máy tính "
 "của mình không?"
 
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Reason"
 msgstr "Lý do"
 
-#: ../../locales/../src/interface/QueueView.cpp:3050
+#: ../../locales/../src/interface/QueueView.cpp:3047
 msgid "Reboot now"
 msgstr "Khởi động lại ngay"
 
@@ -6167,7 +6193,7 @@ msgstr "Khởi động lại ngay"
 msgid "Rec&urse into subdirectories"
 msgstr "Rec&urse vào thư mục con"
 
-#: ../../locales/../src/engine/tlssocket.cpp:223
+#: ../../locales/../src/engine/tlssocket.cpp:225
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Nhận được cảnh báo TLS từ máy phục vụ: %s (%d)"
@@ -6181,22 +6207,22 @@ msgstr "Đã nhận về danh sách thư mục mà nó có vẻ được mã hó
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Nhận được vượt quá 10000 ký tự một dòng, đang bãi bỏ."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1007
-#: ../../locales/../src/interface/netconfwizard.cpp:1016
-#: ../../locales/../src/interface/netconfwizard.cpp:1039
+#: ../../locales/../src/interface/netconfwizard.cpp:989
+#: ../../locales/../src/interface/netconfwizard.cpp:997
+#: ../../locales/../src/interface/netconfwizard.cpp:1018
 msgid "Received data tainted"
 msgstr "Xác nhận dữ liệu bị hỏng"
 
-#: ../../locales/../src/interface/updater.cpp:521
+#: ../../locales/../src/interface/updater.cpp:522
 msgid "Received invalid character in version information"
 msgstr "Có ký tự không hợp lệ trong thông tin về phiên bản"
 
-#: ../../locales/../src/engine/tlssocket.cpp:226
+#: ../../locales/../src/engine/tlssocket.cpp:228
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Nhận được cảnh báo TLS chưa biết %d từ máy chủ"
 
-#: ../../locales/../src/interface/updater.cpp:514
+#: ../../locales/../src/interface/updater.cpp:515
 msgid "Received version information is too large"
 msgstr "Thông tin về phiên bản nhận được là quá dài"
 
@@ -6229,13 +6255,13 @@ msgstr "Thay đổi quyền một cách đệ quy."
 msgid "Recursively deleting files and directories."
 msgstr "Xóa tập tin và thư mục một cách đệ quy."
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:642
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:645
 #, c-format
 msgid "Redirection to invalid or unsupported URI: %s"
 msgstr "Đổi hướng tới địa chỉ URI không hợp lệ hoặc không được hỗ trợ: %s"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:649
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:656
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:652
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:659
 #, c-format
 msgid "Redirection to invalid or unsupported address: %s"
 msgstr "Đổi hướng tới địa chỉ không hợp lệ hoặc không được hỗ trợ: %s"
@@ -6253,20 +6279,20 @@ msgstr "Nhớ mật khẩu?"
 msgid "Remote"
 msgstr "Máy trên mạng"
 
-#: ../../locales/../src/engine/tlssocket.cpp:852
+#: ../../locales/../src/engine/tlssocket.cpp:854
 msgid "Remote certificate not trusted."
 msgstr "Thông tin xác nhận máy mạng không tin cậy."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2275
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Remote file"
 msgstr "Tập tin máy mạng"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3106
-#: ../../locales/../src/interface/search.cpp:383
-#: ../../locales/../src/interface/search.cpp:388
-#: ../../locales/../src/interface/search.cpp:397
-#: ../../locales/../src/interface/search.cpp:402
+#: ../../locales/../src/interface/search.cpp:386
+#: ../../locales/../src/interface/search.cpp:391
+#: ../../locales/../src/interface/search.cpp:400
+#: ../../locales/../src/interface/search.cpp:405
 msgid "Remote file search"
 msgstr "Tìm kiếm tập tin máy mạng"
 
@@ -6302,7 +6328,7 @@ msgstr ""
 msgid "Remote path cannot be parsed. Make sure it is a valid absolute path."
 msgstr "Không thể phân tích đường dẫn máy mạng. Hãy chắc chắn là nó hợp lệ."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:331
+#: ../../locales/../src/interface/manual_transfer.cpp:332
 msgid "Remote path could not be parsed."
 msgstr "Đường dẫn máy mạng không thể phân tách được."
 
@@ -6346,8 +6372,8 @@ msgstr "Đổi tên thư mục đã chọn"
 msgid "Rename selected files and directories"
 msgstr "Đổi tên tập tin và thư mục đã chọn"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3396
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2438
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3397
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2419
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "Đổi tên từ “%s” thành “%s”"
@@ -6356,20 +6382,20 @@ msgstr "Đổi tên từ “%s” thành “%s”"
 msgid "Reporting bugs and feature requests"
 msgstr "Cách báo cáo lỗi và yêu cầu các đặc tính mới"
 
-#: ../../locales/../src/engine/proxy.cpp:375
+#: ../../locales/../src/engine/proxy.cpp:398
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
 "Yêu cầu gặp lỗi - máy khách không chạy “identd” (hoặc là không thể kết nối "
 "từ máy chủ)"
 
-#: ../../locales/../src/engine/proxy.cpp:378
+#: ../../locales/../src/engine/proxy.cpp:401
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
 "Yêu cầu gặp lỗi - “identd” của máy khách không thể xác nhận chuỗi định danh "
 "(ID) tài khoản"
 
-#: ../../locales/../src/engine/proxy.cpp:372
+#: ../../locales/../src/engine/proxy.cpp:395
 msgid "Request rejected or failed"
 msgstr "Yêu cầu bị từ chối hay gặp lỗi"
 
@@ -6385,21 +6411,21 @@ msgstr "Yêu cầu FTP thông qua TLS ngầm định"
 msgid "Reset and requeue &all"
 msgstr "Đặt và xếp lại toàn &bộ hàng đợi"
 
-#: ../../locales/../src/engine/socket.cpp:1098
+#: ../../locales/../src/engine/socket.cpp:1084
 msgid "Resolved protocol is unknown"
 msgstr "Giao thức phân giải chưa biết"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1081
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:457
+#: ../../locales/../src/engine/ControlSocket.cpp:1082
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:459
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Phân giải địa chỉ IP của %s"
 
-#: ../../locales/../src/engine/socket.cpp:1057
+#: ../../locales/../src/engine/socket.cpp:1043
 msgid "Resource temporarily unavailable"
 msgstr "Tài nguyên tạm thời không sẵn sàng"
 
-#: ../../locales/../src/engine/logging.cpp:112
+#: ../../locales/../src/engine/logging.cpp:113
 #: ../../locales/../src/interface/netconfwizard.cpp:411
 #: ../../locales/../src/interface/StatusView.cpp:286
 #: ../../locales/../src/interface/StatusView.cpp:346
@@ -6425,19 +6451,19 @@ msgstr ""
 "Phục hồi tập tin ASCII có thể là nguyên nhân của sự cố nếu máy chủ dùng kiểu "
 "xuống dòng khác với máy khách."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1272
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:939
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1273
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:924
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
 msgstr "Đang nhận danh sách của thư mục \"%s\"…"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1269
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:936
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1270
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:921
 msgid "Retrieving directory listing..."
 msgstr "Đang nhận danh sách thư mục…"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3772
-#: ../../locales/../src/interface/netconfwizard.cpp:720
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3773
+#: ../../locales/../src/interface/netconfwizard.cpp:710
 #, c-format
 msgid "Retrieving external IP address from %s"
 msgstr "Nhận địa chỉ IP từ %s"
@@ -6474,7 +6500,7 @@ msgstr "Giao thức SFTP"
 msgid "SOC&KS 4"
 msgstr "SOC&KS 4"
 
-#: ../../locales/../src/engine/proxy.cpp:154
+#: ../../locales/../src/engine/proxy.cpp:177
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
 msgstr "Máy chủ ủy nhiệm SOCKS4 sẽ kết nối đến: %s"
@@ -6483,16 +6509,16 @@ msgstr "Máy chủ ủy nhiệm SOCKS4 sẽ kết nối đến: %s"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:858
+#: ../../locales/../src/interface/netconfwizard.cpp:846
 msgid "Save settings?"
 msgstr "Lưu lại các cài đặt không?"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:436
+#: ../../locales/../src/interface/manual_transfer.cpp:437
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:978
 msgid "Saving of password has been disabled by your system administrator."
 msgstr "Việc lưu mật khẩu đã được tắt bởi người quản trị hệ thống."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:438
+#: ../../locales/../src/interface/manual_transfer.cpp:439
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:980
 msgid "Saving of passwords has been disabled by you."
 msgstr "Việc lưu mật khẩu đã được tắt bởi chính bạn."
@@ -6525,8 +6551,8 @@ msgstr "Tìm kiếm tập tin trên máy chủ"
 msgid "Security information"
 msgstr "Thông tin an ninh"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:580
-#: ../../locales/../src/interface/netconfwizard.cpp:593
+#: ../../locales/../src/interface/netconfwizard.cpp:573
+#: ../../locales/../src/interface/netconfwizard.cpp:586
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr "Xem thêm: http://wiki.filezilla-project.org/Network_Configuration"
 
@@ -6579,7 +6605,7 @@ msgid "Select file for exported data"
 msgstr "Chọn tập tin cho dữ liệu xuất ra"
 
 #: ../../locales/../src/interface/export.cpp:34
-#: ../../locales/../src/interface/queue.cpp:1489
+#: ../../locales/../src/interface/queue.cpp:1495
 msgid "Select file for exported queue"
 msgstr "Chọn tập tin cho hàng đợi xuất ra"
 
@@ -6588,7 +6614,7 @@ msgid "Select file for exported settings"
 msgstr "Chọn tập tin để xuất ra thông tin cài đặt"
 
 #: ../../locales/../src/interface/export.cpp:32
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2208
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2211
 msgid "Select file for exported sites"
 msgstr "Chọn tập tin cho địa chỉ xuất ra"
 
@@ -6596,11 +6622,11 @@ msgstr "Chọn tập tin cho địa chỉ xuất ra"
 msgid "Select file to import settings from"
 msgstr "Chọn tập tin để nhập thông tin cài đặt"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:241
+#: ../../locales/../src/interface/manual_transfer.cpp:242
 msgid "Select file to upload"
 msgstr "Chọn tập tin để tải lên"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:129
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:128
 msgid "Select filename for converted key file"
 msgstr "Chọn tập tin để chuyển đổi tập tin khóa"
 
@@ -6608,11 +6634,11 @@ msgstr "Chọn tập tin để chuyển đổi tập tin khóa"
 msgid "Select how these files should be opened."
 msgstr "Chọn cách mở tập tin."
 
-#: ../../locales/../src/interface/search.cpp:507
+#: ../../locales/../src/interface/search.cpp:513
 msgid "Select target download directory"
 msgstr "Chọn thư mục đích để tải về"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:237
+#: ../../locales/../src/interface/manual_transfer.cpp:238
 msgid "Select target filename"
 msgstr "Chọn tên tập tin đích"
 
@@ -6624,7 +6650,7 @@ msgstr "Chọn những thể loại cần xuất thông tin:"
 msgid "Select the private data you would like to delete."
 msgstr "Chọn thông tin riêng tư bạn muốn xóa."
 
-#: ../../locales/../src/interface/search.cpp:475
+#: ../../locales/../src/interface/search.cpp:481
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6636,7 +6662,7 @@ msgid "Selected %d directory."
 msgid_plural "Selected %d directories."
 msgstr[0] "Đã chọn %d thư mục"
 
-#: ../../locales/../src/interface/search.cpp:473
+#: ../../locales/../src/interface/search.cpp:479
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6654,7 +6680,7 @@ msgid "Selected %d file. Total size: At least %s"
 msgid_plural "Selected %d files. Total size: At least %s"
 msgstr[0] "Đã chọn %d tập tin. Kích thước tổng cộng ít nhất là: %s"
 
-#: ../../locales/../src/interface/search.cpp:479
+#: ../../locales/../src/interface/search.cpp:485
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Đã chọn %s và %s để truyền."
@@ -6692,7 +6718,7 @@ msgstr "Tập tin đã chọn đã được mở"
 msgid "Selected file is still being edited"
 msgstr "Tập tin đã chọn vẫn còn bị chỉnh sửa"
 
-#: ../../locales/../src/interface/filter.cpp:303
+#: ../../locales/../src/interface/filter.cpp:304
 msgid "Selected filter only works for local files."
 msgstr "Chọn bộ lọc chỉ làm việc cho tập tin nội bộ."
 
@@ -6716,7 +6742,7 @@ msgstr "Gửi các &lệnh duy trì FTP"
 msgid "Send custom command to the server otherwise not available"
 msgstr "Gửi lệnh từ người dùng đến máy chủ nếu không thì không có hiệu lực"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4317
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4332
 msgid "Sending keep-alive command"
 msgstr "Đang gửi lệnh duy trì"
 
@@ -6729,21 +6755,21 @@ msgstr "Số sê-ri:"
 msgid "Server &Type:"
 msgstr "&Kiểu máy chủ:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:741
+#: ../../locales/../src/engine/tlssocket.cpp:743
 msgid "Server did not properly shut down TLS connection"
 msgstr "Máy chủ không tắt kết nối TLS một cách đúng đắn"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:890
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:943
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:891
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:944
 msgid "Server does not support non-ASCII characters."
 msgstr "Máy chủ không hỗ trợ các ký tự không phải ASCII."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4153
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4168
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr "Máy chủ không hỗ trợ phục hồi tập tin >%d GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4149
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4164
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -6752,15 +6778,15 @@ msgstr ""
 "Máy chủ không hỗ trợ phục hồi tập tin > %d GB. Kết thúc truyền khi kích "
 "thước tập tin tương ứng."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2426
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2427
 msgid "Server does not support resume of files > 2GB."
 msgstr "Máy chủ không hỗ trợ phục hồi tập tin >2GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2422
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2423
 msgid "Server does not support resume of files > 4GB."
 msgstr "Máy chủ không hỗ trợ phục hồi tập tin >4GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4164
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4179
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -6769,7 +6795,7 @@ msgstr ""
 "Máy chủ có thể không hỗ trợ phục hồi tập tin > %d GB. Kết thúc truyền từ lúc "
 "kích thước tập tin tương ứng."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:839
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:840
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
@@ -6777,24 +6803,24 @@ msgstr ""
 "Máy chủ có thể yêu cầu tài khoản dùng. Thử ghi rõ một tài khoản dùng trong "
 "Danh bạ"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:344
+#: ../../locales/../src/engine/ControlSocket.cpp:345
 msgid "Server returned empty path."
 msgstr "Máy chủ trả về đường dẫn rỗng."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:675
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:660
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
 msgstr ""
 "Máy chủ gửi một lời nhắc đăng nhập. Bạn cần dùng đăng nhập kiểu tương tác."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3719
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3720
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr ""
 "Máy chủ gửi trả lời thụ động với địa chỉ không đầy đủ. Chế độ thụ động bị "
 "lỗi."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3714
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3715
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
@@ -6802,15 +6828,15 @@ msgstr ""
 "Máy chủ gửi trả lời thụ động với địa chỉ không đầy đủ. Dùng địa chỉ máy chủ "
 "để thay thế."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:419
-#: ../../locales/../src/interface/netconfwizard.cpp:426
-#: ../../locales/../src/interface/netconfwizard.cpp:465
-#: ../../locales/../src/interface/netconfwizard.cpp:474
-#: ../../locales/../src/interface/netconfwizard.cpp:486
+#: ../../locales/../src/interface/netconfwizard.cpp:418
+#: ../../locales/../src/interface/netconfwizard.cpp:424
+#: ../../locales/../src/interface/netconfwizard.cpp:459
+#: ../../locales/../src/interface/netconfwizard.cpp:468
+#: ../../locales/../src/interface/netconfwizard.cpp:480
+#: ../../locales/../src/interface/netconfwizard.cpp:503
 #: ../../locales/../src/interface/netconfwizard.cpp:510
-#: ../../locales/../src/interface/netconfwizard.cpp:517
-#: ../../locales/../src/interface/netconfwizard.cpp:526
-#: ../../locales/../src/interface/netconfwizard.cpp:537
+#: ../../locales/../src/interface/netconfwizard.cpp:519
+#: ../../locales/../src/interface/netconfwizard.cpp:530
 msgid "Server sent unexpected reply."
 msgstr "Máy chủ gửi trả lời không hợp lệ."
 
@@ -6826,7 +6852,7 @@ msgstr "Kiểu mã hóa từ máy chủ tới máy khách:"
 msgid "Server&type:"
 msgstr "&Kiểu máy chủ:"
 
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Server/Local file"
 msgstr "Tập tin Máy chủ/Máy nội bộ"
 
@@ -6843,8 +6869,8 @@ msgstr "Thông tin chi tiết phiên làm việc"
 msgid "Set &Priority"
 msgstr "T&hiết lập quyền ưu tiên"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3544
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2317
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3545
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2298
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Thiết lập quyền hạn từ “%s” thành “%s”"
@@ -6869,7 +6895,7 @@ msgstr "Hiển thị danh sách thư mục &thô"
 msgid "Show &welcome dialog..."
 msgstr "Hiển thị hộp thoại &chào mừng…"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2168
+#: ../../locales/../src/interface/Mainfrm.cpp:2170
 msgid "Show both directory trees and continue comparing?"
 msgstr "Hiển thị cả cây thư mục và tiếp tục so sánh?"
 
@@ -6890,7 +6916,7 @@ msgstr "Hiển thị các kiểu mã hóa TLS sẵn dùng"
 msgid "Shows this help dialog"
 msgstr "Hiển thị hộp thoại trợ giúp"
 
-#: ../../locales/../src/interface/QueueView.cpp:3046
+#: ../../locales/../src/interface/QueueView.cpp:3043
 msgid "Shutdown now"
 msgstr "Tắt ngay bây giờ"
 
@@ -6964,7 +6990,7 @@ msgstr ""
 "Dấu trang gắn với trang mạng yêu cầu máy chủ phải được lưu trong danh bạ.\n"
 "Thêm kết nối hiện tại vào danh bạ?"
 
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Size"
 msgstr "Kích thước"
 
@@ -6983,43 +7009,43 @@ msgstr "Không biết kích thước"
 msgid "Skip file"
 msgstr "Bỏ qua tập tin"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1152
-#: ../../locales/../src/engine/ControlSocket.cpp:1169
-#: ../../locales/../src/engine/ControlSocket.cpp:1193
-#: ../../locales/../src/engine/ControlSocket.cpp:1253
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1171
+#: ../../locales/../src/engine/ControlSocket.cpp:1195
+#: ../../locales/../src/engine/ControlSocket.cpp:1255
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Giữ nguyên tải xuống của %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1156
-#: ../../locales/../src/engine/ControlSocket.cpp:1172
-#: ../../locales/../src/engine/ControlSocket.cpp:1197
-#: ../../locales/../src/engine/ControlSocket.cpp:1257
+#: ../../locales/../src/engine/ControlSocket.cpp:1158
+#: ../../locales/../src/engine/ControlSocket.cpp:1174
+#: ../../locales/../src/engine/ControlSocket.cpp:1199
+#: ../../locales/../src/engine/ControlSocket.cpp:1259
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Giữ nguyên tải lên của %s"
 
-#: ../../locales/../src/engine/socket.cpp:1061
+#: ../../locales/../src/engine/socket.cpp:1047
 msgid "Socket address outside address space"
 msgstr "Địa chỉ ổ cắm mạng nằm ngoài không gian địa chỉ"
 
-#: ../../locales/../src/engine/socket.cpp:1063
+#: ../../locales/../src/engine/socket.cpp:1049
 msgid "Socket already connected"
 msgstr "Ổ cắm đã sẵn được kết nối"
 
-#: ../../locales/../src/engine/socket.cpp:1071
+#: ../../locales/../src/engine/socket.cpp:1057
 msgid "Socket has been shut down"
 msgstr "Ổ cắm bị tắt"
 
-#: ../../locales/../src/engine/socket.cpp:1068
+#: ../../locales/../src/engine/socket.cpp:1054
 msgid "Socket not connected"
 msgstr "Ổ cắm chưa được kết nối"
 
-#: ../../locales/../src/engine/socket.cpp:1111
+#: ../../locales/../src/engine/socket.cpp:1097
 msgid "Socket type not supported for address family"
 msgstr "Kiểu ổ cắm không hỗ trợ họ địa chỉ"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1157
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Có một vài tập tin vẫn đang sửa hay cần phải tải lên."
 
@@ -7036,7 +7062,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Xắp xếp thư mục trực tiếp"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:464
+#: ../../locales/../src/interface/filelistctrl.cpp:466
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "Thứ tự xắp xếp không thể thay đổi nếu đang so sánh các thư mục."
 
@@ -7052,7 +7078,7 @@ msgstr "Chế độ &xắp xếp:"
 msgid "Source and path of the drop operation are identical"
 msgstr "Nguồn và đường dẫn của lệnh “thả” là trùng nhau"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:139
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:138
 msgid "Source and target file may not be the same"
 msgstr "Tập tin nguồn và đường dẫn của nó không thể giống nhau"
 
@@ -7102,19 +7128,19 @@ msgstr "Bắt đầu truyền ngay lậ&p tức"
 msgid "Start with opened Site Manager"
 msgstr "Bắt đầu bằng việc mở Danh bạ"
 
-#: ../../locales/../src/interface/updater.cpp:212
+#: ../../locales/../src/interface/updater.cpp:213
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Tự động kiểm tra cập nhật phiên bản mới vào %s\n"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2146
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1583
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2147
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1568
 #, c-format
 msgid "Starting download of %s"
 msgstr "Bắt đầu tải về %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2149
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1586
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2150
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1571
 #, c-format
 msgid "Starting upload of %s"
 msgstr "Bắt đầu tải lên %s"
@@ -7128,11 +7154,11 @@ msgid "State or province:"
 msgstr "Bang hoặc tỉnh:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1087
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Status"
 msgstr "Tình trạng"
 
-#: ../../locales/../src/engine/logging.cpp:109
+#: ../../locales/../src/engine/logging.cpp:110
 #: ../../locales/../src/interface/StatusView.cpp:295
 #: ../../locales/../src/interface/StatusView.cpp:370
 msgid "Status:"
@@ -7162,7 +7188,7 @@ msgstr "Các lần truyền thành công"
 msgid "Summary of test results:"
 msgstr "Tổng hợp kết quả kiểm tra:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3054
+#: ../../locales/../src/interface/QueueView.cpp:3051
 msgid "Suspend now"
 msgstr "Ngừng ngay bây giờ"
 
@@ -7176,22 +7202,22 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3700
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
-#: ../../locales/../src/interface/state.cpp:238
-#: ../../locales/../src/interface/state.cpp:252
-#: ../../locales/../src/interface/state.cpp:258
-#: ../../locales/../src/interface/state.cpp:268
-#: ../../locales/../src/interface/state.cpp:355
-#: ../../locales/../src/interface/state.cpp:363
-#: ../../locales/../src/interface/state.cpp:371
-#: ../../locales/../src/interface/state.cpp:930
+#: ../../locales/../src/interface/state.cpp:239
+#: ../../locales/../src/interface/state.cpp:253
+#: ../../locales/../src/interface/state.cpp:259
+#: ../../locales/../src/interface/state.cpp:269
+#: ../../locales/../src/interface/state.cpp:356
+#: ../../locales/../src/interface/state.cpp:364
+#: ../../locales/../src/interface/state.cpp:372
+#: ../../locales/../src/interface/state.cpp:924
+#: ../../locales/../src/interface/state.cpp:932
 #: ../../locales/../src/interface/state.cpp:938
-#: ../../locales/../src/interface/state.cpp:944
-#: ../../locales/../src/interface/state.cpp:953
-#: ../../locales/../src/interface/state.cpp:979
+#: ../../locales/../src/interface/state.cpp:947
+#: ../../locales/../src/interface/state.cpp:973
 msgid "Synchronized browsing"
 msgstr "Duyệt đồng bộ"
 
-#: ../../locales/../src/interface/state.cpp:370
+#: ../../locales/../src/interface/state.cpp:371
 msgid "Synchronized browsing has been disabled."
 msgstr "Chức năng duyệt đồng bộ đã bị khóa."
 
@@ -7205,8 +7231,8 @@ msgstr "Cấu trúc sai"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2280
-#: ../../locales/../src/interface/Mainfrm.cpp:2322
+#: ../../locales/../src/interface/Mainfrm.cpp:2282
+#: ../../locales/../src/interface/Mainfrm.cpp:2324
 msgid "Syntax error in command line"
 msgstr "Cấu trúc dòng lệnh sai"
 
@@ -7218,11 +7244,11 @@ msgstr "Hệ thống"
 msgid "System details"
 msgstr "Chi tiết hệ thống"
 
-#: ../../locales/../src/engine/socket.cpp:1052
+#: ../../locales/../src/engine/socket.cpp:1038
 msgid "System limit of open files exceeded"
 msgstr "Đã chạm đến giới hạn số lượng tập tin mở của hệ thống"
 
-#: ../../locales/../src/engine/socket.cpp:1109
+#: ../../locales/../src/engine/socket.cpp:1095
 msgid "System's network subsystem has failed"
 msgstr "Hệ thống mạng con hệ thống bị lỗi"
 
@@ -7230,19 +7256,19 @@ msgstr "Hệ thống mạng con hệ thống bị lỗi"
 msgid "T&oolbar"
 msgstr "Thanh côn&g cụ"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:300
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:302
 msgid "TLS connection established, sending HTTP request"
 msgstr "Kết nối TLS đã được thiết lập, đang gửi yêu cầu HTTP"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:404
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:405
 msgid "TLS connection established, waiting for welcome message..."
 msgstr "Kết nối TLS đã được thiết lập, xin chờ thông tin từ máy chủ…"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:407
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:408
 msgid "TLS connection established."
 msgstr "Kết nối TLS đã được thiết lập."
 
-#: ../../locales/../src/engine/proxy.cpp:499
+#: ../../locales/../src/engine/proxy.cpp:522
 msgid "TTL expired"
 msgstr "TTL đã hết hiệu lực"
 
@@ -7254,15 +7280,15 @@ msgstr "Tập tin đích đã sẵn có từ trước"
 msgid "Target file:"
 msgstr "Tập tin đích:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2635
+#: ../../locales/../src/interface/RemoteListView.cpp:2625
 msgid "Target filename already exists!"
 msgstr "Tập tin đích đã có sẵn từ trước!"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1603
+#: ../../locales/../src/interface/RemoteListView.cpp:1596
 msgid "Target filename already exists, really continue?"
 msgstr "Tên tập tin đích đã tạo rồi, có tiếp tục nữa không?"
 
-#: ../../locales/../src/engine/socket.cpp:1082
+#: ../../locales/../src/engine/socket.cpp:1068
 msgid "Temporary failure in name resolution"
 msgstr "Tiến trình phân giải quyết bị lỗi tạm thời"
 
@@ -7270,7 +7296,7 @@ msgstr "Tiến trình phân giải quyết bị lỗi tạm thời"
 msgid "Test results"
 msgstr "Kết quả kiểm tra"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4170
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4185
 msgid "Testing resume capabilities of server"
 msgstr "Kiểm tra khả năng phục hồi của máy chủ"
 
@@ -7296,16 +7322,16 @@ msgstr ""
 "Danh bạ được mở trong cửa sổ khác của FileZilla 3.\n"
 "Xin hãy đóng nó lại nếu không dữ liệu không thể bị xóa."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:634
+#: ../../locales/../src/interface/netconfwizard.cpp:627
 #, c-format
 msgid "The address you entered was: %s"
 msgstr "Địa chỉ bạn đã nhập vào là: %s"
 
-#: ../../locales/../src/engine/socket.cpp:1088
+#: ../../locales/../src/engine/socket.cpp:1074
 msgid "The ai_family member is not supported"
 msgstr "Thành viên ai_family không được hỗ trợ"
 
-#: ../../locales/../src/engine/socket.cpp:1101
+#: ../../locales/../src/engine/socket.cpp:1087
 msgid "The ai_socktype member is not supported"
 msgstr "Thành viên ai_socktype không được hỗ trợ"
 
@@ -7362,7 +7388,7 @@ msgid "The entered filter name already exists, please choose a different name."
 msgstr ""
 "Tên bộ lọc nhập vào đã sẵn có từ trước rồi, xin hãy chọn một cái tên khác"
 
-#: ../../locales/../src/interface/settings/optionspage_filetype.cpp:154
+#: ../../locales/../src/interface/settings/optionspage_filetype.cpp:153
 #, c-format
 msgid "The extension '%s' does already exist in the list"
 msgstr "Phần mở rộng “%s” đã được sẵn có từ trước trong danh sách"
@@ -7378,7 +7404,7 @@ msgstr ""
 "Xin hãy nhập một cái tên mới:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1621
-#: ../../locales/../src/interface/LocalListView.cpp:1699
+#: ../../locales/../src/interface/LocalListView.cpp:1704
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -7409,7 +7435,7 @@ msgid "The file '%s' could not be loaded."
 msgstr "Tập tin “%s” không thể tải lên được."
 
 #: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/LocalListView.cpp:1695
+#: ../../locales/../src/interface/LocalListView.cpp:1700
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7419,7 +7445,7 @@ msgstr ""
 "Không có chương trình ràng xử lý kiểu tập tin này trong hệ điều hành của bạn."
 
 #: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1707
+#: ../../locales/../src/interface/LocalListView.cpp:1712
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7441,7 +7467,7 @@ msgstr ""
 "liệu.\n"
 "Bạn có thực sự muốn tiếp tục không?"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:105
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:104
 #, c-format
 msgid ""
 "The file '%s' is not in a format supported by FileZilla.\n"
@@ -7512,17 +7538,17 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Giới hạn phải nằm trong khoản từ 1 dến 2000 MiB"
 
-#: ../../locales/../src/interface/state.cpp:979
+#: ../../locales/../src/interface/state.cpp:973
 #, c-format
 msgid "The local directory '%s' could not be created."
 msgstr "Không thể tạo thư mục nội bộ “%s”."
 
-#: ../../locales/../src/interface/state.cpp:964
+#: ../../locales/../src/interface/state.cpp:958
 #, c-format
 msgid "The local directory '%s' does not exist."
 msgstr "Thư mục nội bộ “%s” không sẵn có."
 
-#: ../../locales/../src/interface/state.cpp:249
+#: ../../locales/../src/interface/state.cpp:250
 #, c-format
 msgid ""
 "The local directory '%s' is not below the synchronization root (%s).\n"
@@ -7531,7 +7557,7 @@ msgstr ""
 "Thư mục nội bộ này (%s) không nằm dưới gốc đồng bộ hóa (%s).\n"
 "Bạn có muốn tắt chức năng duyệt đồng bộ và tiếp tục đổi thư mục?"
 
-#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:76
+#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:78
 msgid ""
 "The lowest available port has to be less or equal than the highest available "
 "port."
@@ -7546,16 +7572,16 @@ msgstr "Không thể tải phiên bản mới về, vui lòng thử lại sau."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Phiên bản mới nhất đã được lưu lại tại thư mục Tải về của bạn."
 
-#: ../../locales/../src/interface/QueueView.cpp:1832
+#: ../../locales/../src/interface/QueueView.cpp:1829
 msgid "The queue will not be saved."
 msgstr "Hàng đợi sẽ không được ghi lại."
 
-#: ../../locales/../src/interface/state.cpp:891
+#: ../../locales/../src/interface/state.cpp:885
 #, c-format
 msgid "The remote directory '%s' does not exist."
 msgstr "Thư mục “%s” trên máy phục vụ không sẵn có."
 
-#: ../../locales/../src/interface/state.cpp:935
+#: ../../locales/../src/interface/state.cpp:929
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7598,7 +7624,7 @@ msgstr ""
 msgid "The server could not be added."
 msgstr "Máy chủ không thể được đặt thêm."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:590
+#: ../../locales/../src/interface/netconfwizard.cpp:583
 msgid "The server sent an unexpected or unrecognized reply."
 msgstr "Máy chủ gửi trả lời không như mong đợi hay trả lời được công nhận."
 
@@ -7632,7 +7658,7 @@ msgstr ""
 "Không hiểu khóa của máy chủ. Bạn không được đảm bảo rằng máy chủ đó là máy "
 "tính bạn nghĩ."
 
-#: ../../locales/../src/engine/socket.cpp:1100
+#: ../../locales/../src/engine/socket.cpp:1086
 msgid "The servname parameter is not supported for ai_socktype"
 msgstr "Tham số servname không được hỗ trọ cho ai_socktype"
 
@@ -7644,19 +7670,19 @@ msgstr ""
 "Các cài đặt đã được nhập vào. Bạn phải khởi động lại FileZilla để các cài "
 "đặt có hiệu lực."
 
-#: ../../locales/../src/engine/socket.cpp:1048
+#: ../../locales/../src/engine/socket.cpp:1034
 msgid "The specified address family is not supported"
 msgstr "Họ địa chỉ đã cho không được hỗ trợ"
 
-#: ../../locales/../src/engine/socket.cpp:1113
+#: ../../locales/../src/engine/socket.cpp:1099
 msgid "The specified network name is no longer available"
 msgstr "Tên mạng đã chỉ định không còn được sử dụng nữa"
 
-#: ../../locales/../src/interface/QueueView.cpp:3049
+#: ../../locales/../src/interface/QueueView.cpp:3046
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Hệ thống sẽ khởi động lại trừ khi bạn bấm vào Thôi."
 
-#: ../../locales/../src/interface/QueueView.cpp:3045
+#: ../../locales/../src/interface/QueueView.cpp:3042
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Hệ thống sẽ tắt ngay trừ khi bạn bấm vào Thôi."
 
@@ -7668,7 +7694,7 @@ msgstr ""
 "Tập tin đích đã sẵn có từ trước.\n"
 "Xin hãy chọn một hành động."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:858
+#: ../../locales/../src/interface/netconfwizard.cpp:846
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr ""
 "Kiểm tra không thành công. Bạn có thật sự muốn ghi lại các cài đặt không?"
@@ -7682,15 +7708,15 @@ msgstr "Không thể phục hồi tập tin sao lưu dự phòng “%s”"
 msgid "Themes"
 msgstr "Kiểu dáng"
 
-#: ../../locales/../src/interface/filter.cpp:443
+#: ../../locales/../src/interface/filter.cpp:444
 msgid "This filter set cannot be removed."
 msgstr "Bộ lọc này không thể xóa."
 
-#: ../../locales/../src/interface/filter.cpp:383
+#: ../../locales/../src/interface/filter.cpp:384
 msgid "This filter set cannot be renamed."
 msgstr "Không thể đổi tên bộ lọc này."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:591
+#: ../../locales/../src/interface/netconfwizard.cpp:584
 msgid ""
 "This means that some router and/or firewall is still interfering with "
 "FileZilla."
@@ -7713,7 +7739,7 @@ msgstr ""
 "Chương trình thuật sĩ sẽ giúp bạn cấu hình một cách đúng đắn tất cả các bộ "
 "định tuyến router và tường lửa firewall bạn có và kiểm tra cấu hình của bạn."
 
-#: ../../locales/../src/interface/queue.cpp:1204
+#: ../../locales/../src/interface/queue.cpp:1210
 msgid "Time"
 msgstr "Thời gian"
 
@@ -7726,12 +7752,12 @@ msgid "Time&out in seconds:"
 msgstr "Số giâ&y chờ tối đa:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:125
-#: ../../locales/../src/interface/queue.cpp:323
+#: ../../locales/../src/interface/queue.cpp:329
 msgid "Timeout"
 msgstr "Quá giờ"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1621
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1047
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1622
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1032
 #, c-format
 msgid "Timezone offset of server is %d seconds."
 msgstr "Khoảng chênh múi giờ của của máy chủ dịch vụ là %d giây."
@@ -7740,11 +7766,11 @@ msgstr "Khoảng chênh múi giờ của của máy chủ dịch vụ là %d gi�
 msgid "Title:"
 msgstr "Tựa đề:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2166
+#: ../../locales/../src/interface/Mainfrm.cpp:2168
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "So sánh các thư mục, tất cả các danh sách tập tin phải được sắp xếp."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2167
+#: ../../locales/../src/interface/Mainfrm.cpp:2169
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "Làm điều này, các cây thư mục cần phải hiển thị tất cả hay ẩn tất cả."
 
@@ -7807,15 +7833,15 @@ msgstr "Bật tắt việc hiển thị của cây thư mục máy mạng"
 msgid "Toggles the display of the transfer queue"
 msgstr "Bật tắt việc hiển thị của hàng đợi truyền"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:558
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:561
 msgid "Too long header line"
 msgstr "Đầu đề quá dài"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:633
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:636
 msgid "Too many redirects"
 msgstr "Quá nhiều lần gửi lại"
 
-#: ../../locales/../src/engine/logging.cpp:113
+#: ../../locales/../src/engine/logging.cpp:114
 #: ../../locales/../src/interface/StatusView.cpp:289
 #: ../../locales/../src/interface/StatusView.cpp:356
 msgid "Trace:"
@@ -7852,11 +7878,11 @@ msgstr "Cài đặt chế độ truyền"
 msgid "Transfer connection interrupted: %s"
 msgstr "Kết nối truyền bị ngắt: %s"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:637
+#: ../../locales/../src/interface/netconfwizard.cpp:630
 msgid "Transferred data got tainted."
 msgstr "Dữ liệu truyền đi bị hư hỏng."
 
-#: ../../locales/../src/interface/queue.cpp:333
+#: ../../locales/../src/interface/queue.cpp:339
 #: ../../locales/../src/interface/statuslinectrl.cpp:246
 msgid "Transferring"
 msgstr "Đang truyền"
@@ -7865,8 +7891,8 @@ msgstr "Đang truyền"
 msgid "Transfers"
 msgstr "Truyền"
 
+#: ../../locales/../src/interface/QueueView.cpp:2944
 #: ../../locales/../src/interface/QueueView.cpp:2947
-#: ../../locales/../src/interface/QueueView.cpp:2950
 msgid "Transfers finished"
 msgstr "Việc truyền đã hoàn thành"
 
@@ -7878,11 +7904,11 @@ msgstr "Coi các tập tin không có phần mở &rộng như tập tin ASCII"
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Coi các tập tin &sau đây như tập tin ASCII:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:846
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:831
 msgid "Trust changed Hostkey:"
 msgstr "Khóa đã thay đổi đáng tin cậy:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:844
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
 msgid "Trust new Hostkey:"
 msgstr "Tin khóa mới:"
 
@@ -7930,16 +7956,15 @@ msgid "U&se filetype associations if available"
 msgstr "&Dùng ràng buộc xử lý kiểu tập tin nếu được"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1545
-#, fuzzy
 msgid "U&se system defaults for current language"
-msgstr "&Dùng trình soạn thảo tập tin văn bản mặc định của hệ thống."
+msgstr "&Dùng trình soạn thảo tập tin văn bản mặc định cho ngôn ngữ hiện tại"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:463
 msgid "USER@&HOST"
 msgstr "TÀIK&HOẢN@MÁYCHỦ"
 
-#: ../../locales/../src/engine/proxy.cpp:381
-#: ../../locales/../src/engine/proxy.cpp:508
+#: ../../locales/../src/engine/proxy.cpp:404
+#: ../../locales/../src/engine/proxy.cpp:531
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "Mã lỗi sai không xác định %d"
@@ -7953,13 +7978,13 @@ msgstr "Đơn vị:"
 msgid "Unknown"
 msgstr "Không rõ"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:685
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:686
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr ""
 "Không rõ máy chủ ủy nhiệm cho giao thức FTP, không thể tạo đăng nhập liên "
 "tiếp."
 
-#: ../../locales/../src/engine/proxy.cpp:429
+#: ../../locales/../src/engine/proxy.cpp:452
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "Không rõ phiên bản giao thức SOCKS: %d"
@@ -7972,7 +7997,7 @@ msgstr "Không rõ giấy phép"
 msgid "Unknown host key"
 msgstr "Không rõ khóa máy chủ"
 
-#: ../../locales/../src/engine/proxy.cpp:437
+#: ../../locales/../src/engine/proxy.cpp:460
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -7986,8 +8011,8 @@ msgid ""
 "Unknown root element, the file does not appear to be generated by FileZilla."
 msgstr "Không hiểu nút gốc, tập tin không được tạo ra bởi FileZilla."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:612
-#: ../../locales/../src/interface/netconfwizard.cpp:623
+#: ../../locales/../src/interface/netconfwizard.cpp:605
+#: ../../locales/../src/interface/netconfwizard.cpp:616
 msgid ""
 "Unless these problems get fixed, active mode FTP will not work and passive "
 "mode has to be used."
@@ -7995,7 +8020,7 @@ msgstr ""
 "Trừ khi những vấn đề này được sửa, nếu không chế độ truyền tích cực sẽ không "
 "làm việc và chế độ thụ động sẽ được dùng."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:599
+#: ../../locales/../src/interface/netconfwizard.cpp:592
 msgid ""
 "Unless this problem gets fixed, active mode FTP will not work and passive "
 "mode has to be used."
@@ -8003,11 +8028,11 @@ msgstr ""
 "Trừ khi vấn đề này được sửa, nếu không chế độ truyền tích cực sẽ không làm "
 "việc và chế độ thụ động sẽ được dùng."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1096
+#: ../../locales/../src/engine/tlssocket.cpp:1098
 msgid "Unsupported certificate type"
 msgstr "Kiểu giấy chứng nhận không được hỗ trợ"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:618
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:621
 msgid "Unsupported redirect"
 msgstr "Gửi lại một lần nữa không được hỗ trợ"
 
@@ -8108,9 +8133,8 @@ msgid "Use server from site manager"
 msgstr "Dùng máy chủ từ Danh bạ"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1496
-#, fuzzy
 msgid "Use system &defaults for current language"
-msgstr "&Dùng trình soạn thảo tập tin văn bản mặc định của hệ thống."
+msgstr "&Dùng hệ thống mặc định cho ngôn ngữ hiện tại"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:194
 msgid "Use the following IP address:"
@@ -8146,7 +8170,7 @@ msgstr ""
 msgid "User:"
 msgstr "Tài khoản:"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:494
+#: ../../locales/../src/interface/manual_transfer.cpp:495
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1044
 msgid "Username cannot be a series of spaces"
 msgstr "Tên người dùng không thể là một chuỗi khoảng trắng"
@@ -8170,7 +8194,7 @@ msgstr "Hợp lệ đến:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Nhật ký thông tin đầy đủ từ wxWidgets"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1146
+#: ../../locales/../src/engine/tlssocket.cpp:1148
 msgid "Verifying certificate..."
 msgstr "Đang xác minh giấy phép…"
 
@@ -8178,7 +8202,7 @@ msgstr "Đang xác minh giấy phép…"
 msgid "Very high"
 msgstr "Rất cao"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1391
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1392
 msgid "View hidden option set, but unsupported by server"
 msgstr "Hiển thị tùy chọn ẩn, nhưng không được hỗ trợ bởi máy chủ"
 
@@ -8194,15 +8218,15 @@ msgstr "Hiển thị cột"
 msgid "W&rite"
 msgstr "&Ghi"
 
-#: ../../locales/../src/interface/QueueView.cpp:1670
+#: ../../locales/../src/interface/QueueView.cpp:1671
 msgid "Waiting"
 msgstr "Đang chờ"
 
-#: ../../locales/../src/interface/queue.cpp:329
+#: ../../locales/../src/interface/queue.cpp:335
 msgid "Waiting for browsing connection"
 msgstr "Đang chờ trình duyệt kết nối"
 
-#: ../../locales/../src/interface/queue.cpp:330
+#: ../../locales/../src/interface/queue.cpp:336
 msgid "Waiting for password"
 msgstr "Đang chờ mật khẩu"
 
@@ -8214,7 +8238,7 @@ msgstr "Việc chờ truyền bị hủy"
 msgid "Waiting to retry..."
 msgstr "Đang thử lại xin chờ…"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:975
+#: ../../locales/../src/interface/netconfwizard.cpp:958
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Cảnh báo, đang bỏ qua dữ liệu kết nối từ một địa chỉ IP sai."
 
@@ -8280,20 +8304,20 @@ msgstr "Bạn có muốn FileZilla ghi nhớ mật khẩu?"
 msgid "Wr&ite"
 msgstr "&Ghi"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:449
-#: ../../locales/../src/interface/netconfwizard.cpp:456
+#: ../../locales/../src/interface/netconfwizard.cpp:445
+#: ../../locales/../src/interface/netconfwizard.cpp:451
 msgid "Wrong external IP address"
 msgstr "Sai địa chỉ IP"
 
-#: ../../locales/../src/engine/httpcontrolsocket.cpp:781
+#: ../../locales/../src/engine/httpcontrolsocket.cpp:784
 msgid "Wrong line endings"
 msgstr "Xuống dòng sai"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:858
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:843
 msgid "Yes"
 msgstr "Đồng ý"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:777
+#: ../../locales/../src/interface/netconfwizard.cpp:766
 msgid ""
 "You appear to be using an IPv6-only host. This wizard does not support this "
 "environment."
@@ -8347,21 +8371,21 @@ msgid "You have selected at least one symbolic link."
 msgstr "Bạn phải chọn ít nhất một liên kết mềm."
 
 #: ../../locales/../src/interface/edithandler.cpp:1587
-#: ../../locales/../src/interface/search.cpp:725
+#: ../../locales/../src/interface/search.cpp:709
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
 msgstr ""
 "Bạn đã chọn hơn 10 tập tin để biên tập, bạn có thực sự muốn tiếp tục không?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1665
+#: ../../locales/../src/interface/LocalListView.cpp:1670
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
 msgstr ""
 "Bạn đã chọn hơn 10 tập tin hay thư mục, bạn có thực sự muốn tiếp tục không?"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:414
+#: ../../locales/../src/interface/manual_transfer.cpp:415
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:954
 msgid "You have to enter a hostname."
 msgstr "Bạn phải nhập tên máy chủ."
@@ -8370,30 +8394,30 @@ msgstr "Bạn phải nhập tên máy chủ."
 msgid "You have to enter a key file path"
 msgstr "Bạn phải nhập vào một đường dẫn đến tập tin khóa"
 
-#: ../../locales/../src/interface/search.cpp:518
+#: ../../locales/../src/interface/search.cpp:524
 msgid "You have to enter a local directory."
 msgstr "Bạn phải nhập thư mục máy nội bộ."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:165
-#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:89
-msgid "You have to enter a valid IP address."
-msgstr "Bạn phải nhập địa chỉ IP."
+#: ../../locales/../src/interface/netconfwizard.cpp:158
+#: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:91
+msgid "You have to enter a valid IPv4 address."
+msgstr "Bạn phải nhập một địa chỉ IPv4 hợp lệ."
 
-#: ../../locales/../src/interface/search.cpp:523
+#: ../../locales/../src/interface/search.cpp:529
 msgid "You have to enter a writable local directory."
 msgstr "Bạn phải nhập thư mục được phép ghi."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:505
+#: ../../locales/../src/interface/manual_transfer.cpp:506
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1054
 msgid "You have to enter an account name"
 msgstr "Bạn phải nhập tài khoản của bạn"
 
-#: ../../locales/../src/interface/manual_transfer.cpp:479
+#: ../../locales/../src/interface/manual_transfer.cpp:480
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1029
 msgid "You have to specify a user name"
 msgstr "Bạn phải ghi rõ tên tài khoản người dùng"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:638
+#: ../../locales/../src/interface/netconfwizard.cpp:631
 msgid ""
 "You likely have a router or firewall which erroneously modified the "
 "transferred data."
@@ -8447,23 +8471,23 @@ msgstr ""
 "Bạn cần phải nhập vào cả đường dẫn máy nội bộ và máy mạng để bật chế độ "
 "duyệt đồng bộ cho địa chỉ này."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:302
+#: ../../locales/../src/interface/manual_transfer.cpp:303
 msgid "You need to specify a local file."
 msgstr "Bạn phải chỉ ra tập tin nội bộ."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:319
+#: ../../locales/../src/interface/manual_transfer.cpp:320
 msgid "You need to specify a remote file."
 msgstr "Bạn phải chỉ ra tập tin máy mạng."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:325
+#: ../../locales/../src/interface/manual_transfer.cpp:326
 msgid "You need to specify a remote path."
 msgstr "Bạn phải chỉ ra đường dẫn máy chủ."
 
-#: ../../locales/../src/interface/manual_transfer.cpp:296
+#: ../../locales/../src/interface/manual_transfer.cpp:297
 msgid "You need to specify a server."
 msgstr "Bạn phải chỉ ra một máy chủ."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:577
 msgid ""
 "You should have no problems connecting to other servers, file transfers "
 "should work properly."
@@ -8471,7 +8495,7 @@ msgstr ""
 "Bạn có thể không có vấn đề với việc kết nối tới các máy chủ khác, việc "
 "truyền tập tin có thể làm việc một cách đúng đắn."
 
-#: ../../locales/../src/interface/QueueView.cpp:3053
+#: ../../locales/../src/interface/QueueView.cpp:3050
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Máy tính của bạn sẽ ngừng trừ khi bạn bấm vào Thôi."
 
@@ -8496,7 +8520,7 @@ msgstr "byte"
 msgid "contains"
 msgstr "có chứa"
 
-#: ../../locales/../src/interface/updater.cpp:216
+#: ../../locales/../src/interface/updater.cpp:217
 msgid "custom"
 msgstr "Tùy chỉnh"
 
@@ -8518,19 +8542,19 @@ msgstr "kết thúc với"
 msgid "equals"
 msgstr "bằng nhau"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:529
-#: ../../locales/../src/interface/filelistctrl.cpp:548
-#: ../../locales/../src/interface/filelistctrl.cpp:575
-#: ../../locales/../src/interface/filelistctrl.cpp:591
+#: ../../locales/../src/interface/filelistctrl.cpp:531
+#: ../../locales/../src/interface/filelistctrl.cpp:550
+#: ../../locales/../src/interface/filelistctrl.cpp:577
+#: ../../locales/../src/interface/filelistctrl.cpp:593
 msgid "file"
 msgstr "tập tin"
 
-#: ../../locales/../src/interface/edithandler.cpp:97
+#: ../../locales/../src/interface/edithandler.cpp:98
 msgid "fz3temp-lockfile"
 msgstr "fz3temp-lockfile"
 
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:177
-#: ../../locales/../src/interface/fzputtygen_interface.cpp:203
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:176
+#: ../../locales/../src/interface/fzputtygen_interface.cpp:202
 msgid ""
 "fzputtygen could not be started.\n"
 "Please make sure this executable exists in the same directory as the main "
@@ -8540,15 +8564,15 @@ msgstr ""
 "Xin chắc chắn là tập tin thi hành sẵn có trong cùng thư mục với tập tin thi "
 "hành chính của FileZilla."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:467
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:452
 msgid "fzsftp belongs to a different version of FileZilla"
 msgstr "fzsftp thuộc về một phiên bản khác của FileZilla"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1510
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1495
 msgid "fzsftp could not be started"
 msgstr "không thể khởi động fzsftp"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1125
+#: ../../locales/../src/engine/tlssocket.cpp:1127
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers không trả về chứng nhận nào cả."
 
@@ -8604,10 +8628,10 @@ msgstr "người được phép đọc"
 msgid "owner writeable"
 msgstr "người được phép ghi"
 
-#: ../../locales/../src/engine/proxy.cpp:84
-#: ../../locales/../src/engine/tlssocket.cpp:1189
-#: ../../locales/../src/engine/tlssocket.cpp:1200
-#: ../../locales/../src/engine/tlssocket.cpp:1215
+#: ../../locales/../src/engine/proxy.cpp:96
+#: ../../locales/../src/engine/tlssocket.cpp:1191
+#: ../../locales/../src/engine/tlssocket.cpp:1202
+#: ../../locales/../src/engine/tlssocket.cpp:1217
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:38
 msgid "unknown"
 msgstr "không rõ"
@@ -8627,6 +8651,18 @@ msgstr "ai cũng được phép ghi"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Deleting directories"
+#~ msgstr "Đang xóa các thư mục"
+
+#~ msgid "Deleting multiple unrelated directories is not yet supported"
+#~ msgstr "Việc bội xóa không liên quan đến thư mục vẫn chưa được hỗ trợ"
+
+#~ msgid "Downloading multiple unrelated directories is not yet supported"
+#~ msgstr "Việc bội tải xuống không liên quan đến thư mục vẫn chưa được hỗ trợ"
+
+#~ msgid "Downloading search results"
+#~ msgstr "Đang tải về kết quả tìm kiếm"
 
 #~ msgid "U&se system defaults"
 #~ msgstr "&Dùng hệ thống mặc định"
