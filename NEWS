@@ -10,6 +10,17 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.15.0-beta1 (2016-01-13)
+
++ Building FileZilla now depends on libfilezilla 0.3.0 (https://lib.filezilla-project.org/).
++ Added support for downloading and deleting multiple unrelated directories from the search dialog
++ *nix: Vastly speed up line-ending conversion when downloading files using the ASCII data type
++ Improved compatibility with broken servers omitting the mandatory 1yz reply to transfer commands
+- Fix handling of SFTP keyfiles with non-ASCII characters in their paths
+- Add missing directory comparison checkbox to new bookmark dialog
+- MSW: Installer now sets appid on desktop icon
+- Updated built-in pugixml
+
 3.14.1 (2015-10-16)
 
 + For third-party builds, add configure flag to allow using system ciphers for FTP over TLS. Display a warning if an insecure cipher is negotiated as result of using system ciphers.
