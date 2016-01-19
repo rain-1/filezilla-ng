@@ -16,6 +16,7 @@ libfzputtycommon_win_a_SOURCES = wincons.c \
 libfzsftp_win_a_CFLAGS = $(COMMON_CFLAGS)
 
 libfzsftp_win_a_SOURCES = \
+		wincapi.c \
 		windefs.c \
                 winhandl.c \
 		winhsock.c \
@@ -28,7 +29,7 @@ libfzsftp_win_a_SOURCES = \
 		winshare.c \
 		wintime.c
 
-noinst_HEADERS = winsecur.h winstuff.h rcstuff.h
+noinst_HEADERS = wincapi.h winsecur.h winstuff.h rcstuff.h
 
 dist_noinst_DATA = psftp.rc version.rc2 pscp.ico windows_manifest.xml
 
