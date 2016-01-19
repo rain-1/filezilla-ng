@@ -2995,10 +2995,13 @@ static void usage(void)
     printf("  -C        enable compression\n");
     printf("  -i key    private key file for user authentication\n");
     printf("  -noagent  disable use of Pageant\n");
+    printf("  -agent    enable use of Pageant\n");
     printf("  -hostkey aa:bb:cc:...\n");
     printf("            manually specify a host key (may be repeated)\n");
-    printf("  -agent    enable use of Pageant\n");
     printf("  -batch    disable all interactive prompts\n");
+    printf("  -sshlog file\n");
+    printf("  -sshrawlog file\n");
+    printf("            log protocol details to a file\n");
     cleanup_exit(1);
 }
 

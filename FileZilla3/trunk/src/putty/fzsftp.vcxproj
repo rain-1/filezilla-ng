@@ -97,6 +97,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="be_misc.c" />
     <ClCompile Include="be_none.c" />
     <ClCompile Include="callback.c" />
     <ClCompile Include="cmdline.c" />
@@ -142,6 +143,7 @@
     <ClCompile Include="tree234.c" />
     <ClCompile Include="version.c" />
     <ClCompile Include="wildcard.c" />
+    <ClCompile Include="windows\wincapi.c" />
     <ClCompile Include="windows\wincons.c" />
     <ClCompile Include="windows\windefs.c" />
     <ClCompile Include="windows\winhandl.c" />
@@ -177,6 +179,7 @@
     <ClInclude Include="storage.h" />
     <ClInclude Include="tree234.h" />
     <ClInclude Include="windows\rcstuff.h" />
+    <ClInclude Include="windows\wincapi.h" />
     <ClInclude Include="windows\winsecur.h" />
     <ClInclude Include="windows\winstuff.h" />
   </ItemGroup>

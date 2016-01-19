@@ -481,6 +481,7 @@ void save_open_settings(void *sesskey, Conf *conf)
     write_setting_s(sesskey, "ProxyUsername", conf_get_str(conf, CONF_proxy_username));
     write_setting_s(sesskey, "ProxyPassword", conf_get_str(conf, CONF_proxy_password));
     write_setting_s(sesskey, "ProxyTelnetCommand", conf_get_str(conf, CONF_proxy_telnet_command));
+    write_setting_i(sesskey, "ProxyLogToTerm", conf_get_int(conf, CONF_proxy_log_to_term));
     */
     wmap(sesskey, "Environment", conf, CONF_environmt, TRUE);
     write_setting_s(sesskey, "UserName", conf_get_str(conf, CONF_username));
@@ -761,7 +762,8 @@ void load_open_settings(void *sesskey, Conf *conf, int load_proxy_settings)
     gpps(sesskey, "ProxyUsername", "", conf, CONF_proxy_username);
     gpps(sesskey, "ProxyPassword", "", conf, CONF_proxy_password);
     gpps(sesskey, "ProxyTelnetCommand", "connect %host %port\\n",
-         conf, CONF_proxy_telnet_command);
+	 conf, CONF_proxy_telnet_command);
+    gppi(sesskey, "ProxyLogToTerm", FORCE_OFF, conf, CONF_proxy_log_to_term);
     }
     gppmap(sesskey, "Environment", conf, CONF_environmt);
     gpps(sesskey, "UserName", "", conf, CONF_username);
