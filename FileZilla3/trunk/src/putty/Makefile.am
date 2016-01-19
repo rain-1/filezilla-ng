@@ -33,6 +33,7 @@ libfzputtycommon_a_SOURCES = \
 bin_PROGRAMS = fzsftp fzputtygen
 
 fzsftp_SOURCES = \
+		be_misc.c \
 		be_none.c \
 		callback.c \
 		cproxy.c \
