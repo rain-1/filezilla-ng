@@ -92,6 +92,10 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 		min.y = maxHeight;
 		min.x += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
 	}
+
+	// Add extra safety margin to prevent squishing on OS X.
+	min.x += 2;
+
 	subjectPanel->SetMinSize(min);
 	subjectPanel->Thaw();
 
