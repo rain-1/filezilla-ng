@@ -906,7 +906,7 @@ int CFtpControlSocket::LogonParseResponse()
 		++pData->opState;
 
 		if (pData->opState == LOGON_DONE) {
-			LogMessage(MessageType::Status, _("Connected"));
+			LogMessage(MessageType::Status, _("Logged in"));
 			ResetOperation(FZ_REPLY_OK);
 			LogMessage(MessageType::Debug_Info, _T("Measured latency of %d ms"), m_rtt.GetLatency());
 			return true;
