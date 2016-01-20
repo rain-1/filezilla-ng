@@ -51,55 +51,58 @@ void CContextControl::Create(wxWindow *parent)
 void CContextControl::CreateTab()
 {
 	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateTab"));
-#ifdef __WXMSW__
-	// Some reparenting is being done when creating tabs. Reparenting of frozen windows isn't working
-	// on OS X.
-	wxWindowUpdateLocker lock(this);
-#endif
 
-	CState* pState = 0;
+	{
+	#ifdef __WXMSW__
+		// Some reparenting is being done when creating tabs. Reparenting of frozen windows isn't working
+		// on OS X.
+		wxWindowUpdateLocker lock(this);
+	#endif
 
-	// See if we can reuse an existing context
-	for (size_t i = 0; i < m_context_controls.size(); i++) {
-		if (m_context_controls[i].tab_index != -1)
-			continue;
+		CState* pState = 0;
 
-		if (m_context_controls[i].pState->IsRemoteConnected() ||
-			!m_context_controls[i].pState->IsRemoteIdle())
-			continue;
+		// See if we can reuse an existing context
+		for (size_t i = 0; i < m_context_controls.size(); i++) {
+			if (m_context_controls[i].tab_index != -1)
+				continue;
 
-		pState = m_context_controls[i].pState;
-		m_context_controls.erase(m_context_controls.begin() + i);
-		if (m_current_context_controls > (int)i)
-			m_current_context_controls--;
-		break;
-	}
-	if (!pState) {
-		pState = CContextManager::Get()->CreateState(m_mainFrame);
-		if (!pState->CreateEngine()) {
-			wxMessageBoxEx(_("Failed to initialize FTP engine"));
+			if (m_context_controls[i].pState->IsRemoteConnected() ||
+				!m_context_controls[i].pState->IsRemoteIdle())
+				continue;
+
+			pState = m_context_controls[i].pState;
+			m_context_controls.erase(m_context_controls.begin() + i);
+			if (m_current_context_controls > (int)i)
+				m_current_context_controls--;
+			break;
 		}
-	}
-
-	// Restore last server and path
-	CServer last_server;
-	CServerPath last_path;
-	if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH)))
-		pState->SetLastServer(last_server, last_path);
-
-	CreateContextControls(pState);
-
-	pState->GetRecursiveOperationHandler()->SetQueue(m_mainFrame.GetQueue());
-
-	wxString const localDir = COptions::Get()->GetOption(OPTION_LASTLOCALDIR);
-	if (!pState->SetLocalDir(localDir)) {
-		wxString const homeDir = wxGetHomeDir();
-		if (!pState->SetLocalDir(homeDir)) {
-			pState->SetLocalDir(_T("/"));
+		if (!pState) {
+			pState = CContextManager::Get()->CreateState(m_mainFrame);
+			if (!pState->CreateEngine()) {
+				wxMessageBoxEx(_("Failed to initialize FTP engine"));
+			}
 		}
-	}
 
-	CContextManager::Get()->SetCurrentContext(pState);
+		// Restore last server and path
+		CServer last_server;
+		CServerPath last_path;
+		if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH)))
+			pState->SetLastServer(last_server, last_path);
+
+		CreateContextControls(pState);
+
+		pState->GetRecursiveOperationHandler()->SetQueue(m_mainFrame.GetQueue());
+
+		wxString const localDir = COptions::Get()->GetOption(OPTION_LASTLOCALDIR);
+		if (!pState->SetLocalDir(localDir)) {
+			wxString const homeDir = wxGetHomeDir();
+			if (!pState->SetLocalDir(homeDir)) {
+				pState->SetLocalDir(_T("/"));
+			}
+		}
+
+		CContextManager::Get()->SetCurrentContext(pState);
+	}
 
 	if (!m_mainFrame.RestoreSplitterPositions())
 		m_mainFrame.SetDefaultSplitterPositions();
