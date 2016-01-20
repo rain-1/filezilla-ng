@@ -164,8 +164,8 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 			if (!res && result) {
 				if (result->ai_family == AF_INET) {
 					ip = CSocket::AddressToString(result->ai_addr, result->ai_addrlen, false);
-					freeaddrinfo(result);
 				}
+				freeaddrinfo(result);
 			}
 
 			if (ip.empty()) {
