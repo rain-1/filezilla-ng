@@ -309,7 +309,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	// Remember which files are selected
 	bool *selected = 0;
 	int focused_item = -1;
-	int focused_index = -1;
+	unsigned int focused_index{};
 
 	if (updateSelections) {
 #ifndef __WXMSW__
@@ -376,9 +376,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	}
 }
 
-template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelections(bool* selections, int focused_item, int focused_index)
+template<class CFileData> void CFileListCtrl<CFileData>::SortList_UpdateSelections(bool* selections, int focused_item, unsigned int focused_index)
 {
-	if (focused_item != -1) {
+	if (focused_item >= 0) {
 		if (m_indexMapping[focused_item] != focused_index) {
 			SetItemState(focused_item, 0, wxLIST_STATE_FOCUSED);
 		}
