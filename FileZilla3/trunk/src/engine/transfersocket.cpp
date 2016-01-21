@@ -705,6 +705,8 @@ void CTransferSocket::OnIOThreadEvent()
 void CTransferSocket::FinalizeWrite()
 {
 	bool res = ioThread_->Finalize(BUFFERSIZE - m_transferBufferLen);
+	m_transferBufferLen = BUFFERSIZE;
+
 	if (m_transferEndReason != TransferEndReason::none)
 		return;
 

@@ -210,6 +210,9 @@ bool CIOThread::Finalize(int len)
 			return false;
 	}
 #endif
+
+	m_curAppBuf = -1;
+
 	return true;
 }
 
