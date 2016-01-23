@@ -1,14 +1,14 @@
 # Norwegian bokmål translation of FileZilla
-# Copyright (C) 2015 Tim Kosse
+# Copyright (C) 2016 Tim Kosse
 # This file is distributed under the same license as the filezilla package.
-# Åka Sikrom <a4 æt hush dåt com>, 2015.
+# Åka Sikrom <a4 æt hush dåt com>, 2015-2016.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-13 13:13+0100\n"
-"PO-Revision-Date: 2015-12-16 07:38+0100\n"
+"POT-Creation-Date: 2016-01-23 18:33+0100\n"
+"PO-Revision-Date: 2016-01-14 08:41+0100\n"
 "Last-Translator: Åka Sikrom <a4 æt hush dåt com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -1754,7 +1754,7 @@ msgstr "Byggedato:"
 msgid "Build information"
 msgstr "Byggeinformasjon"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:241
+#: ../../locales/../src/interface/verifycertdialog.cpp:245
 msgid "Business category:"
 msgstr "Firmakategori:"
 
@@ -1803,12 +1803,12 @@ msgid "Can't read from file"
 msgstr "Klarte ikke å lese fra fil"
 
 #: ../../locales/../src/engine/transfersocket.cpp:650
-#: ../../locales/../src/engine/transfersocket.cpp:716
+#: ../../locales/../src/engine/transfersocket.cpp:718
 msgid "Can't write data to file."
 msgstr "Klarte ikke å skrive data til fil."
 
 #: ../../locales/../src/engine/transfersocket.cpp:652
-#: ../../locales/../src/engine/transfersocket.cpp:718
+#: ../../locales/../src/engine/transfersocket.cpp:720
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Klarte ikke å skrive data til fil: %s"
@@ -1860,7 +1860,7 @@ msgstr "Klarte ikke å legge til tjeneren i tjeneroppsettet"
 msgid "Cannot assign requested address"
 msgstr "Klarte ikke å tildele forespurt adresse"
 
-#: ../../locales/../src/interface/context_control.cpp:349
+#: ../../locales/../src/interface/context_control.cpp:352
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -2191,7 +2191,7 @@ msgstr "Kommando:"
 msgid "Comment"
 msgstr "Kommentar"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:239
+#: ../../locales/../src/interface/verifycertdialog.cpp:243
 msgid "Common name:"
 msgstr "Navn:"
 
@@ -2285,9 +2285,9 @@ msgid "Connect bypassing proxy settings"
 msgstr "Koble til uten å bruke mellomtjener-oppsett"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Connect failed: %s"
-msgstr "Etterspørsel av mellomtjener mislyktes. %s"
+msgstr "Tilkobling mislyktes. %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1383
 msgid "Connect in current tab"
@@ -2300,10 +2300,6 @@ msgstr "Koble til i ny fane"
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
 msgstr "Koble til valgt tjener fra Tjeneroppsett"
-
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
-msgid "Connected"
-msgstr "Tilkoblet"
 
 #: ../../locales/../src/interface/queue.cpp:332
 msgid "Connecting"
@@ -2379,9 +2375,8 @@ msgid "Connection established, sending HTTP request"
 msgstr "Tilkoblet. Sender HTTP-forespørsel"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:333
-#, fuzzy
 msgid "Connection established, waiting for welcome message."
-msgstr "Tilkoblet. Venter på velkomstmelding …"
+msgstr "Tilkoblet. Venter på velkomstmelding."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
 msgid "Connection established, waiting for welcome message..."
@@ -2576,9 +2571,9 @@ msgstr ""
 "Klarte ikke å importere sertifikater. «gnutls_x509_crt_import» mislyktes"
 
 #: ../../locales/../src/interface/FileZilla.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Could not initialize Winsock (%d): %s"
-msgstr "Klarte ikke å skrive til sokkel: %s"
+msgstr "Klarte ikke å starte Winsock (%d). %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:876
 msgid ""
@@ -2661,9 +2656,8 @@ msgid "Could not parse server address:"
 msgstr "Ugyldig tolkning av tjeneradresse:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:977
-#, fuzzy
 msgid "Could not read from data socket."
-msgstr "Klarte ikke å lese fra sokkel: %s"
+msgstr "Klarte ikke å lese fra datasokkel."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
 #, c-format
@@ -2675,9 +2669,8 @@ msgid "Could not read server item."
 msgstr "Klarte ikke å lese tjenerobjekt."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:344
-#, fuzzy
 msgid "Could not receive data from server."
-msgstr "Klarte ikke å koble til tjeneren"
+msgstr "Klarte ikke å motta data fra tjeneren."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
 #, c-format
@@ -2767,7 +2760,7 @@ msgstr "Klarte ikke å skrive til loggfil: %s"
 msgid "Could not write to socket: %s"
 msgstr "Klarte ikke å skrive til sokkel: %s"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:244
+#: ../../locales/../src/interface/verifycertdialog.cpp:248
 msgid "Country:"
 msgstr "Land:"
 
@@ -3347,7 +3340,7 @@ msgstr "&Avslutt"
 msgid "E&xport..."
 msgstr "&Eksporter …"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:250
+#: ../../locales/../src/interface/verifycertdialog.cpp:254
 msgid "E-Mail:"
 msgstr "E-post:"
 
@@ -3400,9 +3393,8 @@ msgstr "Tom mappe."
 
 #: ../../locales/../src/interface/recursive_operation.cpp:377
 #: ../../locales/../src/interface/recursive_operation.cpp:412
-#, fuzzy
 msgid "Empty dirs to visit"
-msgstr "Tom mappeliste"
+msgstr "Tomme mapper å besøke"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:52
 msgid "Empty file extension."
@@ -3740,7 +3732,7 @@ msgstr "Fant ikke maskinadressen for kontrolltilkobling. Tilkobling lukket."
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "Fant ikke maskinadressen for datakobling. Tilkobling lukket."
 
-#: ../../locales/../src/interface/context_control.cpp:80
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "Feil ved innlasting av FTP-motoren."
 
@@ -3751,9 +3743,8 @@ msgid "Failed to initialize TLS."
 msgstr "Feil ved initialisering av TLS."
 
 #: ../../locales/../src/interface/FileZilla.cpp:109
-#, fuzzy
 msgid "Failed to initialize networking"
-msgstr "Feil ved innlasting av FTP-motoren."
+msgstr "Klarte ikke å starte nettverksfunksjoner."
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:146
 msgid "Failed to load panels, invalid resource files?"
@@ -4587,7 +4578,7 @@ msgstr ""
 msgid "Initializing TLS..."
 msgstr "Laster inn TLS …"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:107
+#: ../../locales/../src/interface/verifycertdialog.cpp:111
 msgid "Insecure algorithm!"
 msgstr "Usikker algoritme!"
 
@@ -4738,15 +4729,15 @@ msgstr "«ai_flags» har ugyldig verdi"
 msgid "Invalid value for hints"
 msgstr "Ugyldig hintverdi"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:252
+#: ../../locales/../src/interface/verifycertdialog.cpp:256
 msgid "Jurisdiction country:"
 msgstr "Jurisdiksjonsland:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:254
+#: ../../locales/../src/interface/verifycertdialog.cpp:258
 msgid "Jurisdiction locality:"
 msgstr "Jurisdiksjonslokalitet:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:253
+#: ../../locales/../src/interface/verifycertdialog.cpp:257
 msgid "Jurisdiction state or province:"
 msgstr "Jurisdiksjonsstat eller provins:"
 
@@ -4889,13 +4880,18 @@ msgstr "Lokale filter:"
 msgid "Local site:"
 msgstr "Lokal maskin:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:246
+#: ../../locales/../src/interface/verifycertdialog.cpp:250
 msgid "Locality:"
 msgstr "Lokalitet:"
 
 #: ../../locales/../src/interface/settings/optionspage_logging.cpp:97
 msgid "Log file"
 msgstr "Loggfil"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
+#, fuzzy
+msgid "Logged in"
+msgstr "Loggføring"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2111
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
@@ -5447,7 +5443,7 @@ msgstr "Handling pågår"
 msgid "Operation not supported"
 msgstr "Denne handlinga støttes ikke"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:240
+#: ../../locales/../src/interface/verifycertdialog.cpp:244
 msgid "Organization:"
 msgstr "Organisasjon:"
 
@@ -5459,7 +5455,7 @@ msgstr "Andre SFTP-valg"
 msgid "Other system error"
 msgstr "Annen systemfeil"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:262
+#: ../../locales/../src/interface/verifycertdialog.cpp:266
 msgid "Other:"
 msgstr "Annet:"
 
@@ -5914,8 +5910,8 @@ msgstr ""
 msgid "Positio&n of the message log:"
 msgstr "Plassering av meldingslogg:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:247
-#: ../../locales/../src/interface/verifycertdialog.cpp:248
+#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:252
 msgid "Postal code:"
 msgstr "Postnummer:"
 
@@ -6752,7 +6748,7 @@ msgid "Sending keep-alive command"
 msgstr "Be FTP-tjener om å holde forbindelsen («keep-alive»)"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:65
-#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:255
 msgid "Serial number:"
 msgstr "Serienummer:"
 
@@ -6881,7 +6877,7 @@ msgstr "Velg &prioritet"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Bruk «%2$s» som tillatelsesoppsett for «%1$s»"
 
-#: ../../locales/../src/engine/transfersocket.cpp:791
+#: ../../locales/../src/engine/transfersocket.cpp:793
 msgid "SetSocketBufferSize called without socket"
 msgstr "«SetSocketBufferSize» sendte et kall uten sokkel"
 
@@ -7155,7 +7151,7 @@ msgstr "Starter opplasting av %s"
 msgid "Starts the local site in the given path"
 msgstr "Starter lokal filliste på valgt sti"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:245
+#: ../../locales/../src/interface/verifycertdialog.cpp:249
 msgid "State or province:"
 msgstr "Stat eller provins:"
 
@@ -7178,7 +7174,7 @@ msgstr "Stopp og fjern &alle"
 msgid "Stop recursive operation"
 msgstr "Stopp rekursiv handling"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:249
+#: ../../locales/../src/interface/verifycertdialog.cpp:253
 msgid "Street:"
 msgstr "Gate:"
 
@@ -7768,7 +7764,7 @@ msgstr "Tidsavbrudd"
 msgid "Timezone offset of server is %d seconds."
 msgstr "Tidssone-forskyvning av tjenertid er %d sekunder."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:243
+#: ../../locales/../src/interface/verifycertdialog.cpp:247
 msgid "Title:"
 msgstr "Tittel"
 
@@ -7976,7 +7972,7 @@ msgstr "BRUKER@&VERT"
 msgid "Unassigned error code %d"
 msgstr "Ikke tilordnet feilkode %d"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:242
+#: ../../locales/../src/interface/verifycertdialog.cpp:246
 msgid "Unit:"
 msgstr "Enhet:"
 
@@ -8654,6 +8650,9 @@ msgstr "overskrivbar for alle"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Connected"
+#~ msgstr "Tilkoblet"
 
 #~ msgid "Deleting directories"
 #~ msgstr "Sletter mapper"
