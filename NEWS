@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.15.0-rc1 (2016-01-23)
+
+- Fix regression from 3.16.0-beta1 where extra data being appended to some downloaded files
+- Fix setting initial pane sizes when creating new tabs
+- OS X: Fix display of issuer and subject details in certificate verification dialog
+- Updated SFTP components from PuTTY
+- Official binaries now link against GnuTLS 3.4.8
+- Official binaries now link against SQLite 3.10.2
+
 3.15.0-beta1 (2016-01-13)
 
 + Building FileZilla now depends on libfilezilla 0.3.0 (https://lib.filezilla-project.org/).
