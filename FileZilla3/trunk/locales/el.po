@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: FileZilla Client 3.14.1\n"
+"Project-Id-Version: FileZilla Client 3.15.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-13 13:13+0100\n"
-"PO-Revision-Date: 2016-01-04 11:00+0200\n"
+"POT-Creation-Date: 2016-01-23 18:33+0100\n"
+"PO-Revision-Date: 2016-01-21 15:21+0200\n"
 "Last-Translator: Ydatografida <ydatografida@gmail.com>\n"
 "Language-Team: Stamatis H. Stamatellos <ydatografida@gmail.com>\n"
 "Language: el_GR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.8.6\n"
+"X-Generator: Poedit 1.8.4\n"
 
 #. @translator: This is a date/time formatting specifier. See https://wiki.filezilla-project.org/Date_and_Time_formatting
 #: ../../locales/../src/interface/statuslinectrl.cpp:56
@@ -1777,7 +1777,7 @@ msgstr "Ημερομηνία κατασκευής:"
 msgid "Build information"
 msgstr "Πληροφορίες κατασκευής"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:241
+#: ../../locales/../src/interface/verifycertdialog.cpp:245
 msgid "Business category:"
 msgstr "Κατηγορία επιχείρισης:"
 
@@ -1827,12 +1827,12 @@ msgid "Can't read from file"
 msgstr "Αδύνατη η ανάγνωση από το αρχείο"
 
 #: ../../locales/../src/engine/transfersocket.cpp:650
-#: ../../locales/../src/engine/transfersocket.cpp:716
+#: ../../locales/../src/engine/transfersocket.cpp:718
 msgid "Can't write data to file."
 msgstr "Αδύνατη η εγγραφή δεδομένων στο αρχείο."
 
 #: ../../locales/../src/engine/transfersocket.cpp:652
-#: ../../locales/../src/engine/transfersocket.cpp:718
+#: ../../locales/../src/engine/transfersocket.cpp:720
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Αδύνατη η εγγραφή δεδομένων στο αρχείο: %s"
@@ -1883,7 +1883,7 @@ msgstr "Αδυναμία προσθήκης του εξυπηρετητή στο
 msgid "Cannot assign requested address"
 msgstr "Αδυναμία αντιστοίχισης αιτούμενης διεύθυνσης"
 
-#: ../../locales/../src/interface/context_control.cpp:349
+#: ../../locales/../src/interface/context_control.cpp:352
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -2217,7 +2217,7 @@ msgstr "Εντολή:"
 msgid "Comment"
 msgstr "Σχόλιο"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:239
+#: ../../locales/../src/interface/verifycertdialog.cpp:243
 msgid "Common name:"
 msgstr "Σύνηθες όνομα:"
 
@@ -2313,9 +2313,9 @@ msgid "Connect bypassing proxy settings"
 msgstr "Η σύνδεση προσπέρασε τις ρυθμίσεις του διαμεσολαβητή"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Connect failed: %s"
-msgstr "Απέτυχε το αίτημα του διαμεσολαβητή: %s"
+msgstr "Απέτυχε η σύνδεση με: %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1383
 msgid "Connect in current tab"
@@ -2328,10 +2328,6 @@ msgstr "Σύνδεση σε νέα καρτέλα"
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
 msgstr "Σύνδεση σε καθορισμένη τοποθεσία του διαχειριστή δικτυακού τόπου"
-
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
-msgid "Connected"
-msgstr "Συνδεδεμένος"
 
 #: ../../locales/../src/interface/queue.cpp:332
 msgid "Connecting"
@@ -2408,9 +2404,8 @@ msgid "Connection established, sending HTTP request"
 msgstr "Σύνδεση εδραιώθηκε, αποστολή HTTP αιτήματος"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:333
-#, fuzzy
 msgid "Connection established, waiting for welcome message."
-msgstr "Σύνδεση εδραιώθηκε, αναμονή για μήνυμα υποδοχής..."
+msgstr "Σύνδεση εδραιώθηκε, αναμονή για μήνυμα υποδοχής."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
 msgid "Connection established, waiting for welcome message..."
@@ -2608,9 +2603,9 @@ msgstr ""
 "Αδυναμία εισαγωγής ομότιμων πιστοποιητικών, απέτυχε gnutls_x509_crt_import"
 
 #: ../../locales/../src/interface/FileZilla.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Could not initialize Winsock (%d): %s"
-msgstr "Αδυναμία εγγραφής στην υποδοχή: %s"
+msgstr "Δεν ήταν δυνατή η προετοιμασία του Winsock (%d): %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:876
 msgid ""
@@ -2696,9 +2691,8 @@ msgid "Could not parse server address:"
 msgstr "Αδυναμία ανάλυσης της διεύθυνσης του εξυπηρετητή:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:977
-#, fuzzy
 msgid "Could not read from data socket."
-msgstr "Αδυναμία ανάγνωσης από την υποδοχή: %s"
+msgstr "Αδυναμία ανάγνωσης δεδομένων υποδοχής."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
 #, c-format
@@ -2710,9 +2704,8 @@ msgid "Could not read server item."
 msgstr "Αδυναμία ανάγνωσης αντικειμένου εξυπηρετητή."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:344
-#, fuzzy
 msgid "Could not receive data from server."
-msgstr "Αδύνατη η σύνδεση στον εξυπηρετητή"
+msgstr "Δεν ήταν δυνατή η λήψη δεδομένων από το διακομιστή."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
 #, c-format
@@ -2806,7 +2799,7 @@ msgstr "Αδυναμία εγγραφής στο αρχείο συμβάντων
 msgid "Could not write to socket: %s"
 msgstr "Αδυναμία εγγραφής στην υποδοχή: %s"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:244
+#: ../../locales/../src/interface/verifycertdialog.cpp:248
 msgid "Country:"
 msgstr "Χώρα:"
 
@@ -3395,7 +3388,7 @@ msgstr "Έ&ξοδος"
 msgid "E&xport..."
 msgstr "E&ξαγωγή..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:250
+#: ../../locales/../src/interface/verifycertdialog.cpp:254
 msgid "E-Mail:"
 msgstr "E-Mail:"
 
@@ -3793,7 +3786,7 @@ msgstr ""
 "Αποτυχία λήψης ομότιμης διεύθυνσης από τα δεδομένα σύνδεσης, η σύνδεση "
 "έκλεισε."
 
-#: ../../locales/../src/interface/context_control.cpp:80
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "Αποτυχία αρχικοποίησης της μηχανής FTP"
 
@@ -3804,9 +3797,8 @@ msgid "Failed to initialize TLS."
 msgstr "Αποτυχία αρχικοποίησης του TLS."
 
 #: ../../locales/../src/interface/FileZilla.cpp:109
-#, fuzzy
 msgid "Failed to initialize networking"
-msgstr "Αποτυχία αρχικοποίησης της μηχανής FTP"
+msgstr "Απέτυχε η προετοιμασία δικτύωσης"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:146
 msgid "Failed to load panels, invalid resource files?"
@@ -4673,7 +4665,7 @@ msgstr ""
 msgid "Initializing TLS..."
 msgstr "Αρχικοποίηση TLS..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:107
+#: ../../locales/../src/interface/verifycertdialog.cpp:111
 msgid "Insecure algorithm!"
 msgstr "Επισφαλής αλγόριθμος!"
 
@@ -4825,15 +4817,15 @@ msgstr "Μη έγκυρη τιμή για ai_flags"
 msgid "Invalid value for hints"
 msgstr "Μη έγκυρη τιμή για περιηγήσεις"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:252
+#: ../../locales/../src/interface/verifycertdialog.cpp:256
 msgid "Jurisdiction country:"
 msgstr "Κράτος δραστηριοποίησης:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:254
+#: ../../locales/../src/interface/verifycertdialog.cpp:258
 msgid "Jurisdiction locality:"
 msgstr "Περιοχή δραστηριοποίησης:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:253
+#: ../../locales/../src/interface/verifycertdialog.cpp:257
 msgid "Jurisdiction state or province:"
 msgstr "Περιφέρεια ή νομαρχία δραστηριοποίησης:"
 
@@ -4976,13 +4968,17 @@ msgstr "Τοπικά φίλτρα:"
 msgid "Local site:"
 msgstr "Τοπική τοποθεσία:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:246
+#: ../../locales/../src/interface/verifycertdialog.cpp:250
 msgid "Locality:"
 msgstr "Τοποθεσία:"
 
 #: ../../locales/../src/interface/settings/optionspage_logging.cpp:97
 msgid "Log file"
 msgstr "Αρχείο Συμβάντων"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
+msgid "Logged in"
+msgstr "Σε σύνδεση"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2111
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
@@ -5551,7 +5547,7 @@ msgstr "Λειτουργία σε εξέλιξη"
 msgid "Operation not supported"
 msgstr "Η λειτουργία δεν υποστηρίζεται"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:240
+#: ../../locales/../src/interface/verifycertdialog.cpp:244
 msgid "Organization:"
 msgstr "Οργανισμός:"
 
@@ -5563,7 +5559,7 @@ msgstr "Άλλες SFTP επιλογές"
 msgid "Other system error"
 msgstr "Άλλο σφάλμα συστήματος"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:262
+#: ../../locales/../src/interface/verifycertdialog.cpp:266
 msgid "Other:"
 msgstr "Άλλα:"
 
@@ -6043,8 +6039,8 @@ msgstr ""
 msgid "Positio&n of the message log:"
 msgstr "Θέ&ση του αρχείου συμβάντων:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:247
-#: ../../locales/../src/interface/verifycertdialog.cpp:248
+#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:252
 msgid "Postal code:"
 msgstr "Ταχυδρομικός κωδικός:"
 
@@ -6898,7 +6894,7 @@ msgid "Sending keep-alive command"
 msgstr "Αποστολή εντολής διατήρησης ενεργού"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:65
-#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:255
 msgid "Serial number:"
 msgstr "Σειριακός Αριθμός:"
 
@@ -7027,7 +7023,7 @@ msgstr "Ορισμός &Προτεραιότητας"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Ορισμός δικαιωμάτων του '%s' στο '%s'"
 
-#: ../../locales/../src/engine/transfersocket.cpp:791
+#: ../../locales/../src/engine/transfersocket.cpp:793
 msgid "SetSocketBufferSize called without socket"
 msgstr "SetSocketBufferSize κλήθηκε χωρίς όνομα υποδοχής"
 
@@ -7306,7 +7302,7 @@ msgstr "Εκκίνηση αποστολής του %s"
 msgid "Starts the local site in the given path"
 msgstr "Εκκίνηση τοπικής τοποθεσίας στη δεδομένη διαδρομή"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:245
+#: ../../locales/../src/interface/verifycertdialog.cpp:249
 msgid "State or province:"
 msgstr "Περιφέρεια ή νομαρχία:"
 
@@ -7329,7 +7325,7 @@ msgstr "Διακοπή και απομάκρυνση &όλων"
 msgid "Stop recursive operation"
 msgstr "Διακοπή Αναδρομικής Λειτουργίας"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:249
+#: ../../locales/../src/interface/verifycertdialog.cpp:253
 msgid "Street:"
 msgstr "Οδός:"
 
@@ -7935,7 +7931,7 @@ msgstr "Διακοπή"
 msgid "Timezone offset of server is %d seconds."
 msgstr "Η απόκλιση της ζώνης ώρας του διακομιστή είναι %d δευτερόλεπτα."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:243
+#: ../../locales/../src/interface/verifycertdialog.cpp:247
 msgid "Title:"
 msgstr "Τίτλος:"
 
@@ -8149,7 +8145,7 @@ msgstr "ΧΡΗΣΤΗΣ@&ΚΟΜΒΟΣ"
 msgid "Unassigned error code %d"
 msgstr "Απροσδιόριστος ο κωδικός σφάλματος %d"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:242
+#: ../../locales/../src/interface/verifycertdialog.cpp:246
 msgid "Unit:"
 msgstr "Μονάδα:"
 
@@ -8852,6 +8848,9 @@ msgstr "δημόσια εγγράψιμο"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Connected"
+#~ msgstr "Συνδεδεμένος"
 
 #~ msgid "Deleting directories"
 #~ msgstr "Διαγραφή φακέλων"

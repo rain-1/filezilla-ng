@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Filezilla italian translation 06.01.2016\n"
+"Project-Id-Version: Filezilla italian translation 22.01.2016\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-13 13:13+0100\n"
-"PO-Revision-Date: 2016-01-06 08:24+0100\n"
+"POT-Creation-Date: 2016-01-23 18:33+0100\n"
+"PO-Revision-Date: 2016-01-22 09:58+0100\n"
 "Last-Translator: bovirus <@bovirus@gmail.com>\n"
 "Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
 "<www.filezilla-project.it>\n"
@@ -1774,7 +1774,7 @@ msgstr "Data di creazione:"
 msgid "Build information"
 msgstr "Informazioni versione"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:241
+#: ../../locales/../src/interface/verifycertdialog.cpp:245
 msgid "Business category:"
 msgstr "Categoria business:"
 
@@ -1824,12 +1824,12 @@ msgid "Can't read from file"
 msgstr "Non si riesce a leggere il file"
 
 #: ../../locales/../src/engine/transfersocket.cpp:650
-#: ../../locales/../src/engine/transfersocket.cpp:716
+#: ../../locales/../src/engine/transfersocket.cpp:718
 msgid "Can't write data to file."
 msgstr "Non si riesce a scrivere nel file."
 
 #: ../../locales/../src/engine/transfersocket.cpp:652
-#: ../../locales/../src/engine/transfersocket.cpp:718
+#: ../../locales/../src/engine/transfersocket.cpp:720
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Impossibile scrivere nel file: %s"
@@ -1881,7 +1881,7 @@ msgstr "Impossibile aggiungere server al Gestore siti"
 msgid "Cannot assign requested address"
 msgstr "Impossibile assegnare indirizzo richiesto"
 
-#: ../../locales/../src/interface/context_control.cpp:349
+#: ../../locales/../src/interface/context_control.cpp:352
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -2212,7 +2212,7 @@ msgstr "Comando:"
 msgid "Comment"
 msgstr "Commento"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:239
+#: ../../locales/../src/interface/verifycertdialog.cpp:243
 msgid "Common name:"
 msgstr "Nome comune:"
 
@@ -2306,9 +2306,9 @@ msgid "Connect bypassing proxy settings"
 msgstr "Connetti ignorando le impostazioni proxy"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Connect failed: %s"
-msgstr "Richiesta proxy non riuscita: %s"
+msgstr "Connessione fallita: %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1383
 msgid "Connect in current tab"
@@ -2321,10 +2321,6 @@ msgstr "Connetti in una nuova scheda"
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
 msgstr "Connetti al sito specificato nel Gestore siti"
-
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
-msgid "Connected"
-msgstr "Connesso"
 
 #: ../../locales/../src/interface/queue.cpp:332
 msgid "Connecting"
@@ -2402,9 +2398,8 @@ msgid "Connection established, sending HTTP request"
 msgstr "Connessione stabilita, invio richiesta HTTP"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:333
-#, fuzzy
 msgid "Connection established, waiting for welcome message."
-msgstr "Connessione stabilita, in attesa del messaggio di benvenuto..."
+msgstr "Connessione stabilita. In attesa del messaggio di benvenuto."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
 msgid "Connection established, waiting for welcome message..."
@@ -2604,9 +2599,9 @@ msgstr ""
 "fallito"
 
 #: ../../locales/../src/interface/FileZilla.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Could not initialize Winsock (%d): %s"
-msgstr "Impossibile scrivere nel socket: %s"
+msgstr "Imposssibili inizializzare Winsock (%d): %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:876
 msgid ""
@@ -2691,9 +2686,8 @@ msgid "Could not parse server address:"
 msgstr "Impossibile analizzare l'indirizzo del server:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:977
-#, fuzzy
 msgid "Could not read from data socket."
-msgstr "Impossibile leggere dal socket: %s"
+msgstr "Impossibile leggere dal socket dati."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
 #, c-format
@@ -2705,9 +2699,8 @@ msgid "Could not read server item."
 msgstr "Impossibile leggere l'elemento del server."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:344
-#, fuzzy
 msgid "Could not receive data from server."
-msgstr "Impossibile collegarsi al server"
+msgstr "Impossibile ricevere dati dal server."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
 #, c-format
@@ -2800,7 +2793,7 @@ msgstr "Impossibile scrivere nel file log: %s"
 msgid "Could not write to socket: %s"
 msgstr "Impossibile scrivere nel socket: %s"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:244
+#: ../../locales/../src/interface/verifycertdialog.cpp:248
 msgid "Country:"
 msgstr "Nazione:"
 
@@ -3385,7 +3378,7 @@ msgstr "&Esci"
 msgid "E&xport..."
 msgstr "E&sporta..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:250
+#: ../../locales/../src/interface/verifycertdialog.cpp:254
 msgid "E-Mail:"
 msgstr "Email:"
 
@@ -3785,7 +3778,7 @@ msgstr ""
 "Non è stato possibile recuperare l'indirizzo esterno della connessione dati, "
 "connessione terminata."
 
-#: ../../locales/../src/interface/context_control.cpp:80
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "Non è stato possibile avviare il motore FTP"
 
@@ -3796,9 +3789,8 @@ msgid "Failed to initialize TLS."
 msgstr "Non è stato possibile inizializzare TLS."
 
 #: ../../locales/../src/interface/FileZilla.cpp:109
-#, fuzzy
 msgid "Failed to initialize networking"
-msgstr "Non è stato possibile avviare il motore FTP"
+msgstr "Impossibile inizializzare la rete"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:146
 msgid "Failed to load panels, invalid resource files?"
@@ -4660,7 +4652,7 @@ msgstr ""
 msgid "Initializing TLS..."
 msgstr "Inizializzazione TLS in corso..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:107
+#: ../../locales/../src/interface/verifycertdialog.cpp:111
 msgid "Insecure algorithm!"
 msgstr "Algoritmo non sicuro!"
 
@@ -4813,15 +4805,15 @@ msgstr "Valore non valido per ai_flags"
 msgid "Invalid value for hints"
 msgstr "Valore non valido per i suggerimenti"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:252
+#: ../../locales/../src/interface/verifycertdialog.cpp:256
 msgid "Jurisdiction country:"
 msgstr "Nazione giurisdizione:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:254
+#: ../../locales/../src/interface/verifycertdialog.cpp:258
 msgid "Jurisdiction locality:"
 msgstr "Località giurisdizione:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:253
+#: ../../locales/../src/interface/verifycertdialog.cpp:257
 msgid "Jurisdiction state or province:"
 msgstr "Provincia giurisdizione:"
 
@@ -4964,13 +4956,17 @@ msgstr "Filtri locali:"
 msgid "Local site:"
 msgstr "Sito locale:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:246
+#: ../../locales/../src/interface/verifycertdialog.cpp:250
 msgid "Locality:"
 msgstr "Località:"
 
 #: ../../locales/../src/interface/settings/optionspage_logging.cpp:97
 msgid "Log file"
 msgstr "File log"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
+msgid "Logged in"
+msgstr "Accesso effettuato"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2111
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
@@ -5532,7 +5528,7 @@ msgstr "Operazione in corso"
 msgid "Operation not supported"
 msgstr "Operazione non supportata"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:240
+#: ../../locales/../src/interface/verifycertdialog.cpp:244
 msgid "Organization:"
 msgstr "Organizzazione:"
 
@@ -5544,7 +5540,7 @@ msgstr "Altre opzioni SFTP"
 msgid "Other system error"
 msgstr "Altre errore di sistema"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:262
+#: ../../locales/../src/interface/verifycertdialog.cpp:266
 msgid "Other:"
 msgstr "Altro:"
 
@@ -6003,8 +5999,8 @@ msgstr ""
 msgid "Positio&n of the message log:"
 msgstr "Posizio&ne del registro messaggi:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:247
-#: ../../locales/../src/interface/verifycertdialog.cpp:248
+#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:252
 msgid "Postal code:"
 msgstr "CAP:"
 
@@ -6845,7 +6841,7 @@ msgid "Sending keep-alive command"
 msgstr "Invia comando per mantenere connessione attiva"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:65
-#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:255
 msgid "Serial number:"
 msgstr "Numero seriale:"
 
@@ -6974,7 +6970,7 @@ msgstr "Imposta &priorità"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Imposta permessi di '%s' a '%s'"
 
-#: ../../locales/../src/engine/transfersocket.cpp:791
+#: ../../locales/../src/engine/transfersocket.cpp:793
 msgid "SetSocketBufferSize called without socket"
 msgstr "Chiamata SetSocketBufferSize senza socket"
 
@@ -7253,7 +7249,7 @@ msgstr "Avvio upload di %s"
 msgid "Starts the local site in the given path"
 msgstr "Avvia il sito locale nel percorso indicato"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:245
+#: ../../locales/../src/interface/verifycertdialog.cpp:249
 msgid "State or province:"
 msgstr "Provincia:"
 
@@ -7276,7 +7272,7 @@ msgstr "Ferm&a e rimuovi tutto"
 msgid "Stop recursive operation"
 msgstr "Ferma operazioni ricorsive"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:249
+#: ../../locales/../src/interface/verifycertdialog.cpp:253
 msgid "Street:"
 msgstr "Via:"
 
@@ -7873,7 +7869,7 @@ msgstr "Timeout"
 msgid "Timezone offset of server is %d seconds."
 msgstr "L'offset fuso orario server è di %d secondi."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:243
+#: ../../locales/../src/interface/verifycertdialog.cpp:247
 msgid "Title:"
 msgstr "Titolo:"
 
@@ -8090,7 +8086,7 @@ msgstr "USER@&HOST"
 msgid "Unassigned error code %d"
 msgstr "Codice errore non assegnato %d"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:242
+#: ../../locales/../src/interface/verifycertdialog.cpp:246
 msgid "Unit:"
 msgstr "Unità:"
 
@@ -8776,6 +8772,9 @@ msgstr "scrivibile per gli altri"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Connected"
+#~ msgstr "Connesso"
 
 #~ msgid "Deleting directories"
 #~ msgstr "Eliminazione cartelle"
