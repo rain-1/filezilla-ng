@@ -2,6 +2,13 @@ dnl Checks whether we need to pass -std=libc++ to CXXFLAGS. Sadly this is needed
 dnl which for some insane reason defaults to an ancient stdlibc++ :(
 dnl To check for this, we try to use std::forward from <utility>
 
+dnl Copyright (c) 2015-2016 Tim Kosse <tim.kosse@filezilla-project.org>
+
+dnl Copying and distribution of this file, with or without modification, are
+dnl permitted in any medium without royalty provided the copyright notice
+dnl and this notice are preserved. This file is offered as-is, without any
+dnl warranty.
+
 AC_DEFUN([CHECK_LIBCXX], [
 
   AC_LANG_PUSH(C++)
