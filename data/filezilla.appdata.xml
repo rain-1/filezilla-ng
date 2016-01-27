@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Ryan Lerch <rlerch@redhat.com> -->
-<!-- Copyright 2015 Tim Kosse <tim.kosse@filezilla-project.org> -->
+<!-- Copyright 2016 Tim Kosse <tim.kosse@filezilla-project.org> -->
 <application>
   <id type="desktop">filezilla.desktop</id>
   <metadata_license>CC0-1.0</metadata_license>
