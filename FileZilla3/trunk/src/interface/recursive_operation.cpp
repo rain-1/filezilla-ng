@@ -374,7 +374,7 @@ void CRecursiveOperation::ListingFailed(int error)
 	}
 
 	auto & root = recursion_roots_.front();
-	wxCHECK_RET(!root.m_dirsToVisit.empty(), _("Empty dirs to visit"));
+	wxCHECK_RET(!root.m_dirsToVisit.empty(), _T("Empty dirs to visit"));
 
 	recursion_root::new_dir dir = root.m_dirsToVisit.front();
 	root.m_dirsToVisit.pop_front();
@@ -409,7 +409,7 @@ void CRecursiveOperation::LinkIsNotDir()
 		return;
 
 	auto & root = recursion_roots_.front();
-	wxCHECK_RET(!root.m_dirsToVisit.empty(), _("Empty dirs to visit"));
+	wxCHECK_RET(!root.m_dirsToVisit.empty(), _T("Empty dirs to visit"));
 
 	recursion_root::new_dir dir = root.m_dirsToVisit.front();
 	root.m_dirsToVisit.pop_front();
