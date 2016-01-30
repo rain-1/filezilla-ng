@@ -2938,7 +2938,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 
 #if WITH_LIBDBUS
 		if (!m_desktop_notification)
-			m_desktop_notification = std::make_unique<CDesktopNotification>;
+			m_desktop_notification = std::make_unique<CDesktopNotification>();
 		m_desktop_notification->Notify(title, msg, (failed_count > 0) ? _T("transfer.error") : _T("transfer.complete"));
 #elif defined(__WXGTK__) || defined(__WXMSW__)
 		m_desktop_notification = std::make_unique<wxNotificationMessage>();
