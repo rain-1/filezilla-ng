@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Русский перевод\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-13 13:13+0100\n"
-"PO-Revision-Date: 2015-11-16 20:53+0600\n"
+"POT-Creation-Date: 2016-01-30 15:29+0100\n"
+"PO-Revision-Date: 2016-01-25 11:31+0600\n"
 "Last-Translator: Pavel Starosek <starosekpd@gmail.com>\n"
 "Language-Team: Oleg Koptev\n"
 "Language: ru\n"
@@ -91,7 +91,7 @@ msgstr[0] "%d файл. Общий размер: не менее %s"
 msgstr[1] "%d файла. Общий размер: не менее %s"
 msgstr[2] "%d файлов. Общий размер: не менее %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2778
+#: ../../locales/../src/interface/QueueView.cpp:2772
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d файлов добавлено в задание"
@@ -1509,7 +1509,7 @@ msgstr "&Всегда использовать это действие"
 msgid "Algorithm:"
 msgstr "Алгоритм:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2937
 msgid "All files have been successfully transferred"
 msgstr "Все файлы успешно переданы"
 
@@ -1517,7 +1517,7 @@ msgstr "Все файлы успешно переданы"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Все порты должны находиться в диапазоне между 1024 и 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2933
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1568,7 +1568,7 @@ msgid ""
 msgstr ""
 "Кроме того, вы также можете загрузить последнюю версию с сайта FileZilla:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1908
+#: ../../locales/../src/interface/QueueView.cpp:1902
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1577,7 +1577,7 @@ msgstr ""
 "Ошибка при загрузке очереди передач из \"%s\".\n"
 "Часть передач не была восстановлена."
 
-#: ../../locales/../src/interface/QueueView.cpp:1818
+#: ../../locales/../src/interface/QueueView.cpp:1812
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1774,7 +1774,7 @@ msgstr "Дата сборки:"
 msgid "Build information"
 msgstr "Информация о сборке"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:241
+#: ../../locales/../src/interface/verifycertdialog.cpp:245
 msgid "Business category:"
 msgstr "Вид деятельности:"
 
@@ -1823,12 +1823,12 @@ msgid "Can't read from file"
 msgstr "Невозможно прочитать данные из файла!"
 
 #: ../../locales/../src/engine/transfersocket.cpp:650
-#: ../../locales/../src/engine/transfersocket.cpp:716
+#: ../../locales/../src/engine/transfersocket.cpp:718
 msgid "Can't write data to file."
 msgstr "Невозможно записать данные в файл!"
 
 #: ../../locales/../src/engine/transfersocket.cpp:652
-#: ../../locales/../src/engine/transfersocket.cpp:718
+#: ../../locales/../src/engine/transfersocket.cpp:720
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Невозможно записать данные в файл: %s"
@@ -1878,7 +1878,7 @@ msgstr "Невозможно добавить сервер в Менеджер �
 msgid "Cannot assign requested address"
 msgstr "Невозможно назначить запрошенный адрес"
 
-#: ../../locales/../src/interface/context_control.cpp:349
+#: ../../locales/../src/interface/context_control.cpp:352
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -2209,7 +2209,7 @@ msgstr "Команда:"
 msgid "Comment"
 msgstr "Комментарии"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:239
+#: ../../locales/../src/interface/verifycertdialog.cpp:243
 msgid "Common name:"
 msgstr "Общее название:"
 
@@ -2303,9 +2303,9 @@ msgid "Connect bypassing proxy settings"
 msgstr "Подключиться в обход настроек прокси"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Connect failed: %s"
-msgstr "Сбой запроса прокси: %s"
+msgstr "Не удалось подключиться: %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1383
 msgid "Connect in current tab"
@@ -2318,10 +2318,6 @@ msgstr "Подключиться в новой вкладке"
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
 msgstr "Подключиться к сайту указанному в Менеджере Сайтов"
-
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
-msgid "Connected"
-msgstr "Соединение установлено"
 
 #: ../../locales/../src/interface/queue.cpp:332
 msgid "Connecting"
@@ -2397,9 +2393,8 @@ msgid "Connection established, sending HTTP request"
 msgstr "Соединение установлено, отправка HTTP запроса"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:333
-#, fuzzy
 msgid "Connection established, waiting for welcome message."
-msgstr "Соединение установлено, ожидание приглашения..."
+msgstr "Соединение установлено, ожидание приглашения."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
 msgid "Connection established, waiting for welcome message..."
@@ -2593,9 +2588,9 @@ msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "Невозможно импортировать сертификаты, ошибка в gnutls_x509_crt_import"
 
 #: ../../locales/../src/interface/FileZilla.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Could not initialize Winsock (%d): %s"
-msgstr "Невозможно записать данные в сокет: %s"
+msgstr "Невозможно инициализировать Winsock (%d): %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:876
 msgid ""
@@ -2678,9 +2673,8 @@ msgid "Could not parse server address:"
 msgstr "Невозможно разобрать адрес сервера:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:977
-#, fuzzy
 msgid "Could not read from data socket."
-msgstr "Невозможно получить данные с сокета: %s"
+msgstr "Невозможно прочитать данные с сокета данных."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
 #, c-format
@@ -2692,9 +2686,8 @@ msgid "Could not read server item."
 msgstr "Невозможно прочитать данные на сервере."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:344
-#, fuzzy
 msgid "Could not receive data from server."
-msgstr "Невозможно подключиться к серверу"
+msgstr "Невозможно получить данные с сервера."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
 #, c-format
@@ -2742,7 +2735,7 @@ msgstr "Невозможно записать \"%s\", закладка не мо
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Невозможно записать \"%s\", общая закладка не может быть сохранена: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1847
+#: ../../locales/../src/interface/QueueView.cpp:1841
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2784,7 +2777,7 @@ msgstr "Невозможно записать данные в лог-файл: %
 msgid "Could not write to socket: %s"
 msgstr "Невозможно записать данные в сокет: %s"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:244
+#: ../../locales/../src/interface/verifycertdialog.cpp:248
 msgid "Country:"
 msgstr "Страна:"
 
@@ -3313,7 +3306,7 @@ msgstr "Скачивается обновление..."
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
 #: ../../locales/../src/interface/LocalTreeView.cpp:110
-#: ../../locales/../src/interface/QueueView.cpp:88
+#: ../../locales/../src/interface/QueueView.cpp:90
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
@@ -3323,7 +3316,7 @@ msgstr "Перетаскивание между запущенными копи�
 
 #: ../../locales/../src/interface/LocalListView.cpp:111
 #: ../../locales/../src/interface/LocalTreeView.cpp:116
-#: ../../locales/../src/interface/QueueView.cpp:101
+#: ../../locales/../src/interface/QueueView.cpp:103
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
@@ -3356,7 +3349,7 @@ msgstr "В&ыход"
 msgid "E&xport..."
 msgstr "&Экспорт..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:250
+#: ../../locales/../src/interface/verifycertdialog.cpp:254
 msgid "E-Mail:"
 msgstr "E-Mail:"
 
@@ -3392,7 +3385,7 @@ msgstr "Редактирование результатов поиска"
 msgid "Email:"
 msgstr "Email:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "Empty command"
 msgstr "Пустая команда"
 
@@ -3407,12 +3400,6 @@ msgstr "Пустой список каталогов"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:14
 msgid "Empty directory."
 msgstr "Пустой каталог"
-
-#: ../../locales/../src/interface/recursive_operation.cpp:377
-#: ../../locales/../src/interface/recursive_operation.cpp:412
-#, fuzzy
-msgid "Empty dirs to visit"
-msgstr "Пустой список каталогов"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:52
 msgid "Empty file extension."
@@ -3464,7 +3451,7 @@ msgstr "Ввести &команду..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Введите 0 для отключения ограничения."
 
-#: ../../locales/../src/interface/QueueView.cpp:2109
+#: ../../locales/../src/interface/QueueView.cpp:2103
 msgid "Enter command"
 msgstr "Введите команду"
 
@@ -3557,7 +3544,7 @@ msgstr "Ошибка при экспорте настроек"
 msgid "Error importing"
 msgstr "Ошибка импорта"
 
-#: ../../locales/../src/interface/QueueView.cpp:1909
+#: ../../locales/../src/interface/QueueView.cpp:1903
 msgid "Error loading queue"
 msgstr "Ошибка загрузки очереди"
 
@@ -3571,7 +3558,7 @@ msgstr "Ошибка загрузки очереди"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1830
+#: ../../locales/../src/interface/QueueView.cpp:1824
 #: ../../locales/../src/interface/search.cpp:802
 #: ../../locales/../src/interface/search.cpp:821
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3586,7 +3573,7 @@ msgstr "Ошибка загрузки очереди"
 msgid "Error loading xml file"
 msgstr "Ошибка загрузки файла xml"
 
-#: ../../locales/../src/interface/QueueView.cpp:1819
+#: ../../locales/../src/interface/QueueView.cpp:1813
 msgid "Error saving queue"
 msgstr "Ошибка сохранения очереди"
 
@@ -3597,7 +3584,7 @@ msgstr "Ошибка запуска программы"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1848
+#: ../../locales/../src/interface/QueueView.cpp:1842
 #: ../../locales/../src/interface/sitemanager.cpp:611
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
@@ -3754,7 +3741,7 @@ msgstr ""
 "Не удалось получить peer-адрес соединения передачи данных, соединение "
 "закрыто!"
 
-#: ../../locales/../src/interface/context_control.cpp:80
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "Не удалось инициализировать движок FTP"
 
@@ -3765,9 +3752,8 @@ msgid "Failed to initialize TLS."
 msgstr "Не удалось инициализировать TLS."
 
 #: ../../locales/../src/interface/FileZilla.cpp:109
-#, fuzzy
 msgid "Failed to initialize networking"
-msgstr "Не удалось инициализировать движок FTP"
+msgstr "Не удалось инициализировать сеть"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:146
 msgid "Failed to load panels, invalid resource files?"
@@ -4601,7 +4587,7 @@ msgstr ""
 msgid "Initializing TLS..."
 msgstr "Инициализирую TLS..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:107
+#: ../../locales/../src/interface/verifycertdialog.cpp:111
 msgid "Insecure algorithm!"
 msgstr "Небезопасный алгоритм!"
 
@@ -4750,15 +4736,15 @@ msgstr "Неверное значение ai_flags"
 msgid "Invalid value for hints"
 msgstr "Неверное значение hints"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:252
+#: ../../locales/../src/interface/verifycertdialog.cpp:256
 msgid "Jurisdiction country:"
 msgstr "Страна юрисдикции:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:254
+#: ../../locales/../src/interface/verifycertdialog.cpp:258
 msgid "Jurisdiction locality:"
 msgstr "Место юрисдикции:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:253
+#: ../../locales/../src/interface/verifycertdialog.cpp:257
 msgid "Jurisdiction state or province:"
 msgstr "Штат или провинция юрисдикции:"
 
@@ -4901,13 +4887,17 @@ msgstr "Локальные фильтры:"
 msgid "Local site:"
 msgstr "Локальный сайт:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:246
+#: ../../locales/../src/interface/verifycertdialog.cpp:250
 msgid "Locality:"
 msgstr "Локальность:"
 
 #: ../../locales/../src/interface/settings/optionspage_logging.cpp:97
 msgid "Log file"
 msgstr "Файл журнала"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
+msgid "Logged in"
+msgstr "Авторизовались"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2111
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
@@ -5195,7 +5185,7 @@ msgstr "Адрес не ассоциирован с nodename"
 msgid "No category to export selected"
 msgstr "Не выбрана категория экспорта"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "No command given, aborting."
 msgstr "Не указана команда. Отбой."
 
@@ -5465,7 +5455,7 @@ msgstr "Операция выполняется"
 msgid "Operation not supported"
 msgstr "Операция не поддерживается"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:240
+#: ../../locales/../src/interface/verifycertdialog.cpp:244
 msgid "Organization:"
 msgstr "Организация:"
 
@@ -5477,7 +5467,7 @@ msgstr "Другие настройки SFTP"
 msgid "Other system error"
 msgstr "Другая системная ошибка"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:262
+#: ../../locales/../src/interface/verifycertdialog.cpp:266
 msgid "Other:"
 msgstr "Другое:"
 
@@ -5729,7 +5719,7 @@ msgstr "Введите число одновременных передач (0-1
 msgid "Please enter a password for this server:"
 msgstr "Введите пароль для данного сервера:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2109
+#: ../../locales/../src/interface/QueueView.cpp:2103
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5928,8 +5918,8 @@ msgstr ""
 msgid "Positio&n of the message log:"
 msgstr "Позиция &журнала сообщений:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:247
-#: ../../locales/../src/interface/verifycertdialog.cpp:248
+#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:252
 msgid "Postal code:"
 msgstr "Почтовый индекс:"
 
@@ -6051,9 +6041,9 @@ msgid "Proxy reply: %s"
 msgstr "Ответ прокси: %s"
 
 #: ../../locales/../src/engine/proxy.cpp:535
-#, fuzzy, c-format
+#, c-format
 msgid "Proxy request failed. Reply from proxy: %s"
-msgstr "Сбой запроса прокси: %s"
+msgstr "Сбой запроса прокси. Ответ от прокси: %s"
 
 #: ../../locales/../src/engine/proxy.cpp:407
 #, c-format
@@ -6099,7 +6089,7 @@ msgstr "Задание: %s%s"
 msgid "Queue: empty"
 msgstr "Задание: пусто"
 
-#: ../../locales/../src/interface/QueueView.cpp:438
+#: ../../locales/../src/interface/QueueView.cpp:440
 msgid "Queued files"
 msgstr "Файлы в задании"
 
@@ -6534,11 +6524,11 @@ msgstr "Сохранение пароля было отключено вашим
 msgid "Saving of passwords has been disabled by you."
 msgstr "Сохранение паролей было отключено вами."
 
-#: ../../locales/../src/interface/QueueView.cpp:1710
+#: ../../locales/../src/interface/QueueView.cpp:1704
 msgid "Scanning for files to add to queue"
 msgstr "Поиск файлов для добавления в задание"
 
-#: ../../locales/../src/interface/QueueView.cpp:1712
+#: ../../locales/../src/interface/QueueView.cpp:1706
 msgid "Scanning for files to upload"
 msgstr "Поиск файлов для загрузки на сервер"
 
@@ -6768,7 +6758,7 @@ msgid "Sending keep-alive command"
 msgstr "Посылаю команду FTP активности"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:65
-#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:255
 msgid "Serial number:"
 msgstr "Серийный номер:"
 
@@ -6897,7 +6887,7 @@ msgstr "Установить &приоритет"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Сменить права '%s' на '%s'"
 
-#: ../../locales/../src/engine/transfersocket.cpp:791
+#: ../../locales/../src/engine/transfersocket.cpp:793
 msgid "SetSocketBufferSize called without socket"
 msgstr "SetSocketBufferSize вызван без указания сокета"
 
@@ -7170,7 +7160,7 @@ msgstr "Начинаю закачивать %s"
 msgid "Starts the local site in the given path"
 msgstr "Запуск локального сайта по указанному пути"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:245
+#: ../../locales/../src/interface/verifycertdialog.cpp:249
 msgid "State or province:"
 msgstr "Штат или провинция:"
 
@@ -7193,7 +7183,7 @@ msgstr "Остановить и удалить &все"
 msgid "Stop recursive operation"
 msgstr "Остановить рекурсивную операцию"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:249
+#: ../../locales/../src/interface/verifycertdialog.cpp:253
 msgid "Street:"
 msgstr "Улица:"
 
@@ -7594,7 +7584,7 @@ msgstr ""
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Новая версия была сохранена в вашем каталоге загрузок."
 
-#: ../../locales/../src/interface/QueueView.cpp:1829
+#: ../../locales/../src/interface/QueueView.cpp:1823
 msgid "The queue will not be saved."
 msgstr "Очередь не может быть сохранена."
 
@@ -7787,7 +7777,7 @@ msgstr "Время ожидания"
 msgid "Timezone offset of server is %d seconds."
 msgstr "Смещение часового пояса сервера составляет %d секунд."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:243
+#: ../../locales/../src/interface/verifycertdialog.cpp:247
 msgid "Title:"
 msgstr "Название:"
 
@@ -7917,8 +7907,7 @@ msgstr "Передача"
 msgid "Transfers"
 msgstr "Передачи"
 
-#: ../../locales/../src/interface/QueueView.cpp:2944
-#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2929
 msgid "Transfers finished"
 msgstr "Передачи завершены"
 
@@ -7995,7 +7984,7 @@ msgstr "USER@&HOST"
 msgid "Unassigned error code %d"
 msgstr "Неопределенный код ошибки %d"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:242
+#: ../../locales/../src/interface/verifycertdialog.cpp:246
 msgid "Unit:"
 msgstr "Объект:"
 
@@ -8247,7 +8236,7 @@ msgstr "Видимые колонки"
 msgid "W&rite"
 msgstr "З&апись"
 
-#: ../../locales/../src/interface/QueueView.cpp:1671
+#: ../../locales/../src/interface/QueueView.cpp:1665
 msgid "Waiting"
 msgstr "Ожидание"
 
@@ -8433,9 +8422,8 @@ msgstr "Укажите локальный каталог."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:158
 #: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:91
-#, fuzzy
 msgid "You have to enter a valid IPv4 address."
-msgstr "Укажите правильный IP-адрес."
+msgstr "Укажите правильный IPv4-адрес."
 
 #: ../../locales/../src/interface/search.cpp:529
 msgid "You have to enter a writable local directory."
@@ -8685,6 +8673,12 @@ msgstr "чтение и запись (для всех)"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Empty dirs to visit"
+#~ msgstr "Пустые каталоги для посещения"
+
+#~ msgid "Connected"
+#~ msgstr "Соединение установлено"
 
 #~ msgid "Deleting directories"
 #~ msgstr "Удаление каталогов"
