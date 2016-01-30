@@ -2,13 +2,13 @@
 # Copyright (C) 2016 Tim Kosse
 # This file is distributed under the same license as the filezilla package.
 # Åka Sikrom <a4 æt hush dåt com>, 2015-2016.
-#
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-23 18:33+0100\n"
-"PO-Revision-Date: 2016-01-14 08:41+0100\n"
+"POT-Creation-Date: 2016-01-30 15:29+0100\n"
+"PO-Revision-Date: 2016-01-26 08:52+0100\n"
 "Last-Translator: Åka Sikrom <a4 æt hush dåt com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -82,7 +82,7 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d fil. Total størrelse: Minst %s"
 msgstr[1] "%d filer. Total størrelse: Minst %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2778
+#: ../../locales/../src/interface/QueueView.cpp:2772
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d filer lagt i kø"
@@ -1492,7 +1492,7 @@ msgstr "&Bruk alltid denne handlinga"
 msgid "Algorithm:"
 msgstr "Algoritme:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2937
 msgid "All files have been successfully transferred"
 msgstr "Alle filer ble overført uten problemer"
 
@@ -1500,7 +1500,7 @@ msgstr "Alle filer ble overført uten problemer"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Alle porter i rekken må være mellom 1024 og 65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2933
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1547,7 +1547,7 @@ msgid ""
 "website:"
 msgstr "Du kan også laste ned siste versjon fra FileZilla-nettstedet:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1908
+#: ../../locales/../src/interface/QueueView.cpp:1902
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1556,7 +1556,7 @@ msgstr ""
 "Det oppstod en feil under innlasting av overføringskø fra «%s».\n"
 "Enkelte oppføringer ble kanskje ikke gjenopprettet."
 
-#: ../../locales/../src/interface/QueueView.cpp:1818
+#: ../../locales/../src/interface/QueueView.cpp:1812
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -2718,7 +2718,7 @@ msgstr "Klarte ikke å lagre «%s». Bokmerket er ikke lagt til: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "Klarte ikke å lagre «%s». Globale bokmerker ble ikke lagret: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1847
+#: ../../locales/../src/interface/QueueView.cpp:1841
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -3294,7 +3294,7 @@ msgstr "Laster ned oppdatering …"
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
 #: ../../locales/../src/interface/LocalTreeView.cpp:110
-#: ../../locales/../src/interface/QueueView.cpp:88
+#: ../../locales/../src/interface/QueueView.cpp:90
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
@@ -3306,7 +3306,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/LocalListView.cpp:111
 #: ../../locales/../src/interface/LocalTreeView.cpp:116
-#: ../../locales/../src/interface/QueueView.cpp:101
+#: ../../locales/../src/interface/QueueView.cpp:103
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
@@ -3375,7 +3375,7 @@ msgstr "Redigerer søkeresultater"
 msgid "Email:"
 msgstr "Epost:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "Empty command"
 msgstr "Tom kommando"
 
@@ -3390,11 +3390,6 @@ msgstr "Tom mappeliste"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:14
 msgid "Empty directory."
 msgstr "Tom mappe."
-
-#: ../../locales/../src/interface/recursive_operation.cpp:377
-#: ../../locales/../src/interface/recursive_operation.cpp:412
-msgid "Empty dirs to visit"
-msgstr "Tomme mapper å besøke"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:52
 msgid "Empty file extension."
@@ -3446,7 +3441,7 @@ msgstr "&Skriv inn kommando …"
 msgid "Enter 0 for unlimited speed."
 msgstr "Skriv inn 0 for ubegrenset hastighet."
 
-#: ../../locales/../src/interface/QueueView.cpp:2109
+#: ../../locales/../src/interface/QueueView.cpp:2103
 msgid "Enter command"
 msgstr "Angi kommando"
 
@@ -3538,7 +3533,7 @@ msgstr "Feil ved eksportering av innstillinger"
 msgid "Error importing"
 msgstr "Feil ved importering"
 
-#: ../../locales/../src/interface/QueueView.cpp:1909
+#: ../../locales/../src/interface/QueueView.cpp:1903
 msgid "Error loading queue"
 msgstr "Feil ved lasting av kø"
 
@@ -3552,7 +3547,7 @@ msgstr "Feil ved lasting av kø"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1830
+#: ../../locales/../src/interface/QueueView.cpp:1824
 #: ../../locales/../src/interface/search.cpp:802
 #: ../../locales/../src/interface/search.cpp:821
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3567,7 +3562,7 @@ msgstr "Feil ved lasting av kø"
 msgid "Error loading xml file"
 msgstr "Feil ved innlasting av xml-fil"
 
-#: ../../locales/../src/interface/QueueView.cpp:1819
+#: ../../locales/../src/interface/QueueView.cpp:1813
 msgid "Error saving queue"
 msgstr "Feil ved lagring av kø"
 
@@ -3578,7 +3573,7 @@ msgstr "Feil ved oppstart av program"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1848
+#: ../../locales/../src/interface/QueueView.cpp:1842
 #: ../../locales/../src/interface/sitemanager.cpp:611
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
@@ -4889,9 +4884,8 @@ msgid "Log file"
 msgstr "Loggfil"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
-#, fuzzy
 msgid "Logged in"
-msgstr "Loggføring"
+msgstr "Logget inn"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2111
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
@@ -5181,7 +5175,7 @@ msgstr "Ingen adresse er tildelt nodenavnet"
 msgid "No category to export selected"
 msgstr "Ingen eksporteringskategori er valgt"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "No command given, aborting."
 msgstr "Ingen kommando gitt, avslutter."
 
@@ -5712,7 +5706,7 @@ msgstr ""
 msgid "Please enter a password for this server:"
 msgstr "Skriv inn et passord for denne tjeneren:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2109
+#: ../../locales/../src/interface/QueueView.cpp:2103
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -6083,7 +6077,7 @@ msgstr "Kø: %s%s"
 msgid "Queue: empty"
 msgstr "Kø: tom"
 
-#: ../../locales/../src/interface/QueueView.cpp:438
+#: ../../locales/../src/interface/QueueView.cpp:440
 msgid "Queued files"
 msgstr "Filer i kø"
 
@@ -6521,11 +6515,11 @@ msgstr "Systemadministratoren har slått av passordlagring."
 msgid "Saving of passwords has been disabled by you."
 msgstr "Du har slått av passordlagring."
 
-#: ../../locales/../src/interface/QueueView.cpp:1710
+#: ../../locales/../src/interface/QueueView.cpp:1704
 msgid "Scanning for files to add to queue"
 msgstr "Søker etter filer som skal legges i kø"
 
-#: ../../locales/../src/interface/QueueView.cpp:1712
+#: ../../locales/../src/interface/QueueView.cpp:1706
 msgid "Scanning for files to upload"
 msgstr "Søker etter filer å laste opp"
 
@@ -7574,7 +7568,7 @@ msgstr "Klarte ikke å laste ned ny versjon. Prøv igjen senere."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Ny versjon er lagret i gjeldende brukers nedlastingsmappe."
 
-#: ../../locales/../src/interface/QueueView.cpp:1829
+#: ../../locales/../src/interface/QueueView.cpp:1823
 msgid "The queue will not be saved."
 msgstr "Køen blir ikke lagret."
 
@@ -7894,8 +7888,7 @@ msgstr "Overfører"
 msgid "Transfers"
 msgstr "Overføringer"
 
-#: ../../locales/../src/interface/QueueView.cpp:2944
-#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2929
 msgid "Transfers finished"
 msgstr "Overføringer er ferdige"
 
@@ -8215,7 +8208,7 @@ msgstr "Synlige kolonner"
 msgid "W&rite"
 msgstr "&Skriv"
 
-#: ../../locales/../src/interface/QueueView.cpp:1671
+#: ../../locales/../src/interface/QueueView.cpp:1665
 msgid "Waiting"
 msgstr "Venter"
 
@@ -8650,6 +8643,9 @@ msgstr "overskrivbar for alle"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Empty dirs to visit"
+#~ msgstr "Tomme mapper å besøke"
 
 #~ msgid "Connected"
 #~ msgstr "Tilkoblet"
