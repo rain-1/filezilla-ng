@@ -110,6 +110,8 @@ class CAsyncRequestQueue;
 class CQueue;
 #if WITH_LIBDBUS
 class CDesktopNotification;
+#elif defined(__WXGTK__) || defined(__WXMSW__)
+class wxNotificationMessage;
 #endif
 
 class CQueueView : public CQueueViewBase, public COptionChangeEventHandler
@@ -304,7 +306,9 @@ protected:
 	void ReleaseExclusiveEngineLock(CFileZillaEngine* pEngine);
 
 #if WITH_LIBDBUS
-	CDesktopNotification* m_desktop_notification;
+	std::unique_ptr<CDesktopNotification> m_desktop_notification;
+#elif defined(__WXGTK__) || defined(__WXMSW__)
+	std::unique_ptr<wxNotificationMessage> m_desktop_notification;
 #endif
 
 	CQueueStorage m_queue_storage;

@@ -28,6 +28,8 @@
 #include "drop_target_ex.h"
 #if WITH_LIBDBUS
 #include "../dbus/desktop_notification.h"
+#elif defined(__WXGTK__) || defined(__WXMSW__)
+#include <wx/notifmsg.h>
 #endif
 
 #include <libfilezilla/local_filesys.hpp>
@@ -473,10 +475,6 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 #endif
 
 	m_resize_timer.SetOwner(this);
-
-#if WITH_LIBDBUS
-	m_desktop_notification = 0;
-#endif
 }
 
 CQueueView::~CQueueView()
@@ -487,10 +485,6 @@ CQueueView::~CQueueView()
 	DeleteEngines();
 
 	m_resize_timer.Stop();
-
-#if WITH_LIBDBUS
-	delete m_desktop_notification;
-#endif
 }
 
 bool CQueueView::QueueFile(const bool queueOnly, const bool download,
@@ -2918,8 +2912,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 	// Need to check all contexts whether there's a recursive
 	// download operation still in progress
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (unsigned int i = 0; i < pStates->size(); i++)
-	{
+	for (unsigned int i = 0; i < pStates->size(); ++i) {
 		CState *pState = (*pStates)[i];
 		CRecursiveOperation *pRecursiveOperationHandler;
 		if (!pState || !(pRecursiveOperationHandler = pState->GetRecursiveOperationHandler()))
@@ -2932,21 +2925,28 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		}
 	}
 
-#if WITH_LIBDBUS
-	if (!m_pMainFrame->IsActive())
-	{
-		if (!m_desktop_notification)
-			m_desktop_notification = new CDesktopNotification;
-		int failed_count = m_pQueue->GetQueueView_Failed()->GetFileCount();
-		if (failed_count != 0)
-		{
+	if (!m_pMainFrame->IsActive()) {
+		wxString const title = _("Transfers finished");
+		wxString msg;
+		int const failed_count = m_pQueue->GetQueueView_Failed()->GetFileCount();
+		if (failed_count != 0) {
 			wxString fmt = wxPLURAL("All transfers have finished. %d file could not be transferred.", "All transfers have finished. %d files could not be transferred.", failed_count);
-			m_desktop_notification->Notify(_("Transfers finished"), wxString::Format(fmt, failed_count), _T("transfer.error"));
+			msg = wxString::Format(fmt, failed_count);
 		}
 		else
-			m_desktop_notification->Notify(_("Transfers finished"), _("All files have been successfully transferred"), _T("transfer.complete"));
-	}
+			msg = _("All files have been successfully transferred");
+
+#if WITH_LIBDBUS
+		if (!m_desktop_notification)
+			m_desktop_notification = std::make_unique<CDesktopNotification>;
+		m_desktop_notification->Notify(title, msg, (failed_count > 0) ? _T("transfer.error") : _T("transfer.complete"));
+#elif defined(__WXGTK__) || defined(__WXMSW__)
+		m_desktop_notification = std::make_unique<wxNotificationMessage>();
+		m_desktop_notification->SetTitle(title);
+		m_desktop_notification->SetMessage(msg);
+		m_desktop_notification->Show(5);
 #endif
+}
 
 	switch (m_actionAfterState)
 	{
