@@ -3,7 +3,7 @@
 
 #include "socket.h"
 
-class CLatencyMeasurement final : public CCallback
+class CLatencyMeasurement final
 {
 public:
 	CLatencyMeasurement();
@@ -19,8 +19,6 @@ public:
 	int GetLatency() const;
 
 	void Reset();
-
-	virtual void cb();
 
 protected:
 	fz::monotonic_clock m_start;

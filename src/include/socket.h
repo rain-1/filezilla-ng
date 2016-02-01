@@ -33,12 +33,6 @@ typedef fz::simple_event<socket_event_type, CSocketEventSource*, SocketEventType
 struct hostaddress_event_type;
 typedef fz::simple_event<hostaddress_event_type, CSocketEventSource*, wxString> CHostAddressEvent;
 
-class CCallback
-{
-public:
-	virtual void cb() {}
-};
-
 void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source);
 void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, CSocketEventSource const* const source);
 
@@ -138,8 +132,6 @@ public:
 	// accepted sockets
 	int SetBufferSizes(int size_read, int size_write);
 
-	void SetSynchronousReadCallback(CCallback* cb);
-
 protected:
 	static int DoSetFlags(int fd, int flags, int flags_mask);
 	static int DoSetBufferSizes(int fd, int size_read, int size_write);
@@ -162,8 +154,6 @@ protected:
 	int m_flags;
 
 	int m_buffer_sizes[2];
-
-	CCallback* m_synchronous_read_cb{};
 };
 
 #ifdef FZ_WINDOWS

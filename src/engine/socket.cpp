@@ -704,8 +704,6 @@ protected:
 		if (!m_pSocket || !m_pSocket->m_pEvtHandler)
 			return;
 		if (m_triggered & WAIT_READ) {
-			if (m_pSocket->m_synchronous_read_cb)
-				m_pSocket->m_synchronous_read_cb->cb();
 			m_pSocket->m_pEvtHandler->send_event<CSocketEvent>(m_pSocket, SocketEventType::read, m_triggered_errors[1]);
 			m_triggered &= ~WAIT_READ;
 		}
@@ -1622,17 +1620,6 @@ int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 	}
 
 	return ret;
-}
-
-void CSocket::SetSynchronousReadCallback(CCallback* cb)
-{
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.lock();
-
-	m_synchronous_read_cb = cb;
-
-	if (m_pSocketThread)
-		m_pSocketThread->m_sync.unlock();
 }
 
 wxString CSocket::GetPeerHost() const

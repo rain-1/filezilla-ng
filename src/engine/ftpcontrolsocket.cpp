@@ -184,16 +184,11 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
 	// firewalls which terminate the control connection on long transfers.
 	m_pSocket->SetFlags(CSocket::flag_nodelay | CSocket::flag_keepalive);
-
-	// The GUI and file operations can easily block our thread. But the socket has an
-	// internal thread. Register read callback to get timely update to rtt.
-	m_pSocket->SetSynchronousReadCallback(&m_rtt);
 }
 
 CFtpControlSocket::~CFtpControlSocket()
 {
 	remove_handler();
-	m_pSocket->SetSynchronousReadCallback(0);
 
 	DoClose();
 }
