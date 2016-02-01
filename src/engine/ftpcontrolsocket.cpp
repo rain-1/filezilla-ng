@@ -3704,8 +3704,8 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 		return true;
 	}
 
-	const wxString peerIP = m_pSocket->GetPeerIP();
-	if (!fz::is_routable_address(pData->host.ToStdWstring()) && fz::is_routable_address(peerIP.ToStdWstring())) {
+	std::string const peerIP = m_pSocket->GetPeerIP();
+	if (!fz::is_routable_address(pData->host.ToStdWstring()) && fz::is_routable_address(peerIP)) {
 		if (engine_.GetOptions().GetOptionVal(OPTION_PASVREPLYFALLBACKMODE) != 1 || pData->bTriedActive) {
 			LogMessage(MessageType::Status, _("Server sent passive reply with unroutable address. Using server address instead."));
 			LogMessage(MessageType::Debug_Info, _T("  Reply: %s, peer: %s"), pData->host, peerIP);
@@ -3725,27 +3725,23 @@ bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 	return true;
 }
 
-int CFtpControlSocket::GetExternalIPAddress(wxString& address)
+int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 {
 	// Local IP should work. Only a complete moron would use IPv6
 	// and NAT at the same time.
-	if (m_pSocket->GetAddressFamily() != CSocket::ipv6)
-	{
+	if (m_pSocket->GetAddressFamily() != CSocket::ipv6) {
 		int mode = engine_.GetOptions().GetOptionVal(OPTION_EXTERNALIPMODE);
 
-		if (mode)
-		{
+		if (mode) {
 			if (engine_.GetOptions().GetOptionVal(OPTION_NOEXTERNALONLOCAL) &&
-				!fz::is_routable_address(m_pSocket->GetPeerIP().ToStdWstring()))
+				!fz::is_routable_address(m_pSocket->GetPeerIP()))
 				// Skip next block, use local address
 				goto getLocalIP;
 		}
 
-		if (mode == 1)
-		{
+		if (mode == 1) {
 			wxString ip = engine_.GetOptions().GetOption(OPTION_EXTERNALIP);
-			if (!ip.empty())
-			{
+			if (!ip.empty()) {
 				address = ip;
 				return FZ_REPLY_OK;
 			}
@@ -3754,9 +3750,9 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 		}
 		else if (mode == 2) {
 			if (!m_pIPResolver) {
-				const wxString& localAddress = m_pSocket->GetLocalIP(true);
+				std::string localAddress = m_pSocket->GetLocalIP(true);
 
-				if (!localAddress.empty() && localAddress == engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP)) {
+				if (!localAddress.empty() && localAddress == engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP).ToStdString()) {
 					LogMessage(MessageType::Debug_Verbose, _T("Using cached external IP address"));
 
 					address = localAddress;
@@ -3795,10 +3791,8 @@ int CFtpControlSocket::GetExternalIPAddress(wxString& address)
 	}
 
 getLocalIP:
-
 	address = m_pSocket->GetLocalIP(true);
-	if (address.empty())
-	{
+	if (address.empty()) {
 		LogMessage(MessageType::Error, _("Failed to retrieve local ip address."), 1);
 		return FZ_REPLY_ERROR;
 	}
@@ -4061,15 +4055,13 @@ int CFtpControlSocket::TransferSend()
 			cmd = GetPassiveCommand(*pData);
 		}
 		else {
-			wxString address;
+			std::string address;
 			int res = GetExternalIPAddress(address);
 			if (res == FZ_REPLY_WOULDBLOCK)
 				return res;
-			else if (res == FZ_REPLY_OK)
-			{
+			else if (res == FZ_REPLY_OK) {
 				wxString portArgument = m_pTransferSocket->SetupActiveTransfer(address);
-				if (!portArgument.empty())
-				{
+				if (!portArgument.empty()) {
 					pData->bTriedActive = true;
 					if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
 						cmd = _T("EPRT " + portArgument);
@@ -4079,8 +4071,7 @@ int CFtpControlSocket::TransferSend()
 				}
 			}
 
-			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || pData->bTriedPasv)
-			{
+			if (!engine_.GetOptions().GetOptionVal(OPTION_ALLOW_TRANSFERMODEFALLBACK) || pData->bTriedPasv) {
 				LogMessage(MessageType::Error, _("Failed to create listening socket for active mode transfer"));
 				ResetOperation(FZ_REPLY_ERROR);
 				return FZ_REPLY_ERROR;

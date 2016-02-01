@@ -80,7 +80,7 @@ public:
 	// If host is a name that can be resolved, a hostaddress socket event gets sent.
 	// Once connections got established, a connection event gets sent. If
 	// connection could not be established, a close event gets sent.
-	int Connect(wxString const& host, unsigned int port, address_family family = unspec, wxString const& bind = wxString());
+	int Connect(std::string const& host, unsigned int port, address_family family = unspec, std::string const& bind = std::string());
 
 	// After receiving a send or receive event, you can call these functions
 	// as long as their return value is positive.
@@ -91,8 +91,8 @@ public:
 	int Close();
 
 	// Returns empty string on error
-	wxString GetLocalIP(bool strip_zone_index = false) const;
-	wxString GetPeerIP(bool strip_zone_index = false) const;
+	std::string GetLocalIP(bool strip_zone_index = false) const;
+	std::string GetPeerIP(bool strip_zone_index = false) const;
 
 	// Returns the hostname passed to Connect()
 	wxString GetPeerHost() const;
@@ -113,8 +113,8 @@ public:
 
 	static void Cleanup(bool force);
 
-	static wxString AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
-	static wxString AddressToString(char const* buf, int buf_len);
+	static std::string AddressToString(const struct sockaddr* addr, int addr_len, bool with_port = true, bool strip_zone_index = false);
+	static std::string AddressToString(char const* buf, int buf_len);
 
 	int Listen(address_family family, int port = 0);
 	CSocket* Accept(int& error);
@@ -141,17 +141,17 @@ protected:
 
 	fz::event_handler* m_pEvtHandler;
 
-	int m_fd;
+	int m_fd{-1};
 
-	SocketState m_state;
+	SocketState m_state{none};
 
-	CSocketThread* m_pSocketThread;
+	CSocketThread* m_pSocketThread{};
 
-	wxString m_host;
-	unsigned int m_port;
+	std::string m_host;
+	unsigned int m_port{};
 	int m_family;
 
-	int m_flags;
+	int m_flags{};
 
 	int m_buffer_sizes[2];
 };
