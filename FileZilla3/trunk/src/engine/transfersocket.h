@@ -25,7 +25,7 @@ public:
 	CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSocket & controlSocket, TransferMode transferMode);
 	virtual ~CTransferSocket();
 
-	wxString SetupActiveTransfer(const wxString& ip);
+	wxString SetupActiveTransfer(std::string const& ip);
 	bool SetupPassiveTransfer(wxString host, int port);
 
 	void SetActive();

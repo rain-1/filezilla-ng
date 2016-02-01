@@ -237,20 +237,15 @@ public:
 		m_waiting = 0;
 	}
 
-	int Connect(wxString const& bind)
+	int Connect(std::string const& bind)
 	{
-		wxASSERT(m_pSocket);
-
-		auto const hostBuf = m_pSocket->m_host.mb_str();
-		auto const bindBuf = bind.mb_str();
-		if (!hostBuf || !bindBuf) {
-			m_bind.clear();
-			m_host.clear();
-			m_port.clear();
+		assert(m_pSocket);
+		if (!m_pSocket) {
 			return EINVAL;
 		}
-		m_host = hostBuf;
-		m_bind = bindBuf;
+
+		m_host = m_pSocket->m_host;
+		m_bind = bind;
 
 		// Connect method of CSocket ensures port is in range
 		char tmp[7];
@@ -267,7 +262,7 @@ public:
 	{
 		if (m_started) {
 			fz::scoped_lock l(m_sync);
-			wxASSERT(m_threadwait);
+			assert(m_threadwait);
 			m_waiting = 0;
 			WakeupThread(l);
 			return 0;
@@ -860,12 +855,6 @@ CSocket::CSocket(fz::event_handler* pEvtHandler)
 #ifdef ERRORCODETEST
 	CErrorCodeTest test;
 #endif
-	m_fd = -1;
-	m_state = none;
-	m_pSocketThread = 0;
-	m_flags = 0;
-
-	m_port = 0;
 	m_family = AF_UNSPEC;
 
 	m_buffer_sizes[0] = -1;
@@ -911,13 +900,17 @@ void CSocket::DetachThread()
 	Cleanup(false);
 }
 
-int CSocket::Connect(wxString const& host, unsigned int port, address_family family, wxString const& bind)
+int CSocket::Connect(std::string const& host, unsigned int port, address_family family, std::string const& bind)
 {
 	if (m_state != none)
 		return EISCONN;
 
 	if (port < 1 || port > 65535)
 		return EINVAL;
+
+	if (host.empty()) {
+		return EINVAL;
+	}
 
 	switch (family)
 	{
@@ -1274,40 +1267,41 @@ int CSocket::Write(const void* buffer, unsigned int size, int& error)
 	return res;
 }
 
-wxString CSocket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port /*=true*/, bool strip_zone_index/*=false*/)
+std::string CSocket::AddressToString(const struct sockaddr* addr, int addr_len, bool with_port, bool strip_zone_index)
 {
 	char hostbuf[NI_MAXHOST];
 	char portbuf[NI_MAXSERV];
 
 	int res = getnameinfo(addr, addr_len, hostbuf, NI_MAXHOST, portbuf, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
 	if (res) // Should never fail
-		return wxString();
+		return std::string();
 
-	wxString host = wxString(hostbuf, wxConvLibc);
-	wxString port = wxString(portbuf, wxConvLibc);
+	std::string host = hostbuf;
+	std::string port = portbuf;
 
 	// IPv6 uses colons as separator, need to enclose address
 	// to avoid ambiguity if also showing port
 	if (addr->sa_family == AF_INET6) {
 		if (strip_zone_index) {
-			int pos = host.Find('%');
-			if (pos != -1)
-				host.Truncate(pos);
+			auto pos = host.find('%');
+			if (pos != std::string::npos) {
+				host = host.substr(0, pos);
+			}
 		}
 		if (with_port)
-			host = _T("[") + host + _T("]");
+			host = "[" + host + "]";
 	}
 
 	if (with_port)
-		return host + _T(":") + port;
+		return host + ":" + port;
 	else
 		return host;
 }
 
-wxString CSocket::AddressToString(char const* buf, int buf_len)
+std::string CSocket::AddressToString(char const* buf, int buf_len)
 {
 	if (buf_len != 4 && buf_len != 16) {
-		return wxString();
+		return std::string();
 	}
 
 	sockaddr_u addr;
@@ -1320,28 +1314,27 @@ wxString CSocket::AddressToString(char const* buf, int buf_len)
 		addr.in4.sin_family = AF_INET;
 	}
 
-
 	return AddressToString(&addr.sockaddr, sizeof(addr), false, true);
 }
 
-wxString CSocket::GetLocalIP(bool strip_zone_index /*=false*/) const
+std::string CSocket::GetLocalIP(bool strip_zone_index /*=false*/) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getsockname(m_fd, (sockaddr*)&addr, &addr_len);
 	if (res)
-		return wxString();
+		return std::string();
 
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }
 
-wxString CSocket::GetPeerIP(bool strip_zone_index /*=false*/) const
+std::string CSocket::GetPeerIP(bool strip_zone_index /*=false*/) const
 {
 	struct sockaddr_storage addr;
 	socklen_t addr_len = sizeof(addr);
 	int res = getpeername(m_fd, (sockaddr*)&addr, &addr_len);
 	if (res)
-		return wxString();
+		return std::string();
 
 	return AddressToString((sockaddr *)&addr, addr_len, false, strip_zone_index);
 }

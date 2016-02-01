@@ -211,7 +211,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		m_socket = new CSocket(this);
 		m_recvBufferPos = 0;
 
-		int res = m_socket->Connect(_T("probe.filezilla-project.org"), 21);
+		int res = m_socket->Connect("probe.filezilla-project.org", 21);
 		if (res && res != EINPROGRESS) {
 			PrintMessage(wxString::Format(_("Connect failed: %s"), CSocket::GetErrorDescription(res)), 1);
 			CloseSocket();

@@ -479,7 +479,7 @@ int CHttpControlSocket::DoInternalConnect()
 	delete m_pBackend;
 	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 
-	int res = m_pSocket->Connect(pData->host, pData->port);
+	int res = m_pSocket->Connect(pData->host.ToStdString(), pData->port);
 	if (!res)
 		return FZ_REPLY_OK;
 

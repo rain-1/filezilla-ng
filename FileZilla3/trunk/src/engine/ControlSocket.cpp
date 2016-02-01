@@ -1082,7 +1082,7 @@ int CRealControlSocket::ContinueConnect()
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
-	int res = m_pSocket->Connect(host, port);
+	int res = m_pSocket->Connect(host.ToStdString(), port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {

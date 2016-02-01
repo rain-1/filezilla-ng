@@ -114,7 +114,7 @@ protected:
 	// Other servers return "550 No files found."
 	bool IsMisleadingListResponse() const;
 
-	int GetExternalIPAddress(wxString& address);
+	int GetExternalIPAddress(std::string& address);
 
 	// Checks if listing2 is a subset of listing1. Compares only filenames.
 	bool CheckInclusion(const CDirectoryListing& listing1, const CDirectoryListing& listing2);
