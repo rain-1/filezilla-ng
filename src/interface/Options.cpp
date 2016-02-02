@@ -190,6 +190,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Show Site Manager on startup", number, _T("0"), normal },
 	{ "Prompt password change", number, _T("0"), normal },
 	{ "Persistent Choices", number, _T("0"), normal },
+	{ "Show notification bubbles", number, _T("1"), normal },
 
 	// Default/internal options
 	{ "Config Location", string, _T(""), default_only },
