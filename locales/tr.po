@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-13 13:13+0100\n"
-"PO-Revision-Date: 2016-01-02 13:23+0000\n"
+"POT-Creation-Date: 2016-01-30 15:29+0100\n"
+"PO-Revision-Date: 2016-01-31 09:02+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/kayazeren/"
 "filezilla/language/tr_TR/)\n"
@@ -80,7 +80,7 @@ msgid "%d file. Total size: At least %s"
 msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d dosya. Toplam boyut: En az %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2778
+#: ../../locales/../src/interface/QueueView.cpp:2772
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d dosya aktarım kuyruğuna eklendi"
@@ -1480,7 +1480,7 @@ msgstr "Her &zaman şu işlem yapılsın"
 msgid "Algorithm:"
 msgstr "Algoritma:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2937
 msgid "All files have been successfully transferred"
 msgstr "Tüm dosyalar aktarıldı"
 
@@ -1488,7 +1488,7 @@ msgstr "Tüm dosyalar aktarıldı"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Yazılan tüm kapılar 1024 ile 65535 arasında olmalı."
 
-#: ../../locales/../src/interface/QueueView.cpp:2943
+#: ../../locales/../src/interface/QueueView.cpp:2933
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1534,7 +1534,7 @@ msgid ""
 msgstr ""
 "Alternatif olarak, son sürümü FileZilla web sitesinden indirebilirsiniz:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1908
+#: ../../locales/../src/interface/QueueView.cpp:1902
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1543,7 +1543,7 @@ msgstr ""
 "Aktarım kuyruğu \"%s\" üzerinden yüklenirken hata oluştu.\n"
 "Bazı aktarım kuyruğu ögeleri yüklenememiş olabilir."
 
-#: ../../locales/../src/interface/QueueView.cpp:1818
+#: ../../locales/../src/interface/QueueView.cpp:1812
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1740,7 +1740,7 @@ msgstr "Yapım tarihi:"
 msgid "Build information"
 msgstr "Yapım bilgileri"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:241
+#: ../../locales/../src/interface/verifycertdialog.cpp:245
 msgid "Business category:"
 msgstr "İş kategorisi:"
 
@@ -1789,12 +1789,12 @@ msgid "Can't read from file"
 msgstr "Dosya okunamıyor"
 
 #: ../../locales/../src/engine/transfersocket.cpp:650
-#: ../../locales/../src/engine/transfersocket.cpp:716
+#: ../../locales/../src/engine/transfersocket.cpp:718
 msgid "Can't write data to file."
 msgstr "Veri dosyaya yazılamıyor."
 
 #: ../../locales/../src/engine/transfersocket.cpp:652
-#: ../../locales/../src/engine/transfersocket.cpp:718
+#: ../../locales/../src/engine/transfersocket.cpp:720
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "Veri %s dosyasına yazılamıyor"
@@ -1844,7 +1844,7 @@ msgstr "Sunucu Site Yöneticisine eklenemiyor"
 msgid "Cannot assign requested address"
 msgstr "İstenen adres atanamadı"
 
-#: ../../locales/../src/interface/context_control.cpp:349
+#: ../../locales/../src/interface/context_control.cpp:352
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -2176,7 +2176,7 @@ msgstr "Komut:"
 msgid "Comment"
 msgstr "Not"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:239
+#: ../../locales/../src/interface/verifycertdialog.cpp:243
 msgid "Common name:"
 msgstr "Bilinen Ad:"
 
@@ -2270,9 +2270,9 @@ msgid "Connect bypassing proxy settings"
 msgstr "Vekil sunucu ayarları atlanarak bağlanılsın"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:216
-#, fuzzy, c-format
+#, c-format
 msgid "Connect failed: %s"
-msgstr "Vekil sunucu isteği başarısız oldu: %s"
+msgstr "Bağlantı kurulamadı: %s"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1383
 msgid "Connect in current tab"
@@ -2285,10 +2285,6 @@ msgstr "Yeni sekmede bağlansın"
 #: ../../locales/../src/interface/cmdline.cpp:8
 msgid "Connect to specified Site Manager site"
 msgstr "Site Yöneticisinde belirtilen siteye bağlanılsın"
-
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
-msgid "Connected"
-msgstr "Bağlandı"
 
 #: ../../locales/../src/interface/queue.cpp:332
 msgid "Connecting"
@@ -2364,9 +2360,8 @@ msgid "Connection established, sending HTTP request"
 msgstr "Bağlanıldı, HTTP isteği gönderiliyor"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:333
-#, fuzzy
 msgid "Connection established, waiting for welcome message."
-msgstr "Bağlanıldı, hoş geldin iletisi bekleniyor..."
+msgstr "Bağlantı kuruldu, hoşgeldiniz iletisi bekleniyor."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
 msgid "Connection established, waiting for welcome message..."
@@ -2556,9 +2551,9 @@ msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "Denklik sertifikaları alınamadı, gnutls_x509_crt_import başarısız"
 
 #: ../../locales/../src/interface/FileZilla.cpp:108
-#, fuzzy, c-format
+#, c-format
 msgid "Could not initialize Winsock (%d): %s"
-msgstr "%s soketine yazılamıyor"
+msgstr "Winsock başlatılamadı (%d): %s"
 
 #: ../../locales/../src/engine/tlssocket.cpp:876
 msgid ""
@@ -2640,9 +2635,8 @@ msgid "Could not parse server address:"
 msgstr "Sunucu adresi çözümlenemedi:"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:977
-#, fuzzy
 msgid "Could not read from data socket."
-msgstr "Soketten okunamadı: %s"
+msgstr "Soketten veri okunamadı."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
 #, c-format
@@ -2654,9 +2648,8 @@ msgid "Could not read server item."
 msgstr "Sunucu nesnesi okunamıyor."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:344
-#, fuzzy
 msgid "Could not receive data from server."
-msgstr "Sunucuyla bağlantı kurulamıyor"
+msgstr "Sunucudan veri alınamadı."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
 #, c-format
@@ -2704,7 +2697,7 @@ msgstr "\"%s\" dosyasına yazılamıyor, yer imi kaydedilemedi: %s"
 msgid "Could not write \"%s\", the global bookmarks could no be saved: %s"
 msgstr "\"%s\" dosyasına yazılamıyor, küresel yer imleri kaydedilemedi: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1847
+#: ../../locales/../src/interface/QueueView.cpp:1841
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2746,7 +2739,7 @@ msgstr "%s günlük dosyasına yazılamıyor"
 msgid "Could not write to socket: %s"
 msgstr "%s soketine yazılamıyor"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:244
+#: ../../locales/../src/interface/verifycertdialog.cpp:248
 msgid "Country:"
 msgstr "Ülke:"
 
@@ -3274,7 +3267,7 @@ msgstr "Güncelleme indiriliyor..."
 
 #: ../../locales/../src/interface/LocalListView.cpp:105
 #: ../../locales/../src/interface/LocalTreeView.cpp:110
-#: ../../locales/../src/interface/QueueView.cpp:88
+#: ../../locales/../src/interface/QueueView.cpp:90
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
@@ -3285,7 +3278,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/LocalListView.cpp:111
 #: ../../locales/../src/interface/LocalTreeView.cpp:116
-#: ../../locales/../src/interface/QueueView.cpp:101
+#: ../../locales/../src/interface/QueueView.cpp:103
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
@@ -3318,7 +3311,7 @@ msgstr "FileZilla yazılımını &kapat"
 msgid "E&xport..."
 msgstr "Bilgileri &Ver..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:250
+#: ../../locales/../src/interface/verifycertdialog.cpp:254
 msgid "E-Mail:"
 msgstr "E-posta:"
 
@@ -3354,7 +3347,7 @@ msgstr "Arama sonuçları düzenleniyor"
 msgid "Email:"
 msgstr "E-posta:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "Empty command"
 msgstr "Boş komut"
 
@@ -3369,11 +3362,6 @@ msgstr "Klasör listesi boş"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:14
 msgid "Empty directory."
 msgstr "Klasör boş."
-
-#: ../../locales/../src/interface/recursive_operation.cpp:377
-#: ../../locales/../src/interface/recursive_operation.cpp:412
-msgid "Empty dirs to visit"
-msgstr "Bakılacak boş klasörler"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:52
 msgid "Empty file extension."
@@ -3425,7 +3413,7 @@ msgstr "Özel &komut yazın..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Sınırsız hız için 0 yazın."
 
-#: ../../locales/../src/interface/QueueView.cpp:2109
+#: ../../locales/../src/interface/QueueView.cpp:2103
 msgid "Enter command"
 msgstr "Komutu yazın"
 
@@ -3519,7 +3507,7 @@ msgstr "Ayarlar verilirken hata oluştu"
 msgid "Error importing"
 msgstr "Alırken hata oluştu"
 
-#: ../../locales/../src/interface/QueueView.cpp:1909
+#: ../../locales/../src/interface/QueueView.cpp:1903
 msgid "Error loading queue"
 msgstr "Kuyruk yüklenirken hata oluştu"
 
@@ -3533,7 +3521,7 @@ msgstr "Kuyruk yüklenirken hata oluştu"
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1830
+#: ../../locales/../src/interface/QueueView.cpp:1824
 #: ../../locales/../src/interface/search.cpp:802
 #: ../../locales/../src/interface/search.cpp:821
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3548,7 +3536,7 @@ msgstr "Kuyruk yüklenirken hata oluştu"
 msgid "Error loading xml file"
 msgstr "XML dosyası okunurken hata oluştu"
 
-#: ../../locales/../src/interface/QueueView.cpp:1819
+#: ../../locales/../src/interface/QueueView.cpp:1813
 msgid "Error saving queue"
 msgstr "Kuyruk kaydedilirken hata oluştu"
 
@@ -3559,7 +3547,7 @@ msgstr "Yazılım başlatılırken hata oluştu"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1848
+#: ../../locales/../src/interface/QueueView.cpp:1842
 #: ../../locales/../src/interface/sitemanager.cpp:611
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
@@ -3713,7 +3701,7 @@ msgstr "Denetim bağlantısının denklik adresi alınamadı, bağlantı kapatı
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "Veri bağlantısının denklik adresi alınamadı, bağlantı kapandı."
 
-#: ../../locales/../src/interface/context_control.cpp:80
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "FTP motoru başlatılamadı"
 
@@ -3724,9 +3712,8 @@ msgid "Failed to initialize TLS."
 msgstr "TLS başlatılamadı"
 
 #: ../../locales/../src/interface/FileZilla.cpp:109
-#, fuzzy
 msgid "Failed to initialize networking"
-msgstr "FTP motoru başlatılamadı"
+msgstr "Ağ sistemi başlatılamadı"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:146
 msgid "Failed to load panels, invalid resource files?"
@@ -4568,7 +4555,7 @@ msgstr ""
 msgid "Initializing TLS..."
 msgstr "TLS başlatılıyor..."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:107
+#: ../../locales/../src/interface/verifycertdialog.cpp:111
 msgid "Insecure algorithm!"
 msgstr "Güvenliksiz algoritma!"
 
@@ -4720,15 +4707,15 @@ msgstr "ai_flags değeri geçersiz"
 msgid "Invalid value for hints"
 msgstr "İpucu değeri geçersiz"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:252
+#: ../../locales/../src/interface/verifycertdialog.cpp:256
 msgid "Jurisdiction country:"
 msgstr "Yetkili ülke:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:254
+#: ../../locales/../src/interface/verifycertdialog.cpp:258
 msgid "Jurisdiction locality:"
 msgstr "Yetkili yerleşim:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:253
+#: ../../locales/../src/interface/verifycertdialog.cpp:257
 msgid "Jurisdiction state or province:"
 msgstr "Yetkili şehir:"
 
@@ -4871,13 +4858,17 @@ msgstr "Yerel süzgeçler:"
 msgid "Local site:"
 msgstr "Yerel site:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:246
+#: ../../locales/../src/interface/verifycertdialog.cpp:250
 msgid "Locality:"
 msgstr "Yer:"
 
 #: ../../locales/../src/interface/settings/optionspage_logging.cpp:97
 msgid "Log file"
 msgstr "Günlük dosyası"
+
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
+msgid "Logged in"
+msgstr "Oturum açıldı"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2111
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:115
@@ -5168,7 +5159,7 @@ msgstr "Nodename için bir adres belirtilmemiş"
 msgid "No category to export selected"
 msgstr "Verilecek bir kategori seçilmemiş"
 
-#: ../../locales/../src/interface/QueueView.cpp:2120
+#: ../../locales/../src/interface/QueueView.cpp:2114
 msgid "No command given, aborting."
 msgstr "Komut verilmedi, vazgeçiliyor."
 
@@ -5435,7 +5426,7 @@ msgstr "İşlem yürütülüyor"
 msgid "Operation not supported"
 msgstr "İşlem desteklenmiyor"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:240
+#: ../../locales/../src/interface/verifycertdialog.cpp:244
 msgid "Organization:"
 msgstr "Kurum:"
 
@@ -5447,7 +5438,7 @@ msgstr "Diğer SFTP Ayarları"
 msgid "Other system error"
 msgstr "Diğer sistem hatası"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:262
+#: ../../locales/../src/interface/verifycertdialog.cpp:266
 msgid "Other:"
 msgstr "Diğer:"
 
@@ -5699,7 +5690,7 @@ msgstr "Aynı anda 0 ile 10 arasında kaç aktarım yapılabileceğini yazın."
 msgid "Please enter a password for this server:"
 msgstr "Lütfen bu sunucunun parolasını yazın:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2109
+#: ../../locales/../src/interface/QueueView.cpp:2103
 msgid ""
 "Please enter a path and executable to run.\n"
 "E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
@@ -5901,8 +5892,8 @@ msgstr ""
 msgid "Positio&n of the message log:"
 msgstr "İleti gü&nlüğünün konumu:"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:247
-#: ../../locales/../src/interface/verifycertdialog.cpp:248
+#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:252
 msgid "Postal code:"
 msgstr "Posta kodu:"
 
@@ -6073,7 +6064,7 @@ msgstr "Aktarım Kuyruğu: %s%s"
 msgid "Queue: empty"
 msgstr "Aktarım Kuyruğu: boş"
 
-#: ../../locales/../src/interface/QueueView.cpp:438
+#: ../../locales/../src/interface/QueueView.cpp:440
 msgid "Queued files"
 msgstr "Kuyruktakiler"
 
@@ -6504,11 +6495,11 @@ msgstr "Parola kaydı yönetici tarafından devre dışı bırakılmış."
 msgid "Saving of passwords has been disabled by you."
 msgstr "Parola kaydını devre dışı bırakmışsınız."
 
-#: ../../locales/../src/interface/QueueView.cpp:1710
+#: ../../locales/../src/interface/QueueView.cpp:1704
 msgid "Scanning for files to add to queue"
 msgstr "Aktarım Kuyruğuna eklenecek dosyalar taranıyor"
 
-#: ../../locales/../src/interface/QueueView.cpp:1712
+#: ../../locales/../src/interface/QueueView.cpp:1706
 msgid "Scanning for files to upload"
 msgstr "Yüklenecek dosyalar taranıyor"
 
@@ -6731,7 +6722,7 @@ msgid "Sending keep-alive command"
 msgstr "Canlı-tut komutu gönderiliyor"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:65
-#: ../../locales/../src/interface/verifycertdialog.cpp:251
+#: ../../locales/../src/interface/verifycertdialog.cpp:255
 msgid "Serial number:"
 msgstr "Seri No:"
 
@@ -6860,7 +6851,7 @@ msgstr "Önceliği &Belirle"
 msgid "Set permissions of '%s' to '%s'"
 msgstr "'%s' izinleri '%s' olarak güncelleniyor"
 
-#: ../../locales/../src/engine/transfersocket.cpp:791
+#: ../../locales/../src/engine/transfersocket.cpp:793
 msgid "SetSocketBufferSize called without socket"
 msgstr "Soket olmadan SetSocketBufferSize çağrıldı"
 
@@ -7134,7 +7125,7 @@ msgstr "%s yüklemesine başlanıyor"
 msgid "Starts the local site in the given path"
 msgstr "Yerel site verilmiş yol ile başlatılır"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:245
+#: ../../locales/../src/interface/verifycertdialog.cpp:249
 msgid "State or province:"
 msgstr "Şehir:"
 
@@ -7157,7 +7148,7 @@ msgstr "Durdur ve hepsini &sil"
 msgid "Stop recursive operation"
 msgstr "Alt klasör işlemini durdur"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:249
+#: ../../locales/../src/interface/verifycertdialog.cpp:253
 msgid "Street:"
 msgstr "Sokak:"
 
@@ -7555,7 +7546,7 @@ msgstr "Yeni sürüm indirilemedi, lütfen daha sonra yeniden deneyin."
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Yeni sürüm İndirmeler klasörünüze kaydedilecek."
 
-#: ../../locales/../src/interface/QueueView.cpp:1829
+#: ../../locales/../src/interface/QueueView.cpp:1823
 msgid "The queue will not be saved."
 msgstr "Kuyruk kaydedilemedi."
 
@@ -7745,7 +7736,7 @@ msgstr "Zaman Aşımı"
 msgid "Timezone offset of server is %d seconds."
 msgstr "Sunucunun saat dilimi farkı %d saniye."
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:243
+#: ../../locales/../src/interface/verifycertdialog.cpp:247
 msgid "Title:"
 msgstr "Başlık:"
 
@@ -7877,8 +7868,7 @@ msgstr "Aktarılıyor"
 msgid "Transfers"
 msgstr "Aktarım"
 
-#: ../../locales/../src/interface/QueueView.cpp:2944
-#: ../../locales/../src/interface/QueueView.cpp:2947
+#: ../../locales/../src/interface/QueueView.cpp:2929
 msgid "Transfers finished"
 msgstr "Aktarımlar tamamlandı"
 
@@ -7955,7 +7945,7 @@ msgstr "KULLANICI@&SUNUCU"
 msgid "Unassigned error code %d"
 msgstr "Atanmamış hata kodu %d"
 
-#: ../../locales/../src/interface/verifycertdialog.cpp:242
+#: ../../locales/../src/interface/verifycertdialog.cpp:246
 msgid "Unit:"
 msgstr "Birim:"
 
@@ -8205,7 +8195,7 @@ msgstr "Görüntülenecek sütunlar"
 msgid "W&rite"
 msgstr "Y&azma"
 
-#: ../../locales/../src/interface/QueueView.cpp:1671
+#: ../../locales/../src/interface/QueueView.cpp:1665
 msgid "Waiting"
 msgstr "Bekliyor"
 
