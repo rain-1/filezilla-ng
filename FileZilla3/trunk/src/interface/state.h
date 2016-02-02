@@ -126,7 +126,7 @@ public:
 
 	bool RefreshRemote();
 
-	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
+	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, CStateEventHandler* insertBefore = 0);
 	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
 
 	CFileZillaEngine* m_pEngine{};
