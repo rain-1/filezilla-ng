@@ -291,8 +291,8 @@ void CSearchDialog::Run()
 	m_original_dir = m_pState->GetRemotePath();
 	m_local_target = m_pState->GetLocalDir();
 
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE);
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_pState->GetRecursiveOperationHandler());
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_pState->GetRecursiveOperationHandler());
 
 	ShowModal();
 
