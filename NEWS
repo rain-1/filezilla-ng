@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.15.0.1 (2016-02-02)
+
+- Fix for search dialog not displaying the results from the last visited directory of a search
+
 3.15.0 (2016-01-30)
 
 + MSW: Display notification bubble if FileZilla isn't in the forgeground and all active transfers have finished.
