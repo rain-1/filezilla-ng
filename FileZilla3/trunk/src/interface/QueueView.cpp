@@ -2925,7 +2925,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		}
 	}
 
-	if (!m_pMainFrame->IsActive()) {
+	if (!m_pMainFrame->IsActive() && COptions::Get()->GetOptionVal(OPTION_SHOW_NOTIFICATION_BUBBLE) != 0) {
 		wxString const title = _("Transfers finished");
 		wxString msg;
 		int const failed_count = m_pQueue->GetQueueView_Failed()->GetFileCount();
@@ -2946,7 +2946,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		m_desktop_notification->SetMessage(msg);
 		m_desktop_notification->Show(5);
 #endif
-}
+	}
 
 	switch (m_actionAfterState)
 	{
