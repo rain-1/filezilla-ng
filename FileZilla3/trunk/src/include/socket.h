@@ -31,7 +31,7 @@ struct socket_event_type;
 typedef fz::simple_event<socket_event_type, CSocketEventSource*, SocketEventType, int> CSocketEvent;
 
 struct hostaddress_event_type;
-typedef fz::simple_event<hostaddress_event_type, CSocketEventSource*, wxString> CHostAddressEvent;
+typedef fz::simple_event<hostaddress_event_type, CSocketEventSource*, std::string> CHostAddressEvent;
 
 void RemoveSocketEvents(fz::event_handler * handler, CSocketEventSource const* const source);
 void ChangeSocketEventHandler(fz::event_handler * oldHandler, fz::event_handler * newHandler, CSocketEventSource const* const source);
@@ -80,7 +80,7 @@ public:
 	// If host is a name that can be resolved, a hostaddress socket event gets sent.
 	// Once connections got established, a connection event gets sent. If
 	// connection could not be established, a close event gets sent.
-	int Connect(std::string const& host, unsigned int port, address_family family = unspec, std::string const& bind = std::string());
+	int Connect(fz::native_string const& host, unsigned int port, address_family family = unspec, std::string const& bind = std::string());
 
 	// After receiving a send or receive event, you can call these functions
 	// as long as their return value is positive.
@@ -95,7 +95,7 @@ public:
 	std::string GetPeerIP(bool strip_zone_index = false) const;
 
 	// Returns the hostname passed to Connect()
-	wxString GetPeerHost() const;
+	fz::native_string GetPeerHost() const;
 
 	// -1 on error
 	int GetLocalPort(int& error);
@@ -104,7 +104,7 @@ public:
 	// If connected, either ipv4 or ipv6, unspec otherwise
 	address_family GetAddressFamily() const;
 
-	static wxString GetErrorString(int error);
+	static std::string GetErrorString(int error);
 	static wxString GetErrorDescription(int error);
 
 	// Can only be called if the state is none
@@ -147,7 +147,7 @@ protected:
 
 	CSocketThread* m_pSocketThread{};
 
-	std::string m_host;
+	fz::native_string m_host;
 	unsigned int m_port{};
 	int m_family;
 

@@ -78,7 +78,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 
 	m_pSocket = new CSocket(this);
 
-	int res = m_pSocket->Connect(host.ToStdString(), m_port, protocol);
+	int res = m_pSocket->Connect(fz::to_native(host), m_port, protocol);
 	if (res && res != EINPROGRESS) {
 		Close(false);
 		return;

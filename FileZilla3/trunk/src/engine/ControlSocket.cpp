@@ -951,7 +951,7 @@ void CRealControlSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, i
 	}
 }
 
-void CRealControlSocket::OnHostAddress(CSocketEventSource*, wxString const& address)
+void CRealControlSocket::OnHostAddress(CSocketEventSource*, std::string const& address)
 {
 	if (!m_pBackend)
 		return;
@@ -1082,7 +1082,7 @@ int CRealControlSocket::ContinueConnect()
 		LogMessage(MessageType::Status, _("Resolving address of %s"), host);
 	}
 
-	int res = m_pSocket->Connect(host.ToStdString(), port);
+	int res = m_pSocket->Connect(fz::to_native(host), port);
 
 	// Treat success same as EINPROGRESS, we wait for connect notification in any case
 	if (res && res != EINPROGRESS) {

@@ -538,7 +538,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 		}
 	}
 
-	int res = m_pSocket->Connect(host.ToStdString(), port, CSocket::unspec, bindAddress);
+	int res = m_pSocket->Connect(fz::to_native(host), port, CSocket::unspec, bindAddress);
 	if (res && res != EINPROGRESS) {
 		ResetSocket();
 		return false;
