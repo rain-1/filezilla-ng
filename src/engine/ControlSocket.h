@@ -280,7 +280,7 @@ protected:
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);
-	void OnHostAddress(CSocketEventSource* source, wxString const& address);
+	void OnHostAddress(CSocketEventSource* source, std::string const& address);
 
 	virtual void OnConnect();
 	virtual void OnReceive();

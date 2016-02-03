@@ -458,7 +458,7 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 
 	m_tlsState = TlsState::handshake;
 
-	wxString hostname;
+	fz::native_string hostname;
 
 	if (pPrimarySocket) {
 		// Implicitly trust certificate of primary socket
@@ -482,10 +482,10 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 		hostname = m_socket.GetPeerHost();
 	}
 
-	if (!hostname.empty() && fz::get_address_type(hostname.ToStdWstring()) == fz::address_type::unknown) {
-		const wxWX2MBbuf utf8 = hostname.mb_str(wxConvUTF8);
-		if (utf8) {
-			int res = gnutls_server_name_set( m_session, GNUTLS_NAME_DNS, utf8, strlen(utf8) );
+	if (!hostname.empty() && fz::get_address_type(hostname) == fz::address_type::unknown) {
+		auto const utf8 = fz::to_utf8(hostname);
+		if (!utf8.empty()) {
+			int res = gnutls_server_name_set(m_session, GNUTLS_NAME_DNS, utf8.c_str(), utf8.size());
 			if (res) {
 				LogError(res, _T("gnutls_server_name_set"), MessageType::Debug_Warning );
 			}

@@ -244,7 +244,11 @@ public:
 			return EINVAL;
 		}
 
-		m_host = m_pSocket->m_host;
+		m_host = fz::to_utf8(m_pSocket->m_host);
+		if (m_host.empty()) {
+			return EINVAL;
+		}
+
 		m_bind = bind;
 
 		// Connect method of CSocket ensures port is in range
@@ -626,11 +630,11 @@ protected:
 			if (m_waiting & (WAIT_WRITE | WAIT_CONNECT))
 				FD_SET(m_pSocket->m_fd, &writefds);
 
-			int max = wxMax(m_pipe[0], m_pSocket->m_fd) + 1;
+			int maxfd = std::max(m_pipe[0], m_pSocket->m_fd) + 1;
 
 			l.unlock();
 
-			int res = select(max, &readfds, &writefds, 0, 0);
+			int res = select(maxfd, &readfds, &writefds, 0, 0);
 
 			l.lock();
 
@@ -648,8 +652,6 @@ protected:
 				continue;
 			if (res == -1) {
 				res = errno;
-				//printf("select failed: %s\n", (const char *)CSocket::GetErrorDescription(res).mb_str());
-				//fflush(stdout);
 
 				if (res == EINTR)
 					continue;
@@ -900,7 +902,7 @@ void CSocket::DetachThread()
 	Cleanup(false);
 }
 
-int CSocket::Connect(std::string const& host, unsigned int port, address_family family, std::string const& bind)
+int CSocket::Connect(fz::native_string const& host, unsigned int port, address_family family, std::string const& bind)
 {
 	if (m_state != none)
 		return EISCONN;
@@ -1009,12 +1011,12 @@ void CSocket::SetEventHandler(fz::event_handler* pEvtHandler)
 	}
 }
 
-#define ERRORDECL(c, desc) { c, _T(#c), desc },
+#define ERRORDECL(c, desc) { c, #c, desc },
 
 struct Error_table
 {
 	int code;
-	const wxChar* const name;
+	const char* const name;
 	const wxChar* const description;
 };
 
@@ -1092,10 +1094,9 @@ static Error_table const error_table[] =
 	{ 0, 0, 0 }
 };
 
-wxString CSocket::GetErrorString(int error)
+std::string CSocket::GetErrorString(int error)
 {
-	for (int i = 0; error_table[i].code; ++i)
-	{
+	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code)
 			continue;
 
@@ -1107,8 +1108,7 @@ wxString CSocket::GetErrorString(int error)
 
 wxString CSocket::GetErrorDescription(int error)
 {
-	for (int i = 0; error_table[i].code; ++i)
-	{
+	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code)
 			continue;
 
@@ -1128,7 +1128,7 @@ int CSocket::Close()
 		m_pSocketThread->m_host.clear();
 		m_pSocketThread->m_port.clear();
 
-			m_pSocketThread->WakeupThread(l);
+		m_pSocketThread->WakeupThread(l);
 
 		CSocketThread::CloseSocketFd(fd);
 		m_state = none;
@@ -1615,7 +1615,7 @@ int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 	return ret;
 }
 
-wxString CSocket::GetPeerHost() const
+fz::native_string CSocket::GetPeerHost() const
 {
 	return m_host;
 }

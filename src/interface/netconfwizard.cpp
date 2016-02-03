@@ -211,7 +211,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		m_socket = new CSocket(this);
 		m_recvBufferPos = 0;
 
-		int res = m_socket->Connect("probe.filezilla-project.org", 21);
+		int res = m_socket->Connect(fzT("probe.filezilla-project.org"), 21);
 		if (res && res != EINPROGRESS) {
 			PrintMessage(wxString::Format(_("Connect failed: %s"), CSocket::GetErrorDescription(res)), 1);
 			CloseSocket();
@@ -936,8 +936,8 @@ void CNetConfWizard::OnAccept()
 	if (!m_pDataSocket)
 		return;
 
-	wxString peerAddr = m_socket->GetPeerHost();
-	wxString dataPeerAddr = m_pDataSocket->GetPeerHost();
+	std::string peerAddr = m_socket->GetPeerIP();
+	std::string dataPeerAddr = m_pDataSocket->GetPeerIP();
 	if (peerAddr.empty()) {
 		delete m_pDataSocket;
 		m_pDataSocket = 0;
