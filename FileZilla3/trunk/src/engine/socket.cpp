@@ -1103,7 +1103,7 @@ std::string CSocket::GetErrorString(int error)
 		return error_table[i].name;
 	}
 
-	return wxString::Format(_T("%d"), error);
+	return wxString::Format(_T("%d"), error).ToStdString();
 }
 
 wxString CSocket::GetErrorDescription(int error)
