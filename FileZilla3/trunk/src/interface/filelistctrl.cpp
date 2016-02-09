@@ -486,7 +486,7 @@ wxString GetExt(const wxString& file)
 	wxString ret;
 
 	int pos = file.Find('.', true);
-	if (pos > 0 && file[pos + 1] != 0) // Does neither starts nor end with dot
+	if (pos > 0 && (static_cast<size_t>(pos) + 1) < file.size()) // Does neither starts nor end with dot
 		ret = file.Mid(pos + 1);
 
 	return ret;
