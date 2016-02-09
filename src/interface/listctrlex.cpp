@@ -1115,21 +1115,25 @@ bool wxListCtrlEx::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 		break;
 	case HDN_ITEMCHANGINGA:
 	case HDN_ITEMCHANGINGW:
-		if (m_columnDragging)
-		{
-			if (nmHDR->pitem->mask & HDI_WIDTH && nmHDR->pitem->cxy < MIN_COLUMN_WIDTH)
-			{
+		if (m_columnDragging) {
+			if (nmHDR->pitem->mask & HDI_WIDTH && nmHDR->pitem->cxy < MIN_COLUMN_WIDTH) {
 				*result = 1;
 				return true;
 			}
-			else
-			{
+			else {
 				*result = 0;
 				return false;
 			}
 		}
 		else
 			return false;
+	case HDN_DIVIDERDBLCLICK:
+		{
+			wxListEvent event(wxEVT_LIST_COL_END_DRAG, GetId());
+			event.SetEventObject(this);
+			AddPendingEvent(event);
+		}
+		break;
 	}
 
 	return wxListCtrl::MSWOnNotify(idCtrl, lParam, result);
