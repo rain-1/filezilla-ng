@@ -535,30 +535,23 @@ bool wxListCtrlEx::ReadColumnWidths(unsigned int optionId)
 		return true;
 	}
 
-	const unsigned int count = m_columnInfo.size();
+	size_t const columnCount = m_columnInfo.size();
 
 	wxString savedWidths = COptions::Get()->GetOption(optionId);
 	wxStringTokenizer tokens(savedWidths, _T(" "));
-	if (tokens.CountTokens() < count)
-		return false;
 
-	unsigned long* newWidths = new unsigned long[count];
-	for (unsigned int i = 0; i < count; i++)
-	{
-		wxString token = tokens.GetNextToken();
-		if (!token.ToULong(newWidths + i) || newWidths[i] > 5000)
-		{
-			delete [] newWidths;
-			return false;
+	size_t const tokenCount = tokens.CountTokens();
+
+	for (size_t i = 0; i < columnCount; ++i) {
+		unsigned long newWidth{};
+		if (i < tokenCount) {
+			wxString token = tokens.GetNextToken();
+			if (token.ToULong(&newWidth) && newWidth < 10000) {
+				m_columnInfo[i].width = newWidth;
+			}
 		}
-		else if (newWidths[i] < MIN_COLUMN_WIDTH)
-			newWidths[i] = MIN_COLUMN_WIDTH;
 	}
 
-	for (unsigned int i = 0; i < count; i++)
-		m_columnInfo[i].width = newWidths[i];
-
-	delete [] newWidths;
 	return true;
 }
 
@@ -567,13 +560,11 @@ void wxListCtrlEx::SaveColumnWidths(unsigned int optionId)
 	const unsigned int count = m_columnInfo.size();
 
 	wxString widths;
-	for (unsigned int i = 0; i < count; i++)
-	{
+	for (unsigned int i = 0; i < count; ++i) {
 		int width = 0;
 
 		bool found = false;
-		for (int j = 0; j < GetColumnCount(); j++)
-		{
+		for (int j = 0; j < GetColumnCount(); ++j) {
 			if (m_pVisibleColumnMapping[j] != i)
 				continue;
 
@@ -590,7 +581,7 @@ void wxListCtrlEx::SaveColumnWidths(unsigned int optionId)
 }
 
 
-void wxListCtrlEx::AddColumn(const wxString& name, int align, int initialWidth, bool fixed /*=false*/)
+void wxListCtrlEx::AddColumn(const wxString& name, int align, int initialWidth, bool fixed)
 {
 	wxASSERT(!GetColumnCount());
 
