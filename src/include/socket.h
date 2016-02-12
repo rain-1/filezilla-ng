@@ -105,11 +105,11 @@ public:
 	address_family GetAddressFamily() const;
 
 	static std::string GetErrorString(int error);
-	static wxString GetErrorDescription(int error);
+	static fz::native_string GetErrorDescription(int error);
 
-	// Can only be called if the state is none
+	// Due to asynchronicity it is possible that the old handler receives one last 
+	// socket event when changing handlers.
 	void SetEventHandler(fz::event_handler* pEvtHandler);
-	fz::event_handler* GetEventHandler() { return m_pEvtHandler; }
 
 	static void Cleanup(bool force);
 
@@ -137,7 +137,8 @@ protected:
 	static int DoSetBufferSizes(int fd, int size_read, int size_write);
 	static int SetNonblocking(int fd);
 
-	void DetachThread();
+	// Note: Unlocks the lock.
+	void DetachThread(fz::scoped_lock & l);
 
 	fz::event_handler* m_pEvtHandler;
 
