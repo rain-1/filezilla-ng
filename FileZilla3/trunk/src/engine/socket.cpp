@@ -868,15 +868,17 @@ CSocket::~CSocket()
 	if (m_state != none)
 		Close();
 
-	DetachThread();
+	if (m_pSocketThread) {
+		fz::scoped_lock l(m_pSocketThread->m_sync);
+		DetachThread(l);
+	}
 }
 
-void CSocket::DetachThread()
+void CSocket::DetachThread(fz::scoped_lock & l)
 {
 	if (!m_pSocketThread)
 		return;
 
-	fz::scoped_lock l(m_pSocketThread->m_sync);
 	m_pSocketThread->SetSocket(0, l);
 	if (m_pSocketThread->m_finished) {
 		m_pSocketThread->WakeupThread(l);
@@ -914,16 +916,18 @@ int CSocket::Connect(fz::native_string const& host, unsigned int port, address_f
 		return EINVAL;
 	}
 
+	int af{};
+
 	switch (family)
 	{
 	case unspec:
-		m_family = AF_UNSPEC;
+		af = AF_UNSPEC;
 		break;
 	case ipv4:
-		m_family = AF_INET;
+		af = AF_INET;
 		break;
 	case ipv6:
-		m_family = AF_INET6;
+		af = AF_INET6;
 		break;
 	default:
 		return EINVAL;
@@ -932,17 +936,9 @@ int CSocket::Connect(fz::native_string const& host, unsigned int port, address_f
 	if (m_pSocketThread && m_pSocketThread->m_started) {
 		fz::scoped_lock l(m_pSocketThread->m_sync);
 		if (!m_pSocketThread->m_threadwait) {
-			m_pSocketThread->WakeupThread(l);
-			l.unlock();
-			// Wait a small amount of time
-			wxMilliSleep(100);
-
-			l.lock();
-			if (!m_pSocketThread->m_threadwait) {
-				// Inside a blocking call, e.g. getaddrinfo
-				l.unlock();
-				DetachThread();
-			}
+			// Possibly inside a blocking call, e.g. getaddrinfo.
+			// Detach the thread so that we can continue.
+			DetachThread(l);
 		}
 	}
 	if (!m_pSocketThread) {
@@ -950,6 +946,7 @@ int CSocket::Connect(fz::native_string const& host, unsigned int port, address_f
 		m_pSocketThread->SetSocket(this);
 	}
 
+	m_family = af;
 	m_state = connecting;
 
 	m_host = host;
@@ -1106,16 +1103,16 @@ std::string CSocket::GetErrorString(int error)
 	return wxString::Format(_T("%d"), error).ToStdString();
 }
 
-wxString CSocket::GetErrorDescription(int error)
+fz::native_string CSocket::GetErrorDescription(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
 		if (error != error_table[i].code)
 			continue;
 
-		return wxString(error_table[i].name) + _T(" - ") + wxGetTranslation(error_table[i].description);
+		return fz::to_native(wxString(error_table[i].name) + _T(" - ") + wxGetTranslation(error_table[i].description));
 	}
 
-	return wxString::Format(_T("%d"), error);
+	return fz::to_native(wxString::Format(_T("%d"), error));
 }
 
 int CSocket::Close()
