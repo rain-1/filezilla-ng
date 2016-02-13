@@ -26,13 +26,14 @@ static const wxString typeNames[SERVERTYPE_MAX] = {
 	TRANSLATE_T("Default (Autodetect)"),
 	_T("Unix"),
 	_T("VMS"),
-	_T("DOS"),
+	_T("DOS with backslash separators"),
 	_T("MVS, OS/390, z/OS"),
 	_T("VxWorks"),
 	_T("z/VM"),
 	_T("HP NonStop"),
 	TRANSLATE_T("DOS-like with virtual paths"),
-	_T("Cygwin")
+	_T("Cygwin"),
+	_T("DOS with forward-slash separators"),
 };
 
 static const t_protocolInfo& GetProtocolInfo(ServerProtocol protocol)

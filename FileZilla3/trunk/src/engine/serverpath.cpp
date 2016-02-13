@@ -20,13 +20,14 @@ static const CServerTypeTraits traits[SERVERTYPE_MAX] = {
 	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Failsafe
 	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false },
 	{ _T("."),   false,  '[',  ']',    false, 0, '^', false, false },
-	{ _T("\\/"), false,    0,    0,    false, 0, 0,   true,  false },
+	{ _T("\\/"), false,    0,    0,    false, 0, 0,   true,  false }, // DOS with backslashes
 	{ _T("."),   false, '\'', '\'',     true, 1, 0,   false, false },
 	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false },
 	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  false }, // Same as Unix
 	{ _T("."),   false,    0,    0,    false, 0, 0,   false, false },
 	{ _T("\\"),  true,     0,    0,    false, 0, 0,   true,  false },
-	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  }  // Cygwin is like Unix but has optional prefix of form "//server"
+	{ _T("/"),   true,     0,    0,    false, 0, 0,   true,  true  },  // Cygwin is like Unix but has optional prefix of form "//server"
+	{ _T("/\\"), false,    0,    0,    false, 0, 0,   true,  false } // DOS with forwardslashes
 };
 
 bool CServerPathData::operator==(const CServerPathData& cmp) const
@@ -95,8 +96,7 @@ bool CServerPath::SetPath(wxString &newPath, bool isFile)
 				m_type = DOS;
 		else if (path.c_str()[0] == FTP_MVS_DOUBLE_QUOTE && path.Last() == FTP_MVS_DOUBLE_QUOTE)
 			m_type = MVS;
-		else if (path[0] == ':' && (pos1 = path.Mid(1).Find(':')) > 0)
-		{
+		else if (path[0] == ':' && (pos1 = path.Mid(1).Find(':')) > 0) {
 			int slash = path.Find('/');
 			if (slash == -1 || slash > pos1)
 				m_type = VXWORKS;
@@ -159,7 +159,7 @@ wxString CServerPath::GetPath() const
 
 	// DOS is strange.
 	// C: is current working dir on drive C, C:\ the drive root.
-	if (m_type == DOS && m_data->m_segments.size() == 1)
+	if ((m_type == DOS || m_type == DOS_FWD_SLASHES) && m_data->m_segments.size() == 1)
 		path += traits[m_type].separators[0];
 
 	return path;
@@ -531,6 +531,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 		}
 		break;
 	case DOS:
+	case DOS_FWD_SLASHES:
 		{
 			bool is_relative = false;
 			int sep = dir.find_first_of(traits[m_type].separators);
