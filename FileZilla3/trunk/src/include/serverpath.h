@@ -19,7 +19,7 @@ class CServerPath final
 {
 public:
 	CServerPath();
-	explicit CServerPath(wxString const& path, ServerType type = ServerType::DEFAULT);
+	explicit CServerPath(wxString const& path, ServerType type = DEFAULT);
 	CServerPath(CServerPath const& path, wxString subdir); // Ignores parent on absolute subdir
 	CServerPath(CServerPath const& path) = default;
 	CServerPath(CServerPath && path) noexcept = default;
