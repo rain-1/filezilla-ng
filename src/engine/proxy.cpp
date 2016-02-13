@@ -6,6 +6,7 @@
   #include <ws2tcpip.h>
 #else
   #include <sys/socket.h>
+  #include <netdb.h>
 #endif
 #include <filezilla.h>
 #include "engineprivate.h"
@@ -14,9 +15,7 @@
 
 #include <libfilezilla/iputils.hpp>
 
-#ifndef FZ_WINDOWS
-#include <netdb.h>
-#endif
+#include <algorithm>
 
 enum handshake_state
 {
