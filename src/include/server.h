@@ -22,13 +22,14 @@ enum ServerType
 	DEFAULT,
 	UNIX,
 	VMS,
-	DOS,
+	DOS, // Backslashes as preferred separator
 	MVS,
 	VXWORKS,
 	ZVM,
 	HPNONSTOP,
 	DOS_VIRTUAL,
 	CYGWIN,
+	DOS_FWD_SLASHES, // Forwardslashes as preferred separator
 
 	SERVERTYPE_MAX
 };

@@ -72,7 +72,7 @@ protected:
 
 	bool ParseData(bool partial);
 
-	bool ParseLine(CLine &line, const enum ServerType serverType, bool concatenated);
+	bool ParseLine(CLine &line, ServerType const serverType, bool concatenated);
 
 	bool ParseAsUnix(CLine &line, CDirentry &entry, bool expect_date);
 	bool ParseAsDos(CLine &line, CDirentry &entry);

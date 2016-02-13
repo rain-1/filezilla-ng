@@ -138,6 +138,22 @@ void CServerPathTest::testGetPath()
 
 	const CServerPath cygwin4(_T("//foo"), CYGWIN);
 	CPPUNIT_ASSERT(cygwin4.GetPath() == _T("//foo"));
+
+
+	const CServerPath dos_slashes1(_T("C:\\"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes1.GetPath() == _T("C:/"));
+
+	const CServerPath dos_slashes2(_T("C:\\FOO"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes2.GetPath() == _T("C:/FOO"));
+
+	const CServerPath dos_slashes3(_T("md:\\"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes3.GetPath() == _T("md:/"));
+
+	const CServerPath dos_slashes4(_T("C:"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes4.GetPath() == _T("C:/"));
+
+	const CServerPath dos_slashes5(_T("C:\\FOO\\"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes5.GetPath() == _T("C:/FOO"));
 }
 
 void CServerPathTest::testHasParent()
@@ -236,6 +252,14 @@ void CServerPathTest::testHasParent()
 
 	const CServerPath cygwin6(_T("//foo/bar"), CYGWIN);
 	CPPUNIT_ASSERT(cygwin6.HasParent());
+
+
+	const CServerPath dos_slashes1(_T("C:\\"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(!dos_slashes1.HasParent());
+
+	const CServerPath dos_slashes2(_T("C:\\FOO"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes2.HasParent());
+
 }
 
 void CServerPathTest::testGetParent()
@@ -300,6 +324,11 @@ void CServerPathTest::testGetParent()
 	CPPUNIT_ASSERT(cygwin3.GetParent() == cygwin2);
 	CPPUNIT_ASSERT(cygwin5.GetParent() == cygwin4);
 	CPPUNIT_ASSERT(cygwin6.GetParent() == cygwin5);
+
+	const CServerPath dos_slashes1(_T("C:\\"), DOS_FWD_SLASHES);
+	const CServerPath dos_slashes2(_T("C:/FOO"), DOS_FWD_SLASHES);
+	CPPUNIT_ASSERT(dos_slashes2.GetParent() == dos_slashes1);
+
 }
 
 void CServerPathTest::testFormatSubdir()
@@ -326,11 +355,13 @@ void CServerPathTest::testGetCommonParent()
 	CPPUNIT_ASSERT(vms2.GetCommonParent(vms1) == vms1);
 	CPPUNIT_ASSERT(vms3.GetCommonParent(vms1) == CServerPath());
 
-	const CServerPath dos1(_T("C:\\"));
-	const CServerPath dos2(_T("C:\\FOO"));
-	const CServerPath dos3(_T("D:\\FOO"));
-	CPPUNIT_ASSERT(dos1.GetCommonParent(dos2) == dos1);
-	CPPUNIT_ASSERT(dos2.GetCommonParent(dos3) == CServerPath());
+	{
+		const CServerPath dos1(_T("C:\\"));
+		const CServerPath dos2(_T("C:\\FOO"));
+		const CServerPath dos3(_T("D:\\FOO"));
+		CPPUNIT_ASSERT(dos1.GetCommonParent(dos2) == dos1);
+		CPPUNIT_ASSERT(dos2.GetCommonParent(dos3) == CServerPath());
+	}
 
 	const CServerPath mvs1(_T("'FOO'"), MVS);
 	const CServerPath mvs2(_T("'FOO.'"), MVS);
@@ -391,6 +422,15 @@ void CServerPathTest::testGetCommonParent()
 	CPPUNIT_ASSERT(cygwin4.GetCommonParent(cygwin4) == cygwin4);
 	CPPUNIT_ASSERT(cygwin4.GetCommonParent(cygwin6) == cygwin4);
 	CPPUNIT_ASSERT(cygwin4.GetCommonParent(cygwin1) == CServerPath());
+
+	{
+		const CServerPath dos_slashes1(_T("C:\\"), DOS_FWD_SLASHES);
+		const CServerPath dos_slashes2(_T("C:\\FOO"), DOS_FWD_SLASHES);
+		const CServerPath dos_slashes3(_T("D:\\FOO"), DOS_FWD_SLASHES);
+		CPPUNIT_ASSERT(dos_slashes1.GetCommonParent(dos_slashes2) == dos_slashes1);
+		CPPUNIT_ASSERT(dos_slashes2.GetCommonParent(dos_slashes3) == CServerPath());
+	}
+
 }
 
 void CServerPathTest::testFormatFilename()
@@ -403,10 +443,12 @@ void CServerPathTest::testFormatFilename()
 	const CServerPath vms1(_T("FOO:[BAR]"));
 	CPPUNIT_ASSERT(vms1.FormatFilename(_T("BAZ"), false) == _T("FOO:[BAR]BAZ"));
 
-	const CServerPath dos1(_T("C:\\"));
-	const CServerPath dos2(_T("C:\\foo"));
-	CPPUNIT_ASSERT(dos1.FormatFilename(_T("bar"), false) == _T("C:\\bar"));
-	CPPUNIT_ASSERT(dos2.FormatFilename(_T("bar"), false) == _T("C:\\foo\\bar"));
+	{
+		const CServerPath dos1(_T("C:\\"));
+		const CServerPath dos2(_T("C:\\foo"));
+		CPPUNIT_ASSERT(dos1.FormatFilename(_T("bar"), false) == _T("C:\\bar"));
+		CPPUNIT_ASSERT(dos2.FormatFilename(_T("bar"), false) == _T("C:\\foo\\bar"));
+	}
 
 	const CServerPath mvs1(_T("'FOO.BAR'"), MVS);
 	const CServerPath mvs2(_T("'FOO.BAR.'"), MVS);
@@ -447,6 +489,14 @@ void CServerPathTest::testFormatFilename()
 	CPPUNIT_ASSERT(cygwin2.FormatFilename(_T("bar"), false) == _T("/foo/bar"));
 	CPPUNIT_ASSERT(cygwin3.FormatFilename(_T("bar"), false) == _T("//bar"));
 	CPPUNIT_ASSERT(cygwin4.FormatFilename(_T("bar"), false) == _T("//foo/bar"));
+
+	{
+		const CServerPath dos_slashes1(_T("C:\\"), DOS_FWD_SLASHES);
+		const CServerPath dos_slashes2(_T("C:\\foo"), DOS_FWD_SLASHES);
+		CPPUNIT_ASSERT(dos_slashes1.FormatFilename(_T("bar"), false) == _T("C:/bar"));
+		CPPUNIT_ASSERT(dos_slashes2.FormatFilename(_T("bar"), false) == _T("C:/foo/bar"));
+	}
+
 }
 
 void CServerPathTest::testChangePath()
@@ -484,26 +534,28 @@ void CServerPathTest::testChangePath()
 	CPPUNIT_ASSERT(vms8.ChangePath(sub, true) && vms8 == vms9 && sub == _T("FOO"));
 	CPPUNIT_ASSERT(vms10.ChangePath(_T("FOO:[BAR]")) && vms10 == vms1);
 
-	const CServerPath dos1(_T("c:\\bar"));
-	CServerPath dos2(_T("c:\\bar"));
-	CServerPath dos3(_T("c:\\bar\\baz"));
-	CServerPath dos4(_T("c:\\bar"));
-	CServerPath dos5(_T("c:\\bar\\baz\\bar"));
-	CServerPath dos6(_T("c:\\bar\\baz\\"));
-	CServerPath dos7(_T("d:\\bar"));
-	CServerPath dos8(_T("c:\\bar\\baz"));
-	CServerPath dos9(_T("c:\\bar\\"));
-	CServerPath dos10(_T("md:\\bar\\"), DOS);
-	CPPUNIT_ASSERT(dos2.ChangePath(_T("baz")) && dos2 == dos3);
-	CPPUNIT_ASSERT(dos4.ChangePath(_T("baz\\bar")) && dos4 == dos5);
-	CPPUNIT_ASSERT(dos5.ChangePath(_T("\\bar\\")) && dos5 == dos1);
-	CPPUNIT_ASSERT(dos6.ChangePath(_T("..\\..\\.\\foo\\..\\bar")) && dos6 == dos1);
-	CPPUNIT_ASSERT(dos7.ChangePath(_T("c:\\bar")) && dos7 == dos1);
-	sub = _T("\\bar\\foo");
-	CPPUNIT_ASSERT(dos8.ChangePath(sub, true) && dos8 == dos1 && sub == _T("foo"));
-	sub = _T("baz\\foo");
-	CPPUNIT_ASSERT(dos9.ChangePath(sub, true) && dos9 == dos3 && sub == _T("foo"));
-	CPPUNIT_ASSERT(dos9.ChangePath(_T("md:\\bar\\")) && dos9 == dos10);
+	{
+		const CServerPath dos1(_T("c:\\bar"));
+		CServerPath dos2(_T("c:\\bar"));
+		CServerPath dos3(_T("c:\\bar\\baz"));
+		CServerPath dos4(_T("c:\\bar"));
+		CServerPath dos5(_T("c:\\bar\\baz\\bar"));
+		CServerPath dos6(_T("c:\\bar\\baz\\"));
+		CServerPath dos7(_T("d:\\bar"));
+		CServerPath dos8(_T("c:\\bar\\baz"));
+		CServerPath dos9(_T("c:\\bar\\"));
+		CServerPath dos10(_T("md:\\bar\\"), DOS);
+		CPPUNIT_ASSERT(dos2.ChangePath(_T("baz")) && dos2 == dos3);
+		CPPUNIT_ASSERT(dos4.ChangePath(_T("baz\\bar")) && dos4 == dos5);
+		CPPUNIT_ASSERT(dos5.ChangePath(_T("\\bar\\")) && dos5 == dos1);
+		CPPUNIT_ASSERT(dos6.ChangePath(_T("..\\..\\.\\foo\\..\\bar")) && dos6 == dos1);
+		CPPUNIT_ASSERT(dos7.ChangePath(_T("c:\\bar")) && dos7 == dos1);
+		sub = _T("\\bar\\foo");
+		CPPUNIT_ASSERT(dos8.ChangePath(sub, true) && dos8 == dos1 && sub == _T("foo"));
+		sub = _T("baz\\foo");
+		CPPUNIT_ASSERT(dos9.ChangePath(sub, true) && dos9 == dos3 && sub == _T("foo"));
+		CPPUNIT_ASSERT(dos9.ChangePath(_T("md:\\bar\\")) && dos9 == dos10);
+	}
 
 	const CServerPath mvs1(_T("'BAR.'"), MVS);
 	CServerPath mvs2(_T("'BAR.'"), MVS);
@@ -610,4 +662,28 @@ void CServerPathTest::testChangePath()
 	CPPUNIT_ASSERT(cygwin5.ChangePath(_T("//foo")) && cygwin5 == cygwin6);
 	sub = _T("//foo");
 	CPPUNIT_ASSERT(cygwin1.ChangePath(sub, true) && cygwin1 == cygwin7 && sub == _T("foo"));
+
+	{
+		const CServerPath dos_slashes1(_T("c:\\bar"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes2(_T("c:\\bar"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes3(_T("c:\\bar/baz"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes4(_T("c:\\bar"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes5(_T("c:\\bar\\baz\\bar"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes6(_T("c:\\bar\\baz\\"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes7(_T("d:/bar"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes8(_T("c:\\bar\\baz"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes9(_T("c:\\bar\\"), DOS_FWD_SLASHES);
+		CServerPath dos_slashes10(_T("md:\\bar\\"), DOS_FWD_SLASHES);
+		CPPUNIT_ASSERT(dos_slashes2.ChangePath(_T("baz")) && dos_slashes2 == dos_slashes3);
+		CPPUNIT_ASSERT(dos_slashes4.ChangePath(_T("baz\\bar")) && dos_slashes4 == dos_slashes5);
+		CPPUNIT_ASSERT(dos_slashes5.ChangePath(_T("\\bar\\")) && dos_slashes5 == dos_slashes1);
+		CPPUNIT_ASSERT(dos_slashes6.ChangePath(_T("..\\..\\.\\foo\\..\\bar")) && dos_slashes6 == dos_slashes1);
+		CPPUNIT_ASSERT(dos_slashes7.ChangePath(_T("c:\\bar")) && dos_slashes7 == dos_slashes1);
+		sub = _T("\\bar\\foo");
+		CPPUNIT_ASSERT(dos_slashes8.ChangePath(sub, true) && dos_slashes8 == dos_slashes1 && sub == _T("foo"));
+		sub = _T("baz\\foo");
+		CPPUNIT_ASSERT(dos_slashes9.ChangePath(sub, true) && dos_slashes9 == dos_slashes3 && sub == _T("foo"));
+		CPPUNIT_ASSERT(dos_slashes9.ChangePath(_T("md:\\bar\\")) && dos_slashes9 == dos_slashes10);
+	}
+
 }
