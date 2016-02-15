@@ -975,7 +975,7 @@ bool CDirectoryListingParser::ParseAsUnix(CLine &line, CDirentry &entry, bool ex
 		if (entry.is_link()) {
 			size_t pos;
 			if ((pos = entry.name.find(_T(" -> "))) != std::wstring::npos) {
-				entry.target = CSparseOptional<std::wstring>(entry.name.substr(pos + 4));
+				entry.target = fz::sparse_optional<std::wstring>(entry.name.substr(pos + 4));
 				entry.name = entry.name.substr(0, pos);
 			}
 		}
@@ -2561,7 +2561,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 			else if (valuePrefix == _T("os.unix=slink") || valuePrefix == _T("os.unix=symlink")) {
 				entry.flags |= CDirentry::flag_dir | CDirentry::flag_link;
 				if (colonPos != std::wstring::npos)
-					entry.target = CSparseOptional<std::wstring>(value.substr(colonPos));
+					entry.target = fz::sparse_optional<std::wstring>(value.substr(colonPos));
 			}
 			else if ((valuePrefix == _T("cdir") || valuePrefix == _T("pdir")) && colonPos == std::wstring::npos) {
 				// Current and parent directory, don't parse it

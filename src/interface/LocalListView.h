@@ -15,7 +15,7 @@ class CLocalFileData final : public CGenericFileData
 public:
 	wxString name;
 #ifdef __WXMSW__
-	CSparseOptional<wxString> label;
+	fz::sparse_optional<wxString> label;
 #endif
 	fz::datetime time;
 	int64_t size;
