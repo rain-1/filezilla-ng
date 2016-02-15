@@ -1,7 +1,7 @@
 #ifndef __DIRECTORYLISTING_H__
 #define __DIRECTORYLISTING_H__
 
-#include "optional.h"
+#include <libfilezilla/optional.hpp>
 #include <libfilezilla/shared.hpp>
 #include <libfilezilla/time.hpp>
 
@@ -53,7 +53,7 @@ public:
 		return time.empty() && time.get_accuracy() >= fz::datetime::seconds;
 	}
 
-	CSparseOptional<std::wstring> target; // Set to linktarget it link is true
+	fz::sparse_optional<std::wstring> target; // Set to linktarget it link is true
 
 	fz::datetime time;
 

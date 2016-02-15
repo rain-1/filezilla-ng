@@ -30,7 +30,7 @@ void recursion_root::add_dir_to_visit_restricted(CServerPath const& path, wxStri
 	dirToVisit.parent = path;
 	dirToVisit.recurse = recurse;
 	if (!restrict.empty()) {
-		dirToVisit.restrict = CSparseOptional<wxString>(restrict);
+		dirToVisit.restrict = fz::sparse_optional<wxString>(restrict);
 	}
 	m_dirsToVisit.push_back(dirToVisit);
 }

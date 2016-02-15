@@ -622,7 +622,7 @@ void CLocalListView::DisplayDrives()
 
 		CLocalFileData data;
 		data.name = drive;
-		data.label = CSparseOptional<wxString>(data.name);
+		data.label = fz::sparse_optional<wxString>(data.name);
 		data.dir = true;
 		data.size = -1;
 
@@ -678,7 +678,7 @@ void CLocalListView::DisplayShares(wxString computer)
 			CLocalFileData data;
 			data.name = p->shi1_netname;
 #ifdef __WXMSW__
-			data.label = CSparseOptional<wxString>(data.name);
+			data.label = fz::sparse_optional<wxString>(data.name);
 #endif
 			data.dir = true;
 			data.size = -1;
@@ -1753,7 +1753,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		if (item >= m_indexMapping.size())
 			continue;
 
-		m_fileData[index].label = CSparseOptional<wxString>(drive + _T(" (") + iter->volumeName + _T(")"));
+		m_fileData[index].label = fz::sparse_optional<wxString>(drive + _T(" (") + iter->volumeName + _T(")"));
 
 		RefreshItem(item);
 	}

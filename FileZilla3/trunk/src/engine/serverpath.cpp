@@ -187,7 +187,7 @@ CServerPath CServerPath::GetParent() const
 	parent_data.m_segments.pop_back();
 
 	if (m_type == MVS)
-		parent_data.m_prefix = CSparseOptional<wxString>(_T("."));
+		parent_data.m_prefix = fz::sparse_optional<wxString>(_T("."));
 
 	return parent;
 }
@@ -343,7 +343,7 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 	{
 		*(p + prefix_len) = 0;
 		if( *p ) {
-			data.m_prefix = CSparseOptional<wxString>(p);
+			data.m_prefix = fz::sparse_optional<wxString>(p);
 		}
 
 		p += prefix_len + 1;
@@ -518,7 +518,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 				dir = dir.Left(pos2);
 
 				if (pos1)
-					data.m_prefix = CSparseOptional<wxString>(dir.Left(pos1));
+					data.m_prefix = fz::sparse_optional<wxString>(dir.Left(pos1));
 				dir = dir.Mid(pos1 + 1);
 
 				data.m_segments.clear();
@@ -623,10 +623,10 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			if (isFile) {
 				if (!ExtractFile(dir, file))
 					return false;
-				data.m_prefix = CSparseOptional<wxString>(_T("."));
+				data.m_prefix = fz::sparse_optional<wxString>(_T("."));
 			}
 			else if (!dir.empty() && dir.Last() == '.')
-				data.m_prefix = CSparseOptional<wxString>(_T("."));
+				data.m_prefix = fz::sparse_optional<wxString>(_T("."));
 			else
 				data.m_prefix.clear();
 		}
@@ -659,7 +659,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 				int colon2;
 				if ((colon2 = dir.Mid(1).Find(':')) < 1)
 					return false;
-				data.m_prefix = CSparseOptional<wxString>(dir.Left(colon2 + 2));
+				data.m_prefix = fz::sparse_optional<wxString>(dir.Left(colon2 + 2));
 				dir = dir.Mid(colon2 + 2);
 
 				data.m_segments.clear();
@@ -683,7 +683,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 				return false;
 			if (dir.Left(2) == _T("//"))
 			{
-				data.m_prefix = CSparseOptional<wxString>(traits[m_type].separators[0]);
+				data.m_prefix = fz::sparse_optional<wxString>(traits[m_type].separators[0]);
 				dir = dir.Mid(1);
 			}
 

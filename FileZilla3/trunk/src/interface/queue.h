@@ -4,7 +4,7 @@
 #include "aui_notebook_ex.h"
 #include "listctrlex.h"
 #include "edithandler.h"
-#include "optional.h"
+#include <libfilezilla/optional.hpp>
 
 enum class QueuePriority : char {
 	lowest,
@@ -159,7 +159,7 @@ public:
 	std::wstring const& GetLocalFile() const { return !Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
 	std::wstring const& GetRemoteFile() const { return Download() ? GetSourceFile() : (m_targetFile ? *m_targetFile : m_sourceFile); }
 	std::wstring const& GetSourceFile() const { return m_sourceFile; }
-	CSparseOptional<std::wstring> const& GetTargetFile() const { return m_targetFile; }
+	fz::sparse_optional<std::wstring> const& GetTargetFile() const { return m_targetFile; }
 	CLocalPath const& GetLocalPath() const { return m_localPath; }
 	CServerPath const& GetRemotePath() const { return m_remotePath; }
 	int64_t GetSize() const { return m_size; }
@@ -262,7 +262,7 @@ public:
 
 protected:
 	std::wstring const m_sourceFile;
-	CSparseOptional<std::wstring> m_targetFile;
+	fz::sparse_optional<std::wstring> m_targetFile;
 	CLocalPath const m_localPath;
 	CServerPath const m_remotePath;
 	int64_t m_size{};

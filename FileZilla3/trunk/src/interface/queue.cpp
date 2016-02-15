@@ -225,7 +225,7 @@ CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
 					 const CLocalPath& localPath, const CServerPath& remotePath, int64_t size)
 	: CQueueItem(parent)
 	, m_sourceFile(sourceFile)
-	, m_targetFile(targetFile.empty() ? CSparseOptional<std::wstring>() : CSparseOptional<std::wstring>(to_wstring(targetFile)))
+	, m_targetFile(targetFile.empty() ? fz::sparse_optional<std::wstring>() : fz::sparse_optional<std::wstring>(to_wstring(targetFile)))
 	, m_localPath(localPath)
 	, m_remotePath(remotePath)
 	, m_size(size)
@@ -311,7 +311,7 @@ bool CFileItem::TryRemoveAll()
 void CFileItem::SetTargetFile(wxString const& file)
 {
 	if (!file.empty() && file != m_sourceFile)
-		m_targetFile = CSparseOptional<std::wstring>(to_wstring(file));
+		m_targetFile = fz::sparse_optional<std::wstring>(to_wstring(file));
 	else
 		m_targetFile.clear();
 }

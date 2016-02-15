@@ -4,7 +4,7 @@
 #include "state.h"
 #include <set>
 #include "filter.h"
-#include <optional.h>
+#include <libfilezilla/optional.hpp>
 
 class CChmodDialog;
 class CQueueView;
@@ -29,7 +29,7 @@ private:
 		CServerPath parent;
 		wxString subdir;
 		CLocalPath localDir;
-		CSparseOptional<wxString> restrict;
+		fz::sparse_optional<wxString> restrict;
 
 		// Symlink target might be outside actual start dir. Yet
 		// sometimes user wants to download symlink target contents

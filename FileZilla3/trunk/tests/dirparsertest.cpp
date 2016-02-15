@@ -51,7 +51,7 @@ std::vector<t_entry> CDirectoryListingParserTest::m_entries;
 CPPUNIT_TEST_SUITE_REGISTRATION(CDirectoryListingParserTest);
 
 typedef fz::shared_value<std::wstring> R;
-typedef CSparseOptional<std::wstring> O;
+typedef fz::sparse_optional<std::wstring> O;
 
 static int calcYear(int month, int day)
 {
