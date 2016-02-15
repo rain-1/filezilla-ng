@@ -15,7 +15,6 @@ noinst_HEADERS = \
 	optional.h \
 	optionsbase.h \
 	option_change_event_handler.h \
-	refcount.h \
 	server.h \
 	serverpath.h \
 	setup.h \

@@ -2,6 +2,7 @@
 #define __DIRECTORYLISTING_H__
 
 #include "optional.h"
+#include <libfilezilla/shared.hpp>
 #include <libfilezilla/time.hpp>
 
 #include <map>
@@ -11,8 +12,8 @@ class CDirentry
 public:
 	std::wstring name;
 	int64_t size;
-	CRefcountObject<std::wstring> permissions;
-	CRefcountObject<std::wstring> ownerGroup;
+	fz::shared_value<std::wstring> permissions;
+	fz::shared_value<std::wstring> ownerGroup;
 
 	enum _flags
 	{
@@ -59,8 +60,6 @@ public:
 	wxString dump() const;
 	bool operator==(const CDirentry &op) const;
 };
-
-#include "refcount.h"
 
 class CDirectoryListing final
 {
@@ -126,7 +125,7 @@ public:
 	bool has_perms() const { return (m_flags & listing_has_perms) != 0; }
 	bool has_usergroup() const { return (m_flags & listing_has_usergroup) != 0; }
 
-	void Assign(std::deque<CRefcountObject<CDirentry>> & entries);
+	void Assign(std::deque<fz::shared_value<CDirentry>> & entries);
 
 	bool RemoveEntry(unsigned int index);
 
@@ -134,10 +133,10 @@ public:
 
 protected:
 
-	CRefcountObject_Uninitialized<std::vector<CRefcountObject<CDirentry> > > m_entries;
+	fz::shared_optional<std::vector<fz::shared_value<CDirentry> > > m_entries;
 
-	mutable CRefcountObject_Uninitialized<std::multimap<std::wstring, unsigned int> > m_searchmap_case;
-	mutable CRefcountObject_Uninitialized<std::multimap<std::wstring, unsigned int> > m_searchmap_nocase;
+	mutable fz::shared_optional<std::multimap<std::wstring, unsigned int> > m_searchmap_case;
+	mutable fz::shared_optional<std::multimap<std::wstring, unsigned int> > m_searchmap_nocase;
 
 	unsigned int m_entryCount{};
 };

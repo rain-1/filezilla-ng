@@ -1,7 +1,7 @@
 #ifndef __LOCAL_PATH_H__
 #define __LOCAL_PATH_H__
 
-#include "refcount.h"
+#include <libfilezilla/shared.hpp>
 
 // This class encapsulates local paths.
 // On Windows it uses the C:\foo\bar\ syntax and also supports
@@ -69,7 +69,7 @@ public:
 	bool operator!=(const CLocalPath& op) const;
 
 protected:
-	CRefcountObject<wxString> m_path;
+	fz::shared_value<wxString> m_path;
 };
 
 #endif //__LOCAL_PATH_H__

@@ -59,7 +59,7 @@ void CDirectoryListing::SetCount(unsigned int count)
 		m_searchmap_nocase.clear();
 	}
 
-	m_entries.Get().resize(count);
+	m_entries.get().resize(count);
 
 	m_entryCount = count;
 }
@@ -75,14 +75,14 @@ CDirentry& CDirectoryListing::operator[](unsigned int index)
 {
 	// Commented out, too heavy speed penalty
 	// wxASSERT(index < m_entryCount);
-	return m_entries.Get()[index].Get();
+	return m_entries.get()[index].get();
 }
 
-void CDirectoryListing::Assign(std::deque<CRefcountObject<CDirentry>> &entries)
+void CDirectoryListing::Assign(std::deque<fz::shared_value<CDirentry>> &entries)
 {
 	m_entryCount = entries.size();
 
-	std::vector<CRefcountObject<CDirentry> >& own_entries = m_entries.Get();
+	std::vector<fz::shared_value<CDirentry> >& own_entries = m_entries.get();
 	own_entries.clear();
 	own_entries.reserve(m_entryCount);
 
@@ -110,8 +110,8 @@ bool CDirectoryListing::RemoveEntry(unsigned int index)
 	m_searchmap_case.clear();
 	m_searchmap_nocase.clear();
 
-	std::vector<CRefcountObject<CDirentry> >& entries = m_entries.Get();
-	std::vector<CRefcountObject<CDirentry> >::iterator iter = entries.begin() + index;
+	std::vector<fz::shared_value<CDirentry> >& entries = m_entries.get();
+	std::vector<fz::shared_value<CDirentry> >::iterator iter = entries.begin() + index;
 	if ((*iter)->is_dir())
 		m_flags |= CDirectoryListing::unsure_dir_removed;
 	else
@@ -136,7 +136,7 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 		return -1;
 
 	if (!m_searchmap_case)
-		m_searchmap_case.Get();
+		m_searchmap_case.get();
 
 	// Search map
 	auto iter = m_searchmap_case->find(to_wstring(name));
@@ -147,10 +147,10 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 	if (i == m_entryCount)
 		return -1;
 
-	auto & searchmap_case = m_searchmap_case.Get();
+	auto & searchmap_case = m_searchmap_case.get();
 
 	// Build map if not yet complete
-	std::vector<CRefcountObject<CDirentry> >::const_iterator entry_iter = m_entries->begin() + i;
+	std::vector<fz::shared_value<CDirentry> >::const_iterator entry_iter = m_entries->begin() + i;
 	for (; entry_iter != m_entries->end(); ++entry_iter, ++i) {
 		std::wstring const& entry_name = (*entry_iter)->name;
 		searchmap_case.insert(std::pair<std::wstring const, unsigned int>(entry_name, i));
@@ -169,7 +169,7 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 		return -1;
 
 	if (!m_searchmap_nocase)
-		m_searchmap_nocase.Get();
+		m_searchmap_nocase.get();
 
 	name.MakeLower();
 
@@ -182,10 +182,10 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 	if (i == m_entryCount)
 		return -1;
 
-	auto& searchmap_nocase = m_searchmap_nocase.Get();
+	auto& searchmap_nocase = m_searchmap_nocase.get();
 
 	// Build map if not yet complete
-	std::vector<CRefcountObject<CDirentry> >::const_iterator entry_iter = m_entries->begin() + i;
+	std::vector<fz::shared_value<CDirentry> >::const_iterator entry_iter = m_entries->begin() + i;
 	for (; entry_iter != m_entries->end(); ++entry_iter, ++i) {
 		wxString entry_name = (*entry_iter)->name;
 		entry_name.MakeLower();
