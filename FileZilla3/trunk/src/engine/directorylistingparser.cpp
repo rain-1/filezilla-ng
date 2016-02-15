@@ -19,7 +19,7 @@ static char const data[][150]={
 namespace {
 struct ObjectCache
 {
-	CRefcountObject<std::wstring> const& get(std::wstring const& v)
+	fz::shared_value<std::wstring> const& get(std::wstring const& v)
 	{
 		auto it = std::lower_bound(cache.begin(), cache.end(), v);
 
@@ -32,7 +32,7 @@ struct ObjectCache
 	// Vector coupled with binary search and sorted insertion is fastest
 	// alternative as we expect a relatively low amount of inserts.
 	// Note that we cannot use set, as it it cannot search based on a different type.
-	std::vector<CRefcountObject<std::wstring>> cache;
+	std::vector<fz::shared_value<std::wstring>> cache;
 };
 
 
@@ -722,8 +722,8 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 
 bool CDirectoryListingParser::ParseLine(CLine &line, const enum ServerType serverType, bool concatenated)
 {
-	CRefcountObject<CDirentry> refEntry;
-	CDirentry & entry = refEntry.Get();
+	fz::shared_value<CDirentry> refEntry;
+	CDirentry & entry = refEntry.get();
 
 	bool res;
 	int ires;

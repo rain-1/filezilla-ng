@@ -31,7 +31,7 @@ bool CLocalPath::SetPath(const wxString& path, wxString* file /*=0*/)
 	const wxChar* in = path.c_str();
 
 	{
-		wxStringBuffer start(m_path.Get(), path.Len() + 2);
+		wxStringBuffer start(m_path.get(), path.Len() + 2);
 		wxChar* out = start;
 
 #ifdef __WXMSW__
@@ -306,7 +306,7 @@ CLocalPath CLocalPath::GetParent(wxString* last_segment /*=0*/) const
 
 bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
 {
-	wxString& path = m_path.Get();
+	wxString& path = m_path.get();
 
 #ifdef __WXMSW__
 	if (path.Len() == 3 && path[0] != '\\') // Drive root
@@ -339,7 +339,7 @@ bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
 
 void CLocalPath::AddSegment(const wxString& segment)
 {
-	wxString& path = m_path.Get();
+	wxString& path = m_path.get();
 
 	wxASSERT(!path.empty());
 	wxASSERT(segment.Find(_T("/")) == -1);
@@ -358,7 +358,7 @@ bool CLocalPath::ChangePath(const wxString& new_path)
 	if (new_path.empty())
 		return false;
 
-	wxString& path = m_path.Get();
+	wxString& path = m_path.get();
 
 #ifdef __WXMSW__
 	if (new_path == _T("\\") || new_path == _T("/")) {

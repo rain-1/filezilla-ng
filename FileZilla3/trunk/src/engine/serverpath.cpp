@@ -182,7 +182,7 @@ CServerPath CServerPath::GetParent() const
 		return CServerPath();
 
 	CServerPath parent(*this);
-	CServerPathData& parent_data = parent.m_data.Get();
+	CServerPathData& parent_data = parent.m_data.get();
 
 	parent_data.m_segments.pop_back();
 
@@ -281,7 +281,7 @@ bool CServerPath::SetSafePath(const wxString& path)
 
 bool CServerPath::DoSetSafePath(const wxString& path)
 {
-	CServerPathData& data = m_data.Get();
+	CServerPathData& data = m_data.get();
 	data.m_prefix.clear();
 	data.m_segments.clear();
 
@@ -481,7 +481,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 	}
 
 	bool const was_empty = empty();
-	CServerPathData& data = m_data.Get();
+	CServerPathData& data = m_data.get();
 
 	switch (m_type)
 	{
@@ -853,7 +853,7 @@ bool CServerPath::AddSegment(const wxString& segment)
 		return false;
 
 	// TODO: Check for invalid characters
-	m_data.Get().m_segments.push_back(segment);
+	m_data.get().m_segments.push_back(segment);
 
 	return true;
 }
@@ -890,7 +890,7 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 	CServerPath parent;
 	parent.m_type = m_type;
 
-	CServerPathData& parentData = parent.m_data.Get();
+	CServerPathData& parentData = parent.m_data.get();
 
 	tConstSegmentIter last = m_data->m_segments.end();
 	tConstSegmentIter last2 = path.m_data->m_segments.end();

@@ -2,7 +2,7 @@
 #define __SERVERPATH_H__
 
 #include "optional.h"
-#include "refcount.h"
+#include <libfilezilla/shared.hpp>
 
 #include <deque>
 
@@ -86,7 +86,7 @@ private:
 
 	static void EscapeSeparators(ServerType type, wxString& subdir);
 
-	CRefcountObject_Uninitialized<CServerPathData> m_data;
+	fz::shared_optional<CServerPathData> m_data;
 };
 
 #endif

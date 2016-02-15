@@ -50,7 +50,7 @@ std::vector<t_entry> CDirectoryListingParserTest::m_entries;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CDirectoryListingParserTest);
 
-typedef CRefcountObject<std::wstring> R;
+typedef fz::shared_value<std::wstring> R;
 typedef CSparseOptional<std::wstring> O;
 
 static int calcYear(int month, int day)

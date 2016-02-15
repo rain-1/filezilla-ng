@@ -128,7 +128,7 @@ protected:
 	int m_currentOffset;
 
 	std::deque<t_list> m_DataList;
-	std::deque<CRefcountObject<CDirentry>> m_entryList;
+	std::deque<fz::shared_value<CDirentry>> m_entryList;
 	int64_t m_totalData;
 
 	CLine *m_prevLine;

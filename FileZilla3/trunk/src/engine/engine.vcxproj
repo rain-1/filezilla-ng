@@ -112,7 +112,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\engine_context.h" />
-    <ClInclude Include="..\include\refcount.h" />
     <ClInclude Include="backend.h" />
     <ClInclude Include="..\include\commands.h" />
     <ClInclude Include="ControlSocket.h" />
