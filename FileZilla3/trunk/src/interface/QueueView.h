@@ -42,11 +42,11 @@ public:
 
 enum ActionAfterState
 {
-	ActionAfterState_Disabled,
+	ActionAfterState_None,
+	ActionAfterState_ShowNotification,
+	ActionAfterState_RequestAttention,
 	ActionAfterState_Close,
-	ActionAfterState_Disconnect,
 	ActionAfterState_RunCommand,
-	ActionAfterState_ShowMessage,
 	ActionAfterState_PlaySound
 // On Windows and OS X, wx can reboot or shutdown the system as well.
 #if defined(__WXMSW__) || defined(__WXMAC__)
