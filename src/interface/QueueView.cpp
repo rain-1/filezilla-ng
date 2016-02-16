@@ -439,24 +439,20 @@ protected:
 
 CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsyncRequestQueue *pAsyncRequestQueue)
 	: CQueueViewBase(parent, index, _("Queued files")),
-	  m_pMainFrame(pMainFrame),
-	  m_pAsyncRequestQueue(pAsyncRequestQueue)
+	m_pMainFrame(pMainFrame),
+	m_pAsyncRequestQueue(pAsyncRequestQueue)
 {
 	if (m_pAsyncRequestQueue)
 		m_pAsyncRequestQueue->SetQueue(this);
 
-	m_activeCount = 0;
-	m_activeCountDown = 0;
-	m_activeCountUp = 0;
-	m_activeMode = 0;
-	m_quit = 0;
-	m_waitStatusLineUpdate = false;
-	m_lastTopItem = -1;
-	
-	m_totalQueueSize = 0;
-	m_filesWithUnknownSize = 0;
-
-	m_actionAfterState = ActionAfterState_None;
+	int action = COptions::Get()->GetOptionVal(OPTION_QUEUE_COMPLETION_ACTION);
+	if (action < 0 || action >= ActionAfterState::Count) {
+		action = 1;
+	}
+	else if (action == ActionAfterState::Reboot || action == ActionAfterState::Shutdown || action == ActionAfterState::Sleep) {
+		action = 1;
+	}
+	m_actionAfterState = static_cast<ActionAfterState::type>(action);
 
 	std::list<ColumnId> extraCols;
 	extraCols.push_back(colTransferStatus);
@@ -491,7 +487,7 @@ CQueueView::~CQueueView()
 bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 						   const wxString& sourceFile, const wxString& targetFile,
 						   const CLocalPath& localPath, const CServerPath& remotePath,
-						   const CServer& server, int64_t size, enum CEditHandler::fileType edit,
+						   const CServer& server, int64_t size, CEditHandler::fileType edit,
 						   QueuePriority priority)
 {
 	CServerItem* pServerItem = CreateServerItem(server);
@@ -935,7 +931,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	int replyCode = notification.nReplyCode;
 
 	if ((replyCode & FZ_REPLY_CANCELED) == FZ_REPLY_CANCELED) {
-		enum ResetReason reason;
+		ResetReason reason;
 		if (pEngineData->pItem) {
 			if (pEngineData->pItem->pending_remove())
 				reason = remove;
@@ -1101,7 +1097,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	}
 
 	if (!m_activeMode) {
-		enum ResetReason reason;
+		ResetReason reason;
 		if (pEngineData->pItem && pEngineData->pItem->pending_remove())
 			reason = remove;
 		else
@@ -1113,7 +1109,7 @@ void CQueueView::ProcessReply(t_EngineData* pEngineData, COperationNotification 
 	SendNextCommand(*pEngineData);
 }
 
-void CQueueView::ResetEngine(t_EngineData& data, const enum ResetReason reason)
+void CQueueView::ResetEngine(t_EngineData& data, const ResetReason reason)
 {
 	if (!data.active)
 		return;
@@ -1738,7 +1734,7 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent&)
 	ProcessUploadFolderItems();
 }
 
-int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const enum CFileExistsNotification::OverwriteAction defaultFileExistsAction)
+int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const CFileExistsNotification::OverwriteAction defaultFileExistsAction)
 {
 	wxASSERT(pServerItem);
 
@@ -2032,16 +2028,16 @@ void CQueueView::OnContextMenu(wxContextMenuEvent&)
 	bool has_selection = HasSelection();
 
 	pMenu->Check(XRCID("ID_PROCESSQUEUE"), IsActive() ? true : false);
-	pMenu->Check(XRCID("ID_ACTIONAFTER_NONE"), IsActionAfter(ActionAfterState_None));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_SHOW_NOTIFICATION_BUBBLE"), IsActionAfter(ActionAfterState_ShowNotification));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_REQUEST_ATTENTION"), IsActionAfter(ActionAfterState_RequestAttention));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_CLOSE"), IsActionAfter(ActionAfterState_Close));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_RUNCOMMAND"), IsActionAfter(ActionAfterState_RunCommand));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_PLAYSOUND"), IsActionAfter(ActionAfterState_PlaySound));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_NONE"), IsActionAfter(ActionAfterState::None));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_SHOW_NOTIFICATION_BUBBLE"), IsActionAfter(ActionAfterState::ShowNotification));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_REQUEST_ATTENTION"), IsActionAfter(ActionAfterState::RequestAttention));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_CLOSE"), IsActionAfter(ActionAfterState::Close));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_RUNCOMMAND"), IsActionAfter(ActionAfterState::RunCommand));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_PLAYSOUND"), IsActionAfter(ActionAfterState::PlaySound));
 #if defined(__WXMSW__) || defined(__WXMAC__)
-	pMenu->Check(XRCID("ID_ACTIONAFTER_REBOOT"), IsActionAfter(ActionAfterState_Reboot));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_SHUTDOWN"), IsActionAfter(ActionAfterState_Shutdown));
-	pMenu->Check(XRCID("ID_ACTIONAFTER_SLEEP"), IsActionAfter(ActionAfterState_Sleep));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_REBOOT"), IsActionAfter(ActionAfterState::Reboot));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_SHUTDOWN"), IsActionAfter(ActionAfterState::Shutdown));
+	pMenu->Check(XRCID("ID_ACTIONAFTER_SLEEP"), IsActionAfter(ActionAfterState::Sleep));
 #endif
 	pMenu->Enable(XRCID("ID_REMOVE"), has_selection);
 
@@ -2070,7 +2066,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 {
 	if (!event.IsChecked() || event.GetId() == XRCID("ID_ACTIONAFTER_NONE"))
 	{ // Goes from checked to non-checked or disable is pressed
-		m_actionAfterState = ActionAfterState_None;
+		m_actionAfterState = ActionAfterState::None;
 		m_actionAfterRunCommand = _T("");
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
@@ -2084,49 +2080,52 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 #endif
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_NONE")) {
-		m_actionAfterState = ActionAfterState_None;
+		m_actionAfterState = ActionAfterState::None;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SHOW_NOTIFICATION_BUBBLE")) {
-		m_actionAfterState = ActionAfterState_ShowNotification;
+		m_actionAfterState = ActionAfterState::ShowNotification;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_REQUEST_ATTENTION")) {
-		m_actionAfterState = ActionAfterState_RequestAttention;
+		m_actionAfterState = ActionAfterState::RequestAttention;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_CLOSE")) {
-		m_actionAfterState = ActionAfterState_Close;
+		m_actionAfterState = ActionAfterState::Close;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_CLOSE")) {
-		m_actionAfterState = ActionAfterState_Close;
+		m_actionAfterState = ActionAfterState::Close;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_PLAYSOUND")) {
-		m_actionAfterState = ActionAfterState_PlaySound;
+		m_actionAfterState = ActionAfterState::PlaySound;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_RUNCOMMAND")) {
-		m_actionAfterState = ActionAfterState_RunCommand;
+		m_actionAfterState = ActionAfterState::RunCommand;
 		wxTextEntryDialog dlg(m_pMainFrame, _("Please enter a path and executable to run.\nE.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\nYou can also optionally specify program arguments."), _("Enter command"));
 
 		if (dlg.ShowModal() != wxID_OK) {
-			m_actionAfterState = ActionAfterState_None;
+			m_actionAfterState = ActionAfterState::None;
 			return;
 		}
 		const wxString &command = dlg.GetValue();
 
 		if (command.empty()) {
 			wxMessageBoxEx(_("No command given, aborting."), _("Empty command"), wxICON_ERROR, m_pMainFrame);
-			m_actionAfterState = ActionAfterState_None;
+			m_actionAfterState = ActionAfterState::None;
 			return;
 		}
 		m_actionAfterRunCommand = command;
 	}
-
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_REBOOT"))
-		m_actionAfterState = ActionAfterState_Reboot;
+		m_actionAfterState = ActionAfterState::Reboot;
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SHUTDOWN"))
-		m_actionAfterState = ActionAfterState_Shutdown;
+		m_actionAfterState = ActionAfterState::Shutdown;
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_SLEEP"))
-		m_actionAfterState = ActionAfterState_Sleep;
+		m_actionAfterState = ActionAfterState::Sleep;
 #endif
+
+	if (m_actionAfterState != ActionAfterState::Reboot && m_actionAfterState != ActionAfterState::Shutdown && m_actionAfterState != ActionAfterState::Sleep) {
+		COptions::Get()->SetOption(OPTION_QUEUE_COMPLETION_ACTION, m_actionAfterState);
+	}
 }
 
 void CQueueView::RemoveAll()
@@ -2168,7 +2167,7 @@ void CQueueView::RemoveAll()
 	}
 
 	SaveSetItemCount(m_itemCount);
-	m_actionAfterState = ActionAfterState_None;
+	m_actionAfterState = ActionAfterState::None;
 
 	m_serverList = newServerList;
 	UpdateStatusLinePositions();
@@ -2296,7 +2295,7 @@ bool CQueueView::StopItem(CFileItem* item)
 
 	if (item->m_pEngineData->state == t_EngineData::waitprimary)
 	{
-		enum ResetReason reason;
+		ResetReason reason;
 		if (item->m_pEngineData->pItem && item->m_pEngineData->pItem->pending_remove())
 			reason = remove;
 		else
@@ -2373,7 +2372,7 @@ void CQueueView::OnFolderThreadFiles(wxCommandEvent&)
 		m_folderscan_item_refresh_timer.Start(200, true);
 }
 
-void CQueueView::SetDefaultFileExistsAction(enum CFileExistsNotification::OverwriteAction action, const TransferDirection direction)
+void CQueueView::SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction)
 {
 	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
 		(*iter)->SetDefaultFileExistsAction(action, direction);
@@ -2389,8 +2388,8 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 		return;
 
 	// Get current default action for the item
-	enum CFileExistsNotification::OverwriteAction downloadAction = CFileExistsNotification::unknown;
-	enum CFileExistsNotification::OverwriteAction uploadAction = CFileExistsNotification::unknown;
+	CFileExistsNotification::OverwriteAction downloadAction = CFileExistsNotification::unknown;
+	CFileExistsNotification::OverwriteAction uploadAction = CFileExistsNotification::unknown;
 	bool has_upload = false;
 	bool has_download = false;
 	bool download_unknown = false;
@@ -2894,12 +2893,7 @@ void CQueueView::OnExclusiveEngineRequestGranted(wxCommandEvent& event)
 	SendNextCommand(*pEngineData);
 }
 
-enum ActionAfterState CQueueView::GetActionAfterState() const
-{
-	return m_actionAfterState;
-}
-
-bool CQueueView::IsActionAfter(enum ActionAfterState state)
+bool CQueueView::IsActionAfter(ActionAfterState::type state)
 {
 	return m_actionAfterState == state;
 }
@@ -2924,7 +2918,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 
 	switch (m_actionAfterState)
 	{
-		case ActionAfterState_ShowNotification:
+		case ActionAfterState::ShowNotification:
 		{
 			wxString const title = _("Transfers finished");
 			wxString msg;
@@ -2948,39 +2942,39 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 #endif
 			break;
 		}
-		case ActionAfterState_RequestAttention:
+		case ActionAfterState::RequestAttention:
 		{
 			int const failed_count = m_pQueue->GetQueueView_Failed()->GetFileCount();
 			m_pMainFrame->RequestUserAttention(failed_count ? wxUSER_ATTENTION_ERROR : wxUSER_ATTENTION_INFO);
 			break;
 		}
-		case ActionAfterState_Close:
+		case ActionAfterState::Close:
 		{
 			m_pMainFrame->Close();
 			break;
 		}
-		case ActionAfterState_RunCommand:
+		case ActionAfterState::RunCommand:
 		{
 			wxExecute(m_actionAfterRunCommand);
 			break;
 		}
-		case ActionAfterState_PlaySound:
+		case ActionAfterState::PlaySound:
 		{
 			wxSound sound(wxGetApp().GetResourceDir().GetPath() + _T("finished.wav"));
 			sound.Play(wxSOUND_ASYNC);
 			break;
 		}
 #ifdef __WXMSW__
-		case ActionAfterState_Reboot:
-		case ActionAfterState_Shutdown:
+		case ActionAfterState::Reboot:
+		case ActionAfterState::Shutdown:
 			if (!warned) {
 				ActionAfterWarnUser(m_actionAfterState);
 				return;
 			}
 			else
-				wxShutdown((m_actionAfterState == ActionAfterState_Reboot) ? wxSHUTDOWN_REBOOT : wxSHUTDOWN_POWEROFF);
+				wxShutdown((m_actionAfterState == ActionAfterState::Reboot) ? wxSHUTDOWN_REBOOT : wxSHUTDOWN_POWEROFF);
 			break;
-		case ActionAfterState_Sleep:
+		case ActionAfterState::Sleep:
 			if (!warned) {
 				ActionAfterWarnUser(m_actionAfterState);
 				return;
@@ -2989,18 +2983,18 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 				SetSuspendState(false, false, true);
 			break;
 #elif defined(__WXMAC__)
-		case ActionAfterState_Reboot:
-		case ActionAfterState_Shutdown:
-		case ActionAfterState_Sleep:
+		case ActionAfterState::Reboot:
+		case ActionAfterState::Shutdown:
+		case ActionAfterState::Sleep:
 			if (!warned) {
 				ActionAfterWarnUser(m_actionAfterState);
 				return;
 			}
 			else {
 				wxString action;
-				if( m_actionAfterState == ActionAfterState_Reboot )
+				if( m_actionAfterState == ActionAfterState::Reboot )
 					action = _T("restart");
-				else if( m_actionAfterState == ActionAfterState_Shutdown )
+				else if( m_actionAfterState == ActionAfterState::Shutdown )
 					action = _T("shut down");
 				else
 					action = _T("sleep");
@@ -3014,22 +3008,22 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 			break;
 
 	}
-	m_actionAfterState = ActionAfterState_None; // Resetting the state.
+	m_actionAfterState = ActionAfterState::None; // Resetting the state.
 }
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
-void CQueueView::ActionAfterWarnUser(ActionAfterState s)
+void CQueueView::ActionAfterWarnUser(ActionAfterState::type s)
 {
 	if (m_actionAfterWarnDialog != NULL)
 		return;
 
 	wxString message;
 	wxString label;
-	if(s == ActionAfterState_Shutdown) {
+	if(s == ActionAfterState::Shutdown) {
 		message = _("The system will soon shut down unless you click Cancel.");
 		label = _("Shutdown now");
 	}
-	else if(s == ActionAfterState_Reboot) {
+	else if(s == ActionAfterState::Reboot) {
 		message = _("The system will soon reboot unless you click Cancel.");
 		label = _("Reboot now");
 	}
@@ -3076,7 +3070,7 @@ void CQueueView::OnActionAfterTimerTick()
 	}
 	else if (!m_actionAfterWarnDialog->Update(m_actionAfterTimerCount++, _T(""), &skipped)) {
 		// User has pressed cancel!
-		m_actionAfterState = ActionAfterState_None; // resetting to disabled
+		m_actionAfterState = ActionAfterState::None; // resetting to disabled
 		m_actionAfterWarnDialog->Destroy();
 		m_actionAfterWarnDialog = 0;
 		delete m_actionAfterTimer;

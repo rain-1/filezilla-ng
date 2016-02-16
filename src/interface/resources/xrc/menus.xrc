@@ -397,16 +397,17 @@
         <label>&amp;Play sound</label>
         <checkable>1</checkable>
       </object>
+      <object class="separator"/>
       <object class="wxMenuItem" name="ID_ACTIONAFTER_REBOOT" platform="win|mac">
-        <label>R&amp;eboot system</label>
+        <label>R&amp;eboot system once</label>
         <checkable>1</checkable>
       </object>
       <object class="wxMenuItem" name="ID_ACTIONAFTER_SHUTDOWN" platform="win|mac">
-        <label>S&amp;hutdown system</label>
+        <label>S&amp;hutdown system once</label>
         <checkable>1</checkable>
       </object>
       <object class="wxMenuItem" name="ID_ACTIONAFTER_SLEEP" platform="win|mac">
-        <label>S&amp;uspend system</label>
+        <label>S&amp;uspend system once</label>
         <checkable>1</checkable>
       </object>
     </object>

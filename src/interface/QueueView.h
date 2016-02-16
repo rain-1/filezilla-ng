@@ -20,9 +20,9 @@ public:
 		dir,
 		file
 	};
-	const enum t_type m_type;
+	const t_type m_type;
 
-	CFolderProcessingEntry(enum t_type type) : m_type(type) {}
+	CFolderProcessingEntry(t_type type) : m_type(type) {}
 	virtual ~CFolderProcessingEntry() {}
 };
 
@@ -40,22 +40,23 @@ public:
 	bool dir{};
 };
 
-enum ActionAfterState
-{
-	ActionAfterState_None,
-	ActionAfterState_ShowNotification,
-	ActionAfterState_RequestAttention,
-	ActionAfterState_Close,
-	ActionAfterState_RunCommand,
-	ActionAfterState_PlaySound
-// On Windows and OS X, wx can reboot or shutdown the system as well.
-#if defined(__WXMSW__) || defined(__WXMAC__)
-	,
-	ActionAfterState_Reboot,
-	ActionAfterState_Shutdown,
-	ActionAfterState_Sleep
-#endif
+namespace ActionAfterState {
+enum type {
+	None,
+	ShowNotification,
+	RequestAttention,
+	Close,
+	RunCommand,
+	PlaySound,
+
+	// On Windows and OS X, wx can reboot or shutdown the system as well.
+	Reboot,
+	Shutdown,
+	Sleep,
+
+	Count
 };
+}
 
 class CStatusLineCtrl;
 class CFileItem;
@@ -126,7 +127,7 @@ public:
 	bool QueueFile(const bool queueOnly, const bool download,
 		const wxString& localFile, const wxString& remoteFile,
 		const CLocalPath& localPath, const CServerPath& remotePath,
-		const CServer& server, int64_t size, enum CEditHandler::fileType edit = CEditHandler::none,
+		const CServer& server, int64_t size, CEditHandler::fileType edit = CEditHandler::none,
 		QueuePriority priority = QueuePriority::normal);
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
@@ -199,9 +200,7 @@ protected:
 		remove
 	};
 
-	enum ActionAfterState GetActionAfterState() const;
-
-	void ResetEngine(t_EngineData& data, const enum ResetReason reason);
+	void ResetEngine(t_EngineData& data, const ResetReason reason);
 	void DeleteEngines();
 
 	virtual bool RemoveItem(CQueueItem* item, bool destroy, bool updateItemCount = true, bool updateSelections = true, bool forward = true);
@@ -218,10 +217,10 @@ protected:
 	void DisplayQueueSize();
 	void SaveQueue();
 
-	bool IsActionAfter(enum ActionAfterState);
+	bool IsActionAfter(ActionAfterState::type);
 	void ActionAfter(bool warned = false);
 #if defined(__WXMSW__) || defined(__WXMAC__)
-	void ActionAfterWarnUser(ActionAfterState s);
+	void ActionAfterWarnUser(ActionAfterState::type s);
 #endif
 
 	void ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<CNotification> && pNotification);
@@ -263,18 +262,18 @@ protected:
 	 * This assures we are updating the status line positions only once,
 	 * and not multiple times (for example inside a loop).
 	 */
-	bool m_waitStatusLineUpdate;
+	bool m_waitStatusLineUpdate{};
 
 	// Remember last top item in UpdateStatusLinePositions()
-	int m_lastTopItem;
+	int m_lastTopItem{-1};
 
-	int m_activeCount;
-	int m_activeCountDown;
-	int m_activeCountUp;
-	int m_activeMode; // 0 inactive, 1 only immediate transfers, 2 all
-	int m_quit;
+	int m_activeCount{};
+	int m_activeCountDown{};
+	int m_activeCountUp{};
+	int m_activeMode{}; // 0 inactive, 1 only immediate transfers, 2 all
+	int m_quit{};
 
-	enum ActionAfterState m_actionAfterState;
+	ActionAfterState::type m_actionAfterState;
 	wxString m_actionAfterRunCommand;
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	wxTimer* m_actionAfterTimer{};
@@ -283,8 +282,8 @@ protected:
 	int m_actionAfterTimerId{-1};
 #endif
 
-	int64_t m_totalQueueSize;
-	int m_filesWithUnknownSize;
+	int64_t m_totalQueueSize{};
+	int m_filesWithUnknownSize{};
 
 	CMainFrame* m_pMainFrame;
 	CAsyncRequestQueue* m_pAsyncRequestQueue;
