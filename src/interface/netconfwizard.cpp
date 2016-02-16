@@ -901,7 +901,7 @@ int CNetConfWizard::CreateListenSocket()
 int CNetConfWizard::CreateListenSocket(unsigned int port)
 {
 	m_pSocketServer = new CSocket(this);
-	int res = m_pSocketServer->Listen(CSocket::unspec, port);
+	int res = m_pSocketServer->Listen(m_socket ? m_socket->GetAddressFamily() : CSocket::unspec, port);
 
 	if (res < 0) {
 		delete m_pSocketServer;
