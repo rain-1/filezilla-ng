@@ -274,7 +274,6 @@ protected:
 	int m_quit{};
 
 	ActionAfterState::type m_actionAfterState;
-	wxString m_actionAfterRunCommand;
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	wxTimer* m_actionAfterTimer{};
 	wxProgressDialog* m_actionAfterWarnDialog{};

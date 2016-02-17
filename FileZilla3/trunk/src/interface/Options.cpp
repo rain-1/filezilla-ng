@@ -191,6 +191,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Prompt password change", number, _T("0"), normal },
 	{ "Persistent Choices", number, _T("0"), normal },
 	{ "Queue completion action", number, _T("1"), normal },
+	{ "Queue completion command", string, _T(""), normal },
 
 	// Default/internal options
 	{ "Config Location", string, _T(""), default_only },

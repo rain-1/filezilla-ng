@@ -95,6 +95,7 @@ enum interfaceOptions
 	OPTION_PROMPTPASSWORDSAVE,
 	OPTION_PERSISTENT_CHOICES,
 	OPTION_QUEUE_COMPLETION_ACTION,
+	OPTION_QUEUE_COMPLETION_COMMAND,
 
 	// Default/internal options
 	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated
