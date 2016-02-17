@@ -7,7 +7,7 @@
 #include <wx/timer.h>
 #include "socket.h"
 
-#define NETCONFBUFFERSIZE 100
+#define NETCONFBUFFERSIZE 200
 
 class COptions;
 
