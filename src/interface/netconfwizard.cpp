@@ -48,6 +48,7 @@ CNetConfWizard::~CNetConfWizard()
 	delete m_pIPResolver;
 	delete [] m_pSendBuffer;
 	delete m_pSocketServer;
+	delete m_pDataSocket;
 }
 
 bool CNetConfWizard::Load()
@@ -57,8 +58,7 @@ bool CNetConfWizard::Load()
 
 	wxSize minPageSize = GetPageAreaSizer()->GetMinSize();
 
-	for (int i = 1; i <= 7; i++)
-	{
+	for (int i = 1; i <= 7; ++i) {
 		wxWizardPageSimple* page = new wxWizardPageSimple();
 		bool res = wxXmlResource::Get()->LoadPanel(page, this, wxString::Format(_T("NETCONF_PANEL%d"), i));
 		if (!res)
@@ -392,7 +392,7 @@ void CNetConfWizard::OnReceive()
 			i = -1;
 		}
 
-		if (m_recvBufferPos == 100) {
+		if (m_recvBufferPos == 200) {
 			m_testResult = servererror;
 			PrintMessage(_("Invalid data received"), 1);
 			CloseSocket();
@@ -573,6 +573,7 @@ void CNetConfWizard::CloseSocket()
 			text[3] = _("See also: https://wiki.filezilla-project.org/Network_Configuration");
 			break;
 		case successful:
+			PrintMessage(_("Test finished successfully"), 0);
 			text[0] = _("Congratulations, your configuration seems to be working.");
 			text[1] = _("You should have no problems connecting to other servers, file transfers should work properly.");
 			text[2] = _("If you keep having problems with a specific server, the server itself or a remote router or firewall might be misconfigured. In this case try to toggle passive mode and contact the server administrator for help.");
@@ -935,6 +936,7 @@ void CNetConfWizard::OnAccept()
 	m_pDataSocket = m_pSocketServer->Accept(error);
 	if (!m_pDataSocket)
 		return;
+	m_pDataSocket->SetEventHandler(this);
 
 	std::string peerAddr = m_socket->GetPeerIP();
 	std::string dataPeerAddr = m_pDataSocket->GetPeerIP();
