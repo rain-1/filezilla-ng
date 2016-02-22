@@ -727,8 +727,6 @@ Function RunUninstaller
   BringToFront
   Sleep 500
 
-  Call CleanLeftovers
-
 FunctionEnd
 
 Function PageLeaveReinstall
@@ -939,6 +937,8 @@ Function PageInstfilesShow
     Call RunUninstaller
 
   ${EndIf}
+
+  Call CleanLeftovers
 
 FunctionEnd
 
