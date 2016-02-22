@@ -10,6 +10,15 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.16.0-rc1 (2016-02-21)
+
++ Make notification bubble on queue completion configurable though the queue's context menu
++ Selected queue completion action is now remembered, excluding the system shutdown/sleep actions.
++ Added new servertype to the Site Manager for servers using MS-DOS style paths with forward slashes as separators
++ Building FileZilla now depends on libfilezilla >= 0.4.0 (https://lib.filezilla-project.org/).
+- Fixes for network configuration wizard leading to incorrect test result
+- MSW: Installer now removes leftover files from improperly uninstalled previous versions
+
 3.15.0.2 (2016-02-10)
 
 - MSW: Binaries are now also signed using a SHA256 signature and certificate.
