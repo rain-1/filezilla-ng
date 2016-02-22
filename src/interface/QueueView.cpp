@@ -2097,7 +2097,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 		m_actionAfterState = ActionAfterState::PlaySound;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_RUNCOMMAND")) {
-		wxTextEntryDialog dlg(m_pMainFrame, _("Please enter a path and executable to run.\nE.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\nYou can also optionally specify program arguments."), _("Enter command"));
+		wxTextEntryDialog dlg(m_pMainFrame, _("Please enter the complete path of a program and its arguments. This command will be executed when the queue has finished processing.\nE.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\nYou need to properly quote commands and their arguments if they contain spaces."), _("Enter command"));
 		dlg.SetValue(COptions::Get()->GetOption(OPTION_QUEUE_COMPLETION_COMMAND));
 
 		if (dlg.ShowModal() == wxID_OK) {
