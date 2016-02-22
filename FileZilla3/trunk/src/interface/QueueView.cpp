@@ -2097,21 +2097,19 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 		m_actionAfterState = ActionAfterState::PlaySound;
 	}
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_RUNCOMMAND")) {
-		m_actionAfterState = ActionAfterState::RunCommand;
 		wxTextEntryDialog dlg(m_pMainFrame, _("Please enter a path and executable to run.\nE.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\nYou can also optionally specify program arguments."), _("Enter command"));
 		dlg.SetValue(COptions::Get()->GetOption(OPTION_QUEUE_COMPLETION_COMMAND));
 
-		if (dlg.ShowModal() != wxID_OK) {
-			m_actionAfterState = ActionAfterState::None;
-			return;
+		if (dlg.ShowModal() == wxID_OK) {
+			const wxString &command = dlg.GetValue();
+			if (command.empty()) {
+				wxMessageBoxEx(_("No command given, aborting."), _("Empty command"), wxICON_ERROR, m_pMainFrame);
+			}
+			else {
+				m_actionAfterState = ActionAfterState::RunCommand;
+				COptions::Get()->SetOption(OPTION_QUEUE_COMPLETION_COMMAND, command);
+			}
 		}
-		const wxString &command = dlg.GetValue();
-
-		if (command.empty()) {
-			wxMessageBoxEx(_("No command given, aborting."), _("Empty command"), wxICON_ERROR, m_pMainFrame);
-			m_actionAfterState = ActionAfterState::None;
-		}
-		COptions::Get()->SetOption(OPTION_QUEUE_COMPLETION_COMMAND, command);
 	}
 #if defined(__WXMSW__) || defined(__WXMAC__)
 	else if (event.GetId() == XRCID("ID_ACTIONAFTER_REBOOT"))
