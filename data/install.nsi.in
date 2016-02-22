@@ -597,6 +597,93 @@ Function PageReinstall
 
 FunctionEnd
 
+Function CleanLeftovers
+
+  DetailPrint "Cleaning leftover files"
+  SetDetailsPrint none
+
+  Delete "$INSTDIR\libgcc_s_sjlj-1.dll"
+  Delete "$INSTDIR\libstdc++-6.dll"
+  Delete "$INSTDIR\libwinpthread-1.dll"
+  Delete "$INSTDIR\mingwm10.dll"
+
+  Delete "$INSTDIR\resources\dialogs.xrc"
+  Delete "$INSTDIR\resources\filezilla.xpm"
+  Delete "$INSTDIR\resources\inputdialog.xrc"
+  Delete "$INSTDIR\resources\menus.xrc"
+  Delete "$INSTDIR\resources\netconfwizard.xrc"
+  Delete "$INSTDIR\resources\quickconnectbar.xrc"
+  Delete "$INSTDIR\resources\settings.xrc"
+  Delete "$INSTDIR\resources\themes.xml"
+  Delete "$INSTDIR\resources\toolbar.xrc"
+  Delete "$INSTDIR\resources\update.xrc"
+  Delete "$INSTDIR\resources\xxquickconnectbar.xrc"
+  Delete "$INSTDIR\resources\xxtoolbar.xrc"
+  Delete "$INSTDIR\resources\20x20\unknown.png"
+  Delete "$INSTDIR\resources\24x24\unknown.png"
+  RMDir "$INSTDIR\resources\20x20"
+  RMDir "$INSTDIR\resources\24x24"
+  RMDir "$INSTDIR\resources"
+
+  Delete "$INSTDIR\locales\ar_EG\filezilla.mo"
+  Delete "$INSTDIR\locales\bg\filezilla.mo"
+  Delete "$INSTDIR\locales\ca_ES\filezilla.mo"
+  Delete "$INSTDIR\locales\cs\filezilla.mo"
+  Delete "$INSTDIR\locales\de_DE\filezilla.mo"
+  Delete "$INSTDIR\locales\el_GR\filezilla.mo"
+  Delete "$INSTDIR\locales\es_ES\filezilla.mo"
+  Delete "$INSTDIR\locales\et_EE\filezilla.mo"
+  Delete "$INSTDIR\locales\eu_ES\filezilla.mo"
+  Delete "$INSTDIR\locales\fi\filezilla.mo"
+  Delete "$INSTDIR\locales\fr_CA\filezilla.mo"
+  Delete "$INSTDIR\locales\fr_FR\filezilla.mo"
+  Delete "$INSTDIR\locales\gl\filezilla.mo"
+  Delete "$INSTDIR\locales\gr\filezilla.mo"
+  Delete "$INSTDIR\locales\hu\filezilla.mo"
+  Delete "$INSTDIR\locales\it_IT\filezilla.mo"
+  Delete "$INSTDIR\locales\km\filezilla.mo"
+  Delete "$INSTDIR\locales\lt\filezilla.mo"
+  Delete "$INSTDIR\locales\lv\filezilla.mo"
+  Delete "$INSTDIR\locales\mk\filezilla.mo"
+  Delete "$INSTDIR\locales\nl_NL\filezilla.mo"
+  Delete "$INSTDIR\locales\ru_RU\filezilla.mo"
+  Delete "$INSTDIR\locales\sk\filezilla.mo"
+  Delete "$INSTDIR\locales\sl\filezilla.mo"
+  Delete "$INSTDIR\locales\sv_SE\filezilla.mo"
+  Delete "$INSTDIR\locales\tr_TR\filezilla.mo"
+
+  RMDir "$INSTDIR\locales\ar_EG"
+  RMDir "$INSTDIR\locales\bg"
+  RMDir "$INSTDIR\locales\ca_ES"
+  RMDir "$INSTDIR\locales\cs"
+  RMDir "$INSTDIR\locales\de_DE"
+  RMDir "$INSTDIR\locales\el_GR"
+  RMDir "$INSTDIR\locales\es_ES"
+  RMDir "$INSTDIR\locales\et_EE"
+  RMDir "$INSTDIR\locales\eu_ES"
+  RMDir "$INSTDIR\locales\fi"
+  RMDir "$INSTDIR\locales\fr_CA"
+  RMDir "$INSTDIR\locales\fr_FR"
+  RMDir "$INSTDIR\locales\gl"
+  RMDir "$INSTDIR\locales\gr"
+  RMDir "$INSTDIR\locales\hu"
+  RMDir "$INSTDIR\locales\it_IT"
+  RMDir "$INSTDIR\locales\km"
+  RMDir "$INSTDIR\locales\lt"
+  RMDir "$INSTDIR\locales\lv"
+  RMDir "$INSTDIR\locales\mk"
+  RMDir "$INSTDIR\locales\nl_NL"
+  RMDir "$INSTDIR\locales\ru_RU"
+  RMDir "$INSTDIR\locales\sk"
+  RMDir "$INSTDIR\locales\sl"
+  RMDir "$INSTDIR\locales\sv_SE"
+  RMDir "$INSTDIR\locales\tr_TR"
+
+  RMDir "$INSTDIR\locales"
+
+  SetDetailsPrint lastused
+FunctionEnd
+
 Function RunUninstaller
 
   ${If} $ALL_USERS_DEFAULT == 1
@@ -639,6 +726,8 @@ Function RunUninstaller
 
   BringToFront
   Sleep 500
+
+  Call CleanLeftovers
 
 FunctionEnd
 
