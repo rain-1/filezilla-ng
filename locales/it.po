@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Filezilla italian translation 16.02.2016\n"
+"Project-Id-Version: Filezilla italian translation 23.02.2016\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-22 14:31+0100\n"
-"PO-Revision-Date: 2016-02-16 13:57+0100\n"
+"POT-Creation-Date: 2016-02-29 11:00+0100\n"
+"PO-Revision-Date: 2016-02-23 14:50+0100\n"
 "Last-Translator: bovirus <@bovirus@gmail.com>\n"
 "Language-Team: bovirus - Andrea Sanavia - Vincenzo Reale - Riccardo Vianello "
 "<www.filezilla-project.it>\n"
@@ -79,7 +79,7 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d file. Dimensione totale: almeno %s"
 msgstr[1] "%d file. Dimensione totale: almeno %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2765
+#: ../../locales/../src/interface/QueueView.cpp:2764
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d file aggiunti alla coda"
@@ -1496,7 +1496,7 @@ msgstr "&Esegui sempre questa azione"
 msgid "Algorithm:"
 msgstr "Algoritmo:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2928
+#: ../../locales/../src/interface/QueueView.cpp:2927
 msgid "All files have been successfully transferred"
 msgstr "Tutti i file sono stati trasferiti correttamente"
 
@@ -1506,7 +1506,7 @@ msgstr ""
 "Tutte le porte nell'intervallo specificato devono essere comprese tra 1024 e "
 "65535."
 
-#: ../../locales/../src/interface/QueueView.cpp:2924
+#: ../../locales/../src/interface/QueueView.cpp:2923
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -3157,7 +3157,7 @@ msgstr "Elenco cartella di \"%s\" completato"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:196
 msgid "Directory listing successful"
-msgstr "Contenuto cartella letto con successo"
+msgstr "Contenuto cartella letto correttamente"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1135
 msgid "Disa&ble all"
@@ -3406,7 +3406,7 @@ msgstr "Modifica risultati ricerca"
 msgid "Email:"
 msgstr "Email:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2106
+#: ../../locales/../src/interface/QueueView.cpp:2104
 msgid "Empty command"
 msgstr "Comando vuoto"
 
@@ -3472,7 +3472,7 @@ msgstr "&Esegui comando personalizzato..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Inserisci 0 per velocità illimitata."
 
-#: ../../locales/../src/interface/QueueView.cpp:2100
+#: ../../locales/../src/interface/QueueView.cpp:2098
 msgid "Enter command"
 msgstr "Inserisci comando"
 
@@ -3995,7 +3995,7 @@ msgstr "Trasferimenti ignorato"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:130
 msgid "File transfer successful"
-msgstr "Trasferimento file completato con successo"
+msgstr "Trasferimento file completato"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:115
 #, c-format
@@ -4573,7 +4573,7 @@ msgstr "Importa configurazione"
 #: ../../locales/../src/interface/import.cpp:73
 #: ../../locales/../src/interface/import.cpp:76
 msgid "Import successful"
-msgstr "Importazione avvenuta con successo"
+msgstr "Importazione completata"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:49
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:56
@@ -5247,7 +5247,7 @@ msgstr "Nessun indirizzo associato con il nome nodo"
 msgid "No category to export selected"
 msgstr "Nessuna categoria da esportare selezionata"
 
-#: ../../locales/../src/interface/QueueView.cpp:2106
+#: ../../locales/../src/interface/QueueView.cpp:2104
 msgid "No command given, aborting."
 msgstr "Nessun comando ottenuto, annullamento in corso."
 
@@ -5818,8 +5818,7 @@ msgstr ""
 "Inserisci un comando FTP.\n"
 "L'utilizzo di comandi ftp personalizzati svuoterà la cache delle cartelle."
 
-#: ../../locales/../src/interface/QueueView.cpp:2100
-#, fuzzy
+#: ../../locales/../src/interface/QueueView.cpp:2098
 msgid ""
 "Please enter the complete path of a program and its arguments. This command "
 "will be executed when the queue has finished processing.\n"
@@ -5827,9 +5826,11 @@ msgid ""
 "You need to properly quote commands and their arguments if they contain "
 "spaces."
 msgstr ""
-"Inserisci il percorso del programma da eseguire.\n"
-"Es. c:\\somePath\\file.exe sotto MS Windows o /somePath/file sotto Unix.\n"
-"È possibile anche specificare i parametri del programma."
+"Inserisci il percorso completo del programma e i suoi argomenti. Questo "
+"comando verrà eseguito quando srà completata l'elaborazione della coda.\n"
+"Es. c:\\cartella\\file.exe in MS Windows o /cartella/file in Unix.\n"
+"È pnecessario quotare corretamente i comandi e i loro argomenti se "
+"contengono spazi."
 
 #: ../../locales/../src/interface/LocalListView.cpp:902
 #: ../../locales/../src/interface/LocalTreeView.cpp:1120
@@ -5867,7 +5868,7 @@ msgid ""
 "prevent successful FTP connections."
 msgstr ""
 "Seguire attentamente le istruzioni, in quanto una configurazione errata può "
-"impedire il successo delle connessioni FTP."
+"impedire la riuscita delle connessioni FTP."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:627
 msgid ""
@@ -6144,7 +6145,7 @@ msgstr "Algoritmo chiave pubblica:"
 msgid "Public permissions"
 msgstr "Permessi pubblici"
 
-#: ../../locales/../src/interface/QueueView.cpp:3035
+#: ../../locales/../src/interface/QueueView.cpp:3038
 msgid "Queue has been fully processed"
 msgstr "Coda elaborata completamente"
 
@@ -6172,9 +6173,8 @@ msgid "Queueing:"
 msgstr "In coda:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:402
-#, fuzzy
 msgid "R&eboot system once"
-msgstr "&Riavvia il sistema"
+msgstr "Riavvia il sist&ema"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:118
 msgid "R&emote directory tree"
@@ -6257,7 +6257,7 @@ msgstr "Eliminare tutti i file e/o cartelle selezionati nel computer?"
 msgid "Reason"
 msgstr "Motivo"
 
-#: ../../locales/../src/interface/QueueView.cpp:3028
+#: ../../locales/../src/interface/QueueView.cpp:3031
 msgid "Reboot now"
 msgstr "Riavvia adesso"
 
@@ -6553,7 +6553,6 @@ msgid "S&how the Site Manager on startup"
 msgstr "&Visualizza Gestore siti all'avvio"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:406
-#, fuzzy
 msgid "S&hutdown system once"
 msgstr "&Arresta il sistema"
 
@@ -6562,9 +6561,8 @@ msgid "S&top"
 msgstr "&Ferma"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:410
-#, fuzzy
 msgid "S&uspend system once"
-msgstr "&Sospendi il sistema"
+msgstr "S&ospendi il sistema"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:92
 msgid "S&ynchronized browsing"
@@ -7005,7 +7003,7 @@ msgstr "Visualizza crittografie TLS disponibili"
 msgid "Shows this help dialog"
 msgstr "Visualizza questa finestra di aiuto"
 
-#: ../../locales/../src/interface/QueueView.cpp:3024
+#: ../../locales/../src/interface/QueueView.cpp:3027
 msgid "Shutdown now"
 msgstr "Arresta il sistema"
 
@@ -7282,7 +7280,7 @@ msgstr "Trasferimenti riusciti"
 msgid "Summary of test results:"
 msgstr "Riepilogo dei risultati del test:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3032
+#: ../../locales/../src/interface/QueueView.cpp:3035
 msgid "Suspend now"
 msgstr "Sospendi ora"
 
@@ -7387,9 +7385,8 @@ msgid "Temporary failure in name resolution"
 msgstr "Fallimento temporaneo nella risoluzione nomi"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:576
-#, fuzzy
 msgid "Test finished successfully"
-msgstr "Trasferimento file completato con successo"
+msgstr "Test completato correttamente"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:370
 msgid "Test results"
@@ -7783,11 +7780,11 @@ msgstr "La famiglia di indirizzi specificata non è supportata"
 msgid "The specified network name is no longer available"
 msgstr "Il nome rete specificato non è più disponibile"
 
-#: ../../locales/../src/interface/QueueView.cpp:3027
+#: ../../locales/../src/interface/QueueView.cpp:3030
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "Il sistema sarà riavviato a meno che non fate clic su [Annulla]."
 
-#: ../../locales/../src/interface/QueueView.cpp:3023
+#: ../../locales/../src/interface/QueueView.cpp:3026
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "Il sistema si chiuderà a meno che non fate clic su [Annulla]."
 
@@ -8002,7 +7999,7 @@ msgstr "Trasferimento in corso"
 msgid "Transfers"
 msgstr "Trasferimenti"
 
-#: ../../locales/../src/interface/QueueView.cpp:2920
+#: ../../locales/../src/interface/QueueView.cpp:2919
 msgid "Transfers finished"
 msgstr "Trasferimenti completati"
 
@@ -8614,7 +8611,7 @@ msgstr ""
 "Non si dovrebbero avere problemi di connessione ad altri server, i "
 "trasferimenti dei file dovrebbero funzionare correttamente."
 
-#: ../../locales/../src/interface/QueueView.cpp:3031
+#: ../../locales/../src/interface/QueueView.cpp:3034
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "Il sistema sarà messo in sospensone a meno fai clic su [Annulla]."
 
