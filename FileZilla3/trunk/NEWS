@@ -10,6 +10,10 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.16.0 (2016-02-29)
+
+- Small fix for remembering queue completion actions
+
 3.16.0-rc1 (2016-02-21)
 
 + Make notification bubble on queue completion configurable though the queue's context menu
