@@ -2064,13 +2064,11 @@ void CQueueView::OnStopAndClear(wxCommandEvent&)
 
 void CQueueView::OnActionAfter(wxCommandEvent& event)
 {
-	if (event.GetId() == XRCID("ID_ACTIONAFTER_NONE"))
-	{ // Goes from checked to non-checked or disable is pressed
+	if (event.GetId() == XRCID("ID_ACTIONAFTER_NONE")) {
 		m_actionAfterState = ActionAfterState::None;
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
-		if (m_actionAfterWarnDialog)
-		{
+		if (m_actionAfterWarnDialog) {
 			m_actionAfterWarnDialog->Destroy();
 			m_actionAfterWarnDialog = 0;
 		}
@@ -2143,12 +2141,10 @@ void CQueueView::RemoveAll()
 
 	std::vector<CServerItem*> newServerList;
 	m_itemCount = 0;
-	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-	{
+	for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
 		if ((*iter)->TryRemoveAll())
 			delete *iter;
-		else
-		{
+		else {
 			newServerList.push_back(*iter);
 			m_itemCount += 1 + (*iter)->GetChildrenCount(true);
 		}
@@ -2164,7 +2160,10 @@ void CQueueView::RemoveAll()
 	}
 
 	SaveSetItemCount(m_itemCount);
-	m_actionAfterState = ActionAfterState::None;
+
+	if (newServerList.empty() && (m_actionAfterState == ActionAfterState::Reboot || m_actionAfterState == ActionAfterState::Shutdown || m_actionAfterState == ActionAfterState::Sleep)) {
+		m_actionAfterState = ActionAfterState::None;
+	}
 
 	m_serverList = newServerList;
 	UpdateStatusLinePositions();
@@ -2971,16 +2970,20 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 				ActionAfterWarnUser(m_actionAfterState);
 				return;
 			}
-			else
+			else {
 				wxShutdown((m_actionAfterState == ActionAfterState::Reboot) ? wxSHUTDOWN_REBOOT : wxSHUTDOWN_POWEROFF);
+				m_actionAfterState = ActionAfterState::None;
+			}
 			break;
 		case ActionAfterState::Sleep:
 			if (!warned) {
 				ActionAfterWarnUser(m_actionAfterState);
 				return;
 			}
-			else
+			else {
 				SetSuspendState(false, false, true);
+				m_actionAfterState = ActionAfterState::None;
+			}
 			break;
 #elif defined(__WXMAC__)
 		case ActionAfterState::Reboot:
@@ -2999,6 +3002,7 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 				else
 					action = _T("sleep");
 				wxExecute(_T("osascript -e 'tell application \"System Events\" to ") + action + _T("'"));
+				m_actionAfterState = ActionAfterState::None;
 			}
 			break;
 #else
@@ -3008,7 +3012,6 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 			break;
 
 	}
-	m_actionAfterState = ActionAfterState::None; // Resetting the state.
 }
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
