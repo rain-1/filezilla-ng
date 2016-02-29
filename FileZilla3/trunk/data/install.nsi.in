@@ -23,7 +23,11 @@
 
   ; Name and file
   Name "FileZilla Client ${VERSION}"
+!ifdef ENABLE_OFFERS
+  OutFile "FileZilla_3_setup_bundled.exe"
+!else
   OutFile "FileZilla_3_setup.exe"
+!endif
 
   SetCompressor /SOLID LZMA
 
@@ -128,6 +132,11 @@
 
   !define MUI_PAGE_CUSTOMFUNCTION_PRE PageLicensePre
   !insertmacro MUI_PAGE_LICENSE "${top_srcdir}\COPYING"
+
+!ifdef ENABLE_OFFERS
+  !include "@srcdir@\offer.nsh"
+  Page custom OfferPage OfferPageLeave
+!endif
 
   Page custom PageReinstall PageLeaveReinstall
   Page custom PageAllUsers PageLeaveAllUsers
