@@ -1440,11 +1440,10 @@ void CQueueViewBase::OnChar(wxKeyEvent& event)
 
 void CQueueViewBase::OnEndColumnDrag(wxListEvent&)
 {
-	for (unsigned int i = 0; i < m_pQueue->GetPageCount(); i++)
-	{
+	for (unsigned int i = 0; i < m_pQueue->GetPageCount(); ++i) {
 		wxWindow *page = m_pQueue->GetPage(i);
 
-		wxListCtrl* queue_page = wxDynamicCast(page, wxListCtrl);
+		wxListCtrl* queue_page = dynamic_cast<wxListCtrl*>(page);
 		if (!queue_page || queue_page == this)
 			continue;
 

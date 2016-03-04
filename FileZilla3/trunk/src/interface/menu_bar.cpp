@@ -34,7 +34,7 @@ CMenuBar::~CMenuBar()
 
 CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 {
-	CMenuBar* menubar = wxDynamicCast(wxXmlResource::Get()->LoadMenuBar(_T("ID_MENUBAR")), CMenuBar);
+	CMenuBar* menubar = dynamic_cast<CMenuBar*>(wxXmlResource::Get()->LoadMenuBar(_T("ID_MENUBAR")));
 	if (!menubar)
 		return 0;
 

@@ -39,7 +39,7 @@ bool CQuickconnectBar::Create(CMainFrame* pParent)
 
 #ifdef __WXMAC__
 	// Under OS X default buttons are toplevel window wide, where under Windows / GTK they stop at the parent panel.
-	wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(pParent), wxTopLevelWindow);
+	wxTopLevelWindow *tlw = dynamic_cast<wxTopLevelWindow*>(wxGetTopLevelParent(pParent));
 	if (tlw)
 		tlw->SetDefaultItem(0);
 #endif

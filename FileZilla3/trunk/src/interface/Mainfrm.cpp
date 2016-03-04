@@ -198,8 +198,7 @@ public:
 protected:
 	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
 	{
-		if (notification == STATECHANGE_CHANGEDCONTEXT)
-		{
+		if (notification == STATECHANGE_CHANGEDCONTEXT) {
 			// Update window title
 			const CServer* pServer = pState ? pState->GetServer() : 0;
 			if (!pServer)
@@ -217,29 +216,25 @@ protected:
 		if (!controls)
 			return;
 
-		if (controls->tab_index == -1)
-		{
+		if (controls->tab_index == -1) {
 			if (notification == STATECHANGE_REMOTE_IDLE || notification == STATECHANGE_SERVER)
 				pState->Disconnect();
 
 			return;
 		}
 
-		if (notification == STATECHANGE_SERVER)
-		{
+		if (notification == STATECHANGE_SERVER) {
 			const CServer* pServer = pState->GetServer();
 
-			if (pState == CContextManager::Get()->GetCurrentContext())
-			{
-				if (!pServer)
+			if (pState == CContextManager::Get()->GetCurrentContext()) {
+				if (!pServer) {
 					m_pMainFrame->SetTitle(_T("FileZilla"));
-				else
-				{
+				}
+				else {
 					m_pMainFrame->SetTitle(pState->GetTitle() + _T(" - FileZilla"));
-					if (pServer->GetName().empty())
-					{
+					if (pServer->GetName().empty()) {
 						// Can only happen through quickconnect bar
-						CMenuBar* pMenuBar = wxDynamicCast(m_pMainFrame->GetMenuBar(), CMenuBar);
+						CMenuBar* pMenuBar = dynamic_cast<CMenuBar*>(m_pMainFrame->GetMenuBar());
 						if (pMenuBar)
 							pMenuBar->ClearBookmarks();
 					}
@@ -1066,20 +1061,16 @@ bool CMainFrame::CloseDialogsAndQuit(wxCloseEvent &event)
 
 	int size = wxTopLevelWindows.size();
 	static wxTopLevelWindow* pLast = 0;
-	if (wxTopLevelWindows.size())
-	{
+	if (wxTopLevelWindows.size()) {
 		wxWindowList::reverse_iterator iter = wxTopLevelWindows.rbegin();
 		wxTopLevelWindow* pTop = (wxTopLevelWindow*)(*iter);
-		while (pTop != this && (size != prev_size || pLast != pTop))
-		{
-			wxDialog* pDialog = wxDynamicCast(pTop, wxDialog);
+		while (pTop != this && (size != prev_size || pLast != pTop)) {
+			wxDialog* pDialog = dynamic_cast<wxDialog*>(pTop);
 			if (pDialog)
 				pDialog->EndModal(wxID_CANCEL);
-			else
-			{
+			else {
 				wxWindow* pParent = pTop->GetParent();
-				if (m_pQueuePane && pParent == m_pQueuePane)
-				{
+				if (m_pQueuePane && pParent == m_pQueuePane) {
 					// It's the AUI frame manager hint window. Ignore it
 					++iter;
 					if (iter == wxTopLevelWindows.rend())

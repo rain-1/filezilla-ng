@@ -45,20 +45,17 @@ void CSplitterWindowEx::OnSize(wxSizeEvent& event)
 	wxWindow *parent = wxGetTopLevelParent(this);
 	bool iconized;
 
-	wxTopLevelWindow *winTop = wxDynamicCast(parent, wxTopLevelWindow);
-	if ( winTop )
-	{
+	auto winTop = dynamic_cast<wxTopLevelWindow*>(parent);
+	if ( winTop ) {
 		iconized = winTop->IsIconized();
 	}
-	else
-	{
+	else {
 		wxFAIL_MSG(wxT("should have a top level parent!"));
 
 		iconized = false;
 	}
 
-	if ( iconized )
-	{
+	if (iconized) {
 		m_lastSize = wxSize(0,0);
 
 		event.Skip();
@@ -66,8 +63,7 @@ void CSplitterWindowEx::OnSize(wxSizeEvent& event)
 		return;
 	}
 
-	if ( m_windowTwo )
-	{
+	if (m_windowTwo) {
 		int w, h;
 		GetClientSize(&w, &h);
 
