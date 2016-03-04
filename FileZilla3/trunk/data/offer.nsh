@@ -193,7 +193,10 @@ Function OfferPage
           SetRegView 64
         ${EndIf}
         StrCpy $R0 ''
-        ReadRegStr $R0 HKCU Software\Classes\http\shell\open\command ''
+        ReadRegStr $R0 HKCU Software\Microsoft\Windows\Shell\Associations\UrlAssociations\http\UserChoice 'ProgId'
+        ${If} $R0 == ''
+          ReadRegStr $R0 HKCU Software\Classes\http\shell\open\command ''
+        ${EndIf}
         ${If} $R0 == ''
           ReadRegStr $R0 HKLM Software\Classes\http\shell\open\command ''
         ${EndIf}
