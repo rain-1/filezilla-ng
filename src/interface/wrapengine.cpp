@@ -338,7 +338,7 @@ bool CWrapEngine::WrapText(wxWindow* parent, wxString& text, unsigned long maxLe
 
 bool CWrapEngine::WrapText(wxWindow* parent, int id, unsigned long maxLength)
 {
-	wxStaticText* pText = wxDynamicCast(parent->FindWindow(id), wxStaticText);
+	wxStaticText* pText = dynamic_cast<wxStaticText*>(parent->FindWindow(id));
 	if (!pText)
 		return false;
 
@@ -399,7 +399,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 		wxWindow* window;
 		wxSizer* subSizer = 0;
 		if ((window = item->GetWindow())) {
-			wxStaticText* text = wxDynamicCast(window, wxStaticText);
+			wxStaticText* text = dynamic_cast<wxStaticText*>(window);
 			if (text) {
 #ifdef __WXMAC__
 				const int offset = 3;
@@ -429,7 +429,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 				continue;
 			}
 
-			wxNotebook* book = wxDynamicCast(window, wxNotebook);
+			wxNotebook* book = dynamic_cast<wxNotebook*>(window);
 			if (book) {
 				int maxPageWidth = 0;
 				for (unsigned int j = 0; j < book->GetPageCount(); ++j) {
@@ -453,8 +453,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 				continue;
 			}
 
-			if (wxDynamicCast(window, wxCheckBox) || wxDynamicCast(window, wxRadioButton) || wxDynamicCast(window, wxChoice))
-			{
+			if (dynamic_cast<wxCheckBox*>(window) || dynamic_cast<wxRadioButton*>(window) || dynamic_cast<wxChoice*>(window)) {
 #if WRAPDEBUG >= 3
 				plvl printf("Leave: WrapRecursive on unshrinkable control failed: %s\n",
 					static_cast<char const*>(wxString(window->GetClassInfo()->GetClassName())));
@@ -472,8 +471,7 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 
 			// Add border of static box sizer
 			wxStaticBoxSizer* sboxSizer;
-			if ((sboxSizer = wxDynamicCast(subSizer, wxStaticBoxSizer)))
-			{
+			if ((sboxSizer = dynamic_cast<wxStaticBoxSizer*>(subSizer))) {
 				int top, other;
 				sboxSizer->GetStaticBox()->GetBordersForSizer(&top, &other);
 				subBorder += other * 2;
@@ -497,8 +495,8 @@ int CWrapEngine::WrapRecursive(wxWindow* wnd, wxSizer* sizer, int max)
 		}
 	}
 
-	wxStaticBoxSizer* sboxSizer = wxDynamicCast(sizer, wxStaticBoxSizer);
-	if( sboxSizer ) {
+	wxStaticBoxSizer* sboxSizer = dynamic_cast<wxStaticBoxSizer*>(sizer);
+	if (sboxSizer) {
 #ifdef __WXGTK3__
 		gtk_widget_set_size_request(sboxSizer->GetStaticBox()->GetHandle(), -1, -1);
 		GtkRequisition req;
@@ -783,22 +781,18 @@ bool CWrapEngine::UnwrapRecursive(wxWindow* wnd, wxSizer* sizer)
 
 		wxWindow* window;
 		wxSizer* subSizer;
-		if ((window = item->GetWindow()))
-		{
-			wxStaticText* text = wxDynamicCast(window, wxStaticText);
-			if (text)
-			{
+		if ((window = item->GetWindow())) {
+			wxStaticText* text = dynamic_cast<wxStaticText*>(window);
+			if (text) {
 				wxString unwrapped = UnwrapText(text->GetLabel());
 				text->SetLabel(unwrapped);
 
 				continue;
 			}
 
-			wxNotebook* book = wxDynamicCast(window, wxNotebook);
-			if (book)
-			{
-				for (unsigned int j = 0; j < book->GetPageCount(); ++j)
-				{
+			wxNotebook* book = dynamic_cast<wxNotebook*>(window);
+			if (book) {
+				for (unsigned int j = 0; j < book->GetPageCount(); ++j) {
 					wxNotebookPage* page = book->GetPage(j);
 					UnwrapRecursive(wnd, page->GetSizer());
 				}

@@ -1442,7 +1442,7 @@ bool CNewAssociationDialog::Run(const wxString &file)
 
 void CNewAssociationDialog::SetCtrlState()
 {
-	wxRadioButton* pCustom = wxDynamicCast(FindWindow(XRCID("ID_USE_CUSTOM")), wxRadioButton);
+	wxRadioButton* pCustom = dynamic_cast<wxRadioButton*>(FindWindow(XRCID("ID_USE_CUSTOM")));
 	if (!pCustom) {
 		// Return since it can get called before dialog got fully loaded
 		return;

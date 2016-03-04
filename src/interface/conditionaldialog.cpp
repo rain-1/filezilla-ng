@@ -65,8 +65,8 @@ bool CConditionalDialog::Run()
 
 	int id = ShowModal();
 
-	if (wxDynamicCast(FindWindow(wxID_HIGHEST + 1), wxCheckBox)->GetValue())
-	{
+	auto cb = dynamic_cast<wxCheckBox*>(FindWindow(wxID_HIGHEST + 1));
+	if (cb && cb->GetValue()) {
 		while (dialogs.Len() <= (unsigned int)m_type)
 			dialogs += _T("0");
 		dialogs[m_type] = '1';
