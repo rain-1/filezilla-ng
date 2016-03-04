@@ -12,9 +12,12 @@ CShellExtensionInterface::CShellExtensionInterface()
 {
 	m_shellExtension = 0;
 
-	CoCreateInstance(CLSID_ShellExtension, NULL,
+	int res = CoCreateInstance(CLSID_ShellExtension, NULL,
 	  CLSCTX_INPROC_SERVER | CLSCTX_LOCAL_SERVER, IID_IUnknown,
 	  &m_shellExtension);
+	if (res != S_OK) {
+		m_shellExtension = 0;
+	}
 
 	if (m_shellExtension)
 		m_hMutex = CreateMutex(0, false, _T("FileZilla3DragDropExtLogMutex"));
