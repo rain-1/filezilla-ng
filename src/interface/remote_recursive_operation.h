@@ -1,5 +1,5 @@
-#ifndef __RECURSIVE_OPERATION_H__
-#define __RECURSIVE_OPERATION_H__
+#ifndef FILEZILLA_REMOTE_RECURSIVE_OPERATION_HEADER
+#define FILEZILLA_REMOTE_RECURSIVE_OPERATION_HEADER
 
 #include "state.h"
 #include <set>
@@ -118,4 +118,4 @@ protected:
 	uint64_t m_processedDirectories{};
 };
 
-#endif //__RECURSIVE_OPERATION_H__
+#endif

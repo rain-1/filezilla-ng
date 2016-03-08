@@ -4,7 +4,7 @@
 #include <wx/dnd.h>
 #include "dndobjects.h"
 #include "chmoddialog.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "inputdialog.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"

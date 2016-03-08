@@ -1,5 +1,5 @@
 #include <filezilla.h>
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "commandqueue.h"
 #include "chmoddialog.h"
 #include "filter.h"

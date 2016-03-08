@@ -214,7 +214,7 @@
     <ClCompile Include="queueview_successful.cpp" />
     <ClCompile Include="quickconnectbar.cpp" />
     <ClCompile Include="recentserverlist.cpp" />
-    <ClCompile Include="recursive_operation.cpp" />
+    <ClCompile Include="remote_recursive_operation.cpp" />
     <ClCompile Include="RemoteListView.cpp" />
     <ClCompile Include="RemoteTreeView.cpp" />
     <ClCompile Include="search.cpp" />
@@ -326,7 +326,7 @@
     <ClInclude Include="queueview_successful.h" />
     <ClInclude Include="quickconnectbar.h" />
     <ClInclude Include="recentserverlist.h" />
-    <ClInclude Include="recursive_operation.h" />
+    <ClInclude Include="remote_recursive_operation.h" />
     <ClInclude Include="RemoteListView.h" />
     <ClInclude Include="RemoteTreeView.h" />
     <ClInclude Include="search.h" />

@@ -2,7 +2,7 @@
 #include "commandqueue.h"
 #include "Mainfrm.h"
 #include "state.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "loginmanager.h"
 #include "queue.h"
 #include "RemoteListView.h"

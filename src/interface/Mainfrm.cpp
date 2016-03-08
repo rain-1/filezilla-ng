@@ -30,7 +30,7 @@
 #include "clearprivatedata.h"
 #include "export.h"
 #include "import.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include <wx/tokenzr.h>
 #include "edithandler.h"
 #include "inputdialog.h"
