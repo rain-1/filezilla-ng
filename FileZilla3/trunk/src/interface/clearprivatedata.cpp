@@ -8,7 +8,7 @@
 #include "Options.h"
 #include "ipcmutex.h"
 #include "queue.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 
 BEGIN_EVENT_TABLE(CClearPrivateDataDialog, wxDialogEx)
 EVT_TIMER(wxID_ANY, CClearPrivateDataDialog::OnTimer)

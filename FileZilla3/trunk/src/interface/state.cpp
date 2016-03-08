@@ -6,7 +6,7 @@
 #include "Mainfrm.h"
 #include "queue.h"
 #include "filezillaapp.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "listingcomparison.h"
 #include "xrc_helper.h"
 

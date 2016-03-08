@@ -8,7 +8,7 @@
 #include "Mainfrm.h"
 #include "Options.h"
 #include "queue.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "recursive_operation_status.h"
 #include "RemoteListView.h"
 #include "RemoteTreeView.h"

@@ -22,7 +22,7 @@
 #include <wx/progdlg.h>
 #include <wx/sound.h>
 #include "statusbar.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "auto_ascii_files.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"

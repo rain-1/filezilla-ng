@@ -1,7 +1,7 @@
 #include <filezilla.h>
 #include "recursive_operation_status.h"
 
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "themeprovider.h"
 
 #include <wx/bmpbuttn.h>

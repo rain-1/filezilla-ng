@@ -8,7 +8,7 @@
 #include "ipcmutex.h"
 #include "Options.h"
 #include "queue.h"
-#include "recursive_operation.h"
+#include "remote_recursive_operation.h"
 #include "sizeformatting.h"
 #include "timeformatting.h"
 #include "window_state_manager.h"
