@@ -301,7 +301,6 @@ public:
 
 	wxString m_statusMessage;
 
-	volatile bool m_remove{};
 	bool m_active{};
 
 	int m_count{};

@@ -12,33 +12,7 @@
 
 #include "queue_storage.h"
 
-class CFolderProcessingEntry
-{
-public:
-	enum t_type
-	{
-		dir,
-		file
-	};
-	const t_type m_type;
-
-	CFolderProcessingEntry(t_type type) : m_type(type) {}
-	virtual ~CFolderProcessingEntry() {}
-};
-
-class t_newEntry : public CFolderProcessingEntry
-{
-public:
-	t_newEntry()
-		: CFolderProcessingEntry(CFolderProcessingEntry::file)
-	{}
-
-	wxString name;
-	int64_t size{};
-	fz::datetime time;
-	int attributes{};
-	bool dir{};
-};
+#include "local_recursive_operation.h"
 
 namespace ActionAfterState {
 enum type {

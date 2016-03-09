@@ -32,8 +32,6 @@
 #include <wx/notifmsg.h>
 #endif
 
-#include <libfilezilla/local_filesys.hpp>
-
 #ifdef __WXMSW__
 #include <powrprof.h>
 #endif
@@ -167,12 +165,6 @@ protected:
 	wxDataObjectComposite* m_pDataObject;
 };
 
-DECLARE_EVENT_TYPE(fzEVT_FOLDERTHREAD_COMPLETE, -1)
-DEFINE_EVENT_TYPE(fzEVT_FOLDERTHREAD_COMPLETE)
-
-DECLARE_EVENT_TYPE(fzEVT_FOLDERTHREAD_FILES, -1)
-DEFINE_EVENT_TYPE(fzEVT_FOLDERTHREAD_FILES)
-
 DECLARE_EVENT_TYPE(fzEVT_ASKFORPASSWORD, -1)
 DEFINE_EVENT_TYPE(fzEVT_ASKFORPASSWORD)
 
@@ -212,230 +204,6 @@ EVT_COMMAND(wxID_ANY, fzEVT_GRANTEXCLUSIVEENGINEACCESS, CQueueView::OnExclusiveE
 
 EVT_SIZE(CQueueView::OnSize)
 END_EVENT_TABLE()
-
-class CFolderProcessingThread final : public fz::thread
-{
-	struct t_internalDirPair
-	{
-		CLocalPath localPath;
-		CServerPath remotePath;
-	};
-public:
-	CFolderProcessingThread(CQueueView* pOwner, CFolderScanItem* pFolderItem)
-	{
-		m_pOwner = pOwner;
-		m_pFolderItem = pFolderItem;
-
-		t_internalDirPair* pair = new t_internalDirPair;
-		pair->localPath = pFolderItem->GetLocalPath();
-		pair->remotePath = pFolderItem->GetRemotePath();
-		m_dirsToCheck.push_back(pair);
-	}
-
-	virtual ~CFolderProcessingThread()
-	{
-		{
-			fz::scoped_lock locker(m_sync);
-			m_quit = true;
-		}
-		join();
-		for (auto iter = m_entryList.begin(); iter != m_entryList.end(); ++iter)
-			delete *iter;
-		for (auto iter = m_dirsToCheck.begin(); iter != m_dirsToCheck.end(); ++iter)
-			delete *iter;
-	}
-
-	void GetFiles(std::list<CFolderProcessingEntry*> &entryList)
-	{
-		wxASSERT(entryList.empty());
-		fz::scoped_lock locker(m_sync);
-		entryList.swap(m_entryList);
-
-		m_didSendEvent = false;
-		m_processing_entries = true;
-
-		if (m_throttleWait) {
-			m_throttleWait = false;
-			m_condition.signal(locker);
-		}
-	}
-
-	class t_dirPair : public CFolderProcessingEntry
-	{
-	public:
-		t_dirPair() : CFolderProcessingEntry(CFolderProcessingEntry::dir) {}
-		CLocalPath localPath;
-		CServerPath remotePath;
-	};
-
-	void ProcessDirectory(const CLocalPath& localPath, CServerPath const& remotePath, const wxString& name)
-	{
-		fz::scoped_lock locker(m_sync);
-
-		t_internalDirPair* pair = new t_internalDirPair;
-
-		{
-			pair->localPath = localPath;
-			pair->localPath.AddSegment(name);
-
-			pair->remotePath = remotePath;
-			pair->remotePath.AddSegment(name);
-		}
-
-		m_dirsToCheck.push_back(pair);
-
-		if (m_threadWaiting) {
-			m_threadWaiting = false;
-			m_condition.signal(locker);
-		}
-	}
-
-	void CheckFinished()
-	{
-		fz::scoped_lock locker(m_sync);
-		wxASSERT(m_processing_entries);
-
-		m_processing_entries = false;
-
-		if (m_threadWaiting && (!m_dirsToCheck.empty() || m_entryList.empty())) {
-			m_threadWaiting = false;
-			m_condition.signal(locker);
-		}
-	}
-
-	CFolderScanItem* GetFolderScanItem()
-	{
-		return m_pFolderItem;
-	}
-
-protected:
-
-	void AddEntry(CFolderProcessingEntry* entry)
-	{
-		fz::scoped_lock l(m_sync);
-		m_entryList.push_back(entry);
-
-		// Wait if there are more than 100 items to queue,
-		// don't send notification if there are less than 10.
-		// This reduces overhead
-		bool send;
-
-		if (m_didSendEvent) {
-			send = false;
-			if (m_entryList.size() >= 100) {
-				m_throttleWait = true;
-				m_condition.wait(l);
-			}
-		}
-		else if (m_entryList.size() < 20)
-			send = false;
-		else
-			send = true;
-
-		if (send)
-			m_didSendEvent = true;
-
-		l.unlock();
-
-		if (send) {
-			// We send the notification after leaving the critical section, else we
-			// could get into a deadlock. wxWidgets event system does internal
-			// locking.
-			m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
-		}
-	}
-
-	void entry()
-	{
-#ifdef __WXDEBUG__
-		wxMutexGuiEnter();
-		wxASSERT(m_pFolderItem->GetTopLevelItem() && m_pFolderItem->GetTopLevelItem()->GetType() == QueueItemType::Server);
-		wxMutexGuiLeave();
-#endif
-
-		wxASSERT(!m_pFolderItem->Download());
-
-		fz::local_filesys localFileSystem;
-
-		while (!m_pFolderItem->m_remove) {
-			fz::scoped_lock l(m_sync);
-			if (m_quit) {
-				break;
-			}
-			if (m_dirsToCheck.empty()) {
-				if (!m_didSendEvent && !m_entryList.empty()) {
-					m_didSendEvent = true;
-					l.unlock();
-					m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
-					continue;
-				}
-
-				if (!m_didSendEvent && !m_processing_entries) {
-					break;
-				}
-				m_threadWaiting = true;
-				m_condition.wait(l);
-				if (m_dirsToCheck.empty()) {
-					break;
-				}
-				continue;
-			}
-
-			const t_internalDirPair *pair = m_dirsToCheck.front();
-			m_dirsToCheck.pop_front();
-
-			l.unlock();
-
-			if (!localFileSystem.begin_find_files(fz::to_native(pair->localPath.GetPath()), false)) {
-				delete pair;
-				continue;
-			}
-
-			t_dirPair* pair2 = new t_dirPair;
-			pair2->localPath = pair->localPath;
-			pair2->remotePath = pair->remotePath;
-			AddEntry(pair2);
-
-			t_newEntry* entry = new t_newEntry;
-
-			fz::native_string name;
-			bool is_link;
-			bool is_dir;
-			while (localFileSystem.get_next_file(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes)) {
-				if (is_link)
-					continue;
-
-				entry->name = name;
-				entry->dir = is_dir;
-
-				AddEntry(entry);
-
-				entry = new t_newEntry;
-			}
-			delete entry;
-
-			delete pair;
-		}
-
-		m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY));
-	}
-
-	std::list<t_internalDirPair*> m_dirsToCheck;
-
-	// Access has to be guarded by m_sync
-	std::list<CFolderProcessingEntry*> m_entryList;
-
-	CQueueView* m_pOwner;
-	CFolderScanItem* m_pFolderItem;
-
-	fz::mutex m_sync;
-	fz::condition m_condition;
-	bool m_threadWaiting{};
-	bool m_throttleWait{};
-	bool m_didSendEvent{};
-	bool m_processing_entries{};
-	bool m_quit{};
-};
 
 CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsyncRequestQueue *pAsyncRequestQueue)
 	: CQueueViewBase(parent, index, _("Queued files")),
@@ -1517,13 +1285,12 @@ bool CQueueView::Quit()
 	for (unsigned int i = 0; i < 2; ++i) {
 		if (!m_queuedFolders[i].empty()) {
 			canQuit = false;
-			for (auto & dir : m_queuedFolders[i]) {
-				dir->m_remove = true;
-			}
 		}
 	}
-	if (m_pFolderProcessingThread)
+	if (m_pFolderProcessingThread) {
+		m_pFolderProcessingThread->Quit();
 		canQuit = false;
+	}
 
 	if (!canQuit)
 		return false;
@@ -1703,7 +1470,7 @@ void CQueueView::ProcessUploadFolderItems()
 		pItem->m_statusMessage = _("Scanning for files to upload");
 	RefreshItem(pItem);
 	pItem->m_active = true;
-	m_pFolderProcessingThread = new CFolderProcessingThread(this, pItem);
+	m_pFolderProcessingThread = new CFolderProcessingThread(this, pItem->GetLocalPath(), pItem->GetRemotePath());
 	m_pFolderProcessingThread->run();
 
 	RefreshListOnly(false);
@@ -1737,15 +1504,16 @@ void CQueueView::OnFolderThreadComplete(wxCommandEvent&)
 int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const CFileExistsNotification::OverwriteAction defaultFileExistsAction)
 {
 	wxASSERT(pServerItem);
+	wxASSERT(!m_queuedFolders[1].empty());
 
-	CFolderScanItem* pFolderScanItem = m_pFolderProcessingThread->GetFolderScanItem();
+	CFolderScanItem* pFolderScanItem = m_queuedFolders[1].front();
 
 	int added = 0;
 
 	CFilterManager filters;
 	for (std::list<CFolderProcessingEntry*>::const_iterator iter = entryList.begin(); iter != entryList.end(); ++iter) {
 		if ((*iter)->m_type == CFolderProcessingEntry::dir) {
-			if (m_pFolderProcessingThread->GetFolderScanItem()->m_dir_is_empty) {
+			if (pFolderScanItem->m_dir_is_empty) {
 				CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, pFolderScanItem->m_current_remote_path, _T(""));
 				InsertItem(pServerItem, fileItem);
 				added++;
@@ -2233,7 +2001,9 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 		else if (pItem->GetType() == QueueItemType::FolderScan) {
 			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
 			if (pFolder->m_active) {
-				pFolder->m_remove = true;
+				if (m_pFolderProcessingThread) {
+					m_pFolderProcessingThread->Quit();
+				}
 				continue;
 			}
 			else
@@ -2318,7 +2088,9 @@ bool CQueueView::StopItem(CServerItem* pServerItem, bool updateSelections)
 		if (pItem->GetType() == QueueItemType::FolderScan) {
 			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
 			if (pFolder->m_active) {
-				pFolder->m_remove = true;
+				if (m_pFolderProcessingThread) {
+					m_pFolderProcessingThread->Quit();
+				}
 				continue;
 			}
 		}

@@ -177,6 +177,7 @@
     <ClCompile Include="locale_initializer.cpp" />
     <ClCompile Include="LocalListView.cpp" />
     <ClCompile Include="LocalTreeView.cpp" />
+    <ClCompile Include="local_recursive_operation.cpp" />
     <ClCompile Include="loginmanager.cpp" />
     <ClCompile Include="Mainfrm.cpp" />
     <ClCompile Include="manual_transfer.cpp" />
@@ -289,6 +290,7 @@
     <ClInclude Include="locale_initializer.h" />
     <ClInclude Include="LocalListView.h" />
     <ClInclude Include="LocalTreeView.h" />
+    <ClInclude Include="local_recursive_operation.h" />
     <ClInclude Include="loginmanager.h" />
     <ClInclude Include="Mainfrm.h" />
     <ClInclude Include="manual_transfer.h" />

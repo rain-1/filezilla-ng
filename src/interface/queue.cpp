@@ -748,11 +748,7 @@ CFolderScanItem::CFolderScanItem(CServerItem* parent, bool queued, bool download
 
 bool CFolderScanItem::TryRemoveAll()
 {
-	if (!m_active)
-		return true;
-
-	m_remove = true;
-	return false;
+	return !m_active;
 }
 
 // --------------

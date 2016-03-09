@@ -46,6 +46,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		led.cpp \
 		listctrlex.cpp \
 		listingcomparison.cpp \
+		local_recursive_operation.cpp \
 		locale_initializer.cpp \
 		LocalListView.cpp \
 		LocalTreeView.cpp \
@@ -162,6 +163,7 @@ noinst_HEADERS = aboutdialog.h \
 		 led.h \
 		 listctrlex.h \
 		 listingcomparison.h \
+		 local_recursive_operation.h \
 		 locale_initializer.h \
 		 LocalListView.h \
 		 LocalTreeView.h \
