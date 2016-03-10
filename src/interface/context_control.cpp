@@ -199,8 +199,11 @@ void CContextControl::CreateContextControls(CState* pState)
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
 
-	auto recursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState);
-	context_controls.pRemoteListViewPanel->SetFooter(recursiveStatus);
+	auto localRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState, true);
+	context_controls.pLocalListViewPanel->SetFooter(localRecursiveStatus);
+
+	auto remoteRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState, false);
+	context_controls.pRemoteListViewPanel->SetFooter(remoteRecursiveStatus);
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
 	const int swap = COptions::Get()->GetOptionVal(OPTION_FILEPANE_SWAP);

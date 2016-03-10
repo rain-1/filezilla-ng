@@ -1023,7 +1023,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	const bool addOnly = event.GetId() == XRCID("ID_ADDTOQUEUE");
 	CFilterManager filter;
-	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download, filter.GetActiveFilters(false), currentPath);
+	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(false), currentPath);
 }
 
 void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)

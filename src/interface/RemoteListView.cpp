@@ -1260,7 +1260,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_download,
+		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
 }
