@@ -650,9 +650,9 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 	enum CRecursiveOperation::OperationMode mode;
 	if (flatten)
-		mode = start ? CRecursiveOperation::recursive_download_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
+		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
 	else
-		mode = start ? CRecursiveOperation::recursive_download : CRecursiveOperation::recursive_addtoqueue;
+		mode = start ? CRecursiveOperation::recursive_transfer : CRecursiveOperation::recursive_addtoqueue;
 
 	for (auto const& dir : selected_dirs) {
 		CLocalPath target_path = path;

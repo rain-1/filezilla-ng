@@ -13,14 +13,15 @@ EVT_BUTTON(wxID_ANY, CRecursiveOperationStatus::OnCancel)
 EVT_TIMER(wxID_ANY, CRecursiveOperationStatus::OnTimer)
 END_EVENT_TABLE()
 
-CRecursiveOperationStatus::CRecursiveOperationStatus(wxWindow* parent, CState* pState)
+CRecursiveOperationStatus::CRecursiveOperationStatus(wxWindow* parent, CState* pState, bool local)
 	: wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
 	, CStateEventHandler(pState)
+	, m_local(local)
 {
 	Hide();
 	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
-	m_pState->RegisterHandler(this, STATECHANGE_RECURSION_STATUS);
+	m_pState->RegisterHandler(this, local ? STATECHANGE_LOCAL_RECURSION_STATUS : STATECHANGE_REMOTE_RECURSION_STATUS);
 
 	m_pTextCtrl[0] = new wxStaticText(this, wxID_ANY, _T("Recursive operation in progress"), wxPoint(10, 10));
 	m_pTextCtrl[1] = new wxStaticText(this, wxID_ANY, _T("Recursive operation in progress"), wxPoint(10, 20));
@@ -87,8 +88,8 @@ void CRecursiveOperationStatus::UpdateText()
 		switch (mode) {
 		case CRecursiveOperation::recursive_addtoqueue:
 		case CRecursiveOperation::recursive_addtoqueue_flatten:
-		case CRecursiveOperation::recursive_download:
-		case CRecursiveOperation::recursive_download_flatten:
+		case CRecursiveOperation::recursive_transfer:
+		case CRecursiveOperation::recursive_transfer_flatten:
 			text = _("Recursively adding files to queue.");
 			break;
 		case CRecursiveOperation::recursive_delete:

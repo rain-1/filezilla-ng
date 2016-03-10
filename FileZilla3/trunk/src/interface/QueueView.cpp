@@ -1219,9 +1219,9 @@ bool CQueueView::SetActive(bool active /*=true*/)
 			if (!pRecursiveOperation)
 				continue;
 
-			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_download)
+			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer)
 				pRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
-			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_download_flatten)
+			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
 				pRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
 		}
 
@@ -2677,8 +2677,8 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		if (!pState || !(pRecursiveOperationHandler = pState->GetRecursiveOperationHandler()))
 			continue;
 
-		if (pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_download ||
-			pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_download_flatten)
+		if (pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_transfer ||
+			pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
 		{
 			return;
 		}

@@ -45,7 +45,8 @@ private:
 		bool second_try{};
 	};
 
-	CServerPath m_startDir;
+	CServerPath m_remoteStartDir;
+	CLocalPath m_localStartDir;
 	std::set<CServerPath> m_visitedDirs;
 	std::deque<new_dir> m_dirsToVisit;
 	bool m_allowParent{};
@@ -60,9 +61,9 @@ public:
 	enum OperationMode
 	{
 		recursive_none,
-		recursive_download,
+		recursive_transfer,
 		recursive_addtoqueue,
-		recursive_download_flatten,
+		recursive_transfer_flatten,
 		recursive_addtoqueue_flatten,
 		recursive_delete,
 		recursive_chmod,
