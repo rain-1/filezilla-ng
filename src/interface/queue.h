@@ -20,7 +20,6 @@ enum class QueueItemType {
 	Server,
 	File,
 	Folder,
-	FolderScan,
 	Status
 };
 
@@ -98,7 +97,7 @@ public:
 	virtual bool RemoveChild(CQueueItem* pItem, bool destroy = true, bool forward = true); // Removes a child item with is somewhere in the tree of children
 	virtual bool TryRemoveAll();
 
-	int64_t GetTotalSize(int& filesWithUnknownSize, int& queuedFiles, int& folderScanCount) const;
+	int64_t GetTotalSize(int& filesWithUnknownSize, int& queuedFiles) const;
 
 	void QueueImmediateFiles();
 	void QueueImmediateFile(CFileItem* pItem);
@@ -283,41 +282,6 @@ public:
 	virtual bool TryRemoveAll() { return true; }
 };
 
-class CFolderScanItem : public CQueueItem
-{
-public:
-	CFolderScanItem(CServerItem* parent, bool queued, bool download, const CLocalPath& localPath, const CServerPath& remotePath);
-	virtual ~CFolderScanItem() {}
-
-	virtual QueueItemType GetType() const { return QueueItemType::FolderScan; }
-	CLocalPath GetLocalPath() const { return m_localPath; }
-	CServerPath GetRemotePath() const { return m_remotePath; }
-	bool Download() const { return m_download; }
-	int GetCount() const { return m_count; }
-	virtual bool TryRemoveAll();
-
-	bool queued() const { return m_queued; }
-	void set_queued(bool q) { m_queued = q; }
-
-	wxString m_statusMessage;
-
-	bool m_active{};
-
-	int m_count{};
-
-	CFileExistsNotification::OverwriteAction m_defaultFileExistsAction{CFileExistsNotification::unknown};
-
-	bool m_dir_is_empty{};
-	CLocalPath m_current_local_path;
-	CServerPath m_current_remote_path;
-
-protected:
-	bool m_queued;
-	CLocalPath m_localPath;
-	CServerPath m_remotePath;
-	bool m_download;
-};
-
 class CStatusItem : public CQueueItem
 {
 public:
@@ -392,9 +356,7 @@ protected:
 	unsigned int m_insertionCount;
 
 	int m_fileCount;
-	int m_folderScanCount;
 	bool m_fileCountChanged;
-	bool m_folderScanCountChanged;
 
 	// Selection management.
 	void UpdateSelections_ItemAdded(int added);

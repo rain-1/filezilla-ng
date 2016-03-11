@@ -110,7 +110,7 @@ void CFolderProcessingThread::AddEntry(CFolderProcessingEntry* entry)
 		// We send the notification after leaving the critical section, else we
 		// could get into a deadlock. wxWidgets event system does internal
 		// locking.
-		m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
+		//m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
 	}
 }
 
@@ -128,7 +128,7 @@ void CFolderProcessingThread::entry()
 			if (!m_didSendEvent && !m_entryList.empty()) {
 				m_didSendEvent = true;
 				l.unlock();
-				m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
+				//m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
 				continue;
 			}
 
@@ -179,7 +179,7 @@ void CFolderProcessingThread::entry()
 		delete pair;
 	}
 
-	m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY));
+	//m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY));
 }
 
 void CFolderProcessingThread::Quit()

@@ -319,7 +319,7 @@ void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notificatio
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
 		auto recursiveOperation = m_pState->GetRecursiveOperationHandler();
-		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_list) {
+		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRemoteRecursiveOperation::recursive_list) {
 			std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
 			ProcessDirectoryListing(listing);
 		}
@@ -425,7 +425,7 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 	root.add_dir_to_visit_restricted(path, _T(""), true);
 	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
+	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_list, filters, path);
 }
 
 void CSearchDialog::OnStop(wxCommandEvent&)
@@ -648,11 +648,11 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	}
 	m_pQueue->QueueFile_Finish(start);
 
-	enum CRecursiveOperation::OperationMode mode;
+	enum CRemoteRecursiveOperation::OperationMode mode;
 	if (flatten)
-		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
+		mode = start ? CRemoteRecursiveOperation::recursive_transfer_flatten : CRemoteRecursiveOperation::recursive_addtoqueue_flatten;
 	else
-		mode = start ? CRecursiveOperation::recursive_transfer : CRecursiveOperation::recursive_addtoqueue;
+		mode = start ? CRemoteRecursiveOperation::recursive_transfer : CRemoteRecursiveOperation::recursive_addtoqueue;
 
 	for (auto const& dir : selected_dirs) {
 		CLocalPath target_path = path;
@@ -765,7 +765,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
+	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)

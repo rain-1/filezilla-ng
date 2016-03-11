@@ -35,26 +35,22 @@ void recursion_root::add_dir_to_visit_restricted(CServerPath const& path, wxStri
 	m_dirsToVisit.push_back(dirToVisit);
 }
 
-
-
-CRecursiveOperation::CRecursiveOperation(CState* pState)
-	: CStateEventHandler(pState),
-	  m_operationMode(recursive_none)
+CRemoteRecursiveOperation::CRemoteRecursiveOperation(CState* pState)
+	: CRecursiveOperation(pState)
 {
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
 	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
 }
 
-CRecursiveOperation::~CRecursiveOperation()
+CRemoteRecursiveOperation::~CRemoteRecursiveOperation()
 {
-	if (m_pChmodDlg)
-	{
+	if (m_pChmodDlg) {
 		m_pChmodDlg->Destroy();
 		m_pChmodDlg = 0;
 	}
 }
 
-void CRecursiveOperation::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void* data2)
+void CRemoteRecursiveOperation::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
 		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
@@ -66,14 +62,14 @@ void CRecursiveOperation::OnStateChange(CState*, enum t_statechange_notification
 	}
 }
 
-void CRecursiveOperation::AddRecursionRoot(recursion_root && root)
+void CRemoteRecursiveOperation::AddRecursionRoot(recursion_root && root)
 {
 	if (!root.empty()) {
 		recursion_roots_.push_back(std::forward<recursion_root>(root));
 	}
 }
 
-void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir)
+void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir)
 {
 	wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
 	wxCHECK_RET(m_pState->IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
@@ -102,7 +98,7 @@ void CRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vecto
 	NextOperation();
 }
 
-bool CRecursiveOperation::NextOperation()
+bool CRemoteRecursiveOperation::NextOperation()
 {
 	if (m_operationMode == recursive_none)
 		return false;
@@ -140,7 +136,7 @@ bool CRecursiveOperation::NextOperation()
 	return false;
 }
 
-bool CRecursiveOperation::BelowRecursionRoot(const CServerPath& path, recursion_root::new_dir &dir)
+bool CRemoteRecursiveOperation::BelowRecursionRoot(const CServerPath& path, recursion_root::new_dir &dir)
 {
 	if (!dir.start_dir.empty()) {
 		if (path.IsSubdirOf(dir.start_dir, false))
@@ -169,7 +165,7 @@ bool CRecursiveOperation::BelowRecursionRoot(const CServerPath& path, recursion_
 // Defined in RemoteListView.cpp
 extern wxString StripVMSRevision(const wxString& name);
 
-void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing)
+void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing)
 {
 	if (!pDirectoryListing) {
 		StopRecursiveOperation();
@@ -337,7 +333,7 @@ void CRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDire
 	NextOperation();
 }
 
-void CRecursiveOperation::SetChmodDialog(CChmodDialog* pChmodDialog)
+void CRemoteRecursiveOperation::SetChmodDialog(CChmodDialog* pChmodDialog)
 {
 	wxASSERT(pChmodDialog);
 
@@ -347,7 +343,7 @@ void CRecursiveOperation::SetChmodDialog(CChmodDialog* pChmodDialog)
 	m_pChmodDlg = pChmodDialog;
 }
 
-void CRecursiveOperation::StopRecursiveOperation()
+void CRemoteRecursiveOperation::StopRecursiveOperation()
 {
 	if (m_operationMode != recursive_none) {
 		m_operationMode = recursive_none;
@@ -362,7 +358,7 @@ void CRecursiveOperation::StopRecursiveOperation()
 	}
 }
 
-void CRecursiveOperation::ListingFailed(int error)
+void CRemoteRecursiveOperation::ListingFailed(int error)
 {
 	if (m_operationMode == recursive_none || recursion_roots_.empty())
 		return;
@@ -388,22 +384,7 @@ void CRecursiveOperation::ListingFailed(int error)
 	NextOperation();
 }
 
-void CRecursiveOperation::SetQueue(CQueueView* pQueue)
-{
-	m_pQueue = pQueue;
-}
-
-bool CRecursiveOperation::ChangeOperationMode(enum OperationMode mode)
-{
-	if (mode != recursive_addtoqueue && m_operationMode != recursive_transfer && mode != recursive_addtoqueue_flatten && m_operationMode != recursive_transfer_flatten)
-		return false;
-
-	m_operationMode = mode;
-
-	return true;
-}
-
-void CRecursiveOperation::LinkIsNotDir()
+void CRemoteRecursiveOperation::LinkIsNotDir()
 {
 	if (m_operationMode == recursive_none || recursion_roots_.empty())
 		return;

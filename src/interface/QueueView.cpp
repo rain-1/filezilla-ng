@@ -170,8 +170,6 @@ DEFINE_EVENT_TYPE(fzEVT_ASKFORPASSWORD)
 
 BEGIN_EVENT_TABLE(CQueueView, CQueueViewBase)
 EVT_FZ_NOTIFICATION(wxID_ANY, CQueueView::OnEngineEvent)
-EVT_COMMAND(wxID_ANY, fzEVT_FOLDERTHREAD_COMPLETE, CQueueView::OnFolderThreadComplete)
-EVT_COMMAND(wxID_ANY, fzEVT_FOLDERTHREAD_FILES, CQueueView::OnFolderThreadFiles)
 
 EVT_CONTEXT_MENU(CQueueView::OnContextMenu)
 EVT_MENU(XRCID("ID_PROCESSQUEUE"), CQueueView::OnProcessQueue)
@@ -232,8 +230,6 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 
 	SetDropTarget(new CQueueViewDropTarget(this));
 
-	m_folderscan_item_refresh_timer.SetOwner(this);
-
 	m_line_height = -1;
 #ifdef __WXMSW__
 	m_header_height = -1;
@@ -244,9 +240,6 @@ CQueueView::CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsync
 
 CQueueView::~CQueueView()
 {
-	delete m_pFolderProcessingThread;
-	m_pFolderProcessingThread = 0;
-
 	DeleteEngines();
 
 	m_resize_timer.Stop();
@@ -1215,14 +1208,14 @@ bool CQueueView::SetActive(bool active /*=true*/)
 		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 			CState* pState = *iter;
 
-			CRecursiveOperation* pRecursiveOperation = pState->GetRecursiveOperationHandler();
+			CRemoteRecursiveOperation* pRecursiveOperation = pState->GetRecursiveOperationHandler();
 			if (!pRecursiveOperation)
 				continue;
 
-			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer)
-				pRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
-			if (pRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
-				pRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
+			if (pRecursiveOperation->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer)
+				pRecursiveOperation->ChangeOperationMode(CRemoteRecursiveOperation::recursive_addtoqueue);
+			if (pRecursiveOperation->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer_flatten)
+				pRecursiveOperation->ChangeOperationMode(CRemoteRecursiveOperation::recursive_addtoqueue_flatten);
 		}
 
 		UpdateStatusLinePositions();
@@ -1281,16 +1274,6 @@ bool CQueueView::Quit()
 	bool canQuit = true;
 	if (!SetActive(false))
 		canQuit = false;
-
-	for (unsigned int i = 0; i < 2; ++i) {
-		if (!m_queuedFolders[i].empty()) {
-			canQuit = false;
-		}
-	}
-	if (m_pFolderProcessingThread) {
-		m_pFolderProcessingThread->Quit();
-		canQuit = false;
-	}
 
 	if (!canQuit)
 		return false;
@@ -1401,11 +1384,10 @@ void CQueueView::CalculateQueueSize()
 	// Collect total queue size
 	m_totalQueueSize = 0;
 	m_fileCount = 0;
-	m_folderScanCount = 0;
 
 	m_filesWithUnknownSize = 0;
 	for (std::vector<CServerItem*>::const_iterator iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
-		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount, m_folderScanCount);
+		m_totalQueueSize += (*iter)->GetTotalSize(m_filesWithUnknownSize, m_fileCount);
 
 	DisplayQueueSize();
 	DisplayNumberQueuedFiles();
@@ -1419,149 +1401,6 @@ void CQueueView::DisplayQueueSize()
 	pStatusBar->DisplayQueueSize(m_totalQueueSize, m_filesWithUnknownSize != 0);
 }
 
-bool CQueueView::QueueFolder(bool queueOnly, bool download, const CLocalPath& localPath, const CServerPath& remotePath, const CServer& server)
-{
-	CServerItem* pServerItem = CreateServerItem(server);
-
-	CFolderScanItem* folderItem = new CFolderScanItem(pServerItem, queueOnly, download, localPath, remotePath);
-	InsertItem(pServerItem, folderItem);
-
-	folderItem->m_statusMessage = _("Waiting");
-
-	CommitChanges();
-
-	m_queuedFolders[download ? 0 : 1].push_back(folderItem);
-	ProcessFolderItems();
-
-	RefreshListOnly(false);
-
-	return true;
-}
-
-bool CQueueView::ProcessFolderItems(int type /*=-1*/)
-{
-	if (type == -1) {
-		while (ProcessFolderItems(0));
-		ProcessUploadFolderItems();
-
-		return true;
-	}
-
-	return false;
-}
-
-void CQueueView::ProcessUploadFolderItems()
-{
-	if (m_queuedFolders[1].empty()) {
-		if (m_quit)
-			m_pMainFrame->Close();
-
-		return;
-	}
-
-	if (m_pFolderProcessingThread)
-		return;
-
-	CFolderScanItem* pItem = m_queuedFolders[1].front();
-
-	if (pItem->queued())
-		pItem->m_statusMessage = _("Scanning for files to add to queue");
-	else
-		pItem->m_statusMessage = _("Scanning for files to upload");
-	RefreshItem(pItem);
-	pItem->m_active = true;
-	m_pFolderProcessingThread = new CFolderProcessingThread(this, pItem->GetLocalPath(), pItem->GetRemotePath());
-	m_pFolderProcessingThread->run();
-
-	RefreshListOnly(false);
-}
-
-void CQueueView::OnFolderThreadComplete(wxCommandEvent&)
-{
-	if (!m_pFolderProcessingThread)
-		return;
-
-	m_folderscan_item_refresh_timer.Stop();
-
-	wxASSERT(!m_queuedFolders[1].empty());
-	CFolderScanItem* pItem = m_queuedFolders[1].front();
-	if (pItem->m_dir_is_empty) {
-		CServerItem* pServerItem = (CServerItem*)pItem->GetTopLevelItem();
-		CFileItem* fileItem = new CFolderItem(pServerItem, pItem->queued(), pItem->m_current_remote_path, _T(""));
-		InsertItem(pServerItem, fileItem);
-		QueueFile_Finish(!pItem->queued());
-	}
-	m_queuedFolders[1].pop_front();
-
-	RemoveItem(pItem, true);
-
-	delete m_pFolderProcessingThread;
-	m_pFolderProcessingThread = 0;
-
-	ProcessUploadFolderItems();
-}
-
-int CQueueView::QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const CFileExistsNotification::OverwriteAction defaultFileExistsAction)
-{
-	wxASSERT(pServerItem);
-	wxASSERT(!m_queuedFolders[1].empty());
-
-	CFolderScanItem* pFolderScanItem = m_queuedFolders[1].front();
-
-	int added = 0;
-
-	CFilterManager filters;
-	for (std::list<CFolderProcessingEntry*>::const_iterator iter = entryList.begin(); iter != entryList.end(); ++iter) {
-		if ((*iter)->m_type == CFolderProcessingEntry::dir) {
-			if (pFolderScanItem->m_dir_is_empty) {
-				CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, pFolderScanItem->m_current_remote_path, _T(""));
-				InsertItem(pServerItem, fileItem);
-				added++;
-			}
-
-			const CFolderProcessingThread::t_dirPair* entry = (const CFolderProcessingThread::t_dirPair*)*iter;
-			pFolderScanItem->m_current_local_path = entry->localPath;
-			pFolderScanItem->m_current_remote_path = entry->remotePath;
-			pFolderScanItem->m_dir_is_empty = true;
-			delete entry;
-		}
-		else {
-			const t_newEntry* entry = (const t_newEntry*)*iter;
-			if (filters.FilenameFiltered(entry->name, pFolderScanItem->m_current_local_path.GetPath(), entry->dir, entry->size, true, entry->attributes, entry->time)) {
-				delete entry;
-				continue;
-			}
-
-			pFolderScanItem->m_dir_is_empty = false;
-
-			if (entry->dir) {
-				m_pFolderProcessingThread->ProcessDirectory(pFolderScanItem->m_current_local_path, pFolderScanItem->m_current_remote_path, entry->name);
-				delete entry;
-				continue;
-			}
-
-			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, download, entry->name, wxEmptyString, pFolderScanItem->m_current_local_path, pFolderScanItem->m_current_remote_path, entry->size);
-
-			if (download)
-				fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType()));
-			else
-				fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(entry->name, pFolderScanItem->m_current_remote_path.GetType()));
-
-			fileItem->m_defaultFileExistsAction = defaultFileExistsAction;
-
-			delete entry;
-
-			InsertItem(pServerItem, fileItem);
-
-			added++;
-		}
-	}
-
-	QueueFile_Finish(!queueOnly);
-
-	return added;
-}
-
 void CQueueView::SaveQueue()
 {
 	// Kiosk mode 2 doesn't save queue
@@ -1572,8 +1411,7 @@ void CQueueView::SaveQueue()
 	// just as extra precaution. Better 'save' than sorry.
 	CInterProcessMutex mutex(MUTEX_QUEUE);
 
-	if (!m_queue_storage.SaveQueue(m_serverList))
-	{
+	if (!m_queue_storage.SaveQueue(m_serverList)) {
 		wxString msg = wxString::Format(_("An error occurred saving the transfer queue to \"%s\".\nSome queue items might not have been saved."), m_queue_storage.GetDatabaseFilename());
 		wxMessageBoxEx(msg, _("Error saving queue"), wxICON_ERROR);
 	}
@@ -1918,15 +1756,6 @@ void CQueueView::RemoveAll()
 		}
 	}
 
-	// Clear list of queued directories that aren't busy
-	for (unsigned int i = 0; i < 2; ++i) {
-		auto begin = m_queuedFolders[i].begin();
-		auto end = m_queuedFolders[i].end();
-		if (begin != end && (*begin)->m_active)
-			++begin;
-		m_queuedFolders[i].erase(begin, end);
-	}
-
 	SaveSetItemCount(m_itemCount);
 
 	if (newServerList.empty() && (m_actionAfterState == ActionAfterState::Reboot || m_actionAfterState == ActionAfterState::Shutdown || m_actionAfterState == ActionAfterState::Sleep)) {
@@ -1940,19 +1769,6 @@ void CQueueView::RemoveAll()
 
 	CheckQueueState();
 	RefreshListOnly();
-}
-
-void CQueueView::RemoveQueuedFolderItem(CFolderScanItem* pFolder)
-{
-	for (unsigned int i = 0; i < 2; ++i) {
-		for (auto iter = m_queuedFolders[i].begin(); iter != m_queuedFolders[i].end(); ++iter) {
-			if (*iter != pFolder)
-				continue;
-
-			m_queuedFolders[i].erase(iter);
-			return;
-		}
-	}
 }
 
 void CQueueView::OnRemoveSelected(wxCommandEvent&)
@@ -1998,17 +1814,6 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 
 		if (pItem->GetType() == QueueItemType::Status)
 			continue;
-		else if (pItem->GetType() == QueueItemType::FolderScan) {
-			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
-			if (pFolder->m_active) {
-				if (m_pFolderProcessingThread) {
-					m_pFolderProcessingThread->Quit();
-				}
-				continue;
-			}
-			else
-				RemoveQueuedFolderItem(pFolder);
-		}
 		else if (pItem->GetType() == QueueItemType::Server) {
 			CServerItem* pServer = (CServerItem*)pItem;
 			StopItem(pServer, false);
@@ -2085,17 +1890,8 @@ bool CQueueView::StopItem(CServerItem* pServerItem, bool updateSelections)
 
 	for (int i = static_cast<int>(items.size()) - 1; i >= removedAtFront; --i) {
 		CQueueItem* pItem = items[i];
-		if (pItem->GetType() == QueueItemType::FolderScan) {
-			CFolderScanItem* pFolder = (CFolderScanItem*)pItem;
-			if (pFolder->m_active) {
-				if (m_pFolderProcessingThread) {
-					m_pFolderProcessingThread->Quit();
-				}
-				continue;
-			}
-		}
-		else if (pItem->GetType() == QueueItemType::File ||
-				 pItem->GetType() == QueueItemType::Folder)
+		if (pItem->GetType() == QueueItemType::File ||
+			 pItem->GetType() == QueueItemType::Folder)
 		{
 			CFileItem* pFile = (CFileItem*)pItem;
 			if (pFile->IsActive()) {
@@ -2119,25 +1915,6 @@ bool CQueueView::StopItem(CServerItem* pServerItem, bool updateSelections)
 	SaveSetItemCount(m_itemCount);
 
 	return false;
-}
-
-void CQueueView::OnFolderThreadFiles(wxCommandEvent&)
-{
-	if (!m_pFolderProcessingThread)
-		return;
-
-	wxASSERT(!m_queuedFolders[1].empty());
-	CFolderScanItem* pItem = m_queuedFolders[1].front();
-
-	std::list<CFolderProcessingEntry*> entryList;
-	m_pFolderProcessingThread->GetFiles(entryList);
-	int added = QueueFiles(entryList, pItem->queued(), false, (CServerItem*)pItem->GetTopLevelItem(), pItem->m_defaultFileExistsAction);
-	m_pFolderProcessingThread->CheckFinished();
-
-	pItem->m_count += added;
-
-	if (!m_folderscan_item_refresh_timer.IsRunning())
-		m_folderscan_item_refresh_timer.Start(200, true);
 }
 
 void CQueueView::SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction)
@@ -2176,13 +1953,6 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 
 		switch (pItem->GetType())
 		{
-		case QueueItemType::FolderScan:
-			if (uploadAction == CFileExistsNotification::unknown)
-				uploadAction = ((CFolderScanItem*)pItem)->m_defaultFileExistsAction;
-			else if (((CFolderScanItem*)pItem)->m_defaultFileExistsAction != uploadAction)
-				upload_unknown = true;
-			has_upload = true;
-			break;
 		case QueueItemType::File:
 			{
 				CFileItem *pFileItem = (CFileItem*)pItem;
@@ -2237,11 +2007,6 @@ void CQueueView::OnSetDefaultFileExistsAction(wxCommandEvent &)
 
 		switch (pItem->GetType())
 		{
-		case QueueItemType::FolderScan:
-			if (!has_upload)
-				break;
-			((CFolderScanItem*)pItem)->m_defaultFileExistsAction = uploadAction;
-			break;
 		case QueueItemType::File:
 			{
 				CFileItem *pFileItem = (CFileItem*)pItem;
@@ -2528,16 +2293,6 @@ void CQueueView::OnTimer(wxTimerEvent& event)
 		return;
 	}
 
-	if (id == m_folderscan_item_refresh_timer.GetId()) {
-		if (m_queuedFolders[1].empty())
-			return;
-
-		CFolderScanItem* pItem = m_queuedFolders[1].front();
-		pItem->m_statusMessage = wxString::Format(_("%d files added to queue"), pItem->GetCount());
-		RefreshItem(pItem);
-		return;
-	}
-
 	for (auto & pData : m_engineData) {
 		if (pData->m_idleDisconnectTimer && !pData->m_idleDisconnectTimer->IsRunning()) {
 			delete pData->m_idleDisconnectTimer;
@@ -2673,12 +2428,12 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	for (unsigned int i = 0; i < pStates->size(); ++i) {
 		CState *pState = (*pStates)[i];
-		CRecursiveOperation *pRecursiveOperationHandler;
+		CRemoteRecursiveOperation *pRecursiveOperationHandler;
 		if (!pState || !(pRecursiveOperationHandler = pState->GetRecursiveOperationHandler()))
 			continue;
 
-		if (pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_transfer ||
-			pRecursiveOperationHandler->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
+		if (pRecursiveOperationHandler->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer ||
+			pRecursiveOperationHandler->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer_flatten)
 		{
 			return;
 		}

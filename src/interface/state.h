@@ -46,7 +46,7 @@ class CCommandQueue;
 class CMainFrame;
 class CStateEventHandler;
 class CRemoteDataObject;
-class CRecursiveOperation;
+class CRemoteRecursiveOperation;
 class CComparisonManager;
 
 class CState;
@@ -144,7 +144,7 @@ public:
 	bool IsRemoteConnected() const;
 	bool IsRemoteIdle(bool ignore_recursive = false) const;
 
-	CRecursiveOperation* GetRecursiveOperationHandler() { return m_pRecursiveOperation; }
+	CRemoteRecursiveOperation* GetRecursiveOperationHandler() { return m_pRecursiveOperation; }
 
 	void NotifyHandlers(enum t_statechange_notifications notification, wxString const& data = wxString(), const void* data2 = 0);
 
@@ -189,7 +189,7 @@ protected:
 
 	CMainFrame& m_mainFrame;
 
-	CRecursiveOperation* m_pRecursiveOperation;
+	CRemoteRecursiveOperation* m_pRecursiveOperation;
 
 	CComparisonManager* m_pComparisonManager;
 
