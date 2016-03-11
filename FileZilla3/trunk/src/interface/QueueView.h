@@ -12,8 +12,6 @@
 
 #include "queue_storage.h"
 
-#include "local_recursive_operation.h"
-
 namespace ActionAfterState {
 enum type {
 	None,
@@ -80,7 +78,6 @@ struct t_EngineData
 
 class CMainFrame;
 class CStatusLineCtrl;
-class CFolderProcessingThread;
 class CAsyncRequestQueue;
 class CQueue;
 #if WITH_LIBDBUS
@@ -91,7 +88,6 @@ class wxNotificationMessage;
 
 class CQueueView : public CQueueViewBase, public COptionChangeEventHandler
 {
-	friend class CFolderProcessingThread;
 	friend class CQueueViewDropTarget;
 	friend class CQueueViewFailed;
 public:
@@ -106,8 +102,6 @@ public:
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
 	bool QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject);
-	int QueueFiles(const std::list<CFolderProcessingEntry*> &entryList, bool queueOnly, bool download, CServerItem* pServerItem, const CFileExistsNotification::OverwriteAction defaultFileExistsAction);
-	bool QueueFolder(bool queueOnly, bool download, const CLocalPath& localPath, const CServerPath& remotePath, const CServer& server);
 
 	bool empty() const;
 	int IsActive() const { return m_activeMode; }
@@ -115,7 +109,6 @@ public:
 	bool Quit();
 
 	// This sets the default file exists action for all files currently in queue.
-	// This includes queued folders which are yet to be processed
 	void SetDefaultFileExistsAction(CFileExistsNotification::OverwriteAction action, const TransferDirection direction);
 
 	void UpdateItemSize(CFileItem* pItem, int64_t size);
@@ -158,9 +151,6 @@ protected:
 	// Called from TryStartNextTransfer(), checks
 	// whether it is allowed to start another transfer on that server item
 	bool CanStartTransfer(const CServerItem& server_item, struct t_EngineData *&pEngineData);
-
-	bool ProcessFolderItems(int type = -1);
-	void ProcessUploadFolderItems();
 
 	void ProcessReply(t_EngineData* pEngineData, COperationNotification const& notification);
 	void SendNextCommand(t_EngineData& engineData);
@@ -221,17 +211,6 @@ protected:
 	std::list<CStatusLineCtrl*> m_statusLineList;
 
 	/*
-	 * List of queued folders used to populate the queue.
-	 * Index 0 for downloads, index 1 for uploads.
-	 * For each type, only the first one can be active at any given time.
-	 */
-	std::list<CFolderScanItem*> m_queuedFolders[2];
-
-	void RemoveQueuedFolderItem(CFolderScanItem* pFolder);
-
-	CFolderProcessingThread *m_pFolderProcessingThread{};
-
-	/*
 	 * Don't update status line positions if m_waitStatusLineUpdate is true.
 	 * This assures we are updating the status line positions only once,
 	 * and not multiple times (for example inside a loop).
@@ -265,8 +244,6 @@ protected:
 
 	virtual void OnPostScroll();
 
-	wxTimer m_folderscan_item_refresh_timer;
-
 	int GetLineHeight();
 	int m_line_height;
 #ifdef __WXMSW__
@@ -291,8 +268,6 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnEngineEvent(wxFzEvent &event);
-	void OnFolderThreadComplete(wxCommandEvent& event);
-	void OnFolderThreadFiles(wxCommandEvent& event);
 	void OnChar(wxKeyEvent& event);
 
 	// Context menu handlers

@@ -61,7 +61,7 @@ bool CRecursiveOperationStatus::Show(bool show)
 void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifications, const wxString&, const void*)
 {
 	auto const mode = m_pState->GetRecursiveOperationHandler()->GetOperationMode();
-	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
+	bool show = mode != CRemoteRecursiveOperation::recursive_none && mode != CRemoteRecursiveOperation::recursive_list;
 	if (IsShown() != show) {
 		Show(show);
 	}
@@ -83,19 +83,19 @@ void CRecursiveOperationStatus::UpdateText()
 	wxString text;
 
 	auto const mode = m_pState->GetRecursiveOperationHandler()->GetOperationMode();
-	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
+	bool show = mode != CRemoteRecursiveOperation::recursive_none && mode != CRemoteRecursiveOperation::recursive_list;
 	if (show) {
 		switch (mode) {
-		case CRecursiveOperation::recursive_addtoqueue:
-		case CRecursiveOperation::recursive_addtoqueue_flatten:
-		case CRecursiveOperation::recursive_transfer:
-		case CRecursiveOperation::recursive_transfer_flatten:
+		case CRemoteRecursiveOperation::recursive_addtoqueue:
+		case CRemoteRecursiveOperation::recursive_addtoqueue_flatten:
+		case CRemoteRecursiveOperation::recursive_transfer:
+		case CRemoteRecursiveOperation::recursive_transfer_flatten:
 			text = _("Recursively adding files to queue.");
 			break;
-		case CRecursiveOperation::recursive_delete:
+		case CRemoteRecursiveOperation::recursive_delete:
 			text = _("Recursively deleting files and directories.");
 			break;
-		case CRecursiveOperation::recursive_chmod:
+		case CRemoteRecursiveOperation::recursive_chmod:
 			text = _("Recursively changing permissions.");
 			break;
 		default:
