@@ -60,8 +60,8 @@ bool CRecursiveOperationStatus::Show(bool show)
 
 void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifications, const wxString&, const void*)
 {
-	auto const mode = m_pState->GetRecursiveOperationHandler()->GetOperationMode();
-	bool show = mode != CRemoteRecursiveOperation::recursive_none && mode != CRemoteRecursiveOperation::recursive_list;
+	auto const mode = m_pState->GetRemoteRecursiveOperation()->GetOperationMode();
+	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
 	if (IsShown() != show) {
 		Show(show);
 	}
@@ -82,20 +82,20 @@ void CRecursiveOperationStatus::UpdateText()
 	m_changed = false;
 	wxString text;
 
-	auto const mode = m_pState->GetRecursiveOperationHandler()->GetOperationMode();
-	bool show = mode != CRemoteRecursiveOperation::recursive_none && mode != CRemoteRecursiveOperation::recursive_list;
+	auto const mode = m_pState->GetRemoteRecursiveOperation()->GetOperationMode();
+	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
 	if (show) {
 		switch (mode) {
-		case CRemoteRecursiveOperation::recursive_addtoqueue:
-		case CRemoteRecursiveOperation::recursive_addtoqueue_flatten:
-		case CRemoteRecursiveOperation::recursive_transfer:
-		case CRemoteRecursiveOperation::recursive_transfer_flatten:
+		case CRecursiveOperation::recursive_addtoqueue:
+		case CRecursiveOperation::recursive_addtoqueue_flatten:
+		case CRecursiveOperation::recursive_transfer:
+		case CRecursiveOperation::recursive_transfer_flatten:
 			text = _("Recursively adding files to queue.");
 			break;
-		case CRemoteRecursiveOperation::recursive_delete:
+		case CRecursiveOperation::recursive_delete:
 			text = _("Recursively deleting files and directories.");
 			break;
-		case CRemoteRecursiveOperation::recursive_chmod:
+		case CRecursiveOperation::recursive_chmod:
 			text = _("Recursively changing permissions.");
 			break;
 		default:
@@ -103,8 +103,8 @@ void CRecursiveOperationStatus::UpdateText()
 		}
 		m_pTextCtrl[0]->SetLabel(text);
 
-		unsigned long long const countFiles = static_cast<unsigned long long>(m_pState->GetRecursiveOperationHandler()->GetProcessedFiles());
-		unsigned long long const countDirs = static_cast<unsigned long long>(m_pState->GetRecursiveOperationHandler()->GetProcessedDirectories());
+		unsigned long long const countFiles = static_cast<unsigned long long>(m_pState->GetRemoteRecursiveOperation()->GetProcessedFiles());
+		unsigned long long const countDirs = static_cast<unsigned long long>(m_pState->GetRemoteRecursiveOperation()->GetProcessedDirectories());
 		const wxString files = wxString::Format(wxPLURAL_LL("%llu file", "%llu files", countFiles), countFiles);
 		const wxString dirs = wxString::Format(wxPLURAL_LL("%llu directory", "%llu directories", countDirs), countDirs);
 		// @translator: Example: Processed 5 files in 1 directory
@@ -123,7 +123,7 @@ void CRecursiveOperationStatus::OnPaint(wxPaintEvent&)
 
 void CRecursiveOperationStatus::OnCancel(wxCommandEvent&)
 {
-	m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
+	m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
 	m_pState->RefreshRemote();
 }
 

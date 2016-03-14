@@ -5,6 +5,24 @@
 
 #include "QueueView.h"
 
+CLocalRecursiveOperation::CLocalRecursiveOperation(CState* pState)
+	: CRecursiveOperation(pState)
+{
+}
+
+CLocalRecursiveOperation::~CLocalRecursiveOperation()
+{
+}
+
+void CLocalRecursiveOperation::StopRecursiveOperation()
+{
+}
+
+void CLocalRecursiveOperation::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2)
+{
+}
+
+/*
 DEFINE_EVENT_TYPE(fzEVT_FOLDERTHREAD_COMPLETE)
 DEFINE_EVENT_TYPE(fzEVT_FOLDERTHREAD_FILES)
 
@@ -190,3 +208,4 @@ void CFolderProcessingThread::Quit()
 	}
 	join();
 }
+*/

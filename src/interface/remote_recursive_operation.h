@@ -53,7 +53,7 @@ class CRemoteRecursiveOperation final : public CRecursiveOperation
 {
 public:
 	CRemoteRecursiveOperation(CState* pState);
-	~CRemoteRecursiveOperation();
+	virtual ~CRemoteRecursiveOperation();
 
 	void AddRecursionRoot(recursion_root && root);
 	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir);

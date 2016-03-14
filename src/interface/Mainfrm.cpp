@@ -1,54 +1,56 @@
 #include <filezilla.h>
 #include "Mainfrm.h"
 
+#include "aboutdialog.h"
+#include "asyncrequestqueue.h"
+#include "auto_ascii_files.h"
+#include "bookmarks_dialog.h"
+#include "buildinfo.h"
+#include "clearprivatedata.h"
+#include "cmdline.h"
+#include "commandqueue.h"
+#include "conditionaldialog.h"
+#include "context_control.h"
+#include "defaultfileexistsdlg.h"
+#include "edithandler.h"
+#include "export.h"
+#include "filelist_statusbar.h"
+#include "filezillaapp.h"
+#include "filter.h"
+#include "import.h"
+#include "inputdialog.h"
+#include "led.h"
+#include "local_recursive_operation.h"
 #include "LocalListView.h"
 #include "LocalTreeView.h"
+#include "loginmanager.h"
+#include "manual_transfer.h"
+#include "menu_bar.h"
+#include "netconfwizard.h"
+#include "Options.h"
+#include "power_management.h"
 #include "queue.h"
+#include "quickconnectbar.h"
+#include "remote_recursive_operation.h"
 #include "RemoteListView.h"
 #include "RemoteTreeView.h"
+#include "search.h"
+#include "settings/settingsdialog.h"
+#include "sitemanager_dialog.h"
+#include "speedlimits_dialog.h"
+#include "splitter.h"
 #include "StatusView.h"
 #include "state.h"
-#include "Options.h"
-#include "asyncrequestqueue.h"
-#include "commandqueue.h"
-#include "led.h"
-#include "sitemanager_dialog.h"
-#include "settings/settingsdialog.h"
 #include "themeprovider.h"
-#include "filezillaapp.h"
+#include "toolbar.h"
+#include "update_dialog.h"
+#include "updater.h"
 #include "view.h"
 #include "viewheader.h"
-#include "aboutdialog.h"
-#include "filter.h"
-#include "netconfwizard.h"
-#include "quickconnectbar.h"
-#include "updater.h"
-#include "update_dialog.h"
-#include "defaultfileexistsdlg.h"
-#include "loginmanager.h"
-#include "conditionaldialog.h"
-#include "clearprivatedata.h"
-#include "export.h"
-#include "import.h"
-#include "remote_recursive_operation.h"
-#include <wx/tokenzr.h>
-#include "edithandler.h"
-#include "inputdialog.h"
-#include "window_state_manager.h"
-#include "cmdline.h"
-#include "buildinfo.h"
-#include "filelist_statusbar.h"
-#include "manual_transfer.h"
-#include "auto_ascii_files.h"
-#include "splitter.h"
-#include "bookmarks_dialog.h"
-#include "search.h"
-#include "power_management.h"
 #include "welcome_dialog.h"
-#include "context_control.h"
-#include "speedlimits_dialog.h"
-#include "toolbar.h"
-#include "menu_bar.h"
+#include "window_state_manager.h"
+
+#include <wx/tokenzr.h>
 
 #ifdef __WXMSW__
 #include <wx/module.h>
@@ -1015,10 +1017,9 @@ void CMainFrame::OnCancel(wxCommandEvent&)
 	if (!pState || pState->m_pCommandQueue->Idle())
 		return;
 
-	if (wxMessageBoxEx(_("Really cancel current operation?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) == wxYES)
-	{
+	if (wxMessageBoxEx(_("Really cancel current operation?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) == wxYES) {
 		pState->m_pCommandQueue->Cancel();
-		pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
+		pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
 	}
 }
 
@@ -1208,8 +1209,11 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	bool res = true;
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	for (CState* pState : *pStates) {
-		if( pState->GetRecursiveOperationHandler() ) {
-			pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
+		if (pState->GetLocalRecursiveOperation()) {
+			pState->GetLocalRecursiveOperation()->StopRecursiveOperation();
+		}
+		if (pState->GetRemoteRecursiveOperation()) {
+			pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
 		}
 
 		if (pState->m_pCommandQueue) {
