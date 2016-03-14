@@ -1,8 +1,23 @@
 #ifndef FILEZILLA_LOCAL_RECURSIVE_OPERATION_HEADER
 #define FILEZILLA_LOCAL_RECURSIVE_OPERATION_HEADER
 
+#include "recursive_operation.h"
+
 #include <libfilezilla/thread.hpp>
 
+class CLocalRecursiveOperation final : public CRecursiveOperation
+{
+public:
+	CLocalRecursiveOperation(CState* pState);
+	virtual ~CLocalRecursiveOperation();
+
+	virtual void StopRecursiveOperation();
+
+protected:
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
+};
+
+/*
 DECLARE_EVENT_TYPE(fzEVT_FOLDERTHREAD_COMPLETE, -1)
 DECLARE_EVENT_TYPE(fzEVT_FOLDERTHREAD_FILES, -1)
 
@@ -85,5 +100,5 @@ private:
 	bool m_processing_entries{};
 	bool m_quit{};
 };
-
+*/
 #endif

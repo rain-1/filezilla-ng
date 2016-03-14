@@ -43,6 +43,7 @@ enum t_statechange_notifications
 class CDirectoryListing;
 class CFileZillaEngine;
 class CCommandQueue;
+class CLocalRecursiveOperation;
 class CMainFrame;
 class CStateEventHandler;
 class CRemoteDataObject;
@@ -144,7 +145,8 @@ public:
 	bool IsRemoteConnected() const;
 	bool IsRemoteIdle(bool ignore_recursive = false) const;
 
-	CRemoteRecursiveOperation* GetRecursiveOperationHandler() { return m_pRecursiveOperation; }
+	CLocalRecursiveOperation* GetLocalRecursiveOperation() { return m_pLocalRecursiveOperation; }
+	CRemoteRecursiveOperation* GetRemoteRecursiveOperation() { return m_pRemoteRecursiveOperation; }
 
 	void NotifyHandlers(enum t_statechange_notifications notification, wxString const& data = wxString(), const void* data2 = 0);
 
@@ -189,7 +191,8 @@ protected:
 
 	CMainFrame& m_mainFrame;
 
-	CRemoteRecursiveOperation* m_pRecursiveOperation;
+	CLocalRecursiveOperation* m_pLocalRecursiveOperation;
+	CRemoteRecursiveOperation* m_pRemoteRecursiveOperation;
 
 	CComparisonManager* m_pComparisonManager;
 

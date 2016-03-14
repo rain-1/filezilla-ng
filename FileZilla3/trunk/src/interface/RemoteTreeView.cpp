@@ -968,7 +968,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 	}
 
 	if (!cached || pChmodDlg->Recursive()) {
-		CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+		CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 
@@ -977,7 +977,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		if (selected)
 			currentPath = GetPathFromItem(selected);
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_chmod, filter.GetActiveFilters(false), currentPath);
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod, filter.GetActiveFilters(false), currentPath);
 	}
 	else {
 		pChmodDlg->Destroy();
@@ -1013,7 +1013,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	recursion_root root(path, true);
 	root.add_dir_to_visit(path, _T(""), localDir);
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
 	pRecursiveOperation->AddRecursionRoot(std::move(root));
 
 	CServerPath currentPath;
@@ -1023,7 +1023,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	const bool addOnly = event.GetId() == XRCID("ID_ADDTOQUEUE");
 	CFilterManager filter;
-	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRemoteRecursiveOperation::recursive_addtoqueue : CRemoteRecursiveOperation::recursive_transfer, filter.GetActiveFilters(false), currentPath);
+	pRecursiveOperation->StartRecursiveOperation(addOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(false), currentPath);
 }
 
 void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
@@ -1043,7 +1043,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 
 	const bool hasParent = pathToDelete.HasParent();
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
 
 	recursion_root root;
 	CServerPath startDir;
@@ -1070,7 +1070,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 	}
 
 	CFilterManager filter;
-	pRecursiveOperation->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_delete, filter.GetActiveFilters(false), currentPath);
+	pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filter.GetActiveFilters(false), currentPath);
 }
 
 void CRemoteTreeView::OnMenuRename(wxCommandEvent&)

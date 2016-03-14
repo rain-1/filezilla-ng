@@ -291,8 +291,8 @@ void CSearchDialog::Run()
 	m_original_dir = m_pState->GetRemotePath();
 	m_local_target = m_pState->GetLocalDir();
 
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_pState->GetRecursiveOperationHandler());
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_pState->GetRecursiveOperationHandler());
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_pState->GetRemoteRecursiveOperation());
+	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_pState->GetRemoteRecursiveOperation());
 
 	ShowModal();
 
@@ -304,7 +304,7 @@ void CSearchDialog::Run()
 	if (m_searching) {
 		if (!m_pState->IsRemoteIdle()) {
 			m_pState->m_pCommandQueue->Cancel();
-			m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
+			m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
 		}
 		if (!m_original_dir.empty())
 			m_pState->ChangeRemoteDir(m_original_dir);
@@ -318,8 +318,8 @@ void CSearchDialog::Run()
 void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
-		auto recursiveOperation = m_pState->GetRecursiveOperationHandler();
-		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRemoteRecursiveOperation::recursive_list) {
+		auto recursiveOperation = m_pState->GetRemoteRecursiveOperation();
+		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_list) {
 			std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
 			ProcessDirectoryListing(listing);
 		}
@@ -423,16 +423,16 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 	m_searching = true;
 	recursion_root root(path, true);
 	root.add_dir_to_visit_restricted(path, _T(""), true);
-	m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
+	m_pState->GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_list, filters, path);
+	m_pState->GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
 }
 
 void CSearchDialog::OnStop(wxCommandEvent&)
 {
 	if (!m_pState->IsRemoteIdle()) {
 		m_pState->m_pCommandQueue->Cancel();
-		m_pState->GetRecursiveOperationHandler()->StopRecursiveOperation();
+		m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
 	}
 }
 
@@ -650,9 +650,9 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 	enum CRemoteRecursiveOperation::OperationMode mode;
 	if (flatten)
-		mode = start ? CRemoteRecursiveOperation::recursive_transfer_flatten : CRemoteRecursiveOperation::recursive_addtoqueue_flatten;
+		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
 	else
-		mode = start ? CRemoteRecursiveOperation::recursive_transfer : CRemoteRecursiveOperation::recursive_addtoqueue;
+		mode = start ? CRecursiveOperation::recursive_transfer : CRecursiveOperation::recursive_addtoqueue;
 
 	for (auto const& dir : selected_dirs) {
 		CLocalPath target_path = path;
@@ -661,10 +661,10 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 		recursion_root root(dir, true);
 		root.add_dir_to_visit(dir, _T(""), target_path, false);
-		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
+		m_pState->GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(mode, filters, m_original_dir);
+	m_pState->GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)
@@ -762,10 +762,10 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		}
 		recursion_root root(path, !path.HasParent());
 		root.add_dir_to_visit(path, segment);
-		m_pState->GetRecursiveOperationHandler()->AddRecursionRoot(std::move(root));
+		m_pState->GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRecursiveOperationHandler()->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_delete, filters, m_original_dir);
+	m_pState->GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)

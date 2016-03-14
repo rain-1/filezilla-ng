@@ -7,6 +7,7 @@
 #include "xmlfunctions.h"
 #include "filezillaapp.h"
 #include "ipcmutex.h"
+#include "local_recursive_operation.h"
 #include "state.h"
 #include "asyncrequestqueue.h"
 #include "defaultfileexistsdlg.h"
@@ -1197,7 +1198,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 	}
 }
 
-bool CQueueView::SetActive(bool active /*=true*/)
+bool CQueueView::SetActive(bool active)
 {
 	if (!active) {
 		m_activeMode = 0;
@@ -1208,14 +1209,20 @@ bool CQueueView::SetActive(bool active /*=true*/)
 		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
 			CState* pState = *iter;
 
-			CRemoteRecursiveOperation* pRecursiveOperation = pState->GetRecursiveOperationHandler();
-			if (!pRecursiveOperation)
-				continue;
-
-			if (pRecursiveOperation->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer)
-				pRecursiveOperation->ChangeOperationMode(CRemoteRecursiveOperation::recursive_addtoqueue);
-			if (pRecursiveOperation->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer_flatten)
-				pRecursiveOperation->ChangeOperationMode(CRemoteRecursiveOperation::recursive_addtoqueue_flatten);
+			CLocalRecursiveOperation* pLocalRecursiveOperation = pState->GetLocalRecursiveOperation();
+			if (pLocalRecursiveOperation) {
+				if (pLocalRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer)
+					pLocalRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
+				if (pLocalRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
+					pLocalRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
+			}
+			CRemoteRecursiveOperation* pRemoteRecursiveOperation = pState->GetRemoteRecursiveOperation();
+			if (pRemoteRecursiveOperation) {
+				if (pRemoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer)
+					pRemoteRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
+				if (pRemoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
+					pRemoteRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
+			}
 		}
 
 		UpdateStatusLinePositions();
@@ -2428,19 +2435,30 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	for (unsigned int i = 0; i < pStates->size(); ++i) {
 		CState *pState = (*pStates)[i];
-		CRemoteRecursiveOperation *pRecursiveOperationHandler;
-		if (!pState || !(pRecursiveOperationHandler = pState->GetRecursiveOperationHandler()))
+		if (!pState) {
 			continue;
+		}
 
-		if (pRecursiveOperationHandler->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer ||
-			pRecursiveOperationHandler->GetOperationMode() == CRemoteRecursiveOperation::recursive_transfer_flatten)
-		{
-			return;
+		auto localRecursiveOperation = pState->GetLocalRecursiveOperation();
+		if (localRecursiveOperation) {
+			if (localRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer ||
+				localRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
+			{
+				return;
+			}
+		}
+
+		auto remoteRecursiveOperation = pState->GetRemoteRecursiveOperation();
+		if (remoteRecursiveOperation) {
+			if (remoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer ||
+				remoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
+			{
+				return;
+			}
 		}
 	}
 
-	switch (m_actionAfterState)
-	{
+	switch (m_actionAfterState) {
 		case ActionAfterState::ShowNotification:
 		{
 			wxString const title = _("Transfers finished");

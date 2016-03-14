@@ -1201,7 +1201,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 {
 	bool idle = m_pState->IsRemoteIdle();
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 
 	wxASSERT(local_parent.IsWriteable());
@@ -1260,7 +1260,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRemoteRecursiveOperation::recursive_addtoqueue : CRemoteRecursiveOperation::recursive_transfer,
+		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
 }
@@ -1405,7 +1405,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		follow_symlink = XRCCTRL(dlg, "ID_RECURSE", wxRadioButton)->GetValue();
 	}
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 
 	std::deque<wxString> filesToDelete;
@@ -1446,7 +1446,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_delete,
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
 }
@@ -1681,7 +1681,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 	const int applyType = pChmodDlg->GetApplyType();
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRecursiveOperationHandler();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 	recursion_root root(m_pDirectoryListing->path, false);
 
@@ -1730,12 +1730,12 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRemoteRecursiveOperation::recursive_chmod,
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 
 		// Refresh listing. This gets done implicitely by the recursive operation, so
 		// only it if not recursing.
-		if (pRecursiveOperation->GetOperationMode() != CRemoteRecursiveOperation::recursive_chmod)
+		if (pRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_chmod)
 			m_pState->ChangeRemoteDir(m_pDirectoryListing->path);
 	}
 	else {
