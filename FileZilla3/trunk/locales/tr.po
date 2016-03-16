@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-22 14:31+0100\n"
-"PO-Revision-Date: 2016-02-16 21:06+0000\n"
+"POT-Creation-Date: 2016-03-16 09:06+0100\n"
+"PO-Revision-Date: 2016-03-08 10:02+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/kayazeren/"
 "filezilla/language/tr_TR/)\n"
@@ -80,7 +80,7 @@ msgid "%d file. Total size: At least %s"
 msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d dosya. Toplam boyut: En az %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2765
+#: ../../locales/../src/interface/QueueView.cpp:2764
 #, c-format
 msgid "%d files added to queue"
 msgstr "%d dosya aktarım kuyruğuna eklendi"
@@ -218,7 +218,7 @@ msgstr "&Aktif"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:206
 msgid "&Add bookmark..."
-msgstr "Yer imi &ekle..."
+msgstr "Yer İmi &Ekle..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:245
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:291
@@ -284,7 +284,7 @@ msgstr "SI sem&bollerini kullanan ikili önekler. (örnek: 1 KB = 1024 bytes)"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:204
 msgid "&Bookmarks"
-msgstr "&Yer İmleri"
+msgstr "Ye&r İmleri"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2260
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2669
@@ -312,7 +312,7 @@ msgstr "İ&ptal"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:50
 msgid "&Clear private data..."
-msgstr "&Kişisel verileri sil..."
+msgstr "&Kişisel Verileri Sil..."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:28
 msgid "&Close"
@@ -336,7 +336,7 @@ msgstr "&Bağlan"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:12
 msgid "&Copy current connection to Site Manager..."
-msgstr "Geçerli bağlantıyı Site Yöneti&cisine kopyala..."
+msgstr "Geçerli Bağlantıyı Site Yöneti&cisine Kopyala..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:803
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:428
@@ -352,7 +352,7 @@ msgstr "&Klasör oluştur"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:611
 msgid "&Create new tab"
-msgstr "&Sekme ekle"
+msgstr "&Sekme Ekle"
 
 #: ../../locales/../src/interface/menu_bar.cpp:72
 msgid "&Debug"
@@ -369,7 +369,7 @@ msgstr "Varsayılan &Düzenleyici:"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:135
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:349
 msgid "&Default file exists action..."
-msgstr "Varsayılan &dosya var işlemi..."
+msgstr "Varsayılan &Dosya Var İşlemi..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:155
 msgid "&Delay between failed login attempts:"
@@ -386,11 +386,11 @@ msgstr "&Sil"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3233
 msgid "&Delete symlink"
-msgstr "&Sembolik bağlantıyı sil"
+msgstr "&Sembolik Bağlantıyı Sil"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:70
 msgid "&Directory comparison"
-msgstr "&Klasör karşılaştırma"
+msgstr "&Klasör Karşılaştırma"
 
 #: ../../locales/../src/interface/state.cpp:895
 msgid ""
@@ -408,7 +408,7 @@ msgstr "Yerel &dosyayı boşver, dosyayı yeniden indirip düzenle"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:185
 msgid "&Disconnect"
-msgstr "&Bağlantıyı kes"
+msgstr "&Bağlantıyı Kes"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1404
 msgid "&Display momentary transfer speed instead of average speed"
@@ -560,7 +560,7 @@ msgstr "Dış I&P adresi şu İnternet adresinden alınsın:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:226
 msgid "&Getting help..."
-msgstr "&Yardım alın..."
+msgstr "&Yardım Başlıkları..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2600
 msgid "&Global bookmark"
@@ -577,7 +577,7 @@ msgstr "&Yardım"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:87
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:540
 msgid "&Hide identical files"
-msgstr "Eş dosyalar &gizlensin"
+msgstr "Eş Dosyalar &Gizlensin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:354
 msgid "&Highest"
@@ -591,7 +591,7 @@ msgstr "&Kullanılabilecek en büyük kapı:"
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:26
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:94
 msgid "&Host:"
-msgstr "&Sunucu:"
+msgstr "Su&nucu:"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1616
 msgid "&IEC binary prefixes (e.g. 1 KiB = 1024 bytes)"
@@ -611,7 +611,7 @@ msgstr "Sistem dosya tipi &ilişkileri devralınsın"
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:109
 msgid "&Install new version"
-msgstr "&Yeni sürüm yüklensin"
+msgstr "&Yeni sürümü yükle"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
 msgid "&Keep remote path structure relative to search root"
@@ -635,7 +635,7 @@ msgstr "Eş zaman&lı bağlantı sayısı sınırlansın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:114
 msgid "&Local directory tree"
-msgstr "Yere&l klasör ağacı"
+msgstr "Yere&l Klasör Ağacı"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2654
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2744
@@ -660,11 +660,11 @@ msgstr "&Düşük"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:210
 msgid "&Manage bookmarks..."
-msgstr "Yer i&mleri yönetimi..."
+msgstr "Yer İ&mleri Yönetimi..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:169
 msgid "&Manual transfer..."
-msgstr "El ile aktarı&m..."
+msgstr "El İle Aktarı&m..."
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:474
 msgid "&Maximum number of connections:"
@@ -676,7 +676,7 @@ msgstr "&En fazla bağlanma denemesi:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:110
 msgid "&Message log"
-msgstr "&Günlük kaydı"
+msgstr "&Günlük Kaydı"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1356
 msgid "&Minimize to tray"
@@ -692,7 +692,7 @@ msgstr "&Ad:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:47
 msgid "&Network configuration wizard..."
-msgstr "Ağ ayarla&ma yardımcısı..."
+msgstr "Ağ Ayarla&ma Yardımcısı..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1232
 msgid "&New"
@@ -702,9 +702,9 @@ msgstr "Ye&ni"
 msgid "&New Site"
 msgstr "Site E&kle"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1665
+#: ../../locales/../src/interface/Mainfrm.cpp:1656
 msgid "&New version available!"
-msgstr "Ye&ni bir sürüm yayınlanmış!"
+msgstr "Ye&ni Bir Sürüm Yayınlanmış!"
 
 #: ../../locales/../src/interface/netconfwizard.cpp:27
 msgid "&Next >"
@@ -768,7 +768,7 @@ msgstr "Ka&pı:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:153
 msgid "&Preserve timestamps of transferred files"
-msgstr "Dosya zaman damgaları &korunsun"
+msgstr "Dosya Zaman Damgaları &Korunsun"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1635
 msgid "&Queue"
@@ -776,15 +776,15 @@ msgstr "Aktarım &kuyruğu"
 
 #: ../../locales/../src/interface/resources/xrc/quickconnectbar.xrc:97
 msgid "&Quickconnect"
-msgstr "&Hızlı bağlan"
+msgstr "&Hızlı Bağlan"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:106
 msgid "&Quickconnect bar"
-msgstr "&Hızlı bağlantı çubuğu"
+msgstr "&Hızlı Bağlantı Çubuğu"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1504
 msgid "&Quickconnect history"
-msgstr "&Hızlı bağlantı geçmişi"
+msgstr "&Hızlı Bağlantı Geçmişi"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:409
 msgid "&Read"
@@ -792,7 +792,7 @@ msgstr "&Okuma"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:181
 msgid "&Reconnect"
-msgstr "&Yeniden bağlan"
+msgstr "&Yeniden Bağlan"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1511
 msgid "&Reconnect information"
@@ -856,7 +856,7 @@ msgstr "Geçe&rsiz karakterler şununla değiştirilsin:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:229
 msgid "&Report a bug..."
-msgstr "Hata bildi&rin (İngilizce)..."
+msgstr "Hata Bildi&rimi (İngilizce)..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:385
 msgid "&Request attention"
@@ -880,11 +880,11 @@ msgstr "Komut çalıştı&r..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:76
 msgid "&Run configuration wizard now..."
-msgstr "Ağ aya&r yardımcısını başlat..."
+msgstr "Ağ Aya&r Yardımcısını Başlat..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2084
 msgid "&Run update check now..."
-msgstr "Güncellemele&ri denetle..."
+msgstr "Güncellemele&ri Denetle..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:468
 msgid "&SITE"
@@ -904,7 +904,7 @@ msgstr "&Ara"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:190
 msgid "&Search remote files..."
-msgstr "&Uzak dosyalarda arama..."
+msgstr "&Uzak Dosyalarda Arama..."
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:18
 msgid "&Select Entry:"
@@ -945,7 +945,7 @@ msgstr "Günlük kayıtlarına &zaman damgası eklensin"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1517
 msgid "&Site Manager entries"
-msgstr "&Site Yöneticisi Kayıtları"
+msgstr "&Site Yöneticisi kayıtları"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:7
 msgid "&Site Manager..."
@@ -961,7 +961,7 @@ msgstr "&Atla"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:165
 msgid "&Speed limits"
-msgstr "Hız &sınırlaması"
+msgstr "Hız &Sınırlaması"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
 msgid "&Start transfer immediately"
@@ -975,7 +975,7 @@ msgstr "&Yerel ve Uzak panellerin yerini değiştir"
 msgid "&TLS Ciphers"
 msgstr "&TLS Şifreleri"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:227
+#: ../../locales/../src/interface/netconfwizard.cpp:234
 msgid "&Test"
 msgstr "&Sına"
 
@@ -994,7 +994,7 @@ msgstr "Ak&tarım yöntemi:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1523
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:122
 msgid "&Transfer queue"
-msgstr "Ak&tarım kuyruğu"
+msgstr "Ak&tarım Kuyruğu"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1141
 msgid "&Treat dotfiles as ASCII files"
@@ -1052,7 +1052,7 @@ msgstr "K&ullanıcı:"
 msgid "&Username:"
 msgstr "K&ullanıcı Adı:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1659
+#: ../../locales/../src/interface/Mainfrm.cpp:1650
 #, c-format
 msgid "&Version %s"
 msgstr "&Sürüm %s"
@@ -1119,7 +1119,7 @@ msgstr ""
 "'Normal' ve 'Hesap' oturum açma tipleri kullanılamıyor. Kaydınız 'Parola "
 "sorulsun' olarak değiştirildi."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:588
+#: ../../locales/../src/interface/Mainfrm.cpp:583
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1300,7 +1300,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Yeni bir FileZilla sürümü yayınlanmış:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:648
+#: ../../locales/../src/interface/Mainfrm.cpp:643
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1400,14 +1400,14 @@ msgstr "İşlem:"
 msgid "Active mode"
 msgstr "Aktif Kip"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:615
+#: ../../locales/../src/interface/netconfwizard.cpp:629
 msgid ""
 "Active mode FTP test failed. FileZilla does not know the correct external IP "
 "address."
 msgstr ""
 "Aktif kip FTP sınaması yapılamadı. FileZilla doğru dış IP adresini bilmiyor."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:602
+#: ../../locales/../src/interface/netconfwizard.cpp:616
 msgid ""
 "Active mode FTP test failed. FileZilla does not know the correct external IP "
 "address. In addition to that, your router has modified the sent address."
@@ -1415,7 +1415,7 @@ msgstr ""
 "Aktif kip FTP sınaması yapılamadı. FileZilla doğru dış IP adresini bilmiyor. "
 "Ayrıca yönelticiniz giden adresi değiştirdi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:590
+#: ../../locales/../src/interface/netconfwizard.cpp:604
 msgid ""
 "Active mode FTP test failed. FileZilla knows the correct external IP "
 "address, but your router or firewall has misleadingly modified the sent "
@@ -1477,7 +1477,7 @@ msgstr "Her &zaman şu işlem yapılsın"
 msgid "Algorithm:"
 msgstr "Algoritma:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2928
+#: ../../locales/../src/interface/QueueView.cpp:2927
 msgid "All files have been successfully transferred"
 msgstr "Tüm dosyalar aktarıldı"
 
@@ -1485,7 +1485,7 @@ msgstr "Tüm dosyalar aktarıldı"
 msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr "Yazılan tüm kapılar 1024 ile 65535 arasında olmalı."
 
-#: ../../locales/../src/interface/QueueView.cpp:2924
+#: ../../locales/../src/interface/QueueView.cpp:2923
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1753,7 +1753,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:176
 msgid "C&ancel current operation"
-msgstr "Yürürlükteki işlemi ipt&al et"
+msgstr "Yürürlükteki İşlemi İpt&al Et"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:431
 msgid "C&lear all"
@@ -1833,7 +1833,7 @@ msgstr "Yürürlükteki işlemi iptal eder"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "'%s' erişilemiyor, sürücü hazır değil ya da bir ortam takılmamış."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:561
+#: ../../locales/../src/interface/Mainfrm.cpp:556
 msgid "Cannot add server to Site Manager"
 msgstr "Sunucu Site Yöneticisine eklenemiyor"
 
@@ -1892,7 +1892,7 @@ msgstr "Hızlı Bağlantı çubuğu kaynak dosyasından yüklenemiyor"
 msgid "Cannot load key file"
 msgstr "Anahtar dosyası yüklenemedi"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:994
+#: ../../locales/../src/interface/Mainfrm.cpp:989
 msgid "Cannot load toolbar from resource file"
 msgstr "Araç çubuğu kaynak dosyasından yüklenemiyor"
 
@@ -2033,7 +2033,7 @@ msgstr ""
 "Oturum açma bilgilerinizi denetleyin. Yazdığınız kullanıcı adının başında ya "
 "da sonunda boşluk karakteri var."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:762
+#: ../../locales/../src/interface/netconfwizard.cpp:778
 msgid "Checking for correct external IP address"
 msgstr "Doğru dış IP adresi denetleniyor"
 
@@ -2076,7 +2076,7 @@ msgstr "Şifre:"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:21
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:615
 msgid "Cl&ose tab"
-msgstr "Sekmeyi &kapat"
+msgstr "Sekmeyi &Kapat"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1285
 msgid "Classic"
@@ -2084,7 +2084,7 @@ msgstr "Klasik"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:436
 msgid "Clear &layout cache"
-msgstr "Arayüz önbelleğini temiz&le"
+msgstr "Arayüz Önbelleğini Temiz&le"
 
 #: ../../locales/../src/interface/quickconnectbar.cpp:150
 msgid "Clear history"
@@ -2103,7 +2103,7 @@ msgstr "Kişisel verileri sil"
 msgid "Clear quickconnect bar"
 msgstr "Hızlı bağlantı çubuğunu temizle"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:581
+#: ../../locales/../src/interface/netconfwizard.cpp:595
 msgid "Click on Finish to save your configuration."
 msgstr "Ayarlarınızı kaydetmek için Bitti düğmesine tıklayın."
 
@@ -2120,14 +2120,14 @@ msgid "Close &all other tabs"
 msgstr "Diğer tüm sekmeleri k&apat"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1135
-#: ../../locales/../src/interface/Mainfrm.cpp:1156
+#: ../../locales/../src/interface/Mainfrm.cpp:1126
+#: ../../locales/../src/interface/Mainfrm.cpp:1147
 msgid "Close FileZilla"
-msgstr "FileZilla yazılımını kapat"
+msgstr "FileZilla yazılımını kapatır"
 
 #: ../../locales/../src/interface/cmdline.cpp:15
 msgid "Close all running instances of FileZilla"
-msgstr "Çalışan tüm FileZilla kopyalarını kapat"
+msgstr "Çalışan Tüm FileZilla Kopyalarını Kapat"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:23
 msgid "Closes current tab"
@@ -2177,20 +2177,20 @@ msgstr "Not"
 msgid "Common name:"
 msgstr "Bilinen Ad:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:439
-#: ../../locales/../src/interface/netconfwizard.cpp:452
+#: ../../locales/../src/interface/netconfwizard.cpp:451
+#: ../../locales/../src/interface/netconfwizard.cpp:464
 msgid "Communication tainted by router or firewall"
 msgstr "İletişim, yöneltici ya da güvenlik duvarı tarafından bozuldu"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:82
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:535
 msgid "Compare &modification time"
-msgstr "Son değişiklik za&manları karşılaştırılsın"
+msgstr "Değişiklik Za&manları Karşılaştırılsın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:78
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:531
 msgid "Compare file&size"
-msgstr "Do&sya boyutları karşılaştırılsın"
+msgstr "Do&sya Boyutları Karşılaştırılsın"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1784
 msgid "Comparison &threshold (in minutes):"
@@ -2258,7 +2258,7 @@ msgstr "Silme işlemini onaylayın"
 msgid "Confirmation needed"
 msgstr "Onay gerekiyor"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:577
+#: ../../locales/../src/interface/netconfwizard.cpp:591
 msgid "Congratulations, your configuration seems to be working."
 msgstr "Tebrikler, ayarlarınız çalışıyor gibi görünüyor."
 
@@ -2266,7 +2266,7 @@ msgstr "Tebrikler, ayarlarınız çalışıyor gibi görünüyor."
 msgid "Connect bypassing proxy settings"
 msgstr "Vekil sunucu ayarları atlanarak bağlanılsın"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:216
+#: ../../locales/../src/interface/netconfwizard.cpp:222
 #, c-format
 msgid "Connect failed: %s"
 msgstr "Bağlantı kurulamadı: %s"
@@ -2287,7 +2287,7 @@ msgstr "Site Yöneticisinde belirtilen siteye bağlanılsın"
 msgid "Connecting"
 msgstr "Bağlanıyor"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:210
+#: ../../locales/../src/interface/netconfwizard.cpp:216
 #: ../../locales/../src/interface/statuslinectrl.cpp:243
 #, c-format
 msgid "Connecting to %s"
@@ -2338,7 +2338,7 @@ msgstr "Bağlantı denemesi kullanıcı tarafından kesildi"
 msgid "Connection attempt timed out"
 msgstr "Bağlanma denemesi zaman aşımına uğradı"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:552
+#: ../../locales/../src/interface/netconfwizard.cpp:564
 msgid "Connection closed"
 msgstr "Bağlantı kapandı"
 
@@ -2356,7 +2356,7 @@ msgstr "Bağlanıldı, TLS yükleniyor..."
 msgid "Connection established, sending HTTP request"
 msgstr "Bağlanıldı, HTTP isteği gönderiliyor"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:333
+#: ../../locales/../src/interface/netconfwizard.cpp:345
 msgid "Connection established, waiting for welcome message."
 msgstr "Bağlantı kuruldu, hoşgeldiniz iletisi bekleniyor."
 
@@ -2364,7 +2364,7 @@ msgstr "Bağlantı kuruldu, hoşgeldiniz iletisi bekleniyor."
 msgid "Connection established, waiting for welcome message..."
 msgstr "Bağlanıldı, hoş geldin iletisi bekleniyor..."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:350
+#: ../../locales/../src/interface/netconfwizard.cpp:362
 msgid "Connection lost"
 msgstr "Bağlantı koptu"
 
@@ -2394,7 +2394,7 @@ msgid "Connection timed out after %d second of inactivity"
 msgid_plural "Connection timed out after %d seconds of inactivity"
 msgstr[0] "%d saniye boyunca işlem yapılmadığından bağlantı kesildi"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1056
+#: ../../locales/../src/interface/netconfwizard.cpp:1072
 msgid "Connection timed out."
 msgstr "Bağlantı zaman aşımına uğradı."
 
@@ -2406,11 +2406,11 @@ msgstr "Sunucuyla bağlantı kesildi."
 msgid "Connection with proxy established, performing handshake..."
 msgstr "Vekil sunucu ile bağlantı sağlandı, iletişim kuruluyor..."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:570
+#: ../../locales/../src/interface/netconfwizard.cpp:584
 msgid "Connection with server got closed prematurely."
 msgstr "Sunucuyla bağlantı vaktinden önce kapandı."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:561
+#: ../../locales/../src/interface/netconfwizard.cpp:575
 msgid "Connection with the test server failed."
 msgstr "Sınama sunucusuyla bağlantı kurulamadı."
 
@@ -2631,7 +2631,7 @@ msgstr "Uzaktaki yola gidilemedi."
 msgid "Could not parse server address:"
 msgstr "Sunucu adresi çözümlenemedi:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:979
+#: ../../locales/../src/interface/netconfwizard.cpp:995
 msgid "Could not read from data socket."
 msgstr "Soketten veri okunamadı."
 
@@ -2644,7 +2644,7 @@ msgstr "Soketten okunamadı: %s"
 msgid "Could not read server item."
 msgstr "Sunucu nesnesi okunamıyor."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:344
+#: ../../locales/../src/interface/netconfwizard.cpp:356
 msgid "Could not receive data from server."
 msgstr "Sunucudan veri alınamadı."
 
@@ -2905,8 +2905,8 @@ msgstr "Tehlikeli dosya tipi"
 msgid "Data"
 msgstr "Veri"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:973
-#: ../../locales/../src/interface/netconfwizard.cpp:1038
+#: ../../locales/../src/interface/netconfwizard.cpp:989
+#: ../../locales/../src/interface/netconfwizard.cpp:1054
 msgid "Data socket closed too early."
 msgstr "Veri soketi çok erken kapandı."
 
@@ -3064,7 +3064,7 @@ msgstr "Klasör"
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
 #: ../../locales/../src/interface/filelistctrl.cpp:464
-#: ../../locales/../src/interface/Mainfrm.cpp:2167
+#: ../../locales/../src/interface/Mainfrm.cpp:2158
 msgid "Directory comparison"
 msgstr "Klasör Karşılaştırma"
 
@@ -3106,7 +3106,7 @@ msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr "Eşzamanlı tarama devre dışı bırakılıp uzak klasör değiştirilsin mi?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:650
+#: ../../locales/../src/interface/Mainfrm.cpp:645
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3155,8 +3155,8 @@ msgstr "Varsayılan düzenleyici kulla&nılmasın"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Düzenlenen &tüm dosyalar için aynı işlem uygulansın"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1138
-#: ../../locales/../src/interface/Mainfrm.cpp:1160
+#: ../../locales/../src/interface/Mainfrm.cpp:1129
+#: ../../locales/../src/interface/Mainfrm.cpp:1151
 msgid "Do you really want to close FileZilla?"
 msgstr "FileZilla kapatılsın mı?"
 
@@ -3179,7 +3179,7 @@ msgstr "Seçili kayıdı silmek istiyor musunuz?"
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Aktarım kuyruğunu gerçekten silmek istiyor musunuz?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:589
+#: ../../locales/../src/interface/Mainfrm.cpp:584
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "'%s' sunucuya gönderilsin mi?"
@@ -3236,7 +3236,7 @@ msgstr "Seçili klasörü indir"
 msgid "Download selected files and directories"
 msgstr "Seçili dosya ve klasörleri indir"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:966
+#: ../../locales/../src/interface/Mainfrm.cpp:961
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3296,7 +3296,7 @@ msgstr "Ça&lıştırma"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:39
 msgid "E&xit"
-msgstr "FileZilla yazılımını &kapat"
+msgstr "Çı&kış"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:415
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:459
@@ -3340,7 +3340,7 @@ msgstr "Arama sonuçları düzenleniyor"
 msgid "Email:"
 msgstr "E-posta:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2106
+#: ../../locales/../src/interface/QueueView.cpp:2104
 msgid "Empty command"
 msgstr "Boş komut"
 
@@ -3400,19 +3400,19 @@ msgstr "Karşılaştırma bitirilip sıralama düzeni değiştirilsin mi?"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:195
 msgid "Enter &custom command..."
-msgstr "Özel &komut yazın..."
+msgstr "Özel &Komut Yazın..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3604
 msgid "Enter 0 for unlimited speed."
 msgstr "Sınırsız hız için 0 yazın."
 
-#: ../../locales/../src/interface/QueueView.cpp:2100
+#: ../../locales/../src/interface/QueueView.cpp:2098
 msgid "Enter command"
 msgstr "Komutu yazın"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:572
+#: ../../locales/../src/interface/Mainfrm.cpp:567
 msgid "Enter custom command"
-msgstr "Özel komutu yazın"
+msgstr "Özel komut yazın"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1841
 msgid "Enter directory"
@@ -3525,7 +3525,7 @@ msgstr "Kuyruk yüklenirken hata oluştu"
 #: ../../locales/../src/interface/sitemanager.cpp:743
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:751
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:809
-#: ../../locales/../src/interface/wrapengine.cpp:939
+#: ../../locales/../src/interface/wrapengine.cpp:933
 msgid "Error loading xml file"
 msgstr "XML dosyası okunurken hata oluştu"
 
@@ -3669,7 +3669,7 @@ msgstr "Siteler kopyalanamadı ya da taşınamadı"
 msgid "Failed to create backup copy of xml file"
 msgstr "Xml dosyasının yedeği alınamadı"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:793
+#: ../../locales/../src/interface/netconfwizard.cpp:809
 msgid "Failed to create listen socket, aborting"
 msgstr "Dinleme soketi oluşturulamadı, iptal ediliyor"
 
@@ -3686,11 +3686,11 @@ msgstr "'Belgelerim' klasörüne erişilemedi"
 msgid "Failed to get desktop path"
 msgstr "Masaüstü yolu alınamadı"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:946
+#: ../../locales/../src/interface/netconfwizard.cpp:962
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr "Denetim bağlantısının denklik adresi alınamadı, bağlantı kapatıldı."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:953
+#: ../../locales/../src/interface/netconfwizard.cpp:969
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "Veri bağlantısının denklik adresi alınamadı, bağlantı kapandı."
 
@@ -3737,7 +3737,7 @@ msgstr "\"%s\" yazma için açılamıyor"
 msgid "Failed to parse returned path."
 msgstr "Döndürülen yol çözümlenemedi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1005
+#: ../../locales/../src/interface/netconfwizard.cpp:1021
 msgid "Failed to receive data"
 msgstr "Veri alınamadı"
 
@@ -3745,7 +3745,7 @@ msgstr "Veri alınamadı"
 msgid "Failed to retrieve directory listing"
 msgstr "Klasör listesi alınamadı"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:722
+#: ../../locales/../src/interface/netconfwizard.cpp:738
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "Dış IP adresi alınamadı, iptal ediliyor"
 
@@ -3757,15 +3757,15 @@ msgstr "Dış IP adresi okunamadı, yerel IP deneniyor"
 msgid "Failed to retrieve local ip address."
 msgstr "Yerel IP adresi okunamadı."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:698
+#: ../../locales/../src/interface/netconfwizard.cpp:714
 msgid "Failed to retrieve local ip address. Aborting"
 msgstr "Yerel IP adresi okunamadı. Vazgeçiliyor"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:626
+#: ../../locales/../src/interface/netconfwizard.cpp:640
 msgid "Failed to retrieve the external IP address."
 msgstr "Dış IP adresi okunamadı."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:313
+#: ../../locales/../src/interface/netconfwizard.cpp:325
 msgid "Failed to send command."
 msgstr "Komut gönderilemedi."
 
@@ -3806,7 +3806,7 @@ msgstr ""
 msgid "Failed to set language to %s, using default system language."
 msgstr "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak."
 
-#: ../../locales/../src/interface/settings/optionspage.cpp:215
+#: ../../locales/../src/interface/settings/optionspage.cpp:206
 msgid "Failed to validate settings"
 msgstr "Ayarlar doğrulanamadı"
 
@@ -3917,7 +3917,7 @@ msgstr "Dosya aktarıldı"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Dosya aktarıldı, %s/%s kadarı aktarıldı"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1137
+#: ../../locales/../src/interface/Mainfrm.cpp:1128
 msgid "File transfers still in progress."
 msgstr "Dosya aktarımı henüz bitmedi."
 
@@ -3946,7 +3946,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "Filezilla şu anda bir sunucuya bağlı."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1442
+#: ../../locales/../src/interface/Mainfrm.cpp:1433
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "Dil değişikliğinin etkili olabilmesi için FileZilla yeniden başlatılmalı."
@@ -3957,7 +3957,7 @@ msgstr "FileZilla Güncellemeleri"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:97
 msgid "Filelist status &bars"
-msgstr "Dosya listesi durum &çubukları"
+msgstr "Dosya Listesi Durum Ç&ubukları"
 
 #: ../../locales/../src/interface/edithandler.cpp:1084
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
@@ -3970,7 +3970,7 @@ msgstr "Dosya Adı"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:66
 msgid "Filename &filters..."
-msgstr "&Dosya adı süzgeçleri..."
+msgstr "&Dosya Adı Süzgeçleri..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2970
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:2174
@@ -4120,9 +4120,9 @@ msgstr "&UTF-8 kullanılsın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:199
 msgid "Force showing &hidden files"
-msgstr "&Gizli dosyalar görüntülensin"
+msgstr "&Gizli Dosyalar Görüntülensin"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:645
+#: ../../locales/../src/interface/Mainfrm.cpp:640
 msgid "Force showing hidden files"
 msgstr "Gizli dosyalar görüntülenir"
 
@@ -4327,7 +4327,7 @@ msgstr ""
 "Sunucu anahtarının değişmesini beklemiyorsanız, sistem yöneticisi ile "
 "görüşün."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:563
+#: ../../locales/../src/interface/netconfwizard.cpp:577
 msgid ""
 "If the problem persists, some router and/or firewall keeps blocking "
 "FileZilla."
@@ -4335,7 +4335,7 @@ msgstr ""
 "Bu sorun devam ederse, Filezilla bir yöneltici ya da güvenlik duvarı "
 "tarafından engelleniyor demektir."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:572
+#: ../../locales/../src/interface/netconfwizard.cpp:586
 msgid ""
 "If the problem persists, some router and/or firewall keeps interrupting the "
 "connection."
@@ -4361,7 +4361,7 @@ msgstr ""
 "Sembolik bağlantı bir klasörü gösteriyorsa Filezilla sembolik bağlantıyı ya "
 "da bağlı klasörün içini silebilir."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:634
+#: ../../locales/../src/interface/netconfwizard.cpp:648
 msgid ""
 "If this problem persists, please contact your router or firewall "
 "manufacturer for a solution."
@@ -4369,7 +4369,7 @@ msgstr ""
 "Bu sorun devam ederse, çözüm için yöneltici ya da güvenlik duvarı "
 "üreticinizle görüşün."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:592
+#: ../../locales/../src/interface/netconfwizard.cpp:606
 msgid "If this problem stays, please contact your router manufacturer."
 msgstr "Bu sorun devam ederse yöneltici üreticinizle görüşün."
 
@@ -4407,7 +4407,7 @@ msgstr ""
 "Sına'ya tıkladığınızda, probe.filezilla-project.org adresine bağlanılarak "
 "bazı basit sınamalar yapılır."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1159
+#: ../../locales/../src/interface/Mainfrm.cpp:1150
 msgid "If you close FileZilla, your changes will be lost."
 msgstr ""
 "FileZilla yazılımını şimdi kapatırsanız, yaptığınız değişiklikler kaybolacak."
@@ -4430,7 +4430,7 @@ msgstr ""
 "Klasörleri listelemekte ya da dosya aktarımında sorun yaşıyorsanız, "
 "varsayılan aktarım kipini değiştirmeyi deneyin."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:579
+#: ../../locales/../src/interface/netconfwizard.cpp:593
 msgid ""
 "If you keep having problems with a specific server, the server itself or a "
 "remote router or firewall might be misconfigured. In this case try to toggle "
@@ -4464,7 +4464,7 @@ msgstr ""
 "Bir yöneltici kullanıyorsanız bu kapıların FileZilla çalışan bilgisayara "
 "yönlendirildiğinden emin olun."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:605
+#: ../../locales/../src/interface/netconfwizard.cpp:619
 msgid ""
 "If your router keeps changing the IP address, please contact your router "
 "manufacturer."
@@ -4601,10 +4601,10 @@ msgstr ""
 msgid "Invalid chunk size"
 msgstr "Yığın boyutu geçersiz"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:363
-#: ../../locales/../src/interface/netconfwizard.cpp:372
-#: ../../locales/../src/interface/netconfwizard.cpp:380
-#: ../../locales/../src/interface/netconfwizard.cpp:397
+#: ../../locales/../src/interface/netconfwizard.cpp:375
+#: ../../locales/../src/interface/netconfwizard.cpp:384
+#: ../../locales/../src/interface/netconfwizard.cpp:392
+#: ../../locales/../src/interface/netconfwizard.cpp:409
 msgid "Invalid data received"
 msgstr "Geçersiz veri alındı"
 
@@ -4716,7 +4716,7 @@ msgstr "Yetkili şehir:"
 msgid "Keep directories on top"
 msgstr "Klasörler üstte görüntülensin"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:649
+#: ../../locales/../src/interface/Mainfrm.cpp:644
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4751,7 +4751,7 @@ msgstr "E&n düşük"
 msgid "Language"
 msgstr "Dil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1442
+#: ../../locales/../src/interface/Mainfrm.cpp:1433
 msgid "Language changed"
 msgstr "Dil değişti"
 
@@ -4793,8 +4793,8 @@ msgstr "Satır uzunluğu aşıldı"
 msgid "Linked against"
 msgstr "Bağlantılı"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:264
-#: ../../locales/../src/interface/netconfwizard.cpp:270
+#: ../../locales/../src/interface/netconfwizard.cpp:276
+#: ../../locales/../src/interface/netconfwizard.cpp:282
 msgid "Listen socket closed"
 msgstr "Dinleme soketi kapandı"
 
@@ -4978,8 +4978,8 @@ msgstr "Eşzamanlı ak&tarım:"
 msgid "Memory allocation failure"
 msgstr "Bellek yerleşimi hatası"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:388
-#: ../../locales/../src/interface/Mainfrm.cpp:1752
+#: ../../locales/../src/interface/Mainfrm.cpp:383
+#: ../../locales/../src/interface/Mainfrm.cpp:1743
 msgid "Message log"
 msgstr "Günlük kaydı"
 
@@ -5085,7 +5085,7 @@ msgstr "K&lasör Ekle"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:16
 msgid "New &tab"
-msgstr "&Sekme ekle"
+msgstr "&Sekme Ekle"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2825
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:47
@@ -5152,7 +5152,7 @@ msgstr "Nodename için bir adres belirtilmemiş"
 msgid "No category to export selected"
 msgstr "Verilecek bir kategori seçilmemiş"
 
-#: ../../locales/../src/interface/QueueView.cpp:2106
+#: ../../locales/../src/interface/QueueView.cpp:2104
 msgid "No command given, aborting."
 msgstr "Komut verilmedi, vazgeçiliyor."
 
@@ -5253,7 +5253,7 @@ msgstr "Bağlı değil"
 msgid "Not connected to any server"
 msgstr "Sunucuya bağlı değil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:561
+#: ../../locales/../src/interface/Mainfrm.cpp:556
 msgid "Not connected to any server."
 msgstr "Sunucuya bağlı değil."
 
@@ -5265,7 +5265,7 @@ msgstr "Bağlı değil."
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Başlatılamadı, WSAStartup çağrılmalı"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:647
+#: ../../locales/../src/interface/Mainfrm.cpp:642
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr ""
 "Dikkat bu özellik yalnız FTP iletişim kuralı kullanılırken desteklenir."
@@ -5505,7 +5505,7 @@ msgstr "Sistem, akta&rım ve diğer işlemler sırasında askıya alınmasın"
 msgid "P&roxy host:"
 msgstr "&Vekil sunucu:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:497
+#: ../../locales/../src/interface/netconfwizard.cpp:509
 msgid "PORT command tainted by router or firewall."
 msgstr "PORT komutu yöneltici ya da güvenlik duvarı tarafından bozuldu."
 
@@ -5513,7 +5513,7 @@ msgstr "PORT komutu yöneltici ya da güvenlik duvarı tarafından bozuldu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&sif (önerilen)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2322
+#: ../../locales/../src/interface/Mainfrm.cpp:2313
 msgid "Parameter not a valid URL"
 msgstr "Parametre geçerli bir İnternet adresi değil"
 
@@ -5537,9 +5537,9 @@ msgstr "Pasif (önerilen)"
 msgid "Passive mode"
 msgstr "Pasif Kip"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:598
-#: ../../locales/../src/interface/netconfwizard.cpp:611
-#: ../../locales/../src/interface/netconfwizard.cpp:622
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+#: ../../locales/../src/interface/netconfwizard.cpp:625
+#: ../../locales/../src/interface/netconfwizard.cpp:636
 msgid "Passive mode has been set as default transfer mode."
 msgstr "Varsayılan aktarım kipi Pasif olarak seçildi."
 
@@ -5558,7 +5558,7 @@ msgstr "Yol"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "%s klasörü ve %s alt klasörü için yol oluşturulamıyor"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2280
+#: ../../locales/../src/interface/Mainfrm.cpp:2271
 msgid "Path not found:"
 msgstr "Yol bulunamadı:"
 
@@ -5591,7 +5591,7 @@ msgstr "İzinler"
 msgid "Platform:"
 msgstr "Platform:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:562
+#: ../../locales/../src/interface/netconfwizard.cpp:576
 msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
@@ -5607,13 +5607,13 @@ msgstr ""
 "Lütfen tüm güvenlik duvarı ve yönelticilerinizi, dışarı giden bağlantılarda "
 "FileZilla'nın keyfi kapıları kullanabileceği şekilde ayarlayın."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:633
+#: ../../locales/../src/interface/netconfwizard.cpp:647
 msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
 msgstr ""
 "Lütfen yöneltici ayarlarından 'DMZ kipi' ya da 'Oyun kipi' ayarlarını "
 "devredışı bırakın."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:571
+#: ../../locales/../src/interface/netconfwizard.cpp:585
 msgid ""
 "Please ensure you have a stable internet connection and carefully check your "
 "settings again."
@@ -5708,16 +5708,15 @@ msgstr "Dış adresinizin alınabileceği bir İnternet adresi yazın"
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr "0 %s/s değerinden büyük ya da eşit bir yükleme hızı sınırı yazın."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:572
+#: ../../locales/../src/interface/Mainfrm.cpp:567
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
 msgstr ""
-"Lütfen standart FTP komutunu yazın.\n"
-"Standart ftp komutları kullanmak klasör önbelleğini siler."
+"Lütfen standart bir FTP komutu yazın.\n"
+"Standart ftp komutları kullanıldığında klasör önbelleği silinir."
 
-#: ../../locales/../src/interface/QueueView.cpp:2100
-#, fuzzy
+#: ../../locales/../src/interface/QueueView.cpp:2098
 msgid ""
 "Please enter the complete path of a program and its arguments. This command "
 "will be executed when the queue has finished processing.\n"
@@ -5725,9 +5724,11 @@ msgid ""
 "You need to properly quote commands and their arguments if they contain "
 "spaces."
 msgstr ""
-"Lütfen bir yol ve çalıştırılabilir bir dosya adı yazın.\n"
+"Lütfen bir programın tam yolunu ve argümanlarını yazın. Kuyruğun işlenmesi "
+"tamamlandığında bu komut yürütülür.\n"
 "Örneğin: Windows için c:\\yol\\dosya.exe ya da Unix için /yol/dosya.\n"
-"Ayrıca isterseniz programa özel parametreleri de yazabilirsiniz."
+"Komut ve argümanlarda boşluk karakteri varsa uygun şekilde tırnak içine "
+"almalısınız."
 
 #: ../../locales/../src/interface/LocalListView.cpp:902
 #: ../../locales/../src/interface/LocalTreeView.cpp:1120
@@ -5748,8 +5749,8 @@ msgstr "Lütfen bu sunucu için bir kullanıcı adı ve parola yazın:"
 msgid "Please enter your external IP address"
 msgstr "Lütfen dış IP adresinizi yazın"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:603
-#: ../../locales/../src/interface/netconfwizard.cpp:616
+#: ../../locales/../src/interface/netconfwizard.cpp:617
+#: ../../locales/../src/interface/netconfwizard.cpp:630
 msgid ""
 "Please enter your external IP address on the active mode page of this "
 "wizard. In case you have a dynamic address or don't know your external "
@@ -5767,7 +5768,7 @@ msgstr ""
 "Lütfen açıklamaları dikkatle inceleyin, hatalı ayarlar düzgün FTP "
 "bağlantıları yapılmasını engeller."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:627
+#: ../../locales/../src/interface/netconfwizard.cpp:641
 msgid ""
 "Please make sure FileZilla is allowed to establish outgoing connections and "
 "make sure you typed the address of the address resolver correctly."
@@ -5780,7 +5781,7 @@ msgid "Please make sure the requested locale is installed on your system."
 msgstr ""
 "Lütfen istenen yerel dosyaların sisteminize kurulmuş olduğuna emin olun."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:604
+#: ../../locales/../src/interface/netconfwizard.cpp:618
 msgid ""
 "Please make sure your router is using the latest available firmware. "
 "Furthermore, your router has to be configured properly. You will have to use "
@@ -5804,7 +5805,7 @@ msgstr ""
 "kullanılıyor sanabilir. Bu şekilde bir güvenlik uyarısı alırsanız görmezden "
 "gelebilirsiniz."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:687
+#: ../../locales/../src/interface/Mainfrm.cpp:682
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5821,7 +5822,7 @@ msgstr ""
 "Kısa aralıklarla üstüste bağlanmaya çalışacağınız bazı sunucuların sizi "
 "yasaklayabileceğini unutmayın."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:580
+#: ../../locales/../src/interface/netconfwizard.cpp:594
 msgid ""
 "Please run this wizard again should you change your network environment or "
 "in case you suddenly encounter problems with servers that did work "
@@ -5865,7 +5866,7 @@ msgstr "Lütfen seçili klasör ve dosyaların izinlerini belirleyin."
 msgid "Please select the new attributes for the selected files."
 msgstr "Lütfen seçili dosyaların izinlerini belirleyin."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:591
+#: ../../locales/../src/interface/netconfwizard.cpp:605
 msgid ""
 "Please update your firewall and make sure your router is using the latest "
 "available firmware. Furthermore, your router has to be configured properly. "
@@ -5902,7 +5903,7 @@ msgstr "Yer Ayırma"
 msgid "Predefined Sites"
 msgstr "Öntanımlı Siteler"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:686
+#: ../../locales/../src/interface/Mainfrm.cpp:681
 msgid "Preserving file timestamps"
 msgstr "Dosya zaman damgaları korunuyor"
 
@@ -5954,7 +5955,7 @@ msgstr "Ve&kil sunucu parolası:"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:129
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:338
 msgid "Process &Queue"
-msgstr "&Kuyruktaki dosyaları aktar"
+msgstr "&Kuyruktaki Dosyaları Aktar"
 
 #: ../../locales/../src/engine/socket.cpp:1027
 msgid "Process file table overflow"
@@ -6037,7 +6038,7 @@ msgstr "Genel Anahtar Algoritması:"
 msgid "Public permissions"
 msgstr "Genel izinler"
 
-#: ../../locales/../src/interface/QueueView.cpp:3035
+#: ../../locales/../src/interface/QueueView.cpp:3038
 msgid "Queue has been fully processed"
 msgstr "Kuyruk tamamen işlendi"
 
@@ -6065,20 +6066,19 @@ msgid "Queueing:"
 msgstr "Kuyruğa Alınıyor:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:402
-#, fuzzy
 msgid "R&eboot system once"
-msgstr "Sistem y&eniden başlatılsın"
+msgstr "Sistem bir kez y&eniden başlatılsın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:118
 msgid "R&emote directory tree"
-msgstr "U&zak klasör ağacı"
+msgstr "U&zak Klasör Ağacı"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:456
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:474
 msgid "R&eset and requeue selected files"
 msgstr "Burayı boşalt ve s&eçili dosyaları yeniden kuyruğa ekle"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:586
+#: ../../locales/../src/interface/Mainfrm.cpp:581
 msgid "Raw FTP command"
 msgstr "Standart FTP komutu"
 
@@ -6095,7 +6095,7 @@ msgstr "&Yenile"
 msgid "Re&name"
 msgstr "Ye&niden Adlandır"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:586
+#: ../../locales/../src/interface/netconfwizard.cpp:600
 msgid ""
 "Re-run the wizard and carefully check your settings and configure all "
 "routers and firewalls accordingly."
@@ -6111,7 +6111,7 @@ msgstr "Ok&uma"
 msgid "Read-only"
 msgstr "Salt-okunur"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1023
+#: ../../locales/../src/interface/Mainfrm.cpp:1018
 msgid "Really cancel current operation?"
 msgstr "Yürürlükteki işlem iptal edilsin mi?"
 
@@ -6150,7 +6150,7 @@ msgstr "Gerçekten seçili tüm dosya ve klasörleri silmek istiyor musunuz?"
 msgid "Reason"
 msgstr "Neden"
 
-#: ../../locales/../src/interface/QueueView.cpp:3028
+#: ../../locales/../src/interface/QueueView.cpp:3031
 msgid "Reboot now"
 msgstr "Yeniden başlat"
 
@@ -6172,9 +6172,9 @@ msgstr "Alınan klasör listesi EBCDIC olarak kodlanmış görünüyor."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "10.000 karakterden uzun bir satır alındı, iptal ediliyor."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:991
-#: ../../locales/../src/interface/netconfwizard.cpp:999
-#: ../../locales/../src/interface/netconfwizard.cpp:1020
+#: ../../locales/../src/interface/netconfwizard.cpp:1007
+#: ../../locales/../src/interface/netconfwizard.cpp:1015
+#: ../../locales/../src/interface/netconfwizard.cpp:1036
 msgid "Received data tainted"
 msgstr "Alınan veri bozuk"
 
@@ -6392,7 +6392,7 @@ msgid "Resource temporarily unavailable"
 msgstr "Kaynak geçici olarak kullanım dışında"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/netconfwizard.cpp:411
+#: ../../locales/../src/interface/netconfwizard.cpp:423
 #: ../../locales/../src/interface/StatusView.cpp:286
 #: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Response:"
@@ -6428,36 +6428,34 @@ msgid "Retrieving directory listing..."
 msgstr "Klasör listesi alınıyor..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3764
-#: ../../locales/../src/interface/netconfwizard.cpp:711
+#: ../../locales/../src/interface/netconfwizard.cpp:727
 #, c-format
 msgid "Retrieving external IP address from %s"
 msgstr "%s üzerinden dış IP adresi okunuyor"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:34
 msgid "S&how files currently being edited..."
-msgstr "Şu anda düzenlenen dosyaları &görüntüle..."
+msgstr "Şu An Düzenlenen Dosyaları &Görüntüle..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1366
 msgid "S&how the Site Manager on startup"
 msgstr "Başlangıçta Sit&e Yöneticisi görüntülensin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:406
-#, fuzzy
 msgid "S&hutdown system once"
-msgstr "Sistemi &kapat"
+msgstr "Sistemi bir kez &kapat"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3037
 msgid "S&top"
 msgstr "&Durdur"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:410
-#, fuzzy
 msgid "S&uspend system once"
-msgstr "Sistemi as&kıya al"
+msgstr "Sistemi bir kez as&kıya al"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:92
 msgid "S&ynchronized browsing"
-msgstr "Eş&zamanlı tarama"
+msgstr "Eş&zamanlı Tarama"
 
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:97
 msgid "SFTP"
@@ -6476,7 +6474,7 @@ msgstr "SOCKS4 vekil sunucu şuraya bağlanacak: %s"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:847
+#: ../../locales/../src/interface/netconfwizard.cpp:863
 msgid "Save settings?"
 msgstr "Ayarlar kaydedilsin"
 
@@ -6518,8 +6516,8 @@ msgstr "Sunucuda dosya arayın"
 msgid "Security information"
 msgstr "Güvenlik bilgileri"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:573
 #: ../../locales/../src/interface/netconfwizard.cpp:587
+#: ../../locales/../src/interface/netconfwizard.cpp:601
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr ""
 "Ayrıca https://wiki.filezilla-project.org/Network_Configuration adresine "
@@ -6573,7 +6571,7 @@ msgid "Select file for exported data"
 msgstr "Verilecek veriler için bir dosya seçin"
 
 #: ../../locales/../src/interface/export.cpp:34
-#: ../../locales/../src/interface/queue.cpp:1495
+#: ../../locales/../src/interface/queue.cpp:1494
 msgid "Select file for exported queue"
 msgstr "Aktarılmış kuyruk için bir dosya seçin"
 
@@ -6799,15 +6797,15 @@ msgstr ""
 "Sunucu yöneltilemeyen bir adresle pasif bir yanıt verdi. Bunun yerine sunucu "
 "adresi kullanılacak."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:418
-#: ../../locales/../src/interface/netconfwizard.cpp:424
-#: ../../locales/../src/interface/netconfwizard.cpp:459
-#: ../../locales/../src/interface/netconfwizard.cpp:468
+#: ../../locales/../src/interface/netconfwizard.cpp:430
+#: ../../locales/../src/interface/netconfwizard.cpp:436
+#: ../../locales/../src/interface/netconfwizard.cpp:471
 #: ../../locales/../src/interface/netconfwizard.cpp:480
-#: ../../locales/../src/interface/netconfwizard.cpp:503
-#: ../../locales/../src/interface/netconfwizard.cpp:510
-#: ../../locales/../src/interface/netconfwizard.cpp:519
-#: ../../locales/../src/interface/netconfwizard.cpp:530
+#: ../../locales/../src/interface/netconfwizard.cpp:492
+#: ../../locales/../src/interface/netconfwizard.cpp:515
+#: ../../locales/../src/interface/netconfwizard.cpp:522
+#: ../../locales/../src/interface/netconfwizard.cpp:531
+#: ../../locales/../src/interface/netconfwizard.cpp:542
 msgid "Server sent unexpected reply."
 msgstr "Sunucu beklenmeyen bir yanıt verdi."
 
@@ -6868,9 +6866,9 @@ msgstr "Ham klasö&r listesi görüntülensin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:223
 msgid "Show &welcome dialog..."
-msgstr "&Hoşgeldiniz penceresini görüntüle..."
+msgstr "&Hoşgeldiniz Penceresini Görüntüle..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2170
+#: ../../locales/../src/interface/Mainfrm.cpp:2161
 msgid "Show both directory trees and continue comparing?"
 msgstr "Her iki klasör ağacı görüntülenerek karşılaştırmaya devam edilsin"
 
@@ -6890,7 +6888,7 @@ msgstr "Kullanılabilecek TLS şifrelerini görüntüler"
 msgid "Shows this help dialog"
 msgstr "Bu yardım penceresini görüntüler"
 
-#: ../../locales/../src/interface/QueueView.cpp:3024
+#: ../../locales/../src/interface/QueueView.cpp:3027
 msgid "Shutdown now"
 msgstr "Şimdi kapat"
 
@@ -7020,7 +7018,7 @@ msgstr "Soket bağlı değil"
 msgid "Socket type not supported for address family"
 msgstr "Soket tipi bu adres ailesinde desteklenmiyor"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1158
+#: ../../locales/../src/interface/Mainfrm.cpp:1149
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Bazı dosyalar düzenlenmiş ve yüklenmeleri gerekli."
 
@@ -7163,7 +7161,7 @@ msgstr "Aktarılanlar"
 msgid "Summary of test results:"
 msgstr "Sınama sonuçları özeti:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3032
+#: ../../locales/../src/interface/QueueView.cpp:3035
 msgid "Suspend now"
 msgstr "Şimdi askya al"
 
@@ -7206,8 +7204,8 @@ msgstr "Sözdizimi hatası"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2282
-#: ../../locales/../src/interface/Mainfrm.cpp:2324
+#: ../../locales/../src/interface/Mainfrm.cpp:2273
+#: ../../locales/../src/interface/Mainfrm.cpp:2315
 msgid "Syntax error in command line"
 msgstr "Komut satırında sözdizimi hatası"
 
@@ -7229,7 +7227,7 @@ msgstr "Sistemin ağ altsistemi bozuldu"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:102
 msgid "T&oolbar"
-msgstr "A&raç çubuğu"
+msgstr "A&raç Çubuğu"
 
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:302
 msgid "TLS connection established, sending HTTP request"
@@ -7267,10 +7265,9 @@ msgstr "Hedef dosya adı zaten var, devam edilsin mi?"
 msgid "Temporary failure in name resolution"
 msgstr "Ad geçici olarak çözümlenemedi"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:576
-#, fuzzy
+#: ../../locales/../src/interface/netconfwizard.cpp:590
 msgid "Test finished successfully"
-msgstr "Dosya aktarıldı"
+msgstr "Deneme başarılı oldu"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:370
 msgid "Test results"
@@ -7302,7 +7299,7 @@ msgstr ""
 "Site Yöneticisi başka bir FileZilla 3 oturumunda açık.\n"
 "Lütfen onu kapatın yoksa veri silinemez."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:628
+#: ../../locales/../src/interface/netconfwizard.cpp:642
 #, c-format
 msgid "The address you entered was: %s"
 msgstr "Yazdığınız adres: %s"
@@ -7603,7 +7600,7 @@ msgstr ""
 msgid "The server could not be added."
 msgstr "Sunucu eklenemedi."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:598
 msgid "The server sent an unexpected or unrecognized reply."
 msgstr "Sunucu anlaşılamayan bir yanıt verdi."
 
@@ -7657,11 +7654,11 @@ msgstr "Belirtilen adres ailesi desteklenmiyor"
 msgid "The specified network name is no longer available"
 msgstr "Belirtilen ağ adı artık kullanılmıyor"
 
-#: ../../locales/../src/interface/QueueView.cpp:3027
+#: ../../locales/../src/interface/QueueView.cpp:3030
 msgid "The system will soon reboot unless you click Cancel."
 msgstr "İptal düğmesine tıklamazsanız sistem yeniden başlatılacak."
 
-#: ../../locales/../src/interface/QueueView.cpp:3023
+#: ../../locales/../src/interface/QueueView.cpp:3026
 msgid "The system will soon shut down unless you click Cancel."
 msgstr "İptal düğmesine tıklamazsanız sistem birazdan kapanacak."
 
@@ -7673,7 +7670,7 @@ msgstr ""
 "Hedef dosya zaten var.\n"
 "Lütfen bir işlem seçin:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:847
+#: ../../locales/../src/interface/netconfwizard.cpp:863
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr "Sınama başarısız oldu. Ayarları kaydetmek istediğinize emin misiniz?"
 
@@ -7694,7 +7691,7 @@ msgstr "Bu süzme seti silinemiyor."
 msgid "This filter set cannot be renamed."
 msgstr "Bu süzme seti yeniden adlandırılamaz."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:585
+#: ../../locales/../src/interface/netconfwizard.cpp:599
 msgid ""
 "This means that some router and/or firewall is still interfering with "
 "FileZilla."
@@ -7744,12 +7741,12 @@ msgstr "Sunucunun saat dilimi farkı %d saniye."
 msgid "Title:"
 msgstr "Başlık:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2168
+#: ../../locales/../src/interface/Mainfrm.cpp:2159
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Klasörleri karşılaştırmak için her iki dosya listesi de hizalanmış olmalı."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2169
+#: ../../locales/../src/interface/Mainfrm.cpp:2160
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Bunu yapabilmek için klasör ağaçlarının ikisi de görünmeli ya da gizlenmeli."
@@ -7839,7 +7836,7 @@ msgstr "Aktarım &yönü"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:138
 msgid "Transfer &type"
-msgstr "Aktarım &tipi"
+msgstr "Aktarım &Tipi"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:196
 msgid "Transfer Mode"
@@ -7859,7 +7856,7 @@ msgstr "Aktarım Ayarları"
 msgid "Transfer connection interrupted: %s"
 msgstr "Aktarım bağlantısı kesildi: %s"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:631
+#: ../../locales/../src/interface/netconfwizard.cpp:645
 msgid "Transferred data got tainted."
 msgstr "Aktarılan veri bozuldu."
 
@@ -7872,7 +7869,7 @@ msgstr "Aktarılıyor"
 msgid "Transfers"
 msgstr "Aktarım"
 
-#: ../../locales/../src/interface/QueueView.cpp:2920
+#: ../../locales/../src/interface/QueueView.cpp:2919
 msgid "Transfers finished"
 msgstr "Aktarımlar tamamlandı"
 
@@ -7992,15 +7989,15 @@ msgstr ""
 "Bilinmeyen kök nesnesine rastlandı. Bu dosya FileZilla tarafından "
 "üretilmemiş gibi görünüyor."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:606
-#: ../../locales/../src/interface/netconfwizard.cpp:617
+#: ../../locales/../src/interface/netconfwizard.cpp:620
+#: ../../locales/../src/interface/netconfwizard.cpp:631
 msgid ""
 "Unless these problems get fixed, active mode FTP will not work and passive "
 "mode has to be used."
 msgstr ""
 "Bu sorunlar çözülmeden aktif kip çalışmaz, yalnız pasif kip kullanılabilir."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:593
+#: ../../locales/../src/interface/netconfwizard.cpp:607
 msgid ""
 "Unless this problem gets fixed, active mode FTP will not work and passive "
 "mode has to be used."
@@ -8219,7 +8216,7 @@ msgstr "Aktarımın iptal edilmesi bekleniyor"
 msgid "Waiting to retry..."
 msgstr "Yeniden denemek için bekleniyor..."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:960
+#: ../../locales/../src/interface/netconfwizard.cpp:976
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Uyarı, yanlış IP adresinden yapılan veri bağlantısı yok sayılıyor."
 
@@ -8285,8 +8282,8 @@ msgstr "Parolalar hatırlansın mı?"
 msgid "Wr&ite"
 msgstr "Ya&zma"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:445
-#: ../../locales/../src/interface/netconfwizard.cpp:451
+#: ../../locales/../src/interface/netconfwizard.cpp:457
+#: ../../locales/../src/interface/netconfwizard.cpp:463
 msgid "Wrong external IP address"
 msgstr "Dış IP adresi yanlış"
 
@@ -8298,7 +8295,7 @@ msgstr "Satır sonu yanlış"
 msgid "Yes"
 msgstr "Evet"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:767
+#: ../../locales/../src/interface/netconfwizard.cpp:783
 msgid ""
 "You appear to be using an IPv6-only host. This wizard does not support this "
 "environment."
@@ -8400,7 +8397,7 @@ msgstr "Bir hesap adı yazmalısınız"
 msgid "You have to specify a user name"
 msgstr "Bir kullanıcı adı yazmalısınız"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:632
+#: ../../locales/../src/interface/netconfwizard.cpp:646
 msgid ""
 "You likely have a router or firewall which erroneously modified the "
 "transferred data."
@@ -8469,7 +8466,7 @@ msgstr "Uzaktaki bir bağlantı yolunu belirtmelisiniz."
 msgid "You need to specify a server."
 msgstr "Bir sunucu belirtmelisiniz."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:578
+#: ../../locales/../src/interface/netconfwizard.cpp:592
 msgid ""
 "You should have no problems connecting to other servers, file transfers "
 "should work properly."
@@ -8477,7 +8474,7 @@ msgstr ""
 "Diğer sunuculara bağlanmakta bir sorununuz olmamalı. Dosya aktarımları "
 "düzgün çalışıyor olmalı."
 
-#: ../../locales/../src/interface/QueueView.cpp:3031
+#: ../../locales/../src/interface/QueueView.cpp:3034
 msgid "Your computer will suspend unless you click Cancel."
 msgstr "İptal düğmesine tıklamazsanız sistem askıya alınacak."
 
