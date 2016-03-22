@@ -16,10 +16,11 @@
 #include <wx/msw/registry.h>
 #include "volume_enumerator.h"
 #endif
-#include "edithandler.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"
+#include "edithandler.h"
 #include "filelist_statusbar.h"
+#include "local_recursive_operation.h"
 #include "sizeformatting.h"
 #include "timeformatting.h"
 
@@ -827,6 +828,14 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 
 	bool queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
 
+	auto recursiveOperation = m_pState->GetLocalRecursiveOperation();
+	if (!recursiveOperation || recursiveOperation->IsActive()) {
+		wxBell();
+		return;
+	}
+
+	local_recursion_root root(m_dir);
+
 	long item = -1;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
@@ -842,26 +851,38 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		if (data->comparison_flags == fill)
 			continue;
 
-		CServerPath path = m_pState->GetRemotePath();
-		if (path.empty()) {
+		CServerPath remotePath = m_pState->GetRemotePath();
+		if (remotePath.empty()) {
 			wxBell();
 			break;
 		}
 
 		if (data->dir) {
-			if (!path.ChangePath(data->name)) {
+			CLocalPath localPath = m_dir;
+			if (!localPath.ChangePath(data->name)) {
+				continue;
+			}
+			if (!remotePath.ChangePath(data->name)) {
 				continue;
 			}
 
-			// FIXME
+			root.add_dir_to_visit(localPath, remotePath);
 		}
 		else {
-			m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, path, *pServer, data->size);
+			m_pQueue->QueueFile(queue_only, false, data->name, wxEmptyString, m_dir, remotePath, *pServer, data->size);
 			added = true;
 		}
 	}
+
 	if (added)
 		m_pQueue->QueueFile_Finish(!queue_only);
+
+	if (!root.empty()) {
+		recursiveOperation->AddRecursionRoot(std::move(root));
+		CFilterManager filter;
+		recursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
+			filter.GetActiveFilters(false));
+	}
 }
 
 // Create a new Directory

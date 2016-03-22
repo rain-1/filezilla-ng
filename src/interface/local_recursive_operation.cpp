@@ -5,6 +5,26 @@
 
 #include "QueueView.h"
 
+DEFINE_EVENT_TYPE(fzEVT_LOCALRECURSION_DIR)
+
+BEGIN_EVENT_TABLE(CLocalRecursiveOperation, wxEvtHandler)
+EVT_COMMAND(wxID_ANY, fzEVT_LOCALRECURSION_DIR, CLocalRecursiveOperation::OnListedDirectory)
+END_EVENT_TABLE()
+
+local_recursion_root::local_recursion_root(CLocalPath const& rootPath)
+	: m_rootPath(rootPath)
+{}
+
+
+void local_recursion_root::add_dir_to_visit(CLocalPath const& localPath, CServerPath const& remotePath)
+{
+	new_dir dirToVisit;
+	dirToVisit.localPath = localPath;
+	dirToVisit.remotePath = remotePath;
+	m_dirsToVisit.push_back(dirToVisit);
+}
+
+
 CLocalRecursiveOperation::CLocalRecursiveOperation(CState* pState)
 	: CRecursiveOperation(pState)
 {
@@ -12,200 +32,181 @@ CLocalRecursiveOperation::CLocalRecursiveOperation(CState* pState)
 
 CLocalRecursiveOperation::~CLocalRecursiveOperation()
 {
+	join();
+}
+
+void CLocalRecursiveOperation::AddRecursionRoot(local_recursion_root && root)
+{
+	if (!root.empty()) {
+		fz::scoped_lock l(mutex_);
+		recursion_roots_.push_back(std::forward<local_recursion_root>(root));
+	}
+}
+
+void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters)
+{
+	{
+		fz::scoped_lock l(mutex_);
+
+		wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
+		wxCHECK_RET(m_pState->IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
+
+		if (mode == recursive_chmod)
+			return;
+
+		if ((mode == recursive_transfer || mode == recursive_addtoqueue || mode == recursive_transfer_flatten || mode == recursive_addtoqueue_flatten) && !m_pQueue)
+			return;
+
+		if (recursion_roots_.empty()) {
+			// Nothing to do in this case
+			return;
+		}
+
+		m_processedFiles = 0;
+		m_processedDirectories = 0;
+
+		m_operationMode = mode;
+
+		m_filters = filters;
+
+		if (!run()) {
+			m_operationMode = recursive_none;
+			return;
+		}
+	}
+
+	m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 }
 
 void CLocalRecursiveOperation::StopRecursiveOperation()
 {
+	{
+		fz::scoped_lock l(mutex_);
+		if (m_operationMode == recursive_none) {
+			return;
+		}
+
+		m_operationMode = recursive_none;
+		recursion_roots_.clear();
+	}
+
+	join();
+
+	m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 }
 
 void CLocalRecursiveOperation::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2)
 {
 }
 
-/*
-DEFINE_EVENT_TYPE(fzEVT_FOLDERTHREAD_COMPLETE)
-DEFINE_EVENT_TYPE(fzEVT_FOLDERTHREAD_FILES)
-
-CFolderProcessingThread::CFolderProcessingThread(CQueueView* pOwner, CLocalPath const& localPath, CServerPath const& remotePath)
-{
-	m_pOwner = pOwner;
-	
-	if (!localPath.empty() && !remotePath.empty()) {
-		t_internalDirPair* pair = new t_internalDirPair;
-		pair->localPath = localPath;
-		pair->remotePath = remotePath;
-		m_dirsToCheck.push_back(pair);
-	}
-}
-
-CFolderProcessingThread::~CFolderProcessingThread()
-{
-	Quit();
-	for (auto iter = m_entryList.begin(); iter != m_entryList.end(); ++iter)
-		delete *iter;
-	for (auto iter = m_dirsToCheck.begin(); iter != m_dirsToCheck.end(); ++iter)
-		delete *iter;
-}
-
-void CFolderProcessingThread::GetFiles(std::list<CFolderProcessingEntry*> &entryList)
-{
-	wxASSERT(entryList.empty());
-	fz::scoped_lock locker(m_sync);
-	entryList.swap(m_entryList);
-
-	m_didSendEvent = false;
-	m_processing_entries = true;
-
-	if (m_throttleWait) {
-		m_throttleWait = false;
-		m_condition.signal(locker);
-	}
-}
-
-void CFolderProcessingThread::ProcessDirectory(const CLocalPath& localPath, CServerPath const& remotePath, const wxString& name)
-{
-	fz::scoped_lock locker(m_sync);
-
-	t_internalDirPair* pair = new t_internalDirPair;
-
-	{
-		pair->localPath = localPath;
-		pair->localPath.AddSegment(name);
-
-		pair->remotePath = remotePath;
-		pair->remotePath.AddSegment(name);
-	}
-
-	m_dirsToCheck.push_back(pair);
-
-	if (m_threadWaiting) {
-		m_threadWaiting = false;
-		m_condition.signal(locker);
-	}
-}
-
-void CFolderProcessingThread::CheckFinished()
-{
-	fz::scoped_lock locker(m_sync);
-	wxASSERT(m_processing_entries);
-
-	m_processing_entries = false;
-
-	if (m_threadWaiting && (!m_dirsToCheck.empty() || m_entryList.empty())) {
-		m_threadWaiting = false;
-		m_condition.signal(locker);
-	}
-}
-
-void CFolderProcessingThread::AddEntry(CFolderProcessingEntry* entry)
-{
-	fz::scoped_lock l(m_sync);
-	m_entryList.push_back(entry);
-
-	// Wait if there are more than 100 items to queue,
-	// don't send notification if there are less than 10.
-	// This reduces overhead
-	bool send;
-
-	if (m_didSendEvent) {
-		send = false;
-		if (m_entryList.size() >= 100) {
-			m_throttleWait = true;
-			m_condition.wait(l);
-		}
-	}
-	else if (m_entryList.size() < 20)
-		send = false;
-	else
-		send = true;
-
-	if (send)
-		m_didSendEvent = true;
-
-	l.unlock();
-
-	if (send) {
-		// We send the notification after leaving the critical section, else we
-		// could get into a deadlock. wxWidgets event system does internal
-		// locking.
-		//m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
-	}
-}
-
-void CFolderProcessingThread::entry()
-{
-	fz::local_filesys localFileSystem;
-
-	while (true) {
-		fz::scoped_lock l(m_sync);
-		if (m_quit) {
-			break;
-		}
-
-		if (m_dirsToCheck.empty()) {
-			if (!m_didSendEvent && !m_entryList.empty()) {
-				m_didSendEvent = true;
-				l.unlock();
-				//m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_FILES, wxID_ANY));
-				continue;
-			}
-
-			if (!m_didSendEvent && !m_processing_entries) {
-				break;
-			}
-			m_threadWaiting = true;
-			m_condition.wait(l);
-			if (m_dirsToCheck.empty()) {
-				break;
-			}
-			continue;
-		}
-
-		const t_internalDirPair *pair = m_dirsToCheck.front();
-		m_dirsToCheck.pop_front();
-
-		l.unlock();
-
-		if (!localFileSystem.begin_find_files(fz::to_native(pair->localPath.GetPath()), false)) {
-			delete pair;
-			continue;
-		}
-
-		t_dirPair* pair2 = new t_dirPair;
-		pair2->localPath = pair->localPath;
-		pair2->remotePath = pair->remotePath;
-		AddEntry(pair2);
-
-		t_newEntry* entry = new t_newEntry;
-
-		fz::native_string name;
-		bool is_link;
-		bool is_dir;
-		while (localFileSystem.get_next_file(name, is_link, is_dir, &entry->size, &entry->time, &entry->attributes)) {
-			if (is_link)
-				continue;
-
-			entry->name = name;
-			entry->dir = is_dir;
-
-			AddEntry(entry);
-
-			entry = new t_newEntry;
-		}
-		delete entry;
-
-		delete pair;
-	}
-
-	//m_pOwner->QueueEvent(new wxCommandEvent(fzEVT_FOLDERTHREAD_COMPLETE, wxID_ANY));
-}
-
-void CFolderProcessingThread::Quit()
+void CLocalRecursiveOperation::entry()
 {
 	{
-		fz::scoped_lock locker(m_sync);
-		m_quit = true;
+		fz::scoped_lock l(mutex_);
+		while (!recursion_roots_.empty()) {
+			listing d;
+
+			{
+				auto& root = recursion_roots_.front();
+				if (root.m_dirsToVisit.empty()) {
+					recursion_roots_.pop_front();
+					continue;
+				}
+
+				auto const& dir = root.m_dirsToVisit.front();
+				d.localPath = dir.localPath;
+				d.remotePath = dir.remotePath;
+
+				root.m_dirsToVisit.pop_front();
+			}
+
+			// Do the slow part without holding mutex
+			l.unlock();
+
+			fz::local_filesys fs;
+			fz::native_string localPath = fz::to_native(d.localPath.GetPath());
+			if (fs.begin_find_files(localPath)) {
+
+				listing::entry entry;
+				bool isLink{};
+				while (fs.get_next_file(entry.name, isLink, entry.dir, &entry.size, &entry.time, &entry.attributes)) {
+					if (isLink) {
+						continue;
+					}
+					// TODO: Filters
+					d.files.push_back(entry);
+				}
+			}
+
+			l.lock();
+
+			// Check for cancellation
+			if (recursion_roots_.empty()) {
+				break;
+			}
+
+			auto& root = recursion_roots_.front();
+
+			// Queue for recursion
+			for (auto const& entry : d.files) {
+				if (entry.dir) {
+					local_recursion_root::new_dir dir;
+					CLocalPath localSub = d.localPath;
+					localSub.AddSegment(entry.name);
+
+					CServerPath remoteSub = d.remotePath;
+					if (!remoteSub.empty()) {
+						remoteSub.AddSegment(entry.name);
+					}
+					root.add_dir_to_visit(localSub, remoteSub);
+				}
+			}
+
+			m_listedDirectories.emplace_back(std::move(d));
+
+			// Hand off to GUI thread
+			//TODO : once
+			l.unlock();
+			QueueEvent(new wxCommandEvent(fzEVT_LOCALRECURSION_DIR, wxID_ANY));
+			l.lock();
+		}
 	}
-	join();
+
+	listing d;
+	m_listedDirectories.emplace_back(std::move(d));
+	QueueEvent(new wxCommandEvent(fzEVT_LOCALRECURSION_DIR, wxID_ANY));
 }
-*/
+
+void CLocalRecursiveOperation::OnListedDirectory(wxCommandEvent &)
+{
+	CServer const* const server = m_pState->GetServer();
+	if (!server)
+		return;
+
+	listing d;
+
+	{
+		fz::scoped_lock l(mutex_);
+		if (m_operationMode == recursive_none) {
+			return;
+		}
+
+		if (m_listedDirectories.empty()) {
+			return;
+		}
+
+		d = std::move(m_listedDirectories.front());
+		m_listedDirectories.pop_front();
+	}
+
+	if (d.localPath.empty()) {
+		StopRecursiveOperation();
+	}
+	else {
+		bool const queueOnly = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten;
+		m_pQueue->QueueFiles(queueOnly, *server, d);
+		++m_processedDirectories;
+		m_processedFiles += d.files.size();
+		m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+	}
+}

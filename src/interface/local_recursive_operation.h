@@ -5,100 +5,75 @@
 
 #include <libfilezilla/thread.hpp>
 
-class CLocalRecursiveOperation final : public CRecursiveOperation
+#include <set>
+
+class local_recursion_root final
 {
 public:
+	local_recursion_root() = default;
+	local_recursion_root(CLocalPath const& rootPath);
+	
+	void add_dir_to_visit(CLocalPath const& localPath, CServerPath const& remotePath = CServerPath());
+
+	bool empty() const { return m_dirsToVisit.empty(); }
+
+private:
+	friend class CLocalRecursiveOperation;
+
+	class new_dir final
+	{
+	public:
+		CLocalPath localPath;
+		CServerPath remotePath;
+	};
+
+	CLocalPath m_rootPath;
+	std::set<CLocalPath> m_visitedDirs;
+	std::deque<new_dir> m_dirsToVisit;
+};
+
+class CLocalRecursiveOperation final : public CRecursiveOperation, private fz::thread, public wxEvtHandler
+{
+public:
+	class listing final
+	{
+	public:
+		class entry final
+		{
+		public:
+			fz::native_string name;
+			int64_t size{};
+			fz::datetime time;
+			int attributes{};
+			bool dir{};
+		};
+
+		std::vector<entry> files;
+		CLocalPath localPath;
+		CServerPath remotePath;
+	};
+
 	CLocalRecursiveOperation(CState* pState);
 	virtual ~CLocalRecursiveOperation();
+
+	void AddRecursionRoot(local_recursion_root && root);
+	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters);
 
 	virtual void StopRecursiveOperation();
 
 protected:
 	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
+
+	virtual void entry();
+
+	std::deque<local_recursion_root> recursion_roots_;
+
+	fz::mutex mutex_;
+
+	std::deque<listing> m_listedDirectories;
+
+	DECLARE_EVENT_TABLE()
+	void OnListedDirectory(wxCommandEvent &);
 };
 
-/*
-DECLARE_EVENT_TYPE(fzEVT_FOLDERTHREAD_COMPLETE, -1)
-DECLARE_EVENT_TYPE(fzEVT_FOLDERTHREAD_FILES, -1)
-
-class CQueueView;
-
-class CFolderProcessingEntry
-{
-public:
-	enum t_type
-	{
-		dir,
-		file
-	};
-	const t_type m_type;
-
-	CFolderProcessingEntry(t_type type) : m_type(type) {}
-	virtual ~CFolderProcessingEntry() {}
-};
-
-class t_newEntry : public CFolderProcessingEntry
-{
-public:
-	t_newEntry()
-		: CFolderProcessingEntry(CFolderProcessingEntry::file)
-	{}
-
-	wxString name;
-	int64_t size{};
-	fz::datetime time;
-	int attributes{};
-	bool dir{};
-};
-
-class CFolderProcessingThread final : public fz::thread
-{
-	struct t_internalDirPair
-	{
-		CLocalPath localPath;
-		CServerPath remotePath;
-	};
-public:
-	CFolderProcessingThread(CQueueView* pOwner, CLocalPath const& localPath, CServerPath const& remotePath);
-
-	virtual ~CFolderProcessingThread();
-
-	void GetFiles(std::list<CFolderProcessingEntry*> &entryList);
-
-	class t_dirPair : public CFolderProcessingEntry
-	{
-	public:
-		t_dirPair() : CFolderProcessingEntry(CFolderProcessingEntry::dir) {}
-		CLocalPath localPath;
-		CServerPath remotePath;
-	};
-
-	void ProcessDirectory(const CLocalPath& localPath, CServerPath const& remotePath, const wxString& name);
-
-	void CheckFinished();
-
-	void Quit();
-
-private:
-
-	void AddEntry(CFolderProcessingEntry* entry);
-
-	void entry();
-
-	std::list<t_internalDirPair*> m_dirsToCheck;
-
-	// Access has to be guarded by m_sync
-	std::list<CFolderProcessingEntry*> m_entryList;
-
-	CQueueView* m_pOwner;
-
-	fz::mutex m_sync;
-	fz::condition m_condition;
-	bool m_threadWaiting{};
-	bool m_throttleWait{};
-	bool m_didSendEvent{};
-	bool m_processing_entries{};
-	bool m_quit{};
-};
-*/
 #endif

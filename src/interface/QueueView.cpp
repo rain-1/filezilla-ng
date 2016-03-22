@@ -11,7 +11,6 @@
 #include "state.h"
 #include "asyncrequestqueue.h"
 #include "defaultfileexistsdlg.h"
-#include "filter.h"
 #include <wx/dnd.h>
 #include "dndobjects.h"
 #include "loginmanager.h"
@@ -321,17 +320,42 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 		if (fileInfo.dir)
 			continue;
 
-		CFileItem* fileItem;
 		wxString localFile = ReplaceInvalidCharacters(fileInfo.name);
 		if (dataObject.GetServerPath().GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localFile = StripVMSRevision(localFile);
 
-		fileItem = new CFileItem(pServerItem, queueOnly, true,
+		CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, true,
 			fileInfo.name, (fileInfo.name != localFile) ? localFile : wxString(),
 			localPath, dataObject.GetServerPath(), fileInfo.size);
 		fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(fileInfo.name, dataObject.GetServerPath().GetType()));
 
 		InsertItem(pServerItem, fileItem);
+	}
+
+	QueueFile_Finish(!queueOnly);
+
+	return true;
+}
+
+bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalRecursiveOperation::listing const& listing)
+{
+	CServerItem* pServerItem = CreateServerItem(server);
+
+	auto files = listing.files;
+	if (files.empty()) {
+		// Lonely directory, queue it individually
+	}
+	else {
+		for (auto const& file : files) {
+			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, false,
+				file.name, wxString(),
+				listing.localPath, listing.remotePath, file.size);
+			fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(file.name, listing.remotePath.GetType()));
+
+			// TODO: default file exists action?
+
+			InsertItem(pServerItem, fileItem);
+		}
 	}
 
 	QueueFile_Finish(!queueOnly);
