@@ -1197,7 +1197,7 @@ void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 	TransferSelectedFiles(localDir, event.GetId() == XRCID("ID_ADDTOQUEUE"));
 }
 
-void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool queueOnly)
+void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool queue_only)
 {
 	bool idle = m_pState->IsRemoteIdle();
 
@@ -1246,21 +1246,21 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 			wxString localFile = CQueueView::ReplaceInvalidCharacters(name);
 			if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 				localFile = StripVMSRevision(localFile);
-			m_pQueue->QueueFile(queueOnly, true,
+			m_pQueue->QueueFile(queue_only, true,
 				name, (name == localFile) ? wxString() : localFile,
 				local_parent, m_pDirectoryListing->path, *pServer, entry.size);
 			added = true;
 		}
 	}
 	if (added)
-		m_pQueue->QueueFile_Finish(!queueOnly);
+		m_pQueue->QueueFile_Finish(!queue_only);
 
 	if (!root.empty()) {
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		if (IsComparing())
 			ExitComparisonMode();
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
+		pRecursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
 	}
 }

@@ -67,7 +67,7 @@ protected:
 	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
 	// Caller is responsible to check selection is valid!
-	void TransferSelectedFiles(const CLocalPath& local_parent, bool queueOnly);
+	void TransferSelectedFiles(const CLocalPath& local_parent, bool queue_only);
 
 	// Cache icon for directories, no need to calculate it multiple times
 	int m_dirIcon;

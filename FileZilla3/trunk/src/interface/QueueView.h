@@ -11,6 +11,7 @@
 #include <wx/progdlg.h>
 
 #include "queue_storage.h"
+#include "local_recursive_operation.h"
 
 namespace ActionAfterState {
 enum type {
@@ -101,7 +102,8 @@ public:
 		QueuePriority priority = QueuePriority::normal);
 
 	void QueueFile_Finish(const bool start); // Need to be called after QueueFile
-	bool QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject);
+	bool QueueFiles(const bool queueOnly, CLocalPath const& localPath, const CRemoteDataObject& dataObject);
+	bool QueueFiles(const bool queueOnly, CServer const& server, CLocalRecursiveOperation::listing const& listing);
 
 	bool empty() const;
 	int IsActive() const { return m_activeMode; }

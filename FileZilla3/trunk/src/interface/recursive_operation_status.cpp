@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "recursive_operation_status.h"
 
+#include "local_recursive_operation.h"
 #include "remote_recursive_operation.h"
 #include "themeprovider.h"
 
@@ -60,7 +61,12 @@ bool CRecursiveOperationStatus::Show(bool show)
 
 void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifications, const wxString&, const void*)
 {
-	auto const mode = m_pState->GetRemoteRecursiveOperation()->GetOperationMode();
+	CRecursiveOperation* op = m_local ? static_cast<CRecursiveOperation*>(m_pState->GetLocalRecursiveOperation()) : static_cast<CRecursiveOperation*>(m_pState->GetRemoteRecursiveOperation());
+	auto mode = CRecursiveOperation::recursive_none;
+	if (op) {
+		mode = op->GetOperationMode();
+	}
+
 	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
 	if (IsShown() != show) {
 		Show(show);

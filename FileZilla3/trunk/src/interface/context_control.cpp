@@ -201,7 +201,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
 
-	auto localRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState, true);
+	auto localRecursiveStatus = new CRecursiveOperationStatus(context_controls.pLocalListViewPanel, context_controls.pState, true);
 	context_controls.pLocalListViewPanel->SetFooter(localRecursiveStatus);
 
 	auto remoteRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState, false);
