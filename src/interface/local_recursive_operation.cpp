@@ -103,6 +103,12 @@ void CLocalRecursiveOperation::entry()
 {
 	{
 		fz::scoped_lock l(mutex_);
+
+		auto filters = m_filters;
+
+		CFilterManager filterManager;
+		filterManager.CompileRegexes(filters);
+
 		while (!recursion_roots_.empty()) {
 			listing d;
 
@@ -129,12 +135,16 @@ void CLocalRecursiveOperation::entry()
 
 				listing::entry entry;
 				bool isLink{};
-				while (fs.get_next_file(entry.name, isLink, entry.dir, &entry.size, &entry.time, &entry.attributes)) {
+				fz::native_string name;
+				while (fs.get_next_file(name, isLink, entry.dir, &entry.size, &entry.time, &entry.attributes)) {
+					entry.name = name;
 					if (isLink) {
 						continue;
 					}
-					// TODO: Filters
-					d.files.push_back(entry);
+
+					if (!filterManager.FilenameFiltered(filters, entry.name, d.localPath.GetPath(), entry.dir, entry.size, entry.attributes, entry.time)) {
+						d.files.push_back(entry);
+					}
 				}
 			}
 
