@@ -843,23 +843,32 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 	return false;
 }
 
+bool CFilterManager::CompileRegexes(std::vector<CFilter>& filters)
+{
+	bool ret = true;
+	for (auto & filter : filters) {
+		ret &= CompileRegexes(filter);
+	}
+	return ret;
+}
+
 bool CFilterManager::CompileRegexes(CFilter& filter)
 {
-	for (auto iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
-	{
-		CFilterCondition& condition = *iter;
+	bool ret = true;
+	for (auto & condition : filter.filters) {
 		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4) {
 			condition.pRegEx = std::make_shared<wxRegEx>(condition.strValue);
 			if (!condition.pRegEx->IsValid()) {
 				condition.pRegEx.reset();
-				return false;
+				ret = false;
 			}
 		}
-		else
+		else {
 			condition.pRegEx.reset();
+		}
 	}
 
-	return true;
+	return ret;
 }
 
 bool CFilterManager::CompileRegexes()
