@@ -41,7 +41,7 @@ public:
 		class entry final
 		{
 		public:
-			fz::native_string name;
+			wxString name;
 			int64_t size{};
 			fz::datetime time;
 			int attributes{};
