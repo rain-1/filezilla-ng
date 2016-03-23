@@ -343,16 +343,22 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 
 	auto files = listing.files;
 	if (files.empty()) {
-		// Lonely directory, queue it individually
+		if (listing.remotePath.HasParent()) {
+			wxString sub = listing.remotePath.GetLastSegment();
+		}
+		CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, listing.remotePath, wxString());
+		InsertItem(pServerItem, fileItem);
 	}
 	else {
 		for (auto const& file : files) {
+			if (file.dir) {
+				// We're recursing into anyhow, no need to create a folder item at this point.
+				continue;
+			}
 			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, false,
 				file.name, wxString(),
 				listing.localPath, listing.remotePath, file.size);
 			fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(file.name, listing.remotePath.GetType()));
-
-			// TODO: default file exists action?
 
 			InsertItem(pServerItem, fileItem);
 		}
