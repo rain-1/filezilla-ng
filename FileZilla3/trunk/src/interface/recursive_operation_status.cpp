@@ -85,10 +85,12 @@ void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifi
 
 void CRecursiveOperationStatus::UpdateText()
 {
+	CRecursiveOperation* operation = m_local ? static_cast<CRecursiveOperation*>(m_pState->GetLocalRecursiveOperation()) : static_cast<CRecursiveOperation*>(m_pState->GetRemoteRecursiveOperation());
+
 	m_changed = false;
 	wxString text;
 
-	auto const mode = m_pState->GetRemoteRecursiveOperation()->GetOperationMode();
+	auto const mode = operation->GetOperationMode();
 	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
 	if (show) {
 		switch (mode) {
@@ -109,8 +111,8 @@ void CRecursiveOperationStatus::UpdateText()
 		}
 		m_pTextCtrl[0]->SetLabel(text);
 
-		unsigned long long const countFiles = static_cast<unsigned long long>(m_pState->GetRemoteRecursiveOperation()->GetProcessedFiles());
-		unsigned long long const countDirs = static_cast<unsigned long long>(m_pState->GetRemoteRecursiveOperation()->GetProcessedDirectories());
+		unsigned long long const countFiles = static_cast<unsigned long long>(operation->GetProcessedFiles());
+		unsigned long long const countDirs = static_cast<unsigned long long>(operation->GetProcessedDirectories());
 		const wxString files = wxString::Format(wxPLURAL_LL("%llu file", "%llu files", countFiles), countFiles);
 		const wxString dirs = wxString::Format(wxPLURAL_LL("%llu directory", "%llu directories", countDirs), countDirs);
 		// @translator: Example: Processed 5 files in 1 directory
@@ -129,8 +131,13 @@ void CRecursiveOperationStatus::OnPaint(wxPaintEvent&)
 
 void CRecursiveOperationStatus::OnCancel(wxCommandEvent&)
 {
-	m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
-	m_pState->RefreshRemote();
+	if (m_local) {
+		m_pState->GetLocalRecursiveOperation()->StopRecursiveOperation();
+	}
+	else {
+		m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
+		m_pState->RefreshRemote();
+	}
 }
 
 void CRecursiveOperationStatus::OnTimer(wxTimerEvent&)
