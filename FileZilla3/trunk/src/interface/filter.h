@@ -91,6 +91,7 @@ public:
 
 	std::vector<CFilter> GetActiveFilters(bool local);
 
+	static bool CompileRegexes(std::vector<CFilter>& filters);
 	static bool CompileRegexes(CFilter& filter);
 
 	static bool LoadFilter(pugi::xml_node& element, CFilter& filter);
