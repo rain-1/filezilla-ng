@@ -897,12 +897,15 @@ public:
 
 	CDirectoryListing directoryListing;
 	int mtime_index;
+
+	fz::monotonic_clock m_time_before_locking;
 };
 
 enum listStates
 {
 	list_init = 0,
 	list_waitcwd,
+	list_waitlock,
 	list_list,
 	list_mtime
 };
@@ -1114,8 +1117,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ListSubcommandResult()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1124,16 +1126,13 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (pData->opState != list_waitcwd)
-	{
+	if (pData->opState != list_waitcwd) {
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (prevResult != FZ_REPLY_OK)
-	{
-		if (pData->fallback_to_current)
-		{
+	if (prevResult != FZ_REPLY_OK) {
+		if (pData->fallback_to_current) {
 			// List current directory instead
 			pData->fallback_to_current = false;
 			pData->path.clear();
@@ -1142,8 +1141,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 			if (res != FZ_REPLY_OK)
 				return res;
 		}
-		else
-		{
+		else {
 			ResetOperation(prevResult);
 			return FZ_REPLY_ERROR;
 		}
@@ -1152,8 +1150,7 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 	if (pData->path.empty())
 		pData->path = m_CurrentPath;
 
-	if (!pData->refresh)
-	{
+	if (!pData->refresh) {
 		wxASSERT(!pData->pNextOpData);
 
 		// Do a cache lookup now that we know the correct directory
@@ -1161,11 +1158,9 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		int hasUnsureEntries;
 		bool is_outdated = false;
 		bool found = engine_.GetDirectoryCache().DoesExist(*m_pCurrentServer, m_CurrentPath, hasUnsureEntries, is_outdated);
-		if (found)
-		{
+		if (found) {
 			// We're done if listins is recent and has no outdated entries
-			if (!is_outdated && !hasUnsureEntries)
-			{
+			if (!is_outdated && !hasUnsureEntries) {
 				engine_.SendDirectoryListingNotification(m_CurrentPath, true, false, false);
 
 				ResetOperation(FZ_REPLY_OK);
@@ -1175,10 +1170,12 @@ int CSftpControlSocket::ListSubcommandResult(int prevResult)
 		}
 	}
 
-	if (!pData->holdsLock)
-	{
-		if (!TryLockCache(lock_list, m_CurrentPath))
+	if (!pData->holdsLock) {
+		if (!TryLockCache(lock_list, m_CurrentPath)) {
+			pData->opState = list_waitlock;
+			pData->m_time_before_locking = fz::monotonic_clock::now();
 			return FZ_REPLY_WOULDBLOCK;
+		}
 	}
 
 	pData->opState = list_list;
@@ -1190,8 +1187,7 @@ int CSftpControlSocket::ListSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::ListSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1200,7 +1196,32 @@ int CSftpControlSocket::ListSend()
 	CSftpListOpData *pData = static_cast<CSftpListOpData *>(m_pCurOpData);
 	LogMessage(MessageType::Debug_Debug, _T("  state = %d"), pData->opState);
 
-	if (pData->opState == list_list) {
+	if (pData->opState == list_waitlock) {
+		if (!pData->holdsLock) {
+			LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Not holding the lock as expected"));
+			ResetOperation(FZ_REPLY_INTERNALERROR);
+			return FZ_REPLY_ERROR;
+		}
+
+		// Check if we can use already existing listing
+		CDirectoryListing listing;
+		bool is_outdated = false;
+		wxASSERT(pData->subDir.empty()); // Did do ChangeDir before trying to lock
+		bool found = engine_.GetDirectoryCache().Lookup(listing, *m_pCurrentServer, pData->path, true, is_outdated);
+		if (found && !is_outdated && !listing.get_unsure_flags() &&
+			listing.m_firstListTime >= pData->m_time_before_locking)
+		{
+			engine_.SendDirectoryListingNotification(listing.path, !pData->pNextOpData, false, false);
+
+			ResetOperation(FZ_REPLY_OK);
+			return FZ_REPLY_OK;
+		}
+
+		pData->opState = list_waitcwd;
+
+		return ListSubcommandResult(FZ_REPLY_OK);
+	}
+	else if (pData->opState == list_list) {
 		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown, true);
 		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
 		if (!SendCommand(_T("ls")))
