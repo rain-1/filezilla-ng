@@ -1048,6 +1048,11 @@ void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 
 void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 {
+	auto recursiveOperation = m_pState->GetLocalRecursiveOperation();
+	if (recursiveOperation->IsActive()) {
+		return;
+	}
+
 	if (!m_contextMenuItem.IsOk())
 		return;
 
@@ -1067,7 +1072,15 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	if (!remotePath.ChangePath(GetItemText(m_contextMenuItem)))
 		return;
 
-	// FIXME
+	local_recursion_root root;
+	root.add_dir_to_visit(path, remotePath);
+	recursiveOperation->AddRecursionRoot(std::move(root));
+	
+	bool const queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
+
+	CFilterManager filter;
+	recursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
+		filter.GetActiveFilters(true));
 }
 
 // Create a new Directory

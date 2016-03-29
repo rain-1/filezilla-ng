@@ -11,11 +11,6 @@ BEGIN_EVENT_TABLE(CLocalRecursiveOperation, wxEvtHandler)
 EVT_COMMAND(wxID_ANY, fzEVT_LOCALRECURSION_DIR, CLocalRecursiveOperation::OnListedDirectory)
 END_EVENT_TABLE()
 
-local_recursion_root::local_recursion_root(CLocalPath const& rootPath)
-	: m_rootPath(rootPath)
-{}
-
-
 void local_recursion_root::add_dir_to_visit(CLocalPath const& localPath, CServerPath const& remotePath)
 {
 	new_dir dirToVisit;

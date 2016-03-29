@@ -834,7 +834,7 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 		return;
 	}
 
-	local_recursion_root root(m_dir);
+	local_recursion_root root;
 
 	long item = -1;
 	for (;;) {

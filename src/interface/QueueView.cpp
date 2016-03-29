@@ -341,7 +341,7 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 {
 	CServerItem* pServerItem = CreateServerItem(server);
 
-	auto files = listing.files;
+	auto const& files = listing.files;
 	if (files.empty()) {
 		if (listing.remotePath.HasParent()) {
 			wxString sub = listing.remotePath.GetLastSegment();
@@ -1393,8 +1393,7 @@ void CQueueView::UpdateStatusLinePositions()
 	m_lastTopItem = GetTopItem();
 	int bottomItem = m_lastTopItem + GetCountPerPage();
 
-	for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter) {
-		CStatusLineCtrl *pCtrl = *iter;
+	for (auto pCtrl : m_statusLineList) {
 		int index = GetItemIndex(pCtrl->GetItem()) + 1;
 		if (index < m_lastTopItem || index > bottomItem) {
 			pCtrl->Show(false);

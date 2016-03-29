@@ -11,7 +11,6 @@ class local_recursion_root final
 {
 public:
 	local_recursion_root() = default;
-	local_recursion_root(CLocalPath const& rootPath);
 	
 	void add_dir_to_visit(CLocalPath const& localPath, CServerPath const& remotePath = CServerPath());
 
@@ -27,7 +26,6 @@ private:
 		CServerPath remotePath;
 	};
 
-	CLocalPath m_rootPath;
 	std::set<CLocalPath> m_visitedDirs;
 	std::deque<new_dir> m_dirsToVisit;
 };
