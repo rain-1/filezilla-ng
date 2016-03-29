@@ -132,10 +132,10 @@ void CLocalRecursiveOperation::entry()
 				bool isLink{};
 				fz::native_string name;
 				while (fs.get_next_file(name, isLink, entry.dir, &entry.size, &entry.time, &entry.attributes)) {
-					entry.name = name;
 					if (isLink) {
 						continue;
 					}
+					entry.name = name;
 
 					if (!filterManager.FilenameFiltered(filters, entry.name, d.localPath.GetPath(), entry.dir, entry.size, entry.attributes, entry.time)) {
 						d.files.push_back(entry);
