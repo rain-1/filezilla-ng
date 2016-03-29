@@ -655,6 +655,16 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	if (!m_pServer)
 		return;
 
+	if (path.empty()) {
+		return;
+	}
+
+	auto recursiveOperation = GetLocalRecursiveOperation();
+	if (!recursiveOperation || recursiveOperation->IsActive()) {
+		wxBell();
+		return;
+	}
+
 	const wxArrayString& files = pFileDataObject->GetFilenames();
 
 	for (unsigned int i = 0; i < files.Count(); ++i) {
@@ -670,10 +680,22 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		else if (type == fz::local_filesys::dir) {
 			CLocalPath localPath(files[i]);
 			if (localPath.HasParent()) {
-				//FIXME
+				
+				CServerPath remotePath = path;
+				if (!remotePath.ChangePath(localPath.GetLastSegment())) {
+					continue;
+				}
+
+				local_recursion_root root;
+				root.add_dir_to_visit(localPath, remotePath);
+				recursiveOperation->AddRecursionRoot(std::move(root));
 			}
 		}
 	}
+
+	CFilterManager filter;
+	recursiveOperation->StartRecursiveOperation(queueOnly ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
+		filter.GetActiveFilters(true));
 }
 
 void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const CLocalPath& path, bool copy)

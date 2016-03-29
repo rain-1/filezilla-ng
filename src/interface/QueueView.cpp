@@ -66,8 +66,7 @@ public:
 		if (pDragDropManager)
 			pDragDropManager->pDropTarget = m_pQueueView;
 
-		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
-		{
+		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat()) {
 			CState* const pState = CContextManager::Get()->GetCurrentContext();
 			if (!pState)
 				return wxDragNone;
@@ -81,10 +80,8 @@ public:
 
 			pState->UploadDroppedFiles(m_pFileDataObject, path, true);
 		}
-		else
-		{
-			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
-			{
+		else {
+			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId()) {
 				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
@@ -96,15 +93,13 @@ public:
 			if (!pServer)
 				return wxDragNone;
 
-			if (!pServer->EqualsNoPass(m_pRemoteDataObject->GetServer()))
-			{
+			if (!pServer->EqualsNoPass(m_pRemoteDataObject->GetServer())) {
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
 			const CLocalPath& target = pState->GetLocalDir();
-			if (!target.IsWriteable())
-			{
+			if (!target.IsWriteable()) {
 				wxBell();
 				return wxDragNone;
 			}
