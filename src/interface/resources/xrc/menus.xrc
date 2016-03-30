@@ -397,7 +397,7 @@
         <label>&amp;Play sound</label>
         <checkable>1</checkable>
       </object>
-      <object class="separator"/>
+      <object class="separator" platform="win|mac"/>
       <object class="wxMenuItem" name="ID_ACTIONAFTER_REBOOT" platform="win|mac">
         <label>R&amp;eboot system once</label>
         <checkable>1</checkable>
