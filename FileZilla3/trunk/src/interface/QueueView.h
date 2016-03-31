@@ -12,6 +12,8 @@
 
 #include "queue_storage.h"
 #include "local_recursive_operation.h"
+#include "notification.h"
+
 
 namespace ActionAfterState {
 enum type {
@@ -33,7 +35,7 @@ enum type {
 
 class CStatusLineCtrl;
 class CFileItem;
-struct t_EngineData
+struct t_EngineData final
 {
 	t_EngineData()
 		: pEngine()
@@ -87,7 +89,7 @@ class CDesktopNotification;
 class wxNotificationMessage;
 #endif
 
-class CQueueView : public CQueueViewBase, public COptionChangeEventHandler
+class CQueueView : public CQueueViewBase, public COptionChangeEventHandler, private EngineNotificationHandler
 {
 	friend class CQueueViewDropTarget;
 	friend class CQueueViewFailed;
@@ -268,8 +270,12 @@ protected:
 	// Unit is byte/s.
 	wxFileOffset GetCurrentSpeed(bool countDownload, bool countUpload);
 
+	virtual void OnEngineEvent(CFileZillaEngine* engine);
+	void DoOnEngineEvent(CFileZillaEngine* engine);
+
+	void OnAskPassword();
+
 	DECLARE_EVENT_TABLE()
-	void OnEngineEvent(wxFzEvent &event);
 	void OnChar(wxKeyEvent& event);
 
 	// Context menu handlers
@@ -279,7 +285,6 @@ protected:
 	void OnRemoveSelected(wxCommandEvent& event);
 	void OnSetDefaultFileExistsAction(wxCommandEvent& event);
 
-	void OnAskPassword(wxCommandEvent& event);
 	void OnTimer(wxTimerEvent& evnet);
 
 	void OnSetPriority(wxCommandEvent& event);

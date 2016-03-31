@@ -119,7 +119,6 @@ bool HandleKeyboardCommand(wxCommandEvent& event, wxWindow& parent)
 BEGIN_EVENT_TABLE(CMainFrame, wxNavigationEnabled<wxFrame>)
 	EVT_SIZE(CMainFrame::OnSize)
 	EVT_MENU(wxID_ANY, CMainFrame::OnMenuHandler)
-	EVT_FZ_NOTIFICATION(wxID_ANY, CMainFrame::OnEngineEvent)
 	EVT_COMMAND(wxID_ANY, fzEVT_UPDATE_LED_TOOLTIP, CMainFrame::OnUpdateLedTooltip)
 	EVT_TOOL(XRCID("ID_TOOLBAR_DISCONNECT"), CMainFrame::OnDisconnect)
 	EVT_MENU(XRCID("ID_MENU_SERVER_DISCONNECT"), CMainFrame::OnDisconnect)
@@ -867,12 +866,17 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 	}
 }
 
-void CMainFrame::OnEngineEvent(wxFzEvent &event)
+void CMainFrame::OnEngineEvent(CFileZillaEngine* engine)
+{
+	CallAfter(&CMainFrame::DoOnEngineEvent, engine);
+}
+
+void CMainFrame::DoOnEngineEvent(CFileZillaEngine* engine)
 {
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 	CState* pState = 0;
 	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
-		if ((*iter)->m_pEngine != event.engine_)
+		if ((*iter)->m_pEngine != engine)
 			continue;
 
 		pState = *iter;

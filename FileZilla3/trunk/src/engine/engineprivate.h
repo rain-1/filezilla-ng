@@ -56,10 +56,8 @@ protected:
 class CFileZillaEnginePrivate final : public fz::event_handler, COptionChangeEventHandler
 {
 public:
-	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context, CFileZillaEngine& parent);
+	CFileZillaEnginePrivate(CFileZillaEngineContext& engine_context, CFileZillaEngine& parent, EngineNotificationHandler& notificationHandler);
 	virtual ~CFileZillaEnginePrivate();
-
-	int Init(wxEvtHandler *pEventHandler);
 
 	int Execute(CCommand const& command);
 	int Cancel();
@@ -147,7 +145,7 @@ protected:
 	// Used to synchronize access to the notification list
 	fz::mutex notification_mutex_;
 
-	wxEvtHandler *m_pEventHandler{};
+	EngineNotificationHandler& notification_handler_;
 
 	int m_engine_id;
 

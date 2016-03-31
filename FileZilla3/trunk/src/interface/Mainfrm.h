@@ -3,6 +3,7 @@
 
 #include "statusbar.h"
 #include "engine_context.h"
+#include "notification.h"
 
 #include <wx/timer.h>
 
@@ -30,7 +31,7 @@ class CThemeProvider;
 class CToolBar;
 class CWindowStateManager;
 
-class CMainFrame final : public wxNavigationEnabled<wxFrame>, private COptionChangeEventHandler
+class CMainFrame final : public wxNavigationEnabled<wxFrame>, private COptionChangeEventHandler, public EngineNotificationHandler
 #if FZ_MANUALUPDATECHECK
 	, protected CUpdateHandler
 #endif
@@ -119,11 +120,13 @@ private:
 
 	void OnOptionsChanged(changed_options_t const& options);
 
+	virtual void OnEngineEvent(CFileZillaEngine* engine); // Before thread jump
+	void DoOnEngineEvent(CFileZillaEngine* engine); // After thread jump
+
 	// Event handlers
 	DECLARE_EVENT_TABLE()
 	void OnSize(wxSizeEvent& event);
 	void OnMenuHandler(wxCommandEvent& event);
-	void OnEngineEvent(wxFzEvent& event);
 	void OnUpdateLedTooltip(wxCommandEvent&);
 	void OnDisconnect(wxCommandEvent&);
 	void OnCancel(wxCommandEvent&);

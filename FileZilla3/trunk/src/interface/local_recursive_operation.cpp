@@ -5,10 +5,7 @@
 
 #include "QueueView.h"
 
-DEFINE_EVENT_TYPE(fzEVT_LOCALRECURSION_DIR)
-
 BEGIN_EVENT_TABLE(CLocalRecursiveOperation, wxEvtHandler)
-EVT_COMMAND(wxID_ANY, fzEVT_LOCALRECURSION_DIR, CLocalRecursiveOperation::OnListedDirectory)
 END_EVENT_TABLE()
 
 void local_recursion_root::add_dir_to_visit(CLocalPath const& localPath, CServerPath const& remotePath)
@@ -172,17 +169,17 @@ void CLocalRecursiveOperation::entry()
 			// Hand off to GUI thread
 			//TODO : once
 			l.unlock();
-			QueueEvent(new wxCommandEvent(fzEVT_LOCALRECURSION_DIR, wxID_ANY));
+			CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
 			l.lock();
 		}
 	}
 
 	listing d;
 	m_listedDirectories.emplace_back(std::move(d));
-	QueueEvent(new wxCommandEvent(fzEVT_LOCALRECURSION_DIR, wxID_ANY));
+	CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
 }
 
-void CLocalRecursiveOperation::OnListedDirectory(wxCommandEvent &)
+void CLocalRecursiveOperation::OnListedDirectory()
 {
 	CServer const* const server = m_pState->GetServer();
 	if (!server)

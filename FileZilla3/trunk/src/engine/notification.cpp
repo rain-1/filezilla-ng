@@ -1,30 +1,5 @@
 #include <filezilla.h>
 
-wxDEFINE_EVENT(fzEVT_NOTIFICATION, wxFzEvent);
-
-wxFzEvent::wxFzEvent()
-	: wxEvent(wxID_ANY, fzEVT_NOTIFICATION)
-	, engine_()
-{
-}
-
-wxFzEvent::wxFzEvent(CFileZillaEngine const* engine)
-	: wxEvent(wxID_ANY, fzEVT_NOTIFICATION)
-	, engine_(engine)
-{
-}
-
-wxFzEvent::wxFzEvent(int id)
-	: wxEvent(id, fzEVT_NOTIFICATION)
-	, engine_()
-{
-}
-
-wxEvent *wxFzEvent::Clone() const
-{
-	return new wxFzEvent(*this);
-}
-
 CDirectoryListingNotification::CDirectoryListingNotification(const CServerPath& path, const bool modified /*=false*/, const bool failed /*=false*/)
 	: m_modified(modified), m_failed(failed), m_path(path)
 {
