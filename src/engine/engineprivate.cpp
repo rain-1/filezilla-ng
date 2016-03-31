@@ -18,9 +18,10 @@ std::vector<CFileZillaEnginePrivate*> CFileZillaEnginePrivate::m_engineList;
 std::atomic_int CFileZillaEnginePrivate::m_activeStatus[2] = {{0}, {0}};
 std::list<CFileZillaEnginePrivate::t_failedLogins> CFileZillaEnginePrivate::m_failedLogins;
 
-CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent)
+CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& context, CFileZillaEngine& parent, EngineNotificationHandler& notificationHandler)
 	: event_handler(context.GetEventLoop())
 	, transfer_status_(*this)
+	, notification_handler_(notificationHandler)
 	, m_options(context.GetOptions())
 	, m_rateLimiter(context.GetRateLimiter())
 	, directory_cache_(context.GetDirectoryCache())
@@ -135,13 +136,13 @@ void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 		fz::scoped_lock lock(notification_mutex_);
 		m_NotificationList.push_back(pNotification);
 
-		if (!m_maySendNotificationEvent || !m_pEventHandler) {
+		if (!m_maySendNotificationEvent) {
 			return;
 		}
 		m_maySendNotificationEvent = false;
 	}
 
-	m_pEventHandler->QueueEvent(new wxFzEvent(&parent_));
+	notification_handler_.OnEngineEvent(&parent_);
 }
 
 void CFileZillaEnginePrivate::AddLogNotification(CLogmsgNotification *pNotification)
@@ -176,13 +177,13 @@ void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
 			queue_logs_ = ShouldQueueLogsFromOptions();
 		}
 
-		if (!m_maySendNotificationEvent || !m_pEventHandler || m_NotificationList.empty()) {
+		if (!m_maySendNotificationEvent || !m_NotificationList.empty()) {
 			return;
 		}
 		m_maySendNotificationEvent = false;
 	}
 
-	m_pEventHandler->QueueEvent(new wxFzEvent(&parent_));
+	notification_handler_.OnEngineEvent(&parent_);
 }
 
 void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
@@ -719,13 +720,6 @@ void CFileZillaEnginePrivate::OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsync
 
 	m_pControlSocket->SetAlive();
 	m_pControlSocket->SetAsyncRequestReply(reply.get());
-}
-
-int CFileZillaEnginePrivate::Init(wxEvtHandler *pEventHandler)
-{
-	fz::scoped_lock lock(mutex_);
-	m_pEventHandler = pEventHandler;
-	return FZ_REPLY_OK;
 }
 
 int CFileZillaEnginePrivate::Execute(const CCommand &command)

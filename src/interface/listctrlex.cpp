@@ -1129,9 +1129,9 @@ bool wxListCtrlEx::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 			return false;
 	case HDN_DIVIDERDBLCLICK:
 		{
-			wxListEvent event(wxEVT_LIST_COL_END_DRAG, GetId());
-			event.SetEventObject(this);
-			AddPendingEvent(event);
+			auto event = new wxListEvent(wxEVT_LIST_COL_END_DRAG, GetId());
+			event->SetEventObject(this);
+			QueueEvent(event);
 		}
 		break;
 	}

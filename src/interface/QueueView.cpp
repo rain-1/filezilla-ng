@@ -160,12 +160,7 @@ protected:
 	wxDataObjectComposite* m_pDataObject;
 };
 
-DECLARE_EVENT_TYPE(fzEVT_ASKFORPASSWORD, -1)
-DEFINE_EVENT_TYPE(fzEVT_ASKFORPASSWORD)
-
 BEGIN_EVENT_TABLE(CQueueView, CQueueViewBase)
-EVT_FZ_NOTIFICATION(wxID_ANY, CQueueView::OnEngineEvent)
-
 EVT_CONTEXT_MENU(CQueueView::OnContextMenu)
 EVT_MENU(XRCID("ID_PROCESSQUEUE"), CQueueView::OnProcessQueue)
 EVT_MENU(XRCID("ID_REMOVEALL"), CQueueView::OnStopAndClear)
@@ -181,8 +176,6 @@ EVT_MENU(XRCID("ID_ACTIONAFTER_PLAYSOUND"), CQueueView::OnActionAfter)
 EVT_MENU(XRCID("ID_ACTIONAFTER_REBOOT"), CQueueView::OnActionAfter)
 EVT_MENU(XRCID("ID_ACTIONAFTER_SHUTDOWN"), CQueueView::OnActionAfter)
 EVT_MENU(XRCID("ID_ACTIONAFTER_SLEEP"), CQueueView::OnActionAfter)
-
-EVT_COMMAND(wxID_ANY, fzEVT_ASKFORPASSWORD, CQueueView::OnAskPassword)
 
 EVT_TIMER(wxID_ANY, CQueueView::OnTimer)
 EVT_CHAR(CQueueView::OnChar)
@@ -364,9 +357,14 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 	return true;
 }
 
-void CQueueView::OnEngineEvent(wxFzEvent &event)
+void CQueueView::OnEngineEvent(CFileZillaEngine* engine)
 {
-	t_EngineData* const pEngineData = GetEngineData(event.engine_);
+	CallAfter(&CQueueView::DoOnEngineEvent, engine);
+}
+
+void CQueueView::DoOnEngineEvent(CFileZillaEngine* engine)
+{
+	t_EngineData* const pEngineData = GetEngineData(engine);
 	if (!pEngineData)
 		return;
 
@@ -1118,7 +1116,7 @@ void CQueueView::SendNextCommand(t_EngineData& engineData)
 			engineData.pItem->SetStatusMessage(CFileItem::wait_password);
 			RefreshItem(engineData.pItem);
 			if (m_waitingForPassword.empty()) {
-				QueueEvent(new wxCommandEvent(fzEVT_ASKFORPASSWORD));
+				CallAfter(&CQueueView::OnAskPassword);
 			}
 			m_waitingForPassword.push_back(engineData.pEngine);
 			return;
@@ -2102,8 +2100,7 @@ t_EngineData* CQueueView::GetIdleEngine(const CServer* pServer, bool allowTransi
 		const int newEngineCount = COptions::Get()->GetOptionVal(OPTION_NUMTRANSFERS);
 		if (newEngineCount > static_cast<int>(m_engineData.size()) - transient) {
 			pFirstIdle = new t_EngineData;
-			pFirstIdle->pEngine = new CFileZillaEngine(m_pMainFrame->GetEngineContext());
-			pFirstIdle->pEngine->Init(this);
+			pFirstIdle->pEngine = new CFileZillaEngine(m_pMainFrame->GetEngineContext(), *this);
 
 			m_engineData.push_back(pFirstIdle);
 		}
@@ -2188,7 +2185,7 @@ void CQueueView::TryRefreshListings()
 	}
 }
 
-void CQueueView::OnAskPassword(wxCommandEvent&)
+void CQueueView::OnAskPassword()
 {
 	while (!m_waitingForPassword.empty()) {
 		const CFileZillaEngine* const pEngine = m_waitingForPassword.front();

@@ -70,8 +70,9 @@ protected:
 
 	std::deque<listing> m_listedDirectories;
 
+	void OnListedDirectory();
+
 	DECLARE_EVENT_TABLE()
-	void OnListedDirectory(wxCommandEvent &);
 };
 
 #endif

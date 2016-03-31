@@ -23,7 +23,6 @@ namespace {
 }
 
 BEGIN_EVENT_TABLE(CUpdater, wxEvtHandler)
-EVT_FZ_NOTIFICATION(wxID_ANY, CUpdater::OnEngineEvent)
 EVT_TIMER(wxID_ANY, CUpdater::OnTimer)
 END_EVENT_TABLE()
 
@@ -82,10 +81,9 @@ static CUpdater* instance = 0;
 
 CUpdater::CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context)
 	: state_(UpdaterState::idle)
-	, engine_(new CFileZillaEngine(engine_context))
+	, engine_(new CFileZillaEngine(engine_context, *this))
 {
 	AddHandler(parent);
-	engine_->Init(this);
 }
 
 void CUpdater::Init()
@@ -288,9 +286,14 @@ bool CUpdater::CreateTransferCommand(wxString const& url, wxString const& local_
 	return true;
 }
 
-void CUpdater::OnEngineEvent(wxFzEvent& event)
+void CUpdater::OnEngineEvent(CFileZillaEngine* engine)
 {
-	if (!engine_ || engine_ != event.engine_)
+	CallAfter(&CUpdater::DoOnEngineEvent, engine);
+}
+
+void CUpdater::DoOnEngineEvent(CFileZillaEngine* engine)
+{
+	if (!engine_ || engine_ != engine)
 		return;
 
 	std::unique_ptr<CNotification> notification;

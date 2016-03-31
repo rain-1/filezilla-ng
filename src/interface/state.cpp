@@ -539,8 +539,7 @@ bool CState::CreateEngine()
 	if (m_pEngine)
 		return true;
 
-	m_pEngine = new CFileZillaEngine(m_mainFrame.GetEngineContext());
-	m_pEngine->Init(&m_mainFrame);
+	m_pEngine = new CFileZillaEngine(m_mainFrame.GetEngineContext(), m_mainFrame);
 
 	m_pCommandQueue = new CCommandQueue(m_pEngine, &m_mainFrame, this);
 

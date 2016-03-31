@@ -7,19 +7,14 @@
 #include "directorycache.h"
 #include "engineprivate.h"
 
-CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context)
-	: impl_(new CFileZillaEnginePrivate(engine_context, *this))
+CFileZillaEngine::CFileZillaEngine(CFileZillaEngineContext& engine_context, EngineNotificationHandler& notificationHandler)
+	: impl_(new CFileZillaEnginePrivate(engine_context, *this, notificationHandler))
 {
 }
 
 CFileZillaEngine::~CFileZillaEngine()
 {
 	delete impl_;
-}
-
-int CFileZillaEngine::Init(wxEvtHandler *pEventHandler)
-{
-	return impl_->Init(pEventHandler);
 }
 
 int CFileZillaEngine::Execute(const CCommand &command)

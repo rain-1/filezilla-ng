@@ -5,43 +5,32 @@
 // ---------------------
 
 // To inform the application about what's happening, the engine sends
-// some notifications to the application using events.
-// For example the event table entry could look like this:
-//     EVT_FZ_NOTIFICATION(wxID_ANY, CMainFrame::OnEngineEvent)
-// and the handler function has the following declaration:
-//     void OnEngineEvent(wxFzEvent& event);
-// You can get the engine which sent the event by reading
-//     event.engine_
+// some notifications to the application.
+// The handler needs to derive from EngineNotificationHandler and implement
+// the OnEngineEvent method which takes the engine as parameter.
 // Whenever you get a notification event,
 // CFileZillaEngine::GetNextNotification has to be called until it returns 0,
 // or you will lose important notifications or your memory will fill with
 // pending notifications.
+//
+// Note: It may be called from a worker thread.
 
 // A special class of notifications are the asynchronous requests. These
-// requests have to be answered. Once proessed, call
+// requests have to be answered. Once processed, call
 // CFileZillaEngine::SetAsyncRequestReply to continue the current operation.
 
 #include "local_path.h"
 #include <libfilezilla/time.hpp>
 
 class CFileZillaEngine;
-class wxFzEvent final : public wxEvent
+
+class EngineNotificationHandler
 {
 public:
-	wxFzEvent();
+	virtual ~EngineNotificationHandler() {}
 
-	explicit wxFzEvent(int id);
-	explicit wxFzEvent(CFileZillaEngine const* engine);
-
-	virtual wxEvent *Clone() const;
-
-	CFileZillaEngine const* engine_;
+	virtual void OnEngineEvent(CFileZillaEngine* engine) = 0;
 };
-
-wxDECLARE_EVENT(fzEVT_NOTIFICATION, wxFzEvent);
-
-#define EVT_FZ_NOTIFICATION(id, func) \
-	wx__DECLARE_EVT1(fzEVT_NOTIFICATION, id, &func)
 
 enum NotificationId
 {

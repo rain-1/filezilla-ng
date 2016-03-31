@@ -3,6 +3,8 @@
 
 #if FZ_MANUALUPDATECHECK
 
+#include "notification.h"
+
 #include <wx/timer.h>
 
 struct build
@@ -47,7 +49,7 @@ public:
 };
 
 class CFileZillaEngineContext;
-class CUpdater : public wxEvtHandler
+class CUpdater : public wxEvtHandler, private EngineNotificationHandler
 {
 public:
 	CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_context);
@@ -103,8 +105,10 @@ protected:
 
 	void SetState( UpdaterState s );
 
+	virtual void OnEngineEvent(CFileZillaEngine* engine);
+	void DoOnEngineEvent(CFileZillaEngine* engine);
+
 	DECLARE_EVENT_TABLE()
-	void OnEngineEvent(wxFzEvent& event);
 	void OnTimer(wxTimerEvent& ev);
 
 	UpdaterState state_;

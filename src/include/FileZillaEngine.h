@@ -8,18 +8,11 @@ class CFileZillaEnginePrivate;
 class CFileZillaEngine final
 {
 public:
-	CFileZillaEngine(CFileZillaEngineContext& engine_context);
+	CFileZillaEngine(CFileZillaEngineContext& engine_context, EngineNotificationHandler& notificationHandler);
 	~CFileZillaEngine();
 
 	CFileZillaEngine(CFileZillaEngine const&) = delete;
 	CFileZillaEngine& operator=(CFileZillaEngine const&) = delete;
-
-	// Initialize the engine. Pass over the event handler that should receive notification
-	// events as defined in notification.h
-	int Init(wxEvtHandler *pEventHandler);
-
-	// TODO: Init function with a function pointer for a callback function for
-	// notifications. Not all users of the engine use wxWidgets.
 
 	// Execute the given command. See commands.h for a list of the available
 	// commands and reply codes.
