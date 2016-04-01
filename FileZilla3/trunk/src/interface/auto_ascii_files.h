@@ -4,11 +4,12 @@
 class CAutoAsciiFiles
 {
 public:
-	static bool TransferLocalAsAscii(wxString local_file, enum ServerType server_type);
-	static bool TransferRemoteAsAscii(wxString remote_file, enum ServerType server_type);
+	static bool TransferLocalAsAscii(wxString const& local_file, enum ServerType server_type);
+	static bool TransferRemoteAsAscii(wxString const& remote_file, enum ServerType server_type);
 
 	static void SettingsChanged();
 protected:
+	static bool IsAsciiExtension(wxString const& ext);
 	static std::vector<wxString> m_ascii_extensions;
 };
 

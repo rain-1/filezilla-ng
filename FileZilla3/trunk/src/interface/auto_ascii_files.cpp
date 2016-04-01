@@ -40,17 +40,18 @@ void CAutoAsciiFiles::SettingsChanged()
 // Defined in RemoteListView.cpp
 wxString StripVMSRevision(const wxString& name);
 
-bool CAutoAsciiFiles::TransferLocalAsAscii(wxString local_file, enum ServerType server_type)
+bool CAutoAsciiFiles::TransferLocalAsAscii(wxString const& local_file, enum ServerType server_type)
 {
 	int pos = local_file.Find(fz::local_filesys::path_separator, true);
-	if (pos != -1)
-		local_file = local_file.Mid(pos + 1);
 
 	// Identical implementation, only difference is for the local one to strip path.
-	return TransferRemoteAsAscii(local_file, server_type);
+	return TransferRemoteAsAscii(
+		(pos != -1) ? local_file.Mid(pos + 1) : local_file,
+		server_type
+	);
 }
 
-bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString remote_file, enum ServerType server_type)
+bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString const& remote_file, enum ServerType server_type)
 {
 	int mode = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
 	if (mode == 1)
@@ -58,26 +59,24 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString remote_file, enum ServerTyp
 	else if (mode == 2)
 		return false;
 
-	if (server_type == VMS)
-		remote_file = StripVMSRevision(remote_file);
+	if (server_type == VMS) {
+		return TransferRemoteAsAscii(StripVMSRevision(remote_file), DEFAULT);
+	}
 
 	if (!remote_file.empty() && remote_file[0] == '.')
 		return COptions::Get()->GetOptionVal(OPTION_ASCIIDOTFILE) != 0;
 
 	int pos = remote_file.Find('.', true);
-	if (pos == -1)
+	if (pos < 0 || pos + 1 == remote_file.size()) {
 		return COptions::Get()->GetOptionVal(OPTION_ASCIINOEXT) != 0;
-	remote_file = remote_file.Mid(pos + 1);
-
-	if (remote_file.empty())
-		return false;
+	}
+	wxString ext = remote_file.Mid(pos + 1);
 
 	for (auto const& ascii_ext : m_ascii_extensions) {
-		if (!remote_file.CmpNoCase(ascii_ext)) {
+		if (!ext.CmpNoCase(ascii_ext)) {
 			return true;
 		}
 	}
 
 	return false;
 }
-
