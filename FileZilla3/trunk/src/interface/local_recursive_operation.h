@@ -43,10 +43,10 @@ public:
 			int64_t size{};
 			fz::datetime time;
 			int attributes{};
-			bool dir{};
 		};
 
 		std::vector<entry> files;
+		std::vector<entry> dirs;
 		CLocalPath localPath;
 		CServerPath remotePath;
 	};
@@ -60,6 +60,8 @@ public:
 	virtual void StopRecursiveOperation();
 
 protected:
+	bool DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters);
+
 	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
 
 	virtual void entry();
@@ -69,6 +71,8 @@ protected:
 	fz::mutex mutex_;
 
 	std::deque<listing> m_listedDirectories;
+
+	CServer server_;
 
 	void OnListedDirectory();
 

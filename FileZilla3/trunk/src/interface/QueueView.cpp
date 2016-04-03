@@ -272,18 +272,16 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 void CQueueView::QueueFile_Finish(const bool start)
 {
 	bool need_refresh = false;
-	if (m_insertionStart <= GetTopItem() + GetCountPerPage() + 1)
+	if (m_insertionStart >= 0 && m_insertionStart <= GetTopItem() + GetCountPerPage() + 1)
 		need_refresh = true;
 	CommitChanges();
 
-	if (!m_activeMode && start)
-	{
+	if (!m_activeMode && start) {
 		m_activeMode = 1;
 		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
 	}
 
-	if (m_activeMode)
-	{
+	if (m_activeMode) {
 		m_waitStatusLineUpdate = true;
 		AdvanceQueue(false);
 		m_waitStatusLineUpdate = false;
@@ -330,7 +328,8 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 	CServerItem* pServerItem = CreateServerItem(server);
 
 	auto const& files = listing.files;
-	if (files.empty()) {
+	if (files.empty() && listing.dirs.empty()) {
+		// Empty directory
 		if (listing.remotePath.HasParent()) {
 			wxString sub = listing.remotePath.GetLastSegment();
 		}
@@ -339,10 +338,6 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 	}
 	else {
 		for (auto const& file : files) {
-			if (file.dir) {
-				// We're recursing into anyhow, no need to create a folder item at this point.
-				continue;
-			}
 			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, false,
 				file.name, wxString(),
 				listing.localPath, listing.remotePath, file.size);
@@ -350,10 +345,10 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 
 			InsertItem(pServerItem, fileItem);
 		}
+
+		// We do not look at dirs here, recursion takes care of it.
 	}
-
-	QueueFile_Finish(!queueOnly);
-
+	
 	return true;
 }
 

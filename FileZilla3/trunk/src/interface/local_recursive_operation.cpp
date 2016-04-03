@@ -37,21 +37,37 @@ void CLocalRecursiveOperation::AddRecursionRoot(local_recursion_root && root)
 
 void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters)
 {
+	if (!DoStartRecursiveOperation(mode, filters)) {
+		StopRecursiveOperation();
+	}
+}
+
+bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters)
+{
+	if (!m_pState || !m_pQueue) {
+		return false;
+	}
+	
+	auto const server = m_pState->GetServer();
+	if (!server) {
+		return false;
+	}
+
+	server_ = *server;
+	
 	{
 		fz::scoped_lock l(mutex_);
 
-		wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
-		wxCHECK_RET(m_pState->IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
+		wxCHECK_MSG(m_operationMode == recursive_none, false, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
+		wxCHECK_MSG(m_pState->IsRemoteConnected(), false, _T("StartRecursiveOperation while disconnected"));
 
-		if (mode == recursive_chmod)
-			return;
-
-		if ((mode == recursive_transfer || mode == recursive_addtoqueue || mode == recursive_transfer_flatten || mode == recursive_addtoqueue_flatten) && !m_pQueue)
-			return;
+		if (mode == recursive_chmod) {
+			return false;
+		}
 
 		if (recursion_roots_.empty()) {
 			// Nothing to do in this case
-			return;
+			return false;
 		}
 
 		m_processedFiles = 0;
@@ -63,11 +79,13 @@ void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::
 
 		if (!run()) {
 			m_operationMode = recursive_none;
-			return;
+			return false;
 		}
 	}
 
 	m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+
+	return true;
 }
 
 void CLocalRecursiveOperation::StopRecursiveOperation()
@@ -80,6 +98,9 @@ void CLocalRecursiveOperation::StopRecursiveOperation()
 
 		m_operationMode = recursive_none;
 		recursion_roots_.clear();
+
+		m_processedFiles = 0;
+		m_processedDirectories = 0;
 	}
 
 	join();
@@ -128,14 +149,20 @@ void CLocalRecursiveOperation::entry()
 				listing::entry entry;
 				bool isLink{};
 				fz::native_string name;
-				while (fs.get_next_file(name, isLink, entry.dir, &entry.size, &entry.time, &entry.attributes)) {
+				bool isDir{};
+				while (fs.get_next_file(name, isLink, isDir, &entry.size, &entry.time, &entry.attributes)) {
 					if (isLink) {
 						continue;
 					}
 					entry.name = name;
 
-					if (!filterManager.FilenameFiltered(filters, entry.name, d.localPath.GetPath(), entry.dir, entry.size, entry.attributes, entry.time)) {
-						d.files.push_back(entry);
+					if (!filterManager.FilenameFiltered(filters, entry.name, d.localPath.GetPath(), isDir, entry.size, entry.attributes, entry.time)) {
+						if (isDir) {
+							d.dirs.emplace_back(std::move(entry));
+						}
+						else {
+							d.files.emplace_back(std::move(entry));
+						}
 					}
 				}
 			}
@@ -150,27 +177,26 @@ void CLocalRecursiveOperation::entry()
 			auto& root = recursion_roots_.front();
 
 			// Queue for recursion
-			for (auto const& entry : d.files) {
-				if (entry.dir) {
-					local_recursion_root::new_dir dir;
-					CLocalPath localSub = d.localPath;
-					localSub.AddSegment(entry.name);
+			for (auto const& entry : d.dirs) {
+				local_recursion_root::new_dir dir;
+				CLocalPath localSub = d.localPath;
+				localSub.AddSegment(entry.name);
 
-					CServerPath remoteSub = d.remotePath;
-					if (!remoteSub.empty()) {
-						remoteSub.AddSegment(entry.name);
-					}
-					root.add_dir_to_visit(localSub, remoteSub);
+				CServerPath remoteSub = d.remotePath;
+				if (!remoteSub.empty()) {
+					remoteSub.AddSegment(entry.name);
 				}
+				root.add_dir_to_visit(localSub, remoteSub);
 			}
 
 			m_listedDirectories.emplace_back(std::move(d));
 
 			// Hand off to GUI thread
-			//TODO : once
-			l.unlock();
-			CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
-			l.lock();
+			if (m_listedDirectories.size() == 1) {
+				l.unlock();
+				CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
+				l.lock();
+			}
 		}
 	}
 
@@ -181,34 +207,48 @@ void CLocalRecursiveOperation::entry()
 
 void CLocalRecursiveOperation::OnListedDirectory()
 {
-	CServer const* const server = m_pState->GetServer();
-	if (!server)
+	if (m_operationMode == recursive_none) {
 		return;
+	}
+
+	bool const queueOnly = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten;
 
 	listing d;
 
-	{
-		fz::scoped_lock l(mutex_);
-		if (m_operationMode == recursive_none) {
-			return;
+	bool stop = false;
+	int64_t processed = 0;
+	while (processed < 10000) {
+		{
+			fz::scoped_lock l(mutex_);
+			if (m_listedDirectories.empty()) {
+				break;
+			}
+
+			d = std::move(m_listedDirectories.front());
+			m_listedDirectories.pop_front();
 		}
 
-		if (m_listedDirectories.empty()) {
-			return;
+		if (d.localPath.empty()) {
+			StopRecursiveOperation();
 		}
-
-		d = std::move(m_listedDirectories.front());
-		m_listedDirectories.pop_front();
+		else {
+			m_pQueue->QueueFiles(queueOnly, server_, d);
+			++m_processedDirectories;
+			processed += d.files.size();
+		}
 	}
 
-	if (d.localPath.empty()) {
+	m_pQueue->QueueFile_Finish(!queueOnly);
+	
+	m_processedFiles += processed;
+	if (stop) {
 		StopRecursiveOperation();
 	}
-	else {
-		bool const queueOnly = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten;
-		m_pQueue->QueueFiles(queueOnly, *server, d);
-		++m_processedDirectories;
-		m_processedFiles += d.files.size();
+	else if (processed) {
 		m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+
+		if (processed >= 10000) {
+			CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
+		}
 	}
 }
