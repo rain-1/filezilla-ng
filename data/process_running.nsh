@@ -74,12 +74,14 @@ Function GetFilenameFromProcessId
   Exch $R0
   Push $R1
   Push $R2
+  Push $R3
 
   !define PROCESS_QUERY_INFORMATION 0x0400
   System::Call "kernel32::OpenProcess(i ${PROCESS_QUERY_INFORMATION}, i 0, i $R0) i .R0"
 
   ${If} $R0 == 0
 
+    Pop $R3
     Pop $R2
     Pop $R1
     Pop $R0
@@ -88,11 +90,18 @@ Function GetFilenameFromProcessId
 
   ${EndIf}
 
-  System::Call "psapi::GetProcessImageFileName(i R0, t .R1, i ${NSIS_MAX_STRLEN}) i .R2"
+  StrCpy $R3 ${NSIS_MAX_STRLEN}
+  System::Call "kernel32::QueryFullProcessImageName(i R0, i 0, t .R1, *i R3) i .R2"
+
+  ${If} $R2 == 0
+    ; Fallback
+    System::Call "psapi::GetProcessImageFileName(i R0, t .R1, i ${NSIS_MAX_STRLEN}) i .R2"
+  ${EndIf}
 
   ${If} $R2 == 0
 
     System::Call "kernel32::CloseHandle(i R0)"
+    Pop $R3
     Pop $R2
     Pop $R1
     Pop $R0
@@ -104,6 +113,7 @@ Function GetFilenameFromProcessId
 
   System::Call "kernel32::CloseHandle(i R0)"
 
+  Pop $R3
   Pop $R2
   StrCpy $R0 $R1
   Pop $R1
