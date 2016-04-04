@@ -122,8 +122,7 @@ Function GetFilenameFromProcessId
 FunctionEnd
 
 ; Expects process name on top of stack
-; Gets replaced with 1 if process is running,
-; 0 if it is not
+; Afterwards, top of stack contains path to the process if it's running or an empty string if it is not.
 Function IsProcessRunning
 
   Exch $R0 ; Name
@@ -133,6 +132,7 @@ Function IsProcessRunning
   Push $R3 ; Counter
   Push $R4 ; Strlen
   Push $R5 ; Current process ID and image filename
+  Push $R6 ; Last part of path
 
   StrCpy $R0 "\$R0"
 
@@ -158,18 +158,19 @@ Function IsProcessRunning
     Pop $R5
 
     ; Get last part of filename
-    StrCpy $R5 $R5 '' $R4
+    StrCpy $R6 $R5 '' $R4
 
-    ${If} $R5 == $R0
+    ${If} $R6 == $R0
 
       ; Program is running
+      StrCpy $R0 $R5
+      Pop $R6
       Pop $R5
       Pop $R4
       Pop $R3
       Pop $R2
       Pop $R1
-      Pop $R0
-      Push 1
+      Exch $R0
       return
 
     ${EndIf}
@@ -184,7 +185,7 @@ Function IsProcessRunning
   Pop $R2
   Pop $R1
   Pop $R0
-  Push 0
+  Push ''
 
 FunctionEnd
 

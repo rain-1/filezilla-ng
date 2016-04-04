@@ -110,6 +110,7 @@
   Var PERFORM_UPDATE
   Var SKIPLICENSE
   Var GetInstalledSize.total
+  Var OldRunDir
 
 ;--------------------------------
 ; Interface Settings
@@ -337,6 +338,12 @@ Function ReadSkipLicense
 FunctionEnd
 
 Function .onInit
+
+  ; The very first thing we should do: See if there's still a running FZ, we use it to detect
+  ; cases were users have installed multiple copies installed in different directories.
+  Push "filezilla.exe"
+  Call IsProcessRunning
+  Pop $OldRunDir
 
   ${Unless} ${AtLeastWinVista}
     MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows Vista and may not work correctly on your system.$\nDo you really want to continue with the installation?" /SD IDNO IDYES installonoldwindows
@@ -900,7 +907,7 @@ Function CheckFileZillaRunning
     StrCpy $R0 2
   ${EndIf}
 
-  ${While} $R1 == 1
+  ${While} $R1 != ''
 
     ${If} $R0 == 0
 
@@ -922,7 +929,7 @@ Function CheckFileZillaRunning
   Call IsProcessRunning
   Pop $R1
 
-  ${While} $R1 == 1
+  ${While} $R1 != ''
 
     MessageBox MB_ABORTRETRYIGNORE|MB_DEFBUTTON2 "FileZilla appears to be running.$\nPlease close all running instances of FileZilla before continuing the installation." /SD IDIGNORE IDABORT CheckFileZillaRunning_abort IDIGNORE CheckFileZillaRunning_ignore
 
@@ -960,6 +967,20 @@ FunctionEnd
 Function .onInstSuccess
 
   ${MementoSectionSave}
+
+  ; Detect multiple install directories
+  ${If} $OldRunDir != ''
+    ${GetFileVersion} $OldRunDir $R0
+    ${GetFileVersion} "$Instdir\filezilla.exe" $R1
+
+    StrCpy $R2 $OldRunDir -14
+
+    ${If} $R0 != ''
+    ${AndIf} $R1 != ''
+    ${AndIf} $R0 != $R1
+      MessageBox MB_ICONEXCLAMATION 'Multiple installations of FileZilla detected.$\n$\nFileZilla ${VERSION} has been installed to "$InstDir".$\nAn old installation of FileZilla $R0 still exists in the "$R2" directory.$\n$\nPlease delete the old version in the "$R2" directory.' /SD IDOK
+    ${EndIf}
+  ${EndIf}
 
 FunctionEnd
 
