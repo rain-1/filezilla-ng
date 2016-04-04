@@ -1,7 +1,7 @@
 ; FileZilla 3 installation script
 ; Written by Tim Kosse <mailto:tim.kosse@filezilla-project.org>
 ;
-; Requires NSIS >= 2.35
+; Requires NSIS >= 3.0b3
 
 ;--------------------------------
 ; Build environment
