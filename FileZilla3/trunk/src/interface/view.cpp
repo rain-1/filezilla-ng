@@ -35,7 +35,7 @@ void CView::Arrange(wxWindow* child, wxRect& clientRect, bool top)
 		else {
 			clientRect.SetTop(childHeight);
 		}
-		clientRect.SetHeight(clientRect.GetHeight() - childHeight);
+		clientRect.SetHeight(std::max(0, (clientRect.GetHeight() - childHeight)));
 
 		child->SetSize(childRect);
 #ifdef __WXMSW__

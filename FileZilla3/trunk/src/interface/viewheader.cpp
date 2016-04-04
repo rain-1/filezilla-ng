@@ -93,7 +93,7 @@ void CViewHeader::OnSize(wxSizeEvent&)
 	rect.SetWidth(rect.GetWidth() - m_cbOffset + 2);
 	rect.SetX(m_cbOffset);
 	rect.Deflate(0, border_offset / 2);
-	rect.SetWidth(rect.GetWidth() - border_offset / 2);
+	rect.SetWidth(std::max(0, rect.GetWidth() - border_offset / 2));
 	if (m_pComboBox) {
 		m_pComboBox->SetSize(rect);
 	}
