@@ -222,7 +222,7 @@ void CUpdateDialog::OnInstall(wxCommandEvent&)
 		return;
 	}
 #ifdef __WXMSW__
-	wxExecute(_T("\"") + f +  _T("\" /update"));
+	wxExecute(_T("\"") + f +  _T("\" /update /NCRC"));
 	wxWindow* p = parent_;
 	while( p->GetParent() ) {
 		p = p->GetParent();
