@@ -66,6 +66,8 @@ protected:
 
 	virtual void entry();
 
+	void EnqueueEnumeratedListing(fz::scoped_lock& l, listing&& d);
+
 	std::deque<local_recursion_root> recursion_roots_;
 
 	fz::mutex mutex_;
