@@ -1269,12 +1269,14 @@ bool CQueueView::SetActive(bool active)
 		return m_activeCount == 0;
 	}
 	else {
-		m_activeMode = 2;
+		if (!m_serverList.empty()) {
+			m_activeMode = 2;
 
-		m_waitStatusLineUpdate = true;
-		AdvanceQueue();
-		m_waitStatusLineUpdate = false;
-		UpdateStatusLinePositions();
+			m_waitStatusLineUpdate = true;
+			AdvanceQueue();
+			m_waitStatusLineUpdate = false;
+			UpdateStatusLinePositions();
+		}
 	}
 
 	CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
