@@ -101,15 +101,48 @@ void CLocalRecursiveOperation::StopRecursiveOperation()
 
 		m_processedFiles = 0;
 		m_processedDirectories = 0;
+
 	}
 
 	join();
+	m_listedDirectories.clear();
 
 	m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 }
 
 void CLocalRecursiveOperation::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2)
 {
+}
+
+void CLocalRecursiveOperation::EnqueueEnumeratedListing(fz::scoped_lock& l, listing&& d)
+{
+	if (recursion_roots_.empty()) {
+		return;
+	}
+
+	auto& root = recursion_roots_.front();
+
+	// Queue for recursion
+	for (auto const& entry : d.dirs) {
+		local_recursion_root::new_dir dir;
+		CLocalPath localSub = d.localPath;
+		localSub.AddSegment(entry.name);
+
+		CServerPath remoteSub = d.remotePath;
+		if (!remoteSub.empty()) {
+			remoteSub.AddSegment(entry.name);
+		}
+		root.add_dir_to_visit(localSub, remoteSub);
+	}
+
+	m_listedDirectories.emplace_back(std::move(d));
+
+	// Hand off to GUI thread
+	if (m_listedDirectories.size() == 1) {
+		l.unlock();
+		CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
+		l.lock();
+	}
 }
 
 void CLocalRecursiveOperation::entry()
@@ -142,10 +175,11 @@ void CLocalRecursiveOperation::entry()
 			// Do the slow part without holding mutex
 			l.unlock();
 
+			bool sentPartial = false;
 			fz::local_filesys fs;
 			fz::native_string localPath = fz::to_native(d.localPath.GetPath());
-			if (fs.begin_find_files(localPath)) {
 
+			if (fs.begin_find_files(localPath)) {
 				listing::entry entry;
 				bool isLink{};
 				fz::native_string name;
@@ -163,39 +197,36 @@ void CLocalRecursiveOperation::entry()
 						else {
 							d.files.emplace_back(std::move(entry));
 						}
+
+						// If having queued 5k items, hand off to main thread.
+						if (d.files.size() + d.dirs.size() >= 5000) {
+							sentPartial = true;
+
+							listing next;
+							next.localPath = d.localPath;
+							next.remotePath = d.remotePath;
+
+							l.lock();
+							// Check for cancellation
+							if (recursion_roots_.empty()) {
+								l.unlock();
+								break;
+							}
+							EnqueueEnumeratedListing(l, std::move(d));
+							l.unlock();
+							d = next;
+						}
 					}
 				}
 			}
 
 			l.lock();
-
 			// Check for cancellation
 			if (recursion_roots_.empty()) {
 				break;
 			}
-
-			auto& root = recursion_roots_.front();
-
-			// Queue for recursion
-			for (auto const& entry : d.dirs) {
-				local_recursion_root::new_dir dir;
-				CLocalPath localSub = d.localPath;
-				localSub.AddSegment(entry.name);
-
-				CServerPath remoteSub = d.remotePath;
-				if (!remoteSub.empty()) {
-					remoteSub.AddSegment(entry.name);
-				}
-				root.add_dir_to_visit(localSub, remoteSub);
-			}
-
-			m_listedDirectories.emplace_back(std::move(d));
-
-			// Hand off to GUI thread
-			if (m_listedDirectories.size() == 1) {
-				l.unlock();
-				CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
-				l.lock();
+			if (!sentPartial || !d.files.empty() || !d.dirs.empty()) {
+				EnqueueEnumeratedListing(l, std::move(d));
 			}
 		}
 
@@ -218,7 +249,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 
 	bool stop = false;
 	int64_t processed = 0;
-	while (processed < 10000) {
+	while (processed < 5000) {
 		{
 			fz::scoped_lock l(mutex_);
 			if (m_listedDirectories.empty()) {
@@ -248,7 +279,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 	else if (processed) {
 		m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 
-		if (processed >= 10000) {
+		if (processed >= 5000) {
 			CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
 		}
 	}
