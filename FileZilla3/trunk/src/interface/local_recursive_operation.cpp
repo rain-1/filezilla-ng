@@ -198,10 +198,11 @@ void CLocalRecursiveOperation::entry()
 				l.lock();
 			}
 		}
+
+		listing d;
+		m_listedDirectories.emplace_back(std::move(d));
 	}
 
-	listing d;
-	m_listedDirectories.emplace_back(std::move(d));
 	CallAfter(&CLocalRecursiveOperation::OnListedDirectory);
 }
 
