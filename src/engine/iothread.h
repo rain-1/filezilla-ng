@@ -3,8 +3,8 @@
 
 #include <libfilezilla/event.hpp>
 
-#define BUFFERCOUNT 5
-#define BUFFERSIZE 128*1024
+#define BUFFERCOUNT 8
+#define BUFFERSIZE 256*1024
 
 // Does not actually read from or write to file
 // Useful for benchmarks to avoid IO bottleneck
