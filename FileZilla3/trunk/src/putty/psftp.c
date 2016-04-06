@@ -493,7 +493,7 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
     xfer = xfer_download_init(fh, offset);
     while (!xfer_done(xfer)) {
 	void *vbuf;
-	int ret, len;
+	int len;
 	int wpos, wlen;
 
 	xfer_download_queue(xfer);
@@ -516,8 +516,10 @@ int sftp_get_file(char *fname, char *outfname, int recurse, int restart)
 	    while (file && wpos < len) {
 		wlen = write_to_file(file, buf + wpos, len - wpos);
 		if (wlen <= 0) {
-		    fzprintf(shown_err ? sftpStatus : sftpError, "error while writing local file");
-		    shown_err = TRUE;
+		    if (!shown_err) {
+			fzprintf(sftpError, "error while writing local file");
+			shown_err = TRUE;
+		    }
 		    ret = 0;
 		    xfer_set_error(xfer);
 		    break;
