@@ -998,11 +998,6 @@ static DWORD try_connect(Actual_Socket sock)
 	p_setsockopt(s, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
     }
 
-    {
-	int size_write = 262144;
-	p_setsockopt(s, SOL_SOCKET, SO_SNDBUF, (const char*)&size_write, sizeof(size_write));
-    }
-
     /*
      * Bind to local address.
      */
@@ -1434,6 +1429,20 @@ static void socket_error_callback(void *vs)
                  s->pending_error, 0);
 }
 
+static void update_tcp_send_buffer_size(SOCKET s)
+{
+    ULONG v = 0;
+    DWORD outlen = 0;
+
+#ifndef SIO_IDEAL_SEND_BACKLOG_QUERY
+#define SIO_IDEAL_SEND_BACKLOG_QUERY 0x4004747b
+#endif
+
+    if (!p_WSAIoctl(s, SIO_IDEAL_SEND_BACKLOG_QUERY, 0, 0, &v, sizeof(v), &outlen, 0, 0)) {
+	p_setsockopt(s, SOL_SOCKET, SO_SNDBUF, (const char*)&v, sizeof(v));
+    }
+}
+
 /*
  * The function which tries to send on a socket once it's deemed
  * writable.
@@ -1495,8 +1504,10 @@ void try_send(Actual_Socket s)
 	    }
 	} else {
 	    UpdateQuota(1, nsent);
-	    if (fz_timer_check(&s->send_timer))
+	    if (fz_timer_check(&s->send_timer)) {
+		update_tcp_send_buffer_size(s->s);
 		fznotify(sftpSend);
+	    }
 	    if (s->sending_oob) {
 		if (nsent < len) {
 		    memmove(s->oobdata, s->oobdata+nsent, len-nsent);
