@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <nettle/aes.h>
+#include <nettle/memxor.h>
 
 #include "ssh.h"
 
@@ -27,9 +28,7 @@ static void aes_sdctr_nettle(unsigned char *blk, int len, AESContextNettle *ctx)
 
     while (len > 0) {
 	aes256_encrypt(&ctx->ctx, 16, b, ctx->iv2);
-	for (i = 0; i < 16; i++) {
-	    blk[i] ^= b[i];
-	}
+	memxor(blk, b, 16);
 	for (i = 3; i >= 0; i--) {
 	    tmp = GET_32BIT_MSB_FIRST(ctx->iv2 + 4 * i);
 	    tmp = (tmp + 1) & 0xffffffff;
