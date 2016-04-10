@@ -14,7 +14,6 @@ libfzputtycommon_a_SOURCES = \
 			import.c \
 			misc.c \
 			sshaes.c \
-			sshaes_nettle.c \
 			sshbcrypt.c \
 			sshblowf.c \
 			sshbn.c \
