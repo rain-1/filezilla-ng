@@ -336,7 +336,7 @@ void SHA384_Simple(const void *p, int len, unsigned char *output) {
  * Thin abstraction for things where hashes are pluggable.
  */
 
-static void *sha512_init(void)
+static void *putty_sha512_init(void)
 {
     SHA512_State *s;
 
@@ -379,11 +379,11 @@ static void sha512_final(void *handle, unsigned char *output)
 }
 
 const struct ssh_hash ssh_sha512 = {
-    sha512_init, sha512_copy, sha512_bytes, sha512_final, sha512_free,
+    putty_sha512_init, sha512_copy, sha512_bytes, sha512_final, sha512_free,
     64, "SHA-512"
 };
 
-static void *sha384_init(void)
+static void *putty_sha384_init(void)
 {
     SHA512_State *s;
 
@@ -402,7 +402,7 @@ static void sha384_final(void *handle, unsigned char *output)
 }
 
 const struct ssh_hash ssh_sha384 = {
-    sha384_init, sha512_copy, sha512_bytes, sha384_final, sha512_free,
+    putty_sha384_init, sha512_copy, sha512_bytes, sha384_final, sha512_free,
     48, "SHA-384"
 };
 #endif
