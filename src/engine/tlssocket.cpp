@@ -66,9 +66,15 @@ public:
 	}
 };
 
-extern "C" static int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming)
+namespace {
+#if GNUTLS_VERSION_NUMBER >= 0x030400
+extern "C" int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming, gnutls_datum_t const*)
+#else
+extern "C" int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming)
+#endif
 {
 	return CTlsSocketCallbacks::handshake_hook_func(session, htype, post, incoming);
+}
 }
 
 CTlsSocket::CTlsSocket(event_handler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
