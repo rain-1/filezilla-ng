@@ -1185,9 +1185,16 @@ static const struct ssh2_cipher ssh_aes192_ctr = {
     NULL
 };
 
+typedef struct AESContextNettle AESContextNettle;
+void aes256_key_nettle(void *handle, unsigned char *key);
+void *aes_make_context_nettle(void);
+void aes_free_context_nettle(void *handle);
+void aes_iv_nettle(void *handle, unsigned char *iv);
+void aes_ssh2_sdctr_nettle(void *handle, unsigned char *blk, int len);
+
 static const struct ssh2_cipher ssh_aes256_ctr = {
-    aes_make_context, aes_free_context, aes_iv, aes256_key,
-    aes_ssh2_sdctr, aes_ssh2_sdctr, NULL, NULL,
+    aes_make_context_nettle, aes_free_context_nettle, aes_iv_nettle, aes256_key_nettle,
+    aes_ssh2_sdctr_nettle, aes_ssh2_sdctr_nettle, NULL, NULL,
     "aes256-ctr",
     16, 256, 32, 0, "AES-256 SDCTR",
     NULL

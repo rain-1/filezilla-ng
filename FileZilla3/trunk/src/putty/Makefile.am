@@ -14,6 +14,7 @@ libfzputtycommon_a_SOURCES = \
 			import.c \
 			misc.c \
 			sshaes.c \
+			sshaes_nettle.c \
 			sshbcrypt.c \
 			sshblowf.c \
 			sshbn.c \
@@ -75,6 +76,8 @@ endif
 AM_CPPFLAGS = -I$(srcdir)/$(FRONTEND) -I../../config.h
 
 fzsftp_LDADD = libfzputtycommon.a
+fzsftp_LDADD += $(NETTLE_LIBS)
+
 
 if SFTP_UNIX
   libfzputtycommon_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64
@@ -85,10 +88,8 @@ if SFTP_UNIX
 
   fzputtygen_SOURCES += tree234.c
   fzputtygen_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI
-  fzputtygen_LDADD = unix/libfzputtycommon_ux.a libfzputtycommon.a
-endif
-
-if SFTP_MINGW
+  fzputtygen_LDADD = unix/libfzputtycommon_ux.a libfzputtycommon.a $(NETTLE_LIBS)
+else
   libfzputtycommon_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_WINDOWS
 
   fzsftp_SOURCES += pproxy.c
@@ -97,14 +98,16 @@ if SFTP_MINGW
   fzsftp_LDADD += -lws2_32 -lole32
 
   fzputtygen_CPPFLAGS = $(AM_CPPFLAGS) -D_WINDOWS -DNO_GSSAPI
-  fzputtygen_LDADD = windows/libfzputtycommon_win.a libfzputtycommon.a $(RESOURCEFILE)
+  fzputtygen_LDADD = windows/libfzputtycommon_win.a libfzputtycommon.a $(RESOURCEFILE) $(NETTLE_LIBS)
   fzputtygen_LDADD += -lole32
 endif
+
+libfzputtycommon_a_CPPFLAGS += $(NETTLE_CFLAGS)
 
 if MACAPPBUNDLE
 noinst_DATA = $(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp$(EXEEXT)
 endif
- 
+
 $(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp$(EXEEXT): fzsftp fzputtygen
 	mkdir -p $(top_builddir)/FileZilla.app/Contents/MacOS
 	cp -f fzsftp $(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp
