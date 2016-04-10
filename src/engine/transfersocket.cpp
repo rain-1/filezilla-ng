@@ -165,15 +165,13 @@ void CTransferSocket::OnAccept(int error)
 	controlSocket_.SetAlive();
 	controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnAccept(%d)"), error);
 
-	if (!m_pSocketServer)
-	{
+	if (!m_pSocketServer) {
 		controlSocket_.LogMessage(MessageType::Debug_Warning, _T("No socket server in OnAccept"), error);
 		return;
 	}
 
 	m_pSocket = m_pSocketServer->Accept(error);
-	if (!m_pSocket)
-	{
+	if (!m_pSocket) {
 		if (error == EAGAIN)
 			controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("No pending connection"));
 		else {
@@ -193,16 +191,13 @@ void CTransferSocket::OnConnect()
 	controlSocket_.SetAlive();
 	controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnConnect"));
 
-	if (!m_pSocket)
-	{
+	if (!m_pSocket) {
 		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("CTransferSocket::OnConnect called without socket"));
 		return;
 	}
 
-	if (!m_pBackend)
-	{
-		if (!InitBackend())
-		{
+	if (!m_pBackend) {
+		if (!InitBackend()) {
 			TransferEnd(TransferEndReason::transfer_failure);
 			return;
 		}
@@ -778,6 +773,11 @@ bool CTransferSocket::InitBackend()
 	if (m_pBackend)
 		return true;
 
+#ifdef FZ_WINDOWS
+	// For send buffer tuning
+	add_timer(fz::duration::from_seconds(1), false);
+#endif
+
 	if (controlSocket_.m_protectDataChannel) {
 		if (!InitTls(controlSocket_.m_pTlsSocket))
 			return false;
@@ -793,13 +793,28 @@ void CTransferSocket::SetSocketBufferSizes(CSocket* pSocket)
 	wxCHECK_RET(pSocket, _("SetSocketBufferSize called without socket"));
 
 	const int size_read = engine_.GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_RECV);
+#if FZ_WINDOWS
+	const int size_write = -1;
+#else
 	const int size_write = engine_.GetOptions().GetOptionVal(OPTION_SOCKET_BUFFERSIZE_SEND);
+#endif
 	pSocket->SetBufferSizes(size_read, size_write);
 }
 
 void CTransferSocket::operator()(fz::event_base const& ev)
 {
-	fz::dispatch<CSocketEvent, CIOThreadEvent>(ev, this,
+	fz::dispatch<CSocketEvent, CIOThreadEvent, fz::timer_event>(ev, this,
 		&CTransferSocket::OnSocketEvent,
-		&CTransferSocket::OnIOThreadEvent);
+		&CTransferSocket::OnIOThreadEvent,
+		&CTransferSocket::OnTimer);
+}
+
+void CTransferSocket::OnTimer(fz::timer_id)
+{
+	if (m_pSocket && m_pSocket->GetState() == CSocket::connected) {
+		int const ideal_send_buffer = m_pSocket->GetIdealSendBufferSize();
+		if (ideal_send_buffer != -1) {
+			m_pSocket->SetBufferSizes(-1, ideal_send_buffer);
+		}
+	}
 }

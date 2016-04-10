@@ -56,6 +56,7 @@ protected:
 	void OnReceive();
 	void OnSend();
 	void OnClose(int error);
+	void OnTimer(fz::timer_id);
 
 	// Create a socket server
 	CSocket* CreateSocketServer();

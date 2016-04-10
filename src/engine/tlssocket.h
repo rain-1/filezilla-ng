@@ -48,6 +48,7 @@ public:
 	static wxString ListTlsCiphers(wxString priority);
 
 	bool SetClientCertificate(fz::native_string const& keyfile, fz::native_string const& certs, fz::native_string const& password);
+
 protected:
 
 	bool InitSession();
@@ -128,6 +129,8 @@ protected:
 
 	bool m_socket_eof{};
 	int m_socket_error{ECONNABORTED}; // Set in the push and pull functions if reading/writing fails fatally
+
+	friend class CTlsSocketCallbacks;
 };
 
 #endif //__TLSSOCKET_H__
