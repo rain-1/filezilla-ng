@@ -487,11 +487,21 @@ if test "$buildmain" = "yes"; then
   fi
   AC_DEFINE_UNQUOTED(FZ_AUTOUPDATECHECK, $autoupdatecheck, [Set to 1 to add support for automated update checks])
 
+  # Nettle
+  # ------
+
+  PKG_CHECK_MODULES([NETTLE], [nettle >= 3.1],, [
+    AC_MSG_ERROR([nettle 3.1 greater was not found. You can get it from https://www.lysator.liu.se/~nisse/nettle/])
+  ])
+
+  AC_SUBST(NETTLE_LIBS)
+  AC_SUBST(NETTLE_CFLAGS)
+
   # GnuTLS
   # ------
 
   PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 3.1.12],, [
-    AC_MSG_ERROR([libgnutls 3.1.12 greater was not found. You can get it from http://gnutls.org/])
+    AC_MSG_ERROR([libgnutls 3.1.12 greater was not found. You can get it from https://gnutls.org/])
   ])
 
   AC_SUBST(LIBGNUTLS_LIBS)
