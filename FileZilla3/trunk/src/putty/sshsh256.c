@@ -5,6 +5,7 @@
  */
 
 #include "ssh.h"
+#include <nettle/hmac.h>
 
 /* ----------------------------------------------------------------------
  * Core SHA256 algorithm: processes 16-word blocks into a message digest.
@@ -191,7 +192,7 @@ void SHA256_Simple(const void *p, int len, unsigned char *output) {
  * Thin abstraction for things where hashes are pluggable.
  */
 
-static void *sha256_init(void)
+static void *putty_sha256_init(void)
 {
     SHA256_State *s;
 
@@ -234,7 +235,7 @@ static void sha256_final(void *handle, unsigned char *output)
 }
 
 const struct ssh_hash ssh_sha256 = {
-    sha256_init, sha256_copy, sha256_bytes, sha256_final, sha256_free,
+    putty_sha256_init, sha256_copy, sha256_bytes, sha256_final, sha256_free,
     32, "SHA-256"
 };
 
@@ -245,34 +246,19 @@ const struct ssh_hash ssh_sha256 = {
 
 static void *sha256_make_context(void *cipher_ctx)
 {
-    return snewn(3, SHA256_State);
+    return snewn(1, struct hmac_sha256_ctx);
 }
 
 static void sha256_free_context(void *handle)
 {
-    smemclr(handle, 3 * sizeof(SHA256_State));
+    smemclr(handle, sizeof(struct hmac_sha256_ctx));
     sfree(handle);
 }
 
 static void sha256_key_internal(void *handle, unsigned char *key, int len)
 {
-    SHA256_State *keys = (SHA256_State *)handle;
-    unsigned char foo[64];
-    int i;
-
-    memset(foo, 0x36, 64);
-    for (i = 0; i < len && i < 64; i++)
-	foo[i] ^= key[i];
-    SHA256_Init(&keys[0]);
-    SHA256_Bytes(&keys[0], foo, 64);
-
-    memset(foo, 0x5C, 64);
-    for (i = 0; i < len && i < 64; i++)
-	foo[i] ^= key[i];
-    SHA256_Init(&keys[1]);
-    SHA256_Bytes(&keys[1], foo, 64);
-
-    smemclr(foo, 64);		       /* burn the evidence */
+    struct hmac_sha256_ctx *ctx = (struct hmac_sha256_ctx*)handle;
+    hmac_sha256_set_key(ctx, len, key);
 }
 
 static void sha256_key(void *handle, unsigned char *key)
@@ -282,28 +268,18 @@ static void sha256_key(void *handle, unsigned char *key)
 
 static void hmacsha256_start(void *handle)
 {
-    SHA256_State *keys = (SHA256_State *)handle;
-
-    keys[2] = keys[0];		      /* structure copy */
 }
 
 static void hmacsha256_bytes(void *handle, unsigned char const *blk, int len)
 {
-    SHA256_State *keys = (SHA256_State *)handle;
-    SHA256_Bytes(&keys[2], (void *)blk, len);
+    struct hmac_sha256_ctx *ctx = (struct hmac_sha256_ctx*)handle;
+    hmac_sha256_update(ctx, len, blk);
 }
 
 static void hmacsha256_genresult(void *handle, unsigned char *hmac)
 {
-    SHA256_State *keys = (SHA256_State *)handle;
-    SHA256_State s;
-    unsigned char intermediate[32];
-
-    s = keys[2];		       /* structure copy */
-    SHA256_Final(&s, intermediate);
-    s = keys[1];		       /* structure copy */
-    SHA256_Bytes(&s, intermediate, 32);
-    SHA256_Final(&s, hmac);
+    struct hmac_sha256_ctx *ctx = (struct hmac_sha256_ctx*)handle;
+    hmac_sha256_digest(ctx, SHA256_DIGEST_SIZE, hmac);
 }
 
 static void sha256_do_hmac(void *handle, unsigned char *blk, int len,
