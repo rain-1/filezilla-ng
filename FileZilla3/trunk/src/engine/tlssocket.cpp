@@ -27,6 +27,50 @@ void log_func(int level, const char* msg)
 }
 #endif
 
+class CTlsSocketCallbacks
+{
+public:
+	static int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming)
+	{
+		if (!session) {
+			return 0;
+		}
+		auto* tls = reinterpret_cast<CTlsSocket*>(gnutls_session_get_ptr(session));
+		if (!tls) {
+			return 0;
+		}
+
+		char const* prefix;
+		if (incoming) {
+			if (post) {
+				prefix = "Processed";
+			}
+			else {
+				prefix = "Received";
+			}
+		}
+		else {
+			if (post) {
+				prefix = "Sent";
+			}
+			else {
+				prefix = "About to send";
+			}
+		}
+
+		char const* name = gnutls_handshake_description_get_name(static_cast<gnutls_handshake_description_t>(htype));
+
+		tls->m_pOwner->LogMessage(MessageType::Debug_Debug, _T("TLS handshake: %s %s"), prefix, name);
+
+		return 0;
+	}
+};
+
+extern "C" static int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming)
+{
+	return CTlsSocketCallbacks::handshake_hook_func(session, htype, post, incoming);
+}
+
 CTlsSocket::CTlsSocket(event_handler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
 	: event_handler(pOwner->event_loop_)
 	, CBackend(pEvtHandler)
@@ -112,6 +156,9 @@ bool CTlsSocket::InitSession()
 		Uninit();
 		return false;
 	}
+
+	// For use in callbacks
+	gnutls_session_set_ptr(m_session, this);
 
 	// Even though the name gnutls_db_set_cache_expiration
 	// implies expiration of some cache, it also governs
@@ -491,6 +538,8 @@ int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 			}
 		}
 	}
+
+	gnutls_handshake_set_hook_function(m_session, GNUTLS_HANDSHAKE_ANY, GNUTLS_HOOK_BOTH, &handshake_hook_func);
 
 	return ContinueHandshake();
 }

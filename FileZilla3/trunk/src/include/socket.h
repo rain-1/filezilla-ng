@@ -130,7 +130,13 @@ public:
 
 	// If called on listen socket, sizes will be inherited by
 	// accepted sockets
-	int SetBufferSizes(int size_read, int size_write);
+	int SetBufferSizes(int size_receive, int size_send);
+
+	// On a connected socket, gets the ideal send buffer size or
+	// -1 if it cannot be determined.
+	//
+	// Currently only implemented for Windows.
+	int GetIdealSendBufferSize();
 
 protected:
 	static int DoSetFlags(int fd, int flags, int flags_mask);

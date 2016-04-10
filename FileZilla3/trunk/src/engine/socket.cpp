@@ -1572,18 +1572,18 @@ int CSocket::DoSetFlags(int fd, int flags, int flags_mask)
 	return 0;
 }
 
-int CSocket::SetBufferSizes(int size_read, int size_write)
+int CSocket::SetBufferSizes(int size_receive, int size_send)
 {
 	int ret = 0;
 
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.lock();
 
-	m_buffer_sizes[0] = size_read;
-	m_buffer_sizes[1] = size_write;
+	m_buffer_sizes[0] = size_receive;
+	m_buffer_sizes[1] = size_send;
 
 	if (m_fd != -1)
-		ret = DoSetBufferSizes(m_fd, size_read, size_write);
+		ret = DoSetBufferSizes(m_fd, size_receive, size_send);
 
 	if (m_pSocketThread)
 		m_pSocketThread->m_sync.unlock();
@@ -1591,10 +1591,45 @@ int CSocket::SetBufferSizes(int size_read, int size_write)
 	return ret;
 }
 
+int CSocket::GetIdealSendBufferSize()
+{
+	int size = -1;
+
+#ifdef FZ_WINDOWS
+	if (m_pSocketThread)
+		m_pSocketThread->m_sync.lock();
+
+	if (m_fd != -1) {
+		// MSDN says this:
+		// "Dynamic send buffering for TCP was added on Windows 7 and Windows
+		// Server 2008 R2.By default, dynamic send buffering for TCP is
+		// enabled unless an application sets the SO_SNDBUF socket option on
+		// the stream socket"
+		//
+		// Guess what: It doesn't do it by itself. Programs need to 
+		// periodically and manually update SO_SNDBUF based on what
+		// SIO_IDEAL_SEND_BACKLOG_QUERY returns.
+#ifndef SIO_IDEAL_SEND_BACKLOG_QUERY
+#define SIO_IDEAL_SEND_BACKLOG_QUERY 0x4004747b
+#endif
+		ULONG v{};
+		DWORD outlen{};
+		if (!WSAIoctl(m_fd, SIO_IDEAL_SEND_BACKLOG_QUERY, 0, 0, &v, sizeof(v), &outlen, 0, 0)) {
+			size = v;
+		}
+	}
+
+	if (m_pSocketThread)
+		m_pSocketThread->m_sync.unlock();
+#endif
+
+	return size;
+}
+
+
 int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 {
 	int ret = 0;
-
 	if (size_read != -1) {
 		int res = setsockopt(fd, SOL_SOCKET, SO_RCVBUF, (const char*)&size_read, sizeof(size_read));
 		if (res != 0) {
