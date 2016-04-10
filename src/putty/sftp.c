@@ -1490,6 +1490,7 @@ void xfer_cleanup(struct fxp_xfer *xfer)
     sfree(xfer);
 }
 
+int recv_peek(Socket sk, char* buf, int len);
 int pending_receive()
 {
     char tmp[5];
