@@ -221,7 +221,7 @@ void SHA_Simple(const void *p, int len, unsigned char *output)
  * Thin abstraction for things where hashes are pluggable.
  */
 
-static void *sha1_init(void)
+static void *putty_sha1_init(void)
 {
     SHA_State *s;
 
@@ -264,7 +264,7 @@ static void sha1_final(void *handle, unsigned char *output)
 }
 
 const struct ssh_hash ssh_sha1 = {
-    sha1_init, sha1_copy, sha1_bytes, sha1_final, sha1_free, 20, "SHA-1"
+    putty_sha1_init, sha1_copy, sha1_bytes, sha1_final, sha1_free, 20, "SHA-1"
 };
 
 /* ----------------------------------------------------------------------
