@@ -6,16 +6,7 @@
  * Modifications made for SHA-384 also
  */
 
-#ifdef SHA512_STANDALONE
-typedef struct {
-    uint64 h[8];
-    unsigned char block[128];
-    int blkused;
-    uint32 len[4];
-} SHA512_State;
-#else
 #include "ssh.h"
-#endif
 
 #define BLKSIZE 128
 
@@ -72,7 +63,6 @@ static void SHA512_Core_Init(SHA512_State *s) {
 	s->h[i] = iv[i];
 }
 
-#ifndef SHA512_STANDALONE
 static void SHA384_Core_Init(SHA512_State *s) {
     static const uint64 iv[] = {
         INIT(0xcbbb9d5d, 0xc1059ed8),
@@ -88,7 +78,6 @@ static void SHA384_Core_Init(SHA512_State *s) {
     for (i = 0; i < 8; i++)
         s->h[i] = iv[i];
 }
-#endif
 
 static void SHA512_Block(SHA512_State *s, uint64 *block) {
     uint64 w[80];
@@ -204,7 +193,6 @@ void SHA512_Init(SHA512_State *s) {
 	s->len[i] = 0;
 }
 
-#ifndef SHA512_STANDALONE
 void SHA384_Init(SHA512_State *s) {
     int i;
     SHA384_Core_Init(s);
@@ -212,7 +200,6 @@ void SHA384_Init(SHA512_State *s) {
     for (i = 0; i < 4; i++)
         s->len[i] = 0;
 }
-#endif
 
 void SHA512_Bytes(SHA512_State *s, const void *p, int len) {
     unsigned char *q = (unsigned char *)p;
@@ -307,7 +294,6 @@ void SHA512_Final(SHA512_State *s, unsigned char *digest) {
     }
 }
 
-#ifndef SHA512_STANDALONE
 void SHA384_Final(SHA512_State *s, unsigned char *digest) {
     unsigned char biggerDigest[512 / 8];
     SHA512_Final(s, biggerDigest);
@@ -405,7 +391,6 @@ const struct ssh_hash ssh_sha384 = {
     putty_sha384_init, sha512_copy, sha512_bytes, sha384_final, sha512_free,
     48, "SHA-384"
 };
-#endif
 
 #ifdef TEST
 
