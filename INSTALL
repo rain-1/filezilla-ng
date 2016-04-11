@@ -9,6 +9,7 @@ FileZilla depends on the following libraries:
 - libfilezilla 0.4.0 or greater
 - wxWidgets 3.0.2 or greater
 - libidn (only if not on Windows and not having gettaddrinfo with AI_IDN support)
+- Nettle 3.1 or greater
 - GnuTLS 3.1.12 or greater
 - libdbus on *nix
 - sqlite3 3.7 or greater
