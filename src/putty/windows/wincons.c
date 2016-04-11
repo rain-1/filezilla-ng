@@ -186,7 +186,7 @@ int askhk(void *frontend, const char *algname, const char *betteralgs,
 	return 0;
     }
 
-	fzprintf_raw(sftpRequest, "%d%s\n%s\n", (int)sftpReqHostkeyBetteralg, algname, betteralgs);
+    fzprintf_raw(sftpRequest, "%d%s\n%s\n", (int)sftpReqHostkeyBetteralg, algname, betteralgs);
 
     hin = GetStdHandle(STD_INPUT_HANDLE);
     GetConsoleMode(hin, &savemode);

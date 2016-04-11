@@ -254,8 +254,7 @@ int askhk(void *frontend, const char *algname, const char *betteralgs,
 	return 0;
     }
 
-    fprintf(stderr, msg, algname, betteralgs);
-    fflush(stderr);
+    fzprintf_raw(sftpRequest, "%d%s\n%s\n", (int)sftpReqHostkeyBetteralg, algname, betteralgs);
 
     {
 	struct termios oldmode, newmode;
