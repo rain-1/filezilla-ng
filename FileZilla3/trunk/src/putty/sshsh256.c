@@ -5,7 +5,7 @@
  */
 
 #include "ssh.h"
-#include <nettle/hmac.h>
+#include <nettle/sha2.h>
 
 /* ----------------------------------------------------------------------
  * Outer SHA256 algorithm: take an arbitrary length byte string,

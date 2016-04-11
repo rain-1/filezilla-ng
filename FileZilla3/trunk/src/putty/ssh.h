@@ -8,6 +8,7 @@
 #include "misc.h"
 
 #include <nettle/sha.h>
+#include <nettle/sha2.h>
 
 struct ssh_channel;
 typedef struct ssh_tag *Ssh;
@@ -259,12 +260,7 @@ void hmacmd5_key(void *handle, void const *key, int len);
 void hmacmd5_do_hmac(void *handle, unsigned char const *blk, int len,
 		     unsigned char *hmac);
 
-typedef struct {
-    uint32 h[5];
-    unsigned char block[64];
-    int blkused;
-    uint32 lenhi, lenlo;
-} SHA_State;
+typedef struct sha1_ctx SHA_State;
 void SHA_Init(SHA_State * s);
 void SHA_Bytes(SHA_State * s, const void *p, int len);
 void SHA_Final(SHA_State * s, unsigned char *output);
