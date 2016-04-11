@@ -17,7 +17,7 @@
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
 
-#define FZSFTP_PROTOCOL_VERSION 4
+#define FZSFTP_PROTOCOL_VERSION 5
 
 struct sftp_event_type;
 typedef fz::simple_event<sftp_event_type> CSftpEvent;
@@ -229,13 +229,16 @@ protected:
 
 						m_pOwner->SendAsyncRequest(new CHostKeyNotification(line.Mid(1), port, fingerprint, requestType == sftpReqHostkeyChanged));
 					}
-					else if (requestType == sftpReqPassword)
-					{
+					else if (requestType == sftpReqPassword) {
 						sftp_message* message = new sftp_message;
 						message->type = eventType;
 						message->reqType = sftpReqPassword;
 						message->text = line.Mid(1);
 						SendMessage(message);
+					}
+					else if (requestType == sftpReqHostkeyBetteralg) {
+						m_pOwner->LogMessage(MessageType::Error, _T("Got sftpReqHostkeyBetteralg when we shouldn't have. Aborting connection."));
+						goto loopexit;
 					}
 				}
 				break;
