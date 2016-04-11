@@ -9,8 +9,8 @@
     <libfilezilla_lib>x:\xample\libfilezilla\lib</libfilezilla_lib>
     <wxwidgets_include>x:\xample\wxwidgets\include;x:\xample\wxwidgets\include\msvc</wxwidgets_include>
     <wxwidgets_lib>x:\xample\wxwidgets\lib\vc_lib</wxwidgets_lib>
-    <gnutls_include>x:\xample\gnutls-3.1.10-win\include</gnutls_include>
-    <gnutls_lib>x:\xample\gnutls-3.1.10-win\bin</gnutls_lib>
+    <gnutls_include>x:\xample\gnutls-3.4.9-win32\include</gnutls_include>
+    <gnutls_lib>x:\xample\gnutls-3.4.9-win32\bin</gnutls_lib>
     <sqlite3_include>x:\xample\sqlite-amalgamation-3080200</sqlite3_include>
     <sqlite3_lib>x:\xample\sqlite-amalgamation-3080200</sqlite3_lib>
 
