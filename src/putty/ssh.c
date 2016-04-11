@@ -6699,7 +6699,10 @@ static void do_ssh2_transport(Ssh ssh, const void *vin, int inlen,
             warn = FALSE;
             for (i = 0; i < s->n_preferred_hk; i++) {
                 if (s->preferred_hk[i] == HK_WARN)
-                    warn = TRUE;
+		    /*
+		     * FZ: instead of warning, ignore insecure known hostkeys. Rationale: the askhk function doesn't get fingerprints that allow the user to verify what is getting cross-signed.
+		     */
+                    break;
                 for (j = 0; j < lenof(hostkey_algs); j++) {
                     if (hostkey_algs[j].id != s->preferred_hk[i])
                         continue;

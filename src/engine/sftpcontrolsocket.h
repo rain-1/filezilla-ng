@@ -37,6 +37,7 @@ enum sftpRequestTypes
 	sftpReqPassword,
 	sftpReqHostkey,
 	sftpReqHostkeyChanged,
+	sftpReqHostkeyBetteralg,
 	sftpReqUnknown
 };
 
