@@ -112,6 +112,21 @@ unsigned long getticks(void);	       /* based on gettimeofday(2) */
  */
 #define FLAG_STDERR_TTY 0x1000
 
+/* The per-session frontend structure managed by gtkwin.c */
+struct gui_data;
+struct gui_data *new_session_window(Conf *conf, const char *geometry_string);
+
+/* Defined in gtkmain.c */
+void launch_duplicate_session(Conf *conf);
+void launch_new_session(void);
+void launch_saved_session(const char *str);
+#ifdef MAY_REFER_TO_GTK_IN_HEADERS
+GtkWidget *make_gtk_toplevel_window(void *frontend);
+#endif
+
+/* Defined in gtkcomm.c */
+void gtkcomm_setup(void);
+
 /* Things pty.c needs from pterm.c */
 const char *get_x_display(void *frontend);
 int font_dimension(void *frontend, int which);/* 0 for width, 1 for height */

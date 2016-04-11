@@ -10,6 +10,8 @@
 #include <limits.h>
 #include <assert.h>
 #include <time.h>
+#include <errno.h>
+#include <string.h>
 
 #include "putty.h"
 #include "ssh.h"

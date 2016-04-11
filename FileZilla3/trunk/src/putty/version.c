@@ -13,25 +13,25 @@
 #define SNAPSHOT_TEXT STR(SNAPSHOT)
 #endif
 
-char ver[] = "Development snapshot " SNAPSHOT_TEXT;
-char sshver[] = "PuTTY-Snapshot-" SNAPSHOT_TEXT;
+const char ver[] = "Development snapshot " SNAPSHOT_TEXT;
+const char sshver[] = "PuTTY-Snapshot-" SNAPSHOT_TEXT;
 
 #undef SNAPSHOT_TEXT
 
 #elif defined RELEASE
 
-char ver[] = "Release " STR(RELEASE);
-char sshver[] = "PuTTY-Release-" STR(RELEASE);
+const char ver[] = "Release " STR(RELEASE);
+const char sshver[] = "PuTTY-Release-" STR(RELEASE);
 
 #elif defined SVN_REV
 
-char ver[] = "Custom build r" STR(SVN_REV) ", " __DATE__ " " __TIME__;
-char sshver[] = "PuTTY-Custom-r" STR(SVN_REV);
+const char ver[] = "Custom build r" STR(SVN_REV) ", " __DATE__ " " __TIME__;
+const char sshver[] = "PuTTY-Custom-r" STR(SVN_REV);
 
 #else
 
-char ver[] = "Unidentified build, " __DATE__ " " __TIME__;
-char sshver[] = "PuTTY-Local: " __DATE__ " " __TIME__;
+const char ver[] = "Unidentified build, " __DATE__ " " __TIME__;
+const char sshver[] = "PuTTY-Local: " __DATE__ " " __TIME__;
 
 #endif
 
