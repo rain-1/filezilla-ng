@@ -251,12 +251,14 @@ filezilla_DEPENDENCIES = ../engine/libengine.a
 
 filezilla_CPPFLAGS = -I$(srcdir)/../include
 filezilla_CPPFLAGS += $(LIBFILEZILLA_CFLAGS)
+filezilla_CPPFLAGS += $(NETTLE_CFLAGS)
 filezilla_CPPFLAGS += $(WX_CPPFLAGS)
 filezilla_CXXFLAGS = $(WX_CXXFLAGS_ONLY)
 filezilla_CFLAGS = $(WX_CFLAGS_ONLY)
 
 filezilla_LDFLAGS = ../engine/libengine.a $(LIBFILEZILLA_LIBS)
 filezilla_LDFLAGS += $(PUGIXML_LIBS)
+filezilla_LDFLAGS += $(NETTLE_LIBS)
 filezilla_LDFLAGS += $(LIBGNUTLS_LIBS)
 
 if HAVE_DBUS

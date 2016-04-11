@@ -10,17 +10,12 @@
 #include <wx/tokenzr.h>
 #include <string>
 
+#include <libfilezilla/file.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
 #include <string>
 
-// This is ugly but does the job
-#define SHA512_STANDALONE
-typedef unsigned int uint32;
-namespace {
-#include "../putty/int64.h"
-#include "../putty/sshsh512.c"
-}
+#include <nettle/sha2.h>
 
 BEGIN_EVENT_TABLE(CUpdater, wxEvtHandler)
 EVT_TIMER(wxID_ANY, CUpdater::OnTimer)
@@ -673,19 +668,18 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 		return false;
 	}
 
-	SHA512_State state;
-	SHA512_Init(&state);
+	sha512_ctx state;
+	sha512_init(&state);
 
 	{
-		wxLogNull null;
-		wxFile f;
-		if (!f.Open(file)) {
+		fz::file f(fz::to_native(file), fz::file::reading);
+		if (!f.opened()) {
 			return false;
 		}
-		char buffer[65536];
-		ssize_t read;
-		while ((read = f.Read(buffer, sizeof(buffer))) > 0) {
-			SHA512_Bytes(&state, buffer, read);
+		unsigned char buffer[65536];
+		int64_t read;
+		while ((read = f.read(buffer, sizeof(buffer))) > 0) {
+			sha512_update(&state, static_cast<size_t>(read), buffer);
 		}
 		if (read < 0) {
 			return false;
@@ -693,7 +687,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 	}
 
 	unsigned char raw_digest[64];
-	SHA512_Final(&state, raw_digest);
+	sha512_digest(&state, 64, raw_digest);
 
 	wxString digest;
 	for (unsigned int i = 0; i < sizeof(raw_digest); ++i) {
