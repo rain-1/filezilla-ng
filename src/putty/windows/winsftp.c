@@ -8,6 +8,7 @@
 #include "psftp.h"
 #include "ssh.h"
 #include "int64.h"
+#include "winsecur.h"
 
 char *get_ttymode(void *frontend, const char *mode) { return NULL; }
 
@@ -117,8 +118,12 @@ RFile *open_existing_file(const char *name, uint64 *size,
     ret = snew(RFile);
     ret->h = h;
 
-    if (size)
-        size->lo=GetFileSize(h, &(size->hi));
+    if (size) {
+        DWORD lo, hi;
+        lo = GetFileSize(h, &hi);
+        size->lo = lo;
+        size->hi = hi;
+    }
 
     if (mtime || atime) {
 	FILETIME actime, wrtime;
@@ -195,8 +200,12 @@ WFile *open_existing_wfile(const char *name, uint64 *size)
     ret = snew(WFile);
     ret->h = h;
 
-    if (size)
-	size->lo=GetFileSize(h, &(size->hi));
+    if (size) {
+        DWORD lo, hi;
+        lo = GetFileSize(h, &hi);
+        size->lo = lo;
+        size->hi = hi;
+    }
 
     return ret;
 }
@@ -246,7 +255,10 @@ int seek_file(WFile *f, uint64 offset, int whence)
 	return -1;
     }
 
-    SetFilePointer(f->h, offset.lo, &(offset.hi), movemethod);
+    {
+        LONG lo = offset.lo, hi = offset.hi;
+        SetFilePointer(f->h, lo, &hi, movemethod);
+    }
     
     if (GetLastError() != NO_ERROR)
 	return -1;
@@ -257,9 +269,11 @@ int seek_file(WFile *f, uint64 offset, int whence)
 uint64 get_file_posn(WFile *f)
 {
     uint64 ret;
+    LONG lo, hi;
 
-    ret.hi = 0L;
-    ret.lo = SetFilePointer(f->h, 0L, &(ret.hi), FILE_CURRENT);
+    lo = SetFilePointer(f->h, 0L, &hi, FILE_CURRENT);
+    ret.lo = lo;
+    ret.hi = hi;
 
     return ret;
 }
@@ -792,6 +806,25 @@ char *ssh_sftp_get_cmdline(const char *prompt, int no_fds_ok)
     CloseHandle(ctx->event);
 
     return ctx->line;
+}
+
+void platform_psftp_post_option_setup(void)
+{
+#if !defined UNPROTECT && !defined NO_SECURITY
+    /*
+     * Protect our process.
+     */
+    {
+        char *error = NULL;
+        if (!setprocessacl(error)) {
+            char *message = dupprintf("Could not restrict process ACL: %s",
+                                      error);
+            logevent(NULL, message);
+            sfree(message);
+            sfree(error);
+        }
+    }
+#endif
 }
 
 /* ----------------------------------------------------------------------

@@ -2972,6 +2972,10 @@ int sftp_senddata(char *buf, int len)
     back->send(backhandle, buf, len);
     return 1;
 }
+int sftp_sendbuffer(void)
+{
+    return back->sendbuffer(backhandle);
+}
 
 /*
  *  Short description of parameters.
@@ -3434,6 +3438,8 @@ int psftp_main(int argc, char *argv[])
     argc -= i;
     argv += i;
     back = NULL;
+
+    platform_psftp_post_option_setup();
 
     /*
      * If the loaded session provides a hostname, and a hostname has not
