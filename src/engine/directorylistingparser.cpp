@@ -844,7 +844,7 @@ done:
 			int64_t seconds = t.GetNumber();
 			if (seconds > 0 && seconds <= 0xffffffffll) {
 				fz::datetime time(static_cast<time_t>(seconds), fz::datetime::seconds);
-				if (time.empty()) {
+				if (!time.empty()) {
 					entry.time = time;
 				}
 			}
@@ -1139,9 +1139,13 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 		if (!str.Mid(pos + 1).ToLong(&minute))
 			return false;
 
-		if (hour < 0 || hour > 23)
-			return false;
-		if (minute < 0 || minute > 59)
+		if (hour < 0 || hour > 23) {
+			// Allow alternate midnight representation
+			if (hour != 24 || minute != 0) {
+				return false;
+			}
+		}
+		else if (minute < 0 || minute > 59)
 			return false;
 
 		// Some servers use times only for files newer than 6 months
@@ -1191,9 +1195,13 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 				if (!str.Mid(pos + 1).ToLong(&minute))
 					return false;
 
-				if (hour < 0 || hour > 23)
-					return false;
-				if (minute < 0 || minute > 59)
+				if (hour < 0 || hour > 23) {
+					// Allow alternate midnight representation
+					if (hour != 24 || minute != 0) {
+						return false;
+					}
+				}
+				else if (minute < 0 || minute > 59)
 					return false;
 			}
 			else
@@ -1426,7 +1434,7 @@ bool CDirectoryListingParser::ParseTime(CToken &token, CDirentry &entry)
 		return false;
 
 	int64_t hour = token.GetNumber(0, pos);
-	if (hour < 0 || hour > 23)
+	if (hour < 0 || hour > 24)
 		return false;
 
 	// See if we got seconds
@@ -2582,7 +2590,7 @@ int CDirectoryListingParser::ParseAsMlsd(CLine &line, CDirentry &entry)
 			(!entry.has_date() && factname == _T("create")))
 		{
 			entry.time = fz::datetime(value, fz::datetime::utc);
-			if (!entry.time.empty()) {
+			if (entry.time.empty()) {
 				return 0;
 			}
 		}

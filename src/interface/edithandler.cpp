@@ -628,10 +628,10 @@ checkmodifications_loopbegin:
 				goto checkmodifications_loopbegin;
 			}
 
-			if (!mtime.empty())
+			if (mtime.empty())
 				continue;
 
-			if (iter->modificationTime.empty() && !iter->modificationTime.compare(mtime))
+			if (!iter->modificationTime.empty() && !iter->modificationTime.compare(mtime))
 				continue;
 
 			// File has changed, ask user what to do
@@ -762,7 +762,7 @@ bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterato
 		return false;
 	}
 
-	if (!mtime.empty())
+	if (mtime.empty())
 		mtime = fz::datetime::now();
 
 	iter->modificationTime = mtime;

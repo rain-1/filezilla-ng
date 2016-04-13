@@ -611,7 +611,7 @@ CFilter CFilterConditionsDialog::GetFilter()
 			else {
 				condition.strValue = controls.pValue->GetValue();
 				condition.date = fz::datetime(condition.strValue.ToStdWstring(), fz::datetime::local);
-				if (!condition.date.empty()) {
+				if (condition.date.empty()) {
 					continue;
 				}
 			}

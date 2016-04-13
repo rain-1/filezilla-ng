@@ -152,7 +152,7 @@ void wxListCtrlEx::HandlePrefixSearch(wxChar character)
 
 	// Keyboard navigation within items
 	fz::datetime now = fz::datetime::now();
-	if (m_prefixSearch_lastKeyPress.empty()) {
+	if (!m_prefixSearch_lastKeyPress.empty()) {
 		fz::duration span = now - m_prefixSearch_lastKeyPress;
 		if (span.get_seconds() >= 1) {
 			m_prefixSearch_prefix = _T("");

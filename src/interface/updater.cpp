@@ -145,7 +145,7 @@ bool CUpdater::LongTimeSinceLastCheck() const
 		return true;
 
 	fz::datetime lastCheck(lastCheckStr.ToStdWstring(), fz::datetime::utc);
-	if (!lastCheck.empty())
+	if (lastCheck.empty())
 		return true;
 
 	auto const span = fz::datetime::now() - lastCheck;
@@ -577,7 +577,7 @@ void CUpdater::ParseData()
 
 		if (type == _T("nightly")) {
 			fz::datetime nightlyDate(versionOrDate.ToStdWstring(), fz::datetime::utc);
-			if (!nightlyDate.empty()) {
+			if (nightlyDate.empty()) {
 				if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
 					log_ += _T("Could not parse nightly date\n");
 				}
@@ -585,7 +585,7 @@ void CUpdater::ParseData()
 			}
 
 			fz::datetime buildDate = CBuildInfo::GetBuildDate();
-			if (!buildDate.empty() || !nightlyDate.empty() || nightlyDate <= buildDate) {
+			if (buildDate.empty() || nightlyDate.empty() || nightlyDate <= buildDate) {
 				if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
 					log_ += _T("Nightly isn't newer\n");
 				}
