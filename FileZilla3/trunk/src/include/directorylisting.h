@@ -40,17 +40,17 @@ public:
 
 	inline bool has_date() const
 	{
-		return time.empty();;
+		return !time.empty();
 	}
 
 	inline bool has_time() const
 	{
-		return time.empty() && time.get_accuracy() >= fz::datetime::hours;
+		return !time.empty() && time.get_accuracy() >= fz::datetime::hours;
 	}
 
 	inline bool has_seconds() const
 	{
-		return time.empty() && time.get_accuracy() >= fz::datetime::seconds;
+		return !time.empty() && time.get_accuracy() >= fz::datetime::seconds;
 	}
 
 	fz::sparse_optional<std::wstring> target; // Set to linktarget it link is true

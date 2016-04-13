@@ -389,7 +389,7 @@ int CControlSocket::CheckOverwriteFile()
 		found = false;
 
 	if (!pData->download) {
-		if (!found && pData->remoteFileSize < 0 && !pData->fileTime.empty())
+		if (!found && pData->remoteFileSize < 0 && pData->fileTime.empty())
 			return FZ_REPLY_OK;
 	}
 
@@ -401,6 +401,7 @@ int CControlSocket::CheckOverwriteFile()
 	pNotification->remotePath = pData->remotePath;
 	pNotification->localSize = pData->localFileSize;
 	pNotification->remoteSize = pData->remoteFileSize;
+	pNotification->remoteTime = pData->fileTime;
 	pNotification->ascii = !pData->transferSettings.binary;
 
 	if (pData->download && pNotification->localSize >= 0)
@@ -412,15 +413,10 @@ int CControlSocket::CheckOverwriteFile()
 
 	pNotification->localTime = fz::local_filesys::get_modification_time(fz::to_native(pData->localFile));
 
-	if (pData->fileTime.empty())
-		pNotification->remoteTime = pData->fileTime;
-
 	if (found) {
-		if (!pData->fileTime.empty()) {
-			if (entry.has_date()) {
-				pNotification->remoteTime = entry.time;
-				pData->fileTime = entry.time;
-			}
+		if (pNotification->remoteTime.empty() && entry.has_date()) {
+			pNotification->remoteTime = entry.time;
+			pData->fileTime = entry.time;
 		}
 	}
 
@@ -1140,7 +1136,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::overwriteNewer:
-		if (!pFileExistsNotification->localTime.empty() || !pFileExistsNotification->remoteTime.empty())
+		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty())
 			SendNextCommand();
 		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime))
 			SendNextCommand();
@@ -1177,7 +1173,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::overwriteSizeOrNewer:
-		if (!pFileExistsNotification->localTime.empty() || !pFileExistsNotification->remoteTime.empty())
+		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty())
 			SendNextCommand();
 		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
 		Second compare flags the remaining case in which we need to send command : both size unknown */

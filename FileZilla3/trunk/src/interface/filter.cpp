@@ -802,7 +802,7 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 #endif //__WXMSW__
 			break;
 		case filter_date:
-			if (date.empty()) {
+			if (!date.empty()) {
 				int cmp = date.compare( condition.date );
 				switch (condition.condition)
 				{
@@ -948,7 +948,7 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 		}
 		else if (condition.type == filter_date) {
 			condition.date = fz::datetime(condition.strValue.ToStdWstring(), fz::datetime::local);
-			if (!condition.date.empty()) {
+			if (condition.date.empty()) {
 				continue;
 			}
 		}

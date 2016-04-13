@@ -72,7 +72,7 @@ Impl& GetImpl()
 wxString CTimeFormat::Format(fz::datetime const& time)
 {
 	wxString ret;
-	if (time.empty()) {
+	if (!time.empty()) {
 		if (time.get_accuracy() > fz::datetime::days) {
 			ret = FormatDateTime(time);
 		}

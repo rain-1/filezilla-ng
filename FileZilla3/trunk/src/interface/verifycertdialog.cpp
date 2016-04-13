@@ -27,7 +27,7 @@ CVerifyCertDialog::~CVerifyCertDialog()
 bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 {
 	bool warning = false;
-	if (cert.GetActivationTime().empty()) {
+	if (!cert.GetActivationTime().empty()) {
 		if (cert.GetActivationTime() > fz::datetime::now()) {
 			pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), wxString::Format(_("%s - Not yet valid!"), CTimeFormat::Format(cert.GetActivationTime())));
 			xrc_call(*pDlg, "ID_ACTIVATION_TIME", &wxWindow::SetForegroundColour, wxColour(255, 0, 0));
@@ -41,7 +41,7 @@ bool CVerifyCertDialog::DisplayCert(wxDialogEx* pDlg, const CCertificate& cert)
 		pDlg->SetChildLabel(XRCID("ID_ACTIVATION_TIME"), _("Invalid date"));
 	}
 
-	if (cert.GetExpirationTime().empty()) {
+	if (!cert.GetExpirationTime().empty()) {
 		if (cert.GetExpirationTime() < fz::datetime::now()) {
 			pDlg->SetChildLabel(XRCID("ID_EXPIRATION_TIME"), wxString::Format(_("%s - Certificate expired!"), CTimeFormat::Format(cert.GetExpirationTime())));
 			xrc_call(*pDlg, "ID_EXPIRATION_TIME", &wxWindow::SetForegroundColour, wxColour(255, 0, 0));

@@ -1416,6 +1416,20 @@ void CDirectoryListingParserTest::InitEntries()
 		DEFAULT
 	});
 
+	m_entries.push_back((t_entry){
+		"-rw-------      1  99999999 0              3 Apr   4 24:00 alternate_midnight",
+		{
+			_T("alternate_midnight"),
+			3,
+			R(_T("-rw-------")),
+			R(_T("99999999 0")),
+			0,
+			O(),
+			fz::datetime(fz::datetime::utc, calcYear(4, 4), 4, 5, 0, 0)
+		},
+		DEFAULT
+	});
+
 /*
 	std::wstring name;
 	int64_t size;
