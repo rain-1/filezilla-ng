@@ -10,6 +10,10 @@
 #include <wx/tokenzr.h>
 #include <string>
 
+#ifdef __WXMSW__
+#include <wx/msw/registry.h>
+#endif
+
 #include <libfilezilla/file.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
@@ -181,6 +185,24 @@ wxString CUpdater::GetUrl()
 		url += _T("&osarch=64");
 	else
 		url += _T("&osarch=32");
+
+	// Add information about package
+	{
+		wxLogNull log;
+
+		// Installer always writes to 32bit section
+		wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\FileZilla Client"), wxRegKey::WOW64ViewMode_32);
+
+		long updated{};
+		if (key.QueryValue(_T("Updated"), &updated)) {
+			url += wxString::Format(_T("&updated=%d"), updated);
+		}
+
+		long package{};
+		if (key.QueryValue(_T("Package"), &package)) {
+			url += wxString::Format(_T("&package=%d"), package);
+		}
+	}
 #endif
 
 	wxString const cpuCaps = CBuildInfo::GetCPUCaps(',');
