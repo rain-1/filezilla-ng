@@ -1041,12 +1041,12 @@ Section "FileZilla Client" SecMain
   ${If} $PERFORM_UPDATE == 0
     ; Open question: How to deal with non-installer packages, e.g. the zip archive?
 !ifdef ENABLE_OFFERS
-    WriteRegStr SHCTX "Software\FileZilla Client" "Package" "2"
+    WriteRegDWORD SHCTX "Software\FileZilla Client" "Package" 2
 !else
-    WriteRegStr SHCTX "Software\FileZilla Client" "Package" "1"
+    WriteRegDWORD SHCTX "Software\FileZilla Client" "Package" 1
 !endif
   ${EndIf}
-  WriteRegStr SHCTX "Software\FileZilla Client" "Updated" "$PERFORM_UPDATE"
+  WriteRegDWORD SHCTX "Software\FileZilla Client" "Updated" $PERFORM_UPDATE
 
   WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "UninstallString" "$INSTDIR\uninstall.exe"
   WriteRegExpandStr SHCTX "Software\Microsoft\Windows\CurrentVersion\Uninstall\FileZilla Client" "InstallLocation" "$INSTDIR"
