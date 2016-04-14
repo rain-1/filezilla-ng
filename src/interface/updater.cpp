@@ -191,15 +191,19 @@ wxString CUpdater::GetUrl()
 		wxLogNull log;
 
 		// Installer always writes to 32bit section
-		wxRegKey key(_T("HKEY_CURRENT_USER\\Software\\FileZilla Client"), wxRegKey::WOW64ViewMode_32);
+		auto key = std::make_unique<wxRegKey>(_T("HKEY_CURRENT_USER\\Software\\FileZilla Client"), wxRegKey::WOW64ViewMode_32);
+		if (!key->Exists()) {
+			// wxRegKey is sad, it doesn't even have a copy constructor.
+			key = std::make_unique<wxRegKey>(_T("HKEY_LOCAL_MACHINE\\Software\\FileZilla Client"), wxRegKey::WOW64ViewMode_32);
+		}
 
 		long updated{};
-		if (key.QueryValue(_T("Updated"), &updated)) {
+		if (key->GetValueType(_("Updated")) == wxRegKey::Type_Dword && key->QueryValue(_T("Updated"), &updated)) {
 			url += wxString::Format(_T("&updated=%d"), updated);
 		}
 
 		long package{};
-		if (key.QueryValue(_T("Package"), &package)) {
+		if (key->GetValueType(_("Package")) == wxRegKey::Type_Dword && key->QueryValue(_T("Package"), &package)) {
 			url += wxString::Format(_T("&package=%d"), package);
 		}
 	}
