@@ -122,6 +122,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Update Check", number, _T("1"), normal },
 	{ "Update Check Interval", number, _T("7"), normal },
 	{ "Last automatic update check", string, _T(""), normal },
+	{ "Last automatic update version", string, _T(""), normal },
 	{ "Update Check New Version", string, _T(""), normal },
 	{ "Update Check Check Beta", number, _T("0"), normal },
 	{ "Show debug menu", number, _T("0"), normal },

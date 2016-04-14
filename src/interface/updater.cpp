@@ -87,7 +87,7 @@ CUpdater::CUpdater(CUpdateHandler& parent, CFileZillaEngineContext& engine_conte
 
 void CUpdater::Init()
 {
-	if( state_ == UpdaterState::checking || state_ == UpdaterState::newversion_downloading ) {
+	if (state_ == UpdaterState::checking || state_ == UpdaterState::newversion_downloading) {
 		return;
 	}
 
@@ -170,7 +170,7 @@ wxString CUpdater::GetUrl()
 	if (host.empty())
 		host = _T("unknown");
 
-	wxString version(PACKAGE_VERSION, wxConvLocal);
+	wxString version = CBuildInfo::GetVersion();
 	version.Replace(_T(" "), _T("%20"));
 
 	wxString url = wxString::Format(_T("https://update.filezilla-project.org/update.php?platform=%s&version=%s"), host, version);
@@ -212,6 +212,14 @@ wxString CUpdater::GetUrl()
 	wxString const cpuCaps = CBuildInfo::GetCPUCaps(',');
 	if (!cpuCaps.empty()) {
 		url += _T("&cpuid=") + cpuCaps;
+	}
+
+	wxString const lastVersion = COptions::Get()->GetOption(OPTION_UPDATECHECK_LASTVERSION);
+	if (lastVersion != CBuildInfo::GetVersion()) {
+		url += _T("&initial=1");
+	}
+	else {
+		url += _T("&initial=0");
 	}
 
 	return url;
@@ -423,7 +431,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 
 void CUpdater::ProcessOperation(COperationNotification const& operation)
 {
-	if( state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading ) {
+	if (state_ != UpdaterState::checking && state_ != UpdaterState::newversion_downloading) {
 		return;
 	}
 
@@ -449,7 +457,8 @@ void CUpdater::ProcessOperation(COperationNotification const& operation)
 			s = UpdaterState::newversion;
 		}
 	}
-	else if( state_ == UpdaterState::checking ) {
+	else if (state_ == UpdaterState::checking) {
+		COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTVERSION, CBuildInfo::GetVersion());
 		s = ProcessFinishedData(true);
 	}
 	else {
