@@ -10,6 +10,21 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.17.0-rc1 (2016-04-15)
+
++ Recursivly queing local files for upload now displays the progress below the local file list
++ MSW: Use dynamic TCP send buffer sizes to improve upload speeds on high-latency connections
++ SFTP: Use hardware-accelerated AES on x86_64 CPUs if available by using the AES implementation from Nettle instead of PuTTY
++ Building FileZilla now depends on the Nettle library, version 3.1 or later
++ Building FileZilla now depends on libfilezilla >= 0.5.0 (https://lib.filezilla-project.org/).
+- MSW: The installer now warns if it detects old versions of FileZilla outside of the installation directory
+- Improve compatibility with directory listings where midnight is represented as 24:00:00 of the prior day
+- SFTP: Failed downloads due to write failures, e.g. due to a full disk, no longer show up as successful
+- SFTP: Fix transfer failures if multiple transfers try to list the same directory
+- SFTP: Updated PuTTY components
+- FTP over TLS: Debug logs now contain additional information about the TLS handshake
+
+
 3.16.1 (2016-03-16)
 
 ! MSW: Updated installer to NSIS 3.0b3 to prevent DLL hijacking
