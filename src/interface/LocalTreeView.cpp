@@ -1036,8 +1036,10 @@ void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 
 	const bool remoteConnected = m_pState->IsRemoteConnected() && !m_pState->GetRemotePath().empty();
 
-	pMenu->Enable(XRCID("ID_UPLOAD"), hasParent && remoteConnected);
-	pMenu->Enable(XRCID("ID_ADDTOQUEUE"), hasParent && remoteConnected);
+	bool const idle = m_pState && m_pState->GetLocalRecursiveOperation() && !m_pState->GetLocalRecursiveOperation()->IsActive();
+
+	pMenu->Enable(XRCID("ID_UPLOAD"), hasParent && remoteConnected && idle);
+	pMenu->Enable(XRCID("ID_ADDTOQUEUE"), hasParent && remoteConnected && idle);
 	pMenu->Enable(XRCID("ID_MKDIR"), writeable);
 	pMenu->Enable(XRCID("ID_DELETE"), writeable && hasParent);
 	pMenu->Enable(XRCID("ID_RENAME"), writeable && hasParent);

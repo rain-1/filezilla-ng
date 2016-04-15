@@ -725,8 +725,7 @@ CFileListCtrl<CLocalFileData>::CSortComparisonObject CLocalListView::GetSortComp
 	CFileListCtrlSortBase::DirSortMode dirSortMode = GetDirSortMode();
 	CFileListCtrlSortBase::NameSortMode nameSortMode = GetNameSortMode();
 
-	if (!m_sortDirection)
-	{
+	if (!m_sortDirection) {
 		if (m_sortColumn == 1)
 			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
@@ -736,8 +735,7 @@ CFileListCtrl<CLocalFileData>::CSortComparisonObject CLocalListView::GetSortComp
 		else
 			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CFileListCtrlSortName<std::vector<CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 	}
-	else
-	{
+	else {
 		if (m_sortColumn == 1)
 			return CFileListCtrl<CLocalFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CLocalFileData>, CLocalFileData>, CLocalFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
@@ -751,8 +749,7 @@ CFileListCtrl<CLocalFileData>::CSortComparisonObject CLocalListView::GetSortComp
 
 void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 {
-	if (GetEditControl())
-	{
+	if (GetEditControl()) {
 		event.Skip();
 		return;
 	}
@@ -762,8 +759,7 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 		return;
 
 	const bool connected = m_pState->IsRemoteConnected();
-	if (!connected)
-	{
+	if (!connected) {
 		pMenu->Enable(XRCID("ID_EDIT"), COptions::Get()->GetOptionVal(OPTION_EDIT_TRACK_LOCAL) == 0);
 		pMenu->Enable(XRCID("ID_UPLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
@@ -773,12 +769,10 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 	int count = 0;
 	int fillCount = 0;
 	bool selectedDir = false;
-	while (index != -1)
-	{
-		count++;
+	while (index != -1) {
+		++count;
 		const CLocalFileData* const data = GetData(index);
-		if (!data || (!index && m_hasParent))
-		{
+		if (!data || (!index && m_hasParent)) {
 			pMenu->Enable(XRCID("ID_OPEN"), false);
 			pMenu->Enable(XRCID("ID_RENAME"), false);
 			pMenu->Enable(XRCID("ID_EDIT"), false);
@@ -789,8 +783,7 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 			selectedDir = true;
 		index = GetNextItem(index, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
 	}
-	if (!count || fillCount == count)
-	{
+	if (!count || fillCount == count) {
 		pMenu->Delete(XRCID("ID_ENTER"));
 		pMenu->Enable(XRCID("ID_UPLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
@@ -798,19 +791,22 @@ void CLocalListView::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_RENAME"), false);
 		pMenu->Enable(XRCID("ID_EDIT"), false);
 	}
-	else if (count > 1)
-	{
+	else if (count > 1) {
 		pMenu->Delete(XRCID("ID_ENTER"));
 		pMenu->Enable(XRCID("ID_RENAME"), false);
 	}
-	else
-	{
+	else {
 		// Exactly one item selected
 		if (!selectedDir)
 			pMenu->Delete(XRCID("ID_ENTER"));
 	}
-	if (selectedDir)
+	if (selectedDir) {
 		pMenu->Enable(XRCID("ID_EDIT"), false);
+		if (m_pState && m_pState->GetLocalRecursiveOperation() && m_pState->GetLocalRecursiveOperation()->IsActive()) {
+			pMenu->Enable(XRCID("ID_UPLOAD"), false);
+			pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
+		}
+	}
 
 	PopupMenu(pMenu);
 	delete pMenu;
