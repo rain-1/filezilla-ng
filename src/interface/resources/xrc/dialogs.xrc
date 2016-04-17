@@ -1146,14 +1146,14 @@
             <flag>wxTOP|wxGROW</flag>
             <border>5</border>
           </object>
-          <object class="sizeritem">
+          <object class="sizeritem" platform="win|mac">
             <object class="wxStaticText">
               <label>Hold the shift key to toggle the filter state on both sides simultaneously.</label>
             </object>
             <flag>wxTOP|wxBOTTOM</flag>
             <border>5</border>
           </object>
-          <object class="sizeritem">
+          <object class="sizeritem" platform="win|mac">
             <object class="wxStaticLine"/>
             <flag>wxGROW</flag>
           </object>
