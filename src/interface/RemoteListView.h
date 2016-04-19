@@ -14,7 +14,7 @@ class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandl
 {
 	friend class CRemoteListViewDropTarget;
 public:
-	CRemoteListView(wxWindow* pParent, CState* pState, CQueueView* pQueue);
+	CRemoteListView(wxWindow* pParent, CState& state, CQueueView* pQueue);
 	virtual ~CRemoteListView();
 
 	virtual bool CanStartComparison();
@@ -51,7 +51,7 @@ protected:
 
 	virtual CSortComparisonObject GetSortComparisonObject();
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2);
 	void ApplyCurrentFilter();
 	void SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);
 	bool UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> const& pDirectoryListing);

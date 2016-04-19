@@ -13,7 +13,7 @@ class CSearchDialog : protected CFilterConditionsDialog, public CStateEventHandl
 {
 	friend class CSearchDialogFileList;
 public:
-	CSearchDialog(wxWindow* parent, CState* pState, CQueueView* pQueue);
+	CSearchDialog(wxWindow* parent, CState& state, CQueueView* pQueue);
 	virtual ~CSearchDialog();
 
 	bool Load();
@@ -31,7 +31,7 @@ protected:
 	CSearchDialogFileList *m_results{};
 	CQueueView* m_pQueue;
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	CWindowStateManager* m_pWindowStateManager{};
 

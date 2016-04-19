@@ -67,7 +67,7 @@ bool CComparisonManager::CompareListings()
 
 	CFilterManager filters;
 	if (filters.HasActiveFilters() && !filters.HasSameLocalAndRemoteFilters()) {
-		m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+		m_state.NotifyHandlers(STATECHANGE_COMPARISON);
 		wxMessageBoxEx(_("Cannot compare directories, different filters for local and remote directories are enabled"), _("Directory comparison failed"), wxICON_EXCLAMATION);
 		return false;
 	}
@@ -76,7 +76,7 @@ bool CComparisonManager::CompareListings()
 	m_pLeft->m_pComparisonManager = this;
 	m_pRight->m_pComparisonManager = this;
 
-	m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+	m_state.NotifyHandlers(STATECHANGE_COMPARISON);
 
 	wxString error;
 	if (!m_pLeft->CanStartComparison() || !m_pRight->CanStartComparison()) {
@@ -211,8 +211,8 @@ int CComparisonManager::CompareFiles(const int dirSortMode, const wxString& loca
 	return 0;
 }
 
-CComparisonManager::CComparisonManager(CState* pState)
-	: m_pState(pState)
+CComparisonManager::CComparisonManager(CState& state)
+	: m_state(state)
 {
 }
 
@@ -248,5 +248,5 @@ void CComparisonManager::ExitComparisonMode()
 	if (m_pRight)
 		m_pRight->OnExitComparisonMode();
 
-	m_pState->NotifyHandlers(STATECHANGE_COMPARISON);
+	m_state.NotifyHandlers(STATECHANGE_COMPARISON);
 }

@@ -230,7 +230,7 @@ static gboolean gtk_button_release_event(GtkWidget*, void *gdk_event, CGtkEventC
 }
 #endif
 
-template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CState*, CQueueView* pQueue, bool border /*=false*/)
+template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pParent, CQueueView* pQueue, bool border /*=false*/)
 : wxListCtrlEx(pParent, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxLC_VIRTUAL | wxLC_REPORT | wxLC_EDIT_LABELS | (border ? wxBORDER_SUNKEN : wxNO_BORDER)),
 	CComparableListing(this)
 {

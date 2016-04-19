@@ -35,11 +35,11 @@ void recursion_root::add_dir_to_visit_restricted(CServerPath const& path, wxStri
 	m_dirsToVisit.push_back(dirToVisit);
 }
 
-CRemoteRecursiveOperation::CRemoteRecursiveOperation(CState* pState)
-	: CRecursiveOperation(pState)
+CRemoteRecursiveOperation::CRemoteRecursiveOperation(CState &state)
+	: CRecursiveOperation(state)
 {
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
+	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
+	state.RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
 }
 
 CRemoteRecursiveOperation::~CRemoteRecursiveOperation()
@@ -50,7 +50,7 @@ CRemoteRecursiveOperation::~CRemoteRecursiveOperation()
 	}
 }
 
-void CRemoteRecursiveOperation::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void* data2)
+void CRemoteRecursiveOperation::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
 		std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
@@ -72,7 +72,7 @@ void CRemoteRecursiveOperation::AddRecursionRoot(recursion_root && root)
 void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir)
 {
 	wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
-	wxCHECK_RET(m_pState->IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
+	wxCHECK_RET(m_state.IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
 	wxCHECK_RET(!finalDir.empty(), _T("Empty final dir in recursive operation"));
 
 	if (mode == recursive_chmod && !m_pChmodDlg)
@@ -90,8 +90,8 @@ void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std:
 	m_processedDirectories = 0;
 
 	m_operationMode = mode;
-	m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
-	m_pState->NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
+	m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+	m_state.NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
 
 	m_filters = filters;
 
@@ -108,13 +108,13 @@ bool CRemoteRecursiveOperation::NextOperation()
 		while (!root.m_dirsToVisit.empty()) {
 			const recursion_root::new_dir& dirToVisit = root.m_dirsToVisit.front();
 			if (m_operationMode == recursive_delete && !dirToVisit.doVisit) {
-				m_pState->m_pCommandQueue->ProcessCommand(new CRemoveDirCommand(dirToVisit.parent, dirToVisit.subdir), CCommandQueue::recursiveOperation);
+				m_state.m_pCommandQueue->ProcessCommand(new CRemoveDirCommand(dirToVisit.parent, dirToVisit.subdir), CCommandQueue::recursiveOperation);
 				root.m_dirsToVisit.pop_front();
 				continue;
 			}
 
 			CListCommand* cmd = new CListCommand(dirToVisit.parent, dirToVisit.subdir, dirToVisit.link ? LIST_FLAG_LINK : 0);
-			m_pState->m_pCommandQueue->ProcessCommand(cmd, CCommandQueue::recursiveOperation);
+			m_state.m_pCommandQueue->ProcessCommand(cmd, CCommandQueue::recursiveOperation);
 			return true;
 		}
 
@@ -123,16 +123,16 @@ bool CRemoteRecursiveOperation::NextOperation()
 
 	if (m_operationMode == recursive_delete && !m_finalDir.empty()) {
 		// After a deletion we cannot refresh if inside the deleted directories. Navigate user out if it
-		auto curPath = m_pState->GetRemotePath();
+		auto curPath = m_state.GetRemotePath();
 		if (!curPath.empty() && (curPath == m_finalDir || m_finalDir.IsParentOf(curPath, false))) {
 			StopRecursiveOperation();
-			m_pState->ChangeRemoteDir(m_finalDir, wxString(), LIST_FLAG_REFRESH);
+			m_state.ChangeRemoteDir(m_finalDir, wxString(), LIST_FLAG_REFRESH);
 			return false;
 		}
 	}
 
 	StopRecursiveOperation();
-	m_pState->RefreshRemote();
+	m_state.RefreshRemote();
 	return false;
 }
 
@@ -184,7 +184,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 	auto & root = recursion_roots_.front();
 	wxASSERT(!root.m_dirsToVisit.empty());
 
-	if (!m_pState->IsRemoteConnected() || root.m_dirsToVisit.empty()) {
+	if (!m_state.IsRemoteConnected() || root.m_dirsToVisit.empty()) {
 		StopRecursiveOperation();
 		return;
 	}
@@ -218,13 +218,13 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 
 	++m_processedDirectories;
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	wxASSERT(pServer);
 
 	if (!pDirectoryListing->GetCount()) {
 		if (m_operationMode == recursive_transfer) {
 			wxFileName::Mkdir(dir.localDir.GetPath(), 0777, wxPATH_MKDIR_FULL);
-			m_pState->RefreshLocalFile(dir.localDir.GetPath());
+			m_state.RefreshLocalFile(dir.localDir.GetPath());
 		}
 		else if (m_operationMode == recursive_addtoqueue) {
 			m_pQueue->QueueFile(true, true, _T(""), _T(""), dir.localDir, CServerPath(), *pServer, -1);
@@ -318,7 +318,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 				char permissions[9];
 				bool res = m_pChmodDlg->ConvertPermissions(*entry.permissions, permissions);
 				wxString newPerms = m_pChmodDlg->GetPermissions(res ? permissions : 0, entry.is_dir());
-				m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(pDirectoryListing->path, entry.name, newPerms), CCommandQueue::recursiveOperation);
+				m_state.m_pCommandQueue->ProcessCommand(new CChmodCommand(pDirectoryListing->path, entry.name, newPerms), CCommandQueue::recursiveOperation);
 			}
 		}
 	}
@@ -326,9 +326,9 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 		m_pQueue->QueueFile_Finish(m_operationMode != recursive_addtoqueue && m_operationMode != recursive_addtoqueue_flatten);
 
 	if (m_operationMode == recursive_delete && !filesToDelete.empty())
-		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, std::move(filesToDelete)), CCommandQueue::recursiveOperation);
+		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, std::move(filesToDelete)), CCommandQueue::recursiveOperation);
 
-	m_pState->NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
+	m_state.NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
 
 	NextOperation();
 }
@@ -347,8 +347,8 @@ void CRemoteRecursiveOperation::StopRecursiveOperation()
 {
 	if (m_operationMode != recursive_none) {
 		m_operationMode = recursive_none;
-		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
-		m_pState->NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
+		m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+		m_state.NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
 	}
 	recursion_roots_.clear();
 
@@ -395,7 +395,7 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 	recursion_root::new_dir dir = root.m_dirsToVisit.front();
 	root.m_dirsToVisit.pop_front();
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	if (!pServer) {
 		NextOperation();
 		return;
@@ -405,7 +405,7 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 		if (!dir.subdir.empty()) {
 			std::deque<wxString> files;
 			files.push_back(dir.subdir);
-			m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(dir.parent, std::move(files)), CCommandQueue::recursiveOperation);
+			m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(dir.parent, std::move(files)), CCommandQueue::recursiveOperation);
 		}
 		NextOperation();
 		return;

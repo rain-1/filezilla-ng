@@ -51,7 +51,7 @@ public:
 		CServerPath remotePath;
 	};
 
-	CLocalRecursiveOperation(CState* pState);
+	CLocalRecursiveOperation(CState& state);
 	virtual ~CLocalRecursiveOperation();
 
 	void AddRecursionRoot(local_recursion_root && root);
@@ -62,7 +62,7 @@ public:
 protected:
 	bool DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters);
 
-	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2);
 
 	virtual void entry();
 

@@ -45,8 +45,7 @@ void CContextManager::DestroyState(CState* pState)
 		m_contexts.erase(m_contexts.begin() + i);
 		if ((int)i < m_current_context)
 			m_current_context--;
-		else if ((int)i == m_current_context)
-		{
+		else if ((int)i == m_current_context) {
 			if (i >= m_contexts.size())
 				m_current_context--;
 			NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0);
@@ -64,8 +63,7 @@ void CContextManager::SetCurrentContext(CState* pState)
 	if (GetCurrentContext() == pState)
 		return;
 
-	for (unsigned int i = 0; i < m_contexts.size(); i++)
-	{
+	for (unsigned int i = 0; i < m_contexts.size(); ++i) {
 		if (m_contexts[i] != pState)
 			continue;
 
@@ -79,8 +77,7 @@ void CContextManager::DestroyAllStates()
 	m_current_context = -1;
 	NotifyHandlers(GetCurrentContext(), STATECHANGE_CHANGEDCONTEXT, _T(""), 0);
 
-	while (!m_contexts.empty())
-	{
+	while (!m_contexts.empty()) {
 		CState* pState = m_contexts.back();
 		m_contexts.pop_back();
 
@@ -89,7 +86,7 @@ void CContextManager::DestroyAllStates()
 	}
 }
 
-void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only)
+void CContextManager::RegisterHandler(CGlobalStateEventHandler* pHandler, t_statechange_notifications notification, bool current_only)
 {
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
@@ -107,7 +104,7 @@ void CContextManager::RegisterHandler(CStateEventHandler* pHandler, enum t_state
 	handlers.push_back(handler);
 }
 
-void CContextManager::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification)
+void CContextManager::UnregisterHandler(CGlobalStateEventHandler* pHandler, t_statechange_notifications notification)
 {
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX);
@@ -161,13 +158,13 @@ CState* CContextManager::GetCurrentContext()
 	return m_contexts[m_current_context];
 }
 
-void CContextManager::NotifyAllHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
+void CContextManager::NotifyAllHandlers(t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
 {
 	for (unsigned int i = 0; i < m_contexts.size(); i++)
 		m_contexts[i]->NotifyHandlers(notification, data, data2);
 }
 
-void CContextManager::NotifyGlobalHandlers(enum t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
+void CContextManager::NotifyGlobalHandlers(t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
 {
 	auto const& handlers = m_handlers[notification];
 	for (auto const& handler : handlers) {
@@ -180,10 +177,10 @@ CState::CState(CMainFrame &mainFrame)
 {
 	m_title = _("Not connected");
 
-	m_pComparisonManager = new CComparisonManager(this);
+	m_pComparisonManager = new CComparisonManager(*this);
 
-	m_pLocalRecursiveOperation = new CLocalRecursiveOperation(this);
-	m_pRemoteRecursiveOperation = new CRemoteRecursiveOperation(this);
+	m_pLocalRecursiveOperation = new CLocalRecursiveOperation(*this);
+	m_pRemoteRecursiveOperation = new CRemoteRecursiveOperation(*this);
 
 	m_sync_browse.is_changing = false;
 	m_sync_browse.compare = false;
@@ -198,16 +195,13 @@ CState::~CState()
 	delete m_pComparisonManager;
 	delete m_pCommandQueue;
 	delete m_pEngine;
+	delete m_pLocalRecursiveOperation;
+	delete m_pRemoteRecursiveOperation;
 
 	// Unregister all handlers
 	for (int i = 0; i < STATECHANGE_MAX; ++i) {
-		for (auto & handler : m_handlers[i]) {
-			handler.pHandler->m_pState = 0;
-		}
+		wxASSERT(m_handlers[i].empty());
 	}
-
-	delete m_pLocalRecursiveOperation;
-	delete m_pRemoteRecursiveOperation;
 }
 
 CLocalPath CState::GetLocalDir() const
@@ -541,7 +535,7 @@ bool CState::CreateEngine()
 
 	m_pEngine = new CFileZillaEngine(m_mainFrame.GetEngineContext(), m_mainFrame);
 
-	m_pCommandQueue = new CCommandQueue(m_pEngine, &m_mainFrame, this);
+	m_pCommandQueue = new CCommandQueue(m_pEngine, &m_mainFrame, *this);
 
 	return true;
 }
@@ -554,11 +548,11 @@ void CState::DestroyEngine()
 	m_pEngine = 0;
 }
 
-void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, CStateEventHandler* insertBefore)
+void CState::RegisterHandler(CStateEventHandler* pHandler, t_statechange_notifications notification, CStateEventHandler* insertBefore)
 {
 	wxASSERT(pHandler);
-	wxASSERT(pHandler->m_pState == this);
-	if (pHandler->m_pState != this)
+	wxASSERT(&pHandler->m_state == this);
+	if (!pHandler || &pHandler->m_state != this)
 		return;
 	wxASSERT(notification != STATECHANGE_MAX && notification != STATECHANGE_NONE);
 	wxASSERT(pHandler != insertBefore);
@@ -582,7 +576,7 @@ void CState::RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_no
 	handlers.insert(insertionPoint, handler);
 }
 
-void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification)
+void CState::UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notifications notification)
 {
 	wxASSERT(pHandler);
 	wxASSERT(notification != STATECHANGE_MAX);
@@ -609,30 +603,31 @@ void CState::UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_
 	}
 }
 
-void CState::NotifyHandlers(enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CState::NotifyHandlers(t_statechange_notifications notification, const wxString& data, const void* data2)
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
 	auto const& handlers = m_handlers[notification];
 	for (auto const& handler : handlers) {
-		handler.pHandler->OnStateChange(this, notification, data, data2);
+		handler.pHandler->OnStateChange(notification, data, data2);
 	}
 
 	CContextManager::Get()->NotifyHandlers(this, notification, data, data2);
 }
 
-CStateEventHandler::CStateEventHandler(CState* pState)
-	: m_pState(pState)
+CStateEventHandler::CStateEventHandler(CState &state)
+	: m_state(state)
 {
 }
 
 CStateEventHandler::~CStateEventHandler()
 {
-	CContextManager::Get()->UnregisterHandler(this, STATECHANGE_NONE);
+	m_state.UnregisterHandler(this, STATECHANGE_NONE);
+}
 
-	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
-		(*iter)->UnregisterHandler(this, STATECHANGE_NONE);
+CGlobalStateEventHandler::~CGlobalStateEventHandler()
+{
+	CContextManager::Get()->UnregisterHandler(this, STATECHANGE_NONE);
 }
 
 void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const wxString& subdir, bool queueOnly)

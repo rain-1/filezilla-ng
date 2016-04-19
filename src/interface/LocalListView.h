@@ -30,11 +30,11 @@ class CLocalListView : public CFileListCtrl<CLocalFileData>, CStateEventHandler
 	friend class CLocalListViewSortType;
 
 public:
-	CLocalListView(wxWindow* parent, CState *pState, CQueueView *pQueue);
+	CLocalListView(wxWindow* parent, CState& state, CQueueView *pQueue);
 	virtual ~CLocalListView();
 
 protected:
-	void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void*);
+	void OnStateChange(t_statechange_notifications notification, const wxString& data, const void*);
 	bool DisplayDir(CLocalPath const& dirname);
 	void ApplyCurrentFilter();
 

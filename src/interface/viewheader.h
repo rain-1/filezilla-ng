@@ -47,10 +47,10 @@ protected:
 class CLocalViewHeader : public CViewHeader, CStateEventHandler
 {
 public:
-	CLocalViewHeader(wxWindow* pParent, CState* pState);
+	CLocalViewHeader(wxWindow* pParent, CState& state);
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	wxString m_oldValue;
 
@@ -68,10 +68,10 @@ protected:
 class CRemoteViewHeader : public CViewHeader, CStateEventHandler
 {
 public:
-	CRemoteViewHeader(wxWindow* pParent, CState* pState);
+	CRemoteViewHeader(wxWindow* pParent, CState& state);
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	CServer m_lastServer;
 	CServerPath m_path;

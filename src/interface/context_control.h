@@ -17,7 +17,7 @@ class CViewHeader;
 class CSplitterWindowEx;
 class CState;
 
-class CContextControl final : public wxSplitterWindow, public CStateEventHandler
+class CContextControl final : public wxSplitterWindow, public CGlobalStateEventHandler
 {
 public:
 	struct _context_controls
@@ -70,7 +70,7 @@ public:
 
 protected:
 
-	void CreateContextControls(CState* pState);
+	void CreateContextControls(CState& state);
 
 	std::vector<struct _context_controls> m_context_controls;
 	int m_current_context_controls{-1};
@@ -91,7 +91,7 @@ protected:
 	void OnTabContextCloseOthers(wxCommandEvent& event);
 	void OnTabContextNew(wxCommandEvent&);
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*);
 };
 
 #endif //__CONTEX_CONTROL_H__

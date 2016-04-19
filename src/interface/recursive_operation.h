@@ -8,15 +8,14 @@ class CQueueView;
 class CRecursiveOperation : public CStateEventHandler
 {
 public:
-	CRecursiveOperation(CState* pState)
-		: CStateEventHandler(pState)
+	CRecursiveOperation(CState& state)
+		: CStateEventHandler(state)
 		, m_operationMode(recursive_none)
 	{}
 
 	virtual ~CRecursiveOperation() = default;
 
-	enum OperationMode
-	{
+	enum OperationMode {
 		recursive_none,
 		recursive_transfer,
 		recursive_addtoqueue,

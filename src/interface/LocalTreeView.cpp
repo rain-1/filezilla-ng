@@ -102,7 +102,7 @@ public:
 			pDragDropManager->pDropTarget = m_pLocalTreeView;
 
 		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
-			m_pLocalTreeView->m_pState->HandleDroppedFiles(m_pFileDataObject, path, def == wxDragCopy);
+			m_pLocalTreeView->m_state.HandleDroppedFiles(m_pFileDataObject, path, def == wxDragCopy);
 		else
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
@@ -111,13 +111,13 @@ public:
 				return wxDragNone;
 			}
 
-			if (!m_pLocalTreeView->m_pState->GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalTreeView->m_pState->GetServer()))
+			if (!m_pLocalTreeView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalTreeView->m_state.GetServer()))
 			{
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
-			if (!m_pLocalTreeView->m_pState->DownloadDroppedFiles(m_pRemoteDataObject, path))
+			if (!m_pLocalTreeView->m_state.DownloadDroppedFiles(m_pRemoteDataObject, path))
 				return wxDragNone;
 		}
 
@@ -236,10 +236,10 @@ EVT_CHAR(CLocalTreeView::OnChar)
 EVT_MENU(XRCID("ID_OPEN"), CLocalTreeView::OnMenuOpen)
 END_EVENT_TABLE()
 
-CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, CQueueView *pQueueView)
+CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, CQueueView *pQueueView)
 	: wxTreeCtrlEx(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER),
 	CSystemImageList(16),
-	CStateEventHandler(pState),
+	CStateEventHandler(state),
 	m_pQueueView(pQueueView)
 {
 	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::CLocalTreeView"));
@@ -247,8 +247,8 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, 
 	SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 #endif
 
-	pState->RegisterHandler(this, STATECHANGE_LOCAL_DIR);
-	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
+	state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
+	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
 
 	SetImageList(GetSystemImageList());
 
@@ -838,7 +838,7 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	wxString dir = GetDirFromItem(item);
 
 	wxString error;
-	if (!m_pState->SetLocalDir(dir, &error)) {
+	if (!m_state.SetLocalDir(dir, &error)) {
 		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
@@ -849,10 +849,10 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 }
 
-void CLocalTreeView::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void*)
+void CLocalTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
-		SetDir(m_pState->GetLocalDir().GetPath());
+		SetDir(m_state.GetLocalDir().GetPath());
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
 		RefreshListing();
@@ -905,7 +905,7 @@ void CLocalTreeView::OnBeginDrag(wxTreeEvent& event)
 	{
 		// We only need to refresh local side if the operation got handled
 		// externally, the internal handlers do this for us already
-		m_pState->RefreshLocal();
+		m_state.RefreshLocal();
 	}
 }
 
@@ -1034,9 +1034,9 @@ void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 	const bool hasParent = path.HasParent();
 	const bool writeable = path.IsWriteable();
 
-	const bool remoteConnected = m_pState->IsRemoteConnected() && !m_pState->GetRemotePath().empty();
+	const bool remoteConnected = m_state.IsRemoteConnected() && !m_state.GetRemotePath().empty();
 
-	bool const idle = m_pState && m_pState->GetLocalRecursiveOperation() && !m_pState->GetLocalRecursiveOperation()->IsActive();
+	bool const idle = m_state.GetLocalRecursiveOperation() && !m_state.GetLocalRecursiveOperation()->IsActive();
 
 	pMenu->Enable(XRCID("ID_UPLOAD"), hasParent && remoteConnected && idle);
 	pMenu->Enable(XRCID("ID_ADDTOQUEUE"), hasParent && remoteConnected && idle);
@@ -1050,7 +1050,7 @@ void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 
 void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 {
-	auto recursiveOperation = m_pState->GetLocalRecursiveOperation();
+	auto recursiveOperation = m_state.GetLocalRecursiveOperation();
 	if (recursiveOperation->IsActive()) {
 		return;
 	}
@@ -1063,11 +1063,11 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	if (!path.HasParent())
 		return;
 
-	if (!m_pState->IsRemoteConnected())
+	if (!m_state.IsRemoteConnected())
 		return;
 
-	const CServer server = *m_pState->GetServer();
-	CServerPath remotePath = m_pState->GetRemotePath();
+	const CServer server = *m_state.GetServer();
+	CServerPath remotePath = m_state.GetRemotePath();
 	if (remotePath.empty())
 		return;
 
@@ -1091,7 +1091,7 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent&)
 	wxString newdir = MenuMkdir();
 	if (!newdir.empty()) {
 		RefreshListing();
-		m_pState->RefreshLocal();
+		m_state.RefreshLocal();
 	}
 }
 
@@ -1105,7 +1105,7 @@ void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 
 	// OnMenuEnter
 	wxString error;
-	if (!m_pState->SetLocalDir(newdir, &error))
+	if (!m_state.SetLocalDir(newdir, &error))
 	{
 		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
@@ -1204,7 +1204,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 
 	if (!item) {
 		if (GetItemParent(m_contextMenuItem) == GetSelection())
-			m_pState->RefreshLocal();
+			m_state.RefreshLocal();
 		else
 			RefreshListing();
 		return;
@@ -1218,7 +1218,7 @@ void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 	else
 		path = path.Left(pos);
 
-	m_pState->SetLocalDir(path);
+	m_state.SetLocalDir(path);
 	RefreshListing();
 }
 
@@ -1310,7 +1310,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	}
 
 	if (item == currentSel) {
-		m_pState->SetLocalDir(parent + newName);
+		m_state.SetLocalDir(parent + newName);
 		return;
 	}
 
@@ -1328,7 +1328,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	}
 
 	// Current selection below renamed item
-	m_pState->SetLocalDir(parent + newName + sub);
+	m_state.SetLocalDir(parent + newName + sub);
 }
 
 void CLocalTreeView::OnChar(wxKeyEvent& event)
@@ -1434,8 +1434,8 @@ void CLocalTreeView::OnDevicechange(WPARAM wParam, LPARAM lParam)
 			mask <<= 1;
 		}
 
-		if (GetSelection() == m_drives && m_pState)
-			m_pState->RefreshLocal();
+		if (GetSelection() == m_drives)
+			m_state.RefreshLocal();
 	}
 }
 

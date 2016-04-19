@@ -18,7 +18,7 @@ public:
 		recursiveOperation
 	};
 
-	CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState* pState);
+	CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState& state);
 	~CCommandQueue();
 
 	void ProcessCommand(CCommand *pCommand, command_origin origin = normal);
@@ -43,7 +43,7 @@ protected:
 
 	CFileZillaEngine *m_pEngine;
 	CMainFrame* m_pMainFrame;
-	CState* m_pState;
+	CState& m_state;
 	bool m_exclusiveEngineRequest;
 	bool m_exclusiveEngineLock;
 	int m_requestId;

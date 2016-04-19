@@ -8,13 +8,13 @@
 class CRecursiveOperationStatus final : public wxWindow, public CStateEventHandler
 {
 public:
-	CRecursiveOperationStatus(wxWindow* pParent, CState* pState, bool local);
+	CRecursiveOperationStatus(wxWindow* pParent, CState& state, bool local);
 
 	CRecursiveOperationStatus(CRecursiveOperationStatus const&) = delete;
 private:
 	virtual bool Show(bool show);
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString&, const void*);
 
 	void UpdateText();
 

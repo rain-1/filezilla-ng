@@ -13,11 +13,11 @@ DEFINE_EVENT_TYPE(fzEVT_GRANTEXCLUSIVEENGINEACCESS)
 
 int CCommandQueue::m_requestIdCounter = 0;
 
-CCommandQueue::CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState* pState)
+CCommandQueue::CCommandQueue(CFileZillaEngine *pEngine, CMainFrame* pMainFrame, CState& state)
+	: m_state(state)
 {
 	m_pEngine = pEngine;
 	m_pMainFrame = pMainFrame;
-	m_pState = pState;
 	m_exclusiveEngineRequest = false;
 	m_exclusiveEngineLock = false;
 	m_requestId = 0;
@@ -50,7 +50,7 @@ void CCommandQueue::ProcessCommand(CCommand *pCommand, CCommandQueue::command_or
 
 	m_CommandList.emplace_back(origin, std::unique_ptr<CCommand>(pCommand));
 	if (m_CommandList.size() == 1) {
-		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+		m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		ProcessNextCommand();
 	}
 }
@@ -75,7 +75,7 @@ void CCommandQueue::ProcessNextCommand()
 		// - Interface cannot obtain listing since not connected
 		// - Yet getting operation successful
 		// To keep things flowing, we need to advance the recursive operation.
-		m_pState->GetRemoteRecursiveOperation()->NextOperation();
+		m_state.GetRemoteRecursiveOperation()->NextOperation();
 	}
 
 	while (!m_CommandList.empty()) {
@@ -94,10 +94,10 @@ void CCommandQueue::ProcessNextCommand()
 		if (m_exclusiveEngineRequest)
 			GrantExclusiveEngineRequest();
 		else
-			m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+			m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 
-		if (!m_pState->SuccessfulConnect())
-			m_pState->SetServer(0);
+		if (!m_state.SuccessfulConnect())
+			m_state.SetServer(0);
 	}
 }
 
@@ -113,7 +113,7 @@ bool CCommandQueue::Cancel()
 
 	if (!m_pEngine)	{
 		m_CommandList.clear();
-		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+		m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		return true;
 	}
 
@@ -122,7 +122,7 @@ bool CCommandQueue::Cancel()
 		return false;
 	else {
 		m_CommandList.clear();
-		m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+		m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 		return true;
 	}
 }
@@ -148,7 +148,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 			return;
 		}
 		if (nReplyCode & FZ_REPLY_PASSWORDFAILED)
-			CLoginManager::Get().CachedPasswordFailed(*m_pState->GetServer());
+			CLoginManager::Get().CachedPasswordFailed(*m_state.GetServer());
 	}
 
 	if (m_CommandList.empty()) {
@@ -173,7 +173,7 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 
 		if (reconnect) {
 			// Try automatic reconnect
-			const CServer* pServer = m_pState->GetServer();
+			const CServer* pServer = m_state.GetServer();
 			if (pServer) {
 				m_CommandList.emplace_front(normal, std::make_unique<CConnectCommand>(*pServer));
 				ProcessNextCommand();
@@ -193,16 +193,16 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 			CListCommand* pListCommand = static_cast<CListCommand*>(commandInfo.command.get());
 			wxASSERT(pListCommand->GetFlags() & LIST_FLAG_LINK);
 
-			m_pState->LinkIsNotDir(pListCommand->GetPath(), pListCommand->GetSubDir());
+			m_state.LinkIsNotDir(pListCommand->GetPath(), pListCommand->GetSubDir());
 		}
 		else {
 			if (commandInfo.origin == recursiveOperation) {
 				// Let the recursive operation handler know if a LIST command failed,
 				// so that it may issue the next command in recursive operations.
-				m_pState->GetRemoteRecursiveOperation()->ListingFailed(nReplyCode);
+				m_state.GetRemoteRecursiveOperation()->ListingFailed(nReplyCode);
 			}
 			else {
-				m_pState->ListingFailed(nReplyCode);
+				m_state.ListingFailed(nReplyCode);
 			}
 		}
 		m_CommandList.pop_front();
@@ -220,10 +220,10 @@ void CCommandQueue::ProcessReply(int nReplyCode, Command commandId)
 
 		// If this was an automatic reconnect during a recursive
 		// operation, stop the recursive operation
-		m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
+		m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
 	}
 	else if (commandInfo.command->GetId() == Command::connect && nReplyCode == FZ_REPLY_OK) {
-		m_pState->SetSuccessfulConnect();
+		m_state.SetSuccessfulConnect();
 		m_CommandList.pop_front();
 	}
 	else
@@ -248,7 +248,7 @@ void CCommandQueue::RequestExclusiveEngine(bool requestExclusive)
 		}
 		if (m_CommandList.empty())
 		{
-			m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+			m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 			GrantExclusiveEngineRequest();
 			return;
 		}
@@ -256,7 +256,7 @@ void CCommandQueue::RequestExclusiveEngine(bool requestExclusive)
 	if (!requestExclusive)
 		m_exclusiveEngineLock = false;
 	m_exclusiveEngineRequest = requestExclusive;
-	m_pState->NotifyHandlers(STATECHANGE_REMOTE_IDLE);
+	m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 }
 
 void CCommandQueue::GrantExclusiveEngineRequest()
@@ -304,7 +304,7 @@ void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const&
 	if (!listingNotification.GetPath().empty()) {
 		pListing = std::make_shared<CDirectoryListing>();
 		if (listingNotification.Failed() ||
-			m_pState->m_pEngine->CacheLookup(listingNotification.GetPath(), *pListing) != FZ_REPLY_OK)
+			m_state.m_pEngine->CacheLookup(listingNotification.GetPath(), *pListing) != FZ_REPLY_OK)
 		{
 			pListing = std::make_shared<CDirectoryListing>();
 			pListing->path = listingNotification.GetPath();
@@ -314,11 +314,11 @@ void CCommandQueue::ProcessDirectoryListing(CDirectoryListingNotification const&
 	}
 
 	if (listingIsRecursive) {
-		if (!listingNotification.Modified() && m_pState->GetRemoteRecursiveOperation()->IsActive()) {
-			m_pState->NotifyHandlers(STATECHANGE_REMOTE_DIR_OTHER, wxString(), &pListing);
+		if (!listingNotification.Modified() && m_state.GetRemoteRecursiveOperation()->IsActive()) {
+			m_state.NotifyHandlers(STATECHANGE_REMOTE_DIR_OTHER, wxString(), &pListing);
 		}
 	}
 	else {
-		m_pState->SetRemoteDir(pListing, listingNotification.Modified());
+		m_state.SetRemoteDir(pListing, listingNotification.Modified());
 	}
 }

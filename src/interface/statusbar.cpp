@@ -297,7 +297,7 @@ EVT_TIMER(wxID_ANY, CStatusBar::OnTimer)
 END_EVENT_TABLE()
 
 CStatusBar::CStatusBar(wxTopLevelWindow* pParent)
-	: CWidgetsStatusBar(pParent), CStateEventHandler(0)
+	: CWidgetsStatusBar(pParent)
 {
 	// Speedlimits
 	RegisterOption(OPTION_SPEEDLIMIT_ENABLE);
@@ -615,7 +615,7 @@ void CStatusBar::OnOptionsChanged(changed_options_t const& options)
 	}
 }
 
-void CStatusBar::OnStateChange(CState*, enum t_statechange_notifications notification, const wxString&, const void*)
+void CStatusBar::OnStateChange(CState*, t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_SERVER || notification == STATECHANGE_CHANGEDCONTEXT) {
 		DisplayDataType();

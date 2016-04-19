@@ -182,11 +182,10 @@ BEGIN_EVENT_TABLE(CMainFrame, wxNavigationEnabled<wxFrame>)
 	EVT_MENU(XRCID("ID_MENU_FILE_CLOSETAB"), CMainFrame::OnMenuCloseTab)
 END_EVENT_TABLE()
 
-class CMainFrameStateEventHandler : public CStateEventHandler
+class CMainFrameStateEventHandler : public CGlobalStateEventHandler
 {
 public:
 	CMainFrameStateEventHandler(CMainFrame* pMainFrame)
-		: CStateEventHandler(0)
 	{
 		m_pMainFrame = pMainFrame;
 
@@ -197,7 +196,7 @@ public:
 	}
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*)
 	{
 		if (notification == STATECHANGE_CHANGEDCONTEXT) {
 			// Update window title
@@ -212,6 +211,10 @@ protected:
 
 		if (!pState)
 			return;
+
+		if (!m_pMainFrame->m_pContextControl) {
+			return;
+		}
 
 		CContextControl::_context_controls* controls = m_pMainFrame->m_pContextControl->GetControlsFromState(pState);
 		if (!controls)
@@ -441,6 +444,9 @@ CMainFrame::~CMainFrame()
 	CPowerManagement::Destroy();
 
 	delete m_pStateEventHandler;
+
+	delete m_pContextControl;
+	m_pContextControl = 0;
 
 	CContextManager::Get()->DestroyAllStates();
 	delete m_pAsyncRequestQueue;
@@ -2493,7 +2499,7 @@ void CMainFrame::OnSearch(wxCommandEvent&)
 		return;
 	}
 
-	CSearchDialog dlg(this, pState, m_pQueueView);
+	CSearchDialog dlg(this, *pState, m_pQueueView);
 	if (!dlg.Load())
 		return;
 

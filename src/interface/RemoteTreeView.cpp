@@ -81,7 +81,7 @@ public:
 			pDragDropManager->pDropTarget = m_pRemoteTreeView;
 
 		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
-			m_pRemoteTreeView->m_pState->UploadDroppedFiles(m_pFileDataObject, path, false);
+			m_pRemoteTreeView->m_state.UploadDroppedFiles(m_pFileDataObject, path, false);
 		else
 		{
 			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
@@ -90,7 +90,7 @@ public:
 				return wxDragNone;
 			}
 
-			if (!m_pRemoteTreeView->m_pState->GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteTreeView->m_pState->GetServer()))
+			if (!m_pRemoteTreeView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteTreeView->m_state.GetServer()))
 			{
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
@@ -124,7 +124,7 @@ public:
 			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 			{
 				const CRemoteDataObject::t_fileInfo& info = *iter;
-				m_pRemoteTreeView->m_pState->m_pCommandQueue->ProcessCommand(
+				m_pRemoteTreeView->m_state.m_pCommandQueue->ProcessCommand(
 					new CRenameCommand(m_pRemoteDataObject->GetServerPath(), info.name, path, info.name)
 					);
 			}
@@ -240,17 +240,17 @@ EVT_CHAR(CRemoteTreeView::OnChar)
 EVT_MENU(XRCID("ID_GETURL"), CRemoteTreeView::OnMenuGeturl)
 END_EVENT_TABLE()
 
-CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState* pState, CQueueView* pQueue)
+CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState& state, CQueueView* pQueue)
 	: wxTreeCtrlEx(parent, id, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL | wxTR_EDIT_LABELS | wxTR_LINES_AT_ROOT | wxTR_HAS_BUTTONS | wxNO_BORDER | wxTR_HIDE_ROOT),
 	CSystemImageList(16),
-	CStateEventHandler(pState)
+	CStateEventHandler(state)
 {
 #ifdef __WXMAC__
 	SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
 #endif
 
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
-	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
+	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
+	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
 
 	CreateImageList();
 
@@ -273,10 +273,10 @@ CRemoteTreeView::~CRemoteTreeView()
 	delete m_pImageList;
 }
 
-void CRemoteTreeView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* v)
+void CRemoteTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void* v)
 {
 	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(pState->GetRemoteDir(), v ? *reinterpret_cast<bool const*>(v) : false);
+		SetDirectoryListing(m_state.GetRemoteDir(), v ? *reinterpret_cast<bool const*>(v) : false);
 	else if (notification == STATECHANGE_APPLYFILTER)
 		ApplyFilters(false);
 }
@@ -400,7 +400,7 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 		if (!child) {
 			CDirectoryListing listing;
 
-			if (m_pState->m_pEngine->CacheLookup(path, listing) == FZ_REPLY_OK) {
+			if (m_state.m_pEngine->CacheLookup(path, listing) == FZ_REPLY_OK) {
 				child = AppendItem(parent, *iter, 0, 2, path.HasParent() ? 0 : new CItemData(path));
 				SetItemImages(child, false);
 			}
@@ -532,7 +532,7 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 
 		CDirectoryListing subListing;
 
-		if (m_pState->m_pEngine->CacheLookup(subdir, subListing) == FZ_REPLY_OK) {
+		if (m_state.m_pEngine->CacheLookup(subdir, subListing) == FZ_REPLY_OK) {
 			wxTreeItemId child = AppendItem(parent, name, 0, 2, 0);
 			SetItemImages(child, false);
 
@@ -585,7 +585,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 			childPath.AddSegment(*iter);
 
 			CDirectoryListing subListing;
-			if (m_pState->m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
+			if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
 				if (!GetLastChild(child) && HasSubdirs(subListing, filter))
 					AppendItem(child, _T(""), -1, -1);
 				SetItemImages(child, false);
@@ -612,7 +612,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 			childPath.AddSegment(*iter);
 
 			CDirectoryListing subListing;
-			if (m_pState->m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
+			if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
 				wxTreeItemId childItem = AppendItem(parent, *iter, 0, 2, 0);
 				if (childItem) {
 					SetItemImages(childItem, false);
@@ -648,7 +648,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		childPath.AddSegment(*iter);
 
 		CDirectoryListing subListing;
-		if (m_pState->m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
+		if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
 			wxTreeItemId childItem = AppendItem(parent, *iter, 0, 2, 0);
 			if (childItem) {
 				SetItemImages(childItem, false);
@@ -721,7 +721,7 @@ void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 	if (m_busy)
 		return;
 
-	if (!m_pState->IsRemoteIdle(true)) {
+	if (!m_state.IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
@@ -735,7 +735,7 @@ void CRemoteTreeView::OnSelectionChanged(wxTreeEvent& event)
 	if (path.empty())
 		return;
 
-	m_pState->ChangeRemoteDir(path);
+	m_state.ChangeRemoteDir(path);
 }
 
 void CRemoteTreeView::OnItemActivated(wxTreeEvent& event)
@@ -773,7 +773,7 @@ CServerPath CRemoteTreeView::GetPathFromItem(const wxTreeItemId& item) const
 void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 {
 	// Drag could result in recursive operation, don't allow at this point
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -793,7 +793,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 
 	wxDataObjectComposite object;
 
-	CServer const* pServer = m_pState->GetServer();
+	CServer const* pServer = m_state.GetServer();
 	if (!pServer)
 		return;
 	CServer const server = *pServer;
@@ -839,8 +839,8 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 #if FZ3_USESHELLEXT
 	if (ext) {
 		if (!pRemoteDataObject->DidSendData()) {
-			pServer = m_pState->GetServer();
-			if (!pServer || !m_pState->IsRemoteIdle() || *pServer != server) {
+			pServer = m_state.GetServer();
+			if (!pServer || !m_state.IsRemoteIdle() || *pServer != server) {
 				wxBell();
 				return;
 			}
@@ -852,7 +852,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 				return;
 			}
 
-			m_pState->DownloadDroppedFiles(pRemoteDataObject, target);
+			m_state.DownloadDroppedFiles(pRemoteDataObject, target);
 		}
 	}
 #endif
@@ -866,7 +866,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 		return;
 
 	const CServerPath& path = m_contextMenuItem ? GetPathFromItem(m_contextMenuItem) : CServerPath();
-	if (!m_pState->IsRemoteIdle() || path.empty()) {
+	if (!m_state.IsRemoteIdle() || path.empty()) {
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 		pMenu->Enable(XRCID("ID_MKDIR"), false);
@@ -879,7 +879,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 	else if (!path.HasParent())
 		pMenu->Enable(XRCID("ID_RENAME"), false);
 
-	if (!m_pState->GetLocalDir().IsWriteable()) {
+	if (!m_state.GetLocalDir().IsWriteable()) {
 		pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 	}
@@ -890,7 +890,7 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 
 void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	if (!m_contextMenuItem)
@@ -915,7 +915,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		CDirectoryListing listing;
 
 		// ... and it needs to be cached
-		cached = m_pState->m_pEngine->CacheLookup(parentPath, listing) == FZ_REPLY_OK;
+		cached = m_state.m_pEngine->CacheLookup(parentPath, listing) == FZ_REPLY_OK;
 		if (cached) {
 			for (unsigned int i = 0; i < listing.GetCount(); ++i) {
 				if (listing[i].name != name)
@@ -939,7 +939,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 	}
 
 	// State may have changed while chmod dialog was shown
-	if (!m_contextMenuItem || !m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle()) {
+	if (!m_contextMenuItem || !m_state.IsRemoteConnected() || !m_state.IsRemoteIdle()) {
 		pChmodDlg->Destroy();
 		pChmodDlg = 0;
 		return;
@@ -953,7 +953,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		if (!applyType || applyType == 2) {
 			wxString newPerms = pChmodDlg->GetPermissions(permissions, true);
 
-			m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(path.GetParent(), name, newPerms));
+			m_state.m_pCommandQueue->ProcessCommand(new CChmodCommand(path.GetParent(), name, newPerms));
 		}
 
 		if (pChmodDlg->Recursive())
@@ -968,7 +968,7 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 	}
 
 	if (!cached || pChmodDlg->Recursive()) {
-		CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
+		CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 
@@ -984,20 +984,20 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		const wxTreeItemId selected = GetSelection();
 		if (selected) {
 			CServerPath currentPath = GetPathFromItem(selected);
-			m_pState->ChangeRemoteDir(currentPath);
+			m_state.ChangeRemoteDir(currentPath);
 		}
 	}
 }
 
 void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 {
-	CLocalPath localDir = m_pState->GetLocalDir();
+	CLocalPath localDir = m_state.GetLocalDir();
 	if (!localDir.IsWriteable()) {
 		wxBell();
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	if (!m_contextMenuItem)
@@ -1013,7 +1013,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	recursion_root root(path, true);
 	root.add_dir_to_visit(path, _T(""), localDir);
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 	pRecursiveOperation->AddRecursionRoot(std::move(root));
 
 	CServerPath currentPath;
@@ -1028,7 +1028,7 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	if (!m_contextMenuItem)
@@ -1043,7 +1043,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 
 	const bool hasParent = pathToDelete.HasParent();
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 
 	recursion_root root;
 	CServerPath startDir;
@@ -1066,7 +1066,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 		currentPath = GetPathFromItem(selected);
 	if (!currentPath.empty() && (pathToDelete == currentPath || pathToDelete.IsParentOf(currentPath, false))) {
 		currentPath = startDir;
-		m_pState->ChangeRemoteDir(startDir);
+		m_state.ChangeRemoteDir(startDir);
 	}
 
 	CFilterManager filter;
@@ -1075,7 +1075,7 @@ void CRemoteTreeView::OnMenuDelete(wxCommandEvent&)
 
 void CRemoteTreeView::OnMenuRename(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	if (!m_contextMenuItem)
@@ -1093,7 +1093,7 @@ void CRemoteTreeView::OnMenuRename(wxCommandEvent&)
 
 void CRemoteTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 {
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		event.Veto();
 		return;
 	}
@@ -1117,7 +1117,7 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		event.Veto();
 		return;
 	}
@@ -1138,8 +1138,8 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		return;
 	}
 
-	m_pState->m_pCommandQueue->ProcessCommand(new CRenameCommand(parent, oldName, parent, newName));
-	m_pState->ChangeRemoteDir(parent);
+	m_state.m_pCommandQueue->ProcessCommand(new CRenameCommand(parent, oldName, parent, newName));
+	m_state.ChangeRemoteDir(parent);
 
 	CServerPath currentPath;
 	const wxTreeItemId selected = GetSelection();
@@ -1164,10 +1164,10 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		currentPath.AddSegment(newName);
 		for (std::list<wxString>::const_iterator iter = subdirs.begin(); iter != subdirs.end(); ++iter)
 			currentPath.AddSegment(*iter);
-		m_pState->ChangeRemoteDir(currentPath);
+		m_state.ChangeRemoteDir(currentPath);
 	}
 	else if (currentPath != parent)
-		m_pState->ChangeRemoteDir(currentPath);
+		m_state.ChangeRemoteDir(currentPath);
 }
 
 
@@ -1180,7 +1180,7 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent&)
 	if (newpath.HasParent())
 	{
 		listed = newpath.GetParent();
-		m_pState->ChangeRemoteDir(listed);
+		m_state.ChangeRemoteDir(listed);
 	}
 
 	CServerPath currentPath;
@@ -1188,7 +1188,7 @@ void CRemoteTreeView::OnMkdir(wxCommandEvent&)
 	if (selected)
 		currentPath = GetPathFromItem(selected);
 	if (!currentPath.empty() && currentPath != listed)
-		m_pState->ChangeRemoteDir(currentPath);
+		m_state.ChangeRemoteDir(currentPath);
 
 }
 
@@ -1197,7 +1197,7 @@ void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	CServerPath newpath = MenuMkdir();
 	if (!newpath.empty()) {
-		m_pState->ChangeRemoteDir(newpath);
+		m_state.ChangeRemoteDir(newpath);
 	}
 }
 
@@ -1205,7 +1205,7 @@ void CRemoteTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 // Returns the name of the new directory
 CServerPath CRemoteTreeView::MenuMkdir()
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return CServerPath();
 
 	if (!m_contextMenuItem)
@@ -1244,7 +1244,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 		return CServerPath();
 	}
 
-	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(newPath));
+	m_state.m_pCommandQueue->ProcessCommand(new CMkdirCommand(newPath));
 
 	return newPath;
 }
@@ -1257,7 +1257,7 @@ bool CRemoteTreeView::ListExpand(wxTreeItemId item)
 		return false;
 
 	CDirectoryListing listing;
-	if (m_pState->m_pEngine->CacheLookup(path, listing) == FZ_REPLY_OK)
+	if (m_state.m_pEngine->CacheLookup(path, listing) == FZ_REPLY_OK)
 		RefreshItem(item, listing, false);
 	else
 	{
@@ -1317,7 +1317,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 		}
 
 		CDirectoryListing listing;
-		if (m_pState->m_pEngine->CacheLookup(parent.path, listing) == FZ_REPLY_OK)
+		if (m_state.m_pEngine->CacheLookup(parent.path, listing) == FZ_REPLY_OK)
 			RefreshItem(parent.item, listing, false);
 		else if (filter.HasActiveFilters()) {
 			for (wxTreeItemId child = GetFirstChild(parent.item, cookie); child; child = GetNextSibling(child)) {
@@ -1369,7 +1369,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
 		return;
 	}
 
-	const CServer *pServer = m_pState->GetServer();
+	const CServer *pServer = m_state.GetServer();
 	if (!pServer)
 	{
 		wxBell();

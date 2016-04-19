@@ -17,7 +17,7 @@ class CMainFrame;
 class CPowerManagementInhibitor;
 #endif
 
-class CPowerManagement : protected CStateEventHandler
+class CPowerManagement : protected CGlobalStateEventHandler
 {
 public:
 	static void Create(CMainFrame* pMainFrame);

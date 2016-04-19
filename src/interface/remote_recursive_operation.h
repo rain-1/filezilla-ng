@@ -52,7 +52,7 @@ private:
 class CRemoteRecursiveOperation final : public CRecursiveOperation
 {
 public:
-	CRemoteRecursiveOperation(CState* pState);
+	CRemoteRecursiveOperation(CState& state);
 	virtual ~CRemoteRecursiveOperation();
 
 	void AddRecursionRoot(recursion_root && root);
@@ -72,7 +72,7 @@ protected:
 
 	bool NextOperation();
 
-	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2);
 
 	bool BelowRecursionRoot(const CServerPath& path, recursion_root::new_dir &dir);
 

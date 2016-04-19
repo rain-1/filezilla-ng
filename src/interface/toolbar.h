@@ -6,10 +6,10 @@
 
 class CMainFrame;
 
-class CToolBar : public wxToolBar, public CStateEventHandler, public COptionChangeEventHandler
+class CToolBar : public wxToolBar, public CGlobalStateEventHandler, public COptionChangeEventHandler
 {
 public:
-	CToolBar();
+	CToolBar() = default;
 	virtual ~CToolBar();
 
 	void UpdateToolbarState();
@@ -20,10 +20,10 @@ public:
 	bool HideTool(int id);
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
-	CMainFrame* m_pMainFrame;
+	CMainFrame* m_pMainFrame{};
 
 	std::map<int, wxToolBarToolBase*> m_hidden_tools;
 

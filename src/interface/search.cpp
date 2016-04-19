@@ -53,7 +53,7 @@ class CSearchDialogFileList : public CFileListCtrl<CSearchFileData>
 	friend class CSearchDialog;
 	friend class CSearchSortType;
 public:
-	CSearchDialogFileList(CSearchDialog* pParent, CState* pState, CQueueView* pQueue);
+	CSearchDialogFileList(CSearchDialog* pParent, CState &state, CQueueView* pQueue);
 
 protected:
 	virtual bool ItemIsDir(int index) const;
@@ -89,8 +89,8 @@ private:
 // Defined in RemoteListView.cpp
 extern wxString StripVMSRevision(const wxString& name);
 
-CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState* pState, CQueueView* pQueue)
-	: CFileListCtrl<CSearchFileData>(pParent, pState, pQueue, true),
+CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState& state, CQueueView* pQueue)
+	: CFileListCtrl<CSearchFileData>(pParent, pQueue, true),
 	m_searchDialog(pParent)
 {
 	m_hasParent = false;
@@ -230,8 +230,8 @@ EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
 EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
 END_EVENT_TABLE()
 
-CSearchDialog::CSearchDialog(wxWindow* parent, CState* pState, CQueueView* pQueue)
-	: CStateEventHandler(pState)
+CSearchDialog::CSearchDialog(wxWindow* parent, CState& state, CQueueView* pQueue)
+	: CStateEventHandler(state)
 	, m_parent(parent)
 	, m_pQueue(pQueue)
 {
@@ -260,12 +260,12 @@ bool CSearchDialog::Load()
 	if (!CreateListControl(filter_name | filter_size | filter_path | filter_date))
 		return false;
 
-	m_results = new CSearchDialogFileList(this, m_pState, 0);
+	m_results = new CSearchDialogFileList(this, m_state, 0);
 	ReplaceControl(XRCCTRL(*this, "ID_RESULTS", wxWindow), m_results);
 
 	m_results->SetFilelistStatusBar(pStatusBar);
 
-	const CServerPath path = m_pState->GetRemotePath();
+	const CServerPath path = m_state.GetRemotePath();
 	if (!path.empty())
 		xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, path.GetPath());
 
@@ -288,44 +288,44 @@ bool CSearchDialog::Load()
 
 void CSearchDialog::Run()
 {
-	m_original_dir = m_pState->GetRemotePath();
-	m_local_target = m_pState->GetLocalDir();
+	m_original_dir = m_state.GetRemotePath();
+	m_local_target = m_state.GetLocalDir();
 
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_pState->GetRemoteRecursiveOperation());
-	m_pState->RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_pState->GetRemoteRecursiveOperation());
+	m_state.RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_state.GetRemoteRecursiveOperation());
+	m_state.RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_state.GetRemoteRecursiveOperation());
 
 	ShowModal();
 
 	SaveConditions();
 
-	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
-	m_pState->UnregisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
+	m_state.UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
+	m_state.UnregisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
 
 	if (m_searching) {
-		if (!m_pState->IsRemoteIdle()) {
-			m_pState->m_pCommandQueue->Cancel();
-			m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
+		if (!m_state.IsRemoteIdle()) {
+			m_state.m_pCommandQueue->Cancel();
+			m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
 		}
 		if (!m_original_dir.empty())
-			m_pState->ChangeRemoteDir(m_original_dir);
+			m_state.ChangeRemoteDir(m_original_dir);
 	}
 	else {
-		if (m_pState->IsRemoteIdle() && !m_original_dir.empty())
-			m_pState->ChangeRemoteDir(m_original_dir);
+		if (m_state.IsRemoteIdle() && !m_original_dir.empty())
+			m_state.ChangeRemoteDir(m_original_dir);
 	}
 }
 
-void CSearchDialog::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void* data2)
+void CSearchDialog::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
-		auto recursiveOperation = m_pState->GetRemoteRecursiveOperation();
+		auto recursiveOperation = m_state.GetRemoteRecursiveOperation();
 		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_list) {
 			std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
 			ProcessDirectoryListing(listing);
 		}
 	}
 	else if (notification == STATECHANGE_REMOTE_IDLE) {
-		if (pState->IsRemoteIdle())
+		if (m_state.IsRemoteIdle())
 			m_searching = false;
 		SetCtrlState();
 	}
@@ -374,14 +374,14 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 
 void CSearchDialog::OnSearch(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
 
 	CServerPath path;
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	if (!pServer) {
 		wxMessageBoxEx(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
 		return;
@@ -423,22 +423,22 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 	m_searching = true;
 	recursion_root root(path, true);
 	root.add_dir_to_visit_restricted(path, _T(""), true);
-	m_pState->GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
+	m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
 }
 
 void CSearchDialog::OnStop(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle()) {
-		m_pState->m_pCommandQueue->Cancel();
-		m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
+	if (!m_state.IsRemoteIdle()) {
+		m_state.m_pCommandQueue->Cancel();
+		m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
 	}
 }
 
 void CSearchDialog::SetCtrlState()
 {
-	bool idle = m_pState->IsRemoteIdle();
+	bool idle = m_state.IsRemoteIdle();
 	XRCCTRL(*this, "ID_START", wxButton)->Enable(idle);
 	XRCCTRL(*this, "ID_STOP", wxButton)->Enable(!idle);
 }
@@ -454,7 +454,7 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 	if (!pMenu)
 		return;
 
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DELETE"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_EDIT"), false);
@@ -587,7 +587,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<
 
 void CSearchDialog::OnDownload(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	// Find all selected files and directories
@@ -611,7 +611,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	}
 	m_local_target = path;
 
-	CServer const* pServer = m_pState->GetServer();
+	CServer const* pServer = m_state.GetServer();
 	if (!pServer) {
 		wxBell();
 		return;
@@ -661,15 +661,15 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 		recursion_root root(dir, true);
 		root.add_dir_to_visit(dir, _T(""), target_path, false);
-		m_pState->GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
+		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	// Find all selected files and directories
@@ -697,7 +697,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		return;
 	}
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	if (!pServer) {
 		wxBell();
 		return;
@@ -722,7 +722,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 
 void CSearchDialog::OnDelete(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 		return;
 
 	// Find all selected files and directories
@@ -751,7 +751,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		CDirentry const& entry = m_results->m_fileData[file];
 		std::deque<wxString> files_to_delete;
 		files_to_delete.push_back(entry.name);
-		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[file].path, std::move(files_to_delete)));
+		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[file].path, std::move(files_to_delete)));
 	}
 
 	for (auto path : selected_dirs) {
@@ -762,10 +762,10 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		}
 		recursion_root root(path, !path.HasParent());
 		root.add_dir_to_visit(path, segment);
-		m_pState->GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
+		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_pState->GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)
