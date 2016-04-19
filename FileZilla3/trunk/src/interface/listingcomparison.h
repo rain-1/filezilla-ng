@@ -49,7 +49,7 @@ class CState;
 class CComparisonManager
 {
 public:
-	CComparisonManager(CState* pState);
+	CComparisonManager(CState& state);
 
 	bool CompareListings();
 	bool IsComparing() const { return m_isComparing; }
@@ -61,7 +61,7 @@ public:
 protected:
 	int CompareFiles(const int dirSortMode, const wxString& local, const wxString& remote, bool localDir, bool remoteDir);
 
-	CState* m_pState;
+	CState& m_state;
 
 	// Left/right, first/second, a/b, doesn't matter
 	CComparableListing* m_pLeft{};

@@ -14,15 +14,15 @@ EVT_BUTTON(wxID_ANY, CRecursiveOperationStatus::OnCancel)
 EVT_TIMER(wxID_ANY, CRecursiveOperationStatus::OnTimer)
 END_EVENT_TABLE()
 
-CRecursiveOperationStatus::CRecursiveOperationStatus(wxWindow* parent, CState* pState, bool local)
+CRecursiveOperationStatus::CRecursiveOperationStatus(wxWindow* parent, CState& state, bool local)
 	: wxWindow(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
-	, CStateEventHandler(pState)
+	, CStateEventHandler(state)
 	, m_local(local)
 {
 	Hide();
 	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
-	m_pState->RegisterHandler(this, local ? STATECHANGE_LOCAL_RECURSION_STATUS : STATECHANGE_REMOTE_RECURSION_STATUS);
+	m_state.RegisterHandler(this, local ? STATECHANGE_LOCAL_RECURSION_STATUS : STATECHANGE_REMOTE_RECURSION_STATUS);
 
 	m_pTextCtrl[0] = new wxStaticText(this, wxID_ANY, _T("Recursive operation in progress"), wxPoint(10, 10));
 	m_pTextCtrl[1] = new wxStaticText(this, wxID_ANY, _T("Recursive operation in progress"), wxPoint(10, 20));
@@ -59,9 +59,9 @@ bool CRecursiveOperationStatus::Show(bool show)
 	return ret;
 }
 
-void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifications, const wxString&, const void*)
+void CRecursiveOperationStatus::OnStateChange(t_statechange_notifications, const wxString&, const void*)
 {
-	CRecursiveOperation* op = m_local ? static_cast<CRecursiveOperation*>(m_pState->GetLocalRecursiveOperation()) : static_cast<CRecursiveOperation*>(m_pState->GetRemoteRecursiveOperation());
+	CRecursiveOperation* op = m_local ? static_cast<CRecursiveOperation*>(m_state.GetLocalRecursiveOperation()) : static_cast<CRecursiveOperation*>(m_state.GetRemoteRecursiveOperation());
 	auto mode = CRecursiveOperation::recursive_none;
 	if (op) {
 		mode = op->GetOperationMode();
@@ -85,7 +85,7 @@ void CRecursiveOperationStatus::OnStateChange(CState*, enum t_statechange_notifi
 
 void CRecursiveOperationStatus::UpdateText()
 {
-	CRecursiveOperation* operation = m_local ? static_cast<CRecursiveOperation*>(m_pState->GetLocalRecursiveOperation()) : static_cast<CRecursiveOperation*>(m_pState->GetRemoteRecursiveOperation());
+	CRecursiveOperation* operation = m_local ? static_cast<CRecursiveOperation*>(m_state.GetLocalRecursiveOperation()) : static_cast<CRecursiveOperation*>(m_state.GetRemoteRecursiveOperation());
 
 	m_changed = false;
 	wxString text;
@@ -132,11 +132,11 @@ void CRecursiveOperationStatus::OnPaint(wxPaintEvent&)
 void CRecursiveOperationStatus::OnCancel(wxCommandEvent&)
 {
 	if (m_local) {
-		m_pState->GetLocalRecursiveOperation()->StopRecursiveOperation();
+		m_state.GetLocalRecursiveOperation()->StopRecursiveOperation();
 	}
 	else {
-		m_pState->GetRemoteRecursiveOperation()->StopRecursiveOperation();
-		m_pState->RefreshRemote();
+		m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
+		m_state.RefreshRemote();
 	}
 }
 

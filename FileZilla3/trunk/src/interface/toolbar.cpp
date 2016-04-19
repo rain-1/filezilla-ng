@@ -10,12 +10,6 @@
 
 IMPLEMENT_DYNAMIC_CLASS(CToolBar, wxToolBar)
 
-CToolBar::CToolBar()
-	: CStateEventHandler(0)
-	, m_pMainFrame()
-{
-}
-
 CToolBar::~CToolBar()
 {
 	for (auto iter = m_hidden_tools.begin(); iter != m_hidden_tools.end(); ++iter)
@@ -76,7 +70,7 @@ CToolBar* CToolBar::Load(CMainFrame* pMainFrame)
 	return toolbar;
 }
 
-void CToolBar::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CToolBar::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*)
 {
 	switch (notification)
 	{

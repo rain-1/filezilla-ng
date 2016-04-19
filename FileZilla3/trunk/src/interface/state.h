@@ -45,6 +45,7 @@ class CFileZillaEngine;
 class CCommandQueue;
 class CLocalRecursiveOperation;
 class CMainFrame;
+class CGlobalStateEventHandler;
 class CStateEventHandler;
 class CRemoteDataObject;
 class CRemoteRecursiveOperation;
@@ -57,10 +58,10 @@ class CContextManager final
 public:
 	// If current_only is set, only notifications from the current (at the time
 	// of notification emission) context is dispatched to the handler.
-	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, bool current_only);
-	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
+	void RegisterHandler(CGlobalStateEventHandler* pHandler, t_statechange_notifications notification, bool current_only);
+	void UnregisterHandler(CGlobalStateEventHandler* pHandler, t_statechange_notifications notification);
 
-	size_t HandlerCount(enum t_statechange_notifications notification) const;
+	size_t HandlerCount(t_statechange_notifications notification) const;
 
 	CState* CreateState(CMainFrame &mainFrame);
 	void DestroyState(CState* pState);
@@ -71,8 +72,8 @@ public:
 
 	static CContextManager* Get();
 
-	void NotifyAllHandlers(enum t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
-	void NotifyGlobalHandlers(enum t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
+	void NotifyAllHandlers(t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
+	void NotifyGlobalHandlers(t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
 
 	void SetCurrentContext(CState* pState);
 
@@ -84,12 +85,12 @@ protected:
 
 	struct t_handler
 	{
-		CStateEventHandler* pHandler;
+		CGlobalStateEventHandler* pHandler;
 		bool current_only;
 	};
 	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
 
-	void NotifyHandlers(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	void NotifyHandlers(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	static CContextManager m_the_context_manager;
 };
@@ -128,8 +129,8 @@ public:
 
 	bool RefreshRemote();
 
-	void RegisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification, CStateEventHandler* insertBefore = 0);
-	void UnregisterHandler(CStateEventHandler* pHandler, enum t_statechange_notifications notification);
+	void RegisterHandler(CStateEventHandler* pHandler, t_statechange_notifications notification, CStateEventHandler* insertBefore = 0);
+	void UnregisterHandler(CStateEventHandler* pHandler, t_statechange_notifications notification);
 
 	CFileZillaEngine* m_pEngine{};
 	CCommandQueue* m_pCommandQueue{};
@@ -148,7 +149,7 @@ public:
 	CLocalRecursiveOperation* GetLocalRecursiveOperation() { return m_pLocalRecursiveOperation; }
 	CRemoteRecursiveOperation* GetRemoteRecursiveOperation() { return m_pRemoteRecursiveOperation; }
 
-	void NotifyHandlers(enum t_statechange_notifications notification, wxString const& data = wxString(), const void* data2 = 0);
+	void NotifyHandlers(t_statechange_notifications notification, wxString const& data = wxString(), const void* data2 = 0);
 
 	bool SuccessfulConnect() const { return m_successful_connect; }
 	void SetSuccessfulConnect() { m_successful_connect = true; }
@@ -223,15 +224,24 @@ protected:
 	wxString m_previouslyVisitedRemoteSubdir;
 };
 
+class CGlobalStateEventHandler
+{
+public:
+	CGlobalStateEventHandler() = default;
+	virtual ~CGlobalStateEventHandler();
+
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2) = 0;
+};
+
 class CStateEventHandler
 {
 public:
-	CStateEventHandler(CState* pState);
+	CStateEventHandler(CState& state);
 	virtual ~CStateEventHandler();
 
-	CState* m_pState;
+	CState& m_state;
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2) = 0;
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2) = 0;
 };
 
 #endif

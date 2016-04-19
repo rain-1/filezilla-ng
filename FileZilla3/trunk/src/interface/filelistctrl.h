@@ -10,7 +10,6 @@
 
 class CQueueView;
 class CFileListCtrl_SortComparisonObject;
-class CState;
 class CFilelistStatusBar;
 #if defined(__WXGTK__) && !defined(__WXGTK3__)
 class CGtkEventCallbackProxyBase;
@@ -490,7 +489,7 @@ template<class CFileData> class CFileListCtrl : public wxListCtrlEx, public CCom
 {
 	template<typename Listing, typename DataEntry> friend class CFileListCtrlSortType;
 public:
-	CFileListCtrl(wxWindow* pParent, CState *pState, CQueueView *pQueue, bool border = false);
+	CFileListCtrl(wxWindow* pParent, CQueueView *pQueue, bool border = false);
 	virtual ~CFileListCtrl();
 
 	class CSortComparisonObject : public std::binary_function<int,int,bool>

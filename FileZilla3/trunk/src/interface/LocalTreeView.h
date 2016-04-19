@@ -19,7 +19,7 @@ class CLocalTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler
 	friend class CLocalTreeViewDropTarget;
 
 public:
-	CLocalTreeView(wxWindow* parent, wxWindowID id, CState *pState, CQueueView *pQueueView);
+	CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, CQueueView *pQueueView);
 	virtual ~CLocalTreeView();
 
 #ifdef __WXMSW__
@@ -28,7 +28,7 @@ public:
 #endif
 
 protected:
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2);
 
 	void SetDir(wxString localDir);
 	void RefreshListing();

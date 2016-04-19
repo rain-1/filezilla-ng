@@ -17,8 +17,8 @@ void local_recursion_root::add_dir_to_visit(CLocalPath const& localPath, CServer
 }
 
 
-CLocalRecursiveOperation::CLocalRecursiveOperation(CState* pState)
-	: CRecursiveOperation(pState)
+CLocalRecursiveOperation::CLocalRecursiveOperation(CState& state)
+	: CRecursiveOperation(state)
 {
 }
 
@@ -44,11 +44,11 @@ void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::
 
 bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters)
 {
-	if (!m_pState || !m_pQueue) {
+	if (!m_pQueue) {
 		return false;
 	}
 	
-	auto const server = m_pState->GetServer();
+	auto const server = m_state.GetServer();
 	if (!server) {
 		return false;
 	}
@@ -59,7 +59,7 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std
 		fz::scoped_lock l(mutex_);
 
 		wxCHECK_MSG(m_operationMode == recursive_none, false, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
-		wxCHECK_MSG(m_pState->IsRemoteConnected(), false, _T("StartRecursiveOperation while disconnected"));
+		wxCHECK_MSG(m_state.IsRemoteConnected(), false, _T("StartRecursiveOperation while disconnected"));
 
 		if (mode == recursive_chmod) {
 			return false;
@@ -83,7 +83,7 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std
 		}
 	}
 
-	m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+	m_state.NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 
 	return true;
 }
@@ -107,10 +107,10 @@ void CLocalRecursiveOperation::StopRecursiveOperation()
 	join();
 	m_listedDirectories.clear();
 
-	m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+	m_state.NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 }
 
-void CLocalRecursiveOperation::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void* data2)
+void CLocalRecursiveOperation::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
 }
 
@@ -277,7 +277,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 		StopRecursiveOperation();
 	}
 	else if (processed) {
-		m_pState->NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+		m_state.NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 
 		if (processed >= 5000) {
 			CallAfter(&CLocalRecursiveOperation::OnListedDirectory);

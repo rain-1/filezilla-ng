@@ -91,7 +91,7 @@ public:
 				}
 			}
 
-			m_pRemoteListView->m_pState->UploadDroppedFiles(m_pFileDataObject, subdir, false);
+			m_pRemoteListView->m_state.UploadDroppedFiles(m_pFileDataObject, subdir, false);
 			return wxDragCopy;
 		}
 
@@ -103,7 +103,7 @@ public:
 			return wxDragNone;
 		}
 
-		if (!m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteListView->m_pState->GetServer()))
+		if (!m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pRemoteListView->m_state.GetServer()))
 		{
 			wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 			return wxDragNone;
@@ -163,13 +163,13 @@ public:
 		for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
 		{
 			const CRemoteDataObject::t_fileInfo& info = *iter;
-			m_pRemoteListView->m_pState->m_pCommandQueue->ProcessCommand(
+			m_pRemoteListView->m_state.m_pCommandQueue->ProcessCommand(
 				new CRenameCommand(m_pRemoteDataObject->GetServerPath(), info.name, target, info.name)
 				);
 		}
 
 		// Refresh remote listing
-		m_pRemoteListView->m_pState->m_pCommandQueue->ProcessCommand(
+		m_pRemoteListView->m_state.m_pCommandQueue->ProcessCommand(
 			new CListCommand()
 			);
 
@@ -253,7 +253,7 @@ public:
 			return wxDragNone;
 		}
 
-		const CServer* const pServer = m_pRemoteListView->m_pState->GetServer();
+		const CServer* const pServer = m_pRemoteListView->m_state.GetServer();
 		wxASSERT(pServer);
 
 		int hit = DoDisplayDropHighlight(wxPoint(x, y));
@@ -355,13 +355,13 @@ BEGIN_EVENT_TABLE(CRemoteListView, CFileListCtrl<CGenericFileData>)
 	EVT_MENU(XRCID("ID_CONTEXT_REFRESH"), CRemoteListView::OnMenuRefresh)
 END_EVENT_TABLE()
 
-CRemoteListView::CRemoteListView(wxWindow* pParent, CState *pState, CQueueView* pQueue)
-	: CFileListCtrl<CGenericFileData>(pParent, pState, pQueue),
-	CStateEventHandler(pState)
+CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* pQueue)
+	: CFileListCtrl<CGenericFileData>(pParent, pQueue),
+	CStateEventHandler(state)
 {
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
-	pState->RegisterHandler(this, STATECHANGE_APPLYFILTER);
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
+	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
+	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
+	state.RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
 
 	m_dropTarget = -1;
 
@@ -734,7 +734,7 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 
 		ClearSelection();
 
-		prevFocused = m_pState->GetPreviouslyVisitedRemoteSubdir();
+		prevFocused = m_state.GetPreviouslyVisitedRemoteSubdir();
 		ensureVisible = !prevFocused.empty();
 	}
 	else {
@@ -878,7 +878,7 @@ wxString StripVMSRevision(const wxString& name)
 void CRemoteListView::OnItemActivated(wxListEvent &event)
 {
 	int const action = COptions::Get()->GetOptionVal(OPTION_DOUBLECLICK_ACTION_DIRECTORY);
-	if (!m_pState->IsRemoteIdle(action ? false : true)) {
+	if (!m_state.IsRemoteIdle(action ? false : true)) {
 		wxBell();
 		return;
 	}
@@ -928,7 +928,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
 		const wxString& name = entry.name;
 
-		const CServer* pServer = m_pState->GetServer();
+		const CServer* pServer = m_state.GetServer();
 		if (!pServer) {
 			wxBell();
 			return;
@@ -946,10 +946,10 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 					m_pLinkResolveState.reset(new t_linkResolveState);
 					m_pLinkResolveState->remote_path = m_pDirectoryListing->path;
 					m_pLinkResolveState->link = name;
-					m_pLinkResolveState->local_path = m_pState->GetLocalDir();
+					m_pLinkResolveState->local_path = m_state.GetLocalDir();
 					m_pLinkResolveState->server = *pServer;
 				}
-				m_pState->ChangeRemoteDir(m_pDirectoryListing->path, name, entry.is_link() ? LIST_FLAG_LINK : 0);
+				m_state.ChangeRemoteDir(m_pDirectoryListing->path, name, entry.is_link() ? LIST_FLAG_LINK : 0);
 			}
 			else {
 				wxCommandEvent evt(0, action == 1 ? XRCID("ID_DOWNLOAD") : XRCID("ID_ADDTOQUEUE"));
@@ -973,7 +973,7 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 
 			const bool queue_only = action == 1;
 
-			const CLocalPath local_path = m_pState->GetLocalDir();
+			const CLocalPath local_path = m_state.GetLocalDir();
 			if (!local_path.IsWriteable()) {
 				wxBell();
 				return;
@@ -989,13 +989,13 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 		}
 	}
 	else {
-		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
+		m_state.ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
 	}
 }
 
 void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 {
-	if (!m_pState->IsRemoteIdle(true)) {
+	if (!m_state.IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
@@ -1021,7 +1021,7 @@ void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
 		const wxString& name = entry.name;
 
-		const CServer* pServer = m_pState->GetServer();
+		const CServer* pServer = m_state.GetServer();
 		if (!pServer) {
 			wxBell();
 			return;
@@ -1036,13 +1036,13 @@ void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 			m_pLinkResolveState.reset(new t_linkResolveState);
 			m_pLinkResolveState->remote_path = m_pDirectoryListing->path;
 			m_pLinkResolveState->link = name;
-			m_pLinkResolveState->local_path = m_pState->GetLocalDir();
+			m_pLinkResolveState->local_path = m_state.GetLocalDir();
 			m_pLinkResolveState->server = *pServer;
 		}
-		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, name, entry.is_link() ? LIST_FLAG_LINK : 0);
+		m_state.ChangeRemoteDir(m_pDirectoryListing->path, name, entry.is_link() ? LIST_FLAG_LINK : 0);
 	}
 	else {
-		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
+		m_state.ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
 	}
 }
 
@@ -1057,9 +1057,9 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 	if (!pMenu)
 		return;
 
-	bool const idle = m_pState->IsRemoteIdle();
-	bool const userIdle = m_pState->IsRemoteIdle(true);
-	if (!m_pState->IsRemoteConnected() || !idle) {
+	bool const idle = m_state.IsRemoteIdle();
+	bool const userIdle = m_state.IsRemoteIdle(true);
+	if (!m_state.IsRemoteConnected() || !idle) {
 		bool canEnter = false;
 		if (userIdle) {
 			int item = GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
@@ -1152,7 +1152,7 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 				pMenu->Enable(XRCID("ID_RENAME"), false);
 			}
 
-			if (!m_pState->GetLocalDir().IsWriteable()) {
+			if (!m_state.GetLocalDir().IsWriteable()) {
 				pMenu->Enable(XRCID("ID_DOWNLOAD"), false);
 				pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 			}
@@ -1166,9 +1166,9 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 {
 	// Make sure selection is valid
-	bool idle = m_pState->IsRemoteIdle();
+	bool idle = m_state.IsRemoteIdle();
 
-	const CLocalPath localDir = m_pState->GetLocalDir();
+	const CLocalPath localDir = m_state.GetLocalDir();
 	if (!localDir.IsWriteable()) {
 		wxBell();
 		return;
@@ -1199,14 +1199,14 @@ void CRemoteListView::OnMenuDownload(wxCommandEvent& event)
 
 void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool queue_only)
 {
-	bool idle = m_pState->IsRemoteIdle();
+	bool idle = m_state.IsRemoteIdle();
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 
 	wxASSERT(local_parent.IsWriteable());
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	if (!pServer) {
 		wxBell();
 		return;
@@ -1276,7 +1276,7 @@ void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	CServerPath newdir = MenuMkdir();
 	if (!newdir.empty()) {
-		m_pState->ChangeRemoteDir(newdir, wxString(), 0, true);
+		m_state.ChangeRemoteDir(newdir, wxString(), 0, true);
 	}
 }
 
@@ -1284,7 +1284,7 @@ void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent&)
 // Returns the name of the new directory
 CServerPath CRemoteListView::MenuMkdir()
 {
-	if (!m_pDirectoryListing || !m_pState->IsRemoteIdle()) {
+	if (!m_pDirectoryListing || !m_state.IsRemoteIdle()) {
 		wxBell();
 		return CServerPath();
 	}
@@ -1315,7 +1315,7 @@ CServerPath CRemoteListView::MenuMkdir()
 		return CServerPath();
 
 	if (!m_pDirectoryListing || oldPath != m_pDirectoryListing->path ||
-		!m_pState->IsRemoteIdle())
+		!m_state.IsRemoteIdle())
 	{
 		wxBell();
 		return CServerPath();
@@ -1327,7 +1327,7 @@ CServerPath CRemoteListView::MenuMkdir()
 		return CServerPath();
 	}
 
-	m_pState->m_pCommandQueue->ProcessCommand(new CMkdirCommand(path));
+	m_state.m_pCommandQueue->ProcessCommand(new CMkdirCommand(path));
 
 	// Return name of the New Directory
 	return path;
@@ -1335,7 +1335,7 @@ CServerPath CRemoteListView::MenuMkdir()
 
 void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -1405,7 +1405,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		follow_symlink = XRCCTRL(dlg, "ID_RECURSE", wxRadioButton)->GetValue();
 	}
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 
 	std::deque<wxString> filesToDelete;
@@ -1438,7 +1438,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 	}
 
 	if (!filesToDelete.empty())
-		m_pState->m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_pDirectoryListing->path, std::move(filesToDelete)));
+		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_pDirectoryListing->path, std::move(filesToDelete)));
 
 	if (!root.empty()) {
 		if (IsComparing())
@@ -1458,7 +1458,7 @@ void CRemoteListView::OnMenuRename(wxCommandEvent&)
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -1524,7 +1524,7 @@ void CRemoteListView::OnKeyDown(wxKeyEvent& event)
 
 bool CRemoteListView::OnBeginRename(const wxListEvent& event)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 	{
 		wxBell();
 		return false;
@@ -1549,7 +1549,7 @@ bool CRemoteListView::OnBeginRename(const wxListEvent& event)
 
 bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 {
-	if (!m_pState->IsRemoteIdle())
+	if (!m_state.IsRemoteIdle())
 	{
 		wxBell();
 		return false;
@@ -1601,14 +1601,14 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 		}
 	}
 
-	m_pState->m_pCommandQueue->ProcessCommand(new CRenameCommand(m_pDirectoryListing->path, entry.name, newPath, newFile));
+	m_state.m_pCommandQueue->ProcessCommand(new CRenameCommand(m_pDirectoryListing->path, entry.name, newPath, newFile));
 
 	return true;
 }
 
 void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteConnected() || !m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -1673,7 +1673,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 	}
 
 	// State may have changed while chmod dialog was shown
-	if (!m_pState->IsRemoteConnected() || !m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteConnected() || !m_state.IsRemoteIdle()) {
 		pChmodDlg->Destroy();
 		wxBell();
 		return;
@@ -1681,7 +1681,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 
 	const int applyType = pChmodDlg->GetApplyType();
 
-	CRemoteRecursiveOperation* pRecursiveOperation = m_pState->GetRemoteRecursiveOperation();
+	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 	recursion_root root(m_pDirectoryListing->path, false);
 
@@ -1716,7 +1716,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 			bool res = pChmodDlg->ConvertPermissions(*entry.permissions, newPermissions);
 			wxString newPerms = pChmodDlg->GetPermissions(res ? newPermissions : 0, entry.is_dir());
 
-			m_pState->m_pCommandQueue->ProcessCommand(new CChmodCommand(m_pDirectoryListing->path, entry.name, newPerms));
+			m_state.m_pCommandQueue->ProcessCommand(new CChmodCommand(m_pDirectoryListing->path, entry.name, newPerms));
 		}
 
 		if (pChmodDlg->Recursive() && entry.is_dir())
@@ -1736,11 +1736,11 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		// Refresh listing. This gets done implicitely by the recursive operation, so
 		// only it if not recursing.
 		if (pRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_chmod)
-			m_pState->ChangeRemoteDir(m_pDirectoryListing->path);
+			m_state.ChangeRemoteDir(m_pDirectoryListing->path);
 	}
 	else {
 		pChmodDlg->Destroy();
-		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, _T(""), 0, true);
+		m_state.ChangeRemoteDir(m_pDirectoryListing->path, _T(""), 0, true);
 	}
 
 }
@@ -1988,11 +1988,10 @@ void CRemoteListView::RepositionInfoText()
 
 }
 
-void CRemoteListView::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2)
+void CRemoteListView::OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2)
 {
-	wxASSERT(pState);
 	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(pState->GetRemoteDir());
+		SetDirectoryListing(m_state.GetRemoteDir());
 	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR) {
 		wxASSERT(data2);
 		LinkIsNotDir(*(CServerPath*)data2, data);
@@ -2038,7 +2037,7 @@ void CRemoteListView::SetInfoText()
 
 void CRemoteListView::OnBeginDrag(wxListEvent&)
 {
-	if (!m_pState->IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return;
 	}
@@ -2048,7 +2047,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 		return;
 	}
 
-	bool idle = m_pState->m_pCommandQueue->Idle();
+	bool idle = m_state.m_pCommandQueue->Idle();
 
 	long item = -1;
 	int count = 0;
@@ -2080,7 +2079,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 
 	wxDataObjectComposite object;
 
-	CServer const* pServer = m_pState->GetServer();
+	CServer const* pServer = m_state.GetServer();
 	if (!pServer)
 		return;
 	CServer const server = *pServer;
@@ -2142,8 +2141,8 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 #if FZ3_USESHELLEXT
 	if (ext) {
 		if (!pRemoteDataObject->DidSendData()) {
-			pServer = m_pState->GetServer();
-			if (!m_pState->IsRemoteIdle() ||
+			pServer = m_state.GetServer();
+			if (!m_state.IsRemoteIdle() ||
 				!pServer || *pServer != server ||
 				!m_pDirectoryListing || m_pDirectoryListing->path != path)
 			{
@@ -2153,7 +2152,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 			}
 
 			// Same checks as before
-			idle = m_pState->m_pCommandQueue->Idle();
+			idle = m_state.m_pCommandQueue->Idle();
 
 			item = -1;
 			for (;;) {
@@ -2192,7 +2191,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 
 void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteConnected() || !m_pDirectoryListing) {
+	if (!m_state.IsRemoteConnected() || !m_pDirectoryListing) {
 		wxBell();
 		return;
 	}
@@ -2226,7 +2225,7 @@ void CRemoteListView::OnMenuEdit(wxCommandEvent&)
 	}
 
 	const CServerPath path = m_pDirectoryListing->path;
-	const CServer server = *m_pState->GetServer();
+	const CServer server = *m_state.GetServer();
 	pEditHandler->Edit(CEditHandler::remote, selected_items, path, server, this);
 }
 
@@ -2488,7 +2487,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 	if (!m_pDirectoryListing)
 		return;
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	if (!pServer)
 		return;
 
@@ -2577,14 +2576,13 @@ int CRemoteListView::GetOverlayIndex(int item)
 
 void CRemoteListView::OnMenuRefresh(wxCommandEvent&)
 {
-	if (m_pState)
-		m_pState->RefreshRemote();
+	m_state.RefreshRemote();
 }
 
 void CRemoteListView::OnNavigationEvent(bool forward)
 {
 	if (!forward) {
-		if (!m_pState->IsRemoteIdle(true)) {
+		if (!m_state.IsRemoteIdle(true)) {
 			wxBell();
 			return;
 		}
@@ -2594,13 +2592,13 @@ void CRemoteListView::OnNavigationEvent(bool forward)
 			return;
 		}
 
-		m_pState->ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
+		m_state.ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
 	}
 }
 
 void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 {
-	if (!m_pState->IsRemoteIdle() || !m_pDirectoryListing) {
+	if (!m_state.IsRemoteIdle() || !m_pDirectoryListing) {
 		wxBell();
 		return;
 	}
@@ -2639,12 +2637,12 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 		file.Create(emptyfile);
 	}
 
-	const CServer* pServer = m_pState->GetServer();
+	const CServer* pServer = m_state.GetServer();
 	if (!pServer) {
 		wxBell();
 		return;
 	}
 
 	CFileTransferCommand *cmd = new CFileTransferCommand(emptyfile, m_pDirectoryListing->path, newFileName, false, CFileTransferCommand::t_transferSettings());
-	m_pState->m_pCommandQueue->ProcessCommand(cmd);
+	m_state.m_pCommandQueue->ProcessCommand(cmd);
 }

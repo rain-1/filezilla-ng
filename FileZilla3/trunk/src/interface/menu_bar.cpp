@@ -16,8 +16,7 @@ EVT_MENU(wxID_ANY, CMenuBar::OnMenuEvent)
 END_EVENT_TABLE()
 
 CMenuBar::CMenuBar()
-	: CStateEventHandler(0)
-	, m_pMainFrame()
+	: m_pMainFrame()
 {
 }
 
@@ -48,14 +47,11 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 		wxMenu *helpMenu;
 
 		wxMenuItem* pUpdateItem = menubar->FindItem(XRCID("ID_CHECKFORUPDATES"), &helpMenu);
-		if (pUpdateItem)
-		{
+		if (pUpdateItem) {
 			// Get rid of separator
 			unsigned int count = helpMenu->GetMenuItemCount();
-			for (unsigned int i = 0; i < count - 1; i++)
-			{
-				if (helpMenu->FindItemByPosition(i) == pUpdateItem)
-				{
+			for (unsigned int i = 0; i < count - 1; ++i) {
+				if (helpMenu->FindItemByPosition(i) == pUpdateItem) {
 					helpMenu->Delete(helpMenu->FindItemByPosition(i + 1));
 					break;
 				}
@@ -65,8 +61,7 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 		}
 	}
 
-	if (COptions::Get()->GetOptionVal(OPTION_DEBUG_MENU))
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_DEBUG_MENU)) {
 		wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_DEBUG"));
 		if (pMenu)
 			menubar->Append(pMenu, _("&Debug"));
@@ -147,14 +142,12 @@ void CMenuBar::UpdateBookmarkMenu()
 		return;
 
 	// Delete old bookmarks
-	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_global.begin(); iter != m_bookmark_menu_id_map_global.end(); ++iter)
-	{
+	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_global.begin(); iter != m_bookmark_menu_id_map_global.end(); ++iter) {
 		pMenu->Delete(iter->first);
 	}
 	m_bookmark_menu_id_map_global.clear();
 
-	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_site.begin(); iter != m_bookmark_menu_id_map_site.end(); ++iter)
-	{
+	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_site.begin(); iter != m_bookmark_menu_id_map_site.end(); ++iter) {
 		pMenu->Delete(iter->first);
 	}
 	m_bookmark_menu_id_map_site.clear();
@@ -326,7 +319,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 	event.Skip();
 }
 
-void CMenuBar::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CMenuBar::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*)
 {
 	switch (notification)
 	{

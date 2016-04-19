@@ -5,7 +5,7 @@
 #include "state.h"
 
 class CMainFrame;
-class CMenuBar : public wxMenuBar, public CStateEventHandler, public COptionChangeEventHandler
+class CMenuBar : public wxMenuBar, public CGlobalStateEventHandler, public COptionChangeEventHandler
 {
 public:
 	CMenuBar();
@@ -29,7 +29,7 @@ protected:
 
 	void UpdateSpeedLimitMenuItem();
 
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString& data, const void* data2);
+	virtual void OnStateChange(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2);
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
 	DECLARE_DYNAMIC_CLASS(CMenuBar)

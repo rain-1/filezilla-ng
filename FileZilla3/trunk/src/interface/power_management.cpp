@@ -28,7 +28,6 @@ void CPowerManagement::Destroy()
 }
 
 CPowerManagement::CPowerManagement(CMainFrame* pMainFrame)
-	: CStateEventHandler(0)
 {
 	m_pMainFrame = pMainFrame;
 

@@ -32,8 +32,7 @@ EVT_MENU(XRCID("ID_TABCONTEXT_NEW"), CContextControl::OnTabContextNew)
 END_EVENT_TABLE()
 
 CContextControl::CContextControl(CMainFrame& mainFrame)
-	: CStateEventHandler(0)
-	, m_mainFrame(mainFrame)
+	: m_mainFrame(mainFrame)
 {
 	wxASSERT(!CContextManager::Get()->HandlerCount(STATECHANGE_CHANGEDCONTEXT));
 	CContextManager::Get()->RegisterHandler(this, STATECHANGE_CHANGEDCONTEXT, false);
@@ -90,7 +89,7 @@ void CContextControl::CreateTab()
 		if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH)))
 			pState->SetLastServer(last_server, last_path);
 
-		CreateContextControls(pState);
+		CreateContextControls(*pState);
 
 		pState->GetLocalRecursiveOperation()->SetQueue(m_mainFrame.GetQueue());
 		pState->GetRemoteRecursiveOperation()->SetQueue(m_mainFrame.GetQueue());
@@ -113,7 +112,7 @@ void CContextControl::CreateTab()
 		m_tabs->SetSelection(m_tabs->GetPageCount() - 1);
 }
 
-void CContextControl::CreateContextControls(CState* pState)
+void CContextControl::CreateContextControls(CState& state)
 {
 	wxGetApp().AddStartupProfileRecord(_T("CContextControl::CreateContextControls"));
 	wxWindow* parent = this;
@@ -161,7 +160,7 @@ void CContextControl::CreateContextControls(CState* pState)
 
 	struct CContextControl::_context_controls context_controls;
 
-	context_controls.pState = pState;
+	context_controls.pState = &state;
 	context_controls.pViewSplitter = new CSplitterWindowEx(parent, -1, initial_position, wxDefaultSize, wxSP_NOBORDER  | wxSP_LIVE_UPDATE);
 	context_controls.pViewSplitter->SetMinimumPaneSize(50, 100);
 	context_controls.pViewSplitter->SetSashGravity(0.5);
@@ -174,15 +173,15 @@ void CContextControl::CreateContextControls(CState* pState)
 
 	context_controls.pLocalTreeViewPanel = new CView(context_controls.pLocalSplitter);
 	context_controls.pLocalListViewPanel = new CView(context_controls.pLocalSplitter);
-	context_controls.pLocalTreeView = new CLocalTreeView(context_controls.pLocalTreeViewPanel, -1, pState, m_mainFrame.GetQueue());
-	context_controls.pLocalListView = new CLocalListView(context_controls.pLocalListViewPanel, pState, m_mainFrame.GetQueue());
+	context_controls.pLocalTreeView = new CLocalTreeView(context_controls.pLocalTreeViewPanel, -1, state, m_mainFrame.GetQueue());
+	context_controls.pLocalListView = new CLocalListView(context_controls.pLocalListViewPanel, state, m_mainFrame.GetQueue());
 	context_controls.pLocalTreeViewPanel->SetWindow(context_controls.pLocalTreeView);
 	context_controls.pLocalListViewPanel->SetWindow(context_controls.pLocalListView);
 
 	context_controls.pRemoteTreeViewPanel = new CView(context_controls.pRemoteSplitter);
 	context_controls.pRemoteListViewPanel = new CView(context_controls.pRemoteSplitter);
-	context_controls.pRemoteTreeView = new CRemoteTreeView(context_controls.pRemoteTreeViewPanel, -1, pState, m_mainFrame.GetQueue());
-	context_controls.pRemoteListView = new CRemoteListView(context_controls.pRemoteListViewPanel, pState, m_mainFrame.GetQueue());
+	context_controls.pRemoteTreeView = new CRemoteTreeView(context_controls.pRemoteTreeViewPanel, -1, state, m_mainFrame.GetQueue());
+	context_controls.pRemoteListView = new CRemoteListView(context_controls.pRemoteListViewPanel, state, m_mainFrame.GetQueue());
 	context_controls.pRemoteTreeViewPanel->SetWindow(context_controls.pRemoteTreeView);
 	context_controls.pRemoteListViewPanel->SetWindow(context_controls.pRemoteListView);
 
@@ -201,10 +200,10 @@ void CContextControl::CreateContextControls(CState* pState)
 	context_controls.pRemoteListViewPanel->SetStatusBar(pRemoteFilelistStatusBar);
 	context_controls.pRemoteListView->SetFilelistStatusBar(pRemoteFilelistStatusBar);
 
-	auto localRecursiveStatus = new CRecursiveOperationStatus(context_controls.pLocalListViewPanel, context_controls.pState, true);
+	auto localRecursiveStatus = new CRecursiveOperationStatus(context_controls.pLocalListViewPanel, state, true);
 	context_controls.pLocalListViewPanel->SetFooter(localRecursiveStatus);
 
-	auto remoteRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, context_controls.pState, false);
+	auto remoteRecursiveStatus = new CRecursiveOperationStatus(context_controls.pRemoteListViewPanel, state, false);
 	context_controls.pRemoteListViewPanel->SetFooter(remoteRecursiveStatus);
 
 	const int layout = COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT);
@@ -224,7 +223,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	}
 
 	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_LOCAL)) {
-		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalTreeViewPanel, pState);
+		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalTreeViewPanel, state);
 		context_controls.pLocalTreeViewPanel->SetHeader(context_controls.pLocalViewHeader);
 		if (layout == 3 && swap)
 			context_controls.pLocalSplitter->SplitVertically(context_controls.pLocalListViewPanel, context_controls.pLocalTreeViewPanel);
@@ -235,13 +234,13 @@ void CContextControl::CreateContextControls(CState* pState)
 	}
 	else {
 		context_controls.pLocalTreeViewPanel->Hide();
-		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalListViewPanel, pState);
+		context_controls.pLocalViewHeader = new CLocalViewHeader(context_controls.pLocalListViewPanel, state);
 		context_controls.pLocalListViewPanel->SetHeader(context_controls.pLocalViewHeader);
 		context_controls.pLocalSplitter->Initialize(context_controls.pLocalListViewPanel);
 	}
 
 	if (COptions::Get()->GetOptionVal(OPTION_SHOW_TREE_REMOTE)) {
-		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteTreeViewPanel, pState);
+		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteTreeViewPanel, state);
 		context_controls.pRemoteTreeViewPanel->SetHeader(context_controls.pRemoteViewHeader);
 		if (layout == 3 && !swap)
 			context_controls.pRemoteSplitter->SplitVertically(context_controls.pRemoteListViewPanel, context_controls.pRemoteTreeViewPanel);
@@ -252,7 +251,7 @@ void CContextControl::CreateContextControls(CState* pState)
 	}
 	else {
 		context_controls.pRemoteTreeViewPanel->Hide();
-		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteListViewPanel, pState);
+		context_controls.pRemoteViewHeader = new CRemoteViewHeader(context_controls.pRemoteListViewPanel, state);
 		context_controls.pRemoteListViewPanel->SetHeader(context_controls.pRemoteViewHeader);
 		context_controls.pRemoteSplitter->Initialize(context_controls.pRemoteListViewPanel);
 	}
@@ -271,14 +270,14 @@ void CContextControl::CreateContextControls(CState* pState)
 	m_mainFrame.ConnectNavigationHandler(context_controls.pLocalViewHeader);
 	m_mainFrame.ConnectNavigationHandler(context_controls.pRemoteViewHeader);
 
-	pState->GetComparisonManager()->SetListings(context_controls.pLocalListView, context_controls.pRemoteListView);
+	state.GetComparisonManager()->SetListings(context_controls.pLocalListView, context_controls.pRemoteListView);
 
 	if (m_tabs) {
 		context_controls.tab_index = m_tabs->GetPageCount();
-		m_tabs->AddPage(context_controls.pViewSplitter, pState->GetTitle());
+		m_tabs->AddPage(context_controls.pViewSplitter, state.GetTitle());
 
 		// Copy reconnect and bookmark information
-		pState->SetLastServer(
+		state.SetLastServer(
 			m_context_controls[m_current_context_controls].pState->GetLastServer(),
 			m_context_controls[m_current_context_controls].pState->GetLastServerPath());
 
@@ -564,27 +563,23 @@ void CContextControl::AdvanceTab(bool forward)
 	m_tabs->AdvanceTab(forward);
 }
 
-void CContextControl::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CContextControl::OnStateChange(CState* pState, t_statechange_notifications notification, const wxString&, const void*)
 {
-	if (notification == STATECHANGE_CHANGEDCONTEXT)
-	{
-		if (!pState)
-		{
+	if (notification == STATECHANGE_CHANGEDCONTEXT) {
+		if (!pState) {
 			m_current_context_controls = 0;
 			return;
 		}
 
 		// Get current controls for new current context
-		for (m_current_context_controls = 0; m_current_context_controls < (int)m_context_controls.size(); m_current_context_controls++)
-		{
+		for (m_current_context_controls = 0; m_current_context_controls < (int)m_context_controls.size(); ++m_current_context_controls) {
 			if (m_context_controls[m_current_context_controls].pState == pState)
 				break;
 		}
 		if (m_current_context_controls == (int)m_context_controls.size())
 			m_current_context_controls = -1;
 	}
-	else if (notification == STATECHANGE_SERVER)
-	{
+	else if (notification == STATECHANGE_SERVER) {
 		if (!m_tabs)
 			return;
 

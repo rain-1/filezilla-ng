@@ -15,13 +15,13 @@ class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandle
 	friend class CRemoteTreeViewDropTarget;
 
 public:
-	CRemoteTreeView(wxWindow* parent, wxWindowID id, CState* pState, CQueueView* pQueue);
+	CRemoteTreeView(wxWindow* parent, wxWindowID id, CState& state, CQueueView* pQueue);
 	virtual ~CRemoteTreeView();
 
 protected:
 	wxTreeItemId MakeParent(CServerPath path, bool select);
 	void SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pListing, bool modified);
-	virtual void OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*);
+	virtual void OnStateChange(t_statechange_notifications notification, const wxString&, const void*);
 
 	void DisplayItem(wxTreeItemId parent, const CDirectoryListing& listing);
 	void RefreshItem(wxTreeItemId parent, const CDirectoryListing& listing, bool will_select_parent);

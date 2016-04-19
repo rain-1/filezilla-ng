@@ -330,10 +330,10 @@ EVT_COMMAND(wxID_ANY, fzEVT_LOCALVIEWHEADERSETTEXTSEL, CLocalViewHeader::OnSelec
 #endif
 END_EVENT_TABLE()
 
-CLocalViewHeader::CLocalViewHeader(wxWindow* pParent, CState* pState)
-	: CViewHeader(pParent, _("Local site:")), CStateEventHandler(pState)
+CLocalViewHeader::CLocalViewHeader(wxWindow* pParent, CState& state)
+	: CViewHeader(pParent, _("Local site:")), CStateEventHandler(state)
 {
-	pState->RegisterHandler(this, STATECHANGE_LOCAL_DIR);
+	state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 }
 
 void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
@@ -345,14 +345,12 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 #endif
 
 	wxString str = m_pComboBox->GetValue();
-	if (str.empty() || str.Right(1) == _T("/"))
-	{
+	if (str.empty() || str.Right(1) == _T("/")) {
 		m_oldValue = str;
 		return;
 	}
 #ifdef __WXMSW__
-	if (str.Right(1) == _T("\\"))
-	{
+	if (str.Right(1) == _T("\\")) {
 		m_oldValue = str;
 		return;
 	}
@@ -361,25 +359,21 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 	if (str == m_oldValue)
 		return;
 
-	if (str.Left(m_oldValue.Length()) != m_oldValue)
-	{
+	if (str.Left(m_oldValue.Length()) != m_oldValue) {
 		m_oldValue = str;
 		return;
 	}
 
 #ifdef __WXMSW__
-	if (str.Left(2) == _T("\\\\"))
-	{
+	if (str.Left(2) == _T("\\\\")) {
 		int pos = str.Mid(2).Find('\\');
-		if (pos == -1)
-		{
+		if (pos == -1) {
 			// Partial UNC path, no full server yet, skip further processing
 			return;
 		}
 
 		pos = str.Mid(pos + 3).Find('\\');
-		if (pos == -1)
-		{
+		if (pos == -1) {
 			// Partial UNC path, no full share yet, skip further processing
 			return;
 		}
@@ -387,8 +381,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 #endif
 
 	wxFileName fn(str);
-	if (!fn.IsOk())
-	{
+	if (!fn.IsOk()) {
 		m_oldValue = str;
 		return;
 	}
@@ -403,8 +396,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 	}
 	else {
 		wxLogNull log;
-		if (!dir.Open(path) || !dir.IsOpened())
-		{
+		if (!dir.Open(path) || !dir.IsOpened()) {
 			m_oldValue = str;
 			return;
 		}
@@ -420,8 +412,7 @@ void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
 	}
 
 	wxString tmp;
-	if (dir.GetNext(&tmp))
-	{
+	if (dir.GetNext(&tmp)) {
 		m_oldValue = str;
 		return;
 	}
@@ -475,9 +466,8 @@ void CLocalViewHeader::OnSelectionChanged(wxCommandEvent& event)
 	if (dir.empty())
 		return;
 
-	if (!wxDir::Exists(dir))
-	{
-		const wxString& current = m_pState->GetLocalDir().GetPath();
+	if (!wxDir::Exists(dir)) {
+		const wxString& current = m_state.GetLocalDir().GetPath();
 		int item = m_pComboBox->FindString(current, true);
 		if (item != wxNOT_FOUND)
 			m_pComboBox->SetSelection(item);
@@ -486,7 +476,7 @@ void CLocalViewHeader::OnSelectionChanged(wxCommandEvent& event)
 		return;
 	}
 
-	m_pState->SetLocalDir(dir);
+	m_state.SetLocalDir(dir);
 }
 
 void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
@@ -498,17 +488,16 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	wxString dir = m_pComboBox->GetValue();
 
 	wxString error;
-	if (!m_pState->SetLocalDir(dir, &error))
-	{
+	if (!m_state.SetLocalDir(dir, &error)) {
 		if (!error.empty())
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
 		else
 			wxBell();
-		m_pComboBox->SetValue(m_pState->GetLocalDir().GetPath());
+		m_pComboBox->SetValue(m_state.GetLocalDir().GetPath());
 	}
 }
 
-void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CLocalViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
 	wxASSERT(notification == STATECHANGE_LOCAL_DIR);
 	(void)notification;
@@ -517,7 +506,7 @@ void CLocalViewHeader::OnStateChange(CState* pState, enum t_statechange_notifica
 	m_autoCompletionText = _T("");
 #endif
 
-	wxString dir = pState->GetLocalDir().GetPath();
+	wxString dir = m_state.GetLocalDir().GetPath();
 	AddRecentDirectory(dir);
 }
 
@@ -526,25 +515,25 @@ EVT_TEXT_ENTER(wxID_ANY, CRemoteViewHeader::OnTextEnter)
 EVT_COMBOBOX(wxID_ANY, CRemoteViewHeader::OnSelectionChanged)
 END_EVENT_TABLE()
 
-CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState* pState)
-	: CViewHeader(pParent, _("Remote site:")), CStateEventHandler(pState)
+CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState& state)
+	: CViewHeader(pParent, _("Remote site:")), CStateEventHandler(state)
 {
-	pState->RegisterHandler(this, STATECHANGE_REMOTE_DIR);
+	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
 	Disable();
 }
 
-void CRemoteViewHeader::OnStateChange(CState* pState, enum t_statechange_notifications notification, const wxString&, const void*)
+void CRemoteViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
 	wxASSERT(notification == STATECHANGE_REMOTE_DIR);
 	(void)notification;
 
-	m_path = pState->GetRemotePath();
+	m_path = m_state.GetRemotePath();
 	if (m_path.empty()) {
 		m_pComboBox->SetValue(_T(""));
 		Disable();
 	}
 	else {
-		const CServer* const pServer = pState->GetServer();
+		const CServer* const pServer = m_state.GetServer();
 		if (pServer && *pServer != m_lastServer) {
 			m_pComboBox->Clear();
 			m_recentDirectories.clear();
@@ -568,12 +557,12 @@ void CRemoteViewHeader::OnTextEnter(wxCommandEvent&)
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle(true)) {
+	if (!m_state.IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
 
-	m_pState->ChangeRemoteDir(path);
+	m_state.ChangeRemoteDir(path);
 }
 
 void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
@@ -588,10 +577,10 @@ void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
 		return;
 	}
 
-	if (!m_pState->IsRemoteIdle(true)) {
+	if (!m_state.IsRemoteIdle(true)) {
 		wxBell();
 		return;
 	}
 
-	m_pState->ChangeRemoteDir(path);
+	m_state.ChangeRemoteDir(path);
 }
