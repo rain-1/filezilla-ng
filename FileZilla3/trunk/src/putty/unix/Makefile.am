@@ -7,7 +7,7 @@ libfzputtycommon_ux_a_SOURCES = uxcons.c \
 			     uxnoise.c \
 			     uxstore.c
 
-libfzputtycommon_ux_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64
+libfzputtycommon_ux_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64 $(NETTLE_CFLAGS)
 
 libfzsftp_ux_a_SOURCES = \
 			uxsftp.c \
@@ -19,6 +19,6 @@ libfzsftp_ux_a_SOURCES = \
 			uxproxy.c \
 			uxshare.c
 
-libfzsftp_ux_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64
+libfzsftp_ux_a_CPPFLAGS = $(AM_CPPFLAGS) -DNO_GSSAPI -D_FILE_OFFSET_BITS=64 $(NETTLE_CFLAGS)
 
 noinst_HEADERS = unix.h
