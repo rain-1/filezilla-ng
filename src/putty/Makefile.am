@@ -102,6 +102,8 @@ else
 endif
 
 libfzputtycommon_a_CPPFLAGS += $(NETTLE_CFLAGS)
+fzsftp_CPPFLAGS += $(NETTLE_CFLAGS)
+fzputtygen_CPPFLAGS += $(NETTLE_CFLAGS)
 
 if MACAPPBUNDLE
 noinst_DATA = $(top_builddir)/FileZilla.app/Contents/MacOS/fzsftp$(EXEEXT)
