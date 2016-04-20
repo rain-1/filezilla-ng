@@ -61,4 +61,6 @@ void xrc_call(wxWindow const& parent, S&& name, void (Control::* ptr)(Args...) c
 	}
 }
 
+void InitHandlers(wxXmlResource& res);
+
 #endif

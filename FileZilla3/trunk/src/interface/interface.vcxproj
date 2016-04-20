@@ -248,6 +248,7 @@
     <ClCompile Include="xh_text_ex.cpp" />
     <ClCompile Include="xh_toolb_ex.cpp" />
     <ClCompile Include="xmlfunctions.cpp" />
+    <ClCompile Include="xrc_helper.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="asksavepassworddialog.h" />

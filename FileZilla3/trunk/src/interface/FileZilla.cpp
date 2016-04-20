@@ -14,32 +14,8 @@
 
 #include <libfilezilla/local_filesys.hpp>
 
-#include <wx/xrc/xh_animatctrl.h>
-#include <wx/xrc/xh_bmpbt.h>
-#include <wx/xrc/xh_bttn.h>
-#include <wx/xrc/xh_chckb.h>
-#include <wx/xrc/xh_chckl.h>
-#include <wx/xrc/xh_choic.h>
-#include <wx/xrc/xh_dlg.h>
-#include <wx/xrc/xh_gauge.h>
-#include <wx/xrc/xh_listb.h>
-#include <wx/xrc/xh_listc.h>
-#include <wx/xrc/xh_menu.h>
-#include <wx/xrc/xh_notbk.h>
-#include <wx/xrc/xh_panel.h>
-#include <wx/xrc/xh_radbt.h>
-#include <wx/xrc/xh_scwin.h>
-#include <wx/xrc/xh_sizer.h>
-#include <wx/xrc/xh_spin.h>
-#include <wx/xrc/xh_stbmp.h>
-#include <wx/xrc/xh_stbox.h>
-#include <wx/xrc/xh_stlin.h>
-#include <wx/xrc/xh_sttxt.h>
-#include "xh_text_ex.h"
-#include <wx/xrc/xh_tree.h>
-#include <wx/xrc/xh_hyperlink.h>
-#include "xh_toolb_ex.h"
 #include "wxfilesystem_blob_handler.h"
+#include "xrc_helper.h"
 #ifdef __WXMSW__
 #include <wx/dynlib.h>
 #endif
@@ -439,33 +415,7 @@ bool CFileZillaApp::LoadResourceFiles()
 	pResource->SetFlags(pResource->GetFlags() | wxXRC_NO_RELOADING);
 #endif
 
-	pResource->AddHandler(new wxMenuXmlHandler);
-	pResource->AddHandler(new wxMenuBarXmlHandler);
-	pResource->AddHandler(new wxDialogXmlHandler);
-	pResource->AddHandler(new wxPanelXmlHandler);
-	pResource->AddHandler(new wxSizerXmlHandler);
-	pResource->AddHandler(new wxButtonXmlHandler);
-	pResource->AddHandler(new wxBitmapButtonXmlHandler);
-	pResource->AddHandler(new wxStaticTextXmlHandler);
-	pResource->AddHandler(new wxStaticBoxXmlHandler);
-	pResource->AddHandler(new wxStaticBitmapXmlHandler);
-	pResource->AddHandler(new wxTreeCtrlXmlHandler);
-	pResource->AddHandler(new wxListCtrlXmlHandler);
-	pResource->AddHandler(new wxCheckListBoxXmlHandler);
-	pResource->AddHandler(new wxChoiceXmlHandler);
-	pResource->AddHandler(new wxGaugeXmlHandler);
-	pResource->AddHandler(new wxCheckBoxXmlHandler);
-	pResource->AddHandler(new wxSpinCtrlXmlHandler);
-	pResource->AddHandler(new wxRadioButtonXmlHandler);
-	pResource->AddHandler(new wxNotebookXmlHandler);
-	pResource->AddHandler(new wxTextCtrlXmlHandlerEx);
-	pResource->AddHandler(new wxListBoxXmlHandler);
-	pResource->AddHandler(new wxToolBarXmlHandlerEx);
-	pResource->AddHandler(new wxStaticLineXmlHandler);
-	pResource->AddHandler(new wxScrolledWindowXmlHandler);
-	pResource->AddHandler(new wxHyperlinkCtrlXmlHandler);
-	pResource->AddHandler(new wxAnimationCtrlXmlHandler);
-	pResource->AddHandler(new wxStdDialogButtonSizerXmlHandler);
+	InitHandlers(*pResource);
 
 	if (fz::local_filesys::get_file_type(fz::to_native(m_resourceDir.GetPath() + _T("xrc/resources.xrc"))) == fz::local_filesys::file) {
 		pResource->LoadFile(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
@@ -483,7 +433,7 @@ bool CFileZillaApp::LoadResourceFiles()
 			pResource->LoadFile(dir + name);
 		}
 	}
-	
+
 	// Useful for XRC files with embedded image data.
 	wxFileSystem::AddHandler(new wxFileSystemBlobHandler);
 
