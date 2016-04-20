@@ -29,7 +29,9 @@ struct version_information
 
 	build available_;
 
-	wxString changelog;
+	wxString changelog_;
+
+	wxString resources_;
 };
 
 enum class UpdaterState
@@ -63,7 +65,8 @@ public:
 
 	UpdaterState GetState() const { return state_; }
 	build AvailableBuild() const { return version_information_.available_; }
-	wxString GetChangelog() const { return version_information_.changelog; }
+	wxString GetChangelog() const { return version_information_.changelog_; }
+	wxString GetResources() const { return version_information_.resources_; }
 
 	wxString DownloadedFile() const;
 

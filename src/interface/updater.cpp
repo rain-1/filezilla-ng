@@ -544,7 +544,7 @@ void CUpdater::ProcessData(CDataNotification& dataNotification)
 		log_ += wxString::Format(_T("ProcessData %d\n"), len);
 	}
 
-	if( raw_version_information_.size() + len > 131072 ) {
+	if( raw_version_information_.size() + len > 0x40000) {
 		log_ += _("Received version information is too large");
 		engine_->Cancel();
 		SetState(UpdaterState::failed);
@@ -588,26 +588,35 @@ void CUpdater::ParseData()
 		}
 
 		wxStringTokenizer tokens(line, _T(" \t\n"),  wxTOKEN_STRTOK);
-		if( !tokens.CountTokens() ) {
+		if (!tokens.CountTokens()) {
 			// After empty line, changelog follows
-			version_information_.changelog = raw_version_information;
-			version_information_.changelog.Trim(true);
-			version_information_.changelog.Trim(false);
+			version_information_.changelog_ = raw_version_information;
+			version_information_.changelog_.Trim(true);
+			version_information_.changelog_.Trim(false);
 
-			if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
-				log_ += wxString::Format(_T("Changelog: %s\n"), version_information_.changelog);
+			if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
+				log_ += wxString::Format(_T("Changelog: %s\n"), version_information_.changelog_);
 			}
 			break;
 		}
 
-		if( tokens.CountTokens() != 2 && tokens.CountTokens() != 6 ) {
-			if( COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4 ) {
+		wxString const type = tokens.GetNextToken();
+		if (type == _T("resources")) {
+			if (tokens.CountTokens() == 2) {
+				if (UpdatableBuild()) {
+					version_information_.resources_ = tokens.GetNextToken();
+				}
+			}
+			continue;
+		}
+
+		if (tokens.CountTokens() != 2 && tokens.CountTokens() != 6) {
+			if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
 				log_ += wxString::Format(_T("Skipping line with %d tokens\n"), static_cast<int>(tokens.CountTokens()));
 			}
 			continue;
 		}
 
-		wxString type = tokens.GetNextToken();
 		wxString versionOrDate = tokens.GetNextToken();
 
 		if (type == _T("nightly")) {
