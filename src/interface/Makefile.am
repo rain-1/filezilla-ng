@@ -122,7 +122,9 @@ filezilla_SOURCES = aboutdialog.cpp \
 		wxfilesystem_blob_handler.cpp \
 		xh_text_ex.cpp \
 		xh_toolb_ex.cpp \
-		xmlfunctions.cpp
+		xmlfunctions.cpp \
+		xrc_helper.cpp
+
 
 if USE_BINRELOC
 filezilla_SOURCES += prefix.cpp
