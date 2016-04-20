@@ -130,6 +130,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "File exists action upload", number, _T("0"), normal },
 	{ "Allow ascii resume", number, _T("0"), normal },
 	{ "Greeting version", string, _T(""), normal },
+	{ "Greeting resources", string, _T(""), normal },
 	{ "Onetime Dialogs", string, _T(""), normal },
 	{ "Show Tree Local", number, _T("1"), normal },
 	{ "Show Tree Remote", number, _T("1"), normal },

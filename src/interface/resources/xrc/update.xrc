@@ -144,6 +144,10 @@
           <url>https://filezilla-project.org/</url>
         </object>
       </object>
+      <object class="sizeritem">
+        <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+        <object class="wxPanel" name="ID_FOOTERMESSAGE_PANEL" />
+      </object>
     </object>
   </object>
   <object class="wxPanel" name="ID_CHECKING_PANEL">
