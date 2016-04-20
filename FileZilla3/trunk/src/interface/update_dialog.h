@@ -26,6 +26,8 @@ protected:
 	void LoadPanel(wxString const& name);
 	void Wrap();
 
+	void InitFooter();
+
 	wxWindow* parent_;
 	CUpdater& updater_;
 

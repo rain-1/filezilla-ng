@@ -610,9 +610,9 @@ void CUpdater::ParseData()
 			continue;
 		}
 
-		if (tokens.CountTokens() != 2 && tokens.CountTokens() != 6) {
+		if (tokens.CountTokens() != 1 && tokens.CountTokens() != 5) {
 			if (COptions::Get()->GetOptionVal(OPTION_LOGGING_DEBUGLEVEL) == 4) {
-				log_ += wxString::Format(_T("Skipping line with %d tokens\n"), static_cast<int>(tokens.CountTokens()));
+				log_ += wxString::Format(_T("Skipping line with %d tokens\n"), static_cast<int>(tokens.CountTokens() + 1));
 			}
 			continue;
 		}

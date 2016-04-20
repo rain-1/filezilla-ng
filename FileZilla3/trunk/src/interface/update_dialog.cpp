@@ -7,6 +7,8 @@
 #include "file_utils.h"
 #include "update_dialog.h"
 #include "themeprovider.h"
+#include "xrc_helper.h"
+#include "Options.h"
 
 #include <wx/animate.h>
 #include <wx/hyperlink.h>
@@ -77,6 +79,8 @@ int CUpdateDialog::ShowModal()
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->SetAnimation(a);
 	XRCCTRL(*this, "ID_WAIT_DOWNLOAD", wxAnimationCtrl)->Play();
 
+	InitFooter();
+
 	Wrap();
 
 	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Hide();
@@ -92,6 +96,40 @@ int CUpdateDialog::ShowModal()
 	updater_.RemoveHandler(*this);
 
 	return ret;
+}
+
+void CUpdateDialog::InitFooter()
+{
+	bool hideFooter = true;
+#if FZ_WINDOWS
+	if (CBuildInfo::GetBuildType() == _T("official")) {
+		wxString const resources = updater_.GetResources();
+		if (!resources.empty()) {
+			wxLogNull null;
+
+			wxXmlResource res(wxXRC_NO_RELOADING);
+			InitHandlers(res);
+			if (res.Load(_T("blob:") + resources)) {
+				wxWindow* parent = XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel);
+				if (parent) {
+					wxPanel* p = new wxPanel();
+					if (res.LoadPanel(p, parent, _T("ID_UPDATE_FOOTER"))) {
+						wxSize minSize = p->GetSizer()->GetMinSize();
+						parent->SetInitialSize(minSize);
+						hideFooter = false;
+					}
+					else {
+						delete p;
+					}
+				}
+			}
+		}
+	}
+#endif
+	if (hideFooter) {
+		XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel)->Hide();
+	}
+
 }
 
 void CUpdateDialog::Wrap()
@@ -221,6 +259,7 @@ void CUpdateDialog::OnInstall(wxCommandEvent&)
 	if( f.empty() ) {
 		return;
 	}
+	COptions::Get()->SetOption(OPTION_GREETINGRESOURCES, updater_.GetResources());
 #ifdef __WXMSW__
 	wxExecute(_T("\"") + f +  _T("\" /update /NCRC"));
 	wxWindow* p = parent_;

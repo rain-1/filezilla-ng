@@ -14,6 +14,9 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	const wxString ownVersion = CBuildInfo::GetVersion();
 	wxString greetingVersion = COptions::Get()->GetOption(OPTION_GREETINGVERSION);
 
+	wxString const resources = COptions::Get()->GetOption(OPTION_GREETINGRESOURCES);
+	COptions::Get()->SetOption(OPTION_GREETINGRESOURCES, _T(""));
+
 	if (!force) {
 		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 			if (delay)
