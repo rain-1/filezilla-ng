@@ -39,6 +39,7 @@
 #include <wx/xrc/xh_tree.h>
 #include <wx/xrc/xh_hyperlink.h>
 #include "xh_toolb_ex.h"
+#include "wxfilesystem_blob_handler.h"
 #ifdef __WXMSW__
 #include <wx/dynlib.h>
 #endif
@@ -482,6 +483,9 @@ bool CFileZillaApp::LoadResourceFiles()
 			pResource->LoadFile(dir + name);
 		}
 	}
+	
+	// Useful for XRC files with embedded image data.
+	wxFileSystem::AddHandler(new wxFileSystemBlobHandler);
 
 	return true;
 }
