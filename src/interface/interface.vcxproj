@@ -244,6 +244,7 @@
     <ClCompile Include="welcome_dialog.cpp" />
     <ClCompile Include="window_state_manager.cpp" />
     <ClCompile Include="wrapengine.cpp" />
+    <ClCompile Include="wxfilesystem_blob_handler.cpp" />
     <ClCompile Include="xh_text_ex.cpp" />
     <ClCompile Include="xh_toolb_ex.cpp" />
     <ClCompile Include="xmlfunctions.cpp" />
@@ -358,6 +359,7 @@
     <ClInclude Include="welcome_dialog.h" />
     <ClInclude Include="window_state_manager.h" />
     <ClInclude Include="wrapengine.h" />
+    <ClInclude Include="wxfilesystem_blob_handler.h" />
     <ClInclude Include="xh_text_ex.h" />
     <ClInclude Include="xmlfunctions.h" />
     <ClInclude Include="xrc_helper.h" />
