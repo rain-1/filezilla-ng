@@ -12,6 +12,8 @@ public:
 	virtual bool CanOpen(wxString const& location);
 
 	virtual wxFSFile* OpenFile(wxFileSystem& fs, wxString const& location);
+
+	virtual wxString FindFirst(wxString const& wildcard, int flags);
 };
 
 #endif

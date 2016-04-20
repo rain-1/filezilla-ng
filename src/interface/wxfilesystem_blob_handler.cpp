@@ -8,6 +8,15 @@ bool wxFileSystemBlobHandler::CanOpen(wxString const& location)
 	return GetProtocol(location) == _T("blob");
 }
 
+wxString wxFileSystemBlobHandler::FindFirst(wxString const& wildcard, int flags)
+{
+	if ((flags & wxFILE) != wxFILE) {
+		return wxString();
+	}
+
+	return wildcard;
+}
+
 wxFSFile* wxFileSystemBlobHandler::OpenFile(wxFileSystem& fs, const wxString& location)
 {
 	auto pos = location.Find(':');
