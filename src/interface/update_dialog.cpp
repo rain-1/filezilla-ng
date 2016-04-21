@@ -98,6 +98,25 @@ int CUpdateDialog::ShowModal()
 	return ret;
 }
 
+namespace {
+void MakeLinksFromTooltips(wxWindow& parent)
+{
+	// Iterates over all children.
+	// If tooltip is a URL, make the child have the hand cursor
+	// and launch URL in browser upon click.
+	wxWindowList children = parent.GetChildren();
+	for (auto child : children) {
+		wxString const tooltip = child->GetToolTipText();
+		if (tooltip.find(_T("http://")) == 0 || tooltip.find(_T("https://")) == 0) {
+			child->SetCursor(wxCURSOR_HAND);
+			child->Bind(wxEVT_LEFT_UP, std::bind(&wxLaunchDefaultBrowser, tooltip, 0));
+		}
+		MakeLinksFromTooltips(*child);
+	}
+}
+}
+
+
 void CUpdateDialog::InitFooter()
 {
 	bool hideFooter = true;
@@ -117,6 +136,7 @@ void CUpdateDialog::InitFooter()
 						wxSize minSize = p->GetSizer()->GetMinSize();
 						parent->SetInitialSize(minSize);
 						hideFooter = false;
+						MakeLinksFromTooltips(*p);
 					}
 					else {
 						delete p;
