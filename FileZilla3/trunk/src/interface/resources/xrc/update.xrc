@@ -67,7 +67,7 @@
         </object>
         <option>1</option>
         <flag>wxGROW</flag>
-        <minsize>300,200</minsize>
+        <minsize>300,150</minsize>
       </object>
       <object class="sizeritem">
         <object class="wxBoxSizer">
