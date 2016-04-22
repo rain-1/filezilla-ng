@@ -1,13 +1,13 @@
 # Translation for FileZilla Client - German
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-30 15:29+0100\n"
-"PO-Revision-Date: 2016-01-30 01:23+0100\n"
+"POT-Creation-Date: 2016-04-22 14:27+0200\n"
+"PO-Revision-Date: 2016-04-22 01:08+0200\n"
 "Last-Translator: Peter Körner <18427@gmx.net>\n"
 "Language-Team: German\n"
 "Language: de\n"
@@ -80,11 +80,6 @@ msgid_plural "%d files. Total size: At least %s"
 msgstr[0] "%d Datei. Gesamtgröße: mindestens %s"
 msgstr[1] "%d Dateien. Gesamtgröße: mindestens %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:2772
-#, c-format
-msgid "%d files added to queue"
-msgstr "%d Dateien zur Warteschlange hinzugefügt"
-
 #: ../../locales/../src/engine/ControlSocket.cpp:105
 #, c-format
 msgid "%d second"
@@ -96,14 +91,14 @@ msgstr[1] "%d Sekunden"
 msgid "%h - Host"
 msgstr "%h - Server"
 
-#: ../../locales/../src/interface/recursive_operation_status.cpp:108
+#: ../../locales/../src/interface/recursive_operation_status.cpp:117
 #, c-format
 msgid "%llu directory"
 msgid_plural "%llu directories"
 msgstr[0] "%llu Verzeichnis"
 msgstr[1] "%llu Verzeichnisse"
 
-#: ../../locales/../src/interface/recursive_operation_status.cpp:107
+#: ../../locales/../src/interface/recursive_operation_status.cpp:116
 #, c-format
 msgid "%llu file"
 msgid_plural "%llu files"
@@ -157,7 +152,7 @@ msgid_plural "%s bytes"
 msgstr[0] "%s Byte"
 msgstr[1] "%s Bytes"
 
-#: ../../locales/../src/interface/FileZilla.cpp:617
+#: ../../locales/../src/interface/FileZilla.cpp:571
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -172,7 +167,7 @@ msgstr ""
 "Bitte laden Sie FileZilla erneut herunter. Falls dieses Problem weiterhin "
 "auftritt, senden Sie bitte einen Fehlerbericht."
 
-#: ../../locales/../src/interface/FileZilla.cpp:702
+#: ../../locales/../src/interface/FileZilla.cpp:656
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -326,7 +321,7 @@ msgstr "&Persönliche Daten löschen..."
 msgid "&Close"
 msgstr "&Schließen"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:377
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Close FileZilla"
 msgstr "&FileZilla beenden"
 
@@ -362,7 +357,7 @@ msgstr "&Verzeichnis erstellen"
 msgid "&Create new tab"
 msgstr "&Neuen Tab erzeugen"
 
-#: ../../locales/../src/interface/menu_bar.cpp:72
+#: ../../locales/../src/interface/menu_bar.cpp:67
 msgid "&Debug"
 msgstr "&Debug"
 
@@ -400,14 +395,14 @@ msgstr "&Symbolische Verknüpfung löschen"
 msgid "&Directory comparison"
 msgstr "&Verzeichnisvergleich"
 
-#: ../../locales/../src/interface/state.cpp:887
+#: ../../locales/../src/interface/state.cpp:909
 msgid ""
 "&Disable synchronized browsing and continue changing the local directory"
 msgstr ""
 "&Synchronisierten Verzeichniswechsel deaktivieren und das lokale Verzeichnis "
 "wechseln"
 
-#: ../../locales/../src/interface/state.cpp:960
+#: ../../locales/../src/interface/state.cpp:982
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr ""
@@ -421,10 +416,6 @@ msgstr "Lokale &Datei verwerfen, dann Datei neu herunterladen und bearbeiten"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:185
 msgid "&Disconnect"
 msgstr "&Trennen"
-
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
-msgid "&Disconnect from server"
-msgstr "&Verbindung zum Server trennen"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1404
 msgid "&Display momentary transfer speed instead of average speed"
@@ -723,7 +714,7 @@ msgstr "&Neu"
 msgid "&New Site"
 msgstr "&Neuer Server"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1665
+#: ../../locales/../src/interface/Mainfrm.cpp:1670
 msgid "&New version available!"
 msgstr "&Neue Version verfügbar!"
 
@@ -736,6 +727,7 @@ msgstr "&Weiter >"
 msgid "&No"
 msgstr "&Nein"
 
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:377
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:458
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:719
 msgid "&None"
@@ -776,7 +768,7 @@ msgstr "&Passiv"
 msgid "&Password:"
 msgstr "&Passwort:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
 msgid "&Play sound"
 msgstr "&Klang abspielen"
 
@@ -878,6 +870,10 @@ msgstr "&Ungültige Zeichen ersetzen durch:"
 msgid "&Report a bug..."
 msgstr "&Einen Fehler melden..."
 
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
+msgid "&Request attention"
+msgstr "Um Auf&merksamkeit bitten"
+
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:449
 msgid "&Reset and requeue all"
 msgstr "Alle &Dateien zurücksetzen und wieder zur Warteschlange hinzufügen"
@@ -890,9 +886,9 @@ msgstr "Assistent neusta&rten"
 msgid "&Resume"
 msgstr "Wiedera&ufnehmen"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
 msgid "&Run command..."
-msgstr "&Befehl eingeben..."
+msgstr "&Befehl ausführen..."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:76
 msgid "&Run configuration wizard now..."
@@ -955,10 +951,6 @@ msgstr "&Debugmenü anzeigen"
 msgid "&Show detailed log"
 msgstr "&Detailliertes Log anzeigen"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
-msgid "&Show message"
-msgstr "&Nachricht anzeigen"
-
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2117
 msgid "&Show timestamps in message log"
 msgstr "&Zeitstempel im Nachrichtenprotokoll anzeigen"
@@ -995,7 +987,7 @@ msgstr "&Lokal- und Serveransicht vertauschen"
 msgid "&TLS Ciphers"
 msgstr "&TLS-Chiffren"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:227
+#: ../../locales/../src/interface/netconfwizard.cpp:234
 msgid "&Test"
 msgstr "&Test"
 
@@ -1072,7 +1064,7 @@ msgstr "&Benutzer:"
 msgid "&Username:"
 msgstr "Ben&utzername:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1659
+#: ../../locales/../src/interface/Mainfrm.cpp:1664
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -1139,7 +1131,7 @@ msgstr ""
 "Anmeldung via 'Normal' oder 'Konto' ist nicht verfügbar. Ihr Eintrag wurde "
 "auf 'Nach Passwort fragen' geändert."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:588
+#: ../../locales/../src/interface/Mainfrm.cpp:590
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1157,7 +1149,7 @@ msgid_plural "(%d objects filtered)"
 msgstr[0] "(%d Objekt ausgefiltert)"
 msgstr[1] "(%d Objekte ausgefiltert)"
 
-#: ../../locales/../src/interface/update_dialog.cpp:254
+#: ../../locales/../src/interface/update_dialog.cpp:313
 #, c-format
 msgid "(%u%% downloaded)"
 msgstr "(%u%% heruntergeladen)"
@@ -1278,7 +1270,7 @@ msgstr "Es muss ein Standardeditor eingestellt sein."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:118
-#: ../../locales/../src/interface/state.cpp:736
+#: ../../locales/../src/interface/state.cpp:758
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr ""
 "Ein Verzeichnis kann nicht in eines seiner Unterverzeichnisse verschoben "
@@ -1310,7 +1302,7 @@ msgstr ""
 "Eine Datei mit diesem Namen wird noch bearbeitet. Bitte schließen Sie diese "
 "und versuchen Sie es erneut."
 
-#: ../../locales/../src/interface/FileZilla.cpp:596
+#: ../../locales/../src/interface/FileZilla.cpp:550
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1329,7 +1321,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Eine neue FileZilla-Version ist verfügbar:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:648
+#: ../../locales/../src/interface/Mainfrm.cpp:650
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1347,7 +1339,7 @@ msgstr ""
 "mit dem Serveradministrator in Verbindung, wenn Sie diese Einstellung "
 "dennoch benötigen."
 
-#: ../../locales/../src/interface/state.cpp:258
+#: ../../locales/../src/interface/state.cpp:253
 msgid ""
 "A remote operation is in progress and synchronized browsing is enabled.\n"
 "Disable synchronized browsing and continue changing the local directory?"
@@ -1399,8 +1391,8 @@ msgstr "Über FileZilla"
 msgid "Above the file lists"
 msgstr "Über den Dateilisten"
 
-#: ../../locales/../src/engine/server.cpp:862
-#: ../../locales/../src/engine/server.cpp:883
+#: ../../locales/../src/engine/server.cpp:863
+#: ../../locales/../src/engine/server.cpp:884
 #: ../../locales/../src/interface/manual_transfer.cpp:154
 #: ../../locales/../src/interface/manual_transfer.cpp:155
 #: ../../locales/../src/interface/manual_transfer.cpp:188
@@ -1431,7 +1423,7 @@ msgstr "Aktion:"
 msgid "Active mode"
 msgstr "Aktiver Modus"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:614
+#: ../../locales/../src/interface/netconfwizard.cpp:629
 msgid ""
 "Active mode FTP test failed. FileZilla does not know the correct external IP "
 "address."
@@ -1439,7 +1431,7 @@ msgstr ""
 "Test für den aktiven FTP-Modus fehlgeschlagen. FileZilla kennt die korrekte "
 "externe IP-Adresse nicht."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:601
+#: ../../locales/../src/interface/netconfwizard.cpp:616
 msgid ""
 "Active mode FTP test failed. FileZilla does not know the correct external IP "
 "address. In addition to that, your router has modified the sent address."
@@ -1448,7 +1440,7 @@ msgstr ""
 "externe IP-Adresse nicht. Zusätzlich hat Ihr Router die gesendete Adresse "
 "verändert."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:589
+#: ../../locales/../src/interface/netconfwizard.cpp:604
 msgid ""
 "Active mode FTP test failed. FileZilla knows the correct external IP "
 "address, but your router or firewall has misleadingly modified the sent "
@@ -1482,7 +1474,7 @@ msgstr ""
 msgid "Add to queue"
 msgstr "Zur Warteschlange hinzufügen"
 
-#: ../../locales/../src/engine/proxy.cpp:528
+#: ../../locales/../src/engine/proxy.cpp:529
 msgid "Address type not supported"
 msgstr "Adresstyp nicht unterstützt"
 
@@ -1513,7 +1505,7 @@ msgstr "I&mmer diese Aktion ausführen"
 msgid "Algorithm:"
 msgstr "Algorithmus:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2937
+#: ../../locales/../src/interface/QueueView.cpp:2490
 msgid "All files have been successfully transferred"
 msgstr "Alle Dateien wurden erfolgreich übertragen"
 
@@ -1522,7 +1514,7 @@ msgid "All ports in the given range have to be between 1024 and 65535."
 msgstr ""
 "Alle Ports im angegebenen Bereich müssen zwischen 1024 und 65535 liegen."
 
-#: ../../locales/../src/interface/QueueView.cpp:2933
+#: ../../locales/../src/interface/QueueView.cpp:2486
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
@@ -1575,7 +1567,7 @@ msgstr ""
 "Alternativ können Sie die aktuelle Version auch von der FileZilla-Website "
 "herunterladen:"
 
-#: ../../locales/../src/interface/QueueView.cpp:1902
+#: ../../locales/../src/interface/QueueView.cpp:1531
 #, c-format
 msgid ""
 "An error occurred loading the transfer queue from \"%s\".\n"
@@ -1585,7 +1577,7 @@ msgstr ""
 "aufgetreten.\n"
 "Möglicherweise wurden einige Warteschlangeneinträge nicht wiederhergestellt."
 
-#: ../../locales/../src/interface/QueueView.cpp:1812
+#: ../../locales/../src/interface/QueueView.cpp:1441
 #, c-format
 msgid ""
 "An error occurred saving the transfer queue to \"%s\".\n"
@@ -1601,7 +1593,7 @@ msgid ""
 "location."
 msgstr "Am Zielort ist bereits ein Eintrag mit diesem Namen vorhanden."
 
-#: ../../locales/../src/engine/server.cpp:885
+#: ../../locales/../src/engine/server.cpp:886
 #: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:191
 #: ../../locales/../src/interface/manual_transfer.cpp:207
@@ -1611,7 +1603,7 @@ msgstr "Am Zielort ist bereits ein Eintrag mit diesem Namen vorhanden."
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: ../../locales/../src/interface/state.cpp:937
+#: ../../locales/../src/interface/state.cpp:959
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
@@ -1628,7 +1620,7 @@ msgstr ""
 msgid "Any changes made to the filters could not be saved."
 msgstr "Keine der Änderungen an den Filtern konnte gespeichert werden."
 
-#: ../../locales/../src/interface/filter.cpp:970
+#: ../../locales/../src/interface/filter.cpp:979
 msgid "Any changes made to the filters will not be saved."
 msgstr "Änderungen an den Filtern werden nicht gespeichert."
 
@@ -1652,7 +1644,7 @@ msgstr "Nur au&f Dateien anwenden"
 msgid "Archive"
 msgstr "Archiv"
 
-#: ../../locales/../src/engine/socket.cpp:1081
+#: ../../locales/../src/engine/socket.cpp:1071
 msgid "Argument buffer overflow"
 msgstr "Argumentpuffer-Überlauf"
 
@@ -1668,8 +1660,8 @@ msgstr "Als Tab in der Übertragungs-Warteschlangenansicht"
 msgid "Ask for action"
 msgstr "Aktion erfragen"
 
-#: ../../locales/../src/engine/server.cpp:856
-#: ../../locales/../src/engine/server.cpp:877
+#: ../../locales/../src/engine/server.cpp:857
+#: ../../locales/../src/engine/server.cpp:878
 #: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Ask for password"
 msgstr "Nach Passwort fragen"
@@ -1703,7 +1695,7 @@ msgstr "Nun sind alle notwendigen Informationen zusammengestellt."
 msgid "Attribute"
 msgstr "Attribut"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:657
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:660
 msgid "Authentication failed."
 msgstr "Authentifizierung fehlgeschlagen."
 
@@ -1733,7 +1725,7 @@ msgid "B&ypass proxy"
 msgstr "&Proxy umgehen"
 
 # TODO
-#: ../../locales/../src/engine/socket.cpp:1045
+#: ../../locales/../src/engine/socket.cpp:1035
 msgid "Bad file descriptor"
 msgstr "Ungültiger file descriptor"
 
@@ -1750,7 +1742,7 @@ msgstr "Verhalten"
 msgid "Being edited"
 msgstr "Wird bearbeitet"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1113
+#: ../../locales/../src/engine/tlssocket.cpp:1168
 msgid "Beware! Certificate has been revoked"
 msgstr "Vorsicht! Zertifikat wurde widerrufen"
 
@@ -1763,7 +1755,7 @@ msgid "Blackboard"
 msgstr "Schwarzes Brett"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:261
-#: ../../locales/../src/interface/menu_bar.cpp:304
+#: ../../locales/../src/interface/menu_bar.cpp:297
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:418
 msgid "Bookmark"
 msgstr "Lesezeichen"
@@ -1827,22 +1819,22 @@ msgstr "Ben&utzerdefinierte Dateizuordnungen:"
 msgid "CPU features:"
 msgstr "CPU-Features:"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1571
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1211
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1566
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1235
 msgid "Calculating timezone offset of server..."
 msgstr "Berechne Zeitzonenabweichung des Servers..."
 
-#: ../../locales/../src/engine/transfersocket.cpp:670
+#: ../../locales/../src/engine/transfersocket.cpp:665
 msgid "Can't read from file"
 msgstr "Kann nicht aus Datei lesen"
 
-#: ../../locales/../src/engine/transfersocket.cpp:650
-#: ../../locales/../src/engine/transfersocket.cpp:718
+#: ../../locales/../src/engine/transfersocket.cpp:645
+#: ../../locales/../src/engine/transfersocket.cpp:713
 msgid "Can't write data to file."
 msgstr "In die Datei kann nicht geschrieben werden."
 
-#: ../../locales/../src/engine/transfersocket.cpp:652
-#: ../../locales/../src/engine/transfersocket.cpp:720
+#: ../../locales/../src/engine/transfersocket.cpp:647
+#: ../../locales/../src/engine/transfersocket.cpp:715
 #, c-format
 msgid "Can't write data to file: %s"
 msgstr "In die Datei kann nicht geschrieben werden: %s"
@@ -1886,15 +1878,15 @@ msgstr ""
 "Kein Zugriff auf '%s' möglich, kein Datenträger im Laufwerk oder Laufwerk "
 "nicht bereit."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:561
+#: ../../locales/../src/interface/Mainfrm.cpp:563
 msgid "Cannot add server to Site Manager"
 msgstr "Kann Server nicht zum Servermanager hinzufügen"
 
-#: ../../locales/../src/engine/socket.cpp:1098
+#: ../../locales/../src/engine/socket.cpp:1088
 msgid "Cannot assign requested address"
 msgstr "Kann geforderte Adresse nicht zuweisen"
 
-#: ../../locales/../src/interface/context_control.cpp:352
+#: ../../locales/../src/interface/context_control.cpp:356
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -1916,20 +1908,20 @@ msgstr "Kann neuen Filter nicht erstellen"
 
 #: ../../locales/../src/interface/edithandler.cpp:1574
 #: ../../locales/../src/interface/edithandler.cpp:1622
-#: ../../locales/../src/interface/LocalListView.cpp:1705
+#: ../../locales/../src/interface/LocalListView.cpp:1719
 #: ../../locales/../src/interface/search.cpp:696
 msgid "Cannot edit file"
 msgstr "Kann die Datei nicht bearbeiten"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1587
+#: ../../locales/../src/interface/LocalListView.cpp:1601
 msgid "Cannot edit file, not connected to any server."
 msgstr "Kann Datei nicht bearbeiten, nicht mit einem Server verbunden."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1596
+#: ../../locales/../src/interface/LocalListView.cpp:1610
 msgid "Cannot edit file, remote path unknown."
 msgstr "Kann Datei nicht bearbeiten, Pfad auf Server unbekannt."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:341
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:336
 msgid ""
 "Cannot establish FTP connection to an SFTP server. Please select proper "
 "protocol."
@@ -1946,7 +1938,7 @@ msgstr "Quickconnect-Leiste kann nicht aus Ressourcendatei geladen werden"
 msgid "Cannot load key file"
 msgstr "Kann Schlüsseldatei nicht laden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:994
+#: ../../locales/../src/interface/Mainfrm.cpp:1001
 msgid "Cannot load toolbar from resource file"
 msgstr "Werkzeugleiste kann nicht aus Ressourcendatei geladen werden"
 
@@ -1963,7 +1955,7 @@ msgstr "Kann Eintrag nicht umbenennen"
 msgid "Cannot rename file"
 msgstr "Kann Datei nicht umbenennen"
 
-#: ../../locales/../src/engine/proxy.cpp:172
+#: ../../locales/../src/engine/proxy.cpp:173
 msgid "Cannot resolve hostname to IPv4 address for use with SOCKS4 proxy."
 msgstr ""
 "Kann Hostnamen nicht zu IPv4-Adresse für die Verwendung mit SOCKS4-Proxy "
@@ -2042,7 +2034,7 @@ msgid "Changing logfile settings requires restart of FileZilla."
 msgstr ""
 "Das Ändern der Logdatei-Einstellungen erfordert einen FileZilla-Neustart."
 
-#: ../../locales/../src/interface/FileZilla.cpp:596
+#: ../../locales/../src/interface/FileZilla.cpp:550
 msgid "Character encoding issue"
 msgstr "Probleme mit Zeichensatz"
 
@@ -2066,11 +2058,11 @@ msgstr "Suche nach Updates"
 msgid "Check for newer versions of FileZilla"
 msgstr "Nach neueren FileZilla-Versionen suchen"
 
-#: ../../locales/../src/interface/update_dialog.cpp:57
+#: ../../locales/../src/interface/update_dialog.cpp:59
 msgid "Check for updates failed"
 msgstr "Suche nach Updates fehlgeschlagen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:784
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:779
 msgid ""
 "Check your login credentials. The entered password starts or ends with a "
 "space character."
@@ -2078,7 +2070,7 @@ msgstr ""
 "Überprüfen Sie Ihre Logindaten. Das eingegebene Passwort beginnt oder endet "
 "mit einem Leerzeichen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:780
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:775
 msgid ""
 "Check your login credentials. The entered username starts or ends with a "
 "space character."
@@ -2086,20 +2078,20 @@ msgstr ""
 "Überprüfen Sie Ihre Logindaten. Der eingegebene Benutzername beginnt oder "
 "endet mit einem Leerzeichen."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:761
+#: ../../locales/../src/interface/netconfwizard.cpp:778
 msgid "Checking for correct external IP address"
 msgstr "Überprüfe Korrektheit der externen IP-Adresse"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:162
+#: ../../locales/../src/interface/resources/xrc/update.xrc:166
 msgid "Checking for updates..."
 msgstr "Suche nach Updates..."
 
-#: ../../locales/../src/interface/updater.cpp:716
+#: ../../locales/../src/interface/updater.cpp:757
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Übereinstimmung der Prüfsumme auf Datei %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:712
+#: ../../locales/../src/interface/updater.cpp:753
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Nicht-Übereinstimmung der Prüfsumme auf Datei %s\n"
@@ -2144,11 +2136,11 @@ msgid "Clear history"
 msgstr "Verlauf leeren"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1485
-#: ../../locales/../src/interface/clearprivatedata.cpp:34
-#: ../../locales/../src/interface/clearprivatedata.cpp:40
-#: ../../locales/../src/interface/clearprivatedata.cpp:46
-#: ../../locales/../src/interface/clearprivatedata.cpp:77
-#: ../../locales/../src/interface/clearprivatedata.cpp:103
+#: ../../locales/../src/interface/clearprivatedata.cpp:35
+#: ../../locales/../src/interface/clearprivatedata.cpp:41
+#: ../../locales/../src/interface/clearprivatedata.cpp:47
+#: ../../locales/../src/interface/clearprivatedata.cpp:74
+#: ../../locales/../src/interface/clearprivatedata.cpp:98
 msgid "Clear private data"
 msgstr "Persönliche Daten löschen"
 
@@ -2156,7 +2148,7 @@ msgstr "Persönliche Daten löschen"
 msgid "Clear quickconnect bar"
 msgstr "Quickconnect-Leiste leeren"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:580
+#: ../../locales/../src/interface/netconfwizard.cpp:595
 msgid "Click on Finish to save your configuration."
 msgstr "Klicken Sie auf Beenden, um Ihre Konfiguration zu speichern."
 
@@ -2173,8 +2165,8 @@ msgid "Close &all other tabs"
 msgstr "Andere Tabs &schließen"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1135
-#: ../../locales/../src/interface/Mainfrm.cpp:1156
+#: ../../locales/../src/interface/Mainfrm.cpp:1137
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
 msgid "Close FileZilla"
 msgstr "FileZilla beenden"
 
@@ -2190,7 +2182,7 @@ msgstr "Schließt den aktuellen Tab"
 msgid "Co&mments:"
 msgstr "Ko&mmentare:"
 
-#: ../../locales/../src/interface/listctrlex.cpp:756
+#: ../../locales/../src/interface/listctrlex.cpp:747
 msgid "Column properties"
 msgstr "Spalteneigenschaften"
 
@@ -2210,11 +2202,11 @@ msgstr ""
 msgid "Command failed"
 msgstr "Befehl fehlgeschlagen"
 
-#: ../../locales/../src/engine/proxy.cpp:525
+#: ../../locales/../src/engine/proxy.cpp:526
 msgid "Command not supported"
 msgstr "Befehl nicht unterstützt"
 
-#: ../../locales/../src/engine/engineprivate.cpp:212
+#: ../../locales/../src/engine/engineprivate.cpp:213
 msgid "Command not supported by this protocol"
 msgstr "Der Befehl wird von diesem Protokoll nicht unterstützt"
 
@@ -2232,8 +2224,8 @@ msgstr "Kommentar"
 msgid "Common name:"
 msgstr "Allgemeiner Name:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:439
-#: ../../locales/../src/interface/netconfwizard.cpp:452
+#: ../../locales/../src/interface/netconfwizard.cpp:451
+#: ../../locales/../src/interface/netconfwizard.cpp:464
 msgid "Communication tainted by router or firewall"
 msgstr "Kommunikation vom Router oder der Firewall beeinträchtigt"
 
@@ -2306,14 +2298,14 @@ msgstr "Löschen bestätigen"
 
 #: ../../locales/../src/interface/edithandler.cpp:1586
 #: ../../locales/../src/interface/file_utils.h:45
-#: ../../locales/../src/interface/LocalListView.cpp:1669
+#: ../../locales/../src/interface/LocalListView.cpp:1683
 #: ../../locales/../src/interface/RemoteListView.cpp:1390
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1041
 #: ../../locales/../src/interface/search.cpp:708
 msgid "Confirmation needed"
 msgstr "Bestätigung erforderlich"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:576
+#: ../../locales/../src/interface/netconfwizard.cpp:591
 msgid "Congratulations, your configuration seems to be working."
 msgstr "Herzlichen Glückwunsch, Ihre Konfiguration scheint zu funktionieren."
 
@@ -2321,7 +2313,7 @@ msgstr "Herzlichen Glückwunsch, Ihre Konfiguration scheint zu funktionieren."
 msgid "Connect bypassing proxy settings"
 msgstr "Verbinden (Proxy-Einstellungen umgehen)"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:216
+#: ../../locales/../src/interface/netconfwizard.cpp:222
 #, c-format
 msgid "Connect failed: %s"
 msgstr "Connect fehlgeschlagen: %s"
@@ -2342,21 +2334,21 @@ msgstr "Mit angegebenem Server aus dem Servermanager verbinden"
 msgid "Connecting"
 msgstr "Verbindung wird hergestellt"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:210
+#: ../../locales/../src/interface/netconfwizard.cpp:216
 #: ../../locales/../src/interface/statuslinectrl.cpp:243
 #, c-format
 msgid "Connecting to %s"
 msgstr "Verbinde mit %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1051
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4261
+#: ../../locales/../src/engine/ControlSocket.cpp:1047
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4247
 #, c-format
 msgid "Connecting to %s through %s proxy"
 msgstr "Verbinde mit %s über %s-Proxy"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:959
-#: ../../locales/../src/engine/proxy.cpp:266
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:355
+#: ../../locales/../src/engine/ControlSocket.cpp:955
+#: ../../locales/../src/engine/proxy.cpp:267
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:358
 #, c-format
 msgid "Connecting to %s..."
 msgstr "Verbinde mit %s..."
@@ -2365,7 +2357,7 @@ msgstr "Verbinde mit %s..."
 msgid "Connection"
 msgstr "Verbindung"
 
-#: ../../locales/../src/engine/socket.cpp:1059
+#: ../../locales/../src/engine/socket.cpp:1049
 msgid "Connection aborted"
 msgstr "Verbindung abgebrochen"
 
@@ -2373,37 +2365,37 @@ msgstr "Verbindung abgebrochen"
 msgid "Connection attempt failed"
 msgstr "Verbindungsversuch fehlgeschlagen"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:923
-#: ../../locales/../src/engine/proxy.cpp:240
+#: ../../locales/../src/engine/ControlSocket.cpp:919
+#: ../../locales/../src/engine/proxy.cpp:241
 #, c-format
 msgid "Connection attempt failed with \"%s\", trying next address."
 msgstr ""
 "Verbindungsversuch fehlgeschlagen mit \"%s\", versuche nächste Adresse."
 
-#: ../../locales/../src/engine/ControlSocket.cpp:928
+#: ../../locales/../src/engine/ControlSocket.cpp:924
 #, c-format
 msgid "Connection attempt failed with \"%s\"."
 msgstr "Verbindungsversuch fehlgeschlagen mit \"%s\"."
 
 #: ../../locales/../src/engine/ControlSocket.cpp:185
-#: ../../locales/../src/engine/engineprivate.cpp:681
+#: ../../locales/../src/engine/engineprivate.cpp:682
 msgid "Connection attempt interrupted by user"
 msgstr "Verbindungsversuch durch Benutzer unterbrochen"
 
-#: ../../locales/../src/engine/socket.cpp:1052
+#: ../../locales/../src/engine/socket.cpp:1042
 msgid "Connection attempt timed out"
 msgstr "Zeitüberschreitung bei Verbindungsversuch"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:552
+#: ../../locales/../src/interface/netconfwizard.cpp:564
 msgid "Connection closed"
 msgstr "Verbindung getrennt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1018
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:220
+#: ../../locales/../src/engine/ControlSocket.cpp:1014
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:215
 msgid "Connection closed by server"
 msgstr "Verbindung vom Server geschlossen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:385
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:380
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:285
 msgid "Connection established, initializing TLS..."
 msgstr "Verbindung hergestellt, initialisiere TLS..."
@@ -2412,46 +2404,46 @@ msgstr "Verbindung hergestellt, initialisiere TLS..."
 msgid "Connection established, sending HTTP request"
 msgstr "Verbindung hergestellt, schicke HTTP-Anfrage"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:333
+#: ../../locales/../src/interface/netconfwizard.cpp:345
 msgid "Connection established, waiting for welcome message."
 msgstr "Verbindung hergestellt, warte auf Willkommensnachricht."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:413
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:408
 msgid "Connection established, waiting for welcome message..."
 msgstr "Verbindung hergestellt, warte auf Willkommensnachricht..."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:350
+#: ../../locales/../src/interface/netconfwizard.cpp:362
 msgid "Connection lost"
 msgstr "Verbindung verloren"
 
-#: ../../locales/../src/engine/proxy.cpp:510
+#: ../../locales/../src/engine/proxy.cpp:511
 msgid "Connection not allowed by ruleset"
 msgstr "Verbindung durch den Regelsatz nicht erlaubt"
 
-#: ../../locales/../src/engine/proxy.cpp:519
+#: ../../locales/../src/engine/proxy.cpp:520
 msgid "Connection refused"
 msgstr "Verbindung verweigert"
 
-#: ../../locales/../src/engine/socket.cpp:1046
+#: ../../locales/../src/engine/socket.cpp:1036
 msgid "Connection refused by server"
 msgstr "Verbindung durch Server verweigert"
 
-#: ../../locales/../src/engine/socket.cpp:1055
+#: ../../locales/../src/engine/socket.cpp:1045
 msgid "Connection reset by network"
 msgstr "Verbindung durch Netzwerk zurückgesetzt"
 
-#: ../../locales/../src/engine/socket.cpp:1060
+#: ../../locales/../src/engine/socket.cpp:1050
 msgid "Connection reset by peer"
 msgstr "Verbindung durch Peer zurückgesetzt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:560
+#: ../../locales/../src/engine/ControlSocket.cpp:556
 #, c-format
 msgid "Connection timed out after %d second of inactivity"
 msgid_plural "Connection timed out after %d seconds of inactivity"
 msgstr[0] "Zeitüberschreitung der Verbindung nach %d Sekunde Inaktivität"
 msgstr[1] "Zeitüberschreitung der Verbindung nach %d Sekunden Inaktivität"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1054
+#: ../../locales/../src/interface/netconfwizard.cpp:1072
 msgid "Connection timed out."
 msgstr "Zeitüberschreitung der Verbindung."
 
@@ -2459,15 +2451,15 @@ msgstr "Zeitüberschreitung der Verbindung."
 msgid "Connection to server lost."
 msgstr "Verbindung zu Server verloren."
 
-#: ../../locales/../src/engine/proxy.cpp:249
+#: ../../locales/../src/engine/proxy.cpp:250
 msgid "Connection with proxy established, performing handshake..."
 msgstr "Verbindung mit Proxy hergestellt, führe Handshake durch..."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:570
+#: ../../locales/../src/interface/netconfwizard.cpp:584
 msgid "Connection with server got closed prematurely."
 msgstr "Verbindung zum Server wurde vorzeitig getrennt."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:561
+#: ../../locales/../src/interface/netconfwizard.cpp:575
 msgid "Connection with the test server failed."
 msgstr "Verbindung zum Testserver fehlgeschlagen."
 
@@ -2492,7 +2484,7 @@ msgstr "Kopie von %s"
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Die URLs der ausgewählten Objekte in die Zwischenablage kopieren."
 
-#: ../../locales/../src/engine/transfersocket.cpp:180
+#: ../../locales/../src/engine/transfersocket.cpp:178
 #, c-format
 msgid "Could not accept connection: %s"
 msgstr "Konnte Verbindung nicht akzeptieren: %s"
@@ -2502,7 +2494,7 @@ msgstr "Konnte Verbindung nicht akzeptieren: %s"
 msgid "Could not add connection to Site Manager"
 msgstr "Konnte Verbindung nicht in Servermanager aufnehmen"
 
-#: ../../locales/../src/interface/state.cpp:750
+#: ../../locales/../src/interface/state.cpp:772
 msgid "Could not complete operation"
 msgstr "Konnte Operation nicht abschließen"
 
@@ -2510,12 +2502,12 @@ msgstr "Konnte Operation nicht abschließen"
 msgid "Could not connect to server"
 msgstr "Herstellen der Verbindung zum Server fehlgeschlagen"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1089
+#: ../../locales/../src/engine/ControlSocket.cpp:1085
 #, c-format
 msgid "Could not connect to server: %s"
 msgstr "Herstellen der Verbindung zum Server fehlgeschlagen: %s"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:788
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:791
 msgid "Could not convert command to server encoding"
 msgstr "Befehl konnte nicht im Serverzeichensatz kodiert werden"
 
@@ -2524,7 +2516,7 @@ msgstr "Befehl konnte nicht im Serverzeichensatz kodiert werden"
 msgid "Could not convert private key"
 msgstr "Konnte privaten Schlüssel nicht konvertieren"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2522
+#: ../../locales/../src/interface/RemoteListView.cpp:2521
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1381
 msgid "Could not copy URLs"
 msgstr "Konnte URLs nicht kopieren"
@@ -2533,7 +2525,7 @@ msgstr "Konnte URLs nicht kopieren"
 msgid "Could not copy data"
 msgstr "Konnte Daten nicht kopieren"
 
-#: ../../locales/../src/interface/updater.cpp:459
+#: ../../locales/../src/interface/updater.cpp:492
 #, c-format
 msgid "Could not create local file %s\n"
 msgstr "Konnte lokale Datei %s nicht erzeugen\n"
@@ -2543,7 +2535,7 @@ msgstr "Konnte lokale Datei %s nicht erzeugen\n"
 msgid "Could not create logging mutex: %s"
 msgstr "Konnte Logging-Mutex nicht erzeugen: %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2183
+#: ../../locales/../src/interface/RemoteListView.cpp:2182
 #: ../../locales/../src/interface/RemoteTreeView.cpp:851
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
@@ -2554,11 +2546,11 @@ msgstr ""
 "Entweder ist die Shell-Erweiterung nicht ordnungsgemäß eingerichtet oder Sie "
 "haben die Dateien nicht in ein Explorer-Fenster gezogen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4110
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4096
 msgid "Could not establish connection to server"
 msgstr "Konnte keine Verbindung zum Server aufbauen"
 
-#: ../../locales/../src/interface/FileZilla.cpp:428
+#: ../../locales/../src/interface/FileZilla.cpp:405
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2571,11 +2563,11 @@ msgstr ""
 "Kommandozeilenoption '--datadir <custompath>' oder setzen Sie die "
 "Umgebungsvariable 'FZ_DATADIR'."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:681
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:676
 msgid "Could not generate custom login sequence."
 msgstr "Es konnte keine benutzerdefinierte Anmeldesequenz erstellt werden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:958
+#: ../../locales/../src/engine/tlssocket.cpp:1013
 msgid ""
 "Could not get distinguished name of certificate issuer, "
 "gnutls_x509_get_issuer_dn failed"
@@ -2583,7 +2575,7 @@ msgstr ""
 "Konnte 'Distinguished Name' des Zertifikatsausstellers nicht ermitteln; "
 "gnutls_x509_get_issuer_dn fehlgeschlagen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:935
+#: ../../locales/../src/engine/tlssocket.cpp:990
 msgid ""
 "Could not get distinguished name of certificate subject, gnutls_x509_get_dn "
 "failed"
@@ -2591,7 +2583,7 @@ msgstr ""
 "Konnte 'Distinguished Name' des Zertifikat-Betreffs nicht ermitteln; "
 "gnutls_x509_get_dn fehlgeschlagen"
 
-#: ../../locales/../src/interface/state.cpp:923
+#: ../../locales/../src/interface/state.cpp:945
 msgid "Could not get full remote path."
 msgstr "Konnte kompletten Pfad auf Server nicht bestimmen."
 
@@ -2605,18 +2597,18 @@ msgstr "Keine Antwort von fzputtygen erhalten."
 msgid "Could not get temporary directory to download file into."
 msgstr "Kann temporäres Download-Verzeichnis nicht finden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:881
+#: ../../locales/../src/engine/tlssocket.cpp:936
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Konnte Zertifikat der Gegenstelle nicht importieren; gnutls_x509_crt_import "
 "fehlgeschlagen"
 
-#: ../../locales/../src/interface/FileZilla.cpp:108
+#: ../../locales/../src/interface/FileZilla.cpp:85
 #, c-format
 msgid "Could not initialize Winsock (%d): %s"
 msgstr "Konnte Winsock nicht initialisieren (%d): %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:876
+#: ../../locales/../src/engine/tlssocket.cpp:931
 msgid ""
 "Could not initialize structure for peer certificates, gnutls_x509_crt_init "
 "failed"
@@ -2644,7 +2636,7 @@ msgstr "Konnte Schlüsseldatei nicht laden"
 msgid "Could not load private key"
 msgstr "Konnte privaten Schlüssel nicht laden"
 
-#: ../../locales/../src/interface/state.cpp:945
+#: ../../locales/../src/interface/state.cpp:967
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2656,7 +2648,7 @@ msgstr ""
 "Synchronisierten Verzeichniswechsel deaktivieren und das Verzeichnis auf dem "
 "Server wechseln?"
 
-#: ../../locales/../src/interface/state.cpp:362
+#: ../../locales/../src/interface/state.cpp:357
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2667,7 +2659,7 @@ msgstr ""
 "nicht bestimmen.\n"
 "Synchronisierter Verzeichniswechsel wurde deaktiviert."
 
-#: ../../locales/../src/interface/state.cpp:267
+#: ../../locales/../src/interface/state.cpp:262
 #, c-format
 msgid ""
 "Could not obtain corresponding remote directory for the local directory "
@@ -2679,7 +2671,7 @@ msgstr ""
 "Synchronisierter Verzeichniswechsel wurde deaktiviert."
 
 #: ../../locales/../src/interface/aboutdialog.cpp:198
-#: ../../locales/../src/interface/RemoteListView.cpp:2522
+#: ../../locales/../src/interface/RemoteListView.cpp:2521
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1381
 msgid "Could not open clipboard"
 msgstr "Konnte Zwischenablage nicht öffnen"
@@ -2699,11 +2691,11 @@ msgstr "Konnte Server-Pfad nicht verarbeiten."
 msgid "Could not parse server address:"
 msgstr "Konnte Serveradresse nicht verarbeiten:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:977
+#: ../../locales/../src/interface/netconfwizard.cpp:995
 msgid "Could not read from data socket."
 msgstr "Konnte vom Datensocket nicht lesen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:211
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:206
 #, c-format
 msgid "Could not read from socket: %s"
 msgstr "Konnte vom Socket nicht lesen: %s"
@@ -2712,16 +2704,16 @@ msgstr "Konnte vom Socket nicht lesen: %s"
 msgid "Could not read server item."
 msgstr "Konnte Servereintrag nicht lesen."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:344
+#: ../../locales/../src/interface/netconfwizard.cpp:356
 msgid "Could not receive data from server."
 msgstr "Konnte vom Server keine Daten empfangen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2596
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2591
 #, c-format
 msgid "Could not seek to offset %s within file"
 msgstr "Es konnte nicht zu Position %s innerhalb der Datei gesprungen werden"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2503
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2498
 msgid "Could not seek to the end of the file"
 msgstr "Es konnte nicht zum Dateiende gesprungen werden"
 
@@ -2729,11 +2721,11 @@ msgstr "Es konnte nicht zum Dateiende gesprungen werden"
 msgid "Could not send command to fzputtygen."
 msgstr "Konnte Befehl nicht an fzputtygen senden."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2624
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2619
 msgid "Could not spawn IO thread"
 msgstr "IO-Thread konnte nicht gestartet werden"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1065
+#: ../../locales/../src/engine/ControlSocket.cpp:1061
 #, c-format
 msgid "Could not start proxy handshake: %s"
 msgstr "Proxy-Handshake konnte nicht gestartet werden: %s"
@@ -2766,7 +2758,7 @@ msgstr ""
 "Konnte \"%s\" nicht schreiben; die globalen Lesezeichen konnten nicht "
 "gespeichert werden: %s"
 
-#: ../../locales/../src/interface/QueueView.cpp:1841
+#: ../../locales/../src/interface/QueueView.cpp:1470
 #, c-format
 msgid ""
 "Could not write \"%s\", the queue could not be saved.\n"
@@ -2805,8 +2797,8 @@ msgstr "Konnte nicht in lokale Datei schreiben"
 msgid "Could not write to log file: %s"
 msgstr "Konnte nicht in Logdatei schreiben: %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:883
-#: ../../locales/../src/engine/ControlSocket.cpp:987
+#: ../../locales/../src/engine/ControlSocket.cpp:879
+#: ../../locales/../src/engine/ControlSocket.cpp:983
 #, c-format
 msgid "Could not write to socket: %s"
 msgstr "Konnte nicht in Socket schreiben: %s"
@@ -2819,11 +2811,11 @@ msgstr "Staat:"
 msgid "Crea&te new file"
 msgstr "&Neue Datei erstellen"
 
-#: ../../locales/../src/interface/state.cpp:959
+#: ../../locales/../src/interface/state.cpp:981
 msgid "Create &missing local directory and enter it"
 msgstr "&Fehlendes lokales Verzeichnis erstellen und betreten"
 
-#: ../../locales/../src/interface/state.cpp:886
+#: ../../locales/../src/interface/state.cpp:908
 msgid "Create &missing remote directory and enter it"
 msgstr "&Fehlendes Serververzeichnis erstellen und betreten"
 
@@ -2854,14 +2846,14 @@ msgstr "Eine neue, leere Datei im aktuellen Verzeichnis erstellen"
 msgid "Create director&y and enter it"
 msgstr "Verzeichnis erstellen und &betreten"
 
-#: ../../locales/../src/interface/LocalListView.cpp:902
-#: ../../locales/../src/interface/LocalTreeView.cpp:1120
+#: ../../locales/../src/interface/LocalListView.cpp:917
+#: ../../locales/../src/interface/LocalTreeView.cpp:1135
 #: ../../locales/../src/interface/RemoteListView.cpp:1293
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1219
 msgid "Create directory"
 msgstr "Verzeichnis erstellen"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2609
+#: ../../locales/../src/interface/RemoteListView.cpp:2607
 msgid "Create empty file"
 msgstr "Leere Datei erstellen"
 
@@ -2869,8 +2861,8 @@ msgstr "Leere Datei erstellen"
 msgid "Creating directory"
 msgstr "Erstelle Verzeichnis"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3171
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1932
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3166
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1956
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "Erstelle Verzeichnis '%s'..."
@@ -2892,7 +2884,7 @@ msgstr "Kritischer Dateiübertragungsfehler"
 msgid "Critical file transfer error after transferring %s in %s"
 msgstr "Kritischer Dateiübertragungsfehler nach Übertragung von %s in %s"
 
-#: ../../locales/../src/interface/state.cpp:353
+#: ../../locales/../src/interface/state.cpp:348
 #, c-format
 msgid ""
 "Current remote directory (%s) is not below the synchronization root (%s).\n"
@@ -2983,8 +2975,8 @@ msgstr "Gefährlicher Dateityp"
 msgid "Data"
 msgstr "Daten"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:971
-#: ../../locales/../src/interface/netconfwizard.cpp:1036
+#: ../../locales/../src/interface/netconfwizard.cpp:989
+#: ../../locales/../src/interface/netconfwizard.cpp:1054
 msgid "Data socket closed too early."
 msgstr "Datensocket wurde zu früh geschlossen."
 
@@ -3067,7 +3059,7 @@ msgstr ""
 "Die Verzögerung nach fehlerhaften Verbindungsversuchen muss zwischen 1 und "
 "999 Sekunden liegen."
 
-#: ../../locales/../src/engine/engineprivate.cpp:522
+#: ../../locales/../src/engine/engineprivate.cpp:523
 #, c-format
 msgid ""
 "Delaying connection for %d second due to previously failed connection "
@@ -3096,12 +3088,12 @@ msgstr "Markiertes Verzeichnis löschen"
 msgid "Delete selected files and directories"
 msgstr "Ausgewählte Dateien und Verzeichnisse löschen"
 
-#: ../../locales/../src/engine/engineprivate.cpp:365
+#: ../../locales/../src/engine/engineprivate.cpp:366
 #, c-format
 msgid "Deleting \"%s\""
 msgstr "Lösche \"%s\""
 
-#: ../../locales/../src/engine/engineprivate.cpp:368
+#: ../../locales/../src/engine/engineprivate.cpp:369
 #, c-format
 msgid "Deleting %u files from \"%s\""
 msgstr "Lösche %u Dateien aus \"%s\""
@@ -3132,7 +3124,7 @@ msgstr "Neuere FileZilla-Version erkannt"
 msgid "Dire&ctories"
 msgstr "Verzei&chnisse"
 
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Direction"
 msgstr "Richtung"
 
@@ -3145,8 +3137,8 @@ msgstr "Verzeichnis"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1770
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
-#: ../../locales/../src/interface/filelistctrl.cpp:465
-#: ../../locales/../src/interface/Mainfrm.cpp:2167
+#: ../../locales/../src/interface/filelistctrl.cpp:464
+#: ../../locales/../src/interface/Mainfrm.cpp:2172
 msgid "Directory comparison"
 msgstr "Verzeichnisvergleich"
 
@@ -3164,7 +3156,7 @@ msgstr ""
 msgid "Directory listing aborted by user"
 msgstr "Anzeigen des Verzeichnisinhalts durch Benutzer abgebrochen"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2013
+#: ../../locales/../src/interface/RemoteListView.cpp:2012
 msgid "Directory listing failed"
 msgstr "Anzeigen des Verzeichnisinhalts fehlgeschlagen"
 
@@ -3185,14 +3177,14 @@ msgstr "Anzeigen des Verzeichnisinhalts abgeschlossen"
 msgid "Disa&ble all"
 msgstr "Alle d&eaktivieren"
 
-#: ../../locales/../src/interface/state.cpp:952
+#: ../../locales/../src/interface/state.cpp:974
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
 "Synchronisierten Verzeichniswechsel deaktivieren und das Serververzeichnis "
 "wechseln?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:650
+#: ../../locales/../src/interface/Mainfrm.cpp:652
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3205,16 +3197,16 @@ msgid "Disconnect from server"
 msgstr "Verbindung zum Server trennen"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:81
-#: ../../locales/../src/engine/ControlSocket.cpp:884
-#: ../../locales/../src/engine/ControlSocket.cpp:989
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:213
+#: ../../locales/../src/engine/ControlSocket.cpp:880
+#: ../../locales/../src/engine/ControlSocket.cpp:985
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:208
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:882
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:884
 #: ../../locales/../src/interface/queue.cpp:331
 msgid "Disconnected from server"
 msgstr "Verbindung zum Server getrennt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1020
+#: ../../locales/../src/engine/ControlSocket.cpp:1016
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:898
 #, c-format
 msgid "Disconnected from server: %s"
@@ -3237,28 +3229,24 @@ msgstr "Informationsdialog anzeigen"
 msgid "Do &not use default editor"
 msgstr "&Keinen Standardeditor verwenden"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:410
-msgid "Do &nothing"
-msgstr "Nichts &machen"
-
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1816
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1871
 msgid "Do the same with &all selected files already being edited"
 msgstr "Für alle ausgewählten &momentan bearbeiteten Dateien anwenden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1138
-#: ../../locales/../src/interface/Mainfrm.cpp:1160
+#: ../../locales/../src/interface/Mainfrm.cpp:1140
+#: ../../locales/../src/interface/Mainfrm.cpp:1162
 msgid "Do you really want to close FileZilla?"
 msgstr "Wollen Sie FileZilla wirklich beenden?"
 
-#: ../../locales/../src/interface/clearprivatedata.cpp:34
+#: ../../locales/../src/interface/clearprivatedata.cpp:35
 msgid ""
 "Do you really want to delete all Site Manager entries and the transfer queue?"
 msgstr ""
 "Wollen Sie wirklich alle Servermanagereinträge und die Übertragungs-"
 "Warteschlange löschen?"
 
-#: ../../locales/../src/interface/clearprivatedata.cpp:46
+#: ../../locales/../src/interface/clearprivatedata.cpp:47
 msgid "Do you really want to delete all Site Manager entries?"
 msgstr "Wollen Sie wirklich alle Servermanagereinträge löschen?"
 
@@ -3266,11 +3254,11 @@ msgstr "Wollen Sie wirklich alle Servermanagereinträge löschen?"
 msgid "Do you really want to delete selected entry?"
 msgstr "Wollen Sie wirklich den gewählten Eintrag löschen?"
 
-#: ../../locales/../src/interface/clearprivatedata.cpp:40
+#: ../../locales/../src/interface/clearprivatedata.cpp:41
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Wollen Sie wirklich die Übertragungs-Warteschlange löschen?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:589
+#: ../../locales/../src/interface/Mainfrm.cpp:591
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Wollen Sie wirklich '%s' zum Server senden?"
@@ -3329,7 +3317,7 @@ msgstr "Ausgewähltes Verzeichnis herunterladen"
 msgid "Download selected files and directories"
 msgstr "Ausgewählte Dateien und Verzeichnisse herunterladen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:966
+#: ../../locales/../src/interface/Mainfrm.cpp:973
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3351,9 +3339,9 @@ msgstr "Lade %s herunter"
 msgid "Downloading update..."
 msgstr "Lade Update herunter..."
 
-#: ../../locales/../src/interface/LocalListView.cpp:105
+#: ../../locales/../src/interface/LocalListView.cpp:106
 #: ../../locales/../src/interface/LocalTreeView.cpp:110
-#: ../../locales/../src/interface/QueueView.cpp:90
+#: ../../locales/../src/interface/QueueView.cpp:85
 #: ../../locales/../src/interface/RemoteListView.cpp:102
 #: ../../locales/../src/interface/RemoteTreeView.cpp:89
 msgid ""
@@ -3363,9 +3351,9 @@ msgstr ""
 "Drag&Drop zwischen verschiedenen Instanzen von FileZilla ist derzeit noch "
 "nicht möglich."
 
-#: ../../locales/../src/interface/LocalListView.cpp:111
+#: ../../locales/../src/interface/LocalListView.cpp:112
 #: ../../locales/../src/interface/LocalTreeView.cpp:116
-#: ../../locales/../src/interface/QueueView.cpp:103
+#: ../../locales/../src/interface/QueueView.cpp:97
 #: ../../locales/../src/interface/RemoteListView.cpp:108
 #: ../../locales/../src/interface/RemoteTreeView.cpp:95
 msgid "Drag&drop between different servers has not been implemented yet."
@@ -3421,8 +3409,8 @@ msgstr ""
 msgid "Editing directories is not supported"
 msgstr "Bearbeiten von Verzeichnissen wird nicht unterstützt"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1587
-#: ../../locales/../src/interface/LocalListView.cpp:1596
+#: ../../locales/../src/interface/LocalListView.cpp:1601
+#: ../../locales/../src/interface/LocalListView.cpp:1610
 msgid "Editing failed"
 msgstr "Bearbeiten fehlgeschlagen"
 
@@ -3434,7 +3422,7 @@ msgstr "Bearbeiten von Suchergebnissen"
 msgid "Email:"
 msgstr "E-Mail:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:1736
 msgid "Empty command"
 msgstr "Leerer Befehl"
 
@@ -3442,7 +3430,7 @@ msgstr "Leerer Befehl"
 msgid "Empty command."
 msgstr "Leerer Befehl."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2015
+#: ../../locales/../src/interface/RemoteListView.cpp:2014
 msgid "Empty directory listing"
 msgstr "Leeres Verzeichnis"
 
@@ -3488,7 +3476,7 @@ msgstr "Verschlüsselung"
 msgid "Encryption details"
 msgstr "Verschlüsselungsdetails"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:467
+#: ../../locales/../src/interface/filelistctrl.cpp:466
 msgid "End comparison and change sorting order?"
 msgstr "Vergleichen beenden und Sortierreihenfolge ändern?"
 
@@ -3500,11 +3488,11 @@ msgstr "&Benutzerdefinierten Befehl eingeben..."
 msgid "Enter 0 for unlimited speed."
 msgstr "Geben Sie 0 für unbegrenzte Geschwindigkeit ein."
 
-#: ../../locales/../src/interface/QueueView.cpp:2103
+#: ../../locales/../src/interface/QueueView.cpp:1730
 msgid "Enter command"
 msgstr "Befehl eingeben"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:572
+#: ../../locales/../src/interface/Mainfrm.cpp:574
 msgid "Enter custom command"
 msgstr "Benutzerdefinierten Befehl eingeben"
 
@@ -3594,7 +3582,7 @@ msgstr "Fehler beim Exportieren der Einstellungen"
 msgid "Error importing"
 msgstr "Fehler beim Importieren"
 
-#: ../../locales/../src/interface/QueueView.cpp:1903
+#: ../../locales/../src/interface/QueueView.cpp:1532
 msgid "Error loading queue"
 msgstr "Fehler beim Laden der Warteschlange"
 
@@ -3604,11 +3592,11 @@ msgstr "Fehler beim Laden der Warteschlange"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:732
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:778
 #: ../../locales/../src/interface/filter.cpp:214
-#: ../../locales/../src/interface/filter.cpp:971
+#: ../../locales/../src/interface/filter.cpp:980
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
-#: ../../locales/../src/interface/Options.cpp:243
-#: ../../locales/../src/interface/QueueView.cpp:1824
+#: ../../locales/../src/interface/Options.cpp:247
+#: ../../locales/../src/interface/QueueView.cpp:1453
 #: ../../locales/../src/interface/search.cpp:802
 #: ../../locales/../src/interface/search.cpp:821
 #: ../../locales/../src/interface/sitemanager.cpp:16
@@ -3619,11 +3607,11 @@ msgstr "Fehler beim Laden der Warteschlange"
 #: ../../locales/../src/interface/sitemanager.cpp:743
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:751
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:809
-#: ../../locales/../src/interface/wrapengine.cpp:939
+#: ../../locales/../src/interface/wrapengine.cpp:933
 msgid "Error loading xml file"
 msgstr "xml-Datei kann nicht geladen werden"
 
-#: ../../locales/../src/interface/QueueView.cpp:1813
+#: ../../locales/../src/interface/QueueView.cpp:1442
 msgid "Error saving queue"
 msgstr "Fehler beim Speichern der Warteschlange"
 
@@ -3634,7 +3622,7 @@ msgstr "Fehler beim Starten des Programms"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:318
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:813
-#: ../../locales/../src/interface/QueueView.cpp:1842
+#: ../../locales/../src/interface/QueueView.cpp:1471
 #: ../../locales/../src/interface/sitemanager.cpp:611
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
@@ -3662,7 +3650,7 @@ msgstr "Beispiele"
 msgid "Exe&cute"
 msgstr "Aus&führen"
 
-#: ../../locales/../src/interface/update_dialog.cpp:57
+#: ../../locales/../src/interface/update_dialog.cpp:59
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Programm enthält keine Versionsinformationen, Suche nach Updates nicht "
@@ -3738,19 +3726,19 @@ msgstr "FTPES - FTP über explizites TLS"
 msgid "FTPS - FTP over implicit TLS"
 msgstr "FTPS - FTP über implizites TLS"
 
-#: ../../locales/../src/interface/LocalListView.cpp:530
-#: ../../locales/../src/interface/LocalListView.cpp:606
-#: ../../locales/../src/interface/LocalListView.cpp:891
-#: ../../locales/../src/interface/LocalListView.cpp:1783
+#: ../../locales/../src/interface/LocalListView.cpp:531
+#: ../../locales/../src/interface/LocalListView.cpp:607
+#: ../../locales/../src/interface/LocalListView.cpp:906
+#: ../../locales/../src/interface/LocalListView.cpp:1797
 #: ../../locales/../src/interface/LocalTreeView.cpp:843
-#: ../../locales/../src/interface/LocalTreeView.cpp:1096
-#: ../../locales/../src/interface/viewheader.cpp:504
+#: ../../locales/../src/interface/LocalTreeView.cpp:1111
+#: ../../locales/../src/interface/viewheader.cpp:493
 msgid "Failed to change directory"
 msgstr "Verzeichnis konnte nicht gewechselt werden"
 
-#: ../../locales/../src/interface/FileZilla.cpp:158
-#: ../../locales/../src/interface/FileZilla.cpp:173
-#: ../../locales/../src/interface/FileZilla.cpp:175
+#: ../../locales/../src/interface/FileZilla.cpp:135
+#: ../../locales/../src/interface/FileZilla.cpp:150
+#: ../../locales/../src/interface/FileZilla.cpp:152
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 msgid "Failed to change language"
 msgstr "Wechseln der Sprache fehlgeschlagen"
@@ -3763,14 +3751,14 @@ msgstr "Kopieren oder Verschieben der Servereinträge fehlgeschlagen"
 msgid "Failed to create backup copy of xml file"
 msgstr "Sicherheitskopie der xml-Datei konnte nicht erstellt werden"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:792
+#: ../../locales/../src/interface/netconfwizard.cpp:809
 msgid "Failed to create listen socket, aborting"
 msgstr ""
 "Fehler beim Erstellen eines Sockets für die Datenübertragungen, Aktion "
 "abgebrochen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4089
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4093
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4075
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4079
 msgid "Failed to create listening socket for active mode transfer"
 msgstr ""
 "Fehler beim Erstellen eines Sockets für Datenübertragungen im Aktiven Modus."
@@ -3783,13 +3771,13 @@ msgstr "Pfad für 'Eigene Dateien' konnte nicht gefunden werden"
 msgid "Failed to get desktop path"
 msgstr "Desktop-Pfad konnte nicht gefunden werden"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:944
+#: ../../locales/../src/interface/netconfwizard.cpp:962
 msgid "Failed to get peer address of control connection, connection closed."
 msgstr ""
 "Server-IP-Adresse für die Kontrollverbindung konnte nicht ermittelt werden, "
 "Verbindung getrennt."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:951
+#: ../../locales/../src/interface/netconfwizard.cpp:969
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr ""
 "Server-IP-Adresse für die Datenverbindung konnte nicht ermittelt werden, "
@@ -3799,13 +3787,13 @@ msgstr ""
 msgid "Failed to initialize FTP engine"
 msgstr "FTP-Engine konnte nicht initialisiert werden."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:393
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:755
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:388
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:750
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:292
 msgid "Failed to initialize TLS."
 msgstr "TLS konnte nicht initialisiert werden."
 
-#: ../../locales/../src/interface/FileZilla.cpp:109
+#: ../../locales/../src/interface/FileZilla.cpp:86
 msgid "Failed to initialize networking"
 msgstr "Netzwerkfunktionalität konnte nicht initialisiert werden"
 
@@ -3820,17 +3808,17 @@ msgstr ""
 msgid "Failed to load private key: %s"
 msgstr "Laden des privaten Schlüssels fehlgeschlagen: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2493
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2488
 #, c-format
 msgid "Failed to open \"%s\" for appending/writing"
 msgstr "\"%s\" konnte nicht zum Anhängen/Schreiben geöffnet werden"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2559
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2554
 #, c-format
 msgid "Failed to open \"%s\" for reading"
 msgstr "%s konnte nicht zum Lesen geöffnet werden"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2525
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2520
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:1008
 #, c-format
 msgid "Failed to open \"%s\" for writing"
@@ -3840,7 +3828,7 @@ msgstr "%s konnte nicht zum Schreiben geöffnet werden"
 msgid "Failed to parse returned path."
 msgstr "Zurückgegebener Pfad konnte nicht geparst werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:1003
+#: ../../locales/../src/interface/netconfwizard.cpp:1021
 msgid "Failed to receive data"
 msgstr "Daten konnten nicht empfangen werden"
 
@@ -3848,40 +3836,40 @@ msgstr "Daten konnten nicht empfangen werden"
 msgid "Failed to retrieve directory listing"
 msgstr "Verzeichnisinhalt konnte nicht empfangen werden"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:721
+#: ../../locales/../src/interface/netconfwizard.cpp:738
 msgid "Failed to retrieve external ip address, aborting"
 msgstr "Externe IP-Adresse konnte nicht ermittelt werden, breche ab"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3786
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3777
 msgid "Failed to retrieve external ip address, using local address"
 msgstr ""
 "Externe IP-Adresse konnte nicht ermittelt werden. Verwende statt dessen "
 "lokale IP-Adresse."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3807
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3796
 msgid "Failed to retrieve local ip address."
 msgstr "Lokale IP-Adresse konnte nicht ermittelt werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:697
+#: ../../locales/../src/interface/netconfwizard.cpp:714
 msgid "Failed to retrieve local ip address. Aborting"
 msgstr "Lokale IP-Adresse konnte nicht ermittelt werden, breche ab"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:625
+#: ../../locales/../src/interface/netconfwizard.cpp:640
 msgid "Failed to retrieve the external IP address."
 msgstr "Externe IP-Adresse konnte nicht ermittelt werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:313
+#: ../../locales/../src/interface/netconfwizard.cpp:325
 msgid "Failed to send command."
 msgstr "Fehler beim Senden des Befehls."
 
-#: ../../locales/../src/interface/FileZilla.cpp:173
+#: ../../locales/../src/interface/FileZilla.cpp:150
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr ""
 "Die Sprache konnte nicht in %s (%s) geändert werden. Die Standard-"
 "Systemsprache wird benutzt."
 
-#: ../../locales/../src/interface/FileZilla.cpp:151
+#: ../../locales/../src/interface/FileZilla.cpp:128
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
@@ -3889,14 +3877,14 @@ msgstr ""
 "Die Sprache konnte nicht in %s (%s) geändert werden, die Standard-"
 "Systemsprache (%s, %s) wird benutzt."
 
-#: ../../locales/../src/interface/FileZilla.cpp:140
+#: ../../locales/../src/interface/FileZilla.cpp:117
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr ""
 "Die Sprache konnte nicht in %s (%s) geändert werden. Die Standard-"
 "Systemsprache wird benutzt."
 
-#: ../../locales/../src/interface/FileZilla.cpp:175
+#: ../../locales/../src/interface/FileZilla.cpp:152
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 #, c-format
 msgid "Failed to set language to %s, using default system language"
@@ -3904,25 +3892,25 @@ msgstr ""
 "Die Sprache konnte nicht in %s geändert werden. Die Standard-Systemsprache "
 "wird benutzt."
 
-#: ../../locales/../src/interface/FileZilla.cpp:147
+#: ../../locales/../src/interface/FileZilla.cpp:124
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Die Sprache konnte nicht in %s geändert werden. Die Standard-Systemsprache "
 "(%s, %s) wird benutzt."
 
-#: ../../locales/../src/interface/FileZilla.cpp:137
+#: ../../locales/../src/interface/FileZilla.cpp:114
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr ""
 "Die Sprache konnte nicht in %s geändert werden. Die Standard-Systemsprache "
 "wird benutzt."
 
-#: ../../locales/../src/interface/settings/optionspage.cpp:215
+#: ../../locales/../src/interface/settings/optionspage.cpp:206
 msgid "Failed to validate settings"
 msgstr "Überprüfung der Einstellungen fehlgeschlagen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1107
+#: ../../locales/../src/engine/tlssocket.cpp:1162
 msgid "Failed to verify peer certificate"
 msgstr "Verifizierung des Zertifikats der Gegenstelle fehlgeschlagen"
 
@@ -3959,7 +3947,7 @@ msgstr "Datei"
 msgid "File Types"
 msgstr "Dateitypen"
 
-#: ../../locales/../src/engine/socket.cpp:1051
+#: ../../locales/../src/engine/socket.cpp:1041
 msgid "File descriptor not a socket"
 msgstr "File descriptor kein Socket"
 
@@ -3988,8 +3976,8 @@ msgid "File lists"
 msgstr "Dateilisten"
 
 #: ../../locales/../src/interface/edithandler.cpp:1550
-#: ../../locales/../src/interface/FileZilla.cpp:618
-#: ../../locales/../src/interface/FileZilla.cpp:703
+#: ../../locales/../src/interface/FileZilla.cpp:572
+#: ../../locales/../src/interface/FileZilla.cpp:657
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Datei nicht gefunden"
@@ -4030,7 +4018,7 @@ msgstr "Dateiübertragung erfolgreich"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Dateiübertragung erfolgreich, %s in %s übertragen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1137
+#: ../../locales/../src/interface/Mainfrm.cpp:1139
 msgid "File transfers still in progress."
 msgstr "Dateiübertragungen dauern noch an."
 
@@ -4042,7 +4030,7 @@ msgstr "Datei würde mit Datentyp 'ASCII' übertragen werden."
 msgid "File would transfer with binary data type."
 msgstr "Datei würde mit Datentyp 'Binär' übertragen werden."
 
-#: ../../locales/../src/interface/FileZilla.cpp:429
+#: ../../locales/../src/interface/FileZilla.cpp:406
 #: ../../locales/../src/interface/quickconnectbar.cpp:66
 #: ../../locales/../src/interface/quickconnectbar.cpp:204
 msgid "FileZilla Error"
@@ -4060,7 +4048,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla ist schon mit einem Server verbunden."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1442
+#: ../../locales/../src/interface/Mainfrm.cpp:1447
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla muss neu gestartet werden, damit das Ändern der Sprache wirksam "
@@ -4076,7 +4064,7 @@ msgstr "Stat&usleisten für Verzeichnisanzeige"
 
 #: ../../locales/../src/interface/edithandler.cpp:1084
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
-#: ../../locales/../src/interface/LocalListView.cpp:276
+#: ../../locales/../src/interface/LocalListView.cpp:277
 #: ../../locales/../src/interface/RemoteListView.cpp:373
 #: ../../locales/../src/interface/search.cpp:108
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:33
@@ -4087,8 +4075,8 @@ msgstr "Dateiname"
 msgid "Filename &filters..."
 msgstr "&Datei-/Verzeichnisfilter..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2975
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2174
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2970
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2198
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr ""
@@ -4123,7 +4111,7 @@ msgid "Files currently being edited"
 msgstr "Momentan bearbeitete Dateien"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:135
-#: ../../locales/../src/interface/LocalListView.cpp:277
+#: ../../locales/../src/interface/LocalListView.cpp:278
 #: ../../locales/../src/interface/RemoteListView.cpp:374
 #: ../../locales/../src/interface/search.cpp:110
 msgid "Filesize"
@@ -4133,7 +4121,7 @@ msgstr "Dateigröße"
 msgid "Filesize format"
 msgstr "Dateigrößenformat"
 
-#: ../../locales/../src/interface/LocalListView.cpp:278
+#: ../../locales/../src/interface/LocalListView.cpp:279
 #: ../../locales/../src/interface/RemoteListView.cpp:375
 #: ../../locales/../src/interface/search.cpp:111
 msgid "Filetype"
@@ -4207,7 +4195,7 @@ msgstr "SHA256-Fingerprint:"
 msgid "Fingerprint:"
 msgstr "Fingerabdruck:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:55
+#: ../../locales/../src/interface/netconfwizard.cpp:56
 msgid "Firewall and router configuration wizard"
 msgstr "Assistent zur Firewall- und Routerkonfiguration"
 
@@ -4225,7 +4213,7 @@ msgstr ""
 "Um eine zuverlässige Verbindung bzw. Datenübertragung zu garantieren, "
 "sollten Sie einen Bereich von mindestens 10 Ports angeben."
 
-#: ../../locales/../src/interface/Options.cpp:242
+#: ../../locales/../src/interface/Options.cpp:246
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -4241,7 +4229,7 @@ msgstr "&UTF-8 erzwingen"
 msgid "Force showing &hidden files"
 msgstr "A&uflistung versteckter Dateien erzwingen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:645
+#: ../../locales/../src/interface/Mainfrm.cpp:647
 msgid "Force showing hidden files"
 msgstr "Auflistung versteckter Dateien erzwingen"
 
@@ -4256,7 +4244,7 @@ msgstr ""
 "Anführungszeichen."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:647
+#: ../../locales/../src/interface/updater.cpp:689
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Neues %s %s gefunden\n"
@@ -4269,7 +4257,7 @@ msgstr "Weitere Dokumentation"
 msgid "General"
 msgstr "Allgemein"
 
-#: ../../locales/../src/engine/proxy.cpp:507
+#: ../../locales/../src/engine/proxy.cpp:508
 msgid "General SOCKS server failure"
 msgstr "Allgemeines Versagen des SOCKS-Servers"
 
@@ -4296,22 +4284,22 @@ msgstr ""
 msgid "Global bookmarks"
 msgstr "Globale Lesezeichen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:212
+#: ../../locales/../src/engine/tlssocket.cpp:265
 #, c-format
 msgid "GnuTLS error %d"
 msgstr "GnuTLS-Fehler %d"
 
-#: ../../locales/../src/engine/tlssocket.cpp:214
+#: ../../locales/../src/engine/tlssocket.cpp:267
 #, c-format
 msgid "GnuTLS error %d in %s"
 msgstr "GnuTLS-Fehler %d in %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:208
+#: ../../locales/../src/engine/tlssocket.cpp:261
 #, c-format
 msgid "GnuTLS error %d in %s: %s"
 msgstr "GnuTLS-Fehler %d in %s: %s"
 
-#: ../../locales/../src/engine/tlssocket.cpp:206
+#: ../../locales/../src/engine/tlssocket.cpp:259
 #, c-format
 msgid "GnuTLS error %d: %s"
 msgstr "GnuTLS-Fehler %d: %s"
@@ -4341,13 +4329,13 @@ msgid "Hidden"
 msgstr "Versteckt"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:963
-#: ../../locales/../src/interface/queue.cpp:911
-#: ../../locales/../src/interface/queue.cpp:998
+#: ../../locales/../src/interface/queue.cpp:883
+#: ../../locales/../src/interface/queue.cpp:939
 msgid "High"
 msgstr "Hoch"
 
-#: ../../locales/../src/interface/queue.cpp:913
-#: ../../locales/../src/interface/queue.cpp:1000
+#: ../../locales/../src/interface/queue.cpp:885
+#: ../../locales/../src/interface/queue.cpp:941
 msgid "Highest"
 msgstr "Höchste"
 
@@ -4367,7 +4355,7 @@ msgstr ""
 msgid "Homepage:"
 msgstr "Homepage:"
 
-#: ../../locales/../src/engine/socket.cpp:1062
+#: ../../locales/../src/engine/socket.cpp:1052
 msgid "Host is down"
 msgstr "Server ist offline"
 
@@ -4379,12 +4367,12 @@ msgstr "Fingerabdruck des Server-Schlüssels:"
 msgid "Host key mismatch"
 msgstr "Server-Schlüssel stimmen nicht überein"
 
-#: ../../locales/../src/engine/server.cpp:157
+#: ../../locales/../src/engine/server.cpp:158
 msgid "Host starts with '[' but no closing bracket found."
 msgstr ""
 "Host fängt mit '[' an, es wurde aber keine schließende Klammer gefunden."
 
-#: ../../locales/../src/engine/proxy.cpp:516
+#: ../../locales/../src/engine/proxy.cpp:517
 msgid "Host unreachable"
 msgstr "Host nicht erreichbar"
 
@@ -4403,7 +4391,7 @@ msgstr "Stunden,"
 msgid "I&SO 8601 (example: 15:47)"
 msgstr "ISO 8&601 (Beispiel: 15:47)"
 
-#: ../../locales/../src/engine/proxy.cpp:153
+#: ../../locales/../src/engine/proxy.cpp:154
 msgid "IPv6 addresses are not supported with SOCKS4 proxy"
 msgstr "IPv6-Adressen werden mit SOCKS4-Proxy nicht unterstützt"
 
@@ -4453,7 +4441,7 @@ msgstr ""
 "Falls Sie nichts von einem Wechsel des Server-Schlüssels wissen, "
 "kontaktieren Sie bitte den Server-Administrator."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:563
+#: ../../locales/../src/interface/netconfwizard.cpp:577
 msgid ""
 "If the problem persists, some router and/or firewall keeps blocking "
 "FileZilla."
@@ -4461,7 +4449,7 @@ msgstr ""
 "Wenn das Problem weiterhin besteht, wird FileZilla durch einen Router oder "
 "eine Firewall blockiert."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:572
+#: ../../locales/../src/interface/netconfwizard.cpp:586
 msgid ""
 "If the problem persists, some router and/or firewall keeps interrupting the "
 "connection."
@@ -4487,7 +4475,7 @@ msgstr ""
 "Wenn die symbolische Verknüpfung auf ein Verzeichnis zeigt, kann FileZilla "
 "entweder die Verknüpfung oder aber den Inhalt des Zielverzeichnisses löschen."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:633
+#: ../../locales/../src/interface/netconfwizard.cpp:648
 msgid ""
 "If this problem persists, please contact your router or firewall "
 "manufacturer for a solution."
@@ -4495,7 +4483,7 @@ msgstr ""
 "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Hersteller "
 "Ihres Routers oder Ihrer Firewall, um eine Lösung zu erfragen."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:591
+#: ../../locales/../src/interface/netconfwizard.cpp:606
 msgid "If this problem stays, please contact your router manufacturer."
 msgstr ""
 "Wenn das Problem weiterhin besteht, wenden Sie sich bitte an den Hersteller "
@@ -4535,7 +4523,7 @@ msgstr ""
 "Wenn Sie auf \"Test\" klicken, wird sich FileZilla mit probe.filezilla-"
 "project.org verbinden und einige einfache Tests ausführen."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1159
+#: ../../locales/../src/interface/Mainfrm.cpp:1161
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Wenn Sie FileZilla schließen, werden Ihre Änderungen verloren gehen."
 
@@ -4559,7 +4547,7 @@ msgstr ""
 "Wenn Sie Probleme haben Verzeichnisinhalte anzeigen zu lassen oder Dateien "
 "zu übertragen, versuchen Sie den Standard-Übertragungsmodus zu ändern."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:578
+#: ../../locales/../src/interface/netconfwizard.cpp:593
 msgid ""
 "If you keep having problems with a specific server, the server itself or a "
 "remote router or firewall might be misconfigured. In this case try to toggle "
@@ -4595,7 +4583,7 @@ msgstr ""
 "Wenn Sie einen Router benutzen, stellen Sie sicher, dass alle angegebenen "
 "Ports zu dem Rechner, auf dem Sie FileZilla verwenden, weitergeleitet werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:604
+#: ../../locales/../src/interface/netconfwizard.cpp:619
 msgid ""
 "If your router keeps changing the IP address, please contact your router "
 "manufacturer."
@@ -4658,7 +4646,7 @@ msgstr ""
 "FileZilla den Server nach einem Port und verbindet sich zu diesem Port; "
 "hierfür muss nicht viel eingerichtet werden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1119
+#: ../../locales/../src/engine/tlssocket.cpp:1174
 msgid ""
 "Incomplete chain, top certificate is not self-signed certificate authority "
 "certificate"
@@ -4670,7 +4658,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Falsches Passwort"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:192
+#: ../../locales/../src/interface/resources/xrc/update.xrc:196
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4678,7 +4666,7 @@ msgstr ""
 "Informationen zur aktuellen FileZilla-Version konnten nicht abgefragt "
 "werden. Bitte versuchen Sie es später noch einmal."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:746
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:741
 msgid "Initializing TLS..."
 msgstr "Initialisiere TLS..."
 
@@ -4686,12 +4674,12 @@ msgstr "Initialisiere TLS..."
 msgid "Insecure algorithm!"
 msgstr "Unsicherer Algorithmus!"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:730
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:725
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Unsicherer Server; er unterstützt kein FTP über TLS."
 
-#: ../../locales/../src/engine/server.cpp:860
-#: ../../locales/../src/engine/server.cpp:881
+#: ../../locales/../src/engine/server.cpp:861
+#: ../../locales/../src/engine/server.cpp:882
 #: ../../locales/../src/interface/manual_transfer.cpp:185
 msgid "Interactive"
 msgstr "Interaktiv"
@@ -4700,7 +4688,7 @@ msgstr "Interaktiv"
 msgid "Interface"
 msgstr "Oberfläche"
 
-#: ../../locales/../src/engine/socket.cpp:1048
+#: ../../locales/../src/engine/socket.cpp:1038
 msgid "Interrupted by signal"
 msgstr "Unterbrochen durch Signal"
 
@@ -4717,12 +4705,12 @@ msgstr "Content-Length ungültig"
 msgid "Invalid HTTP Response"
 msgstr "Ungültige HTTP-Rückmeldung"
 
-#: ../../locales/../src/engine/socket.cpp:1036
+#: ../../locales/../src/engine/socket.cpp:1026
 msgid "Invalid argument passed"
 msgstr "Ungültiges Argument übergeben"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:456
-#: ../../locales/../src/engine/ControlSocket.cpp:512
+#: ../../locales/../src/engine/ControlSocket.cpp:452
+#: ../../locales/../src/engine/ControlSocket.cpp:508
 msgid ""
 "Invalid character sequence received, disabling UTF-8. Select UTF-8 option in "
 "site manager to force UTF-8."
@@ -4734,10 +4722,10 @@ msgstr ""
 msgid "Invalid chunk size"
 msgstr "Ungültige Datenpaketgröße."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:363
-#: ../../locales/../src/interface/netconfwizard.cpp:372
-#: ../../locales/../src/interface/netconfwizard.cpp:380
-#: ../../locales/../src/interface/netconfwizard.cpp:397
+#: ../../locales/../src/interface/netconfwizard.cpp:375
+#: ../../locales/../src/interface/netconfwizard.cpp:384
+#: ../../locales/../src/interface/netconfwizard.cpp:392
+#: ../../locales/../src/interface/netconfwizard.cpp:409
 msgid "Invalid data received"
 msgstr "Ungültige Daten empfangen"
 
@@ -4751,7 +4739,7 @@ msgstr "Ungültiges Datum"
 msgid "Invalid filename"
 msgstr "Ungültiger Dateiname"
 
-#: ../../locales/../src/engine/server.cpp:162
+#: ../../locales/../src/engine/server.cpp:163
 msgid "Invalid host, after closing bracket only colon and port may follow."
 msgstr ""
 "Ungültiger Host; nach der schließenden Klammer dürfen nur Doppelpunkt und "
@@ -4761,13 +4749,13 @@ msgstr ""
 msgid "Invalid input"
 msgstr "Ungültige Eingabe"
 
-#: ../../locales/../src/engine/server.cpp:63
-#: ../../locales/../src/engine/server.cpp:180
-#: ../../locales/../src/engine/server.cpp:190
+#: ../../locales/../src/engine/server.cpp:64
+#: ../../locales/../src/engine/server.cpp:181
+#: ../../locales/../src/engine/server.cpp:191
 msgid "Invalid port given. The port has to be a value from 1 to 65535."
 msgstr "Ungültiger Port angegeben. Der Port muss zwischen 1 und 65535 liegen."
 
-#: ../../locales/../src/engine/server.cpp:91
+#: ../../locales/../src/engine/server.cpp:92
 #: ../../locales/../src/interface/quickconnectbar.cpp:121
 msgid ""
 "Invalid protocol specified. Valid protocols are:\n"
@@ -4782,7 +4770,7 @@ msgstr ""
 "ftps:// für FTP über TLS (implizit) und\n"
 "ftpes:// für FTP über TLS (explizit)."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4233
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4219
 msgid ""
 "Invalid proxy host, after closing bracket only colon and port may follow."
 msgstr ""
@@ -4821,15 +4809,15 @@ msgstr "Ungültiger Pfad für Servereintrag"
 msgid "Invalid size in condition"
 msgstr "Ungültige Größe in Bedingung"
 
-#: ../../locales/../src/engine/server.cpp:132
+#: ../../locales/../src/engine/server.cpp:133
 msgid "Invalid username given."
 msgstr "Ungültiger Benutzername angegeben."
 
-#: ../../locales/../src/engine/socket.cpp:1069
+#: ../../locales/../src/engine/socket.cpp:1059
 msgid "Invalid value for ai_flags"
 msgstr "Ungültiger Wert für 'ai_flags'"
 
-#: ../../locales/../src/engine/socket.cpp:1071
+#: ../../locales/../src/engine/socket.cpp:1061
 msgid "Invalid value for hints"
 msgstr "Ungültiger Wert für 'hints'"
 
@@ -4849,7 +4837,7 @@ msgstr "Land oder Provinz des Gerichtsstands:"
 msgid "Keep directories on top"
 msgstr "Verzeichnisse immer oben"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:649
+#: ../../locales/../src/interface/Mainfrm.cpp:651
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4868,8 +4856,8 @@ msgstr "Schlüsselaustausch"
 msgid "Key exchange:"
 msgstr "Schlüsselaustausch:"
 
-#: ../../locales/../src/engine/server.cpp:858
-#: ../../locales/../src/engine/server.cpp:879
+#: ../../locales/../src/engine/server.cpp:859
+#: ../../locales/../src/engine/server.cpp:880
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1311
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1312
 msgid "Key file"
@@ -4884,11 +4872,11 @@ msgstr "Niedri&gste"
 msgid "Language"
 msgstr "Sprache"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1442
+#: ../../locales/../src/interface/Mainfrm.cpp:1447
 msgid "Language changed"
 msgstr "Sprache gewechselt"
 
-#: ../../locales/../src/interface/LocalListView.cpp:279
+#: ../../locales/../src/interface/LocalListView.cpp:280
 #: ../../locales/../src/interface/RemoteListView.cpp:376
 #: ../../locales/../src/interface/search.cpp:112
 msgid "Last modified"
@@ -4926,8 +4914,8 @@ msgstr "Maximale Zeilenlänge überschritten"
 msgid "Linked against"
 msgstr "Gelinkt gegen"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:264
-#: ../../locales/../src/interface/netconfwizard.cpp:270
+#: ../../locales/../src/interface/netconfwizard.cpp:276
+#: ../../locales/../src/interface/netconfwizard.cpp:282
 msgid "Listen socket closed"
 msgstr "Socket für eingehende Verbindungen geschlossen"
 
@@ -4946,11 +4934,11 @@ msgstr "&Niedrigster verfügbarer Port:"
 msgid "Local"
 msgstr "Lokal"
 
-#: ../../locales/../src/engine/socket.cpp:1033
+#: ../../locales/../src/engine/socket.cpp:1023
 msgid "Local address in use"
 msgstr "Lokale Adresse in Benutzung"
 
-#: ../../locales/../src/engine/socket.cpp:1061
+#: ../../locales/../src/engine/socket.cpp:1051
 msgid "Local endpoint has been closed"
 msgstr "Lokaler Endpunkt wurde geschlossen"
 
@@ -4962,8 +4950,8 @@ msgstr "Lokale Datei"
 msgid "Local file does not exist."
 msgstr "Lokale Datei existiert nicht."
 
-#: ../../locales/../src/interface/updater.cpp:371
-#: ../../locales/../src/interface/updater.cpp:463
+#: ../../locales/../src/interface/updater.cpp:403
+#: ../../locales/../src/interface/updater.cpp:496
 #, c-format
 msgid "Local file is %s\n"
 msgstr "Lokale Datei ist %s\n"
@@ -4992,7 +4980,7 @@ msgstr "Ort:"
 msgid "Log file"
 msgstr "Logdatei"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:909
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:904
 msgid "Logged in"
 msgstr "Angemeldet"
 
@@ -5001,7 +4989,7 @@ msgstr "Angemeldet"
 msgid "Logging"
 msgstr "Logging"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:804
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:799
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Cannot fall back to local charset since using proxy."
@@ -5010,7 +4998,7 @@ msgstr ""
 "unterstützt möglicherweise kein UTF-8. Kann nicht auf lokalen Zeichensatz "
 "zurückgreifen, da ein Proxy verwendet wird."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:811
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:806
 msgid ""
 "Login data contains non-ASCII characters and server might not be UTF-8 "
 "aware. Trying local charset."
@@ -5018,7 +5006,7 @@ msgstr ""
 "Anmeldedaten enthalten nicht-ASCII-konforme Zeichen und der Server "
 "unterstützt möglicherweise kein UTF-8. Versuche lokalen Zeichensatz."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:838
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:833
 msgid "Login sequence fully executed yet not logged in. Aborting."
 msgstr ""
 "Anmeldevorgang vollständig ausgeführt, jedoch nicht angemeldet. Abbruch."
@@ -5038,13 +5026,13 @@ msgstr ""
 "Kontozugangstyp; kann nur in Verbindung mit einer FTP-URL verwendet werden. "
 "Argument muss entweder '%s' oder '%s' sein."
 
-#: ../../locales/../src/interface/queue.cpp:906
-#: ../../locales/../src/interface/queue.cpp:993
+#: ../../locales/../src/interface/queue.cpp:878
+#: ../../locales/../src/interface/queue.cpp:934
 msgid "Low"
 msgstr "Niedrig"
 
-#: ../../locales/../src/interface/queue.cpp:904
-#: ../../locales/../src/interface/queue.cpp:991
+#: ../../locales/../src/interface/queue.cpp:876
+#: ../../locales/../src/interface/queue.cpp:932
 msgid "Lowest"
 msgstr "Niedrigste"
 
@@ -5107,12 +5095,12 @@ msgstr "Keine der folgenden Bedingungen darf zutreffen"
 msgid "Maximum simultaneous &transfers:"
 msgstr "Maximale Anzahl gleichzeitiger Über&tragungen:"
 
-#: ../../locales/../src/engine/socket.cpp:1075
+#: ../../locales/../src/engine/socket.cpp:1065
 msgid "Memory allocation failure"
 msgstr "Speicherzuweisungsfehlschlag"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:388
-#: ../../locales/../src/interface/Mainfrm.cpp:1752
+#: ../../locales/../src/interface/Mainfrm.cpp:387
+#: ../../locales/../src/interface/Mainfrm.cpp:1757
 msgid "Message log"
 msgstr "Nachrichtenprotokoll"
 
@@ -5120,7 +5108,7 @@ msgstr "Nachrichtenprotokoll"
 msgid "Message log position"
 msgstr "Position des Nachrichtenprotokolls"
 
-#: ../../locales/../src/engine/socket.cpp:1058
+#: ../../locales/../src/engine/socket.cpp:1048
 msgid "Message too large"
 msgstr "Nachricht zu groß"
 
@@ -5193,11 +5181,11 @@ msgstr "Es muss ein gültiger Server-Pfad eingegeben werden"
 msgid "Need to specify a character encoding"
 msgstr "Sie müssen einen Zeichensatz angeben"
 
-#: ../../locales/../src/engine/socket.cpp:1079
+#: ../../locales/../src/engine/socket.cpp:1069
 msgid "Neither nodename nor servname provided, or not known"
 msgstr "Weder 'nodename' noch 'servname' angegeben, oder nicht bekannt"
 
-#: ../../locales/../src/engine/socket.cpp:1066
+#: ../../locales/../src/engine/socket.cpp:1056
 msgid ""
 "Network host does not have any network addresses in the requested address "
 "family"
@@ -5205,8 +5193,8 @@ msgstr ""
 "Netzwerkhost besitzt in der angeforderten Adressfamilie keine "
 "Netzwerkadressen"
 
-#: ../../locales/../src/engine/proxy.cpp:513
-#: ../../locales/../src/engine/socket.cpp:1050
+#: ../../locales/../src/engine/proxy.cpp:514
+#: ../../locales/../src/engine/socket.cpp:1040
 msgid "Network unreachable"
 msgstr "Netzwerk nicht erreichbar"
 
@@ -5246,13 +5234,13 @@ msgstr "Neue&s Lesezeichen"
 msgid "New bookmark"
 msgstr "Neues Lesezeichen"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1123
+#: ../../locales/../src/interface/LocalTreeView.cpp:1138
 #: ../../locales/../src/interface/RemoteListView.cpp:1306
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1232
 msgid "New directory"
 msgstr "Neues Verzeichnis"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:51
+#: ../../locales/../src/interface/welcome_dialog.cpp:54
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "Neue Features und Verbesserungen in %s"
@@ -5275,11 +5263,11 @@ msgstr "Neuer Server"
 msgid "Next to the transfer queue"
 msgstr "Neben der Übertragungs-Warteschlange"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:835
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:838
 msgid "No"
 msgstr "Nein"
 
-#: ../../locales/../src/engine/socket.cpp:1077
+#: ../../locales/../src/engine/socket.cpp:1067
 msgid "No address associated with nodename"
 msgstr "Keine Adresse mit Knotenname verknüpft"
 
@@ -5287,11 +5275,11 @@ msgstr "Keine Adresse mit Knotenname verknüpft"
 msgid "No category to export selected"
 msgstr "Keine Kategorie zum Exportieren ausgewählt"
 
-#: ../../locales/../src/interface/QueueView.cpp:2114
+#: ../../locales/../src/interface/QueueView.cpp:1736
 msgid "No command given, aborting."
 msgstr "Kein Befehl angegeben, Abbruch."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3758
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3749
 msgid "No external IP address set, trying default."
 msgstr "Keine externe IP-Adresse angegeben, versuche Standard-Adresse."
 
@@ -5303,19 +5291,15 @@ msgstr "Es werden derzeit keine Dateien bearbeitet."
 msgid "No filter name given"
 msgstr "Bitte einen Filternamen angeben"
 
-#: ../../locales/../src/engine/server.cpp:77
-#: ../../locales/../src/engine/server.cpp:174
-#: ../../locales/../src/engine/server.cpp:199
+#: ../../locales/../src/engine/server.cpp:78
+#: ../../locales/../src/engine/server.cpp:175
+#: ../../locales/../src/engine/server.cpp:200
 msgid "No host given, please enter a host."
 msgstr "Kein Server angegeben, bitte Server eingeben."
 
 #: ../../locales/../src/interface/settings/optionspage_themes.cpp:87
 msgid "No images available"
 msgstr "Keine Bilder verfügbar"
-
-#: ../../locales/../src/interface/QueueView.cpp:2974
-msgid "No more files in the queue!"
-msgstr "Keine weiteren Dateien in der Warteschlange!"
 
 #: ../../locales/../src/interface/filter.cpp:340
 #: ../../locales/../src/interface/filter.cpp:404
@@ -5333,7 +5317,7 @@ msgstr ""
 "Für das Bearbeiten von Dateien mit der Erweiterung '%s' wurde kein Programm "
 "festgelegt."
 
-#: ../../locales/../src/engine/socket.cpp:1053
+#: ../../locales/../src/engine/socket.cpp:1043
 msgid "No route to host"
 msgstr "Keine Route zum Host"
 
@@ -5345,7 +5329,7 @@ msgstr "Keine Suchergebnisse"
 msgid "No sites available"
 msgstr "Keine Server verfügbar"
 
-#: ../../locales/../src/engine/proxy.cpp:484
+#: ../../locales/../src/engine/proxy.cpp:485
 msgid "No supported SOCKS5 auth method"
 msgstr "Keine unterstützte SOCKS5-Authentifizierungsmethode"
 
@@ -5363,39 +5347,39 @@ msgstr "Keine"
 msgid "None selected yet"
 msgstr "Noch keiner ausgewählt"
 
-#: ../../locales/../src/engine/socket.cpp:1073
+#: ../../locales/../src/engine/socket.cpp:1063
 msgid "Nonrecoverable failure in name resolution"
 msgstr "Nichtbehebbarer Fehlschlag bei Namensauflösung"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:962
-#: ../../locales/../src/engine/server.cpp:854
-#: ../../locales/../src/engine/server.cpp:875
+#: ../../locales/../src/engine/server.cpp:855
+#: ../../locales/../src/engine/server.cpp:876
 #: ../../locales/../src/interface/manual_transfer.cpp:154
 #: ../../locales/../src/interface/manual_transfer.cpp:179
 #: ../../locales/../src/interface/manual_transfer.cpp:540
-#: ../../locales/../src/interface/queue.cpp:909
-#: ../../locales/../src/interface/queue.cpp:996
+#: ../../locales/../src/interface/queue.cpp:881
+#: ../../locales/../src/interface/queue.cpp:937
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1309
 msgid "Normal"
 msgstr "Normal"
 
-#: ../../locales/../src/interface/queueview_failed.cpp:312
-#: ../../locales/../src/interface/queueview_failed.cpp:337
+#: ../../locales/../src/interface/queueview_failed.cpp:311
+#: ../../locales/../src/interface/queueview_failed.cpp:336
 msgid "Not all items could be requeued for transfer."
 msgstr ""
 "Nicht alle Objekte konnten für die Übertragung wieder zur Warteschlange "
 "hinzugefügt werden."
 
-#: ../../locales/../src/interface/state.cpp:180
-#: ../../locales/../src/interface/state.cpp:483
+#: ../../locales/../src/interface/state.cpp:178
+#: ../../locales/../src/interface/state.cpp:478
 msgid "Not connected"
 msgstr "Nicht verbunden"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2011
+#: ../../locales/../src/interface/RemoteListView.cpp:2010
 msgid "Not connected to any server"
 msgstr "Derzeit mit keinem Server verbunden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:561
+#: ../../locales/../src/interface/Mainfrm.cpp:563
 msgid "Not connected to any server."
 msgstr "Derzeit mit keinem Server verbunden."
 
@@ -5403,11 +5387,11 @@ msgstr "Derzeit mit keinem Server verbunden."
 msgid "Not connected."
 msgstr "Nicht verbunden."
 
-#: ../../locales/../src/engine/socket.cpp:1094
+#: ../../locales/../src/engine/socket.cpp:1084
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Nicht initialisiert; WSAStartup muss aufgerufen werden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:647
+#: ../../locales/../src/interface/Mainfrm.cpp:649
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr ""
 "Beachten Sie, dass dieses Feature nur bei Verwendung des FTP-Protokolls "
@@ -5478,7 +5462,7 @@ msgstr ""
 "Übertragungsmodus und (falls aktiviert) den alternativen Übertragungsmodus "
 "im Fehlerfall festgelegt."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:845
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:848
 msgid "Once"
 msgstr "Einmal"
 
@@ -5524,8 +5508,8 @@ msgstr "Geöffnet als:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1616
 #: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1700
-#: ../../locales/../src/interface/LocalListView.cpp:1712
+#: ../../locales/../src/interface/LocalListView.cpp:1714
+#: ../../locales/../src/interface/LocalListView.cpp:1726
 msgid "Opening failed"
 msgstr "Öffnen fehlgeschlagen"
 
@@ -5548,15 +5532,15 @@ msgstr ""
 msgid "Operating System:"
 msgstr "Betriebssystem:"
 
-#: ../../locales/../src/engine/socket.cpp:1044
+#: ../../locales/../src/engine/socket.cpp:1034
 msgid "Operation already in progress"
 msgstr "Operation wird bereits ausgeführt"
 
-#: ../../locales/../src/engine/socket.cpp:1035
+#: ../../locales/../src/engine/socket.cpp:1025
 msgid "Operation in progress"
 msgstr "Operation wird ausgeführt"
 
-#: ../../locales/../src/engine/socket.cpp:1056
+#: ../../locales/../src/engine/socket.cpp:1046
 msgid "Operation not supported"
 msgstr "Operation nicht unterstützt"
 
@@ -5568,7 +5552,7 @@ msgstr "Organisation:"
 msgid "Other SFTP options"
 msgstr "Sonstige SFTP-Optionen"
 
-#: ../../locales/../src/engine/socket.cpp:1089
+#: ../../locales/../src/engine/socket.cpp:1079
 msgid "Other system error"
 msgstr "Anderer Systemfehler"
 
@@ -5576,8 +5560,8 @@ msgstr "Anderer Systemfehler"
 msgid "Other:"
 msgstr "Andere:"
 
-#: ../../locales/../src/engine/socket.cpp:1039
-#: ../../locales/../src/engine/socket.cpp:1040
+#: ../../locales/../src/engine/socket.cpp:1029
+#: ../../locales/../src/engine/socket.cpp:1030
 msgid "Out of memory"
 msgstr "Speichermangel"
 
@@ -5626,7 +5610,7 @@ msgstr "Überschreiben falls &Größe unterschiedlich"
 msgid "Overwrite if different si&ze or source newer"
 msgstr "Überschr&eiben falls Größe unterschiedlich oder Quelldatei aktueller"
 
-#: ../../locales/../src/interface/updater.cpp:219
+#: ../../locales/../src/interface/updater.cpp:246
 #, c-format
 msgid "Own build type: %s\n"
 msgstr "Eigener Build-Typ: %s\n"
@@ -5653,7 +5637,7 @@ msgstr ""
 msgid "P&roxy host:"
 msgstr "P&roxy-Server:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:497
+#: ../../locales/../src/interface/netconfwizard.cpp:509
 msgid "PORT command tainted by router or firewall."
 msgstr "PORT-Befehl wurde vom Router oder der Firewall beeinträchtigt."
 
@@ -5661,11 +5645,11 @@ msgstr "PORT-Befehl wurde vom Router oder der Firewall beeinträchtigt."
 msgid "Pa&ssive (recommended)"
 msgstr "&Passiv (empfohlen)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2322
+#: ../../locales/../src/interface/Mainfrm.cpp:2327
 msgid "Parameter not a valid URL"
 msgstr "Parameter keine gültige URL"
 
-#: ../../locales/../src/interface/updater.cpp:543
+#: ../../locales/../src/interface/updater.cpp:576
 #, c-format
 msgid "Parsing %d bytes of version information.\n"
 msgstr "Parse %d Bytes der Versionsinformationen.\n"
@@ -5685,9 +5669,9 @@ msgstr "Passiv (empfohlen)"
 msgid "Passive mode"
 msgstr "Passiver Modus"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:597
-#: ../../locales/../src/interface/netconfwizard.cpp:610
-#: ../../locales/../src/interface/netconfwizard.cpp:621
+#: ../../locales/../src/interface/netconfwizard.cpp:612
+#: ../../locales/../src/interface/netconfwizard.cpp:625
+#: ../../locales/../src/interface/netconfwizard.cpp:636
 msgid "Passive mode has been set as default transfer mode."
 msgstr "Der passive Modus ist nun der Standard-Übertragungsmodus."
 
@@ -5700,14 +5684,14 @@ msgstr "Passwort benötigt"
 msgid "Path"
 msgstr "Pfad"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3058
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2220
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3053
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2244
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
 "Pfad kann für Verzeichnis %s und Unterverzeichnis %s nicht erstellt werden"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2280
+#: ../../locales/../src/interface/Mainfrm.cpp:2285
 msgid "Path not found:"
 msgstr "Pfad nicht gefunden:"
 
@@ -5727,8 +5711,8 @@ msgstr "Ausstehende Entfernung"
 msgid "Permission"
 msgstr "Berechtigung"
 
-#: ../../locales/../src/engine/socket.cpp:1032
-#: ../../locales/../src/engine/socket.cpp:1041
+#: ../../locales/../src/engine/socket.cpp:1022
+#: ../../locales/../src/engine/socket.cpp:1031
 msgid "Permission denied"
 msgstr "Zugriff verweigert"
 
@@ -5741,7 +5725,7 @@ msgstr "Berechtigungen"
 msgid "Platform:"
 msgstr "Plattform:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:562
+#: ../../locales/../src/interface/netconfwizard.cpp:576
 msgid ""
 "Please check on https://filezilla-project.org/probe.php that the server is "
 "running and carefully check your settings again."
@@ -5757,13 +5741,13 @@ msgstr ""
 "Bitte konfigurieren Sie Ihre Router und Firewalls so, dass FileZilla "
 "ausgehende Verbindungen zu beliebigen Ports aufbauen kann."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:632
+#: ../../locales/../src/interface/netconfwizard.cpp:647
 msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
 msgstr ""
 "Bitte deaktivieren Sie Einstellungen wie 'DMZ mode' oder 'Game mode' Ihres "
 "Routers."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:571
+#: ../../locales/../src/interface/netconfwizard.cpp:585
 msgid ""
 "Please ensure you have a stable internet connection and carefully check your "
 "settings again."
@@ -5838,17 +5822,6 @@ msgstr ""
 msgid "Please enter a password for this server:"
 msgstr "Bitte geben Sie ein Passwort für diesen Server ein:"
 
-#: ../../locales/../src/interface/QueueView.cpp:2103
-msgid ""
-"Please enter a path and executable to run.\n"
-"E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
-"You can also optionally specify program arguments."
-msgstr ""
-"Bitte tragen Sie einen Pfad und eine Exe-Datei ein, welche aufgerufen werden "
-"soll.\n"
-"Beispiel: c:\\Pfad\\Datei.exe unter MS Windows oder /Pfad/Datei unter Unix.\n"
-"Sie können auch zusätzliche Argumente für den Programmaufruf angeben."
-
 #: ../../locales/../src/interface/settings/optionspage_connection.cpp:46
 msgid ""
 "Please enter a timeout between 10 and 9999 seconds or 0 to disable timeouts."
@@ -5881,7 +5854,7 @@ msgstr ""
 "Bitte tragen Sie für die Begrenzung der Uploadgeschwindigkeit einen Wert "
 "größer oder gleich 0 %s/s ein."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:572
+#: ../../locales/../src/interface/Mainfrm.cpp:574
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5889,14 +5862,29 @@ msgstr ""
 "Bitte geben Sie einen FTP-Befehl ein.\n"
 "Die Benutzung eigener FTP-Befehle leert den Verzeichniscache."
 
-#: ../../locales/../src/interface/LocalListView.cpp:902
-#: ../../locales/../src/interface/LocalTreeView.cpp:1120
+#: ../../locales/../src/interface/QueueView.cpp:1730
+msgid ""
+"Please enter the complete path of a program and its arguments. This command "
+"will be executed when the queue has finished processing.\n"
+"E.g. c:\\somePath\\file.exe under MS Windows or /somePath/file under Unix.\n"
+"You need to properly quote commands and their arguments if they contain "
+"spaces."
+msgstr ""
+"Bitte tragen Sie den vollständigen Pfad eines Programms und dessen Argumente "
+"ein. Dieser Befehl wird ausgeführt, wenn die Warteschlange "
+"abgearbeitetwurde.\n"
+"Beispiel: c:\\Pfad\\Datei.exe unter MS Windows oder /Pfad/Datei unter Unix.\n"
+"Sie müssen Befehle und ihre Argumente korrekt in Anführungszeichen "
+"einschließen falls sie Leerzeichen enthalten."
+
+#: ../../locales/../src/interface/LocalListView.cpp:917
+#: ../../locales/../src/interface/LocalTreeView.cpp:1135
 #: ../../locales/../src/interface/RemoteListView.cpp:1293
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1219
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Bitte geben Sie den Namen des zu erstellenden Verzeichnisses ein:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2609
+#: ../../locales/../src/interface/RemoteListView.cpp:2607
 msgid "Please enter the name of the file which should be created:"
 msgstr "Bitte geben Sie den Namen der zu erstellenden Datei ein:"
 
@@ -5909,8 +5897,8 @@ msgstr ""
 msgid "Please enter your external IP address"
 msgstr "Bitte geben Sie Ihre externe IP-Adresse ein"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:602
-#: ../../locales/../src/interface/netconfwizard.cpp:615
+#: ../../locales/../src/interface/netconfwizard.cpp:617
+#: ../../locales/../src/interface/netconfwizard.cpp:630
 msgid ""
 "Please enter your external IP address on the active mode page of this "
 "wizard. In case you have a dynamic address or don't know your external "
@@ -5929,7 +5917,7 @@ msgstr ""
 "Bitte folgen Sie den Anweisungen sorgfältig, da eine falsche Konfiguration "
 "erfolgreiche FTP-Verbindungen verhindert."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:626
+#: ../../locales/../src/interface/netconfwizard.cpp:641
 msgid ""
 "Please make sure FileZilla is allowed to establish outgoing connections and "
 "make sure you typed the address of the address resolver correctly."
@@ -5938,13 +5926,13 @@ msgstr ""
 "Verbindungen aufzubauen und die Adresse des Adressauflösers korrekt "
 "eingegeben ist."
 
-#: ../../locales/../src/interface/FileZilla.cpp:157
+#: ../../locales/../src/interface/FileZilla.cpp:134
 msgid "Please make sure the requested locale is installed on your system."
 msgstr ""
 "Bitte vergewissern Sie sich, dass die gewünschte Sprache auf dem System "
 "installiert ist."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:603
+#: ../../locales/../src/interface/netconfwizard.cpp:618
 msgid ""
 "Please make sure your router is using the latest available firmware. "
 "Furthermore, your router has to be configured properly. You will have to use "
@@ -5969,7 +5957,7 @@ msgstr ""
 "Software benutzt wird. Sollte dies einen Fehlalarm auslösen, können Sie "
 "diesen ohne weiteres ignorieren."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:687
+#: ../../locales/../src/interface/Mainfrm.cpp:689
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5986,7 +5974,7 @@ msgstr ""
 "Bitte beachten Sie, dass manche Server Sie möglicherweise ablehnen, wenn Sie "
 "sich zu oft oder nach zu kurzer Zeit erneut verbinden möchten."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:579
+#: ../../locales/../src/interface/netconfwizard.cpp:594
 msgid ""
 "Please run this wizard again should you change your network environment or "
 "in case you suddenly encounter problems with servers that did work "
@@ -6036,7 +6024,7 @@ msgstr ""
 msgid "Please select the new attributes for the selected files."
 msgstr "Bitte wählen Sie die neuen Attribute für die ausgewählten Dateien."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:590
+#: ../../locales/../src/interface/netconfwizard.cpp:605
 msgid ""
 "Please update your firewall and make sure your router is using the latest "
 "available firmware. Furthermore, your router has to be configured properly. "
@@ -6073,7 +6061,7 @@ msgstr "Speicherplatzvorbelegung"
 msgid "Predefined Sites"
 msgstr "Vordefinierte Server"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:686
+#: ../../locales/../src/interface/Mainfrm.cpp:688
 msgid "Preserving file timestamps"
 msgstr "Änderungszeitpunkt der Dateien beibehalten"
 
@@ -6081,7 +6069,7 @@ msgstr "Änderungszeitpunkt der Dateien beibehalten"
 msgid "Preview:"
 msgstr "Vorschau:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1136
+#: ../../locales/../src/engine/tlssocket.cpp:1191
 msgid "Primary connection and data connection certificates don't match."
 msgstr ""
 "Das Zertifikat der Datenverbindung stimmt nicht mit dem der Hauptverbindung "
@@ -6099,7 +6087,7 @@ msgstr "Versionsinformationen auf stdout ausgeben und verlassen"
 msgid "Prioritize directories (default)"
 msgstr "Bevorzuge Verzeichnisse (Standard)"
 
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Priority"
 msgstr "Priorität"
 
@@ -6129,21 +6117,21 @@ msgstr "Proxy-Pass&wort:"
 msgid "Process &Queue"
 msgstr "&Warteschlange abarbeiten"
 
-#: ../../locales/../src/engine/socket.cpp:1037
+#: ../../locales/../src/engine/socket.cpp:1027
 msgid "Process file table overflow"
 msgstr "Überlauf der Prozess-Dateitabelle"
 
 #. @translator: Example: Processed 5 files in 1 directory
-#: ../../locales/../src/interface/recursive_operation_status.cpp:110
+#: ../../locales/../src/interface/recursive_operation_status.cpp:119
 #, c-format
 msgid "Processed %s in %s."
 msgstr "%s in %s verarbeitet."
 
-#: ../../locales/../src/engine/socket.cpp:1042
+#: ../../locales/../src/engine/socket.cpp:1032
 msgid "Protocol not supported"
 msgstr "Protokoll nicht unterstützt"
 
-#: ../../locales/../src/engine/socket.cpp:1096
+#: ../../locales/../src/engine/socket.cpp:1086
 msgid "Protocol not supported on given socket type"
 msgstr "Protokoll auf angegebenem Socket-Typ nicht unterstützt"
 
@@ -6160,7 +6148,7 @@ msgstr "Proxy-&Port:"
 msgid "Proxy &user:"
 msgstr "Proxy-Ben&utzer:"
 
-#: ../../locales/../src/engine/proxy.cpp:494
+#: ../../locales/../src/engine/proxy.cpp:495
 msgid "Proxy authentication failed"
 msgstr "Proxy-Authentifizierung fehlgeschlagen."
 
@@ -6170,33 +6158,33 @@ msgstr "Proxy-Authentifizierung fehlgeschlagen."
 msgid "Proxy handshake failed: %s"
 msgstr "Proxy-Handshake fehlgeschlagen: %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4227
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4213
 msgid "Proxy host starts with '[' but no closing bracket found."
 msgstr ""
 "Proxy-Host fängt mit '[' an, es wurde aber keine schließende Klammer "
 "gefunden."
 
-#: ../../locales/../src/engine/proxy.cpp:352
+#: ../../locales/../src/engine/proxy.cpp:353
 #, c-format
 msgid "Proxy reply: %s"
 msgstr "Proxy-Antwort: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:535
+#: ../../locales/../src/engine/proxy.cpp:536
 #, c-format
 msgid "Proxy request failed. Reply from proxy: %s"
 msgstr "Proxy-Anfrage fehlgeschlagen. Antwort des Proxys: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:407
+#: ../../locales/../src/engine/proxy.cpp:408
 #, c-format
 msgid "Proxy request failed: %s"
 msgstr "Proxy-Anfrage fehlgeschlagen: %s"
 
-#: ../../locales/../src/engine/proxy.cpp:559
+#: ../../locales/../src/engine/proxy.cpp:560
 msgid "Proxy request failed: Unknown address type in CONNECT reply"
 msgstr ""
 "Proxy-Anfrage fehlgeschlagen: Unbekannter Adresstyp in 'CONNECT'-Antwort"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4256
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4242
 msgid "Proxy set but proxy host or port invalid"
 msgstr "Proxy wurde eingestellt, aber der Proxyserver oder -port ist ungültig"
 
@@ -6212,7 +6200,7 @@ msgstr "Algorithmus des öffentlichen Schlüssels:"
 msgid "Public permissions"
 msgstr "Öffentliche Berechtigungen"
 
-#: ../../locales/../src/interface/QueueView.cpp:3054
+#: ../../locales/../src/interface/QueueView.cpp:2601
 msgid "Queue has been fully processed"
 msgstr "Warteschlange wurde komplett abgearbeitet"
 
@@ -6231,7 +6219,7 @@ msgstr "Warteschlange: %s%s"
 msgid "Queue: empty"
 msgstr "Warteschlange: leer"
 
-#: ../../locales/../src/interface/QueueView.cpp:440
+#: ../../locales/../src/interface/QueueView.cpp:195
 msgid "Queued files"
 msgstr "Zu übertragende Dateien"
 
@@ -6239,9 +6227,9 @@ msgstr "Zu übertragende Dateien"
 msgid "Queueing:"
 msgstr "Warteschlange:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
-msgid "R&eboot system"
-msgstr "&System neu starten"
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:402
+msgid "R&eboot system once"
+msgstr "&System einmal neu starten"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:118
 msgid "R&emote directory tree"
@@ -6253,7 +6241,7 @@ msgid "R&eset and requeue selected files"
 msgstr ""
 "A&usgewählte Dateien zurücksetzen und wieder zur Warteschlange hinzufügen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:586
+#: ../../locales/../src/interface/Mainfrm.cpp:588
 msgid "Raw FTP command"
 msgstr "Raw-FTP-Befehl"
 
@@ -6270,7 +6258,7 @@ msgstr "A&ktualisieren"
 msgid "Re&name"
 msgstr "U&mbenennen"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:585
+#: ../../locales/../src/interface/netconfwizard.cpp:600
 msgid ""
 "Re-run the wizard and carefully check your settings and configure all "
 "routers and firewalls accordingly."
@@ -6286,7 +6274,7 @@ msgstr "Lese&n"
 msgid "Read-only"
 msgstr "Schreibgeschützt"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1023
+#: ../../locales/../src/interface/Mainfrm.cpp:1030
 msgid "Really cancel current operation?"
 msgstr "Aktuelle Operation wirklich abbrechen?"
 
@@ -6325,11 +6313,11 @@ msgstr ""
 "Möchten Sie wirklich alle ausgewählten Dateien und/oder Verzeichnisse von "
 "Ihrem Rechner löschen?"
 
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Reason"
 msgstr "Grund"
 
-#: ../../locales/../src/interface/QueueView.cpp:3047
+#: ../../locales/../src/interface/QueueView.cpp:2594
 msgid "Reboot now"
 msgstr "Jetzt neustarten"
 
@@ -6337,40 +6325,40 @@ msgstr "Jetzt neustarten"
 msgid "Rec&urse into subdirectories"
 msgstr "&Unterverzeichnisse einbeziehen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:225
+#: ../../locales/../src/engine/tlssocket.cpp:278
 #, c-format
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "TLS-Warnung vom Server erhalten: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2957
+#: ../../locales/../src/engine/directorylistingparser.cpp:2965
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Verzeichnisinhalt empfangen, der EBCDIC-codiert zu sein scheint."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:1992
-#: ../../locales/../src/engine/directorylistingparser.cpp:2008
+#: ../../locales/../src/engine/directorylistingparser.cpp:2000
+#: ../../locales/../src/engine/directorylistingparser.cpp:2016
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Zeile mit einer Länge größer als 10000 Zeichen empfangen, Abbruch."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:989
-#: ../../locales/../src/interface/netconfwizard.cpp:997
-#: ../../locales/../src/interface/netconfwizard.cpp:1018
+#: ../../locales/../src/interface/netconfwizard.cpp:1007
+#: ../../locales/../src/interface/netconfwizard.cpp:1015
+#: ../../locales/../src/interface/netconfwizard.cpp:1036
 msgid "Received data tainted"
 msgstr "Empfangene Daten fehlerhaft"
 
-#: ../../locales/../src/interface/updater.cpp:522
+#: ../../locales/../src/interface/updater.cpp:555
 msgid "Received invalid character in version information"
 msgstr "Ungültiges Zeichen in Versionsinformationen empfangen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:228
+#: ../../locales/../src/engine/tlssocket.cpp:281
 #, c-format
 msgid "Received unknown TLS alert %d from the server"
 msgstr "Unbekannte TLS-Warnung %d vom Server erhalten"
 
-#: ../../locales/../src/interface/updater.cpp:515
+#: ../../locales/../src/interface/updater.cpp:548
 msgid "Received version information is too large"
 msgstr "Empfangene Versionsinformationen sind zu groß"
 
-#: ../../locales/../src/interface/clearprivatedata.cpp:77
+#: ../../locales/../src/interface/clearprivatedata.cpp:74
 msgid ""
 "Reconnect information cannot be cleared while connected to a server.\n"
 "If you continue, your connection will be disconnected."
@@ -6388,15 +6376,15 @@ msgstr "Wiederverbindungseinstellungen"
 msgid "Reconnects to the last used server"
 msgstr "Stellt Verbindung mit dem zuletzt benutzten Server wieder her"
 
-#: ../../locales/../src/interface/recursive_operation_status.cpp:92
+#: ../../locales/../src/interface/recursive_operation_status.cpp:101
 msgid "Recursively adding files to queue."
 msgstr "Füge Dateien rekursiv zur Warteschlange hinzu."
 
-#: ../../locales/../src/interface/recursive_operation_status.cpp:98
+#: ../../locales/../src/interface/recursive_operation_status.cpp:107
 msgid "Recursively changing permissions."
 msgstr "Ändere rekursiv Berechtigungen."
 
-#: ../../locales/../src/interface/recursive_operation_status.cpp:95
+#: ../../locales/../src/interface/recursive_operation_status.cpp:104
 msgid "Recursively deleting files and directories."
 msgstr "Lösche rekursiv Dateien und Verzeichnisse."
 
@@ -6424,12 +6412,12 @@ msgstr "Passwörter speichern?"
 msgid "Remote"
 msgstr "Server"
 
-#: ../../locales/../src/engine/tlssocket.cpp:854
+#: ../../locales/../src/engine/tlssocket.cpp:909
 msgid "Remote certificate not trusted."
 msgstr "Zertifikat des Servers nicht vertrauenswürdig."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2275
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Remote file"
 msgstr "Datei auf Server"
 
@@ -6490,7 +6478,7 @@ msgstr "Verarbeiten des Server-Pfads:"
 msgid "Remote path:"
 msgstr "Server-Pfad:"
 
-#: ../../locales/../src/interface/viewheader.cpp:530
+#: ../../locales/../src/interface/viewheader.cpp:519
 msgid "Remote site:"
 msgstr "Server:"
 
@@ -6522,8 +6510,8 @@ msgstr "Ausgewähltes Verzeichnis umbenennen"
 msgid "Rename selected files and directories"
 msgstr "Ausgewählte Dateien und Verzeichnisse umbenennen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3397
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2419
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3392
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2443
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "'%s' wird in '%s' umbenannt"
@@ -6532,20 +6520,20 @@ msgstr "'%s' wird in '%s' umbenannt"
 msgid "Reporting bugs and feature requests"
 msgstr "Fehler und Verbesserungswünsche mitteilen"
 
-#: ../../locales/../src/engine/proxy.cpp:398
+#: ../../locales/../src/engine/proxy.cpp:399
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
 "Anfrage fehlgeschlagen - auf Client läuft kein identd (oder er ist vom "
 "Server aus nicht erreichbar)"
 
-#: ../../locales/../src/engine/proxy.cpp:401
+#: ../../locales/../src/engine/proxy.cpp:402
 msgid "Request failed - client's identd could not confirm the user ID string"
 msgstr ""
 "Anfrage fehlgeschlagen - identd des Client konnte die Nutzer-ID-Zeichenkette "
 "nicht bestätigen"
 
-#: ../../locales/../src/engine/proxy.cpp:395
+#: ../../locales/../src/engine/proxy.cpp:396
 msgid "Request rejected or failed"
 msgstr "Anfrage zurückgewiesen oder fehlgeschlagen"
 
@@ -6561,22 +6549,22 @@ msgstr "Implizites FTP über TLS erfordern"
 msgid "Reset and requeue &all"
 msgstr "Alle &Dateien zurücksetzen und wieder zur Warteschlange hinzufügen"
 
-#: ../../locales/../src/engine/socket.cpp:1084
+#: ../../locales/../src/engine/socket.cpp:1074
 msgid "Resolved protocol is unknown"
 msgstr "Aufgelöstes Protokoll ist unbekannt"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1082
+#: ../../locales/../src/engine/ControlSocket.cpp:1078
 #: ../../locales/../src/engine/httpcontrolsocket.cpp:459
 #, c-format
 msgid "Resolving address of %s"
 msgstr "Auflösen der IP-Adresse für %s"
 
-#: ../../locales/../src/engine/socket.cpp:1043
+#: ../../locales/../src/engine/socket.cpp:1033
 msgid "Resource temporarily unavailable"
 msgstr "Ressource vorübergehend nicht verfügbar"
 
 #: ../../locales/../src/engine/logging.cpp:113
-#: ../../locales/../src/interface/netconfwizard.cpp:411
+#: ../../locales/../src/interface/netconfwizard.cpp:423
 #: ../../locales/../src/interface/StatusView.cpp:286
 #: ../../locales/../src/interface/StatusView.cpp:346
 msgid "Response:"
@@ -6601,19 +6589,19 @@ msgstr ""
 "Das Fortsetzen des Downloads von ASCII-Dateien kann Probleme verursachen, "
 "wenn der Server ein anderes Zeilenumbruchformat verwendet als der Client."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1273
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:924
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1268
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:930
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
 msgstr "Empfange Verzeichnisinhalt für \"%s\"..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1270
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:921
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1265
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:927
 msgid "Retrieving directory listing..."
 msgstr "Empfange Verzeichnisinhalt..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3773
-#: ../../locales/../src/interface/netconfwizard.cpp:710
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3764
+#: ../../locales/../src/interface/netconfwizard.cpp:727
 #, c-format
 msgid "Retrieving external IP address from %s"
 msgstr "Beziehe externe IP-Adresse von %s"
@@ -6626,17 +6614,17 @@ msgstr "&Anzeigen der gerade bearbeiteten Dateien..."
 msgid "S&how the Site Manager on startup"
 msgstr "&Servermanager bei Programmstart anzeigen"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:401
-msgid "S&hutdown system"
-msgstr "S&ystem herunterfahren"
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:406
+msgid "S&hutdown system once"
+msgstr "S&ystem einmal herunterfahren"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3037
 msgid "S&top"
 msgstr "S&top"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:405
-msgid "S&uspend system"
-msgstr "S&ystem in Standby-Modus versetzen"
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:410
+msgid "S&uspend system once"
+msgstr "Sys&tem einmal in Standby-Modus versetzen"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:92
 msgid "S&ynchronized browsing"
@@ -6650,7 +6638,7 @@ msgstr "SFTP"
 msgid "SOC&KS 4"
 msgstr "SO&CKS 4"
 
-#: ../../locales/../src/engine/proxy.cpp:177
+#: ../../locales/../src/engine/proxy.cpp:178
 #, c-format
 msgid "SOCKS4 proxy will connect to: %s"
 msgstr "SOCKS4-Proxy wird Verbindung herstellen mit: %s"
@@ -6659,7 +6647,7 @@ msgstr "SOCKS4-Proxy wird Verbindung herstellen mit: %s"
 msgid "SQLite:"
 msgstr "SQLite:"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:863
 msgid "Save settings?"
 msgstr "Einstellungen speichern?"
 
@@ -6674,14 +6662,6 @@ msgstr ""
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:980
 msgid "Saving of passwords has been disabled by you."
 msgstr "Das Speichern von Passwörtern wurde von Ihnen deaktiviert."
-
-#: ../../locales/../src/interface/QueueView.cpp:1704
-msgid "Scanning for files to add to queue"
-msgstr "Suche nach Dateien, die zur Warteschlange hinzugefügt werden sollen"
-
-#: ../../locales/../src/interface/QueueView.cpp:1706
-msgid "Scanning for files to upload"
-msgstr "Suche nach Dateien, die hochgeladen werden sollen"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
 msgid "Search &conditions:"
@@ -6703,8 +6683,8 @@ msgstr "Auf Server nach Dateien suchen"
 msgid "Security information"
 msgstr "Sicherheitsinformationen"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:573
-#: ../../locales/../src/interface/netconfwizard.cpp:586
+#: ../../locales/../src/interface/netconfwizard.cpp:587
+#: ../../locales/../src/interface/netconfwizard.cpp:601
 msgid "See also: https://wiki.filezilla-project.org/Network_Configuration"
 msgstr "Siehe auch: https://wiki.filezilla-project.org/Network_Configuration"
 
@@ -6757,7 +6737,7 @@ msgid "Select file for exported data"
 msgstr "Wählen Sie die Datei für die exportierten Daten"
 
 #: ../../locales/../src/interface/export.cpp:34
-#: ../../locales/../src/interface/queue.cpp:1495
+#: ../../locales/../src/interface/queue.cpp:1415
 msgid "Select file for exported queue"
 msgstr "Wählen Sie die Datei für die exportierte Warteschlange"
 
@@ -6880,7 +6860,7 @@ msgstr "Gewählte Datei wird immer noch bearbeitet"
 msgid "Selected filter only works for local files."
 msgstr "Der ausgewählte Filter funktioniert nur bei lokalen Dateien."
 
-#: ../../locales/../src/interface/menu_bar.cpp:304
+#: ../../locales/../src/interface/menu_bar.cpp:297
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -6889,7 +6869,7 @@ msgstr ""
 "unterschiedlichen Servertyp.\n"
 "Verwenden Sie serverspezifische Lesezeichen für diesen Server."
 
-#: ../../locales/../src/engine/engineprivate.cpp:291
+#: ../../locales/../src/engine/engineprivate.cpp:292
 msgid "Selected port usually in use by a different protocol."
 msgstr ""
 "Warnung: Der gewählte Port wird üblicherweise von einem anderen Protokoll "
@@ -6905,7 +6885,7 @@ msgstr ""
 "Benutzerdefinierten Befehl, der sonst nicht verfügbar wäre, an den Server "
 "schicken."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4332
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4318
 msgid "Sending keep-alive command"
 msgstr "Sende Verbindungserhaltungs-Befehl"
 
@@ -6918,23 +6898,23 @@ msgstr "Seriennummer:"
 msgid "Server &Type:"
 msgstr "Server&typ:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:743
+#: ../../locales/../src/engine/tlssocket.cpp:798
 msgid "Server did not properly shut down TLS connection"
 msgstr "Server hat die TLS-Verbindung nicht ordnungsgemäß geschlossen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:891
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:944
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:886
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:939
 msgid "Server does not support non-ASCII characters."
 msgstr "Der Server unterstützt keine Nicht-ASCII-Zeichen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4168
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4154
 #, c-format
 msgid "Server does not support resume of files > %d GB."
 msgstr ""
 "Der Server unterstützt das Fortsetzen von Downloads nur für Dateigrößen bis "
 "%d GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4164
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4150
 #, c-format
 msgid ""
 "Server does not support resume of files > %d GB. End transfer since file "
@@ -6943,19 +6923,19 @@ msgstr ""
 "Der Server unterstützt das Fortsetzen von Downloads nur für Dateigrößen bis "
 "%d GB. Die Übertragung wird beendet, da die Dateigrößen übereinstimmen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2427
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2422
 msgid "Server does not support resume of files > 2GB."
 msgstr ""
 "Der Server unterstützt das Fortsetzen von Downloads nur für Dateigrößen bis "
 "2 GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2423
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2418
 msgid "Server does not support resume of files > 4GB."
 msgstr ""
 "Der Server unterstützt das Fortsetzen von Downloads nur für Dateigrößen bis "
 "4 GB."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4179
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4165
 #, c-format
 msgid ""
 "Server may not support resume of files > %d GB. End transfer since file "
@@ -6965,7 +6945,7 @@ msgstr ""
 "Dateigrößen bis %d GB. Die Übertragung wird beendet, da die Dateigrößen "
 "übereinstimmen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:840
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:835
 msgid ""
 "Server might require an account. Try specifying an account using the Site "
 "Manager"
@@ -6977,7 +6957,7 @@ msgstr ""
 msgid "Server returned empty path."
 msgstr "Server gab leeren Pfad zurück."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:660
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:663
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
@@ -6985,13 +6965,13 @@ msgstr ""
 "Server sendete eine zusätzliche Login-Aufforderung. Sie müssen den Login-Typ "
 "'interaktiv' verwenden."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3720
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3715
 msgid "Server sent passive reply with unroutable address. Passive mode failed."
 msgstr ""
 "Vom Server gesendete Adresse für den Passiv-Modus ist nicht routingfähig. "
 "Passiv-Modus fehlgeschlagen."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3715
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3710
 msgid ""
 "Server sent passive reply with unroutable address. Using server address "
 "instead."
@@ -6999,15 +6979,15 @@ msgstr ""
 "Vom Server gesendete Adresse für den Passiv-Modus ist nicht routingfähig. "
 "Benutze stattdessen die Serveradresse."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:418
-#: ../../locales/../src/interface/netconfwizard.cpp:424
-#: ../../locales/../src/interface/netconfwizard.cpp:459
-#: ../../locales/../src/interface/netconfwizard.cpp:468
+#: ../../locales/../src/interface/netconfwizard.cpp:430
+#: ../../locales/../src/interface/netconfwizard.cpp:436
+#: ../../locales/../src/interface/netconfwizard.cpp:471
 #: ../../locales/../src/interface/netconfwizard.cpp:480
-#: ../../locales/../src/interface/netconfwizard.cpp:503
-#: ../../locales/../src/interface/netconfwizard.cpp:510
-#: ../../locales/../src/interface/netconfwizard.cpp:519
-#: ../../locales/../src/interface/netconfwizard.cpp:530
+#: ../../locales/../src/interface/netconfwizard.cpp:492
+#: ../../locales/../src/interface/netconfwizard.cpp:515
+#: ../../locales/../src/interface/netconfwizard.cpp:522
+#: ../../locales/../src/interface/netconfwizard.cpp:531
+#: ../../locales/../src/interface/netconfwizard.cpp:542
 msgid "Server sent unexpected reply."
 msgstr "Server sendete unerwartete Antwort."
 
@@ -7023,7 +7003,7 @@ msgstr "Server-zu-Client-Chiffre:"
 msgid "Server&type:"
 msgstr "Server&typ:"
 
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Server/Local file"
 msgstr "Server/Lokale Datei"
 
@@ -7040,8 +7020,8 @@ msgstr "Sitzungsdetails"
 msgid "Set &Priority"
 msgstr "&Priorität setzen"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3545
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2298
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:3540
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2322
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Berechtigungen für '%s' werden auf '%s' gesetzt"
@@ -7058,6 +7038,10 @@ msgstr "Einstellungen"
 msgid "Settings directory:"
 msgstr "Einstellungsverzeichnis:"
 
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
+msgid "Sh&ow notification bubble"
+msgstr "Bena&chrichtigungsblase anzeigen"
+
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2273
 msgid "Show &raw directory listing"
 msgstr "&Unverarbeiteten Verzeichnisinhalt anzeigen"
@@ -7066,11 +7050,11 @@ msgstr "&Unverarbeiteten Verzeichnisinhalt anzeigen"
 msgid "Show &welcome dialog..."
 msgstr "&Begrüßungsdialog anzeigen..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2170
+#: ../../locales/../src/interface/Mainfrm.cpp:2175
 msgid "Show both directory trees and continue comparing?"
 msgstr "Beide Verzeichnisbäume anzeigen und Vergleich fortsetzen?"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:210
+#: ../../locales/../src/interface/resources/xrc/update.xrc:214
 msgid "Show details"
 msgstr "Details anzeigen"
 
@@ -7086,7 +7070,7 @@ msgstr "Zeigt verfügbare TLS-Chiffren an"
 msgid "Shows this help dialog"
 msgstr "Zeigt diesen Hilfe-Dialog an"
 
-#: ../../locales/../src/interface/QueueView.cpp:3043
+#: ../../locales/../src/interface/QueueView.cpp:2590
 msgid "Shutdown now"
 msgstr "Jetzt herunterfahren"
 
@@ -7161,7 +7145,7 @@ msgstr ""
 "gespeichert ist.\n"
 "Die aktuelle Verbindung in den Servermanager aufnehmen?"
 
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Size"
 msgstr "Größe"
 
@@ -7180,43 +7164,43 @@ msgstr "Dateigröße unbekannt"
 msgid "Skip file"
 msgstr "Datei überspringen"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1154
-#: ../../locales/../src/engine/ControlSocket.cpp:1171
-#: ../../locales/../src/engine/ControlSocket.cpp:1195
-#: ../../locales/../src/engine/ControlSocket.cpp:1255
+#: ../../locales/../src/engine/ControlSocket.cpp:1150
+#: ../../locales/../src/engine/ControlSocket.cpp:1167
+#: ../../locales/../src/engine/ControlSocket.cpp:1191
+#: ../../locales/../src/engine/ControlSocket.cpp:1251
 #, c-format
 msgid "Skipping download of %s"
 msgstr "Überspringe Download von %s"
 
-#: ../../locales/../src/engine/ControlSocket.cpp:1158
-#: ../../locales/../src/engine/ControlSocket.cpp:1174
-#: ../../locales/../src/engine/ControlSocket.cpp:1199
-#: ../../locales/../src/engine/ControlSocket.cpp:1259
+#: ../../locales/../src/engine/ControlSocket.cpp:1154
+#: ../../locales/../src/engine/ControlSocket.cpp:1170
+#: ../../locales/../src/engine/ControlSocket.cpp:1195
+#: ../../locales/../src/engine/ControlSocket.cpp:1255
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "Überspringe Upload von %s"
 
-#: ../../locales/../src/engine/socket.cpp:1047
+#: ../../locales/../src/engine/socket.cpp:1037
 msgid "Socket address outside address space"
 msgstr "Socketadresse außerhalb des Adressraums"
 
-#: ../../locales/../src/engine/socket.cpp:1049
+#: ../../locales/../src/engine/socket.cpp:1039
 msgid "Socket already connected"
 msgstr "Socket bereits verbunden"
 
-#: ../../locales/../src/engine/socket.cpp:1057
+#: ../../locales/../src/engine/socket.cpp:1047
 msgid "Socket has been shut down"
 msgstr "Socket wurde geschlossen"
 
-#: ../../locales/../src/engine/socket.cpp:1054
+#: ../../locales/../src/engine/socket.cpp:1044
 msgid "Socket not connected"
 msgstr "Socket nicht verbunden"
 
-#: ../../locales/../src/engine/socket.cpp:1097
+#: ../../locales/../src/engine/socket.cpp:1087
 msgid "Socket type not supported for address family"
 msgstr "Sockettyp für Adressfamilie nicht unterstützt"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1158
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "Some files are still being edited or need to be uploaded."
 msgstr ""
 "Einige Dateien werden immer noch bearbeitet oder müssen hochgeladen werden."
@@ -7234,7 +7218,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Verzeichnisse einsortieren"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:466
+#: ../../locales/../src/interface/filelistctrl.cpp:465
 msgid "Sort order cannot be changed if comparing directories."
 msgstr ""
 "Die Sortierreihenfolge kann nicht geändert werden, wenn die Verzeichnisse "
@@ -7305,19 +7289,19 @@ msgstr "Übertragung s&ofort starten"
 msgid "Start with opened Site Manager"
 msgstr "Mit geöffnetem Servermanager starten"
 
-#: ../../locales/../src/interface/updater.cpp:213
+#: ../../locales/../src/interface/updater.cpp:240
 #, c-format
 msgid "Started update check on %s\n"
 msgstr "Update-Prüfung gestartet um %s\n"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2147
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1568
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2142
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1592
 #, c-format
 msgid "Starting download of %s"
 msgstr "Starte Download von %s"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2150
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1571
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:2145
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1595
 #, c-format
 msgid "Starting upload of %s"
 msgstr "Starte Upload von %s"
@@ -7331,7 +7315,7 @@ msgid "State or province:"
 msgstr "Land oder Provinz:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1087
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Status"
 msgstr "Status"
 
@@ -7345,7 +7329,7 @@ msgstr "Status:"
 msgid "Stop and remove &all"
 msgstr "&Anhalten und alle entfernen"
 
-#: ../../locales/../src/interface/recursive_operation_status.cpp:40
+#: ../../locales/../src/interface/recursive_operation_status.cpp:42
 msgid "Stop recursive operation"
 msgstr "Rekursive Operation anhalten"
 
@@ -7365,7 +7349,7 @@ msgstr "Erfolgreiche Übertragungen"
 msgid "Summary of test results:"
 msgstr "Zusammenfassung der Testergebnisse:"
 
-#: ../../locales/../src/interface/QueueView.cpp:3051
+#: ../../locales/../src/interface/QueueView.cpp:2598
 msgid "Suspend now"
 msgstr "Jetzt in Standby-Modus gehen"
 
@@ -7379,22 +7363,22 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3700
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
-#: ../../locales/../src/interface/state.cpp:239
-#: ../../locales/../src/interface/state.cpp:253
-#: ../../locales/../src/interface/state.cpp:259
-#: ../../locales/../src/interface/state.cpp:269
-#: ../../locales/../src/interface/state.cpp:356
-#: ../../locales/../src/interface/state.cpp:364
-#: ../../locales/../src/interface/state.cpp:372
-#: ../../locales/../src/interface/state.cpp:924
-#: ../../locales/../src/interface/state.cpp:932
-#: ../../locales/../src/interface/state.cpp:938
-#: ../../locales/../src/interface/state.cpp:947
-#: ../../locales/../src/interface/state.cpp:973
+#: ../../locales/../src/interface/state.cpp:234
+#: ../../locales/../src/interface/state.cpp:248
+#: ../../locales/../src/interface/state.cpp:254
+#: ../../locales/../src/interface/state.cpp:264
+#: ../../locales/../src/interface/state.cpp:351
+#: ../../locales/../src/interface/state.cpp:359
+#: ../../locales/../src/interface/state.cpp:367
+#: ../../locales/../src/interface/state.cpp:946
+#: ../../locales/../src/interface/state.cpp:954
+#: ../../locales/../src/interface/state.cpp:960
+#: ../../locales/../src/interface/state.cpp:969
+#: ../../locales/../src/interface/state.cpp:995
 msgid "Synchronized browsing"
 msgstr "Synchronisierter Verzeichniswechsel"
 
-#: ../../locales/../src/interface/state.cpp:371
+#: ../../locales/../src/interface/state.cpp:366
 msgid "Synchronized browsing has been disabled."
 msgstr "Synchronisierter Verzeichniswechsel wurde deaktiviert."
 
@@ -7408,8 +7392,8 @@ msgstr "Syntaxfehler"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2282
-#: ../../locales/../src/interface/Mainfrm.cpp:2324
+#: ../../locales/../src/interface/Mainfrm.cpp:2287
+#: ../../locales/../src/interface/Mainfrm.cpp:2329
 msgid "Syntax error in command line"
 msgstr "Syntaxfehler in der Kommandozeile"
 
@@ -7421,11 +7405,11 @@ msgstr "System"
 msgid "System details"
 msgstr "Systemdetails"
 
-#: ../../locales/../src/engine/socket.cpp:1038
+#: ../../locales/../src/engine/socket.cpp:1028
 msgid "System limit of open files exceeded"
 msgstr "Systembegrenzung offener Dateien überschritten"
 
-#: ../../locales/../src/engine/socket.cpp:1095
+#: ../../locales/../src/engine/socket.cpp:1085
 msgid "System's network subsystem has failed"
 msgstr "Netzwerk-Subsystem des Systems hat versagt"
 
@@ -7437,15 +7421,15 @@ msgstr "&Werkzeugleiste"
 msgid "TLS connection established, sending HTTP request"
 msgstr "TLS-Verbindung hergestellt, schicke HTTP-Anfrage"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:405
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:400
 msgid "TLS connection established, waiting for welcome message..."
 msgstr "TLS-Verbindung hergestellt, warte auf Willkommensnachricht..."
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:408
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:403
 msgid "TLS connection established."
 msgstr "TLS-Verbindung hergestellt."
 
-#: ../../locales/../src/engine/proxy.cpp:522
+#: ../../locales/../src/engine/proxy.cpp:523
 msgid "TTL expired"
 msgstr "TTL abgelaufen"
 
@@ -7457,7 +7441,7 @@ msgstr "Zieldatei existiert bereits"
 msgid "Target file:"
 msgstr "Zieldatei:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2625
+#: ../../locales/../src/interface/RemoteListView.cpp:2623
 msgid "Target filename already exists!"
 msgstr "Zieldateiname existiert bereits!"
 
@@ -7465,15 +7449,19 @@ msgstr "Zieldateiname existiert bereits!"
 msgid "Target filename already exists, really continue?"
 msgstr "Zieldateiname existiert bereits - trotzdem fortfahren?"
 
-#: ../../locales/../src/engine/socket.cpp:1068
+#: ../../locales/../src/engine/socket.cpp:1058
 msgid "Temporary failure in name resolution"
 msgstr "Vorübergehender Fehlschlag bei Namensauflösung"
+
+#: ../../locales/../src/interface/netconfwizard.cpp:590
+msgid "Test finished successfully"
+msgstr "Test erfolgreich abgeschlossen"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:370
 msgid "Test results"
 msgstr "Testergebnisse"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4185
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:4171
 msgid "Testing resume capabilities of server"
 msgstr "Überprüfe, ob der Server das Fortsetzen von Downloads unterstützt."
 
@@ -7493,7 +7481,7 @@ msgstr ""
 "Wollen Sie fortfahren? Änderungen im Servermanager werden dann nicht "
 "gespeichert."
 
-#: ../../locales/../src/interface/clearprivatedata.cpp:103
+#: ../../locales/../src/interface/clearprivatedata.cpp:98
 msgid ""
 "The Site Manager is opened in another instance of FileZilla 3.\n"
 "Please close it or the data cannot be deleted."
@@ -7502,16 +7490,16 @@ msgstr ""
 "geöffnet.\n"
 "Bitte schließen Sie ihn oder die Daten können nicht gelöscht werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:627
+#: ../../locales/../src/interface/netconfwizard.cpp:642
 #, c-format
 msgid "The address you entered was: %s"
 msgstr "Die eingegebene Adresse lautet: %s"
 
-#: ../../locales/../src/engine/socket.cpp:1074
+#: ../../locales/../src/engine/socket.cpp:1064
 msgid "The ai_family member is not supported"
 msgstr "Der 'ai_family'-Member wird nicht unterstützt"
 
-#: ../../locales/../src/engine/socket.cpp:1087
+#: ../../locales/../src/engine/socket.cpp:1077
 msgid "The ai_socktype member is not supported"
 msgstr "Der 'ai_socktype'-Member wird nicht unterstützt"
 
@@ -7587,7 +7575,7 @@ msgstr ""
 "Bitte geben Sie einen neuen Namen ein:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1621
-#: ../../locales/../src/interface/LocalListView.cpp:1704
+#: ../../locales/../src/interface/LocalListView.cpp:1718
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -7620,7 +7608,7 @@ msgid "The file '%s' could not be loaded."
 msgstr "Die Datei '%s' konnte nicht geladen werden."
 
 #: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/LocalListView.cpp:1700
+#: ../../locales/../src/interface/LocalListView.cpp:1714
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7630,7 +7618,7 @@ msgstr ""
 "Auf Ihrem System ist diesem Dateityp kein Programm zugeordnet."
 
 #: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1712
+#: ../../locales/../src/interface/LocalListView.cpp:1726
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7679,11 +7667,11 @@ msgstr ""
 "Benutzername und Passwort importiert werden.\n"
 "Mit dem Importieren fortfahren?"
 
-#: ../../locales/../src/interface/listctrlex.cpp:756
+#: ../../locales/../src/interface/listctrlex.cpp:747
 msgid "The filename column can neither be hidden nor moved."
 msgstr "Die Spalte 'Dateiname' kann weder versteckt noch verschoben werden."
 
-#: ../../locales/../src/interface/listctrlex.cpp:809
+#: ../../locales/../src/interface/listctrlex.cpp:800
 msgid "The filename column cannot be hidden."
 msgstr "Die Spalte 'Dateiname' kann nicht versteckt werden."
 
@@ -7723,17 +7711,17 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Das Limit muss zwischen 1 und 2000 MiB liegen"
 
-#: ../../locales/../src/interface/state.cpp:973
+#: ../../locales/../src/interface/state.cpp:995
 #, c-format
 msgid "The local directory '%s' could not be created."
 msgstr "Das lokale Verzeichnis '%s' konnte nicht erstellt werden."
 
-#: ../../locales/../src/interface/state.cpp:958
+#: ../../locales/../src/interface/state.cpp:980
 #, c-format
 msgid "The local directory '%s' does not exist."
 msgstr "Das lokale Verzeichnis '%s' existiert nicht."
 
-#: ../../locales/../src/interface/state.cpp:250
+#: ../../locales/../src/interface/state.cpp:245
 #, c-format
 msgid ""
 "The local directory '%s' is not below the synchronization root (%s).\n"
@@ -7762,16 +7750,16 @@ msgstr ""
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Die neue Version wurde in Ihr Download-Verzeichnis gespeichert."
 
-#: ../../locales/../src/interface/QueueView.cpp:1823
+#: ../../locales/../src/interface/QueueView.cpp:1452
 msgid "The queue will not be saved."
 msgstr "Die Warteschlange wird nicht gespeichert werden."
 
-#: ../../locales/../src/interface/state.cpp:885
+#: ../../locales/../src/interface/state.cpp:907
 #, c-format
 msgid "The remote directory '%s' does not exist."
 msgstr "Das Serververzeichnis '%s' existiert nicht."
 
-#: ../../locales/../src/interface/state.cpp:929
+#: ../../locales/../src/interface/state.cpp:951
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7818,7 +7806,7 @@ msgstr ""
 msgid "The server could not be added."
 msgstr "Der Server konnte nicht hinzugefügt werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:583
+#: ../../locales/../src/interface/netconfwizard.cpp:598
 msgid "The server sent an unexpected or unrecognized reply."
 msgstr "Der Server sendete eine unerwartete oder nicht erkannte Antwort."
 
@@ -7853,7 +7841,7 @@ msgstr ""
 "Der Server-Schlüssel ist unbekannt. Daher kann nicht garantiert werden, dass "
 "der Server wirklich derjenige ist, mit dem Sie sich verbinden wollen."
 
-#: ../../locales/../src/engine/socket.cpp:1086
+#: ../../locales/../src/engine/socket.cpp:1076
 msgid "The servname parameter is not supported for ai_socktype"
 msgstr "Der 'servname'-Parameter wird bei ai_socktype nicht unterstützt"
 
@@ -7865,21 +7853,21 @@ msgstr ""
 "Die Einstellungen wurden importiert. Sie müssen FileZilla neu starten, damit "
 "alle Einstellungen wirksam werden."
 
-#: ../../locales/../src/engine/socket.cpp:1034
+#: ../../locales/../src/engine/socket.cpp:1024
 msgid "The specified address family is not supported"
 msgstr "Die angegebene Adressfamilie wird nicht unterstützt"
 
-#: ../../locales/../src/engine/socket.cpp:1099
+#: ../../locales/../src/engine/socket.cpp:1089
 msgid "The specified network name is no longer available"
 msgstr "Der angegebene Netzwerkname ist nicht länger verfügbar"
 
-#: ../../locales/../src/interface/QueueView.cpp:3046
+#: ../../locales/../src/interface/QueueView.cpp:2593
 msgid "The system will soon reboot unless you click Cancel."
 msgstr ""
 "Das System wird in Kürze neu gestartet, sofern Sie nicht auf Abbrechen "
 "klicken."
 
-#: ../../locales/../src/interface/QueueView.cpp:3042
+#: ../../locales/../src/interface/QueueView.cpp:2589
 msgid "The system will soon shut down unless you click Cancel."
 msgstr ""
 "Das System wird in Kürze heruntergefahren, sofern Sie nicht auf Abbrechen "
@@ -7893,7 +7881,7 @@ msgstr ""
 "Die Zieldatei existiert bereits.\n"
 "Bitte wählen Sie eine Aktion aus."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:846
+#: ../../locales/../src/interface/netconfwizard.cpp:863
 msgid "The test did not succeed. Do you really want to save the settings?"
 msgstr ""
 "Der Test war nicht erfolgreich. Wollen Sie diese Einstellungen trotzdem "
@@ -7917,7 +7905,7 @@ msgstr "Dieser Filtersatz kann nicht entfernt werden."
 msgid "This filter set cannot be renamed."
 msgstr "Dieser Filtersatz kann nicht umbenannt werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:584
+#: ../../locales/../src/interface/netconfwizard.cpp:599
 msgid ""
 "This means that some router and/or firewall is still interfering with "
 "FileZilla."
@@ -7941,7 +7929,7 @@ msgstr ""
 "Dieser Assistent wird Ihnen dabei helfen, eventuell vorhandende Router und "
 "Firewalls zu konfigurieren und Ihre Konfiguration zu testen."
 
-#: ../../locales/../src/interface/queue.cpp:1210
+#: ../../locales/../src/interface/queue.cpp:1150
 msgid "Time"
 msgstr "Zeitpunkt"
 
@@ -7958,8 +7946,8 @@ msgstr "&Zeitüberschreitung nach"
 msgid "Timeout"
 msgstr "Zeitüberschreitung"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1622
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1032
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1617
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1038
 #, c-format
 msgid "Timezone offset of server is %d seconds."
 msgstr "Zeitzonenabweichung des Servers beträgt %d Sekunden."
@@ -7968,13 +7956,13 @@ msgstr "Zeitzonenabweichung des Servers beträgt %d Sekunden."
 msgid "Title:"
 msgstr "Titel:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2168
+#: ../../locales/../src/interface/Mainfrm.cpp:2173
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Um die Verzeichnisse vergleichen zu können, ist es notwendig, dass die "
 "Dateilisten entsprechend angeordnet sind."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2169
+#: ../../locales/../src/interface/Mainfrm.cpp:2174
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Zu diesem Zweck müssen beide Verzeichnisbäume angezeigt oder versteckt sein."
@@ -8078,13 +8066,13 @@ msgstr "Übertragungs-Warteschlange"
 msgid "Transfer Settings"
 msgstr "Übertragungs-Einstellungen"
 
-#: ../../locales/../src/engine/transfersocket.cpp:448
-#: ../../locales/../src/engine/transfersocket.cpp:470
+#: ../../locales/../src/engine/transfersocket.cpp:443
+#: ../../locales/../src/engine/transfersocket.cpp:465
 #, c-format
 msgid "Transfer connection interrupted: %s"
 msgstr "Übertragungsverbindung unterbrochen: %s"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:630
+#: ../../locales/../src/interface/netconfwizard.cpp:645
 msgid "Transferred data got tainted."
 msgstr "Übertragene Daten waren fehlerhaft."
 
@@ -8097,7 +8085,7 @@ msgstr "Wird übertragen"
 msgid "Transfers"
 msgstr "Übertragungen"
 
-#: ../../locales/../src/interface/QueueView.cpp:2929
+#: ../../locales/../src/interface/QueueView.cpp:2482
 msgid "Transfers finished"
 msgstr "Übertragungen abgeschlossen"
 
@@ -8109,11 +8097,11 @@ msgstr "&Dateien ohne Endung als ASCII-Dateien behandeln"
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "&Folgende Dateitypen als ASCII-Dateien behandeln:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:831
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:834
 msgid "Trust changed Hostkey:"
 msgstr "Verändertem Serverschlüssel vertrauen:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:832
 msgid "Trust new Hostkey:"
 msgstr "Neuem Serverschlüssel vertrauen:"
 
@@ -8130,7 +8118,7 @@ msgid "Trust this host and carry on connecting?"
 msgstr "Diesem Server vertrauen und Verbindung herstellen?"
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:122
-#: ../../locales/../src/interface/resources/xrc/update.xrc:197
+#: ../../locales/../src/interface/resources/xrc/update.xrc:201
 msgid "Try again"
 msgstr "Nochmals versuchen"
 
@@ -8168,8 +8156,8 @@ msgstr "Standa&rdeinstellung des Systems für aktuelle Sprache verwenden"
 msgid "USER@&HOST"
 msgstr "&BENUTZER@SERVER"
 
-#: ../../locales/../src/engine/proxy.cpp:404
-#: ../../locales/../src/engine/proxy.cpp:531
+#: ../../locales/../src/engine/proxy.cpp:405
+#: ../../locales/../src/engine/proxy.cpp:532
 #, c-format
 msgid "Unassigned error code %d"
 msgstr "Nicht zugewiesener Fehlercode %d"
@@ -8183,12 +8171,12 @@ msgstr "Element:"
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:686
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:681
 msgid "Unknown FTP proxy type, cannot generate login sequence."
 msgstr ""
 "Unbekannter FTP-Proxy-Typ. Es kann keine Anmeldesequenz erstellt werden."
 
-#: ../../locales/../src/engine/proxy.cpp:452
+#: ../../locales/../src/engine/proxy.cpp:453
 #, c-format
 msgid "Unknown SOCKS protocol version: %d"
 msgstr "Unbekannte Version des SOCKS-Protokolls: %d"
@@ -8201,7 +8189,7 @@ msgstr "Unbekanntes Zertifikat"
 msgid "Unknown host key"
 msgstr "Unbekannter Server-Schlüssel"
 
-#: ../../locales/../src/engine/proxy.cpp:460
+#: ../../locales/../src/engine/proxy.cpp:461
 #, c-format
 msgid ""
 "Unknown protocol version of SOCKS Username/Password Authentication "
@@ -8217,8 +8205,8 @@ msgstr ""
 "Unbekanntes Wurzelelement; die Datei scheint nicht von FileZilla erzeugt "
 "worden zu sein."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:605
-#: ../../locales/../src/interface/netconfwizard.cpp:616
+#: ../../locales/../src/interface/netconfwizard.cpp:620
+#: ../../locales/../src/interface/netconfwizard.cpp:631
 msgid ""
 "Unless these problems get fixed, active mode FTP will not work and passive "
 "mode has to be used."
@@ -8226,7 +8214,7 @@ msgstr ""
 "Solange diese Probleme nicht gelöst sind, funktioniert der aktive Modus "
 "nicht. Stattdessen muss der passive Modus verwendet werden."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:592
+#: ../../locales/../src/interface/netconfwizard.cpp:607
 msgid ""
 "Unless this problem gets fixed, active mode FTP will not work and passive "
 "mode has to be used."
@@ -8234,7 +8222,7 @@ msgstr ""
 "Solange dieses Problem nicht gelöst ist, funktioniert der Aktive Modus "
 "nicht. Stattdessen muss der Passive Modus verwendet werden."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1098
+#: ../../locales/../src/engine/tlssocket.cpp:1153
 msgid "Unsupported certificate type"
 msgstr "Nicht unterstützter Zertifikatstyp"
 
@@ -8403,7 +8391,7 @@ msgstr "Gültig bis:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Ausführliche wxWidgets-Logmeldungen"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1148
+#: ../../locales/../src/engine/tlssocket.cpp:1203
 msgid "Verifying certificate..."
 msgstr "Überprüfe Zertifikat..."
 
@@ -8411,7 +8399,7 @@ msgstr "Überprüfe Zertifikat..."
 msgid "Very high"
 msgstr "Sehr hoch"
 
-#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1392
+#: ../../locales/../src/engine/ftpcontrolsocket.cpp:1387
 msgid "View hidden option set, but unsupported by server"
 msgstr ""
 "Anzeige versteckter Dateien aktiviert, aber vom Server nicht unterstützt"
@@ -8428,10 +8416,6 @@ msgstr "Sichtbare Spalten"
 msgid "W&rite"
 msgstr "S&chreiben"
 
-#: ../../locales/../src/interface/QueueView.cpp:1665
-msgid "Waiting"
-msgstr "Warte"
-
 #: ../../locales/../src/interface/queue.cpp:335
 msgid "Waiting for browsing connection"
 msgstr "Warten auf Browsing-Verbindung"
@@ -8444,11 +8428,11 @@ msgstr "Warten auf Passworteingabe"
 msgid "Waiting for transfer to be cancelled"
 msgstr "Warte auf Abbruch der Übertragung"
 
-#: ../../locales/../src/engine/engineprivate.cpp:229
+#: ../../locales/../src/engine/engineprivate.cpp:230
 msgid "Waiting to retry..."
 msgstr "Nächsten Versuch abwarten..."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:958
+#: ../../locales/../src/interface/netconfwizard.cpp:976
 msgid "Warning, ignoring data connection from wrong IP."
 msgstr "Warnung, eine Datenverbindung von einer falschen IP wird ignoriert."
 
@@ -8516,8 +8500,8 @@ msgstr "Soll FileZilla Passwörter speichern?"
 msgid "Wr&ite"
 msgstr "Sc&hreiben"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:445
-#: ../../locales/../src/interface/netconfwizard.cpp:451
+#: ../../locales/../src/interface/netconfwizard.cpp:457
+#: ../../locales/../src/interface/netconfwizard.cpp:463
 msgid "Wrong external IP address"
 msgstr "Falsche externe IP-Adresse"
 
@@ -8525,11 +8509,11 @@ msgstr "Falsche externe IP-Adresse"
 msgid "Wrong line endings"
 msgstr "Falsche Zeilenenden"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:843
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:846
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:766
+#: ../../locales/../src/interface/netconfwizard.cpp:783
 msgid ""
 "You appear to be using an IPv6-only host. This wizard does not support this "
 "environment."
@@ -8537,7 +8521,7 @@ msgstr ""
 "Sie verwenden anscheinend einen Nur-IPv6-Host. Diese Umgebung wird von "
 "diesem Assistenten nicht unterstützt."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:241
+#: ../../locales/../src/interface/resources/xrc/update.xrc:245
 msgid "You are using the latest version of FileZilla."
 msgstr "Sie verwenden die aktuelle FileZilla-Version."
 
@@ -8546,12 +8530,12 @@ msgid "You can always open this dialog again through the help menu."
 msgstr "Sie können diesen Dialog auch über das Hilfe-Menü öffnen."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:139
-#: ../../locales/../src/interface/resources/xrc/update.xrc:217
+#: ../../locales/../src/interface/resources/xrc/update.xrc:221
 msgid "You can download the latest version from the FileZilla website:"
 msgstr ""
 "Sie können die aktuelle Version von der FileZilla-Website herunterladen:"
 
-#: ../../locales/../src/engine/server.cpp:65
+#: ../../locales/../src/engine/server.cpp:66
 msgid "You can leave the port field empty to use the default port."
 msgstr ""
 "Sie können das Port-Feld leer lassen, um den Standard-Port zu verwenden."
@@ -8596,7 +8580,7 @@ msgstr ""
 "Sie haben mehr als 10 Dateien zum Bearbeiten ausgewählt; möchten Sie "
 "wirklich fortfahren?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1670
+#: ../../locales/../src/interface/LocalListView.cpp:1684
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -8636,7 +8620,7 @@ msgstr "Sie müssen einen Kontonamen angeben."
 msgid "You have to specify a user name"
 msgstr "Sie müssen einen Benutzernamen angeben"
 
-#: ../../locales/../src/interface/netconfwizard.cpp:631
+#: ../../locales/../src/interface/netconfwizard.cpp:646
 msgid ""
 "You likely have a router or firewall which erroneously modified the "
 "transferred data."
@@ -8708,7 +8692,7 @@ msgstr "Sie müssen einen Server-Pfad angeben."
 msgid "You need to specify a server."
 msgstr "Sie müssen einen Server angeben."
 
-#: ../../locales/../src/interface/netconfwizard.cpp:577
+#: ../../locales/../src/interface/netconfwizard.cpp:592
 msgid ""
 "You should have no problems connecting to other servers, file transfers "
 "should work properly."
@@ -8716,7 +8700,7 @@ msgstr ""
 "Sie sollten keine Probleme haben, eine Verbindung zu anderen Servern "
 "herzustellen, Dateiübertragungen sollten richtig funktionieren."
 
-#: ../../locales/../src/interface/QueueView.cpp:3050
+#: ../../locales/../src/interface/QueueView.cpp:2597
 msgid "Your computer will suspend unless you click Cancel."
 msgstr ""
 "Das System wird in den Standby-Modus versetzt, sofern Sie nicht auf "
@@ -8743,7 +8727,7 @@ msgstr "Bytes"
 msgid "contains"
 msgstr "enthält"
 
-#: ../../locales/../src/interface/updater.cpp:217
+#: ../../locales/../src/interface/updater.cpp:244
 msgid "custom"
 msgstr "benutzerdefiniert"
 
@@ -8765,10 +8749,10 @@ msgstr "hört auf mit"
 msgid "equals"
 msgstr "ist gleich"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:531
-#: ../../locales/../src/interface/filelistctrl.cpp:550
-#: ../../locales/../src/interface/filelistctrl.cpp:577
-#: ../../locales/../src/interface/filelistctrl.cpp:593
+#: ../../locales/../src/interface/filelistctrl.cpp:530
+#: ../../locales/../src/interface/filelistctrl.cpp:549
+#: ../../locales/../src/interface/filelistctrl.cpp:576
+#: ../../locales/../src/interface/filelistctrl.cpp:592
 msgid "file"
 msgstr "Datei"
 
@@ -8787,15 +8771,15 @@ msgstr ""
 "Bitte stellen Sie sicher, dass sich diese ausführbare Datei im gleichen "
 "Verzeichnis wie das FileZilla-Hauptprogramm befindet."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:452
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:455
 msgid "fzsftp belongs to a different version of FileZilla"
 msgstr "fzsftp gehört zu einer anderen FileZilla-Version"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1495
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1519
 msgid "fzsftp could not be started"
 msgstr "fzsftp konnte nicht gestartet werden"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1127
+#: ../../locales/../src/engine/tlssocket.cpp:1182
 msgid "gnutls_certificate_get_peers returned no certificates"
 msgstr "gnutls_certificate_get_peers gab keine Zertifikate zurück"
 
@@ -8851,10 +8835,10 @@ msgstr "'Besitzer: lesbar'"
 msgid "owner writeable"
 msgstr "'Besitzer: beschreibbar'"
 
-#: ../../locales/../src/engine/proxy.cpp:96
-#: ../../locales/../src/engine/tlssocket.cpp:1191
-#: ../../locales/../src/engine/tlssocket.cpp:1202
-#: ../../locales/../src/engine/tlssocket.cpp:1217
+#: ../../locales/../src/engine/proxy.cpp:97
+#: ../../locales/../src/engine/tlssocket.cpp:1246
+#: ../../locales/../src/engine/tlssocket.cpp:1257
+#: ../../locales/../src/engine/tlssocket.cpp:1272
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:38
 msgid "unknown"
 msgstr "unbekannt"
@@ -8874,6 +8858,36 @@ msgstr "'Andere: beschreibbar'"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Package"
+#~ msgstr "Paket"
+
+#~ msgid "Updated"
+#~ msgstr "Aktualisiert"
+
+#~ msgid "%d files added to queue"
+#~ msgstr "%d Dateien zur Warteschlange hinzugefügt"
+
+#~ msgid "&Disconnect from server"
+#~ msgstr "&Verbindung zum Server trennen"
+
+#~ msgid "&Show message"
+#~ msgstr "&Nachricht anzeigen"
+
+#~ msgid "Do &nothing"
+#~ msgstr "Nichts &machen"
+
+#~ msgid "No more files in the queue!"
+#~ msgstr "Keine weiteren Dateien in der Warteschlange!"
+
+#~ msgid "Scanning for files to add to queue"
+#~ msgstr "Suche nach Dateien, die zur Warteschlange hinzugefügt werden sollen"
+
+#~ msgid "Scanning for files to upload"
+#~ msgstr "Suche nach Dateien, die hochgeladen werden sollen"
+
+#~ msgid "Waiting"
+#~ msgstr "Warte"
 
 #~ msgid "Empty dirs to visit"
 #~ msgstr "Leere Verzeichnisse zu besuchen"
