@@ -10,6 +10,12 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.17.0 (2016-04-21)
+
+- *nix: Removed a label on the filter dialog that doesn't apply to *nix builds
+- Fix compilation if Nettle is installed in a custom location
+- Fix potential issues with destruction order when closing FileZilla
+
 3.17.0-rc1 (2016-04-15)
 
 + Recursivly queuing local files for upload now displays the progress below the local file list
