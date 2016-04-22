@@ -12,7 +12,7 @@ Legend:
 
 3.17.0-rc1 (2016-04-15)
 
-+ Recursivly queing local files for upload now displays the progress below the local file list
++ Recursivly queuing local files for upload now displays the progress below the local file list
 + MSW: Use dynamic TCP send buffer sizes to improve upload speeds on high-latency connections
 + SFTP: Use hardware-accelerated AES on x86_64 CPUs if available by using the AES implementation from Nettle instead of PuTTY
 + Building FileZilla now depends on the Nettle library, version 3.1 or later
@@ -28,7 +28,7 @@ Legend:
 3.16.1 (2016-03-16)
 
 ! MSW: Updated installer to NSIS 3.0b3 to prevent DLL hijacking
-- MSW: Fix string conversion functions of MiNGW runtime libraries
+- MSW: Fix string conversion functions of MinGW runtime libraries
 - Updated PuTTY components
 - Updated translations
 - Official binaries now link against GnuTLS 3.4.10
