@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla 3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-15 11:31+0200\n"
-"PO-Revision-Date: 2016-03-29 08:03+0100\n"
+"POT-Creation-Date: 2016-04-22 14:27+0200\n"
+"PO-Revision-Date: 2016-04-18 10:28+0100\n"
 "Last-Translator: Åka Sikrom <a4 æt hush dåt com>\n"
 "Language-Team: Norwegian Bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: nb_NO\n"
@@ -125,7 +125,7 @@ msgstr "%s (? B/s)"
 #: ../../locales/../src/interface/verifycertdialog.cpp:46
 #, c-format
 msgid "%s - Certificate expired!"
-msgstr "%s - Sertifikat utgått!"
+msgstr "%s - Utgått sertifikat!"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:32
 #, c-format
@@ -154,7 +154,7 @@ msgid_plural "%s bytes"
 msgstr[0] "%s byte"
 msgstr[1] "%s byte"
 
-#: ../../locales/../src/interface/FileZilla.cpp:617
+#: ../../locales/../src/interface/FileZilla.cpp:571
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -168,7 +168,7 @@ msgstr ""
 "Last ned FileZilla på nytt. Send gjerne en feilrapport hvis problemet ikke "
 "forsvinner."
 
-#: ../../locales/../src/interface/FileZilla.cpp:702
+#: ../../locales/../src/interface/FileZilla.cpp:656
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -261,7 +261,7 @@ msgstr "&Bruk alltid denne handlinga"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:341
 msgid "&Ask your operating system for the external IP address"
-msgstr "&Be operativsystemet om å oppgi ekstern adresse"
+msgstr "&Be operativsystemet om å oppgi ekstern IP-adresse"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:140
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:586
@@ -325,7 +325,7 @@ msgstr "&Avslutt FileZilla"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:631
 msgid "&Configure speed limits..."
-msgstr "&Sett opp fartsbegrensninger …"
+msgstr "&Sett opp fartsgrenser …"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:163
 msgid "&Configure..."
@@ -355,7 +355,7 @@ msgstr "&Ny mappe"
 msgid "&Create new tab"
 msgstr "&Ny fane"
 
-#: ../../locales/../src/interface/menu_bar.cpp:72
+#: ../../locales/../src/interface/menu_bar.cpp:67
 msgid "&Debug"
 msgstr "&Feilsøking"
 
@@ -393,13 +393,13 @@ msgstr "&Slett symbolsk lenke"
 msgid "&Directory comparison"
 msgstr "&Mappesammenlikning"
 
-#: ../../locales/../src/interface/state.cpp:914
+#: ../../locales/../src/interface/state.cpp:909
 msgid ""
 "&Disable synchronized browsing and continue changing the local directory"
 msgstr ""
 "&Slå av synkronisert filbehandling og fortsett med å bytte ekstern mappe"
 
-#: ../../locales/../src/interface/state.cpp:987
+#: ../../locales/../src/interface/state.cpp:982
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr ""
@@ -407,7 +407,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1809
 msgid "&Discard local file then download and edit file anew"
-msgstr "&Forkast gjeldende lokal fil, last ned og rediger den på nytt"
+msgstr "&Forkast gjeldende lokal fil, og last ned og rediger den på nytt"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:185
 msgid "&Disconnect"
@@ -478,7 +478,7 @@ msgstr "&Slå på komprimering"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3555
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:896
 msgid "&Enable speed limits"
-msgstr "&Bruk hastighetsgrenser"
+msgstr "&Bruk fartsgrenser"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:535
 msgid "&Encoding:"
@@ -494,7 +494,7 @@ msgstr "&Skriv inn kommando …"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
 msgid "&Establish connection in a new tab"
-msgstr "&Opprett tilkobling i ny fane"
+msgstr "&Koble til i ny fane"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:421
 msgid "&Execute"
@@ -618,7 +618,7 @@ msgstr "&Installer ny versjon"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
 msgid "&Keep remote path structure relative to search root"
-msgstr "&Hold ekstern mappestruktur relativ til søkeroten"
+msgstr "&Hold ekstern mappestruktur relativ til søkerot"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:230
 msgid "&Key file:"
@@ -705,7 +705,7 @@ msgstr "&Ny"
 msgid "&New Site"
 msgstr "&Ny tjener"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1664
+#: ../../locales/../src/interface/Mainfrm.cpp:1670
 msgid "&New version available!"
 msgstr "&Ny versjon tilgjengelig!"
 
@@ -808,7 +808,7 @@ msgstr "&Oppdater"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:360
 msgid "&Remember password until FileZilla is closed"
-msgstr "&Husk passordet frem til FileZilla lukkes"
+msgstr "&Husk passord frem til FileZilla lukkes"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3660
 msgid "&Remember passwords"
@@ -833,7 +833,7 @@ msgstr "&Fjern nøkkel"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:346
 msgid "&Remove selected"
-msgstr "Fjern &valgte"
+msgstr "Fjern &valgt"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1244
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2830
@@ -919,7 +919,7 @@ msgstr "&Velg språk"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2136
 msgid "&Select the columns that should be displayed:"
-msgstr "&Velg kolonnene som skal vises:"
+msgstr "&Velg kolonner som skal vises:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2323
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:174
@@ -964,7 +964,7 @@ msgstr "&Hopp over"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:165
 msgid "&Speed limits"
-msgstr "&Hastighetsgrenser"
+msgstr "&Fartsgrenser"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
 msgid "&Start transfer immediately"
@@ -1055,7 +1055,7 @@ msgstr "&Bruker:"
 msgid "&Username:"
 msgstr "&Brukernavn:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1658
+#: ../../locales/../src/interface/Mainfrm.cpp:1664
 #, c-format
 msgid "&Version %s"
 msgstr "&Versjon %s"
@@ -1121,14 +1121,14 @@ msgstr ""
 "Innloggingstypene «Normal» og «Konto» er ikke tilgjengelig. Innstillinga er "
 "derfor endret til «Be om passord»."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:584
+#: ../../locales/../src/interface/Mainfrm.cpp:590
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
 "command without the leading 'quote'."
 msgstr ""
-"«quote» er vanligvis en lokal kommando som brukes av kommandolinjeklienter "
-"for å sende argumenter til tjeneren. Du skriver sannsynligvis inn rene "
+"«quote» er vanligvis en lokal kommando som brukes av kommandolinje-klienter "
+"for å sende argumenter til tjenere. Du skriver sannsynligvis inn rene "
 "kommandoer uten «quote»."
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:76
@@ -1139,7 +1139,7 @@ msgid_plural "(%d objects filtered)"
 msgstr[0] "(%d objekt filtrert)"
 msgstr[1] "(%d objekter filtrert)"
 
-#: ../../locales/../src/interface/update_dialog.cpp:254
+#: ../../locales/../src/interface/update_dialog.cpp:313
 #, c-format
 msgid "(%u%% downloaded)"
 msgstr "(%u%% lastet ned)"
@@ -1193,7 +1193,7 @@ msgstr "-"
 
 #: ../../locales/../src/interface/statuslinectrl.cpp:209
 msgid "--:--:-- left"
-msgstr "--:--:-- igjen"
+msgstr "--:--:-- gjenstår"
 
 #: ../../locales/../src/interface/cmdline.cpp:88
 msgid "-c cannot be used together with an FTP URL."
@@ -1201,7 +1201,7 @@ msgstr "«-c» kan ikke brukes sammen med en FTP-nettadresse."
 
 #: ../../locales/../src/interface/cmdline.cpp:97
 msgid "-l can only be used together with an FTP URL."
-msgstr "-I kan kun brukes sammen med en FTP-nettadresse."
+msgstr "«-l» kan bare brukes sammen med en FTP-nettadresse."
 
 #: ../../locales/../src/interface/cmdline.cpp:76
 msgid "-s and -c cannot be present at the same time."
@@ -1260,7 +1260,7 @@ msgstr "Du må velge standard redigeringsprogram."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:118
-#: ../../locales/../src/interface/state.cpp:763
+#: ../../locales/../src/interface/state.cpp:758
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Du kan ikke dra en mappe inn i en av dens egne undermapper."
 
@@ -1280,7 +1280,7 @@ msgstr "En tidligere åpnet fil er blitt endret."
 
 #: ../../locales/../src/interface/edithandler.cpp:1644
 msgid "A file with that name is already being transferred."
-msgstr "En fil med dette navnet overføres allerede."
+msgstr "En fil med dette navnet er allerede under overføring."
 
 #: ../../locales/../src/interface/edithandler.cpp:1648
 msgid ""
@@ -1289,7 +1289,7 @@ msgstr ""
 "En fil med dette navnet er under redigering. Lukk fila i "
 "redigeringsprogrammet og prøv igjen."
 
-#: ../../locales/../src/interface/FileZilla.cpp:596
+#: ../../locales/../src/interface/FileZilla.cpp:550
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1299,37 +1299,36 @@ msgid ""
 msgstr ""
 "Klarte ikke å dekode et lokalt filnavn.\n"
 "Kontroller at miljøvariablene LC_CTYPE (eller LC_ALL) har korrekte verdier.\n"
-"Hvis du ikke fikser problemet, kan enkelte filer mangle i fillista.\n"
+"Hvis du ikke retter opp dette, kan enkelte filer mangle i fillista.\n"
 "Du får ingen flere advarsler om dette i denne programøkta."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:50
 msgid "A new version of FileZilla is available:"
 msgstr "Det har kommet en ny versjon av FileZilla:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:644
+#: ../../locales/../src/interface/Mainfrm.cpp:650
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
 msgstr ""
-"En ordentlig oppsatt tjener viser alltid alle filer, men noen tjenere "
-"gjemmer filer fra brukeren. Bruk denne innstillingen for å tvinge tjeneren "
-"til å vise alle filer."
+"En korrekt oppsatt tjener viser alltid alle filer, men noen tjenere skjuler "
+"filer fra brukeren. Bruk dette valget for å tvinge tjeneren til å vise alle "
+"filer."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:245
 msgid ""
 "A proper server does not require this. Contact the server administrator if "
 "you need this."
 msgstr ""
-"En korrekt oppsatt tjener skal ikke kreve dette. Ta kontakt med "
-"administrator for tjenermaskinen hvis valget likevel viser seg nødvendig."
+"En korrekt oppsatt tjener skal ikke kreve dette valget. Ta kontakt med "
+"administrator for tjenermaskinen hvis det viser seg å være nødvendig likevel."
 
-#: ../../locales/../src/interface/state.cpp:259
+#: ../../locales/../src/interface/state.cpp:253
 msgid ""
 "A remote operation is in progress and synchronized browsing is enabled.\n"
 "Disable synchronized browsing and continue changing the local directory?"
 msgstr ""
-"En ekstern operasjon er under behandling, og synkronisert filutforsking er "
-"slått på.\n"
+"En ekstern handling pågår, og synkronisert filutforsking er slått på.\n"
 "Vil du slå av synkronisert filutforsking og fortsette med å bytte lokal "
 "mappe?"
 
@@ -1357,7 +1356,7 @@ msgstr "&Bruk bare på opplastinger"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:541
 msgid "A&pply to all files and directories"
-msgstr "&Gjør gjeldende for alle filer og mapper"
+msgstr "&Bruk på alle filer og mapper"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:478
 msgid "A&utomatically remove successful transfers"
@@ -1373,7 +1372,7 @@ msgstr "Om FileZilla"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1326
 msgid "Above the file lists"
-msgstr "Over fillista"
+msgstr "Over fillister"
 
 #: ../../locales/../src/engine/server.cpp:863
 #: ../../locales/../src/engine/server.cpp:884
@@ -1389,7 +1388,7 @@ msgstr "Konto"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:375
 msgid "Action after queue &completion"
-msgstr "Handling etter &utførelse av kø"
+msgstr "Handling når køen er &ferdig"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1917
 msgid "Action on selected file:"
@@ -1471,14 +1470,14 @@ msgid ""
 "expected and might even damage your system. Use beta versions and nightly "
 "builds at your own risk."
 msgstr ""
-"Råd: Bruk alltid stabile versjoner av programmet, med mindre du vil teste "
+"Råd: Bruk alltid stabile versjoner av programmet, med mindre du vil prøve ut "
 "nye funksjoner. Beta- og dagsversjoner («nightly builds») er tilgjengelig "
 "til testformål. Dagsversjoner av FileZilla virker ofte ikke som forventet, "
 "og kan skade systemet. Beta- og dagsversjoner brukes derfor på egen risiko."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3507
 msgid "Al&ways perform this action"
-msgstr "&Bruk alltid denne handlinga"
+msgstr "&Gjør alltid dette"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1996
 msgid "Algorithm:"
@@ -1490,26 +1489,26 @@ msgstr "Alle filer ble overført uten problemer"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:308
 msgid "All ports in the given range have to be between 1024 and 65535."
-msgstr "Alle porter i rekken må være mellom 1024 og 65535."
+msgstr "Alle porter i rekkevidda må være mellom 1024 og 65535."
 
 #: ../../locales/../src/interface/QueueView.cpp:2486
 #, c-format
 msgid "All transfers have finished. %d file could not be transferred."
 msgid_plural "All transfers have finished. %d files could not be transferred."
-msgstr[0] "Alle overføringer er fullført. %d fil ble ikke overført."
-msgstr[1] "Alle overføringer er fullført. %d filer ble ikke overført."
+msgstr[0] "Overføring er fullført. %d fil ble ikke overført."
+msgstr[1] "Overføring er fullført. %d filer ble ikke overført."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:213
 msgid "Allow &fall back to other transfer mode on failure"
-msgstr "Tillat &tilbakefall til alternativ overføringsmodus ved feil"
+msgstr "Tillat &tilbakefall til annen overføringsmodus ved feil"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:88
 msgid "Allow fallback to other transfer mode on failure"
-msgstr "Tillat tilbakefall til alternativt overføringsmodus ved feil"
+msgstr "Tillat tilbakefall til annen overføringsmodus ved feil"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3467
 msgid "Already connected"
-msgstr "Allerede tilkoblet"
+msgstr "Allerede koblet til"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:84
 msgid "Alternative name:"
@@ -1522,7 +1521,7 @@ msgid ""
 "Alternatively you can use the Pageant tool from PuTTY to manage your keys, "
 "FileZilla does recognize Pageant."
 msgstr ""
-"Du kan også bruke Pageant fra PuTTY for å administrere nøkler. FileZilla "
+"Du kan også bruke Pageant fra PuTTY til å administrere nøkler. FileZilla "
 "fungerer med Pageant."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:665
@@ -1530,8 +1529,8 @@ msgid ""
 "Alternatively you can use your system's SSH agent. To do so, make sure the "
 "SSH_AUTH_SOCK environment variable is set."
 msgstr ""
-"Alternativt kan du bruke operativsystemets SSH-klient. Sjekk i så fall at "
-"SSH_AUTH_SOCK-miljøvariabelen har en verdi før du fortsetter."
+"Du kan også bruke operativsystemets SSH-klient. Sjekk i så fall at "
+"miljøvariabelen «SSH_AUTH_SOCK» har en verdi før du fortsetter."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:129
 msgid ""
@@ -1573,12 +1572,12 @@ msgstr "Det finnes allerede en fil med samme navn som den du prøver å flytte."
 msgid "Anonymous"
 msgstr "Anonym"
 
-#: ../../locales/../src/interface/state.cpp:964
+#: ../../locales/../src/interface/state.cpp:959
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
-"En annen ekstern operasjon er allerede under behandling. Du kan derfor ikke "
-"gå til en annen mappe nå."
+"Det pågår allerede en annen ekstern handling. Du må vente til denne er "
+"ferdig før du kan bytte mappe."
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:808
 msgid "Any changes made in the Site Manager could not be saved."
@@ -1586,19 +1585,19 @@ msgstr "Eventuelle endringer i Tjeneroppsett ble ikke lagret."
 
 #: ../../locales/../src/interface/filter.cpp:213
 msgid "Any changes made to the filters could not be saved."
-msgstr "Eventuelle endringer i filtrene ble ikke lagret."
+msgstr "Eventuelle filterendringer ble ikke lagret."
 
 #: ../../locales/../src/interface/filter.cpp:979
 msgid "Any changes made to the filters will not be saved."
-msgstr "Eventuelle endringer gjort på filtrene blir ikke lagret."
+msgstr "Eventuelle filterendringer blir ikke lagret."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:555
 msgid "App&ly to directories only"
-msgstr "Bruk kun på &mapper"
+msgstr "Bare bruk på &mapper"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1191
 msgid "Apply"
-msgstr "Lagre"
+msgstr "Bruk"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:213
 msgid "Apply to &current queue only"
@@ -1606,7 +1605,7 @@ msgstr "Bare bruk på gjeldende kø"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:548
 msgid "Apply to &files only"
-msgstr "Bruk kun på &filer"
+msgstr "Bare bruk på &filer"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:105
 msgid "Archive"
@@ -1614,7 +1613,7 @@ msgstr "Arkiv"
 
 #: ../../locales/../src/engine/socket.cpp:1071
 msgid "Argument buffer overflow"
-msgstr "Mellomlageret for argumenter er fullt"
+msgstr "Argument-mellomlageret er fullt"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1328
 msgid "As tab in the transfer queue pane"
@@ -1636,19 +1635,19 @@ msgstr "Be om passord"
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:271
 msgid "Ask operating system for a port."
-msgstr "Spør operativsystemet etter port."
+msgstr "Be operativsystemet om en port."
 
 #: ../../locales/../src/interface/resources/xrc/netconfwizard.xrc:173
 msgid "Ask your operating system for the external IP address"
-msgstr "Spør operativsystemet etter ekstern IP-adresse"
+msgstr "Be operativsystem om ekstern IP-adresse"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3416
 msgid "Asking questions in the FileZilla forums"
-msgstr "Stille spørsmål på FileZilla-forumet"
+msgstr "Still spørsmål på FileZilla-forumet"
 
 #: ../../locales/../src/interface/settings/optionspage_edit_associations.cpp:63
 msgid "Associated program not found:"
-msgstr "Finner ikke tilordnet program"
+msgstr "Fant ikke tilordnet program:"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:686
 msgid "At least one filter condition is incomplete"
@@ -1710,7 +1709,7 @@ msgstr "Redigeres"
 
 #: ../../locales/../src/engine/tlssocket.cpp:1168
 msgid "Beware! Certificate has been revoked"
-msgstr "Obs! Sertifikatet har blitt tilbaketrukket"
+msgstr "Obs! Sertifikatet er tilbakekalt"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2544
 msgid "Binary"
@@ -1721,7 +1720,7 @@ msgid "Blackboard"
 msgstr "Tavleoppsett"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:261
-#: ../../locales/../src/interface/menu_bar.cpp:304
+#: ../../locales/../src/interface/menu_bar.cpp:297
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:418
 msgid "Bookmark"
 msgstr "Bokmerke"
@@ -1744,7 +1743,7 @@ msgstr "Byggedato:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:646
 msgid "Build information"
-msgstr "Byggeinformasjon"
+msgstr "Bygginfo"
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:245
 msgid "Business category:"
@@ -1757,8 +1756,8 @@ msgid ""
 "please enter the port range below."
 msgstr ""
 "Som standard brukes alle tilgjengelige porter for tilkobling i aktiv modus. "
-"Hvis du vil begrense hvilke porter FileZilla skal bruke, kan du angi "
-"rekkevidde under."
+"Skriv inn en rekkevidde nedenfor for å begrense hvilke porter FileZilla kan "
+"bruke."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:176
 msgid "C&ancel current operation"
@@ -1788,7 +1787,7 @@ msgstr "CPU-funksjoner:"
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1566
 #: ../../locales/../src/engine/sftpcontrolsocket.cpp:1235
 msgid "Calculating timezone offset of server..."
-msgstr "Beregn tidsforskjell mellom klient og tjener …"
+msgstr "Beregner tidsforskjell mellom klient og tjener …"
 
 #: ../../locales/../src/engine/transfersocket.cpp:665
 msgid "Can't read from file"
@@ -1844,21 +1843,21 @@ msgstr ""
 "Fikk ikke tilgang til «%s». Kontroller at mediet er satt inn, og at enheten "
 "ikke er i bruk."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:557
+#: ../../locales/../src/interface/Mainfrm.cpp:563
 msgid "Cannot add server to Site Manager"
-msgstr "Klarte ikke å legge til tjeneren i tjeneroppsettet"
+msgstr "Klarte ikke å legge til tjeneren i Tjeneroppsett"
 
 #: ../../locales/../src/engine/socket.cpp:1088
 msgid "Cannot assign requested address"
 msgstr "Klarte ikke å tildele forespurt adresse"
 
-#: ../../locales/../src/interface/context_control.cpp:357
+#: ../../locales/../src/interface/context_control.cpp:356
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
 msgstr ""
-"Klarte ikke å lukke fanen mens handlinga pågikk.\n"
-"Vil du avbyte gjeldende handling og lukke fanen?"
+"Fanen er opptatt.\n"
+"Vil du avbyte gjeldende handling og lukke den?"
 
 #: ../../locales/../src/interface/listingcomparison.cpp:71
 msgid ""
@@ -1874,18 +1873,18 @@ msgstr "Klarte ikke å legge til nytt filter"
 
 #: ../../locales/../src/interface/edithandler.cpp:1574
 #: ../../locales/../src/interface/edithandler.cpp:1622
-#: ../../locales/../src/interface/LocalListView.cpp:1720
+#: ../../locales/../src/interface/LocalListView.cpp:1719
 #: ../../locales/../src/interface/search.cpp:696
 msgid "Cannot edit file"
 msgstr "Klarte ikke å redigere fil"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1602
+#: ../../locales/../src/interface/LocalListView.cpp:1601
 msgid "Cannot edit file, not connected to any server."
-msgstr "Klarte ikke å redigere fil. Du er ikke tilkoblet en tjener."
+msgstr "Klarte ikke å redigere fil. Du er ikke koblet til en tjener."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1611
+#: ../../locales/../src/interface/LocalListView.cpp:1610
 msgid "Cannot edit file, remote path unknown."
-msgstr "Klarte ikke å redigere fil, fordi ekstern sti er ukjent."
+msgstr "Klarte ikke å redigere fil. Ekstern sti er ukjent."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:336
 msgid ""
@@ -1904,7 +1903,7 @@ msgstr "Klarte ikke å laste inn hurtigtilkoblingslinje fra ressursfil"
 msgid "Cannot load key file"
 msgstr "Klarte ikke å laste inn nøkkelfil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:995
+#: ../../locales/../src/interface/Mainfrm.cpp:1001
 msgid "Cannot load toolbar from resource file"
 msgstr "Klarte ikke å laste inn verktøylinje fra ressursfil"
 
@@ -1999,7 +1998,7 @@ msgstr "Endre filtillatelser."
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "Du må starte FileZilla på nytt for at endringer her skal tre i kraft."
 
-#: ../../locales/../src/interface/FileZilla.cpp:596
+#: ../../locales/../src/interface/FileZilla.cpp:550
 msgid "Character encoding issue"
 msgstr "Problem med tegnkoding"
 
@@ -2023,7 +2022,7 @@ msgstr "Se etter oppdateringer"
 msgid "Check for newer versions of FileZilla"
 msgstr "Sjekk etter nye versjoner av FileZilla"
 
-#: ../../locales/../src/interface/update_dialog.cpp:57
+#: ../../locales/../src/interface/update_dialog.cpp:59
 msgid "Check for updates failed"
 msgstr "Klarte ikke å se etter oppdateringer"
 
@@ -2045,18 +2044,18 @@ msgstr ""
 
 #: ../../locales/../src/interface/netconfwizard.cpp:778
 msgid "Checking for correct external IP address"
-msgstr "Sjekker etter korrekt ekstern IP-adresse"
+msgstr "Ser etter korrekt ekstern IP-adresse"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:162
+#: ../../locales/../src/interface/resources/xrc/update.xrc:166
 msgid "Checking for updates..."
-msgstr "Se etter oppdateringer …"
+msgstr "Ser etter oppdateringer …"
 
-#: ../../locales/../src/interface/updater.cpp:748
+#: ../../locales/../src/interface/updater.cpp:757
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "Kontrollsum samsvarer med fila %s\n"
 
-#: ../../locales/../src/interface/updater.cpp:744
+#: ../../locales/../src/interface/updater.cpp:753
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "Kontrollsum samsvarer ikke med fila %s\n"
@@ -2130,8 +2129,8 @@ msgid "Close &all other tabs"
 msgstr "Lukk &alle andre faner"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1131
-#: ../../locales/../src/interface/Mainfrm.cpp:1152
+#: ../../locales/../src/interface/Mainfrm.cpp:1137
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
 msgid "Close FileZilla"
 msgstr "Lukk FileZilla"
 
@@ -2261,7 +2260,7 @@ msgstr "Bekreft sletting"
 
 #: ../../locales/../src/interface/edithandler.cpp:1586
 #: ../../locales/../src/interface/file_utils.h:45
-#: ../../locales/../src/interface/LocalListView.cpp:1684
+#: ../../locales/../src/interface/LocalListView.cpp:1683
 #: ../../locales/../src/interface/RemoteListView.cpp:1390
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1041
 #: ../../locales/../src/interface/search.cpp:708
@@ -2456,7 +2455,7 @@ msgstr "Klarte ikke å akseptere tilkobling: %s"
 msgid "Could not add connection to Site Manager"
 msgstr "Klarte ikke å legge tilkoblinga i Tjeneroppsett"
 
-#: ../../locales/../src/interface/state.cpp:777
+#: ../../locales/../src/interface/state.cpp:772
 msgid "Could not complete operation"
 msgstr "Klarte ikke å fullføre handlinga"
 
@@ -2478,7 +2477,7 @@ msgstr "Klarte ikke å kode kommandoer slik at tjeneren forstår dem"
 msgid "Could not convert private key"
 msgstr "Klarte ikke å konvertere privatnøkkel"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2522
+#: ../../locales/../src/interface/RemoteListView.cpp:2521
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1381
 msgid "Could not copy URLs"
 msgstr "Klarte ikke å kopiere nettadresser"
@@ -2497,7 +2496,7 @@ msgstr "Klarte ikke å lage den lokale fila %s\n"
 msgid "Could not create logging mutex: %s"
 msgstr "Klarte ikke å lage loggføringsmutex %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2183
+#: ../../locales/../src/interface/RemoteListView.cpp:2182
 #: ../../locales/../src/interface/RemoteTreeView.cpp:851
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
@@ -2512,7 +2511,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Klarte ikke å opprette forbindelse med tjeneren"
 
-#: ../../locales/../src/interface/FileZilla.cpp:428
+#: ../../locales/../src/interface/FileZilla.cpp:405
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2543,7 +2542,7 @@ msgstr ""
 "Fant ikke «distinguished name» på sertifikatsubjekt. «gnutls_x509_get_dn» "
 "mislyktes"
 
-#: ../../locales/../src/interface/state.cpp:950
+#: ../../locales/../src/interface/state.cpp:945
 msgid "Could not get full remote path."
 msgstr "Klarte ikke å hente fullstendig ekstern filsti"
 
@@ -2562,7 +2561,7 @@ msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr ""
 "Klarte ikke å importere sertifikater. «gnutls_x509_crt_import» mislyktes"
 
-#: ../../locales/../src/interface/FileZilla.cpp:108
+#: ../../locales/../src/interface/FileZilla.cpp:85
 #, c-format
 msgid "Could not initialize Winsock (%d): %s"
 msgstr "Klarte ikke å starte Winsock (%d). %s"
@@ -2595,7 +2594,7 @@ msgstr "Klarte ikke å laste inn nøkkelfil"
 msgid "Could not load private key"
 msgstr "Klarte ikke å laste inn privatnøkkel"
 
-#: ../../locales/../src/interface/state.cpp:972
+#: ../../locales/../src/interface/state.cpp:967
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2606,7 +2605,7 @@ msgstr ""
 "Vil du slå av synkronisert filbehandling og fortsette med å endre ekstern "
 "mappe?"
 
-#: ../../locales/../src/interface/state.cpp:363
+#: ../../locales/../src/interface/state.cpp:357
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2616,7 +2615,7 @@ msgstr ""
 "Fant ikke lokal mappe som tilsvarer den eksterne mappa «%s».\n"
 "Synkronisert filbehandling er derfor slått av."
 
-#: ../../locales/../src/interface/state.cpp:268
+#: ../../locales/../src/interface/state.cpp:262
 #, c-format
 msgid ""
 "Could not obtain corresponding remote directory for the local directory "
@@ -2627,7 +2626,7 @@ msgstr ""
 "Synkronisert filbehandling har blitt slått av."
 
 #: ../../locales/../src/interface/aboutdialog.cpp:198
-#: ../../locales/../src/interface/RemoteListView.cpp:2522
+#: ../../locales/../src/interface/RemoteListView.cpp:2521
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1381
 msgid "Could not open clipboard"
 msgstr "Klarte ikke å åpne utklippstavle"
@@ -2760,11 +2759,11 @@ msgstr "Land:"
 msgid "Crea&te new file"
 msgstr "La&g ny fil"
 
-#: ../../locales/../src/interface/state.cpp:986
+#: ../../locales/../src/interface/state.cpp:981
 msgid "Create &missing local directory and enter it"
 msgstr "Lag manglende lokal &mappe, og gå inn i den"
 
-#: ../../locales/../src/interface/state.cpp:913
+#: ../../locales/../src/interface/state.cpp:908
 msgid "Create &missing remote directory and enter it"
 msgstr "Lag manglende ekstern &mappe, og gå inn i den"
 
@@ -2800,7 +2799,7 @@ msgstr "Lag map&pe, og gå inn i den"
 msgid "Create directory"
 msgstr "Ny mappe"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2609
+#: ../../locales/../src/interface/RemoteListView.cpp:2607
 msgid "Create empty file"
 msgstr "Lag tom fil"
 
@@ -2831,7 +2830,7 @@ msgstr "Krisik filoverføringsfeil"
 msgid "Critical file transfer error after transferring %s in %s"
 msgstr "Kritisk filoverføringsfeil etter overføring av %s i løpet av %s"
 
-#: ../../locales/../src/interface/state.cpp:354
+#: ../../locales/../src/interface/state.cpp:348
 #, c-format
 msgid ""
 "Current remote directory (%s) is not below the synchronization root (%s).\n"
@@ -3084,7 +3083,7 @@ msgstr "Mappe"
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
 #: ../../locales/../src/interface/filelistctrl.cpp:464
-#: ../../locales/../src/interface/Mainfrm.cpp:2166
+#: ../../locales/../src/interface/Mainfrm.cpp:2172
 msgid "Directory comparison"
 msgstr "Sammenlikning av mapper"
 
@@ -3100,7 +3099,7 @@ msgstr "Mappa som inneholder loggfil finnes ikke, eller filnavnet er ugyldig."
 msgid "Directory listing aborted by user"
 msgstr "Mappelisting avbrutt av bruker"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2013
+#: ../../locales/../src/interface/RemoteListView.cpp:2012
 msgid "Directory listing failed"
 msgstr "Mappevisning mislyktes."
 
@@ -3121,13 +3120,13 @@ msgstr "Mappevisning fullført"
 msgid "Disa&ble all"
 msgstr "Slå &av alle"
 
-#: ../../locales/../src/interface/state.cpp:979
+#: ../../locales/../src/interface/state.cpp:974
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
 "Slå av synkronisert filbehandling og fortsette med å bytte ekstern mappe?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:646
+#: ../../locales/../src/interface/Mainfrm.cpp:652
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3176,8 +3175,8 @@ msgstr "Ikke &bruk standard redigeringsprogram"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Gjør det samme med &alle valgte filer som allerede er under redigering"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1134
-#: ../../locales/../src/interface/Mainfrm.cpp:1156
+#: ../../locales/../src/interface/Mainfrm.cpp:1140
+#: ../../locales/../src/interface/Mainfrm.cpp:1162
 msgid "Do you really want to close FileZilla?"
 msgstr "Er du sikker på at du vil lukke FileZilla?"
 
@@ -3200,7 +3199,7 @@ msgstr "Er du sikker på at du vil fjerne valgt tjener?"
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Er du sikker på at du vil tømme overføringskøen?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:585
+#: ../../locales/../src/interface/Mainfrm.cpp:591
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "Er du sikker på at du vil sende «%s» til tjeneren?"
@@ -3258,7 +3257,7 @@ msgstr "Last ned valgt mappe"
 msgid "Download selected files and directories"
 msgstr "Last ned valgte filer og mapper"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:967
+#: ../../locales/../src/interface/Mainfrm.cpp:973
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3350,8 +3349,8 @@ msgstr ""
 msgid "Editing directories is not supported"
 msgstr "Redigering av mapper støttes ikke"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1602
-#: ../../locales/../src/interface/LocalListView.cpp:1611
+#: ../../locales/../src/interface/LocalListView.cpp:1601
+#: ../../locales/../src/interface/LocalListView.cpp:1610
 msgid "Editing failed"
 msgstr "Redigering mislyktes"
 
@@ -3371,7 +3370,7 @@ msgstr "Tom kommando"
 msgid "Empty command."
 msgstr "Tom kommando"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2015
+#: ../../locales/../src/interface/RemoteListView.cpp:2014
 msgid "Empty directory listing"
 msgstr "Tom mappeliste"
 
@@ -3433,7 +3432,7 @@ msgstr "Skriv inn 0 for ubegrenset hastighet."
 msgid "Enter command"
 msgstr "Angi kommando"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:568
+#: ../../locales/../src/interface/Mainfrm.cpp:574
 msgid "Enter custom command"
 msgstr "Skriv inn kommando"
 
@@ -3534,7 +3533,7 @@ msgstr "Feil ved lasting av kø"
 #: ../../locales/../src/interface/filter.cpp:980
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
-#: ../../locales/../src/interface/Options.cpp:246
+#: ../../locales/../src/interface/Options.cpp:247
 #: ../../locales/../src/interface/QueueView.cpp:1453
 #: ../../locales/../src/interface/search.cpp:802
 #: ../../locales/../src/interface/search.cpp:821
@@ -3589,7 +3588,7 @@ msgstr "Eksempler"
 msgid "Exe&cute"
 msgstr "K&jør:"
 
-#: ../../locales/../src/interface/update_dialog.cpp:57
+#: ../../locales/../src/interface/update_dialog.cpp:59
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Kjørbare fil inneholder ingen versjonsinformasjon. Klarte derfor ikke å se "
@@ -3668,16 +3667,16 @@ msgstr "FTPS - FTP via implisitt TLS"
 #: ../../locales/../src/interface/LocalListView.cpp:531
 #: ../../locales/../src/interface/LocalListView.cpp:607
 #: ../../locales/../src/interface/LocalListView.cpp:906
-#: ../../locales/../src/interface/LocalListView.cpp:1798
+#: ../../locales/../src/interface/LocalListView.cpp:1797
 #: ../../locales/../src/interface/LocalTreeView.cpp:843
 #: ../../locales/../src/interface/LocalTreeView.cpp:1111
-#: ../../locales/../src/interface/viewheader.cpp:504
+#: ../../locales/../src/interface/viewheader.cpp:493
 msgid "Failed to change directory"
 msgstr "Klarte ikke å bytte mappe"
 
-#: ../../locales/../src/interface/FileZilla.cpp:158
-#: ../../locales/../src/interface/FileZilla.cpp:173
-#: ../../locales/../src/interface/FileZilla.cpp:175
+#: ../../locales/../src/interface/FileZilla.cpp:135
+#: ../../locales/../src/interface/FileZilla.cpp:150
+#: ../../locales/../src/interface/FileZilla.cpp:152
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 msgid "Failed to change language"
 msgstr "Feil ved endring av språket"
@@ -3715,7 +3714,7 @@ msgstr "Fant ikke maskinadressen for kontrolltilkobling. Tilkobling lukket."
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "Fant ikke maskinadressen for datakobling. Tilkobling lukket."
 
-#: ../../locales/../src/interface/context_control.cpp:83
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "Feil ved innlasting av FTP-motoren."
 
@@ -3725,7 +3724,7 @@ msgstr "Feil ved innlasting av FTP-motoren."
 msgid "Failed to initialize TLS."
 msgstr "Feil ved initialisering av TLS."
 
-#: ../../locales/../src/interface/FileZilla.cpp:109
+#: ../../locales/../src/interface/FileZilla.cpp:86
 msgid "Failed to initialize networking"
 msgstr "Klarte ikke å starte nettverksfunksjoner."
 
@@ -3790,36 +3789,36 @@ msgstr "Fant ikke ekstern IP-adresse."
 msgid "Failed to send command."
 msgstr "Klarte ikke å sende kommando."
 
-#: ../../locales/../src/interface/FileZilla.cpp:173
+#: ../../locales/../src/interface/FileZilla.cpp:150
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr "Feil ved endring av språk til %s (%s). Bruker standard systemspråk"
 
-#: ../../locales/../src/interface/FileZilla.cpp:151
+#: ../../locales/../src/interface/FileZilla.cpp:128
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
 msgstr ""
 "Feil ved endring av språk til %s (%s). Bruker standard systemspråk (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:140
+#: ../../locales/../src/interface/FileZilla.cpp:117
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr "Feil ved endring av språk til %s (%s). Bruker standard systemspråk."
 
-#: ../../locales/../src/interface/FileZilla.cpp:175
+#: ../../locales/../src/interface/FileZilla.cpp:152
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 #, c-format
 msgid "Failed to set language to %s, using default system language"
 msgstr "Feil ved endring av språk til %s. Bruker standard systemspråk"
 
-#: ../../locales/../src/interface/FileZilla.cpp:147
+#: ../../locales/../src/interface/FileZilla.cpp:124
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Feil ved endring av språk til %s. Bruker standard systemspråk (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:137
+#: ../../locales/../src/interface/FileZilla.cpp:114
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr "Feil ved endring av språk til %s. Bruker standard systemspråk."
@@ -3894,8 +3893,8 @@ msgid "File lists"
 msgstr "Fillister"
 
 #: ../../locales/../src/interface/edithandler.cpp:1550
-#: ../../locales/../src/interface/FileZilla.cpp:618
-#: ../../locales/../src/interface/FileZilla.cpp:703
+#: ../../locales/../src/interface/FileZilla.cpp:572
+#: ../../locales/../src/interface/FileZilla.cpp:657
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Fil ikke funnet"
@@ -3935,7 +3934,7 @@ msgstr "Filoverføring vellykket"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Filoverføring vellykket, overførte %s i løpet av %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1133
+#: ../../locales/../src/interface/Mainfrm.cpp:1139
 msgid "File transfers still in progress."
 msgstr "Filoverføring pågår fremdeles."
 
@@ -3947,7 +3946,7 @@ msgstr "Fila ville blitt overført i form av ASCII-data."
 msgid "File would transfer with binary data type."
 msgstr "Fila ville blitt overført i binærform."
 
-#: ../../locales/../src/interface/FileZilla.cpp:429
+#: ../../locales/../src/interface/FileZilla.cpp:406
 #: ../../locales/../src/interface/quickconnectbar.cpp:66
 #: ../../locales/../src/interface/quickconnectbar.cpp:204
 msgid "FileZilla Error"
@@ -3964,7 +3963,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla er allerede tilkoblet en tjener."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1441
+#: ../../locales/../src/interface/Mainfrm.cpp:1447
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla må startes på nytt for at språkendringene skal tre i kraft."
 
@@ -4123,7 +4122,7 @@ msgstr ""
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "For pålitelighet bør du angi en rekkevide på minst 10 porter."
 
-#: ../../locales/../src/interface/Options.cpp:245
+#: ../../locales/../src/interface/Options.cpp:246
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -4139,7 +4138,7 @@ msgstr "Tving &UTF-8"
 msgid "Force showing &hidden files"
 msgstr "Tving visning av &skjulte filer"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:641
+#: ../../locales/../src/interface/Mainfrm.cpp:647
 msgid "Force showing hidden files"
 msgstr "Tving visning av skjulte filer"
 
@@ -4152,14 +4151,14 @@ msgid "Format: Extension followed by properly quoted command and arguments."
 msgstr "Format: Filetternavn etterfulgt av gyldig kommando og argument(er)."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:680
+#: ../../locales/../src/interface/updater.cpp:689
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Fant ny %s: %s\n"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3385
 msgid "Further documentation"
-msgstr "Mer dokumentasjon"
+msgstr "Annen dokumentasjon"
 
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:86
 msgid "General"
@@ -4185,7 +4184,7 @@ msgstr "Få hjelp"
 #: ../../locales/../src/interface/filter.cpp:354
 #: ../../locales/../src/interface/filter.cpp:410
 msgid "Given filterset name already exists, overwrite filter set?"
-msgstr "Filtersett-navnet finnes allerede. Vil du overskrive det?"
+msgstr "Filtersett-navnet finnes allerede. Vil du overskrive filtersettet?"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:248
 msgid "Global bookmarks"
@@ -4419,7 +4418,7 @@ msgstr ""
 "Hvis du velger test, kobler FileZilla til probe.filezilla-project.org og "
 "utfører noen enkle tester."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1155
+#: ../../locales/../src/interface/Mainfrm.cpp:1161
 msgid "If you close FileZilla, your changes will be lost."
 msgstr "Hvis du lukker FileZilla, går alle endringer tapt."
 
@@ -4549,7 +4548,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Feil passord"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:192
+#: ../../locales/../src/interface/resources/xrc/update.xrc:196
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4728,7 +4727,7 @@ msgstr "Jurisdiksjonsstat eller provins:"
 msgid "Keep directories on top"
 msgstr "Ha mapper på toppen"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:645
+#: ../../locales/../src/interface/Mainfrm.cpp:651
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4763,7 +4762,7 @@ msgstr "L&avest"
 msgid "Language"
 msgstr "Språk"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1441
+#: ../../locales/../src/interface/Mainfrm.cpp:1447
 msgid "Language changed"
 msgstr "Språk endret"
 
@@ -4989,8 +4988,8 @@ msgstr "Maksimalt antall samtidige &overføringer:"
 msgid "Memory allocation failure"
 msgstr "Minnetildelingsfeil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:384
-#: ../../locales/../src/interface/Mainfrm.cpp:1751
+#: ../../locales/../src/interface/Mainfrm.cpp:387
+#: ../../locales/../src/interface/Mainfrm.cpp:1757
 msgid "Message log"
 msgstr "Meldingslogg"
 
@@ -5128,7 +5127,7 @@ msgstr "Nytt bokmerke"
 msgid "New directory"
 msgstr "Ny mappe"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:51
+#: ../../locales/../src/interface/welcome_dialog.cpp:54
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "Ny funksjonalitet og forbedringer i %s"
@@ -5165,7 +5164,7 @@ msgstr "Ingen eksporteringskategori er valgt"
 
 #: ../../locales/../src/interface/QueueView.cpp:1736
 msgid "No command given, aborting."
-msgstr "Ingen kommando gitt, avslutter."
+msgstr "Ingen kommando gitt. Avslutter."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3749
 msgid "No external IP address set, trying default."
@@ -5254,16 +5253,16 @@ msgstr "Normal"
 msgid "Not all items could be requeued for transfer."
 msgstr "Klarte ikke å legge alle elementer tilbake i overføringskø."
 
-#: ../../locales/../src/interface/state.cpp:181
-#: ../../locales/../src/interface/state.cpp:484
+#: ../../locales/../src/interface/state.cpp:178
+#: ../../locales/../src/interface/state.cpp:478
 msgid "Not connected"
 msgstr "Ikke tilkoblet"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2011
+#: ../../locales/../src/interface/RemoteListView.cpp:2010
 msgid "Not connected to any server"
 msgstr "Ikke tilkoblet"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:557
+#: ../../locales/../src/interface/Mainfrm.cpp:563
 msgid "Not connected to any server."
 msgstr "Ikke tilkoblet."
 
@@ -5275,7 +5274,7 @@ msgstr "Ikke tilkoblet."
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Ikke lastet inn. Må laste inn WSAStartup"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:643
+#: ../../locales/../src/interface/Mainfrm.cpp:649
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr "Merk at denne funksjonen bare støttes når du bruker FTP-protokollen."
 
@@ -5386,8 +5385,8 @@ msgstr "Åpnet som:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1616
 #: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1715
-#: ../../locales/../src/interface/LocalListView.cpp:1727
+#: ../../locales/../src/interface/LocalListView.cpp:1714
+#: ../../locales/../src/interface/LocalListView.cpp:1726
 msgid "Opening failed"
 msgstr "Åpning mislyktes"
 
@@ -5520,11 +5519,7 @@ msgstr "PORT-kommando ble ødelagt av ruter eller brannmur."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssiv (anbefalt)"
 
-#: ../../locales/../src/interface/updater.cpp:206
-msgid "Package"
-msgstr "Pakke"
-
-#: ../../locales/../src/interface/Mainfrm.cpp:2321
+#: ../../locales/../src/interface/Mainfrm.cpp:2327
 msgid "Parameter not a valid URL"
 msgstr "Parameteret er ikke en gyldig nettadresse"
 
@@ -5569,7 +5564,7 @@ msgstr "Sti"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Klarte ikke å konstruere sti for for mappa %s og undermappa %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2279
+#: ../../locales/../src/interface/Mainfrm.cpp:2285
 msgid "Path not found:"
 msgstr "Fant ikke sti:"
 
@@ -5616,8 +5611,8 @@ msgid ""
 "Please configure any firewalls and routers so that FileZilla can establish "
 "outgoing connection to arbitrary ports."
 msgstr ""
-"Sett opp eventuelle brannmurer og/eller rutere slik at FileZilla kan sette "
-"opp utgående tilkoblinger på vilkårlige porter."
+"Sett opp eventuelle brannmurer og/eller rutere slik at FileZilla kan gjøre "
+"utgående tilkobling via vilkårlige porter."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:647
 msgid "Please disable settings like 'DMZ mode' or 'Game mode' on your router."
@@ -5642,7 +5637,7 @@ msgstr "Skriv inn et selvvalgt tidsformat."
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:713
 msgid ""
 "Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18."
-msgstr "Skriv inn en dato i formatet ÅÅÅÅ-MM-DD, som i eksempelet 2010-07-18."
+msgstr "Skriv inn en dato i formatet ÅÅÅÅ-MM-DD, som f.eks.2010-07-18."
 
 #: ../../locales/../src/interface/settings/optionspage_transfer.cpp:123
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
@@ -5723,7 +5718,7 @@ msgstr "Skriv inn en adresse til et sted hvor ekstern adresse kan hentes fra"
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr "Skriv inn en opplastingsgrense som er høyere eller lik 0 %s/s."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:568
+#: ../../locales/../src/interface/Mainfrm.cpp:574
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5752,7 +5747,7 @@ msgstr ""
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Skriv inn navn på mappa som skal opprettes:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2609
+#: ../../locales/../src/interface/RemoteListView.cpp:2607
 msgid "Please enter the name of the file which should be created:"
 msgstr "Skriv inn navn på fila som skal opprettes:"
 
@@ -5787,12 +5782,12 @@ msgid ""
 "Please make sure FileZilla is allowed to establish outgoing connections and "
 "make sure you typed the address of the address resolver correctly."
 msgstr ""
-"Kontroller at FileZilla har tillatelse til å etablere utgående tilkoblinger, "
-"og at du har skrevet adressen til adressefinneren riktig."
+"Kontroller at FileZilla har tillatelse til å foreta utgående tilkoblinger, "
+"og at du har skrevet inn rett adresse til adressefinneren."
 
-#: ../../locales/../src/interface/FileZilla.cpp:157
+#: ../../locales/../src/interface/FileZilla.cpp:134
 msgid "Please make sure the requested locale is installed on your system."
-msgstr "Kontroller at forespurt språk er installert på systemet."
+msgstr "Kontroller at forespurt regionoppsett er installert på systemet."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:618
 msgid ""
@@ -5817,7 +5812,7 @@ msgstr ""
 "andre uønskede programmer. Dette kan gi en falsk alarm som du trygt kan "
 "overse."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:683
+#: ../../locales/../src/interface/Mainfrm.cpp:689
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5839,7 +5834,7 @@ msgid ""
 "in case you suddenly encounter problems with servers that did work "
 "previously."
 msgstr ""
-"Kjør denne veiviseren på nytt hvis nettverksmiljøet endres, eller hvis du "
+"Kjør denne veiviseren på nytt hvis du endrer nettverksmiljø, eller hvis du "
 "plutselig opplever problemer med tjenere som har fungert tidligere."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3228
@@ -5913,9 +5908,9 @@ msgstr "Forhåndstildeling"
 msgid "Predefined Sites"
 msgstr "Forhåndsdefinerte tjenere"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:682
+#: ../../locales/../src/interface/Mainfrm.cpp:688
 msgid "Preserving file timestamps"
-msgstr "Behold timestamp på filer"
+msgstr "Behold tidsstempel på filer"
 
 #: ../../locales/../src/interface/settings/optionspage_themes.cpp:206
 msgid "Preview:"
@@ -5979,11 +5974,11 @@ msgstr "Behandlet %s i %s."
 
 #: ../../locales/../src/engine/socket.cpp:1032
 msgid "Protocol not supported"
-msgstr "Kommandoen støttes ikke"
+msgstr "Protokoll støttes ikke"
 
 #: ../../locales/../src/engine/socket.cpp:1086
 msgid "Protocol not supported on given socket type"
-msgstr "Protokollen støttes ikke på valgt sokkeltype"
+msgstr "Protokoll støttes ikke på valgt sokkeltype"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:190
 msgid "Protocol:"
@@ -6089,7 +6084,7 @@ msgstr "&Eksternt mappetre"
 msgid "R&eset and requeue selected files"
 msgstr "&Nullstill og legg tilbake valgte filer i kø"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:582
+#: ../../locales/../src/interface/Mainfrm.cpp:588
 msgid "Raw FTP command"
 msgstr "Ren FTP-kommando"
 
@@ -6122,7 +6117,7 @@ msgstr "L&es"
 msgid "Read-only"
 msgstr "Skrivebeskyttet"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1024
+#: ../../locales/../src/interface/Mainfrm.cpp:1030
 msgid "Really cancel current operation?"
 msgstr "Er du sikker på at du vil avbryte gjeldende handling?"
 
@@ -6191,11 +6186,11 @@ msgstr "Mottok en linje på over 10 000 tegn, avbryter."
 #: ../../locales/../src/interface/netconfwizard.cpp:1015
 #: ../../locales/../src/interface/netconfwizard.cpp:1036
 msgid "Received data tainted"
-msgstr "Mottatt data ødelagt"
+msgstr "Mottatt data er ødelagt"
 
 #: ../../locales/../src/interface/updater.cpp:555
 msgid "Received invalid character in version information"
-msgstr "Versjonsinformasjonen inneholder ugyldig(e) tegn"
+msgstr "Versjonsinformasjon inneholder ugyldig(e) tegn"
 
 #: ../../locales/../src/engine/tlssocket.cpp:281
 #, c-format
@@ -6323,7 +6318,7 @@ msgstr "Håndtering av ekstern filsti:"
 msgid "Remote path:"
 msgstr "Ekstern filsti:"
 
-#: ../../locales/../src/interface/viewheader.cpp:530
+#: ../../locales/../src/interface/viewheader.cpp:519
 msgid "Remote site:"
 msgstr "Ekstern tjener:"
 
@@ -6363,14 +6358,14 @@ msgstr "Endrer navn fra «%s» til «%s»"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3422
 msgid "Reporting bugs and feature requests"
-msgstr "Feilrapportering og ønsker om ny funksjonalitet"
+msgstr "Rapporter feil og ønsker om ny funksjonalitet"
 
 #: ../../locales/../src/engine/proxy.cpp:399
 msgid ""
 "Request failed - client is not running identd (or not reachable from server)"
 msgstr ""
-"Forespørsel mislyktes. Klienten kjører ikke - eller tjeneren når ikke frem "
-"til - identd"
+"Forespørsel mislyktes. Klienten kjører ikke - eller tjeneren får ikke "
+"kontakt med - identd"
 
 #: ../../locales/../src/engine/proxy.cpp:402
 msgid "Request failed - client's identd could not confirm the user ID string"
@@ -6499,7 +6494,7 @@ msgstr "Lagre innstillinger?"
 #: ../../locales/../src/interface/manual_transfer.cpp:437
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:978
 msgid "Saving of password has been disabled by your system administrator."
-msgstr "Systemadministratoren har slått av passordlagring."
+msgstr "Systemadministrator har slått av passordlagring."
 
 #: ../../locales/../src/interface/manual_transfer.cpp:439
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:980
@@ -6700,7 +6695,7 @@ msgstr "Valgt fil er fortsatt åpen for redigering"
 msgid "Selected filter only works for local files."
 msgstr "Valgt filter fungerer bare på lokale filer."
 
-#: ../../locales/../src/interface/menu_bar.cpp:304
+#: ../../locales/../src/interface/menu_bar.cpp:297
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -6878,11 +6873,11 @@ msgstr "Vis &ren mappeliste"
 msgid "Show &welcome dialog..."
 msgstr "Vis &velkomstdialog …"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2169
+#: ../../locales/../src/interface/Mainfrm.cpp:2175
 msgid "Show both directory trees and continue comparing?"
 msgstr "Vil du se begge mappetrærne og fortsette sammenlikning?"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:210
+#: ../../locales/../src/interface/resources/xrc/update.xrc:214
 msgid "Show details"
 msgstr "Vis detaljer"
 
@@ -6900,7 +6895,7 @@ msgstr "Viser denne hjelpdialogen"
 
 #: ../../locales/../src/interface/QueueView.cpp:2590
 msgid "Shutdown now"
-msgstr "Slå av maskinen nå"
+msgstr "Slå avnå"
 
 #: ../../locales/../src/interface/resources/xrc/certificate.xrc:81
 msgid "Signature algorithm:"
@@ -6916,7 +6911,7 @@ msgstr "Tjeneroppsett"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:986
 msgid "Site Manager - Cannot remember password"
-msgstr "Tjeneroppsett - Klarte ikke å lagre passord"
+msgstr "Tjeneroppsett - klarte ikke å lagre passord"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:954
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:967
@@ -6932,7 +6927,7 @@ msgstr "Tjeneroppsett - Klarte ikke å lagre passord"
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1127
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1134
 msgid "Site Manager - Invalid data"
-msgstr "Tjeneroppsett - Ugyldige data"
+msgstr "Tjeneroppsett - ugyldige data"
 
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:329
 msgid "Site Manager already open"
@@ -7028,7 +7023,7 @@ msgstr "Sokkel ikke tilkoblet"
 msgid "Socket type not supported for address family"
 msgstr "Sokkeltypen støttes ikke av aktuell adressefamilie"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1154
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Noen eksterne filer blir fremdeles redigert eller må lastes opp."
 
@@ -7077,19 +7072,19 @@ msgstr "Kildefil:"
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 msgid "Speed Limits"
-msgstr "Hastighetsgrenser"
+msgstr "Fartsgrenser"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:892
 msgid "Speed limits"
-msgstr "Hastighetsgrenser"
+msgstr "Fartsgrenser"
 
 #: ../../locales/../src/interface/statusbar.cpp:575
 msgid "Speed limits are disabled, click to change."
-msgstr "Hastighetsgenser er slått av. Trykk for å endre."
+msgstr "Fartsgrenser er slått av. Trykk for å endre."
 
 #: ../../locales/../src/interface/statusbar.cpp:578
 msgid "Speed limits are enabled, click to change."
-msgstr "Hastighetsgenser er slått på. Trykk for å endre."
+msgstr "Fartsgrenser er slått på. Trykk for å endre."
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2067
 msgid "Stable and beta versions"
@@ -7185,22 +7180,22 @@ msgstr ""
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3700
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
-#: ../../locales/../src/interface/state.cpp:240
+#: ../../locales/../src/interface/state.cpp:234
+#: ../../locales/../src/interface/state.cpp:248
 #: ../../locales/../src/interface/state.cpp:254
-#: ../../locales/../src/interface/state.cpp:260
-#: ../../locales/../src/interface/state.cpp:270
-#: ../../locales/../src/interface/state.cpp:357
-#: ../../locales/../src/interface/state.cpp:365
-#: ../../locales/../src/interface/state.cpp:373
-#: ../../locales/../src/interface/state.cpp:951
-#: ../../locales/../src/interface/state.cpp:959
-#: ../../locales/../src/interface/state.cpp:965
-#: ../../locales/../src/interface/state.cpp:974
-#: ../../locales/../src/interface/state.cpp:1000
+#: ../../locales/../src/interface/state.cpp:264
+#: ../../locales/../src/interface/state.cpp:351
+#: ../../locales/../src/interface/state.cpp:359
+#: ../../locales/../src/interface/state.cpp:367
+#: ../../locales/../src/interface/state.cpp:946
+#: ../../locales/../src/interface/state.cpp:954
+#: ../../locales/../src/interface/state.cpp:960
+#: ../../locales/../src/interface/state.cpp:969
+#: ../../locales/../src/interface/state.cpp:995
 msgid "Synchronized browsing"
 msgstr "Synkronisert filbehandling"
 
-#: ../../locales/../src/interface/state.cpp:372
+#: ../../locales/../src/interface/state.cpp:366
 msgid "Synchronized browsing has been disabled."
 msgstr "Synkronisert filbehandling er avslått."
 
@@ -7214,8 +7209,8 @@ msgstr "Syntaksfeil"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2281
-#: ../../locales/../src/interface/Mainfrm.cpp:2323
+#: ../../locales/../src/interface/Mainfrm.cpp:2287
+#: ../../locales/../src/interface/Mainfrm.cpp:2329
 msgid "Syntax error in command line"
 msgstr "Syntaksfeil på kommandolinja"
 
@@ -7263,7 +7258,7 @@ msgstr "Målfila finnes allerede"
 msgid "Target file:"
 msgstr "Målfil:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2625
+#: ../../locales/../src/interface/RemoteListView.cpp:2623
 msgid "Target filename already exists!"
 msgstr "Målfila finnes allerede!"
 
@@ -7389,7 +7384,7 @@ msgstr ""
 "Velg et nytt navn:"
 
 #: ../../locales/../src/interface/edithandler.cpp:1621
-#: ../../locales/../src/interface/LocalListView.cpp:1719
+#: ../../locales/../src/interface/LocalListView.cpp:1718
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -7421,7 +7416,7 @@ msgid "The file '%s' could not be loaded."
 msgstr "Klarte ikke å laste inn fila «%s»."
 
 #: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/LocalListView.cpp:1715
+#: ../../locales/../src/interface/LocalListView.cpp:1714
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7431,7 +7426,7 @@ msgstr ""
 "Denne filtypen er ikke tilordnet et program."
 
 #: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1727
+#: ../../locales/../src/interface/LocalListView.cpp:1726
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7522,17 +7517,17 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Grensen må være på mellom 1 og 2000 MiB"
 
-#: ../../locales/../src/interface/state.cpp:1000
+#: ../../locales/../src/interface/state.cpp:995
 #, c-format
 msgid "The local directory '%s' could not be created."
 msgstr "Klarte ikke å opprette lokal mappe «%s»."
 
-#: ../../locales/../src/interface/state.cpp:985
+#: ../../locales/../src/interface/state.cpp:980
 #, c-format
 msgid "The local directory '%s' does not exist."
 msgstr "Lokal mappe «%s» finnes ikke."
 
-#: ../../locales/../src/interface/state.cpp:251
+#: ../../locales/../src/interface/state.cpp:245
 #, c-format
 msgid ""
 "The local directory '%s' is not below the synchronization root (%s).\n"
@@ -7563,12 +7558,12 @@ msgstr "Ny versjon er lagret i gjeldende brukers nedlastingsmappe."
 msgid "The queue will not be saved."
 msgstr "Køen blir ikke lagret."
 
-#: ../../locales/../src/interface/state.cpp:912
+#: ../../locales/../src/interface/state.cpp:907
 #, c-format
 msgid "The remote directory '%s' does not exist."
 msgstr "Ekstern mappe «%s» finnes ikke."
 
-#: ../../locales/../src/interface/state.cpp:956
+#: ../../locales/../src/interface/state.cpp:951
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7753,12 +7748,12 @@ msgstr "Tidssone-forskyvning av tjenertid er %d sekunder."
 msgid "Title:"
 msgstr "Tittel"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2167
+#: ../../locales/../src/interface/Mainfrm.cpp:2173
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Fillistene må være oppstilt på samme linje for å kunne sammenlikne mapper."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2168
+#: ../../locales/../src/interface/Mainfrm.cpp:2174
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr "For å gjøre dette må du enten vise eller skjule begge mappelistene."
 
@@ -7912,7 +7907,7 @@ msgid "Trust this host and carry on connecting?"
 msgstr "Vil du godkjenne verten og fortsette med å koble til?"
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:122
-#: ../../locales/../src/interface/resources/xrc/update.xrc:197
+#: ../../locales/../src/interface/resources/xrc/update.xrc:201
 msgid "Try again"
 msgstr "Prøv igjen"
 
@@ -8023,11 +8018,6 @@ msgstr "Denne videresendinga støttes ikke"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1936
 msgid "Up&load and unedit"
 msgstr "&Last opp uten endringer"
-
-#: ../../locales/../src/interface/updater.cpp:201
-#, fuzzy
-msgid "Updated"
-msgstr "Oppdateringer"
 
 #: ../../locales/../src/interface/settings/optionspage_updatecheck.cpp:45
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:112
@@ -8308,7 +8298,7 @@ msgstr ""
 "Det ser ut som du bruker en vert som bare støtter IPv6. Denne veiviseren "
 "støtter ikke slike arbeidsmiljøer."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:241
+#: ../../locales/../src/interface/resources/xrc/update.xrc:245
 msgid "You are using the latest version of FileZilla."
 msgstr "Du bruker nyeste versjon av FileZilla."
 
@@ -8317,7 +8307,7 @@ msgid "You can always open this dialog again through the help menu."
 msgstr "Du kan finne igjen denne dialogboksen via hjelpemenyen."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:139
-#: ../../locales/../src/interface/resources/xrc/update.xrc:217
+#: ../../locales/../src/interface/resources/xrc/update.xrc:221
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Du kan laste ned nyeste versjon fra FileZilla-nettstedet:"
 
@@ -8363,7 +8353,7 @@ msgstr ""
 "Du har valgt å redigere flere enn ti filer samtidig. Er du sikker på at du "
 "vil fortsette?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1685
+#: ../../locales/../src/interface/LocalListView.cpp:1684
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -8635,6 +8625,12 @@ msgstr "overskrivbar for alle"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets:"
+
+#~ msgid "Package"
+#~ msgstr "Pakke"
+
+#~ msgid "Updated"
+#~ msgstr "Oppdatert"
 
 #~ msgid "%d files added to queue"
 #~ msgstr "%d filer lagt i kø"
