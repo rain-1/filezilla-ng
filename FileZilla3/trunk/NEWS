@@ -10,7 +10,7 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
-3.17.0 (2016-04-21)
+3.17.0 (2016-04-22)
 
 - *nix: Removed a label on the filter dialog that doesn't apply to *nix builds
 - Fix compilation if Nettle is installed in a custom location
