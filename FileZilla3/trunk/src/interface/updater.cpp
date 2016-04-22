@@ -198,12 +198,12 @@ wxString CUpdater::GetUrl()
 		}
 
 		long updated{};
-		if (key->GetValueType(_("Updated")) == wxRegKey::Type_Dword && key->QueryValue(_T("Updated"), &updated)) {
+		if (key->GetValueType(_T("Updated")) == wxRegKey::Type_Dword && key->QueryValue(_T("Updated"), &updated)) {
 			url += wxString::Format(_T("&updated=%d"), updated);
 		}
 
 		long package{};
-		if (key->GetValueType(_("Package")) == wxRegKey::Type_Dword && key->QueryValue(_T("Package"), &package)) {
+		if (key->GetValueType(_T("Package")) == wxRegKey::Type_Dword && key->QueryValue(_T("Package"), &package)) {
 			url += wxString::Format(_T("&package=%d"), package);
 		}
 	}
