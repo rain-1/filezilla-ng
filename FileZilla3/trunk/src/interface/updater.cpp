@@ -602,7 +602,7 @@ void CUpdater::ParseData()
 
 		wxString const type = tokens.GetNextToken();
 		if (type == _T("resources")) {
-			if (tokens.CountTokens() == 2) {
+			if (tokens.HasMoreTokens()) {
 				if (UpdatableBuild()) {
 					version_information_.resources_ = tokens.GetNextToken();
 				}
