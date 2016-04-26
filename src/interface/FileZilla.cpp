@@ -497,20 +497,30 @@ bool CFileZillaApp::SetLocale(int language)
 	auto pLocale = std::make_unique<wxLocale>();
 	wxLogNull log;
 	pLocale->Init(language);
-	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla"))) {
+	if (!pLocale->IsOk()) {
+		return false;
+	}
+	
+	// Load catalog. Only fail if a non-default language has been selected
+	if (!pLocale->AddCatalog(_T("filezilla")) && language != wxLANGUAGE_DEFAULT) {
 		return false;
 	}
 
-	// Now unload old locale
-	// We unload new locale as well, else the internal locale chain in wxWidgets get's broken.
-	pLocale.reset();
-	m_pLocale.reset();
+	if (m_pLocale) {
+		// Now unload old locale
+		// We unload new locale as well, else the internal locale chain in wxWidgets get's broken.
+		pLocale.reset();
+		m_pLocale.reset();
 
-	// Finally load new one
-	pLocale = std::make_unique<wxLocale>();
-	pLocale->Init(language);
-	if (!pLocale->IsOk() || !pLocale->AddCatalog(_T("filezilla"))) {
-		return false;
+		// Finally load new one
+		pLocale = std::make_unique<wxLocale>();
+		pLocale->Init(language);
+		if (!pLocale->IsOk()) {
+			return false;
+		}
+		else if (!pLocale->AddCatalog(_T("filezilla")) && language != wxLANGUAGE_DEFAULT) {
+			return false;
+		}
 	}
 	m_pLocale = std::move(pLocale);
 
