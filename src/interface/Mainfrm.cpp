@@ -1296,8 +1296,7 @@ void CMainFrame::OnRefresh(wxCommandEvent &)
 
 void CMainFrame::OnTimer(wxTimerEvent& event)
 {
-	if (event.GetId() == m_closeEventTimer.GetId())
-	{
+	if (event.GetId() == m_closeEventTimer.GetId()) {
 		if (m_closeEvent == 0)
 			return;
 
@@ -1664,12 +1663,12 @@ void CMainFrame::UpdaterStateChanged(UpdaterState s, build const& v)
 	wxString const name = wxString::Format(_("&Version %s"), v.version_);
 
 	wxMenuItem* pItem = m_pMenuBar->FindItem(GetAvailableUpdateMenuId());
-	if( !pItem ) {
+	if (!pItem) {
 		wxMenu* pMenu = new wxMenu();
 		pMenu->Append(GetAvailableUpdateMenuId(), name);
 		m_pMenuBar->Append(pMenu, _("&New version available!"));
 
-		if( !update_dialog_timer_.IsRunning() ) {
+		if (!update_dialog_timer_.IsRunning()) {
 			update_dialog_timer_.Start(1, true);
 		}
 	}
@@ -1681,12 +1680,16 @@ void CMainFrame::UpdaterStateChanged(UpdaterState s, build const& v)
 
 void CMainFrame::TriggerUpdateDialog()
 {
-	if( CUpdateDialog::IsRunning() ) {
+	if (m_bQuit) {
 		return;
 	}
 
-	if( !wxDialogEx::CanShowPopupDialog() ) {
-		update_dialog_timer_.Start( 1000, true );
+	if (CUpdateDialog::IsRunning()) {
+		return;
+	}
+
+	if (!wxDialogEx::CanShowPopupDialog()) {
+		update_dialog_timer_.Start(1000, true);
 		return;
 	}
 
