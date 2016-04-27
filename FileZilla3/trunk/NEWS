@@ -18,7 +18,7 @@ Legend:
 
 3.17.0-rc1 (2016-04-15)
 
-+ Recursivly queuing local files for upload now displays the progress below the local file list
++ Recursively queuing local files for upload now displays the progress below the local file list
 + MSW: Use dynamic TCP send buffer sizes to improve upload speeds on high-latency connections
 + SFTP: Use hardware-accelerated AES on x86_64 CPUs if available by using the AES implementation from Nettle instead of PuTTY
 + Building FileZilla now depends on the Nettle library, version 3.1 or later
@@ -55,7 +55,7 @@ Legend:
 
 3.15.0.2 (2016-02-10)
 
-- MSW: Binaries are now also signed using a SHA256 signature and certificate.
+- MSW: Binaries are now also signed using a SHA-256 signature and certificate.
 - OS X: Move location of COPYING file containing the GPL to a different location in the bundle. On some systems OS X cannot verify the bundle with the file at the old location
 - Restore focused item if changing directory listing sort order
 - Fix restoring the column widths of the failed transfers tab in the queue when starting FileZilla
@@ -67,7 +67,7 @@ Legend:
 
 3.15.0 (2016-01-30)
 
-+ MSW: Display notification bubble if FileZilla isn't in the forgeground and all active transfers have finished.
++ MSW: Display notification bubble if FileZilla isn't in the foreground and all active transfers have finished.
 
 3.15.0-rc1 (2016-01-23)
 
@@ -92,7 +92,7 @@ Legend:
 3.14.1 (2015-10-16)
 
 + For third-party builds, add configure flag to allow using system ciphers for FTP over TLS. Display a warning if an insecure cipher is negotiated as result of using system ciphers.
-- Fixed loading of the directory comparison flag for bookmakrs in the Site Manager
+- Fixed loading of the directory comparison flag for bookmarks in the Site Manager
 - Changing the interface layout and icon theme no longer results in an inconsistent UI state
 - Some SFTP servers send additional information on errors. This information is now shown in the message log
 - If the local file cannot be opened on SFTP transfers FileZilla no longer automatically retries
@@ -335,7 +335,7 @@ Legend:
 3.10.0-beta1 (2014-12-03)
 
 + FTP over TLS is now used by default if the server supports it. Use of plain FTP can be enforced for a server in the Site Manager
-+ Connection handling and transferring files has been moved into its own thread to improve GUI responsivenes
++ Connection handling and transferring files has been moved into its own thread to improve GUI responsiveness
 + The message log now only shows abbreviated logs unless an error occurs
 + Added option to pre-allocate disk space when downloading files
 + Files editing can now be started from the search dialog
@@ -357,7 +357,7 @@ Legend:
 3.9.0.4 (2014-09-06)
 
 - MSW: Fixed crash if starting file rename in an unusual way
-- OS X: Fixed a bug im wxWidgets so that a right-click after a left-click no longer counts as double-click
+- OS X: Fixed a bug in wxWidgets so that a right-click after a left-click no longer counts as double-click
 - OS X: Fixed pasting of passwords into the "Enter password" dialog 
 - OS X: Fixed context menu site manager tree not working
 - *nix, OS X: Fixed context menu of search dialog not working
