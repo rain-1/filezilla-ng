@@ -292,8 +292,9 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 	// Before the optimization this function was responsible for
 	// most CPU cycles used during loading of transfer queues
 	// from file
-	const int len = (int)path.Len();
-	wxChar const* begin = path.c_str();
+	//const int len = (int)path.size();
+	wxChar const* const begin = path.c_str();
+	wxChar const* const end = begin + path.size();
 	
 	wxChar const* p = begin;
 
@@ -340,7 +341,7 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 
 	++p;
 
-	if (len - (p - begin) < prefix_len) {
+	if (prefix_len > end - p) {
 		return false;
 	}
 	if (prefix_len) {
@@ -348,7 +349,7 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 		p += prefix_len + 1;
 	}
 
-	while (len > (p - begin)) {
+	while (p < end) {
 		int segment_len = 0;
 		do {
 			if (*p < '0' || *p > '9') {
@@ -369,7 +370,7 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 		}
 		++p;
 
-		if (len - (p - begin) < segment_len) {
+		if (segment_len > end - p) {
 			return false;
 		}
 		data.m_segments.emplace_back(wxString(p, p + segment_len));
