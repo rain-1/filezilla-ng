@@ -50,11 +50,13 @@ CServerPath::CServerPath(CServerPath const& path, wxString subdir)
 	: m_type(path.m_type)
 	, m_data(path.m_data)
 {
-	if (subdir.empty())
+	if (subdir.empty()) {
 		return;
+	}
 
-	if (!ChangePath(subdir))
+	if (!ChangePath(subdir)) {
 		clear();
+	}
 }
 
 CServerPath::CServerPath(wxString const& path, ServerType type /*=DEFAULT*/)
@@ -78,8 +80,9 @@ bool CServerPath::SetPath(wxString &newPath, bool isFile)
 	wxString path = newPath;
 	wxString file;
 
-	if (path.empty())
+	if (path.empty()) {
 		return false;
+	}
 
 	if (m_type == DEFAULT) {
 		int pos1 = path.Find(_T(":["));
@@ -290,33 +293,32 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 	// most CPU cycles used during loading of transfer queues
 	// from file
 	const int len = (int)path.Len();
-	wxCharTypeBuffer<wxChar> buf(len + 1);
-	wxChar* begin = buf.data();
-
-	memcpy(begin, (const wxChar*)path.c_str(), (len + 1) * sizeof(wxChar));
-	wxChar* p = begin;
+	wxChar const* begin = path.c_str();
+	
+	wxChar const* p = begin;
 
 	int type = 0;
-	do
-	{
-		if (*p < '0' || *p > '9')
+	do {
+		if (*p < '0' || *p > '9') {
 			return false;
+		}
 		type *= 10;
 		type += *p - '0';
 
-		if (type >= SERVERTYPE_MAX)
+		if (type >= SERVERTYPE_MAX) {
 			return false;
+		}
 		++p;
 	} while (*p != ' ');
 
-	m_type = (ServerType)type;
+	m_type = static_cast<ServerType>(type);
 	++p;
 
 	int prefix_len = 0;
-	do
-	{
-		if (*p < '0' || *p > '9')
+	do {
+		if (*p < '0' || *p > '9') {
 			return false;
+		}
 		prefix_len *= 10;
 		prefix_len += *p - '0';
 
@@ -327,8 +329,9 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 	while (*p && *p != ' ');
 
 	if (!*p) {
-		if (prefix_len != 0)
+		if (prefix_len != 0) {
 			return false;
+		}
 		else {
 			// Is root directory, like / on unix like systems.
 			return true;
@@ -337,43 +340,39 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 
 	++p;
 
-	if (len - (p - begin) < prefix_len)
+	if (len - (p - begin) < prefix_len) {
 		return false;
-	if (prefix_len)
-	{
-		*(p + prefix_len) = 0;
-		if( *p ) {
-			data.m_prefix = fz::sparse_optional<wxString>(p);
-		}
-
+	}
+	if (prefix_len) {
+		data.m_prefix = fz::sparse_optional<wxString>(new wxString(p, p + prefix_len));
 		p += prefix_len + 1;
 	}
 
-	while (len > (p - begin))
-	{
+	while (len > (p - begin)) {
 		int segment_len = 0;
-		do
-		{
-			if (*p < '0' || *p > '9')
+		do {
+			if (*p < '0' || *p > '9') {
 				return false;
+			}
 			segment_len *= 10;
 			segment_len += *p - '0';
 
-			if (segment_len > 32767) // Should be sane enough
+			if (segment_len > 32767) { // Should be sane enough
 				return false;
+			}
 			++p;
 		}
 		while (*p != ' ');
 
-		if (!segment_len)
+		if (!segment_len) {
 			return false;
+		}
 		++p;
 
-		if (len - (p - begin) < segment_len)
+		if (len - (p - begin) < segment_len) {
 			return false;
-		*(p + segment_len) = 0;
-		wxString s(p);
-		data.m_segments.push_back(s);
+		}
+		data.m_segments.emplace_back(wxString(p, p + segment_len));
 
 		p += segment_len + 1;
 	}
@@ -383,8 +382,9 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 
 bool CServerPath::SetType(ServerType type)
 {
-	if (!empty() && m_type != DEFAULT)
+	if (!empty() && m_type != DEFAULT) {
 		return false;
+	}
 
 	m_type = type;
 
