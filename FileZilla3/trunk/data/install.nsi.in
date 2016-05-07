@@ -723,9 +723,9 @@ Function RunUninstaller
   ${If} $PREVIOUS_VERSION_STATE == "same"
   ${AndIf} $REINSTALL_UNINSTALL == "1"
   ${AndIf} $PERFORM_UPDATE != "1"
-    ExecWait '$R1 _?=$INSTDIR'
+    ExecWait '"$R1" _?=$INSTDIR'
   ${Else}
-    ExecWait '$R1 /frominstall /keepstartmenudir _?=$INSTDIR'
+    ExecWait '"$R1" /frominstall /keepstartmenudir _?=$INSTDIR'
   ${EndIf}
 
   IfErrors no_remove_uninstaller
