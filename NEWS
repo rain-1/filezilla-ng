@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.17.0.1 (2016-05-09)
+
+! MSW: Quoted the path to the uninstaller when executed from the installer to prevent an attacker from tricking the installer into running some other program instead
+- SFTP: Fixed resuming SFTP transfers
+- MSW: Loading the system default locale no longer fails on systems that have any English locale installed, yet do not have the US-English locale installed
+- Fixed crash if update dialog is opened at the very same moment FileZilla is being closed.
+
 3.17.0 (2016-04-22)
 
 - *nix: Removed a label on the filter dialog that doesn't apply to *nix builds
