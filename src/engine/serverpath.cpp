@@ -292,7 +292,6 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 	// Before the optimization this function was responsible for
 	// most CPU cycles used during loading of transfer queues
 	// from file
-	//const int len = (int)path.size();
 	wxChar const* const begin = path.c_str();
 	wxChar const* const end = begin + path.size();
 	
