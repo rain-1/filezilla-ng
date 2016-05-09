@@ -36,7 +36,7 @@ public:
 
 	// If ChangePath returns false, the object will be left
 	// empty.
-	bool ChangePath(wxString subdir);
+	bool ChangePath(wxString const& subdir);
 	bool ChangePath(wxString &subdir, bool isFile);
 
 	wxString GetPath() const;

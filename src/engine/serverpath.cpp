@@ -452,7 +452,7 @@ bool CServerPath::IsParentOf(const CServerPath &path, bool cmpNoCase) const
 	return path.IsSubdirOf(*this, cmpNoCase);
 }
 
-bool CServerPath::ChangePath(wxString subdir)
+bool CServerPath::ChangePath(wxString const& subdir)
 {
 	wxString subdir2 = subdir;
 	return ChangePath(subdir2, false);
