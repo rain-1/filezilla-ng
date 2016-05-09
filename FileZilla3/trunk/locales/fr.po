@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-22 14:27+0200\n"
+"POT-Creation-Date: 2016-05-09 09:00+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -150,7 +150,7 @@ msgid_plural "%s bytes"
 msgstr[0] "%s octet"
 msgstr[1] "%s octets"
 
-#: ../../locales/../src/interface/FileZilla.cpp:571
+#: ../../locales/../src/interface/FileZilla.cpp:581
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -165,7 +165,7 @@ msgstr ""
 "Veuillez télécharger Filezilla à nouveau. Si le problème persiste, merci de "
 "soumettre un rapport d'erreur."
 
-#: ../../locales/../src/interface/FileZilla.cpp:656
+#: ../../locales/../src/interface/FileZilla.cpp:666
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -717,7 +717,7 @@ msgstr "&Nouveau"
 msgid "&New Site"
 msgstr "&Nouveau Site"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1670
+#: ../../locales/../src/interface/Mainfrm.cpp:1669
 msgid "&New version available!"
 msgstr "&Nouvelle version disponible !"
 
@@ -734,7 +734,7 @@ msgstr "&Non"
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:458
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:719
 msgid "&None"
-msgstr "Aucu&n"
+msgstr "Aucu&ne"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:362
 msgid "&Normal"
@@ -875,7 +875,7 @@ msgstr "Soumettre un &rapport d'erreur..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:385
 msgid "&Request attention"
-msgstr "&Demande d'attention"
+msgstr "Interroge&r l'utilisateur"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:449
 msgid "&Reset and requeue all"
@@ -1069,7 +1069,7 @@ msgstr "&Identifiant :"
 msgid "&Username:"
 msgstr "&Identifiant :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1664
+#: ../../locales/../src/interface/Mainfrm.cpp:1663
 #, c-format
 msgid "&Version %s"
 msgstr "&Version %s"
@@ -1305,7 +1305,7 @@ msgstr ""
 "Un fichier portant ce nom est encore en cours d'édition. Veuillez le fermer "
 "et réessayez."
 
-#: ../../locales/../src/interface/FileZilla.cpp:550
+#: ../../locales/../src/interface/FileZilla.cpp:560
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -2038,7 +2038,7 @@ msgstr ""
 "Toutes modifications des paramètres du fichier journal nécessitent un "
 "redémarrage de FileZilla."
 
-#: ../../locales/../src/interface/FileZilla.cpp:550
+#: ../../locales/../src/interface/FileZilla.cpp:560
 msgid "Character encoding issue"
 msgstr "Problème d'encodage de caractères"
 
@@ -3137,7 +3137,7 @@ msgstr "Dossier"
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
 #: ../../locales/../src/interface/filelistctrl.cpp:464
-#: ../../locales/../src/interface/Mainfrm.cpp:2172
+#: ../../locales/../src/interface/Mainfrm.cpp:2175
 msgid "Directory comparison"
 msgstr "Comparaison de dossier"
 
@@ -3388,7 +3388,7 @@ msgstr "&Quitter"
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:459
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:482
 msgid "E&xport..."
-msgstr "E&xport..."
+msgstr "E&xporter..."
 
 #: ../../locales/../src/interface/verifycertdialog.cpp:254
 msgid "E-Mail:"
@@ -3976,8 +3976,8 @@ msgid "File lists"
 msgstr "Listes des fichiers"
 
 #: ../../locales/../src/interface/edithandler.cpp:1550
-#: ../../locales/../src/interface/FileZilla.cpp:572
-#: ../../locales/../src/interface/FileZilla.cpp:657
+#: ../../locales/../src/interface/FileZilla.cpp:582
+#: ../../locales/../src/interface/FileZilla.cpp:667
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Fichier introuvable"
@@ -4049,7 +4049,7 @@ msgstr ""
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla est déjà connecté à un serveur."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1447
+#: ../../locales/../src/interface/Mainfrm.cpp:1446
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "FileZilla doit être redémarré pour que le changement de langue prenne effet."
@@ -4871,7 +4871,7 @@ msgstr "La &plus basse"
 msgid "Language"
 msgstr "Langue"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1447
+#: ../../locales/../src/interface/Mainfrm.cpp:1446
 msgid "Language changed"
 msgstr "Langue modifiée"
 
@@ -5103,7 +5103,7 @@ msgid "Memory allocation failure"
 msgstr "Échec de l'allocation de mémoire"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1757
+#: ../../locales/../src/interface/Mainfrm.cpp:1760
 msgid "Message log"
 msgstr "Journal des événements"
 
@@ -5652,7 +5652,7 @@ msgstr "La commande PORT a été corrompue par le routeur ou le pare-feu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&ssif (recommandé)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2327
+#: ../../locales/../src/interface/Mainfrm.cpp:2330
 msgid "Parameter not a valid URL"
 msgstr "Le paramètre n'est pas une URL invalide"
 
@@ -5698,7 +5698,7 @@ msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
 "Le chemin ne peut pas être créé pour le dossier %s et le sous-dossier %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2285
+#: ../../locales/../src/interface/Mainfrm.cpp:2288
 msgid "Path not found:"
 msgstr "Chemin introuvable :"
 
@@ -7029,7 +7029,7 @@ msgstr "Dossier des paramètres :"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:381
 msgid "Sh&ow notification bubble"
-msgstr "Afficher la la bulle de n&otification"
+msgstr "Afficher une bulle de n&otification"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2273
 msgid "Show &raw directory listing"
@@ -7039,7 +7039,7 @@ msgstr "Afficher le contenu b&rut du dossier"
 msgid "Show &welcome dialog..."
 msgstr "Afficher le dialogue de &bienvenue..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2175
+#: ../../locales/../src/interface/Mainfrm.cpp:2178
 msgid "Show both directory trees and continue comparing?"
 msgstr "Afficher les arborescences des 2 côtés et continuer la comparaison ?"
 
@@ -7384,8 +7384,8 @@ msgstr "Erreur de syntaxe"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2287
-#: ../../locales/../src/interface/Mainfrm.cpp:2329
+#: ../../locales/../src/interface/Mainfrm.cpp:2290
+#: ../../locales/../src/interface/Mainfrm.cpp:2332
 msgid "Syntax error in command line"
 msgstr "Erreur de syntaxe dans la ligne de commande"
 
@@ -7936,13 +7936,13 @@ msgstr "Le décalage du fuseau horaire du serveur est de %d secondes."
 msgid "Title:"
 msgstr "Titre :"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2173
+#: ../../locales/../src/interface/Mainfrm.cpp:2176
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Pour comparer des dossiers, les listes de fichiers doivent être alignées des "
 "deux côtés."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2174
+#: ../../locales/../src/interface/Mainfrm.cpp:2177
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Pour ce faire, les arborescences doivent être toutes deux visibles ou "
@@ -8845,9 +8845,3 @@ msgstr "écriture par tous"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:708
 msgid "wxWidgets:"
 msgstr "wxWidgets :"
-
-#~ msgid "Package"
-#~ msgstr "Paquet"
-
-#~ msgid "Updated"
-#~ msgstr "Mise à jour effectuée"
