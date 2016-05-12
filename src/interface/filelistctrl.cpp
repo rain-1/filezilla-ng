@@ -285,8 +285,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 	CancelLabelEdit();
 
 	if (column != -1) {
-		if (column != m_sortColumn)
-		{
+		if (column != m_sortColumn) {
 			const int oldVisibleColumn = GetColumnVisibleIndex(m_sortColumn);
 			if (oldVisibleColumn != -1)
 				SetHeaderSortIconIndex(oldVisibleColumn, -1);
