@@ -440,12 +440,12 @@ public:
 		typename Listing::value_type const& data1 = this->m_listing[a];
 		typename Listing::value_type const& data2 = this->m_listing[b];
 
-		if (this->m_listing[a].path < m_fileData[b].path)
+		if (data1.path < data2.path)
 			return true;
-		if (this->m_listing[a].path != m_fileData[b].path)
+		if (data1.path != data2.path)
 			return false;
 
-		CMP_LESS(CmpName, static_cast<CDirentry const&>(data1), static_cast<CDirentry const&>(data2));
+		CMP_LESS(CmpName, data1, data2);
 	}
 	std::vector<DataEntry>& m_fileData;
 };
@@ -468,9 +468,9 @@ public:
 		CMP(CmpDir, data1, data2);
 		CMP(CmpName, data1, data2);
 
-		if (this->m_listing[a].path < m_fileData[b].path)
+		if (data1.path < data2.path)
 			return true;
-		if (this->m_listing[a].path != m_fileData[b].path)
+		if (data1.path != data2.path)
 			return false;
 
 		CMP_LESS(CmpName, data1, data2);
