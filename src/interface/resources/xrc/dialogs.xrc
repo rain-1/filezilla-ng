@@ -2998,6 +2998,36 @@
         <object class="wxFlexGridSizer">
           <object class="sizeritem">
             <object class="wxStaticText">
+              <label>Search type:</label>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <orient>wxHORIZONTAL</orient>
+              <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_LOCAL_SEARCH">
+                  <label>&amp;Local search</label>
+                  <style>wxRB_GROUP</style>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxRadioButton" name="ID_REMOTE_SEARCH">
+                  <label>&amp;Remote search</label>
+                </object>
+              </object>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="ID_START">
+              <label>&amp;Search</label>
+              <default>1</default>
+            </object>
+            <flag>wxALIGN_CENTRE_VERTICAL</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText">
               <label>Search &amp;directory:</label>
             </object>
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
@@ -3009,9 +3039,8 @@
             <flag>wxGROW|wxALIGN_CENTRE_VERTICAL</flag>
           </object>
           <object class="sizeritem">
-            <object class="wxButton" name="ID_START">
-              <label>&amp;Search</label>
-              <default>1</default>
+            <object class="wxButton" name="ID_STOP">
+              <label>S&amp;top</label>
             </object>
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
@@ -3032,12 +3061,7 @@
             </object>
             <flag>wxALIGN_CENTRE_VERTICAL</flag>
           </object>
-          <object class="sizeritem">
-            <object class="wxButton" name="ID_STOP">
-              <label>S&amp;top</label>
-            </object>
-            <flag>wxALIGN_CENTRE_VERTICAL</flag>
-          </object>
+          <object class="spacer" />
           <cols>3</cols>
           <vgap>7</vgap>
           <hgap>5</hgap>

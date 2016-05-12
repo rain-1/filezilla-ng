@@ -31,6 +31,8 @@ enum t_statechange_notifications
 	STATECHANGE_REMOTE_RECURSION_STATUS,
 	STATECHANGE_LOCAL_RECURSION_STATUS,
 
+	STATECHANGE_LOCAL_RECURSION_LISTING,
+
 	/* Global notifications */
 	STATECHANGE_QUEUEPROCESSING,
 	STATECHANGE_NEWCONTEXT, /* New context created */
@@ -72,8 +74,8 @@ public:
 
 	static CContextManager* Get();
 
-	void NotifyAllHandlers(t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
-	void NotifyGlobalHandlers(t_statechange_notifications notification, const wxString& data = _T(""), const void* data2 = 0);
+	void NotifyAllHandlers(t_statechange_notifications notification, wxString const& data = wxString(), void const* data2 = 0);
+	void NotifyGlobalHandlers(t_statechange_notifications notification, wxString const& data = wxString(), void const* data2 = 0);
 
 	void SetCurrentContext(CState* pState);
 
@@ -90,7 +92,7 @@ protected:
 	};
 	std::vector<t_handler> m_handlers[STATECHANGE_MAX];
 
-	void NotifyHandlers(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2);
+	void NotifyHandlers(CState* pState, t_statechange_notifications notification, wxString const& data, void const* data2);
 
 	static CContextManager m_the_context_manager;
 };
@@ -145,6 +147,7 @@ public:
 
 	bool IsRemoteConnected() const;
 	bool IsRemoteIdle(bool ignore_recursive = false) const;
+	bool IsLocalIdle(bool ignore_recursive = false) const;
 
 	CLocalRecursiveOperation* GetLocalRecursiveOperation() { return m_pLocalRecursiveOperation; }
 	CRemoteRecursiveOperation* GetRemoteRecursiveOperation() { return m_pRemoteRecursiveOperation; }

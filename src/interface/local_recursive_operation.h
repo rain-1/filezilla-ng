@@ -36,7 +36,7 @@ public:
 	class listing final
 	{
 	public:
-		class entry final
+		class entry
 		{
 		public:
 			wxString name;

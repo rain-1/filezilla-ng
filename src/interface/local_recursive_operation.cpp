@@ -243,6 +243,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 		return;
 	}
 
+	bool const queue = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten || m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue_flatten;
 	bool const queueOnly = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten;
 
 	listing d;
@@ -264,13 +265,18 @@ void CLocalRecursiveOperation::OnListedDirectory()
 			StopRecursiveOperation();
 		}
 		else {
-			m_pQueue->QueueFiles(queueOnly, server_, d);
+			if (queue) {
+				m_pQueue->QueueFiles(queueOnly, server_, d);
+			}
 			++m_processedDirectories;
 			processed += d.files.size();
+			m_state.NotifyHandlers(STATECHANGE_LOCAL_RECURSION_LISTING, wxString(), &d);
 		}
 	}
 
-	m_pQueue->QueueFile_Finish(!queueOnly);
+	if (queue) {
+		m_pQueue->QueueFile_Finish(!queueOnly);
+	}
 	
 	m_processedFiles += processed;
 	if (stop) {

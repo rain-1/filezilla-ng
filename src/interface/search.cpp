@@ -14,14 +14,22 @@
 #include "window_state_manager.h"
 #include "xrc_helper.h"
 
-class CSearchFileData : public CGenericFileData, public CDirentry
+class CRemoteSearchFileData : public CDirentry
 {
 public:
 	CServerPath path;
 };
 
+class CLocalSearchFileData : public CLocalRecursiveOperation::listing::entry
+{
+public:
+	bool is_dir() const { return dir; }
+	bool dir{};
+	CLocalPath path;
+};
+
 template<>
-inline int DoCmpName(CSearchFileData const& data1, CSearchFileData const& data2, CFileListCtrlSortBase::NameSortMode const nameSortMode)
+inline int DoCmpName(CRemoteSearchFileData const& data1, CRemoteSearchFileData const& data2, CFileListCtrlSortBase::NameSortMode const nameSortMode)
 {
 	int res;
 	switch (nameSortMode)
@@ -48,19 +56,50 @@ inline int DoCmpName(CSearchFileData const& data1, CSearchFileData const& data2,
 	return res;
 }
 
-class CSearchDialogFileList : public CFileListCtrl<CSearchFileData>
+template<>
+inline int DoCmpName(CLocalSearchFileData const& data1, CLocalSearchFileData const& data2, CFileListCtrlSortBase::NameSortMode const nameSortMode)
+{
+	int res;
+	switch (nameSortMode)
+	{
+	case CFileListCtrlSortBase::namesort_casesensitive:
+		res = CFileListCtrlSortBase::CmpCase(data1.name, data2.name);
+		break;
+	default:
+	case CFileListCtrlSortBase::namesort_caseinsensitive:
+		res = CFileListCtrlSortBase::CmpNoCase(data1.name, data2.name);
+		break;
+	case CFileListCtrlSortBase::namesort_natural:
+		res = CFileListCtrlSortBase::CmpNatural(data1.name, data2.name);
+		break;
+	}
+
+	if (!res) {
+		if (data1.path < data2.path)
+			res = -1;
+		else if (data2.path < data1.path)
+			res = 1;
+	}
+
+	return res;
+}
+
+class CSearchDialogFileList : public CFileListCtrl<CGenericFileData>
 {
 	friend class CSearchDialog;
 	friend class CSearchSortType;
 public:
 	CSearchDialogFileList(CSearchDialog* pParent, CState &state, CQueueView* pQueue);
 
+	void clear();
+	void set_mode(CSearchDialog::search_mode mode);
+
 protected:
 	virtual bool ItemIsDir(int index) const;
 
 	virtual int64_t ItemGetSize(int index) const;
 
-	CFileListCtrl<CSearchFileData>::CSortComparisonObject GetSortComparisonObject();
+	CFileListCtrl<CGenericFileData>::CSortComparisonObject GetSortComparisonObject();
 
 	CSearchDialog *m_searchDialog;
 
@@ -81,6 +120,11 @@ private:
 	virtual void OnExitComparisonMode() {}
 
 	int m_dirIcon;
+
+	CSearchDialog::search_mode mode_{};
+
+	std::vector<CRemoteSearchFileData> remoteFileData_;
+	std::vector<CLocalSearchFileData> localFileData_;
 };
 
 // Search dialog file list
@@ -90,7 +134,7 @@ private:
 extern wxString StripVMSRevision(const wxString& name);
 
 CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState& state, CQueueView* pQueue)
-	: CFileListCtrl<CSearchFileData>(pParent, pQueue, true),
+	: CFileListCtrl<CGenericFileData>(pParent, pQueue, true),
 	m_searchDialog(pParent)
 {
 	m_hasParent = false;
@@ -98,8 +142,6 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState& sta
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
 
 	m_dirIcon = GetIconIndex(iconType::dir);
-
-	InitSort(OPTION_SEARCH_SORTORDER);
 
 	InitHeaderSortImageList();
 
@@ -113,54 +155,96 @@ CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState& sta
 	AddColumn(_("Permissions"), wxLIST_FORMAT_LEFT, widths[5]);
 	AddColumn(_("Owner/Group"), wxLIST_FORMAT_LEFT, widths[6]);
 	LoadColumnSettings(OPTION_SEARCH_COLUMN_WIDTHS, OPTION_SEARCH_COLUMN_SHOWN, OPTION_SEARCH_COLUMN_ORDER);
+
+	InitSort(OPTION_SEARCH_SORTORDER);
 }
 
 bool CSearchDialogFileList::ItemIsDir(int index) const
 {
-	return m_fileData[index].is_dir();
+	if (mode_ == CSearchDialog::search_mode::local) {
+		return localFileData_[index].dir;
+	}
+	else {
+		return remoteFileData_[index].is_dir();
+	}
 }
 
 int64_t CSearchDialogFileList::ItemGetSize(int index) const
 {
-	return m_fileData[index].size;
+	if (mode_ == CSearchDialog::search_mode::local) {
+		return localFileData_[index].size;
+	}
+	else {
+		return remoteFileData_[index].size;
+	}
 }
 
-CFileListCtrl<CSearchFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
+CFileListCtrl<CGenericFileData>::CSortComparisonObject CSearchDialogFileList::GetSortComparisonObject()
 {
 	CFileListCtrlSortBase::DirSortMode dirSortMode = GetDirSortMode();
 	CFileListCtrlSortBase::NameSortMode nameSortMode = GetNameSortMode();
 
-	if (!m_sortDirection) {
-		if (m_sortColumn == 1)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 2)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 3)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 4)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 5)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortPermissions<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 6)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortOwnerGroup<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
+	if (mode_ == CSearchDialog::search_mode::local) {
+		if (!m_sortDirection) {
+			if (m_sortColumn == 1)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 2)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 3)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 4)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+		
+			else
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+		}
+		else {
+			if (m_sortColumn == 1)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 2)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 3)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 4)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			
+			else
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CLocalSearchFileData>, CGenericFileData>, CGenericFileData>(localFileData_, m_fileData, dirSortMode, nameSortMode, this));
+		}
 	}
 	else {
-		if (m_sortColumn == 1)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 2)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 3)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 4)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 5)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPermissions<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else if (m_sortColumn == 6)
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortOwnerGroup<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
-		else
-			return CFileListCtrl<CSearchFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CSearchFileData>, CSearchFileData>, CSearchFileData>(m_fileData, m_fileData, dirSortMode, nameSortMode, this));
+		if (!m_sortDirection) {
+			if (m_sortColumn == 1)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortPath<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 2)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortSize<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 3)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortType<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 4)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortTime<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 5)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortPermissions<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 6)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortOwnerGroup<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortNamePath<std::vector<CRemoteSearchFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+		}
+		else {
+			if (m_sortColumn == 1)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPath<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 2)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 3)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortType<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 4)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortTime<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 5)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortPermissions<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else if (m_sortColumn == 6)
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortOwnerGroup<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+			else
+				return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortNamePath<std::vector<CRemoteSearchFileData>, CGenericFileData>, CGenericFileData>(remoteFileData_, m_fileData, dirSortMode, nameSortMode, this));
+		}
 	}
 }
 
@@ -170,34 +254,59 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		return wxString();
 	int index = m_indexMapping[item];
 
-	const CDirentry& entry = m_fileData[index];
-	if (!column)
-		return entry.name;
-	else if (column == 1)
-		return m_fileData[index].path.GetPath();
-	else if (column == 2) {
-		if (entry.is_dir() || entry.size < 0)
-			return wxString();
-		else
-			return CSizeFormat::Format(entry.size);
-	}
-	else if (column == 3) {
-		CSearchFileData& data = m_fileData[index];
-		if (data.fileType.empty()) {
-			if (data.path.GetType() == VMS)
-				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+	if (mode_ == CSearchDialog::search_mode::local) {
+		CLocalSearchFileData const& entry = localFileData_[index];
+		if (!column)
+			return entry.name;
+		else if (column == 1)
+			return entry.path.GetPath();
+		else if (column == 2) {
+			if (entry.is_dir() || entry.size < 0)
+				return wxString();
 			else
-				data.fileType = GetType(entry.name, entry.is_dir());
+				return CSizeFormat::Format(entry.size);
 		}
+		else if (column == 3) {
+			auto & data = m_fileData[index];
+			if (data.fileType.empty()) {
+				data.fileType = GetType(entry.name, entry.is_dir());
+			}
 
-		return data.fileType;
+			return data.fileType;
+		}
+		else if (column == 4)
+			return CTimeFormat::Format(entry.time);
 	}
-	else if (column == 4)
-		return CTimeFormat::Format(entry.time);
-	else if (column == 5)
-		return *entry.permissions;
-	else if (column == 6)
-		return *entry.ownerGroup;
+	else {
+		CRemoteSearchFileData const& entry = remoteFileData_[index];
+		if (!column)
+			return entry.name;
+		else if (column == 1)
+			return entry.path.GetPath();
+		else if (column == 2) {
+			if (entry.is_dir() || entry.size < 0)
+				return wxString();
+			else
+				return CSizeFormat::Format(entry.size);
+		}
+		else if (column == 3) {
+			auto & data = m_fileData[index];
+			if (data.fileType.empty()) {
+				if (entry.path.GetType() == VMS)
+					data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+				else
+					data.fileType = GetType(entry.name, entry.is_dir());
+			}
+
+			return data.fileType;
+		}
+		else if (column == 4)
+			return CTimeFormat::Format(entry.time);
+		else if (column == 5)
+			return *entry.permissions;
+		else if (column == 6)
+			return *entry.ownerGroup;
+	}
 	return wxString();
 }
 
@@ -213,8 +322,30 @@ int CSearchDialogFileList::OnGetItemImage(long item) const
 	if (icon != -2)
 		return icon;
 
-	icon = pThis->GetIconIndex(iconType::file, pThis->m_fileData[index].name, false);
+	if (mode_ == CSearchDialog::search_mode::local) {
+		auto const& file = localFileData_[index];
+		icon = pThis->GetIconIndex(iconType::file, file.path.GetPath() + file.name, true);
+	}
+	else {
+		icon = pThis->GetIconIndex(iconType::file, remoteFileData_[index].name, false);
+	}
+
 	return icon;
+}
+
+void CSearchDialogFileList::clear()
+{
+	ClearSelection();
+	m_indexMapping.clear();
+	m_fileData.clear();
+	SetItemCount(0);
+	RefreshListOnly(true);
+	GetFilelistStatusBar()->Clear();
+}
+
+void CSearchDialogFileList::set_mode(CSearchDialog::search_mode mode)
+{
+	mode_ = mode;
 }
 
 // Search dialog
@@ -250,7 +381,7 @@ bool CSearchDialog::Load()
 	if (!wxDialogEx::Load(m_parent, _T("ID_SEARCH")))
 		return false;
 
-	/* XRCed complains if adding a status bar to a dialog, so do it here instead */
+	// XRCed complains if adding a status bar to a dialog, so do it here instead
 	CFilelistStatusBar* pStatusBar = new CFilelistStatusBar(this);
 	pStatusBar->SetEmptyString(_("No search results"));
 	pStatusBar->SetConnected(true);
@@ -293,15 +424,17 @@ void CSearchDialog::Run()
 
 	m_state.RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_state.GetRemoteRecursiveOperation());
 	m_state.RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_state.GetRemoteRecursiveOperation());
+	m_state.RegisterHandler(this, STATECHANGE_LOCAL_RECURSION_LISTING);
 
 	ShowModal();
 
 	SaveConditions();
 
+	m_state.UnregisterHandler(this, STATECHANGE_LOCAL_RECURSION_LISTING);
 	m_state.UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
 	m_state.UnregisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
 
-	if (m_searching) {
+	if (m_searching == search_mode::remote) {
 		if (!m_state.IsRemoteIdle()) {
 			m_state.m_pCommandQueue->Cancel();
 			m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
@@ -326,8 +459,14 @@ void CSearchDialog::OnStateChange(t_statechange_notifications notification, cons
 	}
 	else if (notification == STATECHANGE_REMOTE_IDLE) {
 		if (m_state.IsRemoteIdle())
-			m_searching = false;
+			m_searching = search_mode::none;
 		SetCtrlState();
+	}
+	else if (notification == STATECHANGE_LOCAL_RECURSION_LISTING) {
+		if (m_searching == search_mode::local && data2) {
+			auto listing = reinterpret_cast<CLocalRecursiveOperation::listing const*>(data2);
+			ProcessDirectoryListing(*listing);
+		}
 	}
 }
 
@@ -341,91 +480,243 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 		return;
 
 	int old_count = m_results->m_fileData.size();
-	int added = 0;
+	int added_count = 0;
 
 	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing->GetCount());
+	m_results->remoteFileData_.reserve(m_results->m_fileData.size() + listing->GetCount());
 	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing->GetCount());
 
+	wxString const path = listing->path.GetPath();
+
+	bool const has_selections = m_results->GetSelectedItemCount() != 0;
+
+	std::vector<int> added_indexes;
+	if (has_selections) {
+		added_indexes.reserve(listing->GetCount());
+	}
+
+	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = m_results->GetSortComparisonObject();
 	for (unsigned int i = 0; i < listing->GetCount(); ++i) {
 		const CDirentry& entry = (*listing)[i];
 
-		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, listing->path.GetPath(), entry.is_dir(), entry.size, 0, entry.time))
+		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, path, entry.is_dir(), entry.size, 0, entry.time)) {
 			continue;
+		}
 
-		CSearchFileData data;
-		static_cast<CDirentry&>(data) = entry;
-		data.path = listing->path;
+		CRemoteSearchFileData remoteData;
+		static_cast<CDirentry&>(remoteData) = entry;
+		remoteData.path = listing->path;
+		m_results->remoteFileData_.push_back(remoteData);
+
+		CGenericFileData data;
 		data.icon = entry.is_dir() ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
-		m_results->m_indexMapping.push_back(old_count + added++);
+
+		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, compare);
+		int const added_index = insertPos - m_results->m_indexMapping.begin();
+		m_results->m_indexMapping.insert(insertPos, old_count + added_count++);
+
+		// Remember inserted index
+		if (has_selections) {
+			auto const added_indexes_insert_pos = std::lower_bound(added_indexes.begin(), added_indexes.end(), added_index);
+			for (auto index = added_indexes_insert_pos; index != added_indexes.end(); ++index) {
+				++(*index);
+			}
+			added_indexes.insert(added_indexes_insert_pos, added_index);
+		}
 
 		if (entry.is_dir())
 			m_results->GetFilelistStatusBar()->AddDirectory();
 		else
 			m_results->GetFilelistStatusBar()->AddFile(entry.size);
 	}
+	compare.Destroy();
 
-	if (added) {
-		m_results->SetItemCount(old_count + added);
-		m_results->SortList(-1, -1, true);
+	if (added_count) {
+		m_results->SetItemCount(old_count + added_count);
+		
+		// Update selections
+		if (has_selections) {
+			auto added_index = added_indexes.cbegin();
+			std::deque<bool> selected;
+			// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
+			for (unsigned int i = *added_index; i < m_results->m_indexMapping.size(); ++i) {
+				if (added_index != added_indexes.end() && i == *added_index) {
+					selected.push_front(false);
+					++added_index;
+				}
+				bool is_selected = m_results->GetItemState(i, wxLIST_STATE_SELECTED) != 0;
+				selected.push_back(is_selected);
+
+				bool should_selected = selected.front();
+				selected.pop_front();
+				if (is_selected != should_selected)
+					m_results->SetSelection(i, should_selected);
+			}
+		}
+
+		m_results->RefreshListOnly(false);
+	}
+}
+
+void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing const& listing)
+{
+	int old_count = m_results->m_fileData.size();
+	int added_count = 0;
+
+	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing.files.size() + listing.dirs.size());
+	m_results->localFileData_.reserve(m_results->m_fileData.size() + listing.files.size() + listing.dirs.size());
+	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing.files.size() + listing.dirs.size());
+
+	wxString const path = listing.localPath.GetPath();
+
+	bool const has_selections = m_results->GetSelectedItemCount() != 0;
+
+	std::vector<int> added_indexes;
+	if (has_selections) {
+		added_indexes.reserve(listing.files.size() + listing.dirs.size());
+	}
+
+	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = m_results->GetSortComparisonObject();
+	for (auto const& file : listing.files) {
+		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, file.name, path, false, file.size, file.attributes, file.time)) {
+			continue;
+		}
+
+		CLocalSearchFileData localData;
+		static_cast<CLocalRecursiveOperation::listing::entry&>(localData) = file;
+		localData.path = listing.localPath;
+		m_results->localFileData_.push_back(localData);
+
+		CGenericFileData data;
+		data.icon = false ? m_results->m_dirIcon : -2;
+		m_results->m_fileData.push_back(data);
+
+		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, compare);
+		int const added_index = insertPos - m_results->m_indexMapping.begin();
+		m_results->m_indexMapping.insert(insertPos, old_count + added_count++);
+
+		// Remember inserted index
+		if (has_selections) {
+			auto const added_indexes_insert_pos = std::lower_bound(added_indexes.begin(), added_indexes.end(), added_index);
+			for (auto index = added_indexes_insert_pos; index != added_indexes.end(); ++index) {
+				++(*index);
+			}
+			added_indexes.insert(added_indexes_insert_pos, added_index);
+		}
+
+		if (false)
+			m_results->GetFilelistStatusBar()->AddDirectory();
+		else
+			m_results->GetFilelistStatusBar()->AddFile(file.size);
+	}
+	compare.Destroy();
+
+	if (added_count) {
+		m_results->SetItemCount(old_count + added_count);
+
+		// Update selections
+		if (has_selections) {
+			auto added_index = added_indexes.cbegin();
+			std::deque<bool> selected;
+			// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
+			for (unsigned int i = *added_index; i < m_results->m_indexMapping.size(); ++i) {
+				if (added_index != added_indexes.end() && i == *added_index) {
+					selected.push_front(false);
+					++added_index;
+				}
+				bool is_selected = m_results->GetItemState(i, wxLIST_STATE_SELECTED) != 0;
+				selected.push_back(is_selected);
+
+				bool should_selected = selected.front();
+				selected.pop_front();
+				if (is_selected != should_selected)
+					m_results->SetSelection(i, should_selected);
+			}
+		}
+
 		m_results->RefreshListOnly(false);
 	}
 }
 
 void CSearchDialog::OnSearch(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle()) {
-		wxBell();
-		return;
-	}
+	bool const localSearch = xrc_call(*this, "ID_LOCAL_SEARCH", &wxRadioButton::GetValue);
 
-	CServerPath path;
+	if (localSearch) {
+		if (!m_state.IsLocalIdle()) {
+			wxBell();
+			return;
+		}
 
-	const CServer* pServer = m_state.GetServer();
-	if (!pServer) {
-		wxMessageBoxEx(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
-		return;
-	}
-	path.SetType(pServer->GetType());
-	if (!path.SetPath(XRCCTRL(*this, "ID_PATH", wxTextCtrl)->GetValue()) || path.empty()) {
-		wxMessageBoxEx(_("Need to enter valid remote path"), _("Remote file search"), wxICON_EXCLAMATION);
-		return;
-	}
+		CLocalPath path;
+		if (!path.SetPath(xrc_call(*this, "ID_PATH", &wxTextCtrl::GetValue)) || path.empty()) {
+			wxMessageBoxEx(_("Need to enter valid local path"), _("Local file search"), wxICON_EXCLAMATION);
+			return;
+		}
 
-	m_search_root = path;
+		m_local_search_root = path;
+	}
+	else {
+		if (!m_state.IsRemoteIdle()) {
+			wxBell();
+			return;
+		}
+
+		CServerPath path;
+
+		const CServer* pServer = m_state.GetServer();
+		if (!pServer) {
+			wxMessageBoxEx(_("Connection to server lost."), _("Remote file search"), wxICON_EXCLAMATION);
+			return;
+		}
+		path.SetType(pServer->GetType());
+		if (!path.SetPath(xrc_call(*this, "ID_PATH", &wxTextCtrl::GetValue)) || path.empty()) {
+			wxMessageBoxEx(_("Need to enter valid remote path"), _("Remote file search"), wxICON_EXCLAMATION);
+			return;
+		}
+
+		m_remote_search_root = path;
+	}
 
 	// Prepare filter
 	wxString error;
 	if (!ValidateFilter(error, true)) {
-		wxMessageBoxEx(wxString::Format(_("Invalid search conditions: %s"), error), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(wxString::Format(_("Invalid search conditions: %s"), error), _("File search"), wxICON_EXCLAMATION);
 		return;
 	}
 	m_search_filter = GetFilter();
 	if (!CFilterManager::CompileRegexes(m_search_filter)) {
-		wxMessageBoxEx(_("Invalid regular expression in search conditions."), _("Remote file search"), wxICON_EXCLAMATION);
+		wxMessageBoxEx(_("Invalid regular expression in search conditions."), _("File search"), wxICON_EXCLAMATION);
 		return;
 	}
 	m_search_filter.matchCase = xrc_call(*this, "ID_CASE", &wxCheckBox::GetValue);
 	m_search_filter.filterFiles = xrc_call(*this, "ID_FIND_FILES", &wxCheckBox::GetValue);
 	m_search_filter.filterDirs = xrc_call(*this, "ID_FIND_DIRS", &wxCheckBox::GetValue);
 
-	// Delete old results
-	m_results->ClearSelection();
-	m_results->m_indexMapping.clear();
-	m_results->m_fileData.clear();
-	m_results->SetItemCount(0);
-	m_visited.clear();
-	m_results->RefreshListOnly(true);
+	m_searching = localSearch ? search_mode::local : search_mode::remote;
 
-	m_results->GetFilelistStatusBar()->Clear();
+	// Delete old results
+	m_results->clear();
+	m_results->set_mode(m_searching);
+	m_visited.clear();
 
 	// Start
-	m_searching = true;
-	recursion_root root(path, true);
-	root.add_dir_to_visit_restricted(path, _T(""), true);
-	m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
-	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, path);
+	
+	if (localSearch) {
+		local_recursion_root root;
+		root.add_dir_to_visit(m_local_search_root);
+		m_state.GetLocalRecursiveOperation()->AddRecursionRoot(std::move(root));
+		std::vector<CFilter> const filters; // Empty, recurse into everything
+		m_state.GetLocalRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters);
+	}
+	else {
+		recursion_root root(m_remote_search_root, true);
+		root.add_dir_to_visit_restricted(m_remote_search_root, _T(""), true);
+		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
+		std::vector<CFilter> const filters; // Empty, recurse into everything
+		m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, m_remote_search_root);
+	}
 }
 
 void CSearchDialog::OnStop(wxCommandEvent&)
@@ -535,7 +826,7 @@ void CSearchDownloadDialog::OnOK(wxCommandEvent&)
 
 void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<CServerPath> &selected_dirs)
 {
-	std::deque<CServerPath> dirs;
+/*	std::deque<CServerPath> dirs;
 
 	int sel = -1;
 	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
@@ -579,7 +870,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<
 			selected_files_new.push_back(sel_file);
 	}
 	selected_files.swap(selected_files_new);
-
+	*/
 	// At this point selected_dirs contains uncomparable
 	// paths and selected_files contains only files not
 	// covered by any of those directories.
@@ -587,7 +878,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<
 
 void CSearchDialog::OnDownload(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle())
+	/*if (!m_state.IsRemoteIdle())
 		return;
 
 	// Find all selected files and directories
@@ -628,7 +919,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 			// Append relative path to search root to local target path
 			CServerPath remote_path = m_results->m_fileData[sel].path;
 			std::list<wxString> segments;
-			while (m_search_root.IsParentOf(remote_path, false) && remote_path.HasParent()) {
+			while (m_remote_search_root.IsParentOf(remote_path, false) && remote_path.HasParent()) {
 				segments.push_front(remote_path.GetLastSegment());
 				remote_path = remote_path.GetParent();
 			}
@@ -664,12 +955,12 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);*/
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle())
+/*	if (!m_state.IsRemoteIdle())
 		return;
 
 	// Find all selected files and directories
@@ -717,7 +1008,7 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 		const CServerPath path = m_results->m_fileData[item].path;
 
 		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
-	}
+	}*/
 }
 
 void CSearchDialog::OnDelete(wxCommandEvent&)
@@ -747,7 +1038,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
 		return;
 
-	for (auto const& file : selected_files) {
+/*	for (auto const& file : selected_files) {
 		CDirentry const& entry = m_results->m_fileData[file];
 		std::deque<wxString> files_to_delete;
 		files_to_delete.push_back(entry.name);
@@ -765,7 +1056,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);*/
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)
@@ -781,12 +1072,17 @@ void CSearchDialog::OnCharHook(wxKeyEvent& event)
 #ifdef __WXMSW__
 int CSearchDialogFileList::GetOverlayIndex(int item)
 {
-	if (item < 0 || item >= (int)m_indexMapping.size())
-		return -1;
+	if (mode_ == CSearchDialog::search_mode::local) {
+		return 0;
+	}
+	if (item < 0 || item >= (int)m_indexMapping.size()) {
+		return 0;
+	}
 	int index = m_indexMapping[item];
 
-	if (m_fileData[index].is_link())
+	if (remoteFileData_[index].is_link()) {
 		return GetLinkOverlayIndex();
+	}
 
 	return 0;
 }

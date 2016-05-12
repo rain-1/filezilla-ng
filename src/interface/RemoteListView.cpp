@@ -446,7 +446,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 
 	m_indexMapping[0] = pDirectoryListing->GetCount();
 
-	std::list<unsigned int> added;
+	std::list<unsigned int> added_indexes;
 
 	CFilterManager filter;
 	const wxString path = m_pDirectoryListing->path.GetPath();
@@ -483,15 +483,15 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 			++start;
 		std::vector<unsigned int>::iterator insertPos = std::lower_bound(start, m_indexMapping.end(), i, compare);
 
-		const int item = insertPos - m_indexMapping.begin();
+		const int added_index = insertPos - m_indexMapping.begin();
 		m_indexMapping.insert(insertPos, i);
 
-		for (auto iter = added.begin(); iter != added.end(); ++iter) {
+		for (auto iter = added_indexes.begin(); iter != added_indexes.end(); ++iter) {
 			unsigned int &pos = *iter;
-			if (pos >= (unsigned int)item)
+			if (pos >= (unsigned int)added_index)
 				++pos;
 		}
-		added.push_back(item);
+		added_indexes.push_back(added_index);
 	}
 	compare.Destroy();
 
@@ -499,15 +499,15 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 
 	std::list<bool> selected;
 	unsigned int start;
-	added.push_back(m_indexMapping.size());
-	start = added.front();
+	added_indexes.push_back(m_indexMapping.size());
+	start = added_indexes.front();
 
 	SetItemCount(m_indexMapping.size());
 
 	for (unsigned int i = start; i < m_indexMapping.size(); ++i) {
-		if (i == added.front()) {
+		if (i == added_indexes.front()) {
 			selected.push_front(false);
-			added.pop_front();
+			added_indexes.pop_front();
 		}
 		bool is_selected = GetItemState(i, wxLIST_STATE_SELECTED) != 0;
 		selected.push_back(is_selected);
