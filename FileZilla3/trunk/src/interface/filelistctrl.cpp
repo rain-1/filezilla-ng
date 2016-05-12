@@ -237,9 +237,6 @@ template<class CFileData> CFileListCtrl<CFileData>::CFileListCtrl(wxWindow* pPar
 	CreateSystemImageList(16);
 	m_pQueue = pQueue;
 
-	m_sortColumn = 0;
-	m_sortDirection = 0;
-
 	m_hasParent = true;
 
 	m_comparisonIndex = -1;
@@ -291,19 +288,27 @@ template<class CFileData> void CFileListCtrl<CFileData>::SortList(int column /*=
 				SetHeaderSortIconIndex(oldVisibleColumn, -1);
 		}
 	}
-	else
-		column = m_sortColumn;
+	else {
+		if (m_sortColumn != -1) {
+			column = m_sortColumn;
+		}
+		else {
+			column = 0;
+		}
+	}
 
 	if (direction == -1)
 		direction = m_sortDirection;
 
-	int newVisibleColumn = GetColumnVisibleIndex(column);
-	if (newVisibleColumn == -1) {
-		newVisibleColumn = 0;
-		column = 0;
-	}
 
-	SetHeaderSortIconIndex(newVisibleColumn, direction);
+	if (column != m_sortColumn || direction != m_sortDirection) {
+		int newVisibleColumn = GetColumnVisibleIndex(column);
+		if (newVisibleColumn == -1) {
+			newVisibleColumn = 0;
+			column = 0;
+		}
+		SetHeaderSortIconIndex(newVisibleColumn, direction);
+	}
 
 	// Remember which files are selected
 	bool *selected = 0;
@@ -731,7 +736,7 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnColumnRightClicked(wx
 template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
 {
 	wxString sortInfo = COptions::Get()->GetOption(optionID);
-	if( !sortInfo.empty() ) {
+	if (!sortInfo.empty()) {
 		m_sortDirection = sortInfo[0] - '0';
 	}
 	else {
@@ -740,14 +745,16 @@ template<class CFileData> void CFileListCtrl<CFileData>::InitSort(int optionID)
 	if (m_sortDirection < 0 || m_sortDirection > 1)
 		m_sortDirection = 0;
 
-	if (sortInfo.Len() == 3)
-	{
+	if (sortInfo.Len() == 3) {
 		m_sortColumn = sortInfo[2] - '0';
-		if (GetColumnVisibleIndex(m_sortColumn) == -1)
+		if (GetColumnVisibleIndex(m_sortColumn) == -1) {
 			m_sortColumn = 0;
+		}
 	}
 	else
 		m_sortColumn = 0;
+
+	SetHeaderSortIconIndex(GetColumnVisibleIndex(m_sortColumn), m_sortDirection);
 }
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnItemSelected(wxListEvent& event)
