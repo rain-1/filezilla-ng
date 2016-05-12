@@ -535,8 +535,8 @@ protected:
 	// The .. item
 	bool m_hasParent;
 
-	int m_sortColumn;
-	int m_sortDirection;
+	int m_sortColumn{-1};
+	int m_sortDirection{};
 
 	void InitSort(int optionID); // Has to be called after initializing columns
 	void SortList(int column = -1, int direction = -1, bool updateSelections = true);

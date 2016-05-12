@@ -378,12 +378,12 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 	AddColumn(_("Owner/Group"), wxLIST_FORMAT_LEFT, widths[5]);
 	LoadColumnSettings(OPTION_REMOTEFILELIST_COLUMN_WIDTHS, OPTION_REMOTEFILELIST_COLUMN_SHOWN, OPTION_REMOTEFILELIST_COLUMN_ORDER);
 
-	InitSort(OPTION_REMOTEFILELIST_SORTORDER);
-
 	m_dirIcon = GetIconIndex(iconType::dir);
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
 
 	InitHeaderSortImageList();
+
+	InitSort(OPTION_REMOTEFILELIST_SORTORDER);
 
 	SetDirectoryListing(0);
 
@@ -660,10 +660,8 @@ bool CRemoteListView::UpdateDirectoryListing(std::shared_ptr<CDirectoryListing> 
 	if (unsure & CDirectoryListing::unsure_invalid)
 		return false;
 
-	if (!(unsure & ~(CDirectoryListing::unsure_dir_changed | CDirectoryListing::unsure_file_changed)))
-	{
-		if (m_sortColumn && m_sortColumn != 2)
-		{
+	if (!(unsure & ~(CDirectoryListing::unsure_dir_changed | CDirectoryListing::unsure_file_changed))) {
+		if (m_sortColumn != 0 && m_sortColumn != 2) {
 			// If not sorted by file or type, changing file attributes can influence
 			// sort order.
 			return false;
@@ -2268,8 +2266,7 @@ bool CRemoteListView::CanStartComparison()
 
 void CRemoteListView::StartComparison()
 {
-	if (m_sortDirection || m_sortColumn)
-	{
+	if (m_sortDirection || m_sortColumn != 0) {
 		wxASSERT(m_originalIndexMapping.empty());
 		SortList(0, 0);
 	}
@@ -2419,8 +2416,7 @@ CFileListCtrl<CGenericFileData>::CSortComparisonObject CRemoteListView::GetSortC
 	CFileListCtrlSort<CDirectoryListing>::NameSortMode nameSortMode = GetNameSortMode();
 
 	CDirectoryListing const& directoryListing = *m_pDirectoryListing;
-	if (!m_sortDirection)
-	{
+	if (!m_sortDirection) {
 		if (m_sortColumn == 1)
 			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortSize<CDirectoryListing, CGenericFileData>(directoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)
@@ -2434,8 +2430,7 @@ CFileListCtrl<CGenericFileData>::CSortComparisonObject CRemoteListView::GetSortC
 		else
 			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CFileListCtrlSortName<CDirectoryListing, CGenericFileData>(directoryListing, m_fileData, dirSortMode, nameSortMode, this));
 	}
-	else
-	{
+	else {
 		if (m_sortColumn == 1)
 			return CFileListCtrl<CGenericFileData>::CSortComparisonObject(new CReverseSort<CFileListCtrlSortSize<CDirectoryListing, CGenericFileData>, CGenericFileData>(directoryListing, m_fileData, dirSortMode, nameSortMode, this));
 		else if (m_sortColumn == 2)

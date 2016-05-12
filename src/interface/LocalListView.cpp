@@ -280,8 +280,6 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 	AddColumn(_("Last modified"), wxLIST_FORMAT_LEFT, widths[3]);
 	LoadColumnSettings(OPTION_LOCALFILELIST_COLUMN_WIDTHS, OPTION_LOCALFILELIST_COLUMN_SHOWN, OPTION_LOCALFILELIST_COLUMN_ORDER);
 
-	InitSort(OPTION_LOCALFILELIST_SORTORDER);
-
 	SetImageList(GetSystemImageList(), wxIMAGE_LIST_SMALL);
 
 #ifdef __WXMSW__
@@ -289,6 +287,8 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 #endif
 
 	InitHeaderSortImageList();
+
+	InitSort(OPTION_LOCALFILELIST_SORTORDER);
 
 	SetDropTarget(new CLocalListViewDropTarget(this));
 
@@ -1488,8 +1488,7 @@ wxListItemAttr* CLocalListView::OnGetItemAttr(long item) const
 
 void CLocalListView::StartComparison()
 {
-	if (m_sortDirection || m_sortColumn)
-	{
+	if (m_sortDirection || m_sortColumn != 0) {
 		wxASSERT(m_originalIndexMapping.empty());
 		SortList(0, 0);
 	}
