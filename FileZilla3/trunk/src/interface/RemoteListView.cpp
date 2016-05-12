@@ -454,6 +454,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 	CGenericFileData last = m_fileData.back();
 	m_fileData.pop_back();
 
+	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = GetSortComparisonObject();
 	for (unsigned int i = pDirectoryListing->GetCount() - to_add; i < pDirectoryListing->GetCount(); ++i) {
 		const CDirentry& entry = (*pDirectoryListing)[i];
 		CGenericFileData data;
@@ -480,9 +481,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		std::vector<unsigned int>::iterator start = m_indexMapping.begin();
 		if (m_hasParent)
 			++start;
-		CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = GetSortComparisonObject();
 		std::vector<unsigned int>::iterator insertPos = std::lower_bound(start, m_indexMapping.end(), i, compare);
-		compare.Destroy();
 
 		const int item = insertPos - m_indexMapping.begin();
 		m_indexMapping.insert(insertPos, i);
@@ -494,6 +493,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		}
 		added.push_back(item);
 	}
+	compare.Destroy();
 
 	m_fileData.push_back(last);
 
