@@ -137,7 +137,7 @@ size_t CContextManager::HandlerCount(t_statechange_notifications notification) c
 	return m_handlers[notification].size();
 }
 
-void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications notification, const wxString& data, const void* data2)
+void CContextManager::NotifyHandlers(CState* pState, t_statechange_notifications notification, wxString const& data, void const* data2)
 {
 	wxASSERT(notification != STATECHANGE_NONE && notification != STATECHANGE_MAX);
 
@@ -158,13 +158,13 @@ CState* CContextManager::GetCurrentContext()
 	return m_contexts[m_current_context];
 }
 
-void CContextManager::NotifyAllHandlers(t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
+void CContextManager::NotifyAllHandlers(t_statechange_notifications notification, wxString const& data, void const* data2)
 {
 	for (unsigned int i = 0; i < m_contexts.size(); i++)
 		m_contexts[i]->NotifyHandlers(notification, data, data2);
 }
 
-void CContextManager::NotifyGlobalHandlers(t_statechange_notifications notification, const wxString& data /*=_T("")*/, const void* data2 /*=0*/)
+void CContextManager::NotifyGlobalHandlers(t_statechange_notifications notification, wxString const& data, void const* data2)
 {
 	auto const& handlers = m_handlers[notification];
 	for (auto const& handler : handlers) {
@@ -886,13 +886,21 @@ bool CState::IsRemoteConnected() const
 
 bool CState::IsRemoteIdle(bool ignore_recursive) const
 {
-	if (!ignore_recursive && m_pRemoteRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_none)
+	if (!ignore_recursive && m_pRemoteRecursiveOperation && m_pRemoteRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_none)
 		return false;
 
 	if (!m_pCommandQueue)
 		return true;
 
 	return m_pCommandQueue->Idle(ignore_recursive ? CCommandQueue::normal : CCommandQueue::any);
+}
+
+bool CState::IsLocalIdle(bool ignore_recursive) const
+{
+	if (!ignore_recursive && m_pLocalRecursiveOperation && m_pLocalRecursiveOperation->GetOperationMode() != CRecursiveOperation::recursive_none)
+		return false;
+
+	return true;
 }
 
 void CState::ListingFailed(int)
@@ -909,7 +917,6 @@ void CState::ListingFailed(int)
 		xrc_call(dlg, "ID_SYNCBROWSE_DISABLE", &wxRadioButton::SetLabel, _("&Disable synchronized browsing and continue changing the local directory"));
 		dlg.GetSizer()->Fit(&dlg);
 		if (dlg.ShowModal() == wxID_OK) {
-
 			if (xrc_call(dlg, "ID_SYNCBROWSE_CREATE", &wxRadioButton::GetValue)) {
 				m_pCommandQueue->ProcessCommand(new CMkdirCommand(m_sync_browse.target_path));
 				m_pCommandQueue->ProcessCommand(new CListCommand(m_sync_browse.target_path));

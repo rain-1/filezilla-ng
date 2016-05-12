@@ -2,6 +2,7 @@
 #define __SEARCH_H__
 
 #include "filter_conditions_dialog.h"
+#include "local_recursive_operation.h"
 #include "state.h"
 #include <set>
 
@@ -13,6 +14,13 @@ class CSearchDialog : protected CFilterConditionsDialog, public CStateEventHandl
 {
 	friend class CSearchDialogFileList;
 public:
+	enum class search_mode
+	{
+		none,
+		local,
+		remote
+	};
+
 	CSearchDialog(wxWindow* parent, CState& state, CQueueView* pQueue);
 	virtual ~CSearchDialog();
 
@@ -21,6 +29,7 @@ public:
 
 protected:
 	void ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> const& listing);
+	void ProcessDirectoryListing(CLocalRecursiveOperation::listing const& listing);
 
 	void SetCtrlState();
 
@@ -37,7 +46,7 @@ protected:
 
 	CFilter m_search_filter;
 
-	bool m_searching{};
+	search_mode m_searching{};
 
 	CServerPath m_original_dir;
 	CLocalPath m_local_target;
@@ -55,7 +64,8 @@ protected:
 
 	std::set<CServerPath> m_visited;
 
-	CServerPath m_search_root;
+	CLocalPath m_local_search_root;
+	CServerPath m_remote_search_root;
 };
 
 #endif //__SEARCH_H__
