@@ -496,7 +496,7 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 bool CLocalPath::operator==(const CLocalPath& op) const
 {
 #ifdef __WXMSW__
-	return m_path->CmpNoCase(*op.m_path) == 0;
+	return m_path.is_same(op.m_path) || m_path->CmpNoCase(*op.m_path) == 0;
 #else
 	return m_path == op.m_path;
 #endif
@@ -505,7 +505,7 @@ bool CLocalPath::operator==(const CLocalPath& op) const
 bool CLocalPath::operator!=(const CLocalPath& op) const
 {
 #ifdef __WXMSW__
-	return m_path->CmpNoCase(*op.m_path) != 0;
+	return !m_path.is_same(op.m_path) && m_path->CmpNoCase(*op.m_path) != 0;
 #else
 	return m_path != op.m_path;
 #endif
@@ -514,7 +514,7 @@ bool CLocalPath::operator!=(const CLocalPath& op) const
 bool CLocalPath::operator<(CLocalPath const& op) const
 {
 #ifdef __WXMSW__
-	return m_path->CmpNoCase(*op.m_path) < 0;
+	return !m_path.is_same(op.m_path) && m_path->CmpNoCase(*op.m_path) < 0;
 #else
 	return m_path < op.m_path;
 #endif
