@@ -511,6 +511,15 @@ bool CLocalPath::operator!=(const CLocalPath& op) const
 #endif
 }
 
+bool CLocalPath::operator<(CLocalPath const& op) const
+{
+#ifdef __WXMSW__
+	return m_path->CmpNoCase(*op.m_path) < 0;
+#else
+	return m_path < op.m_path;
+#endif
+}
+
 bool CLocalPath::IsParentOf(const CLocalPath &path) const
 {
 	if (empty() || path.empty())

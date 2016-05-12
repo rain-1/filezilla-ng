@@ -68,6 +68,7 @@ public:
 	bool operator==(const CLocalPath& op) const;
 	bool operator!=(const CLocalPath& op) const;
 
+	bool operator<(CLocalPath const& op) const;
 protected:
 	fz::shared_value<wxString> m_path;
 };
