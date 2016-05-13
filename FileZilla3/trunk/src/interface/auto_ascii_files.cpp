@@ -67,7 +67,7 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString const& remote_file, enum Se
 		return COptions::Get()->GetOptionVal(OPTION_ASCIIDOTFILE) != 0;
 
 	int pos = remote_file.Find('.', true);
-	if (pos < 0 || pos + 1 == remote_file.size()) {
+	if (pos < 0 || static_cast<unsigned int>(pos) + 1 == remote_file.size()) {
 		return COptions::Get()->GetOptionVal(OPTION_ASCIINOEXT) != 0;
 	}
 	wxString ext = remote_file.Mid(pos + 1);
