@@ -39,7 +39,7 @@ public:
 		class entry
 		{
 		public:
-			wxString name;
+			std::wstring name;
 			int64_t size{};
 			fz::datetime time;
 			int attributes{};
