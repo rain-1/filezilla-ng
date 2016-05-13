@@ -14,13 +14,13 @@
 #include "window_state_manager.h"
 #include "xrc_helper.h"
 
-class CRemoteSearchFileData : public CDirentry
+class CRemoteSearchFileData final : public CDirentry
 {
 public:
 	CServerPath path;
 };
 
-class CLocalSearchFileData : public CLocalRecursiveOperation::listing::entry
+class CLocalSearchFileData final : public CLocalRecursiveOperation::listing::entry
 {
 public:
 	bool is_dir() const { return dir; }

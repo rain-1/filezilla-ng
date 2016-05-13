@@ -188,7 +188,7 @@ void CLocalRecursiveOperation::entry()
 					if (isLink) {
 						continue;
 					}
-					entry.name = name;
+					entry.name = fz::to_wstring(name);
 
 					if (!filterManager.FilenameFiltered(filters, entry.name, d.localPath.GetPath(), isDir, entry.size, entry.attributes, entry.time)) {
 						if (isDir) {
