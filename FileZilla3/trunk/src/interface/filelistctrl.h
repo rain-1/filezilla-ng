@@ -18,7 +18,7 @@ class CGtkEventCallbackProxyBase;
 class CGenericFileData
 {
 public:
-	wxString fileType;
+	std::wstring fileType;
 	int icon{-2};
 
 	// t_fileEntryFlags is defined in listingcomparison.h as it will be used for
@@ -345,9 +345,9 @@ public:
 		DataEntry &type1 = m_fileData[a];
 		DataEntry &type2 = m_fileData[b];
 		if (type1.fileType.empty())
-			type1.fileType = m_pListView->GetType(data1.name, data1.is_dir());
+			type1.fileType = m_pListView->GetType(data1.name, data1.is_dir()).ToStdWstring();
 		if (type2.fileType.empty())
-			type2.fileType = m_pListView->GetType(data2.name, data2.is_dir());
+			type2.fileType = m_pListView->GetType(data2.name, data2.is_dir()).ToStdWstring();
 
 		CMP(CmpStringNoCase, type1.fileType, type2.fileType);
 

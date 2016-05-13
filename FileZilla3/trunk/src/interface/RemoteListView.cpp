@@ -2391,9 +2391,9 @@ wxString CRemoteListView::GetItemText(int item, unsigned int column)
 		{
 			const CDirentry& entry = (*m_pDirectoryListing)[index];
 			if (m_pDirectoryListing->path.GetType() == VMS)
-				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+				data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir()).ToStdWstring();
 			else
-				data.fileType = GetType(entry.name, entry.is_dir());
+				data.fileType = GetType(entry.name, entry.is_dir()).ToStdWstring();
 		}
 
 		return data.fileType;

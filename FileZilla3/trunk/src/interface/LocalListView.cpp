@@ -1580,7 +1580,7 @@ wxString CLocalListView::GetItemText(int item, unsigned int column)
 			return wxString();
 
 		if (data->fileType.empty())
-			data->fileType = GetType(data->name, data->dir, m_dir.GetPath());
+			data->fileType = GetType(data->name, data->dir, m_dir.GetPath()).ToStdWstring();
 
 		return data->fileType;
 	}

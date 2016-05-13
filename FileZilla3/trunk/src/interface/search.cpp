@@ -269,7 +269,7 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 		else if (column == 3) {
 			auto & data = m_fileData[index];
 			if (data.fileType.empty()) {
-				data.fileType = GetType(entry.name, entry.is_dir());
+				data.fileType = GetType(entry.name, entry.is_dir()).ToStdWstring();
 			}
 
 			return data.fileType;
@@ -293,9 +293,9 @@ wxString CSearchDialogFileList::GetItemText(int item, unsigned int column)
 			auto & data = m_fileData[index];
 			if (data.fileType.empty()) {
 				if (entry.path.GetType() == VMS)
-					data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir());
+					data.fileType = GetType(StripVMSRevision(entry.name), entry.is_dir()).ToStdWstring();
 				else
-					data.fileType = GetType(entry.name, entry.is_dir());
+					data.fileType = GetType(entry.name, entry.is_dir()).ToStdWstring();
 			}
 
 			return data.fileType;
