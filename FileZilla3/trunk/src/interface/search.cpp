@@ -541,7 +541,7 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 			std::deque<bool> selected;
 			// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
 			for (unsigned int i = *added_index; i < m_results->m_indexMapping.size(); ++i) {
-				if (added_index != added_indexes.end() && i == *added_index) {
+				if (added_index != added_indexes.end() && i == static_cast<unsigned int>(*added_index)) {
 					selected.push_front(false);
 					++added_index;
 				}
@@ -621,7 +621,7 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 			std::deque<bool> selected;
 			// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
 			for (unsigned int i = *added_index; i < m_results->m_indexMapping.size(); ++i) {
-				if (added_index != added_indexes.end() && i == *added_index) {
+				if (added_index != added_indexes.end() && i == static_cast<unsigned int>(*added_index)) {
 					selected.push_front(false);
 					++added_index;
 				}
