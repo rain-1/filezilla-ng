@@ -1287,14 +1287,19 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 
 #ifdef FZ_WINDOWS
 		BOOL res = CreateDirectory(local_path.GetPath().c_str(), 0);
-		if (!res && GetLastError() != ERROR_ALREADY_EXISTS)
+		if (!res && GetLastError() != ERROR_ALREADY_EXISTS) {
 			break;
+		}
 #else
-		const wxCharBuffer s = local_path.GetPath().fn_str();
-
-		int res = mkdir(s, 0777);
-		if (res && errno != EEXIST)
+		fz::native_string s = fz::to_native(local_path.GetPath());
+		if (s.empty()) {
 			break;
+		}
+
+		int res = mkdir(s.c_str(), 0777);
+		if (res && errno != EEXIST) {
+			break;
+		}
 #endif
 		last_successful = local_path;
 	}
