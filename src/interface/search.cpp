@@ -482,10 +482,6 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 	int old_count = m_results->m_fileData.size();
 	int added_count = 0;
 
-	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing->GetCount());
-	m_results->remoteFileData_.reserve(m_results->m_fileData.size() + listing->GetCount());
-	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing->GetCount());
-
 	wxString const path = listing->path.GetPath();
 
 	bool const has_selections = m_results->GetSelectedItemCount() != 0;
@@ -563,10 +559,6 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 {
 	int old_count = m_results->m_fileData.size();
 	int added_count = 0;
-
-	m_results->m_fileData.reserve(m_results->m_fileData.size() + listing.files.size() + listing.dirs.size());
-	m_results->localFileData_.reserve(m_results->m_fileData.size() + listing.files.size() + listing.dirs.size());
-	m_results->m_indexMapping.reserve(m_results->m_indexMapping.size() + listing.files.size() + listing.dirs.size());
 
 	wxString const path = listing.localPath.GetPath();
 
