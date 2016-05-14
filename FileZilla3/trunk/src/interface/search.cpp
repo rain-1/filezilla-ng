@@ -650,7 +650,7 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 		}
 
 		CLocalPath path;
-		if (!path.SetPath(xrc_call(*this, "ID_PATH", &wxTextCtrl::GetValue)) || path.empty()) {
+		if (!path.SetPath(xrc_call(*this, "ID_PATH", &wxTextCtrl::GetValue).ToStdWstring()) || path.empty()) {
 			wxMessageBoxEx(_("Need to enter valid local path"), _("Local file search"), wxICON_EXCLAMATION);
 			return;
 		}

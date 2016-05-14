@@ -1285,8 +1285,8 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 	for (auto iter = segments.rbegin(); iter != segments.rend(); ++iter) {
 		local_path.AddSegment(*iter);
 
-#ifdef __WXMSW__
-		BOOL res = CreateDirectory(local_path.GetPath().wc_str(), 0);
+#ifdef FZ_WINDOWS
+		BOOL res = CreateDirectory(local_path.GetPath().c_str(), 0);
 		if (!res && GetLastError() != ERROR_ALREADY_EXISTS)
 			break;
 #else

@@ -22,10 +22,10 @@ public:
 	// If file is given and path not terminated by a separator,
 	// the filename portion is returned in file.
 	explicit CLocalPath(const wxString& path, wxString* file = 0);
-	bool SetPath(const wxString& path, wxString* file = 0);
+	bool SetPath(std::wstring const& path, wxString* file = 0);
 
 	// Always terminated by a separator
-	const wxString& GetPath() const { return *m_path; }
+	std::wstring const& GetPath() const { return *m_path; }
 
 	bool empty() const;
 	void clear();
@@ -63,14 +63,14 @@ public:
 	// Checks if the directory exists.
 	bool Exists(wxString *error = 0) const;
 
-	static const wxChar path_separator;
+	static wchar_t const path_separator;
 
 	bool operator==(const CLocalPath& op) const;
 	bool operator!=(const CLocalPath& op) const;
 
 	bool operator<(CLocalPath const& op) const;
 protected:
-	fz::shared_value<wxString> m_path;
+	fz::shared_value<std::wstring> m_path;
 };
 
 #endif //__LOCAL_PATH_H__
