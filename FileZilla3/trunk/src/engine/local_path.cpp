@@ -9,7 +9,7 @@
 #ifdef FZ_WINDOWS
 wchar_t const CLocalPath::path_separator = '\\';
 #else
-wchar_t wxChar CLocalPath::path_separator = '/';
+wchar_t const CLocalPath::path_separator = '/';
 #endif
 
 CLocalPath::CLocalPath(const wxString& path, wxString* file /*=0*/)
@@ -37,7 +37,6 @@ bool CLocalPath::SetPath(std::wstring const& path, wxString* file /*=0*/)
 	std::deque<wchar_t*> segments; // List to store the beginnings of segments
 
 	wchar_t const* in = path.c_str();
-	wchar_t const* in_end = in + path.size();
 
 	{
 		std::wstring & path_out = m_path.get();
@@ -68,6 +67,7 @@ bool CLocalPath::SetPath(std::wstring const& path, wxString* file /*=0*/)
 					// It's \\?\c:\foo\bar
 					goto parse_regular;
 				}
+				wchar_t const* in_end = in + path.size();
 				if (in_end - in < 5 || wxStrnicmp(in, _T("UNC\\"), 4)) {
 					path_out.clear();
 					return false;
