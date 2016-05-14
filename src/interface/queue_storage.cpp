@@ -221,7 +221,7 @@ void CQueueStorage::Impl::ReadLocalPaths()
 			int64_t id = GetColumnInt64(selectLocalPathQuery_, path_table_column_names::id);
 			wxString localPathRaw = GetColumnText(selectLocalPathQuery_, path_table_column_names::path);
 			CLocalPath localPath;
-			if (id > 0 && !localPathRaw.empty() && localPath.SetPath(localPathRaw))
+			if (id > 0 && !localPathRaw.empty() && localPath.SetPath(localPathRaw.ToStdWstring()))
 				reverseLocalPaths_[id] = localPath;
 		}
 	}

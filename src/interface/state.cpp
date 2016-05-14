@@ -185,7 +185,7 @@ CState::CState(CMainFrame &mainFrame)
 	m_sync_browse.is_changing = false;
 	m_sync_browse.compare = false;
 
-	m_localDir.SetPath(CLocalPath::path_separator);
+	m_localDir.SetPath(std::wstring(1, CLocalPath::path_separator));
 }
 
 CState::~CState()
@@ -422,13 +422,13 @@ void CState::RefreshLocalFile(wxString file)
 
 void CState::LocalDirCreated(const CLocalPath& path)
 {
-	if (!path.IsSubdirOf(m_localDir))
+	if (!path.IsSubdirOf(m_localDir)) {
 		return;
+	}
 
-	wxString next_segment = path.GetPath().Mid(m_localDir.GetPath().Len());
+	wxString next_segment = path.GetPath().substr(m_localDir.GetPath().size());
 	int pos = next_segment.Find(CLocalPath::path_separator);
-	if (pos <= 0)
-	{
+	if (pos <= 0) {
 		// Shouldn't ever come true
 		return;
 	}
@@ -715,9 +715,9 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	}
 	*p = 0; // End of list
 
-	wxChar* to = new wxChar[path.GetPath().Len() + 2];
+	wxChar* to = new wxChar[path.GetPath().size() + 2];
 	wxStrcpy(to, path.GetPath());
-	to[path.GetPath().Len() + 1] = 0; // End of list
+	to[path.GetPath().size() + 1] = 0; // End of list
 
 	SHFILEOPSTRUCT op = {0};
 	op.pFrom = from;

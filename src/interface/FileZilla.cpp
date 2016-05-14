@@ -418,7 +418,8 @@ bool CFileZillaApp::LoadResourceFiles()
 	InitHandlers(*pResource);
 
 	if (fz::local_filesys::get_file_type(fz::to_native(m_resourceDir.GetPath() + _T("xrc/resources.xrc"))) == fz::local_filesys::file) {
-		pResource->LoadFile(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
+		wxFileName fn(m_resourceDir.GetPath() + _T("xrc/resources.xrc"));
+		pResource->LoadFile(fn);
 	}
 	else {
 		fz::local_filesys fs;

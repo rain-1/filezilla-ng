@@ -359,11 +359,11 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 	if (m_dir.GetPath() == _T("\\")) {
 		DisplayDrives();
 	}
-	else if (m_dir.GetPath().Left(2) == _T("\\\\"))
-	{
-		int pos = m_dir.GetPath().Mid(2).Find('\\');
-		if (pos != -1 && pos + 3 != (int)m_dir.GetPath().Len())
+	else if (m_dir.GetPath().substr(0, 2) == _T("\\\\")) {
+		auto pos = m_dir.GetPath().substr(2).find('\\');
+		if (pos != std::wstring::npos && pos + 3 < m_dir.GetPath().size()) {
 			goto regular_dir;
+		}
 
 		// UNC path without shares
 		DisplayShares(m_dir.GetPath());
