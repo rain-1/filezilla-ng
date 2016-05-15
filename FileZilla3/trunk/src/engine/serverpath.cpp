@@ -136,9 +136,9 @@ wxString CServerPath::GetPath() const
 	if (m_data->m_segments.empty() && (!traits[m_type].has_root || !m_data->m_prefix || traits[m_type].separator_after_prefix))
 		path += traits[m_type].separators[0];
 
-	for (tConstSegmentIter iter = m_data->m_segments.begin(); iter != m_data->m_segments.end(); ++iter) {
-		const wxString& segment = *iter;
-		if (iter != m_data->m_segments.begin())
+	for (auto iter = m_data->m_segments.cbegin(); iter != m_data->m_segments.cend(); ++iter) {
+		std::wstring const& segment = *iter;
+		if (iter != m_data->m_segments.cbegin())
 			path += traits[m_type].separators[0];
 		else if (traits[m_type].has_root) {
 			if (!m_data->m_prefix || traits[m_type].separator_after_prefix)
@@ -189,8 +189,9 @@ CServerPath CServerPath::GetParent() const
 
 	parent_data.m_segments.pop_back();
 
-	if (m_type == MVS)
-		parent_data.m_prefix = fz::sparse_optional<wxString>(_T("."));
+	if (m_type == MVS) {
+		parent_data.m_prefix = fz::sparse_optional<std::wstring>(_T("."));
+	}
 
 	return parent;
 }
@@ -344,7 +345,7 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 		return false;
 	}
 	if (prefix_len) {
-		data.m_prefix = fz::sparse_optional<wxString>(new wxString(p, p + prefix_len));
+		data.m_prefix = fz::sparse_optional<std::wstring>(new std::wstring(p, p + prefix_len));
 		p += prefix_len + 1;
 	}
 
@@ -415,7 +416,7 @@ bool CServerPath::IsSubdirOf(const CServerPath &path, bool cmpNoCase) const
 			else if( !m_data->m_prefix && path.m_data->m_prefix ) {
 				return false;
 			}
-			else if( m_data->m_prefix && path.m_data->m_prefix && m_data->m_prefix->CmpNoCase(*path.m_data->m_prefix) ) {
+			else if( m_data->m_prefix && path.m_data->m_prefix && fz::stricmp(*m_data->m_prefix, *path.m_data->m_prefix) ) {
 				return false;
 			}
 		}
@@ -431,14 +432,17 @@ bool CServerPath::IsSubdirOf(const CServerPath &path, bool cmpNoCase) const
 	tConstSegmentIter iter1 = m_data->m_segments.begin();
 	tConstSegmentIter iter2 = path.m_data->m_segments.begin();
 	while (iter1 != m_data->m_segments.end()) {
-		if (iter2 == path.m_data->m_segments.end())
+		if (iter2 == path.m_data->m_segments.end()) {
 			return true;
-		if (cmpNoCase) {
-			if (iter1->CmpNoCase(*iter2))
-				return false;
 		}
-		else if (*iter1 != *iter2)
+		if (cmpNoCase) {
+			if (fz::stricmp(*iter1, *iter2)) {
+				return false;
+			}
+		}
+		else if (*iter1 != *iter2) {
 			return false;
+		}
 
 		++iter1;
 		++iter2;
@@ -518,13 +522,13 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 				dir = dir.Left(pos2);
 
 				if (pos1)
-					data.m_prefix = fz::sparse_optional<wxString>(dir.Left(pos1));
+					data.m_prefix = fz::sparse_optional<std::wstring>(dir.Left(pos1).ToStdWstring());
 				dir = dir.Mid(pos1 + 1);
 
 				data.m_segments.clear();
 			}
 
-			if (!Segmentize(dir, data.m_segments))
+			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 				return false;
 			if (data.m_segments.empty() && was_empty)
 				return false;
@@ -547,7 +551,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			{
 				if (data.m_segments.empty())
 					return false;
-				wxString first = data.m_segments.front();
+				std::wstring first = data.m_segments.front();
 				data.m_segments.clear();
 				data.m_segments.push_back(first);
 				dir = dir.Mid(1);
@@ -556,7 +560,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			if (isFile && !ExtractFile(dir, file))
 				return false;
 
-			if (!Segmentize(dir, data.m_segments))
+			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 				return false;
 			if (data.m_segments.empty() && was_empty)
 				return false;
@@ -623,15 +627,15 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			if (isFile) {
 				if (!ExtractFile(dir, file))
 					return false;
-				data.m_prefix = fz::sparse_optional<wxString>(_T("."));
+				data.m_prefix = fz::sparse_optional<std::wstring>(_T("."));
 			}
 			else if (!dir.empty() && dir.Last() == '.')
-				data.m_prefix = fz::sparse_optional<wxString>(_T("."));
+				data.m_prefix = fz::sparse_optional<std::wstring>(_T("."));
 			else
 				data.m_prefix.clear();
 		}
 
-		if (!Segmentize(dir, data.m_segments))
+		if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 			return false;
 		break;
 	case HPNONSTOP:
@@ -641,7 +645,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 		if (isFile && !ExtractFile(dir, file))
 			return false;
 
-		if (!Segmentize(dir, data.m_segments))
+		if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 			return false;
 		if (data.m_segments.empty() && was_empty)
 			return false;
@@ -659,7 +663,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 				int colon2;
 				if ((colon2 = dir.Mid(1).Find(':')) < 1)
 					return false;
-				data.m_prefix = fz::sparse_optional<wxString>(dir.Left(colon2 + 2));
+				data.m_prefix = fz::sparse_optional<std::wstring>(dir.Left(colon2 + 2).ToStdWstring());
 				dir = dir.Mid(colon2 + 2);
 
 				data.m_segments.clear();
@@ -668,29 +672,27 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			if (isFile && !ExtractFile(dir, file))
 				return false;
 
-			if (!Segmentize(dir, data.m_segments))
+			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 				return false;
 		}
 		break;
 	case CYGWIN:
 		{
-			if (wxString(traits[m_type].separators).Contains(dir[0]))
-			{
+			if (wxString(traits[m_type].separators).Contains(dir[0])) {
 				data.m_segments.clear();
 				data.m_prefix.clear();
 			}
 			else if (was_empty)
 				return false;
-			if (dir.Left(2) == _T("//"))
-			{
-				data.m_prefix = fz::sparse_optional<wxString>(traits[m_type].separators[0]);
+			if (dir.Left(2) == _T("//")) {
+				data.m_prefix = fz::sparse_optional<std::wstring>(std::wstring(1, traits[m_type].separators[0]));
 				dir = dir.Mid(1);
 			}
 
 			if (isFile && !ExtractFile(dir, file))
 				return false;
 
-			if (!Segmentize(dir, data.m_segments))
+			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 				return false;
 		}
 		break;
@@ -704,7 +706,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			if (isFile && !ExtractFile(dir, file))
 				return false;
 
-			if (!Segmentize(dir, data.m_segments))
+			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
 				return false;
 		}
 		break;
@@ -768,14 +770,17 @@ bool CServerPath::operator<(const CServerPath &op) const
 
 	tConstSegmentIter iter1, iter2;
 	for (iter1 = m_data->m_segments.begin(), iter2 = op.m_data->m_segments.begin(); iter1 != m_data->m_segments.end(); ++iter1, ++iter2) {
-		if (iter2 == op.m_data->m_segments.end())
+		if (iter2 == op.m_data->m_segments.end()) {
 			return false;
+		}
 
-		const int cmp = iter1->Cmp(*iter2);
-		if (cmp < 0)
+		const int cmp = std::wcscmp(iter1->c_str(), iter2->c_str());
+		if (cmp < 0) {
 			return true;
-		if (cmp > 0)
+		}
+		if (cmp > 0) {
 			return false;
+		}
 	}
 
 	return iter2 != op.m_data->m_segments.end();
@@ -839,9 +844,10 @@ int CServerPath::CmpNoCase(const CServerPath &op) const
 	tConstSegmentIter iter = m_data->m_segments.begin();
 	tConstSegmentIter iter2 = op.m_data->m_segments.begin();
 	while (iter != m_data->m_segments.end()) {
-		int res = iter++->CmpNoCase(*iter2++);
-		if (res)
+		int res = fz::stricmp(*(iter++), *(iter2++));
+		if (res) {
 			return res;
+		}
 	}
 
 	return 0;
@@ -853,7 +859,7 @@ bool CServerPath::AddSegment(const wxString& segment)
 		return false;
 
 	// TODO: Check for invalid characters
-	m_data.get().m_segments.push_back(segment);
+	m_data.get().m_segments.push_back(segment.ToStdWstring());
 
 	return true;
 }
@@ -934,7 +940,7 @@ wxString CServerPath::FormatSubdir(const wxString &subdir) const
 	return res;
 }
 
-bool CServerPath::SegmentizeAddSegment(wxString & segment, tSegmentList& segments, bool& append)
+bool CServerPath::SegmentizeAddSegment(std::wstring & segment, tSegmentList& segments, bool& append)
 {
 	if (traits[m_type].has_dots) {
 		if (segment == _T("."))
@@ -950,7 +956,7 @@ bool CServerPath::SegmentizeAddSegment(wxString & segment, tSegmentList& segment
 	}
 
 	bool append_next = false;
-	if (!segment.empty() && traits[m_type].separatorEscape && segment.Last() == traits[m_type].separatorEscape) {
+	if (!segment.empty() && traits[m_type].separatorEscape && segment.back() == traits[m_type].separatorEscape) {
 		append_next = true;
 		segment[segment.size() - 1] = traits[m_type].separators[0];
 	}
@@ -965,7 +971,7 @@ bool CServerPath::SegmentizeAddSegment(wxString & segment, tSegmentList& segment
 	return true;
 }
 
-bool CServerPath::Segmentize(wxString const& str, tSegmentList& segments)
+bool CServerPath::Segmentize(std::wstring const& str, tSegmentList& segments)
 {
 	bool append = false;
 	size_t start = 0;
@@ -981,7 +987,7 @@ bool CServerPath::Segmentize(wxString const& str, tSegmentList& segments)
 			continue;
 		}
 
-		wxString segment = str.substr(start, pos - start);
+		std::wstring segment = str.substr(start, pos - start);
 		start = pos + 1;
 
 		if (!SegmentizeAddSegment(segment, segments, append)) {
@@ -990,7 +996,7 @@ bool CServerPath::Segmentize(wxString const& str, tSegmentList& segments)
 	}
 
 	if (start < str.size()) {
-		wxString segment = str.substr(start);
+		std::wstring segment = str.substr(start);
 		if (!SegmentizeAddSegment(segment, segments, append)) {
 			return false;
 		}
