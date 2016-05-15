@@ -695,7 +695,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	listing.path = path;
 	listing.m_firstListTime = fz::monotonic_clock::now();
 
-	if (!ParseData(false)){
+	if (!ParseData(false)) {
 		listing.m_flags |= CDirectoryListing::listing_failed;
 		return listing;
 	}
@@ -703,19 +703,16 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	if (!m_fileList.empty()) {
 		wxASSERT(m_entryList.empty());
 
-		listing.SetCount(m_fileList.size());
-		unsigned int i = 0;
 		for (auto const& file : m_fileList) {
 			CDirentry entry;
 			entry.name = file;
 			entry.flags = 0;
 			entry.size = -1;
-			listing[i++] = entry;
+			m_entryList.emplace_back(std::move(entry));
 		}
 	}
-	else {
-		listing.Assign(m_entryList);
-	}
+
+	listing.Assign(m_entryList);
 
 	return listing;
 }

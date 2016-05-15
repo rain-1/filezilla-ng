@@ -215,8 +215,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 		}
 		else if (type != unknown && mayCreate) {
 			const unsigned int count = entry.listing.GetCount();
-			entry.listing.SetCount(count + 1);
-			CDirentry& direntry = entry.listing[count];
+			CDirentry direntry;
 			direntry.name = filename;
 			if (type == dir)
 				direntry.flags = CDirentry::flag_dir | CDirentry::flag_unsure;
@@ -234,6 +233,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 				entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 				break;
 			}
+			entry.listing.Append(std::move(direntry));
 
 			++m_totalFileCount;
 		}

@@ -79,8 +79,9 @@ public:
 	// entry if you do not call ClearFindMap afterwards
 	CDirentry& operator[](unsigned int index);
 
-	void SetCount(unsigned int count);
-	unsigned int GetCount() const { return m_entryCount; }
+	unsigned int GetCount() const { return m_entries ? m_entries->size() : 0; }
+
+	void Append(CDirentry&& entry);
 
 	int FindFile_CmpCase(const wxString& name) const;
 	int FindFile_CmpNoCase(wxString name) const;
@@ -137,8 +138,6 @@ protected:
 
 	mutable fz::shared_optional<std::multimap<std::wstring, unsigned int> > m_searchmap_case;
 	mutable fz::shared_optional<std::multimap<std::wstring, unsigned int> > m_searchmap_nocase;
-
-	unsigned int m_entryCount{};
 };
 
 #endif

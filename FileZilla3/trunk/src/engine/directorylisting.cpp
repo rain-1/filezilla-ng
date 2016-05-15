@@ -40,30 +40,6 @@ bool CDirentry::operator==(const CDirentry &op) const
 	return true;
 }
 
-void CDirectoryListing::SetCount(unsigned int count)
-{
-	if (count == m_entryCount)
-		return;
-
-	const unsigned int old_count = m_entryCount;
-
-	if (!count)
-	{
-		m_entryCount = 0;
-		return;
-	}
-
-	if (count < old_count)
-	{
-		m_searchmap_case.clear();
-		m_searchmap_nocase.clear();
-	}
-
-	m_entries.get().resize(count);
-
-	m_entryCount = count;
-}
-
 const CDirentry& CDirectoryListing::operator[](unsigned int index) const
 {
 	// Commented out, too heavy speed penalty
@@ -80,11 +56,9 @@ CDirentry& CDirectoryListing::operator[](unsigned int index)
 
 void CDirectoryListing::Assign(std::deque<fz::shared_value<CDirentry>> &entries)
 {
-	m_entryCount = entries.size();
-
 	std::vector<fz::shared_value<CDirentry> >& own_entries = m_entries.get();
 	own_entries.clear();
-	own_entries.reserve(m_entryCount);
+	own_entries.reserve(entries.size());
 
 	m_flags &= ~(listing_has_dirs | listing_has_perms | listing_has_usergroup);
 
@@ -118,8 +92,6 @@ bool CDirectoryListing::RemoveEntry(unsigned int index)
 		m_flags |= CDirectoryListing::unsure_file_removed;
 	entries.erase(iter);
 
-	--m_entryCount;
-
 	return true;
 }
 
@@ -132,11 +104,13 @@ void CDirectoryListing::GetFilenames(std::vector<std::wstring> &names) const
 
 int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 {
-	if (!m_entryCount)
+	if (!m_entries || m_entries->empty()) {
 		return -1;
+	}
 
-	if (!m_searchmap_case)
+	if (!m_searchmap_case) {
 		m_searchmap_case.get();
+	}
 
 	// Search map
 	auto iter = m_searchmap_case->find(to_wstring(name));
@@ -144,8 +118,9 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 		return iter->second;
 
 	unsigned int i = m_searchmap_case->size();
-	if (i == m_entryCount)
+	if (i == m_entries->size()) {
 		return -1;
+	}
 
 	auto & searchmap_case = m_searchmap_case.get();
 
@@ -165,7 +140,7 @@ int CDirectoryListing::FindFile_CmpCase(const wxString& name) const
 
 int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 {
-	if (!m_entryCount)
+	if (!m_entries || m_entries->empty())
 		return -1;
 
 	if (!m_searchmap_nocase)
@@ -179,8 +154,9 @@ int CDirectoryListing::FindFile_CmpNoCase(wxString name) const
 		return iter->second;
 
 	unsigned int i = m_searchmap_nocase->size();
-	if (i == m_entryCount)
+	if (i == m_entries->size()) {
 		return -1;
+	}
 
 	auto& searchmap_nocase = m_searchmap_nocase.get();
 
@@ -206,4 +182,9 @@ void CDirectoryListing::ClearFindMap()
 
 	m_searchmap_case.clear();
 	m_searchmap_nocase.clear();
+}
+
+void CDirectoryListing::Append(CDirentry&& entry)
+{
+	m_entries.get().emplace_back(entry);
 }
