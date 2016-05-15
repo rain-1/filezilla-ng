@@ -9,8 +9,8 @@
 class CServerPathData final
 {
 public:
-	std::deque<wxString> m_segments;
-	fz::sparse_optional<wxString> m_prefix;
+	std::deque<std::wstring> m_segments;
+	fz::sparse_optional<std::wstring> m_prefix;
 
 	bool operator==(const CServerPathData& cmp) const;
 };
@@ -76,12 +76,12 @@ private:
 
 	ServerType m_type;
 
-	typedef std::deque<wxString> tSegmentList;
+	typedef std::deque<std::wstring> tSegmentList;
 	typedef tSegmentList::iterator tSegmentIter;
 	typedef tSegmentList::const_iterator tConstSegmentIter;
 
-	bool Segmentize(wxString const& str, tSegmentList& segments);
-	bool SegmentizeAddSegment(wxString & segment, tSegmentList& segments, bool& append);
+	bool Segmentize(std::wstring const& str, tSegmentList& segments);
+	bool SegmentizeAddSegment(std::wstring & segment, tSegmentList& segments, bool& append);
 	bool ExtractFile(wxString& dir, wxString& file);
 
 	static void EscapeSeparators(ServerType type, wxString& subdir);
