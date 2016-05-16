@@ -356,6 +356,7 @@ EVT_BUTTON(XRCID("ID_START"), CSearchDialog::OnSearch)
 EVT_BUTTON(XRCID("ID_STOP"), CSearchDialog::OnStop)
 EVT_CONTEXT_MENU(CSearchDialog::OnContextMenu)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DOWNLOAD"), CSearchDialog::OnDownload)
+EVT_MENU(XRCID("ID_MENU_SEARCH_UPLOAD"), CSearchDialog::OnUpload)
 EVT_MENU(XRCID("ID_MENU_SEARCH_EDIT"), CSearchDialog::OnEdit)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
 EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
@@ -420,7 +421,6 @@ bool CSearchDialog::Load()
 void CSearchDialog::Run()
 {
 	m_original_dir = m_state.GetRemotePath();
-	m_local_target = m_state.GetLocalDir();
 
 	m_state.RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_state.GetRemoteRecursiveOperation());
 	m_state.RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_state.GetRemoteRecursiveOperation());
@@ -577,18 +577,20 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 	}
 
 	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = m_results->GetSortComparisonObject();
-	for (auto const& file : listing.files) {
-		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, file.name, path, false, file.size, file.attributes, file.time)) {
-			continue;
+
+	auto const& add_entry = [&](CLocalRecursiveOperation::listing::entry const& entry, bool dir) {
+		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, path, false, entry.size, entry.attributes, entry.time)) {
+			return;
 		}
 
 		CLocalSearchFileData localData;
-		static_cast<CLocalRecursiveOperation::listing::entry&>(localData) = file;
+		static_cast<CLocalRecursiveOperation::listing::entry&>(localData) = entry;
 		localData.path = listing.localPath;
+		localData.dir = dir;
 		m_results->localFileData_.push_back(localData);
 
 		CGenericFileData data;
-		data.icon = false ? m_results->m_dirIcon : -2;
+		data.icon = dir ? m_results->m_dirIcon : -2;
 		m_results->m_fileData.push_back(data);
 
 		auto insertPos = std::lower_bound(m_results->m_indexMapping.begin(), m_results->m_indexMapping.end(), old_count + added_count, compare);
@@ -604,10 +606,19 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 			added_indexes.insert(added_indexes_insert_pos, added_index);
 		}
 
-		if (false)
+		if (dir) {
 			m_results->GetFilelistStatusBar()->AddDirectory();
-		else
-			m_results->GetFilelistStatusBar()->AddFile(file.size);
+		}
+		else {
+			m_results->GetFilelistStatusBar()->AddFile(entry.size);
+		}
+	};
+
+	for (auto const& file : listing.files) {
+		add_entry(file, false);
+	}
+	for (auto const& dir : listing.dirs) {
+		add_entry(dir, true);
 	}
 	compare.Destroy();
 
@@ -767,18 +778,30 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_EDIT"), false);
 	}
 
+	bool const localSearch = m_results->mode_ == search_mode::local;
+	if (localSearch) {
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_DOWNLOAD"));
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_DELETE"));
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_EDIT"));
+	}
+	else {
+		pMenu->Delete(XRCID("ID_MENU_SEARCH_UPLOAD"));
+	}
+
 	PopupMenu(pMenu);
 	delete pMenu;
 }
 
 
 
-class CSearchDownloadDialog : public wxDialogEx
+class CSearchTransferDialog : public wxDialogEx
 {
 public:
-	bool Run(wxWindow* parent, const wxString& m_local_dir, int count_files, int count_dirs)
+	bool Run(wxWindow* parent, bool download, const wxString& path, int count_files, int count_dirs)
 	{
-		if (!Load(parent, _T("ID_SEARCH_DOWNLOAD")))
+		download_ = download;
+
+		if (!Load(parent, download ? _T("ID_SEARCH_DOWNLOAD") : _T("ID_SEARCH_UPLOAD")))
 			return false;
 
 		wxString desc;
@@ -793,7 +816,12 @@ public:
 		}
 		XRCCTRL(*this, "ID_DESC", wxStaticText)->SetLabel(desc);
 
-		XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl)->ChangeValue(m_local_dir);
+		if (download) {
+			XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl)->ChangeValue(path);
+		}
+		else {
+			XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl)->ChangeValue(path);
+		}
 
 		if (ShowModal() != wxID_OK)
 			return false;
@@ -802,45 +830,69 @@ public:
 	}
 
 protected:
+	bool download_{};
 
 	DECLARE_EVENT_TABLE()
 	void OnBrowse(wxCommandEvent& event);
 	void OnOK(wxCommandEvent& event);
 };
 
-BEGIN_EVENT_TABLE(CSearchDownloadDialog, wxDialogEx)
-EVT_BUTTON(XRCID("ID_BROWSE"), CSearchDownloadDialog::OnBrowse)
-EVT_BUTTON(XRCID("wxID_OK"), CSearchDownloadDialog::OnOK)
+BEGIN_EVENT_TABLE(CSearchTransferDialog, wxDialogEx)
+EVT_BUTTON(XRCID("ID_BROWSE"), CSearchTransferDialog::OnBrowse)
+EVT_BUTTON(XRCID("wxID_OK"), CSearchTransferDialog::OnOK)
 END_EVENT_TABLE()
 
-void CSearchDownloadDialog::OnBrowse(wxCommandEvent&)
+void CSearchTransferDialog::OnBrowse(wxCommandEvent&)
 {
 	wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
+	if (!pText) {
+		return;
+	}
 
 	wxDirDialog dlg(this, _("Select target download directory"), pText->GetValue(), wxDD_NEW_DIR_BUTTON);
 	if (dlg.ShowModal() == wxID_OK)
 		pText->ChangeValue(dlg.GetPath());
 }
 
-void CSearchDownloadDialog::OnOK(wxCommandEvent&)
+void CSearchTransferDialog::OnOK(wxCommandEvent&)
 {
-	wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
+	if (download_) {
+		wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
 
-	CLocalPath path(pText->GetValue());
-	if (path.empty()) {
-		wxMessageBoxEx(_("You have to enter a local directory."), _("Download search results"), wxICON_EXCLAMATION);
-		return;
+		CLocalPath path(pText->GetValue());
+		if (path.empty()) {
+			wxMessageBoxEx(_("You have to enter a local directory."), _("Download search results"), wxICON_EXCLAMATION);
+			return;
+		}
+
+		if (!path.IsWriteable()) {
+			wxMessageBoxEx(_("You have to enter a writable local directory."), _("Download search results"), wxICON_EXCLAMATION);
+			return;
+		}
 	}
+	else {
+		wxTextCtrl *pText = XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl);
 
-	if (!path.IsWriteable()) {
-		wxMessageBoxEx(_("You have to enter a writable local directory."), _("Download search results"), wxICON_EXCLAMATION);
-		return;
+		CServerPath path(pText->GetValue());
+		if (path.empty()) {
+			wxMessageBoxEx(_("You have to enter a remote directory."), _("Upload search results"), wxICON_EXCLAMATION);
+			return;
+		}
 	}
 
 	EndDialog(wxID_OK);
 }
 
 namespace {
+
+bool isSubdir(CServerPath const& a, CServerPath const&b) {
+	return a.IsSubdirOf(b, false);
+}
+
+bool isSubdir(CLocalPath const& a, CLocalPath const&b) {
+	return a.IsSubdirOf(b);
+}
+
 template<typename Path, typename FileData>
 void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected_dirs, std::vector<FileData> const& fileData, CSearchDialogFileList const* results)
 {
@@ -869,7 +921,7 @@ void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected
 	// Resolve by only keeping topmost parents
 	std::sort(dirs.begin(), dirs.end());
 	for (Path const& path : dirs) {
-		if (!selected_dirs.empty() && (path.IsSubdirOf(selected_dirs.back(), false) || path == selected_dirs.back())) {
+		if (!selected_dirs.empty() && (isSubdir(path, selected_dirs.back()) || path == selected_dirs.back())) {
 			continue;
 		}
 		selected_dirs.push_back(path);
@@ -881,8 +933,9 @@ void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected
 		Path const& path = fileData[sel_file].path;
 		std::deque<Path>::iterator path_iter;
 		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter) {
-			if (*path_iter == path || path_iter->IsParentOf(path, false))
+			if (*path_iter == path || isSubdir(path, *path_iter)) {
 				break;
+			}
 		}
 		if (path_iter == selected_dirs.end())
 			selected_files_new.push_back(sel_file);
@@ -901,21 +954,19 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		return;
 	}
 
-	if (m_results->mode_ != search_mode::remote) {
-		return;
-	}
-
 	// Find all selected files and directories
 	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
 	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
-	if (selected_files.empty() && selected_dirs.empty())
+	if (selected_files.empty() && selected_dirs.empty()) {
 		return;
+	}
 
-	CSearchDownloadDialog dlg;
-	if (!dlg.Run(this, m_local_target.GetPath(), selected_files.size(), selected_dirs.size()))
+	CSearchTransferDialog dlg;
+	if (!dlg.Run(this, true, m_state.GetLocalDir().GetPath(), selected_files.size(), selected_dirs.size())) {
 		return;
+	}
 
 	wxTextCtrl *pText = XRCCTRL(dlg, "ID_LOCALPATH", wxTextCtrl);
 
@@ -924,7 +975,6 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		wxBell();
 		return;
 	}
-	m_local_target = path;
 
 	CServer const* pServer = m_state.GetServer();
 	if (!pServer) {
@@ -936,12 +986,12 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	bool flatten = XRCCTRL(dlg, "ID_PATHS_FLATTEN", wxRadioButton)->GetValue();
 
 	for (auto const& sel : selected_files) {
-		const CDirentry& entry = m_results->remoteFileData_[sel];
+		CRemoteSearchFileData const& entry = m_results->remoteFileData_[sel];
 
 		CLocalPath target_path = path;
 		if (!flatten) {
 			// Append relative path to search root to local target path
-			CServerPath remote_path = m_results->remoteFileData_[sel].path;
+			CServerPath remote_path = entry.path;
 			std::list<wxString> segments;
 			while (m_remote_search_root.IsParentOf(remote_path, false) && remote_path.HasParent()) {
 				segments.push_front(remote_path.GetLastSegment());
@@ -952,7 +1002,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 			}
 		}
 
-		CServerPath remote_path = m_results->remoteFileData_[sel].path;
+		CServerPath remote_path = entry.path;
 		wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
 		if (!entry.is_dir() && remote_path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localName = StripVMSRevision(localName);
@@ -963,7 +1013,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	}
 	m_pQueue->QueueFile_Finish(start);
 
-	enum CRemoteRecursiveOperation::OperationMode mode;
+	CRecursiveOperation::OperationMode mode;
 	if (flatten)
 		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
 	else
@@ -971,8 +1021,9 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 	for (auto const& dir : selected_dirs) {
 		CLocalPath target_path = path;
-		if (!flatten && dir.HasParent())
+		if (!flatten && dir.HasParent()) {
 			target_path.AddSegment(dir.GetLastSegment());
+		}
 
 		recursion_root root(dir, true);
 		root.add_dir_to_visit(dir, _T(""), target_path, false);
@@ -980,6 +1031,88 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
 	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
+}
+
+void CSearchDialog::OnUpload(wxCommandEvent&)
+{
+	if (!m_state.IsLocalIdle()) {
+		return;
+	}
+
+	// Find all selected files and directories
+	std::deque<CLocalPath> selected_dirs;
+	std::list<int> selected_files;
+	ProcessSelection(selected_files, selected_dirs, m_results->localFileData_, m_results);
+
+	if (selected_files.empty() && selected_dirs.empty()) {
+		return;
+	}
+
+	CSearchTransferDialog dlg;
+	if (!dlg.Run(this, false, m_state.GetRemotePath().GetPath(), selected_files.size(), selected_dirs.size()))
+		return;
+
+	wxTextCtrl *pText = XRCCTRL(dlg, "ID_REMOTEPATH", wxTextCtrl);
+
+	CServerPath path(pText->GetValue());
+	if (path.empty()) {
+		wxBell();
+		return;
+	}
+
+	CServer const* pServer = m_state.GetServer();
+	if (!pServer) {
+		wxBell();
+		return;
+	}
+
+	bool start = XRCCTRL(dlg, "ID_QUEUE_START", wxRadioButton)->GetValue();
+	bool flatten = XRCCTRL(dlg, "ID_PATHS_FLATTEN", wxRadioButton)->GetValue();
+
+	for (auto const& sel : selected_files) {
+		CLocalSearchFileData const& entry = m_results->localFileData_[sel];
+
+		CServerPath target_path = path;
+		if (!flatten) {
+			// Append relative path to search root to local target path
+			CLocalPath local_path = entry.path;
+			std::list<wxString> segments;
+			while (m_local_search_root.IsParentOf(local_path) && local_path.HasParent()) {
+				segments.push_front(local_path.GetLastSegment());
+				local_path = local_path.GetParent();
+			}
+			for (auto const& segment : segments) {
+				target_path.AddSegment(segment);
+			}
+		}
+
+		CLocalPath local_path = entry.path;
+		wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
+
+		m_pQueue->QueueFile(!start, false,
+			entry.name, (localName != entry.name) ? localName : wxString(),
+			local_path, target_path, *pServer, entry.size);
+	}
+	m_pQueue->QueueFile_Finish(start);
+
+	CRecursiveOperation::OperationMode mode;
+	if (flatten)
+		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
+	else
+		mode = start ? CRecursiveOperation::recursive_transfer : CRecursiveOperation::recursive_addtoqueue;
+
+	for (auto const& dir : selected_dirs) {
+		CServerPath target_path = path;
+		if (!flatten && dir.HasParent()) {
+			target_path.AddSegment(dir.GetLastSegment());
+		}
+
+		local_recursion_root root;
+		root.add_dir_to_visit(dir, target_path);
+		m_state.GetLocalRecursiveOperation()->AddRecursionRoot(std::move(root));
+	}
+	std::vector<CFilter> const filters; // Empty, recurse into everything
+	m_state.GetLocalRecursiveOperation()->StartRecursiveOperation(mode, filters);
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)
@@ -1042,8 +1175,13 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 
 void CSearchDialog::OnDelete(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle())
+	if (!m_state.IsRemoteIdle()) {
 		return;
+	}
+
+	if (m_results->mode_ != search_mode::remote) {
+		return;
+	}
 
 	// Find all selected files and directories
 	std::deque<CServerPath> selected_dirs;
