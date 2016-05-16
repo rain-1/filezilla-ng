@@ -840,19 +840,21 @@ void CSearchDownloadDialog::OnOK(wxCommandEvent&)
 	EndDialog(wxID_OK);
 }
 
-void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<CServerPath> &selected_dirs)
+namespace {
+template<typename Path, typename FileData>
+void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected_dirs, std::vector<FileData> const& fileData, CSearchDialogFileList const* results)
 {
-/*	std::deque<CServerPath> dirs;
+	std::deque<Path> dirs;
 
 	int sel = -1;
-	while ((sel = m_results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
-		if (sel > (int)m_results->m_indexMapping.size())
+	while ((sel = results->GetNextItem(sel, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
+		if (sel > (int)results->indexMapping().size())
 			continue;
-		int index = m_results->m_indexMapping[sel];
+		int index = results->indexMapping()[sel];
 
-		if (m_results->m_fileData[index].is_dir()) {
-			CServerPath path = m_results->m_fileData[index].path;
-			path.ChangePath(m_results->m_fileData[index].name);
+		if (fileData[index].is_dir()) {
+			Path path = fileData[index].path;
+			path.ChangePath(fileData[index].name);
 			if (path.empty())
 				continue;
 
@@ -866,7 +868,7 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<
 	// any directories that are in a parent-child relationship
 	// Resolve by only keeping topmost parents
 	std::sort(dirs.begin(), dirs.end());
-	for (CServerPath const& path : dirs) {
+	for (Path const& path : dirs) {
 		if (!selected_dirs.empty() && (path.IsSubdirOf(selected_dirs.back(), false) || path == selected_dirs.back())) {
 			continue;
 		}
@@ -876,8 +878,8 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<
 	// Now in a second phase filter out all files that are also in a directory
 	std::list<int> selected_files_new;
 	for (auto const& sel_file : selected_files) {
-		CServerPath const& path = m_results->m_fileData[sel_file].path;
-		std::deque<CServerPath>::iterator path_iter;
+		Path const& path = fileData[sel_file].path;
+		std::deque<Path>::iterator path_iter;
 		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter) {
 			if (*path_iter == path || path_iter->IsParentOf(path, false))
 				break;
@@ -886,21 +888,27 @@ void CSearchDialog::ProcessSelection(std::list<int> &selected_files, std::deque<
 			selected_files_new.push_back(sel_file);
 	}
 	selected_files.swap(selected_files_new);
-	*/
+
 	// At this point selected_dirs contains uncomparable
 	// paths and selected_files contains only files not
 	// covered by any of those directories.
 }
+}
 
 void CSearchDialog::OnDownload(wxCommandEvent&)
 {
-	/*if (!m_state.IsRemoteIdle())
+	if (!m_state.IsRemoteIdle()) {
 		return;
+	}
+
+	if (m_results->mode_ != search_mode::remote) {
+		return;
+	}
 
 	// Find all selected files and directories
 	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
-	ProcessSelection(selected_files, selected_dirs);
+	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
@@ -928,12 +936,12 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	bool flatten = XRCCTRL(dlg, "ID_PATHS_FLATTEN", wxRadioButton)->GetValue();
 
 	for (auto const& sel : selected_files) {
-		const CDirentry& entry = m_results->m_fileData[sel];
+		const CDirentry& entry = m_results->remoteFileData_[sel];
 
 		CLocalPath target_path = path;
 		if (!flatten) {
 			// Append relative path to search root to local target path
-			CServerPath remote_path = m_results->m_fileData[sel].path;
+			CServerPath remote_path = m_results->remoteFileData_[sel].path;
 			std::list<wxString> segments;
 			while (m_remote_search_root.IsParentOf(remote_path, false) && remote_path.HasParent()) {
 				segments.push_front(remote_path.GetLastSegment());
@@ -944,7 +952,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 			}
 		}
 
-		CServerPath remote_path = m_results->m_fileData[sel].path;
+		CServerPath remote_path = m_results->remoteFileData_[sel].path;
 		wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
 		if (!entry.is_dir() && remote_path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localName = StripVMSRevision(localName);
@@ -971,18 +979,23 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);*/
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)
 {
-/*	if (!m_state.IsRemoteIdle())
+	if (!m_state.IsRemoteIdle()) {
 		return;
+	}
+
+	if (m_results->mode_ != search_mode::remote) {
+		return;
+	}
 
 	// Find all selected files and directories
 	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
-	ProcessSelection(selected_files, selected_dirs);
+	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
@@ -1020,11 +1033,11 @@ void CSearchDialog::OnEdit(wxCommandEvent&)
 	}
 
 	for (auto const& item : selected_files) {
-		const CDirentry& entry = m_results->m_fileData[item];
-		const CServerPath path = m_results->m_fileData[item].path;
+		const CDirentry& entry = m_results->remoteFileData_[item];
+		const CServerPath path = m_results->remoteFileData_[item].path;
 
 		pEditHandler->Edit(CEditHandler::remote, entry.name, path, *pServer, entry.size, this);
-	}*/
+	}
 }
 
 void CSearchDialog::OnDelete(wxCommandEvent&)
@@ -1035,7 +1048,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	// Find all selected files and directories
 	std::deque<CServerPath> selected_dirs;
 	std::list<int> selected_files;
-	ProcessSelection(selected_files, selected_dirs);
+	ProcessSelection(selected_files, selected_dirs, m_results->remoteFileData_, m_results);
 
 	if (selected_files.empty() && selected_dirs.empty())
 		return;
@@ -1054,11 +1067,11 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 	if (wxMessageBoxEx(question, _("Confirm deletion"), wxICON_QUESTION | wxYES_NO) != wxYES)
 		return;
 
-/*	for (auto const& file : selected_files) {
-		CDirentry const& entry = m_results->m_fileData[file];
+	for (auto const& file : selected_files) {
+		CDirentry const& entry = m_results->remoteFileData_[file];
 		std::deque<wxString> files_to_delete;
 		files_to_delete.push_back(entry.name);
-		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->m_fileData[file].path, std::move(files_to_delete)));
+		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->remoteFileData_[file].path, std::move(files_to_delete)));
 	}
 
 	for (auto path : selected_dirs) {
@@ -1072,7 +1085,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);*/
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
 void CSearchDialog::OnCharHook(wxKeyEvent& event)

@@ -520,6 +520,8 @@ public:
 
 	virtual void OnNavigationEvent(bool) {}
 
+	std::vector<unsigned int> const& indexMapping() const { return m_indexMapping; }
+
 protected:
 	CQueueView *m_pQueue;
 
