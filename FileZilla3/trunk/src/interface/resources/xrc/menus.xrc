@@ -599,6 +599,9 @@
     <object class="wxMenuItem" name="ID_MENU_SEARCH_DOWNLOAD">
       <label>&amp;Download...</label>
     </object>
+    <object class="wxMenuItem" name="ID_MENU_SEARCH_UPLOAD">
+      <label>&amp;Upload...</label>
+    </object>
     <object class="wxMenuItem" name="ID_MENU_SEARCH_EDIT">
       <label>&amp;View/Edit</label>
     </object>

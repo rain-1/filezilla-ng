@@ -49,13 +49,13 @@ protected:
 	search_mode m_searching{};
 
 	CServerPath m_original_dir;
-	CLocalPath m_local_target;
-
+	
 	DECLARE_EVENT_TABLE()
 	void OnSearch(wxCommandEvent& event);
 	void OnStop(wxCommandEvent& event);
 	void OnContextMenu(wxContextMenuEvent& event);
 	void OnDownload(wxCommandEvent&);
+	void OnUpload(wxCommandEvent&);
 	void OnEdit(wxCommandEvent&);
 	void OnDelete(wxCommandEvent&);
 	void OnCharHook(wxKeyEvent& event);
