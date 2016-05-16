@@ -451,16 +451,23 @@ void CSearchDialog::Run()
 void CSearchDialog::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
 	if (notification == STATECHANGE_REMOTE_DIR_OTHER && data2) {
-		auto recursiveOperation = m_state.GetRemoteRecursiveOperation();
-		if (recursiveOperation && recursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_list) {
-			std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
-			ProcessDirectoryListing(listing);
+		if (m_searching == search_mode::remote) {
+			auto recursiveOperation = m_state.GetRemoteRecursiveOperation();
+			if (recursiveOperation && recursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_list) {
+				std::shared_ptr<CDirectoryListing> const& listing = *reinterpret_cast<std::shared_ptr<CDirectoryListing> const*>(data2);
+				ProcessDirectoryListing(listing);
+			}
 		}
 	}
 	else if (notification == STATECHANGE_REMOTE_IDLE) {
-		if (m_state.IsRemoteIdle())
-			m_searching = search_mode::none;
-		SetCtrlState();
+		if (m_searching == search_mode::remote) {
+			if (m_state.IsRemoteIdle()) {
+				m_searching = search_mode::none;
+			}
+		}
+		if (m_searching != search_mode::local) {
+			SetCtrlState();
+		}
 	}
 	else if (notification == STATECHANGE_LOCAL_RECURSION_LISTING) {
 		if (m_searching == search_mode::local && data2) {
@@ -709,6 +716,8 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 		std::vector<CFilter> const filters; // Empty, recurse into everything
 		m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, m_remote_search_root);
 	}
+
+	SetCtrlState();
 }
 
 void CSearchDialog::OnStop(wxCommandEvent&)
@@ -721,7 +730,22 @@ void CSearchDialog::OnStop(wxCommandEvent&)
 
 void CSearchDialog::SetCtrlState()
 {
-	bool idle = m_state.IsRemoteIdle();
+	bool const localSearch = xrc_call(*this, "ID_LOCAL_SEARCH", &wxRadioButton::GetValue);
+
+	bool idle = m_searching == search_mode::none;
+	if (idle) {
+		if (!localSearch) {
+			if (!m_state.IsRemoteIdle()) {
+				idle = false;
+			}
+		}
+		else {
+			if (!m_state.IsLocalIdle()) {
+				idle = false;
+			}
+		}
+	}
+
 	XRCCTRL(*this, "ID_START", wxButton)->Enable(idle);
 	XRCCTRL(*this, "ID_STOP", wxButton)->Enable(!idle);
 }
