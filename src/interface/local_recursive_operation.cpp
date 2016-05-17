@@ -49,17 +49,21 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std
 	}
 	
 	auto const server = m_state.GetServer();
-	if (!server) {
-		return false;
+	if (server) {
+		server_ = *server;
+	}
+	else {
+		if (mode != OperationMode::recursive_list) {
+			return false;
+		}
+
+		server_ = CServer();
 	}
 
-	server_ = *server;
-	
 	{
 		fz::scoped_lock l(mutex_);
 
 		wxCHECK_MSG(m_operationMode == recursive_none, false, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
-		wxCHECK_MSG(m_state.IsRemoteConnected(), false, _T("StartRecursiveOperation while disconnected"));
 
 		if (mode == recursive_chmod) {
 			return false;
