@@ -435,11 +435,13 @@ void CSearchDialog::Run()
 	m_state.RegisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER, m_state.GetRemoteRecursiveOperation());
 	m_state.RegisterHandler(this, STATECHANGE_REMOTE_IDLE, m_state.GetRemoteRecursiveOperation());
 	m_state.RegisterHandler(this, STATECHANGE_LOCAL_RECURSION_LISTING);
+	m_state.RegisterHandler(this, STATECHANGE_LOCAL_RECURSION_STATUS);
 
 	ShowModal();
 
 	SaveConditions();
 
+	m_state.UnregisterHandler(this, STATECHANGE_LOCAL_RECURSION_STATUS);
 	m_state.UnregisterHandler(this, STATECHANGE_LOCAL_RECURSION_LISTING);
 	m_state.UnregisterHandler(this, STATECHANGE_REMOTE_IDLE);
 	m_state.UnregisterHandler(this, STATECHANGE_REMOTE_DIR_OTHER);
@@ -483,6 +485,12 @@ void CSearchDialog::OnStateChange(t_statechange_notifications notification, cons
 		if (m_searching == search_mode::local && data2) {
 			auto listing = reinterpret_cast<CLocalRecursiveOperation::listing const*>(data2);
 			ProcessDirectoryListing(*listing);
+		}
+	}
+	else if (notification == STATECHANGE_LOCAL_RECURSION_STATUS) {
+		if (m_searching == search_mode::local && m_state.IsLocalIdle()) {
+			m_searching = search_mode::none;
+			SetCtrlState();
 		}
 	}
 }
