@@ -117,7 +117,6 @@ void CToolBar::UpdateToolbarState()
 	EnableTool(XRCID("ID_TOOLBAR_DISCONNECT"), pServer && idle);
 	EnableTool(XRCID("ID_TOOLBAR_CANCEL"), pServer && !idle);
 	EnableTool(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pServer != 0);
-	EnableTool(XRCID("ID_TOOLBAR_FIND"), pServer && idle);
 
 	ToggleTool(XRCID("ID_TOOLBAR_COMPARISON"), pState->GetComparisonManager()->IsComparing());
 	ToggleTool(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pState->GetSyncBrowse());

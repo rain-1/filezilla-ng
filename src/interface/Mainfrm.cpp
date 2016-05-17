@@ -2494,17 +2494,14 @@ void CMainFrame::OnTaskBarClick_Delayed(wxCommandEvent&)
 void CMainFrame::OnSearch(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
-		return;
-
-	if (!pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
-		wxBell();
+	if (!pState) {
 		return;
 	}
 
 	CSearchDialog dlg(this, *pState, m_pQueueView);
-	if (!dlg.Load())
+	if (!dlg.Load()) {
 		return;
+	}
 
 	dlg.Run();
 }

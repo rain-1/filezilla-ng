@@ -440,7 +440,6 @@ void CMenuBar::UpdateMenubarState()
 	Enable(XRCID("ID_MENU_SERVER_CMD"), pServer && idle);
 	Enable(XRCID("ID_MENU_FILE_COPYSITEMANAGER"), pServer != 0);
 	Enable(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pServer != 0);
-	Enable(XRCID("ID_MENU_SERVER_SEARCH"), pServer && idle);
 
 	Check(XRCID("ID_TOOLBAR_COMPARISON"), pState->GetComparisonManager()->IsComparing());
 	Check(XRCID("ID_TOOLBAR_SYNCHRONIZED_BROWSING"), pState->GetSyncBrowse());
