@@ -360,6 +360,8 @@ EVT_MENU(XRCID("ID_MENU_SEARCH_UPLOAD"), CSearchDialog::OnUpload)
 EVT_MENU(XRCID("ID_MENU_SEARCH_EDIT"), CSearchDialog::OnEdit)
 EVT_MENU(XRCID("ID_MENU_SEARCH_DELETE"), CSearchDialog::OnDelete)
 EVT_CHAR_HOOK(CSearchDialog::OnCharHook)
+EVT_RADIOBUTTON(XRCID("ID_LOCAL_SEARCH"), CSearchDialog::OnChangeSearchMode)
+EVT_RADIOBUTTON(XRCID("ID_REMOTE_SEARCH"), CSearchDialog::OnChangeSearchMode)
 END_EVENT_TABLE()
 
 CSearchDialog::CSearchDialog(wxWindow* parent, CState& state, CQueueView* pQueue)
@@ -397,10 +399,6 @@ bool CSearchDialog::Load()
 
 	m_results->SetFilelistStatusBar(pStatusBar);
 
-	const CServerPath path = m_state.GetRemotePath();
-	if (!path.empty())
-		xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, path.GetPath());
-
 	SetCtrlState();
 
 	m_pWindowStateManager = new CWindowStateManager(this);
@@ -414,6 +412,18 @@ bool CSearchDialog::Load()
 	xrc_call(*this, "ID_CASE", &wxCheckBox::SetValue, m_search_filter.matchCase);
 	xrc_call(*this, "ID_FIND_FILES", &wxCheckBox::SetValue, m_search_filter.filterFiles);
 	xrc_call(*this, "ID_FIND_DIRS", &wxCheckBox::SetValue, m_search_filter.filterDirs);
+
+	if (m_state.IsRemoteConnected()) {
+		CServerPath const path = m_state.GetRemotePath();
+		if (!path.empty())
+			xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, path.GetPath());
+	}
+	else {
+		CLocalPath const path = m_state.GetLocalDir();
+		xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, path.GetPath());
+		xrc_call(*this, "ID_REMOTE_SEARCH", &wxRadioButton::Disable);
+		xrc_call(*this, "ID_LOCAL_SEARCH", &wxRadioButton::SetValue, true);
+	}
 
 	return true;
 }
@@ -1293,4 +1303,25 @@ void CSearchDialog::SaveConditions()
 	CFilterDialog::SaveFilter(filter, m_search_filter);
 
 	file.Save(true);
+}
+
+void CSearchDialog::OnChangeSearchMode(wxCommandEvent&)
+{
+	wxString const strPath = xrc_call(*this, "ID_PATH", &wxTextCtrl::GetValue);
+
+	CLocalPath const localPath = m_state.GetLocalDir();
+	CServerPath const remotePath = m_state.GetRemotePath();
+
+	bool const local = xrc_call(*this, "ID_LOCAL_SEARCH", &wxRadioButton::GetValue);
+	if (local) {
+		if (strPath == remotePath.GetPath() && !localPath.empty()) {
+			xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, localPath.GetPath());
+		}
+	}
+	else {
+		if (strPath == localPath.GetPath() && !remotePath.empty()) {
+			xrc_call(*this, "ID_PATH", &wxTextCtrl::ChangeValue, remotePath.GetPath());
+		}
+	}
+
 }

@@ -3013,6 +3013,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxRadioButton" name="ID_REMOTE_SEARCH">
+                  <value>1</value>
                   <label>&amp;Remote search</label>
                 </object>
               </object>

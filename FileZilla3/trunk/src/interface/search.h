@@ -59,6 +59,7 @@ protected:
 	void OnEdit(wxCommandEvent&);
 	void OnDelete(wxCommandEvent&);
 	void OnCharHook(wxKeyEvent& event);
+	void OnChangeSearchMode(wxCommandEvent&);
 
 	std::set<CServerPath> m_visited;
 
