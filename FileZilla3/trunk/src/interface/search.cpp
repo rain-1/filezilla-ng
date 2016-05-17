@@ -931,7 +931,7 @@ void ProcessSelection(std::list<int> &selected_files, std::deque<Path> &selected
 	std::list<int> selected_files_new;
 	for (auto const& sel_file : selected_files) {
 		Path const& path = fileData[sel_file].path;
-		std::deque<Path>::iterator path_iter;
+		typename std::deque<Path>::iterator path_iter;
 		for (path_iter = selected_dirs.begin(); path_iter != selected_dirs.end(); ++path_iter) {
 			if (*path_iter == path || isSubdir(path, *path_iter)) {
 				break;
