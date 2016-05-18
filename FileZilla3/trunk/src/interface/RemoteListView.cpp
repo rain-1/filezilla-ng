@@ -1062,7 +1062,6 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 						canEnter = true;
 					}
 				}
-				canEnter = true;
 			}
 		}
 		else {
