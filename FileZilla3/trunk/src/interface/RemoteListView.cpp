@@ -446,13 +446,18 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 
 	m_indexMapping[0] = pDirectoryListing->GetCount();
 
-	std::list<unsigned int> added_indexes;
-
 	CFilterManager filter;
 	const wxString path = m_pDirectoryListing->path.GetPath();
 
 	CGenericFileData last = m_fileData.back();
 	m_fileData.pop_back();
+
+	bool const has_selections = GetSelectedItemCount() != 0;
+
+	std::vector<int> added_indexes;
+	if (has_selections) {
+		added_indexes.reserve(to_add);
+	}
 
 	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = GetSortComparisonObject();
 	for (unsigned int i = pDirectoryListing->GetCount() - to_add; i < pDirectoryListing->GetCount(); ++i) {
@@ -486,12 +491,14 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 		const int added_index = insertPos - m_indexMapping.begin();
 		m_indexMapping.insert(insertPos, i);
 
-		for (auto iter = added_indexes.begin(); iter != added_indexes.end(); ++iter) {
-			unsigned int &pos = *iter;
-			if (pos >= (unsigned int)added_index)
-				++pos;
+		// Remember inserted index
+		if (has_selections) {
+			auto const added_indexes_insert_pos = std::lower_bound(added_indexes.begin(), added_indexes.end(), added_index);
+			for (auto index = added_indexes_insert_pos; index != added_indexes.end(); ++index) {
+				++(*index);
+			}
+			added_indexes.insert(added_indexes_insert_pos, added_index);
 		}
-		added_indexes.push_back(added_index);
 	}
 	compare.Destroy();
 
@@ -503,20 +510,7 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 	start = added_indexes.front();
 
 	SetItemCount(m_indexMapping.size());
-
-	for (unsigned int i = start; i < m_indexMapping.size(); ++i) {
-		if (i == added_indexes.front()) {
-			selected.push_front(false);
-			added_indexes.pop_front();
-		}
-		bool is_selected = GetItemState(i, wxLIST_STATE_SELECTED) != 0;
-		selected.push_back(is_selected);
-
-		bool should_selected = selected.front();
-		selected.pop_front();
-		if (is_selected != should_selected)
-			SetSelection(i, should_selected);
-	}
+	UpdateSelections_ItemsAdded(added_indexes);
 
 	if (m_pFilelistStatusBar)
 		m_pFilelistStatusBar->SetHidden(m_pDirectoryListing->GetCount() + 1 - m_indexMapping.size());
