@@ -59,7 +59,7 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox), canRemember, true);
 		XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl)->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE));
 	}
-	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.FormatHost());
+	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.Format(ServerFormat::with_optional_port));
 
 	if (server.GetUser().empty()) {
 		pwdDlg.SetTitle(_("Enter username and password"));

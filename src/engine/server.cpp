@@ -637,36 +637,46 @@ int CServer::MaximumMultipleConnections() const
 	return m_maximumMultipleConnections;
 }
 
-wxString CServer::FormatHost(bool always_omit_port /*=false*/) const
+wxString CServer::Format(ServerFormat formatType) const
 {
-	wxString host = m_host;
+	t_protocolInfo const& info = GetProtocolInfo(m_protocol);
+	wxString server = m_host;
 
-	if (host.Find(':') != -1)
-		host = _T("[") + host + _T("]");
+	if (server.Find(':') != -1)
+		server = _T("[") + server + _T("]");
 
-	if (!always_omit_port)
-	{
-		if (m_port != GetDefaultPort(m_protocol))
-			host += wxString::Format(_T(":%d"), m_port);
+	if (formatType == ServerFormat::host_only) {
+		return server;
+	}
+	
+	if (m_port != GetDefaultPort(m_protocol)) {
+		server += wxString::Format(_T(":%d"), m_port);
 	}
 
-	return host;
-}
-
-wxString CServer::FormatServer(const bool always_include_prefix /*=false*/) const
-{
-	wxString server = FormatHost();
-
-	if (m_logonType != ANONYMOUS)
-		server = GetUser() + _T("@") + server;
-
-	const t_protocolInfo& info = GetProtocolInfo(m_protocol);
-	if (!info.prefix.empty())
-	{
-		if (always_include_prefix || info.alwaysShowPrefix)
-			server = info.prefix + _T("://") + server;
-		else if (m_port != info.defaultPort)
-			server = info.prefix + _T("://") + server;
+	if (formatType == ServerFormat::with_optional_port) {
+		return server;
+	}
+		
+	if (m_logonType != ANONYMOUS) {
+		wxString const user = GetUser();
+		if (!user.empty()) {
+			if (formatType == ServerFormat::url_with_password && !GetPass().empty()) {
+				server = GetUser() + _T(":") + GetPass() + _T("@") + server;
+			}
+			else {
+				server = GetUser() + _T("@") + server;
+			}
+		}
+	}
+	
+	if (formatType == ServerFormat::with_user_and_optional_port) {
+		if (!info.alwaysShowPrefix && m_port == info.defaultPort) {
+			return server;
+		}
+	}
+		
+	if (!info.prefix.empty()) {
+		server = info.prefix + _T("://") + server;
 	}
 
 	return server;

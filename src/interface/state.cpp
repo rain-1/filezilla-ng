@@ -468,10 +468,10 @@ void CState::SetServer(const CServer* server, CServerPath const& path)
 		m_pServer = new CServer(*server);
 
 		const wxString& name = server->GetName();
-		if (!name.empty())
-			m_title = name + _T(" - ") + server->FormatServer();
-		else
-			m_title = server->FormatServer();
+		if (!name.empty()) {
+			m_title = name + _T(" - ");
+		}
+		m_title += server->Format(ServerFormat::with_user_and_optional_port);
 	}
 	else {
 		m_pServer = 0;

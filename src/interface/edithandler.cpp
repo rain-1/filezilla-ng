@@ -716,7 +716,8 @@ int CEditHandler::DisplayChangeNotification(CEditHandler::fileType type, std::li
 		else
 			dlg.SetChildLabel(XRCID("ID_OPENEDAS"), file);
 	}
-	dlg.SetChildLabel(XRCID("ID_SERVER"), iter->server.FormatServer());
+
+	dlg.SetChildLabel(XRCID("ID_SERVER"), iter->server.Format(ServerFormat::with_user_and_optional_port));
 	dlg.SetChildLabel(XRCID("ID_REMOTEPATH"), iter->remotePath.GetPath());
 
 	dlg.GetSizer()->Fit(&dlg);
@@ -1117,7 +1118,7 @@ int CEditHandlerStatusDialog::ShowModal()
 				pListCtrl->SetItem(i, COLUMN_STATUS, _("Unknown"));
 				break;
 			}
-			pListCtrl->SetItem(i, COLUMN_REMOTEPATH, iter->server.FormatServer() + iter->remotePath.GetPath());
+			pListCtrl->SetItem(i, COLUMN_REMOTEPATH, iter->server.Format(ServerFormat::with_user_and_optional_port) + iter->remotePath.GetPath());
 			CEditHandler::t_fileData* pData = new CEditHandler::t_fileData(*iter);
 			pListCtrl->SetItemPtrData(i, (wxUIntPtr)pData);
 		}
@@ -1145,7 +1146,7 @@ int CEditHandlerStatusDialog::ShowModal()
 				pListCtrl->SetItem(i, COLUMN_STATUS, _("Unknown"));
 				break;
 			}
-			pListCtrl->SetItem(i, COLUMN_REMOTEPATH, iter->server.FormatServer() + iter->remotePath.GetPath());
+			pListCtrl->SetItem(i, COLUMN_REMOTEPATH, iter->server.Format(ServerFormat::with_user_and_optional_port) + iter->remotePath.GetPath());
 			CEditHandler::t_fileData* pData = new CEditHandler::t_fileData(*iter);
 			pListCtrl->SetItemPtrData(i, (wxUIntPtr)pData);
 		}

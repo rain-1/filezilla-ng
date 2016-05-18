@@ -6,6 +6,7 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 #include "themeprovider.h"
+#include "server.h"
 
 CQueueItem::CQueueItem(CQueueItem* parent)
 	: m_parent(parent)
@@ -391,7 +392,7 @@ const CServer& CServerItem::GetServer() const
 
 wxString CServerItem::GetName() const
 {
-	return m_server.FormatServer();
+	return m_server.Format(ServerFormat::with_user_and_optional_port);
 }
 
 void CServerItem::AddChild(CQueueItem* pItem)

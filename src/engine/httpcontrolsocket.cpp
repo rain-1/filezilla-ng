@@ -343,7 +343,7 @@ int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 	m_pCurOpData = pData;
 	m_pHttpOpData = pData;
 
-	m_current_uri = wxURI(m_pCurrentServer->FormatServer() + pData->remotePath.FormatFilename(pData->remoteFile));
+	m_current_uri = wxURI(m_pCurrentServer->Format(ServerFormat::with_user_and_optional_port) + pData->remotePath.FormatFilename(pData->remoteFile));
 
 	if (!localFile.empty()) {
 		pData->localFileSize = fz::local_filesys::get_size(fz::to_native(pData->localFile));

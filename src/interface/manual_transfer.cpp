@@ -159,7 +159,7 @@ void CManualTransfer::DisplayServer()
 {
 	if (m_pServer)
 	{
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(m_pServer->FormatHost(true));
+		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(m_pServer->Format(ServerFormat::host_only));
 		unsigned int port = m_pServer->GetPort();
 
 		if (port != CServer::GetDefaultPort(m_pServer->GetProtocol()))
@@ -461,7 +461,7 @@ bool CManualTransfer::VerifyServer()
 		return false;
 	}
 
-	xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, server.FormatHost(true));
+	xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, server.Format(ServerFormat::with_optional_port));
 	xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), server.GetPort()));
 
 	protocolName = CServer::GetProtocolName(server.GetProtocol());
