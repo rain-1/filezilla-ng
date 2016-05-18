@@ -751,9 +751,16 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 
 void CSearchDialog::OnStop(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle()) {
-		m_state.m_pCommandQueue->Cancel();
-		m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
+	if (m_searching == search_mode::remote) {
+		if (!m_state.IsRemoteIdle()) {
+			m_state.m_pCommandQueue->Cancel();
+			m_state.GetRemoteRecursiveOperation()->StopRecursiveOperation();
+		}
+	}
+	else if (m_searching == search_mode::local) {
+		if (!m_state.IsLocalIdle()) {
+			m_state.GetLocalRecursiveOperation()->StopRecursiveOperation();
+		}
 	}
 }
 
