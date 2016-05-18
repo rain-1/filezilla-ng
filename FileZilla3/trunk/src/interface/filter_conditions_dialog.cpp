@@ -702,12 +702,13 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 			}
 		}
 		else if (type == filter_date) {
-			const wxString d = controls.pValue->GetValue();
-			if (d.empty() && allow_empty)
+			wxString const d = controls.pValue->GetValue();
+			if (d.empty() && allow_empty) {
 				continue;
+			}
 
-			wxDateTime date;
-			if (!date.ParseFormat(d, _T("%Y-%m-%d")) || !date.IsValid()) {
+			fz::datetime date(d.ToStdWstring(), fz::datetime::local);
+			if (date.empty()) {
 				m_pListCtrl->SelectLine(i);
 				controls.pValue->SetFocus();
 				error = _("Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18.");
