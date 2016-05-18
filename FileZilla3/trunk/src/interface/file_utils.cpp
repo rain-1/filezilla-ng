@@ -3,27 +3,22 @@
 #include "file_utils.h"
 
 #include <wx/stdpaths.h>
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 #include <wx/dynlib.h> // Used by GetDownloadDir
 #include <knownfolders.h>
 #else
 #include <wx/textfile.h>
 #include <wordexp.h>
-#endif //__WXMSW__
+#endif
 
-wxString GetAsURL(const wxString& dir)
+wxString GetAsURL(wxString const& dir)
 {
 	// Cheap URL encode
 	wxString encoded;
-	const wxWX2MBbuf utf8 = dir.mb_str(wxConvUTF8);
+	std::string utf8 = fz::to_utf8(dir.ToStdWstring());
 
-	if (!utf8)
-		return wxString();
-
-	//TODO: create a standalone URLEncode function
-	const char* p = utf8;
-	while (*p)
-	{
+	char const* p = utf8.c_str();
+	while (*p) {
 		// List of characters that don't need to be escaped taken
 		// from the BNF grammar in RFC 1738
 		// Again attention seeking Windows wants special treatment...
@@ -54,20 +49,21 @@ wxString GetAsURL(const wxString& dir)
 			encoded += (wxChar)c;
 		}
 #ifdef __WXMSW__
-		else if (c == '\\')
+		else if (c == '\\') {
 			encoded += '/';
+		}
 #endif
 		else
 			encoded += wxString::Format(_T("%%%x"), (unsigned int)c);
 	}
 #ifdef __WXMSW__
-	if (encoded.Left(2) == _T("//"))
-	{
+	if (encoded.Left(2) == _T("//")) {
 		// UNC path
 		encoded = encoded.Mid(2);
 	}
-	else
+	else {
 		encoded = _T("/") + encoded;
+	}
 #endif
 	return _T("file://") + encoded;
 }

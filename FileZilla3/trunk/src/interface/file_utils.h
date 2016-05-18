@@ -10,7 +10,7 @@ bool PathExpand(wxString& cmd);
 wxString GetSystemOpenCommand(wxString file, bool &program_exists);
 
 // Returns a file:// URL
-wxString GetAsURL(const wxString& dir);
+wxString GetAsURL(wxString const& dir);
 
 // Opens specified directory in local file manager, e.g. Explorer on Windows
 bool OpenInFileManager(const wxString& dir);
