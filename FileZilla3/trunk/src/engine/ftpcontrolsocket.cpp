@@ -526,7 +526,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 			pData->loginSequence.push_back(cmd);
 		}
 		// User@host
-		t_loginCommand cmd = {false, false, loginCommandType::user, wxString::Format(_T("USER %s@%s"), server.GetUser(), server.FormatHost())};
+		t_loginCommand cmd = {false, false, loginCommandType::user, wxString::Format(_T("USER %s@%s"), server.GetUser(), server.Format(ServerFormat::with_optional_port))};
 		pData->loginSequence.push_back(cmd);
 
 		// Password
@@ -558,9 +558,9 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		// Site or Open
 		t_loginCommand cmd = {false, false, loginCommandType::user, _T("")};
 		if (pData->ftp_proxy_type == 2)
-			cmd.command = _T("SITE ") + server.FormatHost();
+			cmd.command = _T("SITE ") + server.Format(ServerFormat::with_optional_port);
 		else
-			cmd.command = _T("OPEN ") + server.FormatHost();
+			cmd.command = _T("OPEN ") + server.Format(ServerFormat::with_optional_port);
 		pData->loginSequence.push_back(cmd);
 
 		// User
@@ -584,7 +584,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 	else if (pData->ftp_proxy_type == 4) {
 		wxString proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
 		wxString proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-		wxString host = server.FormatHost();
+		wxString host = server.Format(ServerFormat::with_optional_port);
 		wxString user = server.GetUser();
 		wxString account = server.GetAccount();
 		proxyUser.Replace(_T("%"), _T("%%"));
@@ -4244,7 +4244,7 @@ int CFtpControlSocket::Connect(const CServer &server)
 			return FZ_REPLY_ERROR;
 		}
 
-		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server.FormatHost(), _T("FTP")); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
+		LogMessage(MessageType::Status, _("Connecting to %s through %s proxy"), server.Format(ServerFormat::with_optional_port), _T("FTP")); // @translator: Connecting to ftp.example.com through SOCKS5 proxy
 	}
 	else {
 		pData->ftp_proxy_type = 0;

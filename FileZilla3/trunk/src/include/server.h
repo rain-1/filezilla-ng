@@ -53,6 +53,15 @@ enum PasvMode
 	MODE_PASSIVE
 };
 
+enum class ServerFormat
+{
+	host_only,
+	with_optional_port,
+	with_user_and_optional_port,
+	url,
+	url_with_password
+};
+
 enum CharsetEncoding
 {
 	ENCODING_AUTO,
@@ -111,8 +120,7 @@ public:
 	void SetPasvMode(PasvMode pasvMode);
 	void MaximumMultipleConnections(int maximum);
 
-	wxString FormatHost(bool always_omit_port = false) const;
-	wxString FormatServer(const bool always_include_prefix = false) const;
+	wxString Format(ServerFormat formatType) const;
 
 	bool SetEncodingType(CharsetEncoding type, const wxString& encoding = wxString());
 	bool SetCustomEncoding(const wxString& encoding);

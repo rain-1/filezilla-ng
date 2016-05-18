@@ -1363,29 +1363,28 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
 		return;
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.empty())
-	{
+	if (path.empty()) {
 		wxBell();
 		return;
 	}
 
 	const CServer *pServer = m_state.GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxBell();
 		return;
 	}
 
-	if (!wxTheClipboard->Open())
-	{
+	if (!wxTheClipboard->Open()) {
 		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
 		return;
 	}
 
-	wxString url = pServer->FormatServer(true);
+	wxString url = pServer->Format(ServerFormat::url);
+		
 	url += path.GetPath();
 
 	// Poor mans URLencode
+	// TODO: use a proper URLEncode function, confer file_utils.cpp
 	url.Replace(_T(" "), _T("%20"));
 
 	wxTheClipboard->SetData(new wxURLDataObject(url));

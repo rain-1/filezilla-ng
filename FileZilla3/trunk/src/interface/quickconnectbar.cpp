@@ -86,7 +86,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 		return;
 	}
 
-	host = server.FormatHost(true);
+	host = server.Format(ServerFormat::with_optional_port);
 	ServerProtocol protocol = server.GetProtocol();
 	switch (protocol)
 	{
@@ -159,7 +159,7 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent&)
 			iter != m_recentServers.end();
 			++iter, ++i)
 		{
-			wxString name(iter->FormatServer());
+			wxString name(iter->Format(ServerFormat::with_user_and_optional_port));
 			name.Replace(_T("&"), _T("&&"));
 			pMenu->Append(10 + i, name);
 		}

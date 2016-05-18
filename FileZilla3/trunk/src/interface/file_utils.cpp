@@ -20,6 +20,7 @@ wxString GetAsURL(const wxString& dir)
 	if (!utf8)
 		return wxString();
 
+	//TODO: create a standalone URLEncode function
 	const char* p = utf8;
 	while (*p)
 	{

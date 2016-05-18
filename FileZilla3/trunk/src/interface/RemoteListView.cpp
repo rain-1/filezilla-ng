@@ -2511,24 +2511,24 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 	}
 
 	const CServerPath& path = m_pDirectoryListing->path;
-	const wxString server = pServer->FormatServer(true);
-	if (selected_item_list.size() == 1)
-	{
+
+	wxString const server = pServer->Format(ServerFormat::url);
+
+	if (selected_item_list.size() == 1) {
 		wxString url = server;
 		url += path.FormatFilename(selected_item_list.front().name, false);
 
 		// Poor mans URLencode
+		// TODO: use a proper URLEncode function, confer file_utils.cpp
 		url.Replace(_T(" "), _T("%20"));
 
 		wxTheClipboard->SetData(new wxURLDataObject(url));
 	}
-	else
-	{
+	else {
 		wxString urls;
-		for (std::list<CDirentry>::const_iterator iter = selected_item_list.begin(); iter != selected_item_list.end(); ++iter)
-		{
+		for (auto const& entry : selected_item_list) {
 			urls += server;
-			urls += path.FormatFilename(iter->name, false);
+			urls += path.FormatFilename(entry.name, false);
 #ifdef __WXMSW__
 			urls += _T("\r\n");
 #else
@@ -2537,6 +2537,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 		}
 
 		// Poor mans URLencode
+		// TODO: use a proper URLEncode function, confer file_utils.cpp
 		urls.Replace(_T(" "), _T("%20"));
 
 		wxTheClipboard->SetData(new wxTextDataObject(urls));
