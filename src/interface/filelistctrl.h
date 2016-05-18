@@ -565,6 +565,9 @@ protected:
 
 	CFilelistStatusBar* m_pFilelistStatusBar;
 
+	// Indexes of the items added, sorted ascending.
+	void UpdateSelections_ItemsAdded(std::vector<int> const& added_indexes);
+
 #ifndef __WXMSW__
 	// Generic wxListCtrl does not support wxLIST_STATE_DROPHILITED, emulate it
 	wxListItemAttr m_dropHighlightAttribute;

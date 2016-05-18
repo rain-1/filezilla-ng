@@ -555,27 +555,7 @@ void CSearchDialog::ProcessDirectoryListing(std::shared_ptr<CDirectoryListing> c
 
 	if (added_count) {
 		m_results->SetItemCount(old_count + added_count);
-		
-		// Update selections
-		if (has_selections) {
-			auto added_index = added_indexes.cbegin();
-			std::deque<bool> selected;
-			// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
-			for (unsigned int i = *added_index; i < m_results->m_indexMapping.size(); ++i) {
-				if (added_index != added_indexes.end() && i == static_cast<unsigned int>(*added_index)) {
-					selected.push_front(false);
-					++added_index;
-				}
-				bool is_selected = m_results->GetItemState(i, wxLIST_STATE_SELECTED) != 0;
-				selected.push_back(is_selected);
-
-				bool should_selected = selected.front();
-				selected.pop_front();
-				if (is_selected != should_selected)
-					m_results->SetSelection(i, should_selected);
-			}
-		}
-
+		m_results->UpdateSelections_ItemsAdded(added_indexes);
 		m_results->RefreshListOnly(false);
 	}
 }
@@ -642,27 +622,7 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 
 	if (added_count) {
 		m_results->SetItemCount(old_count + added_count);
-
-		// Update selections
-		if (has_selections) {
-			auto added_index = added_indexes.cbegin();
-			std::deque<bool> selected;
-			// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
-			for (unsigned int i = *added_index; i < m_results->m_indexMapping.size(); ++i) {
-				if (added_index != added_indexes.end() && i == static_cast<unsigned int>(*added_index)) {
-					selected.push_front(false);
-					++added_index;
-				}
-				bool is_selected = m_results->GetItemState(i, wxLIST_STATE_SELECTED) != 0;
-				selected.push_back(is_selected);
-
-				bool should_selected = selected.front();
-				selected.pop_front();
-				if (is_selected != should_selected)
-					m_results->SetSelection(i, should_selected);
-			}
-		}
-
+		m_results->UpdateSelections_ItemsAdded(added_indexes);
 		m_results->RefreshListOnly(false);
 	}
 }

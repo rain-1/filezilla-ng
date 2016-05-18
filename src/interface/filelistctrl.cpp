@@ -1030,3 +1030,28 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnKeyDown(wxKeyEvent& e
 	else
 		event.Skip();
 }
+
+template<class CFileData> void CFileListCtrl<CFileData>::UpdateSelections_ItemsAdded(std::vector<int> const& added_indexes)
+{
+	if (added_indexes.empty()) {
+		return;
+	}
+
+	auto added_index = added_indexes.cbegin();
+	std::deque<bool> selected;
+	// This is O(n) in number of items. I think it's possible to make it O(n) in number of selections
+	for (unsigned int i = *added_index; i < m_indexMapping.size(); ++i) {
+		if (added_index != added_indexes.end() && i == static_cast<unsigned int>(*added_index)) {
+			selected.push_front(false);
+			++added_index;
+		}
+		bool is_selected = GetItemState(i, wxLIST_STATE_SELECTED) != 0;
+		selected.push_back(is_selected);
+
+		bool should_selected = selected.front();
+		selected.pop_front();
+		if (is_selected != should_selected) {
+			SetSelection(i, should_selected);
+		}
+	}
+}
