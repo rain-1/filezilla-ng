@@ -658,13 +658,25 @@ wxString CServer::Format(ServerFormat formatType) const
 	}
 		
 	if (m_logonType != ANONYMOUS) {
-		wxString const user = GetUser();
+		auto user = GetUser().ToStdWstring();
+		// For now, only escape if formatting for URL.
+		// Open question: Do we need some form of escapement for presentation within the GUI,
+		// that deals e.g. with whitespace but does not touch Unicode characters?
+		if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
+			user = url_encode(user);
+		}
 		if (!user.empty()) {
-			if (formatType == ServerFormat::url_with_password && !GetPass().empty()) {
-				server = GetUser() + _T(":") + GetPass() + _T("@") + server;
+			if (formatType == ServerFormat::url_with_password) {
+				auto pass = GetPass().ToStdWstring();
+				if (!pass.empty()) {
+					if (formatType == ServerFormat::url || formatType == ServerFormat::url_with_password) {
+						pass = url_encode(pass);
+					}
+					server = user + _T(":") + pass + _T("@") + server;
+				}
 			}
 			else {
-				server = GetUser() + _T("@") + server;
+				server = url_encode(user) + _T("@") + server;
 			}
 		}
 	}

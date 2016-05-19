@@ -1380,12 +1380,12 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
 	}
 
 	wxString url = pServer->Format(ServerFormat::url);
-		
-	url += path.GetPath();
 
-	// Poor mans URLencode
-	// TODO: use a proper URLEncode function, confer file_utils.cpp
-	url.Replace(_T(" "), _T("%20"));
+	wxString const pathPart = url_encode(path.GetPath().ToStdWstring(), true);
+	if (!pathPart.empty() && pathPart[0] != '/') {
+		url += '/';
+	}
+	url += pathPart;
 
 	wxTheClipboard->SetData(new wxURLDataObject(url));
 
