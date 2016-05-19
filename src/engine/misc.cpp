@@ -83,3 +83,34 @@ bool GetRealOsVersion(int& major, int& minor)
 	return true;
 #endif
 }
+
+std::wstring url_encode(std::wstring const& s, bool keep_slashes)
+{
+	std::wstring ret;
+
+	std::string utf8 = fz::to_utf8(s);
+	ret.reserve(utf8.size());
+
+	for (auto const& c : utf8) {
+		if (!c) {
+			break;
+		}
+		else if ((c >= '0' && c <= '9') ||
+				(c >= 'a' && c <= 'z') ||
+				(c >= 'A' && c <= 'Z') ||
+				c == '-' || c == '.' || c == '_' || c == '~')
+		{
+			ret += c;
+		}
+		else if (c == '/' && keep_slashes) {
+			ret += c;
+		}
+		else {
+			ret += '%';
+			ret += fz::int_to_hex_char(static_cast<unsigned char>(c) >> 4);
+			ret += fz::int_to_hex_char(c & 0xf);
+		}
+	}
+
+	return ret;
+}

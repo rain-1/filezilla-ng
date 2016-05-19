@@ -468,6 +468,7 @@ void CState::SetServer(const CServer* server, CServerPath const& path)
 		m_pServer = new CServer(*server);
 
 		const wxString& name = server->GetName();
+		m_title.clear();
 		if (!name.empty()) {
 			m_title = name + _T(" - ");
 		}

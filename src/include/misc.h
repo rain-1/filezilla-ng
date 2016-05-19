@@ -37,4 +37,6 @@ unique_static_cast(std::unique_ptr<Base>&& p)
 #define wxPLURAL_LL(sing, plur, n) \
 	wxGetTranslation((sing), (plur), (sizeof(unsigned int) < 8 && (n) > 1000000000) ? (1000000000 + (n) % 1000000000) : (n))
 
+std::wstring url_encode(std::wstring const& s, bool keep_slashes = false);
+
 #endif //__MISC_H__

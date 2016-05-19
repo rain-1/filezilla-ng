@@ -2482,10 +2482,8 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 	long item = -1;
 
 	std::list<CDirentry> selected_item_list;
-	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
-	{
-		if (!item)
-		{
+	while ((item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
+		if (!item) {
 			wxBell();
 			return;
 		}
@@ -2498,14 +2496,12 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 
 		selected_item_list.push_back(entry);
 	}
-	if (selected_item_list.empty())
-	{
+	if (selected_item_list.empty()) {
 		wxBell();
 		return;
 	}
 
-	if (!wxTheClipboard->Open())
-	{
+	if (!wxTheClipboard->Open()) {
 		wxMessageBoxEx(_("Could not open clipboard"), _("Could not copy URLs"), wxICON_EXCLAMATION);
 		return;
 	}
@@ -2514,34 +2510,33 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 
 	wxString const server = pServer->Format(ServerFormat::url);
 
+	auto getUrl = [](wxString const& serverPart, CServerPath const& path, wxString const& name) {
+		wxString url = serverPart;
+
+		auto const pathPart = url_encode(path.FormatFilename(name, false).ToStdWstring(), true);
+		if (!pathPart.empty() && pathPart[0] != '/') {
+			url += '/';
+		}
+		url += pathPart;
+
+		return url;
+	};
+
+	wxString urls;
 	if (selected_item_list.size() == 1) {
-		wxString url = server;
-		url += path.FormatFilename(selected_item_list.front().name, false);
-
-		// Poor mans URLencode
-		// TODO: use a proper URLEncode function, confer file_utils.cpp
-		url.Replace(_T(" "), _T("%20"));
-
-		wxTheClipboard->SetData(new wxURLDataObject(url));
+		urls = getUrl(server, path, selected_item_list.front().name);
 	}
 	else {
-		wxString urls;
 		for (auto const& entry : selected_item_list) {
-			urls += server;
-			urls += path.FormatFilename(entry.name, false);
+			urls = getUrl(server, path, entry.name);
 #ifdef __WXMSW__
 			urls += _T("\r\n");
 #else
 			urls += _T("\n");
 #endif
 		}
-
-		// Poor mans URLencode
-		// TODO: use a proper URLEncode function, confer file_utils.cpp
-		urls.Replace(_T(" "), _T("%20"));
-
-		wxTheClipboard->SetData(new wxTextDataObject(urls));
 	}
+	wxTheClipboard->SetData(new wxURLDataObject(urls));
 
 	wxTheClipboard->Flush();
 	wxTheClipboard->Close();

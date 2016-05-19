@@ -6,7 +6,6 @@
 #include "sizeformatting.h"
 #include "timeformatting.h"
 #include "themeprovider.h"
-#include "server.h"
 
 CQueueItem::CQueueItem(CQueueItem* parent)
 	: m_parent(parent)
