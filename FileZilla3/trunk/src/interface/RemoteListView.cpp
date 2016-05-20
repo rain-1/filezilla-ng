@@ -352,6 +352,7 @@ BEGIN_EVENT_TABLE(CRemoteListView, CFileListCtrl<CGenericFileData>)
 	EVT_MENU(XRCID("ID_EDIT"), CRemoteListView::OnMenuEdit)
 	EVT_MENU(XRCID("ID_ENTER"), CRemoteListView::OnMenuEnter)
 	EVT_MENU(XRCID("ID_GETURL"), CRemoteListView::OnMenuGeturl)
+	EVT_MENU(XRCID("ID_GETURL_PASSWORD"), CRemoteListView::OnMenuGeturl)
 	EVT_MENU(XRCID("ID_CONTEXT_REFRESH"), CRemoteListView::OnMenuRefresh)
 END_EVENT_TABLE()
 
@@ -1149,6 +1150,8 @@ void CRemoteListView::OnContextMenu(wxContextMenuEvent& event)
 			}
 		}
 	}
+
+	pMenu->Delete(XRCID(wxGetKeyState(WXK_SHIFT) ? "ID_GETURL" : "ID_GETURL_PASSWORD"));
 
 	PopupMenu(pMenu);
 	delete pMenu;
@@ -2470,14 +2473,16 @@ void CRemoteListView::LinkIsNotDir(const CServerPath& path, const wxString& link
 	m_pLinkResolveState.reset();
 }
 
-void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
+void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 {
-	if (!m_pDirectoryListing)
+	if (!m_pDirectoryListing) {
 		return;
+	}
 
 	const CServer* pServer = m_state.GetServer();
-	if (!pServer)
+	if (!pServer) {
 		return;
+	}
 
 	long item = -1;
 
@@ -2508,7 +2513,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent&)
 
 	const CServerPath& path = m_pDirectoryListing->path;
 
-	wxString const server = pServer->Format(ServerFormat::url);
+	wxString const server = pServer->Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
 	auto getUrl = [](wxString const& serverPart, CServerPath const& path, wxString const& name) {
 		wxString url = serverPart;
