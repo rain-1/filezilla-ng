@@ -10,6 +10,17 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.18.0-rc1 (2016-05-20)
+
++ The search functionality can now also be used to search local file
++ Reduced CPU consumption of adding files to the list of search results
++ Opening the remote context menu while holding shift allows copying URLs to clipboard that include the password
++ Added an option to the configuration file through which initiating drag&drop can be disallowed
++ Reduced memory footprint of some data structures
++ Building FileZilla now depends on libfilezilla >= 0.5.2 (https://lib.filezilla-project.org/).
+- The remote file list context menu no longer shows inapplicable entries while files are being added to queue
+- Fix date validation in filter and search conditions
+
 3.17.0.1 (2016-05-09)
 
 ! MSW: Quoted the path to the uninstaller when executed from the installer to prevent an attacker from tricking the installer into running some other program instead
