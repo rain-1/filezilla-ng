@@ -98,6 +98,7 @@ enum interfaceOptions
 	OPTION_PERSISTENT_CHOICES,
 	OPTION_QUEUE_COMPLETION_ACTION,
 	OPTION_QUEUE_COMPLETION_COMMAND,
+	OPTION_DND_DISABLED,
 
 	// Default/internal options
 	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated

@@ -1273,6 +1273,10 @@ void CLocalListView::OnStateChange(t_statechange_notifications notification, con
 
 void CLocalListView::OnBeginDrag(wxListEvent&)
 {
+	if (COptions::Get()->GetOptionVal(OPTION_DND_DISABLED) != 0) {
+		return;
+	}
+
 	long item = -1;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);

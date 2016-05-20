@@ -1940,23 +1940,24 @@ bool CSiteManagerDialog::IsPredefinedItem(wxTreeItemId item)
 
 void CSiteManagerDialog::OnBeginDrag(wxTreeEvent& event)
 {
-	if (!Verify())
-	{
+	if (COptions::Get()->GetOptionVal(OPTION_DND_DISABLED) != 0) {
+		return;
+	}
+
+	if (!Verify()) {
 		event.Veto();
 		return;
 	}
 	UpdateItem();
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
-	{
+	if (!pTree) {
 		event.Veto();
 		return;
 	}
 
 	wxTreeItemId item = event.GetItem();
-	if (!item.IsOk())
-	{
+	if (!item.IsOk()) {
 		event.Veto();
 		return;
 	}
