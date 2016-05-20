@@ -71,7 +71,7 @@ protected:
 	void OnMkdir(wxCommandEvent&);
 	void OnMenuMkdirChgDir(wxCommandEvent&);
 	void OnChar(wxKeyEvent& event);
-	void OnMenuGeturl(wxCommandEvent&);
+	void OnMenuGeturl(wxCommandEvent& event);
 
 	wxTreeItemId m_contextMenuItem;
 };

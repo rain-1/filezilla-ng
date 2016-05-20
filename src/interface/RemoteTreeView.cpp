@@ -884,6 +884,8 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 		pMenu->Enable(XRCID("ID_ADDTOQUEUE"), false);
 	}
 
+	pMenu->Delete(XRCID(wxGetKeyState(WXK_SHIFT) ? "ID_GETURL" : "ID_GETURL_PASSWORD"));
+
 	PopupMenu(pMenu);
 	delete pMenu;
 }
@@ -1357,7 +1359,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 	}
 }
 
-void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
+void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 {
 	if (!m_contextMenuItem)
 		return;
@@ -1379,7 +1381,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent&)
 		return;
 	}
 
-	wxString url = pServer->Format(ServerFormat::url);
+	wxString url = pServer->Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
 	wxString const pathPart = url_encode(path.GetPath().ToStdWstring(), true);
 	if (!pathPart.empty() && pathPart[0] != '/') {
