@@ -194,6 +194,7 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Persistent Choices", number, _T("0"), normal },
 	{ "Queue completion action", number, _T("1"), normal },
 	{ "Queue completion command", string, _T(""), normal },
+	{ "Drag and Drop disabled", number, _T("0"), normal },
 
 	// Default/internal options
 	{ "Config Location", string, _T(""), default_only },

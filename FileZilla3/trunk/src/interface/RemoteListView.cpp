@@ -2031,6 +2031,10 @@ void CRemoteListView::SetInfoText()
 
 void CRemoteListView::OnBeginDrag(wxListEvent&)
 {
+	if (COptions::Get()->GetOptionVal(OPTION_DND_DISABLED) != 0) {
+		return;
+	}
+
 	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return;

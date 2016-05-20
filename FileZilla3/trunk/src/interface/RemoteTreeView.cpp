@@ -772,6 +772,10 @@ CServerPath CRemoteTreeView::GetPathFromItem(const wxTreeItemId& item) const
 
 void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 {
+	if (COptions::Get()->GetOptionVal(OPTION_DND_DISABLED) != 0) {
+		return;
+	}
+
 	// Drag could result in recursive operation, don't allow at this point
 	if (!m_state.IsRemoteIdle()) {
 		wxBell();

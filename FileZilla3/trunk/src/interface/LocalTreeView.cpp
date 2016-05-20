@@ -861,6 +861,10 @@ void CLocalTreeView::OnStateChange(t_statechange_notifications notification, con
 
 void CLocalTreeView::OnBeginDrag(wxTreeEvent& event)
 {
+	if (COptions::Get()->GetOptionVal(OPTION_DND_DISABLED) != 0) {
+		return;
+	}
+
 	wxTreeItemId item = event.GetItem();
 	if (!item)
 		return;
