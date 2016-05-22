@@ -1000,7 +1000,7 @@ bool CSiteManagerDialog::Verify()
 			return false;
 		}
 
-		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(server.Format(ServerFormat::with_optional_port));
+		XRCCTRL(*this, "ID_HOST", wxTextCtrl)->ChangeValue(server.Format(ServerFormat::host_only));
 		if (server.GetPort() != CServer::GetDefaultPort(server.GetProtocol())) {
 			XRCCTRL(*this, "ID_PORT", wxTextCtrl)->ChangeValue(wxString::Format(_T("%d"), server.GetPort()));
 		}
@@ -1623,7 +1623,7 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_CONNECT", &wxButton::Enable, true);
 
 		xrc_call(*this, "ID_HOST", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, site_data->m_server.Format(ServerFormat::with_optional_port));
+		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, site_data->m_server.Format(ServerFormat::host_only));
 		unsigned int port = site_data->m_server.GetPort();
 
 		if (port != CServer::GetDefaultPort(site_data->m_server.GetProtocol()))

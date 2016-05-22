@@ -86,7 +86,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 		return;
 	}
 
-	host = server.Format(ServerFormat::with_optional_port);
+	host = server.Format(ServerFormat::host_only);
 	ServerProtocol protocol = server.GetProtocol();
 	switch (protocol)
 	{
