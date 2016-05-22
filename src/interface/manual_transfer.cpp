@@ -461,7 +461,7 @@ bool CManualTransfer::VerifyServer()
 		return false;
 	}
 
-	xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, server.Format(ServerFormat::with_optional_port));
+	xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, server.Format(ServerFormat::host_only));
 	xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), server.GetPort()));
 
 	protocolName = CServer::GetProtocolName(server.GetProtocol());
