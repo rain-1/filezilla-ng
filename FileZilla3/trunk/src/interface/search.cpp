@@ -579,7 +579,7 @@ void CSearchDialog::ProcessDirectoryListing(CLocalRecursiveOperation::listing co
 	CFileListCtrl<CGenericFileData>::CSortComparisonObject compare = m_results->GetSortComparisonObject();
 
 	auto const& add_entry = [&](CLocalRecursiveOperation::listing::entry const& entry, bool dir) {
-		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, path, false, entry.size, entry.attributes, entry.time)) {
+		if (!CFilterManager::FilenameFilteredByFilter(m_search_filter, entry.name, path, dir, entry.size, entry.attributes, entry.time)) {
 			return;
 		}
 
