@@ -134,7 +134,10 @@ void CLocalRecursiveOperation::EnqueueEnumeratedListing(fz::scoped_lock& l, list
 
 		CServerPath remoteSub = d.remotePath;
 		if (!remoteSub.empty()) {
-			remoteSub.AddSegment(entry.name);
+			if (m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue) {
+				// Non-flatten case
+				remoteSub.AddSegment(entry.name);
+			}
 		}
 		root.add_dir_to_visit(localSub, remoteSub);
 	}
