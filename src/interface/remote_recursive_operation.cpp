@@ -265,8 +265,10 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 				dirToVisit.localDir = dir.localDir;
 				dirToVisit.start_dir = dir.start_dir;
 
-				if (m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue)
+				if (m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue) {
+					// Non-flatten case
 					dirToVisit.localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(entry.name));
+				}
 				if (entry.is_link()) {
 					dirToVisit.link = 1;
 					dirToVisit.recurse = false;
