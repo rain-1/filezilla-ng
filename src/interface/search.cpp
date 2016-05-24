@@ -338,6 +338,8 @@ void CSearchDialogFileList::clear()
 	ClearSelection();
 	m_indexMapping.clear();
 	m_fileData.clear();
+	localFileData_.clear();
+	remoteFileData_.clear();
 	SetItemCount(0);
 	RefreshListOnly(true);
 	GetFilelistStatusBar()->Clear();
