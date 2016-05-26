@@ -45,6 +45,8 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 		return false;
 	}
 
+	InitFooter(force ? wxString() : resources);
+
 	xrc_call(*this, "ID_FZVERSION", &wxStaticText::SetLabel, _T("FileZilla ") + CBuildInfo::GetVersion());
 
 	wxString const url = _T("https://welcome.filezilla-project.org/welcome?type=client&category=%s&version=") + ownVersion;
@@ -63,6 +65,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 	xrc_call(*this, "ID_DOCUMENTATION_MORE", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("documentation_more")));
 	xrc_call(*this, "ID_SUPPORT_FORUM", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("support_forum")));
 	xrc_call(*this, "ID_SUPPORT_MORE", &wxHyperlinkCtrl::SetURL, wxString::Format(url, _T("support_more")));
+
 	Layout();
 
 	GetSizer()->Fit(this);
@@ -81,4 +84,39 @@ void CWelcomeDialog::OnTimer(wxTimerEvent&)
 {
 	ShowModal();
 	Destroy();
+}
+
+void MakeLinksFromTooltips(wxWindow& parent);
+
+void CWelcomeDialog::InitFooter(wxString const& resources)
+{
+	bool hideFooter = true;
+#if FZ_WINDOWS
+	if (CBuildInfo::GetBuildType() == _T("official")) {
+		if (!resources.empty()) {
+			wxLogNull null;
+
+			wxXmlResource res(wxXRC_NO_RELOADING);
+			InitHandlers(res);
+			if (res.Load(_T("blob:") + resources)) {
+				wxWindow* parent = XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel);
+				if (parent) {
+					wxPanel* p = new wxPanel();
+					if (res.LoadPanel(p, parent, _T("ID_WELCOME_FOOTER"))) {
+						wxSize minSize = p->GetSizer()->GetMinSize();
+						parent->SetInitialSize(minSize);
+						hideFooter = false;
+						MakeLinksFromTooltips(*p);
+					}
+					else {
+						delete p;
+					}
+				}
+			}
+		}
+	}
+#endif
+	if (hideFooter) {
+		XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel)->Hide();
+	}
 }

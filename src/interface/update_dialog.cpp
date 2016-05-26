@@ -83,7 +83,7 @@ int CUpdateDialog::ShowModal()
 
 	Wrap();
 
-	XRCCTRL(*this, "ID_DETAILS", wxTextCtrl)->Hide();
+	xrc_call(*this, "ID_DETAILS", &wxTextCtrl::Hide);
 
 	UpdaterState s = updater_.GetState();
 	UpdaterStateChanged( s, updater_.AvailableBuild() );
@@ -98,7 +98,6 @@ int CUpdateDialog::ShowModal()
 	return ret;
 }
 
-namespace {
 void MakeLinksFromTooltips(wxWindow& parent)
 {
 	// Iterates over all children.
@@ -114,8 +113,6 @@ void MakeLinksFromTooltips(wxWindow& parent)
 		MakeLinksFromTooltips(*child);
 	}
 }
-}
-
 
 void CUpdateDialog::InitFooter()
 {
@@ -149,7 +146,6 @@ void CUpdateDialog::InitFooter()
 	if (hideFooter) {
 		XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel)->Hide();
 	}
-
 }
 
 void CUpdateDialog::Wrap()
