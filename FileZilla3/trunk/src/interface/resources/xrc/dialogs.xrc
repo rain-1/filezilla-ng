@@ -3562,6 +3562,10 @@
             <border>5</border>
           </object>
           <object class="sizeritem">
+            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+            <object class="wxPanel" name="ID_FOOTERMESSAGE_PANEL" />
+          </object>
+          <object class="sizeritem">
             <object class="wxStaticLine"/>
             <flag>wxGROW|wxTOP|wxBOTTOM</flag>
             <border>2</border>
