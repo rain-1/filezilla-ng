@@ -118,7 +118,7 @@ void CUpdateDialog::InitFooter()
 {
 	bool hideFooter = true;
 #if FZ_WINDOWS
-	if (CBuildInfo::GetBuildType() == _T("official")) {
+	if (CBuildInfo::GetBuildType() == _T("official") && !COptions::Get()->GetOptionVal(OPTION_DISABLE_UPDATE_FOOTER)) {
 		wxString const resources = updater_.GetResources();
 		if (!resources.empty()) {
 			wxLogNull null;

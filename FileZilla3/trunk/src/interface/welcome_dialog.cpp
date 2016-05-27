@@ -92,7 +92,7 @@ void CWelcomeDialog::InitFooter(wxString const& resources)
 {
 	bool hideFooter = true;
 #if FZ_WINDOWS
-	if (CBuildInfo::GetBuildType() == _T("official")) {
+	if (CBuildInfo::GetBuildType() == _T("official") && !COptions::Get()->GetOptionVal(OPTION_DISABLE_UPDATE_FOOTER)) {
 		if (!resources.empty()) {
 			wxLogNull null;
 
