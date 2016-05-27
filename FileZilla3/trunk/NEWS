@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.18.0 (2016-05-27)
+
+- Small fixes to local file search
+- Fixed a regression introduced in 3.18.0-rc1 when formatting hostnames for display
+
 3.18.0-rc1 (2016-05-20)
 
 + The search functionality can now also be used to search local file
