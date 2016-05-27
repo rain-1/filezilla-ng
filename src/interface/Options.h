@@ -99,6 +99,7 @@ enum interfaceOptions
 	OPTION_QUEUE_COMPLETION_ACTION,
 	OPTION_QUEUE_COMPLETION_COMMAND,
 	OPTION_DND_DISABLED,
+	OPTION_DISABLE_UPDATE_FOOTER,
 
 	// Default/internal options
 	OPTION_DEFAULT_SETTINGSDIR, // guaranteed to be (back)slash-terminated
