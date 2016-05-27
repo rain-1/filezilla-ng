@@ -4,8 +4,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: id_ID\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-22 14:27+0200\n"
-"PO-Revision-Date: 2016-04-18 19:58+0700\n"
+"POT-Creation-Date: 2016-05-27 13:58+0200\n"
+"PO-Revision-Date: 2016-05-21 16:04+0700\n"
 "Last-Translator: Willy Sudiarto Raharjo <willysr@gmail.com>\n"
 "Language-Team: Bahasa Indonesia <willysr@gmail.com>\n"
 "Language: id\n"
@@ -44,9 +44,9 @@ msgid "%d directory"
 msgid_plural "%d directories"
 msgstr[0] "%d direktori"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1386
-#: ../../locales/../src/interface/search.cpp:484
-#: ../../locales/../src/interface/search.cpp:743
+#: ../../locales/../src/interface/RemoteListView.cpp:1380
+#: ../../locales/../src/interface/search.cpp:801
+#: ../../locales/../src/interface/search.cpp:1188
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -54,9 +54,9 @@ msgstr[0] "Direktori %d dengan isinya"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:46
 #: ../../locales/../src/interface/filelist_statusbar.cpp:66
-#: ../../locales/../src/interface/RemoteListView.cpp:1385
-#: ../../locales/../src/interface/search.cpp:483
-#: ../../locales/../src/interface/search.cpp:742
+#: ../../locales/../src/interface/RemoteListView.cpp:1379
+#: ../../locales/../src/interface/search.cpp:800
+#: ../../locales/../src/interface/search.cpp:1187
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -142,7 +142,7 @@ msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s byte"
 
-#: ../../locales/../src/interface/FileZilla.cpp:571
+#: ../../locales/../src/interface/FileZilla.cpp:582
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -157,7 +157,7 @@ msgstr ""
 "Harap mendownload FileZilla kembali. Jika hal ini masih tetap ada, harap "
 "kirimkan laporan kesalahan."
 
-#: ../../locales/../src/interface/FileZilla.cpp:656
+#: ../../locales/../src/interface/FileZilla.cpp:667
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -188,7 +188,7 @@ msgstr "%u - Nama pengguna"
 msgid "%w - Proxy password"
 msgstr "%w - Kata sandi proxy"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3497
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3621
 msgid "&Abort previous connection and connect in current tab"
 msgstr "B&atalkan koneksi sebelumnya dan buka koneksi pada tab aktual"
 
@@ -220,8 +220,8 @@ msgstr "&Tambahkan berkas ke antrian"
 msgid "&Add key file..."
 msgstr "&Tambah berkas kunci..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:492
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:551
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:496
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:559
 msgid "&Add to queue"
 msgstr "&Tambahkan ke antrian"
 
@@ -254,7 +254,7 @@ msgid "&Ask your operating system for the external IP address"
 msgstr "&Meminta sistem operasi anda untuk alamat IP eksternal"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:140
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:586
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:594
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1054
 msgid "&Auto"
 msgstr "&Otomatis"
@@ -264,7 +264,7 @@ msgid "&Autodetect"
 msgstr "&Deteksi otomatis"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:148
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:594
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:602
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1069
 msgid "&Binary"
 msgstr "&Biner"
@@ -281,7 +281,7 @@ msgstr "&Penanda"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2669
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2756
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2951
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3136
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3161
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1930
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2145
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:337
@@ -294,8 +294,8 @@ msgstr "&Toleransi burst:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:379
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1025
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3627
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3683
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3751
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3807
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:40
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:34
 msgid "&Cancel"
@@ -309,11 +309,11 @@ msgstr "&Hapus data privat..."
 msgid "&Close"
 msgstr "&Tutup"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
 msgid "&Close FileZilla"
 msgstr "&Tutup FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:631
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:642
 msgid "&Configure speed limits..."
 msgstr "&Mengkonfigurasi batas kecepatan..."
 
@@ -330,18 +330,18 @@ msgid "&Copy current connection to Site Manager..."
 msgstr "&Salin koneksi saat ini ke Manajemen Situs..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:803
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:428
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:432
 msgid "&Copy to clipboard"
 msgstr "&Salin ke clipboard"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:264
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:304
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:498
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:562
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:502
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:570
 msgid "&Create directory"
 msgstr "&Buat direktori"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:611
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:622
 msgid "&Create new tab"
 msgstr "&Buka tab baru"
 
@@ -358,7 +358,7 @@ msgid "&Default editor:"
 msgstr "Editor &default:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:135
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:349
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:353
 msgid "&Default file exists action..."
 msgstr "&Aksi default jika berkas sudah ada..."
 
@@ -370,12 +370,12 @@ msgstr "&Keterlambatan diantara percobaan login yang gagal:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1238
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2836
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:276
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:571
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:579
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:59
 msgid "&Delete"
 msgstr "&Hapus"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3233
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3353
 msgid "&Delete symlink"
 msgstr "&Hapus symlink"
 
@@ -383,14 +383,14 @@ msgstr "&Hapus symlink"
 msgid "&Directory comparison"
 msgstr "Perbandingan &direktori"
 
-#: ../../locales/../src/interface/state.cpp:909
+#: ../../locales/../src/interface/state.cpp:918
 msgid ""
 "&Disable synchronized browsing and continue changing the local directory"
 msgstr ""
 "&Nonaktifkan penjelajahan tersinkronisasi dan lanjutkan mengganti direktori "
 "remote."
 
-#: ../../locales/../src/interface/state.cpp:982
+#: ../../locales/../src/interface/state.cpp:990
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr ""
@@ -413,7 +413,7 @@ msgstr "&Tampilkan kecepatan transfer dan bukan kecepatan rata-rata"
 msgid "&Display size in bytes"
 msgstr "&Tampilkan ukuran dalam byte"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3666
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3790
 msgid "&Do not remember passwords (recommended)"
 msgstr "&Jangan mengingat kata kunci (direkomendasikan)"
 
@@ -430,15 +430,15 @@ msgid "&Double-click action on files:"
 msgstr "Aksi klik &ganda untuk berkas:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:286
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:487
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:491
 msgid "&Download"
 msgstr "&Download"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3122
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3147
 msgid "&Download to:"
 msgstr "&Download ke:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:600
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:608
 msgid "&Download..."
 msgstr "&Mendownload..."
 
@@ -458,8 +458,8 @@ msgstr "&Edit aturan filter..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:72
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:159
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:526
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:627
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:534
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:638
 msgid "&Enable"
 msgstr "&Aktifkan"
 
@@ -467,7 +467,7 @@ msgstr "&Aktifkan"
 msgid "&Enable compression"
 msgstr "&Aktifkan kompresi"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3555
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3679
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:896
 msgid "&Enable speed limits"
 msgstr "&Aktifkan batas kecepatan"
@@ -480,11 +480,11 @@ msgstr "&Enkoding:"
 msgid "&Encryption:"
 msgstr "&Enkripsi:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:420
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:424
 msgid "&Enter custom command..."
 msgstr "&Masukkan perintah sendiri..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3614
 msgid "&Establish connection in a new tab"
 msgstr "Buat kon&eksi pada tab baru"
 
@@ -497,7 +497,7 @@ msgid "&Export Site Manager entries"
 msgstr "&Ekspor daftar manajemen situs"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:27
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:581
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:589
 msgid "&Export..."
 msgstr "&Ekspor..."
 
@@ -509,11 +509,11 @@ msgstr "&Kembali ke mode aktif"
 msgid "&File"
 msgstr "&Berkas"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:519
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:527
 msgid "&File Attributes..."
 msgstr "&Atribut berkas..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:332
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:336
 msgid "&File permissions..."
 msgstr "Hak akses &berkas..."
 
@@ -537,7 +537,15 @@ msgstr "&Filters"
 msgid "&Finish editing and delete local file"
 msgstr "&Selesaikan pengeditan dan hapus berkas lokal"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3158
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3278
+msgid ""
+"&Flatten local paths, upload all contained files directly into target "
+"directory"
+msgstr ""
+"&Rampingkan path lokal, upload semua berkas yang berada didalamnya pada "
+"direktori target"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3183
 msgid ""
 "&Flatten remote paths, download all contained files directly into target "
 "directory"
@@ -545,7 +553,7 @@ msgstr ""
 "&Path remote lebih ramping, download semua berkas yang ada langsung pada "
 "direktori target"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3240
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3360
 msgid "&Follow symlink, delete target directory contents"
 msgstr "&Ikuti symlink, hapus isi direktori target"
 
@@ -570,11 +578,11 @@ msgid "&Help"
 msgstr "&Bantuan"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:87
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:540
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:548
 msgid "&Hide identical files"
 msgstr "&Sembunyikan berkas yang sama"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:354
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:358
 msgid "&Highest"
 msgstr "&Tertinggi"
 
@@ -608,7 +616,8 @@ msgstr "&Turunkan asosiasi jenis berkas sistem"
 msgid "&Install new version"
 msgstr "&Install versi baru"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3176
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3271
 msgid "&Keep remote path structure relative to search root"
 msgstr "&Pertahankan struktur path remote relatif pada root pencarian"
 
@@ -637,6 +646,10 @@ msgstr "Pohon direktori &lokal"
 msgid "&Local directory:"
 msgstr "Direktori &lokal:"
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3010
+msgid "&Local search"
+msgstr "Pencarian &lokal"
+
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2122
 msgid "&Log to file"
 msgstr "&Catat log ke berkas"
@@ -649,7 +662,7 @@ msgstr "&Tipe Logon:"
 msgid "&Logontype:"
 msgstr "&TipeLogon:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:366
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:370
 msgid "&Low"
 msgstr "&Rendah"
 
@@ -697,7 +710,7 @@ msgstr "&Baru"
 msgid "&New Site"
 msgstr "&Situs Baru"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1670
+#: ../../locales/../src/interface/Mainfrm.cpp:1669
 msgid "&New version available!"
 msgstr "&Versi baru tersedia!"
 
@@ -710,13 +723,13 @@ msgstr "&Lanjut >"
 msgid "&No"
 msgstr "&Tidak"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:377
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:458
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:719
 msgid "&None"
 msgstr "&Tidak ada"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:362
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:366
 msgid "&Normal"
 msgstr "&Normal"
 
@@ -735,7 +748,7 @@ msgid "&OPEN"
 msgstr "&BUKA"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:255
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:557
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:565
 msgid "&Open"
 msgstr "&Buka"
 
@@ -751,7 +764,7 @@ msgstr "&Pasif"
 msgid "&Password:"
 msgstr "&KataKunci:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:401
 msgid "&Play sound"
 msgstr "&Mainkan suara"
 
@@ -794,7 +807,7 @@ msgid "&Reconnect information"
 msgstr "Informasi &koneksi ulang"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:61
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:622
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:633
 msgid "&Refresh"
 msgstr "&Perbarui"
 
@@ -802,7 +815,7 @@ msgstr "&Perbarui"
 msgid "&Remember password until FileZilla is closed"
 msgstr "&Ingat Kata kunci sampai FileZilla ditutup"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3660
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3784
 msgid "&Remember passwords"
 msgstr "&Ingat kata kunci?"
 
@@ -815,6 +828,10 @@ msgstr "&Direktori remote:"
 msgid "&Remote path:"
 msgstr "Path &remote:"
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3017
+msgid "&Remote search"
+msgstr "Pencarian &remote"
+
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1117
 msgid "&Remove"
 msgstr "&Hapus"
@@ -823,7 +840,7 @@ msgstr "&Hapus"
 msgid "&Remove key"
 msgstr "&Hapus kunci"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:346
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:350
 msgid "&Remove selected"
 msgstr "&Hapus yang dipilih"
 
@@ -831,8 +848,8 @@ msgstr "&Hapus yang dipilih"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2830
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:280
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:324
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:511
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:575
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:515
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:583
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:53
 msgid "&Rename"
 msgstr "&Ganti nama"
@@ -853,11 +870,11 @@ msgstr "&Ganti karakter yang tidak valid dengan:"
 msgid "&Report a bug..."
 msgstr "&Laporkan kesalahan..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Request attention"
 msgstr "&Meminta perhatian"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:449
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:453
 msgid "&Reset and requeue all"
 msgstr "&Ulangi dan antri ulang semua berkas"
 
@@ -869,7 +886,7 @@ msgstr "&Ulang kembali Panduan"
 msgid "&Resume"
 msgstr "&Teruskan"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
 msgid "&Run command..."
 msgstr "&Jalankan perintah..."
 
@@ -893,7 +910,7 @@ msgstr "&SOCKS 5"
 msgid "&Save as..."
 msgstr "&Simpan sebagai..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3013
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3025
 msgid "&Search"
 msgstr "&Pencarian"
 
@@ -930,7 +947,7 @@ msgstr "&Pengaturan..."
 msgid "&Show debug menu"
 msgstr "&Tampilkan menu debug"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:424
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:428
 msgid "&Show detailed log"
 msgstr "&Tampilkan log detail"
 
@@ -958,7 +975,8 @@ msgstr "&Lewati"
 msgid "&Speed limits"
 msgstr "&Batas kecepatan"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3194
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3289
 msgid "&Start transfer immediately"
 msgstr "&Mulai transfer secepatnya"
 
@@ -966,7 +984,7 @@ msgstr "&Mulai transfer secepatnya"
 msgid "&Swap local and remote panes"
 msgstr "&Tukar jendela lokal dan remote"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:440
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:444
 msgid "&TLS Ciphers"
 msgstr "&TLS Cipher"
 
@@ -1004,9 +1022,17 @@ msgid "&Update cached key for this host"
 msgstr "&Update kunci yang di-cache untuk mesin ini"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:240
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:546
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:554
 msgid "&Upload"
 msgstr "&Upload"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3248
+msgid "&Upload to:"
+msgstr "&Upload ke:"
+
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:611
+msgid "&Upload..."
+msgstr "&Upload..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1420
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1200
@@ -1047,7 +1073,7 @@ msgstr "&Pengguna:"
 msgid "&Username:"
 msgstr "&Nama pengguna:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1664
+#: ../../locales/../src/interface/Mainfrm.cpp:1663
 #, c-format
 msgid "&Version %s"
 msgstr "&Versi %s"
@@ -1057,7 +1083,7 @@ msgid "&View"
 msgstr "&Lihat"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:300
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:603
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:614
 msgid "&View/Edit"
 msgstr "&Lihat/Edit"
 
@@ -1131,7 +1157,7 @@ msgid "(%d object filtered)"
 msgid_plural "(%d objects filtered)"
 msgstr[0] "(%d objek terfilter)"
 
-#: ../../locales/../src/interface/update_dialog.cpp:313
+#: ../../locales/../src/interface/update_dialog.cpp:309
 #, c-format
 msgid "(%u%% downloaded)"
 msgstr "(%u%% terdownload)"
@@ -1171,8 +1197,8 @@ msgstr "(contoh: %H:%M)"
 msgid "(example: %Y-%m-%d)"
 msgstr "(contoh: %Y-%m-%d)"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3574
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3591
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3698
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3715
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:919
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:944
 #, c-format
@@ -1252,7 +1278,7 @@ msgstr "Editor default harus ditentukan."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:118
-#: ../../locales/../src/interface/state.cpp:758
+#: ../../locales/../src/interface/state.cpp:759
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Sebuah direktori tidak bisa dipindah pada salah satu sub direktorinya."
 
@@ -1271,17 +1297,17 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Sebuah berkas yang sebelumnya dibuka sudah berubah."
 
-#: ../../locales/../src/interface/edithandler.cpp:1644
+#: ../../locales/../src/interface/edithandler.cpp:1645
 msgid "A file with that name is already being transferred."
 msgstr "Berkas dengan nama tersebut sudah ditransfer."
 
-#: ../../locales/../src/interface/edithandler.cpp:1648
+#: ../../locales/../src/interface/edithandler.cpp:1649
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr ""
 "Berkas dengan nama tersebut masih diedit. Harap ditutup dan coba kembali."
 
-#: ../../locales/../src/interface/FileZilla.cpp:550
+#: ../../locales/../src/interface/FileZilla.cpp:561
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1328,7 +1354,7 @@ msgstr ""
 "lokal?"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:144
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:590
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:598
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1062
 msgid "A&SCII"
 msgstr "A&SCII"
@@ -1353,7 +1379,7 @@ msgstr "G&unakan hanya untuk upload"
 msgid "A&pply to all files and directories"
 msgstr "&Terapkan pada semua berkas dan direktori"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:478
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:482
 msgid "A&utomatically remove successful transfers"
 msgstr "&Hapus transfer yang berhasil secara otomatis"
 
@@ -1369,8 +1395,8 @@ msgstr "Tentang FileZilla"
 msgid "Above the file lists"
 msgstr "Diatas daftar berkas"
 
-#: ../../locales/../src/engine/server.cpp:863
-#: ../../locales/../src/engine/server.cpp:884
+#: ../../locales/../src/engine/server.cpp:885
+#: ../../locales/../src/engine/server.cpp:906
 #: ../../locales/../src/interface/manual_transfer.cpp:154
 #: ../../locales/../src/interface/manual_transfer.cpp:155
 #: ../../locales/../src/interface/manual_transfer.cpp:188
@@ -1381,7 +1407,7 @@ msgstr "Diatas daftar berkas"
 msgid "Account"
 msgstr "Akun"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:375
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:379
 msgid "Action after queue &completion"
 msgstr "Aksi setelah antrian &selesai"
 
@@ -1431,12 +1457,13 @@ msgstr ""
 msgid "Active mode IP"
 msgstr "IP mode aktif"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3176
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3201
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3296
 msgid "Add files to &queue only"
 msgstr "Tambahkan berkas ke hanya ke &antrian"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:494
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:553
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:498
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:561
 msgid "Add selected directory to the transfer queue"
 msgstr "Masukkan direktori yang dipilih pada antrian transfer"
 
@@ -1472,7 +1499,7 @@ msgstr ""
 "dan mungkin merusak sistem Anda. Gunakan versi beta dan build harian dengan "
 "resiko Anda sendiri."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3507
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3631
 msgid "Al&ways perform this action"
 msgstr "&Selalu gunakan aksi ini"
 
@@ -1502,7 +1529,7 @@ msgstr "Ijinkan &kembali pada mode transfer lain jika gagal"
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "Ijinkan kembali pada mode transfer lain jika gagal"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3467
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3591
 msgid "Already connected"
 msgstr "Sudah terhubung"
 
@@ -1552,7 +1579,7 @@ msgstr ""
 "Sebuah kesalahan memuat antrian transfer ke \"%s\".\n"
 "Beberapa antrian mungkin belum dikembalikan."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2033
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2034
 msgid ""
 "An item with the same name as the dragged item already exists at the target "
 "location."
@@ -1560,7 +1587,7 @@ msgstr ""
 "Berkas dengan nama yang sama dengan berkas yang sedang di-geser sudah ada "
 "pada lokasi target."
 
-#: ../../locales/../src/engine/server.cpp:886
+#: ../../locales/../src/engine/server.cpp:908
 #: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:191
 #: ../../locales/../src/interface/manual_transfer.cpp:207
@@ -1570,7 +1597,7 @@ msgstr ""
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: ../../locales/../src/interface/state.cpp:959
+#: ../../locales/../src/interface/state.cpp:967
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
@@ -1625,8 +1652,8 @@ msgstr "Sebagai tab dalam tampilan antrian transfer"
 msgid "Ask for action"
 msgstr "Meminta tindakan"
 
-#: ../../locales/../src/engine/server.cpp:857
-#: ../../locales/../src/engine/server.cpp:878
+#: ../../locales/../src/engine/server.cpp:879
+#: ../../locales/../src/engine/server.cpp:900
 #: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Ask for password"
 msgstr "Meminta kata sandi"
@@ -1639,7 +1666,7 @@ msgstr "Meminta sistem operasi untuk sebuah port."
 msgid "Ask your operating system for the external IP address"
 msgstr "Meminta sistem operasi anda untuk alamat IP eksternal"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3416
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3536
 msgid "Asking questions in the FileZilla forums"
 msgstr "Menanyakan pertanyaan pada forum FileZilla"
 
@@ -1692,7 +1719,7 @@ msgstr "L&ewati proxy"
 msgid "Bad file descriptor"
 msgstr "Deskriptor berkas rusak"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3373
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3493
 msgid "Basic usage instructions"
 msgstr "Instruksi penggunaan dasar"
 
@@ -1700,8 +1727,8 @@ msgstr "Instruksi penggunaan dasar"
 msgid "Behaviour"
 msgstr "Perilaku"
 
-#: ../../locales/../src/interface/edithandler.cpp:1114
-#: ../../locales/../src/interface/edithandler.cpp:1142
+#: ../../locales/../src/interface/edithandler.cpp:1115
+#: ../../locales/../src/interface/edithandler.cpp:1143
 msgid "Being edited"
 msgstr "Sedang diedit"
 
@@ -1762,14 +1789,19 @@ msgstr ""
 msgid "C&ancel current operation"
 msgstr "B&atalkan operasi saat ini"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:431
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:435
 msgid "C&lear all"
 msgstr "B&ersihkan semua"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:328
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:515
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:519
 msgid "C&opy URL(s) to clipboard"
 msgstr "&Salin URL ke clipboard"
+
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:332
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:523
+msgid "C&opy URL(s) with password to clipboard"
+msgstr "&Salin URL dengan kata sandi ke clipboard"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1507
 msgid "C&ustom"
@@ -1819,10 +1851,11 @@ msgstr "Tidak dapat menulis data ke berkas: %s"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2723
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2891
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2981
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3193
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3263
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3525
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3745
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3218
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3313
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3383
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3649
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3869
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:604
 msgid "Cancel"
 msgstr "Batal"
@@ -1870,18 +1903,18 @@ msgstr ""
 msgid "Cannot create new filter"
 msgstr "Tidak dapat membuat filter baru"
 
-#: ../../locales/../src/interface/edithandler.cpp:1574
-#: ../../locales/../src/interface/edithandler.cpp:1622
-#: ../../locales/../src/interface/LocalListView.cpp:1719
-#: ../../locales/../src/interface/search.cpp:696
+#: ../../locales/../src/interface/edithandler.cpp:1575
+#: ../../locales/../src/interface/edithandler.cpp:1623
+#: ../../locales/../src/interface/LocalListView.cpp:1722
+#: ../../locales/../src/interface/search.cpp:1136
 msgid "Cannot edit file"
 msgstr "Tidak dapat mengedit berkas"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1601
+#: ../../locales/../src/interface/LocalListView.cpp:1604
 msgid "Cannot edit file, not connected to any server."
 msgstr "Tidak dapat mengedit berkas, tidak terhubung ke server."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1610
+#: ../../locales/../src/interface/LocalListView.cpp:1613
 msgid "Cannot edit file, remote path unknown."
 msgstr "Tidak bisa mengedit berkas, path remote tidak diketahui."
 
@@ -1915,7 +1948,7 @@ msgstr "Tidak bisa mengingat kata sandi"
 msgid "Cannot rename entry"
 msgstr "Tidak dapat mengganti nama daftar"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1582
+#: ../../locales/../src/interface/RemoteListView.cpp:1576
 msgid "Cannot rename file"
 msgstr "Tidak dapat mengganti nama berkas"
 
@@ -1934,17 +1967,17 @@ msgstr "Tidak dapat menyimpat kumpulan filter"
 msgid "Cannot select filter"
 msgstr "Tidak dapat memilih filter"
 
-#: ../../locales/../src/interface/edithandler.cpp:1472
-#: ../../locales/../src/interface/edithandler.cpp:1476
-#: ../../locales/../src/interface/edithandler.cpp:1511
+#: ../../locales/../src/interface/edithandler.cpp:1473
+#: ../../locales/../src/interface/edithandler.cpp:1477
+#: ../../locales/../src/interface/edithandler.cpp:1512
 msgid "Cannot set file association"
 msgstr "Tidak dapat menentukan asosiasi berkas"
 
-#: ../../locales/../src/interface/edithandler.cpp:1073
+#: ../../locales/../src/interface/edithandler.cpp:1074
 msgid "Cannot show dialog"
 msgstr "Tidak bisa menampilkan dialog"
 
-#: ../../locales/../src/interface/edithandler.cpp:1644
+#: ../../locales/../src/interface/edithandler.cpp:1645
 msgid "Cannot view/edit selected file"
 msgstr "Tidak bisa melihat/edit berkas yang dipilih"
 
@@ -1988,8 +2021,8 @@ msgstr "Tantangan:"
 msgid "Change file attributes"
 msgstr "Ganti atribut berkas"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:333
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:520
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:337
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:528
 msgid "Change the file permissions."
 msgstr "Ganti hak akses berkas."
 
@@ -1997,7 +2030,7 @@ msgstr "Ganti hak akses berkas."
 msgid "Changing logfile settings requires restart of FileZilla."
 msgstr "Mengganti pengaturan berkas log membutuhkan akses ulang FileZilla."
 
-#: ../../locales/../src/interface/FileZilla.cpp:550
+#: ../../locales/../src/interface/FileZilla.cpp:561
 msgid "Character encoding issue"
 msgstr "Masalah enkoding karakter"
 
@@ -2069,7 +2102,7 @@ msgstr "Pilih direktori lokal default"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:124
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:364
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2245
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2246
 msgid "Choose the local directory"
 msgstr "Pilih direktori lokal"
 
@@ -2082,7 +2115,7 @@ msgid "Cipher:"
 msgstr "Cipher:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:21
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:615
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:626
 msgid "Cl&ose tab"
 msgstr "Tut&up tab"
 
@@ -2090,7 +2123,7 @@ msgstr "Tut&up tab"
 msgid "Classic"
 msgstr "Klasik"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:436
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:440
 msgid "Clear &layout cache"
 msgstr "Hapus cache &layout"
 
@@ -2123,7 +2156,7 @@ msgstr "Klien ke server MAC:"
 msgid "Client to server cipher:"
 msgstr "Cipher klien ke server:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:618
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:629
 msgid "Close &all other tabs"
 msgstr "Tutup &semua tab yang lain"
 
@@ -2145,7 +2178,7 @@ msgstr "Tutup tab aktual"
 msgid "Co&mments:"
 msgstr "Ko&mentar:"
 
-#: ../../locales/../src/interface/listctrlex.cpp:747
+#: ../../locales/../src/interface/listctrlex.cpp:745
 msgid "Column properties"
 msgstr "Properti kolom"
 
@@ -2191,12 +2224,12 @@ msgid "Communication tainted by router or firewall"
 msgstr "Komunikasi diputus oleh router atau firewall"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:82
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:535
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:543
 msgid "Compare &modification time"
 msgstr "Bandingkan waktu &modifikasi"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:78
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:531
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:539
 msgid "Compare file&size"
 msgstr "Bandingkan &ukuran berkas"
 
@@ -2233,7 +2266,7 @@ msgid "Concurrent transfers"
 msgstr "Transfer konkurensi"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1315
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3063
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3088
 msgid "Conditions are c&ase sensitive"
 msgstr "Kondisi bersifat &case sensitive"
 
@@ -2249,20 +2282,20 @@ msgstr "Konfigurasi mode pasif"
 msgid "Configure port range"
 msgstr "Konfigurasi batasan port"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3379
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3499
 msgid "Configuring FileZilla and your network"
 msgstr "Mengkonfigurasi FileZilla dan jaringan Anda"
 
-#: ../../locales/../src/interface/search.cpp:747
+#: ../../locales/../src/interface/search.cpp:1192
 msgid "Confirm deletion"
 msgstr "Konfirmasi penghapusan"
 
-#: ../../locales/../src/interface/edithandler.cpp:1586
+#: ../../locales/../src/interface/edithandler.cpp:1587
 #: ../../locales/../src/interface/file_utils.h:45
-#: ../../locales/../src/interface/LocalListView.cpp:1683
-#: ../../locales/../src/interface/RemoteListView.cpp:1390
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1041
-#: ../../locales/../src/interface/search.cpp:708
+#: ../../locales/../src/interface/LocalListView.cpp:1686
+#: ../../locales/../src/interface/RemoteListView.cpp:1384
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1047
+#: ../../locales/../src/interface/search.cpp:1148
 msgid "Confirmation needed"
 msgstr "Dibutuhkan konfirmasi"
 
@@ -2406,7 +2439,7 @@ msgstr[0] "Koneksi time out setelah %d detik tidak aktif"
 msgid "Connection timed out."
 msgstr "Koneksi time out."
 
-#: ../../locales/../src/interface/search.cpp:386
+#: ../../locales/../src/interface/search.cpp:660
 msgid "Connection to server lost."
 msgstr "Koneksi ke server putus."
 
@@ -2438,8 +2471,13 @@ msgstr "Salin (%d) dari %s"
 msgid "Copy of %s"
 msgstr "Salinan dari %s"
 
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:333
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:524
+msgid "Copy the URLs of the selected items to clipboard, including password."
+msgstr "Salin URL dari item yang dipilih pada clipboard, termasuk kata sandi."
+
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:329
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:516
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:520
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Salin URL dari item yang dipilih pada clipboard."
 
@@ -2453,7 +2491,7 @@ msgstr "Tidak dapat menerima hubungan: %s"
 msgid "Could not add connection to Site Manager"
 msgstr "Tidak bisa menambahkan koneksi pada Manajemen Situs"
 
-#: ../../locales/../src/interface/state.cpp:772
+#: ../../locales/../src/interface/state.cpp:773
 msgid "Could not complete operation"
 msgstr "Tidak dapat menyelesaikan operasi"
 
@@ -2475,8 +2513,8 @@ msgstr "Tidak dapat mengkonversi perintah ke enkoding server"
 msgid "Could not convert private key"
 msgstr "Tidak dapat mengkonversi kunci privat"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2521
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1381
+#: ../../locales/../src/interface/RemoteListView.cpp:2514
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1384
 msgid "Could not copy URLs"
 msgstr "Tidak dapat menyalin URL"
 
@@ -2494,8 +2532,8 @@ msgstr "Tidak bisa membuat berkas lokal%s\n"
 msgid "Could not create logging mutex: %s"
 msgstr "Tidak bisa membuat mutex %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2182
-#: ../../locales/../src/interface/RemoteTreeView.cpp:851
+#: ../../locales/../src/interface/RemoteListView.cpp:2180
+#: ../../locales/../src/interface/RemoteTreeView.cpp:855
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2541,7 +2579,7 @@ msgstr ""
 "Tidak dapat mendapatkan nama unik dari pemberi sertifikat, "
 "gnutls_x509_get_dn gagal"
 
-#: ../../locales/../src/interface/state.cpp:945
+#: ../../locales/../src/interface/state.cpp:953
 msgid "Could not get full remote path."
 msgstr "Tidak dapat memperoleh path remote lengkap"
 
@@ -2550,8 +2588,8 @@ msgstr "Tidak dapat memperoleh path remote lengkap"
 msgid "Could not get reply from fzputtygen."
 msgstr "Tidak dapat mendapatkan jawaban dari fzputtygen."
 
-#: ../../locales/../src/interface/edithandler.cpp:1574
-#: ../../locales/../src/interface/search.cpp:696
+#: ../../locales/../src/interface/edithandler.cpp:1575
+#: ../../locales/../src/interface/search.cpp:1136
 msgid "Could not get temporary directory to download file into."
 msgstr "Tidak bisa mendapatkan direktori sementara untuk mendownload berkas"
 
@@ -2591,7 +2629,7 @@ msgstr "Tidak dapat memuat berkas kunci"
 msgid "Could not load private key"
 msgstr "Tidak bisa memuat kunci privat"
 
-#: ../../locales/../src/interface/state.cpp:967
+#: ../../locales/../src/interface/state.cpp:975
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2624,8 +2662,8 @@ msgstr ""
 "Penjelajahan tersinkronisasi telah dinonaktifkan."
 
 #: ../../locales/../src/interface/aboutdialog.cpp:198
-#: ../../locales/../src/interface/RemoteListView.cpp:2521
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1381
+#: ../../locales/../src/interface/RemoteListView.cpp:2514
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1384
 msgid "Could not open clipboard"
 msgstr "Tidak dapat membuka clipboard"
 
@@ -2718,7 +2756,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/sitemanager.cpp:720
 #: ../../locales/../src/interface/sitemanager.cpp:774
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2226
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2227
 #, c-format
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr ""
@@ -2758,25 +2796,25 @@ msgstr "Negara:"
 msgid "Crea&te new file"
 msgstr "Membua&t berkas baru"
 
-#: ../../locales/../src/interface/state.cpp:981
+#: ../../locales/../src/interface/state.cpp:989
 msgid "Create &missing local directory and enter it"
 msgstr "Membuat direktori lokal yang tidak ada dan &masuk"
 
-#: ../../locales/../src/interface/state.cpp:908
+#: ../../locales/../src/interface/state.cpp:917
 msgid "Create &missing remote directory and enter it"
 msgstr "Membuat direktori remote yang tidak ada dan &masuk"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:265
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:305
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:499
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:563
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:503
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:571
 msgid "Create a new subdirectory in the current directory"
 msgstr "Membuat sub direkori baru di direktori saat ini"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:269
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:309
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:503
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:567
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:507
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:575
 msgid "Create a new subdirectory in the current directory and change into it"
 msgstr ""
 "Membuat sub direkori baru di direktori saat ini dan berpindah ke direktori "
@@ -2788,19 +2826,19 @@ msgstr "Membuat berkas kosong baru di direktori saat ini"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:268
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:308
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:502
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:566
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:506
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:574
 msgid "Create director&y and enter it"
 msgstr "Membuat direktor&i dan masuk"
 
 #: ../../locales/../src/interface/LocalListView.cpp:917
-#: ../../locales/../src/interface/LocalTreeView.cpp:1135
-#: ../../locales/../src/interface/RemoteListView.cpp:1293
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1219
+#: ../../locales/../src/interface/LocalTreeView.cpp:1139
+#: ../../locales/../src/interface/RemoteListView.cpp:1287
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1225
 msgid "Create directory"
 msgstr "Membuat direktori"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2607
+#: ../../locales/../src/interface/RemoteListView.cpp:2600
 msgid "Create empty file"
 msgstr "Membuat berkas kosong"
 
@@ -2883,8 +2921,8 @@ msgid "D&efault"
 msgstr "D&efault"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:320
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:507
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:606
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:511
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:617
 msgid "D&elete"
 msgstr "H&apus"
 
@@ -2913,7 +2951,7 @@ msgstr "D&uplikat"
 msgid "DOS-like with virtual paths"
 msgstr "Seperi DOS dengan path virtual"
 
-#: ../../locales/../src/interface/edithandler.cpp:1626
+#: ../../locales/../src/interface/edithandler.cpp:1627
 msgid "Dangerous filetype"
 msgstr "Jenis berkas berbahaya"
 
@@ -3020,8 +3058,8 @@ msgstr[0] ""
 msgid "Delete Site Manager entry"
 msgstr "Hapus daftar Manajemen Situs"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:508
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:572
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:512
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:580
 msgid "Delete selected directory"
 msgstr "Hapus direktori yang dipilih"
 
@@ -3040,11 +3078,11 @@ msgstr "Menghapus \"%s\""
 msgid "Deleting %u files from \"%s\""
 msgstr "Menghapus %u berkas dari \"%s\""
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3331
 msgid "Deleting symbolic link"
 msgstr "Menghapus link simbolis"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:955
+#: ../../locales/../src/interface/LocalTreeView.cpp:959
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -3070,17 +3108,17 @@ msgstr "Dire&ktori"
 msgid "Direction"
 msgstr "Arah"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:271
+#: ../../locales/../src/interface/filelistctrl.cpp:268
 msgid "Directory"
 msgstr "Direktori"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2783
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:524
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:532
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1770
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
-#: ../../locales/../src/interface/filelistctrl.cpp:464
-#: ../../locales/../src/interface/Mainfrm.cpp:2172
+#: ../../locales/../src/interface/filelistctrl.cpp:468
+#: ../../locales/../src/interface/Mainfrm.cpp:2175
 msgid "Directory comparison"
 msgstr "Perbandingan direktori"
 
@@ -3096,7 +3134,7 @@ msgstr "Direktori berisi berkas log tidak ada atau nama berkas tidak valid."
 msgid "Directory listing aborted by user"
 msgstr "Pendataan direktori dibatalkan oleh pengguna"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2012
+#: ../../locales/../src/interface/RemoteListView.cpp:2006
 msgid "Directory listing failed"
 msgstr "Pendataan direktori gagal"
 
@@ -3117,7 +3155,7 @@ msgstr "Pendataan direktori berhasil"
 msgid "Disa&ble all"
 msgstr "&Nonaktifkan semua"
 
-#: ../../locales/../src/interface/state.cpp:974
+#: ../../locales/../src/interface/state.cpp:982
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr ""
@@ -3207,7 +3245,7 @@ msgstr "Apakah Anda hendak mengirimkan '%s' pada server?"
 msgid "Do you want to reopen this file?"
 msgstr "Apakah Anda hendak membuka kembali berkas ini?"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3361
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3481
 msgid "Documentation"
 msgstr "Dokumentasi"
 
@@ -3229,7 +3267,7 @@ msgstr "Aksi klik ganda"
 msgid "Download"
 msgstr "Download"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3563
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3687
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:905
 msgid "Download &limit:"
 msgstr "&Batasan download:"
@@ -3243,13 +3281,13 @@ msgstr "Batasan download %s/s:"
 msgid "Download limit: none"
 msgstr "Batasan download: tidak ada"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3110
-#: ../../locales/../src/interface/search.cpp:524
-#: ../../locales/../src/interface/search.cpp:529
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3135
+#: ../../locales/../src/interface/search.cpp:851
+#: ../../locales/../src/interface/search.cpp:856
 msgid "Download search results"
 msgstr "Download hasil pencarian"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:489
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:493
 msgid "Download selected directory"
 msgstr "Download direktori yang dipilih"
 
@@ -3266,7 +3304,7 @@ msgstr ""
 "Kecepatan download: %s/s\n"
 "Kecepatan upload: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1099
+#: ../../locales/../src/interface/edithandler.cpp:1100
 msgid "Downloading"
 msgstr "Mendownload"
 
@@ -3318,9 +3356,9 @@ msgstr "E&ksekusi"
 msgid "E&xit"
 msgstr "Ke&luar"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:415
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:459
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:482
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:419
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:463
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:486
 msgid "E&xport..."
 msgstr "E&kspor..."
 
@@ -3343,16 +3381,16 @@ msgstr ""
 "Edit berkas dengan editor yang telah dikonfigurasi dan upload perubahan pada "
 "server."
 
-#: ../../locales/../src/interface/search.cpp:684
+#: ../../locales/../src/interface/search.cpp:1124
 msgid "Editing directories is not supported"
 msgstr "Perubahan direktori belum didukung"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1601
-#: ../../locales/../src/interface/LocalListView.cpp:1610
+#: ../../locales/../src/interface/LocalListView.cpp:1604
+#: ../../locales/../src/interface/LocalListView.cpp:1613
 msgid "Editing failed"
 msgstr "Pengeditan gagal"
 
-#: ../../locales/../src/interface/search.cpp:684
+#: ../../locales/../src/interface/search.cpp:1124
 msgid "Editing search results"
 msgstr "Mengedit hasil pencarian"
 
@@ -3368,7 +3406,7 @@ msgstr "Masukkan perintah sendiri"
 msgid "Empty command."
 msgstr "Perintah kosong."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2014
+#: ../../locales/../src/interface/RemoteListView.cpp:2008
 msgid "Empty directory listing"
 msgstr "Daftar direktori kosong"
 
@@ -3414,7 +3452,7 @@ msgstr "Enkripsi"
 msgid "Encryption details"
 msgstr "Detail enkripsi"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:466
+#: ../../locales/../src/interface/filelistctrl.cpp:470
 msgid "End comparison and change sorting order?"
 msgstr "Akhiri perbandingan dan ganti urutan pengurutan?"
 
@@ -3422,7 +3460,7 @@ msgstr "Akhiri perbandingan dan ganti urutan pengurutan?"
 msgid "Enter &custom command..."
 msgstr "Masukkan &perintah sendiri..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3604
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3728
 msgid "Enter 0 for unlimited speed."
 msgstr "Masukkan 0 untuk kecepatan tidak terbatas."
 
@@ -3531,10 +3569,10 @@ msgstr "Kesalahan memuat antrian"
 #: ../../locales/../src/interface/filter.cpp:980
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
-#: ../../locales/../src/interface/Options.cpp:247
+#: ../../locales/../src/interface/Options.cpp:249
 #: ../../locales/../src/interface/QueueView.cpp:1453
-#: ../../locales/../src/interface/search.cpp:802
-#: ../../locales/../src/interface/search.cpp:821
+#: ../../locales/../src/interface/search.cpp:1252
+#: ../../locales/../src/interface/search.cpp:1271
 #: ../../locales/../src/interface/sitemanager.cpp:16
 #: ../../locales/../src/interface/sitemanager.cpp:436
 #: ../../locales/../src/interface/sitemanager.cpp:517
@@ -3563,7 +3601,7 @@ msgstr "Kesalahan menjalankan program"
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:830
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2227
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2228
 #: ../../locales/../src/interface/xmlfunctions.cpp:147
 msgid "Error writing xml file"
 msgstr "Kesalahan menulis berkas xml"
@@ -3663,9 +3701,9 @@ msgstr "FTPS - FTP diatas TLS implisit"
 #: ../../locales/../src/interface/LocalListView.cpp:531
 #: ../../locales/../src/interface/LocalListView.cpp:607
 #: ../../locales/../src/interface/LocalListView.cpp:906
-#: ../../locales/../src/interface/LocalListView.cpp:1797
+#: ../../locales/../src/interface/LocalListView.cpp:1800
 #: ../../locales/../src/interface/LocalTreeView.cpp:843
-#: ../../locales/../src/interface/LocalTreeView.cpp:1111
+#: ../../locales/../src/interface/LocalTreeView.cpp:1115
 #: ../../locales/../src/interface/viewheader.cpp:493
 msgid "Failed to change directory"
 msgstr "Gagal mengganti direktori"
@@ -3677,7 +3715,7 @@ msgstr "Gagal mengganti direktori"
 msgid "Failed to change language"
 msgstr "Gagal mengganti bahasa"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2033
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2034
 msgid "Failed to copy or move sites"
 msgstr "Gagal menyalin atau memindahkan situs"
 
@@ -3854,7 +3892,7 @@ msgstr "B&erkas:"
 msgid "Fil&es"
 msgstr "B&erkas"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:270
+#: ../../locales/../src/interface/filelistctrl.cpp:267
 msgid "File"
 msgstr "Berkas"
 
@@ -3874,7 +3912,7 @@ msgstr "Berkas tidak mengandung data yang dapat diimpor."
 msgid "File editing"
 msgstr "Pengeditan berkas"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1596
+#: ../../locales/../src/interface/RemoteListView.cpp:1590
 msgid "File exists"
 msgstr "Berkas ada"
 
@@ -3890,14 +3928,16 @@ msgstr "Berkas sudah berubah"
 msgid "File lists"
 msgstr "Daftar berkas"
 
-#: ../../locales/../src/interface/edithandler.cpp:1550
-#: ../../locales/../src/interface/FileZilla.cpp:572
-#: ../../locales/../src/interface/FileZilla.cpp:657
+#: ../../locales/../src/interface/edithandler.cpp:1551
+#: ../../locales/../src/interface/FileZilla.cpp:583
+#: ../../locales/../src/interface/FileZilla.cpp:668
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Berkas tidak ditemukan"
 
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:87
+#: ../../locales/../src/interface/search.cpp:675
+#: ../../locales/../src/interface/search.cpp:680
 msgid "File search"
 msgstr "Pencarian berkas"
 
@@ -3959,11 +3999,11 @@ msgstr ""
 "FileZilla sekarang bisa menguji konfigurasi Anda untuk memastikan semua "
 "sudah sudah benar."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3485
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3609
 msgid "FileZilla is already connected to a server."
 msgstr "FileZilla sudah terhubung ke sebuah server."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1447
+#: ../../locales/../src/interface/Mainfrm.cpp:1446
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr "FileZilla harus dijalankan ulang agar perubahan bahasa berjalan."
 
@@ -3975,11 +4015,11 @@ msgstr "Update FileZilla"
 msgid "Filelist status &bars"
 msgstr "&Status bar daftar berkas"
 
-#: ../../locales/../src/interface/edithandler.cpp:1084
+#: ../../locales/../src/interface/edithandler.cpp:1085
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:277
-#: ../../locales/../src/interface/RemoteListView.cpp:373
-#: ../../locales/../src/interface/search.cpp:108
+#: ../../locales/../src/interface/RemoteListView.cpp:374
+#: ../../locales/../src/interface/search.cpp:150
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:33
 msgid "Filename"
 msgstr "Nama berkas"
@@ -3994,7 +4034,7 @@ msgstr "&Filter nama berkas..."
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "Nama berkas tidak bisa dibuat untuk direktori %s dan nama berkas %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1582
+#: ../../locales/../src/interface/RemoteListView.cpp:1576
 msgid "Filename invalid"
 msgstr "Nama berkas tidak valid"
 
@@ -4007,11 +4047,11 @@ msgstr "Nama berkas tidak berubah"
 msgid "Filename:"
 msgstr "Nama berkas:"
 
-#: ../../locales/../src/interface/file_utils.cpp:318
+#: ../../locales/../src/interface/file_utils.cpp:315
 msgid "Filenames may not contain any of the following characters: / * ? < > |"
 msgstr "Nama berkas tidak boleh menggunakan karakter berikut: / * ? < > |"
 
-#: ../../locales/../src/interface/file_utils.cpp:293
+#: ../../locales/../src/interface/file_utils.cpp:290
 msgid ""
 "Filenames may not contain any of the following characters: / \\ : * ? \" < > "
 "|"
@@ -4024,8 +4064,8 @@ msgstr "Berkas saat ini sedang diedit"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:135
 #: ../../locales/../src/interface/LocalListView.cpp:278
-#: ../../locales/../src/interface/RemoteListView.cpp:374
-#: ../../locales/../src/interface/search.cpp:110
+#: ../../locales/../src/interface/RemoteListView.cpp:375
+#: ../../locales/../src/interface/search.cpp:152
 msgid "Filesize"
 msgstr "Ukuran berkas"
 
@@ -4034,8 +4074,8 @@ msgid "Filesize format"
 msgstr "Format ukuran berkas"
 
 #: ../../locales/../src/interface/LocalListView.cpp:279
-#: ../../locales/../src/interface/RemoteListView.cpp:375
-#: ../../locales/../src/interface/search.cpp:111
+#: ../../locales/../src/interface/RemoteListView.cpp:376
+#: ../../locales/../src/interface/search.cpp:153
 msgid "Filetype"
 msgstr "Jenis berkas"
 
@@ -4086,11 +4126,11 @@ msgstr "Filter daftar direktori"
 msgid "Filter validation failed"
 msgstr "Validasi filter gagal"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3068
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3093
 msgid "Find &files"
 msgstr "Mencari &berkas"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3073
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3098
 msgid "Find d&irectories"
 msgstr "Mencari d&irektori"
 
@@ -4123,7 +4163,7 @@ msgstr ""
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "Untuk reliabilitas, Anda harus menentukan paling tidak 10 port."
 
-#: ../../locales/../src/interface/Options.cpp:246
+#: ../../locales/../src/interface/Options.cpp:248
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -4159,7 +4199,7 @@ msgstr ""
 msgid "Found new %s %s\n"
 msgstr "Menemukan %s %s baru\n"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3385
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3505
 msgid "Further documentation"
 msgstr "Dokumentasi lebih lanjut"
 
@@ -4180,7 +4220,7 @@ msgstr "Proxy generik"
 msgid "Get external IP address from the following URL:"
 msgstr "Dapatkan alamat IP eksternal dari URL berikut:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3404
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3524
 msgid "Getting help"
 msgstr "Mendapatkan bantuan"
 
@@ -4221,7 +4261,7 @@ msgstr "GnuTLS:"
 msgid "Group permissions"
 msgstr "Hak akses grup"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:358
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:362
 msgid "H&igh"
 msgstr "T&inggi"
 
@@ -4372,7 +4412,7 @@ msgstr ""
 "menambahkan \".1\" pada akhir nama berkas (kemungkinan menimpa berkas log "
 "lama) dan berkas baru akan dibuat."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3223
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3343
 msgid ""
 "If the symlink points to a directory, FileZilla can either delete the "
 "symbolic link or remove the contents of the linked directory."
@@ -4576,8 +4616,8 @@ msgstr "Algoritma tidak aman!"
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Server tidak aman, tidak mendukung FTP diatas TLS."
 
-#: ../../locales/../src/engine/server.cpp:861
-#: ../../locales/../src/engine/server.cpp:882
+#: ../../locales/../src/engine/server.cpp:883
+#: ../../locales/../src/engine/server.cpp:904
 #: ../../locales/../src/interface/manual_transfer.cpp:185
 msgid "Interactive"
 msgstr "Interaktif"
@@ -4632,8 +4672,8 @@ msgstr "Data yang diterima tidak valid"
 msgid "Invalid date"
 msgstr "Tanggal tidak valid"
 
-#: ../../locales/../src/interface/file_utils.cpp:293
-#: ../../locales/../src/interface/file_utils.cpp:318
+#: ../../locales/../src/interface/file_utils.cpp:290
+#: ../../locales/../src/interface/file_utils.cpp:315
 msgid "Invalid filename"
 msgstr "Nama berkas tidak valid"
 
@@ -4675,7 +4715,7 @@ msgstr ""
 "Host tidak valid, setelah kurung penutup hanya titik dua dan port yang boleh "
 "mengikuti."
 
-#: ../../locales/../src/interface/search.cpp:405
+#: ../../locales/../src/interface/search.cpp:680
 msgid "Invalid regular expression in search conditions."
 msgstr "Regular expression pada kondisi pencarian tidak valid."
 
@@ -4683,7 +4723,7 @@ msgstr "Regular expression pada kondisi pencarian tidak valid."
 msgid "Invalid response code"
 msgstr "Kode respon tidak valid"
 
-#: ../../locales/../src/interface/search.cpp:400
+#: ../../locales/../src/interface/search.cpp:675
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Kondisi pencarian tidak valid: %s"
@@ -4754,14 +4794,14 @@ msgstr "Pertukaran kunci"
 msgid "Key exchange:"
 msgstr "Pertukaran kunci:"
 
-#: ../../locales/../src/engine/server.cpp:859
-#: ../../locales/../src/engine/server.cpp:880
+#: ../../locales/../src/engine/server.cpp:881
+#: ../../locales/../src/engine/server.cpp:902
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1311
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1312
 msgid "Key file"
 msgstr "Berkas kunci"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:370
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:374
 msgid "L&owest"
 msgstr "Ter&endah"
 
@@ -4770,13 +4810,13 @@ msgstr "Ter&endah"
 msgid "Language"
 msgstr "Bahasa"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1447
+#: ../../locales/../src/interface/Mainfrm.cpp:1446
 msgid "Language changed"
 msgstr "Bahasa sudah berubah"
 
 #: ../../locales/../src/interface/LocalListView.cpp:280
-#: ../../locales/../src/interface/RemoteListView.cpp:376
-#: ../../locales/../src/interface/search.cpp:112
+#: ../../locales/../src/interface/RemoteListView.cpp:377
+#: ../../locales/../src/interface/search.cpp:154
 msgid "Last modified"
 msgstr "Terakhir dimodifikasi"
 
@@ -4827,8 +4867,8 @@ msgstr "Daftar:"
 msgid "Lo&west available port:"
 msgstr "Port ter&endah yang tersedia:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1132
-#: ../../locales/../src/interface/edithandler.cpp:1368
+#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1369
 msgid "Local"
 msgstr "Lokal:"
 
@@ -4862,9 +4902,17 @@ msgstr "Berkas lokal adalah direktori dan bukan berkas biasa"
 msgid "Local file is not a valid filename."
 msgstr "Berkas lokal bukan nama berkas yang valid."
 
+#: ../../locales/../src/interface/search.cpp:644
+msgid "Local file search"
+msgstr "Pencarian berkas lokal"
+
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1079
 msgid "Local filters:"
 msgstr "Filter lokal:"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3266
+msgid "Local path handling:"
+msgstr "Penanganan path lokal:"
 
 #: ../../locales/../src/interface/viewheader.cpp:334
 msgid "Local site:"
@@ -4972,15 +5020,15 @@ msgstr "Balasan rusak, server tidak mengirimkan akhir baris yang benar"
 msgid "Manual transfer"
 msgstr "Transfer manual"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3027
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3057
 msgid "Match all of the following"
 msgstr "Cocokkan semua dari pilihan berikut"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3028
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3058
 msgid "Match any of the following"
 msgstr "Cocok dengan sembarang pilihan berikut"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3029
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3059
 msgid "Match none of the following"
 msgstr "Tidak cocok dengan pilihan berikut"
 
@@ -4993,7 +5041,7 @@ msgid "Memory allocation failure"
 msgstr "Kegagalan alokasi memori"
 
 #: ../../locales/../src/interface/Mainfrm.cpp:387
-#: ../../locales/../src/interface/Mainfrm.cpp:1757
+#: ../../locales/../src/interface/Mainfrm.cpp:1760
 msgid "Message log"
 msgstr "Pesan log"
 
@@ -5021,11 +5069,11 @@ msgstr "Ke &bawah"
 msgid "Move &up"
 msgstr "Ke &atas"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:974
+#: ../../locales/../src/interface/LocalTreeView.cpp:978
 msgid "My Computer"
 msgstr "Komputerku"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:964
+#: ../../locales/../src/interface/LocalTreeView.cpp:968
 msgid "My Documents"
 msgstr "Dokumenku"
 
@@ -5066,7 +5114,11 @@ msgstr "Pengurutan Natural"
 msgid "Need to enter filter name"
 msgstr "Harus memasukkan nama filter"
 
-#: ../../locales/../src/interface/search.cpp:391
+#: ../../locales/../src/interface/search.cpp:644
+msgid "Need to enter valid local path"
+msgstr "Harus memasukkan nama path lokal yang valid"
+
+#: ../../locales/../src/interface/search.cpp:665
 msgid "Need to enter valid remote path"
 msgstr "Harus memasukkan nama path remote yang valid"
 
@@ -5123,17 +5175,17 @@ msgstr "Pe&nanda Baru"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:555
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:790
 #: ../../locales/../src/interface/sitemanager.cpp:695
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2183
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2184
 msgid "New bookmark"
 msgstr "Penanda baru"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1138
-#: ../../locales/../src/interface/RemoteListView.cpp:1306
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1232
+#: ../../locales/../src/interface/LocalTreeView.cpp:1142
+#: ../../locales/../src/interface/RemoteListView.cpp:1300
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1238
 msgid "New directory"
 msgstr "Direktori baru"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:54
+#: ../../locales/../src/interface/welcome_dialog.cpp:56
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "Fitur dan peningkatan baru pada %s"
@@ -5148,7 +5200,7 @@ msgstr "Direktori baru"
 
 #: ../../locales/../src/interface/sitemanager.cpp:585
 #: ../../locales/../src/interface/sitemanager.cpp:597
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2159
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2160
 msgid "New site"
 msgstr "Situs baru"
 
@@ -5177,7 +5229,7 @@ msgid "No external IP address set, trying default."
 msgstr ""
 "Tidak ada alamat IP eksternal yang ditentukan, mencoba menggunakan default."
 
-#: ../../locales/../src/interface/edithandler.cpp:1073
+#: ../../locales/../src/interface/edithandler.cpp:1074
 msgid "No files are currently being edited."
 msgstr "Tidak ada berkas yang sedang diedit."
 
@@ -5215,7 +5267,7 @@ msgstr ""
 msgid "No route to host"
 msgstr "Tidak ada rute"
 
-#: ../../locales/../src/interface/search.cpp:255
+#: ../../locales/../src/interface/search.cpp:391
 msgid "No search results"
 msgstr "Tidak ada hasil pencarian"
 
@@ -5246,8 +5298,8 @@ msgid "Nonrecoverable failure in name resolution"
 msgstr "Kegagalan yang tidak dapat diperbaiki pada resolusi nama"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:962
-#: ../../locales/../src/engine/server.cpp:855
-#: ../../locales/../src/engine/server.cpp:876
+#: ../../locales/../src/engine/server.cpp:877
+#: ../../locales/../src/engine/server.cpp:898
 #: ../../locales/../src/interface/manual_transfer.cpp:154
 #: ../../locales/../src/interface/manual_transfer.cpp:179
 #: ../../locales/../src/interface/manual_transfer.cpp:540
@@ -5263,11 +5315,11 @@ msgid "Not all items could be requeued for transfer."
 msgstr "Tidak semua bisa diantrikan ulang untuk transfer."
 
 #: ../../locales/../src/interface/state.cpp:178
-#: ../../locales/../src/interface/state.cpp:478
+#: ../../locales/../src/interface/state.cpp:479
 msgid "Not connected"
 msgstr "Tidak terhubung"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2010
+#: ../../locales/../src/interface/RemoteListView.cpp:2004
 msgid "Not connected to any server"
 msgstr "Tidak terhubung pada sembarang server"
 
@@ -5327,11 +5379,12 @@ msgstr "&Buka berkas"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2564
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2717
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2975
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3187
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3256
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3452
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3621
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3677
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3212
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3307
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3376
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3576
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3745
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3801
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:34
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:27
 msgid "OK"
@@ -5365,7 +5418,7 @@ msgstr "Sekali seminggu"
 msgid "Only use plain FTP (insecure)"
 msgstr "Hanya gunakan plain FTP (tidak aman)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:558
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:566
 msgid "Open directory in system's file manager"
 msgstr "Buka direktori pada manajemen berkas sistem"
 
@@ -5393,10 +5446,10 @@ msgstr "Buka dialog pengaturan FileZilla"
 msgid "Opened as:"
 msgstr "Dibuka sebagai:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1714
-#: ../../locales/../src/interface/LocalListView.cpp:1726
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1734
+#: ../../locales/../src/interface/LocalListView.cpp:1717
+#: ../../locales/../src/interface/LocalListView.cpp:1729
 msgid "Opening failed"
 msgstr "Pembukaan berkas gagal"
 
@@ -5505,8 +5558,8 @@ msgstr "Jenis build: %s\n"
 msgid "Owner permissions"
 msgstr "Hak akses pemilik"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:378
-#: ../../locales/../src/interface/search.cpp:114
+#: ../../locales/../src/interface/RemoteListView.cpp:379
+#: ../../locales/../src/interface/search.cpp:156
 msgid "Owner/Group"
 msgstr "Pemilik/Grup"
 
@@ -5529,7 +5582,7 @@ msgstr "Perintah PORT diabaikan oleh router atau firewall."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&sif (disarankan)"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2327
+#: ../../locales/../src/interface/Mainfrm.cpp:2330
 msgid "Parameter not a valid URL"
 msgstr "Parameter bukan URL yang valid"
 
@@ -5564,7 +5617,7 @@ msgid "Password required"
 msgstr "Kata sandi diperlukan"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:150
-#: ../../locales/../src/interface/search.cpp:109
+#: ../../locales/../src/interface/search.cpp:151
 msgid "Path"
 msgstr "Path"
 
@@ -5574,7 +5627,7 @@ msgstr "Path"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "Path tidak bisa dibuat untuk direktori %s dan sub direktori %s"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2285
+#: ../../locales/../src/interface/Mainfrm.cpp:2288
 msgid "Path not found:"
 msgstr "Path tidak ditemukan:"
 
@@ -5582,10 +5635,10 @@ msgstr "Path tidak ditemukan:"
 msgid "Paths"
 msgstr "Path"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
-#: ../../locales/../src/interface/edithandler.cpp:1248
-#: ../../locales/../src/interface/edithandler.cpp:1338
-#: ../../locales/../src/interface/edithandler.cpp:1348
+#: ../../locales/../src/interface/edithandler.cpp:1112
+#: ../../locales/../src/interface/edithandler.cpp:1249
+#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1349
 msgid "Pending removal"
 msgstr "Penghapusan tertunda"
 
@@ -5598,8 +5651,8 @@ msgstr "Hak akses"
 msgid "Permission denied"
 msgstr "Hak akses ditolak"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:377
-#: ../../locales/../src/interface/search.cpp:113
+#: ../../locales/../src/interface/RemoteListView.cpp:378
+#: ../../locales/../src/interface/search.cpp:155
 msgid "Permissions"
 msgstr "Hak akses"
 
@@ -5645,7 +5698,7 @@ msgstr "Harap masukkan format tanggal kustomisasi."
 msgid "Please enter a custom time format."
 msgstr "Harap masukkan format waktu kustomisasi."
 
-#: ../../locales/../src/interface/filter_conditions_dialog.cpp:713
+#: ../../locales/../src/interface/filter_conditions_dialog.cpp:714
 msgid ""
 "Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18."
 msgstr ""
@@ -5749,13 +5802,13 @@ msgstr ""
 "jika mengandung spasi."
 
 #: ../../locales/../src/interface/LocalListView.cpp:917
-#: ../../locales/../src/interface/LocalTreeView.cpp:1135
-#: ../../locales/../src/interface/RemoteListView.cpp:1293
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1219
+#: ../../locales/../src/interface/LocalTreeView.cpp:1139
+#: ../../locales/../src/interface/RemoteListView.cpp:1287
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1225
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Masukkan nama direktori yang akan dibuat:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2607
+#: ../../locales/../src/interface/RemoteListView.cpp:2600
 msgid "Please enter the name of the file which should be created:"
 msgstr "Harap masukkan nama berkas yang akan dibuat:"
 
@@ -5848,7 +5901,7 @@ msgstr ""
 "atau Anda mengalami masalah dengan server padahal sebelumnya bekerja dengan "
 "baik."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3228
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3348
 msgid "Please select an action:"
 msgstr "Harap pilih sebuah aksi:"
 
@@ -5970,7 +6023,7 @@ msgid "Pro&xy password:"
 msgstr "Katasandi pro&xy:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:129
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:338
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:342
 msgid "Process &Queue"
 msgstr "Proses &Antrian"
 
@@ -6077,11 +6130,12 @@ msgstr "Antrian: kosong"
 msgid "Queued files"
 msgstr "Berkas antrian"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3164
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3189
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3284
 msgid "Queueing:"
 msgstr "Mengantri:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:402
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:406
 msgid "R&eboot system once"
 msgstr "R&eboot sistem sekali"
 
@@ -6089,8 +6143,8 @@ msgstr "R&eboot sistem sekali"
 msgid "R&emote directory tree"
 msgstr "Pohon direktori R&emote"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:456
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:474
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:460
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:478
 msgid "R&eset and requeue selected files"
 msgstr "U&langi dan antri ulang berkas yang terpilih"
 
@@ -6131,28 +6185,28 @@ msgstr "Hanya-baca"
 msgid "Really cancel current operation?"
 msgstr "Yakin batalkan operasi yang sedang berjalan?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1382
-#: ../../locales/../src/interface/search.cpp:740
+#: ../../locales/../src/interface/RemoteListView.cpp:1376
+#: ../../locales/../src/interface/search.cpp:1185
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
 "Really delete %d directories with their contents from the server?"
 msgstr[0] "Yakin menghapus %d direktori dengan isinya dari server?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1380
-#: ../../locales/../src/interface/search.cpp:738
+#: ../../locales/../src/interface/RemoteListView.cpp:1374
+#: ../../locales/../src/interface/search.cpp:1183
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
 msgstr[0] "Yakin menghapus %d berkas? dari server?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1387
-#: ../../locales/../src/interface/search.cpp:744
+#: ../../locales/../src/interface/RemoteListView.cpp:1381
+#: ../../locales/../src/interface/search.cpp:1189
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "Yakin menghapus %s dan %s dari server?"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1041
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1047
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
 "Yakin menghapus semua berkas dan/atau direktori yang dipilih dari server?"
@@ -6180,13 +6234,13 @@ msgstr "Mas&uk jauh kedalam sub direktori"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Menerima peringatan TLS dari server: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2965
+#: ../../locales/../src/engine/directorylistingparser.cpp:2962
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr ""
 "Menerima sebuah daftar direktori yang tampaknya dikodekan dalam EBCDIC."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2000
-#: ../../locales/../src/engine/directorylistingparser.cpp:2016
+#: ../../locales/../src/engine/directorylistingparser.cpp:1997
+#: ../../locales/../src/engine/directorylistingparser.cpp:2013
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "Menerima baris melebihi 10000 karakter, dibatalkan."
 
@@ -6254,11 +6308,11 @@ msgstr "Pengalihan ke alamat yang tidak valid atau tidak didukung: %s"
 msgid "Refresh the file and folder lists"
 msgstr "Perbarui daftar berkas dan direktori"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3697
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3821
 msgid "Remember passwords?"
 msgstr "Ingat kata kunci?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1095
+#: ../../locales/../src/interface/edithandler.cpp:1096
 msgid "Remote"
 msgstr "Remote"
 
@@ -6271,11 +6325,9 @@ msgstr "Sertifikat remote tidak dipercaya."
 msgid "Remote file"
 msgstr "Berkas remote"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3106
-#: ../../locales/../src/interface/search.cpp:386
-#: ../../locales/../src/interface/search.cpp:391
-#: ../../locales/../src/interface/search.cpp:400
-#: ../../locales/../src/interface/search.cpp:405
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3131
+#: ../../locales/../src/interface/search.cpp:660
+#: ../../locales/../src/interface/search.cpp:665
 msgid "Remote file search"
 msgstr "Pencarian berkas remote"
 
@@ -6283,7 +6335,7 @@ msgstr "Pencarian berkas remote"
 msgid "Remote filters:"
 msgstr "Filter remote:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1086
+#: ../../locales/../src/interface/edithandler.cpp:1087
 msgid "Remote path"
 msgstr "Path Remote"
 
@@ -6315,7 +6367,7 @@ msgstr "Path remote tidak bisa diproses. Pastikan sudah path absolut valid."
 msgid "Remote path could not be parsed."
 msgstr "Path remote tidak bisa diproses."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3146
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3171
 msgid "Remote path handling:"
 msgstr "Penanganan path remote:"
 
@@ -6327,13 +6379,13 @@ msgstr "Path remote:"
 msgid "Remote site:"
 msgstr "Situs remote:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:446
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:464
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:450
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:468
 msgid "Remove &all"
 msgstr "Hapus &semua"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:453
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:471
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:457
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:475
 msgid "Remove &selected"
 msgstr "Hapus &yang terpilih"
 
@@ -6345,8 +6397,8 @@ msgstr "Hapus &yang terpilih"
 msgid "Rename file"
 msgstr "Ganti nama berkas"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:512
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:576
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:516
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:584
 msgid "Rename selected directory"
 msgstr "Ganti nama direktori yang terpilih"
 
@@ -6361,7 +6413,7 @@ msgstr "Ganti nama berkas dan direktori yang terpilih"
 msgid "Renaming '%s' to '%s'"
 msgstr "Mengganti nama '%s' menjadi '%s'"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3422
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3542
 msgid "Reporting bugs and feature requests"
 msgstr "Melaporkan kesalahan dan permintaan fitur"
 
@@ -6389,7 +6441,7 @@ msgstr "Membutuhkan FTP diatas TLS secara eksplisit"
 msgid "Require implicit FTP over TLS"
 msgstr "Membutuhkan FTP diatas TLS secara implisit"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:467
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:471
 msgid "Reset and requeue &all"
 msgstr "Ulangi dan antri ulang &semua berkas"
 
@@ -6414,7 +6466,7 @@ msgstr "Sumberdaya tidak tersedia"
 msgid "Response:"
 msgstr "Respon:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3092
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3117
 msgid "Results:"
 msgstr "Hasil:"
 
@@ -6458,15 +6510,15 @@ msgstr "&Tampilkan berkas yang sedang diedit..."
 msgid "S&how the Site Manager on startup"
 msgstr "Ta&mpilkan Manajemen Situs di awal"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:406
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:410
 msgid "S&hutdown system once"
 msgstr "&Mematikan sistem sekali"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3037
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3044
 msgid "S&top"
 msgstr "&Berhenti"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:410
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:414
 msgid "S&uspend system once"
 msgstr "&Menghentikan sistem sekali"
 
@@ -6506,11 +6558,11 @@ msgstr ""
 msgid "Saving of passwords has been disabled by you."
 msgstr "Penyimpanan kata sandi telah dinonaktifkan oleh Anda."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3050
 msgid "Search &conditions:"
 msgstr "&Kondisi pencarian:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3001
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3032
 msgid "Search &directory:"
 msgstr "&Direktori pencarian:"
 
@@ -6521,6 +6573,10 @@ msgstr "Mencari berkas secara rekursif."
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:191
 msgid "Search server for files"
 msgstr "Mencari berkas pada server"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3001
+msgid "Search type:"
+msgstr "Jenis pencarian:"
 
 #: ../../locales/../src/interface/statusbar.cpp:502
 msgid "Security information"
@@ -6548,7 +6604,7 @@ msgid ""
 "Select default action to perform if target file of a transfer already exists."
 msgstr "Pilih aksi default yang akan dilakukan jika berkas tujuan sudah ada."
 
-#: ../../locales/../src/interface/edithandler.cpp:1531
+#: ../../locales/../src/interface/edithandler.cpp:1532
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Pilih editor default"
@@ -6587,7 +6643,7 @@ msgid "Select file for exported settings"
 msgstr "Pilih pengaturan untuk berkas yang akan diekspor"
 
 #: ../../locales/../src/interface/export.cpp:32
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2211
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2212
 msgid "Select file for exported sites"
 msgstr "Pilih berkas untuk situs yang akan diekspor"
 
@@ -6607,7 +6663,7 @@ msgstr "Pilih nama berkas untuk berkas kunci yang akan dikonversi"
 msgid "Select how these files should be opened."
 msgstr "Pilih bagaimana berkas ini harus dibuka"
 
-#: ../../locales/../src/interface/search.cpp:513
+#: ../../locales/../src/interface/search.cpp:839
 msgid "Select target download directory"
 msgstr "Pilih direktori target download"
 
@@ -6623,7 +6679,7 @@ msgstr "Pilih kategori yang akan diekspor:"
 msgid "Select the private data you would like to delete."
 msgstr "Pilih data privat yang hendak Anda hapus."
 
-#: ../../locales/../src/interface/search.cpp:481
+#: ../../locales/../src/interface/search.cpp:798
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6635,7 +6691,7 @@ msgid "Selected %d directory."
 msgid_plural "Selected %d directories."
 msgstr[0] "Direktori yang dipilih %d."
 
-#: ../../locales/../src/interface/search.cpp:479
+#: ../../locales/../src/interface/search.cpp:796
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6653,7 +6709,7 @@ msgid "Selected %d file. Total size: At least %s"
 msgid_plural "Selected %d files. Total size: At least %s"
 msgstr[0] "Berkas yang dipilih %d. Ukuran total: Paling tidak %s"
 
-#: ../../locales/../src/interface/search.cpp:485
+#: ../../locales/../src/interface/search.cpp:802
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Terpilih %s dan %s untuk ditransfer."
@@ -6668,8 +6724,8 @@ msgstr "Terpilih %s dan %s. Ukuran total: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Terpilih %s dan %s. Ukuran total: Paling tidak %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1476
-#: ../../locales/../src/interface/edithandler.cpp:1550
+#: ../../locales/../src/interface/edithandler.cpp:1477
+#: ../../locales/../src/interface/edithandler.cpp:1551
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Editor yang dipilih tidak ada."
@@ -6683,11 +6739,11 @@ msgstr "Berkas yang dipilih sudah diedit"
 msgid "Selected file is already loaded"
 msgstr "Berkas yang dipilih sudah dimuat"
 
-#: ../../locales/../src/interface/edithandler.cpp:1648
+#: ../../locales/../src/interface/edithandler.cpp:1649
 msgid "Selected file is already opened"
 msgstr "Berkas yang dipilih sudah terbuka"
 
-#: ../../locales/../src/interface/edithandler.cpp:1720
+#: ../../locales/../src/interface/edithandler.cpp:1721
 msgid "Selected file is still being edited"
 msgstr "Berkas yang dipilih masih diedit"
 
@@ -6840,7 +6896,7 @@ msgstr "Server:"
 msgid "Session details"
 msgstr "Detail sesi"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:352
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:356
 msgid "Set &Priority"
 msgstr "Tentukan &Prioritas"
 
@@ -6862,7 +6918,7 @@ msgstr "Pengaturan"
 msgid "Settings directory:"
 msgstr "Pengaturan direktori:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
 msgid "Sh&ow notification bubble"
 msgstr "Tampilkan inf&ormasi notifikasi"
 
@@ -6874,7 +6930,7 @@ msgstr "Tampilkan &daftar direktori"
 msgid "Show &welcome dialog..."
 msgstr "Tampilkan dialog &selamat datang..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2175
+#: ../../locales/../src/interface/Mainfrm.cpp:2178
 msgid "Show both directory trees and continue comparing?"
 msgstr ""
 "Tampilkan struktur pohon dari dua direktori dan melanjutkan perbandingan?"
@@ -6887,7 +6943,7 @@ msgstr "Tampilkan detail"
 msgid "Show details about custom date and time formats"
 msgstr "Tampilkan detail fornat tanggal dan waktu"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:441
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:445
 msgid "Shows available TLS ciphers"
 msgstr "Tampilkan cipher TLS yang tersedia"
 
@@ -7042,7 +7098,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Urutkan direktori secara inline"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:465
+#: ../../locales/../src/interface/filelistctrl.cpp:469
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "Urutan pengurutan tidak bisa diganti jika membandingkan direktori."
 
@@ -7070,7 +7126,7 @@ msgstr "Sumber dan target dari operasi drop sama"
 msgid "Source file:"
 msgstr "Berkas sumber:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3639
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3763
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 msgid "Speed Limits"
@@ -7133,7 +7189,7 @@ msgstr "Menjalankan situs lokal pada path yang diberikan"
 msgid "State or province:"
 msgstr "Kota atau provinsi:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1087
+#: ../../locales/../src/interface/edithandler.cpp:1088
 #: ../../locales/../src/interface/queue.cpp:1150
 msgid "Status"
 msgstr "Status"
@@ -7144,7 +7200,7 @@ msgstr "Status"
 msgid "Status:"
 msgstr "Status:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:342
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:346
 msgid "Stop and remove &all"
 msgstr "Stop dan hapus &semua"
 
@@ -7172,7 +7228,7 @@ msgstr "Ringkasan dari hasil pengujian:"
 msgid "Suspend now"
 msgstr "Menghentikan sekarang"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3245
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3365
 msgid ""
 "Symlinks to files are not affected by this choice, such symlinks are always "
 "deleted."
@@ -7180,7 +7236,7 @@ msgstr ""
 "Symlink ke berkas tidak terpengaruh oleh pilihan ini, karena symlink selalu "
 "dihapus."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3700
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3824
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
 #: ../../locales/../src/interface/state.cpp:234
 #: ../../locales/../src/interface/state.cpp:248
@@ -7189,11 +7245,11 @@ msgstr ""
 #: ../../locales/../src/interface/state.cpp:351
 #: ../../locales/../src/interface/state.cpp:359
 #: ../../locales/../src/interface/state.cpp:367
-#: ../../locales/../src/interface/state.cpp:946
 #: ../../locales/../src/interface/state.cpp:954
-#: ../../locales/../src/interface/state.cpp:960
-#: ../../locales/../src/interface/state.cpp:969
-#: ../../locales/../src/interface/state.cpp:995
+#: ../../locales/../src/interface/state.cpp:962
+#: ../../locales/../src/interface/state.cpp:968
+#: ../../locales/../src/interface/state.cpp:977
+#: ../../locales/../src/interface/state.cpp:1003
 msgid "Synchronized browsing"
 msgstr "Penjelajahan tersinkronisasi"
 
@@ -7211,8 +7267,8 @@ msgstr "Kesalahan sintaks"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2287
-#: ../../locales/../src/interface/Mainfrm.cpp:2329
+#: ../../locales/../src/interface/Mainfrm.cpp:2290
+#: ../../locales/../src/interface/Mainfrm.cpp:2332
 msgid "Syntax error in command line"
 msgstr "Kesalahan sintaks pada perintah baris"
 
@@ -7260,11 +7316,11 @@ msgstr "Berkas tujuan telah ada"
 msgid "Target file:"
 msgstr "Berkas target:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2623
+#: ../../locales/../src/interface/RemoteListView.cpp:2616
 msgid "Target filename already exists!"
 msgstr "Nama berkas tujuan telah ada!"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1596
+#: ../../locales/../src/interface/RemoteListView.cpp:1590
 msgid "Target filename already exists, really continue?"
 msgstr "Berkas tujuan telah ada, yakin melanjutkan?"
 
@@ -7352,7 +7408,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Koneksi data tidak dapat terbentuk: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2932
-#: ../../locales/../src/interface/edithandler.cpp:1511
+#: ../../locales/../src/interface/edithandler.cpp:1512
 msgid "The default editor for text files could not be found."
 msgstr "Editor default untuk berkas teks tidak ditemukan."
 
@@ -7383,8 +7439,8 @@ msgstr ""
 "Berkas %s telah ada.\n"
 "Masukkan nama baru:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1621
-#: ../../locales/../src/interface/LocalListView.cpp:1718
+#: ../../locales/../src/interface/edithandler.cpp:1622
+#: ../../locales/../src/interface/LocalListView.cpp:1721
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -7414,8 +7470,8 @@ msgstr "Berkas '%s' tidak bisa dimuat atau tidak mengandung kunci privat."
 msgid "The file '%s' could not be loaded."
 msgstr "Berkas '%s' tidak bisa dimuat."
 
-#: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/LocalListView.cpp:1714
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/LocalListView.cpp:1717
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7424,8 +7480,8 @@ msgstr ""
 "Berkas '%s' tidak bisa dibuka:\n"
 "Tidak ada program yang diasosiasikan pada sistem Anda dengan berkas ini."
 
-#: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1726
+#: ../../locales/../src/interface/edithandler.cpp:1734
+#: ../../locales/../src/interface/LocalListView.cpp:1729
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7474,11 +7530,11 @@ msgstr ""
 "dan kata sandi yang akan diimpor.\n"
 "Lanjutkan dengan proses impor?"
 
-#: ../../locales/../src/interface/listctrlex.cpp:747
+#: ../../locales/../src/interface/listctrlex.cpp:745
 msgid "The filename column can neither be hidden nor moved."
 msgstr "Kolom nama berkas tidak bisa disembunyikan atau dipindahkan."
 
-#: ../../locales/../src/interface/listctrlex.cpp:800
+#: ../../locales/../src/interface/listctrlex.cpp:798
 msgid "The filename column cannot be hidden."
 msgstr "Kolom nama berkas tidak bisa disembunyikan."
 
@@ -7496,7 +7552,7 @@ msgstr "Karakter berikut akan diganti: %s"
 msgid "The following files are currently being edited:"
 msgstr "Berkas-berkas berikut ini sedang diedit:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3300
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3420
 msgid "The free open source FTP solution"
 msgstr "Solusi FTP open source yang gratis"
 
@@ -7517,12 +7573,12 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Batas harus diantara 1 dan 2000 MiB"
 
-#: ../../locales/../src/interface/state.cpp:995
+#: ../../locales/../src/interface/state.cpp:1003
 #, c-format
 msgid "The local directory '%s' could not be created."
 msgstr "Direktori lokal '%s' tidak bisa dibuat."
 
-#: ../../locales/../src/interface/state.cpp:980
+#: ../../locales/../src/interface/state.cpp:988
 #, c-format
 msgid "The local directory '%s' does not exist."
 msgstr "Direktori lokal '%s' tidak ada."
@@ -7557,12 +7613,12 @@ msgstr "Versi baru telah disimpan pada direktori Downloads Anda."
 msgid "The queue will not be saved."
 msgstr "Antrian tidak akan disimpan."
 
-#: ../../locales/../src/interface/state.cpp:907
+#: ../../locales/../src/interface/state.cpp:916
 #, c-format
 msgid "The remote directory '%s' does not exist."
 msgstr "Direktori remote '%s' tidak ada."
 
-#: ../../locales/../src/interface/state.cpp:951
+#: ../../locales/../src/interface/state.cpp:959
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7587,12 +7643,12 @@ msgstr ""
 msgid "The selected file is already being edited:"
 msgstr "Berkas yang dipilih sedang diedit:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1720
+#: ../../locales/../src/interface/edithandler.cpp:1721
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr "Berkas yang dipilih masih dibuka oleh program lain, harap ditutup."
 
-#: ../../locales/../src/interface/edithandler.cpp:1626
+#: ../../locales/../src/interface/edithandler.cpp:1627
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
@@ -7747,11 +7803,11 @@ msgstr "Waktu offset zona waktu server adalah %d detik."
 msgid "Title:"
 msgstr "Judul:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2173
+#: ../../locales/../src/interface/Mainfrm.cpp:2176
 msgid "To compare directories, both file lists have to be aligned."
 msgstr "Untuk membandingkan direktori, kedua daftar berkas harus sejajar."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2174
+#: ../../locales/../src/interface/Mainfrm.cpp:2177
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Untuk melakukannya, struktur pohon direktori harus menampilkan berkas "
@@ -7914,7 +7970,7 @@ msgid "Try again"
 msgstr "Coba kembali"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2593
-#: ../../locales/../src/interface/edithandler.cpp:1085
+#: ../../locales/../src/interface/edithandler.cpp:1086
 msgid "Type"
 msgstr "Jenis"
 
@@ -7930,7 +7986,7 @@ msgstr "Jenis proxy generik:"
 msgid "U&pload"
 msgstr "U&pload"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3580
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3704
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:930
 msgid "U&pload limit:"
 msgstr "Batasn U&pload:"
@@ -7957,8 +8013,8 @@ msgstr "Kode kesalahan yang belum ditentukan %d"
 msgid "Unit:"
 msgstr "Unit:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1117
-#: ../../locales/../src/interface/edithandler.cpp:1145
+#: ../../locales/../src/interface/edithandler.cpp:1118
+#: ../../locales/../src/interface/edithandler.cpp:1146
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
@@ -8033,7 +8089,7 @@ msgstr "Update"
 msgid "Upload"
 msgstr "Upload"
 
-#: ../../locales/../src/interface/edithandler.cpp:1108
+#: ../../locales/../src/interface/edithandler.cpp:1109
 msgid "Upload failed"
 msgstr "Upload gagal"
 
@@ -8046,7 +8102,12 @@ msgstr "Batasan Upload: %s/s:"
 msgid "Upload limit: none"
 msgstr "Batasn Upload: tidak ada"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:548
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3236
+#: ../../locales/../src/interface/search.cpp:865
+msgid "Upload search results"
+msgstr "Upload hasil pencarian"
+
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:556
 msgid "Upload selected directory"
 msgstr "Upload direktori yang dipilih"
 
@@ -8062,19 +8123,19 @@ msgstr "Upload berkas ini kembali ke server?"
 msgid "Upload this file to the server?"
 msgstr "Upload berkas ini kembali ke server?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1102
-#: ../../locales/../src/interface/edithandler.cpp:1136
-#: ../../locales/../src/interface/edithandler.cpp:1292
+#: ../../locales/../src/interface/edithandler.cpp:1103
+#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1293
 msgid "Uploading"
 msgstr "Mengupload"
 
-#: ../../locales/../src/interface/edithandler.cpp:1105
-#: ../../locales/../src/interface/edithandler.cpp:1294
+#: ../../locales/../src/interface/edithandler.cpp:1106
+#: ../../locales/../src/interface/edithandler.cpp:1295
 msgid "Uploading and pending removal"
 msgstr "Mengupload dan penghapusan tertunda"
 
-#: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/edithandler.cpp:1296
+#: ../../locales/../src/interface/edithandler.cpp:1140
+#: ../../locales/../src/interface/edithandler.cpp:1297
 msgid "Uploading and unediting"
 msgstr "Mengupload dan batalkan pengeditan"
 
@@ -8243,11 +8304,11 @@ msgstr ""
 msgid "Warning: Potential security breach!"
 msgstr "Peringatan: Kemungkinan masalah keamanan!"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3464
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3588
 msgid "Welcome to FileZilla"
 msgstr "Selamat datang ke FileZilla"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3330
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3450
 msgid "What's new"
 msgstr "Apa yang baru"
 
@@ -8255,7 +8316,7 @@ msgstr "Apa yang baru"
 msgid "What's new:"
 msgstr "Apa yang baru:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3654
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3778
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
@@ -8280,7 +8341,7 @@ msgstr "Ketika memul&ai koneksi baru ketika sudah terhubung:"
 msgid "Widescreen"
 msgstr "Layar lebar"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3649
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3773
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "Apakah Anda menghendaki FileZilla untuk mengingat kata sandi ini?"
 
@@ -8313,7 +8374,7 @@ msgstr ""
 msgid "You are using the latest version of FileZilla."
 msgstr "Anda menggunakan versi terbaru dari FileZilla."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3439
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3559
 msgid "You can always open this dialog again through the help menu."
 msgstr "Anda selalu bisa membuka dialog ini kemudian melalui menu bantuan."
 
@@ -8352,12 +8413,12 @@ msgstr ""
 msgid "You did not enter a new name for the file. Overwrite the file instead?"
 msgstr "Anda tidak memasukkan nama baru untuk berkas ini. Timpa berkas ini?"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3218
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3338
 msgid "You have selected at least one symbolic link."
 msgstr "Anda telah memilih paling tidak satu link simbolis."
 
-#: ../../locales/../src/interface/edithandler.cpp:1587
-#: ../../locales/../src/interface/search.cpp:709
+#: ../../locales/../src/interface/edithandler.cpp:1588
+#: ../../locales/../src/interface/search.cpp:1149
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
@@ -8365,7 +8426,7 @@ msgstr ""
 "Anda telah memilih lebih dari 10 berkas untuk pengeditan, apakah Anda hendak "
 "melanjutkan?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1684
+#: ../../locales/../src/interface/LocalListView.cpp:1687
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -8382,16 +8443,20 @@ msgstr "Anda harus memasukkan nama mesin"
 msgid "You have to enter a key file path"
 msgstr "Anda harus memasukkan path berkas kunci"
 
-#: ../../locales/../src/interface/search.cpp:524
+#: ../../locales/../src/interface/search.cpp:851
 msgid "You have to enter a local directory."
 msgstr "Anda harus memasukkan direktori lokal."
+
+#: ../../locales/../src/interface/search.cpp:865
+msgid "You have to enter a remote directory."
+msgstr "Anda harus memasukkan direktori remote."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:158
 #: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:91
 msgid "You have to enter a valid IPv4 address."
 msgstr "Anda harus memasukkan alamat IPv4 valid."
 
-#: ../../locales/../src/interface/search.cpp:529
+#: ../../locales/../src/interface/search.cpp:856
 msgid "You have to enter a writable local directory."
 msgstr "Anda harus memasukkan direktori lokal yang dapat ditulisi."
 
@@ -8421,7 +8486,7 @@ msgstr "Anda harus memasukan sebuah nama untuk penanda."
 msgid "You need to enter a name for the log file."
 msgstr "Anda harus memasukan sebuah nama untuk berkas log."
 
-#: ../../locales/../src/interface/edithandler.cpp:1472
+#: ../../locales/../src/interface/edithandler.cpp:1473
 msgid "You need to enter a properly quoted command."
 msgstr "Anda harus memasukkan perintah yang dikutip dengan benar."
 
@@ -8530,10 +8595,10 @@ msgstr "diakhiri dengan"
 msgid "equals"
 msgstr "sama"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:530
-#: ../../locales/../src/interface/filelistctrl.cpp:549
-#: ../../locales/../src/interface/filelistctrl.cpp:576
-#: ../../locales/../src/interface/filelistctrl.cpp:592
+#: ../../locales/../src/interface/filelistctrl.cpp:534
+#: ../../locales/../src/interface/filelistctrl.cpp:553
+#: ../../locales/../src/interface/filelistctrl.cpp:580
+#: ../../locales/../src/interface/filelistctrl.cpp:596
 msgid "file"
 msgstr "berkas"
 

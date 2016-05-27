@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-15 11:31+0200\n"
-"PO-Revision-Date: 2016-04-15 09:43+0000\n"
+"POT-Creation-Date: 2016-05-27 13:58+0200\n"
+"PO-Revision-Date: 2016-05-22 18:18+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/kayazeren/"
 "filezilla/language/tr_TR/)\n"
@@ -50,9 +50,9 @@ msgid "%d directory"
 msgid_plural "%d directories"
 msgstr[0] "%d klasör"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1386
-#: ../../locales/../src/interface/search.cpp:484
-#: ../../locales/../src/interface/search.cpp:743
+#: ../../locales/../src/interface/RemoteListView.cpp:1380
+#: ../../locales/../src/interface/search.cpp:801
+#: ../../locales/../src/interface/search.cpp:1188
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -60,9 +60,9 @@ msgstr[0] "İçindekilerle %d klasör"
 
 #: ../../locales/../src/interface/filelist_statusbar.cpp:46
 #: ../../locales/../src/interface/filelist_statusbar.cpp:66
-#: ../../locales/../src/interface/RemoteListView.cpp:1385
-#: ../../locales/../src/interface/search.cpp:483
-#: ../../locales/../src/interface/search.cpp:742
+#: ../../locales/../src/interface/RemoteListView.cpp:1379
+#: ../../locales/../src/interface/search.cpp:800
+#: ../../locales/../src/interface/search.cpp:1187
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -148,7 +148,7 @@ msgid "%s byte"
 msgid_plural "%s bytes"
 msgstr[0] "%s bayt"
 
-#: ../../locales/../src/interface/FileZilla.cpp:617
+#: ../../locales/../src/interface/FileZilla.cpp:582
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -162,7 +162,7 @@ msgstr ""
 "FileZilla yazılımını yeniden indirip kurun. Sorun çözülmüyorsa bir hata "
 "raporu gönderin."
 
-#: ../../locales/../src/interface/FileZilla.cpp:702
+#: ../../locales/../src/interface/FileZilla.cpp:667
 #, c-format
 msgid ""
 "%s could not be found. Without this component of FileZilla, SFTP will not "
@@ -192,7 +192,7 @@ msgstr "%u - Kullanıcı adı"
 msgid "%w - Proxy password"
 msgstr "%w - Vekil sunucu parolası"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3497
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3621
 msgid "&Abort previous connection and connect in current tab"
 msgstr "Ö&nceki bağlantıyı iptal edip geçerli sekmede bağlan"
 
@@ -224,8 +224,8 @@ msgstr "&Aktarım kuyruğuna ekle"
 msgid "&Add key file..."
 msgstr "&Anahtar Dosyası Ekle..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:492
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:551
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:496
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:559
 msgid "&Add to queue"
 msgstr "&Aktarım kuyruğuna ekle"
 
@@ -258,7 +258,7 @@ msgid "&Ask your operating system for the external IP address"
 msgstr "Dış IP &adresi işletim sistemine sorulsun"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:140
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:586
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:594
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1054
 msgid "&Auto"
 msgstr "Otom&atik"
@@ -268,7 +268,7 @@ msgid "&Autodetect"
 msgstr "Otomatik &algılansın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:148
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:594
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:602
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1069
 msgid "&Binary"
 msgstr "İk&ili"
@@ -285,7 +285,7 @@ msgstr "Ye&r İmleri"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2669
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2756
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2951
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3136
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3161
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1930
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2145
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:337
@@ -298,8 +298,8 @@ msgstr "&Hoşgörü:"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:379
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1025
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3627
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3683
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3751
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3807
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:40
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:34
 msgid "&Cancel"
@@ -313,11 +313,11 @@ msgstr "&Kişisel Verileri Sil..."
 msgid "&Close"
 msgstr "&Kapat"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
 msgid "&Close FileZilla"
 msgstr "FileZilla &Kapansın"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:631
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:642
 msgid "&Configure speed limits..."
 msgstr "Hız &aınırı ayarları..."
 
@@ -334,22 +334,22 @@ msgid "&Copy current connection to Site Manager..."
 msgstr "Geçerli Bağlantıyı Site Yöneti&cisine Kopyala..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:803
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:428
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:432
 msgid "&Copy to clipboard"
 msgstr "Panoya &Kopyala"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:264
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:304
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:498
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:562
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:502
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:570
 msgid "&Create directory"
 msgstr "&Klasör oluştur"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:611
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:622
 msgid "&Create new tab"
 msgstr "&Sekme Ekle"
 
-#: ../../locales/../src/interface/menu_bar.cpp:72
+#: ../../locales/../src/interface/menu_bar.cpp:67
 msgid "&Debug"
 msgstr "&Hata Ayıklama"
 
@@ -362,7 +362,7 @@ msgid "&Default editor:"
 msgstr "Varsayılan &Düzenleyici:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:135
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:349
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:353
 msgid "&Default file exists action..."
 msgstr "Varsayılan &Dosya Var İşlemi..."
 
@@ -374,12 +374,12 @@ msgstr "Başarısız bağlantılar arası &bekleme süresi:"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1238
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2836
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:276
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:571
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:579
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:59
 msgid "&Delete"
 msgstr "&Sil"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3233
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3353
 msgid "&Delete symlink"
 msgstr "&Sembolik Bağlantıyı Sil"
 
@@ -387,12 +387,12 @@ msgstr "&Sembolik Bağlantıyı Sil"
 msgid "&Directory comparison"
 msgstr "&Klasör Karşılaştırma"
 
-#: ../../locales/../src/interface/state.cpp:914
+#: ../../locales/../src/interface/state.cpp:918
 msgid ""
 "&Disable synchronized browsing and continue changing the local directory"
 msgstr "&Eşzamanlı taramayı devre dışı bırakıp yerel klasörü değiştir"
 
-#: ../../locales/../src/interface/state.cpp:987
+#: ../../locales/../src/interface/state.cpp:990
 msgid ""
 "&Disable synchronized browsing and continue changing the remote directory"
 msgstr "&Eşzamanlı taramayı devre dışı bırakıp uzak klasörü değiştir"
@@ -413,7 +413,7 @@ msgstr "Ortalama aktarım hızı yerine &anlık aktarım hızı görüntülensin
 msgid "&Display size in bytes"
 msgstr "&Boyut görüntülensin (bayt)"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3666
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3790
 msgid "&Do not remember passwords (recommended)"
 msgstr "Parolalar &hatırlanmasın (önerilir)"
 
@@ -430,15 +430,15 @@ msgid "&Double-click action on files:"
 msgstr "&Dosyalara çift tıklayınca ne olsun:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:286
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:487
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:491
 msgid "&Download"
 msgstr "İn&dir"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3122
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3147
 msgid "&Download to:"
 msgstr "Şuraya İn&dir:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:600
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:608
 msgid "&Download..."
 msgstr "İn&dir..."
 
@@ -458,8 +458,8 @@ msgstr "Süzg&eç Kurallarını Düzenle..."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:72
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:159
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:526
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:627
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:534
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:638
 msgid "&Enable"
 msgstr "&Etkinleştir"
 
@@ -467,7 +467,7 @@ msgstr "&Etkinleştir"
 msgid "&Enable compression"
 msgstr "Sıkıştırma &kullanılsın"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3555
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3679
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:896
 msgid "&Enable speed limits"
 msgstr "Hız sınırları &uygulansın"
@@ -480,11 +480,11 @@ msgstr "&Kodlama:"
 msgid "&Encryption:"
 msgstr "Şifr&eleme:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:420
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:424
 msgid "&Enter custom command..."
 msgstr "Öz&el komut yazın..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3490
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3614
 msgid "&Establish connection in a new tab"
 msgstr "Bağlantı y&eni sekmede açılsın"
 
@@ -497,7 +497,7 @@ msgid "&Export Site Manager entries"
 msgstr "Sit&e bilgileri verilsin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:27
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:581
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:589
 msgid "&Export..."
 msgstr "Bilgileri V&er..."
 
@@ -509,11 +509,11 @@ msgstr "Akti&f kipe geçilsin"
 msgid "&File"
 msgstr "&Dosya"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:519
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:527
 msgid "&File Attributes..."
 msgstr "&Dosya İzinleri..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:332
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:336
 msgid "&File permissions..."
 msgstr "&Dosya izinleri..."
 
@@ -537,7 +537,15 @@ msgstr "&Süzgeçler"
 msgid "&Finish editing and delete local file"
 msgstr "Düzenlemeyi &bitirip yerel dosyayı sil"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3158
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3278
+msgid ""
+"&Flatten local paths, upload all contained files directly into target "
+"directory"
+msgstr ""
+"Yerel yollara aldırmadan, bulunan tüm dosyalar doğrudan hede&f klasöre "
+"yüklensin"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3183
 msgid ""
 "&Flatten remote paths, download all contained files directly into target "
 "directory"
@@ -545,7 +553,7 @@ msgstr ""
 "Uzak yollara aldırmadan, bulunan tüm dosyalar doğrudan hede&f klasöre "
 "indirilsin"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3240
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3360
 msgid "&Follow symlink, delete target directory contents"
 msgstr "Sembolik bağlantı izlensin, hede&f klasörün içeriği silinsin"
 
@@ -570,11 +578,11 @@ msgid "&Help"
 msgstr "&Yardım"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:87
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:540
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:548
 msgid "&Hide identical files"
 msgstr "Eş Dosyalar &Gizlensin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:354
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:358
 msgid "&Highest"
 msgstr "&En büyük"
 
@@ -608,7 +616,8 @@ msgstr "Sistem dosya tipi &ilişkileri devralınsın"
 msgid "&Install new version"
 msgstr "&Yeni sürümü yükle"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3151
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3176
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3271
 msgid "&Keep remote path structure relative to search root"
 msgstr "Arama &köküne göre uzaktaki yol yapısı korunsun"
 
@@ -637,6 +646,10 @@ msgstr "Yere&l Klasör Ağacı"
 msgid "&Local directory:"
 msgstr "Yere&l klasör:"
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3010
+msgid "&Local search"
+msgstr "&Yerel arama"
+
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:2122
 msgid "&Log to file"
 msgstr "Gün&lük dosyalansın"
@@ -649,7 +662,7 @@ msgstr "&Oturum Açma Tipi:"
 msgid "&Logontype:"
 msgstr "&Oturum Açma Tipi:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:366
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:370
 msgid "&Low"
 msgstr "&Düşük"
 
@@ -697,7 +710,7 @@ msgstr "Ye&ni"
 msgid "&New Site"
 msgstr "Site E&kle"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1664
+#: ../../locales/../src/interface/Mainfrm.cpp:1669
 msgid "&New version available!"
 msgstr "Ye&ni Bir Sürüm Yayınlanmış!"
 
@@ -710,13 +723,13 @@ msgstr "İ&leri >"
 msgid "&No"
 msgstr "&Hayır"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:377
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:458
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:719
 msgid "&None"
 msgstr "&Yok"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:362
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:366
 msgid "&Normal"
 msgstr "&Normal"
 
@@ -735,7 +748,7 @@ msgid "&OPEN"
 msgstr "&AÇIK"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:255
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:557
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:565
 msgid "&Open"
 msgstr "&Aç"
 
@@ -751,7 +764,7 @@ msgstr "&Pasif"
 msgid "&Password:"
 msgstr "&Parola:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:401
 msgid "&Play sound"
 msgstr "&Ses çalınsın"
 
@@ -794,7 +807,7 @@ msgid "&Reconnect information"
 msgstr "&Yeniden bağlanma bilgileri"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:61
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:622
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:633
 msgid "&Refresh"
 msgstr "&Yenile"
 
@@ -802,7 +815,7 @@ msgstr "&Yenile"
 msgid "&Remember password until FileZilla is closed"
 msgstr "Parola, FileZilla kapatılana kadar hatırlansın"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3660
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3784
 msgid "&Remember passwords"
 msgstr "Pa&rolalar hatırlansın"
 
@@ -815,6 +828,10 @@ msgstr "Uzak klasö&r:"
 msgid "&Remote path:"
 msgstr "&Uzak yol:"
 
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3017
+msgid "&Remote search"
+msgstr "&Uzak arama"
+
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1117
 msgid "&Remove"
 msgstr "&Sil"
@@ -823,7 +840,7 @@ msgstr "&Sil"
 msgid "&Remove key"
 msgstr "Anahta&rı Sil"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:346
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:350
 msgid "&Remove selected"
 msgstr "Seçilmişi kaldı&r"
 
@@ -831,8 +848,8 @@ msgstr "Seçilmişi kaldı&r"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2830
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:280
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:324
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:511
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:575
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:515
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:583
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:53
 msgid "&Rename"
 msgstr "Yeniden Adlandı&r"
@@ -853,11 +870,11 @@ msgstr "Geçe&rsiz karakterler şununla değiştirilsin:"
 msgid "&Report a bug..."
 msgstr "Hata Bildi&rimi (İngilizce)..."
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:389
 msgid "&Request attention"
 msgstr "&Dikkat çek"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:449
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:453
 msgid "&Reset and requeue all"
 msgstr "Bu&rayı boşaltarak tümünü yeniden kuyruğa al"
 
@@ -869,7 +886,7 @@ msgstr "Ya&rdımcıyı Baştan Başlat"
 msgid "&Resume"
 msgstr "Sü&rdür"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:393
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:397
 msgid "&Run command..."
 msgstr "Komut çalıştı&r..."
 
@@ -893,7 +910,7 @@ msgstr "&SOCKS 5"
 msgid "&Save as..."
 msgstr "&Farklı Kaydet..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3013
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3025
 msgid "&Search"
 msgstr "&Ara"
 
@@ -930,7 +947,7 @@ msgstr "Aya&rlar..."
 msgid "&Show debug menu"
 msgstr "Hata ayıklama menü&sü görüntülensin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:424
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:428
 msgid "&Show detailed log"
 msgstr "A&yrıntılı günlüğe bakın"
 
@@ -958,7 +975,8 @@ msgstr "&Atla"
 msgid "&Speed limits"
 msgstr "Hız &Sınırlaması"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3169
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3194
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3289
 msgid "&Start transfer immediately"
 msgstr "Aktarıma &hemen başla"
 
@@ -966,7 +984,7 @@ msgstr "Aktarıma &hemen başla"
 msgid "&Swap local and remote panes"
 msgstr "&Yerel ve Uzak panellerin yerini değiştir"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:440
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:444
 msgid "&TLS Ciphers"
 msgstr "&TLS Şifreleri"
 
@@ -1004,9 +1022,17 @@ msgid "&Update cached key for this host"
 msgstr "B&u sunucunun önbellekteki anahtarı güncellensin"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:240
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:546
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:554
 msgid "&Upload"
 msgstr "&Yükle"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3248
+msgid "&Upload to:"
+msgstr "Şuraya &Yükle:"
+
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:611
+msgid "&Upload..."
+msgstr "&Yükle..."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1420
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1200
@@ -1047,7 +1073,7 @@ msgstr "K&ullanıcı:"
 msgid "&Username:"
 msgstr "K&ullanıcı Adı:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1658
+#: ../../locales/../src/interface/Mainfrm.cpp:1663
 #, c-format
 msgid "&Version %s"
 msgstr "&Sürüm %s"
@@ -1057,7 +1083,7 @@ msgid "&View"
 msgstr "&Görünüm"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:300
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:603
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:614
 msgid "&View/Edit"
 msgstr "&Göster/Düzenle"
 
@@ -1114,7 +1140,7 @@ msgstr ""
 "'Normal' ve 'Hesap' oturum açma tipleri kullanılamıyor. Kaydınız 'Parola "
 "sorulsun' olarak değiştirildi."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:584
+#: ../../locales/../src/interface/Mainfrm.cpp:590
 msgid ""
 "'quote' is usually a local command used by commandline clients to send the "
 "arguments following 'quote' to the server. You might want to enter the raw "
@@ -1131,7 +1157,7 @@ msgid "(%d object filtered)"
 msgid_plural "(%d objects filtered)"
 msgstr[0] "(%d nesne süzüldü)"
 
-#: ../../locales/../src/interface/update_dialog.cpp:254
+#: ../../locales/../src/interface/update_dialog.cpp:309
 #, c-format
 msgid "(%u%% downloaded)"
 msgstr "(%u%% indirildi)"
@@ -1171,8 +1197,8 @@ msgstr "(örnek: %H:%M)"
 msgid "(example: %Y-%m-%d)"
 msgstr "(örnek: %Y-%m-%d)"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3574
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3591
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3698
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3715
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:919
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:944
 #, c-format
@@ -1250,7 +1276,7 @@ msgstr "Varsayılan bir düzenleyici ayarlamalısınız."
 
 #: ../../locales/../src/interface/RemoteListView.cpp:157
 #: ../../locales/../src/interface/RemoteTreeView.cpp:118
-#: ../../locales/../src/interface/state.cpp:763
+#: ../../locales/../src/interface/state.cpp:759
 msgid "A directory cannot be dragged into one of its subdirectories."
 msgstr "Bir klasör kendi alt klasörlerinden birine sürüklenemez."
 
@@ -1268,17 +1294,17 @@ msgstr ""
 msgid "A file previously opened has been changed."
 msgstr "Açık bir dosya değiştirilmiş."
 
-#: ../../locales/../src/interface/edithandler.cpp:1644
+#: ../../locales/../src/interface/edithandler.cpp:1645
 msgid "A file with that name is already being transferred."
 msgstr "Aynı adlı bir dosya zaten aktarıldı."
 
-#: ../../locales/../src/interface/edithandler.cpp:1648
+#: ../../locales/../src/interface/edithandler.cpp:1649
 msgid ""
 "A file with that name is still being edited. Please close it and try again."
 msgstr ""
 "Aynı adlı bir dosya zaten düzenleniyor. Açık dosyayı kapatıp yeniden deneyin."
 
-#: ../../locales/../src/interface/FileZilla.cpp:596
+#: ../../locales/../src/interface/FileZilla.cpp:561
 msgid ""
 "A local filename could not be decoded.\n"
 "Please make sure the LC_CTYPE (or LC_ALL) environment variable is set "
@@ -1295,7 +1321,7 @@ msgstr ""
 msgid "A new version of FileZilla is available:"
 msgstr "Yeni bir FileZilla sürümü yayınlanmış:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:644
+#: ../../locales/../src/interface/Mainfrm.cpp:650
 msgid ""
 "A proper server always shows all files, but some broken servers hide files "
 "from the user. Use this option to force the server to show all files."
@@ -1312,7 +1338,7 @@ msgstr ""
 "Normal bir sunucu için gerekmez. Kullanmanız gerekiyorsa sunucu yöneticisi "
 "ile görüşün."
 
-#: ../../locales/../src/interface/state.cpp:259
+#: ../../locales/../src/interface/state.cpp:253
 msgid ""
 "A remote operation is in progress and synchronized browsing is enabled.\n"
 "Disable synchronized browsing and continue changing the local directory?"
@@ -1322,7 +1348,7 @@ msgstr ""
 "etmek ister misiniz?"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:144
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:590
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:598
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1062
 msgid "A&SCII"
 msgstr "A&SCII"
@@ -1347,7 +1373,7 @@ msgstr "Y&alnız yüklemelere uygulansın"
 msgid "A&pply to all files and directories"
 msgstr "Tüm dosy&a ve klasörlere uygulansın"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:478
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:482
 msgid "A&utomatically remove successful transfers"
 msgstr "T&amamlanan aktarımlar kendiliğinden silinsin"
 
@@ -1363,8 +1389,8 @@ msgstr "FileZilla Hakkında"
 msgid "Above the file lists"
 msgstr "Yerel ve uzak dosya gezginlerinin üzerinde"
 
-#: ../../locales/../src/engine/server.cpp:863
-#: ../../locales/../src/engine/server.cpp:884
+#: ../../locales/../src/engine/server.cpp:885
+#: ../../locales/../src/engine/server.cpp:906
 #: ../../locales/../src/interface/manual_transfer.cpp:154
 #: ../../locales/../src/interface/manual_transfer.cpp:155
 #: ../../locales/../src/interface/manual_transfer.cpp:188
@@ -1375,7 +1401,7 @@ msgstr "Yerel ve uzak dosya gezginlerinin üzerinde"
 msgid "Account"
 msgstr "Hesap"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:375
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:379
 msgid "Action after queue &completion"
 msgstr "Kuyruk tamamlandıktan sonra yapıla&cak işlem"
 
@@ -1423,12 +1449,13 @@ msgstr ""
 msgid "Active mode IP"
 msgstr "Aktif Kip IP Adresi"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3176
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3201
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3296
 msgid "Add files to &queue only"
 msgstr "Dosyalar yalnız &kuyruğa eklensin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:494
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:553
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:498
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:561
 msgid "Add selected directory to the transfer queue"
 msgstr "Seçili klasörler aktarım kuyruğuna eklensin"
 
@@ -1464,7 +1491,7 @@ msgstr ""
 "çalışmayarak sisteminize zarar verebilir. Deneme sürümleri ve gecelik "
 "yapımları kullanmaktan doğabilecek zararları üstlenme riski size aittir."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3507
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3631
 msgid "Al&ways perform this action"
 msgstr "Her &zaman şu işlem yapılsın"
 
@@ -1494,7 +1521,7 @@ msgstr "Hata durumunda diğer aktarım &yöntemi kullanılsın"
 msgid "Allow fallback to other transfer mode on failure"
 msgstr "Hata durumunda diğer aktarım yöntemi kullanılsın"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3467
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3591
 msgid "Already connected"
 msgstr "Zaten bağlı"
 
@@ -1544,13 +1571,13 @@ msgstr ""
 "Aktarım kuyruğu \"%s\" üzerine yüklenirken hata oluştu.\n"
 "Bazı aktarım kuyruğu ögeleri kaydedilmemiş olabilir."
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2033
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2034
 msgid ""
 "An item with the same name as the dragged item already exists at the target "
 "location."
 msgstr "Hedefte, sürüklediğiniz nesne ile aynı adı taşıyan bir nesne var."
 
-#: ../../locales/../src/engine/server.cpp:886
+#: ../../locales/../src/engine/server.cpp:908
 #: ../../locales/../src/interface/manual_transfer.cpp:153
 #: ../../locales/../src/interface/manual_transfer.cpp:191
 #: ../../locales/../src/interface/manual_transfer.cpp:207
@@ -1560,7 +1587,7 @@ msgstr "Hedefte, sürüklediğiniz nesne ile aynı adı taşıyan bir nesne var.
 msgid "Anonymous"
 msgstr "Anonim"
 
-#: ../../locales/../src/interface/state.cpp:964
+#: ../../locales/../src/interface/state.cpp:967
 msgid ""
 "Another remote operation is already in progress, cannot change directory now."
 msgstr ""
@@ -1614,8 +1641,8 @@ msgstr "Aktarım kuyruğu bölümünde sekme olarak"
 msgid "Ask for action"
 msgstr "Ne yapılacağı sorulsun"
 
-#: ../../locales/../src/engine/server.cpp:857
-#: ../../locales/../src/engine/server.cpp:878
+#: ../../locales/../src/engine/server.cpp:879
+#: ../../locales/../src/engine/server.cpp:900
 #: ../../locales/../src/interface/manual_transfer.cpp:182
 msgid "Ask for password"
 msgstr "Parola sorulan"
@@ -1628,7 +1655,7 @@ msgstr "İşletim sisteminden bir kapı istensin."
 msgid "Ask your operating system for the external IP address"
 msgstr "İşletim sistemine dış IP adresi sorulsun"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3416
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3536
 msgid "Asking questions in the FileZilla forums"
 msgstr "FileZilla forumlarında soru sorabilirsiniz"
 
@@ -1681,7 +1708,7 @@ msgstr "&Vekil sunucu atlansın"
 msgid "Bad file descriptor"
 msgstr "Dosya belirteci bozuk"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3373
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3493
 msgid "Basic usage instructions"
 msgstr "Basit kullanım bilgileri"
 
@@ -1689,8 +1716,8 @@ msgstr "Basit kullanım bilgileri"
 msgid "Behaviour"
 msgstr "Davranış"
 
-#: ../../locales/../src/interface/edithandler.cpp:1114
-#: ../../locales/../src/interface/edithandler.cpp:1142
+#: ../../locales/../src/interface/edithandler.cpp:1115
+#: ../../locales/../src/interface/edithandler.cpp:1143
 msgid "Being edited"
 msgstr "Düzenlendi"
 
@@ -1707,7 +1734,7 @@ msgid "Blackboard"
 msgstr "Karatahta"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:261
-#: ../../locales/../src/interface/menu_bar.cpp:304
+#: ../../locales/../src/interface/menu_bar.cpp:297
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:418
 msgid "Bookmark"
 msgstr "Yer imi"
@@ -1750,14 +1777,19 @@ msgstr ""
 msgid "C&ancel current operation"
 msgstr "Yürürlükteki İşlemi İpt&al Et"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:431
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:435
 msgid "C&lear all"
 msgstr "Hepsini temiz&le"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:328
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:515
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:519
 msgid "C&opy URL(s) to clipboard"
 msgstr "İnternet adresini pan&oya kopyala"
+
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:332
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:523
+msgid "C&opy URL(s) with password to clipboard"
+msgstr "İnternet adreslerini parola ile pan&oya kopyala"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1507
 msgid "C&ustom"
@@ -1807,10 +1839,11 @@ msgstr "Veri %s dosyasına yazılamıyor"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2723
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2891
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2981
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3193
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3263
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3525
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3745
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3218
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3313
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3383
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3649
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3869
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:604
 msgid "Cancel"
 msgstr "İptal"
@@ -1828,7 +1861,7 @@ msgstr "Yürürlükteki işlemi iptal eder"
 msgid "Cannot access '%s', no media inserted or drive not ready."
 msgstr "'%s' erişilemiyor, sürücü hazır değil ya da bir ortam takılmamış."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:557
+#: ../../locales/../src/interface/Mainfrm.cpp:563
 msgid "Cannot add server to Site Manager"
 msgstr "Sunucu Site Yöneticisine eklenemiyor"
 
@@ -1836,7 +1869,7 @@ msgstr "Sunucu Site Yöneticisine eklenemiyor"
 msgid "Cannot assign requested address"
 msgstr "İstenen adres atanamadı"
 
-#: ../../locales/../src/interface/context_control.cpp:357
+#: ../../locales/../src/interface/context_control.cpp:356
 msgid ""
 "Cannot close tab while busy.\n"
 "Cancel current operation and close tab?"
@@ -1856,18 +1889,18 @@ msgstr ""
 msgid "Cannot create new filter"
 msgstr "Yeni süzgeç oluşturulamıyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1574
-#: ../../locales/../src/interface/edithandler.cpp:1622
-#: ../../locales/../src/interface/LocalListView.cpp:1720
-#: ../../locales/../src/interface/search.cpp:696
+#: ../../locales/../src/interface/edithandler.cpp:1575
+#: ../../locales/../src/interface/edithandler.cpp:1623
+#: ../../locales/../src/interface/LocalListView.cpp:1722
+#: ../../locales/../src/interface/search.cpp:1136
 msgid "Cannot edit file"
 msgstr "Dosya düzenlenemiyor"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1602
+#: ../../locales/../src/interface/LocalListView.cpp:1604
 msgid "Cannot edit file, not connected to any server."
 msgstr "Dosya düzenlenemiyor, herhangi bir sunucuya bağlı değil."
 
-#: ../../locales/../src/interface/LocalListView.cpp:1611
+#: ../../locales/../src/interface/LocalListView.cpp:1613
 msgid "Cannot edit file, remote path unknown."
 msgstr "Uzaktaki yol bilinmediğinden dosya düzenlenemiyor."
 
@@ -1887,7 +1920,7 @@ msgstr "Hızlı Bağlantı çubuğu kaynak dosyasından yüklenemiyor"
 msgid "Cannot load key file"
 msgstr "Anahtar dosyası yüklenemedi"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:995
+#: ../../locales/../src/interface/Mainfrm.cpp:1001
 msgid "Cannot load toolbar from resource file"
 msgstr "Araç çubuğu kaynak dosyasından yüklenemiyor"
 
@@ -1900,7 +1933,7 @@ msgstr "Parola hatırlanamıyor"
 msgid "Cannot rename entry"
 msgstr "Kayıt yeniden adlandırılamıyor"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1582
+#: ../../locales/../src/interface/RemoteListView.cpp:1576
 msgid "Cannot rename file"
 msgstr "Dosya yeniden adlandırılamıyor"
 
@@ -1919,17 +1952,17 @@ msgstr "Süzgeç kümesi kaydedilemiyor"
 msgid "Cannot select filter"
 msgstr "Süzgeç seçilemiyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1472
-#: ../../locales/../src/interface/edithandler.cpp:1476
-#: ../../locales/../src/interface/edithandler.cpp:1511
+#: ../../locales/../src/interface/edithandler.cpp:1473
+#: ../../locales/../src/interface/edithandler.cpp:1477
+#: ../../locales/../src/interface/edithandler.cpp:1512
 msgid "Cannot set file association"
 msgstr "Dosya ilişkisi ayarlanamıyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1073
+#: ../../locales/../src/interface/edithandler.cpp:1074
 msgid "Cannot show dialog"
 msgstr "Görüntülenemiyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1644
+#: ../../locales/../src/interface/edithandler.cpp:1645
 msgid "Cannot view/edit selected file"
 msgstr "Seçilen dosyada görüntüleme/düzenleme yapılamıyor"
 
@@ -1973,8 +2006,8 @@ msgstr "Kimlik Sor:"
 msgid "Change file attributes"
 msgstr "Dosya izinlerini değiştir"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:333
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:520
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:337
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:528
 msgid "Change the file permissions."
 msgstr "Dosya izinlerini değiştir."
 
@@ -1984,7 +2017,7 @@ msgstr ""
 "Değiştirilen günlük dosyası ayarlarının etkin olması için FileZilla yeniden "
 "başlatılmalıdır."
 
-#: ../../locales/../src/interface/FileZilla.cpp:596
+#: ../../locales/../src/interface/FileZilla.cpp:561
 msgid "Character encoding issue"
 msgstr "Karakter kodlaması sorunu"
 
@@ -2008,7 +2041,7 @@ msgstr "Güncellemeleri denetle"
 msgid "Check for newer versions of FileZilla"
 msgstr "Yeni FileZilla sürümlerini denetle"
 
-#: ../../locales/../src/interface/update_dialog.cpp:57
+#: ../../locales/../src/interface/update_dialog.cpp:59
 msgid "Check for updates failed"
 msgstr "Güncellemeler denetlenemedi"
 
@@ -2032,16 +2065,16 @@ msgstr ""
 msgid "Checking for correct external IP address"
 msgstr "Doğru dış IP adresi denetleniyor"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:162
+#: ../../locales/../src/interface/resources/xrc/update.xrc:166
 msgid "Checking for updates..."
 msgstr "Güncellemeler denetleniyor..."
 
-#: ../../locales/../src/interface/updater.cpp:748
+#: ../../locales/../src/interface/updater.cpp:757
 #, c-format
 msgid "Checksum match on file %s\n"
 msgstr "%s dosyasının sağlaması tutuyor\n"
 
-#: ../../locales/../src/interface/updater.cpp:744
+#: ../../locales/../src/interface/updater.cpp:753
 #, c-format
 msgid "Checksum mismatch on file %s\n"
 msgstr "%s dosyasının sağlaması tutmuyor\n"
@@ -2056,7 +2089,7 @@ msgstr "Varsayılan yerel klasörü seçin"
 
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:124
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:364
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2245
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2246
 msgid "Choose the local directory"
 msgstr "Yerel klasörü seçin"
 
@@ -2069,7 +2102,7 @@ msgid "Cipher:"
 msgstr "Şifre:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:21
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:615
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:626
 msgid "Cl&ose tab"
 msgstr "Sekmeyi &Kapat"
 
@@ -2077,7 +2110,7 @@ msgstr "Sekmeyi &Kapat"
 msgid "Classic"
 msgstr "Klasik"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:436
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:440
 msgid "Clear &layout cache"
 msgstr "Arayüz Önbelleğini Temiz&le"
 
@@ -2110,13 +2143,13 @@ msgstr "İstemciden sunucunun MAC adresine:"
 msgid "Client to server cipher:"
 msgstr "İstemciden sunucuya şifre:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:618
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:629
 msgid "Close &all other tabs"
 msgstr "Diğer tüm sekmeleri k&apat"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:40
-#: ../../locales/../src/interface/Mainfrm.cpp:1131
-#: ../../locales/../src/interface/Mainfrm.cpp:1152
+#: ../../locales/../src/interface/Mainfrm.cpp:1137
+#: ../../locales/../src/interface/Mainfrm.cpp:1158
 msgid "Close FileZilla"
 msgstr "FileZilla yazılımını kapatır"
 
@@ -2132,7 +2165,7 @@ msgstr "Geçerli sekmeyi kapatır"
 msgid "Co&mments:"
 msgstr "No&tlar:"
 
-#: ../../locales/../src/interface/listctrlex.cpp:747
+#: ../../locales/../src/interface/listctrlex.cpp:745
 msgid "Column properties"
 msgstr "Sütun özellikleri"
 
@@ -2178,12 +2211,12 @@ msgid "Communication tainted by router or firewall"
 msgstr "İletişim, yöneltici ya da güvenlik duvarı tarafından bozuldu"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:82
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:535
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:543
 msgid "Compare &modification time"
 msgstr "Değişiklik Za&manları Karşılaştırılsın"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:78
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:531
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:539
 msgid "Compare file&size"
 msgstr "Do&sya Boyutları Karşılaştırılsın"
 
@@ -2220,7 +2253,7 @@ msgid "Concurrent transfers"
 msgstr "Eşzamanlı Aktarım"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1315
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3063
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3088
 msgid "Conditions are c&ase sensitive"
 msgstr "Ölçütler büyük küçük h&arfe duyarlı olsun"
 
@@ -2236,20 +2269,20 @@ msgstr "Pasif kipi ayarlayın"
 msgid "Configure port range"
 msgstr "Kapı aralığını ayarlayın"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3379
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3499
 msgid "Configuring FileZilla and your network"
 msgstr "FileZilla ve ağ ayarlarınız"
 
-#: ../../locales/../src/interface/search.cpp:747
+#: ../../locales/../src/interface/search.cpp:1192
 msgid "Confirm deletion"
 msgstr "Silme işlemini onaylayın"
 
-#: ../../locales/../src/interface/edithandler.cpp:1586
+#: ../../locales/../src/interface/edithandler.cpp:1587
 #: ../../locales/../src/interface/file_utils.h:45
-#: ../../locales/../src/interface/LocalListView.cpp:1684
-#: ../../locales/../src/interface/RemoteListView.cpp:1390
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1041
-#: ../../locales/../src/interface/search.cpp:708
+#: ../../locales/../src/interface/LocalListView.cpp:1686
+#: ../../locales/../src/interface/RemoteListView.cpp:1384
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1047
+#: ../../locales/../src/interface/search.cpp:1148
 msgid "Confirmation needed"
 msgstr "Onay gerekiyor"
 
@@ -2393,7 +2426,7 @@ msgstr[0] "%d saniye boyunca işlem yapılmadığından bağlantı kesildi"
 msgid "Connection timed out."
 msgstr "Bağlantı zaman aşımına uğradı."
 
-#: ../../locales/../src/interface/search.cpp:386
+#: ../../locales/../src/interface/search.cpp:660
 msgid "Connection to server lost."
 msgstr "Sunucuyla bağlantı kesildi."
 
@@ -2425,8 +2458,13 @@ msgstr "%d / (%s) kopya"
 msgid "Copy of %s"
 msgstr "%s kopyası"
 
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:333
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:524
+msgid "Copy the URLs of the selected items to clipboard, including password."
+msgstr "Seçilmiş ögelerin İnternet adreslerini parolaları ile panoya kopyalar."
+
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:329
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:516
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:520
 msgid "Copy the URLs of the selected items to clipboard."
 msgstr "Seçili ögelerin İnternet adreslerini panoya kopyalar."
 
@@ -2440,7 +2478,7 @@ msgstr "%s bağlantısı kabul edilemedi"
 msgid "Could not add connection to Site Manager"
 msgstr "Bağlantı Site Yöneticisine eklenemedi"
 
-#: ../../locales/../src/interface/state.cpp:777
+#: ../../locales/../src/interface/state.cpp:773
 msgid "Could not complete operation"
 msgstr "İşlem tamamlanamadı"
 
@@ -2462,8 +2500,8 @@ msgstr "Komut, sunucu kodlamasına dönüştürülemedi"
 msgid "Could not convert private key"
 msgstr "Kişisel anahtar dönüştürülemedi"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2522
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1381
+#: ../../locales/../src/interface/RemoteListView.cpp:2514
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1384
 msgid "Could not copy URLs"
 msgstr "İnternet adresleri kopyalanamadı"
 
@@ -2481,8 +2519,8 @@ msgstr "%s yerel dosyası oluşturulamıyor\n"
 msgid "Could not create logging mutex: %s"
 msgstr "Günlükleme için mutex oluşturulamadı: %s"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2183
-#: ../../locales/../src/interface/RemoteTreeView.cpp:851
+#: ../../locales/../src/interface/RemoteListView.cpp:2180
+#: ../../locales/../src/interface/RemoteTreeView.cpp:855
 msgid ""
 "Could not determine the target of the Drag&Drop operation.\n"
 "Either the shell extension is not installed properly or you didn't drop the "
@@ -2496,7 +2534,7 @@ msgstr ""
 msgid "Could not establish connection to server"
 msgstr "Sunucu ile bağlantı kurulamadı"
 
-#: ../../locales/../src/interface/FileZilla.cpp:428
+#: ../../locales/../src/interface/FileZilla.cpp:405
 msgid ""
 "Could not find the resource files for FileZilla, closing FileZilla.\n"
 "You can set the data directory of FileZilla using the '--datadir "
@@ -2524,7 +2562,7 @@ msgid ""
 "failed"
 msgstr "Sertifika konusunun adı alınamadı, gnutls_x509_get_dn başarısız"
 
-#: ../../locales/../src/interface/state.cpp:950
+#: ../../locales/../src/interface/state.cpp:953
 msgid "Could not get full remote path."
 msgstr "Uzaktaki yolun tamamı okunamadı."
 
@@ -2533,8 +2571,8 @@ msgstr "Uzaktaki yolun tamamı okunamadı."
 msgid "Could not get reply from fzputtygen."
 msgstr "fzputtygen yanıt vermiyor."
 
-#: ../../locales/../src/interface/edithandler.cpp:1574
-#: ../../locales/../src/interface/search.cpp:696
+#: ../../locales/../src/interface/edithandler.cpp:1575
+#: ../../locales/../src/interface/search.cpp:1136
 msgid "Could not get temporary directory to download file into."
 msgstr "Dosyanın kayıt edileceği geçici klasöre erişilemedi."
 
@@ -2542,7 +2580,7 @@ msgstr "Dosyanın kayıt edileceği geçici klasöre erişilemedi."
 msgid "Could not import peer certificates, gnutls_x509_crt_import failed"
 msgstr "Denklik sertifikaları alınamadı, gnutls_x509_crt_import başarısız"
 
-#: ../../locales/../src/interface/FileZilla.cpp:108
+#: ../../locales/../src/interface/FileZilla.cpp:85
 #, c-format
 msgid "Could not initialize Winsock (%d): %s"
 msgstr "Winsock başlatılamadı (%d): %s"
@@ -2575,7 +2613,7 @@ msgstr "Anahtar dosyası yüklenemedi"
 msgid "Could not load private key"
 msgstr "Kişisel anahtar yüklenemedi"
 
-#: ../../locales/../src/interface/state.cpp:972
+#: ../../locales/../src/interface/state.cpp:975
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2585,7 +2623,7 @@ msgstr ""
 "Uzaktaki '%s' klasörüne karşı gelen yerel klasöre geçilemedi.\n"
 "Eşzamanlı tarama devre dışı bırakılıp uzak klasör değiştirilsin mi?"
 
-#: ../../locales/../src/interface/state.cpp:363
+#: ../../locales/../src/interface/state.cpp:357
 #, c-format
 msgid ""
 "Could not obtain corresponding local directory for the remote directory "
@@ -2595,7 +2633,7 @@ msgstr ""
 "Uzaktaki '%s' klasörüne karşı gelen yerel klasöre geçilemedi.\n"
 "Eşzamanlı tarama devre dışı bırakıldı."
 
-#: ../../locales/../src/interface/state.cpp:268
+#: ../../locales/../src/interface/state.cpp:262
 #, c-format
 msgid ""
 "Could not obtain corresponding remote directory for the local directory "
@@ -2606,8 +2644,8 @@ msgstr ""
 "Eşzamanlı tarama devre dışı bırakıldı."
 
 #: ../../locales/../src/interface/aboutdialog.cpp:198
-#: ../../locales/../src/interface/RemoteListView.cpp:2522
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1381
+#: ../../locales/../src/interface/RemoteListView.cpp:2514
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1384
 msgid "Could not open clipboard"
 msgstr "Pano açılamadı"
 
@@ -2700,7 +2738,7 @@ msgstr ""
 
 #: ../../locales/../src/interface/sitemanager.cpp:720
 #: ../../locales/../src/interface/sitemanager.cpp:774
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2226
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2227
 #, c-format
 msgid "Could not write \"%s\", the selected sites could not be exported: %s"
 msgstr "\"%s\" dosyasına yazılamıyor, seçilen siteler verilemedi: %s"
@@ -2739,25 +2777,25 @@ msgstr "Ülke:"
 msgid "Crea&te new file"
 msgstr "&Dosya oluştur"
 
-#: ../../locales/../src/interface/state.cpp:986
+#: ../../locales/../src/interface/state.cpp:989
 msgid "Create &missing local directory and enter it"
 msgstr "&Eksik yerel klasörü oluştur ve aç"
 
-#: ../../locales/../src/interface/state.cpp:913
+#: ../../locales/../src/interface/state.cpp:917
 msgid "Create &missing remote directory and enter it"
 msgstr "&Eksik uzak klasörü oluştur ve aç"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:265
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:305
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:499
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:563
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:503
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:571
 msgid "Create a new subdirectory in the current directory"
 msgstr "Geçerli klasörde yeni bir alt klasör oluşturur"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:269
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:309
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:503
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:567
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:507
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:575
 msgid "Create a new subdirectory in the current directory and change into it"
 msgstr "Geçerli klasörde yeni bir alt klasör oluşturup içine geçin"
 
@@ -2767,19 +2805,19 @@ msgstr "Geçerli klasörde yeni bir boş dosya oluşturur"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:268
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:308
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:502
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:566
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:506
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:574
 msgid "Create director&y and enter it"
 msgstr "Kla&sör oluştur ve aç"
 
 #: ../../locales/../src/interface/LocalListView.cpp:917
-#: ../../locales/../src/interface/LocalTreeView.cpp:1135
-#: ../../locales/../src/interface/RemoteListView.cpp:1293
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1219
+#: ../../locales/../src/interface/LocalTreeView.cpp:1139
+#: ../../locales/../src/interface/RemoteListView.cpp:1287
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1225
 msgid "Create directory"
 msgstr "Klasör oluştur"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2609
+#: ../../locales/../src/interface/RemoteListView.cpp:2600
 msgid "Create empty file"
 msgstr "Boş dosya oluştur"
 
@@ -2810,7 +2848,7 @@ msgstr "Kritik dosya aktarım hatası"
 msgid "Critical file transfer error after transferring %s in %s"
 msgstr "Aktarımın %s/%s kadarı iletildikten sonra kritik dosya aktarım hatası"
 
-#: ../../locales/../src/interface/state.cpp:354
+#: ../../locales/../src/interface/state.cpp:348
 #, c-format
 msgid ""
 "Current remote directory (%s) is not below the synchronization root (%s).\n"
@@ -2862,8 +2900,8 @@ msgid "D&efault"
 msgstr "V&arsayılan"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:320
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:507
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:606
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:511
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:617
 msgid "D&elete"
 msgstr "S&il"
 
@@ -2892,7 +2930,7 @@ msgstr "K&opyala"
 msgid "DOS-like with virtual paths"
 msgstr "DOS benzeri sanal yollar"
 
-#: ../../locales/../src/interface/edithandler.cpp:1626
+#: ../../locales/../src/interface/edithandler.cpp:1627
 msgid "Dangerous filetype"
 msgstr "Tehlikeli dosya tipi"
 
@@ -2999,8 +3037,8 @@ msgstr[0] ""
 msgid "Delete Site Manager entry"
 msgstr "Site Yöneticisi kaydını sil"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:508
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:572
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:512
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:580
 msgid "Delete selected directory"
 msgstr "Seçili klasörü sil"
 
@@ -3019,11 +3057,11 @@ msgstr "\"%s\" siliniyor"
 msgid "Deleting %u files from \"%s\""
 msgstr "%u dosya \"%s\" üzerinden siliniyor"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3211
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3331
 msgid "Deleting symbolic link"
 msgstr "Sembolik bağlantı siliniyor"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:955
+#: ../../locales/../src/interface/LocalTreeView.cpp:959
 msgid "Desktop"
 msgstr "Masaüstü"
 
@@ -3049,17 +3087,17 @@ msgstr "K&lasörler"
 msgid "Direction"
 msgstr "Yön"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:271
+#: ../../locales/../src/interface/filelistctrl.cpp:268
 msgid "Directory"
 msgstr "Klasör"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2783
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:524
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:532
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:1770
 #: ../../locales/../src/interface/resources/xrc/sitemanager.xrc:365
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:76
-#: ../../locales/../src/interface/filelistctrl.cpp:464
-#: ../../locales/../src/interface/Mainfrm.cpp:2166
+#: ../../locales/../src/interface/filelistctrl.cpp:468
+#: ../../locales/../src/interface/Mainfrm.cpp:2175
 msgid "Directory comparison"
 msgstr "K&lasör karşılaştırma kullanılsın"
 
@@ -3075,7 +3113,7 @@ msgstr "Günlük dosyasını içeren klasör yok ya da dosya adı geçersiz."
 msgid "Directory listing aborted by user"
 msgstr "Kullanıcı klasör listelemeyi durdurdu"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2013
+#: ../../locales/../src/interface/RemoteListView.cpp:2006
 msgid "Directory listing failed"
 msgstr "Klasör listelenemedi"
 
@@ -3096,12 +3134,12 @@ msgstr "Klasör listelendi"
 msgid "Disa&ble all"
 msgstr "Tümünü &Devre Dışı Bırak"
 
-#: ../../locales/../src/interface/state.cpp:979
+#: ../../locales/../src/interface/state.cpp:982
 msgid ""
 "Disable synchronized browsing and continue changing the remote directory?"
 msgstr "Eşzamanlı tarama devre dışı bırakılıp uzak klasör değiştirilsin mi?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:646
+#: ../../locales/../src/interface/Mainfrm.cpp:652
 msgid ""
 "Disable this option again if you will not be able to see the correct "
 "directory contents anymore."
@@ -3151,8 +3189,8 @@ msgstr "Varsayılan düzenleyici kulla&nılmasın"
 msgid "Do the same with &all selected files already being edited"
 msgstr "Düzenlenen &tüm dosyalar için aynı işlem uygulansın"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1134
-#: ../../locales/../src/interface/Mainfrm.cpp:1156
+#: ../../locales/../src/interface/Mainfrm.cpp:1140
+#: ../../locales/../src/interface/Mainfrm.cpp:1162
 msgid "Do you really want to close FileZilla?"
 msgstr "FileZilla kapatılsın mı?"
 
@@ -3175,7 +3213,7 @@ msgstr "Seçili kayıdı silmek istiyor musunuz?"
 msgid "Do you really want to delete the transfer queue?"
 msgstr "Aktarım kuyruğunu gerçekten silmek istiyor musunuz?"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:585
+#: ../../locales/../src/interface/Mainfrm.cpp:591
 #, c-format
 msgid "Do you really want to send '%s' to the server?"
 msgstr "'%s' sunucuya gönderilsin mi?"
@@ -3184,7 +3222,7 @@ msgstr "'%s' sunucuya gönderilsin mi?"
 msgid "Do you want to reopen this file?"
 msgstr "Bu dosyayı yeniden açmak ister misiniz?"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3361
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3481
 msgid "Documentation"
 msgstr "Belgeler"
 
@@ -3204,7 +3242,7 @@ msgstr "Çift Tıklama Eylemleri"
 msgid "Download"
 msgstr "İndirme"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3563
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3687
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:905
 msgid "Download &limit:"
 msgstr "İndirme &sınırı:"
@@ -3218,13 +3256,13 @@ msgstr "İndirme sınırı: %s/s."
 msgid "Download limit: none"
 msgstr "İndirme sınırı: yok"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3110
-#: ../../locales/../src/interface/search.cpp:524
-#: ../../locales/../src/interface/search.cpp:529
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3135
+#: ../../locales/../src/interface/search.cpp:851
+#: ../../locales/../src/interface/search.cpp:856
 msgid "Download search results"
 msgstr "Arama sonuçlarını indir"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:489
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:493
 msgid "Download selected directory"
 msgstr "Seçili klasörü indir"
 
@@ -3232,7 +3270,7 @@ msgstr "Seçili klasörü indir"
 msgid "Download selected files and directories"
 msgstr "Seçili dosya ve klasörleri indir"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:967
+#: ../../locales/../src/interface/Mainfrm.cpp:973
 #, c-format
 msgid ""
 "Download speed: %s/s\n"
@@ -3241,7 +3279,7 @@ msgstr ""
 "İndirme Hızı: %s/s\n"
 "Yükleme Hızı: %s/s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1099
+#: ../../locales/../src/interface/edithandler.cpp:1100
 msgid "Downloading"
 msgstr "İndiriliyor"
 
@@ -3294,9 +3332,9 @@ msgstr "Ça&lıştırma"
 msgid "E&xit"
 msgstr "Çı&kış"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:415
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:459
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:482
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:419
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:463
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:486
 msgid "E&xport..."
 msgstr "Bilgileri &Ver..."
 
@@ -3319,16 +3357,16 @@ msgstr ""
 "Dosya ayarlanmış olan düzenleyici ile düzenlensin ve değişiklikler sunucuya "
 "yüklensin."
 
-#: ../../locales/../src/interface/search.cpp:684
+#: ../../locales/../src/interface/search.cpp:1124
 msgid "Editing directories is not supported"
 msgstr "Klasörleri düzenleme işlemi desteklenmiyor"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1602
-#: ../../locales/../src/interface/LocalListView.cpp:1611
+#: ../../locales/../src/interface/LocalListView.cpp:1604
+#: ../../locales/../src/interface/LocalListView.cpp:1613
 msgid "Editing failed"
 msgstr "Düzenleme yapılamadı"
 
-#: ../../locales/../src/interface/search.cpp:684
+#: ../../locales/../src/interface/search.cpp:1124
 msgid "Editing search results"
 msgstr "Arama sonuçları düzenleniyor"
 
@@ -3344,7 +3382,7 @@ msgstr "Boş komut"
 msgid "Empty command."
 msgstr "Boş komut."
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2015
+#: ../../locales/../src/interface/RemoteListView.cpp:2008
 msgid "Empty directory listing"
 msgstr "Klasör listesi boş"
 
@@ -3390,7 +3428,7 @@ msgstr "Şifreleme"
 msgid "Encryption details"
 msgstr "Şifreleme ayrıntıları"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:466
+#: ../../locales/../src/interface/filelistctrl.cpp:470
 msgid "End comparison and change sorting order?"
 msgstr "Karşılaştırma bitirilip sıralama düzeni değiştirilsin mi?"
 
@@ -3398,7 +3436,7 @@ msgstr "Karşılaştırma bitirilip sıralama düzeni değiştirilsin mi?"
 msgid "Enter &custom command..."
 msgstr "Özel &Komut Yazın..."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3604
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3728
 msgid "Enter 0 for unlimited speed."
 msgstr "Hız sınırlaması olmaması için 0 yazın."
 
@@ -3406,7 +3444,7 @@ msgstr "Hız sınırlaması olmaması için 0 yazın."
 msgid "Enter command"
 msgstr "Komutu yazın"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:568
+#: ../../locales/../src/interface/Mainfrm.cpp:574
 msgid "Enter custom command"
 msgstr "Özel komut yazın"
 
@@ -3509,10 +3547,10 @@ msgstr "Kuyruk yüklenirken hata oluştu"
 #: ../../locales/../src/interface/filter.cpp:980
 #: ../../locales/../src/interface/import.cpp:106
 #: ../../locales/../src/interface/import.cpp:293
-#: ../../locales/../src/interface/Options.cpp:246
+#: ../../locales/../src/interface/Options.cpp:249
 #: ../../locales/../src/interface/QueueView.cpp:1453
-#: ../../locales/../src/interface/search.cpp:802
-#: ../../locales/../src/interface/search.cpp:821
+#: ../../locales/../src/interface/search.cpp:1252
+#: ../../locales/../src/interface/search.cpp:1271
 #: ../../locales/../src/interface/sitemanager.cpp:16
 #: ../../locales/../src/interface/sitemanager.cpp:436
 #: ../../locales/../src/interface/sitemanager.cpp:517
@@ -3541,7 +3579,7 @@ msgstr "Yazılım başlatılırken hata oluştu"
 #: ../../locales/../src/interface/sitemanager.cpp:721
 #: ../../locales/../src/interface/sitemanager.cpp:775
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:830
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2227
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2228
 #: ../../locales/../src/interface/xmlfunctions.cpp:147
 msgid "Error writing xml file"
 msgstr "XML dosyası yazılırken hata oluştu"
@@ -3564,7 +3602,7 @@ msgstr "Örnekler"
 msgid "Exe&cute"
 msgstr "Çal&ıştırma"
 
-#: ../../locales/../src/interface/update_dialog.cpp:57
+#: ../../locales/../src/interface/update_dialog.cpp:59
 msgid "Executable contains no version info, cannot check for updates."
 msgstr ""
 "Kullandığınız uygulama sürüm bilgisini içermediğinden güncelleme denetimi "
@@ -3643,21 +3681,21 @@ msgstr "FTPS - FTP üzerinden örtülü TLS"
 #: ../../locales/../src/interface/LocalListView.cpp:531
 #: ../../locales/../src/interface/LocalListView.cpp:607
 #: ../../locales/../src/interface/LocalListView.cpp:906
-#: ../../locales/../src/interface/LocalListView.cpp:1798
+#: ../../locales/../src/interface/LocalListView.cpp:1800
 #: ../../locales/../src/interface/LocalTreeView.cpp:843
-#: ../../locales/../src/interface/LocalTreeView.cpp:1111
-#: ../../locales/../src/interface/viewheader.cpp:504
+#: ../../locales/../src/interface/LocalTreeView.cpp:1115
+#: ../../locales/../src/interface/viewheader.cpp:493
 msgid "Failed to change directory"
 msgstr "Klasör değiştirilemedi"
 
-#: ../../locales/../src/interface/FileZilla.cpp:158
-#: ../../locales/../src/interface/FileZilla.cpp:173
-#: ../../locales/../src/interface/FileZilla.cpp:175
+#: ../../locales/../src/interface/FileZilla.cpp:135
+#: ../../locales/../src/interface/FileZilla.cpp:150
+#: ../../locales/../src/interface/FileZilla.cpp:152
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 msgid "Failed to change language"
 msgstr "Dil değiştirilemedi"
 
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2033
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2034
 msgid "Failed to copy or move sites"
 msgstr "Siteler kopyalanamadı ya da taşınamadı"
 
@@ -3690,7 +3728,7 @@ msgstr "Denetim bağlantısının denklik adresi alınamadı, bağlantı kapatı
 msgid "Failed to get peer address of data connection, connection closed."
 msgstr "Veri bağlantısının denklik adresi alınamadı, bağlantı kapandı."
 
-#: ../../locales/../src/interface/context_control.cpp:83
+#: ../../locales/../src/interface/context_control.cpp:82
 msgid "Failed to initialize FTP engine"
 msgstr "FTP motoru başlatılamadı"
 
@@ -3700,7 +3738,7 @@ msgstr "FTP motoru başlatılamadı"
 msgid "Failed to initialize TLS."
 msgstr "TLS başlatılamadı"
 
-#: ../../locales/../src/interface/FileZilla.cpp:109
+#: ../../locales/../src/interface/FileZilla.cpp:86
 msgid "Failed to initialize networking"
 msgstr "Ağ sistemi başlatılamadı"
 
@@ -3765,13 +3803,13 @@ msgstr "Dış IP adresi okunamadı."
 msgid "Failed to send command."
 msgstr "Komut gönderilemedi."
 
-#: ../../locales/../src/interface/FileZilla.cpp:173
+#: ../../locales/../src/interface/FileZilla.cpp:150
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language"
 msgstr ""
 "Dil %s (%s) olarak değiştirilemiyor, sistem varsayılan dili kullanılacak"
 
-#: ../../locales/../src/interface/FileZilla.cpp:151
+#: ../../locales/../src/interface/FileZilla.cpp:128
 #, c-format
 msgid ""
 "Failed to set language to %s (%s), using default system language (%s, %s)."
@@ -3779,25 +3817,25 @@ msgstr ""
 "Dil %s (%s) olarak değiştirilemedi, sistem varsayılan dili kullanılacak (%s, "
 "%s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:140
+#: ../../locales/../src/interface/FileZilla.cpp:117
 #, c-format
 msgid "Failed to set language to %s (%s), using default system language."
 msgstr ""
 "Dil %s (%s) olarak değiştirilemiyor, sistem varsayılan dili kullanılacak."
 
-#: ../../locales/../src/interface/FileZilla.cpp:175
+#: ../../locales/../src/interface/FileZilla.cpp:152
 #: ../../locales/../src/interface/settings/optionspage_language.cpp:51
 #, c-format
 msgid "Failed to set language to %s, using default system language"
 msgstr "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak"
 
-#: ../../locales/../src/interface/FileZilla.cpp:147
+#: ../../locales/../src/interface/FileZilla.cpp:124
 #, c-format
 msgid "Failed to set language to %s, using default system language (%s, %s)."
 msgstr ""
 "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak (%s, %s)."
 
-#: ../../locales/../src/interface/FileZilla.cpp:137
+#: ../../locales/../src/interface/FileZilla.cpp:114
 #, c-format
 msgid "Failed to set language to %s, using default system language."
 msgstr "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak."
@@ -3835,7 +3873,7 @@ msgstr "Dos&ya:"
 msgid "Fil&es"
 msgstr "Dos&yalar"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:270
+#: ../../locales/../src/interface/filelistctrl.cpp:267
 msgid "File"
 msgstr "Dosya"
 
@@ -3855,7 +3893,7 @@ msgstr "Dosyada alınabilecek bir veri yok."
 msgid "File editing"
 msgstr "Dosya Düzenleme"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1596
+#: ../../locales/../src/interface/RemoteListView.cpp:1590
 msgid "File exists"
 msgstr "Dosya var"
 
@@ -3871,14 +3909,16 @@ msgstr "Dosya değiştirildi"
 msgid "File lists"
 msgstr "Dosya Listeleri"
 
-#: ../../locales/../src/interface/edithandler.cpp:1550
-#: ../../locales/../src/interface/FileZilla.cpp:618
-#: ../../locales/../src/interface/FileZilla.cpp:703
+#: ../../locales/../src/interface/edithandler.cpp:1551
+#: ../../locales/../src/interface/FileZilla.cpp:583
+#: ../../locales/../src/interface/FileZilla.cpp:668
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "File not found"
 msgstr "Dosya bulunamadı"
 
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:87
+#: ../../locales/../src/interface/search.cpp:675
+#: ../../locales/../src/interface/search.cpp:680
 msgid "File search"
 msgstr "Dosya arama"
 
@@ -3913,7 +3953,7 @@ msgstr "Dosya aktarıldı"
 msgid "File transfer successful, transferred %s in %s"
 msgstr "Dosya aktarıldı, %s/%s kadarı aktarıldı"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1133
+#: ../../locales/../src/interface/Mainfrm.cpp:1139
 msgid "File transfers still in progress."
 msgstr "Dosya aktarımı henüz bitmedi."
 
@@ -3925,7 +3965,7 @@ msgstr "Dosya ASCII veri tipiyle aktarılsa olurdu."
 msgid "File would transfer with binary data type."
 msgstr "Dosya ikili veri tipiyle aktarılsa olurdu."
 
-#: ../../locales/../src/interface/FileZilla.cpp:429
+#: ../../locales/../src/interface/FileZilla.cpp:406
 #: ../../locales/../src/interface/quickconnectbar.cpp:66
 #: ../../locales/../src/interface/quickconnectbar.cpp:204
 msgid "FileZilla Error"
@@ -3938,11 +3978,11 @@ msgid ""
 msgstr ""
 "FileZilla artık tüm ayarlarının doğru yapılıp yapılmadığını sınayabilir."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3485
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3609
 msgid "FileZilla is already connected to a server."
 msgstr "Filezilla şu anda bir sunucuya bağlı."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1441
+#: ../../locales/../src/interface/Mainfrm.cpp:1446
 msgid "FileZilla needs to be restarted for the language change to take effect."
 msgstr ""
 "Dil değişikliğinin etkili olabilmesi için FileZilla yeniden başlatılmalı."
@@ -3955,11 +3995,11 @@ msgstr "FileZilla Güncellemeleri"
 msgid "Filelist status &bars"
 msgstr "Dosya Listesi Durum Ç&ubukları"
 
-#: ../../locales/../src/interface/edithandler.cpp:1084
+#: ../../locales/../src/interface/edithandler.cpp:1085
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:130
 #: ../../locales/../src/interface/LocalListView.cpp:277
-#: ../../locales/../src/interface/RemoteListView.cpp:373
-#: ../../locales/../src/interface/search.cpp:108
+#: ../../locales/../src/interface/RemoteListView.cpp:374
+#: ../../locales/../src/interface/search.cpp:150
 #: ../../locales/../src/interface/settings/optionspage_connection_sftp.cpp:33
 msgid "Filename"
 msgstr "Dosya Adı"
@@ -3974,7 +4014,7 @@ msgstr "&Dosya Adı Süzgeçleri..."
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "Dosya adı %s klasörü ve %s dosya adı için oluşturulamıyor"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1582
+#: ../../locales/../src/interface/RemoteListView.cpp:1576
 msgid "Filename invalid"
 msgstr "Dosya adı geçersiz"
 
@@ -3987,11 +4027,11 @@ msgstr "Dosya adı değiştirilmedi"
 msgid "Filename:"
 msgstr "Dosya Adı:"
 
-#: ../../locales/../src/interface/file_utils.cpp:318
+#: ../../locales/../src/interface/file_utils.cpp:315
 msgid "Filenames may not contain any of the following characters: / * ? < > |"
 msgstr "Dosya adlarında şu karakterler bulunamaz: / * ? < > |"
 
-#: ../../locales/../src/interface/file_utils.cpp:293
+#: ../../locales/../src/interface/file_utils.cpp:290
 msgid ""
 "Filenames may not contain any of the following characters: / \\ : * ? \" < > "
 "|"
@@ -4003,8 +4043,8 @@ msgstr "Şu an düzenlenen dosyalar"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:135
 #: ../../locales/../src/interface/LocalListView.cpp:278
-#: ../../locales/../src/interface/RemoteListView.cpp:374
-#: ../../locales/../src/interface/search.cpp:110
+#: ../../locales/../src/interface/RemoteListView.cpp:375
+#: ../../locales/../src/interface/search.cpp:152
 msgid "Filesize"
 msgstr "Boyut"
 
@@ -4013,8 +4053,8 @@ msgid "Filesize format"
 msgstr "Dosya Boyutu Biçimi"
 
 #: ../../locales/../src/interface/LocalListView.cpp:279
-#: ../../locales/../src/interface/RemoteListView.cpp:375
-#: ../../locales/../src/interface/search.cpp:111
+#: ../../locales/../src/interface/RemoteListView.cpp:376
+#: ../../locales/../src/interface/search.cpp:153
 msgid "Filetype"
 msgstr "Tip"
 
@@ -4065,11 +4105,11 @@ msgstr "Klasör listesi süzülsün"
 msgid "Filter validation failed"
 msgstr "Süzgeç doğrulanamadı"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3068
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3093
 msgid "Find &files"
 msgstr "Dosyaları a&ra"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3073
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3098
 msgid "Find d&irectories"
 msgstr "&Klasörleri ara"
 
@@ -4102,7 +4142,7 @@ msgstr ""
 msgid "For reliability you should specify a range of at least 10 ports."
 msgstr "Güvenilirlik açısından en az 10 kapılık bir aralık belirtilmeli."
 
-#: ../../locales/../src/interface/Options.cpp:245
+#: ../../locales/../src/interface/Options.cpp:248
 msgid ""
 "For this session the default settings will be used. Any changes to the "
 "settings will not be saved."
@@ -4118,7 +4158,7 @@ msgstr "&UTF-8 kullanılsın"
 msgid "Force showing &hidden files"
 msgstr "&Gizli Dosyalar Görüntülensin"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:641
+#: ../../locales/../src/interface/Mainfrm.cpp:647
 msgid "Force showing hidden files"
 msgstr "Gizli dosyalar görüntülensin"
 
@@ -4133,12 +4173,12 @@ msgstr ""
 "parametreleri yazın."
 
 #. @translator: Two examples: Found new nightly 2014-04-03\n, Found new release 3.9.0.1\n
-#: ../../locales/../src/interface/updater.cpp:680
+#: ../../locales/../src/interface/updater.cpp:689
 #, c-format
 msgid "Found new %s %s\n"
 msgstr "Yeni %s %s bulundu\n"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3385
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3505
 msgid "Further documentation"
 msgstr "Ayrıntılı bilgiler"
 
@@ -4159,7 +4199,7 @@ msgstr "Genel Vekil Sunucu"
 msgid "Get external IP address from the following URL:"
 msgstr "Dış IP adresi şu İnternet adresinden alınsın:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3404
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3524
 msgid "Getting help"
 msgstr "Yardım istiyorsanız"
 
@@ -4200,7 +4240,7 @@ msgstr "GnuTLS:"
 msgid "Group permissions"
 msgstr "Grup izinleri"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:358
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:362
 msgid "H&igh"
 msgstr "&Yüksek"
 
@@ -4349,7 +4389,7 @@ msgstr ""
 "\".1\" eklenerek (daha eski günlük dosyalarının üzerine yazılabilir) yeniden "
 "adlandırılır ve yeni bir dosya oluşturulur."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3223
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3343
 msgid ""
 "If the symlink points to a directory, FileZilla can either delete the "
 "symbolic link or remove the contents of the linked directory."
@@ -4403,7 +4443,7 @@ msgstr ""
 "Sına'ya tıkladığınızda, probe.filezilla-project.org adresine bağlanılarak "
 "bazı basit sınamalar yapılır."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1155
+#: ../../locales/../src/interface/Mainfrm.cpp:1161
 msgid "If you close FileZilla, your changes will be lost."
 msgstr ""
 "FileZilla yazılımını şimdi kapatırsanız, yaptığınız değişiklikler kaybolacak."
@@ -4532,7 +4572,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Parola yanlış"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:192
+#: ../../locales/../src/interface/resources/xrc/update.xrc:196
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4552,8 +4592,8 @@ msgstr "Güvenliksiz algoritma!"
 msgid "Insecure server, it does not support FTP over TLS."
 msgstr "Güvenliksiz sunucu, TLS üzerinden FTP desteklenmiyor."
 
-#: ../../locales/../src/engine/server.cpp:861
-#: ../../locales/../src/engine/server.cpp:882
+#: ../../locales/../src/engine/server.cpp:883
+#: ../../locales/../src/engine/server.cpp:904
 #: ../../locales/../src/interface/manual_transfer.cpp:185
 msgid "Interactive"
 msgstr "Etkileşimli"
@@ -4609,8 +4649,8 @@ msgstr "Geçersiz veri alındı"
 msgid "Invalid date"
 msgstr "Tarih geçersiz"
 
-#: ../../locales/../src/interface/file_utils.cpp:293
-#: ../../locales/../src/interface/file_utils.cpp:318
+#: ../../locales/../src/interface/file_utils.cpp:290
+#: ../../locales/../src/interface/file_utils.cpp:315
 msgid "Invalid filename"
 msgstr "Dosya adı geçersiz"
 
@@ -4652,7 +4692,7 @@ msgstr ""
 "Vekil sunucu geçersiz. Parantezi kapattıktan sonra yalnızca iki nokta "
 "üstüste ve bağlantı noktası yazılabilir."
 
-#: ../../locales/../src/interface/search.cpp:405
+#: ../../locales/../src/interface/search.cpp:680
 msgid "Invalid regular expression in search conditions."
 msgstr "Arama ölçütlerindeki kurallı ifade geçersiz."
 
@@ -4660,7 +4700,7 @@ msgstr "Arama ölçütlerindeki kurallı ifade geçersiz."
 msgid "Invalid response code"
 msgstr "Yanıt kodu geçersiz"
 
-#: ../../locales/../src/interface/search.cpp:400
+#: ../../locales/../src/interface/search.cpp:675
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Arama ölçütleri geçersiz: %s"
@@ -4712,7 +4752,7 @@ msgstr "Yetkili şehir:"
 msgid "Keep directories on top"
 msgstr "Klasörler üstte görüntülensin"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:645
+#: ../../locales/../src/interface/Mainfrm.cpp:651
 msgid ""
 "Keep in mind that not all servers support this feature and may return "
 "incorrect listings if this option is enabled. Although FileZilla performs "
@@ -4731,14 +4771,14 @@ msgstr "Anahtar Takası"
 msgid "Key exchange:"
 msgstr "Anahtar Takası:"
 
-#: ../../locales/../src/engine/server.cpp:859
-#: ../../locales/../src/engine/server.cpp:880
+#: ../../locales/../src/engine/server.cpp:881
+#: ../../locales/../src/engine/server.cpp:902
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1311
 #: ../../locales/../src/interface/sitemanager_dialog.cpp:1312
 msgid "Key file"
 msgstr "Anahtar dosyası"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:370
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:374
 msgid "L&owest"
 msgstr "E&n düşük"
 
@@ -4747,13 +4787,13 @@ msgstr "E&n düşük"
 msgid "Language"
 msgstr "Dil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1441
+#: ../../locales/../src/interface/Mainfrm.cpp:1446
 msgid "Language changed"
 msgstr "Dil değişti"
 
 #: ../../locales/../src/interface/LocalListView.cpp:280
-#: ../../locales/../src/interface/RemoteListView.cpp:376
-#: ../../locales/../src/interface/search.cpp:112
+#: ../../locales/../src/interface/RemoteListView.cpp:377
+#: ../../locales/../src/interface/search.cpp:154
 msgid "Last modified"
 msgstr "Son Değişiklik"
 
@@ -4804,8 +4844,8 @@ msgstr "Sıralama:"
 msgid "Lo&west available port:"
 msgstr "Kullanılabilecek e&n küçük kapı:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1132
-#: ../../locales/../src/interface/edithandler.cpp:1368
+#: ../../locales/../src/interface/edithandler.cpp:1133
+#: ../../locales/../src/interface/edithandler.cpp:1369
 msgid "Local"
 msgstr "Yerel"
 
@@ -4839,9 +4879,17 @@ msgstr "Yerel dosya normal bir dosya değil bir klasör."
 msgid "Local file is not a valid filename."
 msgstr "Yerel dosyanın geçerli bir adı yok."
 
+#: ../../locales/../src/interface/search.cpp:644
+msgid "Local file search"
+msgstr "Yerel dosyalarda arama"
+
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1079
 msgid "Local filters:"
 msgstr "Yerel Süzgeçler:"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3266
+msgid "Local path handling:"
+msgstr "Yerel yolun işlenişi:"
 
 #: ../../locales/../src/interface/viewheader.cpp:334
 msgid "Local site:"
@@ -4955,15 +5003,15 @@ msgstr "Uygunsuz yanıt, sunucu uygun satır sonu karakterleri göndermiyor"
 msgid "Manual transfer"
 msgstr "El ile aktarım"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3027
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3057
 msgid "Match all of the following"
 msgstr "Aşağıdakilerin hepsine uyan"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3028
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3058
 msgid "Match any of the following"
 msgstr "Aşağıdakilerin herhangi birine uyan"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3029
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3059
 msgid "Match none of the following"
 msgstr "Aşağıdakilerin hiçbirine uymayan"
 
@@ -4975,8 +5023,8 @@ msgstr "Eşzamanlı ak&tarım:"
 msgid "Memory allocation failure"
 msgstr "Bellek yerleşimi hatası"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:384
-#: ../../locales/../src/interface/Mainfrm.cpp:1751
+#: ../../locales/../src/interface/Mainfrm.cpp:387
+#: ../../locales/../src/interface/Mainfrm.cpp:1760
 msgid "Message log"
 msgstr "Günlük"
 
@@ -5004,11 +5052,11 @@ msgstr "&Aşağı taşı"
 msgid "Move &up"
 msgstr "Y&ukarı taşı"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:974
+#: ../../locales/../src/interface/LocalTreeView.cpp:978
 msgid "My Computer"
 msgstr "Bilgisayarım"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:964
+#: ../../locales/../src/interface/LocalTreeView.cpp:968
 msgid "My Documents"
 msgstr "Belgelerim"
 
@@ -5049,7 +5097,11 @@ msgstr "Doğal sıralama"
 msgid "Need to enter filter name"
 msgstr "Süzgeç adını yazmalısınız"
 
-#: ../../locales/../src/interface/search.cpp:391
+#: ../../locales/../src/interface/search.cpp:644
+msgid "Need to enter valid local path"
+msgstr "Geçerli bir yerel yol yazılmalıdır"
+
+#: ../../locales/../src/interface/search.cpp:665
 msgid "Need to enter valid remote path"
 msgstr "Geçerli bir yol yazmalısınız"
 
@@ -5104,17 +5156,17 @@ msgstr "Yer İ&mi Ekle"
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:555
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:790
 #: ../../locales/../src/interface/sitemanager.cpp:695
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2183
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2184
 msgid "New bookmark"
 msgstr "Yeni yer imi"
 
-#: ../../locales/../src/interface/LocalTreeView.cpp:1138
-#: ../../locales/../src/interface/RemoteListView.cpp:1306
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1232
+#: ../../locales/../src/interface/LocalTreeView.cpp:1142
+#: ../../locales/../src/interface/RemoteListView.cpp:1300
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1238
 msgid "New directory"
 msgstr "Klasör oluştur"
 
-#: ../../locales/../src/interface/welcome_dialog.cpp:51
+#: ../../locales/../src/interface/welcome_dialog.cpp:56
 #, c-format
 msgid "New features and improvements in %s"
 msgstr "%s sürümündeki yeni özellik ve geliştirmeler"
@@ -5129,7 +5181,7 @@ msgstr "Klasör oluştur"
 
 #: ../../locales/../src/interface/sitemanager.cpp:585
 #: ../../locales/../src/interface/sitemanager.cpp:597
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2159
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2160
 msgid "New site"
 msgstr "Yeni site"
 
@@ -5157,7 +5209,7 @@ msgstr "Komut verilmedi, vazgeçiliyor."
 msgid "No external IP address set, trying default."
 msgstr "Dış IP adresi belirtilmemiş, varsayılan deneniyor."
 
-#: ../../locales/../src/interface/edithandler.cpp:1073
+#: ../../locales/../src/interface/edithandler.cpp:1074
 msgid "No files are currently being edited."
 msgstr "Şu an düzenlenen bir dosya yok."
 
@@ -5194,7 +5246,7 @@ msgstr ""
 msgid "No route to host"
 msgstr "Sunucuya giden yol bulunamadı"
 
-#: ../../locales/../src/interface/search.cpp:255
+#: ../../locales/../src/interface/search.cpp:391
 msgid "No search results"
 msgstr "Henüz bir sonuç yok"
 
@@ -5225,8 +5277,8 @@ msgid "Nonrecoverable failure in name resolution"
 msgstr "Ad çözümlenemedi"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:962
-#: ../../locales/../src/engine/server.cpp:855
-#: ../../locales/../src/engine/server.cpp:876
+#: ../../locales/../src/engine/server.cpp:877
+#: ../../locales/../src/engine/server.cpp:898
 #: ../../locales/../src/interface/manual_transfer.cpp:154
 #: ../../locales/../src/interface/manual_transfer.cpp:179
 #: ../../locales/../src/interface/manual_transfer.cpp:540
@@ -5241,16 +5293,16 @@ msgstr "Normal"
 msgid "Not all items could be requeued for transfer."
 msgstr "Tüm ögeler aktarım için kuyruğa yeniden eklenememiş olabilir."
 
-#: ../../locales/../src/interface/state.cpp:181
-#: ../../locales/../src/interface/state.cpp:484
+#: ../../locales/../src/interface/state.cpp:178
+#: ../../locales/../src/interface/state.cpp:479
 msgid "Not connected"
 msgstr "Bağlı değil"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2011
+#: ../../locales/../src/interface/RemoteListView.cpp:2004
 msgid "Not connected to any server"
 msgstr "Herhangi bir sunucuya bağlı değil"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:557
+#: ../../locales/../src/interface/Mainfrm.cpp:563
 msgid "Not connected to any server."
 msgstr "Herhangi bir sunucuya bağlı değil."
 
@@ -5262,7 +5314,7 @@ msgstr "Bağlı değil."
 msgid "Not initialized, need to call WSAStartup"
 msgstr "Başlatılamadı, WSAStartup çağrılmalı"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:643
+#: ../../locales/../src/interface/Mainfrm.cpp:649
 msgid "Note that this feature is only supported using the FTP protocol."
 msgstr ""
 "Dikkat bu özellik yalnız FTP iletişim kuralı kullanılırken desteklenir."
@@ -5308,11 +5360,12 @@ msgstr "Dosyayı &aç"
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2564
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2717
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2975
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3187
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3256
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3452
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3621
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3677
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3212
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3307
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3376
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3576
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3745
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3801
 #: ../../locales/../src/interface/resources/xrc/inputdialog.xrc:34
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:27
 msgid "OK"
@@ -5345,7 +5398,7 @@ msgstr "Haftada bir"
 msgid "Only use plain FTP (insecure)"
 msgstr "Yalnız düz FTp kullanılsın (düşük güvenlik)"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:558
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:566
 msgid "Open directory in system's file manager"
 msgstr "Sistem dosya yöneticisinde açık dosya"
 
@@ -5373,10 +5426,10 @@ msgstr "FileZilla ayarları penceresini açar"
 msgid "Opened as:"
 msgstr "Olarak açılan:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1715
-#: ../../locales/../src/interface/LocalListView.cpp:1727
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/edithandler.cpp:1734
+#: ../../locales/../src/interface/LocalListView.cpp:1717
+#: ../../locales/../src/interface/LocalListView.cpp:1729
 msgid "Opening failed"
 msgstr "Açılamadı"
 
@@ -5485,8 +5538,8 @@ msgstr "Kendi tipinizi oluşturun: %s\n"
 msgid "Owner permissions"
 msgstr "Sahip izinleri"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:378
-#: ../../locales/../src/interface/search.cpp:114
+#: ../../locales/../src/interface/RemoteListView.cpp:379
+#: ../../locales/../src/interface/search.cpp:156
 msgid "Owner/Group"
 msgstr "Sahip/Grup"
 
@@ -5509,11 +5562,7 @@ msgstr "PORT komutu yöneltici ya da güvenlik duvarı tarafından bozuldu."
 msgid "Pa&ssive (recommended)"
 msgstr "Pa&sif (önerilen)"
 
-#: ../../locales/../src/interface/updater.cpp:206
-msgid "Package"
-msgstr "Paket"
-
-#: ../../locales/../src/interface/Mainfrm.cpp:2321
+#: ../../locales/../src/interface/Mainfrm.cpp:2330
 msgid "Parameter not a valid URL"
 msgstr "Parametre geçerli bir İnternet adresi değil"
 
@@ -5548,7 +5597,7 @@ msgid "Password required"
 msgstr "Parola zorunlu"
 
 #: ../../locales/../src/interface/filter_conditions_dialog.cpp:150
-#: ../../locales/../src/interface/search.cpp:109
+#: ../../locales/../src/interface/search.cpp:151
 msgid "Path"
 msgstr "Yol"
 
@@ -5558,7 +5607,7 @@ msgstr "Yol"
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "%s klasörü ve %s alt klasörü için yol oluşturulamıyor"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2279
+#: ../../locales/../src/interface/Mainfrm.cpp:2288
 msgid "Path not found:"
 msgstr "Yol bulunamadı:"
 
@@ -5566,10 +5615,10 @@ msgstr "Yol bulunamadı:"
 msgid "Paths"
 msgstr "Yollar"
 
-#: ../../locales/../src/interface/edithandler.cpp:1111
-#: ../../locales/../src/interface/edithandler.cpp:1248
-#: ../../locales/../src/interface/edithandler.cpp:1338
-#: ../../locales/../src/interface/edithandler.cpp:1348
+#: ../../locales/../src/interface/edithandler.cpp:1112
+#: ../../locales/../src/interface/edithandler.cpp:1249
+#: ../../locales/../src/interface/edithandler.cpp:1339
+#: ../../locales/../src/interface/edithandler.cpp:1349
 msgid "Pending removal"
 msgstr "Silinmesi bekleniyor"
 
@@ -5582,8 +5631,8 @@ msgstr "İzin"
 msgid "Permission denied"
 msgstr "Erişim reddedildi"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:377
-#: ../../locales/../src/interface/search.cpp:113
+#: ../../locales/../src/interface/RemoteListView.cpp:378
+#: ../../locales/../src/interface/search.cpp:155
 msgid "Permissions"
 msgstr "İzinler"
 
@@ -5629,7 +5678,7 @@ msgstr "Lütfen özel bir tarih biçimi yazın."
 msgid "Please enter a custom time format."
 msgstr "Lütfen özel bir saat biçimi yazın."
 
-#: ../../locales/../src/interface/filter_conditions_dialog.cpp:713
+#: ../../locales/../src/interface/filter_conditions_dialog.cpp:714
 msgid ""
 "Please enter a date of the form YYYY-MM-DD such as for example 2010-07-18."
 msgstr "Lütfen 2010-07-18 gibi YYYY-AA-GG şeklinde bir tarih yazın."
@@ -5708,7 +5757,7 @@ msgstr "Dış adresinizin alınabileceği bir İnternet adresi yazın"
 msgid "Please enter an upload speed limit greater or equal to 0 %s/s."
 msgstr "0 %s/s değerinden büyük ya da eşit bir yükleme hızı sınırı yazın."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:568
+#: ../../locales/../src/interface/Mainfrm.cpp:574
 msgid ""
 "Please enter raw FTP command.\n"
 "Using raw ftp commands will clear the directory cache."
@@ -5731,13 +5780,13 @@ msgstr ""
 "almalısınız."
 
 #: ../../locales/../src/interface/LocalListView.cpp:917
-#: ../../locales/../src/interface/LocalTreeView.cpp:1135
-#: ../../locales/../src/interface/RemoteListView.cpp:1293
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1219
+#: ../../locales/../src/interface/LocalTreeView.cpp:1139
+#: ../../locales/../src/interface/RemoteListView.cpp:1287
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1225
 msgid "Please enter the name of the directory which should be created:"
 msgstr "Lütfen oluşturulacak klasörün adını yazın:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2609
+#: ../../locales/../src/interface/RemoteListView.cpp:2600
 msgid "Please enter the name of the file which should be created:"
 msgstr "Lütfen oluşturulacak dosyanın adını yazın:"
 
@@ -5776,7 +5825,7 @@ msgstr ""
 "Lütfen dışarı giden FileZilla bağlantılarına izin verildiğine ve adres "
 "bulucudaki adresin doğru yazıldığına emin olun."
 
-#: ../../locales/../src/interface/FileZilla.cpp:157
+#: ../../locales/../src/interface/FileZilla.cpp:134
 msgid "Please make sure the requested locale is installed on your system."
 msgstr ""
 "Lütfen istenen yerel dosyaların sisteminize kurulmuş olduğuna emin olun."
@@ -5805,7 +5854,7 @@ msgstr ""
 "kullanılıyor sanabilir. Bu şekilde bir güvenlik uyarısı alırsanız görmezden "
 "gelebilirsiniz."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:683
+#: ../../locales/../src/interface/Mainfrm.cpp:689
 msgid ""
 "Please note that preserving timestamps on uploads on FTP, FTPS and FTPES "
 "servers only works if they support the MFMT command."
@@ -5831,7 +5880,7 @@ msgstr ""
 "Ağ ortamınızı değiştirir ya da çalıştığınız sunucular ile aniden sorunlar "
 "yaşamaya başlarsanız bu yardımcıyı yeniden çalıştırın."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3228
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3348
 msgid "Please select an action:"
 msgstr "Lütfen bir işlem seçin:"
 
@@ -5903,7 +5952,7 @@ msgstr "Yer Ayırma"
 msgid "Predefined Sites"
 msgstr "Öntanımlı Siteler"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:682
+#: ../../locales/../src/interface/Mainfrm.cpp:688
 msgid "Preserving file timestamps"
 msgstr "Dosya zaman damgaları korunuyor"
 
@@ -5953,7 +6002,7 @@ msgid "Pro&xy password:"
 msgstr "Ve&kil sunucu parolası:"
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:129
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:338
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:342
 msgid "Process &Queue"
 msgstr "&Kuyruktaki Dosyaları Aktar"
 
@@ -6061,11 +6110,12 @@ msgstr "Aktarım Kuyruğu: Boş"
 msgid "Queued files"
 msgstr "Kuyruktakiler"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3164
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3189
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3284
 msgid "Queueing:"
 msgstr "Kuyruğa Alınıyor:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:402
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:406
 msgid "R&eboot system once"
 msgstr "Sistem bir kez y&eniden başlatılsın"
 
@@ -6073,12 +6123,12 @@ msgstr "Sistem bir kez y&eniden başlatılsın"
 msgid "R&emote directory tree"
 msgstr "U&zak Klasör Ağacı"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:456
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:474
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:460
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:478
 msgid "R&eset and requeue selected files"
 msgstr "Burayı boşalt ve s&eçili dosyaları yeniden kuyruğa ekle"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:582
+#: ../../locales/../src/interface/Mainfrm.cpp:588
 msgid "Raw FTP command"
 msgstr "Standart FTP komutu"
 
@@ -6111,12 +6161,12 @@ msgstr "Ok&uma"
 msgid "Read-only"
 msgstr "Salt-okunur"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1024
+#: ../../locales/../src/interface/Mainfrm.cpp:1030
 msgid "Really cancel current operation?"
 msgstr "Yürürlükteki işlem iptal edilsin mi?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1382
-#: ../../locales/../src/interface/search.cpp:740
+#: ../../locales/../src/interface/RemoteListView.cpp:1376
+#: ../../locales/../src/interface/search.cpp:1185
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
@@ -6124,20 +6174,20 @@ msgid_plural ""
 msgstr[0] ""
 "Gerçekten sunucudaki %d klasörü içindekilerle beraber silmek istiyor musunuz?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1380
-#: ../../locales/../src/interface/search.cpp:738
+#: ../../locales/../src/interface/RemoteListView.cpp:1374
+#: ../../locales/../src/interface/search.cpp:1183
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
 msgstr[0] "Gerçekten sunucudaki %d dosyayı silmek istiyor musunuz?"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1387
-#: ../../locales/../src/interface/search.cpp:744
+#: ../../locales/../src/interface/RemoteListView.cpp:1381
+#: ../../locales/../src/interface/search.cpp:1189
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "Gerçekten sunucudaki %s ve %s silinsin mi?"
 
-#: ../../locales/../src/interface/RemoteTreeView.cpp:1041
+#: ../../locales/../src/interface/RemoteTreeView.cpp:1047
 msgid "Really delete all selected files and/or directories from the server?"
 msgstr ""
 "Gerçekten sunucudaki seçili tüm dosya ve klasörleri silmek istiyor musunuz?"
@@ -6163,12 +6213,12 @@ msgstr "Alt klasörlere de &uygulansın"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Sunucudan TLS uyarısı alındı: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2965
+#: ../../locales/../src/engine/directorylistingparser.cpp:2962
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Alınan klasör listesi EBCDIC olarak kodlanmış görünüyor."
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2000
-#: ../../locales/../src/engine/directorylistingparser.cpp:2016
+#: ../../locales/../src/engine/directorylistingparser.cpp:1997
+#: ../../locales/../src/engine/directorylistingparser.cpp:2013
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "10.000 karakterden uzun bir satır alındı, iptal ediliyor."
 
@@ -6236,11 +6286,11 @@ msgstr "Geçersiz ya da desteklenmeyen adrese yönlendirme: %s"
 msgid "Refresh the file and folder lists"
 msgstr "Dosya ve klasör listelerini yeniler"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3697
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3821
 msgid "Remember passwords?"
 msgstr "Parolalar hatırlansın"
 
-#: ../../locales/../src/interface/edithandler.cpp:1095
+#: ../../locales/../src/interface/edithandler.cpp:1096
 msgid "Remote"
 msgstr "Uzaktaki"
 
@@ -6253,11 +6303,9 @@ msgstr "Uzaktaki sertifikaya güvenilmiyor."
 msgid "Remote file"
 msgstr "Uzak Dosya"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3106
-#: ../../locales/../src/interface/search.cpp:386
-#: ../../locales/../src/interface/search.cpp:391
-#: ../../locales/../src/interface/search.cpp:400
-#: ../../locales/../src/interface/search.cpp:405
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3131
+#: ../../locales/../src/interface/search.cpp:660
+#: ../../locales/../src/interface/search.cpp:665
 msgid "Remote file search"
 msgstr "Uzak dosya arama"
 
@@ -6265,7 +6313,7 @@ msgstr "Uzak dosya arama"
 msgid "Remote filters:"
 msgstr "Uzak Süzgeçler:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1086
+#: ../../locales/../src/interface/edithandler.cpp:1087
 msgid "Remote path"
 msgstr "Uzaktaki yol"
 
@@ -6298,7 +6346,7 @@ msgstr "Uzaktaki yola gidilemedi. Bunun geçerli bir yol olduğundan emin olun."
 msgid "Remote path could not be parsed."
 msgstr "Uzaktaki yola gidilemedi."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3146
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3171
 msgid "Remote path handling:"
 msgstr "Uzaktaki yolun işlenişi:"
 
@@ -6306,17 +6354,17 @@ msgstr "Uzaktaki yolun işlenişi:"
 msgid "Remote path:"
 msgstr "Uzaktaki yol:"
 
-#: ../../locales/../src/interface/viewheader.cpp:530
+#: ../../locales/../src/interface/viewheader.cpp:519
 msgid "Remote site:"
 msgstr "Uzak Site:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:446
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:464
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:450
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:468
 msgid "Remove &all"
 msgstr "Tümünü &sil"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:453
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:471
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:457
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:475
 msgid "Remove &selected"
 msgstr "&Seçilileri sil"
 
@@ -6328,8 +6376,8 @@ msgstr "&Seçilileri sil"
 msgid "Rename file"
 msgstr "Dosyanın adı değiştirilsin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:512
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:576
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:516
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:584
 msgid "Rename selected directory"
 msgstr "Seçili klasörü yeniden adlandır"
 
@@ -6344,7 +6392,7 @@ msgstr "Seçili dosya ve klasörleri yeniden adlandır"
 msgid "Renaming '%s' to '%s'"
 msgstr "'%s' adı '%s' olarak değiştiriliyor"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3422
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3542
 msgid "Reporting bugs and feature requests"
 msgstr "Hataları ve isteklerinizi iletebilirsiniz"
 
@@ -6373,7 +6421,7 @@ msgstr "TLS üzerinden açıkta FTP istensin"
 msgid "Require implicit FTP over TLS"
 msgstr "TLS üzerinden örtülü FTP istensin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:467
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:471
 msgid "Reset and requeue &all"
 msgstr "Bur&ayı boşaltın ve tümünü yeniden kuyruğa alın"
 
@@ -6398,7 +6446,7 @@ msgstr "Kaynak geçici olarak kullanım dışında"
 msgid "Response:"
 msgstr "Yanıt:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3092
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3117
 msgid "Results:"
 msgstr "Sonuçlar:"
 
@@ -6441,15 +6489,15 @@ msgstr "Şu An Düzenlenen Dosyaları &Görüntüle..."
 msgid "S&how the Site Manager on startup"
 msgstr "Başlangıçta Sit&e Yöneticisi görüntülensin"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:406
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:410
 msgid "S&hutdown system once"
 msgstr "Sistemi bir kez &kapat"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3037
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3044
 msgid "S&top"
 msgstr "&Durdur"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:410
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:414
 msgid "S&uspend system once"
 msgstr "Sistemi bir kez as&kıya al"
 
@@ -6488,11 +6536,11 @@ msgstr "Parola kaydı yönetici tarafından devre dışı bırakılmış."
 msgid "Saving of passwords has been disabled by you."
 msgstr "Parola kaydını devre dışı bırakmışsınız."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3020
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3050
 msgid "Search &conditions:"
 msgstr "Arama ö&lçütleri:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3001
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3032
 msgid "Search &directory:"
 msgstr "Arama &klasörü:"
 
@@ -6503,6 +6551,10 @@ msgstr "Alt klasörlerdeki dosyaları arar."
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:191
 msgid "Search server for files"
 msgstr "Sunucuda dosya arayın"
+
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3001
+msgid "Search type:"
+msgstr "Arama tipi:"
 
 #: ../../locales/../src/interface/statusbar.cpp:502
 msgid "Security information"
@@ -6533,7 +6585,7 @@ msgid ""
 msgstr ""
 "Aktarılan hedef dosya zaten var ise yapılmasını istediğiniz işlemi seçin."
 
-#: ../../locales/../src/interface/edithandler.cpp:1531
+#: ../../locales/../src/interface/edithandler.cpp:1532
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:104
 msgid "Select default editor"
 msgstr "Varsayılan düzenleyiciyi seçin"
@@ -6572,7 +6624,7 @@ msgid "Select file for exported settings"
 msgstr "Ayarların verileceği dosyayı seçin"
 
 #: ../../locales/../src/interface/export.cpp:32
-#: ../../locales/../src/interface/sitemanager_dialog.cpp:2211
+#: ../../locales/../src/interface/sitemanager_dialog.cpp:2212
 msgid "Select file for exported sites"
 msgstr "Verilecek siteler için bir dosya seçin"
 
@@ -6592,7 +6644,7 @@ msgstr "Dönüştürülmüş anahtar dosyasının adını seçin"
 msgid "Select how these files should be opened."
 msgstr "Bu dosyaların nasıl açılacağını seçin."
 
-#: ../../locales/../src/interface/search.cpp:513
+#: ../../locales/../src/interface/search.cpp:839
 msgid "Select target download directory"
 msgstr "Hedef indirme klasörünü seçin"
 
@@ -6608,7 +6660,7 @@ msgstr "Verilecek bilgileri seçin:"
 msgid "Select the private data you would like to delete."
 msgstr "Lütfen silmek istediğiniz özel verilerinizi seçin."
 
-#: ../../locales/../src/interface/search.cpp:481
+#: ../../locales/../src/interface/search.cpp:798
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6620,7 +6672,7 @@ msgid "Selected %d directory."
 msgid_plural "Selected %d directories."
 msgstr[0] "%d klasör seçilmiş."
 
-#: ../../locales/../src/interface/search.cpp:479
+#: ../../locales/../src/interface/search.cpp:796
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6638,7 +6690,7 @@ msgid "Selected %d file. Total size: At least %s"
 msgid_plural "Selected %d files. Total size: At least %s"
 msgstr[0] "Seçilmiş dosya %d. Toplam boyut: En az %s"
 
-#: ../../locales/../src/interface/search.cpp:485
+#: ../../locales/../src/interface/search.cpp:802
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Aktarım için %s ve %s seçilmiş."
@@ -6653,8 +6705,8 @@ msgstr "Seçilmiş %s ve %s. Toplam boyut: %s"
 msgid "Selected %s and %s. Total size: At least %s"
 msgstr "Seçilmiş %s ve %s. Toplam boyut: En az %s"
 
-#: ../../locales/../src/interface/edithandler.cpp:1476
-#: ../../locales/../src/interface/edithandler.cpp:1550
+#: ../../locales/../src/interface/edithandler.cpp:1477
+#: ../../locales/../src/interface/edithandler.cpp:1551
 #: ../../locales/../src/interface/settings/optionspage_edit.cpp:124
 msgid "Selected editor does not exist."
 msgstr "Seçilmiş düzenleyici bulunamadı."
@@ -6668,11 +6720,11 @@ msgstr "Seçilmiş dosya zaten düzenleniyor"
 msgid "Selected file is already loaded"
 msgstr "Seçilmiş dosya zaten yüklenmiş"
 
-#: ../../locales/../src/interface/edithandler.cpp:1648
+#: ../../locales/../src/interface/edithandler.cpp:1649
 msgid "Selected file is already opened"
 msgstr "Seçilmiş dosya zaten açık"
 
-#: ../../locales/../src/interface/edithandler.cpp:1720
+#: ../../locales/../src/interface/edithandler.cpp:1721
 msgid "Selected file is still being edited"
 msgstr "Seçilmiş dosya şu anda düzenleniyor"
 
@@ -6680,7 +6732,7 @@ msgstr "Seçilmiş dosya şu anda düzenleniyor"
 msgid "Selected filter only works for local files."
 msgstr "Seçilen süzgeç yalnız yerel dosyalar için çalışır."
 
-#: ../../locales/../src/interface/menu_bar.cpp:304
+#: ../../locales/../src/interface/menu_bar.cpp:297
 msgid ""
 "Selected global bookmark and current server use a different server type.\n"
 "Use site-specific bookmarks for this server."
@@ -6826,7 +6878,7 @@ msgstr "Sunucu:"
 msgid "Session details"
 msgstr "Oturum Ayrıntıları"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:352
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:356
 msgid "Set &Priority"
 msgstr "Önceliği &Belirle"
 
@@ -6848,7 +6900,7 @@ msgstr "Ayarlar"
 msgid "Settings directory:"
 msgstr "Ayarlar Klasörü:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:381
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:385
 msgid "Sh&ow notification bubble"
 msgstr "Bildirim bal&onunu görüntüle"
 
@@ -6860,11 +6912,11 @@ msgstr "Ham klasö&r listesi görüntülensin"
 msgid "Show &welcome dialog..."
 msgstr "&Hoşgeldiniz Penceresini Görüntüle..."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2169
+#: ../../locales/../src/interface/Mainfrm.cpp:2178
 msgid "Show both directory trees and continue comparing?"
 msgstr "Her iki klasör ağacı görüntülenerek karşılaştırmaya devam edilsin"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:210
+#: ../../locales/../src/interface/resources/xrc/update.xrc:214
 msgid "Show details"
 msgstr "Ayrıntıları görüntüle"
 
@@ -6872,7 +6924,7 @@ msgstr "Ayrıntıları görüntüle"
 msgid "Show details about custom date and time formats"
 msgstr "İsteğe göre uyarlamada kullanılabilecek tarih ve saat biçimleri"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:441
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:445
 msgid "Shows available TLS ciphers"
 msgstr "Kullanılabilecek TLS şifrelerini görüntüler"
 
@@ -7010,7 +7062,7 @@ msgstr "Soket bağlı değil"
 msgid "Socket type not supported for address family"
 msgstr "Soket tipi bu adres ailesinde desteklenmiyor"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:1154
+#: ../../locales/../src/interface/Mainfrm.cpp:1160
 msgid "Some files are still being edited or need to be uploaded."
 msgstr "Bazı dosyalar düzenlenmiş ve yüklenmeleri gerekli."
 
@@ -7027,7 +7079,7 @@ msgstr ""
 msgid "Sort directories inline"
 msgstr "Klasörler sıralamada arada görüntülensin"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:465
+#: ../../locales/../src/interface/filelistctrl.cpp:469
 msgid "Sort order cannot be changed if comparing directories."
 msgstr "Sıralama düzeni klasörler karşılaştırılırken değiştirilemez."
 
@@ -7055,7 +7107,7 @@ msgstr "Bırakma işleminin kaynak ve hedefi aynı"
 msgid "Source file:"
 msgstr "Kaynak dosya:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3639
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3763
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:54
 #: ../../locales/../src/interface/speedlimits_dialog.cpp:62
 msgid "Speed Limits"
@@ -7118,7 +7170,7 @@ msgstr "Yerel site verilmiş yol ile başlatılır"
 msgid "State or province:"
 msgstr "Şehir:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1087
+#: ../../locales/../src/interface/edithandler.cpp:1088
 #: ../../locales/../src/interface/queue.cpp:1150
 msgid "Status"
 msgstr "Durum"
@@ -7129,7 +7181,7 @@ msgstr "Durum"
 msgid "Status:"
 msgstr "Durum:"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:342
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:346
 msgid "Stop and remove &all"
 msgstr "Durdur ve hepsini &sil"
 
@@ -7157,7 +7209,7 @@ msgstr "Sınama sonuçları özeti:"
 msgid "Suspend now"
 msgstr "Şimdi askya al"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3245
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3365
 msgid ""
 "Symlinks to files are not affected by this choice, such symlinks are always "
 "deleted."
@@ -7165,24 +7217,24 @@ msgstr ""
 "Dosya sembolik bağlantıları bu seçimden etkilenmez. Bu şekilde tüm sembolik "
 "bağlantılar herzaman silinir."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3700
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3824
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:82
-#: ../../locales/../src/interface/state.cpp:240
+#: ../../locales/../src/interface/state.cpp:234
+#: ../../locales/../src/interface/state.cpp:248
 #: ../../locales/../src/interface/state.cpp:254
-#: ../../locales/../src/interface/state.cpp:260
-#: ../../locales/../src/interface/state.cpp:270
-#: ../../locales/../src/interface/state.cpp:357
-#: ../../locales/../src/interface/state.cpp:365
-#: ../../locales/../src/interface/state.cpp:373
-#: ../../locales/../src/interface/state.cpp:951
-#: ../../locales/../src/interface/state.cpp:959
-#: ../../locales/../src/interface/state.cpp:965
-#: ../../locales/../src/interface/state.cpp:974
-#: ../../locales/../src/interface/state.cpp:1000
+#: ../../locales/../src/interface/state.cpp:264
+#: ../../locales/../src/interface/state.cpp:351
+#: ../../locales/../src/interface/state.cpp:359
+#: ../../locales/../src/interface/state.cpp:367
+#: ../../locales/../src/interface/state.cpp:954
+#: ../../locales/../src/interface/state.cpp:962
+#: ../../locales/../src/interface/state.cpp:968
+#: ../../locales/../src/interface/state.cpp:977
+#: ../../locales/../src/interface/state.cpp:1003
 msgid "Synchronized browsing"
 msgstr "Eşzamanlı tarama"
 
-#: ../../locales/../src/interface/state.cpp:372
+#: ../../locales/../src/interface/state.cpp:366
 msgid "Synchronized browsing has been disabled."
 msgstr "Eşzamanlı tarama devre dışı."
 
@@ -7196,8 +7248,8 @@ msgstr "Sözdizimi hatası"
 #: ../../locales/../src/interface/cmdline.cpp:88
 #: ../../locales/../src/interface/cmdline.cpp:97
 #: ../../locales/../src/interface/cmdline.cpp:103
-#: ../../locales/../src/interface/Mainfrm.cpp:2281
-#: ../../locales/../src/interface/Mainfrm.cpp:2323
+#: ../../locales/../src/interface/Mainfrm.cpp:2290
+#: ../../locales/../src/interface/Mainfrm.cpp:2332
 msgid "Syntax error in command line"
 msgstr "Komut satırında sözdizimi hatası"
 
@@ -7245,11 +7297,11 @@ msgstr "Hedef dosya zaten var"
 msgid "Target file:"
 msgstr "Hedef Dosya:"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:2625
+#: ../../locales/../src/interface/RemoteListView.cpp:2616
 msgid "Target filename already exists!"
 msgstr "Hedef dosya zaten var!"
 
-#: ../../locales/../src/interface/RemoteListView.cpp:1596
+#: ../../locales/../src/interface/RemoteListView.cpp:1590
 msgid "Target filename already exists, really continue?"
 msgstr "Hedef dosya adı zaten var, devam edilsin mi?"
 
@@ -7341,7 +7393,7 @@ msgid "The data connection could not be established: %s"
 msgstr "Veri bağlantısı kurulamadı: %s"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2932
-#: ../../locales/../src/interface/edithandler.cpp:1511
+#: ../../locales/../src/interface/edithandler.cpp:1512
 msgid "The default editor for text files could not be found."
 msgstr "Metin dosyaları için varsayılan düzenleyici bulunamadı."
 
@@ -7371,8 +7423,8 @@ msgstr ""
 "%s adında bir dosya zaten var.\n"
 "Lütfen yeni bir ad yazın:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1621
-#: ../../locales/../src/interface/LocalListView.cpp:1719
+#: ../../locales/../src/interface/edithandler.cpp:1622
+#: ../../locales/../src/interface/LocalListView.cpp:1721
 #, c-format
 msgid ""
 "The file '%s' cannot be opened:\n"
@@ -7402,8 +7454,8 @@ msgstr "'%s' dosyası yüklenemedi ya da kişisel bir anahtar içermiyor."
 msgid "The file '%s' could not be loaded."
 msgstr "'%s' dosyası yüklenemedi."
 
-#: ../../locales/../src/interface/edithandler.cpp:1616
-#: ../../locales/../src/interface/LocalListView.cpp:1715
+#: ../../locales/../src/interface/edithandler.cpp:1617
+#: ../../locales/../src/interface/LocalListView.cpp:1717
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7412,8 +7464,8 @@ msgstr ""
 "'%s' dosyası açılamıyor:\n"
 "Sisteminizde bu dosya tipi ile ilişkilendirilmiş bir program yok."
 
-#: ../../locales/../src/interface/edithandler.cpp:1733
-#: ../../locales/../src/interface/LocalListView.cpp:1727
+#: ../../locales/../src/interface/edithandler.cpp:1734
+#: ../../locales/../src/interface/LocalListView.cpp:1729
 #, c-format
 msgid ""
 "The file '%s' could not be opened:\n"
@@ -7462,11 +7514,11 @@ msgstr ""
 "kullanıcı adı ve parola bilgileri alınacak.\n"
 "Almaya devam etmek istiyor musunuz?"
 
-#: ../../locales/../src/interface/listctrlex.cpp:747
+#: ../../locales/../src/interface/listctrlex.cpp:745
 msgid "The filename column can neither be hidden nor moved."
 msgstr "Dosya adı sütunu gizlenemez ya da kaldırılamaz."
 
-#: ../../locales/../src/interface/listctrlex.cpp:800
+#: ../../locales/../src/interface/listctrlex.cpp:798
 msgid "The filename column cannot be hidden."
 msgstr "Dosya adı sütunu gizlenemez."
 
@@ -7484,7 +7536,7 @@ msgstr "Değiştirilecek karakterler: %s"
 msgid "The following files are currently being edited:"
 msgstr "Şu anda aşağıdaki dosyalar düzenleniyor:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3300
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3420
 msgid "The free open source FTP solution"
 msgstr "Ücretsiz açık kaynak kodlu FTP çözümü"
 
@@ -7505,17 +7557,17 @@ msgstr ""
 msgid "The limit needs to be between 1 and 2000 MiB"
 msgstr "Sınır 1 ile 2.000 MiB arasında olmalı"
 
-#: ../../locales/../src/interface/state.cpp:1000
+#: ../../locales/../src/interface/state.cpp:1003
 #, c-format
 msgid "The local directory '%s' could not be created."
 msgstr "'%s' yerel klasörü oluşturulamadı."
 
-#: ../../locales/../src/interface/state.cpp:985
+#: ../../locales/../src/interface/state.cpp:988
 #, c-format
 msgid "The local directory '%s' does not exist."
 msgstr "'%s' yerel klasörü bulunamadı."
 
-#: ../../locales/../src/interface/state.cpp:251
+#: ../../locales/../src/interface/state.cpp:245
 #, c-format
 msgid ""
 "The local directory '%s' is not below the synchronization root (%s).\n"
@@ -7543,12 +7595,12 @@ msgstr "Yeni sürüm İndirmeler klasörünüze kaydedilecek."
 msgid "The queue will not be saved."
 msgstr "Kuyruk kaydedilemedi."
 
-#: ../../locales/../src/interface/state.cpp:912
+#: ../../locales/../src/interface/state.cpp:916
 #, c-format
 msgid "The remote directory '%s' does not exist."
 msgstr "'%s' uzak klasörü bulunamadı."
 
-#: ../../locales/../src/interface/state.cpp:956
+#: ../../locales/../src/interface/state.cpp:959
 #, c-format
 msgid ""
 "The remote directory '%s' is not below the synchronization root (%s).\n"
@@ -7571,14 +7623,14 @@ msgstr "Seçilen dosyada şu kategoriler için alınabilecek veriler var:"
 msgid "The selected file is already being edited:"
 msgstr "Seçilen dosya zaten düzenleniyor:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1720
+#: ../../locales/../src/interface/edithandler.cpp:1721
 msgid ""
 "The selected file is still opened in some other program, please close it."
 msgstr ""
 "Seçilen dosya başka bir program tarafından açılmış durumda, lütfen önce onu "
 "kapatın."
 
-#: ../../locales/../src/interface/edithandler.cpp:1626
+#: ../../locales/../src/interface/edithandler.cpp:1627
 msgid ""
 "The selected file would be executed directly.\n"
 "This can be dangerous and might damage your system.\n"
@@ -7733,12 +7785,12 @@ msgstr "Sunucunun saat dilimi farkı %d saniye."
 msgid "Title:"
 msgstr "Başlık:"
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2167
+#: ../../locales/../src/interface/Mainfrm.cpp:2176
 msgid "To compare directories, both file lists have to be aligned."
 msgstr ""
 "Klasörleri karşılaştırmak için her iki dosya listesi de hizalanmış olmalı."
 
-#: ../../locales/../src/interface/Mainfrm.cpp:2168
+#: ../../locales/../src/interface/Mainfrm.cpp:2177
 msgid "To do this, the directory trees need to be both shown or both hidden."
 msgstr ""
 "Bunu yapabilmek için klasör ağaçlarının ikisi de görünmeli ya da gizlenmeli."
@@ -7896,12 +7948,12 @@ msgstr ""
 "Bu sunucuya güvenip bağlanmaya devam etmek için Tamam düğmesine tıklayın."
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:122
-#: ../../locales/../src/interface/resources/xrc/update.xrc:197
+#: ../../locales/../src/interface/resources/xrc/update.xrc:201
 msgid "Try again"
 msgstr "Yeniden dene"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2593
-#: ../../locales/../src/interface/edithandler.cpp:1085
+#: ../../locales/../src/interface/edithandler.cpp:1086
 msgid "Type"
 msgstr "Tip"
 
@@ -7917,7 +7969,7 @@ msgstr "Genel Vekil Sunucu Tipi:"
 msgid "U&pload"
 msgstr "Yü&kle"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3580
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3704
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:930
 msgid "U&pload limit:"
 msgstr "Yü&kleme sınırı:"
@@ -7944,8 +7996,8 @@ msgstr "Atanmamış hata kodu %d"
 msgid "Unit:"
 msgstr "Birim:"
 
-#: ../../locales/../src/interface/edithandler.cpp:1117
-#: ../../locales/../src/interface/edithandler.cpp:1145
+#: ../../locales/../src/interface/edithandler.cpp:1118
+#: ../../locales/../src/interface/edithandler.cpp:1146
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
@@ -8010,10 +8062,6 @@ msgstr "Yönlendirme desteklenmiyor"
 msgid "Up&load and unedit"
 msgstr "Yük&le ve kapat"
 
-#: ../../locales/../src/interface/updater.cpp:201
-msgid "Updated"
-msgstr "Güncellendi"
-
 #: ../../locales/../src/interface/settings/optionspage_updatecheck.cpp:45
 #: ../../locales/../src/interface/settings/settingsdialog.cpp:112
 msgid "Updates"
@@ -8023,7 +8071,7 @@ msgstr "Güncelleme"
 msgid "Upload"
 msgstr "Yükleme"
 
-#: ../../locales/../src/interface/edithandler.cpp:1108
+#: ../../locales/../src/interface/edithandler.cpp:1109
 msgid "Upload failed"
 msgstr "Yüklenemedi"
 
@@ -8036,7 +8084,12 @@ msgstr "Yükleme sınırı: %s/s"
 msgid "Upload limit: none"
 msgstr "Yükleme sınırı: yok"
 
-#: ../../locales/../src/interface/resources/xrc/menus.xrc:548
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3236
+#: ../../locales/../src/interface/search.cpp:865
+msgid "Upload search results"
+msgstr "Yükleme arama sonuçları"
+
+#: ../../locales/../src/interface/resources/xrc/menus.xrc:556
 msgid "Upload selected directory"
 msgstr "Seçili klasörü yükle"
 
@@ -8052,19 +8105,19 @@ msgstr "Bu dosya sunucuya geri yüklensin mi?"
 msgid "Upload this file to the server?"
 msgstr "Bu dosya sunucuya yüklensin mi?"
 
-#: ../../locales/../src/interface/edithandler.cpp:1102
-#: ../../locales/../src/interface/edithandler.cpp:1136
-#: ../../locales/../src/interface/edithandler.cpp:1292
+#: ../../locales/../src/interface/edithandler.cpp:1103
+#: ../../locales/../src/interface/edithandler.cpp:1137
+#: ../../locales/../src/interface/edithandler.cpp:1293
 msgid "Uploading"
 msgstr "Yükleniyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1105
-#: ../../locales/../src/interface/edithandler.cpp:1294
+#: ../../locales/../src/interface/edithandler.cpp:1106
+#: ../../locales/../src/interface/edithandler.cpp:1295
 msgid "Uploading and pending removal"
 msgstr "Yükleniyor ve silinmesi bekleniyor"
 
-#: ../../locales/../src/interface/edithandler.cpp:1139
-#: ../../locales/../src/interface/edithandler.cpp:1296
+#: ../../locales/../src/interface/edithandler.cpp:1140
+#: ../../locales/../src/interface/edithandler.cpp:1297
 msgid "Uploading and unediting"
 msgstr "Yüklenip kapatılıyor"
 
@@ -8232,11 +8285,11 @@ msgstr ""
 msgid "Warning: Potential security breach!"
 msgstr "Dikkat: Olası güvenlik ihlali!"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3464
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3588
 msgid "Welcome to FileZilla"
 msgstr "FileZilla Yazılımına Hoş Geldiniz"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3330
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3450
 msgid "What's new"
 msgstr "Yenilikler:"
 
@@ -8244,7 +8297,7 @@ msgstr "Yenilikler:"
 msgid "What's new:"
 msgstr "Yenilikler:"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3654
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3778
 msgid ""
 "When allowing FileZilla to remember passwords, you can reconnnect without "
 "having to re-enter a password after restarting FileZilla."
@@ -8268,7 +8321,7 @@ msgstr "Z&aten bağlıyken yeni bir bağlantı başlatıldığında:"
 msgid "Widescreen"
 msgstr "Geniş Ekran"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3649
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3773
 msgid "Would you like FileZilla to remember passwords?"
 msgstr "Parolalar hatırlansın mı?"
 
@@ -8297,16 +8350,16 @@ msgstr ""
 "Kullandığınız bilgisayar yalnız IPv6 kullanıyor gibi. Bu yardımcı, bu ortamı "
 "desteklemiyor."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:241
+#: ../../locales/../src/interface/resources/xrc/update.xrc:245
 msgid "You are using the latest version of FileZilla."
 msgstr "Son FileZilla sürümünü kullanıyorsunuz."
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3439
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3559
 msgid "You can always open this dialog again through the help menu."
 msgstr "Bu pencereyi yardım menüsünden açabilirsiniz"
 
 #: ../../locales/../src/interface/resources/xrc/update.xrc:139
-#: ../../locales/../src/interface/resources/xrc/update.xrc:217
+#: ../../locales/../src/interface/resources/xrc/update.xrc:221
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Son sürümü FileZilla web sitesinden indirebilirsiniz:"
 
@@ -8338,12 +8391,12 @@ msgstr ""
 "Dosya için yeni bir ad yazmadınız. Onun yerine dosyanın üzerine yazmak ister "
 "misiniz?"
 
-#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3218
+#: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3338
 msgid "You have selected at least one symbolic link."
 msgstr "En az bir sembolik bağlantı seçmelisiniz."
 
-#: ../../locales/../src/interface/edithandler.cpp:1587
-#: ../../locales/../src/interface/search.cpp:709
+#: ../../locales/../src/interface/edithandler.cpp:1588
+#: ../../locales/../src/interface/search.cpp:1149
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
@@ -8351,7 +8404,7 @@ msgstr ""
 "Düzenleme için 10 taneden fazla dosya seçtiniz. Bunu gerçekten yapmak "
 "istiyor musunuz?"
 
-#: ../../locales/../src/interface/LocalListView.cpp:1685
+#: ../../locales/../src/interface/LocalListView.cpp:1687
 msgid ""
 "You have selected more than 10 files or directories to open, do you really "
 "want to continue?"
@@ -8368,16 +8421,20 @@ msgstr "Bir sunucu adı yazmalısınız."
 msgid "You have to enter a key file path"
 msgstr "Bir anahtar dosyası yolu yazmalısınız"
 
-#: ../../locales/../src/interface/search.cpp:524
+#: ../../locales/../src/interface/search.cpp:851
 msgid "You have to enter a local directory."
 msgstr "Yerel bir klasör yazmalısınız."
+
+#: ../../locales/../src/interface/search.cpp:865
+msgid "You have to enter a remote directory."
+msgstr "Uzak bir klasör yazmalısınız."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:158
 #: ../../locales/../src/interface/settings/optionspage_connection_active.cpp:91
 msgid "You have to enter a valid IPv4 address."
 msgstr "Geçerli bir IPv4 adresi yazmalısınız."
 
-#: ../../locales/../src/interface/search.cpp:529
+#: ../../locales/../src/interface/search.cpp:856
 msgid "You have to enter a writable local directory."
 msgstr "Yazılabilir bir yerel klasör yazmalısınız."
 
@@ -8407,7 +8464,7 @@ msgstr "Yer imi için bir ad yazmalısınız"
 msgid "You need to enter a name for the log file."
 msgstr "Günlük dosyası için bir ad yazmalısınız."
 
-#: ../../locales/../src/interface/edithandler.cpp:1472
+#: ../../locales/../src/interface/edithandler.cpp:1473
 msgid "You need to enter a properly quoted command."
 msgstr "Uygun şekilde düzenlenmiş bir komut yazmalısınız."
 
@@ -8515,10 +8572,10 @@ msgstr "şununla biten"
 msgid "equals"
 msgstr "şuna eşit olan"
 
-#: ../../locales/../src/interface/filelistctrl.cpp:530
-#: ../../locales/../src/interface/filelistctrl.cpp:549
-#: ../../locales/../src/interface/filelistctrl.cpp:576
-#: ../../locales/../src/interface/filelistctrl.cpp:592
+#: ../../locales/../src/interface/filelistctrl.cpp:534
+#: ../../locales/../src/interface/filelistctrl.cpp:553
+#: ../../locales/../src/interface/filelistctrl.cpp:580
+#: ../../locales/../src/interface/filelistctrl.cpp:596
 msgid "file"
 msgstr "dosya"
 
