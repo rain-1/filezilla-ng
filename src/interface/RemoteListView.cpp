@@ -2537,7 +2537,7 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 	}
 	else {
 		for (auto const& entry : selected_item_list) {
-			urls = getUrl(server, path, entry.name);
+			urls += getUrl(server, path, entry.name);
 #ifdef __WXMSW__
 			urls += _T("\r\n");
 #else
