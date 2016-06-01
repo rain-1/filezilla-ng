@@ -86,12 +86,14 @@ void CWelcomeDialog::OnTimer(wxTimerEvent&)
 	Destroy();
 }
 
+#if FZ_WINDOWS && FZ_MANUALUPDATECHECK
 void MakeLinksFromTooltips(wxWindow& parent);
+#endif
 
 void CWelcomeDialog::InitFooter(wxString const& resources)
 {
 	bool hideFooter = true;
-#if FZ_WINDOWS
+#if FZ_WINDOWS && FZ_MANUALUPDATECHECK
 	if (CBuildInfo::GetBuildType() == _T("official") && !COptions::Get()->GetOptionVal(OPTION_DISABLE_UPDATE_FOOTER)) {
 		if (!resources.empty()) {
 			wxLogNull null;
