@@ -2645,7 +2645,9 @@ int CFtpControlSocket::FileTransferSend()
 	case filetransfer_mfmt:
 		{
 			cmd = _T("MFMT ");
-			cmd += pData->fileTime.format(_T("%Y%m%d%H%M%S "), fz::datetime::utc);
+			fz::datetime t = pData->fileTime;
+			t -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+			cmd += t.format(_T("%Y%m%d%H%M%S "), fz::datetime::utc);
 			cmd += pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath);
 
 			break;
