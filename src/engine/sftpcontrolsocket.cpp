@@ -1819,8 +1819,12 @@ int CSftpControlSocket::FileTransferSend()
 		}
 
 		wxString quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
+
+		fz::datetime t = pData->fileTime;
+		t -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
+		
 		// Y2K38
-		time_t ticks = pData->fileTime.get_time_t();
+		time_t ticks = t.get_time_t();
 		wxString seconds = wxString::Format(_T("%d"), (int)ticks);
 		if (!SendCommand(_T("chmtime ") + seconds + _T(" ") + WildcardEscape(quotedFilename),
 			_T("chmtime ") + seconds + _T(" ") + quotedFilename))
