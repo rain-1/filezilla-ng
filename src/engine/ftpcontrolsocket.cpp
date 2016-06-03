@@ -212,7 +212,8 @@ void CFtpControlSocket::OnReceive()
 		}
 
 		if (!read) {
-			LogMessage(MessageType::Error, _("Connection closed by server"));
+			auto messageType = (GetCurrentCommandId() == Command::none) ? MessageType::Status : MessageType::Error;
+			LogMessage(messageType, _("Connection closed by server"));
 			DoClose();
 			return;
 		}

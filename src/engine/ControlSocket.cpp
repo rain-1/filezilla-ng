@@ -1008,12 +1008,13 @@ void CRealControlSocket::OnClose(int error)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CRealControlSocket::OnClose(%d)"), error);
 
-	if (GetCurrentCommandId() != Command::connect)
-	{
+	auto cmd = GetCurrentCommandId();
+	if (cmd != Command::connect) {
+		auto messageType = (cmd == Command::none) ? MessageType::Status : MessageType::Error;
 		if (!error)
-			LogMessage(MessageType::Error, _("Connection closed by server"));
+			LogMessage(messageType, _("Connection closed by server"));
 		else
-			LogMessage(MessageType::Error, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
+			LogMessage(messageType, _("Disconnected from server: %s"), CSocket::GetErrorDescription(error));
 	}
 	DoClose();
 }
