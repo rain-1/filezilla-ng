@@ -63,17 +63,21 @@ void CContextControl::CreateTab()
 
 		// See if we can reuse an existing context
 		for (size_t i = 0; i < m_context_controls.size(); i++) {
-			if (m_context_controls[i].tab_index != -1)
+			if (m_context_controls[i].used()) {
 				continue;
+			}
 
 			if (m_context_controls[i].pState->IsRemoteConnected() ||
 				!m_context_controls[i].pState->IsRemoteIdle())
+			{
 				continue;
+			}
 
 			pState = m_context_controls[i].pState;
 			m_context_controls.erase(m_context_controls.begin() + i);
-			if (m_current_context_controls > (int)i)
-				m_current_context_controls--;
+			if (m_current_context_controls > (int)i) {
+				--m_current_context_controls;
+			}
 			break;
 		}
 		if (!pState) {
@@ -129,7 +133,7 @@ void CContextControl::CreateContextControls(CState& state)
 			m_tabs = new wxAuiNotebookEx();
 
 			wxSize splitter_size = m_context_controls[m_current_context_controls].pViewSplitter->GetSize();
-			m_tabs->Create(this, wxID_ANY, initial_position, splitter_size, wxNO_BORDER | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_CLOSE_ON_ALL_TABS);
+			m_tabs->Create(this, wxID_ANY, initial_position, splitter_size, wxNO_BORDER | wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_WINDOWLIST_BUTTON | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_TAB_MOVE);
 			m_tabs->SetExArtProvider();
 			m_tabs->SetSelectedFont(*wxNORMAL_FONT);
 			m_tabs->SetMeasuringFont(*wxNORMAL_FONT);
@@ -273,7 +277,6 @@ void CContextControl::CreateContextControls(CState& state)
 	state.GetComparisonManager()->SetListings(context_controls.pLocalListView, context_controls.pRemoteListView);
 
 	if (m_tabs) {
-		context_controls.tab_index = m_tabs->GetPageCount();
 		m_tabs->AddPage(context_controls.pViewSplitter, state.GetTitle());
 
 		// Copy reconnect and bookmark information
@@ -284,7 +287,6 @@ void CContextControl::CreateContextControls(CState& state)
 		context_controls.site_bookmarks = m_context_controls[m_current_context_controls].site_bookmarks;
 	}
 	else {
-		context_controls.tab_index = 0;
 		context_controls.site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
 
 		context_controls.site_bookmarks->path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
@@ -299,18 +301,14 @@ void CContextControl::CreateContextControls(CState& state)
 
 void CContextControl::OnTabRefresh(wxCommandEvent&)
 {
-	if (m_right_clicked_tab == -1)
+	if (m_right_clicked_tab == -1) {
 		return;
+	}
 
-	for (size_t j = 0; j < m_context_controls.size(); j++)
-	{
-		if (m_context_controls[j].tab_index != m_right_clicked_tab)
-			continue;
-
-		m_context_controls[j].pState->RefreshLocal();
-		m_context_controls[j].pState->RefreshRemote();
-
-		break;
+	auto * controls = GetControlsFromTabIndex(m_right_clicked_tab);
+	if (controls) {
+		controls->pState->RefreshLocal();
+		controls->pState->RefreshRemote();
 	}
 }
 
@@ -325,8 +323,7 @@ struct CContextControl::_context_controls* CContextControl::GetCurrentControls()
 struct CContextControl::_context_controls* CContextControl::GetControlsFromState(CState* pState)
 {
 	size_t i = 0;
-	for (i = 0; i < m_context_controls.size(); i++)
-	{
+	for (i = 0; i < m_context_controls.size(); ++i) {
 		if (m_context_controls[i].pState == pState)
 			return &m_context_controls[i];
 	}
@@ -335,24 +332,19 @@ struct CContextControl::_context_controls* CContextControl::GetControlsFromState
 
 bool CContextControl::CloseTab(int tab)
 {
-	if (!m_tabs)
+	if (!m_tabs) {
 		return false;
-	if (tab < 0)
-		return false;
-
-	size_t i = 0;
-	for (i = 0; i < m_context_controls.size(); i++)
-	{
-		if (m_context_controls[i].tab_index == tab)
-			break;
 	}
-	if (i == m_context_controls.size())
+	if (tab < 0 || static_cast<size_t>(tab) >= m_tabs->GetPageCount()) {
 		return false;
+	}
 
-	CState* pState = m_context_controls[i].pState;
 
-	if (!pState->m_pCommandQueue->Idle())
-	{
+	auto *const removeControls = GetControlsFromTabIndex(tab);
+
+	CState *const pState = removeControls->pState;
+
+	if (!pState->m_pCommandQueue->Idle()) {
 		if (wxMessageBoxEx(_("Cannot close tab while busy.\nCancel current operation and close tab?"), _T("FileZilla"), wxYES_NO | wxICON_QUESTION) != wxYES)
 			return false;
 	}
@@ -374,29 +366,23 @@ bool CContextControl::CloseTab(int tab)
 		m_tabs->Disconnect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler(CContextControl::OnTabChanged), 0, this);
 
 		int keep = tab ? 0 : 1;
+
+		auto * keptControls = GetControlsFromTabIndex(keep);
 		m_tabs->RemovePage(keep);
 
-		size_t j;
-		for (j = 0; j < m_context_controls.size(); ++j) {
-			if (m_context_controls[j].tab_index != keep) {
-				continue;
-			}
+		CContextManager::Get()->SetCurrentContext(keptControls->pState);
 
-			break;
-		}
-
-		m_context_controls[j].pViewSplitter->Reparent(this);
-		ReplaceWindow(m_tabs, m_context_controls[j].pViewSplitter);
-		m_context_controls[j].pViewSplitter->Show();
-		m_context_controls[j].tab_index = 0;
+		keptControls->pViewSplitter->Reparent(this);
+		ReplaceWindow(m_tabs, keptControls->pViewSplitter);
+		keptControls->pViewSplitter->Show();
 
 		wxAuiNotebookEx *tabs = m_tabs;
 		m_tabs = 0;
 
-		m_context_controls[i].tab_index = -1;
-		m_context_controls[i].site_bookmarks.reset();
+		removeControls->pViewSplitter = 0;
+		removeControls->site_bookmarks.reset();
 
-		CContextManager::Get()->SetCurrentContext(m_context_controls[j].pState);
+		CContextManager::Get()->SetCurrentContext(keptControls->pState);
 
 		tabs->Destroy();
 	}
@@ -407,21 +393,12 @@ bool CContextControl::CloseTab(int tab)
 				newsel = m_tabs->GetPageCount() - 2;
 			}
 
-			for (size_t j = 0; j < m_context_controls.size(); ++j) {
-				if (m_context_controls[j].tab_index != newsel) {
-					continue;
-				}
-				m_tabs->SetSelection(newsel);
-				CContextManager::Get()->SetCurrentContext(m_context_controls[j].pState);
-			}
+			m_tabs->SetSelection(newsel);
+			CContextManager::Get()->SetCurrentContext(GetControlsFromTabIndex(newsel)->pState);
 		}
-		for (size_t j = 0; j < m_context_controls.size(); ++j) {
-			if (m_context_controls[j].tab_index > tab) {
-				--m_context_controls[j].tab_index;
-			}
-		}
-		m_context_controls[i].tab_index = -1;
-		m_context_controls[i].site_bookmarks.reset();
+
+		removeControls->pViewSplitter = 0;
+		removeControls->site_bookmarks.reset();
 		m_tabs->DeletePage(tab);
 	}
 
@@ -473,14 +450,13 @@ void CContextControl::OnTabContextCloseOthers(wxCommandEvent&)
 void CContextControl::OnTabClosing_Deferred(wxCommandEvent& event)
 {
 	int tab = event.GetId();
-	if (tab < 0)
-	{
+	if (tab < 0) {
 		tab++;
 		int count = GetTabCount();
-		for (int i = count - 1; i >= 0; i--)
-		{
-			if (i != -tab)
+		for (int i = count - 1; i >= 0; --i) {
+			if (i != -tab) {
 				CloseTab(i);
+			}
 		}
 	}
 	else
@@ -491,17 +467,12 @@ void CContextControl::OnTabClosing_Deferred(wxCommandEvent& event)
 void CContextControl::OnTabChanged(wxAuiNotebookEvent&)
 {
 	int i = m_tabs->GetSelection();
-	if (i < 0 || i >= (int)m_context_controls.size())
+	auto * const controls = GetControlsFromTabIndex(i);
+	if (!controls) {
 		return;
-
-	for (size_t j = 0; j < m_context_controls.size(); j++)
-	{
-		if (m_context_controls[j].tab_index != i)
-			continue;
-
-		CContextManager::Get()->SetCurrentContext(m_context_controls[j].pState);
-		break;
 	}
+
+	CContextManager::Get()->SetCurrentContext(controls->pState);
 }
 
 void CContextControl::OnTabClosing(wxAuiNotebookEvent& event)
@@ -525,10 +496,13 @@ int CContextControl::GetTabCount() const
 
 struct CContextControl::_context_controls* CContextControl::GetControlsFromTabIndex(int i)
 {
-	for (size_t j = 0; j < m_context_controls.size(); j++)
-	{
-		if (m_context_controls[j].tab_index == i)
-			return &m_context_controls[j];
+	wxWindow* page = m_tabs->GetPage(i);
+	if (page) {
+		for (auto & controls : m_context_controls) {
+			if (controls.pViewSplitter == page) {
+				return &controls;
+			}
+		}
 	}
 
 	return 0;
@@ -536,19 +510,21 @@ struct CContextControl::_context_controls* CContextControl::GetControlsFromTabIn
 
 bool CContextControl::SelectTab(int i)
 {
-	if (i < 0)
+	if (i < 0) {
 		return false;
+	}
 
-	if (!m_tabs)
-	{
-		if (i != 0)
+	if (!m_tabs) {
+		if (i != 0) {
 			return false;
+		}
 
 		return true;
 	}
 
-	if ((int)m_tabs->GetPageCount() <= i)
+	if ((int)m_tabs->GetPageCount() <= i) {
 		return false;
+	}
 
 	m_tabs->SetSelection(i);
 
@@ -557,8 +533,9 @@ bool CContextControl::SelectTab(int i)
 
 void CContextControl::AdvanceTab(bool forward)
 {
-	if (!m_tabs)
+	if (!m_tabs) {
 		return;
+	}
 
 	m_tabs->AdvanceTab(forward);
 }
@@ -580,12 +557,17 @@ void CContextControl::OnStateChange(CState* pState, t_statechange_notifications 
 			m_current_context_controls = -1;
 	}
 	else if (notification == STATECHANGE_SERVER) {
-		if (!m_tabs)
+		if (!m_tabs) {
 			return;
+		}
 
 		CContextControl::_context_controls* controls = GetControlsFromState(pState);
-		if (controls && controls->tab_index != -1)
-			m_tabs->SetPageText(controls->tab_index, controls->pState->GetTitle());
+		if (controls && controls->used()) {
+			int i = m_tabs->GetPageIndex(controls->pViewSplitter);
+			if (i != wxNOT_FOUND) {
+				m_tabs->SetPageText(i, controls->pState->GetTitle());
+			}
+		}
 	}
 }
 

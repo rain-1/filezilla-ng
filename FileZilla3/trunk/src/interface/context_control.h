@@ -22,25 +22,25 @@ class CContextControl final : public wxSplitterWindow, public CGlobalStateEventH
 public:
 	struct _context_controls
 	{
+		bool used() const { return pViewSplitter != 0; }
+
 		// List of all windows and controls assorted with a context
-		CView* pLocalTreeViewPanel;
-		CView* pLocalListViewPanel;
-		CLocalTreeView* pLocalTreeView;
-		CLocalListView* pLocalListView;
-		CView* pRemoteTreeViewPanel;
-		CView* pRemoteListViewPanel;
-		CRemoteTreeView* pRemoteTreeView;
-		CRemoteListView* pRemoteListView;
-		CViewHeader* pLocalViewHeader;
-		CViewHeader* pRemoteViewHeader;
+		CView* pLocalTreeViewPanel{};
+		CView* pLocalListViewPanel{};
+		CLocalTreeView* pLocalTreeView{};
+		CLocalListView* pLocalListView{};
+		CView* pRemoteTreeViewPanel{};
+		CView* pRemoteListViewPanel{};
+		CRemoteTreeView* pRemoteTreeView{};
+		CRemoteListView* pRemoteListView{};
+		CViewHeader* pLocalViewHeader{};
+		CViewHeader* pRemoteViewHeader{};
 
-		CSplitterWindowEx* pViewSplitter; // Contains local and remote splitters
-		CSplitterWindowEx* pLocalSplitter;
-		CSplitterWindowEx* pRemoteSplitter;
+		CSplitterWindowEx* pViewSplitter{}; // Contains local and remote splitters
+		CSplitterWindowEx* pLocalSplitter{};
+		CSplitterWindowEx* pRemoteSplitter{};
 
-		CState* pState;
-
-		int tab_index;
+		CState* pState{};
 
 		struct _site_bookmarks
 		{
