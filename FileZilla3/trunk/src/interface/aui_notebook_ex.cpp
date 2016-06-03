@@ -71,6 +71,14 @@ END_EVENT_TABLE()
 
 wxAuiNotebookEx::wxAuiNotebookEx()
 {
+	Bind(wxEVT_AUINOTEBOOK_DRAG_MOTION, [&](wxAuiNotebookEvent& evt) {
+		wxAuiNotebook::OnTabDragMotion(evt);
+
+		int active = m_tabs.GetActivePage();
+		if (active != wxNOT_FOUND) {
+			m_curPage = active;
+		}
+	});
 }
 
 wxAuiNotebookEx::~wxAuiNotebookEx()
