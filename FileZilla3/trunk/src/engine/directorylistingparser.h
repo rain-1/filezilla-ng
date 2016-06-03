@@ -136,7 +136,7 @@ protected:
 	CServer m_server;
 
 	bool m_fileListOnly;
-	std::vector<wxString> m_fileList;
+	std::vector<std::wstring> m_fileList;
 
 	bool m_maybeMultilineVms;
 
