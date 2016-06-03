@@ -217,10 +217,11 @@ protected:
 		}
 
 		CContextControl::_context_controls* controls = m_pMainFrame->m_pContextControl->GetControlsFromState(pState);
-		if (!controls)
+		if (!controls) {
 			return;
+		}
 
-		if (controls->tab_index == -1) {
+		if (!controls->used()) {
 			if (notification == STATECHANGE_REMOTE_IDLE || notification == STATECHANGE_SERVER)
 				pState->Disconnect();
 
@@ -1316,32 +1317,34 @@ void CMainFrame::OnTimer(wxTimerEvent& event)
 void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	CSiteManagerDialog dlg;
 
 	std::set<wxString> handled_paths;
 	std::vector<CSiteManagerDialog::_connected_site> connected_sites;
 
-	if (pServer)
-	{
+	if (pServer) {
 		CSiteManagerDialog::_connected_site connected_site;
 		connected_site.server = *pServer;
 		connected_sites.push_back(connected_site);
 	}
 
-	for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-	{
+	for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 		CContextControl::_context_controls *controls =  m_pContextControl->GetControlsFromTabIndex(i);
-		if (!controls)
+		if (!controls) {
 			continue;
+		}
 
 		const wxString& path = controls->site_bookmarks->path;
-		if (path.empty())
+		if (path.empty()) {
 			continue;
-		if (handled_paths.find(path) != handled_paths.end())
+		}
+		if (handled_paths.find(path) != handled_paths.end()) {
 			continue;
+		}
 
 		CSiteManagerDialog::_connected_site connected_site;
 		connected_site.old_path = path;
@@ -1350,23 +1353,23 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 		handled_paths.insert(path);
 	}
 
-	if (!dlg.Create(this, &connected_sites, pServer))
+	if (!dlg.Create(this, &connected_sites, pServer)) {
 		return;
+	}
 
 	int res = dlg.ShowModal();
-	if (res == wxID_YES || res == wxID_OK)
-	{
+	if (res == wxID_YES || res == wxID_OK) {
 		// Update bookmark paths
-		for (size_t j = 0; j < connected_sites.size(); j++)
-		{
-			for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
-			{
+		for (size_t j = 0; j < connected_sites.size(); ++j) {
+			for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 				CContextControl::_context_controls *controls =  m_pContextControl->GetControlsFromTabIndex(i);
-				if (!controls)
+				if (!controls) {
 					continue;
+				}
 
-				if (connected_sites[j].old_path != controls->site_bookmarks->path)
+				if (connected_sites[j].old_path != controls->site_bookmarks->path) {
 					continue;
+				}
 
 				controls->site_bookmarks->path = connected_sites[j].new_path;
 
@@ -1378,17 +1381,18 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 		}
 	}
 
-	if (res == wxID_YES)
-	{
+	if (res == wxID_YES) {
 		CSiteManagerItemData_Site data;
-		if (!dlg.GetServer(data))
+		if (!dlg.GetServer(data)) {
 			return;
+		}
 
 		ConnectToSite(data);
 	}
 
-	if (m_pMenuBar)
+	if (m_pMenuBar) {
 		m_pMenuBar->UpdateBookmarkMenu();
+	}
 }
 
 void CMainFrame::OnSiteManager(wxCommandEvent& e)
@@ -2549,13 +2553,14 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 		return;
 
 	std::shared_ptr<CContextControl::_context_controls::_site_bookmarks> site_bookmarks;
-	for (int i = 0; i < m_pContextControl->GetTabCount(); i++) {
+	for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 		if (i == m_pContextControl->GetCurrentTab())
 			continue;
 
 		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
-		if (!controls || !controls->site_bookmarks || controls->site_bookmarks->path != path)
+		if (!controls || !controls->site_bookmarks || controls->site_bookmarks->path != path) {
 			continue;
+		}
 
 		site_bookmarks = controls->site_bookmarks;
 		site_bookmarks->bookmarks.clear();
