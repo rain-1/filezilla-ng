@@ -61,27 +61,35 @@ public:
 
 	virtual void DrawTab(wxDC &dc, wxWindow *wnd, const wxAuiNotebookPage &page, const wxRect &rect, int close_button_state, wxRect *out_tab_rect, wxRect *out_button_rect, int *x_extent)
 	{
-		wxColour const baseOrig = m_baseColour;
-		wxColour const activeOrig = m_activeColour;
+		wxColour const tint; // TODO: Somehow get desired tint from the tab.
 
-		wxColour const tint(0, 0, 0, 255);
+		if (tint.IsOk()) {
 
-		wxColour const base(
-			wxColour::AlphaBlend(tint.Red(),   baseOrig.Red(),   tint.Alpha() / 255.0f),
-			wxColour::AlphaBlend(tint.Green(), baseOrig.Green(), tint.Alpha() / 255.0f),
-			wxColour::AlphaBlend(tint.Blue(),  baseOrig.Blue(),  tint.Alpha() / 255.0f));
+			wxColour const baseOrig = m_baseColour;
+			wxColour const activeOrig = m_activeColour;
 
-		wxColour const active(
-			wxColour::AlphaBlend(tint.Red(),   activeOrig.Red(),   tint.Alpha() / 255.0f),
-			wxColour::AlphaBlend(tint.Green(), activeOrig.Green(), tint.Alpha() / 255.0f),
-			wxColour::AlphaBlend(tint.Blue(),  activeOrig.Blue(),  tint.Alpha() / 255.0f));
 
-		m_baseColour = base;
-		m_activeColour = active;
+			wxColour const base(
+				wxColour::AlphaBlend(tint.Red(),   baseOrig.Red(),   tint.Alpha() / 255.0f),
+				wxColour::AlphaBlend(tint.Green(), baseOrig.Green(), tint.Alpha() / 255.0f),
+				wxColour::AlphaBlend(tint.Blue(),  baseOrig.Blue(),  tint.Alpha() / 255.0f));
 
-		wxAuiDefaultTabArt::DrawTab(dc, wnd, page, rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
-		m_baseColour = baseOrig;
-		m_activeColour = baseOrig;
+			wxColour const active(
+				wxColour::AlphaBlend(tint.Red(),   activeOrig.Red(),   tint.Alpha() / 255.0f),
+				wxColour::AlphaBlend(tint.Green(), activeOrig.Green(), tint.Alpha() / 255.0f),
+				wxColour::AlphaBlend(tint.Blue(),  activeOrig.Blue(),  tint.Alpha() / 255.0f));
+
+			m_baseColour = base;
+			m_activeColour = active;
+
+			wxAuiDefaultTabArt::DrawTab(dc, wnd, page, rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+
+			m_baseColour = baseOrig;
+			m_activeColour = baseOrig;
+		}
+		else {
+			wxAuiDefaultTabArt::DrawTab(dc, wnd, page, rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+		}
 	}
 
 protected:
