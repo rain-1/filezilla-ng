@@ -1,5 +1,7 @@
-#ifndef __VOLUME_ENUMERATOR_H__
-#define __VOLUME_ENUMERATOR_H__
+#ifndef FILEZILLA_VOLUME_ENUMERATOR_HEADER
+#define FILEZILLA_VOLUME_ENUMERATOR_HEADER
+
+#include <libfilezilla/thread.hpp>
 
 #include <list>
 
@@ -18,7 +20,7 @@
 
 // Since the local directory tree including the drives is populated at
 // startup, use a background thread to obtain the labels.
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 
 DECLARE_EVENT_TYPE(fzEVT_VOLUMEENUMERATED, -1)
 DECLARE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED, -1)
@@ -33,40 +35,35 @@ public:
 
 	struct t_VolumeInfo
 	{
-		wxString volume;
-		wxString volumeName;
+		std::wstring volume;
+		std::wstring volumeName;
+		int icon{-1};
 	};
 
 	std::list<t_VolumeInfo> GetVolumes();
 
-	static std::list<wxString> GetDrives();
+	static std::list<std::wstring> GetDrives();
 
 	static long GetDrivesToHide();
 	static bool IsHidden(wxChar const* drive, long noDrives);
 
 protected:
 	bool GetDriveLabels();
-	void ProcessDrive(wxString const& drive);
-	bool GetDriveLabel(wxString const& drive);
+	void ProcessDrive(std::wstring const& drive);
+	bool GetDriveLabel(std::wstring const& drive);
+	bool GetDriveIcon(std::wstring const& drive);
 	virtual void entry();
 
 	wxEvtHandler* m_pEvtHandler;
 
-	bool m_failure;
-	bool m_stop;
-	bool m_running;
-
-	struct t_VolumeInfoInternal
-	{
-		wxChar* pVolume;
-		wxChar* pVolumeName;
-	};
-
-	std::list<t_VolumeInfoInternal> m_volumeInfo;
+	bool m_failure{};
+	bool m_stop{};
+	
+	std::list<t_VolumeInfo> m_volumeInfo;
 
 	fz::mutex sync_;
 };
 
-#endif //__WXMSW__
+#endif
 
-#endif //__VOLUME_ENUMERATOR_H__
+#endif
