@@ -1180,9 +1180,14 @@ bool CQueueStorage::BeginTransaction()
 	return sqlite3_exec(d_->db_, "BEGIN TRANSACTION", 0, 0, 0) == SQLITE_OK;
 }
 
-bool CQueueStorage::EndTransaction()
+bool CQueueStorage::EndTransaction(bool rollback)
 {
-	return sqlite3_exec(d_->db_, "END TRANSACTION", 0, 0, 0) == SQLITE_OK;
+	if (rollback) {
+		return sqlite3_exec(d_->db_, "ROLLBACK", 0, 0, 0) == SQLITE_OK;
+	}
+	else {
+		return sqlite3_exec(d_->db_, "END TRANSACTION", 0, 0, 0) == SQLITE_OK;
+	}
 }
 
 bool CQueueStorage::Vacuum()
