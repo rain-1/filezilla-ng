@@ -42,7 +42,7 @@ IMPLEMENT_APP_NO_MAIN(CFileZillaApp)
 
 CFileZillaApp::CFileZillaApp()
 {
-	m_profilingActive = true;
+	m_profile_start = fz::monotonic_clock::now();
 	AddStartupProfileRecord(_T("CFileZillaApp::CFileZillaApp()"));
 }
 
@@ -715,31 +715,30 @@ int CFileZillaApp::ProcessCommandLine()
 
 void CFileZillaApp::AddStartupProfileRecord(const wxString& msg)
 {
-	if (!m_profilingActive)
+	if (!m_profile_start) {
 		return;
+	}
 
-	m_startupProfile.push_back(std::make_pair(wxDateTime::UNow(), msg));
+	m_startupProfile.emplace_back(fz::monotonic_clock::now(), msg);
 }
 
 void CFileZillaApp::ShowStartupProfile()
 {
-	m_profilingActive = false;
+	if (m_profile_start){// && m_pCommandLine && m_pCommandLine->HasSwitch(CCommandLine::debug_startup)) {
+		wxString msg = _T("Profile:\n");
+		for (auto const& p : m_startupProfile) {
+			auto const diff = p.first - m_profile_start;
 
-	std::list<std::pair<wxDateTime, wxString> > profile;
-	profile.swap(m_startupProfile);
-
-	if (m_pCommandLine && !m_pCommandLine->HasSwitch(CCommandLine::debug_startup))
-		return;
-
-	wxString msg = _T("Profile:\n");
-	for (auto const& p : profile) {
-		msg += p.first.Format(_T("%Y-%m-%d %H:%M:%S %l"));
-		msg += _T(" ");
-		msg += p.second;
-		msg += _T("\n");
+			msg += std::to_wstring(diff.get_milliseconds());
+			msg += _T(" ");
+			msg += p.second;
+			msg += _T("\n");
+		}
+		wxMessageBoxEx(msg);
 	}
 
-	wxMessageBoxEx(msg);
+	m_profile_start = fz::monotonic_clock();
+	m_startupProfile.clear();
 }
 
 wxString CFileZillaApp::GetSettingsFile(wxString const& name) const
