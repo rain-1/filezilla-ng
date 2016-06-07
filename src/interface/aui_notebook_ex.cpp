@@ -59,6 +59,31 @@ public:
 		return size;
 	}
 
+	virtual void DrawTab(wxDC &dc, wxWindow *wnd, const wxAuiNotebookPage &page, const wxRect &rect, int close_button_state, wxRect *out_tab_rect, wxRect *out_button_rect, int *x_extent)
+	{
+		wxColour const baseOrig = m_baseColour;
+		wxColour const activeOrig = m_activeColour;
+
+		wxColour const tint(0, 0, 0, 255);
+
+		wxColour const base(
+			wxColour::AlphaBlend(tint.Red(),   baseOrig.Red(),   tint.Alpha() / 255.0f),
+			wxColour::AlphaBlend(tint.Green(), baseOrig.Green(), tint.Alpha() / 255.0f),
+			wxColour::AlphaBlend(tint.Blue(),  baseOrig.Blue(),  tint.Alpha() / 255.0f));
+
+		wxColour const active(
+			wxColour::AlphaBlend(tint.Red(),   activeOrig.Red(),   tint.Alpha() / 255.0f),
+			wxColour::AlphaBlend(tint.Green(), activeOrig.Green(), tint.Alpha() / 255.0f),
+			wxColour::AlphaBlend(tint.Blue(),  activeOrig.Blue(),  tint.Alpha() / 255.0f));
+
+		m_baseColour = base;
+		m_activeColour = active;
+
+		wxAuiDefaultTabArt::DrawTab(dc, wnd, page, rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+		m_baseColour = baseOrig;
+		m_activeColour = baseOrig;
+	}
+
 protected:
 	wxAuiNotebookEx* m_pNotebook;
 
@@ -67,22 +92,25 @@ protected:
 
 BEGIN_EVENT_TABLE(wxAuiNotebookEx, wxAuiNotebook)
 EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY, wxAuiNotebookEx::OnPageChanged)
+EVT_AUINOTEBOOK_DRAG_MOTION(wxID_ANY, wxAuiNotebookEx::OnTabDragMotion)
 END_EVENT_TABLE()
 
 wxAuiNotebookEx::wxAuiNotebookEx()
 {
-	Bind(wxEVT_AUINOTEBOOK_DRAG_MOTION, [&](wxAuiNotebookEvent& evt) {
-		wxAuiNotebook::OnTabDragMotion(evt);
-
-		int active = m_tabs.GetActivePage();
-		if (active != wxNOT_FOUND) {
-			m_curPage = active;
-		}
-	});
 }
 
 wxAuiNotebookEx::~wxAuiNotebookEx()
 {
+}
+
+void wxAuiNotebookEx::OnTabDragMotion(wxAuiNotebookEvent& evt)
+{
+	wxAuiNotebook::OnTabDragMotion(evt);
+
+	int active = m_tabs.GetActivePage();
+	if (active != wxNOT_FOUND) {
+		m_curPage = active;
+	}
 }
 
 void wxAuiNotebookEx::RemoveExtraBorders()

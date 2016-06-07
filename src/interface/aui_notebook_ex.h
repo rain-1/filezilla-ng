@@ -28,6 +28,7 @@ protected:
 
 	DECLARE_EVENT_TABLE()
 	void OnPageChanged(wxAuiNotebookEvent& event);
+	void OnTabDragMotion(wxAuiNotebookEvent& evt);
 };
 
 #endif //__AUI_NOTEBOOK_EX_H__
