@@ -724,7 +724,7 @@ void CFileZillaApp::AddStartupProfileRecord(const wxString& msg)
 
 void CFileZillaApp::ShowStartupProfile()
 {
-	if (m_profile_start){// && m_pCommandLine && m_pCommandLine->HasSwitch(CCommandLine::debug_startup)) {
+	if (m_profile_start && m_pCommandLine && m_pCommandLine->HasSwitch(CCommandLine::debug_startup)) {
 		wxString msg = _T("Profile:\n");
 		for (auto const& p : m_startupProfile) {
 			auto const diff = p.first - m_profile_start;
