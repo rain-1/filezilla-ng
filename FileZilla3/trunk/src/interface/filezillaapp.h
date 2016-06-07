@@ -67,8 +67,8 @@ protected:
 
 	std::unique_ptr<CCommandLine> m_pCommandLine;
 
-	bool m_profilingActive;
-	std::list<std::pair<wxDateTime, wxString> > m_startupProfile;
+	fz::monotonic_clock m_profile_start;
+	std::vector<std::pair<fz::monotonic_clock, wxString> > m_startupProfile;
 };
 
 DECLARE_APP(CFileZillaApp)
