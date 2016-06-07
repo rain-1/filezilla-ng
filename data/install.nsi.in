@@ -111,6 +111,7 @@
   Var SKIPLICENSE
   Var GetInstalledSize.total
   Var OldRunDir
+  Var CommandLine
 
 ;--------------------------------
 ; Interface Settings
@@ -205,9 +206,7 @@ FunctionEnd
 
 Function ReadAllUsersCommandline
 
-  ${GetParameters} $R0
-
-  ${GetOptions} $R0 "/user" $R1
+  ${GetOptions} $CommandLine "/user" $R1
 
   ${Unless} ${Errors}
     ${If} $R1 == "current"
@@ -311,9 +310,7 @@ FunctionEnd
 
 Function ReadUpdateCommandline
 
-  ${GetParameters} $R0
-
-  ${GetOptions} $R0 "/update" $R1
+  ${GetOptions} $CommandLine "/update" $R1
 
   ${If} ${Errors}
     StrCpy $PERFORM_UPDATE 0
@@ -325,9 +322,7 @@ FunctionEnd
 
 Function ReadSkipLicense
 
-  ${GetParameters} $R0
-
-  ${GetOptions} $R0 "/skiplicense" $R1
+  ${GetOptions} $CommandLine "/skiplicense" $R1
 
   ${If} ${Errors}
     StrCpy $SKIPLICENSE 0
@@ -344,6 +339,9 @@ Function .onInit
   Push "filezilla.exe"
   Call IsProcessRunning
   Pop $OldRunDir
+
+  ; Store command line
+  ${GetParameters} $CommandLine
 
   ${Unless} ${AtLeastWinVista}
     MessageBox MB_YESNO|MB_ICONSTOP "Unsupported operating system.$\nFileZilla ${VERSION} requires at least Windows Vista and may not work correctly on your system.$\nDo you really want to continue with the installation?" /SD IDNO IDYES installonoldwindows
@@ -1342,6 +1340,8 @@ FunctionEnd
 
 Function un.onInit
 
+  ${un.GetParameters} $CommandLine
+
   Call un.GetUserInfo
   Call un.ReadPreviousVersion
 
@@ -1360,9 +1360,7 @@ Function un.RemoveStartmenu
   Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
   Delete "$SMPROGRAMS\$MUI_TEMP\FileZilla.lnk"
 
-  ${un.GetParameters} $R0
-
-  ${un.GetOptions} $R0 "/keepstartmenudir" $R1
+  ${un.GetOptions} $CommandLine "/keepstartmenudir" $R1
   ${If} ${Errors}
 
     ; Delete empty start menu parent diretories
@@ -1383,9 +1381,7 @@ FunctionEnd
 
 Function un.ConfirmPagePre
 
-  ${un.GetParameters} $R0
-
-  ${un.GetOptions} $R0 "/frominstall" $R1
+  ${un.GetOptions} $CommandLine "/frominstall" $R1
   ${Unless} ${Errors}
     Abort
   ${EndUnless}
@@ -1394,9 +1390,7 @@ FunctionEnd
 
 Function un.FinishPagePre
 
-  ${un.GetParameters} $R0
-
-  ${un.GetOptions} $R0 "/frominstall" $R1
+  ${un.GetOptions} $CommandLine "/frominstall" $R1
   ${Unless} ${Errors}
     SetRebootFlag false
     Abort
@@ -1525,12 +1519,12 @@ Section "Uninstall"
   RMDir "$INSTDIR\resources"
   RMDir "$INSTDIR\docs"
 
-  ${un.GetOptions} $R0 "/frominstall" $R1
+  ${un.GetOptions} $CommandLine "/frominstall" $R1
   ${If} ${Errors}
     RMDir /REBOOTOK "$INSTDIR"
 
-	DeleteRegValue SHCTX "Software\FileZilla Client" "Package"
-	DeleteRegValue SHCTX "Software\FileZilla Client" "Updated"
+    DeleteRegValue SHCTX "Software\FileZilla Client" "Package"
+    DeleteRegValue SHCTX "Software\FileZilla Client" "Updated"
   ${EndIf}
 
   ${If} $un.REMOVE_ALL_USERS == 1
