@@ -615,17 +615,19 @@ void CLocalListView::DisplayDrives()
 {
 	int count = m_fileData.size();
 
-	std::list<wxString> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
-	for( std::list<wxString>::const_iterator it = drives.begin(); it != drives.end(); ++it ) {
+	std::list<std::wstring> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
+	for (auto it = drives.begin(); it != drives.end(); ++it) {
 		wxString drive = *it;
-		if (drive.Right(1) == _T("\\"))
+		if (drive.Right(1) == _T("\\")) {
 			drive.RemoveLast();
+		}
 
 		CLocalFileData data;
 		data.name = drive;
 		data.label = fz::sparse_optional<wxString>(data.name);
 		data.dir = true;
 		data.size = -1;
+		data.icon = GetIconIndex(iconType::dir, _T(""), false);
 
 		m_fileData.push_back(data);
 		m_indexMapping.push_back(count);
@@ -1744,8 +1746,9 @@ int64_t CLocalListView::ItemGetSize(int index) const
 
 void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 {
-	if (!m_pVolumeEnumeratorThread)
+	if (!m_pVolumeEnumeratorThread) {
 		return;
+	}
 
 	std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> volumeInfo;
 	volumeInfo = m_pVolumeEnumeratorThread->GetVolumes();
@@ -1755,22 +1758,30 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		m_pVolumeEnumeratorThread = 0;
 	}
 
-	if (m_dir.GetPath() != _T("\\"))
+	if (m_dir.GetPath() != _T("\\")) {
 		return;
+	}
 
 	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter) {
 		wxString drive = iter->volume;
 
 		unsigned int item, index;
-		for (item = 1; item < m_indexMapping.size(); ++item) {
+		for (item = m_hasParent ? 1 : 0; item < m_indexMapping.size(); ++item) {
 			index = m_indexMapping[item];
-			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" "))
+			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" ")) {
 				break;
+			}
 		}
-		if (item >= m_indexMapping.size())
+		if (item >= m_indexMapping.size()) {
 			continue;
+		}
 
-		m_fileData[index].label = fz::sparse_optional<wxString>(drive + _T(" (") + iter->volumeName + _T(")"));
+		if (!iter->volumeName.empty()) {
+			m_fileData[index].label = fz::sparse_optional<wxString>(drive + _T(" (") + iter->volumeName + _T(")"));
+		}
+		if (iter->icon != -1) {
+			m_fileData[index].icon = iter->icon;
+		}
 
 		RefreshItem(item);
 	}

@@ -400,7 +400,7 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 {
 	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives"));
 
-	std::list<wxString> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
+	std::list<std::wstring> drives = CVolumeDescriptionEnumeratorThread::GetDrives();
 
 	m_pVolumeEnumeratorThread = new CVolumeDescriptionEnumeratorThread(this);
 	if (m_pVolumeEnumeratorThread->Failed()) {
@@ -408,13 +408,12 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 		m_pVolumeEnumeratorThread = 0;
 	}
 
-	for( std::list<wxString>::const_iterator it = drives.begin(); it != drives.end(); ++it ) {
+	for (auto it = drives.begin(); it != drives.end(); ++it) {
 		wxString drive = *it;
 		if (drive.Right(1) == _T("\\"))
 			drive = drive.RemoveLast();
 
-		wxGetApp().AddStartupProfileRecord(wxString::Format(_T("CLocalTreeView::DisplayDrives adding drive %s"), drive.c_str()));
-		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(iconType::dir, drive));
+		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(iconType::dir, _T(""), false));
 		AppendItem(item, _T(""));
 	}
 	SortChildren(parent);
@@ -426,7 +425,7 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 
 #endif
 
-void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, const wxString& knownSubdir /*=_T("")*/)
+void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, const wxString& knownSubdir)
 {
 	fz::local_filesys local_filesys;
 
@@ -990,30 +989,33 @@ bool CLocalTreeView::CreateRoot()
 
 void CLocalTreeView::OnVolumesEnumerated(wxCommandEvent& event)
 {
-	if (!m_pVolumeEnumeratorThread)
+	if (!m_pVolumeEnumeratorThread) {
 		return;
+	}
 
 	std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> volumeInfo;
 	volumeInfo = m_pVolumeEnumeratorThread->GetVolumes();
 
-	if (event.GetEventType() == fzEVT_VOLUMESENUMERATED)
-	{
+	if (event.GetEventType() == fzEVT_VOLUMESENUMERATED) {
 		delete m_pVolumeEnumeratorThread;
 		m_pVolumeEnumeratorThread = 0;
 	}
 
-	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter)
-	{
+	for (std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo>::const_iterator iter = volumeInfo.begin(); iter != volumeInfo.end(); ++iter) {
 		wxString drive = iter->volume;
 
 		wxTreeItemIdValue tmp;
 		wxTreeItemId item = GetFirstChild(m_drives, tmp);
-		while (item)
-		{
+		while (item) {
 			wxString name = GetItemText(item);
-			if (name == drive || name.Left(drive.Len() + 1) == drive + _T(" "))
-			{
-				SetItemText(item, drive + _T(" (") + iter->volumeName + _T(")"));
+			if (name == drive || name.Left(drive.Len() + 1) == drive + _T(" ")) {
+
+				if (!iter->volumeName.empty()) {
+					SetItemText(item, drive + _T(" (") + iter->volumeName + _T(")"));
+				}
+				if (iter->icon != -1) {
+					SetItemImage(item, iter->icon);
+				}
 				break;
 			}
 			item = GetNextChild(m_drives, tmp);

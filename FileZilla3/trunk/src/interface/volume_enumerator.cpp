@@ -1,7 +1,7 @@
 #include <filezilla.h>
 #include "volume_enumerator.h"
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 
 #include <wx/msw/registry.h>
 
@@ -11,12 +11,7 @@ DEFINE_EVENT_TYPE(fzEVT_VOLUMESENUMERATED)
 CVolumeDescriptionEnumeratorThread::CVolumeDescriptionEnumeratorThread(wxEvtHandler* pEvtHandler)
 	: m_pEvtHandler(pEvtHandler)
 {
-	m_failure = false;
-	m_stop = false;
-	m_running = true;
-
 	if (!run()) {
-		m_running = false;
 		m_failure = true;
 	}
 }
@@ -25,95 +20,128 @@ CVolumeDescriptionEnumeratorThread::~CVolumeDescriptionEnumeratorThread()
 {
 	m_stop = true;
 	join();
-
-	for (auto iter = m_volumeInfo.cbegin(); iter != m_volumeInfo.cend(); ++iter) {
-		delete [] iter->pVolume;
-		delete [] iter->pVolumeName;
-	}
 	m_volumeInfo.clear();
 }
 
 void CVolumeDescriptionEnumeratorThread::entry()
 {
-	if (!GetDriveLabels())
+	if (!GetDriveLabels()) {
 		m_failure = true;
-
-	m_running = false;
+	}
 
 	m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMESENUMERATED));
 }
 
-void CVolumeDescriptionEnumeratorThread::ProcessDrive(wxString const& drive)
+void CVolumeDescriptionEnumeratorThread::ProcessDrive(std::wstring const& drive)
 {
-	if ( GetDriveLabel(drive)) {
+	if (GetDriveLabel(drive)) {
+		m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMEENUMERATED));
+	}
+
+	if (GetDriveIcon(drive)) {
 		m_pEvtHandler->QueueEvent(new wxCommandEvent(fzEVT_VOLUMEENUMERATED));
 	}
 }
 
-bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(wxString const& drive)
+bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(std::wstring const& drive)
 {
-	int len = drive.size();
-	wxChar* pVolume = new wxChar[drive.size() + 1];
-	wxStrcpy(pVolume, drive);
-	if (pVolume[drive.size() - 1] == '\\') {
-		pVolume[drive.size() - 1] = 0;
-		--len;
-	}
-	if (!*pVolume) {
-		delete [] pVolume;
+	if (drive.empty()) {
 		return false;
 	}
 
+	std::wstring volume;
+	if (drive[drive.size() - 1] == '\\') {
+		if (drive.size() == 1) {
+			return false;
+		}
+		volume = drive.substr(0, drive.size() - 1);
+	}
+	else {
+		volume = drive;
+	}
+
 	// Check if it is a network share
-	wxChar *share_name = new wxChar[512];
+	wxChar share_name[512];
 	DWORD dwSize = 511;
-	if (!WNetGetConnection(pVolume, share_name, &dwSize)) {
+	if (!WNetGetConnection(volume.c_str(), share_name, &dwSize) && share_name[0]) {
 		fz::scoped_lock l(sync_);
-		t_VolumeInfoInternal volumeInfo;
-		volumeInfo.pVolume = pVolume;
-		volumeInfo.pVolumeName = share_name;
+		t_VolumeInfo volumeInfo;
+		volumeInfo.volume = volume;
+		volumeInfo.volumeName = share_name;
 		m_volumeInfo.push_back(volumeInfo);
 		return true;
 	}
-	else
-		delete [] share_name;
 
 	// Get the label of the drive
-	wxChar* pVolumeName = new wxChar[501];
+	wxChar volume_name[501];
 	int oldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
-	BOOL res = GetVolumeInformation(drive.wc_str(), pVolumeName, 500, 0, 0, 0, 0, 0);
+	BOOL res = GetVolumeInformation(drive.c_str(), volume_name, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
-	if (res && pVolumeName[0]) {
+	if (res && volume_name[0]) {
 		fz::scoped_lock l(sync_);
-		t_VolumeInfoInternal volumeInfo;
-		volumeInfo.pVolume = pVolume;
-		volumeInfo.pVolumeName = pVolumeName;
+		t_VolumeInfo volumeInfo;
+		volumeInfo.volume = volume;
+		volumeInfo.volumeName = volume_name;
 		m_volumeInfo.push_back(volumeInfo);
 		return true;
 	}
 
-	delete [] pVolumeName;
-	delete [] pVolume;
+	return false;
+}
+
+bool CVolumeDescriptionEnumeratorThread::GetDriveIcon(std::wstring const& drive)
+{
+	if (drive.empty()) {
+		return false;
+	}
+
+	std::wstring volume;
+	if (drive[drive.size() - 1] == '\\') {
+		if (drive.size() == 1) {
+			return false;
+		}
+		volume = drive.substr(0, drive.size() - 1);
+	}
+	else {
+		volume = drive;
+	}
+
+	SHFILEINFO shFinfo;
+	memset(&shFinfo, 0, sizeof(SHFILEINFO));
+	if (SHGetFileInfo(volume.c_str(), FILE_ATTRIBUTE_DIRECTORY,
+		&shFinfo, sizeof(SHFILEINFO),
+		SHGFI_ICON))
+	{
+		// we only need the index from the system image list
+		DestroyIcon(shFinfo.hIcon);
+
+		fz::scoped_lock l(sync_);
+		t_VolumeInfo volumeInfo;
+		volumeInfo.volume = volume;
+		volumeInfo.icon = shFinfo.iIcon;
+		m_volumeInfo.push_back(volumeInfo);
+		return true;
+	}
 
 	return false;
 }
 
 bool CVolumeDescriptionEnumeratorThread::GetDriveLabels()
 {
-	std::list<wxString> drives = GetDrives();
+	std::list<std::wstring> drives = GetDrives();
 
-	if( drives.empty() ) {
+	if (drives.empty()) {
 		return true;
 	}
 
-	std::list<wxString>::const_iterator drive_a = drives.end();
-	for( std::list<wxString>::const_iterator it = drives.begin(); it != drives.end() && !m_stop; ++it ) {
+	std::list<std::wstring>::const_iterator drive_a = drives.end();
+	for (std::list<std::wstring>::const_iterator it = drives.begin(); it != drives.end() && !m_stop; ++it) {
 		if (m_stop) {
 			return false;
 		}
 
-		wxString const& drive = *it;
-		if( (drive[0] == 'a' || drive[0] == 'A') && drive_a == drives.end() ) {
+		std::wstring const& drive = *it;
+		if ((drive[0] == 'a' || drive[0] == 'A') && drive_a == drives.end()) {
 			// Defer processing of A:, most commonly the slowest of all drives.
 			drive_a = it;
 		}
@@ -122,7 +150,7 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabels()
 		}
 	}
 
-	if( drive_a != drives.end() && !m_stop ) {
+	if (drive_a != drives.end() && !m_stop) {
 		ProcessDrive(*drive_a);
 	}
 
@@ -156,9 +184,9 @@ bool CVolumeDescriptionEnumeratorThread::IsHidden(wxChar const* drive, long noDr
 	return (noDrives & bit) != 0;
 }
 
-std::list<wxString> CVolumeDescriptionEnumeratorThread::GetDrives()
+std::list<std::wstring> CVolumeDescriptionEnumeratorThread::GetDrives()
 {
-	std::list<wxString> ret;
+	std::list<std::wstring> ret;
 
 	long drivesToHide = GetDrivesToHide();
 
@@ -198,19 +226,12 @@ std::list<CVolumeDescriptionEnumeratorThread::t_VolumeInfo> CVolumeDescriptionEn
 {
 	std::list<t_VolumeInfo> volumeInfo;
 
-	fz::scoped_lock l(sync_);
-
-	for (auto const& internal_info : m_volumeInfo) {
-		t_VolumeInfo info;
-		info.volume = internal_info.pVolume;
-		delete[] internal_info.pVolume;
-		info.volumeName = internal_info.pVolumeName;
-		delete[] internal_info.pVolumeName;
-		volumeInfo.push_back(info);
+	{
+		fz::scoped_lock l(sync_);
+		m_volumeInfo.swap(volumeInfo);
 	}
-	m_volumeInfo.clear();
 
 	return volumeInfo;
 }
 
-#endif //__WXMSW__
+#endif
