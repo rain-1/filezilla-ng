@@ -416,8 +416,8 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 		wxGetApp().AddStartupProfileRecord(wxString::Format(_T("CLocalTreeView::DisplayDrives adding drive %s"), drive.c_str()));
 		wxTreeItemId item = AppendItem(parent, drive, GetIconIndex(iconType::dir, drive));
 		AppendItem(item, _T(""));
-		SortChildren(parent);
 	}
+	SortChildren(parent);
 
 	wxGetApp().AddStartupProfileRecord(_T("CLocalTreeView::DisplayDrives adding drives done"));
 
