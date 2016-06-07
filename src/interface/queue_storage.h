@@ -22,7 +22,7 @@ public:
 	bool BeginTransaction();
 
 	// Call after finishing loading
-	bool EndTransaction();
+	bool EndTransaction(bool rollback = false);
 
 	bool Clear(); // Also clears caches
 

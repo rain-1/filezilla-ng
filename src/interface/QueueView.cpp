@@ -1486,8 +1486,9 @@ void CQueueView::LoadQueue()
 		error = true;
 	else {
 		CServer server;
-		int64_t id;
-		for (id = m_queue_storage.GetServer(server, true); id > 0; id = m_queue_storage.GetServer(server, false)) {
+		int64_t const first_id = m_queue_storage.GetServer(server, true);
+		auto id = first_id;
+		for (; id > 0; id = m_queue_storage.GetServer(server, false)) {
 			m_insertionStart = -1;
 			m_insertionCount = 0;
 			CServerItem *pServerItem = CreateServerItem(server);
@@ -1511,21 +1512,32 @@ void CQueueView::LoadQueue()
 		if (id < 0)
 			error = true;
 
-		if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2)
-			if (!m_queue_storage.Clear())
+		if (error || first_id > 0) {
+			if (COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE) != 2) {
+				if (!m_queue_storage.Clear()) {
+					error = true;
+				}
+			}
+
+			if (!m_queue_storage.EndTransaction()) {
 				error = true;
+			}
 
-		if (!m_queue_storage.EndTransaction())
-			error = true;
-
-		if (!m_queue_storage.Vacuum())
-			error = true;
+			if (!m_queue_storage.Vacuum()) {
+				error = true;
+			}
+		}
+		else {
+			// Queue was already empty. No need to commit
+			if (!m_queue_storage.EndTransaction(true)) {
+				error = true;
+			}
+		}
 	}
 
 	m_insertionStart = -1;
 	m_insertionCount = 0;
 	CommitChanges();
-
 	if (error) {
 		wxString file = CQueueStorage::GetDatabaseFilename();
 		wxString msg = wxString::Format(_("An error occurred loading the transfer queue from \"%s\".\nSome queue items might not have been restored."), file);
