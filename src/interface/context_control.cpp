@@ -496,6 +496,19 @@ int CContextControl::GetTabCount() const
 
 struct CContextControl::_context_controls* CContextControl::GetControlsFromTabIndex(int i)
 {
+	if (!m_tabs) {
+		if (i == 0 && !m_context_controls.empty()) {
+			for (auto & controls : m_context_controls) {
+				if (controls.pViewSplitter != 0) {
+					return &controls;
+				}
+			}
+		}
+		else {
+			return 0;
+		}
+	}
+
 	wxWindow* page = m_tabs->GetPage(i);
 	if (page) {
 		for (auto & controls : m_context_controls) {
