@@ -185,7 +185,7 @@ public:
 	typedef Listing List;
 	typedef typename Listing::value_type value_type;
 
-	CFileListCtrlSort(Listing const& listing, enum DirSortMode dirSortMode, enum NameSortMode nameSortMode)
+	CFileListCtrlSort(Listing const& listing, DirSortMode dirSortMode, NameSortMode nameSortMode)
 		: m_listing(listing), m_dirSortMode(dirSortMode), m_nameSortMode(nameSortMode)
 	{
 	}
@@ -542,8 +542,8 @@ protected:
 
 	void InitSort(int optionID); // Has to be called after initializing columns
 	void SortList(int column = -1, int direction = -1, bool updateSelections = true);
-	enum CFileListCtrlSortBase::DirSortMode GetDirSortMode();
-	enum CFileListCtrlSortBase::NameSortMode GetNameSortMode();
+	CFileListCtrlSortBase::DirSortMode GetDirSortMode();
+	CFileListCtrlSortBase::NameSortMode GetNameSortMode();
 	virtual CSortComparisonObject GetSortComparisonObject() = 0;
 
 	// An empty path denotes a virtual file

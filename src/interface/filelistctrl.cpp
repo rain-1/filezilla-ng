@@ -410,7 +410,7 @@ template<class CFileData> CFileListCtrlSortBase::DirSortMode CFileListCtrl<CFile
 {
 	const int dirSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_DIRSORT);
 
-	enum CFileListCtrlSortBase::DirSortMode dirSortMode;
+	CFileListCtrlSortBase::DirSortMode dirSortMode;
 	switch (dirSortOption)
 	{
 	case 0:
@@ -435,7 +435,7 @@ template<class CFileData> CFileListCtrlSortBase::NameSortMode CFileListCtrl<CFil
 {
 	const int nameSortOption = COptions::Get()->GetOptionVal(OPTION_FILELIST_NAMESORT);
 
-	enum CFileListCtrlSortBase::NameSortMode nameSortMode;
+	CFileListCtrlSortBase::NameSortMode nameSortMode;
 	switch (nameSortOption)
 	{
 	case 0:
