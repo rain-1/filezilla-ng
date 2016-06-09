@@ -1,18 +1,20 @@
 #include <filezilla.h>
-#include "RemoteTreeView.h"
-#include "commandqueue.h"
-#include <wx/dnd.h>
-#include "dndobjects.h"
+
 #include "chmoddialog.h"
-#include "remote_recursive_operation.h"
-#include "inputdialog.h"
+#include "commandqueue.h"
+#include "dndobjects.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"
-#include <wx/clipbrd.h>
+#include "graphics.h"
+#include "inputdialog.h"
+#include "Options.h"
 #include "queue.h"
 #include "QueueView.h"
+#include "RemoteTreeView.h"
+#include "remote_recursive_operation.h"
 #include "themeprovider.h"
-#include "Options.h"
+
+#include <wx/clipbrd.h>
 
 #include <algorithm>
 
@@ -251,6 +253,7 @@ CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState& state,
 
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
+	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
 
 	CreateImageList();
 
@@ -273,12 +276,17 @@ CRemoteTreeView::~CRemoteTreeView()
 	delete m_pImageList;
 }
 
-void CRemoteTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void* v)
+void CRemoteTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
-	if (notification == STATECHANGE_REMOTE_DIR)
-		SetDirectoryListing(m_state.GetRemoteDir(), v ? *reinterpret_cast<bool const*>(v) : false);
-	else if (notification == STATECHANGE_APPLYFILTER)
+	if (notification == STATECHANGE_REMOTE_DIR) {
+		SetDirectoryListing(m_state.GetRemoteDir(), data2 ? *reinterpret_cast<bool const*>(data2) : false);
+	}
+	else if (notification == STATECHANGE_APPLYFILTER) {
 		ApplyFilters(false);
+	}
+	else if (notification == STATECHANGE_TAB_COLOR) {
+		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	}
 }
 
 void CRemoteTreeView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> const& pListing, bool modified)

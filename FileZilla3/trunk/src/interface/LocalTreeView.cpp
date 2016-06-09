@@ -1,15 +1,16 @@
 #include <filezilla.h>
-#include "LocalTreeView.h"
-#include "queue.h"
+
+#include "dndobjects.h"
+#include "dragdropmanager.h"
+#include "drop_target_ex.h"
 #include "filezillaapp.h"
 #include "filter.h"
 #include "file_utils.h"
-#include <wx/dnd.h>
-#include "dndobjects.h"
+#include "graphics.h"
 #include "inputdialog.h"
-#include "dragdropmanager.h"
-#include "drop_target_ex.h"
+#include "LocalTreeView.h"
 #include "Options.h"
+#include "queue.h"
 
 #include <libfilezilla/local_filesys.hpp>
 
@@ -249,6 +250,7 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, C
 
 	state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
+	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
 
 	SetImageList(GetSystemImageList());
 
@@ -848,10 +850,14 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 }
 
-void CLocalTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
+void CLocalTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
-	if (notification == STATECHANGE_LOCAL_DIR)
+	if (notification == STATECHANGE_LOCAL_DIR) {
 		SetDir(m_state.GetLocalDir().GetPath());
+	}
+	else if (notification == STATECHANGE_TAB_COLOR) {
+		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	}
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
 		RefreshListing();

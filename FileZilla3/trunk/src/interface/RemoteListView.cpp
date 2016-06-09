@@ -2,25 +2,28 @@
 
 #define FILELISTCTRL_INCLUDE_TEMPLATE_DEFINITION
 
-#include "RemoteListView.h"
-#include "commandqueue.h"
-#include "queue.h"
-#include "filezillaapp.h"
-#include "inputdialog.h"
 #include "chmoddialog.h"
-#include "filter.h"
-#include <algorithm>
-#include <wx/dcclient.h>
-#include <wx/dnd.h>
+#include "commandqueue.h"
 #include "dndobjects.h"
-#include "Options.h"
-#include "remote_recursive_operation.h"
-#include "edithandler.h"
 #include "dragdropmanager.h"
 #include "drop_target_ex.h"
-#include <wx/clipbrd.h>
+#include "edithandler.h"
+#include "filezillaapp.h"
+#include "filter.h"
+#include "graphics.h"
+#include "inputdialog.h"
+#include "Options.h"
+#include "queue.h"
+#include "RemoteListView.h"
+#include "remote_recursive_operation.h"
 #include "sizeformatting.h"
 #include "timeformatting.h"
+
+#include <wx/clipbrd.h>
+#include <wx/dcclient.h>
+
+#include <algorithm>
+
 #ifdef __WXMSW__
 #include "shellapi.h"
 #include "commctrl.h"
@@ -363,6 +366,7 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
 	state.RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
+	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
 
 	m_dropTarget = -1;
 
@@ -1989,6 +1993,9 @@ void CRemoteListView::OnStateChange(t_statechange_notifications notification, co
 	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR) {
 		wxASSERT(data2);
 		LinkIsNotDir(*(CServerPath*)data2, data);
+	}
+	else if (notification == STATECHANGE_TAB_COLOR) {
+		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);

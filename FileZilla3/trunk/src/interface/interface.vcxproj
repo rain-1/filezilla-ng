@@ -281,6 +281,7 @@
     <ClInclude Include="filter_conditions_dialog.h" />
     <ClInclude Include="filteredit.h" />
     <ClInclude Include="fzputtygen_interface.h" />
+    <ClInclude Include="graphics.h" />
     <ClInclude Include="import.h" />
     <ClInclude Include="inputdialog.h" />
     <ClInclude Include="ipcmutex.h" />

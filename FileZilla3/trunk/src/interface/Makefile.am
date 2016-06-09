@@ -161,6 +161,7 @@ noinst_HEADERS = aboutdialog.h \
 		 filteredit.h \
 		 file_utils.h \
 		 fzputtygen_interface.h \
+		 graphics.h \
 		 import.h \
 		 inputdialog.h \
 		 ipcmutex.h \

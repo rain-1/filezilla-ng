@@ -47,7 +47,7 @@ public:
 			wxString path;
 			std::list<wxString> bookmarks;
 		};
-		std::shared_ptr<_site_bookmarks> site_bookmarks;
+		std::shared_ptr<_site_bookmarks> site_bookmarks; // Could this be moved into the state instead?
 	};
 
 	CContextControl(CMainFrame& mainFrame);

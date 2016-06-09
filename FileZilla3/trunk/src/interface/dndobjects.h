@@ -9,6 +9,8 @@
 
 #include "xmlfunctions.h"
 
+#include <wx/dnd.h>
+
 #include <memory>
 
 class wxRemoteDataFormat : public wxDataFormat

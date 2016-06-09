@@ -33,6 +33,8 @@ enum t_statechange_notifications
 
 	STATECHANGE_LOCAL_RECURSION_LISTING,
 
+	STATECHANGE_TAB_COLOR,
+
 	/* Global notifications */
 	STATECHANGE_QUEUEPROCESSING,
 	STATECHANGE_NEWCONTEXT, /* New context created */
