@@ -1,6 +1,7 @@
 #include <filezilla.h>
 #include "viewheader.h"
 #include "commandqueue.h"
+#include "graphics.h"
 
 #ifdef __WXMSW__
 #include <wx/msw/uxtheme.h>
@@ -334,6 +335,7 @@ CLocalViewHeader::CLocalViewHeader(wxWindow* pParent, CState& state)
 	: CViewHeader(pParent, _("Local site:")), CStateEventHandler(state)
 {
 	state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
+	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
 }
 
 void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
@@ -497,17 +499,19 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	}
 }
 
-void CLocalViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
+void CLocalViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
-	wxASSERT(notification == STATECHANGE_LOCAL_DIR);
-	(void)notification;
-
+	if (notification == STATECHANGE_TAB_COLOR) {
+		SetWindowBackgroundTint(*m_pComboBox, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	}
+	else if (notification == STATECHANGE_LOCAL_DIR) {
 #ifdef __WXGTK__
-	m_autoCompletionText = _T("");
+		m_autoCompletionText = _T("");
 #endif
 
-	wxString dir = m_state.GetLocalDir().GetPath();
-	AddRecentDirectory(dir);
+		wxString dir = m_state.GetLocalDir().GetPath();
+		AddRecentDirectory(dir);
+	}
 }
 
 BEGIN_EVENT_TABLE(CRemoteViewHeader, CViewHeader)
@@ -519,32 +523,35 @@ CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState& state)
 	: CViewHeader(pParent, _("Remote site:")), CStateEventHandler(state)
 {
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
+	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
 	Disable();
 }
 
-void CRemoteViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
+void CRemoteViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
 {
-	wxASSERT(notification == STATECHANGE_REMOTE_DIR);
-	(void)notification;
-
-	m_path = m_state.GetRemotePath();
-	if (m_path.empty()) {
-		m_pComboBox->SetValue(_T(""));
-		Disable();
+	if (notification == STATECHANGE_TAB_COLOR) {
+		SetWindowBackgroundTint(*m_pComboBox, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
 	}
-	else {
-		const CServer* const pServer = m_state.GetServer();
-		if (pServer && *pServer != m_lastServer) {
-			m_pComboBox->Clear();
-			m_recentDirectories.clear();
-			m_sortedRecentDirectories.clear();
-			m_lastServer = *pServer;
+	else if (notification == STATECHANGE_REMOTE_DIR) {
+		m_path = m_state.GetRemotePath();
+		if (m_path.empty()) {
+			m_pComboBox->SetValue(_T(""));
+			Disable();
 		}
-		Enable();
+		else {
+			const CServer* const pServer = m_state.GetServer();
+			if (pServer && *pServer != m_lastServer) {
+				m_pComboBox->Clear();
+				m_recentDirectories.clear();
+				m_sortedRecentDirectories.clear();
+				m_lastServer = *pServer;
+			}
+			Enable();
 #ifdef __WXGTK__
-		GetParent()->m_dirtyTabOrder = true;
+			GetParent()->m_dirtyTabOrder = true;
 #endif
-		AddRecentDirectory(m_path.GetPath());
+			AddRecentDirectory(m_path.GetPath());
+		}
 	}
 }
 

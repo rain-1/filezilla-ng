@@ -2577,7 +2577,7 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 	}
 }
 
-bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path /*=CServerPath()*/, bool isReconnect /*=true*/)
+bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path, bool isReconnect)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)

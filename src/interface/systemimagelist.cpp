@@ -14,6 +14,7 @@
 	#endif
 #endif
 #ifndef __WXMSW__
+#include "graphics.h"
 #include "themeprovider.h"
 #include <wx/rawbmp.h>
 #endif
@@ -38,27 +39,6 @@ HIMAGELIST wxImageListEx::Detach()
 #endif
 
 #ifndef __WXMSW__
-static inline void AlphaComposite_Over_Inplace(wxAlphaPixelData::Iterator &a, wxAlphaPixelData::Iterator &b)
-{
-	// Alpha compositing of a single pixel, b gets composited over a
-	// (well-known over operator), result stored in a.
-	// All RGB and A values have range from 0 to 255, RGB values aren't
-	// premultiplied by A.
-	// Safe for multiple compositions.
-
-	if (!b.Alpha())
-	{
-		// Nothing to do
-		return;
-	}
-
-	int new_alpha = a.Alpha() + b.Alpha() - a.Alpha() * b.Alpha() / 255; // Could only get 0 if both alphas were 0, caught that already.
-	a.Red() = ((int)a.Red() * (255 - b.Alpha()) * a.Alpha() / 255 + (int)b.Red() * b.Alpha()) / new_alpha;
-	a.Green() = ((int)a.Green() * (255 - b.Alpha()) * a.Alpha() / 255 + (int)b.Green() * b.Alpha()) / new_alpha;
-	a.Blue() = ((int)a.Blue() * (255 - b.Alpha()) * a.Alpha() / 255 + (int)b.Blue() * b.Alpha()) / new_alpha;
-	a.Alpha() = new_alpha;
-}
-
 static void OverlaySymlink(wxBitmap& bmp)
 {
 	// This is ugly, but apparently needed so that the data is _really_ in the right internal format
