@@ -22,7 +22,6 @@ bool CStatusLineCtrl::m_initialized = false;
 CStatusLineCtrl::CStatusLineCtrl(CQueueView* pParent, const t_EngineData* const pEngineData, const wxRect& initialPosition)
 	: m_pParent(pParent)
 	, m_pEngineData(pEngineData)
-	, m_gcLastTimeStamp(wxDateTime::Now())
 {
 	wxASSERT(pEngineData);
 
@@ -130,9 +129,9 @@ void CStatusLineCtrl::OnPaint(wxPaintEvent&)
 		}
 
 		if (COptions::Get()->GetOptionVal(OPTION_SPEED_DISPLAY))
-			rate = GetCurrentSpeed();
+			rate = GetMomentarySpeed();
 		else
-			rate = GetSpeed(elapsed_milli_seconds);
+			rate = GetAverageSpeed(elapsed_milli_seconds);
 
 		if (status_.totalSize > 0 && elapsed_milli_seconds >= 1000 && rate > 0) {
 			wxFileOffset r = status_.totalSize - status_.currentOffset;
@@ -251,8 +250,8 @@ void CStatusLineCtrl::ClearTransferStatus()
 		m_transferStatusTimer.Stop();
 
 	m_past_data_count = 0;
-	m_gcLastOffset = -1;
-	m_gcLastSpeed = -1;
+
+	m_monentary_speed_data = monentary_speed_data();
 	Refresh(false);
 }
 
@@ -354,7 +353,7 @@ void CStatusLineCtrl::DrawProgressBar(wxDC& dc, int x, int y, int height, int ba
 	dc.DrawText(text, x + PROGRESSBAR_WIDTH / 2 - w / 2, y + height / 2 - h / 2);
 }
 
-wxFileOffset CStatusLineCtrl::GetSpeed(int elapsed_milli_seconds)
+wxFileOffset CStatusLineCtrl::GetAverageSpeed(int elapsed_milli_seconds)
 {
 	if (status_.empty())
 		return -1;
@@ -384,35 +383,44 @@ wxFileOffset CStatusLineCtrl::GetSpeed(int elapsed_milli_seconds)
 	return ((status_.currentOffset - status_.startOffset - forget.offset) * 1000) / (elapsed_milli_seconds - forget.elapsed);
 }
 
-wxFileOffset CStatusLineCtrl::GetCurrentSpeed()
+wxFileOffset CStatusLineCtrl::GetMomentarySpeed()
 {
-	if (status_.empty())
+	if (status_.empty()) {
 		return -1;
-
-	const wxTimeSpan timeDiff( wxDateTime::UNow().Subtract(m_gcLastTimeStamp) );
-
-	if (timeDiff.GetMilliseconds().GetLo() <= 2000)
-		return m_gcLastSpeed;
-
-	m_gcLastTimeStamp = wxDateTime::UNow();
-
-	if (m_gcLastOffset < 0)
-		m_gcLastOffset = status_.startOffset;
-
-	const wxFileOffset fileOffsetDiff = status_.currentOffset - m_gcLastOffset;
-	m_gcLastOffset = status_.currentOffset;
-	if( fileOffsetDiff >= 0 ) {
-		m_gcLastSpeed = fileOffsetDiff * 1000 / timeDiff.GetMilliseconds().GetLo();
 	}
 
-	return m_gcLastSpeed;
+	if (!m_monentary_speed_data.last_update) {
+		m_monentary_speed_data.last_update = fz::monotonic_clock::now();
+		m_monentary_speed_data.last_offset = status_.startOffset;
+		return -1;
+	}
+
+	fz::duration const time_diff = fz::monotonic_clock::now() - m_monentary_speed_data.last_update;
+	if (time_diff.get_seconds() < 2) {
+		return m_monentary_speed_data.last_speed;
+	}
+
+	m_monentary_speed_data.last_update = fz::monotonic_clock::now();
+
+	if (m_monentary_speed_data.last_offset < 0) {
+		m_monentary_speed_data.last_offset = status_.startOffset;
+	}
+
+	wxFileOffset const fileOffsetDiff = status_.currentOffset - m_monentary_speed_data.last_offset;
+	m_monentary_speed_data.last_offset = status_.currentOffset;
+	if (fileOffsetDiff >= 0) {
+		m_monentary_speed_data.last_speed = fileOffsetDiff * 1000 / time_diff.get_milliseconds();
+	}
+
+	return m_monentary_speed_data.last_speed;
 }
 
-bool CStatusLineCtrl::Show(bool show /*=true*/)
+bool CStatusLineCtrl::Show(bool show)
 {
 	if (show) {
-		if (!m_transferStatusTimer.IsRunning())
+		if (!m_transferStatusTimer.IsRunning()) {
 			m_transferStatusTimer.Start(100);
+		}
 	}
 	else
 		m_transferStatusTimer.Stop();

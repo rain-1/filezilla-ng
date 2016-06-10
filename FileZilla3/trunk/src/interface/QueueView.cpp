@@ -2872,17 +2872,15 @@ wxFileOffset CQueueView::GetCurrentSpeed(bool countDownload, bool countUpload)
 {
 	wxFileOffset totalSpeed = 0;
 
-	for (auto iter = m_statusLineList.begin(); iter != m_statusLineList.end(); ++iter)
-	{
-		CStatusLineCtrl *pCtrl = *iter;
+	for (auto pCtrl : m_statusLineList) {
 		const CFileItem *pItem = pCtrl->GetItem();
 		bool isDownload = pItem->Download();
 
-		if ((isDownload && countDownload) || (!isDownload && countUpload))
-		{
-			wxFileOffset speed = pCtrl->GetCurrentSpeed();
-			if (speed > 0)
+		if ((isDownload && countDownload) || (!isDownload && countUpload)) {
+			wxFileOffset speed = pCtrl->GetMomentarySpeed();
+			if (speed > 0) {
 				totalSpeed += speed;
+			}
 		}
 	}
 

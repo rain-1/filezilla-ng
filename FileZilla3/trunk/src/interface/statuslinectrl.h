@@ -17,8 +17,8 @@ public:
 
 	int64_t GetLastOffset() const { return status_.empty() ? m_lastOffset : status_.currentOffset; }
 	int64_t GetTotalSize() const { return status_.empty() ? -1 : status_.totalSize; }
-	wxFileOffset GetSpeed(int elapsed_milli_seconds);
-	wxFileOffset GetCurrentSpeed();
+	wxFileOffset GetAverageSpeed(int elapsed_milli_seconds);
+	wxFileOffset GetMomentarySpeed();
 
 	virtual bool Show(bool show = true);
 
@@ -52,10 +52,12 @@ protected:
 	} m_past_data[10];
 	int m_past_data_count{};
 
-	//Used by getCurrentSpeed
-	wxDateTime m_gcLastTimeStamp;
-	wxFileOffset m_gcLastOffset{-1};
-	wxFileOffset m_gcLastSpeed{-1};
+	//Used by GetMomentarySpeed
+	struct monentary_speed_data {
+		fz::monotonic_clock last_update;
+		wxFileOffset last_offset{-1};
+		wxFileOffset last_speed{-1};
+	} m_monentary_speed_data;
 
 	//Used to avoid excessive redraws
 	wxBitmap m_data;
