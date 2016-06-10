@@ -468,12 +468,13 @@ void CVerifyCertDialog::LoadTrustedCerts()
 		if (data.host.empty() || data.port < 1 || data.port > 65535)
 			remove = cert;
 
+		fz::datetime const now = fz::datetime::now();
 		int64_t activationTime = GetTextElementInt(cert, "ActivationTime", 0);
-		if (activationTime == 0 || activationTime > wxDateTime::GetTimeNow())
+		if (activationTime == 0 || activationTime > now.get_time_t())
 			remove = cert;
 
 		int64_t expirationTime = GetTextElementInt(cert, "ExpirationTime", 0);
-		if (expirationTime == 0 || expirationTime < wxDateTime::GetTimeNow())
+		if (expirationTime == 0 || expirationTime < now.get_time_t())
 			remove = cert;
 
 		if (IsTrusted(data.host, data.port, data.data, data.len, true)) // Weed out duplicates
