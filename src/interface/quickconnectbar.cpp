@@ -77,8 +77,7 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	wxString error;
 
 	CServerPath path;
-	if (!server.ParseUrl(host, port, user, pass, error, path))
-	{
+	if (!server.ParseUrl(host, port, user, pass, error, path)) {
 		wxString msg = _("Could not parse server address:");
 		msg += _T("\n");
 		msg += error;
@@ -133,8 +132,11 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 		server.SetLogonType(ASK);
 		CLoginManager::Get().RememberPassword(server);
 	}
-	if (!m_pMainFrame->ConnectToServer(server, path))
+	Site site;
+	site.m_server = server;
+	if (!m_pMainFrame->ConnectToSite(site, path)) {
 		return;
+	}
 
 	CRecentServerList::SetMostRecentServer(server);
 }
@@ -175,37 +177,31 @@ void CQuickconnectBar::OnQuickconnectDropdown(wxCommandEvent&)
 void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 {
 	const int id = event.GetId();
-	if (id == 1)
+	if (id == 1) {
 		OnQuickconnect(event);
-	else if (id == 2)
+	}
+	else if (id == 2) {
 		ClearFields();
-	else if (id == 3)
+	}
+	else if (id == 3) {
 		CRecentServerList::Clear();
+	}
 
-	if (id < 10)
+	if (id < 10) {
 		return;
+	}
 
 	unsigned int index = id - 10;
-	if (index >= m_recentServers.size())
+	if (index >= m_recentServers.size()) {
 		return;
+	}
 
 	std::list<CServer>::const_iterator iter = m_recentServers.begin();
 	std::advance(iter, index);
 
-	CServer server = *iter;
-	if (server.GetLogonType() == ASK) {
-		if (!CLoginManager::Get().GetPassword(server, false))
-			return;
-	}
-
-	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState || !pState->m_pEngine)
-	{
-		wxMessageBoxEx(_("FTP Engine not initialized, can't connect"), _("FileZilla Error"), wxICON_EXCLAMATION);
-		return;
-	}
-
-	m_pMainFrame->ConnectToServer(server);
+	Site site;
+	site.m_server = *iter;
+	m_pMainFrame->ConnectToSite(site);
 }
 
 void CQuickconnectBar::ClearFields()

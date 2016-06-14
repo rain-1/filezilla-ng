@@ -1282,14 +1282,8 @@ void CMainFrame::OnReconnect(wxCommandEvent &)
 	}
 
 	Site site = pState->GetLastSite();
-	if (site.m_server && site.m_server.GetLogonType() == ASK) {
-		if (!CLoginManager::Get().GetPassword(site.m_server, false)) {
-			return;
-		}
-	}
-
 	CServerPath path = pState->GetLastServerPath();
-	ConnectToServer(site.m_server, path, true); // FIXME
+	ConnectToSite(site, path);
 }
 
 void CMainFrame::OnRefresh(wxCommandEvent &)
@@ -1905,40 +1899,80 @@ void CMainFrame::OnSitemanagerDropdown(wxCommandEvent& event)
 	}
 }
 
-bool CMainFrame::ConnectToSite(Site & data, bool newTab)
+bool CMainFrame::ConnectToSite(Site & data, CServerPath const& path)
 {
+	// First check if we need to ask user for a password
 	if (data.m_server.GetLogonType() == ASK ||
 		(data.m_server.GetLogonType() == INTERACTIVE && data.m_server.GetUser().empty()))
 	{
-		if (!CLoginManager::Get().GetPassword(data.m_server, false, data.m_server.GetName()))
+		if (!CLoginManager::Get().GetPassword(data.m_server, false, data.m_server.GetName())) {
 			return false;
+		}
 	}
 
-	if (newTab)
-		m_pContextControl->CreateTab();
-
-	if (!ConnectToServer(data.m_server, data.m_default_bookmark.m_remoteDir))
+	// Check if current state is already connected and if needed ask whether to open in new tab
+	CState* pState = CContextManager::Get()->GetCurrentContext();
+	if (!pState) {
 		return false;
+	}
 
-	CState *pState = CContextManager::Get()->GetCurrentContext();
-	if (pState) {
-		if (!data.m_default_bookmark.m_localDir.empty()) {
-			bool set = pState->SetLocalDir(data.m_default_bookmark.m_localDir, 0, false);
-
-			if (set && data.m_default_bookmark.m_sync) {
-				wxASSERT(!data.m_default_bookmark.m_remoteDir.empty());
-				pState->SetSyncBrowse(true, data.m_default_bookmark.m_remoteDir);
+	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
+		int action = COptions::Get()->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE);
+		if (action < 2) {
+			wxDialogEx dlg;
+			if (!dlg.Load(this, _T("ID_ALREADYCONNECTED"))) {
+				return false;
 			}
+
+			if (action != 0) {
+				XRCCTRL(dlg, "ID_OLDTAB", wxRadioButton)->SetValue(true);
+			}
+			else {
+				XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->SetValue(true);
+			}
+
+			if (dlg.ShowModal() != wxID_OK) {
+				return false;
+			}
+
+			if (XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->GetValue()) {
+				action = 0;
+			}
+			else {
+				action = 1;
+			}
+
+			if (XRCCTRL(dlg, "ID_REMEMBER", wxCheckBox)->IsChecked()) {
+				action |= 2;
+			}
+			COptions::Get()->SetOption(OPTION_ALREADYCONNECTED_CHOICE, action);
 		}
 
-		if (data.m_default_bookmark.m_comparison && pState->GetComparisonManager()) {
-			pState->GetComparisonManager()->CompareListings();
+		if (!(action & 1)) {
+			m_pContextControl->CreateTab();
+			pState = CContextManager::Get()->GetCurrentContext();
 		}
 	}
 
-	SetBookmarksFromPath(data.m_path);
-	if (m_pMenuBar)
-		m_pMenuBar->UpdateBookmarkMenu();
+	// Next tell the state to connect
+	if (!pState->Connect(data, path.empty() ? data.m_default_bookmark.m_remoteDir : path)) {
+		return false;
+	}
+
+	// Apply comparison and sync browsing options
+	// FIXME: Move to state?
+	if (!data.m_default_bookmark.m_localDir.empty()) {
+		bool set = pState->SetLocalDir(data.m_default_bookmark.m_localDir, 0, false);
+
+		if (set && data.m_default_bookmark.m_sync) {
+			wxASSERT(!data.m_default_bookmark.m_remoteDir.empty());
+			pState->SetSyncBrowse(true, data.m_default_bookmark.m_remoteDir);
+		}
+	}
+
+	if (data.m_default_bookmark.m_comparison && pState->GetComparisonManager()) {
+		pState->GetComparisonManager()->CompareListings();
+	}
 
 	return true;
 }
@@ -2357,11 +2391,9 @@ void CMainFrame::ProcessCommandLine()
 				return;
 		}
 
-		CState* pState = CContextManager::Get()->GetCurrentContext();
-		if (!pState)
-			return;
-
-		ConnectToServer(server, path);
+		Site site;
+		site.m_server = server;
+		ConnectToSite(site, path);
 	}
 }
 
@@ -2555,83 +2587,6 @@ void CMainFrame::OnMenuCloseTab(wxCommandEvent&)
 		return;
 
 	m_pContextControl->CloseTab(m_pContextControl->GetCurrentTab());
-}
-
-void CMainFrame::SetBookmarksFromPath(const wxString& path)
-{
-	/* FIXME
-	if (!m_pContextControl)
-		return;
-
-	std::shared_ptr<CContextControl::_context_controls::_site_bookmarks> site_bookmarks;
-	for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
-		if (i == m_pContextControl->GetCurrentTab())
-			continue;
-
-		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
-		if (!controls || !controls->site_bookmarks || controls->site_bookmarks->path != path) {
-			continue;
-		}
-
-		site_bookmarks = controls->site_bookmarks;
-		site_bookmarks->bookmarks.clear();
-	}
-	if (!site_bookmarks) {
-		site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
-		site_bookmarks->path = path;
-	}
-
-	CContextControl::_context_controls *controls = m_pContextControl->GetCurrentControls();
-	if (controls) {
-		controls->site_bookmarks = site_bookmarks;
-		CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
-	}*/
-}
-
-bool CMainFrame::ConnectToServer(CServer const& server, const CServerPath &path, bool isReconnect)
-{
-	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
-		return false;
-
-	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
-		int action = COptions::Get()->GetOptionVal(OPTION_ALREADYCONNECTED_CHOICE);
-		if( action < 2 ) {
-			wxDialogEx dlg;
-			if (!dlg.Load(this, _T("ID_ALREADYCONNECTED")))
-				return false;
-
-			if (action != 0)
-				XRCCTRL(dlg, "ID_OLDTAB", wxRadioButton)->SetValue(true);
-			else
-				XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->SetValue(true);
-
-			if (dlg.ShowModal() != wxID_OK)
-				return false;
-
-			if (XRCCTRL(dlg, "ID_NEWTAB", wxRadioButton)->GetValue()) {
-				action = 0;
-			}
-			else {
-				action = 1;
-			}
-
-			if( XRCCTRL(dlg, "ID_REMEMBER", wxCheckBox)->IsChecked() ) {
-				action |= 2;
-			}
-			COptions::Get()->SetOption(OPTION_ALREADYCONNECTED_CHOICE, action);
-		}
-
-		if( !(action & 1) ) {
-			m_pContextControl->CreateTab();
-			pState = CContextManager::Get()->GetCurrentContext();
-		}
-	}
-
-	Site site;
-	site.m_server = server;
-
-	return pState->Connect(site, path);
 }
 
 void CMainFrame::OnToggleToolBar(wxCommandEvent& event)

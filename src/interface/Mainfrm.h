@@ -62,11 +62,9 @@ public:
 
 	void PostInitialize();
 
-	bool ConnectToServer(const CServer& server, const CServerPath& path = CServerPath(), bool isReconnect = false);
-
 	CContextControl* GetContextControl() { return m_pContextControl; }
 
-	bool ConnectToSite(Site & data, bool newTab = false);
+	bool ConnectToSite(Site & data, CServerPath const& path = CServerPath());
 
 	CFileZillaEngineContext& GetEngineContext() { return m_engineContext; }
 private:
@@ -80,8 +78,6 @@ private:
 	void OpenSiteManager(const CServer* pServer = 0);
 
 	void FocusNextEnabled(std::list<wxWindow*>& windowOrder, std::list<wxWindow*>::iterator iter, bool skipFirst, bool forward);
-
-	void SetBookmarksFromPath(const wxString& path);
 
 	CStatusBar* m_pStatusBar{};
 	CMenuBar* m_pMenuBar{};
