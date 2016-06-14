@@ -935,7 +935,7 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 
 
 	server.SetBypassProxy(GetColumnInt(selectServersQuery_, server_table_column_names::bypass_proxy) == 1 );
-	server.SetName( GetColumnText(selectServersQuery_, server_table_column_names::name) );
+	server.SetName(GetColumnText(selectServersQuery_, server_table_column_names::name).ToStdWstring());
 
 	return GetColumnInt64(selectServersQuery_, server_table_column_names::id);
 }

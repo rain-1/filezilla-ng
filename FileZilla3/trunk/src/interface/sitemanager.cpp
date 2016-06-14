@@ -6,7 +6,7 @@
 #include "Options.h"
 #include "xmlfunctions.h"
 
-std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> CSiteManager::m_idMap;
+std::map<int, std::unique_ptr<Site>> CSiteManager::m_idMap;
 
 bool CSiteManager::Load(CSiteManagerXmlHandler& handler)
 {
@@ -43,35 +43,10 @@ bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 				return false;
 		}
 		else if (!strcmp(child.name(), "Server")) {
-			std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(child);
+			std::unique_ptr<Site> data = ReadServerElement(child);
 
 			if (data) {
 				handler.AddSite(std::move(data));
-
-				// Bookmarks
-				for (auto bookmark = child.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
-					wxString name = GetTextElement_Trimmed(bookmark, "Name");
-					if (name.empty())
-						continue;
-
-					auto bookmarkData = std::make_unique<CSiteManagerItemData>(CSiteManagerItemData::BOOKMARK);
-
-					bookmarkData->m_localDir = GetTextElement(bookmark, "LocalDir");
-					bookmarkData->m_remoteDir.SetSafePath(GetTextElement(bookmark, "RemoteDir"));
-					if (bookmarkData->m_localDir.empty() && bookmarkData->m_remoteDir.empty()) {
-						continue;
-					}
-
-					if (!bookmarkData->m_localDir.empty() && !bookmarkData->m_remoteDir.empty())
-						bookmarkData->m_sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
-
-					bookmarkData->m_comparison = GetTextElementBool(bookmark, "DirectoryComparison", false);
-
-					handler.AddBookmark(name, std::move(bookmarkData));
-				}
-
-				if (!handler.LevelUp())
-					return false;
 			}
 		}
 	}
@@ -79,7 +54,25 @@ bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 	return true;
 }
 
-std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(pugi::xml_node element)
+bool CSiteManager::ReadBookmarkElement(Bookmark & bookmark, pugi::xml_node element)
+{
+	bookmark.m_localDir = GetTextElement(element, "LocalDir");
+	bookmark.m_remoteDir.SetSafePath(GetTextElement(element, "RemoteDir"));
+
+	if (bookmark.m_localDir.empty() && bookmark.m_remoteDir.empty()) {
+		return false;
+	}
+
+	if (!bookmark.m_localDir.empty() && !bookmark.m_remoteDir.empty()) {
+		bookmark.m_sync = GetTextElementBool(element, "SyncBrowsing", false);
+	}
+
+	bookmark.m_comparison = GetTextElementBool(element, "DirectoryComparison", false);
+
+	return true;
+}
+
+std::unique_ptr<Site> CSiteManager::ReadServerElement(pugi::xml_node element)
 {
 	CServer server;
 	if (!::GetServer(element, server))
@@ -87,15 +80,26 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(pugi:
 	if (server.GetName().empty())
 		return 0;
 
-	auto data = std::make_unique<CSiteManagerItemData_Site>(server);
+	auto data = std::make_unique<Site>();
+	data->m_server = server;
+
 	data->m_comments = GetTextElement(element, "Comments");
-	data->m_localDir = GetTextElement(element, "LocalDir");
-	data->m_remoteDir.SetSafePath(GetTextElement(element, "RemoteDir"));
+	
+	ReadBookmarkElement(data->m_default_bookmark, element);
 
-	if (!data->m_localDir.empty() && !data->m_remoteDir.empty())
-		data->m_sync = GetTextElementBool(element, "SyncBrowsing", false);
+	// Bookmarks
+	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
+		wxString name = GetTextElement_Trimmed(bookmark, "Name");
+		if (name.empty()) {
+			continue;
+		}
 
-	data->m_comparison = GetTextElementBool(element, "DirectoryComparison", false);
+		Bookmark bookmarkData;
+		if (ReadBookmarkElement(bookmarkData, bookmark)) {
+			bookmarkData.m_name = name;
+			data->m_bookmarks.push_back(bookmarkData);
+		}
+	}
 
 	return data;
 }
@@ -103,7 +107,7 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::ReadServerElement(pugi:
 class CSiteManagerXmlHandler_Menu : public CSiteManagerXmlHandler
 {
 public:
-	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> *idMap, bool predefined)
+	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, std::unique_ptr<Site>> *idMap, bool predefined)
 		: m_pMenu(pMenu), m_idMap(idMap)
 	{
 		m_added_site = false;
@@ -117,11 +121,11 @@ public:
 	unsigned int GetInsertIndex(wxMenu* pMenu, const wxString& name)
 	{
 		unsigned int i;
-		for (i = 0; i < pMenu->GetMenuItemCount(); ++i)
-		{
+		for (i = 0; i < pMenu->GetMenuItemCount(); ++i) {
 			const wxMenuItem* const pItem = pMenu->FindItemByPosition(i);
-			if (!pItem)
+			if (!pItem) {
 				continue;
+			}
 
 			// Use same sorting as site tree in site manager
 #ifdef __WXMSW__
@@ -136,7 +140,7 @@ public:
 		return i;
 	}
 
-	virtual bool AddFolder(const wxString& name, bool)
+	virtual bool AddFolder(wxString const& name, bool)
 	{
 		m_parents.push_back(m_pMenu);
 		m_childNames.push_back(name);
@@ -148,7 +152,7 @@ public:
 		return true;
 	}
 
-	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data)
+	virtual bool AddSite(std::unique_ptr<Site> data)
 	{
 		wxString newName(data->m_server.GetName());
 		int i = GetInsertIndex(m_pMenu, newName);
@@ -164,16 +168,10 @@ public:
 		return true;
 	}
 
-	virtual bool AddBookmark(const wxString&, std::unique_ptr<CSiteManagerItemData>)
-	{
-		return true;
-	}
-
 	// Go up a level
 	virtual bool LevelUp()
 	{
-		if (m_added_site)
-		{
+		if (m_added_site) {
 			m_added_site = false;
 			return true;
 		}
@@ -206,7 +204,7 @@ public:
 protected:
 	wxMenu* m_pMenu;
 
-	std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> *m_idMap;
+	std::map<int, std::unique_ptr<Site>> *m_idMap;
 
 	std::list<wxMenu*> m_parents;
 	std::list<wxString> m_childNames;
@@ -227,15 +225,12 @@ public:
 		return true;
 	}
 
-	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site>)
+	virtual bool AddSite(std::unique_ptr<Site> site)
 	{
-		++sites_;
-		return true;
-	}
-
-	virtual bool AddBookmark(const wxString&, std::unique_ptr<CSiteManagerItemData>)
-	{
-		++bookmarks_;
+		if (site) {
+			++sites_;
+			bookmarks_ += site->m_bookmarks.size();
+		}
 		return true;
 	}
 
@@ -311,7 +306,7 @@ bool CSiteManager::LoadPredefined(CSiteManagerXmlHandler& handler)
 	return true;
 }
 
-std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap)
+std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std::unique_ptr<Site>> &idMap)
 {
 	auto pMenu = std::make_unique<wxMenu>();
 	CSiteManagerXmlHandler_Menu handler(pMenu.get(), &idMap, true);
@@ -327,11 +322,11 @@ std::unique_ptr<wxMenu> CSiteManager::GetSitesMenu_Predefined(std::map<int, std:
 	return pMenu;
 }
 
-std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteById(int id)
+std::unique_ptr<Site> CSiteManager::GetSiteById(int id)
 {
 	auto iter = m_idMap.find(id);
 
-	std::unique_ptr<CSiteManagerItemData_Site> pData;
+	std::unique_ptr<Site> pData;
 	if (iter != m_idMap.end()) {
 		pData = std::move(iter->second);
 	}
@@ -404,7 +399,7 @@ wxString CSiteManager::BuildPath(wxChar root, std::list<wxString> const& segment
 	return ret;
 }
 
-std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteByPath(wxString sitePath)
+std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString sitePath)
 {
 	wxChar c = sitePath.empty() ? 0 : sitePath[0];
 	if (c != '0' && c != '1') {
@@ -462,7 +457,7 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteByPath(wxString 
 		segments.pop_back();
 	}
 
-	std::unique_ptr<CSiteManagerItemData_Site> data = ReadServerElement(child);
+	std::unique_ptr<Site> data = ReadServerElement(child);
 
 	if (!data) {
 		wxMessageBoxEx(_("Could not read server item."), _("Invalid site path"));
@@ -470,88 +465,15 @@ std::unique_ptr<CSiteManagerItemData_Site> CSiteManager::GetSiteByPath(wxString 
 	}
 
 	if (bookmark) {
-		data->m_localDir = GetTextElement(bookmark, "LocalDir");
-		data->m_remoteDir.SetSafePath(GetTextElement(bookmark, "RemoteDir"));
-		if (!data->m_localDir.empty() && !data->m_remoteDir.empty()) {
-			data->m_sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
+		Bookmark bookmarkData;
+		if (ReadBookmarkElement(bookmarkData, bookmark)) {
+			data->m_default_bookmark = bookmarkData;
 		}
-		else
-			data->m_sync = false;
-		data->m_comparison = GetTextElementBool(bookmark, "DirectoryComparison", false);
 	}
 
-	data->m_path = BuildPath( c, segments );
+	data->m_path = BuildPath(c, segments);
 
 	return data;
-}
-
-bool CSiteManager::GetBookmarks(wxString sitePath, std::list<wxString> &bookmarks)
-{
-	if (sitePath.empty())
-		return false;
-	wxChar c = sitePath[0];
-	if (c != '0' && c != '1')
-		return false;
-
-	sitePath = sitePath.Mid(1);
-
-	// We have to synchronize access to sitemanager.xml so that multiple processed don't write
-	// to the same file or one is reading while the other one writes.
-	CInterProcessMutex mutex(MUTEX_SITEMANAGER);
-
-	CXmlFile file;
-	if (c == '0') {
-		file.SetFileName(wxGetApp().GetSettingsFile(_T("sitemanager")));
-	}
-	else {
-		CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
-		if (defaultsDir.empty()) {
-			wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
-			return 0;
-		}
-		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
-	}
-
-	auto document = file.Load();
-	if (!document) {
-		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-		return false;
-	}
-
-	auto element = document.child("Servers");
-	if (!element)
-		return false;
-
-	std::list<wxString> segments;
-	if (!UnescapeSitePath(sitePath, segments)) {
-		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
-		return 0;
-	}
-
-	auto child = GetElementByPath(element, segments);
-
-	if (child && !strcmp(child.name(), "Bookmark"))
-		child = child.parent();
-
-	if (!child || strcmp(child.name(), "Server"))
-		return 0;
-
-	// Bookmarks
-	for (auto bookmark = child.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
-		wxString name = GetTextElement_Trimmed(bookmark, "Name");
-		if (name.empty())
-			continue;
-
-		wxString localPath = GetTextElement(bookmark, "LocalDir");
-		CServerPath remotePath;
-		remotePath.SetSafePath(GetTextElement(bookmark, "RemoteDir"));
-		if (localPath.empty() && remotePath.empty())
-			continue;
-
-		bookmarks.push_back(name);
-	}
-
-	return true;
 }
 
 wxString CSiteManager::AddServer(CServer server)
@@ -597,7 +519,7 @@ wxString CSiteManager::AddServer(CServer server)
 		name = _("New site") + wxString::Format(_T(" %d"), ++i);
 	}
 
-	server.SetName(name);
+	server.SetName(name.ToStdWstring());
 
 	auto xServer = element.append_child("Server");
 	SetServer(xServer, server);

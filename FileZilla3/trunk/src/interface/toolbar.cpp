@@ -125,8 +125,7 @@ void CToolBar::UpdateToolbarState()
 	if (pServer || !idle)
 		canReconnect = false;
 	else {
-		CServer tmp;
-		canReconnect = !pState->GetLastServer().GetHost().empty();
+		canReconnect = static_cast<bool>(pState->GetLastSite().m_server);
 	}
 	EnableTool(XRCID("ID_TOOLBAR_RECONNECT"), canReconnect);
 }

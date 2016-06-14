@@ -23,7 +23,7 @@ class CMenuBar;
 class CQueue;
 class CQueueView;
 class CQuickconnectBar;
-class CSiteManagerItemData_Site;
+class Site;
 class CSplitterWindowEx;
 class CStatusView;
 class CState;
@@ -66,7 +66,7 @@ public:
 
 	CContextControl* GetContextControl() { return m_pContextControl; }
 
-	bool ConnectToSite(CSiteManagerItemData_Site & data, bool newTab = false);
+	bool ConnectToSite(Site & data, bool newTab = false);
 
 	CFileZillaEngineContext& GetEngineContext() { return m_engineContext; }
 private:

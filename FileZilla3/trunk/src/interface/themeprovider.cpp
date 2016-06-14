@@ -297,7 +297,7 @@ void CThemeProvider::OnOptionsChanged(changed_options_t const&)
 	wxArtProvider::Push(this);
 }
 
-wxSize CThemeProvider::GetIconSize(enum iconSize size)
+wxSize CThemeProvider::GetIconSize(iconSize size)
 {
 	int s;
 	if (size == iconSizeSmall) {

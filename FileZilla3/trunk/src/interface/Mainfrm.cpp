@@ -240,8 +240,9 @@ protected:
 					if (pServer->GetName().empty()) {
 						// Can only happen through quickconnect bar
 						CMenuBar* pMenuBar = dynamic_cast<CMenuBar*>(m_pMainFrame->GetMenuBar());
-						if (pMenuBar)
-							pMenuBar->ClearBookmarks();
+						if (pMenuBar) {
+							pMenuBar->UpdateBookmarkMenu();
+						}
 					}
 				}
 			}
@@ -430,7 +431,6 @@ CMainFrame::CMainFrame()
 
 	FixTabOrder();
 
-	RegisterOption(OPTION_LANGUAGE);
 	RegisterOption(OPTION_THEME);
 	RegisterOption(OPTION_THEME_ICONSIZE);
 	RegisterOption(OPTION_MESSAGELOG_POSITION);
@@ -773,14 +773,18 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		if (!pState) {
 			return;
 		}
-		CServer const* pServer = pState->GetServer();
+		
+		Site const& site = pState->GetSite();
 
+		/* FIXME
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-		if (!controls)
+		if (!controls) {
 			return;
-		if (!pServer && !controls->site_bookmarks->path.empty()) {
+		}
+
+		if (!site.m_server && !controls->site_bookmarks->path.empty()) {
 			// Get server from site manager
-			std::unique_ptr<CSiteManagerItemData_Site> data = CSiteManager::GetSiteByPath(controls->site_bookmarks->path);
+			std::unique_ptr<Site> data = CSiteManager::GetSiteByPath(controls->site_bookmarks->path);
 			if (data) {
 				server = data->m_server;
 				pServer = &server;
@@ -809,7 +813,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
 			if (m_pMenuBar)
 				m_pMenuBar->UpdateBookmarkMenu();
-		}
+		}*/
 	}
 	else if (event.GetId() == XRCID("ID_MENU_HELP_WELCOME")) {
 		CWelcomeDialog dlg;
@@ -862,7 +866,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		}
 
-		std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteById(event.GetId());
+		std::unique_ptr<Site> pData = CSiteManager::GetSiteById(event.GetId());
 
 		if (!pData) {
 			event.Skip();
@@ -1242,9 +1246,10 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 
 	CContextControl::_context_controls* controls = m_pContextControl ? m_pContextControl->GetCurrentControls() : 0;
 	if (controls) {
-		COptions::Get()->SetLastServer(controls->pState->GetLastServer());
+		Site site = controls->pState->GetLastSite();
+		COptions::Get()->SetLastServer(site.m_server);
 		COptions::Get()->SetOption(OPTION_LASTSERVERPATH, controls->pState->GetLastServerPath().GetSafePath());
-		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, controls->site_bookmarks ? controls->site_bookmarks->path : wxString());
+		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, site.m_path);
 	}
 
 	for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
@@ -1268,21 +1273,23 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 void CMainFrame::OnReconnect(wxCommandEvent &)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
-	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle())
+	if (pState->IsRemoteConnected() || !pState->IsRemoteIdle()) {
 		return;
+	}
 
-	CServer server = pState->GetLastServer();
-
-	if (server.GetLogonType() == ASK) {
-		if (!CLoginManager::Get().GetPassword(server, false))
+	Site site = pState->GetLastSite();
+	if (site.m_server && site.m_server.GetLogonType() == ASK) {
+		if (!CLoginManager::Get().GetPassword(site.m_server, false)) {
 			return;
+		}
 	}
 
 	CServerPath path = pState->GetLastServerPath();
-	ConnectToServer(server, path, true);
+	ConnectToServer(site.m_server, path, true); // FIXME
 }
 
 void CMainFrame::OnRefresh(wxCommandEvent &)
@@ -1314,7 +1321,7 @@ void CMainFrame::OnTimer(wxTimerEvent& event)
 #endif
 }
 
-void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
+void CMainFrame::OpenSiteManager(CServer const* pServer)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState) {
@@ -1338,7 +1345,8 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 			continue;
 		}
 
-		const wxString& path = controls->site_bookmarks->path;
+		Site const& site = controls->pState->GetSite();
+		wxString const& path = site.m_path;
 		if (path.empty()) {
 			continue;
 		}
@@ -1348,7 +1356,7 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 
 		CSiteManagerDialog::_connected_site connected_site;
 		connected_site.old_path = path;
-		connected_site.server = controls->pState->GetLastServer();
+		connected_site.server = site.m_server;
 		connected_sites.push_back(connected_site);
 		handled_paths.insert(path);
 	}
@@ -1367,6 +1375,8 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 					continue;
 				}
 
+				Site const& site = controls->pState->GetSite();
+	/* FIXME
 				if (connected_sites[j].old_path != controls->site_bookmarks->path) {
 					continue;
 				}
@@ -1375,14 +1385,14 @@ void CMainFrame::OpenSiteManager(const CServer* pServer /*=0*/)
 
 				controls->site_bookmarks->bookmarks.clear();
 				CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
-
+				*/
 				break;
 			}
 		}
 	}
 
 	if (res == wxID_YES) {
-		CSiteManagerItemData_Site data;
+		Site data;
 		if (!dlg.GetServer(data)) {
 			return;
 		}
@@ -1895,7 +1905,7 @@ void CMainFrame::OnSitemanagerDropdown(wxCommandEvent& event)
 	}
 }
 
-bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site & data, bool newTab)
+bool CMainFrame::ConnectToSite(Site & data, bool newTab)
 {
 	if (data.m_server.GetLogonType() == ASK ||
 		(data.m_server.GetLogonType() == INTERACTIVE && data.m_server.GetUser().empty()))
@@ -1907,21 +1917,21 @@ bool CMainFrame::ConnectToSite(CSiteManagerItemData_Site & data, bool newTab)
 	if (newTab)
 		m_pContextControl->CreateTab();
 
-	if (!ConnectToServer(data.m_server, data.m_remoteDir))
+	if (!ConnectToServer(data.m_server, data.m_default_bookmark.m_remoteDir))
 		return false;
 
 	CState *pState = CContextManager::Get()->GetCurrentContext();
 	if (pState) {
-		if (!data.m_localDir.empty()) {
-			bool set = pState->SetLocalDir(data.m_localDir, 0, false);
+		if (!data.m_default_bookmark.m_localDir.empty()) {
+			bool set = pState->SetLocalDir(data.m_default_bookmark.m_localDir, 0, false);
 
-			if (set && data.m_sync) {
-				wxASSERT(!data.m_remoteDir.empty());
-				pState->SetSyncBrowse(true, data.m_remoteDir);
+			if (set && data.m_default_bookmark.m_sync) {
+				wxASSERT(!data.m_default_bookmark.m_remoteDir.empty());
+				pState->SetSyncBrowse(true, data.m_default_bookmark.m_remoteDir);
 			}
 		}
 
-		if (data.m_comparison && pState->GetComparisonManager()) {
+		if (data.m_default_bookmark.m_comparison && pState->GetComparisonManager()) {
 			pState->GetComparisonManager()->CompareListings();
 		}
 	}
@@ -2310,7 +2320,7 @@ void CMainFrame::ProcessCommandLine()
 		}
 	}
 	else if ((site = pCommandLine->GetOption(CCommandLine::site)) != _T("")) {
-		std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteByPath(site);
+		std::unique_ptr<Site> pData = CSiteManager::GetSiteByPath(site);
 
 		if (pData) {
 			ConnectToSite(*pData);
@@ -2549,6 +2559,7 @@ void CMainFrame::OnMenuCloseTab(wxCommandEvent&)
 
 void CMainFrame::SetBookmarksFromPath(const wxString& path)
 {
+	/* FIXME
 	if (!m_pContextControl)
 		return;
 
@@ -2574,10 +2585,10 @@ void CMainFrame::SetBookmarksFromPath(const wxString& path)
 	if (controls) {
 		controls->site_bookmarks = site_bookmarks;
 		CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
-	}
+	}*/
 }
 
-bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path, bool isReconnect)
+bool CMainFrame::ConnectToServer(CServer const& server, const CServerPath &path, bool isReconnect)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
 	if (!pState)
@@ -2617,13 +2628,10 @@ bool CMainFrame::ConnectToServer(const CServer &server, const CServerPath &path,
 		}
 	}
 
-	CContextControl::_context_controls* controls = m_pContextControl->GetControlsFromState(pState);
-	if (!isReconnect && controls) {
-		controls->site_bookmarks.reset();
-		m_pMenuBar->ClearBookmarks();
-	}
+	Site site;
+	site.m_server = server;
 
-	return pState->Connect(server, path);
+	return pState->Connect(site, path);
 }
 
 void CMainFrame::OnToggleToolBar(wxCommandEvent& event)
@@ -2685,8 +2693,7 @@ void CMainFrame::OnOptionsChanged(changed_options_t const& options)
 		UpdateLayout();
 	}
 
-	bool const language_changed = options.test(OPTION_LANGUAGE);
-	if (options.test(OPTION_THEME) || options.test(OPTION_THEME_ICONSIZE) || language_changed) {
+	if (options.test(OPTION_THEME) || options.test(OPTION_THEME_ICONSIZE)) {
 		CreateMainToolBar();
 		if (m_pToolBar) {
 			m_pToolBar->UpdateToolbarState();

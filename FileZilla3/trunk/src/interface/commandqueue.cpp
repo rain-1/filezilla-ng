@@ -96,8 +96,9 @@ void CCommandQueue::ProcessNextCommand()
 		else
 			m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 
-		if (!m_state.SuccessfulConnect())
-			m_state.SetServer(0);
+		if (!m_state.SuccessfulConnect()) {
+			m_state.SetSite(Site());
+		}
 	}
 }
 

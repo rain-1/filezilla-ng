@@ -2,6 +2,7 @@
 #define __STATE_H__
 
 #include "local_path.h"
+#include "sitemanager.h"
 
 #include <memory>
 
@@ -116,7 +117,7 @@ public:
 	bool SetLocalDir(CLocalPath const& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
 	bool SetLocalDir(const wxString& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
 
-	bool Connect(const CServer& server, const CServerPath& path = CServerPath());
+	bool Connect(Site const& site, const CServerPath& path = CServerPath());
 	bool Disconnect();
 
 	bool ChangeRemoteDir(const CServerPath& path, const wxString& subdir = _T(""), int flags = 0, bool ignore_busy = false);
@@ -124,7 +125,8 @@ public:
 	std::shared_ptr<CDirectoryListing> GetRemoteDir() const;
 	const CServerPath GetRemotePath() const;
 
-	const CServer* GetServer() const;
+	Site const& GetSite() const;
+	CServer const* GetServer() const;
 	wxString GetTitle() const;
 
 	void RefreshLocal();
@@ -165,10 +167,10 @@ public:
 	bool SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root = CServerPath());
 	bool GetSyncBrowse() const { return !m_sync_browse.local_root.empty(); }
 
-	CServer GetLastServer() const { return m_last_server; }
+	Site GetLastSite() const { return m_last_site; }
 	CServerPath GetLastServerPath() const { return m_last_path; }
-	void SetLastServer(const CServer& server, const CServerPath& path)
-	{ m_last_server = server; m_last_path = path; }
+	void SetLastSite(Site const& server, CServerPath const& path)
+		{ m_last_site = server; m_last_path = path; }
 
 	bool GetSecurityInfo(CCertificateNotification *& pInfo);
 	bool GetSecurityInfo(CSftpEncryptionNotification *& pInfo);
@@ -182,17 +184,21 @@ public:
 	void ClearPreviouslyVisitedLocalSubdir() { m_previouslyVisitedLocalSubdir = _T(""); }
 	void ClearPreviouslyVisitedRemoteSubdir() { m_previouslyVisitedRemoteSubdir = _T(""); }
 
+	wxColour GetColour() const { return m_colour; }
+	void SetColour(wxColour const& colour);
+
 protected:
-	void SetServer(const CServer* server, CServerPath const& path = CServerPath());
+	void SetSite(Site const& site, CServerPath const& path = CServerPath());
 
 	CLocalPath m_localDir;
 	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
-	CServer* m_pServer{};
+	Site m_site;
+	
 	wxString m_title;
 	bool m_successful_connect{};
 
-	CServer m_last_server;
+	Site m_last_site;
 	CServerPath m_last_path;
 
 	CMainFrame& m_mainFrame;
@@ -227,6 +233,8 @@ protected:
 
 	wxString m_previouslyVisitedLocalSubdir;
 	wxString m_previouslyVisitedRemoteSubdir;
+
+	wxColour m_colour;
 };
 
 class CGlobalStateEventHandler

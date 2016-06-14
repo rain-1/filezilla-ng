@@ -41,13 +41,6 @@ public:
 		CSplitterWindowEx* pRemoteSplitter{};
 
 		CState* pState{};
-
-		struct _site_bookmarks
-		{
-			wxString path;
-			std::list<wxString> bookmarks;
-		};
-		std::shared_ptr<_site_bookmarks> site_bookmarks; // Could this be moved into the state instead?
 	};
 
 	CContextControl(CMainFrame& mainFrame);

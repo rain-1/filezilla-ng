@@ -88,10 +88,28 @@ void CContextControl::CreateTab()
 		}
 
 		// Restore last server and path
-		CServer last_server;
-		CServerPath last_path;
-		if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH)))
-			pState->SetLastServer(last_server, last_path);
+		auto * current = GetCurrentControls();
+		if (current) {
+			pState->SetLastSite(current->pState->GetLastSite(), current->pState->GetLastServerPath());
+		}
+		else {
+			CServer last_server;
+			CServerPath last_path;
+			if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH))) {
+				wxString last_site_path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
+
+
+				std::unique_ptr<Site> site;
+				if (!last_site_path.empty()) {
+					site = CSiteManager::GetSiteByPath(last_site_path);
+				}
+				if (!site || site->m_server != last_server) {
+					site.reset(new Site);
+					site->m_server = last_server;
+				}
+				pState->SetLastSite(*site, last_path);
+			}				
+		}
 
 		CreateContextControls(*pState);
 
@@ -278,21 +296,8 @@ void CContextControl::CreateContextControls(CState& state)
 
 	if (m_tabs) {
 		m_tabs->AddPage(context_controls.pViewSplitter, state.GetTitle());
-
-		// Copy reconnect and bookmark information
-		state.SetLastServer(
-			m_context_controls[m_current_context_controls].pState->GetLastServer(),
-			m_context_controls[m_current_context_controls].pState->GetLastServerPath());
-
-		context_controls.site_bookmarks = m_context_controls[m_current_context_controls].site_bookmarks;
 	}
 	else {
-		context_controls.site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
-
-		context_controls.site_bookmarks->path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
-		CSiteManager::GetBookmarks(context_controls.site_bookmarks->path,
-			context_controls.site_bookmarks->bookmarks);
-
 		Initialize(context_controls.pViewSplitter);
 	}
 
@@ -380,7 +385,6 @@ bool CContextControl::CloseTab(int tab)
 		m_tabs = 0;
 
 		removeControls->pViewSplitter = 0;
-		removeControls->site_bookmarks.reset();
 
 		CContextManager::Get()->SetCurrentContext(keptControls->pState);
 
@@ -398,7 +402,6 @@ bool CContextControl::CloseTab(int tab)
 		}
 
 		removeControls->pViewSplitter = 0;
-		removeControls->site_bookmarks.reset();
 		m_tabs->DeletePage(tab);
 	}
 

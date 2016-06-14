@@ -56,6 +56,27 @@ EVT_BUTTON(XRCID("ID_NEWBOOKMARK"), CSiteManagerDialog::OnNewBookmark)
 EVT_BUTTON(XRCID("ID_BOOKMARK_BROWSE"), CSiteManagerDialog::OnBookmarkBrowse)
 END_EVENT_TABLE()
 
+class CSiteManagerItemData : public wxTreeItemData
+{
+public:
+	CSiteManagerItemData() = default;
+
+	CSiteManagerItemData(std::unique_ptr<Site> && site)
+		: m_site(std::move(site))
+	{}
+
+	// While inside tree, the contents of the path and bookmarks members are inconsistent
+	std::unique_ptr<Site> m_site;
+
+	// While inside tree, the nam member is inconsistent
+	std::unique_ptr<Bookmark> m_bookmark;
+
+	// Needed to keep track of currently connected sites so that
+	// bookmarks and bookmark path can be updated in response to
+	// changes done here
+	int connected_item{-1};
+};
+
 class CSiteManagerDialogDataObject : public wxDataObjectSimple
 {
 public:
@@ -82,6 +103,61 @@ public:
 		m_pSiteManager = pSiteManager;
 	}
 
+	bool IsValidDropLocation(wxTreeItemId const& hit, wxDragResult const& def)
+	{
+		if (!hit) {
+			return false;
+		}
+		if (hit == m_pSiteManager->m_dropSource) {
+			return false;
+		}
+
+		const bool predefined = m_pSiteManager->IsPredefinedItem(hit);
+		if (predefined) {
+			return false;
+		}
+
+		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
+		if (!pTree) {
+			return false;
+		}
+
+		CSiteManagerItemData *pData = (CSiteManagerItemData *)pTree->GetItemData(hit);
+		CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(m_pSiteManager->m_dropSource);
+		if (pData) {
+			// Cannot drop on bookmark
+			if (!pData->m_site) {
+				return false;
+			}
+
+			// If dropping on a site, source needs to be a bookmark
+			if (!pSourceData || pSourceData->m_site) {
+				return false;
+			}
+		}
+		// Target is a directory, so source must not be a bookmark
+		else if (pSourceData && !pSourceData->m_site) {
+			return false;
+		}
+
+		// Disallow dragging into own child
+		wxTreeItemId item = hit;
+		while (item != pTree->GetRootItem()) {
+			if (item == m_pSiteManager->m_dropSource) {
+				ClearDropHighlight();
+				return wxDragNone;
+			}
+			item = pTree->GetItemParent(item);
+		}
+
+		// If moving, disallow moving to direct parent
+		if (def == wxDragMove && pTree->GetItemParent(m_pSiteManager->m_dropSource) == hit) {
+			return false;
+		}
+
+		return true;
+	}
+
 	virtual wxDragResult OnData(wxCoord x, wxCoord y, wxDragResult def)
 	{
 		ClearDropHighlight();
@@ -93,44 +169,13 @@ public:
 		}
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
-		if (!hit)
+		if (!IsValidDropLocation(hit, def)) {
 			return wxDragNone;
-		if (hit == m_pSiteManager->m_dropSource)
-			return wxDragNone;
-
-		const bool predefined = m_pSiteManager->IsPredefinedItem(hit);
-		if (predefined)
-			return wxDragNone;
-
-		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
-		CSiteManagerItemData *pData = (CSiteManagerItemData *)pTree->GetItemData(hit);
-		CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(m_pSiteManager->m_dropSource);
-		if (pData)
-		{
-			if (pData->m_type == CSiteManagerItemData::BOOKMARK)
-				return wxDragNone;
-			if (!pSourceData || pSourceData->m_type != CSiteManagerItemData::BOOKMARK)
-				return wxDragNone;
-		}
-		else if (pSourceData && pSourceData->m_type == CSiteManagerItemData::BOOKMARK)
-			return wxDragNone;
-
-		wxTreeItemId item = hit;
-		while (item != pTree->GetRootItem())
-		{
-			if (item == m_pSiteManager->m_dropSource)
-			{
-				ClearDropHighlight();
-				return wxDragNone;
-			}
-			item = pTree->GetItemParent(item);
 		}
 
-		if (def == wxDragMove && pTree->GetItemParent(m_pSiteManager->m_dropSource) == hit)
+		if (!m_pSiteManager->MoveItems(m_pSiteManager->m_dropSource, hit, def == wxDragCopy)) {
 			return wxDragNone;
-
-		if (!m_pSiteManager->MoveItems(m_pSiteManager->m_dropSource, hit, def == wxDragCopy))
-			return wxDragNone;
+		}
 
 		return def;
 	}
@@ -141,37 +186,8 @@ public:
 		ClearDropHighlight();
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
-		if (!hit)
-			return false;
-		if (hit == m_pSiteManager->m_dropSource)
-			return false;
-
-		const bool predefined = m_pSiteManager->IsPredefinedItem(hit);
-		if (predefined)
-			return false;
-
-		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
-		CSiteManagerItemData *pData = (CSiteManagerItemData *)pTree->GetItemData(hit);
-		CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(m_pSiteManager->m_dropSource);
-		if (pData)
-		{
-			if (pData->m_type == CSiteManagerItemData::BOOKMARK)
-				return false;
-			if (!pSourceData || pSourceData->m_type != CSiteManagerItemData::BOOKMARK)
-				return false;
-		}
-		else if (pSourceData && pSourceData->m_type == CSiteManagerItemData::BOOKMARK)
-			return false;
-
-		wxTreeItemId item = hit;
-		while (item != pTree->GetRootItem())
-		{
-			if (item == m_pSiteManager->m_dropSource)
-			{
-				ClearDropHighlight();
-				return false;
-			}
-			item = pTree->GetItemParent(item);
+		if (!IsValidDropLocation(hit, wxDragCopy)) {
+			return wxDragNone;
 		}
 
 		return true;
@@ -215,61 +231,8 @@ public:
 		}
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
-		if (!hit)
-		{
+		if (!IsValidDropLocation(hit, def)) {
 			ClearDropHighlight();
-			return wxDragNone;
-		}
-		if (hit == m_pSiteManager->m_dropSource)
-		{
-			ClearDropHighlight();
-			return wxDragNone;
-		}
-
-		const bool predefined = m_pSiteManager->IsPredefinedItem(hit);
-		if (predefined)
-		{
-			ClearDropHighlight();
-			return wxDragNone;
-		}
-
-		wxTreeCtrl *pTree = XRCCTRL(*m_pSiteManager, "ID_SITETREE", wxTreeCtrl);
-		CSiteManagerItemData *pData = static_cast<CSiteManagerItemData *>(pTree->GetItemData(hit));
-		CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(m_pSiteManager->m_dropSource);
-		if (pData)
-		{
-			if (pData->m_type == CSiteManagerItemData::BOOKMARK)
-			{
-				ClearDropHighlight();
-				return wxDragNone;
-			}
-			if (!pSourceData || pSourceData->m_type != CSiteManagerItemData::BOOKMARK)
-			{
-				ClearDropHighlight();
-				return wxDragNone;
-			}
-		}
-		else if (pSourceData && pSourceData->m_type == CSiteManagerItemData::BOOKMARK)
-		{
-			ClearDropHighlight();
-			return wxDragNone;
-		}
-
-		wxTreeItemId item = hit;
-		while (item != pTree->GetRootItem())
-		{
-			if (item == m_pSiteManager->m_dropSource)
-			{
-				ClearDropHighlight();
-				return wxDragNone;
-			}
-			item = pTree->GetItemParent(item);
-		}
-
-		if (def == wxDragMove && pTree->GetItemParent(m_pSiteManager->m_dropSource) == hit)
-		{
-			ClearDropHighlight();
-			return wxDragNone;
 		}
 
 		DisplayDropHighlight(wxPoint(x, y));
@@ -460,8 +423,9 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 
 void CSiteManagerDialog::MarkConnectedSites()
 {
-	for (int i = 0; i < (int)m_connected_sites->size(); ++i)
+	for (int i = 0; i < (int)m_connected_sites->size(); ++i) {
 		MarkConnectedSite(i);
+	}
 }
 
 void CSiteManagerDialog::MarkConnectedSite(int connected_site)
@@ -469,54 +433,56 @@ void CSiteManagerDialog::MarkConnectedSite(int connected_site)
 	wxString connected_site_path = (*m_connected_sites)[connected_site].old_path;
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
-	if (connected_site_path.Left(1) == _T("1"))
-	{
+	if (connected_site_path.Left(1) == _T("1")) {
 		// Default sites never change
 		(*m_connected_sites)[connected_site].new_path = (*m_connected_sites)[connected_site].old_path;
 		return;
 	}
 
-	if (connected_site_path.Left(1) != _T("0"))
+	if (connected_site_path.Left(1) != _T("0")) {
 		return;
+	}
 
 	std::list<wxString> segments;
-	if (!CSiteManager::UnescapeSitePath(connected_site_path.Mid(1), segments))
+	if (!CSiteManager::UnescapeSitePath(connected_site_path.Mid(1), segments)) {
 		return;
+	}
 
 	wxTreeItemId current = m_ownSites;
-	while (!segments.empty())
-	{
+	while (!segments.empty()) {
 		wxTreeItemIdValue c;
 		wxTreeItemId child = pTree->GetFirstChild(current, c);
-		while (child)
-		{
-			if (pTree->GetItemText(child) == segments.front())
+		while (child) {
+			if (pTree->GetItemText(child) == segments.front()) {
 				break;
+			}
 
 			child = pTree->GetNextChild(current, c);
 		}
-		if (!child)
+		if (!child) {
 			return;
+		}
 
 		segments.pop_front();
 		current = child;
 	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(current));
-	if (!data || data->m_type != CSiteManagerItemData::SITE)
+	if (!data || !data->m_site) {
 		return;
+	}
 
-	CSiteManagerItemData_Site *site_data = static_cast<CSiteManagerItemData_Site* >(data);
-	wxASSERT(site_data->connected_item == -1);
-	site_data->connected_item = connected_site;
+	wxASSERT(data->connected_item == -1);
+	data->connected_item = connected_site;
 }
 
 void CSiteManagerDialog::CreateControls(wxWindow* parent)
 {
-	if( !wxDialogEx::Load(parent, _T("ID_SITEMANAGER"))) {
+	if (!wxDialogEx::Load(parent, _T("ID_SITEMANAGER"))) {
 		return;
 	}
 
@@ -526,13 +492,15 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 
 	wxChoice *pChoice = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice);
 	wxASSERT(pChoice);
-	for (int i = 0; i < SERVERTYPE_MAX; ++i)
-		pChoice->Append(CServer::GetNameFromServerType((enum ServerType)i));
+	for (int i = 0; i < SERVERTYPE_MAX; ++i) {
+		pChoice->Append(CServer::GetNameFromServerType(static_cast<ServerType>(i)));
+	}
 
 	pChoice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 	wxASSERT(pChoice);
-	for (int i = 0; i < LOGONTYPE_MAX; ++i)
-		pChoice->Append(CServer::GetNameFromLogonType((enum LogonType)i));
+	for (int i = 0; i < LOGONTYPE_MAX; ++i) {
+		pChoice->Append(CServer::GetNameFromLogonType(static_cast<LogonType>(i)));
+	}
 
 	wxChoice* pEncryption = XRCCTRL(*this, "ID_ENCRYPTION", wxChoice);
 	pEncryption->Append(_("Use explicit FTP over TLS if available"));
@@ -572,14 +540,12 @@ void CSiteManagerDialog::OnConnect(wxCommandEvent&)
 		return;
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
-	{
+	if (!data) {
 		wxBell();
 		return;
 	}
 
-	if (!Verify())
-	{
+	if (!Verify()) {
 		wxBell();
 		return;
 	}
@@ -638,7 +604,7 @@ public:
 		return true;
 	}
 
-	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data)
+	virtual bool AddSite(std::unique_ptr<Site> data)
 	{
 		if (m_kiosk && !m_predefined &&
 			data->m_server.GetLogonType() == NORMAL)
@@ -650,17 +616,16 @@ public:
 
 		const wxString name(data->m_server.GetName());
 
-		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 2, 2, data.release());
-
-		m_item = newItem;
-		m_expand.push_back(true);
+		CSiteManagerItemData* pData = new CSiteManagerItemData(std::move(data));
+		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 2, 2, pData);
 
 		if (!m_wrong_sel_depth && !m_lastSelection.empty()) {
 			const wxString& first = m_lastSelection.front();
 			if (first == name) {
 				m_lastSelection.pop_front();
-				if (m_lastSelection.empty())
+				if (m_lastSelection.empty()) {
 					m_pTree->SafeSelectItem(newItem);
+				}
 			}
 			else
 				++m_wrong_sel_depth;
@@ -668,16 +633,25 @@ public:
 		else
 			++m_wrong_sel_depth;
 
+		for (auto const& bookmark : pData->m_site->m_bookmarks) {
+			AddBookmark(newItem, bookmark);
+		}
+
+		m_pTree->SortChildren(newItem);
+		m_pTree->Expand(newItem);
+		
 		return true;
 	}
 
-	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data)
+	bool AddBookmark(wxTreeItemId const& parent, Bookmark const& bookmark)
 	{
-		wxTreeItemId newItem = m_pTree->AppendItem(m_item, name, 3, 3, data.release());
+		CSiteManagerItemData* pData = new CSiteManagerItemData;
+		pData->m_bookmark = std::make_unique<Bookmark>(bookmark);
+		wxTreeItemId newItem = m_pTree->AppendItem(parent, bookmark.m_name, 3, 3, pData);
 
 		if (!m_wrong_sel_depth && !m_lastSelection.empty()) {
 			const wxString& first = m_lastSelection.front();
-			if (first == name) {
+			if (first == bookmark.m_name) {
 				m_lastSelection.clear();
 				m_pTree->SafeSelectItem(newItem);
 			}
@@ -691,8 +665,7 @@ public:
 		if (m_wrong_sel_depth)
 			m_wrong_sel_depth--;
 
-		if (!m_expand.empty())
-		{
+		if (!m_expand.empty()) {
 			const bool expand = m_expand.back();
 			m_expand.pop_back();
 			if (expand)
@@ -787,7 +760,7 @@ bool CSiteManagerDialog::Load()
 	return res;
 }
 
-bool CSiteManagerDialog::Save(pugi::xml_node element /*=0*/, wxTreeItemId treeId /*=wxTreeItemId()*/)
+bool CSiteManagerDialog::Save(pugi::xml_node element, wxTreeItemId treeId)
 {
 	if (!m_pSiteManagerMutex)
 		return false;
@@ -848,8 +821,9 @@ bool CSiteManagerDialog::Save(pugi::xml_node element /*=0*/, wxTreeItemId treeId
 bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return false;
+	}
 
 	wxString const name = pTree->GetItemText(child);
 
@@ -861,46 +835,53 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 		AddTextElement(node, name);
 		Save(node, child);
 	}
-	else if (data->m_type == CSiteManagerItemData::SITE) {
-		CSiteManagerItemData_Site *site_data = static_cast<CSiteManagerItemData_Site* >(data);
+	else if (data->m_site) {
 		auto node = element.append_child("Server");
-		SetServer(node, site_data->m_server);
+		SetServer(node, data->m_site->m_server);
 
 		// Save comments
-		AddTextElement(node, "Comments", site_data->m_comments);
+		AddTextElement(node, "Comments", data->m_site->m_comments);
 
 		// Save local dir
-		AddTextElement(node, "LocalDir", data->m_localDir);
+		AddTextElement(node, "LocalDir", data->m_site->m_default_bookmark.m_localDir);
 
 		// Save remote dir
-		AddTextElement(node, "RemoteDir", data->m_remoteDir.GetSafePath());
+		AddTextElement(node, "RemoteDir", data->m_site->m_default_bookmark.m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(node, "SyncBrowsing", data->m_sync ? "1" : "0");
-		AddTextElementRaw(node, "DirectoryComparison", data->m_comparison ? "1" : "0");
+		AddTextElementRaw(node, "SyncBrowsing", data->m_site->m_default_bookmark.m_sync ? "1" : "0");
+		AddTextElementRaw(node, "DirectoryComparison", data->m_site->m_default_bookmark.m_comparison ? "1" : "0");
 		AddTextElement(node, name);
+
+		data->m_site->m_bookmarks.clear();
 
 		Save(node, child);
 
-		if (site_data->connected_item != -1) {
-			if ((*m_connected_sites)[site_data->connected_item].server == site_data->m_server) {
-				(*m_connected_sites)[site_data->connected_item].new_path = GetSitePath(child);
-				(*m_connected_sites)[site_data->connected_item].server = site_data->m_server;
+		if (data->connected_item != -1) {
+			if ((*m_connected_sites)[data->connected_item].server.EqualsNoPass(data->m_site->m_server)) {
+				(*m_connected_sites)[data->connected_item].new_path = GetSitePath(child);
+				(*m_connected_sites)[data->connected_item].server = data->m_site->m_server;
 			}
 		}
 	}
-	else {
+	else if (data->m_bookmark) {
+		data->m_bookmark->m_name = name;
+		CSiteManagerItemData* siteData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(pTree->GetItemParent(child)));
+		if (siteData && siteData->m_site) {
+			siteData->m_site->m_bookmarks.push_back(*data->m_bookmark);
+		}
+
 		auto node = element.append_child("Bookmark");
 
 		AddTextElement(node, "Name", name);
 
 		// Save local dir
-		AddTextElement(node, "LocalDir", data->m_localDir);
+		AddTextElement(node, "LocalDir", data->m_bookmark->m_localDir);
 
 		// Save remote dir
-		AddTextElement(node, "RemoteDir", data->m_remoteDir.GetSafePath());
+		AddTextElement(node, "RemoteDir", data->m_bookmark->m_remoteDir.GetSafePath());
 
-		AddTextElementRaw(node, "SyncBrowsing", data->m_sync ? "1" : "0");
-		AddTextElementRaw(node, "DirectoryComparison", data->m_comparison ? "1" : "0");
+		AddTextElementRaw(node, "SyncBrowsing", data->m_bookmark->m_sync ? "1" : "0");
+		AddTextElementRaw(node, "DirectoryComparison", data->m_bookmark->m_comparison ? "1" : "0");
 	}
 
 	return true;
@@ -919,8 +900,9 @@ void CSiteManagerDialog::OnNewFolder(wxCommandEvent&)
 	while (pTree->GetItemData(item))
 		item = pTree->GetItemParent(item);
 
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 
 	wxString name = FindFirstFreeName(item, _("New folder"));
 
@@ -947,7 +929,7 @@ bool CSiteManagerDialog::Verify()
 	if (!data)
 		return true;
 
-	if (data->m_type == CSiteManagerItemData::SITE) {
+	if (data->m_site) {
 		const wxString& host = XRCCTRL(*this, "ID_HOST", wxTextCtrl)->GetValue();
 		if (host.empty()) {
 			XRCCTRL(*this, "ID_HOST", wxTextCtrl)->SetFocus();
@@ -1100,19 +1082,23 @@ bool CSiteManagerDialog::Verify()
 	}
 	else {
 		wxTreeItemId parent = pTree->GetItemParent(item);
-		CSiteManagerItemData_Site* pServer = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
-		if (!pServer)
+		if (!parent) {
 			return false;
+		}
+		CSiteManagerItemData* pServer = static_cast<CSiteManagerItemData*>(pTree->GetItemData(parent));
+		if (!pServer || !pServer->m_site) {
+			return false;
+		}
 
 		const wxString remotePathRaw = XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->GetValue();
 		if (!remotePathRaw.empty()) {
 			CServerPath remotePath;
-			remotePath.SetType(pServer->m_server.GetType());
+			remotePath.SetType(pServer->m_site->m_server.GetType());
 			if (!remotePath.SetPath(remotePathRaw)) {
 				XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxString msg;
-				if (pServer->m_server.GetType() != DEFAULT)
-					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_server.GetType()));
+				if (pServer->m_site->m_server.GetType() != DEFAULT)
+					msg = wxString::Format(_("Remote path cannot be parsed. Make sure it is a valid absolute path and is supported by the servertype (%s) selected on the parent site."), CServer::GetNameFromServerType(pServer->m_site->m_server.GetType()));
 				else
 					msg = _("Remote path cannot be parsed. Make sure it is a valid absolute path.");
 				wxMessageBoxEx(msg, _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
@@ -1164,8 +1150,9 @@ void CSiteManagerDialog::OnBeginLabelEdit(wxTreeEvent& event)
 
 void CSiteManagerDialog::OnEndLabelEdit(wxTreeEvent& event)
 {
-	if (event.IsEditCancelled())
+	if (event.IsEditCancelled()) {
 		return;
+	}
 
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree) {
@@ -1258,8 +1245,9 @@ void CSiteManagerDialog::OnSelChanging(wxTreeEvent& event)
 	if (!pTree)
 		return;
 
-	if (!Verify())
+	if (!Verify()) {
 		event.Veto();
+	}
 
 	UpdateItem();
 }
@@ -1315,33 +1303,40 @@ void CSiteManagerDialog::OnLogontypeSelChanged(wxCommandEvent& event)
 bool CSiteManagerDialog::UpdateItem()
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return false;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return false;
+	}
 
-	if (IsPredefinedItem(item))
+	if (IsPredefinedItem(item)) {
 		return true;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data)
+	if (!data) {
 		return false;
+	}
 
-	if (data->m_type == CSiteManagerItemData::SITE)
-		return UpdateServer(*(CSiteManagerItemData_Site *)data, pTree->GetItemText(item));
-	else
-	{
+	if (data->m_site) {
+		return UpdateServer(*data->m_site, pTree->GetItemText(item));
+	}
+	else {
+		wxASSERT(data->m_bookmark);
 		wxTreeItemId parent = pTree->GetItemParent(item);
-		CSiteManagerItemData_Site* pServer = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(parent));
-		if (!pServer)
+		CSiteManagerItemData const* pServer = static_cast<CSiteManagerItemData*>(pTree->GetItemData(parent));
+		if (!pServer || !pServer->m_site) {
 			return false;
-		return UpdateBookmark(*data, pServer->m_server);
+		}
+		data->m_bookmark->m_name = pTree->GetItemText(item);
+		return UpdateBookmark(*data->m_bookmark, pServer->m_site->m_server);
 	}
 }
 
-bool CSiteManagerDialog::UpdateBookmark(CSiteManagerItemData &bookmark, const CServer& server)
+bool CSiteManagerDialog::UpdateBookmark(Bookmark &bookmark, const CServer& server)
 {
 	bookmark.m_localDir = xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::GetValue);
 	bookmark.m_remoteDir = CServerPath();
@@ -1353,7 +1348,7 @@ bool CSiteManagerDialog::UpdateBookmark(CSiteManagerItemData &bookmark, const CS
 	return true;
 }
 
-bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const wxString &name)
+bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 {
 	ServerProtocol const protocol = GetProtocol();
 	wxASSERT(protocol != UNKNOWN);
@@ -1385,12 +1380,12 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	const wxString serverType = xrc_call(*this, "ID_SERVERTYPE", &wxChoice::GetStringSelection);
 	server.m_server.SetType(CServer::GetServerTypeFromName(serverType));
 
-	server.m_localDir = xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::GetValue);
-	server.m_remoteDir = CServerPath();
-	server.m_remoteDir.SetType(server.m_server.GetType());
-	server.m_remoteDir.SetPath(xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::GetValue));
-	server.m_sync = xrc_call(*this, "ID_SYNC", &wxCheckBox::GetValue);
-	server.m_comparison = xrc_call(*this, "ID_COMPARISON", &wxCheckBox::GetValue);
+	server.m_default_bookmark.m_localDir = xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::GetValue);
+	server.m_default_bookmark.m_remoteDir = CServerPath();
+	server.m_default_bookmark.m_remoteDir.SetType(server.m_server.GetType());
+	server.m_default_bookmark.m_remoteDir.SetPath(xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::GetValue));
+	server.m_default_bookmark.m_sync = xrc_call(*this, "ID_SYNC", &wxCheckBox::GetValue);
+	server.m_default_bookmark.m_comparison = xrc_call(*this, "ID_COMPARISON", &wxCheckBox::GetValue);
 
 	int hours = xrc_call(*this, "ID_TIMEZONE_HOURS", &wxSpinCtrl::GetValue);
 	int minutes = xrc_call(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::GetValue);
@@ -1424,41 +1419,44 @@ bool CSiteManagerDialog::UpdateServer(CSiteManagerItemData_Site &server, const w
 	else
 		server.m_server.SetBypassProxy(false);
 
-	server.m_server.SetName(name);
+	server.m_server.SetName(name.ToStdWstring());
 
 	return true;
 }
 
-bool CSiteManagerDialog::GetServer(CSiteManagerItemData_Site& data)
+bool CSiteManagerDialog::GetServer(Site& data)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return false;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return false;
+	}
 
 	CSiteManagerItemData* pData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
 	if (!pData)
 		return false;
 
-	if (pData->m_type == CSiteManagerItemData::BOOKMARK) {
+	if (pData->m_bookmark) {
 		item = pTree->GetItemParent(item);
-		CSiteManagerItemData_Site* pSiteData = static_cast<CSiteManagerItemData_Site* >(pTree->GetItemData(item));
+		CSiteManagerItemData* pSiteData = static_cast<CSiteManagerItemData*>(pTree->GetItemData(item));
 
-		data = *pSiteData;
-		if (!pData->m_localDir.empty())
-			data.m_localDir = pData->m_localDir;
-		if (!pData->m_remoteDir.empty())
-			data.m_remoteDir = pData->m_remoteDir;
-		if (data.m_localDir.empty() || data.m_remoteDir.empty())
-			data.m_sync = false;
+		data = *pSiteData->m_site;
+		if (!pData->m_bookmark->m_localDir.empty())
+			data.m_default_bookmark.m_localDir = pData->m_bookmark->m_localDir;
+		if (!pData->m_bookmark->m_remoteDir.empty())
+			data.m_default_bookmark.m_remoteDir = pData->m_bookmark->m_remoteDir;
+		if (data.m_default_bookmark.m_localDir.empty() || data.m_default_bookmark.m_remoteDir.empty())
+			data.m_default_bookmark.m_sync = false;
 		else
-			data.m_sync = pData->m_sync;
+			data.m_default_bookmark.m_sync = pData->m_bookmark->m_sync;
 	}
-	else
-		data = *(CSiteManagerItemData_Site *)pData;
+	else {
+		data = *pData->m_site;
+	}
 
 	data.m_path = GetSitePath(item);
 
@@ -1605,12 +1603,10 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "wxID_OK", &wxButton::SetDefault);
 #endif
 	}
-	else if (data->m_type == CSiteManagerItemData::SITE) {
+	else if (data->m_site) {
 		m_pNotebook_Site->Show();
 		m_pNotebook_Bookmark->Hide();
 		m_pNotebook_Site->GetContainingSizer()->Layout();
-
-		CSiteManagerItemData_Site* site_data = (CSiteManagerItemData_Site *)data;
 
 		// Set the control states according if it's possible to use the control
 		xrc_call(*this, "ID_RENAME", &wxWindow::Enable, !predefined);
@@ -1623,54 +1619,54 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_CONNECT", &wxButton::Enable, true);
 
 		xrc_call(*this, "ID_HOST", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, site_data->m_server.Format(ServerFormat::host_only));
-		unsigned int port = site_data->m_server.GetPort();
+		xrc_call(*this, "ID_HOST", &wxTextCtrl::ChangeValue, data->m_site->m_server.Format(ServerFormat::host_only));
+		unsigned int port = data->m_site->m_server.GetPort();
 
-		if (port != CServer::GetDefaultPort(site_data->m_server.GetProtocol()))
+		if (port != CServer::GetDefaultPort(data->m_site->m_server.GetProtocol()))
 			xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString::Format(_T("%d"), port));
 		else
 			xrc_call(*this, "ID_PORT", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_PORT", &wxWindow::Enable, !predefined);
 
-		SetProtocol(site_data->m_server.GetProtocol());
+		SetProtocol(data->m_site->m_server.GetProtocol());
 		xrc_call(*this, "ID_PROTOCOL", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_ENCRYPTION", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::SetValue, site_data->m_server.GetBypassProxy());
+		xrc_call(*this, "ID_BYPASSPROXY", &wxCheckBox::SetValue, data->m_site->m_server.GetBypassProxy());
 
-		xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetLogonType() != ANONYMOUS);
-		xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, !predefined && (site_data->m_server.GetLogonType() == NORMAL || site_data->m_server.GetLogonType() == ACCOUNT));
-		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetLogonType() == ACCOUNT);
-		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetLogonType() == KEY);
-		xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, !predefined && site_data->m_server.GetLogonType() == KEY);
+		xrc_call(*this, "ID_USER", &wxTextCtrl::Enable, !predefined && data->m_site->m_server.GetLogonType() != ANONYMOUS);
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::Enable, !predefined && (data->m_site->m_server.GetLogonType() == NORMAL || data->m_site->m_server.GetLogonType() == ACCOUNT));
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::Enable, !predefined && data->m_site->m_server.GetLogonType() == ACCOUNT);
+		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::Enable, !predefined && data->m_site->m_server.GetLogonType() == KEY);
+		xrc_call(*this, "ID_KEYFILE_BROWSE", &wxButton::Enable, !predefined && data->m_site->m_server.GetLogonType() == KEY);
 
-		SetControlVisibility(site_data->m_server.GetProtocol(), site_data->m_server.GetLogonType());
+		SetControlVisibility(data->m_site->m_server.GetProtocol(), data->m_site->m_server.GetLogonType());
 
-		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, CServer::GetNameFromLogonType(site_data->m_server.GetLogonType()));
+		xrc_call(*this, "ID_LOGONTYPE", &wxChoice::SetStringSelection, CServer::GetNameFromLogonType(data->m_site->m_server.GetLogonType()));
 		xrc_call(*this, "ID_LOGONTYPE", &wxWindow::Enable, !predefined);
 
-		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, site_data->m_server.GetUser());
-		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, site_data->m_server.GetAccount());
-		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, site_data->m_server.GetPass());
-		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, site_data->m_server.GetKeyFile());
-		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, site_data->m_comments);
+		xrc_call(*this, "ID_USER", &wxTextCtrl::ChangeValue, data->m_site->m_server.GetUser());
+		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, data->m_site->m_server.GetAccount());
+		xrc_call(*this, "ID_PASS", &wxTextCtrl::ChangeValue, data->m_site->m_server.GetPass());
+		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, data->m_site->m_server.GetKeyFile());
+		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, data->m_site->m_comments);
 		xrc_call(*this, "ID_COMMENTS", &wxWindow::Enable, !predefined);
 
-		xrc_call(*this, "ID_SERVERTYPE", &wxChoice::SetSelection, site_data->m_server.GetType());
+		xrc_call(*this, "ID_SERVERTYPE", &wxChoice::SetSelection, data->m_site->m_server.GetType());
 		xrc_call(*this, "ID_SERVERTYPE", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::ChangeValue, site_data->m_localDir);
+		xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::ChangeValue, data->m_site->m_default_bookmark.m_localDir);
 		xrc_call(*this, "ID_LOCALDIR", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::ChangeValue, site_data->m_remoteDir.GetPath());
+		xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::ChangeValue, data->m_site->m_default_bookmark.m_remoteDir.GetPath());
 		xrc_call(*this, "ID_REMOTEDIR", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_SYNC", &wxCheckBox::Enable, !predefined);
-		xrc_call(*this, "ID_SYNC", &wxCheckBox::SetValue, site_data->m_sync);
+		xrc_call(*this, "ID_SYNC", &wxCheckBox::SetValue, data->m_site->m_default_bookmark.m_sync);
 		xrc_call(*this, "ID_COMPARISON", &wxCheckBox::Enable, !predefined);
-		xrc_call(*this, "ID_COMPARISON", &wxCheckBox::SetValue, site_data->m_comparison);
-		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_HOURS", &wxSpinCtrl::SetValue, site_data->m_server.GetTimezoneOffset() / 60);
+		xrc_call(*this, "ID_COMPARISON", &wxCheckBox::SetValue, data->m_site->m_default_bookmark.m_comparison);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_HOURS", &wxSpinCtrl::SetValue, data->m_site->m_server.GetTimezoneOffset() / 60);
 		xrc_call(*this, "ID_TIMEZONE_HOURS", &wxWindow::Enable, !predefined);
-		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::SetValue, site_data->m_server.GetTimezoneOffset() % 60);
+		xrc_call<wxSpinCtrl, int>(*this, "ID_TIMEZONE_MINUTES", &wxSpinCtrl::SetValue, data->m_site->m_server.GetTimezoneOffset() % 60);
 		xrc_call(*this, "ID_TIMEZONE_MINUTES", &wxWindow::Enable, !predefined);
 
-		enum PasvMode pasvMode = site_data->m_server.GetPasvMode();
+		PasvMode pasvMode = data->m_site->m_server.GetPasvMode();
 		if (pasvMode == MODE_ACTIVE)
 			xrc_call(*this, "ID_TRANSFERMODE_ACTIVE", &wxRadioButton::SetValue, true);
 		else if (pasvMode == MODE_PASSIVE)
@@ -1681,7 +1677,7 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_TRANSFERMODE_PASSIVE", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_TRANSFERMODE_DEFAULT", &wxWindow::Enable, !predefined);
 
-		int maxMultiple = site_data->m_server.MaximumMultipleConnections();
+		int maxMultiple = data->m_site->m_server.MaximumMultipleConnections();
 		xrc_call(*this, "ID_LIMITMULTIPLE", &wxCheckBox::SetValue, maxMultiple != 0);
 		xrc_call(*this, "ID_LIMITMULTIPLE", &wxWindow::Enable, !predefined);
 		if (maxMultiple != 0) {
@@ -1693,7 +1689,7 @@ void CSiteManagerDialog::SetCtrlState()
 			xrc_call<wxSpinCtrl, int>(*this, "ID_MAXMULTIPLE", &wxSpinCtrl::SetValue, 1);
 		}
 
-		switch (site_data->m_server.GetEncodingType()) {
+		switch (data->m_site->m_server.GetEncodingType()) {
 		default:
 		case ENCODING_AUTO:
 			xrc_call(*this, "ID_CHARSET_AUTO", &wxRadioButton::SetValue, true);
@@ -1708,8 +1704,8 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_CHARSET_AUTO", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_CHARSET_UTF8", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_CHARSET_CUSTOM", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::Enable, !predefined && site_data->m_server.GetEncodingType() == ENCODING_CUSTOM);
-		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::ChangeValue, site_data->m_server.GetCustomEncoding());
+		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::Enable, !predefined && data->m_site->m_server.GetEncodingType() == ENCODING_CUSTOM);
+		xrc_call(*this, "ID_ENCODING", &wxTextCtrl::ChangeValue, data->m_site->m_server.GetCustomEncoding());
 #ifdef __WXGTK__
 		xrc_call(*this, "ID_CONNECT", &wxButton::SetDefault);
 #endif
@@ -1728,15 +1724,15 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_NEWBOOKMARK", &wxWindow::Enable, !predefined);
 		xrc_call(*this, "ID_CONNECT", &wxButton::Enable, true);
 
-		xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::ChangeValue, data->m_localDir);
+		xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::ChangeValue, data->m_bookmark->m_localDir);
 		xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxWindow::Enable, !predefined);
-		xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::ChangeValue, data->m_remoteDir.GetPath());
+		xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::ChangeValue, data->m_bookmark->m_remoteDir.GetPath());
 		xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxWindow::Enable, !predefined);
 
 		xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::Enable, !predefined);
-		xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::SetValue, data->m_sync);
+		xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::SetValue, data->m_bookmark->m_sync);
 		xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::Enable, !predefined);
-		xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::SetValue, data->m_comparison);
+		xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::SetValue, data->m_bookmark->m_comparison);
 	}
 #ifdef __WXGTK__
 	if (pFocus && !pFocus->IsEnabled()) {
@@ -1853,22 +1849,23 @@ void CSiteManagerDialog::OnCopySite(wxCommandEvent&)
 	}
 
 	wxTreeItemId newItem;
-	if (data->m_type == CSiteManagerItemData::SITE) {
-		CSiteManagerItemData_Site* newData = new CSiteManagerItemData_Site(*(CSiteManagerItemData_Site *)data);
-		newData->connected_item = -1;
+	if (data->m_site) {
+		CSiteManagerItemData* newData = new CSiteManagerItemData;
+		newData->m_site = std::make_unique<Site>(*data->m_site);
 		newItem = pTree->AppendItem(parent, newName, 2, 2, newData);
 
 		wxTreeItemIdValue cookie;
-		for (wxTreeItemId child = pTree->GetFirstChild(item, cookie); child.IsOk(); child = pTree->GetNextChild(item, cookie))
-		{
-			CSiteManagerItemData* pData = new CSiteManagerItemData(*(CSiteManagerItemData *)pTree->GetItemData(child));
+		for (wxTreeItemId child = pTree->GetFirstChild(item, cookie); child.IsOk(); child = pTree->GetNextChild(item, cookie)) {
+			CSiteManagerItemData* pData = new CSiteManagerItemData;
+			pData->m_bookmark = std::make_unique<Bookmark>(*static_cast<CSiteManagerItemData*>(pTree->GetItemData(child))->m_bookmark);
 			pTree->AppendItem(newItem, pTree->GetItemText(child), 3, 3, pData);
 		}
 		if (pTree->IsExpanded(item))
 			pTree->Expand(newItem);
 	}
 	else {
-		CSiteManagerItemData* newData = new CSiteManagerItemData(*data);
+		CSiteManagerItemData* newData = new CSiteManagerItemData;
+		newData->m_bookmark = std::make_unique<Bookmark>(*data->m_bookmark);
 		newItem = pTree->AppendItem(parent, newName, 3, 3, newData);
 	}
 	pTree->SortChildren(parent);
@@ -2006,13 +2003,16 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 	CSiteManagerItemData *pTargetData = (CSiteManagerItemData *)pTree->GetItemData(target);
 	CSiteManagerItemData *pSourceData = (CSiteManagerItemData *)pTree->GetItemData(source);
 	if (pTargetData) {
-		if (pTargetData->m_type == CSiteManagerItemData::BOOKMARK)
+		if (pTargetData->m_bookmark) {
 			return false;
-		if (!pSourceData || pSourceData->m_type != CSiteManagerItemData::BOOKMARK)
+		}
+		if (!pSourceData || pSourceData->m_site) {
 			return false;
+		}
 	}
-	else if (pSourceData && pSourceData->m_type == CSiteManagerItemData::BOOKMARK)
+	else if (pSourceData && !pSourceData->m_site) {
 		return false;
+	}
 
 	wxTreeItemId item = target;
 	while (item != pTree->GetRootItem()) {
@@ -2060,8 +2060,9 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 			if (pTree->IsExpanded(pair.source))
 				expand.push_back(newItem);
 		}
-		else if (data->m_type == CSiteManagerItemData::SITE) {
-			CSiteManagerItemData_Site* newData = new CSiteManagerItemData_Site(*(CSiteManagerItemData_Site *)data);
+		else if (data->m_site) {
+			CSiteManagerItemData* newData = new CSiteManagerItemData;
+			newData->m_site = std::make_unique<Site>(*data->m_site);
 			newData->connected_item = -1;
 			pTree->SetItemData(newItem, newData);
 		}
@@ -2069,7 +2070,8 @@ bool CSiteManagerDialog::MoveItems(wxTreeItemId source, wxTreeItemId target, boo
 			pTree->SetItemImage(newItem, 3, wxTreeItemIcon_Normal);
 			pTree->SetItemImage(newItem, 3, wxTreeItemIcon_Selected);
 
-			CSiteManagerItemData* newData = new CSiteManagerItemData(*data);
+			CSiteManagerItemData* newData = new CSiteManagerItemData;
+			newData->m_bookmark = std::make_unique<Bookmark>(*data->m_bookmark);
 			pTree->SetItemData(newItem, newData);
 		}
 
@@ -2159,9 +2161,12 @@ void CSiteManagerDialog::AddNewSite(wxTreeItemId parent, const CServer& server, 
 
 	wxString name = FindFirstFreeName(parent, _("New site"));
 
-	CSiteManagerItemData_Site* pData = new CSiteManagerItemData_Site(server);
-	if (connected)
+	CSiteManagerItemData* pData = new CSiteManagerItemData;
+	pData->m_site = std::make_unique<Site>();
+	pData->m_site->m_server = server;
+	if (connected) {
 		pData->connected_item = 0;
+	}
 
 	wxTreeItemId newItem = pTree->AppendItem(parent, name, 2, 2, pData);
 	pTree->SortChildren(parent);
@@ -2183,7 +2188,9 @@ void CSiteManagerDialog::AddNewBookmark(wxTreeItemId parent)
 
 	wxString name = FindFirstFreeName(parent, _("New bookmark"));
 
-	wxTreeItemId newItem = pTree->AppendItem(parent, name, 3, 3, new CSiteManagerItemData(CSiteManagerItemData::BOOKMARK));
+	CSiteManagerItemData* pData = new CSiteManagerItemData;
+	pData->m_bookmark = std::make_unique<Bookmark>();
+	wxTreeItemId newItem = pTree->AppendItem(parent, name, 3, 3, pData);
 	pTree->SortChildren(parent);
 	pTree->EnsureVisible(newItem);
 	pTree->SafeSelectItem(newItem);
@@ -2209,6 +2216,11 @@ void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
 
 void CSiteManagerDialog::OnExportSelected(wxCommandEvent&)
 {
+	if (!Verify()) {
+		return;
+	}
+	UpdateItem();
+
 	wxFileDialog dlg(this, _("Select file for exported sites"), wxString(),
 					_T("sites.xml"), _T("XML files (*.xml)|*.xml"),
 					wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
@@ -2232,20 +2244,24 @@ void CSiteManagerDialog::OnExportSelected(wxCommandEvent&)
 void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
+	if (!item.IsOk()) {
 		return;
+	}
 
 	CSiteManagerItemData* data = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!data || data->m_type != CSiteManagerItemData::BOOKMARK)
+	if (!data || !data->m_bookmark) {
 		return;
+	}
 
 	wxDirDialog dlg(this, _("Choose the local directory"), XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->GetValue(), wxDD_NEW_DIR_BUTTON);
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return;
+	}
 
 	XRCCTRL(*this, "ID_BOOKMARK_LOCALDIR", wxTextCtrl)->ChangeValue(dlg.GetPath());
 }
@@ -2253,21 +2269,26 @@ void CSiteManagerDialog::OnBookmarkBrowse(wxCommandEvent&)
 void CSiteManagerDialog::OnNewBookmark(wxCommandEvent&)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return;
+	}
 
 	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk() || IsPredefinedItem(item))
+	if (!item.IsOk() || IsPredefinedItem(item)) {
 		return;
+	}
 
 	CSiteManagerItemData *pData = (CSiteManagerItemData *)pTree->GetItemData(item);
-	if (!pData)
+	if (!pData) {
 		return;
-	if (pData->m_type == CSiteManagerItemData::BOOKMARK)
+	}
+	if (pData->m_bookmark) {
 		item = pTree->GetItemParent(item);
+	}
 
-	if (!Verify())
+	if (!Verify()) {
 		return;
+	}
 
 	AddNewBookmark(item);
 }
@@ -2282,35 +2303,24 @@ wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item, bool stripBookmark)
 	if (!pData)
 		return wxString();
 
-	if (stripBookmark && pData->m_type == CSiteManagerItemData::BOOKMARK)
+	if (stripBookmark && pData->m_bookmark) {
 		item = pTree->GetItemParent(item);
+	}
 
 	wxString path;
-	while (item)
-	{
-		if (item == m_predefinedSites)
+	while (item) {
+		if (item == m_predefinedSites) {
 			return _T("1") + path;
-		else if (item == m_ownSites)
+		}
+		else if (item == m_ownSites) {
 			return _T("0") + path;
+		}
 		path = _T("/") + CSiteManager::EscapeSegment(pTree->GetItemText(item)) + path;
 
 		item = pTree->GetItemParent(item);
 	}
 
 	return _T("0") + path;
-}
-
-wxString CSiteManagerDialog::GetSitePath(bool stripBookmark)
-{
-	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
-		return wxString();
-
-	wxTreeItemId item = pTree->GetSelection();
-	if (!item.IsOk())
-		return wxString();
-
-	return GetSitePath(item, stripBookmark);
 }
 
 void CSiteManagerDialog::SetProtocol(ServerProtocol protocol)
