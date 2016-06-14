@@ -109,7 +109,6 @@ CStatusView::CStatusView(wxWindow* parent, wxWindowID id)
 
 	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 
-	RegisterOption(OPTION_LANGUAGE);
 	RegisterOption(OPTION_MESSAGELOG_TIMESTAMP);
 }
 
