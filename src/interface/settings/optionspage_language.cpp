@@ -26,30 +26,12 @@ bool COptionsPageLanguage::SavePage()
 
 	const int selection = pListBox->GetSelection();
 	wxString code;
-	if (selection > 0)
+	if (selection > 0) {
 		code = m_locale[selection - 1].code;
+	}
 
-#ifdef __WXGTK__
 	m_pOptions->SetOption(OPTION_LANGUAGE, code);
-#else
-	bool successful = false;
-	if (code.empty()) {
-		wxGetApp().SetLocale(wxLANGUAGE_DEFAULT);
 
-		// Default language cannot fail, has to silently fall back to English
-		successful = true;
-	}
-	else {
-		const wxLanguageInfo* pInfo = wxLocale::FindLanguageInfo(code);
-		if (pInfo)
-			successful = wxGetApp().SetLocale(pInfo->Language);
-	}
-
-	if (successful)
-		m_pOptions->SetOption(OPTION_LANGUAGE, code);
-	else
-		wxMessageBoxEx(wxString::Format(_("Failed to set language to %s, using default system language"), pListBox->GetStringSelection()), _("Failed to change language"), wxICON_EXCLAMATION, this);
-#endif
 	return true;
 }
 
