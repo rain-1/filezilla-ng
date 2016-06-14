@@ -62,19 +62,21 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 	XRCCTRL(pwdDlg, "ID_HOST", wxStaticText)->SetLabel(server.Format(ServerFormat::with_optional_port));
 
 	if (server.GetUser().empty()) {
-		pwdDlg.SetTitle(_("Enter username and password"));
 		XRCCTRL(pwdDlg, "ID_OLD_USER_LABEL", wxStaticText)->Hide();
 		XRCCTRL(pwdDlg, "ID_OLD_USER", wxStaticText)->Hide();
 
 		XRCCTRL(pwdDlg, "ID_HEADER_PASS", wxStaticText)->Hide();
 		if (server.GetLogonType() == INTERACTIVE) {
+			pwdDlg.SetTitle(_("Enter username"));
 			XRCCTRL(pwdDlg, "ID_PASSWORD_LABEL", wxStaticText)->Hide();
 			XRCCTRL(pwdDlg, "ID_PASSWORD", wxTextCtrl)->Hide();
 			XRCCTRL(pwdDlg, "ID_REMEMBER", wxCheckBox)->Hide();
 			XRCCTRL(pwdDlg, "ID_HEADER_BOTH", wxStaticText)->Hide();
 		}
-		else
+		else {
+			pwdDlg.SetTitle(_("Enter username and password"));
 			XRCCTRL(pwdDlg, "ID_HEADER_USER", wxStaticText)->Hide();
+		}
 
 		XRCCTRL(pwdDlg, "ID_NEW_USER", wxTextCtrl)->SetFocus();
 	}
