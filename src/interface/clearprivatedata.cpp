@@ -152,11 +152,11 @@ bool CClearPrivateDataDialog::ClearReconnect()
 	COptions::Get()->SetOption(OPTION_LASTSERVERPATH, _T(""));
 
 	const std::vector<CState*> *states = CContextManager::Get()->GetAllStates();
-	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter)
-	{
+	for (std::vector<CState*>::const_iterator iter = states->begin(); iter != states->end(); ++iter) {
 		CState* pState = *iter;
-
-		pState->SetLastServer(CServer(), CServerPath());
+		if (pState) {
+			pState->SetLastSite(Site(), CServerPath());
+		}
 	}
 
 	return true;

@@ -164,20 +164,16 @@ void CMenuBar::UpdateBookmarkMenu()
 
 	// Insert global bookmarks
 	std::list<wxString> global_bookmarks;
-	if (CBookmarksDialog::GetBookmarks(global_bookmarks) && !global_bookmarks.empty())
-	{
+	if (CBookmarksDialog::GetGlobalBookmarks(global_bookmarks) && !global_bookmarks.empty()) {
 		pMenu->AppendSeparator();
 
-		for (std::list<wxString>::const_iterator iter = global_bookmarks.begin(); iter != global_bookmarks.end(); ++iter)
-		{
+		for (std::list<wxString>::const_iterator iter = global_bookmarks.begin(); iter != global_bookmarks.end(); ++iter) {
 			int id;
-			if (ids == m_bookmark_menu_ids.end())
-			{
+			if (ids == m_bookmark_menu_ids.end()) {
 				id = wxNewId();
 				m_bookmark_menu_ids.push_back(id);
 			}
-			else
-			{
+			else {
 				id = *ids;
 				++ids;
 			}
@@ -192,43 +188,34 @@ void CMenuBar::UpdateBookmarkMenu()
 	// Insert site-specific bookmarks
 	CContextControl* pContextControl = m_pMainFrame ? m_pMainFrame->GetContextControl() : 0;
 	CContextControl::_context_controls* controls = pContextControl ? pContextControl->GetCurrentControls() : 0;
-	if (!controls)
+	CState* pState = controls ? controls->pState : 0;
+	if (!pState) {
 		return;
+	}
 
-	if (!controls->site_bookmarks || controls->site_bookmarks->bookmarks.empty())
+	Site const& site = pState->GetSite();
+	if (site.m_bookmarks.empty()) {
 		return;
+	}
 
 	pMenu->AppendSeparator();
 
-	for (std::list<wxString>::const_iterator iter = controls->site_bookmarks->bookmarks.begin(); iter != controls->site_bookmarks->bookmarks.end(); ++iter)
-	{
+	for (auto const& bookmark : site.m_bookmarks) {
 		int id;
-		if (ids == m_bookmark_menu_ids.end())
-		{
+		if (ids == m_bookmark_menu_ids.end()) {
 			id = wxNewId();
 			m_bookmark_menu_ids.push_back(id);
 		}
-		else
-		{
+		else {
 			id = *ids;
 			++ids;
 		}
-		wxString name(*iter);
+		wxString name(bookmark.m_name);
 		name.Replace(_T("&"), _T("&&"));
 		pMenu->Append(id, name);
 
-		m_bookmark_menu_id_map_site[id] = *iter;
+		m_bookmark_menu_id_map_site[id] = bookmark.m_name;
 	}
-}
-
-void CMenuBar::ClearBookmarks()
-{
-	CContextControl* pContextControl = m_pMainFrame ? m_pMainFrame->GetContextControl() : 0;
-	CContextControl::_context_controls* controls = pContextControl ? pContextControl->GetCurrentControls() : 0;
-
-	if (controls && !controls->site_bookmarks)
-		controls->site_bookmarks = std::make_shared<CContextControl::_context_controls::_site_bookmarks>();
-	UpdateBookmarkMenu();
 }
 
 void CMenuBar::OnMenuEvent(wxCommandEvent& event)
@@ -242,36 +229,36 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 		// We hit a site-specific bookmark
 		CContextControl* pContextControl = m_pMainFrame ? m_pMainFrame->GetContextControl() : 0;
 		CContextControl::_context_controls* controls = pContextControl ? pContextControl->GetCurrentControls() : 0;
-		if (!controls)
-			return;
-		if (controls->site_bookmarks->path.empty())
-			return;
-
-		wxString name = iter->second;
-		name.Replace(_T("\\"), _T("\\\\"));
-		name.Replace(_T("/"), _T("\\/"));
-		name = controls->site_bookmarks->path + _T("/") + name;
-
-		std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteByPath(name);
-		if (!pData)
+		CState* pState = controls ? controls->pState : 0;
+		if (!pState)
 			return;
 
-		pState->SetSyncBrowse(false);
-		if (!pData->m_remoteDir.empty() && pState->IsRemoteIdle(true)) {
-			const CServer* pServer = pState->GetServer();
-			if (!pServer || *pServer != pData->m_server) {
-				m_pMainFrame->ConnectToSite(*pData);
-				pData->m_localDir.clear(); // So not to set again below
-			}
-			else
-				pState->ChangeRemoteDir(pData->m_remoteDir);
-		}
-		if (!pData->m_localDir.empty()) {
-			bool set = pState->SetLocalDir(pData->m_localDir);
+		Site site = pState->GetSite(); // Copy
 
-			if (set && pData->m_sync) {
-				wxASSERT(!pData->m_remoteDir.empty());
-				pState->SetSyncBrowse(true, pData->m_remoteDir);
+		for (auto const& bookmark : site.m_bookmarks) {
+			if (bookmark.m_name == iter->second) {
+
+				pState->SetSyncBrowse(false);
+				if (!bookmark.m_remoteDir.empty() && pState->IsRemoteIdle(true)) {
+					const CServer* pServer = pState->GetServer();
+					if (!pServer || *pServer != site.m_server) {
+						m_pMainFrame->ConnectToSite(site);
+						break;
+					}
+					else {
+						pState->ChangeRemoteDir(bookmark.m_remoteDir);
+					}
+				}
+				if (!bookmark.m_localDir.empty()) {
+					bool set = pState->SetLocalDir(bookmark.m_localDir);
+
+					if (set && bookmark.m_sync) {
+						wxASSERT(!bookmark.m_remoteDir.empty());
+						pState->SetSyncBrowse(true, bookmark.m_remoteDir);
+					}
+				}
+
+				break;
 			}
 		}
 
@@ -448,8 +435,7 @@ void CMenuBar::UpdateMenubarState()
 	if (pServer || !idle)
 		canReconnect = false;
 	else {
-		CServer tmp;
-		canReconnect = !pState->GetLastServer().GetHost().empty();
+		canReconnect = static_cast<bool>(pState->GetLastSite().m_server);
 	}
 	Enable(XRCID("ID_MENU_SERVER_RECONNECT"), canReconnect);
 
@@ -463,14 +449,11 @@ void CMenuBar::UpdateMenubarState()
 
 bool CMenuBar::ShowItem(int id)
 {
-	for (auto menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); ++menu_iter)
-	{
+	for (auto menu_iter = m_hidden_items.begin(); menu_iter != m_hidden_items.end(); ++menu_iter) {
 		int offset = 0;
 
-		for (auto iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter)
-		{
-			if (iter->second->GetId() != id)
-			{
+		for (auto iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter) {
+			if (iter->second->GetId() != id) {
 				offset++;
 				continue;
 			}
@@ -502,8 +485,7 @@ bool CMenuBar::HideItem(int id)
 
 	auto menu_iter = m_hidden_items.insert(std::make_pair(pMenu, std::map<int, wxMenuItem*>())).first;
 
-	for (auto iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter)
-	{
+	for (auto iter = menu_iter->second.begin(); iter != menu_iter->second.end(); ++iter) {
 		if (iter->first > (int)pos)
 			break;
 

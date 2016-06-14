@@ -26,7 +26,7 @@ public:
 	static bool ThemeHasSize(const wxString& themePath, const wxString& size);
 
 	static wxSize GetIconSize(wxString const& str);
-	static wxSize GetIconSize(enum iconSize size);
+	static wxSize GetIconSize(iconSize size);
 
 	static CThemeProvider* Get();
 

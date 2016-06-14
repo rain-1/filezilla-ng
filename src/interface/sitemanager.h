@@ -5,51 +5,33 @@
 
 #include "xmlfunctions.h"
 
-class CSiteManagerItemData : public wxTreeItemData
+class Bookmark
 {
 public:
-	enum type
-	{
-		SITE,
-		BOOKMARK
-	};
-
-	CSiteManagerItemData(enum type item_type)
-		: m_type(item_type)
-	{
-	}
-
-	virtual ~CSiteManagerItemData()
-	{
-	}
+	virtual ~Bookmark() = default;
 
 	wxString m_localDir;
 	CServerPath m_remoteDir;
 
-	enum type m_type;
-
 	bool m_sync{};
 	bool m_comparison{};
 
-	wxString m_path;
+	wxString m_name;
 };
 
-class CSiteManagerItemData_Site : public CSiteManagerItemData
+class Site
 {
 public:
-	CSiteManagerItemData_Site(const CServer& server = CServer())
-		: CSiteManagerItemData(SITE), m_server(server)
-	{
-		connected_item = -1;
-	}
+	virtual ~Site() = default;
 
 	CServer m_server;
 	wxString m_comments;
 
-	// Needed to keep track of currently connected sites so that
-	// bookmarks and bookmark path can be updated in response to
-	// changes done here
-	int connected_item;
+	Bookmark m_default_bookmark;
+
+	std::vector<Bookmark> m_bookmarks;
+
+	wxString m_path;
 };
 
 class CSiteManagerXmlHandler
@@ -58,9 +40,8 @@ public:
 	virtual ~CSiteManagerXmlHandler() {};
 
 	// Adds a folder and descents
-	virtual bool AddFolder(const wxString& name, bool expanded) = 0;
-	virtual bool AddSite(std::unique_ptr<CSiteManagerItemData_Site> data) = 0;
-	virtual bool AddBookmark(const wxString& name, std::unique_ptr<CSiteManagerItemData> data) = 0;
+	virtual bool AddFolder(wxString const& name, bool expanded) = 0;
+	virtual bool AddSite(std::unique_ptr<Site> data) = 0;
 
 	// Go up a level
 	virtual bool LevelUp() { return true; } // *Ding*
@@ -73,10 +54,8 @@ class CSiteManager
 	friend class CSiteManagerDialog;
 public:
 	// This function also clears the Id map
-	static std::unique_ptr<CSiteManagerItemData_Site> GetSiteById(int id);
-	static std::unique_ptr<CSiteManagerItemData_Site> GetSiteByPath(wxString sitePath);
-
-	static bool GetBookmarks(wxString sitePath, std::list<wxString> &bookmarks);
+	static std::unique_ptr<Site> GetSiteById(int id);
+	static std::unique_ptr<Site> GetSiteByPath(wxString sitePath);
 
 	static wxString AddServer(CServer server);
 	static bool AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
@@ -86,22 +65,24 @@ public:
 	static void ClearIdMap();
 
 	static bool UnescapeSitePath(wxString path, std::list<wxString>& result);
-	static wxString EscapeSegment( wxString segment );
+	static wxString EscapeSegment(wxString segment);
 
 	static bool HasSites();
+
+	static bool ReadBookmarkElement(Bookmark & bookmark, pugi::xml_node element);
 
 protected:
 	static bool Load(CSiteManagerXmlHandler& pHandler);
 	static bool Load(pugi::xml_node element, CSiteManagerXmlHandler& pHandler);
-	static std::unique_ptr<CSiteManagerItemData_Site> ReadServerElement(pugi::xml_node element);
+	static std::unique_ptr<Site> ReadServerElement(pugi::xml_node element);
 
 	static pugi::xml_node GetElementByPath(pugi::xml_node node, std::list<wxString> const& segments);
 	static wxString BuildPath(wxChar root, std::list<wxString> const& segments);
 
-	static std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> m_idMap;
+	static std::map<int, std::unique_ptr<Site>> m_idMap;
 
 	// The map maps event id's to sites
-	static std::unique_ptr<wxMenu> GetSitesMenu_Predefined(std::map<int, std::unique_ptr<CSiteManagerItemData_Site>> &idMap);
+	static std::unique_ptr<wxMenu> GetSitesMenu_Predefined(std::map<int, std::unique_ptr<Site>> &idMap);
 
 	static bool LoadPredefined(CSiteManagerXmlHandler& handler);
 };

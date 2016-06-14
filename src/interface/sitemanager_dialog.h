@@ -28,17 +28,16 @@ public:
 	// Creation. If pServer is set, it will cause a new item to be created.
 	bool Create(wxWindow* parent, std::vector<_connected_site> *connected_sites, const CServer* pServer = 0);
 
-	bool GetServer(CSiteManagerItemData_Site& data);
-	wxString GetSitePath(bool stripBookmark = true);
-
+	bool GetServer(Site& data);
+	
 protected:
 	// Creates the controls and sizers
 	void CreateControls(wxWindow* parent);
 
 	bool Verify();
 	bool UpdateItem();
-	bool UpdateServer(CSiteManagerItemData_Site &server, const wxString& name);
-	bool UpdateBookmark(CSiteManagerItemData &bookmark, const CServer& server);
+	bool UpdateServer(Site &server, const wxString& name);
+	bool UpdateBookmark(Bookmark &bookmark, const CServer& server);
 	bool Load();
 	bool Save(pugi::xml_node element = pugi::xml_node(), wxTreeItemId treeId = wxTreeItemId());
 	bool SaveChild(pugi::xml_node element, wxTreeItemId child);

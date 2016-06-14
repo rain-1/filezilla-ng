@@ -190,8 +190,6 @@ CState::CState(CMainFrame &mainFrame)
 
 CState::~CState()
 {
-	delete m_pServer;
-
 	delete m_pComparisonManager;
 	delete m_pCommandQueue;
 	delete m_pEngine;
@@ -239,7 +237,7 @@ bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPr
 		return false;
 
 	if (!m_sync_browse.local_root.empty()) {
-		wxASSERT(m_pServer);
+		wxASSERT(m_site.m_server);
 
 		if (dir != m_sync_browse.local_root && !dir.IsSubdirOf(m_sync_browse.local_root)) {
 			wxString msg = wxString::Format(_("The local directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the local directory?"),
@@ -440,53 +438,55 @@ void CState::LocalDirCreated(const CLocalPath& path)
 	NotifyHandlers(STATECHANGE_LOCAL_REFRESH_FILE, next_segment);
 }
 
-void CState::SetServer(const CServer* server, CServerPath const& path)
+void CState::SetSite(Site const& site, CServerPath const& path)
 {
-	if (m_pServer) {
-		if (server && *server == *m_pServer &&
-			server->GetName() == m_pServer->GetName() &&
-			server->MaximumMultipleConnections() == m_pServer->MaximumMultipleConnections())
+	if (m_site.m_server) {
+		if (site.m_server && site.m_server == m_site.m_server &&
+			site.m_server.GetName() == m_site.m_server.GetName() &&
+			site.m_server.MaximumMultipleConnections() == m_site.m_server.MaximumMultipleConnections())
 		{
 			// Nothing changes
 			return;
 		}
 
 		SetRemoteDir(0);
-		delete m_pServer;
 		m_pCertificate.reset();
 		m_pSftpEncryptionInfo.reset();
 	}
-	if (server) {
+	if (site.m_server) {
 		if (!path.empty()) {
 			m_last_path = path;
 		}
-		else if (m_last_server != *server) {
+		else if (m_last_site.m_server != site.m_server) {
 			m_last_path.clear();
 		}
-		m_last_server = *server;
+		m_last_site = site;
 
-		m_pServer = new CServer(*server);
-
-		const wxString& name = server->GetName();
+		wxString const& name = site.m_server.GetName();
 		m_title.clear();
 		if (!name.empty()) {
 			m_title = name + _T(" - ");
 		}
-		m_title += server->Format(ServerFormat::with_user_and_optional_port);
+		m_title += site.m_server.Format(ServerFormat::with_user_and_optional_port);
 	}
 	else {
-		m_pServer = 0;
 		m_title = _("Not connected");
 	}
+	m_site = site;
 
 	m_successful_connect = false;
 
 	NotifyHandlers(STATECHANGE_SERVER);
 }
 
-const CServer* CState::GetServer() const
+Site const& CState::GetSite() const
 {
-	return m_pServer;
+	return m_site;
+}
+
+CServer const* CState::GetServer() const
+{
+	return m_site.m_server ? &m_site.m_server : 0;
 }
 
 wxString CState::GetTitle() const
@@ -494,25 +494,31 @@ wxString CState::GetTitle() const
 	return m_title;
 }
 
-bool CState::Connect(const CServer& server, const CServerPath& path)
+bool CState::Connect(Site const& site, CServerPath const& path)
 {
-	if (!m_pEngine)
+	if (!site.m_server) {
 		return false;
-	if (m_pEngine->IsConnected() || m_pEngine->IsBusy() || !m_pCommandQueue->Idle())
+	}
+	if (!m_pEngine) {
+		return false;
+	}
+	if (m_pEngine->IsConnected() || m_pEngine->IsBusy() || !m_pCommandQueue->Idle()) {
 		m_pCommandQueue->Cancel();
+	}
 	m_pRemoteRecursiveOperation->StopRecursiveOperation();
 	SetSyncBrowse(false);
 
-	m_pCommandQueue->ProcessCommand(new CConnectCommand(server));
+	m_pCommandQueue->ProcessCommand(new CConnectCommand(site.m_server));
 	m_pCommandQueue->ProcessCommand(new CListCommand(path, _T(""), LIST_FLAG_FALLBACK_CURRENT));
 
-	SetServer(&server, path);
+	SetSite(site, path);
 
 	return true;
 }
 
 bool CState::Disconnect()
 {
+	SetColour(wxColour());
 	if (!m_pEngine)
 		return false;
 
@@ -522,7 +528,7 @@ bool CState::Disconnect()
 	if (!IsRemoteIdle())
 		return false;
 
-	SetServer(0);
+	SetSite(Site());
 	m_pCommandQueue->ProcessCommand(new CDisconnectCommand());
 
 	return true;
@@ -633,8 +639,9 @@ CGlobalStateEventHandler::~CGlobalStateEventHandler()
 
 void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const wxString& subdir, bool queueOnly)
 {
-	if (!m_pServer || !m_pDirectoryListing)
+	if (!m_site.m_server || !m_pDirectoryListing) {
 		return;
+	}
 
 	CServerPath path = m_pDirectoryListing->path;
 	if (subdir == _T("..") && path.HasParent())
@@ -647,8 +654,9 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const w
 
 void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const CServerPath& path, bool queueOnly)
 {
-	if (!m_pServer)
+	if (!m_site.m_server) {
 		return;
+	}
 
 	if (path.empty()) {
 		return;
@@ -669,7 +677,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		if (type == fz::local_filesys::file) {
 			wxString localFile;
 			const CLocalPath localPath(files[i], &localFile);
-			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, *m_pServer, size);
+			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, m_site.m_server, size);
 			m_mainFrame.GetQueue()->QueueFile_Finish(!queueOnly);
 		}
 		else if (type == fz::local_filesys::dir) {
@@ -882,7 +890,7 @@ bool CState::IsRemoteConnected() const
 	if (!m_pEngine)
 		return false;
 
-	return m_pServer != 0;
+	return static_cast<bool>(m_site.m_server);
 }
 
 bool CState::IsRemoteIdle(bool ignore_recursive) const
@@ -944,7 +952,7 @@ void CState::LinkIsNotDir(const CServerPath& path, const wxString& subdir)
 
 bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=_T("")*/, int flags /*=0*/, bool ignore_busy /*=false*/)
 {
-	if (!m_pServer || !m_pCommandQueue)
+	if (!m_site.m_server || !m_pCommandQueue)
 		return false;
 
 	if (!m_sync_browse.local_root.empty()) {
@@ -1138,4 +1146,12 @@ void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
 	m_pCertificate.reset();
 	m_pSftpEncryptionInfo = std::make_unique<CSftpEncryptionNotification>(info);
 	NotifyHandlers(STATECHANGE_ENCRYPTION);
+}
+
+void CState::SetColour(wxColour const& colour)
+{
+	if (colour != m_colour) {
+		m_colour = colour;
+		NotifyHandlers(STATECHANGE_TAB_COLOR, wxString(), &m_colour);
+	}
 }

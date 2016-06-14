@@ -149,14 +149,16 @@ public:
 
 	// Abstract server name.
 	// Not compared in ==, < and related operators
-	void SetName(const wxString& name) { m_name = name; }
-	wxString GetName() const { return m_name; }
+	void SetName(std::wstring const& name) { m_name = name; }
+	std::wstring GetName() const { return m_name; }
 
 	static wxString GetNameFromServerType(ServerType type);
 	static ServerType GetServerTypeFromName(const wxString& name);
 
 	static wxString GetNameFromLogonType(LogonType type);
 	static LogonType GetLogonTypeFromName(const wxString& name);
+
+	explicit operator bool() const { return !m_host.empty(); }
 
 protected:
 	void Initialize();
@@ -175,7 +177,7 @@ protected:
 	int m_maximumMultipleConnections;
 	CharsetEncoding m_encodingType;
 	wxString m_customEncoding;
-	wxString m_name;
+	std::wstring m_name;
 
 	std::vector<wxString> m_postLoginCommands;
 	bool m_bypassProxy;

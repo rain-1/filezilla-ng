@@ -29,7 +29,7 @@ public:
 
 	int Run();
 
-	static bool GetBookmarks(std::list<wxString> &bookmarks);
+	static bool GetGlobalBookmarks(std::list<wxString> &bookmarks);
 	static bool GetBookmark(const wxString& name, wxString &local_dir, CServerPath &remote_dir, bool &sync, bool &comparison);
 	static bool AddBookmark(const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
 

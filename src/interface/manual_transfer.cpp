@@ -520,7 +520,7 @@ void CManualTransfer::OnSelectSite(wxCommandEvent&)
 
 void CManualTransfer::OnSelectedSite(wxCommandEvent& event)
 {
-	std::unique_ptr<CSiteManagerItemData_Site> pData = CSiteManager::GetSiteById(event.GetId());
+	std::unique_ptr<Site> pData = CSiteManager::GetSiteById(event.GetId());
 	if (!pData)
 		return;
 

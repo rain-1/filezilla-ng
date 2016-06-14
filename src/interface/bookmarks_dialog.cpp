@@ -85,11 +85,14 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 	bool const comparison = xrc_call(*this, "ID_COMPARISON", &wxCheckBox::GetValue);
 
 	if (!global && m_server) {
-		std::list<wxString> bookmarks;
-
-		if (m_site_path.empty() || !CSiteManager::GetBookmarks(m_site_path, bookmarks)) {
-			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
+		std::unique_ptr<Site> site;
+		if (!m_site_path.empty()) {
+			site = CSiteManager::GetSiteByPath(m_site_path);
+		}
+		if (!site) {
+			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
 				return;
+			}
 
 			m_site_path = CSiteManager::AddServer(*m_server);
 			if (m_site_path.empty()) {
@@ -98,8 +101,8 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 				return;
 			}
 		}
-		for (std::list<wxString>::const_iterator iter = bookmarks.begin(); iter != bookmarks.end(); ++iter) {
-			if (*iter == name) {
+		for (auto const& bookmark : site->m_bookmarks) {
+			if (bookmark.m_name == name) {
 				wxMessageBoxEx(_("A bookmark with the entered name already exists. Please enter an unused name."), _("New bookmark"), wxICON_EXCLAMATION, this);
 				return;
 			}
@@ -202,25 +205,18 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 
 void CBookmarksDialog::LoadSiteSpecificBookmarks()
 {
-	if (m_site_path.empty())
+	if (m_site_path.empty()) {
 		return;
+	}
 
-	std::list<wxString> bookmarks;
-
-	if (!CSiteManager::GetBookmarks(m_site_path, bookmarks))
+	std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(m_site_path);
+	if (!site) {
 		return;
+	}
 
-	for (std::list<wxString>::const_iterator iter = bookmarks.begin(); iter != bookmarks.end(); ++iter) {
-		wxString path = *iter;
-		path.Replace(_T("\\"), _T("\\\\"));
-		path.Replace(_T("/"), _T("\\/"));
-		path = m_site_path + _T("/") + path;
-
-		std::unique_ptr<CSiteManagerItemData_Site> data = CSiteManager::GetSiteByPath(path);
-		if (data) {
-			CBookmarkItemData* new_data = new CBookmarkItemData(data->m_localDir, data->m_remoteDir, data->m_sync, data->m_comparison);
-			m_pTree->AppendItem(m_bookmarks_site, *iter, 1, 1, new_data);
-		}
+	for (auto const& bookmark : site->m_bookmarks) {
+		CBookmarkItemData* new_data = new CBookmarkItemData(bookmark.m_localDir, bookmark.m_remoteDir, bookmark.m_sync, bookmark.m_comparison);
+		m_pTree->AppendItem(m_bookmarks_site, bookmark.m_name, 1, 1, new_data);
 	}
 
 	m_pTree->SortChildren(m_bookmarks_site);
@@ -324,16 +320,18 @@ void CBookmarksDialog::SaveSiteSpecificBookmarks()
 	if (m_site_path.empty())
 		return;
 
-	if (!CSiteManager::ClearBookmarks(m_site_path))
-			return;
+	if (!CSiteManager::ClearBookmarks(m_site_path)) {
+		return;
+	}
 
 	wxTreeItemIdValue cookie;
 	for (wxTreeItemId child = m_pTree->GetFirstChild(m_bookmarks_site, cookie); child.IsOk(); child = m_pTree->GetNextChild(m_bookmarks_site, cookie)) {
 		CBookmarkItemData *data = (CBookmarkItemData *)m_pTree->GetItemData(child);
 		wxASSERT(data);
 
-		if (!CSiteManager::AddBookmark(m_site_path, m_pTree->GetItemText(child), data->m_local_dir, data->m_remote_dir, data->m_sync, data->m_comparison))
+		if (!CSiteManager::AddBookmark(m_site_path, m_pTree->GetItemText(child), data->m_local_dir, data->m_remote_dir, data->m_sync, data->m_comparison)) {
 			return;
+		}
 	}
 }
 
@@ -518,9 +516,13 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 		item = m_pTree->GetItemParent(item);
 
 	if (item == m_bookmarks_site) {
-		std::list<wxString> bookmarks;
 
-		if (m_site_path.empty() || !CSiteManager::GetBookmarks(m_site_path, bookmarks)) {
+		std::unique_ptr<Site> site;
+		if (!m_site_path.empty()) {
+			site = CSiteManager::GetSiteByPath(m_site_path);
+		}
+		
+		if (!site) {
 			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES)
 				return;
 
@@ -685,7 +687,7 @@ void CBookmarksDialog::OnEndLabelEdit(wxTreeEvent& event)
 	m_pTree->SortChildren(parent);
 }
 
-bool CBookmarksDialog::GetBookmarks(std::list<wxString> &bookmarks)
+bool CBookmarksDialog::GetGlobalBookmarks(std::list<wxString> &bookmarks)
 {
 	CInterProcessMutex mutex(MUTEX_GLOBALBOOKMARKS);
 

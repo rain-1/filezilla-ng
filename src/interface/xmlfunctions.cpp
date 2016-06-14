@@ -392,16 +392,18 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	server.SetProtocol(static_cast<ServerProtocol>(protocol));
 
 	int type = GetTextElementInt(node, "Type");
-	if (type < 0 || type >= SERVERTYPE_MAX)
+	if (type < 0 || type >= SERVERTYPE_MAX) {
 		return false;
+	}
 
-	server.SetType((enum ServerType)type);
+	server.SetType(static_cast<ServerType>(type));
 
 	int logonType = GetTextElementInt(node, "Logontype");
-	if (logonType < 0)
+	if (logonType < 0 || logonType >= LOGONTYPE_MAX) {
 		return false;
+	}
 
-	server.SetLogonType((enum LogonType)logonType);
+	server.SetLogonType(static_cast<LogonType>(logonType));
 
 	if (server.GetLogonType() != ANONYMOUS) {
 		wxString user = GetTextElement(node, "User");
@@ -495,10 +497,11 @@ bool GetServer(pugi::xml_node node, CServer& server)
 	}
 
 	server.SetBypassProxy(GetTextElementInt(node, "BypassProxy", false) == 1);
-	server.SetName(GetTextElement_Trimmed(node, "Name"));
+	server.SetName(GetTextElement_Trimmed(node, "Name").ToStdWstring());
 
-	if (server.GetName().empty())
-		server.SetName(GetTextElement_Trimmed(node));
+	if (server.GetName().empty()) {
+		server.SetName(GetTextElement_Trimmed(node).ToStdWstring());
+	}
 
 	return true;
 }
@@ -519,7 +522,7 @@ void SetServer(pugi::xml_node node, const CServer& server)
 	AddTextElement(node, "Protocol", server.GetProtocol());
 	AddTextElement(node, "Type", server.GetType());
 
-	enum LogonType logonType = server.GetLogonType();
+	LogonType logonType = server.GetLogonType();
 
 	if (server.GetLogonType() != ANONYMOUS) {
 		AddTextElement(node, "User", server.GetUser());
