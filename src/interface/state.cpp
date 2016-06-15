@@ -1155,3 +1155,27 @@ void CState::SetColour(wxColour const& colour)
 		NotifyHandlers(STATECHANGE_TAB_COLOR, wxString(), &m_colour);
 	}
 }
+
+void CState::UpdateSite(wxString const& oldPath, Site const& newSite)
+{
+	if (newSite.m_path.empty() || !newSite.m_server) {
+		return;
+	}
+
+	bool changed = false;
+	if (m_site.m_server) {
+		if (m_site.m_path == oldPath && m_site.m_server.EqualsNoPass(newSite.m_server)) {
+			m_site = newSite;
+			changed = true;
+		}
+	}
+	if (m_last_site.m_server) {
+		if (m_last_site.m_path == oldPath && m_last_site.m_server.EqualsNoPass(newSite.m_server)) {
+			m_last_site = newSite;
+			changed = true;
+		}
+	}
+	if (changed) {
+		NotifyHandlers(STATECHANGE_SERVER);
+	}
+}

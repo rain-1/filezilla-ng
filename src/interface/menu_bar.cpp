@@ -138,8 +138,9 @@ CMenuBar* CMenuBar::Load(CMainFrame* pMainFrame)
 void CMenuBar::UpdateBookmarkMenu()
 {
 	wxMenu* pMenu;
-	if (!FindItem(XRCID("ID_BOOKMARK_ADD"), &pMenu))
+	if (!FindItem(XRCID("ID_BOOKMARK_ADD"), &pMenu)) {
 		return;
+	}
 
 	// Delete old bookmarks
 	for (std::map<int, wxString>::const_iterator iter = m_bookmark_menu_id_map_global.begin(); iter != m_bookmark_menu_id_map_global.end(); ++iter) {
@@ -153,8 +154,7 @@ void CMenuBar::UpdateBookmarkMenu()
 	m_bookmark_menu_id_map_site.clear();
 
 	// Delete the separators
-	while (pMenu->GetMenuItemCount() > 2)
-	{
+	while (pMenu->GetMenuItemCount() > 2) {
 		wxMenuItem* pSeparator = pMenu->FindItemByPosition(2);
 		if (pSeparator)
 			pMenu->Delete(pSeparator);
@@ -193,7 +193,10 @@ void CMenuBar::UpdateBookmarkMenu()
 		return;
 	}
 
-	Site const& site = pState->GetSite();
+	Site site = pState->GetSite();
+	if (!site.m_server) {
+		site = pState->GetLastSite();
+	}
 	if (site.m_bookmarks.empty()) {
 		return;
 	}
@@ -317,6 +320,7 @@ void CMenuBar::OnStateChange(CState* pState, t_statechange_notifications notific
 	case STATECHANGE_SERVER:
 	case STATECHANGE_REMOTE_IDLE:
 		UpdateMenubarState();
+		UpdateBookmarkMenu();
 		break;
 	case STATECHANGE_QUEUEPROCESSING:
 		{
@@ -416,8 +420,9 @@ void CMenuBar::UpdateSpeedLimitMenuItem()
 void CMenuBar::UpdateMenubarState()
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	const CServer* const pServer = pState->GetServer();
 	const bool idle = pState->IsRemoteIdle();
