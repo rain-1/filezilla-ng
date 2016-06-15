@@ -335,7 +335,7 @@ CLocalViewHeader::CLocalViewHeader(wxWindow* pParent, CState& state)
 	: CViewHeader(pParent, _("Local site:")), CStateEventHandler(state)
 {
 	state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
-	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
+	state.RegisterHandler(this, STATECHANGE_SERVER);
 }
 
 void CLocalViewHeader::OnTextChanged(wxCommandEvent&)
@@ -499,10 +499,10 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	}
 }
 
-void CLocalViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
+void CLocalViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
-	if (notification == STATECHANGE_TAB_COLOR) {
-		SetWindowBackgroundTint(*m_pComboBox, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	if (notification == STATECHANGE_SERVER) {
+		SetWindowBackgroundTint(*m_pComboBox, m_state.GetSite().m_colour);
 	}
 	else if (notification == STATECHANGE_LOCAL_DIR) {
 #ifdef __WXGTK__
@@ -523,14 +523,14 @@ CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState& state)
 	: CViewHeader(pParent, _("Remote site:")), CStateEventHandler(state)
 {
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
-	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
+	state.RegisterHandler(this, STATECHANGE_SERVER);
 	Disable();
 }
 
-void CRemoteViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
+void CRemoteViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
-	if (notification == STATECHANGE_TAB_COLOR) {
-		SetWindowBackgroundTint(*m_pComboBox, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	if (notification == STATECHANGE_SERVER) {
+		SetWindowBackgroundTint(*m_pComboBox, m_state.GetSite().m_colour);
 	}
 	else if (notification == STATECHANGE_REMOTE_DIR) {
 		m_path = m_state.GetRemotePath();

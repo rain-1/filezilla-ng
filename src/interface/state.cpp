@@ -518,7 +518,6 @@ bool CState::Connect(Site const& site, CServerPath const& path)
 
 bool CState::Disconnect()
 {
-	SetColour(wxColour());
 	if (!m_pEngine)
 		return false;
 
@@ -1148,14 +1147,6 @@ void CState::SetSecurityInfo(CSftpEncryptionNotification const& info)
 	NotifyHandlers(STATECHANGE_ENCRYPTION);
 }
 
-void CState::SetColour(wxColour const& colour)
-{
-	if (colour != m_colour) {
-		m_colour = colour;
-		NotifyHandlers(STATECHANGE_TAB_COLOR, wxString(), &m_colour);
-	}
-}
-
 void CState::UpdateSite(wxString const& oldPath, Site const& newSite)
 {
 	if (newSite.m_path.empty() || !newSite.m_server) {
@@ -1163,16 +1154,19 @@ void CState::UpdateSite(wxString const& oldPath, Site const& newSite)
 	}
 
 	bool changed = false;
-	if (m_site.m_server) {
+	if (m_site.m_server && m_site != newSite) {
 		if (m_site.m_path == oldPath && m_site.m_server.EqualsNoPass(newSite.m_server)) {
 			m_site = newSite;
 			changed = true;
 		}
 	}
-	if (m_last_site.m_server) {
+	if (m_last_site.m_server && m_last_site != newSite) {
 		if (m_last_site.m_path == oldPath && m_last_site.m_server.EqualsNoPass(newSite.m_server)) {
 			m_last_site = newSite;
-			changed = true;
+			if (!m_site.m_server) {
+				// Active site has precedence over historic data
+				changed = true;
+			}
 		}
 	}
 	if (changed) {

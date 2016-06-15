@@ -5,10 +5,11 @@
 
 #include "xmlfunctions.h"
 
-class Bookmark
+class Bookmark final
 {
 public:
-	virtual ~Bookmark() = default;
+	bool operator==(Bookmark const& b) const;
+	bool operator!=(Bookmark const& b) const { return !(*this == b); }
 
 	wxString m_localDir;
 	CServerPath m_remoteDir;
@@ -19,10 +20,11 @@ public:
 	wxString m_name;
 };
 
-class Site
+class Site final
 {
 public:
-	virtual ~Site() = default;
+	bool operator==(Site const& s) const;
+	bool operator!=(Site const& s) const { return !(*this == s); }
 
 	CServer m_server;
 	wxString m_comments;
@@ -32,6 +34,8 @@ public:
 	std::vector<Bookmark> m_bookmarks;
 
 	wxString m_path;
+
+	wxColour m_colour;
 };
 
 class CSiteManagerXmlHandler

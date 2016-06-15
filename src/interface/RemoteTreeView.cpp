@@ -253,7 +253,7 @@ CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState& state,
 
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
-	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
+	state.RegisterHandler(this, STATECHANGE_SERVER);
 
 	CreateImageList();
 
@@ -284,8 +284,8 @@ void CRemoteTreeView::OnStateChange(t_statechange_notifications notification, co
 	else if (notification == STATECHANGE_APPLYFILTER) {
 		ApplyFilters(false);
 	}
-	else if (notification == STATECHANGE_TAB_COLOR) {
-		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	else if (notification == STATECHANGE_SERVER) {
+		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
 	}
 }
 

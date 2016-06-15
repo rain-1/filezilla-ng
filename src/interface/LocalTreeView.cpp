@@ -250,7 +250,7 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, C
 
 	state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
-	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
+	state.RegisterHandler(this, STATECHANGE_SERVER);
 
 	SetImageList(GetSystemImageList());
 
@@ -850,13 +850,13 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 }
 
-void CLocalTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
+void CLocalTreeView::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR) {
 		SetDir(m_state.GetLocalDir().GetPath());
 	}
-	else if (notification == STATECHANGE_TAB_COLOR) {
-		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	else if (notification == STATECHANGE_SERVER) {
+		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);

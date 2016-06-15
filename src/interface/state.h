@@ -34,8 +34,6 @@ enum t_statechange_notifications
 
 	STATECHANGE_LOCAL_RECURSION_LISTING,
 
-	STATECHANGE_TAB_COLOR,
-
 	/* Global notifications */
 	STATECHANGE_QUEUEPROCESSING,
 	STATECHANGE_NEWCONTEXT, /* New context created */
@@ -184,9 +182,6 @@ public:
 	void ClearPreviouslyVisitedLocalSubdir() { m_previouslyVisitedLocalSubdir = _T(""); }
 	void ClearPreviouslyVisitedRemoteSubdir() { m_previouslyVisitedRemoteSubdir = _T(""); }
 
-	wxColour GetColour() const { return m_colour; }
-	void SetColour(wxColour const& colour);
-
 	void UpdateSite(wxString const& oldPath, Site const& newSite);
 
 protected:
@@ -235,8 +230,6 @@ protected:
 
 	wxString m_previouslyVisitedLocalSubdir;
 	wxString m_previouslyVisitedRemoteSubdir;
-
-	wxColour m_colour;
 };
 
 class CGlobalStateEventHandler
