@@ -237,13 +237,6 @@ protected:
 				}
 				else {
 					m_pMainFrame->SetTitle(pState->GetTitle() + _T(" - FileZilla"));
-					if (pServer->GetName().empty()) {
-						// Can only happen through quickconnect bar
-						CMenuBar* pMenuBar = dynamic_cast<CMenuBar*>(m_pMainFrame->GetMenuBar());
-						if (pMenuBar) {
-							pMenuBar->UpdateBookmarkMenu();
-						}
-					}
 				}
 			}
 
@@ -775,45 +768,31 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		}
 		
 		Site const& site = pState->GetSite();
+		wxString sitePath = site.m_path;
 
-		/* FIXME
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 		if (!controls) {
 			return;
 		}
 
-		if (!site.m_server && !controls->site_bookmarks->path.empty()) {
-			// Get server from site manager
-			std::unique_ptr<Site> data = CSiteManager::GetSiteByPath(controls->site_bookmarks->path);
-			if (data) {
-				server = data->m_server;
-				pServer = &server;
-			}
-			else {
-				controls->site_bookmarks->path.clear();
-				controls->site_bookmarks->bookmarks.clear();
-				if (m_pMenuBar)
-					m_pMenuBar->UpdateBookmarkMenu();
-			}
-		}
-
 		// controls->last_bookmark_path can get modified if it's empty now
 		int res;
 		if (event.GetId() == XRCID("ID_BOOKMARK_ADD")) {
-			CNewBookmarkDialog dlg(this, controls->site_bookmarks->path, pServer);
+			CNewBookmarkDialog dlg(this, sitePath, site.m_server ? &site.m_server : 0);
 			res = dlg.Run(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
 		}
 		else {
-			CBookmarksDialog dlg(this, controls->site_bookmarks->path, pServer);
-
+			CBookmarksDialog dlg(this, sitePath, site.m_server ? &site.m_server : 0);
 			res = dlg.Run();
 		}
 		if (res == wxID_OK) {
-			controls->site_bookmarks->bookmarks.clear();
-			CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
-			if (m_pMenuBar)
+			// FIXME
+			// notify states
+
+			if (m_pMenuBar) {
 				m_pMenuBar->UpdateBookmarkMenu();
-		}*/
+			}
+		}
 	}
 	else if (event.GetId() == XRCID("ID_MENU_HELP_WELCOME")) {
 		CWelcomeDialog dlg;
@@ -1362,25 +1341,16 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 	int res = dlg.ShowModal();
 	if (res == wxID_YES || res == wxID_OK) {
 		// Update bookmark paths
-		for (size_t j = 0; j < connected_sites.size(); ++j) {
-			for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
-				CContextControl::_context_controls *controls =  m_pContextControl->GetControlsFromTabIndex(i);
-				if (!controls) {
-					continue;
+		for (auto const& connected_site : connected_sites) {
+			std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(connected_site.new_path);
+			if (site) {
+				for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
+					CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
+					if (!controls) {
+						continue;
+					}
+					controls->pState->UpdateSite(connected_site.old_path, *site);
 				}
-
-				Site const& site = controls->pState->GetSite();
-	/* FIXME
-				if (connected_sites[j].old_path != controls->site_bookmarks->path) {
-					continue;
-				}
-
-				controls->site_bookmarks->path = connected_sites[j].new_path;
-
-				controls->site_bookmarks->bookmarks.clear();
-				CSiteManager::GetBookmarks(controls->site_bookmarks->path, controls->site_bookmarks->bookmarks);
-				*/
-				break;
 			}
 		}
 	}
@@ -1392,10 +1362,6 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 		}
 
 		ConnectToSite(data);
-	}
-
-	if (m_pMenuBar) {
-		m_pMenuBar->UpdateBookmarkMenu();
 	}
 }
 

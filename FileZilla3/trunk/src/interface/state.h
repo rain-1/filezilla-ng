@@ -187,6 +187,8 @@ public:
 	wxColour GetColour() const { return m_colour; }
 	void SetColour(wxColour const& colour);
 
+	void UpdateSite(wxString const& oldPath, Site const& newSite);
+
 protected:
 	void SetSite(Site const& site, CServerPath const& path = CServerPath());
 

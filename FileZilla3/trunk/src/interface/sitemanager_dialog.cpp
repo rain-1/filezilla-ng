@@ -2199,7 +2199,16 @@ void CSiteManagerDialog::AddNewBookmark(wxTreeItemId parent)
 
 void CSiteManagerDialog::RememberLastSelected()
 {
-	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, GetSitePath(false));
+	wxString path;
+
+	wxTreeCtrlEx *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrlEx);
+	if (pTree) {
+		wxTreeItemId sel = pTree->GetSelection();
+		if (sel) {
+			path = GetSitePath(sel);
+		}
+	}
+	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, path);
 }
 
 void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)
@@ -2295,13 +2304,17 @@ void CSiteManagerDialog::OnNewBookmark(wxCommandEvent&)
 
 wxString CSiteManagerDialog::GetSitePath(wxTreeItemId item, bool stripBookmark)
 {
+	wxASSERT(item);
+
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
-	if (!pTree)
+	if (!pTree) {
 		return wxString();
+	}
 
 	CSiteManagerItemData* pData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!pData)
+	if (!pData) {
 		return wxString();
+	}
 
 	if (stripBookmark && pData->m_bookmark) {
 		item = pTree->GetItemParent(item);
