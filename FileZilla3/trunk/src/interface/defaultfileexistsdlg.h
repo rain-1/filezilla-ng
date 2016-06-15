@@ -10,15 +10,15 @@ public:
 
 	bool Load(wxWindow *parent, bool fromQueue);
 
-	static enum CFileExistsNotification::OverwriteAction GetDefault(bool download);
-	static void SetDefault(bool download, enum CFileExistsNotification::OverwriteAction action);
+	static CFileExistsNotification::OverwriteAction GetDefault(bool download);
+	static void SetDefault(bool download, CFileExistsNotification::OverwriteAction action);
 
-	bool Run(enum CFileExistsNotification::OverwriteAction *downloadAction = 0, enum CFileExistsNotification::OverwriteAction *uploadAction = 0);
+	bool Run(CFileExistsNotification::OverwriteAction *downloadAction = 0, CFileExistsNotification::OverwriteAction *uploadAction = 0);
 
 protected:
-	void SelectDefaults(enum CFileExistsNotification::OverwriteAction* downloadAction, enum CFileExistsNotification::OverwriteAction* uploadAction);
+	void SelectDefaults(CFileExistsNotification::OverwriteAction* downloadAction, CFileExistsNotification::OverwriteAction* uploadAction);
 
-	static enum CFileExistsNotification::OverwriteAction m_defaults[2];
+	static CFileExistsNotification::OverwriteAction m_defaults[2];
 };
 
 #endif //__DEFAULTFILEEXISTSDLG_H__

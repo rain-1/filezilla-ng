@@ -59,7 +59,7 @@ void CManualTransfer::Run(wxWindow* pParent, CState* pState)
 	wxChoice* pChoice = XRCCTRL(*this, "ID_LOGONTYPE", wxChoice);
 	wxASSERT(pChoice);
 	for (int i = 0; i < LOGONTYPE_MAX; ++i)
-		pChoice->Append(CServer::GetNameFromLogonType((enum LogonType)i));
+		pChoice->Append(CServer::GetNameFromLogonType(static_cast<LogonType>(i)));
 
 	if (m_pState->GetServer()) {
 		m_pServer = new CServer(*m_pState->GetServer());
@@ -388,13 +388,13 @@ bool CManualTransfer::UpdateServer()
 	server.SetHost(host, port);
 
 	const wxString& protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
-	const enum ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
+	const ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
 	if (protocol != UNKNOWN)
 		server.SetProtocol(protocol);
 	else
 		server.SetProtocol(FTP);
 
-	enum LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
+	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
 	server.SetLogonType(logon_type);
 
 	server.SetUser(xrc_call(*this, "ID_USER", &wxTextCtrl::GetValue),
@@ -416,10 +416,10 @@ bool CManualTransfer::VerifyServer()
 		return false;
 	}
 
-	enum LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
+	LogonType logon_type = CServer::GetLogonTypeFromName(xrc_call(*this, "ID_LOGONTYPE", &wxChoice::GetStringSelection));
 
 	wxString protocolName = xrc_call(*this, "ID_PROTOCOL", &wxChoice::GetStringSelection);
-	enum ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
+	ServerProtocol protocol = CServer::GetProtocolFromName(protocolName);
 	if (protocol == SFTP &&
 		logon_type == ACCOUNT)
 	{

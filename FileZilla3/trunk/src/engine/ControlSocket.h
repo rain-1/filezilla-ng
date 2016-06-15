@@ -223,8 +223,8 @@ protected:
 	// SendNextCommand will be called once the lock gets available
 	// and engine could obtain it.
 	// Lock is recursive. Lock counter increases on suboperations.
-	bool TryLockCache(enum locking_reason reason, const CServerPath& directory);
-	bool IsLocked(enum locking_reason reason, const CServerPath& directory);
+	bool TryLockCache(locking_reason reason, const CServerPath& directory);
+	bool IsLocked(locking_reason reason, const CServerPath& directory);
 
 	// Unlocks the cache. Can be called if not holding the lock
 	// Doesn't need reason as one engine can at most hold one lock
@@ -234,7 +234,7 @@ protected:
 	// Returns reason != unknown iff engine is the first waiting engine
 	// and obtains the lock.
 	// On failure, the engine was not waiting for a lock.
-	enum locking_reason ObtainLockFromEvent();
+	locking_reason ObtainLockFromEvent();
 
 	bool IsWaitingForLock();
 
@@ -242,7 +242,7 @@ protected:
 	{
 		CControlSocket* pControlSocket;
 		CServerPath directory;
-		enum locking_reason reason;
+		locking_reason reason;
 		bool waiting;
 		int lockcount;
 	};

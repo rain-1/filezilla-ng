@@ -129,7 +129,7 @@ protected:
 class CAsyncRequestNotification : public CNotificationHelper<nId_asyncrequest>
 {
 public:
-	virtual enum RequestId GetRequestID() const = 0;
+	virtual RequestId GetRequestID() const = 0;
 	unsigned int requestNumber{}; // Do never change this
 
 protected:
@@ -141,7 +141,7 @@ protected:
 class CFileExistsNotification final : public CAsyncRequestNotification
 {
 public:
-	virtual enum RequestId GetRequestID() const;
+	virtual RequestId GetRequestID() const;
 
 	bool download{};
 
@@ -191,7 +191,7 @@ public:
 	};
 
 	CInteractiveLoginNotification(type t, const wxString& challenge, bool repeated);
-	virtual enum RequestId GetRequestID() const;
+	virtual RequestId GetRequestID() const;
 
 	// Set to true if you have set a password
 	bool passwordSet{};
@@ -273,7 +273,7 @@ class CHostKeyNotification final : public CAsyncRequestNotification
 {
 public:
 	CHostKeyNotification(wxString host, int port, wxString fingerprint, bool changed = false);
-	virtual enum RequestId GetRequestID() const;
+	virtual RequestId GetRequestID() const;
 
 	wxString GetHost() const;
 	int GetPort() const;
@@ -378,7 +378,7 @@ public:
 		const wxString& sessionMac,
 		int algorithmWarnings,
 		const std::vector<CCertificate> &certificates);
-	virtual enum RequestId GetRequestID() const { return reqId_certificate; }
+	virtual RequestId GetRequestID() const { return reqId_certificate; }
 
 	const wxString& GetHost() const { return m_host; }
 	unsigned int GetPort() const { return m_port; }

@@ -27,7 +27,7 @@ CCommandLine::CCommandLine(int argc, wxChar** argv)
 	m_parser.SetSwitchChars(_T("-"));
 }
 
-bool CCommandLine::HasSwitch(enum CCommandLine::t_switches s) const
+bool CCommandLine::HasSwitch(CCommandLine::t_switches s) const
 {
 	if (s == sitemanager)
 		return m_parser.Found(_T("s"));
@@ -43,7 +43,7 @@ bool CCommandLine::HasSwitch(enum CCommandLine::t_switches s) const
 	return false;
 }
 
-wxString CCommandLine::GetOption(enum CCommandLine::t_option option) const
+wxString CCommandLine::GetOption(CCommandLine::t_option option) const
 {
 	wxString value;
 	switch (option)

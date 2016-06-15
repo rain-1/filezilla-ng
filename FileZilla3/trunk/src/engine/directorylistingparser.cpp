@@ -717,7 +717,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	return listing;
 }
 
-bool CDirectoryListingParser::ParseLine(CLine &line, const enum ServerType serverType, bool concatenated)
+bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType, bool concatenated)
 {
 	fz::shared_value<CDirentry> refEntry;
 	CDirentry & entry = refEntry.get();

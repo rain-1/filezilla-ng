@@ -1,7 +1,7 @@
 #include <filezilla.h>
 #include "defaultfileexistsdlg.h"
 
-enum CFileExistsNotification::OverwriteAction CDefaultFileExistsDlg::m_defaults[2] = {CFileExistsNotification::unknown, CFileExistsNotification::unknown};
+CFileExistsNotification::OverwriteAction CDefaultFileExistsDlg::m_defaults[2] = {CFileExistsNotification::unknown, CFileExistsNotification::unknown};
 
 CDefaultFileExistsDlg::CDefaultFileExistsDlg()
 {
@@ -29,7 +29,7 @@ bool CDefaultFileExistsDlg::Load(wxWindow *parent, bool fromQueue)
 	return true;
 }
 
-void CDefaultFileExistsDlg::SelectDefaults(enum CFileExistsNotification::OverwriteAction* downloadAction, enum CFileExistsNotification::OverwriteAction* uploadAction)
+void CDefaultFileExistsDlg::SelectDefaults(CFileExistsNotification::OverwriteAction* downloadAction, CFileExistsNotification::OverwriteAction* uploadAction)
 {
 	if (downloadAction)
 		XRCCTRL(*this, "ID_DOWNLOAD_ACTION", wxChoice)->SetSelection(*downloadAction + 1);
@@ -37,12 +37,12 @@ void CDefaultFileExistsDlg::SelectDefaults(enum CFileExistsNotification::Overwri
 		XRCCTRL(*this, "ID_UPLOAD_ACTION", wxChoice)->SetSelection(*uploadAction + 1);
 }
 
-enum CFileExistsNotification::OverwriteAction CDefaultFileExistsDlg::GetDefault(bool download)
+CFileExistsNotification::OverwriteAction CDefaultFileExistsDlg::GetDefault(bool download)
 {
 	return m_defaults[download ? 0 : 1];
 }
 
-bool CDefaultFileExistsDlg::Run(enum CFileExistsNotification::OverwriteAction *downloadAction, enum CFileExistsNotification::OverwriteAction *uploadAction)
+bool CDefaultFileExistsDlg::Run(CFileExistsNotification::OverwriteAction *downloadAction, CFileExistsNotification::OverwriteAction *uploadAction)
 {
 	SelectDefaults(downloadAction, uploadAction);
 
@@ -63,12 +63,11 @@ bool CDefaultFileExistsDlg::Run(enum CFileExistsNotification::OverwriteAction *d
 	if (ShowModal() != wxID_OK)
 		return false;
 
-	if (downloadAction || !uploadAction)
-	{
+	if (downloadAction || !uploadAction) {
 		int dl = XRCCTRL(*this, "ID_DOWNLOAD_ACTION", wxChoice)->GetSelection();
 		if (dl >= 0)
 			dl--;
-		enum CFileExistsNotification::OverwriteAction action = (enum CFileExistsNotification::OverwriteAction)dl;
+		CFileExistsNotification::OverwriteAction action = static_cast<CFileExistsNotification::OverwriteAction>(dl);
 
 		if (downloadAction)
 			*downloadAction = action;
@@ -76,12 +75,11 @@ bool CDefaultFileExistsDlg::Run(enum CFileExistsNotification::OverwriteAction *d
 			m_defaults[0] = action;
 	}
 
-	if (!downloadAction || uploadAction)
-	{
+	if (!downloadAction || uploadAction) {
 		int ul = XRCCTRL(*this, "ID_UPLOAD_ACTION", wxChoice)->GetSelection();
 		if (ul >= 0)
 			ul--;
-		enum CFileExistsNotification::OverwriteAction action = (enum CFileExistsNotification::OverwriteAction)ul;
+		CFileExistsNotification::OverwriteAction action = static_cast<CFileExistsNotification::OverwriteAction>(ul);
 
 		if (uploadAction)
 			*uploadAction = action;
@@ -92,7 +90,7 @@ bool CDefaultFileExistsDlg::Run(enum CFileExistsNotification::OverwriteAction *d
 	return true;
 }
 
-void CDefaultFileExistsDlg::SetDefault(bool download, enum CFileExistsNotification::OverwriteAction action)
+void CDefaultFileExistsDlg::SetDefault(bool download, CFileExistsNotification::OverwriteAction action)
 {
 	m_defaults[download ? 0 : 1] = action;
 }

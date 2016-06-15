@@ -58,7 +58,7 @@ CFilter::CFilter()
 #endif
 }
 
-bool CFilter::HasConditionOfType(enum t_filterType type) const
+bool CFilter::HasConditionOfType(t_filterType type) const
 {
 	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
 	{

@@ -73,7 +73,7 @@ void CLed::OnTimer(wxTimerEvent& event)
 		return;
 	}
 
-	if (!CFileZillaEngine::IsActive((enum CFileZillaEngine::_direction)m_index)) {
+	if (!CFileZillaEngine::IsActive(static_cast<CFileZillaEngine::_direction>(m_index))) {
 		Unset();
 		m_timer.Stop();
 	}

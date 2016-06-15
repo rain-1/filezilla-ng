@@ -31,7 +31,7 @@ protected:
 		wxString body;
 		wxString category;
 	};
-	std::list<struct _notification> m_notifications;
+	std::list<_notification> m_notifications;
 
 	bool HandleReply(wxDBusMessage& msg);
 	bool HandleSignal(wxDBusMessage& msg);
@@ -77,7 +77,7 @@ void CDesktopNotificationImpl::Notify(const wxString& summary, const wxString& b
 	if (m_state == error)
 		return;
 
-	struct _notification notification;
+	_notification notification;
 	notification.summary = summary;
 	notification.body = body;
 	notification.category = category;
@@ -97,7 +97,7 @@ void CDesktopNotificationImpl::EmitNotifications()
 
 	m_state = busy;
 
-	struct _notification notification = m_notifications.front();
+	_notification notification = m_notifications.front();
 	m_notifications.pop_front();
 
 	wxDBusMethodCall *call = new wxDBusMethodCall(

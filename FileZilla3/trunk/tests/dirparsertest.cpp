@@ -15,7 +15,7 @@ typedef struct
 {
 	std::string data;
 	CDirentry reference;
-	enum ServerType serverType;
+	ServerType serverType;
 } t_entry;
 
 class CDirectoryListingParserTest : public CppUnit::TestFixture

@@ -590,7 +590,7 @@ bool CQueueStorage::Impl::SaveServer(const CServerItem& item)
 	Bind(insertServerQuery_, server_table_column_names::protocol, static_cast<int>(server.GetProtocol()));
 	Bind(insertServerQuery_, server_table_column_names::type, static_cast<int>(server.GetType()));
 
-	enum LogonType logonType = server.GetLogonType();
+	LogonType logonType = server.GetLogonType();
 	if (server.GetLogonType() != ANONYMOUS) {
 		Bind(insertServerQuery_, server_table_column_names::user, server.GetUser());
 
@@ -852,13 +852,13 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 	if (type < 0 || type >= SERVERTYPE_MAX)
 		return INVALID_DATA;
 
-	server.SetType((enum ServerType)type);
+	server.SetType(static_cast<ServerType>(type));
 
 	int logonType = GetColumnInt(selectServersQuery_, server_table_column_names::logontype);
 	if (logonType < 0 || logonType >= LOGONTYPE_MAX)
 		return INVALID_DATA;
 
-	server.SetLogonType((enum LogonType)logonType);
+	server.SetLogonType(static_cast<LogonType>(logonType));
 
 	if (server.GetLogonType() != ANONYMOUS)
 	{

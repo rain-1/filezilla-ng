@@ -25,8 +25,8 @@ public:
 	bool Parse();
 	void DisplayUsage();
 
-	bool HasSwitch(enum t_switches s) const;
-	wxString GetOption(enum t_option option) const;
+	bool HasSwitch(t_switches s) const;
+	wxString GetOption(t_option option) const;
 	wxString GetParameter() const;
 
 protected:

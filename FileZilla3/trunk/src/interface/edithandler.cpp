@@ -232,7 +232,7 @@ void CEditHandler::Release()
 	delete this;
 }
 
-enum CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName) const
+CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName) const
 {
 	std::list<t_fileData>::const_iterator iter = GetFile(fileName);
 	if (iter == m_fileDataList[local].end())
@@ -241,7 +241,7 @@ enum CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName
 	return iter->state;
 }
 
-enum CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const
+CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const
 {
 	std::list<t_fileData>::const_iterator iter = GetFile(fileName, remotePath, server);
 	if (iter == m_fileDataList[remote].end())
@@ -250,7 +250,7 @@ enum CEditHandler::fileState CEditHandler::GetFileState(const wxString& fileName
 	return iter->state;
 }
 
-int CEditHandler::GetFileCount(enum CEditHandler::fileType type, enum CEditHandler::fileState state, const CServer* pServer /*=0*/) const
+int CEditHandler::GetFileCount(CEditHandler::fileType type, CEditHandler::fileState state, const CServer* pServer /*=0*/) const
 {
 	int count = 0;
 	if (state == unknown) {
@@ -283,7 +283,7 @@ int CEditHandler::GetFileCount(enum CEditHandler::fileType type, enum CEditHandl
 	return count;
 }
 
-bool CEditHandler::AddFile(enum CEditHandler::fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server)
+bool CEditHandler::AddFile(CEditHandler::fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server)
 {
 	wxASSERT(type != none);
 
@@ -395,7 +395,7 @@ bool CEditHandler::RemoveAll(bool force)
 	return m_fileDataList[local].empty() && m_fileDataList[remote].empty();
 }
 
-bool CEditHandler::RemoveAll(enum fileState state, const CServer* pServer /*=0*/)
+bool CEditHandler::RemoveAll(fileState state, const CServer* pServer /*=0*/)
 {
 	// Others not implemented
 	wxASSERT(state == upload_and_remove_failed);
@@ -580,7 +580,7 @@ bool CEditHandler::StartEditing(const wxString& file, const CServerPath& remoteP
 	return StartEditing(remote, *iter);
 }
 
-bool CEditHandler::StartEditing(enum CEditHandler::fileType type, t_fileData& data)
+bool CEditHandler::StartEditing(CEditHandler::fileType type, t_fileData& data)
 {
 	wxASSERT(type != none);
 	wxASSERT(data.state == edit);
@@ -741,7 +741,7 @@ bool CEditHandler::UploadFile(const wxString& file, bool unedit)
 	return UploadFile(local, iter, unedit);
 }
 
-bool CEditHandler::UploadFile(enum fileType type, std::list<t_fileData>::iterator iter, bool unedit)
+bool CEditHandler::UploadFile(fileType type, std::list<t_fileData>::iterator iter, bool unedit)
 {
 	wxCHECK(type != none, false);
 
@@ -809,7 +809,7 @@ void CEditHandler::SetTimerState()
 		m_timer.Start(15000);
 }
 
-wxString CEditHandler::CanOpen(enum CEditHandler::fileType type, const wxString& fileName, bool &dangerous, bool &program_exists)
+wxString CEditHandler::CanOpen(CEditHandler::fileType type, const wxString& fileName, bool &dangerous, bool &program_exists)
 {
 	wxASSERT(type != none);
 
@@ -1185,7 +1185,7 @@ void CEditHandlerStatusDialog::SetCtrlState()
 	int item = -1;
 	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1)
 	{
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 		if (pData->state == CEditHandler::edit)
 			selectedEdited = true;
@@ -1219,7 +1219,7 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent&)
 	int item = -1;
 	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 		if (pData->state != CEditHandler::edit && pData->state != CEditHandler::upload_and_remove_failed) {
 			wxBell();
@@ -1232,7 +1232,7 @@ void CEditHandlerStatusDialog::OnUnedit(wxCommandEvent&)
 	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		const int i = *iter;
 
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(i, type);
 
 		if (type == CEditHandler::local) {
@@ -1266,7 +1266,7 @@ void CEditHandlerStatusDialog::OnUpload(wxCommandEvent& event)
 	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
 
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 
 		if (pData->state != CEditHandler::edit && pData->state != CEditHandler::upload_and_remove_failed) {
@@ -1279,7 +1279,7 @@ void CEditHandlerStatusDialog::OnUpload(wxCommandEvent& event)
 	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		const int i = *iter;
 
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(i, type);
 
 		bool unedit = event.GetId() == XRCID("ID_UPLOADANDUNEDIT") || pData->state == CEditHandler::upload_and_remove_failed;
@@ -1313,7 +1313,7 @@ void CEditHandlerStatusDialog::OnEdit(wxCommandEvent&)
 	while ((item = pListCtrl->GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED)) != -1) {
 		pListCtrl->SetItemState(item, 0, wxLIST_STATE_SELECTED);
 
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(item, type);
 
 		if (pData->state != CEditHandler::edit) {
@@ -1326,7 +1326,7 @@ void CEditHandlerStatusDialog::OnEdit(wxCommandEvent&)
 	for (std::list<int>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
 		const int i = *iter;
 
-		enum CEditHandler::fileType type;
+		CEditHandler::fileType type;
 		CEditHandler::t_fileData* pData = GetDataFromItem(i, type);
 
 		if (type == CEditHandler::local) {

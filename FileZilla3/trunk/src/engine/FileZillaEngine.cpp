@@ -37,7 +37,7 @@ bool CFileZillaEngine::IsPendingAsyncRequestReply(std::unique_ptr<CAsyncRequestN
 	return impl_->IsPendingAsyncRequestReply(pNotification);
 }
 
-bool CFileZillaEngine::IsActive(enum CFileZillaEngine::_direction direction)
+bool CFileZillaEngine::IsActive(CFileZillaEngine::_direction direction)
 {
 	return CFileZillaEnginePrivate::IsActive(direction);
 }

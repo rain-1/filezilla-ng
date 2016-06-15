@@ -40,7 +40,7 @@ void CAutoAsciiFiles::SettingsChanged()
 // Defined in RemoteListView.cpp
 wxString StripVMSRevision(const wxString& name);
 
-bool CAutoAsciiFiles::TransferLocalAsAscii(wxString const& local_file, enum ServerType server_type)
+bool CAutoAsciiFiles::TransferLocalAsAscii(wxString const& local_file, ServerType server_type)
 {
 	int pos = local_file.Find(fz::local_filesys::path_separator, true);
 
@@ -51,7 +51,7 @@ bool CAutoAsciiFiles::TransferLocalAsAscii(wxString const& local_file, enum Serv
 	);
 }
 
-bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString const& remote_file, enum ServerType server_type)
+bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString const& remote_file, ServerType server_type)
 {
 	int mode = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
 	if (mode == 1)

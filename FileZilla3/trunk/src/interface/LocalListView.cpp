@@ -1345,7 +1345,7 @@ void CLocalListView::RefreshFile(const wxString& file)
 	CLocalFileData data;
 
 	bool wasLink;
-	enum fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(m_dir.GetPath() + file), wasLink, &data.size, &data.time, &data.attributes);
+	fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(m_dir.GetPath() + file), wasLink, &data.size, &data.time, &data.attributes);
 	if (type == fz::local_filesys::unknown)
 		return;
 

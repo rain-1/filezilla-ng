@@ -79,7 +79,7 @@ protected:
 		wxWindow* pChild;
 	};
 
-	std::map<int, struct t_statbar_child> m_children;
+	std::map<int, t_statbar_child> m_children;
 
 	void PositionChildren(int field);
 

@@ -29,7 +29,7 @@ class CFilterCondition
 public:
 	CFilterCondition();
 
-	enum t_filterType type;
+	t_filterType type;
 	int condition;
 
 	wxString strValue; // All other types
@@ -55,12 +55,12 @@ public:
 
 	bool filterFiles;
 	bool filterDirs;
-	enum t_matchType matchType;
+	t_matchType matchType;
 	bool matchCase;
 
 	std::vector<CFilterCondition> filters;
 
-	bool HasConditionOfType(enum t_filterType type) const;
+	bool HasConditionOfType(t_filterType type) const;
 	bool IsLocalFilter() const;
 };
 

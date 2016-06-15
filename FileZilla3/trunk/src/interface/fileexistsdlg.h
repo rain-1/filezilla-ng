@@ -14,7 +14,7 @@ public:
 	/// Creation
 	bool Create(wxWindow* parent);
 
-	enum CFileExistsNotification::OverwriteAction GetAction() const;
+	CFileExistsNotification::OverwriteAction GetAction() const;
 	bool Always(bool &directionOnly, bool &queueOnly) const;
 
 protected:
@@ -31,7 +31,7 @@ protected:
 	wxString GetPathEllipsis(wxString path, wxWindow *window);
 
 	CFileExistsNotification *m_pNotification;
-	enum CFileExistsNotification::OverwriteAction m_action;
+	CFileExistsNotification::OverwriteAction m_action;
 	bool m_always{};
 	bool m_directionOnly{};
 	bool m_queueOnly{};

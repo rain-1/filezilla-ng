@@ -8,7 +8,7 @@ BEGIN_EVENT_TABLE(CConditionalDialog, wxDialog)
 EVT_BUTTON(wxID_ANY, CConditionalDialog::OnButton)
 END_EVENT_TABLE()
 
-CConditionalDialog::CConditionalDialog(wxWindow* parent, enum DialogType type, enum Modes mode, bool checked /*=false*/)
+CConditionalDialog::CConditionalDialog(wxWindow* parent, DialogType type, Modes mode, bool checked /*=false*/)
 	: wxDialog(parent, wxID_ANY, _T(""), wxDefaultPosition), m_type(type)
 {
 	wxSizer* pVertSizer = new wxBoxSizer(wxVERTICAL);

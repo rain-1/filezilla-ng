@@ -27,9 +27,9 @@ private:
 	bool HandleReply(wxDBusMessage& msg);
 	bool HandleSignal(wxDBusMessage& msg);
 
-	enum _state m_state;
+	_state m_state;
 
-	enum _state m_intended_state;
+	_state m_intended_state;
 	unsigned int m_cookie;
 
 	bool m_use_gsm;

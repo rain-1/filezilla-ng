@@ -1388,7 +1388,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 		if (pData) {
 			bool wasLink;
 			int attributes;
-			enum fz::local_filesys::type type;
+			fz::local_filesys::type type;
 			fz::datetime date;
 			if (!path.empty() && path.Last() == fz::local_filesys::path_separator)
 				type = fz::local_filesys::get_file_info(fz::to_native(path + pData->m_known_subdir), wasLink, 0, &date, &attributes);

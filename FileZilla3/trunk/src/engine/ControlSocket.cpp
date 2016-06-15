@@ -613,7 +613,7 @@ const std::list<CControlSocket::t_lockInfo>::iterator CControlSocket::GetLockSta
 	return iter;
 }
 
-bool CControlSocket::TryLockCache(enum locking_reason reason, const CServerPath& directory)
+bool CControlSocket::TryLockCache(locking_reason reason, const CServerPath& directory)
 {
 	wxASSERT(m_pCurrentServer);
 	wxASSERT(m_pCurOpData);
@@ -668,7 +668,7 @@ bool CControlSocket::TryLockCache(enum locking_reason reason, const CServerPath&
 	return true;
 }
 
-bool CControlSocket::IsLocked(enum locking_reason reason, const CServerPath& directory)
+bool CControlSocket::IsLocked(locking_reason reason, const CServerPath& directory)
 {
 	wxASSERT(m_pCurrentServer);
 
@@ -713,7 +713,7 @@ void CControlSocket::UnlockCache()
 	}
 
 	CServerPath directory = iter->directory;
-	enum locking_reason reason = iter->reason;
+	locking_reason reason = iter->reason;
 
 	m_lockInfoList.erase(iter);
 
@@ -743,7 +743,7 @@ void CControlSocket::UnlockCache()
 	}
 }
 
-enum CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
+CControlSocket::locking_reason CControlSocket::ObtainLockFromEvent()
 {
 	if (!m_pCurOpData)
 		return lock_unknown;
@@ -1053,7 +1053,7 @@ int CRealControlSocket::ContinueConnect()
 		delete m_pBackend;
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
-		int res = m_pProxyBackend->Handshake((enum CProxySocket::ProxyType)proxy_type,
+		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
 											m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(),
 											engine_.GetOptions().GetOption(OPTION_PROXY_USER),
 											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));

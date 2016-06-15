@@ -51,12 +51,12 @@ public:
 	void CreateTab();
 	bool CloseTab(int tab);
 
-	struct _context_controls* GetCurrentControls();
-	struct _context_controls* GetControlsFromState(CState* pState);
+	_context_controls* GetCurrentControls();
+	_context_controls* GetControlsFromState(CState* pState);
 
 	int GetCurrentTab() const;
 	int GetTabCount() const;
-	struct _context_controls* GetControlsFromTabIndex(int i);
+	_context_controls* GetControlsFromTabIndex(int i);
 
 	bool SelectTab(int i);
 	void AdvanceTab(bool forward);
@@ -65,7 +65,7 @@ protected:
 
 	void CreateContextControls(CState& state);
 
-	std::vector<struct _context_controls> m_context_controls;
+	std::vector<_context_controls> m_context_controls;
 	int m_current_context_controls{-1};
 
 	wxAuiNotebookEx* m_tabs{};
