@@ -366,7 +366,7 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 	state.RegisterHandler(this, STATECHANGE_REMOTE_DIR);
 	state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
 	state.RegisterHandler(this, STATECHANGE_REMOTE_LINKNOTDIR);
-	state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
+	state.RegisterHandler(this, STATECHANGE_SERVER);
 
 	m_dropTarget = -1;
 
@@ -1994,8 +1994,8 @@ void CRemoteListView::OnStateChange(t_statechange_notifications notification, co
 		wxASSERT(data2);
 		LinkIsNotDir(*(CServerPath*)data2, data);
 	}
-	else if (notification == STATECHANGE_TAB_COLOR) {
-		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	else if (notification == STATECHANGE_SERVER) {
+		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);

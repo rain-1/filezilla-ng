@@ -270,7 +270,7 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 	m_state.RegisterHandler(this, STATECHANGE_LOCAL_DIR);
 	m_state.RegisterHandler(this, STATECHANGE_APPLYFILTER);
 	m_state.RegisterHandler(this, STATECHANGE_LOCAL_REFRESH_FILE);
-	m_state.RegisterHandler(this, STATECHANGE_TAB_COLOR);
+	m_state.RegisterHandler(this, STATECHANGE_SERVER);
 
 	m_dropTarget = -1;
 
@@ -1263,14 +1263,14 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 	}
 }
 
-void CLocalListView::OnStateChange(t_statechange_notifications notification, const wxString& data, const void* data2)
+void CLocalListView::OnStateChange(t_statechange_notifications notification, const wxString& data, const void*)
 {
 	if (notification == STATECHANGE_LOCAL_DIR)
 		DisplayDir(m_state.GetLocalDir());
 	else if (notification == STATECHANGE_APPLYFILTER)
 		ApplyCurrentFilter();
-	else if (notification == STATECHANGE_TAB_COLOR) {
-		SetWindowBackgroundTint(*this, data2 ? *reinterpret_cast<wxColour const*>(data2) : wxColour());
+	else if (notification == STATECHANGE_SERVER) {
+		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_LOCAL_REFRESH_FILE);

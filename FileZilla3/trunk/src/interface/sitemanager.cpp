@@ -1,10 +1,65 @@
-	#include <filezilla.h>
+#include <filezilla.h>
 #include "sitemanager.h"
 
 #include "filezillaapp.h"
 #include "ipcmutex.h"
 #include "Options.h"
 #include "xmlfunctions.h"
+
+bool Bookmark::operator==(Bookmark const& b) const
+{
+	if (m_localDir != b.m_localDir) {
+		return false;
+	}
+	
+	if (m_remoteDir != b.m_remoteDir) {
+		return false;
+	}
+
+	if (m_sync != b.m_sync) {
+		return false;
+	}
+
+	if (m_comparison != b.m_comparison) {
+		return false;
+	}
+
+	if (m_name != b.m_name) {
+		return false;
+	}
+
+	return true;
+}
+
+bool Site::operator==(Site const& s) const
+{
+	if (m_server != s.m_server) {
+		return false;
+	}
+
+	if (m_comments != s.m_comments) {
+		return false;
+	}
+
+	if (m_default_bookmark != s.m_default_bookmark) {
+		return false;
+	}
+
+	if (m_bookmarks != s.m_bookmarks) {
+		return false;
+	}
+
+	if (m_path != s.m_path) {
+		return false;
+	}
+
+	if (m_colour != s.m_colour) {
+		return false;
+	}
+
+	return true;
+}
+
 
 std::map<int, std::unique_ptr<Site>> CSiteManager::m_idMap;
 
