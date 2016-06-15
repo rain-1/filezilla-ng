@@ -136,7 +136,7 @@ parse_regular:
 			dotdot,
 			segment
 		};
-		enum _last last = separator;
+		_last last = separator;
 
 		while (*in) {
 			if (*in == '/'

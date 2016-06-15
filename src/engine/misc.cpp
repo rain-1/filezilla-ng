@@ -8,12 +8,12 @@
 
 #include "tlssocket.h"
 
-wxString GetDependencyVersion(dependency::type d)
+wxString GetDependencyVersion(lib_dependency d)
 {
 	switch (d) {
-	case dependency::wxwidgets:
+	case lib_dependency::wxwidgets:
 		return wxVERSION_NUM_DOT_STRING_T;
-	case dependency::gnutls:
+	case lib_dependency::gnutls:
 		{
 			const char* v = gnutls_check_version(0);
 			if (!v || !*v)
@@ -21,21 +21,21 @@ wxString GetDependencyVersion(dependency::type d)
 
 			return wxString(v, wxConvLibc);
 		}
-	case dependency::sqlite:
+	case lib_dependency::sqlite:
 		return wxString::FromUTF8(sqlite3_libversion());
 	default:
 		return wxString();
 	}
 }
 
-wxString GetDependencyName(dependency::type d)
+wxString GetDependencyName(lib_dependency d)
 {
 	switch (d) {
-	case dependency::wxwidgets:
+	case lib_dependency::wxwidgets:
 		return _T("wxWidgets");
-	case dependency::gnutls:
+	case lib_dependency::gnutls:
 		return _T("GnuTLS");
-	case dependency::sqlite:
+	case lib_dependency::sqlite:
 		return _T("SQLite");
 	default:
 		return wxString();

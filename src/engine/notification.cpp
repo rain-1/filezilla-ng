@@ -5,7 +5,7 @@ CDirectoryListingNotification::CDirectoryListingNotification(const CServerPath& 
 {
 }
 
-enum RequestId CFileExistsNotification::GetRequestID() const
+RequestId CFileExistsNotification::GetRequestID() const
 {
 	return reqId_fileexists;
 }
@@ -17,7 +17,7 @@ CInteractiveLoginNotification::CInteractiveLoginNotification(type t, const wxStr
 {
 }
 
-enum RequestId CInteractiveLoginNotification::GetRequestID() const
+RequestId CInteractiveLoginNotification::GetRequestID() const
 {
 	return reqId_interactiveLogin;
 }
@@ -42,7 +42,7 @@ CHostKeyNotification::CHostKeyNotification(wxString host, int port, wxString fin
 {
 }
 
-enum RequestId CHostKeyNotification::GetRequestID() const
+RequestId CHostKeyNotification::GetRequestID() const
 {
 	return m_changed ? reqId_hostkeyChanged : reqId_hostkey;
 }

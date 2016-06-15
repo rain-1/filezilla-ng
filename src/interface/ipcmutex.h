@@ -34,7 +34,7 @@ enum t_ipcMutexType
 class CInterProcessMutex
 {
 public:
-	CInterProcessMutex(enum t_ipcMutexType mutexType, bool initialLock = true);
+	CInterProcessMutex(t_ipcMutexType mutexType, bool initialLock = true);
 	~CInterProcessMutex();
 
 	bool Lock();
@@ -43,7 +43,7 @@ public:
 
 	bool IsLocked() const { return m_locked; }
 
-	enum t_ipcMutexType GetType() const { return m_type; }
+	t_ipcMutexType GetType() const { return m_type; }
 
 private:
 
@@ -55,7 +55,7 @@ private:
 	static int m_fd;
 	static int m_instanceCount;
 #endif
-	enum t_ipcMutexType m_type;
+	t_ipcMutexType m_type;
 
 	bool m_locked;
 };
@@ -63,7 +63,7 @@ private:
 class CReentrantInterProcessMutexLocker
 {
 public:
-	CReentrantInterProcessMutexLocker(enum t_ipcMutexType mutexType);
+	CReentrantInterProcessMutexLocker(t_ipcMutexType mutexType);
 	~CReentrantInterProcessMutexLocker();
 
 protected:
@@ -74,7 +74,7 @@ protected:
 	};
 	static std::list<t_data> m_mutexes;
 
-	enum t_ipcMutexType m_type;
+	t_ipcMutexType m_type;
 };
 
 #endif //__IPCMUTEX_H__

@@ -4,8 +4,8 @@
 class CAutoAsciiFiles
 {
 public:
-	static bool TransferLocalAsAscii(wxString const& local_file, enum ServerType server_type);
-	static bool TransferRemoteAsAscii(wxString const& remote_file, enum ServerType server_type);
+	static bool TransferLocalAsAscii(wxString const& local_file, ServerType server_type);
+	static bool TransferRemoteAsAscii(wxString const& remote_file, ServerType server_type);
 
 	static void SettingsChanged();
 protected:

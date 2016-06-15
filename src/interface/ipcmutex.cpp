@@ -10,7 +10,7 @@ int CInterProcessMutex::m_instanceCount = 0;
 
 std::list<CReentrantInterProcessMutexLocker::t_data> CReentrantInterProcessMutexLocker::m_mutexes;
 
-CInterProcessMutex::CInterProcessMutex(enum t_ipcMutexType mutexType, bool initialLock /*=true*/)
+CInterProcessMutex::CInterProcessMutex(t_ipcMutexType mutexType, bool initialLock)
 {
 	m_locked = false;
 #ifdef __WXMSW__
@@ -156,7 +156,7 @@ void CInterProcessMutex::Unlock()
 #endif
 }
 
-CReentrantInterProcessMutexLocker::CReentrantInterProcessMutexLocker(enum t_ipcMutexType mutexType)
+CReentrantInterProcessMutexLocker::CReentrantInterProcessMutexLocker(t_ipcMutexType mutexType)
 {
 	m_type = mutexType;
 

@@ -47,30 +47,30 @@ enum capabilityNames
 class CCapabilities final
 {
 public:
-	enum capabilities GetCapability(enum capabilityNames name, wxString* pOption = 0) const;
-	enum capabilities GetCapability(enum capabilityNames name, int* pOption) const;
-	void SetCapability(enum capabilityNames name, enum capabilities cap, const wxString& option = _T(""));
-	void SetCapability(enum capabilityNames name, enum capabilities cap, int option);
+	capabilities GetCapability(capabilityNames name, wxString* pOption = 0) const;
+	capabilities GetCapability(capabilityNames name, int* pOption) const;
+	void SetCapability(capabilityNames name, capabilities cap, const wxString& option = _T(""));
+	void SetCapability(capabilityNames name, capabilities cap, int option);
 
 protected:
 	struct t_cap
 	{
-		enum capabilities cap;
+		capabilities cap;
 		wxString option;
 		int number;
 	};
-	std::map<enum capabilityNames, struct t_cap> m_capabilityMap;
+	std::map<capabilityNames, t_cap> m_capabilityMap;
 };
 
 class CServerCapabilities final
 {
 public:
 	// If return value isn't 'yes', pOptions remains unchanged
-	static enum capabilities GetCapability(const CServer& server, enum capabilityNames name, wxString* pOption = 0);
-	static enum capabilities GetCapability(const CServer& server, enum capabilityNames name, int* option);
+	static capabilities GetCapability(const CServer& server, capabilityNames name, wxString* pOption = 0);
+	static capabilities GetCapability(const CServer& server, capabilityNames name, int* option);
 
-	static void SetCapability(const CServer& server, enum capabilityNames name, enum capabilities cap, const wxString& option = _T(""));
-	static void SetCapability(const CServer& server, enum capabilityNames name, enum capabilities cap, int option);
+	static void SetCapability(const CServer& server, capabilityNames name, capabilities cap, const wxString& option = _T(""));
+	static void SetCapability(const CServer& server, capabilityNames name, capabilities cap, int option);
 
 protected:
 	static std::map<CServer, CCapabilities> m_serverMap;

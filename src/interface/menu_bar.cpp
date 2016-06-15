@@ -236,7 +236,11 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 		if (!pState)
 			return;
 
-		Site site = pState->GetSite(); // Copy
+		Site site = pState->GetSite();
+		if (!site.m_server) {
+			site = pState->GetLastSite();
+		}
+
 
 		for (auto const& bookmark : site.m_bookmarks) {
 			if (bookmark.m_name == iter->second) {

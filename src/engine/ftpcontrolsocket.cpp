@@ -688,7 +688,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 
 int CFtpControlSocket::Logon()
 {
-	const enum CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
+	const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
 	if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != no)
 		m_useUTF8 = true;
 	else if (encoding == ENCODING_UTF8)
@@ -881,7 +881,7 @@ int CFtpControlSocket::LogonParseResponse()
 		if (CServerCapabilities::GetCapability(*m_pCurrentServer, tvfs_support) != yes)
 			CServerCapabilities::SetCapability(*m_pCurrentServer, tvfs_support, no);
 
-		const enum CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
+		const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
 		if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes)
 		{
 			LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
@@ -912,7 +912,7 @@ int CFtpControlSocket::LogonParseResponse()
 			continue;
 		else if (pData->opState == LOGON_SYST) {
 			wxString system;
-			enum capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), syst_command, &system);
+			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), syst_command, &system);
 			if (cap == unknown)
 				break;
 			else if (cap == yes) {
@@ -932,10 +932,10 @@ int CFtpControlSocket::LogonParseResponse()
 			}
 		}
 		else if (pData->opState == LOGON_FEAT) {
-			enum capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), feat_command);
+			capabilities cap = CServerCapabilities::GetCapability(*GetCurrentServer(), feat_command);
 			if (cap == unknown)
 				break;
-			const enum CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
+			const CharsetEncoding encoding = m_pCurrentServer->GetEncodingType();
 			if (encoding == ENCODING_AUTO && CServerCapabilities::GetCapability(*m_pCurrentServer, utf8_command) != yes) {
 				LogMessage(MessageType::Status, _("Server does not support non-ASCII characters."));
 				m_useUTF8 = false;
@@ -1379,7 +1379,7 @@ int CFtpControlSocket::ListSubcommandResult(int prevResult)
 			return Transfer(_T("MLSD"), pData);
 		else {
 			if (engine_.GetOptions().GetOptionVal(OPTION_VIEW_HIDDEN_FILES)) {
-				enum capabilities cap = CServerCapabilities::GetCapability(*m_pCurrentServer, list_hidden_support);
+				capabilities cap = CServerCapabilities::GetCapability(*m_pCurrentServer, list_hidden_support);
 				if (cap == unknown)
 					pData->viewHiddenCheck = true;
 				else if (cap == yes)
@@ -1822,52 +1822,53 @@ enum cwdStates
 	cwd_pwd_subdir
 };
 
-int CFtpControlSocket::ChangeDir(CServerPath path /*=CServerPath()*/, wxString subDir /*=_T("")*/, bool link_discovery /*=false*/)
+int CFtpControlSocket::ChangeDir(CServerPath path, wxString subDir, bool link_discovery)
 {
-	enum cwdStates state = cwd_init;
+	cwdStates state = cwd_init;
 
-	if (path.GetType() == DEFAULT)
+	if (path.GetType() == DEFAULT) {
 		path.SetType(m_pCurrentServer->GetType());
+	}
 
 	CServerPath target;
-	if (path.empty())
-	{
-		if (m_CurrentPath.empty())
+	if (path.empty()) {
+		if (m_CurrentPath.empty()) {
 			state = cwd_pwd;
-		else
+		}
+		else {
 			return FZ_REPLY_OK;
+		}
 	}
-	else
-	{
-		if (!subDir.empty())
-		{
+	else {
+		if (!subDir.empty()) {
 			// Check if the target is in cache already
 			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, subDir);
-			if (!target.empty())
-			{
-				if (m_CurrentPath == target)
+			if (!target.empty()) {
+				if (m_CurrentPath == target) {
 					return FZ_REPLY_OK;
+				}
 
 				path = target;
 				subDir = _T("");
 				state = cwd_cwd;
 			}
-			else
-			{
+			else {
 				// Target unknown, check for the parent's target
 				target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
 				if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 					target.clear();
 					state = cwd_cwd_subdir;
 				}
-				else
+				else {
 					state = cwd_cwd;
+				}
 			}
 		}
 		else {
 			target = engine_.GetPathCache().Lookup(*m_pCurrentServer, path, _T(""));
-			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath))
+			if (m_CurrentPath == path || (!target.empty() && target == m_CurrentPath)) {
 				return FZ_REPLY_OK;
+			}
 			state = cwd_cwd;
 		}
 	}
@@ -2723,7 +2724,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 		m_pCurOpData->waitForAsyncRequest = false;
 	}
 
-	const enum RequestId requestId = pNotification->GetRequestID();
+	const RequestId requestId = pNotification->GetRequestID();
 	switch (requestId)
 	{
 	case reqId_fileexists:

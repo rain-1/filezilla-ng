@@ -154,7 +154,7 @@ protected:
 
 	// Called from TryStartNextTransfer(), checks
 	// whether it is allowed to start another transfer on that server item
-	bool CanStartTransfer(const CServerItem& server_item, struct t_EngineData *&pEngineData);
+	bool CanStartTransfer(const CServerItem& server_item, t_EngineData *&pEngineData);
 
 	void ProcessReply(t_EngineData* pEngineData, COperationNotification const& notification);
 	void SendNextCommand(t_EngineData& engineData);

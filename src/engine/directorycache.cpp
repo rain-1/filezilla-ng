@@ -175,7 +175,7 @@ bool CDirectoryCache::InvalidateFile(const CServer &server, const CServerPath &p
 	return true;
 }
 
-bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, enum Filetype type /*=file*/, int64_t size /*=-1*/)
+bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path, const wxString& filename, bool mayCreate, Filetype type, int64_t size)
 {
 	fz::scoped_lock lock(mutex_);
 
@@ -205,7 +205,7 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 		}
 
 		if (matchCase) {
-			enum Filetype old_type = entry.listing[i].is_dir() ? dir : file;
+			Filetype old_type = entry.listing[i].is_dir() ? dir : file;
 			if (type != old_type)
 				entry.listing.m_flags |= CDirectoryListing::unsure_invalid;
 			else if (type == dir)

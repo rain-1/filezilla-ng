@@ -38,8 +38,8 @@ public:
 private:
 	void CalcMinListWidth();
 
-	enum t_filterType GetTypeFromTypeSelection(int selection);
-	void SetSelectionFromType(wxChoice* pChoice, enum t_filterType);
+	t_filterType GetTypeFromTypeSelection(int selection);
+	void SetSelectionFromType(wxChoice* pChoice, t_filterType);
 
 	void MakeControls(const CFilterCondition& condition, int i = -1);
 	void DestroyControls();

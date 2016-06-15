@@ -35,8 +35,7 @@ public:
 	bool HandleReply(wxDBusMessage& msg);
 	bool HandleSignal(wxDBusMessage& msg);
 
-	enum state m_state;
-
+	state m_state;
 	char* m_client_object_path;
 
 	unsigned int m_serial;

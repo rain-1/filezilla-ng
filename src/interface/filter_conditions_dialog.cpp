@@ -672,7 +672,7 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 
 	for (unsigned int i = 0; i < size; ++i) {
 		const CFilterControls& controls = m_filterControls[i];
-		enum t_filterType type = GetTypeFromTypeSelection(controls.pType->GetSelection());
+		t_filterType type = GetTypeFromTypeSelection(controls.pType->GetSelection());
 		if (!controls.pValue) {
 			continue;
 		}

@@ -468,7 +468,7 @@ void CQueueView::ProcessNotification(t_EngineData* pEngineData, std::unique_ptr<
 	}
 }
 
-bool CQueueView::CanStartTransfer(const CServerItem& server_item, struct t_EngineData *&pEngineData)
+bool CQueueView::CanStartTransfer(const CServerItem& server_item, t_EngineData *&pEngineData)
 {
 	const CServer &server = server_item.GetServer();
 	const int max_count = server.MaximumMultipleConnections();

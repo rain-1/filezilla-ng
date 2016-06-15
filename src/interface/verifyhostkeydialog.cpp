@@ -36,7 +36,7 @@ void CVerifyHostkeyDialog::ShowVerificationDialog(wxWindow* parent, CHostKeyNoti
 		notification.m_trust = true;
 		notification.m_alwaysTrust = XRCCTRL(dlg, "ID_ALWAYS", wxCheckBox)->GetValue();
 
-		struct t_keyData data;
+		t_keyData data;
 		data.host = host;
 		data.fingerprint = notification.GetFingerprint();
 		m_sessionTrustedKeys.push_back(data);

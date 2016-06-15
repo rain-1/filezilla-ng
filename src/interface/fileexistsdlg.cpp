@@ -188,7 +188,7 @@ void CFileExistsDlg::OnOK(wxCommandEvent&)
 	EndModal(wxID_OK);
 }
 
-enum CFileExistsNotification::OverwriteAction CFileExistsDlg::GetAction() const
+CFileExistsNotification::OverwriteAction CFileExistsDlg::GetAction() const
 {
 	return m_action;
 }

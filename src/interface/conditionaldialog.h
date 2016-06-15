@@ -23,14 +23,14 @@ public:
 		many_selected_for_edit
 	};
 
-	CConditionalDialog(wxWindow* parent, enum DialogType type, enum Modes mode, bool checked = false);
+	CConditionalDialog(wxWindow* parent, DialogType type, Modes mode, bool checked = false);
 
 	void AddText(const wxString &text);
 
 	bool Run();
 
 protected:
-	enum DialogType m_type;
+	DialogType m_type;
 
 	wxSizer* m_pTextSizer;
 

@@ -1740,7 +1740,7 @@ void CMainFrame::UpdateLayout()
 	// Now the other panes
 	for (int i = 0; i < m_pContextControl->GetTabCount(); i++)
 	{
-		struct CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
+		CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
 		if (!controls)
 			continue;
 

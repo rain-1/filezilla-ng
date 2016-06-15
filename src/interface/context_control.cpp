@@ -180,7 +180,7 @@ void CContextControl::CreateContextControls(CState& state)
 		parent = m_tabs;
 	}
 
-	struct CContextControl::_context_controls context_controls;
+	CContextControl::_context_controls context_controls;
 
 	context_controls.pState = &state;
 	context_controls.pViewSplitter = new CSplitterWindowEx(parent, -1, initial_position, wxDefaultSize, wxSP_NOBORDER  | wxSP_LIVE_UPDATE);
@@ -317,7 +317,7 @@ void CContextControl::OnTabRefresh(wxCommandEvent&)
 	}
 }
 
-struct CContextControl::_context_controls* CContextControl::GetCurrentControls()
+ CContextControl::_context_controls* CContextControl::GetCurrentControls()
 {
 	if (m_current_context_controls == -1)
 		return 0;
@@ -325,7 +325,7 @@ struct CContextControl::_context_controls* CContextControl::GetCurrentControls()
 	return &m_context_controls[m_current_context_controls];
 }
 
-struct CContextControl::_context_controls* CContextControl::GetControlsFromState(CState* pState)
+CContextControl::_context_controls* CContextControl::GetControlsFromState(CState* pState)
 {
 	size_t i = 0;
 	for (i = 0; i < m_context_controls.size(); ++i) {
@@ -497,7 +497,7 @@ int CContextControl::GetTabCount() const
 	return m_tabs ? m_tabs->GetPageCount() : (m_context_controls.empty() ? 0 : 1);
 }
 
-struct CContextControl::_context_controls* CContextControl::GetControlsFromTabIndex(int i)
+CContextControl::_context_controls* CContextControl::GetControlsFromTabIndex(int i)
 {
 	if (!m_tabs) {
 		if (i == 0 && !m_context_controls.empty()) {

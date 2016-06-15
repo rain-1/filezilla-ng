@@ -42,7 +42,7 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 			CFileExistsNotification *pFileExistsNotification = static_cast<CFileExistsNotification *>(pNotification.get());
 
 			// Get the action, go up the hierarchy till one is found
-			enum CFileExistsNotification::OverwriteAction action = pFileExistsNotification->overwriteAction;
+			CFileExistsNotification::OverwriteAction action = pFileExistsNotification->overwriteAction;
 			if (action == CFileExistsNotification::unknown)
 				action = CDefaultFileExistsDlg::GetDefault(pFileExistsNotification->download);
 			if (action == CFileExistsNotification::unknown) {
@@ -50,7 +50,7 @@ bool CAsyncRequestQueue::ProcessDefaults(CFileZillaEngine *pEngine, std::unique_
 				if (option < CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
 					action = CFileExistsNotification::unknown;
 				else
-					action = (enum CFileExistsNotification::OverwriteAction)option;
+					action = static_cast<CFileExistsNotification::OverwriteAction>(option);
 			}
 
 			// Ask and rename options require user interaction
@@ -199,7 +199,7 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 	auto & notification = static_cast<CFileExistsNotification&>(*entry.pNotification.get());
 
 	// Get the action, go up the hierarchy till one is found
-	enum CFileExistsNotification::OverwriteAction action = notification.overwriteAction;
+	CFileExistsNotification::OverwriteAction action = notification.overwriteAction;
 	if (action == CFileExistsNotification::unknown)
 		action = CDefaultFileExistsDlg::GetDefault(notification.download);
 	if (action == CFileExistsNotification::unknown) {
@@ -207,7 +207,7 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 		if (option <= CFileExistsNotification::unknown || option >= CFileExistsNotification::ACTION_COUNT)
 			action = CFileExistsNotification::ask;
 		else
-			action = (enum CFileExistsNotification::OverwriteAction)option;
+			action = static_cast<CFileExistsNotification::OverwriteAction>(option);
 	}
 
 	if (action == CFileExistsNotification::ask) {

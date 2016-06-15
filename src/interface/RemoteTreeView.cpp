@@ -1306,7 +1306,7 @@ struct _parents
 
 void CRemoteTreeView::ApplyFilters(bool resort)
 {
-	std::list<struct _parents> parents;
+	std::list<_parents> parents;
 
 	const wxTreeItemId root = GetRootItem();
 	wxTreeItemIdValue cookie;
@@ -1315,7 +1315,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 		if (path.empty())
 			continue;
 
-		struct _parents dir;
+		_parents dir;
 		dir.item = child;
 		dir.path = path;
 		parents.push_back(dir);
@@ -1323,7 +1323,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 
 	CFilterManager filter;
 	while (!parents.empty()) {
-		struct _parents parent = parents.back();
+		_parents parent = parents.back();
 		parents.pop_back();
 
 		if (resort) {
@@ -1349,7 +1349,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 					}
 				}
 
-				struct _parents dir;
+				_parents dir;
 				dir.item = child;
 				dir.path = path;
 				parents.push_back(dir);
@@ -1363,7 +1363,7 @@ void CRemoteTreeView::ApplyFilters(bool resort)
 			if (path.empty())
 				continue;
 
-			struct _parents dir;
+			_parents dir;
 			dir.item = child;
 			dir.path = path;
 			parents.push_back(dir);

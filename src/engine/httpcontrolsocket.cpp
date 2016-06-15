@@ -199,7 +199,7 @@ int CHttpControlSocket::DoReceive()
 {
 	do
 	{
-		const enum CSocket::SocketState state = m_pSocket->GetState();
+		const CSocket::SocketState state = m_pSocket->GetState();
 		if (state != CSocket::connected && state != CSocket::closing)
 			return 0;
 
@@ -647,7 +647,7 @@ int CHttpControlSocket::ParseHeader(CHttpOpData* pData)
 						return FZ_REPLY_ERROR;
 					}
 
-					enum ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme());
+					ServerProtocol protocol = CServer::GetProtocolFromPrefix(pData->m_newLocation.GetScheme());
 					if( protocol != HTTP && protocol != HTTPS ) {
 						LogMessage(MessageType::Error, _("Redirection to invalid or unsupported address: %s"), pData->m_newLocation.BuildURI());
 						ResetOperation(FZ_REPLY_ERROR);

@@ -46,12 +46,12 @@ public:
 	// If files are locked, they won't be removed though
 	void Release();
 
-	enum fileState GetFileState(const wxString& fileName) const; // Local files
-	enum fileState GetFileState(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const; // Remote files
+	fileState GetFileState(const wxString& fileName) const; // Local files
+	fileState GetFileState(const wxString& fileName, const CServerPath& remotePath, const CServer& server) const; // Remote files
 
 	// Returns the number of files in given state
 	// pServer may be set only if state isn't unknown
-	int GetFileCount(enum fileType type, enum fileState state, const CServer* pServer = 0) const;
+	int GetFileCount(fileType type, fileState state, const CServer* pServer = 0) const;
 
 	// Starts editing the given file, queues it if needed. For local files, fileName must include local path.
 	// Can be used to edit files already being added, user is prompted for action.
@@ -70,13 +70,13 @@ public:
 
 	// Adds the file that doesn't exist yet. (Has to be in unknown state)
 	// The initial state will be download
-	bool AddFile(enum fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server);
+	bool AddFile(fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server);
 
 	// Tries to unedit and remove file
 	bool Remove(const wxString& fileName); // Local files
 	bool Remove(const wxString& fileName, const CServerPath& remotePath, const CServer& server); // Remote files
 	bool RemoveAll(bool force);
-	bool RemoveAll(enum fileState state, const CServer* pServer = 0);
+	bool RemoveAll(fileState state, const CServer* pServer = 0);
 
 	void FinishTransfer(bool successful, const wxString& fileName);
 	void FinishTransfer(bool successful, const wxString& fileName, const CServerPath& remotePath, const CServer& server);
@@ -93,7 +93,7 @@ public:
 	 * The dangerous argument will be set to true on some filetypes,
 	 * e.g. executables.
 	 */
-	wxString CanOpen(enum fileType type, const wxString& fileName, bool &dangerous, bool& program_exists);
+	wxString CanOpen(fileType type, const wxString& fileName, bool &dangerous, bool& program_exists);
 	bool StartEditing(const wxString& file);
 	bool StartEditing(const wxString& file, const CServerPath& remotePath, const CServer& server);
 
@@ -107,7 +107,7 @@ public:
 		CServer server;
 	};
 
-	const std::list<t_fileData>& GetFiles(enum fileType type) const { wxASSERT(type != none); return m_fileDataList[(type == local) ? 0 : 1]; }
+	const std::list<t_fileData>& GetFiles(fileType type) const { wxASSERT(type != none); return m_fileDataList[(type == local) ? 0 : 1]; }
 
 	bool UploadFile(const wxString& file, bool unedit);
 	bool UploadFile(const wxString& file, const CServerPath& remotePath, const CServer& server, bool unedit);
@@ -126,13 +126,13 @@ protected:
 
 	wxString m_localDir;
 
-	bool StartEditing(enum fileType type, t_fileData &data);
+	bool StartEditing(fileType type, t_fileData &data);
 
 	wxString GetCustomOpenCommand(const wxString& file, bool& program_exists);
 
 	void SetTimerState();
 
-	bool UploadFile(enum fileType type, std::list<t_fileData>::iterator iter, bool unedit);
+	bool UploadFile(fileType type, std::list<t_fileData>::iterator iter, bool unedit);
 
 	std::list<t_fileData> m_fileDataList[2];
 
