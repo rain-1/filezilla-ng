@@ -3,6 +3,8 @@
 
 #include <wx/aui/aui.h>
 
+#include <map>
+
 class wxAuiTabArtEx;
 class wxAuiNotebookEx : public wxAuiNotebook
 {
@@ -23,8 +25,16 @@ public:
 	void AdvanceTab(bool forward);
 
 	bool AddPage(wxWindow *page, const wxString &text, bool select = false, int imageId = -1);
+
+	bool RemovePage(size_t page);
+
+	void SetTabColour(size_t page, wxColour const& c);
+	wxColour GetTabColour(wxWindow* page);
+
 protected:
 	std::vector<bool> m_highlighted;
+
+	std::map<wxWindow*, wxColour> m_colourMap;
 
 	DECLARE_EVENT_TABLE()
 	void OnPageChanged(wxAuiNotebookEvent& event);

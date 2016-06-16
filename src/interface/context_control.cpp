@@ -581,6 +581,7 @@ void CContextControl::OnStateChange(CState* pState, t_statechange_notifications 
 		if (controls && controls->used()) {
 			int i = m_tabs->GetPageIndex(controls->pViewSplitter);
 			if (i != wxNOT_FOUND) {
+				m_tabs->SetTabColour(i, controls->pState->GetSite().m_colour);
 				m_tabs->SetPageText(i, controls->pState->GetTitle());
 			}
 		}
