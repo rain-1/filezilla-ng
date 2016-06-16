@@ -6,6 +6,25 @@
 #include "Options.h"
 #include "xmlfunctions.h"
 
+namespace {
+struct background_color {
+	wxColour const color;
+	wchar_t const*const name;
+};
+
+background_color const background_colors[] = {
+	{ wxColour(), TRANSLATE_T("None") },
+	{ wxColour(255, 0, 0, 32), TRANSLATE_T("Red") },
+	{ wxColour(0, 255, 0, 32), TRANSLATE_T("Green") },
+	{ wxColour(0, 0, 255, 32), TRANSLATE_T("Blue") },
+	{ wxColour(255, 255, 0, 32), TRANSLATE_T("Yellow") },
+	{ wxColour(0, 255, 255, 32), TRANSLATE_T("Cyan") },
+	{ wxColour(255, 0, 255, 32), TRANSLATE_T("Mangenta") },
+	{ wxColour(255, 128, 0, 32), TRANSLATE_T("Orange") },
+	{ wxColour(), 0 }
+};
+}
+
 bool Bookmark::operator==(Bookmark const& b) const
 {
 	if (m_localDir != b.m_localDir) {
@@ -139,6 +158,7 @@ std::unique_ptr<Site> CSiteManager::ReadServerElement(pugi::xml_node element)
 	data->m_server = server;
 
 	data->m_comments = GetTextElement(element, "Comments");
+	data->m_colour = GetColourFromIndex(GetTextElementInt(element, "Colour"));
 	
 	ReadBookmarkElement(data->m_default_bookmark, element);
 
@@ -762,3 +782,31 @@ bool CSiteManager::HasSites()
 
 	return handler.sites_ > 0;
 }
+
+wxColour CSiteManager::GetColourFromIndex(int i)
+{
+	if (i < 0 || i >= (sizeof(background_colors) / sizeof(background_color) + 1)) {
+		return wxColour();
+	}
+	return background_colors[i].color;
+}
+
+int CSiteManager::GetColourIndex(wxColour const& c)
+{
+	for (int i = 0; background_colors[i].name; ++i) {
+		if (c == background_colors[i].color) {
+			return i;
+		}
+	}
+
+	return 0;
+}
+
+wxString CSiteManager::GetColourName(int i)
+{
+	if (i < 0 || i >= (sizeof(background_colors) / sizeof(background_color) + 1)) {
+		return wxString();
+	}
+	return wxGetTranslation(background_colors[i].name);
+}
+

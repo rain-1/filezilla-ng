@@ -508,6 +508,17 @@ void CSiteManagerDialog::CreateControls(wxWindow* parent)
 	pEncryption->Append(_("Require implicit FTP over TLS"));
 	pEncryption->Append(_("Only use plain FTP (insecure)"));
 	pEncryption->SetSelection(0);
+
+	wxChoice* pColors = XRCCTRL(*this, "ID_COLOR", wxChoice);
+	if (pColors) {
+		for (int i = 0; ; ++i) {
+			wxString name = CSiteManager::GetColourName(i);
+			if (name.empty()) {
+				break;
+			}
+			pColors->AppendString(wxGetTranslation(name));
+		}
+	}
 }
 
 void CSiteManagerDialog::OnOK(wxCommandEvent&)
@@ -841,6 +852,9 @@ bool CSiteManagerDialog::SaveChild(pugi::xml_node element, wxTreeItemId child)
 
 		// Save comments
 		AddTextElement(node, "Comments", data->m_site->m_comments);
+
+		// Save colour
+		AddTextElement(node, "Colour", CSiteManager::GetColourIndex(data->m_site->m_colour));
 
 		// Save local dir
 		AddTextElement(node, "LocalDir", data->m_site->m_default_bookmark.m_localDir);
@@ -1376,6 +1390,7 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	server.m_server.SetKeyFile(xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue));
 
 	server.m_comments = xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::GetValue);
+	server.m_colour = CSiteManager::GetColourFromIndex(xrc_call(*this, "ID_COLOR", &wxChoice::GetSelection));
 
 	const wxString serverType = xrc_call(*this, "ID_SERVERTYPE", &wxChoice::GetStringSelection);
 	server.m_server.SetType(CServer::GetServerTypeFromName(serverType));
@@ -1583,6 +1598,7 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_ACCOUNT", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, wxString());
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, wxString());
+		xrc_call(*this, "ID_COLOR", &wxChoice::Select, 0);
 
 		SetControlVisibility(FTP, ANONYMOUS);
 
@@ -1650,6 +1666,8 @@ void CSiteManagerDialog::SetCtrlState()
 		xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, data->m_site->m_server.GetKeyFile());
 		xrc_call(*this, "ID_COMMENTS", &wxTextCtrl::ChangeValue, data->m_site->m_comments);
 		xrc_call(*this, "ID_COMMENTS", &wxWindow::Enable, !predefined);
+		xrc_call(*this, "ID_COLOR", &wxChoice::Select, CSiteManager::GetColourIndex(data->m_site->m_colour));
+		xrc_call(*this, "ID_COLOR", &wxWindow::Enable, !predefined);
 
 		xrc_call(*this, "ID_SERVERTYPE", &wxChoice::SetSelection, data->m_site->m_server.GetType());
 		xrc_call(*this, "ID_SERVERTYPE", &wxWindow::Enable, !predefined);
