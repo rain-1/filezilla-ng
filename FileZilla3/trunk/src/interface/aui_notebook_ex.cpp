@@ -61,7 +61,7 @@ public:
 
 	virtual void DrawTab(wxDC &dc, wxWindow *wnd, const wxAuiNotebookPage &page, const wxRect &rect, int close_button_state, wxRect *out_tab_rect, wxRect *out_button_rect, int *x_extent)
 	{
-		wxColour const tint; // TODO: Somehow get desired tint from the tab.
+		wxColour const tint = m_pNotebook->GetTabColour(page.window);
 
 		if (tint.IsOk()) {
 
@@ -158,6 +158,14 @@ bool wxAuiNotebookEx::SetPageText(size_t page_idx, const wxString& text)
 	return true;
 }
 
+void wxAuiNotebookEx::SetTabColour(size_t page, wxColour const& c)
+{
+	wxWindow* w = GetPage(page);
+	if (w) {
+		m_colourMap[w] = c;
+	}
+}
+
 void wxAuiNotebookEx::Highlight(size_t page, bool highlight /*=true*/)
 {
 	if (GetSelection() == (int)page)
@@ -228,4 +236,19 @@ bool wxAuiNotebookEx::AddPage(wxWindow *page, const wxString &text, bool select,
 	}
 
 	return res;
+}
+
+bool wxAuiNotebookEx::RemovePage(size_t page)
+{
+	m_colourMap.erase(GetPage(page));
+	return wxAuiNotebook::RemovePage(page);
+}
+
+wxColour wxAuiNotebookEx::GetTabColour(wxWindow* page)
+{
+	auto const it = m_colourMap.find(page);
+	if (it != m_colourMap.end()) {
+		return it->second;
+	}
+	return wxColour();
 }
