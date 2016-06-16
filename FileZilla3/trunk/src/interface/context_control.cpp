@@ -159,6 +159,7 @@ void CContextControl::CreateContextControls(CState& state)
 			m_context_controls[m_current_context_controls].pViewSplitter->Reparent(m_tabs);
 
 			m_tabs->AddPage(m_context_controls[m_current_context_controls].pViewSplitter, m_context_controls[m_current_context_controls].pState->GetTitle());
+			m_tabs->SetTabColour(0, m_context_controls[m_current_context_controls].pState->GetSite().m_colour);
 			ReplaceWindow(m_context_controls[m_current_context_controls].pViewSplitter, m_tabs);
 
 			m_tabs->Connect(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED, wxAuiNotebookEventHandler(CContextControl::OnTabChanged), 0, this);
