@@ -260,12 +260,42 @@
                           <border>5</border>
                         </object>
                         <object class="sizeritem">
+                          <object class="wxStaticLine"/>
+                          <option>0</option>
+                          <flag>wxALL|wxGROW</flag>
+                          <border>5</border>
+                        </object>
+
+                        <object class="sizeritem">
+                          <object class="wxBoxSizer">
+                            <orient>wxHORIZONTAL</orient>
+
+                            <object class="sizeritem">
+                              <object class="wxStaticText">
+                                <label>Background color:</label>
+                              </object>
+                              <flag>wxALL|wxALIGN_CENTRE_VERTICAL</flag>
+                              <border>5</border>
+                            </object>
+
+                            <object class="sizeritem">
+                              <object class="wxChoice" name="ID_COLOR">
+                                <selection>0</selection>
+                              </object>
+                              <flag>wxALL|wxALIGN_CENTRE_VERTICAL</flag>
+                              <border>5</border>
+                            </object>
+                          </object>
+                        </object>
+
+                        <object class="sizeritem">
                           <object class="wxStaticText">
                             <label>Co&amp;mments:</label>
                           </object>
                           <flag>wxALL</flag>
                           <border>5</border>
                         </object>
+
                         <object class="sizeritem">
                           <object class="wxTextCtrl" name="ID_COMMENTS">
                             <size>-1,43d</size>

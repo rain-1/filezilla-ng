@@ -75,6 +75,10 @@ public:
 
 	static bool ReadBookmarkElement(Bookmark & bookmark, pugi::xml_node element);
 
+	static wxColour GetColourFromIndex(int i);
+	static int GetColourIndex(wxColour const& c);
+	static wxString GetColourName(int i);
+
 protected:
 	static bool Load(CSiteManagerXmlHandler& pHandler);
 	static bool Load(pugi::xml_node element, CSiteManagerXmlHandler& pHandler);
