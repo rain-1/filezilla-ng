@@ -1342,7 +1342,7 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 	if (res == wxID_YES || res == wxID_OK) {
 		// Update bookmark paths
 		for (auto const& connected_site : connected_sites) {
-			std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(connected_site.new_path);
+			std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(connected_site.new_path, false);
 			if (site) {
 				for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 					CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);

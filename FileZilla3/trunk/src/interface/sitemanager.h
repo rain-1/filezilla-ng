@@ -59,7 +59,7 @@ class CSiteManager
 public:
 	// This function also clears the Id map
 	static std::unique_ptr<Site> GetSiteById(int id);
-	static std::unique_ptr<Site> GetSiteByPath(wxString sitePath);
+	static std::unique_ptr<Site> GetSiteByPath(wxString const& sitePath, bool printErrors = true);
 
 	static wxString AddServer(CServer server);
 	static bool AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
@@ -80,6 +80,8 @@ public:
 	static wxString GetColourName(int i);
 
 protected:
+	static std::unique_ptr<Site> DoGetSiteByPath(wxString sitePath, wxString& error);
+
 	static bool Load(CSiteManagerXmlHandler& pHandler);
 	static bool Load(pugi::xml_node element, CSiteManagerXmlHandler& pHandler);
 	static std::unique_ptr<Site> ReadServerElement(pugi::xml_node element);
