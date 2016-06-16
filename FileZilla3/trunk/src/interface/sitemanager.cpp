@@ -185,12 +185,12 @@ public:
 	CSiteManagerXmlHandler_Menu(wxMenu* pMenu, std::map<int, std::unique_ptr<Site>> *idMap, bool predefined)
 		: m_pMenu(pMenu), m_idMap(idMap)
 	{
-		m_added_site = false;
-
-		if (predefined)
+		if (predefined) {
 			path = _T("1");
-		else
+		}
+		else {
 			path = _T("0");
+		}
 	}
 
 	unsigned int GetInsertIndex(wxMenu* pMenu, const wxString& name)
@@ -204,11 +204,13 @@ public:
 
 			// Use same sorting as site tree in site manager
 #ifdef __WXMSW__
-			if (pItem->GetItemLabelText().CmpNoCase(name) > 0)
+			if (pItem->GetItemLabelText().CmpNoCase(name) > 0) {
 				break;
+			}
 #else
-			if (pItem->GetItemLabelText() > name)
+			if (pItem->GetItemLabelText() > name) {
 				break;
+			}
 #endif
 		}
 
@@ -238,26 +240,19 @@ public:
 
 		(*m_idMap)[pItem->GetId()] = std::move(data);
 
-		m_added_site = true;
-
 		return true;
 	}
 
 	// Go up a level
 	virtual bool LevelUp()
 	{
-		if (m_added_site) {
-			m_added_site = false;
-			return true;
-		}
-
-		if (m_parents.empty() || m_childNames.empty())
+		if (m_parents.empty() || m_childNames.empty()) {
 			return false;
+		}
 
 		wxMenu* pChild = m_pMenu;
 		m_pMenu = m_parents.back();
-		if (pChild->GetMenuItemCount())
-		{
+		if (pChild->GetMenuItemCount()) {
 			wxString name = m_childNames.back();
 			int i = GetInsertIndex(m_pMenu, name);
 			name.Replace(_T("&"), _T("&&"));
@@ -265,8 +260,9 @@ public:
 			wxMenuItem* pItem = new wxMenuItem(m_pMenu, wxID_ANY, name, _T(""), wxITEM_NORMAL, pChild);
 			m_pMenu->Insert(i, pItem);
 		}
-		else
+		else {
 			delete pChild;
+		}
 		m_childNames.pop_back();
 		m_parents.pop_back();
 
@@ -283,8 +279,6 @@ protected:
 
 	std::list<wxMenu*> m_parents;
 	std::list<wxString> m_childNames;
-
-	bool m_added_site;
 
 	wxString path;
 	std::list<wxString> m_paths;
