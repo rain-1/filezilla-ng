@@ -19,7 +19,7 @@ background_color const background_colors[] = {
 	{ wxColour(0, 0, 255, 32), TRANSLATE_T("Blue") },
 	{ wxColour(255, 255, 0, 32), TRANSLATE_T("Yellow") },
 	{ wxColour(0, 255, 255, 32), TRANSLATE_T("Cyan") },
-	{ wxColour(255, 0, 255, 32), TRANSLATE_T("Mangenta") },
+	{ wxColour(255, 0, 255, 32), TRANSLATE_T("Magenta") },
 	{ wxColour(255, 128, 0, 32), TRANSLATE_T("Orange") },
 	{ wxColour(), 0 }
 };
@@ -468,11 +468,23 @@ wxString CSiteManager::BuildPath(wxChar root, std::list<wxString> const& segment
 	return ret;
 }
 
-std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString sitePath)
+std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString const& sitePath, bool printErrors)
+{
+	wxString error;
+
+	std::unique_ptr<Site> ret = DoGetSiteByPath(sitePath, error);
+	if (!ret && printErrors) {
+		wxMessageBoxEx(_("Site does not exist."), error);
+	}
+
+	return ret;
+}
+
+std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(wxString sitePath, wxString& error)
 {
 	wxChar c = sitePath.empty() ? 0 : sitePath[0];
 	if (c != '0' && c != '1') {
-		wxMessageBoxEx(_("Site path has to begin with 0 or 1."), _("Invalid site path"));
+		error = _("Site path has to begin with 0 or 1.");
 		return 0;
 	}
 
@@ -489,7 +501,7 @@ std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString sitePath)
 	else {
 		CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 		if (defaultsDir.empty()) {
-			wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
+			error = _("Site does not exist.");
 			return 0;
 		}
 		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
@@ -503,19 +515,19 @@ std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString sitePath)
 
 	auto element = document.child("Servers");
 	if (!element) {
-		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
+		error = _("Site does not exist.");
 		return 0;
 	}
 
 	std::list<wxString> segments;
 	if (!UnescapeSitePath(sitePath, segments) || segments.empty()) {
-		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
+		error = _("Site path is malformed.");
 		return 0;
 	}
 
 	auto child = GetElementByPath(element, segments);
 	if (!child) {
-		wxMessageBoxEx(_("Site does not exist."), _("Invalid site path"));
+		error = _("Site does not exist.");
 		return 0;
 	}
 
@@ -529,7 +541,7 @@ std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString sitePath)
 	std::unique_ptr<Site> data = ReadServerElement(child);
 
 	if (!data) {
-		wxMessageBoxEx(_("Could not read server item."), _("Invalid site path"));
+		error = _("Could not read server item.");
 		return 0;
 	}
 
