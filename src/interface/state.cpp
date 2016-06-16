@@ -461,18 +461,11 @@ void CState::SetSite(Site const& site, CServerPath const& path)
 			m_last_path.clear();
 		}
 		m_last_site = site;
-
-		wxString const& name = site.m_server.GetName();
-		m_title.clear();
-		if (!name.empty()) {
-			m_title = name + _T(" - ");
-		}
-		m_title += site.m_server.Format(ServerFormat::with_user_and_optional_port);
 	}
-	else {
-		m_title = _("Not connected");
-	}
+	
 	m_site = site;
+
+	UpdateTitle();
 
 	m_successful_connect = false;
 
@@ -1170,6 +1163,22 @@ void CState::UpdateSite(wxString const& oldPath, Site const& newSite)
 		}
 	}
 	if (changed) {
+		UpdateTitle();
 		NotifyHandlers(STATECHANGE_SERVER);
+	}
+}
+
+void CState::UpdateTitle()
+{
+	if (m_site.m_server) {
+		wxString const& name = m_site.m_server.GetName();
+		m_title.clear();
+		if (!name.empty()) {
+			m_title = name + _T(" - ");
+		}
+		m_title += m_site.m_server.Format(ServerFormat::with_user_and_optional_port);
+	}
+	else {
+		m_title = _("Not connected");
 	}
 }

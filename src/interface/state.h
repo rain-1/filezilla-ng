@@ -187,6 +187,8 @@ public:
 protected:
 	void SetSite(Site const& site, CServerPath const& path = CServerPath());
 
+	void UpdateTitle();
+
 	CLocalPath m_localDir;
 	std::shared_ptr<CDirectoryListing> m_pDirectoryListing;
 
