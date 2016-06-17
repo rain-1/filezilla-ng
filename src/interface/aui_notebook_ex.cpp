@@ -2,6 +2,7 @@
 #include <wx/aui/aui.h>
 #include "aui_notebook_ex.h"
 #include <wx/dcmirror.h>
+#include <wx/graphics.h>
 
 #include <memory>
 
@@ -65,6 +66,7 @@ public:
 
 		if (tint.IsOk()) {
 
+#if !defined(__WXGTK__) || !defined(wxHAS_NATIVE_TABART)
 			wxColour const baseOrig = m_baseColour;
 			wxColour const activeOrig = m_activeColour;
 
@@ -86,6 +88,24 @@ public:
 
 			m_baseColour = baseOrig;
 			m_activeColour = baseOrig;
+#else
+			wxRect tab_rect;
+			if (!out_tab_rect) {
+				out_tab_rect = &tab_rect;
+			}
+
+			wxAuiDefaultTabArt::DrawTab(dc, wnd, page, rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
+
+			wxMemoryDC *mdc = dynamic_cast<wxMemoryDC*>(&dc);
+			if (mdc) {
+				wxGraphicsContext *gc = wxGraphicsContext::Create(*mdc);
+				if (gc) {
+					gc->SetBrush(wxBrush(tint));
+					gc->DrawRectangle(out_tab_rect->x, out_tab_rect->y, out_tab_rect->width, out_tab_rect->height);
+					delete gc;
+				}
+			}
+#endif
 		}
 		else {
 			wxAuiDefaultTabArt::DrawTab(dc, wnd, page, rect, close_button_state, out_tab_rect, out_button_rect, x_extent);
