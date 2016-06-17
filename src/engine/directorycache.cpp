@@ -214,7 +214,6 @@ bool CDirectoryCache::UpdateFile(const CServer &server, const CServerPath &path,
 				entry.listing.m_flags |= CDirectoryListing::unsure_file_changed;
 		}
 		else if (type != unknown && mayCreate) {
-			const unsigned int count = entry.listing.GetCount();
 			CDirentry direntry;
 			direntry.name = filename;
 			if (type == dir)
