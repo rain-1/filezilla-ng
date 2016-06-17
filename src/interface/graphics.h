@@ -35,7 +35,7 @@ static inline void AlphaComposite_Over_Inplace(wxAlphaPixelData::Iterator &bg, w
 }
 
 static inline wxColour AlphaComposite_Over(wxColour const& bg, wxColour const& fg) {
-	if (!fg.Alpha()) {
+	if (!fg.IsOk() || !fg.Alpha()) {
 		// Nothing to do. Also prevents zero new_alpha
 		return bg;
 	}
