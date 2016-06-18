@@ -105,16 +105,19 @@ bool CSiteManager::Load(pugi::xml_node element, CSiteManagerXmlHandler& handler)
 
 	for (auto child = element.first_child(); child; child = child.next_sibling()) {
 		if (!strcmp(child.name(), "Folder")) {
-			wxString name = GetTextElement_Trimmed(child);
-			if (name.empty())
+			std::wstring name = GetTextElement_Trimmed(child).ToStdWstring();
+			if (name.empty()) {
 				continue;
+			}
 
 			const bool expand = GetTextAttribute(child, "expanded") != _T("0");
-			if (!handler.AddFolder(name, expand))
+			if (!handler.AddFolder(name, expand)) {
 				return false;
+			}
 			Load(child, handler);
-			if (!handler.LevelUp())
+			if (!handler.LevelUp()) {
 				return false;
+			}
 		}
 		else if (!strcmp(child.name(), "Server")) {
 			std::unique_ptr<Site> data = ReadServerElement(child);
@@ -217,7 +220,7 @@ public:
 		return i;
 	}
 
-	virtual bool AddFolder(wxString const& name, bool)
+	virtual bool AddFolder(std::wstring const& name, bool)
 	{
 		m_parents.push_back(m_pMenu);
 		m_childNames.push_back(name);
@@ -277,18 +280,18 @@ protected:
 
 	std::map<int, std::unique_ptr<Site>> *m_idMap;
 
-	std::list<wxMenu*> m_parents;
-	std::list<wxString> m_childNames;
+	std::deque<wxMenu*> m_parents;
+	std::deque<std::wstring> m_childNames;
 
-	wxString path;
-	std::list<wxString> m_paths;
+	std::wstring path;
+	std::deque<std::wstring> m_paths;
 };
 
 
 class CSiteManagerXmlHandler_Stats : public CSiteManagerXmlHandler
 {
 public:
-	virtual bool AddFolder(const wxString&, bool)
+	virtual bool AddFolder(std::wstring const&, bool)
 	{
 		++directories_;
 		return true;
@@ -404,71 +407,72 @@ std::unique_ptr<Site> CSiteManager::GetSiteById(int id)
 	return pData;
 }
 
-bool CSiteManager::UnescapeSitePath(wxString path, std::list<wxString>& result)
+bool CSiteManager::UnescapeSitePath(std::wstring path, std::vector<std::wstring>& result)
 {
 	result.clear();
 
-	wxString name;
-	wxChar const* p = path.c_str();
+	std::wstring name;
+	wchar_t const* p = path.c_str();
 
 	// Undo escapement
 	bool lastBackslash = false;
-	while (*p)
-	{
+	while (*p) {
 		const wxChar& c = *p;
-		if (c == '\\')
-		{
-			if (lastBackslash)
-			{
+		if (c == '\\') {
+			if (lastBackslash) {
 				name += _T("\\");
 				lastBackslash = false;
 			}
-			else
+			else {
 				lastBackslash = true;
+			}
 		}
-		else if (c == '/')
-		{
-			if (lastBackslash)
-			{
+		else if (c == '/') {
+			if (lastBackslash) {
 				name += _T("/");
 				lastBackslash = 0;
 			}
-			else
-			{
-				if (!name.empty())
+			else {
+				if (!name.empty()) {
 					result.push_back(name);
+				}
 				name.clear();
 			}
 		}
-		else
+		else {
 			name += *p;
+		}
 		++p;
 	}
-	if (lastBackslash)
+	if (lastBackslash) {
 		return false;
-	if (!name.empty())
+	}
+	if (!name.empty()) {
 		result.push_back(name);
+	}
 
 	return !result.empty();
 }
 
-wxString CSiteManager::EscapeSegment(wxString segment)
+std::wstring CSiteManager::EscapeSegment(std::wstring segment)
 {
-	segment.Replace(_T("\\"), _T("\\\\"));
-	segment.Replace(_T("/"), _T("\\/"));
+	fz::replace_substrings(segment, _T("\\"), _T("\\\\"));
+	fz::replace_substrings(segment, _T("/"), _T("\\/"));
 	return segment;
 }
 
-wxString CSiteManager::BuildPath(wxChar root, std::list<wxString> const& segments)
+std::wstring CSiteManager::BuildPath(wxChar root, std::vector<std::wstring> const& segments)
 {
-	wxString ret = root;
-	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it)
-		ret += _T("/") + EscapeSegment(*it);
+	std::wstring ret;
+	ret += root;
+	for (auto const& segment : segments) {
+		ret += _T("/") + EscapeSegment(segment);
+	}
 
 	return ret;
 }
 
-std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString const& sitePath, bool printErrors)
+std::unique_ptr<Site> CSiteManager::GetSiteByPath(std::wstring const& sitePath, bool printErrors)
 {
 	wxString error;
 
@@ -480,7 +484,7 @@ std::unique_ptr<Site> CSiteManager::GetSiteByPath(wxString const& sitePath, bool
 	return ret;
 }
 
-std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(wxString sitePath, wxString& error)
+std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(std::wstring sitePath, wxString& error)
 {
 	wxChar c = sitePath.empty() ? 0 : sitePath[0];
 	if (c != '0' && c != '1') {
@@ -488,7 +492,7 @@ std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(wxString sitePath, wxString&
 		return 0;
 	}
 
-	sitePath = sitePath.Mid(1);
+	sitePath = sitePath.substr(1);
 
 	// We have to synchronize access to sitemanager.xml so that multiple processed don't write
 	// to the same file or one is reading while the other one writes.
@@ -519,7 +523,7 @@ std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(wxString sitePath, wxString&
 		return 0;
 	}
 
-	std::list<wxString> segments;
+	std::vector<std::wstring> segments;
 	if (!UnescapeSitePath(sitePath, segments) || segments.empty()) {
 		error = _("Site path is malformed.");
 		return 0;
@@ -585,7 +589,7 @@ wxString CSiteManager::AddServer(CServer server)
 		names.push_back(name);
 	}
 
-	wxString name = _("New site");
+	std::wstring name = _("New site");
 	int i = 1;
 
 	for (;;) {
@@ -600,7 +604,7 @@ wxString CSiteManager::AddServer(CServer server)
 		name = _("New site") + wxString::Format(_T(" %d"), ++i);
 	}
 
-	server.SetName(name.ToStdWstring());
+	server.SetName(name);
 
 	auto xServer = element.append_child("Server");
 	SetServer(xServer, server);
@@ -618,11 +622,9 @@ wxString CSiteManager::AddServer(CServer server)
 	return _T("0/") + EscapeSegment(name);
 }
 
-pugi::xml_node CSiteManager::GetElementByPath(pugi::xml_node node, std::list<wxString> const& segments)
+pugi::xml_node CSiteManager::GetElementByPath(pugi::xml_node node, std::vector<std::wstring> const& segments)
 {
-	for (std::list<wxString>::const_iterator it = segments.begin(); it != segments.end(); ++it) {
-		const wxString & segment = *it;
-
+	for (auto const& segment : segments) {
 		pugi::xml_node child;
 		for (child = node.first_child(); child; child = child.next_sibling()) {
 			if (strcmp(child.name(), "Server") && strcmp(child.name(), "Folder") && strcmp(child.name(), "Bookmark"))
@@ -647,7 +649,7 @@ pugi::xml_node CSiteManager::GetElementByPath(pugi::xml_node node, std::list<wxS
 	return node;
 }
 
-bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
+bool CSiteManager::AddBookmark(std::wstring sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison)
 {
 	if (local_dir.empty() && remote_dir.empty())
 		return false;
@@ -656,7 +658,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	if (c != '0')
 		return false;
 
-	sitePath = sitePath.Mid(1);
+	sitePath = sitePath.substr(1);
 
 	// We have to synchronize access to sitemanager.xml so that multiple processed don't write
 	// to the same file or one is reading while the other one writes.
@@ -675,7 +677,7 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	if (!element)
 		return false;
 
-	std::list<wxString> segments;
+	std::vector<std::wstring> segments;
 	if (!UnescapeSitePath(sitePath, segments)) {
 		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;
@@ -727,13 +729,13 @@ bool CSiteManager::AddBookmark(wxString sitePath, const wxString& name, const wx
 	return true;
 }
 
-bool CSiteManager::ClearBookmarks(wxString sitePath)
+bool CSiteManager::ClearBookmarks(std::wstring sitePath)
 {
 	wxChar const c = sitePath.empty() ? 0 : sitePath[0];
 	if (c != '0')
 		return false;
 
-	sitePath = sitePath.Mid(1);
+	sitePath = sitePath.substr(1);
 
 	// We have to synchronize access to sitemanager.xml so that multiple processed don't write
 	// to the same file or one is reading while the other one writes.
@@ -752,7 +754,7 @@ bool CSiteManager::ClearBookmarks(wxString sitePath)
 	if (!element)
 		return false;
 
-	std::list<wxString> segments;
+	std::vector<std::wstring> segments;
 	if (!UnescapeSitePath(sitePath, segments)) {
 		wxMessageBoxEx(_("Site path is malformed."), _("Invalid site path"));
 		return 0;

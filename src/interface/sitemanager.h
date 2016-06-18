@@ -33,7 +33,7 @@ public:
 
 	std::vector<Bookmark> m_bookmarks;
 
-	wxString m_path;
+	std::wstring m_path;
 
 	wxColour m_colour;
 };
@@ -44,7 +44,7 @@ public:
 	virtual ~CSiteManagerXmlHandler() {};
 
 	// Adds a folder and descents
-	virtual bool AddFolder(wxString const& name, bool expanded) = 0;
+	virtual bool AddFolder(std::wstring const& name, bool expanded) = 0;
 	virtual bool AddSite(std::unique_ptr<Site> data) = 0;
 
 	// Go up a level
@@ -59,17 +59,17 @@ class CSiteManager
 public:
 	// This function also clears the Id map
 	static std::unique_ptr<Site> GetSiteById(int id);
-	static std::unique_ptr<Site> GetSiteByPath(wxString const& sitePath, bool printErrors = true);
+	static std::unique_ptr<Site> GetSiteByPath(std::wstring const& sitePath, bool printErrors = true);
 
 	static wxString AddServer(CServer server);
-	static bool AddBookmark(wxString sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
-	static bool ClearBookmarks(wxString sitePath);
+	static bool AddBookmark(std::wstring sitePath, const wxString& name, const wxString &local_dir, const CServerPath &remote_dir, bool sync, bool comparison);
+	static bool ClearBookmarks(std::wstring sitePath);
 
 	static std::unique_ptr<wxMenu> GetSitesMenu();
 	static void ClearIdMap();
 
-	static bool UnescapeSitePath(wxString path, std::list<wxString>& result);
-	static wxString EscapeSegment(wxString segment);
+	static bool UnescapeSitePath(std::wstring path, std::vector<std::wstring>& result);
+	static std::wstring EscapeSegment(std::wstring segment);
 
 	static bool HasSites();
 
@@ -80,14 +80,14 @@ public:
 	static wxString GetColourName(int i);
 
 protected:
-	static std::unique_ptr<Site> DoGetSiteByPath(wxString sitePath, wxString& error);
+	static std::unique_ptr<Site> DoGetSiteByPath(std::wstring sitePath, wxString& error);
 
 	static bool Load(CSiteManagerXmlHandler& pHandler);
 	static bool Load(pugi::xml_node element, CSiteManagerXmlHandler& pHandler);
 	static std::unique_ptr<Site> ReadServerElement(pugi::xml_node element);
 
-	static pugi::xml_node GetElementByPath(pugi::xml_node node, std::list<wxString> const& segments);
-	static wxString BuildPath(wxChar root, std::list<wxString> const& segments);
+	static pugi::xml_node GetElementByPath(pugi::xml_node node, std::vector<std::wstring> const& segments);
+	static std::wstring BuildPath(wxChar root, std::vector<std::wstring> const& segments);
 
 	static std::map<int, std::unique_ptr<Site>> m_idMap;
 

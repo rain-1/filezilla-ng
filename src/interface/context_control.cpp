@@ -96,7 +96,7 @@ void CContextControl::CreateTab()
 			CServer last_server;
 			CServerPath last_path;
 			if (COptions::Get()->GetLastServer(last_server) && last_path.SetSafePath(COptions::Get()->GetOption(OPTION_LASTSERVERPATH))) {
-				wxString last_site_path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
+				std::wstring last_site_path = COptions::Get()->GetOption(OPTION_LAST_CONNECTED_SITE);
 
 
 				std::unique_ptr<Site> site;
