@@ -589,7 +589,7 @@ wxString CSiteManager::AddServer(CServer server)
 		names.push_back(name);
 	}
 
-	std::wstring name = _("New site");
+	std::wstring name = _("New site").ToStdWstring();
 	int i = 1;
 
 	for (;;) {
