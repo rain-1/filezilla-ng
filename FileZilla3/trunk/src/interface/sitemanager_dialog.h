@@ -17,8 +17,8 @@ public:
 	struct _connected_site
 	{
 		CServer server;
-		wxString old_path;
-		wxString new_path;
+		std::wstring old_path;
+		std::wstring new_path;
 	};
 
 	/// Constructors
@@ -59,7 +59,7 @@ protected:
 
 	void RememberLastSelected();
 
-	wxString GetSitePath(wxTreeItemId item, bool stripBookmark = true);
+	std::wstring GetSitePath(wxTreeItemId item, bool stripBookmark = true);
 
 	void MarkConnectedSites();
 	void MarkConnectedSite(int connected_site);

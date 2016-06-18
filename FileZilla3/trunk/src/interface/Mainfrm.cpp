@@ -768,7 +768,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		}
 		
 		Site const& site = pState->GetSite();
-		wxString sitePath = site.m_path;
+		std::wstring sitePath = site.m_path;
 
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 		if (!controls) {
@@ -1303,7 +1303,7 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 
 	CSiteManagerDialog dlg;
 
-	std::set<wxString> handled_paths;
+	std::set<std::wstring> handled_paths;
 	std::vector<CSiteManagerDialog::_connected_site> connected_sites;
 
 	if (pServer) {
@@ -1319,7 +1319,7 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 		}
 
 		Site const& site = controls->pState->GetSite();
-		wxString const& path = site.m_path;
+		std::wstring const& path = site.m_path;
 		if (path.empty()) {
 			continue;
 		}
@@ -2312,7 +2312,7 @@ void CMainFrame::ProcessCommandLine()
 		pState->SetLocalDir(local);
 	}
 
-	wxString site;
+	std::wstring site;
 	if (pCommandLine->HasSwitch(CCommandLine::sitemanager)) {
 		if (COptions::Get()->GetOptionVal(OPTION_INTERFACE_SITEMANAGER_ON_STARTUP) == 0) {
 			Show();

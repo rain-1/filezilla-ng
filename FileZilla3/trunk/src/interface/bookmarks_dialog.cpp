@@ -25,7 +25,7 @@ EVT_TREE_BEGIN_LABEL_EDIT(XRCID("ID_TREE"), CBookmarksDialog::OnBeginLabelEdit)
 EVT_TREE_END_LABEL_EDIT(XRCID("ID_TREE"), CBookmarksDialog::OnEndLabelEdit)
 END_EVENT_TABLE()
 
-CNewBookmarkDialog::CNewBookmarkDialog(wxWindow* parent, wxString& site_path, const CServer* server)
+CNewBookmarkDialog::CNewBookmarkDialog(wxWindow* parent, std::wstring& site_path, const CServer* server)
 	: m_parent(parent)
 	, m_site_path(site_path)
 	, m_server(server)
@@ -149,7 +149,7 @@ public:
 	bool m_comparison{};
 };
 
-CBookmarksDialog::CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server)
+CBookmarksDialog::CBookmarksDialog(wxWindow* parent, std::wstring& site_path, const CServer* server)
 	: m_parent(parent)
 	, m_site_path(site_path)
 	, m_server(server)

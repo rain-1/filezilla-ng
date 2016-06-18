@@ -6,14 +6,14 @@
 class CNewBookmarkDialog : public wxDialogEx
 {
 public:
-	CNewBookmarkDialog(wxWindow* parent, wxString& site_path, const CServer* server);
+	CNewBookmarkDialog(wxWindow* parent, std::wstring& site_path, const CServer* server);
 	virtual ~CNewBookmarkDialog() {}
 
 	int Run(const wxString &local_path, const CServerPath &remote_path);
 
 protected:
 	wxWindow* m_parent;
-	wxString &m_site_path;
+	std::wstring &m_site_path;
 	const CServer* m_server;
 
 	DECLARE_EVENT_TABLE()
@@ -24,7 +24,7 @@ protected:
 class CBookmarksDialog final : public wxDialogEx
 {
 public:
-	CBookmarksDialog(wxWindow* parent, wxString& site_path, const CServer* server);
+	CBookmarksDialog(wxWindow* parent, std::wstring& site_path, const CServer* server);
 	virtual ~CBookmarksDialog() {}
 
 	int Run();
@@ -45,7 +45,7 @@ protected:
 	void SaveGlobalBookmarks();
 
 	wxWindow* m_parent;
-	wxString &m_site_path;
+	std::wstring &m_site_path;
 	CServer const* m_server;
 
 	wxTreeCtrl *m_pTree{};
