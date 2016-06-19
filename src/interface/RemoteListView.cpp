@@ -411,7 +411,7 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 
 	EnablePrefixSearch(true);
 
-	m_windowTinter = std::make_unique<CWindowTinter>(*this);
+	m_windowTinter = std::make_unique<CWindowTinter>(*GetMainWindow());
 }
 
 CRemoteListView::~CRemoteListView()

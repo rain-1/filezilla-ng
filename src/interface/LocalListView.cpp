@@ -296,7 +296,7 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 
 	EnablePrefixSearch(true);
 
-	m_windowTinter = std::make_unique<CWindowTinter>(*this);
+	m_windowTinter = std::make_unique<CWindowTinter>(*GetMainWindow());
 }
 
 CLocalListView::~CLocalListView()
