@@ -293,28 +293,40 @@ protected:
 class CInfoText : public wxWindow
 {
 public:
-	CInfoText(wxWindow* parent, const wxString& text)
-		: wxWindow(parent, wxID_ANY, wxPoint(0, 60), wxDefaultSize),
-		m_text(text)
+	CInfoText(wxWindow* parent)
+		: m_tinter(*this)
 	{
+		Hide();
+		Create(parent, wxID_ANY, wxPoint(0, 60), wxDefaultSize);
+
 		SetForegroundColour(parent->GetForegroundColour());
 		SetBackgroundColour(parent->GetBackgroundColour());
 		GetTextExtent(m_text, &m_textSize.x, &m_textSize.y);
+
+#ifdef __WXMSW__
+		if (GetLayoutDirection() != wxLayout_RightToLeft)
+			SetDoubleBuffered(true);
+#endif
 	}
 
-	void SetText(const wxString &text)
+	void SetText(wxString const& text)
 	{
-		if (text == m_text)
+		if (text == m_text) {
 			return;
+		}
 
 		m_text = text;
-
 		GetTextExtent(m_text, &m_textSize.x, &m_textSize.y);
 	}
 
 	wxSize GetTextSize() const { return m_textSize; }
 
 	bool AcceptsFocus() const { return false; }
+
+	void SetBackgroundTint(wxColour const& colour) {
+		m_tinter.SetBackgroundTint(colour);
+	}
+
 protected:
 	wxString m_text;
 
@@ -329,6 +341,8 @@ protected:
 	};
 
 	wxSize m_textSize;
+
+	CWindowTinter m_tinter;
 
 	DECLARE_EVENT_TABLE()
 };
@@ -370,7 +384,8 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 
 	m_dropTarget = -1;
 
-	m_pInfoText = 0;
+	m_pInfoText = new CInfoText(this);
+
 	m_pDirectoryListing = 0;
 
 	const unsigned long widths[6] = { 80, 75, 80, 100, 80, 80 };
@@ -395,6 +410,8 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 	SetDropTarget(new CRemoteListViewDropTarget(this));
 
 	EnablePrefixSearch(true);
+
+	m_windowTinter = std::make_unique<CWindowTinter>(*this);
 }
 
 CRemoteListView::~CRemoteListView()
@@ -1953,17 +1970,17 @@ void CRemoteListView::OnSize(wxSizeEvent& event)
 
 void CRemoteListView::RepositionInfoText()
 {
-	if (!m_pInfoText)
+	if (!m_pInfoText) {
 		return;
+	}
 
 	wxRect rect = GetClientRect();
-
 	wxSize size = m_pInfoText->GetTextSize();
 
-	if (m_indexMapping.empty())
+	if (!GetItemCount()) {
 		rect.y = 60;
-	else
-	{
+	}
+	else {
 		wxRect itemRect;
 		GetItemRect(0, itemRect);
 		rect.y = wxMax(60, itemRect.GetBottom() + 1);
@@ -1974,8 +1991,7 @@ void CRemoteListView::RepositionInfoText()
 
 	m_pInfoText->SetSize(rect);
 #ifdef __WXMSW__
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
-	{
+	if (GetLayoutDirection() != wxLayout_RightToLeft) {
 		m_pInfoText->Refresh(true);
 		m_pInfoText->Update();
 	}
@@ -1994,7 +2010,8 @@ void CRemoteListView::OnStateChange(t_statechange_notifications notification, co
 		LinkIsNotDir(*(CServerPath*)data2, data);
 	}
 	else if (notification == STATECHANGE_SERVER) {
-		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
+		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
+		m_pInfoText->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);
@@ -2014,25 +2031,15 @@ void CRemoteListView::SetInfoText()
 			text = _("Empty directory listing");
 	}
 
+
 	if (text.empty()) {
-		delete m_pInfoText;
-		m_pInfoText = 0;
-		return;
+		m_pInfoText->Hide();
 	}
-
-	if (!m_pInfoText) {
-		m_pInfoText = new CInfoText(this, text);
-#ifdef __WXMSW__
-		if (GetLayoutDirection() != wxLayout_RightToLeft)
-			m_pInfoText->SetDoubleBuffered(true);
-#endif
-
+	else {
+		m_pInfoText->SetText(text);
 		RepositionInfoText();
-		return;
+		m_pInfoText->Show();
 	}
-
-	m_pInfoText->SetText(text);
-	RepositionInfoText();
 }
 
 void CRemoteListView::OnBeginDrag(wxListEvent&)

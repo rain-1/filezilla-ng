@@ -272,6 +272,8 @@ CLocalTreeView::CLocalTreeView(wxWindow* parent, wxWindowID id, CState& state, C
 #endif
 
 	SetDropTarget(new CLocalTreeViewDropTarget(this));
+
+	m_windowTinter = std::make_unique<CWindowTinter>(*this);
 }
 
 CLocalTreeView::~CLocalTreeView()
@@ -856,7 +858,7 @@ void CLocalTreeView::OnStateChange(t_statechange_notifications notification, con
 		SetDir(m_state.GetLocalDir().GetPath());
 	}
 	else if (notification == STATECHANGE_SERVER) {
-		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
+		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_APPLYFILTER);

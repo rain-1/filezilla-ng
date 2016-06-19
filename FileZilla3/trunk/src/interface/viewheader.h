@@ -4,6 +4,7 @@
 #include "state.h"
 
 class CComboBoxEx;
+class CWindowTinter;
 class CViewHeader : public wxNavigationEnabled<wxWindow>
 {
 	friend class CComboBoxEx;
@@ -42,6 +43,8 @@ protected:
 
 	int m_cbOffset{};
 	int m_labelHeight{};
+
+	std::unique_ptr<CWindowTinter> m_windowTinter;
 };
 
 class CLocalViewHeader : public CViewHeader, CStateEventHandler

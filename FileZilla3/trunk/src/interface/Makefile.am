@@ -40,6 +40,7 @@ filezilla_SOURCES = aboutdialog.cpp \
 		filteredit.cpp \
 		file_utils.cpp \
 		fzputtygen_interface.cpp \
+		graphics.cpp \
 		import.cpp \
 		inputdialog.cpp \
 		ipcmutex.cpp \

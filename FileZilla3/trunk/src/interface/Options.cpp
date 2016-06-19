@@ -38,7 +38,7 @@ struct t_Option
 {
 	const char name[30];
 	const Type type;
-	const wxString defaultValue; // Default values are stored as string even for numerical options
+	const std::wstring defaultValue; // Default values are stored as string even for numerical options
 	const Flags flags; // internal items won't get written to settings file nor loaded from there
 };
 
