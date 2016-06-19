@@ -268,6 +268,8 @@ CRemoteTreeView::CRemoteTreeView(wxWindow* parent, wxWindowID id, CState& state,
 	SetDropTarget(new CRemoteTreeViewDropTarget(this));
 
 	Enable(false);
+
+	m_windowTinter = std::make_unique<CWindowTinter>(*this);
 }
 
 CRemoteTreeView::~CRemoteTreeView()
@@ -285,7 +287,7 @@ void CRemoteTreeView::OnStateChange(t_statechange_notifications notification, co
 		ApplyFilters(false);
 	}
 	else if (notification == STATECHANGE_SERVER) {
-		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
+		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
 }
 

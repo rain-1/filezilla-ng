@@ -9,6 +9,7 @@ class CLocalListViewDropTarget;
 #ifdef __WXMSW__
 class CVolumeDescriptionEnumeratorThread;
 #endif
+class CWindowTinter;
 
 class CLocalFileData final : public CGenericFileData
 {
@@ -87,6 +88,8 @@ protected:
 	int m_dropTarget;
 
 	wxString MenuMkdir();
+
+	std::unique_ptr<CWindowTinter> m_windowTinter;
 
 	// Event handlers
 	DECLARE_EVENT_TABLE()

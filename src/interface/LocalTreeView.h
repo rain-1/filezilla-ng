@@ -7,6 +7,7 @@
 #include "treectrlex.h"
 
 class CQueueView;
+class CWindowTinter;
 
 #ifdef __WXMSW__
 class CVolumeDescriptionEnumeratorThread;
@@ -92,6 +93,8 @@ protected:
 
 	wxTreeItemId m_contextMenuItem;
 	wxTreeItemId m_dropHighlight;
+
+	std::unique_ptr<CWindowTinter> m_windowTinter;
 };
 
 #endif

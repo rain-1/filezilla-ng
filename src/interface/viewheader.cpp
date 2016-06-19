@@ -84,6 +84,8 @@ CViewHeader::CViewHeader(wxWindow* pParent, const wxString& label)
 	SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 	m_pComboBox->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
 	m_pLabel->SetBackgroundStyle(wxBG_STYLE_SYSTEM);
+
+	m_windowTinter = std::make_unique<CWindowTinter>(*m_pComboBox);
 }
 
 void CViewHeader::OnSize(wxSizeEvent&)
@@ -115,8 +117,7 @@ void CViewHeader::OnSize(wxSizeEvent&)
 void CViewHeader::OnComboPaint(wxPaintEvent& event)
 {
 	// We do a small trick to let the control handle the event before we can paint
-	if (m_alreadyInPaint)
-	{
+	if (m_alreadyInPaint) {
 		event.Skip();
 		return;
 	}
@@ -133,8 +134,7 @@ void CViewHeader::OnComboPaint(wxPaintEvent& event)
 
 	int thumbWidth = ::GetSystemMetrics(SM_CXHTHUMB);
 
-	if (m_bLeftMousePressed)
-	{
+	if (m_bLeftMousePressed) {
 		if (!SendMessage((HWND)box->GetHandle(), CB_GETDROPPEDSTATE, 0, 0))
 			m_bLeftMousePressed = false;
 	}
@@ -502,7 +502,7 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 void CLocalViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_SERVER) {
-		SetWindowBackgroundTint(*m_pComboBox, m_state.GetSite().m_colour);
+		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
 	else if (notification == STATECHANGE_LOCAL_DIR) {
 #ifdef __WXGTK__
@@ -530,7 +530,7 @@ CRemoteViewHeader::CRemoteViewHeader(wxWindow* pParent, CState& state)
 void CRemoteViewHeader::OnStateChange(t_statechange_notifications notification, const wxString&, const void*)
 {
 	if (notification == STATECHANGE_SERVER) {
-		SetWindowBackgroundTint(*m_pComboBox, m_state.GetSite().m_colour);
+		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
 	else if (notification == STATECHANGE_REMOTE_DIR) {
 		m_path = m_state.GetRemotePath();

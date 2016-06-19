@@ -49,15 +49,16 @@ static inline wxColour AlphaComposite_Over(wxColour const& bg, wxColour const& f
 	);
 }
 
-static inline void SetWindowBackgroundTint(wxWindow& wnd, wxColour const& tint)
+class CWindowTinter final
 {
-	wxColour const bg = wnd.GetDefaultAttributes().colBg;
-	wxColour const newColour = AlphaComposite_Over(bg, tint);
-	if (newColour != wnd.GetBackgroundColour()) {
-		if (wnd.SetBackgroundColour(newColour)) {
-			wnd.Refresh();
-		}
-	}
-}
+public:
+	CWindowTinter(wxWindow& wnd);
+
+	void SetBackgroundTint(wxColour const& tint);
+
+private:
+	wxColour m_originalColor;
+	wxWindow& m_wnd;
+};
 
 #endif

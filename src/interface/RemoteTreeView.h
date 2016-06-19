@@ -8,6 +8,7 @@
 #include "treectrlex.h"
 
 class CQueueView;
+class CWindowTinter;
 class CRemoteTreeView : public wxTreeCtrlEx, CSystemImageList, CStateEventHandler, COptionChangeEventHandler
 {
 	DECLARE_CLASS(CRemoteTreeView)
@@ -56,6 +57,10 @@ protected:
 
 	virtual void OnOptionsChanged(changed_options_t const& options);
 
+	std::unique_ptr<CWindowTinter> m_windowTinter;
+
+	wxTreeItemId m_contextMenuItem;
+
 	DECLARE_EVENT_TABLE()
 	void OnItemExpanding(wxTreeEvent& event);
 	void OnSelectionChanged(wxTreeEvent& event);
@@ -72,8 +77,6 @@ protected:
 	void OnMenuMkdirChgDir(wxCommandEvent&);
 	void OnChar(wxKeyEvent& event);
 	void OnMenuGeturl(wxCommandEvent& event);
-
-	wxTreeItemId m_contextMenuItem;
 };
 
 #endif

@@ -5,10 +5,11 @@
 #include "listctrlex.h"
 #include "filelistctrl.h"
 
-class CQueueView;
 class CChmodDialog;
 class CInfoText;
+class CQueueView;
 class CRemoteListViewDropTarget;
+class CWindowTinter;
 
 class CRemoteListView : public CFileListCtrl<CGenericFileData>, CStateEventHandler
 {
@@ -98,6 +99,8 @@ protected:
 	std::unique_ptr<t_linkResolveState> m_pLinkResolveState;
 
 	CServerPath MenuMkdir();
+
+	std::unique_ptr<CWindowTinter> m_windowTinter;
 
 	DECLARE_EVENT_TABLE()
 	void OnItemActivated(wxListEvent &event);

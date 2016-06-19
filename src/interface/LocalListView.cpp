@@ -295,6 +295,8 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 	SetDropTarget(new CLocalListViewDropTarget(this));
 
 	EnablePrefixSearch(true);
+
+	m_windowTinter = std::make_unique<CWindowTinter>(*this);
 }
 
 CLocalListView::~CLocalListView()
@@ -1254,12 +1256,13 @@ void CLocalListView::ReselectItems(const std::list<wxString>& selectedNames, wxS
 		if (i == (int)m_indexMapping.size())
 			break;
 	}
-	if (!focused.empty())
-	{
-		if (firstSelected != -1)
+	if (!focused.empty()) {
+		if (firstSelected != -1) {
 			SetItemState(firstSelected, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
-		else
+		}
+		else {
 			SetItemState(0, wxLIST_STATE_FOCUSED, wxLIST_STATE_FOCUSED);
+		}
 	}
 }
 
@@ -1270,7 +1273,7 @@ void CLocalListView::OnStateChange(t_statechange_notifications notification, con
 	else if (notification == STATECHANGE_APPLYFILTER)
 		ApplyCurrentFilter();
 	else if (notification == STATECHANGE_SERVER) {
-		SetWindowBackgroundTint(*this, m_state.GetSite().m_colour);
+		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
 	}
 	else {
 		wxASSERT(notification == STATECHANGE_LOCAL_REFRESH_FILE);
