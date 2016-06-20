@@ -526,10 +526,6 @@ void CRemoteListView::UpdateDirectoryListing_Added(std::shared_ptr<CDirectoryLis
 
 	m_fileData.push_back(last);
 
-	unsigned int start;
-	added_indexes.push_back(m_indexMapping.size());
-	start = added_indexes.front();
-
 	SetItemCount(m_indexMapping.size());
 	UpdateSelections_ItemsAdded(added_indexes);
 
