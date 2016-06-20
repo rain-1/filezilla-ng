@@ -507,9 +507,7 @@ CContextControl::_context_controls* CContextControl::GetControlsFromTabIndex(int
 				}
 			}
 		}
-		else {
-			return 0;
-		}
+		return 0;
 	}
 
 	wxWindow* page = m_tabs->GetPage(i);
