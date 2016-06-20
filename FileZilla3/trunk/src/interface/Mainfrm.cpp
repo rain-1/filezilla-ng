@@ -767,8 +767,8 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			return;
 		}
 		
-		Site const& site = pState->GetSite();
-		std::wstring sitePath = site.m_path;
+		Site const old_site = pState->GetSite();
+		std::wstring sitePath = old_site.m_path;
 
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
 		if (!controls) {
@@ -778,19 +778,25 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		// controls->last_bookmark_path can get modified if it's empty now
 		int res;
 		if (event.GetId() == XRCID("ID_BOOKMARK_ADD")) {
-			CNewBookmarkDialog dlg(this, sitePath, site.m_server ? &site.m_server : 0);
+			CNewBookmarkDialog dlg(this, sitePath, old_site.m_server ? &old_site.m_server : 0);
 			res = dlg.Run(pState->GetLocalDir().GetPath(), pState->GetRemotePath());
 		}
 		else {
-			CBookmarksDialog dlg(this, sitePath, site.m_server ? &site.m_server : 0);
+			CBookmarksDialog dlg(this, sitePath, old_site.m_server ? &old_site.m_server : 0);
 			res = dlg.Run();
 		}
 		if (res == wxID_OK) {
-			// FIXME
-			// notify states
-
-			if (m_pMenuBar) {
-				m_pMenuBar->UpdateBookmarkMenu();
+			if (old_site.m_path.empty() && !sitePath.empty()) {
+				std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(sitePath, false);
+				if (site) {
+					for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
+						CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
+						if (!controls) {
+							continue;
+						}
+						controls->pState->UpdateSite(old_site.m_path, *site);
+					}
+				}
 			}
 		}
 	}
