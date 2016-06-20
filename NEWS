@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.19.0-rc1 (2016-06-20)
+
++ In the Site Manager a background colour for sites can now be selected
++ Open tabs can be re-arranged using drag&drop
+- Fixed copying URLs of multiple selected files to clipboard
+- Setting remote file timestamps did not take timezone offsets configured through the Site Manager into account
+
 3.18.0 (2016-05-27)
 
 - Small fixes to local file search
