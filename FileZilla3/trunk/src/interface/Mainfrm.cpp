@@ -786,7 +786,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			res = dlg.Run();
 		}
 		if (res == wxID_OK) {
-			if (old_site.m_path.empty() && !sitePath.empty()) {
+			if (!sitePath.empty()) {
 				std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(sitePath, false);
 				if (site) {
 					for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
