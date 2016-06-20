@@ -793,7 +793,7 @@ bool CSiteManager::HasSites()
 
 wxColour CSiteManager::GetColourFromIndex(int i)
 {
-	if (i < 0 || i >= (sizeof(background_colors) / sizeof(background_color) + 1)) {
+	if (i < 0 || static_cast<unsigned int>(i) + 1 >= (sizeof(background_colors) / sizeof(background_color) + 1)) {
 		return wxColour();
 	}
 	return background_colors[i].color;
@@ -812,7 +812,7 @@ int CSiteManager::GetColourIndex(wxColour const& c)
 
 wxString CSiteManager::GetColourName(int i)
 {
-	if (i < 0 || i >= (sizeof(background_colors) / sizeof(background_color) + 1)) {
+	if (i < 0 || static_cast<unsigned int>(i) + 1 >= (sizeof(background_colors) / sizeof(background_color))) {
 		return wxString();
 	}
 	return wxGetTranslation(background_colors[i].name);
