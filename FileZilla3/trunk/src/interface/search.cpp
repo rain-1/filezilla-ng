@@ -756,10 +756,12 @@ void CSearchDialog::OnContextMenu(wxContextMenuEvent& event)
 	}
 
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_SEARCH"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
-	if (!m_state.IsRemoteIdle()) {
+	if (!m_state.IsRemoteIdle() || !m_state.IsRemoteConnected()) {
+		pMenu->Enable(XRCID("ID_MENU_SEARCH_UPLOAD"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DOWNLOAD"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_DELETE"), false);
 		pMenu->Enable(XRCID("ID_MENU_SEARCH_EDIT"), false);
