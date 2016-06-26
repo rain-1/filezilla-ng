@@ -24,7 +24,7 @@ Legend:
 
 3.18.0-rc1 (2016-05-20)
 
-+ The search functionality can now also be used to search local file
++ The search functionality can now also be used to search local files
 + Reduced CPU consumption of adding files to the list of search results
 + Opening the remote context menu while holding shift allows copying URLs to clipboard that include the password
 + Added an option to the configuration file through which initiating drag&drop can be disallowed
