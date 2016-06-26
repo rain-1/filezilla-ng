@@ -1356,8 +1356,7 @@ void CQueueView::CheckQueueState()
 
 		CContextManager::Get()->NotifyGlobalHandlers(STATECHANGE_QUEUEPROCESSING);
 
-		if (!m_quit)
-			ActionAfter();
+		ActionAfter();
 	}
 
 	if (m_quit)
