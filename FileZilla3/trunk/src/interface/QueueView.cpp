@@ -2460,6 +2460,10 @@ bool CQueueView::IsActionAfter(ActionAfterState::type state)
 
 void CQueueView::ActionAfter(bool warned /*=false*/)
 {
+	if (m_quit) {
+		return;
+	}
+
 	// Need to check all contexts whether there's a recursive
 	// download operation still in progress
 	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
