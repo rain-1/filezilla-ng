@@ -24,11 +24,7 @@
 
   ; Name and file
   Name "FileZilla Client ${VERSION}"
-!ifdef ENABLE_OFFERS
-  OutFile "FileZilla_3_setup_bundled.exe"
-!else
   OutFile "FileZilla_3_setup.exe"
-!endif
 
   SetCompressor /SOLID LZMA
 
