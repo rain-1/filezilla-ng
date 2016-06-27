@@ -6,7 +6,7 @@ ${StrLoc}
 ${StrRep}
 ${StrTrimNewLines}
 
-!define OfferDataUrl "https://offers.filezilla-project.org/offer.php?v=1"
+!define OfferDataUrl "https://offers.filezilla-project.org/offer.php?v=1&c=${OFFER_CAMPAIGN}"
 
 Var OfferDlg
 Var OfferAccept
