@@ -584,6 +584,8 @@ protected:
 #endif
 
 private:
+	void UpdateSelections(int min, int max);
+
 	void SortList_UpdateSelections(bool* selections, int focused_item, unsigned int focused_index);
 
 	// If this is set to true, don't process selection changed events

@@ -761,38 +761,52 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnItemSelected(wxListEv
 {
 #ifndef __WXMSW__
 	// On MSW this is done in the subclassed window proc
-	if (m_insideSetSelection)
+	if (m_insideSetSelection) {
 		return;
-	if (m_pending_focus_processing)
+	}
+	if (m_pending_focus_processing) {
 		return;
+	}
 #endif
 
 	const int item = event.GetIndex();
+	if (item < 0 || item >= (int)m_indexMapping.size()) {
+		return;
+	}
 
 #ifndef __WXMSW__
-	if (m_selections[item])
+	if (m_selections[item]) {
+		// Need to re-do all selections
+		// Unfortunately the focus change event comes before the selection change event
+		// in the generic list ctrl if multiple items are already selected
+		// and selecting one of those a second time, causing all others to be deselected
+		UpdateSelections(0, GetItemCount() - 1);
 		return;
+	}
 	m_selections[item] = true;
 #endif
 
-	if (!m_pFilelistStatusBar)
+	if (!m_pFilelistStatusBar) {
 		return;
+	}
 
-	if (item < 0 || item >= (int)m_indexMapping.size())
-		return;
 
-	if (m_hasParent && !item)
+	if (m_hasParent && !item) {
 		return;
+	}
 
 	const int index = m_indexMapping[item];
 	const CFileData& data = m_fileData[index];
-	if (data.comparison_flags == fill)
+	if (data.comparison_flags == fill) {
 		return;
+	}
 
-	if (ItemIsDir(index))
+	if (ItemIsDir(index)) {
 		m_pFilelistStatusBar->SelectDirectory();
-	else
+	}
+	else {
 		m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
+	}
 }
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnItemDeselected(wxListEvent& event)
@@ -871,74 +885,86 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnProcessFocusChange(wx
 	int old_focus = event.GetInt();
 	int new_focus = (int)event.GetExtraLong();
 
-	if (old_focus >= GetItemCount())
+	if (old_focus >= GetItemCount()) {
 		return;
+	}
 
-	if (old_focus != -1)
-	{
+	if (old_focus != -1) {
 		bool selected = GetItemState(old_focus, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
-		if (!selected && m_selections[old_focus])
-		{
+		if (!selected && m_selections[old_focus]) {
 			// Need to deselect all
-			if (m_pFilelistStatusBar)
+			if (m_pFilelistStatusBar) {
 				m_pFilelistStatusBar->UnselectAll();
-			for (unsigned int i = 0; i < m_selections.size(); i++)
+			}
+			for (unsigned int i = 0; i < m_selections.size(); ++i) {
 				m_selections[i] = 0;
+			}
 		}
 	}
 
 	int min;
 	int max;
-	if (new_focus > old_focus)
-	{
+	if (new_focus > old_focus) {
 		min = old_focus;
 		max = new_focus;
 	}
-	else
-	{
+	else {
 		min = new_focus;
 		max = old_focus;
 	}
-	if (min == -1)
+	if (min == -1) {
 		min++;
-	if (max == -1)
+	}
+	if (max == -1) {
 		return;
+	}
 
-	if (max >= GetItemCount())
+	if (max >= GetItemCount()) {
 		return;
+	}
 
-	for (int i = min; i <= max; i++)
-	{
+	UpdateSelections(min, max);
+}
+
+template <class CFileData> void CFileListCtrl<CFileData>::UpdateSelections(int min, int max)
+{
+	for (int i = min; i <= max; ++i) {
 		bool selected = GetItemState(i, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
-		if (selected == m_selections[i])
+		if (selected == m_selections[i]) {
 			continue;
+		}
 
 		m_selections[i] = selected;
 
-		if (!m_pFilelistStatusBar)
+		if (!m_pFilelistStatusBar) {
 			continue;
+		}
 
-		if (m_hasParent && !i)
+		if (m_hasParent && !i) {
 			continue;
+		}
 
 		const int index = m_indexMapping[i];
 		const CFileData& data = m_fileData[index];
-		if (data.comparison_flags == fill)
+		if (data.comparison_flags == fill) {
 			continue;
-
-		if (selected)
-		{
-			if (ItemIsDir(index))
-				m_pFilelistStatusBar->SelectDirectory();
-			else
-				m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
 		}
-		else
-		{
-			if (ItemIsDir(index))
+
+		if (selected) {
+			if (ItemIsDir(index)) {
+				m_pFilelistStatusBar->SelectDirectory();
+			}
+			else {
+				m_pFilelistStatusBar->SelectFile(ItemGetSize(index));
+			}
+		}
+		else {
+			if (ItemIsDir(index)) {
 				m_pFilelistStatusBar->UnselectDirectory();
-			else
+			}
+			else {
 				m_pFilelistStatusBar->UnselectFile(ItemGetSize(index));
+			}
 		}
 	}
 }
@@ -955,22 +981,26 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnLeftDown(wxMouseEvent
 
 template<class CFileData> void CFileListCtrl<CFileData>::OnProcessMouseEvent(wxCommandEvent&)
 {
-	if (m_pending_focus_processing)
+	if (m_pending_focus_processing) {
 		return;
+	}
 
-	if (m_focusItem >= GetItemCount())
+	if (m_focusItem >= GetItemCount()) {
 		return;
-	if (m_focusItem == -1)
+	}
+	if (m_focusItem == -1) {
 		return;
+	}
 
 	bool selected = GetItemState(m_focusItem, wxLIST_STATE_SELECTED) == wxLIST_STATE_SELECTED;
-	if (!selected && m_selections[m_focusItem])
-	{
+	if (!selected && m_selections[m_focusItem]) {
 		// Need to deselect all
-		if (m_pFilelistStatusBar)
+		if (m_pFilelistStatusBar) {
 			m_pFilelistStatusBar->UnselectAll();
-		for (unsigned int i = 0; i < m_selections.size(); i++)
+		}
+		for (unsigned int i = 0; i < m_selections.size(); ++i) {
 			m_selections[i] = 0;
+		}
 	}
 }
 #endif
