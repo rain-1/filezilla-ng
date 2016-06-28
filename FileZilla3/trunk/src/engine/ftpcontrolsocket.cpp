@@ -17,7 +17,6 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/util.hpp>
 
-#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
@@ -2483,7 +2482,7 @@ int CFtpControlSocket::FileTransferSend()
 				wxFileOffset startOffset = 0;
 
 				// Potentially racy
-				bool didExist = wxFile::Exists(pData->localFile);
+				bool didExist = fz::local_filesys::get_file_type(fz::to_native(pData->localFile)) != fz::local_filesys::unknown;
 
 				if (pData->resume) {
 					if (!pFile->open(fz::to_native(pData->localFile), fz::file::writing, fz::file::existing)) {
@@ -2738,65 +2737,7 @@ bool CFtpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotific
 			CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 
 			CFileExistsNotification *pFileExistsNotification = static_cast<CFileExistsNotification *>(pNotification);
-			switch (pFileExistsNotification->overwriteAction)
-			{
-			case CFileExistsNotification::rename:
-				if (pData->download) {
-					wxFileName fn = pData->localFile;
-					fn.SetFullName(pFileExistsNotification->newName);
-					pData->localFile = fn.GetFullPath();
-
-					int64_t size;
-					bool isLink;
-					if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
-						pData->localFileSize = size;
-					else
-						pData->localFileSize = -1;
-
-					if (CheckOverwriteFile() == FZ_REPLY_OK)
-						SendNextCommand();
-				}
-				else {
-					pData->remoteFile = pFileExistsNotification->newName;
-					pData->remoteFileSize = -1;
-					pData->fileTime = fz::datetime();
-
-					CDirentry entry;
-					bool dir_did_exist;
-					bool matched_case;
-					if (!engine_.GetDirectoryCache().LookupFile(entry, *m_pCurrentServer, pData->tryAbsolutePath ? pData->remotePath : m_CurrentPath, pData->remoteFile, dir_did_exist, matched_case) ||
-						!matched_case)
-					{
-						if (engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
-						{
-							pData->opState = filetransfer_mdtm;
-						}
-					}
-					else // found and matched case
-					{
-						pData->remoteFileSize = entry.size;
-						if (entry.has_date())
-							pData->fileTime = entry.time;
-
-						if (pData->download &&
-							!entry.has_time() &&
-							engine_.GetOptions().GetOptionVal(OPTION_PRESERVE_TIMESTAMPS) &&
-							CServerCapabilities::GetCapability(*m_pCurrentServer, mdtm_command) == yes)
-						{
-							pData->opState = filetransfer_mdtm;
-						}
-						else {
-							if (CheckOverwriteFile() != FZ_REPLY_OK)
-								break;
-						}
-					}
-					SendNextCommand();
-				}
-				break;
-			default:
-				return SetFileExistsAction(pFileExistsNotification);
-			}
+			return SetFileExistsAction(pFileExistsNotification);
 		}
 		break;
 	case reqId_interactiveLogin:

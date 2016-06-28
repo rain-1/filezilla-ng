@@ -12,9 +12,6 @@
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
 
-#include <wx/file.h>
-#include <wx/filename.h>
-
 #ifndef __WXMSW__
 	#define mutex mutex_override // Sadly on some platforms system headers include conflicting names
 	#include <netdb.h>
@@ -368,10 +365,10 @@ int CControlSocket::CheckOverwriteFile()
 
 	CFileTransferOpData *pData = static_cast<CFileTransferOpData *>(m_pCurOpData);
 
-	if (pData->download)
-	{
-		if (!wxFile::Exists(pData->localFile))
+	if (pData->download) {
+		if (fz::local_filesys::get_file_type(fz::to_native(pData->localFile), true) != fz::local_filesys::file) {
 			return FZ_REPLY_OK;
+		}
 	}
 
 	CDirentry entry;
@@ -1123,8 +1120,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 {
 	wxASSERT(pFileExistsNotification);
 
-	if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer)
-	{
+	if (!m_pCurOpData || m_pCurOpData->opId != Command::transfer) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("No or invalid operation in progress, ignoring request reply %f"), pFileExistsNotification->GetRequestID());
 		return false;
 	}
@@ -1207,22 +1203,33 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		break;
 	case CFileExistsNotification::rename:
 		if (pData->download) {
-			wxFileName fn = pData->localFile;
-			fn.SetFullName(pFileExistsNotification->newName);
-			pData->localFile = fn.GetFullPath();
+			{
+				wxString tmp;
+				CLocalPath l(pData->localFile, &tmp);
+				if (l.empty() || tmp.empty()) {
+					ResetOperation(FZ_REPLY_INTERNALERROR);
+					return false;
+				}
+				pData->localFile = l.GetPath() + tmp;
+			}
 
 			int64_t size;
 			bool isLink;
-			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
+			if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file) {
 				pData->localFileSize = size;
-			else
+			}
+			else {
 				pData->localFileSize = -1;
+			}
 
-			if (CheckOverwriteFile() == FZ_REPLY_OK)
+			if (CheckOverwriteFile() == FZ_REPLY_OK) {
 				SendNextCommand();
+			}
 		}
 		else {
 			pData->remoteFile = pFileExistsNotification->newName;
+			pData->fileTime = fz::datetime();
+			pData->remoteFileSize = -1;
 
 			CDirentry entry;
 			bool dir_did_exist;
@@ -1231,15 +1238,13 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 				matched_case)
 			{
 				pData->remoteFileSize = entry.size;
-				if (entry.has_date())
+				if (entry.has_date()) {
 					pData->fileTime = entry.time;
+				}
 
-				if (CheckOverwriteFile() != FZ_REPLY_OK)
+				if (CheckOverwriteFile() != FZ_REPLY_OK) {
 					break;
-			}
-			else {
-				pData->fileTime = fz::datetime();
-				pData->remoteFileSize = -1;
+				}
 			}
 
 			SendNextCommand();
@@ -1273,7 +1278,7 @@ void CControlSocket::CreateLocalDir(const wxString &local_file)
 	if (local_path.empty() || !local_path.HasParent())
 		return;
 
-	// Only go back as far as needed. On comparison, wxWidgets'
+	// Only go back as far as needed. By comparison, wxWidgets'
 	// wxFileName::Mkdir always starts at the root.
 	std::vector<wxString> segments;
 	while (!local_path.Exists() && local_path.HasParent()) {

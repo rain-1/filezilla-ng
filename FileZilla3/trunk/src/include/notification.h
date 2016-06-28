@@ -229,7 +229,7 @@ class CTransferStatus final
 {
 public:
 	CTransferStatus() {}
-	CTransferStatus(wxFileOffset total, wxFileOffset start, bool l)
+	CTransferStatus(int64_t total, int64_t start, bool l)
 		: totalSize(total)
 		, startOffset(start)
 		, currentOffset(start)
@@ -237,9 +237,9 @@ public:
 	{}
 
 	fz::datetime started;
-	wxFileOffset totalSize{-1};		// Total size of the file to transfer, -1 if unknown
-	wxFileOffset startOffset{-1};
-	wxFileOffset currentOffset{-1};
+	int64_t totalSize{-1};		// Total size of the file to transfer, -1 if unknown
+	int64_t startOffset{-1};
+	int64_t currentOffset{-1};
 
 	void clear() { startOffset = -1; }
 	bool empty() const { return startOffset < 0; }

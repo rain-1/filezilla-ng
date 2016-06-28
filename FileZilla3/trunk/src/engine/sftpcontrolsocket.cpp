@@ -12,7 +12,6 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/process.hpp>
 
-#include <wx/filename.h>
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 #include <wx/txtstrm.h>
@@ -408,7 +407,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 		args.push_back(fzT("-C"));
 	}
 	if (!m_pProcess->spawn(executable, args)) {
-		LogMessage(MessageType::Debug_Warning, _T("Could not create process: %s"), wxSysErrorMsg());
+		LogMessage(MessageType::Debug_Warning, _T("Could not create process"));
 		DoClose();
 		return FZ_REPLY_ERROR;
 	}

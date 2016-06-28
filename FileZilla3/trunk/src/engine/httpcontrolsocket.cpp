@@ -5,10 +5,9 @@
 #include "httpcontrolsocket.h"
 #include "tlssocket.h"
 
+#include <libfilezilla/file.hpp>
 #include <libfilezilla/iputils.hpp>
 #include <libfilezilla/local_filesys.hpp>
-
-#include <wx/file.h>
 
 #define FZ_REPLY_REDIRECTED FZ_REPLY_ALREADYCONNECTED
 
@@ -72,15 +71,9 @@ public:
 	CHttpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
 		: CFileTransferOpData(is_download, local_file, remote_file, remote_path), CHttpOpData(this)
 	{
-		pFile = 0;
 	}
 
-	virtual ~CHttpFileTransferOpData()
-	{
-		delete pFile;
-	}
-
-	wxFile* pFile;
+	fz::file file;
 };
 
 CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate & engine)
@@ -517,9 +510,10 @@ int CHttpControlSocket::FileTransferParseResponse(char* p, unsigned int len)
 		engine_.AddNotification(new CDataNotification(q, len));
 	}
 	else {
-		wxASSERT(pData->pFile);
+		wxASSERT(pData->file.opened());
 
-		if (pData->pFile->Write(p, len) != len) {
+		auto write = static_cast<int64_t>(len);
+		if (pData->file.write(p, write) != write) {
 			LogMessage(MessageType::Error, _("Failed to write to file %s"), pData->localFile);
 			ResetOperation(FZ_REPLY_ERROR);
 			return FZ_REPLY_ERROR;
@@ -867,21 +861,19 @@ int CHttpControlSocket::OnChunkedData(CHttpOpData* pData)
 
 int CHttpControlSocket::ResetOperation(int nErrorCode)
 {
-	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer)
-	{
+	if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
 		CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
-		delete pData->pFile;
-		pData->pFile = 0;
+		pData->file.close();
 	}
 
-	if (!m_pCurOpData || !m_pCurOpData->pNextOpData)
-	{
-		if (m_pBackend)
-		{
-			if (nErrorCode == FZ_REPLY_OK)
+	if (!m_pCurOpData || !m_pCurOpData->pNextOpData) {
+		if (m_pBackend) {
+			if (nErrorCode == FZ_REPLY_OK) {
 				LogMessage(MessageType::Status, _("Disconnected from server"));
-			else
+			}
+			else {
 				LogMessage(MessageType::Error, _("Disconnected from server"));
+			}
 		}
 		ResetSocket();
 		m_pHttpOpData = 0;
@@ -1000,16 +992,16 @@ int CHttpControlSocket::Disconnect()
 
 int CHttpControlSocket::OpenFile(CHttpFileTransferOpData* pData)
 {
-	delete pData->pFile;
-	pData->pFile = new wxFile();
+	pData->file.close();
+
 	CreateLocalDir(pData->localFile);
 
-	if (!pData->pFile->Open(pData->localFile, pData->resume ? wxFile::write_append : wxFile::write)) {
+	if (!pData->file.open(fz::to_native(pData->localFile), fz::file::writing, pData->resume ? fz::file::existing : fz::file::empty)) {
 		LogMessage(MessageType::Error, _("Failed to open \"%s\" for writing"), pData->localFile);
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
-	wxFileOffset end = pData->pFile->SeekEnd();
+	int64_t end = pData->file.seek(0, fz::file::end);
 	if (!end) {
 		pData->resume = false;
 	}
