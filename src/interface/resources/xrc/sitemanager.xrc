@@ -272,7 +272,7 @@
 
                             <object class="sizeritem">
                               <object class="wxStaticText">
-                                <label>Background color:</label>
+                                <label>&amp;Background color:</label>
                               </object>
                               <flag>wxALL|wxALIGN_CENTRE_VERTICAL</flag>
                               <border>5</border>
