@@ -3128,7 +3128,7 @@
         <border>5</border>
       </object>
     </object>
-    <title>Remote file search</title>
+    <title>File search</title>
     <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
   <object class="wxDialog" name="ID_SEARCH_DOWNLOAD">
@@ -3268,7 +3268,7 @@
           </object>
           <object class="sizeritem">
             <object class="wxRadioButton" name="ID_PATHS_KEEP">
-              <label>&amp;Keep remote path structure relative to search root</label>
+              <label>&amp;Keep local path structure relative to search root</label>
               <value>1</value>
               <style>wxRB_GROUP</style>
             </object>
