@@ -117,7 +117,11 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 	m_prefixes[static_cast<int>(MessageType::Debug_Debug)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
 	m_prefixes[static_cast<int>(MessageType::RawList)] = _("Listing:");
 
-	m_pid = wxGetProcessId();
+#if FZ_WINDOWS
+	m_pid = static_cast<unsigned int>(GetCurrentProcessId());
+#else
+	m_pid = static_cast<unsigned int>(getpid());
+#endif
 
 	m_max_size = engine_.GetOptions().GetOptionVal(OPTION_LOGGING_FILE_SIZELIMIT);
 	if (m_max_size < 0)
