@@ -855,7 +855,7 @@ void CTransferStatusManager::Reset()
 	engine_.AddNotification(new CTransferStatusNotification());
 }
 
-void CTransferStatusManager::Init(wxFileOffset totalSize, wxFileOffset startOffset, bool list)
+void CTransferStatusManager::Init(int64_t totalSize, int64_t startOffset, bool list)
 {
 	fz::scoped_lock lock(mutex_);
 	if (startOffset < 0)
@@ -883,7 +883,7 @@ void CTransferStatusManager::SetMadeProgress()
 	status_.madeProgress = true;
 }
 
-void CTransferStatusManager::Update(wxFileOffset transferredBytes)
+void CTransferStatusManager::Update(int64_t transferredBytes)
 {
 	CNotification* notification = 0;
 

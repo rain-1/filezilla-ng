@@ -613,7 +613,7 @@ int CTlsSocket::Read(void *buffer, unsigned int len, int& error)
 	}
 
 	if (m_peekDataLen) {
-		unsigned int min = wxMin(len, m_peekDataLen);
+		auto min = std::min(len, m_peekDataLen);
 		memcpy(buffer, m_peekData, min);
 
 		if (min == m_peekDataLen) {
@@ -809,7 +809,7 @@ void CTlsSocket::Failure(int code, bool send_close, const wxString& function)
 int CTlsSocket::Peek(void *buffer, unsigned int len, int& error)
 {
 	if (m_peekData) {
-		int min = wxMin(len, m_peekDataLen);
+		auto min = std::min(len, m_peekDataLen);
 		memcpy(buffer, m_peekData, min);
 
 		error = 0;

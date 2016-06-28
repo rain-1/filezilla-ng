@@ -35,11 +35,11 @@ public:
 
 	bool empty();
 
-	void Init(wxFileOffset totalSize, wxFileOffset startOffset, bool list);
+	void Init(int64_t totalSize, int64_t startOffset, bool list);
 	void Reset();
 	void SetStartTime();
 	void SetMadeProgress();
-	void Update(wxFileOffset transferredBytes);
+	void Update(int64_t transferredBytes);
 
 	CTransferStatus Get(bool &changed);
 

@@ -14,7 +14,6 @@
 
 #include <wx/log.h>
 #include <wx/tokenzr.h>
-#include <wx/txtstrm.h>
 
 #define FZSFTP_PROTOCOL_VERSION 5
 

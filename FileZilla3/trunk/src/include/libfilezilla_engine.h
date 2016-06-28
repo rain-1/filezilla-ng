@@ -24,8 +24,7 @@
 #include <windows.h>
 #endif
 
-#include <wx/datetime.h>
-#include <wx/event.h>
+#include <wx/file.h>
 #include <wx/string.h>
 #include <wx/translation.h>
 
