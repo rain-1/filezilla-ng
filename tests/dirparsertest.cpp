@@ -22,8 +22,9 @@ class CDirectoryListingParserTest : public CppUnit::TestFixture
 {
 	CPPUNIT_TEST_SUITE(CDirectoryListingParserTest);
 	InitEntries();
-	for (unsigned int i = 0; i < m_entries.size(); i++)
+	for (unsigned int i = 0; i < m_entries.size(); ++i) {
 		CPPUNIT_TEST(testIndividual);
+	}
 	CPPUNIT_TEST(testAll);
 	CPPUNIT_TEST_SUITE_END();
 
@@ -37,7 +38,7 @@ public:
 
 	static std::vector<t_entry> m_entries;
 
-	static wxCriticalSection m_sync;
+	static fz::mutex m_sync;
 
 protected:
 	static void InitEntries();
@@ -45,7 +46,7 @@ protected:
 	t_entry m_entry;
 };
 
-wxCriticalSection CDirectoryListingParserTest::m_sync;
+fz::mutex CDirectoryListingParserTest::m_sync;
 std::vector<t_entry> CDirectoryListingParserTest::m_entries;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CDirectoryListingParserTest);
@@ -55,17 +56,21 @@ typedef fz::sparse_optional<std::wstring> O;
 
 static int calcYear(int month, int day)
 {
-	const int cur_year = wxDateTime::GetCurrentYear();
-	const int cur_month = wxDateTime::GetCurrentMonth() + 1;
-	const int cur_day = wxDateTime::Now().GetDay();
+	auto const now = fz::datetime::now();
+	auto const tm = now.get_tm(fz::datetime::local);
+	int const cur_year = tm.tm_year + 1900;
+	int const cur_month = tm.tm_mon + 1;
+	int const cur_day = tm.tm_mday;
 
 	// Not exact but good enough for our purpose
-	const int day_of_year = month * 31 + day;
-	const int cur_day_of_year = cur_month * 31 + cur_day;
-	if (day_of_year > (cur_day_of_year + 1))
+	int const day_of_year = month * 31 + day;
+	int const cur_day_of_year = cur_month * 31 + cur_day;
+	if (day_of_year > (cur_day_of_year + 1)) {
 		return cur_year - 1;
-	else
+	}
+	else {
 		return cur_year;
+	}
 }
 
 void CDirectoryListingParserTest::InitEntries()
@@ -1448,12 +1453,12 @@ void CDirectoryListingParserTest::InitEntries()
 
 void CDirectoryListingParserTest::testIndividual()
 {
-	m_sync.Enter();
+	m_sync.lock();
 
 	static int index = 0;
 	const t_entry &entry = m_entries[index++];
 
-	m_sync.Leave();
+	m_sync.unlock();
 
 	CServer server;
 	server.SetType(entry.serverType);
