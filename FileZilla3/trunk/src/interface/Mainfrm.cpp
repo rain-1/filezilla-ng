@@ -787,7 +787,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		}
 		if (res == wxID_OK) {
 			if (!sitePath.empty()) {
-				std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(sitePath, false);
+				std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(sitePath, false).first;
 				if (site) {
 					for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 						CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
@@ -857,7 +857,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			event.Skip();
 		}
 		else {
-			ConnectToSite(*pData);
+			ConnectToSite(*pData, pData->m_default_bookmark);
 		}
 	}
 }
@@ -1268,7 +1268,9 @@ void CMainFrame::OnReconnect(wxCommandEvent &)
 
 	Site site = pState->GetLastSite();
 	CServerPath path = pState->GetLastServerPath();
-	ConnectToSite(site, path);
+	Bookmark bm;
+	bm.m_remoteDir = path;
+	ConnectToSite(site, bm);
 }
 
 void CMainFrame::OnRefresh(wxCommandEvent &)
@@ -1348,7 +1350,7 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 	if (res == wxID_YES || res == wxID_OK) {
 		// Update bookmark paths
 		for (auto const& connected_site : connected_sites) {
-			std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(connected_site.new_path, false);
+			std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(connected_site.new_path, false).first;
 			if (site) {
 				for (int i = 0; i < m_pContextControl->GetTabCount(); ++i) {
 					CContextControl::_context_controls *controls = m_pContextControl->GetControlsFromTabIndex(i);
@@ -1363,11 +1365,12 @@ void CMainFrame::OpenSiteManager(CServer const* pServer)
 
 	if (res == wxID_YES) {
 		Site data;
-		if (!dlg.GetServer(data)) {
+		Bookmark bookmark;
+		if (!dlg.GetServer(data, bookmark)) {
 			return;
 		}
 
-		ConnectToSite(data);
+		ConnectToSite(data, bookmark);
 	}
 }
 
@@ -1871,7 +1874,7 @@ void CMainFrame::OnSitemanagerDropdown(wxCommandEvent& event)
 	}
 }
 
-bool CMainFrame::ConnectToSite(Site & data, CServerPath const& path)
+bool CMainFrame::ConnectToSite(Site & data, Bookmark const& bookmark)
 {
 	// First check if we need to ask user for a password
 	if (data.m_server.GetLogonType() == ASK ||
@@ -1927,22 +1930,22 @@ bool CMainFrame::ConnectToSite(Site & data, CServerPath const& path)
 	}
 
 	// Next tell the state to connect
-	if (!pState->Connect(data, path.empty() ? data.m_default_bookmark.m_remoteDir : path)) {
+	if (!pState->Connect(data, bookmark.m_remoteDir)) {
 		return false;
 	}
 
 	// Apply comparison and sync browsing options
 	// FIXME: Move to state?
-	if (!data.m_default_bookmark.m_localDir.empty()) {
-		bool set = pState->SetLocalDir(data.m_default_bookmark.m_localDir, 0, false);
+	if (!bookmark.m_localDir.empty()) {
+		bool set = pState->SetLocalDir(bookmark.m_localDir, 0, false);
 
-		if (set && data.m_default_bookmark.m_sync) {
-			wxASSERT(!data.m_default_bookmark.m_remoteDir.empty());
-			pState->SetSyncBrowse(true, data.m_default_bookmark.m_remoteDir);
+		if (set && bookmark.m_sync) {
+			wxASSERT(!bookmark.m_remoteDir.empty());
+			pState->SetSyncBrowse(true, bookmark.m_remoteDir);
 		}
 	}
 
-	if (data.m_default_bookmark.m_comparison && pState->GetComparisonManager()) {
+	if (bookmark.m_comparison && pState->GetComparisonManager()) {
 		pState->GetComparisonManager()->CompareListings();
 	}
 
@@ -2296,15 +2299,14 @@ void CMainFrame::OnDropdownComparisonHide(wxCommandEvent&)
 void CMainFrame::ProcessCommandLine()
 {
 	const CCommandLine* pCommandLine = wxGetApp().GetCommandLine();
-	if (!pCommandLine)
+	if (!pCommandLine) {
 		return;
+	}
 
 	wxString local;
-	if ((local = pCommandLine->GetOption(CCommandLine::local)) != _T(""))
-	{
+	if ((local = pCommandLine->GetOption(CCommandLine::local)) != _T("")) {
 
-		if (!wxDir::Exists(local))
-		{
+		if (!wxDir::Exists(local)) {
 			wxString str = _("Path not found:");
 			str += _T("\n") + local;
 			wxMessageBoxEx(str, _("Syntax error in command line"));
@@ -2312,8 +2314,9 @@ void CMainFrame::ProcessCommandLine()
 		}
 
 		CState *pState = CContextManager::Get()->GetCurrentContext();
-		if (!pState)
+		if (!pState) {
 			return;
+		}
 
 		pState->SetLocalDir(local);
 	}
@@ -2326,10 +2329,10 @@ void CMainFrame::ProcessCommandLine()
 		}
 	}
 	else if ((site = pCommandLine->GetOption(CCommandLine::site)) != _T("")) {
-		std::unique_ptr<Site> pData = CSiteManager::GetSiteByPath(site);
+		auto const data = CSiteManager::GetSiteByPath(site);
 
-		if (pData) {
-			ConnectToSite(*pData);
+		if (data.first) {
+			ConnectToSite(*data.first, data.second);
 		}
 	}
 
@@ -2365,7 +2368,9 @@ void CMainFrame::ProcessCommandLine()
 
 		Site site;
 		site.m_server = server;
-		ConnectToSite(site, path);
+		Bookmark bm;
+		bm.m_remoteDir = path;
+		ConnectToSite(site, bm);
 	}
 }
 

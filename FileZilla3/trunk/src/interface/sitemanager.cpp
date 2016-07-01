@@ -472,24 +472,25 @@ std::wstring CSiteManager::BuildPath(wxChar root, std::vector<std::wstring> cons
 	return ret;
 }
 
-std::unique_ptr<Site> CSiteManager::GetSiteByPath(std::wstring const& sitePath, bool printErrors)
+std::pair<std::unique_ptr<Site>, Bookmark> CSiteManager::GetSiteByPath(std::wstring const& sitePath, bool printErrors)
 {
 	wxString error;
 
-	std::unique_ptr<Site> ret = DoGetSiteByPath(sitePath, error);
-	if (!ret && printErrors) {
+	auto ret = DoGetSiteByPath(sitePath, error);
+	if (!ret.first && printErrors) {
 		wxMessageBoxEx(_("Site does not exist."), error);
 	}
 
 	return ret;
 }
 
-std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(std::wstring sitePath, wxString& error)
+std::pair<std::unique_ptr<Site>, Bookmark> CSiteManager::DoGetSiteByPath(std::wstring sitePath, wxString& error)
 {
+	std::pair<std::unique_ptr<Site>, Bookmark> ret;
 	wxChar c = sitePath.empty() ? 0 : sitePath[0];
 	if (c != '0' && c != '1') {
 		error = _("Site path has to begin with 0 or 1.");
-		return 0;
+		return ret;
 	}
 
 	sitePath = sitePath.substr(1);
@@ -506,7 +507,7 @@ std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(std::wstring sitePath, wxStr
 		CLocalPath const defaultsDir = wxGetApp().GetDefaultsDir();
 		if (defaultsDir.empty()) {
 			error = _("Site does not exist.");
-			return 0;
+			return ret;
 		}
 		file.SetFileName(defaultsDir.GetPath() + _T("fzdefaults.xml"));
 	}
@@ -514,25 +515,25 @@ std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(std::wstring sitePath, wxStr
 	auto document = file.Load();
 	if (!document) {
 		wxMessageBoxEx(file.GetError(), _("Error loading xml file"), wxICON_ERROR);
-		return 0;
+		return ret;
 	}
 
 	auto element = document.child("Servers");
 	if (!element) {
 		error = _("Site does not exist.");
-		return 0;
+		return ret;
 	}
 
 	std::vector<std::wstring> segments;
 	if (!UnescapeSitePath(sitePath, segments) || segments.empty()) {
 		error = _("Site path is malformed.");
-		return 0;
+		return ret;
 	}
 
 	auto child = GetElementByPath(element, segments);
 	if (!child) {
 		error = _("Site does not exist.");
-		return 0;
+		return ret;
 	}
 
 	pugi::xml_node bookmark;
@@ -542,23 +543,25 @@ std::unique_ptr<Site> CSiteManager::DoGetSiteByPath(std::wstring sitePath, wxStr
 		segments.pop_back();
 	}
 
-	std::unique_ptr<Site> data = ReadServerElement(child);
-
-	if (!data) {
+	ret.first = ReadServerElement(child);
+	if (!ret.first) {
 		error = _("Could not read server item.");
-		return 0;
 	}
-
-	if (bookmark) {
-		Bookmark bookmarkData;
-		if (ReadBookmarkElement(bookmarkData, bookmark)) {
-			data->m_default_bookmark = bookmarkData;
+	else {
+		if (bookmark) {
+			Bookmark bm;
+			if (ReadBookmarkElement(bm, bookmark)) {
+				ret.second = bm;
+			}
 		}
+		else {
+			ret.second = ret.first->m_default_bookmark;
+		}
+
+		ret.first->m_path = BuildPath(c, segments);
 	}
 
-	data->m_path = BuildPath(c, segments);
-
-	return data;
+	return ret;
 }
 
 wxString CSiteManager::AddServer(CServer server)

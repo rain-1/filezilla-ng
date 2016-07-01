@@ -249,7 +249,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 				if (!bookmark.m_remoteDir.empty() && pState->IsRemoteIdle(true)) {
 					const CServer* pServer = pState->GetServer();
 					if (!pServer || *pServer != site.m_server) {
-						m_pMainFrame->ConnectToSite(site);
+						m_pMainFrame->ConnectToSite(site, bookmark);
 						break;
 					}
 					else {

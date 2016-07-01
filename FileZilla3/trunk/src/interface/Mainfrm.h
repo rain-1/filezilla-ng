@@ -64,7 +64,7 @@ public:
 
 	CContextControl* GetContextControl() { return m_pContextControl; }
 
-	bool ConnectToSite(Site & data, CServerPath const& path = CServerPath());
+	bool ConnectToSite(Site & data, Bookmark const& bookmark);
 
 	CFileZillaEngineContext& GetEngineContext() { return m_engineContext; }
 private:

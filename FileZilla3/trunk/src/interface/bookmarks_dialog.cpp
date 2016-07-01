@@ -87,7 +87,7 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 	if (!global && m_server) {
 		std::unique_ptr<Site> site;
 		if (!m_site_path.empty()) {
-			site = CSiteManager::GetSiteByPath(m_site_path);
+			site = CSiteManager::GetSiteByPath(m_site_path).first;
 		}
 		if (!site) {
 			if (wxMessageBoxEx(_("Site-specific bookmarks require the server to be stored in the Site Manager.\nAdd current connection to the site manager?"), _("New bookmark"), wxYES_NO | wxICON_QUESTION, this) != wxYES) {
@@ -101,10 +101,12 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 				return;
 			}
 		}
-		for (auto const& bookmark : site->m_bookmarks) {
-			if (bookmark.m_name == name) {
-				wxMessageBoxEx(_("A bookmark with the entered name already exists. Please enter an unused name."), _("New bookmark"), wxICON_EXCLAMATION, this);
-				return;
+		else {
+			for (auto const& bookmark : site->m_bookmarks) {
+				if (bookmark.m_name == name) {
+					wxMessageBoxEx(_("A bookmark with the entered name already exists. Please enter an unused name."), _("New bookmark"), wxICON_EXCLAMATION, this);
+					return;
+				}
 			}
 		}
 
@@ -209,7 +211,7 @@ void CBookmarksDialog::LoadSiteSpecificBookmarks()
 		return;
 	}
 
-	std::unique_ptr<Site> site = CSiteManager::GetSiteByPath(m_site_path);
+	auto const site = CSiteManager::GetSiteByPath(m_site_path).first;
 	if (!site) {
 		return;
 	}
@@ -519,7 +521,7 @@ void CBookmarksDialog::OnNewBookmark(wxCommandEvent&)
 
 		std::unique_ptr<Site> site;
 		if (!m_site_path.empty()) {
-			site = CSiteManager::GetSiteByPath(m_site_path);
+			site = CSiteManager::GetSiteByPath(m_site_path).first;
 		}
 		
 		if (!site) {

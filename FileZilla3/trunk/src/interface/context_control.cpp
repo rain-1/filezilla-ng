@@ -100,7 +100,7 @@ void CContextControl::CreateTab()
 
 				std::unique_ptr<Site> site;
 				if (!last_site_path.empty()) {
-					site = CSiteManager::GetSiteByPath(last_site_path, false);
+					site = CSiteManager::GetSiteByPath(last_site_path, false).first;
 				}
 				if (!site || site->m_server != last_server) {
 					site.reset(new Site);

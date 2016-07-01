@@ -134,7 +134,9 @@ void CQuickconnectBar::OnQuickconnect(wxCommandEvent& event)
 	}
 	Site site;
 	site.m_server = server;
-	if (!m_pMainFrame->ConnectToSite(site, path)) {
+	Bookmark bm;
+	bm.m_remoteDir = path;
+	if (!m_pMainFrame->ConnectToSite(site, bm)) {
 		return;
 	}
 
@@ -201,7 +203,7 @@ void CQuickconnectBar::OnMenu(wxCommandEvent& event)
 
 	Site site;
 	site.m_server = *iter;
-	m_pMainFrame->ConnectToSite(site);
+	m_pMainFrame->ConnectToSite(site, Bookmark());
 }
 
 void CQuickconnectBar::ClearFields()

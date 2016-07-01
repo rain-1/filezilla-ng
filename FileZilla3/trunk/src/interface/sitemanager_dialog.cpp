@@ -1442,7 +1442,7 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	return true;
 }
 
-bool CSiteManagerDialog::GetServer(Site& data)
+bool CSiteManagerDialog::GetServer(Site& data, Bookmark& bookmark)
 {
 	wxTreeCtrl *pTree = XRCCTRL(*this, "ID_SITETREE", wxTreeCtrl);
 	if (!pTree) {
@@ -1463,17 +1463,20 @@ bool CSiteManagerDialog::GetServer(Site& data)
 		CSiteManagerItemData* pSiteData = static_cast<CSiteManagerItemData*>(pTree->GetItemData(item));
 
 		data = *pSiteData->m_site;
+		bookmark = data.m_default_bookmark;
+
 		if (!pData->m_bookmark->m_localDir.empty())
-			data.m_default_bookmark.m_localDir = pData->m_bookmark->m_localDir;
+			bookmark.m_localDir = pData->m_bookmark->m_localDir;
 		if (!pData->m_bookmark->m_remoteDir.empty())
-			data.m_default_bookmark.m_remoteDir = pData->m_bookmark->m_remoteDir;
-		if (data.m_default_bookmark.m_localDir.empty() || data.m_default_bookmark.m_remoteDir.empty())
-			data.m_default_bookmark.m_sync = false;
+			bookmark.m_remoteDir = pData->m_bookmark->m_remoteDir;
+		if (bookmark.m_localDir.empty() || bookmark.m_remoteDir.empty())
+			bookmark.m_sync = false;
 		else
-			data.m_default_bookmark.m_sync = pData->m_bookmark->m_sync;
+			bookmark.m_sync = pData->m_bookmark->m_sync;
 	}
 	else {
 		data = *pData->m_site;
+		bookmark = data.m_default_bookmark;
 	}
 
 	data.m_path = GetSitePath(item);
