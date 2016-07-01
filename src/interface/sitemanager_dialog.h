@@ -28,7 +28,7 @@ public:
 	// Creation. If pServer is set, it will cause a new item to be created.
 	bool Create(wxWindow* parent, std::vector<_connected_site> *connected_sites, const CServer* pServer = 0);
 
-	bool GetServer(Site& data);
+	bool GetServer(Site& data, Bookmark& bookmark);
 	
 protected:
 	// Creates the controls and sizers
