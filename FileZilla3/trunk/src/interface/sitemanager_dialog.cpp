@@ -383,6 +383,14 @@ bool CSiteManagerDialog::Create(wxWindow* parent, std::vector<_connected_site> *
 	pSizer->Add(m_pNotebook_Bookmark, 1, wxGROW);
 	pSizer->SetItemMinSize(1, pSizer->GetItem((size_t)0)->GetMinSize().GetWidth(), -1);
 
+	// Set min size of tree to actual size of tree.
+	// Otherwise some platforms automatically calculate a min size fitting all items,
+	// resulting in a huge dialog if there are many sites.
+	wxSize const treeSize = pTree->GetSize();
+	if (treeSize.IsFullySpecified()) {
+		pTree->SetMinSize(treeSize);
+	}
+
 	if (!Load()) {
 		return false;
 	}
