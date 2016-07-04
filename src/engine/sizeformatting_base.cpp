@@ -4,6 +4,7 @@
 #ifndef __WXMSW__
 #include <langinfo.h>
 #endif
+#include <math.h>
 
 namespace {
 const wxChar prefix[] = { ' ', 'K', 'M', 'G', 'T', 'P', 'E' };
