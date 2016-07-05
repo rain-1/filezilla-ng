@@ -1,7 +1,8 @@
-#ifndef __LOGGING_PRIVATE_H__
-#define __LOGGING_PRIVATE_H__
+#ifndef FILEZILLA_ENGINE_LOGGIN_PRIVATE_HEADER
+#define FILEZILLA_ENGINE_LOGGIN_PRIVATE_HEADER
 
 #include "engineprivate.h"
+#include <libfilezilla/format.hpp>
 #include <libfilezilla/mutex.hpp>
 #include <utility>
 
@@ -17,12 +18,12 @@ public:
 	template<typename String, typename...Args>
 	void LogMessage(MessageType nMessageType, String&& msgFormat, Args&& ...args) const
 	{
-		if( !ShouldLog(nMessageType) ) {
+		if (!ShouldLog(nMessageType)) {
 			return;
 		}
 
 		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType);
-		notification->msg.Printf(std::forward<String>(msgFormat), std::forward<Args>(args)...);
+		notification->msg = to_wstring(fz::sprintf(std::forward<String>(msgFormat), std::forward<Args>(args)...));
 
 		LogToFile(nMessageType, notification->msg);
 		engine_.AddLogNotification(notification);
@@ -31,7 +32,7 @@ public:
 	template<typename String>
 	void LogMessageRaw(MessageType nMessageType, String&& msg) const
 	{
-		if( !ShouldLog(nMessageType) ) {
+		if (!ShouldLog(nMessageType)) {
 			return;
 		}
 
@@ -45,23 +46,25 @@ public:
 	void LogMessage(String&& sourceFile, int nSourceLine, void *pInstance, MessageType nMessageType
 					, String2&& msgFormat, Args&& ...args) const
 	{
-		if( !ShouldLog(nMessageType) ) {
+		if (!ShouldLog(nMessageType)) {
 			return;
 		}
 
-		wxString source(sourceFile);
-		int pos = source.Find('\\', true);
-		if (pos != -1)
-			source = source.Mid(pos+1);
+		fz::native_string source(sourceFile);
+		auto pos = source.find('\\', true);
+		if (pos != fz::native_string::npos) {
+			source = source.substr(pos + 1);
+		}
 
-		pos = source.Find('/', true);
-		if (pos != -1)
-			source = source.Mid(pos+1);
+		pos = source.find('/', true);
+		if (pos != fz::native_string::npos) {
+			source = source.substr(pos + 1);
+		}
 
-		wxString text = wxString::Format(std::forward<String2>(msgFormat), std::forward<Args>(args)...);
+		auto const text = fz::sprintf(std::forward<String2>(msgFormat), std::forward<Args>(args)...);
 
 		CLogmsgNotification *notification = new CLogmsgNotification(nMessageType);
-		notification->msg.Printf(_T("%s(%d): %s   caller=%p"), source, nSourceLine, text, pInstance);
+		notification->msg = fz::sprintf(L"%s(%d): %s   caller=%p", source, nSourceLine, text, pInstance);
 
 		LogToFile(nMessageType, notification->msg);
 		engine_.AddLogNotification(notification);
@@ -76,18 +79,18 @@ private:
 	CFileZillaEnginePrivate & engine_;
 
 	bool InitLogFile(fz::scoped_lock& l) const;
-	void LogToFile(MessageType nMessageType, const wxString& msg) const;
+	void LogToFile(MessageType nMessageType, std::wstring const& msg) const;
 
 	static bool m_logfile_initialized;
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	static HANDLE m_log_fd;
 #else
 	static int m_log_fd;
 #endif
-	static wxString m_prefixes[static_cast<int>(MessageType::count)];
+	static std::string m_prefixes[static_cast<int>(MessageType::count)];
 	static unsigned int m_pid;
 	static int m_max_size;
-	static wxString m_file;
+	static fz::native_string m_file;
 
 	static int m_refcount;
 

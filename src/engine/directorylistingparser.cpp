@@ -2,6 +2,8 @@
 #include "directorylistingparser.h"
 #include "ControlSocket.h"
 
+#include <libfilezilla/format.hpp>
+
 #include <algorithm>
 #include <vector>
 
@@ -602,16 +604,16 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 		std::map<std::wstring, int> combo;
 		for (auto iter = m_MonthNamesMap.begin(); iter != m_MonthNamesMap.end(); ++iter) {
 			// January could be 1 or 0, depends how the server counts
-			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second).ToStdWstring()] = iter->second;
-			combo[wxString::Format(_T("%s%02d"), iter->first, iter->second - 1).ToStdWstring()] = iter->second;
+			combo[fz::sprintf(L"%s%02d", iter->first, iter->second)] = iter->second;
+			combo[fz::sprintf(L"%s%02d", iter->first, iter->second - 1)] = iter->second;
 			if (iter->second < 10)
-				combo[wxString::Format(_T("%s%d"), iter->first, iter->second).ToStdWstring()] = iter->second;
+				combo[fz::sprintf(L"%s%d", iter->first, iter->second)] = iter->second;
 			else
-				combo[wxString::Format(_T("%s%d"), iter->first, iter->second % 10).ToStdWstring()] = iter->second;
+				combo[fz::sprintf(L"%s%d", iter->first, iter->second % 10)] = iter->second;
 			if (iter->second <= 10)
-				combo[wxString::Format(_T("%s%d"), iter->first, iter->second - 1).ToStdWstring()] = iter->second;
+				combo[fz::sprintf(L"%s%d", iter->first, iter->second - 1)] = iter->second;
 			else
-				combo[wxString::Format(_T("%s%d"), iter->first, (iter->second - 1) % 10).ToStdWstring()] = iter->second;
+				combo[fz::sprintf(L"%s%d", iter->first, (iter->second - 1) % 10)] = iter->second;
 		}
 		m_MonthNamesMap.insert(combo.begin(), combo.end());
 
@@ -701,7 +703,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	}
 
 	if (!m_fileList.empty()) {
-		wxASSERT(m_entryList.empty());
+		assert(m_entryList.empty());
 
 		for (auto const& file : m_fileList) {
 			CDirentry entry;
@@ -1215,7 +1217,7 @@ bool CDirectoryListingParser::ParseUnixDateTime(CLine & line, int &index, CDiren
 	return true;
 }
 
-bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bool saneFieldOrder /*=false*/)
+bool CDirectoryListingParser::ParseShortDate(CToken &token, CDirentry &entry, bool saneFieldOrder)
 {
 	if (token.GetLength() < 1)
 		return false;

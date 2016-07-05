@@ -2,7 +2,7 @@
 
 #include "logging_private.h"
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 #include <wx/filename.h>
 #endif
 #include <wx/log.h>
@@ -10,15 +10,15 @@
 #include <errno.h>
 
 bool CLogging::m_logfile_initialized = false;
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 HANDLE CLogging::m_log_fd = INVALID_HANDLE_VALUE;
 #else
 int CLogging::m_log_fd = -1;
 #endif
-wxString CLogging::m_prefixes[static_cast<int>(MessageType::count)];
+std::string CLogging::m_prefixes[static_cast<int>(MessageType::count)];
 unsigned int CLogging::m_pid;
 int CLogging::m_max_size;
-wxString CLogging::m_file;
+fz::native_string CLogging::m_file;
 
 int CLogging::m_refcount = 0;
 fz::mutex CLogging::mutex_(false);
@@ -39,7 +39,7 @@ CLogging::~CLogging()
 	m_refcount--;
 
 	if (!m_refcount) {
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 		if (m_log_fd != INVALID_HANDLE_VALUE) {
 			CloseHandle(m_log_fd);
 			m_log_fd = INVALID_HANDLE_VALUE;
@@ -94,11 +94,11 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 	if (m_file.empty())
 		return false;
 
-#ifdef __WXMSW__
-	m_log_fd = CreateFile(m_file.wc_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+#ifdef FZ_WINDOWS
+	m_log_fd = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
 	if (m_log_fd == INVALID_HANDLE_VALUE)
 #else
-	m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
+	m_log_fd = open(m_file.c_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
 	if (m_log_fd == -1)
 #endif
 	{
@@ -107,15 +107,15 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 		return false;
 	}
 
-	m_prefixes[static_cast<int>(MessageType::Status)] = _("Status:");
-	m_prefixes[static_cast<int>(MessageType::Error)] = _("Error:");
-	m_prefixes[static_cast<int>(MessageType::Command)] = _("Command:");
-	m_prefixes[static_cast<int>(MessageType::Response)] = _("Response:");
-	m_prefixes[static_cast<int>(MessageType::Debug_Warning)] = _("Trace:");
+	m_prefixes[static_cast<int>(MessageType::Status)] = fz::to_utf8(_("Status:"));
+	m_prefixes[static_cast<int>(MessageType::Error)] = fz::to_utf8(_("Error:"));
+	m_prefixes[static_cast<int>(MessageType::Command)] = fz::to_utf8(_("Command:"));
+	m_prefixes[static_cast<int>(MessageType::Response)] = fz::to_utf8(_("Response:"));
+	m_prefixes[static_cast<int>(MessageType::Debug_Warning)] = fz::to_utf8(_("Trace:"));
 	m_prefixes[static_cast<int>(MessageType::Debug_Info)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
 	m_prefixes[static_cast<int>(MessageType::Debug_Verbose)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
 	m_prefixes[static_cast<int>(MessageType::Debug_Debug)] = m_prefixes[static_cast<int>(MessageType::Debug_Warning)];
-	m_prefixes[static_cast<int>(MessageType::RawList)] = _("Listing:");
+	m_prefixes[static_cast<int>(MessageType::RawList)] = fz::to_utf8(_("Listing:"));
 
 #if FZ_WINDOWS
 	m_pid = static_cast<unsigned int>(GetCurrentProcessId());
@@ -133,7 +133,7 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 	return true;
 }
 
-void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
+void CLogging::LogToFile(MessageType nMessageType, std::wstring const& msg) const
 {
 	fz::scoped_lock l(mutex_);
 
@@ -142,166 +142,166 @@ void CLogging::LogToFile(MessageType nMessageType, const wxString& msg) const
 			return;
 		}
 	}
-#ifdef __WXMSW__
-	if (m_log_fd == INVALID_HANDLE_VALUE)
+#ifdef FZ_WINDOWS
+	if (m_log_fd == INVALID_HANDLE_VALUE) {
 		return;
+	}
 #else
-	if (m_log_fd == -1)
+	if (m_log_fd == -1) {
 		return;
+	}
 #endif
 
 	fz::datetime now = fz::datetime::now();
-	wxString out(wxString::Format(_T("%s %u %d %s %s")
-#ifdef __WXMSW__
-		_T("\r\n"),
+	std::string const out = fz::sprintf("%s %u %d %s %s"
+#ifdef FZ_WINDOWS
+		"\r\n",
 #else
-		_T("\n"),
+		"\n",
 #endif
-		now.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], msg));
+		now.format(_T("%Y-%m-%d %H:%M:%S"), fz::datetime::local), m_pid, engine_.GetEngineId(), m_prefixes[static_cast<int>(nMessageType)], fz::to_utf8(msg));
 
-	const wxWX2MBbuf utf8 = out.mb_str(wxConvUTF8);
-	if (utf8) {
-#ifdef __WXMSW__
-		if (m_max_size) {
-			LARGE_INTEGER size;
-			if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size) {
-				CloseHandle(m_log_fd);
-				m_log_fd = INVALID_HANDLE_VALUE;
-
-				// m_log_fd might no longer be the original file.
-				// Recheck on a new handle. Proteced with a mutex against other processes
-				HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
-				if (!hMutex) {
-					wxString error = wxSysErrorMsg();
-					l.unlock();
-					LogMessage(MessageType::Error, _("Could not create logging mutex: %s"), error);
-					return;
-				}
-
-				HANDLE hFile = CreateFile(m_file.wc_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-				if (hFile == INVALID_HANDLE_VALUE) {
-					wxString error = wxSysErrorMsg();
-
-					// Oh dear..
-					ReleaseMutex(hMutex);
-					CloseHandle(hMutex);
-
-					l.unlock(); // Avoid recursion
-					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
-					return;
-				}
-
-				wxString error;
-				if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size) {
-					CloseHandle(hFile);
-
-					// MoveFileEx can fail if trying to access a deleted file for which another process still has
-					// a handle. Move it far away first.
-					// Todo: Handle the case in which logdir and tmpdir are on different volumes.
-					// (Why is everthing so needlessly complex on MSW?)
-					wxString tmp = wxFileName::CreateTempFileName(_T("fz3"));
-					MoveFileEx((m_file + _T(".1")).wc_str(), tmp.wc_str(), MOVEFILE_REPLACE_EXISTING);
-					DeleteFile(tmp.wc_str());
-					MoveFileEx(m_file.wc_str(), (m_file + _T(".1")).wc_str(), MOVEFILE_REPLACE_EXISTING);
-					m_log_fd = CreateFile(m_file.wc_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
-					if (m_log_fd == INVALID_HANDLE_VALUE) {
-						// If this function would return bool, I'd return FILE_NOT_FOUND here.
-						error = wxSysErrorMsg();
-					}
-				}
-				else
-					m_log_fd = hFile;
-
-				if (hMutex) {
-					ReleaseMutex(hMutex);
-					CloseHandle(hMutex);
-				}
-
-				if (!error.empty()) {
-					l.unlock(); // Avoid recursion
-					LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
-					return;
-				}
-			}
-		}
-		DWORD len = (DWORD)strlen((const char*)utf8);
-		DWORD written;
-		BOOL res = WriteFile(m_log_fd, (const char*)utf8, len, &written, 0);
-		if (!res || written != len) {
+#ifdef FZ_WINDOWS
+	if (m_max_size) {
+		LARGE_INTEGER size;
+		if (!GetFileSizeEx(m_log_fd, &size) || size.QuadPart > m_max_size) {
 			CloseHandle(m_log_fd);
 			m_log_fd = INVALID_HANDLE_VALUE;
-			l.unlock(); // Avoid recursion
-			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
-		}
-#else
-		if (m_max_size) {
-			struct stat buf;
-			int rc = fstat(m_log_fd, &buf);
-			while (!rc && buf.st_size > m_max_size) {
-				struct flock lock = {};
-				lock.l_type = F_WRLCK;
-				lock.l_whence = SEEK_SET;
-				lock.l_start = 0;
-				lock.l_len = 1;
 
-				int rc;
+			// m_log_fd might no longer be the original file.
+			// Recheck on a new handle. Proteced with a mutex against other processes
+			HANDLE hMutex = ::CreateMutex(0, true, _T("FileZilla 3 Logrotate Mutex"));
+			if (!hMutex) {
+				wxString error = wxSysErrorMsg();
+				l.unlock();
+				LogMessage(MessageType::Error, _("Could not create logging mutex: %s"), error);
+				return;
+			}
 
-				// Retry through signals
-				while ((rc = fcntl(m_log_fd, F_SETLKW, &lock)) == -1 && errno == EINTR);
+			HANDLE hFile = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+			if (hFile == INVALID_HANDLE_VALUE) {
+				wxString error = wxSysErrorMsg();
 
-				// Ignore any other failures
-				int fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
-				if (fd == -1) {
-					wxString error = wxSysErrorMsg();
+				// Oh dear..
+				ReleaseMutex(hMutex);
+				CloseHandle(hMutex);
 
-					close(m_log_fd);
-					m_log_fd = -1;
+				l.unlock(); // Avoid recursion
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
+				return;
+			}
 
-					l.unlock(); // Avoid recursion
-					LogMessage(MessageType::Error, error);
-					return;
+			wxString error;
+			if (GetFileSizeEx(hFile, &size) && size.QuadPart > m_max_size) {
+				CloseHandle(hFile);
+
+				// MoveFileEx can fail if trying to access a deleted file for which another process still has
+				// a handle. Move it far away first.
+				// Todo: Handle the case in which logdir and tmpdir are on different volumes.
+				// (Why is everthing so needlessly complex on MSW?)
+				wxString tmp = wxFileName::CreateTempFileName(_T("fz3"));
+				MoveFileEx((m_file + _T(".1")).c_str(), tmp.wc_str(), MOVEFILE_REPLACE_EXISTING);
+				DeleteFile(tmp.wc_str());
+				MoveFileEx(m_file.c_str(), (m_file + _T(".1")).c_str(), MOVEFILE_REPLACE_EXISTING);
+				m_log_fd = CreateFile(m_file.c_str(), FILE_APPEND_DATA, FILE_SHARE_DELETE | FILE_SHARE_WRITE | FILE_SHARE_READ, 0, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0);
+				if (m_log_fd == INVALID_HANDLE_VALUE) {
+					// If this function would return bool, I'd return FILE_NOT_FOUND here.
+					error = wxSysErrorMsg();
 				}
-				struct stat buf2;
-				rc = fstat(fd, &buf2);
+			}
+			else
+				m_log_fd = hFile;
 
-				// Different files
-				if (!rc && buf.st_ino != buf2.st_ino) {
-					close(m_log_fd); // Releases the lock
-					m_log_fd = fd;
-					buf = buf2;
-					continue;
-				}
+			if (hMutex) {
+				ReleaseMutex(hMutex);
+				CloseHandle(hMutex);
+			}
 
-				// The file is indeed the log file and we are holding a lock on it.
-
-				// Rename it
-				rc = rename(m_file.fn_str(), (m_file + _T(".1")).fn_str());
-				close(m_log_fd);
-				close(fd);
-
-				// Get the new file
-				m_log_fd = open(m_file.fn_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
-				if (m_log_fd == -1) {
-					l.unlock(); // Avoid recursion
-					LogMessage(MessageType::Error, wxSysErrorMsg());
-					return;
-				}
-
-				if (!rc) // Rename didn't fail
-					rc = fstat(m_log_fd, &buf);
+			if (!error.empty()) {
+				l.unlock(); // Avoid recursion
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), error);
+				return;
 			}
 		}
-		size_t len = strlen((const char*)utf8);
-		size_t written = write(m_log_fd, (const char*)utf8, len);
-		if (written != len) {
-			close(m_log_fd);
-			m_log_fd = -1;
-
-			l.unlock(); // Avoid recursion
-			LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
-		}
-#endif
 	}
+	DWORD len = out.size();
+	DWORD written;
+	BOOL res = WriteFile(m_log_fd, out.c_str(), len, &written, 0);
+	if (!res || written != len) {
+		CloseHandle(m_log_fd);
+		m_log_fd = INVALID_HANDLE_VALUE;
+		l.unlock(); // Avoid recursion
+		LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
+	}
+#else
+	if (m_max_size) {
+		struct stat buf;
+		int rc = fstat(m_log_fd, &buf);
+		while (!rc && buf.st_size > m_max_size) {
+			struct flock lock = {};
+			lock.l_type = F_WRLCK;
+			lock.l_whence = SEEK_SET;
+			lock.l_start = 0;
+			lock.l_len = 1;
+
+			int rc;
+
+			// Retry through signals
+			while ((rc = fcntl(m_log_fd, F_SETLKW, &lock)) == -1 && errno == EINTR);
+
+			// Ignore any other failures
+			int fd = open(m_file.c_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
+			if (fd == -1) {
+				wxString error = wxSysErrorMsg();
+
+				close(m_log_fd);
+				m_log_fd = -1;
+
+				l.unlock(); // Avoid recursion
+				LogMessage(MessageType::Error, error);
+				return;
+			}
+			struct stat buf2;
+			rc = fstat(fd, &buf2);
+
+			// Different files
+			if (!rc && buf.st_ino != buf2.st_ino) {
+				close(m_log_fd); // Releases the lock
+				m_log_fd = fd;
+				buf = buf2;
+				continue;
+			}
+
+			// The file is indeed the log file and we are holding a lock on it.
+
+			// Rename it
+			rc = rename(m_file.c_str(), (m_file + _T(".1")).c_str());
+			close(m_log_fd);
+			close(fd);
+
+			// Get the new file
+			m_log_fd = open(m_file.c_str(), O_WRONLY | O_APPEND | O_CREAT | O_CLOEXEC, 0644);
+			if (m_log_fd == -1) {
+				l.unlock(); // Avoid recursion
+				LogMessage(MessageType::Error, _("Could not open log file: %s"), wxSysErrorMsg());
+				return;
+			}
+
+			if (!rc) {
+				// Rename didn't fail
+				rc = fstat(m_log_fd, &buf);
+			}
+		}
+	}
+	size_t written = write(m_log_fd, out.c_str(), out.size());
+	if (written != out.size()) {
+		close(m_log_fd);
+		m_log_fd = -1;
+
+		l.unlock(); // Avoid recursion
+		LogMessage(MessageType::Error, _("Could not write to log file: %s"), wxSysErrorMsg());
+	}
+#endif
 }
 
 void CLogging::UpdateLogLevel(COptionsBase & options)

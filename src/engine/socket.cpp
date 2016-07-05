@@ -6,6 +6,7 @@
   #include <ws2tcpip.h>
 #endif
 #include <filezilla.h>
+#include <libfilezilla/format.hpp>
 #include <libfilezilla/mutex.hpp>
 #include "socket.h"
 #ifndef FZ_WINDOWS
@@ -1014,7 +1015,7 @@ struct Error_table
 {
 	int code;
 	const char* const name;
-	const wxChar* const description;
+	const wchar_t* const description;
 };
 
 static Error_table const error_table[] =
@@ -1094,25 +1095,27 @@ static Error_table const error_table[] =
 std::string CSocket::GetErrorString(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
-		if (error != error_table[i].code)
+		if (error != error_table[i].code) {
 			continue;
+		}
 
 		return error_table[i].name;
 	}
 
-	return wxString::Format(_T("%d"), error).ToStdString();
+	return fz::sprintf("%d", error);
 }
 
 fz::native_string CSocket::GetErrorDescription(int error)
 {
 	for (int i = 0; error_table[i].code; ++i) {
-		if (error != error_table[i].code)
+		if (error != error_table[i].code) {
 			continue;
+		}
 
-		return fz::to_native(wxString(error_table[i].name) + _T(" - ") + wxGetTranslation(error_table[i].description));
+		return fz::to_native(fz::to_native(std::string(error_table[i].name)) + fzT(" - ") + fz::to_native(wxGetTranslation(error_table[i].description)));
 	}
 
-	return fz::to_native(wxString::Format(_T("%d"), error));
+	return fz::sprintf(fzT("%d"), error);
 }
 
 int CSocket::Close()

@@ -95,7 +95,7 @@ public:
 	{
 	}
 
-	wxString msg;
+	std::wstring msg;
 	MessageType msgType{MessageType::Status}; // Type of message, see logging.h for details
 };
 
