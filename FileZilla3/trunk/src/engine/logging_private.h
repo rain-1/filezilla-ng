@@ -50,14 +50,14 @@ public:
 			return;
 		}
 
-		fz::native_string source(sourceFile);
+		std::wstring source(sourceFile);
 		auto pos = source.find('\\', true);
-		if (pos != fz::native_string::npos) {
+		if (pos != std::wstring::npos) {
 			source = source.substr(pos + 1);
 		}
 
 		pos = source.find('/', true);
-		if (pos != fz::native_string::npos) {
+		if (pos != std::wstring::npos) {
 			source = source.substr(pos + 1);
 		}
 
