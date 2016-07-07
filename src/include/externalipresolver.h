@@ -17,7 +17,7 @@ public:
 
 	bool Done() const { return m_done; }
 	bool Successful() const;
-	wxString GetIP() const;
+	std::string GetIP() const;
 
 	void GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force = false);
 
@@ -32,7 +32,7 @@ protected:
 
 	bool m_done{};
 
-	wxString m_data;
+	std::string m_data;
 
 	CSocket *m_pSocket{};
 
