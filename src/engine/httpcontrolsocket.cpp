@@ -386,14 +386,13 @@ int CHttpControlSocket::FileTransferSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransferSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if( !m_current_uri.HasScheme() || !m_current_uri.HasServer() || !m_current_uri.HasPath() ) {
+	if (!m_current_uri.HasScheme() || !m_current_uri.HasServer() || !m_current_uri.HasPath()) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Invalid URI: %s"), m_current_uri.BuildURI());
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -401,39 +400,40 @@ int CHttpControlSocket::FileTransferSend()
 
 	CHttpFileTransferOpData *pData = static_cast<CHttpFileTransferOpData *>(m_pCurOpData);
 
-	if (pData->opState == filetransfer_waitfileexists)
-	{
+	if (pData->opState == filetransfer_waitfileexists) {
 		pData->opState = filetransfer_transfer;
 
 		int res = OpenFile(pData);
-		if( res != FZ_REPLY_OK)
+		if (res != FZ_REPLY_OK) {
 			return res;
+		}
 
 		res = InternalConnect(m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(), m_pCurrentServer->GetProtocol() == HTTPS);
-		if (res != FZ_REPLY_OK)
+		if (res != FZ_REPLY_OK) {
 			return res;
+		}
 	}
 
-	wxString location = m_current_uri.GetPath();
-	if( m_current_uri.HasQuery() ) {
-		location += _T("?") + m_current_uri.GetQuery();
+	std::wstring location = m_current_uri.GetPath().ToStdWstring();
+	if (m_current_uri.HasQuery()) {
+		location += L"?" + m_current_uri.GetQuery().ToStdWstring();
 	}
-	wxString action = wxString::Format(_T("GET %s HTTP/1.1"), location );
+	std::wstring action = fz::sprintf(L"GET %s HTTP/1.1", location);
 	LogMessageRaw(MessageType::Command, action);
 
-	wxString hostWithPort = m_current_uri.GetServer();
-	if( m_current_uri.HasPort() ) {
-		hostWithPort += _T(":") + m_current_uri.GetPort();
+	std::string hostWithPort = fz::to_utf8(m_current_uri.GetServer());
+	if (m_current_uri.HasPort()) {
+		hostWithPort += ":" + fz::to_utf8(m_current_uri.GetPort());
 	}
-	wxString command = wxString::Format(_T("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n"), action, hostWithPort, wxString(PACKAGE_STRING, wxConvLocal));
-	if( pData->resume ) {
-		command += wxString::Format(_T("Range: bytes=%") + wxString(wxFileOffsetFmtSpec) + _T("d-\r\n"), pData->localFileSize);
+	std::string command = fz::sprintf("%s\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n", fz::to_utf8(action), hostWithPort, PACKAGE_STRING);
+	if (pData->resume) {
+		command += fz::sprintf("Range: bytes=%d-\r\n", pData->localFileSize);
 	}
-	command += _T("\r\n");
+	command += "\r\n";
 
-	const wxWX2MBbuf str = command.mb_str();
-	if (!Send(str, strlen(str)))
+	if (!Send(command.c_str(), command.size())) {
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }

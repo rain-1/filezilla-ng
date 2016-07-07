@@ -1,16 +1,16 @@
 #include <filezilla.h>
 
-wxString CDirentry::dump() const
+std::wstring CDirentry::dump() const
 {
-	wxString str = wxString::Format(_T("name=%s\nsize=%lld\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n"),
-				name, static_cast<long long>(size), *permissions, *ownerGroup, flags & flag_dir, flags & flag_link,
+	std::wstring str = fz::sprintf(L"name=%s\nsize=%d\npermissions=%s\nownerGroup=%s\ndir=%d\nlink=%d\ntarget=%s\nunsure=%d\n",
+				name, size, *permissions, *ownerGroup, flags & flag_dir, flags & flag_link,
 				target ? *target : std::wstring(), flags & flag_unsure);
 
-	if( has_date() ) {
-		str += _T("date=") + time.format(_T("%Y-%m-%d"), fz::datetime::local) + _T("\n");
+	if (has_date()) {
+		str += L"date=" + time.format(L"%Y-%m-%d", fz::datetime::local) + L"\n";
 	}
-	if( has_time() ) {
-		str += _T("time=") + time.format(_T("%H-%M-%S"), fz::datetime::local) + _T("\n");
+	if (has_time()) {
+		str += L"time=" + time.format(L"%H-%M-%S", fz::datetime::local) + L"\n";
 	}
 	return str;
 }
@@ -32,9 +32,10 @@ bool CDirentry::operator==(const CDirentry &op) const
 	if (flags != op.flags)
 		return false;
 
-	if( has_date() ) {
-		if (time != op.time)
+	if (has_date()) {
+		if (time != op.time) {
 			return false;
+		}
 	}
 
 	return true;
