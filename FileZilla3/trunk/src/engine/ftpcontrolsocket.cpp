@@ -2538,7 +2538,7 @@ int CFtpControlSocket::FileTransferSend()
 					// Try to preallocate the file in order to reduce fragmentation
 					int64_t sizeToPreallocate = pData->remoteFileSize - startOffset;
 					if (sizeToPreallocate > 0) {
-						LogMessage(MessageType::Debug_Info, _T("Preallocating %") + wxString(wxFileOffsetFmtSpec) + _T("d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
+						LogMessage(MessageType::Debug_Info, _T("Preallocating %d bytes for the file \"%s\""), sizeToPreallocate, pData->localFile);
 						auto oldPos = pFile->seek(0, fz::file::current);
 						if (oldPos >= 0) {
 							if (pFile->seek(sizeToPreallocate, fz::file::end) == pData->remoteFileSize) {

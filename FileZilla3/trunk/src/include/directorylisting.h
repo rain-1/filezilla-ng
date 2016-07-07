@@ -57,7 +57,7 @@ public:
 
 	fz::datetime time;
 
-	wxString dump() const;
+	std::wstring dump() const;
 	bool operator==(const CDirentry &op) const;
 };
 
