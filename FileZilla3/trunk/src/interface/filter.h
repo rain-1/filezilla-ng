@@ -2,9 +2,9 @@
 #define __FILTER_H__
 
 #include "dialogex.h"
-#include <wx/regex.h>
 
 #include <memory>
+#include <regex>
 
 enum t_filterType
 {
@@ -36,7 +36,7 @@ public:
 	int64_t value; // If type is size
 	fz::datetime date; // If type is date
 	bool matchCase;
-	std::shared_ptr<wxRegEx> pRegEx;
+	std::shared_ptr<std::wregex> pRegEx;
 };
 
 class CFilter

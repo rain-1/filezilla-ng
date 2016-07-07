@@ -6,7 +6,7 @@
 #include "externalipresolver.h"
 #include "rtt.h"
 
-#include <wx/regex.h>
+#include <regex>
 
 #define RECVBUFFERSIZE 4096
 #define MAXLINELEN 2000
@@ -159,7 +159,7 @@ protected:
 	void OnExternalIPAddress();
 	void OnTimer(fz::timer_id id);
 
-	wxRegEx m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
+	std::unique_ptr<std::wregex> m_pasvReplyRegex; // Have it as class member to avoid recompiling the regex on each transfer or listing
 };
 
 class CIOThread;
