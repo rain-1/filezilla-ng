@@ -5,11 +5,11 @@
 
 #include <libfilezilla/iputils.hpp>
 
-#include <wx/regex.h>
+#include <regex>
 
 namespace {
 fz::mutex s_sync;
-wxString ip;
+std::string ip;
 bool checked = false;
 }
 
@@ -361,24 +361,25 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 			}
 		}
 
-		if (i)
-			m_data += wxString(buffer, wxConvLocal, i);
+		if (i) {
+			m_data.append(buffer, i);
+		}
 
-		if (i == len)
+		if (i == len) {
 			return;
+		}
 	}
 
 	if (m_protocol == CSocket::ipv6) {
 		if (!m_data.empty() && m_data[0] == '[') {
-			if (m_data.Last() != ']') {
+			if (m_data.back() != ']') {
 				Close(false);
 				return;
 			}
-			m_data.RemoveLast();
-			m_data = m_data.Mid(1);
+			m_data = m_data.substr(1, m_data.size() - 2);
 		}
 
-		if (fz::get_ipv6_long_form(m_data.ToStdWstring()).empty()) {
+		if (fz::get_ipv6_long_form(m_data).empty()) {
 			Close(false);
 			return;
 		}
@@ -387,21 +388,20 @@ void CExternalIPResolver::OnData(char* buffer, unsigned int len)
 		ip = m_data;
 	}
 	else {
-
 		// Validate ip address
-		wxString digit = _T("0*[0-9]{1,3}");
-		const wxChar* dot = _T("\\.");
-		wxString exp = _T("(^|[^\\.[:digit:]])(") + digit + dot + digit + dot + digit + dot + digit + _T(")([^\\.[:digit:]]|$)");
-		wxRegEx regex;
-		regex.Compile(exp);
+		std::string const digit = "0*[0-9]{1,3}";
+		char const* const dot = "\\.";
+		std::string const exp = "(^|[^\\.[:digit:]])(" + digit + dot + digit + dot + digit + dot + digit + ")([^\\.[:digit:]]|$)";
 
-		if (!regex.Matches(m_data)) {
+		std::regex const regex(exp);
+		std::smatch m;
+		if (!std::regex_search(m_data, m, regex)) {
 			Close(false);
 			return;
 		}
 
 		fz::scoped_lock l(s_sync);
-		ip = regex.GetMatch(m_data, 2);
+		ip = m[2];
 	}
 
 	Close(true);
@@ -535,7 +535,7 @@ bool CExternalIPResolver::Successful() const
 	return !ip.empty();
 }
 
-wxString CExternalIPResolver::GetIP() const
+std::string CExternalIPResolver::GetIP() const
 {
 	fz::scoped_lock l(s_sync);
 	return ip;
