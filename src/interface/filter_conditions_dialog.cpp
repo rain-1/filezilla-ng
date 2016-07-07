@@ -673,24 +673,42 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 	for (unsigned int i = 0; i < size; ++i) {
 		const CFilterControls& controls = m_filterControls[i];
 		t_filterType type = GetTypeFromTypeSelection(controls.pType->GetSelection());
+		int condition = controls.pCondition ? controls.pCondition->GetSelection() : 0;
 		if (!controls.pValue) {
 			continue;
 		}
 
-		if ((type == filter_name || type == filter_path) && (!controls.pValue || controls.pValue->GetValue().empty())) {
-			if (allow_empty)
-				continue;
+		if (type == filter_name || type == filter_path) {
+			if (!controls.pValue || controls.pValue->GetValue().empty()) {
+				if (allow_empty) {
+					continue;
+				}
 
-			m_pListCtrl->SelectLine(i);
-			controls.pValue->SetFocus();
-			error = _("At least one filter condition is incomplete");
-			SetFilterCtrlState(false);
-			return false;
+				m_pListCtrl->SelectLine(i);
+				controls.pValue->SetFocus();
+				error = _("At least one filter condition is incomplete");
+				SetFilterCtrlState(false);
+				return false;
+			}
+
+			if (condition == 4) {
+				try {
+					std::wregex(controls.pValue->GetValue());
+				}
+				catch (std::regex_error const&) {
+					m_pListCtrl->SelectLine(i);
+					controls.pValue->SetFocus();
+					error = _("Invalid regular expression");
+					SetFilterCtrlState(false);
+					return false;
+				}
+			}
 		}
 		else if (type == filter_size) {
 			const wxString v = controls.pValue->GetValue();
-			if (v.empty() && allow_empty)
+			if (v.empty() && allow_empty) {
 				continue;
+			}
 
 			long long number;
 			if (!v.ToLongLong(&number) || number < 0) {

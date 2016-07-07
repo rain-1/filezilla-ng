@@ -3614,28 +3614,32 @@ bool CFtpControlSocket::ParseEpsvResponse(CRawTransferOpData* pData)
 bool CFtpControlSocket::ParsePasvResponse(CRawTransferOpData* pData)
 {
 	// Validate ip address
-	if (!m_pasvReplyRegex.IsValid()) {
-		wxString digit = _T("0*[0-9]{1,3}");
-		const wxChar* dot = _T(",");
-		wxString exp = _T("( |\\()(") + digit + dot + digit + dot + digit + dot + digit + dot + digit + dot + digit + _T(")( |\\)|$)");
-		m_pasvReplyRegex.Compile(exp);
+	if (!m_pasvReplyRegex) {
+		std::wstring digit = _T("0*[0-9]{1,3}");
+		wchar_t const* const  dot = _T(",");
+		std::wstring exp = _T("( |\\()(") + digit + dot + digit + dot + digit + dot + digit + dot + digit + dot + digit + _T(")( |\\)|$)");
+		m_pasvReplyRegex = std::make_unique<std::wregex>(exp);
 	}
 
-	if (!m_pasvReplyRegex.Matches(m_Response))
+	std::wsmatch m;
+	if (!std::regex_search(m_Response.ToStdWstring(), m, *m_pasvReplyRegex)) {
 		return false;
+	}
 
-	pData->host = m_pasvReplyRegex.GetMatch(m_Response, 2);
+	pData->host = m[2].str();
 
 	int i = pData->host.Find(',', true);
 	long number = 0;
-	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number))
+	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number)) {
 		return false;
+	}
 
 	pData->port = number; //get ls byte of server socket
 	pData->host = pData->host.Left(i);
 	i = pData->host.Find(',', true);
-	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number))
+	if (i == -1 || !pData->host.Mid(i + 1).ToLong(&number)) {
 		return false;
+	}
 
 	pData->port += 256 * number; //add ms byte of server socket
 	pData->host = pData-> host.Left(i);

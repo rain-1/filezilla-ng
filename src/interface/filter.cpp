@@ -11,8 +11,6 @@
 
 #include <libfilezilla/local_filesys.hpp>
 
-#include <wx/regex.h>
-
 bool CFilterManager::m_loaded = false;
 std::vector<CFilter> CFilterManager::m_globalFilters;
 std::vector<CFilterSet> CFilterManager::m_globalFilterSets;
@@ -603,7 +601,7 @@ bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const
 	return false;
 }
 
-static bool StringMatch(const wxString& subject, const wxString& filter, int condition, bool matchCase, std::shared_ptr<const wxRegEx> const& pRegEx)
+static bool StringMatch(const wxString& subject, const wxString& filter, int condition, bool matchCase, std::shared_ptr<const std::wregex> const& pRegEx)
 {
 	bool match = false;
 
@@ -657,8 +655,9 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 		break;
 	case 4:
 		wxASSERT(pRegEx);
-		if (pRegEx && pRegEx->Matches(subject))
+		if (pRegEx && std::regex_search(subject.ToStdWstring(), *pRegEx)) {
 			match = true;
+		}
 		break;
 	case 5:
 		if (matchCase) {
@@ -857,8 +856,10 @@ bool CFilterManager::CompileRegexes(CFilter& filter)
 	bool ret = true;
 	for (auto & condition : filter.filters) {
 		if ((condition.type == filter_name || condition.type == filter_path) && condition.condition == 4) {
-			condition.pRegEx = std::make_shared<wxRegEx>(condition.strValue);
-			if (!condition.pRegEx->IsValid()) {
+			try {
+				condition.pRegEx = std::make_shared<std::wregex>(condition.strValue.ToStdWstring());
+			}
+			catch (std::regex_error const&) {
 				condition.pRegEx.reset();
 				ret = false;
 			}
