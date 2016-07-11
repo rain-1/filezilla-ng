@@ -71,6 +71,55 @@ extern "C" int handshake_hook_func(gnutls_session_t session, unsigned int htype,
 {
 	return CTlsSocketCallbacks::handshake_hook_func(session, htype, post, incoming);
 }
+
+struct cert_list_holder final
+{
+	cert_list_holder() = default;
+	~cert_list_holder() {
+		for (unsigned int i = 0; i < certs_size; ++i) {
+			gnutls_x509_crt_deinit(certs[i]);
+		}
+		gnutls_free(certs);
+	}
+
+	cert_list_holder(cert_list_holder const&) = delete;
+	cert_list_holder& operator=(cert_list_holder const&) = delete;
+
+	gnutls_x509_crt_t * certs{};
+	unsigned int certs_size{};
+};
+
+struct datum_holder final : gnutls_datum_t
+{
+	datum_holder() {
+		data = 0;
+	}
+
+	~datum_holder() {
+		gnutls_free(data);
+	}
+
+	datum_holder(datum_holder const&) = delete;
+	datum_holder& operator=(datum_holder const&) = delete;
+
+};
+
+void clone_cert(gnutls_x509_crt_t in, gnutls_x509_crt_t &out)
+{
+	gnutls_x509_crt_deinit(out);
+	out = 0;
+
+	if (in) {
+		datum_holder der;
+		if (gnutls_x509_crt_export2(in, GNUTLS_X509_FMT_DER, &der) == GNUTLS_E_SUCCESS) {
+			gnutls_x509_crt_init(&out);
+			if (gnutls_x509_crt_import(out, &der, GNUTLS_X509_FMT_DER) != GNUTLS_E_SUCCESS) {
+				gnutls_x509_crt_deinit(out);
+				out = 0;
+			}
+		}
+	}
+}
 }
 
 CTlsSocket::CTlsSocket(event_handler* pEvtHandler, CSocket& socket, CControlSocket* pOwner)
@@ -117,6 +166,9 @@ bool CTlsSocket::Init()
 		Uninit();
 		return false;
 	}
+
+	// Disable time checks. We allow expired/not yet valid certificates, though only after explicit user confirmation
+	gnutls_certificate_set_verify_flags(m_certCredentials, gnutls_certificate_get_verify_flags(m_certCredentials) | GNUTLS_VERIFY_DISABLE_TIME_CHECKS | GNUTLS_VERIFY_DISABLE_TRUSTED_TIME_CHECKS);
 
 	if (!InitSession())
 		return false;
@@ -473,7 +525,7 @@ void CTlsSocket::OnSend()
 
 bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 {
-	gnutls_datum_t d;
+	datum_holder d;
 	int res = gnutls_session_get_data2(pPrimarySocket->m_session, &d);
 	if (res) {
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("gnutls_session_get_data2 on primary socket failed: %d"), res);
@@ -482,15 +534,16 @@ bool CTlsSocket::CopySessionData(const CTlsSocket* pPrimarySocket)
 
 	// Set session data
 	res = gnutls_session_set_data(m_session, d.data, d.size );
-	gnutls_free(d.data);
 	if (res) {
 		m_pOwner->LogMessage(MessageType::Debug_Info, _T("gnutls_session_set_data failed: %d. Going to reinitialize session."), res);
 		UninitSession();
-		if (!InitSession())
+		if (!InitSession()) {
 			return false;
+		}
 	}
-	else
+	else {
 		m_pOwner->LogMessage(MessageType::Debug_Info, _T("Trying to resume existing TLS session."));
+	}
 
 	return true;
 }
@@ -1017,7 +1070,7 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		fingerprint_sha1 = bin2hex(digest, size);
 	}
 
-	gnutls_datum_t der;
+	datum_holder der;
 	if (gnutls_x509_crt_export2(cert, GNUTLS_X509_FMT_DER, &der) != GNUTLS_E_SUCCESS) {
 		m_pOwner->LogMessage(MessageType::Error, _T("gnutls_x509_crt_get_issuer_dn"));
 		return false;
@@ -1033,8 +1086,6 @@ bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 		issuer,
 		subject,
 		alt_subject_names);
-
-	gnutls_free(der.data);
 
 	return true;
 }
@@ -1188,25 +1239,6 @@ bool CTlsSocket::GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned 
 	return true;
 }
 
-namespace {
-struct cert_list_holder final
-{
-	cert_list_holder() = default;
-	~cert_list_holder() {
-		for (unsigned int i = 0; i < certs_size; ++i) {
-		//	gnutls_x509_crt_deinit(certs[i]);
-		}
-		gnutls_free(certs);
-	}
-
-	cert_list_holder(cert_list_holder const&) = delete;
-	cert_list_holder& operator=(cert_list_holder const&) = delete;
-
-	gnutls_x509_crt_t * certs{};
-	unsigned int certs_size{};
-};
-}
-
 int CTlsSocket::VerifyCertificate()
 {
 	if (m_tlsState != TlsState::handshake) {
@@ -1228,8 +1260,35 @@ int CTlsSocket::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
+	gnutls_x509_crt root{};
+	clone_cert(certs.certs[certs.certs_size - 1], root);
+	if (!root) {
+		m_pOwner->LogMessage(MessageType::Error, _("Could not copy certificate"));
+		Failure(0, true);
+		return FZ_REPLY_ERROR;
+	}
+
+	// Our trust-model is user-guided TOFU on the host's certificate.
+	//
+	// Here we validate the certificate chain sent by the server on the assumption
+	// that it's signed by a trusted CA.
+	//
+	// For now, add the highest certificate from the chain to trust list. Otherweise
+	// gnutls_certificate_verify_peers2 always stops with GNUTLS_CERT_SIGNER_NOT_FOUND
+	// at the highest certificate in the chain.
+	//
+	// Actual trust decision is done later by the user.
+	gnutls_x509_trust_list_t tlist;
+	gnutls_certificate_get_trust_list(m_certCredentials, &tlist);
+	if (gnutls_x509_trust_list_add_cas(tlist, &root, 1, 0) != 1) {
+		m_pOwner->LogMessage(MessageType::Error, _("Could not add trust"));
+		Failure(0, true);
+		return FZ_REPLY_ERROR;
+	}
+
 	unsigned int status = 0;
 	int const verifyResult = gnutls_certificate_verify_peers2(m_session, &status);
+
 	if (verifyResult < 0) {
 		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("gnutls_certificate_verify_peers2 returned %d with status %u"), verifyResult, status);
 		m_pOwner->LogMessage(MessageType::Error, _("Failed to verify peer certificate"));
@@ -1237,28 +1296,39 @@ int CTlsSocket::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
-	if (status & GNUTLS_CERT_REVOKED) {
-		m_pOwner->LogMessage(MessageType::Error, _("Beware! Certificate has been revoked"));
-		Failure(0, true);
-		return FZ_REPLY_ERROR;
-	}
-	else if (status & GNUTLS_CERT_SIGNER_NOT_CA) {
-		m_pOwner->LogMessage(MessageType::Error, _("An issuer in the certificate chain is not a certificate authority"));
+	if (status != 0) {
+		if (status & GNUTLS_CERT_REVOKED) {
+			m_pOwner->LogMessage(MessageType::Error, _("Beware! Certificate has been revoked"));
+		}
+		else if (status & GNUTLS_CERT_SIGNATURE_FAILURE) {
+			m_pOwner->LogMessage(MessageType::Error, _("Certificate signature verification failed"));
+		}
+		else if (status & GNUTLS_CERT_INSECURE_ALGORITHM) {
+			m_pOwner->LogMessage(MessageType::Error, _("A certificate in the chain was signed using an insecure algorithm"));
+		}
+		else if (status & GNUTLS_CERT_SIGNER_NOT_CA) {
+			m_pOwner->LogMessage(MessageType::Error, _("An issuer in the certificate chain is not a certificate authority"));
+		}
+		else if (status & GNUTLS_CERT_UNEXPECTED_OWNER) {
+			m_pOwner->LogMessage(MessageType::Error, _("The server's hostname does not match the certificate's hostname"));
+		}
+		else {
+			m_pOwner->LogMessage(MessageType::Error, _("Received certificate chain could not be verified. Verification status is %d."), status);
+		}
+
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
 	}
 
-	unsigned int cert_list_size;
-	const gnutls_datum_t* cert_list = gnutls_certificate_get_peers(m_session, &cert_list_size);
-	if (!cert_list || !cert_list_size) {
-		m_pOwner->LogMessage(MessageType::Error, _("gnutls_certificate_get_peers returned no certificates"));
+	datum_holder cert_der{};
+	if (gnutls_x509_crt_export2(certs.certs[0], GNUTLS_X509_FMT_DER, &cert_der) != GNUTLS_E_SUCCESS) {
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
 	}
 
 	if (m_implicitTrustedCert.data) {
-		if (m_implicitTrustedCert.size != cert_list[0].size ||
-			memcmp(m_implicitTrustedCert.data, cert_list[0].data, cert_list[0].size))
+		if (m_implicitTrustedCert.size != cert_der.size ||
+			memcmp(m_implicitTrustedCert.data, cert_der.data, cert_der.size))
 		{
 			m_pOwner->LogMessage(MessageType::Error, _("Primary connection and data connection certificates don't match."));
 			Failure(0, true);
@@ -1275,16 +1345,16 @@ int CTlsSocket::VerifyCertificate()
 	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 
 	std::vector<CCertificate> certificates;
+	certificates.reserve(certs.certs_size);
 	for (unsigned int i = 0; i < certs.certs_size; ++i) {
 		CCertificate cert;
-		if (ExtractCert(certs.certs[i], cert))
+		if (ExtractCert(certs.certs[i], cert)) {
 			certificates.push_back(cert);
+		}
 		else {
 			Failure(0, true);
 			return FZ_REPLY_ERROR;
 		}
-
-		++cert_list;
 	}
 
 	if (CertificateIsBlacklisted(certificates)) {
@@ -1304,6 +1374,7 @@ int CTlsSocket::VerifyCertificate()
 		algorithmWarnings,
 		certificates);
 
+	// Finally, ask user to verify the certificate chain
 	m_pOwner->SendAsyncRequest(pNotification);
 
 	return FZ_REPLY_WOULDBLOCK;
