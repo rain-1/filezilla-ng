@@ -93,7 +93,9 @@ protected:
 	void OnRead();
 	void OnSend();
 
-	bool ExtractCert(gnutls_datum_t const* datum, CCertificate& out);
+	bool GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned int & certs_size);
+
+	bool ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out);
 	std::vector<wxString> GetCertSubjectAltNames(gnutls_x509_crt_t cert);
 
 	bool m_canReadFromSocket{true};
