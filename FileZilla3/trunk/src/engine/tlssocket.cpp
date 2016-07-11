@@ -67,11 +67,7 @@ public:
 };
 
 namespace {
-#if GNUTLS_VERSION_NUMBER >= 0x030400
 extern "C" int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming, gnutls_datum_t const*)
-#else
-extern "C" int handshake_hook_func(gnutls_session_t session, unsigned int htype, unsigned int post, unsigned int incoming)
-#endif
 {
 	return CTlsSocketCallbacks::handshake_hook_func(session, htype, post, incoming);
 }
@@ -924,20 +920,8 @@ static wxString bin2hex(const unsigned char* in, size_t size)
 }
 
 
-bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
+bool CTlsSocket::ExtractCert(gnutls_x509_crt_t const& cert, CCertificate& out)
 {
-	gnutls_x509_crt_t cert;
-	if (gnutls_x509_crt_init(&cert)) {
-		m_pOwner->LogMessage(MessageType::Error, _("Could not initialize structure for peer certificates, gnutls_x509_crt_init failed"));
-		return false;
-	}
-
-	if (gnutls_x509_crt_import(cert, datum, GNUTLS_X509_FMT_DER)) {
-		m_pOwner->LogMessage(MessageType::Error, _("Could not import peer certificates, gnutls_x509_crt_import failed"));
-		gnutls_x509_crt_deinit(cert);
-		return false;
-	}
-
 	fz::datetime expirationTime(gnutls_x509_crt_get_expiration_time(cert), fz::datetime::seconds);
 	fz::datetime activationTime(gnutls_x509_crt_get_activation_time(cert), fz::datetime::seconds);
 
@@ -945,7 +929,7 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 	unsigned char buffer[40];
 	size_t size = sizeof(buffer);
 	int res = gnutls_x509_crt_get_serial(cert, buffer, &size);
-	if( res != 0 ) {
+	if (res != 0) {
 		size = 0;
 	}
 
@@ -956,16 +940,18 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 	wxString pkAlgoName;
 	if (pkAlgo >= 0) {
 		const char* pAlgo = gnutls_pk_algorithm_get_name((gnutls_pk_algorithm_t)pkAlgo);
-		if (pAlgo)
+		if (pAlgo) {
 			pkAlgoName = wxString(pAlgo, wxConvUTF8);
+		}
 	}
 
 	int signAlgo = gnutls_x509_crt_get_signature_algorithm(cert);
 	wxString signAlgoName;
 	if (signAlgo >= 0) {
 		const char* pAlgo = gnutls_sign_algorithm_get_name((gnutls_sign_algorithm_t)signAlgo);
-		if (pAlgo)
+		if (pAlgo) {
 			signAlgoName = wxString(pAlgo, wxConvUTF8);
+		}
 	}
 
 	wxString subject, issuer;
@@ -975,20 +961,20 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 	if (size) {
 		char* dn = new char[size + 1];
 		dn[size] = 0;
-		if (!(res = gnutls_x509_crt_get_dn(cert, dn, &size)))
-		{
+		if (!(res = gnutls_x509_crt_get_dn(cert, dn, &size))) {
 			dn[size] = 0;
 			subject = wxString(dn, wxConvUTF8);
 		}
-		else
+		else {
 			LogError(res, _T("gnutls_x509_crt_get_dn"));
+		}
 		delete [] dn;
 	}
-	else
+	else {
 		LogError(res, _T("gnutls_x509_crt_get_dn"));
+	}
 	if (subject.empty()) {
 		m_pOwner->LogMessage(MessageType::Error, _("Could not get distinguished name of certificate subject, gnutls_x509_get_dn failed"));
-		gnutls_x509_crt_deinit(cert);
 		return false;
 	}
 
@@ -1003,15 +989,16 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 			dn[size] = 0;
 			issuer = wxString(dn, wxConvUTF8);
 		}
-		else
+		else {
 			LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
+		}
 		delete [] dn;
 	}
-	else
+	else {
 		LogError(res, _T("gnutls_x509_crt_get_issuer_dn"));
+	}
 	if (issuer.empty() ) {
 		m_pOwner->LogMessage(MessageType::Error, _("Could not get distinguished name of certificate issuer, gnutls_x509_get_issuer_dn failed"));
-		gnutls_x509_crt_deinit(cert);
 		return false;
 	}
 
@@ -1030,10 +1017,13 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		fingerprint_sha1 = bin2hex(digest, size);
 	}
 
-	gnutls_x509_crt_deinit(cert);
-
+	gnutls_datum_t der;
+	if (gnutls_x509_crt_export2(cert, GNUTLS_X509_FMT_DER, &der) != GNUTLS_E_SUCCESS) {
+		m_pOwner->LogMessage(MessageType::Error, _T("gnutls_x509_crt_get_issuer_dn"));
+		return false;
+	}
 	out = CCertificate(
-		datum->data, datum->size,
+		der.data, der.size,
 		activationTime, expirationTime,
 		serial,
 		pkAlgoName, pkBits,
@@ -1043,6 +1033,8 @@ bool CTlsSocket::ExtractCert(gnutls_datum_t const* datum, CCertificate& out)
 		issuer,
 		subject,
 		alt_subject_names);
+
+	gnutls_free(der.data);
 
 	return true;
 }
@@ -1140,6 +1132,81 @@ int CTlsSocket::GetAlgorithmWarnings()
 }
 
 
+bool CTlsSocket::GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned int & certs_size)
+{
+	certs = 0;
+	certs_size = 0;
+
+	// First get unsorted list of peer certificates in DER
+	unsigned int cert_list_size;
+	const gnutls_datum_t* cert_list = gnutls_certificate_get_peers(m_session, &cert_list_size);
+	if (!cert_list || !cert_list_size) {
+		m_pOwner->LogMessage(MessageType::Error, _("gnutls_certificate_get_peers returned no certificates"));
+		return false;
+	}
+
+	// Convert them all to PEM
+	gnutls_datum_t *pem_cert_list = new gnutls_datum_t[cert_list_size];
+	for (unsigned i = 0; i < cert_list_size; ++i) {
+		if (gnutls_pem_base64_encode2("CERTIFICATE", cert_list + i, pem_cert_list + i) != 0) {
+			for (unsigned int j = 0; j < i; ++j) {
+				gnutls_free(pem_cert_list[j].data);
+			}
+			delete [] pem_cert_list;
+			m_pOwner->LogMessage(MessageType::Error, _("gnutls_pem_base64_encode2 failed"));
+			return false;
+		}
+	}
+
+	// Concatenate them
+	gnutls_datum_t concated_certs{};
+	for (unsigned i = 0; i < cert_list_size; ++i) {
+		concated_certs.size += pem_cert_list[i].size;
+	}
+	concated_certs.data = new unsigned char[concated_certs.size];
+	concated_certs.size = 0;
+	for (unsigned i = 0; i < cert_list_size; ++i) {
+		memcpy(concated_certs.data + concated_certs.size, pem_cert_list[i].data, pem_cert_list[i].size);
+		concated_certs.size += pem_cert_list[i].size;
+	}
+
+	for (unsigned i = 0; i < cert_list_size; ++i) {
+		gnutls_free(pem_cert_list[i].data);
+	}
+	delete[] pem_cert_list;
+
+	// And now import the certificates
+	int res = gnutls_x509_crt_list_import2(&certs, &certs_size, &concated_certs, GNUTLS_X509_FMT_PEM, GNUTLS_X509_CRT_LIST_SORT);
+
+	delete[] concated_certs.data;
+
+	if (res != GNUTLS_E_SUCCESS) {
+		m_pOwner->LogMessage(MessageType::Error, _("Could not sort peer certificates"));
+		return false;
+	}
+
+	return true;
+}
+
+namespace {
+struct cert_list_holder final
+{
+	cert_list_holder() = default;
+	~cert_list_holder() {
+		for (unsigned int i = 0; i < certs_size; ++i) {
+		//	gnutls_x509_crt_deinit(certs[i]);
+		}
+		gnutls_free(certs);
+	}
+
+	cert_list_holder(cert_list_holder const&) = delete;
+	cert_list_holder& operator=(cert_list_holder const&) = delete;
+
+	gnutls_x509_crt_t * certs{};
+	unsigned int certs_size{};
+};
+}
+
 int CTlsSocket::VerifyCertificate()
 {
 	if (m_tlsState != TlsState::handshake) {
@@ -1151,6 +1218,12 @@ int CTlsSocket::VerifyCertificate()
 
 	if (gnutls_certificate_type_get(m_session) != GNUTLS_CRT_X509) {
 		m_pOwner->LogMessage(MessageType::Error, _("Unsupported certificate type"));
+		Failure(0, true);
+		return FZ_REPLY_ERROR;
+	}
+
+	cert_list_holder certs;
+	if (!GetSortedPeerCertificates(certs.certs, certs.certs_size)) {
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
 	}
@@ -1169,9 +1242,8 @@ int CTlsSocket::VerifyCertificate()
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
 	}
-
-	if (status & GNUTLS_CERT_SIGNER_NOT_CA) {
-		m_pOwner->LogMessage(MessageType::Error, _("Incomplete chain, top certificate is not self-signed certificate authority certificate"));
+	else if (status & GNUTLS_CERT_SIGNER_NOT_CA) {
+		m_pOwner->LogMessage(MessageType::Error, _("An issuer in the certificate chain is not a certificate authority"));
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
 	}
@@ -1203,9 +1275,9 @@ int CTlsSocket::VerifyCertificate()
 	m_pOwner->LogMessage(MessageType::Status, _("Verifying certificate..."));
 
 	std::vector<CCertificate> certificates;
-	for (unsigned int i = 0; i < cert_list_size; ++i) {
+	for (unsigned int i = 0; i < certs.certs_size; ++i) {
 		CCertificate cert;
-		if (ExtractCert(cert_list, cert))
+		if (ExtractCert(certs.certs[i], cert))
 			certificates.push_back(cert);
 		else {
 			Failure(0, true);
