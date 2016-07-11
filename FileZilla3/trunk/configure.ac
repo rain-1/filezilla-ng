@@ -500,8 +500,8 @@ if test "$buildmain" = "yes"; then
   # GnuTLS
   # ------
 
-  PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 3.1.12],, [
-    AC_MSG_ERROR([libgnutls 3.1.12 greater was not found. You can get it from https://gnutls.org/])
+  PKG_CHECK_MODULES([LIBGNUTLS], [gnutls >= 3.4.0],, [
+    AC_MSG_ERROR([libgnutls 3.4.0 or greater was not found. You can get it from https://gnutls.org/])
   ])
 
   AC_SUBST(LIBGNUTLS_LIBS)
