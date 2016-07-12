@@ -14,8 +14,7 @@ int fzprintf(sftpEventTypes type, const char* fmt, ...)
     char* str, *p, *s;
     va_start(ap, fmt);
     str = dupvprintf(fmt, ap);
-    if (!*str)
-    {
+    if (!*str) {
 	sfree(str);
 	va_end(ap);
 
@@ -26,23 +25,19 @@ int fzprintf(sftpEventTypes type, const char* fmt, ...)
     }
     p = str;
     s = str;
-    while (1)
-    {
-	if (*p == '\r' || *p == '\n')
-	{
-	    if (p != s)
-	    {
+    while (1) {
+	if (*p == '\r' || *p == '\n') {
+	    if (p != s) {
 		*p = 0;
 		fprintf(stdout, "%c%s\n", (int)type + '0', s);
 		s = p + 1;
 	    }
-	    else
+	    else {
 		s++;
+	    }
 	}
-	else if (!*p)
-	{
-	    if (p != s)
-	    {
+	else if (!*p) {
+	    if (p != s) {
 		*p = 0;
 		fprintf(stdout, "%c%s\n", (int)type + '0', s);
 		s = p + 1;
@@ -51,11 +46,11 @@ int fzprintf(sftpEventTypes type, const char* fmt, ...)
 	}
 	p++;
     }
+    fflush(stdout);
+
     sfree(str);
 
     va_end(ap);
-
-    fflush(stdout);
 
     return 0;
 }
@@ -68,30 +63,35 @@ int fzprintf_raw_untrusted(sftpEventTypes type, const char* fmt, ...)
     str = dupvprintf(fmt, ap);
     p = str;
     s = str;
-    while (*p)
-    {
-	if (*p == '\r')
-	    p++;
-	else if (*p == '\n')
-	{
-	    if (s != str)
-		*s++ = ' ';
+    while (*p) {
+	if (*p == '\r') {
 	    p++;
 	}
-	else if (*p)
+	else if (*p == '\n') {
+	    if (s != str) {
+		*s++ = ' ';
+	    }
+	    p++;
+	}
+	else if (*p) {
 	    *s++ = *p++;
+	}
     }
     while (s != str && *(s - 1) == ' ')
 	s--;
     *s = 0;
-    if (*str)
-	fprintf(stdout, "%c%s\n", (int)type + '0', str);
+    if (*str) {
+	if (type != sftpUnknown) {
+	    fputc((int)type + '0', stdout);
+	}
+	fputs(str, stdout);
+	fputc('\n', stdout);
+	fflush(stdout);
+    }
 
     sfree(str);
 
     va_end(ap);
-
-    fflush(stdout);
 
     return 0;
 }
@@ -105,12 +105,11 @@ int fzprintf_raw(sftpEventTypes type, const char* fmt, ...)
 
     fputc((char)type + '0', stdout);
     fputs(str, stdout);
+    fflush(stdout);
 
     sfree(str);
 
     va_end(ap);
-
-    fflush(stdout);
 
     return 0;
 }

@@ -1,4 +1,4 @@
-#define FZSFTP_PROTOCOL_VERSION 5
+#define FZSFTP_PROTOCOL_VERSION 6
 
 typedef enum
 {
@@ -38,7 +38,13 @@ enum sftpRequestTypes
 };
 
 int fznotify(sftpEventTypes type);
+
+// Format the string. Each line of the string is prepended by type
 int fzprintf(sftpEventTypes type, const char* p, ...);
+
+// Format the string, then print the type and the string as-is. Caller is responsible to add trailing linebreak
 int fzprintf_raw(sftpEventTypes type, const char* p, ...);
+
+// Format the string, then print the type (if now sftpUnknown) and the string with linebreaks replaced by spaces.
 int fzprintf_raw_untrusted(sftpEventTypes type, const char* p, ...);
 int fznotify1(sftpEventTypes type, int data);
