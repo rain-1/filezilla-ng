@@ -377,7 +377,7 @@ public:
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
 		int algorithmWarnings,
-		const std::vector<CCertificate> &certificates);
+		std::vector<CCertificate> && certificates);
 	virtual RequestId GetRequestID() const { return reqId_certificate; }
 
 	const wxString& GetHost() const { return m_host; }
