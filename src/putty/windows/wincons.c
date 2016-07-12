@@ -359,13 +359,13 @@ int console_get_userpass_input(prompts_t *p,
      */
     /* We only print the `name' caption if we have to... */
     if (p->name)
-	fzprintf_raw_untrusted(sftpRequestPreamble, p->name);
+	fzprintf_raw_untrusted(sftpRequestPreamble, "%s", p->name);
     else
 	fzprintf_raw_untrusted(sftpRequestPreamble, "");
 
     /* ...but we always print any `instruction'. */
     if (p->instruction)
-	fzprintf_raw_untrusted(sftpRequestInstruction, p->instruction);
+	fzprintf_raw_untrusted(sftpRequestInstruction, "%s", p->instruction);
     else
 	fzprintf_raw_untrusted(sftpRequestInstruction, "");
 
