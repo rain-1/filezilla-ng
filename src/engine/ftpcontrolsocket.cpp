@@ -2178,24 +2178,23 @@ int CFtpControlSocket::FileTransferParseResponse()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("FileTransferParseResponse()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
-	if (pData->opState == filetransfer_init)
+	if (pData->opState == filetransfer_init) {
 		return FZ_REPLY_ERROR;
+	}
 
 	int code = GetReplyCode();
 	bool error = false;
 	switch (pData->opState)
 	{
 	case filetransfer_size:
-		if (code != 2 && code != 3)
-		{
+		if (code != 2 && code != 3) {
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == yes ||
 				!m_Response.Mid(4).CmpNoCase(_T("file not found")) ||
 				(pData->remotePath.FormatFilename(pData->remoteFile).Lower().Find(_T("file not found")) == -1 &&
@@ -2206,26 +2205,27 @@ int CFtpControlSocket::FileTransferParseResponse()
 				pData->opState = filetransfer_resumetest;
 
 				int res = CheckOverwriteFile();
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 			}
-			else
+			else {
 				pData->opState = filetransfer_mdtm;
+			}
 		}
-		else
-		{
+		else {
 			pData->opState = filetransfer_mdtm;
-			if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 4)
-			{
-				if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == unknown)
+			if (m_Response.Left(4) == _T("213 ") && m_Response.Length() > 4) {
+				if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == unknown) {
 					CServerCapabilities::SetCapability(*m_pCurrentServer, size_command, yes);
+				}
 				wxString str = m_Response.Mid(4);
-				wxFileOffset size = 0;
+				int64_t size = 0;
 				const wxChar *buf = str.c_str();
-				while (*buf)
-				{
-					if (*buf < '0' || *buf > '9')
+				while (*buf) {
+					if (*buf < '0' || *buf > '9') {
 						break;
+					}
 
 					size *= 10;
 					size += *buf - '0';
@@ -2233,8 +2233,9 @@ int CFtpControlSocket::FileTransferParseResponse()
 				}
 				pData->remoteFileSize = size;
 			}
-			else
+			else {
 				LogMessage(MessageType::Debug_Info, _T("Invalid SIZE reply"));
+			}
 		}
 		break;
 	case filetransfer_mdtm:
@@ -2248,8 +2249,9 @@ int CFtpControlSocket::FileTransferParseResponse()
 
 		{
 			int res = CheckOverwriteFile();
-			if (res != FZ_REPLY_OK)
+			if (res != FZ_REPLY_OK) {
 				return res;
+			}
 		}
 
 		break;
@@ -2262,8 +2264,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 		break;
 	}
 
-	if (error)
-	{
+	if (error) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -2414,7 +2415,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 	else if (pData->opState == filetransfer_waitresumetest) {
 		if (prevResult != FZ_REPLY_OK) {
 			if (pData->transferEndReason == TransferEndReason::failed_resumetest) {
-				if (pData->localFileSize > ((wxFileOffset)1 << 32)) {
+				if (pData->localFileSize > (1ll << 32)) {
 					CServerCapabilities::SetCapability(*m_pCurrentServer, resume4GBbug, yes);
 					LogMessage(MessageType::Error, _("Server does not support resume of files > 4GB."));
 				}
@@ -2430,7 +2431,7 @@ int CFtpControlSocket::FileTransferSubcommandResult(int prevResult)
 				ResetOperation(prevResult);
 			return prevResult;
 		}
-		if (pData->localFileSize > ((wxFileOffset)1 << 32))
+		if (pData->localFileSize > (1ll << 32))
 			CServerCapabilities::SetCapability(*m_pCurrentServer, resume4GBbug, no);
 		else
 			CServerCapabilities::SetCapability(*m_pCurrentServer, resume2GBbug, no);
@@ -2479,7 +2480,7 @@ int CFtpControlSocket::FileTransferSend()
 				// Be quiet
 				wxLogNull nullLog;
 
-				wxFileOffset startOffset = 0;
+				int64_t startOffset = 0;
 
 				// Potentially racy
 				bool didExist = fz::local_filesys::get_file_type(fz::to_native(pData->localFile)) != fz::local_filesys::unknown;
@@ -2557,7 +2558,7 @@ int CFtpControlSocket::FileTransferSend()
 					return FZ_REPLY_ERROR;
 				}
 
-				wxFileOffset startOffset;
+				int64_t startOffset;
 				if (pData->resume) {
 					if (pData->remoteFileSize > 0) {
 						startOffset = pData->remoteFileSize;
@@ -4072,8 +4073,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("FileTransferTestResumeCapability()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -4081,18 +4081,16 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 
 	CFtpFileTransferOpData *pData = static_cast<CFtpFileTransferOpData *>(m_pCurOpData);
 
-	if (!pData->download)
+	if (!pData->download) {
 		return FZ_REPLY_OK;
+	}
 
-	for (int i = 0; i < 2; ++i)
-	{
-		if (pData->localFileSize >= ((wxFileOffset)1 << (i ? 31 : 32)))
-		{
+	for (int i = 0; i < 2; ++i) {
+		if (pData->localFileSize >= (1ll << (i ? 31 : 32))) {
 			switch (CServerCapabilities::GetCapability(*GetCurrentServer(), i ? resume2GBbug : resume4GBbug))
 			{
 			case yes:
-				if (pData->remoteFileSize == pData->localFileSize)
-				{
+				if (pData->remoteFileSize == pData->localFileSize) {
 					LogMessage(MessageType::Debug_Info, _("Server does not support resume of files > %d GB. End transfer since file sizes match."), i ? 2 : 4);
 					ResetOperation(FZ_REPLY_OK);
 					return FZ_REPLY_CANCELED;
@@ -4101,19 +4099,16 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 				ResetOperation(FZ_REPLY_CRITICALERROR);
 				return FZ_REPLY_ERROR;
 			case unknown:
-				if (pData->remoteFileSize < pData->localFileSize)
-				{
+				if (pData->remoteFileSize < pData->localFileSize) {
 					// Don't perform test
 					break;
 				}
-				if (pData->remoteFileSize == pData->localFileSize)
-				{
+				if (pData->remoteFileSize == pData->localFileSize) {
 					LogMessage(MessageType::Debug_Info, _("Server may not support resume of files > %d GB. End transfer since file sizes match."), i ? 2 : 4);
 					ResetOperation(FZ_REPLY_OK);
 					return FZ_REPLY_CANCELED;
 				}
-				else if (pData->remoteFileSize > pData->localFileSize)
-				{
+				else if (pData->remoteFileSize > pData->localFileSize) {
 					LogMessage(MessageType::Status, _("Testing resume capabilities of server"));
 
 					pData->opState = filetransfer_waitresumetest;
@@ -4135,8 +4130,7 @@ int CFtpControlSocket::FileTransferTestResumeCapability()
 
 int CFtpControlSocket::Connect(const CServer &server)
 {
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
 		delete m_pCurOpData;
 	}
