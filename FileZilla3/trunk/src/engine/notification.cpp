@@ -192,16 +192,15 @@ CCertificateNotification::CCertificateNotification(const wxString& host, unsigne
 		const wxString& sessionCipher,
 		const wxString& sessionMac,
 		int algorithmWarnings,
-		const std::vector<CCertificate> &certificates)
+		std::vector<CCertificate> && certificates)
 	: m_protocol(protocol)
 	, m_keyExchange(keyExchange)
 	, m_algorithmWarnings(algorithmWarnings)
+	, m_certificates(certificates)
 {
 	m_host = host;
 	m_port = port;
 
 	m_sessionCipher = sessionCipher;
 	m_sessionMac = sessionMac;
-
-	m_certificates = certificates;
 }

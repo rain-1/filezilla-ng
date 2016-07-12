@@ -1372,7 +1372,7 @@ int CTlsSocket::VerifyCertificate()
 		GetCipherName(),
 		GetMacName(),
 		algorithmWarnings,
-		certificates);
+		std::move(certificates));
 
 	// Finally, ask user to verify the certificate chain
 	m_pOwner->SendAsyncRequest(pNotification);
