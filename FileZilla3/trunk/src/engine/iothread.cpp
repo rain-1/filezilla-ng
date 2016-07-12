@@ -384,7 +384,7 @@ bool CIOThread::DoWrite(const char* pBuffer, int64_t len)
 
 	int code = wxSysErrorCode();
 
-	const wxString error = wxSysErrorMsg(code);
+	std::wstring const error = wxSysErrorMsg(code);
 
 	fz::scoped_lock locker(m_mutex);
 	m_error_description = error;
@@ -392,7 +392,7 @@ bool CIOThread::DoWrite(const char* pBuffer, int64_t len)
 	return false;
 }
 
-wxString CIOThread::GetError()
+std::wstring CIOThread::GetError()
 {
 	fz::scoped_lock locker(m_mutex);
 	return m_error_description;

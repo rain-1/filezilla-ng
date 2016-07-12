@@ -55,7 +55,7 @@ public:
 
 	bool Finalize(int len);
 
-	wxString GetError();
+	std::wstring GetError();
 
 private:
 	void Close();
@@ -88,7 +88,7 @@ private:
 
 	bool m_wasCarriageReturn{};
 
-	wxString m_error_description;
+	std::wstring m_error_description;
 
 #ifdef SIMULATE_IO
 	int64_t size_{};
