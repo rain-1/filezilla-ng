@@ -10,9 +10,11 @@ typedef enum
     sftpStatus,
     sftpRecv, /* socket */
     sftpSend, /* socket */
-    sftpClose,
-    sftpRequest,
     sftpListentry,
+    sftpAskHostkey,
+    sftpAskHostkeyChanged,
+    sftpAskHostkeyBetteralg,
+    sftpAskPassword,
     sftpTransfer, /* payload: when written to local file (download) or acknowledged by server (upload) */
     sftpRequestPreamble,
     sftpRequestInstruction,
@@ -27,15 +29,6 @@ typedef enum
     sftpMacServerToClient,
     sftpHostkey
 } sftpEventTypes;
-
-enum sftpRequestTypes
-{
-    sftpReqPassword,
-    sftpReqHostkey,
-    sftpReqHostkeyChanged,
-    sftpReqHostkeyBetteralg,
-    sftpReqUnknown
-};
 
 int fznotify(sftpEventTypes type);
 

@@ -50,7 +50,7 @@ namespace listingEncoding
 class CDirectoryListingParser final
 {
 public:
-	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding = listingEncoding::unknown, bool sftp_mode = false);
+	CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding = listingEncoding::unknown);
 	~CDirectoryListingParser();
 
 	CDirectoryListingParser(CDirectoryListingParser const&) = delete;
@@ -59,7 +59,7 @@ public:
 	CDirectoryListing Parse(const CServerPath &path);
 
 	bool AddData(char *pData, int len);
-	bool AddLine(const wchar_t* pLine);
+	bool AddLine(std::wstring && line);
 
 	void Reset();
 
@@ -143,8 +143,6 @@ protected:
 	fz::duration m_timezoneOffset;
 
 	listingEncoding::type m_listingEncoding;
-
-	bool sftp_mode_{};
 };
 
 #endif
