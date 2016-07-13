@@ -450,7 +450,7 @@ int console_get_userpass_input(prompts_t *p, const unsigned char *in,
 //	    newmode.c_lflag |= ECHO;
 	tcsetattr(infd, TCSANOW, &newmode);
 
-	fzprintf_raw_untrusted(sftpAskPassword, "%s\n", pr->prompt);
+	fzprintf_raw_untrusted(sftpAskPassword, "%s", pr->prompt);
 
         len = 0;
         while (1) {

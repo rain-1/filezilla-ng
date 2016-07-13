@@ -86,7 +86,7 @@ protected:
 	int ListSubcommandResult(int prevResult);
 	int ListSend();
 	int ListParseResponse(bool successful, const wxString& reply);
-	int ListParseEntry(std::wstring && entry);
+	int ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name);
 	int ListCheckTimezoneDetection();
 
 	int ChangeDir(CServerPath path = CServerPath(), wxString subDir = _T(""), bool link_discovery = false);

@@ -77,17 +77,14 @@ int fzprintf_raw_untrusted(sftpEventTypes type, const char* fmt, ...)
 	    *s++ = *p++;
 	}
     }
-    while (s != str && *(s - 1) == ' ')
-	s--;
     *s = 0;
-    if (*str) {
-	if (type != sftpUnknown) {
-	    fputc((int)type + '0', stdout);
-	}
-	fputs(str, stdout);
-	fputc('\n', stdout);
-	fflush(stdout);
+
+    if (type != sftpUnknown) {
+	fputc((int)type + '0', stdout);
     }
+    fputs(str, stdout);
+    fputc('\n', stdout);
+    fflush(stdout);
 
     sfree(str);
 
