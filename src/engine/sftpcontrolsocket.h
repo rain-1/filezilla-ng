@@ -12,9 +12,11 @@ enum class sftpEvent {
 	Status,
 	Recv,
 	Send,
-	Close,
-	Request,
 	Listentry,
+	AskHostkey,
+	AskHostkeyChanged,
+	AskHostkeyBetteralg,
+	AskPassword,
 	Transfer,
 	RequestPreamble,
 	RequestInstruction,
@@ -29,16 +31,7 @@ enum class sftpEvent {
 	MacServerToClient,
 	Hostkey,
 
-	max = Hostkey
-};
-
-enum sftpRequestTypes
-{
-	sftpReqPassword,
-	sftpReqHostkey,
-	sftpReqHostkeyChanged,
-	sftpReqHostkeyBetteralg,
-	sftpReqUnknown
+	count
 };
 
 namespace fz {
@@ -78,7 +71,7 @@ protected:
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult);
 
-	void ProcessReply(int result, const wxString& reply = _T(""));
+	void ProcessReply(int result, std::wstring const& reply);
 
 	int ConnectParseResponse(bool successful, const wxString& reply);
 	int ConnectSend();
@@ -93,7 +86,7 @@ protected:
 	int ListSubcommandResult(int prevResult);
 	int ListSend();
 	int ListParseResponse(bool successful, const wxString& reply);
-	int ListParseEntry(const wxString& entry);
+	int ListParseEntry(std::wstring && entry);
 	int ListCheckTimezoneDetection();
 
 	int ChangeDir(CServerPath path = CServerPath(), wxString subDir = _T(""), bool link_discovery = false);
@@ -131,7 +124,7 @@ protected:
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnSftpEvent();
-	void OnTerminate();
+	void OnTerminate(std::wstring const& error);
 
 	wxString m_requestPreamble;
 	wxString m_requestInstruction;

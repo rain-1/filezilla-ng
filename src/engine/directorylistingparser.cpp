@@ -268,28 +268,22 @@ protected:
 	int64_t m_number{-1};
 };
 
-class CLine
+class CLine final
 {
 public:
-	CLine(wchar_t* p, int len = -1, int trailing_whitespace = 0)
+	CLine(std::wstring && line, int trailing_whitespace = -1)
+		: trailing_whitespace_(trailing_whitespace)
+		, line_(line)
 	{
-		m_pLine = p;
-		if (len >= 0)
-			m_len = len;
-		else
-			m_len = fz::strlen(p);
-
-		m_parsePos = 0;
-
 		m_Tokens.reserve(10);
 		m_LineEndTokens.reserve(10);
-		m_trailing_whitespace = trailing_whitespace;
+		while (m_parsePos < line_.size() && (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t')) {
+			++m_parsePos;
+		}
 	}
 
 	~CLine()
 	{
-		delete [] m_pLine;
-
 		std::vector<CToken *>::iterator iter;
 		for (iter = m_Tokens.begin(); iter != m_Tokens.end(); ++iter)
 			delete *iter;
@@ -299,20 +293,19 @@ public:
 
 	bool GetToken(unsigned int n, CToken &token, bool toEnd = false, bool include_whitespace = false)
 	{
-		n += offset_;
 		if (!toEnd) {
 			if (m_Tokens.size() > n) {
 				token = *(m_Tokens[n]);
 				return true;
 			}
 
-			int start = m_parsePos;
-			while (m_parsePos < m_len) {
-				if (m_pLine[m_parsePos] == ' ' || m_pLine[m_parsePos] == '\t') {
-					CToken *pToken = new CToken(m_pLine + start, m_parsePos - start);
+			size_t start = m_parsePos;
+			while (m_parsePos < line_.size()) {
+				if (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t') {
+					CToken *pToken = new CToken(line_.c_str() + start, m_parsePos - start);
 					m_Tokens.push_back(pToken);
 
-					while (m_parsePos < m_len && (m_pLine[m_parsePos] == ' ' || m_pLine[m_parsePos] == '\t'))
+					while (m_parsePos < line_.size() && (line_[m_parsePos] == ' ' || line_[m_parsePos] == '\t'))
 						++m_parsePos;
 
 					if (m_Tokens.size() > n) {
@@ -325,8 +318,8 @@ public:
 				++m_parsePos;
 			}
 			if (m_parsePos != start) {
-				CToken *pToken = new CToken(m_pLine + start, m_parsePos - start);
-					m_Tokens.push_back(pToken);
+				CToken *pToken = new CToken(line_.c_str() + start, m_parsePos - start);
+				m_Tokens.push_back(pToken);
 			}
 
 			if (m_Tokens.size() > n) {
@@ -338,7 +331,7 @@ public:
 		}
 		else {
 			if (include_whitespace) {
-				int prev = n - offset_;
+				int prev = n;
 				if (prev)
 					--prev;
 
@@ -347,7 +340,7 @@ public:
 					return false;
 				wchar_t const* p = ref.GetToken() + ref.GetLength() + 1;
 
-				auto const newLen = m_len - (p - m_pLine);
+				auto const newLen = line_.size() - (p - line_.c_str());
 				if (newLen <= 0) {
 					return false;
 				}
@@ -360,14 +353,25 @@ public:
 				return true;
 			}
 
-			if (m_Tokens.size() <= n)
-				if (!GetToken(n - offset_, token))
+			if (m_Tokens.size() <= n) {
+				if (!GetToken(n, token)) {
 					return false;
+				}
+			}
+
+			if (trailing_whitespace_ == -1) {
+				trailing_whitespace_ = 0;
+				size_t i = line_.size() - 1;
+				while (i < line_.size() && (line_[i] == ' ' || line_[i] == '\t')) {
+					--i;
+					++trailing_whitespace_;
+				}
+			}
 
 			for (unsigned int i = static_cast<unsigned int>(m_LineEndTokens.size()); i <= n; ++i) {
 				const CToken *refToken = m_Tokens[i];
 				const wchar_t* p = refToken->GetToken();
-				auto const newLen = m_len - (p - m_pLine) - m_trailing_whitespace;
+				auto const newLen = line_.size() - (p - line_.c_str()) - trailing_whitespace_;
 				if (newLen <= 0) {
 					return false;
 				}
@@ -379,33 +383,25 @@ public:
 		}
 	};
 
-	CLine *Concat(const CLine *pLine) const
+	CLine *Concat(CLine const* pLine) const
 	{
-		int newLen = m_len + pLine->m_len + 1;
-		wchar_t* p = new wchar_t[newLen];
-		memcpy(p, m_pLine, m_len * sizeof(wchar_t));
-		p[m_len] = ' ';
-		memcpy(p + m_len + 1, pLine->m_pLine, pLine->m_len * sizeof(wchar_t));
-
-		return new CLine(p, m_len + pLine->m_len + 1, pLine->m_trailing_whitespace);
-	}
-
-	void SetTokenOffset(unsigned int offset)
-	{
-		offset_ = offset;
+		std::wstring n;
+		n.reserve(line_.size() + pLine->line_.size() + 1);
+		n = line_;
+		n += ' ';
+		n += pLine->line_;
+		return new CLine(std::move(n), pLine->trailing_whitespace_);
 	}
 
 protected:
 	std::vector<CToken *> m_Tokens;
 	std::vector<CToken *> m_LineEndTokens;
-	int m_parsePos;
-	int m_len;
-	int m_trailing_whitespace;
-	wchar_t* m_pLine;
-	unsigned int offset_{};
+	size_t m_parsePos{};
+	int trailing_whitespace_;
+	std::wstring const line_;
 };
 
-CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding, bool sftp_mode)
+CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket, const CServer& server, listingEncoding::type encoding)
 	: m_pControlSocket(pControlSocket)
 	, m_currentOffset(0)
 	, m_totalData()
@@ -414,7 +410,6 @@ CDirectoryListingParser::CDirectoryListingParser(CControlSocket* pControlSocket,
 	, m_fileListOnly(true)
 	, m_maybeMultilineVms(false)
 	, m_listingEncoding(encoding)
-	, sftp_mode_(sftp_mode)
 {
 	if (m_MonthNamesMap.empty()) {
 		//Fill the month names map
@@ -673,11 +668,8 @@ bool CDirectoryListingParser::ParseData(bool partial)
 				else
 					m_prevLine = pLine;
 			}
-			else if (!sftp_mode_) {
-				m_prevLine = pLine;
-			}
 			else {
-				delete pLine;
+				m_prevLine = pLine;
 			}
 		}
 		else {
@@ -726,10 +718,6 @@ bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType
 
 	bool res;
 	int ires;
-
-	if (sftp_mode_) {
-		line.SetTokenOffset(1);
-	}
 
 	if (serverType == ZVM) {
 		res = ParseAsZVM(line, entry);
@@ -833,21 +821,6 @@ done:
 		auto pos = entry.name.rfind(';');
 		if (pos != std::wstring::npos && pos > 0)
 			entry.name = entry.name.substr(0, pos);
-	}
-
-	if (sftp_mode_) {
-		line.SetTokenOffset(0);
-
-		CToken t;
-		if (line.GetToken(0, t)) {
-			int64_t seconds = t.GetNumber();
-			if (seconds > 0 && seconds <= 0xffffffffll) {
-				fz::datetime time(static_cast<time_t>(seconds), fz::datetime::seconds);
-				if (!time.empty()) {
-					entry.time = time;
-				}
-			}
-		}
 	}
 
 	{
@@ -1930,26 +1903,14 @@ bool CDirectoryListingParser::AddData(char *pData, int len)
 	return ParseData(true);
 }
 
-bool CDirectoryListingParser::AddLine(wchar_t const* pLine)
+bool CDirectoryListingParser::AddLine(std::wstring && line)
 {
-	if (m_pControlSocket)
-		m_pControlSocket->LogMessageRaw(MessageType::RawList, pLine);
+	if (m_pControlSocket) {
+		m_pControlSocket->LogMessageRaw(MessageType::RawList, line);
+	}
 
-	while (*pLine == ' ' || *pLine == '\t')
-		++pLine;
-
-	if (!*pLine)
-		return false;
-
-	const int len = fz::strlen(pLine);
-
-	wchar_t* p = new wchar_t[len + 1];
-
-	wcscpy(p, pLine);
-
-	CLine line(p, len);
-
-	ParseLine(line, m_server.GetType(), false);
+	CLine l(std::move(line));
+	ParseLine(l, m_server.GetType(), false);
 
 	return true;
 }
@@ -1980,14 +1941,8 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 		int startpos = m_currentOffset;
 		int reslen = 0;
 
-		int emptylen = 0;
-
 		int currentOffset = m_currentOffset;
 		while (iter->p[currentOffset] != '\n' && iter->p[currentOffset] != '\r' && iter->p[currentOffset]) {
-			if (iter->p[currentOffset] == ' ' || iter->p[currentOffset] == '\t')
-				++emptylen;
-			else
-				emptylen = 0;
 			++reslen;
 
 			++currentOffset;
@@ -2039,8 +1994,8 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 
 			delete [] i->p;
 			++i;
-		}
-		;
+		};
+
 		// Copy last chunk
 		if (iter != m_DataList.end() && reslen) {
 			int copylen = m_currentOffset-startpos;
@@ -2058,9 +2013,9 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 			m_DataList.erase(m_DataList.begin(), iter);
 
 		size_t lineLength{};
-		wchar_t* buffer;
+		std::wstring buffer;
 		if (m_pControlSocket) {
-			buffer = m_pControlSocket->ConvToLocalBuffer(res, buflen, lineLength);
+			buffer = m_pControlSocket->ConvToLocal(res, buflen);
 			m_pControlSocket->LogMessageRaw(MessageType::RawList, buffer);
 		}
 		else {
@@ -2070,18 +2025,13 @@ CLine *CDirectoryListingParser::GetLine(bool breakAtEnd /*=false*/, bool &error)
 				if (str.empty())
 					str = wxString(res, wxConvISO8859_1);
 			}
-			lineLength = str.Len() + 1;
-			buffer = new wchar_t[str.Len() + 1];
-			wcscpy(buffer, str.c_str());
+			buffer = str.ToStdWstring();
 		}
 		delete [] res;
 
-		if (!buffer) {
-			// Line contained no usable data, start over
-			continue;
+		if (!buffer.empty()) {
+			return new CLine(std::move(buffer));
 		}
-
-		return new CLine(buffer, lineLength - 1, emptylen);
 	}
 
 	return 0;

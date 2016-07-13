@@ -72,8 +72,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 	"adding the key to the cache, enter \"n\".\n"
 	"If you do not trust this host, press Return to abandon the\n"
 	"connection.\n"
-	"Store key in cache? (y/n) ";*/
-
+	"Store key in cache? (y/n) ";
     static const char wrongmsg_batch[] =
 	"WARNING - POTENTIAL SECURITY BREACH!\n"
 	"The server's host key does not match the one PuTTY has\n"
@@ -84,7 +83,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 	"The new %s key fingerprint is:\n"
 	"%s\n"
 	"Connection abandoned.\n";
-    /*static const char wrongmsg[] =
+    static const char wrongmsg[] =
 	"WARNING - POTENTIAL SECURITY BREACH!\n"
 	"The server's host key does not match the one PuTTY has\n"
 	"cached in the registry. This means that either the\n"
@@ -114,16 +113,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
     if (ret == 0)		       /* success - key matched OK */
 	return 1;
 
-    if (ret == 2) {		       /* key was different */
-	if (console_batch_mode) {
-	    fprintf(stderr, wrongmsg_batch, keytype, fingerprint);
-            return 0;
-	}
-	fzprintf_raw(sftpRequest, "%d%s\n%d\n%s\n", (int)sftpReqHostkeyChanged, host, port, fingerprint);
-    }
-    if (ret == 1) {		       /* key was absent */
-	fzprintf_raw(sftpRequest, "%d%s\n%d\n%s\n", (int)sftpReqHostkey, host, port, fingerprint);
-    }
+    fzprintf_raw((ret == 1) ? sftpAskHostkey : sftpAskHostkeyChanged, "%s\n%d\n%s\n", host, port, fingerprint);
 
     hin = GetStdHandle(STD_INPUT_HANDLE);
     GetConsoleMode(hin, &savemode);
@@ -186,7 +176,7 @@ int askhk(void *frontend, const char *algname, const char *betteralgs,
 	return 0;
     }
 
-    fzprintf_raw(sftpRequest, "%d%s\n%s\n", (int)sftpReqHostkeyBetteralg, algname, betteralgs);
+    fzprintf_raw(sftpAskHostkeyBetteralg, "%s\n%s\n", algname, betteralgs);
 
     hin = GetStdHandle(STD_INPUT_HANDLE);
     GetConsoleMode(hin, &savemode);
@@ -383,7 +373,7 @@ int console_get_userpass_input(prompts_t *p,
 	//    newmode |= ENABLE_ECHO_INPUT;
 	SetConsoleMode(hin, newmode);
 
-	fzprintf_raw_untrusted(sftpRequest, "%d%s\n", (int)sftpReqPassword, pr->prompt);
+	fzprintf_raw_untrusted(sftpAskPassword, "%s\n", pr->prompt);
 	
         len = 0;
         while (1) {

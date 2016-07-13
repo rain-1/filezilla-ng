@@ -433,15 +433,17 @@ CFileTransferOpData::~CFileTransferOpData()
 {
 }
 
-wxString CControlSocket::ConvToLocal(const char* buffer, size_t len)
+std::wstring CControlSocket::ConvToLocal(const char* buffer, size_t len)
 {
+	std::wstring ret;
+
 	size_t outLen{};
 	if (m_useUTF8) {
 		wxChar* out = ConvToLocalBuffer(buffer, wxConvUTF8, len, outLen);
 		if (out) {
-			wxString str(out, outLen - 1);
+			ret.assign(out, outLen - 1);
 			delete [] out;
-			return str;
+			return ret;
 		}
 
 		// Fall back to local charset on error
@@ -452,23 +454,24 @@ wxString CControlSocket::ConvToLocal(const char* buffer, size_t len)
 	}
 
 	if (m_pCSConv) {
-		wxChar* out = ConvToLocalBuffer(buffer, *m_pCSConv, len, outLen);
+		wchar_t* out = ConvToLocalBuffer(buffer, *m_pCSConv, len, outLen);
 		if (out) {
-			wxString str(out, outLen - 1);
+			ret.assign(out, outLen - 1);
 			delete [] out;
-			return str;
+			return ret;
 		}
 	}
 
 	wxCSConv conv(_T("ISO-8859-1"));
-	wxString str = conv.cMB2WX(buffer);
-	if (str.empty())
-		str = wxConvCurrent->cMB2WX(buffer);
+	ret = conv.cMB2WX(buffer);
+	if (ret.empty()) {
+		ret = wxConvCurrent->cMB2WX(buffer);
+	}
 
-	return str;
+	return ret;
 }
 
-wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen)
+wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, size_t len, size_t& outlen)
 {
 	wxASSERT(buffer && len > 0 && !buffer[len - 1]);
 	outlen = conv.ToWChar(0, 0, buffer, len);
@@ -480,7 +483,7 @@ wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, wxMBConv& conv, si
 	return unicode;
 }
 
-wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen)
+wchar_t* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_t& outlen)
 {
 	if (m_useUTF8) {
 #ifdef __WXMSW__
@@ -489,13 +492,13 @@ wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_t
 		// This helps when processing large directory listings.
 		int outlen2 = MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, buffer, len, 0, 0);
 		if (outlen2 > 0) {
-			wxChar* out = new wxChar[outlen2];
+			wchar_t* out = new wchar_t[outlen2];
 			MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, buffer, len, out, outlen2);
 			outlen = static_cast<size_t>(outlen2);
 			return out;
 		}
 #else
-		wxChar* res = ConvToLocalBuffer(buffer, wxConvUTF8, len, outlen);
+		wchar_t* res = ConvToLocalBuffer(buffer, wxConvUTF8, len, outlen);
 		if (res && *res)
 			return res;
 #endif
@@ -508,18 +511,18 @@ wxChar* CControlSocket::ConvToLocalBuffer(const char* buffer, size_t len, size_t
 	}
 
 	if (m_pCSConv) {
-		wxChar* res = ConvToLocalBuffer(buffer, *m_pCSConv, len, outlen);
+		wchar_t* res = ConvToLocalBuffer(buffer, *m_pCSConv, len, outlen);
 		if (res && *res)
 			return res;
 	}
 
 	// Fallback: Conversion using current locale
-	wxChar* res = ConvToLocalBuffer(buffer, *wxConvCurrent, len, outlen);
+	wchar_t* res = ConvToLocalBuffer(buffer, *wxConvCurrent, len, outlen);
 
 	return res;
 }
 
-wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8 /*=false*/)
+wxCharBuffer CControlSocket::ConvToServer(const wxString& str, bool force_utf8)
 {
 	if (m_useUTF8 || force_utf8) {
 		wxCharBuffer const buffer = str.utf8_str();

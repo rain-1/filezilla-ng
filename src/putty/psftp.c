@@ -1241,7 +1241,7 @@ int sftp_cmd_ls(struct sftp_command *cmd)
 		mtime = ournames[i]->attrs.mtime;
 	    }
 	    fzprintf_raw_untrusted(sftpListentry, ournames[i]->longname);
-	    fzprintf_raw_untrusted(sftpUnknown, "%lu", ournames[i]->mtime);
+	    fzprintf_raw_untrusted(sftpUnknown, "%lu", mtime);
 	    fzprintf_raw_untrusted(sftpUnknown, "%s", ournames[i]->filename);
 	    fxp_free_name(ournames[i]);
 	}

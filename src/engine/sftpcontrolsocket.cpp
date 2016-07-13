@@ -15,13 +15,13 @@
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
-#define FZSFTP_PROTOCOL_VERSION 5
+#define FZSFTP_PROTOCOL_VERSION 6
 
 struct sftp_event_type;
 typedef fz::simple_event<sftp_event_type> CSftpEvent;
 
 struct terminate_event_type;
-typedef fz::simple_event<terminate_event_type> CTerminateEvent;
+typedef fz::simple_event<terminate_event_type, std::wstring> CTerminateEvent;
 
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
@@ -45,12 +45,7 @@ enum filetransferStates
 struct sftp_message
 {
 	sftpEvent type;
-	wxString text;
-	union
-	{
-		sftpRequestTypes reqType;
-		int value;
-	};
+	std::wstring text[3];
 };
 
 class CSftpInputThread final : public fz::thread
@@ -90,56 +85,33 @@ protected:
 			m_sftpMessages.push_back(message);
 		}
 
-		if (sendEvent)
+		if (sendEvent) {
 			m_pOwner->send_event<CSftpEvent>();
-	}
-
-	int ReadNumber(bool &error)
-	{
-		int number = 0;
-
-		while(true) {
-			char c;
-			int read = process_.read(&c, 1);
-			if (read != 1) {
-				if (!read)
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
-				else
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Uknown input stream error"));
-				error = true;
-				return 0;
-			}
-
-			if (c == '\n')
-				break;
-			else if (c >= '0' && c <= '9') {
-				number *= 10;
-				number += c - '0';
-			}
 		}
-		return number;
 	}
 
-	wxString ReadLine(bool &error)
+	std::wstring ReadLine(std::wstring &error)
 	{
 		int len = 0;
 		const int buffersize = 4096;
 		char buffer[buffersize];
 
-		while(true) {
+		while (true) {
 			char c;
 			int read = process_.read(&c, 1);
 			if (read != 1) {
-				if (!read)
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Unexpected EOF."));
-				else
-					m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Uknown input stream error"));
-				error = true;
-				return wxString();
+				if (!read) {
+					error = L"Unexpected EOF.";
+				}
+				else {
+					error = L"Unknown error reading from process";
+				}
+				return std::wstring();
 			}
 
-			if (c == '\n')
+			if (c == '\n') {
 				break;
+			}
 
 			if (len == buffersize - 1) {
 				// Cap string length
@@ -149,46 +121,57 @@ protected:
 			buffer[len++] = c;
 		}
 
-		while (len && buffer[len - 1] == '\r')
+		while (len && buffer[len - 1] == '\r') {
 			--len;
+		}
 
 		buffer[len] = 0;
 
 		const wxString line = m_pOwner->ConvToLocal(buffer, len + 1);
 		if (len && line.empty()) {
-			m_pOwner->LogMessage(MessageType::Error, _T("Failed to convert reply to local character set."));
-			error = true;
+			error = L"Failed to convert reply to local character set.";
 		}
 
-		return line;
+		return line.ToStdWstring();
 	}
 
 	virtual void entry()
 	{
-		bool error = false;
-		while (!error) {
+		std::wstring error;
+		while (error.empty()) {
 			char readType = 0;
 			int read = process_.read(&readType, 1);
-			if (read != 1)
+			if (read != 1) {
 				break;
+			}
 
 			readType -= '0';
 
-			sftpEvent eventType = sftpEvent::Unknown;
-			if( readType >= 0 && readType <= static_cast<char>(sftpEvent::max) ) {
-				eventType = static_cast<sftpEvent>(readType);
+			if (readType < 0 || readType >= static_cast<char>(sftpEvent::count) ) {
+				error = fz::sprintf(L"Unknown eventType %d", readType);
+				break;
 			}
 
-			switch(eventType)
+			sftpEvent eventType = static_cast<sftpEvent>(readType);
+
+			int lines{};
+			switch (eventType)
 			{
+			case sftpEvent::Unknown:
+			case sftpEvent::Recv:
+			case sftpEvent::Send:
+			case sftpEvent::UsedQuotaRecv:
+			case sftpEvent::UsedQuotaSend:
+				break;
 			case sftpEvent::Reply:
-			case sftpEvent::Listentry:
-			case sftpEvent::RequestPreamble:
-			case sftpEvent::RequestInstruction:
 			case sftpEvent::Done:
 			case sftpEvent::Error:
 			case sftpEvent::Verbose:
 			case sftpEvent::Status:
+			case sftpEvent::Transfer:
+			case sftpEvent::AskPassword:
+			case sftpEvent::RequestPreamble:
+			case sftpEvent::RequestInstruction:
 			case sftpEvent::KexAlgorithm:
 			case sftpEvent::KexHash:
 			case sftpEvent::KexCurve:
@@ -197,87 +180,32 @@ protected:
 			case sftpEvent::MacClientToServer:
 			case sftpEvent::MacServerToClient:
 			case sftpEvent::Hostkey:
-				{
-					sftp_message* message = new sftp_message;
-					message->type = eventType;
-					message->text = ReadLine(error);
-					if (error) {
-						delete message;
-						goto loopexit;
-					}
-					SendMessage(message);
-				}
+				lines = 1;
 				break;
-			case sftpEvent::Request:
-				{
-					const wxString& line = ReadLine(error);
-					if (error || line.empty())
-						goto loopexit;
-					int requestType = line[0] - '0';
-					if (requestType == sftpReqHostkey || requestType == sftpReqHostkeyChanged) {
-						const wxString& strPort = ReadLine(error);
-						if (error)
-							goto loopexit;
-						long port = 0;
-						if (!strPort.ToLong(&port))
-							goto loopexit;
-						const wxString& fingerprint = ReadLine(error);
-						if (error)
-							goto loopexit;
+			case sftpEvent::AskHostkeyBetteralg:
+				lines = 2;
+				break;
+			case sftpEvent::Listentry:
+			case sftpEvent::AskHostkey:
+			case sftpEvent::AskHostkeyChanged:
+				lines = 3;
+				break;
+			};
 
-						m_pOwner->SendAsyncRequest(new CHostKeyNotification(line.Mid(1), port, fingerprint, requestType == sftpReqHostkeyChanged));
-					}
-					else if (requestType == sftpReqPassword) {
-						sftp_message* message = new sftp_message;
-						message->type = eventType;
-						message->reqType = sftpReqPassword;
-						message->text = line.Mid(1);
-						SendMessage(message);
-					}
-					else if (requestType == sftpReqHostkeyBetteralg) {
-						m_pOwner->LogMessage(MessageType::Error, _T("Got sftpReqHostkeyBetteralg when we shouldn't have. Aborting connection."));
-						goto loopexit;
-					}
-				}
-				break;
-			case sftpEvent::Recv:
-			case sftpEvent::Send:
-			case sftpEvent::UsedQuotaRecv:
-			case sftpEvent::UsedQuotaSend:
-				{
-					sftp_message* message = new sftp_message;
-					message->type = eventType;
-					SendMessage(message);
-				}
-				break;
-			case sftpEvent::Transfer:
-				{
-					sftp_message* message = new sftp_message;
-					message->type = eventType;
-					message->value = ReadNumber(error);
-					if (error) {
-						delete message;
-						goto loopexit;
-					}
-					if (!message->value)
-						delete message;
-					else
-						SendMessage(message);
-				}
-				break;
-			default:
-				{
-					char tmp[2];
-					tmp[0] = static_cast<char>(eventType) + '0';
-					tmp[1] = 0;
-					m_pOwner->LogMessage(MessageType::Debug_Info, _T("Unknown eventType: %s"), tmp);
-				}
+			auto msg = new sftp_message;
+			msg->type = eventType;
+			for (int i = 0; i < lines && error.empty(); ++i) {
+				msg->text[i] = ReadLine(error);
+			}
+
+			if (!error.empty()) {
 				break;
 			}
-		}
-loopexit:
 
-		m_pOwner->send_event<CTerminateEvent>();
+			SendMessage(msg);
+		}
+
+		m_pOwner->send_event<CTerminateEvent>(error);
 	}
 
 	fz::process& process_;
@@ -583,134 +511,152 @@ void CSftpControlSocket::OnSftpEvent()
 		switch (message->type)
 		{
 		case sftpEvent::Reply:
-			LogMessageRaw(MessageType::Response, message->text);
-			ProcessReply(FZ_REPLY_OK, message->text);
-			break;
-		case sftpEvent::Status:
-			LogMessageRaw(MessageType::Status, message->text);
-			break;
-		case sftpEvent::Error:
-			LogMessageRaw(MessageType::Error, message->text);
-			break;
-		case sftpEvent::Verbose:
-			LogMessageRaw(MessageType::Debug_Info, message->text);
+			LogMessageRaw(MessageType::Response, message->text[0]);
+			ProcessReply(FZ_REPLY_OK, message->text[0]);
 			break;
 		case sftpEvent::Done:
 			{
 				int result;
-				if (message->text == _T("1")) {
+				if (message->text[0] == L"1") {
 					result = FZ_REPLY_OK;
 				}
-				else if (message->text == _T("2")) {
+				else if (message->text[0] == L"2") {
 					result = FZ_REPLY_CRITICALERROR;
 				}
 				else {
 					result = FZ_REPLY_ERROR;
 				}
-				ProcessReply(result);
-				break;
-			}
-		case sftpEvent::RequestPreamble:
-			m_requestPreamble = message->text;
-			break;
-		case sftpEvent::RequestInstruction:
-			m_requestInstruction = message->text;
-			break;
-		case sftpEvent::Request:
-			switch(message->reqType)
-			{
-			case sftpReqPassword:
-				if (!m_pCurOpData || m_pCurOpData->opId != Command::connect) {
-					LogMessage(MessageType::Debug_Warning, _T("sftpReqPassword outside connect operation, ignoring."));
-					break;
-				}
-				else {
-					CSftpConnectOpData *pData = static_cast<CSftpConnectOpData*>(m_pCurOpData);
-
-					wxString const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message->text;
-
-					if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
-						CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
-						if (m_requestPreamble == _T("SSH key passphrase")) {
-							t = CInteractiveLoginNotification::keyfile;
-						}
-
-						wxString challenge;
-						if (!m_requestPreamble.empty() && t != CInteractiveLoginNotification::keyfile)
-							challenge += m_requestPreamble + _T("\n");
-						if (!m_requestInstruction.empty())
-							challenge += m_requestInstruction + _T("\n");
-						if (message->text != _T("Password:"))
-							challenge += message->text;
-						CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(t, challenge, pData->lastChallenge == challengeIdentifier);
-						pNotification->server = *m_pCurrentServer;
-
-						pData->lastChallenge = challengeIdentifier;
-
-						SendAsyncRequest(pNotification);
-					}
-					else {
-						const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message->text;
-
-						if (!pData->lastChallenge.empty()) {
-							// Check for same challenge. Will most likely fail as well, so abort early.
-							if (pData->lastChallenge == challengeIdentifier) {
-								LogMessage(MessageType::Error, _("Authentication failed."));
-							}
-							else {
-								LogMessage(MessageType::Error, _("Server sent an additional login prompt. You need to use the interactive login type."));
-							}
-							DoClose(FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED);
-
-							for (;iter != messages.end(); ++iter)
-								delete *iter;
-							return;
-						}
-
-						pData->lastChallenge = challengeIdentifier;
-
-						const wxString pass = m_pCurrentServer->GetPass();
-						wxString show = _T("Pass: ");
-						show.Append('*', pass.Length());
-						SendCommand(pass, show);
-					}
-				}
-				break;
-			default:
-				wxFAIL_MSG(_T("given notification codes should have been handled by thread"));
-				break;
+				ProcessReply(result, std::wstring());
 			}
 			break;
-		case sftpEvent::Listentry:
-			ListParseEntry(message->text);
+		case sftpEvent::Error:
+			LogMessageRaw(MessageType::Error, message->text[0]);
 			break;
-		case sftpEvent::Transfer:
-			{
-				bool tmp;
-				CTransferStatus status = engine_.transfer_status_.Get(tmp);
-				if (!status.empty() && !status.madeProgress) {
-					if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
-						CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
-						if (pData->download) {
-							if (message->value > 0)
-								engine_.transfer_status_.SetMadeProgress();
-						}
-						else
-						{
-							if (status.currentOffset > status.startOffset + 65565)
-								engine_.transfer_status_.SetMadeProgress();
-						}
-					}
-				}
-
-				engine_.transfer_status_.Update(message->value);
-			}
+		case sftpEvent::Verbose:
+			LogMessageRaw(MessageType::Debug_Info, message->text[0]);
+			break;
+		case sftpEvent::Status:
+			LogMessageRaw(MessageType::Status, message->text[0]);
 			break;
 		case sftpEvent::Recv:
 			SetActive(CFileZillaEngine::recv);
 			break;
 		case sftpEvent::Send:
 			SetActive(CFileZillaEngine::send);
+			break;
+		case sftpEvent::Listentry:
+			// FIXME
+			ListParseEntry(std::move(message->text[0]));
+			break;
+		case sftpEvent::Transfer:
+			{
+				long value{};
+				wxString s = message->text[0];
+				if (!s.ToLong(&value)) {
+					value = 0;
+				}
+
+				bool tmp;
+				CTransferStatus status = engine_.transfer_status_.Get(tmp);
+				if (!status.empty() && !status.madeProgress) {
+					if (m_pCurOpData && m_pCurOpData->opId == Command::transfer) {
+						CSftpFileTransferOpData *pData = static_cast<CSftpFileTransferOpData *>(m_pCurOpData);
+						if (pData->download) {
+							if (value > 0) {
+								engine_.transfer_status_.SetMadeProgress();
+							}
+						}
+						else {
+							if (status.currentOffset > status.startOffset + 65565) {
+								engine_.transfer_status_.SetMadeProgress();
+							}
+						}
+					}
+				}
+
+				engine_.transfer_status_.Update(value);
+			}
+			break;
+		case sftpEvent::AskHostkey:
+		case sftpEvent::AskHostkeyChanged:
+			{
+				long port = 0;
+				if (!wxString(message->text[1]).ToLong(&port)) {
+					DoClose(FZ_REPLY_INTERNALERROR);
+					break;
+				}
+				SendAsyncRequest(new CHostKeyNotification(message->text[0], port, message->text[2], message->type == sftpEvent::AskHostkeyChanged));
+			}
+			break;
+		case sftpEvent::AskHostkeyBetteralg:
+			LogMessage(MessageType::Error, _T("Got sftpReqHostkeyBetteralg when we shouldn't have. Aborting connection."));
+			DoClose(FZ_REPLY_INTERNALERROR);
+			break;
+		case sftpEvent::AskPassword:
+			if (!m_pCurOpData || m_pCurOpData->opId != Command::connect) {
+				LogMessage(MessageType::Debug_Warning, _T("sftpReqPassword outside connect operation, ignoring."));
+				break;
+			}
+			else {
+				CSftpConnectOpData *pData = static_cast<CSftpConnectOpData*>(m_pCurOpData);
+
+				wxString const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message->text[0];
+
+				if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
+					CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
+					if (m_requestPreamble == _T("SSH key passphrase")) {
+						t = CInteractiveLoginNotification::keyfile;
+					}
+
+					wxString challenge;
+					if (!m_requestPreamble.empty() && t != CInteractiveLoginNotification::keyfile) {
+						challenge += m_requestPreamble + _T("\n");
+					}
+					if (!m_requestInstruction.empty()) {
+						challenge += m_requestInstruction + _T("\n");
+					}
+					if (message->text[0] != L"Password:") {
+						challenge += message->text[0];
+					}
+					CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(t, challenge, pData->lastChallenge == challengeIdentifier);
+					pNotification->server = *m_pCurrentServer;
+
+					pData->lastChallenge = challengeIdentifier;
+
+					SendAsyncRequest(pNotification);
+				}
+				else {
+					const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message->text[0];
+
+					if (!pData->lastChallenge.empty()) {
+						// Check for same challenge. Will most likely fail as well, so abort early.
+						if (pData->lastChallenge == challengeIdentifier) {
+							LogMessage(MessageType::Error, _("Authentication failed."));
+						}
+						else {
+							LogMessage(MessageType::Error, _("Server sent an additional login prompt. You need to use the interactive login type."));
+						}
+						DoClose(FZ_REPLY_CRITICALERROR | FZ_REPLY_PASSWORDFAILED);
+
+						for (;iter != messages.end(); ++iter)
+							delete *iter;
+						return;
+					}
+
+					pData->lastChallenge = challengeIdentifier;
+
+					const wxString pass = m_pCurrentServer->GetPass();
+					wxString show = _T("Pass: ");
+					show.Append('*', pass.Length());
+					SendCommand(pass, show);
+				}
+			}
+			break;
+		case sftpEvent::RequestPreamble:
+			m_requestPreamble = message->text[0];
+			break;
+		case sftpEvent::RequestInstruction:
+			m_requestInstruction = message->text[0];
 			break;
 		case sftpEvent::UsedQuotaRecv:
 			OnQuotaRequest(CRateLimiter::inbound);
@@ -719,28 +665,28 @@ void CSftpControlSocket::OnSftpEvent()
 			OnQuotaRequest(CRateLimiter::outbound);
 			break;
 		case sftpEvent::KexAlgorithm:
-			m_sftpEncryptionDetails.kexAlgorithm = message->text;
+			m_sftpEncryptionDetails.kexAlgorithm = message->text[0];
 			break;
 		case sftpEvent::KexHash:
-			m_sftpEncryptionDetails.kexHash = message->text;
+			m_sftpEncryptionDetails.kexHash = message->text[0];
 			break;
 		case sftpEvent::KexCurve:
-			m_sftpEncryptionDetails.kexCurve = message->text;
+			m_sftpEncryptionDetails.kexCurve = message->text[0];
 			break;
 		case sftpEvent::CipherClientToServer:
-			m_sftpEncryptionDetails.cipherClientToServer = message->text;
+			m_sftpEncryptionDetails.cipherClientToServer = message->text[0];
 			break;
 		case sftpEvent::CipherServerToClient:
-			m_sftpEncryptionDetails.cipherServerToClient = message->text;
+			m_sftpEncryptionDetails.cipherServerToClient = message->text[0];
 			break;
 		case sftpEvent::MacClientToServer:
-			m_sftpEncryptionDetails.macClientToServer = message->text;
+			m_sftpEncryptionDetails.macClientToServer = message->text[0];
 			break;
 		case sftpEvent::MacServerToClient:
-			m_sftpEncryptionDetails.macServerToClient = message->text;
+			m_sftpEncryptionDetails.macServerToClient = message->text[0];
 			break;
 		case sftpEvent::Hostkey:
-			m_sftpEncryptionDetails.hostKey = message->text;
+			m_sftpEncryptionDetails.hostKey = message->text[0];
 			break;
 		default:
 			wxFAIL_MSG(_T("given notification codes not handled"));
@@ -750,8 +696,11 @@ void CSftpControlSocket::OnSftpEvent()
 	}
 }
 
-void CSftpControlSocket::OnTerminate()
+void CSftpControlSocket::OnTerminate(std::wstring const& error)
 {
+	if (!error.empty()) {
+		LogMessageRaw(MessageType::Error, error);
+	}
 	if (m_pProcess) {
 		DoClose();
 	}
@@ -1062,7 +1011,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 	return FZ_REPLY_ERROR;
 }
 
-int CSftpControlSocket::ListParseEntry(const wxString& entry)
+int CSftpControlSocket::ListParseEntry(std::wstring && entry)
 {
 	if (!m_pCurOpData) {
 		LogMessageRaw(MessageType::RawList, entry);
@@ -1093,23 +1042,14 @@ int CSftpControlSocket::ListParseEntry(const wxString& entry)
 		return FZ_REPLY_ERROR;
 	}
 
-	if (!pData->pParser)
-	{
+	if (!pData->pParser) {
 		LogMessageRaw(MessageType::RawList, entry);
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("pData->pParser is 0"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	if (entry.Find('\r') != -1 || entry.Find('\n') != -1)
-	{
-		LogMessageRaw(MessageType::RawList, entry);
-		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("Listing entry contains \\r at pos %d and \\n at pos %d. Please contect FileZilla team."), entry.Find('\r'), entry.Find('\n'));
-		ResetOperation(FZ_REPLY_INTERNALERROR);
-		return FZ_REPLY_INTERNALERROR;
-	}
-
-	pData->pParser->AddLine(entry.c_str());
+	pData->pParser->AddLine(std::move(entry));
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -1223,7 +1163,7 @@ int CSftpControlSocket::ListSend()
 		return ListSubcommandResult(FZ_REPLY_OK);
 	}
 	else if (pData->opState == list_list) {
-		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown, true);
+		pData->pParser = new CDirectoryListingParser(this, *m_pCurrentServer, listingEncoding::unknown);
 		pData->pParser->SetTimezoneOffset(GetTimezoneOffset());
 		if (!SendCommand(_T("ls")))
 			return FZ_REPLY_ERROR;
@@ -1467,7 +1407,7 @@ int CSftpControlSocket::ChangeDirSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-void CSftpControlSocket::ProcessReply(int result, const wxString& reply /*=_T("")*/)
+void CSftpControlSocket::ProcessReply(int result, std::wstring const& reply)
 {
 	Command commandId = GetCurrentCommandId();
 	switch (commandId)
