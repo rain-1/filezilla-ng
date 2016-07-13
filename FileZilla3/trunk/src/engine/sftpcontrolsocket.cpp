@@ -15,6 +15,8 @@
 #include <wx/log.h>
 #include <wx/tokenzr.h>
 
+#include <cwchar>
+
 #define FZSFTP_PROTOCOL_VERSION 6
 
 struct sftp_event_type;
@@ -545,8 +547,7 @@ void CSftpControlSocket::OnSftpEvent()
 			SetActive(CFileZillaEngine::send);
 			break;
 		case sftpEvent::Listentry:
-			// FIXME
-			ListParseEntry(std::move(message->text[0]));
+			ListParseEntry(std::move(message->text[0]), message->text[1], std::move(message->text[2]));
 			break;
 		case sftpEvent::Transfer:
 			{
@@ -1011,7 +1012,7 @@ int CSftpControlSocket::ListParseResponse(bool successful, const wxString& reply
 	return FZ_REPLY_ERROR;
 }
 
-int CSftpControlSocket::ListParseEntry(std::wstring && entry)
+int CSftpControlSocket::ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name)
 {
 	if (!m_pCurOpData) {
 		LogMessageRaw(MessageType::RawList, entry);
@@ -1049,7 +1050,14 @@ int CSftpControlSocket::ListParseEntry(std::wstring && entry)
 		return FZ_REPLY_INTERNALERROR;
 	}
 
-	pData->pParser->AddLine(std::move(entry));
+	fz::datetime time;
+	if (!stime.empty()) {
+		int64_t t = std::wcstoll(stime.c_str(), 0, 10);
+		if (t > 0) {
+			time = fz::datetime(static_cast<time_t>(t), fz::datetime::seconds);
+		}
+	}
+	pData->pParser->AddLine(std::move(entry), std::move(name), time);
 
 	return FZ_REPLY_WOULDBLOCK;
 }

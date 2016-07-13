@@ -373,7 +373,7 @@ int console_get_userpass_input(prompts_t *p,
 	//    newmode |= ENABLE_ECHO_INPUT;
 	SetConsoleMode(hin, newmode);
 
-	fzprintf_raw_untrusted(sftpAskPassword, "%s\n", pr->prompt);
+	fzprintf_raw_untrusted(sftpAskPassword, "%s", pr->prompt);
 	
         len = 0;
         while (1) {

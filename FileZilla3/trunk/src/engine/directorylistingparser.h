@@ -59,7 +59,7 @@ public:
 	CDirectoryListing Parse(const CServerPath &path);
 
 	bool AddData(char *pData, int len);
-	bool AddLine(std::wstring && line);
+	bool AddLine(std::wstring && line, wxString && name, fz::datetime const& time);
 
 	void Reset();
 
@@ -72,7 +72,7 @@ protected:
 
 	bool ParseData(bool partial);
 
-	bool ParseLine(CLine &line, ServerType const serverType, bool concatenated);
+	bool ParseLine(CLine &line, ServerType const serverType, bool concatenated, CDirentry const* override = 0);
 
 	bool ParseAsUnix(CLine &line, CDirentry &entry, bool expect_date);
 	bool ParseAsDos(CLine &line, CDirentry &entry);

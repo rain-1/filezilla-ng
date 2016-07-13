@@ -52,6 +52,8 @@ bool CLoginManager::DisplayDialog(CServer &server, wxString const& name, wxStrin
 		pwdDlg.GetSizer()->Show(XRCCTRL(pwdDlg, "ID_CHALLENGE", wxTextCtrl), false, true);
 	}
 	else {
+		challenge.Trim(true);
+		challenge.Trim(false);
 #ifdef __WXMSW__
 		challenge.Replace(_T("\n"), _T("\r\n"));
 #endif

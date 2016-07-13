@@ -711,7 +711,7 @@ CDirectoryListing CDirectoryListingParser::Parse(const CServerPath &path)
 	return listing;
 }
 
-bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType, bool concatenated)
+bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType, bool concatenated, CDirentry const* override)
 {
 	fz::shared_value<CDirentry> refEntry;
 	CDirentry & entry = refEntry.get();
@@ -805,8 +805,20 @@ bool CDirectoryListingParser::ParseLine(CLine &line, ServerType const serverType
 	else
 		m_maybeMultilineVms = false;
 
-	return false;
+	if (!override || override->name.empty()) {
+		return false;
+	}
 done:
+
+	if (override) {
+		// If SFTP is uses we already have precise data for some fields
+		if (!override->name.empty()) {
+			entry.name = override->name;
+		}
+		if (!override->time.empty()) {
+			entry.time = override->time;
+		}
+	}
 
 	m_maybeMultilineVms = false;
 	m_fileList.clear();
@@ -1903,14 +1915,17 @@ bool CDirectoryListingParser::AddData(char *pData, int len)
 	return ParseData(true);
 }
 
-bool CDirectoryListingParser::AddLine(std::wstring && line)
+bool CDirectoryListingParser::AddLine(std::wstring && line, wxString && name, fz::datetime const& time)
 {
 	if (m_pControlSocket) {
 		m_pControlSocket->LogMessageRaw(MessageType::RawList, line);
 	}
 
+	CDirentry override;
+	override.name = std::move(name);
+	override.time = time;
 	CLine l(std::move(line));
-	ParseLine(l, m_server.GetType(), false);
+	ParseLine(l, m_server.GetType(), true, &override);
 
 	return true;
 }
