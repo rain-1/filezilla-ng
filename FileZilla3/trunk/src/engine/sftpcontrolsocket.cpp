@@ -1813,9 +1813,21 @@ int CSftpControlSocket::DoClose(int nErrorCode /*=FZ_REPLY_DISCONNECTED*/)
 	}
 
 	if (m_pInputThread) {
-		auto thread = m_pInputThread;
+		m_pInputThread->join();
+		delete m_pInputThread;
 		m_pInputThread = 0;
-		delete thread;
+
+		auto threadEventsFilter = [&](fz::event_loop::Events::value_type const& ev) -> bool {
+			if (ev.first != this) {
+				return false;
+			}
+			else if (ev.second->derived_type() == CSftpEvent::type() || ev.second->derived_type() == CTerminateEvent::type()) {
+				return true;
+			}
+			return false;
+		};
+
+		event_loop_.filter_events(threadEventsFilter);
 	}
 	if (m_pProcess) {
 		delete m_pProcess;
