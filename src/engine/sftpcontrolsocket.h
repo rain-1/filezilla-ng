@@ -40,6 +40,7 @@ class process;
 
 class CSftpInputThread;
 
+struct sftp_message;
 class CSftpControlSocket final : public CControlSocket, public CRateLimiterObject
 {
 public:
@@ -63,7 +64,7 @@ public:
 protected:
 	// Replaces filename"with"quotes with
 	// "filename""with""quotes"
-	wxString QuoteFilename(wxString filename);
+	std::wstring QuoteFilename(std::wstring const& filename);
 
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
 
@@ -89,7 +90,7 @@ protected:
 	int ListParseEntry(std::wstring && entry, std::wstring const& stime, std::wstring && name);
 	int ListCheckTimezoneDetection();
 
-	int ChangeDir(CServerPath path = CServerPath(), wxString subDir = _T(""), bool link_discovery = false);
+	int ChangeDir(CServerPath path = CServerPath(), wxString subDir = wxString(), bool link_discovery = false);
 	int ChangeDirParseResponse(bool successful, const wxString& reply);
 	int ChangeDirSubcommandResult(int prevResult);
 	int ChangeDirSend();
@@ -110,20 +111,20 @@ protected:
 	int RenameSubcommandResult(int prevResult);
 	int RenameSend();
 
-	bool SendCommand(wxString const& cmd, const wxString& show = wxString());
+	bool SendCommand(std::wstring const& cmd, std::wstring const& show = std::wstring());
 	bool AddToStream(const wxString& cmd, bool force_utf8 = false);
 
 	virtual void OnRateAvailable(CRateLimiter::rate_direction direction);
 	void OnQuotaRequest(CRateLimiter::rate_direction direction);
 
 	// see src/putty/wildcard.c
-	wxString WildcardEscape(const wxString& file);
+	std::wstring WildcardEscape(std::wstring const& file);
 
 	fz::process* m_pProcess{};
 	CSftpInputThread* m_pInputThread{};
 
 	virtual void operator()(fz::event_base const& ev);
-	void OnSftpEvent();
+	void OnSftpEvent(sftp_message const& message);
 	void OnTerminate(std::wstring const& error);
 
 	wxString m_requestPreamble;
