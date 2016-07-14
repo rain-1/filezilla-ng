@@ -2176,20 +2176,21 @@ void CMainFrame::OnActivate(wxActivateEvent& event)
 void CMainFrame::OnToolbarComparison(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	CComparisonManager* pComparisonManager = pState->GetComparisonManager();
-	if (pComparisonManager->IsComparing())
-	{
+	if (pComparisonManager->IsComparing()) {
 		pComparisonManager->ExitComparisonMode();
 		return;
 	}
 
 	if (!COptions::Get()->GetOptionVal(OPTION_FILEPANE_LAYOUT)) {
 		CContextControl::_context_controls* controls = m_pContextControl->GetCurrentControls();
-		if (!controls)
+		if (!controls) {
 			return;
+		}
 
 		if ((controls->pLocalSplitter->IsSplit() && !controls->pRemoteSplitter->IsSplit()) ||
 			(!controls->pLocalSplitter->IsSplit() && controls->pRemoteSplitter->IsSplit()))

@@ -864,9 +864,6 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	}
 
 	if (!root.empty()) {
-		if (m_pComparisonManager->IsComparing())
-			m_pComparisonManager->ExitComparisonMode();
-
 		m_pRemoteRecursiveOperation->AddRecursionRoot(std::move(root));
 
 		CFilterManager filter;

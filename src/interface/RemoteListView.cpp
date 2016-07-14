@@ -738,8 +738,9 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 	if (reset) {
 		ResetSearchPrefix();
 
-		if (IsComparing() && m_pDirectoryListing)
+		if (IsComparing() && m_pDirectoryListing) {
 			ExitComparisonMode();
+		}
 
 		ClearSelection();
 
@@ -1267,8 +1268,6 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 
 	if (!root.empty()) {
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
-		if (IsComparing())
-			ExitComparisonMode();
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
 													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
@@ -1451,8 +1450,6 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_pDirectoryListing->path, std::move(filesToDelete)));
 
 	if (!root.empty()) {
-		if (IsComparing())
-			ExitComparisonMode();
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		
 		CFilterManager filter;
@@ -1734,9 +1731,6 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 	}
 
 	if (pChmodDlg->Recursive()) {
-		if (IsComparing())
-			ExitComparisonMode();
-
 		pRecursiveOperation->SetChmodDialog(pChmodDlg);
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
@@ -1759,8 +1753,9 @@ void CRemoteListView::ApplyCurrentFilter()
 {
 	CFilterManager filter;
 
-	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing())
+	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing()) {
 		ExitComparisonMode();
+	}
 
 	if (m_fileData.size() <= 1)
 		return;

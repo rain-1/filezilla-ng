@@ -317,31 +317,33 @@ bool CLocalListView::DisplayDir(CLocalPath const& dirname)
 	wxString focused;
 	std::list<wxString> selectedNames;
 	bool ensureVisible = false;
-	if (m_dir != dirname)
-	{
+	if (m_dir != dirname) {
 		ResetSearchPrefix();
 
-		if (IsComparing())
+		if (IsComparing()) {
 			ExitComparisonMode();
+		}
 
 		ClearSelection();
 		focused = m_state.GetPreviouslyVisitedLocalSubdir();
 		ensureVisible = !focused.empty();
-		if (focused.empty())
+		if (focused.empty()) {
 			focused = _T("..");
+		}
 
-		if (GetItemCount())
+		if (GetItemCount()) {
 			EnsureVisible(0);
+		}
 		m_dir = dirname;
 	}
-	else
-	{
+	else {
 		// Remember which items were selected
 		selectedNames = RememberSelectedItems(focused);
 	}
 
-	if (m_pFilelistStatusBar)
+	if (m_pFilelistStatusBar) {
 		m_pFilelistStatusBar->UnselectAll();
+	}
 
 	const int oldItemCount = m_indexMapping.size();
 
@@ -1095,18 +1097,21 @@ void CLocalListView::ApplyCurrentFilter()
 {
 	CFilterManager filter;
 
-	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing())
+	if (!filter.HasSameLocalAndRemoteFilters() && IsComparing()) {
 		ExitComparisonMode();
+	}
 
 	unsigned int min = m_hasParent ? 1 : 0;
-	if (m_fileData.size() <= min)
+	if (m_fileData.size() <= min) {
 		return;
+	}
 
 	wxString focused;
 	const std::list<wxString>& selectedNames = RememberSelectedItems(focused);
 
-	if (m_pFilelistStatusBar)
+	if (m_pFilelistStatusBar) {
 		m_pFilelistStatusBar->UnselectAll();
+	}
 
 	int64_t totalSize{};
 	int unknown_sizes = 0;
