@@ -1119,7 +1119,7 @@ std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
 			}
 		}
 	}
-
+	return ret;
 }
 
 bool CTlsSocket::CertificateIsBlacklisted(std::vector<CCertificate> const&)
