@@ -1120,7 +1120,6 @@ std::vector<wxString> CTlsSocket::GetCertSubjectAltNames(gnutls_x509_crt_t cert)
 		}
 	}
 
-	return ret;
 }
 
 bool CTlsSocket::CertificateIsBlacklisted(std::vector<CCertificate> const&)
@@ -1260,7 +1259,7 @@ int CTlsSocket::VerifyCertificate()
 		return FZ_REPLY_ERROR;
 	}
 
-	gnutls_x509_crt root{};
+	gnutls_x509_crt_t root{};
 	clone_cert(certs.certs[certs.certs_size - 1], root);
 	if (!root) {
 		m_pOwner->LogMessage(MessageType::Error, _("Could not copy certificate"));
