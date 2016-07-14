@@ -432,7 +432,7 @@ int CSftpControlSocket::ConnectSend()
 			std::wstring cmd = fz::sprintf(L"proxy %d \"%s\" %d", type,
 											engine_.GetOptions().GetOption(OPTION_PROXY_HOST),
 											engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT));
-			std::wstring user = engine_.GetOptions().GetOption(OPTION_PROXY_USER);
+			std::wstring user = engine_.GetOptions().GetOption(OPTION_PROXY_USER).ToStdWstring();
 			if (!user.empty()) {
 				cmd += L" \"" + user + L"\"";
 			}
@@ -755,7 +755,7 @@ bool CSftpControlSocket::SetAsyncRequestReply(CAsyncRequestNotification *pNotifi
 				DoClose(FZ_REPLY_CANCELED);
 				return false;
 			}
-			std::wstring const pass = pInteractiveLoginNotification->server.GetPass();
+			std::wstring const pass = pInteractiveLoginNotification->server.GetPass().ToStdWstring();
 			m_pCurrentServer->SetUser(m_pCurrentServer->GetUser(), pass);
 			std::wstring show = L"Pass: ";
 			show.append(pass.size(), '*');
