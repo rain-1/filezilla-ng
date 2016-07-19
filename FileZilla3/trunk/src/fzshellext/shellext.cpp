@@ -308,7 +308,6 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 #ifdef DEBUG
 		if (!GLogMutex)
 			GLogMutex = CreateMutex(NULL, false, _T("FileZilla3DragDropExtLogMutex"));
-#endif
 
 		if (GRefThisDll != 0) {
 			DEBUG_MSG("DllMain return: settings already loaded");
@@ -348,6 +347,10 @@ DllMain(HINSTANCE HInstance, DWORD Reason, LPVOID Reserved)
 		DEBUG_LOG_VERSION(HInstance);
 
 		DEBUG_MSG("DllMain leave");
+#else
+		GEnabled = true;
+#endif
+
 	}
 	else if (Reason == DLL_PROCESS_DETACH) {
 		DEBUG_MSG("DllMain detaching process");
