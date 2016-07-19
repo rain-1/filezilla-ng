@@ -64,10 +64,10 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(std::wstring const& drive
 	wxChar share_name[512];
 	DWORD dwSize = 511;
 	if (!WNetGetConnection(volume.c_str(), share_name, &dwSize) && share_name[0]) {
-		fz::scoped_lock l(sync_);
 		t_VolumeInfo volumeInfo;
 		volumeInfo.volume = volume;
 		volumeInfo.volumeName = share_name;
+		fz::scoped_lock l(sync_);
 		m_volumeInfo.push_back(volumeInfo);
 		return true;
 	}
@@ -78,10 +78,10 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveLabel(std::wstring const& drive
 	BOOL res = GetVolumeInformation(drive.c_str(), volume_name, 500, 0, 0, 0, 0, 0);
 	SetErrorMode(oldErrorMode);
 	if (res && volume_name[0]) {
-		fz::scoped_lock l(sync_);
 		t_VolumeInfo volumeInfo;
 		volumeInfo.volume = volume;
 		volumeInfo.volumeName = volume_name;
+		fz::scoped_lock l(sync_);
 		m_volumeInfo.push_back(volumeInfo);
 		return true;
 	}
@@ -115,10 +115,10 @@ bool CVolumeDescriptionEnumeratorThread::GetDriveIcon(std::wstring const& drive)
 		// we only need the index from the system image list
 		DestroyIcon(shFinfo.hIcon);
 
-		fz::scoped_lock l(sync_);
 		t_VolumeInfo volumeInfo;
 		volumeInfo.volume = volume;
 		volumeInfo.icon = shFinfo.iIcon;
+		fz::scoped_lock l(sync_);
 		m_volumeInfo.push_back(volumeInfo);
 		return true;
 	}

@@ -45,7 +45,7 @@ protected:
 	void OnTimer(fz::timer_id id);
 	void OnRateChanged();
 
-	fz::mutex sync_;
+	fz::mutex sync_{false};
 };
 
 struct ratelimit_changed_event_type{};

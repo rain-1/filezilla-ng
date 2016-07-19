@@ -188,7 +188,7 @@ protected:
 	DECLARE_EVENT_TABLE()
 	void OnTimer(wxTimerEvent& event);
 
-	fz::mutex m_sync_;
+	fz::mutex m_sync_{false};
 
 	changed_options_t changedOptions_;
 };
