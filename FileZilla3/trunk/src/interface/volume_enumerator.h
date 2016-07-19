@@ -61,7 +61,7 @@ protected:
 	
 	std::list<t_VolumeInfo> m_volumeInfo;
 
-	fz::mutex sync_;
+	fz::mutex sync_{false};
 };
 
 #endif

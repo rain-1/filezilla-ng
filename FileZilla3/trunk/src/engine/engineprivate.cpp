@@ -130,19 +130,21 @@ Command CFileZillaEnginePrivate::GetCurrentCommandId() const
 		return GetCurrentCommand()->GetId();
 }
 
+void CFileZillaEnginePrivate::AddNotification(fz::scoped_lock& lock, CNotification *pNotification)
+{
+	m_NotificationList.push_back(pNotification);
+
+	if (m_maySendNotificationEvent) {
+		m_maySendNotificationEvent = false;
+		lock.unlock();
+		notification_handler_.OnEngineEvent(&parent_);
+	}
+}
+
 void CFileZillaEnginePrivate::AddNotification(CNotification *pNotification)
 {
-	{
-		fz::scoped_lock lock(notification_mutex_);
-		m_NotificationList.push_back(pNotification);
-
-		if (!m_maySendNotificationEvent) {
-			return;
-		}
-		m_maySendNotificationEvent = false;
-	}
-
-	notification_handler_.OnEngineEvent(&parent_);
+	fz::scoped_lock lock(notification_mutex_);
+	AddNotification(lock, pNotification);
 }
 
 void CFileZillaEnginePrivate::AddLogNotification(CLogmsgNotification *pNotification)
@@ -151,15 +153,17 @@ void CFileZillaEnginePrivate::AddLogNotification(CLogmsgNotification *pNotificat
 
 	if (pNotification->msgType == MessageType::Error) {
 		queue_logs_ = false;
-		SendQueuedLogs();
-		AddNotification(pNotification);
+
+		m_NotificationList.insert(m_NotificationList.end(), queued_logs_.begin(), queued_logs_.end());
+		queued_logs_.clear();
+		AddNotification(lock, pNotification);
 	}
 	else if (pNotification->msgType == MessageType::Status) {
-		ClearQueuedLogs(false);
-		AddNotification(pNotification);
+		ClearQueuedLogs(lock, false);
+		AddNotification(lock, pNotification);
 	}
 	else if (!queue_logs_) {
-		AddNotification(pNotification);
+		AddNotification(lock, pNotification);
 	}
 	else {
 		queued_logs_.push_back(pNotification);
@@ -186,10 +190,8 @@ void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
 	notification_handler_.OnEngineEvent(&parent_);
 }
 
-void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
+void CFileZillaEnginePrivate::ClearQueuedLogs(fz::scoped_lock& lock, bool reset_flag)
 {
-	fz::scoped_lock lock(notification_mutex_);
-
 	for (auto msg : queued_logs_) {
 		delete msg;
 	}
@@ -198,6 +200,12 @@ void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
 	if (reset_flag) {
 		queue_logs_ = ShouldQueueLogsFromOptions();
 	}
+}
+
+void CFileZillaEnginePrivate::ClearQueuedLogs(bool reset_flag)
+{
+	fz::scoped_lock lock(notification_mutex_);
+	ClearQueuedLogs(lock, reset_flag);
 }
 
 int CFileZillaEnginePrivate::ResetOperation(int nErrorCode)

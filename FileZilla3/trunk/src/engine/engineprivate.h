@@ -81,6 +81,7 @@ public:
 	void SetActive(int direction);
 
 	// Add new pending notification
+	void AddNotification(fz::scoped_lock& lock, CNotification *pNotification); // note: Unlocks the mutex!
 	void AddNotification(CNotification *pNotification);
 	void AddLogNotification(CLogmsgNotification *pNotification);
 	std::unique_ptr<CNotification> GetNextNotification();
@@ -109,6 +110,7 @@ protected:
 
 	void SendQueuedLogs(bool reset_flag = false);
 	void ClearQueuedLogs(bool reset_flag);
+	void ClearQueuedLogs(fz::scoped_lock& lock, bool reset_flag);
 	bool ShouldQueueLogsFromOptions() const;
 
 	int CheckCommandPreconditions(CCommand const& command, bool checkBusy);
@@ -143,7 +145,7 @@ protected:
 	static fz::mutex mutex_;
 
 	// Used to synchronize access to the notification list
-	fz::mutex notification_mutex_;
+	fz::mutex notification_mutex_{false};
 
 	EngineNotificationHandler& notification_handler_;
 

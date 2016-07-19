@@ -75,7 +75,7 @@ private:
 	char* m_buffers[BUFFERCOUNT];
 	unsigned int m_bufferLens[BUFFERCOUNT];
 
-	fz::mutex m_mutex;
+	fz::mutex m_mutex{false};
 	fz::condition m_condition;
 
 	int m_curAppBuf{};

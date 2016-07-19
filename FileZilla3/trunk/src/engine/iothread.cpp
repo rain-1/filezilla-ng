@@ -99,12 +99,14 @@ void CIOThread::entry()
 
 			++m_curThreadBuf %= BUFFERCOUNT;
 			if (m_curThreadBuf == m_curAppBuf) {
-				if (!m_running)
+				if (!m_running) {
 					break;
+				}
 
 				m_threadWaiting = true;
-				if (m_running)
+				if (m_running) {
 					m_condition.wait(l);
+				}
 			}
 		}
 	}

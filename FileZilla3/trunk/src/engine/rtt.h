@@ -26,7 +26,7 @@ protected:
 	int64_t m_summed_latency{};
 	int m_measurements{};
 
-	mutable fz::mutex m_sync;
+	mutable fz::mutex m_sync{false};
 };
 
 #endif
