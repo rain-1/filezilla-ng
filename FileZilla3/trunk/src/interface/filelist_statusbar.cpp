@@ -17,8 +17,9 @@ CFilelistStatusBar::CFilelistStatusBar(wxWindow* pParent)
 	UpdateText();
 
 #ifdef __WXMSW__
-	if (GetLayoutDirection() != wxLayout_RightToLeft)
+	if (GetLayoutDirection() != wxLayout_RightToLeft) {
 		SetDoubleBuffered(true);
+	}
 #endif
 
 	RegisterOption(OPTION_SIZE_FORMAT);
@@ -33,43 +34,53 @@ void CFilelistStatusBar::UpdateText()
 		text = m_offline_string;
 	}
 	else if (m_count_selected_files || m_count_selected_dirs) {
-		if (!m_count_selected_files)
+		if (!m_count_selected_files) {
 			text = wxString::Format(wxPLURAL("Selected %d directory.", "Selected %d directories.", m_count_selected_dirs), m_count_selected_dirs);
+		}
 		else if (!m_count_selected_dirs) {
 			const wxString size = CSizeFormat::Format(m_total_selected_size, true);
-			if (m_unknown_selected_size)
+			if (m_unknown_selected_size) {
 				text = wxString::Format(wxPLURAL("Selected %d file. Total size: At least %s", "Selected %d files. Total size: At least %s", m_count_selected_files), m_count_selected_files, size);
-			else
+			}
+			else {
 				text = wxString::Format(wxPLURAL("Selected %d file. Total size: %s", "Selected %d files. Total size: %s", m_count_selected_files), m_count_selected_files, size);
+			}
 		}
 		else {
 			const wxString files = wxString::Format(wxPLURAL("%d file", "%d files", m_count_selected_files), m_count_selected_files);
 			const wxString dirs = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_selected_dirs), m_count_selected_dirs);
 			const wxString size = CSizeFormat::Format(m_total_selected_size, true);
-			if (m_unknown_selected_size)
+			if (m_unknown_selected_size) {
 				text = wxString::Format(_("Selected %s and %s. Total size: At least %s"), files, dirs, size);
-			else
+			}
+			else {
 				text = wxString::Format(_("Selected %s and %s. Total size: %s"), files, dirs, size);
+			}
 		}
 	}
 	else if (m_count_files || m_count_dirs) {
-		if (!m_count_files)
+		if (!m_count_files) {
 			text = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_dirs), m_count_dirs);
+		}
 		else if (!m_count_dirs) {
 			const wxString size = CSizeFormat::Format(m_total_size, true);
-			if (m_unknown_size)
+			if (m_unknown_size) {
 				text = wxString::Format(wxPLURAL("%d file. Total size: At least %s", "%d files. Total size: At least %s", m_count_files), m_count_files, size);
-			else
+			}
+			else {
 				text = wxString::Format(wxPLURAL("%d file. Total size: %s", "%d files. Total size: %s", m_count_files), m_count_files, size);
+			}
 		}
 		else {
 			const wxString files = wxString::Format(wxPLURAL("%d file", "%d files", m_count_files), m_count_files);
 			const wxString dirs = wxString::Format(wxPLURAL("%d directory", "%d directories", m_count_dirs), m_count_dirs);
 			const wxString size = CSizeFormat::Format(m_total_size, true);
-			if (m_unknown_size)
+			if (m_unknown_size) {
 				text = wxString::Format(_("%s and %s. Total size: At least %s"), files, dirs, size);
-			else
+			}
+			else {
 				text = wxString::Format(_("%s and %s. Total size: %s"), files, dirs, size);
+			}
 		}
 		if (m_hidden) {
 			text += ' ';
@@ -132,20 +143,33 @@ void CFilelistStatusBar::UnselectAll()
 void CFilelistStatusBar::SelectFile(int64_t size)
 {
 	++m_count_selected_files;
-	if (size < 0)
+	if (size < 0) {
 		++m_unknown_selected_size;
-	else
+	}
+	else {
 		m_total_selected_size += size;
+	}
 	TriggerUpdateText();
 }
 
 void CFilelistStatusBar::UnselectFile(int64_t size)
 {
-	--m_count_selected_files;
-	if (size < 0)
-		--m_unknown_selected_size;
-	else
-		m_total_selected_size -= size;
+	if (m_count_selected_files) {
+		--m_count_selected_files;
+	}
+	if (size < 0) {
+		if (m_unknown_selected_size) {
+			--m_unknown_selected_size;
+		}
+	}
+	else {
+		if (m_total_selected_size > size) {
+			m_total_selected_size -= size;
+		}
+		else {
+			m_total_selected_size = 0;
+		}
+	}
 	TriggerUpdateText();
 }
 
@@ -157,7 +181,9 @@ void CFilelistStatusBar::SelectDirectory()
 
 void CFilelistStatusBar::UnselectDirectory()
 {
-	--m_count_selected_dirs;
+	if (m_count_selected_dirs) {
+		--m_count_selected_dirs;
+	}
 	TriggerUpdateText();
 }
 
@@ -168,8 +194,9 @@ void CFilelistStatusBar::OnTimer(wxTimerEvent&)
 
 void CFilelistStatusBar::TriggerUpdateText()
 {
-	if (m_updateTimer.IsRunning())
+	if (m_updateTimer.IsRunning()) {
 		return;
+	}
 
 	m_updateTimer.Start(1, true);
 }
@@ -177,20 +204,33 @@ void CFilelistStatusBar::TriggerUpdateText()
 void CFilelistStatusBar::AddFile(int64_t size)
 {
 	++m_count_files;
-	if (size < 0)
+	if (size < 0) {
 		++m_unknown_size;
-	else
+	}
+	else {
 		m_total_size += size;
+	}
 	TriggerUpdateText();
 }
 
 void CFilelistStatusBar::RemoveFile(int64_t size)
 {
-	--m_count_files;
-	if (size < 0)
-		--m_unknown_size;
-	else
-		m_total_size -= size;
+	if (m_count_files) {
+		--m_count_files;
+	}
+	if (size < 0) {
+		if (m_unknown_size) {
+			--m_unknown_size;
+		}
+	}
+	else {
+		if (m_total_size > size) {
+			m_total_size -= size;
+		}
+		else {
+			m_total_size = 0;
+		}
+	}
 	TriggerUpdateText();
 }
 
@@ -202,7 +242,9 @@ void CFilelistStatusBar::AddDirectory()
 
 void CFilelistStatusBar::RemoveDirectory()
 {
-	--m_count_dirs;
+	if (m_count_dirs) {
+		--m_count_dirs;
+	}
 	TriggerUpdateText();
 }
 
