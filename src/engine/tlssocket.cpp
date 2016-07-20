@@ -556,13 +556,21 @@ bool CTlsSocket::ResumedSession() const
 int CTlsSocket::Handshake(const CTlsSocket* pPrimarySocket, bool try_resume)
 {
 	m_pOwner->LogMessage(MessageType::Debug_Verbose, _T("CTlsSocket::Handshake()"));
-	wxASSERT(m_session);
+	if (!m_session) {
+		m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Called CTlsSocket::Handshake without session"));
+		return FZ_REPLY_ERROR;
+	}
 
 	m_tlsState = TlsState::handshake;
 
 	fz::native_string hostname;
 
 	if (pPrimarySocket) {
+		if (!pPrimarySocket->m_session) {
+			m_pOwner->LogMessage(MessageType::Debug_Warning, _T("Primary socket has no session"));
+			return FZ_REPLY_ERROR;
+		}
+
 		// Implicitly trust certificate of primary socket
 		unsigned int cert_list_size;
 		const gnutls_datum_t* const cert_list = gnutls_certificate_get_peers(pPrimarySocket->m_session, &cert_list_size);
