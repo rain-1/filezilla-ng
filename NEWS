@@ -10,6 +10,20 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.20.0-rc1 (2016-07-20)
+
++ Added compatibility for filenames with leading or trailing whitespace if using SFTP
++ Building and running FileZilla now depends on libfilezilla >= 0.8.0 (https://lib.filezilla-project.org/).
++ Building and running FileZilla now depends on GnuTLS 3.4.0 or higher
+- Fixed regression introduced in 3.19.0-rc1, reconnecting again uses the last used remote directory instead of the initial default remote directory
+- Fixed crash if creating a new site via the bookmarks dialog
+- Queuing remote directories for transfer no longer exits comparison mode
+- Fixed a rare crash using FTP over TLS if the control connection fails at the same time the data connection gets established
+- Entering invalid regular expressions in filter and search conditions now shows an error message
+- Fixed title of search dialog
+- Stricter certificate chain validation to supplement the Tofu model
+- *nix: Fix initial size of Site Manager dialog with some GTK versions
+
 3.19.0 (2016-06-27)
 
 + Building FileZilla now depends on libfilezilla >= 0.5.3 (https://lib.filezilla-project.org/).
