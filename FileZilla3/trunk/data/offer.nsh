@@ -62,8 +62,16 @@ Var OfferReadLineTemp
 
   ${ReadLine} ${HANDLE} $R0
 
+  StrCpy $R3 400
+
+  ${StrLoc} "$R4" "$R0" "," '<'
+  ${If} $R4 != ''
+    StrCpy $R3 $R0 '' -$R4
+    StrCpy $R0 $R0 $R4
+  ${EndIf}
+
   IntOp $R1 $(^FontSize) + $R0
-  CreateFont $R2 "$(^Font)" $R1 400
+  CreateFont $R2 "$(^Font)" $R1 $R3
   SendMessage ${CONTROL} ${WM_SETFONT} $R2 1
 
 !macroend
