@@ -13,7 +13,7 @@ Legend:
 3.20.0-rc1 (2016-07-20)
 
 + Added compatibility for filenames with leading or trailing whitespace if using SFTP
-+ Building and running FileZilla now depends on libfilezilla >= 0.8.0 (https://lib.filezilla-project.org/).
++ Building and running FileZilla now depends on libfilezilla >= 0.6.0 (https://lib.filezilla-project.org/).
 + Building and running FileZilla now depends on GnuTLS 3.4.0 or higher
 - Fixed regression introduced in 3.19.0-rc1, reconnecting again uses the last used remote directory instead of the initial default remote directory
 - Fixed crash if creating a new site via the bookmarks dialog
