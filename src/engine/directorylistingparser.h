@@ -59,7 +59,7 @@ public:
 	CDirectoryListing Parse(const CServerPath &path);
 
 	bool AddData(char *pData, int len);
-	bool AddLine(std::wstring && line, wxString && name, fz::datetime const& time);
+	bool AddLine(std::wstring && line, std::wstring && name, fz::datetime const& time);
 
 	void Reset();
 
