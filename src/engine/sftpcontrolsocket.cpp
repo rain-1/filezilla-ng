@@ -133,7 +133,10 @@ protected:
 			int lines{};
 			switch (eventType)
 			{
+			case sftpEvent::count:
 			case sftpEvent::Unknown:
+				error = fz::sprintf(L"Unknown eventType %d", readType);
+				break;
 			case sftpEvent::Recv:
 			case sftpEvent::Send:
 			case sftpEvent::UsedQuotaRecv:
