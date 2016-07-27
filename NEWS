@@ -10,6 +10,11 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.20.0 (2016-07-27)
+
++ Display error message if entering a non-existing path on local file search
++ Building and running FileZilla now depends on libfilezilla >= 0.6.0 (https://lib.filezilla-project.org/).
+
 3.20.0-rc1 (2016-07-20)
 
 + Added compatibility for filenames with leading or trailing whitespace if using SFTP
