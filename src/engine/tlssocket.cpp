@@ -1288,7 +1288,7 @@ int CTlsSocket::VerifyCertificate()
 	gnutls_x509_trust_list_t tlist;
 	gnutls_certificate_get_trust_list(m_certCredentials, &tlist);
 	if (gnutls_x509_trust_list_add_cas(tlist, &root, 1, 0) != 1) {
-		m_pOwner->LogMessage(MessageType::Error, _("Could not add trust"));
+		m_pOwner->LogMessage(MessageType::Error, _("Could not add certificate to temporary trust list"));
 		Failure(0, true);
 		return FZ_REPLY_ERROR;
 	}
