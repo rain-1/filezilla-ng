@@ -108,7 +108,7 @@ void MakeLinksFromTooltips(wxWindow& parent)
 		wxString const tooltip = child->GetToolTipText();
 		if (tooltip.find(_T("http://")) == 0 || tooltip.find(_T("https://")) == 0) {
 			child->SetCursor(wxCURSOR_HAND);
-			child->Bind(wxEVT_LEFT_UP, std::bind(&wxLaunchDefaultBrowser, tooltip, 0));
+			child->Bind(wxEVT_LEFT_UP, [tooltip](wxEvent const&) { wxLaunchDefaultBrowser(tooltip); });
 		}
 		MakeLinksFromTooltips(*child);
 	}
@@ -116,7 +116,6 @@ void MakeLinksFromTooltips(wxWindow& parent)
 
 void CUpdateDialog::InitFooter()
 {
-	bool hideFooter = true;
 #if FZ_WINDOWS
 	if (CBuildInfo::GetBuildType() == _T("official") && !COptions::Get()->GetOptionVal(OPTION_DISABLE_UPDATE_FOOTER)) {
 		wxString const resources = updater_.GetResources();
@@ -126,26 +125,26 @@ void CUpdateDialog::InitFooter()
 			wxXmlResource res(wxXRC_NO_RELOADING);
 			InitHandlers(res);
 			if (res.Load(_T("blob:") + resources)) {
-				wxWindow* parent = XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel);
-				if (parent) {
-					wxPanel* p = new wxPanel();
-					if (res.LoadPanel(p, parent, _T("ID_UPDATE_FOOTER"))) {
-						wxSize minSize = p->GetSizer()->GetMinSize();
-						parent->SetInitialSize(minSize);
-						hideFooter = false;
-						MakeLinksFromTooltips(*p);
+				auto sizer = xrc_call(*this, "ID_NEWVERSION_PANEL", &wxPanel::GetSizer);
+				if (sizer) {
+					wxPanel* p{};
+					bool top{};
+					if (p = res.LoadPanel(sizer->GetContainingWindow(), _T("ID_UPDATE_FOOTER"))) {
+						top = false;
 					}
-					else {
-						delete p;
+					else if (p = res.LoadPanel(sizer->GetContainingWindow(), _T("ID_UPDATE_HEADER"))) {
+						top = true;
+					}
+
+					if (p) {
+						MakeLinksFromTooltips(*p);
+						sizer->Insert(top ? 0 : 1, p, wxSizerFlags().Align(wxALIGN_CENTER_HORIZONTAL).Border(top ? wxBOTTOM : wxTOP, 5));
 					}
 				}
 			}
 		}
 	}
 #endif
-	if (hideFooter) {
-		XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel)->Hide();
-	}
 }
 
 void CUpdateDialog::Wrap()
