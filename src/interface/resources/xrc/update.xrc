@@ -44,109 +44,112 @@
     </object>
   </object>
   <object class="wxPanel" name="ID_NEWVERSION_PANEL">
-    <object class="wxFlexGridSizer">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
       <object class="sizeritem">
-        <object class="wxStaticText">
-          <label>A new version of FileZilla is available:</label>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_VERSION">
-          <label>&lt;1.2.3.4&gt;</label>
-        </object>
-      </object>
-      <object class="spacer"/>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_NEWS_LABEL">
-          <label>What's new:</label>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxTextCtrl" name="ID_NEWS">
-          <style>wxTE_AUTO_SCROLL|wxTE_MULTILINE|wxTE_READONLY</style>
-        </object>
         <option>1</option>
         <flag>wxGROW</flag>
-        <minsize>300,150</minsize>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
+        <object class="wxFlexGridSizer">
           <object class="sizeritem">
-            <object class="wxFlexGridSizer">
-              <rows>1</rows>
-              <vgap>5</vgap>
-              <hgap>5</hgap>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_DOWNLOAD_LABEL">
-                  <label>Downloading update...</label>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL|wxTOP|wxBOTTOM</flag>
-                <border>10</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxAnimationCtrl" name="ID_WAIT_DOWNLOAD"/>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
-              <object class="sizeritem">
-                <object class="wxStaticText" name="ID_DOWNLOAD_PROGRESS">
-                  <label>&lt;12% downloaded&gt;</label>
-                </object>
-                <flag>wxALIGN_CENTRE_VERTICAL</flag>
-              </object>
+            <object class="wxStaticText">
+              <label>A new version of FileZilla is available:</label>
             </object>
           </object>
-          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_VERSION">
+              <label>&lt;1.2.3.4&gt;</label>
+            </object>
+          </object>
+          <object class="spacer"/>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_NEWS_LABEL">
+              <label>What's new:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="ID_NEWS">
+              <style>wxTE_AUTO_SCROLL|wxTE_MULTILINE|wxTE_READONLY</style>
+            </object>
+            <option>1</option>
+            <flag>wxGROW</flag>
+            <minsize>300,150</minsize>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <rows>1</rows>
+                  <vgap>5</vgap>
+                  <hgap>5</hgap>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="ID_DOWNLOAD_LABEL">
+                      <label>Downloading update...</label>
+                    </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL|wxTOP|wxBOTTOM</flag>
+                    <border>10</border>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxAnimationCtrl" name="ID_WAIT_DOWNLOAD"/>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxStaticText" name="ID_DOWNLOAD_PROGRESS">
+                      <label>&lt;12% downloaded&gt;</label>
+                    </object>
+                    <flag>wxALIGN_CENTRE_VERTICAL</flag>
+                  </object>
+                </object>
+              </object>
+              <orient>wxVERTICAL</orient>
+            </object>
+            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_DOWNLOADED">
+              <label>The new version has been saved in your Downloads directory.</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxButton" name="ID_INSTALL">
+              <label>&amp;Install new version</label>
+              <default>1</default>
+            </object>
+            <flag>wxTOP|wxBOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
+            <border>10</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_DOWNLOAD_FAIL">
+              <label>The new version could not be downloaded, please retry later.</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxHyperlinkCtrl" name="ID_DOWNLOAD_RETRY">
+              <label>Try again</label>
+            </object>
+            <flag>wxBOTTOM</flag>
+            <border>10</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_NEWVERSION_WEBSITE_TEXT_DLFAIL">
+              <label>Alternatively, you can also download the latest version from the FileZilla website:</label>
+            </object>
+          </object>
+          <cols>1</cols>
+          <vgap>5</vgap>
+          <hgap>5</hgap>
+          <growablecols>0</growablecols>
+          <growablerows>4</growablerows>
+          <object class="sizeritem">
+            <object class="wxStaticText" name="ID_NEWVERSION_WEBSITE_TEXT">
+              <label>You can download the latest version from the FileZilla website:</label>
+            </object>
+          </object>
+          <object class="sizeritem">
+            <object class="wxHyperlinkCtrl" name="ID_NEWVERSION_WEBSITE_LINK">
+              <url>https://filezilla-project.org/</url>
+            </object>
+          </object>
         </object>
-        <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_DOWNLOADED">
-          <label>The new version has been saved in your Downloads directory.</label>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxButton" name="ID_INSTALL">
-          <label>&amp;Install new version</label>
-          <default>1</default>
-        </object>
-        <flag>wxTOP|wxBOTTOM|wxALIGN_CENTRE_HORIZONTAL</flag>
-        <border>10</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_DOWNLOAD_FAIL">
-          <label>The new version could not be downloaded, please retry later.</label>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxHyperlinkCtrl" name="ID_DOWNLOAD_RETRY">
-          <label>Try again</label>
-        </object>
-        <flag>wxBOTTOM</flag>
-        <border>10</border>
-      </object>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_NEWVERSION_WEBSITE_TEXT_DLFAIL">
-          <label>Alternatively, you can also download the latest version from the FileZilla website:</label>
-        </object>
-      </object>
-      <cols>1</cols>
-      <vgap>5</vgap>
-      <hgap>5</hgap>
-      <growablecols>0</growablecols>
-      <growablerows>4</growablerows>
-      <object class="sizeritem">
-        <object class="wxStaticText" name="ID_NEWVERSION_WEBSITE_TEXT">
-          <label>You can download the latest version from the FileZilla website:</label>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <object class="wxHyperlinkCtrl" name="ID_NEWVERSION_WEBSITE_LINK">
-          <url>https://filezilla-project.org/</url>
-        </object>
-      </object>
-      <object class="sizeritem">
-        <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
-        <object class="wxPanel" name="ID_FOOTERMESSAGE_PANEL" />
       </object>
     </object>
   </object>
