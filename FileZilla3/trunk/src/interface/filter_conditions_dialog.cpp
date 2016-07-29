@@ -693,7 +693,7 @@ bool CFilterConditionsDialog::ValidateFilter(wxString& error, bool allow_empty /
 
 			if (condition == 4) {
 				try {
-					std::wregex(controls.pValue->GetValue());
+					std::wregex(controls.pValue->GetValue().ToStdWstring());
 				}
 				catch (std::regex_error const&) {
 					m_pListCtrl->SelectLine(i);
