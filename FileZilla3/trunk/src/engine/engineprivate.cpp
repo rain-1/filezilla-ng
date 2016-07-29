@@ -181,7 +181,7 @@ void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
 			queue_logs_ = ShouldQueueLogsFromOptions();
 		}
 
-		if (!m_maySendNotificationEvent || !m_NotificationList.empty()) {
+		if (!m_maySendNotificationEvent || m_NotificationList.empty()) {
 			return;
 		}
 		m_maySendNotificationEvent = false;
@@ -838,11 +838,12 @@ int CFileZillaEnginePrivate::Cancel()
 void CFileZillaEnginePrivate::OnOptionsChanged(changed_options_t const&)
 {
 	bool queue_logs = ShouldQueueLogsFromOptions();
-	fz::scoped_lock lock(notification_mutex_);
-	queue_logs_ = queue_logs;
-
-	if (!queue_logs_) {
-		SendQueuedLogs();
+	if (queue_logs) {
+		fz::scoped_lock lock(notification_mutex_);
+		queue_logs_ = true;
+	}
+	else {
+		SendQueuedLogs(true);
 	}
 }
 
