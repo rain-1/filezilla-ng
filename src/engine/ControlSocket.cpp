@@ -1213,6 +1213,15 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 					ResetOperation(FZ_REPLY_INTERNALERROR);
 					return false;
 				}
+				if (!l.ChangePath(pFileExistsNotification->newName)) {
+					ResetOperation(FZ_REPLY_INTERNALERROR);
+					return false;
+				}
+				if (!l.HasParent() || !l.MakeParent(&tmp)) {
+					ResetOperation(FZ_REPLY_INTERNALERROR);
+					return false;
+				}
+				
 				pData->localFile = l.GetPath() + tmp;
 			}
 
