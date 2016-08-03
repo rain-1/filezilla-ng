@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileZilla\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2016-07-20 15:45+0200\n"
-"PO-Revision-Date: 2016-07-12 10:08+0000\n"
+"POT-Creation-Date: 2016-08-03 16:26+0200\n"
+"PO-Revision-Date: 2016-07-31 04:29+0000\n"
 "Last-Translator: Kaya Zeren <kayazeren@gmail.com>\n"
 "Language-Team: Turkish (Turkey) (http://www.transifex.com/kayazeren/"
 "filezilla/language/tr_TR/)\n"
@@ -51,8 +51,8 @@ msgid_plural "%d directories"
 msgstr[0] "%d klasör"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1395
-#: ../../locales/../src/interface/search.cpp:803
-#: ../../locales/../src/interface/search.cpp:1190
+#: ../../locales/../src/interface/search.cpp:809
+#: ../../locales/../src/interface/search.cpp:1196
 #, c-format
 msgid "%d directory with its contents"
 msgid_plural "%d directories with their contents"
@@ -61,8 +61,8 @@ msgstr[0] "İçindekilerle %d klasör"
 #: ../../locales/../src/interface/filelist_statusbar.cpp:50
 #: ../../locales/../src/interface/filelist_statusbar.cpp:75
 #: ../../locales/../src/interface/RemoteListView.cpp:1394
-#: ../../locales/../src/interface/search.cpp:802
-#: ../../locales/../src/interface/search.cpp:1189
+#: ../../locales/../src/interface/search.cpp:808
+#: ../../locales/../src/interface/search.cpp:1195
 #, c-format
 msgid "%d file"
 msgid_plural "%d files"
@@ -616,7 +616,7 @@ msgstr "Bilgileri &Al..."
 msgid "&Inherit system's filetype associations"
 msgstr "Sistem dosya tipi &ilişkileri devralınsın"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:109
+#: ../../locales/../src/interface/resources/xrc/update.xrc:114
 msgid "&Install new version"
 msgstr "&Yeni sürümü yükle"
 
@@ -1165,7 +1165,7 @@ msgid "(%d object filtered)"
 msgid_plural "(%d objects filtered)"
 msgstr[0] "(%d nesne süzüldü)"
 
-#: ../../locales/../src/interface/update_dialog.cpp:309
+#: ../../locales/../src/interface/update_dialog.cpp:308
 #, c-format
 msgid "(%u%% downloaded)"
 msgstr "(%u%% indirildi)"
@@ -1278,7 +1278,7 @@ msgid ""
 "A bookmark with the entered name already exists. Please enter an unused name."
 msgstr "Aynı adlı bir yer imi var. Lütfen farklı bir im adı yazın:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1314
+#: ../../locales/../src/engine/tlssocket.cpp:1318
 msgid "A certificate in the chain was signed using an insecure algorithm"
 msgstr ""
 "Zincirdeki bir sertifika güvenli olmayan bir algoritma kullanılarak "
@@ -1331,7 +1331,7 @@ msgstr ""
 "Bu sorunu çözmezseniz bazı dosyalar listelerde görüntülenmeyebilir.\n"
 "Bu oturum boyunca başka uyarı almayacaksınız."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:50
+#: ../../locales/../src/interface/resources/xrc/update.xrc:55
 msgid "A new version of FileZilla is available:"
 msgstr "Yeni bir FileZilla sürümü yayınlanmış:"
 
@@ -1560,7 +1560,7 @@ msgstr ""
 "Alternatif olarak sisteminizdeki SSH programını kullanabilirsiniz. Bunu "
 "yapmak için SSH_AUTH_SOCK değişkeninin ayarlandığından emin olun."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:129
+#: ../../locales/../src/interface/resources/xrc/update.xrc:134
 msgid ""
 "Alternatively, you can also download the latest version from the FileZilla "
 "website:"
@@ -1585,7 +1585,7 @@ msgstr ""
 "Aktarım kuyruğu \"%s\" üzerine yüklenirken hata oluştu.\n"
 "Bazı aktarım kuyruğu ögeleri kaydedilmemiş olabilir."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1317
+#: ../../locales/../src/engine/tlssocket.cpp:1321
 msgid "An issuer in the certificate chain is not a certificate authority"
 msgstr "Sertifika zincirindeki yayıncılardan biri sertifika yetkilisi değil"
 
@@ -1693,7 +1693,7 @@ msgstr "Tüm ayar bilgileri toplandı."
 msgid "Attribute"
 msgstr "İzinler"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:597
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:600
 msgid "Authentication failed."
 msgstr "Kimlik doğrulanamadı."
 
@@ -1739,7 +1739,7 @@ msgstr "Davranış"
 msgid "Being edited"
 msgstr "Düzenlendi"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1308
+#: ../../locales/../src/engine/tlssocket.cpp:1312
 msgid "Beware! Certificate has been revoked"
 msgstr "Dikkat! Sertifika geçersiz kılınmış"
 
@@ -1826,7 +1826,7 @@ msgid "CPU features:"
 msgstr "CPU Özellikleri:"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1566
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1129
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1132
 msgid "Calculating timezone offset of server..."
 msgstr "Sunucunun saat dilimi farkı hesaplanıyor..."
 
@@ -1914,7 +1914,7 @@ msgstr "Yeni süzgeç oluşturulamıyor"
 #: ../../locales/../src/interface/edithandler.cpp:1575
 #: ../../locales/../src/interface/edithandler.cpp:1623
 #: ../../locales/../src/interface/LocalListView.cpp:1737
-#: ../../locales/../src/interface/search.cpp:1138
+#: ../../locales/../src/interface/search.cpp:1144
 msgid "Cannot edit file"
 msgstr "Dosya düzenlenemiyor"
 
@@ -2020,7 +2020,7 @@ msgstr "Sertifika bağlantısı:"
 msgid "Certificate issuer"
 msgstr "Sertifika Yayıncısı"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1311
+#: ../../locales/../src/engine/tlssocket.cpp:1315
 msgid "Certificate signature verification failed"
 msgstr "Sertifika imzası doğrulanamadı"
 
@@ -2091,7 +2091,7 @@ msgstr ""
 msgid "Checking for correct external IP address"
 msgstr "Doğru dış IP adresi denetleniyor"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:166
+#: ../../locales/../src/interface/resources/xrc/update.xrc:169
 msgid "Checking for updates..."
 msgstr "Güncellemeler denetleniyor..."
 
@@ -2299,7 +2299,7 @@ msgstr "Kapı aralığını ayarlayın"
 msgid "Configuring FileZilla and your network"
 msgstr "FileZilla ve ağ ayarlarınız"
 
-#: ../../locales/../src/interface/search.cpp:1194
+#: ../../locales/../src/interface/search.cpp:1200
 msgid "Confirm deletion"
 msgstr "Silme işlemini onaylayın"
 
@@ -2308,7 +2308,7 @@ msgstr "Silme işlemini onaylayın"
 #: ../../locales/../src/interface/LocalListView.cpp:1701
 #: ../../locales/../src/interface/RemoteListView.cpp:1399
 #: ../../locales/../src/interface/RemoteTreeView.cpp:1057
-#: ../../locales/../src/interface/search.cpp:1150
+#: ../../locales/../src/interface/search.cpp:1156
 msgid "Confirmation needed"
 msgstr "Onay gerekiyor"
 
@@ -2355,7 +2355,7 @@ msgstr "%s bağlantısı %s vekil sunucusu üzerinden yapılıyor"
 
 #: ../../locales/../src/engine/ControlSocket.cpp:955
 #: ../../locales/../src/engine/proxy.cpp:267
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:259
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:262
 #, c-format
 msgid "Connecting to %s..."
 msgstr "%s bağlantısı kuruluyor..."
@@ -2452,7 +2452,7 @@ msgstr[0] "İşlem %d saniye içinde yapılamadığından bağlantı kesildi"
 msgid "Connection timed out."
 msgstr "Bağlantı zaman aşımına uğradı."
 
-#: ../../locales/../src/interface/search.cpp:660
+#: ../../locales/../src/interface/search.cpp:666
 msgid "Connection to server lost."
 msgstr "Sunucuyla bağlantı kesildi."
 
@@ -2499,14 +2499,14 @@ msgstr "Seçili ögelerin İnternet adreslerini panoya kopyalar."
 msgid "Could not accept connection: %s"
 msgstr "%s bağlantısı kabul edilemedi"
 
+#: ../../locales/../src/engine/tlssocket.cpp:1295
+msgid "Could not add certificate to temporary trust list"
+msgstr "Sertifika geçici güvenilirlik listesine eklenemedi"
+
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:99
 #: ../../locales/../src/interface/bookmarks_dialog.cpp:533
 msgid "Could not add connection to Site Manager"
 msgstr "Bağlantı Site Yöneticisine eklenemedi"
-
-#: ../../locales/../src/engine/tlssocket.cpp:1291
-msgid "Could not add trust"
-msgstr "Güvenilenlere eklenemedi"
 
 #: ../../locales/../src/interface/state.cpp:773
 msgid "Could not complete operation"
@@ -2521,7 +2521,7 @@ msgstr "Sunucuyla bağlantı kurulamıyor"
 msgid "Could not connect to server: %s"
 msgstr "%s sunucusuyla bağlantı kurulamadı"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:694
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:697
 msgid "Could not convert command to server encoding"
 msgstr "Komut, sunucu kodlamasına dönüştürülemedi"
 
@@ -2535,7 +2535,7 @@ msgstr "Kişisel anahtar dönüştürülemedi"
 msgid "Could not copy URLs"
 msgstr "İnternet adresleri kopyalanamadı"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1273
+#: ../../locales/../src/engine/tlssocket.cpp:1277
 msgid "Could not copy certificate"
 msgstr "Sertifika kopyalanamadı"
 
@@ -2606,7 +2606,7 @@ msgid "Could not get reply from fzputtygen."
 msgstr "fzputtygen yanıt vermiyor."
 
 #: ../../locales/../src/interface/edithandler.cpp:1575
-#: ../../locales/../src/interface/search.cpp:1138
+#: ../../locales/../src/interface/search.cpp:1144
 msgid "Could not get temporary directory to download file into."
 msgstr "Dosyanın kayıt edileceği geçici klasöre erişilemedi."
 
@@ -2717,7 +2717,7 @@ msgstr "Dosyanın sonuna ulaşılamıyor"
 msgid "Could not send command to fzputtygen."
 msgstr "Komut fzputtygen üzerine gönderilemedi."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1242
+#: ../../locales/../src/engine/tlssocket.cpp:1246
 msgid "Could not sort peer certificates"
 msgstr "Eş sertifikaları sıralanamadı"
 
@@ -2853,7 +2853,7 @@ msgid "Creating directory"
 msgstr "Klasör oluşturuluyor"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3109
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1863
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1866
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "'%s' klasörü oluşturuluyor..."
@@ -3288,8 +3288,8 @@ msgid "Download limit: none"
 msgstr "İndirme sınırı: yok"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3135
-#: ../../locales/../src/interface/search.cpp:853
-#: ../../locales/../src/interface/search.cpp:858
+#: ../../locales/../src/interface/search.cpp:859
+#: ../../locales/../src/interface/search.cpp:864
 msgid "Download search results"
 msgstr "Arama sonuçlarını indir"
 
@@ -3319,7 +3319,7 @@ msgstr "İndiriliyor"
 msgid "Downloading %s"
 msgstr "%s indiriliyor"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:81
+#: ../../locales/../src/interface/resources/xrc/update.xrc:86
 msgid "Downloading update..."
 msgstr "Güncelleme indiriliyor..."
 
@@ -3388,7 +3388,7 @@ msgstr ""
 "Dosya ayarlanmış olan düzenleyici ile düzenlensin ve değişiklikler sunucuya "
 "yüklensin."
 
-#: ../../locales/../src/interface/search.cpp:1126
+#: ../../locales/../src/interface/search.cpp:1132
 msgid "Editing directories is not supported"
 msgstr "Klasörleri düzenleme işlemi desteklenmiyor"
 
@@ -3397,7 +3397,7 @@ msgstr "Klasörleri düzenleme işlemi desteklenmiyor"
 msgid "Editing failed"
 msgstr "Düzenleme yapılamadı"
 
-#: ../../locales/../src/interface/search.cpp:1126
+#: ../../locales/../src/interface/search.cpp:1132
 msgid "Editing search results"
 msgstr "Arama sonuçları düzenleniyor"
 
@@ -3584,8 +3584,8 @@ msgstr "Kuyruk yüklenirken hata oluştu"
 #: ../../locales/../src/interface/import.cpp:293
 #: ../../locales/../src/interface/Options.cpp:249
 #: ../../locales/../src/interface/QueueView.cpp:1452
-#: ../../locales/../src/interface/search.cpp:1254
-#: ../../locales/../src/interface/search.cpp:1273
+#: ../../locales/../src/interface/search.cpp:1260
+#: ../../locales/../src/interface/search.cpp:1279
 #: ../../locales/../src/interface/sitemanager.cpp:90
 #: ../../locales/../src/interface/sitemanager.cpp:517
 #: ../../locales/../src/interface/sitemanager.cpp:577
@@ -3875,7 +3875,7 @@ msgstr "Dil %s olarak değiştirilemiyor, sistem varsayılan dili kullanılacak.
 msgid "Failed to validate settings"
 msgstr "Ayarlar doğrulanamadı"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1301
+#: ../../locales/../src/engine/tlssocket.cpp:1305
 msgid "Failed to verify peer certificate"
 msgstr "Denklik sertifikası doğrulanamadı"
 
@@ -3949,8 +3949,8 @@ msgstr "Dosya bulunamadı"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3131
 #: ../../locales/../src/interface/resources/xrc/toolbar.xrc:87
-#: ../../locales/../src/interface/search.cpp:675
-#: ../../locales/../src/interface/search.cpp:680
+#: ../../locales/../src/interface/search.cpp:681
+#: ../../locales/../src/interface/search.cpp:686
 msgid "File search"
 msgstr "Dosya arama"
 
@@ -4040,7 +4040,7 @@ msgid "Filename &filters..."
 msgstr "&Dosya Adı Süzgeçleri..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2913
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2107
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2110
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr "Dosya adı %s klasörü ve %s dosya adı için oluşturulamıyor"
@@ -4599,7 +4599,7 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "Parola yanlış"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:196
+#: ../../locales/../src/interface/resources/xrc/update.xrc:199
 msgid ""
 "Information about the latest version of FileZilla could not be retrieved. "
 "Please try again later."
@@ -4723,7 +4723,7 @@ msgstr ""
 msgid "Invalid regular expression"
 msgstr "Kurallı ifade geçersiz"
 
-#: ../../locales/../src/interface/search.cpp:680
+#: ../../locales/../src/interface/search.cpp:686
 msgid "Invalid regular expression in search conditions."
 msgstr "Arama ölçütlerindeki kurallı ifade geçersiz."
 
@@ -4731,7 +4731,7 @@ msgstr "Arama ölçütlerindeki kurallı ifade geçersiz."
 msgid "Invalid response code"
 msgstr "Yanıt kodu geçersiz"
 
-#: ../../locales/../src/interface/search.cpp:675
+#: ../../locales/../src/interface/search.cpp:681
 #, c-format
 msgid "Invalid search conditions: %s"
 msgstr "Arama ölçütleri geçersiz: %s"
@@ -4903,6 +4903,7 @@ msgid "Local file is not a valid filename."
 msgstr "Yerel dosyanın geçerli bir adı yok."
 
 #: ../../locales/../src/interface/search.cpp:644
+#: ../../locales/../src/interface/search.cpp:650
 msgid "Local file search"
 msgstr "Yerel dosyalarda arama"
 
@@ -5128,7 +5129,7 @@ msgstr "Süzgeç adını yazmalısınız"
 msgid "Need to enter valid local path"
 msgstr "Geçerli bir yerel yol yazılmalıdır"
 
-#: ../../locales/../src/interface/search.cpp:665
+#: ../../locales/../src/interface/search.cpp:671
 msgid "Need to enter valid remote path"
 msgstr "Geçerli bir yol yazmalısınız"
 
@@ -5216,7 +5217,7 @@ msgstr "Yeni site"
 msgid "Next to the transfer queue"
 msgstr "Aktarım kuyruğu bölümünün yanında"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:738
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:741
 msgid "No"
 msgstr "Hayır"
 
@@ -5410,7 +5411,7 @@ msgid ""
 msgstr ""
 "İzleyen sayfalarda aktarım ve -seçtiyseniz- başvuru kipleri ayarlanacak."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:747
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:750
 msgid "Once"
 msgstr "Bir kez"
 
@@ -5634,7 +5635,7 @@ msgid "Path"
 msgstr "Yol"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2996
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2154
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2157
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr "%s klasörü ve %s alt klasörü için yol oluşturulamıyor"
@@ -5992,7 +5993,7 @@ msgstr "Dosya zaman damgaları korunuyor"
 msgid "Preview:"
 msgstr "Önizleme:"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1340
+#: ../../locales/../src/engine/tlssocket.cpp:1344
 msgid "Primary connection and data connection certificates don't match."
 msgstr "Birincil bağlantı ve veri bağlantı sertifikaları uyuşmuyor."
 
@@ -6198,7 +6199,7 @@ msgid "Really cancel current operation?"
 msgstr "Yürürlükteki işlem iptal edilsin mi?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1391
-#: ../../locales/../src/interface/search.cpp:1187
+#: ../../locales/../src/interface/search.cpp:1193
 #, c-format
 msgid "Really delete %d directory with its contents from the server?"
 msgid_plural ""
@@ -6207,14 +6208,14 @@ msgstr[0] ""
 "Gerçekten sunucudaki %d klasörü içindekilerle beraber silmek istiyor musunuz?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1389
-#: ../../locales/../src/interface/search.cpp:1185
+#: ../../locales/../src/interface/search.cpp:1191
 #, c-format
 msgid "Really delete %d file from the server?"
 msgid_plural "Really delete %d files from the server?"
 msgstr[0] "Gerçekten sunucudaki %d dosyayı silmek istiyor musunuz?"
 
 #: ../../locales/../src/interface/RemoteListView.cpp:1396
-#: ../../locales/../src/interface/search.cpp:1191
+#: ../../locales/../src/interface/search.cpp:1197
 #, c-format
 msgid "Really delete %s and %s from the server?"
 msgstr "Gerçekten sunucudaki %s ve %s silinsin mi?"
@@ -6245,7 +6246,7 @@ msgstr "Alt klasörlere de &uygulansın"
 msgid "Received TLS alert from the server: %s (%d)"
 msgstr "Sunucudan TLS uyarısı alındı: %s (%d)"
 
-#: ../../locales/../src/engine/directorylistingparser.cpp:2929
+#: ../../locales/../src/engine/directorylistingparser.cpp:2928
 msgid "Received a directory listing which appears to be encoded in EBCDIC."
 msgstr "Alınan klasör listesi EBCDIC olarak kodlanmış görünüyor."
 
@@ -6254,7 +6255,7 @@ msgstr "Alınan klasör listesi EBCDIC olarak kodlanmış görünüyor."
 msgid "Received a line exceeding 10000 characters, aborting."
 msgstr "10.000 karakterden uzun bir satır alındı, iptal ediliyor."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1323
+#: ../../locales/../src/engine/tlssocket.cpp:1327
 #, c-format
 msgid ""
 "Received certificate chain could not be verified. Verification status is %d."
@@ -6345,8 +6346,8 @@ msgstr "Uzaktaki sertifikaya güvenilmiyor."
 msgid "Remote file"
 msgstr "Uzak Dosya"
 
-#: ../../locales/../src/interface/search.cpp:660
-#: ../../locales/../src/interface/search.cpp:665
+#: ../../locales/../src/interface/search.cpp:666
+#: ../../locales/../src/interface/search.cpp:671
 msgid "Remote file search"
 msgstr "Uzak dosya arama"
 
@@ -6428,7 +6429,7 @@ msgid "Rename selected files and directories"
 msgstr "Seçili dosya ve klasörleri yeniden adlandır"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3335
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2350
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2353
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "'%s' adı '%s' olarak değiştiriliyor"
@@ -6506,13 +6507,13 @@ msgstr ""
 "Sunucu ile istemcinin satır sonu karakteri farklı ise sorunlara yol açabilir."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1268
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:832
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
 msgstr "\"%s\" klasör listesi alınıyor..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1265
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:826
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:829
 msgid "Retrieving directory listing..."
 msgstr "Klasör listesi alınıyor..."
 
@@ -6685,7 +6686,7 @@ msgstr "Dönüştürülmüş anahtar dosyasının adını seçin"
 msgid "Select how these files should be opened."
 msgstr "Bu dosyaların nasıl açılacağını seçin."
 
-#: ../../locales/../src/interface/search.cpp:841
+#: ../../locales/../src/interface/search.cpp:847
 msgid "Select target download directory"
 msgstr "Hedef indirme klasörünü seçin"
 
@@ -6701,7 +6702,7 @@ msgstr "Verilecek bilgileri seçin:"
 msgid "Select the private data you would like to delete."
 msgstr "Lütfen silmek istediğiniz özel verilerinizi seçin."
 
-#: ../../locales/../src/interface/search.cpp:800
+#: ../../locales/../src/interface/search.cpp:806
 #, c-format
 msgid "Selected %d directory with its contents for transfer."
 msgid_plural "Selected %d directories with their contents for transfer."
@@ -6713,7 +6714,7 @@ msgid "Selected %d directory."
 msgid_plural "Selected %d directories."
 msgstr[0] "%d klasör seçilmiş."
 
-#: ../../locales/../src/interface/search.cpp:798
+#: ../../locales/../src/interface/search.cpp:804
 #, c-format
 msgid "Selected %d file for transfer."
 msgid_plural "Selected %d files for transfer."
@@ -6731,7 +6732,7 @@ msgid "Selected %d file. Total size: At least %s"
 msgid_plural "Selected %d files. Total size: At least %s"
 msgstr[0] "Seçilmiş dosya %d. Toplam boyut: En az %s"
 
-#: ../../locales/../src/interface/search.cpp:804
+#: ../../locales/../src/interface/search.cpp:810
 #, c-format
 msgid "Selected %s and %s for transfer."
 msgstr "Aktarım için %s ve %s seçilmiş."
@@ -6860,7 +6861,7 @@ msgstr ""
 msgid "Server returned empty path."
 msgstr "Sunucu boş bir yol döndürdü."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:600
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:603
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
@@ -6894,6 +6895,11 @@ msgstr ""
 msgid "Server sent unexpected reply."
 msgstr "Sunucu beklenmeyen bir yanıt verdi."
 
+#: ../../locales/../src/engine/tlssocket.cpp:1239
+msgid ""
+"Server sent unsorted certificate chain in violation of the TLS specifications"
+msgstr ""
+
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:2082
 msgid "Server to client MAC:"
 msgstr "Sunucudan istemcinin MAC adresine:"
@@ -6924,7 +6930,7 @@ msgid "Set &Priority"
 msgstr "Önceliği &Belirle"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3483
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2231
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2234
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "'%s' izinleri '%s' olarak güncelleniyor"
@@ -6957,7 +6963,7 @@ msgstr "&Hoşgeldiniz Penceresini Görüntüle..."
 msgid "Show both directory trees and continue comparing?"
 msgstr "Her iki klasör ağacı görüntülenerek karşılaştırmaya devam edilsin"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:214
+#: ../../locales/../src/interface/resources/xrc/update.xrc:217
 msgid "Show details"
 msgstr "Ayrıntıları görüntüle"
 
@@ -7069,7 +7075,7 @@ msgstr "Dosya atlansın"
 #: ../../locales/../src/engine/ControlSocket.cpp:1150
 #: ../../locales/../src/engine/ControlSocket.cpp:1167
 #: ../../locales/../src/engine/ControlSocket.cpp:1191
-#: ../../locales/../src/engine/ControlSocket.cpp:1260
+#: ../../locales/../src/engine/ControlSocket.cpp:1269
 #, c-format
 msgid "Skipping download of %s"
 msgstr "%s indirilmesi atlanıyor"
@@ -7077,7 +7083,7 @@ msgstr "%s indirilmesi atlanıyor"
 #: ../../locales/../src/engine/ControlSocket.cpp:1154
 #: ../../locales/../src/engine/ControlSocket.cpp:1170
 #: ../../locales/../src/engine/ControlSocket.cpp:1195
-#: ../../locales/../src/engine/ControlSocket.cpp:1264
+#: ../../locales/../src/engine/ControlSocket.cpp:1273
 #, c-format
 msgid "Skipping upload of %s"
 msgstr "%s yüklemesi atlanıyor"
@@ -7191,13 +7197,13 @@ msgid "Started update check on %s\n"
 msgstr "Güncelleme denetimi %s zamanında başlatıldı\n"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2143
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1486
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1489
 #, c-format
 msgid "Starting download of %s"
 msgstr "%s indirilmesine başlanıyor"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2146
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1489
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1492
 #, c-format
 msgid "Starting upload of %s"
 msgstr "%s yüklemesine başlanıyor"
@@ -7623,11 +7629,11 @@ msgid ""
 msgstr ""
 "En küçük kapı değeri, en büyük kapı değerinden küçük ya da eşit olmalı."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:117
+#: ../../locales/../src/interface/resources/xrc/update.xrc:122
 msgid "The new version could not be downloaded, please retry later."
 msgstr "Yeni sürüm indirilemedi, lütfen daha sonra yeniden deneyin."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:104
+#: ../../locales/../src/interface/resources/xrc/update.xrc:109
 msgid "The new version has been saved in your Downloads directory."
 msgstr "Yeni sürüm İndirmeler klasörünüze kaydedilecek."
 
@@ -7718,7 +7724,7 @@ msgstr ""
 "Sunucunun anahtarı bilinmiyor. Bu sunucunun, olmasını beklediğiniz "
 "bilgisayar olduğunun bir garantisi yok."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1320
+#: ../../locales/../src/engine/tlssocket.cpp:1324
 msgid "The server's hostname does not match the certificate's hostname"
 msgstr "Sunucu adı sertifikadaki sunucu adı ile eşleşmiyor"
 
@@ -7820,7 +7826,7 @@ msgid "Timeout"
 msgstr "Zaman Aşımı"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1617
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:934
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:937
 #, c-format
 msgid "Timezone offset of server is %d seconds."
 msgstr "Sunucunun saat dilimi farkı %d saniye."
@@ -7969,11 +7975,11 @@ msgstr "Uzantısı &olmayan dosyalar ASCII olarak kabul edilsin"
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "ASCII &olarak algılanacak dosya tipleri:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:735
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:738
 msgid "Trust changed Hostkey:"
 msgstr "Değiştirilmiş sunucu anahtarına güvenilsin:"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:733
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:736
 msgid "Trust new Hostkey:"
 msgstr "Yeni sunucu anahtarına güvenilsin:"
 
@@ -7991,8 +7997,8 @@ msgid "Trust this host and carry on connecting?"
 msgstr ""
 "Bu sunucuya güvenip bağlanmaya devam etmek için Tamam düğmesine tıklayın."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:122
-#: ../../locales/../src/interface/resources/xrc/update.xrc:201
+#: ../../locales/../src/interface/resources/xrc/update.xrc:127
+#: ../../locales/../src/interface/resources/xrc/update.xrc:204
 msgid "Try again"
 msgstr "Yeniden dene"
 
@@ -8094,7 +8100,7 @@ msgid ""
 msgstr ""
 "Bu sorun çözülmeden aktif kip çalışmaz, yalnız pasif kip kullanılabilir."
 
-#: ../../locales/../src/engine/tlssocket.cpp:1259
+#: ../../locales/../src/engine/tlssocket.cpp:1263
 msgid "Unsupported certificate type"
 msgstr "Sertifika tipi desteklenmiyor"
 
@@ -8129,7 +8135,7 @@ msgid "Upload limit: none"
 msgstr "Yükleme sınırı: yok"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3236
-#: ../../locales/../src/interface/search.cpp:867
+#: ../../locales/../src/interface/search.cpp:873
 msgid "Upload search results"
 msgstr "Yükleme arama sonuçları"
 
@@ -8267,7 +8273,7 @@ msgstr "Geçerlilik Sonu:"
 msgid "Verbose log messages from wxWidgets"
 msgstr "Günlüğe wxWidgets kayıtları da yazılsın"
 
-#: ../../locales/../src/engine/tlssocket.cpp:1352
+#: ../../locales/../src/engine/tlssocket.cpp:1356
 msgid "Verifying certificate..."
 msgstr "Sertifika doğrulanıyor..."
 
@@ -8304,8 +8310,9 @@ msgid "Waiting for transfer to be cancelled"
 msgstr "Aktarımın iptal edilmesi bekleniyor"
 
 #: ../../locales/../src/engine/engineprivate.cpp:238
+#, fuzzy
 msgid "Waiting to retry..."
-msgstr "Yeniden deneniyor..."
+msgstr "'%s' klasörü oluşturuluyor..."
 
 #: ../../locales/../src/interface/netconfwizard.cpp:976
 msgid "Warning, ignoring data connection from wrong IP."
@@ -8337,7 +8344,7 @@ msgstr "FileZilla Yazılımına Hoş Geldiniz"
 msgid "What's new"
 msgstr "Yenilikler:"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:61
+#: ../../locales/../src/interface/resources/xrc/update.xrc:66
 msgid "What's new:"
 msgstr "Yenilikler:"
 
@@ -8386,7 +8393,7 @@ msgstr "Satır sonu yanlış"
 msgid "Yellow"
 msgstr "Sarı"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:745
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:748
 msgid "Yes"
 msgstr "Evet"
 
@@ -8398,7 +8405,7 @@ msgstr ""
 "Kullandığınız bilgisayar yalnız IPv6 kullanıyor gibi. Bu yardımcı, bu ortamı "
 "desteklemiyor."
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:245
+#: ../../locales/../src/interface/resources/xrc/update.xrc:248
 msgid "You are using the latest version of FileZilla."
 msgstr "Son FileZilla sürümünü kullanıyorsunuz."
 
@@ -8406,8 +8413,8 @@ msgstr "Son FileZilla sürümünü kullanıyorsunuz."
 msgid "You can always open this dialog again through the help menu."
 msgstr "Bu pencereyi yardım menüsünden açabilirsiniz"
 
-#: ../../locales/../src/interface/resources/xrc/update.xrc:139
-#: ../../locales/../src/interface/resources/xrc/update.xrc:221
+#: ../../locales/../src/interface/resources/xrc/update.xrc:144
+#: ../../locales/../src/interface/resources/xrc/update.xrc:224
 msgid "You can download the latest version from the FileZilla website:"
 msgstr "Son sürümü FileZilla web sitesinden indirebilirsiniz:"
 
@@ -8444,7 +8451,7 @@ msgid "You have selected at least one symbolic link."
 msgstr "En az bir sembolik bağlantı seçmelisiniz."
 
 #: ../../locales/../src/interface/edithandler.cpp:1588
-#: ../../locales/../src/interface/search.cpp:1151
+#: ../../locales/../src/interface/search.cpp:1157
 msgid ""
 "You have selected more than 10 files for editing, do you really want to "
 "continue?"
@@ -8469,11 +8476,11 @@ msgstr "Bir sunucu adı yazmalısınız."
 msgid "You have to enter a key file path"
 msgstr "Bir anahtar dosyası yolu yazmalısınız"
 
-#: ../../locales/../src/interface/search.cpp:853
+#: ../../locales/../src/interface/search.cpp:859
 msgid "You have to enter a local directory."
 msgstr "Yerel bir klasör yazmalısınız."
 
-#: ../../locales/../src/interface/search.cpp:867
+#: ../../locales/../src/interface/search.cpp:873
 msgid "You have to enter a remote directory."
 msgstr "Uzak bir klasör yazmalısınız."
 
@@ -8482,7 +8489,7 @@ msgstr "Uzak bir klasör yazmalısınız."
 msgid "You have to enter a valid IPv4 address."
 msgstr "Geçerli bir IPv4 adresi yazmalısınız."
 
-#: ../../locales/../src/interface/search.cpp:858
+#: ../../locales/../src/interface/search.cpp:864
 msgid "You have to enter a writable local directory."
 msgstr "Yazılabilir bir yerel klasör yazmalısınız."
 
@@ -8642,11 +8649,11 @@ msgstr ""
 "Lütfen bu çalıştırılabilir dosyanın FileZilla çalıştırılabilir dosyası ile "
 "aynı klasörde bulunduğundan emin olun."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:356
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:359
 msgid "fzsftp belongs to a different version of FileZilla"
 msgstr "fzsftp farklı bir FileZilla sürümüne ait"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1413
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1416
 msgid "fzsftp could not be started"
 msgstr "fzsftp başlatılamıyor"
 
@@ -8711,9 +8718,9 @@ msgid "owner writeable"
 msgstr "sahibi yazabilir"
 
 #: ../../locales/../src/engine/proxy.cpp:97
-#: ../../locales/../src/engine/tlssocket.cpp:1396
-#: ../../locales/../src/engine/tlssocket.cpp:1407
-#: ../../locales/../src/engine/tlssocket.cpp:1422
+#: ../../locales/../src/engine/tlssocket.cpp:1400
+#: ../../locales/../src/engine/tlssocket.cpp:1411
+#: ../../locales/../src/engine/tlssocket.cpp:1426
 #: ../../locales/../src/interface/sftp_crypt_info_dlg.cpp:38
 msgid "unknown"
 msgstr "bilinmeyen"
