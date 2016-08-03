@@ -1234,7 +1234,11 @@ bool CTlsSocket::GetSortedPeerCertificates(gnutls_x509_crt_t *& certs, unsigned 
 	delete[] pem_cert_list;
 
 	// And now import the certificates
-	int res = gnutls_x509_crt_list_import2(&certs, &certs_size, &concated_certs, GNUTLS_X509_FMT_PEM, GNUTLS_X509_CRT_LIST_SORT);
+	int res = gnutls_x509_crt_list_import2(&certs, &certs_size, &concated_certs, GNUTLS_X509_FMT_PEM, GNUTLS_X509_CRT_LIST_FAIL_IF_UNSORTED);
+	if (res == GNUTLS_E_CERTIFICATE_LIST_UNSORTED) {
+		m_pOwner->LogMessage(MessageType::Error, _("Server sent unsorted certificate chain in violation of the TLS specifications"));
+		res = gnutls_x509_crt_list_import2(&certs, &certs_size, &concated_certs, GNUTLS_X509_FMT_PEM, GNUTLS_X509_CRT_LIST_SORT);
+	}
 
 	delete[] concated_certs.data;
 
