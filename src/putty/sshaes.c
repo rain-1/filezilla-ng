@@ -8,6 +8,7 @@
 #include "ssh.h"
 
 #include <nettle/aes.h>
+#include <nettle/gcm.h>
 #include <nettle/memxor.h>
 
 typedef struct AESContext AESContext;
@@ -47,24 +48,28 @@ static void aes_decrypt_cbc(unsigned char *blk, int len, AESContext * ctx)
     }
 }
 
+static void increment_iv_step32(uint8_t *iv, int i)
+{
+    word32 tmp;
+    for (--i; i >= 0; i--) {
+	tmp = GET_32BIT_MSB_FIRST(iv + 4 * i);
+	tmp = (tmp + 1) & 0xffffffff;
+	PUT_32BIT_MSB_FIRST(iv + 4 * i, tmp);
+	if (tmp != 0)
+	    break;
+    }
+}
+
 static void aes_sdctr(unsigned char *blk, int len, AESContext *ctx)
 {
-    int i;
     uint8_t b[16];
-    word32 tmp;
 
     assert((len & 15) == 0);
 
     while (len > 0) {
 	aes_encrypt(&ctx->enc_ctx, 16, b, ctx->iv);
 	memxor(blk, b, 16);
-	for (i = 3; i >= 0; i--) {
-	    tmp = GET_32BIT_MSB_FIRST(ctx->iv + 4 * i);
-	    tmp = (tmp + 1) & 0xffffffff;
-	    PUT_32BIT_MSB_FIRST(ctx->iv + 4 * i, tmp);
-	    if (tmp != 0)
-		break;
-	}
+	increment_iv_step32(ctx->iv, 4);
 	blk += 16;
 	len -= 16;
     }
@@ -200,7 +205,134 @@ static const struct ssh2_cipher ssh_rijndael_lysator = {
     NULL
 };
 
+
+
+/* GCM */
+
+typedef struct AES256GCMContext AES256GCMContext;
+struct AES256GCMContext {
+    struct gcm_aes256_ctx ctx;
+    uint8_t iv[12];
+};
+
+
+void *aes256_gcm_make_context(void)
+{
+    AES256GCMContext* ctx = snew(AES256GCMContext);
+    return ctx;
+}
+
+
+void aes256_gcm_free_context(void *handle)
+{
+    sfree(handle);
+}
+
+
+void aes256_gcm_key(void *handle, unsigned char *key)
+{
+    AES256GCMContext *ctx = (AES256GCMContext *)handle;
+    nettle_gcm_aes256_set_key(&ctx->ctx, key);
+}
+
+
+void aes256_gcm_iv(void *handle, unsigned char *iv)
+{
+    AES256GCMContext *ctx = (AES256GCMContext *)handle;
+    memcpy(ctx->iv, iv, 12);
+}
+
+
+void aes256_gcm_encrypt_blk(void *handle, unsigned char *blk, int len)
+{
+    AES256GCMContext *ctx = (AES256GCMContext *)handle;
+    unsigned char adata[4];
+    PUT_32BIT(adata, (unsigned int)len);
+    nettle_gcm_aes256_set_iv(&ctx->ctx, 12, ctx->iv);
+    nettle_gcm_aes256_update(&ctx->ctx, 4, adata);
+    nettle_gcm_aes256_encrypt(&ctx->ctx, len, blk, blk);
+}
+
+void aes256_gcm_decrypt_blk(void *handle, unsigned char *blk, int len)
+{
+    AES256GCMContext *ctx = (AES256GCMContext *)handle;
+    
+    // Decryption was already done at MAC verification. Just increment the IV here.
+    increment_iv_step32(ctx->iv + 4, 2);
+}
+
+
+
+
+
+static void *aesgcm_mac_make_context(void *ctx)
+{
+    return ctx;
+}
+
+static void aesgcm_mac_free_context(void *ctx)
+{
+    /* Not allocated, just forwarded, no need to free */
+}
+
+static void aesgcm_mac_setkey(void *ctx, unsigned char *key)
+{
+    /* Uses the same context as the cipher, so ignore */
+}
+
+static void aes256_gcm_mac_generate(void *handle, unsigned char *blk, int len, unsigned long seq)
+{
+    AES256GCMContext *ctx = (AES256GCMContext *)handle;
+    nettle_gcm_aes256_digest(&ctx->ctx, 16, blk+len);
+    increment_iv_step32(ctx->iv + 4, 2);
+}
+
+static int aes256_gcm_mac_verify(void *handle, unsigned char *blk, int len, unsigned long seq)
+{
+    int res;
+
+    AES256GCMContext *ctx = (AES256GCMContext *)handle;
+
+    unsigned char mac[16];
+
+    nettle_gcm_aes256_set_iv(&ctx->ctx, 12, ctx->iv);
+    unsigned char adata[4];
+    PUT_32BIT(adata, (unsigned int)(len - 4));
+    nettle_gcm_aes256_update(&ctx->ctx, 4, adata);
+    nettle_gcm_aes256_decrypt(&ctx->ctx, len - 4, blk + 4, blk + 4);
+    nettle_gcm_aes256_digest(&ctx->ctx, 16, mac);
+
+    res = smemeq(blk+len, mac, 16);
+
+    return res;
+}
+
+static const struct ssh_mac ssh2_aes256_gcm_mac = {
+    aesgcm_mac_make_context, aesgcm_mac_free_context,
+    aesgcm_mac_setkey,
+
+    /* whole-packet operations */
+    aes256_gcm_mac_generate,aes256_gcm_mac_verify,
+
+    /* partial-packet operations, not supported */
+    0,0,0,0,
+
+    "", "", /* Not selectable individually, just part of aes256-gcm@openssh.com */
+    16, 0, "AES256 GCM"
+};
+
+
+
+static const struct ssh2_cipher ssh_aes256_gcm = {
+    aes256_gcm_make_context, aes256_gcm_free_context, aes256_gcm_iv, aes256_gcm_key,
+    aes256_gcm_encrypt_blk, aes256_gcm_decrypt_blk, NULL, NULL,
+    "aes256-gcm@openssh.com",
+    16, 256, 32, SSH_CIPHER_IS_GCM, "AES-256 GCM",
+    &ssh2_aes256_gcm_mac
+};
+
 static const struct ssh2_cipher *const aes_list[] = {
+    &ssh_aes256_gcm,
     &ssh_aes256_ctr,
     &ssh_aes256,
     &ssh_rijndael_lysator,
