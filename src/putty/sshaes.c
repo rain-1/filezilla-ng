@@ -327,7 +327,7 @@ static const struct ssh2_cipher ssh_aes256_gcm = {
     aes256_gcm_make_context, aes256_gcm_free_context, aes256_gcm_iv, aes256_gcm_key,
     aes256_gcm_encrypt_blk, aes256_gcm_decrypt_blk, NULL, NULL,
     "aes256-gcm@openssh.com",
-    16, 256, 32, SSH_CIPHER_IS_GCM, "AES-256 GCM",
+    16, 256, 32, 0, "AES-256 GCM",
     &ssh2_aes256_gcm_mac
 };
 
