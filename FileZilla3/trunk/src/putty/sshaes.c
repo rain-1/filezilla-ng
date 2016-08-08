@@ -207,7 +207,7 @@ static const struct ssh2_cipher ssh_rijndael_lysator = {
 
 
 
-/* GCM */
+/* GCM 256 */
 
 typedef struct AES256GCMContext AES256GCMContext;
 struct AES256GCMContext {
@@ -256,13 +256,10 @@ void aes256_gcm_encrypt_blk(void *handle, unsigned char *blk, int len)
 void aes256_gcm_decrypt_blk(void *handle, unsigned char *blk, int len)
 {
     AES256GCMContext *ctx = (AES256GCMContext *)handle;
-    
+
     // Decryption was already done at MAC verification. Just increment the IV here.
     increment_iv_step32(ctx->iv + 4, 2);
 }
-
-
-
 
 
 static void *aesgcm_mac_make_context(void *ctx)
@@ -321,8 +318,6 @@ static const struct ssh_mac ssh2_aes256_gcm_mac = {
     16, 0, "AES256 GCM"
 };
 
-
-
 static const struct ssh2_cipher ssh_aes256_gcm = {
     aes256_gcm_make_context, aes256_gcm_free_context, aes256_gcm_iv, aes256_gcm_key,
     aes256_gcm_encrypt_blk, aes256_gcm_decrypt_blk, NULL, NULL,
@@ -331,6 +326,114 @@ static const struct ssh2_cipher ssh_aes256_gcm = {
     &ssh2_aes256_gcm_mac
 };
 
+
+/* GCM 128 */
+
+typedef struct AES128GCMContext AES128GCMContext;
+struct AES128GCMContext {
+    struct gcm_aes128_ctx ctx;
+    uint8_t iv[12];
+};
+
+
+void *aes128_gcm_make_context(void)
+{
+    AES128GCMContext* ctx = snew(AES128GCMContext);
+    return ctx;
+}
+
+
+void aes128_gcm_free_context(void *handle)
+{
+    sfree(handle);
+}
+
+
+void aes128_gcm_key(void *handle, unsigned char *key)
+{
+    AES128GCMContext *ctx = (AES128GCMContext *)handle;
+    nettle_gcm_aes128_set_key(&ctx->ctx, key);
+}
+
+
+void aes128_gcm_iv(void *handle, unsigned char *iv)
+{
+    AES128GCMContext *ctx = (AES128GCMContext *)handle;
+    memcpy(ctx->iv, iv, 12);
+}
+
+
+void aes128_gcm_encrypt_blk(void *handle, unsigned char *blk, int len)
+{
+    AES128GCMContext *ctx = (AES128GCMContext *)handle;
+    unsigned char adata[4];
+    PUT_32BIT(adata, (unsigned int)len);
+    nettle_gcm_aes128_set_iv(&ctx->ctx, 12, ctx->iv);
+    nettle_gcm_aes128_update(&ctx->ctx, 4, adata);
+    nettle_gcm_aes128_encrypt(&ctx->ctx, len, blk, blk);
+}
+
+void aes128_gcm_decrypt_blk(void *handle, unsigned char *blk, int len)
+{
+    AES128GCMContext *ctx = (AES128GCMContext *)handle;
+
+    // Decryption was already done at MAC verification. Just increment the IV here.
+    increment_iv_step32(ctx->iv + 4, 2);
+}
+
+
+
+static void aes128_gcm_mac_generate(void *handle, unsigned char *blk, int len, unsigned long seq)
+{
+    AES128GCMContext *ctx = (AES128GCMContext *)handle;
+    nettle_gcm_aes128_digest(&ctx->ctx, 16, blk + len);
+    increment_iv_step32(ctx->iv + 4, 2);
+}
+
+static int aes128_gcm_mac_verify(void *handle, unsigned char *blk, int len, unsigned long seq)
+{
+    int res;
+
+    AES128GCMContext *ctx = (AES128GCMContext *)handle;
+
+    unsigned char mac[16];
+
+    nettle_gcm_aes128_set_iv(&ctx->ctx, 12, ctx->iv);
+    unsigned char adata[4];
+    PUT_32BIT(adata, (unsigned int)(len - 4));
+    nettle_gcm_aes128_update(&ctx->ctx, 4, adata);
+    nettle_gcm_aes128_decrypt(&ctx->ctx, len - 4, blk + 4, blk + 4);
+    nettle_gcm_aes128_digest(&ctx->ctx, 16, mac);
+
+    res = smemeq(blk + len, mac, 16);
+
+    return res;
+}
+
+static const struct ssh_mac ssh2_aes128_gcm_mac = {
+    aesgcm_mac_make_context, aesgcm_mac_free_context,
+    aesgcm_mac_setkey,
+
+    /* whole-packet operations */
+    aes128_gcm_mac_generate, aes128_gcm_mac_verify,
+
+    /* partial-packet operations, not supported */
+    0,0,0,0,
+
+    "", "", /* Not selectable individually, just part of aes256-gcm@openssh.com */
+    16, 0, "AES128 GCM"
+};
+
+
+static const struct ssh2_cipher ssh_aes128_gcm = {
+    aes128_gcm_make_context, aes128_gcm_free_context, aes128_gcm_iv, aes128_gcm_key,
+    aes128_gcm_encrypt_blk, aes128_gcm_decrypt_blk, NULL, NULL,
+    "aes128-gcm@openssh.com",
+    16, 128, 16, 0, "AES-128 GCM",
+    &ssh2_aes128_gcm_mac
+};
+
+
 static const struct ssh2_cipher *const aes_list[] = {
     &ssh_aes256_gcm,
     &ssh_aes256_ctr,
@@ -338,6 +441,7 @@ static const struct ssh2_cipher *const aes_list[] = {
     &ssh_rijndael_lysator,
     &ssh_aes192_ctr,
     &ssh_aes192,
+    &ssh_aes128_gcm,
     &ssh_aes128_ctr,
     &ssh_aes128,
 };
