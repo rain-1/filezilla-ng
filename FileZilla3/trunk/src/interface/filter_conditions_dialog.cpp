@@ -568,7 +568,7 @@ CFilter CFilterConditionsDialog::GetFilter()
 	CFilter filter;
 	for (unsigned int i = 0; i < m_currentFilter.filters.size(); ++i) {
 		CFilterControls const& controls = m_filterControls[i];
-		if (!controls.pType || !controls.pCondition || !controls.pValue) {
+		if (!controls.pType || !controls.pCondition) {
 			continue;
 		}
 		CFilterCondition condition = m_currentFilter.filters[i];
@@ -580,14 +580,16 @@ CFilter CFilterConditionsDialog::GetFilter()
 		{
 		case filter_name:
 		case filter_path:
-			if (controls.pValue->GetValue().empty())
+			if (!controls.pValue || controls.pValue->GetValue().empty()) {
 				continue;
+			}
 			condition.strValue = controls.pValue->GetValue();
 			break;
 		case filter_size:
 			{
-				if (controls.pValue->GetValue().empty())
+				if (!controls.pValue || controls.pValue->GetValue().empty()) {
 					continue;
+				}
 				condition.strValue = controls.pValue->GetValue();
 				unsigned long long tmp;
 				condition.strValue.ToULongLong(&tmp);
@@ -596,7 +598,10 @@ CFilter CFilterConditionsDialog::GetFilter()
 			break;
 		case filter_attributes:
 		case filter_permissions:
-			if (controls.pSet->GetSelection()) {
+			if (!controls.pSet) {
+				continue;
+			}
+			else if (controls.pSet->GetSelection()) {
 				condition.strValue = _T("0");
 				condition.value = 0;
 			}
@@ -606,8 +611,9 @@ CFilter CFilterConditionsDialog::GetFilter()
 			}
 			break;
 		case filter_date:
-			if (controls.pValue->GetValue().empty())
+			if (!controls.pValue || controls.pValue->GetValue().empty()) {
 				continue;
+			}
 			else {
 				condition.strValue = controls.pValue->GetValue();
 				condition.date = fz::datetime(condition.strValue.ToStdWstring(), fz::datetime::local);
