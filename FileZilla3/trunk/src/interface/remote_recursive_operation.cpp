@@ -69,7 +69,7 @@ void CRemoteRecursiveOperation::AddRecursionRoot(recursion_root && root)
 	}
 }
 
-void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir, bool immediate)
+void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, ActiveFilters const& filters, CServerPath const& finalDir, bool immediate)
 {
 	wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
 	wxCHECK_RET(m_state.IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
@@ -253,7 +253,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			if (entry.name != *dir.restrict)
 				continue;
 		}
-		else if (filter.FilenameFiltered(m_filters, entry.name, path, entry.is_dir(), entry.size, 0, entry.time))
+		else if (filter.FilenameFiltered(m_filters.second, entry.name, path, entry.is_dir(), entry.size, 0, entry.time))
 			continue;
 
 		if (!entry.is_dir()) {

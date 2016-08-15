@@ -1044,24 +1044,23 @@ void CFilterManager::ToggleFilters()
 		m_filters_disabled = true;
 }
 
-std::vector<CFilter> CFilterManager::GetActiveFilters(bool local)
+ActiveFilters CFilterManager::GetActiveFilters()
 {
-	std::vector<CFilter> filters;
+	ActiveFilters filters;
 
-	if (m_filters_disabled)
+	if (m_filters_disabled) {
 		return filters;
+	}
 
 	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
 
 	// Check active filters
 	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {
-		if (local) {
-			if (set.local[i])
-				filters.push_back(m_globalFilters[i]);
+		if (set.local[i]) {
+			filters.first.push_back(m_globalFilters[i]);
 		}
-		else {
-			if (set.remote[i])
-				filters.push_back(m_globalFilters[i]);
+		if (set.remote[i]) {
+			filters.second.push_back(m_globalFilters[i]);
 		}
 	}
 

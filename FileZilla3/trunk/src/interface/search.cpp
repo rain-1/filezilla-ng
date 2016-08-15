@@ -703,14 +703,14 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 		local_recursion_root root;
 		root.add_dir_to_visit(m_local_search_root);
 		m_state.GetLocalRecursiveOperation()->AddRecursionRoot(std::move(root));
-		std::vector<CFilter> const filters; // Empty, recurse into everything
+		ActiveFilters const filters; // Empty, recurse into everything
 		m_state.GetLocalRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters);
 	}
 	else {
 		recursion_root root(m_remote_search_root, true);
 		root.add_dir_to_visit_restricted(m_remote_search_root, _T(""), true);
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
-		std::vector<CFilter> const filters; // Empty, recurse into everything
+		ActiveFilters const filters; // Empty, recurse into everything
 		m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_list, filters, m_remote_search_root);
 	}
 
@@ -1020,7 +1020,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		root.add_dir_to_visit(dir, _T(""), target_path, false);
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
-	std::vector<CFilter> const filters; // Empty, recurse into everything
+	ActiveFilters const filters; // Empty, recurse into everything
 	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir, start);
 }
 
@@ -1098,7 +1098,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 		root.add_dir_to_visit(dir, target_path);
 		m_state.GetLocalRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
-	std::vector<CFilter> const filters; // Empty, recurse into everything
+	ActiveFilters const filters; // Empty, recurse into everything
 	m_state.GetLocalRecursiveOperation()->StartRecursiveOperation(mode, filters, start);
 }
 
@@ -1209,7 +1209,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 		root.add_dir_to_visit(path, segment);
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
-	std::vector<CFilter> const filters; // Empty, recurse into everything
+	ActiveFilters const filters; // Empty, recurse into everything
 	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(CRecursiveOperation::recursive_delete, filters, m_original_dir);
 }
 
