@@ -55,12 +55,12 @@ public:
 	virtual ~CLocalRecursiveOperation();
 
 	void AddRecursionRoot(local_recursion_root && root);
-	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters);
+	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, bool immediate = true);
 
 	virtual void StopRecursiveOperation();
 
 protected:
-	bool DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters);
+	bool DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, bool immediate);
 
 	virtual void OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2);
 

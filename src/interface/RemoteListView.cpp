@@ -1269,8 +1269,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	if (!root.empty()) {
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
-													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(false), m_pDirectoryListing->path, !queue_only);
 	}
 }
 

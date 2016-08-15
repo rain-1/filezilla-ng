@@ -1229,17 +1229,11 @@ bool CQueueView::SetActive(bool active)
 
 			CLocalRecursiveOperation* pLocalRecursiveOperation = pState->GetLocalRecursiveOperation();
 			if (pLocalRecursiveOperation) {
-				if (pLocalRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer)
-					pLocalRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
-				if (pLocalRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
-					pLocalRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
+				pLocalRecursiveOperation->SetImmediate(false);
 			}
 			CRemoteRecursiveOperation* pRemoteRecursiveOperation = pState->GetRemoteRecursiveOperation();
 			if (pRemoteRecursiveOperation) {
-				if (pRemoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer)
-					pRemoteRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue);
-				if (pRemoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
-					pRemoteRecursiveOperation->ChangeOperationMode(CRecursiveOperation::recursive_addtoqueue_flatten);
+				pRemoteRecursiveOperation->SetImmediate(false);
 			}
 		}
 

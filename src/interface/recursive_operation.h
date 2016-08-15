@@ -18,12 +18,12 @@ public:
 	enum OperationMode {
 		recursive_none,
 		recursive_transfer,
-		recursive_addtoqueue,
 		recursive_transfer_flatten,
-		recursive_addtoqueue_flatten,
 		recursive_delete,
 		recursive_chmod,
-		recursive_list
+		recursive_list,
+		recursive_synchronize_download,
+		recursive_synchronize_upload
 	};
 
 	bool IsActive() const { return GetOperationMode() != recursive_none; }
@@ -38,9 +38,11 @@ public:
 
 	void SetQueue(CQueueView* pQueue);
 
-	bool ChangeOperationMode(OperationMode mode);
+	void SetImmediate(bool immediate);
 
 protected:
+	bool m_immediate{true};
+
 	OperationMode m_operationMode;
 
 	CQueueView* m_pQueue{};

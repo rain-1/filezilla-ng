@@ -69,17 +69,19 @@ void CRemoteRecursiveOperation::AddRecursionRoot(recursion_root && root)
 	}
 }
 
-void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir)
+void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir, bool immediate)
 {
 	wxCHECK_RET(m_operationMode == recursive_none, _T("StartRecursiveOperation called with m_operationMode != recursive_none"));
 	wxCHECK_RET(m_state.IsRemoteConnected(), _T("StartRecursiveOperation while disconnected"));
 	wxCHECK_RET(!finalDir.empty(), _T("Empty final dir in recursive operation"));
 
-	if (mode == recursive_chmod && !m_pChmodDlg)
+	if (mode == recursive_chmod && !m_pChmodDlg) {
 		return;
+	}
 
-	if ((mode == recursive_transfer || mode == recursive_addtoqueue || mode == recursive_transfer_flatten || mode == recursive_addtoqueue_flatten) && !m_pQueue)
+	if ((mode == recursive_transfer || mode == recursive_transfer_flatten) && !m_pQueue) {
 		return;
+	}
 
 	if (recursion_roots_.empty()) {
 		// Nothing to do in this case
@@ -89,6 +91,7 @@ void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, std:
 	m_processedFiles = 0;
 	m_processedDirectories = 0;
 
+	m_immediate = immediate;
 	m_operationMode = mode;
 	m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 	m_state.NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
@@ -221,12 +224,12 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 	const CServer* pServer = m_state.GetServer();
 	wxASSERT(pServer);
 
-	if (!pDirectoryListing->GetCount()) {
-		if (m_operationMode == recursive_transfer) {
+	if (!pDirectoryListing->GetCount() && m_operationMode == recursive_transfer) {
+		if (m_immediate) {
 			wxFileName::Mkdir(dir.localDir.GetPath(), 0777, wxPATH_MKDIR_FULL);
 			m_state.RefreshLocalFile(dir.localDir.GetPath());
 		}
-		else if (m_operationMode == recursive_addtoqueue) {
+		else {
 			m_pQueue->QueueFile(true, true, _T(""), _T(""), dir.localDir, CServerPath(), *pServer, -1);
 			m_pQueue->QueueFile_Finish(false);
 		}
@@ -265,7 +268,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 				dirToVisit.localDir = dir.localDir;
 				dirToVisit.start_dir = dir.start_dir;
 
-				if (m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue) {
+				if (m_operationMode == recursive_transfer) {
 					// Non-flatten case
 					dirToVisit.localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(entry.name));
 				}
@@ -285,19 +288,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 					wxString localFile = CQueueView::ReplaceInvalidCharacters(entry.name);
 					if (pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 						localFile = StripVMSRevision(localFile);
-					m_pQueue->QueueFile(m_operationMode == recursive_addtoqueue, true,
-						entry.name, (entry.name == localFile) ? wxString() : localFile,
-						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
-					added = true;
-				}
-				break;
-			case recursive_addtoqueue:
-			case recursive_addtoqueue_flatten:
-				{
-					wxString localFile = CQueueView::ReplaceInvalidCharacters(entry.name);
-					if (pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
-						localFile = StripVMSRevision(localFile);
-					m_pQueue->QueueFile(true, true,
+					m_pQueue->QueueFile(!m_immediate, true,
 						entry.name, (entry.name == localFile) ? wxString() : localFile,
 						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
 					added = true;
@@ -324,8 +315,9 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			}
 		}
 	}
-	if (added)
-		m_pQueue->QueueFile_Finish(m_operationMode != recursive_addtoqueue && m_operationMode != recursive_addtoqueue_flatten);
+	if (added) {
+		m_pQueue->QueueFile_Finish(m_immediate);
+	}
 
 	if (m_operationMode == recursive_delete && !filesToDelete.empty())
 		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, std::move(filesToDelete)), CCommandQueue::recursiveOperation);
@@ -388,8 +380,9 @@ void CRemoteRecursiveOperation::ListingFailed(int error)
 
 void CRemoteRecursiveOperation::LinkIsNotDir()
 {
-	if (m_operationMode == recursive_none || recursion_roots_.empty())
+	if (m_operationMode == recursive_none || recursion_roots_.empty()) {
 		return;
+	}
 
 	auto & root = recursion_roots_.front();
 	wxCHECK_RET(!root.m_dirsToVisit.empty(), _T("Empty dirs to visit"));
@@ -415,10 +408,11 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 	else if (m_operationMode != recursive_list) {
 		CLocalPath localPath = dir.localDir;
 		wxString localFile = dir.subdir;
-		if (m_operationMode != recursive_addtoqueue_flatten && m_operationMode != recursive_transfer_flatten)
+		if (m_operationMode != recursive_transfer_flatten) {
 			localPath.MakeParent();
-		m_pQueue->QueueFile(m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten, true, dir.subdir, (dir.subdir == localFile) ? wxString() : localFile, localPath, dir.parent, *pServer, -1);
-		m_pQueue->QueueFile_Finish(m_operationMode != recursive_addtoqueue);
+		}
+		m_pQueue->QueueFile(!m_immediate, true, dir.subdir, (dir.subdir == localFile) ? wxString() : localFile, localPath, dir.parent, *pServer, -1);
+		m_pQueue->QueueFile_Finish(m_immediate);
 	}
 
 	NextOperation();

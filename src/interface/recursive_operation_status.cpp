@@ -94,8 +94,6 @@ void CRecursiveOperationStatus::UpdateText()
 	bool show = mode != CRecursiveOperation::recursive_none && mode != CRecursiveOperation::recursive_list;
 	if (show) {
 		switch (mode) {
-		case CRecursiveOperation::recursive_addtoqueue:
-		case CRecursiveOperation::recursive_addtoqueue_flatten:
 		case CRecursiveOperation::recursive_transfer:
 		case CRecursiveOperation::recursive_transfer_flatten:
 			text = _("Recursively adding files to queue.");
@@ -105,6 +103,10 @@ void CRecursiveOperationStatus::UpdateText()
 			break;
 		case CRecursiveOperation::recursive_chmod:
 			text = _("Recursively changing permissions.");
+			break;
+		case CRecursiveOperation::recursive_synchronize_download:
+		case CRecursiveOperation::recursive_synchronize_upload:
+			text = _("Synchronizing directories.");
 			break;
 		default:
 			break;

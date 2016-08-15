@@ -884,8 +884,7 @@ void CLocalListView::OnMenuUpload(wxCommandEvent& event)
 	if (!root.empty()) {
 		recursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
-		recursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
-			filter.GetActiveFilters(true));
+		recursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(true), !queue_only);
 	}
 }
 
