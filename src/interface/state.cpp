@@ -689,7 +689,7 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 	}
 
 	CFilterManager filter;
-	recursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(true), !queueOnly);
+	recursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(), !queueOnly);
 }
 
 void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const CLocalPath& path, bool copy)
@@ -866,7 +866,7 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 		m_pRemoteRecursiveOperation->AddRecursionRoot(std::move(root));
 
 		CFilterManager filter;
-		m_pRemoteRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(false), pRemoteDataObject->GetServerPath(), !queueOnly);
+		m_pRemoteRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(), pRemoteDataObject->GetServerPath(), !queueOnly);
 	}
 
 	return true;

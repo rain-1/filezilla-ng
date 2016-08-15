@@ -35,14 +35,14 @@ void CLocalRecursiveOperation::AddRecursionRoot(local_recursion_root && root)
 	}
 }
 
-void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, bool immediate)
+void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, ActiveFilters const& filters, bool immediate)
 {
 	if (!DoStartRecursiveOperation(mode, filters, immediate)) {
 		StopRecursiveOperation();
 	}
 }
 
-bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, bool immediate)
+bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, ActiveFilters const& filters, bool immediate)
 {
 	if (!m_pQueue) {
 		return false;
@@ -158,7 +158,7 @@ void CLocalRecursiveOperation::entry()
 	{
 		fz::scoped_lock l(mutex_);
 
-		auto filters = m_filters;
+		auto filters = m_filters.first;
 
 		CFilterManager filterManager;
 		filterManager.CompileRegexes(filters);

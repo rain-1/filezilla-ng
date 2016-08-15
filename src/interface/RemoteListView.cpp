@@ -1269,7 +1269,7 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 	if (!root.empty()) {
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
-		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(false), m_pDirectoryListing->path, !queue_only);
+		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(), m_pDirectoryListing->path, !queue_only);
 	}
 }
 
@@ -1453,7 +1453,7 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 		
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_delete,
-													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
+													 filter.GetActiveFilters(), m_pDirectoryListing->path);
 	}
 }
 
@@ -1734,7 +1734,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
 		CFilterManager filter;
 		pRecursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_chmod,
-													 filter.GetActiveFilters(false), m_pDirectoryListing->path);
+													 filter.GetActiveFilters(), m_pDirectoryListing->path);
 
 		// Refresh listing. This gets done implicitely by the recursive operation, so
 		// only it if not recursing.

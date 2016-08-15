@@ -72,6 +72,8 @@ public:
 	std::vector<bool> remote;
 };
 
+typedef std::pair<std::vector<CFilter>, std::vector<CFilter>> ActiveFilters;
+
 namespace pugi { class xml_node; }
 class CFilterManager
 {
@@ -89,7 +91,7 @@ public:
 
 	static void ToggleFilters();
 
-	std::vector<CFilter> GetActiveFilters(bool local);
+	ActiveFilters GetActiveFilters();
 
 	static bool CompileRegexes(std::vector<CFilter>& filters);
 	static bool CompileRegexes(CFilter& filter);

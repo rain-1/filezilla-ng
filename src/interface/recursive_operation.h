@@ -47,7 +47,7 @@ protected:
 
 	CQueueView* m_pQueue{};
 
-	std::vector<CFilter> m_filters;
+	ActiveFilters m_filters;
 };
 
 #endif
