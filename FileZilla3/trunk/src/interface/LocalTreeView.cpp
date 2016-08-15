@@ -1095,8 +1095,7 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 	bool const queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
 
 	CFilterManager filter;
-	recursiveOperation->StartRecursiveOperation(queue_only ? CRecursiveOperation::recursive_addtoqueue : CRecursiveOperation::recursive_transfer,
-		filter.GetActiveFilters(true));
+	recursiveOperation->StartRecursiveOperation(CRecursiveOperation::recursive_transfer, filter.GetActiveFilters(true), !queue_only);
 }
 
 // Create a new Directory

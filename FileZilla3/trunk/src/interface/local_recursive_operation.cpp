@@ -35,14 +35,14 @@ void CLocalRecursiveOperation::AddRecursionRoot(local_recursion_root && root)
 	}
 }
 
-void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters)
+void CLocalRecursiveOperation::StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, bool immediate)
 {
-	if (!DoStartRecursiveOperation(mode, filters)) {
+	if (!DoStartRecursiveOperation(mode, filters, immediate)) {
 		StopRecursiveOperation();
 	}
 }
 
-bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters)
+bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, bool immediate)
 {
 	if (!m_pQueue) {
 		return false;
@@ -77,6 +77,7 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, std
 		m_processedFiles = 0;
 		m_processedDirectories = 0;
 
+		m_immediate = immediate;
 		m_operationMode = mode;
 
 		m_filters = filters;
@@ -134,7 +135,7 @@ void CLocalRecursiveOperation::EnqueueEnumeratedListing(fz::scoped_lock& l, list
 
 		CServerPath remoteSub = d.remotePath;
 		if (!remoteSub.empty()) {
-			if (m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue) {
+			if (m_operationMode == recursive_transfer) {
 				// Non-flatten case
 				remoteSub.AddSegment(entry.name);
 			}
@@ -250,8 +251,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 		return;
 	}
 
-	bool const queue = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten || m_operationMode == recursive_transfer || m_operationMode == recursive_addtoqueue_flatten;
-	bool const queueOnly = m_operationMode == recursive_addtoqueue || m_operationMode == recursive_addtoqueue_flatten;
+	bool const queue = m_operationMode == recursive_transfer || m_operationMode == recursive_transfer_flatten;
 
 	listing d;
 
@@ -273,7 +273,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 		}
 		else {
 			if (queue) {
-				m_pQueue->QueueFiles(queueOnly, server_, d);
+				m_pQueue->QueueFiles(!m_immediate, server_, d);
 			}
 			++m_processedDirectories;
 			processed += d.files.size();
@@ -282,7 +282,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 	}
 
 	if (queue) {
-		m_pQueue->QueueFile_Finish(!queueOnly);
+		m_pQueue->QueueFile_Finish(m_immediate);
 	}
 	
 	m_processedFiles += processed;

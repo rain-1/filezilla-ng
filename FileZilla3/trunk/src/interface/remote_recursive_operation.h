@@ -58,7 +58,7 @@ public:
 	virtual ~CRemoteRecursiveOperation();
 
 	void AddRecursionRoot(recursion_root && root);
-	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir);
+	void StartRecursiveOperation(OperationMode mode, std::vector<CFilter> const& filters, CServerPath const& finalDir, bool immediate = true);
 
 	// Needed for recursive_chmod
 	void SetChmodDialog(CChmodDialog* pChmodDialog);

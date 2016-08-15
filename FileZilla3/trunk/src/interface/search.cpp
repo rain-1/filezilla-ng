@@ -1008,11 +1008,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 	}
 	m_pQueue->QueueFile_Finish(start);
 
-	CRecursiveOperation::OperationMode mode;
-	if (flatten)
-		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
-	else
-		mode = start ? CRecursiveOperation::recursive_transfer : CRecursiveOperation::recursive_addtoqueue;
+	auto const mode = flatten ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_transfer;
 
 	for (auto const& dir : selected_dirs) {
 		CLocalPath target_path = path;
@@ -1025,7 +1021,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		m_state.GetRemoteRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir);
+	m_state.GetRemoteRecursiveOperation()->StartRecursiveOperation(mode, filters, m_original_dir, start);
 }
 
 void CSearchDialog::OnUpload(wxCommandEvent&)
@@ -1090,12 +1086,8 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 	}
 	m_pQueue->QueueFile_Finish(start);
 
-	CRecursiveOperation::OperationMode mode;
-	if (flatten)
-		mode = start ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_addtoqueue_flatten;
-	else
-		mode = start ? CRecursiveOperation::recursive_transfer : CRecursiveOperation::recursive_addtoqueue;
-
+	auto const mode = flatten ? CRecursiveOperation::recursive_transfer_flatten : CRecursiveOperation::recursive_transfer;
+	
 	for (auto const& dir : selected_dirs) {
 		CServerPath target_path = path;
 		if (!flatten && dir.HasParent()) {
@@ -1107,7 +1099,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 		m_state.GetLocalRecursiveOperation()->AddRecursionRoot(std::move(root));
 	}
 	std::vector<CFilter> const filters; // Empty, recurse into everything
-	m_state.GetLocalRecursiveOperation()->StartRecursiveOperation(mode, filters);
+	m_state.GetLocalRecursiveOperation()->StartRecursiveOperation(mode, filters, start);
 }
 
 void CSearchDialog::OnEdit(wxCommandEvent&)

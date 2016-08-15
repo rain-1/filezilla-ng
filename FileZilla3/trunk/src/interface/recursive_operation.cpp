@@ -6,12 +6,9 @@ void CRecursiveOperation::SetQueue(CQueueView * pQueue)
 	m_pQueue = pQueue;
 }
 
-bool CRecursiveOperation::ChangeOperationMode(OperationMode mode)
+void CRecursiveOperation::SetImmediate(bool immediate)
 {
-	if (mode != recursive_addtoqueue && m_operationMode != recursive_transfer && mode != recursive_addtoqueue_flatten && m_operationMode != recursive_transfer_flatten)
-		return false;
-
-	m_operationMode = mode;
-
-	return true;
+	if (m_operationMode == recursive_transfer || m_operationMode == recursive_transfer_flatten) {
+		m_immediate = immediate;
+	}
 }
