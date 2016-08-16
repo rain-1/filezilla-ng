@@ -6,6 +6,9 @@
 #include "Options.h"
 #include "queue.h"
 
+#include <libfilezilla/local_filesys.hpp>
+#include <libfilezilla/recursive_remove.hpp>
+
 recursion_root::recursion_root(CServerPath const& start_dir, bool allow_parent)
 	: m_remoteStartDir(start_dir)
 	, m_allowParent(allow_parent)
@@ -240,9 +243,53 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 	// Is operation restricted to a single child?
 	bool const restrict = static_cast<bool>(dir.restrict);
 
-	std::deque<wxString> filesToDelete;
+	std::deque<std::wstring> filesToDelete;
 
-	const wxString path = pDirectoryListing->path.GetPath();
+	wxString const remotePath = pDirectoryListing->path.GetPath();
+
+	if (m_operationMode == recursive_synchronize_download && !dir.localDir.empty()) {
+		// Step one in synchronization: Delete local files not on the server
+		fz::local_filesys fs;
+		if (fs.begin_find_files(dir.localDir.GetPath())) {
+			std::list<fz::native_string> paths_to_delete;
+
+			bool isLink{};
+			fz::native_string name;
+			bool isDir{};
+			int64_t size{};
+			fz::datetime time;
+			int attributes{};
+			while (fs.get_next_file(name, isLink, isDir, &size, &time, &attributes)) {
+				if (isLink) {
+					continue;
+				}
+				if (filter.FilenameFiltered(m_filters.first, name, dir.localDir.GetPath(), isDir, size, attributes, time)) {
+					continue;
+				}
+
+				// Local item isn't filtered
+
+				int remoteIndex = pDirectoryListing->FindFile_CmpCase(name);
+				if (remoteIndex != -1) {
+					CDirentry const& entry = (*pDirectoryListing)[remoteIndex];
+					if (!filter.FilenameFiltered(m_filters.second, entry.name, remotePath, entry.is_dir(), entry.size, 0, entry.time)) {
+						// Both local and remote items exist
+
+						if (isDir == entry.is_dir() || entry.is_link()) {
+							// Normal item, nothing we should do
+							continue;
+						}
+					}
+				}
+
+				// Local item should be deleted if reaching this point
+				paths_to_delete.push_back(fz::to_native(dir.localDir.GetPath()) + name);
+			}
+
+			fz::recursive_remove r;
+			r.remove(paths_to_delete);
+		}
+	}
 
 	bool added = false;
 
@@ -253,7 +300,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			if (entry.name != *dir.restrict)
 				continue;
 		}
-		else if (filter.FilenameFiltered(m_filters.second, entry.name, path, entry.is_dir(), entry.size, 0, entry.time))
+		else if (filter.FilenameFiltered(m_filters.second, entry.name, remotePath, entry.is_dir(), entry.size, 0, entry.time))
 			continue;
 
 		if (!entry.is_dir()) {
@@ -268,7 +315,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 				dirToVisit.localDir = dir.localDir;
 				dirToVisit.start_dir = dir.start_dir;
 
-				if (m_operationMode == recursive_transfer) {
+				if (m_operationMode == recursive_transfer || m_operationMode == recursive_synchronize_download) {
 					// Non-flatten case
 					dirToVisit.localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(entry.name));
 				}
@@ -284,10 +331,12 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			{
 			case recursive_transfer:
 			case recursive_transfer_flatten:
+			case recursive_synchronize_download:
 				{
 					wxString localFile = CQueueView::ReplaceInvalidCharacters(entry.name);
-					if (pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
+					if (pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION)) {
 						localFile = StripVMSRevision(localFile);
+					}
 					m_pQueue->QueueFile(!m_immediate, true,
 						entry.name, (entry.name == localFile) ? wxString() : localFile,
 						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
@@ -319,8 +368,9 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 		m_pQueue->QueueFile_Finish(m_immediate);
 	}
 
-	if (m_operationMode == recursive_delete && !filesToDelete.empty())
+	if (m_operationMode == recursive_delete && !filesToDelete.empty()) {
 		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(pDirectoryListing->path, std::move(filesToDelete)), CCommandQueue::recursiveOperation);
+	}
 
 	m_state.NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
 
@@ -398,7 +448,7 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 
 	if (m_operationMode == recursive_delete) {
 		if (!dir.subdir.empty()) {
-			std::deque<wxString> files;
+			std::deque<std::wstring> files;
 			files.push_back(dir.subdir);
 			m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(dir.parent, std::move(files)), CCommandQueue::recursiveOperation);
 		}

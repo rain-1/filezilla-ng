@@ -1194,7 +1194,7 @@ void CSearchDialog::OnDelete(wxCommandEvent&)
 
 	for (auto const& file : selected_files) {
 		CDirentry const& entry = m_results->remoteFileData_[file];
-		std::deque<wxString> files_to_delete;
+		std::deque<std::wstring> files_to_delete;
 		files_to_delete.push_back(entry.name);
 		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_results->remoteFileData_[file].path, std::move(files_to_delete)));
 	}

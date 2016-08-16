@@ -42,20 +42,6 @@ CFilterCondition::CFilterCondition()
 	value = 0;
 }
 
-CFilter::CFilter()
-{
-	matchType = all;
-	filterDirs = true;
-	filterFiles = true;
-
-	// Filenames on Windows ignore case
-#ifdef __WXMSW__
-	matchCase = false;
-#else
-	matchCase = true;
-#endif
-}
-
 bool CFilter::HasConditionOfType(t_filterType type) const
 {
 	for (std::vector<CFilterCondition>::const_iterator iter = filters.begin(); iter != filters.end(); ++iter)
@@ -550,17 +536,8 @@ bool CFilterManager::HasActiveFilters(bool ignore_disabled /*=false*/)
 
 bool CFilterManager::HasSameLocalAndRemoteFilters() const
 {
-	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
-	for (unsigned int i = 0; i < m_globalFilters.size(); i++)
-	{
-		if (set.local[i])
-		{
-			if (!set.remote[i])
-				return false;
-		}
-		else if (set.remote[i])
-			return false;
-	}
+	CFilterSet const& set = m_globalFilterSets[m_globalCurrentFilterSet];
+	return set.local == set.remote;
 
 	return true;
 }
@@ -572,7 +549,7 @@ bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path
 
 	wxASSERT(m_globalCurrentFilterSet < m_globalFilterSets.size());
 
-	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
+	CFilterSet const& set = m_globalFilterSets[m_globalCurrentFilterSet];
 
 	// Check active filters
 	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {

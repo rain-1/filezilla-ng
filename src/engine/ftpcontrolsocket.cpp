@@ -153,7 +153,7 @@ public:
 	virtual ~CFtpDeleteOpData() {}
 
 	CServerPath path;
-	std::deque<wxString> files;
+	std::deque<std::wstring> files;
 	bool omitPath{};
 
 	// Set to fz::datetime::Now initially and after
@@ -2830,8 +2830,9 @@ int CFtpControlSocket::RawCommandSend()
 
 	CRawCommandOpData *pData = static_cast<CRawCommandOpData *>(m_pCurOpData);
 
-	if (!SendCommand(pData->m_command, false, false))
+	if (!SendCommand(pData->m_command, false, false)) {
 		return FZ_REPLY_ERROR;
+	}
 
 	return FZ_REPLY_WOULDBLOCK;
 }
@@ -2841,19 +2842,17 @@ int CFtpControlSocket::RawCommandParseResponse()
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RawCommandParseResponse"));
 
 	int code = GetReplyCode();
-	if (code == 2 || code == 3)
-	{
+	if (code == 2 || code == 3) {
 		ResetOperation(FZ_REPLY_OK);
 		return FZ_REPLY_OK;
 	}
-	else
-	{
+	else {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 }
 
-int CFtpControlSocket::Delete(const CServerPath& path, std::deque<wxString>&& files)
+int CFtpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
 {
 	wxASSERT(!m_pCurOpData);
 	CFtpDeleteOpData *pData = new CFtpDeleteOpData();
@@ -2863,8 +2862,9 @@ int CFtpControlSocket::Delete(const CServerPath& path, std::deque<wxString>&& fi
 	pData->omitPath = true;
 
 	int res = ChangeDir(pData->path);
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	// CFileZillaEnginePrivate should have checked this already
 	wxASSERT(!files.empty());

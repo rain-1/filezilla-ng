@@ -49,14 +49,18 @@ public:
 		none
 	};
 
-	CFilter();
-
 	wxString name;
 
-	bool filterFiles;
-	bool filterDirs;
-	t_matchType matchType;
-	bool matchCase;
+	bool filterFiles{};
+	bool filterDirs{};
+	t_matchType matchType{all};
+
+	// Filenames on Windows ignore case
+#ifdef __WXMSW__
+	bool matchCase{};
+#else
+	bool matchCase{true};
+#endif
 
 	std::vector<CFilterCondition> filters;
 

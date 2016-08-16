@@ -128,7 +128,7 @@ public:
 							 const wxString &remoteFile, bool download,
 							 const CFileTransferCommand::t_transferSettings& transferSettings);
 	virtual int RawCommand(const wxString& command = wxString());
-	virtual int Delete(const CServerPath& path, std::deque<wxString>&& files);
+	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	virtual int RemoveDir(const CServerPath& path = CServerPath(), const wxString& subDir = wxString());
 	virtual int Mkdir(const CServerPath& path);
 	virtual int Rename(const CRenameCommand& command);

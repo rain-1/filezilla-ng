@@ -27,7 +27,7 @@ private:
 	{
 	public:
 		CServerPath parent;
-		wxString subdir;
+		std::wstring subdir;
 		CLocalPath localDir;
 		fz::sparse_optional<wxString> restrict;
 
