@@ -204,7 +204,7 @@ public:
 	virtual ~CSftpDeleteOpData() {}
 
 	CServerPath path;
-	std::deque<wxString> files;
+	std::deque<std::wstring> files;
 
 	// Set to fz::datetime::Now initially and after
 	// sending an updated listing to the UI.
@@ -2034,7 +2034,7 @@ std::wstring CSftpControlSocket::QuoteFilename(std::wstring const& filename)
 	return L"\"" + fz::replace_substrings(filename, L"\"", L"\"\"") + L"\"";
 }
 
-int CSftpControlSocket::Delete(const CServerPath& path, std::deque<wxString>&& files)
+int CSftpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::Delete"));
 	wxASSERT(!m_pCurOpData);

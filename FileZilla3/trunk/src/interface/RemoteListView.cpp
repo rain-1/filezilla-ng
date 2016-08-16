@@ -1355,60 +1355,65 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 	long item = -1;
 	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (!item)
+		if (!item) {
 			continue;
-		if (item == -1)
+		}
+		if (item == -1) {
 			break;
+		}
 
-		if (!IsItemValid(item))
-		{
+		if (!IsItemValid(item)) {
 			wxBell();
 			return;
 		}
 
 		int index = GetItemIndex(item);
-		if (index == -1)
+		if (index == -1) {
 			continue;
-		if (m_fileData[index].comparison_flags == fill)
+		}
+		if (m_fileData[index].comparison_flags == fill) {
 			continue;
+		}
 
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		if (entry.is_dir())
-		{
+		if (entry.is_dir()) {
 			count_dirs++;
-			if (entry.is_link())
+			if (entry.is_link()) {
 				selected_link = true;
+			}
 		}
-		else
+		else {
 			count_files++;
+		}
 	}
 
 	wxString question;
-	if (!count_dirs)
+	if (!count_dirs) {
 		question.Printf(wxPLURAL("Really delete %d file from the server?", "Really delete %d files from the server?", count_files), count_files);
-	else if (!count_files)
+	}
+	else if (!count_files) {
 		question.Printf(wxPLURAL("Really delete %d directory with its contents from the server?", "Really delete %d directories with their contents from the server?", count_dirs), count_dirs);
-	else
-	{
+	}
+	else {
 		wxString files = wxString::Format(wxPLURAL("%d file", "%d files", count_files), count_files);
 		wxString dirs = wxString::Format(wxPLURAL("%d directory with its contents", "%d directories with their contents", count_dirs), count_dirs);
 		question.Printf(_("Really delete %s and %s from the server?"), files, dirs);
 	}
 
-	if (wxMessageBoxEx(question, _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES)
+	if (wxMessageBoxEx(question, _("Confirmation needed"), wxICON_QUESTION | wxYES_NO, this) != wxYES) {
 		return;
+	}
 
 	bool follow_symlink = false;
-	if (selected_link)
-	{
+	if (selected_link) {
 		wxDialogEx dlg;
-		if (!dlg.Load(this, _T("ID_DELETE_SYMLINK")))
-		{
+		if (!dlg.Load(this, _T("ID_DELETE_SYMLINK"))) {
 			wxBell();
 			return;
 		}
-		if (dlg.ShowModal() != wxID_OK)
+		if (dlg.ShowModal() != wxID_OK) {
 			return;
+		}
 
 		follow_symlink = XRCCTRL(dlg, "ID_RECURSE", wxRadioButton)->GetValue();
 	}
@@ -1416,24 +1421,28 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 	CRemoteRecursiveOperation* pRecursiveOperation = m_state.GetRemoteRecursiveOperation();
 	wxASSERT(pRecursiveOperation);
 
-	std::deque<wxString> filesToDelete;
+	std::deque<std::wstring> filesToDelete;
 
 	recursion_root root(m_pDirectoryListing->path, false);
 	for (item = -1; ;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (!item)
+		if (!item) {
 			continue;
-		if (item == -1)
+		}
+		if (item == -1) {
 			break;
+		}
 
 		int index = GetItemIndex(item);
-		if (index == -1)
+		if (index == -1) {
 			continue;
-		if (m_fileData[index].comparison_flags == fill)
+		}
+		if (m_fileData[index].comparison_flags == fill) {
 			continue;
+		}
 
 		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		const wxString& name = entry.name;
+		std::wstring const& name = entry.name;
 
 		if (entry.is_dir() && (follow_symlink || !entry.is_link())) {
 			CServerPath remotePath = m_pDirectoryListing->path;
@@ -1441,12 +1450,14 @@ void CRemoteListView::OnMenuDelete(wxCommandEvent&)
 				root.add_dir_to_visit(m_pDirectoryListing->path, name, CLocalPath(), true);;
 			}
 		}
-		else
+		else {
 			filesToDelete.push_back(name);
+		}
 	}
 
-	if (!filesToDelete.empty())
+	if (!filesToDelete.empty()) {
 		m_state.m_pCommandQueue->ProcessCommand(new CDeleteCommand(m_pDirectoryListing->path, std::move(filesToDelete)));
+	}
 
 	if (!root.empty()) {
 		pRecursiveOperation->AddRecursionRoot(std::move(root));
