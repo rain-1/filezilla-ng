@@ -50,7 +50,7 @@ protected:
 
 	wxTreeItemId GetNearestParent(wxString& localDir);
 	wxTreeItemId GetSubdir(wxTreeItemId parent, const wxString& subDir);
-	void DisplayDir(wxTreeItemId parent, const wxString& dirname, const wxString& knownSubdir = _T(""));
+	void DisplayDir(wxTreeItemId parent, const wxString& dirname, std::wstring const& knownSubdir = std::wstring());
 	wxString HasSubdir(const wxString& dirname);
 	wxTreeItemId MakeSubdirs(wxTreeItemId parent, wxString dirname, wxString subDir);
 	wxString m_currentDir;

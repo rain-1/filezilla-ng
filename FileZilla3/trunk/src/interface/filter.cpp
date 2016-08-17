@@ -542,37 +542,35 @@ bool CFilterManager::HasSameLocalAndRemoteFilters() const
 	return true;
 }
 
-bool CFilterManager::FilenameFiltered(const wxString& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const
+bool CFilterManager::FilenameFiltered(std::wstring const& name, const wxString& path, bool dir, int64_t size, bool local, int attributes, fz::datetime const& date) const
 {
-	if (m_filters_disabled)
+	if (m_filters_disabled) {
 		return false;
+	}
 
 	wxASSERT(m_globalCurrentFilterSet < m_globalFilterSets.size());
 
 	CFilterSet const& set = m_globalFilterSets[m_globalCurrentFilterSet];
+	auto const& active = local ? set.local : set.remote;
 
 	// Check active filters
 	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {
-		if (local) {
-			if (set.local[i])
-				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date))
-					return true;
-		}
-		else {
-			if (set.remote[i])
-				if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date))
-					return true;
+		if (active[i]) {
+			if (FilenameFilteredByFilter(m_globalFilters[i], name, path, dir, size, attributes, date)) {
+				return true;
+			}
 		}
 	}
 
 	return false;
 }
 
-bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date) const
+bool CFilterManager::FilenameFiltered(std::vector<CFilter> const& filters, std::wstring const& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date) const
 {
 	for (auto const& filter : filters) {
-		if (FilenameFilteredByFilter(filter, name, path, dir, size, attributes, date))
+		if (FilenameFilteredByFilter(filter, name, path, dir, size, attributes, date)) {
 			return true;
+		}
 	}
 
 	return false;
@@ -651,17 +649,17 @@ static bool StringMatch(const wxString& subject, const wxString& filter, int con
 	return match;
 }
 
-bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxString& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date)
+bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstring const& name, const wxString& path, bool dir, int64_t size, int attributes, fz::datetime const& date)
 {
-	if (dir && !filter.filterDirs)
+	if (dir && !filter.filterDirs) {
 		return false;
-	else if (!dir && !filter.filterFiles)
+	}
+	else if (!dir && !filter.filterFiles) {
 		return false;
+	}
 
-	for (std::vector<CFilterCondition>::const_iterator iter = filter.filters.begin(); iter != filter.filters.end(); ++iter)
-	{
+	for (auto const& condition : filter.filters) {
 		bool match = false;
-		const CFilterCondition& condition = *iter;
 
 		switch (condition.type)
 		{
@@ -672,8 +670,9 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 			match = StringMatch(path, condition.strValue, condition.condition, filter.matchCase, condition.pRegEx);
 			break;
 		case filter_size:
-			if (size == -1)
+			if (size == -1) {
 				continue;
+			}
 			switch (condition.condition)
 			{
 			case 0:
@@ -802,19 +801,23 @@ bool CFilterManager::FilenameFilteredByFilter(const CFilter& filter, const wxStr
 			break;
 		}
 		if (match) {
-			if (filter.matchType == CFilter::any)
+			if (filter.matchType == CFilter::any) {
 				return true;
-			else if (filter.matchType == CFilter::none)
+			}
+			else if (filter.matchType == CFilter::none) {
 				return false;
+			}
 		}
 		else {
-			if (filter.matchType == CFilter::all)
+			if (filter.matchType == CFilter::all) {
 				return false;
+			}
 		}
 	}
 
-	if (filter.matchType != CFilter::any || filter.filters.empty())
+	if (filter.matchType != CFilter::any || filter.filters.empty()) {
 		return true;
+	}
 
 	return false;
 }

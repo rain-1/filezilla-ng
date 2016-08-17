@@ -14,7 +14,7 @@ class CWindowTinter;
 class CLocalFileData final : public CGenericFileData
 {
 public:
-	wxString name;
+	std::wstring name;
 #ifdef __WXMSW__
 	fz::sparse_optional<wxString> label;
 #endif

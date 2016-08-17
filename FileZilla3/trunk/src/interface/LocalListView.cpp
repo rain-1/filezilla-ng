@@ -1723,9 +1723,10 @@ void CLocalListView::OnMenuOpen(wxCommandEvent&)
 		bool program_exists = false;
 		wxString cmd = GetSystemOpenCommand(fn.GetFullPath(), program_exists);
 		if (cmd.empty()) {
-			int pos = data.name.Find('.') == -1;
-			if (pos == -1 || (pos == 0 && data.name.Mid(1).Find('.') == -1))
+			auto pos = data.name.find('.');
+			if (pos == std::wstring::npos || (pos == 0 && data.name.find('.', 1) == std::wstring::npos)) {
 				cmd = pEditHandler->GetOpenCommand(fn.GetFullPath(), program_exists);
+			}
 		}
 		if (cmd.empty()) {
 			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nNo program has been associated on your system with this file type."), fn.GetFullPath()), _("Opening failed"), wxICON_EXCLAMATION);
@@ -1780,7 +1781,7 @@ void CLocalListView::OnVolumesEnumerated(wxCommandEvent& event)
 		unsigned int item, index;
 		for (item = m_hasParent ? 1 : 0; item < m_indexMapping.size(); ++item) {
 			index = m_indexMapping[item];
-			if (m_fileData[index].name == drive || m_fileData[index].name.Left(drive.Len() + 1) == drive + _T(" ")) {
+			if (m_fileData[index].name == drive || m_fileData[index].name.substr(0, drive.Len() + 1) == drive + _T(" ")) {
 				break;
 			}
 		}
