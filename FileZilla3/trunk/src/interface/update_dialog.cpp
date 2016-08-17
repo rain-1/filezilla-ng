@@ -129,10 +129,10 @@ void CUpdateDialog::InitFooter()
 				if (sizer) {
 					wxPanel* p{};
 					bool top{};
-					if (p = res.LoadPanel(sizer->GetContainingWindow(), _T("ID_UPDATE_FOOTER"))) {
+					if ((p = res.LoadPanel(sizer->GetContainingWindow(), _T("ID_UPDATE_FOOTER")))) {
 						top = false;
 					}
-					else if (p = res.LoadPanel(sizer->GetContainingWindow(), _T("ID_UPDATE_HEADER"))) {
+					else if ((p = res.LoadPanel(sizer->GetContainingWindow(), _T("ID_UPDATE_HEADER")))) {
 						top = true;
 					}
 
