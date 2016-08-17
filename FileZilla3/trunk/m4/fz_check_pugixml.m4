@@ -90,7 +90,7 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
     PUGIXML_LIBS="-lpugixml"
   else
     AC_MSG_NOTICE([Using builtin pugixml])
-    PUGIXML_LIBS="../pugixml/libpugixml.a"
+    PUGIXML_LIBS="\$(top_srcdir)/src/pugixml/libpugixml.a"
   fi
 
   AC_SUBST(PUGIXML_LIBS)
