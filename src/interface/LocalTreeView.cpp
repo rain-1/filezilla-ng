@@ -26,8 +26,8 @@
 class CTreeItemData : public wxTreeItemData
 {
 public:
-	CTreeItemData(const wxString& known_subdir) : m_known_subdir(known_subdir) {}
-	wxString m_known_subdir;
+	CTreeItemData(std::wstring const& known_subdir) : m_known_subdir(known_subdir) {}
+	std::wstring m_known_subdir;
 };
 
 class CLocalTreeViewDropTarget : public CScrollableDropTarget<wxTreeCtrlEx>
@@ -429,7 +429,7 @@ bool CLocalTreeView::DisplayDrives(wxTreeItemId parent)
 
 #endif
 
-void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, const wxString& knownSubdir)
+void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, std::wstring const& knownSubdir)
 {
 	fz::local_filesys local_filesys;
 
@@ -482,22 +482,24 @@ void CLocalTreeView::DisplayDir(wxTreeItemId parent, const wxString& dirname, co
 			wxGetApp().DisplayEncodingWarning();
 			continue;
 		}
-		wxString file_wx = file;
+		std::wstring wfile = fz::to_wstring(file);
 
-		wxString fullName = dirname + file_wx;
+		std::wstring fullName = dirname.ToStdWstring() + wfile;
 #ifdef __WXMSW__
-		if (file_wx.CmpNoCase(knownSubdir))
+		if (fz::stricmp(wfile, knownSubdir))
 #else
-		if (file_wx != knownSubdir)
+		if (wfile != knownSubdir)
 #endif
 		{
-			if (filter.FilenameFiltered(file_wx, dirname, true, size, true, attributes, date))
+			if (filter.FilenameFiltered(wfile, dirname, true, size, true, attributes, date)) {
 				continue;
+			}
 		}
-		else
+		else {
 			matchedKnown = true;
+		}
 
-		wxTreeItemId item = AppendItem(parent, file_wx, GetIconIndex(iconType::dir, fullName),
+		wxTreeItemId item = AppendItem(parent, wfile, GetIconIndex(iconType::dir, fullName),
 #ifdef __WXMSW__
 				-1
 #else
@@ -531,8 +533,9 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 	CFilterManager filter;
 
 	fz::local_filesys local_filesys;
-	if (!local_filesys.begin_find_files(fz::to_native(dirname), true))
+	if (!local_filesys.begin_find_files(fz::to_native(dirname), true)) {
 		return wxString();
+	}
 
 	fz::native_string file;
 	bool wasLink;
@@ -547,11 +550,12 @@ wxString CLocalTreeView::HasSubdir(const wxString& dirname)
 			continue;
 		}
 
-		wxString file_wx = file;
-		if (filter.FilenameFiltered(file_wx, dirname, true, size, true, attributes, date))
+		std::wstring wfile = fz::to_wstring(file);
+		if (filter.FilenameFiltered(wfile, dirname, true, size, true, attributes, date)) {
 			continue;
+		}
 
-		return file_wx;
+		return wfile;
 	}
 
 	return wxString();
@@ -573,7 +577,7 @@ wxTreeItemId CLocalTreeView::MakeSubdirs(wxTreeItemId parent, wxString dirname, 
 			subDir = subDir.Mid(pos + 1);
 		}
 
-		DisplayDir(parent, dirname, segment);
+		DisplayDir(parent, dirname, segment.ToStdWstring());
 
 		wxTreeItemId item = GetSubdir(parent, segment);
 		if (!item)
@@ -743,11 +747,12 @@ void CLocalTreeView::RefreshListing()
 				continue;
 			}
 
-			wxString file_wx = file;
-			if (filter.FilenameFiltered(file_wx, dir.dir, true, size, true, attributes, date))
+			std::wstring wfile = fz::to_wstring(file);
+			if (filter.FilenameFiltered(wfile, dir.dir, true, size, true, attributes, date)) {
 				continue;
+			}
 
-			dirs.push_back(file_wx);
+			dirs.push_back(wfile);
 		}
 		auto const& sortFunc = CFileListCtrlSortBase::GetCmpFunction(m_nameSortMode);
 		std::sort(dirs.begin(), dirs.end(), [&](auto const& lhs, auto const& rhs) { return sortFunc(lhs, rhs) < 0; });
@@ -1406,7 +1411,7 @@ bool CLocalTreeView::CheckSubdirStatus(wxTreeItemId& item, const wxString& path)
 	wxString sub = HasSubdir(path);
 	if (!sub.empty()) {
 		wxTreeItemId subItem = AppendItem(item, _T(""));
-		SetItemData(subItem, new CTreeItemData(sub));
+		SetItemData(subItem, new CTreeItemData(sub.ToStdWstring()));
 	}
 	else if (child)
 		Delete(child);

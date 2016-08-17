@@ -250,7 +250,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 	if (m_operationMode == recursive_synchronize_download && !dir.localDir.empty()) {
 		// Step one in synchronization: Delete local files not on the server
 		fz::local_filesys fs;
-		if (fs.begin_find_files(dir.localDir.GetPath())) {
+		if (fs.begin_find_files(fz::to_native(dir.localDir.GetPath()))) {
 			std::list<fz::native_string> paths_to_delete;
 
 			bool isLink{};
