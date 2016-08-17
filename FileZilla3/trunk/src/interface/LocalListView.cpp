@@ -404,7 +404,7 @@ regular_dir:
 				continue;
 			}
 
-			data.name = name;
+			data.name = fz::to_wstring(name);
 			m_fileData.push_back(data);
 			if (!filter.FilenameFiltered(data.name, m_dir.GetPath(), data.dir, data.size, true, data.attributes, data.time)) {
 				if (data.dir)

@@ -263,7 +263,8 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 				if (isLink) {
 					continue;
 				}
-				if (filter.FilenameFiltered(m_filters.first, name, dir.localDir.GetPath(), isDir, size, attributes, time)) {
+				auto const wname = fz::to_wstring(name);
+				if (filter.FilenameFiltered(m_filters.first, wname, dir.localDir.GetPath(), isDir, size, attributes, time)) {
 					continue;
 				}
 
