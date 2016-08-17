@@ -4,6 +4,7 @@
   #include <libfilezilla/private/windows.hpp>
   #include <winsock2.h>
   #include <ws2tcpip.h>
+  #include <mstcpip.h>
 #endif
 #include <filezilla.h>
 #include <libfilezilla/format.hpp>
@@ -378,7 +379,7 @@ protected:
 			(void)bind(fd, &bindAddr.sockaddr, sizeof(bindAddr));
 		}
 
-		CSocket::DoSetFlags(fd, m_pSocket->m_flags, m_pSocket->m_flags);
+		CSocket::DoSetFlags(fd, m_pSocket->m_flags, m_pSocket->m_flags, m_pSocket->m_keepalive_interval);
 		CSocket::DoSetBufferSizes(fd, m_pSocket->m_buffer_sizes[0], m_pSocket->m_buffer_sizes[1]);
 
 		int res = connect(fd, addr.ai_addr, addr.ai_addrlen);
@@ -854,6 +855,7 @@ protected:
 
 CSocket::CSocket(fz::event_handler* pEvtHandler)
 	: m_pEvtHandler(pEvtHandler)
+	, m_keepalive_interval(fz::duration::from_hours(2))
 {
 #ifdef ERRORCODETEST
 	CErrorCodeTest test;
@@ -1544,18 +1546,21 @@ int CSocket::SetNonblocking(int fd)
 
 void CSocket::SetFlags(int flags)
 {
-	if (m_pSocketThread)
+	if (m_pSocketThread) {
 		m_pSocketThread->m_sync.lock();
+	}
 
-	if (m_fd != -1)
-		DoSetFlags(m_fd, flags, flags ^ m_flags);
+	if (m_fd != -1) {
+		DoSetFlags(m_fd, flags, flags ^ m_flags, m_keepalive_interval);
+	}
 	m_flags = flags;
 
-	if (m_pSocketThread)
+	if (m_pSocketThread) {
 		m_pSocketThread->m_sync.unlock();
+	}
 }
 
-int CSocket::DoSetFlags(int fd, int flags, int flags_mask)
+int CSocket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& keepalive_interval)
 {
 	if (flags_mask & flag_nodelay) {
 		const int value = (flags & flag_nodelay) ? 1 : 0;
@@ -1565,11 +1570,30 @@ int CSocket::DoSetFlags(int fd, int flags, int flags_mask)
 		}
 	}
 	if (flags_mask & flag_keepalive) {
+#if FZ_WINDOWS
+		tcp_keepalive v{};
+		v.onoff = (flags & flag_keepalive) ? 1 : 0;
+		v.keepalivetime = keepalive_interval.get_milliseconds();
+		v.keepaliveinterval = 1000;
+		DWORD tmp{};
+		int res = WSAIoctl(fd, SIO_KEEPALIVE_VALS, &v, sizeof(v), 0, 0, &tmp, 0, 0);
+		if (res != 0) {
+			return GetLastSocketError();
+		}
+#else
 		const int value = (flags & flag_keepalive) ? 1 : 0;
 		int res = setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (const char*)&value, sizeof(value));
 		if (res != 0) {
 			return GetLastSocketError();
 		}
+#ifdef TCP_KEEPIDLE
+		int const idle = d.get_seconds();
+		res = setsockopt(m_fd, IPPROTO_TCP, TCP_KEEPINTVL, (const char*)&idle, sizeof(idle));
+		if (res != 0) {
+			return GetLastSocketError();
+		}
+#endif
+#endif
 	}
 
 	return 0;
@@ -1653,4 +1677,24 @@ int CSocket::DoSetBufferSizes(int fd, int size_read, int size_write)
 fz::native_string CSocket::GetPeerHost() const
 {
 	return m_host;
+}
+
+void CSocket::SetKeepaliveInterval(fz::duration const& d)
+{
+	if (d < fz::duration::from_minutes(1)) {
+		return;
+	}
+
+	if (m_pSocketThread) {
+		m_pSocketThread->m_sync.lock();
+	}
+
+	m_keepalive_interval = d;
+	if (m_fd != -1) {
+		DoSetFlags(m_fd, m_flags, flag_keepalive, m_keepalive_interval);
+	}
+
+	if (m_pSocketThread) {
+		m_pSocketThread->m_sync.unlock();
+	}
 }

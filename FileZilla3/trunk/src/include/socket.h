@@ -132,6 +132,10 @@ public:
 	// accepted sockets
 	int SetBufferSizes(int size_receive, int size_send);
 
+	// Duration must not be smaller than 5 minutes.
+	// Default interval if 2 hours.
+	void SetKeepaliveInterval(fz::duration const& d);
+
 	// On a connected socket, gets the ideal send buffer size or
 	// -1 if it cannot be determined.
 	//
@@ -139,7 +143,7 @@ public:
 	int GetIdealSendBufferSize();
 
 protected:
-	static int DoSetFlags(int fd, int flags, int flags_mask);
+	static int DoSetFlags(int fd, int flags, int flags_mask, fz::duration const&);
 	static int DoSetBufferSizes(int fd, int size_read, int size_write);
 	static int SetNonblocking(int fd);
 
@@ -159,6 +163,7 @@ protected:
 	int m_family;
 
 	int m_flags{};
+	fz::duration m_keepalive_interval;
 
 	int m_buffer_sizes[2];
 };

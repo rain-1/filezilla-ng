@@ -183,6 +183,11 @@ CFtpControlSocket::CFtpControlSocket(CFileZillaEnginePrivate & engine)
 	// Enable SO_KEEPALIVE, lots of clueless users have broken routers and
 	// firewalls which terminate the control connection on long transfers.
 	m_pSocket->SetFlags(CSocket::flag_nodelay | CSocket::flag_keepalive);
+
+	int v = engine_.GetOptions().GetOptionVal(OPTION_TCP_KEEPALIVE_INTERVAL);
+	if (v >= 1 && v < 100000) {
+		m_pSocket->SetKeepaliveInterval(fz::duration::from_minutes(v));
+	}
 }
 
 CFtpControlSocket::~CFtpControlSocket()
