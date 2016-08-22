@@ -107,8 +107,9 @@ static const t_Option options[OPTIONS_NUM] =
 	{ "Size format", number, _T("0"), normal },
 	{ "Size thousands separator", number, _T("1"), normal },
 	{ "Size decimal places", number, _T("1"), normal },
+	{ "TCP Keepalive Interval", number, _T("15"), normal },
 
-		// Interface settings
+	// Interface settings
 	{ "Number of Transfers", number, _T("2"), normal },
 	{ "Ascii Binary mode", number, _T("0"), normal },
 	{ "Auto Ascii files", string, _T("am|asp|bat|c|cfm|cgi|conf|cpp|css|dhtml|diz|h|hpp|htm|html|in|inc|java|js|jsp|lua|m4|mak|md5|nfo|nsi|pas|patch|php|phtml|pl|po|py|qmail|sh|sha1|sha256|sha512|shtml|sql|svg|tcl|tpl|txt|vbs|xhtml|xml|xrc"), normal },
