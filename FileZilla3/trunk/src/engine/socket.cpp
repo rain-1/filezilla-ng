@@ -1587,8 +1587,8 @@ int CSocket::DoSetFlags(int fd, int flags, int flags_mask, fz::duration const& k
 			return GetLastSocketError();
 		}
 #ifdef TCP_KEEPIDLE
-		int const idle = d.get_seconds();
-		res = setsockopt(m_fd, IPPROTO_TCP, TCP_KEEPINTVL, (const char*)&idle, sizeof(idle));
+		int const idle = keepalive_interval.get_seconds();
+		res = setsockopt(fd, IPPROTO_TCP, TCP_KEEPINTVL, (const char*)&idle, sizeof(idle));
 		if (res != 0) {
 			return GetLastSocketError();
 		}
