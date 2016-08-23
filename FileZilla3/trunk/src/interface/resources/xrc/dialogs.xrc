@@ -3444,6 +3444,11 @@
             <flag>wxGROW</flag>
           </object>
           <object class="sizeritem">
+            <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
+            <object class="wxPanel" name="ID_HEADERMESSAGE_PANEL" />
+            <hidden>1</hidden>
+          </object>
+          <object class="sizeritem">
             <object class="wxBoxSizer">
               <object class="sizeritem">
                 <object class="wxStaticText" name="ID_HEADING_NEWS">
@@ -3564,6 +3569,7 @@
           <object class="sizeritem">
             <flag>wxALIGN_CENTRE_HORIZONTAL</flag>
             <object class="wxPanel" name="ID_FOOTERMESSAGE_PANEL" />
+            <hidden>1</hidden>
           </object>
           <object class="sizeritem">
             <object class="wxStaticLine"/>

@@ -90,9 +90,26 @@ void CWelcomeDialog::OnTimer(wxTimerEvent&)
 void MakeLinksFromTooltips(wxWindow& parent);
 #endif
 
+namespace {
+void CreateMessagePanel(wxWindow& dlg, char const* ctrl, wxXmlResource& resource, wxString const& resourceName)
+{
+	wxWindow* parent = XRCCTRL(dlg, ctrl, wxPanel);
+	if (parent) {
+		wxPanel* p = new wxPanel();
+		if (resource.LoadPanel(p, parent, resourceName)) {
+			wxSize minSize = p->GetSizer()->GetMinSize();
+			parent->SetInitialSize(minSize);
+			MakeLinksFromTooltips(*p);
+		}
+		else {
+			delete p;
+		}
+	}
+}
+}
+
 void CWelcomeDialog::InitFooter(wxString const& resources)
 {
-	bool hideFooter = true;
 #if FZ_WINDOWS && FZ_MANUALUPDATECHECK
 	if (CBuildInfo::GetBuildType() == _T("official") && !COptions::Get()->GetOptionVal(OPTION_DISABLE_UPDATE_FOOTER)) {
 		if (!resources.empty()) {
@@ -101,24 +118,10 @@ void CWelcomeDialog::InitFooter(wxString const& resources)
 			wxXmlResource res(wxXRC_NO_RELOADING);
 			InitHandlers(res);
 			if (res.Load(_T("blob:") + resources)) {
-				wxWindow* parent = XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel);
-				if (parent) {
-					wxPanel* p = new wxPanel();
-					if (res.LoadPanel(p, parent, _T("ID_WELCOME_FOOTER"))) {
-						wxSize minSize = p->GetSizer()->GetMinSize();
-						parent->SetInitialSize(minSize);
-						hideFooter = false;
-						MakeLinksFromTooltips(*p);
-					}
-					else {
-						delete p;
-					}
-				}
+				CreateMessagePanel(*this, "ID_HEADERMESSAGE_PANEL", res, _T("ID_WELCOME_HEADER"));
+				CreateMessagePanel(*this, "ID_FOOTERMESSAGE_PANEL", res, _T("ID_WELCOME_FOOTER"));
 			}
 		}
 	}
 #endif
-	if (hideFooter) {
-		XRCCTRL(*this, "ID_FOOTERMESSAGE_PANEL", wxPanel)->Hide();
-	}
 }
