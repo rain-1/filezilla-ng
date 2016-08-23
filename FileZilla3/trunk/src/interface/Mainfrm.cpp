@@ -1,3 +1,4 @@
+
 #include <filezilla.h>
 #include "Mainfrm.h"
 
@@ -2615,6 +2616,14 @@ void CMainFrame::SetupKeyboardAccelerators()
 	for (auto const& command : keyboardCommands) {
 		entries.emplace_back(wxACCEL_CMD, command.second.second, command.first);
 	}
+
+	// Ctrl+(Shift+)Tab to switch between tabs
+	int id = wxNewId();
+	entries.emplace_back(wxACCEL_RAW_CTRL, '\t', id);
+	Bind(wxEVT_MENU, [this](wxEvent&) { if (m_pContextControl) { m_pContextControl->AdvanceTab(true); } }, id);
+	id = wxNewId();
+	entries.emplace_back(wxACCEL_RAW_CTRL | wxACCEL_SHIFT, '\t', id);
+	Bind(wxEVT_MENU, [this](wxEvent&) { if (m_pContextControl) { m_pContextControl->AdvanceTab(false); } }, id);
 #endif
 	wxAcceleratorTable accel(entries.size(), &entries[0]);
 	SetAcceleratorTable(accel);
