@@ -88,6 +88,10 @@ bool CLocalRecursiveOperation::DoStartRecursiveOperation(OperationMode mode, Act
 		}
 	}
 
+	if ((mode == CRecursiveOperation::recursive_transfer || mode == CRecursiveOperation::recursive_transfer_flatten) && immediate) {
+		m_actionAfterBlocker = m_pQueue->GetActionAfterBlocker();
+	}
+
 	m_state.NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
 
 	return true;
@@ -113,6 +117,8 @@ void CLocalRecursiveOperation::StopRecursiveOperation()
 	m_listedDirectories.clear();
 
 	m_state.NotifyHandlers(STATECHANGE_LOCAL_RECURSION_STATUS);
+
+	m_actionAfterBlocker.reset();
 }
 
 void CLocalRecursiveOperation::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)

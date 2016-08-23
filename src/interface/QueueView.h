@@ -89,10 +89,28 @@ class CDesktopNotification;
 class wxNotificationMessage;
 #endif
 
+class CActionAfterBlocker final
+{
+public:
+	CActionAfterBlocker(CQueueView& queueView)
+		: queueView_(queueView)
+	{
+	}
+
+	~CActionAfterBlocker();
+
+private:
+	friend class CQueueView;
+	CQueueView& queueView_;
+	bool trigger_{};
+};
+
 class CQueueView : public CQueueViewBase, public COptionChangeEventHandler, private EngineNotificationHandler
 {
 	friend class CQueueViewDropTarget;
 	friend class CQueueViewFailed;
+	friend class CActionAfterBlocker;
+
 public:
 	CQueueView(CQueue* parent, int index, CMainFrame* pMainFrame, CAsyncRequestQueue* pAsyncRequestQueue);
 	virtual ~CQueueView();
@@ -140,6 +158,8 @@ public:
 	// Get the current upload speed as the sum of all active uploads.
 	// Unit is byte/s.
 	wxFileOffset GetCurrentUploadSpeed();
+
+	std::shared_ptr<CActionAfterBlocker> GetActionAfterBlocker();
 
 protected:
 
@@ -274,6 +294,8 @@ protected:
 	void DoOnEngineEvent(CFileZillaEngine* engine);
 
 	void OnAskPassword();
+
+	std::weak_ptr<CActionAfterBlocker> m_actionAfterBlocker;
 
 	DECLARE_EVENT_TABLE()
 	void OnChar(wxKeyEvent& event);

@@ -4,6 +4,7 @@
 #include "filter.h"
 #include "state.h"
 
+class CActionAfterBlocker;
 class CQueueView;
 class CRecursiveOperation : public CStateEventHandler
 {
@@ -48,6 +49,8 @@ protected:
 	CQueueView* m_pQueue{};
 
 	ActiveFilters m_filters;
+	
+	std::shared_ptr<CActionAfterBlocker> m_actionAfterBlocker;
 };
 
 #endif
