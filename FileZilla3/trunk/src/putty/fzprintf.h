@@ -38,6 +38,6 @@ int fzprintf(sftpEventTypes type, const char* p, ...);
 // Format the string, then print the type and the string as-is. Caller is responsible to add trailing linebreak
 int fzprintf_raw(sftpEventTypes type, const char* p, ...);
 
-// Format the string, then print the type (if now sftpUnknown) and the string with linebreaks replaced by spaces.
+// Format the string, then print the type (if not sftpUnknown) and the string with linebreaks replaced by spaces.
 int fzprintf_raw_untrusted(sftpEventTypes type, const char* p, ...);
 int fznotify1(sftpEventTypes type, int data);
