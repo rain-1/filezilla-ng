@@ -88,7 +88,6 @@ void CWelcomeDialog::OnTimer(wxTimerEvent&)
 
 #if FZ_WINDOWS && FZ_MANUALUPDATECHECK
 void MakeLinksFromTooltips(wxWindow& parent);
-#endif
 
 namespace {
 void CreateMessagePanel(wxWindow& dlg, char const* ctrl, wxXmlResource& resource, wxString const& resourceName)
@@ -107,6 +106,7 @@ void CreateMessagePanel(wxWindow& dlg, char const* ctrl, wxXmlResource& resource
 	}
 }
 }
+#endif
 
 void CWelcomeDialog::InitFooter(wxString const& resources)
 {
