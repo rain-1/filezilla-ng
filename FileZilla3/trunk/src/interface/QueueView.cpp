@@ -1220,8 +1220,9 @@ bool CQueueView::SetActive(bool active)
 {
 	if (!active) {
 		m_activeMode = 0;
-		for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter)
+		for (auto iter = m_serverList.begin(); iter != m_serverList.end(); ++iter) {
 			(*iter)->QueueImmediateFiles();
+		}
 
 		const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
 		for (std::vector<CState*>::const_iterator iter = pStates->begin(); iter != pStates->end(); ++iter) {
@@ -1235,6 +1236,11 @@ bool CQueueView::SetActive(bool active)
 			if (pRemoteRecursiveOperation) {
 				pRemoteRecursiveOperation->SetImmediate(false);
 			}
+		}
+
+		auto blocker = m_actionAfterBlocker.lock();
+		if (blocker) {
+			blocker->trigger_ = false;
 		}
 
 		UpdateStatusLinePositions();
@@ -1890,25 +1896,27 @@ void CQueueView::OnRemoveSelected(wxCommandEvent&)
 
 bool CQueueView::StopItem(CFileItem* item)
 {
-	if (!item->IsActive())
+	if (!item->IsActive()) {
 		return true;
+	}
 
 	((CServerItem*)item->GetTopLevelItem())->QueueImmediateFile(item);
 
-	if (item->m_pEngineData->state == t_EngineData::waitprimary)
-	{
+	if (item->m_pEngineData->state == t_EngineData::waitprimary) {
 		ResetReason reason;
-		if (item->m_pEngineData->pItem && item->m_pEngineData->pItem->pending_remove())
+		if (item->m_pEngineData->pItem && item->m_pEngineData->pItem->pending_remove()) {
 			reason = remove;
-		else
+		}
+		else {
 			reason = reset;
-		if (item->m_pEngineData->pItem)
+		}
+		if (item->m_pEngineData->pItem) {
 			item->m_pEngineData->pItem->SetStatusMessage(CFileItem::none);
+		}
 		ResetEngine(*item->m_pEngineData, reason);
 		return true;
 	}
-	else
-	{
+	else {
 		item->m_pEngineData->pEngine->Cancel();
 		return false;
 	}
@@ -2457,32 +2465,10 @@ void CQueueView::ActionAfter(bool warned /*=false*/)
 		return;
 	}
 
-	// Need to check all contexts whether there's a recursive
-	// download operation still in progress
-	const std::vector<CState*> *pStates = CContextManager::Get()->GetAllStates();
-	for (unsigned int i = 0; i < pStates->size(); ++i) {
-		CState *pState = (*pStates)[i];
-		if (!pState) {
-			continue;
-		}
-
-		auto localRecursiveOperation = pState->GetLocalRecursiveOperation();
-		if (localRecursiveOperation) {
-			if (localRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer ||
-				localRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
-			{
-				return;
-			}
-		}
-
-		auto remoteRecursiveOperation = pState->GetRemoteRecursiveOperation();
-		if (remoteRecursiveOperation) {
-			if (remoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer ||
-				remoteRecursiveOperation->GetOperationMode() == CRecursiveOperation::recursive_transfer_flatten)
-			{
-				return;
-			}
-		}
+	auto blocker = m_actionAfterBlocker.lock();
+	if (blocker) {
+		blocker->trigger_ = true;
+		return;
 	}
 
 	switch (m_actionAfterState) {
@@ -2935,4 +2921,23 @@ void CQueueView::OnOptionsChanged(changed_options_t const&)
 {
 	if (m_activeMode)
 		AdvanceQueue();
+}
+
+std::shared_ptr<CActionAfterBlocker> CQueueView::GetActionAfterBlocker()
+{
+	auto ret = m_actionAfterBlocker.lock();
+	if (!ret) {
+		ret = std::make_shared<CActionAfterBlocker>(*this);
+		m_actionAfterBlocker = ret;
+	}
+
+	return ret;
+}
+
+
+CActionAfterBlocker::~CActionAfterBlocker()
+{
+	if (trigger_) {
+		queueView_.ActionAfter();
+	}
 }

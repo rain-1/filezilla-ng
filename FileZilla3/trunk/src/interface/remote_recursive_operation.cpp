@@ -96,6 +96,11 @@ void CRemoteRecursiveOperation::StartRecursiveOperation(OperationMode mode, Acti
 
 	m_immediate = immediate;
 	m_operationMode = mode;
+
+	if ((mode == CRecursiveOperation::recursive_transfer || mode == CRecursiveOperation::recursive_transfer_flatten) && immediate) {
+		m_actionAfterBlocker = m_pQueue->GetActionAfterBlocker();
+	}
+
 	m_state.NotifyHandlers(STATECHANGE_REMOTE_IDLE);
 	m_state.NotifyHandlers(STATECHANGE_REMOTE_RECURSION_STATUS);
 
@@ -401,6 +406,8 @@ void CRemoteRecursiveOperation::StopRecursiveOperation()
 		m_pChmodDlg->Destroy();
 		m_pChmodDlg = 0;
 	}
+
+	m_actionAfterBlocker.reset();
 }
 
 void CRemoteRecursiveOperation::ListingFailed(int error)
