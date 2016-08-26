@@ -8,7 +8,7 @@
 <FileZilla3>
     <Filters>
         <Filter>
-            <Name>CVS and SVN directories</Name>
+            <Name>Source control directories</Name>
             <ApplyToFiles>0</ApplyToFiles>
             <ApplyToDirs>1</ApplyToDirs>
             <MatchType>Any</MatchType>
@@ -23,6 +23,21 @@
                     <Type>0</Type>
                     <Condition>1</Condition>
                     <Value>.svn</Value>
+                </Condition>
+                <Condition>
+                    <Type>0</Type>
+                    <Condition>1</Condition>
+                    <Value>.git</Value>
+                </Condition>
+                <Condition>
+                    <Type>0</Type>
+                    <Condition>1</Condition>
+                    <Value>.hg</Value>
+                </Condition>
+                <Condition>
+                    <Type>0</Type>
+                    <Condition>1</Condition>
+                    <Value>.bzr</Value>
                 </Condition>
             </Conditions>
         </Filter>
