@@ -592,8 +592,6 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 				SendAsyncRequest(pNotification);
 			}
 			else {
-				const wxString newChallenge = m_requestPreamble + _T("\n") + m_requestInstruction + message.text[0];
-
 				if (!pData->lastChallenge.empty()) {
 					// Check for same challenge. Will most likely fail as well, so abort early.
 					if (pData->lastChallenge == challengeIdentifier) {
