@@ -73,11 +73,11 @@ protected:
 
 // This class checks if the shell extension is installed and
 // communicates with it.
-class CShellExtensionInterface
+class CShellExtensionInterface final
 {
 public:
 	CShellExtensionInterface();
-	virtual ~CShellExtensionInterface();
+	~CShellExtensionInterface();
 
 	bool IsLoaded() const { return m_shellExtension != 0; }
 
@@ -96,7 +96,7 @@ protected:
 	HANDLE m_hMutex;
 	HANDLE m_hMapping;
 
-	wxString m_dragDirectory;
+	std::wstring m_dragDirectory;
 };
 
 #endif //__WXMSW__
