@@ -276,7 +276,7 @@ public:
 
 protected:
 	virtual int DoClose(int nErrorCode = FZ_REPLY_DISCONNECTED);
-	void ResetSocket();
+	virtual void ResetSocket();
 
 	virtual void operator()(fz::event_base const& ev);
 	void OnSocketEvent(CSocketEventSource* source, SocketEventType t, int error);

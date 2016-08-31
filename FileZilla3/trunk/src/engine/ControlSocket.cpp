@@ -1102,17 +1102,16 @@ void CRealControlSocket::ResetSocket()
 {
 	m_pSocket->Close();
 
-	if (m_pSendBuffer)
-	{
+	if (m_pSendBuffer) {
 		delete [] m_pSendBuffer;
 		m_pSendBuffer = 0;
 		m_nSendBufferLen = 0;
 	}
 
-	if (m_pProxyBackend)
-	{
-		if (m_pProxyBackend != m_pBackend)
+	if (m_pProxyBackend) {
+		if (m_pProxyBackend != m_pBackend) {
 			delete m_pProxyBackend;
+		}
 		m_pProxyBackend = 0;
 	}
 	delete m_pBackend;
