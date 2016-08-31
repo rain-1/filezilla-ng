@@ -24,10 +24,11 @@ DEFINE_GUID(CLSID_ShellExtension,
 //           1 - Awaiting reply from shell extension
 //           2 - shell extension has filled in the data
 //           3 - shell extension failed to fill in the data
-// Filename: Given as wide character string. Zero-terminated. Capped to MAX_PATH wide-characters + terminating 0.
+// Filename: Given as wide character string. Zero-terminated. Capped to 32766 wide-characters followed by the terminating 0.
 
-const int DRAG_EXT_MAPPING_LENGTH = 1 + 1 + (MAX_PATH + 1) * 2 + 1;
+int const DRAG_EXT_MAPPING_LENGTH = 65536;
+int const DRAG_EXT_MAX_PATH = (DRAG_EXT_MAPPING_LENGTH - 4) / 2;
 
-const int DRAG_EXT_VERSION = 1;
+const int DRAG_EXT_VERSION = 2;
 
 #endif //__SHELLEXT_H__

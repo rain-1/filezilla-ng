@@ -862,6 +862,8 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 				DEBUG_MSG("CShellExt::CopyCallback supported structure version");
 				if (data[1] == 1) {
 					DEBUG_MSG("CShellExt::CopyCallback dragging");
+					data[DRAG_EXT_MAPPING_LENGTH - 1] = 0;
+					data[DRAG_EXT_MAPPING_LENGTH - 2] = 0;
 
 					wchar_t* file = reinterpret_cast<wchar_t *>(data + 2);
 					DEBUG_MSG("Dragged file:");
@@ -869,12 +871,12 @@ STDMETHODIMP_(UINT) CShellExt::CopyCallback(HWND Hwnd, UINT wFunc, UINT Flags,
 
 					if (_wcsicmp(file, SrcFile) == 0) {
 						data[1] = 2;
-						if (_tcslen(DestFile) > MAX_PATH) {
-							DEBUG_MSG("CShellExt::CopyCallback length of DestFile exceeding MAX_PATH");
+						if (_tcslen(DestFile) > DRAG_EXT_MAX_PATH) {
+							DEBUG_MSG("CShellExt::CopyCallback length of DestFile exceeding DRAG_EXT_MAX_PATH");
 						}
 						else {
-							wcsncpy(file, DestFile, MAX_PATH);
-							file[MAX_PATH] = 0;
+							wcsncpy(file, DestFile, DRAG_EXT_MAX_PATH);
+							file[DRAG_EXT_MAX_PATH] = 0;
 							DEBUG_MSG("CShellExt::CopyCallback destination written into buffer");
 						}
 						Result = IDNO;

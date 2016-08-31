@@ -29,55 +29,59 @@ CShellExtensionInterface::CShellExtensionInterface()
 
 CShellExtensionInterface::~CShellExtensionInterface()
 {
-	if (m_shellExtension)
-	{
+	if (m_shellExtension) {
 		((IUnknown*)m_shellExtension)->Release();
 		CoFreeUnusedLibraries();
 	}
 
-	if (m_hMapping)
+	if (m_hMapping) {
 		CloseHandle(m_hMapping);
+	}
 
-	if (m_hMutex)
+	if (m_hMutex) {
 		CloseHandle(m_hMutex);
+	}
 
-	if (!m_dragDirectory.empty())
-		RemoveDirectory(m_dragDirectory.wc_str());
+	if (!m_dragDirectory.empty()) {
+		RemoveDirectory(m_dragDirectory.c_str());
+	}
 }
 
 wxString CShellExtensionInterface::InitDrag()
 {
-	if (!m_shellExtension)
+	if (!m_shellExtension) {
 		return wxString();
+	}
 
-	if (!m_hMutex)
+	if (!m_hMutex) {
 		return wxString();
+	}
 
-	if (!CreateDragDirectory())
+	if (!CreateDragDirectory()) {
 		return wxString();
+	}
 
 	m_hMapping = CreateFileMapping(INVALID_HANDLE_VALUE, 0, PAGE_READWRITE, 0, DRAG_EXT_MAPPING_LENGTH, DRAG_EXT_MAPPING);
-	if (!m_hMapping)
+	if (!m_hMapping) {
 		return wxString();
+	}
 
 	char* data = (char*)MapViewOfFile(m_hMapping, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, DRAG_EXT_MAPPING_LENGTH);
-	if (!data)
-	{
+	if (!data) {
 		CloseHandle(m_hMapping);
 		m_hMapping = 0;
 		return wxString();
 	}
 
 	DWORD result = WaitForSingleObject(m_hMutex, 250);
-	if (result != WAIT_OBJECT_0)
-	{
+	if (result != WAIT_OBJECT_0) {
 		UnmapViewOfFile(data);
 		return wxString();
 	}
 
 	*data = DRAG_EXT_VERSION;
 	data[1] = 1;
-	wcscpy((wchar_t*)(data + 2), m_dragDirectory.wc_str(wxConvLocal));
+	wcscpy((wchar_t*)(data + 2), m_dragDirectory.c_str());
 
 	ReleaseMutex(m_hMutex);
 
@@ -88,35 +92,36 @@ wxString CShellExtensionInterface::InitDrag()
 
 wxString CShellExtensionInterface::GetTarget()
 {
-	if (!m_shellExtension)
+	if (!m_shellExtension) {
 		return wxString();
+	}
 
-	if (!m_hMutex)
+	if (!m_hMutex) {
 		return wxString();
+	}
 
-	if (!m_hMapping)
+	if (!m_hMapping) {
 		return wxString();
+	}
 
 	char* data = (char*)MapViewOfFile(m_hMapping, FILE_MAP_READ | FILE_MAP_WRITE, 0, 0, DRAG_EXT_MAPPING_LENGTH);
-	if (!data)
-	{
+	if (!data) {
 		CloseHandle(m_hMapping);
 		m_hMapping = 0;
 		return wxString();
 	}
 
 	DWORD result = WaitForSingleObject(m_hMutex, 250);
-	if (result != WAIT_OBJECT_0)
-	{
+	if (result != WAIT_OBJECT_0) {
 		UnmapViewOfFile(data);
 		return wxString();
 	}
 
 	wxString target;
 	const char reply = data[1];
-	if (reply == 2)
-	{
+	if (reply == 2) {
 		data[DRAG_EXT_MAPPING_LENGTH - 1] = 0;
+		data[DRAG_EXT_MAPPING_LENGTH - 2] = 0;
 		target = (wchar_t*)(data + 2);
 	}
 
@@ -124,14 +129,17 @@ wxString CShellExtensionInterface::GetTarget()
 
 	UnmapViewOfFile(data);
 
-	if (target.empty())
+	if (target.empty()) {
 		return target;
+	}
 
-	if (target.Last() == '\\')
+	if (target.Last() == '\\') {
 		target.RemoveLast();
+	}
 	int pos = target.Find('\\', true);
-	if (pos < 1)
+	if (pos < 1) {
 		return wxString();
+	}
 	target = target.Left(pos + 1);
 
 	return target;
@@ -149,12 +157,13 @@ bool CShellExtensionInterface::CreateDragDirectory()
 
 		wxFileName dirname(wxStandardPaths::Get().GetTempDir(), DRAG_EXT_DUMMY_DIR_PREFIX + std::to_wstring(value));
 		dirname.Normalize();
-		wxString dir = dirname.GetFullPath();
+		std::wstring dir = dirname.GetFullPath().ToStdWstring();
 
-		if (dir.Len() > MAX_PATH)
+		if (dir.size() > DRAG_EXT_MAX_PATH) {
 			return false;
+		}
 
-		if (CreateDirectory(dir.wc_str(), 0)) {
+		if (CreateDirectory(dir.c_str(), 0)) {
 			m_dragDirectory = dir;
 			return true;
 		}
