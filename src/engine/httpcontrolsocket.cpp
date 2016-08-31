@@ -79,17 +79,12 @@ public:
 CHttpControlSocket::CHttpControlSocket(CFileZillaEnginePrivate & engine)
 	: CRealControlSocket(engine)
 {
-	m_pRecvBuffer = 0;
-	m_recvBufferPos = 0;
-	m_pTlsSocket = 0;
-	m_pHttpOpData = 0;
 }
 
 CHttpControlSocket::~CHttpControlSocket()
 {
 	remove_handler();
 	DoClose();
-	delete [] m_pRecvBuffer;
 }
 
 int CHttpControlSocket::SendNextCommand()
@@ -190,14 +185,13 @@ void CHttpControlSocket::OnReceive()
 
 int CHttpControlSocket::DoReceive()
 {
-	do
-	{
+	do {
 		const CSocket::SocketState state = m_pSocket->GetState();
-		if (state != CSocket::connected && state != CSocket::closing)
+		if (state != CSocket::connected && state != CSocket::closing) {
 			return 0;
+		}
 
-		if (!m_pRecvBuffer)
-		{
+		if (!m_pRecvBuffer) {
 			m_pRecvBuffer = new char[m_recvBufferLen];
 			m_recvBufferPos = 0;
 		}
@@ -205,10 +199,8 @@ int CHttpControlSocket::DoReceive()
 		unsigned int len = m_recvBufferLen - m_recvBufferPos;
 		int error;
 		int read = m_pBackend->Read(m_pRecvBuffer + m_recvBufferPos, len, error);
-		if (read == -1)
-		{
-			if (error != EAGAIN)
-			{
+		if (read == -1) {
+			if (error != EAGAIN) {
 				ResetOperation(FZ_REPLY_ERROR | FZ_REPLY_DISCONNECTED);
 			}
 			return 0;
@@ -922,12 +914,25 @@ void CHttpControlSocket::OnClose(int error)
 	ProcessData(0, 0);
 }
 
+void CHttpControlSocket::ResetSocket()
+{
+	delete[] m_pRecvBuffer;
+	m_pRecvBuffer = 0;
+	m_recvBufferPos = 0;
+
+	if (m_pTlsSocket) {
+		if (m_pTlsSocket != m_pBackend) {
+			delete m_pTlsSocket;
+		}
+		m_pTlsSocket = 0;
+	}
+
+	CRealControlSocket::ResetSocket();
+}
+
 void CHttpControlSocket::ResetHttpData(CHttpOpData* pData)
 {
 	wxASSERT(pData);
-
-	delete [] m_pRecvBuffer;
-	m_pRecvBuffer = 0;
 
 	pData->m_gotHeader = false;
 	pData->m_responseCode = -1;

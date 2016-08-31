@@ -39,6 +39,7 @@ protected:
 
 	virtual int ResetOperation(int nErrorCode);
 
+	virtual void ResetSocket();
 	virtual void ResetHttpData(CHttpOpData* pData);
 
 	int OpenFile( CHttpFileTransferOpData* pData);
@@ -48,13 +49,13 @@ protected:
 
 	int ProcessData(char* p, int len);
 
-	char* m_pRecvBuffer;
-	unsigned int m_recvBufferPos;
+	char* m_pRecvBuffer{};
+	unsigned int m_recvBufferPos{};
 	static const unsigned int m_recvBufferLen = 4096;
 
-	CHttpOpData* m_pHttpOpData;
+	CHttpOpData* m_pHttpOpData{};
 
-	CTlsSocket* m_pTlsSocket;
+	CTlsSocket* m_pTlsSocket{};
 
 	wxURI m_current_uri;
 };
