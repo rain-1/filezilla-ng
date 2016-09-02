@@ -2619,7 +2619,7 @@ int CFtpControlSocket::FileTransferSend()
 				engine_.transfer_status_.Init(len, startOffset, false);
 			}
 			pData->pIOThread = new CIOThread;
-			if (!pData->pIOThread->Create(std::move(pFile), !pData->download, pData->binary)) {
+			if (!pData->pIOThread->Create(engine_.GetThreadPool(), std::move(pFile), !pData->download, pData->binary)) {
 				// CIOThread will delete pFile
 				delete pData->pIOThread;
 				pData->pIOThread = 0;
@@ -3715,7 +3715,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
-				m_pIPResolver = new CExternalIPResolver(*this);
+				m_pIPResolver = new CExternalIPResolver(engine_.GetThreadPool(), *this);
 				m_pIPResolver->GetExternalIP(resolverAddress, CSocket::ipv4);
 				if (!m_pIPResolver->Done()) {
 					LogMessage(MessageType::Debug_Verbose, _T("Waiting for resolver thread"));

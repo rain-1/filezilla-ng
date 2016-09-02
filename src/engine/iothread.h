@@ -2,6 +2,7 @@
 #define __IOTHREAD_H__
 
 #include <libfilezilla/event.hpp>
+#include <libfilezilla/thread_pool.hpp>
 
 #define BUFFERCOUNT 8
 #define BUFFERSIZE 256*1024
@@ -25,13 +26,13 @@ namespace fz {
 class file;
 }
 
-class CIOThread final : protected fz::thread
+class CIOThread final
 {
 public:
 	CIOThread();
-	virtual ~CIOThread();
+	~CIOThread();
 
-	bool Create(std::unique_ptr<fz::file> && pFile, bool read, bool binary);
+	bool Create(fz::thread_pool& pool, std::unique_ptr<fz::file> && pFile, bool read, bool binary);
 	virtual void Destroy(); // Only call that might be blocking
 
 	// Call before first call to one of the GetNext*Buffer functions
@@ -60,7 +61,7 @@ public:
 private:
 	void Close();
 
-	virtual void entry();
+	void entry();
 
 	int64_t ReadFromFile(char* pBuffer, int64_t maxLen);
 	bool WriteToFile(char* pBuffer, int64_t len);
@@ -93,6 +94,8 @@ private:
 #ifdef SIMULATE_IO
 	int64_t size_{};
 #endif
+
+	fz::async_task thread_;
 };
 
 #endif //__IOTHREAD_H__

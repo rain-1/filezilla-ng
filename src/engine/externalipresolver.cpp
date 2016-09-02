@@ -13,8 +13,9 @@ std::string ip;
 bool checked = false;
 }
 
-CExternalIPResolver::CExternalIPResolver(event_handler & handler)
-	: event_handler(handler.event_loop_)
+CExternalIPResolver::CExternalIPResolver(fz::thread_pool & pool, fz::event_handler & handler)
+	: fz::event_handler(handler.event_loop_)
+	, thread_pool_(pool)
 	, m_handler(&handler)
 {
 	ResetHttpData(true);
@@ -76,7 +77,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 		return;
 	}
 
-	m_pSocket = new CSocket(this);
+	m_pSocket = new CSocket(thread_pool_, this);
 
 	int res = m_pSocket->Connect(fz::to_native(host), m_port, protocol);
 	if (res && res != EINPROGRESS) {

@@ -26,8 +26,10 @@ protected:
 
 	void ResetTest();
 
-	wxWindow* m_parent;
-	COptions* m_pOptions;
+	CFileZillaEngineContext & engine_context_;
+
+	wxWindow* const m_parent;
+	COptions* const m_pOptions;
 
 	std::vector<wxWizardPageSimple*> m_pages;
 
@@ -87,16 +89,16 @@ protected:
 		datatainted
 	} m_testResult;
 
-	CExternalIPResolver* m_pIPResolver;
+	CExternalIPResolver* m_pIPResolver{};
 	wxString m_externalIP;
 
 	CSocket* m_pSocketServer{};
 	CSocket* m_pDataSocket{};
-	int m_listenPort;
-	bool gotListReply;
-	int m_data;
+	int m_listenPort{};
+	bool gotListReply{};
+	int m_data{};
 
-	char* m_pSendBuffer;
+	char* m_pSendBuffer{};
 
 	wxTimer m_timer;
 };
