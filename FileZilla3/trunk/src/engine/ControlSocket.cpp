@@ -840,7 +840,7 @@ void CControlSocket::SendAsyncRequest(CAsyncRequestNotification* pNotification)
 CRealControlSocket::CRealControlSocket(CFileZillaEnginePrivate & engine)
 	: CControlSocket(engine)
 {
-	m_pSocket = new CSocket(this);
+	m_pSocket = new CSocket(engine.GetThreadPool(), this);
 
 	m_pBackend = new CSocketBackend(this, *m_pSocket, engine_.GetRateLimiter());
 	m_pProxyBackend = 0;

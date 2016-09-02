@@ -90,6 +90,7 @@ public:
 	CRateLimiter& GetRateLimiter() { return m_rateLimiter; }
 	CDirectoryCache& GetDirectoryCache() { return directory_cache_; }
 	CPathCache& GetPathCache() { return path_cache_; }
+	fz::thread_pool& GetThreadPool() { return thread_pool_; }
 
 	void SendDirectoryListingNotification(const CServerPath& path, bool onList, bool modified, bool failed);
 
@@ -202,6 +203,8 @@ protected:
 
 	bool queue_logs_{true};
 	std::deque<CLogmsgNotification*> queued_logs_;
+
+	fz::thread_pool & thread_pool_;
 };
 
 struct command_event_type{};

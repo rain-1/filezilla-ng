@@ -9,6 +9,7 @@
 #include <filezilla.h>
 #include <libfilezilla/format.hpp>
 #include <libfilezilla/mutex.hpp>
+#include <libfilezilla/thread_pool.hpp>
 #include "socket.h"
 #ifndef FZ_WINDOWS
   #define mutex mutex_override // Sadly on some platforms system headers include conflicting names
@@ -191,7 +192,7 @@ public:
 #endif
 }
 
-class CSocketThread final : protected fz::thread
+class CSocketThread final
 {
 	friend class CSocket;
 public:
@@ -209,9 +210,9 @@ public:
 		}
 	}
 
-	virtual ~CSocketThread()
+	~CSocketThread()
 	{
-		join();
+		thread_.join();
 #ifdef FZ_WINDOWS
 		if (m_sync_event != WSA_INVALID_EVENT)
 			WSACloseEvent(m_sync_event);
@@ -286,11 +287,9 @@ public:
 		}
 #endif
 
-		if (!run()) {
-			return 1;
-		}
+		thread_ = m_pSocket->thread_pool_.spawn([this]() { entry(); });
 
-		return 0;
+		return thread_ ? 0 : 1;
 	}
 
 	// Cancels select or idle wait
@@ -762,7 +761,7 @@ protected:
 		return true;
 	}
 
-	virtual void entry()
+	void entry()
 	{
 		fz::scoped_lock l(m_sync);
 		for (;;) {
@@ -851,10 +850,13 @@ protected:
 
 	// Thread waits for instructions
 	bool m_threadwait{};
+
+	fz::async_task thread_;
 };
 
-CSocket::CSocket(fz::event_handler* pEvtHandler)
-	: m_pEvtHandler(pEvtHandler)
+CSocket::CSocket(fz::thread_pool & pool, fz::event_handler* pEvtHandler)
+	: thread_pool_(pool)
+	, m_pEvtHandler(pEvtHandler)
 	, m_keepalive_interval(fz::duration::from_hours(2))
 {
 #ifdef ERRORCODETEST
@@ -1512,7 +1514,7 @@ CSocket* CSocket::Accept(int &error)
 
 	DoSetBufferSizes(fd, m_buffer_sizes[0], m_buffer_sizes[1]);
 
-	CSocket* pSocket = new CSocket(0);
+	CSocket* pSocket = new CSocket(thread_pool_, 0);
 	pSocket->m_state = connected;
 	pSocket->m_fd = fd;
 	pSocket->m_pSocketThread = new CSocketThread();

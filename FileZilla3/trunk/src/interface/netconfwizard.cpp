@@ -30,11 +30,9 @@ TRANSLATE_T("< &Back");
 
 CNetConfWizard::CNetConfWizard(wxWindow* parent, COptions* pOptions, CFileZillaEngineContext & engine_context)
 	: fz::event_handler(engine_context.GetEventLoop())
+	, engine_context_(engine_context)
 	, m_parent(parent), m_pOptions(pOptions), m_pSocketServer(0)
 {
-	m_pIPResolver = 0;
-	m_pSendBuffer = 0;
-
 	m_timer.SetOwner(this);
 
 	ResetTest();
@@ -214,7 +212,7 @@ void CNetConfWizard::OnPageChanging(wxWizardEvent& event)
 		event.Veto();
 
 		PrintMessage(wxString::Format(_("Connecting to %s"), _T("probe.filezilla-project.org")), 0);
-		m_socket = new CSocket(this);
+		m_socket = new CSocket(engine_context_.GetThreadPool(), this);
 		m_recvBufferPos = 0;
 
 		int res = m_socket->Connect(fzT("probe.filezilla-project.org"), 21);
@@ -726,7 +724,7 @@ wxString CNetConfWizard::GetExternalIPAddress()
 
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
-			m_pIPResolver = new CExternalIPResolver(*this);
+			m_pIPResolver = new CExternalIPResolver(engine_context_.GetThreadPool(), *this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
 			if (!m_pIPResolver->Done())
 				return wxString();
@@ -917,7 +915,7 @@ int CNetConfWizard::CreateListenSocket()
 
 int CNetConfWizard::CreateListenSocket(unsigned int port)
 {
-	m_pSocketServer = new CSocket(this);
+	m_pSocketServer = new CSocket(engine_context_.GetThreadPool(), this);
 	int res = m_pSocketServer->Listen(m_socket ? m_socket->GetAddressFamily() : CSocket::unspec, port);
 
 	if (res < 0) {

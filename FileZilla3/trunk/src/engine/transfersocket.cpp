@@ -485,7 +485,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 {
 	ResetSocket();
 
-	m_pSocket = new CSocket(this);
+	m_pSocket = new CSocket(engine_.GetThreadPool(), this);
 
 	if (controlSocket_.m_pProxyBackend) {
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, &controlSocket_);
@@ -575,7 +575,7 @@ void CTransferSocket::TransferEnd(TransferEndReason reason)
 
 CSocket* CTransferSocket::CreateSocketServer(int port)
 {
-	CSocket* pServer = new CSocket(this);
+	CSocket* pServer = new CSocket(engine_.GetThreadPool(), this);
 	int res = pServer->Listen(controlSocket_.m_pSocket->GetAddressFamily(), port);
 	if (res) {
 		controlSocket_.LogMessage(MessageType::Debug_Verbose, _T("Could not listen on port %d: %s"), port, CSocket::GetErrorDescription(res));

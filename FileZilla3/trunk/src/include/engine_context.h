@@ -10,6 +10,7 @@ class CRateLimiter;
 
 namespace fz {
 class event_loop;
+class thread_pool;
 }
 
 // There can be multiple engines, but there can be at most one context
@@ -20,6 +21,7 @@ public:
 	~CFileZillaEngineContext();
 
 	COptionsBase& GetOptions();
+	fz::thread_pool& GetThreadPool();
 	fz::event_loop& GetEventLoop();
 	CRateLimiter& GetRateLimiter();
 	CDirectoryCache& GetDirectoryCache();

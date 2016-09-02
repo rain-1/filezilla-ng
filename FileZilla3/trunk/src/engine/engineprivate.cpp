@@ -27,6 +27,7 @@ CFileZillaEnginePrivate::CFileZillaEnginePrivate(CFileZillaEngineContext& contex
 	, directory_cache_(context.GetDirectoryCache())
 	, path_cache_(context.GetPathCache())
 	, parent_(parent)
+	, thread_pool_(context.GetThreadPool())
 {
 	m_engineList.push_back(this);
 
@@ -81,8 +82,9 @@ CFileZillaEnginePrivate::~CFileZillaEnginePrivate()
 
 	delete m_pLogging;
 
-	if (m_engineList.empty())
+	if (m_engineList.empty()) {
 		CSocket::Cleanup(true);
+	}
 }
 
 void CFileZillaEnginePrivate::OnEngineEvent(EngineNotificationType type)

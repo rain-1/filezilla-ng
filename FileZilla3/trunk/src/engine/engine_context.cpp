@@ -8,6 +8,7 @@
 #include "socket.h"
 
 #include <libfilezilla/event_loop.hpp>
+#include <libfilezilla/thread_pool.hpp>
 
 namespace {
 struct logging_options_changed_event_type;
@@ -57,6 +58,7 @@ public:
 		optionChangeHandler_.remove_handler();
 	}
 
+	fz::thread_pool pool_;
 	fz::event_loop loop_;
 	CRateLimiter limiter_;
 	CDirectoryCache directory_cache_;
@@ -77,6 +79,11 @@ CFileZillaEngineContext::~CFileZillaEngineContext()
 COptionsBase& CFileZillaEngineContext::GetOptions()
 {
 	return options_;
+}
+
+fz::thread_pool& CFileZillaEngineContext::GetThreadPool()
+{
+	return impl_->pool_;
 }
 
 fz::event_loop& CFileZillaEngineContext::GetEventLoop()

@@ -5,6 +5,10 @@
 
 #include <errno.h>
 
+namespace fz {
+class thread_pool;
+}
+
 // IPv6 capable, non-blocking socket class for use with wxWidgets.
 // Error codes are the same as used by the POSIX socket functions,
 // see 'man 2 socket', 'man 2 connect', ...
@@ -41,7 +45,7 @@ class CSocket final : public CSocketEventSource
 {
 	friend class CSocketThread;
 public:
-	CSocket(fz::event_handler* pEvtHandler);
+	CSocket(fz::thread_pool& pool, fz::event_handler* pEvtHandler);
 	virtual ~CSocket();
 
 	CSocket(CSocket const&) = delete;
@@ -150,6 +154,7 @@ protected:
 	// Note: Unlocks the lock.
 	void DetachThread(fz::scoped_lock & l);
 
+	fz::thread_pool & thread_pool_;
 	fz::event_handler* m_pEvtHandler;
 
 	int m_fd{-1};

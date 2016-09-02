@@ -34,7 +34,7 @@ void CIOThread::Close()
 	}
 }
 
-bool CIOThread::Create(std::unique_ptr<fz::file> && pFile, bool read, bool binary)
+bool CIOThread::Create(fz::thread_pool& pool, std::unique_ptr<fz::file> && pFile, bool read, bool binary)
 {
 	wxASSERT(pFile);
 
@@ -59,7 +59,8 @@ bool CIOThread::Create(std::unique_ptr<fz::file> && pFile, bool read, bool binar
 	
 	m_running = true;
 	
-	if (!run()) {
+	thread_ = pool.spawn([this]() { entry(); });
+	if (!thread_) {
 		m_running = false;
 		return false;
 	}
@@ -70,10 +71,12 @@ bool CIOThread::Create(std::unique_ptr<fz::file> && pFile, bool read, bool binar
 void CIOThread::entry()
 {
 	if (m_read) {
+		fz::scoped_lock l(m_mutex);
 		while (m_running) {
-			auto len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
 
-			fz::scoped_lock l(m_mutex);
+			l.unlock();
+			auto len = ReadFromFile(m_buffers[m_curThreadBuf], BUFFERSIZE);
+			l.lock();
 
 			if (m_appWaiting) {
 				if (!m_evtHandler) {
@@ -261,7 +264,7 @@ void CIOThread::Destroy()
 		}
 	}
 
-	join();
+	thread_.join();
 }
 
 int64_t CIOThread::ReadFromFile(char* pBuffer, int64_t maxLen)
