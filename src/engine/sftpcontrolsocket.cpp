@@ -249,6 +249,7 @@ public:
 	}
 
 	wxString lastChallenge;
+	CInteractiveLoginNotification::type lastChallengeType{CInteractiveLoginNotification::interactive};
 	bool criticalFailure{};
 
 	std::vector<std::wstring> keyfiles_;
@@ -567,8 +568,8 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 
 			wxString const challengeIdentifier = m_requestPreamble + _T("\n") + m_requestInstruction + _T("\n") + message.text[0];
 
+			CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
 			if (m_pCurrentServer->GetLogonType() == INTERACTIVE || m_requestPreamble == _T("SSH key passphrase")) {
-				CInteractiveLoginNotification::type t = CInteractiveLoginNotification::interactive;
 				if (m_requestPreamble == _T("SSH key passphrase")) {
 					t = CInteractiveLoginNotification::keyfile;
 				}
@@ -586,12 +587,10 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 				CInteractiveLoginNotification *pNotification = new CInteractiveLoginNotification(t, challenge, pData->lastChallenge == challengeIdentifier);
 				pNotification->server = *m_pCurrentServer;
 
-				pData->lastChallenge = challengeIdentifier;
-
 				SendAsyncRequest(pNotification);
 			}
 			else {
-				if (!pData->lastChallenge.empty()) {
+				if (!pData->lastChallenge.empty() && pData->lastChallengeType != CInteractiveLoginNotification::keyfile) {
 					// Check for same challenge. Will most likely fail as well, so abort early.
 					if (pData->lastChallenge == challengeIdentifier) {
 						LogMessage(MessageType::Error, _("Authentication failed."));
@@ -603,13 +602,13 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 					return;
 				}
 
-				pData->lastChallenge = challengeIdentifier;
-
 				std::wstring const pass = m_pCurrentServer->GetPass().ToStdWstring();
 				std::wstring show = _T("Pass: ");
 				show.append(pass.size(), '*');
 				SendCommand(pass, show);
 			}
+			pData->lastChallenge = challengeIdentifier;
+			pData->lastChallengeType = t;
 		}
 		break;
 	case sftpEvent::RequestPreamble:
