@@ -274,10 +274,11 @@ wxString CServer::GetAccount() const
 	return m_account;
 }
 
-wxString CServer::GetKeyFile() const
+std::wstring CServer::GetKeyFile() const
 {
-	if (m_logonType != KEY)
-		return wxString();
+	if (m_logonType != KEY) {
+		return std::wstring();
+	}
 
 	return m_keyFile;
 }

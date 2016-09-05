@@ -13,7 +13,6 @@
 #include <libfilezilla/process.hpp>
 
 #include <wx/log.h>
-#include <wx/tokenzr.h>
 
 #include <cwchar>
 
@@ -34,7 +33,7 @@ typedef fz::simple_event<terminate_event_type, std::wstring> CTerminateEvent;
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
 public:
-	CSftpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
+	CSftpFileTransferOpData(bool is_download, wxString const& local_file, wxString const& remote_file, CServerPath const& remote_path)
 		: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
 	{
 	}
@@ -236,25 +235,24 @@ enum connectStates
 	connect_open
 };
 
-class CSftpConnectOpData : public COpData
+class CSftpConnectOpData final : public COpData
 {
 public:
 	CSftpConnectOpData()
 		: COpData(Command::connect)
+		, keyfile_(keyfiles_.cend())
 	{
-		criticalFailure = false;
-		pKeyFiles = 0;
 	}
 
 	virtual ~CSftpConnectOpData()
 	{
-		delete pKeyFiles;
 	}
 
 	wxString lastChallenge;
-	bool criticalFailure;
+	bool criticalFailure{};
 
-	wxStringTokenizer* pKeyFiles;
+	std::vector<std::wstring> keyfiles_;
+	std::vector<std::wstring>::const_iterator keyfile_;
 };
 
 int CSftpControlSocket::Connect(const CServer &server)
@@ -287,16 +285,13 @@ int CSftpControlSocket::Connect(const CServer &server)
 
 	pData->opState = connect_init;
 
-	wxStringTokenizer* pTokenizer;
-	if (m_pCurrentServer->GetLogonType() == KEY)
-		pTokenizer = new wxStringTokenizer(m_pCurrentServer->GetKeyFile() + _T("\n"), _T("\n"), wxTOKEN_DEFAULT);
-	else
-		pTokenizer = new wxStringTokenizer(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), _T("\n"), wxTOKEN_DEFAULT);
-
-	if (!pTokenizer->HasMoreTokens())
-		delete pTokenizer;
-	else
-		pData->pKeyFiles = pTokenizer;
+	if (m_pCurrentServer->GetLogonType() == KEY) {
+		pData->keyfiles_ = fz::strtok(m_pCurrentServer->GetKeyFile(), '\n');
+	}
+	else {
+		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES).ToStdWstring(), '\n');
+	}
+	pData->keyfile_ = pData->keyfiles_.cend();
 
 	m_pProcess = new fz::process();
 
@@ -360,23 +355,28 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 			DoClose(FZ_REPLY_INTERNALERROR);
 			return FZ_REPLY_ERROR;
 		}
-		if (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy())
+		if (engine_.GetOptions().GetOptionVal(OPTION_PROXY_TYPE) && !m_pCurrentServer->GetBypassProxy()) {
 			pData->opState = connect_proxy;
-		else if (pData->pKeyFiles)
+		}
+		else if (pData->keyfile_ != pData->keyfiles_.cend()) {
 			pData->opState = connect_keys;
-		else
+		}
+		else {
 			pData->opState = connect_open;
+		}
 		break;
 	case connect_proxy:
-		if (pData->pKeyFiles)
+		if (pData->keyfile_ != pData->keyfiles_.cend()) {
 			pData->opState = connect_keys;
-		else
+		}
+		else {
 			pData->opState = connect_open;
+		}
 		break;
 	case connect_keys:
-		wxASSERT(pData->pKeyFiles);
-		if (!pData->pKeyFiles->HasMoreTokens())
+		if (pData->keyfile_ == pData->keyfiles_.cend()) {
 			pData->opState = connect_open;
+		}
 		break;
 	case connect_open:
 		engine_.AddNotification(new CSftpEncryptionNotification(m_sftpEncryptionDetails));
@@ -450,7 +450,7 @@ int CSftpControlSocket::ConnectSend()
 		}
 		break;
 	case connect_keys:
-		res = SendCommand(L"keyfile \"" + pData->pKeyFiles->GetNextToken().ToStdWstring() + L"\"");
+		res = SendCommand(L"keyfile \"" + *(pData->keyfile_++) + L"\"");
 		break;
 	case connect_open:
 		res = SendCommand(fz::sprintf(L"open \"%s@%s\" %d", m_pCurrentServer->GetUser(), m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort()));
