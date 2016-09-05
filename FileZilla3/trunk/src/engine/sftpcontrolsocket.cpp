@@ -340,8 +340,7 @@ int CSftpControlSocket::ConnectParseResponse(bool successful, const wxString& re
 	}
 
 	CSftpConnectOpData *pData = static_cast<CSftpConnectOpData *>(m_pCurOpData);
-	if (!pData)
-	{
+	if (!pData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData of wrong type"));
 		DoClose(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -2029,7 +2028,7 @@ int CSftpControlSocket::MkdirSend()
 
 std::wstring CSftpControlSocket::QuoteFilename(std::wstring const& filename)
 {
-	return L"\"" + fz::replace_substrings(filename, L"\"", L"\"\"") + L"\"";
+	return L"\"" + fz::replaced_substrings(filename, L"\"", L"\"\"") + L"\"";
 }
 
 int CSftpControlSocket::Delete(const CServerPath& path, std::deque<std::wstring>&& files)

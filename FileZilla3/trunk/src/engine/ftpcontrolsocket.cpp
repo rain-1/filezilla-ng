@@ -18,7 +18,6 @@
 #include <libfilezilla/util.hpp>
 
 #include <wx/log.h>
-#include <wx/tokenzr.h>
 
 #include <algorithm>
 
@@ -587,73 +586,78 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		}
 	}
 	else if (pData->ftp_proxy_type == 4) {
-		wxString proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
-		wxString proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
-		wxString host = server.Format(ServerFormat::with_optional_port);
-		wxString user = server.GetUser();
-		wxString account = server.GetAccount();
-		proxyUser.Replace(_T("%"), _T("%%"));
-		proxyPass.Replace(_T("%"), _T("%%"));
-		host.Replace(_T("%"), _T("%%"));
-		user.Replace(_T("%"), _T("%%"));
-		account.Replace(_T("%"), _T("%%"));
+		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER).ToStdWstring();
+		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS).ToStdWstring();
+		std::wstring host = server.Format(ServerFormat::with_optional_port).ToStdWstring();
+		std::wstring user = server.GetUser().ToStdWstring();
+		std::wstring account = server.GetAccount().ToStdWstring();
+		fz::replace_substrings(proxyUser, _T("%"), _T("%%"));
+		fz::replace_substrings(proxyPass, _T("%"), _T("%%"));
+		fz::replace_substrings(host, _T("%"), _T("%%"));
+		fz::replace_substrings(user, _T("%"), _T("%%"));
+		fz::replace_substrings(account, _T("%"), _T("%%"));
 
-		wxString loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE);
-		wxStringTokenizer tokens(loginSequence, _T("\n"), wxTOKEN_STRTOK);
+		std::wstring const loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE).ToStdWstring();
+		std::vector<std::wstring> const tokens = fz::strtok(loginSequence, L" \r\t\n");
 
-		while (tokens.HasMoreTokens()) {
-			wxString token = tokens.GetNextToken();
-			token.Trim(true);
-			token.Trim(false);
-
-			if (token.empty())
-				continue;
-
+		for (auto token : tokens) {
 			bool isHost = false;
 			bool isUser = false;
 			bool password = false;
 			bool isProxyUser = false;
 			bool isProxyPass = false;
-			if (token.Find(_T("%h")) != -1)
+			if (token.find(_T("%h")) != token.npos) {
 				isHost = true;
-			if (token.Find(_T("%u")) != -1)
+			}
+			if (token.find(_T("%u")) != token.npos) {
 				isUser = true;
-			if (token.Find(_T("%p")) != -1)
+			}
+			if (token.find(_T("%p")) != token.npos) {
 				password = true;
-			if (token.Find(_T("%s")) != -1)
+			}
+			if (token.find(_T("%s")) != token.npos) {
 				isProxyUser = true;
-			if (token.Find(_T("%w")) != -1)
+			}
+			if (token.find(_T("%w")) != token.npos) {
 				isProxyPass = true;
+			}
 
 			// Skip account if empty
 			bool isAccount = false;
-			if (token.Find(_T("%a")) != -1) {
-				if (account.empty())
+			if (token.find(_T("%a")) != token.npos) {
+				if (account.empty()) {
 					continue;
-				else
+				}
+				else {
 					isAccount = true;
+				}
 			}
 
-			if (isProxyUser && !isHost && !isUser && proxyUser.empty())
+			if (isProxyUser && !isHost && !isUser && proxyUser.empty()) {
 				continue;
-			if (isProxyPass && !isHost && !isUser && proxyUser.empty())
+			}
+			if (isProxyPass && !isHost && !isUser && proxyUser.empty()) {
 				continue;
+			}
 
-			token.Replace(_T("%s"), proxyUser);
-			token.Replace(_T("%w"), proxyPass);
-			token.Replace(_T("%h"), host);
-			token.Replace(_T("%u"), user);
-			token.Replace(_T("%a"), account);
+			fz::replace_substrings(token, _T("%s"), proxyUser);
+			fz::replace_substrings(token, _T("%w"), proxyPass);
+			fz::replace_substrings(token, _T("%h"), host);
+			fz::replace_substrings(token, _T("%u"), user);
+			fz::replace_substrings(token, _T("%a"), account);
 			// Pass will be replaced before sending to cope with interactve login
 
-			if (!password)
-				token.Replace(_T("%%"), _T("%"));
+			if (!password) {
+				fz::replace_substrings(token, _T("%%"), _T("%"));
+			}
 
 			t_loginCommand cmd;
-			if (password || isProxyPass)
+			if (password || isProxyPass) {
 				cmd.hide_arguments = true;
-			else
+			}
+			else {
 				cmd.hide_arguments = false;
+			}
 
 			if (isUser && !password && !isAccount) {
 				cmd.optional = false;
