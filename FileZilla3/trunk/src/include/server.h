@@ -91,7 +91,7 @@ public:
 	wxString GetUser() const;
 	wxString GetPass() const;
 	wxString GetAccount() const;
-	wxString GetKeyFile() const;
+	std::wstring GetKeyFile() const;
 	int GetTimezoneOffset() const;
 	PasvMode GetPasvMode() const;
 	int MaximumMultipleConnections() const;
@@ -171,7 +171,7 @@ protected:
 	wxString m_user;
 	wxString m_pass;
 	wxString m_account;
-	wxString m_keyFile;
+	std::wstring m_keyFile;
 	int m_timezoneOffset;
 	PasvMode m_pasvMode;
 	int m_maximumMultipleConnections;
