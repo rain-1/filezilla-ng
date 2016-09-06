@@ -942,6 +942,7 @@ void CEditHandler::OnChangedFileEvent(wxCommandEvent&)
 
 wxString CEditHandler::GetTemporaryFile(wxString name)
 {
+	name = CQueueView::ReplaceInvalidCharacters(name);
 #ifdef __WXMSW__
 	// MAX_PATH - 1 is theoretical limit, we subtract another 4 to allow
 	// editors which create temporary files
@@ -949,41 +950,45 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 #else
 	int max = -1;
 #endif
-	if (max != -1)
-	{
+	if (max != -1) {
 		name = TruncateFilename(m_localDir, name, max);
-		if (name.empty())
+		if (name.empty()) {
 			return wxString();
+		}
 	}
 
 	wxString file = m_localDir + name;
-	if (!FilenameExists(file))
+	if (!FilenameExists(file)) {
 		return file;
+	}
 
-	if (max != -1)
+	if (max != -1) {
 		max--;
+	}
 	int cutoff = 1;
 	int n = 1;
-	while (++n < 10000) // Just to give up eventually
-	{
+	while (++n < 10000) { // Just to give up eventually
 		// Further reduce length if needed
-		if (max != -1 && n >= cutoff)
-		{
+		if (max != -1 && n >= cutoff) {
 			cutoff *= 10;
 			max--;
 			name = TruncateFilename(m_localDir, name, max);
-			if (name.empty())
+			if (name.empty()) {
 				return wxString();
+			}
 		}
 
 		int pos = name.Find('.', true);
-		if (pos < 1)
+		if (pos < 1) {
 			file = m_localDir + name + wxString::Format(_T(" %d"), n);
-		else
+		}
+		else {
 			file = m_localDir + name.Left(pos) + wxString::Format(_T(" %d"), n) + name.Mid(pos);
+		}
 
-		if (!FilenameExists(file))
+		if (!FilenameExists(file)) {
 			return file;
+		}
 	}
 
 	return wxString();
