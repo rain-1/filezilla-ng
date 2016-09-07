@@ -27,7 +27,7 @@ public:
 	};
 	static wxString Name(ProxyType t);
 
-	int Handshake(ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass);
+	int Handshake(ProxyType type, wxString const& host, unsigned int port, wxString const& user, wxString const& pass);
 
 	ProxyState GetState() const { return m_proxyState; }
 
@@ -50,10 +50,10 @@ protected:
 	CControlSocket* m_pOwner;
 
 	ProxyType m_proxyType{unknown};
-	wxString m_host;
+	std::wstring m_host;
 	int m_port{};
-	wxString m_user;
-	wxString m_pass;
+	std::string m_user;
+	std::string m_pass;
 
 	ProxyState m_proxyState{noconn};
 
