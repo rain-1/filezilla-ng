@@ -168,16 +168,7 @@ wxString ConvLocal(const char *value)
 
 pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, const wxString& value, bool overwrite)
 {
-	pugi::xml_node ret;
-
-	wxASSERT(node);
-
-	wxScopedCharBuffer utf8 = value.utf8_str();
-	if (utf8) {
-		ret = AddTextElementRaw(node, name, utf8, overwrite);
-	}
-
-	return ret;
+	return AddTextElementRaw(node, name, fz::to_utf8(value).c_str(), overwrite);
 }
 
 void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool overwrite)
@@ -531,22 +522,19 @@ void SetServer(pugi::xml_node node, const CServer& server)
 			if (kiosk_mode)
 				logonType = ASK;
 			else {
-				wxString pass = server.GetPass();
-				auto const& buf = pass.utf8_str(); // wxWidgets has such an ugly string API....
-				std::string utf8(buf.data(), buf.length());
-
-				wxString base64 = wxBase64Encode(utf8.c_str(), utf8.size());
-				pugi::xml_node passElement = AddTextElement(node, "Pass", base64);
+				std::string pass = fz::to_utf8(server.GetPass());
+				
+				pugi::xml_node passElement = AddTextElementRaw(node, "Pass", fz::base64_encode(pass).c_str());
 				if (passElement) {
 					SetTextAttribute(passElement, "encoding", _T("base64"));
 				}
 
-				if (server.GetLogonType() == ACCOUNT)
+				if (server.GetLogonType() == ACCOUNT) {
 					AddTextElement(node, "Account", server.GetAccount());
+				}
 			}
 		}
-		else if (server.GetLogonType() == KEY)
-		{
+		else if (server.GetLogonType() == KEY) {
 			AddTextElement(node, "Keyfile", server.GetKeyFile());
 		}
 	}
