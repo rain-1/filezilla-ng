@@ -49,41 +49,6 @@ CProxySocket::~CProxySocket()
 	delete [] m_pRecvBuffer;
 }
 
-namespace {
-wxString base64encode(const wxString& str)
-{
-	// Code shamelessly taken from wxWidgets and adopted to encode UTF-8 strings.
-	// wxWidget's http class encodes string from arbitrary encoding into base64,
-	// could as well encode /dev/random
-	static char const*const base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-
-	wxString buf;
-
-	const wxWX2MBbuf utf8 = str.mb_str(wxConvUTF8);
-	const char* from = utf8;
-
-	size_t len = strlen(from);
-	while (len >= 3) { // encode full blocks first
-		buf << wxString::Format(wxT("%c%c"), base64[(from[0] >> 2) & 0x3f], base64[((from[0] << 4) & 0x30) | ((from[1] >> 4) & 0xf)]);
-		buf << wxString::Format(wxT("%c%c"), base64[((from[1] << 2) & 0x3c) | ((from[2] >> 6) & 0x3)], base64[from[2] & 0x3f]);
-		from += 3;
-		len -= 3;
-	}
-	if (len > 0) { // pad the remaining characters
-		buf << wxString::Format(wxT("%c"), base64[(from[0] >> 2) & 0x3f]);
-		if (len == 1) {
-			buf << wxString::Format(wxT("%c="), base64[(from[0] << 4) & 0x30]);
-		}
-		else {
-			buf << wxString::Format(wxT("%c%c"), base64[((from[0] << 4) & 0x30) | ((from[1] >> 4) & 0xf)], base64[(from[1] << 2) & 0x3c]);
-		}
-		buf << wxString::Format(wxT("="));
-	}
-
-	return buf;
-}
-}
-
 wxString CProxySocket::Name(ProxyType t)
 {
 	switch (t) {
@@ -98,22 +63,23 @@ wxString CProxySocket::Name(ProxyType t)
 	}
 }
 
-int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, unsigned int port, const wxString& user, const wxString& pass)
+int CProxySocket::Handshake(CProxySocket::ProxyType type, wxString const& host, unsigned int port, wxString const& user, wxString const& pass)
 {
-	if (type == CProxySocket::unknown || host.empty() || port < 1 || port > 65535)
+	if (type == CProxySocket::unknown || host.empty() || port < 1 || port > 65535) {
 		return EINVAL;
+	}
 
-	if (m_proxyState != noconn)
+	if (m_proxyState != noconn) {
 		return EALREADY;
+	}
 
-	const wxWX2MBbuf host_raw = host.mb_str(wxConvUTF8);
-
-	if (type != HTTP && type != SOCKS5 && type != SOCKS4)
+	if (type != HTTP && type != SOCKS5 && type != SOCKS4) {
 		return EPROTONOSUPPORT;
+	}
 
-	m_user = user;
-	m_pass = pass;
-	m_host = host;
+	m_user = fz::to_utf8(user);
+	m_pass = fz::to_utf8(pass);
+	m_host = host.ToStdWstring();
 	m_port = port;
 	m_proxyType = type;
 
@@ -122,46 +88,43 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 	if (type == HTTP) {
 		m_handshakeState = http_wait;
 
-		wxWX2MBbuf challenge{};
-		int challenge_len{};
+		std::string auth;
 		if (!user.empty()) {
-			challenge = base64encode(user + _T(":") + pass).mb_str(wxConvUTF8);
-			challenge_len = strlen(challenge);
+			auth = "Proxy-Authorization: Basic ";
+			auth += fz::base64_encode(m_user + ":" + m_pass);
+			auth += "\r\n";
 		}
 
 		// Bit oversized, but be on the safe side
-		m_pSendBuffer = new char[70 + strlen(host_raw) * 2 + 2*5 + challenge_len + 23];
+		std::string host_raw = fz::to_utf8(host);
+		m_pSendBuffer = new char[70 + host_raw.size() * 2 + 2*5 + auth.size() + 23];
 
-		if (!challenge || !challenge_len) {
-			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nUser-Agent: FileZilla\r\n\r\n",
-				(const char*)host_raw, port,
-				(const char*)host_raw, port);
-		}
-		else {
-			m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\nProxy-Authorization: Basic %s\r\nUser-Agent: FileZilla\r\n\r\n",
-				(const char*)host_raw, port,
-				(const char*)host_raw, port,
-				(const char*)challenge);
-		}
+		m_sendBufferLen = sprintf(m_pSendBuffer, "CONNECT %s:%u HTTP/1.1\r\nHost: %s:%u\r\n%sUser-Agent: FileZilla\r\n\r\n",
+			host_raw.c_str(), port,
+			host_raw.c_str(), port,
+			auth.c_str());
 
 		m_pRecvBuffer = new char[4096];
 		m_recvBufferLen = 4096;
 		m_recvBufferPos = 0;
 	}
 	else if (type == SOCKS4) {
-		wxString ip = m_host;
-		if (!fz::get_ipv6_long_form(m_host.ToStdWstring()).empty()) {
+		std::string ip;
+		auto const addressType = fz::get_address_type(m_host);
+		if (addressType == fz::address_type::ipv6) {
 			m_pOwner->LogMessage(MessageType::Error, _("IPv6 addresses are not supported with SOCKS4 proxy"));
 			return EINVAL;
 		}
-
-		if (fz::get_address_type(m_host.ToStdWstring()) == fz::address_type::unknown) {
+		else if (addressType == fz::address_type::ipv4) {
+			ip = fz::to_string(m_host);
+		}
+		else {
 			addrinfo hints{};
 			hints.ai_family = AF_INET;
 			hints.ai_socktype = SOCK_STREAM;
 
 			addrinfo * result{};
-			int res = getaddrinfo(host.ToStdString().c_str(), 0, &hints, &result);
+			int res = getaddrinfo(fz::to_string(m_host).c_str(), 0, &hints, &result);
 			if (!res && result) {
 				if (result->ai_family == AF_INET) {
 					ip = CSocket::AddressToString(result->ai_addr, result->ai_addrlen, false);
@@ -185,10 +148,10 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 		unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
 		int i = 0;
 		memset(buf, 0, 4);
-		for (const wxChar* p = ip.c_str(); *p && i < 4; p++) {
-			const wxChar& c = *p;
+		for (auto p = ip.c_str(); *p && i < 4; ++p) {
+			auto const& c = *p;
 			if (c == '.') {
-				i++;
+				++i;
 				continue;
 			}
 			buf[i] *= 10;
@@ -202,6 +165,11 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, const wxString& host, 
 		m_handshakeState = socks4_handshake;
 	}
 	else {
+		if (m_user.size() > 255 || m_pass.size() > 255) {
+			m_pOwner->LogMessage(MessageType::Status, _("SOCKS5 does not support usernames or passwords longer than 255 characters."));
+			return EINVAL;
+		}
+
 		m_pSendBuffer = new char[4];
 		m_pSendBuffer[0] = 5; // Protocol version
 		if (!user.empty()) {
@@ -349,10 +317,10 @@ void CProxySocket::OnReceive()
 
 			end = strchr(m_pRecvBuffer, '\r'); // Never fails as old value of end exists and starts with CR, we just look for an earlier case.
 			*end = 0;
-			wxString reply(m_pRecvBuffer, wxConvUTF8);
+			std::wstring const reply = fz::to_wstring_from_utf8(m_pRecvBuffer);
 			m_pOwner->LogMessage(MessageType::Response, _("Proxy reply: %s"), reply);
 
-			if (reply.Left(10) != _T("HTTP/1.1 2") && reply.Left(10) != _T("HTTP/1.0 2")) {
+			if (reply.substr(0, 10) != L"HTTP/1.1 2" && reply.substr(0, 10) != L"HTTP/1.0 2") {
 				m_proxyState = noconn;
 				m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNRESET);
 				return;
@@ -490,8 +458,7 @@ void CProxySocket::OnReceive()
 				}
 				break;
 			case socks5_auth:
-				if (m_pRecvBuffer[1] != 0)
-				{
+				if (m_pRecvBuffer[1] != 0) {
 					m_pOwner->LogMessage(MessageType::Error, _("Proxy authentication failed"));
 					m_proxyState = noconn;
 					m_pEvtHandler->send_event<CSocketEvent>(this, SocketEventType::close, ECONNABORTED);
@@ -580,37 +547,31 @@ void CProxySocket::OnReceive()
 			{
 			case socks5_auth:
 				{
-					const wxWX2MBbuf user = m_user.mb_str(wxConvUTF8);
-					const wxWX2MBbuf pass = m_pass.mb_str(wxConvUTF8);
-
-					const int userlen = strlen(user);
-					const int passlen = strlen(pass);
-					m_sendBufferLen = userlen + passlen + 3;
+					m_sendBufferLen = m_user.size() + m_pass.size() + 3;
 					m_pSendBuffer = new char[m_sendBufferLen];
 					m_pSendBuffer[0] = 1;
-					m_pSendBuffer[1] = userlen;
-					memcpy(m_pSendBuffer + 2, (const char*)user, userlen);
-					m_pSendBuffer[userlen + 2] = passlen;
-					memcpy(m_pSendBuffer + userlen + 3, (const char*)pass, passlen);
+					m_pSendBuffer[1] = m_user.size();
+					memcpy(m_pSendBuffer + 2, m_user.c_str(), m_user.size());
+					m_pSendBuffer[m_user.size() + 2] = m_pass.size();
+					memcpy(m_pSendBuffer + m_user.size() + 3, m_pass.c_str(), m_pass.size());
 					m_recvBufferLen = 2;
 				}
 				break;
 			case socks5_request:
 				{
-					const wxWX2MBbuf host = m_host.mb_str(wxConvUTF8);
-					const int hostlen = strlen(host);
-					int addrlen = std::max(hostlen, 16);
+					std::string host = fz::to_utf8(m_host);
+					size_t addrlen = std::max(host.size(), size_t(16));
 
 					m_pSendBuffer = new char[7 + addrlen];
 					m_pSendBuffer[0] = 5;
 					m_pSendBuffer[1] = 1; // CONNECT
 					m_pSendBuffer[2] = 0; // Reserved
 
-					auto type = fz::get_address_type(m_host.ToStdWstring());
+					auto const type = fz::get_address_type(host);
 					if (type == fz::address_type::ipv6) {
-						auto ipv6 = fz::get_ipv6_long_form(m_host.ToStdWstring());
+						auto ipv6 = fz::get_ipv6_long_form(host);
 						addrlen = 16;
-						for (int i = 0; i < 16; ++i) {
+						for (auto i = 0; i < 16; ++i) {
 							m_pSendBuffer[4 + i] = (fz::hex_char_to_int(ipv6[i * 2 + i / 2]) << 4) + fz::hex_char_to_int(ipv6[i * 2 + 1 + i / 2]);
 						}
 
@@ -620,11 +581,10 @@ void CProxySocket::OnReceive()
 						unsigned char *buf = (unsigned char*)m_pSendBuffer + 4;
 						int i = 0;
 						memset(buf, 0, 4);
-						for (const wxChar* p = m_host.c_str(); *p && i < 4; ++p) {
-							const wxChar& c = *p;
-							if (c == '.')
-							{
-								i++;
+						for (auto p = host.c_str(); *p && i < 4; ++p) {
+							auto const& c = *p;
+							if (c == '.') {
+								++i;
 								continue;
 							}
 							buf[i] *= 10;
@@ -637,11 +597,10 @@ void CProxySocket::OnReceive()
 					}
 					else {
 						m_pSendBuffer[3] = 3; // Domain name
-						m_pSendBuffer[4] = hostlen;
-						memcpy(m_pSendBuffer + 5, (const char*)host, hostlen);
-						addrlen = hostlen + 1;
+						m_pSendBuffer[4] = host.size();
+						memcpy(m_pSendBuffer + 5, host.c_str(), host.size());
+						addrlen = host.size() + 1;
 					}
-
 
 					m_pSendBuffer[addrlen + 4] = (m_port >> 8) & 0xFF; // Port in network order
 					m_pSendBuffer[addrlen + 5] = m_port & 0xFF;
