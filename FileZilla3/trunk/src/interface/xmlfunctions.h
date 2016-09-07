@@ -84,7 +84,7 @@ void SetAttributeInt(pugi::xml_node node, const char* name, int value);
 pugi::xml_node FindElementWithAttribute(pugi::xml_node node, const char* element, const char* attribute, const char* value);
 
 // Add a new child element with the specified name and value to the xml document
-pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, const wxString& value, bool overwrite = false);
+pugi::xml_node AddTextElement(pugi::xml_node node, const char* name, wxString const& value, bool overwrite = false);
 void AddTextElement(pugi::xml_node node, const char* name, int64_t value, bool overwrite = false);
 pugi::xml_node AddTextElementRaw(pugi::xml_node node, const char* name, const char* value, bool overwrite = false);
 
