@@ -4,7 +4,6 @@
 #include "Options.h"
 #include <wx/ffile.h>
 #include <wx/log.h>
-#include <wx/base64.h>
 
 #include <libfilezilla/local_filesys.hpp>
 
@@ -403,22 +402,18 @@ bool GetServer(pugi::xml_node node, CServer& server)
 		if ((long)NORMAL == logonType || (long)ACCOUNT == logonType) {
 			auto  passElement = node.child("Pass");
 			if (passElement) {
-				pass = GetTextElement(passElement);
 
 				wxString encoding = GetTextAttribute(passElement, "encoding");
 
 				if (encoding == _T("base64")) {
-					wxMemoryBuffer buf = wxBase64Decode(pass);
-					if (!buf.IsEmpty()) {
-						pass = wxString::FromUTF8(static_cast<const char*>(buf.GetData()), buf.GetDataLen());
-					}
-					else {
-						pass.clear();
-					}
+					std::string decoded = fz::base64_decode(passElement.child_value());
+					pass = fz::to_wstring_from_utf8(decoded);
 				}
 				else if (!encoding.empty()) {
-					pass.clear();
 					server.SetLogonType(ASK);
+				}
+				else {
+					pass = GetTextElement(passElement);
 				}
 			}
 		} else if ((long)KEY == logonType) {

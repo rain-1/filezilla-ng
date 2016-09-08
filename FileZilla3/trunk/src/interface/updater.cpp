@@ -6,7 +6,6 @@
 #include "updater.h"
 #include "Options.h"
 #include "file_utils.h"
-#include <wx/base64.h>
 #include <wx/tokenzr.h>
 #include <string>
 
@@ -355,8 +354,8 @@ void CUpdater::ProcessNotification(std::unique_ptr<CNotification> && notificatio
 						unsigned int ca_data_length{};
 						unsigned char const* ca_data = ca.GetRawData(ca_data_length);
 
-						wxMemoryBuffer updater_root = wxBase64Decode(s_update_cert, wxNO_LEN, wxBase64DecodeMode_SkipWS);
-						if( ca_data_length == updater_root.GetDataLen() && !memcmp(ca_data, updater_root.GetData(), ca_data_length) ) {
+						std::string updater_root = fz::base64_decode(s_update_cert);
+						if (ca_data_length == updater_root.size() && !memcmp(ca_data, updater_root.c_str(), ca_data_length) ) {
 							certNotification.m_trusted = true;
 						}
 					}
