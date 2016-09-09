@@ -49,21 +49,21 @@ CProxySocket::~CProxySocket()
 	delete [] m_pRecvBuffer;
 }
 
-wxString CProxySocket::Name(ProxyType t)
+std::wstring CProxySocket::Name(ProxyType t)
 {
 	switch (t) {
 	case HTTP:
-		return _T("HTTP");
+		return L"HTTP";
 	case SOCKS4:
-		return _T("SOCKS4");
+		return L"SOCKS4";
 	case SOCKS5:
-		return _T("SOCKS5");
+		return L"SOCKS5";
 	default:
-		return _("unknown");
+		return _("unknown").ToStdWstring();
 	}
 }
 
-int CProxySocket::Handshake(CProxySocket::ProxyType type, wxString const& host, unsigned int port, wxString const& user, wxString const& pass)
+int CProxySocket::Handshake(CProxySocket::ProxyType type, std::wstring const& host, unsigned int port, std::wstring const& user, std::wstring const& pass)
 {
 	if (type == CProxySocket::unknown || host.empty() || port < 1 || port > 65535) {
 		return EINVAL;
@@ -79,7 +79,7 @@ int CProxySocket::Handshake(CProxySocket::ProxyType type, wxString const& host, 
 
 	m_user = fz::to_utf8(user);
 	m_pass = fz::to_utf8(pass);
-	m_host = host.ToStdWstring();
+	m_host = host;
 	m_port = port;
 	m_proxyType = type;
 
@@ -678,4 +678,14 @@ int CProxySocket::Write(const void *, unsigned int, int& error)
 {
 	error = EAGAIN;
 	return -1;
+}
+
+std::wstring CProxySocket::GetUser() const
+{
+	return fz::to_wstring(m_user);
+}
+
+std::wstring CProxySocket::GetPass() const
+{
+	return fz::to_wstring(m_pass);
 }

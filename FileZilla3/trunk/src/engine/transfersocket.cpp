@@ -491,7 +491,7 @@ bool CTransferSocket::SetupPassiveTransfer(wxString host, int port)
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, &controlSocket_);
 
 		int res = m_pProxyBackend->Handshake(controlSocket_.m_pProxyBackend->GetProxyType(),
-											 host, port,
+											 host.ToStdWstring(), port,
 											 controlSocket_.m_pProxyBackend->GetUser(), controlSocket_.m_pProxyBackend->GetPass());
 
 		if (res != EINPROGRESS) {

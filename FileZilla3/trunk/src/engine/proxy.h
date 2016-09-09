@@ -25,9 +25,9 @@ public:
 
 		proxytype_count
 	};
-	static wxString Name(ProxyType t);
+	static std::wstring Name(ProxyType t);
 
-	int Handshake(ProxyType type, wxString const& host, unsigned int port, wxString const& user, wxString const& pass);
+	int Handshake(ProxyType type, std::wstring const& host, unsigned int port, std::wstring const& user, std::wstring const& pass);
 
 	ProxyState GetState() const { return m_proxyState; }
 
@@ -42,8 +42,8 @@ public:
 	bool Detached() const { return m_pSocket == 0; }
 
 	ProxyType GetProxyType() const { return m_proxyType; }
-	wxString GetUser() const { return m_user; }
-	wxString GetPass() const { return m_pass; }
+	std::wstring GetUser() const;
+	std::wstring GetPass() const;
 
 protected:
 	CSocket* m_pSocket;
