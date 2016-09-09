@@ -1054,9 +1054,9 @@ int CRealControlSocket::ContinueConnect()
 		m_pProxyBackend = new CProxySocket(this, m_pSocket, this);
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
-											m_pCurrentServer->GetHost(), m_pCurrentServer->GetPort(),
-											engine_.GetOptions().GetOption(OPTION_PROXY_USER),
-											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
+											m_pCurrentServer->GetHost().ToStdWstring(), m_pCurrentServer->GetPort(),
+											engine_.GetOptions().GetOption(OPTION_PROXY_USER).ToStdWstring(),
+											engine_.GetOptions().GetOption(OPTION_PROXY_PASS).ToStdWstring());
 
 		if (res != EINPROGRESS) {
 			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));
