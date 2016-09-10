@@ -720,14 +720,15 @@ wxString CNetConfWizard::GetExternalIPAddress()
 	else if (mode == 2) {
 		if (!m_pIPResolver) {
 			wxTextCtrl* pResolver = XRCCTRL(*this, "ID_ACTIVERESOLVER", wxTextCtrl);
-			wxString address = pResolver->GetValue();
+			std::wstring address = pResolver->GetValue().ToStdWstring();
 
 			PrintMessage(wxString::Format(_("Retrieving external IP address from %s"), address), 0);
 
 			m_pIPResolver = new CExternalIPResolver(engine_context_.GetThreadPool(), *this);
 			m_pIPResolver->GetExternalIP(address, CSocket::ipv4, true);
-			if (!m_pIPResolver->Done())
+			if (!m_pIPResolver->Done()) {
 				return wxString();
+			}
 		}
 		if (m_pIPResolver->Successful()) {
 			ret = m_pIPResolver->GetIP();

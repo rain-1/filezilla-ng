@@ -1,5 +1,5 @@
-#ifndef __EXTERNALIPRESOLVER_H__
-#define __EXTERNALIPRESOLVER_H__
+#ifndef FILEZILLA_ENGINE_EXTERNALIPRESOLVER_HEADER
+#define FILEZILLA_ENGINE_EXTERNALIPRESOLVER_HEADER
 
 #include "socket.h"
 
@@ -19,13 +19,13 @@ public:
 	bool Successful() const;
 	std::string GetIP() const;
 
-	void GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force = false);
+	void GetExternalIP(std::wstring const& resolver, CSocket::address_family protocol, bool force = false);
 
 protected:
 
 	void Close(bool successful);
 
-	wxString m_address;
+	std::wstring m_address;
 	CSocket::address_family m_protocol{};
 	unsigned long m_port{80};
 	fz::thread_pool & thread_pool_;
@@ -48,8 +48,7 @@ protected:
 	void OnChunkedData();
 	void OnSend();
 
-	char* m_pSendBuffer{};
-	unsigned int m_sendBufferPos{};
+	std::string m_sendBuffer;
 
 	char* m_pRecvBuffer{};
 	unsigned int m_recvBufferPos{};
@@ -60,12 +59,11 @@ protected:
 	void ResetHttpData(bool resetRedirectCount);
 	bool m_gotHeader{};
 	int m_responseCode{};
-	wxString m_responseString;
-	wxString m_location;
+	std::string m_responseString;
+	std::wstring m_location;
 	int m_redirectCount{};
 
-	enum transferEncodings
-	{
+	enum transferEncodings {
 		identity,
 		chunked,
 		unknown
@@ -73,8 +71,7 @@ protected:
 
 	transferEncodings m_transferEncoding;
 
-	struct t_chunkData
-	{
+	struct t_chunkData {
 		bool getTrailer{};
 		bool terminateChunk{};
 		int64_t size{};
@@ -83,4 +80,4 @@ protected:
 	bool m_finished{};
 };
 
-#endif //__EXTERNALIPRESOLVER_H__
+#endif

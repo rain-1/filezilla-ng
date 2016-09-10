@@ -3715,7 +3715,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 					return FZ_REPLY_OK;
 				}
 
-				wxString resolverAddress = engine_.GetOptions().GetOption(OPTION_EXTERNALIPRESOLVER);
+				std::wstring resolverAddress = engine_.GetOptions().GetOption(OPTION_EXTERNALIPRESOLVER).ToStdWstring();
 
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
