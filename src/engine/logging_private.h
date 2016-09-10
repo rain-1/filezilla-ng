@@ -51,12 +51,12 @@ public:
 		}
 
 		std::wstring source(sourceFile);
-		auto pos = source.find('\\', true);
+		auto pos = source.rfind('\\');
 		if (pos != std::wstring::npos) {
 			source = source.substr(pos + 1);
 		}
 
-		pos = source.find('/', true);
+		pos = source.rfind('/');
 		if (pos != std::wstring::npos) {
 			source = source.substr(pos + 1);
 		}

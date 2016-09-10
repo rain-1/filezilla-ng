@@ -3,6 +3,7 @@
 #include "socket.h"
 #include "misc.h"
 
+#include <libfilezilla/format.hpp>
 #include <libfilezilla/iputils.hpp>
 
 #include <regex>
@@ -25,8 +26,6 @@ CExternalIPResolver::~CExternalIPResolver()
 {
 	remove_handler();
 
-	delete [] m_pSendBuffer;
-	m_pSendBuffer = 0;
 	delete [] m_pRecvBuffer;
 	m_pRecvBuffer = 0;
 
@@ -34,7 +33,7 @@ CExternalIPResolver::~CExternalIPResolver()
 	m_pSocket = 0;
 }
 
-void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::address_family protocol, bool force /*=false*/)
+void CExternalIPResolver::GetExternalIP(std::wstring const& address, CSocket::address_family protocol, bool force)
 {
 	{
 		fz::scoped_lock l(s_sync);
@@ -51,26 +50,33 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 	m_address = address;
 	m_protocol = protocol;
 
-	wxString host;
-	int pos;
-	if ((pos = address.Find(_T("://"))) != -1)
-		host = address.Mid(pos + 3);
-	else
-		host = address;
-
-	if ((pos = host.Find(_T("/"))) != -1)
-		host = host.Left(pos);
-
-	wxString hostWithPort = host;
-
-	if ((pos = host.Find(':', true)) != -1) {
-		wxString port = host.Mid(pos + 1);
-		if (!port.ToULong(&m_port) || m_port < 1 || m_port > 65535)
-			m_port = 80;
-		host = host.Left(pos);
+	std::wstring host;
+	int pos = address.find(L"://");
+	if (pos != std::wstring::npos) {
+		host = address.substr(pos + 3);
 	}
-	else
+	else {
+		host = address;
+	}
+
+	pos = host.find('/');
+	if (pos != std::wstring::npos) {
+		host = host.substr(0, pos);
+	}
+
+	std::wstring hostWithPort = host;
+	pos = host.rfind(':');
+	if (pos != std::wstring::npos) {
+		std::wstring port = host.substr(pos + 1);
+		m_port = fz::to_integral<decltype(m_port)>(port);
+		if (m_port < 1 || m_port > 65535) {
+			m_port = 80;
+		}
+		host = host.substr(0, pos);
+	}
+	else {
 		m_port = 80;
+	}
 
 	if (host.empty()) {
 		m_done = true;
@@ -85,9 +91,7 @@ void CExternalIPResolver::GetExternalIP(const wxString& address, CSocket::addres
 		return;
 	}
 
-	wxString buffer = wxString::Format(_T("GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n"), address, hostWithPort, wxString(PACKAGE_STRING, wxConvLocal));
-	m_pSendBuffer = new char[strlen(buffer.mb_str()) + 1];
-	strcpy(m_pSendBuffer, buffer.mb_str());
+	m_sendBuffer = fz::sprintf("GET %s HTTP/1.1\r\nHost: %s\r\nUser-Agent: %s\r\nConnection: close\r\n\r\n", fz::to_utf8(address), fz::to_utf8(hostWithPort), PACKAGE_STRING);
 }
 
 void CExternalIPResolver::operator()(fz::event_base const& ev)
@@ -97,8 +101,9 @@ void CExternalIPResolver::operator()(fz::event_base const& ev)
 
 void CExternalIPResolver::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
-	if (!m_pSocket)
+	if (!m_pSocket) {
 		return;
+	}
 
 	switch (t)
 	{
@@ -141,8 +146,9 @@ void CExternalIPResolver::OnReceive()
 		m_recvBufferPos = 0;
 	}
 
-	if (m_pSendBuffer)
+	if (!m_sendBuffer.empty()) {
 		return;
+	}
 
 	while (m_pSocket) {
 		unsigned int len = m_recvBufferLen - m_recvBufferPos;
@@ -180,13 +186,13 @@ void CExternalIPResolver::OnReceive()
 
 void CExternalIPResolver::OnSend()
 {
-	while (m_pSendBuffer) {
-		unsigned int len = strlen(m_pSendBuffer + m_sendBufferPos);
+	while (!m_sendBuffer.empty()) {
 		int error;
-		int written = m_pSocket->Write(m_pSendBuffer + m_sendBufferPos, len, error);
+		int written = m_pSocket->Write(m_sendBuffer.c_str(), m_sendBuffer.size(), error);
 		if (written == -1) {
-			if (error != EAGAIN)
+			if (error != EAGAIN) {
 				Close(false);
+			}
 			return;
 		}
 
@@ -195,21 +201,16 @@ void CExternalIPResolver::OnSend()
 			return;
 		}
 
-		if (written == (int)len) {
-			delete [] m_pSendBuffer;
-			m_pSendBuffer = 0;
-
+		m_sendBuffer = m_sendBuffer.substr(written);
+		if (m_sendBuffer.empty()) {
 			OnReceive();
 		}
-		else
-			m_sendBufferPos += written;
 	}
 }
 
 void CExternalIPResolver::Close(bool successful)
 {
-	delete [] m_pSendBuffer;
-	m_pSendBuffer = 0;
+	m_sendBuffer.clear();
 
 	delete [] m_pRecvBuffer;
 	m_pRecvBuffer = 0;
@@ -217,8 +218,9 @@ void CExternalIPResolver::Close(bool successful)
 	delete m_pSocket;
 	m_pSocket = 0;
 
-	if (m_done)
+	if (m_done) {
 		return;
+	}
 
 	m_done = true;
 
@@ -266,7 +268,7 @@ void CExternalIPResolver::OnHeader()
 		m_pRecvBuffer[i] = 0;
 
 		if (!m_responseCode) {
-			m_responseString = wxString(m_pRecvBuffer, wxConvLocal);
+			m_responseString = m_pRecvBuffer;
 			if (m_recvBufferPos < 16 || memcmp(m_pRecvBuffer, "HTTP/1.", 7)) {
 				// Invalid HTTP Status-Line
 				Close(false);
@@ -308,7 +310,7 @@ void CExternalIPResolver::OnHeader()
 					delete [] m_pRecvBuffer;
 					m_pRecvBuffer = 0;
 
-					wxString location = m_location;
+					std::wstring location = m_location;
 
 					ResetHttpData(false);
 
@@ -329,15 +331,17 @@ void CExternalIPResolver::OnHeader()
 				return;
 			}
 			if (m_recvBufferPos > 12 && !memcmp(m_pRecvBuffer, "Location: ", 10)) {
-				m_location = wxString(m_pRecvBuffer + 10, wxConvLocal);
+				m_location = fz::to_wstring_from_utf8(m_pRecvBuffer + 10);
 			}
 			else if (m_recvBufferPos > 21 && !memcmp(m_pRecvBuffer, "Transfer-Encoding: ", 19)) {
 				if (!strcmp(m_pRecvBuffer + 19, "chunked"))
 					m_transferEncoding = chunked;
-				else if (!strcmp(m_pRecvBuffer + 19, "identity"))
+				else if (!strcmp(m_pRecvBuffer + 19, "identity")) {
 					m_transferEncoding = identity;
-				else
+				}
+				else {
 					m_transferEncoding = unknown;
+				}
 			}
 		}
 
@@ -414,8 +418,9 @@ void CExternalIPResolver::ResetHttpData(bool resetRedirectCount)
 	m_location.clear();
 	m_responseCode = 0;
 	m_responseString.clear();
-	if (resetRedirectCount)
+	if (resetRedirectCount) {
 		m_redirectCount = 0;
+	}
 
 	m_transferEncoding = unknown;
 
