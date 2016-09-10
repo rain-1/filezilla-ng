@@ -33,7 +33,7 @@ wxFSFile* wxFileSystemBlobHandler::OpenFile(wxFileSystem& fs, const wxString& lo
 
 		wxChar const* str = data.c_str();
 
-		unsigned char* buf = static_cast<unsigned char*>(malloc(data.size() / 2));
+		buf = static_cast<unsigned char*>(malloc(data.size() / 2));
 		for (size_t i = 0; i < data.size() / 2; ++i) {
 			buf[i] = static_cast<unsigned char>(fz::hex_char_to_int(str[i * 2]) * 16 + fz::hex_char_to_int(str[i * 2 + 1]));
 		}
