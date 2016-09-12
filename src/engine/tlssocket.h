@@ -45,7 +45,7 @@ public:
 
 	bool ResumedSession() const;
 
-	static wxString ListTlsCiphers(wxString priority);
+	static std::string ListTlsCiphers(std::string priority);
 
 	bool SetClientCertificate(fz::native_string const& keyfile, fz::native_string const& certs, fz::native_string const& password);
 

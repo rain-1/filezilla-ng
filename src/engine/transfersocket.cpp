@@ -22,14 +22,16 @@ CTransferSocket::CTransferSocket(CFileZillaEnginePrivate & engine, CFtpControlSo
 CTransferSocket::~CTransferSocket()
 {
 	remove_handler();
-	if (m_transferEndReason == TransferEndReason::none)
+	if (m_transferEndReason == TransferEndReason::none) {
 		m_transferEndReason = TransferEndReason::successful;
+	}
 	ResetSocket();
 
 	if (m_transferMode == TransferMode::upload || m_transferMode == TransferMode::download) {
 		if (ioThread_) {
-			if (m_transferMode == TransferMode::download)
+			if (m_transferMode == TransferMode::download) {
 				FinalizeWrite();
+			}
 			ioThread_->SetEventHandler(0);
 		}
 	}
@@ -38,7 +40,7 @@ CTransferSocket::~CTransferSocket()
 void CTransferSocket::ResetSocket()
 {
 	delete m_pProxyBackend;
-	if( m_pBackend == m_pTlsSocket ) {
+	if (m_pBackend == m_pTlsSocket) {
 		m_pBackend = 0;
 	}
 	delete m_pTlsSocket;
@@ -53,14 +55,14 @@ void CTransferSocket::ResetSocket()
 
 }
 
-wxString CTransferSocket::SetupActiveTransfer(std::string const& ip)
+std::wstring CTransferSocket::SetupActiveTransfer(std::string const& ip)
 {
 	ResetSocket();
 	m_pSocketServer = CreateSocketServer();
 
 	if (!m_pSocketServer) {
 		controlSocket_.LogMessage(MessageType::Debug_Warning, _T("CreateSocketServer failed"));
-		return wxString();
+		return std::wstring();
 	}
 
 	int error;
@@ -69,25 +71,25 @@ wxString CTransferSocket::SetupActiveTransfer(std::string const& ip)
 		ResetSocket();
 
 		controlSocket_.LogMessage(MessageType::Debug_Warning, _T("GetLocalPort failed: %s"), CSocket::GetErrorDescription(error));
-		return wxString();
+		return std::wstring();
 	}
 
 	if (engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS)) {
 		port += static_cast<int>(engine_.GetOptions().GetOptionVal(OPTION_LIMITPORTS_OFFSET));
 		if (port <= 0 || port >= 65536) {
 			controlSocket_.LogMessage(MessageType::Debug_Warning, _T("Port outside valid range"));
-			return wxString();
+			return std::wstring();
 		}
 	}
 
-	wxString portArguments;
+	std::wstring portArguments;
 	if (m_pSocketServer->GetAddressFamily() == CSocket::ipv6) {
-		portArguments = wxString::Format(_T("|2|%s|%d|"), ip, port);
+		portArguments = fz::sprintf(L"|2|%s|%d|", ip, port);
 	}
 	else {
-		portArguments = ip;
-		portArguments += wxString::Format(_T(",%d,%d"), port / 256, port % 256);
-		portArguments.Replace(_T("."), _T(","));
+		portArguments = fz::to_wstring(ip);
+		fz::replace_substrings(portArguments, L".", L",");
+		portArguments += fz::sprintf(L",%d,%d", port / 256, port % 256);
 	}
 
 	return portArguments;
@@ -95,8 +97,7 @@ wxString CTransferSocket::SetupActiveTransfer(std::string const& ip)
 
 void CTransferSocket::OnSocketEvent(CSocketEventSource*, SocketEventType t, int error)
 {
-	if (m_pProxyBackend)
-	{
+	if (m_pProxyBackend) {
 		switch (t)
 		{
 		case SocketEventType::connection:
@@ -448,7 +449,7 @@ void CTransferSocket::OnClose(int error)
 	char buffer[100];
 	int numread = m_pBackend->Peek(&buffer, 100, error);
 	if (numread > 0) {
-#ifndef __WXMSW__
+#ifndef FZ_WINDOWS
 		wxFAIL_MSG(_T("Peek isn't supposed to return data after close notification"));
 #endif
 

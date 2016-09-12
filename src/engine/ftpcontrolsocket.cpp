@@ -4016,7 +4016,7 @@ int CFtpControlSocket::TransferSend()
 			if (res == FZ_REPLY_WOULDBLOCK)
 				return res;
 			else if (res == FZ_REPLY_OK) {
-				wxString portArgument = m_pTransferSocket->SetupActiveTransfer(address);
+				std::wstring portArgument = m_pTransferSocket->SetupActiveTransfer(address);
 				if (!portArgument.empty()) {
 					pData->bTriedActive = true;
 					if (m_pSocket->GetAddressFamily() == CSocket::ipv6)
