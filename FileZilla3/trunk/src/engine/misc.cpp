@@ -44,7 +44,7 @@ wxString GetDependencyName(lib_dependency d)
 	}
 }
 
-wxString ListTlsCiphers(const wxString& priority)
+std::string ListTlsCiphers(std::string const& priority)
 {
 	return CTlsSocket::ListTlsCiphers(priority);
 }

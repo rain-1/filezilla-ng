@@ -14,7 +14,7 @@ enum class lib_dependency
 wxString GetDependencyName(lib_dependency d);
 wxString GetDependencyVersion(lib_dependency d);
 
-wxString ListTlsCiphers(wxString const& priority);
+std::string ListTlsCiphers(std::string const& priority);
 
 // Microsoft, in its insane stupidity, has decided to make GetVersion(Ex) useless, starting with Windows 8.1,
 // this function no longer returns the operating system version but instead some arbitrary and random value depending

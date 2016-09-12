@@ -609,8 +609,10 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		CInputDialog dlg;
 		dlg.Create(this, _T("Ciphers"), _T("Priority string:"));
 		dlg.AllowEmpty(true);
-		if (dlg.ShowModal() == wxID_OK)
-			wxMessageBoxEx(ListTlsCiphers(dlg.GetValue()), _T("Ciphers"));
+		if (dlg.ShowModal() == wxID_OK) {
+			std::string ciphers = ListTlsCiphers(fz::to_string(dlg.GetValue().ToStdWstring()));
+			wxMessageBoxEx(fz::to_wstring(ciphers), _T("Ciphers"));
+		}
 	}
 	else if (event.GetId() == XRCID("ID_CLEARCACHE_LAYOUT")) {
 		CWrapEngine::ClearCache();
