@@ -598,7 +598,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		fz::replace_substrings(account, _T("%"), _T("%%"));
 
 		std::wstring const loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE).ToStdWstring();
-		std::vector<std::wstring> const tokens = fz::strtok(loginSequence, L" \r\t\n");
+		std::vector<std::wstring> const tokens = fz::strtok(loginSequence, L"\r\n");
 
 		for (auto token : tokens) {
 			bool isHost = false;
