@@ -1748,7 +1748,7 @@ void CQueueView::OnActionAfter(wxCommandEvent& event)
 			}
 			else {
 				m_actionAfterState = ActionAfterState::RunCommand;
-				COptions::Get()->SetOption(OPTION_QUEUE_COMPLETION_COMMAND, command);
+				COptions::Get()->SetOption(OPTION_QUEUE_COMPLETION_COMMAND, command.ToStdWstring());
 			}
 		}
 	}

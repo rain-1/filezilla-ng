@@ -112,14 +112,14 @@ enum interfaceOptions
 
 struct t_OptionsCache
 {
-	bool operator==(wxString const& v) const { return strValue == v; }
+	bool operator==(std::wstring const& v) const { return strValue == v; }
 	bool operator==(int v) const { return numValue == v; }
-	t_OptionsCache& operator=(wxString const& v);
+	t_OptionsCache& operator=(std::wstring const& v);
 	t_OptionsCache& operator=(int v);
 
 	bool from_default;
 	int numValue;
-	wxString strValue;
+	std::wstring strValue;
 };
 
 class CXmlFile;
@@ -127,10 +127,10 @@ class COptions : public wxEvtHandler, public COptionsBase
 {
 public:
 	virtual int GetOptionVal(unsigned int nID);
-	virtual wxString GetOption(unsigned int nID);
+	virtual std::wstring GetOption(unsigned int nID);
 
 	virtual bool SetOption(unsigned int nID, int value);
-	virtual bool SetOption(unsigned int nID, wxString const& value);
+	virtual bool SetOption(unsigned int nID, std::wstring const& value);
 
 	bool OptionFromFzDefaultsXml(unsigned int nID);
 
@@ -152,15 +152,15 @@ protected:
 	virtual ~COptions();
 
 	int Validate(unsigned int nID, int value);
-	wxString Validate(unsigned int nID, wxString const& value);
+	std::wstring Validate(unsigned int nID, std::wstring const& value);
 
 	template<typename T> void ContinueSetOption(unsigned int nID, T const& value);
 	void SetXmlValue(unsigned int nID, int value);
-	void SetXmlValue(unsigned int nID, wxString const& value);
+	void SetXmlValue(unsigned int nID, std::wstring const& value);
 
 	// path is element path below document root, separated by slashes
-	void SetServer(wxString path, const CServer& server);
-	bool GetServer(wxString path, CServer& server);
+	void SetServer(std::wstring path, const CServer& server);
+	bool GetServer(std::wstring path, CServer& server);
 
 	pugi::xml_node CreateSettingsXmlElement();
 

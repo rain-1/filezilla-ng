@@ -70,7 +70,7 @@ bool CConditionalDialog::Run()
 		while (dialogs.Len() <= (unsigned int)m_type)
 			dialogs += _T("0");
 		dialogs[m_type] = '1';
-		COptions::Get()->SetOption(OPTION_ONETIME_DIALOGS, dialogs);
+		COptions::Get()->SetOption(OPTION_ONETIME_DIALOGS, dialogs.ToStdWstring());
 	}
 
 	if (id == wxID_OK || id == wxID_YES)

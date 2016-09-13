@@ -275,10 +275,10 @@ wxString CControlSocket::ConvertDomainName(wxString const& domain)
 #elif defined(AI_IDN)
 	return domain;
 #else
-	wxScopedCharBuffer const utf8 = domain.utf8_str();
+	std::string const utf8 = fz::to_utf8(domain);
 
 	char *output = 0;
-	if (idna_to_ascii_8z(utf8, &output, IDNA_ALLOW_UNASSIGNED)) {
+	if (idna_to_ascii_8z(utf8.c_str(), &output, IDNA_ALLOW_UNASSIGNED)) {
 		LogMessage(MessageType::Debug_Warning, _T("Could not convert domain name"));
 		return domain;
 	}
@@ -1055,8 +1055,8 @@ int CRealControlSocket::ContinueConnect()
 		m_pBackend = m_pProxyBackend;
 		int res = m_pProxyBackend->Handshake(static_cast<CProxySocket::ProxyType>(proxy_type),
 											m_pCurrentServer->GetHost().ToStdWstring(), m_pCurrentServer->GetPort(),
-											engine_.GetOptions().GetOption(OPTION_PROXY_USER).ToStdWstring(),
-											engine_.GetOptions().GetOption(OPTION_PROXY_PASS).ToStdWstring());
+											engine_.GetOptions().GetOption(OPTION_PROXY_USER),
+											engine_.GetOptions().GetOption(OPTION_PROXY_PASS));
 
 		if (res != EINPROGRESS) {
 			LogMessage(MessageType::Error, _("Could not start proxy handshake: %s"), CSocket::GetErrorDescription(res));

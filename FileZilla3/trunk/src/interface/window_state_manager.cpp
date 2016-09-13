@@ -42,7 +42,7 @@ void CWindowStateManager::Remember(unsigned int optionId)
 	// pos_width pos_height
 	posString += wxString::Format(_T("%d %d "), m_lastWindowSize.x, m_lastWindowSize.y);
 
-	COptions::Get()->SetOption(optionId, posString);
+	COptions::Get()->SetOption(optionId, posString.ToStdWstring());
 }
 
 bool CWindowStateManager::ReadDefaults(const unsigned int optionId, bool& maximized, wxPoint& position, wxSize& size)

@@ -1484,15 +1484,15 @@ void CNewAssociationDialog::OnOK(wxCommandEvent&)
 		}
 
 		if (always)
-			COptions::Get()->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + cmd);
+			COptions::Get()->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + cmd.ToStdWstring());
 		else {
 			wxString associations = COptions::Get()->GetOption(OPTION_EDIT_CUSTOMASSOCIATIONS);
 			if (!associations.empty() && associations.Last() != '\n')
 				associations += '\n';
 			if (m_ext.empty())
 				m_ext = _T("/");
-			associations += m_ext + _T(" ") + cmd;
-			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations);
+			associations += m_ext.ToStdWstring() + _T(" ") + cmd.ToStdWstring();
+			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations.ToStdWstring());
 		}
 	}
 	else {
@@ -1525,7 +1525,7 @@ void CNewAssociationDialog::OnOK(wxCommandEvent&)
 			if (m_ext.empty())
 				m_ext = _T("/");
 			associations += m_ext + _T(" ") + cmd;
-			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations);
+			COptions::Get()->SetOption(OPTION_EDIT_CUSTOMASSOCIATIONS, associations.ToStdWstring());
 		}
 	}
 

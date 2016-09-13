@@ -32,7 +32,7 @@ bool CWelcomeDialog::Run(wxWindow* parent, bool force /*=false*/, bool delay /*=
 				delete this;
 			return true;
 		}
-		COptions::Get()->SetOption(OPTION_GREETINGVERSION, ownVersion);
+		COptions::Get()->SetOption(OPTION_GREETINGVERSION, ownVersion.ToStdWstring());
 
 		if (greetingVersion.empty() && !COptions::Get()->GetOptionVal(OPTION_DEFAULT_KIOSKMODE))
 			COptions::Get()->SetOption(OPTION_PROMPTPASSWORDSAVE, 1);

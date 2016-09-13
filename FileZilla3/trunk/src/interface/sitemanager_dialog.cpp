@@ -759,7 +759,7 @@ bool CSiteManagerDialog::Load()
 	if (!element)
 		return true;
 
-	std::wstring lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED).ToStdWstring();
+	std::wstring lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
 	if (!lastSelection.empty() && lastSelection[0] == '0') {
 		if (lastSelection == _T("0"))
 			pTree->SafeSelectItem(treeId);
@@ -1934,7 +1934,7 @@ bool CSiteManagerDialog::LoadDefaultSites()
 	pTree->SetItemImage(m_predefinedSites, 1, wxTreeItemIcon_Expanded);
 	pTree->SetItemImage(m_predefinedSites, 1, wxTreeItemIcon_SelectedExpanded);
 
-	std::wstring lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED).ToStdWstring();
+	std::wstring lastSelection = COptions::Get()->GetOption(OPTION_SITEMANAGER_LASTSELECTED);
 	if (!lastSelection.empty() && lastSelection[0] == '1') {
 		if (lastSelection == _T("1"))
 			pTree->SafeSelectItem(m_predefinedSites);
@@ -2240,7 +2240,7 @@ void CSiteManagerDialog::RememberLastSelected()
 			path = GetSitePath(sel);
 		}
 	}
-	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, path);
+	COptions::Get()->SetOption(OPTION_SITEMANAGER_LASTSELECTED, path.ToStdWstring());
 }
 
 void CSiteManagerDialog::OnContextMenu(wxTreeEvent& event)

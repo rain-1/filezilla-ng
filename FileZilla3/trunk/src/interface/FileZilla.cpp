@@ -141,11 +141,11 @@ void CFileZillaApp::InitLocale()
 			for( language = GetFallbackLocale(language); !language.empty(); language = GetFallbackLocale(language) ) {
 				const wxLanguageInfo* fallbackInfo = wxLocale::FindLanguageInfo(language);
 				if( fallbackInfo && SetLocale(fallbackInfo->Language )) {
-					COptions::Get()->SetOption(OPTION_LANGUAGE, language);
+					COptions::Get()->SetOption(OPTION_LANGUAGE, language.ToStdWstring());
 					return;
 				}
 			}
-			COptions::Get()->SetOption(OPTION_LANGUAGE, wxString());
+			COptions::Get()->SetOption(OPTION_LANGUAGE, std::wstring());
 			if (pInfo && !pInfo->Description.empty())
 				wxMessageBoxEx(wxString::Format(_("Failed to set language to %s (%s), using default system language"), pInfo->Description, language), _("Failed to change language"), wxICON_EXCLAMATION);
 			else
@@ -670,7 +670,7 @@ void CFileZillaApp::CheckExistsFzsftp()
 	}
 #endif
 
-	COptions::Get()->SetOption(OPTION_FZSFTP_EXECUTABLE, executable);
+	COptions::Get()->SetOption(OPTION_FZSFTP_EXECUTABLE, executable.ToStdWstring());
 }
 
 #ifdef __WXMSW__

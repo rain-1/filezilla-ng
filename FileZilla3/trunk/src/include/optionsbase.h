@@ -86,10 +86,10 @@ class COptionsBase
 public:
 	inline virtual ~COptionsBase() {};
 	virtual int GetOptionVal(unsigned int nID) = 0;
-	virtual wxString GetOption(unsigned int nID) = 0;
+	virtual std::wstring GetOption(unsigned int nID) = 0;
 
 	virtual bool SetOption(unsigned int nID, int value) = 0;
-	virtual bool SetOption(unsigned int nID, wxString const& value) = 0;
+	virtual bool SetOption(unsigned int nID, std::wstring const& value) = 0;
 };
 
 #endif

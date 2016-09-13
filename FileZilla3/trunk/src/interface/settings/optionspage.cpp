@@ -143,7 +143,7 @@ void COptionsPage::ReloadSettings()
 void COptionsPage::SetOptionFromText(int ctrlId, int optionId)
 {
 	const wxString& value = GetText(ctrlId);
-	m_pOptions->SetOption(optionId, value);
+	m_pOptions->SetOption(optionId, value.ToStdWstring());
 }
 
 void COptionsPage::SetIntOptionFromText(int ctrlId, int optionId)
