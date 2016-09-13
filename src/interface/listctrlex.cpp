@@ -495,32 +495,32 @@ void wxListCtrlEx::LoadColumnSettings(int widthsOptionId, int visibilityOptionId
 
 void wxListCtrlEx::SaveColumnSettings(int widthsOptionId, int visibilityOptionId, int sortOptionId)
 {
-	if (widthsOptionId != -1)
+	if (widthsOptionId != -1) {
 		SaveColumnWidths(widthsOptionId);
-
-	if (visibilityOptionId != -1)
-	{
-		wxString visibleColumns;
-		for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-		{
-			if (m_columnInfo[i].shown)
-				visibleColumns += _T("1");
-			else
-				visibleColumns += _T("0");
-		}
-		COptions::Get()->SetOption(visibilityOptionId, visibleColumns);
 	}
 
-	if (sortOptionId != -1)
-	{
+	if (visibilityOptionId != -1) {
+		wxString visibleColumns;
+		for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
+			if (m_columnInfo[i].shown) {
+				visibleColumns += _T("1");
+			}
+			else {
+				visibleColumns += _T("0");
+			}
+		}
+		COptions::Get()->SetOption(visibilityOptionId, visibleColumns.ToStdWstring());
+	}
+
+	if (sortOptionId != -1) {
 		wxString order;
-		for (unsigned int i = 0; i < m_columnInfo.size(); i++)
-		{
-			if (i)
+		for (unsigned int i = 0; i < m_columnInfo.size(); ++i) {
+			if (i) {
 				order += _T(",");
+			}
 			order += wxString::Format(_T("%d"), m_columnInfo[i].order);
 		}
-		COptions::Get()->SetOption(sortOptionId, order);
+		COptions::Get()->SetOption(sortOptionId, order.ToStdWstring());
 	}
 }
 
@@ -577,7 +577,7 @@ void wxListCtrlEx::SaveColumnWidths(unsigned int optionId)
 	}
 	widths.RemoveLast();
 
-	COptions::Get()->SetOption(optionId, widths);
+	COptions::Get()->SetOption(optionId, widths.ToStdWstring());
 }
 
 

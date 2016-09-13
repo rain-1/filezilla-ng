@@ -64,7 +64,7 @@ bool COptionsPageConnectionSFTP::SavePage()
 				keyFiles += _T("\n");
 			keyFiles += pKeys->GetItemText(i);
 		}
-		m_pOptions->SetOption(OPTION_SFTP_KEYFILES, keyFiles);
+		m_pOptions->SetOption(OPTION_SFTP_KEYFILES, keyFiles.ToStdWstring());
 	}
 
 	if (m_pFzpg->IsProcessCreated())

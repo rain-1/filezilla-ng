@@ -417,7 +417,7 @@ CRemoteListView::CRemoteListView(wxWindow* pParent, CState& state, CQueueView* p
 CRemoteListView::~CRemoteListView()
 {
 	wxString str = wxString::Format(_T("%d %d"), m_sortDirection, m_sortColumn);
-	COptions::Get()->SetOption(OPTION_REMOTEFILELIST_SORTORDER, str);
+	COptions::Get()->SetOption(OPTION_REMOTEFILELIST_SORTORDER, str.ToStdWstring());
 }
 
 // See comment to OnGetItemText

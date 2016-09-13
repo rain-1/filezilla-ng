@@ -49,7 +49,7 @@ bool COptionsPageEdit::SavePage()
 	COptions* pOptions = COptions::Get();
 
 	if (GetRCheck(XRCID("ID_DEFAULT_CUSTOM")))
-		pOptions->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + GetText(XRCID("ID_EDITOR")));
+		pOptions->SetOption(OPTION_EDIT_DEFAULTEDITOR, _T("2") + GetText(XRCID("ID_EDITOR")).ToStdWstring());
 	else
 		pOptions->SetOption(OPTION_EDIT_DEFAULTEDITOR, GetRCheck(XRCID("ID_DEFAULT_TEXT")) ? _T("1") : _T("0"));
 

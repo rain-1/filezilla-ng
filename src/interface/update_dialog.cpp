@@ -274,7 +274,7 @@ void CUpdateDialog::OnInstall(wxCommandEvent&)
 	if( f.empty() ) {
 		return;
 	}
-	COptions::Get()->SetOption(OPTION_GREETINGRESOURCES, updater_.GetResources());
+	COptions::Get()->SetOption(OPTION_GREETINGRESOURCES, updater_.GetResources().ToStdWstring());
 #ifdef __WXMSW__
 	wxExecute(_T("\"") + f +  _T("\" /update /NCRC"));
 	wxWindow* p = parent_;

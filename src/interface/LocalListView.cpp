@@ -302,7 +302,7 @@ CLocalListView::CLocalListView(wxWindow* pParent, CState& state, CQueueView *pQu
 CLocalListView::~CLocalListView()
 {
 	wxString str = wxString::Format(_T("%d %d"), m_sortDirection, m_sortColumn);
-	COptions::Get()->SetOption(OPTION_LOCALFILELIST_SORTORDER, str);
+	COptions::Get()->SetOption(OPTION_LOCALFILELIST_SORTORDER, str.ToStdWstring());
 
 #ifdef __WXMSW__
 	delete m_pVolumeEnumeratorThread;

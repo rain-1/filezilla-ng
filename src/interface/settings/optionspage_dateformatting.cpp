@@ -50,7 +50,7 @@ bool COptionsPageDateFormatting::SavePage()
 		dateFormat = _T("1");
 	else
 		dateFormat = _T("0");
-	m_pOptions->SetOption(OPTION_DATE_FORMAT, dateFormat);
+	m_pOptions->SetOption(OPTION_DATE_FORMAT, dateFormat.ToStdWstring());
 
 	wxString timeFormat;
 	if (GetRCheck(XRCID("ID_TIMEFORMAT_CUSTOM")))
@@ -59,7 +59,7 @@ bool COptionsPageDateFormatting::SavePage()
 		timeFormat = _T("1");
 	else
 		timeFormat = _T("0");
-	m_pOptions->SetOption(OPTION_TIME_FORMAT, timeFormat);
+	m_pOptions->SetOption(OPTION_TIME_FORMAT, timeFormat.ToStdWstring());
 
 	return true;
 }

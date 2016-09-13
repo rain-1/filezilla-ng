@@ -586,8 +586,8 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		}
 	}
 	else if (pData->ftp_proxy_type == 4) {
-		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER).ToStdWstring();
-		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS).ToStdWstring();
+		std::wstring proxyUser = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_USER);
+		std::wstring proxyPass = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_PASS);
 		std::wstring host = server.Format(ServerFormat::with_optional_port).ToStdWstring();
 		std::wstring user = server.GetUser().ToStdWstring();
 		std::wstring account = server.GetAccount().ToStdWstring();
@@ -597,7 +597,7 @@ bool CFtpControlSocket::GetLoginSequence(const CServer& server)
 		fz::replace_substrings(user, _T("%"), _T("%%"));
 		fz::replace_substrings(account, _T("%"), _T("%%"));
 
-		std::wstring const loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE).ToStdWstring();
+		std::wstring const loginSequence = engine_.GetOptions().GetOption(OPTION_FTP_PROXY_CUSTOMLOGINSEQUENCE);
 		std::vector<std::wstring> const tokens = fz::strtok(loginSequence, L"\r\n");
 
 		for (auto token : tokens) {
@@ -3708,14 +3708,14 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 			if (!m_pIPResolver) {
 				std::string localAddress = m_pSocket->GetLocalIP(true);
 
-				if (!localAddress.empty() && localAddress == engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP).ToStdString()) {
+				if (!localAddress.empty() && localAddress == engine_.GetOptions().GetOption(OPTION_LASTRESOLVEDIP)) {
 					LogMessage(MessageType::Debug_Verbose, _T("Using cached external IP address"));
 
 					address = localAddress;
 					return FZ_REPLY_OK;
 				}
 
-				std::wstring resolverAddress = engine_.GetOptions().GetOption(OPTION_EXTERNALIPRESOLVER).ToStdWstring();
+				std::wstring resolverAddress = engine_.GetOptions().GetOption(OPTION_EXTERNALIPRESOLVER);
 
 				LogMessage(MessageType::Debug_Info, _("Retrieving external IP address from %s"), resolverAddress);
 
@@ -3736,7 +3736,7 @@ int CFtpControlSocket::GetExternalIPAddress(std::string& address)
 				LogMessage(MessageType::Debug_Info, _T("Got external IP address"));
 				address = m_pIPResolver->GetIP();
 
-				engine_.GetOptions().SetOption(OPTION_LASTRESOLVEDIP, address);
+				engine_.GetOptions().SetOption(OPTION_LASTRESOLVEDIP, fz::to_wstring(address));
 
 				delete m_pIPResolver;
 				m_pIPResolver = 0;

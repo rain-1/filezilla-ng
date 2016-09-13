@@ -1236,7 +1236,7 @@ void CMainFrame::OnClose(wxCloseEvent &event)
 	if (controls) {
 		Site site = controls->pState->GetLastSite();
 		COptions::Get()->SetLastServer(site.m_server);
-		COptions::Get()->SetOption(OPTION_LASTSERVERPATH, controls->pState->GetLastServerPath().GetSafePath());
+		COptions::Get()->SetOption(OPTION_LASTSERVERPATH, controls->pState->GetLastServerPath().GetSafePath().ToStdWstring());
 		COptions::Get()->SetOption(OPTION_LAST_CONNECTED_SITE, site.m_path);
 	}
 
@@ -2082,7 +2082,7 @@ void CMainFrame::RememberSplitterPositions()
 	// m_lastQueueLogSplitterPos is a value between 0 and 1
 	posString += wxString::Format(_T("%d"), (int)(m_pQueueLogSplitter->GetRelativeSashPosition() * 1000000000));
 
-	COptions::Get()->SetOption(OPTION_MAINWINDOW_SPLITTER_POSITION, posString);
+	COptions::Get()->SetOption(OPTION_MAINWINDOW_SPLITTER_POSITION, posString.ToStdWstring());
 }
 
 bool CMainFrame::RestoreSplitterPositions()

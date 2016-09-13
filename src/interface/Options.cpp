@@ -1,13 +1,14 @@
 #include <filezilla.h>
 #include "Options.h"
 #include "filezillaapp.h"
-#include <wx/tokenzr.h>
 #include "ipcmutex.h"
 #include <option_change_event_handler.h>
 #include "sizeformatting.h"
 
 #include <algorithm>
 #include <string>
+
+#include <wx/tokenzr.h>
 
 #ifdef __WXMSW__
 	#include <shlobj.h>
@@ -208,23 +209,17 @@ BEGIN_EVENT_TABLE(COptions, wxEvtHandler)
 EVT_TIMER(wxID_ANY, COptions::OnTimer)
 END_EVENT_TABLE()
 
-t_OptionsCache& t_OptionsCache::operator=(wxString const& v)
+t_OptionsCache& t_OptionsCache::operator=(std::wstring const& v)
 {
 	strValue = v;
-	long l;
-	if (v.ToLong(&l)) {
-		numValue = l;
-	}
-	else {
-		numValue = 0;
-	}
+	numValue = fz::to_integral<int>(v);
 	return *this;
 }
 
 t_OptionsCache& t_OptionsCache::operator=(int v)
 {
 	numValue = v;
-	strValue.Printf("%d", v);
+	strValue = fz::to_wstring(v);
 	return *this;
 }
 
@@ -277,17 +272,19 @@ COptions::~COptions()
 
 int COptions::GetOptionVal(unsigned int nID)
 {
-	if (nID >= OPTIONS_NUM)
+	if (nID >= OPTIONS_NUM) {
 		return 0;
+	}
 
 	fz::scoped_lock l(m_sync_);
 	return m_optionsCache[nID].numValue;
 }
 
-wxString COptions::GetOption(unsigned int nID)
+std::wstring COptions::GetOption(unsigned int nID)
 {
-	if (nID >= OPTIONS_NUM)
-		return wxString();
+	if (nID >= OPTIONS_NUM) {
+		return std::wstring();
+	}
 
 	fz::scoped_lock l(m_sync_);
 	return m_optionsCache[nID].strValue;
@@ -295,27 +292,26 @@ wxString COptions::GetOption(unsigned int nID)
 
 bool COptions::SetOption(unsigned int nID, int value)
 {
-	if (nID >= OPTIONS_NUM)
+	if (nID >= OPTIONS_NUM) {
 		return false;
+	}
 
-	if (options[nID].type != number)
+	if (options[nID].type != number) {
 		return false;
+	}
 
 	ContinueSetOption(nID, value);
 	return true;
 }
 
-bool COptions::SetOption(unsigned int nID, wxString const& value)
+bool COptions::SetOption(unsigned int nID, std::wstring const& value)
 {
-	if (nID >= OPTIONS_NUM)
+	if (nID >= OPTIONS_NUM) {
 		return false;
+	}
 
 	if (options[nID].type != string) {
-		long tmp;
-		if (!value.ToLong(&tmp))
-			return false;
-
-		return SetOption(nID, tmp);
+		return SetOption(nID, fz::to_integral<int>(value));
 	}
 
 	ContinueSetOption(nID, value);
@@ -337,8 +333,9 @@ void COptions::ContinueSetOption(unsigned int nID, T const& value)
 	}
 
 	// Fixme: Setting options from other threads
-	if (!wxIsMainThread())
+	if (!wxIsMainThread()) {
 		return;
+	}
 
 	if (options[nID].flags == normal || options[nID].flags == default_priority) {
 		SetXmlValue(nID, validated);
@@ -400,19 +397,17 @@ pugi::xml_node COptions::CreateSettingsXmlElement()
 
 void COptions::SetXmlValue(unsigned int nID, int value)
 {
-	SetXmlValue(nID, wxString::Format(_T("%d"), value));
+	SetXmlValue(nID, fz::to_wstring(value));
 }
 
-void COptions::SetXmlValue(unsigned int nID, wxString const& value)
+void COptions::SetXmlValue(unsigned int nID, std::wstring const& value)
 {
-	if (!m_pXmlFile)
+	if (!m_pXmlFile) {
 		return;
+	}
 
 	// No checks are made about the validity of the value, that's done in SetOption
-
-	wxScopedCharBuffer utf8 = value.utf8_str();
-	if (!utf8)
-		return;
+	std::string utf8 = fz::to_utf8(value);
 
 	auto settings = CreateSettingsXmlElement();
 	if (settings) {
@@ -428,7 +423,7 @@ void COptions::SetXmlValue(unsigned int nID, wxString const& value)
 			setting = settings.append_child("Setting");
 			SetTextAttribute(setting, "name", options[nID].name);
 		}
-		setting.text() = utf8;
+		setting.text() = utf8.c_str();
 	}
 }
 
@@ -437,71 +432,87 @@ int COptions::Validate(unsigned int nID, int value)
 	switch (nID)
 	{
 	case OPTION_UPDATECHECK_INTERVAL:
-		if (value < 1 || value > 7)
+		if (value < 1 || value > 7) {
 			value = 7;
+		}
 		break;
 	case OPTION_LOGGING_DEBUGLEVEL:
-		if (value < 0 || value > 4)
+		if (value < 0 || value > 4) {
 			value = 0;
+		}
 		break;
 	case OPTION_RECONNECTCOUNT:
-		if (value < 0 || value > 99)
+		if (value < 0 || value > 99) {
 			value = 5;
+		}
 		break;
 	case OPTION_RECONNECTDELAY:
-		if (value < 0 || value > 999)
+		if (value < 0 || value > 999) {
 			value = 5;
+		}
 		break;
 	case OPTION_FILEPANE_LAYOUT:
-		if (value < 0 || value > 3)
+		if (value < 0 || value > 3) {
 			value = 0;
+		}
 		break;
 	case OPTION_SPEEDLIMIT_INBOUND:
 	case OPTION_SPEEDLIMIT_OUTBOUND:
-		if (value < 0)
+		if (value < 0) {
 			value = 0;
+		}
 		break;
 	case OPTION_SPEEDLIMIT_BURSTTOLERANCE:
-		if (value < 0 || value > 2)
+		if (value < 0 || value > 2) {
 			value = 0;
+		}
 		break;
 	case OPTION_FILELIST_DIRSORT:
 	case OPTION_FILELIST_NAMESORT:
-		if (value < 0 || value > 2)
+		if (value < 0 || value > 2) {
 			value = 0;
+		}
 		break;
 	case OPTION_SOCKET_BUFFERSIZE_RECV:
-		if (value != -1 && (value < 4096 || value > 4096 * 1024))
+		if (value != -1 && (value < 4096 || value > 4096 * 1024)) {
 			value = -1;
+		}
 		break;
 	case OPTION_SOCKET_BUFFERSIZE_SEND:
-		if (value != -1 && (value < 4096 || value > 4096 * 1024))
+		if (value != -1 && (value < 4096 || value > 4096 * 1024)) {
 			value = 131072;
+		}
 		break;
 	case OPTION_COMPARISONMODE:
-		if (value < 0 || value > 0)
+		if (value < 0 || value > 0) {
 			value = 1;
+		}
 		break;
 	case OPTION_COMPARISON_THRESHOLD:
-		if (value < 0 || value > 1440)
+		if (value < 0 || value > 1440) {
 			value = 1;
+		}
 		break;
 	case OPTION_SIZE_DECIMALPLACES:
-		if (value < 0 || value > 3)
+		if (value < 0 || value > 3) {
 			value = 0;
+		}
 		break;
 	case OPTION_MESSAGELOG_POSITION:
-		if (value < 0 || value > 2)
+		if (value < 0 || value > 2) {
 			value = 0;
+		}
 		break;
 	case OPTION_DOUBLECLICK_ACTION_FILE:
 	case OPTION_DOUBLECLICK_ACTION_DIRECTORY:
-		if (value < 0 || value > 3)
+		if (value < 0 || value > 3) {
 			value = 0;
+		}
 		break;
 	case OPTION_SIZE_FORMAT:
-		if (value < 0 || value >= CSizeFormat::formats_count)
+		if (value < 0 || value >= CSizeFormat::formats_count) {
 			value = 0;
+		}
 		break;
 	case OPTION_TIMEOUT:
 		if (value <= 0) {
@@ -518,82 +529,87 @@ int COptions::Validate(unsigned int nID, int value)
 	return value;
 }
 
-wxString COptions::Validate(unsigned int nID, wxString const& value)
+std::wstring COptions::Validate(unsigned int nID, std::wstring const& value)
 {
 	if (nID == OPTION_INVALID_CHAR_REPLACE) {
-		if (value.Len() > 1)
+		if (value.size() > 1) {
 			return _T("_");
+		}
 	}
 	return value;
 }
 
-void COptions::SetServer(wxString path, const CServer& server)
+void COptions::SetServer(std::wstring path, const CServer& server)
 {
-	if (!m_pXmlFile)
+	if (!m_pXmlFile) {
 		return;
+	}
 
-	if (path.empty())
+	if (path.empty()) {
 		return;
+	}
 
 	auto element = m_pXmlFile->GetElement();
 
 	while (!path.empty()) {
-		wxString sub;
-		int pos = path.Find('/');
-		if (pos != -1) {
-			sub = path.Left(pos);
-			path = path.Mid(pos + 1);
+		std::wstring sub;
+		int pos = path.find('/');
+		if (pos != std::wstring::npos) {
+			sub = path.substr(0, pos);
+			path = path.substr(pos + 1);
 		}
 		else {
 			sub = path;
-			path = _T("");
+			path.clear();
 		}
-		wxScopedCharBuffer utf8 = sub.utf8_str();
-		if (!utf8)
-			return;
-		auto newElement = element.child(utf8);
-		if (newElement)
+
+		std::string utf8 = fz::to_utf8(sub);
+		auto newElement = element.child(utf8.c_str());
+		if (newElement) {
 			element = newElement;
+		}
 		else {
-			element = element.append_child(utf8);
+			element = element.append_child(utf8.c_str());
 		}
 	}
 
 	::SetServer(element, server);
 
-	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2)
+	if (GetOptionVal(OPTION_DEFAULT_KIOSKMODE) == 2) {
 		return;
+	}
 
 	CInterProcessMutex mutex(MUTEX_OPTIONS);
 	m_pXmlFile->Save(true);
 }
 
-bool COptions::GetServer(wxString path, CServer& server)
+bool COptions::GetServer(std::wstring path, CServer& server)
 {
-	if (path.empty())
+	if (path.empty()) {
 		return false;
+	}
 
-	if (!m_pXmlFile)
+	if (!m_pXmlFile) {
 		return false;
+	}
 	auto element = m_pXmlFile->GetElement();
 
 	while (!path.empty()) {
-		wxString sub;
-		int pos = path.Find('/');
-		if (pos != -1) {
-			sub = path.Left(pos);
-			path = path.Mid(pos + 1);
+		std::wstring sub;
+		int pos = path.find('/');
+		if (pos != std::wstring::npos) {
+			sub = path.substr(0, pos);
+			path = path.substr(pos + 1);
 		}
 		else {
 			sub = path;
 			path = _T("");
 		}
-		wxScopedCharBuffer utf8 = sub.utf8_str();
-		if (!utf8)
+		std::string utf8 = fz::to_utf8(sub);
+		element = element.child(utf8.c_str());
+		if (!element) {
 			return false;
-		element = element.child(utf8);
-		if (!element)
-			return false;
+		}
 	}
 
 	bool res = ::GetServer(element, server);
@@ -603,10 +619,12 @@ bool COptions::GetServer(wxString path, CServer& server)
 
 void COptions::SetLastServer(const CServer& server)
 {
-	if (!m_pLastServer)
+	if (!m_pLastServer) {
 		m_pLastServer = new CServer(server);
-	else
+	}
+	else {
 		*m_pLastServer = server;
+	}
 	SetServer(_T("Settings/LastServer"), server);
 }
 
@@ -614,14 +632,16 @@ bool COptions::GetLastServer(CServer& server)
 {
 	if (!m_pLastServer) {
 		bool res = GetServer(_T("Settings/LastServer"), server);
-		if (res)
+		if (res) {
 			m_pLastServer = new CServer(server);
+		}
 		return res;
 	}
 	else {
 		server = *m_pLastServer;
-		if (server == CServer())
+		if (server == CServer()) {
 			return false;
+		}
 
 		return true;
 	}
@@ -629,14 +649,16 @@ bool COptions::GetLastServer(CServer& server)
 
 void COptions::Init()
 {
-	if (!m_theOptions)
+	if (!m_theOptions) {
 		new COptions(); // It sets m_theOptions internally itself
+	}
 }
 
 void COptions::Destroy()
 {
-	if (!m_theOptions)
+	if (!m_theOptions) {
 		return;
+	}
 
 	delete m_theOptions;
 	m_theOptions = 0;
@@ -650,8 +672,9 @@ COptions* COptions::Get()
 void COptions::Import(pugi::xml_node element)
 {
 	LoadOptions(GetNameOptionMap(), element);
-	if (!m_save_timer.IsRunning())
+	if (!m_save_timer.IsRunning()) {
 		m_save_timer.Start(15000, true);
+	}
 }
 
 void COptions::LoadOptions(std::map<std::string, unsigned int> const& nameOptionMap, pugi::xml_node settings)
@@ -678,7 +701,7 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 	if (iter != nameOptionMap.end()) {
 		if (!allowDefault && options[iter->second].flags == default_only)
 			return;
-		wxString value = GetTextElement(option);
+		std::wstring value = GetTextElement(option).ToStdWstring();
 		if (options[iter->second].flags == default_priority) {
 			if (allowDefault) {
 				fz::scoped_lock l(m_sync_);
@@ -692,8 +715,7 @@ void COptions::LoadOptionFromElement(pugi::xml_node option, std::map<std::string
 		}
 
 		if (options[iter->second].type == number) {
-			long numValue = 0;
-			value.ToLong(&numValue);
+			int numValue = fz::to_integral<int>(value);
 			numValue = Validate(iter->second, numValue);
 			fz::scoped_lock l(m_sync_);
 			m_optionsCache[iter->second] = numValue;

@@ -30,7 +30,7 @@ bool COptionsPageLanguage::SavePage()
 		code = m_locale[selection - 1].code;
 	}
 
-	m_pOptions->SetOption(OPTION_LANGUAGE, code);
+	m_pOptions->SetOption(OPTION_LANGUAGE, code.ToStdWstring());
 
 	return true;
 }

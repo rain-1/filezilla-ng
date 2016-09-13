@@ -99,7 +99,7 @@ bool COptionsPageFiletype::SavePage()
 			extensions += _T("|");
 		extensions += ext;
 	}
-	m_pOptions->SetOption(OPTION_ASCIIFILES, extensions);
+	m_pOptions->SetOption(OPTION_ASCIIFILES, extensions.ToStdWstring());
 
 	return true;
 }

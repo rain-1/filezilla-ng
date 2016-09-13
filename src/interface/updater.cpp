@@ -457,7 +457,7 @@ void CUpdater::ProcessOperation(COperationNotification const& operation)
 		}
 	}
 	else if (state_ == UpdaterState::checking) {
-		COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTVERSION, CBuildInfo::GetVersion());
+		COptions::Get()->SetOption(OPTION_UPDATECHECK_LASTVERSION, CBuildInfo::GetVersion().ToStdWstring());
 		s = ProcessFinishedData(true);
 	}
 	else {
@@ -692,7 +692,7 @@ void CUpdater::ParseData()
 
 	version_information_.update_available();
 
-	COptions::Get()->SetOption( OPTION_UPDATECHECK_NEWVERSION, raw_version_information_ );
+	COptions::Get()->SetOption(OPTION_UPDATECHECK_NEWVERSION, raw_version_information_.ToStdWstring());
 }
 
 void CUpdater::OnTimer(wxTimerEvent&)

@@ -37,7 +37,7 @@ protected:
 	};
 	std::vector<t_page> m_pages;
 
-	std::map<int, wxString> m_oldValues;
+	std::map<int, std::wstring> m_oldValues;
 
 	DECLARE_EVENT_TABLE()
 	void OnPageChanging(wxTreeEvent& event);

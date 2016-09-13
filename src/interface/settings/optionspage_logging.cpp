@@ -45,7 +45,7 @@ bool COptionsPageLogging::SavePage()
 	wxString filename;
 	if (GetCheck(XRCID("ID_LOGFILE")))
 		filename = GetText(XRCID("ID_FILENAME"));
-	m_pOptions->SetOption(OPTION_LOGGING_FILE, filename);
+	m_pOptions->SetOption(OPTION_LOGGING_FILE, filename.ToStdWstring());
 
 	if (GetCheck(XRCID("ID_DOLIMIT")))
 		SetOptionFromText(XRCID("ID_LIMIT"), OPTION_LOGGING_FILE_SIZELIMIT);

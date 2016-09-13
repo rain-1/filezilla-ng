@@ -287,10 +287,10 @@ int CSftpControlSocket::Connect(const CServer &server)
 	pData->opState = connect_init;
 
 	if (m_pCurrentServer->GetLogonType() == KEY) {
-		pData->keyfiles_ = fz::strtok(m_pCurrentServer->GetKeyFile(), '\n');
+		pData->keyfiles_ = fz::strtok(m_pCurrentServer->GetKeyFile(), L"\r\n");
 	}
 	else {
-		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES).ToStdWstring(), '\n');
+		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), L"\r\n");
 	}
 	pData->keyfile_ = pData->keyfiles_.cend();
 
@@ -435,13 +435,13 @@ int CSftpControlSocket::ConnectSend()
 			std::wstring cmd = fz::sprintf(L"proxy %d \"%s\" %d", type,
 											engine_.GetOptions().GetOption(OPTION_PROXY_HOST),
 											engine_.GetOptions().GetOptionVal(OPTION_PROXY_PORT));
-			std::wstring user = engine_.GetOptions().GetOption(OPTION_PROXY_USER).ToStdWstring();
+			std::wstring user = engine_.GetOptions().GetOption(OPTION_PROXY_USER);
 			if (!user.empty()) {
 				cmd += L" \"" + user + L"\"";
 			}
 
 			std::wstring show = cmd;
-			std::wstring pass = engine_.GetOptions().GetOption(OPTION_PROXY_PASS).ToStdWstring();
+			std::wstring pass = engine_.GetOptions().GetOption(OPTION_PROXY_PASS);
 			if (!pass.empty()) {
 				cmd += L" \"" + pass + L"\"";
 				show += L" \"" + std::wstring(pass.size(), '*') + L"\"";

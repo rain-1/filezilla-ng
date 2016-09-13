@@ -133,11 +133,11 @@ bool COptionsPageThemes::SavePage()
 	const int sel = pTheme->GetSelection();
 	const wxString theme = ((wxStringClientData*)pTheme->GetClientObject(sel))->GetData();
 
-	m_pOptions->SetOption(OPTION_THEME, theme);
+	m_pOptions->SetOption(OPTION_THEME, theme.ToStdWstring());
 
 	wxNotebook *pPreview = XRCCTRL(*this, "ID_PREVIEW", wxNotebook);
 	wxString size = pPreview->GetPageText(pPreview->GetSelection());
-	m_pOptions->SetOption(OPTION_THEME_ICONSIZE, size);
+	m_pOptions->SetOption(OPTION_THEME_ICONSIZE, size.ToStdWstring());
 
 	return true;
 }
