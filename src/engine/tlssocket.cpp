@@ -1468,7 +1468,7 @@ std::string CTlsSocket::ListTlsCiphers(std::string priority)
 			if (name != 0) {
 				list += fz::sprintf(
 					"%-50s    0x%02x, 0x%02x    %s\n",
-					wxString::FromUTF8(name),
+					name,
 					(unsigned char)id[0],
 					(unsigned char)id[1],
 					gnutls_protocol_get_name(version));

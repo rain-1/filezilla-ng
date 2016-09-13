@@ -89,7 +89,7 @@ class CSearchDialogFileList : public CFileListCtrl<CGenericFileData>
 	friend class CSearchDialog;
 	friend class CSearchSortType;
 public:
-	CSearchDialogFileList(CSearchDialog* pParent, CState &state, CQueueView* pQueue);
+	CSearchDialogFileList(CSearchDialog* pParent, CQueueView* pQueue);
 
 	void clear();
 	void set_mode(CSearchDialog::search_mode mode);
@@ -133,7 +133,7 @@ private:
 // Defined in RemoteListView.cpp
 extern wxString StripVMSRevision(const wxString& name);
 
-CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CState& state, CQueueView* pQueue)
+CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CQueueView* pQueue)
 	: CFileListCtrl<CGenericFileData>(pParent, pQueue, true),
 	m_searchDialog(pParent)
 {
@@ -396,7 +396,7 @@ bool CSearchDialog::Load()
 	if (!CreateListControl(filter_name | filter_size | filter_path | filter_date))
 		return false;
 
-	m_results = new CSearchDialogFileList(this, m_state, 0);
+	m_results = new CSearchDialogFileList(this, 0);
 	ReplaceControl(XRCCTRL(*this, "ID_RESULTS", wxWindow), m_results);
 
 	m_results->SetFilelistStatusBar(pStatusBar);

@@ -9853,7 +9853,7 @@ static void do_ssh2_authconn(Ssh ssh, const unsigned char *in, int inlen,
 		s->agentp += s->commentlen;
 		/* s->agentp now points at next key, if any */
 
-		remove_duplicate_keys(ssh, &s->loaded_keyfile_list, s->pkblob, s->pklen);
+		remove_duplicate_keys(ssh, &s->loaded_keyfile_list, (unsigned char*)s->pkblob, s->pklen);
 
 		/* See if server will accept it */
 		s->pktout = ssh2_pkt_init(SSH2_MSG_USERAUTH_REQUEST);

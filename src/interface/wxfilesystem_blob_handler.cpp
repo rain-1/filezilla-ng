@@ -18,7 +18,7 @@ wxString wxFileSystemBlobHandler::FindFirst(wxString const& wildcard, int flags)
 	return wildcard;
 }
 
-wxFSFile* wxFileSystemBlobHandler::OpenFile(wxFileSystem& fs, const wxString& location)
+wxFSFile* wxFileSystemBlobHandler::OpenFile(wxFileSystem&, const wxString& location)
 {
 	unsigned char* buf{};
 	size_t buf_len{};

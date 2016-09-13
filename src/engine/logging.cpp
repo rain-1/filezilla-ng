@@ -90,7 +90,7 @@ bool CLogging::InitLogFile(fz::scoped_lock& l) const
 
 	m_logfile_initialized = true;
 
-	m_file = engine_.GetOptions().GetOption(OPTION_LOGGING_FILE);
+	m_file = fz::to_native(engine_.GetOptions().GetOption(OPTION_LOGGING_FILE));
 	if (m_file.empty())
 		return false;
 

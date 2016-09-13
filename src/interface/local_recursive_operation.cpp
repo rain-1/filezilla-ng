@@ -121,7 +121,7 @@ void CLocalRecursiveOperation::StopRecursiveOperation()
 	m_actionAfterBlocker.reset();
 }
 
-void CLocalRecursiveOperation::OnStateChange(t_statechange_notifications notification, const wxString&, const void* data2)
+void CLocalRecursiveOperation::OnStateChange(t_statechange_notifications, const wxString&, const void*)
 {
 }
 
