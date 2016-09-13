@@ -553,7 +553,7 @@ void COptions::SetServer(std::wstring path, const CServer& server)
 
 	while (!path.empty()) {
 		std::wstring sub;
-		int pos = path.find('/');
+		size_t pos = path.find('/');
 		if (pos != std::wstring::npos) {
 			sub = path.substr(0, pos);
 			path = path.substr(pos + 1);
@@ -596,7 +596,7 @@ bool COptions::GetServer(std::wstring path, CServer& server)
 
 	while (!path.empty()) {
 		std::wstring sub;
-		int pos = path.find('/');
+		size_t pos = path.find('/');
 		if (pos != std::wstring::npos) {
 			sub = path.substr(0, pos);
 			path = path.substr(pos + 1);

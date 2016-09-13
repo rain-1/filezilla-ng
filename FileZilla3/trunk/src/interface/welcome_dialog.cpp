@@ -123,5 +123,7 @@ void CWelcomeDialog::InitFooter(wxString const& resources)
 			}
 		}
 	}
+#else
+	(void)resources;
 #endif
 }

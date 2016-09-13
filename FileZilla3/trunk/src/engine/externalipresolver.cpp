@@ -51,7 +51,7 @@ void CExternalIPResolver::GetExternalIP(std::wstring const& address, CSocket::ad
 	m_protocol = protocol;
 
 	std::wstring host;
-	int pos = address.find(L"://");
+	size_t pos = address.find(L"://");
 	if (pos != std::wstring::npos) {
 		host = address.substr(pos + 3);
 	}

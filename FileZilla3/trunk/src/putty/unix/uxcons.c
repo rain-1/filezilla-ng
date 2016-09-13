@@ -117,13 +117,13 @@ int verify_ssh_host_key(void *frontend, char *host, int port,
 {
     int ret;
 
-    static const char absentmsg_batch[] =
+/*    static const char absentmsg_batch[] =
 	"The server's host key is not cached. You have no guarantee\n"
 	"that the server is the computer you think it is.\n"
 	"The server's %s key fingerprint is:\n"
 	"%s\n"
 	"Connection abandoned.\n";
-/*    static const char absentmsg[] =
+    static const char absentmsg[] =
 	"The server's host key is not cached. You have no guarantee\n"
 	"that the server is the computer you think it is.\n"
 	"The server's %s key fingerprint is:\n"

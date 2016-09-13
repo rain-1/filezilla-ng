@@ -192,7 +192,7 @@ void CFileZillaEnginePrivate::SendQueuedLogs(bool reset_flag)
 	notification_handler_.OnEngineEvent(&parent_);
 }
 
-void CFileZillaEnginePrivate::ClearQueuedLogs(fz::scoped_lock& lock, bool reset_flag)
+void CFileZillaEnginePrivate::ClearQueuedLogs(fz::scoped_lock&, bool reset_flag)
 {
 	for (auto msg : queued_logs_) {
 		delete msg;

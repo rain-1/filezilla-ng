@@ -222,8 +222,6 @@ int main(int argc, char **argv)
 	}
 	else if (!strcmp(cmd, "fingerprint")) {
 	    const char* error = 0;
-	    void* blob = NULL;
-	    int bloblen = 0;
 
 	    if (!fingerprint) {
 		if (ssh2key) {
