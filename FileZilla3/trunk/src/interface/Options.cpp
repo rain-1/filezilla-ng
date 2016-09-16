@@ -2,15 +2,14 @@
 #include "Options.h"
 #include "filezillaapp.h"
 #include "ipcmutex.h"
+#include "locale_initializer.h"
 #include <option_change_event_handler.h>
 #include "sizeformatting.h"
 
 #include <algorithm>
 #include <string>
 
-#include <wx/tokenzr.h>
-
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 	#include <shlobj.h>
 
 	// Needed for MinGW:
@@ -43,7 +42,7 @@ struct t_Option
 	const Flags flags; // internal items won't get written to settings file nor loaded from there
 };
 
-#ifdef __WXMSW__
+#ifdef FZ_WINDOWS
 //case insensitive
 #define DEFAULT_FILENAME_SORT   _T("0")
 #else
@@ -778,10 +777,10 @@ void COptions::SaveIfNeeded()
 }
 
 namespace {
-#ifndef __WXMSW__
-wxString TryDirectory( wxString path, wxString const& suffix, bool check_exists )
+#ifndef FZ_WINDOWS
+std::wstring TryDirectory(wxString path, wxString const& suffix, bool check_exists)
 {
-	if( !path.empty() && path[0] == '/' ) {
+	if (!path.empty() && path[0] == '/') {
 		if( path[path.size() - 1] != '/' ) {
 			path += '/';
 		}
@@ -797,7 +796,7 @@ wxString TryDirectory( wxString path, wxString const& suffix, bool check_exists 
 	else {
 		path.clear();
 	}
-	return path;
+	return path.ToStdWstring();
 }
 #endif
 
@@ -813,64 +812,55 @@ wxString GetEnv(wxString const& env)
 
 CLocalPath COptions::GetUnadjustedSettingsDir()
 {
-	wxFileName fn;
-#ifdef __WXMSW__
-	wxChar buffer[MAX_PATH * 2 + 1];
+	CLocalPath ret;
+
+#ifdef FZ_WINDOWS
+	wchar_t buffer[MAX_PATH * 2 + 1];
 
 	if (SUCCEEDED(SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer))) {
-		fn = wxFileName(buffer, _T(""));
-		fn.AppendDir(_T("FileZilla"));
+		CLocalPath tmp(buffer);
+		if (!tmp.empty()) {
+			tmp.AddSegment(L"FileZilla");
+		}
+		ret = tmp;
 	}
 	else {
 		// Fall back to directory where the executable is
-		if (GetModuleFileName(0, buffer, MAX_PATH * 2))
-			fn = buffer;
+		DWORD c = GetModuleFileName(0, buffer, MAX_PATH * 2);
+		if (c && c < MAX_PATH * 2) {
+			wxString tmp;
+			ret.SetPath(buffer, &tmp);
+		}
 	}
 #else
-	wxString cfg = TryDirectory(GetEnv(_T("XDG_CONFIG_HOME")), _T("filezilla/"), true);
-	if( cfg.empty() ) {
+	std::wstring cfg = TryDirectory(GetEnv(_T("XDG_CONFIG_HOME")), _T("filezilla/"), true);
+	if (cfg.empty()) {
 		cfg = TryDirectory(wxGetHomeDir(), _T(".config/filezilla/"), true);
 	}
-	if( cfg.empty() ) {
+	if (cfg.empty()) {
 		cfg = TryDirectory(wxGetHomeDir(), _T(".filezilla/"), true);
 	}
-	if( cfg.empty() ) {
+	if (cfg.empty()) {
 		cfg = TryDirectory(GetEnv(_T("XDG_CONFIG_HOME")), _T("filezilla/"), false);
 	}
-	if( cfg.empty() ) {
+	if (cfg.empty()) {
 		cfg = TryDirectory(wxGetHomeDir(), _T(".config/filezilla/"), false);
 	}
-	if( cfg.empty() ) {
+	if (cfg.empty()) {
 		cfg = TryDirectory(wxGetHomeDir(), _T(".filezilla/"), false);
 	}
-	fn = wxFileName(cfg, _T(""));
+	ret.SetPath(cfg);
 #endif
-	return CLocalPath(fn.GetPath());
+	return ret;
 }
 
 CLocalPath COptions::InitSettingsDir()
 {
 	CLocalPath p;
 
-	wxString dir(GetOption(OPTION_DEFAULT_SETTINGSDIR));
+	std::wstring dir = GetOption(OPTION_DEFAULT_SETTINGSDIR);
 	if (!dir.empty()) {
-		wxStringTokenizer tokenizer(dir, _T("/\\"), wxTOKEN_RET_EMPTY_ALL);
-		dir = _T("");
-		while (tokenizer.HasMoreTokens()) {
-			wxString token = tokenizer.GetNextToken();
-			if (!token.empty() && token[0] == '$') {
-				if (token.size() > 1 && token[1] == '$')
-					token = token.Mid(1);
-				else {
-					token = GetEnv(token.Mid(1));
-				}
-			}
-			dir += token;
-			const wxChar delimiter = tokenizer.GetLastDelimiter();
-			if (delimiter)
-				dir += delimiter;
-		}
-
+		dir = ExpandPath(dir);
 		p.SetPath(wxGetApp().GetDefaultsDir().GetPath());
 		p.ChangePath(dir);
 	}
@@ -878,8 +868,9 @@ CLocalPath COptions::InitSettingsDir()
 		p = GetUnadjustedSettingsDir();
 	}
 
-	if (!p.empty() && !p.Exists())
-		wxFileName::Mkdir( p.GetPath(), 0700, wxPATH_MKDIR_FULL );
+	if (!p.empty() && !p.Exists()) {
+		wxFileName::Mkdir(p.GetPath(), 0700, wxPATH_MKDIR_FULL);
+	}
 
 	SetOption(OPTION_DEFAULT_SETTINGSDIR, p.GetPath());
 

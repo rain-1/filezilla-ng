@@ -1,6 +1,5 @@
 #include <filezilla.h>
 #include "verifyhostkeydialog.h"
-#include <wx/tokenzr.h>
 #include "dialogex.h"
 #include "ipcmutex.h"
 
