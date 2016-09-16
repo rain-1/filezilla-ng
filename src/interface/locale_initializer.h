@@ -1,4 +1,7 @@
-#ifndef __LOCALE_INITIALIZER_H__
+#ifndef FILEZILLA_LOCALE_INITIALIZER_HEADER
+#define FILEZILLA_LOCALE_INITIALIZER_HEADER
+
+#include <libfilezilla/libfilezilla.hpp>
 
 wxString GetFallbackLocale(wxString const& locale);
 
@@ -29,4 +32,48 @@ protected:
 
 #endif //__WXGTK__
 
-#endif //__LOCALE_INITIALIZER_H__
+template<typename String>
+String ExpandPath(String dir)
+{
+	if (dir.empty()) {
+		return dir;
+	}
+
+	String result;
+	while (!dir.empty()) {
+		String token;
+#ifdef FZ_WINDOWS
+		size_t pos = dir.find_first_of(fzS(String::value_type, "\\/"));
+#else
+		size_t pos = dir.find('/');
+#endif
+		if (pos == String::npos) {
+			token.swap(dir);
+		}
+		else {
+			token = dir.substr(0, pos);
+			dir = dir.substr(pos + 1);
+		}
+
+		if (token[0] == '$') {
+			if (token[1] == '$') {
+				result += token.substr(1);
+			}
+			else if (token.size() > 1) {
+				char* env = getenv(fz::to_string(token.substr(1)).c_str());
+				if (env) {
+					result += fz::toString<String>(env);
+				}
+			}
+		}
+		else {
+			result += token;
+		}
+
+		result += '/';
+	}
+
+	return result;
+}
+
+#endif

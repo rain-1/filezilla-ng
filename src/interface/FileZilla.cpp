@@ -7,7 +7,6 @@
 #include "Options.h"
 #include "wrapengine.h"
 #include "buildinfo.h"
-#include <wx/tokenzr.h>
 #include "cmdline.h"
 #include "welcome_dialog.h"
 #include <msgbox.h>

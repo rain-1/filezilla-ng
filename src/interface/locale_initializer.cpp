@@ -229,45 +229,16 @@ std::string CInitializer::GetDefaultsXmlFile()
 std::string CInitializer::ReadSettingsFromDefaults(std::string file)
 {
 	std::string dir = CInitializer::GetSettingFromFile(file, "Config Location");
-
-	if (dir.empty())
-		return "";
-
-	std::string result;
-	while (!dir.empty())
-	{
-		std::string token;
-		int pos = dir.find('/');
-		if (pos == -1)
-			token.swap(dir);
-		else
-		{
-			token = dir.substr(0, pos);
-			dir = dir.substr(pos + 1);
-		}
-
-		if (!token.empty() && token[0] == '$')
-		{
-			if (token[1] == '$')
-				result += token.substr(1);
-			else if (token.size() > 1)
-			{
-				std::string value = mkstr(getenv(token.substr(1).c_str()));
-				result += value;
-			}
-		}
-		else
-			result += token;
-
-		result += '/';
-	}
+	auto result = ExpandPath(dir);
 
 	struct stat buf;
-	if (stat(result.c_str(), &buf))
+	if (stat(result.c_str(), &buf)) {
 		return "";
+	}
 
-	if (result[result.size() - 1] != '/')
+	if (result[result.size() - 1] != '/') {
 		result += '/';
+	}
 
 	return result;
 }

@@ -17,7 +17,7 @@ CLocalPath::CLocalPath(const wxString& path, wxString* file /*=0*/)
 	SetPath(path.ToStdWstring(), file);
 }
 
-bool CLocalPath::SetPath(std::wstring const& path, wxString* file /*=0*/)
+bool CLocalPath::SetPath(std::wstring const& path, wxString* file)
 {
 	// This function ensures that the path is in canonical form on success.
 	if (path.empty()) {
