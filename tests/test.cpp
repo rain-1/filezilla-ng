@@ -6,7 +6,7 @@
 #include <locale.h>
 #include <wx/init.h>
 
-int main(int char*)
+int main(int, char*[])
 {
 	setlocale(LC_ALL, "");
 
