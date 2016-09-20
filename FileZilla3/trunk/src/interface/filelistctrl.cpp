@@ -813,36 +813,43 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnItemDeselected(wxList
 {
 #ifndef __WXMSW__
 	// On MSW this is done in the subclassed window proc
-	if (m_insideSetSelection)
+	if (m_insideSetSelection) {
 		return;
+	}
 #endif
 
 	const int item = event.GetIndex();
+	if (item < 0 || item >= (int)m_indexMapping.size()) {
+		return;
+	}
 
 #ifndef __WXMSW__
-	if (!m_selections[item])
+	if (!m_selections[item]) {
 		return;
+	}
 	m_selections[item] = false;
 #endif
 
-	if (!m_pFilelistStatusBar)
+	if (!m_pFilelistStatusBar) {
 		return;
+	}
 
-	if (item < 0 || item >= (int)m_indexMapping.size())
+	if (m_hasParent && !item) {
 		return;
-
-	if (m_hasParent && !item)
-		return;
+	}
 
 	const int index = m_indexMapping[item];
 	const CFileData& data = m_fileData[index];
-	if (data.comparison_flags == fill)
+	if (data.comparison_flags == fill) {
 		return;
+	}
 
-	if (ItemIsDir(index))
+	if (ItemIsDir(index)) {
 		m_pFilelistStatusBar->UnselectDirectory();
-	else
+	}
+	else {
 		m_pFilelistStatusBar->UnselectFile(ItemGetSize(index));
+	}
 }
 
 template<class CFileData> void CFileListCtrl<CFileData>::SetSelection(int item, bool select)
@@ -874,8 +881,9 @@ template<class CFileData> void CFileListCtrl<CFileData>::OnFocusChanged(wxListEv
 template<class CFileData> void CFileListCtrl<CFileData>::SetItemCount(int count)
 {
 	m_selections.resize(count, false);
-	if (m_focusItem >= count)
+	if (m_focusItem >= count) {
 		m_focusItem = -1;
+	}
 	wxListCtrlEx::SetItemCount(count);
 }
 
