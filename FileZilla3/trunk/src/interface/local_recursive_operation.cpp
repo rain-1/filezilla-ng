@@ -275,7 +275,7 @@ void CLocalRecursiveOperation::OnListedDirectory()
 		}
 
 		if (d.localPath.empty()) {
-			StopRecursiveOperation();
+			stop = true;
 		}
 		else {
 			if (queue) {
