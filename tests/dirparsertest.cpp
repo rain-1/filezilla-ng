@@ -11,12 +11,12 @@
  * also ambiguity, the parser is very fragile.
  */
 
-typedef struct
+struct t_entry
 {
 	std::string data;
 	CDirentry reference;
 	ServerType serverType;
-} t_entry;
+};
 
 class CDirectoryListingParserTest : public CppUnit::TestFixture
 {
@@ -79,7 +79,7 @@ void CDirectoryListingParserTest::InitEntries()
 	// -------------------
 
 	// We start with a perfect example of a unix style directory listing without anomalies.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"dr-xr-xr-x   2 root     other        512 Apr  8  1994 01-unix-std dir",
 			{
 				_T("01-unix-std dir"),
@@ -91,10 +91,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1994, 4, 8)
 			},
 			DEFAULT
-		});
+		}));
 
 	// This one is a recent file with a time instead of the year.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 root     other        531 3 29 03:26 02-unix-std file",
 			{
 				_T("02-unix-std file"),
@@ -106,10 +106,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(3, 29), 3, 29, 3, 26)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Group omitted
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"dr-xr-xr-x   2 root                  512 Apr  8  1994 03-unix-nogroup dir",
 			{
 				_T("03-unix-nogroup dir"),
@@ -121,10 +121,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1994, 4, 8)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Symbolic link
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"lrwxrwxrwx   1 root     other          7 Jan 25 00:17 04-unix-std link -> usr/bin",
 			{
 				_T("04-unix-std link"),
@@ -136,12 +136,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(1, 25), 1, 25, 0, 17)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Some listings with uncommon date/time format
 	// --------------------------------------------
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 root     other        531 09-26 2000 05-unix-date file",
 			{
 				_T("05-unix-date file"),
@@ -153,9 +153,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 9, 26)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 root     other        531 09-26 13:45 06-unix-date file",
 			{
 				_T("06-unix-date file"),
@@ -167,9 +167,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(9, 26), 9, 26, 13, 45)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 root     other        531 2005-06-07 21:22 07-unix-date file",
 			{
 				_T("07-unix-date file"),
@@ -181,11 +181,11 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2005, 6, 7, 21, 22)
 			},
 			DEFAULT
-		});
+		}));
 
 
 	// Unix style with size information in kilobytes
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 root     other  33.5k Oct 5 21:22 08-unix-namedsize file",
 			{
 				_T("08-unix-namedsize file"),
@@ -197,12 +197,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(10, 5), 10, 5, 21, 22)
 			},
 			DEFAULT
-		});
+		}));
 
 	// NetWare style listings
 	// ----------------------
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"d [R----F--] supervisor            512       Jan 16 18:53    09-netware dir",
 			{
 				_T("09-netware dir"),
@@ -214,9 +214,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(1, 16), 1, 16, 18, 53)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"- [R----F--] rhesus             214059       Oct 20 15:27    10-netware file",
 			{
 				_T("10-netware file"),
@@ -228,7 +228,7 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(10, 20), 10, 20, 15, 27)
 			},
 			DEFAULT
-		});
+		}));
 
 	// NetPresenz for the Mac
 	// ----------------------
@@ -237,7 +237,7 @@ void CDirectoryListingParserTest::InitEntries()
 	// The numerical username is mistaken as size. However,
 	// this is ambiguous to the normal unix style listing.
 	// It's not possible to recognize both formats the right way.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-------r--         326  1391972  1392298 Nov 22  1995 11-netpresenz file",
 			{
 				_T("11-netpresenz file"),
@@ -249,9 +249,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1995, 11, 22)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"drwxrwxr-x               folder        2 May 10  1996 12-netpresenz dir",
 			{
 				_T("12-netpresenz dir"),
@@ -263,10 +263,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1996, 5, 10)
 			},
 			DEFAULT
-		});
+		}));
 
 	// A format with domain field some windows servers send
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 group domain user 531 Jan 29 03:26 13-unix-domain file",
 			{
 				_T("13-unix-domain file"),
@@ -278,14 +278,14 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(1, 29), 1, 29, 3, 26)
 			},
 			DEFAULT
-		});
+		}));
 
 	// EPLF directory listings
 	// -----------------------
 
 	// See http://cr.yp.to/ftp/list/eplf.html (mirrored at https://filezilla-project.org/specs/eplf.html)
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"+i8388621.48594,m825718503,r,s280,up755\t14-eplf file",
 			{
 				_T("14-eplf file"),
@@ -297,9 +297,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1996, 3, 1, 22, 15, 3)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"+i8388621.50690,m824255907,/,\t15-eplf dir",
 			{
 				_T("15-eplf dir"),
@@ -311,12 +311,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1996, 2, 13, 23, 58, 27)
 			},
 			DEFAULT
-		});
+		}));
 
 	// MSDOS type listing used by old IIS
 	// ----------------------------------
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"04-27-00  12:09PM       <DIR>          16-dos-dateambiguous dir",
 			{
 				_T("16-dos-dateambiguous dir"),
@@ -328,10 +328,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 4, 27, 12, 9)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Ambiguous date and AM/PM crap. Some evil manager must have forced the poor devs to implement this
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"04-06-00  03:47PM                  589 17-dos-dateambiguous file",
 			{
 				_T("17-dos-dateambiguous file"),
@@ -343,9 +343,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 4, 6, 15, 47)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"2002-09-02  18:48       <DIR>          18-dos-longyear dir",
 			{
 				_T("18-dos-longyear dir"),
@@ -357,9 +357,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2002, 9, 2, 18, 48)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"2002-09-02  19:06                9,730 19-dos-longyear file",
 			{
 				_T("19-dos-longyear file"),
@@ -371,10 +371,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2002, 9, 2, 19, 6)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Numerical unix style listing
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"0100644   500  101   12345    123456789       20-unix-numerical file",
 			{
 				_T("20-unix-numerical file"),
@@ -386,12 +386,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1973, 11, 29, 21, 33, 9)
 			},
 			DEFAULT
-		});
+		}));
 
 	// VShell servers
 	// --------------
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"206876  Apr 04, 2000 21:06 21-vshell-old file",
 			{
 				_T("21-vshell-old file"),
@@ -403,9 +403,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 4, 4, 21, 6)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"0  Dec 12, 2002 02:13 22-vshell-old dir/",
 			{
 				_T("22-vshell-old dir"),
@@ -417,11 +417,11 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2002, 12, 12, 2, 13)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* This type of directory listings is sent by some newer versions of VShell
 	 * both year and time in one line is uncommon. */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rwxr-xr-x    1 user group        9 Oct 08, 2002 09:47 23-vshell-new file",
 			{
 				_T("23-vshell-new file"),
@@ -433,13 +433,13 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2002, 10, 8, 9, 47)
 			},
 			DEFAULT
-		});
+		}));
 
 	// OS/2 server format
 	// ------------------
 
 	// This server obviously isn't Y2K aware
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"36611      A    04-23-103  10:57  24-os2 file",
 			{
 				_T("24-os2 file"),
@@ -451,9 +451,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 4, 23, 10, 57)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			" 1123      A    07-14-99   12:37  25-os2 file",
 			{
 				_T("25-os2 file"),
@@ -465,10 +465,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1999, 7, 14, 12, 37)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Another server not aware of Y2K
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"    0 DIR       02-11-103  16:15  26-os2 dir",
 			{
 				_T("26-os2 dir"),
@@ -480,10 +480,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 2, 11, 16, 15)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Again Y2K
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			" 1123 DIR  A    10-05-100  23:38  27-os2 dir",
 			{
 				_T("27-os2 dir"),
@@ -495,12 +495,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 10, 5, 23, 38)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Localized date formats
 	// ----------------------
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"dr-xr-xr-x   2 root     other      2235 26. Juli, 20:10 28-datetest-ger dir",
 			{
 				_T("28-datetest-ger dir"),
@@ -512,9 +512,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(7, 26), 7, 26, 20, 10)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"dr-xr-xr-x   2 root     other      2235 szept 26 20:10 28b-datetest-hungarian dir",
 			{
 				_T("28b-datetest-hungarian dir"),
@@ -526,9 +526,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(9, 26), 9, 26, 20, 10)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r-xr-xr-x   2 root     other      2235 2.   Okt.  2003 29-datetest-ger file",
 			{
 				_T("29-datetest-ger file"),
@@ -540,9 +540,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 10, 2)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r-xr-xr-x   2 root     other      2235 1999/10/12 17:12 30-datetest file",
 			{
 				_T("30-datetest file"),
@@ -554,9 +554,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1999, 10, 12, 17, 12)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r-xr-xr-x   2 root     other      2235 24-04-2003 17:12 31-datetest file",
 			{
 				_T("31-datetest file"),
@@ -568,12 +568,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 4, 24, 17, 12)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Japanese listing
 	// Remark: I'v no idea in which encoding the foreign characters are, but
 	// it's not valid UTF-8. Parser has to be able to cope with it somehow.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rw-r--r--   1 root       sys           8473  4\x8c\x8e 18\x93\xfa 2003\x94\x4e 32-datatest-japanese file",
 			{
 				_T("32-datatest-japanese file"),
@@ -585,11 +585,11 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 4, 18)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Some other asian listing format. Those >127 chars are just examples
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-rwxrwxrwx   1 root     staff          0 2003   3\xed\xef 20 33-asian date file",
 			{
 				_T("33-asian date file"),
@@ -601,9 +601,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 3, 20)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r--r--r-- 1 root root 2096 8\xed 17 08:52 34-asian date file",
 			{
 				_T("34-asian date file"),
@@ -615,9 +615,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(8, 17), 8, 17, 8, 52)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r-xr-xr-x   2 root  root  96 2004.07.15   35-dotted-date file",
 			{
 				_T("35-dotted-date file"),
@@ -629,12 +629,12 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2004, 7, 15)
 			},
 			DEFAULT
-		});
+		}));
 
 	// VMS listings
 	// ------------
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"36-vms-dir.DIR;1  1 19-NOV-2001 21:41 [root,root] (RWE,RWE,RE,RE)",
 			{
 				_T("36-vms-dir"),
@@ -646,10 +646,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2001, 11, 19, 21, 41)
 			},
 			DEFAULT
-		});
+		}));
 
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"37-vms-file;1       155   2-JUL-2003 10:30:13.64",
 			{
 				_T("37-vms-file;1"),
@@ -661,10 +661,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 7, 2, 10, 30, 13)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* VMS style listing without time */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"38-vms-notime-file;1    2/8    7-JAN-2000    [IV2_XXX]   (RWED,RWED,RE,)",
 			{
 				_T("38-vms-notime-file;1"),
@@ -676,10 +676,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 1, 7)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* Localized month */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"39-vms-notime-file;1    6/8    15-JUI-2002    PRONAS   (RWED,RWED,RE,)",
 			{
 				_T("39-vms-notime-file;1"),
@@ -691,9 +691,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2002, 7, 15)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"40-vms-multiline-file;1\r\n170774/170775     24-APR-2003 08:16:15  [FTP_CLIENT,SCOT]      (RWED,RWED,RE,)",
 			{
 				_T("40-vms-multiline-file;1"),
@@ -705,9 +705,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 4, 24, 8, 16, 15)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"41-vms-multiline-file;1\r\n10     2-JUL-2003 10:30:08.59  [FTP_CLIENT,SCOT]      (RWED,RWED,RE,)",
 			{
 				_T("41-vms-multiline-file;1"),
@@ -719,10 +719,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 7, 2, 10, 30, 8)
 			},
 			DEFAULT
-		});
+		}));
 
 	// VMS style listings with a different field order
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"42-vms-alternate-field-order-file;1   [SUMMARY]    1/3     2-AUG-2006 13:05  (RWE,RWE,RE,)",
 			{
 				_T("42-vms-alternate-field-order-file;1"),
@@ -734,9 +734,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2006, 8, 2, 13, 5)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"43-vms-alternate-field-order-file;1       17-JUN-1994 17:25:37     6308/13     (RWED,RWED,R,)",
 			{
 				_T("43-vms-alternate-field-order-file;1"),
@@ -748,13 +748,13 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1994, 6, 17, 17, 25, 37)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Miscellaneous listings
 	// ----------------------
 
 	/* IBM AS/400 style listing */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"QSYS            77824 02/23/00 15:09:55 *DIR 44-ibm-as400 dir/",
 			{
 				_T("44-ibm-as400 dir"),
@@ -766,9 +766,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 2, 23, 15, 9, 55)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"QSYS            77824 23/02/00 15:09:55 *FILE 45-ibm-as400-date file",
 			{
 				_T("45-ibm-as400-date file"),
@@ -780,10 +780,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2000, 2, 23, 15, 9, 55)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* aligned directory listing with too long size */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r-xr-xr-x longowner longgroup123456 Feb 12 17:20 46-unix-concatsize file",
 			{
 				_T("46-unix-concatsize file"),
@@ -795,10 +795,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(2, 12), 2, 12, 17, 20)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* short directory listing with month name */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r-xr-xr-x 2 owner group 4512 01-jun-99 47_unix_shortdatemonth file",
 			{
 				_T("47_unix_shortdatemonth file"),
@@ -810,10 +810,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1999, 6, 1)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* Nortel wfFtp router */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"48-nortel-wfftp-file       1014196  06/03/04  Thur.   10:20:03",
 			{
 				_T("48-nortel-wfftp-file"),
@@ -825,10 +825,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2004, 6, 3, 10, 20, 3)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* VxWorks based server used in Nortel routers */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"2048    Feb-28-1998  05:23:30   49-nortel-vxworks dir <DIR>",
 			{
 				_T("49-nortel-vxworks dir"),
@@ -840,10 +840,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 1998, 2, 28, 5, 23, 30)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* the following format is sent by the Connect:Enterprise server by Sterling Commerce */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-C--E-----FTP B BCC3I1       7670  1294495 Jan 13 07:42 50-conent file",
 			{
 				_T("50-conent file"),
@@ -855,11 +855,11 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(1, 13), 1, 13, 7, 42)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* Microware OS-9
 	 * Notice the yy/mm/dd date format */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"20.20 07/03/29 1026 d-ewrewr 2650 85920 51-OS-9 dir",
 			{
 				_T("51-OS-9 dir"),
@@ -871,10 +871,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2007, 3, 29)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* Localised Unix style listing. Month and day fields are swapped */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"drwxr-xr-x 3 user group 512 01 oct 2004 52-swapped-daymonth dir",
 			{
 				_T("52-swapped-daymonth dir"),
@@ -886,9 +886,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2004, 10, 1)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"-r--r--r-- 0125039 12 Nov 11 2005 53-noownergroup file",
 			{
 				_T("53-noownergroup file"),
@@ -900,9 +900,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2005, 11, 11)
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			// Valid UTF-8 encoding
 			"drwxr-xr-x   5 root     sys          512 2005\xEB\x85\x84  1\xEC\x9B\x94  6\xEC\x9D\xBC 54-asian date year first dir",
 			{
@@ -915,10 +915,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2005, 1, 6)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* IBM AS/400 style listing with localized date*/
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"QPGMR           36864 18.09.06 14:21:26 *FILE      55-AS400.FILE",
 			{
 				_T("55-AS400.FILE"),
@@ -930,10 +930,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2006, 9, 18, 14, 21, 26)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* VMS style listing with complex size */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"56-VMS-complex-size;1 2KB 23-SEP-2005 14:57:07.27",
 			{
 				_T("56-VMS-complex-size;1"),
@@ -945,10 +945,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2005, 9, 23, 14, 57, 7)
 			},
 			DEFAULT
-		});
+		}));
 
 	/* HP NonStop */
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"57-HP_NonStop 101 528 6-Apr-07 14:21:18 255, 0 \"oooo\"",
 			{
 				_T("57-HP_NonStop"),
@@ -960,10 +960,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2007, 4, 6, 14, 21, 18)
 			},
 			HPNONSTOP
-		});
+		}));
 
 	// Only difference is in the owner/group field, no delimiting space.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"58-HP_NonStop 101 528 6-Apr-07 14:21:18 255,255 \"oooo\"",
 			{
 				_T("58-HP_NonStop"),
@@ -975,10 +975,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2007, 4, 6, 14, 21, 18)
 			},
 			HPNONSTOP
-		});
+		}));
 
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"drwxr-xr-x 6 user sys 1024 30. Jan., 12:40 59-localized-date-dir",
 			{
 				_T("59-localized-date-dir"),
@@ -990,7 +990,7 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, calcYear(1, 30), 1, 30, 12, 40)
 			},
 			DEFAULT
-		});
+		}));
 
 	// MVS variants
 	//
@@ -1001,7 +1001,7 @@ void CDirectoryListingParserTest::InitEntries()
 
 	// The following 5 are loosely based on this format:
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"WYOSPT 3420   2003/05/21  1  200  FB      80  8053  PS  60-MVS.FILE",
 			{
 				_T("60-MVS.FILE"),
@@ -1013,9 +1013,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2003, 5, 21)
 		},
 		DEFAULT
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"WPTA01 3290   2004/03/04  1    3  FB      80  3125  PO  61-MVS.DATASET",
 			{
 				_T("61-MVS.DATASET"),
@@ -1027,9 +1027,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2004, 3, 04)
 		},
 		DEFAULT
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"NRP004 3390   **NONE**    1   15  NONE     0     0  PO  62-MVS-NONEDATE.DATASET",
 			{
 				_T("62-MVS-NONEDATE.DATASET"),
@@ -1041,9 +1041,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 		},
 		DEFAULT
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"TSO005 3390   2005/06/06 213000 U 0 27998 PO 63-MVS.DATASET",
 			{
 				_T("63-MVS.DATASET"),
@@ -1055,9 +1055,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2005, 6, 6)
 		},
 		DEFAULT
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"TSO004 3390   VSAM 64-mvs-file",
 			{
 				_T("64-mvs-file"),
@@ -1069,7 +1069,7 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 		},
 		DEFAULT
-	});
+	}));
 
 	// MVS Dataset members
 	//
@@ -1078,7 +1078,7 @@ void CDirectoryListingParserTest::InitEntries()
 	// Speciality: Some members have no attributes at all.
 	// Requires servertype to be MVS or it won't be parsed, as
 	// it would conflict with lots of other servers.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"65-MVS-PDS-MEMBER",
 			{
 				_T("65-MVS-PDS-MEMBER"),
@@ -1090,10 +1090,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 		},
 		MVS
-	});
+	}));
 
 	// Name         VV.MM   Created      Changed       Size  Init  Mod Id
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"66-MVSPDSMEMBER 01.01 2004/06/22 2004/06/22 16:32   128   128    0 BOBY12",
 			{
 				_T("66-MVSPDSMEMBER"),
@@ -1105,10 +1105,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2004, 6, 22, 16, 32)
 		},
 		MVS
-	});
+	}));
 
 	// Hexadecimal size
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"67-MVSPDSMEMBER2 00B308 000411  00 FO                31    ANY",
 			{
 				_T("67-MVSPDSMEMBER2"),
@@ -1120,9 +1120,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 		},
 		MVS
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"68-MVSPDSMEMBER3 00B308 000411  00 FO        RU      ANY    24",
 			{
 				_T("68-MVSPDSMEMBER3"),
@@ -1134,10 +1134,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			MVS
-		});
+		}));
 
 	// Migrated MVS file
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"Migrated				69-SOME.FILE",
 			{
 				_T("69-SOME.FILE"),
@@ -1149,7 +1149,7 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			MVS
-		});
+		}));
 
 	// z/VM, another IBM abomination. Description by Alexandre Charbey
 	// Requires type set to ZVM or it cannot be parsed.
@@ -1169,7 +1169,7 @@ void CDirectoryListingParserTest::InitEntries()
 	// there is the date/time
 	// 060191
 	//   I think it is some internal stuff saying who the file belongs to.  191 is the "handle" of the user's disk. I don't know what 060 is. This 060191 is what FZ shows in its file list.
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"70-ZVMFILE  TRACE   V        65      107        2 2005-10-04 15:28:42 060191",
 			{
 				_T("70-ZVMFILE.TRACE"),
@@ -1181,9 +1181,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2005, 10, 4, 15, 28, 42)
 			},
 			ZVM
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"drwxr-xr-x 3 slopri devlab 512 71-unix-dateless",
 			{
 				_T("71-unix-dateless"),
@@ -1195,9 +1195,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"Type=file;mOdIfY=20081105165215;size=1234; 72-MLSD-file",
 			{
 				_T("72-MLSD-file"),
@@ -1209,13 +1209,13 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2008, 11, 5, 16, 52, 15)
 			},
 			DEFAULT
-		});
+		}));
 
 	// Yet another MVS format.
 	// Follows the below structure but with all but the first two and the last field empty.
 	// Furthermore, Unit is "Tape"
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
-	m_entries.push_back((t_entry) {
+	m_entries.emplace_back(t_entry({
 			"V43525 Tape                                             73-MSV-TAPE.FILE",
 			{
 				_T("73-MSV-TAPE.FILE"),
@@ -1227,9 +1227,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			MVS
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 			"Type=file; 74-MLSD-whitespace trailing\t ",
 			{
 				_T("74-MLSD-whitespace trailing\t "),
@@ -1241,9 +1241,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
-		m_entries.push_back((t_entry){
+		m_entries.emplace_back(t_entry({
 			"Type=file; \t 75-MLSD-whitespace leading",
 			{
 				_T("\t 75-MLSD-whitespace leading"),
@@ -1255,9 +1255,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
-		m_entries.push_back((t_entry){
+		m_entries.emplace_back(t_entry({
 			"modify=20080426135501;perm=;size=65718921;type=file;unique=802U1066013B;UNIX.group=1179;UNIX.mode=00;UNIX.owner=1179; 75 MLSD file with empty permissions",
 			{
 				_T("75 MLSD file with empty permissions"),
@@ -1269,9 +1269,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime(fz::datetime::utc, 2008, 4, 26, 13, 55, 1)
 			},
 			DEFAULT
-		});
+		}));
 
-		m_entries.push_back((t_entry){
+		m_entries.emplace_back(t_entry({
 			"type=OS.unix=slink:/foo; 76 MLSD symlink",
 			{
 				_T("76 MLSD symlink"),
@@ -1283,9 +1283,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
-		m_entries.push_back((t_entry){
+		m_entries.emplace_back(t_entry({
 			"type=OS.UNIX=symlink; 76b MLSD symlink",
 			{
 				_T("76b MLSD symlink"),
@@ -1297,10 +1297,10 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
 		// Old ietf draft for MLST earlier than mlst-07 has no trailing semicolon after facts
-		m_entries.push_back((t_entry){
+		m_entries.emplace_back(t_entry({
 			"type=file 77 MLSD file no trailing semicolon after facts < mlst-07",
 			{
 				_T("77 MLSD file no trailing semicolon after facts < mlst-07"),
@@ -1312,9 +1312,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
-		m_entries.push_back((t_entry){
+		m_entries.emplace_back(t_entry({
 			"type=OS.unix=slink; 77 MLSD symlink notarget",
 			{
 				_T("77 MLSD symlink notarget"),
@@ -1326,9 +1326,9 @@ void CDirectoryListingParserTest::InitEntries()
 				fz::datetime()
 			},
 			DEFAULT
-		});
+		}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 		"size=1365694195;type=file;modify=20090722092510;\tadsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file",
 		{
 			_T("adsl TV 2009-07-22 08-25-10 78 mlsd file that can get parsed as unix.file"),
@@ -1340,11 +1340,11 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, 2009, 7, 22, 9, 25, 10)
 		},
 		DEFAULT
-	});
+	}));
 
 	// MVS entry with a large number of used blocks:
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 		"WYOSPT 3420   2003/05/21  1 ????  FB      80  8053  PS  79-MVS.FILE",
 		{
 			_T("79-MVS.FILE"),
@@ -1356,12 +1356,12 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, 2003, 5, 21)
 		},
 		DEFAULT
-	});
+	}));
 
 	// MVS entry with a large number of used blocks:
 	// https://forum.filezilla-project.org/viewtopic.php?t=21667
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 		"GISBWI 3390   2011/08/25  2 ++++  FB     904 18080  PS  80-MVS.FILE",
 		{
 			_T("80-MVS.FILE"),
@@ -1373,12 +1373,12 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, 2011, 8, 25)
 		},
 		DEFAULT
-	});
+	}));
 
 	// MVS entry with PO-E Dsorg indicating direrctory. See
 	// https://forum.filezilla-project.org/viewtopic.php?t=19374 for reference.
 	// Volume Unit    Referred Ext Used Recfm Lrecl BlkSz Dsorg Dsname
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 		"WYOSPT 3420   2003/05/21  1 3 U 6447    6447  PO-E 81-MVS.DIR",
 		{
 			_T("81-MVS.DIR"),
@@ -1390,9 +1390,9 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, 2003, 5, 21)
 		},
 		DEFAULT
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.push_back(t_entry({
 		"drwxrwxrwx   1 0        0               0 29 Jul 02:27 2014 Invoices",
 		{
 			_T("2014 Invoices"),
@@ -1404,10 +1404,10 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, calcYear(7, 29), 7, 29, 2, 27)
 		},
 		DEFAULT
-	});
+	}));
 
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 		"Type=file;mOdIfY=19681105165215;size=1234; MLSD pre-epoch",
 		{
 			_T("MLSD pre-epoch"),
@@ -1419,9 +1419,9 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, 1968, 11, 5, 16, 52, 15)
 		},
 		DEFAULT
-	});
+	}));
 
-	m_entries.push_back((t_entry){
+	m_entries.emplace_back(t_entry({
 		"-rw-------      1  99999999 0              3 Apr   4 24:00 alternate_midnight",
 		{
 			_T("alternate_midnight"),
@@ -1433,7 +1433,7 @@ void CDirectoryListingParserTest::InitEntries()
 			fz::datetime(fz::datetime::utc, calcYear(4, 4), 4, 5, 0, 0)
 		},
 		DEFAULT
-	});
+	}));
 
 /*
 	std::wstring name;
@@ -1447,8 +1447,9 @@ void CDirectoryListingParserTest::InitEntries()
 */
 
 	// Fix line endings
-	for (auto iter = m_entries.begin(); iter != m_entries.end(); iter++)
-		iter->data += "\r\n";
+	for (auto & entry : m_entries) {
+		entry.data += "\r\n";
+	}
 }
 
 void CDirectoryListingParserTest::testIndividual()
@@ -1456,7 +1457,7 @@ void CDirectoryListingParserTest::testIndividual()
 	m_sync.lock();
 
 	static int index = 0;
-	const t_entry &entry = m_entries[index++];
+	t_entry const& entry = m_entries[index++];
 
 	m_sync.unlock();
 
@@ -1465,10 +1466,9 @@ void CDirectoryListingParserTest::testIndividual()
 
 	CDirectoryListingParser parser(0, server);
 
-	const char* str = entry.data.c_str();
-	const int len = strlen(str);
+	size_t const len = entry.data.size();
 	char* data = new char[len];
-	memcpy(data, str, len);
+	memcpy(data, entry.data.c_str(), len);
 	parser.AddData(data, len);
 
 	CDirectoryListing listing = parser.Parse(CServerPath());
@@ -1488,14 +1488,12 @@ void CDirectoryListingParserTest::testAll()
 {
 	CServer server;
 	CDirectoryListingParser parser(0, server);
-	for (std::vector<t_entry>::const_iterator iter = m_entries.begin(); iter != m_entries.end(); iter++)
-	{
-		server.SetType(iter->serverType);
+	for (auto const& entry : m_entries) {
+		server.SetType(entry.serverType);
 		parser.SetServer(server);
-		const char* str = iter->data.c_str();
-		const int len = strlen(str);
+		size_t const len = entry.data.size();
 		char* data = new char[len];
-		memcpy(data, str, len);
+		memcpy(data, entry.data.c_str(), len);
 		parser.AddData(data, len);
 	}
 	CDirectoryListing listing = parser.Parse(CServerPath());
