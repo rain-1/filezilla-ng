@@ -63,7 +63,7 @@
       </object>
       <object class="separator"/>
       <object class="wxMenuItem" name="ID_MENU_VIEW_FILTERS">
-        <label>Filename &amp;filters...</label>
+        <label>Directory listing &amp;filters...</label>
         <accel>CTRL+I</accel>
       </object>
       <object class="wxMenu" name="">
