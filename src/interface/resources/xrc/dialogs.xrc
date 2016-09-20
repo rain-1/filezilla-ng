@@ -1583,6 +1583,11 @@
               <label>Export &amp;Queue</label>
             </object>
           </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="ID_FILTERS">
+              <label>Export &amp;Filters</label>
+            </object>
+          </object>
           <vgap>5</vgap>
           <object class="sizeritem">
             <object class="wxStdDialogButtonSizer">
