@@ -1292,6 +1292,7 @@
                         <item>Filter out items matching all of the following</item>
                         <item>Filter out items matching any of the following</item>
                         <item>Filter out items matching none of the following</item>
+                        <item>Filter out items matching not all of the following</item>
                       </content>
                       <selection>0</selection>
                     </object>
@@ -3057,6 +3058,7 @@
                 <item>Match all of the following</item>
                 <item>Match any of the following</item>
                 <item>Match none of the following</item>
+                <item>Match not all of the following</item>
               </content>
               <selection>0</selection>
             </object>

@@ -11,6 +11,8 @@
 
 #include <libfilezilla/local_filesys.hpp>
 
+#include <array>
+
 bool CFilterManager::m_loaded = false;
 std::vector<CFilter> CFilterManager::m_globalFilters;
 std::vector<CFilterSet> CFilterManager::m_globalFilterSets;
@@ -33,6 +35,11 @@ EVT_BUTTON(XRCID("ID_LOCAL_DISABLEALL"), CFilterDialog::OnChangeAll)
 EVT_BUTTON(XRCID("ID_REMOTE_ENABLEALL"), CFilterDialog::OnChangeAll)
 EVT_BUTTON(XRCID("ID_REMOTE_DISABLEALL"), CFilterDialog::OnChangeAll)
 END_EVENT_TABLE()
+
+namespace {
+std::array<std::wstring, 4> matchTypeXmlNames =
+	{ L"All", L"Any", L"None", L"Not all" };
+}
 
 CFilterCondition::CFilterCondition()
 {
@@ -136,7 +143,7 @@ void CFilterDialog::SaveFilter(pugi::xml_node& element, const CFilter& filter)
 	AddTextElement(element, "Name", filter.name);
 	AddTextElement(element, "ApplyToFiles", filter.filterFiles ? _T("1") : _T("0"));
 	AddTextElement(element, "ApplyToDirs", filter.filterDirs ? _T("1") : _T("0"));
-	AddTextElement(element, "MatchType", (filter.matchType == CFilter::any) ? _T("Any") : ((filter.matchType == CFilter::none) ? _T("None") : _T("All")));
+	AddTextElement(element, "MatchType", matchTypeXmlNames[filter.matchType]);
 	AddTextElement(element, "MatchCase", filter.matchCase ? _T("1") : _T("0"));
 
 	auto xConditions = element.append_child("Conditions");
@@ -812,7 +819,14 @@ bool CFilterManager::FilenameFilteredByFilter(CFilter const& filter, std::wstrin
 			if (filter.matchType == CFilter::all) {
 				return false;
 			}
+			else if (filter.matchType == CFilter::not_all) {
+				return true;
+			}
 		}
+	}
+	
+	if (filter.matchType == CFilter::not_all) {
+		return false;
 	}
 
 	if (filter.matchType != CFilter::any || filter.filters.empty()) {
@@ -867,12 +881,12 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 	filter.filterDirs = GetTextElement(element, "ApplyToDirs") == _T("1");
 
 	wxString const matchType = GetTextElement(element, "MatchType");
-	if (matchType == _T("Any"))
-		filter.matchType = CFilter::any;
-	else if (matchType == _T("None"))
-		filter.matchType = CFilter::none;
-	else
-		filter.matchType = CFilter::all;
+	filter.matchType = CFilter::all;
+	for (size_t i = 0; i < matchTypeXmlNames.size(); ++i) {
+		if (matchType == matchTypeXmlNames[i]) {
+			filter.matchType = static_cast<CFilter::t_matchType>(i);
+		}
+	}
 	filter.matchCase = GetTextElement(element, "MatchCase") == _T("1");
 
 	auto xConditions = element.child("Conditions");
