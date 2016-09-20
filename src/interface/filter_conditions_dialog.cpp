@@ -640,6 +640,9 @@ CFilter CFilterConditionsDialog::GetFilter()
 	case 2:
 		filter.matchType = CFilter::none;
 		break;
+	case 3:
+		filter.matchType = CFilter::not_all;
+		break;
 	default:
 		filter.matchType = CFilter::all;
 		break;

@@ -46,7 +46,8 @@ public:
 	{
 		all,
 		any,
-		none
+		none,
+		not_all
 	};
 
 	wxString name;
