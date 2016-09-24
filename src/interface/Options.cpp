@@ -798,7 +798,6 @@ std::wstring TryDirectory(wxString path, wxString const& suffix, bool check_exis
 	}
 	return path.ToStdWstring();
 }
-#endif
 
 wxString GetEnv(wxString const& env)
 {
@@ -808,6 +807,7 @@ wxString GetEnv(wxString const& env)
 	}
 	return ret;
 }
+#endif
 }
 
 CLocalPath COptions::GetUnadjustedSettingsDir()
