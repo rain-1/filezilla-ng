@@ -10,6 +10,19 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.22.0-rc1 (2016-09-24)
+
++ Directory listing filters can now be exported and imported
++ Added the "not all" filter match type to filter out all items not matching all conditions
++ Added the "not all" search match type to search for all items not matching all conditions
++ Building and running FileZilla now depends on libfilezilla >= 0.7.0 (https://lib.filezilla-project.org/).
++ Building and running FileZilla now depends on GnuTLS >= 3.4.15
+- Speed up creation of socket and file i/o threads through the use of a thread pool
+- Replace invalid characters in filenames when calculating the local filename for editing remote files
+- The updater can now handle HTTPS servers that redirect to other HTTPS servers
+- SFTP: Try password based login if a password-protected keyfile is rejected by the server instead of failing the login
+- MSW: Tee shell extension now supports long paths on Windows 10
+
 3.21.0 (2016-08-23)
 
 ! Fixed a string format vulnerability introduced in 3.20.0-rc1 when listing directories using SFTP
