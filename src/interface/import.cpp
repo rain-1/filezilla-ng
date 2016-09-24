@@ -5,6 +5,7 @@
 #include "ipcmutex.h"
 #include "Options.h"
 #include "queue.h"
+#include "xrc_helper.h"
 
 CImportDialog::CImportDialog(wxWindow* parent, CQueueView* pQueueView)
 	: m_parent(parent), m_pQueueView(pQueueView)
@@ -35,18 +36,25 @@ void CImportDialog::Run()
 		bool settings = fz3Root.child("Settings") != 0;
 		bool queue = fz3Root.child("Queue") != 0;
 		bool sites = fz3Root.child("Servers") != 0;
+		bool filters = fz3Root.child("Filters") != 0;
 
-		if (settings || queue || sites) {
+		if (settings || queue || sites || filters) {
 			if (!Load(m_parent, _T("ID_IMPORT"))) {
 				wxBell();
 				return;
 			}
-			if (!queue)
-				XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->Hide();
-			if (!sites)
-				XRCCTRL(*this, "ID_SITEMANAGER", wxCheckBox)->Hide();
-			if (!settings)
-				XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->Hide();
+			if (!queue) {
+				xrc_call(*this, "ID_QUEUE", &wxCheckBox::Hide);
+			}
+			if (!sites) {
+				xrc_call(*this, "ID_SITEMANAGER", &wxCheckBox::Hide);
+			}
+			if (!settings) {
+				xrc_call(*this, "ID_SETTINGS", &wxCheckBox::Hide);
+			}
+			if (!filters) {
+				xrc_call(*this, "ID_FILTERS", &wxCheckBox::Hide);
+			}
 			GetSizer()->Fit(this);
 
 			if (ShowModal() != wxID_OK) {
@@ -60,17 +68,21 @@ void CImportDialog::Run()
 				}
 			}
 
-			if (queue && XRCCTRL(*this, "ID_QUEUE", wxCheckBox)->IsChecked()) {
+			if (queue && xrc_call(*this, "ID_QUEUE", &wxCheckBox::IsChecked)) {
 				m_pQueueView->ImportQueue(fz3Root.child("Queue"), true);
 			}
 
-			if (sites && XRCCTRL(*this, "ID_SITEMANAGER", wxCheckBox)->IsChecked()) {
+			if (sites && xrc_call(*this, "ID_SITEMANAGER", &wxCheckBox::IsChecked)) {
 				ImportSites(fz3Root.child("Servers"));
 			}
 
-			if (settings && XRCCTRL(*this, "ID_SETTINGS", wxCheckBox)->IsChecked()) {
+			if (settings && xrc_call(*this, "ID_SETTINGS", &wxCheckBox::IsChecked)) {
 				COptions::Get()->Import(fz3Root.child("Settings"));
 				wxMessageBoxEx(_("The settings have been imported. You have to restart FileZilla for all settings to have effect."), _("Import successful"), wxOK, this);
+			}
+
+			if (filters && xrc_call(*this, "ID_FILTERS", &wxCheckBox::IsChecked)) {
+				CFilterManager::Import(fz3Root);
 			}
 
 			wxMessageBoxEx(_("The selected categories have been imported."), _("Import successful"), wxOK, this);

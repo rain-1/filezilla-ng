@@ -1277,7 +1277,7 @@ void CSearchDialog::SaveConditions()
 		document.remove_child(filter);
 	filter = document.append_child("Filter");
 
-	CFilterDialog::SaveFilter(filter, m_search_filter);
+	CFilterManager::SaveFilter(filter, m_search_filter);
 
 	file.Save(true);
 }

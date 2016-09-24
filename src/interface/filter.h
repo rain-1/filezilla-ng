@@ -101,12 +101,17 @@ public:
 	static bool CompileRegexes(std::vector<CFilter>& filters);
 	static bool CompileRegexes(CFilter& filter);
 
+	static void Import(pugi::xml_node& element);
 	static bool LoadFilter(pugi::xml_node& element, CFilter& filter);
+	static void SaveFilter(pugi::xml_node& element, const CFilter& filter);
 
 protected:
 	static bool CompileRegexes();
 
 	static void LoadFilters();
+	static void LoadFilters(pugi::xml_node& element);
+	static void SaveFilters();
+
 	static bool m_loaded;
 
 	static std::vector<CFilter> m_globalFilters;
@@ -126,12 +131,7 @@ public:
 
 	bool Create(CMainFrame* parent);
 
-	static void SaveFilter(pugi::xml_node& element, const CFilter& filter);
-
 protected:
-
-	void SaveFilters();
-
 	void DisplayFilters();
 
 	void SetCtrlState();
