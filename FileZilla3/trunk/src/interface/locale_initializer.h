@@ -43,7 +43,7 @@ String ExpandPath(String dir)
 	while (!dir.empty()) {
 		String token;
 #ifdef FZ_WINDOWS
-		size_t pos = dir.find_first_of(fzS(String::value_type, "\\/"));
+		size_t pos = dir.find_first_of(fzS(typename String::value_type, "\\/"));
 #else
 		size_t pos = dir.find('/');
 #endif
