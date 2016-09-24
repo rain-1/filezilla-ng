@@ -97,6 +97,10 @@ void CExportDialog::Run()
 			if (element) {
 				exportRoot.append_copy(element);
 			}
+			element = document.child("Sets");
+			if (element) {
+				exportRoot.append_copy(element);
+			}
 		}
 	}
 

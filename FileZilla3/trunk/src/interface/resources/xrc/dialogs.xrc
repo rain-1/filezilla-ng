@@ -1642,6 +1642,12 @@
               <checked>1</checked>
             </object>
           </object>
+          <object class="sizeritem">
+            <object class="wxCheckBox" name="ID_FILTERS">
+              <label>&amp;Filters</label>
+              <checked>1</checked>
+            </object>
+          </object>
           <vgap>5</vgap>
           <object class="sizeritem">
             <object class="wxStaticText">

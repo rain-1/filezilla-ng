@@ -109,6 +109,7 @@ void CFilterDialog::OnOkOrApply(wxCommandEvent& event)
 	m_globalCurrentFilterSet = m_currentFilterSet;
 
 	SaveFilters();
+	m_filters_disabled = false;
 
 	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
 
@@ -136,116 +137,6 @@ void CFilterDialog::OnEdit(wxCommandEvent&)
 	CompileRegexes();
 
 	DisplayFilters();
-}
-
-void CFilterDialog::SaveFilter(pugi::xml_node& element, const CFilter& filter)
-{
-	AddTextElement(element, "Name", filter.name);
-	AddTextElement(element, "ApplyToFiles", filter.filterFiles ? _T("1") : _T("0"));
-	AddTextElement(element, "ApplyToDirs", filter.filterDirs ? _T("1") : _T("0"));
-	AddTextElement(element, "MatchType", matchTypeXmlNames[filter.matchType]);
-	AddTextElement(element, "MatchCase", filter.matchCase ? _T("1") : _T("0"));
-
-	auto xConditions = element.append_child("Conditions");
-	for (std::vector<CFilterCondition>::const_iterator conditionIter = filter.filters.begin(); conditionIter != filter.filters.end(); ++conditionIter) {
-		const CFilterCondition& condition = *conditionIter;
-
-		int type;
-		switch (condition.type)
-		{
-		case filter_name:
-			type = 0;
-			break;
-		case filter_size:
-			type = 1;
-			break;
-		case filter_attributes:
-			type = 2;
-			break;
-		case filter_permissions:
-			type = 3;
-			break;
-		case filter_path:
-			type = 4;
-			break;
-		case filter_date:
-			type = 5;
-			break;
-		default:
-			wxFAIL_MSG(_T("Unhandled filter type"));
-			continue;
-		}
-
-		auto xCondition = xConditions.append_child("Condition");
-		AddTextElement(xCondition, "Type", type);
-
-		if (condition.type == filter_size) {
-			// Backwards compatibility sucks
-			int v = condition.condition;
-			if (v == 2)
-				v = 3;
-			else if (v > 2)
-				--v;
-			AddTextElement(xCondition, "Condition", v);
-		}
-		else
-			AddTextElement(xCondition, "Condition", condition.condition);
-		AddTextElement(xCondition, "Value", condition.strValue);
-	}
-}
-
-void CFilterDialog::SaveFilters()
-{
-	CInterProcessMutex mutex(MUTEX_FILTERS);
-
-	CXmlFile xml(wxGetApp().GetSettingsFile(_T("filters")));
-	auto element = xml.Load();
-	if (!element) {
-		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters could not be saved.");
-		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
-
-		return;
-	}
-
-	auto xFilters = element.child("Filters");
-	while (xFilters) {
-		element.remove_child(xFilters);
-		xFilters = element.child("Filters");
-	}
-
-	xFilters = element.append_child("Filters");
-
-	for (auto const& filter : m_globalFilters) {
-		auto xFilter = xFilters.append_child("Filter");
-		SaveFilter(xFilter, filter);
-	}
-
-	auto xSets = element.child("Sets");
-	while (xSets) {
-		element.remove_child(xSets);
-		xSets = element.child("Sets");
-	}
-
-	xSets = element.append_child("Sets");
-	SetAttributeInt(xSets, "Current", m_currentFilterSet);
-
-	for (auto const& set : m_globalFilterSets) {
-		auto xSet = xSets.append_child("Set");
-
-		if (!set.name.empty()) {
-			AddTextElement(xSet, "Name", set.name);
-		}
-
-		for (unsigned int i = 0; i < set.local.size(); ++i) {
-			auto xItem = xSet.append_child("Item");
-			AddTextElement(xItem, "Local", set.local[i] ? _T("1") : _T("0"));
-			AddTextElement(xItem, "Remote", set.remote[i] ? _T("1") : _T("0"));
-		}
-	}
-
-	xml.Save(true);
-
-	m_filters_disabled = false;
 }
 
 void CFilterDialog::DisplayFilters()
@@ -506,36 +397,33 @@ void CFilterDialog::SetCtrlState()
 CFilterManager::CFilterManager()
 {
 	LoadFilters();
-
-	if (m_globalFilterSets.empty()) {
-		CFilterSet set;
-		set.local.resize(m_globalFilters.size(), false);
-		set.remote.resize(m_globalFilters.size(), false);
-
-		m_globalFilterSets.push_back(set);
-	}
 }
 
-bool CFilterManager::HasActiveFilters(bool ignore_disabled /*=false*/)
+bool CFilterManager::HasActiveFilters(bool ignore_disabled)
 {
-	if (!m_loaded)
+	if (!m_loaded) {
 		LoadFilters();
+	}
 
-	if (m_globalFilterSets.empty())
+	if (m_globalFilterSets.empty()) {
 		return false;
+	}
 
 	wxASSERT(m_globalCurrentFilterSet < m_globalFilterSets.size());
 
-	if (m_filters_disabled && !ignore_disabled)
+	if (m_filters_disabled && !ignore_disabled) {
 		return false;
+	}
 
 	const CFilterSet& set = m_globalFilterSets[m_globalCurrentFilterSet];
 	for (unsigned int i = 0; i < m_globalFilters.size(); ++i) {
-		if (set.local[i])
+		if (set.local[i]) {
 			return true;
+		}
 
-		if (set.remote[i])
+		if (set.remote[i]) {
 			return true;
+		}
 	}
 
 	return false;
@@ -956,12 +844,13 @@ bool CFilterManager::LoadFilter(pugi::xml_node& element, CFilter& filter)
 
 void CFilterManager::LoadFilters()
 {
-	if (m_loaded)
+	if (m_loaded) {
 		return;
+	}
 
 	m_loaded = true;
 
-	CInterProcessMutex mutex(MUTEX_FILTERS);
+	CReentrantInterProcessMutexLocker mutex(MUTEX_FILTERS);
 
 	wxString file(wxGetApp().GetSettingsFile(_T("filters")));
 	if (fz::local_filesys::get_size(fz::to_native(file)) < 1) {
@@ -977,9 +866,30 @@ void CFilterManager::LoadFilters()
 		return;
 	}
 
+	LoadFilters(element);
+}
+
+void CFilterManager::Import(pugi::xml_node& element)
+{
+	m_globalFilters.clear();
+	m_globalFilterSets.clear();
+	m_globalCurrentFilterSet = 0;
+	m_filters_disabled = false;
+
+	CReentrantInterProcessMutexLocker mutex(MUTEX_FILTERS);
+
+	LoadFilters(element);
+	SaveFilters();
+
+	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
+}
+
+void CFilterManager::LoadFilters(pugi::xml_node& element)
+{
 	auto xFilters = element.child("Filters");
-	if (!xFilters)
+	if (!xFilters) {
 		return;
+	}
 
 	auto xFilter = xFilters.child("Filter");
 	while (xFilter) {
@@ -987,43 +897,159 @@ void CFilterManager::LoadFilters()
 
 		bool loaded = LoadFilter(xFilter, filter);
 
-		if (loaded && !filter.name.empty() && !filter.filters.empty())
+		if (loaded && !filter.name.empty() && !filter.filters.empty()) {
 			m_globalFilters.push_back(filter);
+		}
 
 		xFilter = xFilter.next_sibling("Filter");
 	}
 
 	CompileRegexes();
-
 	auto xSets = element.child("Sets");
-	if (!xSets)
-		return;
+	if (xSets) {
+		for (auto xSet = xSets.child("Set"); xSet; xSet = xSet.next_sibling("Set")) {
+			CFilterSet set;
+			auto xItem = xSet.child("Item");
+			while (xItem) {
+				wxString local = GetTextElement(xItem, "Local");
+				wxString remote = GetTextElement(xItem, "Remote");
+				set.local.push_back(local == _T("1") ? true : false);
+				set.remote.push_back(remote == _T("1") ? true : false);
 
-	for (auto xSet = xSets.child("Set"); xSet; xSet = xSet.next_sibling("Set")) {
+				xItem = xItem.next_sibling("Item");
+			}
+
+			if (!m_globalFilterSets.empty()) {
+				set.name = GetTextElement(xSet, "Name");
+				if (set.name.empty()) {
+					continue;
+				}
+			}
+
+			if (set.local.size() == m_globalFilters.size()) {
+				m_globalFilterSets.push_back(set);
+			}
+		}
+
+		int value = GetAttributeInt(xSets, "Current");
+		if (value >= 0 && static_cast<size_t>(value) < m_globalFilterSets.size()) {
+			m_globalCurrentFilterSet = value;
+		}
+	}
+	if (m_globalFilterSets.empty()) {
 		CFilterSet set;
-		auto xItem = xSet.child("Item");
-		while (xItem) {
-			wxString local = GetTextElement(xItem, "Local");
-			wxString remote = GetTextElement(xItem, "Remote");
-			set.local.push_back(local == _T("1") ? true : false);
-			set.remote.push_back(remote == _T("1") ? true : false);
+		set.local.resize(m_globalFilters.size(), false);
+		set.remote.resize(m_globalFilters.size(), false);
 
-			xItem = xItem.next_sibling("Item");
-		}
+		m_globalFilterSets.push_back(set);
+	}
+}
 
-		if (!m_globalFilterSets.empty()) {
-			set.name = GetTextElement(xSet, "Name");
-			if (set.name.empty())
-				continue;
-		}
+void CFilterManager::SaveFilters()
+{
+	CReentrantInterProcessMutexLocker mutex(MUTEX_FILTERS);
 
-		if (set.local.size() == m_globalFilters.size())
-			m_globalFilterSets.push_back(set);
+	CXmlFile xml(wxGetApp().GetSettingsFile(_T("filters")));
+	auto element = xml.Load();
+	if (!element) {
+		wxString msg = xml.GetError() + _T("\n\n") + _("Any changes made to the filters could not be saved.");
+		wxMessageBoxEx(msg, _("Error loading xml file"), wxICON_ERROR);
+
+		return;
 	}
 
-	int value = GetAttributeInt(xSets, "Current");
-	if (value >= 0 && static_cast<size_t>(value) < m_globalFilterSets.size()) {
-		m_globalCurrentFilterSet = value;
+	auto xFilters = element.child("Filters");
+	while (xFilters) {
+		element.remove_child(xFilters);
+		xFilters = element.child("Filters");
+	}
+
+	xFilters = element.append_child("Filters");
+
+	for (auto const& filter : m_globalFilters) {
+		auto xFilter = xFilters.append_child("Filter");
+		SaveFilter(xFilter, filter);
+	}
+
+	auto xSets = element.child("Sets");
+	while (xSets) {
+		element.remove_child(xSets);
+		xSets = element.child("Sets");
+	}
+
+	xSets = element.append_child("Sets");
+	SetAttributeInt(xSets, "Current", m_globalCurrentFilterSet);
+
+	for (auto const& set : m_globalFilterSets) {
+		auto xSet = xSets.append_child("Set");
+
+		if (!set.name.empty()) {
+			AddTextElement(xSet, "Name", set.name);
+		}
+
+		for (unsigned int i = 0; i < set.local.size(); ++i) {
+			auto xItem = xSet.append_child("Item");
+			AddTextElement(xItem, "Local", set.local[i] ? _T("1") : _T("0"));
+			AddTextElement(xItem, "Remote", set.remote[i] ? _T("1") : _T("0"));
+		}
+	}
+
+	xml.Save(true);
+}
+
+void CFilterManager::SaveFilter(pugi::xml_node& element, const CFilter& filter)
+{
+	AddTextElement(element, "Name", filter.name);
+	AddTextElement(element, "ApplyToFiles", filter.filterFiles ? _T("1") : _T("0"));
+	AddTextElement(element, "ApplyToDirs", filter.filterDirs ? _T("1") : _T("0"));
+	AddTextElement(element, "MatchType", matchTypeXmlNames[filter.matchType]);
+	AddTextElement(element, "MatchCase", filter.matchCase ? _T("1") : _T("0"));
+
+	auto xConditions = element.append_child("Conditions");
+	for (std::vector<CFilterCondition>::const_iterator conditionIter = filter.filters.begin(); conditionIter != filter.filters.end(); ++conditionIter) {
+		const CFilterCondition& condition = *conditionIter;
+
+		int type;
+		switch (condition.type)
+		{
+		case filter_name:
+			type = 0;
+			break;
+		case filter_size:
+			type = 1;
+			break;
+		case filter_attributes:
+			type = 2;
+			break;
+		case filter_permissions:
+			type = 3;
+			break;
+		case filter_path:
+			type = 4;
+			break;
+		case filter_date:
+			type = 5;
+			break;
+		default:
+			wxFAIL_MSG(_T("Unhandled filter type"));
+			continue;
+		}
+
+		auto xCondition = xConditions.append_child("Condition");
+		AddTextElement(xCondition, "Type", type);
+
+		if (condition.type == filter_size) {
+			// Backwards compatibility sucks
+			int v = condition.condition;
+			if (v == 2)
+				v = 3;
+			else if (v > 2)
+				--v;
+			AddTextElement(xCondition, "Condition", v);
+		}
+		else
+			AddTextElement(xCondition, "Condition", condition.condition);
+		AddTextElement(xCondition, "Value", condition.strValue);
 	}
 }
 
@@ -1034,8 +1060,9 @@ void CFilterManager::ToggleFilters()
 		return;
 	}
 
-	if (HasActiveFilters(true))
+	if (HasActiveFilters(true)) {
 		m_filters_disabled = true;
+	}
 }
 
 ActiveFilters CFilterManager::GetActiveFilters()

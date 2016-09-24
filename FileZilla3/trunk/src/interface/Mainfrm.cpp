@@ -302,14 +302,16 @@ CMainFrame::CMainFrame()
 	m_closeEventTimer.SetOwner(this);
 
 	if (CFilterManager::HasActiveFilters(true)) {
-		if (COptions::Get()->GetOptionVal(OPTION_FILTERTOGGLESTATE))
+		if (COptions::Get()->GetOptionVal(OPTION_FILTERTOGGLESTATE)) {
 			CFilterManager::ToggleFilters();
+		}
 	}
 
 	CreateMenus();
 	CreateMainToolBar();
-	if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUICKCONNECT))
+	if (COptions::Get()->GetOptionVal(OPTION_SHOW_QUICKCONNECT)) {
 		CreateQuickconnectBar();
+	}
 
 	m_pAsyncRequestQueue = new CAsyncRequestQueue(this);
 
@@ -2384,8 +2386,9 @@ void CMainFrame::OnFilterRightclicked(wxCommandEvent&)
 
 	CFilterManager::ToggleFilters();
 
-	if (active == CFilterManager::HasActiveFilters())
+	if (active == CFilterManager::HasActiveFilters()) {
 		return;
+	}
 
 	CContextManager::Get()->NotifyAllHandlers(STATECHANGE_APPLYFILTER);
 }
