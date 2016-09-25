@@ -292,7 +292,7 @@ int CSftpControlSocket::Connect(const CServer &server)
 	else {
 		pData->keyfiles_ = fz::strtok(engine_.GetOptions().GetOption(OPTION_SFTP_KEYFILES), L"\r\n");
 	}
-	pData->keyfile_ = pData->keyfiles_.cend();
+	pData->keyfile_ = pData->keyfiles_.cbegin();
 
 	m_pProcess = new fz::process();
 
