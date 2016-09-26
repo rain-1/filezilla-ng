@@ -67,7 +67,32 @@ Var OfferReadLineTemp
   ${StrLoc} "$R4" "$R0" "," '<'
   ${If} $R4 != ''
     StrCpy $R3 $R0 '' -$R4
-    StrCpy $R0 $R0 $R4
+    IntOp $R4 $R4 + 1
+    StrCpy $R0 $R0 -$R4
+  
+    ${StrLoc} "$R4" "$R3" "," '<'
+    ${If} $R4 != ''
+      StrCpy $R2 $R3 '' -$R4
+      IntOp $R4 $R4 + 1
+      StrCpy $R3 $R3 -$R4
+
+      ; Sadly one cannot pass variables to this function
+      SetCtlColors ${CONTROL} 0xcafe42 transparent
+
+      ; Obtain pointer to NSIS' internal ctlcolors structure
+      System::Call "user32::GetWindowLong(p ${Control}, i -21) p .R4"
+
+      ${If} $R4 != 0
+        ; First struct member is a COLORREF/DWORD
+        Push $R5
+        System::Call "*$R4(i .R5)"
+        ${If} $R5 == 4390602 ;The 0xcafe42 canary
+          System::Call "*$R4(i $R2)"
+        ${EndIf}
+        Pop $R5
+      ${EndIf}
+      ; transparent
+    ${EndIf}
   ${EndIf}
 
   IntOp $R1 $(^FontSize) + $R0
@@ -177,16 +202,16 @@ Function OfferPage
         ${Else}
           ReadRegStr $R4 HKCU "$R1" "$R2"
         ${EndIf}
-		${If} ${RunningX64}
+        ${If} ${RunningX64}
           ${If} $R4 == ''
-		    SetRegView lastused
+            SetRegView lastused
             SetRegView 32
             ${If} $R0 == "HKLM"
               ReadRegStr $R4 HKLM "$R1" "$R2"
             ${Else}
               ReadRegStr $R4 HKCU "$R1" "$R2"
             ${EndIf}
-		  ${EndIf}
+          ${EndIf}
           SetRegView lastused
         ${EndIf}
         ClearErrors
@@ -236,7 +261,13 @@ Function OfferPage
           ${EndIf}
         ${EndIf}
 
-      ${Case} Controls
+      ${Case} default
+        ${ReadLabelLine} $OfferFileHandle $R4
+        ${If} $OfferResult == ''
+          StrCpy $OfferResult $R4
+        ${EndIf}
+
+      ${Case} controls
         ${Break}
 
       ${Default}
@@ -264,18 +295,22 @@ Function OfferPage
   Pop $OfferDlg
 
   ; First, start with the accept and decline buttons
+
+  ; Accept
   ${ReadPosition} $OfferFileHandle $R0 $R1 $R2 $R3
   ${ReadLabelLine} $OfferFileHandle $R4
   ${NSD_CreateRadioButton} $R0 $R1 $R2 $R3 $R4
   Pop $OfferAccept
   ${NSD_OnClick} $OfferAccept OfferPageOnRadio
+  ${ReadFont} $OfferFileHandle $OfferAccept
  
+  ; Decline
   ${ReadPosition} $OfferFileHandle $R0 $R1 $R2 $R3
   ${ReadLabelLine} $OfferFileHandle $R4
   ${NSD_CreateRadioButton} $R0 $R1 $R2 $R3 $R4
   Pop $OfferDecline
   ${NSD_OnClick} $OfferDecline OfferPageOnRadio
-
+  ${ReadFont} $OfferFileHandle $OfferDecline
 
   ; Process controls
   ${Do}
@@ -349,9 +384,15 @@ Function OfferPage
   ; Setup button states
   ${If} $OfferResult == 0
     ${NSD_Check} $OfferDecline
-  ${Else}
+    EnableWindow $mui.Button.Next 1
+  ${ElseIf} $OfferResult == 1
     StrCpy $OfferResult 1
     ${NSD_Check} $OfferAccept
+    EnableWindow $mui.Button.Next 1
+  ${Else}
+    ${NSD_Uncheck} $OfferAccept
+    ${NSD_Uncheck} $OfferDecline
+    EnableWindow $mui.Button.Next 0
   ${EndIf}
 
   nsDialogs::Show
