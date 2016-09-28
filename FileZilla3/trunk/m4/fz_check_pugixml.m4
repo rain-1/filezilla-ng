@@ -19,9 +19,10 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
       fi
     ])
 
-  if test "x$with_pugixml" != "xbuiltin"; then
 
-    AC_LANG_PUSH(C++)
+  AC_LANG_PUSH(C++)
+
+  if test "x$with_pugixml" != "xbuiltin"; then
 
     dnl Check pugixml.hpp header
     AC_CHECK_HEADER(
@@ -35,6 +36,9 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
         fi
       ])
 
+  fi
+
+  if test "x$with_pugixml" != "xbuiltin"; then
     dnl Check for shared library
     dnl Oddity: in AC_CHECK_HEADER I can leave the true case empty, but not in AC_HAVE_LIBRARY
     AC_HAVE_LIBRARY(pugixml,
@@ -46,7 +50,9 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
           with_pugixml=builtin
         fi
       ])
+  fi
 
+  if test "x$with_pugixml" != "xbuiltin"; then
     dnl Check for at least version 1.5
     AC_MSG_CHECKING([for pugixml >= 1.5])
     AC_COMPILE_IFELSE([
@@ -59,9 +65,15 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
       AC_MSG_RESULT([yes])
     ],[
       AC_MSG_RESULT([no])
-      AC_MSG_ERROR([pugixml system library is too old, you need at least version 1.5])
+        if test "x$with_pugixml" = "xsystem"; then
+          AC_MSG_ERROR([pugixml system library is too old, you need at least version 1.5])
+        else
+          with_pugixml=builtin
+        fi
     ])
+  fi
 
+  if test "x$with_pugixml" != "xbuiltin"; then
     AC_MSG_CHECKING([whether pugixml has been compiled with long long support])
     old_libs="$LIBS"
     LIBS="$LIBS -lpugixml"
@@ -79,12 +91,18 @@ AC_DEFUN([FZ_CHECK_PUGIXML], [
       AC_MSG_RESULT([yes])
     ],[
       AC_MSG_RESULT([no])
-      AC_MSG_ERROR([pugixml system library has been compiled without long long support])
+      if test "x$with_pugixml" = "xsystem"; then
+        AC_MSG_ERROR([pugixml system library has been compiled without long long support])
+      else
+        with_pugixml=builtin
+      fi
     ])
     LIBS="$old_libs"
+  fi
 
-    AC_LANG_POP
-  
+  AC_LANG_POP
+
+  if test "x$with_pugixml" != "xbuiltin"; then
     AC_MSG_NOTICE([Using system pugixml])
     AC_DEFINE(HAVE_LIBPUGIXML, 1, [Define to 1 if your system has the `pugixml' library (-lpugixml).])
     PUGIXML_LIBS="-lpugixml"
