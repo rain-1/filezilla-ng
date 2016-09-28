@@ -929,35 +929,24 @@ void CLocalTreeView::OnBeginDrag(wxTreeEvent& event)
 
 wxString CLocalTreeView::GetSpecialFolder(int folder, int &iconIndex, int &openIconIndex)
 {
-	LPITEMIDLIST list;
-	if (SHGetSpecialFolderLocation((HWND)GetHandle(), folder, &list) != S_OK)
-		return wxString();
+	wxString name;
 
-	SHFILEINFO shFinfo;
-	if (!SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON))
-		return wxString();
+	LPITEMIDLIST list{};
+	if (SHGetSpecialFolderLocation((HWND)GetHandle(), folder, &list) == S_OK) {
+		SHFILEINFO shFinfo{};
+		if (SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON) != 0) {
+			DestroyIcon(shFinfo.hIcon);
+			iconIndex = shFinfo.iIcon;
+		}
 
-	DestroyIcon(shFinfo.hIcon);
-	iconIndex = shFinfo.iIcon;
+		if (SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_OPENICON | SHGFI_DISPLAYNAME) != 0) {
+			DestroyIcon(shFinfo.hIcon);
+			openIconIndex = shFinfo.iIcon;
+			name = shFinfo.szDisplayName;
+		}
 
-	if (!SHGetFileInfo((LPCTSTR)list, 0, &shFinfo, sizeof(shFinfo), SHGFI_PIDL | SHGFI_ICON | SHGFI_SMALLICON | SHGFI_OPENICON | SHGFI_DISPLAYNAME))
-		return wxString();
-
-	DestroyIcon(shFinfo.hIcon);
-	openIconIndex = shFinfo.iIcon;
-
-	wxString name = shFinfo.szDisplayName;
-
-	LPMALLOC pMalloc;
-	SHGetMalloc(&pMalloc);
-
-	if (pMalloc)
-	{
-		pMalloc->Free(list);
-		pMalloc->Release();
+		CoTaskMemFree(list);
 	}
-	else
-		wxLogLastError(wxT("SHGetMalloc"));
 
 	return name;
 }
