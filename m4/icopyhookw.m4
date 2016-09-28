@@ -10,7 +10,8 @@ AC_DEFUN([FZ_CHECK_ICOPYHOOKW], [
         #include <objbase.h>
         #include <shlobj.h>
       ]], [[
-    ICopyHookW* foo;
+        ICopyHookW* foo;
+        (void)foo;
         return 0;
       ]])
     ], [
