@@ -10,6 +10,7 @@ AC_DEFUN([CHECK_THREAD_LOCAL], [
     AC_LANG_PROGRAM([[
     ]], [[
       thread_local static int foo = 0;
+      (void)foo;
       return 0;
     ]])
   ], [
