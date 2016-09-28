@@ -18,7 +18,7 @@ AC_DEFUN([gl_CHECK_TYPE_STRUCT_DIRENT_D_TYPE],
 #include <sys/types.h>
 #include <dirent.h>
          ]],
-         [[struct dirent dp; dp.d_type = 0;]])],
+         [[struct dirent dp; dp.d_type = 0;(void)dp;]])],
        [gl_cv_struct_dirent_d_type=yes],
        [gl_cv_struct_dirent_d_type=no])
      ]
