@@ -109,6 +109,9 @@ void COptionsPageSizeFormatting::UpdateExamples()
 	XRCCTRL(*this, "ID_EXAMPLE4", wxStaticText)->SetLabel(FormatSize(1058817));
 	XRCCTRL(*this, "ID_EXAMPLE5", wxStaticText)->SetLabel(FormatSize(123456789));
 	XRCCTRL(*this, "ID_EXAMPLE6", wxStaticText)->SetLabel(FormatSize(0x39E94F995A72ll));
-
+	
 	GetSizer()->Layout();
+
+	// Otherwise label background isn't cleared properly
+	Refresh();
 }
