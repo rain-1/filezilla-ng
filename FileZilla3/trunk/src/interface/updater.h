@@ -83,14 +83,14 @@ public:
 	void RunIfNeeded();
 
 protected:
-	int Download(wxString const& url, wxString const& local_file = _T(""));
+	int Download(wxString const& url, std::wstring const& local_file = std::wstring());
 	int ContinueDownload();
 
 	void AutoRunIfNeeded();
 	bool Run();
 
 	bool CreateConnectCommand(wxString const& url);
-	bool CreateTransferCommand(wxString const& url, wxString const& local_file);
+	bool CreateTransferCommand(wxString const& url, std::wstring const& local_file);
 
 	wxString GetUrl();
 	void ProcessNotification(std::unique_ptr<CNotification> && notification);
@@ -102,7 +102,7 @@ protected:
 
 	bool VerifyChecksum(wxString const& file, int64_t size, wxString const& checksum);
 
-	wxString GetTempFile() const;
+	std::wstring GetTempFile() const;
 	wxString GetFilename(wxString const& url) const;
 	wxString GetLocalFile(build const& b, bool allow_existing);
 

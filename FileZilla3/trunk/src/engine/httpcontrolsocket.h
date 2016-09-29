@@ -20,9 +20,9 @@ protected:
 	virtual int SendNextCommand();
 	virtual int ParseSubcommandResult(int prevResult);
 
-	virtual int FileTransfer(const wxString localFile, const CServerPath &remotePath,
-							 const wxString &remoteFile, bool download,
-							 const CFileTransferCommand::t_transferSettings& transferSettings);
+	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+		std::wstring const& remoteFile, bool download,
+		CFileTransferCommand::t_transferSettings const& transferSettings);
 	virtual int FileTransferSend();
 	virtual int FileTransferParseResponse(char* p, unsigned int len);
 	virtual int FileTransferSubcommandResult(int prevResult);

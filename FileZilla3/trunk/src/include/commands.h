@@ -158,18 +158,18 @@ public:
 	// For downloads, localFile can be left empty if supported by protocol.
 	// Check for nId_data notification.
 	// FIXME: localFile empty iff protocol is HTTP.
-	CFileTransferCommand(wxString const& localFile, CServerPath const& remotePath, wxString const& remoteFile, bool download, t_transferSettings const& m_transferSettings);
+	CFileTransferCommand(std::wstring const& localFile, CServerPath const& remotePath, std::wstring const& remoteFile, bool download, t_transferSettings const& m_transferSettings);
 
-	wxString GetLocalFile() const;
+	std::wstring GetLocalFile() const;
 	CServerPath GetRemotePath() const;
-	wxString GetRemoteFile() const;
+	std::wstring GetRemoteFile() const;
 	bool Download() const;
 	const t_transferSettings& GetTransferSettings() const { return m_transferSettings; }
 
 protected:
-	wxString const m_localFile;
+	std::wstring const m_localFile;
 	CServerPath const m_remotePath;
-	wxString const m_remoteFile;
+	std::wstring const m_remoteFile;
 	bool const m_download;
 	t_transferSettings const m_transferSettings;
 };

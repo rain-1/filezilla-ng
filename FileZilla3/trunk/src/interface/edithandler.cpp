@@ -139,10 +139,11 @@ void CEditHandler::RemoveTemporaryFilesInSpecificDir(wxString const& temp)
 
 }
 
-wxString CEditHandler::GetLocalDirectory()
+std::wstring CEditHandler::GetLocalDirectory()
 {
-	if (!m_localDir.empty())
+	if (!m_localDir.empty()) {
 		return m_localDir;
+	}
 
 	wxFileName tmpdir(wxFileName::GetTempDir(), _T(""));
 	// Need to call GetLongPath on MSW, GetTempDir can return short path
@@ -150,7 +151,7 @@ wxString CEditHandler::GetLocalDirectory()
 	// length
 	wxString dir = tmpdir.GetLongPath();
 	if (dir.empty() || !wxFileName::DirExists(dir))
-		return wxString();
+		return std::wstring();
 
 	if (dir.Last() != wxFileName::GetPathSeparator())
 		dir += wxFileName::GetPathSeparator();
@@ -161,14 +162,16 @@ wxString CEditHandler::GetLocalDirectory()
 	// already has the correct permissions which get inherited.
 	int i = 1;
 	do {
-		wxString newDir = dir + wxString::Format(_T("fz3temp-%d"), i++);
-		if (wxFileName::FileExists(newDir) || wxFileName::DirExists(newDir))
+		wxString newDir = dir + wxString::Format(_T("fz3temp-%d"), ++i);
+		if (wxFileName::FileExists(newDir) || wxFileName::DirExists(newDir)) {
 			continue;
+		}
 
-		if (!wxMkdir(newDir, 0700))
-			return wxString();
+		if (!wxMkdir(newDir, 0700)) {
+			return std::wstring();
+		}
 
-		m_localDir = newDir + wxFileName::GetPathSeparator();
+		m_localDir = (newDir + wxFileName::GetPathSeparator()).ToStdWstring();
 		break;
 	} while (true);
 
@@ -179,17 +182,15 @@ wxString CEditHandler::GetLocalDirectory()
 	RemoveTemporaryFiles(dir);
 
 #ifdef __WXMSW__
-	m_lockfile_handle = ::CreateFile((m_localDir + _T("fz3temp-lockfile")).wc_str(), GENERIC_WRITE, 0, 0, CREATE_NEW, FILE_ATTRIBUTE_TEMPORARY, 0);
-	if (m_lockfile_handle == INVALID_HANDLE_VALUE)
-	{
+	m_lockfile_handle = ::CreateFile((m_localDir + L"fz3temp-lockfile").c_str(), GENERIC_WRITE, 0, 0, CREATE_NEW, FILE_ATTRIBUTE_TEMPORARY, 0);
+	if (m_lockfile_handle == INVALID_HANDLE_VALUE) {
 		wxRmdir(m_localDir);
-		m_localDir = _T("");
+		m_localDir.clear();
 	}
 #else
-	wxString file = m_localDir + _T("fz3temp-lockfile");
-	m_lockfile_descriptor = open(file.mb_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0600);
-	if (m_lockfile_descriptor >= 0)
-	{
+	auto file = fz::to_native(m_localDir) + "fz3temp-lockfile";
+	m_lockfile_descriptor = open(file.c_str(), O_CREAT | O_RDWR | O_CLOEXEC, 0600);
+	if (m_lockfile_descriptor >= 0) {
 		// Lock 1 byte region in the lockfile.
 		struct flock f = {};
 		f.l_type = F_WRLCK;

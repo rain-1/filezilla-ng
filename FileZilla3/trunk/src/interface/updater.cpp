@@ -247,7 +247,7 @@ bool CUpdater::Run()
 	SetState(UpdaterState::checking);
 
 	m_use_internal_rootcert = true;
-	int res = Download(GetUrl(), wxString());
+	int res = Download(GetUrl(), std::wstring());
 
 	if (res != FZ_REPLY_WOULDBLOCK) {
 		SetState(UpdaterState::failed);
@@ -257,7 +257,7 @@ bool CUpdater::Run()
 	return state_ == UpdaterState::checking;
 }
 
-int CUpdater::Download(wxString const& url, wxString const& local_file)
+int CUpdater::Download(wxString const& url, std::wstring const& local_file)
 {
 	wxASSERT(pending_commands_.empty());
 	pending_commands_.clear();
@@ -297,17 +297,17 @@ bool CUpdater::CreateConnectCommand(wxString const& url)
 	return true;
 }
 
-bool CUpdater::CreateTransferCommand(wxString const& url, wxString const& local_file)
+bool CUpdater::CreateTransferCommand(wxString const& url, std::wstring const& local_file)
 {
 	CFileTransferCommand::t_transferSettings transferSettings;
 
 	CServer s;
 	CServerPath path;
 	wxString error;
-	if( !s.ParseUrl( url, 0, wxString(), wxString(), error, path ) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS) ) {
+	if (!s.ParseUrl(url, 0, wxString(), wxString(), error, path) || (s.GetProtocol() != HTTP && s.GetProtocol() != HTTPS)) {
 		return false;
 	}
-	wxString file = path.GetLastSegment();
+	std::wstring file = path.GetLastSegment().ToStdWstring();
 	path = path.GetParent();
 
 	pending_commands_.emplace_back(new CFileTransferCommand(local_file, path, file, true, transferSettings));
@@ -395,7 +395,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 	}
 	else if (!version_information_.available_.url_.empty()) {
 
-		wxString const temp = GetTempFile();
+		std::wstring const temp = GetTempFile();
 		wxString const local_file = GetLocalFile(version_information_.available_, true);
 		if (!local_file.empty() && fz::local_filesys::get_file_type(fz::to_native(local_file)) != fz::local_filesys::unknown) {
 			local_file_ = local_file;
@@ -415,7 +415,7 @@ UpdaterState CUpdater::ProcessFinishedData(bool can_download)
 				if (size >= 0 && size >= version_information_.available_.size_) {
 					s = ProcessFinishedDownload();
 				}
-				else if( !can_download || Download( version_information_.available_.url_, GetTempFile() ) != FZ_REPLY_WOULDBLOCK ) {
+				else if (!can_download || Download(version_information_.available_.url_, temp) != FZ_REPLY_WOULDBLOCK ) {
 					s = UpdaterState::newversion;
 				}
 			}
@@ -470,11 +470,11 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 {
 	UpdaterState s = UpdaterState::newversion;
 
-	wxString const temp = GetTempFile();
-	if( temp.empty() ) {
+	std::wstring const temp = GetTempFile();
+	if (temp.empty()) {
 		s = UpdaterState::newversion;
 	}
-	else if( !VerifyChecksum( temp, version_information_.available_.size_, version_information_.available_.hash_ ) ) {
+	else if (!VerifyChecksum(temp, version_information_.available_.size_, version_information_.available_.hash_)) {
 		wxLogNull log;
 		wxRemoveFile(temp);
 		s = UpdaterState::newversion;
@@ -482,7 +482,7 @@ UpdaterState CUpdater::ProcessFinishedDownload()
 	else {
 		s = UpdaterState::newversion_ready;
 
-		wxString local_file = GetLocalFile( version_information_.available_, false );
+		wxString local_file = GetLocalFile(version_information_.available_, false);
 
 		wxLogNull log;
 		if (local_file.empty() || !wxRenameFile( temp, local_file, false ) ) {
@@ -757,7 +757,7 @@ bool CUpdater::VerifyChecksum(wxString const& file, int64_t size, wxString const
 	return true;
 }
 
-wxString CUpdater::GetTempFile() const
+std::wstring CUpdater::GetTempFile() const
 {
 	wxASSERT( !version_information_.available_.hash_.empty() );
 	wxString ret = wxFileName::GetTempDir();
@@ -769,7 +769,7 @@ wxString CUpdater::GetTempFile() const
 		ret += _T("fzupdate_") + version_information_.available_.hash_.Left(16) + _T(".tmp");
 	}
 
-	return ret;
+	return ret.ToStdWstring();
 }
 
 wxString CUpdater::GetFilename( wxString const& url) const
@@ -851,9 +851,9 @@ int64_t CUpdater::BytesDownloaded() const
 			ret = fz::local_filesys::get_size(fz::to_native(local_file_));
 		}
 	}
-	else if( state_ == UpdaterState::newversion_downloading ) {
-		wxString const temp = GetTempFile();
-		if( !temp.empty() ) {
+	else if (state_ == UpdaterState::newversion_downloading) {
+		std::wstring const temp = GetTempFile();
+		if (!temp.empty()) {
 			ret = fz::local_filesys::get_size(fz::to_native(temp));
 		}
 	}

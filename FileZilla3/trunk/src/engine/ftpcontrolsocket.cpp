@@ -17,8 +17,6 @@
 #include <libfilezilla/local_filesys.hpp>
 #include <libfilezilla/util.hpp>
 
-#include <wx/log.h>
-
 #include <algorithm>
 
 #define LOGON_WELCOME	0
@@ -46,7 +44,7 @@ CRawTransferOpData::CRawTransferOpData()
 {
 }
 
-CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
+CFtpFileTransferOpData::CFtpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
 	: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
 {
 }
@@ -2133,9 +2131,9 @@ int CFtpControlSocket::ChangeDirSend()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath &remotePath,
-									const wxString &remoteFile, bool download,
-									const CFileTransferCommand::t_transferSettings& transferSettings)
+int CFtpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+									std::wstring const& remoteFile, bool download,
+									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::FileTransfer()"));
 
@@ -2154,8 +2152,7 @@ int CFtpControlSocket::FileTransfer(const wxString localFile, const CServerPath 
 	else {
 		LogMessage(MessageType::Status, _("Starting upload of %s"), localFile);
 	}
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
 		delete m_pCurOpData;
 	}
@@ -2486,9 +2483,6 @@ int CFtpControlSocket::FileTransferSend()
 		{
 			auto pFile = std::make_unique<fz::file>();
 			if (pData->download) {
-				// Be quiet
-				wxLogNull nullLog;
-
 				int64_t startOffset = 0;
 
 				// Potentially racy
