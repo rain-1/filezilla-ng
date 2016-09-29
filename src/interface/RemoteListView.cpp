@@ -24,6 +24,8 @@
 
 #include <algorithm>
 
+#include <libfilezilla/file.hpp>
+
 #ifdef __WXMSW__
 #include "shellapi.h"
 #include "commctrl.h"
@@ -2622,7 +2624,7 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 		return;
 	}
 
-	wxString newFileName = dlg.GetValue();
+	std::wstring newFileName = dlg.GetValue().ToStdWstring();
 
 	// Check if target file already exists
 	for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); ++i) {
@@ -2634,17 +2636,16 @@ void CRemoteListView::OnMenuNewfile(wxCommandEvent&)
 
 	CEditHandler* edithandler = CEditHandler::Get(); // Used to get the temporary folder
 
-	wxString emptyfile_name = _T("empty_file_yq744zm");
-	wxString emptyfile = edithandler->GetLocalDirectory() + emptyfile_name;
+	std::wstring const emptyfile_name = L"empty_file_yq744zm";
+	std::wstring emptyfile = edithandler->GetLocalDirectory() + emptyfile_name;
 
 	// Create the empty temporary file
 	{
-		wxFile file;
-		wxLogNull log;
-		file.Create(emptyfile);
+		fz::file f(fz::to_native(emptyfile), fz::file::writing, fz::file::existing);
+		(void)f;
 	}
 
-	const CServer* pServer = m_state.GetServer();
+	CServer const* pServer = m_state.GetServer();
 	if (!pServer) {
 		wxBell();
 		return;

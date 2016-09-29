@@ -121,16 +121,16 @@ protected:
 	void OnSetAsyncRequestReplyEvent(std::unique_ptr<CAsyncRequestNotification> const& reply);
 
 	// Command handlers, only called by CFileZillaEngine::Command
-	int Connect(const CConnectCommand &command);
-	int Disconnect(const CDisconnectCommand &command);
-	int List(const CListCommand &command);
-	int FileTransfer(const CFileTransferCommand &command);
-	int RawCommand(const CRawCommand& command);
+	int Connect(CConnectCommand const& command);
+	int Disconnect(CDisconnectCommand const& command);
+	int List(CListCommand const&command);
+	int FileTransfer(CFileTransferCommand const& command);
+	int RawCommand(CRawCommand const& command);
 	int Delete(CDeleteCommand& command);
-	int RemoveDir(const CRemoveDirCommand& command);
-	int Mkdir(const CMkdirCommand& command);
-	int Rename(const CRenameCommand& command);
-	int Chmod(const CChmodCommand& command);
+	int RemoveDir(CRemoveDirCommand const& command);
+	int Mkdir(CMkdirCommand const& command);
+	int Rename(CRenameCommand const& command);
+	int Chmod(CChmodCommand const& command);
 
 	void DoCancel();
 

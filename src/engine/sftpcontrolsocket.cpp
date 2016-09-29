@@ -33,7 +33,7 @@ typedef fz::simple_event<terminate_event_type, std::wstring> CTerminateEvent;
 class CSftpFileTransferOpData : public CFileTransferOpData
 {
 public:
-	CSftpFileTransferOpData(bool is_download, wxString const& local_file, wxString const& remote_file, CServerPath const& remote_path)
+	CSftpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
 		: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
 	{
 	}
@@ -1466,9 +1466,9 @@ int CSftpControlSocket::SendNextCommand()
 	return FZ_REPLY_ERROR;
 }
 
-int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath &remotePath,
-									const wxString &remoteFile, bool download,
-									const CFileTransferCommand::t_transferSettings& transferSettings)
+int CSftpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+									std::wstring const& remoteFile, bool download,
+									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::FileTransfer(...)"));
 
@@ -1499,8 +1499,9 @@ int CSftpControlSocket::FileTransfer(const wxString localFile, const CServerPath
 
 	int64_t size;
 	bool isLink;
-	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file)
+	if (fz::local_filesys::get_file_info(fz::to_native(pData->localFile), isLink, &size, 0, 0) == fz::local_filesys::file) {
 		pData->localFileSize = size;
+	}
 
 	pData->opState = filetransfer_waitcwd;
 
@@ -1638,8 +1639,7 @@ int CSftpControlSocket::FileTransferSend()
 {
 	LogMessage(MessageType::Debug_Verbose, _T("FileTransferSend()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -1661,7 +1661,7 @@ int CSftpControlSocket::FileTransferSend()
 			cmd += L"get ";
 			cmd += QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath).ToStdWstring()) + L" ";
 
-			std::wstring localFile = QuoteFilename(pData->localFile.ToStdWstring());
+			std::wstring localFile = QuoteFilename(pData->localFile);
 			std::wstring logstr = cmd;
 			logstr += localFile;
 			LogMessageRaw(MessageType::Command, logstr);
@@ -1676,7 +1676,7 @@ int CSftpControlSocket::FileTransferSend()
 			cmd += L"put ";
 
 			std::wstring logstr = cmd;
-			std::wstring localFile = QuoteFilename(pData->localFile.ToStdWstring()) + _T(" ");
+			std::wstring localFile = QuoteFilename(pData->localFile) + L" ";
 			std::wstring remoteFile = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath).ToStdWstring());
 
 			logstr += localFile;

@@ -422,14 +422,10 @@ int CControlSocket::CheckOverwriteFile()
 	return FZ_REPLY_WOULDBLOCK;
 }
 
-CFileTransferOpData::CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path) :
-	COpData(Command::transfer),
-	localFile(local_file), remoteFile(remote_file), remotePath(remote_path),
-	download(is_download)
-{
-}
-
-CFileTransferOpData::~CFileTransferOpData()
+CFileTransferOpData::CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path)
+	: COpData(Command::transfer)
+	, localFile(local_file), remoteFile(remote_file), remotePath(remote_path)
+	, download(is_download)
 {
 }
 
@@ -1282,7 +1278,7 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 	return true;
 }
 
-void CControlSocket::CreateLocalDir(const wxString &local_file)
+void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 {
 	wxString file;
 	CLocalPath local_path(local_file, &file);
@@ -1335,9 +1331,9 @@ int CControlSocket::List(CServerPath, wxString, int)
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-int CControlSocket::FileTransfer(const wxString, const CServerPath &,
-					const wxString &, bool,
-					const CFileTransferCommand::t_transferSettings&)
+int CControlSocket::FileTransfer(std::wstring const&, CServerPath const&,
+					std::wstring const&, bool,
+					CFileTransferCommand::t_transferSettings const&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }

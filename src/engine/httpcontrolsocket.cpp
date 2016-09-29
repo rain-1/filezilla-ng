@@ -68,8 +68,9 @@ public:
 class CHttpFileTransferOpData : public CFileTransferOpData, public CHttpOpData
 {
 public:
-	CHttpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path)
-		: CFileTransferOpData(is_download, local_file, remote_file, remote_path), CHttpOpData(this)
+	CHttpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, const CServerPath& remote_path)
+		: CFileTransferOpData(is_download, local_file, remote_file, remote_path)
+		, CHttpOpData(this)
 	{
 	}
 
@@ -304,22 +305,20 @@ enum filetransferStates
 	filetransfer_transfer
 };
 
-int CHttpControlSocket::FileTransfer(const wxString localFile, const CServerPath &remotePath,
-							  const wxString &remoteFile, bool download,
-							  const CFileTransferCommand::t_transferSettings&)
+int CHttpControlSocket::FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+									std::wstring const& remoteFile, bool download,
+									CFileTransferCommand::t_transferSettings const& transferSettings)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CHttpControlSocket::FileTransfer()"));
 
 	LogMessage(MessageType::Status, _("Downloading %s"), remotePath.FormatFilename(remoteFile));
 
-	if (!download)
-	{
+	if (!download) {
 		ResetOperation(FZ_REPLY_CRITICALERROR | FZ_REPLY_NOTSUPPORTED);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("deleting nonzero pData"));
 		delete m_pCurOpData;
 	}

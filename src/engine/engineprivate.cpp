@@ -283,7 +283,7 @@ unsigned int CFileZillaEnginePrivate::GetNextAsyncRequestNumber()
 }
 
 // Command handlers
-int CFileZillaEnginePrivate::Connect(const CConnectCommand &command)
+int CFileZillaEnginePrivate::Connect(CConnectCommand const& command)
 {
 	if (IsConnected())
 		return FZ_REPLY_ALREADYCONNECTED;
@@ -316,7 +316,7 @@ int CFileZillaEnginePrivate::Disconnect(CDisconnectCommand const&)
 	return res;
 }
 
-int CFileZillaEnginePrivate::List(const CListCommand &command)
+int CFileZillaEnginePrivate::List(CListCommand const& command)
 {
 	int flags = command.GetFlags();
 	bool const refresh = (command.GetFlags() & LIST_FLAG_REFRESH) != 0;
@@ -356,12 +356,12 @@ int CFileZillaEnginePrivate::List(const CListCommand &command)
 	return m_pControlSocket->List(command.GetPath(), command.GetSubDir(), flags);
 }
 
-int CFileZillaEnginePrivate::FileTransfer(const CFileTransferCommand &command)
+int CFileZillaEnginePrivate::FileTransfer(CFileTransferCommand const& command)
 {
 	return m_pControlSocket->FileTransfer(command.GetLocalFile(), command.GetRemotePath(), command.GetRemoteFile(), command.Download(), command.GetTransferSettings());
 }
 
-int CFileZillaEnginePrivate::RawCommand(const CRawCommand& command)
+int CFileZillaEnginePrivate::RawCommand(CRawCommand const& command)
 {
 	{
 		fz::scoped_lock lock(notification_mutex_);
@@ -381,22 +381,22 @@ int CFileZillaEnginePrivate::Delete(CDeleteCommand& command)
 	return m_pControlSocket->Delete(command.GetPath(), command.ExtractFiles());
 }
 
-int CFileZillaEnginePrivate::RemoveDir(const CRemoveDirCommand& command)
+int CFileZillaEnginePrivate::RemoveDir(CRemoveDirCommand const& command)
 {
 	return m_pControlSocket->RemoveDir(command.GetPath(), command.GetSubDir());
 }
 
-int CFileZillaEnginePrivate::Mkdir(const CMkdirCommand& command)
+int CFileZillaEnginePrivate::Mkdir(CMkdirCommand const& command)
 {
 	return m_pControlSocket->Mkdir(command.GetPath());
 }
 
-int CFileZillaEnginePrivate::Rename(const CRenameCommand& command)
+int CFileZillaEnginePrivate::Rename(CRenameCommand const& command)
 {
 	return m_pControlSocket->Rename(command);
 }
 
-int CFileZillaEnginePrivate::Chmod(const CChmodCommand& command)
+int CFileZillaEnginePrivate::Chmod(CChmodCommand const& command)
 {
 	return m_pControlSocket->Chmod(command);
 }

@@ -39,10 +39,10 @@ public:
 class CFileTransferOpData : public COpData
 {
 public:
-	CFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
-	virtual ~CFileTransferOpData();
+	CFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
+	virtual ~CFileTransferOpData() = default;
 	// Transfer data
-	wxString localFile, remoteFile;
+	std::wstring localFile, remoteFile;
 	CServerPath remotePath;
 	const bool download;
 
@@ -124,9 +124,9 @@ public:
 	virtual int Disconnect();
 	virtual void Cancel();
 	virtual int List(CServerPath path = CServerPath(), wxString subDir = wxString(), int flags = 0);
-	virtual int FileTransfer(const wxString localFile, const CServerPath &remotePath,
-							 const wxString &remoteFile, bool download,
-							 const CFileTransferCommand::t_transferSettings& transferSettings);
+	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+							 std::wstring const& remoteFile, bool download,
+							 CFileTransferCommand::t_transferSettings const& transferSettings);
 	virtual int RawCommand(const wxString& command = wxString());
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
 	virtual int RemoveDir(const CServerPath& path = CServerPath(), const wxString& subDir = wxString());
@@ -189,7 +189,7 @@ protected:
 
 	int CheckOverwriteFile();
 
-	void CreateLocalDir(const wxString &local_file);
+	void CreateLocalDir(std::wstring const& local_file);
 
 	bool ParsePwdReply(wxString reply, bool unquoted = false, const CServerPath& defaultPath = CServerPath());
 

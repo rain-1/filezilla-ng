@@ -42,9 +42,9 @@ protected:
 	int ChangeDirSubcommandResult(int prevResult);
 	int ChangeDirSend();
 
-	virtual int FileTransfer(const wxString localFile, const CServerPath &remotePath,
-							 const wxString &remoteFile, bool download,
-							 const CFileTransferCommand::t_transferSettings& transferSettings);
+	virtual int FileTransfer(std::wstring const& localFile, CServerPath const& remotePath,
+							 std::wstring const& remoteFile, bool download,
+							 CFileTransferCommand::t_transferSettings const& transferSettings);
 	int FileTransferParseResponse();
 	int FileTransferSubcommandResult(int prevResult);
 	int FileTransferSend();
@@ -180,7 +180,7 @@ public:
 class CFtpFileTransferOpData final : public CFileTransferOpData, public CFtpTransferOpData
 {
 public:
-	CFtpFileTransferOpData(bool is_download, const wxString& local_file, const wxString& remote_file, const CServerPath& remote_path);
+	CFtpFileTransferOpData(bool is_download, std::wstring const& local_file, std::wstring const& remote_file, CServerPath const& remote_path);
 	virtual ~CFtpFileTransferOpData();
 
 	CIOThread *pIOThread{};

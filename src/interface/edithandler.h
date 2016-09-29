@@ -40,7 +40,7 @@ public:
 	static CEditHandler* Create();
 	static CEditHandler* Get();
 
-	wxString GetLocalDirectory();
+	std::wstring GetLocalDirectory();
 
 	// This tries to deletes all temporary files.
 	// If files are locked, they won't be removed though
@@ -124,7 +124,7 @@ protected:
 
 	static CEditHandler* m_pEditHandler;
 
-	wxString m_localDir;
+	std::wstring m_localDir;
 
 	bool StartEditing(fileType type, t_fileData &data);
 
