@@ -2459,7 +2459,7 @@ bool CQueueView::IsActionAfter(ActionAfterState::type state)
 	return m_actionAfterState == state;
 }
 
-void CQueueView::ActionAfter(bool warned /*=false*/)
+void CQueueView::ActionAfter(bool warned)
 {
 	if (m_quit) {
 		return;
@@ -2937,7 +2937,7 @@ std::shared_ptr<CActionAfterBlocker> CQueueView::GetActionAfterBlocker()
 
 CActionAfterBlocker::~CActionAfterBlocker()
 {
-	if (trigger_) {
+	if (trigger_ && !queueView_.IsActive()) {
 		queueView_.ActionAfter();
 	}
 }
