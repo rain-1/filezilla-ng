@@ -1463,8 +1463,9 @@ bool CSiteManagerDialog::GetServer(Site& data, Bookmark& bookmark)
 	}
 
 	CSiteManagerItemData* pData = static_cast<CSiteManagerItemData* >(pTree->GetItemData(item));
-	if (!pData)
+	if (!pData) {
 		return false;
+	}
 
 	if (pData->m_bookmark) {
 		item = pTree->GetItemParent(item);
@@ -1473,14 +1474,22 @@ bool CSiteManagerDialog::GetServer(Site& data, Bookmark& bookmark)
 		data = *pSiteData->m_site;
 		bookmark = data.m_default_bookmark;
 
-		if (!pData->m_bookmark->m_localDir.empty())
+		if (!pData->m_bookmark->m_localDir.empty()) {
 			bookmark.m_localDir = pData->m_bookmark->m_localDir;
-		if (!pData->m_bookmark->m_remoteDir.empty())
+		}
+
+		if (!pData->m_bookmark->m_remoteDir.empty()) {
 			bookmark.m_remoteDir = pData->m_bookmark->m_remoteDir;
-		if (bookmark.m_localDir.empty() || bookmark.m_remoteDir.empty())
+		}
+
+		if (bookmark.m_localDir.empty() || bookmark.m_remoteDir.empty()) {
 			bookmark.m_sync = false;
-		else
+			bookmark.m_comparison = false;
+		}
+		else {
 			bookmark.m_sync = pData->m_bookmark->m_sync;
+			bookmark.m_comparison = pData->m_bookmark->m_comparison;
+		}
 	}
 	else {
 		data = *pData->m_site;
