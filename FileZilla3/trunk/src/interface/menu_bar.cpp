@@ -265,6 +265,10 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 					}
 				}
 
+				if (bookmark.m_comparison && pState->GetComparisonManager()) {
+					pState->GetComparisonManager()->CompareListings();
+				}
+
 				break;
 			}
 		}
@@ -279,8 +283,9 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 		CServerPath remote_dir;
 		bool sync;
 		bool comparison;
-		if (!CBookmarksDialog::GetBookmark(iter2->second, local_dir, remote_dir, sync, comparison))
+		if (!CBookmarksDialog::GetBookmark(iter2->second, local_dir, remote_dir, sync, comparison)) {
 			return;
+		}
 
 		pState->SetSyncBrowse(false);
 		if (!remote_dir.empty() && pState->IsRemoteIdle(true)) {
@@ -303,7 +308,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			}
 		}
 
-		if (comparison) {
+		if (comparison && pState->GetComparisonManager()) {
 			pState->GetComparisonManager()->CompareListings();
 		}
 
