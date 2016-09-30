@@ -225,13 +225,14 @@ bool CState::SetLocalDir(const wxString& dir, wxString *error, bool rememberPrev
 
 bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPreviousSubdir)
 {
-	if (m_sync_browse.is_changing) {
+	if (m_changeDirFlags.syncbrowse) {
 		wxMessageBoxEx(_T("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
 		return false;
 	}
 
-	if (!dir.Exists(error))
+	if (!dir.Exists(error)) {
 		return false;
+	}
 
 	if (!m_sync_browse.local_root.empty()) {
 		wxASSERT(m_site.m_server);
@@ -260,8 +261,8 @@ bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPr
 				return false;
 			}
 
-			m_sync_browse.is_changing = true;
-			m_sync_browse.compare = m_pComparisonManager->IsComparing();
+			m_changeDirFlags.syncbrowse = true;
+			m_changeDirFlags.compare = m_pComparisonManager->IsComparing();
 			m_sync_browse.target_path = remote_path;
 			CListCommand *pCommand = new CListCommand(remote_path);
 			m_pCommandQueue->ProcessCommand(pCommand);
@@ -296,6 +297,7 @@ bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPr
 bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified)
 {
 	if (!pDirectoryListing) {
+		m_changeDirFlags.compare = false;
 		SetSyncBrowse(false);
 		if (modified) {
 			return false;
@@ -341,8 +343,13 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 
 	NotifyHandlers(STATECHANGE_REMOTE_DIR, wxString(), &modified);
 
-	if (m_sync_browse.is_changing && !modified) {
-		m_sync_browse.is_changing = false;
+	bool compare = m_changeDirFlags.compare;
+	if (!modified) {
+		m_changeDirFlags.compare = false;
+	}
+
+	if (m_changeDirFlags.syncbrowse && !modified) {
+		m_changeDirFlags.syncbrowse = false;
 		if (m_pDirectoryListing->path != m_sync_browse.remote_root && !m_pDirectoryListing->path.IsSubdirOf(m_sync_browse.remote_root, false)) {
 			SetSyncBrowse(false);
 			wxString msg = wxString::Format(_("Current remote directory (%s) is not below the synchronization root (%s).\nSynchronized browsing has been disabled."),
@@ -357,27 +364,29 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nSynchronized browsing has been disabled."),
 					m_pDirectoryListing->path.GetPath());
 				wxMessageBoxEx(msg, _("Synchronized browsing"));
-				return true;
+				compare = false;
 			}
+			else {
+				wxString error;
+				if (!local_path.Exists(&error)) {
+					SetSyncBrowse(false);
+					wxString msg = error + _T("\n") + _("Synchronized browsing has been disabled.");
+					wxMessageBoxEx(msg, _("Synchronized browsing"));
+					compare = false;
+				}
+				else {
+					m_localDir = local_path;
 
-			wxString error;
-			if (!local_path.Exists(&error)) {
-				SetSyncBrowse(false);
-				wxString msg = error + _T("\n") + _("Synchronized browsing has been disabled.");
-				wxMessageBoxEx(msg, _("Synchronized browsing"));
-				return true;
-			}
+					COptions::Get()->SetOption(OPTION_LASTLOCALDIR, m_localDir.GetPath());
 
-			m_localDir = local_path;
-
-			COptions::Get()->SetOption(OPTION_LASTLOCALDIR, m_localDir.GetPath());
-
-			NotifyHandlers(STATECHANGE_LOCAL_DIR);
-
-			if (m_sync_browse.compare) {
-				m_pComparisonManager->CompareListings();
+					NotifyHandlers(STATECHANGE_LOCAL_DIR);
+				}
 			}
 		}
+	}
+
+	if (compare && !m_pComparisonManager->IsComparing()) {
+		m_pComparisonManager->CompareListings();
 	}
 
 	return true;
@@ -491,7 +500,7 @@ wxString CState::GetTitle() const
 	return m_title;
 }
 
-bool CState::Connect(Site const& site, CServerPath const& path)
+bool CState::Connect(Site const& site, CServerPath const& path, bool compare)
 {
 	if (!site.m_server) {
 		return false;
@@ -510,19 +519,24 @@ bool CState::Connect(Site const& site, CServerPath const& path)
 
 	SetSite(site, path);
 
+	m_changeDirFlags.compare = compare;
+
 	return true;
 }
 
 bool CState::Disconnect()
 {
-	if (!m_pEngine)
+	if (!m_pEngine) {
 		return false;
+	}
 
-	if (!IsRemoteConnected())
+	if (!IsRemoteConnected()) {
 		return true;
+	}
 
-	if (!IsRemoteIdle())
+	if (!IsRemoteIdle()) {
 		return false;
+	}
 
 	SetSite(Site());
 	m_pCommandQueue->ProcessCommand(new CDisconnectCommand());
@@ -905,7 +919,10 @@ bool CState::IsLocalIdle(bool ignore_recursive) const
 
 void CState::ListingFailed(int)
 {
-	if (m_sync_browse.is_changing && !m_sync_browse.target_path.empty()) {
+	bool const compare = m_changeDirFlags.compare;
+	m_changeDirFlags.compare = false;
+
+	if (m_changeDirFlags.syncbrowse && !m_sync_browse.target_path.empty()) {
 		wxDialogEx dlg;
 		if (!dlg.Load(0, _T("ID_SYNCBROWSE_NONEXISTING"))) {
 			SetSyncBrowse(false);
@@ -921,6 +938,7 @@ void CState::ListingFailed(int)
 				m_pCommandQueue->ProcessCommand(new CMkdirCommand(m_sync_browse.target_path));
 				m_pCommandQueue->ProcessCommand(new CListCommand(m_sync_browse.target_path));
 				m_sync_browse.target_path.clear();
+				m_changeDirFlags.compare = compare;
 				return;
 			}
 			else {
@@ -930,21 +948,21 @@ void CState::ListingFailed(int)
 			}
 		}
 	}
-
-	m_sync_browse.is_changing = false;
 }
 
 void CState::LinkIsNotDir(const CServerPath& path, const wxString& subdir)
 {
-	m_sync_browse.is_changing = false;
+	m_changeDirFlags.compare = false;
+	m_changeDirFlags.syncbrowse = false;
 
 	NotifyHandlers(STATECHANGE_REMOTE_LINKNOTDIR, subdir, &path);
 }
 
-bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=_T("")*/, int flags /*=0*/, bool ignore_busy /*=false*/)
+bool CState::ChangeRemoteDir(CServerPath const& path, wxString const& subdir, int flags, bool ignore_busy, bool compare)
 {
-	if (!m_site.m_server || !m_pCommandQueue)
+	if (!m_site.m_server || !m_pCommandQueue) {
 		return false;
+	}
 
 	if (!m_sync_browse.local_root.empty()) {
 		CServerPath p(path);
@@ -1002,8 +1020,8 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 						wxMessageBox(wxString::Format(_("The local directory '%s' could not be created."), local_path.GetPath()), _("Synchronized browsing"), wxICON_EXCLAMATION);
 						return false;
 					}
-					m_sync_browse.is_changing = true;
-					m_sync_browse.compare = m_pComparisonManager->IsComparing();
+					m_changeDirFlags.syncbrowse = true;
+					m_changeDirFlags.compare = m_pComparisonManager->IsComparing();
 					m_sync_browse.target_path.clear();
 				}
 				else {
@@ -1011,8 +1029,8 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 				}
 			}
 			else {
-				m_sync_browse.is_changing = true;
-				m_sync_browse.compare = m_pComparisonManager->IsComparing();
+				m_changeDirFlags.syncbrowse = true;
+				m_changeDirFlags.compare = m_pComparisonManager->IsComparing();
 				m_sync_browse.target_path.clear();
 			}
 		}
@@ -1021,19 +1039,24 @@ bool CState::ChangeRemoteDir(const CServerPath& path, const wxString& subdir /*=
 	CListCommand *pCommand = new CListCommand(path, subdir, flags);
 	m_pCommandQueue->ProcessCommand(pCommand);
 
+	if (compare) {
+		m_changeDirFlags.compare = true;
+	}
+
 	return true;
 }
 
-bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /*=CServerPath()*/)
+bool CState::SetSyncBrowse(bool enable, CServerPath const& assumed_remote_root)
 {
-	if (enable != m_sync_browse.local_root.empty())
+	if (enable != m_sync_browse.local_root.empty()) {
 		return enable;
+	}
 
 	if (!enable) {
 		wxASSERT(assumed_remote_root.empty());
 		m_sync_browse.local_root.clear();
 		m_sync_browse.remote_root.clear();
-		m_sync_browse.is_changing = false;
+		m_changeDirFlags.syncbrowse = false;
 
 		NotifyHandlers(STATECHANGE_SYNC_BROWSE);
 		return false;
@@ -1044,15 +1067,15 @@ bool CState::SetSyncBrowse(bool enable, const CServerPath& assumed_remote_root /
 		return false;
 	}
 
-	m_sync_browse.is_changing = false;
+	m_changeDirFlags.syncbrowse = false;
 	m_sync_browse.local_root = m_localDir;
 
-	if (assumed_remote_root.empty())
+	if (assumed_remote_root.empty()) {
 		m_sync_browse.remote_root = m_pDirectoryListing->path;
+	}
 	else {
 		m_sync_browse.remote_root = assumed_remote_root;
-		m_sync_browse.is_changing = true;
-		m_sync_browse.compare = false;
+		m_changeDirFlags.syncbrowse = true;
 	}
 
 	while (m_sync_browse.local_root.HasParent() && m_sync_browse.remote_root.HasParent() &&

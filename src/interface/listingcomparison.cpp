@@ -47,11 +47,13 @@ void CComparableListing::ExitComparisonMode()
 
 void CComparableListing::RefreshComparison()
 {
-	if (!m_pComparisonManager)
+	if (!m_pComparisonManager) {
 		return;
+	}
 
-	if (!IsComparing())
+	if (!IsComparing()) {
 		return;
+	}
 
 	if (!CanStartComparison() || !GetOther() || !GetOther()->CanStartComparison()) {
 		return;
@@ -62,8 +64,9 @@ void CComparableListing::RefreshComparison()
 
 bool CComparisonManager::CompareListings()
 {
-	if (!m_pLeft || !m_pRight)
+	if (!m_pLeft || !m_pRight) {
 		return false;
+	}
 
 	CFilterManager filters;
 	if (filters.HasActiveFilters() && !filters.HasSameLocalAndRemoteFilters()) {
