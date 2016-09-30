@@ -182,9 +182,6 @@ CState::CState(CMainFrame &mainFrame)
 	m_pLocalRecursiveOperation = new CLocalRecursiveOperation(*this);
 	m_pRemoteRecursiveOperation = new CRemoteRecursiveOperation(*this);
 
-	m_sync_browse.is_changing = false;
-	m_sync_browse.compare = false;
-
 	m_localDir.SetPath(std::wstring(1, CLocalPath::path_separator));
 }
 
@@ -300,8 +297,9 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 {
 	if (!pDirectoryListing) {
 		SetSyncBrowse(false);
-		if (modified)
+		if (modified) {
 			return false;
+		}
 
 		if (m_pDirectoryListing) {
 			m_pDirectoryListing = 0;
@@ -315,9 +313,12 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 
 	if (pDirectoryListing && m_pDirectoryListing &&
 		pDirectoryListing->path == m_pDirectoryListing->path.GetParent())
+	{
 		m_previouslyVisitedRemoteSubdir = m_pDirectoryListing->path.GetLastSegment();
-	else
+	}
+	else {
 		m_previouslyVisitedRemoteSubdir = _T("");
+	}
 
 	if (modified) {
 		if (!m_pDirectoryListing || m_pDirectoryListing->path != pDirectoryListing->path) {
@@ -325,8 +326,9 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 			return true;
 		}
 	}
-	else
+	else {
 		m_last_path = pDirectoryListing->path;
+	}
 
 	if (m_pDirectoryListing && m_pDirectoryListing->path == pDirectoryListing->path &&
 		pDirectoryListing->failed())
@@ -372,10 +374,12 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 
 			NotifyHandlers(STATECHANGE_LOCAL_DIR);
 
-			if (m_sync_browse.compare)
+			if (m_sync_browse.compare) {
 				m_pComparisonManager->CompareListings();
+			}
 		}
 	}
+
 	return true;
 }
 
