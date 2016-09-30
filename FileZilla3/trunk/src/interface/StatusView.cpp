@@ -324,6 +324,14 @@ void CStatusView::InitDefAttr()
 	const wxColour background = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
 	const bool is_dark = background.Red() + background.Green() + background.Blue() < 384;
 
+#ifdef __WXMSW__
+	// Select something for EM_GETCHARFORMAT to work
+	long oldSelectionFrom{-1};
+	long oldSelectionTo{-1};
+	m_pTextCtrl->GetSelection(&oldSelectionFrom, &oldSelectionTo);
+	m_pTextCtrl->SetSelection(m_pTextCtrl->GetInsertionPoint(), m_pTextCtrl->GetInsertionPoint());
+#endif
+
 	for (int i = 0; i < static_cast<int>(MessageType::count); i++) {
 		t_attributeCache& entry = m_attributeCache[i];
 #ifndef __WXMAC__
@@ -382,20 +390,27 @@ void CStatusView::InitDefAttr()
 		entry.len = entry.prefix.Length();
 
 #ifdef __WXMSW__
-		m_pTextCtrl->SetStyle(0, 0, entry.attr);
+		m_pTextCtrl->SetStyle(m_pTextCtrl->GetInsertionPoint(), m_pTextCtrl->GetInsertionPoint(), entry.attr);
 		entry.cf.cbSize = sizeof(CHARFORMAT2);
 		::SendMessage((HWND)m_pTextCtrl->GetHWND(), EM_GETCHARFORMAT, SCF_SELECTION, (LPARAM)&entry.cf);
 #endif
 	}
 
 	m_rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
+
+#ifdef __WXMSW__
+	if (oldSelectionFrom != -1 && oldSelectionTo != -1) {
+		m_pTextCtrl->SetSelection(oldSelectionFrom, oldSelectionTo);
+	}
+#endif
 }
 
 void CStatusView::OnContextMenu(wxContextMenuEvent&)
 {
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_LOG"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
 	pMenu->Check(XRCID("ID_SHOW_DETAILED_LOG"), COptions::Get()->GetOptionVal(OPTION_LOGGING_SHOW_DETAILED_LOGS) != 0);
 
@@ -407,8 +422,9 @@ void CStatusView::OnContextMenu(wxContextMenuEvent&)
 
 void CStatusView::OnClear(wxCommandEvent&)
 {
-	if (m_pTextCtrl)
+	if (m_pTextCtrl) {
 		m_pTextCtrl->Clear();
+	}
 	m_nLineCount = 0;
 	m_lineLengths.clear();
 }
