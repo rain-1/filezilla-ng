@@ -834,8 +834,9 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 		COptions::Get()->SetOption(OPTION_COMPARISONMODE, old_mode ? 0 : 1);
 
 		CComparisonManager* pComparisonManager = pState->GetComparisonManager();
-		if (pComparisonManager && pComparisonManager->IsComparing())
+		if (pComparisonManager && pComparisonManager->IsComparing()) {
 			pComparisonManager->CompareListings();
+		}
 	}
 	else if (HandleKeyboardCommand(event, *this)) {
 		return;
@@ -1396,14 +1397,16 @@ void CMainFrame::OnSiteManager(wxCommandEvent& e)
 
 void CMainFrame::UpdateActivityLed(int direction)
 {
-	if (m_pActivityLed[direction])
+	if (m_pActivityLed[direction]) {
 		m_pActivityLed[direction]->Ping();
+	}
 }
 
 void CMainFrame::OnProcessQueue(wxCommandEvent& event)
 {
-	if (m_pQueueView)
+	if (m_pQueueView) {
 		m_pQueueView->SetActive(event.IsChecked());
+	}
 }
 
 void CMainFrame::OnMenuEditSettings(wxCommandEvent&)
@@ -1935,7 +1938,7 @@ bool CMainFrame::ConnectToSite(Site & data, Bookmark const& bookmark)
 	}
 
 	// Next tell the state to connect
-	if (!pState->Connect(data, bookmark.m_remoteDir)) {
+	if (!pState->Connect(data, bookmark.m_remoteDir, bookmark.m_comparison)) {
 		return false;
 	}
 
@@ -2276,30 +2279,34 @@ void CMainFrame::ShowDropdownMenu(wxMenu* pMenu, wxToolBar* pToolBar, wxCommandE
 void CMainFrame::OnDropdownComparisonMode(wxCommandEvent& event)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	int old_mode = COptions::Get()->GetOptionVal(OPTION_COMPARISONMODE);
 	int new_mode = (event.GetId() == XRCID("ID_COMPARE_SIZE")) ? 0 : 1;
 	COptions::Get()->SetOption(OPTION_COMPARISONMODE, new_mode);
 
 	CComparisonManager* pComparisonManager = pState->GetComparisonManager();
-	if (old_mode != new_mode && pComparisonManager && pComparisonManager->IsComparing())
+	if (old_mode != new_mode && pComparisonManager && pComparisonManager->IsComparing()) {
 		pComparisonManager->CompareListings();
+	}
 }
 
 void CMainFrame::OnDropdownComparisonHide(wxCommandEvent&)
 {
 	CState* pState = CContextManager::Get()->GetCurrentContext();
-	if (!pState)
+	if (!pState) {
 		return;
+	}
 
 	bool old_mode = COptions::Get()->GetOptionVal(OPTION_COMPARE_HIDEIDENTICAL) != 0;
 	COptions::Get()->SetOption(OPTION_COMPARE_HIDEIDENTICAL, old_mode ? 0 : 1);
 
 	CComparisonManager* pComparisonManager = pState->GetComparisonManager();
-	if (pComparisonManager && pComparisonManager->IsComparing())
+	if (pComparisonManager && pComparisonManager->IsComparing()) {
 		pComparisonManager->CompareListings();
+	}
 }
 
 void CMainFrame::ProcessCommandLine()

@@ -253,7 +253,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 						break;
 					}
 					else {
-						pState->ChangeRemoteDir(bookmark.m_remoteDir);
+						pState->ChangeRemoteDir(bookmark.m_remoteDir, wxString(), 0, false, bookmark.m_comparison);
 					}
 				}
 				if (!bookmark.m_localDir.empty()) {
@@ -296,7 +296,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 					wxMessageBoxEx(_("Selected global bookmark and current server use a different server type.\nUse site-specific bookmarks for this server."), _("Bookmark"), wxICON_EXCLAMATION, this);
 					return;
 				}
-				pState->ChangeRemoteDir(remote_dir);
+				pState->ChangeRemoteDir(remote_dir, _T(""), 0, false, comparison);
 			}
 		}
 		if (!local_dir.empty()) {
