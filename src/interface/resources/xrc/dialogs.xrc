@@ -3496,6 +3496,43 @@
             <object class="wxBoxSizer">
               <object class="sizeritem">
                 <object class="wxStaticText">
+                  <label>Getting help</label>
+                  <font>
+                    <weight>bold</weight>
+                  </font>
+                </object>
+                <flag>wxTOP|wxBOTTOM</flag>
+                <border>2</border>
+              </object>
+              <object class="sizeritem">
+                <object class="wxFlexGridSizer">
+                  <object class="sizeritem">
+                    <object class="wxHyperlinkCtrl" name="ID_SUPPORT_FORUM">
+                      <label>Asking questions in the FileZilla forums</label>
+                      <url>http://</url>
+                    </object>
+                  </object>
+                  <object class="sizeritem">
+                    <object class="wxHyperlinkCtrl" name="ID_SUPPORT_MORE">
+                      <label>Reporting bugs and feature requests</label>
+                      <url>http://</url>
+                    </object>
+                  </object>
+                  <cols>1</cols>
+                  <vgap>2</vgap>
+                </object>
+                <flag>wxLEFT</flag>
+                <border>20</border>
+              </object>
+              <orient>wxVERTICAL</orient>
+            </object>
+            <flag>wxTOP</flag>
+            <border>3</border>
+          </object>
+          <object class="sizeritem">
+            <object class="wxBoxSizer">
+              <object class="sizeritem">
+                <object class="wxStaticText">
                   <label>Documentation</label>
                   <font>
                     <weight>bold</weight>
@@ -3521,43 +3558,6 @@
                   <object class="sizeritem">
                     <object class="wxHyperlinkCtrl" name="ID_DOCUMENTATION_MORE">
                       <label>Further documentation</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <cols>1</cols>
-                  <vgap>2</vgap>
-                </object>
-                <flag>wxLEFT</flag>
-                <border>20</border>
-              </object>
-              <orient>wxVERTICAL</orient>
-            </object>
-            <flag>wxTOP</flag>
-            <border>3</border>
-          </object>
-          <object class="sizeritem">
-            <object class="wxBoxSizer">
-              <object class="sizeritem">
-                <object class="wxStaticText">
-                  <label>Getting help</label>
-                  <font>
-                    <weight>bold</weight>
-                  </font>
-                </object>
-                <flag>wxTOP|wxBOTTOM</flag>
-                <border>2</border>
-              </object>
-              <object class="sizeritem">
-                <object class="wxFlexGridSizer">
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_SUPPORT_FORUM">
-                      <label>Asking questions in the FileZilla forums</label>
-                      <url>http://</url>
-                    </object>
-                  </object>
-                  <object class="sizeritem">
-                    <object class="wxHyperlinkCtrl" name="ID_SUPPORT_MORE">
-                      <label>Reporting bugs and feature requests</label>
                       <url>http://</url>
                     </object>
                   </object>
