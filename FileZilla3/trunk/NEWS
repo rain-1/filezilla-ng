@@ -10,6 +10,13 @@ Legend:
     *nix: Unix (e.g BSD) and Unix-like systems (e.g. Linux)
     OS X: Apple Mac OS X
 
+3.22.0 (2016-10-01)
+
+- Bookmarks with the "Directory comparison" checkbox set now work correctly
+- MSW: Fix background clearing issue on the size format settings page
+- MSW: Toggling the log timestamp option no longer results in wrong log colors
+- Fix for premature queue completion action
+
 3.22.0-rc1 (2016-09-24)
 
 + Directory listing filters can now be exported and imported
