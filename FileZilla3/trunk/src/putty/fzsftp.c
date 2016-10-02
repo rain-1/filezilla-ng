@@ -47,7 +47,7 @@ static int ReadQuotas(int i)
 	    if (input_pushback != 0)
 		fatalbox("input_pushback not null!");
 	    else
-		input_pushback = strdup(buffer);
+		input_pushback = strndup(buffer, strcspn(buffer, "\n") + 1);
 	}
 	else
 	    ProcessQuotaCmd(buffer);
@@ -71,7 +71,7 @@ static int ReadQuotas(int i)
 	    if (input_pushback != 0)
 		fatalbox("input_pushback not null!");
 	    else
-		input_pushback = strdup(line);
+		input_pushback = strndup(line, strcspn(line, "\n") + 1);
 	}
 	else
 	    ProcessQuotaCmd(line);
