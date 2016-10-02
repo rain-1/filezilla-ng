@@ -658,6 +658,9 @@ void CSftpControlSocket::OnTerminate(std::wstring const& error)
 	if (!error.empty()) {
 		LogMessageRaw(MessageType::Error, error);
 	}
+	else {
+		LogMessageRaw(MessageType::Debug_Info, _T("CSftpControlSocket::OnTerminate without error"));
+	}
 	if (m_pProcess) {
 		DoClose();
 	}
