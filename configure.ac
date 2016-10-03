@@ -35,9 +35,25 @@ fi
 if ! test "$localesonly" = "yes"; then
 
   if test "X$GCC" = Xyes; then
-    CFLAGS="$CFLAGS -Wall -g"
-    CXXFLAGS="$CXXFLAGS -Wall -g"
+    AX_APPEND_FLAG(-Wall, CFLAGS)
+    AX_APPEND_FLAG(-g, CFLAGS)
+    AX_APPEND_FLAG(-Wall, CXXFLAGS)
+    AX_APPEND_FLAG(-g, CXXFLAGS)
   fi
+
+  # Do this early: Compiler and linker flags to work around a nasty bug in Xcode.
+  AX_CHECK_COMPILE_FLAG([-Werror=partial-availability], [
+    # This warning should be on by default yet it's not even enabled by -Wall. Apple screwed up big time.
+    AX_APPEND_FLAG(-Werror=partial-availability, CFLAGS)
+    AX_APPEND_FLAG(-Werror=partial-availability, CXXFLAGS)
+  ])
+
+  AX_CHECK_LINK_FLAG([-Wl,-no_weak_imports], [
+    # If the programmer wants weak symbols he would just used dlopen/dlsym
+    # But not so on Apple systems where even basic functions like clock_gettime can
+    # be randomly missing at runtime.
+    AX_APPEND_FLAG([-Wl,-no_weak_imports], LFDLAGS)
+  ])
 
   # Check for C++14 support
   CXX_COMPILE_STDCXX_14([],[mandatory])
@@ -323,26 +339,23 @@ if test "$buildmain" = "yes"; then
   # Enable DEP and ASLR linker flags
   # --------------------------------
 
-  AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [LDFLAGS="$LDFLAGS -Wl,--dynamicbase"])
-  AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [LDFLAGS="$LDFLAGS -Wl,--nxcompat"])
+  AX_CHECK_LINK_FLAG([-Wl,--dynamicbase], [AX_APPEND_FLAG([-Wl,--dynamicbase], LDFLAGS)])
+  AX_CHECK_LINK_FLAG([-Wl,--nxcompat], [AX_APPEND_FLAG([-Wl,--nxcompat], LDFLAGS)])
 
   # Set Windows-specific linker flags
   # ---------------------------------
   if echo $host_os | grep "cygwin\|mingw" > /dev/null 2>&1; then
     # We currently require Vista minimum.
-    AX_CHECK_LINK_FLAG([-Wl,--major-subsystem-version -Wl,6], [LDFLAGS="$LDFLAGS -Wl,--major-subsystem-version -Wl,6"])
-    AX_CHECK_LINK_FLAG([-Wl,--minor-subsystem-version -Wl,0], [LDFLAGS="$LDFLAGS -Wl,--minor-subsystem-version -Wl,0"])
-    AX_CHECK_LINK_FLAG([-Wl,--major-os-version -Wl,6], [LDFLAGS="$LDFLAGS -Wl,--major-os-version -Wl,6"])
-    AX_CHECK_LINK_FLAG([-Wl,--minor-os-version -Wl,0], [LDFLAGS="$LDFLAGS -Wl,--minor-os-version -Wl,0"])
+    AX_CHECK_LINK_FLAG([-Wl,--major-subsystem-version -Wl,6], [AX_APPEND_FLAG([-Wl,--major-subsystem-version -Wl,6], LDFLAGS)])
+    AX_CHECK_LINK_FLAG([-Wl,--minor-subsystem-version -Wl,0], [AX_APPEND_FLAG([-Wl,--minor-subsystem-version -Wl,0], LDFLAGS)])
+    AX_CHECK_LINK_FLAG([-Wl,--major-os-version -Wl,6], [AX_APPEND_FLAG([-Wl,--major-os-version -Wl,6], LDFLAGS)])
+    AX_CHECK_LINK_FLAG([-Wl,--minor-os-version -Wl,0], [AX_APPEND_FLAG([-Wl,--minor-os-version -Wl,0], LDFLAGS)])
 
     # Set the Large Address Aware flag on 32bit Windows
     if ! echo $host_cpu | grep "x86_64" > /dev/null 2>&1; then
-      AX_CHECK_LINK_FLAG([-Wl,--large-address-aware], [LDFLAGS="$LDFLAGS -Wl,--large-address-aware"])
+      AX_CHECK_LINK_FLAG([-Wl,--large-address-aware], [AX_APPEND_FLAG([-Wl,--large-address-aware], LDFLAGS)])
     fi
   fi
-fi
-
-if test "$buildmain" = "yes"; then
 
   # Mac OS X specific checks
   # ------------------------
@@ -597,7 +610,8 @@ if test "$buildmain" = "yes"; then
   CHECK_THREADSAFE_GMTIME
   CHECK_INVERSE_GMTIME
 
-  AC_CHECK_FUNCS([clock_gettime])
+  # Must be done after setting linker flags
+  CHECK_CLOCK_GETTIME
   AC_CHECK_DECLS([pthread_condattr_setclock], [], [], [[#include <pthread.h>]])
 
   # SQLite3
