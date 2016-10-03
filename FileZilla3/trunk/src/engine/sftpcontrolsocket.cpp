@@ -516,11 +516,7 @@ void CSftpControlSocket::OnSftpEvent(sftp_message const& message)
 		break;
 	case sftpEvent::Transfer:
 		{
-			long value{};
-			wxString s = message.text[0];
-			if (!s.ToLong(&value)) {
-				value = 0;
-			}
+			auto value = fz::to_integral<int64_t>(message.text[0]);
 
 			bool tmp;
 			CTransferStatus status = engine_.transfer_status_.Get(tmp);
