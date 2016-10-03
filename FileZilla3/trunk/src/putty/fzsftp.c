@@ -46,8 +46,12 @@ static int ReadQuotas(int i)
 	{
 	    if (input_pushback != 0)
 		fatalbox("input_pushback not null!");
-	    else
-		input_pushback = strndup(buffer, strcspn(buffer, "\n") + 1);
+	    else {
+		int pos = strcspn(buffer, "\n") + 1;
+		input_pushback = snewn(pos + 1, char);
+		strncpy(input_pushback, buffer, pos);
+		input_pushback[pos] = 0;
+	    }
 	}
 	else
 	    ProcessQuotaCmd(buffer);
