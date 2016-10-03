@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: fr\n"
 "Report-Msgid-Bugs-To: https://trac.filezilla-project.org/\n"
-"POT-Creation-Date: 2016-10-01 10:12+0200\n"
+"POT-Creation-Date: 2016-10-03 16:02+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Pgase <pgase.filezilla@free.fr>\n"
 "Language-Team: Pgase, William GATHOYE <pgase.filezilla@free.fr, "
@@ -550,9 +550,8 @@ msgid "&Filter sets:"
 msgstr "Jeux de &filtres :"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1647
-#, fuzzy
 msgid "&Filters"
-msgstr "&Filtres :"
+msgstr "&Filtres"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1216
 msgid "&Filters:"
@@ -1746,7 +1745,7 @@ msgstr "À ce stade, toutes les informations requises ont été collectées."
 msgid "Attribute"
 msgstr "Attribut"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:596
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:592
 msgid "Authentication failed."
 msgstr "Échec de l'authentification."
 
@@ -1881,7 +1880,7 @@ msgid "CPU features:"
 msgstr "Caractéristiques du CPU :"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1573
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1128
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1127
 msgid "Calculating timezone offset of server..."
 msgstr "Calcul du décalage horaire du serveur..."
 
@@ -2585,7 +2584,7 @@ msgstr "Impossible d'établir une connexion au serveur"
 msgid "Could not connect to server: %s"
 msgstr "Impossible d'établir une connexion au serveur : %s"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:693
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:692
 msgid "Could not convert command to server encoding"
 msgstr "Impossible de convertir la commande selon l'encodage du serveur"
 
@@ -2932,7 +2931,7 @@ msgid "Creating directory"
 msgstr "Création d'un dossier"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3112
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1862
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1861
 #, c-format
 msgid "Creating directory '%s'..."
 msgstr "Création du dossier '%s'..."
@@ -3227,9 +3226,8 @@ msgstr ""
 "est incorrect."
 
 #: ../../locales/../src/interface/resources/xrc/menus.xrc:66
-#, fuzzy
 msgid "Directory listing &filters..."
-msgstr "Filtres d'affichage du contenu du dossier"
+msgstr "Filtres d'a&ffichage du contenu du dossier..."
 
 #: ../../locales/../src/engine/ControlSocket.cpp:188
 msgid "Directory listing aborted by user"
@@ -3748,9 +3746,8 @@ msgid "Explorer"
 msgstr "Explorateur"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1588
-#, fuzzy
 msgid "Export &Filters"
-msgstr "&Filtres :"
+msgstr "Exporter les &Filtres"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1583
 msgid "Export &Queue"
@@ -4159,7 +4156,7 @@ msgid "Filename"
 msgstr "Nom de fichier"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2916
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2106
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2105
 #, c-format
 msgid "Filename cannot be constructed for directory %s and filename %s"
 msgstr ""
@@ -4248,9 +4245,9 @@ msgid "Filter out items matching none of the following"
 msgstr "Filtrer les objets qui correspondent à aucune des conditions suivantes"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:1295
-#, fuzzy
 msgid "Filter out items matching not all of the following"
-msgstr "Filtrer les objets qui correspondent à toutes les conditions suivantes"
+msgstr ""
+"Filtrer les objets qui ne correspondent pas à toutes les conditions suivantes"
 
 #: ../../locales/../src/interface/filter.cpp:236
 #: ../../locales/../src/interface/filter.cpp:292
@@ -5188,9 +5185,8 @@ msgid "Match none of the following"
 msgstr "Correspondances à aucune des conditions suivantes"
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:3072
-#, fuzzy
 msgid "Match not all of the following"
-msgstr "Correspondances à toutes les conditions suivantes"
+msgstr "Correspondances à aucune de toutes les conditions suivantes"
 
 #: ../../locales/../src/interface/resources/xrc/settings.xrc:822
 msgid "Maximum simultaneous &transfers:"
@@ -5368,7 +5364,7 @@ msgstr "Nouveau site"
 msgid "Next to the transfer queue"
 msgstr "À côté de la file d'attente"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:737
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:736
 msgid "No"
 msgstr "Non"
 
@@ -5570,7 +5566,7 @@ msgstr ""
 "sélectionner sera configuré de même que le mode alternatif si vous l'avez "
 "activé."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:746
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:745
 msgid "Once"
 msgstr "Une seule fois"
 
@@ -5800,7 +5796,7 @@ msgid "Path"
 msgstr "Chemin"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2999
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2153
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2152
 #, c-format
 msgid "Path cannot be constructed for directory %s and subdir %s"
 msgstr ""
@@ -6624,7 +6620,7 @@ msgid "Rename selected files and directories"
 msgstr "Renommer les fichiers et dossiers sélectionnés"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3338
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2349
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2348
 #, c-format
 msgid "Renaming '%s' to '%s'"
 msgstr "Changement du nom de '%s' en '%s'"
@@ -6703,13 +6699,13 @@ msgstr ""
 "utilise des fins de ligne dans un format différent de celui du client."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1275
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:828
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:827
 #, c-format
 msgid "Retrieving directory listing of \"%s\"..."
 msgstr "Récupération du contenu du dossier \"%s\"..."
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1272
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:825
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:824
 msgid "Retrieving directory listing..."
 msgstr "Récupération du contenu du dossier..."
 
@@ -6760,6 +6756,8 @@ msgstr "Le proxy SOCKS 4 se connecte à : %s"
 msgid ""
 "SOCKS5 does not support usernames or passwords longer than 255 characters."
 msgstr ""
+"SOCKS5 ne supporte pas les noms d'utilisateur et les mots de passe de plus "
+"de 255 caractères."
 
 #: ../../locales/../src/interface/resources/xrc/dialogs.xrc:724
 msgid "SQLite:"
@@ -6858,9 +6856,8 @@ msgid "Select file for exported data"
 msgstr "Sélection du fichier pour l'exportation des données"
 
 #: ../../locales/../src/interface/export.cpp:45
-#, fuzzy
 msgid "Select file for exported filters"
-msgstr "Sélection du fichier pour l'exportation des sites"
+msgstr "Sélection du fichier pour l'exportation des filtres"
 
 #: ../../locales/../src/interface/export.cpp:39
 #: ../../locales/../src/interface/queue.cpp:1415
@@ -7078,7 +7075,7 @@ msgstr ""
 msgid "Server returned empty path."
 msgstr "Le serveur a retourné aucun chemin."
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:599
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:595
 msgid ""
 "Server sent an additional login prompt. You need to use the interactive "
 "login type."
@@ -7149,7 +7146,7 @@ msgid "Set &Priority"
 msgstr "Définir la &priorité"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:3486
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2230
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:2229
 #, c-format
 msgid "Set permissions of '%s' to '%s'"
 msgstr "Définir les permissions de '%s' à '%s'"
@@ -7425,13 +7422,13 @@ msgid "Started update check on %s\n"
 msgstr "Démarrage de la recherche de la mise à jour dans %s\n"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2150
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1485
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1484
 #, c-format
 msgid "Starting download of %s"
 msgstr "Démarrage du téléchargement de %s"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:2153
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1488
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1487
 #, c-format
 msgid "Starting upload of %s"
 msgstr "Démarrage de l'envoi de %s"
@@ -8073,7 +8070,7 @@ msgid "Timeout"
 msgstr "Délai d'attente"
 
 #: ../../locales/../src/engine/ftpcontrolsocket.cpp:1624
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:933
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:932
 #, c-format
 msgid "Timezone offset of server is %d seconds."
 msgstr "Le décalage du fuseau horaire du serveur est de %d secondes."
@@ -8224,11 +8221,11 @@ msgstr "Traiter les fichiers sans &extension comme des fichiers ASCII"
 msgid "Treat the &following filetypes as ASCII files:"
 msgstr "Traiter les types de &fichiers suivants comme des fichiers ASCII :"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:734
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:733
 msgid "Trust changed Hostkey:"
 msgstr "Approbation du changement de la clé de l'hôte :"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:732
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:731
 msgid "Trust new Hostkey:"
 msgstr "Approbation de la nouvelle clé de l'hôte :"
 
@@ -8651,7 +8648,7 @@ msgstr "Fins de ligne incorrectes"
 msgid "Yellow"
 msgstr "Jaune"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:744
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:743
 msgid "Yes"
 msgstr "Oui"
 
@@ -8921,7 +8918,7 @@ msgstr ""
 msgid "fzsftp belongs to a different version of FileZilla"
 msgstr "fzsftp appartient à une autre version de FileZilla"
 
-#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1412
+#: ../../locales/../src/engine/sftpcontrolsocket.cpp:1411
 msgid "fzsftp could not be started"
 msgstr "fzsftp n'a pas pu être démarré"
 
