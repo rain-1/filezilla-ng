@@ -1063,9 +1063,9 @@ bool CSiteManagerDialog::Verify()
 		}
 
 		// In key file logon type, check that the provided key file exists
-		wxString keyFile, keyFileComment, keyFileData;
+		std::wstring keyFile, keyFileComment, keyFileData;
 		if (logon_type == KEY) {
-			keyFile = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue);
+			keyFile = xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::GetValue).ToStdWstring();
 			if (keyFile.empty()) {
 				wxMessageBox(_("You have to enter a key file path"), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
@@ -1074,22 +1074,22 @@ bool CSiteManagerDialog::Verify()
 
 			// Check (again) that the key file is in the correct format since it might have been introduced manually
 			CFZPuttyGenInterface cfzg(this);
-			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData))
+			if (cfzg.LoadKeyFile(keyFile, false, keyFileComment, keyFileData)) {
 				xrc_call(*this, "ID_KEYFILE", &wxTextCtrl::ChangeValue, keyFile);
+			}
 			else {
 				xrc_call(*this, "ID_KEYFILE", &wxWindow::SetFocus);
 				return false;
 			}
 		}
 
-		const wxString remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
+		wxString const remotePathRaw = XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->GetValue();
 		if (!remotePathRaw.empty()) {
 			const wxString serverType = XRCCTRL(*this, "ID_SERVERTYPE", wxChoice)->GetStringSelection();
 
 			CServerPath remotePath;
 			remotePath.SetType(CServer::GetServerTypeFromName(serverType));
-			if (!remotePath.SetPath(remotePathRaw))
-			{
+			if (!remotePath.SetPath(remotePathRaw)) {
 				XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxMessageBoxEx(_("Default remote path cannot be parsed. Make sure it is a valid absolute path for the selected server type."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
@@ -1519,12 +1519,12 @@ void CSiteManagerDialog::OnKeyFileBrowse(wxCommandEvent&)
 	wxFileDialog dlg(this, _("Choose a key file"), wxString(), wxString(), wildcards, wxFD_OPEN|wxFD_FILE_MUST_EXIST);
 
 	if (dlg.ShowModal() == wxID_OK) {
-		wxString keyFilePath = dlg.GetPath();
+		std::wstring keyFilePath = dlg.GetPath().ToStdWstring();
 		// If the selected file was a PEM file, LoadKeyFile() will automatically convert it to PPK
 		// and tell us the new location.
 		CFZPuttyGenInterface fzpg(this);
 
-		wxString keyFileComment, keyFileData;
+		std::wstring keyFileComment, keyFileData;
 		if (fzpg.LoadKeyFile(keyFilePath, false, keyFileComment, keyFileData)) {
 			XRCCTRL(*this, "ID_KEYFILE", wxTextCtrl)->ChangeValue(keyFilePath);
 		}

@@ -1,28 +1,26 @@
 #ifndef FILEZILLA_FZPUTTYGEN_INTERFACE_HEADER
 #define FILEZILLA_FZPUTTYGEN_INTERFACE_HEADER
 
-#include <wx/process.h>
+namespace fz {
+class process;
+}
 
 class CFZPuttyGenInterface final
 {
 public:
 	CFZPuttyGenInterface(wxWindow* parent);
 	virtual ~CFZPuttyGenInterface();
-	bool LoadKeyFile(wxString& keyFile, bool silent, wxString& comment, wxString& data);
+	bool LoadKeyFile(std::wstring& keyFile, bool silent, std::wstring& comment, std::wstring& data);
 
-	void EndProcess();
-	void DeleteProcess();
-	bool IsProcessCreated();
-	bool IsProcessStarted();
-
+	bool ProcessFailed() const;
 protected:
 	// return -1 on error
-	int NeedsConversion(wxString keyFile, bool silent);
+	int NeedsConversion(std::wstring const& keyFile, bool silent);
 
 	// return -1 on error
 	int IsKeyFileEncrypted();
 
-	wxProcess* m_pProcess{};
+	std::unique_ptr<fz::process> m_process;
 	bool m_initialized{};
 	wxWindow* m_parent;
 
@@ -33,8 +31,8 @@ protected:
 	};
 
 	bool LoadProcess(bool silent);
-	bool Send(const wxString& cmd);
-	ReplyCode GetReply(wxString& reply);
+	bool Send(std::wstring const& cmd);
+	ReplyCode GetReply(std::wstring& reply);
 };
 
 #endif /* FILEZILLA_FZPUTTYGEN_INTERFACE_HEADER */

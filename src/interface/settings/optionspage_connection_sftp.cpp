@@ -5,10 +5,8 @@
 #include "optionspage_connection_sftp.h"
 #include "../filezillaapp.h"
 #include "../inputdialog.h"
-#include <wx/tokenzr.h>
 
 BEGIN_EVENT_TABLE(COptionsPageConnectionSFTP, COptionsPage)
-EVT_END_PROCESS(wxID_ANY, COptionsPageConnectionSFTP::OnEndProcess)
 EVT_BUTTON(XRCID("ID_ADDKEY"), COptionsPageConnectionSFTP::OnAdd)
 EVT_BUTTON(XRCID("ID_REMOVEKEY"), COptionsPageConnectionSFTP::OnRemove)
 EVT_LIST_ITEM_SELECTED(wxID_ANY, COptionsPageConnectionSFTP::OnSelChanged)
@@ -28,8 +26,9 @@ COptionsPageConnectionSFTP::~COptionsPageConnectionSFTP()
 bool COptionsPageConnectionSFTP::LoadPage()
 {
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
-	if (!pKeys)
+	if (!pKeys) {
 		return false;
+	}
 	pKeys->InsertColumn(0, _("Filename"), wxLIST_FORMAT_LEFT, 150);
 	pKeys->InsertColumn(1, _("Comment"), wxLIST_FORMAT_LEFT, 100);
 	pKeys->InsertColumn(2, _("Data"), wxLIST_FORMAT_LEFT, 350);
@@ -39,10 +38,11 @@ bool COptionsPageConnectionSFTP::LoadPage()
 	size.x = 1;
 	pKeys->SetMinSize(size);
 
-	wxString keyFiles = m_pOptions->GetOption(OPTION_SFTP_KEYFILES);
-	wxStringTokenizer tokens(keyFiles, _T("\n"), wxTOKEN_DEFAULT);
-	while (tokens.HasMoreTokens())
-		AddKey(tokens.GetNextToken(), true);
+	std::wstring keyFiles = m_pOptions->GetOption(OPTION_SFTP_KEYFILES);
+	auto tokens = fz::strtok(keyFiles, L"\r\n");
+	for (auto const& token : tokens) {
+		AddKey(token, true);
+	}
 
 	bool failure = false;
 
@@ -56,19 +56,17 @@ bool COptionsPageConnectionSFTP::LoadPage()
 bool COptionsPageConnectionSFTP::SavePage()
 {
 	// Don't save keys on process error
-	if (!m_pFzpg->IsProcessStarted() || m_pFzpg->IsProcessCreated()) {
+	if (!m_pFzpg->ProcessFailed()) {
 		wxString keyFiles;
 		wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
-		for (int i = 0; i < pKeys->GetItemCount(); i++) {
-			if (!keyFiles.empty())
+		for (int i = 0; i < pKeys->GetItemCount(); ++i) {
+			if (!keyFiles.empty()) {
 				keyFiles += _T("\n");
+			}
 			keyFiles += pKeys->GetItemText(i);
 		}
 		m_pOptions->SetOption(OPTION_SFTP_KEYFILES, keyFiles.ToStdWstring());
 	}
-
-	if (m_pFzpg->IsProcessCreated())
-		m_pFzpg->EndProcess();
 
 	SetOptionFromCheck(XRCID("ID_SFTP_COMPRESSION"), OPTION_SFTP_COMPRESSION);
 
@@ -78,12 +76,13 @@ bool COptionsPageConnectionSFTP::SavePage()
 void COptionsPageConnectionSFTP::OnAdd(wxCommandEvent&)
 {
 	wxFileDialog dlg(this, _("Select file containing private key"), wxString(), wxString(), wxFileSelectorDefaultWildcardStr, wxFD_OPEN | wxFD_FILE_MUST_EXIST);
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return;
+	}
 
-	const wxString file = dlg.GetPath();
+	wxString const file = dlg.GetPath();
 
-	AddKey(dlg.GetPath(), false);
+	AddKey(dlg.GetPath().ToStdWstring(), false);
 }
 
 void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent&)
@@ -91,21 +90,24 @@ void COptionsPageConnectionSFTP::OnRemove(wxCommandEvent&)
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
 
 	int index = pKeys->GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-	if (index == -1)
+	if (index == -1) {
 		return;
+	}
 
 	pKeys->DeleteItem(index);
 }
 
-bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
+bool COptionsPageConnectionSFTP::AddKey(std::wstring keyFile, bool silent)
 {
-	wxString comment, data;
-	if (!m_pFzpg->LoadKeyFile(keyFile, silent, comment, data))
+	std::wstring comment, data;
+	if (!m_pFzpg->LoadKeyFile(keyFile, silent, comment, data)) {
 		return false;
+	}
 
 	if (KeyFileExists(keyFile)) {
-		if (!silent)
+		if (!silent) {
 			wxMessageBoxEx(_("Selected file is already loaded"), _("Cannot load key file"), wxICON_INFORMATION);
+		}
 		return false;
 	}
 
@@ -117,12 +119,13 @@ bool COptionsPageConnectionSFTP::AddKey(wxString keyFile, bool silent)
 	return true;
 }
 
-bool COptionsPageConnectionSFTP::KeyFileExists(const wxString& keyFile)
+bool COptionsPageConnectionSFTP::KeyFileExists(std::wstring const& keyFile)
 {
 	wxListCtrl* pKeys = XRCCTRL(*this, "ID_KEYS", wxListCtrl);
 	for (int i = 0; i < pKeys->GetItemCount(); ++i) {
-		if (pKeys->GetItemText(i) == keyFile)
+		if (pKeys->GetItemText(i) == keyFile) {
 			return true;
+		}
 	}
 	return false;
 }
@@ -139,9 +142,4 @@ void COptionsPageConnectionSFTP::SetCtrlState()
 void COptionsPageConnectionSFTP::OnSelChanged(wxListEvent&)
 {
 	SetCtrlState();
-}
-
-void COptionsPageConnectionSFTP::OnEndProcess(wxProcessEvent&)
-{
-	m_pFzpg->DeleteProcess();
 }
