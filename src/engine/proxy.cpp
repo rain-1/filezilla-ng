@@ -682,10 +682,10 @@ int CProxySocket::Write(const void *, unsigned int, int& error)
 
 std::wstring CProxySocket::GetUser() const
 {
-	return fz::to_wstring(m_user);
+	return fz::to_wstring_from_utf8(m_user);
 }
 
 std::wstring CProxySocket::GetPass() const
 {
-	return fz::to_wstring(m_pass);
+	return fz::to_wstring_from_utf8(m_pass);
 }
