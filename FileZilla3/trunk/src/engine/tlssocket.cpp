@@ -7,6 +7,8 @@
 
 #include <gnutls/x509.h>
 
+#include <algorithm>
+
 #if FZ_USE_GNUTLS_SYSTEM_CIPHERS
 char const ciphers[] = "@SYSTEM";
 #else
