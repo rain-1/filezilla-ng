@@ -13,6 +13,8 @@
 #include <wx/combobox.h>
 #include <wx/dcclient.h>
 
+#include <algorithm>
+
 #ifdef __WXMSW__
 const int border_offset = 0;
 #elif defined(__WXMAC__)

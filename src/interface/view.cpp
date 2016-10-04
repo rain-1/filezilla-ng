@@ -2,6 +2,8 @@
 #include "view.h"
 #include "viewheader.h"
 
+#include <algorithm>
+
 BEGIN_EVENT_TABLE(CView, wxNavigationEnabled<wxWindow>)
 EVT_SIZE(CView::OnSize)
 END_EVENT_TABLE()
