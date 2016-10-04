@@ -1568,44 +1568,41 @@ bool CRemoteListView::OnBeginRename(const wxListEvent& event)
 
 bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 {
-	if (!m_state.IsRemoteIdle())
-	{
+	if (!m_state.IsRemoteIdle()) {
 		wxBell();
 		return false;
 	}
 
-	if (!m_pDirectoryListing)
-	{
+	if (!m_pDirectoryListing) {
 		wxBell();
 		return false;
 	}
 
 	int item = event.GetIndex();
-	if (!item)
+	if (!item) {
 		return false;
+	}
 
 	int index = GetItemIndex(item);
-	if (index == -1 || m_fileData[index].comparison_flags == fill)
-	{
+	if (index == -1 || m_fileData[index].comparison_flags == fill) {
 		wxBell();
 		return false;
 	}
 
 	const CDirentry& entry = (*m_pDirectoryListing)[index];
 
-	wxString newFile = event.GetLabel();
+	std::wstring newFile = event.GetLabel().ToStdWstring();
 
 	CServerPath newPath = m_pDirectoryListing->path;
-	if (!newPath.ChangePath(newFile, true))
-	{
+	if (!newPath.ChangePath(wxString(newFile), true)) {
 		wxMessageBoxEx(_("Filename invalid"), _("Cannot rename file"), wxICON_EXCLAMATION);
 		return false;
 	}
 
-	if (newPath == m_pDirectoryListing->path)
-	{
-		if (entry.name == newFile)
+	if (newPath == m_pDirectoryListing->path) {
+		if (entry.name == newFile) {
 			return false;
+		}
 
 		// Check if target file already exists
 		for (unsigned int i = 0; i < m_pDirectoryListing->GetCount(); i++)
@@ -1733,7 +1730,7 @@ void CRemoteListView::OnMenuChmod(wxCommandEvent&)
 		{
 			char newPermissions[9]{};
 			bool res = pChmodDlg->ConvertPermissions(*entry.permissions, newPermissions);
-			wxString newPerms = pChmodDlg->GetPermissions(res ? newPermissions : 0, entry.is_dir());
+			std::wstring const newPerms = pChmodDlg->GetPermissions(res ? newPermissions : 0, entry.is_dir()).ToStdWstring();
 
 			m_state.m_pCommandQueue->ProcessCommand(new CChmodCommand(m_pDirectoryListing->path, entry.name, newPerms));
 		}
@@ -2535,10 +2532,10 @@ void CRemoteListView::OnMenuGeturl(wxCommandEvent& event)
 
 	wxString const server = pServer->Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
-	auto getUrl = [](wxString const& serverPart, CServerPath const& path, wxString const& name) {
+	auto getUrl = [](wxString const& serverPart, CServerPath const& path, std::wstring const& name) {
 		wxString url = serverPart;
 
-		auto const pathPart = url_encode(path.FormatFilename(name, false).ToStdWstring(), true);
+		auto const pathPart = url_encode(path.FormatFilename(name, false), true);
 		if (!pathPart.empty() && pathPart[0] != '/') {
 			url += '/';
 		}

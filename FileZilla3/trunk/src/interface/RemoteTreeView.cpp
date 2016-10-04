@@ -105,27 +105,22 @@ public:
 				return wxDragNone;
 			}
 
-			const std::list<CRemoteDataObject::t_fileInfo>& files = m_pRemoteDataObject->GetFiles();
-			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-			{
-				const CRemoteDataObject::t_fileInfo& info = *iter;
-				if (info.dir)
-				{
+			std::list<CRemoteDataObject::t_fileInfo> const& files = m_pRemoteDataObject->GetFiles();
+			for (auto const& info : files) {
+				if (info.dir) {
 					CServerPath dir = m_pRemoteDataObject->GetServerPath();
 					dir.AddSegment(info.name);
-					if (dir == path)
+					if (dir == path) {
 						return wxDragNone;
-					else if (dir.IsParentOf(path, false))
-					{
+					}
+					else if (dir.IsParentOf(path, false)) {
 						wxMessageBoxEx(_("A directory cannot be dragged into one of its subdirectories."));
 						return wxDragNone;
 					}
 				}
 			}
 
-			for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter)
-			{
-				const CRemoteDataObject::t_fileInfo& info = *iter;
+			for (auto const& info : files) {
 				m_pRemoteTreeView->m_state.m_pCommandQueue->ProcessCommand(
 					new CRenameCommand(m_pRemoteDataObject->GetServerPath(), info.name, path, info.name)
 					);
@@ -906,22 +901,25 @@ void CRemoteTreeView::OnContextMenu(wxTreeEvent& event)
 
 void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 {
-	if (!m_state.IsRemoteIdle())
+	if (!m_state.IsRemoteIdle()) {
 		return;
+	}
 
-	if (!m_contextMenuItem)
+	if (!m_contextMenuItem) {
 		return;
+	}
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.empty())
+	if (path.empty()) {
 		return;
+	}
 
 	const bool hasParent = path.HasParent();
 
 	CChmodDialog* pChmodDlg = new CChmodDialog;
 
 	// Get current permissions of directory
-	const wxString& name = GetItemText(m_contextMenuItem);
+	std::wstring const name = GetItemText(m_contextMenuItem).ToStdWstring();
 	char permissions[9] = {0};
 	bool cached = false;
 
@@ -934,8 +932,9 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 		cached = m_state.m_pEngine->CacheLookup(parentPath, listing) == FZ_REPLY_OK;
 		if (cached) {
 			for (unsigned int i = 0; i < listing.GetCount(); ++i) {
-				if (listing[i].name != name)
+				if (listing[i].name != name) {
 					continue;
+				}
 
 				pChmodDlg->ConvertPermissions(*listing[i].permissions, permissions);
 			}
@@ -967,20 +966,23 @@ void CRemoteTreeView::OnMenuChmod(wxCommandEvent&)
 	if (cached) { // Implies hasParent
 		// Change directory permissions
 		if (!applyType || applyType == 2) {
-			wxString newPerms = pChmodDlg->GetPermissions(permissions, true);
+			std::wstring const newPerms = pChmodDlg->GetPermissions(permissions, true).ToStdWstring();
 
 			m_state.m_pCommandQueue->ProcessCommand(new CChmodCommand(path.GetParent(), name, newPerms));
 		}
 
-		if (pChmodDlg->Recursive())
+		if (pChmodDlg->Recursive()) {
 			// Start recursion
 			root.add_dir_to_visit(path, _T(""), CLocalPath());
+		}
 	}
 	else {
-		if (hasParent)
+		if (hasParent) {
 			root.add_dir_to_visit_restricted(path.GetParent(), name, pChmodDlg->Recursive());
-		else
+		}
+		else {
 			root.add_dir_to_visit_restricted(path, _T(""), pChmodDlg->Recursive());
+		}
 	}
 
 	if (!cached || pChmodDlg->Recursive()) {
@@ -1147,8 +1149,8 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	CServerPath old_path = GetPathFromItem(event.GetItem());
 	CServerPath parent = old_path.GetParent();
 
-	const wxString& oldName = GetItemText(event.GetItem());
-	const wxString& newName = event.GetLabel();
+	std::wstring const oldName = GetItemText(event.GetItem()).ToStdWstring();
+	std::wstring const newName = event.GetLabel().ToStdWstring();
 	if (oldName == newName) {
 		event.Veto();
 		return;

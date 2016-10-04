@@ -1126,7 +1126,7 @@ int CSftpControlSocket::ListSend()
 	else if (pData->opState == list_mtime) {
 		LogMessage(MessageType::Status, _("Calculating timezone offset of server..."));
 		std::wstring const& name = pData->directoryListing[pData->mtime_index].name;
-		std::wstring quotedFilename = QuoteFilename(pData->directoryListing.path.FormatFilename(name, true).ToStdWstring());
+		std::wstring quotedFilename = QuoteFilename(pData->directoryListing.path.FormatFilename(name, true));
 		if (!SendCommand(L"mtime " + WildcardEscape(quotedFilename),
 			L"mtime " + quotedFilename))
 			return FZ_REPLY_ERROR;
@@ -1658,7 +1658,7 @@ int CSftpControlSocket::FileTransferSend()
 
 			engine_.transfer_status_.Init(pData->remoteFileSize, pData->resume ? pData->localFileSize : 0, false);
 			cmd += L"get ";
-			cmd += QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath).ToStdWstring()) + L" ";
+			cmd += QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath)) + L" ";
 
 			std::wstring localFile = QuoteFilename(pData->localFile);
 			std::wstring logstr = cmd;
@@ -1676,7 +1676,7 @@ int CSftpControlSocket::FileTransferSend()
 
 			std::wstring logstr = cmd;
 			std::wstring localFile = QuoteFilename(pData->localFile) + L" ";
-			std::wstring remoteFile = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath).ToStdWstring());
+			std::wstring remoteFile = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 
 			logstr += localFile;
 			logstr += remoteFile;
@@ -1694,7 +1694,7 @@ int CSftpControlSocket::FileTransferSend()
 		pData->transferInitiated = true;
 	}
 	else if (pData->opState == filetransfer_mtime) {
-		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath).ToStdWstring());
+		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 		if (!SendCommand(_T("mtime ") + WildcardEscape(quotedFilename),
 			L"mtime " + quotedFilename))
 			return FZ_REPLY_ERROR;
@@ -1707,7 +1707,7 @@ int CSftpControlSocket::FileTransferSend()
 			return FZ_REPLY_ERROR;
 		}
 
-		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath).ToStdWstring());
+		std::wstring quotedFilename = QuoteFilename(pData->remotePath.FormatFilename(pData->remoteFile, !pData->tryAbsolutePath));
 
 		fz::datetime t = pData->fileTime;
 		t -= fz::duration::from_minutes(m_pCurrentServer->GetTimezoneOffset());
@@ -2093,14 +2093,14 @@ int CSftpControlSocket::DeleteSend()
 	}
 	CSftpDeleteOpData *pData = static_cast<CSftpDeleteOpData *>(m_pCurOpData);
 
-	const wxString& file = pData->files.front();
+	std::wstring const& file = pData->files.front();
 	if (file.empty()) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty filename"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	std::wstring filename = pData->path.FormatFilename(file).ToStdWstring();
+	std::wstring filename = pData->path.FormatFilename(file);
 	if (filename.empty()) {
 		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath(), file);
 		ResetOperation(FZ_REPLY_ERROR);
@@ -2295,10 +2295,10 @@ int CSftpControlSocket::ChmodSend()
 		{
 			engine_.GetDirectoryCache().UpdateFile(*m_pCurrentServer, pData->m_cmd.GetPath(), pData->m_cmd.GetFile(), false, CDirectoryCache::unknown);
 
-			std::wstring quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute).ToStdWstring());
+			std::wstring quotedFilename = QuoteFilename(pData->m_cmd.GetPath().FormatFilename(pData->m_cmd.GetFile(), !pData->m_useAbsolute));
 
-			res = SendCommand(L"chmod " + pData->m_cmd.GetPermission().ToStdWstring() + L" " + WildcardEscape(quotedFilename),
-					   L"chmod " + pData->m_cmd.GetPermission().ToStdWstring() + _T(" ") + quotedFilename);
+			res = SendCommand(L"chmod " + pData->m_cmd.GetPermission() + L" " + WildcardEscape(quotedFilename),
+					   L"chmod " + pData->m_cmd.GetPermission() + L" " + quotedFilename);
 		}
 		break;
 	default:
@@ -2426,8 +2426,8 @@ int CSftpControlSocket::RenameSend()
 			engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile(), &wasDir);
 			engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());
 
-			std::wstring fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute).ToStdWstring());
-			std::wstring toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()).ToStdWstring());
+			std::wstring fromQuoted = QuoteFilename(pData->m_cmd.GetFromPath().FormatFilename(pData->m_cmd.GetFromFile(), !pData->m_useAbsolute));
+			std::wstring toQuoted = QuoteFilename(pData->m_cmd.GetToPath().FormatFilename(pData->m_cmd.GetToFile(), !pData->m_useAbsolute && pData->m_cmd.GetFromPath() == pData->m_cmd.GetToPath()));
 
 			engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetFromPath(), pData->m_cmd.GetFromFile());
 			engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->m_cmd.GetToPath(), pData->m_cmd.GetToFile());

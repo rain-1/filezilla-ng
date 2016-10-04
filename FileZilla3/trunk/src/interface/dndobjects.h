@@ -44,7 +44,7 @@ public:
 
 	struct t_fileInfo
 	{
-		wxString name;
+		std::wstring name;
 		bool dir;
 		int64_t size;
 		bool link;

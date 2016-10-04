@@ -145,11 +145,11 @@ public:
 
 	bool download{};
 
-	wxString localFile;
+	std::wstring localFile;
 	int64_t localSize{-1};
 	fz::datetime localTime;
 
-	wxString remoteFile;
+	std::wstring remoteFile;
 	CServerPath remotePath;
 	int64_t remoteSize{-1};
 	fz::datetime remoteTime;
@@ -179,7 +179,7 @@ public:
 
 	// Set to new filename if overwriteAction is rename. Might trigger further
 	// file exists notifications if new target file exists as well.
-	wxString newName;
+	std::wstring newName;
 };
 
 class CInteractiveLoginNotification final : public CAsyncRequestNotification
