@@ -176,7 +176,7 @@ bool CFZPuttyGenInterface::LoadProcess(bool silent)
 #endif
 
 	m_process = std::make_unique<fz::process>();
-	if (!m_process->spawn(executable)) {
+	if (!m_process->spawn(fz::to_native(executable))) {
 		m_process.reset();
 
 		if (!silent) {

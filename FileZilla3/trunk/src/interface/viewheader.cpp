@@ -561,7 +561,7 @@ void CRemoteViewHeader::OnTextEnter(wxCommandEvent&)
 {
 	CServerPath path = m_path;
 	wxString value = m_pComboBox->GetValue();
-	if (value.empty() || !path.ChangePath(value)) {
+	if (value.empty() || !path.ChangePath(value.ToStdWstring())) {
 		wxBell();
 		return;
 	}
@@ -581,7 +581,7 @@ void CRemoteViewHeader::OnSelectionChanged(wxCommandEvent& event)
 		return;
 
 	CServerPath path = m_path;
-	if (!path.SetPath(dir)) {
+	if (!path.SetPath(dir.ToStdWstring())) {
 		wxBell();
 		return;
 	}

@@ -59,8 +59,9 @@ public:
 		const wxString& dir = m_pLocalTreeView->GetDirFromItem(item);
 
 #ifdef __WXMSW__
-		if (dir == _T("/"))
+		if (dir == _T("/")) {
 			return wxString();
+		}
 #endif
 
 		return dir;
@@ -71,8 +72,9 @@ public:
 		int flags = 0;
 		wxTreeItemId hit = m_pLocalTreeView->HitTest(point, flags);
 
-		if (flags & (wxTREE_HITTEST_ABOVE | wxTREE_HITTEST_BELOW | wxTREE_HITTEST_NOWHERE | wxTREE_HITTEST_TOLEFT | wxTREE_HITTEST_TORIGHT))
+		if (flags & (wxTREE_HITTEST_ABOVE | wxTREE_HITTEST_BELOW | wxTREE_HITTEST_NOWHERE | wxTREE_HITTEST_TOLEFT | wxTREE_HITTEST_TORIGHT)) {
 			return wxTreeItemId();
+		}
 
 		return hit;
 	}
@@ -1063,29 +1065,34 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 		return;
 	}
 
-	if (!m_contextMenuItem.IsOk())
+	if (!m_contextMenuItem.IsOk()) {
 		return;
+	}
 
 	CLocalPath path(GetDirFromItem(m_contextMenuItem));
 
-	if (!path.HasParent())
+	if (!path.HasParent()) {
 		return;
+	}
 
-	if (!m_state.IsRemoteConnected())
+	if (!m_state.IsRemoteConnected()) {
 		return;
+	}
 
 	const CServer server = *m_state.GetServer();
 	CServerPath remotePath = m_state.GetRemotePath();
-	if (remotePath.empty())
+	if (remotePath.empty()) {
 		return;
+	}
 
-	if (!remotePath.ChangePath(GetItemText(m_contextMenuItem)))
+	if (!remotePath.ChangePath(GetItemText(m_contextMenuItem).ToStdWstring())) {
 		return;
+	}
 
 	local_recursion_root root;
 	root.add_dir_to_visit(path, remotePath);
 	recursiveOperation->AddRecursionRoot(std::move(root));
-	
+
 	bool const queue_only = event.GetId() == XRCID("ID_ADDTOQUEUE");
 
 	CFilterManager filter;

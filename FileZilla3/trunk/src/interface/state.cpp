@@ -693,9 +693,9 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		else if (type == fz::local_filesys::dir) {
 			CLocalPath localPath(files[i]);
 			if (localPath.HasParent()) {
-				
+
 				CServerPath remotePath = path;
-				if (!remotePath.ChangePath(localPath.GetLastSegment())) {
+				if (!remotePath.ChangePath(localPath.GetLastSegment().ToStdWstring())) {
 					continue;
 				}
 
@@ -966,7 +966,7 @@ bool CState::ChangeRemoteDir(CServerPath const& path, wxString const& subdir, in
 
 	if (!m_sync_browse.local_root.empty()) {
 		CServerPath p(path);
-		if (!subdir.empty() && !p.ChangePath(subdir)) {
+		if (!subdir.empty() && !p.ChangePath(subdir.ToStdWstring())) {
 			wxString msg = wxString::Format(_("Could not get full remote path."));
 			wxMessageBoxEx(msg, _("Synchronized browsing"));
 			return false;

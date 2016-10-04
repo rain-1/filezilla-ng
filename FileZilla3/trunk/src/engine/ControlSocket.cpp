@@ -337,7 +337,7 @@ bool CControlSocket::ParsePwdReply(wxString reply, bool unquoted /*=false*/, con
 	}
 
 	m_CurrentPath.SetType(m_pCurrentServer->GetType());
-	if (reply.empty() || !m_CurrentPath.SetPath(reply)) {
+	if (reply.empty() || !m_CurrentPath.SetPath(reply.ToStdWstring())) {
 		if (reply.empty())
 			LogMessage(MessageType::Error, _("Server returned empty path."));
 		else

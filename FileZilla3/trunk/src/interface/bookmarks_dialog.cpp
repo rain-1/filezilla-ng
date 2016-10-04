@@ -62,10 +62,10 @@ void CNewBookmarkDialog::OnOK(wxCommandEvent&)
 
 	CServerPath remote_path;
 	if (!remote_path_raw.empty()) {
-		if (!global && m_server)
+		if (!global && m_server) {
 			remote_path.SetType(m_server->GetType());
-		if (!remote_path.SetPath(remote_path_raw))
-		{
+		}
+		if (!remote_path.SetPath(remote_path_raw.ToStdWstring())) {
 			wxMessageBoxEx(_("Could not parse remote path."), _("New bookmark"), wxICON_EXCLAMATION);
 			return;
 		}
@@ -404,9 +404,10 @@ bool CBookmarksDialog::Verify()
 	wxString const remotePathRaw = xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::GetValue);
 	if (!remotePathRaw.empty()) {
 		CServerPath remotePath;
-		if (server)
+		if (server) {
 			remotePath.SetType(server->GetType());
-		if (!remotePath.SetPath(remotePathRaw)) {
+		}
+		if (!remotePath.SetPath(remotePathRaw.ToStdWstring())) {
 			xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::SetFocus);
 			if (server) {
 				wxString msg;
@@ -459,7 +460,7 @@ void CBookmarksDialog::UpdateBookmark()
 	if (!remotePathRaw.empty()) {
 		if (server)
 			data->m_remote_dir.SetType(server->GetType());
-		data->m_remote_dir.SetPath(remotePathRaw);
+		data->m_remote_dir.SetPath(remotePathRaw.ToStdWstring());
 	}
 
 	data->m_local_dir = xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::GetValue);

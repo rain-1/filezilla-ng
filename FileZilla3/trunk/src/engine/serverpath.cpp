@@ -46,7 +46,7 @@ CServerPath::CServerPath()
 {
 }
 
-CServerPath::CServerPath(CServerPath const& path, wxString subdir)
+CServerPath::CServerPath(CServerPath const& path, std::wstring subdir)
 	: m_type(path.m_type)
 	, m_data(path.m_data)
 {
@@ -59,10 +59,10 @@ CServerPath::CServerPath(CServerPath const& path, wxString subdir)
 	}
 }
 
-CServerPath::CServerPath(wxString const& path, ServerType type /*=DEFAULT*/)
+CServerPath::CServerPath(wxString const& path, ServerType type)
 	: m_type(type)
 {
-	SetPath(path);
+	SetPath(path.ToStdWstring());
 }
 
 void CServerPath::clear()
@@ -70,54 +70,64 @@ void CServerPath::clear()
 	m_data.clear();
 }
 
-bool CServerPath::SetPath(wxString newPath)
+bool CServerPath::SetPath(std::wstring newPath)
 {
 	return SetPath(newPath, false);
 }
 
-bool CServerPath::SetPath(wxString &newPath, bool isFile)
+bool CServerPath::SetPath(std::wstring &newPath, bool isFile)
 {
-	wxString path = newPath;
-	wxString file;
+	std::wstring path = newPath;
+	std::wstring file;
 
 	if (path.empty()) {
 		return false;
 	}
 
 	if (m_type == DEFAULT) {
-		int pos1 = path.Find(_T(":["));
-		if (pos1 != -1) {
-			int pos2 = path.Find(']', true);
-			if (pos2 != -1 && static_cast<size_t>(pos2) == (path.Length() - 1) && !isFile)
+		size_t pos1 = path.find(L":[");
+		if (pos1 != std::wstring::npos) {
+			size_t pos2 = path.rfind(']');
+			if (pos2 != std::string::npos && pos2 == (path.size() - 1) && !isFile) {
 				m_type = VMS;
-			else if (isFile && pos2 > pos1)
+			}
+			else if (isFile && pos2 > pos1) {
 				m_type = VMS;
+			}
 		}
-		else if (path.Length() >= 3 &&
-			((path.c_str()[0] >= 'A' && path.c_str()[0] <= 'Z') || (path.c_str()[0] >= 'a' && path.c_str()[0] <= 'z')) &&
-			path.c_str()[1] == ':' && (path.c_str()[2] == '\\' || path.c_str()[2] == '/'))
-				m_type = DOS;
-		else if (path.c_str()[0] == FTP_MVS_DOUBLE_QUOTE && path.Last() == FTP_MVS_DOUBLE_QUOTE)
+		else if (path.size() >= 3 &&
+			((path[0] >= 'A' && path[0] <= 'Z') || (path[0] >= 'a' && path[0] <= 'z')) &&
+			path[1] == ':' && (path[2] == '\\' || path[2] == '/'))
+		{
+			m_type = DOS;
+		}
+		else if (path[0] == FTP_MVS_DOUBLE_QUOTE && path.back() == FTP_MVS_DOUBLE_QUOTE) {
 			m_type = MVS;
-		else if (path[0] == ':' && (pos1 = path.Mid(1).Find(':')) > 0) {
-			int slash = path.Find('/');
-			if (slash == -1 || slash > pos1)
-				m_type = VXWORKS;
 		}
-		else if (path[0] == '\\')
+		else if (path[0] == ':' && (pos1 = path.find(':'), 2) != std::wstring::npos) {
+			size_t slash = path.find('/');
+			if (slash == std::wstring::npos || slash > pos1) {
+				m_type = VXWORKS;
+			}
+		}
+		else if (path[0] == '\\') {
 			m_type = DOS_VIRTUAL;
+		}
 
-		if (m_type == DEFAULT)
+		if (m_type == DEFAULT) {
 			m_type = UNIX;
+		}
 	}
 
 	m_data.clear();
 
-	if (!ChangePath(path, isFile))
+	if (!ChangePath(path, isFile)) {
 		return false;
+	}
 
-	if (isFile)
+	if (isFile) {
 		newPath = path;
+	}
 	return true;
 }
 
@@ -456,13 +466,13 @@ bool CServerPath::IsParentOf(const CServerPath &path, bool cmpNoCase) const
 	return path.IsSubdirOf(*this, cmpNoCase);
 }
 
-bool CServerPath::ChangePath(wxString const& subdir)
+bool CServerPath::ChangePath(std::wstring const& subdir)
 {
-	wxString subdir2 = subdir;
+	std::wstring subdir2 = subdir;
 	return ChangePath(subdir2, false);
 }
 
-bool CServerPath::ChangePath(wxString &subdir, bool isFile)
+bool CServerPath::ChangePath(std::wstring &subdir, bool isFile)
 {
 	bool ret = DoChangePath(subdir, isFile);
 	if (!ret) {
@@ -472,7 +482,7 @@ bool CServerPath::ChangePath(wxString &subdir, bool isFile)
 	return ret;
 }
 
-bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
+bool CServerPath::DoChangePath(std::wstring &subdir, bool isFile)
 {
 	wxString dir = subdir;
 	wxString file;
@@ -722,7 +732,7 @@ bool CServerPath::DoChangePath(wxString &subdir, bool isFile)
 			if (file == _T("..") || file == _T("."))
 				return false;
 		}
-		subdir = file;
+		subdir = file.ToStdWstring();
 	}
 
 	return true;

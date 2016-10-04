@@ -1257,8 +1257,9 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		}
 		else {
 			wxString localFile = CQueueView::ReplaceInvalidCharacters(name);
-			if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
+			if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION)) {
 				localFile = StripVMSRevision(localFile);
+			}
 			m_pQueue->QueueFile(queue_only, true,
 				name, (name == localFile) ? wxString() : localFile,
 				local_parent, m_pDirectoryListing->path, *pServer, entry.size);
@@ -1332,7 +1333,7 @@ CServerPath CRemoteListView::MenuMkdir()
 	}
 
 	path = m_pDirectoryListing->path;
-	if (!path.ChangePath(dlg.GetValue())) {
+	if (!path.ChangePath(dlg.GetValue().ToStdWstring())) {
 		wxBell();
 		return CServerPath();
 	}
@@ -1594,7 +1595,7 @@ bool CRemoteListView::OnAcceptRename(const wxListEvent& event)
 	std::wstring newFile = event.GetLabel().ToStdWstring();
 
 	CServerPath newPath = m_pDirectoryListing->path;
-	if (!newPath.ChangePath(wxString(newFile), true)) {
+	if (!newPath.ChangePath(newFile, true)) {
 		wxMessageBoxEx(_("Filename invalid"), _("Cannot rename file"), wxICON_EXCLAMATION);
 		return false;
 	}
