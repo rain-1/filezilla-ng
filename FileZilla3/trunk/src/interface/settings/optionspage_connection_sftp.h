@@ -16,13 +16,12 @@ public:
 protected:
 	CFZPuttyGenInterface* m_pFzpg;
 
-	bool AddKey(wxString keyFile, bool silent);
-	bool KeyFileExists(const wxString& keyFile);
+	bool AddKey(std::wstring keyFile, bool silent);
+	bool KeyFileExists(std::wstring const& keyFile);
 
 	void SetCtrlState();
 
 	DECLARE_EVENT_TABLE()
-	void OnEndProcess(wxProcessEvent& event);
 	void OnAdd(wxCommandEvent& event);
 	void OnRemove(wxCommandEvent& event);
 	void OnSelChanged(wxListEvent& event);
