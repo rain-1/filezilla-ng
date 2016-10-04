@@ -510,7 +510,7 @@ void CServerPathTest::testChangePath()
 	CPPUNIT_ASSERT(unix2.ChangePath(_T("../../baz")) && unix2 == unix3);
 	CPPUNIT_ASSERT(unix3.ChangePath(_T("/foo/bar/baz")) && unix3 == unix4);
 	CPPUNIT_ASSERT(unix3.ChangePath(_T(".")) && unix3 == unix4);
-	wxString sub = _T("../../bar");
+	std::wstring sub = L"../../bar";
 	CPPUNIT_ASSERT(unix4.ChangePath(sub, true) && unix4 == unix5 && sub == _T("bar"));
 	sub = _T("bar/");
 	CPPUNIT_ASSERT(!unix4.ChangePath(sub, true));
