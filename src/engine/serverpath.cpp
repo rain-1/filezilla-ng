@@ -786,43 +786,47 @@ bool CServerPath::operator<(const CServerPath &op) const
 	return iter2 != op.m_data->m_segments.end();
 }
 
-wxString CServerPath::FormatFilename(const wxString &filename, bool omitPath /*=false*/) const
+std::wstring CServerPath::FormatFilename(std::wstring const& filename, bool omitPath) const
 {
-	if (empty())
+	if (empty() || filename.empty()) {
 		return filename;
+	}
 
-	if (filename.empty())
-		return wxString();
-
-	if (omitPath && (!traits[m_type].prefixmode || (m_data->m_prefix && *m_data->m_prefix == _T("."))))
+	if (omitPath && (!traits[m_type].prefixmode || (m_data->m_prefix && *m_data->m_prefix == L"."))) {
 		return filename;
+	}
 
-	wxString result = GetPath();
-	if (traits[m_type].left_enclosure && traits[m_type].filename_inside_enclosure)
-		result.RemoveLast();
+	std::wstring result = GetPath().ToStdWstring();
+	if (traits[m_type].left_enclosure && traits[m_type].filename_inside_enclosure) {
+		result.pop_back();
+	}
 
-	switch (m_type)
-	{
+	switch (m_type) {
 		case VXWORKS:
-			if (!result.empty() && !wxString(traits[m_type].separators).Contains(result.Last()) && !m_data->m_segments.empty())
+			if (!result.empty() && !IsSeparator(result.back()) && !m_data->m_segments.empty()) {
 				result += traits[m_type].separators[0];
+			}
 			break;
 		case VMS:
 		case MVS:
 			break;
 		default:
-			if (!result.empty() && !wxString(traits[m_type].separators).Contains(result.Last()))
+			if (!result.empty() && !IsSeparator(result.back())) {
 				result += traits[m_type].separators[0];
+			}
 			break;
 	}
 
-	if (traits[m_type].prefixmode == 1 && !m_data->m_prefix)
-		result += _T("(") + filename + _T(")");
-	else
+	if (traits[m_type].prefixmode == 1 && !m_data->m_prefix) {
+		result += L"(" + filename + L")";
+	}
+	else {
 		result += filename;
+	}
 
-	if (traits[m_type].left_enclosure && traits[m_type].filename_inside_enclosure)
+	if (traits[m_type].left_enclosure && traits[m_type].filename_inside_enclosure) {
 		result += traits[m_type].right_enclosure;
+	}
 
 	return result;
 }
@@ -1037,4 +1041,15 @@ void CServerPath::EscapeSeparators(ServerType type, wxString& subdir)
 size_t CServerPath::SegmentCount() const
 {
 	return empty() ? 0 : m_data->m_segments.size();
+}
+
+bool CServerPath::IsSeparator(wchar_t c) const
+{
+	for (wchar_t const* ref = traits[m_type].separators; *ref; ++ref) {
+		if (*ref == c) {
+			return true;
+		}
+	}
+
+	return false;
 }

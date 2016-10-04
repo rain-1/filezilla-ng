@@ -111,8 +111,8 @@ bool CMkdirCommand::valid() const
 	return !GetPath().empty() && GetPath().HasParent();
 }
 
-CRenameCommand::CRenameCommand(const CServerPath& fromPath, const wxString& fromFile,
-							   const CServerPath& toPath, const wxString& toFile)
+CRenameCommand::CRenameCommand(CServerPath const& fromPath, std::wstring const& fromFile,
+							   CServerPath const& toPath, std::wstring const& toFile)
 	: m_fromPath(fromPath)
 	, m_toPath(toPath)
 	, m_fromFile(fromFile)
@@ -124,7 +124,7 @@ bool CRenameCommand::valid() const
 	return !GetFromPath().empty() && !GetToPath().empty() && !GetFromFile().empty() && !GetToFile().empty();
 }
 
-CChmodCommand::CChmodCommand(const CServerPath& path, const wxString& file, const wxString& permission)
+CChmodCommand::CChmodCommand(CServerPath const& path, std::wstring const& file, std::wstring const& permission)
 	: m_path(path)
 	, m_file(file)
 	, m_permission(permission)

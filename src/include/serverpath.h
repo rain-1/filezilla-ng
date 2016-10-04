@@ -62,7 +62,7 @@ public:
 
 	// omitPath is just a hint. For example dataset member names on MVS servers
 	// always use absolute filenames including the full path
-	wxString FormatFilename(const wxString &filename, bool omitPath = false) const;
+	std::wstring FormatFilename(std::wstring const& filename, bool omitPath = false) const;
 
 	// Returns identity on all but VMS. On VMS it escapes dots
 	wxString FormatSubdir(const wxString &subdir) const;
@@ -71,6 +71,8 @@ public:
 
 	size_t SegmentCount() const;
 private:
+	bool IsSeparator(wchar_t c) const;
+
 	bool DoSetSafePath(const wxString& path);
 	bool DoChangePath(wxString &subdir, bool isFile);
 

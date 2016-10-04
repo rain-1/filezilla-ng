@@ -365,7 +365,7 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			{
 				char permissions[9];
 				bool res = m_pChmodDlg->ConvertPermissions(*entry.permissions, permissions);
-				wxString newPerms = m_pChmodDlg->GetPermissions(res ? permissions : 0, entry.is_dir());
+				std::wstring newPerms = m_pChmodDlg->GetPermissions(res ? permissions : 0, entry.is_dir()).ToStdWstring();
 				m_state.m_pCommandQueue->ProcessCommand(new CChmodCommand(pDirectoryListing->path, entry.name, newPerms), CCommandQueue::recursiveOperation);
 			}
 		}

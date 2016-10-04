@@ -2203,7 +2203,7 @@ int CFtpControlSocket::FileTransferParseResponse()
 		if (code != 2 && code != 3) {
 			if (CServerCapabilities::GetCapability(*m_pCurrentServer, size_command) == yes ||
 				!m_Response.Mid(4).CmpNoCase(_T("file not found")) ||
-				(pData->remotePath.FormatFilename(pData->remoteFile).Lower().Find(_T("file not found")) == -1 &&
+				(wxString(pData->remotePath.FormatFilename(pData->remoteFile)).Lower().Find(_T("file not found")) == -1 &&
 				 m_Response.Lower().Find(_T("file not found")) != -1))
 			{
 				// Server supports SIZE command but command failed. Most likely MDTM will fail as well, so
@@ -2904,26 +2904,27 @@ int CFtpControlSocket::DeleteSend()
 	}
 	CFtpDeleteOpData *pData = static_cast<CFtpDeleteOpData *>(m_pCurOpData);
 
-	const wxString& file = pData->files.front();
+	std::wstring const& file = pData->files.front();
 	if (file.empty()) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty filename"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	wxString filename = pData->path.FormatFilename(file, pData->omitPath);
+	std::wstring filename = pData->path.FormatFilename(file, pData->omitPath);
 	if (filename.empty()) {
 		LogMessage(MessageType::Error, _("Filename cannot be constructed for directory %s and filename %s"), pData->path.GetPath(), file);
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
-	if (pData->m_time.empty())
+	if (pData->m_time.empty()) {
 		pData->m_time = fz::datetime::now();
+	}
 
 	engine_.GetDirectoryCache().InvalidateFile(*m_pCurrentServer, pData->path, file);
 
-	if (!SendCommand(_T("DELE ") + filename))
+	if (!SendCommand(L"DELE " + filename))
 		return FZ_REPLY_ERROR;
 
 	return FZ_REPLY_WOULDBLOCK;
@@ -3307,7 +3308,7 @@ int CFtpControlSocket::MkdirSend()
 class CFtpRenameOpData : public COpData
 {
 public:
-	CFtpRenameOpData(const CRenameCommand& command)
+	CFtpRenameOpData(CRenameCommand const& command)
 		: COpData(Command::rename), m_cmd(command)
 	{
 		m_useAbsolute = false;
@@ -3326,7 +3327,7 @@ enum renameStates
 	rename_rnto
 };
 
-int CFtpControlSocket::Rename(const CRenameCommand& command)
+int CFtpControlSocket::Rename(CRenameCommand const& command)
 {
 	if (m_pCurOpData)
 	{
@@ -3474,10 +3475,9 @@ enum chmodStates
 	chmod_chmod
 };
 
-int CFtpControlSocket::Chmod(const CChmodCommand& command)
+int CFtpControlSocket::Chmod(CChmodCommand const& command)
 {
-	if (m_pCurOpData)
-	{
+	if (m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("m_pCurOpData not empty"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;

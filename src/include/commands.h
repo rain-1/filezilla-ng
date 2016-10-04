@@ -235,21 +235,21 @@ protected:
 class CRenameCommand final : public CCommandHelper<CRenameCommand, Command::rename>
 {
 public:
-	CRenameCommand(CServerPath const& fromPath, wxString const& fromFile,
-				   CServerPath const& toPath, wxString const& toFile);
+	CRenameCommand(CServerPath const& fromPath, std::wstring const& fromFile,
+				   CServerPath const& toPath, std::wstring const& toFile);
 
 	CServerPath GetFromPath() const { return m_fromPath; }
 	CServerPath GetToPath() const { return m_toPath; }
-	wxString GetFromFile() const { return m_fromFile; }
-	wxString GetToFile() const { return m_toFile; }
+	std::wstring GetFromFile() const { return m_fromFile; }
+	std::wstring GetToFile() const { return m_toFile; }
 
 	bool valid() const;
 
 protected:
 	CServerPath const m_fromPath;
 	CServerPath const m_toPath;
-	wxString const m_fromFile;
-	wxString const m_toFile;
+	std::wstring const m_fromFile;
+	std::wstring const m_toFile;
 };
 
 class CChmodCommand final : public CCommandHelper<CChmodCommand, Command::chmod>
@@ -258,18 +258,18 @@ public:
 	// The permission string should be given in a format understandable by the server.
 	// Most likely it's the defaut octal representation used by the unix chmod command,
 	// i.e. chmod 755 foo.bar
-	CChmodCommand(const CServerPath& path, const wxString& file, const wxString& permission);
+	CChmodCommand(CServerPath const& path, std::wstring const& file, std::wstring const& permission);
 
 	CServerPath GetPath() const { return m_path; }
-	wxString GetFile() const { return m_file; }
-	wxString GetPermission() const { return m_permission; }
+	std::wstring GetFile() const { return m_file; }
+	std::wstring GetPermission() const { return m_permission; }
 
 	bool valid() const;
 
 protected:
 	CServerPath const m_path;
-	wxString const m_file;
-	wxString const m_permission;
+	std::wstring const m_file;
+	std::wstring const m_permission;
 };
 
 #endif
