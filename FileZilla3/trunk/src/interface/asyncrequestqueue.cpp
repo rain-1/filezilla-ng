@@ -281,8 +281,10 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 			wxString defaultName;
 			if (notification.download) {
 				msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), notification.localFile);
-				wxFileName fn = notification.localFile;
-				defaultName = fn.GetFullName();
+				CLocalPath fn(notification.localFile, &defaultName);
+				if (fn.empty() || defaultName.empty()) {
+					defaultName = _("new name");
+				}
 			}
 			else {
 				wxString fullName = notification.remotePath.GetPath() + notification.remoteFile;
