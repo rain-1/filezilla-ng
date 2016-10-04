@@ -810,13 +810,13 @@ enum listStates
 	list_mtime
 };
 
-int CSftpControlSocket::List(CServerPath path /*=CServerPath()*/, wxString subDir /*=_T("")*/, int flags /*=0*/)
+int CSftpControlSocket::List(CServerPath path, wxString subDir, int flags)
 {
 	CServerPath newPath = m_CurrentPath;
 	if (!path.empty()) {
 		newPath = path;
 	}
-	if (!newPath.ChangePath(subDir)) {
+	if (!newPath.ChangePath(subDir.ToStdWstring())) {
 		newPath.clear();
 	}
 

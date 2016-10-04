@@ -1257,7 +1257,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 		return CServerPath();
 
 	newPath = path;
-	if (!newPath.ChangePath(dlg.GetValue())) {
+	if (!newPath.ChangePath(dlg.GetValue().ToStdWstring())) {
 		wxBell();
 		return CServerPath();
 	}

@@ -20,7 +20,7 @@ class CServerPath final
 public:
 	CServerPath();
 	explicit CServerPath(wxString const& path, ServerType type = DEFAULT);
-	CServerPath(CServerPath const& path, wxString subdir); // Ignores parent on absolute subdir
+	CServerPath(CServerPath const& path, std::wstring subdir); // Ignores parent on absolute subdir
 	CServerPath(CServerPath const& path) = default;
 	CServerPath(CServerPath && path) noexcept = default;
 
@@ -30,14 +30,14 @@ public:
 	bool empty() const { return !m_data; }
 	void clear();
 
-	bool SetPath(wxString newPath);
-	bool SetPath(wxString &newPath, bool isFile);
+	bool SetPath(std::wstring newPath);
+	bool SetPath(std::wstring& newPath, bool isFile);
 	bool SetSafePath(const wxString& path);
 
 	// If ChangePath returns false, the object will be left
 	// empty.
-	bool ChangePath(wxString const& subdir);
-	bool ChangePath(wxString &subdir, bool isFile);
+	bool ChangePath(std::wstring const& subdir);
+	bool ChangePath(std::wstring &subdir, bool isFile);
 
 	wxString GetPath() const;
 	wxString GetSafePath() const;
@@ -74,7 +74,7 @@ private:
 	bool IsSeparator(wchar_t c) const;
 
 	bool DoSetSafePath(const wxString& path);
-	bool DoChangePath(wxString &subdir, bool isFile);
+	bool DoChangePath(std::wstring &subdir, bool isFile);
 
 	ServerType m_type;
 

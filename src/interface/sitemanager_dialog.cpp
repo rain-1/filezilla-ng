@@ -1089,7 +1089,7 @@ bool CSiteManagerDialog::Verify()
 
 			CServerPath remotePath;
 			remotePath.SetType(CServer::GetServerTypeFromName(serverType));
-			if (!remotePath.SetPath(remotePathRaw)) {
+			if (!remotePath.SetPath(remotePathRaw.ToStdWstring())) {
 				XRCCTRL(*this, "ID_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxMessageBoxEx(_("Default remote path cannot be parsed. Make sure it is a valid absolute path for the selected server type."), _("Site Manager - Invalid data"), wxICON_EXCLAMATION, this);
 				return false;
@@ -1119,7 +1119,7 @@ bool CSiteManagerDialog::Verify()
 		if (!remotePathRaw.empty()) {
 			CServerPath remotePath;
 			remotePath.SetType(pServer->m_site->m_server.GetType());
-			if (!remotePath.SetPath(remotePathRaw)) {
+			if (!remotePath.SetPath(remotePathRaw.ToStdWstring())) {
 				XRCCTRL(*this, "ID_BOOKMARK_REMOTEDIR", wxTextCtrl)->SetFocus();
 				wxString msg;
 				if (pServer->m_site->m_server.GetType() != DEFAULT)
@@ -1366,7 +1366,7 @@ bool CSiteManagerDialog::UpdateBookmark(Bookmark &bookmark, const CServer& serve
 	bookmark.m_localDir = xrc_call(*this, "ID_BOOKMARK_LOCALDIR", &wxTextCtrl::GetValue);
 	bookmark.m_remoteDir = CServerPath();
 	bookmark.m_remoteDir.SetType(server.GetType());
-	bookmark.m_remoteDir.SetPath(xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::GetValue));
+	bookmark.m_remoteDir.SetPath(xrc_call(*this, "ID_BOOKMARK_REMOTEDIR", &wxTextCtrl::GetValue).ToStdWstring());
 	bookmark.m_sync = xrc_call(*this, "ID_BOOKMARK_SYNC", &wxCheckBox::GetValue);
 	bookmark.m_comparison = xrc_call(*this, "ID_BOOKMARK_COMPARISON", &wxCheckBox::GetValue);
 
@@ -1409,7 +1409,7 @@ bool CSiteManagerDialog::UpdateServer(Site &server, const wxString &name)
 	server.m_default_bookmark.m_localDir = xrc_call(*this, "ID_LOCALDIR", &wxTextCtrl::GetValue);
 	server.m_default_bookmark.m_remoteDir = CServerPath();
 	server.m_default_bookmark.m_remoteDir.SetType(server.m_server.GetType());
-	server.m_default_bookmark.m_remoteDir.SetPath(xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::GetValue));
+	server.m_default_bookmark.m_remoteDir.SetPath(xrc_call(*this, "ID_REMOTEDIR", &wxTextCtrl::GetValue).ToStdWstring());
 	server.m_default_bookmark.m_sync = xrc_call(*this, "ID_SYNC", &wxCheckBox::GetValue);
 	server.m_default_bookmark.m_comparison = xrc_call(*this, "ID_COMPARISON", &wxCheckBox::GetValue);
 
