@@ -312,7 +312,7 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 	 */
 
 #ifdef __WXMAC__
-	CLocalPath path(wxStandardPaths::Get().GetDataDir());
+	CLocalPath path(wxStandardPaths::Get().GetDataDir().ToStdWstring());
 	if (FileExists(path.GetPath() + fileToFind))
 		return path;
 
