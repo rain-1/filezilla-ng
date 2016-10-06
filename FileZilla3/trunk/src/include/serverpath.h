@@ -1,5 +1,5 @@
-#ifndef __SERVERPATH_H__
-#define __SERVERPATH_H__
+#ifndef FILEZILLA_ENGINE_SERVERPATH_HEADER
+#define FILEZILLA_ENGINE_SERVERPATH_HEADER
 
 #include <libfilezilla/optional.hpp>
 #include <libfilezilla/shared.hpp>
@@ -19,7 +19,7 @@ class CServerPath final
 {
 public:
 	CServerPath();
-	explicit CServerPath(wxString const& path, ServerType type = DEFAULT);
+	explicit CServerPath(std::wstring const& path, ServerType type = DEFAULT);
 	CServerPath(CServerPath const& path, std::wstring subdir); // Ignores parent on absolute subdir
 	CServerPath(CServerPath const& path) = default;
 	CServerPath(CServerPath && path) noexcept = default;
@@ -32,48 +32,48 @@ public:
 
 	bool SetPath(std::wstring newPath);
 	bool SetPath(std::wstring& newPath, bool isFile);
-	bool SetSafePath(const wxString& path);
+	bool SetSafePath(std::wstring const& path);
 
 	// If ChangePath returns false, the object will be left
 	// empty.
 	bool ChangePath(std::wstring const& subdir);
 	bool ChangePath(std::wstring &subdir, bool isFile);
 
-	wxString GetPath() const;
-	wxString GetSafePath() const;
+	std::wstring GetPath() const;
+	std::wstring GetSafePath() const;
 
 	bool HasParent() const;
 	CServerPath GetParent() const;
-	wxString GetLastSegment() const;
+	std::wstring GetLastSegment() const;
 
-	CServerPath GetCommonParent(const CServerPath& path) const;
+	CServerPath GetCommonParent(CServerPath const& path) const;
 
 	bool SetType(ServerType type);
 	ServerType GetType() const;
 
-	bool IsSubdirOf(const CServerPath &path, bool cmpNoCase) const;
-	bool IsParentOf(const CServerPath &path, bool cmpNoCase) const;
+	bool IsSubdirOf(CServerPath const& path, bool cmpNoCase) const;
+	bool IsParentOf(CServerPath const& path, bool cmpNoCase) const;
 
-	bool operator==(const CServerPath &op) const;
-	bool operator!=(const CServerPath &op) const;
-	bool operator<(const CServerPath &op) const;
+	bool operator==(CServerPath const& op) const;
+	bool operator!=(CServerPath const& op) const;
+	bool operator<(CServerPath const& op) const;
 
-	int CmpNoCase(const CServerPath &op) const;
+	int CmpNoCase(CServerPath const& op) const;
 
 	// omitPath is just a hint. For example dataset member names on MVS servers
 	// always use absolute filenames including the full path
 	std::wstring FormatFilename(std::wstring const& filename, bool omitPath = false) const;
 
 	// Returns identity on all but VMS. On VMS it escapes dots
-	wxString FormatSubdir(const wxString &subdir) const;
+	std::wstring FormatSubdir(std::wstring const& subdir) const;
 
-	bool AddSegment(const wxString& segment);
+	bool AddSegment(std::wstring const& segment);
 
 	size_t SegmentCount() const;
 private:
 	bool IsSeparator(wchar_t c) const;
 
-	bool DoSetSafePath(const wxString& path);
+	bool DoSetSafePath(std::wstring const& path);
 	bool DoChangePath(std::wstring &subdir, bool isFile);
 
 	ServerType m_type;
@@ -84,9 +84,9 @@ private:
 
 	bool Segmentize(std::wstring const& str, tSegmentList& segments);
 	bool SegmentizeAddSegment(std::wstring & segment, tSegmentList& segments, bool& append);
-	bool ExtractFile(wxString& dir, wxString& file);
+	bool ExtractFile(std::wstring& dir, std::wstring& file);
 
-	static void EscapeSeparators(ServerType type, wxString& subdir);
+	static void EscapeSeparators(ServerType type, std::wstring& subdir);
 
 	fz::shared_optional<CServerPathData> m_data;
 };

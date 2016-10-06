@@ -1560,15 +1560,16 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 			for (auto file = xServer.child("File"); file; file = file.next_sibling("File")) {
 				wxString localFile = GetTextElement(file, "LocalFile");
 				wxString remoteFile = GetTextElement(file, "RemoteFile");
-				wxString safeRemotePath = GetTextElement(file, "RemotePath");
+				std::wstring safeRemotePath = GetTextElement(file, "RemotePath").ToStdWstring();
 				bool download = GetTextElementInt(file, "Download") != 0;
 				int64_t size = GetTextElementInt(file, "Size", -1);
 				unsigned char errorCount = static_cast<unsigned char>(GetTextElementInt(file, "ErrorCount"));
 				unsigned int priority = GetTextElementInt(file, "Priority", static_cast<unsigned int>(QueuePriority::normal));
 
 				int dataType = GetTextElementInt(file, "DataType", -1);
-				if (dataType == -1)
+				if (dataType == -1) {
 					dataType = GetTextElementInt(file, "TransferMode", 1);
+				}
 				bool binary = dataType != 0;
 				int overwrite_action = GetTextElementInt(file, "OverwriteAction", CFileExistsNotification::unknown);
 
@@ -1579,15 +1580,18 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 					wxString localFileName;
 					CLocalPath localPath(localFile, &localFileName);
 
-					if (localFileName.empty())
+					if (localFileName.empty()) {
 						continue;
+					}
 
 					// CServerPath and wxString are reference counted.
 					// Save some memory here by re-using the old copy
-					if (localPath != previousLocalPath)
+					if (localPath != previousLocalPath) {
 						previousLocalPath = localPath;
-					if (previousRemotePath != remotePath)
+					}
+					if (previousRemotePath != remotePath) {
 						previousRemotePath = remotePath;
+					}
 
 					CFileItem* fileItem = new CFileItem(pServerItem, true, download,
 						download ? remoteFile : localFileName,
@@ -1598,8 +1602,9 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 					fileItem->m_errorCount = errorCount;
 					InsertItem(pServerItem, fileItem);
 
-					if (overwrite_action > 0 && overwrite_action < CFileExistsNotification::ACTION_COUNT)
+					if (overwrite_action > 0 && overwrite_action < CFileExistsNotification::ACTION_COUNT) {
 						fileItem->m_defaultFileExistsAction = (CFileExistsNotification::OverwriteAction)overwrite_action;
+					}
 				}
 			}
 			for (auto folder = xServer.child("Folder"); folder; folder = folder.next_sibling("Folder")) {
@@ -1608,20 +1613,22 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 				bool download = GetTextElementInt(folder, "Download") != 0;
 				if (download) {
 					wxString localFile = GetTextElement(folder, "LocalFile");
-					if (localFile.empty())
+					if (localFile.empty()) {
 						continue;
+					}
 					folderItem = new CFolderItem(pServerItem, true, CLocalPath(localFile));
 				}
-				else
-				{
+				else {
 					wxString remoteFile = GetTextElement(folder, "RemoteFile");
-					wxString safeRemotePath = GetTextElement(folder, "RemotePath");
-					if (safeRemotePath.empty())
+					std::wstring safeRemotePath = GetTextElement(folder, "RemotePath").ToStdWstring();
+					if (safeRemotePath.empty()) {
 						continue;
+					}
 
 					CServerPath remotePath;
-					if (!remotePath.SetSafePath(safeRemotePath))
+					if (!remotePath.SetSafePath(safeRemotePath)) {
 						continue;
+					}
 					folderItem = new CFolderItem(pServerItem, true, remotePath, remoteFile);
 				}
 
@@ -1640,8 +1647,9 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 				m_serverList.pop_back();
 				delete pServerItem;
 			}
-			else if (updateSelections)
+			else if (updateSelections) {
 				CommitChanges();
+			}
 		}
 
 		xServer = xServer.next_sibling("Server");
@@ -1652,14 +1660,16 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 		m_insertionCount = 0;
 		CommitChanges();
 	}
-	else
+	else {
 		RefreshListOnly();
+	}
 }
 
 void CQueueView::OnPostScroll()
 {
-	if (GetTopItem() != m_lastTopItem)
+	if (GetTopItem() != m_lastTopItem) {
 		UpdateStatusLinePositions();
+	}
 }
 
 void CQueueView::OnContextMenu(wxContextMenuEvent&)

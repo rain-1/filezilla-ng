@@ -286,8 +286,9 @@ void CManualTransfer::OnServerTypeChanged(wxCommandEvent& event)
 
 void CManualTransfer::OnOK(wxCommandEvent&)
 {
-	if (!UpdateServer())
+	if (!UpdateServer()) {
 		return;
+	}
 
 	bool download = xrc_call(*this, "ID_DOWNLOAD", &wxRadioButton::GetValue);
 
@@ -321,7 +322,7 @@ void CManualTransfer::OnOK(wxCommandEvent&)
 		return;
 	}
 
-	wxString remote_path_str = xrc_call(*this, "ID_REMOTEPATH", &wxTextCtrl::GetValue);
+	std::wstring remote_path_str = xrc_call(*this, "ID_REMOTEPATH", &wxTextCtrl::GetValue).ToStdWstring();
 	if (remote_path_str.empty()) {
 		wxMessageBoxEx(_("You need to specify a remote path."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
@@ -336,12 +337,15 @@ void CManualTransfer::OnOK(wxCommandEvent&)
 	int old_data_type = COptions::Get()->GetOptionVal(OPTION_ASCIIBINARY);
 
 	// Set data type for the file to add
-	if (xrc_call(*this, "ID_TYPE_ASCII", &wxRadioButton::GetValue))
+	if (xrc_call(*this, "ID_TYPE_ASCII", &wxRadioButton::GetValue)) {
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 1);
-	else if (xrc_call(*this, "ID_TYPE_BINARY", &wxRadioButton::GetValue))
+	}
+	else if (xrc_call(*this, "ID_TYPE_BINARY", &wxRadioButton::GetValue)) {
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 2);
-	else
+	}
+	else {
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 0);
+	}
 
 	wxString name;
 	CLocalPath localPath(local_file, &name);

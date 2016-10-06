@@ -115,30 +115,32 @@ public:
 		}
 
 		// Find drop directory (if it exists)
-		wxString subdir;
+		std::wstring subdir;
 		int flags = 0;
 		int hit = m_pRemoteListView->HitTest(wxPoint(x, y), flags, 0);
-		if (hit != -1 && (flags & wxLIST_HITTEST_ONITEM))
-		{
+		if (hit != -1 && (flags & wxLIST_HITTEST_ONITEM)) {
 			int index = m_pRemoteListView->GetItemIndex(hit);
 			if (index != -1 && m_pRemoteListView->m_fileData[index].comparison_flags != CComparableListing::fill)
 			{
-				if (index == (int)m_pRemoteListView->m_pDirectoryListing->GetCount())
+				if (index == (int)m_pRemoteListView->m_pDirectoryListing->GetCount()) {
 					subdir = _T("..");
-				else if ((*m_pRemoteListView->m_pDirectoryListing)[index].is_dir())
+				}
+				else if ((*m_pRemoteListView->m_pDirectoryListing)[index].is_dir()) {
 					subdir = (*m_pRemoteListView->m_pDirectoryListing)[index].name;
+				}
 			}
 		}
 
 		// Get target path
 		CServerPath target = m_pRemoteListView->m_pDirectoryListing->path;
-		if (subdir == _T(".."))
-		{
-			if (target.HasParent())
+		if (subdir == _T("..")) {
+			if (target.HasParent()) {
 				target = target.GetParent();
+			}
 		}
-		else if (!subdir.empty())
+		else if (!subdir.empty()) {
 			target.AddSegment(subdir);
+		}
 
 		// Make sure target path is valid
 		if (target == m_pRemoteDataObject->GetServerPath())
@@ -1242,8 +1244,8 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 		if (m_fileData[index].comparison_flags == fill)
 			continue;
 
-		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		const wxString& name = entry.name;
+		CDirentry const& entry = (*m_pDirectoryListing)[index];
+		std::wstring const& name = entry.name;
 
 		if (entry.is_dir()) {
 			if (!idle)
@@ -1309,7 +1311,7 @@ CServerPath CRemoteListView::MenuMkdir()
 	// Append a long segment which does (most likely) not exist in the path and
 	// replace it with "New directory" later. This way we get the exact position of
 	// "New directory" and can preselect it in the dialog.
-	wxString tmpName = _T("25CF809E56B343b5A12D1F0466E3B37A49A9087FDCF8412AA9AF8D1E849D01CF");
+	std::wstring tmpName = _T("25CF809E56B343b5A12D1F0466E3B37A49A9087FDCF8412AA9AF8D1E849D01CF");
 	if (path.AddSegment(tmpName)) {
 		wxString pathName = path.GetPath();
 		int pos = pathName.Find(tmpName);

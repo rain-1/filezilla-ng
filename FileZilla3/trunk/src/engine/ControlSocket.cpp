@@ -1348,7 +1348,7 @@ int CControlSocket::Delete(const CServerPath&, std::deque<std::wstring>&&)
 	return FZ_REPLY_NOTSUPPORTED;
 }
 
-int CControlSocket::RemoveDir(const CServerPath&, const wxString&)
+int CControlSocket::RemoveDir(CServerPath const&, std::wstring const&)
 {
 	return FZ_REPLY_NOTSUPPORTED;
 }

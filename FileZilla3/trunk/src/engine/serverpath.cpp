@@ -1,17 +1,17 @@
 #include <filezilla.h>
 #include "serverpath.h"
 
-#define FTP_MVS_DOUBLE_QUOTE (wxChar)0xDC
+#define FTP_MVS_DOUBLE_QUOTE (wchar_t)0xDC
 
 struct CServerTypeTraits
 {
-	const wxChar* separators;
+	wchar_t const* separators;
 	bool has_root; // Root = simply separator nothing else
-	wxChar left_enclosure; // Example: VMS paths: [FOO.BAR]
-	wxChar right_enclosure;
+	wchar_t left_enclosure; // Example: VMS paths: [FOO.BAR]
+	wchar_t right_enclosure;
 	bool filename_inside_enclosure; // MVS
 	int prefixmode; //0 = normal prefix, 1 = suffix
-	wxChar separatorEscape;
+	wchar_t separatorEscape;
 	bool has_dots; // Special meaning for .. (parent) and . (self)
 	bool separator_after_prefix;
 };
@@ -30,13 +30,15 @@ static const CServerTypeTraits traits[SERVERTYPE_MAX] = {
 	{ _T("/\\"), false,    0,    0,    false, 0, 0,   true,  false } // DOS with forwardslashes
 };
 
-bool CServerPathData::operator==(const CServerPathData& cmp) const
+bool CServerPathData::operator==(CServerPathData const& cmp) const
 {
-	if (m_prefix != cmp.m_prefix)
+	if (m_prefix != cmp.m_prefix) {
 		return false;
+	}
 
-	if (m_segments != cmp.m_segments)
+	if (m_segments != cmp.m_segments) {
 		return false;
+	}
 
 	return true;
 }
@@ -59,10 +61,10 @@ CServerPath::CServerPath(CServerPath const& path, std::wstring subdir)
 	}
 }
 
-CServerPath::CServerPath(wxString const& path, ServerType type)
+CServerPath::CServerPath(std::wstring const& path, ServerType type)
 	: m_type(type)
 {
-	SetPath(path.ToStdWstring());
+	SetPath(path);
 }
 
 void CServerPath::clear()
@@ -131,49 +133,59 @@ bool CServerPath::SetPath(std::wstring &newPath, bool isFile)
 	return true;
 }
 
-wxString CServerPath::GetPath() const
+std::wstring CServerPath::GetPath() const
 {
-	if (empty())
-		return wxString();
+	if (empty()) {
+		return std::wstring();
+	}
 
-	wxString path;
+	std::wstring path;
 
-	if (!traits[m_type].prefixmode && m_data->m_prefix)
+	if (!traits[m_type].prefixmode && m_data->m_prefix) {
 		path = *m_data->m_prefix;
+	}
 
-	if (traits[m_type].left_enclosure != 0)
+	if (traits[m_type].left_enclosure != 0) {
 		path += traits[m_type].left_enclosure;
-	if (m_data->m_segments.empty() && (!traits[m_type].has_root || !m_data->m_prefix || traits[m_type].separator_after_prefix))
+	}
+	if (m_data->m_segments.empty() && (!traits[m_type].has_root || !m_data->m_prefix || traits[m_type].separator_after_prefix)) {
 		path += traits[m_type].separators[0];
+	}
 
 	for (auto iter = m_data->m_segments.cbegin(); iter != m_data->m_segments.cend(); ++iter) {
 		std::wstring const& segment = *iter;
-		if (iter != m_data->m_segments.cbegin())
+		if (iter != m_data->m_segments.cbegin()) {
 			path += traits[m_type].separators[0];
+		}
 		else if (traits[m_type].has_root) {
-			if (!m_data->m_prefix || traits[m_type].separator_after_prefix)
+			if (!m_data->m_prefix || traits[m_type].separator_after_prefix) {
 				path += traits[m_type].separators[0];
+			}
 		}
 
 		if (traits[m_type].separatorEscape) {
-			wxString tmp = segment;
+			std::wstring tmp = segment;
 			EscapeSeparators(m_type, tmp);
 			path += tmp;
 		}
-		else
+		else {
 			path += segment;
+		}
 	}
 
-	if (traits[m_type].prefixmode && m_data->m_prefix)
+	if (traits[m_type].prefixmode && m_data->m_prefix) {
 		path += *m_data->m_prefix;
+	}
 
-	if (traits[m_type].right_enclosure != 0)
+	if (traits[m_type].right_enclosure != 0) {
 		path += traits[m_type].right_enclosure;
+	}
 
 	// DOS is strange.
 	// C: is current working dir on drive C, C:\ the drive root.
-	if ((m_type == DOS || m_type == DOS_FWD_SLASHES) && m_data->m_segments.size() == 1)
+	if ((m_type == DOS || m_type == DOS_FWD_SLASHES) && m_data->m_segments.size() == 1) {
 		path += traits[m_type].separators[0];
+	}
 
 	return path;
 }
@@ -206,31 +218,32 @@ CServerPath CServerPath::GetParent() const
 	return parent;
 }
 
-wxString CServerPath::GetLastSegment() const
+std::wstring CServerPath::GetLastSegment() const
 {
-	if (empty() || !HasParent())
-		return wxString();
+	if (empty() || !HasParent()) {
+		return std::wstring();
+	}
 
-	if (!m_data->m_segments.empty())
+	if (!m_data->m_segments.empty()) {
 		return m_data->m_segments.back();
-	else
-		return wxString();
+	}
+	else {
+		return std::wstring();
+	}
 }
 
 // libc sprintf can be so slow at times...
-wxChar* fast_sprint_number(wxChar* s, size_t n)
+wchar_t* fast_sprint_number(wchar_t* s, size_t n)
 {
-	wxChar tmp[20]; // Long enough for 2^64-1
+	wchar_t tmp[20]; // Long enough for 2^64-1
 
-	wxChar* c = tmp;
-	do
-	{
+	wchar_t* c = tmp;
+	do {
 		*(c++) = n % 10 + '0';
 		n /= 10;
 	} while( n > 0 );
 
-	do
-	{
+	do {
 		*(s++) = *(--c);
 	} while (c != tmp);
 
@@ -239,10 +252,11 @@ wxChar* fast_sprint_number(wxChar* s, size_t n)
 
 #define tstrcpy wcscpy
 
-wxString CServerPath::GetSafePath() const
+std::wstring CServerPath::GetSafePath() const
 {
-	if (empty())
-		return wxString();
+	if (empty()) {
+		return std::wstring();
+	}
 
 	#define INTLENGTH 20 // 2^64 - 1
 
@@ -250,40 +264,39 @@ wxString CServerPath::GetSafePath() const
 		+ INTLENGTH; // Max length of prefix
 
 	len += m_data->m_prefix ? m_data->m_prefix->size() : 0;
-	for( auto const& segment : m_data->m_segments ) {
+	for (auto const& segment : m_data->m_segments) {
 		len += segment.size() + 2 + INTLENGTH;
 	}
 
-	wxString safepath;
-	{
-		wxStringBuffer start(safepath, len);
-		wxChar* t = start;
+	std::wstring safepath;
+	safepath.resize(len);
+	wchar_t * const start = &safepath[0];
+	wchar_t * t = &safepath[0];
 
-		t = fast_sprint_number(t, m_type);
+	t = fast_sprint_number(t, m_type);
+	*(t++) = ' ';
+	t = fast_sprint_number(t, m_data->m_prefix ? m_data->m_prefix->size() : 0);
+
+	if (m_data->m_prefix) {
 		*(t++) = ' ';
-		t = fast_sprint_number(t, m_data->m_prefix ? m_data->m_prefix->size() : 0);
-
-		if (m_data->m_prefix) {
-			*(t++) = ' ';
-			tstrcpy(t, m_data->m_prefix->c_str());
-			t += m_data->m_prefix->size();
-		}
-
-		for( auto const& segment : m_data->m_segments ) {
-			*(t++) = ' ';
-			t = fast_sprint_number(t, segment.size());
-			*(t++) = ' ';
-			tstrcpy(t, segment.c_str());
-			t += segment.size();
-		}
-		*t = 0;
+		tstrcpy(t, m_data->m_prefix->c_str());
+		t += m_data->m_prefix->size();
 	}
-	safepath.Shrink();
+
+	for (auto const& segment : m_data->m_segments) {
+		*(t++) = ' ';
+		t = fast_sprint_number(t, segment.size());
+		*(t++) = ' ';
+		tstrcpy(t, segment.c_str());
+		t += segment.size();
+	}
+	safepath.resize(t - start);
+	safepath.shrink_to_fit();
 
 	return safepath;
 }
 
-bool CServerPath::SetSafePath(const wxString& path)
+bool CServerPath::SetSafePath(std::wstring const& path)
 {
 	bool const ret = DoSetSafePath(path);
 	if (!ret) {
@@ -293,7 +306,7 @@ bool CServerPath::SetSafePath(const wxString& path)
 	return ret;
 }
 
-bool CServerPath::DoSetSafePath(const wxString& path)
+bool CServerPath::DoSetSafePath(std::wstring const& path)
 {
 	CServerPathData& data = m_data.get();
 	data.m_prefix.clear();
@@ -303,10 +316,10 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 	// Before the optimization this function was responsible for
 	// most CPU cycles used during loading of transfer queues
 	// from file
-	wxChar const* const begin = path.c_str();
-	wxChar const* const end = begin + path.size();
+	wchar_t const* const begin = path.c_str();
+	wchar_t const* const end = begin + path.size();
 	
-	wxChar const* p = begin;
+	wchar_t const* p = begin;
 
 	int type = 0;
 	do {
@@ -383,7 +396,7 @@ bool CServerPath::DoSetSafePath(const wxString& path)
 		if (segment_len > end - p) {
 			return false;
 		}
-		data.m_segments.emplace_back(wxString(p, p + segment_len));
+		data.m_segments.emplace_back(p, p + segment_len);
 
 		p += segment_len + 1;
 	}
@@ -484,14 +497,16 @@ bool CServerPath::ChangePath(std::wstring &subdir, bool isFile)
 
 bool CServerPath::DoChangePath(std::wstring &subdir, bool isFile)
 {
-	wxString dir = subdir;
-	wxString file;
+	std::wstring dir = subdir;
+	std::wstring file;
 
 	if (dir.empty()) {
-		if (empty() || isFile)
+		if (empty() || isFile) {
 			return false;
-		else
+		}
+		else {
 			return true;
+		}
 	}
 
 	bool const was_empty = empty();
@@ -501,238 +516,277 @@ bool CServerPath::DoChangePath(std::wstring &subdir, bool isFile)
 	{
 	case VMS:
 		{
-			int pos1 = dir.Find(traits[m_type].left_enclosure);
-			if (pos1 == -1)
-			{
-				int pos2 = dir.Find(traits[m_type].right_enclosure, true);
-				if (pos2 != -1)
+			size_t pos1 = dir.find(traits[m_type].left_enclosure);
+			if (pos1 == std::wstring::npos) {
+				size_t pos2 = dir.rfind(traits[m_type].right_enclosure);
+				if (pos2 != std::wstring::npos) {
 					return false;
+				}
 
-				if (isFile)
-				{
-					if (was_empty)
+				if (isFile) {
+					if (was_empty) {
 						return false;
+					}
 
 					file = dir;
 					break;
 				}
 			}
-			else
-			{
-				int pos2 = dir.Find(traits[m_type].right_enclosure, true);
-				if (pos2 == -1 || pos2 <= pos1 + 1)
+			else {
+				size_t pos2 = dir.rfind(traits[m_type].right_enclosure);
+				if (pos2 == std::wstring::npos || pos2 <= pos1 + 1) {
 					return false;
+				}
 
-				bool enclosure_is_last = static_cast<size_t>(pos2) == (dir.Length() - 1);
-				if (isFile == enclosure_is_last)
+				bool enclosure_is_last = pos2 == (dir.size() - 1);
+				if (isFile == enclosure_is_last) {
 					return false;
+				}
 
-				if (isFile)
-					file = dir.Mid(pos2 + 1);
-				dir = dir.Left(pos2);
+				if (isFile) {
+					file = dir.substr(pos2 + 1);
+				}
+				dir = dir.substr(0, pos2);
 
-				if (pos1)
-					data.m_prefix = fz::sparse_optional<std::wstring>(dir.Left(pos1).ToStdWstring());
-				dir = dir.Mid(pos1 + 1);
+				if (pos1) {
+					data.m_prefix = fz::sparse_optional<std::wstring>(dir.substr(0, pos1));
+				}
+				dir = dir.substr(pos1 + 1);
 
 				data.m_segments.clear();
 			}
 
-			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+			if (!Segmentize(dir, data.m_segments)) {
 				return false;
-			if (data.m_segments.empty() && was_empty)
+			}
+			if (data.m_segments.empty() && was_empty) {
 				return false;
+			}
 		}
 		break;
 	case DOS:
 	case DOS_FWD_SLASHES:
 		{
-			bool is_relative = false;
-			int sep = dir.find_first_of(traits[m_type].separators);
-			if (sep == -1)
-				sep = dir.Len();
-			int colon = dir.Find(':');
-			if (colon > 0 && colon == sep - 1)
-				is_relative = true;
+			bool is_absolute = true;
+			size_t sep = dir.find_first_of(traits[m_type].separators);
+			if (sep == std::wstring::npos) {
+				sep = dir.size();
+			}
+			size_t colon = dir.find(':');
+			if (colon != std::wstring::npos && colon > 0 && colon == sep - 1) {
+				is_absolute = false;
+			}
 
-			if (is_relative)
+			if (is_absolute) {
 				data.m_segments.clear();
-			else if (wxString(traits[m_type].separators).Contains(dir[0]))
-			{
-				if (data.m_segments.empty())
+			}
+			else if (IsSeparator(dir[0])) {
+				// Drive-relative path
+				if (data.m_segments.empty()) {
 					return false;
+				}
 				std::wstring first = data.m_segments.front();
 				data.m_segments.clear();
 				data.m_segments.push_back(first);
-				dir = dir.Mid(1);
+				dir = dir.substr(1);
+			}
+			// else: Any other relative path
+
+			if (isFile && !ExtractFile(dir, file)) {
+				return false;
 			}
 
-			if (isFile && !ExtractFile(dir, file))
+			if (!Segmentize(dir, data.m_segments)) {
 				return false;
-
-			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+			}
+			if (data.m_segments.empty() && was_empty) {
 				return false;
-			if (data.m_segments.empty() && was_empty)
-				return false;
+			}
 		}
 		break;
 	case MVS:
 		{
 			// Remove the double quoation some servers send in PWD reply
-			int i = 0;
-			wxChar c = dir.c_str()[i];
-			while (c == FTP_MVS_DOUBLE_QUOTE)
-				c = dir.c_str()[++i];
-			dir.Remove(0, i);
+			size_t i = 0;
+			wchar_t c = dir[i];
+			while (c == FTP_MVS_DOUBLE_QUOTE) {
+				c = dir[++i];
+			}
+			dir.erase(0, i);
 
 			while (!dir.empty()) {
-				c = dir.Last();
-				if (c != FTP_MVS_DOUBLE_QUOTE)
+				c = dir.back();
+				if (c != FTP_MVS_DOUBLE_QUOTE) {
 					break;
-				else
-					dir.RemoveLast();
+				}
+				else {
+					dir.pop_back();
+				}
 			}
 		}
-		if (dir.empty())
+		if (dir.empty()) {
 			return false;
+		}
 
-		if (dir.c_str()[0] == traits[m_type].left_enclosure) {
-			if (dir.Last() != traits[m_type].right_enclosure)
+		if (dir[0] == traits[m_type].left_enclosure) {
+			if (dir.back() != traits[m_type].right_enclosure) {
 				return false;
+			}
 
-			dir.RemoveLast();
-			dir = dir.Mid(1);
+			dir = dir.substr(1, dir.size() - 2);
 
 			data.m_segments.clear();
 		}
-		else if (dir.Last() == traits[m_type].right_enclosure)
+		else if (dir.back() == traits[m_type].right_enclosure) {
 			return false;
-		else if (was_empty)
+		}
+		else if (was_empty) {
 			return false;
+		}
 
-		if (!dir.empty() && dir.Last() == ')') {
+		if (!dir.empty() && dir.back() == ')') {
 			// Partitioned dataset member
-			if (!isFile)
+			if (!isFile) {
 				return false;
+			}
 
-			int pos = dir.Find('(');
-			if (pos == -1)
+			size_t pos = dir.find('(');
+			if (pos == std::wstring::npos) {
 				return false;
-			dir.RemoveLast();
-			file = dir.Mid(pos + 1);
-			dir = dir.Left(pos);
+			}
+			dir.pop_back();
+			file = dir.substr(pos + 1);
+			dir = dir.substr(0, pos);
 
-			if (!was_empty && !data.m_prefix && !dir.empty())
+			if (!was_empty && !data.m_prefix && !dir.empty()) {
 				return false;
+			}
 
 			data.m_prefix.clear();
 		}
 		else {
-			if (!was_empty && !data.m_prefix)
-			{
-				if (dir.Find('.') != -1 || !isFile)
+			if (!was_empty && !data.m_prefix) {
+				if (dir.find('.') != std::wstring::npos || !isFile) {
 					return false;
+				}
 			}
 
 			if (isFile) {
-				if (!ExtractFile(dir, file))
+				if (!ExtractFile(dir, file)) {
 					return false;
-				data.m_prefix = fz::sparse_optional<std::wstring>(_T("."));
+				}
+				data.m_prefix = fz::sparse_optional<std::wstring>(L".");
 			}
-			else if (!dir.empty() && dir.Last() == '.')
-				data.m_prefix = fz::sparse_optional<std::wstring>(_T("."));
-			else
+			else if (!dir.empty() && dir.back() == '.') {
+				data.m_prefix = fz::sparse_optional<std::wstring>(L".");
+			}
+			else {
 				data.m_prefix.clear();
+			}
 		}
 
-		if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+		if (!Segmentize(dir, data.m_segments)) {
 			return false;
+		}
 		break;
 	case HPNONSTOP:
-		if (dir[0] == '\\')
+		if (dir[0] == '\\') {
 			data.m_segments.clear();
+		}
 
-		if (isFile && !ExtractFile(dir, file))
+		if (isFile && !ExtractFile(dir, file)) {
 			return false;
+		}
 
-		if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+		if (!Segmentize(dir, data.m_segments)) {
 			return false;
-		if (data.m_segments.empty() && was_empty)
+		}
+		if (data.m_segments.empty() && was_empty) {
 			return false;
+		}
 
 		break;
 	case VXWORKS:
 		{
-			if (dir[0] != ':')
-			{
-				if (was_empty)
+			if (dir[0] != ':') {
+				if (was_empty) {
 					return false;
+				}
 			}
-			else
-			{
-				int colon2;
-				if ((colon2 = dir.Mid(1).Find(':')) < 1)
+			else {
+				size_t colon2 =  dir.find(':', 1);
+				if (colon2 == std::wstring::npos || colon2 == 1) {
 					return false;
-				data.m_prefix = fz::sparse_optional<std::wstring>(dir.Left(colon2 + 2).ToStdWstring());
-				dir = dir.Mid(colon2 + 2);
+				}
+				data.m_prefix = fz::sparse_optional<std::wstring>(dir.substr(0, colon2 + 1));
+				dir = dir.substr(colon2 + 1);
 
 				data.m_segments.clear();
 			}
 
-			if (isFile && !ExtractFile(dir, file))
+			if (isFile && !ExtractFile(dir, file)) {
 				return false;
+			}
 
-			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+			if (!Segmentize(dir, data.m_segments)) {
 				return false;
+			}
 		}
 		break;
 	case CYGWIN:
 		{
-			if (wxString(traits[m_type].separators).Contains(dir[0])) {
+			if (IsSeparator(dir[0])) {
 				data.m_segments.clear();
 				data.m_prefix.clear();
 			}
-			else if (was_empty)
+			else if (was_empty) {
 				return false;
-			if (dir.Left(2) == _T("//")) {
+			}
+			if (dir[0] == '/' && dir[1] == '/') {
 				data.m_prefix = fz::sparse_optional<std::wstring>(std::wstring(1, traits[m_type].separators[0]));
-				dir = dir.Mid(1);
+				dir = dir.substr(1);
 			}
 
-			if (isFile && !ExtractFile(dir, file))
+			if (isFile && !ExtractFile(dir, file)) {
 				return false;
+			}
 
-			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+			if (!Segmentize(dir, data.m_segments)) {
 				return false;
+			}
 		}
 		break;
 	default:
 		{
-			if (wxString(traits[m_type].separators).Contains(dir[0]))
+			if (IsSeparator(dir[0])) {
 				data.m_segments.clear();
-			else if (was_empty)
+			}
+			else if (was_empty) {
 				return false;
+			}
 
-			if (isFile && !ExtractFile(dir, file))
+			if (isFile && !ExtractFile(dir, file)) {
 				return false;
+			}
 
-			if (!Segmentize(dir.ToStdWstring(), data.m_segments))
+			if (!Segmentize(dir, data.m_segments)) {
 				return false;
+			}
 		}
 		break;
 	}
 
-	if (!traits[m_type].has_root && data.m_segments.empty())
+	if (!traits[m_type].has_root && data.m_segments.empty()) {
 		return false;
+	}
 
-	if (isFile)
-	{
-		if (traits[m_type].has_dots)
-		{
-			if (file == _T("..") || file == _T("."))
+	if (isFile) {
+		if (traits[m_type].has_dots) {
+			if (file == L".." || file == L".") {
 				return false;
+			}
 		}
-		subdir = file.ToStdWstring();
+		subdir = file;
 	}
 
 	return true;
@@ -806,7 +860,7 @@ std::wstring CServerPath::FormatFilename(std::wstring const& filename, bool omit
 		return filename;
 	}
 
-	std::wstring result = GetPath().ToStdWstring();
+	std::wstring result = GetPath();
 	if (traits[m_type].left_enclosure && traits[m_type].filename_inside_enclosure) {
 		result.pop_back();
 	}
@@ -867,13 +921,14 @@ int CServerPath::CmpNoCase(const CServerPath &op) const
 	return 0;
 }
 
-bool CServerPath::AddSegment(const wxString& segment)
+bool CServerPath::AddSegment(std::wstring const& segment)
 {
-	if (empty())
+	if (empty()) {
 		return false;
+	}
 
 	// TODO: Check for invalid characters
-	m_data.get().m_segments.push_back(segment.ToStdWstring());
+	m_data.get().m_segments.push_back(segment);
 
 	return true;
 }
@@ -943,12 +998,13 @@ CServerPath CServerPath::GetCommonParent(const CServerPath& path) const
 	return parent;
 }
 
-wxString CServerPath::FormatSubdir(const wxString &subdir) const
+std::wstring CServerPath::FormatSubdir(std::wstring const& subdir) const
 {
-	if (!traits[m_type].separatorEscape)
+	if (!traits[m_type].separatorEscape) {
 		return subdir;
+	}
 
-	wxString res = subdir;
+	std::wstring res = subdir;
 	EscapeSeparators(m_type, res);
 
 	return res;
@@ -1022,29 +1078,31 @@ bool CServerPath::Segmentize(std::wstring const& str, tSegmentList& segments)
 	return true;
 }
 
-bool CServerPath::ExtractFile(wxString& dir, wxString& file)
+bool CServerPath::ExtractFile(std::wstring& dir, std::wstring& file)
 {
-	int pos = dir.find_last_of(traits[m_type].separators);
-	if (pos == (int)dir.Length() - 1)
+	size_t pos = dir.find_last_of(traits[m_type].separators);
+	if (pos != std::wstring::npos && pos == dir.size() - 1) {
 		return false;
+	}
 
-	if (pos == -1) {
+	if (pos == std::wstring::npos) {
 		file = dir;
 		dir.clear();
 		return true;
 	}
 
-	file = dir.Mid(pos + 1);
-	dir = dir.Left(pos + 1);
+	file = dir.substr(pos + 1);
+	dir = dir.substr(0, pos + 1);
 
 	return true;
 }
 
-void CServerPath::EscapeSeparators(ServerType type, wxString& subdir)
+void CServerPath::EscapeSeparators(ServerType type, std::wstring& subdir)
 {
 	if (traits[type].separatorEscape) {
-		for (const wxChar* p = traits[type].separators; *p; ++p)
-			subdir.Replace((wxString)*p, (wxString)traits[type].separatorEscape + traits[type].separators[0]);
+		for (wchar_t const* p = traits[type].separators; *p; ++p) {
+			fz::replace_substrings(subdir, std::wstring(1, *p), std::wstring(1, traits[type].separatorEscape) + traits[type].separators[0]);
+		}
 	}
 }
 

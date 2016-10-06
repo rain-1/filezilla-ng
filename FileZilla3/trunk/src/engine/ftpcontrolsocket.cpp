@@ -1902,8 +1902,7 @@ int CFtpControlSocket::ChangeDir(CServerPath path, wxString subDir, bool link_di
 
 int CFtpControlSocket::ChangeDirParseResponse()
 {
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -1914,39 +1913,38 @@ int CFtpControlSocket::ChangeDirParseResponse()
 	switch (pData->opState)
 	{
 	case cwd_pwd:
-		if (code != 2 && code != 3)
+		if (code != 2 && code != 3) {
 			error = true;
-		else if (ParsePwdReply(m_Response))
-		{
+		}
+		else if (ParsePwdReply(m_Response)) {
 			ResetOperation(FZ_REPLY_OK);
 			return FZ_REPLY_OK;
 		}
-		else
+		else {
 			error = true;
+		}
 		break;
 	case cwd_cwd:
-		if (code != 2 && code != 3)
-		{
+		if (code != 2 && code != 3) {
 			// Create remote directory if part of a file upload
-			if (pData->tryMkdOnFail)
-			{
+			if (pData->tryMkdOnFail) {
 				pData->tryMkdOnFail = false;
 				int res = Mkdir(pData->path);
-				if (res != FZ_REPLY_OK)
+				if (res != FZ_REPLY_OK) {
 					return res;
+				}
 			}
-			else
+			else {
 				error = true;
+			}
 		}
-		else
-		{
-			if (pData->target.empty())
+		else {
+			if (pData->target.empty()) {
 				pData->opState = cwd_pwd_cwd;
-			else
-			{
+			}
+			else {
 				m_CurrentPath = pData->target;
-				if (pData->subDir.empty())
-				{
+				if (pData->subDir.empty()) {
 					ResetOperation(FZ_REPLY_OK);
 					return FZ_REPLY_OK;
 				}
@@ -1957,111 +1955,105 @@ int CFtpControlSocket::ChangeDirParseResponse()
 		}
 		break;
 	case cwd_pwd_cwd:
-		if (code != 2 && code != 3)
-		{
+		if (code != 2 && code != 3) 	{
 			LogMessage(MessageType::Debug_Warning, _T("PWD failed, assuming path is '%s'."), pData->path.GetPath());
 			m_CurrentPath = pData->path;
 
-			if (pData->target.empty())
+			if (pData->target.empty()) {
 				engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
+			}
 
-			if (pData->subDir.empty())
-			{
+			if (pData->subDir.empty()) {
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
-			else
+			else {
 				pData->opState = cwd_cwd_subdir;
+			}
 		}
-		else if (ParsePwdReply(m_Response, false, pData->path))
-		{
-			if (pData->target.empty())
-			{
+		else if (ParsePwdReply(m_Response, false, pData->path)) {
+			if (pData->target.empty()) {
 				engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path);
 			}
-			if (pData->subDir.empty())
-			{
+			if (pData->subDir.empty()) {
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
-			else
+			else {
 				pData->opState = cwd_cwd_subdir;
+			}
 		}
-		else
+		else {
 			error = true;
+		}
 		break;
 	case cwd_cwd_subdir:
-		if (code != 2 && code != 3)
-		{
-			if (pData->subDir == _T("..") && !pData->tried_cdup && m_Response.Left(2) == _T("50"))
-			{
+		if (code != 2 && code != 3) {
+			if (pData->subDir == _T("..") && !pData->tried_cdup && m_Response.Left(2) == _T("50")) {
 				// CDUP command not implemented, try again using CWD ..
 				pData->tried_cdup = true;
 			}
-			else if (pData->link_discovery)
-			{
+			else if (pData->link_discovery) {
 				LogMessage(MessageType::Debug_Info, _T("Symlink does not link to a directory, probably a file"));
 				ResetOperation(FZ_REPLY_LINKNOTDIR);
 				return FZ_REPLY_ERROR;
 			}
-			else
+			else {
 				error = true;
+			}
 		}
-		else
+		else {
 			pData->opState = cwd_pwd_subdir;
+		}
 		break;
 	case cwd_pwd_subdir:
 		{
 			CServerPath assumedPath(pData->path);
-			if (pData->subDir == _T(".."))
-			{
-				if (!assumedPath.HasParent())
+			if (pData->subDir == _T("..")) {
+				if (!assumedPath.HasParent()) {
 					assumedPath.clear();
-				else
+				}
+				else {
 					assumedPath = assumedPath.GetParent();
+				}
 			}
-			else
+			else {
 				assumedPath.AddSegment(pData->subDir);
+			}
 
-			if (code != 2 && code != 3)
-			{
-				if (!assumedPath.empty())
-				{
+			if (code != 2 && code != 3) {
+				if (!assumedPath.empty()) {
 					LogMessage(MessageType::Debug_Warning, _T("PWD failed, assuming path is '%s'."), assumedPath.GetPath());
 					m_CurrentPath = assumedPath;
 
-					if (pData->target.empty())
-					{
+					if (pData->target.empty()) {
 						engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 					}
 
 					ResetOperation(FZ_REPLY_OK);
 					return FZ_REPLY_OK;
 				}
-				else
-				{
+				else {
 					LogMessage(MessageType::Debug_Warning, _T("PWD failed, unable to guess current path."));
 					error = true;
 				}
 			}
-			else if (ParsePwdReply(m_Response, false, assumedPath))
-			{
-				if (pData->target.empty())
-				{
+			else if (ParsePwdReply(m_Response, false, assumedPath)) {
+				if (pData->target.empty()) {
 					engine_.GetPathCache().Store(*m_pCurrentServer, m_CurrentPath, pData->path, pData->subDir);
 				}
 
 				ResetOperation(FZ_REPLY_OK);
 				return FZ_REPLY_OK;
 			}
-			else
+			else {
 				error = true;
+			}
 		}
 		break;
 	}
 
-	if (error)
-	{
+	if (error) {
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
@@ -2981,11 +2973,11 @@ public:
 
 	CServerPath path;
 	CServerPath fullPath;
-	wxString subDir;
+	std::wstring subDir;
 	bool omitPath;
 };
 
-int CFtpControlSocket::RemoveDir(const CServerPath& path, const wxString& subDir)
+int CFtpControlSocket::RemoveDir(const CServerPath& path, std::wstring const& subDir)
 {
 	wxASSERT(!m_pCurOpData);
 	CFtpRemoveDirOpData *pData = new CFtpRemoveDirOpData();
@@ -2995,16 +2987,16 @@ int CFtpControlSocket::RemoveDir(const CServerPath& path, const wxString& subDir
 	pData->omitPath = true;
 	pData->fullPath = path;
 
-	if (!pData->fullPath.AddSegment(subDir))
-	{
+	if (!pData->fullPath.AddSegment(subDir)) {
 		LogMessage(MessageType::Error, _("Path cannot be constructed for directory %s and subdir %s"), path.GetPath(), subDir);
 		ResetOperation(FZ_REPLY_ERROR);
 		return FZ_REPLY_ERROR;
 	}
 
 	int res = ChangeDir(pData->path);
-	if (res != FZ_REPLY_OK)
+	if (res != FZ_REPLY_OK) {
 		return res;
+	}
 
 	return SendNextCommand();
 }
@@ -3013,8 +3005,7 @@ int CFtpControlSocket::RemoveDirSubcommandResult(int prevResult)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CFtpControlSocket::RemoveDirSubcommandResult()"));
 
-	if (!m_pCurOpData)
-	{
+	if (!m_pCurOpData) {
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Info, _T("Empty m_pCurOpData"));
 		ResetOperation(FZ_REPLY_INTERNALERROR);
 		return FZ_REPLY_ERROR;
@@ -3022,10 +3013,12 @@ int CFtpControlSocket::RemoveDirSubcommandResult(int prevResult)
 
 	CFtpRemoveDirOpData *pData = static_cast<CFtpRemoveDirOpData *>(m_pCurOpData);
 
-	if (prevResult != FZ_REPLY_OK)
+	if (prevResult != FZ_REPLY_OK) {
 		pData->omitPath = false;
-	else
+	}
+	else {
 		pData->path = m_CurrentPath;
+	}
 
 	return SendNextCommand();
 }
@@ -3186,8 +3179,8 @@ int CFtpControlSocket::MkdirParseResponse()
 			//         contain this substring as the path might be returned in the reply.
 			// Case 3: Substrng of response contains "file exists". pData->path may not
 			//         contain this substring as the path might be returned in the reply.
-			const wxString response = m_Response.Mid(4).Lower();
-			const wxString path = pData->path.GetPath().Lower();
+			wxString const response = m_Response.Mid(4).Lower();
+			wxString const path = wxString(pData->path.GetPath()).Lower();
 			if (response != _T("directory already exists") &&
 				(path.Find(_T("already exists")) != -1 ||
 				 response.Find(_T("already exists")) == -1) &&

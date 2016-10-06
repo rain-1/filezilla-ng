@@ -868,7 +868,7 @@ void CSearchTransferDialog::OnOK(wxCommandEvent&)
 	else {
 		wxTextCtrl *pText = XRCCTRL(*this, "ID_REMOTEPATH", wxTextCtrl);
 
-		CServerPath path(pText->GetValue());
+		CServerPath path(pText->GetValue().ToStdWstring());
 		if (path.empty()) {
 			wxMessageBoxEx(_("You have to enter a remote directory."), _("Upload search results"), wxICON_EXCLAMATION);
 			return;
@@ -1045,7 +1045,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 
 	wxTextCtrl *pText = XRCCTRL(dlg, "ID_REMOTEPATH", wxTextCtrl);
 
-	CServerPath path(pText->GetValue());
+	CServerPath path(pText->GetValue().ToStdWstring());
 	if (path.empty()) {
 		wxBell();
 		return;
@@ -1067,9 +1067,9 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 		if (!flatten) {
 			// Append relative path to search root to local target path
 			CLocalPath local_path = entry.path;
-			std::list<wxString> segments;
+			std::list<std::wstring> segments;
 			while (m_local_search_root.IsParentOf(local_path) && local_path.HasParent()) {
-				segments.push_front(local_path.GetLastSegment());
+				segments.push_front(local_path.GetLastSegment().ToStdWstring());
 				local_path = local_path.GetParent();
 			}
 			for (auto const& segment : segments) {
@@ -1091,7 +1091,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 	for (auto const& dir : selected_dirs) {
 		CServerPath target_path = path;
 		if (!flatten && dir.HasParent()) {
-			target_path.AddSegment(dir.GetLastSegment());
+			target_path.AddSegment(dir.GetLastSegment().ToStdWstring());
 		}
 
 		local_recursion_root root;

@@ -1337,7 +1337,7 @@ int CSftpControlSocket::ChangeDirSend()
 				return FZ_REPLY_WOULDBLOCK;
 			}
 		}
-		cmd = L"cd " + QuoteFilename(pData->path.GetPath().ToStdWstring());
+		cmd = L"cd " + QuoteFilename(pData->path.GetPath());
 		m_CurrentPath.clear();
 		break;
 	case cwd_cwd_subdir:
@@ -1346,7 +1346,7 @@ int CSftpControlSocket::ChangeDirSend()
 			return FZ_REPLY_ERROR;
 		}
 		else {
-			cmd = L"cd " + QuoteFilename(pData->subDir.ToStdWstring());
+			cmd = L"cd " + QuoteFilename(pData->subDir);
 		}
 		m_CurrentPath.clear();
 		break;
@@ -2003,13 +2003,13 @@ int CSftpControlSocket::MkdirSend()
 	case mkd_findparent:
 	case mkd_cwdsub:
 		m_CurrentPath.clear();
-		res = SendCommand(L"cd " + QuoteFilename(pData->currentPath.GetPath().ToStdWstring()));
+		res = SendCommand(L"cd " + QuoteFilename(pData->currentPath.GetPath()));
 		break;
 	case mkd_mkdsub:
-		res = SendCommand(L"mkdir " + QuoteFilename(pData->segments.back().ToStdWstring()));
+		res = SendCommand(L"mkdir " + QuoteFilename(pData->segments.back()));
 		break;
 	case mkd_tryfull:
-		res = SendCommand(L"mkdir " + QuoteFilename(pData->path.GetPath().ToStdWstring()));
+		res = SendCommand(L"mkdir " + QuoteFilename(pData->path.GetPath()));
 		break;
 	default:
 		LogMessage(__TFILE__, __LINE__, this, MessageType::Debug_Warning, _T("unknown op state: %d"), pData->opState);
@@ -2131,10 +2131,10 @@ public:
 	virtual ~CSftpRemoveDirOpData() {}
 
 	CServerPath path;
-	wxString subDir;
+	std::wstring subDir;
 };
 
-int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, const wxString& subDir /*=_T("")*/)
+int CSftpControlSocket::RemoveDir(CServerPath const& path, std::wstring const& subDir)
 {
 	LogMessage(MessageType::Debug_Verbose, _T("CSftpControlSocket::RemoveDir"));
 
@@ -2159,7 +2159,7 @@ int CSftpControlSocket::RemoveDir(const CServerPath& path /*=CServerPath()*/, co
 	engine_.GetPathCache().InvalidatePath(*m_pCurrentServer, pData->path, pData->subDir);
 
 	engine_.InvalidateCurrentWorkingDirs(fullPath);
-	std::wstring quotedFilename = QuoteFilename(fullPath.GetPath().ToStdWstring());
+	std::wstring quotedFilename = QuoteFilename(fullPath.GetPath());
 	if (!SendCommand(L"rmdir " + WildcardEscape(quotedFilename),
 			  L"rmdir " + quotedFilename))
 		return FZ_REPLY_ERROR;

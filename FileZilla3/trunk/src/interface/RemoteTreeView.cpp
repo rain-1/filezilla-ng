@@ -386,8 +386,9 @@ wxTreeItemId CRemoteTreeView::MakeParent(CServerPath path, bool select)
 	wxTreeItemId parent = root;
 
 	for (std::vector<wxString>::const_reverse_iterator iter = pieces.rbegin(); iter != pieces.rend(); ++iter) {
-		if (iter != pieces.rbegin())
-			path.AddSegment(*iter);
+		if (iter != pieces.rbegin()) {
+			path.AddSegment(iter->ToStdWstring());
+		}
 
 		wxTreeItemIdValue cookie;
 		wxTreeItemId child = GetFirstChild(parent, cookie);
@@ -531,7 +532,7 @@ void CRemoteTreeView::DisplayItem(wxTreeItemId parent, const CDirectoryListing& 
 		if (filter.FilenameFiltered(listing[i].name, path, true, -1, false, 0, listing[i].time))
 			continue;
 
-		const wxString& name = listing[i].name;
+		std::wstring const& name = listing[i].name;
 		CServerPath subdir = listing.path;
 		subdir.AddSegment(name);
 
@@ -587,16 +588,18 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 
 		if (!cmp) {
 			CServerPath childPath = listing.path;
-			childPath.AddSegment(*iter);
+			childPath.AddSegment(iter->ToStdWstring());
 
 			CDirectoryListing subListing;
 			if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
-				if (!GetLastChild(child) && HasSubdirs(subListing, filter))
+				if (!GetLastChild(child) && HasSubdirs(subListing, filter)) {
 					AppendItem(child, _T(""), -1, -1);
+				}
 				SetItemImages(child, false);
 			}
-			else
+			else {
 				SetItemImages(child, true);
+			}
 
 			child = GetPrevSibling(child);
 			++iter;
@@ -614,7 +617,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 		else if (cmp < 0) {
 			// New directory
 			CServerPath childPath = listing.path;
-			childPath.AddSegment(*iter);
+			childPath.AddSegment(iter->ToStdWstring());
 
 			CDirectoryListing subListing;
 			if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
@@ -650,7 +653,7 @@ void CRemoteTreeView::RefreshItem(wxTreeItemId parent, const CDirectoryListing& 
 	}
 	while (iter != dirs.rend()) {
 		CServerPath childPath = listing.path;
-		childPath.AddSegment(*iter);
+		childPath.AddSegment(iter->ToStdWstring());
 
 		CDirectoryListing subListing;
 		if (m_state.m_pEngine->CacheLookup(childPath, subListing) == FZ_REPLY_OK) {
@@ -754,16 +757,14 @@ CServerPath CRemoteTreeView::GetPathFromItem(const wxTreeItemId& item) const
 	std::list<wxString> segments;
 
 	wxTreeItemId i = item;
-	while (i != GetRootItem())
-	{
+	while (i != GetRootItem()) {
 		const CItemData* const pData = (const CItemData*)GetItemData(i);
-		if (pData)
-		{
+		if (pData) {
 			CServerPath path = pData->m_path;
-			for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
-			{
-				if (!path.AddSegment(*iter))
+			for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter) {
+				if (!path.AddSegment(iter->ToStdWstring())) {
 					return CServerPath();
+				}
 			}
 			return path;
 		}
@@ -1161,10 +1162,12 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 	CServerPath currentPath;
 	const wxTreeItemId selected = GetSelection();
-	if (selected)
+	if (selected) {
 		currentPath = GetPathFromItem(selected);
-	if (currentPath.empty())
+	}
+	if (currentPath.empty()) {
 		return;
+	}
 
 	if (currentPath == old_path || currentPath.IsSubdirOf(old_path, false)) {
 		// Previously selected path was below renamed one, list the new one
@@ -1180,12 +1183,14 @@ void CRemoteTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		}
 		currentPath = parent;
 		currentPath.AddSegment(newName);
-		for (std::list<wxString>::const_iterator iter = subdirs.begin(); iter != subdirs.end(); ++iter)
-			currentPath.AddSegment(*iter);
+		for (std::list<wxString>::const_iterator iter = subdirs.begin(); iter != subdirs.end(); ++iter) {
+			currentPath.AddSegment(iter->ToStdWstring());
+		}
 		m_state.ChangeRemoteDir(currentPath);
 	}
-	else if (currentPath != parent)
+	else if (currentPath != parent) {
 		m_state.ChangeRemoteDir(currentPath);
+	}
 }
 
 
@@ -1242,7 +1247,7 @@ CServerPath CRemoteTreeView::MenuMkdir()
 	// Append a long segment which does (most likely) not exist in the path and
 	// replace it with "New directory" later. This way we get the exact position of
 	// "New directory" and can preselect it in the dialog.
-	wxString tmpName = _T("25CF809E56B343b5A12D1F0466E3B37A49A9087FDCF8412AA9AF8D1E849D01CF");
+	std::wstring tmpName = _T("25CF809E56B343b5A12D1F0466E3B37A49A9087FDCF8412AA9AF8D1E849D01CF");
 	if (newPath.AddSegment(tmpName)) {
 		wxString pathName = newPath.GetPath();
 		int pos = pathName.Find(tmpName);
@@ -1399,7 +1404,7 @@ void CRemoteTreeView::OnMenuGeturl(wxCommandEvent& event)
 
 	wxString url = pServer->Format((event.GetId() == XRCID("ID_GETURL_PASSWORD")) ? ServerFormat::url_with_password : ServerFormat::url);
 
-	wxString const pathPart = url_encode(path.GetPath().ToStdWstring(), true);
+	std::wstring const pathPart = url_encode(path.GetPath(), true);
 	if (!pathPart.empty() && pathPart[0] != '/') {
 		url += '/';
 	}

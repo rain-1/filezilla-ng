@@ -51,7 +51,7 @@ public:
 
 	virtual int List(CServerPath path = CServerPath(), wxString subDir = _T(""), int flags = 0);
 	virtual int Delete(const CServerPath& path, std::deque<std::wstring>&& files);
-	virtual int RemoveDir(const CServerPath& path = CServerPath(), const wxString& subDir = _T(""));
+	virtual int RemoveDir(CServerPath const& path = CServerPath(), std::wstring const& subDir = std::wstring());
 	virtual int Mkdir(const CServerPath& path);
 	virtual int Rename(const CRenameCommand& command);
 	virtual int Chmod(const CChmodCommand& command);

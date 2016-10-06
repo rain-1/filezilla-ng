@@ -174,27 +174,32 @@ void CBookmarksDialog::LoadGlobalBookmarks()
 	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
 		wxString name;
 		wxString local_dir;
-		wxString remote_dir_raw;
+		std::wstring remote_dir_raw;
 		CServerPath remote_dir;
 
 		name = GetTextElement(bookmark, "Name");
-		if (name.empty())
+		if (name.empty()) {
 			continue;
+		}
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir").ToStdWstring();
 		if (!remote_dir_raw.empty()) {
-			if (!remote_dir.SetSafePath(remote_dir_raw))
+			if (!remote_dir.SetSafePath(remote_dir_raw)) {
 				continue;
+			}
 		}
-		if (local_dir.empty() && remote_dir.empty())
+		if (local_dir.empty() && remote_dir.empty()) {
 			continue;
+		}
 
 		bool sync;
-		if (local_dir.empty() || remote_dir.empty())
+		if (local_dir.empty() || remote_dir.empty()) {
 			sync = false;
-		else
+		}
+		else {
 			sync = GetTextElementBool(bookmark, "SyncBrowsing");
+		}
 
 		bool const comparison = GetTextElementBool(bookmark, "DirectoryComparison");
 
@@ -705,7 +710,7 @@ bool CBookmarksDialog::GetGlobalBookmarks(std::list<wxString> &bookmarks)
 	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
 		wxString name;
 		wxString local_dir;
-		wxString remote_dir_raw;
+		std::wstring remote_dir_raw;
 		CServerPath remote_dir;
 
 		name = GetTextElement(bookmark, "Name");
@@ -713,13 +718,15 @@ bool CBookmarksDialog::GetGlobalBookmarks(std::list<wxString> &bookmarks)
 			continue;
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir").ToStdWstring();
 		if (!remote_dir_raw.empty()) {
-			if (!remote_dir.SetSafePath(remote_dir_raw))
+			if (!remote_dir.SetSafePath(remote_dir_raw)) {
 				continue;
+			}
 		}
-		if (local_dir.empty() && remote_dir.empty())
+		if (local_dir.empty() && remote_dir.empty()) {
 			continue;
+		}
 
 		bookmarks.push_back(name);
 	}
@@ -740,24 +747,29 @@ bool CBookmarksDialog::GetBookmark(const wxString &name, wxString &local_dir, CS
 	}
 
 	for (auto bookmark = element.child("Bookmark"); bookmark; bookmark = bookmark.next_sibling("Bookmark")) {
-		wxString remote_dir_raw;
+		std::wstring remote_dir_raw;
 
-		if (name != GetTextElement(bookmark, "Name"))
+		if (name != GetTextElement(bookmark, "Name")) {
 			continue;
+		}
 
 		local_dir = GetTextElement(bookmark, "LocalDir");
-		remote_dir_raw = GetTextElement(bookmark, "RemoteDir");
+		remote_dir_raw = GetTextElement(bookmark, "RemoteDir").ToStdWstring();
 		if (!remote_dir_raw.empty()) {
-			if (!remote_dir.SetSafePath(remote_dir_raw))
+			if (!remote_dir.SetSafePath(remote_dir_raw)) {
 				return false;
+			}
 		}
-		if (local_dir.empty() && remote_dir_raw.empty())
+		if (local_dir.empty() && remote_dir_raw.empty()) {
 			return false;
+		}
 
-		if (local_dir.empty() || remote_dir_raw.empty())
+		if (local_dir.empty() || remote_dir_raw.empty()) {
 			sync = false;
-		else
+		}
+		else {
 			sync = GetTextElementBool(bookmark, "SyncBrowsing", false);
+		}
 
 		comparison = GetTextElementBool(bookmark, "DirectoryComparison", false);
 		return true;
