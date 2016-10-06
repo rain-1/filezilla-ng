@@ -567,14 +567,14 @@ bool CServerPath::DoChangePath(std::wstring &subdir, bool isFile)
 	case DOS:
 	case DOS_FWD_SLASHES:
 		{
-			bool is_absolute = true;
+			bool is_absolute = false;
 			size_t sep = dir.find_first_of(traits[m_type].separators);
 			if (sep == std::wstring::npos) {
 				sep = dir.size();
 			}
 			size_t colon = dir.find(':');
 			if (colon != std::wstring::npos && colon > 0 && colon == sep - 1) {
-				is_absolute = false;
+				is_absolute = true;
 			}
 
 			if (is_absolute) {
