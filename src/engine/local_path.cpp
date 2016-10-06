@@ -393,7 +393,7 @@ bool CLocalPath::ChangePath(std::wstring const& new_path)
 #else
 	if (!new_path.empty() && new_path[0] == path_separator) {
 		// Absolute new_path
-		return SetPath(new_path));
+		return SetPath(new_path);
 	}
 	else {
 		// Relative new_path
@@ -401,7 +401,7 @@ bool CLocalPath::ChangePath(std::wstring const& new_path)
 			return false;
 		}
 
-		return SetPath(*m_path + new_path));
+		return SetPath(*m_path + new_path);
 	}
 #endif
 }
@@ -472,7 +472,7 @@ bool CLocalPath::Exists(std::wstring *error) const
 
 	return true;
 #else
-	std::string path = fz::to_string(m_path);
+	std::string path = fz::to_string(*m_path);
 	if (path.size() > 1) {
 		path.pop_back();
 	}

@@ -754,16 +754,17 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 #else
 	wxString error;
 	for (unsigned int i = 0; i < files.Count(); ++i) {
-		wxString const& file(files[i]);
+		std::wstring const file(files[i].ToStdWstring());
 
 		int64_t size;
 		bool is_link;
 		fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(file), is_link, &size, 0, 0);
 		if (type == fz::local_filesys::file) {
-			wxString name;
+			std::wstring name;
 			CLocalPath sourcePath(file, &name);
-			if (name.empty())
+			if (name.empty()) {
 				continue;
+			}
 			wxString target = path.GetPath() + name;
 			if (file == target)
 				continue;
@@ -850,7 +851,7 @@ bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 					continue;
 				}
 
-				std::wstring const subDir = dirname + file + CLocalPath::path_separator;
+				std::wstring const subDir = dirname + fz::to_wstring(file) + CLocalPath::path_separator;
 				dirsToVisit.push_back(subDir);
 			}
 			else {

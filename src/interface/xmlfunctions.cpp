@@ -306,7 +306,7 @@ wxString CXmlFile::GetRedirectedName() const
 	bool isLink = false;
 	if (fz::local_filesys::get_file_info(fz::to_native(redirectedName), isLink, 0, 0, 0) == fz::local_filesys::file) {
 		if (isLink) {
-			CLocalPath target(fz::local_filesys::get_link_target(fz::to_native(redirectedName)));
+			CLocalPath target(fz::to_wstring(fz::local_filesys::get_link_target(fz::to_native(redirectedName))));
 			if (!target.empty()) {
 				redirectedName = target.GetPath();
 				redirectedName.RemoveLast();

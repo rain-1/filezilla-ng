@@ -140,7 +140,7 @@ public:
 			return false;
 		}
 
-		std::wstring const dir = GetDirFromItem(hit);
+		std::wstring const dir = GetDirFromItem(hit).ToStdWstring();
 		if (dir.empty() || !CLocalPath(dir).IsWriteable()) {
 			return false;
 		}
