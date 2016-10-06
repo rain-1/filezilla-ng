@@ -937,8 +937,8 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 		if (m_fileData[index].comparison_flags == fill)
 			return;
 
-		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		const wxString& name = entry.name;
+		CDirentry const& entry = (*m_pDirectoryListing)[index];
+		std::wstring const& name = entry.name;
 
 		const CServer* pServer = m_state.GetServer();
 		if (!pServer) {
@@ -1030,8 +1030,8 @@ void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 			return;
 		}
 
-		const CDirentry& entry = (*m_pDirectoryListing)[index];
-		const wxString& name = entry.name;
+		CDirentry const& entry = (*m_pDirectoryListing)[index];
+		std::wstring const& name = entry.name;
 
 		const CServer* pServer = m_state.GetServer();
 		if (!pServer) {
@@ -1054,7 +1054,7 @@ void CRemoteListView::OnMenuEnter(wxCommandEvent &)
 		m_state.ChangeRemoteDir(m_pDirectoryListing->path, name, entry.is_link() ? LIST_FLAG_LINK : 0);
 	}
 	else {
-		m_state.ChangeRemoteDir(m_pDirectoryListing->path, _T(".."));
+		m_state.ChangeRemoteDir(m_pDirectoryListing->path, L"..");
 	}
 }
 
@@ -1287,7 +1287,7 @@ void CRemoteListView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
 	CServerPath newdir = MenuMkdir();
 	if (!newdir.empty()) {
-		m_state.ChangeRemoteDir(newdir, wxString(), 0, true);
+		m_state.ChangeRemoteDir(newdir, std::wstring(), 0, true);
 	}
 }
 

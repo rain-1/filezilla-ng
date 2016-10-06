@@ -596,7 +596,7 @@ void CMainFrame::OnMenuHandler(wxCommandEvent &event)
 			wxBell();
 			return;
 		}
-		pState->m_pCommandQueue->ProcessCommand(new CRawCommand(dlg.GetValue()));
+		pState->m_pCommandQueue->ProcessCommand(new CRawCommand(dlg.GetValue().ToStdWstring()));
 	}
 	else if (event.GetId() == XRCID("wxID_PREFERENCES")) {
 		OnMenuEditSettings(event);

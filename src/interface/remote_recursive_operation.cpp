@@ -137,7 +137,7 @@ bool CRemoteRecursiveOperation::NextOperation()
 		auto curPath = m_state.GetRemotePath();
 		if (!curPath.empty() && (curPath == m_finalDir || m_finalDir.IsParentOf(curPath, false))) {
 			StopRecursiveOperation();
-			m_state.ChangeRemoteDir(m_finalDir, wxString(), LIST_FLAG_REFRESH);
+			m_state.ChangeRemoteDir(m_finalDir, std::wstring(), LIST_FLAG_REFRESH);
 			return false;
 		}
 	}

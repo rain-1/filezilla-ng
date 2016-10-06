@@ -126,10 +126,10 @@ class CListCommand final : public CCommandHelper<CListCommand, Command::list>
 	// directories.
 public:
 	explicit CListCommand(int flags = 0);
-	explicit CListCommand(CServerPath path, wxString subDir = wxString(), int flags = 0);
+	explicit CListCommand(CServerPath path, std::wstring const& subDir = std::wstring(), int flags = 0);
 
 	CServerPath GetPath() const;
-	wxString GetSubDir() const;
+	std::wstring GetSubDir() const;
 
 	int GetFlags() const { return m_flags; }
 
@@ -137,7 +137,7 @@ public:
 
 protected:
 	CServerPath const m_path;
-	wxString const m_subDir;
+	std::wstring const m_subDir;
 	int const m_flags;
 };
 
@@ -177,14 +177,14 @@ protected:
 class CRawCommand final : public CCommandHelper<CRawCommand, Command::raw>
 {
 public:
-	explicit CRawCommand(const wxString &command);
+	explicit CRawCommand(std::wstring const& command);
 
-	wxString GetCommand() const;
+	std::wstring GetCommand() const;
 
 	bool valid() const { return !m_command.empty(); }
 
 protected:
-	wxString m_command;
+	std::wstring m_command;
 };
 
 class CDeleteCommand final : public CCommandHelper<CDeleteCommand, Command::del>
@@ -207,16 +207,16 @@ class CRemoveDirCommand final : public CCommandHelper<CRemoveDirCommand, Command
 public:
 	// Directories can either be given as absolute path or as
 	// pair of an absolute path and the very last path segments.
-	CRemoveDirCommand(CServerPath const& path, wxString const& subdDir);
+	CRemoveDirCommand(CServerPath const& path, std::wstring const& subdDir);
 
 	CServerPath GetPath() const { return m_path; }
-	wxString GetSubDir() const { return m_subDir; }
+	std::wstring GetSubDir() const { return m_subDir; }
 
 	bool valid() const;
 
 protected:
 	CServerPath const m_path;
-	wxString const m_subDir;
+	std::wstring const m_subDir;
 };
 
 class CMkdirCommand final : public CCommandHelper<CMkdirCommand, Command::mkdir>

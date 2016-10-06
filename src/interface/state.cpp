@@ -958,7 +958,7 @@ void CState::LinkIsNotDir(const CServerPath& path, const wxString& subdir)
 	NotifyHandlers(STATECHANGE_REMOTE_LINKNOTDIR, subdir, &path);
 }
 
-bool CState::ChangeRemoteDir(CServerPath const& path, wxString const& subdir, int flags, bool ignore_busy, bool compare)
+bool CState::ChangeRemoteDir(CServerPath const& path, std::wstring const& subdir, int flags, bool ignore_busy, bool compare)
 {
 	if (!m_site.m_server || !m_pCommandQueue) {
 		return false;
@@ -966,7 +966,7 @@ bool CState::ChangeRemoteDir(CServerPath const& path, wxString const& subdir, in
 
 	if (!m_sync_browse.local_root.empty()) {
 		CServerPath p(path);
-		if (!subdir.empty() && !p.ChangePath(subdir.ToStdWstring())) {
+		if (!subdir.empty() && !p.ChangePath(subdir)) {
 			wxString msg = wxString::Format(_("Could not get full remote path."));
 			wxMessageBoxEx(msg, _("Synchronized browsing"));
 			return false;
@@ -976,8 +976,9 @@ bool CState::ChangeRemoteDir(CServerPath const& path, wxString const& subdir, in
 			wxString msg = wxString::Format(_("The remote directory '%s' is not below the synchronization root (%s).\nDisable synchronized browsing and continue changing the remote directory?"),
 					p.GetPath(),
 					m_sync_browse.remote_root.GetPath());
-			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+			if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 				return false;
+			}
 			SetSyncBrowse(false);
 		}
 		else if (!IsRemoteIdle(true) && !ignore_busy) {
@@ -991,8 +992,9 @@ bool CState::ChangeRemoteDir(CServerPath const& path, wxString const& subdir, in
 			if (local_path.empty()) {
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nDisable synchronized browsing and continue changing the remote directory?"),
 					p.GetPath());
-				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES)
+				if (wxMessageBoxEx(msg, _("Synchronized browsing"), wxICON_QUESTION | wxYES_NO) != wxYES) {
 					return false;
+				}
 				SetSyncBrowse(false);
 			}
 			else if (!local_path.Exists(&error)) {
