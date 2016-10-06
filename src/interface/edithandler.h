@@ -55,22 +55,22 @@ public:
 
 	// Starts editing the given file, queues it if needed. For local files, fileName must include local path.
 	// Can be used to edit files already being added, user is prompted for action.
-	bool Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow* parent);
+	bool Edit(CEditHandler::fileType type, std::wstring const& fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow* parent);
 
 	class FileData final {
 	public:
 		FileData() = default;
-		FileData(wxString const& n, int64_t s)
+		FileData(std::wstring const& n, int64_t s)
 			: name(n), size(s) {}
 
-		wxString name;
+		std::wstring name;
 		int64_t size{};
 	};
 	bool Edit(CEditHandler::fileType type, std::vector<FileData> const& data, CServerPath const& path, CServer const& server, wxWindow* parent);
 
 	// Adds the file that doesn't exist yet. (Has to be in unknown state)
 	// The initial state will be download
-	bool AddFile(fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server);
+	bool AddFile(fileType type, std::wstring& fileName, CServerPath const& remotePath, CServer const& server);
 
 	// Tries to unedit and remove file
 	bool Remove(const wxString& fileName); // Local files
@@ -99,8 +99,8 @@ public:
 
 	struct t_fileData
 	{
-		wxString name; // The name of the file
-		wxString file; // The actual local filename
+		std::wstring name; // The name of the file
+		std::wstring file; // The actual local filename
 		fileState state;
 		fz::datetime modificationTime;
 		CServerPath remotePath;
@@ -149,7 +149,7 @@ protected:
 	void RemoveTemporaryFiles(wxString const& temp);
 	void RemoveTemporaryFilesInSpecificDir(wxString const& temp);
 
-	wxString GetTemporaryFile(wxString name);
+	std::wstring GetTemporaryFile(std::wstring name);
 	wxString TruncateFilename(const wxString path, const wxString& name, int max);
 	bool FilenameExists(const wxString& file);
 

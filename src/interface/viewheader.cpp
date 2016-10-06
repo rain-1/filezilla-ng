@@ -466,15 +466,17 @@ void CLocalViewHeader::OnSelectionChanged(wxCommandEvent& event)
 	m_autoCompletionText = _T("");
 #endif
 
-	wxString dir = event.GetString();
-	if (dir.empty())
+	std::wstring dir = event.GetString().ToStdWstring();
+	if (dir.empty()) {
 		return;
+	}
 
 	if (!wxDir::Exists(dir)) {
 		const wxString& current = m_state.GetLocalDir().GetPath();
 		int item = m_pComboBox->FindString(current, true);
-		if (item != wxNOT_FOUND)
+		if (item != wxNOT_FOUND) {
 			m_pComboBox->SetSelection(item);
+		}
 
 		wxBell();
 		return;
@@ -489,14 +491,16 @@ void CLocalViewHeader::OnTextEnter(wxCommandEvent&)
 	m_autoCompletionText = _T("");
 #endif
 
-	wxString dir = m_pComboBox->GetValue();
+	std::wstring dir = m_pComboBox->GetValue().ToStdWstring();
 
-	wxString error;
+	std::wstring error;
 	if (!m_state.SetLocalDir(dir, &error)) {
-		if (!error.empty())
+		if (!error.empty()) {
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-		else
+		}
+		else {
 			wxBell();
+		}
 		m_pComboBox->SetValue(m_state.GetLocalDir().GetPath());
 	}
 }

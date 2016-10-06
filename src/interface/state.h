@@ -112,8 +112,8 @@ public:
 	void DestroyEngine();
 
 	CLocalPath GetLocalDir() const;
-	bool SetLocalDir(CLocalPath const& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
-	bool SetLocalDir(const wxString& dir, wxString *error = 0, bool rememberPreviousSubdir = true);
+	bool SetLocalDir(CLocalPath const& dir, std::wstring *error = 0, bool rememberPreviousSubdir = true);
+	bool SetLocalDir(std::wstring const& dir, std::wstring *error = 0, bool rememberPreviousSubdir = true);
 
 	bool Connect(Site const& site, const CServerPath& path = CServerPath(), bool compare = false);
 	bool Disconnect();
@@ -128,7 +128,7 @@ public:
 	wxString GetTitle() const;
 
 	void RefreshLocal();
-	void RefreshLocalFile(wxString file);
+	void RefreshLocalFile(std::wstring const& file);
 	void LocalDirCreated(const CLocalPath& path);
 
 	bool RefreshRemote();

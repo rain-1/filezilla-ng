@@ -351,7 +351,7 @@ CLocalPath GetDownloadDir()
 		PWSTR path;
 		HRESULT result = pSHGetKnownFolderPath(FOLDERID_Downloads, 0, 0, &path);
 		if(result == S_OK) {
-			wxString dir = path;
+			std::wstring dir = path;
 			CoTaskMemFree(path);
 			return CLocalPath(dir);
 		}
@@ -363,10 +363,12 @@ CLocalPath GetDownloadDir()
 		wxLogNull logNull;
 		wxString homeDir = wxFileName::GetHomeDir();
 		wxString configPath;
-		if (wxGetenv(wxT("XDG_CONFIG_HOME")))
+		if (wxGetenv(wxT("XDG_CONFIG_HOME"))) {
 			configPath = wxGetenv(wxT("XDG_CONFIG_HOME"));
-		else
+		}
+		else {
 			configPath = homeDir + wxT("/.config");
+		}
 		wxString dirsFile = configPath + wxT("/user-dirs.dirs");
 		if (wxFileExists(dirsFile)) {
 			wxTextFile textFile;
@@ -379,7 +381,7 @@ CLocalPath GetDownloadDir()
 						wxString value = line.AfterFirst(wxT('='));
 						value = ShellUnescape(value);
 						if (!value.empty() && wxDirExists(value))
-							return CLocalPath(value);
+							return CLocalPath(value.ToStdWstring());
 						else
 							break;
 					}
@@ -388,5 +390,5 @@ CLocalPath GetDownloadDir()
 		}
 	}
 #endif
-	return CLocalPath(wxStandardPaths::Get().GetDocumentsDir());
+	return CLocalPath(wxStandardPaths::Get().GetDocumentsDir().ToStdWstring());
 }

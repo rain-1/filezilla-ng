@@ -131,7 +131,7 @@ private:
 // -----------------------
 
 // Defined in RemoteListView.cpp
-extern wxString StripVMSRevision(const wxString& name);
+std::wstring StripVMSRevision(std::wstring const& name);
 
 CSearchDialogFileList::CSearchDialogFileList(CSearchDialog* pParent, CQueueView* pQueue)
 	: CFileListCtrl<CGenericFileData>(pParent, pQueue, true),
@@ -645,7 +645,7 @@ void CSearchDialog::OnSearch(wxCommandEvent&)
 			return;
 		}
 
-		wxString error;
+		std::wstring error;
 		if (!path.Exists(&error)) {
 			wxMessageBoxEx(error, _("Local file search"), wxICON_EXCLAMATION);
 			return;
@@ -854,7 +854,7 @@ void CSearchTransferDialog::OnOK(wxCommandEvent&)
 	if (download_) {
 		wxTextCtrl *pText = XRCCTRL(*this, "ID_LOCALPATH", wxTextCtrl);
 
-		CLocalPath path(pText->GetValue());
+		CLocalPath path(pText->GetValue().ToStdWstring());
 		if (path.empty()) {
 			wxMessageBoxEx(_("You have to enter a local directory."), _("Download search results"), wxICON_EXCLAMATION);
 			return;
@@ -965,7 +965,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 
 	wxTextCtrl *pText = XRCCTRL(dlg, "ID_LOCALPATH", wxTextCtrl);
 
-	CLocalPath path(pText->GetValue());
+	CLocalPath path(pText->GetValue().ToStdWstring());
 	if (path.empty() || !path.IsWriteable()) {
 		wxBell();
 		return;
@@ -987,7 +987,7 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		if (!flatten) {
 			// Append relative path to search root to local target path
 			CServerPath remote_path = entry.path;
-			std::list<wxString> segments;
+			std::list<std::wstring> segments;
 			while (m_remote_search_root.IsParentOf(remote_path, false) && remote_path.HasParent()) {
 				segments.push_front(remote_path.GetLastSegment());
 				remote_path = remote_path.GetParent();
@@ -998,12 +998,12 @@ void CSearchDialog::OnDownload(wxCommandEvent&)
 		}
 
 		CServerPath remote_path = entry.path;
-		wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
+		std::wstring localName = CQueueView::ReplaceInvalidCharacters(entry.name);
 		if (!entry.is_dir() && remote_path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localName = StripVMSRevision(localName);
 
 		m_pQueue->QueueFile(!start, true,
-			entry.name, (localName != entry.name) ? localName : wxString(),
+			entry.name, (localName != entry.name) ? localName : std::wstring(),
 			target_path, remote_path, *pServer, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
@@ -1069,7 +1069,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 			CLocalPath local_path = entry.path;
 			std::list<std::wstring> segments;
 			while (m_local_search_root.IsParentOf(local_path) && local_path.HasParent()) {
-				segments.push_front(local_path.GetLastSegment().ToStdWstring());
+				segments.push_front(local_path.GetLastSegment());
 				local_path = local_path.GetParent();
 			}
 			for (auto const& segment : segments) {
@@ -1078,10 +1078,10 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 		}
 
 		CLocalPath local_path = entry.path;
-		wxString localName = CQueueView::ReplaceInvalidCharacters(entry.name);
+		std::wstring localName = CQueueView::ReplaceInvalidCharacters(entry.name);
 
 		m_pQueue->QueueFile(!start, false,
-			entry.name, (localName != entry.name) ? localName : wxString(),
+			entry.name, (localName != entry.name) ? localName : std::wstring(),
 			local_path, target_path, *pServer, entry.size);
 	}
 	m_pQueue->QueueFile_Finish(start);
@@ -1091,7 +1091,7 @@ void CSearchDialog::OnUpload(wxCommandEvent&)
 	for (auto const& dir : selected_dirs) {
 		CServerPath target_path = path;
 		if (!flatten && dir.HasParent()) {
-			target_path.AddSegment(dir.GetLastSegment().ToStdWstring());
+			target_path.AddSegment(dir.GetLastSegment());
 		}
 
 		local_recursion_root root;

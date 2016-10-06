@@ -146,8 +146,8 @@ class CFileItem : public CQueueItem
 {
 public:
 	CFileItem(CServerItem* parent, bool queued, bool download,
-		const wxString& sourceFile, const wxString& targetFile,
-		const CLocalPath& localPath, const CServerPath& remotePath, int64_t size);
+		std::wstring const& sourceFile, std::wstring const& targetFile,
+		CLocalPath const& localPath, CServerPath const& remotePath, int64_t size);
 
 	virtual ~CFileItem();
 
@@ -270,8 +270,8 @@ protected:
 class CFolderItem : public CFileItem
 {
 public:
-	CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath);
-	CFolderItem(CServerItem* parent, bool queued, const CServerPath& remotePath, const wxString& remoteFile);
+	CFolderItem(CServerItem* parent, bool queued, CLocalPath const& localPath);
+	CFolderItem(CServerItem* parent, bool queued, CServerPath const& remotePath, std::wstring const& remoteFile);
 
 	virtual QueueItemType GetType() const { return QueueItemType::Folder; }
 

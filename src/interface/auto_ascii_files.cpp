@@ -38,7 +38,7 @@ void CAutoAsciiFiles::SettingsChanged()
 }
 
 // Defined in RemoteListView.cpp
-wxString StripVMSRevision(const wxString& name);
+std::wstring StripVMSRevision(std::wstring const& name);
 
 bool CAutoAsciiFiles::TransferLocalAsAscii(wxString const& local_file, ServerType server_type)
 {
@@ -60,7 +60,7 @@ bool CAutoAsciiFiles::TransferRemoteAsAscii(wxString const& remote_file, ServerT
 		return false;
 
 	if (server_type == VMS) {
-		return TransferRemoteAsAscii(StripVMSRevision(remote_file), DEFAULT);
+		return TransferRemoteAsAscii(StripVMSRevision(remote_file.ToStdWstring()), DEFAULT);
 	}
 
 	if (!remote_file.empty() && remote_file[0] == '.')

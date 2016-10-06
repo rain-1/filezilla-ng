@@ -1131,21 +1131,21 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::overwriteNewer:
-		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty())
+		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty()) {
 			SendNextCommand();
-		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime))
+		}
+		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime)) {
 			SendNextCommand();
-		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.later_than(pFileExistsNotification->remoteTime))
+		}
+		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.later_than(pFileExistsNotification->remoteTime)) {
 			SendNextCommand();
-		else
-		{
-			if (pData->download)
-			{
+		}
+		else {
+			if (pData->download) {
 				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
-			else
-			{
+			else {
 				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 			}
 			ResetOperation(FZ_REPLY_OK);
@@ -1154,8 +1154,9 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 	case CFileExistsNotification::overwriteSize:
 		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
 		Second compare flags the remaining case in which we need to send command : both size unknown */
-		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0))
+		if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0)) {
 			SendNextCommand();
+		}
 		else {
 			if (pData->download) {
 				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
@@ -1168,41 +1169,44 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::overwriteSizeOrNewer:
-		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty())
+		if (pFileExistsNotification->localTime.empty() || pFileExistsNotification->remoteTime.empty()) {
 			SendNextCommand();
+		}
 		/* First compare flags both size known but different, one size known and the other not (obviously they are different).
 		Second compare flags the remaining case in which we need to send command : both size unknown */
-		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0))
+		else if ((pFileExistsNotification->localSize != pFileExistsNotification->remoteSize) || (pFileExistsNotification->localSize < 0)) {
 			SendNextCommand();
-		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime))
+		}
+		else if (pFileExistsNotification->download && pFileExistsNotification->localTime.earlier_than(pFileExistsNotification->remoteTime)) {
 			SendNextCommand();
-		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.later_than(pFileExistsNotification->remoteTime))
+		}
+		else if (!pFileExistsNotification->download && pFileExistsNotification->localTime.later_than(pFileExistsNotification->remoteTime)) {
 			SendNextCommand();
-		else
-		{
-			if (pData->download)
-			{
-				wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
+		}
+		else {
+			if (pData->download) {
+				auto const filename = pData->remotePath.FormatFilename(pData->remoteFile);
 				LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 			}
-			else
-			{
+			else {
 				LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 			}
 			ResetOperation(FZ_REPLY_OK);
 		}
 		break;
 	case CFileExistsNotification::resume:
-		if (pData->download && pData->localFileSize >= 0)
+		if (pData->download && pData->localFileSize >= 0) {
 			pData->resume = true;
-		else if (!pData->download && pData->remoteFileSize >= 0)
+		}
+		else if (!pData->download && pData->remoteFileSize >= 0) {
 			pData->resume = true;
+		}
 		SendNextCommand();
 		break;
 	case CFileExistsNotification::rename:
 		if (pData->download) {
 			{
-				wxString tmp;
+				std::wstring tmp;
 				CLocalPath l(pData->localFile, &tmp);
 				if (l.empty() || tmp.empty()) {
 					ResetOperation(FZ_REPLY_INTERNALERROR);
@@ -1258,13 +1262,11 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 		}
 		break;
 	case CFileExistsNotification::skip:
-		if (pData->download)
-		{
+		if (pData->download) {
 			wxString filename = pData->remotePath.FormatFilename(pData->remoteFile);
 			LogMessage(MessageType::Status, _("Skipping download of %s"), filename);
 		}
-		else
-		{
+		else {
 			LogMessage(MessageType::Status, _("Skipping upload of %s"), pData->localFile);
 		}
 		ResetOperation(FZ_REPLY_OK);
@@ -1280,16 +1282,16 @@ bool CControlSocket::SetFileExistsAction(CFileExistsNotification *pFileExistsNot
 
 void CControlSocket::CreateLocalDir(std::wstring const & local_file)
 {
-	wxString file;
+	std::wstring file;
 	CLocalPath local_path(local_file, &file);
 	if (local_path.empty() || !local_path.HasParent())
 		return;
 
 	// Only go back as far as needed. By comparison, wxWidgets'
 	// wxFileName::Mkdir always starts at the root.
-	std::vector<wxString> segments;
+	std::vector<std::wstring> segments;
 	while (!local_path.Exists() && local_path.HasParent()) {
-		wxString segment;
+		std::wstring segment;
 		local_path.MakeParent(&segment);
 		segments.push_back(segment);
 	}

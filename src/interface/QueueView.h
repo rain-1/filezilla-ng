@@ -116,7 +116,7 @@ public:
 	virtual ~CQueueView();
 
 	bool QueueFile(const bool queueOnly, const bool download,
-		const wxString& localFile, const wxString& remoteFile,
+		std::wstring const& localFile, std::wstring const& remoteFile,
 		const CLocalPath& localPath, const CServerPath& remotePath,
 		const CServer& server, int64_t size, CEditHandler::fileType edit = CEditHandler::none,
 		QueuePriority priority = QueuePriority::normal);
@@ -149,7 +149,7 @@ public:
 
 	void RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString& newName, bool local);
 
-	static wxString ReplaceInvalidCharacters(const wxString& filename);
+	static std::wstring ReplaceInvalidCharacters(std::wstring const& filename);
 
 	// Get the current download speed as the sum of all active downloads.
 	// Unit is byte/s.

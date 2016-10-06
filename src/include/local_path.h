@@ -1,5 +1,5 @@
-#ifndef __LOCAL_PATH_H__
-#define __LOCAL_PATH_H__
+#ifndef FILEZILLA_ENGINE_LOCAL_PATH_HEADER
+#define FILEZILLA_ENGINE_LOCAL_PATH_HEADER
 
 #include <libfilezilla/shared.hpp>
 
@@ -21,8 +21,8 @@ public:
 	// correct, empty() will return true.
 	// If file is given and path not terminated by a separator,
 	// the filename portion is returned in file.
-	explicit CLocalPath(const wxString& path, wxString* file = 0);
-	bool SetPath(std::wstring const& path, wxString* file = 0);
+	explicit CLocalPath(std::wstring const& path, std::wstring* file = 0);
+	bool SetPath(std::wstring const& path, std::wstring* file = 0);
 
 	// Always terminated by a separator
 	std::wstring const& GetPath() const { return *m_path; }
@@ -31,25 +31,25 @@ public:
 	void clear();
 
 	// On failure the path is undefined
-	bool ChangePath(const wxString& new_path);
+	bool ChangePath(std::wstring const& new_path);
 
 	// Do not call with separators in the segment
-	void AddSegment(const wxString& segment);
+	void AddSegment(std::wstring const& segment);
 
 	// HasParent() and HasLogicalParent() only return different values on
 	// MSW: C:\ is the drive root but has \ as logical parent, the drive list.
 	bool HasParent() const;
 	bool HasLogicalParent() const;
 
-	CLocalPath GetParent(wxString* last_segment = 0) const;
+	CLocalPath GetParent(std::wstring* last_segment = 0) const;
 
 	// If it fails, the path is undefined
-	bool MakeParent(wxString* last_segment = 0);
+	bool MakeParent(std::wstring* last_segment = 0);
 
 	/* Calling GetLastSegment() only returns non-empty string if
 	 * HasParent() returns true
 	 */
-	wxString GetLastSegment() const;
+	std::wstring GetLastSegment() const;
 
 	bool IsSubdirOf(const CLocalPath &path) const;
 	bool IsParentOf(const CLocalPath &path) const;
@@ -61,16 +61,16 @@ public:
 	bool IsWriteable() const;
 
 	// Checks if the directory exists.
-	bool Exists(wxString *error = 0) const;
+	bool Exists(std::wstring *error = 0) const;
 
 	static wchar_t const path_separator;
 
-	bool operator==(const CLocalPath& op) const;
-	bool operator!=(const CLocalPath& op) const;
+	bool operator==(CLocalPath const& op) const;
+	bool operator!=(CLocalPath const& op) const;
 
 	bool operator<(CLocalPath const& op) const;
 protected:
 	fz::shared_value<std::wstring> m_path;
 };
 
-#endif //__LOCAL_PATH_H__
+#endif

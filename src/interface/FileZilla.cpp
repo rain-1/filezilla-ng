@@ -366,27 +366,33 @@ CLocalPath CFileZillaApp::GetDataDir(wxString fileToFind) const
 	// For each path, check for the resources
 	wxPathList::const_iterator node;
 	for (node = pathList.begin(); node != pathList.end(); ++node) {
-		wxString cur = CLocalPath(*node).GetPath();
-		if (FileExists(cur + fileToFind))
+		auto const cur = CLocalPath(node->ToStdWstring()).GetPath();
+		if (FileExists(cur + fileToFind)) {
 			return CLocalPath(cur);
-		if (FileExists(cur + _T("share/filezilla/") + fileToFind))
+		}
+		if (FileExists(cur + _T("share/filezilla/") + fileToFind)) {
 			return CLocalPath(cur + _T("/share/filezilla"));
-		if (FileExists(cur + _T("filezilla/") + fileToFind))
+		}
+		if (FileExists(cur + _T("filezilla/") + fileToFind)) {
 			return CLocalPath(cur + _T("filezilla"));
+		}
 	}
 
 	for (node = pathList.begin(); node != pathList.end(); ++node) {
-		wxString cur = CLocalPath(*node).GetPath();
-		if (FileExists(cur + _T("../") + fileToFind))
+		auto const cur = CLocalPath(node->ToStdWstring()).GetPath();
+		if (FileExists(cur + _T("../") + fileToFind)) {
 			return CLocalPath(cur + _T("/.."));
-		if (FileExists(cur + _T("../share/filezilla/") + fileToFind))
+		}
+		if (FileExists(cur + _T("../share/filezilla/") + fileToFind)) {
 			return CLocalPath(cur + _T("../share/filezilla"));
+		}
 	}
 
 	for (node = pathList.begin(); node != pathList.end(); ++node) {
-		wxString cur = CLocalPath(*node).GetPath();
-		if (FileExists(cur + _T("../../") + fileToFind))
+		auto const cur = CLocalPath(node->ToStdWstring()).GetPath();
+		if (FileExists(cur + _T("../../") + fileToFind)) {
 			return CLocalPath(cur + _T("../.."));
+		}
 	}
 
 	return CLocalPath();

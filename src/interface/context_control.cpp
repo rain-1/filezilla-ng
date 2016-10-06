@@ -115,9 +115,9 @@ void CContextControl::CreateTab()
 		pState->GetLocalRecursiveOperation()->SetQueue(m_mainFrame.GetQueue());
 		pState->GetRemoteRecursiveOperation()->SetQueue(m_mainFrame.GetQueue());
 
-		wxString const localDir = COptions::Get()->GetOption(OPTION_LASTLOCALDIR);
+		std::wstring const localDir = COptions::Get()->GetOption(OPTION_LASTLOCALDIR);
 		if (!pState->SetLocalDir(localDir)) {
-			wxString const homeDir = wxGetHomeDir();
+			std::wstring const homeDir = wxGetHomeDir().ToStdWstring();
 			if (!pState->SetLocalDir(homeDir)) {
 				pState->SetLocalDir(_T("/"));
 			}

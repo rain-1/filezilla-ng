@@ -278,7 +278,7 @@ bool CAsyncRequestQueue::ProcessFileExistsNotification(t_queueEntry &entry)
 				return false;
 
 			wxString msg;
-			wxString defaultName;
+			std::wstring defaultName;
 			if (notification.download) {
 				msg.Printf(_("The file %s already exists.\nPlease enter a new name:"), notification.localFile);
 				CLocalPath fn(notification.localFile, &defaultName);
