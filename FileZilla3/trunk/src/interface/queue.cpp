@@ -221,11 +221,11 @@ int CQueueItem::GetItemIndex() const
 }
 
 CFileItem::CFileItem(CServerItem* parent, bool queued, bool download,
-					 const wxString& sourceFile, const wxString& targetFile,
-					 const CLocalPath& localPath, const CServerPath& remotePath, int64_t size)
+					 std::wstring const& sourceFile, std::wstring const& targetFile,
+					 CLocalPath const& localPath, CServerPath const& remotePath, int64_t size)
 	: CQueueItem(parent)
 	, m_sourceFile(sourceFile)
-	, m_targetFile(targetFile.empty() ? fz::sparse_optional<std::wstring>() : fz::sparse_optional<std::wstring>(to_wstring(targetFile)))
+	, m_targetFile(targetFile.empty() ? fz::sparse_optional<std::wstring>() : fz::sparse_optional<std::wstring>(targetFile))
 	, m_localPath(localPath)
 	, m_remotePath(remotePath)
 	, m_size(size)
@@ -343,13 +343,13 @@ wxString const& CFileItem::GetStatusMessage() const
 	return statusTexts[m_status];
 }
 
-CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CLocalPath& localPath)
-	: CFileItem(parent, queued, true, wxEmptyString, wxEmptyString, localPath, CServerPath(), -1)
+CFolderItem::CFolderItem(CServerItem* parent, bool queued, CLocalPath const& localPath)
+	: CFileItem(parent, queued, true, std::wstring(), std::wstring(), localPath, CServerPath(), -1)
 {
 }
 
-CFolderItem::CFolderItem(CServerItem* parent, bool queued, const CServerPath& remotePath, const wxString& remoteFile)
-	: CFileItem(parent, queued, false, _T(""), remoteFile, CLocalPath(), remotePath, -1)
+CFolderItem::CFolderItem(CServerItem* parent, bool queued, CServerPath const& remotePath, std::wstring const& remoteFile)
+	: CFileItem(parent, queued, false, std::wstring(), remoteFile, CLocalPath(), remotePath, -1)
 {
 }
 
@@ -357,8 +357,9 @@ void CFolderItem::SaveItem(pugi::xml_node& element) const
 {
 	auto file = element.append_child("Folder");
 
-	if (Download())
+	if (Download()) {
 		AddTextElement(file, "LocalFile", GetLocalPath().GetPath() + GetLocalFile());
+	}
 	else {
 		AddTextElement(file, "RemoteFile", GetRemoteFile());
 		AddTextElement(file, "RemotePath", m_remotePath.GetSafePath());
@@ -368,10 +369,12 @@ void CFolderItem::SaveItem(pugi::xml_node& element) const
 
 void CFolderItem::SetActive(const bool active)
 {
-	if (active)
+	if (active) {
 		flags |= flag_active;
-	else
+	}
+	else {
 		flags &= ~flag_active;
+	}
 }
 
 CServerItem::CServerItem(const CServer& server)

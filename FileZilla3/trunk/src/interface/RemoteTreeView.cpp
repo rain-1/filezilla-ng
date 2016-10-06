@@ -855,7 +855,7 @@ void CRemoteTreeView::OnBeginDrag(wxTreeEvent& event)
 				return;
 			}
 
-			CLocalPath target(ext->GetTarget());
+			CLocalPath target(ext->GetTarget().ToStdWstring());
 			if (target.empty()) {
 				ext.reset(); // Release extension before the modal message box
 				wxMessageBoxEx(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
@@ -1016,17 +1016,20 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 		return;
 	}
 
-	if (!m_state.IsRemoteIdle())
+	if (!m_state.IsRemoteIdle()) {
 		return;
+	}
 
-	if (!m_contextMenuItem)
+	if (!m_contextMenuItem) {
 		return;
+	}
 
 	const CServerPath& path = GetPathFromItem(m_contextMenuItem);
-	if (path.empty())
+	if (path.empty()) {
 		return;
+	}
 
-	const wxString& name = GetItemText(m_contextMenuItem);
+	std::wstring const name = GetItemText(m_contextMenuItem).ToStdWstring();
 
 	localDir.AddSegment(CQueueView::ReplaceInvalidCharacters(name));
 
@@ -1037,8 +1040,9 @@ void CRemoteTreeView::OnMenuDownload(wxCommandEvent& event)
 
 	CServerPath currentPath;
 	const wxTreeItemId selected = GetSelection();
-	if (selected)
+	if (selected) {
 		currentPath = GetPathFromItem(selected);
+	}
 
 	const bool addOnly = event.GetId() == XRCID("ID_ADDTOQUEUE");
 	CFilterManager filter;

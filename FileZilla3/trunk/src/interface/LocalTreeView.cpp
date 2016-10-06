@@ -93,7 +93,7 @@ public:
 		if (!hit)
 			return wxDragNone;
 
-		const CLocalPath path(GetDirFromItem(hit));
+		const CLocalPath path(GetDirFromItem(hit).ToStdWstring());
 		if (path.empty() || !path.IsWriteable())
 			return wxDragNone;
 
@@ -136,12 +136,14 @@ public:
 		ClearDropHighlight();
 
 		wxTreeItemId hit = GetHit(wxPoint(x, y));
-		if (!hit)
+		if (!hit) {
 			return false;
+		}
 
-		const wxString dir = GetDirFromItem(hit);
-		if (dir.empty() || !CLocalPath(dir).IsWriteable())
+		std::wstring const dir = GetDirFromItem(hit);
+		if (dir.empty() || !CLocalPath(dir).IsWriteable()) {
 			return false;
+		}
 
 		return true;
 	}
@@ -842,17 +844,20 @@ void CLocalTreeView::OnSelectionChanged(wxTreeEvent& event)
 	}
 
 	wxTreeItemId item = event.GetItem();
-	if (!item)
+	if (!item) {
 		return;
+	}
 
-	wxString dir = GetDirFromItem(item);
+	std::wstring dir = GetDirFromItem(item).ToStdWstring();
 
-	wxString error;
+	std::wstring error;
 	if (!m_state.SetLocalDir(dir, &error)) {
-		if (!error.empty())
+		if (!error.empty()) {
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-		else
+		}
+		else {
 			wxBell();
+		}
 		m_setSelection = true;
 		SelectItem(event.GetOldItem());
 		m_setSelection = false;
@@ -1032,14 +1037,16 @@ void CLocalTreeView::OnVolumesEnumerated(wxCommandEvent& event)
 void CLocalTreeView::OnContextMenu(wxTreeEvent& event)
 {
 	m_contextMenuItem = event.GetItem();
-	if (!m_contextMenuItem.IsOk())
+	if (!m_contextMenuItem.IsOk()) {
 		return;
+	}
 
 	wxMenu* pMenu = wxXmlResource::Get()->LoadMenu(_T("ID_MENU_LOCALTREE"));
-	if (!pMenu)
+	if (!pMenu) {
 		return;
+	}
 
-	const CLocalPath path(GetDirFromItem(m_contextMenuItem));
+	CLocalPath const path(GetDirFromItem(m_contextMenuItem).ToStdWstring());
 
 	const bool hasParent = path.HasParent();
 	const bool writeable = path.IsWriteable();
@@ -1069,7 +1076,7 @@ void CLocalTreeView::OnMenuUpload(wxCommandEvent& event)
 		return;
 	}
 
-	CLocalPath path(GetDirFromItem(m_contextMenuItem));
+	CLocalPath path(GetDirFromItem(m_contextMenuItem).ToStdWstring());
 
 	if (!path.HasParent()) {
 		return;
@@ -1112,19 +1119,20 @@ void CLocalTreeView::OnMenuMkdir(wxCommandEvent&)
 // Create a new Directory and enter the new Directory
 void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
-	wxString newdir = MenuMkdir();
+	std::wstring newdir = MenuMkdir().ToStdWstring();
 	if (newdir.empty()) {
 		return;
 	}
 
 	// OnMenuEnter
-	wxString error;
-	if (!m_state.SetLocalDir(newdir, &error))
-	{
-		if (!error.empty())
+	std::wstring error;
+	if (!m_state.SetLocalDir(newdir, &error)) {
+		if (!error.empty()) {
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-		else
+		}
+		else {
 			wxBell();
+		}
 	}
 }
 
@@ -1132,33 +1140,35 @@ void CLocalTreeView::OnMenuMkdirChgDir(wxCommandEvent&)
 // Returns the name of the new directory
 wxString CLocalTreeView::MenuMkdir()
 {
-	if (!m_contextMenuItem.IsOk())
+	if (!m_contextMenuItem.IsOk()) {
 		return wxString();
+	}
 
-	wxString path = GetDirFromItem(m_contextMenuItem);
-	if (path.Last() != wxFileName::GetPathSeparator())
+	std::wstring path = GetDirFromItem(m_contextMenuItem).ToStdWstring();
+	if (!path.empty() && path.back() != wxFileName::GetPathSeparator()) {
 		path += wxFileName::GetPathSeparator();
+	}
 
-	if (!CLocalPath(path).IsWriteable())
-	{
+	if (!CLocalPath(path).IsWriteable()) {
 		wxBell();
 		return wxString();
 	}
 
 	CInputDialog dlg;
-	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
+	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:"))) {
 		return wxString();
+	}
 
 	wxString newName = _("New directory");
 	dlg.SetValue(path + newName);
-	dlg.SelectText(path.Len(), path.Len() + newName.Len());
+	dlg.SelectText(path.size(), path.size() + newName.size());
 
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return wxString();
+	}
 
 	wxFileName fn(dlg.GetValue(), _T(""));
-	if (!fn.Normalize(wxPATH_NORM_ALL, path))
-	{
+	if (!fn.Normalize(wxPATH_NORM_ALL, path)) {
 		wxBell();
 		return wxString();
 	}
@@ -1189,7 +1199,7 @@ void CLocalTreeView::OnMenuRename(wxCommandEvent&)
 	}
 #endif
 
-	CLocalPath path(GetDirFromItem(m_contextMenuItem));
+	CLocalPath path(GetDirFromItem(m_contextMenuItem).ToStdWstring());
 	if (!path.HasParent() || !path.IsWriteable()) {
 		wxBell();
 		return;
@@ -1200,37 +1210,45 @@ void CLocalTreeView::OnMenuRename(wxCommandEvent&)
 
 void CLocalTreeView::OnMenuDelete(wxCommandEvent&)
 {
-	if (!m_contextMenuItem.IsOk())
+	if (!m_contextMenuItem.IsOk()) {
 		return;
+	}
 
-	wxString path = GetDirFromItem(m_contextMenuItem);
+	std::wstring path = GetDirFromItem(m_contextMenuItem).ToStdWstring();
 
 	CLocalPath local_path(path);
-	if (!local_path.HasParent() || !local_path.IsWriteable())
+	if (!local_path.HasParent() || !local_path.IsWriteable()) {
 		return;
+	}
 
 	gui_recursive_remove rmd(this);
 	rmd.remove(fz::to_native(path));
 
 	wxTreeItemId item = GetSelection();
-	while (item && item != m_contextMenuItem)
+	while (item && item != m_contextMenuItem) {
 		item = GetItemParent(item);
+	}
 
 	if (!item) {
-		if (GetItemParent(m_contextMenuItem) == GetSelection())
+		if (GetItemParent(m_contextMenuItem) == GetSelection()) {
 			m_state.RefreshLocal();
-		else
+		}
+		else {
 			RefreshListing();
+		}
 		return;
 	}
 
-	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator())
-		path.RemoveLast();
-	int pos = path.Find(wxFileName::GetPathSeparator(), true);
-	if (pos < 1)
+	if (!path.empty() && path.back() == wxFileName::GetPathSeparator()) {
+		path.pop_back();
+	}
+	size_t pos = path.rfind(wxFileName::GetPathSeparator());
+	if (pos == std::wstring::npos || !pos) {
 		path = _T("/");
-	else
-		path = path.Left(pos);
+	}
+	else {
+		path = path.substr(0, pos);
+	}
 
 	m_state.SetLocalDir(path);
 	RefreshListing();
@@ -1249,7 +1267,7 @@ void CLocalTreeView::OnBeginLabelEdit(wxTreeEvent& event)
 	}
 #endif
 
-	CLocalPath path(GetDirFromItem(item));
+	CLocalPath path(GetDirFromItem(item).ToStdWstring());
 
 	if (!path.HasParent() || !path.IsWriteable())
 	{
@@ -1276,7 +1294,7 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 	}
 #endif
 
-	wxString path = GetDirFromItem(item);
+	std::wstring path = GetDirFromItem(item).ToStdWstring();
 
 	CLocalPath local_path(path);
 	if (!local_path.HasParent() || !local_path.IsWriteable()) {
@@ -1285,16 +1303,17 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		return;
 	}
 
-	if (!path.empty() && path.Last() == wxFileName::GetPathSeparator())
-		path.RemoveLast();
+	if (!path.empty() && path.back() == wxFileName::GetPathSeparator()) {
+		path.pop_back();
+	}
 
-	int pos = path.Find(wxFileName::GetPathSeparator(), true);
-	wxASSERT(pos != -1);
+	size_t pos = path.rfind(wxFileName::GetPathSeparator());
+	wxASSERT(pos != std::wstring::npos);
 
-	wxString parent = path.Left(pos + 1);
+	std::wstring parent = path.substr(0, pos + 1);
 
 	const wxString& oldName = GetItemText(item);
-	const wxString& newName = event.GetLabel();
+	std::wstring const newName = event.GetLabel().ToStdWstring();
 	if (newName.empty()) {
 		wxBell();
 		event.Veto();
@@ -1303,8 +1322,9 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 
 	wxASSERT(parent + oldName == path);
 
-	if (oldName == newName)
+	if (oldName == newName) {
 		return;
+	}
 
 	if (!RenameFile(this, parent, oldName, newName)) {
 		event.Veto();
@@ -1328,11 +1348,11 @@ void CLocalTreeView::OnEndLabelEdit(wxTreeEvent& event)
 		return;
 	}
 
-	wxString sub;
+	std::wstring sub;
 
 	wxTreeItemId tmp = currentSel;
 	while (tmp != GetRootItem() && tmp != item) {
-		sub = wxFileName::GetPathSeparator() + GetItemText(tmp) + sub;
+		sub = (wxFileName::GetPathSeparator() + GetItemText(tmp) + sub).ToStdWstring();
 		tmp = GetItemParent(tmp);
 	}
 

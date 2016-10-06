@@ -867,25 +867,26 @@ void CRemoteListView::SetDirectoryListing(std::shared_ptr<CDirectoryListing> con
 // foo.bar;1
 // foo.bar;2
 // foo.bar;3
-wxString StripVMSRevision(const wxString& name)
+std::wstring StripVMSRevision(std::wstring const& name)
 {
-	int pos = name.Find(';', true);
-	if (pos < 1)
+	size_t pos = name.rfind(';');
+	if (pos == std::wstring::npos || !pos) {
 		return name;
-
-	const int len = name.Len();
-	if (pos == len - 1)
-		return name;
-
-	int p = pos;
-	while (++p < len)
-	{
-		const wxChar& c = name[p];
-		if (c < '0' || c > '9')
-			return name;
 	}
 
-	return name.Left(pos);
+	if (pos == name.size() - 1) {
+		return name;
+	}
+
+	size_t p = pos;
+	while (++p < name.size()) {
+		wchar_t const& c = name[p];
+		if (c < '0' || c > '9') {
+			return name;
+		}
+	}
+
+	return name.substr(0, pos);
 }
 
 
@@ -993,11 +994,11 @@ void CRemoteListView::OnItemActivated(wxListEvent &event)
 				return;
 			}
 
-			wxString localFile = CQueueView::ReplaceInvalidCharacters(name);
+			std::wstring localFile = CQueueView::ReplaceInvalidCharacters(name);
 			if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 				localFile = StripVMSRevision(localFile);
 			m_pQueue->QueueFile(queue_only, true, name,
-				(name == localFile) ? wxString() : localFile,
+				(name == localFile) ? std::wstring() : localFile,
 				local_path, m_pDirectoryListing->path, *pServer, entry.size);
 			m_pQueue->QueueFile_Finish(true);
 		}
@@ -1258,12 +1259,12 @@ void CRemoteListView::TransferSelectedFiles(const CLocalPath& local_parent, bool
 			}
 		}
 		else {
-			wxString localFile = CQueueView::ReplaceInvalidCharacters(name);
+			std::wstring localFile = CQueueView::ReplaceInvalidCharacters(name);
 			if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION)) {
 				localFile = StripVMSRevision(localFile);
 			}
 			m_pQueue->QueueFile(queue_only, true,
-				name, (name == localFile) ? wxString() : localFile,
+				name, (name == localFile) ? std::wstring() : localFile,
 				local_parent, m_pDirectoryListing->path, *pServer, entry.size);
 			added = true;
 		}
@@ -2010,7 +2011,7 @@ void CRemoteListView::OnStateChange(t_statechange_notifications notification, co
 		SetDirectoryListing(m_state.GetRemoteDir());
 	else if (notification == STATECHANGE_REMOTE_LINKNOTDIR) {
 		wxASSERT(data2);
-		LinkIsNotDir(*(CServerPath*)data2, data);
+		LinkIsNotDir(*(CServerPath*)data2, data.ToStdWstring());
 	}
 	else if (notification == STATECHANGE_SERVER) {
 		m_windowTinter->SetBackgroundTint(m_state.GetSite().m_colour);
@@ -2190,7 +2191,7 @@ void CRemoteListView::OnBeginDrag(wxListEvent&)
 				}
 			}
 
-			CLocalPath target(ext->GetTarget());
+			CLocalPath target(ext->GetTarget().ToStdWstring());
 			if (target.empty()) {
 				ext.reset(); // Release extension before the modal message box
 				wxMessageBoxEx(_("Could not determine the target of the Drag&Drop operation.\nEither the shell extension is not installed properly or you didn't drop the files into an Explorer window."));
@@ -2478,14 +2479,14 @@ int64_t CRemoteListView::ItemGetSize(int index) const
 	return (*m_pDirectoryListing)[index].size;
 }
 
-void CRemoteListView::LinkIsNotDir(const CServerPath& path, const wxString& link)
+void CRemoteListView::LinkIsNotDir(CServerPath const& path, std::wstring const& link)
 {
 	if (m_pLinkResolveState && m_pLinkResolveState->remote_path == path && m_pLinkResolveState->link == link) {
-		wxString localFile = CQueueView::ReplaceInvalidCharacters(link);
+		std::wstring localFile = CQueueView::ReplaceInvalidCharacters(link);
 		if (m_pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
 			localFile = StripVMSRevision(localFile);
 		m_pQueue->QueueFile(false, true,
-			link, (link != localFile) ? localFile : wxString(),
+			link, (link != localFile) ? localFile : std::wstring(),
 			m_pLinkResolveState->local_path, m_pLinkResolveState->remote_path, m_pLinkResolveState->server, -1);
 		m_pQueue->QueueFile_Finish(true);
 	}

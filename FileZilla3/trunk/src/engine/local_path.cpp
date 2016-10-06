@@ -12,12 +12,12 @@ wchar_t const CLocalPath::path_separator = '\\';
 wchar_t const CLocalPath::path_separator = '/';
 #endif
 
-CLocalPath::CLocalPath(const wxString& path, wxString* file /*=0*/)
+CLocalPath::CLocalPath(std::wstring const& path, std::wstring* file)
 {
-	SetPath(path.ToStdWstring(), file);
+	SetPath(path, file);
 }
 
-bool CLocalPath::SetPath(std::wstring const& path, wxString* file)
+bool CLocalPath::SetPath(std::wstring const& path, std::wstring* file)
 {
 	// This function ensures that the path is in canonical form on success.
 	if (path.empty()) {
@@ -26,10 +26,11 @@ bool CLocalPath::SetPath(std::wstring const& path, wxString* file)
 	}
 
 #ifdef FZ_WINDOWS
-	if (path == _T("\\")) {
+	if (path == L"\\") {
 		m_path.get() = path;
-		if (file)
+		if (file) {
 			file->clear();
+		}
 		return true;
 	}
 #endif
@@ -201,11 +202,12 @@ parse_regular:
 		}
 		else if (last == segment) {
 			if (file) {
-				*file = wxString(segments.back(), out);
+				*file = std::wstring(segments.back(), out);
 				out = segments.back();
 			}
-			else
+			else {
 				*out++ = path_separator;
+			}
 		}
 
 		path_out.resize(out - start);
@@ -273,7 +275,7 @@ bool CLocalPath::HasLogicalParent() const
 	return HasParent();
 }
 
-CLocalPath CLocalPath::GetParent(wxString* last_segment) const
+CLocalPath CLocalPath::GetParent(std::wstring* last_segment) const
 {
 	CLocalPath parent;
 
@@ -306,7 +308,7 @@ CLocalPath CLocalPath::GetParent(wxString* last_segment) const
 	return CLocalPath();
 }
 
-bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
+bool CLocalPath::MakeParent(std::wstring* last_segment)
 {
 	std::wstring& path = m_path.get();
 
@@ -338,14 +340,14 @@ bool CLocalPath::MakeParent(wxString* last_segment /*=0*/)
 	return false;
 }
 
-void CLocalPath::AddSegment(const wxString& segment)
+void CLocalPath::AddSegment(std::wstring const& segment)
 {
 	std::wstring& path = m_path.get();
 
-	wxASSERT(!path.empty());
-	wxASSERT(segment.find(_T("/")) == std::wstring::npos);
+	assert(!path.empty());
+	assert(segment.find(_T("/")) == std::wstring::npos);
 #ifdef FZ_WINDOWS
-	wxASSERT(segment.find(_T("\\")) == std::wstring::npos);
+	assert(segment.find(_T("\\")) == std::wstring::npos);
 #endif
 
 	if (!segment.empty()) {
@@ -354,7 +356,7 @@ void CLocalPath::AddSegment(const wxString& segment)
 	}
 }
 
-bool CLocalPath::ChangePath(const wxString& new_path)
+bool CLocalPath::ChangePath(std::wstring const& new_path)
 {
 	if (new_path.empty()) {
 		return false;
@@ -368,45 +370,48 @@ bool CLocalPath::ChangePath(const wxString& new_path)
 
 	if (new_path.size() >= 2 && new_path[0] == '\\' && new_path[1] == '\\') {
 		// Absolute UNC
-		return SetPath(new_path.ToStdWstring());
+		return SetPath(new_path);
 	}
 	if (new_path.size() >= 2 && new_path[0] && new_path[1] == ':') {
 		// Absolute new_path
-		return SetPath(new_path.ToStdWstring());
+		return SetPath(new_path);
 	}
 
 	// Relative new_path
-	if (m_path->empty())
+	if (m_path->empty()) {
 		return false;
+	}
 
 	if (new_path.size() >= 2 && (new_path[0] == '\\' || new_path[0] == '/') && m_path->size() > 2 && (*m_path)[1] == ':') {
 		// Relative to drive root
-		return SetPath(m_path->substr(0, 2) + new_path.ToStdWstring());
+		return SetPath(m_path->substr(0, 2) + new_path);
 	}
 	else {
 		// Relative to current directory
-		return SetPath(*m_path + new_path.ToStdWstring());
+		return SetPath(*m_path + new_path);
 	}
 #else
 	if (!new_path.empty() && new_path[0] == path_separator) {
 		// Absolute new_path
-		return SetPath(new_path.ToStdWstring());
+		return SetPath(new_path));
 	}
 	else {
 		// Relative new_path
-		if (m_path->empty())
+		if (m_path->empty()) {
 			return false;
+		}
 
-		return SetPath(*m_path + new_path.ToStdWstring());
+		return SetPath(*m_path + new_path));
 	}
 #endif
 }
 
-bool CLocalPath::Exists(wxString *error /*=0*/) const
+bool CLocalPath::Exists(std::wstring *error) const
 {
-	wxASSERT(!m_path->empty());
-	if (m_path->empty())
+	assert(!m_path->empty());
+	if (m_path->empty()) {
 		return false;
+	}
 
 #ifdef FZ_WINDOWS
 	if (m_path == _T("\\")) {
@@ -438,56 +443,64 @@ bool CLocalPath::Exists(wxString *error /*=0*/) const
 	}
 	DWORD ret = ::GetFileAttributes(path.c_str());
 	if (ret == INVALID_FILE_ATTRIBUTES) {
-		if (!error)
+		if (!error) {
 			return false;
+		}
 
-		error->Printf(_("'%s' does not exist or cannot be accessed."), path);
+		*error = fz::sprintf(_("'%s' does not exist or cannot be accessed.").ToStdWstring(), path);
 
-		if ((*m_path)[0] == '\\')
+		if ((*m_path)[0] == '\\') {
 			return false;
+		}
 
 		// Check for removable drive, display a more specific error message in that case
-		if (::GetLastError() != ERROR_NOT_READY)
+		if (::GetLastError() != ERROR_NOT_READY) {
 			return false;
+		}
 		int type = GetDriveType(m_path->substr(0, 3).c_str());
-		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM)
-			error->Printf(_("Cannot access '%s', no media inserted or drive not ready."), path);
+		if (type == DRIVE_REMOVABLE || type == DRIVE_CDROM) {
+			*error = fz::sprintf(_("Cannot access '%s', no media inserted or drive not ready.").ToStdWstring(), path);
+		}
 		return false;
 	}
 	else if (!(ret & FILE_ATTRIBUTE_DIRECTORY)) {
-		if (error)
-			error->Printf(_("'%s' is not a directory."), path);
+		if (error) {
+			*error = fz::sprintf(_("'%s' is not a directory.").ToStdWstring(), path);
+		}
 		return false;
 	}
 
 	return true;
 #else
-	wxString path = *m_path;
-	if (path.size() > 1)
-		path.RemoveLast();
-
-	const wxCharBuffer s = path.fn_str();
+	std::string path = fz::to_string(m_path);
+	if (path.size() > 1) {
+		path.pop_back();
+	}
 
 	struct stat buf;
-	int result = stat(s, &buf);
+	int result = stat(path.c_str(), &buf);
 
 	if (!result) {
-		if (S_ISDIR(buf.st_mode))
+		if (S_ISDIR(buf.st_mode)) {
 			return true;
+		}
 
-		if (error)
-			error->Printf(_("'%s' is not a directory."), path);
+		if (error) {
+			*error = fz::sprintf(_("'%s' is not a directory.").ToStdWstring(), m_path);
+		}
 
 		return false;
 	}
 	else if (result == ENOTDIR) {
-		if (error)
-			error->Printf(_("'%s' is not a directory."), path);
+		if (error) {
+			*error = fz::sprintf(_("'%s' is not a directory.").ToStdWstring(), m_path);
+		}
 		return false;
 	}
 	else {
-		if (error)
-			error->Printf(_("'%s' does not exist or cannot be accessed."), path);
+		if (error) {
+			*error = fz::sprintf(_("'%s' does not exist or cannot be accessed.").ToStdWstring(), m_path);
+		}
 		return false;
 	}
 #endif
@@ -560,9 +573,9 @@ bool CLocalPath::IsSubdirOf(const CLocalPath &path) const
 	return true;
 }
 
-wxString CLocalPath::GetLastSegment() const
+std::wstring CLocalPath::GetLastSegment() const
 {
-	wxASSERT(HasParent());
+	assert(HasParent());
 
 #ifdef FZ_WINDOWS
 	// C:\f\ has parent
@@ -575,10 +588,9 @@ wxString CLocalPath::GetLastSegment() const
 #endif
 	for (int i = (int)m_path->size() - 2; i >= min; i--) {
 		if ((*m_path)[i] == path_separator) {
-			wxString last = m_path->substr(i + 1, m_path->size() - i - 2);
-			return last;
+			return m_path->substr(i + 1, m_path->size() - i - 2);
 		}
 	}
 
-	return wxString();
+	return std::wstring();
 }

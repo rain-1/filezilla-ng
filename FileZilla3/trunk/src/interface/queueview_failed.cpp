@@ -175,7 +175,7 @@ bool CQueueViewFailed::RequeueFileItem(CFileItem* pFileItem, CServerItem* pServe
 		CEditHandler::fileState state = pEditHandler->GetFileState(pFileItem->GetRemoteFile(), pFileItem->GetRemotePath(), pServerItem->GetServer());
 		if (state == CEditHandler::unknown) {
 			wxASSERT(pFileItem->Download());
-			wxString file = pFileItem->GetRemoteFile();
+			std::wstring file = pFileItem->GetRemoteFile();
 			if (!pEditHandler->AddFile(CEditHandler::remote, file, pFileItem->GetRemotePath(), pServerItem->GetServer())) {
 				delete pFileItem;
 				return false;

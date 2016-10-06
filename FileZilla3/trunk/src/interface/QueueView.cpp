@@ -234,7 +234,7 @@ CQueueView::~CQueueView()
 }
 
 bool CQueueView::QueueFile(const bool queueOnly, const bool download,
-						   const wxString& sourceFile, const wxString& targetFile,
+						   std::wstring const& sourceFile, std::wstring const& targetFile,
 						   const CLocalPath& localPath, const CServerPath& remotePath,
 						   const CServer& server, int64_t size, CEditHandler::fileType edit,
 						   QueuePriority priority)
@@ -248,19 +248,23 @@ bool CQueueView::QueueFile(const bool queueOnly, const bool download,
 			p.AddSegment(targetFile);
 			fileItem = new CFolderItem(pServerItem, queueOnly, p);
 		}
-		else
+		else {
 			fileItem = new CFolderItem(pServerItem, queueOnly, remotePath, targetFile);
+		}
 		wxASSERT(edit == CEditHandler::none);
 	}
 	else {
 		fileItem = new CFileItem(pServerItem, queueOnly, download, sourceFile, targetFile, localPath, remotePath, size);
-		if (download)
+		if (download) {
 			fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(sourceFile, remotePath.GetType()));
-		else
+		}
+		else {
 			fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(sourceFile, remotePath.GetType()));
+		}
 		fileItem->m_edit = edit;
-		if (edit != CEditHandler::none)
+		if (edit != CEditHandler::none) {
 			fileItem->m_onetime_action = CFileExistsNotification::overwrite;
+		}
 	}
 
 	fileItem->SetPriorityRaw(priority);
@@ -294,7 +298,7 @@ void CQueueView::QueueFile_Finish(const bool start)
 }
 
 // Defined in RemoteListView.cpp
-extern wxString StripVMSRevision(const wxString& name);
+std::wstring StripVMSRevision(std::wstring const& name);
 
 bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, const CRemoteDataObject& dataObject)
 {
@@ -306,12 +310,13 @@ bool CQueueView::QueueFiles(const bool queueOnly, const CLocalPath& localPath, c
 		if (fileInfo.dir)
 			continue;
 
-		wxString localFile = ReplaceInvalidCharacters(fileInfo.name);
-		if (dataObject.GetServerPath().GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION))
+		std::wstring localFile = ReplaceInvalidCharacters(fileInfo.name);
+		if (dataObject.GetServerPath().GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION)) {
 			localFile = StripVMSRevision(localFile);
+		}
 
 		CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, true,
-			fileInfo.name, (fileInfo.name != localFile) ? localFile : wxString(),
+			fileInfo.name, (fileInfo.name != localFile) ? localFile : std::wstring(),
 			localPath, dataObject.GetServerPath(), fileInfo.size);
 		fileItem->SetAscii(CAutoAsciiFiles::TransferRemoteAsAscii(fileInfo.name, dataObject.GetServerPath().GetType()));
 
@@ -330,16 +335,13 @@ bool CQueueView::QueueFiles(const bool queueOnly, CServer const& server, CLocalR
 	auto const& files = listing.files;
 	if (files.empty() && listing.dirs.empty()) {
 		// Empty directory
-		if (listing.remotePath.HasParent()) {
-			wxString sub = listing.remotePath.GetLastSegment();
-		}
-		CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, listing.remotePath, wxString());
+		CFileItem* fileItem = new CFolderItem(pServerItem, queueOnly, listing.remotePath, std::wstring());
 		InsertItem(pServerItem, fileItem);
 	}
 	else {
 		for (auto const& file : files) {
 			CFileItem* fileItem = new CFileItem(pServerItem, queueOnly, false,
-				file.name, wxString(),
+				file.name, std::wstring(),
 				listing.localPath, listing.remotePath, file.size);
 			fileItem->SetAscii(CAutoAsciiFiles::TransferLocalAsAscii(file.name, listing.remotePath.GetType()));
 
@@ -1558,8 +1560,8 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 			CServerPath previousRemotePath;
 
 			for (auto file = xServer.child("File"); file; file = file.next_sibling("File")) {
-				wxString localFile = GetTextElement(file, "LocalFile");
-				wxString remoteFile = GetTextElement(file, "RemoteFile");
+				std::wstring localFile = GetTextElement(file, "LocalFile").ToStdWstring();
+				std::wstring remoteFile = GetTextElement(file, "RemoteFile").ToStdWstring();
 				std::wstring safeRemotePath = GetTextElement(file, "RemotePath").ToStdWstring();
 				bool download = GetTextElementInt(file, "Download") != 0;
 				int64_t size = GetTextElementInt(file, "Size", -1);
@@ -1577,7 +1579,7 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 				if (!localFile.empty() && !remoteFile.empty() && remotePath.SetSafePath(safeRemotePath) &&
 					size >= -1 && priority < static_cast<int>(QueuePriority::count))
 				{
-					wxString localFileName;
+					std::wstring localFileName;
 					CLocalPath localPath(localFile, &localFileName);
 
 					if (localFileName.empty()) {
@@ -1595,7 +1597,7 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 
 					CFileItem* fileItem = new CFileItem(pServerItem, true, download,
 						download ? remoteFile : localFileName,
-						(remoteFile != localFileName) ? (download ? localFileName : remoteFile) : wxString(),
+						(remoteFile != localFileName) ? (download ? localFileName : remoteFile) : std::wstring(),
 						previousLocalPath, previousRemotePath, size);
 					fileItem->SetAscii(!binary);
 					fileItem->SetPriorityRaw(QueuePriority(priority));
@@ -1612,14 +1614,14 @@ void CQueueView::ImportQueue(pugi::xml_node element, bool updateSelections)
 
 				bool download = GetTextElementInt(folder, "Download") != 0;
 				if (download) {
-					wxString localFile = GetTextElement(folder, "LocalFile");
+					std::wstring localFile = GetTextElement(folder, "LocalFile").ToStdWstring();
 					if (localFile.empty()) {
 						continue;
 					}
 					folderItem = new CFolderItem(pServerItem, true, CLocalPath(localFile));
 				}
 				else {
-					wxString remoteFile = GetTextElement(folder, "RemoteFile");
+					std::wstring remoteFile = GetTextElement(folder, "RemoteFile").ToStdWstring();
 					std::wstring safeRemotePath = GetTextElement(folder, "RemotePath").ToStdWstring();
 					if (safeRemotePath.empty()) {
 						continue;
@@ -2799,21 +2801,21 @@ void CQueueView::RenameFileInTransfer(CFileZillaEngine *pEngine, const wxString&
 	RefreshItem(pFile);
 }
 
-wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
+std::wstring CQueueView::ReplaceInvalidCharacters(std::wstring const& filename)
 {
-	if (!COptions::Get()->GetOptionVal(OPTION_INVALID_CHAR_REPLACE_ENABLE))
+	if (!COptions::Get()->GetOptionVal(OPTION_INVALID_CHAR_REPLACE_ENABLE)) {
 		return filename;
+	}
 
 	const wxChar replace = COptions::Get()->GetOption(OPTION_INVALID_CHAR_REPLACE)[0];
 
 	wxString result;
 	{
-		wxStringBuffer start( result, filename.Len() + 1 );
+		wxStringBuffer start(result, filename.size() + 1);
 		wxChar* buf = start;
 
 		const wxChar* p = filename.c_str();
-		while (*p)
-		{
+		while (*p) {
 			const wxChar c = *p;
 			switch (c)
 			{
@@ -2846,7 +2848,7 @@ wxString CQueueView::ReplaceInvalidCharacters(const wxString& filename)
 		*buf = 0;
 	}
 
-	return result;
+	return result.ToStdWstring();
 }
 
 wxFileOffset CQueueView::GetCurrentDownloadSpeed()

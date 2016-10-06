@@ -174,7 +174,7 @@ bool CRemoteRecursiveOperation::BelowRecursionRoot(const CServerPath& path, recu
 }
 
 // Defined in RemoteListView.cpp
-extern wxString StripVMSRevision(const wxString& name);
+std::wstring StripVMSRevision(std::wstring const& name);
 
 void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing* pDirectoryListing)
 {
@@ -339,12 +339,12 @@ void CRemoteRecursiveOperation::ProcessDirectoryListing(const CDirectoryListing*
 			case recursive_transfer_flatten:
 			case recursive_synchronize_download:
 				{
-					wxString localFile = CQueueView::ReplaceInvalidCharacters(entry.name);
+					std::wstring localFile = CQueueView::ReplaceInvalidCharacters(entry.name);
 					if (pDirectoryListing->path.GetType() == VMS && COptions::Get()->GetOptionVal(OPTION_STRIP_VMS_REVISION)) {
 						localFile = StripVMSRevision(localFile);
 					}
 					m_pQueue->QueueFile(!m_immediate, true,
-						entry.name, (entry.name == localFile) ? wxString() : localFile,
+						entry.name, (entry.name == localFile) ? std::wstring() : localFile,
 						dir.localDir, pDirectoryListing->path, *pServer, entry.size);
 					added = true;
 				}
@@ -465,11 +465,11 @@ void CRemoteRecursiveOperation::LinkIsNotDir()
 	}
 	else if (m_operationMode != recursive_list) {
 		CLocalPath localPath = dir.localDir;
-		wxString localFile = dir.subdir;
+		std::wstring localFile = dir.subdir;
 		if (m_operationMode != recursive_transfer_flatten) {
 			localPath.MakeParent();
 		}
-		m_pQueue->QueueFile(!m_immediate, true, dir.subdir, (dir.subdir == localFile) ? wxString() : localFile, localPath, dir.parent, *pServer, -1);
+		m_pQueue->QueueFile(!m_immediate, true, dir.subdir, (dir.subdir == localFile) ? std::wstring() : localFile, localPath, dir.parent, *pServer, -1);
 		m_pQueue->QueueFile_Finish(m_immediate);
 	}
 

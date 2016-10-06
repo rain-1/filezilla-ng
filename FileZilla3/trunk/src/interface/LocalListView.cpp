@@ -63,59 +63,65 @@ public:
 		if (def == wxDragError ||
 			def == wxDragNone ||
 			def == wxDragCancel)
+		{
 			return def;
+		}
 
-		if (m_pLocalListView->m_fileData.empty())
+		if (m_pLocalListView->m_fileData.empty()) {
 			return wxDragError;
+		}
 
-		if (def != wxDragCopy && def != wxDragMove)
+		if (def != wxDragCopy && def != wxDragMove) {
 			return wxDragError;
+		}
 
 		CDragDropManager* pDragDropManager = CDragDropManager::Get();
-		if (pDragDropManager)
+		if (pDragDropManager) {
 			pDragDropManager->pDropTarget = m_pLocalListView;
+		}
 
-		wxString subdir;
+		std::wstring subdir;
 		int flags;
 		int hit = m_pLocalListView->HitTest(wxPoint(x, y), flags, 0);
-		if (hit != -1 && (flags & wxLIST_HITTEST_ONITEM))
-		{
+		if (hit != -1 && (flags & wxLIST_HITTEST_ONITEM)) {
 			const CLocalFileData* const data = m_pLocalListView->GetData(hit);
-			if (data && data->dir)
+			if (data && data->dir) {
 				subdir = data->name;
+			}
 		}
 
 		CLocalPath dir = m_pLocalListView->m_state.GetLocalDir();
-		if (!subdir.empty())
-		{
-			if (!dir.ChangePath(subdir))
+		if (!subdir.empty()) {
+			if (!dir.ChangePath(subdir)) {
 				return wxDragError;
+			}
 		}
 
-		if (!dir.IsWriteable())
+		if (!dir.IsWriteable()) {
 			return wxDragError;
+		}
 
-		if (!GetData())
+		if (!GetData()) {
 			return wxDragError;
+		}
 
-		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat())
+		if (m_pDataObject->GetReceivedFormat() == m_pFileDataObject->GetFormat()) {
 			m_pLocalListView->m_state.HandleDroppedFiles(m_pFileDataObject, dir, def == wxDragCopy);
-		else
-		{
-			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId())
-			{
+		}
+		else {
+			if (m_pRemoteDataObject->GetProcessId() != (int)wxGetProcessId()) {
 				wxMessageBoxEx(_("Drag&drop between different instances of FileZilla has not been implemented yet."));
 				return wxDragNone;
 			}
 
-			if (!m_pLocalListView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalListView->m_state.GetServer()))
-			{
+			if (!m_pLocalListView->m_state.GetServer() || !m_pRemoteDataObject->GetServer().EqualsNoPass(*m_pLocalListView->m_state.GetServer())) {
 				wxMessageBoxEx(_("Drag&drop between different servers has not been implemented yet."));
 				return wxDragNone;
 			}
 
-			if (!m_pLocalListView->m_state.DownloadDroppedFiles(m_pRemoteDataObject, dir))
+			if (!m_pLocalListView->m_state.DownloadDroppedFiles(m_pRemoteDataObject, dir)) {
 				return wxDragNone;
+			}
 		}
 
 		return def;
@@ -195,28 +201,29 @@ public:
 			return def;
 		}
 
-		if (m_pLocalListView->m_fileData.empty())
-		{
+		if (m_pLocalListView->m_fileData.empty()) {
 			ClearDropHighlight();
 			return wxDragNone;
 		}
 
-		const wxString& subdir = DoDisplayDropHighlight(wxPoint(x, y));
+		std::wstring const subdir = DoDisplayDropHighlight(wxPoint(x, y)).ToStdWstring();
 
 		CLocalPath dir = m_pLocalListView->m_state.GetLocalDir();
 		if (subdir.empty()) {
 			const CDragDropManager* pDragDropManager = CDragDropManager::Get();
-			if (pDragDropManager && pDragDropManager->localParent == m_pLocalListView->m_dir)
+			if (pDragDropManager && pDragDropManager->localParent == m_pLocalListView->m_dir) {
 				return wxDragNone;
+			}
 		}
-		else
-		{
-			if (!dir.ChangePath(subdir))
+		else {
+			if (!dir.ChangePath(subdir)) {
 				return wxDragNone;
+			}
 		}
 
-		if (!dir.IsWriteable())
+		if (!dir.IsWriteable()) {
 			return wxDragNone;
+		}
 
 		return def;
 	}
@@ -486,21 +493,20 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 	bool back = false;
 
 	int item = -1;
-	for (;;)
-	{
+	for (;;) {
 		item = GetNextItem(item, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED);
-		if (item == -1)
+		if (item == -1) {
 			break;
+		}
 
 		count++;
 
-		if (!item && m_hasParent)
+		if (!item && m_hasParent) {
 			back = true;
+		}
 	}
-	if (count > 1)
-	{
-		if (back)
-		{
+	if (count > 1) {
+		if (back) {
 			wxBell();
 			return;
 		}
@@ -513,30 +519,29 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 	item = event.GetIndex();
 
 	CLocalFileData *data = GetData(item);
-	if (!data)
+	if (!data) {
 		return;
+	}
 
-	if (data->dir)
-	{
+	if (data->dir) {
 		const int action = COptions::Get()->GetOptionVal(OPTION_DOUBLECLICK_ACTION_DIRECTORY);
-		if (action == 3)
-		{
+		if (action == 3) {
 			// No action
 			wxBell();
 			return;
 		}
 
-		if (!action || data->name == _T(".."))
-		{
+		if (!action || data->name == _T("..")) {
 			// Enter action
 
-			wxString error;
-			if (!m_state.SetLocalDir(data->name, &error))
-			{
-				if (!error.empty())
+			std::wstring error;
+			if (!m_state.SetLocalDir(data->name, &error)) {
+				if (!error.empty()) {
 					wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-				else
+				}
+				else {
 					wxBell();
+				}
 			}
 			return;
 		}
@@ -546,22 +551,19 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 		return;
 	}
 
-	if (data->comparison_flags == fill)
-	{
+	if (data->comparison_flags == fill) {
 		wxBell();
 		return;
 	}
 
 	const int action = COptions::Get()->GetOptionVal(OPTION_DOUBLECLICK_ACTION_FILE);
-	if (action == 3)
-	{
+	if (action == 3) {
 		// No action
 		wxBell();
 		return;
 	}
 
-	if (action == 2)
-	{
+	if (action == 2) {
 		// View / Edit action
 		wxCommandEvent evt;
 		OnMenuEdit(evt);
@@ -569,15 +571,13 @@ void CLocalListView::OnItemActivated(wxListEvent &event)
 	}
 
 	const CServer* pServer = m_state.GetServer();
-	if (!pServer)
-	{
+	if (!pServer) {
 		wxBell();
 		return;
 	}
 
 	CServerPath path = m_state.GetRemotePath();
-	if (path.empty())
-	{
+	if (path.empty()) {
 		wxBell();
 		return;
 	}
@@ -607,12 +607,14 @@ void CLocalListView::OnMenuEnter(wxCommandEvent &)
 		return;
 	}
 
-	wxString error;
+	std::wstring error;
 	if (!m_state.SetLocalDir(data->name, &error)) {
-		if (!error.empty())
+		if (!error.empty()) {
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-		else
+		}
+		else {
 			wxBell();
+		}
 	}
 }
 
@@ -900,19 +902,20 @@ void CLocalListView::OnMenuMkdir(wxCommandEvent&)
 // Create a new Directory and enter the new Directory
 void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent&)
 {
-	wxString newdir = MenuMkdir();
+	std::wstring newdir = MenuMkdir().ToStdWstring();
 	if (newdir.empty()) {
 		return;
 	}
 
 	// OnMenuEnter
-	wxString error;
-	if (!m_state.SetLocalDir(newdir, &error))
-	{
-		if (!error.empty())
+	std::wstring error;
+	if (!m_state.SetLocalDir(newdir, &error)) {
+		if (!error.empty()) {
 			wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-		else
+		}
+		else {
 			wxBell();
+		}
 	}
 }
 
@@ -921,14 +924,15 @@ void CLocalListView::OnMenuMkdirChgDir(wxCommandEvent&)
 wxString CLocalListView::MenuMkdir()
 {
 	CInputDialog dlg;
-	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:")))
+	if (!dlg.Create(this, _("Create directory"), _("Please enter the name of the directory which should be created:"))) {
 		return wxString();
+	}
 
-	if (dlg.ShowModal() != wxID_OK)
+	if (dlg.ShowModal() != wxID_OK) {
 		return wxString();
+	}
 
-	if (dlg.GetValue().empty())
-	{
+	if (dlg.GetValue().empty()) {
 		wxBell();
 		return wxString();
 	}
@@ -1809,21 +1813,20 @@ void CLocalListView::OnMenuRefresh(wxCommandEvent&)
 
 void CLocalListView::OnNavigationEvent(bool forward)
 {
-	if (!forward)
-	{
-		if (!m_hasParent)
-		{
+	if (!forward) {
+		if (!m_hasParent) {
 			wxBell();
 			return;
 		}
 
-		wxString error;
-		if (!m_state.SetLocalDir(_T(".."), &error))
-		{
-			if (!error.empty())
+		std::wstring error;
+		if (!m_state.SetLocalDir(_T(".."), &error)) {
+			if (!error.empty()) {
 				wxMessageBoxEx(error, _("Failed to change directory"), wxICON_INFORMATION);
-			else
+			}
+			else {
 				wxBell();
+			}
 		}
 	}
 }

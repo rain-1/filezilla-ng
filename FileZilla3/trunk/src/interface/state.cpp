@@ -205,25 +205,26 @@ CLocalPath CState::GetLocalDir() const
 }
 
 
-bool CState::SetLocalDir(const wxString& dir, wxString *error, bool rememberPreviousSubdir)
+bool CState::SetLocalDir(std::wstring const& dir, std::wstring *error, bool rememberPreviousSubdir)
 {
 	CLocalPath p(m_localDir);
 #ifdef __WXMSW__
-	if (dir == _T("..") && !p.HasParent() && p.HasLogicalParent())
-	{
+	if (dir == _T("..") && !p.HasParent() && p.HasLogicalParent()) {
 		// Parent of C:\ is drive list
-		if (!p.MakeParent())
+		if (!p.MakeParent()) {
 			return false;
+		}
 	}
 	else
 #endif
-	if (!p.ChangePath(dir))
+	if (!p.ChangePath(dir)) {
 		return false;
+	}
 
 	return SetLocalDir(p, error, rememberPreviousSubdir);
 }
 
-bool CState::SetLocalDir(CLocalPath const& dir, wxString *error, bool rememberPreviousSubdir)
+bool CState::SetLocalDir(CLocalPath const& dir, std::wstring *error, bool rememberPreviousSubdir)
 {
 	if (m_changeDirFlags.syncbrowse) {
 		wxMessageBoxEx(_T("Cannot change directory, there already is a synchronized browsing operation in progress."), _("Synchronized browsing"));
@@ -367,7 +368,7 @@ bool CState::SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryLi
 				compare = false;
 			}
 			else {
-				wxString error;
+				std::wstring error;
 				if (!local_path.Exists(&error)) {
 					SetSyncBrowse(false);
 					wxString msg = error + _T("\n") + _("Synchronized browsing has been disabled.");
@@ -410,23 +411,25 @@ void CState::RefreshLocal()
 	NotifyHandlers(STATECHANGE_LOCAL_DIR);
 }
 
-void CState::RefreshLocalFile(wxString file)
+void CState::RefreshLocalFile(std::wstring const& file)
 {
-	wxString file_name;
+	std::wstring file_name;
 	CLocalPath path(file, &file_name);
-	if (path.empty())
+	if (path.empty()) {
 		return;
+	}
 
-	if (file_name.empty())
-	{
-		if (!path.HasParent())
+	if (file_name.empty()) {
+		if (!path.HasParent()) {
 			return;
+		}
 		path.MakeParent(&file_name);
 		wxASSERT(!file_name.empty());
 	}
 
-	if (path != m_localDir)
+	if (path != m_localDir) {
 		return;
+	}
 
 	NotifyHandlers(STATECHANGE_LOCAL_REFRESH_FILE, file_name);
 }
@@ -680,24 +683,24 @@ void CState::UploadDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 		return;
 	}
 
-	const wxArrayString& files = pFileDataObject->GetFilenames();
+	wxArrayString const& files = pFileDataObject->GetFilenames();
 
 	for (unsigned int i = 0; i < files.Count(); ++i) {
 		int64_t size;
 		bool is_link;
 		fz::local_filesys::type type = fz::local_filesys::get_file_info(fz::to_native(files[i]), is_link, &size, 0, 0);
 		if (type == fz::local_filesys::file) {
-			wxString localFile;
-			const CLocalPath localPath(files[i], &localFile);
+			std::wstring localFile;
+			const CLocalPath localPath(files[i].ToStdWstring(), &localFile);
 			m_mainFrame.GetQueue()->QueueFile(queueOnly, false, localFile, wxEmptyString, localPath, path, m_site.m_server, size);
 			m_mainFrame.GetQueue()->QueueFile_Finish(!queueOnly);
 		}
 		else if (type == fz::local_filesys::dir) {
-			CLocalPath localPath(files[i]);
+			CLocalPath localPath(files[i].ToStdWstring());
 			if (localPath.HasParent()) {
 
 				CServerPath remotePath = path;
-				if (!remotePath.ChangePath(localPath.GetLastSegment().ToStdWstring())) {
+				if (!remotePath.ChangePath(localPath.GetLastSegment())) {
 					continue;
 				}
 
@@ -797,34 +800,42 @@ void CState::HandleDroppedFiles(const wxFileDataObject* pFileDataObject, const C
 
 bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 {
-	if (source.empty() || target.empty())
+	if (source.empty() || target.empty()) {
 		return false;
+	}
 
-	if (source == target)
+	if (source == target) {
 		return false;
+	}
 
-	if (source.IsParentOf(target))
+	if (source.IsParentOf(target)) {
 		return false;
+	}
 
-	if (!source.HasParent())
+	if (!source.HasParent()) {
 		return false;
+	}
 
-	wxString last_segment;
-	if (!source.MakeParent(&last_segment))
+	std::wstring last_segment;
+	if (!source.MakeParent(&last_segment)) {
 		return false;
+	}
 
-	std::list<wxString> dirsToVisit;
+	std::list<std::wstring> dirsToVisit;
 	dirsToVisit.push_back(last_segment + CLocalPath::path_separator);
+
+	fz::native_string const nsource = fz::to_native(source.GetPath());
 
 	// Process any subdirs which still have to be visited
 	while (!dirsToVisit.empty()) {
-		wxString dirname = dirsToVisit.front();
+		std::wstring dirname = dirsToVisit.front();
 		dirsToVisit.pop_front();
 		wxMkdir(target.GetPath() + dirname);
 
 		fz::local_filesys fs;
-		if (!fs.begin_find_files(fz::to_native(source.GetPath() + dirname), false))
+		if (!fs.begin_find_files(nsource + fz::to_native(dirname), false)) {
 			continue;
+		}
 
 		bool is_dir, is_link;
 		fz::native_string file;
@@ -835,14 +846,16 @@ bool CState::RecursiveCopy(CLocalPath source, const CLocalPath& target)
 			}
 
 			if (is_dir) {
-				if (is_link)
+				if (is_link) {
 					continue;
+				}
 
-				const wxString subDir = dirname + file + CLocalPath::path_separator;
+				std::wstring const subDir = dirname + file + CLocalPath::path_separator;
 				dirsToVisit.push_back(subDir);
 			}
-			else
+			else {
 				wxCopyFile(source.GetPath() + dirname + file, target.GetPath() + dirname + file);
+			}
 		}
 	}
 
@@ -854,32 +867,38 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 	bool hasDirs = false;
 	bool hasFiles = false;
 	const std::list<CRemoteDataObject::t_fileInfo>& files = pRemoteDataObject->GetFiles();
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
-		if (iter->dir)
+	for (auto const& fileInfo : files) {
+		if (fileInfo.dir) {
 			hasDirs = true;
-		else
+		}
+		else {
 			hasFiles = true;
+		}
 	}
 
 	if (hasDirs) {
-		if (!IsRemoteConnected() || !IsRemoteIdle())
+		if (!IsRemoteConnected() || !IsRemoteIdle()) {
 			return false;
+		}
 	}
 
-	if (hasFiles)
+	if (hasFiles) {
 		m_mainFrame.GetQueue()->QueueFiles(queueOnly, path, *pRemoteDataObject);
+	}
 
-	if (!hasDirs)
+	if (!hasDirs) {
 		return true;
+	}
 
 	recursion_root root(pRemoteDataObject->GetServerPath(), false);
-	for (std::list<CRemoteDataObject::t_fileInfo>::const_iterator iter = files.begin(); iter != files.end(); ++iter) {
-		if (!iter->dir)
+	for (auto const& fileInfo : files) {
+		if (!fileInfo.dir) {
 			continue;
+		}
 
 		CLocalPath newPath(path);
-		newPath.AddSegment(CQueueView::ReplaceInvalidCharacters(iter->name));
-		root.add_dir_to_visit(pRemoteDataObject->GetServerPath(), iter->name, newPath, iter->link);
+		newPath.AddSegment(CQueueView::ReplaceInvalidCharacters(fileInfo.name));
+		root.add_dir_to_visit(pRemoteDataObject->GetServerPath(), fileInfo.name, newPath, fileInfo.link);
 	}
 
 	if (!root.empty()) {
@@ -894,8 +913,9 @@ bool CState::DownloadDroppedFiles(const CRemoteDataObject* pRemoteDataObject, co
 
 bool CState::IsRemoteConnected() const
 {
-	if (!m_pEngine)
+	if (!m_pEngine) {
 		return false;
+	}
 
 	return static_cast<bool>(m_site.m_server);
 }
@@ -989,7 +1009,7 @@ bool CState::ChangeRemoteDir(CServerPath const& path, std::wstring const& subdir
 			return false;
 		}
 		else {
-			wxString error;
+			std::wstring error;
 			CLocalPath local_path = GetSynchronizedDirectory(p);
 			if (local_path.empty()) {
 				wxString msg = wxString::Format(_("Could not obtain corresponding local directory for the remote directory '%s'.\nDisable synchronized browsing and continue changing the remote directory?"),
@@ -1095,17 +1115,19 @@ bool CState::SetSyncBrowse(bool enable, CServerPath const& assumed_remote_root)
 
 CLocalPath CState::GetSynchronizedDirectory(CServerPath remote_path)
 {
-	std::list<wxString> segments;
+	std::list<std::wstring> segments;
 	while (remote_path.HasParent() && remote_path != m_sync_browse.remote_root) {
 		segments.push_front(remote_path.GetLastSegment());
 		remote_path = remote_path.GetParent();
 	}
-	if (remote_path != m_sync_browse.remote_root)
+	if (remote_path != m_sync_browse.remote_root) {
 		return CLocalPath();
+	}
 
 	CLocalPath local_path = m_sync_browse.local_root;
-	for (std::list<wxString>::const_iterator iter = segments.begin(); iter != segments.end(); ++iter)
-		local_path.AddSegment(*iter);
+	for (auto const& segment : segments) {
+		local_path.AddSegment(segment);
+	}
 
 	return local_path;
 }
@@ -1115,9 +1137,9 @@ CServerPath CState::GetSynchronizedDirectory(CLocalPath local_path)
 {
 	std::list<std::wstring> segments;
 	while (local_path.HasParent() && local_path != m_sync_browse.local_root) {
-		wxString last;
+		std::wstring last;
 		local_path.MakeParent(&last);
-		segments.push_front(last.ToStdWstring());
+		segments.push_front(last);
 	}
 	if (local_path != m_sync_browse.local_root) {
 		return CServerPath();

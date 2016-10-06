@@ -943,19 +943,18 @@ int64_t CQueueStorage::Impl::ParseServerFromRow(CServer& server)
 
 int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 {
-	wxString sourceFile = GetColumnText(selectFilesQuery_, file_table_column_names::source_file);
-	wxString targetFile = GetColumnText(selectFilesQuery_, file_table_column_names::target_file);
+	std::wstring sourceFile = GetColumnText(selectFilesQuery_, file_table_column_names::source_file).ToStdWstring();
+	std::wstring targetFile = GetColumnText(selectFilesQuery_, file_table_column_names::target_file).ToStdWstring();
 
 	int64_t localPathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::local_path, false);
 	int64_t remotePathId = GetColumnInt64(selectFilesQuery_, file_table_column_names::remote_path, false);
 
-	const CLocalPath& localPath(GetLocalPath(localPathId));
-	const CServerPath& remotePath(GetRemotePath(remotePathId));
+	CLocalPath const localPath(GetLocalPath(localPathId));
+	CServerPath const remotePath(GetRemotePath(remotePathId));
 
 	bool download = GetColumnInt(selectFilesQuery_, file_table_column_names::download) != 0;
 
-	if (localPathId == -1 || remotePathId == -1)
-	{
+	if (localPathId == -1 || remotePathId == -1) {
 		// QueueItemType::Folder
 		if ((download && localPath.empty()) ||
 			(!download && remotePath.empty()))
@@ -963,13 +962,14 @@ int64_t CQueueStorage::Impl::ParseFileFromRow(CFileItem** pItem)
 			return INVALID_DATA;
 		}
 
-		if (download)
+		if (download) {
 			*pItem = new CFolderItem(0, true, localPath);
-		else
+		}
+		else {
 			*pItem = new CFolderItem(0, true, remotePath, sourceFile);
+		}
 	}
-	else
-	{
+	else {
 		int64_t size = GetColumnInt64(selectFilesQuery_, file_table_column_names::size);
 		unsigned char errorCount = static_cast<unsigned char>(GetColumnInt(selectFilesQuery_, file_table_column_names::error_count));
 		int priority = GetColumnInt(selectFilesQuery_, file_table_column_names::priority, static_cast<int>(QueuePriority::normal));

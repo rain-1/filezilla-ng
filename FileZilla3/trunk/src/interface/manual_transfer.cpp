@@ -299,7 +299,7 @@ void CManualTransfer::OnOK(wxCommandEvent&)
 		return;
 	}
 
-	wxString local_file = xrc_call(*this, "ID_LOCALFILE", &wxTextCtrl::GetValue);
+	std::wstring local_file = xrc_call(*this, "ID_LOCALFILE", &wxTextCtrl::GetValue).ToStdWstring();
 	if (local_file.empty()) {
 		wxMessageBoxEx(_("You need to specify a local file."), _("Manual transfer"), wxICON_EXCLAMATION);
 		return;
@@ -315,7 +315,7 @@ void CManualTransfer::OnOK(wxCommandEvent&)
 		return;
 	}
 
-	wxString remote_file = xrc_call(*this, "ID_REMOTEFILE", &wxTextCtrl::GetValue);
+	std::wstring remote_file = xrc_call(*this, "ID_REMOTEFILE", &wxTextCtrl::GetValue).ToStdWstring();
 
 	if (remote_file.empty()) {
 		wxMessageBoxEx(_("You need to specify a remote file."), _("Manual transfer"), wxICON_EXCLAMATION);
@@ -347,7 +347,7 @@ void CManualTransfer::OnOK(wxCommandEvent&)
 		COptions::Get()->SetOption(OPTION_ASCIIBINARY, 0);
 	}
 
-	wxString name;
+	std::wstring name;
 	CLocalPath localPath(local_file, &name);
 
 	if (name.empty()) {
@@ -357,7 +357,7 @@ void CManualTransfer::OnOK(wxCommandEvent&)
 
 	m_pQueueView->QueueFile(!start, download,
 		download ? remote_file : name,
-		(remote_file != name) ? (download ? name : remote_file) : wxString(),
+		(remote_file != name) ? (download ? name : remote_file) : std::wstring(),
 		localPath, path, *m_pServer, -1);
 
 	// Restore old data type

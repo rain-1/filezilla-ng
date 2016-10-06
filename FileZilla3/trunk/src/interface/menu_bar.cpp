@@ -257,7 +257,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 					}
 				}
 				if (!bookmark.m_localDir.empty()) {
-					bool set = pState->SetLocalDir(bookmark.m_localDir);
+					bool set = pState->SetLocalDir(bookmark.m_localDir.ToStdWstring());
 
 					if (set && bookmark.m_sync) {
 						wxASSERT(!bookmark.m_remoteDir.empty());
@@ -300,7 +300,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 			}
 		}
 		if (!local_dir.empty()) {
-			bool set = pState->SetLocalDir(local_dir);
+			bool set = pState->SetLocalDir(local_dir.ToStdWstring());
 
 			if (set && sync) {
 				wxASSERT(!remote_dir.empty());

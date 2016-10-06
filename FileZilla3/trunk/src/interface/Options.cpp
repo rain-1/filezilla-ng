@@ -828,7 +828,7 @@ CLocalPath COptions::GetUnadjustedSettingsDir()
 		// Fall back to directory where the executable is
 		DWORD c = GetModuleFileName(0, buffer, MAX_PATH * 2);
 		if (c && c < MAX_PATH * 2) {
-			wxString tmp;
+			std::wstring tmp;
 			ret.SetPath(buffer, &tmp);
 		}
 	}

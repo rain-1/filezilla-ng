@@ -284,15 +284,17 @@ int CEditHandler::GetFileCount(CEditHandler::fileType type, CEditHandler::fileSt
 	return count;
 }
 
-bool CEditHandler::AddFile(CEditHandler::fileType type, wxString& fileName, const CServerPath& remotePath, const CServer& server)
+bool CEditHandler::AddFile(CEditHandler::fileType type, std::wstring& fileName, CServerPath const& remotePath, CServer const& server)
 {
 	wxASSERT(type != none);
 
 	fileState state;
-	if (type == local)
+	if (type == local) {
 		state = GetFileState(fileName);
-	else
+	}
+	else {
 		state = GetFileState(fileName, remotePath, server);
+	}
 	if (state != unknown) {
 		wxFAIL_MSG(_T("File state not unknown"));
 		return false;
@@ -764,17 +766,17 @@ bool CEditHandler::UploadFile(fileType type, std::list<t_fileData>::iterator ite
 		return false;
 	}
 
-	if (mtime.empty())
+	if (mtime.empty()) {
 		mtime = fz::datetime::now();
+	}
 
 	iter->modificationTime = mtime;
 
 	wxASSERT(m_pQueue);
 
-	wxString file;
+	std::wstring file;
 	CLocalPath localPath(iter->file, &file);
-	if (file.empty())
-	{
+	if (file.empty()) {
 		m_fileDataList[type].erase(iter);
 		return false;
 	}
@@ -941,7 +943,7 @@ void CEditHandler::OnChangedFileEvent(wxCommandEvent&)
 	CheckForModifications();
 }
 
-wxString CEditHandler::GetTemporaryFile(wxString name)
+std::wstring CEditHandler::GetTemporaryFile(std::wstring name)
 {
 	name = CQueueView::ReplaceInvalidCharacters(name);
 #ifdef __WXMSW__
@@ -952,13 +954,13 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 	int max = -1;
 #endif
 	if (max != -1) {
-		name = TruncateFilename(m_localDir, name, max);
+		name = TruncateFilename(m_localDir, name, max).ToStdWstring();
 		if (name.empty()) {
-			return wxString();
+			return std::wstring();
 		}
 	}
 
-	wxString file = m_localDir + name;
+	std::wstring file = m_localDir + name;
 	if (!FilenameExists(file)) {
 		return file;
 	}
@@ -975,16 +977,16 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 			max--;
 			name = TruncateFilename(m_localDir, name, max);
 			if (name.empty()) {
-				return wxString();
+				return std::wstring();
 			}
 		}
 
-		int pos = name.Find('.', true);
-		if (pos < 1) {
-			file = m_localDir + name + wxString::Format(_T(" %d"), n);
+		size_t pos = name.rfind('.');
+		if (pos == std::wstring::npos || !pos) {
+			file = m_localDir + name + fz::sprintf(L" %d", n);
 		}
 		else {
-			file = m_localDir + name.Left(pos) + wxString::Format(_T(" %d"), n) + name.Mid(pos);
+			file = m_localDir + name.substr(0, pos) + fz::sprintf(L" %d", n) + name.substr(pos);
 		}
 
 		if (!FilenameExists(file)) {
@@ -992,7 +994,7 @@ wxString CEditHandler::GetTemporaryFile(wxString name)
 		}
 	}
 
-	return wxString();
+	return std::wstring();
 }
 
 wxString CEditHandler::TruncateFilename(const wxString path, const wxString& name, int max)
@@ -1023,8 +1025,9 @@ bool CEditHandler::FilenameExists(const wxString& file)
 	for (auto const& fileData : m_fileDataList[remote]) {
 		// Always ignore case, we don't know which type of filesystem the user profile
 		// is installed upon.
-		if (!fileData.file.CmpNoCase(file))
+		if (!wxString(fileData.file).CmpNoCase(file)) {
 			return true;
+		}
 	}
 
 	if (wxFileName::FileExists(file)) {
@@ -1564,7 +1567,7 @@ void CNewAssociationDialog::OnBrowseEditor(wxCommandEvent&)
 	XRCCTRL(*this, "ID_CUSTOM", wxTextCtrl)->ChangeValue(editor);
 }
 
-bool CEditHandler::Edit(CEditHandler::fileType type, wxString const fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow * parent)
+bool CEditHandler::Edit(CEditHandler::fileType type, std::wstring const& fileName, CServerPath const& path, CServer const& server, int64_t size, wxWindow * parent)
 {
 	std::vector<FileData> data;
 	FileData d{fileName, size};
@@ -1734,7 +1737,7 @@ bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CSe
 		break;
 	}
 
-	wxString localFile = file.name;
+	std::wstring localFile = file.name;
 	if (!AddFile(type, localFile, path, server)) {
 		if( type == CEditHandler::local) {
 			wxMessageBoxEx(wxString::Format(_("The file '%s' could not be opened:\nThe associated command failed"), file.name), _("Opening failed"), wxICON_EXCLAMATION);
@@ -1747,10 +1750,10 @@ bool CEditHandler::DoEdit(CEditHandler::fileType type, FileData const& file, CSe
 	}
 
 	if (type == CEditHandler::remote) {
-		wxString localFileName;
+		std::wstring localFileName;
 		CLocalPath localPath(localFile, &localFileName);
 
-		m_pQueue->QueueFile(false, true, file.name, (localFileName != file.name) ? localFileName : wxString(),
+		m_pQueue->QueueFile(false, true, file.name, (localFileName != file.name) ? localFileName : std::wstring(),
 			localPath, path, server, file.size, type, QueuePriority::high);
 		m_pQueue->QueueFile_Finish(true);
 	}
