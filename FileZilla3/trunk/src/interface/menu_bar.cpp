@@ -253,7 +253,7 @@ void CMenuBar::OnMenuEvent(wxCommandEvent& event)
 						break;
 					}
 					else {
-						pState->ChangeRemoteDir(bookmark.m_remoteDir, wxString(), 0, false, bookmark.m_comparison);
+						pState->ChangeRemoteDir(bookmark.m_remoteDir, std::wstring(), 0, false, bookmark.m_comparison);
 					}
 				}
 				if (!bookmark.m_localDir.empty()) {

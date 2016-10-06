@@ -1,6 +1,6 @@
 #include <filezilla.h>
 
-CConnectCommand::CConnectCommand(CServer const& server, bool retry_connecting /*=true*/)
+CConnectCommand::CConnectCommand(CServer const& server, bool retry_connecting)
 	: m_Server(server)
 	, m_retry_connecting(retry_connecting)
 {
@@ -11,12 +11,12 @@ CServer const& CConnectCommand::GetServer() const
 	return m_Server;
 }
 
-CListCommand::CListCommand(int flags /*=0*/)
+CListCommand::CListCommand(int flags)
 	: m_flags(flags)
 {
 }
 
-CListCommand::CListCommand(CServerPath path, wxString subDir, int flags)
+CListCommand::CListCommand(CServerPath path, std::wstring const& subDir, int flags)
 	: m_path(path), m_subDir(subDir), m_flags(flags)
 {
 }
@@ -26,7 +26,7 @@ CServerPath CListCommand::GetPath() const
 	return m_path;
 }
 
-wxString CListCommand::GetSubDir() const
+std::wstring CListCommand::GetSubDir() const
 {
 	return m_subDir;
 }
@@ -76,12 +76,12 @@ bool CFileTransferCommand::Download() const
 	return m_download;
 }
 
-CRawCommand::CRawCommand(const wxString &command)
+CRawCommand::CRawCommand(std::wstring const& command)
 {
 	m_command = command;
 }
 
-wxString CRawCommand::GetCommand() const
+std::wstring CRawCommand::GetCommand() const
 {
 	return m_command;
 }
@@ -91,7 +91,7 @@ CDeleteCommand::CDeleteCommand(const CServerPath& path, std::deque<std::wstring>
 {
 }
 
-CRemoveDirCommand::CRemoveDirCommand(const CServerPath& path, const wxString& subDir)
+CRemoveDirCommand::CRemoveDirCommand(const CServerPath& path, std::wstring const& subDir)
 	: m_path(path), m_subDir(subDir)
 {
 }

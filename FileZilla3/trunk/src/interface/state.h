@@ -118,7 +118,7 @@ public:
 	bool Connect(Site const& site, const CServerPath& path = CServerPath(), bool compare = false);
 	bool Disconnect();
 
-	bool ChangeRemoteDir(const CServerPath& path, const wxString& subdir = _T(""), int flags = 0, bool ignore_busy = false, bool compare = false);
+	bool ChangeRemoteDir(CServerPath const& path, std::wstring const& subdir = std::wstring(), int flags = 0, bool ignore_busy = false, bool compare = false);
 	bool SetRemoteDir(std::shared_ptr<CDirectoryListing> const& pDirectoryListing, bool modified = false);
 	std::shared_ptr<CDirectoryListing> GetRemoteDir() const;
 	const CServerPath GetRemotePath() const;
